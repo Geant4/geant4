@@ -19,52 +19,54 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4TrajectoryDrawByOriginVolume.hh,v 1.3 2006-05-02 20:47:40 tinslay Exp $
+// $Id: G4VTrajectoryModel.cc,v 1.1 2006-05-02 20:47:40 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// Class Description:
-// Trajectory model which colours a trajectory according to
-// the origin volume
-// Class Description - End:
-// Jane Tinslay March 2006
-
-#ifndef G4TRAJECTORYDRAWBYORIGINVOLUME
-#define G4TRAJECTORYDRAWBYORIGINVOLUME
-
+// Jane Tinslay May 2006
+//
+// See header for details
+//
 #include "G4VTrajectoryModel.hh"
-#include "G4Colour.hh"
-#include "G4ModelColourMap.hh"
-#include "G4String.hh"
-#include <map>
+#include "G4VisTrajContext.hh"
 
-class G4TrajectoryDrawByOriginVolume : public G4VTrajectoryModel {
+G4VTrajectoryModel::G4VTrajectoryModel(const G4String& name, 
+				       G4VisTrajContext* context)
+  :fName(name)
+  ,fVerbose(false)
+  ,fpContext(context) 
+{
+  // Create context object if none is provided. Model will
+  // then use default G4VisTrajContext configuration
+  if (0 == fpContext) fpContext = new G4VisTrajContext();
+}
 
-public: // With description
- 
-  G4TrajectoryDrawByOriginVolume(const G4String& name = "Unspecified", G4VisTrajContext* context=0);
-  
-  virtual ~G4TrajectoryDrawByOriginVolume();
+G4VTrajectoryModel::~G4VTrajectoryModel()
+{
+  delete fpContext;
+}
 
-  virtual void Draw(const G4VTrajectory&, const G4int& i_mode = 0, 
-		    const G4bool& visible = true) const;
-  // Draw the trajectory with optional i_mode parameter
+const G4VisTrajContext&
+G4VTrajectoryModel::GetContext() const 
+{
+  // Expect context to exist
+  assert (0 != fpContext);
+  return *fpContext;
+}
 
-  virtual void Print(std::ostream& ostr) const;
-  // Print configuration
+G4String 
+G4VTrajectoryModel::Name() const 
+{
+  return fName;
+}
 
-  void SetDefault(const G4String&);
-  void SetDefault(const G4Colour&);
+void
+G4VTrajectoryModel::SetVerbose(const G4bool& verbose)
+{
+  fVerbose = verbose;
+}
 
-  void Set(const G4String& particle, const G4String& colour);
-  void Set(const G4String& particle, const G4Colour& colour);
-  // Configuration functions
-
-private:
-
-  // Data members
-  G4ModelColourMap<G4String> fMap;
-  G4Colour fDefault;
-
-};
-
-#endif
+G4bool
+G4VTrajectoryModel::GetVerbose() const
+{
+  return fVerbose;
+}

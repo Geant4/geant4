@@ -19,49 +19,57 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VTrajectoryModel.hh,v 1.4 2006-03-24 20:22:43 tinslay Exp $
+// $Id: G4VTrajectoryModel.hh,v 1.5 2006-05-02 20:47:40 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Jane Tinslay, John Allison, Joseph Perl October 2005
 //
 // Class Description:
-// Abstract base class for trajectory models. Trajectory models are responsible
-// for drawing individual trajectories according to a particular style.
+// Abstract base class for trajectory drawing models. Trajectory drawing
+// models are responsible for drawing individual trajectories according 
+// to a particular style.
 // Class Description - End:
 
 #ifndef G4VTRAJECTORYMODEL_HH
 #define G4VTRAJECTORYMODEL_HH
 
 #include "G4String.hh"
-#include <iostream>
+#include "G4VTrajectory.hh"
 
-class G4VTrajectory;
+class G4VisTrajContext;
 
 class G4VTrajectoryModel {
 
-public: // With description
+public:
 
-  G4VTrajectoryModel(const G4String& name):fName(name) {}
+  // Construct with context object
+  G4VTrajectoryModel(const G4String& name, G4VisTrajContext* fpContext=0);
 
-  virtual ~G4VTrajectoryModel() {}
-
-  virtual void Draw(const G4VTrajectory& trajectory, const G4int& i_mode = 0, 
+  // Destructor
+  virtual ~G4VTrajectoryModel();
+  
+  // Draw method
+  virtual void Draw(const G4VTrajectory& model, const G4int& i_mode = 0, 
 		    const G4bool& visible = true) const = 0;
-  // Draw the trajectory with optional i_mode parameter
-
-  virtual void Print(std::ostream& ostr) const = 0;
+  
   // Print configuration
-
+  virtual void Print(std::ostream& ostr) const = 0;
+  
+  // Accessors
   G4String Name() const ;
+  const G4VisTrajContext& GetContext() const;
+  
+  // Set verbosity
+  void SetVerbose(const G4bool&);
+  G4bool GetVerbose() const;
 
-protected:
+private:
 
-  // Data member
   G4String fName;
-
+  G4bool fVerbose;
+  G4VisTrajContext* fpContext;
+  
 };
-
-inline G4String G4VTrajectoryModel::Name() const {return fName;}
 
 #endif
 

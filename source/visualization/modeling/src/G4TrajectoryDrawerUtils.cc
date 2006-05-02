@@ -19,22 +19,24 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4TrajectoryDrawerUtils.cc,v 1.4 2006-03-24 20:22:43 tinslay Exp $
+// $Id: G4TrajectoryDrawerUtils.cc,v 1.5 2006-05-02 20:47:40 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Jane Tinslay, John Allison, Joseph Perl November 2005
-
+//
 #include "G4TrajectoryDrawerUtils.hh"
+#include "G4Colour.hh"
 #include "G4Polyline.hh"
 #include "G4Polymarker.hh"
 #include "G4VTrajectory.hh"
 #include "G4VTrajectoryPoint.hh"
-#include "G4VVisManager.hh"
-#include "G4Colour.hh"
 #include "G4VisAttributes.hh"
+#include "G4VisTrajContext.hh"
+#include "G4VVisManager.hh"
 
 namespace G4TrajectoryDrawerUtils {
 
+  
   void GetPoints(const G4VTrajectory& traj, G4Polyline& trajectoryLine,
 		 G4Polymarker& auxiliaryPoints, G4Polymarker& stepPoints) 
   {
@@ -44,7 +46,7 @@ namespace G4TrajectoryDrawerUtils {
       const std::vector<G4ThreeVector>* auxiliaries
 	= aTrajectoryPoint->GetAuxiliaryPoints();
       
-      if (auxiliaries) {
+      if (0 != auxiliaries) {
 	for (size_t iAux=0; iAux<auxiliaries->size(); ++iAux) {
 	  const G4ThreeVector pos((*auxiliaries)[iAux]);
 	  trajectoryLine.push_back(pos);
@@ -106,5 +108,74 @@ namespace G4TrajectoryDrawerUtils {
       pVVisManager->Draw(stepPoints);
     }
     
+  }
+  
+  void DrawLineAndPoints(const G4VTrajectory& traj, const G4VisTrajContext& context, const G4int& i_mode) 
+  {
+    G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
+    if (0 == pVVisManager) return;
+    
+    // Extra copy while i_mode is still around
+    G4VisTrajContext myContext(context);
+    
+    if (i_mode != 0) {
+      const G4double markerSize = std::abs(i_mode)/1000;
+      G4bool lineRequired (i_mode >= 0);
+      G4bool markersRequired (markerSize > 0.);        
+      
+      myContext.SetDrawLine(lineRequired);
+      myContext.SetDrawAuxPts(markersRequired);
+      myContext.SetDrawStepPts(markersRequired);
+
+      myContext.SetAuxPtsSize(markerSize);
+      myContext.SetStepPtsSize(markerSize);
+
+      if (!warnedAboutIMode) {
+	G4cout<<"Trajectory drawing configuration will be based on imode value of "<<i_mode<<G4endl;
+	warnedAboutIMode = true;
+      }
+    }
+
+    // Return if don't need to do anything
+    if (!myContext.GetDrawLine() && !myContext.GetDrawAuxPts() && !myContext.GetDrawStepPts()) return;
+    
+    // Get points to draw
+    G4Polyline trajectoryLine;
+    G4Polymarker stepPoints;
+    G4Polymarker auxiliaryPoints;
+    
+    GetPoints(traj, trajectoryLine, auxiliaryPoints, stepPoints);
+    
+    if (myContext.GetDrawLine()) {
+      G4VisAttributes trajectoryLineAttribs(myContext.GetLineColour());
+      trajectoryLineAttribs.SetVisibility(myContext.GetLineVisible());
+      trajectoryLine.SetVisAttributes(&trajectoryLineAttribs);
+      
+      pVVisManager->Draw(trajectoryLine);
+    }
+    
+    if (myContext.GetDrawAuxPts() && (auxiliaryPoints.size() > 0)) {
+      auxiliaryPoints.SetMarkerType(myContext.GetAuxPtsType());
+      auxiliaryPoints.SetScreenSize(myContext.GetAuxPtsSize());
+      auxiliaryPoints.SetFillStyle(myContext.GetAuxPtsFillStyle());
+      
+      G4VisAttributes auxiliaryPointsAttribs(myContext.GetAuxPtsColour());  
+      auxiliaryPointsAttribs.SetVisibility(myContext.GetAuxPtsVisible());
+      auxiliaryPoints.SetVisAttributes(&auxiliaryPointsAttribs);
+      
+      pVVisManager->Draw(auxiliaryPoints);
+    }
+    
+    if (myContext.GetDrawStepPts() && (stepPoints.size() > 0)) {
+      stepPoints.SetMarkerType(myContext.GetStepPtsType());
+      stepPoints.SetScreenSize(myContext.GetStepPtsSize());
+      stepPoints.SetFillStyle(myContext.GetStepPtsFillStyle());
+      
+      G4VisAttributes stepPointsAttribs(myContext.GetStepPtsColour()); 
+      stepPointsAttribs.SetVisibility(myContext.GetStepPtsVisible());
+      stepPoints.SetVisAttributes(&stepPointsAttribs);
+      
+      pVVisManager->Draw(stepPoints);
+    }
   }
 }

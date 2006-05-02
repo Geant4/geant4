@@ -19,52 +19,41 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4TrajectoryDrawByOriginVolume.hh,v 1.3 2006-05-02 20:47:40 tinslay Exp $
+// $Id: G4TrajectoryGenericDrawer.cc,v 1.1 2006-05-02 20:47:40 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// Class Description:
-// Trajectory model which colours a trajectory according to
-// the origin volume
-// Class Description - End:
-// Jane Tinslay March 2006
+// Jane Tinslay May 2006
+//
+#include "G4TrajectoryGenericDrawer.hh"
+#include "G4TrajectoryDrawerUtils.hh"
+#include "G4VisTrajContext.hh"
+#include "G4VTrajectory.hh"
+#include <sstream>
 
-#ifndef G4TRAJECTORYDRAWBYORIGINVOLUME
-#define G4TRAJECTORYDRAWBYORIGINVOLUME
+G4TrajectoryGenericDrawer::G4TrajectoryGenericDrawer(const G4String& name, G4VisTrajContext* context)
+  :G4VTrajectoryModel(name, context)
+{}
 
-#include "G4VTrajectoryModel.hh"
-#include "G4Colour.hh"
-#include "G4ModelColourMap.hh"
-#include "G4String.hh"
-#include <map>
+G4TrajectoryGenericDrawer::~G4TrajectoryGenericDrawer() {}
 
-class G4TrajectoryDrawByOriginVolume : public G4VTrajectoryModel {
+void
+G4TrajectoryGenericDrawer::Draw(const G4VTrajectory& traj, const G4int& i_mode, const G4bool& visible) const
+{
+  G4VisTrajContext myContext(GetContext());
+  myContext.SetVisible(visible);
 
-public: // With description
- 
-  G4TrajectoryDrawByOriginVolume(const G4String& name = "Unspecified", G4VisTrajContext* context=0);
+  if (GetVerbose()) {
+    G4cout<<"G4TrajectoryGenericDrawer named "<<Name();
+    G4cout<<", drawing trajectory with configuration: "<<G4endl;
+    myContext.Print(G4cout);
+  }
   
-  virtual ~G4TrajectoryDrawByOriginVolume();
+  G4TrajectoryDrawerUtils::DrawLineAndPoints(traj, myContext, i_mode);
+}
 
-  virtual void Draw(const G4VTrajectory&, const G4int& i_mode = 0, 
-		    const G4bool& visible = true) const;
-  // Draw the trajectory with optional i_mode parameter
-
-  virtual void Print(std::ostream& ostr) const;
-  // Print configuration
-
-  void SetDefault(const G4String&);
-  void SetDefault(const G4Colour&);
-
-  void Set(const G4String& particle, const G4String& colour);
-  void Set(const G4String& particle, const G4Colour& colour);
-  // Configuration functions
-
-private:
-
-  // Data members
-  G4ModelColourMap<G4String> fMap;
-  G4Colour fDefault;
-
-};
-
-#endif
+void
+G4TrajectoryGenericDrawer::Print(std::ostream& ostr) const
+{
+  ostr<<"G4TrajectoryGenericDrawer model "<< Name()<< ", default configuration :"<<G4endl;
+  GetContext().Print(G4cout);
+}

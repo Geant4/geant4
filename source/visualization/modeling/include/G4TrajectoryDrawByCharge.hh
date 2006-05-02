@@ -19,14 +19,14 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4TrajectoryDrawByCharge.hh,v 1.5 2006-03-24 20:22:43 tinslay Exp $
+// $Id: G4TrajectoryDrawByCharge.hh,v 1.6 2006-05-02 20:47:40 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Jane Tinslay, John Allison, Joseph Perl November 2005
 //
 // Class Description:
 // Trajectory model which colours a trajectory according to  
-// charge. Guts taken from G4VTrajectory::DrawTrajectory method.
+// charge. 
 // Class Description - End:
 
 #ifndef G4TRAJECTORYDRAWBYCHARGE_HH
@@ -43,7 +43,7 @@ public: // With description
  
   enum Charge {Negative=-1, Neutral=0, Positive=1}; 
 
-  G4TrajectoryDrawByCharge(const G4String& name = "Unspecified");
+  G4TrajectoryDrawByCharge(const G4String& name = "Unspecified", G4VisTrajContext* context=0);
 
   G4TrajectoryDrawByCharge(const G4String& name,
 			   const G4Colour& positive,
@@ -52,12 +52,12 @@ public: // With description
   
   virtual ~G4TrajectoryDrawByCharge();
 
+  // Draw the trajectory with optional i_mode parameter
   virtual void Draw(const G4VTrajectory& trajectory, const G4int& i_mode = 0, 
 		    const G4bool& visible = true) const;
-  // Draw the trajectory with optional i_mode parameter
 
-  virtual void Print(std::ostream& ostr) const;
   // Print configuration
+  virtual void Print(std::ostream& ostr) const;
 
   void Set(const Charge& charge, const G4Colour& colour);
   void Set(const Charge& charge, const G4String& colour);

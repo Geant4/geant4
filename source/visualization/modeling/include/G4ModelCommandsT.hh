@@ -19,7 +19,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4ModelCommandsT.hh,v 1.5 2006-04-24 07:49:29 allison Exp $
+// $Id: G4ModelCommandsT.hh,v 1.6 2006-05-02 20:47:40 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Generic model messenges. 
@@ -29,406 +29,579 @@
 #ifndef G4MODELCOMMANDST_HH
 #define G4MODELCOMMANDST_HH
 
-#include "G4Colour.hh"
-#include "G4String.hh"
-#include "G4UIcmdWithABool.hh"
-#include "G4UIcommand.hh"
-#include "G4VModelCommand.hh"
-
+#include "G4ModelApplyCommandsT.hh"
+#include "G4Polymarker.hh"
+#include "G4UIdirectory.hh"
 #include <sstream>
 
-//Set variable colour
+////////////////////////////////////////////////////////////////////////
+// Set parameter colour
 template <typename M>
-class G4ModelCommandSet : public G4VModelCommand<M> {
+class G4ModelCmdSetStringColour : public G4ModelCmdApplyStringColour<M> {
 
 public: // With description
 
-  G4ModelCommandSet(M* model, const G4String& placement);
+  G4ModelCmdSetStringColour(M* model, const G4String& placement)
+    :G4ModelCmdApplyStringColour<M>(model, placement, "set") {}
+  
+  virtual ~G4ModelCmdSetStringColour() {}
 
-  virtual ~G4ModelCommandSet();
+protected:
 
-  void SetNewValue(G4UIcommand* command, G4String newValue);
-
-private:
-
-  G4UIcommand* fpStringCmd;
-  G4UIcommand* fpComponentCmd;
+  virtual void Apply(const G4String& param, const G4Colour& colour) {
+    G4VModelCommand<M>::Model()->Set(param, colour);
+  }
 
 };
 
+////////////////////////////////////////////////////////////////////////
+// Set default colour
 template <typename M>
-G4ModelCommandSet<M>::G4ModelCommandSet(M* model, const G4String& placement)
-  :G4VModelCommand<M>(model)
-{
-  //Set colour through a string
-  G4String name = model->Name();
-  G4String stringDir = placement+"/"+name+"/set";
-  G4UIparameter* param(0);
-
-  fpStringCmd = new G4UIcommand(stringDir, this);
-  fpStringCmd->SetGuidance("Set colour through a string");   
-  fpStringCmd->SetGuidance("Two inputs are expected.");
-  
-  param = new G4UIparameter("Variable ", 's', false);
-  fpStringCmd->SetParameter(param);
-
-  param = new G4UIparameter("Value ", 's', false);
-  fpStringCmd->SetParameter(param);
-
-  //Set colour through RGBA components
-  G4String componentDir = placement+"/"+name+"/setRGBA";
-  
-  fpComponentCmd = new G4UIcommand(componentDir, this);
-  fpComponentCmd->SetGuidance("Set colour through red, green, blue and alpha components");   
-  fpComponentCmd->SetGuidance("Five inputs are expected.");
-  
-  param = new G4UIparameter("Variable ", 's', false);
-  fpComponentCmd->SetParameter(param);
-
-  param = new G4UIparameter("Red component ", 'd', false);
-  fpComponentCmd->SetParameter(param);
-
-  param = new G4UIparameter("Green component ", 'd', false);
-  fpComponentCmd->SetParameter(param);
-
-  param = new G4UIparameter("Blue component ", 'd', false);
-  fpComponentCmd->SetParameter(param);
-
-  param = new G4UIparameter("Alpha component ", 'd', false);
-  fpComponentCmd->SetParameter(param);
-} 
-
-template <typename M>
-G4ModelCommandSet<M>::~G4ModelCommandSet()
-{ 
-  delete fpStringCmd;
-  delete fpComponentCmd;
-}
-
-template <typename M>
-void G4ModelCommandSet<M>::SetNewValue(G4UIcommand* cmd, G4String newValue)
-{
-  if (cmd == fpStringCmd) {
-    G4String parameter;    
-    G4String colour;
-    std::istringstream is (newValue);
-    is >> parameter >> colour;
-    
-    G4VModelCommand<M>::Model()->Set(parameter, colour);
-  }
-
-  if (cmd == fpComponentCmd) {
-    G4String parameter;    
-    G4double red(0), green(0), blue(0), alpha(0);
-    std::istringstream is (newValue);
-    is >> parameter >> red >> green >> blue >> alpha;
-    
-    G4Colour myColour(red, green, blue, alpha);
-
-    G4VModelCommand<M>::Model()->Set(parameter, myColour);
-  }
-}
-
-//Set default colour
-template <typename M>
-class G4ModelCommandSetDefault : public G4VModelCommand<M> {
+class G4ModelCmdSetDefaultColour : public G4ModelCmdApplyColour<M> {
 
 public: // With description
 
-  G4ModelCommandSetDefault(M* model, const G4String& placement);
-
-  virtual ~G4ModelCommandSetDefault();
-
-  void SetNewValue(G4UIcommand* command, G4String newValue);
-
-private:
-
-  G4UIcommand* fpStringCmd;
-  G4UIcommand* fpComponentCmd;
-
-};
-
-template <typename M>
-G4ModelCommandSetDefault<M>::G4ModelCommandSetDefault(M* model, const G4String& placement)
-  :G4VModelCommand<M>(model)
-{
-  //Set colour through a string
-  G4String name = model->Name();
-  G4String stringDir = placement+"/"+name+"/setDefault";
-  G4UIparameter* param(0);
-
-  fpStringCmd = new G4UIcommand(stringDir, this);
-  fpStringCmd->SetGuidance("Set default colour through a string");   
-  fpStringCmd->SetGuidance("One input is expected.");
-
-  param = new G4UIparameter("Value ", 's', false);
-  fpStringCmd->SetParameter(param);
-
-  //Set colour through RGBA components
-  G4String componentDir = placement+"/"+name+"/setDefaultRGBA";
+  G4ModelCmdSetDefaultColour(M* model, const G4String& placement)
+    :G4ModelCmdApplyColour<M>(model, placement, "setDefault") {}
   
-  fpComponentCmd = new G4UIcommand(componentDir, this);
-  fpComponentCmd->SetGuidance("Set default colour through red, green, blue and alpha components.");   
-  fpComponentCmd->SetGuidance("Four inputs are expected.");
+  virtual ~G4ModelCmdSetDefaultColour() {}
 
-  param = new G4UIparameter("Red component ", 'd', false);
-  fpComponentCmd->SetParameter(param);
+protected:
 
-  param = new G4UIparameter("Green component ", 'd', false);
-  fpComponentCmd->SetParameter(param);
-
-  param = new G4UIparameter("Blue component ", 'd', false);
-  fpComponentCmd->SetParameter(param);
-
-  param = new G4UIparameter("Alpha component ", 'd', false);
-  fpComponentCmd->SetParameter(param);
-} 
-
-template <typename M>
-G4ModelCommandSetDefault<M>::~G4ModelCommandSetDefault()
-{ 
-  delete fpStringCmd;
-  delete fpComponentCmd;
-}
-
-template <typename M>
-void G4ModelCommandSetDefault<M>::SetNewValue(G4UIcommand* cmd, G4String newValue)
-{
-  if (cmd == fpStringCmd) {
-    G4String colour;
-    std::istringstream is (newValue);
-    is >> colour;
-    
+  virtual void Apply(const G4Colour& colour) {
     G4VModelCommand<M>::Model()->SetDefault(colour);
   }
+  
+};
 
-  if (cmd == fpComponentCmd) {
-    G4double red(0), green(0), blue(0), alpha(0);
-    std::istringstream is (newValue);
-    is >> red >> green >> blue >> alpha;
-    
-    G4Colour myColour(red, green, blue, alpha);
+////////////////////////////////////////////////////////////////////////
+// Add string command
+template <typename M>
+class G4ModelCmdAddString : public G4ModelCmdApplyString<M> {
 
-    G4VModelCommand<M>::Model()->SetDefault(myColour);
+public: // With description
+
+  G4ModelCmdAddString(M* model, const G4String& placement)
+    :G4ModelCmdApplyString<M>(model, placement, "add") 
+  {
+    G4ModelCmdApplyString<M>::Command()->SetGuidance("Add command");
   }
-}
 
-//Add command
+  virtual ~G4ModelCmdAddString() {}
+
+protected:
+  
+  virtual void Apply(const G4String& newValue) {
+    G4VModelCommand<M>::Model()->Add(newValue);
+  }
+  
+};
+
+////////////////////////////////////////////////////////////////////////
+//Add integer command
 template <typename M>
-class G4ModelCommandAdd : public G4VModelCommand<M> {
+class G4ModelCmdAddInt : public G4ModelCmdApplyInteger<M> {
 
 public: // With description
 
-  G4ModelCommandAdd(M* model, const G4String& placement);
+  G4ModelCmdAddInt(M* model, const G4String& placement)
+  :G4ModelCmdApplyInteger<M>(model, placement, "add") 
+  {
+    G4ModelCmdApplyInteger<M>::Command()->SetGuidance("Add command");    
+  }
+  
+  virtual ~G4ModelCmdAddInt() {}
 
-  virtual ~G4ModelCommandAdd();
+protected:
 
-  void SetNewValue(G4UIcommand* command, G4String newValue);
-
-private:
-
-  G4UIcommand* cmd;
+  virtual void Apply(const G4int& newValue) {
+    G4VModelCommand<M>::Model()->Add(newValue);
+  }
+  
 };
 
+////////////////////////////////////////////////////////////////////////
+// Invert command
 template <typename M>
-G4ModelCommandAdd<M>::G4ModelCommandAdd(M* model, const G4String& placement)
-  :G4VModelCommand<M>(model)
-{
-  //Set colour through a string
-  G4String name = model->Name();
-  G4String stringDir = placement+"/"+name+"/add";
-  G4UIparameter* param(0);
+class G4ModelCmdInvert : public G4ModelCmdApplyBool<M> {
+  
+public: // With description
+  
+  G4ModelCmdInvert(M* model, const G4String& placement) 
+    :G4ModelCmdApplyBool<M>(model, placement, "invert") 
+  {
+    G4ModelCmdApplyBool<M>::Command()->SetGuidance("Invert command");
+  }
 
-  cmd = new G4UIcommand(stringDir, this);
-  cmd->SetGuidance("Add Command");
-  cmd->SetGuidance("One input is expected.");
+  virtual ~G4ModelCmdInvert() {}
 
-  param = new G4UIparameter("Value ", 's', false);
-  cmd->SetParameter(param);
-}
+protected:
 
+  virtual void Apply(const G4bool& newValue) {
+    G4VModelCommand<M>::Model()->SetInvert(newValue);
+  }
+
+};
+
+////////////////////////////////////////////////////////////////////////
+// Active command
 template <typename M>
-G4ModelCommandAdd<M>::~G4ModelCommandAdd()
-{  
-  delete cmd;
-}
-
-template <typename M>
-void G4ModelCommandAdd<M>::SetNewValue(G4UIcommand*, G4String newValue)
-{
-  G4VModelCommand<M>::Model()->Add(newValue);
-}
-
-
-//Invert command
-template <typename M>
-class G4ModelCommandInvert : public G4VModelCommand<M> {
+class G4ModelCmdActive : public G4ModelCmdApplyBool<M> {
 
 public: // With description
 
-  G4ModelCommandInvert(M* model, const G4String& placement);
+  G4ModelCmdActive(M* model, const G4String& placement)
+    :G4ModelCmdApplyBool<M>(model, placement, "active") 
+  {
+    G4ModelCmdApplyBool<M>::Command()->SetGuidance("Active command");
+  }
+  
+  virtual ~G4ModelCmdActive() {}
 
-  virtual ~G4ModelCommandInvert();
+protected:
 
-  void SetNewValue(G4UIcommand* command, G4String newValue);
+  virtual void Apply(const G4bool& newValue) {
+    G4VModelCommand<M>::Model()->SetActive(newValue);
+  }
 
-private:
-
-  G4UIcmdWithABool* fpCmd;
 };
 
+////////////////////////////////////////////////////////////////////////
+// Verbose command
 template <typename M>
-G4ModelCommandInvert<M>::G4ModelCommandInvert(M* model, const G4String& placement)
-  :G4VModelCommand<M>(model)
-{
-  //Set colour through a string
-  G4String name = model->Name();
-  G4String stringDir = placement+"/"+name+"/invert";
-
-  fpCmd = new G4UIcmdWithABool(stringDir, this);
-  fpCmd->SetGuidance("Invert command.");
-  fpCmd->SetGuidance("One input is expected.");
-  fpCmd->SetParameterName("invert", true);
-  fpCmd->SetDefaultValue(true);
-}
-
-template <typename M>
-G4ModelCommandInvert<M>::~G4ModelCommandInvert()
-{  
-  delete fpCmd;
-}
-
-template <typename M>
-void G4ModelCommandInvert<M>::SetNewValue(G4UIcommand*, G4String newValue)
-{
-  G4VModelCommand<M>::Model()->SetInvert(fpCmd->GetNewBoolValue(newValue));
-}
-
-//Active command
-template <typename M>
-class G4ModelCommandActive : public G4VModelCommand<M> {
+class G4ModelCmdVerbose : public G4ModelCmdApplyBool<M> {
 
 public: // With description
 
-  G4ModelCommandActive(M* model, const G4String& placement);
+  G4ModelCmdVerbose(M* model, const G4String& placement)
+    :G4ModelCmdApplyBool<M>(model, placement, "verbose")
+  {
+    G4ModelCmdApplyBool<M>::Command()->SetGuidance("Verbose command");
+  }
 
-  virtual ~G4ModelCommandActive();
+  virtual ~G4ModelCmdVerbose() {}
 
-  void SetNewValue(G4UIcommand* command, G4String newValue);
+protected:
 
-private:
+  virtual void Apply(const G4bool& newValue) {
+    G4VModelCommand<M>::Model()->SetVerbose(newValue);
+  }
 
-  G4UIcmdWithABool* fpCmd;
 };
 
+////////////////////////////////////////////////////////////////////////
+// Reset command
 template <typename M>
-G4ModelCommandActive<M>::G4ModelCommandActive(M* model, const G4String& placement)
-  :G4VModelCommand<M>(model)
-{
-  //Set colour through a string
-  G4String name = model->Name();
-  G4String stringDir = placement+"/"+name+"/active";
-
-  fpCmd = new G4UIcmdWithABool(stringDir, this);
-  fpCmd->SetGuidance("Active command.");
-  fpCmd->SetParameterName("active", true);
-  fpCmd->SetDefaultValue(true);
-}
-
-template <typename M>
-G4ModelCommandActive<M>::~G4ModelCommandActive()
-{  
-  delete fpCmd;
-}
-
-template <typename M>
-void G4ModelCommandActive<M>::SetNewValue(G4UIcommand*, G4String newValue)
-{
-  G4VModelCommand<M>::Model()->SetActive(fpCmd->GetNewBoolValue(newValue));
-}
-
-
-//Reset command
-template <typename M>
-class G4ModelCommandReset : public G4VModelCommand<M> {
+class G4ModelCmdReset : public G4ModelCmdApplyNull<M> {
 
 public: // With description
 
-  G4ModelCommandReset(M* model, const G4String& placement);
+  G4ModelCmdReset(M* model, const G4String& placement)
+    :G4ModelCmdApplyNull<M>(model, placement, "reset") 
+  {
+    G4ModelCmdApplyNull<M>::Command()->SetGuidance("Reset command");    
+  }
+  
+  virtual ~G4ModelCmdReset() {}
+  
+protected:
 
-  virtual ~G4ModelCommandReset();
-
-  void SetNewValue(G4UIcommand* command, G4String newValue);
-
-private:
-
-  G4UIcommand* fpCmd;
+  virtual void Apply() {
+    G4VModelCommand<M>::Model()->Reset();
+  }
+ 
 };
 
+////////////////////////////////////////////////////////////////////////
+// Set auxiliary points colour command
 template <typename M>
-G4ModelCommandReset<M>::G4ModelCommandReset(M* model, const G4String& placement)
-  :G4VModelCommand<M>(model)
-{
-  //Set colour through a string
-  G4String name = model->Name();
-  G4String stringDir = placement+"/"+name+"/reset";
+class G4ModelCmdSetAuxPtsColour : public G4ModelCmdApplyColour<M> {
+  
+public:
 
-  fpCmd = new G4UIcommand(stringDir, this);
-  fpCmd->SetGuidance("Reset command.");
-}
+  G4ModelCmdSetAuxPtsColour(M* model, const G4String& placement)
+    :G4ModelCmdApplyColour<M>(model, placement, "setAuxPtsColour") {}
+  
+protected:
 
-template <typename M>
-G4ModelCommandReset<M>::~G4ModelCommandReset()
-{  
-  delete fpCmd;
-}
-
-template <typename M>
-void G4ModelCommandReset<M>::SetNewValue(G4UIcommand*, G4String)
-{
-  G4VModelCommand<M>::Model()->Reset();
-}
-
-//Verbose command
-template <typename M>
-class G4ModelCommandVerbose : public G4VModelCommand<M> {
-
-public: // With description
-
-  G4ModelCommandVerbose(M* model, const G4String& placement);
-
-  virtual ~G4ModelCommandVerbose();
-
-  void SetNewValue(G4UIcommand* command, G4String newValue);
-
-private:
-
-  G4UIcmdWithABool* fpCmd;
+  void Apply(const G4Colour& colour) {
+    G4VModelCommand<M>::Model()->SetAuxPtsColour(colour);
+  }
+  
 };
 
+////////////////////////////////////////////////////////////////////////
+// Set set points colour command
 template <typename M>
-G4ModelCommandVerbose<M>::G4ModelCommandVerbose(M* model, const G4String& placement)
-  :G4VModelCommand<M>(model)
-{
-  G4String name = model->Name();
-  G4String stringDir = placement+"/"+name+"/verbose";
+class G4ModelCmdSetStepPtsColour : public G4ModelCmdApplyColour<M> {
+  
+public:
 
-  fpCmd = new G4UIcmdWithABool(stringDir, this);
-  fpCmd->SetGuidance("Verbose command.");
-  fpCmd->SetParameterName("verbose", true);
-  fpCmd->SetDefaultValue(true);
-}
+  G4ModelCmdSetStepPtsColour(M* model, const G4String& placement)
+    :G4ModelCmdApplyColour<M>(model, placement, "setStepPtsColour") {}
+  
+protected:
+  
+  void Apply(const G4Colour& colour) {
+    G4VModelCommand<M>::Model()->SetStepPtsColour(colour);
+  }
+  
+};
 
+////////////////////////////////////////////////////////////////////////
+// Set draw line command
 template <typename M>
-G4ModelCommandVerbose<M>::~G4ModelCommandVerbose()
-{  
-  delete fpCmd;
-}
+class G4ModelCmdSetDrawLine : public G4ModelCmdApplyBool<M> {
+  
+public:
 
+  G4ModelCmdSetDrawLine(M* model, const G4String& placement)
+    :G4ModelCmdApplyBool<M>(model, placement, "setDrawLine")
+  {
+    G4ModelCmdApplyBool<M>::Command()->SetGuidance("Set draw line command");
+  }
+  
+protected:
+
+  void Apply(const G4bool& myBool) {
+    G4VModelCommand<M>::Model()->SetDrawLine(myBool);
+  }
+  
+};
+
+////////////////////////////////////////////////////////////////////////
+// Set line visibility command
 template <typename M>
-void G4ModelCommandVerbose<M>::SetNewValue(G4UIcommand*, G4String newValue)
-{
-  G4VModelCommand<M>::Model()->SetVerbose(fpCmd->GetNewBoolValue(newValue));
-}
+class G4ModelCmdSetLineVisible : public G4ModelCmdApplyBool<M> {
+  
+public:
 
-#endif
+  G4ModelCmdSetLineVisible(M* model, const G4String& placement)
+    :G4ModelCmdApplyBool<M>(model, placement, "setLineVisible") 
+  {
+    G4ModelCmdApplyBool<M>::Command()->SetGuidance("Set line visibility command");
+  }
+  
+protected:
+
+   void Apply(const G4bool& myBool) {
+     G4VModelCommand<M>::Model()->SetLineVisible(myBool);
+  }
+  
+};
+
+////////////////////////////////////////////////////////////////////////
+// Set draw auxiliary points command
+template <typename M>
+class G4ModelCmdSetDrawAuxPts : public G4ModelCmdApplyBool<M> {
+  
+public:
+
+  G4ModelCmdSetDrawAuxPts(M* model, const G4String& placement)
+    :G4ModelCmdApplyBool<M>(model, placement, "setDrawAuxPts")
+  {
+    G4ModelCmdApplyBool<M>::Command()->SetGuidance("Set draw auxiliary points command");
+  }
+  
+protected:
+
+   void Apply(const G4bool& myBool) {
+     G4VModelCommand<M>::Model()->SetDrawAuxPts(myBool);
+  }
+  
+};
+
+////////////////////////////////////////////////////////////////////////
+// Set auxiliary points visibility
+template <typename M>
+class G4ModelCmdSetAuxPtsVisible : public G4ModelCmdApplyBool<M> {
+  
+public:
+
+  G4ModelCmdSetAuxPtsVisible(M* model, const G4String& placement)
+    :G4ModelCmdApplyBool<M>(model, placement, "setAuxPtsVisible")
+  {
+    G4ModelCmdApplyBool<M>::Command()->SetGuidance("Set auxiliary points visibility command");
+  }
+  
+protected:
+
+   void Apply(const G4bool& myBool) {
+     G4VModelCommand<M>::Model()->SetAuxPtsVisible(myBool);
+  }
+  
+};
+
+////////////////////////////////////////////////////////////////////////
+// Set draw step points command
+template <typename M>
+class G4ModelCmdSetDrawStepPts : public G4ModelCmdApplyBool<M> {
+  
+public:
+
+  G4ModelCmdSetDrawStepPts(M* model, const G4String& placement)
+    :G4ModelCmdApplyBool<M>(model, placement, "setDrawStepPts")
+  {
+    G4ModelCmdApplyBool<M>::Command()->SetGuidance("Set draw step points command");
+  }
+  
+protected:
+  
+   void Apply(const G4bool& myBool) {
+     G4VModelCommand<M>::Model()->SetDrawStepPts(myBool);
+  }
+  
+};
+
+////////////////////////////////////////////////////////////////////////
+// Set step points visible command
+template <typename M>
+class G4ModelCmdSetStepPtsVisible : public G4ModelCmdApplyBool<M> {
+  
+public:
+
+  G4ModelCmdSetStepPtsVisible(M* model, const G4String& placement)
+    :G4ModelCmdApplyBool<M>(model, placement, "setStepPtsVisible")
+  {
+    G4ModelCmdApplyBool<M>::Command()->SetGuidance("Set step points colour command");
+  }
+  
+protected:
+
+   void Apply(const G4bool& myBool) {
+     G4VModelCommand<M>::Model()->SetStepPtsVisible(myBool);
+  }
+  
+};
+
+////////////////////////////////////////////////////////////////////////
+// Set auxiliary points size command
+template <typename M>
+class G4ModelCmdSetAuxPtsSize : public G4ModelCmdApplyDouble<M> {
+  
+public:
+
+  G4ModelCmdSetAuxPtsSize(M* model, const G4String& placement)
+    :G4ModelCmdApplyDouble<M>(model, placement, "setAuxPtsSize")
+  {
+    G4ModelCmdApplyDouble<M>::Command()->SetGuidance("Set auxiliary points size command");
+  }
+  
+protected:
+
+   void Apply(const G4double& myDouble) {
+     G4VModelCommand<M>::Model()->SetAuxPtsSize(myDouble);
+  }
+  
+};
+
+////////////////////////////////////////////////////////////////////////
+// Set step points size command
+template <typename M>
+class G4ModelCmdSetStepPtsSize : public G4ModelCmdApplyDouble<M> {
+  
+public:
+
+  G4ModelCmdSetStepPtsSize(M* model, const G4String& placement)
+    :G4ModelCmdApplyDouble<M>(model, placement, "setStepPtsSize")
+  {
+    G4ModelCmdApplyDouble<M>::Command()->SetGuidance("Set step points colour command");
+  }
+  
+protected:
+
+   void Apply(const G4double& myDouble) {
+     G4VModelCommand<M>::Model()->SetStepPtsSize(myDouble);
+  }
+  
+};
+
+////////////////////////////////////////////////////////////////////////
+// Set step points type command
+template <typename M>
+class G4ModelCmdSetStepPtsType : public G4ModelCmdApplyString<M> {
+  
+public:
+
+  G4ModelCmdSetStepPtsType(M* model, const G4String& placement)
+    :G4ModelCmdApplyString<M>(model, placement, "setStepPtsType")
+  {
+    G4UIcmdWithAString* cmd = G4ModelCmdApplyString<M>::Command();
+    cmd->SetGuidance("Set step points type.");
+    cmd->SetCandidates("dots circles squares");
+  }
+  
+protected:
+
+  void Apply(const G4String& type) {
+    G4Polymarker::MarkerType myType;
+    
+    if (type == "dots") {myType = G4Polymarker::dots;}
+    else if (type == "circles") {myType = G4Polymarker::circles;}
+    else if (type == "squares") {myType = G4Polymarker::squares;}
+    else {
+      std::ostringstream o;
+      o << "Invalid argument. See command guidance for options.";
+      G4Exception
+	("G4ModelCmdSetStepPtsType::Apply",
+	 "InvalidArgument", JustWarning, o.str().c_str());
+      return;
+    }
+    G4VModelCommand<M>::Model()->SetStepPtsType(myType);
+  }
+  
+};
+
+////////////////////////////////////////////////////////////////////////
+// Set auxiliary points type command
+template <typename M>
+class G4ModelCmdSetAuxPtsType : public G4ModelCmdApplyString<M> {
+  
+public:
+  
+  G4ModelCmdSetAuxPtsType(M* model, const G4String& placement)
+    :G4ModelCmdApplyString<M>(model, placement, "setAuxPtsType")
+  {
+    G4UIcmdWithAString* cmd = G4ModelCmdApplyString<M>::Command();
+
+    cmd->SetGuidance("Set auxiliary points type.");
+    cmd->SetCandidates("dots circles squares");
+  }
+  
+protected:
+  
+  void Apply(const G4String& type) {
+    G4Polymarker::MarkerType myType;
+    
+    if (type == "dots") {myType = G4Polymarker::dots;}
+    else if (type == "circles") {myType = G4Polymarker::circles;}
+    else if (type == "squares") {myType = G4Polymarker::squares;}
+    else {
+      std::ostringstream o;
+      o << "Invalid argument. See command guidance for options.";
+      G4Exception
+	("G4ModelCmdSetAuxPtsType::Apply",
+	 "InvalidArgument", JustWarning, o.str().c_str());
+      return;
+    }
+    
+    G4VModelCommand<M>::Model()->SetAuxPtsType(myType);
+  }
+  
+};
+
+////////////////////////////////////////////////////////////////////////
+// Set step points fill style command
+template <typename M>
+class G4ModelCmdSetStepPtsFillStyle : public G4ModelCmdApplyString<M> {
+  
+public:
+
+  G4ModelCmdSetStepPtsFillStyle(M* model, const G4String& placement)
+    :G4ModelCmdApplyString<M>(model, placement, "setStepPtsFillStyle")
+  {
+    G4UIcmdWithAString* cmd = G4ModelCmdApplyString<M>::Command();
+    cmd->SetGuidance("Set step fill style type.");
+    cmd->SetCandidates("noFill hashed filled");
+  }
+  
+protected:
+
+  void Apply(const G4String& type) {
+    G4VMarker::FillStyle myFillStyle;
+    
+    if (type == "noFill") {myFillStyle = G4VMarker::noFill;}
+    else if (type == "hashed") {myFillStyle = G4VMarker::hashed;}
+    else if (type == "filled") {myFillStyle = G4VMarker::filled;}
+    else {
+      std::ostringstream o;
+      o << "Invalid argument. See command guidance for options.";
+      G4Exception
+	("G4ModelCmdSetStepPtsFillStyle::Apply",
+	 "InvalidArgument", JustWarning, o.str().c_str());
+      return;
+    }
+    G4VModelCommand<M>::Model()->SetStepPtsFillStyle(myFillStyle);
+  }
+  
+};
+
+////////////////////////////////////////////////////////////////////////
+// Set auxiliary points fill style command
+template <typename M>
+class G4ModelCmdSetAuxPtsFillStyle : public G4ModelCmdApplyString<M> {
+  
+public:
+
+  G4ModelCmdSetAuxPtsFillStyle(M* model, const G4String& placement)
+    :G4ModelCmdApplyString<M>(model, placement, "setAuxPtsFillStyle")
+  {
+    G4UIcmdWithAString* cmd = G4ModelCmdApplyString<M>::Command();
+    cmd->SetGuidance("Set auxiliary fill style.");
+    cmd->SetCandidates("noFill hashed filled");
+  }
+  
+protected:
+
+  void Apply(const G4String& type) {
+    G4VMarker::FillStyle myFillStyle;
+    
+    if (type == "noFill") {myFillStyle = G4VMarker::noFill;}
+    else if (type == "hashed") {myFillStyle = G4VMarker::hashed;}
+    else if (type == "filled") {myFillStyle = G4VMarker::filled;}
+    else {
+      std::ostringstream o;
+      o << "Invalid argument. See command guidance for options.";
+      G4Exception
+	("G4ModelCmdSetAuxPtsFillStyle::Apply",
+	 "InvalidArgument", JustWarning, o.str().c_str());
+      return;
+    }
+    G4VModelCommand<M>::Model()->SetAuxPtsFillStyle(myFillStyle);
+  }
+  
+};
+
+////////////////////////////////////////////////////////////////////////
+// SetLineColour command
+template <typename M>
+class G4ModelCmdSetLineColour : public G4ModelCmdApplyColour<M> {
+  
+public:
+
+  G4ModelCmdSetLineColour(M* model, const G4String& placement)
+    :G4ModelCmdApplyColour<M>(model, placement, "setLineColour") {}
+  
+protected:
+
+  void Apply(const G4Colour& colour) {
+    G4VModelCommand<M>::Model()->SetLineColour(colour);
+  }
+  
+};
+
+////////////////////////////////////////////////////////////////////////
+// Create context directory command
+template <typename M>
+class G4ModelCmdCreateContextDir : public G4UImessenger {
+  
+public:
+
+  G4ModelCmdCreateContextDir(M* model, const G4String& placement) {
+    G4String title = placement+"/"+model->Name()+"/";
+    cmd = new G4UIdirectory(title);
+    
+    cmd->SetGuidance("Commands for default configuration");
+  }
+
+  virtual ~G4ModelCmdCreateContextDir() {
+    delete cmd;
+  }
+
+protected:
+
+  G4UIdirectory* cmd;
+  
+};
+#endif      
+

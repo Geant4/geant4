@@ -19,7 +19,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4TrajectoryDrawByOriginVolume.cc,v 1.2 2006-03-24 20:22:43 tinslay Exp $
+// $Id: G4TrajectoryDrawByOriginVolume.cc,v 1.3 2006-05-02 20:47:40 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Jane Tinslay March 2006
@@ -28,11 +28,12 @@
 #include "G4TrajectoryDrawerUtils.hh"
 #include "G4VTrajectory.hh"
 #include "G4TransportationManager.hh"
+#include "G4VisTrajContext.hh"
 #include "G4VTrajectoryPoint.hh"
 #include <sstream>
 
-G4TrajectoryDrawByOriginVolume::G4TrajectoryDrawByOriginVolume(const G4String& name)
-  :G4VTrajectoryModel(name)
+G4TrajectoryDrawByOriginVolume::G4TrajectoryDrawByOriginVolume(const G4String& name, G4VisTrajContext* context)
+  :G4VTrajectoryModel(name, context)
   ,fDefault(G4Colour::Grey())
 {}
 
@@ -61,7 +62,19 @@ G4TrajectoryDrawByOriginVolume::Draw(const G4VTrajectory& traj, const G4int& i_m
   G4String physicalName = volume->GetName();
   fMap.GetColour(physicalName, colour);
    
-  G4TrajectoryDrawerUtils::DrawLineAndPoints(traj, i_mode, colour, visible);
+  G4VisTrajContext myContext(GetContext());
+  
+  myContext.SetLineColour(colour);
+  myContext.SetVisible(visible);
+  
+  if (GetVerbose()) {
+    G4cout<<"G4TrajectoryDrawByOriginVolume drawer named "<<Name();
+    G4cout<<", drawing trajectory originating in logical volume, "<<logicalName;
+    G4cout<<", physical volumed "<<physicalName<<", with configuration:"<<G4endl;
+    myContext.Print(G4cout);
+  }
+
+  G4TrajectoryDrawerUtils::DrawLineAndPoints(traj, myContext, i_mode);
 }
 
 void
@@ -107,4 +120,7 @@ G4TrajectoryDrawByOriginVolume::Print(std::ostream& ostr) const
   ostr<<"Default : "<<fDefault<<G4endl;
 
   fMap.Print(ostr);
+
+  ostr<<"Default configuration:"<<G4endl;
+  GetContext().Print(G4cout);
 }

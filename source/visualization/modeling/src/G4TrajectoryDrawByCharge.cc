@@ -19,17 +19,18 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4TrajectoryDrawByCharge.cc,v 1.5 2006-03-24 20:22:43 tinslay Exp $
+// $Id: G4TrajectoryDrawByCharge.cc,v 1.6 2006-05-02 20:47:40 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Jane Tinslay, John Allison, Joseph Perl November 2005
 #include "G4TrajectoryDrawByCharge.hh"
 #include "G4TrajectoryDrawerUtils.hh"
+#include "G4VisTrajContext.hh"
 #include "G4VTrajectory.hh"
 #include <sstream>
 
-G4TrajectoryDrawByCharge::G4TrajectoryDrawByCharge(const G4String& name)
-  :G4VTrajectoryModel(name)
+G4TrajectoryDrawByCharge::G4TrajectoryDrawByCharge(const G4String& name, G4VisTrajContext* context)
+  :G4VTrajectoryModel(name, context)
 {
   // Default configuration
   fMap[Positive] = G4Colour::Blue();
@@ -61,7 +62,19 @@ G4TrajectoryDrawByCharge::Draw(const G4VTrajectory& traj, const G4int& i_mode, c
   else if(charge<0.) fMap.GetColour(Negative, colour); 
   else               fMap.GetColour(Neutral, colour); 
 
-  G4TrajectoryDrawerUtils::DrawLineAndPoints(traj, i_mode, colour, visible);
+  G4VisTrajContext myContext(GetContext());
+  
+  myContext.SetLineColour(colour);
+  myContext.SetVisible(visible);
+  
+  if (GetVerbose()) {
+    G4cout<<"G4TrajectoryDrawByCharge drawer named "<<Name();
+    G4cout<<", drawing trajectory with charge, "<<charge<<G4endl;
+    G4cout<<", with configuration:"<<G4endl;
+    myContext.Print(G4cout);
+  }
+
+  G4TrajectoryDrawerUtils::DrawLineAndPoints(traj, myContext, i_mode);
 }
 
 void
@@ -69,6 +82,8 @@ G4TrajectoryDrawByCharge::Print(std::ostream& ostr) const
 {
   ostr<<"G4TrajectoryDrawByCharge model "<< Name() <<" colour scheme: "<<std::endl;
   fMap.Print(ostr);
+  ostr<<"Default configuration:"<<G4endl;
+  GetContext().Print(G4cout);
 }
 
 void

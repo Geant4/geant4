@@ -19,7 +19,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4TrajectoryDrawerUtils.hh,v 1.4 2006-03-24 20:22:43 tinslay Exp $
+// $Id: G4TrajectoryDrawerUtils.hh,v 1.5 2006-05-02 20:47:40 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // Jane Tinslay, John Allison, Joseph Perl November 2005
@@ -33,18 +33,28 @@
 
 #include "globals.hh"
 
+class G4Colour;
 class G4Polyline;
 class G4Polymarker;
+class G4VisTrajContext;
 class G4VTrajectory;
-class G4Colour;
 
 namespace G4TrajectoryDrawerUtils {
+
+  namespace {
+    G4bool warnedAboutIMode = false;
+  }
 
   void GetPoints(const G4VTrajectory& traj, G4Polyline& trajectoryLine,
 		 G4Polymarker& auxiliaryPoints, G4Polymarker& stepPoints);
 
+  // Draw trajectory line and points
   void DrawLineAndPoints(const G4VTrajectory& traj, const G4int& i_mode, 
-			 const G4Colour& colour, const G4bool& visible);
+			 const G4Colour& cfg, const G4bool& visible);
+
+  // Draw trajectory line and points using G4VisTrajContext object information
+  void DrawLineAndPoints(const G4VTrajectory& traj, const G4VisTrajContext&, const G4int& i_mode=0);
+
 }
 
 #endif

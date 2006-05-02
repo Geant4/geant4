@@ -19,7 +19,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4TrajectoryModelFactories.hh,v 1.3 2006-03-17 03:24:02 tinslay Exp $
+// $Id: G4TrajectoryModelFactories.hh,v 1.4 2006-05-02 20:47:40 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Jane Tinslay, John Allison, Joseph Perl October 2005
@@ -47,6 +47,18 @@ public: // With description
   G4TrajectoryDrawByChargeFactory();
 
   virtual ~G4TrajectoryDrawByChargeFactory();
+  
+  ModelAndMessengers Create(const G4String& placement, const G4String& name);
+    
+};
+
+class G4TrajectoryGenericDrawerFactory : public G4VModelFactory<G4VTrajectoryModel> {
+
+public: // With description
+
+  G4TrajectoryGenericDrawerFactory();
+
+  virtual ~G4TrajectoryGenericDrawerFactory();
   
   ModelAndMessengers Create(const G4String& placement, const G4String& name);
     

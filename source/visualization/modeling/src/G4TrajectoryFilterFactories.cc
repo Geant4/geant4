@@ -19,7 +19,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-/// $Id: G4TrajectoryFilterFactories.cc,v 1.1 2006-03-28 18:01:18 tinslay Exp $
+/// $Id: G4TrajectoryFilterFactories.cc,v 1.2 2006-05-02 20:47:40 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -47,11 +47,12 @@ G4TrajectoryParticleFilterFactory::Create(const G4String& placement, const G4Str
   // Create associated messengers
   Messengers messengers;
   
-  messengers.push_back(new G4ModelCommandAdd<G4TrajectoryParticleFilter>(model, placement));
-  messengers.push_back(new G4ModelCommandInvert<G4TrajectoryParticleFilter>(model, placement));
-  messengers.push_back(new G4ModelCommandActive<G4TrajectoryParticleFilter>(model, placement));
-  messengers.push_back(new G4ModelCommandVerbose<G4TrajectoryParticleFilter>(model, placement));
-  messengers.push_back(new G4ModelCommandReset<G4TrajectoryParticleFilter>(model, placement));
+  messengers.push_back(new G4ModelCmdAddString<G4TrajectoryParticleFilter>(model, placement));
+  messengers.push_back(new G4ModelCmdInvert<G4TrajectoryParticleFilter>(model, placement));
+  messengers.push_back(new G4ModelCmdActive<G4TrajectoryParticleFilter>(model, placement));
+  messengers.push_back(new G4ModelCmdVerbose<G4TrajectoryParticleFilter>(model, placement));
+  messengers.push_back(new G4ModelCmdReset<G4TrajectoryParticleFilter>(model, placement));
   
   return ModelAndMessengers(model, messengers);
 }
+

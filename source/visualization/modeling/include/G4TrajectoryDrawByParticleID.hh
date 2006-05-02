@@ -19,7 +19,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4TrajectoryDrawByParticleID.hh,v 1.5 2006-03-24 20:22:43 tinslay Exp $
+// $Id: G4TrajectoryDrawByParticleID.hh,v 1.6 2006-05-02 20:47:40 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Jane Tinslay, John Allison, Joseph Perl November 2005
@@ -42,7 +42,7 @@ class G4TrajectoryDrawByParticleID : public G4VTrajectoryModel {
 
 public: // With description
  
-  G4TrajectoryDrawByParticleID(const G4String& name = "Unspecified");
+  G4TrajectoryDrawByParticleID(const G4String& name = "Unspecified", G4VisTrajContext* context=0);
   
   virtual ~G4TrajectoryDrawByParticleID();
 

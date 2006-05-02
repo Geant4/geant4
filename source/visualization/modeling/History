@@ -1,4 +1,4 @@
-$Id: History,v 1.60 2006-04-24 07:32:57 allison Exp $
+$Id: History,v 1.61 2006-05-02 20:47:39 tinslay Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,16 @@ committal in the CVS repository !
 
 History file for visualization/modeling
 ---------------------------------------
+
+2nd May 2006 Jane Tinslay
+- Add context to trajectory drawers. Intended to replace imode. 
+  Allows to configure default drawing style for lines, step and 
+  auxiliary points. For example, colours, visibility, point sizes, 
+  fill styles..
+- Add generic drawer, G4TrajectoryGenericDrawer. Draws all trajectories 
+  in the same style, based on its default context.
+- Update generic commands
+- Add verbose to drawers
 
 21st April 2006 Jane Tinslay  (modeling-V08-00-07)
 - Get rid of some warning messages from G4ModelCommandsT 
