@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVPlacement.cc,v 1.7 2005-11-16 19:08:00 japost Exp $
+// $Id: G4PVPlacement.cc,v 1.8 2006-05-02 15:30:30 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -58,7 +58,7 @@ G4PVPlacement::G4PVPlacement( G4RotationMatrix *pRot,
     }
     SetMotherLogical(motherLogical);
     motherLogical->AddDaughter(this);
-    if (pSurfChk) { CheckOverlaps(); }
+    if ((pSurfChk) && (pMother)) { CheckOverlaps(); }
   }
 }
 
@@ -85,7 +85,7 @@ G4PVPlacement::G4PVPlacement( const G4Transform3D &Transform3D,
                   FatalException, "Cannot place a volume inside itself!");
     SetMotherLogical(motherLogical);
     motherLogical->AddDaughter(this);
-    if (pSurfChk) { CheckOverlaps(); }
+    if ((pSurfChk) && (pMother)) { CheckOverlaps(); }
   }
 }
 
@@ -112,7 +112,7 @@ G4PVPlacement::G4PVPlacement( G4RotationMatrix *pRot,
   }
   SetMotherLogical(pMotherLogical);
   if (pMotherLogical) { pMotherLogical->AddDaughter(this); }
-  if (pSurfChk) { CheckOverlaps(); }
+  if ((pSurfChk) && (pMotherLogical)) { CheckOverlaps(); }
 }
 
 
@@ -138,7 +138,7 @@ G4PVPlacement::G4PVPlacement( const G4Transform3D &Transform3D,
   fallocatedRotM = (GetRotation() != 0);
   SetMotherLogical(pMotherLogical);
   if (pMotherLogical) { pMotherLogical->AddDaughter(this); }
-  if (pSurfChk) { CheckOverlaps(); }
+  if ((pSurfChk) && (pMotherLogical)) { CheckOverlaps(); }
 }
 
 // ----------------------------------------------------------------------
