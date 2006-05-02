@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: QBBC.icc,v 1.1 2006-04-24 11:29:09 vnivanch Exp $
+// $Id: QBBC.icc,v 1.2 2006-05-02 08:03:15 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -76,7 +76,7 @@ template<class T> TQBBC<T>::TQBBC(G4int ver, G4bool flagFTF,
   this->RegisterPhysics( new G4DecayPhysics("decay",ver) );
 
    // Hadron Physics
-  this->RegisterPhysics( new G4HadronElasticPhysics("elasticB",ver,flagHP));
+  this->RegisterPhysics( new G4HadronElasticPhysics("elastic",ver,flagHP));
   this->RegisterPhysics( new G4HadronInelasticQBBC("inelastic", ver, 
 	flagFTF, flagCHIPS, flagHP));
   this->RegisterPhysics( new G4QStoppingPhysics("stopping",ver));

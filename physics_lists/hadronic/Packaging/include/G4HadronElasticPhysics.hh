@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HadronElasticPhysics.hh,v 1.1 2006-04-24 11:25:57 vnivanch Exp $
+// $Id: G4HadronElasticPhysics.hh,v 1.2 2006-05-02 08:00:48 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -39,11 +39,9 @@
 
 #include "globals.hh"
 #include "G4VPhysicsConstructor.hh"
-#include "G4LElasticB.hh"
+#include "G4UHadronElasticProcess.hh"
+#include "G4HadronElastic.hh"
 #include <vector>
-
-class G4HadronicProcess;
-//class G4LElasticB;
 
 class G4HadronElasticPhysics : public G4VPhysicsConstructor
 {
@@ -69,13 +67,14 @@ public:
 private:
 
   std::vector<G4HadronicProcess*> p_list;
-  G4LElasticB* model;
+  G4HadronicInteraction* model;
 
   G4double pLimit;
   G4double edepLimit;
 
   G4int    verbose;
   G4bool   hpFlag;
+  G4bool   elasticFlag;
   G4bool   wasActivated;
 };
 

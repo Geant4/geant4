@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HadronElasticPhysics.cc,v 1.2 2006-04-25 09:38:08 vnivanch Exp $
+// $Id: G4HadronElasticPhysics.cc,v 1.3 2006-05-02 08:00:48 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -36,8 +36,9 @@
 
 #include "G4HadronElasticPhysics.hh"
 
-#include "G4UHadronElasticProcess.hh"
 #include "G4HadronicProcess.hh"
+#include "G4HadronicInteraction.hh"
+#include "G4LElastic.hh"
 
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
@@ -54,6 +55,8 @@ G4HadronElasticPhysics::G4HadronElasticPhysics(const G4String& name,
   if(verbose > 1) G4cout << "### HadronElasticPhysics" << G4endl;
   pLimit = 200.*MeV;
   edepLimit = 100.*keV; 
+  if(name == "elastic") elasticFlag = true;
+  else elasticFlag = false;
 }
 
 G4HadronElasticPhysics::~G4HadronElasticPhysics()
@@ -86,8 +89,9 @@ void G4HadronElasticPhysics::ConstructProcess()
 
   if(verbose > 1) G4cout << "### HadronElasticPhysics Construct Process" << G4endl;
 
-  model = new G4LElasticB(edepLimit, pLimit);
   G4double mThreshold = 130.*MeV;
+  if(elasticFlag) model = new G4HadronElastic(edepLimit, pLimit);
+  else            model = new G4LElastic();
 
   theParticleIterator->reset();
   while( (*theParticleIterator)() )
