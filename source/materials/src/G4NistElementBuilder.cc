@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4NistElementBuilder.cc,v 1.7 2005-09-06 08:28:56 vnivanch Exp $
+// $Id: G4NistElementBuilder.cc,v 1.8 2006-05-02 07:54:15 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -34,7 +34,7 @@
 // Creation date: 23.12.2004
 //
 // Modifications:
-//
+// 02.05.2006 Subtract mass of atomic electrons from NIST mass (VI) 
 //
 // -------------------------------------------------------------------
 //
@@ -223,10 +223,11 @@ void G4NistElementBuilder::AddElement(const G4String& name, G4int Z, G4int nc,
   G4double ww = 0.0;
   G4double www;
   size_t nm = nc;
+  G4double delm = G4double(Z)*electron_mass_c2/amu_c2;
 
   for(size_t i=0; i<nm; i++) {
     www = 0.01*(&W)[i];
-    massIsotopes[index] = (&A)[i];
+    massIsotopes[index] = (&A)[i] - delm;
     sigMass[index]      = (&sA)[i];
     relAbundance[index] = www;
 

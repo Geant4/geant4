@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4NistManager.hh,v 1.5 2006-03-03 14:13:27 vnivanch Exp $
+// $Id: G4NistManager.hh,v 1.6 2006-05-02 07:54:15 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -91,6 +91,7 @@ public:
   G4int    GetZ(const G4String& symb) const;
   G4double GetAtomicMassAmu(G4int Z) const;
   G4double GetIsotopeMass(G4int Z, G4int N) const;
+  G4double GetIsotopeAbundance(G4int Z, G4int N) const;
 
   void PrintElement(const G4String&);
   void PrintElement(G4int Z);
@@ -214,6 +215,14 @@ inline
 G4double G4NistManager::GetIsotopeMass(G4int Z, G4int N) const
 {
   return elmBuilder->GetIsotopeMass(Z, N);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline 
+G4double G4NistManager::GetIsotopeAbundance(G4int Z, G4int N) const
+{
+  return elmBuilder->GetIsotopeAbundance(Z, N);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

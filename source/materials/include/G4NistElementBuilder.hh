@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4NistElementBuilder.hh,v 1.7 2006-02-27 17:29:08 vnivanch Exp $
+// $Id: G4NistElementBuilder.hh,v 1.8 2006-05-02 07:54:15 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef G4NistElementBuilder_h
@@ -62,11 +62,13 @@ class G4NistElementBuilder
 {
 public:
   G4NistElementBuilder(G4int vb);
- ~G4NistElementBuilder();
+  ~G4NistElementBuilder();
 
   G4int    GetZ           (const G4String& symb);
   G4double GetA           (G4int Z);
   G4double GetIsotopeMass (G4int Z, G4int N);
+
+  G4double GetIsotopeAbundance (G4int Z, G4int N);
 
   G4int    GetMaxNumElements() {return maxNumElements-1;};
 
@@ -135,6 +137,16 @@ inline G4double G4NistElementBuilder::GetIsotopeMass(G4int Z, G4int N)
   G4int i = N - nFirstIsotope[Z];
   if(i >= 0 && i <nIsotopes[Z]) m = massIsotopes[i + idxIsotopes[Z]]; 
   return m;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline G4double G4NistElementBuilder::GetIsotopeAbundance(G4int Z, G4int N)
+{
+  G4double x = 0.0;
+  G4int i = N - nFirstIsotope[Z];
+  if(i >= 0 && i <nIsotopes[Z]) x = relAbundance[i + idxIsotopes[Z]]; 
+  return x;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
