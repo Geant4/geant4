@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Region.hh,v 1.15 2006-04-04 15:16:26 gcosmo Exp $
+// $Id: G4Region.hh,v 1.16 2006-05-02 08:47:07 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Region
@@ -49,6 +49,7 @@ class G4VPhysicalVolume;
 
 #include <vector>
 #include <map>
+#include <algorithm>
 
 #include "G4Types.hh"
 #include "G4String.hh"
