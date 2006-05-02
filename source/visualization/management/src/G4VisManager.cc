@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VisManager.cc,v 1.92 2006-04-28 10:25:21 allison Exp $
+// $Id: G4VisManager.cc,v 1.93 2006-05-02 22:19:44 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -680,12 +680,17 @@ void G4VisManager::GeometryHasChanged () {
 
 }
 
+G4bool G4VisManager::FilterTrajectory(const G4VTrajectory& trajectory)
+{
+  return fpTrajFilterMgr->Accept(trajectory);
+}   
+
 void G4VisManager::DispatchToModel(const G4VTrajectory& trajectory, G4int i_mode)
 {
   G4bool visible(true);
 
   // See if trajectory passes filter
-  G4bool passed = fpTrajFilterMgr->Accept(trajectory);
+  G4bool passed = FilterTrajectory(trajectory);
 
   if (!passed) {
     // Draw invisible trajectory if trajectory failed filter and 

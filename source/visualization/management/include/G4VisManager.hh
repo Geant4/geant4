@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.hh,v 1.53 2006-04-19 13:47:24 allison Exp $
+// $Id: G4VisManager.hh,v 1.54 2006-05-02 22:19:44 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -266,6 +266,8 @@ public: // With description
 
   void DispatchToModel(const G4VTrajectory&, G4int i_mode);
   // Draw the trajectory.
+
+  G4bool FilterTrajectory(const G4VTrajectory&);
 
   ////////////////////////////////////////////////////////////////////////
   // Administration routines.
