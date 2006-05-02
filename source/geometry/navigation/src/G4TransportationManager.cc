@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TransportationManager.cc,v 1.7 2006-04-28 11:02:05 gcosmo Exp $
+// $Id: G4TransportationManager.cc,v 1.8 2006-05-02 09:03:07 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -33,6 +33,8 @@
 // --------------------------------------------------------------------
 
 #include "G4TransportationManager.hh"
+
+#include <algorithm>
 
 #include "G4GeometryMessenger.hh"
 #include "G4PropagatorInField.hh"
@@ -254,7 +256,7 @@ void G4TransportationManager::DeRegisterNavigator( G4Navigator* aNavigator )
                   "The navigator for tracking CANNOT be deregistered!");
    }
    std::vector<G4Navigator*>::iterator pNav =
-        find(fNavigators.begin(), fNavigators.end(), aNavigator);
+     std::find(fNavigators.begin(), fNavigators.end(), aNavigator);
    if (pNav != fNavigators.end())
    {
       // Deregister associated world volume
@@ -286,7 +288,7 @@ void G4TransportationManager::DeRegisterNavigator( G4Navigator* aNavigator )
 G4int G4TransportationManager::ActivateNavigator( G4Navigator* aNavigator )
 {
    std::vector<G4Navigator*>::iterator pNav =
-        find(fNavigators.begin(), fNavigators.end(), aNavigator);
+     std::find(fNavigators.begin(), fNavigators.end(), aNavigator);
    if (pNav == fNavigators.end())
    {
       G4String message
@@ -300,7 +302,7 @@ G4int G4TransportationManager::ActivateNavigator( G4Navigator* aNavigator )
       (*pNav)->Activate(true);
    }
    std::vector<G4Navigator*>::iterator pActiveNav =
-        find(fActiveNavigators.begin(), fActiveNavigators.end(), aNavigator);
+     std::find(fActiveNavigators.begin(), fActiveNavigators.end(), aNavigator);
    if (pActiveNav == fActiveNavigators.end())
    {
       fActiveNavigators.push_back(aNavigator);
@@ -319,7 +321,7 @@ G4int G4TransportationManager::ActivateNavigator( G4Navigator* aNavigator )
 void G4TransportationManager::DeActivateNavigator( G4Navigator* aNavigator )
 {
    std::vector<G4Navigator*>::iterator pNav =
-        find(fNavigators.begin(), fNavigators.end(), aNavigator);
+     std::find(fNavigators.begin(), fNavigators.end(), aNavigator);
    if (pNav == fNavigators.end())
    {
       G4String message
@@ -333,7 +335,7 @@ void G4TransportationManager::DeActivateNavigator( G4Navigator* aNavigator )
       (*pNav)->Activate(false);
    }
    std::vector<G4Navigator*>::iterator pActiveNav =
-        find(fActiveNavigators.begin(), fActiveNavigators.end(), aNavigator);
+     std::find(fActiveNavigators.begin(), fActiveNavigators.end(), aNavigator);
    if (pActiveNav != fActiveNavigators.end())
    {
       fActiveNavigators.erase(pActiveNav);
@@ -369,7 +371,7 @@ G4bool G4TransportationManager::RegisterWorld( G4VPhysicalVolume* aWorld )
    G4bool done = false;
 
    std::vector<G4VPhysicalVolume*>::iterator pWorld =
-        find(fWorlds.begin(), fWorlds.end(), aWorld);
+     std::find(fWorlds.begin(), fWorlds.end(), aWorld);
    if (pWorld == fWorlds.end())
    {
      fWorlds.push_back(aWorld);
@@ -388,7 +390,7 @@ G4bool G4TransportationManager::RegisterWorld( G4VPhysicalVolume* aWorld )
 void G4TransportationManager::DeRegisterWorld( G4VPhysicalVolume* aWorld )
 {
    std::vector<G4VPhysicalVolume*>::iterator pWorld =
-   find(fWorlds.begin(), fWorlds.end(), aWorld);
+     std::find(fWorlds.begin(), fWorlds.end(), aWorld);
    if (pWorld != fWorlds.end())
    {
       fWorlds.erase(pWorld);
