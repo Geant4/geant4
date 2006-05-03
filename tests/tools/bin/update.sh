@@ -1,5 +1,5 @@
 #! /bin/sh
-# $Id: update.sh,v 1.15 2002-04-18 17:18:10 stesting Exp $
+# $Id: update.sh,v 1.16 2006-05-03 15:47:49 mclareni Exp $
 # For tagset NNN, extract and check  bonsai<NNN>.sdb then run update.sh.
 # Usage: update.sh [-n] < bonsai<NNN>.sdb >& update<NNN>.log
 
@@ -28,16 +28,17 @@ fi
 mysrc=`echo $G4INSTALL | cut -f 7 -d'/'`
 mydir=`pwd`
 mysdb=`echo $mydir | cut -f 7 -d'/'`
-if [ $mysrc != $mysdb ]
-then
-  echo "Your current directory is in $mysdb :\n $mydir"
-  echo "Your installation directory is in $mysrc :\n $G4INSTALL"
-  echo "On balance, it is more likely you should source setup.csh"
-  echo "   in the correct directory tree"
-  echo "   than you wish to work across the prod/dev1/dev2 structures"
-  echo "\nupdate.sh is stopping\n"
-  exit 24
-fi
+
+#if [ $mysrc != $mysdb ]
+#then
+#  echo "Your current directory is in $mysdb :\n $mydir"
+#  echo "Your installation directory is in $mysrc :\n $G4INSTALL"
+#  echo "On balance, it is more likely you should source setup.csh"
+#  echo "   in the correct directory tree"
+#  echo "   than you wish to work across the prod/dev1/dev2 structures"
+#  echo "\nupdate.sh is stopping\n"
+#  exit 24
+#fi
 
 
 

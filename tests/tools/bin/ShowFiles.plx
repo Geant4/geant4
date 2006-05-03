@@ -23,7 +23,7 @@ $TestTop="/afs/cern.ch/sw/geant4/stt/$DevDir";
        [ qw ( test07    test09    test10           test101   test102    )],
        [ qw ( test103   test104   test104.EMtest   test105   test106    )],
        [ qw ( test11    test12    test13           test14    test15     )],
-       [ qw ( test16    test17    test18           test501   test502    )], 
+       [ qw ( test16    test17    test18           test20    test501   test502    )], 
        [ qw ( test503   test504   test505          test601   test602  )] 
       );
 
@@ -34,9 +34,10 @@ $TestTop="/afs/cern.ch/sw/geant4/stt/$DevDir";
        [ qw ( test101   test102   test103          test104  )],
        [ qw ( test104.EMtest test105 test106       test11   )],
        [ qw ( test12    test13    test14           test15   )],
-       [ qw ( test16    test17    test18           test501  )],
-       [ qw ( test502   test503   test504          test505  )],
-       [ qw ( test601   test602  )] 
+       [ qw ( test16    test17    test18           test20   )],
+       [ qw ( test501   test502   test503          test504  )],
+       [ qw ( test601   test602   test701          test702  )], 
+       [ qw ( test703  )] 
       );
 
 opendir(TT,"$TestTop") || die "Failed to opendir TestTop  $TestTop $!";
@@ -44,9 +45,11 @@ opendir(TT,"$TestTop") || die "Failed to opendir TestTop  $TestTop $!";
 closedir(TT);
 foreach $Platform (@Platforms) {
 #  print "PLATFORM:  $Platform\n";
-#  next unless (-d "$TestTop/$Platform");
-#  next if ( "AIX-xlC" eq "$Platform" || "SUN-CC5" eq "$Platform" );
-   next if ( "AIX-xlC" eq "$Platform" );
+# SUN-CC5 is in afs for refsol7 - skip other directories and links
+# SUN-CC <-- SUN-CC5  (no machine for SUN-CC4 <-- SUN-CC)
+   next unless (-d "$TestTop/$Platform");
+   next if ( "AIX-xlC" eq "$Platform" || "SUN-CC5" eq "$Platform" );
+   next if ( "$Platform" eq "SUN-CC5" );
    $PDir="$TestTop/$Platform";
    next unless (-d "$PDir");
    opendir(PLATFORM,"$PDir")  || die "Failed to opendir Platform $PDir $! ";
@@ -58,14 +61,8 @@ foreach $Platform (@Platforms) {
 #
    foreach $Option (@Options) {
 
-# SUN-CC5 is in afs for refsol7 - skip other directories and links
-      next if ( "$Platform" eq "SUN-CC5" && "$Option" eq "sungeant_debug_ISO" );
-      next if ( "$Platform" eq "SUN-CC5" && "$Option" eq "sungeant_optim_ISO" );
-      next if ( "$Platform" eq "SUN-CC5" && "$Option" eq "OPAL_optim_ISO" );
-      next if ( "$Platform" eq "SUN-CC5" && "$Option" eq "debug" );
-      next if ( "$Platform" eq "SUN-CC5" && "$Option" eq "optim" );
       $TestDir="$PDir/$Option/$SttTag/$Platform";
-      opendir(TD,"$TestDir") || { print  "Failed to opendir TestDir $TestDir $! \n"} ;
+#     opendir(TD,"$TestDir") || { print  "Failed to opendir TestDir $TestDir $! \n"} ;
       opendir(TD,"$TestDir") || { next };
 
       $Heading="$Platform  $Option  $SttTag";

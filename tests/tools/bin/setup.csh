@@ -41,22 +41,11 @@ endif
 #
 # Other G4 environment variables.
 #
-if ( $?NeutronHPCrossSections ) then
-else
- setenv NeutronHPCrossSections $G4INSTALL/../G4NDL0.2
-endif
-if ( $?G4LEVELGAMMADATA ) then
-else
- setenv G4LEVELGAMMADATA $G4INSTALL/data/PhotonEvaporation
-endif
-if ( $?G4RADIOACTIVEDATA ) then
-else
- setenv G4RADIOACTIVEDATA $G4INSTALL/data/RadiativeDecay
-endif
-if ( $?G4LEDATA ) then
-else
- setenv G4LEDATA $G4INSTALL/../G4EMLOW0.3
-endif
+setenv NeutronHPCrossSections $G4INSTALL/../G4NDL0.2
+setenv G4LEVELGAMMADATA $G4INSTALL/data/PhotonEvaporation
+setenv G4RADIOACTIVEDATA $G4INSTALL/data/RadiativeDecay
+setenv G4LEDATA $G4INSTALL/../G4EMLOW0.3
+setenv G4ANALYSIS_BUILD 1
 #
 # Some aliases :
 alias g4root   "cd $G4INSTALL"
@@ -73,13 +62,10 @@ alias g4test201 "cd $G4INSTALL/tests/test201"
 alias g4tools   "cd $G4INSTALL/tests/tools/bin"
 alias g4nt      "cd $G4INSTALL/tests/tools/NT"
 alias g4omake   "cd $G4INSTALL/tests/tools/omake"
-alias g4N01     "cd $G4INSTALL/examples/novice/N01"
 alias g4N02     "cd $G4INSTALL/examples/novice/N02"
 alias g4N03     "cd $G4INSTALL/examples/novice/N03"
-alias g4AnaEx01 "cd $G4INSTALL/examples/extended/analysis/AnaEx01"
-alias g4A01     "cd $G4INSTALL/examples/extended/analysis/A01"
+alias g4ANA01   "cd $G4INSTALL/examples/extended/analysis/AnaEx01"
 alias g4XrayTel "cd $G4INSTALL/examples/advanced/xray_telescope"
-alias g4Em1     "cd $G4INSTALL/examples/extended/electromagnetic/TestEm1"
 #
 # Below aliases assume that $G4WORKDIR/stt/$G4SYSTEM exists !
 alias g4make    "gmake global> & $G4WORKDIR/stt/$G4SYSTEM/gmake.log &"
@@ -89,17 +75,9 @@ alias g4analyse "$G4INSTALL/tests/tools/bin/analyse.sh"
 alias g4tail    "tail -f $G4WORKDIR/stt/$G4SYSTEM/gmake.log"
 alias g4filter  "$G4INSTALL/tests/tools/bin/filter.sh $G4SYSTEM | more"
 #
-alias g4_test201 "$G4WORKDIR/bin/$G4SYSTEM/test201"
-alias g4_N01     "$G4WORKDIR/bin/$G4SYSTEM/exampleN01"
-alias g4_N02     "$G4WORKDIR/bin/$G4SYSTEM/exampleN02"
-alias g4_N03     "$G4WORKDIR/bin/$G4SYSTEM/exampleN03"
-alias g4_gdbN01  "gdb $G4WORKDIR/bin/$G4SYSTEM/exampleN01"
-alias g4_gdbN02  "gdb $G4WORKDIR/bin/$G4SYSTEM/exampleN02"
-alias g4_gdbN03  "gdb $G4WORKDIR/bin/$G4SYSTEM/exampleN03"
-alias g4_AnaEx01 "$G4WORKDIR/bin/$G4SYSTEM/AnaEx01"
-alias g4_A01     "$G4WORKDIR/bin/$G4SYSTEM/A01app"
-alias g4_XrayTel "$G4WORKDIR/bin/$G4SYSTEM/XrayTel"
-alias g4_Em1     "$G4WORKDIR/bin/$G4SYSTEM/TestEm1"
-alias g4_gdbEm1  "gdb $G4WORKDIR/bin/$G4SYSTEM/TestEm1"
+alias test201 "$G4WORKDIR/bin/$G4SYSTEM/test201"
+alias N03     "$G4WORKDIR/bin/$G4SYSTEM/exampleN03"
+alias ANA01   "$G4WORKDIR/bin/$G4SYSTEM/AnaEx01"
+alias XrayTel "$G4WORKDIR/bin/$G4SYSTEM/XrayTel"
 #
 #alias search "$G4INSTALL/tests/search.sh"

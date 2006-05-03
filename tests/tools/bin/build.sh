@@ -1,4 +1,4 @@
-#!/bin/sh -f
+#!/bin/sh -m
 #
 #  This script spawn the reconstruction of libraries or tests
 # from $G4STTDIR/bin directory. The output of the job
@@ -26,7 +26,7 @@
 #
 # Some checks :
 if [ -z "${MAKECMD}" ] ; then
-MAKECMD='gmake -k'
+MAKECMD='gmake -k '
 fi
 # Some checks :
 if [ -z "${G4INSTALL}" ] ; then
@@ -72,11 +72,12 @@ if [ "$1" = "lib" ] ; then
   if [ "$2" = "all" ] ; then 
     # Go in source and spawn libs reconstruction :
     cd $G4INSTALL/source
-    (date;time $MAKECMD;date) > $dir/gmake.log 2>&1
+    (date;time $MAKECMD global ;date) > $dir/gmake.log 2>&1
     exit
   else
     # Go in source/$2 and spawn category reconstruction :
-    cd $G4INSTALL/source/$2
+#    cd $G4INSTALL/source/$2
+    cd $G4INSTALL/$2
     (date;time $MAKECMD;date) > $dir/gmake.log 2>&1
     exit
   fi
@@ -104,14 +105,15 @@ else
       fi
     else
     #
-      if [ "$1" = "all" ] ; then 
-        (date;cd $G4INSTALL/source;time $MAKECMD;\
-        cd $G4INSTALL/tests;$MAKECMD clean_bin;time $MAKECMD;date) \
-        > $dir/gmake.log 2>&1
-        exit
-      else
-        echo "Unknown option " $1
-      fi
+	if [ "$1" = "all" ] ; then 
+	    (date;cd $G4INSTALL/physics_lists/hadronic;time $MAKECMD; \
+		cd $G4INSTALL/source;time $MAKECMD;\
+		cd $G4INSTALL/tests;$MAKECMD clean_bin;time $MAKECMD;date) \
+		> $dir/gmake.log 2>&1
+	    exit
+	else
+	    echo "Unknown option " $1
+	fi
     fi
   fi
 fi

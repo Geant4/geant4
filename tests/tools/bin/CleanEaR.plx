@@ -31,7 +31,8 @@ foreach $Platform (@Platforms) {
 
 # most likely we want the next line to execute.
 
-#     system("rm  -rf  $WorkDir/$SttTag");
+      system("rm  -rf  $WorkDir/$SttTag");
+      system("rm  -f  $WorkDir/*.stat");
 
 
 #     system("rm $PDir/$Option/tmp/$Platform/test18/exe/*.d");

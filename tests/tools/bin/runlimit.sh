@@ -8,7 +8,8 @@
 
 #ulimit -t 600
 # after cut_per_mat...    
-ulimit -t 6000
+# Use this limit later
+###ulimit -t 6000
 # check without!
 #ulimit -v 500000
 # may be it's usefull to restrict output file? Don't think so...

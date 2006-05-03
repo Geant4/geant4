@@ -39,6 +39,14 @@ sub InitVars {
     $REF = "$ENV{REF}";
     $G4SYSTEM = "$ENV{G4SYSTEM}";
     $DEBOPT = "$ENV{DEBOPT}";
+
+    print "LN_out=$ENV{G4LARGE_N} \n";
+# Large_N
+    if ($ENV{G4LARGE_N} ) {
+    print "LN_in=$ENV{G4LARGE_N} \n";
+	$DOT_G4LARGE_N = ".$ENV{G4LARGE_N}";
+    }
+
     $UNIQ = "$REF.$G4SYSTEM.$DEBOPT.$$";
 #################################################################
 # Start/End times.
@@ -289,7 +297,7 @@ sub EndTest {
 #
 # Get the size of $TestName.err 
 #
-    $filename = "$ENV{'G4WORKDIR'}/stt/$ENV{'G4SYSTEM'}/$TestName.err";
+    $filename = "$ENV{'G4WORKDIR'}/stt/$ENV{'G4SYSTEM'}/$TestName$DOT_G4LARGE_N.err";
     $errsize = (stat($filename))[7];
 
     open(ERRFILE,"$filename") || die "Failed to open read $filename $!";

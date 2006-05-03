@@ -36,6 +36,7 @@ while ( <TEMPLATE> ) {
     chomp;
     if ( /^#/) { next}
     if ( /^%/) { next}
+    if ( /refsol/) { next}
     ($rundir,$host,$platform,$option,@fiveargs)=split(' ');
     next if ( "$rundir" ne "$DevDir");
 #   next if ( "$host" eq "pcg4speed" );

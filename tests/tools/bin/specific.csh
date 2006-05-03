@@ -99,8 +99,8 @@ if ( `uname -n | grep pcg4speed` != "" ) then
   setenv OGLHOME /afs/cern.ch/sw/geant4/dev/Mesa/Mesa-1.2.8
   setenv CLHEP_BASE_DIR /afs/cern.ch/sw/geant4/dev/CLHEP/$G4SYSTEM/pro
   # Shareable library
-  setenv G4LIB_BUILD_SHARED 1
-  setenv LD_LIBRARY_PATH $G4LIB/$G4SYSTEM
+#  setenv G4LIB_BUILD_SHARED 1
+#  setenv LD_LIBRARY_PATH $G4LIB/$G4SYSTEM
 endif
 
 if ( `uname -n | grep pcgeant$`   != "" ) then
@@ -115,6 +115,49 @@ if ( `uname -n | grep pcgeant$`   != "" ) then
   setenv XKEYSYMDB /usr/lib/X11/XKeysymDB
   setenv OGLHOME /afs/cern.ch/sw/geant4/dev/Mesa/Mesa-1.2.8
   setenv CLHEP_BASE_DIR /afs/cern.ch/sw/geant4/dev/CLHEP/$G4SYSTEM/pro
+endif
+
+if ( `uname -n | grep pcgeant2` != "" ) then
+  setenv CLHEP_VERSION pro                    
+  setenv DEBOPT ${DEBOPT}_7.2_2.95.2
+  setenv CVSROOT /afs/cern.ch/sw/geant4/cvs
+  setenv G4SYSTEM Linux-g++
+  setenv G4INSTALL /afs/cern.ch/sw/geant4/stt/$REF/src/geant4
+  setenv G4STTDIR  /afs/cern.ch/sw/geant4/stt/$REF/testtools/geant4/tests/tools
+  setenv G4WORKDIR  /afs/cern.ch/sw/geant4/stt/$REF/$G4SYSTEM/$DEBOPT
+  setenv G4LIB $G4WORKDIR/lib
+  setenv CLHEP_BASE_DIR /afs/cern.ch/sw/geant4/dev/CLHEP/Linux-g++/$CLHEP_VERSION
+
+  # Shareable library
+  #####################
+  setenv G4LIB_BUILD_SHARED 1
+  setenv LD_LIBRARY_PATH $G4LIB/$G4SYSTEM:${CLHEP_BASE_DIR}/lib
+
+  # G4 build flags :
+endif
+
+if ( `uname -n | grep pcgeant3` != "" ) then
+  setenv CLHEP_VERSION pro               
+  setenv DEBOPT ${DEBOPT}_7.2_2.95.2
+  setenv CVSROOT /afs/cern.ch/sw/geant4/cvs
+  setenv G4SYSTEM Linux-g++
+  setenv G4INSTALL /afs/cern.ch/sw/geant4/stt/$REF/src/geant4
+  setenv G4STTDIR  /afs/cern.ch/sw/geant4/stt/$REF/testtools/geant4/tests/tools
+  setenv G4WORKDIR  /afs/cern.ch/sw/geant4/stt/$REF/$G4SYSTEM/$DEBOPT
+  setenv G4LIB $G4WORKDIR/lib
+  setenv CLHEP_BASE_DIR /afs/cern.ch/sw/geant4/dev/CLHEP/Linux-g++/${CLHEP_VERSION}
+
+  # Shareable library
+  #####################
+  setenv G4LIB_BUILD_SHARED 1
+  setenv LD_LIBRARY_PATH ${G4LIB}/${G4SYSTEM}:${CLHEP_BASE_DIR}/lib:/afs/cern.ch/sw/geant4/dev/XercesC/Linux-g++/RH72
+#
+#  # G4 build flags :
+#######export G4UI_BUILD_XM_SESSION=1
+##  export G4VIS_BUILD_OPENGLXM_DRIVER=1
+##  export G4VIS_BUILD_OPENGLX_DRIVER=1
+##  export G4VIS_BUILD_OIX_DRIVER=1
+#
 endif
 
 if ( `uname -n | grep pcgeant4` != "" ) then
@@ -283,9 +326,16 @@ if ( `uname -n` == aleph ) then
   setenv OIVFLAGS       "-I$OIVHOME/include -I$HEPVISHOME/include"
   setenv OIVLIBS        "-L$HEPVISHOME/HP-UX-aCC-SF -lHEPVis -L$OIVHOME/HP-UX-aCC -lSoFree"
   setenv SOFREEUSER     $OIVHOME/user/
+  # OPACS :
+  setenv G4UI_BUILD_WO_SESSION       1
+  setenv G4VIS_BUILD_OPACS_DRIVER    1
+  setenv G4UI_USE_WO                 1
+  setenv G4VIS_USE_OPACS             1
+  setenv OCONFIG HP-UX
+  source /lal/OPACS/v3/setup.csh
   # Else :
   #setenv XENVIRONMENT   $G4INSTALL/tests/test201/test201.xrm
-  #setenv XENVIRONMENT   g4.xrm
+  setenv XENVIRONMENT   g4.xrm
   setenv PATH "${PATH}:/lal/DAWN/3.72b/HP-UX-aCC"
   setenv CPPVERBOSE 1
   set prompt='g4-aleph> ' 
@@ -333,92 +383,74 @@ if ( `uname -n` == asc ) then
   setenv OIVFLAGS       "-I$OIVHOME/include -I$HEPVISHOME/include"
   setenv OIVLIBS        "-L$HEPVISHOME/OSF1-cxx-TGS -lHEPVis -L$OIVHOME/lib -lInventorXt -lInventor -limage"
   #setenv XENVIRONMENT   $OIVHOME/app-defaults/Inventor
-  #setenv XENVIRONMENT   g4.xrm
+  setenv XENVIRONMENT   g4.xrm
+  # OPACS :
+  setenv G4UI_BUILD_WO_SESSION       1
+  setenv G4VIS_BUILD_OPACS_DRIVER    1
+  setenv G4UI_USE_WO                 1
+  setenv G4VIS_USE_OPACS             1
+  source /lal/OPACS/v3/setup.csh
+  set prompt=${G4INSTALL}-${G4SYSTEM}'> '
   # Else :
   setenv LD_LIBRARY_PATH "$OIVHOME/lib:$HEPVISHOME/OSF1-cxx-TGS:${OGLHOME}/lib"
   setenv PATH "${PATH}:/lal/DAWN/3.72b/OSF1-cxx"
+  setenv XENVIRONMENT   g4Xt.xrm
   setenv CPPVERBOSE 1
   set prompt='g4-asc> ' 
   # To be able to link :
   limit datasize 500000
 endif
-
 #---------------------------------------------------
-if ( `uname -n` == "lx1" ) then
-  set prompt='g4-6.0-rh72_gcc332> ' 
+if ( `uname -n` == "lx1.lal.in2p3.fr" ) then
   setenv CVSROOT :pserver:barrand@g4cvs.cern.ch:/afs/cern.ch/sw/geant4/cvs
-  setenv CVS_RSH ssh
-  setenv G4INSTALL /geant4/geant4.6.0
-  setenv G4WORKDIR $G4INSTALL/rh72_gcc332
+  setenv G4INSTALL /geant4/geant4-01-01
+  setenv G4WORKDIR $G4INSTALL
   setenv G4STTDIR  $G4WORKDIR/stt
   setenv G4LIB     $G4WORKDIR/lib
   setenv G4SYSTEM  Linux-g++
-  #setenv G4DEBUG   1
-  # Shareable library
-  setenv G4LIB_BUILD_SHARED 1
-  setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:$G4LIB/$G4SYSTEM
+  setenv G4DEBUG   1
+  #setenv G4MAKESHLIB                 $G4INSTALL/config/makeshlib.sh
   # G4 build flags :
-  #setenv G4UI_BUILD_XM_SESSION       1
-  #setenv G4VIS_BUILD_OPENGLXM_DRIVER 1
-  #setenv G4VIS_BUILD_OPENGLX_DRIVER  1
-  #setenv G4VIS_BUILD_OIX_DRIVER      1
-  #setenv G4VIS_BUILD_DAWN_DRIVER     1
-  #setenv G4VIS_BUILD_DAWNFILE_DRIVER 1
-  #setenv G4VIS_BUILD_VRML_DRIVER     1
-  #setenv G4VIS_BUILD_VRMLFILE_DRIVER 1
+  setenv G4UI_BUILD_XM_SESSION       1
+  setenv G4VIS_BUILD_OPENGLXM_DRIVER 1
+  setenv G4VIS_BUILD_OPENGLX_DRIVER  1
+  setenv G4VIS_BUILD_OIX_DRIVER      1
+  setenv G4VIS_BUILD_DAWN_DRIVER     1
+  setenv G4VIS_BUILD_DAWNFILE_DRIVER 1
+  setenv G4VIS_BUILD_VRML_DRIVER     1
+  setenv G4VIS_BUILD_VRMLFILE_DRIVER 1
   # G4 use flags :
-  #setenv G4UI_USE_XM                 1
-  #setenv G4VIS_USE_OPENGLXM          1
-  #setenv G4VIS_USE_OPENGLX           1
-  #setenv G4VIS_USE_OIX               1
-  #setenv G4VIS_USE_DAWN              1
-  #setenv G4VIS_USE_DAWNFILE          1
-  #setenv G4VIS_USE_VRML              1
-  #setenv G4VIS_USE_VRMLFILE          1
+  setenv G4UI_USE_XM                 1
+  setenv G4VIS_USE_OPENGLXM          1
+  setenv G4VIS_USE_OPENGLX           1
+  setenv G4VIS_USE_OIX               1
+  setenv G4VIS_USE_DAWN              1
+  setenv G4VIS_USE_DAWNFILE          1
+  setenv G4VIS_USE_VRML              1
+  setenv G4VIS_USE_VRMLFILE          1
   # Specific :
-  setenv CLHEP_BASE_DIR /lal/CLHEP/1.8.1.0/rh72_gcc332
-  setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${CLHEP_BASE_DIR}/lib
-  #setenv OGLHOME        /lal/Mesa/3.1/Linux
-  #setenv OIVHOME        /lal/SoFree/v2r9
-  #setenv HEPVISHOME     /lal/HEPVis/v5r1-05-LAL
-  #setenv OIVFLAGS       "-I$OIVHOME/include -I$HEPVISHOME/include"
-  #setenv OIVLIBS        "-L$HEPVISHOME/Linux-gxx-SF -lHEPVis -L$OIVHOME/Linux-gxx -lSoFree"
+  setenv CLHEP_BASE_DIR /lal/CLHEP/1.4/Linux-gxx
+  setenv OGLHOME        /lal/Mesa/3.1/Linux
+  setenv OIVHOME        /lal/SoFree/v2r9
+  setenv HEPVISHOME     /lal/HEPVis/v5r1-05-LAL
+  setenv OIVFLAGS       "-I$OIVHOME/include -I$HEPVISHOME/include"
+  setenv OIVLIBS        "-L$HEPVISHOME/Linux-gxx-SF -lHEPVis -L$OIVHOME/Linux-gxx -lSoFree"
+  setenv SOFREEUSER     $OIVHOME/user/
+  # OPACS :
+  setenv G4UI_BUILD_WO_SESSION       1
+  setenv G4VIS_BUILD_OPACS_DRIVER    1
+  setenv G4UI_USE_WO                 1
+  setenv G4VIS_USE_OPACS             1
+  source /lal/OPACS/v3/setup.csh
+  setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:$OIVHOME/Linux-gxx:$HEPVISHOME/Linux-gxx-SF:${OGLHOME}/lib"
   # Else :
   #setenv XENVIRONMENT   $G4INSTALL/tests/test201/test201.xrm
-  #setenv XENVIRONMENT   g4.xrm
-  #setenv PATH "${PATH}:/lal/DAWN/3.72b/Linux-egcs"
-  #setenv CPPVERBOSE 1
-endif
-
-#---------------------------------------------------
-if ( `uname -n` == "NB-BARRAND" ) then
-  set prompt='g4-6.0-VC7> ' 
-  setenv CVSROOT :pserver:barrand@g4cvs.cern.ch:/afs/cern.ch/sw/geant4/cvs
-  setenv CVS_RSH ssh
-  # Path should be <drive>:<path at the UNIX format>
-  setenv G4INSTALL C:/barrand/geant4/geant4.6.0
-  setenv G4WORKDIR $G4INSTALL/VisualC
-  setenv G4STTDIR  $G4WORKDIR/stt
-  setenv G4LIB     $G4WORKDIR/lib
-  setenv G4SYSTEM  WIN32-VC7
-  #setenv G4SYSTEM  WIN32-g++
+  setenv XENVIRONMENT   g4.xrm
+  setenv PATH "${PATH}:/lal/DAWN/3.72b/Linux-egcs"
   setenv CPPVERBOSE 1
-  #setenv G4LIB_BUILD_SHARED 1
-  # Specific :
-  setenv CLHEP_BASE_DIR C:/barrand/CLHEP/1.8.1.0/VisualC
-  # Does not compile with VisualC++ :
-  unsetenv G4VIS_BUILD_DAWN_DRIVER     1
-  unsetenv G4VIS_BUILD_DAWNFILE_DRIVER 1
-  unsetenv G4VIS_BUILD_VRML_DRIVER     1
-  unsetenv G4VIS_BUILD_VRMLFILE_DRIVER 1
-  # GUI :
-  setenv G4UI_BUILD_WIN32_SESSION 1
-  setenv G4UI_USE_WIN32 1
-  # OpenGL :
-  setenv G4VIS_BUILD_OPENGLWIN32_DRIVER  1
-  setenv G4VIS_USE_OPENGLWIN32_DRIVER  1
+  set prompt='g4-lx1> ' 
 endif
-
+#
 if ( `uname -n` == "papou1" ) then
   setenv CVSROOT :pserver:barrand@g4cvs.cern.ch:/afs/cern.ch/sw/geant4/cvs
   setenv G4INSTALL /geant4/geant4-01-00-ref-02
@@ -450,238 +482,98 @@ if ( `uname -n` == "papou1" ) then
   setenv OIVFLAGS       "-I$OIVHOME/include -I$HEPVISHOME/include"
   setenv OIVLIBS        "-L$HEPVISHOME/SunOS-CC -lHEPVis -L$OIVHOME/SunOS-CC -lSoFree"
   setenv SOFREEUSER     $OIVHOME/user/
+  # OPACS :
+  #setenv G4UI_BUILD_WO_SESSION       1
+  #setenv G4VIS_BUILD_OPACS_DRIVER    1
+  #setenv G4UI_USE_WO                 1
+  #setenv G4VIS_USE_OPACS             1
+  #source /lal/OPACS/v3/setup.csh
+  #setenv LD_LIBRARY_PATH "$OIVHOME/Linux-gxx:/lal/HEPVis/v5r0/Linux-gxx"
   # Else :
   setenv CPPVERBOSE 1
   set prompt='g4-papou1> ' 
 endif
-
-if ( `uname -n` == "pc-88172" ) then
-  set prompt='g4-pc-gbp> ' 
-# Core :
-  setenv CVSROOT :ext:gbarrand@sungeant.cern.ch:/afs/cern.ch/sw/geant4/cvs
-  setenv CVS_RSH ssh
-  setenv G4INSTALL /geant4/geant4-05-02-ref-04
-  setenv G4SYSTEM Linux-g++
+# Comments :
+# --------
+#
+if ( `uname -n` == "pc-gbp" || `uname -n` == "pc-89026" || `uname -n` == "pc100" || `uname -n` == "pcal26" ) then
+  setenv CVSROOT :pserver:barrand@g4cvs.cern.ch:/afs/cern.ch/sw/geant4/cvs
+  setenv G4INSTALL /geant4/geant4-03-02-ref-00
   setenv G4WORKDIR $G4INSTALL
-  setenv G4STTDIR $G4WORKDIR/stt
-  setenv G4LIB $G4WORKDIR/lib
-  setenv G4DEBUG 1
+  setenv G4STTDIR  $G4WORKDIR/stt
+  setenv G4LIB     $G4WORKDIR/lib
+  setenv G4SYSTEM  Linux-g++
+  setenv G4DEBUG   1
   setenv G4LIB_BUILD_SHARED 1
-  setenv CPPVERBOSE 1
-  setenv CLHEP_BASE_DIR /usr/local/CLHEP/1.8.0.0
-  setenv LD_LIBRARY_PATH ${G4INSTALL}/lib/${G4SYSTEM}
-  setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:$CLHEP_BASE_DIR/lib
-  setenv NeutronHPCrossSections $G4WORKDIR/data/G4NDL3.5
-  setenv G4LEVELGAMMADATA $G4WORKDIR/data/PhotonEvaporation
-  setenv G4RADIOACTIVEDATA $G4WORKDIR/data/RadiativeDecay
-  setenv G4LEDATA $G4WORKDIR/data/G4EMLOW0.3
-# OpenGL driver :
-#  setenv G4VIS_BUILD_OPENGLXM_DRIVER 1
-#  setenv G4VIS_BUILD_OPENGLX_DRIVER 1
-#  setenv G4VIS_USE_OPENGLXM 1
-#  setenv G4VIS_USE_OPENGLX 1
-#  setenv OGLHOME /usr/include
-# CMT :
-#  source /projects/CMT/v1r12/mgr/setup.csh
-# Inventor driver :
-#  source /projects/HEPVis/v6r3/cmt/cleanup.csh
-#  source /projects/HEPVis/v6r3/cmt/setup.csh
-#  setenv G4VIS_BUILD_OIX_DRIVER 1
-#  setenv G4VIS_USE_OIX 1
-#  setenv TTFLIBS "-L/usr/lib -lttf"
-#  setenv OIVFLAGS "-I$HEPVISROOT/include -I$COINGLROOT/include -I$COINXTROOT/include"
-#  setenv OIVLIBS "-L$COINXTROOT/$COINXTCONFIG -lSoXt -L$HEPVISROOT/$HEPVISCONFIG -lHEPVisXt -lHEPVisDetector -lHEPVisGeometry -lHEPVisUtils ${TTFLIBS} -L$COINGLROOT/$COINGLCONFIG -lCoin"
-# UI Xm :
-#  setenv G4UI_BUILD_XM_SESSION 1
-#  setenv G4UI_USE_XM 1
-#  setenv XENVIRONMENT $G4INSTALL/examples/novice/N03/visTutor/g4Xt.xrm
-# AIDA :
-#  setenv G4ANALYSIS_USE 1
-# Falsetto implementation :
-#  source /projects/Falsetto/v1r1/cmt/setup.csh
-# Lab implementation :
-#  # The upper CMT setup must be executed first !
-#  source /projects/Lab/v9r0/cmt/cleanup.csh
-#  source /projects/Lab/v9r0/cmt/setup.csh
-#  setenv G4ANALYSIS_AIDA_CONFIG_CFLAGS `aida-config --cflags`
-#  setenv G4ANALYSIS_AIDA_CONFIG_LIBS `aida-config --libs`
-# Else :
-#  setenv G4VIS_USE_DAWN              1
-#  setenv G4VIS_USE_DAWNFILE          1
-#  setenv G4VIS_USE_VRML              1
-#  setenv G4VIS_USE_VRMLFILE          1
-# jas :
-#  setenv JDKHOME /lal/JDK/1.2.2/Linux
-#  setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:$JDKHOME/jre/lib/i386:$JDKHOME/jre/lib/i386/classic:$JDKHOME/jre/lib/i386/native_threads
-#  set jars=/lal/jas/2.0alpha4/release/lib
-#  setenv CLASSPATH ${CLASSPATH}:$jars/collections.jar:$jars/hep.jar:$jars/jas.jar
-#  setenv PATH ${PATH}:/lal/jas/2.0alpha4/release
-#  setenv PATH "${PATH}:/lal/DAWN/dawn_3_85a/Linux/bin"
-# Examples :
-  setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${G4WORKDIR}/lib/${G4SYSTEM}
-  setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${G4WORKDIR}/tmp/${G4SYSTEM}/AnaEx01
-  setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${G4WORKDIR}/tmp/${G4SYSTEM}/DMX
-endif
-
-if ( `uname -n` == mac-91114.lal.in2p3.fr || `uname -n` == wl-72130.lal.in2p3.fr || `uname -n` == Ordinateur-de-Guy-Barrand.local ) then
-  set prompt='mac-91114-g4> ' 
-# Core :
-  setenv MAKECMD make
-  setenv CVSROOT :ext:gbarrand@geant4.cvs.cern.ch:/cvs/Geant4
-  setenv CVS_RSH ssh
-#  setenv G4INSTALL /geant4/geant4.6.0
-  setenv G4INSTALL /geant4/geant4-07-01
-  setenv G4SYSTEM Darwin-g++
-  setenv G4WORKDIR $G4INSTALL/Darwin
-  setenv G4STTDIR $G4WORKDIR/stt
-  setenv G4LIB $G4WORKDIR/lib
-  setenv G4DEBUG 1
-  setenv CPPVERBOSE 1
-  # Shareable library
-  #FIXME setenv G4LIB_BUILD_SHARED 1
-  setenv DYLD_LIBRARY_PATH $G4LIB/$G4SYSTEM
-  setenv CLHEP_BASE_DIR /usr/local/CLHEP/1.9.2.1
-  setenv DYLD_LIBRARY_PATH ${DYLD_LIBRARY_PATH}:${CLHEP_BASE_DIR}/lib
-  setenv NeutronHPCrossSections $G4WORKDIR/data/G4NDL3.5
-  setenv G4LEVELGAMMADATA $G4WORKDIR/data/PhotonEvaporation
-  setenv G4RADIOACTIVEDATA $G4WORKDIR/data/RadiativeDecay
-  setenv G4LEDATA $G4WORKDIR/data/G4EMLOW0.3
-# Visualization / OpenInventor :
-  # GUI :
-  setenv G4UI_BUILD_XM_SESSION 1
-  setenv G4UI_USE_XM 1
-  # OpenGL :
+  # G4 build flags :
+  setenv G4UI_BUILD_XM_SESSION       1
   setenv G4VIS_BUILD_OPENGLXM_DRIVER 1
   setenv G4VIS_BUILD_OPENGLX_DRIVER  1
+  setenv G4VIS_BUILD_OIX_DRIVER      1
+  setenv G4VIS_BUILD_DAWN_DRIVER     1
+  setenv G4VIS_BUILD_DAWNFILE_DRIVER 1
+  setenv G4VIS_BUILD_VRML_DRIVER     1
+  setenv G4VIS_BUILD_VRMLFILE_DRIVER 1
+  setenv G4ANALYSIS_BUILD_LAB        1
+  setenv G4ANALYSIS_BUILD_JAS        1
+#  setenv G4ANALYSIS_BUILD_LIZARD     1
+  #setenv G4ANALYSIS_TUPLE 1
+  #setenv G4ANALYSIS_CLOUD 1
+  setenv G4ANALYSIS_LAB_VISUALIZATION 1
+  # G4 use flags :
+  setenv G4UI_USE_XM                 1
   setenv G4VIS_USE_OPENGLXM          1
   setenv G4VIS_USE_OPENGLX           1
-  # Inventor :
-  setenv G4VIS_BUILD_OIX_DRIVER 1
-  setenv G4VIS_USE_OIX 1
-  # SGI-Inventor :
-  setenv OIVHOME /usr/local/SGI-Inventor/2.1.5.10/usr
-  setenv DYLD_LIBRARY_PATH ${DYLD_LIBRARY_PATH}:"$OIVHOME/lib"
-  # OpenScientist RTK Coin* :
-  #setenv OIVHOME /Applications/OpenScientist/v15r0
-  #setenv OIVFLAGS "-I${OIVHOME}/Resources/CoinXt/include -I${OIVHOME}/Resources/CoinGL/include"
-  #setenv OIVLIBS "-L${OIVHOME}/lib -lCoinXt -losc_Coin"
-  #setenv DYLD_LIBRARY_PATH "${DYLD_LIBRARY_PATH}:${OIVHOME}/lib"
-  # OpenScientist devel Coin* :
-  #setenv COINGLHOME /barrand/OpenScientist/mak_release_15/bin/OpenScientist/v15r0/CoinGL/v1r200p3
-  #setenv COINXTHOME /barrand/OpenScientist/mak_release_15/bin/OpenScientist/v15r0/CoinXt/v1r50p4
-  #setenv OIVFLAGS "-I${COINGLHOME}/include -I${COINXTHOME}/include"
-  #setenv OIVLIBS "-L${COINXTHOME}/Darwin -lCoinXt -L${COINGLHOME}/Darwin -losc_Coin"
-  #setenv DYLD_LIBRARY_PATH "${DYLD_LIBRARY_PATH}:${OIVHOME}/lib"
-  #setenv XENVIRONMENT visTutor/g4Xt.xrm
-#  setenv DYLD_BIND_AT_LAUNCH 1
-# AIDA :
-  setenv G4ANALYSIS_USE 1
-# Falsetto implementation :
-#  source $HOME_BARRAND/OpenScientist/dev/Falsetto/v1r2/cmt/setup.csh
-# Lab implementation :
-  source $HOME_BARRAND/OpenScientist/dev/aida-setup.csh
-  #source $HOME_BARRAND/OpenScientist/dev/Lab/v11r1/cmt/setup.csh
-# Set AIDA compile and link access :
-  setenv G4ANALYSIS_AIDA_CONFIG_CFLAGS `aida-config --cflags`
-  setenv G4ANALYSIS_AIDA_CONFIG_LIBS `aida-config --libs`
-# Set PYTHONPATH to access local scripts :
-  setenv PYTHONPATH ${PYTHONPATH}:.
-endif
-
-if ( `uname -n` == pc-panoramix.lal.in2p3.fr ) then
-  set prompt='pc-panoramix-g4> ' 
-# Core :
-  setenv MAKECMD make
-  setenv CVSROOT :ext:gbarrand@sungeant.cern.ch:/afs/cern.ch/sw/geant4/cvs
-  setenv CVS_RSH ssh
-  setenv G4INSTALL /usr/local/geant4/geant4-07-01
-  setenv G4SYSTEM Linux-g++
-  setenv G4WORKDIR $G4INSTALL/slc3_gcc323
-  setenv G4STTDIR $G4WORKDIR/stt
-  setenv G4LIB $G4WORKDIR/lib
-  setenv G4MAKESHLIB 1
-#  setenv G4DEBUG 1
+  setenv G4VIS_USE_OIX               1
+  setenv G4VIS_USE_DAWN              1
+  setenv G4VIS_USE_DAWNFILE          1
+  setenv G4VIS_USE_VRML              1
+  setenv G4VIS_USE_VRMLFILE          1
+  setenv G4ANALYSIS_USE_LAB          1
+  setenv G4ANALYSIS_USE_JAS          1
+#  setenv G4ANALYSIS_USE_LIZARD       1
+  setenv G4ANALYSIS_SYSTEM           Lab
+  # AIDA : 
+  setenv G4ANALYSIS_AIDA /lal/AIDA/1.0/AIDA
+  # Lab :
+  setenv CMTPATH /archos/OSC/v6r1
+  source /archos/OSC/v6r1/Lab/v4r1/cmt/setup.csh
+  # CLHEP :
+  setenv CLHEP_BASE_DIR /lal/CLHEP/1.6.0.0/Linux-gxx
+  # Things needed by the Geant4/vis/drivers :
+  #setenv OGLHOME        /usr/X11R6
+  setenv OGLHOME        /lal/Mesa/3.2/Linux
+  setenv TTFLIBS        "-L/lal/freetype/1.3.1/Linux/lib -lttf"
+  setenv OIVFLAGS       "-I$HEPVISROOT/include -I$SOFREEROOT/include"
+  setenv OIVLIBS        "-L$HEPVISROOT/$HEPVISCONFIG -lHEPVisXm -lHEPVisXt -lHEPVis ${TTFLIBS} -L$SOFREEROOT/$SOFREECONFIG -lSoFreeXt -lSoFree"
+  #setenv SOFREEUSER     $OIVHOME/user/
+  # OPACS :
+  #setenv G4UI_BUILD_WO_SESSION       1
+  #setenv G4VIS_BUILD_OPACS_DRIVER    1
+  #setenv G4UI_USE_WO                 1
+  #setenv G4VIS_USE_OPACS             1
+  #source /lal/OPACS/v3/setup.csh
+  #
+  # java :
+  setenv JDKHOME /lal/JDK/1.2.2/Linux
+  setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:$JDKHOME/jre/lib/i386:$JDKHOME/jre/lib/i386/classic:$JDKHOME/jre/lib/i386/native_threads
+  # jas :
+  set jars=/lal/jas/2.0alpha4/release/lib
+  setenv CLASSPATH ${CLASSPATH}:$jars/collections.jar:$jars/hep.jar:$jars/jas.jar
+  setenv PATH ${PATH}:/lal/jas/2.0alpha4/release
+  # Else :
+  #setenv XENVIRONMENT   g4Xt.xrm
+  setenv PATH "${PATH}:/lal/DAWN/dawn_3_85a/Linux/bin"
   setenv CPPVERBOSE 1
-  setenv CLHEP_BASE_DIR /usr/local/CLHEP/1.9.2.1/slc3_gcc323
-  setenv NeutronHPCrossSections $G4WORKDIR/data/G4NDL3.5
-  setenv G4LEVELGAMMADATA $G4WORKDIR/data/PhotonEvaporation
-  setenv G4RADIOACTIVEDATA $G4WORKDIR/data/RadiativeDecay
-  setenv G4LEDATA $G4WORKDIR/data/G4EMLOW0.3
-# AIDA :
-#  setenv G4ANALYSIS_USE 1
-# Falsetto implementation :
-#  source $HOME_BARRAND/OpenScientist/Falsetto/v1r2/cmt/setup.csh
-# Lab implementation :
-#  source $HOME_BARRAND/OpenScientist/Lab/v10r0/cmt/setup.csh
-# Set AIDA compile and link access :
-#  setenv G4ANALYSIS_AIDA_CONFIG_CFLAGS `aida-config --cflags`
-#  setenv G4ANALYSIS_AIDA_CONFIG_LIBS `aida-config --libs`
-# Set PYTHONPATH to access local scripts :
-#  setenv PYTHONPATH ${PYTHONPATH}:.
-  set string="${CLHEP_BASE_DIR}/lib:${G4LIB}/${G4SYSTEM}"
-  if ( $?LD_LIBRARY_PATH ) then
-    echo $LD_LIBRARY_PATH | grep "$string" >& /dev/null
-    if ( $status != 0 ) then
-      setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:$string
-    endif
-  else
-    setenv LD_LIBRARY_PATH $string
-  endif
+  alias g4ANA01 "cd $G4INSTALL/examples/extended/analysis/AnaEx01"
+  alias ana01   "$G4WORKDIR/bin/$G4SYSTEM/AnaEx01"
+  setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${G4INSTALL}/lib/${G4SYSTEM}
+  setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${G4INSTALL}/tmp/${G4SYSTEM}/AnaEx01
+  setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${G4INSTALL}/tmp/${G4SYSTEM}/dm_example
+  set prompt='g4-pc-gbp> ' 
 endif
-
-if ( `uname -n` == auger5.lal.in2p3.fr ) then
-  set prompt='auger5-g4> ' 
-# Core :
-  setenv MAKECMD make
-  setenv CVSROOT :ext:gbarrand@sungeant.cern.ch:/afs/cern.ch/sw/geant4/cvs
-  setenv CVS_RSH ssh
-  setenv G4INSTALL /geant4/geant4.5.2.ref04
-  setenv G4SYSTEM Linux-g++
-  setenv G4WORKDIR $G4INSTALL/rh93_gcc322
-  setenv G4STTDIR $G4WORKDIR/stt
-  setenv G4LIB $G4WORKDIR/lib
-  setenv G4MAKESHLIB 1
-#  setenv G4DEBUG 1
-  setenv CPPVERBOSE 1
-  setenv CLHEP_BASE_DIR /lal/CLHEP/1.8.0.0/rh93_gcc322
-  setenv NeutronHPCrossSections $G4WORKDIR/data/G4NDL3.5
-  setenv G4LEVELGAMMADATA $G4WORKDIR/data/PhotonEvaporation
-  setenv G4RADIOACTIVEDATA $G4WORKDIR/data/RadiativeDecay
-  setenv G4LEDATA $G4WORKDIR/data/G4EMLOW0.3
-# AIDA :
-#  setenv G4ANALYSIS_USE 1
-# Falsetto implementation :
-#  source $HOME_BARRAND/OpenScientist/Falsetto/v1r2/cmt/setup.csh
-# Lab implementation :
-#  source $HOME_BARRAND/OpenScientist/Lab/v10r0/cmt/setup.csh
-# Set AIDA compile and link access :
-#  setenv G4ANALYSIS_AIDA_CONFIG_CFLAGS `aida-config --cflags`
-#  setenv G4ANALYSIS_AIDA_CONFIG_LIBS `aida-config --libs`
-# Set PYTHONPATH to access local scripts :
-#  setenv PYTHONPATH ${PYTHONPATH}:.
-endif
-
-if ( `uname -n` == "nb-barrand2" ) then
-  setenv CVSROOT :ext:gbarrand@sungeant.cern.ch:/afs/cern.ch/sw/geant4/cvs
-  setenv CVS_RSH ssh
-  setenv G4INSTALL Z:/geant4/geant4-05-00-ref-01
-  setenv G4SYSTEM WIN32-VC7
-  setenv G4WORKDIR $G4INSTALL
-  setenv G4WORKDIR C:/geant4/geant4-05-00-ref-01
-  setenv G4STTDIR $G4WORKDIR/stt
-  setenv G4LIB $G4WORKDIR/lib
-  setenv G4DEBUG 1
-  setenv CPPVERBOSE 1
-# G4 build flags :
-  setenv G4UI_BUILD_WIN32_SESSION 1
-  setenv G4VIS_BUILD_OPENGLWIN32_DRIVER 1
-# G4 use flags :
-  setenv G4UI_USE_WIN32 1
-  setenv G4VIS_USE_OPENGLWIN32 1
-# Specific :
-  setenv CLHEP_BASE_DIR C:/CLHEP/1.8.0.0
-endif
-
+#
+#
 if ( `uname -n` == "lx-si1.lal.in2p3.fr" ) then
   setenv CVSROOT :pserver:barrand@g4cvs.cern.ch:/afs/cern.ch/sw/geant4/cvs
   setenv G4INSTALL /geant4/geant4-03-02-ref-00
@@ -722,7 +614,7 @@ if ( `uname -n` == "lx-si1.lal.in2p3.fr" ) then
   # CLHEP :
   setenv CLHEP_BASE_DIR /lal/CLHEP/1.6.0.0/Linux-gxx
 endif
-
+#
 if ( `uname -n | grep lxplus` != "" ) then
 if ( `whoami` == "gbarrand" ) then
   setenv CVSROOT   /afs/cern.ch/sw/geant4/cvs
@@ -770,3 +662,6 @@ if ( `whoami` == "gbarrand" ) then
   set prompt='g4-lxplus> ' 
 endif
 endif
+#
+####################################################
+####################################################

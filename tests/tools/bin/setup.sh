@@ -22,10 +22,6 @@ if [ `pwd | grep /stt/prod/` ]; then
   . /afs/cern.ch/sw/geant4/stt/prod/testtools/geant4/tests/tools/bin/specific.sh
   found=yes
 fi
-if [ `pwd | grep /tests/tools/bin` ]; then
-  . ./specific.sh
-  found=yes
-fi
 if [ $found = no ]; then
   echo Cannot find sensible tree - pwd should contain /stt/prod/, etc.
   pwd
@@ -66,20 +62,45 @@ if [ -z "$G4STTDIR" ]; then
 else
  echo "You are using the system testing tools directory $G4STTDIR "
 fi
+
+export G4TMP=$G4WORKDIR/tmp
+
 #
 # Other G4 environment variables.
 #
 #export NeutronHPCrossSections=$G4INSTALL/../G4NDL0.2
 #export NeutronHPCrossSections=$G4INSTALL/../G4NDL3.1
-export NeutronHPCrossSections=/afs/cern.ch/sw/geant4/dev/data/G4NDL3.5
+#export NeutronHPCrossSections=/afs/cern.ch/sw/geant4/dev/data/G4NDL3.5
+export NeutronHPCrossSections=/afs/cern.ch/sw/geant4/dev/data/G4NDL3.8
 #export NeutronHPCrossSections=/afs/cern.ch/sw/geant4/dev/data/G4NDL0.2
-export G4LEVELGAMMADATA=$G4INSTALL/data/PhotonEvaporation
-export G4RADIOACTIVEDATA=$G4INSTALL/data/RadiativeDecay
+
+# set only in dev1! (to save space)
+#export G4LEVELGAMMADATA=$G4INSTALL/data/PhotonEvaporation
+
+export G4LEVELGAMMADATA=/afs/cern.ch/sw/geant4/dev/data/PhotonEvaporation
+
+# Yes!
+#export G4LEVELGAMMADATA=$G4INSTALL/data/PhotonEvaporation
+
+export G4ELASTICDATA=/afs/cern.ch/sw/geant4/dev/data/G4ELASTIC
+
+# Yes!
+export G4RADIOACTIVEDATA=/afs/cern.ch/sw/geant4/dev/data/RadiativeDecay
+
+
+# STEP
+export G4LIB_BUILD_STEP=1
+export G4LIB_USE_STEP=1
+
+
 #export G4LEDATA=$G4INSTALL/../G4EMLOW0.3
 # New data for emlowen-V03-02-45: affected tests 14,17,20!
 #export G4LEDATA=$G4INSTALL/../G4EMLOW0.4
-export G4LEDATA=/afs/cern.ch/sw/geant4/dev/data/G4EMLOW1.1
-export G4ANALYSIS_BUILD=1
+
+export G4LEDATA=/afs/cern.ch/sw/geant4/dev/data/G4EMLOW3.0
+#export G4LEDATA=$G4INSTALL/../G4EMLOW3.0
+
+#export G4ANALYSIS_USE=1
 #
 # Some alias -kes :
 alias g4root="cd $G4INSTALL"

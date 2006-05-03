@@ -1,5 +1,5 @@
 #!/bin/sh
-# $Id: updt.sh,v 1.7 2002-07-21 19:16:07 stesting Exp $
+# $Id: updt.sh,v 1.8 2006-05-03 15:47:49 mclareni Exp $
 # Usage:
 #   csh: updt.sh < something.sdb >& something.update.log
 #    sh: updt.sh < something.sdb > something.update.log 2>&1
@@ -18,7 +18,7 @@ do
     command="cvs $NOTHING update -d -P -r $tag $module"
     if [ $module = \# ]
     then
-	echo $module $tag $comments  - ignored
+	echo Ignore: $tag $comments 
     else
 	echo $command
 	$command

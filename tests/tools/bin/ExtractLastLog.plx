@@ -5,8 +5,11 @@
 #
 
 $ActiveExamination="doit";
+undef($ActiveExamination);
+$ActiveExamination="doit";
 $ShowStt=1;
 $ShowAll=1;
+undef($ShowAll);
 
 open(CONFIG,"OnTest") || die "Failed to open OnTest configuration file $! ";
 ($DevDir,$Tag)=split(' ',<CONFIG>);
@@ -24,7 +27,7 @@ opendir(TL,"$TestLogDir") || die "Failed to opendir TestLog  $TestLogDir $!";
 closedir(TL);
 foreach $testlog (@testlogs) {
     next unless ((-M "$TestLogDir/$testlog") < 60 );
-    print "Test Run Log \"$testlog\"\n";
+#   print "Test Run Log \"$testlog\"\n";
     $Machine="Machine";
     $Option="CompilerOpts";
     if ( $testlog =~ m/(\w+)\.\w+\.(.*)\.log/ ) {
@@ -34,7 +37,8 @@ foreach $testlog (@testlogs) {
     $lines=0;
     $title=0;
     $copy=0;
-    undef($Step); undef($ResultsDir); 
+    undef($Step); undef($ResultsDir); undef($FreshStart); undef($Incremental);
+    undef(%Timeout);
     undef(%Start); undef(%Disabled); undef(%Finish); undef(%Missing);
     open(TLC,"$TestLogDir/$testlog") || die "Failed to open read $TestLogDir/$testlog $!";
     while ($line = <TLC> ) {
@@ -51,20 +55,28 @@ foreach $testlog (@testlogs) {
             chomp($line);
             if ( $ShowAll ) {print "$Machine $Option $lines    $line\n"};
             if ( $line =~ m#^G4WORKDIR.*\/(\S+\/\S+)$# ) {
-                $platform=$1;
-                $platform=~s#/#.#;
-                &change_table("Hosts",$platform,$Machine);
+                       $platform=$1;
+                       $platform=~s#/#.#;
+                       &change_table("Hosts",$platform,$Machine);
             }
-            if ( $line =~ m/^STT:(\w+)\s+(\w+)/ ) {
-                if ( $ShowStt ) {print "$Machine $Option $lines    $line\n"}
-                $Step=$1; $State=$2;
+            if ( $line =~ m#^STT:WORKDIR\s(/afs/cern.ch/sw/geant4/stt.*)# ) {
+                       $ResultsDir=$1;
+                       undef($syntaxerror);
+             print   "Extracted Results Dir (for fileage) $ResultsDir\n";
+                   }
+                   if ( $line =~ m/^STT:(\w+)\s+(\w+)/ ) {
+                       $Step=$1; $State=$2;
+                       if ( $ShowStt ) {print "$Machine $Option $lines    $line\n"}
 # Build for now means build test executables after library compilation
 #        logged in gmake.log.
 
-                if ( $line =~ m/^STT:ABORT / ) {
-                     &change_table("Compile",$platform,"A");
-                }
+                if ( $line =~ m/^STT:CREATE / ) { $FreshStart=99 };
+                       if ( $line =~ m/^STT:UPDATE / ) { $Incremental=99 };
+                if ( $line =~ m/^STT:ABORT / ) {{
+                           &change_table("Compile",$platform,"A");
+                 }
 
+         }
                 if ( $line =~ m/^STT:BUILD Started/ ) {
                      &change_table("Compile",$platform,"S");
                      &change_table("Build",$platform,"S");
@@ -73,11 +85,13 @@ foreach $testlog (@testlogs) {
                          $lines++;
                          $nextline = <TLC>;
                      }
-                     if ( $nextline =~ m#^(/afs/.*)\s+created# ) {
-                         $ResultsDir=$1;
-                         undef($syntaxerror);
-                     } else {
-                         print "Unexpected text in log file\n$nextline\ncreation of workdir expected\n";
+                     if ( $FreshStart ) {
+                         if ( $nextline =~ m#^(/afs/.*)\s+created# ) {
+                             $ResultsDir=$1;
+                             undef($syntaxerror);
+                         } else {
+                             print "Unexpected text in log file\n$nextline\ncreation of workdir expected\n";
+                         }
                      }
                 }
                 if ( $line =~ m/^STT:BUILD Finished/ ) {
@@ -99,6 +113,8 @@ foreach $testlog (@testlogs) {
             if ( $line =~ /Finished (test\d+\.\w+) in/ ) { $Finish{$1}=$line }
             if ( $line =~ /Disabled (test\d+\.\w+) in/ ) { $Disabled{$1}=$line }
             if ( $line =~ /Missing (test\d+\.\w+) in/ ) { $Missing{$1}=$line }
+            if ( $line =~ / (test\d+)\: Connection timed out/ ) {$Timeout{$1}=$line }
+# /afs/cern.ch/sw/geant4/stt/dev2/src/geant4/tests/test502: Connection timed out
             if ( $line =~ m/syntax\s+error/ ) {
                 $syntaxerror=$line;
                 print "syntax error reported\n$line\n";
@@ -121,8 +137,6 @@ foreach $testlog (@testlogs) {
                 print "Gmake Age $line\n";
             }
         }
-    } else {
-        sleep(1);
     }
     if (defined($syntaxerror)) {
         print "$syntaxerror\n";
@@ -167,6 +181,7 @@ print "\n\n\n\n\n =================================================\n\n\n\n";
 &print_state_for_all_tests();
 &print_tail($Tag,$DevDir);
 &close_html($Tag,$DevDir);
+&post_html($Tag,$DevDir);
 exit();
 
 sub ReadConfigurationFiles {
@@ -268,6 +283,7 @@ sub print_platform_headings_and_state{
         $l1 .= sprintf("%-7s ",substr($architecture,0,7));
         $l2 .= sprintf("  %-6s", $pco);
         $hostname=~s/plus/+/;
+        $hostname=~s/pcgeant(\d+)/pcg4+$1/;
         $l3 .= sprintf("%-7s ",substr($hostname,0,7));
     }
     print HTML "</TR>\n";
@@ -281,10 +297,17 @@ sub print_all_entries_for_test {
     }
 }
 sub print_state_for_all_tests {
-    foreach $test ( sort (keys(%test_index)) ) {
+    foreach $test ( sort sorttest grep( m/^test/,(keys(%test_index))) ) {
         next unless( $test =~ m/^test/ );
         &print_state_for_test($test);
     }
+}
+sub sorttest {
+    $anum=0; $bnum=0; $aext="."; $bext=".";
+    if ( $a =~ m/^test(\d+)/ ) { $anum=$1 }; 
+    if ( $b =~ m/^test(\d+)/ ) { $bnum=$1 };
+    ($aext=$a)=~s/test${anum}//; ($bext=$b)=~s/test${bnum}//;
+    $anum <=> $bnum || $aext cmp $bext;
 }
 sub print_head {
     my($Tag);my($DevDir);
@@ -298,7 +321,8 @@ sub print_head {
     print HTML "</P>\n";
 }
 sub print_tail {
-    print HTML "</BODY>\n<?HTML>\n";
+    print HTML "</TABLE>\n";
+    print HTML "</BODY>\n</HTML>\n";
 }
 sub open_html {
     $filename="$_[1].html";
@@ -306,5 +330,20 @@ sub open_html {
 }
 sub close_html {
 #   $filename="$_[1].html";
-    close(HTML,">$filename"); # rename and move earlier copies next
+#   close(HTML,">$filename"); # rename and move earlier copies next
+    close(HTML);
+}
+sub post_html {
+    my($PostDir);
+    $filename="$_[1].html";
+    $PostDir="/afs/cern.ch/user/s/soneale/www/Geant4";
+    $FredDir="/afs/cern.ch/sw/geant4/stt/extrainfo/$_[1]";
+    $f="$PostDir/$filename";
+#   The afs acl exposes this directory to stesting
+    $fnew="$PostDir/$filename" . ".new";
+    $fold="$PostDir/$filename" . ".old";
+    `cp $filename $FredDir/$filename`;
+    `cp $filename $fnew`;
+    rename($f,$fold);
+    rename($fnew,$f);
 }

@@ -1,4 +1,4 @@
-#!/usr/local/bin/bash
+#!/usr/local/bin/bash -m
 ##########################
 # g4sbr.sh (SetupBuildRun)
 ##########################
@@ -6,8 +6,12 @@
 #############set -x
 echo "STT:G4SBR start."
 
+echo $0
+echo $1
+echo $3
 REFTREE=$1
 DEBOPT=`echo $2|cut -c 1`
+echo $2
 NONISO=`echo $2 | grep NONISO`
 REFTAG=$3
 ACTION=$4
@@ -24,6 +28,7 @@ fi
 
 #if [ $ACTION = all ]; then
 #export G4LARGE_N=large_N
+#export  ACTION=run
 #fi
 
 if [ X$REFTREE = X -o X$DEBOPT = X -o X$REFTAG = X ]
@@ -79,6 +84,9 @@ env | grep G4
 echo  "CLHEP_BASE_DIR $CLHEP_BASE_DIR"
 echo "STT:SETUPEnvironment Complete"
 
+echo $G4WORKDIR
+
+
 ##########################
 # Check if INPROGRESS
 ##########################
@@ -86,18 +94,22 @@ echo "STT:SETUPEnvironment Complete"
   echo "STT:ABORT inprogress.stat exists."
   cat $G4WORKDIR/inprogress.stat
   ls -l $G4WORKDIR/inprogress.stat
-  exit 
  fi
 
 ###########################################
 # Locks and stats
 ###########################################
 trap "mv $G4WORKDIR/inprogress.stat $G4WORKDIR/interrupt.stat;touch $G4WORKDIR/interrupt.stat" TERM
-rm $G4WORKDIR/done.stat $G4WORKDIR/interrupt.stat
+
+#rm $G4WORKDIR/done.stat $G4WORKDIR/interrupt.stat
+
 touch $G4WORKDIR/inprogress.stat
-cat >>  $G4WORKDIR/inprogress.stat <<EOF
+
+cat >>  $G4WORKDIR/inprogress.stat << ENDOFFILE
 ${REFTAG}
-EOF
+ENDOFFILE
+
+echo HI
 
 ######################################################################
 # Prepare if not incremental: create new stt and link, clear bin|lib|tmp
@@ -105,11 +117,23 @@ EOF
 echo "STT:SETUPDirectories Started"
 if [ X$NONINCREMENTAL = X ]
 then
-  cd ${G4WORKDIR}/stt/${G4SYSTEM}
-  NEXT_NUMBER=$[`ls -c1 gmake.log.*|sort|tail -1|cut -d "." -f3`+1]
-  mv gmake.log gmake.log.${NEXT_NUMBER}
-  echo "STT:UPDATE stt.${REFTAG} and RETAIN stt symbolic link."
+  cd ${G4WORKDIR}
+  if [ -d stt.${REFTAG} ]
+  then
+    echo "STT:ABORT stt.${REFTAG} already exists."
+    exit
+  fi
+  echo "STT:CREATE stt.${REFTAG} and RESET stt symbolic link."
   echo "STT:WORKDIR ${G4WORKDIR}/stt.${REFTAG}/${G4SYSTEM}"
+  mkdir stt.${REFTAG}
+  #  rm -rf stt  # no uniform test for a softlink exists ?
+  [ -a stt ] && rm -f stt
+  ln -s stt.${REFTAG} stt
+#  cd ${G4WORKDIR}/stt/${G4SYSTEM}
+#  NEXT_NUMBER=$[`ls -c1 gmake.log.*|sort|tail -1|cut -d "." -f3`+1]
+#  mv gmake.log gmake.log.${NEXT_NUMBER}
+#  echo "STT:UPDATE stt.${REFTAG} and RETAIN stt symbolic link."
+#  echo "STT:WORKDIR ${G4WORKDIR}/stt.${REFTAG}/${G4SYSTEM}"
 else
   cd ${G4WORKDIR}
   if [ -d stt.${REFTAG} ]
@@ -139,6 +163,7 @@ else
   echo "STT:REMOVE files in $G4BIN"
   rm -r $G4BIN/*
 fi
+
 echo "STT:SETUPDirectories Finished"
 ########################################################
 
@@ -149,6 +174,7 @@ cd ${G4WORKDIR}
 
 if [ X$ACTION = Xbuild -o X$ACTION = Xall  ]
 then
+    date
   . ${G4STTDIR}/bin/tmpenv.sh
   ${G4STTDIR}/bin/geant4-unix.pl --start 0
   echo "STT:BUILD Started"
@@ -156,10 +182,12 @@ then
   echo "STT:BUILD Finished"
   ${G4STTDIR}/bin/geant4-unix.pl --end 0
     sleep 60
+    date
 fi
 
 if [ X$ACTION = Xrun -o X$ACTION = Xall  ]
 then
+    date
 #  ${G4STTDIR}/bin/geant4-unix.pl --start-test tests
   echo "STT:RUN Started"
   . ${G4STTDIR}/bin/runlimit.sh
