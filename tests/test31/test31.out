@@ -1,31 +1,14 @@
 
 *************************************************************
- Geant4 version $Name: not supported by cvs2svn $   (23-February-2005)
+ Geant4 version Name: geant4-08-00-ref-02    (10-February-2006)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
 
-
-***** Table : Nb of materials = 2 *****
-
- Material:    Mylar     density:  1.390 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  28.877 cm 
-   --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
-   --->  Isotope:     C   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
-   --->  Isotope:     C   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %  fractionMass:  55.03 %  Abundance  30.30 %
-   --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
-   --->  Isotope:     H   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
-   --->  Isotope:     H   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %  fractionMass:   8.31 %  Abundance  54.55 %
-   --->  Element: O (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
-   --->  Isotope:     O   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
-   --->  Isotope:     O   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
-   --->  Isotope:     O   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %  fractionMass:  36.65 %  Abundance  15.15 %
-
- Material:   Vacuum     density:  0.000 kg/m3   temperature:   2.73 K  pressure:   0.00 atm  RadLength: 204727576.737 pc 
-   --->  Element: Vacuum ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
-
-
 Detector Construction is defined
+### PhysicsList Construte Particles
+ParticlesBuilder::ConstructParticle
 Physics List is defined
 VisManager will be initialized
 Visualization Manager instantiating...
@@ -35,13 +18,20 @@ Registering graphics systems...
 You have successfully chosen to use the following graphics systems.
 Current available graphics systems are:
   ASCIITree (ATree)
+  DAWNFILE (DAWNFILE)
+  GAGTree (GAGTree)
+  G4HepRep (HepRepXML)
+  G4HepRepFile (HepRepFile)
+  RayTracer (RayTracer)
+  VRML1FILE (VRML1FILE)
+  VRML2FILE (VRML2FILE)
   FukuiRenderer (DAWN)
   OpenGLImmediateX (OGLIX)
   OpenGLStoredX (OGLSX)
   VRML1 (VRML1)
   VRML2 (VRML2)
-  VRML1FILE (VRML1FILE)
-  VRML2FILE (VRML2FILE)
+
+Registering model factories...
 User actions will be initialized
 test31PrimaryGeneratorMessenger: Construct 
 test31PrimaryGeneratorAction is defined
@@ -57,6 +47,7 @@ UI interface is started
 /testem/phys/setCuts         0.1 mm
 #/testem/phys/stepMax        0.1 mm
 /testem/phys/addPhysics      standard
+### PhysicsList Add Physics <standard> emBuilderIsRegisted= 0
 PhysicsList::AddPhysicsList <standard>
 /test31/AbsorberMaterial     G4_Si
 /test31/AbsorberThick        10 mm
@@ -65,39 +56,79 @@ PhysicsList::AddPhysicsList <standard>
 /test31/WorldMaterial        G4_AIR
 /test31/HistoNumber          5
 /test31/gun/beamE            1000.0 MeV
-test31PrimaryGeneratorMessenger: O'K 
 #/process/eLoss/preciseRange  true
 /run/initialize
-G4Material: Mean excitation energy is changed for G4_AIR Iold= 85.627eV; Inew= 85.7 eV;
+### NIST DataBase for Materials is used
+G4Material: Mean excitation energy is changed for G4_AIR Iold= 85.6276eV; Inew= 85.7 eV;
 G4Material: Mean excitation energy is changed for G4_Si Iold= 173.6eV; Inew= 173 eV;
+G4Material: Mean excitation energy is changed for G4_Galactic Iold= 21.8eV; Inew= 21.8 eV;
 The  WORLD   is made of  of G4_AIR. The transverse size (XY) of the world is 1000 mm
 The ABSORBER is made of 60 items of 10 mm of G4_Si. The transverse size (XY) is 1000 mm
 The meanExc(eV)= 173
 
-phot:  Total cross sections from Sandia parametrisation. 
+***** Table : Nb of materials = 4 *****
+
+ Material:    Mylar     density:  1.390 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  28.868 cm 
+   --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
+   --->  Isotope:     C   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
+   --->  Isotope:     C   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %  ElmMassFraction:  55.03 %  ElmAbundance  30.30 %
+   --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
+   --->  Isotope:     H   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+   --->  Isotope:     H   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %  ElmMassFraction:   8.31 %  ElmAbundance  54.55 %
+   --->  Element: O (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
+   --->  Isotope:     O   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+   --->  Isotope:     O   Z =  8   N =  17   A =  16.99 g/mole   abundance:   0.04 %
+   --->  Isotope:     O   Z =  8   N =  18   A =  17.99 g/mole   abundance:   0.20 %  ElmMassFraction:  36.66 %  ElmAbundance  15.15 %
+
+ Material:   G4_AIR     density:  1.205 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 303.900 m  
+   --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
+   --->  Isotope:     C   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
+   --->  Isotope:     C   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %  ElmMassFraction:   0.01 %  ElmAbundance   0.02 %
+   --->  Element: N (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:  75.53 %  ElmAbundance  78.44 %
+   --->  Element: O (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
+   --->  Isotope:     O   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+   --->  Isotope:     O   Z =  8   N =  17   A =  16.99 g/mole   abundance:   0.04 %
+   --->  Isotope:     O   Z =  8   N =  18   A =  17.99 g/mole   abundance:   0.20 %  ElmMassFraction:  23.18 %  ElmAbundance  21.08 %
+   --->  Element: Ar (Ar)   Z = 18.0   N =  39.9   A =  39.95 g/mole  ElmMassFraction:   1.28 %  ElmAbundance   0.47 %
+
+ Material:    G4_Si     density:  2.330 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   9.366 cm 
+   --->  Element: Si (Si)   Z = 14.0   N =  28.1   A =  28.09 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+
+ Material: G4_Galactic     density:  0.000 kg/m3   temperature:   2.73 K  pressure:   0.00 atm  RadLength: 204199975.762 pc 
+   --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
+   --->  Isotope:     H   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+   --->  Isotope:     H   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+
+
+### PhysicsList Construte Processes
 #
 #/testem/histo/fileName            t_e_st.paw
+/gun/particle ion
+/gun/ion 6 12 6
 /gun/particle e-
-/run/beamOn 1000
-G4VUserPhysicsList::BuildPhysicsTable does not retrieve Cut Table but calculate 
+/run/beamOn 500
 
-compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
-       Scattered gamma energy according Klein-Nishina.
-        PhysicsTables from 1 keV to 100 GeV in 80 bins. 
+phot:  Total cross sections from Sandia parametrisation. 
 
-conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
-        e+e- energies according Bethe-Heitler
-        PhysicsTables from 1.022 MeV to 100 GeV in 100 bins. 
+compt:  Total cross sections has a good parametrisation from 10 KeV to (100/Z) GeV
+      Sampling according Klein-Nishina model
+      tables are built for  gamma
+      Lambda tables from 100 eV  to 100 GeV in 90 bins.
+
+conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
+      sampling secondary e+e- according to the Bethe-Heitler model
+      tables are built for  gamma
+      Lambda tables from 1.022 MeV to 100 GeV in 90 bins.
 
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 GeV in 90 bins.
-      Boundary algorithm is active with facrange= 0.199
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 eIoni:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 GeV in 90 bins.
       Lambda tables from threshold to 100 GeV in 90 bins.
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 eBrem:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 GeV in 90 bins.
@@ -109,7 +140,7 @@ eIoni:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 GeV in 90 bins.
       Lambda tables from threshold to 100 GeV in 90 bins.
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 GeV in 90 bins.
@@ -117,13 +148,13 @@ eBrem:   tables are built for  e+
       Total cross sections from a parametrisation based on the EEDL data library. 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
 
-annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
-        gamma energies sampled according Heitler
-        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
+annihil:       Heilter model of formula of annihilation into 2 photons
+      tables are built for  e+
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
 
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 GeV in 90 bins.
-      Boundary algorithm is active with facrange= 0.199
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 100 GeV in 90 bins.
@@ -132,6 +163,9 @@ hIoni:   tables are built for  proton
       Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for protons below.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
+msc:  Model variant of multiple scattering for C12[0.0]
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+
 ionIoni:   tables are built for  GenericIon
       dE/dx and range tables from 100 eV  to 100 GeV in 90 bins.
       Lambda tables from threshold to 100 GeV in 90 bins.
@@ -139,9 +173,16 @@ ionIoni:   tables are built for  GenericIon
       Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for alpha particles below.
       Step function: finalRange(mm)= 0.1, dRoverRange= 0.1, integral: 1
 
+hIoni:   tables are built for  anti_proton
+      dE/dx and range tables from 100 eV  to 100 GeV in 90 bins.
+      Lambda tables from threshold to 100 GeV in 90 bins.
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for protons below.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 GeV in 90 bins.
-      Boundary algorithm is active with facrange= 0.199
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 muIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 GeV in 90 bins.
@@ -160,22 +201,60 @@ muPairProd:   tables are built for  mu+
       Lambda tables from threshold to 100 GeV in 90 bins.
       Parametrised model 
 
+muIoni:   tables are built for  mu-
+      dE/dx and range tables from 100 eV  to 100 GeV in 90 bins.
+      Lambda tables from threshold to 100 GeV in 90 bins.
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
+      radiative corrections for E > 1 GeV
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
+muBrems:   tables are built for  mu-
+      dE/dx and range tables from 100 eV  to 100 GeV in 90 bins.
+      Lambda tables from threshold to 100 GeV in 90 bins.
+      Parametrised model 
+
+muPairProd:   tables are built for  mu-
+      dE/dx and range tables from 100 eV  to 100 GeV in 90 bins.
+      Lambda tables from threshold to 100 GeV in 90 bins.
+      Parametrised model 
+
+hIoni:   tables are built for  pi+
+      dE/dx and range tables from 100 eV  to 100 GeV in 90 bins.
+      Lambda tables from threshold to 100 GeV in 90 bins.
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 0.297504 MeV, ICRU49 parametrisation for protons below.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 GeV in 90 bins.
-      Boundary algorithm is active with facrange= 0.199
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+
+hIoni:   tables are built for  pi-
+      dE/dx and range tables from 100 eV  to 100 GeV in 90 bins.
+      Lambda tables from threshold to 100 GeV in 90 bins.
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 0.297504 MeV, ICRU49 parametrisation for protons below.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : G4_AIR
- Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
  Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : G4_Galactic
+ Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : G4_Si
- Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
  Energy thresholds :  gamma 2.29225 keV    e- 120.425 keV    e+ 118.951 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
@@ -184,7 +263,88 @@ Index : 1     used in the geometry : Yes     recalculation needed : No
 
 ### Run 0 start
 test31Histo:  AbsThick(mm)= 10 Nabs= 60 zmax= 600 nHisto= 5
+/vis/scene/notifyHandlers
+WARNING: Scene "refresh" not found.
+  /vis/scene/list to see scenes.
 Start Run processing.
+test31EventAction: Event # 100 started
+test31EventAction: Event # 200 started
+test31EventAction: Event # 300 started
+test31EventAction: Event # 400 started
+test31EventAction: Event # 500 started
+Run terminated.
+Run Summary
+  Number of events processed : 500
+  User=41.57s Real=41.88s Sys=0.06s
+test31RunAction: End of run actions are started
+test31Histo: End of run actions
+====================================================================
+Initial particle               e-   Ekin(GeV)= 1
+Range(mm)= 247.61; Stragling(mm)= 102.51 +- 4.6    5e+02 events for range
+Number of events               500
+Average energy deposit         837.4 MeV
+Average number of e-           479.9
+Average number of gamma        299.1
+Average number of e+           16.24
+Average number of steps        7537
+Average number of leak charged 1.206
+Average number of leak gamma   21.64
+Average number of back charged 0.004
+Average number of back gamma   1.814
+Average number of mu+mu-       0
+Average number of pi+pi-       0
+====================================================================
+=========   End of tets31Histo  ============================
+/vis/viewer/update
+ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
+#
+#/testem/histo/fileName            t_mu_st.paw
+/gun/particle mu-
+/run/beamOn 1000
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : G4_AIR
+ Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : G4_Galactic
+ Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : G4_Si
+ Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
+ Energy thresholds :  gamma 2.292 keV    e- 120.4 keV    e+ 119 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+### Run 1 start
+/vis/scene/notifyHandlers
+WARNING: Scene "refresh" not found.
+  /vis/scene/list to see scenes.
+Start Run processing.
+G4EnergyLossForExtrapolator::ComputeElectronDEDX for e-
+G4EnergyLossForExtrapolator::ComputeElectronDEDX for e+
+G4EnergyLossForExtrapolator::ComputeMuonDEDX for mu+
+G4EnergyLossForExtrapolator::ComputeProtonDEDX for proton
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 774.1 Erec-E0(MeV)= 22.76
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 764.15021 Erec-E0(MeV)= 12.408652
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 741.41889 Erec-E0(MeV)= -11.284628
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 751.99112 Erec-E0(MeV)= -0.26517075
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 761.80526 Erec-E0(MeV)= 9.9644038
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 769.51351 Erec-E0(MeV)= 17.999113
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 772.82778 Erec-E0(MeV)= 21.453794
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 772.58197 Erec-E0(MeV)= 21.197564
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 739.78549 Erec-E0(MeV)= -12.955164
 test31EventAction: Event # 100 started
 test31EventAction: Event # 200 started
 test31EventAction: Event # 300 started
@@ -198,91 +358,28 @@ test31EventAction: Event # 1000 started
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=54.71s Real=54.77s Sys=0s
+  User=12.58s Real=12.61s Sys=0s
 test31RunAction: End of run actions are started
-test31Histo: End of run actions are started
+test31Histo: End of run actions
 ====================================================================
-Range(mm)= 249.9; Stragling(mm)= 105.05 +- 3.3    1e+03 events for range
-Number of events               1000
-Average energy deposit         827.3 MeV
-Average number of e-           1424
-Average number of gamma        300.1
-Average number of e+           15.84
-Average number of steps        5861
-Average number of leak charged 1.176
-Average number of leak gamma   21.44
-Average number of back charged 0.001
-Average number of back gamma   1.861
-Average number of mu+mu-       0
-Average number of pi+pi-       0
-====================================================================
-G4Material: Mean excitation energy is changed for G4_Al Iold= 166.4eV; Inew= 166 eV;
-====================================================================
-   Tables control for  alpha
-   Material            G4_Al
-====================================================================
-====================================================================
-#
-#/testem/histo/fileName            t_mu_st.paw
-/gun/particle mu-
-/run/beamOn 1000
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : G4_AIR
- Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
- Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 1     used in the geometry : Yes     recalculation needed : No 
- Material : G4_Si
- Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
- Energy thresholds :  gamma 2.292 keV    e- 120.4 keV    e+ 119 keV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-### Run 1 start
-Start Run processing.
-test31EventAction: Event # 1100 started
-test31EventAction: Event # 1200 started
-test31EventAction: Event # 1300 started
-test31EventAction: Event # 1400 started
-test31EventAction: Event # 1500 started
-test31EventAction: Event # 1600 started
-test31EventAction: Event # 1700 started
-test31EventAction: Event # 1800 started
-test31EventAction: Event # 1900 started
-test31EventAction: Event # 2000 started
-Run terminated.
-Run Summary
-  Number of events processed : 1000
-  User=5.71s Real=5.72s Sys=0s
-test31RunAction: End of run actions are started
-test31Histo: End of run actions are started
-====================================================================
+Initial particle               mu-   Ekin(GeV)= 1
 Range(mm)= 600; Stragling(mm)= 0 +- 0    1e+03 events for range
 Number of events               1000
-Average energy deposit         247.4 MeV
-Average number of e-           136
-Average number of gamma        13.77
-Average number of e+           0.057
-Average number of steps        437.6
+Average energy deposit         245.1 MeV
+Average number of e-           104.6
+Average number of gamma        13.11
+Average number of e+           0.048
+Average number of steps        875.6
 Average number of leak charged 1.093
-Average number of leak gamma   0.504
-Average number of back charged 0
+Average number of leak gamma   0.458
+Average number of back charged 0.005
 Average number of back gamma   0.092
 Average number of mu+mu-       0
 Average number of pi+pi-       0
 ====================================================================
-====================================================================
-   Tables control for  alpha
-   Material            G4_Al
-====================================================================
-====================================================================
+=========   End of tets31Histo  ============================
+/vis/viewer/update
+ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
 #
 #/testem/histo/fileName            t_pi_st.paw
 /gun/particle pi+
@@ -292,14 +389,21 @@ Average number of pi+pi-       0
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : G4_AIR
- Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
  Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : G4_Galactic
+ Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : G4_Si
- Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
  Energy thresholds :  gamma 2.292 keV    e- 120.4 keV    e+ 119 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
@@ -307,43 +411,54 @@ Index : 1     used in the geometry : Yes     recalculation needed : No
 ====================================================================
 
 ### Run 2 start
+/vis/scene/notifyHandlers
+WARNING: Scene "refresh" not found.
+  /vis/scene/list to see scenes.
 Start Run processing.
-test31EventAction: Event # 2100 started
-test31EventAction: Event # 2200 started
-test31EventAction: Event # 2300 started
-test31EventAction: Event # 2400 started
-test31EventAction: Event # 2500 started
-test31EventAction: Event # 2600 started
-test31EventAction: Event # 2700 started
-test31EventAction: Event # 2800 started
-test31EventAction: Event # 2900 started
-test31EventAction: Event # 3000 started
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 755.6 Erec-E0(MeV)= -0.4627
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 774.5146 Erec-E0(MeV)= 18.780749
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 729.50362 Erec-E0(MeV)= -27.29657
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 760.85429 Erec-E0(MeV)= 4.8785498
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 777.51976 Erec-E0(MeV)= 21.83918
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 765.27962 Erec-E0(MeV)= 9.3822016
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 770.60597 Erec-E0(MeV)= 14.802873
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 753.96492 Erec-E0(MeV)= -2.1326494
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 778.57404 Erec-E0(MeV)= 22.912145
+test31EventAction: Event # 100 started
+test31EventAction: Event # 200 started
+test31EventAction: Event # 300 started
+test31EventAction: Event # 400 started
+test31EventAction: Event # 500 started
+test31EventAction: Event # 600 started
+test31EventAction: Event # 700 started
+test31EventAction: Event # 800 started
+test31EventAction: Event # 900 started
+test31EventAction: Event # 1000 started
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=5.42s Real=5.42s Sys=0s
+  User=11.54s Real=11.54s Sys=0s
 test31RunAction: End of run actions are started
-test31Histo: End of run actions are started
+test31Histo: End of run actions
 ====================================================================
+Initial particle               pi+   Ekin(GeV)= 1
 Range(mm)= 600; Stragling(mm)= 0 +- 0    1e+03 events for range
 Number of events               1000
-Average energy deposit         241.4 MeV
-Average number of e-           128.7
-Average number of gamma        12.46
+Average energy deposit         240.7 MeV
+Average number of e-           103.2
+Average number of gamma        12.2
 Average number of e+           0.029
-Average number of steps        417.9
+Average number of steps        852.4
 Average number of leak charged 1.088
-Average number of leak gamma   0.375
-Average number of back charged 0
-Average number of back gamma   0.082
+Average number of leak gamma   0.396
+Average number of back charged 0.003
+Average number of back gamma   0.087
 Average number of mu+mu-       0
 Average number of pi+pi-       0
 ====================================================================
-====================================================================
-   Tables control for  alpha
-   Material            G4_Al
-====================================================================
-====================================================================
+=========   End of tets31Histo  ============================
+/vis/viewer/update
+ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
 #
 #/testem/histo/fileName            t_p_st.paw
 /gun/particle proton
@@ -353,14 +468,21 @@ Average number of pi+pi-       0
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : G4_AIR
- Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
  Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : G4_Galactic
+ Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : G4_Si
- Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
  Energy thresholds :  gamma 2.292 keV    e- 120.4 keV    e+ 119 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
@@ -368,45 +490,56 @@ Index : 1     used in the geometry : Yes     recalculation needed : No
 ====================================================================
 
 ### Run 3 start
+/vis/scene/notifyHandlers
+WARNING: Scene "refresh" not found.
+  /vis/scene/list to see scenes.
 Start Run processing.
-test31EventAction: Event # 3100 started
-test31EventAction: Event # 3200 started
-test31EventAction: Event # 3300 started
-test31EventAction: Event # 3400 started
-test31EventAction: Event # 3500 started
-test31EventAction: Event # 3600 started
-test31EventAction: Event # 3700 started
-test31EventAction: Event # 3800 started
-test31EventAction: Event # 3900 started
-test31EventAction: Event # 4000 started
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 732.8 Erec-E0(MeV)= -2.583
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 726.98003 Erec-E0(MeV)= -7.8020718
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 736.128 Erec-E0(MeV)= 0.41998893
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 744.61989 Erec-E0(MeV)= 8.052468
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 727.58053 Erec-E0(MeV)= -7.2623509
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 731.84947 Erec-E0(MeV)= -3.4255081
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 728.34522 Erec-E0(MeV)= -6.5750697
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 736.97622 Erec-E0(MeV)= 1.1823614
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 744.10135 Erec-E0(MeV)= 7.586409
+test31EventAction: Event # 100 started
+test31EventAction: Event # 200 started
+test31EventAction: Event # 300 started
+test31EventAction: Event # 400 started
+test31EventAction: Event # 500 started
+test31EventAction: Event # 600 started
+test31EventAction: Event # 700 started
+test31EventAction: Event # 800 started
+test31EventAction: Event # 900 started
+test31EventAction: Event # 1000 started
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=5.66s Real=5.67s Sys=0s
+  User=9.71s Real=9.71s Sys=0s
 test31RunAction: End of run actions are started
-test31Histo: End of run actions are started
+test31Histo: End of run actions
 ====================================================================
+Initial particle               proton   Ekin(GeV)= 1
 Range(mm)= 600; Stragling(mm)= 0 +- 0    1e+03 events for range
 Number of events               1000
-Average energy deposit         263.3 MeV
-Average number of e-           117.7
-Average number of gamma        6.527
+Average energy deposit         262.5 MeV
+Average number of e-           108.8
+Average number of gamma        5.931
 Average number of e+           0
-Average number of steps        425.6
-Average number of leak charged 1.025
-Average number of leak gamma   0.056
-Average number of back charged 0
-Average number of back gamma   0.021
+Average number of steps        699.4
+Average number of leak charged 1.041
+Average number of leak gamma   0.039
+Average number of back charged 0.002
+Average number of back gamma   0.027
 Average number of mu+mu-       0
 Average number of pi+pi-       0
 ====================================================================
-====================================================================
-   Tables control for  alpha
-   Material            G4_Al
-====================================================================
-====================================================================
+=========   End of tets31Histo  ============================
+/vis/viewer/update
+ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
 #
 Graphics systems deleted.
 Visualization Manager deleting...
-  User=72.13s Real=72.23s Sys=0.03s
+  User=76.68s Real=77.04s Sys=0.07s
 G4 kernel has come to Quit state.

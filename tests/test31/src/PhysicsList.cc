@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.18 2006-03-21 15:45:29 vnivanch Exp $
+// $Id: PhysicsList.cc,v 1.19 2006-05-03 17:08:21 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -59,6 +59,7 @@
 #include "EmBinaryCascadeBuilder.hh"
 #include "EmIonBinaryCascadeBuilder.hh"
 #include "EmGammaNucleusBuilder.hh"
+#include "PhysListEmModelPai.hh"
 
 #include "G4UnitsTable.hh"
 #include "G4LossTableManager.hh"
@@ -164,6 +165,11 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     RegisterPhysics(new G4PenelopeQEDBuilder());
     RegisterPhysics(new G4EmMuonBuilder());
     RegisterPhysics(new G4EmHadronBuilder());
+    emBuilderIsRegisted = true;
+    G4cout << "PhysicsList::AddPhysicsList <" << name << ">" << G4endl;
+
+  } else if (name == "pai" && !emBuilderIsRegisted) {
+    RegisterPhysics(new PhysListEmModelPai());
     emBuilderIsRegisted = true;
     G4cout << "PhysicsList::AddPhysicsList <" << name << ">" << G4endl;
 

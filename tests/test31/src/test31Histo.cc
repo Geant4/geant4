@@ -187,16 +187,6 @@ void test31Histo::EndOfHisto()
   }
   G4cout<<"=========   End of tets31Histo  ============================"<<G4endl;  
 
-  G4double r1 = G4NucleiProperties::GetNuclearMass(12., 6.);
-  G4double r2 = G4NucleiProperties::GetNuclearMass(8., 4.);
-  G4double r3 = G4NucleiProperties::GetNuclearMass(11., 6.);
-  G4double r4 = G4NucleiProperties::GetNuclearMass(11., 5.);
-
-  G4cout << "<<< (12,6)= " <<r1 << "  (8,4)= " <<r2<<"  (11,6)= " <<r3<<"  (11,5)= "<<r4<<G4endl;
-
-
-  //if(nHisto == 0) TableControl();
-  //  CrossSections();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -320,7 +310,10 @@ void test31Histo::AddParticleLeak(const G4Track* track)
       G4double e1 = dp->GetKineticEnergy();
       G4double e2 = 
         extra->EnergyBeforeStep(e1,zmax,absMaterial,dp->GetDefinition());
-      //      G4cout << "e0= " << e0 << " e1= " << e1 << " e2= " << e2 << G4endl;
+      if(n_evt < 10)
+        G4cout << "Extrapolation of primary E0(MeV)= " << e0/MeV 
+	       << " E1(MeV)= " << e1/MeV 
+	       << " Erec-E0(MeV)= " << (e2-e0)/MeV << G4endl;
       if(6 < nHisto) histo->fill(histoID[6],e2 - e0,1.0);      
     }
   }
