@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AssemblyVolume.cc,v 1.7 2006-05-02 11:39:17 gcosmo Exp $
+// $Id: G4AssemblyVolume.cc,v 1.8 2006-05-03 11:49:38 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -286,7 +286,7 @@ void G4AssemblyVolume::MakeImprint( G4AssemblyVolume* pAssembly,
       // Place volumes in this assembly with composed transformation
       //
       MakeImprint( triplets[i].GetAssembly(), pMotherLV,
-                   Tfinal, copyNumBase, surfCheck ); 
+                   Tfinal, i*100+copyNumBase, surfCheck ); 
     }
     else
     {
