@@ -166,8 +166,21 @@ private:
   AIDA::IHistogram1D* gammaSpectrum3[10];
   AIDA::IHistogram1D* gammaSpectrum4[10];
   AIDA::IHistogram1D* gammaSpectrum5[10];
+  AIDA::IHistogram1D* pionPlusSpectrum1[10];
+  AIDA::IHistogram1D* pionPlusSpectrum2[10];
+  AIDA::IHistogram1D* pionPlusSpectrum3[10];
+  AIDA::IHistogram1D* pionPlusSpectrum4[10];
+  AIDA::IHistogram1D* pionPlusSpectrum5[10];
+  AIDA::IHistogram1D* pionMinusSpectrum1[10];
+  AIDA::IHistogram1D* pionMinusSpectrum2[10];
+  AIDA::IHistogram1D* pionMinusSpectrum3[10];
+  AIDA::IHistogram1D* pionMinusSpectrum4[10];
+  AIDA::IHistogram1D* pionMinusSpectrum5[10];
 
   // Now the same histograms, but weighted with 1/momentum
+  // (for the plots in logarithmic scale, i.e. where the
+  //  x-axis is  log_10( Ekin/MeV ), the weight is 
+  // 1/(Ekin*momentum) .
   AIDA::IHistogram1D* emSpectrumWeighted1[10];
   AIDA::IHistogram1D* emSpectrumWeighted2[10];
   AIDA::IHistogram1D* emSpectrumWeighted3[10];
@@ -193,6 +206,16 @@ private:
   AIDA::IHistogram1D* gammaSpectrumWeighted3[10];
   AIDA::IHistogram1D* gammaSpectrumWeighted4[10];
   AIDA::IHistogram1D* gammaSpectrumWeighted5[10];
+  AIDA::IHistogram1D* pionPlusSpectrumWeighted1[10];
+  AIDA::IHistogram1D* pionPlusSpectrumWeighted2[10];
+  AIDA::IHistogram1D* pionPlusSpectrumWeighted3[10];
+  AIDA::IHistogram1D* pionPlusSpectrumWeighted4[10];
+  AIDA::IHistogram1D* pionPlusSpectrumWeighted5[10];
+  AIDA::IHistogram1D* pionMinusSpectrumWeighted1[10];
+  AIDA::IHistogram1D* pionMinusSpectrumWeighted2[10];
+  AIDA::IHistogram1D* pionMinusSpectrumWeighted3[10];
+  AIDA::IHistogram1D* pionMinusSpectrumWeighted4[10];
+  AIDA::IHistogram1D* pionMinusSpectrumWeighted5[10];
 
   // Keep the count of the number of steps and tracks.
   // We use doubles instead of integers to avoid overflow problems.
