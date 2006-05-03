@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RegionStore.hh,v 1.7 2005-08-18 16:51:37 asaim Exp $
+// $Id: G4RegionStore.hh,v 1.8 2006-05-03 10:03:22 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4RegionStore
@@ -53,9 +53,9 @@
 #include <vector>
 #include "G4Types.hh"
 #include "G4String.hh"
+#include "G4VStoreNotifier.hh"
 
 class G4Region;
-class G4VStoreNotifier;
 class G4VPhysicalVolume;
 
 class G4RegionStore : public std::vector<G4Region*>

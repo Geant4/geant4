@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeStore.hh,v 1.12 2004-09-02 07:49:58 gcosmo Exp $
+// $Id: G4PhysicalVolumeStore.hh,v 1.13 2006-05-03 10:03:22 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4PhysicalVolume
@@ -55,8 +55,7 @@
 #include <vector>
 
 #include "G4VPhysicalVolume.hh"
-
-class G4VStoreNotifier;
+#include "G4VStoreNotifier.hh"
 
 class G4PhysicalVolumeStore : public std::vector<G4VPhysicalVolume*>
 {

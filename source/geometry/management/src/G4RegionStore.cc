@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RegionStore.cc,v 1.9 2005-08-18 16:51:37 asaim Exp $
+// $Id: G4RegionStore.cc,v 1.10 2006-05-03 10:03:22 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4RegionStore
@@ -35,7 +35,6 @@
 #include "G4Region.hh"
 #include "G4RegionStore.hh"
 #include "G4GeometryManager.hh"
-#include "G4VStoreNotifier.hh"
 #include "G4VPhysicalVolume.hh"
 
 #include "G4ios.hh"

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VStoreNotifier.hh,v 1.1 2004-09-02 07:48:58 gcosmo Exp $
+// $Id: G4VStoreNotifier.hh,v 1.2 2006-05-03 10:03:22 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4VStoreNotifier
@@ -31,6 +31,7 @@
 // Simple abstract class allowing for implementation of user notifiers
 // to be activated at registration/deregistration of objects in the
 // volume, solid and region stores.
+// See G4VNotifier for the details.
 
 // Author:
 // 01.09.04 G.Cosmo Initial version
@@ -38,18 +39,8 @@
 #ifndef G4VSTORENOTIFIER_HH
 #define G4VSTORENOTIFIER_HH
 
-class G4VStoreNotifier
-{
-  public:  // with description
+#include "G4VNotifier.hh"
 
-    G4VStoreNotifier();
-    virtual ~G4VStoreNotifier();
-      // Constructor and destructor.
-
-    virtual void NotifyRegistration() = 0;
-      // Notification of object registration.
-    virtual void NotifyDeRegistration() = 0;
-      // Notification of object deregistration.
-};
+typedef G4VNotifier G4VStoreNotifier;
 
 #endif

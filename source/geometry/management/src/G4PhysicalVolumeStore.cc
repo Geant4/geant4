@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeStore.cc,v 1.15 2004-09-03 08:17:57 gcosmo Exp $
+// $Id: G4PhysicalVolumeStore.cc,v 1.16 2006-05-03 10:03:22 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4PhysicalVolumeStore
@@ -36,7 +36,6 @@
 #include "G4PhysicalVolumeStore.hh"
 #include "G4GeometryManager.hh"
 #include "G4LogicalVolume.hh"
-#include "G4VStoreNotifier.hh"
 
 // ***************************************************************************
 // Static class variables

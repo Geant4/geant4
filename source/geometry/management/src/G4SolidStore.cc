@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SolidStore.cc,v 1.13 2004-09-03 08:17:58 gcosmo Exp $
+// $Id: G4SolidStore.cc,v 1.14 2006-05-03 10:03:22 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4SolidStore
@@ -35,7 +35,6 @@
 #include "globals.hh"
 #include "G4SolidStore.hh"
 #include "G4GeometryManager.hh"
-#include "G4VStoreNotifier.hh"
 
 // ***************************************************************************
 // Static class variables
