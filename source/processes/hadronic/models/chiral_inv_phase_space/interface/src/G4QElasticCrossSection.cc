@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QElasticCrossSection.cc,v 1.3 2006-04-24 14:41:19 mkossov Exp $
+// $Id: G4QElasticCrossSection.cc,v 1.4 2006-05-03 09:30:21 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -271,7 +271,7 @@ G4double G4QElasticCrossSection::GetPTables(G4double LP,G4double ILP, G4int PDG,
                           .004,.005,1.5e-11,2.3,.002,23.};
   //                      -13- -14-  -15- -16- -17- -18--19--20-21--22--23-  -24- -25-
   //                      -26- -27-   -28- -29- -30- -31-
-  if(PDG==2212&&(tgZ==1&&(tgN==0||tgN==1) || tgZ==2 && tgN==2) || PDG==2112&&tgZ==1&&!tgN)
+  if((PDG==2212 || PDG==2112) && (tgZ==1&&tgN==1 || tgZ==2&&tgN==2 || tgZ==1&&!tgN))
   {
     // --- Total np elastic cross section cs & s1/b1 (t), s2/b2 (u) --- NotTuned for highE
     //p2=p*p;p3=p2*p;sp=sqrt(p);p2s=p2*sp;lp=log(p);dl1=lp-(5.=par(3));p4=p2*p2; p=|3-mom|
@@ -324,9 +324,9 @@ G4double G4QElasticCrossSection::GetPTables(G4double LP,G4double ILP, G4int PDG,
                                 for(G4int ip=0;ip<n_npel;ip++)lastPAR[ip]=np_el[ip];// np
 						else if(PDG==2212&&tgZ==1&&tgN==0)
                                 for(G4int ip=0;ip<n_ppel;ip++)lastPAR[ip]=pp_el[ip];// pp
-      else if(PDG==2212&&tgZ==1&&tgN==1)
+      else if((PDG==2212||PDG==2112)&&tgZ==1&&tgN==1)
                                 for(G4int ip=0;ip<n_pdel;ip++)lastPAR[ip]=pd_el[ip];// pd
-      else if(PDG==2212&&tgZ==2&&tgN==2)
+      else if((PDG==2212||PDG==2112)&&tgZ==2&&tgN==2)
                                 for(G4int ip=0;ip<n_phe4;ip++)lastPAR[ip]=p_he4[ip];// phe4
       else G4cout<<"*Warning*G4QElasticCrossSection::GetPTables: PDG="<<PDG<<", Z="<<tgZ
                <<", N="<<tgN<<" isn't supported. No initialization of parameters!"<<G4endl;
@@ -484,7 +484,7 @@ G4double G4QElasticCrossSection::GetExchangeT(G4int tgZ, G4int tgN, G4int PDG)
 				else if(rand<I12) q2=-std::log(1.-R2*G4UniformRand())/theB2;
     else              q2=-std::log(1.-R3*G4UniformRand())/theB3;
   }
-  else if(PDG==2212 && (tgZ==1 && tgN==1 || tgZ==2 && tgN==2))
+  else if((PDG==2212 || PDG==2112) && (tgZ==1 && tgN==1 || tgZ==2 && tgN==2))
   {
 #ifdef tdebug
     G4cout<<"G4QElasticCS::GetExchangeT: TM="<<lastTM<<",S1="<<theS1<<",B1="<<theB1<<",S2="
@@ -608,7 +608,7 @@ G4double G4QElasticCrossSection::GetTabValues(G4double lp, G4int PDG, G4int tgZ,
     return lastPAR[0]/p2s/(1.+lastPAR[7]/p2s)+(lastPAR[1]+lastPAR[2]*dl1*dl1+lastPAR[4]/p)
                                                    /(1.+lastPAR[5]*lp)/(1.+lastPAR[6]/p4);
   }
-  else if(PDG==2212 && tgZ==1 && tgN==1)
+  else if((PDG==2212 || PDG==2112) && tgZ==1 && tgN==1) // n/p+d (isotope invariant)
   {
     G4double psp=p*sp;                      // p*sqrt(p)
 		  G4double dl1=lp-lastPAR[2];
@@ -630,7 +630,7 @@ G4double G4QElasticCrossSection::GetTabValues(G4double lp, G4int PDG, G4int tgZ,
     return (lastPAR[0]+lastPAR[1]*dl1*dl1)*(1.+lastPAR[3]/(p4+lastPAR[4]*sp)+lastPAR[5]/p)
            /(1.+lastPAR[6]/p3);
   }
-  else if(PDG==2212 && tgZ==2 && tgN==2)
+  else if((PDG==2212 || PDG==2112) && tgZ==2 && tgN==2) // n/p+He4 (isotope invariant)
   {
     G4double p3sp=p3*sp;                      // p^3*sqrt(p)
     G4double p5=p4*p;
@@ -688,13 +688,13 @@ G4double G4QElasticCrossSection::GetQ2max(G4int PDG, G4int tgZ, G4int tgN, G4dou
     G4double sM=(mProt+mProt)*std::sqrt(pP*pP+mNeut2)+mNeut2+mProt2; // Mondelstam s
     return 4*mProt2*pP2/sM;
   }
-  else if(PDG==2212 && tgZ==1&&tgN==1)
+  else if((PDG==2212 || PDG==2112) && tgZ==1&&tgN==1)                // n/p+He4
   {
     G4double pP2=pP*pP;
     G4double sM=(mDeut+mDeut)*std::sqrt(pP*pP+mProt2)+mProt2+mDeut2; // Mondelstam s
     return 4*mDeut2*pP2/sM;
   }
-  else if(PDG==2212 && tgZ==2&&tgN==2)                 // General case for any Z & N
+  else if((PDG==2212 || PDG==2112) && tgZ==2&&tgN==2)                // n/p+He4
   {
     G4double pP2=pP*pP;
     G4double mNuc=G4QPDGCode(2112).GetNuclMass(tgZ,tgN,0)*.001;      // MeV to GeV
