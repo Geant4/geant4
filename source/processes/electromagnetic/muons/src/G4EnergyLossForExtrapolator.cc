@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EnergyLossForExtrapolator.cc,v 1.7 2006-03-21 15:44:45 vnivanch Exp $
+// $Id: G4EnergyLossForExtrapolator.cc,v 1.8 2006-05-03 16:41:01 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -37,10 +37,11 @@
 // 16-03-06 Add muon tables and fix bug in units (V.Ivanchenko)
 // 21-03-06 Add verbosity defined in the constructor and Initialisation
 //          start only when first public method is called (V.Ivanchenko)
+// 03-05-06 Remove unused pointer G4Material* from number of methods (VI)
 //
 //----------------------------------------------------------------------------
 //
-
+ 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4EnergyLossForExtrapolator.hh"
@@ -96,14 +97,14 @@ G4double G4EnergyLossForExtrapolator::EnergyAfterStep(G4double kinEnergy,
   G4double kinEnergyFinal = kinEnergy;
   if(mat && part) {
     G4double step = ComputeTrueStep(mat,part,kinEnergy,stepLength);
-    G4double r  = ComputeRange(kinEnergy,mat,part);
+    G4double r  = ComputeRange(kinEnergy,part);
     if(r <= step) {
       kinEnergyFinal = 0.0;
     } else if(step < linLossLimit*r) {
-      kinEnergyFinal -= step*ComputeDEDX(kinEnergy,mat,part);
+      kinEnergyFinal -= step*ComputeDEDX(kinEnergy,part);
     } else {  
       G4double r1 = r - step;
-      kinEnergyFinal = ComputeEnergy(r1,mat,part);
+      kinEnergyFinal = ComputeEnergy(r1,part);
     }
   }
   return kinEnergyFinal;
@@ -121,13 +122,13 @@ G4double G4EnergyLossForExtrapolator::EnergyBeforeStep(G4double kinEnergy,
 
   if(mat && part) {
     G4double step = ComputeTrueStep(mat,part,kinEnergy,stepLength);
-    G4double r  = ComputeRange(kinEnergy,mat,part);
+    G4double r  = ComputeRange(kinEnergy,part);
 
     if(step < linLossLimit*r) {
-      kinEnergyFinal += step*ComputeDEDX(kinEnergy,mat,part);
+      kinEnergyFinal += step*ComputeDEDX(kinEnergy,part);
     } else {  
       G4double r1 = r + step;
-      kinEnergyFinal = ComputeEnergy(r1,mat,part);
+      kinEnergyFinal = ComputeEnergy(r1,part);
     }
   }
   return kinEnergyFinal;
@@ -291,17 +292,16 @@ const G4ParticleDefinition* G4EnergyLossForExtrapolator::FindParticle(const G4St
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4EnergyLossForExtrapolator::ComputeDEDX(G4double kinEnergy, 
-						  const G4Material* mat, 
 						  const G4ParticleDefinition* part)
 {
   G4double x = 0.0;
-  if(part == electron)      x = ComputeValue(kinEnergy, mat, dedxElectron);
-  else if(part == positron) x = ComputeValue(kinEnergy, mat, dedxPositron);
+  if(part == electron)      x = ComputeValue(kinEnergy, dedxElectron);
+  else if(part == positron) x = ComputeValue(kinEnergy, dedxPositron);
   else if(part == muonPlus || part == muonMinus) {
-    x = ComputeValue(kinEnergy, mat, dedxMuon);
+    x = ComputeValue(kinEnergy, dedxMuon);
   } else {
     G4double e = kinEnergy*proton_mass_c2/mass;
-    x = ComputeValue(e, mat, dedxProton)*charge2;
+    x = ComputeValue(e, dedxProton)*charge2;
   }
   return x;
 }
@@ -309,18 +309,17 @@ G4double G4EnergyLossForExtrapolator::ComputeDEDX(G4double kinEnergy,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4EnergyLossForExtrapolator::ComputeRange(G4double kinEnergy, 
-						   const G4Material* mat, 
 						   const G4ParticleDefinition* part)
 {
   G4double x = 0.0;
-  if(part == electron)      x = ComputeValue(kinEnergy, mat, rangeElectron);
-  else if(part == positron) x = ComputeValue(kinEnergy, mat, rangePositron);
+  if(part == electron)      x = ComputeValue(kinEnergy, rangeElectron);
+  else if(part == positron) x = ComputeValue(kinEnergy, rangePositron);
   else if(part == muonPlus || part == muonMinus) 
-    x = ComputeValue(kinEnergy, mat, rangeMuon);
+    x = ComputeValue(kinEnergy, rangeMuon);
   else {
     G4double massratio = proton_mass_c2/mass;
     G4double e = kinEnergy*massratio;
-    x = ComputeValue(e, mat, rangeProton)/(charge2*massratio);
+    x = ComputeValue(e, rangeProton)/(charge2*massratio);
   }
   return x;
 }
@@ -328,18 +327,17 @@ G4double G4EnergyLossForExtrapolator::ComputeRange(G4double kinEnergy,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4EnergyLossForExtrapolator::ComputeEnergy(G4double range, 
-						    const G4Material* mat, 
 						    const G4ParticleDefinition* part)
 {
   G4double x = 0.0;
-  if(part == electron)      x = ComputeValue(range, mat, invRangeElectron);
-  else if(part == positron) x = ComputeValue(range, mat, invRangePositron);
+  if(part == electron)      x = ComputeValue(range, invRangeElectron);
+  else if(part == positron) x = ComputeValue(range, invRangePositron);
   else if(part == muonPlus || part == muonMinus) 
-    x = ComputeValue(range, mat, invRangeMuon);
+    x = ComputeValue(range, invRangeMuon);
   else {
     G4double massratio = proton_mass_c2/mass;
     G4double r = range*massratio*charge2;
-    x = ComputeValue(r, mat, invRangeProton)/massratio;
+    x = ComputeValue(r, invRangeProton)/massratio;
   }
   return x;
 }

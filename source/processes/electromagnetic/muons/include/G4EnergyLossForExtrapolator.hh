@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EnergyLossForExtrapolator.hh,v 1.4 2006-03-21 15:44:45 vnivanch Exp $
+// $Id: G4EnergyLossForExtrapolator.hh,v 1.5 2006-05-03 16:41:01 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -37,6 +37,7 @@
 // 16-03-06 Add muon tables
 // 21-03-06 Add verbosity defined in the constructor and Initialisation
 //          start only when first public method is called (V.Ivanchenko)
+// 03-05-06 Remove unused pointer G4Material* from number of methods (VI)
 //
 //----------------------------------------------------------------------------
 //
@@ -63,7 +64,7 @@ class G4EnergyLossForExtrapolator
 public:
   G4EnergyLossForExtrapolator(G4int verb = 1);
 
-  ~G4EnergyLossForExtrapolator();
+  virtual ~G4EnergyLossForExtrapolator();
 
   G4double EnergyAfterStep(G4double kinEnergy, G4double step, 
 			   const G4Material*, const G4ParticleDefinition*);
@@ -89,11 +90,11 @@ public:
   G4double EnergyDispertion(G4double kinEnergy, G4double step, 
 			    const G4Material*, const G4String& particleName);
 
-  G4double ComputeDEDX(G4double kinEnergy, const G4Material*, const G4ParticleDefinition*);
+  G4double ComputeDEDX(G4double kinEnergy, const G4ParticleDefinition*);
 
-  G4double ComputeRange(G4double kinEnergy, const G4Material*, const G4ParticleDefinition*);
+  G4double ComputeRange(G4double kinEnergy, const G4ParticleDefinition*);
 
-  G4double ComputeEnergy(G4double range, const G4Material*, const G4ParticleDefinition*);
+  G4double ComputeEnergy(G4double range, const G4ParticleDefinition*);
 
   void SetVerbose(G4int val);
    
@@ -105,7 +106,7 @@ private:
 
   const G4ParticleDefinition* FindParticle(const G4String& name);
 
-  G4double ComputeValue(G4double x, const G4Material* mat, const G4PhysicsTable* table);
+  G4double ComputeValue(G4double x, const G4PhysicsTable* table);
 
   void ComputeElectronDEDX(const G4ParticleDefinition* part, G4PhysicsTable* table); 
 
@@ -247,7 +248,6 @@ inline G4double G4EnergyLossForExtrapolator::EnergyDispersion(G4double kinEnergy
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4double G4EnergyLossForExtrapolator::ComputeValue(G4double x, 
-							  const G4Material* mat, 
 							  const G4PhysicsTable* table)
 {
   G4double res = 0.0;
