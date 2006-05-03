@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AssemblyVolume.hh,v 1.4 2006-05-02 11:39:17 gcosmo Exp $
+// $Id: G4AssemblyVolume.hh,v 1.5 2006-05-03 11:50:11 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -149,6 +149,11 @@ class G4AssemblyVolume
     //
     // The same as previous but takes complete 3D transformation in space
     // as its argument.
+
+  inline std::vector<G4VPhysicalVolume*>::iterator GetVolumesIterator();
+  inline unsigned int TotalImprintedVolumes() const;
+    //
+    // Methods to access the physical volumes imprinted with this assembly.
 
  private:    
 

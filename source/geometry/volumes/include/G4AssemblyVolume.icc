@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AssemblyVolume.icc,v 1.1 2003-10-01 14:55:41 gcosmo Exp $
+// $Id: G4AssemblyVolume.icc,v 1.2 2006-05-03 11:50:11 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -66,3 +66,16 @@ void         G4AssemblyVolume::SetAssemblyID( unsigned int value )
   fAssemblyID = value;
 }
 
+inline
+std::vector<G4VPhysicalVolume*>::iterator
+             G4AssemblyVolume::GetVolumesIterator()
+{
+  std::vector<G4VPhysicalVolume*>::iterator iterator = fPVStore.begin();
+  return iterator;
+}
+
+inline 
+unsigned int G4AssemblyVolume::TotalImprintedVolumes() const
+{
+  return fPVStore.size();
+}
