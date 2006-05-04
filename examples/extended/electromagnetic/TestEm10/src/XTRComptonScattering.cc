@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: XTRComptonScattering.cc,v 1.1 2005-02-01 09:20:54 grichine Exp $
+// $Id: XTRComptonScattering.cc,v 1.2 2006-05-04 14:59:12 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -319,17 +319,22 @@ G4VParticleChange* XTRComptonScattering::PostStepDoIt(const G4Track& aTrack,
    G4double epsilon0 = 1./(1. + 2*E0_m) , epsilon0sq = epsilon0*epsilon0;
    G4double alpha1   = - log(epsilon0)  , alpha2 = 0.5*(1.- epsilon0sq);
 
-   do {
-       if ( alpha1/(alpha1+alpha2) > G4UniformRand() )
-            { epsilon   = exp(-alpha1*G4UniformRand());   // epsilon0**r
-              epsilonsq = epsilon*epsilon; }
-       else {
-             epsilonsq = epsilon0sq + (1.- epsilon0sq)*G4UniformRand();
-             epsilon   = sqrt(epsilonsq);
-       };
-       onecost = (1.- epsilon)/(epsilon*E0_m);
-       sint2   = onecost*(2.-onecost);
-       greject = 1. - epsilon*sint2/(1.+ epsilonsq);
+   do 
+   {
+     if ( alpha1/(alpha1+alpha2) > G4UniformRand() )
+     { 
+       epsilon   = exp(-alpha1*G4UniformRand());   // epsilon0**r
+       epsilonsq = epsilon*epsilon; 
+     }
+     else 
+     {
+       epsilonsq = epsilon0sq + (1.- epsilon0sq)*G4UniformRand();
+       epsilon   = sqrt(epsilonsq);
+     }
+     onecost = (1.- epsilon)/(epsilon*E0_m);
+     sint2   = onecost*(2.-onecost);
+     greject = 1. - epsilon*sint2/(1.+ epsilonsq);
+
    } while (greject < G4UniformRand());
  
    //
@@ -337,7 +342,38 @@ G4VParticleChange* XTRComptonScattering::PostStepDoIt(const G4Track& aTrack,
    //
 
    G4double cosTeta = 1. - onecost , sinTeta = sqrt (sint2);
-   G4double Phi     = twopi * G4UniformRand();
+
+   // Simplified according to 1 + cos^2theta
+   /*
+   G4double rand = G4UniformRand(), prob; //  cosTeta, sinTeta;
+   G4int i;
+
+   for( i = 0; i <= 100; i++)
+   {
+     cosTeta = -1. + i/50.;
+     prob    = 0.5 - 3.*cosTeta/8. - cosTeta*cosTeta*cosTeta/8.;
+     if( prob <= rand ) break;
+   }
+   if ( i >= 100 ) 
+   {
+     cosTeta = 1.;
+     sinTeta = 0.;
+   }
+   else if ( i <= 0 ) 
+   {
+     cosTeta = -1.;
+     sinTeta =  0.;
+   }
+   else sinTeta = std::sqrt( 1. - cosTeta*cosTeta );
+   */
+   cosTeta = -0.001;
+   sinTeta = sqrt( 1. - cosTeta*cosTeta );
+   
+      
+
+
+   G4double Phi     = twopi*G4UniformRand();
+
    G4double dirx = sinTeta*cos(Phi), diry = sinTeta*sin(Phi), dirz = cosTeta;
 
    //
@@ -401,12 +437,15 @@ G4VParticleChange* XTRComptonScattering::PostStepDoIt(const G4Track& aTrack,
    G4double ElecKineEnergy = GammaEnergy0 - GammaEnergy1;
 
     if (ElecKineEnergy > fMinElectronEnergy)	
-      {
-        G4double ElecMomentum = sqrt(ElecKineEnergy*
+    {
+      G4double ElecMomentum = sqrt(ElecKineEnergy*
 	                            (ElecKineEnergy+2.*electron_mass_c2));
-        G4ThreeVector ElecDirection (
+
+      // G4ThreeVector ElecDirection (
+      //   (GammaEnergy0*GammaDirection0 - GammaEnergy1*GammaDirection1)*(1./ElecMomentum) );
+      G4ThreeVector ElecDirection = (
         (GammaEnergy0*GammaDirection0 - GammaEnergy1*GammaDirection1)
-	*(1./ElecMomentum) );
+	*(1./ElecMomentum) ).unit();
 
         // create G4DynamicParticle object for the electron.
         G4DynamicParticle* aElectron= new G4DynamicParticle(

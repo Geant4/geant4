@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em10PhysicsList.cc,v 1.20 2006-04-11 07:55:52 grichine Exp $
+// $Id: Em10PhysicsList.cc,v 1.21 2006-05-04 14:59:12 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -242,6 +242,7 @@ void Em10PhysicsList::ConstructProcess()
 #include "G4XTRGammaRadModel.hh"
 #include "G4XTRRegularRadModel.hh"
 #include "G4XTRTransparentRegRadModel.hh"
+#include "Em10XTRTransparentRegRadModel.hh"
 
 #include "G4StepLimiterPerRegion.hh"
 
@@ -337,7 +338,8 @@ void Em10PhysicsList::ConstructEM()
   else if(fXTRModel == "transpM" ) 
   { 
     // G4XTRTransparentRegRadModel* 
-    processXTR = new G4XTRTransparentRegRadModel(pDet->GetLogicalRadiator(),
+    // processXTR = new G4XTRTransparentRegRadModel(pDet->GetLogicalRadiator(),
+    processXTR = new Em10XTRTransparentRegRadModel(pDet->GetLogicalRadiator(),
 					 pDet->GetFoilMaterial(),
 					 pDet->GetGasMaterial(),
 					 pDet->GetFoilThick(),
@@ -366,21 +368,21 @@ void Em10PhysicsList::ConstructEM()
     {
       // Construct processes for gamma
 
-       thePhotoElectricEffect = new G4PhotoElectricEffect();
-       pmanager->AddDiscreteProcess(thePhotoElectricEffect);
+      thePhotoElectricEffect = new G4PhotoElectricEffect();
+      pmanager->AddDiscreteProcess(thePhotoElectricEffect);
       
       // XTRPhotoElectricEffect* xtrPhotoElectricEffect = new XTRPhotoElectricEffect();
       // xtrPhotoElectricEffect->SetMinElectronEnergy(fMinElectronEnergy);
-      //pmanager->AddDiscreteProcess(xtrPhotoElectricEffect);
+      // pmanager->AddDiscreteProcess(xtrPhotoElectricEffect);
 
-      theComptonScattering   = new G4ComptonScattering();
-      pmanager->AddDiscreteProcess(theComptonScattering);
+      // theComptonScattering   = new G4ComptonScattering();
+      // pmanager->AddDiscreteProcess(theComptonScattering);
 
       
-      // XTRComptonScattering*   xtrComptonScattering   = new XTRComptonScattering();
-      // xtrComptonScattering->SetMinElectronEnergy(fMinElectronEnergy);
-      // xtrComptonScattering->SetMinGammaEnergy(fMinGammaEnergy);
-      // pmanager->AddDiscreteProcess(xtrComptonScattering);
+      XTRComptonScattering*   xtrComptonScattering   = new XTRComptonScattering();
+      xtrComptonScattering->SetMinElectronEnergy(fMinElectronEnergy);
+      xtrComptonScattering->SetMinGammaEnergy(fMinGammaEnergy);
+      pmanager->AddDiscreteProcess(xtrComptonScattering);
       
 
       // theComptonScattering   = new G4ComptonScattering();
