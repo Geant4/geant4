@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VisManager.cc,v 1.93 2006-05-02 22:19:44 tinslay Exp $
+// $Id: G4VisManager.cc,v 1.94 2006-05-04 14:36:31 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -377,7 +377,6 @@ void G4VisManager::Draw (const G4Circle& circle,
 			 const G4Transform3D& objectTransform) {
   if (IsValidView ()) {
     ClearTransientStoreIfMarked();
-    CheckModel();
     fpSceneHandler -> BeginPrimitives (objectTransform);
     fpSceneHandler -> AddPrimitive (circle);
     fpSceneHandler -> EndPrimitives ();
@@ -388,7 +387,6 @@ void G4VisManager::Draw (const G4NURBS& nurbs,
 			 const G4Transform3D& objectTransform) {
   if (IsValidView ()) {
     ClearTransientStoreIfMarked();
-    CheckModel();
     fpSceneHandler -> BeginPrimitives (objectTransform);
     fpSceneHandler -> AddPrimitive (nurbs);
     fpSceneHandler -> EndPrimitives ();
@@ -399,7 +397,6 @@ void G4VisManager::Draw (const G4Polyhedron& polyhedron,
 			 const G4Transform3D& objectTransform) {
   if (IsValidView ()) {
     ClearTransientStoreIfMarked();
-    CheckModel();
     fpSceneHandler -> BeginPrimitives (objectTransform);
     fpSceneHandler -> AddPrimitive (polyhedron);
     fpSceneHandler -> EndPrimitives ();
@@ -410,7 +407,6 @@ void G4VisManager::Draw (const G4Polyline& line,
 			 const G4Transform3D& objectTransform) {
   if (IsValidView ()) {
     ClearTransientStoreIfMarked();
-    CheckModel();
     fpSceneHandler -> BeginPrimitives (objectTransform);
     fpSceneHandler -> AddPrimitive (line);
     fpSceneHandler -> EndPrimitives ();
@@ -421,7 +417,6 @@ void G4VisManager::Draw (const G4Polymarker& polymarker,
 			 const G4Transform3D& objectTransform) {
   if (IsValidView ()) {
     ClearTransientStoreIfMarked();
-    CheckModel();
     fpSceneHandler -> BeginPrimitives (objectTransform);
     fpSceneHandler -> AddPrimitive (polymarker);
     fpSceneHandler -> EndPrimitives ();
@@ -432,7 +427,6 @@ void G4VisManager::Draw (const G4Scale& scale,
 			 const G4Transform3D& objectTransform) {
   if (IsValidView ()) {
     ClearTransientStoreIfMarked();
-    CheckModel();
     fpSceneHandler -> BeginPrimitives (objectTransform);
     fpSceneHandler -> AddPrimitive (scale);
     fpSceneHandler -> EndPrimitives ();
@@ -443,7 +437,6 @@ void G4VisManager::Draw (const G4Square& square,
 			 const G4Transform3D& objectTransform) {
   if (IsValidView ()) {
     ClearTransientStoreIfMarked();
-    CheckModel();
     fpSceneHandler -> BeginPrimitives (objectTransform);
     fpSceneHandler -> AddPrimitive (square);
     fpSceneHandler -> EndPrimitives ();
@@ -454,7 +447,6 @@ void G4VisManager::Draw (const G4Text& text,
 			 const G4Transform3D& objectTransform) {
   if (IsValidView ()) {
     ClearTransientStoreIfMarked();
-    CheckModel();
     fpSceneHandler -> BeginPrimitives (objectTransform);
     fpSceneHandler -> AddPrimitive (text);
     fpSceneHandler -> EndPrimitives ();
@@ -465,7 +457,6 @@ void G4VisManager::Draw2D (const G4Text& text)
 {
   if (IsValidView()) {
     ClearTransientStoreIfMarked();
-    CheckModel();
     fpSceneHandler -> BeginPrimitives2D();
     fpSceneHandler -> AddPrimitive(text);
     fpSceneHandler -> EndPrimitives2D();
@@ -475,7 +466,6 @@ void G4VisManager::Draw2D (const G4Text& text)
 void G4VisManager::Draw (const G4VHit& hit) {
   if (IsValidView ()) {
     ClearTransientStoreIfMarked();
-    CheckModel();
     fpSceneHandler -> AddCompound (hit);
   }
 }
@@ -503,7 +493,6 @@ void G4VisManager::Draw (const G4VSolid& solid,
 			 const G4Transform3D& objectTransform) {
   if (IsValidView ()) {
     ClearTransientStoreIfMarked();
-    CheckModel();
     fpSceneHandler -> PreAddSolid (objectTransform, attribs);
     solid.DescribeYourselfTo (*fpSceneHandler);
     fpSceneHandler -> PostAddSolid ();
@@ -1015,9 +1004,6 @@ void G4VisManager::BeginOfRun ()
 {
   //G4cout << "G4VisManager::BeginOfRun" << G4endl;
   fEventCount = 0;
-  std::ostringstream oss;
-  CLHEP::HepRandom::saveFullState(oss);
-  fBeginOfLastRunRandomStatus = oss.str();
   fTransientsDrawnThisRun = false;
   if (fpSceneHandler) fpSceneHandler->SetTransientsDrawnThisRun(false);
 }
@@ -1028,6 +1014,8 @@ void G4VisManager::BeginOfEvent ()
   std::ostringstream oss;
   CLHEP::HepRandom::saveFullState(oss);
   fBeginOfLastEventRandomStatus = oss.str();
+  if (!fEventCount)  // First event in run...
+    fBeginOfLastRunRandomStatus = fBeginOfLastEventRandomStatus;
   fTransientsDrawnThisEvent = false;
   if (fpSceneHandler) fpSceneHandler->SetTransientsDrawnThisEvent(false);
 }
@@ -1046,24 +1034,27 @@ void G4VisManager::EndOfEvent ()
     size_t nModels = EOEModelList.size();
     if (nModels) {
       ClearTransientStoreIfMarked();
-      G4ModelingParameters* pMP = fpSceneHandler->CreateModelingParameters();
-      fVisManagerModelingParameters = *pMP;
-      delete pMP;
       for (size_t i = 0; i < nModels; i++) {
 	G4VModel* pModel = EOEModelList [i];
-	pModel -> SetModelingParameters (&fVisManagerModelingParameters);
 	fpSceneHandler -> SetModel (pModel);
 	pModel -> DescribeYourselfTo (*fpSceneHandler);
       }
-      fpSceneHandler -> SetModel (0);  // Flags invalid model.
+      fpSceneHandler -> SetModel (0);
     }
     if (fpScene->GetRefreshAtEndOfEvent()) {
+      G4int nEvents = 0;
+      G4int eventID = -2;  // (If no run manager, triggers ShowView as normal.)
       G4RunManager* runManager = G4RunManager::GetRunManager();
-      G4int nEvents =
-	runManager->GetCurrentRun()->GetNumberOfEventToBeProcessed();
-      G4int eventID = runManager->GetCurrentEvent()->GetEventID();
+      if (runManager) {
+	const G4Run* currentRun = runManager->GetCurrentRun();
+	const G4Event* currentEvent = runManager->GetCurrentEvent();
+	if (currentRun && currentEvent) {
+	  nEvents = currentRun->GetNumberOfEventToBeProcessed();
+	  eventID = runManager->GetCurrentEvent()->GetEventID();
+	}
+      }
       // Unless last event (in which case wait end of run)...
-      if (eventID < nEvents -1) {
+      if (eventID < nEvents - 1) {
 	fpViewer->ShowView();
 	fpSceneHandler->SetMarkForClearingTransientStore(true);
       }
@@ -1099,19 +1090,6 @@ void G4VisManager::ClearTransientStoreIfMarked(){
   // transient reprocessing is not done too early.
   fTransientsDrawnThisEvent = fpSceneHandler->GetTransientsDrawnThisEvent();
   fTransientsDrawnThisRun = fpSceneHandler->GetTransientsDrawnThisRun();
-}
-
-void G4VisManager::CheckModel () {
-  G4VModel* pModel = fpSceneHandler->GetModel();
-  if (!pModel) {  // provide a null model.
-    pModel = &fVisManagerNullModel;
-    fpSceneHandler -> SetModel (pModel);
-  }
-  // Ensure modeling parameters are right for this view...
-  G4ModelingParameters* pMP = fpSceneHandler->CreateModelingParameters();
-  fVisManagerModelingParameters = *pMP;
-  delete pMP;
-  pModel->SetModelingParameters (&fVisManagerModelingParameters);
 }
 
 G4String G4VisManager::ViewerShortName (const G4String& viewerName) const {
