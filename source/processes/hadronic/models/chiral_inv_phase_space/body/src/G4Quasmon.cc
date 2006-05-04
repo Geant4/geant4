@@ -24,7 +24,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4Quasmon.cc,v 1.85 2006-03-20 16:25:50 mkossov Exp $
+// $Id: G4Quasmon.cc,v 1.86 2006-05-04 08:33:10 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4Quasmon ----------------
@@ -4614,7 +4614,8 @@ void G4Quasmon::CalculateHadronizationProbabilities
                         //G4double mix=nucBM+E;
                         G4double mix=boundM+E-CB;
                         ////G4double mix=nucBM+E-CB;
-                        G4double st=sqrt(mix*mix-frM2);
+                        G4double st=0.;
+                        if(mix>frM) st=sqrt(mix*mix-frM2);
                         G4double nq=1.-(dkLS-st-st)/boundM;//qi=k-sq((m+E*(M-m)/M)^2-m^2)
 #ifdef pdebug
                         if(pPrint) G4cout<<"G4Q::CHP:qi_k-st="<<nq<<",st="<<st<<",m="

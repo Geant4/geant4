@@ -24,7 +24,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4QSplitter.cc,v 1.1 2005-08-30 07:15:14 mkossov Exp $
+// $Id: G4QSplitter.cc,v 1.2 2006-05-04 08:33:10 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QSplitter ----------------
@@ -132,7 +132,7 @@ G4QSplitter::G4QSplitter(G4QHadron projHadron, const G4bool projEnvFlag,
   G4double rPMass=0.;                        // Prototype of the residProjMass (Meson case)
   G4bool FreeFraF=false;                     // Prototype of the free exchange Flag
   if(G4UniformRand()<FreeFraF) FreeFraF=true;// Confirm the free exchange
-  if(nQProj<2) G4cout<<"***G4QSpl::Constr: nQProj="<<nQProj<<"<2 ***Fata error***"<<G4endl;
+  if(nQProj<2) G4cout<<"***G4QSpl::Constr: nQProj="<<nQProj<<"<2 ***FatalError***"<<G4endl;
 		else if(nQProj>2)                          // ---> Baryon case (clusters are not implem.)
 		{
     //if(nQProj>3)G4cout<<"-Wor-G4QS::Const:nQProj="<<nQProj<<">3 is not implem'd"<<G4endl;
