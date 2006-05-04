@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunMessenger.hh,v 1.12 2003-11-04 01:58:28 asaim Exp $
+// $Id: G4RunMessenger.hh,v 1.13 2006-05-04 19:47:54 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -59,6 +59,7 @@ class G4UIcmdWithAString;
 class G4UIcmdWithAnInteger;
 class G4UIcmdWithABool;
 class G4UIcommand;
+class G4MaterialScanner;
 
 #include "G4UImessenger.hh"
 #include "globals.hh"
@@ -103,6 +104,8 @@ class G4RunMessenger: public G4UImessenger
     G4UIcmdWithAString *        randDirOld;
     G4UIcmdWithAnInteger *      storeRandOld;
     G4UIcmdWithAString *        restoreRandOld;  
+
+    G4MaterialScanner *         materialScanner;
 };
 
 #endif

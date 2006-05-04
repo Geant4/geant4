@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunMessenger.cc,v 1.21 2005-11-09 10:06:32 gcosmo Exp $
+// $Id: G4RunMessenger.cc,v 1.22 2006-05-04 19:47:54 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -37,6 +37,7 @@
 #include "G4UImanager.hh"
 #include "G4ProductionCutsTable.hh"
 #include "G4ios.hh"
+#include "G4MaterialScanner.hh"
 #include <sstream>
 
 G4RunMessenger::G4RunMessenger(G4RunManager * runMgr)
@@ -207,10 +208,12 @@ G4RunMessenger::G4RunMessenger(G4RunManager * runMgr)
   restoreRandOld->SetDefaultValue("currentRun.rndm");
   restoreRandOld->AvailableForStates(G4State_PreInit,G4State_Idle,G4State_GeomClosed);  
 
+  materialScanner = new G4MaterialScanner();
 }
 
 G4RunMessenger::~G4RunMessenger()
 {
+  delete materialScanner;
   delete beamOnCmd;
   delete verboseCmd;
   delete optCmd;
