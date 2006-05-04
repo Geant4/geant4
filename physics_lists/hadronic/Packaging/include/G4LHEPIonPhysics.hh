@@ -20,49 +20,66 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: QBBC.hh,v 1.2 2006-05-04 16:46:14 vnivanch Exp $
+// $Id: G4LHEPIonPhysics.hh,v 1.1 2006-05-04 16:48:39 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
-// ClassName:  QBBC
+// ClassName:   G4LHEPIonBuilder
 //
-// Author: 11 April 2006 V. Ivanchenko
+// Author:      V.Ivanchenko 29.04.2006
 //
 // Modified:
 //
 //----------------------------------------------------------------------------
 //
-#ifndef TQBBC_h
-#define TQBBC_h 1
 
-#include "G4VModularPhysicsList.hh"
+#ifndef G4LHEPIonPhysics_h
+#define G4LHEPIonPhysics_h 1
+
 #include "globals.hh"
-#include "CompileTimeConstraints.hh"
 
-template<class T>
-class TQBBC: public T
+#include "G4VPhysicsConstructor.hh"
+
+class  G4DeuteronInelasticProcess;
+class  G4LEDeuteronInelastic;
+class  G4TritonInelasticProcess;
+class  G4LETritonInelastic;
+class  G4AlphaInelasticProcess;
+class  G4LEAlphaInelastic;
+
+class G4LHEPIonPhysics : public G4VPhysicsConstructor
 {
 public:
+  G4LHEPIonPhysics(const G4String& name="ionInelastic");
+  virtual ~G4LHEPIonPhysics();
 
-  TQBBC(G4int ver = 1, const G4String& type = "QBBC",   
-	G4bool flagFTF = false, G4bool flagCHIPS = false, 
-	G4bool flagHP = false );
+  // This method will be invoked in the Construct() method.
+  // each particle type will be instantiated
+  virtual void ConstructParticle();
 
-  virtual ~TQBBC();
-  
-public:
-
-  virtual void SetCuts();
+  // This method will be invoked in the Construct() method.
+  // each physics process will be instantiated and
+  // registered to the process manager of each particle type
+  virtual void ConstructProcess();
 
 private:
-  enum {ok = CompileTimeConstraints::IsA<T, G4VModularPhysicsList>::ok };
+
+  // Deuteron physics
+  G4DeuteronInelasticProcess* fDeuteronProcess;
+  G4LEDeuteronInelastic*      fDeuteronModel;
+
+  // Triton physics
+  G4TritonInelasticProcess*   fTritonProcess;
+  G4LETritonInelastic*        fTritonModel;
+
+  // Alpha physics
+  G4AlphaInelasticProcess*    fAlphaProcess;
+  G4LEAlphaInelastic*         fAlphaModel;
+
+  G4bool wasActivated;
 };
 
-#include "QBBC.icc"
-typedef TQBBC<G4VModularPhysicsList> QBBC;
 
 #endif
-
-
 

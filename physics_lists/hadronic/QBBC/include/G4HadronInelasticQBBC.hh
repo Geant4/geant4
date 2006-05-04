@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HadronInelasticQBBC.hh,v 1.1 2006-04-24 11:29:09 vnivanch Exp $
+// $Id: G4HadronInelasticQBBC.hh,v 1.2 2006-05-04 16:46:14 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -50,12 +50,11 @@
 #include "G4NeutronHPCaptureData.hh"
 #include "G4NeutronHPFissionData.hh"
 
-#include <vector>
-
 class G4HadronicProcess;
 class G4TheoFSGenerator;
 class G4StringChipsParticleLevelInterface;
 class G4ExcitedStringDecay;
+class G4HadronProcessStore;
 
 class G4HadronInelasticQBBC : public G4VPhysicsConstructor
 {
@@ -83,9 +82,6 @@ private:
   void Register(G4ParticleDefinition*, G4HadronicProcess*, 
 		G4HadronicInteraction*, const G4String&);
 
-  std::vector<G4HadronicProcess*> proc_list;
-  std::vector<G4HadronicInteraction*> model_list;
-
   G4PiNuclearCrossSection thePiCross;
   G4ProtonInelasticCrossSection  theXSecP;
   G4NeutronInelasticCrossSection theXSecN;
@@ -93,6 +89,8 @@ private:
   G4NeutronHPInelasticData  theHPXSecI;
   G4NeutronHPCaptureData    theHPXSecC;
   G4NeutronHPFissionData    theHPXSecF;
+
+  G4HadronProcessStore* store;
 
   G4StringChipsParticleLevelInterface * theCHIPSCascade;
   G4QGSModel< G4QGSParticipants > * theQGStringModel;

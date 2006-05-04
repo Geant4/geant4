@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HadronInelasticQBBC.cc,v 1.1 2006-04-24 11:29:09 vnivanch Exp $
+// $Id: G4HadronInelasticQBBC.cc,v 1.2 2006-05-04 16:46:15 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -64,6 +64,8 @@
 #include "G4NeutronHPFission.hh"
 #include "G4NeutronHPCapture.hh"
 
+#include "G4HadronProcessStore.hh"
+
 G4HadronInelasticQBBC::G4HadronInelasticQBBC(const G4String& name, 
 					     G4int ver, G4bool ftf, G4bool bert, 
 					     G4bool chips, G4bool hp)
@@ -71,6 +73,7 @@ G4HadronInelasticQBBC::G4HadronInelasticQBBC(const G4String& name,
     chipsFlag(chips), hpFlag(hp), wasActivated(false)
 {
   if(verbose > 1) G4cout << "### HadronInelasticQBBC" << G4endl;
+  store = G4HadronProcessStore::Instance();
 }
 
 G4HadronInelasticQBBC::~G4HadronInelasticQBBC()
@@ -81,11 +84,6 @@ G4HadronInelasticQBBC::~G4HadronInelasticQBBC()
     delete theQGStringModel;
     delete theFTFStringDecay;
     delete theFTFStringModel;
-    G4int i;
-    G4int n = proc_list.size();
-    for(i=0; i<n; i++) {delete proc_list[i];}
-    n = model_list.size();
-    for(i=0; i<n; i++) {delete model_list[i];}
   }
 }
 
@@ -112,13 +110,11 @@ void G4HadronInelasticQBBC::ConstructProcess()
   G4HadronicInteraction* theBERT = new G4CascadeInterface();
   theBERT->SetMinEnergy(0.0);
   theBERT->SetMaxEnergy(maxEcascade);
-  model_list.push_back(theBERT);
 
   //CHIPS
   G4HadronicInteraction* theCHIPS = new G4StringChipsInterface();
   theCHIPS->SetMinEnergy(0.0);
   theCHIPS->SetMaxEnergy(maxEcascade);
-  model_list.push_back(theCHIPS);
 
   //QGSC
   G4TheoFSGenerator* theQGSModel = new G4TheoFSGenerator();
@@ -130,7 +126,6 @@ void G4HadronInelasticQBBC::ConstructProcess()
   theQGSModel->SetHighEnergyGenerator(theQGStringModel);
   theQGSModel->SetMinEnergy(minEstring);
   theQGSModel->SetMaxEnergy(100*TeV);
-  model_list.push_back(theQGSModel);
 
   //FTFC
   G4TheoFSGenerator* theFTFModel = new G4TheoFSGenerator();
@@ -141,7 +136,6 @@ void G4HadronInelasticQBBC::ConstructProcess()
   theFTFModel->SetHighEnergyGenerator(theFTFStringModel);
   theFTFModel->SetMinEnergy(minEstring);
   theFTFModel->SetMaxEnergy(100*TeV);
-  model_list.push_back(theFTFModel);
 
   theParticleIterator->reset();
   while( (*theParticleIterator)() ) {
@@ -174,7 +168,6 @@ void G4HadronInelasticQBBC::ConstructProcess()
       G4ProcessManager* pmanager = particle->GetProcessManager();
       G4HadronInelasticProcess* hp = 
 	new G4HadronInelasticProcess("hInelastic", particle);
-      proc_list.push_back(hp);
       pmanager->AddDiscreteProcess(hp);
 
       if(pname == "proton") {
@@ -187,7 +180,6 @@ void G4HadronInelasticQBBC::ConstructProcess()
 	  G4HadronicInteraction* theBIC = new G4BinaryCascade();
 	  theBIC->SetMinEnergy(0.0);
 	  theBIC->SetMaxEnergy(maxEcascade);
-	  model_list.push_back(theBIC);
 	  Register(particle,hp,theBIC,"Binary");
 	}
 
@@ -202,8 +194,6 @@ void G4HadronInelasticQBBC::ConstructProcess()
 	  new G4HadronFissionProcess("nFission");
 	pmanager->AddDiscreteProcess(theNeutronCapture);
 	pmanager->AddDiscreteProcess(theNeutronFission);
-	proc_list.push_back(theNeutronCapture);
-	proc_list.push_back(theNeutronFission);
 
 	G4double emin = 0.0;
 	if(hpFlag) {
@@ -214,9 +204,6 @@ void G4HadronInelasticQBBC::ConstructProcess()
           G4NeutronHPInelastic* hpi = new G4NeutronHPInelastic();
           G4NeutronHPCapture* hpc = new G4NeutronHPCapture();
           G4NeutronHPFission* hpf = new G4NeutronHPFission();
-	  model_list.push_back(hpi);
-	  model_list.push_back(hpc);
-	  model_list.push_back(hpf);
 	  Register(particle,hp,hpi,"HP");
 	  Register(particle,theNeutronCapture,hpc,"HP");
 	  Register(particle,theNeutronFission,hpf,"HP");
@@ -227,20 +214,17 @@ void G4HadronInelasticQBBC::ConstructProcess()
 	  G4HadronicInteraction* theBIC = new G4BinaryCascade();
 	  theBIC->SetMinEnergy(emin);
 	  theBIC->SetMaxEnergy(maxEcascade);
-	  model_list.push_back(theBIC);
 	  Register(particle,hp,theBIC,"Binary");
 	}
 
 	G4HadronicInteraction* theC = new G4LCapture();
 	theC->SetMinEnergy(emin);
 	theC->SetMaxEnergy(maxEcascade);
-	model_list.push_back(theC);
 	Register(particle,theNeutronCapture,theC,"LCapture");
 
 	G4HadronicInteraction* theF = new G4LFission();
 	theF->SetMinEnergy(emin);
 	theF->SetMaxEnergy(maxEcascade);
-	model_list.push_back(theF);
 	Register(particle,theNeutronFission,theF,"LFission");
 
       } else if(pname == "pi-" || pname == "pi+") {
@@ -286,10 +270,13 @@ void G4HadronInelasticQBBC::ConstructProcess()
   }
 }
 
-void G4HadronInelasticQBBC::Register(G4ParticleDefinition* p, G4HadronicProcess* hp, 
-				     G4HadronicInteraction* hi, const G4String& m)
+void G4HadronInelasticQBBC::Register(G4ParticleDefinition* p, 
+				     G4HadronicProcess* hp, 
+				     G4HadronicInteraction* hi, 
+				     const G4String& m)
 {
   hp->RegisterMe(hi);
+  store->Register(hp,p,hi,m);
   if(verbose > 1)
     G4cout << "### QBBC: Register new model " << m 
 	   << " for " << p->GetParticleName() << " and " << hp->GetProcessName()

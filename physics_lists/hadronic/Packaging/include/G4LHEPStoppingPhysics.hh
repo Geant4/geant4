@@ -20,49 +20,67 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: QBBC.hh,v 1.2 2006-05-04 16:46:14 vnivanch Exp $
+// $Id: G4LHEPStoppingPhysics.hh,v 1.1 2006-05-04 16:48:39 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
-// ClassName:  QBBC
+// ClassName:   G4LHEPStoppingPhysics
 //
-// Author: 11 April 2006 V. Ivanchenko
+// Author: 30 April 2006 V. Ivanchenko
 //
 // Modified:
 //
 //----------------------------------------------------------------------------
 //
-#ifndef TQBBC_h
-#define TQBBC_h 1
 
-#include "G4VModularPhysicsList.hh"
+#ifndef G4LHEPStoppingPhysics_h
+#define G4LHEPStoppingPhysics_h 1
+
 #include "globals.hh"
-#include "CompileTimeConstraints.hh"
+#include "G4VPhysicsConstructor.hh"
 
-template<class T>
-class TQBBC: public T
+class G4MuonMinusCaptureAtRest;
+class G4PionMinusAbsorptionAtRest;
+class G4KaonMinusAbsorption;
+class G4AntiProtonAnnihilationAtRest;
+class G4AntiNeutronAnnihilationAtRest;
+
+class G4LHEPStoppingPhysics : public G4VPhysicsConstructor
 {
-public:
+public: 
+  G4LHEPStoppingPhysics(const G4String& name = "stopping",
+			G4int ver = 1);
+  virtual ~G4LHEPStoppingPhysics();
 
-  TQBBC(G4int ver = 1, const G4String& type = "QBBC",   
-	G4bool flagFTF = false, G4bool flagCHIPS = false, 
-	G4bool flagHP = false );
-
-  virtual ~TQBBC();
-  
-public:
-
-  virtual void SetCuts();
+public: 
+  // This method will be invoked in the Construct() method. 
+  // each particle type will be instantiated
+  virtual void ConstructParticle();
+ 
+  // This method will be invoked in the Construct() method.
+  // each physics process will be instantiated and
+  // registered to the process manager of each particle type 
+  virtual void ConstructProcess();
 
 private:
-  enum {ok = CompileTimeConstraints::IsA<T, G4VModularPhysicsList>::ok };
+
+  G4MuonMinusCaptureAtRest* muProcess;
+  G4PionMinusAbsorptionAtRest* piProcess;
+  G4KaonMinusAbsorption* kProcess;
+  G4AntiProtonAnnihilationAtRest* apProcess;
+  G4AntiNeutronAnnihilationAtRest* anProcess;
+
+  G4int    verbose;
+  G4bool   wasActivated;
 };
 
-#include "QBBC.icc"
-typedef TQBBC<G4VModularPhysicsList> QBBC;
-
 #endif
+
+
+
+
+
 
 
 

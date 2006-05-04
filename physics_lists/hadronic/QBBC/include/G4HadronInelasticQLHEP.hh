@@ -20,12 +20,12 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HadronElasticPhysics.hh,v 1.3 2006-05-04 16:46:14 vnivanch Exp $
+// $Id: G4HadronInelasticQLHEP.hh,v 1.1 2006-05-04 16:48:39 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
-// ClassName:   G4HadronElasticPhysics
+// ClassName:   G4HadronInelasticQLHEP
 //
 // Author: 11 April 2006 V. Ivanchenko
 //
@@ -34,23 +34,43 @@
 //----------------------------------------------------------------------------
 //
 
-#ifndef G4HadronElasticPhysics_h
-#define G4HadronElasticPhysics_h 1
+#ifndef G4HadronInelasticQLHEP_h
+#define G4HadronInelasticQLHEP_h 1
 
 #include "globals.hh"
 #include "G4VPhysicsConstructor.hh"
-#include "G4UHadronElasticProcess.hh"
-#include "G4HadronElastic.hh"
+#include "G4QGSModel.hh"
+#include "G4QGSParticipants.hh"
+#include "G4FTFModel.hh"
+
+#include "G4PiNuclearCrossSection.hh"
+#include "G4ProtonInelasticCrossSection.hh"
+#include "G4NeutronInelasticCrossSection.hh"
+#include "G4NeutronHPInelasticData.hh"
+#include "G4NeutronHPCaptureData.hh"
+#include "G4NeutronHPFissionData.hh"
+
 #include <vector>
 
-class G4HadronElasticPhysics : public G4VPhysicsConstructor
+class G4HadronicProcess;
+class G4TheoFSGenerator;
+class G4GeneratorPrecompoundInterface;
+class G4PreCompoundModel;
+class G4ExcitedStringDecay;
+class G4HadronProcessStore;
+
+class G4HadronInelasticQLHEP : public G4VPhysicsConstructor
 {
 public: 
-  G4HadronElasticPhysics(const G4String& name = "elastic",
-			 G4int ver = 1, G4bool hp = false);
-  virtual ~G4HadronElasticPhysics();
+
+  G4HadronInelasticQLHEP(const G4String& name = "inelastic",
+			G4int ver = 1, G4bool qgs = false, G4bool bert = false,
+			G4bool bic = false, G4bool hp = false);
+
+  virtual ~G4HadronInelasticQLHEP();
 
 public: 
+
   // This method will be invoked in the Construct() method. 
   // each particle type will be instantiated
   virtual void ConstructParticle();
@@ -60,41 +80,36 @@ public:
   // registered to the process manager of each particle type 
   virtual void ConstructProcess();
 
-  void SetLimitSWave(G4double);
-
-  void SetLimitIonKineticEnergy(G4double);
-
 private:
 
-  std::vector<G4HadronicProcess*> p_list;
+  void Register(G4ParticleDefinition*, G4HadronicProcess*, 
+		G4HadronicInteraction*, const G4String&);
 
-  G4String mname;
+  void AddLHEP(G4ParticleDefinition*,
+	       G4HadronicProcess*,
+	       G4double emin, G4double emax);
 
-  G4double pLimit;
-  G4double edepLimit;
+  G4PiNuclearCrossSection thePiCross;
+  G4ProtonInelasticCrossSection  theXSecP;
+  G4NeutronInelasticCrossSection theXSecN;
+
+  G4NeutronHPInelasticData  theHPXSecI;
+  G4NeutronHPCaptureData    theHPXSecC;
+  G4NeutronHPFissionData    theHPXSecF;
+
+  G4HadronProcessStore* store;
+
+  G4GeneratorPrecompoundInterface * theCascade;
+  G4PreCompoundModel * thePreEquilib;
+  G4QGSModel< G4QGSParticipants > * theQGStringModel;
+  G4ExcitedStringDecay* theQGStringDecay;
 
   G4int    verbose;
+  G4bool   qgsFlag;
+  G4bool   bertFlag;
+  G4bool   bicFlag;
   G4bool   hpFlag;
   G4bool   wasActivated;
 };
 
-inline void G4HadronElasticPhysics::SetLimitSWave(G4double val)
-{
-  pLimit = val;
-}
-
-inline void G4HadronElasticPhysics::SetLimitIonKineticEnergy(G4double val)
-{
-  edepLimit = val;
-}
-
-
 #endif
-
-
-
-
-
-
-
-

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HadronElasticPhysics.cc,v 1.3 2006-05-02 08:00:48 vnivanch Exp $
+// $Id: G4HadronElasticPhysics.cc,v 1.4 2006-05-04 16:46:14 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -37,6 +37,7 @@
 #include "G4HadronElasticPhysics.hh"
 
 #include "G4HadronicProcess.hh"
+#include "G4HadronElasticProcess.hh"
 #include "G4HadronicInteraction.hh"
 #include "G4LElastic.hh"
 
@@ -48,25 +49,20 @@
 #include "G4IonConstructor.hh"
 #include "G4Neutron.hh"
 
+#include "G4HadronProcessStore.hh"
+
 G4HadronElasticPhysics::G4HadronElasticPhysics(const G4String& name, 
 					       G4int ver, G4bool hp)
-  : G4VPhysicsConstructor(name), verbose(ver), hpFlag(hp), wasActivated(false)
+  : G4VPhysicsConstructor(name), mname(name), verbose(ver), hpFlag(hp), 
+    wasActivated(false)
 {
   if(verbose > 1) G4cout << "### HadronElasticPhysics" << G4endl;
   pLimit = 200.*MeV;
   edepLimit = 100.*keV; 
-  if(name == "elastic") elasticFlag = true;
-  else elasticFlag = false;
 }
 
 G4HadronElasticPhysics::~G4HadronElasticPhysics()
-{
-  if(wasActivated) {
-    delete model;
-    G4int n = p_list.size();
-    for(G4int i=0; i<n; i++) {delete p_list[i];}
-  }
-}
+{}
 
 void G4HadronElasticPhysics::ConstructParticle()
 {
@@ -87,11 +83,17 @@ void G4HadronElasticPhysics::ConstructProcess()
   if(wasActivated) return;
   wasActivated = true;
 
-  if(verbose > 1) G4cout << "### HadronElasticPhysics Construct Process" << G4endl;
+  G4HadronProcessStore* store = G4HadronProcessStore::Instance();
+
+  if(verbose > 1) G4cout << "### HadronElasticPhysics Construct Processes with the model <" 
+			 << mname << ">" << G4endl;
 
   G4double mThreshold = 130.*MeV;
-  if(elasticFlag) model = new G4HadronElastic(edepLimit, pLimit);
-  else            model = new G4LElastic();
+  G4HadronicInteraction* model = 0;
+  G4HadronicProcess* hel = 0;
+
+  if(mname == "elastic") model = new G4HadronElastic(edepLimit, pLimit);
+  else                   model = new G4LElastic();
 
   theParticleIterator->reset();
   while( (*theParticleIterator)() )
@@ -99,12 +101,15 @@ void G4HadronElasticPhysics::ConstructProcess()
     G4ParticleDefinition* particle = theParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
     if(particle->GetPDGMass() > mThreshold && !particle->IsShortLived()) {
-      G4UHadronElasticProcess* hel = new G4UHadronElasticProcess("hElastic", hpFlag);
+
+      if(mname == "elastic") hel = new G4UHadronElasticProcess("hElastic", hpFlag);
+      else                   hel = new G4HadronElasticProcess();
+
       if( hel->IsApplicable(*particle)) { 
    
 	pmanager->AddDiscreteProcess(hel);
         hel->RegisterMe(model);
-	p_list.push_back(hel);
+	store->Register(hel,particle,model,mname);
         if(hpFlag && particle == G4Neutron::Neutron()) {
 	}
 
