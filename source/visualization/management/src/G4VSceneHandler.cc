@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.cc,v 1.60 2006-05-04 17:27:48 allison Exp $
+// $Id: G4VSceneHandler.cc,v 1.61 2006-05-04 17:33:12 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -444,7 +444,7 @@ void G4VSceneHandler::RequestPrimitives (const G4VSolid& solid) {
   case G4ViewParameters::polyhedron:
   default:
     G4Polyhedron::SetNumberOfRotationSteps
-	(fpViewer -> GetViewParameters () . GetNoOfSides ());
+      (fpViewer -> GetViewParameters () . GetNoOfSides ());
     pPolyhedron = solid.GetPolyhedron ();
     G4Polyhedron::ResetNumberOfRotationSteps ();
     if (pPolyhedron) {
@@ -456,11 +456,11 @@ void G4VSceneHandler::RequestPrimitives (const G4VSolid& solid) {
       G4VisManager::Verbosity verbosity =
 	G4VisManager::GetInstance()->GetVerbosity();
       if (verbosity >= G4VisManager::errors) {
-      G4cout <<
-	"ERROR: G4VSceneHandler::RequestPrimitives"
-	"\n  Polyhedron not available for " << solid.GetName () <<
-	".\n  This means it cannot be visualized on most systems."
-	"\n  Contact the Visualization Coordinator." << G4endl;
+	G4cout <<
+	  "ERROR: G4VSceneHandler::RequestPrimitives"
+	  "\n  Polyhedron not available for " << solid.GetName () <<
+	  ".\n  This means it cannot be visualized on most systems."
+	  "\n  Contact the Visualization Coordinator." << G4endl;
       }
     }
     break;
