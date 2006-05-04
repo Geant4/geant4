@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FRSceneFunc.icc,v 1.11 2006-04-19 11:46:47 allison Exp $
+// $Id: G4FRSceneFunc.icc,v 1.12 2006-05-04 14:52:18 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -339,7 +339,7 @@ void G4FRSCENEHANDLER::SendNdiv ( void )
 
 		//-----  number used for dividing a curved surface, Ndiv
 	if ( GetModel() ) {
-	   num_division = GetModel()->GetModelingParameters()->GetNoOfSides();
+	   num_division = fpViewer->GetViewParameters().GetNoOfSides();
 	} else {
 #if defined DEBUG_FR_SCENE
 	   G4cerr << "WARNING: GetNoOfSides() failed. " ;

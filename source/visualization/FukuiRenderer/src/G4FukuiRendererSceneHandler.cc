@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FukuiRendererSceneHandler.cc,v 1.12 2005-10-13 17:19:55 allison Exp $
+// $Id: G4FukuiRendererSceneHandler.cc,v 1.13 2006-05-04 14:52:21 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -63,7 +63,6 @@
 #include "G4Text.hh"
 #include "G4Circle.hh"
 #include "G4Square.hh"
-#include "G4ModelingParameters.hh"
 #include "G4VPhysicalVolume.hh"
 
 //----- constants

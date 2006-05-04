@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DAWNFILESceneHandler.cc,v 1.14 2005-06-02 17:43:46 allison Exp $
+// $Id: G4DAWNFILESceneHandler.cc,v 1.15 2006-05-04 14:52:21 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Satoshi TANAKA
@@ -58,7 +58,6 @@
 #include "G4Text.hh"
 #include "G4Circle.hh"
 #include "G4Square.hh"
-#include "G4ModelingParameters.hh"
 #include "G4VPhysicalVolume.hh"
 
 //----- constants

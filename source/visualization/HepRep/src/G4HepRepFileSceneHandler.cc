@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HepRepFileSceneHandler.cc,v 1.39 2006-04-19 11:43:58 allison Exp $
+// $Id: G4HepRepFileSceneHandler.cc,v 1.40 2006-05-04 14:57:01 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -36,7 +36,6 @@
 #include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
 #include "G4Material.hh"
-#include "G4ModelingParameters.hh"
 #include "G4Polymarker.hh"
 #include "G4Polyline.hh"
 #include "G4Text.hh"
@@ -407,10 +406,14 @@ void G4HepRepFileSceneHandler::AddSolid(const G4VSolid& solid) {
 
 void G4HepRepFileSceneHandler::AddCompound (const G4VTrajectory& traj) {
 #ifdef G4HEPREPFILEDEBUG
-  G4cout << "G4HepRepFileSceneHandler::AddCompound(G4VTrajectory&) " << G4endl;
+  G4cout << "G4HepRepFileSceneHandler::AddCompound(const G4VTrajectory&) " << G4endl;
 #endif
 
-  G4int drawingMode = ((G4TrajectoriesModel*)fpModel)->GetDrawingMode();
+  G4TrajectoriesModel* pTrModel =
+    dynamic_cast<G4TrajectoriesModel*>(fpModel);
+  if (!pTrModel) G4Exception
+     ("G4HepRepFileSceneHandler::AddCompound(const G4VTrajectory&): Not a G4TrajectoriesModel.");
+  G4int drawingMode = pTrModel->GetDrawingMode();
 
   // Pointers to hold trajectory attribute values and definitions.
   std::vector<G4AttValue>* rawTrajAttValues = traj.CreateAttValues();
@@ -556,11 +559,11 @@ void G4HepRepFileSceneHandler::AddCompound (const G4VTrajectory& traj) {
   // trajectory's particulars, call base class to deconstruct trajectory into a polyline.
   // Note that this means color will correctly come from the polyline's VisAttribs.
   if (drawingMode>=0) {
-    ((G4TrajectoriesModel*)fpModel)->SetDrawingMode(0);
+    pTrModel->SetDrawingMode(0);
     drawingTraj = true;
     G4VSceneHandler::AddCompound(traj);  // Invoke default action.
     drawingTraj = false;
-    ((G4TrajectoriesModel*)fpModel)->SetDrawingMode(drawingMode);
+    pTrModel->SetDrawingMode(drawingMode);
   }
 
   if (drawingMode!=0) {
