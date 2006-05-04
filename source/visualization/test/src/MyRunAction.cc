@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: MyRunAction.cc,v 1.5 2003-10-17 09:31:39 gbarrand Exp $
+// $Id: MyRunAction.cc,v 1.6 2006-05-04 14:42:58 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -47,9 +47,6 @@ void MyRunAction::BeginOfRunAction(const G4Run* aRun)
   G4Run* aModifiableRun = const_cast<G4Run*>(aRun);
   aModifiableRun->SetRunID(runIDcounter++);
   //aRun->transient(true);
-
-  G4UImanager* UI = G4UImanager::GetUIpointer();
-  UI->ApplyCommand("/tracking/storeTrajectory 1");
 
   G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
   timer->Start();
