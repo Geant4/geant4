@@ -21,12 +21,11 @@
 // ********************************************************************
 //
 //
-// $Id: G4RayTracerSceneHandler.cc,v 1.5 2006-01-26 10:31:32 allison Exp $
+// $Id: G4RayTracerSceneHandler.cc,v 1.6 2006-05-04 15:01:50 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4RayTracerSceneHandler.hh"
 #include "G4VisManager.hh"
-#include "G4NullModel.hh"
 
 G4RayTracerSceneHandler::G4RayTracerSceneHandler(G4VGraphicsSystem& system,
 						 const G4String& name):
@@ -43,8 +42,8 @@ G4RayTracerSceneHandler::G4RayTracerSceneHandler(G4VGraphicsSystem& system,
     if (!pScene) {
       // Create new scene like /vis/scene/create...
       fpScene = new G4Scene("dummy-ray-tracer-scene");
-      // ...with a model so that it does not trigger empty scene warnings...
-      fpScene->SetRunDurationModelList().push_back(new G4NullModel);
+      // Avoid code triggered at end of events...
+      fpScene->SetRefreshAtEndOfEvent(false);
       // Add to vis manager list; ownership thereby passes to vis manager...
       visManager->SetSceneList().push_back(fpScene);
       // ...and make current...
