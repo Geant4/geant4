@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsScene.cc,v 1.49 2006-04-28 10:24:34 allison Exp $
+// $Id: G4VisCommandsScene.cc,v 1.50 2006-05-04 14:38:49 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/scene commands - John Allison  9th August 1998
@@ -566,6 +566,8 @@ G4VisCommandSceneTransientsAction::G4VisCommandSceneTransientsAction () {
   fpCommand = new G4UIcmdWithAString ("/vis/scene/transientsAction", this);
   fpCommand -> SetGuidance
     ("Rerun events to get transienst (trajectories, etc.), when needed.");
+  fpCommand -> SetGuidance
+    ("Note: ineffective in absence of instantiated run manager.");
   fpCommand -> SetParameterName ("action", omitable = true);
   fpCommand -> SetCandidates ("rerun none");
   fpCommand -> SetDefaultValue ("rerun");
