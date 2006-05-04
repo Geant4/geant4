@@ -1,4 +1,4 @@
-$Id: History,v 1.140 2005-11-28 10:57:24 gcosmo Exp $
+$Id: History,v 1.141 2006-05-04 19:56:34 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May 5th, 2006, Makoto Asai (run-V08-00-00)
+- Introducing the material scanner utility.
 
 November 28th, 2005, Makoto Asai (run-V07-01-08)
 - In G4RunManagerKernel.cc, changed inclusion of version.hh to G4Version.hh.
