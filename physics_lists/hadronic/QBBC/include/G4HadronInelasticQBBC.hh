@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HadronInelasticQBBC.hh,v 1.2 2006-05-04 16:46:14 vnivanch Exp $
+// $Id: G4HadronInelasticQBBC.hh,v 1.3 2006-05-04 18:12:32 ribon Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -42,6 +42,7 @@
 #include "G4QGSModel.hh"
 #include "G4QGSParticipants.hh"
 #include "G4FTFModel.hh"
+#include "G4CascadeInterface.hh"
 
 #include "G4PiNuclearCrossSection.hh"
 #include "G4ProtonInelasticCrossSection.hh"

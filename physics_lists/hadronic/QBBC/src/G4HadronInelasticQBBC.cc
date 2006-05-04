@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HadronInelasticQBBC.cc,v 1.2 2006-05-04 16:46:15 vnivanch Exp $
+// $Id: G4HadronInelasticQBBC.cc,v 1.3 2006-05-04 18:12:32 ribon Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -53,7 +53,6 @@
 #include "G4LundStringFragmentation.hh"
 #include "G4ExcitedStringDecay.hh"
 
-#include "G4CascadeInterface.hh"
 #include "G4BinaryCascade.hh"
 #include "G4HadronFissionProcess.hh"
 #include "G4HadronCaptureProcess.hh"
