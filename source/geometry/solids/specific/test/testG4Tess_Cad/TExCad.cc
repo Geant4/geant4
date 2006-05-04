@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: TEx01example.cc,v 1.1 2005-11-24 10:45:43 flei Exp $
+// $Id: TExCad.cc,v 1.1 2006-05-04 16:36:30 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -39,7 +39,7 @@
 #include "G4UItcsh.hh"
 
 #ifdef G4VIS_USE
-#include "TEx01VisManager.hh"
+#include "G4VisExecutive.hh"
 #endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -57,7 +57,7 @@ int main(int argc,char** argv) {
   
 #ifdef G4VIS_USE
   // Visualization, if you choose to have it!
-  G4VisManager* visManager = new TEx01VisManager;
+  G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
 #endif
    
@@ -82,7 +82,7 @@ int main(int argc,char** argv) {
       session = new G4UIterminal();
 #endif    
 
-    UI->ApplyCommand("/control/execute vis.mac");    
+      //    UI->ApplyCommand("/control/execute vis.mac");    
     session->SessionStart();
     delete session;
   }

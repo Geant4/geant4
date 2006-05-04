@@ -1,9 +1,9 @@
-# $Id: GNUmakefile,v 1.1 2005-11-24 10:42:07 flei Exp $
+# $Id: GNUmakefile,v 1.2 2006-05-04 16:36:30 gcosmo Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
 
-name := TEx01example
+name := TExMixed
 G4TARGET := $(name)
 G4EXLIB := true
 
