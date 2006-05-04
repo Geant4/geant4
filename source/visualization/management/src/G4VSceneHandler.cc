@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.cc,v 1.58 2006-04-28 10:22:27 allison Exp $
+// $Id: G4VSceneHandler.cc,v 1.59 2006-05-04 14:28:04 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -68,8 +68,8 @@
 #include "G4ModelingParameters.hh"
 #include "G4VTrajectory.hh"
 #include "G4VHit.hh"
-#include "G4UImanager.hh"
 #include "Randomize.hh"
+#include "G4RunManager.hh"
 
 G4VSceneHandler::G4VSceneHandler (G4VGraphicsSystem& system, G4int id, const G4String& name):
   fSystem                (system),
@@ -133,7 +133,6 @@ void G4VSceneHandler::PostAddSolid () {
 
 void G4VSceneHandler::BeginPrimitives
 (const G4Transform3D& objectTransformation) {
-  if (!fpModel) G4Exception ("G4VSceneHandler::BeginPrimitives: NO MODEL!!!");
   fNestingDepth++;
   if (fNestingDepth > 1)
     G4Exception("G4VSceneHandler::BeginPrimitives: Nesting detected."
@@ -153,8 +152,6 @@ void G4VSceneHandler::EndPrimitives () {
 }
 
 void G4VSceneHandler::BeginPrimitives2D () {
-  if (!fpModel)
-    G4Exception ("G4VSceneHandler::BeginPrimitives2D: NO MODEL!!!");
   fNestingDepth++;
   if (fNestingDepth > 1)
     G4Exception("G4VSceneHandler::BeginPrimitives2D: Nesting detected."
@@ -174,7 +171,10 @@ void G4VSceneHandler::EndPrimitives2D () {
 void G4VSceneHandler::BeginModeling () {
 }
 
-void G4VSceneHandler::EndModeling () {}
+void G4VSceneHandler::EndModeling ()
+{
+  fpModel = 0;
+}
 
 void G4VSceneHandler::ClearStore () {
   // if (fpViewer) fpViewer -> NeedKernelVisit (true);
@@ -243,7 +243,11 @@ void G4VSceneHandler::AddSolid (const G4VSolid& solid) {
 }
 
 void G4VSceneHandler::AddCompound (const G4VTrajectory& traj) {
-  traj.DrawTrajectory(((G4TrajectoriesModel*)fpModel)->GetDrawingMode());
+  G4TrajectoriesModel* pTrModel =
+    dynamic_cast<G4TrajectoriesModel*>(fpModel);
+  if (!pTrModel) G4Exception
+    ("G4VSceneHandler::AddCompound(const G4VTrajectory&): Not a G4TrajectoriesModel.");
+  traj.DrawTrajectory(pTrModel->GetDrawingMode());
 }
 
 void G4VSceneHandler::AddCompound (const G4VHit& hit) {
@@ -412,14 +416,10 @@ void G4VSceneHandler::SetScene (G4Scene* pScene) {
 }
 
 void G4VSceneHandler::RequestPrimitives (const G4VSolid& solid) {
-  if (!fpModel)
-    G4Exception ("G4VSceneHandler::RequestPrimitives: NO MODEL!!!");
-  G4Polyhedron* pPolyhedron;
-  G4NURBS*      pNURBS;
   BeginPrimitives (*fpObjectTransformation);
-  switch (fpModel -> GetModelingParameters () -> GetRepStyle ()) {
-  case G4ModelingParameters::nurbs:
-    pNURBS = solid.CreateNURBS ();
+  switch (fpViewer -> GetViewParameters () . GetRepStyle ()) {
+  case G4ViewParameters::nurbs:
+    G4NURBS* pNURBS = solid.CreateNURBS ();
     if (pNURBS) {
       pNURBS -> SetVisAttributes
 	(fpViewer -> GetApplicableVisAttributes (fpVisAttribs));
@@ -439,11 +439,11 @@ void G4VSceneHandler::RequestPrimitives (const G4VSolid& solid) {
       }
     }
     // Dropping through to polyhedron...
-  case G4ModelingParameters::polyhedron:
+  case G4ViewParameters::polyhedron:
   default:
     G4Polyhedron::SetNumberOfRotationSteps
-	(fpModel -> GetModelingParameters () -> GetNoOfSides ());
-    pPolyhedron = solid.GetPolyhedron ();
+	(fpViewer -> GetViewParameters () . GetNoOfSides ());
+    G4Polyhedron* pPolyhedron = solid.GetPolyhedron ();
     G4Polyhedron::ResetNumberOfRotationSteps ();
     if (pPolyhedron) {
       pPolyhedron -> SetVisAttributes
@@ -506,22 +506,9 @@ void G4VSceneHandler::ProcessScene (G4VViewer&) {
       // pModel->GetTransformation().  The model must take care of
       // this in pModel->DescribeYourselfTo(*this).  See, for example,
       // G4PhysicalVolumeModel and /vis/scene/add/logo.
-      const G4ModelingParameters* tempMP =
-	pModel -> GetModelingParameters ();
-      // NOTE THAT pModel->GetModelingParameters() COULD BE ZERO.
-      // (Not sure the above is necessary; but in future we might
-      // want to take notice of the modeling parameters with which
-      // the model was created.  For the time being we are ignoring
-      // them and simply using the view parameters.  When the time
-      // comes to do this, then perhaps there should be a default
-      // set of modeling parameters in the view parameters for the
-      // case of a zero modeling parameters pointer.)
-      // (I think for the G4 Vis System we'll rely on view parameters
-      // and convert using pMP = CreateModelingParameters () as above.)
       pModel -> SetModelingParameters (pMP);
       SetModel (pModel);  // Store for use by derived class.
       pModel -> DescribeYourselfTo (*this);
-      pModel -> SetModelingParameters (tempMP);
     }
 
     // Repeat if required...
@@ -529,19 +516,15 @@ void G4VSceneHandler::ProcessScene (G4VViewer&) {
       fSecondPass = true;
       for (size_t i = 0; i < runDurationModelList.size (); i++) {
 	G4VModel* pModel = runDurationModelList[i];
-	const G4ModelingParameters* tempMP =
-	  pModel -> GetModelingParameters ();
 	pModel -> SetModelingParameters (pMP);
 	SetModel (pModel);  // Store for use by derived class.
 	pModel -> DescribeYourselfTo (*this);
-	pModel -> SetModelingParameters (tempMP);
       }
       fSecondPass = false;
       fSecondPassRequested = false;
     }
 
     delete pMP;
-    SetModel (0);  // Flags invalid model.
     EndModeling ();
 
   } else {
@@ -560,13 +543,18 @@ void G4VSceneHandler::ProcessScene (G4VViewer&) {
   fReadyForTransients = true;
 
   // Now (re-)do transients (trajectories, hits, user drawing, etc.)...
-  if (fpScene->GetRecomputeTransients()) {  // If requested...
+  // Uses run manager via UImanager->ApplyCommand("/run/beamOn") so
+  // only makes sense if a run manager exists.  More than that - the
+  // random number status strings are created by G4RunManager, so they
+  // are null if a G4RunManager does not exist...
+  G4RunManager* runManager = G4RunManager::GetRunManager();
+  if (runManager &&
+      fpScene->GetRecomputeTransients()) {  // ...and if requested...
     if (visManager->GetEventCount()) {  // Must have had some prior event(s)...
-      G4UImanager* UImanager = G4UImanager::GetUIpointer();
       if (fpScene->GetRefreshAtEndOfEvent()) {
 	// Check if transients have been drawn.  Note: Use the flag in
 	// the vis manager, which is set *after* a pass triggered by
-	// ClearTransinetStoreIfMarked.  Avoids early processing.
+	// ClearTransientStoreIfMarked.  Avoids early processing.
 	if (visManager->GetTransientsDrawnThisEvent()) {
 	  // Change "warnings" to "confirmations" if this settles!!!!!!!!!!
 	  if (verbosity >= G4VisManager::warnings) {
@@ -575,9 +563,10 @@ void G4VSceneHandler::ProcessScene (G4VViewer&) {
 	      "\n  \"/vis/scene/transientsAction none\" to suppress."
 		   << G4endl;
 	  }
-	  std::istringstream iss(visManager->GetBeginOfLastEventRandomStatus());
+	  std::istringstream
+	    iss(visManager->GetBeginOfLastEventRandomStatus());
 	  CLHEP::HepRandom::restoreFullState(iss);
-	  UImanager->ApplyCommand("/run/beamOn 1");
+	  runManager->BeamOn(1);
 	}
       } else {
 	if (!fpScene->GetRefreshAtEndOfRun()) {
@@ -590,7 +579,7 @@ void G4VSceneHandler::ProcessScene (G4VViewer&) {
 	}
 	// Check if transients have been drawn.  Note: Use the flag in
 	// the vis manager, which is set *after* a pass triggered by
-	// ClearTransinetStoreIfMarked.  Avoids early processing.
+	// ClearTransientStoreIfMarked.  Avoids early processing.
 	if (visManager->GetTransientsDrawnThisRun()) {
 	  // Change "warnings" to "confirmations" if this settles!!!!!!!!!!
 	  if (verbosity >= G4VisManager::warnings) {
@@ -601,13 +590,13 @@ void G4VSceneHandler::ProcessScene (G4VViewer&) {
 	  }
 	  std::istringstream iss(visManager->GetBeginOfLastRunRandomStatus());
 	  CLHEP::HepRandom::restoreFullState(iss);
-	  std::ostringstream oss;
-	  oss << visManager->GetEventCount();
-	  UImanager->ApplyCommand(G4String("/run/beamOn " + oss.str()));
+	  G4int nEvents = visManager->GetEventCount();
+	  runManager->BeamOn(nEvents);
 	}
       }
     }
   }
+
   fMarkForClearingTransientStore = tmpMarkForClearingTransientStore;
 }
 
