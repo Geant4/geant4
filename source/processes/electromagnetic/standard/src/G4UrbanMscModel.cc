@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel.cc,v 1.9 2006-03-23 09:48:41 urban Exp $
+// $Id: G4UrbanMscModel.cc,v 1.10 2006-05-04 10:35:37 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -631,7 +631,7 @@ std::vector<G4DynamicParticle*>* G4UrbanMscModel::SampleSecondaries(
                                 const G4MaterialCutsCouple*,
                                 const G4DynamicParticle* dynParticle,
                                       G4double truestep,
-                                      G4double safety)
+                                      G4double theSafety)
 {
   G4double kineticEnergy = dynParticle->GetKineticEnergy();
   if(kineticEnergy <= 0.0) return 0;
@@ -680,7 +680,7 @@ std::vector<G4DynamicParticle*>* G4UrbanMscModel::SampleSecondaries(
 
         G4ThreeVector Position = *(fParticleChange->GetProposedPosition());
         G4double fac = 0.;
-        if(r <  safety)
+        if(r <  theSafety)
         {
           //normal case, no need to check safety
           fac = 1.;
@@ -690,8 +690,8 @@ std::vector<G4DynamicParticle*>* G4UrbanMscModel::SampleSecondaries(
           //  ******* we do not have track info at this level ***********
           //  ******* so navigator is called at boundary too ************
           navigator->LocateGlobalPointWithinVolume(Position);
-          const G4double cstep = safety ;
-          G4double newsafety = safety;
+          G4double cstep = theSafety ;
+          G4double newsafety = theSafety;
           phi = navigator->ComputeStep(Position,latDirection,
                                        cstep,newsafety);
           if(r < newsafety)

@@ -1,4 +1,4 @@
-$Id: History,v 1.243 2006-04-28 17:32:47 vnivanch Exp $
+$Id: History,v 1.244 2006-05-04 10:39:42 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+04 May 06: V.Ivant (emutils-V08-00-14)
+- G4EmCorrections - fix compilation warning at SUN 
 
 28 April 06: V.Ivant (emutils-V08-00-13)
 - G4EmCalculator - remove debug output 

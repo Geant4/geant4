@@ -1,4 +1,4 @@
-$Id: History,v 1.231 2006-04-28 17:35:35 vnivanch Exp $
+$Id: History,v 1.232 2006-05-04 10:35:37 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+04 May 06: V.Ivanchenko (emstand-V08-00-20)
 - G4BetheBlochModel - use different formula for muons and hadrons for tmax (VI) 
+- G4UrbanMscModel - fix SUN compilation warning (VI)
 
 26 April 06: V.Ivanchenko (emstand-V08-00-19)
 - G4PSTARStopping and G4ASTARStopping - new classes with NIST data on stopping

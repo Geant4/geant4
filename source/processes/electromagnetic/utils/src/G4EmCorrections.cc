@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmCorrections.cc,v 1.14 2006-04-28 17:30:20 vnivanch Exp $
+// $Id: G4EmCorrections.cc,v 1.15 2006-05-04 10:39:42 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -589,8 +589,8 @@ G4double G4EmCorrections::NuclearStoppingPower(G4double kineticEnergy,
     
   for (G4int i=1; i<104; i++)
     {
-      if (er > e[i]) {
-	nloss = (a[i] - a[i-1])*(er-e[i-1])/(e[i] - e[i-1]) + a[i-1];   
+      if (er > ed[i]) {
+	nloss = (a[i] - a[i-1])*(er-ed[i-1])/(ed[i] - ed[i-1]) + a[i-1];   
 	break;
       }
     }
@@ -792,7 +792,7 @@ void G4EmCorrections::Initialise()
   };
 
   for(i=0; i<104; i++) {
-    e[i] = nuca[i][0];
+    ed[i] = nuca[i][0];
     a[i] = nuca[i][1];
   }
 

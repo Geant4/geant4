@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmCorrections.hh,v 1.4 2006-04-28 17:30:20 vnivanch Exp $
+// $Id: G4EmCorrections.hh,v 1.5 2006-05-04 10:39:42 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -144,7 +144,7 @@ private:
 
   G4double     engBarkas[47];
   G4double     corBarkas[47];
-  G4double     e[104];
+  G4double     ed[104];
   G4double     a[104];
   G4double     theZieglerFactor;
   G4double     alpha2;
