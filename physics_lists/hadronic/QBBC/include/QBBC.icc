@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: QBBC.icc,v 1.4 2006-05-04 18:12:32 ribon Exp $
+// $Id: QBBC.icc,v 1.5 2006-05-04 18:27:32 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -36,16 +36,6 @@
 
 #include "globals.hh"
 #include "G4ParticleDefinition.hh"
-//#include "G4ParticleWithCuts.hh"
-//#include "G4ProcessManager.hh"
-//#include "G4ProcessVector.hh"
-//#include "G4ParticleTypes.hh"
-//#include "G4ParticleTable.hh"
-
-//#include "G4Material.hh"
-//#include "G4MaterialTable.hh"
-//#include "G4ios.hh"
-//#include <iomanip>   
 
 #include "G4DecayPhysics.hh"
 #include "G4EmStandardPhysics.hh"
@@ -64,8 +54,8 @@ template<class T> TQBBC<T>::TQBBC( G4int ver, const G4String& type,
 	G4bool flagFTF, G4bool flagCHIPS, G4bool flagHP): T()
 {
   G4DataQuestionaire it(photon, neutron);
-  G4cout << "<<< Geant4 Physics List simulation engine: QBBC 3.0  with type "
-	<< " type " <<G4endl;
+  G4cout << "<<< Geant4 Physics List simulation engine: QBBC 3.0  with type <"
+	<< type <<">" <<G4endl;
   G4cout <<G4endl;
   this->defaultCutValue = 0.7*mm;  
   this->SetVerboseLevel(ver);
