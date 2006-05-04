@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeModel.hh,v 1.26 2006-03-28 16:50:00 allison Exp $
+// $Id: G4PhysicalVolumeModel.hh,v 1.27 2006-05-04 14:19:22 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -36,6 +36,10 @@
 // For access to base class information, e.g., modeling parameters,
 // use GetModelingParameters() inherited from G4VModel.  See Class
 // Description of the base class G4VModel.
+//
+// G4PhysicalVolumeModel assumes the modeling parameters have been set
+// up with meaningful information - default vis attributes and culling
+// policy in particular.
 
 #ifndef G4PHYSICALVOLUMEMODEL_HH
 #define G4PHYSICALVOLUMEMODEL_HH

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeModel.cc,v 1.43 2006-04-19 14:20:03 allison Exp $
+// $Id: G4PhysicalVolumeModel.cc,v 1.44 2006-05-04 14:19:22 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -117,7 +117,7 @@ void G4PhysicalVolumeModel::CalculateExtent ()
     fRequestedDepth = -1;  // Always search to all depths to define extent.
     const G4ModelingParameters* tempMP = fpMP;
     G4ModelingParameters mParams
-      (0,      // No default vis attributes.
+      (0,      // No default vis attributes needed.
        G4ModelingParameters::wireframe,
        true,   // Global culling.
        true,   // Cull invisible volumes.
@@ -151,46 +151,46 @@ void G4PhysicalVolumeModel::CalculateExtent ()
 void G4PhysicalVolumeModel::DescribeYourselfTo
 (G4VGraphicsScene& sceneHandler)
 {
-  if (fpMP && fpMP -> IsViewGeom ()) {
+  if (!fpMP) G4Exception
+    ("G4PhysicalVolumeModel::DescribeYourselfTo: No modeling parameters.");
 
-    sceneHandler.EstablishSpecials (*this);
-    // See .hh file for explanation of this mechanism.
+  sceneHandler.EstablishSpecials (*this);
+  // See .hh file for explanation of this mechanism.
 
-    // For safety...
-    fCurrentDepth = 0;
-    // ...and in working space in scene handler, if required...
-    if (fpCurrentDepth) *fpCurrentDepth = 0;
+  // For safety...
+  fCurrentDepth = 0;
+  // ...and in working space in scene handler, if required...
+  if (fpCurrentDepth) *fpCurrentDepth = 0;
 
-    G4Transform3D startingTransformation = fTransform;
+  G4Transform3D startingTransformation = fTransform;
 
-    VisitGeometryAndGetVisReps
-      (fpTopPV,
-       fRequestedDepth,
-       startingTransformation,
-       sceneHandler);
+  VisitGeometryAndGetVisReps
+    (fpTopPV,
+     fRequestedDepth,
+     startingTransformation,
+     sceneHandler);
 
-    // Clear data...
-    fCurrentDepth     = 0;
-    fpCurrentPV       = 0;
-    fpCurrentLV       = 0;
-    fpCurrentMaterial = 0;
-    fDrawnPVPath.clear();
-    // ...and in working space in scene handler, if required...
-    if (fpCurrentDepth)     *fpCurrentDepth     = 0;
-    if (fppCurrentPV)       *fppCurrentPV       = 0;
-    if (fppCurrentLV)       *fppCurrentLV       = 0;
-    if (fppCurrentMaterial) *fppCurrentMaterial = 0;
-    if (fpDrawnPVPath)      fpDrawnPVPath->clear();
+  // Clear data...
+  fCurrentDepth     = 0;
+  fpCurrentPV       = 0;
+  fpCurrentLV       = 0;
+  fpCurrentMaterial = 0;
+  fDrawnPVPath.clear();
+  // ...and in working space in scene handler, if required...
+  if (fpCurrentDepth)     *fpCurrentDepth     = 0;
+  if (fppCurrentPV)       *fppCurrentPV       = 0;
+  if (fppCurrentLV)       *fppCurrentLV       = 0;
+  if (fppCurrentMaterial) *fppCurrentMaterial = 0;
+  if (fpDrawnPVPath)      fpDrawnPVPath->clear();
 
-    sceneHandler.DecommissionSpecials (*this);
+  sceneHandler.DecommissionSpecials (*this);
 
-    // Clear pointers to working space.
-    fpCurrentDepth     = 0;
-    fppCurrentPV       = 0;
-    fppCurrentLV       = 0;
-    fppCurrentMaterial = 0;
-    fpDrawnPVPath      = 0;
-  }
+  // Clear pointers to working space.
+  fpCurrentDepth     = 0;
+  fppCurrentPV       = 0;
+  fppCurrentLV       = 0;
+  fppCurrentMaterial = 0;
+  fpDrawnPVPath      = 0;
 }
 
 G4String G4PhysicalVolumeModel::GetCurrentTag () const
@@ -423,30 +423,29 @@ void G4PhysicalVolumeModel::DescribeAndDescend
   // Make decision to draw...
   const G4VisAttributes* pVisAttribs = pLV->GetVisAttributes();
   if (!pVisAttribs) pVisAttribs = fpMP->GetDefaultVisAttributes();
+  // Beware - pVisAttribs might still be zero.
   G4bool thisToBeDrawn = true;
-  if (fpMP && pVisAttribs) { // If not, all bets are off.  Draw anyway...
 
-    // There are various reasons why this volume
-    // might not be drawn...
-    G4bool culling = fpMP->IsCulling();
-    G4bool cullingInvisible = fpMP->IsCullingInvisible();
-    G4bool markedVisible = pVisAttribs->IsVisible();
-    G4bool cullingLowDensity = fpMP->IsDensityCulling();
-    G4double density = pMaterial->GetDensity();
-    G4double densityCut = fpMP -> GetVisibleDensity ();
+  // There are various reasons why this volume
+  // might not be drawn...
+  G4bool culling = fpMP->IsCulling();
+  G4bool cullingInvisible = fpMP->IsCullingInvisible();
+  G4bool markedVisible = pVisAttribs? pVisAttribs->IsVisible(): true;
+  G4bool cullingLowDensity = fpMP->IsDensityCulling();
+  G4double density = pMaterial->GetDensity();
+  G4double densityCut = fpMP -> GetVisibleDensity ();
 
-    // 1) Global culling is on....
-    if (culling) {
-      // 2) Culling of invisible volumes is on...
-      if (cullingInvisible) {
-	// 3) ...and the volume is marked not visible...
-	if (!markedVisible) thisToBeDrawn = false;
-      }
-      // 4) Or culling of low density volumes is on...
-      if (cullingLowDensity) {
-	// 5) ...and density is less than cut value...
-	if (density < densityCut) thisToBeDrawn = false;
-      }
+  // 1) Global culling is on....
+  if (culling) {
+    // 2) Culling of invisible volumes is on...
+    if (cullingInvisible) {
+      // 3) ...and the volume is marked not visible...
+      if (!markedVisible) thisToBeDrawn = false;
+    }
+    // 4) Or culling of low density volumes is on...
+    if (cullingLowDensity) {
+      // 5) ...and density is less than cut value...
+      if (density < densityCut) thisToBeDrawn = false;
     }
   }
 
@@ -459,8 +458,6 @@ void G4PhysicalVolumeModel::DescribeAndDescend
       fpDrawnPVPath->push_back(G4PhysicalVolumeNodeID(fpCurrentPV,copyNo));
     }
 
-    const G4VisAttributes* pVisAttribs = pLV -> GetVisAttributes ();
-    if (!pVisAttribs) pVisAttribs = fpMP -> GetDefaultVisAttributes ();
     DescribeSolid (theNewAT, pSol, pVisAttribs, sceneHandler);
   }
 
@@ -478,10 +475,11 @@ void G4PhysicalVolumeModel::DescribeAndDescend
   else if (fCurtailDescent) daughtersToBeDrawn = false;
 
   // Now, reasons that depend on culling policy...
-  else if (fpMP && pVisAttribs) { // If not, culling is indeterminate.
+  else {
     G4bool culling = fpMP->IsCulling();
     G4bool cullingInvisible = fpMP->IsCullingInvisible();
-    G4bool daughtersInvisible = pVisAttribs->IsDaughtersInvisible();
+    G4bool daughtersInvisible =
+      pVisAttribs? pVisAttribs->IsDaughtersInvisible(): false;
     // Culling of covered daughters request.  This is computed in
     // G4VSceneHandler::CreateModelingParameters() depending on view
     // parameters...
@@ -489,14 +487,15 @@ void G4PhysicalVolumeModel::DescribeAndDescend
     G4bool surfaceDrawing =
       fpMP->GetDrawingStyle() == G4ModelingParameters::hsr ||
       fpMP->GetDrawingStyle() == G4ModelingParameters::hlhsr;    
-    if (pVisAttribs->IsForceDrawingStyle()) {
+    if (pVisAttribs && pVisAttribs->IsForceDrawingStyle()) {
       switch (pVisAttribs->GetForcedDrawingStyle()) {
       default:
       case G4VisAttributes::wireframe: surfaceDrawing = false; break;
       case G4VisAttributes::solid: surfaceDrawing = true; break;
       }
     }
-    G4bool opaque = pVisAttribs->GetColour().GetAlpha() >= 1.;
+    G4bool opaque = 
+      pVisAttribs? pVisAttribs->GetColour().GetAlpha() >= 1.: false;
     // 4) Global culling is on....
     if (culling) {
       // 5) ..and culling of invisible volumes is on...
@@ -586,6 +585,9 @@ void G4PhysicalVolumeModel::DescribeSolid
 
 G4bool G4PhysicalVolumeModel::Validate (G4bool warn)
 {
+  if (!fpMP) G4Exception
+    ("G4PhysicalVolumeModel::Validate: No modeling parameters.");
+
   G4VPhysicalVolume* world =
     G4TransportationManager::GetTransportationManager ()
     -> GetNavigatorForTracking () -> GetWorldVolume ();
@@ -598,6 +600,7 @@ G4bool G4PhysicalVolumeModel::Validate (G4bool warn)
   G4PhysicalVolumeSearchScene searchScene
     (&searchModel, fTopPVName, fTopPVCopyNo);
   G4ModelingParameters mp;  // Default modeling parameters for this search.
+  mp.SetDefaultVisAttributes(fpMP->GetDefaultVisAttributes());
   searchModel.SetModelingParameters (&mp);
   searchModel.DescribeYourselfTo (searchScene);
   G4VPhysicalVolume* foundVolume = searchScene.GetFoundVolume ();

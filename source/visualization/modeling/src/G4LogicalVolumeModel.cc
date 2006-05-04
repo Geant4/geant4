@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalVolumeModel.cc,v 1.11 2005-02-15 14:51:33 johna Exp $
+// $Id: G4LogicalVolumeModel.cc,v 1.12 2006-05-04 14:19:22 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -84,12 +84,13 @@ void G4LogicalVolumeModel::DescribeYourselfTo
 (G4VGraphicsScene& sceneHandler) {
 
   // Store current modeling parameters and ensure nothing is culled.
-  const G4ModelingParameters* tpMP = fpMP;
-  G4ModelingParameters nonCulledMP (*fpMP);
+  const G4ModelingParameters* tmpMP = fpMP;
+  G4ModelingParameters nonCulledMP;
+  if (fpMP) nonCulledMP = *fpMP;
   nonCulledMP.SetCulling (false);
   fpMP = &nonCulledMP;    
   G4PhysicalVolumeModel::DescribeYourselfTo (sceneHandler);
-  fpMP = tpMP;
+  fpMP = tmpMP;
 
   if (fVoxels) {
     if (fpTopPV->GetLogicalVolume()->GetVoxelHeader()) {

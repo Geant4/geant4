@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HitsModel.cc,v 1.11 2005-01-27 20:06:52 johna Exp $
+// $Id: G4HitsModel.cc,v 1.12 2006-05-04 14:19:22 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,9 +44,9 @@ G4HitsModel::G4HitsModel () {
 }
 
 void G4HitsModel::DescribeYourselfTo (G4VGraphicsScene& sceneHandler) {
-  if (fpMP && fpMP -> IsViewHits ()) {
-    G4RunManager* runManager = G4RunManager::GetRunManager ();
-    const G4Event* event = runManager -> GetCurrentEvent ();
+  G4RunManager * runManager = G4RunManager::GetRunManager();
+  if (runManager) {
+    const G4Event* event = runManager->GetCurrentEvent ();
     if (event) {
       G4HCofThisEvent* HCE = event -> GetHCofThisEvent ();
       if (HCE) {
