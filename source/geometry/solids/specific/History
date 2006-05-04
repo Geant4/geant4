@@ -1,4 +1,4 @@
-$Id: History,v 1.89 2006-05-03 08:48:16 gcosmo Exp $
+$Id: History,v 1.90 2006-05-04 16:37:47 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+04-May-2006, G.Cosmo (geom-specific-V08-00-06)
+- Use different names for unit tests to avoid confusing liblist ...
 
 03-May-2006, G.Cosmo (geom-specific-V08-00-05)
 - Added four unit tests for G4TessellatedSolid.
