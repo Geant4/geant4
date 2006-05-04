@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4XXXStoredSceneHandler.hh,v 1.1 2006-03-28 17:16:41 allison Exp $
+// $Id: G4XXXStoredSceneHandler.hh,v 1.2 2006-05-04 15:09:14 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -125,6 +125,13 @@ protected:
   // Keep track of which items are permanent, which transient...
   std::vector<StoreIterator> fPermanents;
   std::vector<StoreIterator> fTransients;
+
+private:
+
+#ifdef G4XXXFileDEBUG
+  void PrintThings();
+#endif
+
 };
 
 #endif

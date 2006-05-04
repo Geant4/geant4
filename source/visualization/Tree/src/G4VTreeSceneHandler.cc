@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTreeSceneHandler.cc,v 1.12 2006-03-28 17:22:30 allison Exp $
+// $Id: G4VTreeSceneHandler.cc,v 1.13 2006-05-04 15:05:14 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -35,7 +35,6 @@
 #include "G4PhysicalVolumeModel.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
-#include "G4ModelingParameters.hh"
 
 G4int G4VTreeSceneHandler::fSceneIdCount = 0;
 // Counter for Tree scene handlers.

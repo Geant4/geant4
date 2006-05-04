@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4XXXFileSceneHandler.cc,v 1.2 2006-04-19 15:40:46 allison Exp $
+// $Id: G4XXXFileSceneHandler.cc,v 1.3 2006-05-04 15:09:14 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -35,7 +35,6 @@
 #include "G4PhysicalVolumeModel.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
-#include "G4ModelingParameters.hh"
 #include "G4Box.hh"
 #include "G4Polyline.hh"
 #include "G4Text.hh"
@@ -62,13 +61,17 @@ G4XXXFileSceneHandler::~G4XXXFileSceneHandler() {}
 
 #ifdef G4XXXFileDEBUG
 // Useful function...
-static void G4XXXFileSceneHandlerPrintThings() {
+void G4XXXFileSceneHandler::PrintThings() {
   G4cout <<
     "  with transformation "
-         << (void*)fpObjectTransformation
-         << " from " << fpModel->GetCurrentDescription()
-         << " (tag " << fpModel->GetCurrentTag()
-         << ')';
+         << (void*)fpObjectTransformation;
+  if (fpModel) {
+    G4cout << " from " << fpModel->GetCurrentDescription()
+	   << " (tag " << fpModel->GetCurrentTag()
+	   << ')';
+  } else {
+    G4cout << "(not from a model)";
+  }
   G4PhysicalVolumeModel* pPVModel =
     dynamic_cast<G4PhysicalVolumeModel*>(fpModel);
   if (pPVModel) {

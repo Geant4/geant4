@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ASCIITreeSceneHandler.cc,v 1.27 2006-04-24 08:29:58 allison Exp $
+// $Id: G4ASCIITreeSceneHandler.cc,v 1.28 2006-05-04 15:05:14 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -229,7 +229,7 @@ void G4ASCIITreeSceneHandler::RequestPrimitives(const G4VSolid& solid) {
       }
     }
     if (ignore) {
-      fpModel->GetG4PhysicalVolumeModel()->CurtailDescent();
+      pPVModel->CurtailDescent();
       return;
     }
   }
@@ -269,7 +269,7 @@ void G4ASCIITreeSceneHandler::RequestPrimitives(const G4VSolid& solid) {
 	  // Add printing for repeated LV...
 	  *fpOutFile << " (repeated LV)";
 	  // ...and curtail descent.
-	  fpModel->GetG4PhysicalVolumeModel()->CurtailDescent();
+	  pPVModel->CurtailDescent();
 	}
       }
     }

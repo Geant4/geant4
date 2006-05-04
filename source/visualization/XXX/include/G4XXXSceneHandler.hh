@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4XXXSceneHandler.hh,v 1.19 2006-03-28 17:16:41 allison Exp $
+// $Id: G4XXXSceneHandler.hh,v 1.20 2006-05-04 15:09:14 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -67,9 +67,11 @@ protected:
   static G4int         fSceneIdCount;  // Counter for XXX scene handlers.
 
 private:
+
 #ifdef G4XXXDEBUG
   void PrintThings();
 #endif
+
 };
 
 #endif
