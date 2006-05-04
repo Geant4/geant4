@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.cc,v 1.59 2006-05-04 14:28:04 allison Exp $
+// $Id: G4VSceneHandler.cc,v 1.60 2006-05-04 17:27:48 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -417,9 +417,11 @@ void G4VSceneHandler::SetScene (G4Scene* pScene) {
 
 void G4VSceneHandler::RequestPrimitives (const G4VSolid& solid) {
   BeginPrimitives (*fpObjectTransformation);
+  G4NURBS* pNURBS = 0;
+  G4Polyhedron* pPolyhedron = 0;
   switch (fpViewer -> GetViewParameters () . GetRepStyle ()) {
   case G4ViewParameters::nurbs:
-    G4NURBS* pNURBS = solid.CreateNURBS ();
+    pNURBS = solid.CreateNURBS ();
     if (pNURBS) {
       pNURBS -> SetVisAttributes
 	(fpViewer -> GetApplicableVisAttributes (fpVisAttribs));
@@ -443,7 +445,7 @@ void G4VSceneHandler::RequestPrimitives (const G4VSolid& solid) {
   default:
     G4Polyhedron::SetNumberOfRotationSteps
 	(fpViewer -> GetViewParameters () . GetNoOfSides ());
-    G4Polyhedron* pPolyhedron = solid.GetPolyhedron ();
+    pPolyhedron = solid.GetPolyhedron ();
     G4Polyhedron::ResetNumberOfRotationSteps ();
     if (pPolyhedron) {
       pPolyhedron -> SetVisAttributes
