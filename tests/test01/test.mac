@@ -3,7 +3,7 @@
 # for geometry/tracking performance test from plane gun
 # 100 Gev geantino
 #
-/control/verbose 2
+# /control/verbose 2
 # /run/verbose 2
 /gun/particle geantino
 /gun/energy 100 GeV

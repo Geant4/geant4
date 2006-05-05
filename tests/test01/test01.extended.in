@@ -3,7 +3,7 @@
 # for geometry/tracking performance test
 # 100 Gev geantino
 #
-/control/verbose 2
+# /control/verbose 2
 # /run/verbose 2
 /gun/particle geantino
 /gun/energy 100 GeV
@@ -14,7 +14,7 @@
 #
 /mydet/SwitchDetector SimpleBox
 /mydet/SelectMaterial Al
-/myPGAction/randomGun randomDirection
+/tsGun/randomGun randomDirection
 /tracking/verbose 1
 /run/beamOn 10
 /tracking/verbose 0
@@ -24,7 +24,7 @@
 # Geantino in random directions, 1000 events.
 #
 /mydet/SwitchDetector Honeycomb
-/myPGAction/randomGun randomDirection
+/tsGun/randomGun randomDirection
 /tracking/verbose 1
 /run/beamOn 10
 /tracking/verbose 0
@@ -34,7 +34,7 @@
 # Geantino in random positions and directions, 1000 events.
 #
 /mydet/SwitchDetector Honeycomb
-/myPGAction/randomGun randomPositionAndDirection
+/tsGun/randomGun randomPositionAndDirection
 /tracking/verbose 1
 /run/beamOn 10
 /tracking/verbose 0
@@ -44,9 +44,32 @@
 # Geantino in random positions and directions, 1000 events.
 #
 /mydet/SwitchDetector Assembly
-/myPGAction/randomGun randomPositionAndDirection
+/tsGun/randomGun randomPositionAndDirection
 /tracking/verbose 1
 /run/beamOn 10
 /tracking/verbose 0
 /run/beamOn 1000
+#
+# Assembly2 geometry
+# Geantino 100 GeV to the direction (0.,1., 0.)
+# 10 events
+#
+/mydet/SwitchDetector Assembly2
+/tsGun/randomGun randomPositionAndDirection
+/tracking/verbose 1
+/run/beamOn 10
+/tracking/verbose 0
+/run/beamOn 1000
+#
+# Assembly3 geometry
+# Geantino 100 GeV to the direction (1.,0.,0.)
+# 10 events
+#
+/mydet/SwitchDetector Assembly3
+/tsGun/randomGun randomPositionAndDirection
+/tracking/verbose 1
+/run/beamOn 10
+/tracking/verbose 0
+/run/beamOn 1000
+
 exit

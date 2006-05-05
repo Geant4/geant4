@@ -2,7 +2,7 @@
 # Macro file of "skeleton.cc"
 # for tracking performance test
 #
-/control/verbose 2
+# /control/verbose 2
 # /run/verbose 2
 #
 # SimpleBox geometry made by Pb

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: test01.cc,v 1.5 2005-12-06 15:49:35 gcosmo Exp $
+// $Id: test01.cc,v 1.6 2006-05-05 16:14:41 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -83,6 +83,9 @@ int main(int argc,char** argv) {
   }
 
   delete runManager;
+ 
+  G4cout << G4endl << "!!! Test completed !!!" << G4endl << G4endl;
+
   return 0;
 }
 

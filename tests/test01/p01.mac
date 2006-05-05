@@ -3,8 +3,8 @@
 # for geometry/tracking performance test from plane gun
 # 100 Gev geantino
 #
-/control/verbose 2
-# /run/verbose 2
+# /control/verbose 2
+#
 /gun/particle geantino
 /gun/energy 100 GeV
 /run/initialize
@@ -21,41 +21,26 @@
 /tracking/verbose 1
 /run/beamOn 10
 #
-#/mydet/SwitchDetector SimpleBox
-#/mydet/SelectMaterial Al
-#/mydet/SwitchCSG Tubs
 /tsGun/planeGun -100.0 0.0 0.0
 /tracking/verbose 1
 /run/beamOn 10
 #
 # from +/- Y-axis
 #
-#/mydet/SwitchDetector SimpleBox
-#/mydet/SelectMaterial Al
-#/mydet/SwitchCSG Tubs
 /tsGun/planeGun 0.0 100.0 0.0
 /tracking/verbose 1
 /run/beamOn 10
 #
-/mydet/SwitchDetector SimpleBox
-/mydet/SelectMaterial Al
-#/mydet/SwitchCSG Box
 /tsGun/planeGun 0.0 -100.0 0.0
 /tracking/verbose 1
 /run/beamOn 10
 #
 # from +/- Z-axis
 #
-#/mydet/SwitchDetector SimpleBox
-#/mydet/SelectMaterial Al
-#/mydet/SwitchCSG Tubs
 /tsGun/planeGun 0.0 0.0 100.0
 /tracking/verbose 1
 /run/beamOn 10
 #
-#/mydet/SwitchDetector SimpleBox
-#/mydet/SelectMaterial Al
-#/mydet/SwitchCSG Tubs
 /tsGun/planeGun 0.0 0.0 -100.0
 /tracking/verbose 1
 /run/beamOn 10
