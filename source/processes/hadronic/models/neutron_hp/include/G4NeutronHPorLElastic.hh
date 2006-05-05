@@ -61,12 +61,16 @@ class G4NeutronHPorLElastic : public G4HadronicInteraction
   G4HadFinalState * ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& aTargetNucleus);
 
   G4int GetNiso() {return theElastic[0].GetNiso();}
+
+  void DoNotSuspend() {overrideSuspension = true;}
+
   private:
   
   G4double * xSec;
   G4NeutronHPChannel * theElastic;
   G4String dirName;
   G4int numEle;
+  G4bool overrideSuspension;
 
    public: 
       G4bool IsThisElementOK ( G4String );

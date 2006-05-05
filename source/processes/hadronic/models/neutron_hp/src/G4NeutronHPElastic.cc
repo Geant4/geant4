@@ -29,6 +29,7 @@
 
   G4NeutronHPElastic::G4NeutronHPElastic()
   {
+    overrideSuspension = false;
     G4NeutronHPElasticFS * theFS = new G4NeutronHPElasticFS;
     if(!getenv("NeutronHPCrossSections")) 
        throw G4HadronicException(__FILE__, __LINE__, "Please setenv NeutronHPCrossSections to point to the neutron cross-section files.");
@@ -89,5 +90,7 @@
       delete [] xSec;
       // it is element-wise initialised.
     }
-    return theElastic[index].ApplyYourself(aTrack); 
+    G4HadFinalState* finalState = theElastic[index].ApplyYourself(aTrack);
+    if (overrideSuspension) finalState->SetStatusChange(isAlive);
+    return finalState; 
   }
