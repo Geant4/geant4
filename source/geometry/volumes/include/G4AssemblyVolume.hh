@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AssemblyVolume.hh,v 1.5 2006-05-03 11:50:11 gcosmo Exp $
+// $Id: G4AssemblyVolume.hh,v 1.6 2006-05-05 14:43:05 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -36,11 +36,9 @@
 // The resulting objects are independent copies of each of the assembled
 // logical volumes. The placements are not, however, bound one to each other
 // when placement is done. They are seen as independent physical volumes in
-// space. This is the main difference when compared to the boolean solids or
-// parametrised physical volumes.
+// space.
 
 // Author:      Radovan Chytracek, John Apostolakis, Gabriele Cosmo
-// Version:     1.0
 // Date:        November 2000
 //
 // History:
@@ -51,6 +49,7 @@
 #define G4_ASSEMBLYVOLUME_H 
 
 #include <vector>
+
 #include "G4Transform3D.hh"
 #include "G4AssemblyTriplet.hh"
 
@@ -70,15 +69,12 @@ class G4AssemblyVolume
     // At destruction all the generated physical volumes and associated
     // rotation matrices of the imprints will be destroyed.
     //
-    // The rotation matrix passed in can be 0 = identity or an address even of an object
-    // on the upper stack frame. During assembly imprint, it creates anyway a new matrix
-    // and keeps track of it so it can delete it later at destruction time.
-    // This new policy has been adopted since user has no control on the way the rotations
-    // are combined it's safer doing it this way.
-    //
-    // WARNING! This interface will likely change in the next major release of Geant4 from
-    //          a pointer to a reference due to the reason above
-    //
+    // The rotation matrix passed as argument can be 0 (identity) or an address
+    // even of an object on the upper stack frame. During assembly imprint, a
+    // new matrix is created anyway and it is kept track of it so it can be
+    // automatically deleted later at the end of the application.
+    // This policy is adopted since user has no control on the way the
+    // rotations are combined.
 
   void AddPlacedVolume( G4LogicalVolume* pPlacedVolume,
                         G4ThreeVector& translation,
@@ -86,7 +82,7 @@ class G4AssemblyVolume
     //
     // Place the given volume 'pPlacedVolume' inside the assembly.
     //
-    // The taken approach:
+    // The adopted approach:
     //
     // - Place it w.r.t. the assembly coordinate system.
     //   This step is applied to each of the participating volumes.
@@ -105,34 +101,31 @@ class G4AssemblyVolume
     //   Every next volume being added into the assembly will be placed
     //   w.r.t to the previous one.
     //
-    // The rotation matrix passed in can be 0 = identity or an address even of an object
-    // on the upper stack frame. During assembly imprint, it creates anyway a new matrix
-    // and keeps track of it so it can delete it later at destruction time.
-    // This new policy has been adopted since user has no control on the way the rotations
-    // are combined it's safer doing it this way.
-    //
-    // WARNING! This interface will likely change in the next major release of Geant4 from
-    //          a pointer to a reference due to the reason above
-    //
+    // The rotation matrix passed as argument can be 0 (identity) or an address
+    // even of an object on the upper stack frame. During assembly imprint, a
+    // new matrix is created anyway and it is kept track of it so it can be
+    // automatically deleted later at the end of the application.
+    // This policy is adopted since user has no control on the way the
+    // rotations are combined.
 
   void AddPlacedVolume( G4LogicalVolume* pPlacedVolume,
                         G4Transform3D&   transformation);
     //
-    // The same as previous but takes complete 3D transformation in space
+    // The same as previous, but takes complete 3D transformation in space
+    // as its argument.
+
+  void AddPlacedAssembly( G4AssemblyVolume* pAssembly,
+                          G4Transform3D&    transformation);
+    //
+    // The same as previous AddPlacedVolume(), but takes an assembly volume 
     // as its argument.
 
   void AddPlacedAssembly( G4AssemblyVolume* pAssembly,
                           G4ThreeVector& translation,
                           G4RotationMatrix* rotation);
     //
-    // The same as first AddPlacedVolume()  but takes an assembly volume 
-    // as its argument.
-
-  void AddPlacedAssembly( G4AssemblyVolume* pAssembly,
-                          G4Transform3D&    transformation);
-    //
-    // The same as second  AddPlacedVolume() but takes an assembly volume 
-    // as its argument.
+    // The same as above AddPlacedVolume(), but takes an assembly volume 
+    // as its argument with translation and rotation.
 
   void MakeImprint( G4LogicalVolume* pMotherLV,
                     G4ThreeVector& translationInMother,
@@ -147,13 +140,40 @@ class G4AssemblyVolume
                     G4int copyNumBase = 0,
                     G4bool surfCheck = false );
     //
-    // The same as previous but takes complete 3D transformation in space
-    // as its argument.
+    // The same as previous Imprint() method, but takes complete 3D
+    // transformation in space as its argument.
 
   inline std::vector<G4VPhysicalVolume*>::iterator GetVolumesIterator();
   inline unsigned int TotalImprintedVolumes() const;
     //
-    // Methods to access the physical volumes imprinted with this assembly.
+    // Methods to access the physical volumes imprinted with the assembly.
+
+  unsigned int GetImprintsCount() const;
+    //
+    // Return the number of made imprints.
+
+  unsigned int GetInstanceCount() const;
+    //
+    // Return the number of existing instance of G4AssemblyVolume class.
+
+  unsigned int GetAssemblyID()    const;
+    //
+    // Return instance number of this concrete object.
+  
+ protected:
+     
+  void SetInstanceCount( unsigned int value );
+  void SetAssemblyID( unsigned int value );
+ 
+  void InstanceCountPlus();
+  void InstanceCountMinus();
+
+  void SetImprintsCount( unsigned int value );
+  void ImprintsCountPlus();
+  void ImprintsCountMinus();
+    //
+    // Internal counting mechanism, used to compute unique the names of
+    // physical volumes created by MakeImprint() methods.
 
  private:    
 
@@ -164,7 +184,9 @@ class G4AssemblyVolume
                     G4bool surfCheck = false );
     //    
     // Function for placement of the given assembly in the given mother
-    // (called recursively if the assembly contains an assembly) 
+    // (called recursively if the assembly contains an assembly).
+
+ private:
 
   std::vector<G4AssemblyTriplet> fTriplets;
     //
@@ -176,53 +198,23 @@ class G4AssemblyVolume
     // We need to keep list of physical volumes created by MakeImprint() method
     // in order to be able to cleanup the objects when not needed anymore.
     // This requires the user to keep assembly objects in memory during the
-    // whole job or during the life-time of G4Navigator, log. vol store
-    // and phys. vol. store may keep pointers to physical volumes generated by
+    // whole job or during the life-time of G4Navigator, logical volume store
+    // and physical volume store keep pointers to physical volumes generated by
     // the assembly volume.
     // When an assembly object is about to die it will destroy all its
     // generated physical volumes and rotation matrices as well !
-    // This may affect validity of detector contruction !
-
- public:
-
-  unsigned int GetImprintsCount() const;
-  
- protected:
-    
-  void SetImprintsCount( unsigned int value );
-  void ImprintsCountPlus();
-  void ImprintsCountMinus();
-    //
-    // Internal counting mechanism, used to compute unique the names of
-    // phys. volumes created by MakeImprint(...) method(s).
-
- private:
 
   unsigned int fImprintsCounter;
     //
     // Number of imprints of the given assembly volume.
 
- public:
-    
-  unsigned int GetInstanceCount() const;
-    // Return the number of existing instance of G4AssemblyVolume class
-  unsigned int GetAssemblyID()    const;
-    // Return instance number of this concrete object
-  
- protected:
-     
-  void SetInstanceCount( unsigned int value );
-  void SetAssemblyID( unsigned int value );
- 
-  void InstanceCountPlus();
-  void InstanceCountMinus();
-
- private:
-
   static unsigned int fsInstanceCounter;
-  // Class instance counter
-         unsigned int fAssemblyID;
-  // Assembly object ID derived from instance counter at construction time
+    //
+    // Class instance counter.
+
+  unsigned int fAssemblyID;
+    //
+    // Assembly object ID derived from instance counter at construction time.
 
 };
 
