@@ -14,6 +14,12 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+05 May 2006 Dennis Wright (hadr-hpn-V08-00-02)
+----------------------------------------------
+- installed option to turn off neutron suspension in HPElastic models
+    added method DoNotSuspend() to 
+    G4NeutronHPElastic and G4NeutronHPorLElastic
+
 16 Jan 2006 Dennis Wright for Tatsumi Koi (hadr-hpn-V08-00-01)
 --------------------------------------------------------------
 - fixed problem seen in NeutronHP models: core dump when neutron energy
