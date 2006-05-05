@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AssemblyVolume.cc,v 1.8 2006-05-03 11:49:38 gcosmo Exp $
+// $Id: G4AssemblyVolume.cc,v 1.9 2006-05-05 14:41:24 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -93,8 +93,8 @@ G4AssemblyVolume::~G4AssemblyVolume()
 // object on the upper stack frame. During assembly imprint, it creates anyway
 // a new matrix and keeps track of it so it can delete it later at destruction
 // time.
-// This new policy has been adopted since user has no control on the way the
-// rotations are combined it's safer doing it this way.
+// This policy has been adopted since user has no control on the way the
+// rotations are combined.
 //
 void G4AssemblyVolume::AddPlacedVolume( G4LogicalVolume*  pVolume,
                                         G4ThreeVector&    translation,
@@ -119,9 +119,9 @@ void G4AssemblyVolume::AddPlacedVolume( G4LogicalVolume*  pVolume,
   G4Translate3D translation;
   transformation.getDecomposition(scale, rotation, translation);
 
-  G4ThreeVector      v = transformation.getTranslation();
+  G4ThreeVector      v = translation.getTranslation();
   G4RotationMatrix*  r = new G4RotationMatrix;
-                    *r = transformation.getRotation();
+                    *r = rotation.getRotation();
   
   G4bool isReflection = false;
   if (scale(0,0)*scale(1,1)*scale(2,2) < 0.)  { isReflection = true; }
@@ -199,8 +199,8 @@ void G4AssemblyVolume::AddPlacedAssembly( G4AssemblyVolume* pAssembly,
 // object on the upper stack frame. During assembly imprint, it creates anyway
 // a new matrix and keeps track of it so it can delete it later at destruction
 // time.
-// This new policy has been adopted since user has no control on the way the
-// rotations are combined it's safer doing it this way.
+// This policy has been adopted since user has no control on the way the
+// rotations are combined.
 // 
 // If the assembly volume contains assembly (a'), the function is called
 // recursively with composed transformation:
