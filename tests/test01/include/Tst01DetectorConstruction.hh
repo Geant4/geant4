@@ -45,18 +45,20 @@ class Tst01DetectorConstruction : public G4VUserDetectorConstruction
 
      G4VPhysicalVolume* Construct();
 
-     void SelectDetector(G4String val) ;
+     void SelectDetector(const G4String& val) ;
      void SwitchDetector() ;
 
-     void SelectMaterial(G4String val) ;
+     void SelectMaterial(const G4String& val) ;
 
   // Select/Switch CSG/Boolean
 
-     void SelectCSG(G4String name) ;
+     void SelectCSG(const G4String& name) ;
      void SwitchCSG() ;
 
-     void SelectBoolean(G4String name) ;
+     void SelectBoolean(const G4String& name) ;
      void SwitchBoolean() ;
+
+     G4double GetWorldSize() const { return wSize; }
 
   private:
 
@@ -69,6 +71,8 @@ class Tst01DetectorConstruction : public G4VUserDetectorConstruction
   // Class members
 
      Tst01DetectorMessenger* detectorMessenger ;
+
+     G4double wSize;
 
      G4LogicalVolume*   simpleBoxLog ;
      G4VPhysicalVolume* simpleBoxDetector ;

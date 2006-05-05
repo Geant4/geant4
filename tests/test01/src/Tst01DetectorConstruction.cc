@@ -26,6 +26,8 @@
 #include "G4ios.hh"
 #include "Tst01DetectorMessenger.hh"
 
+#include <sstream>
+
 #include "G4Material.hh"
 #include "G4MaterialTable.hh"
 #include "G4Element.hh"
@@ -67,12 +69,14 @@
 // Constructor/Destructor
 
 Tst01DetectorConstruction::Tst01DetectorConstruction()
-:simpleBoxLog(0),simpleBoxDetector(0),honeycombDetector(0),fWorldPhysVol(0),
- fTestCSG(0),fTestLog(0),fTestVol(0),Air(0),Al(0),Pb(0),
- selectedMaterial(0),detectorChoice(0), fChoiceCSG(0),fChoiceBool(0),
- AssemblyDetectorLog(0),AssemblyDetector(0),AssemblyCalo(0),AssemblyCellLog(0),
- AssemblyDetector2(0), AssemblyDetector3(0)
+ : simpleBoxLog(0),simpleBoxDetector(0),honeycombDetector(0),fWorldPhysVol(0),
+   fTestCSG(0),fTestLog(0),fTestVol(0),Air(0),Al(0),Pb(0),
+   selectedMaterial(0),detectorChoice(0), fChoiceCSG(0),fChoiceBool(0),
+   AssemblyDetectorLog(0),AssemblyDetector(0),AssemblyCalo(0),
+   AssemblyCellLog(0), AssemblyDetector2(0), AssemblyDetector3(0)
 {
+  wSize = 2000.*cm;
+
   detectorMessenger = new Tst01DetectorMessenger(this);
   materialChoice = "Pb";
 }
@@ -82,7 +86,8 @@ Tst01DetectorConstruction::~Tst01DetectorConstruction()
   delete detectorMessenger;
 
   // Clean up Assembly setup
-  if( AssemblyCalo != 0 ) delete +AssemblyCalo;
+  //
+  if( AssemblyCalo != 0 )  { delete AssemblyCalo; }
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -91,8 +96,7 @@ Tst01DetectorConstruction::~Tst01DetectorConstruction()
 
 G4VPhysicalVolume* Tst01DetectorConstruction::Construct()
 {
-  if((!simpleBoxDetector)&&(!honeycombDetector)&&
-     (!AssemblyDetector)&&(!AssemblyDetector2)&&(!AssemblyDetector3))
+  if(!fWorldPhysVol)
   {
     ConstructDetectors();
   }
@@ -100,19 +104,29 @@ G4VPhysicalVolume* Tst01DetectorConstruction::Construct()
   switch(detectorChoice)
   { 
     case 1:
+    {
       fWorldPhysVol = honeycombDetector; 
       break;
+    }
     case 2:
+    {
       fWorldPhysVol = AssemblyDetector; 
       break;
+    }
     case 3:
+    {
       fWorldPhysVol = AssemblyDetector2; 
       break;
+    }
     case 4:
+    {
       fWorldPhysVol = AssemblyDetector3; 
       break;
+    }
     default:
+    {
       fWorldPhysVol = simpleBoxDetector;
+    }
   }
   return fWorldPhysVol;
 }
@@ -123,8 +137,7 @@ G4VPhysicalVolume* Tst01DetectorConstruction::Construct()
 
 void Tst01DetectorConstruction::SwitchDetector()
 {
-  if((!simpleBoxDetector)&&(!honeycombDetector)&&
-     (!AssemblyDetector)&&(!AssemblyDetector2)&&(!AssemblyDetector3))
+  if(!fWorldPhysVol)
   {
     ConstructDetectors();
   }
@@ -157,39 +170,54 @@ void Tst01DetectorConstruction::SwitchDetector()
     }
   }
   G4RunManager::GetRunManager()->DefineWorldVolume(fWorldPhysVol);
+  G4RunManager::GetRunManager()->GeometryHasBeenModified();
 }
 
 /////////////////////////////////////////////////////////////////////
 //
 //
 
-void Tst01DetectorConstruction::SelectDetector(G4String val)
+void Tst01DetectorConstruction::SelectDetector(const G4String& val)
 {
   if(val == "Honeycomb")
+  {
     detectorChoice = 1 ;
+  }
   else if(val == "Assembly") 
+  {
     detectorChoice = 2 ;
+  }
   else if(val == "Assembly2") 
+  {
     detectorChoice = 3 ;
+  }
   else if(val == "Assembly3") 
+  {
     detectorChoice = 4 ;
+  }
   else
+  {
     detectorChoice = 0 ;
+  }
 
-  G4cout << "Now Detector is " << val << G4endl ;
+  G4cout << G4endl;
+  G4cout << "           -------------------------" << G4endl ;
+  G4cout << "           Now Detector is " << val << G4endl ;
+  G4cout << "           -------------------------" << G4endl ;
+  G4cout << G4endl;
 }
 /////////////////////////////////////////////////////////////////////
 //
 //
 
-void Tst01DetectorConstruction::SelectCSG(G4String name)
+void Tst01DetectorConstruction::SelectCSG(const G4String& name)
 {
-  if     ( name == "Tubs"   ) fChoiceCSG = 1 ; 
-  else if( name == "Cons"   ) fChoiceCSG = 2 ;
-  else if( name == "Sphere" ) fChoiceCSG = 3 ;
-  else                        fChoiceCSG = 0 ; // default or error in name
+  if     ( name == "Tubs"   ) { fChoiceCSG = 1 ; }
+  else if( name == "Cons"   ) { fChoiceCSG = 2 ; }
+  else if( name == "Sphere" ) { fChoiceCSG = 3 ; }
+  else                        { fChoiceCSG = 0 ; } // default or error in name
  
-  G4cout << "Now CGS is " << name << G4endl;
+  G4cout << "---> CGS solid is " << name << G4endl;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -200,12 +228,7 @@ void Tst01DetectorConstruction::SwitchCSG()
 {
   SelectMaterialPointer();
 
-  // if( (!simpleBoxDetector) && (!honeycombDetector) ) ConstructDetectors();
-
-  // G4VPhysicalVolume* worldPhysVol =    G4TransportationManager::
-  // GetTransportationManager()->GetNavigatorForTracking()->GetWorldVolume();
-
-  if( fTestCSG ) fTestCSG = 0 ;
+  if( fTestCSG ) { delete fTestCSG; }
   
   switch(fChoiceCSG)
   { 
@@ -224,35 +247,34 @@ void Tst01DetectorConstruction::SwitchCSG()
       fTestCSG = new G4Sphere("testCSG",20*cm,50*cm, 0,2*pi, 0,2*pi) ;
       break ;
     }
-    //  new G4Torus("testCSG",20*cm,40*cm,50*cm,0,2*pi) ;
-
     default:
     {
       fTestCSG = new G4Box("testCSG", 20*cm, 50*cm, 50*cm ) ;
     }
   }
-  if( fTestLog ) fTestLog = 0 ;
-  fTestLog = new G4LogicalVolume(fTestCSG,selectedMaterial,
-                                                "testLog",0,0,0) ;
-  if( fTestVol ) fTestVol = 0 ;
+  if( fTestLog ) { delete fTestLog; }
+  fTestLog = new G4LogicalVolume(fTestCSG,selectedMaterial,"testLog",0,0,0) ;
+
+  if( fTestVol ) { delete fTestVol; }
   fTestVol = new G4PVPlacement(0,G4ThreeVector(),
-				   "testVol",fTestLog, 
+                                   "testVol",fTestLog, 
                                     fWorldPhysVol,
-				    // simpleBoxDetector,
-                                    false,0);  
+                                    false,0);
+  
+  G4RunManager::GetRunManager()->GeometryHasBeenModified();
 }
 
 /////////////////////////////////////////////////////////////////////
 //
 //
 
-void Tst01DetectorConstruction::SelectBoolean(G4String name)
+void Tst01DetectorConstruction::SelectBoolean(const G4String& name)
 {
-  if(      name == "Union"   )     fChoiceBool = 1 ; 
-  else if( name == "Subtraction" ) fChoiceBool = 2 ;
-  else                             fChoiceBool = 0 ; // default or error in name
+  if(      name == "Union"   )     { fChoiceBool = 1 ; }
+  else if( name == "Subtraction" ) { fChoiceBool = 2 ; }
+  else                             { fChoiceBool = 0 ; }
  
-  G4cout << "Now Boolean is " << name << G4endl;
+  G4cout << "---> Boolean operation is " << name << G4endl;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -262,20 +284,9 @@ void Tst01DetectorConstruction::SelectBoolean(G4String name)
 void Tst01DetectorConstruction::SwitchBoolean()
 {
   SelectMaterialPointer();
-  if( (!simpleBoxDetector) && (!honeycombDetector) ) ConstructDetectors();
-
-  // G4VPhysicalVolume* worldPhysVol =    G4TransportationManager::
-  // GetTransportationManager()->GetNavigatorForTracking()->GetWorldVolume();
+  if( !fWorldPhysVol ) { ConstructDetectors(); }
 
   G4RotationMatrix identity ;
-    
-  // NOTE: xRot = rotation such that x axis->y axis & y axis->-x axis
-  //
-  // G4RotationMatrix xRot ;
-  // xRot.rotateZ(-pi*0.5) ;
-  // G4Transform3D transform(xRot,G4ThreeVector()) ;
-  
-
 
   G4Box* pb1 = new G4Box("b1",50*cm,50*cm,50*cm) ;
   G4Box* pb2 = new G4Box("b2",10*cm,10*cm,60*cm) ;
@@ -314,13 +325,12 @@ void Tst01DetectorConstruction::SwitchBoolean()
     }
   }
 
+  G4LogicalVolume*   testBoolLog =
+    new G4LogicalVolume(testBool,selectedMaterial,"testBoolLog",0,0,0) ;
 
-
-  G4LogicalVolume*   testBoolLog = new G4LogicalVolume(testBool,selectedMaterial,
-                                                "testBoolLog",0,0,0) ;
-
-  G4VPhysicalVolume* testBoolVol = new G4PVPlacement(0,G4ThreeVector(),
-                             "testBoolVol",testBoolLog,fWorldPhysVol,false,0);
+  G4VPhysicalVolume* testBoolVol =
+    new G4PVPlacement(0,G4ThreeVector(),"testBoolVol",
+                      testBoolLog,fWorldPhysVol,false,0);
 
   // daughters
   
@@ -338,17 +348,21 @@ void Tst01DetectorConstruction::SwitchBoolean()
     new G4PVPlacement(0,G4ThreeVector(0,0,0),
                       "testD2Vol",testD2Log,testBoolVol,false,0);  
 
+  G4RunManager::GetRunManager()->GeometryHasBeenModified();
 }
 
 //////////////////////////////////////////////////////////////////////
 //
 //
 
-void Tst01DetectorConstruction::SelectMaterial(G4String val)
+void Tst01DetectorConstruction::SelectMaterial(const G4String& val)
 {
   materialChoice = val;
   SelectMaterialPointer();
-  G4cout << "Daughter CSG/Boolean will be made of " << materialChoice << G4endl;
+  G4cout << G4endl;
+  G4cout << "---> Daughter CSG/Boolean will be made of "
+         << materialChoice << G4endl;
+  G4cout << G4endl;
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -409,51 +423,81 @@ void Tst01DetectorConstruction::SelectMaterialPointer()
 
 void Tst01DetectorConstruction::ConstructDetectors()
 {
-  //  SelectMaterialPointer();
 
-//   G4VSolid, G4LogicalVolume, G4VPhysicalVolume  
 //
 //   simpleBoxDetector 
+//
 
-  G4Box * mySimpleBox = new G4Box("SBox",2000*cm, 2000*cm, 2000*cm);
+  G4Box * mySimpleBox = new G4Box("SBox",wSize, wSize, wSize);
   simpleBoxLog = new G4LogicalVolume( mySimpleBox,Air,
-				      // selectedMaterial,
                                       "SLog",0,0,0);
-  simpleBoxDetector = new G4PVPlacement(0,G4ThreeVector(),
-                                        "SPhys",simpleBoxLog,0,false,0);
-
-
+  simpleBoxDetector = new G4PVPlacement(0,G4ThreeVector(),"SPhys",
+                                        simpleBoxLog,0,false,0);
 
 //
 //  honeycombDetector
 //
 
-  size_t i;
+  size_t i,j;
 
-  G4Box *myWorldBox= new G4Box("WBox",2000*cm, 2000*cm, 2000*cm);
+  G4Box *myWorldBox= new G4Box("WBox",wSize, wSize, wSize);
   G4Box *myCalBox = new G4Box("CBox",1500*cm, 1500*cm, 1000*cm);
   G4Tubs *myTargetTube 
      = new G4Tubs("TTube",0*cm, 22.5*cm, 1000*cm, 0.*deg, 360.*deg);
 
-  G4LogicalVolume *myWorldLog=new G4LogicalVolume(myWorldBox,Air,
-						    "WLog", 0, 0, 0);
-  G4LogicalVolume *myCalLog=new G4LogicalVolume(myCalBox,Al,
-						  "CLog", 0, 0, 0);
-  G4LogicalVolume *myTargetLog=new G4LogicalVolume(myTargetTube,Pb,
-						     "TLog", 0, 0, 0);
+  G4LogicalVolume *myWorldLog = new G4LogicalVolume(myWorldBox,Air,
+                                                    "WLog", 0, 0, 0);
+  G4LogicalVolume *myCalLog   = new G4LogicalVolume(myCalBox,Al,
+                                                    "CLog", 0, 0, 0);
+  G4LogicalVolume *myTargetLog= new G4LogicalVolume(myTargetTube,Pb,
+                                                    "TLog", 0, 0, 0);
 
-  honeycombDetector = new G4PVPlacement(0,G4ThreeVector(),
-						 "WPhys",
-						 myWorldLog,
-						 0,false,0);
+  honeycombDetector = new G4PVPlacement(0,G4ThreeVector(),"WPhys",
+                                        myWorldLog,0,false,0);
+
+  G4PVPlacement *myCalPhys=new G4PVPlacement(0,G4ThreeVector(),
+                                               "CalPhys",
+                                               myCalLog,
+                                               honeycombDetector,
+                                               false,0);
+  G4double offset=22.5*cm, xTlate, yTlate;
+  G4int copyNo=0;
+  for (j=1;j<=25;j++)
+  {
+    yTlate = -1000.0*cm - 40.0*cm + j*80.0*cm;
+    for (i=1;i<=50;i++)
+    {
+      std::stringstream tName1;
+      tName1 << "TPhysA_" << j << "_" << i  << std::ends;
+      xTlate = -1000.0*cm - 20.0*cm + i*45.0*cm - offset;
+      // G4PVPlacement *myTargetPhysA =
+         new G4PVPlacement(0,G4ThreeVector(xTlate,yTlate,0*cm),
+                           tName1.str().c_str(),myTargetLog,myCalPhys,
+                           false,copyNo++);
+    }
+  }
+  for (j=1;j<=26;j++)
+  {
+    yTlate = -1000.0*cm - 80.0*cm + j*80.0*cm;
+    for (i=1;i<=50;i++)
+    {
+      std::stringstream tName2;
+      tName2 << "TPhysB_" << j << "_" << i  << std::ends;
+      xTlate = -1000.0*cm - 20.0*cm + i*45.0*cm;
+      // G4PVPlacement *myTargetPhysB =
+         new G4PVPlacement(0,G4ThreeVector(xTlate,yTlate,0*cm),
+                           tName2.str().c_str(),myTargetLog,myCalPhys,
+                           false,copyNo++);
+    }
+  }
+
 //
 //  AssemblyDetector
 //
 
-
-  const double worldX              = 2000*mm;
-  const double worldY              = 2000*mm;
-  const double worldZ              = 2000*mm;
+  const double worldX              = wSize;
+  const double worldY              = wSize;
+  const double worldZ              = wSize;
 
   const double caloX               = 1600*mm;
   const double caloY               = 1600*mm;
@@ -467,17 +511,35 @@ void Tst01DetectorConstruction::ConstructDetectors()
 
   const double firstCaloPos        =  500*mm;
   const double caloCaloOffset      =   50*mm;
-  // const double plateCaloOffset     =    1*mm;
-  // const double platePlateOffset    =    2*mm;
 
   // Define world volume for Assembly detector
-  G4Box* AssemblyBox                   = new G4Box( "AssemblyBox", worldX/2., worldY/2., worldZ/2. );
-  AssemblyDetectorLog                  = new G4LogicalVolume( AssemblyBox, selectedMaterial, "AssemblyDetectorLog", 0, 0, 0);
-  AssemblyDetector                     = new G4PVPlacement(0, G4ThreeVector(), "AssemblyDetector", AssemblyDetectorLog, 0, false, 0);
+  //
+  G4Box* AssemblyWorldBox =
+    new G4Box( "AssemblyWorldBox", worldX, worldY, worldZ );
+  G4LogicalVolume* AssemblyWorldLog =
+    new G4LogicalVolume( AssemblyWorldBox, selectedMaterial,
+                        "AssemblyWorldLog", 0, 0, 0);
+  // G4VPhysicalVolume* AssemblyWorld    =
+    new G4PVPlacement(0, G4ThreeVector(), "AssemblyWorld",
+                      AssemblyWorldLog, 0, false, 0);
+
+  // The Assembly detector
+  //
+  G4Box* AssemblyBox   =
+    new G4Box( "AssemblyBox", worldX/2, worldY/2, worldZ/2 );
+  AssemblyDetectorLog  =
+    new G4LogicalVolume( AssemblyBox, selectedMaterial,
+                        "AssemblyDetectorLog", 0, 0, 0);
+  AssemblyDetector     =
+    new G4PVPlacement(0, G4ThreeVector(), AssemblyDetectorLog,
+                      "AssemblyDetector",
+                      AssemblyWorldLog, false, 0);
 
   // Define a calorimeter plate
-  G4Box* AssemblyCellBox = new G4Box( "AssemblyCellBox", plateX/2., plateY/2., plateZ/2. );
-  AssemblyCellLog        = new G4LogicalVolume( AssemblyCellBox, Pb, "AssemblyCellLog", 0, 0, 0 );
+  G4Box* AssemblyCellBox =
+    new G4Box( "AssemblyCellBox", plateX/2., plateY/2., plateZ/2. );
+  AssemblyCellLog        =
+    new G4LogicalVolume( AssemblyCellBox, Pb, "AssemblyCellLog", 0, 0, 0 );
   
   // Define one calorimeter layer as one assembly volume
   AssemblyCalo = new G4AssemblyVolume();
@@ -503,60 +565,27 @@ void Tst01DetectorConstruction::ConstructDetectors()
   AssemblyCalo->AddPlacedVolume( AssemblyCellLog, Ta, &Ra );
   
   // Now instantiate the layers of calorimeter
+  //
   for( i = 0; i < layers; i++ )
   {
     // Translation of the assembly inside the world
     G4ThreeVector Tm( 0,0,i*(caloZ + caloCaloOffset) - firstCaloPos );
-    AssemblyCalo->MakeImprint( AssemblyDetectorLog, Tm, &Rm );
+    AssemblyCalo->MakeImprint( AssemblyDetectorLog, Tm, &Rm, 0 );
   }
-
-  /*  *****************************************************
-
-  G4PVPlacement *myCalPhys=new G4PVPlacement(0,G4ThreeVector(),
-					       "CalPhys",
-					       myCalLog,
-                                               honeycombDetector,
-					       false,0);
-
-  G4String tName1("TPhys1");	// Allow all target physicals to share
-				// same name (delayed copy)
-  copyNo=0;
-  for (j=1;j<=25;j++)
-  {
-    yTlate = -1000.0*cm - 40.0*cm + j*80.0*cm;
-    for (i=1;i<=50;i++)
-    {
-      xTlate = -1000.0*cm - 20.0*cm + i*45.0*cm - offset;
-      G4PVPlacement *myTargetPhys
-        =new G4PVPlacement(0,G4ThreeVector(xTlate,yTlate,0*cm),
-                           tName1,myTargetLog,myCalPhys,false,copyNo++);
-    }
-  }
-  for (j=1;j<=26;j++)
-  {
-    yTlate = -1000.0*cm - 80.0*cm + j*80.0*cm;
-    for (i=1;i<=50;i++)
-    {
-      xTlate = -1000.0*cm - 20.0*cm + i*45.0*cm;
-      G4PVPlacement *myTargetPhys
-        =new G4PVPlacement(0,G4ThreeVector(xTlate,yTlate,0*cm),
-                           tName1,myTargetLog,myCalPhys,false,copyNo++);
-    }
-  }
-
-  ************************************************ */
+  G4cout << "Total imprinted physical volumes for AssemblyDetector-1: "
+         << AssemblyCalo->TotalImprintedVolumes() << G4endl;
 
   //
   //  AssemblyDetector2 (assembly of assemblies)
   //
   
-  G4double wSize = 1000.*cm;
   G4VSolid* worldS
     = new G4Box("worldS", wSize, wSize, wSize);
   G4LogicalVolume* worldV2
     = new G4LogicalVolume(worldS, Air, "worldV2");
   AssemblyDetector2
-    = new G4PVPlacement(0, G4ThreeVector(), worldV2, "world2", 0, false, 0); 
+    = new G4PVPlacement(0, G4ThreeVector(), worldV2,
+                        "world2", 0, false, 0); 
    
   // Make the elementary assembly of the whole structure
   // Use mother volume instead of assembly as Geant4 does not 
@@ -603,6 +632,7 @@ void Tst01DetectorConstruction::ConstructDetectors()
   rot1->rotateX(90.*deg);
   G4RotationMatrix *rot;
   G4AssemblyVolume* cell = new G4AssemblyVolume();
+
   // Make a hexagone cell out of 6 toothplates. These can zip togeather
   // without generating overlaps (they are self-contained)
   for (G4int i2=0; i2<6; i2++) {
@@ -616,7 +646,8 @@ void Tst01DetectorConstruction::ConstructDetectors()
   }   
 
   // Make a row as an assembly of cells, then combine rows in a honeycomb
-  // structure. This again works without any need to define rows as "overlapping"
+  // structure. This again works without any need to define rows as
+  // "overlapping"
   G4AssemblyVolume* row = new G4AssemblyVolume();
   G4int ncells = 5;
   for (G4int i3=0; i3<ncells; i3++) {
@@ -635,10 +666,12 @@ void Tst01DetectorConstruction::ConstructDetectors()
     G4double yrow = 0.5*dyrow;
     if ((i4%2)==0) yrow = -yrow;
     G4ThreeVector pos1(xrow, yrow, 0.);
-    row->MakeImprint(worldV2, pos1, 0);
+    row->MakeImprint(worldV2, pos1, 0, 0);
     G4ThreeVector pos2(-xrow, -yrow, 0.);
-    row->MakeImprint(worldV2, pos2, 0);
-  }        
+    row->MakeImprint(worldV2, pos2, 0, 0);
+  }
+  G4cout << "Total imprinted physical volumes for AssemblyDetector-2: "
+         << row->TotalImprintedVolumes() << G4endl;
 
   //
   //  AssemblyDetector3 (assembly with reflections)
@@ -669,18 +702,18 @@ void Tst01DetectorConstruction::ConstructDetectors()
    = HepGeom::Translate3D( 110.*cm,0., 0.)
    * HepGeom::RotateY3D( 90.*deg);
   assembly->AddPlacedVolume(consV, transform1);
- 
+
   HepGeom::Transform3D transform2
    = HepGeom::ReflectX3D()
    * HepGeom::Translate3D( 110.*cm,0., 0.)
    * HepGeom::RotateY3D( 90.*deg);
   assembly->AddPlacedVolume(consV, transform2);
-  
+
   HepGeom::Transform3D transform3
    = HepGeom::Translate3D( 0., 110.*cm, 0.)
    * HepGeom::RotateX3D(-90.*deg);
   assembly->AddPlacedVolume(consV, transform3);
- 
+
   HepGeom::Transform3D transform4
    = HepGeom::ReflectY3D()
    * HepGeom::Translate3D( 0., 110.*cm, 0.)
@@ -691,7 +724,10 @@ void Tst01DetectorConstruction::ConstructDetectors()
   //
   G4RotationMatrix* rotv = 0;
   G4ThreeVector posv;
-  assembly->MakeImprint(worldV3, posv, rotv);
+  assembly->MakeImprint(worldV3, posv, rotv, 0);
+
+  G4cout << "Total imprinted physical volumes for AssemblyDetector-3: "
+         << assembly->TotalImprintedVolumes() << G4endl;
 
 //
 // Visualization attributes 
