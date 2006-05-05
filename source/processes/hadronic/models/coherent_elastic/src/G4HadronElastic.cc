@@ -101,7 +101,7 @@ G4HadronElastic::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& targetN
 
 
   G4double plab = aParticle->GetTotalMomentum();
-  if (verboseLevel > -1) 
+  if (verboseLevel > 1) 
     G4cout << "G4HadronElastic::DoIt: Incident particle plab=" << plab/GeV << " GeV/c " 
 	   << " ekin(MeV) = " << aParticle->GetKineticEnergy()/MeV << "  " 
 	   << aParticle->GetDefinition()->GetParticleName() << G4endl;

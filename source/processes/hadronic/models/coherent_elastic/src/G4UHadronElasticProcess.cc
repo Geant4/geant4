@@ -105,8 +105,7 @@ G4double G4UHadronElasticProcess::GetMeanFreePath(const G4Track& track,
     G4int iz = G4int(elm->GetZ());
 
     // CHIPS cross sections
-    if((iz <= 2 && theParticle == theProton) || 
-       (iz == 1 && theParticle == theNeutron)) {
+    if(iz <= 2 && (theParticle == theProton || theParticle == theNeutron)) {
       G4double momentum = dp->GetTotalMomentum();
       if(iz == 1) {
 	G4IsotopeVector* isv = elm->GetIsotopeVector(); 
@@ -117,7 +116,6 @@ G4double G4UHadronElasticProcess::GetMeanFreePath(const G4Track& track,
 	  x = 0.0;
 	  for(G4int j=0; j<ni; j++) {
             G4int N = elm->GetIsotope(j)->GetN() - 1;
-	    if(theParticle == theNeutron) N = 0;
             if(N == 0 || N == 1) {
 	      if(verboseLevel>1) 
 		G4cout << "G4UHadronElasticProcess compute CHIPS CS for Z= 1, N= " 
@@ -223,13 +221,19 @@ G4VParticleChange* G4UHadronElasticProcess::PostStepDoIt(
   G4HadProjectile thePro(track);
   targetNucleus.SetParameters(A, Z);
   if(verboseLevel>1) 
-    G4cout << "G4UHadronElasticProcess for " << theParticle->GetParticleName() 
+    G4cout << "G4UHadronElasticProcess::PostStepDoIt for " 
+	   << theParticle->GetParticleName() 
 	   << " Target Z= " << Z 
 	   << " A= " << A << G4endl; 
 
   aParticleChange.Initialize(track);
   G4HadFinalState* result = hadi->ApplyYourself(thePro, targetNucleus);
-
+  /*
+  G4cout << "Efin= " << result->GetEnergyChange()
+  	 << " de= " << result->GetLocalEnergyDeposit()
+	 << " nsec= " << result->GetNumberOfSecondaries()
+	 << G4endl;
+  */
   aParticleChange.ProposeEnergy(result->GetEnergyChange());
   aParticleChange.ProposeMomentumDirection(result->GetMomentumChange()) ;
   if(result->GetNumberOfSecondaries() > 0) {
