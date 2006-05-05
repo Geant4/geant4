@@ -101,7 +101,7 @@ G4HadronElastic::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& targetN
 
 
   G4double plab = aParticle->GetTotalMomentum();
-  if (verboseLevel > 1) 
+  if (verboseLevel > -1) 
     G4cout << "G4HadronElastic::DoIt: Incident particle plab=" << plab/GeV << " GeV/c " 
 	   << " ekin(MeV) = " << aParticle->GetKineticEnergy()/MeV << "  " 
 	   << aParticle->GetDefinition()->GetParticleName() << G4endl;
@@ -157,9 +157,15 @@ G4HadronElastic::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& targetN
   }
 
   // Sample t
+  if(gtype == fQElastic) {
+    G4double cs = qCManager->GetCrossSection(false,plab,Z,N,projPDG);
+    if(cs > 0.0) t = GeV*qCManager->GetExchangeT(Z,N,projPDG);
+    else gtype = fSWave;
+  }
   if(gtype == fSWave)         t = G4UniformRand()*tmax;
-  else if(gtype == fLElastic) t = SampleT(ptotgev,m1,m2,atno2);
-  else if(gtype == fQElastic) t = GeV*qCManager->GetExchangeT(Z,N,projPDG);
+  else                        t = SampleT(ptotgev,m1,m2,atno2);
+
+  //G4cout <<"type= " << gtype <<" t= " << t << " tmax= " << tmax << G4endl;
 
   // Sampling in CM system
   G4double phi  = G4UniformRand()*twopi;
