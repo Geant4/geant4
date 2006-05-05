@@ -47,7 +47,6 @@ public:
                 planeGun           } ;
 
   Tst01PrimaryGeneratorAction();
-
  ~Tst01PrimaryGeneratorAction();
 
 public:
@@ -63,11 +62,6 @@ private:
   Tst01PrimaryGeneratorMessenger* messenger;
   G4ThreeVector fGunPosition ;
   G4double fPosition, fSize ;
-  G4VPhysicalVolume* worldVolume;
-  G4VPhysicalVolume* fDaughterVolume;
-  G4VisExtent worldExtent;
-  G4VisExtent fDaughterExtent;
-
 };
 
 ///////////////////////////////////////////////////////////////////
@@ -78,37 +72,10 @@ inline void
 Tst01PrimaryGeneratorAction::SetGunPosition(G4ThreeVector pGun) 
 { 
   fGunPosition = pGun ;
- 
   fPosition = std::sqrt( fGunPosition.x()*fGunPosition.x() +
-                    fGunPosition.y()*fGunPosition.y() +
-                    fGunPosition.z()*fGunPosition.z()     ) ;
-
-  G4cout<<"fPosition = "<<fPosition<<G4endl ;
-
-  // world extent
-
-  fDaughterVolume = G4TransportationManager::GetTransportationManager ()
-              -> GetNavigatorForTracking () -> GetWorldVolume ()
-              ->GetLogicalVolume() -> GetDaughter(0)     ;
-  if (fDaughterVolume) 
-  {  
-    fDaughterExtent = fDaughterVolume -> GetLogicalVolume () -> 
-                                         GetSolid () -> GetExtent ();
-
-    fSize = 0.6*std::sqrt( ( fDaughterExtent.GetXmax() - fDaughterExtent.GetXmin() )*
-                  ( fDaughterExtent.GetXmax() - fDaughterExtent.GetXmin() ) +
-
-                  ( fDaughterExtent.GetYmax() - fDaughterExtent.GetYmin() )*
-                  ( fDaughterExtent.GetYmax() - fDaughterExtent.GetYmin() ) +
-
-                  ( fDaughterExtent.GetZmax() - fDaughterExtent.GetZmin() )* 
-                  ( fDaughterExtent.GetZmax() - fDaughterExtent.GetZmin() )     ) ;
-  }
-  else
-  {
-    fSize = 0.0 ;
-  }
-  G4cout<<"fSize = "<<fSize<<G4endl ;
+                         fGunPosition.y()*fGunPosition.y() +
+                         fGunPosition.z()*fGunPosition.z()  ) ;
+  G4cout << "Absolute Gun Position = " << fPosition << G4endl;
 }
 
 #endif

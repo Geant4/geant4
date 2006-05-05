@@ -21,32 +21,26 @@
 // ********************************************************************
 //
 
-//
-//
-//
-//
-
 #include "Tst01PrimaryGeneratorAction.hh"
 
+#include "globals.hh"
+#include <CLHEP/Random/RandFlat.h>
+
 #include "Tst01PrimaryGeneratorMessenger.hh"
+#include "Tst01DetectorConstruction.hh"
 #include "G4Event.hh"
 #include "G4ParticleGun.hh"
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4TransportationManager.hh"
-#include "globals.hh"
-#include <CLHEP/Random/RandFlat.h>
 
 ////////////////////////////////////////////////////////////////////////
 //
 //
 
-Tst01PrimaryGeneratorAction::Tst01PrimaryGeneratorAction():
-  generatorAction (standardGun),
-  particleGun (0),
-  messenger (0),
-  fGunPosition(0.0, 0.0, 0.0),
-  worldVolume (0)
+Tst01PrimaryGeneratorAction::Tst01PrimaryGeneratorAction()
+ : generatorAction (standardGun), particleGun(0),
+   messenger(0), fGunPosition(0.0, 0.0, 0.0)
 {
   G4int n_particle = 1;
   particleGun = new G4ParticleGun(n_particle);
@@ -68,27 +62,11 @@ Tst01PrimaryGeneratorAction::Tst01PrimaryGeneratorAction():
 
   // world extent
 
-  worldVolume = G4TransportationManager::GetTransportationManager ()
-              -> GetNavigatorForTracking () -> GetWorldVolume ()     ;
-  if (worldVolume) 
-  {  
-    worldExtent = worldVolume -> GetLogicalVolume () -> 
-                                         GetSolid () -> GetExtent ();
+  Tst01DetectorConstruction detector;
+  G4double wSize = detector.GetWorldSize();
+  fSize = std::sqrt( wSize*wSize + wSize*wSize + wSize*wSize ) ;
 
-    fSize = std::sqrt( ( worldExtent.GetXmax() - worldExtent.GetXmin() )*
-                  ( worldExtent.GetXmax() - worldExtent.GetXmin() ) +
-
-                  ( worldExtent.GetYmax() - worldExtent.GetYmin() )*
-                  ( worldExtent.GetYmax() - worldExtent.GetYmin() ) +
-
-                  ( worldExtent.GetZmax() - worldExtent.GetZmin() )* 
-                  ( worldExtent.GetZmax() - worldExtent.GetZmin() )     ) ;
-  }
-  else
-  {
-    fSize = 0.0 ;
-  }
-  G4cout<<"fSize = "<<fSize<<G4endl ;
+  G4cout << "World Size factor = " << fSize << G4endl;
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -105,8 +83,7 @@ Tst01PrimaryGeneratorAction::~Tst01PrimaryGeneratorAction()
 //
 //
 
-void Tst01PrimaryGeneratorAction::SelectPrimaryGeneratorAction
-(Action action)
+void Tst01PrimaryGeneratorAction::SelectPrimaryGeneratorAction(Action action)
 {
   generatorAction = action;
 }
@@ -117,7 +94,6 @@ void Tst01PrimaryGeneratorAction::SelectPrimaryGeneratorAction
 
 void Tst01PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
-  G4VPhysicalVolume* currentWorldVolume;
   G4ThreeVector direction, position ;
   G4double costheta, sintheta, phi, cosphi, sinphi ;
 
@@ -144,46 +120,22 @@ void Tst01PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 //......................................................................
     case randomPositionGun:   
 
-    // Check if world is in place or has changed.
-    currentWorldVolume = 
-      G4TransportationManager::GetTransportationManager ()
-      -> GetNavigatorForTracking () -> GetWorldVolume ();
-
-    if (!worldVolume ||	worldVolume != currentWorldVolume) 
-    {
-      worldVolume = currentWorldVolume;
-      if (worldVolume) worldExtent = worldVolume -> GetLogicalVolume ()
-			 -> GetSolid () -> GetExtent ();
-    }
-
     particleGun->SetParticlePosition
       (G4ThreeVector
-       (CLHEP::RandFlat::shoot (worldExtent.GetXmin (), worldExtent.GetXmax ()),
-	CLHEP::RandFlat::shoot (worldExtent.GetYmin (), worldExtent.GetYmax ()),
-	CLHEP::RandFlat::shoot (worldExtent.GetZmin (), worldExtent.GetZmax ())));
+       (CLHEP::RandFlat::shoot(-fSize/2, fSize/2),
+	CLHEP::RandFlat::shoot(-fSize/2, fSize/2),
+	CLHEP::RandFlat::shoot(-fSize/2, fSize/2)));
 
     particleGun->GeneratePrimaryVertex(anEvent);
     break;
 //.................................................................
     case randomPositionAndDirectionGun:  
 
-    // Check if world is in place or has changed.
-    currentWorldVolume =
-      G4TransportationManager::GetTransportationManager ()
-      -> GetNavigatorForTracking () -> GetWorldVolume ();
-
-    if (!worldVolume ||	worldVolume != currentWorldVolume) 
-    {
-      worldVolume = currentWorldVolume;
-      if (worldVolume) worldExtent = worldVolume -> GetLogicalVolume ()
-			 -> GetSolid () -> GetExtent ();
-    }
-
     particleGun->SetParticlePosition
       (G4ThreeVector
-       (CLHEP::RandFlat::shoot (worldExtent.GetXmin (), worldExtent.GetXmax ()),
-	CLHEP::RandFlat::shoot (worldExtent.GetYmin (), worldExtent.GetYmax ()),
-	CLHEP::RandFlat::shoot (worldExtent.GetZmin (), worldExtent.GetZmax ())));
+       (CLHEP::RandFlat::shoot(-fSize/2, fSize/2),
+	CLHEP::RandFlat::shoot(-fSize/2, fSize/2),
+	CLHEP::RandFlat::shoot(-fSize/2, fSize/2)));
 
     costheta = CLHEP::RandFlat::shoot (-1., 1.);
     sintheta = std::sqrt (1. - costheta * costheta);
@@ -205,7 +157,8 @@ void Tst01PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
                                  -fGunPosition.y()/fPosition ,
                                  -fGunPosition.z()/fPosition    ) ;
 
-      costheta = CLHEP::RandFlat::shoot (fPosition/std::sqrt(fPosition*fPosition +
+      costheta = CLHEP::RandFlat::shoot(fPosition
+                                       /std::sqrt(fPosition*fPosition +
                                                   fSize*fSize), 1.);
       sintheta = std::sqrt (1. - costheta * costheta);
       phi      = CLHEP::RandFlat::shoot (twopi);
@@ -240,18 +193,16 @@ void Tst01PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
                                  -fGunPosition.z()/fPosition    ) ;
       particleGun->SetParticleMomentumDirection(direction) ;
 
-   // rho = fSize*CLHEP::RandFlat::shoot(0.0,1.0) ; phi = CLHEP::RandFlat::shoot (twopi) ; 
-   // cosphi   = std::cos (phi); sinphi   = std::sin (phi);
-   // position = G4ThreeVector(rho*cosphi,rho*sinphi,0.0) ;
-
-      position = G4ThreeVector(CLHEP::RandFlat::shoot (-0.5*fSize,0.5*fSize) ,
-                               CLHEP::RandFlat::shoot (-0.5*fSize,0.5*fSize) , 0.0 ) ;
+      position = G4ThreeVector(CLHEP::RandFlat::shoot(-0.5*fSize,0.5*fSize),
+                               CLHEP::RandFlat::shoot(-0.5*fSize,0.5*fSize),
+                               0.0) ;
       position.rotateUz(direction) ;
       particleGun->SetParticlePosition(fGunPosition+position) ;
     }
     else
     {
-      G4Exception("Invalid setting for plane gun in Tst01PrimaryGeneratorAction::GeneratePrimaries") ;
+      G4Exception("Tst01PrimaryGeneratorAction::GeneratePrimaries",
+                  "InvalidSetup", FatalException, "Invalid setting for gun");
     }
     particleGun->GeneratePrimaryVertex(anEvent);
     break ;
