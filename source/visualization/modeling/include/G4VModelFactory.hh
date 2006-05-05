@@ -19,7 +19,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VModelFactory.hh,v 1.3 2006-05-05 05:25:20 allison Exp $
+// $Id: G4VModelFactory.hh,v 1.4 2006-05-05 05:27:59 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Jane Tinslay, John Allison, Joseph Perl October 2005
@@ -83,7 +83,7 @@ template <typename T>
 void 
 G4VModelFactory<T>::Print(std::ostream& ostr) const
 {
-  ostr<<"  "<<fName<<std::endl; 
+  ostr<<fName<<G4endl; 
 } 
 
 #endif
