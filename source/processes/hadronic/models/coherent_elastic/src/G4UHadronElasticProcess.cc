@@ -189,7 +189,7 @@ G4VParticleChange* G4UHadronElasticProcess::PostStepDoIt(
     elm = (*theElementVector)[i];
   }
   G4double Z = elm->GetZ();
-  G4double A = elm->GetA();
+  G4double A = elm->GetN();
   G4int iz = G4int(Z);
 
   // Select isotope
@@ -219,12 +219,12 @@ G4VParticleChange* G4UHadronElasticProcess::PostStepDoIt(
 
   // Initialize the hadronic projectile from the track
   G4HadProjectile thePro(track);
-  targetNucleus.SetParameters(A, Z);
   if(verboseLevel>1) 
     G4cout << "G4UHadronElasticProcess::PostStepDoIt for " 
 	   << theParticle->GetParticleName() 
 	   << " Target Z= " << Z 
 	   << " A= " << A << G4endl; 
+  targetNucleus.SetParameters(A, Z);
 
   aParticleChange.Initialize(track);
   G4HadFinalState* result = hadi->ApplyYourself(thePro, targetNucleus);
