@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmCorrections.cc,v 1.15 2006-05-04 10:39:42 vnivanch Exp $
+// $Id: G4EmCorrections.cc,v 1.16 2006-05-05 17:18:09 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -55,6 +55,9 @@
 G4EmCorrections::G4EmCorrections()
 {
   Initialise();
+  particle = 0;
+  material = 0;
+  kinEnergy = 0.0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
