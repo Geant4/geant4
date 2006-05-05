@@ -136,7 +136,8 @@ void Tst01DetectorMessenger::SetNewValue( G4UIcommand* command ,
   if( command == switchCmd )
   {
     if(newValues=="SimpleBox" || newValues=="Honeycomb" || 
-       newValues=="Assembly" || newValues=="Assembly2" || newValues=="Assembly3" )
+       newValues=="Assembly" || newValues=="Assembly2" ||
+       newValues=="Assembly3" )
     { 
       myDetector->SelectDetector(newValues); 
     }
