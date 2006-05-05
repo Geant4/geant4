@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EventManager.cc,v 1.22 2005-11-21 23:45:48 asaim Exp $
+// $Id: G4EventManager.cc,v 1.23 2006-05-05 06:57:15 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -103,6 +103,7 @@ void G4EventManager::DoProcessing(G4Event* anEvent)
                 "Geometry is not closed : cannot process an event.");
     return;
   }
+  currentEvent = anEvent;
   stateManager->SetNewState(G4State_EventProc);
 
   // Reseting Navigator has been moved to G4Eventmanager, so that resetting
@@ -112,7 +113,6 @@ void G4EventManager::DoProcessing(G4Event* anEvent)
       G4TransportationManager::GetTransportationManager()->GetNavigatorForTracking();
   navigator->LocateGlobalPointAndSetup(center,0,false);
                                                                                       
-  currentEvent = anEvent;
   G4Track * track;
   G4TrackStatus istop;
 
@@ -250,9 +250,9 @@ void G4EventManager::DoProcessing(G4Event* anEvent)
   { sdManager->TerminateCurrentEvent(currentEvent->GetHCofThisEvent()); }
 
   if(userEventAction) userEventAction->EndOfEventAction(currentEvent);
-  currentEvent = 0;
 
   stateManager->SetNewState(G4State_GeomClosed);
+  currentEvent = 0;
   abortRequested = false;
 }
 
