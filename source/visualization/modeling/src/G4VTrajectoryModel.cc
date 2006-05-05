@@ -19,7 +19,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VTrajectoryModel.cc,v 1.1 2006-05-02 20:47:40 tinslay Exp $
+// $Id: G4VTrajectoryModel.cc,v 1.2 2006-05-05 01:46:33 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Jane Tinslay May 2006
@@ -28,6 +28,8 @@
 //
 #include "G4VTrajectoryModel.hh"
 #include "G4VisTrajContext.hh"
+
+#include <assert.h>
 
 G4VTrajectoryModel::G4VTrajectoryModel(const G4String& name, 
 				       G4VisTrajContext* context)
