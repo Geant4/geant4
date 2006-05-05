@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HadronInelasticQLHEP.hh,v 1.1 2006-05-04 16:48:39 vnivanch Exp $
+// $Id: G4HadronInelasticQLHEP.hh,v 1.2 2006-05-05 10:37:22 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -85,9 +85,13 @@ private:
   void Register(G4ParticleDefinition*, G4HadronicProcess*, 
 		G4HadronicInteraction*, const G4String&);
 
-  void AddLHEP(G4ParticleDefinition*,
-	       G4HadronicProcess*,
-	       G4double emin, G4double emax);
+  void AddLEP(G4ParticleDefinition*,
+	      G4HadronicProcess*,
+	      G4double emin, G4double emax);
+
+  void AddHEP(G4ParticleDefinition*,
+	      G4HadronicProcess*,
+	      G4double emin, G4double emax);
 
   G4PiNuclearCrossSection thePiCross;
   G4ProtonInelasticCrossSection  theXSecP;

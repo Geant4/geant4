@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HadronInelasticQLHEP.cc,v 1.1 2006-05-04 16:48:39 vnivanch Exp $
+// $Id: G4HadronInelasticQLHEP.cc,v 1.2 2006-05-05 10:37:22 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -87,6 +87,28 @@
 #include "G4LEXiMinusInelastic.hh"
 #include "G4LEXiZeroInelastic.hh"
 
+#include "G4HEAntiLambdaInelastic.hh"
+#include "G4HEAntiNeutronInelastic.hh"
+#include "G4HEAntiOmegaMinusInelastic.hh"
+#include "G4HEAntiProtonInelastic.hh"
+#include "G4HEAntiSigmaMinusInelastic.hh"
+#include "G4HEAntiSigmaPlusInelastic.hh"
+#include "G4HEAntiXiMinusInelastic.hh"
+#include "G4HEAntiXiZeroInelastic.hh"
+#include "G4HEKaonMinusInelastic.hh"
+#include "G4HEKaonPlusInelastic.hh"
+#include "G4HEKaonZeroInelastic.hh"
+#include "G4HENeutronInelastic.hh"
+#include "G4HELambdaInelastic.hh"
+#include "G4HEProtonInelastic.hh"
+#include "G4HEPionPlusInelastic.hh"
+#include "G4HEPionMinusInelastic.hh"
+#include "G4HEOmegaMinusInelastic.hh"
+#include "G4HESigmaMinusInelastic.hh"
+#include "G4HESigmaPlusInelastic.hh"
+#include "G4HEXiMinusInelastic.hh"
+#include "G4HEXiZeroInelastic.hh"
+
 #include "G4HadronProcessStore.hh"
 
 G4HadronInelasticQLHEP::G4HadronInelasticQLHEP(const G4String& name, 
@@ -133,7 +155,7 @@ void G4HadronInelasticQLHEP::ConstructProcess()
   if(bicFlag || bertFlag) minE = 9.5*GeV;
   if(hpFlag) minEcascade = 19.5*MeV;
   G4double minEstring    = 12.*GeV;
-  G4double maxEcascade   = 25.*GeV;
+  G4double maxELEP       = 25.*GeV;
 
   //Bertini
   G4HadronicInteraction* theBERT = 0;
@@ -204,9 +226,10 @@ void G4HadronInelasticQLHEP::ConstructProcess()
 	hp->AddDataSet(&theXSecP);
         if(qgsFlag) {
 	  Register(particle,hp,theQGSModel,"QGS");
-	  AddLHEP(particle, hp, minE, maxEcascade);
+	  AddLEP(particle, hp, minE, maxELEP);
 	} else {
-	  AddLHEP(particle, hp, minE, 100.*TeV);
+	  AddLEP(particle, hp, minE, 55.*GeV);
+	  AddHEP(particle, hp, 25.*GeV, 100.*TeV);
 	}
         if(bicFlag)       Register(particle,hp,theBIC,"Binary");
 	else if(bertFlag) Register(particle,hp,theBERT,"Bertini");
@@ -215,9 +238,10 @@ void G4HadronInelasticQLHEP::ConstructProcess()
 	hp->AddDataSet(&theXSecN);
         if(qgsFlag) {
 	  Register(particle,hp,theQGSModel,"QGS");
-	  AddLHEP(particle, hp, minE, maxEcascade);
+	  AddLEP(particle, hp, minE, maxELEP);
 	} else {
-	  AddLHEP(particle, hp, minE, 100.*TeV);
+	  AddLEP(particle, hp, minE, 55.*GeV);
+	  AddHEP(particle, hp, 25.*GeV, 100.*TeV);
 	}
 
 	G4HadronCaptureProcess* theNeutronCapture = 
@@ -241,12 +265,12 @@ void G4HadronInelasticQLHEP::ConstructProcess()
 
 	G4HadronicInteraction* theC = new G4LCapture();
 	theC->SetMinEnergy(minEcascade);
-	theC->SetMaxEnergy(maxEcascade);
+	//	theC->SetMaxEnergy(maxEcascade);
 	Register(particle,theNeutronCapture,theC,"LCapture");
 
 	G4HadronicInteraction* theF = new G4LFission();
 	theF->SetMinEnergy(minEcascade);
-	theF->SetMaxEnergy(maxEcascade);
+	//	theF->SetMaxEnergy(maxEcascade);
 	Register(particle,theNeutronFission,theF,"LFission");
 
         if(bicFlag)       Register(particle,hp,theBIC,"Binary");
@@ -256,9 +280,10 @@ void G4HadronInelasticQLHEP::ConstructProcess()
 	hp->AddDataSet(&thePiCross);
         if(qgsFlag) {
 	  Register(particle,hp,theQGSModel,"QGS");
-	  AddLHEP(particle, hp, minE, maxEcascade);
+	  AddLEP(particle, hp, minE, maxELEP);
 	} else {
-	  AddLHEP(particle, hp, minE, 100.*TeV);
+	  AddLEP(particle, hp, minE, 55.*GeV);
+	  AddHEP(particle, hp, 25.*GeV, 100.*TeV);
 	}
 	if(bertFlag) Register(particle,hp,theBERT,"Bertini");
 
@@ -269,15 +294,17 @@ void G4HadronInelasticQLHEP::ConstructProcess()
 
         if(qgsFlag) {
 	  Register(particle,hp,theQGSModel,"QGS");
-	  AddLHEP(particle, hp, minE, maxEcascade);
+	  AddLEP(particle, hp, minE, maxELEP);
 	} else {
-	  AddLHEP(particle, hp, minE, 100.*TeV);
+	  AddLEP(particle, hp, minE, 55.*GeV);
+	  AddHEP(particle, hp, 25.*GeV, 100.*TeV);
 	}
 	if(bertFlag) Register(particle,hp,theBERT,"Bertini");
 
       } else {
 
-	AddLHEP(particle, hp, 0.0, 100.*TeV);
+	AddLEP(particle, hp, 0.0, 55.*GeV);
+	AddHEP(particle, hp, 25.*GeV, 100.*TeV);
       }
 
       if(verbose > 1)
@@ -287,10 +314,10 @@ void G4HadronInelasticQLHEP::ConstructProcess()
   }
 }
 
-void G4HadronInelasticQLHEP::AddLHEP(G4ParticleDefinition* particle,
-				     G4HadronicProcess* hp,
-				     G4double emin,
-				     G4double emax)
+void G4HadronInelasticQLHEP::AddLEP(G4ParticleDefinition* particle,
+				    G4HadronicProcess* hp,
+				    G4double emin,
+				    G4double emax)
 {
   G4HadronicInteraction* hi = 0;
   G4String pname = particle->GetParticleName();
@@ -319,12 +346,53 @@ void G4HadronInelasticQLHEP::AddLHEP(G4ParticleDefinition* particle,
   else if(pname == "xi0"         ) hi = new G4LEXiZeroInelastic();
 
   if(hi) {
-    hp->RegisterMe(hi);
     hi->SetMinEnergy(emin);
     hi->SetMaxEnergy(emax);
     Register(particle,hp,hi,"LHEP");
   } else {
     G4cout << "### G4HadronInelasticTHEO: ERROR - no LHEP model for "
+           << pname << G4endl;
+  }
+}
+
+
+void G4HadronInelasticQLHEP::AddHEP(G4ParticleDefinition* particle,
+				    G4HadronicProcess* hp,
+				    G4double emin,
+				    G4double emax)
+{
+  G4HadronicInteraction* hi = 0;
+  G4String pname = particle->GetParticleName();
+
+  if(pname == "anti_lambda"      ) hi = new G4HEAntiLambdaInelastic();
+  else if(pname == "anti_neutron") hi = new G4HEAntiNeutronInelastic();
+  else if(pname == "anti_omega-" ) hi = new G4HEAntiOmegaMinusInelastic();
+  else if(pname == "anti_proton" ) hi = new G4HEAntiProtonInelastic();
+  else if(pname == "anti_sigma-" ) hi = new G4HEAntiSigmaMinusInelastic();
+  else if(pname == "anti_sigma+" ) hi = new G4HEAntiSigmaPlusInelastic();
+  else if(pname == "anti_xi-"    ) hi = new G4HEAntiXiMinusInelastic();
+  else if(pname == "anti_xi0"    ) hi = new G4HEAntiXiZeroInelastic();
+  else if(pname == "kaon-"       ) hi = new G4HEKaonMinusInelastic();
+  else if(pname == "kaon+"       ) hi = new G4HEKaonPlusInelastic();
+  else if(pname == "kaon0S"      ) hi = new G4HEKaonZeroInelastic();
+  else if(pname == "kaon0L"      ) hi = new G4HEKaonZeroInelastic();
+  else if(pname == "neutron"     ) hi = new G4HENeutronInelastic();
+  else if(pname == "lambda"      ) hi = new G4HELambdaInelastic();
+  else if(pname == "omega-"      ) hi = new G4HEOmegaMinusInelastic();
+  else if(pname == "proton"      ) hi = new G4HEProtonInelastic();
+  else if(pname == "pi+"         ) hi = new G4HEPionPlusInelastic();
+  else if(pname == "pi-"         ) hi = new G4HEPionMinusInelastic();
+  else if(pname == "sigma-"      ) hi = new G4HESigmaMinusInelastic();
+  else if(pname == "sigma+"      ) hi = new G4HESigmaPlusInelastic();
+  else if(pname == "xi-"         ) hi = new G4HEXiMinusInelastic();
+  else if(pname == "xi0"         ) hi = new G4HEXiZeroInelastic();
+
+  if(hi) {
+    hi->SetMinEnergy(emin);
+    hi->SetMaxEnergy(emax);
+    Register(particle,hp,hi,"HEP");
+  } else {
+    G4cout << "### G4HadronInelasticQLHEP: ERROR - no HEP model for "
            << pname << G4endl;
   }
 }
