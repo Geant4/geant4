@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelWorldScoringProcess.cc,v 1.1 2006-04-29 02:24:01 asaim Exp $
+// $Id: G4ParallelWorldScoringProcess.cc,v 1.2 2006-05-06 08:52:53 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -80,17 +80,25 @@ G4ParallelWorldScoringProcess::~G4ParallelWorldScoringProcess()
 void G4ParallelWorldScoringProcess::
 SetParallelWorld(G4String parallelWorldName)
 {
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// Get pointers of the parallel world and its navigator
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   fGhostWorldName = parallelWorldName;
   fGhostWorld = fTransportationManager->GetParallelWorld(fGhostWorldName);
   fGhostNavigator = fTransportationManager->GetNavigator(fGhostWorld);
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 }
 
 void G4ParallelWorldScoringProcess::
 SetParallelWorld(G4VPhysicalVolume* parallelWorld)
 {
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// Get pointer of navigator
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   fGhostWorldName = parallelWorld->GetName();
   fGhostWorld = parallelWorld;
   fGhostNavigator = fTransportationManager->GetNavigator(fGhostWorld);
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 }
 
 //------------------------------------------------------
@@ -100,7 +108,9 @@ SetParallelWorld(G4VPhysicalVolume* parallelWorld)
 //------------------------------------------------------
 void G4ParallelWorldScoringProcess::StartTracking(G4Track*trk)
 {
-  // Activate navigator
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// Activate navigator and get the navigator ID
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   if(fGhostNavigator)
   { fNavigatorID = fTransportationManager->ActivateNavigator(fGhostNavigator); }
   else
@@ -109,10 +119,14 @@ void G4ParallelWorldScoringProcess::StartTracking(G4Track*trk)
        "ProcParaWorld000",FatalException,
        "G4ParallelWorldScoringProcess is used for tracking without having a parallel world assigned");
   }
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-  // Setup touchables
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// Setup initial touchables
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   fPathFinder->Locate(trk->GetPosition(),trk->GetMomentumDirection());
   fOldGhostTouchable = fPathFinder->CreateTouchableHandle(fNavigatorID);
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   fGhostPreStepPoint->SetTouchableHandle(fOldGhostTouchable);
   fNewGhostTouchable = fOldGhostTouchable;
   fGhostPostStepPoint->SetTouchableHandle(fNewGhostTouchable);
@@ -210,16 +224,19 @@ G4VParticleChange* G4ParallelWorldScoringProcess::PostStepDoIt(
 
   if(fOnBoundary)
   {
-    // Locate the point and get new touchable
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// Locate the point and get new touchable
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     fPathFinder->Locate(step.GetPostStepPoint()->GetPosition(),
                         step.GetPostStepPoint()->GetMomentumDirection());
     fNewGhostTouchable = fPathFinder->CreateTouchableHandle(fNavigatorID);
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   }
   else
   {
-    // Do I need this ??????????????????????????????????????????????????????????
-    // fGhostNavigator->LocateGlobalPointWithinVolume(track.GetPosition());
-    // ?????????????????????????????????????????????????????????????????????????
+// Do I need this ??????????????????????????????????????????????????????????
+// fGhostNavigator->LocateGlobalPointWithinVolume(track.GetPosition());
+// ?????????????????????????????????????????????????????????????????????????
     // reuse the touchable
     fNewGhostTouchable = fOldGhostTouchable;
   }
@@ -281,8 +298,12 @@ G4double G4ParallelWorldScoringProcess::AlongStepGetPhysicalInteractionLength(
   else // (currentMinimumStep > fGhostSafety: I may limit the Step)
   {
     G4FieldTrackUpdator::Update(&fFieldTrack,&track);
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// ComputeStep
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     returnedStep = fPathFinder->ComputeStep(fFieldTrack,currentMinimumStep,fNavigatorID,
        track.GetCurrentStepNumber(),fGhostSafety,eLimited,endTrack);
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     if(eLimited == kDoNot)
     {
       returnedStep = fGhostSafety;
