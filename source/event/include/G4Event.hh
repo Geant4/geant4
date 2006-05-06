@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Event.hh,v 1.10 2004-06-11 14:11:15 gcosmo Exp $
+// $Id: G4Event.hh,v 1.11 2006-05-06 00:32:09 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -91,6 +91,10 @@ class G4Event
       // UserEventInformation (optional)
       G4VUserEventInformation* userInfo;
 
+      // Initial random number engine status
+      G4String randomNumberStatus;
+      G4bool validRandomNumberStatus;
+
   public:
       inline void SetEventID(G4int i)
       { eventID =  i; }
@@ -102,6 +106,11 @@ class G4Event
       { trajectoryContainer = value; }
       inline void SetEventAborted()
       { eventAborted = true; }
+      inline void SetRandomNumberStatus(G4String st)
+      {
+        randomNumberStatus = st;
+        validRandomNumberStatus = true;
+      }
   public: // with description
       inline G4int GetEventID() const
       { return eventID; }
@@ -153,6 +162,12 @@ class G4Event
       inline void SetUserInformation(G4VUserEventInformation* anInfo) { userInfo = anInfo; }
       inline G4VUserEventInformation* GetUserInformation() const { return userInfo; }
       //  Set and Get method of G4VUserEventInformation
+      inline const G4String& GetRandomNumberStatus() const 
+      {
+        if(!validRandomNumberStatus)
+        { G4Exception("Random number status is not available for this event."); }
+        return randomNumberStatus;
+      }
 };
 
 #if defined G4EVENT_ALLOC_EXPORT

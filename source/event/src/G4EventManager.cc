@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EventManager.cc,v 1.23 2006-05-05 06:57:15 asaim Exp $
+// $Id: G4EventManager.cc,v 1.24 2006-05-06 00:32:10 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -324,6 +324,8 @@ void G4EventManager::ProcessOneEvent(G4Event* anEvent)
   DoProcessing(anEvent);
 }
 
+#include "Randomize.hh"
+
 #ifdef CLHEP_HepMC         // Temporarly disabled
 #include "G4HepMCInterface.hh"
 void G4EventManager::ProcessOneEvent(const HepMC::GenEvent* hepmcevt,G4Event* anEvent)
@@ -334,6 +336,9 @@ void G4EventManager::ProcessOneEvent(const HepMC::GenEvent* hepmcevt,G4Event* an
   {
     anEvent = new G4Event();
     tempEvent = true;
+    std::ostringstream oss;
+    CLHEP::HepRandom::saveFullState(oss);
+    anEvent->SetRandomNumberStatus(oss.str());
   }
   G4HepMCInterface::HepMC2G4(hepmcevt,anEvent);
   DoProcessing(anEvent);
@@ -350,6 +355,9 @@ void G4EventManager::ProcessOneEvent(G4TrackVector* trackVector,G4Event* anEvent
   {
     anEvent = new G4Event();
     tempEvent = true;
+    std::ostringstream oss;
+    CLHEP::HepRandom::saveFullState(oss);
+    anEvent->SetRandomNumberStatus(oss.str());
   }
   StackTracks(trackVector,false);
   DoProcessing(anEvent);
