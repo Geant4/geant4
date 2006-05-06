@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.cc,v 1.89 2006-04-26 15:24:24 asaim Exp $
+// $Id: G4RunManager.cc,v 1.90 2006-05-06 00:31:54 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -83,6 +83,10 @@ G4RunManager::G4RunManager()
   G4ParticleTable::GetParticleTable()->CreateMessenger();
   G4ProcessTable::GetProcessTable()->CreateMessenger();
   randomNumberStatusDir = "./";
+  std::ostringstream oss;
+  HepRandom::saveFullState(oss);
+  randomNumberStatusForThisRun = oss.str();
+  randomNumberStatusForThisEvent = oss.str();
 }
 
 G4RunManager::~G4RunManager()
@@ -179,21 +183,26 @@ void G4RunManager::RunInitialization()
   if(fSDM)
   { currentRun->SetHCtable(fSDM->GetHCtable()); }
   
-  if(userRunAction) userRunAction->BeginOfRunAction(currentRun);
-
-  for(size_t itr=0;itr<previousEvents->size();itr++)
-  { delete (*previousEvents)[itr]; }
-  previousEvents->clear();
-  for(G4int i_prev=0;i_prev<n_perviousEventsToBeStored;i_prev++)
-  { previousEvents->push_back((G4Event*)0); }
-
-  runAborted = false;
+  std::ostringstream oss;
+  HepRandom::saveFullState(oss);
+  randomNumberStatusForThisRun = oss.str();
+  currentRun->SetRandomNumberStatus(randomNumberStatusForThisRun);
 
   if(storeRandomNumberStatus) {
     G4String fileN = randomNumberStatusDir + "currentRun.rndm"; 
     HepRandom::saveEngineStatus(fileN);
   }
   
+  for(size_t itr=0;itr<previousEvents->size();itr++)
+  { delete (*previousEvents)[itr]; }
+  previousEvents->clear();
+  for(G4int i_prev=0;i_prev<n_perviousEventsToBeStored;i_prev++)
+  { previousEvents->push_back((G4Event*)0); }
+
+  if(userRunAction) userRunAction->BeginOfRunAction(currentRun);
+
+  runAborted = false;
+
   if(verboseLevel>0) G4cout << "Start Run processing." << G4endl;
 }
 
@@ -247,6 +256,11 @@ G4Event* G4RunManager::GenerateEvent(G4int i_event)
   }
 
   G4Event* anEvent = new G4Event(i_event);
+
+  std::ostringstream oss;
+  HepRandom::saveFullState(oss);
+  randomNumberStatusForThisEvent = oss.str();
+  anEvent->SetRandomNumberStatus(randomNumberStatusForThisEvent);
 
   if(storeRandomNumberStatus) {
     G4String fileN = randomNumberStatusDir + "currentEvent.rndm"; 
@@ -321,7 +335,7 @@ void G4RunManager::InitializeGeometry()
 
   if(verboseLevel>1) G4cout << "userDetector->Construct() start." << G4endl;
   kernel->DefineWorldVolume(userDetector->Construct(),false);
-  userDetector->ConstructParallelGeometries();
+  //////////////////////////////////////////////userDetector->ConstructParallelGeometries();
   geometryInitialized = true;
 }
 

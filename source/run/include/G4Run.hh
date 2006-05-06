@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Run.hh,v 1.11 2005-09-19 16:53:53 asaim Exp $
+// $Id: G4Run.hh,v 1.12 2006-05-06 00:31:31 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -53,6 +53,7 @@ class G4Run
     G4int numberOfEventToBeProcessed;
     G4HCtable* HCtable;
     G4DCtable* DCtable;
+    G4String randomNumberStatus;
 
   public: // with description
     virtual void RecordEvent(const G4Event*);
@@ -76,6 +77,9 @@ class G4Run
     inline const G4DCtable* GetDCtable() const
     { return DCtable; }
     //  List of names of digi collection
+    inline const G4String& GetRandomNumberStatus() const
+    { return randomNumberStatus; }
+    // Return random number status at the beginning of this run
   public:
     inline void SetRunID(G4int id)
     { runID = id; }
@@ -85,6 +89,8 @@ class G4Run
     { HCtable = HCtbl; }
     inline void SetDCtable(G4DCtable* DCtbl)
     { DCtable = DCtbl; }
+    inline void SetRandomNumberStatus(G4String& st)
+    { randomNumberStatus = st; }
 };
 
 

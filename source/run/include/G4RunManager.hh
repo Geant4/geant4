@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.hh,v 1.40 2005-06-11 22:33:00 asaim Exp $
+// $Id: G4RunManager.hh,v 1.41 2006-05-06 00:31:40 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -243,6 +243,8 @@ class G4RunManager
 
     G4bool storeRandomNumberStatus;
     G4String randomNumberStatusDir;
+    G4String randomNumberStatusForThisRun;
+    G4String randomNumberStatusForThisEvent;
 
     G4VPhysicalVolume* currentWorld;
 
@@ -328,6 +330,10 @@ class G4RunManager
     }
     inline G4String GetRandomNumberStoreDir() const
     { return randomNumberStatusDir; }
+    inline const G4String& GetRandomNumberStatusForThisRun() const
+    { return randomNumberStatusForThisRun; }
+    inline const G4String& GetRandomNumberStatusForThisEvent() const
+    { return randomNumberStatusForThisEvent; }
 
   public: // with description
     inline void GeometryHasBeenModified()
