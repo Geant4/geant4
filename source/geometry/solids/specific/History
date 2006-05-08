@@ -1,4 +1,4 @@
-$Id: History,v 1.90 2006-05-04 16:37:47 gcosmo Exp $
+$Id: History,v 1.91 2006-05-08 12:20:17 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+08-May-2006, G.Cosmo (geom-specific-V08-00-07)
+- Cleared compilation warning on SUN-CC in G4TriangularFacet.cc.
 
 04-May-2006, G.Cosmo (geom-specific-V08-00-06)
 - Use different names for unit tests to avoid confusing liblist ...
