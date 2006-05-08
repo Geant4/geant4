@@ -139,8 +139,7 @@ G4HadronElastic::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& targetN
   lv0.boost(-bst);
   G4ThreeVector p1 = lv1.vect();
   G4double ptot = p1.mag();
-  G4double ptotgev = ptot/GeV;
-  G4double tmax = 4.0*ptotgev*ptotgev;
+  G4double tmax = 4.0*ptot*ptot;
   G4double t = 0.0;
 
   // Choose generator
@@ -156,14 +155,14 @@ G4HadronElastic::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& targetN
   // Sample t
   if(gtype == fQElastic) {
     G4double cs = qCManager->GetCrossSection(false,plab,Z,N,projPDG);
-    if(cs > 0.0) t = qCManager->GetExchangeT(Z,N,projPDG)/(GeV*GeV);
+    if(cs > 0.0) t = qCManager->GetExchangeT(Z,N,projPDG);
     else gtype = fSWave;
   }
 
   if(gtype == fSWave)         t = G4UniformRand()*tmax;
-  else                        t = SampleT(ptotgev,m1,m2,atno2);
+  else                        t = GeV*GeV*SampleT(ptot,m1,m2,atno2);
 
-  //G4cout <<"type= " << gtype <<" t= " << t << " tmax= " << tmax << G4endl;
+  //  G4cout <<"type= " << gtype <<" t= " << t << " tmax= " << tmax << G4endl;
 
   // Sampling in CM system
   G4double phi  = G4UniformRand()*twopi;

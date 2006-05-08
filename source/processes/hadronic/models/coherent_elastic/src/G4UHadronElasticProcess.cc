@@ -77,8 +77,9 @@ BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
 
 G4double G4UHadronElasticProcess::GetMeanFreePath(const G4Track& track, 
 						  G4double, 
-						  G4ForceCondition*)
+						  G4ForceCondition* cond)
 {
+  *cond = NotForced;
   const G4DynamicParticle* dp = track.GetDynamicParticle();
   const G4Material* material = track.GetMaterial();
   cross = 0.0;
@@ -107,7 +108,11 @@ G4double G4UHadronElasticProcess::GetMeanFreePath(const G4Track& track,
     xsec[i] = cross;
   }
   if(verboseLevel>1) 
-    G4cout << "G4UHadronElasticProcess cross(mb)= " << cross/millibarn << G4endl;
+    G4cout << "G4UHadronElasticProcess cross(1/mm)= " << cross 
+           << "  E(MeV)= " << dp->GetKineticEnergy()
+	   << "  " << theParticle->GetParticleName()
+           << "  in " << material->GetName()
+	   << G4endl;
   if(cross > DBL_MIN) x = 1./cross;
   else x = DBL_MAX;
 
@@ -164,6 +169,12 @@ G4double G4UHadronElasticProcess::GetMicroscopicCrossSection(
 	     << G4endl; 
     x = store->GetCrossSection(dp, elm, temp);
   }
+  if(verboseLevel>1) 
+    G4cout << "G4UHadronElasticProcess cross(mb)= " << x/millibarn 
+           << "  E(MeV)= " << dp->GetKineticEnergy()
+	   << "  " << theParticle->GetParticleName()
+           << "  in Z= " << iz
+	   << G4endl;
 
   return x;
 }
