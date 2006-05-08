@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HadronElasticPhysics.cc,v 1.4 2006-05-04 16:46:14 vnivanch Exp $
+// $Id: G4HadronElasticPhysics.cc,v 1.5 2006-05-08 07:49:20 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -85,8 +85,9 @@ void G4HadronElasticPhysics::ConstructProcess()
 
   G4HadronProcessStore* store = G4HadronProcessStore::Instance();
 
-  if(verbose > 1) G4cout << "### HadronElasticPhysics Construct Processes with the model <" 
-			 << mname << ">" << G4endl;
+  if(verbose > 1) 
+    G4cout << "### HadronElasticPhysics Construct Processes with the model <" 
+	   << mname << ">" << G4endl;
 
   G4double mThreshold = 130.*MeV;
   G4HadronicInteraction* model = 0;
@@ -94,6 +95,7 @@ void G4HadronElasticPhysics::ConstructProcess()
 
   if(mname == "elastic") model = new G4HadronElastic(edepLimit, pLimit);
   else                   model = new G4LElastic();
+  model->SetMaxEnergy(100.*TeV);
 
   theParticleIterator->reset();
   while( (*theParticleIterator)() )
@@ -102,8 +104,10 @@ void G4HadronElasticPhysics::ConstructProcess()
     G4ProcessManager* pmanager = particle->GetProcessManager();
     if(particle->GetPDGMass() > mThreshold && !particle->IsShortLived()) {
 
-      if(mname == "elastic") hel = new G4UHadronElasticProcess("hElastic", hpFlag);
-      else                   hel = new G4HadronElasticProcess();
+      if(mname == "elastic") 
+	hel = new G4UHadronElasticProcess("hElastic", hpFlag);
+      else                   
+	hel = new G4HadronElasticProcess();
 
       if( hel->IsApplicable(*particle)) { 
    

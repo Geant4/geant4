@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: QBBC.icc,v 1.5 2006-05-04 18:27:32 vnivanch Exp $
+// $Id: QBBC.icc,v 1.6 2006-05-08 07:49:20 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -69,6 +69,7 @@ template<class T> TQBBC<T>::TQBBC( G4int ver, const G4String& type,
   // Decays
   this->RegisterPhysics( new G4DecayPhysics("decay",ver) );
 
+  G4cout << "Register type " << type << G4endl;
    // Hadron Physics
   if(type == "QBBC") {
     this->RegisterPhysics( new G4HadronElasticPhysics("elastic",ver,flagHP));
@@ -83,11 +84,15 @@ template<class T> TQBBC<T>::TQBBC( G4int ver, const G4String& type,
     this->RegisterPhysics( new G4LHEPStoppingPhysics("stopping",ver));
     this->RegisterPhysics( new G4LHEPIonPhysics("ionLHEP"));
   } else if (type == "QGSP_EL") {
+    G4cout << "REgister type " << type << G4endl;
     this->RegisterPhysics( new G4HadronElasticPhysics("elastic",ver,flagHP));
     this->RegisterPhysics( new G4HadronInelasticQLHEP("inelastic", ver, 
 		true, false, false));
     this->RegisterPhysics( new G4LHEPStoppingPhysics("stopping",ver));
     this->RegisterPhysics( new G4LHEPIonPhysics("ionLHEP"));
+  } else {
+    G4cout << "QBBC Warning: NO Hadronic Physics Type <" << type
+           << ">" << G4endl;
   }
 }
 

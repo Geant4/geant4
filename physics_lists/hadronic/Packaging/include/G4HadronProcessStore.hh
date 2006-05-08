@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HadronProcessStore.hh,v 1.1 2006-05-04 16:48:39 vnivanch Exp $
+// $Id: G4HadronProcessStore.hh,v 1.2 2006-05-08 07:49:20 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -94,7 +94,7 @@ public:
 
   void Print(const G4ParticleDefinition*);
 
-  void Dump();
+  void Dump(G4int level);
 
   void SetVerbose(G4int val);
 

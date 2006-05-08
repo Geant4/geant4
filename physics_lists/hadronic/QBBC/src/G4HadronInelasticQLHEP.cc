@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HadronInelasticQLHEP.cc,v 1.2 2006-05-05 10:37:22 vnivanch Exp $
+// $Id: G4HadronInelasticQLHEP.cc,v 1.3 2006-05-08 07:49:20 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -150,32 +150,34 @@ void G4HadronInelasticQLHEP::ConstructProcess()
 
   if(verbose > 1) G4cout << "### HadronInelasticQLHEP Construct Process" << G4endl;
 
-  G4double minE          = 0.0*GeV;
-  G4double minEcascade   = 0.0*GeV;
-  if(bicFlag || bertFlag) minE = 9.5*GeV;
-  if(hpFlag) minEcascade = 19.5*MeV;
+  G4double minEneutron   = 0.0*GeV;
+  G4double minELEP       = 0.0*GeV;
+  G4double maxELEP       = 55.*GeV;
   G4double minEstring    = 12.*GeV;
-  G4double maxELEP       = 25.*GeV;
+  if(hpFlag) minEneutron = 19.5*MeV;
 
   //Bertini
   G4HadronicInteraction* theBERT = 0;
   if(bertFlag) {
+    minELEP = 9.5*GeV;
     theBERT = new G4CascadeInterface();
-    theBERT->SetMinEnergy(minEcascade);
+    theBERT->SetMinEnergy(0.0);
     theBERT->SetMaxEnergy(9.9*GeV);
   }
 
   //Binari
   G4HadronicInteraction* theBIC = 0;
   if(bicFlag) {
+    minELEP = 9.5*GeV;
     theBIC = new G4BinaryCascade();
-    theBIC->SetMinEnergy(minEcascade);
+    theBIC->SetMinEnergy(0.0);
     theBIC->SetMaxEnergy(9.9*GeV);
   }
 
   //QGSP
   G4TheoFSGenerator* theQGSModel = 0;
   if(qgsFlag) {
+    maxELEP     = 25.*GeV;
     theQGSModel = new G4TheoFSGenerator();
     theQGStringModel  = new G4QGSModel< G4QGSParticipants >;
     theQGStringDecay  = new G4ExcitedStringDecay(new G4QGSMFragmentation());
@@ -224,25 +226,20 @@ void G4HadronInelasticQLHEP::ConstructProcess()
 
       if(pname == "proton") {
 	hp->AddDataSet(&theXSecP);
-        if(qgsFlag) {
-	  Register(particle,hp,theQGSModel,"QGS");
-	  AddLEP(particle, hp, minE, maxELEP);
-	} else {
-	  AddLEP(particle, hp, minE, 55.*GeV);
-	  AddHEP(particle, hp, 25.*GeV, 100.*TeV);
-	}
+        if(qgsFlag) Register(particle,hp,theQGSModel,"QGS");
+	else        AddHEP(particle, hp, 25.*GeV, 100.*TeV);
+
+	AddLEP(particle, hp, minELEP, maxELEP);
+       
         if(bicFlag)       Register(particle,hp,theBIC,"Binary");
 	else if(bertFlag) Register(particle,hp,theBERT,"Bertini");
 
       } else if(pname == "neutron") {
 	hp->AddDataSet(&theXSecN);
-        if(qgsFlag) {
-	  Register(particle,hp,theQGSModel,"QGS");
-	  AddLEP(particle, hp, minE, maxELEP);
-	} else {
-	  AddLEP(particle, hp, minE, 55.*GeV);
-	  AddHEP(particle, hp, 25.*GeV, 100.*TeV);
-	}
+        if(qgsFlag) Register(particle,hp,theQGSModel,"QGS");
+	else        AddHEP(particle, hp, 25.*GeV, 100.*TeV);
+	
+	AddLEP(particle, hp, minELEP, maxELEP);
 
 	G4HadronCaptureProcess* theNeutronCapture = 
 	  new G4HadronCaptureProcess("nCapture");
@@ -264,27 +261,31 @@ void G4HadronInelasticQLHEP::ConstructProcess()
 	}
 
 	G4HadronicInteraction* theC = new G4LCapture();
-	theC->SetMinEnergy(minEcascade);
-	//	theC->SetMaxEnergy(maxEcascade);
+	theC->SetMinEnergy(minEneutron);
 	Register(particle,theNeutronCapture,theC,"LCapture");
 
 	G4HadronicInteraction* theF = new G4LFission();
-	theF->SetMinEnergy(minEcascade);
-	//	theF->SetMaxEnergy(maxEcascade);
+	theF->SetMinEnergy(minEneutron);
 	Register(particle,theNeutronFission,theF,"LFission");
 
-        if(bicFlag)       Register(particle,hp,theBIC,"Binary");
-	else if(bertFlag) Register(particle,hp,theBERT,"Bertini");
+        if(bicFlag) {
+	  G4BinaryCascade* theB = new G4BinaryCascade();
+	  theB->SetMinEnergy(minEneutron);
+	  theB->SetMaxEnergy(9.9*GeV);
+	  Register(particle,hp,theB,"Binary");
+	} else if(bertFlag) {
+	  G4CascadeInterface* theB = new G4CascadeInterface();
+	  theB->SetMinEnergy(minEneutron);
+	  theB->SetMaxEnergy(9.9*GeV);
+	  Register(particle,hp,theB,"Bertini");
+	}
 
       } else if(pname == "pi-" || pname == "pi+") {
 	hp->AddDataSet(&thePiCross);
-        if(qgsFlag) {
-	  Register(particle,hp,theQGSModel,"QGS");
-	  AddLEP(particle, hp, minE, maxELEP);
-	} else {
-	  AddLEP(particle, hp, minE, 55.*GeV);
-	  AddHEP(particle, hp, 25.*GeV, 100.*TeV);
-	}
+        if(qgsFlag) Register(particle,hp,theQGSModel,"QGS");
+	else        AddHEP(particle, hp, 25.*GeV, 100.*TeV);
+	
+	AddLEP(particle, hp, minELEP, maxELEP);
 	if(bertFlag) Register(particle,hp,theBERT,"Bertini");
 
       } else if(pname == "kaon-"     || 
@@ -292,19 +293,16 @@ void G4HadronInelasticQLHEP::ConstructProcess()
 		pname == "kaon0S"    || 
 		pname == "kaon0L") {
 
-        if(qgsFlag) {
-	  Register(particle,hp,theQGSModel,"QGS");
-	  AddLEP(particle, hp, minE, maxELEP);
-	} else {
-	  AddLEP(particle, hp, minE, 55.*GeV);
-	  AddHEP(particle, hp, 25.*GeV, 100.*TeV);
-	}
+        if(qgsFlag) Register(particle,hp,theQGSModel,"QGS");
+	else        AddHEP(particle, hp, 25.*GeV, 100.*TeV);
+       
+	AddLEP(particle, hp, minELEP, maxELEP);
 	if(bertFlag) Register(particle,hp,theBERT,"Bertini");
 
       } else {
 
-	AddLEP(particle, hp, 0.0, 55.*GeV);
 	AddHEP(particle, hp, 25.*GeV, 100.*TeV);
+	AddLEP(particle, hp, 0.0, 55.*GeV);
       }
 
       if(verbose > 1)
@@ -397,14 +395,17 @@ void G4HadronInelasticQLHEP::AddHEP(G4ParticleDefinition* particle,
   }
 }
 
-void G4HadronInelasticQLHEP::Register(G4ParticleDefinition* p, G4HadronicProcess* hp, 
-				      G4HadronicInteraction* hi, const G4String& m)
+void G4HadronInelasticQLHEP::Register(G4ParticleDefinition* p, 
+				      G4HadronicProcess* hp, 
+				      G4HadronicInteraction* hi, 
+				      const G4String& m)
 {
   hp->RegisterMe(hi);
   store->Register(hp,p,hi,m);
   if(verbose > 1)
     G4cout << "### QLHEP: Register new model " << m 
-	   << " for " << p->GetParticleName() << " and " << hp->GetProcessName()
+	   << " for " << p->GetParticleName() << " and " 
+	   << hp->GetProcessName()
 	   << " E(GeV) " << hi->GetMinEnergy()/GeV 
 	   << " - " << hi->GetMaxEnergy()/GeV << G4endl;
 }

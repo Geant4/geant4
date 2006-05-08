@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HadronProcessStore.cc,v 1.1 2006-05-04 16:48:39 vnivanch Exp $
+// $Id: G4HadronProcessStore.cc,v 1.2 2006-05-08 07:49:20 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -155,8 +155,8 @@ void G4HadronProcessStore::Register(G4HadronicProcess* proc,
   
   if(i == n_proc || j == n_part) 
     p_map.insert(std::make_pair(part,proc));
-  if(k == n_model || j == n_proc) 
-    m_map.insert(std::make_pair(proc,mod));
+
+  m_map.insert(std::make_pair(proc,mod));
     
   if(i == n_proc) {
     n_proc++;
@@ -175,14 +175,70 @@ void G4HadronProcessStore::Register(G4HadronicProcess* proc,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-void G4HadronProcessStore::Print(const G4ParticleDefinition*)
+void G4HadronProcessStore::Print(const G4ParticleDefinition* part)
 {
+  G4cout<<G4endl;
+  G4cout << "       Hadronic Processes for " 
+	 <<part->GetParticleName() << G4endl; 
+  HP hp = 0;
+  HI hi = 0;
+  G4bool first;
+  std::multimap<PD,HP,std::less<PD> >::iterator it;
+  std::multimap<HP,HI,std::less<HP> >::iterator ih;
+  for(it=p_map.lower_bound(part); it!=p_map.upper_bound(part); ++it) {
+    if(it->first == part) {
+      hp = it->second;
+      G4cout << std::setw(10) << hp->GetProcessName()  
+	     << "           Models:  ";
+      first = true;
+      for(ih=m_map.lower_bound(hp); ih!=m_map.upper_bound(hp); ++ih) {
+	if(ih->first == hp) {
+	  hi = ih->second;
+          G4int i=0;
+	  for(; i<n_model; i++) {
+	    if(model[i] == hi) break;
+	  }
+          if(!first) G4cout << "                              ";
+          first = false;
+          G4cout << std::setw(10) << modelName[i] 
+		 << "      Emin(GeV)= "  
+		 << std::setw(5) << hi->GetMinEnergy()/GeV
+		 << "      Emax(GeV)= " 
+		 << std::setw(7) << hi->GetMaxEnergy()/GeV
+		 << G4endl;
+	}
+      }
+    }
+  }  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-void G4HadronProcessStore::Dump()
+void G4HadronProcessStore::Dump(G4int level)
 {
+  if(level > 0) 
+    G4cout << "=============================================================="
+	   << "============================="
+	   << G4endl;
+  for(G4int i=0; i<n_part; i++) {
+    G4String pname = (particle[i])->GetParticleName();
+    G4bool yes = false;
+    if(level >= 2) yes = true;
+    else if(level == 1 && (pname == "proton" || 
+			   pname == "neutron" ||
+			   pname == "pi+" ||
+			   pname == "pi-" ||
+			   pname == "kaon+" ||
+			   pname == "kaon-" ||
+			   pname == "lambda" ||
+			   pname == "anti_neutron" ||
+			   pname == "anti_proton")) yes = true;
+    if(yes) Print(particle[i]);
+  }
+  if(level > 0) 
+    G4cout << "=============================================================="
+	   << "============================="
+	   << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
