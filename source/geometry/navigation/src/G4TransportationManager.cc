@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TransportationManager.cc,v 1.9 2006-05-08 12:07:32 gcosmo Exp $
+// $Id: G4TransportationManager.cc,v 1.10 2006-05-08 12:14:27 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -345,7 +345,8 @@ void G4TransportationManager::DeActivateNavigator( G4Navigator* aNavigator )
 // ----------------------------------------------------------------------------
 // InactivateAll()
 //
-// Inactivate all the navigators and clear the store of active navigators.
+// Inactivate all the navigators except for the tracking one, and clear the
+// store of active navigators.
 //
 void G4TransportationManager::InactivateAll( )
 {
@@ -355,6 +356,11 @@ void G4TransportationManager::InactivateAll( )
       (*pNav)->Activate(false);
    }
    fActiveNavigators.clear();
+
+   // Restore status for the navigator for tracking
+   //
+   fNavigators[0]->Activate(true);
+   fActiveNavigators.push_back(fNavigators[0]);
 }
 
 // ----------------------------------------------------------------------------
