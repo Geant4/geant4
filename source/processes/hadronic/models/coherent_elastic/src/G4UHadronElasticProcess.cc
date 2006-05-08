@@ -102,50 +102,7 @@ G4double G4UHadronElasticProcess::GetMeanFreePath(const G4Track& track,
 	   << G4endl; 
   for (G4int i=0; i<nelm; i++) {
     const G4Element* elm = (*theElementVector)[i];
-    G4int iz = G4int(elm->GetZ());
-
-    // CHIPS cross sections
-    if(iz <= 2 && (theParticle == theProton || theParticle == theNeutron)) {
-      G4double momentum = dp->GetTotalMomentum();
-      if(iz == 1) {
-	G4IsotopeVector* isv = elm->GetIsotopeVector(); 
-        G4int ni = 0;
-	if(isv) ni = isv->size();
-        if(ni > 0) {
-	  G4double* ab = elm->GetRelativeAbundanceVector();
-	  x = 0.0;
-	  for(G4int j=0; j<ni; j++) {
-            G4int N = elm->GetIsotope(j)->GetN() - 1;
-            if(N == 0 || N == 1) {
-	      if(verboseLevel>1) 
-		G4cout << "G4UHadronElasticProcess compute CHIPS CS for Z= 1, N= " 
-		       << N << G4endl; 
-	      G4double y = ab[j]*
-		qCManager->GetCrossSection(false,momentum,1,N,pPDG);
-	      xsecH[N] += y;
-	      x += y;
-	    }
-	  }
-	} else {
-	  if(verboseLevel>1) 
-	    G4cout << "G4UHadronElasticProcess compute CHIPS CS for Z= 1, N=0 " 
-		   << G4endl; 
-	  x = qCManager->GetCrossSection(false,momentum,1,0,pPDG);
-	  xsecH[0] += x;
-	}
-      } else {
-	if(verboseLevel>1) 
-	  G4cout << "G4UHadronElasticProcess compute CHIPS CS for Z= 2, N=2 " 
-		 << G4endl; 
-	x = qCManager->GetCrossSection(false,momentum,2,2,pPDG);
-      }
-    } else {
-      if(verboseLevel>1) 
-	G4cout << "G4UHadronElasticProcess compute GHAD CS for element " 
-	       << elm->GetName() 
-	       << G4endl; 
-      x = GetMicroscopicCrossSection(dp, elm, temp);
-    }
+    G4double x = GetMicroscopicCrossSection(dp, elm, temp);
     cross += theAtomNumDensityVector[i]*x;
     xsec[i] = cross;
   }
@@ -158,12 +115,57 @@ G4double G4UHadronElasticProcess::GetMeanFreePath(const G4Track& track,
 }
 
 G4double G4UHadronElasticProcess::GetMicroscopicCrossSection(
-                                  const G4DynamicParticle* aParticle, 
-				  const G4Element* anElement, 
-				  G4double aTemp)
+                                  const G4DynamicParticle* dp, 
+				  const G4Element* elm, 
+				  G4double temp)
 {
   // gives the microscopic cross section in GEANT4 internal units
-  return store->GetCrossSection(aParticle, anElement, aTemp);
+  G4int iz = G4int(elm->GetZ());
+  G4double x = 0.0;
+  // CHIPS cross sections
+  if(iz <= 2 && (theParticle == theProton || theParticle == theNeutron)) {
+    G4double momentum = dp->GetTotalMomentum();
+    if(iz == 1) {
+      G4IsotopeVector* isv = elm->GetIsotopeVector(); 
+      G4int ni = 0;
+      if(isv) ni = isv->size();
+      if(ni > 0) {
+	G4double* ab = elm->GetRelativeAbundanceVector();
+	x = 0.0;
+	for(G4int j=0; j<ni; j++) {
+	  G4int N = elm->GetIsotope(j)->GetN() - 1;
+	  if(N == 0 || N == 1) {
+	    if(verboseLevel>1) 
+	      G4cout << "G4UHadronElasticProcess compute CHIPS CS for Z= 1, N= " 
+		     << N << G4endl; 
+	    G4double y = ab[j]*
+	      qCManager->GetCrossSection(false,momentum,1,N,pPDG);
+	    xsecH[N] += y;
+	    x += y;
+	  }
+	}
+      } else {
+	if(verboseLevel>1) 
+	  G4cout << "G4UHadronElasticProcess compute CHIPS CS for Z= 1, N=0 " 
+		 << G4endl; 
+	x = qCManager->GetCrossSection(false,momentum,1,0,pPDG);
+	  xsecH[0] = x;
+      }
+    } else {
+      if(verboseLevel>1) 
+	G4cout << "G4UHadronElasticProcess compute CHIPS CS for Z= 2, N=2 " 
+	       << G4endl; 
+      x = qCManager->GetCrossSection(false,momentum,2,2,pPDG);
+    }
+  } else {
+    if(verboseLevel>1) 
+      G4cout << "G4UHadronElasticProcess compute GHAD CS for element " 
+	     << elm->GetName() 
+	     << G4endl; 
+    x = store->GetCrossSection(dp, elm, temp);
+  }
+
+  return x;
 }
 
 G4VParticleChange* G4UHadronElasticProcess::PostStepDoIt(
@@ -235,7 +237,7 @@ G4VParticleChange* G4UHadronElasticProcess::PostStepDoIt(
 	 << G4endl;
   */
   aParticleChange.ProposeEnergy(result->GetEnergyChange());
-  aParticleChange.ProposeMomentumDirection(result->GetMomentumChange()) ;
+  aParticleChange.ProposeMomentumDirection(result->GetMomentumChange());
   if(result->GetNumberOfSecondaries() > 0) {
     aParticleChange.SetNumberOfSecondaries(1);
     G4DynamicParticle* p = result->GetSecondary(0)->GetParticle();

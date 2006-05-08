@@ -145,13 +145,10 @@ G4HadronElastic::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& targetN
 
   // Choose generator
   G4ElasticGenerator gtype = fLElastic;
-  if (theParticle == theProton && Z <= 2) {
+  if ((theParticle == theProton || theParticle == theNeutron) && Z <= 2) {
     gtype = fQElastic;
     if(Z == 1 && N == 2) N = 1;
     else if (Z == 2 && N == 1) N = 2;
-  } else if(theParticle == theNeutron && Z == 1) {
-    gtype = fQElastic;
-    N = 0;
   } else if(plab < plablim) {
     gtype = fSWave;
   }
@@ -159,9 +156,10 @@ G4HadronElastic::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& targetN
   // Sample t
   if(gtype == fQElastic) {
     G4double cs = qCManager->GetCrossSection(false,plab,Z,N,projPDG);
-    if(cs > 0.0) t = GeV*qCManager->GetExchangeT(Z,N,projPDG);
+    if(cs > 0.0) t = GeV*GeV*qCManager->GetExchangeT(Z,N,projPDG);
     else gtype = fSWave;
   }
+
   if(gtype == fSWave)         t = G4UniformRand()*tmax;
   else                        t = SampleT(ptotgev,m1,m2,atno2);
 
