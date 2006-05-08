@@ -21,13 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4FieldTrack.cc,v 1.10 2006-04-28 15:46:36 japost Exp $
+// $Id: G4FieldTrack.cc,v 1.11 2006-05-08 18:00:14 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 
 #include "G4FieldTrack.hh"
-#include "G4ChargeState.hh"
 
 std::ostream& operator<<( std::ostream& os, const G4FieldTrack& SixVec)
 {
@@ -120,4 +119,29 @@ void G4FieldTrack::
   //      left to hang loose in this alpha implementation  ---    JA, 28 Apr 2006
 }
 
+// Implementation methods for the embedded class G4ChargeState
+//                                ----------------------------
 
+G4FieldTrack::G4ChargeState::G4ChargeState(G4double charge,
+			     G4double magnetic_dipole_moment,  
+			     G4double electric_dipole_moment,  
+			     G4double magnetic_charge)
+{
+   fCharge= charge;
+   fMagn_dipole= magnetic_dipole_moment;
+   fElec_dipole= electric_dipole_moment;
+   fMagneticCharge= magnetic_charge;    
+}  
+
+void 
+G4FieldTrack::G4ChargeState::SetChargeAndMoments(G4double charge, 
+				   G4double magnetic_dipole_moment,   // default: do not change
+				   G4double electric_dipole_moment,   // 
+				   G4double magnetic_charge )
+        //  Revise the charge and potentially all moments
+{
+   fCharge= charge;
+   if( magnetic_dipole_moment < DBL_MAX) fMagn_dipole= magnetic_dipole_moment;
+   if( electric_dipole_moment < DBL_MAX) fElec_dipole= electric_dipole_moment;
+   if( magnetic_charge < DBL_MAX)        fMagneticCharge= magnetic_charge;    
+}
