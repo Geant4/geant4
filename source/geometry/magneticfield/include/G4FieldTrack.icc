@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FieldTrack.icc,v 1.16 2006-04-28 13:23:51 japost Exp $
+// $Id: G4FieldTrack.icc,v 1.17 2006-05-08 18:23:29 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -53,6 +53,8 @@ G4FieldTrack::G4FieldTrack( const G4FieldTrack&  rStVec  )
   SixVector[3]= rStVec.SixVector[3];
   SixVector[4]= rStVec.SixVector[4];
   SixVector[5]= rStVec.SixVector[5];
+
+  fpChargeState= 0;
 }
 
 inline
@@ -292,6 +294,7 @@ G4FieldTrack & G4FieldTrack::operator = ( const G4FieldTrack& rStVec )
   //  SetMomentumModulus( rStVec.GetMomentumModulus());
   SetMomentumDir( rStVec.fMomentumDir );
 
+  fpChargeState= rStVec.fpChargeState;
   return *this;
 }
 
