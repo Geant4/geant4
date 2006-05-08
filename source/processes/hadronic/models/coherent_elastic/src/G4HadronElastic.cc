@@ -156,7 +156,7 @@ G4HadronElastic::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& targetN
   // Sample t
   if(gtype == fQElastic) {
     G4double cs = qCManager->GetCrossSection(false,plab,Z,N,projPDG);
-    if(cs > 0.0) t = GeV*GeV*qCManager->GetExchangeT(Z,N,projPDG);
+    if(cs > 0.0) t = qCManager->GetExchangeT(Z,N,projPDG)/(GeV*GeV);
     else gtype = fSWave;
   }
 
