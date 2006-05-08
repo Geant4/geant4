@@ -104,6 +104,7 @@ void StatAccepTestAnalysis::init() {
 
   if ( tuple ) tuple->reset();
   longitudinalProfile.clear();
+  primaryParticleId = 0;
   beamEnergy  = 0.0;
   sumEdepAct  = 0.0;
   sumEdepAct2 = 0.0;
@@ -793,6 +794,7 @@ void StatAccepTestAnalysis::fillNtuple( float incidentParticleId,
 					float incidentParticleEnergy, 
 					float totalEnergyDepositedInActiveLayers,
 					float totalEnergyDepositedInCalorimeter ) {
+  primaryParticleId = static_cast< G4int >( incidentParticleId );
   beamEnergy = incidentParticleEnergy;
   if ( totalEnergyDepositedInCalorimeter - beamEnergy > 0.001*MeV ) {
     G4cout << "\t ***ENERGY-NON-CONSERVATION*** " 
@@ -1755,6 +1757,7 @@ void StatAccepTestAnalysis::finish() {
   // only for these two variables.
 
   // Print results. 
+  G4cout << " Primary particle PDG Id = " << primaryParticleId << G4endl;
   G4cout << " Beam energy [MeV] = " << beamEnergy << G4endl;
 
   // Check for the energy conservation by comparing the beam energy

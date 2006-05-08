@@ -75,6 +75,14 @@ void StatAccepTestEventAction::EndOfEventAction(const G4Event* evt){
   int incidentParticleId = theSteppingAction->getPrimaryParticleId();
   G4double incidentParticleEnergy = theSteppingAction->getPrimaryParticleEnergy();
 
+  if ( evt->GetEventID() == 0 ) {
+    G4cout << "\t -------------------------------" << G4endl
+           << "\t Beam Particle PDG Id = " << incidentParticleId << G4endl
+           << "\t Beam Particle Energy = " << incidentParticleEnergy / GeV
+           << " GeV" << G4endl
+           << "\t -------------------------------" << G4endl;
+  }
+
   theSteppingAction->reset();
 
   // Fill the histograms/ntuple.

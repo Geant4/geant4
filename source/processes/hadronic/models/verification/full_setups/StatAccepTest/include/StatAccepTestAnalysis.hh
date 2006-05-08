@@ -103,6 +103,7 @@ private:
   // deposits and the sum of the square of energy deposits.
   // We also consider the maximum total energy deposit in an event,
   // to check for energy non conservation.
+  G4int primaryParticleId;
   G4double beamEnergy;
   G4double sumEdepAct, sumEdepAct2;
   G4double sumEdepTot, sumEdepTot2, maxEdepTot;
