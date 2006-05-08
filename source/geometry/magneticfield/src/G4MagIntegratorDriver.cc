@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagIntegratorDriver.cc,v 1.42 2004-12-02 09:55:20 gcosmo Exp $
+// $Id: G4MagIntegratorDriver.cc,v 1.43 2006-05-08 14:56:58 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -108,6 +108,7 @@ G4MagInt_Driver::~G4MagInt_Driver()
 
 // To add much printing for debugging purposes, uncomment this:
 // #define  G4DEBUG_FIELD 1    
+// and set verbose level to 1 or higher value !
 
 G4bool
 G4MagInt_Driver::AccurateAdvance(G4FieldTrack& y_current,
@@ -172,7 +173,7 @@ G4MagInt_Driver::AccurateAdvance(G4FieldTrack& y_current,
      G4ThreeVector StartPos( y[0], y[1], y[2] );   
 #    ifdef G4DEBUG_FIELD
        for(i=0;i<nvar;i++) ySubStepStart[i] = y[i] ;
-       yFldTrkStart.LoadFromArray(y);
+       yFldTrkStart.LoadFromArray(y, fNoIntegrationVariables);
        yFldTrkStart.SetCurveLength(x);
 #    endif
 
@@ -193,13 +194,13 @@ G4MagInt_Driver::AccurateAdvance(G4FieldTrack& y_current,
         //--------------------------------------
         lastStepSucceeded= (hdid == h);   
 #ifdef  G4DEBUG_FIELD
-  	  if(dbg>2) PrintStatus( ySubStepStart, x1, y, x, h,  nstp); // Only
+  	  if(dbg>2) PrintStatus( ySubStepStart, xSubStart, y, x, h,  nstp); // Only
 #endif
      }else{
         G4FieldTrack yFldTrk( G4ThreeVector(0,0,0), 
 			      G4ThreeVector(0,0,0), 0., 0., 0., 0. );
         G4double dchord_step, dyerr, dyerr_len;  //  Must figure what to do with these
-	yFldTrk.LoadFromArray(y); 
+	yFldTrk.LoadFromArray(y, fNoIntegrationVariables); 
         yFldTrk.SetCurveLength( x );
 
         QuickAdvance( yFldTrk, dydx, h, dchord_step, dyerr_len ); 
@@ -242,7 +243,8 @@ G4MagInt_Driver::AccurateAdvance(G4FieldTrack& y_current,
      G4ThreeVector EndPos( y[0], y[1], y[2] );
 
 #ifdef  G4DEBUG_FIELD
-     if(dbg && (nstp>nStpPr)) {
+     if( (dbg>0) && (dbg<=2) && (nstp>nStpPr)) {
+       if( nstp==nStpPr ) G4cout << "***** Many steps ****" << G4endl;
        G4cout << "hdid="  << std::setw(12) << hdid  << " "
 	      << "hnext=" << std::setw(12) << hnext << " " << G4endl;
        PrintStatus( ystart, x1, y, x, h, (nstp==nStpPr) ? -nstp: nstp); 
@@ -281,20 +283,13 @@ G4MagInt_Driver::AccurateAdvance(G4FieldTrack& y_current,
             (std::fabs(hstep) > Hmin())     //   and if we are asked, it's OK
             //   && (hnext < hstep * PerThousand ) 
 	  ){
-             if(dbg>0){ 
-		//  Issue WARNING
-		WarnSmallStepSize( hnext, hstep, h, x-x1, nstp ); 
-		// G4cerr << "Mid:SmallStep> ";
+             if(dbg>0){    // G4cerr << "Mid:SmallStep> ";
+		WarnSmallStepSize( hnext, hstep, h, x-x1, nstp );  
 		PrintStatus( ystart, x1, y, x, hstep, no_warnings?nstp:-nstp);
 	     }
 	     no_warnings++;
 	   }
 #endif
-        // else 
-	//   succeeded = false;  // Meaningful only if we break out of the loop.
-	// 
-        // lastStep = true;   //  Make this the last step ... Dubious now
-
         // Make sure that the next step is at least Hmin.
         h = Hmin();
      }else{
@@ -312,7 +307,7 @@ G4MagInt_Driver::AccurateAdvance(G4FieldTrack& y_current,
   for(i=0;i<nvar;i++)  yEnd[i] = y[i] ;
 
   // Put back the values.
-  y_current.LoadFromArray( yEnd );
+  y_current.LoadFromArray( yEnd, fNoIntegrationVariables );
   y_current.SetCurveLength( x );
 
   if(nstp > fMaxNoSteps){
@@ -531,32 +526,6 @@ G4MagInt_Driver::OneGoodStep(      G4double y[],        // InOut
 }   // end of  OneGoodStep .............................
 
 //----------------------------------------------------------------------
-
-#ifdef QUIK_ADVANCE_NEW2
-// QuickAdvance just tries one Step - it does not ensure accuracy
-//
-//   This original interface does not return individual element errors
-//    It is kept only for compatibility, and will be obsolete as of G4 6.0
-//
-G4bool  G4MagInt_Driver::QuickAdvance(       
-			    G4FieldTrack& y_posvel,         // INOUT
-		            const G4double     dydx[],  
-		                  G4double     hstep,       // In
-			          G4double&    dchord_step,
-			          G4double&    dyerr )
-{
-    G4double dyerr_pos_sq=0.0, dyerr_mom_rel_sq=0.0; // dyerr_ener_sq=0.0;
-    G4double dyerr_pos; 
-
-    QuickAdvance( y_posvel,  dydx,  hstep,      
-		  dchord_step, dyerr_pos_sq, dyerr_mom_rel_sq);
-                          //  , dyerr_ener_sq ); 
-    ... 
-    // Calculate dyerr from the above -- as at the end of the func below
-}
-#endif
-
-//----------------------------------------------------------------------
 // QuickAdvance just tries one Step - it does not ensure accuracy
 //
 G4bool  G4MagInt_Driver::QuickAdvance(       
@@ -607,8 +576,15 @@ G4bool  G4MagInt_Driver::QuickAdvance(
     //                         *********
 
     // Put back the values.
-    y_posvel.LoadFromArray( yarrout );   //  yarrout ==> y_posvel
+    y_posvel.LoadFromArray( yarrout, fNoIntegrationVariables );   //  yarrout ==> y_posvel
     y_posvel.SetCurveLength( s_start + hstep );
+
+#ifdef  G4DEBUG_FIELD
+    if(fVerboseLevel>2) {
+       G4cout << "G4MagIntDrv: Quick Advance" << G4endl;
+       PrintStatus( yarrin, s_start, yarrout, s_start+hstep, hstep,  1); 
+    }
+#endif
 
     // A single measure of the error   
     //      TO-DO :  account for  energy,  spin, ... ? 
@@ -739,9 +715,9 @@ void G4MagInt_Driver::PrintStatus( const G4double*   StartArr,
    G4FieldTrack  StartFT(G4ThreeVector(0,0,0), G4ThreeVector(0,0,0), 0., 0., 0., 0. );
    G4FieldTrack  CurrentFT (StartFT);
 
-   StartFT.LoadFromArray( StartArr); 
+   StartFT.LoadFromArray( StartArr, fNoIntegrationVariables); 
    StartFT.SetCurveLength( xstart);
-   CurrentFT.LoadFromArray( CurrentArr); 
+   CurrentFT.LoadFromArray( CurrentArr, fNoIntegrationVariables); 
    CurrentFT.SetCurveLength( xcurrent );
 
    PrintStatus(StartFT, CurrentFT, requestStep, subStepNo ); 
@@ -771,8 +747,10 @@ void G4MagInt_Driver::PrintStatus(
     G4double step_len= CurrentFT.GetCurveLength() 
                          - StartFT.GetCurveLength();
     G4double subStepSize = step_len;
+
+    // G4cout << " G4MagInt_Driver: Current Position  and  Direction" << G4endl;
      
-    if( (subStepNo <= 0) && (verboseLevel <= 3) )
+    if( (subStepNo <= 1) || (verboseLevel > 3) )
     {
        subStepNo = - subStepNo;        // To allow printing banner
 
@@ -787,7 +765,7 @@ void G4MagInt_Driver::PrintStatus(
 	      << std::setw( 8) << " N_x " << " "
 	      << std::setw( 8) << " N_y " << " "
 	      << std::setw( 8) << " N_z " << " "
-	      << std::setw( 7) << " N^2-1 " << " "
+	      << std::setw( 8) << " N^2-1 " << " "
 	      << std::setw(10) << " N(0).N " << " "
 	      << std::setw( 7) << "KinEner " << " "
 	      << std::setw(12) << "Track-l" << " "   // Add the Sub-step ??
@@ -795,8 +773,10 @@ void G4MagInt_Driver::PrintStatus(
 	      << std::setw(12) << "Step-len" << " " 
 	      << std::setw( 9) << "ReqStep" << " "  
 	      << G4endl;
+    }
 
-        PrintStat_Aux( StartFT,  requestStep, 0., 
+    if( (subStepNo <= 0) ){
+       PrintStat_Aux( StartFT,  requestStep, 0., 
 		       0,        0.0,         1.0);
         //*************
     }
@@ -849,7 +829,7 @@ void G4MagInt_Driver::PrintStat_Aux(
 	   << std::setw( 8) << UnitVelocity.y() << " "
 	   << std::setw( 8) << UnitVelocity.z() << " ";
     G4int oldprec= G4cout.precision(3);
-    G4cout << std::setw( 7) << UnitVelocity.mag2()-1.0 << " ";
+    G4cout << std::setw( 8) << UnitVelocity.mag2()-1.0 << " ";
     G4cout.precision(6);
     G4cout << std::setw(10) << dotVeloc_StartCurr << " ";
     G4cout.precision(oldprec);
