@@ -178,7 +178,6 @@ void G4NucleiModel::generateModel(G4double a,
     std::vector<G4double> vp(number_of_zones, pion_vp);
     zone_potentials.push_back(vp);
 
-#ifdef G4BERTINI_KAON
     // kaon potential (primitive)
     std::vector<G4double> kp(number_of_zones, -0.015);
     zone_potentials.push_back(kp);
@@ -186,7 +185,6 @@ void G4NucleiModel::generateModel(G4double a,
     // hyperon potential (primitive)
     std::vector<G4double> hp(number_of_zones, 0.03);
     zone_potentials.push_back(hp);
-#endif
 
   } else { // a < 4
     number_of_zones = 1;
@@ -231,7 +229,6 @@ void G4NucleiModel::generateModel(G4double a,
     std::vector<G4double> vp(number_of_zones, pion_vp_small);
     zone_potentials.push_back(vp);
   
-#ifdef G4BERTINI_KAON
     // kaon potential (primitive)
     std::vector<G4double> kp(number_of_zones, -0.015);
     zone_potentials.push_back(kp);
@@ -239,7 +236,6 @@ void G4NucleiModel::generateModel(G4double a,
     // hyperon potential (primitive)
     std::vector<G4double> hp(number_of_zones, 0.03);
     zone_potentials.push_back(hp);
-#endif
 
   }; 
   nuclei_radius = zone_radii[zone_radii.size() - 1];
@@ -495,17 +491,13 @@ partners G4NucleiModel::generateInteractionPartners(G4CascadParticle& cparticle)
 
     dummy_convertor.setBullet(pmom, pmass);
   
-#ifdef G4BERTINI_KAON
     G4int rtype;
-#endif
 
     for (G4int ip = 1; ip < 3; ip++) { 
       G4InuclElementaryParticle particle = generateNucleon(ip, zone);
       dummy_convertor.setTarget(particle.getMomentum(), particle.getMass());
       G4double ekin = dummy_convertor.getKinEnergyInTheTRS();
       G4double csec = crossSection(ekin, ptype * ip);
-
-#ifdef G4BERTINI_KAON
       rtype = ptype*ip;
 
       if ( (rtype > 10 && rtype < 14) || (rtype > 14 && rtype < 63) ) {
@@ -559,7 +551,6 @@ partners G4NucleiModel::generateInteractionPartners(G4CascadParticle& cparticle)
                  << rtype << G4endl;
         }
       }
-#endif
 
       if(verboseLevel > 2){
 	G4cout << " ip " << ip << " ekin " << ekin << " csec " << csec << G4endl;
@@ -938,11 +929,9 @@ void G4NucleiModel::boundaryTransition(G4CascadParticle& cparticle) {
     G4int next_zone = cparticle.movingInsideNuclei() ? zone - 1 : zone + 1;
 
     G4double dv = getPotential(type,zone) - getPotential(type, next_zone);
-#ifdef G4BERTINI_KAON
     //    G4cout << "Potentials for type " << type << " = " 
     //           << getPotential(type,zone) << " , "
     //	   << getPotential(type,next_zone) << G4endl;
-#endif
 
     G4double qv = dv * dv - 2.0 * dv * mom[0] + pr * pr;
 

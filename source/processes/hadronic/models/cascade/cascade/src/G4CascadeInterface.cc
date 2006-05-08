@@ -83,15 +83,11 @@ G4HadFinalState* G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack
   // Make conversion between native Geant4 and Bertini cascade classes.
   // NOTE: Geant4 units are MeV = 1 and GeV = 1000. Cascade code by default use GeV = 1.
 
-#ifdef G4BERTINI_KAON
   enum particleType { nuclei = 0, proton = 1, neutron = 2, pionPlus = 3,
                       pionMinus = 5, pionZero = 7, photon = 10,
                       kaonPlus = 11, kaonMinus = 13, kaonZero = 15,
                       kaonZeroBar = 17, lambda = 21, sigmaPlus = 23,
                       sigmaZero = 25, sigmaMinus = 27, xiZero = 29, xiMinus = 31 };
-#else
-  enum particleType { nuclei = 0, proton = 1, neutron = 2, pionPlus = 3, pionMinus = 5, pionZero = 7, photon = 10 };
-#endif
 
   G4int bulletType = 0;
 
@@ -102,8 +98,6 @@ G4HadFinalState* G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack
   if (aTrack.GetDefinition() == G4PionMinus::PionMinus() ) bulletType = pionMinus;
   if (aTrack.GetDefinition() ==  G4PionZero::PionZero()  ) bulletType = pionZero;
   if (aTrack.GetDefinition() ==     G4Gamma::Gamma()     ) bulletType = photon;
-
-#ifdef G4BERTINI_KAON
   if (aTrack.GetDefinition() == G4KaonPlus::KaonPlus()     ) bulletType = kaonPlus;
   if (aTrack.GetDefinition() == G4KaonMinus::KaonMinus()   ) bulletType = kaonMinus;
   if (aTrack.GetDefinition() == G4Lambda::Lambda()         ) bulletType = lambda;
@@ -121,7 +115,6 @@ G4HadFinalState* G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack
       bulletType = kaonZeroBar;
     }
   }
-#endif
 
   // Code momentum and energy.
   G4double px,py,pz;
@@ -145,13 +138,9 @@ G4HadFinalState* G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack
 
   sumEnergy = bullet->getKineticEnergy(); // In GeV 
 
-#ifdef G4BERTINI_KAON
   if (bulletType == proton || bulletType == neutron || bulletType == lambda ||
       bulletType == sigmaPlus || bulletType == sigmaZero || bulletType == sigmaMinus ||
       bulletType == xiZero || bulletType == xiMinus) {
-#else
-  if (bulletType == proton || bulletType == neutron) {
-#endif
 
     sumBaryon += 1;
   } 
@@ -209,19 +198,13 @@ G4HadFinalState* G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack
 
 	targetH = new G4InuclElementaryParticle(targetMomentum, 1);
 
-#ifdef G4BERTINI_KAON
 	G4float cutElastic[32];
-#else
-	G4float cutElastic[8];
-#endif
 
 	cutElastic[proton   ] = 1.0; // GeV
 	cutElastic[neutron  ] = 1.0;
 	cutElastic[pionPlus ] = 0.6;
 	cutElastic[pionMinus] = 0.2;
 	cutElastic[pionZero ] = 0.2;
-
-#ifdef G4BERTINI_KAON
         cutElastic[kaonPlus ] = 0.5;
         cutElastic[kaonMinus] = 0.5;
         cutElastic[kaonMinus] = 0.5;
@@ -233,7 +216,6 @@ G4HadFinalState* G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack
         cutElastic[sigmaMinus] = 1.0;
         cutElastic[xiZero] = 1.0;
         cutElastic[xiMinus] = 1.0;
-#endif
 
 	if (momentumBullet[3] > cutElastic[bulletType]) { // inelastic collision possible
 
@@ -304,11 +286,7 @@ G4HadFinalState* G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack
       G4ThreeVector aMom(mom[1], mom[2], mom[3]);
       aMom = aMom.unit();
 
-#ifdef G4BERTINI_KAON
       if (ipart->baryon() ) {
-#else
-      if (outgoingParticle == proton ||  outgoingParticle == neutron) {
-#endif
 	sumBaryon -= 1;
       }
 
@@ -369,7 +347,7 @@ G4HadFinalState* G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack
 #endif
 	break;
 
-#ifdef G4BERTINI_KAON
+
       case kaonPlus:
         cascadeParticle =
           new G4DynamicParticle(G4KaonPlus::KaonPlusDefinition(), aMom, ekin);
@@ -433,7 +411,6 @@ G4HadFinalState* G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack
         cascadeParticle =
          new G4DynamicParticle(G4XiMinus::XiMinusDefinition(), aMom, ekin);
         break;
-#endif
 
       default:
         G4cout << " ERROR: G4CascadeInterface::Propagate undefined particle type"

@@ -29,7 +29,6 @@
 #include "G4CascadSpecialFunctions.hh"
 #include "G4LorentzConvertor.hh"
 
-#ifdef G4BERTINI_KAON
 #include "G4CascadeKplusPChannel.hh"
 #include "G4CascadeKplusNChannel.hh"
 #include "G4CascadeKzeroPChannel.hh"
@@ -50,7 +49,6 @@
 #include "G4CascadeXiZeroNChannel.hh"
 #include "G4CascadeXiMinusPChannel.hh"
 #include "G4CascadeXiMinusNChannel.hh"
-#endif
 
 using namespace G4InuclSpecialFunctions;
 using namespace G4CascadSpecialFunctions;
@@ -66,7 +64,6 @@ public:
 
 private:
 
-#ifdef G4BERTINI_KAON 
   G4CascadeKplusPChannel kpp;
   G4CascadeKplusNChannel kpn;
   G4CascadeKzeroPChannel k0p;
@@ -87,7 +84,6 @@ private:
   G4CascadeXiZeroNChannel x0n;
   G4CascadeXiMinusPChannel xmp;
   G4CascadeXiMinusNChannel xmn;
-#endif
 
   G4int verboseLevel;
   G4int generateMultiplicity(G4int is, 
@@ -108,18 +104,11 @@ private:
   G4bool reChargering(G4double ekin, 
 		      G4int is) const;
 
-#ifdef G4BERTINI_KAON
+
   std::vector<G4double> particleSCMmomentumFor2to2(G4int is, 
 			             G4int kw, 
 				     G4double ekin,
-				     G4double pscm,
-				     G4int outgoing_product) const; 
-#else 
-  std::vector<G4double> particleSCMmomentumFor2to2(G4int is,
-                                              G4int kw,
-                                              G4double ekin,
-                                              G4double pscm) const;
-#endif
+				     G4double pscm) const; 
     
   G4int getElasticCase(G4int is, 
 		       G4int kw, 
@@ -129,11 +118,11 @@ private:
 						G4int mult, 
 						G4double ekin) const;
 
-#ifdef G4BERTINI_KAON 
+
   std::vector<G4int> generateStrangeChannelPartTypes(G4int is, 
 						G4int mult, 
 						G4double ekin) const;
-#endif
+
 
   G4double getMomModuleFor2toMany(G4int is, 
 				  G4int mult, 

@@ -94,11 +94,7 @@ G4CollisionOutput G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
       ekin_in = bparticle->getKineticEnergy();
       zfin += bparticle->getCharge();
 
-#ifdef G4BERTINI_KAON
       if (bparticle->baryon()) afin += 1.0;
-#else
-      if (bparticle->nucleon()) afin += 1.0;
-#endif
 
       cascad_particles.push_back(model.initializeCascad(bparticle));
 
@@ -227,13 +223,7 @@ G4CollisionOutput G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
       for (G4int j = 0; j < 4; j++) momentum_out[j] += mom[j];
 
       zfin -= ipart->getCharge();
-
-#ifdef G4BERTINI_KAON
       if (ipart->baryon()) afin -= 1.0;
-#else
-      if (ipart->nucleon()) afin -= 1.0;
-#endif
-
     };
 
     if (verboseLevel > 3) {

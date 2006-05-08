@@ -109,7 +109,6 @@ public:
     return particleType <= 2; 
   };
 
-#ifdef G4BERTINI_KAON
   G4bool baryon() const { 
     return (particleType == 1  ||
             particleType == 2  ||
@@ -120,7 +119,6 @@ public:
             particleType == 29 ||
             particleType == 31 );
   };
-#endif
 
   G4bool pion() const { 
 
@@ -160,8 +158,6 @@ public:
     case 10: // photon
       mass = 0.0;
       break;
-
-#ifdef G4BERTINI_KAON
     case 11: // k+
       mass = 0.49368;
       break;
@@ -192,8 +188,6 @@ public:
     case 31: // xi-
       mass = 1.3213;
       break;
-#endif
-
     case 111: // PP
       mass = 0.93827 + 0.93827;
       break;
@@ -234,8 +228,6 @@ public:
     case 10: // photon
       charge = 0.0;
       break;
-
-#ifdef G4BERTINI_KAON
     case 11: // k+
       charge = 1.0;
       break;
@@ -266,8 +258,6 @@ public:
     case 31: // xi-
       charge = -1.0;
       break;
-#endif
-
     case 111: // PP
       charge = 2.0;
       break;
@@ -286,7 +276,6 @@ public:
   };
 
 
-#ifdef G4BERTINI_KAON
   G4double getStrangeness(G4int type) const {
 
     G4double strangeness;
@@ -356,7 +345,7 @@ public:
         
     return strangeness;
   };
-#endif 
+
 
   G4double getParticleMass(G4int type) const {
 
@@ -381,8 +370,6 @@ public:
     case 10: // photon
       mass = 0.0;
       break;
-
-#ifdef G4BERTINI_KAON
     case 11: // k+
       mass = 0.49368;
       break;
@@ -413,8 +400,6 @@ public:
     case 31: // xi-
       mass = 1.3213;
       break;
-#endif
-
     case 111: // PP
       mass = 0.93827 + 0.93827;
       break;
