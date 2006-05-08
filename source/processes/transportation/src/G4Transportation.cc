@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Transportation.cc,v 1.55 2006-02-06 16:14:17 japost Exp $
+// $Id: G4Transportation.cc,v 1.56 2006-05-08 09:32:04 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // ------------------------------------------------------------
@@ -348,18 +348,24 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
             if( (no_large_ediff% warnModulo) == 0 )
             {
                no_warnings++;
-               G4cout << "WARNING - G4Transportation::AlongStepGetPIL()" << G4endl
-	              << "   Energy changed in Step, more than 1/1000: " << G4endl
-                      << "          Start= " << startEnergy   << G4endl
-                      << "          End= "   << endEnergy     << G4endl
-                      << "          Relative change= "
-                      << (startEnergy-endEnergy)/startEnergy << G4endl;
+               G4cout << "WARNING - G4Transportation::AlongStepGetPIL() " 
+	              << "   Energy change in Step is above 1^-3 relative value. " << G4endl
+		      << "   Relative change in 'tracking' step = " 
+		      << std::setw(15) << (endEnergy-startEnergy)/startEnergy << G4endl
+                      << "     Starting E= " << std::setw(12) << startEnergy / MeV << " MeV " << G4endl
+                      << "     Ending   E= " << std::setw(12) << endEnergy   / MeV << " MeV " << G4endl;       
                G4cout << " Energy has been corrected -- however, review"
-                      << " field propagation parameters for accuracy." << G4endl;
+                      << " field propagation parameters for accuracy."  << G4endl;
+	       if( (fVerboseLevel > 2 ) || (no_warnings<4) || (no_large_ediff == warnModulo * moduloFactor) ){
+		 G4cout << " These include EpsilonStepMax(/Min) in G4FieldManager "
+			<< " which determine fractional error per step for integrated quantities. " << G4endl
+			<< " Note also the influence of the permitted number of integration steps."
+			<< G4endl;
+	       }
                G4cerr << "ERROR - G4Transportation::AlongStepGetPIL()" << G4endl
 	              << "        Bad 'endpoint'. Energy change detected"
-                      << " and corrected,"                      << G4endl
-                      << "        occurred already "
+                      << " and corrected. " 
+		      << " Has occurred already "
                       << no_large_ediff << " times." << G4endl;
                if( no_large_ediff == warnModulo * moduloFactor )
                {
@@ -428,6 +434,12 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
 G4VParticleChange* G4Transportation::AlongStepDoIt( const G4Track& track,
                                                     const G4Step&  stepData )
 {
+  static G4int noCalls=0;
+  static const G4ParticleDefinition* fOpticalPhoton =
+           G4ParticleTable::GetParticleTable()->FindParticle("opticalphoton");
+
+  noCalls++;
+
   fParticleChange.Initialize(track) ;
 
   //  Code for specific process 
@@ -455,8 +467,6 @@ G4VParticleChange* G4Transportation::AlongStepDoIt( const G4Track& track,
      G4double initialVelocity = stepData.GetPreStepPoint()->GetVelocity() ;
      G4double stepLength      = track.GetStepLength() ;
 
-     static const G4ParticleDefinition* fOpticalPhoton =
-           G4ParticleTable::GetParticleTable()->FindParticle("opticalphoton");
      const G4DynamicParticle* fpDynamicParticle = track.GetDynamicParticle();
      if (fpDynamicParticle->GetDefinition()== fOpticalPhoton)
      {
@@ -518,12 +528,23 @@ G4VParticleChange* G4Transportation::AlongStepDoIt( const G4Track& track,
 		 << G4endl
 		 << "   This track has " << track.GetKineticEnergy() / MeV
 		 << " MeV energy." << G4endl;
+	  G4cout << "   Number of trials = " << fNoLooperTrials 
+		 << "   No of calls to AlongStepDoIt = " << noCalls 
+		 << G4endl;
 	}
 #endif
 	fNoLooperTrials=0; 
       }
       else{
 	fNoLooperTrials ++; 
+#ifdef G4VERBOSE
+	if( (fVerboseLevel > 2) ){
+	  G4cout << "   Transportation::AlongStepDoIt(): Particle looping -  "
+		 << "   Number of trials = " << fNoLooperTrials 
+		 << "   No of calls to  = " << noCalls 
+		 << G4endl;
+	}
+#endif
       }
   }else{
       fNoLooperTrials=0; 
