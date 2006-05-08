@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TransportationManager.hh,v 1.6 2006-04-28 13:29:20 gcosmo Exp $
+// $Id: G4TransportationManager.hh,v 1.7 2006-05-08 12:07:31 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4TransportationManager
@@ -74,7 +74,7 @@ class G4TransportationManager
 
      G4VPhysicalVolume* GetParallelWorld ( const G4String& worldName );
        // Return an exact copy of the tracking world volume. If already
-       // existing just return the pointerq
+       // existing just return the pointer
 
      G4VPhysicalVolume* IsWorldExisting ( const G4String& worldName );
        // Verify existance or not of an istance of the world volume with
@@ -89,6 +89,7 @@ class G4TransportationManager
      void DeRegisterNavigator( G4Navigator* aNavigator );
      G4int  ActivateNavigator( G4Navigator* aNavigator );
      void DeActivateNavigator( G4Navigator* aNavigator );
+     void InactivateAll();
        // Methods for handling navigators. Navigator for tracking is always the
        // first, i.e. position 0 in the collection and cannot be de-registered
 

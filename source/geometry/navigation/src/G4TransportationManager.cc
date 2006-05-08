@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TransportationManager.cc,v 1.8 2006-05-02 09:03:07 gcosmo Exp $
+// $Id: G4TransportationManager.cc,v 1.9 2006-05-08 12:07:32 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -340,6 +340,21 @@ void G4TransportationManager::DeActivateNavigator( G4Navigator* aNavigator )
    {
       fActiveNavigators.erase(pActiveNav);
    }
+}
+
+// ----------------------------------------------------------------------------
+// InactivateAll()
+//
+// Inactivate all the navigators and clear the store of active navigators.
+//
+void G4TransportationManager::InactivateAll( )
+{
+   std::vector<G4Navigator*>::iterator pNav;
+   for (pNav=fActiveNavigators.begin(); pNav!=fActiveNavigators.end(); pNav++)
+   {
+      (*pNav)->Activate(false);
+   }
+   fActiveNavigators.clear();
 }
 
 // ----------------------------------------------------------------------------
