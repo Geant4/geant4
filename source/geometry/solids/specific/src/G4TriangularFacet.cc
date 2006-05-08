@@ -21,7 +21,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4TriangularFacet.cc,v 1.3 2006-03-03 10:15:59 gcosmo Exp $
+// $Id: G4TriangularFacet.cc,v 1.4 2006-05-08 12:20:02 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -139,9 +139,9 @@ G4TriangularFacet::~G4TriangularFacet ()
 //
 G4VFacet *G4TriangularFacet::GetClone ()
 {
-  G4TriangularFacet *c = new G4TriangularFacet (P0, P[0], P[1], ABSOLUTE);
+  G4TriangularFacet *fc = new G4TriangularFacet (P0, P[0], P[1], ABSOLUTE);
   G4VFacet *cc         = 0;
-  cc                   = c;
+  cc                   = fc;
   return cc;
 }
 
