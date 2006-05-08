@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QElasticCrossSection.cc,v 1.4 2006-05-03 09:30:21 mkossov Exp $
+// $Id: G4QElasticCrossSection.cc,v 1.5 2006-05-08 16:51:03 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -127,6 +127,7 @@ G4double G4QElasticCrossSection::CalculateCrossSection(G4bool CS,G4int F,G4int I
 	 else                                  // This isotope wasn't initialized => CREATE
 	 {
     lastPAR = new G4double[nPoints];    // Allocate memory for parameters of CS function
+    lastPAR[nLast]=0;                   // Initialization for VALGRIND
     lastCST = new G4double[nPoints];    // Allocate memory for Tabulated CS function				
     lastSST = new G4double[nPoints];    // Allocate memory for Tabulated first sqaredSlope	
     lastS1T = new G4double[nPoints];    // Allocate memory for Tabulated first mantissa	
