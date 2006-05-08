@@ -69,10 +69,14 @@
 // Constructor/Destructor
 
 Tst01DetectorConstruction::Tst01DetectorConstruction()
- : simpleBoxLog(0),simpleBoxDetector(0),honeycombDetector(0),fWorldPhysVol(0),
-   fTestCSG(0),fTestLog(0),fTestVol(0),Air(0),Al(0),Pb(0),
-   selectedMaterial(0),detectorChoice(0), fChoiceCSG(0),fChoiceBool(0),
-   AssemblyDetectorLog(0),AssemblyDetector(0),AssemblyCalo(0),
+ : simpleBoxLog(0), simpleBoxDetector(0),
+   honeycombDetector(0), fWorldPhysVol(0),
+   fTestCSG(0), fTestLog(0), fTestVol(0),
+   fDisPb(0), fPb1(0), fPb2(0), fPb3(0), fSphere(0),
+   fTestBool(0), fTestBoolLog(0), fTestBoolVol(0),
+   fTestD1Log(0), fTestD1Vol(0), Air(0), Al(0), Pb(0),
+   selectedMaterial(0), detectorChoice(0), fChoiceCSG(0), fChoiceBool(0),
+   AssemblyDetectorLog(0), AssemblyDetector(0), AssemblyCalo(0),
    AssemblyCellLog(0), AssemblyDetector2(0), AssemblyDetector3(0)
 {
   wSize = 2000.*cm;
@@ -256,10 +260,8 @@ void Tst01DetectorConstruction::SwitchCSG()
   fTestLog = new G4LogicalVolume(fTestCSG,selectedMaterial,"testLog",0,0,0) ;
 
   if( fTestVol ) { delete fTestVol; }
-  fTestVol = new G4PVPlacement(0,G4ThreeVector(),
-                                   "testVol",fTestLog, 
-                                    fWorldPhysVol,
-                                    false,0);
+  fTestVol = new G4PVPlacement(0, G4ThreeVector(), "testVol", fTestLog, 
+                               fWorldPhysVol, false, 0);
   
   G4RunManager::GetRunManager()->GeometryHasBeenModified();
 }
@@ -286,71 +288,60 @@ void Tst01DetectorConstruction::SwitchBoolean()
   SelectMaterialPointer();
   if( !fWorldPhysVol ) { ConstructDetectors(); }
 
-  G4RotationMatrix identity ;
+  if( !fDisPb )
+  {
+    G4RotationMatrix identity ;
 
-  G4Box* pb1 = new G4Box("b1",50*cm,50*cm,50*cm) ;
-  G4Box* pb2 = new G4Box("b2",10*cm,10*cm,60*cm) ;
-  // G4Box* pb3 = new G4Box("b3",40*cm,40*cm,40*cm) ;
-  G4Box* pb4 = new G4Box("b4",50*cm,50*cm, 5*cm) ;
+    fPb1 = new G4Box("b1",50*cm,50*cm,50*cm) ;
+    fPb2 = new G4Box("b2",10*cm,10*cm,60*cm) ;
+    fPb3 = new G4Box("b4",50*cm,50*cm, 5*cm) ;
 
-  G4DisplacedSolid* disPb4 = new G4DisplacedSolid("disPb4",pb4,&identity,
-                                                   G4ThreeVector(0,0,60*cm)) ;
+    fDisPb = new G4DisplacedSolid("disPb", fPb3, &identity,
+                                  G4ThreeVector(0,0,60*cm)) ;
 
-  // G4Tubs* tubs1 = new G4Tubs("tubs1",80*cm,90*cm,50*cm,0,2*pi) ;
-
-  G4Sphere* sphere1 = new G4Sphere("shere1",80*cm,90*cm,0,2*pi,0,pi) ;
-  G4Sphere* sphere2 = new G4Sphere("shere2",0,50*cm,0,2*pi,0,pi) ;
-  G4Sphere* sphere3 = new G4Sphere("shere3",0,40*cm,0,2*pi,0,pi) ;
-  G4Sphere* sphere4 = new G4Sphere("shere4",0,10*cm,0,2*pi,0,pi);
+    fSphere = new G4Sphere("sphere", 0, 10*cm, 0 , 2*pi, 0, pi);
+  }
 
   G4ThreeVector putDaughter;
 
-  G4VSolid* testBool ;
-  
+  if( fTestBool ) { delete fTestBool; }
+
   switch(fChoiceBool)
   { 
     case 1 :
     {
-      // testBool = new G4UnionSolid("b1UnionB2", pb1, pb2) ;
-      // testBool = new G4UnionSolid("b1UnionT1", pb1, tubs1) ;
-      testBool = new G4UnionSolid("b1UnionDisPb4", pb1, disPb4) ;
-      // testBool = new G4UnionSolid("sp1UnionDisSp2",sphere1,sphere2) ;
+      fTestBool = new G4UnionSolid("b1UniondisPb", fPb1, fDisPb) ;
       break ;
     }
     case 2 :
     {
-      testBool = new G4SubtractionSolid("b1SubtractB2", pb1, pb2) ;
+      fTestBool = new G4SubtractionSolid("b1SubtractB2", fPb1, fPb2) ;
       putDaughter = G4ThreeVector(0.,30*cm,0.);
       break ;
     }
     default:
     {
-      testBool = new G4IntersectionSolid("b1IntersectB2", pb1, pb2) ;
+      fTestBool = new G4IntersectionSolid("b1IntersectB2", fPb1, fPb2) ;
     }
   }
 
-  G4LogicalVolume*   testBoolLog =
-    new G4LogicalVolume(testBool,selectedMaterial,"testBoolLog",0,0,0) ;
+  if( fTestBoolLog ) { delete fTestBoolLog; }
+  fTestBoolLog = new G4LogicalVolume(fTestBool, selectedMaterial,
+                                     "testBoolLog", 0, 0, 0) ;
 
-  G4VPhysicalVolume* testBoolVol =
-    new G4PVPlacement(0,G4ThreeVector(),"testBoolVol",
-                      testBoolLog,fWorldPhysVol,false,0,true);
+  if( fTestBoolVol ) { delete fTestBoolVol; }
+  fTestBoolVol = new G4PVPlacement(0, G4ThreeVector(), "testBoolVol",
+                                   fTestBoolLog, fWorldPhysVol, false, 0);
 
   // daughters
   
-  G4LogicalVolume*   testD1Log =
-    new G4LogicalVolume(sphere4,selectedMaterial,"testD1Log",0,0,0) ;
+  if( fTestD1Log ) { delete fTestD1Log; }
+  fTestD1Log = new G4LogicalVolume(fSphere, selectedMaterial,
+                                   "testD1Log", 0, 0, 0) ;
 
-  // G4VPhysicalVolume* testD1Vol =
-    new G4PVPlacement(0,putDaughter,
-                      "testD1Vol",testD1Log,testBoolVol,false,0); // ,true);  
-
-    // G4LogicalVolume*   testD2Log =
-    // new G4LogicalVolume(sphere1,selectedMaterial,"testD2Log",0,0,0) ;
-
-  // G4VPhysicalVolume* testD2Vol =
-  //   new G4PVPlacement(0,G4ThreeVector(0,0,0),
-    //                   "testD2Vol",testD2Log,testBoolVol,false,0); // ,true);  
+  if( fTestD1Vol ) { delete fTestD1Vol; }
+  fTestD1Vol = new G4PVPlacement(0, putDaughter, "testD1Vol",
+                                 fTestD1Log, fTestBoolVol, false, 0);
 
   G4RunManager::GetRunManager()->GeometryHasBeenModified();
 }

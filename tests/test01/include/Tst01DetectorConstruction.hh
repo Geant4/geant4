@@ -27,6 +27,7 @@
 class G4VPhysicalVolume;
 class G4LogicalVolume;
 class G4AssemblyVolume;
+class G4DisplacedSolid;
 class G4VSolid ;
 class G4Material;
 class Tst01DetectorMessenger;
@@ -79,19 +80,22 @@ class Tst01DetectorConstruction : public G4VUserDetectorConstruction
      G4VPhysicalVolume* honeycombDetector ;
      G4VPhysicalVolume* fWorldPhysVol ;
 
+  // CSGs /logic/physics volumes
+
      G4VSolid*          fTestCSG ;
      G4LogicalVolume*   fTestLog ;
      G4VPhysicalVolume* fTestVol ;
 
-  // Daughter CSGs /logic/physics volumes
+  // Bools /logic/physics volumes + daughters
 
-     G4VSolid*          fTestD1CSG ;
+     G4DisplacedSolid*  fDisPb ;
+     G4VSolid*          fPb1, *fPb2, *fPb3, *fSphere;
+
+     G4VSolid*          fTestBool ;
+     G4LogicalVolume*   fTestBoolLog ;
+     G4VPhysicalVolume* fTestBoolVol ;
      G4LogicalVolume*   fTestD1Log ;
      G4VPhysicalVolume* fTestD1Vol ;
-
-     G4VSolid*          fTestD2CSG ;
-     G4LogicalVolume*   fTestD2Log ;
-     G4VPhysicalVolume* fTestD2Vol ;
 
      G4Material* Air ;
      G4Material* Al ;
