@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FieldTrack.hh,v 1.15 2006-04-28 15:46:11 japost Exp $
+// $Id: G4FieldTrack.hh,v 1.16 2006-05-08 17:59:21 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -47,7 +47,7 @@
 
 #include "G4ThreeVector.hh"
 
-class  G4ChargeState;
+// class  G4ChargeState;
 
 class  G4FieldTrack
 {
@@ -147,6 +147,31 @@ class  G4FieldTrack
      friend  std::ostream&
              operator<<( std::ostream& os, const G4FieldTrack& SixVec);
 
+     private:   //  Implementation detail -- daughter class
+
+       class G4ChargeState
+       {
+       public:  // without description
+	 G4ChargeState(G4double charge,                       G4double magnetic_dipole_moment= 0.0,  
+		       G4double electric_dipole_moment= 0.0,  G4double magnetic_charge= 0.0);  
+
+	 inline void SetCharge(G4double charge){ fCharge= charge; }
+
+	 //  Revise the charge (in units of the positron charge)
+	 //     do not change moments
+
+	 void SetChargeAndMoments(G4double charge, 
+				  G4double magnetic_dipole_moment= DBL_MAX,   // default: do not change
+				  G4double electric_dipole_moment= DBL_MAX,   // 
+				  G4double magnetic_charge=DBL_MAX );             
+        //  Revise the charge and all moments
+
+       private:
+	 G4double fCharge; 
+	 G4double fMagn_dipole;
+	 G4double fElec_dipole;
+	 G4double fMagneticCharge;  // for magnetic monopole
+       };
    private:
 
      G4double  SixVector[6];
