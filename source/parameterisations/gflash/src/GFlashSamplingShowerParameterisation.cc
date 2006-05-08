@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: GFlashSamplingShowerParameterisation.cc,v 1.3 2005-11-30 19:29:44 gcosmo Exp $
+// $Id: GFlashSamplingShowerParameterisation.cc,v 1.4 2006-05-08 12:26:54 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -42,7 +42,7 @@
 
 GFlashSamplingShowerParameterisation::
 GFlashSamplingShowerParameterisation(G4Material* aMat1, G4Material* aMat2,
-                                     G4double d1, G4double d2,
+                                     G4double dd1, G4double dd2,
                                      GFlashSamplingShowerTuning* aPar)
   : GVFlashShowerParameterisation()
 {  
@@ -50,8 +50,8 @@ GFlashSamplingShowerParameterisation(G4Material* aMat1, G4Material* aMat2,
   else      { thePar = aPar; }
 
   SetMaterial(aMat1,aMat2 );
-  this->d1=d1;
-  this->d2=d2;
+  d1=dd1;
+  d2=dd2;
 
   // Longitudinal Coefficients for a homogenious calo
 
