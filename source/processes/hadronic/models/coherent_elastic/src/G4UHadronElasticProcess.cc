@@ -154,24 +154,24 @@ G4double G4UHadronElasticProcess::GetMicroscopicCrossSection(
 		     << N << " pdg= " << pPDG 
 		     << " mom(GeV)= " << momentum/GeV << "  " << qCManager << G4endl; 
 	    G4double y = ab[j]*
-	      qCManager->GetCrossSection(true,momentum,1,N,pPDG);
+	      qCManager->GetCrossSection(false,momentum,1,N,pPDG);
 	    xsecH[N] += y;
 	    x += y;
 	  }
 	}
       } else {
-	if(verboseLevel>-1) 
+	if(verboseLevel>1) 
 	  G4cout << "G4UHadronElasticProcess compute CHIPS CS for Z= 1, N= 0" 
 		 << " pdg= " << pPDG 
 		 << " mom(GeV)= " << momentum/GeV << "  " << qCManager << G4endl; 
-	x = qCManager->GetCrossSection(true,momentum,1,0,pPDG);
-	  xsecH[0] = x;
+	x = qCManager->GetCrossSection(false,momentum,1,0,pPDG);
+	xsecH[0] = x;
       }
     } else {
       if(verboseLevel>1) 
 	G4cout << "G4UHadronElasticProcess compute CHIPS CS for Z= 2, N=2 " 
 	       << G4endl; 
-      x = qCManager->GetCrossSection(true,momentum,2,2,pPDG);
+      x = qCManager->GetCrossSection(false,momentum,2,2,pPDG);
     }
   } else {
     if(verboseLevel>1) 
