@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4ElasticHadrNucleusHE.hh,v 1.17 2005-11-23 11:24:08 vnivanch Exp $
+// $Id: G4ElasticHadrNucleusHE.hh,v 1.18 2006-05-09 16:31:39 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -135,21 +135,25 @@ public:
 
   G4ElasticHadrNucleusHE();
 
-  ~G4ElasticHadrNucleusHE();
+  virtual ~G4ElasticHadrNucleusHE();
 
   G4HadFinalState * ApplyYourself( const G4HadProjectile  &aTrack,
 				         G4Nucleus        &aNucleus);
+
+  G4double SampleT(const G4ParticleDefinition * p,
+		   G4double labMomentum,
+		   G4int Z,  G4int A);
 
   G4double RandomElastic0();
   
   G4double RandomElastic1( const G4DynamicParticle *   aHadron,
 			   const ElasticData       *   aData);
 
-  void  GetHadronNucleusData(G4DynamicParticle * aParticle,
+  void  GetHadronNucleusData(const G4ParticleDefinition* aParticle,
 			     G4Nucleus         * aNucleus,
 			     ElasticData & ElD );
 
-  G4int   ReadOfData(G4ParticleDefinition * aParticle,
+  G4int   ReadOfData(const G4ParticleDefinition * aParticle,
 		     G4Nucleus            * aNucleus);
 
   G4double GetQ2limit(G4double R1);
@@ -166,7 +170,7 @@ public:
   G4double InterPol(G4double X1, G4double X2, G4double X3,
                     G4double Y1, G4double Y2, G4double Y3, 
                     G4double X);
-  G4double HadronNucleusQ2(G4DynamicParticle * aHadron,
+  G4double HadronNucleusQ2(const G4DynamicParticle * aHadron,
                            G4Nucleus         & aNucleus);
 
 //  ======================================================
@@ -174,7 +178,7 @@ public:
   G4float  GetFt(G4double T);
   G4float  GetDistrFun(G4double Q2);
   G4double GetQ2(G4double Ran);
-  G4double HadronProtonQ2(G4DynamicParticle * aHadron);
+  G4double HadronProtonQ2(const G4DynamicParticle * aHadron);
                                                                           
 //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++
 

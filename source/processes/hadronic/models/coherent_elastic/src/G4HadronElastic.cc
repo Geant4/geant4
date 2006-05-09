@@ -51,6 +51,7 @@
 #include "G4IonTable.hh"
 #include "G4QElasticCrossSection.hh"
 #include "G4VQCrossSection.hh"
+#include "G4ElasticHadrNucleusHE.hh"
 #include "Randomize.hh"
 #include "G4Proton.hh"
 #include "G4Neutron.hh"
@@ -65,14 +66,17 @@ enum G4ElasticGenerator
   fSWave
 };
 
-G4HadronElastic::G4HadronElastic(G4double elim, G4double plim) : G4HadronicInteraction()
+G4HadronElastic::G4HadronElastic(G4double elim, G4double plow, G4double phigh) 
+  : G4HadronicInteraction()
 {
   SetMinEnergy( 0.0*GeV );
   SetMaxEnergy( DBL_MAX );
   verboseLevel= 0;
-  plablim     = plim;
+  plablow     = plow;
+  plabhigh    = phigh;
   ekinlim     = elim;
   qCManager   = G4QElasticCrossSection::GetPointer();
+  hElastic    = new G4ElasticHadrNucleusHE();
 
   theProton   = G4Proton::Proton();
   theNeutron  = G4Neutron::Neutron();
@@ -81,7 +85,9 @@ G4HadronElastic::G4HadronElastic(G4double elim, G4double plim) : G4HadronicInter
 }
 
 G4HadronElastic::~G4HadronElastic()
-{}
+{
+  delete hElastic;
+}
 
 G4VQCrossSection* G4HadronElastic::GetCS()
 {
@@ -149,7 +155,9 @@ G4HadronElastic::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& targetN
     gtype = fQElastic;
     if(Z == 1 && N == 2) N = 1;
     else if (Z == 2 && N == 1) N = 2;
-  } else if(plab < plablim) {
+  } else if(plab >= plabhigh) {
+    gtype = fHElastic;
+  } else if(plab <= plablow) {
     gtype = fSWave;
   }
 
@@ -165,6 +173,7 @@ G4HadronElastic::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& targetN
   }
 
   if(gtype == fSWave)         t = G4UniformRand()*tmax;
+  else if(gtype == fHElastic) t = hElastic->SampleT(theParticle,plab,Z,A);
   else                        t = GeV*GeV*SampleT(ptot,m1,m2,atno2);
 
   //  G4cout <<"type= " << gtype <<" t= " << t << " tmax= " << tmax << G4endl;

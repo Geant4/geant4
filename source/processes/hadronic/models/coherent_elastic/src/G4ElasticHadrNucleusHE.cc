@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElasticHadrNucleusHE.cc,v 1.25 2005-11-28 18:00:46 gcosmo Exp $
+// $Id: G4ElasticHadrNucleusHE.cc,v 1.26 2006-05-09 16:31:59 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  G4ElasticHadrNucleusHE class 
@@ -35,6 +35,7 @@
 //  19.05.04 Variant for G4 6.1: The 'ApplyYourself' was changed
 //  14.11.05 The HE elastic scattering on proton is added (N.Starkov)
 //  23.11.05 int -> G4int, fabs -> abs (V.Ivanchenko)
+//  09.05.06 N.Starkov propose new method SamppleT (V.Ivanchenko)
 //
 
 #include  "G4ElasticHadrNucleusHE.hh"
@@ -190,95 +191,95 @@ G4ElasticHadrNucleusHE::~G4ElasticHadrNucleusHE()
 
 //  ######################################################
 
-G4int G4ElasticHadrNucleusHE::ReadOfData(G4ParticleDefinition * aHadron,
+G4int G4ElasticHadrNucleusHE::ReadOfData(const G4ParticleDefinition * aHadron,
                                          G4Nucleus            * aNucleus)
 {
-    G4int    ii, kk, ik;
-    G4String sNameHdr  = aHadron->GetParticleName();
-    G4int    iNnucl    = (G4int) aNucleus->GetN();
+  G4int    ii, kk, ik;
+  G4String sNameHdr  = aHadron->GetParticleName();
+  G4int    iNnucl    = (G4int) aNucleus->GetN();
 
-    if(iNnucl==2 || iNnucl==3)
+  if(iNnucl==2 || iNnucl==3)
   G4Exception(" This nucleus is very light for this model !!!");
 
-    if(iNnucl>238)
+  if(iNnucl>238)
     G4Exception(" This nucleus is very heavy for this model !!!");
 
-    G4String sPath;
+  G4String sPath;
 
-    if(getenv("G4ELASTICDATA")) 
+  if(getenv("G4ELASTICDATA")) 
     {
-     sPath =  getenv("G4ELASTICDATA");
-     sPath =  sPath+"/Elastic/";
+      sPath =  getenv("G4ELASTICDATA");
+      // sPath =  sPath+"/Elastic/";
     }
-    else  sPath =       "./Elastic/";
+  else  sPath =       "./Elastic/";
 
-    std::ostringstream sNameFile;
-    sNameFile<<sPath<<sNameHdr<<"_"<<iNnucl<<".dat"<<std::ends;
+  std::ostringstream sNameFile;
+  sNameFile<<sPath<<sNameHdr<<"_"<<iNnucl<<".dat"<<std::ends;
   
-    if(getenv("HEElastic_debug"))
+  if(getenv("HEElastic_debug"))
     {
-     G4cout <<" Reading file for: Hadron - "<<sNameHdr
-          <<".  Nucleus - "<<iNnucl<<G4endl;
-     G4cout <<" The Name of File is "<<sNameFile.str()<<G4endl;
+      G4cout <<" Reading file for: Hadron - "<<sNameHdr
+	     <<".  Nucleus - "<<iNnucl<<G4endl;
+      G4cout <<" The Name of File is "<<sNameFile.str()<<G4endl;
     }
 
-//    MyIonTable     = const_cast<G4IonTable *>
-//        (G4ParticleTable::GetParticleTable()->GetIonTable());
+  //    MyIonTable     = const_cast<G4IonTable *>
+  //        (G4ParticleTable::GetParticleTable()->GetIonTable());
 
-    GetNucleusParameters(aNucleus);
+  GetNucleusParameters(aNucleus);
 
-    iContr         = iPoE;
-    Nstep          = ONQ2;
-    iKindWork      = 4;
-//    G4double   nuclMass = (G4double) iNnucl;
-//    R1             = 0.74*std::pow(nuclMass,0.3333)*5.0;
-    maxQ2          = GetQ2limit(R1);   //   MeV^2
+  iContr         = iPoE;
+  Nstep          = ONQ2;
+  iKindWork      = 4;
+  //    G4double   nuclMass = (G4double) iNnucl;
+  //    R1             = 0.74*std::pow(nuclMass,0.3333)*5.0;
+  maxQ2          = GetQ2limit(R1);   //   MeV^2
 
-    G4String str = sNameFile.str();
-    std::ifstream TestFile(str, std::ios::in);
-    TestFile.setf(std::ios::scientific);
+  G4String str = sNameFile.str();
+  std::ifstream TestFile(str, std::ios::in);
+  TestFile.setf(std::ios::scientific);
 
-    if(TestFile)
+  if(TestFile)
     {
-     ElasticData  ElD;
-     if(getenv("HEElastic_debug")) G4cout<<" The file exists "<<G4endl;
+      ElasticData  ElD;
+      if(getenv("HEElastic_debug")) G4cout<<" The file exists "<<G4endl;
 
-     ElD.hadrName         = sNameHdr;
-     ElD.nuclAtomicNumber = iNnucl;
+      ElD.hadrName         = sNameHdr;
+      ElD.nuclAtomicNumber = iNnucl;
      
-     TestFile  >> iPoE;
+      TestFile  >> iPoE;
 
-     G4double  dPower;
+      G4double  dPower;
 
-     for(ik=0; ik<AreaNumb; ik++)
-     {
-       dPower = std::pow(10.0,ik);
+      for(ik=0; ik<AreaNumb; ik++)
+	{
+	  dPower = std::pow(10.0,ik);
 
-       for(kk=0; kk<iPoE; kk++)  TestFile >> ElD.TableE[kk+ik*iPoE];
+	  for(kk=0; kk<iPoE; kk++) {TestFile >> ElD.TableE[kk+ik*iPoE];}
 
-       for(ii=0; ii<ONQ2; ii++)
-       {
+	  for(ii=0; ii<ONQ2; ii++)
+	    {
 
-        ElD.TableQ2[ii] = iQ2[ii];
-        for(kk=0; kk<iPoE; kk++) 
-             TestFile >> ElD.TableCrossSec[kk*ONQ2+ii+ik*ONQ2XE];
-       }       //  ii
-   }               //  ik
+	      ElD.TableQ2[ii] = iQ2[ii];
+	      for(kk=0; kk<iPoE; kk++) 
+		TestFile >> ElD.TableCrossSec[kk*ONQ2+ii+ik*ONQ2XE];
+	    }       //  ii
+	}           //  ik
+      
+      TestFile.close();
 
-   TestFile.close();
+      SetOfElasticData.push_back(ElD);
+      
+      if(getenv("HEElastic_debug"))
+	{
+	  G4cout<<" The array for elastic scattering of "<<sNameHdr;
+	  G4cout<<" on the Nuclues "<<iNnucl<<G4endl;
+	  G4cout<<" from the file "<<sNameFile.str()<<" has been readout !"
+		<<G4endl<<G4endl;
+	}
 
-   SetOfElasticData.push_back(ElD);
-
-  if(getenv("HEElastic_debug"))
-  {
-  G4cout<<" The array for elastic scattering of "<<sNameHdr;
-  G4cout<<" on the Nuclues "<<iNnucl<<G4endl;
-  G4cout<<" from the file "<<sNameFile.str()<<" has been readout !"
-        <<G4endl<<G4endl;
-  }
-
-   return 1;
-  }  //  if check
+      return 1;
+    }  //  if check
 
   else return -1;
 }  //  ReadOfData
@@ -301,17 +302,14 @@ G4double G4ElasticHadrNucleusHE::GetQ2limit(G4double R1)
 //  ========================================================
 
 void  G4ElasticHadrNucleusHE::
-       GetHadronNucleusData(G4DynamicParticle * aParticle,
+       GetHadronNucleusData(const G4ParticleDefinition* PartDef,
                             G4Nucleus         * aNucleus,
                             ElasticData       & ElD)
 {
       ElD.Clean();
 
       G4int     nN       = (G4int) aNucleus->GetN();
-      G4String  hadrName =
-             aParticle->GetDefinition()->GetParticleName();
-
-      G4ParticleDefinition * PartDef = aParticle->GetDefinition();
+      G4String  hadrName = PartDef->GetParticleName();
 
       G4int SizeData = SetOfElasticData.size();
 
@@ -420,7 +418,7 @@ G4HadFinalState * G4ElasticHadrNucleusHE::ApplyYourself(
     {
        ElasticData ElD;
 
-       GetHadronNucleusData(aParticle, aNucl, ElD);               
+       GetHadronNucleusData(hadrDef, aNucl, ElD);               
        ranQ2 = RandomElastic1(aParticle, & ElD);
     }
     else ranQ2 = HadronProtonQ2(aParticle);
@@ -583,10 +581,37 @@ G4HadFinalState * G4ElasticHadrNucleusHE::ApplyYourself(
 }
 */
 
+//  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+G4double G4ElasticHadrNucleusHE::SampleT(
+		   		 const G4ParticleDefinition * p,
+				 G4double labMomentum,
+				 G4int Z,  G4int A)
+{
+  G4double               Q2;
+  G4DynamicParticle* dHadron = new G4DynamicParticle();
+  dHadron->SetDefinition(const_cast<G4ParticleDefinition*>(p));
+  G4ThreeVector mom(0.0,0.0,labMomentum);
+  dHadron->SetMomentum(mom);
+
+  if(A>1)
+    {
+      G4Nucleus   pNucleus;
+      ElasticData ElD;
+
+      pNucleus.SetParameters(G4double(A), G4double(Z));
+      GetHadronNucleusData(dHadron->GetDefinition(), &pNucleus, ElD);
+      Q2 = RandomElastic1(dHadron, &ElD);
+    }
+  else  Q2 = HadronProtonQ2(dHadron);
+
+  return  Q2;
+}
+
 //  ==========================================================
 
 G4double G4ElasticHadrNucleusHE::HadronNucleusQ2(
-			       G4DynamicParticle * aHadron,
+			       const G4DynamicParticle * aHadron,
                                G4Nucleus         & aNucleus)
 {
     G4int       nN;
@@ -599,8 +624,8 @@ G4double G4ElasticHadrNucleusHE::HadronNucleusQ2(
 
     else
     {
-    GetHadronNucleusData(aHadron, & aNucleus, ElD);
-    ranQ2 = RandomElastic1(aHadron, & ElD);
+      GetHadronNucleusData(aHadron->GetDefinition(), & aNucleus, ElD);
+      ranQ2 = RandomElastic1(aHadron, & ElD);
     }
 
     return ranQ2;
@@ -994,7 +1019,7 @@ G4double G4ElasticHadrNucleusHE::
 //  ++++++++++++++++++++++++++++++++++++++++++
 
 G4double G4ElasticHadrNucleusHE::HadronProtonQ2(
-	 G4DynamicParticle * aHadron)
+	 const G4DynamicParticle * aHadron)
 {
     G4double Ran = G4UniformRand(), Q2;
 
