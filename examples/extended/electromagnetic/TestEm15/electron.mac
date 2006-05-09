@@ -1,0 +1,34 @@
+# $Id: electron.mac,v 1.1 2006-05-09 14:03:02 maire Exp $
+#
+# Macro file for "TestEm15.cc"
+# (can be run in batch, without graphic)
+#
+/control/verbose 2
+/run/verbose 2
+#
+/testem/det/setMat Aluminium
+#
+/run/initialize
+#
+/testem/phys/setCuts 1 mm
+#
+/process/inactivate eIoni
+/process/inactivate eBrem
+#
+/gun/particle e-
+/gun/energy 5 MeV
+#
+/testem/histo/setFileName electron
+/testem/histo/setFileType hbook
+/testem/histo/setHisto 1  100  0     1000 um	#true step length
+/testem/histo/setHisto 2  100  0     1000 um	#geom step length
+/testem/histo/setHisto 3  100  0     1 none	#ratio geom/true
+/testem/histo/setHisto 4  100  0     500 um	#lateral radius
+/testem/histo/setHisto 5  100 -500  +500 um 	#y_plane coordinat
+/testem/histo/setHisto 6  100 -25   +25 deg	#psi_plane angle
+/testem/histo/setHisto 7  100 -50   +50 deg	#theta_plane angle
+#
+###/tracking/verbose 2
+###/run/beamOn 1
+#
+/run/beamOn 100000

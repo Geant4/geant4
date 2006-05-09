@@ -1,0 +1,25 @@
+# $Id: TestEm15.in,v 1.1 2006-05-09 14:03:02 maire Exp $
+#
+# Macro file for "TestEm15.cc"
+# (can be run in batch, without graphic)
+#
+/control/verbose 2
+/run/verbose 2
+#
+/testem/det/setMat Water
+#
+/run/initialize
+#
+/process/inactivate eIoni
+/process/inactivate eBrem
+#
+/gun/particle e-
+#
+##/tracking/verbose 1
+##/run/beamOn 1
+#
+/gun/energy 5 MeV
+/run/beamOn 10000
+#
+/gun/energy 100 keV
+/run/beamOn 10000
