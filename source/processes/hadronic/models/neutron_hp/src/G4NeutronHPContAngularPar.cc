@@ -24,6 +24,9 @@
 // J.P. Wellisch, Nov-1996
 // A prototype of the low energy neutron transport model.
 //
+// 09-May-06 fix in Sample by T. Koi
+//
+
 #include "G4NeutronHPContAngularPar.hh"
 #include "G4NeutronHPLegendreStore.hh"
 #include "G4Gamma.hh"
@@ -239,6 +242,9 @@
       G4double productMass = result->GetMass();
       G4int targetZ = G4int(theTargetCode/1000);
       G4int targetA = G4int(theTargetCode-1000*targetZ);
+      // To correspond to natural composition (-nat-) data files. 
+      if ( targetA == 0 ) 
+         targetA = int ( theTarget->GetMass()/amu_c2 + 0.5 );
       G4double targetMass = theTarget->GetMass();
       G4int residualA = targetA+1-A;
       G4int residualZ = targetZ-Z;

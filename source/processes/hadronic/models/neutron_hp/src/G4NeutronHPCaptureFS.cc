@@ -24,6 +24,8 @@
 // J.P. Wellisch, Nov-1996
 // A prototype of the low energy neutron transport model.
 //
+// 12-April-06 Enable IC electron emissions T. Koi 
+//
 #include "G4NeutronHPCaptureFS.hh"
 #include "G4Gamma.hh"
 #include "G4ReactionProduct.hh"
@@ -72,13 +74,22 @@
       G4LorentzVector p4(aCMSMomentum, theTarget.GetTotalEnergy() + theNeutron.GetTotalEnergy());
       G4Fragment nucleus(static_cast<G4int>(theBaseA+1), static_cast<G4int>(theBaseZ) ,p4);
       G4PhotonEvaporation photonEvaporation;
+      // T. K. add
+      photonEvaporation.SetICM( TRUE );
       G4FragmentVector* products = photonEvaporation.BreakItUp(nucleus);
       G4FragmentVector::iterator i;
       thePhotons = new G4ReactionProductVector;
       for(i=products->begin(); i!=products->end(); i++)
       {
         G4ReactionProduct * theOne = new G4ReactionProduct;
-        theOne->SetDefinition( G4Gamma::Gamma() );
+        // T. K. add 
+        if ( (*i)->GetParticleDefinition() != NULL ) 
+           theOne->SetDefinition( (*i)->GetParticleDefinition() );
+        else
+           theOne->SetDefinition( G4Gamma::Gamma() ); // this definiion will be over writen
+        
+        // T. K. comment out below line
+        //theOne->SetDefinition( G4Gamma::Gamma() );
         G4ParticleTable* theTable = G4ParticleTable::GetParticleTable();
         if((*i)->GetMomentum().mag() > 10*MeV) 
                  theOne->SetDefinition( 

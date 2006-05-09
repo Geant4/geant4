@@ -24,6 +24,8 @@
 // J.P. Wellisch, Nov-1996
 // A prototype of the low energy neutron transport model.
 //
+// 12-Apr-06 fix in delayed neutron and photon emission without FS data by T. Koi
+//
 #include "G4NeutronHPFissionFS.hh"
 #include "G4Nucleus.hh"
 #include "G4DynamicParticleVector.hh"
@@ -175,7 +177,8 @@
      {
        G4double time = -std::log(G4UniformRand())/theDecayConstants[i0-Prompt];
        time += theTrack.GetGlobalTime();        
-       G4HadSecondary * track = new G4HadSecondary(theNeutrons->operator[](i));
+       //G4HadSecondary * track = new G4HadSecondary(theNeutrons->operator[](i)); this line will be delete
+       G4HadSecondary * track = new G4HadSecondary( theNeutrons->operator[]( i0 ) );
        track->SetTime(time);
        theResult.AddSecondary(track);
      }
