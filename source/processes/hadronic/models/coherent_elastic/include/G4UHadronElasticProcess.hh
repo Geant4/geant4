@@ -68,6 +68,8 @@ public:
 					      const G4Element* anElement,
 					      G4double aTemp);
 
+  void SetQElasticCrossSection(G4VQCrossSection*);
+
 private:
 
   G4VQCrossSection*           qCManager;
@@ -85,6 +87,7 @@ private:
 
   G4int    pPDG;
   G4bool   flagHP;
+  G4bool   first;
 };
 
 #endif

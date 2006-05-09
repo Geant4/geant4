@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HadronElasticPhysics.cc,v 1.5 2006-05-08 07:49:20 vnivanch Exp $
+// $Id: G4HadronElasticPhysics.cc,v 1.6 2006-05-09 08:01:55 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -50,6 +50,7 @@
 #include "G4Neutron.hh"
 
 #include "G4HadronProcessStore.hh"
+#include "G4VQCrossSection.hh"
 
 G4HadronElasticPhysics::G4HadronElasticPhysics(const G4String& name, 
 					       G4int ver, G4bool hp)
@@ -92,9 +93,15 @@ void G4HadronElasticPhysics::ConstructProcess()
   G4double mThreshold = 130.*MeV;
   G4HadronicInteraction* model = 0;
   G4HadronicProcess* hel = 0;
+  G4VQCrossSection* man = 0; 
 
-  if(mname == "elastic") model = new G4HadronElastic(edepLimit, pLimit);
-  else                   model = new G4LElastic();
+  if(mname == "elastic") {
+    G4HadronElastic* he = new G4HadronElastic(edepLimit, pLimit);
+    model = he;
+    man = he->GetCS();
+  } else {
+    model = new G4LElastic();
+  }
   model->SetMaxEnergy(100.*TeV);
 
   theParticleIterator->reset();
@@ -104,11 +111,13 @@ void G4HadronElasticPhysics::ConstructProcess()
     G4ProcessManager* pmanager = particle->GetProcessManager();
     if(particle->GetPDGMass() > mThreshold && !particle->IsShortLived()) {
 
-      if(mname == "elastic") 
-	hel = new G4UHadronElasticProcess("hElastic", hpFlag);
-      else                   
+      if(mname == "elastic") {
+	G4UHadronElasticProcess* h = new G4UHadronElasticProcess("hElastic", hpFlag);
+        h->SetQElasticCrossSection(man);
+        hel = h;
+      } else {                   
 	hel = new G4HadronElasticProcess();
-
+      }
       if( hel->IsApplicable(*particle)) { 
    
 	pmanager->AddDiscreteProcess(hel);

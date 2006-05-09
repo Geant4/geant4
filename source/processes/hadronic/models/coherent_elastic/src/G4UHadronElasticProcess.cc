@@ -31,6 +31,7 @@
 //
 
 #include "G4UHadronElasticProcess.hh"
+#include "globals.hh"
 #include "G4CrossSectionDataStore.hh"
 #include "G4HadronElasticDataSet.hh"
 #include "G4VQCrossSection.hh"
@@ -42,36 +43,44 @@
 #include "G4Neutron.hh"
 #include "G4Proton.hh"
 #include "G4NeutronHPElasticData.hh"
+#include "G4HadronElastic.hh"
  
 G4UHadronElasticProcess::G4UHadronElasticProcess(const G4String& processName, G4bool fl)
-  : G4HadronicProcess(processName), flagHP(fl)
+  : G4HadronicProcess(processName), flagHP(fl), first(true)
 {
   AddDataSet(new G4HadronElasticDataSet);
-  store = G4HadronicProcess::GetCrossSectionDataStore();
-  qCManager   = G4QElasticCrossSection::GetPointer();
   theProton = G4Proton::Proton();
   theNeutron = G4Neutron::Neutron();
   thEnergy = 1.*keV;
   verboseLevel= 1;
+  qCManager = 0;
 }
 
 G4UHadronElasticProcess::~G4UHadronElasticProcess()
 {
 }
- 
+
+void G4UHadronElasticProcess::SetQElasticCrossSection(G4VQCrossSection* p)
+{
+  qCManager = p;
+}
+
 void G4UHadronElasticProcess::
 BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
 {
-  theParticle = &aParticleType;
-  pPDG = theParticle->GetPDGEncoding();
+  if(first) {
+    first = false;
+    theParticle = &aParticleType;
+    pPDG = theParticle->GetPDGEncoding();
+    if(theParticle == theNeutron && flagHP) 
+      AddDataSet(new G4NeutronHPElasticData());
 
-  if(verboseLevel>1) 
-    G4cout << "G4UHadronElasticProcess for " << theParticle->GetParticleName() 
-	   << G4endl; 
-
-  if(theParticle == theNeutron && flagHP) 
-    AddDataSet(new G4NeutronHPElasticData());
-
+    store = G4HadronicProcess::GetCrossSectionDataStore();
+     
+    if(verboseLevel>1) 
+      G4cout << "G4UHadronElasticProcess for " << theParticle->GetParticleName() 
+	     << G4endl; 
+  }
   store->BuildPhysicsTable(aParticleType);
 }
 
@@ -101,6 +110,7 @@ G4double G4UHadronElasticProcess::GetMeanFreePath(const G4Track& track,
 	   << "  p(GeV)= " << dp->GetTotalMomentum()/GeV
 	   << " in " << material->GetName()
 	   << G4endl; 
+  if(cross > DBL_MIN) cross = 0.0;
   for (G4int i=0; i<nelm; i++) {
     const G4Element* elm = (*theElementVector)[i];
     G4double x = GetMicroscopicCrossSection(dp, elm, temp);
@@ -114,7 +124,6 @@ G4double G4UHadronElasticProcess::GetMeanFreePath(const G4Track& track,
            << "  in " << material->GetName()
 	   << G4endl;
   if(cross > DBL_MIN) x = 1./cross;
-  else x = DBL_MAX;
 
   return x;
 }
@@ -128,7 +137,7 @@ G4double G4UHadronElasticProcess::GetMicroscopicCrossSection(
   G4int iz = G4int(elm->GetZ());
   G4double x = 0.0;
   // CHIPS cross sections
-  if(iz <= 2 && (theParticle == theProton || theParticle == theNeutron)) {
+  if(iz <= -2 && (theParticle == theProton || theParticle == theNeutron)) {
     G4double momentum = dp->GetTotalMomentum();
     if(iz == 1) {
       G4IsotopeVector* isv = elm->GetIsotopeVector(); 
@@ -142,25 +151,27 @@ G4double G4UHadronElasticProcess::GetMicroscopicCrossSection(
 	  if(N == 0 || N == 1) {
 	    if(verboseLevel>1) 
 	      G4cout << "G4UHadronElasticProcess compute CHIPS CS for Z= 1, N= " 
-		     << N << G4endl; 
+		     << N << " pdg= " << pPDG 
+		     << " mom(GeV)= " << momentum/GeV << "  " << qCManager << G4endl; 
 	    G4double y = ab[j]*
-	      qCManager->GetCrossSection(false,momentum,1,N,pPDG);
+	      qCManager->GetCrossSection(true,momentum,1,N,pPDG);
 	    xsecH[N] += y;
 	    x += y;
 	  }
 	}
       } else {
-	if(verboseLevel>1) 
-	  G4cout << "G4UHadronElasticProcess compute CHIPS CS for Z= 1, N=0 " 
-		 << G4endl; 
-	x = qCManager->GetCrossSection(false,momentum,1,0,pPDG);
+	if(verboseLevel>-1) 
+	  G4cout << "G4UHadronElasticProcess compute CHIPS CS for Z= 1, N= 0" 
+		 << " pdg= " << pPDG 
+		 << " mom(GeV)= " << momentum/GeV << "  " << qCManager << G4endl; 
+	x = qCManager->GetCrossSection(true,momentum,1,0,pPDG);
 	  xsecH[0] = x;
       }
     } else {
       if(verboseLevel>1) 
 	G4cout << "G4UHadronElasticProcess compute CHIPS CS for Z= 2, N=2 " 
 	       << G4endl; 
-      x = qCManager->GetCrossSection(false,momentum,2,2,pPDG);
+      x = qCManager->GetCrossSection(true,momentum,2,2,pPDG);
     }
   } else {
     if(verboseLevel>1) 

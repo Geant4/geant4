@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HadronElastic.hh,v 1.1 2006-05-02 07:58:15 vnivanch Exp $
+// $Id: G4HadronElastic.hh,v 1.2 2006-05-09 08:01:08 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -54,7 +54,6 @@
 
 class G4ParticleDefinition;
 class G4VQCrossSection;
-class G4QElastic;
 
 class G4HadronElastic : public G4HadronicInteraction
 {
@@ -66,6 +65,8 @@ public:
  
   G4HadFinalState * ApplyYourself(const G4HadProjectile & aTrack, 
 				  G4Nucleus & targetNucleus);
+
+  G4VQCrossSection* GetCS();
 
 private:
 
@@ -85,7 +86,7 @@ private:
 	     G4double* pxnew, G4double* pynew, G4double* pznew);
 
   G4VQCrossSection*           qCManager;
-  G4QElastic*                 qElastic;
+
   const G4ParticleDefinition* theProton;
   const G4ParticleDefinition* theNeutron;
   const G4ParticleDefinition* theDeuteron;

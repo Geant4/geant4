@@ -51,7 +51,6 @@
 #include "G4IonTable.hh"
 #include "G4QElasticCrossSection.hh"
 #include "G4VQCrossSection.hh"
-#include "G4QElastic.hh"
 #include "Randomize.hh"
 #include "G4Proton.hh"
 #include "G4Neutron.hh"
@@ -73,7 +72,6 @@ G4HadronElastic::G4HadronElastic(G4double elim, G4double plim) : G4HadronicInter
   verboseLevel= 0;
   plablim     = plim;
   ekinlim     = elim;
-  qElastic    = new G4QElastic();
   qCManager   = G4QElasticCrossSection::GetPointer();
 
   theProton   = G4Proton::Proton();
@@ -83,8 +81,11 @@ G4HadronElastic::G4HadronElastic(G4double elim, G4double plim) : G4HadronicInter
 }
 
 G4HadronElastic::~G4HadronElastic()
+{}
+
+G4VQCrossSection* G4HadronElastic::GetCS()
 {
-  delete qElastic;
+  return qCManager;
 }
 
 G4HadFinalState*
@@ -154,6 +155,10 @@ G4HadronElastic::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& targetN
 
   // Sample t
   if(gtype == fQElastic) {
+    if (verboseLevel > 1) 
+      G4cout << "G4HadronElastic: Z= " << Z << " N= " 
+	     << N << " pdg= " <<  projPDG
+	     << " mom(GeV)= " << plab/GeV << "  " << qCManager << G4endl; 
     G4double cs = qCManager->GetCrossSection(false,plab,Z,N,projPDG);
     if(cs > 0.0) t = qCManager->GetExchangeT(Z,N,projPDG);
     else gtype = fSWave;
