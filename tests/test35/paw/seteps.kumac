@@ -1,0 +1,209 @@
+*
+* SND standard for EPS files, i.e., those for LaTeX insertion
+*
+* if keepsize=0 then the sizes of one window will be set to 7.6x7.0cm
+* otherwise the sizes of all picture will be kept
+macro seteps keepsize=0 bound=0.
+if ( [1].EQ.'?' ) then
+  exitm 'basic scaling/sizing macro'
+elseif ( [1].EQ.'usage' ) then
+  mess 'Usage: seteps keepsize=0/1/-1 bound=0'
+  stopm
+elseif ( [1].EQ.'help' ) then
+  mess
+  if ( [lang].eq.'ru' ) then
+     mess 'seteps [keepsize=0] [bound=0.]'
+     mess '  основной макрос для установки единого стиля размеров и фонтов.'
+     mess 'keepsize - флаг указывает, как воспринимать текущие размеры'
+     mess '  листа:'
+     mess '  0 -- размеры листа изменяются так, чтобы каждая зона'
+     mess '       была размером 7.6x7.0 cm^2.'
+     mess '  1 -- размеры листа не изменяются, а зоны помещаются внутрь'
+     mess '       так, что их размеры пропорциональны 7.6x7.0.'
+     mess ' -1 -- размеры листа не изменяются, а зоны помещаются внутрь'
+     mess '       так, чтобы занять как можно большее место.'
+     mess 'bound - это ширина границы листа в см.'
+     mess 'ВНИМАНИЕ: глоб FONT устанавливает все фонты.'
+     mess 'ВНИМАНИЕ: зоны должны быть установлены перед вызовом макроса.'
+  else
+     mess 'seteps [keepsize=0] [bound=0.]'
+     mess '  basic macro to set sizes, fonts, etc.'
+     mess '  keepsize is a flag which specify how to treat picture sizes'
+     mess '  If =0 (default), then new sizes are set, so that each'
+     mess '  window gets sizes 7.6x7.0 cm.'
+     mess '  If =1, then sizes are kept unchanged, but windows are placed'
+     mess '  inside so that they keep their aspect ratio to 7.6x7.0.'
+     mess '  If =-1, then size are kept unchanged, and windows are placed'
+     mess '  inside so that they will take maximum area.'
+     mess '   bound is the width of the whole picture boundaries in cm.'
+     mess '  NOTE: glob 'FONT' is used to set font.'
+     mess '  NOTE: set zones before calling to this macro.'
+  endif
+  mess
+  stopm
+endif
+if ( [keepsize].NE.0 .AND. _
+     [keepsize].NE.1 .AND. _
+     [keepsize].NE.-1 ) then
+  mess 'seteps: unavailable value for keepsize.'
+  stopm
+endif
+*
+* input variables:
+xzones = $grafinfo('xzones')
+yzones = $grafinfo('yzones')
+
+* opts
+opt hard
+opt nbox
+opt npto
+opt dvxr
+opt dvyr
+opt grid
+opt nopg
+opt zfl
+
+* SND standards
+sndxsiz = 7.6
+sndysiz = 7.0
+sndfsiz = 0.27
+sndfmin = 0.2
+sndfmax = 0.45
+sndwind = 0.2
+sndinde = 0.3
+sndarou = 0.1
+sndlwid = 3.
+
+import FONT
+if ( [FONT].EQ.'[FONT]' ) then
+  sndfont = -10
+else
+  sndfont = [FONT]
+endif
+
+* calculate font size scale
+if ( [keepsize].EQ.0 ) then
+  fscale = 1.
+  xscale = 1.
+  yscale = 1.
+else
+  xscale = ( $grafinfo('xsiz') - [bound]*2 ) / _
+           ( [xzones]*([sndxsiz]+[sndwind])-[sndwind] )
+  yscale = ( $grafinfo('ysiz') - [bound]*2 ) / _
+           ( [yzones]*([sndysiz]+[sndwind])-[sndwind] )
+  if ( [xscale].LT.[yscale] ) then
+    fscale = [xscale]
+  else
+    fscale = [yscale]
+  endif
+  if ( [keepsize].EQ.1 ) then
+    xscale = [fscale]
+    yscale = [fscale]
+  endif
+  tmp = [fscale]*[sndfsiz]
+  if ( [tmp].LT.[sndfmin] ) then
+    fscale = [sndfmin]/[sndfsiz]
+  elseif ( [tmp].GT.[sndfmax] ) then
+    fscale = [sndfmax]/[sndfsiz]
+  endif
+endif
+* mess Font scale is [fscale]
+
+* relevant font sizes
+set gsiz [sndfsiz]*[fscale]*0.8
+set tsiz [sndfsiz]*[fscale]*0.8
+set asiz [sndfsiz]*[fscale]
+set vsiz [sndfsiz]*[fscale]
+
+* other font sizes
+set ksiz [sndfsiz]*[fscale]*0.2
+if ( $grafinfo('csiz').EQ.0.28 ) then
+  set csiz [sndfsiz]*[fscale]*0.6
+  set stat 1110
+endif
+set psiz [sndfsiz]*[fscale]
+set ssiz [sndfsiz]*[fscale]*0.5
+set 2siz [sndfsiz]*[fscale]*0.5
+
+* x
+set xval $grafinfo('vsiz')*[sndinde]
+set xlab $grafinfo('xval')+$grafinfo('vsiz')*2.8
+xl = $grafinfo('xlab')+$grafinfo('asiz')+[sndarou]*[fscale]
+xr = $grafinfo('vsiz')*1.2+[sndarou]*[fscale]
+set xwin [sndwind]*[fscale]+[xl]+[xr]
+* set xmgl [xl]+[bound]
+* set xmgr [xr]+[bound]
+
+* y
+set yval $grafinfo('vsiz')*[sndinde]
+set ylab $grafinfo('yval')+$grafinfo('vsiz')+$grafinfo('asiz')*[sndinde]
+set yhti $grafinfo('yval')+$grafinfo('vsiz')+$grafinfo('tsiz')*1.5
+set ygti [bound]+0.0001
+yl = $grafinfo('ylab')+$grafinfo('asiz')
+yu = $grafinfo('yhti')+$grafinfo('tsiz')
+if ( [yl].LT.[yu] ) then
+  yl = [yu]
+endif
+yl = [yl] + [sndarou]*[fscale]
+yu = $grafinfo('vsiz')*0.5+[sndarou]*[fscale]
+set ywin [sndwind]*[fscale]+[yl]+[yu]
+* set ymgl [yl]+[bound]
+* set ymgu [yu]+[bound]
+
+* sizes
+set xtic $grafinfo('vsiz')*0.8
+set ytic $grafinfo('vsiz')*0.8
+xs = [xscale]*([xzones]*([sndxsiz]+[sndwind])-[sndwind]) + [bound]*2
+ys = [yscale]*([yzones]*([sndysiz]+[sndwind])-[sndwind]) + [bound]*2
+if ( [keepsize].EQ.0 ) then
+  set xmgl [bound]+[xl]
+  set xmgr [bound]+[xr]
+  set ymgl [bound]+[yl]
+  set ymgu [bound]+[yu]
+  set xsiz [xs]
+  set ysiz [ys]
+else
+  xs = ($grafinfo('xsiz')-[xs])/2.+[bound]
+  set xmgl [xs]+[xl]
+  set xmgr [xs]+[xr]
+  ys = ($grafinfo('ysiz')-[ys])/2.+[bound]
+  set ymgl [ys]+[yl]
+  set ymgu [ys]+[yu]
+endif
+zone [xzones] [yzones]
+
+mess 'Setting '//$grafinfo('xsiz')//'x'//_
+$grafinfo('ysiz')//' cm picture size'
+mess 'Setting '//[xzones]//'x'//[yzones]//' zones'
+
+* line width
+set hwid [sndlwid]
+set bwid [sndlwid]
+set fwid [sndlwid]
+set xwid 2.5
+set ywid 2.5
+set cwid [sndlwid]
+set pwid [sndlwid]
+
+* fonts
+set tfon [sndfont]
+set vfon [sndfont]
+set lfon [sndfont]
+set cfon [sndfont]
+
+* divisions
+set ndvx 10508.
+set ndvy 10510.
+set ndvz 10504.
+set errx 0.1
+
+* IGSETs
+igset basl 0.15
+igset lwid [sndlwid]
+igset mtyp 4
+igset mscf 0.15
+igset txal 0
+igset chhe [sndfsiz]*[fscale]
+igset tang 0
+igset txfp [sndfont]
+return

@@ -1,0 +1,81 @@
+ exe nimeps
+opt zfl
+opt nfit
+opt nsta
+opt nbox
+opt ngri
+set ymgu 0.25
+*igset MTYP 21 
+*set lwid 6
+*set txfp -20
+set VSIZ 0.15
+set XVAL 0.25
+set XLAB 0.7
+zone
+
+ opt linx
+ opt liny 
+ 
+ null  0 7 0 200
+ itx 2 180 '12.9 GeV/c  p Al -> pi+ X'
+ 
+**   Momentum (Gev/c) R
+ve/create p(8) R 1 1.5 2 2.5 3 3.625 4.5 5.75
+**   RMS Momentum (Gev/c) R
+ve/create rmsp(8) R 0.25 0.25 0.25 0.25 0.25 0.375 0.5 0.75
+**   Cross Section dSig/dp (mb/GeV/c) R
+ve/create cr_p(8) R  54.5589 50.7787 41.732 33.5845 28.3321 16.5237 10.2745 4.29622
+**   RMS Cross Section dSig/dp (mb/GeV/c) R
+ve/create rmscr_p(8) R  4.00496 3.48505 2.78325 2.21147 1.78674 1.05682 0.691661 0.325285
+
+igset plci 1
+igset pmci 1
+gr/h/err p cr_p rmsp rmscr_p 8 20 0.05
+
+**  p
+ve/create px(19) R  0   0.75 0.75 1.25 1.25 1.75 1.75 2.25 2.25 2.75 2.75 3.25 3.25 4 4 5 5 6.5 6.5
+**  LEPAR
+ve/create s1y(19) R  162.877 162.877 82.677 82.677 62.0968 62.0968 49.4992 49.4992 38.6704 38.6704 30.4079 30.4079 22.4535 22.4535 13.5883 13.5883 5.68604 5.68604 0
+**  Binary
+ve/create s2y(19) R  14.1956 14.1956 26.795 26.795 30.814 30.814 31.8324 31.8324 30.3898 30.3898 28.1858 28.1858 24.1517 24.1517 17.0263 17.0263 8.40627 8.40627 0
+**  Bertini
+ve/create s3y(19) R  19.8601 19.8601 23.6435 23.6435 24.9681 24.9681 23.5527 23.5527 18.2391 18.2391 14.3827 14.3827 11.4072 11.4072 9.06188 9.06188 7.28947 7.28947 0
+**  QGSP
+ve/create s4y(19) R  33.4052 33.4052 66.2793 66.2793 71.5502 71.5502 60.3934 60.3934 46.7466 46.7466 34.3234 34.3234 22.852 22.852 11.7641 11.7641 4.5756 4.5756 0
+**  QGSC
+ve/create s5y(19) R  41.0835 41.0835 72.1916 72.1916 74.4173 74.4173 61.7734 61.7734 47.2698 47.2698 34.7077 34.7077 22.9362 22.9362 11.949 11.949 4.64495 4.64495 0
+ 
+igset plci 3
+pline 19 px s1y
+line 4 160 5 160
+
+igset plci 2
+pline 19 px s2y
+line 4 150 5 150
+
+igset plci 6
+pline 19 px s3y
+line 4 140 5 140
+
+igset plci 4
+pline 19 px s4y
+line 4 130 5 130
+
+igset plci 7
+pline 19 px s5y
+line 4 120 5 120
+
+ atitle 'Momentum (GeV/c)' 'Cross Section (mb/GeV/c)' 
+
+ igset CHHE 0.2
+ 
+ itx 5.5 158  'LEPAR' 
+ itx 5.5 148  'Binary' 
+ itx 5.5 138  'Bertini' 
+ itx 5.5 128  'QGSP' 
+ itx 5.5 118  'QGSC' 
+ 
+* exe prf pn_al_800 eps
+
+ opt linx
+ opt liny

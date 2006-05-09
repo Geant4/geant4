@@ -1,0 +1,37 @@
+macro prf
+*
+* write picture in memory to postscript file 
+* (opt zfl must be used)
+*
+* prf [filename] [ps|eps] 
+*   ps = default
+*   file name = use given file name (default is paw.ps)
+*
+* Doug Wright Oct 1993
+
+meta = -111
+file = [1].ps
+
+for a in [*]
+  case [a] in
+*    (land) meta = -112
+    (eps) meta = -113
+  endcase
+endfor
+
+if [meta] = -113 then
+    file = [1].eps
+endif
+
+shell mv [file] [file].old
+fortran/file 66 [file]
+
+* bug in interactive geant has both of these defined!
+* graphics_control/metafile -66 [meta]
+graphics/metafile         -66 [meta]
+
+pic/plot ' '
+close 66
+
+return
+
