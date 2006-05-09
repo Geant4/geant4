@@ -1,0 +1,31 @@
+# $Id: pair.mac,v 1.1 2006-05-09 16:22:19 maire Exp $
+#
+# Macro file for "TestEm17.cc"
+# (can be run in batch, without graphic)
+#
+/control/verbose 2
+/run/verbose 2
+#
+/testem/det/setMat Iron
+/testem/det/setSize 1 m
+#
+/testem/phys/addPhysics standard
+#
+/testem/phys/setCuts 1 mm
+#
+/run/initialize
+#
+/process/inactivate muIoni
+/process/inactivate muBrems
+/process/inactivate muNucl
+#
+/gun/particle mu+
+/gun/energy 10 TeV
+#
+/testem/histo/setFileName pair
+/testem/histo/setFileType hbook
+/testem/histo/setHisto 2 100 -10. 0.
+#
+/testem/event/printModulo 1000
+#
+/run/beamOn 10000
