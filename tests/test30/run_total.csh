@@ -1,4 +1,25 @@
 
+setenv TARGET dn_al_022
+source run_fast.csh
+
+setenv TARGET dn_ta_022
+source run_fast.csh
+
+setenv TARGET dn_zr_022
+source run_fast.csh
+
+setenv TARGET he_al_140
+source run_fast.csh
+
+setenv TARGET he_bi_140
+source run_fast.csh
+
+setenv TARGET he_ni_140
+source run_fast.csh
+
+setenv TARGET he_zr_140
+source run_fast.csh
+
 setenv TARGET pn_al_022
 source run_fast.csh
 
@@ -41,6 +62,9 @@ setenv TARGET pn_al_113
 source run_fast.csh
 
 setenv TARGET pn_fe_113
+source run_fast.csh
+
+setenv TARGET pn_pb_113
 source run_fast.csh
 
 setenv TARGET pn_zr_120

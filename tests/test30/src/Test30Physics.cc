@@ -78,13 +78,25 @@
 #include "G4LEPionPlusInelastic.hh"
 #include "G4LEPionMinusInelastic.hh"
 #include "G4LEProtonInelastic.hh"
-//#include "G4PionMinusNuclearReaction.hh"
-//#include "G4StringChipsInterface.hh"
+//#include "G4PionMinusNuclearReaction.hh" 
+#include "G4StringChipsInterface.hh"
 #include "G4PreCompoundModel.hh"
 #include "G4ExcitationHandler.hh"
 #include "G4BinaryCascade.hh"
 #include "G4BinaryLightIonReaction.hh"
 #include "G4CascadeInterface.hh"
+#include "G4WilsonAbrasionModel.hh"
+
+#include "G4TheoFSGenerator.hh"
+#include "G4FTFModel.hh"
+#include "G4ExcitedStringDecay.hh"
+#include "G4LundStringFragmentation.hh"
+
+#include "G4ElasticHadrNucleusHE.hh"
+#include "G4LElastic.hh"
+#include "G4LElasticB.hh"
+#include "G4CascadeElasticInterface.hh"
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -152,7 +164,6 @@ void Test30Physics::Initialise()
   G4Deuteron::DeuteronDefinition();
   G4Alpha::AlphaDefinition();
   G4Triton::TritonDefinition();
-  G4GenericIon::GenericIonDefinition();
   theProcess = 0;
   theDeExcitation = 0;
   thePreCompound = 0;
@@ -189,7 +200,7 @@ G4VProcess* Test30Physics::GetProcess(const G4String& gen_name,
 
   // Choose generator
 
-  if(gen_name == "LEparametrisation") {
+  if(gen_name == "lepar") {
     if(part_name == "proton")   sg = new Test30VSecondaryGenerator(new G4LEProtonInelastic(),mat);
     else if(part_name == "pi+") sg = new Test30VSecondaryGenerator(new G4LEPionPlusInelastic(),mat);
     else if(part_name == "pi-") sg = new Test30VSecondaryGenerator(new G4LEPionMinusInelastic(),mat);
@@ -202,8 +213,8 @@ G4VProcess* Test30Physics::GetProcess(const G4String& gen_name,
     sg = new Test30VSecondaryGenerator(new G4PionMinusNuclearReaction(),mat);
     theProcess->SetSecondaryGenerator(sg);
     man->AddDiscreteProcess(theProcess);
-
-  } else if(gen_name == "stringCHIPS") {
+*/
+  } else if(gen_name == "strCHIPS") {
     sg = new Test30VSecondaryGenerator(new G4StringChipsInterface(),mat);
 
     //G4cout <<  "Generator is ready" << G4endl;
@@ -211,7 +222,6 @@ G4VProcess* Test30Physics::GetProcess(const G4String& gen_name,
     //G4cout <<  "Generator is set" << G4endl;
     man->AddDiscreteProcess(theProcess);
 
-*/
   } else if(gen_name == "preCompound") {
     theDeExcitation = new G4ExcitationHandler();
     G4PreCompoundModel* pcm = new G4PreCompoundModel(theDeExcitation);
@@ -220,7 +230,7 @@ G4VProcess* Test30Physics::GetProcess(const G4String& gen_name,
     theProcess->SetSecondaryGenerator(sg);
     man->AddDiscreteProcess(theProcess);
 
-  } else if(gen_name == "binary") {
+  } else if(gen_name == "binary_pc") {
     theDeExcitation = new G4ExcitationHandler();
     G4PreCompoundModel* pcm = new G4PreCompoundModel(theDeExcitation);
     thePreCompound = pcm;
@@ -231,23 +241,80 @@ G4VProcess* Test30Physics::GetProcess(const G4String& gen_name,
     hkm->SetDeExcitation(pcm);
     hkmod = hkm;
 
-  } else if(gen_name == "binary_no_pc") {
+  } else if(gen_name == "binary") {
     G4BinaryCascade* hkm = new G4BinaryCascade();
     sg = new Test30VSecondaryGenerator(hkm, mat);
     theProcess->SetSecondaryGenerator(sg);
     man->AddDiscreteProcess(theProcess);
-    hkm->SetDeExcitation(0);
+//    hkm->SetDeExcitation(0);
+
+  } else if(gen_name == "ftfbinary") {
+
+//    theModel = new G4TheoFSGenerator;
+//    theCascade = new G4GeneratorPrecompoundInterface;
+//    thePreEquilib = new G4PreCompoundModel(&theHandler);
+//    theCascade->SetDeExcitation(thePreEquilib);  
+//    theModel->SetTransport(theCascade);
+//    theModel->SetHighEnergyGenerator(&theStringModel);
+//    theStringDecay = new G4ExcitedStringDecay(&theFragmentation);
+//    theStringModel.SetFragmentationModel(theStringDecay);
+
+    G4TheoFSGenerator * model = new G4TheoFSGenerator;
+    G4FTFModel * stringmodel= new G4FTFModel;
+    G4BinaryCascade* cascade = new G4BinaryCascade();
+    G4ExcitedStringDecay * stringDecay = new G4ExcitedStringDecay(new G4LundStringFragmentation());
+    model->SetHighEnergyGenerator(stringmodel);
+    stringmodel->SetFragmentationModel(stringDecay);
+    model->SetTransport(cascade);
+    sg = new Test30VSecondaryGenerator(model, mat);
+    theProcess->SetSecondaryGenerator(sg);
+    man->AddDiscreteProcess(theProcess);
 
   } else if(gen_name == "binary_ion") {
     G4BinaryLightIonReaction* hkm = new G4BinaryLightIonReaction();
     sg = new Test30VSecondaryGenerator(hkm, mat);
     theProcess->SetSecondaryGenerator(sg);
     man->AddDiscreteProcess(theProcess);
-//    hkm->SetDeExcitation(0);
 
   } else if(gen_name == "bertini") {
     G4CascadeInterface* hkm = new G4CascadeInterface();
     sg = new Test30VSecondaryGenerator(hkm, mat);
+    theProcess->SetSecondaryGenerator(sg);
+    man->AddDiscreteProcess(theProcess);
+
+  } else if(gen_name == "LElastic") {
+    G4LElastic* els = new G4LElastic();
+    sg = new Test30VSecondaryGenerator(els, mat);
+    theProcess->SetSecondaryGenerator(sg);
+    man->AddDiscreteProcess(theProcess);
+
+  } else if(gen_name == "LElasticB") {
+    G4LElasticB* els = new G4LElasticB();
+    sg = new Test30VSecondaryGenerator(els, mat);
+    theProcess->SetSecondaryGenerator(sg);
+    man->AddDiscreteProcess(theProcess);
+
+  } else if(gen_name == "HElastic") {
+    G4ElasticHadrNucleusHE* els = new G4ElasticHadrNucleusHE();
+    sg = new Test30VSecondaryGenerator(els, mat);
+    theProcess->SetSecondaryGenerator(sg);
+    man->AddDiscreteProcess(theProcess);
+
+  } else if(gen_name == "BertiniElastic") {
+    G4CascadeElasticInterface* els = new G4CascadeElasticInterface();
+    sg = new Test30VSecondaryGenerator(els, mat);
+    theProcess->SetSecondaryGenerator(sg);
+    man->AddDiscreteProcess(theProcess);
+
+  } else if(gen_name == "abrasion") {
+    G4WilsonAbrasionModel* wam = new G4WilsonAbrasionModel();
+    size_t ne = mat->GetNumberOfElements();
+    const G4ElementVector* ev = mat->GetElementVector();
+    for(size_t i=0; i<ne; i++) {
+      G4Element* elm = (*ev)[i];
+      wam->ActivateFor(elm);
+    }    
+    sg = new Test30VSecondaryGenerator(wam, mat);
     theProcess->SetSecondaryGenerator(sg);
     man->AddDiscreteProcess(theProcess);
 

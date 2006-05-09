@@ -29,11 +29,12 @@
 //
 //      File name:     Test30
 //
-//      Author:        V.Ivanchenko 
-// 
+//      Author:        V.Ivanchenko
+//
 //      Creation date: 12 March 2002
 //
-//      Modifications: 
+//      Modifications:
+//      14.11.03 Renamed to cascade
 //
 // -------------------------------------------------------------------
 
@@ -55,6 +56,7 @@
 #include "G4ProtonInelasticCrossSection.hh"
 #include "G4NeutronInelasticCrossSection.hh"
 #include "G4HadronInelasticDataSet.hh"
+#include "G4HadronElasticDataSet.hh"
 #include "G4IonsShenCrossSection.hh"
 #include "G4TripathiCrossSection.hh"
 
@@ -73,6 +75,7 @@
 #include "G4Alpha.hh"
 #include "G4Deuteron.hh"
 #include "G4Triton.hh"
+#include "G4IonTable.hh"
 #include "G4ForceCondition.hh"
 #include "G4Box.hh"
 #include "G4PVPlacement.hh"
@@ -84,19 +87,18 @@
 #include "G4PreCompoundModel.hh"
 #include "G4Evaporation.hh"
 
-// New Histogramming (from AIDA and Anaphe):
-#include <memory> // for the auto_ptr(T>
+#include "G4StateManager.hh"
 
+#include <memory> // for the auto_ptr(T>
 #include "AIDA/AIDA.h"
 
 #include "G4Timer.hh"
 
 int main(int argc, char** argv)
 {
-  //  HepTupleManager* hbookManager = 0;
-
-  // -------------------------------------------------------------------
-  // Setup
+  G4cout << "========================================================" << G4endl;
+  G4cout << "======             Cascade Test Start           ========" << G4endl;
+  G4cout << "========================================================" << G4endl;
 
   G4String  namePart = "proton";
   G4bool    ionParticle = false;
@@ -258,7 +260,17 @@ int main(int argc, char** argv)
   G4cout << "#eBound" << G4endl;
   G4cout << "#kBound" << G4endl;
 
-
+  const G4ParticleDefinition* proton = G4Proton::Proton();
+  const G4ParticleDefinition* neutron = G4Neutron::Neutron();
+  const G4ParticleDefinition* pin = G4PionMinus::PionMinus();
+  const G4ParticleDefinition* pip = G4PionPlus::PionPlus();
+  const G4ParticleDefinition* pi0 = G4PionZero::PionZero();
+  const G4ParticleDefinition* deu = G4Deuteron::DeuteronDefinition();
+  const G4ParticleDefinition* tri = G4Triton::TritonDefinition();
+  const G4ParticleDefinition* alp = G4Alpha::AlphaDefinition();
+  const G4ParticleDefinition* ion = G4GenericIon::GenericIon();
+  G4ParticleTable* partTable = G4ParticleTable::GetParticleTable();
+  partTable->SetReadiness();
 
   G4String line, line1;
   G4bool end = true;
@@ -268,6 +280,10 @@ int main(int argc, char** argv)
       G4cout << "Next line " << line << G4endl;
       if(line == "#particle") {
         (*fin) >> namePart;
+      } else if(line == "#ion") {
+        ionParticle= true;
+	namePart="GenericIon";
+        (*fin) >> ionA >> ionZ;
       } else if(line == "#energy(MeV)") {
         (*fin) >> energy;
         energy *= MeV;
@@ -327,13 +343,6 @@ int main(int argc, char** argv)
         (*fin) >> kBound;
       } else if(line == "#material") {
         (*fin) >> nameMat;
-      } else if(line == "#particle") {
-        (*fin) >> namePart;
-      } else if(line == "#ion") {
-        ionParticle= true;
-        (*fin) >> ionZ >> ionA ;
-      } else if(line == "#Shen") {
-        Shen = true;
       } else if(line == "#generator") {
         (*fin) >> nameGen;
       } else if(line == "#paw") {
@@ -373,6 +382,9 @@ int main(int argc, char** argv)
 
     G4cout << "###### Start new run # " << run << "     #####" << G4endl;
 
+    if ( ionParticle ) {
+       energy*=ionA;
+    }
     material = mate->GetMaterial(nameMat);
     if(!material) {
       G4cout << "Material <" << nameMat
@@ -380,15 +392,19 @@ int main(int argc, char** argv)
 	     << G4endl;
 	     exit(1);
     }
-    G4ParticleDefinition* part;
-    if ( ! ionParticle ) {
-	part = (G4ParticleTable::GetParticleTable())->FindParticle(namePart);
+    G4ParticleDefinition* part(0);
+    if (namePart != "GenericIon") {
+       part = (G4ParticleTable::GetParticleTable())->FindParticle(namePart);
     } else {
-        part = (G4ParticleTable::GetParticleTable())->GetIon(ionZ, ionA, 0.);
+        G4StateManager* g4State=G4StateManager::GetStateManager();
+	if (! g4State->SetNewState(G4State_Init)) G4cout << "error changing G4state"<< G4endl;;   
+       G4IonTable ions;
+       part = ions.GetIon(ionZ, ionA);
     }
-    if ( ! part ) {
-       G4cout << " Sorry, No definition for particle found" << G4endl;
-       exit(0);
+   if (! part ) {
+       G4cout << " Sorry, No definition for particle" <<namePart << " found" << G4endl;
+       G4Exception(" "); 
+       
     }
     G4VProcess* proc = phys->GetProcess(nameGen, namePart, material);
     G4ExcitationHandler* theDeExcitation = phys->GetDeExcitation();
@@ -401,22 +417,7 @@ int main(int argc, char** argv)
       theDeExcitation->SetEvaporation(evp);
     }
     G4double amass = phys->GetNucleusMass();
-    /*
-    if(nameGen == "binary") {
-      phys->setCutOnP(eBound);
-      phys->setCutOnPPP(kBound);
-    }
-    */
-    const G4ParticleDefinition* proton = G4Proton::Proton();
-    const G4ParticleDefinition* neutron = G4Neutron::Neutron();
-    const G4ParticleDefinition* pin = G4PionMinus::PionMinus();
-    const G4ParticleDefinition* pip = G4PionPlus::PionPlus();
-    const G4ParticleDefinition* pi0 = G4PionZero::PionZero();
-    const G4ParticleDefinition* deu = G4Deuteron::DeuteronDefinition();
-    const G4ParticleDefinition* tri = G4Triton::TritonDefinition();
-    const G4ParticleDefinition* alp = G4Alpha::AlphaDefinition();
-    const G4ParticleDefinition* ion = G4GenericIon::GenericIonDefinition();
-    
+
     if(!proc) {
       G4cout << "For particle: " << part->GetParticleName()
 	     << " generator " << nameGen << " is unavailable"
@@ -450,15 +451,15 @@ int main(int argc, char** argv)
     // Creating a tuple factory, whose tuples will be handled by the tree
     //   std::auto_ptr< AIDA::ITupleFactory > tpf( af->createTupleFactory( *tree ) );
 
-    const G4int nhisto = 56;
+    const G4int nhisto = 63;
     AIDA::IHistogram1D* h[nhisto];
     //    AIDA::IHistogram2D* h2;
     //AIDA::ITuple* ntuple1 = 0;
 
     G4double mass = part->GetPDGMass();
-    G4double pmax = sqrt(energy*(energy + 2.0*mass));
-    G4double binlog = log10(ebinlog);
-    G4int nbinlog = (G4int)(log10(2.0*emax)/binlog);
+    G4double pmax = std::sqrt(energy*(energy + 2.0*mass));
+    G4double binlog = std::log10(ebinlog);
+    G4int nbinlog = (G4int)(std::log10(2.0*emax)/binlog);
     G4double logmax = binlog*nbinlog;
     G4double bine = emax/(G4double)nbinse;
     G4double bind = emax/(G4double)nbinsd;
@@ -557,17 +558,25 @@ int main(int argc, char** argv)
       if(nanglpi>4)
        h[49]=hf->createHistogram1D("50","ds/dE for pi+ at theta = 4",nbinspi,0.,emaxpi);
 
-        h[50]=hf->createHistogram1D("51","E(MeV) neutrons",nbinlog,0.,logmax);
-        if(nangl>0)
-          h[51]=hf->createHistogram1D("52","ds/dE for neutrons at theta = 0",nbinlog,0.,logmax);
-        if(nangl>1)
-          h[52]=hf->createHistogram1D("53","ds/dE for neutrons at theta = 1",nbinlog,0.,logmax);
-        if(nangl>2)
-          h[53]=hf->createHistogram1D("54","ds/dE for neutrons at theta = 2",nbinlog,0.,logmax);
-        if(nangl>3)
-          h[54]=hf->createHistogram1D("55","ds/dE for neutrons at theta = 3",nbinlog,0.,logmax);
-        if(nangl>4)
-          h[55]=hf->createHistogram1D("56","ds/dE for neutrons at theta = 4",nbinlog,0.,logmax);
+      h[50]=hf->createHistogram1D("51","E(MeV) neutrons",nbinlog,0.,logmax);
+      if(nangl>0)
+	h[51]=hf->createHistogram1D("52","ds/dE for neutrons at theta = 0",nbinlog,0.,logmax);
+      if(nangl>1)
+	h[52]=hf->createHistogram1D("53","ds/dE for neutrons at theta = 1",nbinlog,0.,logmax);
+      if(nangl>2)
+	h[53]=hf->createHistogram1D("54","ds/dE for neutrons at theta = 2",nbinlog,0.,logmax);
+      if(nangl>3)
+	h[54]=hf->createHistogram1D("55","ds/dE for neutrons at theta = 3",nbinlog,0.,logmax);
+      if(nangl>4)
+	h[55]=hf->createHistogram1D("56","ds/dE for neutrons at theta = 4",nbinlog,0.,logmax);
+
+      h[56]=hf->createHistogram1D("57","Ekin (MeV) for 1st particle",120,0.,energy*1.2/MeV);
+      h[57]=hf->createHistogram1D("58","Ekin (MeV) for 2nd particle",120,0.,energy*1.2/MeV);
+      h[58]=hf->createHistogram1D("59","cos(Theta) for 1st particle in Lab.Sys.",nbinsa,-1.,1.);
+      h[59]=hf->createHistogram1D("60","cos(Theta) for 2nd particle in Lab.Sys.",nbinsa,-1.,1.);
+      h[60]=hf->createHistogram1D("61","cos(Theta) for 1st particle in CM.Sys.",nbinsa,-1.,1.);
+      h[61]=hf->createHistogram1D("62","cos(Theta) for 2nd particle in CM.Sys.",nbinsa,-1.,1.);
+      h[62]=hf->createHistogram1D("63","cos(Theta) for 1 & 2 particle in CM.Sys.",nbinsa,-1.,1.);
 
       G4cout << "Histograms is initialised nbins=" << nbins
              << G4endl;
@@ -578,14 +587,23 @@ int main(int argc, char** argv)
     G4VCrossSectionDataSet* cs = 0;
     G4double cross_sec = 0.0;
 
-    if(part == proton && material->GetElement(0)->GetZ() > 1.5) {
+    if(nameGen == "LElastic" || nameGen == "LElasticB" || 
+       nameGen == "HElastic" || nameGen == "BertiniElastic") {
+      cs = new G4HadronElasticDataSet();
+    } else if(part == proton && material->GetElement(0)->GetZ() > 1.5) {
       cs = new G4ProtonInelasticCrossSection();
     } else if(part == neutron && material->GetElement(0)->GetZ() > 1.5) {
       cs = new G4NeutronInelasticCrossSection();
     } else if( ionParticle ) {
-      if ( Shen ) cs = new G4IonsShenCrossSection();
-      if ( ! cs ) cs = new G4TripathiCrossSection();
-    } else { 
+      if ( Shen ) {
+        cs = new G4IonsShenCrossSection();
+	G4cout << "Using Shen Cross section for Ions" << G4endl;
+      }
+      if ( ! cs ) {
+      cs = new G4TripathiCrossSection();
+      G4cout << "Using Tripathi Cross section for Ions" << G4endl;
+      }
+    } else {
       cs = new G4HadronInelasticDataSet();
     }
 
@@ -601,7 +619,8 @@ int main(int argc, char** argv)
     G4double factora= cross_sec*MeV*1000.0*(G4double)nbinsa/(twopi*2.0*barn*(G4double)nevt);
     G4double factorb= cross_sec*1000.0/(barn*(G4double)nevt);
     G4cout << "### factor  = " << factor
-           << "### factora = " << factor
+           << "### factora = " << factora
+           << "### factorb = " << factorb
            << "    cross(b)= " << cross_sec/barn << G4endl;
 
     if(nangl > 0) {
@@ -622,7 +641,7 @@ int main(int argc, char** argv)
         }
 
         cng[k] = cross_sec*MeV*1000.0*(G4double)nbinsd/
-         (twopi*(cos(degree*bng1[k]) - cos(degree*bng2[k]))*
+         (twopi*(std::cos(degree*bng1[k]) - std::cos(degree*bng2[k]))*
                 barn*emax*(G4double)nevt);
       }
     }
@@ -645,8 +664,8 @@ int main(int argc, char** argv)
         }
 
         cngpi[k] = cross_sec*MeV*1000.0*(G4double)nbinspi/
-         (twopi*(cos(degree*bngpi1[k]) - cos(degree*bngpi2[k]))*
-                 barn*emaxpi*(G4double)nevt);
+         (twopi*(std::cos(degree*bngpi1[k]) - std::cos(degree*bngpi2[k]))*
+                 barn*emax*(G4double)nevt);
       }
     }
 
@@ -674,7 +693,15 @@ int main(int argc, char** argv)
     step->SetPostStepPoint(bPoint);
     step->SetStepLength(theStep);
 
-    G4RotationMatrix* rot  = new G4RotationMatrix();
+    if(!G4StateManager::GetStateManager()->SetNewState(G4State_Idle))
+      G4cout << "G4StateManager PROBLEM! " << G4endl;
+    /*
+    G4cout << "### proton:" << G4endl;
+    proton->DumpTable();
+    G4cout << "### pin:" << G4endl;
+    pin->DumpTable();
+    */
+    G4RotationMatrix* rot = new G4RotationMatrix();
     G4double phi0 = aDirection.phi();
     G4double theta0 = aDirection.theta();
     rot->rotateZ(-phi0);
@@ -708,6 +735,8 @@ int main(int argc, char** argv)
       gTrack->SetKineticEnergy(energy);
 
       labv = G4LorentzVector(0.0, 0.0, pmax, energy + mass + amass);
+      G4ThreeVector bst = labv.boostVector();
+      
       aChange = proc->PostStepDoIt(*gTrack,*step);
 
       G4double de = aChange->GetLocalEnergyDeposit();
@@ -741,22 +770,35 @@ int main(int argc, char** argv)
         if(!inclusive && nbar != 2) break;
 
         m = pd->GetPDGMass();
-	p = sqrt(e*(e + 2.0*m));
+	p = std::sqrt(e*(e + 2.0*m));
 	mom *= p;
-        m  = pd->GetPDGMass();
         fm = G4LorentzVector(mom, e + m);
         labv -= fm;
         mom = (*rot)*mom;
         px = mom.x();
         py = mom.y();
         pz = mom.z();
-        p  = sqrt(px*px +py*py + pz*pz);
-        pt = sqrt(px*px +py*py);
+        pt = std::sqrt(px*px +py*py);
 
         theta = mom.theta();
+        G4double cost  = std::cos(theta);
         G4double thetad = theta/degree;
 
+        fm.boost(-bst);
+        G4double costcm = std::cos(fm.theta());
+
 	if(usepaw) {
+	  if(i==0)  {
+	    h[56]->fill(e/MeV,1.0);
+	    h[58]->fill(cost,factora);
+	    h[60]->fill(costcm,factora);
+	    h[62]->fill(costcm,factora);
+	  } else if(i==1) {
+	    h[57]->fill(e/MeV,1.0);
+	    h[59]->fill(cost,factora);
+	    h[61]->fill(costcm,factora);
+	    h[62]->fill(costcm,factora);
+	  }
           h[2]->fill(mom.phi()/degree,1.0);
           if(pd == neutron) h[23]->fill(mom.phi()/degree,1.0);
 	}
@@ -770,7 +812,7 @@ int main(int argc, char** argv)
 		 << G4endl;
 	}
 	de += e;
-        if(verbose>0 || abs(mom.phi()/degree - 90.) < 0.01) {
+        if(verbose>0 || std::fabs(mom.phi()/degree - 90.) < 0.001) {
           G4cout << i << "-th secondary  "
 		 << pd->GetParticleName() << "   Ekin(MeV)= "
                  << e/MeV
@@ -778,10 +820,9 @@ int main(int argc, char** argv)
 		 << "   m(MeV)= " << m/MeV
 		 << "   Etot(MeV)= " << (e+m)/MeV
 		 << "   pt(MeV)= " << pt/MeV
+                 << " has deg = " << mom.phi()/degree
                  << G4endl;
         }
-
-
 
 	if(usepaw) {
 
@@ -789,7 +830,7 @@ int main(int argc, char** argv)
             float N = pd->GetBaryonNumber();
             float Z = pd->GetPDGCharge()/eplus;
             float Z0= bestZ[(int)N];
-            if(abs(Z0 - Z) < 0.1 || Z0 == 0.0) h[26]->fill(N, factorb);
+            if(std::fabs(Z0 - Z) < 0.1 || Z0 == 0.0) h[26]->fill(N, factorb);
 	  }
 
           if(pd == proton) {
@@ -799,7 +840,7 @@ int main(int argc, char** argv)
             h[7]->fill(pt/MeV, 1.0);
             h[11]->fill(e/MeV, 1.0);
 	    h[21]->fill(e/MeV, factor);
-	    h[24]->fill(cos(theta), factora);
+	    h[24]->fill(cost, factora);
 
           } else if(pd == pin) {
 
@@ -841,15 +882,15 @@ int main(int argc, char** argv)
             h[10]->fill(pt/MeV, 1.0);
             h[14]->fill(e/MeV, 1.0);
 	    h[22]->fill(e/MeV, factor);
-            G4double ee = log10(e/MeV);
+            G4double ee = std::log10(e/MeV);
             G4int    nb = (G4int)(ee/binlog);
             G4double e1 = binlog*nb;
             G4double e2 = e1 + binlog;
-            e1 = pow(10., e1);
-            e2 = pow(10., e2) - e1;
+            e1 = std::pow(10., e1);
+            e2 = std::pow(10., e2) - e1;
             G4double f  = factor*bine/e2;
 	    h[50]->fill(ee, f);
-	    if(e >= elim) h[25]->fill(cos(theta), factora);
+	    if(e >= elim) h[25]->fill(cost, factora);
             for(G4int kk=0; kk<nangl; kk++) {
               if(bng1[kk] <= thetad && thetad <= bng2[kk]) {
                 h[27+kk]->fill(e/MeV, cng[kk]);
@@ -876,12 +917,11 @@ int main(int argc, char** argv)
         G4cout << "Energy/Momentum balance= " << labv << G4endl;
       }
 
-
       px = labv.px();
       py = labv.py();
       pz = labv.pz();
-      p  = sqrt(px*px +py*py + pz*pz);
-      pt = sqrt(px*px +py*py);
+      p  = std::sqrt(px*px +py*py + pz*pz);
+      pt = std::sqrt(px*px +py*py);
 
       if(usepaw) {
         h[0]->fill((float)n,1.0);
