@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EnergyLossMessenger.hh,v 1.10 2006-04-10 11:03:23 vnivanch Exp $
+// $Id: G4EnergyLossMessenger.hh,v 1.11 2006-05-09 19:50:13 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -78,7 +78,7 @@ class G4EnergyLossMessenger: public G4UImessenger
 public:   // with description
   
   G4EnergyLossMessenger();
-  ~G4EnergyLossMessenger();
+  virtual ~G4EnergyLossMessenger();
 
   void SetNewValue(G4UIcommand*, G4String);
 
@@ -90,6 +90,7 @@ private:
   G4UIcmdWithABool*          SubSecCmd;
   G4UIcmdWithADoubleAndUnit* MinSubSecCmd;
   G4UIcommand*               StepFuncCmd;
+  G4UIcommand*               mscCmd;
   G4UIcmdWithADoubleAndUnit* MinEnCmd;
   G4UIcmdWithADoubleAndUnit* MaxEnCmd;
   G4UIcmdWithABool*          IntegCmd;

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.cc,v 1.68 2006-04-10 11:03:23 vnivanch Exp $
+// $Id: G4LossTableManager.cc,v 1.69 2006-05-09 19:50:13 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -147,6 +147,8 @@ G4LossTableManager::G4LossTableManager()
   maxEnergyForMuonsActive = false;
   stepFunctionActive = false;
   flagLPM = true;
+  flagMSC = true;
+  facRange = 0.02;
   verbose = 1;
 }
 
@@ -784,6 +786,32 @@ void G4LossTableManager::SetLPMFlag(G4bool val)
 G4bool G4LossTableManager::LPMFlag() const
 {
   return flagLPM;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4LossTableManager::SetMscStepLimitation(G4bool val, G4double factor)
+{
+  flagMSC = val;
+  facRange = factor;
+  size_t msc = msc_vector.size();
+  for (size_t j=0; j<msc; j++) {
+    if(msc_vector[j]) msc_vector[j]->MscStepLimitation(val, factor);
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4bool G4LossTableManager::MscFlag() const
+{
+  return flagMSC;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4LossTableManager::FacRange() const
+{
+  return facRange;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

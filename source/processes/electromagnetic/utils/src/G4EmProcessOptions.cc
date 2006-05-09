@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmProcessOptions.cc,v 1.14 2006-04-10 11:03:23 vnivanch Exp $
+// $Id: G4EmProcessOptions.cc,v 1.15 2006-05-09 19:50:13 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -404,13 +404,7 @@ void G4EmProcessOptions::ActivateDeexcitation(G4bool val, const G4Region* r)
 void G4EmProcessOptions::SetMscStepLimitation(G4bool algorithm, 
 					      G4double factor)
 {
-  const std::vector<G4VMultipleScattering*>& u =
-        theManager->GetMultipleScatteringVector();
-  std::vector<G4VMultipleScattering*>::const_iterator itm;
-  for(itm = u.begin(); itm != u.end(); itm++) {
-    G4VMultipleScattering* s = *itm;
-    if(s) s->MscStepLimitation(algorithm, factor);
-  }
+  theManager->SetMscStepLimitation(algorithm, factor);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EnergyLossMessenger.cc,v 1.15 2006-04-10 11:03:23 vnivanch Exp $
+// $Id: G4EnergyLossMessenger.cc,v 1.16 2006-05-09 19:50:13 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -148,6 +148,19 @@ G4EnergyLossMessenger::G4EnergyLossMessenger()
   verCmd->SetParameterName("verb",true);
   verCmd->SetDefaultValue(true);
   verCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
+  mscCmd = new G4UIcommand("/process/eLoss/MscStepLimit",this);
+  mscCmd->SetGuidance("Set msc step limit flag and facRange value.");
+
+  G4UIparameter* msc = new G4UIparameter("algMsc",'b',false);
+  msc->SetGuidance("msc step algorithm flag");
+  mscCmd->SetParameter(msc);
+
+  G4UIparameter* facRange = new G4UIparameter("facRange",'d',false);
+  facRange->SetGuidance("msc parameter facRange");
+  facRange->SetParameterRange("facRange>0.");
+  mscCmd->SetParameter(msc);
+  mscCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -166,6 +179,7 @@ G4EnergyLossMessenger::~G4EnergyLossMessenger()
   delete rangeCmd;
   delete lpmCmd;
   delete verCmd;
+  delete mscCmd;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -202,6 +216,15 @@ void G4EnergyLossMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
      v2 *= G4UIcommand::ValueOf(unt);
      G4VEnergyLoss::SetStepFunction(v1,v2);
      lossTables->SetStepFunction(v1,v2);
+   }
+
+  if (command == mscCmd)
+   {
+     G4double f;
+     G4bool a;
+     std::istringstream is(newValue);
+     is >> a >> f;
+     lossTables->SetMscStepLimitation(a,f);
    }
 
   if (command == MinEnCmd) {

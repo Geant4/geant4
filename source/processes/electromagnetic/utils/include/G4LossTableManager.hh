@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.hh,v 1.36 2006-04-10 11:03:23 vnivanch Exp $
+// $Id: G4LossTableManager.hh,v 1.37 2006-05-09 19:50:13 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -195,6 +195,12 @@ public:
 
   G4bool LPMFlag() const;
 
+  void SetMscStepLimitation(G4bool algorithm, G4double factor = -1.);
+
+  G4bool MscFlag() const;
+
+  G4double FacRange() const;
+
   const std::vector<G4VEnergyLossProcess*>& GetEnergyLossProcessVector();
 
   const std::vector<G4VEmProcess*>& GetEmProcessVector();
@@ -257,6 +263,7 @@ private:
   G4bool maxEnergyForMuonsActive;
   G4bool stepFunctionActive;
   G4bool flagLPM;
+  G4bool flagMSC;
 
   G4double minSubRange;
   G4double maxRangeVariation;
@@ -264,6 +271,7 @@ private:
   G4double minKinEnergy;
   G4double maxKinEnergy;
   G4double maxKinEnergyForMuons;
+  G4double facRange;
 
   G4LossTableBuilder*         tableBuilder;
   G4EnergyLossMessenger*      theMessenger;
