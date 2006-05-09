@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HadronInelasticQBBC.cc,v 1.3 2006-05-04 18:12:32 ribon Exp $
+// $Id: G4HadronInelasticQBBC.cc,v 1.4 2006-05-09 11:41:56 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -174,7 +174,8 @@ void G4HadronInelasticQBBC::ConstructProcess()
         if(ftfFlag) Register(particle,hp,theFTFModel,"FTF");
 	else        Register(particle,hp,theQGSModel,"QGS");
 
-        if(chipsFlag) Register(particle,hp,theCHIPS,"CHIPS");
+	if(bertFlag)       Register(particle,hp,theBERT,"Bertini");
+        else if(chipsFlag) Register(particle,hp,theCHIPS,"CHIPS");
 	else {
 	  G4HadronicInteraction* theBIC = new G4BinaryCascade();
 	  theBIC->SetMinEnergy(0.0);
@@ -208,7 +209,8 @@ void G4HadronInelasticQBBC::ConstructProcess()
 	  Register(particle,theNeutronFission,hpf,"HP");
 	}
 
-        if(chipsFlag) Register(particle,hp,theCHIPS,"CHIPS");
+	if(bertFlag)       Register(particle,hp,theBERT,"Bertini");
+        else if(chipsFlag) Register(particle,hp,theCHIPS,"CHIPS");
 	else {
 	  G4HadronicInteraction* theBIC = new G4BinaryCascade();
 	  theBIC->SetMinEnergy(emin);
@@ -241,8 +243,8 @@ void G4HadronInelasticQBBC::ConstructProcess()
         if(ftfFlag) Register(particle,hp,theFTFModel,"FTF");
 	else        Register(particle,hp,theQGSModel,"QGS");
 
-        if(chipsFlag || !bertFlag) Register(particle,hp,theCHIPS,"CHIPS");
-	else                       Register(particle,hp,theBERT,"Bertini");
+        if(chipsFlag) Register(particle,hp,theCHIPS,"CHIPS");
+	else          Register(particle,hp,theBERT,"Bertini");
 
       } else if(pname == "lambda"    || 
 		pname == "sigma-"    || 
@@ -250,8 +252,8 @@ void G4HadronInelasticQBBC::ConstructProcess()
 		pname == "xi-"       || 
 		pname == "xi0") {
 	Register(particle,hp,theFTFModel,"FTF");
-        if(chipsFlag || !bertFlag) Register(particle,hp,theCHIPS,"CHIPS");
-	else                       Register(particle,hp,theBERT,"Bertini");
+        if(chipsFlag) Register(particle,hp,theCHIPS,"CHIPS");
+	else          Register(particle,hp,theBERT,"Bertini");
 
       } else if(pname == "anti_proton" || pname == "anti_neutron") {
 	Register(particle,hp,theFTFModel,"FTF");
