@@ -12,24 +12,19 @@ set NDVY 010205
  opt logy
  opt logx 
  
- hi/file 1 par.paw
+ hi/file 1 bic.paw
  hi/pl 12(2:100) hist
- itx 0.5 5000 'LEPAR'
+ itx 0.5 5000 'Binary'
  close 1
  
- hi/file 1 prec.paw
+ hi/file 1 ber.paw
  hi/pl 12(2:100) hist
- itx 0.5 5000 'PREC'
+ itx 0.5 5000 'Bertini'
  close 1
  
  hi/file 1 chips.paw
- hi/pl 12(2:100) hist
- itx 0.5 2000 'CHIPS'
- close 1
- 
- hi/file 1 kin.paw
- hi/pl 12(2:100) hist
- itx 0.5 1000 'KIN'
+* hi/pl 12(2:100) hist
+* itx 0.5 2000 'CHIPS'
  close 1
  
  opt liny

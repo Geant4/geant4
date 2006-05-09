@@ -7,7 +7,7 @@
 #verbose
 0
 #events
-100000
+20000
 //--------Proton_processes
 #particle
 alpha
@@ -34,9 +34,14 @@ Al
 5.
 //--------
 #generator
-binary
+binary_ion
 #paw
 bin.paw
+#run
+#generator
+abrasion
+#paw
+abr.paw
 #run
 //--------Exit
 #exit

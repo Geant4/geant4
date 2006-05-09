@@ -190,25 +190,25 @@ int main(int argc, char** argv)
        for(int j=0; j<na-1; j++) {
          f1  = cs[j];  
          y1  = (*f1)[i];  
-         ct1 = cos((*angle)[j]);
+         ct1 = std::cos((*angle)[j]);
             if(j == 0) {
               f2  = cs[j+1]; 
               y2  = (*f2)[i]; 
-              ct2 = cos((*angle)[j+1]);
+              ct2 = std::cos((*angle)[j+1]);
               y1 += (y2 - y1)*(1.0 - ct1)/(ct2 - ct1);
               ct1 = 1.0;
               if(y1 < 0.0) y1 = 0.0;
 	    } else if (j == na-2) {
               f2  = cs[j-1]; 
               y2  = (*f2)[i]; 
-              ct2 = cos((*angle)[j-1]);
+              ct2 = std::cos((*angle)[j-1]);
               y2 -= (y2 - y1)*(ct2 + 1.0)/(ct2 - ct1);
               ct2 = -1.0;
               if(y2 < 0.0) y2 = 0.0;
             } else {
               f2  = cs[j+1]; 
               y2  = (*f2)[i]; 
-              ct2 = cos((*angle)[j+1]);
+              ct2 = std::cos((*angle)[j+1]);
 	    }
 	 //         cout << "f1= " << f1 << " f2= " << f2 << endl;
 	 //         cout << "y1= " << y1 << " y2= " << y2 << endl;
@@ -222,7 +222,7 @@ int main(int argc, char** argv)
      (*fout_a) << "#####..End..#####" << G4endl;
      for(int j=0; j<na-1; j++) {
        f1  = cs[j];  
-       an  = cos((*angle)[j]);
+       an  = std::cos((*angle)[j]);
        x   = 0.0;
        for(i=0; i<nbin; i++) {
          y1  = (*f1)[i];

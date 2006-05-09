@@ -225,8 +225,8 @@ int main(int argc, char** argv)
       for(int j=0; j<na-1; j++) {
         f1  = cs[j];
         y1  = (*f1)[i];
-        ct1 = cos((*angle)[j]);
-        ct2 = cos((*angle)[j+1]);
+        ct1 = std::cos((*angle)[j]);
+        ct2 = std::cos((*angle)[j+1]);
         if(j == 0) {
           f2  = cs[j+1];
           y2  = (*f2)[i];
@@ -234,7 +234,7 @@ int main(int argc, char** argv)
         } else if (j == na-2) {
           f2  = cs[j-1];
           y2  = (*f2)[i];
-          ct2 = cos((*angle)[j-1]);
+          ct2 = std::cos((*angle)[j-1]);
           y2 -= (y2 - y1)*(ct2 + 1.0)/(ct2 - ct1);
           ct2 = -1.0;
           if(y2 < 0.0) y2 = 0.0;
@@ -254,7 +254,7 @@ int main(int argc, char** argv)
 
     for(int j=0; j<na-1; j++) {
       f1  = cs[j];
-      an  = cos((*angle)[j]);
+      an  = std::cos((*angle)[j]);
       x   = 0.0;
       for(int ii=0; ii<nbin-1; ii++) {
         y1  = (*f1)[ii];

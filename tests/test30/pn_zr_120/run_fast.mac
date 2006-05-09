@@ -5,7 +5,7 @@
 //      Created: 13.03.2002 V.Ivanchenko
 //---------------------------------------
 #verbose
-2
+0
 #events
 100000
 //--------Proton_processes
@@ -32,10 +32,14 @@ Zr
 5.
 //--------
 #generator
-LEparametrisation
-//binary
+binary
 #paw
-kin.paw
+bic.paw
+#run
+#generator
+bertini
+#paw
+ber.paw
 #run
 //--------Exit
 #exit

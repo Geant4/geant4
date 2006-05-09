@@ -26,14 +26,11 @@
 //      GEANT 4 class file --- Copyright CERN 1998
 //      CERN Geneva Switzerland
 //
-//
-//      File name:     Test30
-//
-//      Author:        V.Ivanchenko 
+//      Author:        V.Ivanchenko
 //
 //      Creation date: 12 March 2002
 //
-//      Modifications:
+//      Modifications: 14.11.03 new directory
 //
 // -------------------------------------------------------------------
 
