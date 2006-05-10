@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmProcessOptions.cc,v 1.15 2006-05-09 19:50:13 vnivanch Exp $
+// $Id: G4EmProcessOptions.cc,v 1.16 2006-05-10 09:23:39 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -38,6 +38,7 @@
 // 30-06-04 G4EmProcess is pure discrete (V.Ivanchenko)
 // 24-03-05 Add ApplyCuts and RandomStep (V.Ivanchenko)
 // 10-01-06 PreciseRange -> CSDARange (V.Ivantchenko)
+// 10-05-06 Add command MscStepLimit to G4LossTableManager (V.Ivantchenko) 
 //
 // Class Description:
 //

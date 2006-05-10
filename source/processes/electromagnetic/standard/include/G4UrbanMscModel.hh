@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel.hh,v 1.5 2006-03-07 16:57:46 vnivanch Exp $
+// $Id: G4UrbanMscModel.hh,v 1.6 2006-05-10 09:27:01 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -55,6 +55,7 @@
 // 16-02-06 data members b and xsi have been removed (L.Urban)
 // 17-02-06 Save table of transport cross sections not mfp (V.Ivanchenko)
 // 07-03-06 Create G4UrbanMscModel and move there step limit calculation (V.Ivanchenko)
+// 10-05-06 SetMscStepLimitation at initialisation (V.Ivantchenko) 
 //
 
 //
@@ -118,6 +119,8 @@ public:
   virtual G4double ComputeTrueStepLength(G4double geomStepLength);
 
   void SetLateralDisplasmentFlag(G4bool val);
+
+  void SetMscStepLimitation(G4bool, G4double);
 
 private:
 
@@ -193,6 +196,15 @@ inline
 void G4UrbanMscModel::SetLateralDisplasmentFlag(G4bool val) 
 { 
   latDisplasment = val;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline
+void G4UrbanMscModel::SetMscStepLimitation(G4bool alg, G4double factor)
+{
+  steppingAlgorithm = alg;
+  facrange = factor;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

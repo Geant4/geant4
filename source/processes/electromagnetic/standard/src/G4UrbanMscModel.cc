@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel.cc,v 1.11 2006-05-10 08:50:26 vnivanch Exp $
+// $Id: G4UrbanMscModel.cc,v 1.12 2006-05-10 09:27:01 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -78,6 +78,7 @@
 // 17-02-06 Save table of transport cross sections not mfp (V.Ivanchenko)
 // 07-03-06 Create G4UrbanMscModel and move there step limit calculation (V.Ivanchenko)
 // 23-03-06 Bugfix in SampleCosineTheta method (L.Urban)
+// 10-05-06 SetMscStepLimitation at initialisation (V.Ivantchenko) 
 //
 
 // Class Description:

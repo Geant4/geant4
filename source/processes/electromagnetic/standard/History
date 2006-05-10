@@ -1,4 +1,4 @@
-$Id: History,v 1.232 2006-05-04 10:35:37 vnivanch Exp $
+$Id: History,v 1.233 2006-05-10 09:27:01 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+10 May 06: V.Ivanchenko (emstand-V08-00-21)
+- G4MultipleScattering and G4MscUrbanModel - provide a possibility of
+  reinitialisation of facrange and steppingAlgorithm parameters
+  between runs; 
+- Fix compilation warning at SUN;
 
 04 May 06: V.Ivanchenko (emstand-V08-00-20)
 - G4BetheBlochModel - use different formula for muons and hadrons for tmax (VI) 

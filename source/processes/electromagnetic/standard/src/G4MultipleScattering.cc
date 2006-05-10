@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering.cc,v 1.50 2006-03-09 11:55:21 vnivanch Exp $
+// $Id: G4MultipleScattering.cc,v 1.51 2006-05-10 09:27:01 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -95,6 +95,7 @@
 //          value of facrange (L.Urban) 
 // 16-02-06 value of factail changed, samplez = true (L.Urban)
 // 07-03-06 Create G4UrbanMscModel and move there step limit calculation (V.Ivanchenko)
+// 10-05-06 SetMscStepLimitation at initialisation (V.Ivantchenko) 
 //
 // -----------------------------------------------------------------------------
 //
@@ -163,8 +164,10 @@ void G4MultipleScattering::MscStepLimitation(G4bool algorithm, G4double factor)
 
 void G4MultipleScattering::InitialiseProcess(const G4ParticleDefinition* p)
 {
-  if(isInitialized) return;
-
+  if(isInitialized) {
+    mscUrban->SetMscStepLimitation(steppingAlgorithm, facrange);
+    return;
+  }
   if (p->GetParticleType() == "nucleus") {
     //    steppingAlgorithm = false;
     SetLateralDisplasmentFlag(false);
@@ -173,13 +176,13 @@ void G4MultipleScattering::InitialiseProcess(const G4ParticleDefinition* p)
     SetBuildLambdaTable(true);
   }
   // compute Tlimit for particle
-  G4UrbanMscModel* em = new G4UrbanMscModel(facrange,dtrl,tkinlimit,
-					    facgeom,factail,
-					    samplez,steppingAlgorithm);
-  em->SetLateralDisplasmentFlag(LateralDisplasmentFlag());
-  em->SetLowEnergyLimit(lowKineticEnergy);
-  em->SetHighEnergyLimit(highKineticEnergy);
-  AddEmModel(1, em);
+  mscUrban = new G4UrbanMscModel(facrange,dtrl,tkinlimit,
+				 facgeom,factail,
+				 samplez,steppingAlgorithm);
+  mscUrban->SetLateralDisplasmentFlag(LateralDisplasmentFlag());
+  mscUrban->SetLowEnergyLimit(lowKineticEnergy);
+  mscUrban->SetHighEnergyLimit(highKineticEnergy);
+  AddEmModel(1, mscUrban);
   isInitialized = true;
 }
 

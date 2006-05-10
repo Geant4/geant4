@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering.hh,v 1.27 2006-03-07 15:56:41 vnivanch Exp $
+// $Id: G4MultipleScattering.hh,v 1.28 2006-05-10 09:27:01 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -66,7 +66,7 @@
 //
 //------------------------------------------------------------------------------
 //
-// $Id: G4MultipleScattering.hh,v 1.27 2006-03-07 15:56:41 vnivanch Exp $
+// $Id: G4MultipleScattering.hh,v 1.28 2006-05-10 09:27:01 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // class description
@@ -85,6 +85,8 @@
 #include "G4VMultipleScattering.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+class G4UrbanMscModel;
 
 class G4MultipleScattering : public G4VMultipleScattering
 
@@ -129,6 +131,8 @@ protected:
   void InitialiseProcess(const G4ParticleDefinition*);
 
 private:        // data members
+
+  G4UrbanMscModel* mscUrban;
 
   G4double lowKineticEnergy;
   G4double highKineticEnergy;

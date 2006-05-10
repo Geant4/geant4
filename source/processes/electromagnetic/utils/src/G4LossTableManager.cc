@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.cc,v 1.69 2006-05-09 19:50:13 vnivanch Exp $
+// $Id: G4LossTableManager.cc,v 1.70 2006-05-10 09:23:40 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -59,6 +59,7 @@
 // 10-01-06 PreciseRange -> CSDARange (V.Ivantchenko)
 // 20-01-06 Introduce G4EmTableType to remove repeating code (VI)
 // 23-03-06 Set flag isIonisation (VI)
+// 10-05-06 Add methods  SetMscStepLimitation, FacRange and MscFlag (VI)
 //
 // Class Description:
 //

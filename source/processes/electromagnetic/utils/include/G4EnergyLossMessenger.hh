@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EnergyLossMessenger.hh,v 1.11 2006-05-09 19:50:13 vnivanch Exp $
+// $Id: G4EnergyLossMessenger.hh,v 1.12 2006-05-10 09:23:38 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -36,6 +36,7 @@
 //
 // Modifications:
 // 10-01-06 SetStepLimits -> SetStepFunction (V.Ivantchenko)
+// 10-05-06 Add command MscStepLimit (V.Ivantchenko) 
 //
 // -------------------------------------------------------------------
 //
