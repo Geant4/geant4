@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.cc,v 1.3 2006-04-24 16:48:54 maire Exp $
+// $Id: DetectorConstruction.cc,v 1.4 2006-05-10 12:09:13 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -188,7 +188,13 @@ void DetectorConstruction::SetMaterial(G4String materialChoice)
 {
   // search the material by its name
   G4Material* pttoMaterial = G4Material::GetMaterial(materialChoice);
-  if (pttoMaterial) aMaterial = pttoMaterial;
+  if (pttoMaterial) {
+   aMaterial = pttoMaterial;
+   UpdateGeometry();
+  } else {
+    G4cout << "\n--> warning from DetectorConstruction::SetMaterial : "
+           << materialChoice << " not found" << G4endl;  
+  }     
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -196,6 +202,7 @@ void DetectorConstruction::SetMaterial(G4String materialChoice)
 void DetectorConstruction::SetSize(G4double value)
 {
   BoxSize = value;
+  UpdateGeometry();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -204,6 +211,7 @@ void DetectorConstruction::SetSize(G4double value)
 
 void DetectorConstruction::UpdateGeometry()
 {
+  if (pBox) 
   G4RunManager::GetRunManager()->DefineWorldVolume(ConstructVolumes());
 }
 
