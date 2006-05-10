@@ -1,4 +1,4 @@
-$Id: README,v 1.3 2006-04-24 15:56:15 maire Exp $
+$Id: README,v 1.4 2006-05-10 11:15:33 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -98,14 +98,14 @@ $Id: README,v 1.3 2006-04-24 15:56:15 maire Exp $
  7- HOW TO START ?
  
 	compile and link to generate an executable
- 		% cd geant4/examples/extended/electromagnetic/TestEm13
+ 		% cd geant4/examples/extended/electromagnetic/TestEm14
  		% gmake
  		
-	execute TestEm13 in 'batch' mode from macro files :
- 		% TestEm13   compt.mac
+	execute TestEm14 in 'batch' mode from macro files :
+ 		% TestEm14   compt.mac
  		
-	execute TestEm13 in 'interactive mode' with visualization :
- 		% TestEm13
+	execute TestEm14 in 'interactive mode' with visualization :
+ 		% TestEm14
 		Idle> control/execute vis.mac
  		....
  		Idle> type your commands

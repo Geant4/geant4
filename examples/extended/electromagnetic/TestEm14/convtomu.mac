@@ -1,6 +1,6 @@
-# $Id: convtomu.mac,v 1.1 2006-04-24 15:42:49 maire Exp $
+# $Id: convtomu.mac,v 1.2 2006-05-10 11:15:33 maire Exp $
 #
-# Macro file for "TestEm13.cc"
+# Macro file for "TestEm14.cc"
 # (can be run in batch, without graphic)
 #
 # photon 100 TeV; gamma conversion to mu+mu-
