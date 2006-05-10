@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EnergyLossMessenger.cc,v 1.16 2006-05-09 19:50:13 vnivanch Exp $
+// $Id: G4EnergyLossMessenger.cc,v 1.17 2006-05-10 09:18:39 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -152,7 +152,7 @@ G4EnergyLossMessenger::G4EnergyLossMessenger()
   mscCmd = new G4UIcommand("/process/eLoss/MscStepLimit",this);
   mscCmd->SetGuidance("Set msc step limit flag and facRange value.");
 
-  G4UIparameter* msc = new G4UIparameter("algMsc",'b',false);
+  G4UIparameter* msc = new G4UIparameter("algMsc",'s',false);
   msc->SetGuidance("msc step algorithm flag");
   mscCmd->SetParameter(msc);
 
@@ -221,9 +221,11 @@ void G4EnergyLossMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
   if (command == mscCmd)
    {
      G4double f;
-     G4bool a;
+     G4bool a = true;
+     G4String s;
      std::istringstream is(newValue);
-     is >> a >> f;
+     is >> s >> f;
+     if(s == "false" || s == "0" || s == "no") a = false; 
      lossTables->SetMscStepLimitation(a,f);
    }
 
