@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.hh,v 1.38 2006-05-10 09:23:39 vnivanch Exp $
+// $Id: G4LossTableManager.hh,v 1.39 2006-05-10 09:51:21 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -265,6 +265,7 @@ private:
   G4bool stepFunctionActive;
   G4bool flagLPM;
   G4bool flagMSC;
+  G4bool mscActive;
 
   G4double minSubRange;
   G4double maxRangeVariation;

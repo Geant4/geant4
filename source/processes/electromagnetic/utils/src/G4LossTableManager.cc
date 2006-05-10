@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.cc,v 1.70 2006-05-10 09:23:40 vnivanch Exp $
+// $Id: G4LossTableManager.cc,v 1.71 2006-05-10 09:51:22 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -150,6 +150,7 @@ G4LossTableManager::G4LossTableManager()
   flagLPM = true;
   flagMSC = true;
   facRange = 0.02;
+  mscActive = false;
   verbose = 1;
 }
 
@@ -214,6 +215,7 @@ void G4LossTableManager::DeRegister(G4VEnergyLossProcess* p)
 void G4LossTableManager::Register(G4VMultipleScattering* p)
 {
   msc_vector.push_back(p);
+  if(mscActive) p->MscStepLimitation(flagMSC, facRange);
   if(verbose > 1) 
     G4cout << "G4LossTableManager::Register G4VMultipleScattering : " 
 	   << p->GetProcessName() << G4endl;
@@ -793,6 +795,7 @@ G4bool G4LossTableManager::LPMFlag() const
 
 void G4LossTableManager::SetMscStepLimitation(G4bool val, G4double factor)
 {
+  mscActive = true;
   flagMSC = val;
   facRange = factor;
   size_t msc = msc_vector.size();
