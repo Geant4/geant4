@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel.cc,v 1.10 2006-05-04 10:35:37 vnivanch Exp $
+// $Id: G4UrbanMscModel.cc,v 1.11 2006-05-10 08:50:26 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -503,7 +503,7 @@ G4double G4UrbanMscModel::GeomLimit(const G4Track&  track)
   if((track.GetVolume() != 0) &&
      (track.GetVolume() != navigator->GetWorldVolume()))  
   {
-    const G4double cstep = geombig;
+    G4double cstep = geombig;
     navigator->LocateGlobalPointWithinVolume(
                   track.GetStep()->GetPreStepPoint()->GetPosition());
     geomlimit = navigator->ComputeStep(
