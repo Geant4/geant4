@@ -1,4 +1,4 @@
-$Id: README,v 1.1 2006-05-09 14:03:02 maire Exp $
+$Id: README,v 1.2 2006-05-11 11:46:03 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -53,20 +53,22 @@ $Id: README,v 1.1 2006-05-09 14:03:02 maire Exp $
 
  5- HISTOGRAMS
          
-	The test contains 7 built-in 1D histograms, which are managed by the
+	The test contains 9 built-in 1D histograms, which are managed by the
 	HistoManager class and its Messenger. The histos can be individually 
 	activated with the command :
 	/testem/histo/setHisto id nbBins  valMin valMax unit 
 	where unit is the desired unit for the histo (MeV or keV, etc..)
 	(see the macros xxxx.mac).
  		
-        1       "Multiple Scattering. True step length"
-	2	"Multiple Scattering. Geom step length"
-	3	"Multiple Scattering. Ratio geomSl/trueSl"
-	4	"Multiple Scattering. Lateral displacement: radius"
-	5	"Multiple Scattering. Lateral displacement: y_plane"
-	6	"Multiple Scattering. Lateral displac: psi_plane "
-	7	"Multiple Scattering. Angular distrib: theta_plane "
+        1       Multiple Scattering. True step length
+	2	Multiple Scattering. Geom step length
+	3	Multiple Scattering. Ratio geomSl/trueSl
+	4	Multiple Scattering. Lateral displacement: radius
+	5	Multiple Scattering. Lateral displac: psi_space
+	6	Multiple Scattering. Angular distrib: theta_plane
+	7	Multiple Scattering. Phi-position angle
+	8	Multiple Scattering. Phi-direction angle
+	9	Multiple Scattering. Correlation: cos(phiPos-phiDir)
 	
 	See below the note on histogram tools.
 	

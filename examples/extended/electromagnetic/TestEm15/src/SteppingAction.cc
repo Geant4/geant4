@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: SteppingAction.cc,v 1.1 2006-05-09 14:03:04 maire Exp $
+// $Id: SteppingAction.cc,v 1.2 2006-05-11 11:46:04 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -86,18 +86,27 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   G4double lateralDisplacement = std::sqrt(yend*yend + zend*zend);
   runAction->SumLateralDisplacement(lateralDisplacement);
   histoManager->FillHisto(4,lateralDisplacement);
-  histoManager->FillHisto(5,yend);
   
-  G4double psiPlane = std::atan(yend/geomPathLength); 
-  runAction->SumPsiPlane(psiPlane);
-  histoManager->FillHisto(6,psiPlane);
+  G4double psi = std::atan(lateralDisplacement/geomPathLength); 
+  runAction->SumPsi(psi);
+  histoManager->FillHisto(5,psi);
   
-  G4double tetaPlane = std::atan2(direction.y(), direction.x()); 
+  G4double xdir = direction.x(),  ydir = direction.y(), zdir = direction.z();
+  G4double tetaPlane = std::atan2(ydir, xdir); 
   runAction->SumTetaPlane(tetaPlane);
-  histoManager->FillHisto(7,tetaPlane);
-  tetaPlane = std::atan2(direction.z(), direction.x()); 
+  histoManager->FillHisto(6,tetaPlane);
+  tetaPlane = std::atan2(zdir, xdir); 
   runAction->SumTetaPlane(tetaPlane);
-  histoManager->FillHisto(7,tetaPlane);  
+  histoManager->FillHisto(6,tetaPlane);
+  
+  G4double phiPos = std::atan2(zend, yend); 
+  histoManager->FillHisto(7,phiPos);
+  G4double phiDir = std::atan2(zdir, ydir); 
+  histoManager->FillHisto(8,phiDir);
+  
+  G4double phiCorrel = (yend*ydir + zend*zdir)/lateralDisplacement;
+  runAction->SumPhiCorrel(phiCorrel);
+  histoManager->FillHisto(9,phiCorrel);    
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.hh,v 1.1 2006-05-09 14:03:03 maire Exp $
+// $Id: RunAction.hh,v 1.2 2006-05-11 11:46:04 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -62,12 +62,15 @@ class RunAction : public G4UserRunAction
     void SumLateralDisplacement (G4double displa)  
          {lDispl += displa; lDispl2 += displa*displa;}
 	 
-    void SumPsiPlane (G4double psi)  
-         {psiPrj += psi; psiPrj2 += psi*psi;}
+    void SumPsi (G4double psi)  
+         {psiSpa += psi; psiSpa2 += psi*psi;}
 	 
     void SumTetaPlane (G4double teta)  
          {tetPrj += teta; tetPrj2 += teta*teta;}
-	 
+	 	 
+    void SumPhiCorrel (G4double correl)  
+         {phiCor += correl; phiCor2 += correl*correl;}
+	 	 
    G4double ComputeMscHighland(G4double pathLength);
 	 	 	           
   private:
@@ -80,8 +83,9 @@ class RunAction : public G4UserRunAction
     G4double truePL, truePL2;
     G4double geomPL, geomPL2;
     G4double lDispl, lDispl2;
-    G4double psiPrj, psiPrj2;
-    G4double tetPrj, tetPrj2;     
+    G4double psiSpa, psiSpa2;
+    G4double tetPrj, tetPrj2;
+    G4double phiCor, phiCor2;     
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

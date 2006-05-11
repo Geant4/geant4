@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: HistoManager.hh,v 1.1 2006-05-09 14:03:03 maire Exp $
+// $Id: HistoManager.hh,v 1.2 2006-05-11 11:46:04 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -41,7 +41,7 @@ namespace AIDA {
 
 class HistoMessenger;
 
-const G4int MaxHisto = 8;
+const G4int MaxHisto = 10;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

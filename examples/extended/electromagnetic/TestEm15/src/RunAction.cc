@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.1 2006-05-09 14:03:04 maire Exp $
+// $Id: RunAction.cc,v 1.2 2006-05-11 11:46:04 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -66,8 +66,9 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   totalCount = 0;
   
   truePL = truePL2 = geomPL = geomPL2 = 0.;
-  lDispl = lDispl2 = psiPrj = psiPrj2 = 0.;
+  lDispl = lDispl2 = psiSpa = psiSpa2 = 0.;
   tetPrj = tetPrj2 = 0.;
+  phiCor = phiCor2 = 0.;
   
   histoManager->book();
 }
@@ -131,24 +132,35 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   G4double MeanLaD2 = lDispl2/totalCount;     
   G4double rmsLaD   = std::sqrt(std::fabs(MeanLaD2 - MeanLaD*MeanLaD));
   
-  G4double MeanPsi  = psiPrj /(totalCount);     
-  G4double MeanPsi2 = psiPrj2/(totalCount);     
+  G4double MeanPsi  = psiSpa /(totalCount);     
+  G4double MeanPsi2 = psiSpa2/(totalCount);     
   G4double rmsPsi   = std::sqrt(std::fabs(MeanPsi2 - MeanPsi*MeanPsi));
   
   G4double MeanTeta  = tetPrj /(2*totalCount);     
   G4double MeanTeta2 = tetPrj2/(2*totalCount);     
   G4double rmsTeta   = std::sqrt(std::fabs(MeanTeta2 - MeanTeta*MeanTeta));
-         
+  
+  G4double MeanCorrel  = phiCor /(totalCount);     
+  G4double MeanCorrel2 = phiCor2/(totalCount);     
+  G4double rmsCorrel = std::sqrt(std::fabs(MeanCorrel2-MeanCorrel*MeanCorrel));
+           
   G4cout << "\n\n truePathLength :\t" << G4BestUnit(MeanTPL,"Length")
          << " +- "                    << G4BestUnit( rmsTPL,"Length")
          <<   "\n geomPathLength :\t" << G4BestUnit(MeanGPL,"Length")
          << " +- "                    << G4BestUnit( rmsGPL,"Length")
          <<   "\n lateralDisplac :\t" << G4BestUnit(MeanLaD,"Length")
          << " +- "                    << G4BestUnit( rmsLaD,"Length")
-         <<   "\n Psi  plane     :\t" << rmsPsi /mrad << " mrad"
-         <<   "  ("                   << rmsPsi /deg  << " deg)"	 
-         <<   "\n Teta plane     :\t" << rmsTeta/mrad << " mrad"
-         <<   "  ("                   << rmsTeta/deg  << " deg)"	 
+         <<   "\n Psi            :\t" << MeanPsi/mrad 
+	 << " +- "                    << rmsPsi /mrad << " mrad"
+         <<   "  ("                   << MeanPsi/deg 
+	 << " +- "                    << rmsPsi /deg  << " deg)"
+         << G4endl;
+	 	 	 
+  G4cout <<   "\n Theta_plane    :\t" << rmsTeta/mrad << " mrad"
+         <<   "  ("                   << rmsTeta/deg  << " deg)"
+         <<   "\n phi correlation:\t" << MeanCorrel 
+	 << " +- "                    << rmsCorrel
+	 << "  (cos(phi_pos - phi_dir))"	 	 
          << G4endl;
 	 
 
@@ -173,7 +185,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
 	 << "\n ---> effective facRange  :\t" << efFacrange
          << G4endl;
 
-  G4cout << "\n compute teta0 from Highland :\t"
+  G4cout << "\n compute theta0 from Highland :\t"
  	 << ComputeMscHighland(MeanTPL)/mrad << " mrad" 
 	 << "  (" << ComputeMscHighland(MeanTPL)/deg << " deg)" 
 	 << G4endl;

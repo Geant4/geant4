@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.1 2006-05-09 14:03:03 maire Exp $
+// $Id: HistoManager.cc,v 1.2 2006-05-11 11:46:04 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -159,16 +159,18 @@ void HistoManager::SetHisto(G4int ih,
     return;
   }
   
-  const G4String id[] = { "0", "1", "2", "3", "4", "5", "6", "7"};
+  const G4String id[] = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"};
   const G4String title[] = 
                 { "dummy",						//0
                   "Multiple Scattering. True step length",		//1
 		  "Multiple Scattering. Geom step length",		//2
 		  "Multiple Scattering. Ratio geomSl/trueSl",		//3
 		  "Multiple Scattering. Lateral displacement: radius",	//4
-		  "Multiple Scattering. Lateral displacement: y_plane",	//5
-		  "Multiple Scattering. Lateral displac: psi_plane ",	//6
-		  "Multiple Scattering. Angular distrib: theta_plane "	//7
+		  "Multiple Scattering. Lateral displac: psi_space",	//5
+		  "Multiple Scattering. Angular distrib: theta_plane",	//6
+		  "Multiple Scattering. Phi-position angle",		//7
+		  "Multiple Scattering. Phi-direction angle",		//8
+		  "Multiple Scattering. Correlation: cos(phiPos-phiDir)"//9
                  };
 
 
