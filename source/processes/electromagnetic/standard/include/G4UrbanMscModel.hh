@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel.hh,v 1.6 2006-05-10 09:27:01 vnivanch Exp $
+// $Id: G4UrbanMscModel.hh,v 1.7 2006-05-11 14:11:05 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -55,7 +55,10 @@
 // 16-02-06 data members b and xsi have been removed (L.Urban)
 // 17-02-06 Save table of transport cross sections not mfp (V.Ivanchenko)
 // 07-03-06 Create G4UrbanMscModel and move there step limit calculation (V.Ivanchenko)
-// 10-05-06 SetMscStepLimitation at initialisation (V.Ivantchenko) 
+// 10-05-06 SetMscStepLimitation at initialisation (V.Ivantchenko)
+// 11-05-06 name of data member safety changed to presafety, some new data
+//          members added (frscaling1,frscaling2,tlimitminfix,nstepmax)
+//         (L.Urban)
 //
 
 //
@@ -160,12 +163,15 @@ private:
   G4double Tkinlimit;
   G4double Tlimit;
   G4double facrange;
+  G4double frscaling1,frscaling2;
   G4double tlimit;
   G4double tlimitmin;
+  G4double tlimitminfix;
+  G4double nstepmax;
   G4double geombig;
   G4double geommin;
   G4double facgeom;
-  G4double safety;
+  G4double presafety;
   G4double facsafety;
 
   G4double lambda0;
@@ -187,6 +193,7 @@ private:
   G4bool   latDisplasment;
   G4bool   steppingAlgorithm;
   G4bool   isInitialized;
+
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

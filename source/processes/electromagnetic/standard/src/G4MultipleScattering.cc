@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering.cc,v 1.51 2006-05-10 09:27:01 vnivanch Exp $
+// $Id: G4MultipleScattering.cc,v 1.52 2006-05-11 14:11:05 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -95,7 +95,9 @@
 //          value of facrange (L.Urban) 
 // 16-02-06 value of factail changed, samplez = true (L.Urban)
 // 07-03-06 Create G4UrbanMscModel and move there step limit calculation (V.Ivanchenko)
-// 10-05-06 SetMscStepLimitation at initialisation (V.Ivantchenko) 
+// 10-05-06 SetMscStepLimitation at initialisation (V.Ivantchenko)
+// 11-05-06 values of data members tkinlimit, factail have been 
+//          changed (L.Urban) 
 //
 // -----------------------------------------------------------------------------
 //
@@ -120,9 +122,9 @@ G4MultipleScattering::G4MultipleScattering(const G4String& processName)
 
   facrange          = 0.02;
   dtrl              = 0.05;
-  tkinlimit         = 2.*MeV;
+  tkinlimit         = 1.*MeV;
   facgeom           = 3.5;
-  factail           = 0.75; 
+  factail           = 0.85; 
   
   steppingAlgorithm = true;
   samplez           = true ;  
@@ -168,6 +170,7 @@ void G4MultipleScattering::InitialiseProcess(const G4ParticleDefinition* p)
     mscUrban->SetMscStepLimitation(steppingAlgorithm, facrange);
     return;
   }
+
   if (p->GetParticleType() == "nucleus") {
     //    steppingAlgorithm = false;
     SetLateralDisplasmentFlag(false);
@@ -177,12 +180,12 @@ void G4MultipleScattering::InitialiseProcess(const G4ParticleDefinition* p)
   }
   // compute Tlimit for particle
   mscUrban = new G4UrbanMscModel(facrange,dtrl,tkinlimit,
-				 facgeom,factail,
-				 samplez,steppingAlgorithm);
+                                 facgeom,factail,
+                                 samplez,steppingAlgorithm);
   mscUrban->SetLateralDisplasmentFlag(LateralDisplasmentFlag());
   mscUrban->SetLowEnergyLimit(lowKineticEnergy);
   mscUrban->SetHighEnergyLimit(highKineticEnergy);
-  AddEmModel(1, mscUrban);
+  AddEmModel(1,mscUrban);
   isInitialized = true;
 }
 
