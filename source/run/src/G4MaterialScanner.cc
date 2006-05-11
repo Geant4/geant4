@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MaterialScanner.cc,v 1.1 2006-05-04 19:42:47 asaim Exp $
+// $Id: G4MaterialScanner.cc,v 1.2 2006-05-11 01:22:14 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -37,7 +37,7 @@
 #include "G4StateManager.hh"
 #include "G4Event.hh"
 #include "G4TransportationManager.hh"
-#include "G4RunmanagerKernel.hh"
+#include "G4RunManagerKernel.hh"
 #include "G4Region.hh"
 #include "G4RegionStore.hh"
 #include "G4ProcessManager.hh"
@@ -60,7 +60,7 @@ G4MaterialScanner::G4MaterialScanner()
   theMatScannerEventAction = 0;
   theMatScannerStackingAction = 0;
   theMatScannerTrackingAction = 0;
-  theMatScannerSteppingAction = new G4MSSteppingAction();
+  theMatScannerSteppingAction = 0;
 
   eyePosition = G4ThreeVector(0.,0.,0.);
   nTheta = 91;
@@ -92,6 +92,8 @@ void G4MaterialScanner::Scan()
     return;
   }
 
+  if(!theMatScannerSteppingAction)
+  { theMatScannerSteppingAction = new G4MSSteppingAction(); }
   StoreUserActions();
   DoScan();
   RestoreUserActions();

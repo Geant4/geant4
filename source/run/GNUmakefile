@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.12 2006-05-04 19:47:54 asaim Exp $
+# $Id: GNUmakefile,v 1.13 2006-05-11 01:22:12 asaim Exp $
 # ----------------------------------------------------------
 # GNUmakefile for run library.  Gabriele Cosmo, 3/4/1997.
 # ----------------------------------------------------------
@@ -40,8 +40,6 @@ CPPFLAGS += \
             -I$(G4BASE)/digits_hits/hits/include \
             -I$(G4BASE)/digits_hits/digits/include \
             -I$(G4BASE)/event/include \
-            -I$(G4BASE)/intercoms/include \
-            -I$(G4BASE)/visualization/RayTracer/include \
             -I$(G4BASE)/intercoms/include \
 	    -I$(G4BASE)/geometry/biasing/include \
             -I$(G4BASE)/graphics_reps/include 
