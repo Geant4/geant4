@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4NistManager.cc,v 1.4 2006-04-18 07:52:44 vnivanch Exp $
+// $Id: G4NistManager.cc,v 1.5 2006-05-11 08:37:00 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -37,6 +37,7 @@
 // Modifications:
 // 27.02.06 V.Ivanchneko add ConstructNewGasMaterial
 // 18.04.06 V.Ivanchneko add combined creation of materials (NIST + user)
+// 11.05.06 V.Ivanchneko add warning flag to FindMaterial method
 //
 // -------------------------------------------------------------------
 //
@@ -168,22 +169,16 @@ void G4NistManager::DeRegisterMaterial(G4Material* mat)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4Material* G4NistManager::FindOrBuildMaterial(const G4String& name,
-					       G4bool isotopes)
+					       G4bool isotopes,
+					       G4bool warning)
 {
   if (verbose>1) G4cout << "G4NistManager::FindMaterial " << name 
                         << G4endl;
-			
-  G4Material* mat = 0;
-  if (nMaterials > 0) {  
-    for (size_t i=0; i<nMaterials; i++) {
-       if (name == (materials[i])->GetName()) { mat = materials[i]; break; }
-    }
-  }
 
   // search the material in the list of user 
-  if(!mat) mat =  G4Material::GetMaterial(name, false);
+  G4Material* mat =  G4Material::GetMaterial(name, warning);
 
-  if (!mat) mat = matBuilder->FindOrBuildMaterial(name, isotopes);  
+  if (!mat) mat = matBuilder->FindOrBuildMaterial(name, isotopes, warning);  
   return mat;
 }
 

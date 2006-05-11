@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4NistManager.hh,v 1.6 2006-05-02 07:54:15 vnivanch Exp $
+// $Id: G4NistManager.hh,v 1.7 2006-05-11 08:37:00 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -36,6 +36,7 @@
 //
 // Modifications:
 // 27.02.06 V.Ivanchneko add GetAtomicMassAmu and ConstructNewGasMaterial
+// 11.05.06 V.Ivanchneko add warning flag to FindMaterial method
 //
 // Class Description:
 //
@@ -108,7 +109,8 @@ public:
   
   // Find or build a G4Material by name, from the dataBase
   //
-  G4Material* FindOrBuildMaterial(const G4String& name, G4bool isotopes=true);
+  G4Material* FindOrBuildMaterial(const G4String& name, G4bool isotopes=true,
+				  G4bool warning=false);
   
   // construct a G4Material from scratch by atome count
   // 

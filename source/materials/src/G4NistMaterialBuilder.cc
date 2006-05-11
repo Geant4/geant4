@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4NistMaterialBuilder.cc,v 1.11 2006-03-09 16:50:07 vnivanch Exp $
+// $Id: G4NistMaterialBuilder.cc,v 1.12 2006-05-11 08:37:00 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -37,6 +37,7 @@
 // Modifications:
 // 31-10-05 Add chemical effect and gas properties (V.Ivanchenko)
 // 27.02.06 V.Ivanchneko add ConstructNewGasMaterial
+// 11.05.06 V.Ivanchneko add warning flag to FindMaterial method
 //
 // -------------------------------------------------------------------
 //
@@ -75,7 +76,8 @@ G4NistMaterialBuilder::~G4NistMaterialBuilder()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4Material* G4NistMaterialBuilder::FindOrBuildMaterial(const G4String& name,
-                                                       G4bool isotopes)
+                                                       G4bool isotopes,
+						       G4bool warning)
 {
   if(first) {
     if(verbose > 0) {
@@ -111,7 +113,7 @@ G4Material* G4NistMaterialBuilder::FindOrBuildMaterial(const G4String& name,
              << name << " is available"
 	     << G4endl;
   } else {
-    if( verbose > 0) 
+    if( (verbose == 1 && warning) || verbose > 1) 
       G4cout << "G4NistMaterialBuilder::FindOrBuildMaterial WARNING:"
 	     << " material <" << name
 	     << "> is not found out" << G4endl;
