@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: QBBC.icc,v 1.9 2006-05-11 07:17:42 vnivanch Exp $
+// $Id: QBBC.icc,v 1.10 2006-05-11 07:28:38 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -80,6 +80,12 @@ template<class T> TQBBC<T>::TQBBC( G4int ver, const G4String& type,
     this->RegisterPhysics( new G4HadronElasticPhysics("elastic",ver,flagHP));
     this->RegisterPhysics( new G4HadronInelasticQBBC("inelastic", ver, true,
 		flagFTF, flagCHIPS, flagHP));
+    this->RegisterPhysics( new G4QStoppingPhysics("stopping",ver));
+    this->RegisterPhysics( new G4IonBinaryCascadePhysics("ionBIC"));
+  } else if(type == "QBEC_HP") {
+    this->RegisterPhysics( new G4HadronElasticPhysics("elastic",ver,true));
+    this->RegisterPhysics( new G4HadronInelasticQBBC("inelastic", ver, true,
+		flagFTF, flagCHIPS, true));
     this->RegisterPhysics( new G4QStoppingPhysics("stopping",ver));
     this->RegisterPhysics( new G4IonBinaryCascadePhysics("ionBIC"));
   } else if(type == "QGSP") {
