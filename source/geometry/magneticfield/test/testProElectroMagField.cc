@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testProElectroMagField.cc,v 1.14 2004-12-02 09:55:21 gcosmo Exp $
+// $Id: testProElectroMagField.cc,v 1.15 2006-05-11 11:20:30 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -253,6 +253,8 @@ G4FieldManager* SetupField(G4int type)
       case 8: pStepper = new G4CashKarpRKF45( fEquation, nvar  );    break;
 	// --- case 9: pStepper = new G4RKG3_Stepper( fEquation, nvar  );    break;
       default: pStepper = 0;
+	G4cout << "Chosen stepper " << type << " does not exist. " << G4endl;
+	G4Exception("SetupField: incorrect argument for type"); 
     }
     
     pFieldMgr= G4TransportationManager::GetTransportationManager()->
@@ -460,6 +462,8 @@ int main(int argc, char **argv)
     testG4PropagatorInField(myTopNode, type);
 
     G4GeometryManager::GetInstance()->OpenGeometry();
+
+    G4cout << G4endl;   // Add a final newline
     return 0;
 }
 
