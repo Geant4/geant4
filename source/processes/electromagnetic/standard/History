@@ -1,4 +1,4 @@
-$Id: History,v 1.233 2006-05-10 09:27:01 vnivanch Exp $
+$Id: History,v 1.234 2006-05-11 17:51:22 urban Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+11 May 06: L.Urban
+- G4MultipleScattering : values of data members tkinlimit, factail 
+  has been changed
+- G4MscUrbanModel : new data members, changes in ComputeTruePathLengthLimit
+  and in SampleCosineTheta,
+  name of data member safety has been changed to presafety.
 
 10 May 06: V.Ivanchenko (emstand-V08-00-21)
 - G4MultipleScattering and G4MscUrbanModel - provide a possibility of
