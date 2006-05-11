@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HadronInelasticQBBC.cc,v 1.4 2006-05-09 11:41:56 vnivanch Exp $
+// $Id: G4HadronInelasticQBBC.cc,v 1.5 2006-05-11 08:24:40 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -243,8 +243,9 @@ void G4HadronInelasticQBBC::ConstructProcess()
         if(ftfFlag) Register(particle,hp,theFTFModel,"FTF");
 	else        Register(particle,hp,theQGSModel,"QGS");
 
-        if(chipsFlag) Register(particle,hp,theCHIPS,"CHIPS");
-	else          Register(particle,hp,theBERT,"Bertini");
+        Register(particle,hp,theCHIPS,"CHIPS");
+        //if(chipsFlag) Register(particle,hp,theCHIPS,"CHIPS");
+	//else          Register(particle,hp,theBERT,"Bertini");
 
       } else if(pname == "lambda"    || 
 		pname == "sigma-"    || 
@@ -252,8 +253,9 @@ void G4HadronInelasticQBBC::ConstructProcess()
 		pname == "xi-"       || 
 		pname == "xi0") {
 	Register(particle,hp,theFTFModel,"FTF");
-        if(chipsFlag) Register(particle,hp,theCHIPS,"CHIPS");
-	else          Register(particle,hp,theBERT,"Bertini");
+        Register(particle,hp,theCHIPS,"CHIPS");
+        //if(chipsFlag) Register(particle,hp,theCHIPS,"CHIPS");
+	//else          Register(particle,hp,theBERT,"Bertini");
 
       } else if(pname == "anti_proton" || pname == "anti_neutron") {
 	Register(particle,hp,theFTFModel,"FTF");
