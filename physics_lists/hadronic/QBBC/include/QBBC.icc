@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: QBBC.icc,v 1.8 2006-05-09 14:42:19 vnivanch Exp $
+// $Id: QBBC.icc,v 1.9 2006-05-11 07:17:42 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -72,31 +72,37 @@ template<class T> TQBBC<T>::TQBBC( G4int ver, const G4String& type,
    // Hadron Physics
   if(type == "QBBC") {
     this->RegisterPhysics( new G4HadronElasticPhysics("elastic",ver,flagHP));
-    this->RegisterPhysics( new G4HadronInelasticQBBC("inelastic", ver, 
+    this->RegisterPhysics( new G4HadronInelasticQBBC("inelastic", ver, false,
+		flagFTF, flagCHIPS, flagHP));
+    this->RegisterPhysics( new G4QStoppingPhysics("stopping",ver));
+    this->RegisterPhysics( new G4IonBinaryCascadePhysics("ionBIC"));
+  } else if(type == "QBEC") {
+    this->RegisterPhysics( new G4HadronElasticPhysics("elastic",ver,flagHP));
+    this->RegisterPhysics( new G4HadronInelasticQBBC("inelastic", ver, true,
 		flagFTF, flagCHIPS, flagHP));
     this->RegisterPhysics( new G4QStoppingPhysics("stopping",ver));
     this->RegisterPhysics( new G4IonBinaryCascadePhysics("ionBIC"));
   } else if(type == "QGSP") {
     this->RegisterPhysics( new G4HadronElasticPhysics("LElastic",ver,flagHP));
     this->RegisterPhysics( new G4HadronInelasticQLHEP("inelastic", ver, 
-		true, false, false));
+		true, false, false, false));
     this->RegisterPhysics( new G4LHEPStoppingPhysics("stopping",ver));
     this->RegisterPhysics( new G4LHEPIonPhysics("ionLHEP"));
   } else if(type == "QGSP_BERT") {
     this->RegisterPhysics( new G4HadronElasticPhysics("LElastic",ver,flagHP));
     this->RegisterPhysics( new G4HadronInelasticQLHEP("inelastic", ver, 
-		true, true, false));
+		true, true, false, false));
     this->RegisterPhysics( new G4LHEPStoppingPhysics("stopping",ver));
     this->RegisterPhysics( new G4LHEPIonPhysics("ionLHEP"));
   } else if (type == "QGSP_EL") {
     this->RegisterPhysics( new G4HadronElasticPhysics("elastic",ver,flagHP));
     this->RegisterPhysics( new G4HadronInelasticQLHEP("inelastic", ver, 
-		true, false, false));
+		true, false, false, false));
     this->RegisterPhysics( new G4LHEPStoppingPhysics("stopping",ver));
     this->RegisterPhysics( new G4LHEPIonPhysics("ionLHEP"));
   } else if (type == "QGSP_NEL") {
     this->RegisterPhysics( new G4HadronInelasticQLHEP("inelastic", ver, 
-		true, false, false));
+		true, false, false, false));
     this->RegisterPhysics( new G4LHEPStoppingPhysics("stopping",ver));
     this->RegisterPhysics( new G4LHEPIonPhysics("ionLHEP"));
   } else {
