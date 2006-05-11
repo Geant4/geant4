@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4NistElementBuilder.cc,v 1.8 2006-05-02 07:54:15 vnivanch Exp $
+// $Id: G4NistElementBuilder.cc,v 1.9 2006-05-11 10:43:42 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -35,6 +35,7 @@
 //
 // Modifications:
 // 02.05.2006 Subtract mass of atomic electrons from NIST mass (VI) 
+// 11.05.2006 Do not subtract mass of atomic electrons from NIST mass (VI) 
 //
 // -------------------------------------------------------------------
 //
@@ -173,7 +174,7 @@ void G4NistElementBuilder::PrintElement(G4int Z)
     G4int nc = nIsotopes[i];
     G4cout << "Nist Element: <" << elmSymbol[i]
            << ">  Z= " << i
-	   << "  A= " << atomicMass[i] << "  "
+	   << "  Aeff(amu)= " << atomicMass[i] << "  "
 	   << nc << " isotopes:"
            << G4endl;
     if(verbose > 1) {
@@ -196,8 +197,8 @@ void G4NistElementBuilder::PrintElement(G4int Z)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4NistElementBuilder::AddElement(const G4String& name, G4int Z, G4int nc,
-                                  const G4int& N, const G4double& A,
-		                  const G4double& sA, const G4double& W)
+				      const G4int& N, const G4double& A,
+				      const G4double& sA, const G4double& W)
 {
   if (verbose > 1) 
   G4cout << "AddElement " << name << " Z= " << Z << " nc= " << nc << G4endl;
@@ -223,11 +224,11 @@ void G4NistElementBuilder::AddElement(const G4String& name, G4int Z, G4int nc,
   G4double ww = 0.0;
   G4double www;
   size_t nm = nc;
-  G4double delm = G4double(Z)*electron_mass_c2/amu_c2;
+  //  G4double delm = G4double(Z)*electron_mass_c2/amu_c2;
 
   for(size_t i=0; i<nm; i++) {
     www = 0.01*(&W)[i];
-    massIsotopes[index] = (&A)[i] - delm;
+    massIsotopes[index] = (&A)[i]; // - delm;
     sigMass[index]      = (&sA)[i];
     relAbundance[index] = www;
 
