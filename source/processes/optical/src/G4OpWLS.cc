@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpWLS.cc,v 1.6 2005-07-28 22:28:20 gum Exp $
+// $Id: G4OpWLS.cc,v 1.7 2006-05-12 00:30:55 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////
@@ -35,6 +35,7 @@
 // Author:      John Paul Archambault
 //              (Adaptation of G4Scintillation and G4OpAbsorption)
 // Updated:     2005-07-28 - add G4ProcessType to constructor
+//              2006-05-07 - add G4VWLSTimeGeneratorProfile
 // mail:        gum@triumf.ca
 //              jparcham@phys.ualberta.ca
 //
@@ -42,6 +43,8 @@
 
 #include "G4ios.hh"
 #include "G4OpWLS.hh"
+#include "G4WLSTimeGeneratorProfileDelta.hh"
+#include "G4WLSTimeGeneratorProfileExponential.hh"
 
 /////////////////////////
 // Class Implementation
@@ -59,7 +62,10 @@ G4OpWLS::G4OpWLS(const G4String& processName, G4ProcessType type)
   if (verboseLevel>0) {
     G4cout << GetProcessName() << " is created " << G4endl;
   }
-  
+
+  WLSTimeGeneratorProfile = 
+       new G4WLSTimeGeneratorProfileDelta("WLSTimeGeneratorProfileDelta");
+
   BuildThePhysicsTable();
 }
 
@@ -73,6 +79,7 @@ G4OpWLS::~G4OpWLS()
     theIntegralTable->clearAndDestroy();
     delete theIntegralTable;
   }
+  delete WLSTimeGeneratorProfile;
 }
 
 ////////////
@@ -192,8 +199,9 @@ G4OpWLS::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
     // Generate new G4Track object:
     
     // Must give position of WLS optical photon
-  
-    G4double aSecondaryTime = (pPostStepPoint->GetGlobalTime()) + WLSTime;
+
+    G4double TimeDelay = WLSTimeGeneratorProfile->GenerateTime(WLSTime);
+    G4double aSecondaryTime = (pPostStepPoint->GetGlobalTime()) + TimeDelay;
 
     G4ThreeVector aSecondaryPosition = pPostStepPoint->GetPosition();
 
@@ -349,4 +357,24 @@ G4double G4OpWLS::GetMeanFreePath(const G4Track& aTrack,
   }
   
   return AttenuationLength;
+}
+
+void G4OpWLS::UseTimeProfile(const G4String name)
+{
+  if (name == "delta")
+    {
+      delete WLSTimeGeneratorProfile;
+      WLSTimeGeneratorProfile = 
+             new G4WLSTimeGeneratorProfileDelta("delta");
+    }
+  else if (name == "exponential")
+    {
+      delete WLSTimeGeneratorProfile;
+      WLSTimeGeneratorProfile =
+             new G4WLSTimeGeneratorProfileExponential("exponential");
+    }
+  else
+    {
+      G4Exception("G4OpWLS::UseTimeProfile - generator does not exist");
+    }
 }

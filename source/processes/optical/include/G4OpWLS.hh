@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpWLS.hh,v 1.2 2005-07-28 22:26:42 gum Exp $
+// $Id: G4OpWLS.hh,v 1.3 2006-05-12 00:29:49 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////
@@ -35,6 +35,7 @@
 // Author:      John Paul Archambault
 //              (Adaptation of G4Scintillation and G4OpAbsorption)
 // Updated:     2005-07-28 add G4ProcessType to constructor
+//              2006-05-07 - add G4VWLSTimeGeneratorProfile
 // mail:        gum@triumf.ca
 //              jparcham@phys.ualberta.ca
 //
@@ -61,6 +62,7 @@
 #include "G4PhysicsTable.hh"
 #include "G4MaterialPropertiesTable.hh"
 #include "G4PhysicsOrderedFreeVector.hh"
+#include "G4VWLSTimeGeneratorProfile.hh"
 
 // Class Description:
 // Discrete Process -- Bulk absorption of Optical Photons.
@@ -70,6 +72,8 @@
 /////////////////////
 // Class Definition
 /////////////////////
+
+class G4VWLSTimeGeneratorProfile;
 
 class G4OpWLS : public G4VDiscreteProcess 
 {
@@ -111,6 +115,9 @@ public: // With description
   void DumpPhysicsTable() const;
   // Prints the WLS integral table.
 
+  void UseTimeProfile(const G4String name);
+  // Selects the time profile generator
+
 private:
 
   void BuildThePhysicsTable();
@@ -118,6 +125,7 @@ private:
 
 protected:
 
+  G4VWLSTimeGeneratorProfile* WLSTimeGeneratorProfile;
   G4PhysicsTable* theIntegralTable;
 
 };
@@ -152,3 +160,4 @@ void G4OpWLS::DumpPhysicsTable() const
 }
 
 #endif /* G4OpWLS_h */
+
