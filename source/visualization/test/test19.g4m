@@ -55,6 +55,9 @@
 # Add scale
 /vis/scene/add/scale
 #
+# Add event id
+/vis/scene/add/eventID
+#
 # Create a viewer.
 /vis/viewer/create
 #
