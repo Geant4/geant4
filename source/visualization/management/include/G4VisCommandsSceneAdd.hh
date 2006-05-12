@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneAdd.hh,v 1.14 2005-04-10 21:04:39 allison Exp $
+// $Id: G4VisCommandsSceneAdd.hh,v 1.15 2006-05-12 13:22:46 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/scene commands - John Allison  9th August 1998
@@ -46,6 +46,26 @@ public:
 private:
   G4VisCommandSceneAddAxes (const G4VisCommandSceneAddAxes&);
   G4VisCommandSceneAddAxes& operator = (const G4VisCommandSceneAddAxes&);
+  G4UIcommand* fpCommand;
+};
+
+class G4VisCommandSceneAddEventID: public G4VVisCommandScene {
+public:
+  G4VisCommandSceneAddEventID ();
+  virtual ~G4VisCommandSceneAddEventID ();
+  G4String GetCurrentValue (G4UIcommand* command);
+  void SetNewValue (G4UIcommand* command, G4String newValue);
+private:
+  G4VisCommandSceneAddEventID (const G4VisCommandSceneAddEventID&);
+  G4VisCommandSceneAddEventID& operator = (const G4VisCommandSceneAddEventID&);
+  struct EventID {
+    EventID(G4VisManager* vm, G4int size, G4double x, G4double y):
+      fpVisManager(vm), fSize(size), fX(x), fY(y) {}
+    void operator()(G4VGraphicsScene&, const G4Transform3D&);
+    G4VisManager* fpVisManager;
+    G4int fSize;
+    G4double fX, fY;
+  };
   G4UIcommand* fpCommand;
 };
 
@@ -98,13 +118,12 @@ private:
   G4VisCommandSceneAddLogo& operator = (const G4VisCommandSceneAddLogo&);
   class G4Logo {
   public:
-    G4Logo(G4double height, const G4VisAttributes&, G4VisManager*);
+    G4Logo(G4double height, const G4VisAttributes&);
     ~G4Logo();
-    void operator()(const G4Transform3D&);
+    void operator()(G4VGraphicsScene&, const G4Transform3D&);
   private:
     G4double fHeight;
     G4VisAttributes fVisAtts;
-    G4VisManager* fpVisManager;
     G4Polyhedron *fpG, *fp4;
   };
   G4UIcommand* fpCommand;

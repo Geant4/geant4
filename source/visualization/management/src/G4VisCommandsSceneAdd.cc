@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneAdd.cc,v 1.63 2006-03-28 16:26:56 allison Exp $
+// $Id: G4VisCommandsSceneAdd.cc,v 1.64 2006-05-12 13:22:46 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // /vis/scene commands - John Allison  9th August 1998
 
@@ -54,6 +54,9 @@
 #include "G4UIcmdWithAnInteger.hh"
 #include "G4UIcmdWithoutParameter.hh"
 #include "G4Tokenizer.hh"
+#include "G4RunManager.hh"
+#include "G4Run.hh"
+#include "G4Event.hh"
 #include "G4ios.hh"
 #include <sstream>
 
@@ -143,6 +146,104 @@ void G4VisCommandSceneAddAxes::SetNewValue (G4UIcommand*, G4String newValue) {
   UpdateVisManagerScene (currentSceneName);
 }
 
+
+////////////// /vis/scene/add/eventID ///////////////////////////////////////
+
+G4VisCommandSceneAddEventID::G4VisCommandSceneAddEventID () {
+  G4bool omitable;
+  fpCommand = new G4UIcommand ("/vis/scene/add/eventID", this);
+  fpCommand -> SetGuidance ("Adds eventID to current scene.");
+  fpCommand -> SetGuidance
+    ("Run and event numbers are drawn at end of event or run when"
+     "\n the scene in which they are added is current.");
+  G4UIparameter* parameter;
+  parameter = new G4UIparameter ("size", 'i', omitable = true);
+  parameter -> SetGuidance ("Screen size of text in pixels.");
+  parameter -> SetDefaultValue (18);
+  fpCommand -> SetParameter (parameter);
+  parameter = new G4UIparameter ("x-position", 'd', omitable = true);
+  parameter -> SetGuidance ("x screen position in range -1 < x < 1.");
+  parameter -> SetDefaultValue (-0.95);
+  fpCommand -> SetParameter (parameter);
+  parameter = new G4UIparameter ("y-position", 'd', omitable = true);
+  parameter -> SetGuidance ("y screen position in range -1 < y < 1.");
+  parameter -> SetDefaultValue (0.9);
+  fpCommand -> SetParameter (parameter);
+}
+
+G4VisCommandSceneAddEventID::~G4VisCommandSceneAddEventID () {
+  delete fpCommand;
+}
+
+G4String G4VisCommandSceneAddEventID::GetCurrentValue (G4UIcommand*) {
+  return "";
+}
+
+void G4VisCommandSceneAddEventID::SetNewValue (G4UIcommand*, G4String newValue)
+{
+  G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
+  G4bool warn(verbosity >= G4VisManager::warnings);
+
+  G4Scene* pScene = fpVisManager->GetCurrentScene();
+  if (!pScene) {
+    if (verbosity >= G4VisManager::errors) {
+      G4cout <<	"ERROR: No current scene.  Please create one." << G4endl;
+    }
+    return;
+  }
+
+  G4int size;
+  G4double x, y;
+  std::istringstream is(newValue);
+  is >> size >> x >> y;
+
+  EventID* eventID = new EventID(fpVisManager, size, x, y);
+  G4VModel* model =
+    new G4CallbackModel<G4VisCommandSceneAddEventID::EventID>(eventID);
+  model->SetGlobalDescription("EventID");
+  model->SetGlobalTag("EventID");
+  const G4String& currentSceneName = pScene -> GetName ();
+  G4bool successful = pScene -> AddEndOfEventModel (model, warn);
+  if (successful) {
+    if (verbosity >= G4VisManager::confirmations) {
+      G4cout << "EventID will be drawn in scene \""
+	     << currentSceneName << "\"."
+	     << G4endl;
+    }
+  }
+  else G4VisCommandsSceneAddUnsuccessful(verbosity);
+}
+
+void G4VisCommandSceneAddEventID::EventID::operator()
+  (G4VGraphicsScene& sceneHandler, const G4Transform3D&)
+{
+  G4RunManager* runManager = G4RunManager::GetRunManager();
+  if (runManager) {
+    const G4Run* currentRun = runManager->GetCurrentRun();
+    const G4Event* currentEvent = runManager->GetCurrentEvent();
+    if (currentRun && currentEvent) {
+      G4int runID = currentRun->GetRunID();
+      G4int eventID = currentEvent->GetEventID();
+      std::ostringstream oss;
+      if (fpVisManager->GetCurrentScene()->GetRefreshAtEndOfEvent()) {
+	oss << "Run " << runID << " Event " << eventID;
+      } else {
+	G4int nEvents = currentRun->GetNumberOfEventToBeProcessed();
+	if (eventID < nEvents - 1) return;  // Not last event.
+	else {
+	  oss << "Run " << runID << " (" << nEvents << " accumulated events)";
+	}
+      }
+      G4Text text(oss.str(), G4Point3D(fX, fY, 0.));
+      text.SetScreenSize(fSize);
+      G4VisAttributes textAtts(G4Colour(0.,1.,1));
+      text.SetVisAttributes(textAtts);
+      sceneHandler.BeginPrimitives2D();
+      sceneHandler.AddPrimitive(text);
+      sceneHandler.EndPrimitives2D();
+    }
+  }
+}
 
 ////////////// /vis/scene/add/ghosts ///////////////////////////////////////
 
@@ -635,7 +736,7 @@ void G4VisCommandSceneAddLogo::SetNewValue (G4UIcommand*, G4String newValue) {
   G4VisAttributes visAtts(G4Colour(red, green, blue));
   visAtts.SetForceSolid(true);         // Always solid.
 
-  G4Logo* logo = new G4Logo(height,visAtts,fpVisManager);
+  G4Logo* logo = new G4Logo(height,visAtts);
   G4VModel* model =
     new G4CallbackModel<G4VisCommandSceneAddLogo::G4Logo>(logo);
   model->SetGlobalDescription("G4Logo");
@@ -680,10 +781,9 @@ void G4VisCommandSceneAddLogo::SetNewValue (G4UIcommand*, G4String newValue) {
 }
 
 G4VisCommandSceneAddLogo::G4Logo::G4Logo
-(G4double height, const G4VisAttributes& visAtts, G4VisManager* pVisManager):
+(G4double height, const G4VisAttributes& visAtts):
   fHeight(height),
-  fVisAtts(visAtts),
-  fpVisManager(pVisManager)
+  fVisAtts(visAtts)
  {
   const G4double& h =  height;
   const G4double h2  = 0.5 * h;   // Half height.
@@ -751,9 +851,11 @@ G4VisCommandSceneAddLogo::G4Logo::~G4Logo() {
 }
 
 void G4VisCommandSceneAddLogo::G4Logo::operator()
-  (const G4Transform3D& transform) {
-  fpVisManager->Draw(*fpG,transform);
-  fpVisManager->Draw(*fp4,transform);
+  (G4VGraphicsScene& sceneHandler, const G4Transform3D& transform) {
+  sceneHandler.BeginPrimitives(transform);
+  sceneHandler.AddPrimitive(*fpG);
+  sceneHandler.AddPrimitive(*fp4);
+  sceneHandler.EndPrimitives();
 }
 
 ////////////// /vis/scene/add/scale //////////////////////////////////
