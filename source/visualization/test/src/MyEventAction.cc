@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: MyEventAction.cc,v 1.11 2006-04-19 14:44:57 allison Exp $
+// $Id: MyEventAction.cc,v 1.12 2006-05-12 12:36:45 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -141,7 +141,7 @@ void MyEventAction::EndOfEventAction(const G4Event* anEvent)
 	<< G4RunManager::GetRunManager()->GetCurrentRun()->GetRunID()
 	<< " Event " << anEvent->GetEventID();
     //G4Text text(oss.str(), G4Point3D(400.*cm, 400.*cm, -400.*cm));
-    G4Text text(oss.str(), G4Point3D(-0.95, 0.9, 0.));
+    G4Text text(oss.str(), G4Point3D(0., -0.9, 0.));
     text.SetScreenSize(18);
     G4VisAttributes textAtts(G4Colour(0.,1.,1));
     text.SetVisAttributes(textAtts);

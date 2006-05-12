@@ -1,9 +1,12 @@
-$Id: History,v 1.88 2006-05-12 12:35:55 allison Exp $
+$Id: History,v 1.89 2006-05-12 12:36:45 allison Exp $
 
 History file for visualization/test subdirectory
 ------------------------------------------------
 
 $Log: not supported by cvs2svn $
+Revision 1.88  2006/05/12 12:35:55  allison
+Commented out SetRunID.  Interferes with run number set in re-computation of transients.
+
 Revision 1.87  2006/05/04 14:44:02  allison
 vistest-V08-00-05
 
