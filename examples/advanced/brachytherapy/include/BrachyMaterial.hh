@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: BrachyMaterial.hh,v 1.5 2003-05-27 08:37:54 guatelli Exp $
+// $Id: BrachyMaterial.hh,v 1.6 2006-05-12 13:49:29 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //    **********************************
@@ -32,11 +32,11 @@
 //
 //Code developed by: Susanna Guatelli
 //
-//This class manages the elements and materials needed by the simulation
-// set-up ...
+// This class manages the elements and materials
 //
 #ifndef BrachyMaterial_H
 #define BrachyMaterial_H 1
+
 #include "globals.hh"
 class G4Material;
 

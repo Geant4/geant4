@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: BrachyDetectorConstructionIr.hh,v 1.3 2003-05-22 17:20:41 guatelli Exp $
+// $Id: BrachyDetectorConstructionIr.hh,v 1.4 2006-05-12 13:49:29 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //    ****************************************
@@ -30,7 +30,7 @@
 //    *                                      *
 //    ****************************************
 //
-//Management of the Iridium source
+// Management of the Iridium source
 //
 
 #ifndef BrachyDetectorConstructionIr_H
@@ -38,26 +38,26 @@
 
 #include "globals.hh"
 #include "G4VUserDetectorConstruction.hh"
-#include "G4LogicalVolume.hh"
-
 
 class G4LogicalVolume;
 class G4Tubs;
 class G4Box;
 class G4Sphere;
-class G4Tubs;
-class G4Colour;
-class G4VPhysicalVolume;
 class G4VPhysicalVolume;
 class BrachyMaterial;
+class G4VisAttributes;
 
 class BrachyDetectorConstructionIr 
 {
 public:
   BrachyDetectorConstructionIr();
   ~BrachyDetectorConstructionIr();
+
   void  ConstructIridium(G4VPhysicalVolume*);
-  void  CleanIridium();
+  // Model the Iridum source
+
+  void  CleanIridium(); 
+  // Destroy the Iridium source in the experimental set-up
 
 private:   
   G4Tubs* capsule ;

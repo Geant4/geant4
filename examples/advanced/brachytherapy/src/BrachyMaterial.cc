@@ -29,7 +29,7 @@
 //    *                             *
 //    *******************************
 //
-// $Id: BrachyMaterial.cc,v 1.5 2004-03-11 15:38:42 guatelli Exp $
+// $Id: BrachyMaterial.cc,v 1.6 2006-05-12 13:49:29 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -232,6 +232,7 @@ void BrachyMaterial::DefineMaterials()
 
 G4Material* BrachyMaterial::GetMat(G4String material)
 {
+  // Returns a material 
   G4Material* pttoMaterial = G4Material::GetMaterial(material); 
   return pttoMaterial; 
 }
