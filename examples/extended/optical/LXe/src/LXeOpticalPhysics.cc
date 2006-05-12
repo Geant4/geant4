@@ -64,6 +64,9 @@ void LXeOpticalPhysics::ConstructProcess()
   theBoundaryProcess=new G4OpBoundaryProcess();
   theWLSProcess=new G4OpWLS();
 
+  theWLSProcess->UseTimeProfile("delta");
+//theWLSProcess->UseTimeProfile("exponential");
+
   G4ProcessManager * pManager = 0;
   
   pManager = G4OpticalPhoton::OpticalPhoton()->GetProcessManager();
@@ -97,4 +100,5 @@ void LXeOpticalPhysics::SetScintYieldFactor(G4double yf){
   if(theScintProcess)
     theScintProcess->SetScintillationYieldFactor(yf);
 }
+
 
