@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhotoelectricTest.cc,v 1.2 2001-10-29 12:04:36 pia Exp $
+// $Id: G4PhotoelectricTest.cc,v 1.3 2006-05-12 17:47:58 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)

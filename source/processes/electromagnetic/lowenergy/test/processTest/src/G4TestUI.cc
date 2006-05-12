@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TestUI.cc,v 1.4 2001-10-30 08:35:52 pia Exp $
+// $Id: G4TestUI.cc,v 1.5 2006-05-12 17:47:58 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
