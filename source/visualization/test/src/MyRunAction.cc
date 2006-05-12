@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: MyRunAction.cc,v 1.6 2006-05-04 14:42:58 allison Exp $
+// $Id: MyRunAction.cc,v 1.7 2006-05-12 12:35:55 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -44,8 +44,8 @@ MyRunAction::~MyRunAction()
 
 void MyRunAction::BeginOfRunAction(const G4Run* aRun)
 {
-  G4Run* aModifiableRun = const_cast<G4Run*>(aRun);
-  aModifiableRun->SetRunID(runIDcounter++);
+  //G4Run* aModifiableRun = const_cast<G4Run*>(aRun);
+  //aModifiableRun->SetRunID(runIDcounter++);
   //aRun->transient(true);
 
   G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
