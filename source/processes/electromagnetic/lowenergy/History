@@ -1,4 +1,4 @@
-$Id: History,v 1.245 2005-12-20 13:45:40 capra Exp $
+$Id: History,v 1.246 2006-05-12 17:58:47 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,17 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+12.05.2006   MGP, tag emlowen-V08-00-00
+             New developments: photoelectric angular distribution models
+                               Geant4-DNA very lowE physics processes in water
+             The photoelectric angular distribution models have some
+             questionable design features (function arguments passed
+             by value etc.), and very poor code implementation, not
+             respecting the Geant4 coding guidelines and basic 
+             coding conventions
+             The Geant4-DNA processes are in a beta-release status
+
 20.12.2005   R.Capra, tag emlowen-V08-00-RC
              * Internal tag with latest developments in the DNA processes
                - Tested for build, run and plots verified
