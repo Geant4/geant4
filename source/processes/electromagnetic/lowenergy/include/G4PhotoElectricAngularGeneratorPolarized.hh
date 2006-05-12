@@ -76,11 +76,11 @@ private:
   G4ThreeVector PhotoElectronGetPlab(G4RotationMatrix rotation, G4double theta, G4double phi);
   G4RotationMatrix PhotoElectronRotationMatrix(G4ThreeVector direction, G4ThreeVector polarization);
 
-  G4double getMax(G4double arg1, G4double arg2);
+  G4double GetMax(G4double arg1, G4double arg2);
 
   G4double G2Function(G4double theta, G4double c_beta);
-  G4double dsigma_k_shellGavrila1959(G4double beta, G4double theta, G4double phi);
-  G4double dsigma_L1_shellGavrila(G4double beta, G4double theta, G4double phi);
+  G4double DSigmaKshellGavrila1959(G4double beta, G4double theta, G4double phi);
+  G4double DSigmaL1shellGavrila(G4double beta, G4double theta, G4double phi);
 
   G4double betarray[3];
   G4double a[980][2],c[980][2];

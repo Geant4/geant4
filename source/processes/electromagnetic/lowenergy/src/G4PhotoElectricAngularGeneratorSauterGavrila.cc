@@ -26,7 +26,7 @@
 // GEANT4 Class file
 //
 //
-// File name:     G4PhotoElectricAngularGeneratorStandard
+// File name:     G4PhotoElectricAngularGeneratorSauterGavrila
 //
 // Creation date: 10 May 2004
 //
@@ -45,22 +45,22 @@
 //
 //    
 
-#include "G4PhotoElectricAngularGeneratorStandard.hh"
+#include "G4PhotoElectricAngularGeneratorSauterGavrila.hh"
 #include "Randomize.hh"
 
 //    
 
-G4PhotoElectricAngularGeneratorStandard::G4PhotoElectricAngularGeneratorStandard(const G4String& name):G4VPhotoElectricAngularDistribution(name)
+G4PhotoElectricAngularGeneratorSauterGavrila::G4PhotoElectricAngularGeneratorSauterGavrila(const G4String& name):G4VPhotoElectricAngularDistribution(name)
 {;}
 
 //    
 
-G4PhotoElectricAngularGeneratorStandard::~G4PhotoElectricAngularGeneratorStandard() 
+G4PhotoElectricAngularGeneratorSauterGavrila::~G4PhotoElectricAngularGeneratorSauterGavrila() 
 {;}
 
 //
 
-G4ThreeVector G4PhotoElectricAngularGeneratorStandard::GetPhotoElectronDirection(G4ThreeVector direction, G4double eKineticEnergy, G4ThreeVector, G4int)
+G4ThreeVector G4PhotoElectricAngularGeneratorSauterGavrila::GetPhotoElectronDirection(G4ThreeVector direction, G4double eKineticEnergy, G4ThreeVector, G4int)
 {
 
   // Compute Theta distribution of the emitted electron, with respect to the
@@ -101,7 +101,7 @@ G4ThreeVector G4PhotoElectricAngularGeneratorStandard::GetPhotoElectronDirection
 
 //
 
-void G4PhotoElectricAngularGeneratorStandard::PrintGeneratorInformation() const
+void G4PhotoElectricAngularGeneratorSauterGavrila::PrintGeneratorInformation() const
 {
   G4cout << "\n" << G4endl;
   G4cout << "" << G4endl;

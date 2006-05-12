@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LowEnergyPhotoElectric.hh,v 1.26 2004-05-12 09:20:03 silvarod Exp $
+// $Id: G4LowEnergyPhotoElectric.hh,v 1.27 2006-05-12 17:45:26 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: A. Forti

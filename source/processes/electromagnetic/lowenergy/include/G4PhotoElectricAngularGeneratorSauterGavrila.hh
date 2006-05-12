@@ -26,51 +26,53 @@
 // GEANT4 Class file
 //
 //
-// File name:     G4PhotoElectricAngularGenerator462
+// File name:  G4PhotoElectricAngularGeneratorSauterGavrila
 //
-// Author:        Andreia Trindade (andreia@lip.pt)
-// 
 // Creation date: 10 May 2004
 //
 // Modifications: 
-// 10 May 2003       A. Trindade    First implementation acording with new design
+// 10 May 2003     P. Rodrigues    First implementation acording with new design
 //
 // Class Description: 
 //
-// Concrete class for PhotoElectric Electron Angular Distribution Generation - ( < 4.6.2 model)
+// Concrete class for PhotoElectric Electron Angular Distribution Generation 
+// This model is a re-implementation of the Photolectric angular distribution
+// developed my M. Maire for the Standard EM Physics G4PhotoElectricEffect 
 //
-// Class Description: End 
-//
+// Further documentation available from http://www.ge.infn.it/geant4/lowE
+
 // -------------------------------------------------------------------
 //
-//    
 
-#include "G4PhotoElectricAngularGenerator462.hh"
-#include "Randomize.hh"
+#ifndef G4PhotoElectricAngularGeneratorSauterGavrila_h
+#define G4PhotoElectricAngularGeneratorSauterGavrila_h 1
 
-//    
+#include "G4VPhotoElectricAngularDistribution.hh"
+#include "G4ios.hh"
+#include "globals.hh"
 
-G4PhotoElectricAngularGenerator462::G4PhotoElectricAngularGenerator462(const G4String& name):G4VPhotoElectricAngularDistribution(name)
-{;}
-
-//    
-
-G4PhotoElectricAngularGenerator462::~G4PhotoElectricAngularGenerator462() 
-{;}
-
-//
-
-G4ThreeVector G4PhotoElectricAngularGenerator462::GetPhotoElectronDirection(G4ThreeVector direction, G4double, G4ThreeVector, G4int)
+class G4PhotoElectricAngularGeneratorSauterGavrila : public G4VPhotoElectricAngularDistribution
 {
-  return direction;
-}
 
-//
+public:
 
-void G4PhotoElectricAngularGenerator462::PrintGeneratorInformation() const
-{
-  G4cout << "\n" << G4endl;
-  G4cout << "Simple Photoelectric Angular Generator" << G4endl;
-  G4cout << "Photoelectron is emmited with the same direction " << G4endl;
-  G4cout << "than the incident photon (see Physics Reference Manual) \n" << G4endl;
-} 
+  G4PhotoElectricAngularGeneratorSauterGavrila(const G4String& name);
+
+  ~G4PhotoElectricAngularGeneratorSauterGavrila();
+
+  G4ThreeVector GetPhotoElectronDirection(G4ThreeVector direction, G4double kineticEnergy, G4ThreeVector polarization, G4int shellId);
+
+  void PrintGeneratorInformation() const;
+
+protected:
+
+private:
+
+  // hide assignment operator 
+     G4PhotoElectricAngularGeneratorSauterGavrila & operator=(const  G4PhotoElectricAngularGeneratorSauterGavrila &right);
+     G4PhotoElectricAngularGeneratorSauterGavrila(const  G4PhotoElectricAngularGeneratorSauterGavrila&);
+
+};
+
+#endif
+

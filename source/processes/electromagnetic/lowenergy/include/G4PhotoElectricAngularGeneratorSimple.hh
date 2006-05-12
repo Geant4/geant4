@@ -26,7 +26,7 @@
 // GEANT4 Class file
 //
 //
-// File name:  G4PhotoElectricAngularGenerator462
+// File name:  G4PhotoElectricAngularGeneratorSimple
 //
 // Author:        Andreia Trindade (andreia@lip.pt)
 // 
@@ -37,29 +37,29 @@
 //
 // Class Description: 
 //
-// Abstract class for PhotoElectricsstrahlung Angular Generator462 Generation
+// Abstract class for PhotoElectricsstrahlung Angular GeneratorSimple Generation
 // Further documentation available from http://www.ge.infn.it/geant4/lowE
 
 // -------------------------------------------------------------------
 //
 
-#ifndef G4PhotoElectricAngularGenerator462_h
-#define G4PhotoElectricAngularGenerator462_h 1
+#ifndef G4PhotoElectricAngularGeneratorSimple_h
+#define G4PhotoElectricAngularGeneratorSimple_h 1
 
 #include "G4VPhotoElectricAngularDistribution.hh"
 #include "G4ios.hh"
 #include "globals.hh"
 
-class G4PhotoElectricAngularGenerator462 : public G4VPhotoElectricAngularDistribution
+class G4PhotoElectricAngularGeneratorSimple : public G4VPhotoElectricAngularDistribution
 {
 
 public:
 
-  G4PhotoElectricAngularGenerator462(const G4String& name);
+  G4PhotoElectricAngularGeneratorSimple(const G4String& name);
 
-  ~G4PhotoElectricAngularGenerator462();
+  ~G4PhotoElectricAngularGeneratorSimple();
 
-  G4ThreeVector GetPhotoElectronDirection(G4ThreeVector direction, G4double kineticEnergy, G4ThreeVector polarization, G4int shellId);
+  G4ThreeVector GetPhotoElectronDirection(G4ThreeVector direction, G4double kineticEnergy, G4ThreeVector, G4int );
 
   void PrintGeneratorInformation() const;
 
@@ -68,8 +68,8 @@ protected:
 private:
 
   // hide assignment operator 
-     G4PhotoElectricAngularGenerator462 & operator=(const  G4PhotoElectricAngularGenerator462 &right);
-     G4PhotoElectricAngularGenerator462(const  G4PhotoElectricAngularGenerator462&);
+     G4PhotoElectricAngularGeneratorSimple & operator=(const  G4PhotoElectricAngularGeneratorSimple &right);
+     G4PhotoElectricAngularGeneratorSimple(const  G4PhotoElectricAngularGeneratorSimple&);
 
 };
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LowEnergyPhotoElectric.cc,v 1.54 2006-03-06 16:41:11 silvarod Exp $
+// $Id: G4LowEnergyPhotoElectric.cc,v 1.55 2006-05-12 17:46:41 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: A. Forti
@@ -64,8 +64,8 @@
 #include "G4LowEnergyPhotoElectric.hh"
 
 #include "G4VPhotoElectricAngularDistribution.hh"
-#include "G4PhotoElectricAngularGenerator462.hh"
-#include "G4PhotoElectricAngularGeneratorStandard.hh"
+#include "G4PhotoElectricAngularGeneratorSimple.hh"
+#include "G4PhotoElectricAngularGeneratorSauterGavrila.hh"
 #include "G4PhotoElectricAngularGeneratorPolarized.hh"
 
 #include "G4ParticleDefinition.hh"
@@ -107,7 +107,7 @@ G4LowEnergyPhotoElectric::G4LowEnergyPhotoElectric(const G4String& processName)
   meanFreePathTable = 0;
   rangeTest = new G4RangeNoTest;
   generatorName = "geant4.6.2";
-  ElectronAngularGenerator = new G4PhotoElectricAngularGenerator462("GEANT462Generator");              // default generator
+  ElectronAngularGenerator = new G4PhotoElectricAngularGeneratorSimple("GEANTSimpleGenerator");              // default generator
 
 
   if (verboseLevel > 0)
@@ -365,13 +365,13 @@ void G4LowEnergyPhotoElectric::SetAngularGenerator(const G4String& name)
   if (name == "default") 
     {
       delete ElectronAngularGenerator;
-      ElectronAngularGenerator = new G4PhotoElectricAngularGenerator462("GEANT4LowEnergy62Generator");
+      ElectronAngularGenerator = new G4PhotoElectricAngularGeneratorSimple("GEANT4LowEnergySimpleGenerator");
       generatorName = name;
     }
   else if (name == "standard")
     {
       delete ElectronAngularGenerator;
-      ElectronAngularGenerator = new G4PhotoElectricAngularGeneratorStandard("GEANT4StandardEMPhysicsGenerator");
+      ElectronAngularGenerator = new G4PhotoElectricAngularGeneratorSauterGavrila("GEANT4SauterGavrilaGenerator");
       generatorName = name;
     }
   else if (name == "polarized")
