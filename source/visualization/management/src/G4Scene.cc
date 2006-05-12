@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scene.cc,v 1.17 2006-03-06 14:30:59 allison Exp $
+// $Id: G4Scene.cc,v 1.18 2006-05-12 13:24:10 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -108,8 +108,8 @@ G4bool G4Scene::AddWorldIfEmpty (G4bool warn) {
       if (successful) {
 	if (warn) {
 	  G4cout <<
-	    "G4Scene::AddWorldIfEmpty: The scene was empty."
-	    "  \"world\" has been added.";
+    "G4Scene::AddWorldIfEmpty: The scene was empty of run-duration models."
+    "\n  \"world\" has been added.";
 	  G4cout << G4endl;
 	}
       }
@@ -130,12 +130,12 @@ G4bool G4Scene::AddEndOfEventModel (G4VModel* pModel, G4bool warn) {
     if (warn) {
       G4cout << "G4Scene::AddEndOfEventModel: a model \""
 	     << pModel -> GetGlobalDescription ()
-	     << "\"\n  is already in the run-duration list of scene \""
+	     << "\"\n  is already in the end-of-event list of scene \""
 	     << fName <<
 	"\".\n  The old model has been deleted; this new model replaces it."
 	     << G4endl;
     }
-    return false;
+    return true;  // Model replaced sucessfully.
   }
   fEndOfEventModelList.push_back (pModel);
   return true;
