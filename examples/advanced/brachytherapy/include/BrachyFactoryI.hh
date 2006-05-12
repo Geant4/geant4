@@ -31,7 +31,7 @@
 //  S.Guatelli
 //
 // 
-// $Id: BrachyFactoryI.hh,v 1.5 2003-05-22 17:20:41 guatelli Exp $
+// $Id: BrachyFactoryI.hh,v 1.6 2006-05-12 17:08:06 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -60,11 +60,12 @@ public:
   BrachyFactoryI();
  ~BrachyFactoryI();
 
-  G4VUserPrimaryGeneratorAction* CreatePrimaryGeneratorAction();
+  void CreatePrimaryGeneratorAction(G4Event* anEvent);
   void CreateSource(G4VPhysicalVolume*);
   void CleanSource();
 
 private:
   BrachyDetectorConstructionI* iodiumSource;
+  BrachyPrimaryGeneratorActionI* iodiumPrimaryParticle;
 };
 #endif

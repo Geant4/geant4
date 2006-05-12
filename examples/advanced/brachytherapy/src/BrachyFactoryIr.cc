@@ -29,7 +29,7 @@
 //    *                             *
 //    *******************************
 //
-// $Id: BrachyFactoryIr.cc,v 1.4 2003-05-22 17:20:43 guatelli Exp $
+// $Id: BrachyFactoryIr.cc,v 1.5 2006-05-12 17:08:06 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "globals.hh"
@@ -47,18 +47,19 @@
 
 BrachyFactoryIr:: BrachyFactoryIr()
 {
-  iridiumSource=new  BrachyDetectorConstructionIr();
+  iridiumSource = new  BrachyDetectorConstructionIr(); 
+  iridiumPrimaryParticle = new BrachyPrimaryGeneratorActionIr();
 }
 
 BrachyFactoryIr:: ~BrachyFactoryIr()
 {
   delete iridiumSource;
+  delete iridiumPrimaryParticle;
 }
  
-G4VUserPrimaryGeneratorAction*  BrachyFactoryIr::CreatePrimaryGeneratorAction(){
-  G4VUserPrimaryGeneratorAction* iridiumPrimaryParticle =
-                                         new BrachyPrimaryGeneratorActionIr();
-  return iridiumPrimaryParticle;
+void BrachyFactoryIr::CreatePrimaryGeneratorAction(G4Event* anEvent)
+{
+  iridiumPrimaryParticle -> GeneratePrimaries(anEvent);
 }
 
 void BrachyFactoryIr::CreateSource(G4VPhysicalVolume* mother)

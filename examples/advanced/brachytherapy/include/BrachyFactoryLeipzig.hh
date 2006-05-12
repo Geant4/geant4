@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: BrachyFactoryLeipzig.hh,v 1.4 2003-05-22 17:20:41 guatelli Exp $
+// $Id: BrachyFactoryLeipzig.hh,v 1.5 2006-05-12 17:08:06 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //    **********************************
@@ -54,11 +54,12 @@ public:
   BrachyFactoryLeipzig();
  ~BrachyFactoryLeipzig();
 
-  G4VUserPrimaryGeneratorAction* CreatePrimaryGeneratorAction();
+  void CreatePrimaryGeneratorAction(G4Event*);
   void CreateSource(G4VPhysicalVolume*);
   void CleanSource();
 
 private:
   BrachyDetectorConstructionLeipzig* leipzigSource;
+  BrachyPrimaryGeneratorActionIr*  iridiumPrimaryParticle;
 };
 #endif

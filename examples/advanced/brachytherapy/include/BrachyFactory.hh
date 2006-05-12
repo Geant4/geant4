@@ -22,7 +22,7 @@
 //
 //  Code developed by: Susanna Guatelli
 //
-// $Id: BrachyFactory.hh,v 1.4 2003-05-22 17:20:41 guatelli Exp $
+// $Id: BrachyFactory.hh,v 1.5 2006-05-12 17:08:06 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //    **********************************
@@ -53,7 +53,7 @@ public:
   virtual ~BrachyFactory();
 
   //Source primary particles' management ...
-  virtual G4VUserPrimaryGeneratorAction* CreatePrimaryGeneratorAction() = 0;
+  virtual void CreatePrimaryGeneratorAction(G4Event* anEven) = 0;
 
   // ...
   // this function manages the creation of the source in terms of 

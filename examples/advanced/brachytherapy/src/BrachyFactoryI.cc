@@ -29,7 +29,7 @@
 //    *                             *
 //    *******************************
 //
-// $Id: BrachyFactoryI.cc,v 1.4 2003-05-22 17:20:43 guatelli Exp $
+// $Id: BrachyFactoryI.cc,v 1.5 2006-05-12 17:08:06 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "BrachyFactoryI.hh"
@@ -47,6 +47,7 @@
 BrachyFactoryI:: BrachyFactoryI()
 {
   iodiumSource = new BrachyDetectorConstructionI();
+  iodiumPrimaryParticle = new BrachyPrimaryGeneratorActionI();
 }
 
 BrachyFactoryI::~BrachyFactoryI()
@@ -54,16 +55,14 @@ BrachyFactoryI::~BrachyFactoryI()
   delete iodiumSource;
 }
 
-G4VUserPrimaryGeneratorAction*  BrachyFactoryI::CreatePrimaryGeneratorAction()
+void  BrachyFactoryI::CreatePrimaryGeneratorAction(G4Event* anEvent)
 { 
-  G4VUserPrimaryGeneratorAction* iodiumPrimaryParticle = 
-                                          new BrachyPrimaryGeneratorActionI();
-  return iodiumPrimaryParticle;
+  iodiumPrimaryParticle -> GeneratePrimaries(anEvent);
 }
 
 void BrachyFactoryI::CreateSource(G4VPhysicalVolume* mother)
 {
-  iodiumSource->ConstructIodium(mother);
+  iodiumSource -> ConstructIodium(mother);
 }
 
 void BrachyFactoryI::CleanSource()

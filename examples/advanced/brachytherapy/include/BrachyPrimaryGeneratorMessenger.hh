@@ -21,44 +21,39 @@
 // ********************************************************************
 //
 //
-// $Id: BrachyRunMessenger.hh,v 1.3 2003-05-22 17:20:42 guatelli Exp $
+//    ************************************************
+//    *                                              *
+//    *      BrachyPrimaryGeneratorMessenger.hh      *
+//    *                                              *
+//    ***********************************************
+//
+// $Id: BrachyPrimaryGeneratorMessenger.hh,v 1.1 2006-05-12 17:08:06 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
-//
-//
-//    ********************************************
-//    *                                          *
-//    *      BrachyRunMessenger.hh               *
-//    *                                          *
-//    ********************************************
-// This class permits to switch the energy of the gamma delivered from the 
-//radionuclides (Iodium/Iridium)
-//
-
-#ifndef BrachyRunMessenger_h
-#define BrachyRunMessenger_h 1
+#ifndef BrachyPrimaryGeneratorMessenger_h
+#define BrachyPrimaryGeneratorMessenger_h 1
 
 #include "globals.hh"
 #include "G4UImessenger.hh"
 
-class BrachyRunAction;
-class BrachyRunAction;
+class BrachyPrimaryGeneratorAction;
 class G4UIdirectory;
 class G4UIcmdWithAString;
 
-class BrachyRunMessenger: public G4UImessenger
+class BrachyPrimaryGeneratorMessenger: public G4UImessenger
 {
 public:
-  BrachyRunMessenger(BrachyRunAction* );
-  ~BrachyRunMessenger();
+  BrachyPrimaryGeneratorMessenger(BrachyPrimaryGeneratorAction* );
+  ~BrachyPrimaryGeneratorMessenger();
     
   void SetNewValue(G4UIcommand*, G4String);
   
 private:
-  G4UIdirectory*  runDir;
-  G4UIcmdWithAString* primaryParticleEnergySpectrumCmd;
-  BrachyRunAction*  runManager;
+
+  BrachyPrimaryGeneratorAction*  primaryAction;
+  G4UIdirectory*                 primaryDir; 
+  G4UIcmdWithAString*            primaryParticleEnergySpectrumCmd;
 };
 #endif
 

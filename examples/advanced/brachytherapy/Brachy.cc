@@ -57,7 +57,7 @@
 #include "BrachyDetectorConstruction.hh"
 #include "BrachyPhysicsList.hh"
 #include "BrachyPhantomSD.hh"
-#include "BrachyPrimaryGeneratorActionIr.hh"
+#include "BrachyPrimaryGeneratorAction.hh"
 #include "G4SDManager.hh"
 #include "BrachyRunAction.hh"
 #include "Randomize.hh"  
@@ -77,12 +77,15 @@ int main(int argc ,char ** argv)
 
   G4String sensitiveDetectorName = "Phantom";
 
-  // Initialize the Detector component
+  // Initialize the Physics component
+  pRunManager -> SetUserInitialization(new BrachyPhysicsList);
+
   BrachyDetectorConstruction  *pDetectorConstruction = new  BrachyDetectorConstruction(sensitiveDetectorName);
   pRunManager -> SetUserInitialization(pDetectorConstruction);
 
-  // Initialize the Physics component
-  pRunManager -> SetUserInitialization(new BrachyPhysicsList);
+  // Initialize the primary particles
+  BrachyPrimaryGeneratorAction* primary = new BrachyPrimaryGeneratorAction();
+  pRunManager -> SetUserAction(primary);
 
   // Initialize Optional User Action
   BrachyEventAction *pEventAction = new BrachyEventAction();

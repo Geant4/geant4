@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: BrachyPrimaryGeneratorActionIr.hh,v 1.5 2003-06-16 16:45:01 gunter Exp $
+// $Id: BrachyPrimaryGeneratorActionIr.hh,v 1.6 2006-05-12 17:08:06 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //    *************************************************
@@ -59,7 +59,6 @@ public:
   G4double GetEnergy(){return primaryParticleEnergy;};
      
 private:
-
   G4ParticleGun* particleGun;
   G4double primaryParticleEnergy;
 };

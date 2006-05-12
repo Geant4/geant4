@@ -31,20 +31,16 @@
 //    *********************************
 //
 //
-// $Id: BrachyDetectorMessenger.cc,v 1.10 2006-05-12 14:57:54 guatelli Exp $
+// $Id: BrachyDetectorMessenger.cc,v 1.11 2006-05-12 17:08:06 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
 #include "BrachyDetectorMessenger.hh"
-//#include "BrachyFactoryIr.hh"
-//#include "BrachyRunAction.hh"
 #include "BrachyDetectorConstruction.hh"
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithAString.hh"
-//#include "G4UIcmdWithAnInteger.hh"
-//#include "G4UIcmdWithADoubleAndUnit.hh"
-//#include "G4UIcmdWithoutParameter.hh"
+
 
 BrachyDetectorMessenger::BrachyDetectorMessenger( BrachyDetectorConstruction* Det): detector(Det)
 { 

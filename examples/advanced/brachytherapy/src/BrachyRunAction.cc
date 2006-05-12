@@ -35,12 +35,11 @@
 //    *                             *
 //    *******************************
 //
-// $Id: BrachyRunAction.cc,v 1.16 2005-11-22 11:00:47 guatelli Exp $
+// $Id: BrachyRunAction.cc,v 1.17 2006-05-12 17:08:06 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "BrachyRunAction.hh"
-#include "BrachyEventAction.hh"
 
 #ifdef G4ANALYSIS_USE
 #include "BrachyAnalysisManager.hh"
@@ -50,23 +49,14 @@
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
 #include "G4ios.hh"
-#include "BrachyRunMessenger.hh"
-#include "G4SDManager.hh"
-#include "G4Timer.hh"
-#include "BrachyFactoryIr.hh"
-#include "BrachyFactoryI.hh"
-#include "BrachyFactory.hh"
 #include "BrachyRunAction.hh"
 
 BrachyRunAction::BrachyRunAction()
-
 {
-  runMessenger = new BrachyRunMessenger(this);
 }
 
 BrachyRunAction::~BrachyRunAction()
 { 
-  delete runMessenger;
 }
 void BrachyRunAction::BeginOfRunAction(const G4Run* aRun)
 { 
@@ -82,36 +72,11 @@ void BrachyRunAction::BeginOfRunAction(const G4Run* aRun)
  else { G4cout << "The results of Run:"<< runNb << " are summed to the" << 
         " results of the previous Run in brachytherapy.hbk" << G4endl;} 
 #endif  
-
-  G4RunManager* runManager = G4RunManager::GetRunManager();
-
-  if(runManager)
-    { switch(sourceChoice)
-      {
-        case 1:
-	  factory = new BrachyFactoryI;
-	  break;
-        default:   
-	  factory = new BrachyFactoryIr; 
-      }      
-    G4VUserPrimaryGeneratorAction* sourcePrimaryParicle = 
-                                     factory->CreatePrimaryGeneratorAction();
-      
-    if(sourcePrimaryParicle)runManager->SetUserAction(sourcePrimaryParicle);     
-    }
-}
-
-void BrachyRunAction::SelectEnergy(G4int choice)
-{
-  sourceChoice = choice;
-  if (sourceChoice == 1)factory = new BrachyFactoryI;
-  else factory = new BrachyFactoryIr; 
 }
 
 void BrachyRunAction::EndOfRunAction(const G4Run* aRun)
 {
-  G4cout << "number of event = " << aRun->GetNumberOfEvent() << G4endl;
-  delete factory;    
+  G4cout << "number of events = " << aRun->GetNumberOfEvent() << G4endl;
 }
 
 
