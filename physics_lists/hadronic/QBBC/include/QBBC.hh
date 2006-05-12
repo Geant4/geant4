@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: QBBC.hh,v 1.2 2006-05-04 16:46:14 vnivanch Exp $
+// $Id: QBBC.hh,v 1.3 2006-05-12 16:26:37 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -45,9 +45,7 @@ class TQBBC: public T
 {
 public:
 
-  TQBBC(G4int ver = 1, const G4String& type = "QBBC",   
-	G4bool flagFTF = false, G4bool flagCHIPS = false, 
-	G4bool flagHP = false );
+  TQBBC(G4int ver = 1, const G4String& type = "QBBC");
 
   virtual ~TQBBC();
   
