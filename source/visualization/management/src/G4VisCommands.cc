@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommands.cc,v 1.10 2006-05-12 13:16:25 allison Exp $
+// $Id: G4VisCommands.cc,v 1.11 2006-05-12 14:42:46 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/ top level commands - John Allison  5th February 2001
@@ -29,7 +29,7 @@
 #include "G4VisCommands.hh"
 
 #include "G4VisManager.hh"
-#include "G4UIManager.hh"
+#include "G4UImanager.hh"
 #include "G4UIcmdWithABool.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithoutParameter.hh"
