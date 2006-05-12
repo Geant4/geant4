@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.hh,v 1.55 2006-05-04 14:28:04 allison Exp $
+// $Id: G4VisManager.hh,v 1.56 2006-05-12 13:32:04 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -137,6 +137,8 @@ class G4VisManager: public G4VVisManager {
   (std::ostream &, const G4VSceneHandler &);
 
   friend class G4VisStateDependent;
+
+  friend class G4VisCommandList;
 
 public: // With description
 
@@ -323,11 +325,12 @@ public: // With description
   // it contains more information.  (The size information in
   // GetXGeometryString and GetWindowSizeHint is guaranteed to be
   // identical.)
-  G4int                        GetEventCount() const;
-  const G4String&              GetBeginOfLastRunRandomStatus() const;
-  const G4String&              GetBeginOfLastEventRandomStatus() const;
-  G4bool                       GetTransientsDrawnThisEvent() const;
-  G4bool                       GetTransientsDrawnThisRun() const;
+  G4int                        GetEventCount                   () const;
+  const G4String&              GetBeginOfLastRunRandomStatus   () const;
+  const G4String&              GetBeginOfLastEventRandomStatus () const;
+  G4int                        GetLastRunID                    () const;
+  G4bool                       GetTransientsDrawnThisRun       () const;
+  G4bool                       GetTransientsDrawnThisEvent     () const;
 
   void SetUserAction (G4VUserVisAction* pVisAction,
 		      const G4VisExtent& = G4VisExtent::NullExtent);
@@ -343,6 +346,7 @@ public: // With description
   void              SetVerboseLevel             (Verbosity);
   void              SetWindowSizeHint           (G4int xHint, G4int yHint);
   void              SetXGeometryString          (const G4String&);
+  void              SetReprocessingLastEvent    (G4bool);
 
 
   /////////////////////////////////////////////////////////////////////
@@ -414,8 +418,11 @@ protected:
   G4int fEventCount;
   G4String fBeginOfLastRunRandomStatus;
   G4String fBeginOfLastEventRandomStatus;
-  G4bool fTransientsDrawnThisEvent;
+  G4bool fReprocessingLastEvent;
+  G4int fLastRunID;
+  G4int fLastEventID;
   G4bool fTransientsDrawnThisRun;
+  G4bool fTransientsDrawnThisEvent;
 
 private:
 

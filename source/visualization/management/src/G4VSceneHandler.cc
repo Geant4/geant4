@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.cc,v 1.61 2006-05-04 17:33:12 allison Exp $
+// $Id: G4VSceneHandler.cc,v 1.62 2006-05-12 13:32:02 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -568,6 +568,9 @@ void G4VSceneHandler::ProcessScene (G4VViewer&) {
 	  std::istringstream
 	    iss(visManager->GetBeginOfLastEventRandomStatus());
 	  CLHEP::HepRandom::restoreFullState(iss);
+	  visManager->SetReprocessingLastEvent(true);
+	  G4int runID = visManager->GetLastRunID();
+	  runManager->SetRunIDCounter(runID);
 	  runManager->BeamOn(1);
 	}
       } else {
@@ -593,6 +596,8 @@ void G4VSceneHandler::ProcessScene (G4VViewer&) {
 	  std::istringstream iss(visManager->GetBeginOfLastRunRandomStatus());
 	  CLHEP::HepRandom::restoreFullState(iss);
 	  G4int nEvents = visManager->GetEventCount();
+	  G4int runID = visManager->GetLastRunID();
+	  runManager->SetRunIDCounter(runID);
 	  runManager->BeamOn(nEvents);
 	}
       }

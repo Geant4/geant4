@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VisManager.cc,v 1.94 2006-05-04 14:36:31 allison Exp $
+// $Id: G4VisManager.cc,v 1.95 2006-05-12 13:32:03 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -69,6 +69,7 @@
 #include "Randomize.hh"
 #include "G4RunManager.hh"
 #include "G4Run.hh"
+#include "G4Event.hh"
 
 #include <sstream>
 
@@ -85,8 +86,11 @@ G4VisManager::G4VisManager ():
   fVerbose         (1),
   fpStateDependent (0),
   fEventCount      (0),
-  fTransientsDrawnThisEvent (false),
-  fTransientsDrawnThisRun   (false)
+  fReprocessingLastEvent (false),
+  fLastRunID       (0),
+  fLastEventID     (0),
+  fTransientsDrawnThisRun   (false),
+  fTransientsDrawnThisEvent (false)
   // All other objects use default constructors.
 {
   fpTrajDrawModelMgr = new G4VisModelManager<G4VTrajectoryModel>("/vis/modeling/trajectories");
@@ -855,6 +859,7 @@ void G4VisManager::RegisterMessengers () {
 
   // Top level commands...
   RegisterMessenger(new G4VisCommandEnable);
+  RegisterMessenger(new G4VisCommandList);
   RegisterMessenger(new G4VisCommandVerbose);
 
   // Compound commands...
@@ -897,6 +902,7 @@ void G4VisManager::RegisterMessengers () {
   directory -> SetGuidance ("Add model to current scene.");
   fDirectoryList.push_back (directory);
   RegisterMessenger(new G4VisCommandSceneAddAxes);
+  RegisterMessenger(new G4VisCommandSceneAddEventID);
   RegisterMessenger(new G4VisCommandSceneAddGhosts);
   RegisterMessenger(new G4VisCommandSceneAddHits);
   RegisterMessenger(new G4VisCommandSceneAddLogicalVolume);
@@ -1011,11 +1017,37 @@ void G4VisManager::BeginOfRun ()
 void G4VisManager::BeginOfEvent ()
 {
   //G4cout << "G4VisManager::BeginOfEvent" << G4endl;
-  std::ostringstream oss;
-  CLHEP::HepRandom::saveFullState(oss);
-  fBeginOfLastEventRandomStatus = oss.str();
-  if (!fEventCount)  // First event in run...
-    fBeginOfLastRunRandomStatus = fBeginOfLastEventRandomStatus;
+  G4RunManager* runManager = G4RunManager::GetRunManager();
+  if (runManager) {
+    if (!fEventCount) {  // First event.  Do run stuff here because
+			 // currentRun is still zero, curiously, in
+			 // BeginOfRun.
+      fBeginOfLastRunRandomStatus =
+        runManager->GetRandomNumberStatusForThisRun();
+      /*************************************************
+      std::ostringstream oss;
+      CLHEP::HepRandom::saveFullState(oss);
+      fBeginOfLastRunRandomStatus = oss.str();
+      ************************************************/
+      const G4Run* currentRun = runManager->GetCurrentRun();
+      if (currentRun) fLastRunID = currentRun->GetRunID();
+      else fLastRunID++;
+    }
+    fBeginOfLastEventRandomStatus =
+      runManager->GetRandomNumberStatusForThisEvent();
+    /*************************************************
+    std::ostringstream oss;
+    CLHEP::HepRandom::saveFullState(oss);
+    fBeginOfLastEventRandomStatus = oss.str();
+    ************************************************/
+    G4Event* currentEvent =
+      const_cast<G4Event*>(runManager->GetCurrentEvent());
+    if (currentEvent) {
+      if (fReprocessingLastEvent) currentEvent->SetEventID(fLastEventID);
+      else fLastEventID = currentEvent->GetEventID();
+    }
+    fReprocessingLastEvent = false;
+  }
   fTransientsDrawnThisEvent = false;
   if (fpSceneHandler) fpSceneHandler->SetTransientsDrawnThisEvent(false);
 }
@@ -1050,7 +1082,7 @@ void G4VisManager::EndOfEvent ()
 	const G4Event* currentEvent = runManager->GetCurrentEvent();
 	if (currentRun && currentEvent) {
 	  nEvents = currentRun->GetNumberOfEventToBeProcessed();
-	  eventID = runManager->GetCurrentEvent()->GetEventID();
+	  eventID = currentEvent->GetEventID();
 	}
       }
       // Unless last event (in which case wait end of run)...
