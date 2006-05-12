@@ -34,7 +34,7 @@
 //    *                                      *
 //    ****************************************
 //
-// $Id: BrachyDetectorConstruction.cc,v 1.27 2006-05-12 13:23:48 guatelli Exp $
+// $Id: BrachyDetectorConstruction.cc,v 1.28 2006-05-12 14:57:54 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4CSGSolid.hh"
@@ -254,7 +254,7 @@ void BrachyDetectorConstruction::PrintDetectorParameters()
          << "number of Voxel: "
          << numberOfVoxelsAlongX <<G4endl
          << "Voxel size: "
-         << dimVoxel/mm
+         << dimVoxel * 2/mm
          << "mm" << G4endl 
          << "The phantom is made of "
          << phantomAbsorberMaterial -> GetName() <<G4endl

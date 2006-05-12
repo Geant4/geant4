@@ -29,30 +29,16 @@
 //    *                             *
 //    *******************************
 //
-// $Id: BrachyEventAction.cc,v 1.19 2004-03-11 16:05:03 guatelli Exp $
+// $Id: BrachyEventAction.cc,v 1.20 2006-05-12 14:57:54 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "BrachyEventAction.hh"
-#include "BrachyPhantomHit.hh"
-#include "BrachyPhantomSD.hh"
-#include "BrachyDetectorConstruction.hh"
 #include "G4Event.hh"
 #include "G4EventManager.hh"
 #include "G4HCofThisEvent.hh"
-#include "G4VHitsCollection.hh"
 #include "G4TrajectoryContainer.hh"
 #include "G4Trajectory.hh"
 #include "G4VVisManager.hh"
-#include "G4SDManager.hh"
-#include "G4UImanager.hh"
-#include "G4ios.hh"
-#include "G4VVisManager.hh"
-
-#ifdef G4ANALYSIS_USE
-#include"BrachyAnalysisManager.hh"
-#endif
-
-// Retrieve information about the energy deposit in the phantom ...
 
 BrachyEventAction::BrachyEventAction() :
   drawFlag("all" )

@@ -31,37 +31,37 @@
 //    *********************************
 //
 //
-// $Id: BrachyDetectorMessenger.cc,v 1.9 2004-11-24 09:53:05 guatelli Exp $
+// $Id: BrachyDetectorMessenger.cc,v 1.10 2006-05-12 14:57:54 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
 #include "BrachyDetectorMessenger.hh"
-#include "BrachyFactoryIr.hh"
-#include "BrachyRunAction.hh"
+//#include "BrachyFactoryIr.hh"
+//#include "BrachyRunAction.hh"
 #include "BrachyDetectorConstruction.hh"
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithAString.hh"
-#include "G4UIcmdWithAnInteger.hh"
-#include "G4UIcmdWithADoubleAndUnit.hh"
-#include "G4UIcmdWithoutParameter.hh"
+//#include "G4UIcmdWithAnInteger.hh"
+//#include "G4UIcmdWithADoubleAndUnit.hh"
+//#include "G4UIcmdWithoutParameter.hh"
 
 BrachyDetectorMessenger::BrachyDetectorMessenger( BrachyDetectorConstruction* Det): detector(Det)
 { 
   detectorDir = new G4UIdirectory("/phantom/");
-  detectorDir->SetGuidance(" phantom control.");
+  detectorDir -> SetGuidance(" phantom control.");
       
   phantomMaterialCmd = new G4UIcmdWithAString("/phantom/selectMaterial",this);
-  phantomMaterialCmd->SetGuidance("Select Material of the phantom.");
-  phantomMaterialCmd->SetParameterName("choice",false);
-  phantomMaterialCmd->AvailableForStates(G4State_Idle);
+  phantomMaterialCmd -> SetGuidance("Select Material of the phantom.");
+  phantomMaterialCmd -> SetParameterName("choice",false);
+  phantomMaterialCmd -> AvailableForStates(G4State_Idle);
   
   sourceCmd = new G4UIcmdWithAString("/source/switch",this);
-  sourceCmd->SetGuidance("Assign the selected geometry to G4RunManager."); 
-  sourceCmd->SetParameterName("choice",true);
-  sourceCmd->SetDefaultValue(" ");
-  sourceCmd->SetCandidates("Iridium Iodium Leipzig ");
-  sourceCmd->AvailableForStates(G4State_PreInit,G4State_Idle); 
+  sourceCmd -> SetGuidance("Assign the selected geometry to G4RunManager."); 
+  sourceCmd -> SetParameterName("choice",true);
+  sourceCmd -> SetDefaultValue(" ");
+  sourceCmd -> SetCandidates("Iridium Iodium Leipzig ");
+  sourceCmd -> AvailableForStates(G4State_PreInit,G4State_Idle); 
  }
 
 BrachyDetectorMessenger::~BrachyDetectorMessenger()
@@ -73,15 +73,17 @@ BrachyDetectorMessenger::~BrachyDetectorMessenger()
 
 void BrachyDetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 { 
+  // Change the material of the phantom
   if( command == phantomMaterialCmd )
-   { detector->SetPhantomMaterial(newValue);}
+   { detector -> SetPhantomMaterial(newValue);}
 
+  // Switch the source in the phantom
   if( command == sourceCmd )
    {
     if(newValue=="Iodium" || newValue=="Iridium"|| newValue=="Leipzig")
      { 
-       detector->SelectBrachytherapicSeed(newValue); 
-       detector->SwitchBrachytherapicSeed();
+       detector -> SelectBrachytherapicSeed(newValue); 
+       detector -> SwitchBrachytherapicSeed();
       }
    }
 }

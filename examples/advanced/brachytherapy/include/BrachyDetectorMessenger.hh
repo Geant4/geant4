@@ -27,7 +27,7 @@
 //    *                                       *
 //    *****************************************
 //
-// $Id: BrachyDetectorMessenger.hh,v 1.5 2003-05-22 17:20:41 guatelli Exp $
+// $Id: BrachyDetectorMessenger.hh,v 1.6 2006-05-12 14:57:54 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -38,13 +38,13 @@
 #include "G4UImessenger.hh"
 
 class BrachyDetectorConstruction;
-class BrachyFactoryIr;
-class BrachyRunAction;
+//class BrachyFactoryIr;
+//class BrachyRunAction;
 class G4UIdirectory;
 class G4UIcmdWithAString;
-class G4UIcmdWithAnInteger;
-class G4UIcmdWithADoubleAndUnit;
-class G4UIcmdWithoutParameter;
+//class G4UIcmdWithAnInteger;
+//class G4UIcmdWithADoubleAndUnit;
+//class G4UIcmdWithoutParameter;
 
 class BrachyDetectorMessenger: public G4UImessenger
 {
@@ -56,10 +56,10 @@ public:
   
 private:
 
-  BrachyDetectorConstruction*  detector;//pointer to detector
+  BrachyDetectorConstruction*  detector;// pointer to detector
   G4UIdirectory*               detectorDir; 
   G4UIcmdWithAString*          phantomMaterialCmd; // change phantom material
-  G4UIcmdWithAString*          sourceCmd; //change brachytherapis source 
+  G4UIcmdWithAString*          sourceCmd; // change brachytherapic source 
 };
 #endif
 

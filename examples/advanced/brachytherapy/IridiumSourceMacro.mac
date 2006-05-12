@@ -2,4 +2,8 @@
 /run/verbose 0
 /event/verbose 0
 /run/initialize
-/run/beamOn  5000
+/phantom/selectMaterial Lead
+/run/beamOn  500
+/run/beamOn  500
+
+

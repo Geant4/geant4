@@ -35,7 +35,7 @@
 //    *******************************************
 //
 //
-// $Id: BrachyDetectorConstructionLeipzig.cc,v 1.7 2003-12-09 15:29:58 gunter Exp $
+// $Id: BrachyDetectorConstructionLeipzig.cc,v 1.8 2006-05-12 14:57:54 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -43,28 +43,20 @@
 #include "BrachyDetectorConstructionLeipzig.hh"
 #include "G4CSGSolid.hh"
 #include "G4Sphere.hh"
-#include "G4MaterialPropertyVector.hh"
-#include "G4SDManager.hh"
-#include "G4SubtractionSolid.hh"
+//#include "G4MaterialPropertyVector.hh"
+//#include "G4SDManager.hh"
+//#include "G4SubtractionSolid.hh"
 #include "G4RunManager.hh"
-#include "G4MaterialPropertiesTable.hh"
-#include "G4Material.hh"
+//#include "G4MaterialPropertiesTable.hh"
+//#include "G4Material.hh"
 #include "G4Box.hh"
 #include "G4Tubs.hh"
 #include "G4LogicalVolume.hh"
 #include "G4ThreeVector.hh"
 #include "G4PVPlacement.hh"
-#include "G4MaterialTable.hh"
-#include "Randomize.hh"  
-#include "G4RunManager.hh"
-#include "G4Element.hh"
-#include "G4ElementTable.hh"
-#include "G4PVParameterised.hh"
 #include "G4Transform3D.hh"
 #include "G4RotationMatrix.hh"
-#include "G4FieldManager.hh"
 #include "G4TransportationManager.hh"
-#include "G4UnionSolid.hh"
 #include "BrachyMaterial.hh"
 #include "G4VisAttributes.hh"
 #include "G4Colour.hh"
@@ -72,11 +64,12 @@
 // Leipzig Applicator ...
 
 BrachyDetectorConstructionLeipzig::BrachyDetectorConstructionLeipzig()
-: capsule(0),capsuleLog(0),capsulePhys(0),
-  capsuleTip(0),capsuleTipLog(0),capsuleTipPhys(0),
-  iridiumCore(0),iridiumCoreLog(0),iridiumCorePhys(0),
-  applicator1(0),applicator1Log(0),applicator1Phys(0),
-  applicator2(0),applicator2Log(0),applicator2Phys(0)
+  : 
+  capsulePhys(0),
+  capsuleTipPhys(0),
+  iridiumCorePhys(0),
+  applicator1Phys(0),
+  applicator2Phys(0)
 { 
   pMaterial = new BrachyMaterial();
 }
@@ -96,8 +89,8 @@ void  BrachyDetectorConstructionLeipzig::ConstructLeipzig(G4VPhysicalVolume*   m
 
   //Iridium source ...
 
-  capsule = new G4Tubs("Capsule",0,0.55*mm,3.725*mm,0.*deg,360.*deg);
-  capsuleLog = new G4LogicalVolume(capsule,capsuleMat,"CapsuleLog");
+  G4Tubs* capsule = new G4Tubs("Capsule",0,0.55*mm,3.725*mm,0.*deg,360.*deg);
+  G4LogicalVolume* capsuleLog = new G4LogicalVolume(capsule,capsuleMat,"CapsuleLog");
   capsulePhys = new G4PVPlacement(0,
                                   G4ThreeVector(0,0,-1.975*mm),
                                   "CapsulePhys",
@@ -107,8 +100,8 @@ void  BrachyDetectorConstructionLeipzig::ConstructLeipzig(G4VPhysicalVolume*   m
                                   0);
 
   // Capsule tip
-  capsuleTip = new G4Sphere("CapsuleTip",0.*mm,0.55*mm,0.*deg,360.*deg,0.*deg,90.*deg);
-  capsuleTipLog = new G4LogicalVolume(capsuleTip,capsuleMat,"CapsuleTipLog");
+  G4Sphere* capsuleTip = new G4Sphere("CapsuleTip",0.*mm,0.55*mm,0.*deg,360.*deg,0.*deg,90.*deg);
+  G4LogicalVolume* capsuleTipLog = new G4LogicalVolume(capsuleTip,capsuleMat,"CapsuleTipLog");
   capsuleTipPhys = new G4PVPlacement(0,
                                      G4ThreeVector(0.,0.,1.75*mm),
                                      "CapsuleTipPhys",
@@ -118,8 +111,8 @@ void  BrachyDetectorConstructionLeipzig::ConstructLeipzig(G4VPhysicalVolume*   m
                                      0);
   // Iridium core
 
-  iridiumCore = new G4Tubs("IrCore",0,0.30*mm,1.75*mm,0.*deg,360.*deg);
-  iridiumCoreLog = new G4LogicalVolume(iridiumCore,
+  G4Tubs* iridiumCore = new G4Tubs("IrCore",0,0.30*mm,1.75*mm,0.*deg,360.*deg);
+  G4LogicalVolume* iridiumCoreLog = new G4LogicalVolume(iridiumCore,
                                        iridium,
                                        "IridiumCoreLog");
   iridiumCorePhys = new G4PVPlacement(0,
@@ -129,11 +122,11 @@ void  BrachyDetectorConstructionLeipzig::ConstructLeipzig(G4VPhysicalVolume*   m
                                       capsulePhys,
                                       false,
                                       0);
-  // Applicator
-  //Leipzig Applicator is given by two different volumes
 
-  applicator1 = new G4Tubs("Appl1",5*mm,10.5*mm,12*mm,0.*deg,360.*deg);
-  applicator1Log = new G4LogicalVolume(applicator1,tungsten,"Appl1Log");
+  //Leipzig Applicator is modelled with two different volumes
+
+  G4Tubs* applicator1 = new G4Tubs("Appl1",5*mm,10.5*mm,12*mm,0.*deg,360.*deg);
+  G4LogicalVolume* applicator1Log = new G4LogicalVolume(applicator1,tungsten,"Appl1Log");
   applicator1Phys = new G4PVPlacement(0,
                                       G4ThreeVector(0,0,4.0*mm),
                                       "Appl1Phys", 
@@ -142,8 +135,8 @@ void  BrachyDetectorConstructionLeipzig::ConstructLeipzig(G4VPhysicalVolume*   m
                                       false,
                                       0);
 
-  applicator2 = new G4Tubs("Appl2",0.55*mm,5.*mm,3.125*mm,0.*deg,360.*deg);
-  applicator2Log = new G4LogicalVolume(applicator2,tungsten,"Appl2");
+  G4Tubs* applicator2 = new G4Tubs("Appl2",0.55*mm,5.*mm,3.125*mm,0.*deg,360.*deg);
+  G4LogicalVolume* applicator2Log = new G4LogicalVolume(applicator2,tungsten,"Appl2");
   applicator2Phys = new G4PVPlacement(0,
                                       G4ThreeVector(0,0,-4.875*mm),
                                       "Appl2Phys",
@@ -153,12 +146,12 @@ void  BrachyDetectorConstructionLeipzig::ConstructLeipzig(G4VPhysicalVolume*   m
                                       0);
 
   G4VisAttributes* simpleCapsuleVisAtt= new G4VisAttributes(red); 
-  simpleCapsuleVisAtt->SetVisibility(true); 
-  simpleCapsuleVisAtt->SetForceSolid(true); 
-  capsuleLog->SetVisAttributes(simpleCapsuleVisAtt); 
+  simpleCapsuleVisAtt -> SetVisibility(true); 
+  simpleCapsuleVisAtt -> SetForceSolid(true); 
+  capsuleLog -> SetVisAttributes(simpleCapsuleVisAtt); 
 
   G4VisAttributes* simpleCapsuleTipVisAtt= new G4VisAttributes(red); 
-  simpleCapsuleTipVisAtt->SetVisibility(true); 
-  simpleCapsuleTipVisAtt->SetForceSolid(true); 
-  capsuleTipLog->SetVisAttributes(simpleCapsuleTipVisAtt);
+  simpleCapsuleTipVisAtt -> SetVisibility(true); 
+  simpleCapsuleTipVisAtt -> SetForceSolid(true); 
+  capsuleTipLog -> SetVisAttributes(simpleCapsuleTipVisAtt);
 }
