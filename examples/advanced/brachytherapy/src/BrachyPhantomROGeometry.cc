@@ -30,32 +30,33 @@
 //    *                                  *
 //    ************************************
 //
-// $Id: BrachyPhantomROGeometry.cc,v 1.9 2004-05-13 14:47:46 guatelli Exp $
+// $Id: BrachyPhantomROGeometry.cc,v 1.10 2006-05-12 13:23:48 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "BrachyPhantomROGeometry.hh"
 #include "BrachyDummySD.hh"
-
 #include "G4LogicalVolume.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4PVPlacement.hh"
 #include "G4PVReplica.hh"
 #include "G4SDManager.hh"
 #include "G4Box.hh"
-#include "G4Tubs.hh"
-#include "G4SubtractionSolid.hh"
 #include "G4ThreeVector.hh"
 #include "G4Material.hh"
 
 BrachyPhantomROGeometry::BrachyPhantomROGeometry(G4String aString,
                                                  G4double phantomDimX,
+						 G4double phantomDimY,
                                                  G4double phantomDimZ,
                                                  G4int numberOfVoxelsX,
+						 G4int numberOfVoxelsY,
                                                  G4int numberOfVoxelsZ):
   G4VReadOutGeometry(aString),
-  phantomDimensionX(phantomDimX),
-  phantomDimensionZ(phantomDimZ),
+  phantomSizeX(phantomDimX),
+  phantomSizeY(phantomDimY),
+  phantomSizeZ(phantomDimZ),
   numberOfVoxelsAlongX(numberOfVoxelsX),
+  numberOfVoxelsAlongY(numberOfVoxelsY),
   numberOfVoxelsAlongZ(numberOfVoxelsZ)
 {
 }
@@ -71,26 +72,27 @@ G4VPhysicalVolume* BrachyPhantomROGeometry::Build()
   // (It will be allowed to set a NULL pointer in volumes of such virtual
   // division in future, since this material is irrelevant for tracking.)
 
-  G4Material* dummyMat = new G4Material(name="dummyMat", 1., 1.*g/mole, 1.*g/cm3);
+  G4Material* dummyMat = new G4Material(name="dummyMat", 
+					1., 1.*g/mole, 1.*g/cm3);
 
-  G4double worldDimensionX = 4.0*m;
-  G4double worldDimensionY = 4.0*m;
-  G4double worldDimensionZ = 4.0*m;
+  G4double worldSizeX = 4.0*m;
+  G4double worldSizeY = 4.0*m;
+  G4double worldSizeZ = 4.0*m;
 
-  G4double halfPhantomDimensionX = phantomDimensionX;
-  G4double halfPhantomDimensionZ = phantomDimensionZ;
-  G4double halfPhantomDimensionY = phantomDimensionX;
+  G4double halfPhantomSizeX = phantomSizeX;
+  G4double halfPhantomSizeZ = phantomSizeZ;
+  G4double halfPhantomSizeY = phantomSizeY;
 
   // variables for x division ...
-  G4double halfXVoxelDimensionX = halfPhantomDimensionX/numberOfVoxelsAlongX;
-  G4double halfXVoxelDimensionZ = halfPhantomDimensionZ;
-  G4double voxelXThickness = 2*halfXVoxelDimensionX;
+  G4double halfVoxelSize = halfPhantomSizeX/numberOfVoxelsAlongX;
+  G4double halfSize = halfPhantomSizeZ;
+  G4double voxelThickness = 2*halfVoxelSize;
 
   // world volume of ROGeometry ...
   G4Box *ROWorld = new G4Box("ROWorld",
-			     worldDimensionX,
-			     worldDimensionY,
-			     worldDimensionZ);
+			     worldSizeX,
+			     worldSizeY,
+			     worldSizeZ);
 
   G4LogicalVolume *ROWorldLog = new G4LogicalVolume(ROWorld,
 						    dummyMat,
@@ -103,11 +105,11 @@ G4VPhysicalVolume* BrachyPhantomROGeometry::Build()
 						     ROWorldLog,
 						     0,false,0);
   
-  // phantom ROGeometry ... 
+  // Phantom ROGeometry ... 
   G4Box *ROPhantom = new G4Box("ROPhantom", 
-			       halfPhantomDimensionX, 
-			       halfPhantomDimensionY, 
-			       halfPhantomDimensionZ);
+			       halfPhantomSizeX, 
+			       halfPhantomSizeY, 
+			       halfPhantomSizeZ);
 
   G4LogicalVolume *ROPhantomLog = new G4LogicalVolume(ROPhantom,
 						      dummyMat,
@@ -121,13 +123,13 @@ G4VPhysicalVolume* BrachyPhantomROGeometry::Build()
                                                        ROWorldPhys,
                                                        false,0);
  
-  // ROGeomtry: Voxel division
+  // ROGeometry: Voxel division
  
   // X division first... 
   G4Box *ROPhantomXDivision = new G4Box("ROPhantomXDivision",
-					halfXVoxelDimensionX,
-					halfXVoxelDimensionZ,
-					halfXVoxelDimensionZ);
+					halfVoxelSize,
+					halfSize,
+					halfSize);
 
   G4LogicalVolume *ROPhantomXDivisionLog = new G4LogicalVolume(ROPhantomXDivision,
 							       dummyMat,
@@ -139,13 +141,13 @@ G4VPhysicalVolume* BrachyPhantomROGeometry::Build()
                                                               ROPhantomPhys,
                                                               kXAxis,
                                                               numberOfVoxelsAlongX,
-                                                              voxelXThickness);
+                                                              voxelThickness);
   // ...then Z division
   
   G4Box *ROPhantomZDivision = new G4Box("ROPhantomZDivision",
-					halfXVoxelDimensionX,
-					halfXVoxelDimensionZ, 
-					halfXVoxelDimensionX);
+					halfVoxelSize,
+					halfSize, 
+					halfVoxelSize);
 
   G4LogicalVolume *ROPhantomZDivisionLog = new G4LogicalVolume(ROPhantomZDivision,
 							       dummyMat,
@@ -157,13 +159,13 @@ G4VPhysicalVolume* BrachyPhantomROGeometry::Build()
 							      ROPhantomXDivisionPhys,
 							      kZAxis,
 							      numberOfVoxelsAlongZ,
-							      voxelXThickness);
+							      voxelThickness);
   // ...then Y  division
 
   G4Box *ROPhantomYDivision = new G4Box("ROPhantomYDivision",
-					halfXVoxelDimensionX, 
-					halfXVoxelDimensionX,
-					halfXVoxelDimensionX);
+					halfVoxelSize, 
+					halfVoxelSize,
+					halfVoxelSize);
 
   G4LogicalVolume *ROPhantomYDivisionLog = new G4LogicalVolume(ROPhantomYDivision,
 							       dummyMat,
@@ -174,8 +176,8 @@ G4VPhysicalVolume* BrachyPhantomROGeometry::Build()
 							      ROPhantomYDivisionLog,
 							      ROPhantomZDivisionPhys,
 							      kYAxis,
-							      numberOfVoxelsAlongZ,
-							      voxelXThickness);
+							      numberOfVoxelsAlongY,
+							      voxelThickness);
   BrachyDummySD *dummySD = new BrachyDummySD;
   ROPhantomYDivisionLog -> SetSensitiveDetector(dummySD);
 

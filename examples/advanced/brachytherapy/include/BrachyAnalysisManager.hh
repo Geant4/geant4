@@ -25,7 +25,7 @@
 // S.Guatelli
 //
 //
-// $Id: BrachyAnalysisManager.hh,v 1.9 2004-03-11 15:38:42 guatelli Exp $
+// $Id: BrachyAnalysisManager.hh,v 1.10 2006-05-12 13:23:48 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //    **********************************
@@ -35,11 +35,11 @@
 //    **********************************
 // 
 //
-// the class Analysis creates and managed histograms and ntuples
+// The class BrachyAnalysisManager creates and manages histograms and ntuples
 //
 #ifdef G4ANALYSIS_USE
-#ifndef G4PROCESSTESTANALYSIS_HH
-#define G4PROCESSTESTANALYSIS_HH
+#ifndef G4BRACHYANALYSISMANAGER_HH
+#define G4BRACHYANALYSISMANAGER_HH
 
 #include "globals.hh"
 #include <vector>
@@ -63,7 +63,6 @@ private:
   BrachyAnalysisManager();
 
 public:
-
   ~BrachyAnalysisManager();
   static BrachyAnalysisManager* getInstance();
   void book();
@@ -73,16 +72,10 @@ public:
   void DoseDistribution(G4double,G4double);
   void finish();
 
-  
 private:
-
-  //  G4double xx,zz,yy;
-  //G4float  en; 
-  //G4double  x,y,z;
   static BrachyAnalysisManager* instance;
 
 private:
-
   AIDA::IAnalysisFactory*  aFact;
   AIDA::ITree*             theTree;
   AIDA::IHistogramFactory *histFact;

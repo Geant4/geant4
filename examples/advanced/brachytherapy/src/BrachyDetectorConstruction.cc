@@ -34,47 +34,31 @@
 //    *                                      *
 //    ****************************************
 //
-// $Id: BrachyDetectorConstruction.cc,v 1.26 2004-11-24 09:53:05 guatelli Exp $
+// $Id: BrachyDetectorConstruction.cc,v 1.27 2006-05-12 13:23:48 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-#include "BrachyPhantomROGeometry.hh"
-#include "BrachyPhantomSD.hh"
-#include "BrachyDetectorMessenger.hh"
-#include "BrachyDetectorConstruction.hh"
 #include "G4CSGSolid.hh"
-#include "G4Sphere.hh"
 #include "G4MaterialPropertyVector.hh"
 #include "G4SDManager.hh"
-#include "G4SubtractionSolid.hh"
 #include "G4RunManager.hh"
-#include "G4MaterialPropertiesTable.hh"
-#include "G4Material.hh"
 #include "G4Box.hh"
-#include "G4Tubs.hh"
 #include "G4LogicalVolume.hh"
 #include "G4ThreeVector.hh"
 #include "G4PVPlacement.hh"
 #include "globals.hh"
 #include "G4MaterialTable.hh"
-#include "Randomize.hh"  
-#include "G4RunManager.hh"
-#include "G4Element.hh"
-#include "G4ElementTable.hh"
-#include "G4PVParameterised.hh"
-#include "G4Transform3D.hh"
-#include "G4RotationMatrix.hh"
-#include "G4FieldManager.hh"
 #include "G4TransportationManager.hh"
-#include "G4SDManager.hh"
 #include "G4Colour.hh"
 #include "G4UserLimits.hh"
-#include "G4UnionSolid.hh"
 #include "G4VisAttributes.hh"
-#include "G4Colour.hh"
 #include "BrachyMaterial.hh"
 #include "BrachyFactoryLeipzig.hh"
 #include "BrachyFactoryIr.hh"
 #include "BrachyFactoryI.hh"
+#include "BrachyPhantomROGeometry.hh"
+#include "BrachyPhantomSD.hh"
+#include "BrachyDetectorMessenger.hh"
+#include "BrachyDetectorConstruction.hh"
 
 BrachyDetectorConstruction::BrachyDetectorConstruction(G4String &SDName)
 : detectorChoice(0), phantomSD(0), phantomROGeometry(0), factory(0),
@@ -82,28 +66,38 @@ BrachyDetectorConstruction::BrachyDetectorConstruction(G4String &SDName)
   Phantom(0), PhantomLog(0), PhantomPhys(0),
   phantomAbsorberMaterial(0)
 {
-  phantomDimensionX=15.*cm ;
-  phantomDimensionY=15.*cm;
-  phantomDimensionZ=15.*cm;
+  // Define half size of the phantom along the x, y, z axis
+  phantomSizeX = 15.*cm ;
+  phantomSizeY = 15.*cm;
+  phantomSizeZ = 15.*cm;
 
-  numberOfVoxelsAlongX=300;
-  numberOfVoxelsAlongZ=300;
+  // Define the number of voxels the phantom is subdivided along the
+  // three axis 
+  // Each voxel is 1 mm wide
+  numberOfVoxelsAlongX = 300;
+  numberOfVoxelsAlongY = 300;
+  numberOfVoxelsAlongZ = 300;
 
   ComputeDimVoxel();
-
-  Worldx = 4.0*m;
-  Worldy = 4.0*m;
-  Worldz = 4.0*m;
+  
+  // Define the sizes of the World volume contaning the phantom
+  worldSizeX = 4.0*m;
+  worldSizeY = 4.0*m;
+  worldSizeZ = 4.0*m;
 
   sensitiveDetectorName = SDName;
 
+  // Define the messenger of the Detector component
+  // It is possible to modify geometrical parameters through UI
   detectorMessenger = new BrachyDetectorMessenger(this);
 
+  // Define the Iridium source as default source modelled in the geometry
   factory = new BrachyFactoryIr();
 
+  // BrachyMaterial defined the all the materials necessary
+  // for the experimental set-up 
   pMaterial = new BrachyMaterial();
 }
-
 
 BrachyDetectorConstruction::~BrachyDetectorConstruction()
 { 
@@ -116,8 +110,14 @@ BrachyDetectorConstruction::~BrachyDetectorConstruction()
 G4VPhysicalVolume* BrachyDetectorConstruction::Construct()
 {
   pMaterial -> DefineMaterials();
+ 
+  // Model the phantom (water box)  
   ConstructPhantom();
+
+  // Model the source in the phantom
   factory -> CreateSource(PhantomPhys); //Build the source inside the phantom
+ 
+  // Define the sensitive volume: phantom
   ConstructSensitiveDetector();
 
   return WorldPhys;
@@ -125,9 +125,10 @@ G4VPhysicalVolume* BrachyDetectorConstruction::Construct()
 
 void BrachyDetectorConstruction::SwitchBrachytherapicSeed()
 {
+  // Change the source in the water phantom
   factory -> CleanSource();
-
   delete factory;
+
   switch(detectorChoice)
   { 
     case 1:
@@ -143,6 +144,7 @@ void BrachyDetectorConstruction::SwitchBrachytherapicSeed()
       factory = new BrachyFactoryIr();
       break;
   }
+
   factory -> CreateSource(PhantomPhys);
 
   // Notify run manager that the new geometry has been built
@@ -151,7 +153,7 @@ void BrachyDetectorConstruction::SwitchBrachytherapicSeed()
 
 void BrachyDetectorConstruction::SelectBrachytherapicSeed(G4String val)
 {
-  if(val=="Iodium") 
+  if(val == "Iodium") 
   {
    detectorChoice = 1;
   }
@@ -169,11 +171,15 @@ void BrachyDetectorConstruction::SelectBrachytherapicSeed(G4String val)
       }
     }
   }
+
   G4cout << "Now the source is " << val << G4endl;
 }
 
 void BrachyDetectorConstruction::ConstructPhantom()
 {
+  // Model the water phantom 
+  
+  // Define the light blue color
   G4Colour  lblue   (0.0, 0.0, .75);
 
   G4Material* air = pMaterial -> GetMat("Air") ;
@@ -182,25 +188,31 @@ void BrachyDetectorConstruction::ConstructPhantom()
   ComputeDimVoxel();
 
   // World volume
-  World = new G4Box("World",Worldx,Worldy,Worldz);
+  World = new G4Box("World",worldSizeX,worldSizeY,worldSizeZ);
   WorldLog = new G4LogicalVolume(World,air,"WorldLog",0,0,0);
   WorldPhys = new G4PVPlacement(0,G4ThreeVector(),
                                 "WorldPhys",WorldLog,0,false,0);
 
   // Water Box
-  Phantom = new G4Box("Phantom",phantomDimensionX,phantomDimensionY,
-                       phantomDimensionZ);
+  Phantom = new G4Box("Phantom",phantomSizeX,phantomSizeY,
+                       phantomSizeZ);
+
+  // Logical volume
   PhantomLog = new G4LogicalVolume(Phantom,water,"PhantomLog",0,0,0);
-  PhantomPhys = new G4PVPlacement(0,G4ThreeVector(),
-                                  "PhantomPhys",PhantomLog,
-                                  WorldPhys,false,0); 
+
+  // Physical volume
+  PhantomPhys = new G4PVPlacement(0,G4ThreeVector(), // Position: rotation and translation
+                                  "PhantomPhys", // Name
+				  PhantomLog, // Associated logical volume
+                                  WorldPhys, // Mother volume
+				  false,0); 
 
   WorldLog -> SetVisAttributes (G4VisAttributes::Invisible);
 
+  // Visualization attributes of the phantom
   G4VisAttributes* simpleBoxVisAtt = new G4VisAttributes(lblue);
   simpleBoxVisAtt -> SetVisibility(true);
   simpleBoxVisAtt -> SetForceWireframe(true);
-
   PhantomLog -> SetVisAttributes(simpleBoxVisAtt);
 }
 
@@ -214,11 +226,16 @@ void  BrachyDetectorConstruction::ConstructSensitiveDetector()
     phantomSD = new BrachyPhantomSD(sensitiveDetectorName);
     G4String ROGeometryName = "PhantomROGeometry";
     phantomROGeometry = new BrachyPhantomROGeometry(ROGeometryName,
-                                phantomDimensionX,phantomDimensionZ,
-                                numberOfVoxelsAlongX,numberOfVoxelsAlongZ);
+                                phantomSizeX,  
+				phantomSizeY, 
+				phantomSizeZ,
+                                numberOfVoxelsAlongX,
+				numberOfVoxelsAlongY,		    
+				numberOfVoxelsAlongZ);
     phantomROGeometry -> BuildROGeometry();
     phantomSD -> SetROgeometry(phantomROGeometry);
     pSDManager -> AddNewDetector(phantomSD);
+   
     PhantomLog -> SetSensitiveDetector(phantomSD);
   }
 }
@@ -227,29 +244,31 @@ void BrachyDetectorConstruction::PrintDetectorParameters()
 {
   G4cout << "-----------------------------------------------------------------------"
          << G4endl
-         << "the detector is a  box whose size is: " << G4endl
-         << phantomDimensionX/cm
+         << "the phantom is a water box whose size is: " << G4endl
+         << phantomSizeX *2./cm
          << " cm * "
-         << phantomDimensionY/cm
+         << phantomSizeY *2./cm
          << " cm * "
-         << phantomDimensionZ/cm
+         << phantomSizeZ *2./cm
          << " cm" << G4endl
-         << "numVoxel: "
+         << "number of Voxel: "
          << numberOfVoxelsAlongX <<G4endl
-         << "dim voxel: "
+         << "Voxel size: "
          << dimVoxel/mm
          << "mm" << G4endl 
-         << "material of the box : "
-         << phantomAbsorberMaterial->GetName() <<G4endl
-         << "the source is at the center  of the detector" << G4endl
+         << "The phantom is made of "
+         << phantomAbsorberMaterial -> GetName() <<G4endl
+         << "the source is at the center of the phantom" << G4endl
          << "-------------------------------------------------------------------------"
          << G4endl;
 }
 
-
 void BrachyDetectorConstruction::SetPhantomMaterial(G4String materialChoice)
 {
-  // search the material by its name   
+  // It is possible to change the material of the phantom
+  // interactively
+
+  // Search the material by its name   
   G4Material* pttoMaterial = G4Material::GetMaterial(materialChoice);     
   if (pttoMaterial)
   {

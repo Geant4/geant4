@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: BrachyPhantomROGeometry.hh,v 1.5 2003-05-27 08:37:54 guatelli Exp $
+// $Id: BrachyPhantomROGeometry.hh,v 1.6 2006-05-12 13:23:48 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //    ************************************
@@ -30,8 +30,10 @@
 //    *                                  *
 //    ************************************
 //
-//The phantom is devided in voxels. the dimension of the voxel is 1mm
+// The phantom is devided in voxels. 
+// The energy deposit is integrated over the voxels
 //
+
 #ifndef BrachyPhantomROGeometry_h
 #define BrachyPhantomROGeometry_h 
 
@@ -42,17 +44,23 @@ class BrachyPhantomROGeometry : public G4VReadOutGeometry
 public:
   BrachyPhantomROGeometry(G4String aString,
 			  G4double phantomDimX,
+			  G4double phantomDimY,
 			  G4double phantomDimZ,
 			  G4int numberOfVoxelsX,
+			  G4int numberOfVoxelsY,
 			  G4int numberOfVoxelsZ);
+
   ~BrachyPhantomROGeometry();
+
 private:
   G4VPhysicalVolume* Build();
 
 private:
-  const G4double phantomDimensionX;
-  const G4double phantomDimensionZ;
+  const G4double phantomSizeX;
+  const G4double phantomSizeY;
+  const G4double phantomSizeZ;
   const G4int numberOfVoxelsAlongX;
+  const G4int numberOfVoxelsAlongY;
   const G4int numberOfVoxelsAlongZ; 
   G4VPhysicalVolume *ROPhantomYDivisionPhys;
 };

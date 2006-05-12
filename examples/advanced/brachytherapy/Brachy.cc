@@ -38,15 +38,7 @@
 //    *                             *
 //    *******************************
 //
-// Brachytherapy simulates the energy deposition in a cubic (30*cm)
 //
-// brachytherapy source.
-//
-// Simplified gamma generation is used.
-// Source axis is oriented along Z axis. The source is in the centre
-//of the box.
-
-//default source Ir-192
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
@@ -85,18 +77,28 @@ int main(int argc ,char ** argv)
 
   G4String sensitiveDetectorName = "Phantom";
 
+  // Initialize the Detector component
   BrachyDetectorConstruction  *pDetectorConstruction = new  BrachyDetectorConstruction(sensitiveDetectorName);
+  pRunManager -> SetUserInitialization(pDetectorConstruction);
 
-  pRunManager->SetUserInitialization(pDetectorConstruction);
-  pRunManager->SetUserInitialization(new BrachyPhysicsList);
+  // Initialize the Physics component
+  pRunManager -> SetUserInitialization(new BrachyPhysicsList);
 
+  // Initialize Optional User Action
+  BrachyEventAction *pEventAction = new BrachyEventAction();
+  pRunManager -> SetUserAction(pEventAction );
+
+  BrachyRunAction *pRunAction = new BrachyRunAction();
+  pRunManager -> SetUserAction(pRunAction);
+
+  //// Initialize the Visualization component 
 #ifdef G4VIS_USE
-  // visualization manager
+  // Visualization manager
   G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
 #endif
   
-  // output environment variables:
+  // Output environment variables concerning the analysis:
 #ifdef G4ANALYSIS_USE
   G4cout << G4endl << G4endl << G4endl 
 	 << " User Environment " << G4endl
@@ -108,17 +110,12 @@ int main(int argc ,char ** argv)
 	 << G4endl;
 #endif
   
+  // Initialize the interactive session 
   G4UIsession* session = 0;
   if (argc == 1)   // Define UI session for interactive mode.
     {
       session = new G4UIterminal();
     }
-
-  BrachyEventAction *pEventAction = new BrachyEventAction();
-  pRunManager -> SetUserAction(pEventAction );
-
-  BrachyRunAction *pRunAction = new BrachyRunAction();
-  pRunManager -> SetUserAction(pRunAction);
 
   //Initialize G4 kernel
   pRunManager -> Initialize();
@@ -139,6 +136,9 @@ int main(int argc ,char ** argv)
       UI -> ApplyCommand(command+fileName);
     }  
 
+  // Close the output file containing histograms and n-tuple with the 
+  // results of the simulation.
+  // Finish the analysis.
 #ifdef G4ANALYSIS_USE
   BrachyAnalysisManager* analysis = BrachyAnalysisManager::getInstance();
   analysis -> finish();

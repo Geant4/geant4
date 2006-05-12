@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: BrachyDetectorConstruction.hh,v 1.15 2003-05-22 17:20:40 guatelli Exp $
+// $Id: BrachyDetectorConstruction.hh,v 1.16 2006-05-12 13:23:48 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //  
 //    ****************************************
@@ -29,24 +29,18 @@
 //    *    BrachyDetectorConstruction.hh     *
 //    *                                      *
 //    ****************************************
-// this class manages the geometry of the simulation set up
+// This class manages the geometry of the simulation experimental set-up
 //
 
 #ifndef BrachyDetectorConstruction_H
 #define BrachyDetectorConstruction_H 1
 
-#include "globals.hh"
 #include "G4VUserDetectorConstruction.hh"
-#include "G4LogicalVolume.hh"
 
-class BrachyPhantomSD;
 class BrachyDetectorMessenger;
 class G4LogicalVolume;
 class G4Material;
-class G4Tubs;
 class G4Box;
-class G4Sphere;
-class G4Tubs;
 class G4Colour;
 class G4VPhysicalVolume;
 class BrachyPhantomSD;
@@ -54,7 +48,6 @@ class BrachyPhantomROGeometry;
 class G4VPhysicalVolume;
 class BrachyMaterial;
 class BrachyFactory;
-class BrachyVoxelParameterisation;
 
 class BrachyDetectorConstruction : public G4VUserDetectorConstruction
 {
@@ -71,14 +64,14 @@ public:
   void PrintDetectorParameters(); 
   void SetPhantomMaterial(G4String); 
 
-  const G4double VoxelWidth_X(){return phantomDimensionX/numberOfVoxelsAlongX;}
-  const G4double VoxelWidth_Z(){return phantomDimensionZ/numberOfVoxelsAlongZ;}
-  const G4int   GetNumVoxelX()  {return  numberOfVoxelsAlongX;}
-  const G4int   GetNumVoxelZ()  {return numberOfVoxelsAlongZ;}
-  const G4double GetDimX()      {return phantomDimensionX;}
-  const G4double GetBoxDim_Z()  {return  phantomDimensionZ;}
+  const G4double VoxelWidth_X(){return phantomSizeX/numberOfVoxelsAlongX;}
+  const G4double VoxelWidth_Z(){return phantomSizeZ/numberOfVoxelsAlongZ;}
+  const G4int    GetNumVoxelX(){return numberOfVoxelsAlongX;}
+  const G4int    GetNumVoxelZ(){return numberOfVoxelsAlongZ;}
+  const G4double GetDimX()     {return phantomSizeX;}
+  const G4double GetBoxDim_Z() {return  phantomSizeZ;}
 
-  void ComputeDimVoxel() {dimVoxel = phantomDimensionX/numberOfVoxelsAlongX;}
+  void ComputeDimVoxel() {dimVoxel = phantomSizeX/numberOfVoxelsAlongX;}
 
 private:
   
@@ -98,14 +91,15 @@ private:
   G4VPhysicalVolume*  PhantomPhys; //pointer to physical phantom
   G4Material*         phantomAbsorberMaterial;
  
-  G4double phantomDimensionX; //Phantom XDimension
-  G4double phantomDimensionY; //Phantom YDimension
-  G4double phantomDimensionZ; //Phantom ZDimension  
+  G4double phantomSizeX; //Phantom XSize
+  G4double phantomSizeY; //Phantom YSize
+  G4double phantomSizeZ; //Phantom ZSize  
   G4int numberOfVoxelsAlongX; //Number of voxels along x axis
+  G4int numberOfVoxelsAlongY; //Number of voxels along y axis 
   G4int numberOfVoxelsAlongZ; //Number of voxels along z axis 
-  G4double Worldx ; //World XDimension
-  G4double Worldy ; //World YDimension
-  G4double Worldz ; //World XDimension
+  G4double worldSizeX ; //World XSize
+  G4double worldSizeY ; //World YSize
+  G4double worldSizeZ ; //World XSize
   G4String sensitiveDetectorName; 
   BrachyDetectorMessenger* detectorMessenger; 
   BrachyMaterial* pMaterial; 
