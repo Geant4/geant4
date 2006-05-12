@@ -1,4 +1,4 @@
-$Id: History,v 1.346 2006-05-04 16:12:07 allison Exp $
+$Id: History,v 1.347 2006-05-12 13:37:21 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,25 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+--------------------------------------------
+12th May 2006  John Allison  (vis-V08-00-07)
+- Needs run-V08-00-02 and event-V08-00-03.
+- Main features:
+  o Protect against non-instantiation of run manager.
+  o Final refinements for re-computation of transients.
+  o G4OpenGLWin32Viewer: Fixed buffer swapping behaviour.
+- visman-V08-00-16:
+  o Added /vis/list and /vis/scene/add/eventID.
+  o Final refinements for event/run reprocessing (re-computation of
+    transients).
+- modeling-V08-00-09:
+  o Removed dependency on G4RunManager.
+  o G4CallbackModel: Added G4VGraphicsScene argument to operator().
+- opengl-V08-00-06: G4OpenGLWin32Viewer: Fixed buffer swapping behaviour.
+- raytracer-V08-00-04: SetRecomputeTransients(false).
+- raytracer-V08-00-03: Moved G4RayShooter class to Event category.
+- vistest-V08-00-06: Added /vis/scene/add/eventID.
 
 ----------------------------------------------
 21st April 2006  John Allison  (vis-V08-00-06)
