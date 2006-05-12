@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HitsModel.cc,v 1.12 2006-05-04 14:19:22 allison Exp $
+// $Id: G4HitsModel.cc,v 1.13 2006-05-12 12:47:35 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -31,10 +31,8 @@
 #include "G4HitsModel.hh"
 
 #include "G4VGraphicsScene.hh"
-#include "G4ModelingParameters.hh"
-#include "G4RunManager.hh"
+#include "G4RunManagerKernel.hh"
 #include "G4Event.hh"
-#include "G4HCofThisEvent.hh"
 
 G4HitsModel::~G4HitsModel () {}
 
@@ -44,20 +42,18 @@ G4HitsModel::G4HitsModel () {
 }
 
 void G4HitsModel::DescribeYourselfTo (G4VGraphicsScene& sceneHandler) {
-  G4RunManager * runManager = G4RunManager::GetRunManager();
-  if (runManager) {
-    const G4Event* event = runManager->GetCurrentEvent ();
-    if (event) {
-      G4HCofThisEvent* HCE = event -> GetHCofThisEvent ();
-      if (HCE) {
-	G4int nHC = HCE -> GetCapacity ();
-	for (int iHC = 0; iHC < nHC; iHC++) {
-	  G4VHitsCollection* HC = HCE -> GetHC (iHC);
-	  if (HC) {
-	    for(size_t iHit = 0; iHit < HC->GetSize(); ++iHit) {
-	      G4VHit* hit = HC -> GetHit (iHit);
-	      sceneHandler.AddCompound (*hit);
-	    }
+  const G4Event* event = G4RunManagerKernel::GetRunManagerKernel()->
+    GetEventManager()->GetConstCurrentEvent();
+  if (event) {
+    G4HCofThisEvent* HCE = event -> GetHCofThisEvent ();
+    if (HCE) {
+      G4int nHC = HCE -> GetCapacity ();
+      for (int iHC = 0; iHC < nHC; iHC++) {
+	G4VHitsCollection* HC = HCE -> GetHC (iHC);
+	if (HC) {
+	  for(size_t iHit = 0; iHit < HC->GetSize(); ++iHit) {
+	    G4VHit* hit = HC -> GetHit (iHit);
+	    sceneHandler.AddCompound (*hit);
 	  }
 	}
       }
