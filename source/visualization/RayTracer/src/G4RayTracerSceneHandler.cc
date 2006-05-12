@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RayTracerSceneHandler.cc,v 1.6 2006-05-04 15:01:50 allison Exp $
+// $Id: G4RayTracerSceneHandler.cc,v 1.7 2006-05-12 12:43:43 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4RayTracerSceneHandler.hh"
@@ -44,6 +44,8 @@ G4RayTracerSceneHandler::G4RayTracerSceneHandler(G4VGraphicsSystem& system,
       fpScene = new G4Scene("dummy-ray-tracer-scene");
       // Avoid code triggered at end of events...
       fpScene->SetRefreshAtEndOfEvent(false);
+      // Avoid re-computing transients.
+      fpScene->SetRecomputeTransients(false);
       // Add to vis manager list; ownership thereby passes to vis manager...
       visManager->SetSceneList().push_back(fpScene);
       // ...and make current...
