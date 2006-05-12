@@ -1,4 +1,4 @@
-$Id: History,v 1.65 2006-05-05 05:25:20 allison Exp $
+$Id: History,v 1.66 2006-05-12 13:02:03 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,11 @@ committal in the CVS repository !
 
 History file for visualization/modeling
 ---------------------------------------
+
+12th May 2006  John Allison  (modeling-V08-00-09)
+- G4TrajectoriesModel and G4HitsModel: Removed dependency on G4RunManager.
+  Uses G4RunManagerKernel.  Needs event-V08-00-01.
+- G4CallbackModel: Added G4VGraphicsScene argument to operator().
 
 4th May 2006  Joseph Perl  (modeling-V08-00-08)
 - Add missing assert to G4VTrajectoryModel needed by Windows.
