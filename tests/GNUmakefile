@@ -20,7 +20,10 @@ ELECTROMAGNETIC += 6 7 ## G4GammaConversionToMuons process.
 ELECTROMAGNETIC += 8 9 10 ## Transistion radiation and PAI (photoabsorption
                         ## ionisation) model.
 ELECTROMAGNETIC += 11 12 ## Energy deposited by particles which cross a material
-ELECTROMAGNETIC += 13 14 ## Photon processes (13) and muon interactions (14)
+ELECTROMAGNETIC += 13 ## Photon processes
+ELECTROMAGNETIC += 14 ## Total cross sections
+ELECTROMAGNETIC += 15 ## Multiple Scattering
+ELECTROMAGNETIC += 17 ## Muon interactions
 
 # Symbolic links to extended g3tog4 examples using test601, etc...
 G3TOG4 += 01 02   ## 01 - clGeometry  02 cltog4 (actually hand coded for now)
