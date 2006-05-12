@@ -1,9 +1,12 @@
-$Id: History,v 1.90 2006-05-12 12:37:46 allison Exp $
+$Id: History,v 1.91 2006-05-12 12:39:16 allison Exp $
 
 History file for visualization/test subdirectory
 ------------------------------------------------
 
 $Log: not supported by cvs2svn $
+Revision 1.90  2006/05/12 12:37:46  allison
+Added /vis/scene/add/eventID.
+
 Revision 1.89  2006/05/12 12:36:45  allison
 Moved text to bottom right so as not to interfere with /vis/scene/add/eventID.
 
