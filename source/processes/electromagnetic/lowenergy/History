@@ -1,4 +1,4 @@
-$Id: History,v 1.246 2006-05-12 17:58:47 pia Exp $
+$Id: History,v 1.247 2006-05-12 20:10:23 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,19 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+12.05.2006   MGP, tag emlowen-V08-00-02
+             Same as emlowen-V08-00-00, with updated History
+
+12.05.2006   MGP, tag emlowen-V08-00-01
+             New developments: photoelectric angular distribution models
+             The photoelectric angular distribution models have some
+             questionable design features (function arguments passed
+             by value etc.), and very poor code implementation, not
+             respecting the Geant4 coding guidelines and basic 
+             coding conventions
+             (subset of the previous tag emlowen-V08-00-00 for
+              incremental testing)
 
 12.05.2006   MGP, tag emlowen-V08-00-00
              New developments: photoelectric angular distribution models
