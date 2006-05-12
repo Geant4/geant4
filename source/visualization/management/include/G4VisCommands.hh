@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommands.hh,v 1.3 2001-08-05 02:29:02 johna Exp $
+// $Id: G4VisCommands.hh,v 1.4 2006-05-12 13:16:25 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/ top level commands - John Allison  5th February 2001
@@ -46,6 +46,18 @@ private:
   G4VisCommandEnable& operator = (const G4VisCommandEnable&);
   G4UIcmdWithABool* fpCommand;
   G4UIcmdWithoutParameter* fpCommand1;
+};
+
+class G4VisCommandList: public G4VVisCommand {
+public:
+  G4VisCommandList ();
+  virtual ~G4VisCommandList ();
+  G4String GetCurrentValue (G4UIcommand* command);
+  void SetNewValue (G4UIcommand* command, G4String newValue);
+private:
+  G4VisCommandList (const G4VisCommandList&);
+  G4VisCommandList& operator = (const G4VisCommandList&);
+  G4UIcmdWithAString* fpCommand;
 };
 
 class G4VisCommandVerbose: public G4VVisCommand {

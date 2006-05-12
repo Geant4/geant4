@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommands.cc,v 1.9 2005-03-03 16:13:08 allison Exp $
+// $Id: G4VisCommands.cc,v 1.10 2006-05-12 13:16:25 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/ top level commands - John Allison  5th February 2001
@@ -29,6 +29,7 @@
 #include "G4VisCommands.hh"
 
 #include "G4VisManager.hh"
+#include "G4UIManager.hh"
 #include "G4UIcmdWithABool.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithoutParameter.hh"
@@ -64,6 +65,42 @@ void G4VisCommandEnable::SetNewValue (G4UIcommand* command,
     else fpVisManager->Disable();        // Printing is in vis manager.
   } else fpVisManager->Disable();        // Printing is in vis manager.
   // Note: Printing is in vis manager.
+}
+
+////////////// /vis/list ///////////////////////////////////////
+
+G4VisCommandList::G4VisCommandList ()
+{
+  G4bool omitable;
+
+  fpCommand = new G4UIcmdWithAString("/vis/list", this);
+  fpCommand -> SetGuidance("Lists visualization parameters.");
+  fpCommand -> SetParameterName("verbosity", omitable=true);
+  fpCommand -> SetDefaultValue("0");
+}
+
+G4VisCommandList::~G4VisCommandList ()
+{
+  delete fpCommand;
+}
+
+G4String G4VisCommandList::GetCurrentValue (G4UIcommand*)
+{
+  return "";
+}
+
+void G4VisCommandList::SetNewValue (G4UIcommand* command, G4String newValue)
+{
+  G4String& verbosityString = newValue;
+  //G4VisManager::Verbosity verbosity =
+  //  fpVisManager->GetVerbosityValue(verbosityString);
+
+  fpVisManager->PrintAvailableGraphicsSystems();
+  G4cout << G4endl;
+  fpVisManager->PrintAvailableModels();
+  G4cout << G4endl;
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();
+  UImanager->ApplyCommand(G4String("/vis/viewer/list ! ") + verbosityString);
 }
 
 ////////////// /vis/verbose ///////////////////////////////////////
