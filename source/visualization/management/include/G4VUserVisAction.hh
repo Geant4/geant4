@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserVisAction.hh,v 1.5 2005-11-22 16:53:27 allison Exp $
+// $Id: G4VUserVisAction.hh,v 1.6 2006-05-12 13:14:42 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -50,7 +50,7 @@ public: // With description
   G4VUserVisAction() {}
   virtual ~G4VUserVisAction() {}
   virtual void Draw() = 0;
-  void operator()(const G4Transform3D& = G4Transform3D()) {
+  void operator()(G4VGraphicsScene&, const G4Transform3D&) {
     Draw();
   }
 
