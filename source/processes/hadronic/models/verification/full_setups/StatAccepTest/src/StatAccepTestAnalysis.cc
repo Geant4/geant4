@@ -1799,7 +1799,7 @@ void StatAccepTestAnalysis::finish() {
   sum  = sumEdepAct;
   sum2 = sumEdepAct2;
   mu       = sum / n;
-  sigma    = std::sqrt( ( sum2 - sum*sum/n ) / (n - 1.0) );
+  sigma    = std::sqrt( std::abs( ( sum2 - sum*sum/n ) ) / (n - 1.0) );
   mu_sigma = sigma / std::sqrt( n );
   G4cout << " Average <E> [MeV] deposited in all active layers = " 
          << mu << " +/- " << mu_sigma << G4endl;
@@ -1807,7 +1807,7 @@ void StatAccepTestAnalysis::finish() {
   sum  = sumEdepTot;
   sum2 = sumEdepTot2;
   mu       = sum / n;
-  sigma    = std::sqrt( ( sum2 - sum*sum/n ) / (n - 1.0) );
+  sigma    = std::sqrt( std::abs( ( sum2 - sum*sum/n ) ) / (n - 1.0) );
   mu_sigma = sigma / std::sqrt( n );
   G4cout << " Average <E> [MeV] deposited in the whole calorimeter = " 
          << mu << " +/- " << mu_sigma << G4endl;
@@ -1820,7 +1820,7 @@ void StatAccepTestAnalysis::finish() {
     sum  = sumL[ iLayer ];
     sum2 = sumL2[ iLayer ];
     mu       = sum / n;
-    sigma    = std::sqrt( ( sum2 - sum*sum/n ) / (n - 1.0) );
+    sigma    = std::sqrt( std::abs( ( sum2 - sum*sum/n ) ) / (n - 1.0) );
     mu_sigma = sigma / std::sqrt( n );
     //if ( mu > 1.0E-06 ) {
     G4cout << "\t layer = " << iLayer << "\t <E> = " 
@@ -1863,7 +1863,7 @@ void StatAccepTestAnalysis::finish() {
     sum  = sumR[ iBinR ];
     sum2 = sumR2[ iBinR ];
     mu       = sum / n;
-    sigma    = std::sqrt( ( sum2 - sum*sum/n ) / (n - 1.0) );
+    sigma    = std::sqrt( std::abs( ( sum2 - sum*sum/n ) ) / (n - 1.0) );
     mu_sigma = sigma / std::sqrt( n );
     //if ( mu > 1.0E-06 ) {
     G4cout << "\t iBinR = " << iBinR << "\t <E> = " 
