@@ -1,4 +1,4 @@
-$Id: History,v 1.52 2006-05-13 12:47:49 allison Exp $
+$Id: History,v 1.53 2006-05-13 12:52:54 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -25,7 +25,7 @@ committal in the CVS repository !
 History file for visualization management sub-category
 ------------------------------------------------------
 
-13th May 2006 John Allison
+13th May 2006 John Allison  (visman-V08-00-17)
 - Provided identity transformation for 2D drawing.  A temporary
   expedient until all drivers can implement 2D drawing.
 
