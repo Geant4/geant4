@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmModelManager.cc,v 1.33 2006-01-20 09:51:56 vnivanch Exp $
+// $Id: G4EmModelManager.cc,v 1.34 2006-05-13 18:51:38 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -54,6 +54,7 @@
 // 18-08-05 Fix cut for e+e- pair production (V.Ivanchenko)
 // 29-11-05 Add protection for arithmetic operations with cut=DBL_MAX (V.Ivanchenko)
 // 20-01-06 Introduce G4EmTableType and reducing number of methods (VI)
+// 13-05-06 Add GetModel by index method (VI)
 //
 // Class Description:
 //
@@ -226,6 +227,19 @@ void G4EmModelManager::UpdateEmModel(const G4String& nam,
   G4cout << "G4EmModelManager::UpdateEmModel WARNING: no model <"
          << nam << "> is found out"
 	 << G4endl;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4VEmModel* G4EmModelManager::GetModel(G4int i)
+{
+  G4VEmModel* m = 0;
+  if(i >= 0 && i < nEmModels) m = models[i];
+  else if(verboseLevel > 0) 
+    G4cout << "G4EmModelManager::GetModel WARNING: "
+	   << "index " << i << " is wrong Nmodels= "
+	   << nEmModels << G4endl;
+  return m;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

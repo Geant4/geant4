@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmModelManager.hh,v 1.16 2006-01-20 09:51:56 vnivanch Exp $
+// $Id: G4EmModelManager.hh,v 1.17 2006-05-13 18:51:37 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -47,6 +47,7 @@
 // 11-04-05 Remove access to fluctuation models (V.Ivanchenko)
 // 10-01-06 PreciseRange -> CSDARange (V.Ivantchenko)
 // 20-01-06 Introduce G4EmTableType and reducing number of methods (VI)
+// 13-05-06 Add GetModel by index method (VI)
 //
 // Class Description:
 //
@@ -123,7 +124,7 @@ public:
 
   G4EmModelManager();
 
- ~G4EmModelManager();
+  ~G4EmModelManager();
 
   void Clear();
 
@@ -143,6 +144,8 @@ public:
                         G4bool startFromNull = true, G4EmTableType t = fRestricted);
 
   G4VEmModel* SelectModel(G4double& energy, size_t& index);
+
+  G4VEmModel* GetModel(G4int);
 
   void AddEmModel(G4int, G4VEmModel*, G4VEmFluctuationModel*, const G4Region*);
   

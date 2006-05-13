@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.hh,v 1.31 2006-02-09 12:52:06 maire Exp $
+// $Id: G4VEmProcess.hh,v 1.32 2006-05-13 18:51:37 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -46,6 +46,7 @@
 // 09-05-05 Fix problem in logic when path boundary between materials (VI)
 // 11-01-06 add A to parameters of ComputeCrossSectionPerAtom (VI)
 // 01-02-06 put default value A=0. to keep compatibility with v5.2 (mma)
+// 13-05-06 Add method to access model by index (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -189,6 +190,9 @@ public:
   G4bool IsIntegral() const;
 
   void SetApplyCuts(G4bool val);
+
+  // Access to models
+  G4VEmModel* GetModelByIndex(G4int idx = 0);
   
 protected:
 
@@ -453,6 +457,13 @@ inline G4double G4VEmProcess::GetElectronEnergyCut()
 inline void G4VEmProcess::SetLambdaFactor(G4double val)
 {
   if(val > 0.0 && val <= 1.0) lambdaFactor = val;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4VEmModel* G4VEmProcess::GetModelByIndex(G4int idx)
+{
+  return modelManager->GetModel(idx);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

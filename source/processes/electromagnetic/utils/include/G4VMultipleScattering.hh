@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.hh,v 1.37 2006-03-28 14:23:23 vnivanch Exp $
+// $Id: G4VMultipleScattering.hh,v 1.38 2006-05-13 18:51:37 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -56,6 +56,7 @@
 // 26-01-06 Rename GetRange -> GetRangeFromRestricteDEDX (V.Ivanchenko)
 // 17-02-06 Save table of transport cross sections not mfp (V.Ivanchenko)
 // 07-03-06 Move step limit calculation to model (V.Ivanchenko)
+// 13-05-06 Add method to access model by index (V.Ivanchenko)
 //
 
 // -------------------------------------------------------------------
@@ -190,6 +191,9 @@ public:
   // Define particle definition
   const G4ParticleDefinition* Particle() const;
   void SetParticle(const G4ParticleDefinition*);
+
+  // Access to models
+  G4VEmModel* GetModelByIndex(G4int idx = 0);
 
 protected:
 
@@ -454,6 +458,11 @@ const G4MaterialCutsCouple* G4VMultipleScattering::CurrentMaterialCutsCouple() c
 {
   return currentCouple;
 } 
+
+inline G4VEmModel* G4VMultipleScattering::GetModelByIndex(G4int idx)
+{
+  return modelManager->GetModel(idx);
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

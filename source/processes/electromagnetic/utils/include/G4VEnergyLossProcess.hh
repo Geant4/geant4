@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.hh,v 1.53 2006-03-28 14:23:23 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.hh,v 1.54 2006-05-13 18:51:37 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -66,6 +66,7 @@
 // 26-01-06 Add public method GetCSDARange (V.Ivanchenko)
 // 22-03-06 Add SetDynamicMassCharge (V.Ivanchenko)
 // 23-03-06 Use isIonisation flag (V.Ivanchenko)
+// 13-05-06 Add method to access model by index (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -314,6 +315,9 @@ public:
   // Set scaling parameters
   void SetDynamicMassCharge(G4double massratio, G4double charge2ratio);
 
+  // Access to models
+  G4VEmModel* GetModelByIndex(G4int idx = 0);
+
 protected:
 
   void SetParticle(const G4ParticleDefinition* p);
@@ -323,13 +327,6 @@ protected:
   G4VEmModel* SelectModel(G4double kinEnergy);
 
   size_t CurrentMaterialCutsCoupleIndex() const;
-
-  // Set scaling parameters
-  //
-  void SetMassRatio(G4double val);
-  void SetReduceFactor(G4double val);
-  void SetChargeSquare(G4double val);
-  void SetChargeSquareRatio(G4double val);
 
   G4double GetCurrentRange() const;
 
@@ -841,34 +838,6 @@ inline size_t G4VEnergyLossProcess::CurrentMaterialCutsCoupleIndex() const
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-  
-inline void G4VEnergyLossProcess::SetMassRatio(G4double val)
-{
-  massRatio = val;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-  
-inline void G4VEnergyLossProcess::SetReduceFactor(G4double val) 
-{
-  reduceFactor = val;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-  
-inline void G4VEnergyLossProcess::SetChargeSquare(G4double val) 
-{
-  chargeSquare = val;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline void G4VEnergyLossProcess::SetChargeSquareRatio(G4double val) 
-{
-  chargeSqRatio = val;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline void G4VEnergyLossProcess::SetDynamicMassCharge(G4double massratio, 
 						       G4double charge2ratio)
@@ -892,6 +861,13 @@ inline void G4VEnergyLossProcess::AddCollaborativeProcess(
             G4VEnergyLossProcess* p)
 {
   scProcesses.push_back(p);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4VEmModel* G4VEnergyLossProcess::GetModelByIndex(G4int idx)
+{
+  return modelManager->GetModel(idx);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

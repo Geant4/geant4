@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.cc,v 1.37 2005-10-27 11:33:26 vnivanch Exp $
+// $Id: G4VMultipleScattering.cc,v 1.38 2006-05-13 18:51:40 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -74,6 +74,7 @@
 #include "G4Region.hh"
 #include "G4RegionStore.hh"
 #include "G4PhysicsTableHelper.hh"
+#include "G4GenericIon.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -163,7 +164,10 @@ void G4VMultipleScattering::PreparePhysicsTable(const G4ParticleDefinition& part
 {
   if (!firstParticle) {
     currentCouple = 0;
-    firstParticle = &part;
+    if(part.GetParticleType() == "nucleus" && 
+       part.GetParticleSubType() == "generic") 
+         firstParticle = G4GenericIon::GenericIon();
+    else firstParticle = &part; 
     currentParticle = &part;
   }
 
@@ -181,7 +185,8 @@ void G4VMultipleScattering::PreparePhysicsTable(const G4ParticleDefinition& part
     InitialiseProcess(firstParticle);
     if(buildLambdaTable)
       theLambdaTable = G4PhysicsTableHelper::PreparePhysicsTable(theLambdaTable);
-    const G4DataVector* theCuts = modelManager->Initialise(firstParticle, 0, 10.0, verboseLevel);
+    const G4DataVector* theCuts = 
+      modelManager->Initialise(firstParticle, 0, 10.0, verboseLevel);
 
     if(2 < verboseLevel) G4cout << theCuts << G4endl;
 
