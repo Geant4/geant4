@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmCalculator.hh,v 1.14 2006-03-23 11:54:24 vnivanch Exp $
+// $Id: G4EmCalculator.hh,v 1.15 2006-05-13 17:57:40 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -237,6 +237,7 @@ private:
 
   G4String                     currentParticleName;
   G4String                     currentMaterialName;
+  G4String                     currentProcessName;
 };
 
 //....oooOO0OOooo.......oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

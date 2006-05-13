@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmCorrections.hh,v 1.5 2006-05-04 10:39:42 vnivanch Exp $
+// $Id: G4EmCorrections.hh,v 1.6 2006-05-13 17:57:40 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -35,11 +35,12 @@
 // Creation date: 13.01.2005
 //
 // Modifications:
-// 28.04.2006 General cleanup, add finite size corrections
+// 28.04.2006 General cleanup, add finite size corrections (V.Ivanchenko)
+// 13.05.2006 Add corrections for ion stopping (V.Ivanhcenko)
 //
 // Class Description:
 //
-// This class provides calculation of EM corrections to ionisation 
+// This class provides calculation of EM corrections to ionisation
 //
 
 // -------------------------------------------------------------------
@@ -54,7 +55,11 @@
 #include "G4Material.hh"
 #include "G4ParticleDefinition.hh"
 
-class G4EmCorrections 
+class G4NistManager;
+class G4VEmModel;
+class G4PhysicsVector;
+
+class G4EmCorrections
 {
 
 public:
@@ -116,26 +121,40 @@ public:
 		       G4double kineticEnergy,
 		       G4bool fluct = true);
 
+  void AddStoppingData(G4int Z, G4int A, const G4String& materialName,
+		       G4PhysicsVector& dVector);
+
+  G4double EffectiveChargeCorrection(const G4ParticleDefinition*,
+				     const G4Material*,
+				     G4double);
+
+  G4ionEffectiveCharge* GetIonEffectiveCharge(G4VEmModel* m = 0);
+
+  G4int GetNumberOfStoppingVectors();
+
 private:
 
   void Initialise();
+
+  G4PhysicsVector* InitialiseMaterial(const G4Material* mat);
+
   void SetupKinematics(const G4ParticleDefinition* p,
 		       const G4Material* material,
 		       G4double kineticEnergy);
 
-  G4double KShell(G4double theta, G4double eta); 
+  G4double KShell(G4double theta, G4double eta);
 
-  G4double LShell(G4double theta, G4double eta); 
+  G4double LShell(G4double theta, G4double eta);
 
-  G4int Index(G4double x, G4double* y, G4int n); 
+  G4int Index(G4double x, G4double* y, G4int n);
 
-  G4double Value(G4double xv, G4double x1, G4double x2, G4double y1, G4double y2); 
+  G4double Value(G4double xv, G4double x1, G4double x2, G4double y1, G4double y2);
 
   G4double Value2(G4double xv, G4double yv, G4double x1, G4double x2,
                   G4double y1, G4double y2,
-                  G4double z11, G4double z21, G4double z12, G4double z22); 
+                  G4double z11, G4double z21, G4double z12, G4double z22);
 
-  G4double NuclearStoppingPower(G4double e, G4double z1, G4double z2, 
+  G4double NuclearStoppingPower(G4double e, G4double z1, G4double z2,
                                             G4double m1, G4double m2);
 
   // hide assignment operator
@@ -149,6 +168,8 @@ private:
   G4double     theZieglerFactor;
   G4double     alpha2;
   G4bool       lossFlucFlag;
+
+  G4int        verbose;
 
   G4int        nK;
   G4int        nL;
@@ -181,13 +202,16 @@ private:
   G4double     TAU[93];
 
   const G4ParticleDefinition* particle;
+  const G4ParticleDefinition* curParticle;
   const G4Material*           material;
+  const G4Material*           curMaterial;
   const G4ElementVector*      theElementVector;
-  const G4double*             atomDensity; 
+  const G4double*             atomDensity;
 
   G4int     numberOfElements;
   G4double  kinEnergy;
   G4double  mass;
+  G4double  massFactor;
   G4double  tau;
   G4double  gamma;
   G4double  bg2;
@@ -200,18 +224,32 @@ private:
   G4double  q2;
 
   G4AtomicShells        shells;
-  G4ionEffectiveCharge  effCharge; 
+  G4ionEffectiveCharge  effCharge;
+
+  G4NistManager*              nist;
+  G4VEmModel*                 ionModel;
+
+  // Ion stopping data
+  G4int                       nIons;
+  G4int                       idx;
+  std::vector<G4int>          Zion;
+  std::vector<G4int>          Aion;
+  std::vector<G4String>       materialName;
+
+  std::vector<const G4Material*> materialList;
+  std::vector<G4PhysicsVector*>  stopData;
+  G4PhysicsVector*               curVector;
 };
 
-inline G4int G4EmCorrections::Index(G4double x, G4double* y, G4int n) 
+inline G4int G4EmCorrections::Index(G4double x, G4double* y, G4int n)
 {
   G4int idx = n-1;
   do {idx--;} while (idx>0 && x<y[idx]);
   return idx;
 }
 
-inline G4double G4EmCorrections::Value(G4double xv, G4double x1, G4double x2, 
-                                       G4double y1, G4double y2) 
+inline G4double G4EmCorrections::Value(G4double xv, G4double x1, G4double x2,
+                                       G4double y1, G4double y2)
 {
   return y1 + (y2 - y1)*(xv - x1)/(x2 - x1);
 }
@@ -220,7 +258,7 @@ inline G4double G4EmCorrections::Value2(G4double xv, G4double yv, G4double x1, G
                                         G4double y1, G4double y2,
 					G4double z11, G4double z21, G4double z12, G4double z22)
 {
-  return (z11*(x2-xv)*(y2-yv) + z22*(xv-x1)*(yv-y1) + 
+  return (z11*(x2-xv)*(y2-yv) + z22*(xv-x1)*(yv-y1) +
 	  0.5*(z12*((x2-xv)*(yv-y1)+(xv-x1)*(y2-yv))+z21*((xv-x1)*(y2-yv)+(yv-y1)*(x2-xv))))
          / ((x2-x1)*(y2-y1));
 }

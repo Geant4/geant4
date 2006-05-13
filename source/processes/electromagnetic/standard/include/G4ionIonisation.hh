@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4ionIonisation.hh,v 1.39 2006-05-10 19:38:43 vnivanch Exp $
+// $Id: G4ionIonisation.hh,v 1.40 2006-05-13 17:55:09 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -73,7 +73,6 @@ class G4Material;
 class G4VEmFluctuationModel;
 class G4PhysicsVector;
 class G4BraggIonModel;
-class G4NistManager;
 
 class G4ionIonisation : public G4VEnergyLossProcess
 {
@@ -87,10 +86,6 @@ public:
 
   // Print out of the class parameters
   virtual void PrintInfo();
-
-  G4double EffectiveChargeCorrection(const G4ParticleDefinition*,
-				     const G4Material*,
-				     G4double);
 
   void AddStoppingData(G4int Z, G4int A, const G4String& materialName,
 		       G4PhysicsVector& dVector);
@@ -128,27 +123,13 @@ private:
 			G4double mass,
 			G4double kinEnergy);
 
-  G4PhysicsVector* InitialiseMaterial(const G4Material*);
-
   // hide assignment operator
   G4ionIonisation & operator=(const G4ionIonisation &right);
   G4ionIonisation(const G4ionIonisation&);
 
-  G4ionEffectiveCharge        effCharge;
+  G4ionEffectiveCharge*       effCharge;
   G4VEmFluctuationModel*      flucModel;
   G4EmCorrections*            corr;
-  G4BraggIonModel*            theBraggModel;
-  G4NistManager*              nist;
-
-  // Ion stopping data
-  G4int                       nIons;
-  G4int                       idx;
-  std::vector<G4int>          Zion;
-  std::vector<G4int>          Aion;
-  std::vector<G4String>       materialName;
-
-  std::vector<const G4Material*> materialList;
-  std::vector<G4PhysicsVector*>  stopData;
 
   // cash
   const G4Material*           curMaterial;
@@ -173,7 +154,7 @@ private:
 
 inline G4bool G4ionIonisation::IsApplicable(const G4ParticleDefinition& p)
 {
-  return (p.GetPDGCharge() != 0.0 && !p.IsShortLived() && 
+  return (p.GetPDGCharge() != 0.0 && !p.IsShortLived() &&
           p.GetParticleType() == "nucleus");
 }
 
@@ -194,16 +175,10 @@ inline void G4ionIonisation::DefineMassCharge(const G4ParticleDefinition* pd,
 					      G4double mass,
 					      G4double kinEnergy)
 {
-  //  currentParticle = pd;
-  // theMaterial     = mat;
   preKinEnergy    = kinEnergy;
   massRatio       = baseMass/mass;
-  charge2         = effCharge.EffectiveChargeSquareRatio(pd,mat,kinEnergy);
+  charge2         = effCharge->EffectiveChargeSquareRatio(pd,mat,kinEnergy);
   SetDynamicMassCharge(massRatio, charge2);
-  //  SetMassRatio(massRatio);
-  // SetReduceFactor(1.0/(charge2*massRatio));
-  // SetChargeSquare(charge2);
-  // SetChargeSquareRatio(charge2);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -217,14 +192,14 @@ inline void G4ionIonisation::CorrectionsAlongStep(
   if(eloss < preKinEnergy) {
     const G4ParticleDefinition* part = dp->GetDefinition();
     const G4Material* mat = couple->GetMaterial();
-    if(preKinEnergy*massRatio > eth) 
+    if(preKinEnergy*massRatio > eth)
       eloss += s*corr->HighOrderCorrections(part,mat,preKinEnergy);
     else {
       if(stopDataActive)
-	eloss *= EffectiveChargeCorrection(part,mat,preKinEnergy);
+	eloss *= corr->EffectiveChargeCorrection(part,mat,preKinEnergy);
       eloss += s*corr->NuclearDEDX(part,mat,preKinEnergy - eloss*0.5);
     }
-    fParticleChange.SetProposedCharge(effCharge.EffectiveCharge(part,
+    fParticleChange.SetProposedCharge(effCharge->EffectiveCharge(part,
                                       mat,preKinEnergy-eloss));
   }
 }
@@ -244,7 +219,7 @@ inline std::vector<G4DynamicParticle*>* G4ionIonisation::SecondariesPostStep(
 
 inline void G4ionIonisation::ActivateStoppingData(G4bool val)
 {
-  stopDataActive = val;  
+  stopDataActive = val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
