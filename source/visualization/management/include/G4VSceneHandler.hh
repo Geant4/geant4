@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.hh,v 1.31 2006-04-19 13:45:03 allison Exp $
+// $Id: G4VSceneHandler.hh,v 1.32 2006-05-13 12:46:24 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -319,6 +319,7 @@ protected:
   G4VPhysicalVolume* fpCurrentPV;   // Current physical volume.
   G4LogicalVolume*   fpCurrentLV;   // Current logical volume.
   G4Material*        fpCurrentMaterial; // Current material.
+  const G4Transform3D fIdentityTransformation;
 
 private:
 

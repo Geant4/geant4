@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.cc,v 1.62 2006-05-12 13:32:02 allison Exp $
+// $Id: G4VSceneHandler.cc,v 1.63 2006-05-13 12:46:24 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -156,12 +156,16 @@ void G4VSceneHandler::BeginPrimitives2D () {
   if (fNestingDepth > 1)
     G4Exception("G4VSceneHandler::BeginPrimitives2D: Nesting detected."
 		"\n  It is illegal to nest Begin/EndPrimitives.");
+  // Not actually required for 2D operations but some drivers do an
+  // initial transformation...
+  fpObjectTransformation = &fIdentityTransformation;
 }
 
 void G4VSceneHandler::EndPrimitives2D () {
   if (fNestingDepth <= 0)
     G4Exception("G4VSceneHandler::EndPrimitives2D: Nesting error");
   fNestingDepth--;
+  fpObjectTransformation = 0;
   if (fReadyForTransients) {
     fTransientsDrawnThisEvent = true;
     fTransientsDrawnThisRun = true;
