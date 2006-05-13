@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.84 2006-03-28 14:23:23 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.85 2006-05-13 19:24:39 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -599,7 +599,7 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
     G4double r = GetScaledRangeForScaledEnergy(preStepScaledEnergy);
     G4double x = r - length/reduceFactor;
     if(x < 0.0) {
-      if(0 < verboseLevel && nWarnings<20) {
+      if(0 < verboseLevel && nWarnings<10) {
 	G4cout << "WARNING! G4VEnergyLossProcess::AlongStepDoIt: x= " << x
 	       << " for eScaled(MeV)= " << preStepScaledEnergy/MeV
 	       << " step(mm)= " << length/mm
@@ -636,9 +636,6 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
            << G4endl;
   }
   */
-
-  // Corrections, which cannot be tabulated
-  CorrectionsAlongStep(currentCouple, dynParticle, eloss, length);
 
   G4double cut  = (*theCuts)[currentMaterialIndex];
   G4double esec = 0.0;
@@ -694,6 +691,9 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
       }
     }
   }
+
+  // Corrections, which cannot be tabulated
+  CorrectionsAlongStep(currentCouple, dynParticle, eloss, length);
 
   // Sample fluctuations
   if (lossFluctuationFlag && eloss + esec + lowestKinEnergy < preStepKinEnergy) {

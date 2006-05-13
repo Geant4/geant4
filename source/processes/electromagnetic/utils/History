@@ -1,4 +1,4 @@
-$Id: History,v 1.246 2006-05-13 17:57:40 vnivanch Exp $
+$Id: History,v 1.247 2006-05-13 19:24:39 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -20,6 +20,8 @@ committal in the CVS repository !
 13 May 06: V.Ivant (emutils-V08-00-16)
 - G4EmCalculator and G4EmCorrections - add correction from user data 
   on stopping power
+- G4VEnergyLossProcess, G4VEmProcess, G4VMultipleScattering - add
+  GetModelByIndex method
 
 10 May 06: V.Ivant (emutils-V08-00-15)
 - G4LossTableMessenger - add command MscStepLimitation 
