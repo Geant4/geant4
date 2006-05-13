@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhotoElectricAngularGeneratorTest.cc,v 1.3 2006-03-06 16:41:11 silvarod Exp $
+// $Id: G4PhotoElectricAngularGeneratorTest.cc,v 1.4 2006-05-13 17:09:35 silvarod Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -60,8 +60,8 @@
 #include "G4MaterialTable.hh"
 #include "G4LowEnergyPhotoElectric.hh"
 #include "G4VPhotoElectricAngularDistribution.hh"
-#include "G4PhotoElectricAngularGenerator462.hh"
-#include "G4PhotoElectricAngularGeneratorStandard.hh"
+#include "G4PhotoElectricAngularGeneratorSimple.hh"
+#include "G4PhotoElectricAngularGeneratorSauterGavrila.hh"
 #include "G4PhotoElectricAngularGeneratorPolarized.hh"
 
 #include "AIDA/IManagedObject.h"
@@ -114,8 +114,8 @@ int main()
   if (nIterations <= 0) G4Exception("Wrong input");
 
   G4int gType = 0;
-  G4cout << "Toy Model [1]" << G4endl;
-  G4cout << "Standard  [2]" << G4endl;
+  G4cout << "Simple [1]" << G4endl;
+  G4cout << "SauterGavrila  [2]" << G4endl;
   G4cout << "Polarized [3]" << G4endl;
   G4cin >> gType;
   if ( !(gType < 4)) G4Exception("Wrong input");
@@ -124,12 +124,12 @@ int main()
 
   if (gType == 1)
     {
-      angularDistribution = new G4PhotoElectricAngularGenerator462("PhotoElectricAngularGenerator462");
+      angularDistribution = new G4PhotoElectricAngularGeneratorSimple("PhotoElectricAngularGeneratorSimple");
     }
 
   if(gType == 2)
     {
-      angularDistribution = new G4PhotoElectricAngularGeneratorStandard("PhotoElectricAngularGeneratorStandard");
+      angularDistribution = new G4PhotoElectricAngularGeneratorSauterGavrila("PhotoElectricAngularGeneratorSauterGavrila");
     }
 
   if(gType == 3)
@@ -156,8 +156,8 @@ int main()
     G4ThreeVector d0 = direction.unit();
     G4ThreeVector a1 = SetPerpendicularVector(d0); //different orthogonal
     G4ThreeVector a0 = a1.unit(); // unit vector
-//    G4double rand1 = G4UniformRand();
-    G4double rand1 = 0;
+    G4double rand1 = G4UniformRand();
+//    G4double rand1 = 0;
     G4double angle = twopi*rand1; // random polar angle
     G4ThreeVector b0 = d0.cross(a0); // cross product
     G4ThreeVector c;
@@ -167,7 +167,7 @@ int main()
     G4ThreeVector pol = c.unit();
 
     G4ThreeVector photondirection = angularDistribution->GetPhotoElectronDirection(direction, initEnergy, pol, level);
-
+    G4cout << photondirection.theta() << G4endl;
 
     histo_1->fill(photondirection.theta());
     histo_2->fill(photondirection.phi());

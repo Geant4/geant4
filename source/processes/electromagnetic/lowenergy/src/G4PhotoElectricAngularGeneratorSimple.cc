@@ -60,7 +60,7 @@ G4PhotoElectricAngularGeneratorSimple::~G4PhotoElectricAngularGeneratorSimple()
 
 //
 
-G4ThreeVector G4PhotoElectricAngularGeneratorSimple::GetPhotoElectronDirection(G4ThreeVector direction, G4double, G4ThreeVector, G4int)
+G4ThreeVector G4PhotoElectricAngularGeneratorSimple::GetPhotoElectronDirection(const G4ThreeVector& direction, const G4double, const G4ThreeVector&, const G4int) const
 {
   return direction;
 }

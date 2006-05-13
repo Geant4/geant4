@@ -57,6 +57,12 @@ G4VPhotoElectricAngularDistribution::G4VPhotoElectricAngularDistribution(const G
 G4VPhotoElectricAngularDistribution::~G4VPhotoElectricAngularDistribution() 
 {;}
 
+//G4ThreeVector G4VPhotoElectricAngularDistribution::GetPhotoElectronDirection(const G4ThreeVector&,
+//                                                                             const G4double,
+//                                                                             const G4ThreeVector&,
+//                                                                             const G4int) const 
+//{;}
+
 void G4VPhotoElectricAngularDistribution::PrintGeneratorInformation() const
 {;}
 

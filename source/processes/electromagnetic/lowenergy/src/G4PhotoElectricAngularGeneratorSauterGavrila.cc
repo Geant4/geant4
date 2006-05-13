@@ -60,7 +60,7 @@ G4PhotoElectricAngularGeneratorSauterGavrila::~G4PhotoElectricAngularGeneratorSa
 
 //
 
-G4ThreeVector G4PhotoElectricAngularGeneratorSauterGavrila::GetPhotoElectronDirection(G4ThreeVector direction, G4double eKineticEnergy, G4ThreeVector, G4int)
+G4ThreeVector G4PhotoElectricAngularGeneratorSauterGavrila::GetPhotoElectronDirection(const G4ThreeVector& direction, const G4double eKineticEnergy, const G4ThreeVector&, const G4int) const
 {
 
   // Compute Theta distribution of the emitted electron, with respect to the
