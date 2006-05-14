@@ -149,6 +149,25 @@ void StatAccepTestAnalysis::init() {
   numStepProton = numStepAntiProton = 0.0;
   numStepNeutron = numStepAntiNeutron = 0.0;
 
+  numStep2 = 0.0;
+  numStepPositive2 = numStepNeutral2 = numStepNegative2 = 0.0;
+  numStepPDGCodeZero2 = numStepPDGCodeUnrecognized2 = 0.0;
+  numStepEM2 = 0.0;
+  numStepEWK2 = 0.0;
+  numStepHAD2 = 0.0; 
+  numStepMeson2 = numStepBaryon2 = 0.0;     
+  numStepMesonLight2 = numStepBaryonLight2 = 0.0;     
+  numStepMesonStrange2 = numStepBaryonStrange2 = 0.0;     
+  numStepMesonHeavy2 = numStepBaryonHeavy2 = 0.0;
+  numStepElectron2 = numStepGamma2 = numStepPositron2 = 0.0;
+  numStepMuMinus2 = numStepMuPlus2 = 0.0;
+  numStepTauMinus2 = numStepTauPlus2 = 0.0;
+  numStepNeutrino2 = 0.0;
+  numStepPiPlus2 = numStepPi02 = numStepPiMinus2 = 0.0;
+  numStepKPlus2 = numStepKNeutral2 = numStepKMinus2 = 0.0; 
+  numStepProton2 = numStepAntiProton2 = 0.0;
+  numStepNeutron2 = numStepAntiNeutron2 = 0.0;
+
   numTrack = 0.0;
   numTrackPositive = numTrackNeutral = numTrackNegative = 0.0;
   numTrackPDGCodeZero = numTrackPDGCodeUnrecognized = 0.0;
@@ -168,13 +187,40 @@ void StatAccepTestAnalysis::init() {
   numTrackProton = numTrackAntiProton = 0.0;
   numTrackNeutron = numTrackAntiNeutron = 0.0;
 
+  numTrack2 = 0.0;
+  numTrackPositive2 = numTrackNeutral2 = numTrackNegative2 = 0.0;
+  numTrackPDGCodeZero2 = numTrackPDGCodeUnrecognized2 = 0.0;
+  numTrackEM2 = 0.0;
+  numTrackEWK2 = 0.0;
+  numTrackHAD2 = 0.0; 
+  numTrackMeson2 = numTrackBaryon2 = 0.0;     
+  numTrackMesonLight2 = numTrackBaryonLight2 = 0.0;     
+  numTrackMesonStrange2 = numTrackBaryonStrange2 = 0.0;     
+  numTrackMesonHeavy2 = numTrackBaryonHeavy2 = 0.0;
+  numTrackElectron2 = numTrackGamma2 = numTrackPositron2 = 0.0;
+  numTrackMuMinus2 = numTrackMuPlus2 = 0.0;
+  numTrackTauMinus2 = numTrackTauPlus2 = 0.0;
+  numTrackNeutrino2 = 0.0;
+  numTrackPiPlus2 = numTrackPi02 = numTrackPiMinus2 = 0.0;
+  numTrackKPlus2 = numTrackKNeutral2 = numTrackKMinus2 = 0.0; 
+  numTrackProton2 = numTrackAntiProton2 = 0.0;
+  numTrackNeutron2 = numTrackAntiNeutron2 = 0.0;
+
   electronTrackLength = 0.0;
   muonTrackLength = 0.0;
   pionChargedTrackLength = 0.0;
   protonTrackLength = 0.0;
   gammaTrackLength = 0.0;
   pion0TrackLength = 0.0;
-  neutronTrackLength = 0.0;
+
+  neutronTrackLength2 = 0.0;
+  electronTrackLength2 = 0.0;
+  muonTrackLength2 = 0.0;
+  pionChargedTrackLength2 = 0.0;
+  protonTrackLength2 = 0.0;
+  gammaTrackLength2 = 0.0;
+  pion0TrackLength2 = 0.0;
+  neutronTrackLength2 = 0.0;
 
   kinEnergyExiting = 0.0;
   kinEnergyExitingGammas = 0.0; 
@@ -190,6 +236,21 @@ void StatAccepTestAnalysis::init() {
   numExitingMuons = 0.0;
   numExitingElectrons = 0.0;
   numExitingOthers = 0.0;
+
+  kinEnergyExiting2 = 0.0;
+  kinEnergyExitingGammas2 = 0.0; 
+  kinEnergyExitingNeutrons2 = 0.0;
+  kinEnergyExitingNeutrinos2 = 0.0;
+  kinEnergyExitingMuons2 = 0.0;
+  kinEnergyExitingElectrons2 = 0.0;
+  kinEnergyExitingOthers2 = 0.0;
+  numExiting2 = 0.0;
+  numExitingGammas2 = 0.0;
+  numExitingNeutrons2 = 0.0;
+  numExitingNeutrinos2 = 0.0;
+  numExitingMuons2 = 0.0;
+  numExitingElectrons2 = 0.0;
+  numExitingOthers2 = 0.0;
 
 }                       
 
@@ -1021,23 +1082,31 @@ void StatAccepTestAnalysis::infoTrack( const G4Track* aTrack ) {
       if ( aTrack->GetDefinition() == G4Electron::ElectronDefinition() || 
 	   aTrack->GetDefinition() == G4Positron::PositronDefinition() ) {
 	electronTrackLength += trackLength;
+	electronTrackLength2 += trackLength * trackLength;
       } else if ( aTrack->GetDefinition() == G4Gamma::GammaDefinition() ) {
 	gammaTrackLength += trackLength;
+	gammaTrackLength2 += trackLength * trackLength;
       } else if ( aTrack->GetDefinition() == G4MuonMinus::MuonMinusDefinition() ||  
 		  aTrack->GetDefinition() == G4MuonPlus::MuonPlusDefinition() ) {
 	muonTrackLength += trackLength;
+	muonTrackLength2 += trackLength * trackLength;
       } else if ( aTrack->GetDefinition() == G4PionPlus::PionPlusDefinition() ||
 		  aTrack->GetDefinition() == G4PionMinus::PionMinusDefinition() ) {
 	pionChargedTrackLength += trackLength;
+	pionChargedTrackLength2 += trackLength * trackLength;
       } else if ( aTrack->GetDefinition() == G4PionZero::PionZeroDefinition() ) {
 	pion0TrackLength += trackLength;
+	pion0TrackLength2 += trackLength * trackLength;
       } else if ( aTrack->GetDefinition() == G4Proton::ProtonDefinition() ) {
 	protonTrackLength += trackLength;
+	protonTrackLength2 += trackLength * trackLength;
       } else if ( aTrack->GetDefinition() == G4Neutron::NeutronDefinition() ) {
 	neutronTrackLength += trackLength;
+	neutronTrackLength2 += trackLength * trackLength;
       }
     } else if ( aTrack->GetVolume()->GetName() == "expHall" ) {
       kinEnergyExiting += aTrack->GetKineticEnergy();
+      kinEnergyExiting2 += aTrack->GetKineticEnergy() * aTrack->GetKineticEnergy();
       numExiting++;
       //G4cout << " Exiting particle: " 
       //       << aTrack->GetDefinition()->GetParticleName() 
@@ -1738,6 +1807,447 @@ classifyParticle( const bool isTrack, const G4ParticleDefinition* particleDef ) 
 }
 
 
+
+void StatAccepTestAnalysis::endOfEvent() {
+  // This method is useful to update the "squared" event variables
+  // which are used at the end of the Run to compute the statistical
+  // uncertainties of various quantities.
+  // Notice that only the quantities that are meaningful on an event
+  // by event basis, like the number of steps, the number of tracks,
+  // the exiting kinetic energy, the number of exiting particles;
+  // this does not apply to the track length.
+
+  static G4double numStep_previous = 0.0;
+  static G4double numStepPositive_previous = 0.0;
+  static G4double numStepNeutral_previous = 0.0;
+  static G4double numStepNegative_previous = 0.0;
+  static G4double numStepPDGCodeZero_previous = 0.0;
+  static G4double numStepPDGCodeUnrecognized_previous = 0.0;
+  static G4double numStepEM_previous = 0.0;
+  static G4double numStepEWK_previous = 0.0;
+  static G4double numStepHAD_previous = 0.0;
+  static G4double numStepMeson_previous = 0.0;
+  static G4double numStepBaryon_previous = 0.0;
+  static G4double numStepMesonLight_previous = 0.0;
+  static G4double numStepBaryonLight_previous = 0.0;
+  static G4double numStepMesonStrange_previous = 0.0;
+  static G4double numStepBaryonStrange_previous = 0.0;
+  static G4double numStepMesonHeavy_previous = 0.0;
+  static G4double numStepBaryonHeavy_previous = 0.0;
+  static G4double numStepElectron_previous = 0.0;
+  static G4double numStepGamma_previous = 0.0;
+  static G4double numStepPositron_previous = 0.0;
+  static G4double numStepMuMinus_previous = 0.0;
+  static G4double numStepMuPlus_previous = 0.0;
+  static G4double numStepTauMinus_previous = 0.0;
+  static G4double numStepTauPlus_previous = 0.0;
+  static G4double numStepNeutrino_previous = 0.0;
+  static G4double numStepPiPlus_previous = 0.0;
+  static G4double numStepPi0_previous = 0.0;
+  static G4double numStepPiMinus_previous = 0.0;
+  static G4double numStepKPlus_previous = 0.0;
+  static G4double numStepKNeutral_previous = 0.0;
+  static G4double numStepKMinus_previous = 0.0;
+  static G4double numStepProton_previous = 0.0;
+  static G4double numStepAntiProton_previous = 0.0;
+  static G4double numStepNeutron_previous = 0.0;
+  static G4double numStepAntiNeutron_previous = 0.0;
+
+  numStep2 +=
+    ( numStep - numStep_previous ) *
+    ( numStep - numStep_previous );
+  numStepPositive2 +=
+    ( numStepPositive - numStepPositive_previous ) *
+    ( numStepPositive - numStepPositive_previous );
+  numStepNeutral2 +=
+    ( numStepNeutral - numStepNeutral_previous ) *
+    ( numStepNeutral - numStepNeutral_previous );
+  numStepNegative2 +=
+    ( numStepNegative - numStepNegative_previous ) *
+    ( numStepNegative - numStepNegative_previous );
+  numStepPDGCodeZero2 +=
+    ( numStepPDGCodeZero - numStepPDGCodeZero_previous ) *
+    ( numStepPDGCodeZero - numStepPDGCodeZero_previous );
+  numStepPDGCodeUnrecognized2 +=
+    ( numStepPDGCodeUnrecognized - numStepPDGCodeUnrecognized_previous ) *
+    ( numStepPDGCodeUnrecognized - numStepPDGCodeUnrecognized_previous );
+  numStepEM2 +=
+    ( numStepEM - numStepEM_previous ) *
+    ( numStepEM - numStepEM_previous );
+  numStepEWK2 +=
+    ( numStepEWK - numStepEWK_previous ) *
+    ( numStepEWK - numStepEWK_previous );
+  numStepHAD2 +=
+    ( numStepHAD - numStepHAD_previous ) *
+    ( numStepHAD - numStepHAD_previous );
+  numStepMeson2 +=
+    ( numStepMeson - numStepMeson_previous ) *
+    ( numStepMeson - numStepMeson_previous );
+  numStepBaryon2 +=
+    ( numStepBaryon - numStepBaryon_previous ) *
+    ( numStepBaryon - numStepBaryon_previous );
+  numStepMesonLight2 +=
+    ( numStepMesonLight - numStepMesonLight_previous ) *
+    ( numStepMesonLight - numStepMesonLight_previous );
+  numStepBaryonLight2 +=
+    ( numStepBaryonLight - numStepBaryonLight_previous ) *
+    ( numStepBaryonLight - numStepBaryonLight_previous );
+  numStepMesonStrange2 +=
+    ( numStepMesonStrange - numStepMesonStrange_previous ) *
+    ( numStepMesonStrange - numStepMesonStrange_previous );
+  numStepBaryonStrange2 +=
+    ( numStepBaryonStrange - numStepBaryonStrange_previous ) *
+    ( numStepBaryonStrange - numStepBaryonStrange_previous );
+  numStepMesonHeavy2 +=
+    ( numStepMesonHeavy - numStepMesonHeavy_previous ) *
+    ( numStepMesonHeavy - numStepMesonHeavy_previous );
+  numStepBaryonHeavy2 +=
+    ( numStepBaryonHeavy - numStepBaryonHeavy_previous ) *
+    ( numStepBaryonHeavy - numStepBaryonHeavy_previous );
+  numStepElectron2 +=
+    ( numStepElectron - numStepElectron_previous ) *
+    ( numStepElectron - numStepElectron_previous );
+  numStepGamma2 +=
+    ( numStepGamma - numStepGamma_previous ) *
+    ( numStepGamma - numStepGamma_previous );
+  numStepPositron2 +=
+    ( numStepPositron - numStepPositron_previous ) *
+    ( numStepPositron - numStepPositron_previous );
+  numStepMuMinus2 +=
+    ( numStepMuMinus - numStepMuMinus_previous ) *
+    ( numStepMuMinus - numStepMuMinus_previous );
+  numStepMuPlus2 +=
+    ( numStepMuPlus - numStepMuPlus_previous ) *
+    ( numStepMuPlus - numStepMuPlus_previous );
+  numStepTauMinus2 +=
+    ( numStepTauMinus - numStepTauMinus_previous ) *
+    ( numStepTauMinus - numStepTauMinus_previous );
+  numStepTauPlus2 +=
+    ( numStepTauPlus - numStepTauPlus_previous ) *
+    ( numStepTauPlus - numStepTauPlus_previous );
+  numStepNeutrino2 +=
+    ( numStepNeutrino - numStepNeutrino_previous ) *
+    ( numStepNeutrino - numStepNeutrino_previous );
+  numStepPiPlus2 +=
+    ( numStepPiPlus - numStepPiPlus_previous ) *
+    ( numStepPiPlus - numStepPiPlus_previous );
+  numStepPi02 +=
+    ( numStepPi0 - numStepPi0_previous ) *
+    ( numStepPi0 - numStepPi0_previous );
+  numStepPiMinus2 +=
+    ( numStepPiMinus - numStepPiMinus_previous ) *
+    ( numStepPiMinus - numStepPiMinus_previous );
+  numStepKPlus2 +=
+    ( numStepKPlus - numStepKPlus_previous ) *
+    ( numStepKPlus - numStepKPlus_previous );
+  numStepKNeutral2 +=
+    ( numStepKNeutral - numStepKNeutral_previous ) *
+    ( numStepKNeutral - numStepKNeutral_previous );
+  numStepKMinus2 +=
+    ( numStepKMinus - numStepKMinus_previous ) *
+    ( numStepKMinus - numStepKMinus_previous );
+  numStepProton2 +=
+    ( numStepProton - numStepProton_previous ) *
+    ( numStepProton - numStepProton_previous );
+  numStepAntiProton2 +=
+    ( numStepAntiProton - numStepAntiProton_previous ) *
+    ( numStepAntiProton - numStepAntiProton_previous );
+  numStepNeutron2 +=
+    ( numStepNeutron - numStepNeutron_previous ) *
+    ( numStepNeutron - numStepNeutron_previous );
+  numStepAntiNeutron2 +=
+    ( numStepAntiNeutron - numStepAntiNeutron_previous ) *
+    ( numStepAntiNeutron - numStepAntiNeutron_previous );
+
+  numStep_previous = numStep;
+  numStepPositive_previous = numStepPositive;
+  numStepNeutral_previous = numStepNeutral;
+  numStepNegative_previous = numStepNegative;
+  numStepPDGCodeZero_previous = numStepPDGCodeZero;
+  numStepPDGCodeUnrecognized_previous = numStepPDGCodeUnrecognized;
+  numStepEM_previous = numStepEM;
+  numStepEWK_previous = numStepEWK;
+  numStepHAD_previous = numStepHAD;
+  numStepMeson_previous = numStepMeson;
+  numStepBaryon_previous = numStepBaryon;
+  numStepMesonLight_previous = numStepMesonLight;
+  numStepBaryonLight_previous = numStepBaryonLight;
+  numStepMesonStrange_previous = numStepMesonStrange;
+  numStepBaryonStrange_previous = numStepBaryonStrange;
+  numStepMesonHeavy_previous = numStepMesonHeavy;
+  numStepBaryonHeavy_previous = numStepBaryonHeavy;
+  numStepElectron_previous = numStepElectron;
+  numStepGamma_previous = numStepGamma;
+  numStepPositron_previous = numStepPositron;
+  numStepMuMinus_previous = numStepMuMinus;
+  numStepMuPlus_previous = numStepMuPlus;
+  numStepTauMinus_previous = numStepTauMinus;
+  numStepTauPlus_previous = numStepTauPlus;
+  numStepNeutrino_previous = numStepNeutrino;
+  numStepPiPlus_previous = numStepPiPlus;
+  numStepPi0_previous = numStepPi0;
+  numStepPiMinus_previous = numStepPiMinus;
+  numStepKPlus_previous = numStepKPlus;
+  numStepKNeutral_previous = numStepKNeutral;
+  numStepKMinus_previous = numStepKMinus;
+  numStepProton_previous = numStepProton;
+  numStepAntiProton_previous = numStepAntiProton;
+  numStepNeutron_previous = numStepNeutron;
+  numStepAntiNeutron_previous = numStepAntiNeutron;
+
+  static G4double numTrack_previous = 0.0;
+  static G4double numTrackPositive_previous = 0.0;
+  static G4double numTrackNeutral_previous = 0.0;
+  static G4double numTrackNegative_previous = 0.0;
+  static G4double numTrackPDGCodeZero_previous = 0.0;
+  static G4double numTrackPDGCodeUnrecognized_previous = 0.0;
+  static G4double numTrackEM_previous = 0.0;
+  static G4double numTrackEWK_previous = 0.0;
+  static G4double numTrackHAD_previous = 0.0;
+  static G4double numTrackMeson_previous = 0.0;
+  static G4double numTrackBaryon_previous = 0.0;
+  static G4double numTrackMesonLight_previous = 0.0;
+  static G4double numTrackBaryonLight_previous = 0.0;
+  static G4double numTrackMesonStrange_previous = 0.0;
+  static G4double numTrackBaryonStrange_previous = 0.0;
+  static G4double numTrackMesonHeavy_previous = 0.0;
+  static G4double numTrackBaryonHeavy_previous = 0.0;
+  static G4double numTrackElectron_previous = 0.0;
+  static G4double numTrackGamma_previous = 0.0;
+  static G4double numTrackPositron_previous = 0.0;
+  static G4double numTrackMuMinus_previous = 0.0;
+  static G4double numTrackMuPlus_previous = 0.0;
+  static G4double numTrackTauMinus_previous = 0.0;
+  static G4double numTrackTauPlus_previous = 0.0;
+  static G4double numTrackNeutrino_previous = 0.0;
+  static G4double numTrackPiPlus_previous = 0.0;
+  static G4double numTrackPi0_previous = 0.0;
+  static G4double numTrackPiMinus_previous = 0.0;
+  static G4double numTrackKPlus_previous = 0.0;
+  static G4double numTrackKNeutral_previous = 0.0;
+  static G4double numTrackKMinus_previous = 0.0;
+  static G4double numTrackProton_previous = 0.0;
+  static G4double numTrackAntiProton_previous = 0.0;
+  static G4double numTrackNeutron_previous = 0.0;
+  static G4double numTrackAntiNeutron_previous = 0.0;
+
+  numTrack2 +=
+    ( numTrack - numTrack_previous ) *
+    ( numTrack - numTrack_previous );
+  numTrackPositive2 +=
+    ( numTrackPositive - numTrackPositive_previous ) *
+    ( numTrackPositive - numTrackPositive_previous );
+  numTrackNeutral2 +=
+    ( numTrackNeutral - numTrackNeutral_previous ) *
+    ( numTrackNeutral - numTrackNeutral_previous );
+  numTrackNegative2 +=
+    ( numTrackNegative - numTrackNegative_previous ) *
+    ( numTrackNegative - numTrackNegative_previous );
+  numTrackPDGCodeZero2 +=
+    ( numTrackPDGCodeZero - numTrackPDGCodeZero_previous ) *
+    ( numTrackPDGCodeZero - numTrackPDGCodeZero_previous );
+  numTrackPDGCodeUnrecognized2 +=
+    ( numTrackPDGCodeUnrecognized - numTrackPDGCodeUnrecognized_previous ) *
+    ( numTrackPDGCodeUnrecognized - numTrackPDGCodeUnrecognized_previous );
+  numTrackEM2 +=
+    ( numTrackEM - numTrackEM_previous ) *
+    ( numTrackEM - numTrackEM_previous );
+  numTrackEWK2 +=
+    ( numTrackEWK - numTrackEWK_previous ) *
+    ( numTrackEWK - numTrackEWK_previous );
+  numTrackHAD2 +=
+    ( numTrackHAD - numTrackHAD_previous ) *
+    ( numTrackHAD - numTrackHAD_previous );
+  numTrackMeson2 +=
+    ( numTrackMeson - numTrackMeson_previous ) *
+    ( numTrackMeson - numTrackMeson_previous );
+  numTrackBaryon2 +=
+    ( numTrackBaryon - numTrackBaryon_previous ) *
+    ( numTrackBaryon - numTrackBaryon_previous );
+  numTrackMesonLight2 +=
+    ( numTrackMesonLight - numTrackMesonLight_previous ) *
+    ( numTrackMesonLight - numTrackMesonLight_previous );
+  numTrackBaryonLight2 +=
+    ( numTrackBaryonLight - numTrackBaryonLight_previous ) *
+    ( numTrackBaryonLight - numTrackBaryonLight_previous );
+  numTrackMesonStrange2 +=
+    ( numTrackMesonStrange - numTrackMesonStrange_previous ) *
+    ( numTrackMesonStrange - numTrackMesonStrange_previous );
+  numTrackBaryonStrange2 +=
+    ( numTrackBaryonStrange - numTrackBaryonStrange_previous ) *
+    ( numTrackBaryonStrange - numTrackBaryonStrange_previous );
+  numTrackMesonHeavy2 +=
+    ( numTrackMesonHeavy - numTrackMesonHeavy_previous ) *
+    ( numTrackMesonHeavy - numTrackMesonHeavy_previous );
+  numTrackBaryonHeavy2 +=
+    ( numTrackBaryonHeavy - numTrackBaryonHeavy_previous ) *
+    ( numTrackBaryonHeavy - numTrackBaryonHeavy_previous );
+  numTrackElectron2 +=
+    ( numTrackElectron - numTrackElectron_previous ) *
+    ( numTrackElectron - numTrackElectron_previous );
+  numTrackGamma2 +=
+    ( numTrackGamma - numTrackGamma_previous ) *
+    ( numTrackGamma - numTrackGamma_previous );
+  numTrackPositron2 +=
+    ( numTrackPositron - numTrackPositron_previous ) *
+    ( numTrackPositron - numTrackPositron_previous );
+  numTrackMuMinus2 +=
+    ( numTrackMuMinus - numTrackMuMinus_previous ) *
+    ( numTrackMuMinus - numTrackMuMinus_previous );
+  numTrackMuPlus2 +=
+    ( numTrackMuPlus - numTrackMuPlus_previous ) *
+    ( numTrackMuPlus - numTrackMuPlus_previous );
+  numTrackTauMinus2 +=
+    ( numTrackTauMinus - numTrackTauMinus_previous ) *
+    ( numTrackTauMinus - numTrackTauMinus_previous );
+  numTrackTauPlus2 +=
+    ( numTrackTauPlus - numTrackTauPlus_previous ) *
+    ( numTrackTauPlus - numTrackTauPlus_previous );
+  numTrackNeutrino2 +=
+    ( numTrackNeutrino - numTrackNeutrino_previous ) *
+    ( numTrackNeutrino - numTrackNeutrino_previous );
+  numTrackPiPlus2 +=
+    ( numTrackPiPlus - numTrackPiPlus_previous ) *
+    ( numTrackPiPlus - numTrackPiPlus_previous );
+  numTrackPi02 +=
+    ( numTrackPi0 - numTrackPi0_previous ) *
+    ( numTrackPi0 - numTrackPi0_previous );
+  numTrackPiMinus2 +=
+    ( numTrackPiMinus - numTrackPiMinus_previous ) *
+    ( numTrackPiMinus - numTrackPiMinus_previous );
+  numTrackKPlus2 +=
+    ( numTrackKPlus - numTrackKPlus_previous ) *
+    ( numTrackKPlus - numTrackKPlus_previous );
+  numTrackKNeutral2 +=
+    ( numTrackKNeutral - numTrackKNeutral_previous ) *
+    ( numTrackKNeutral - numTrackKNeutral_previous );
+  numTrackKMinus2 +=
+    ( numTrackKMinus - numTrackKMinus_previous ) *
+    ( numTrackKMinus - numTrackKMinus_previous );
+  numTrackProton2 +=
+    ( numTrackProton - numTrackProton_previous ) *
+    ( numTrackProton - numTrackProton_previous );
+  numTrackAntiProton2 +=
+    ( numTrackAntiProton - numTrackAntiProton_previous ) *
+    ( numTrackAntiProton - numTrackAntiProton_previous );
+  numTrackNeutron2 +=
+    ( numTrackNeutron - numTrackNeutron_previous ) *
+    ( numTrackNeutron - numTrackNeutron_previous );
+  numTrackAntiNeutron2 +=
+    ( numTrackAntiNeutron - numTrackAntiNeutron_previous ) *
+    ( numTrackAntiNeutron - numTrackAntiNeutron_previous );
+
+  numTrack_previous = numTrack;
+  numTrackPositive_previous = numTrackPositive;
+  numTrackNeutral_previous = numTrackNeutral;
+  numTrackNegative_previous = numTrackNegative;
+  numTrackPDGCodeZero_previous = numTrackPDGCodeZero;
+  numTrackPDGCodeUnrecognized_previous = numTrackPDGCodeUnrecognized;
+  numTrackEM_previous = numTrackEM;
+  numTrackEWK_previous = numTrackEWK;
+  numTrackHAD_previous = numTrackHAD;
+  numTrackMeson_previous = numTrackMeson;
+  numTrackBaryon_previous = numTrackBaryon;
+  numTrackMesonLight_previous = numTrackMesonLight;
+  numTrackBaryonLight_previous = numTrackBaryonLight;
+  numTrackMesonStrange_previous = numTrackMesonStrange;
+  numTrackBaryonStrange_previous = numTrackBaryonStrange;
+  numTrackMesonHeavy_previous = numTrackMesonHeavy;
+  numTrackBaryonHeavy_previous = numTrackBaryonHeavy;
+  numTrackElectron_previous = numTrackElectron;
+  numTrackGamma_previous = numTrackGamma;
+  numTrackPositron_previous = numTrackPositron;
+  numTrackMuMinus_previous = numTrackMuMinus;
+  numTrackMuPlus_previous = numTrackMuPlus;
+  numTrackTauMinus_previous = numTrackTauMinus;
+  numTrackTauPlus_previous = numTrackTauPlus;
+  numTrackNeutrino_previous = numTrackNeutrino;
+  numTrackPiPlus_previous = numTrackPiPlus;
+  numTrackPi0_previous = numTrackPi0;
+  numTrackPiMinus_previous = numTrackPiMinus;
+  numTrackKPlus_previous = numTrackKPlus;
+  numTrackKNeutral_previous = numTrackKNeutral;
+  numTrackKMinus_previous = numTrackKMinus;
+  numTrackProton_previous = numTrackProton;
+  numTrackAntiProton_previous = numTrackAntiProton;
+  numTrackNeutron_previous = numTrackNeutron;
+  numTrackAntiNeutron_previous = numTrackAntiNeutron;
+
+  static G4double kinEnergyExiting_previous = 0.0;
+  static G4double kinEnergyExitingGammas_previous = 0.0; 
+  static G4double kinEnergyExitingNeutrons_previous = 0.0;
+  static G4double kinEnergyExitingNeutrinos_previous = 0.0;
+  static G4double kinEnergyExitingMuons_previous = 0.0;
+  static G4double kinEnergyExitingElectrons_previous = 0.0;
+  static G4double kinEnergyExitingOthers_previous = 0.0;
+  static G4double numExiting_previous = 0.0;
+  static G4double numExitingGammas_previous = 0.0;
+  static G4double numExitingNeutrons_previous = 0.0;
+  static G4double numExitingNeutrinos_previous = 0.0;
+  static G4double numExitingMuons_previous = 0.0;
+  static G4double numExitingElectrons_previous = 0.0;
+  static G4double numExitingOthers_previous = 0.0;
+  
+  kinEnergyExiting2 += 
+    ( kinEnergyExiting - kinEnergyExiting_previous ) *
+    ( kinEnergyExiting - kinEnergyExiting_previous );
+  kinEnergyExitingGammas2 += 
+    ( kinEnergyExitingGammas - kinEnergyExitingGammas_previous ) *
+    ( kinEnergyExitingGammas - kinEnergyExitingGammas_previous );
+  kinEnergyExitingNeutrons2 += 
+    ( kinEnergyExitingNeutrons - kinEnergyExitingNeutrons_previous ) *
+    ( kinEnergyExitingNeutrons - kinEnergyExitingNeutrons_previous );
+  kinEnergyExitingNeutrinos2 += 
+    ( kinEnergyExitingNeutrinos - kinEnergyExitingNeutrinos_previous ) *
+    ( kinEnergyExitingNeutrinos - kinEnergyExitingNeutrinos_previous );
+  kinEnergyExitingMuons2 += 
+    ( kinEnergyExitingMuons - kinEnergyExitingMuons_previous ) *
+    ( kinEnergyExitingMuons - kinEnergyExitingMuons_previous );
+  kinEnergyExitingElectrons2 += 
+    ( kinEnergyExitingElectrons - kinEnergyExitingElectrons_previous ) *
+    ( kinEnergyExitingElectrons - kinEnergyExitingElectrons_previous );
+  kinEnergyExitingOthers2 += 
+    ( kinEnergyExitingOthers - kinEnergyExitingOthers_previous ) *
+    ( kinEnergyExitingOthers - kinEnergyExitingOthers_previous );
+  numExiting2 += 
+    ( numExiting - numExiting_previous ) *
+    ( numExiting - numExiting_previous );
+  numExitingGammas2 += 
+    ( numExitingGammas - numExitingGammas_previous ) *
+    ( numExitingGammas - numExitingGammas_previous );
+  numExitingNeutrons2 += 
+    ( numExitingNeutrons - numExitingNeutrons_previous ) *
+    ( numExitingNeutrons - numExitingNeutrons_previous );
+  numExitingNeutrinos2 += 
+    ( numExitingNeutrinos - numExitingNeutrinos_previous ) *
+    ( numExitingNeutrinos - numExitingNeutrinos_previous );
+  numExitingMuons2 += 
+    ( numExitingMuons - numExitingMuons_previous ) *
+    ( numExitingMuons - numExitingMuons_previous );
+  numExitingElectrons2 += 
+    ( numExitingElectrons - numExitingElectrons_previous ) *
+    ( numExitingElectrons - numExitingElectrons_previous );
+  numExitingOthers2 += 
+    ( numExitingOthers - numExitingOthers_previous ) *
+    ( numExitingOthers - numExitingOthers_previous );
+
+  kinEnergyExiting_previous = kinEnergyExiting;
+  kinEnergyExitingGammas_previous = kinEnergyExitingGammas;
+  kinEnergyExitingNeutrons_previous =  kinEnergyExitingNeutrons;
+  kinEnergyExitingNeutrinos_previous = kinEnergyExitingNeutrinos;
+  kinEnergyExitingMuons_previous = kinEnergyExitingMuons;
+  kinEnergyExitingElectrons_previous = kinEnergyExitingElectrons;
+  kinEnergyExitingOthers_previous = kinEnergyExitingOthers;
+  numExiting_previous = numExiting;
+  numExitingGammas_previous = numExitingGammas;
+  numExitingNeutrons_previous = numExitingNeutrons;
+  numExitingNeutrinos_previous = numExitingNeutrinos;
+  numExitingMuons_previous = numExitingMuons;
+  numExitingElectrons_previous = numExitingElectrons;
+  numExitingOthers_previous = numExitingOthers;
+
+}
+
 void StatAccepTestAnalysis::finish() {
 
   // Notice that the errors that are calculated here are not the
@@ -1803,7 +2313,9 @@ void StatAccepTestAnalysis::finish() {
   mu_sigma = sigma / std::sqrt( n );
   G4cout << " Average <E> [MeV] deposited in all active layers = " 
          << mu << " +/- " << mu_sigma << G4endl;
-  G4double mu_Evis = mu;  // For later usage.
+  G4double mu_Evis = mu;             // For later usage.
+  G4double mu_Evis_sigma = mu_sigma; //  "    "     "
+
   sum  = sumEdepTot;
   sum2 = sumEdepTot2;
   mu       = sum / n;
@@ -1811,10 +2323,15 @@ void StatAccepTestAnalysis::finish() {
   mu_sigma = sigma / std::sqrt( n );
   G4cout << " Average <E> [MeV] deposited in the whole calorimeter = " 
          << mu << " +/- " << mu_sigma << G4endl;
+
   G4double fractionLongitudinal1stQuarter = 0.0;
   G4double fractionLongitudinal2ndQuarter = 0.0;
   G4double fractionLongitudinal3rdQuarter = 0.0;
   G4double fractionLongitudinal4thQuarter = 0.0;
+  G4double fractionLongitudinal1stQuarter_sigma = 0.0;
+  G4double fractionLongitudinal2ndQuarter_sigma = 0.0;
+  G4double fractionLongitudinal3rdQuarter_sigma = 0.0;
+  G4double fractionLongitudinal4thQuarter_sigma = 0.0;
   G4cout << " Average <E> [MeV] in each Layer " << G4endl; 
   for ( int iLayer = 0; iLayer < numberOfReadoutLayers; iLayer++ ) {
     sum  = sumL[ iLayer ];
@@ -1832,31 +2349,82 @@ void StatAccepTestAnalysis::finish() {
     }
     if ( iLayer < numberOfReadoutLayers/4 ) {
       fractionLongitudinal1stQuarter += mu;
+      fractionLongitudinal1stQuarter_sigma += mu_sigma * mu_sigma;
     } else if ( iLayer < 2*numberOfReadoutLayers/4 ) {
       fractionLongitudinal2ndQuarter += mu;
+      fractionLongitudinal2ndQuarter_sigma += mu_sigma * mu_sigma;
     } else if ( iLayer < 3*numberOfReadoutLayers/4 ) {
       fractionLongitudinal3rdQuarter += mu;
+      fractionLongitudinal3rdQuarter_sigma += mu_sigma * mu_sigma;
     } else {
       fractionLongitudinal4thQuarter += mu;
+      fractionLongitudinal4thQuarter_sigma += mu_sigma * mu_sigma;
     }
   }
   if ( mu_Evis > 1.0E-06 ) {
+    G4cout << "  sumL_1 = " << fractionLongitudinal1stQuarter << " +/- "
+           << std::sqrt( fractionLongitudinal1stQuarter_sigma ) << G4endl
+           << "  sumL_2 = " << fractionLongitudinal2ndQuarter << " +/- "
+           << std::sqrt( fractionLongitudinal2ndQuarter_sigma ) << G4endl
+           << "  sumL_3 = " << fractionLongitudinal3rdQuarter << " +/- "
+           << std::sqrt( fractionLongitudinal3rdQuarter_sigma ) << G4endl
+           << "  sumL_4 = " << fractionLongitudinal4thQuarter << " +/- "
+           << std::sqrt( fractionLongitudinal4thQuarter_sigma ) << G4endl;
+    if ( fractionLongitudinal1stQuarter > 1.0E-06 ) { 
+      fractionLongitudinal1stQuarter_sigma /= 
+	( fractionLongitudinal1stQuarter * fractionLongitudinal1stQuarter );
+    }
     fractionLongitudinal1stQuarter /= mu_Evis;
+    fractionLongitudinal1stQuarter_sigma = fractionLongitudinal1stQuarter *
+      std::sqrt( fractionLongitudinal1stQuarter_sigma +
+		 ( mu_Evis_sigma / mu_Evis ) * ( mu_Evis_sigma / mu_Evis ) );
+
+    if ( fractionLongitudinal2ndQuarter > 1.0E-06 ) { 
+      fractionLongitudinal2ndQuarter_sigma /= 
+	( fractionLongitudinal2ndQuarter * fractionLongitudinal2ndQuarter );
+    }
     fractionLongitudinal2ndQuarter /= mu_Evis;
+    fractionLongitudinal2ndQuarter_sigma = fractionLongitudinal2ndQuarter *
+      std::sqrt( fractionLongitudinal2ndQuarter_sigma +
+		 ( mu_Evis_sigma / mu_Evis ) * ( mu_Evis_sigma / mu_Evis ) );
+
+    if ( fractionLongitudinal3rdQuarter > 1.0E-06 ) { 
+      fractionLongitudinal3rdQuarter_sigma /= 
+	( fractionLongitudinal3rdQuarter * fractionLongitudinal3rdQuarter );
+    }
     fractionLongitudinal3rdQuarter /= mu_Evis;
+    fractionLongitudinal3rdQuarter_sigma = fractionLongitudinal3rdQuarter *
+      std::sqrt( fractionLongitudinal3rdQuarter_sigma +
+		 ( mu_Evis_sigma / mu_Evis ) * ( mu_Evis_sigma / mu_Evis ) );
+
+    if ( fractionLongitudinal4thQuarter > 1.0E-06 ) { 
+      fractionLongitudinal4thQuarter_sigma /= 
+	( fractionLongitudinal4thQuarter * fractionLongitudinal4thQuarter );
+    }
     fractionLongitudinal4thQuarter /= mu_Evis;
+    fractionLongitudinal4thQuarter_sigma = fractionLongitudinal4thQuarter *
+      std::sqrt( fractionLongitudinal4thQuarter_sigma +
+		 ( mu_Evis_sigma / mu_Evis ) * ( mu_Evis_sigma / mu_Evis ) );
   }
   G4cout << " longitudinal fraction in the 1st quarter = "
-         << fractionLongitudinal1stQuarter*100.0 << " %" << std::endl
+         << fractionLongitudinal1stQuarter*100.0 << " +/- "
+         << fractionLongitudinal1stQuarter_sigma*100.0 << " %" << std::endl
 	 << "                              2nd         = "
-         << fractionLongitudinal2ndQuarter*100.0 << " %" << std::endl
+         << fractionLongitudinal2ndQuarter*100.0 << " +/- "
+         << fractionLongitudinal2ndQuarter_sigma*100.0 << " %" << std::endl
 	 << "                              3rd         = "
-         << fractionLongitudinal3rdQuarter*100.0 << " %" << std::endl
+         << fractionLongitudinal3rdQuarter*100.0 << " +/- "
+         << fractionLongitudinal3rdQuarter_sigma*100.0 << " %" << std::endl
 	 << "                              4th         = "
-         << fractionLongitudinal4thQuarter*100.0 << " %" << std::endl;
+         << fractionLongitudinal4thQuarter*100.0 << " +/- "
+         << fractionLongitudinal4thQuarter_sigma*100.0 << " %" << std::endl;
+
   G4double fractionTransverse1stThird = 0.0;
   G4double fractionTransverse2ndThird = 0.0;
   G4double fractionTransverse3rdThird = 0.0;
+  G4double fractionTransverse1stThird_sigma = 0.0;
+  G4double fractionTransverse2ndThird_sigma = 0.0;
+  G4double fractionTransverse3rdThird_sigma = 0.0;
   // // // std::vector< G4double > rmsTransverseProfile;   //***TEMPORARY WORK-AROUND***
   G4cout << " Average <E> [MeV] in each Radius bin " << G4endl; 
   for ( int iBinR = 0; iBinR < numberOfRadiusBins; iBinR++ ) {
@@ -1876,23 +2444,59 @@ void StatAccepTestAnalysis::finish() {
     // // // rmsTransverseProfile.push_back( mu_sigma );   //***TEMPORARY WORK-AROUND***
     if ( iBinR < numberOfRadiusBins/3 ) {
       fractionTransverse1stThird += mu;
+      fractionTransverse1stThird_sigma += mu_sigma * mu_sigma;
     } else if ( iBinR < 2*numberOfRadiusBins/3 ) {
       fractionTransverse2ndThird += mu;
+      fractionTransverse2ndThird_sigma += mu_sigma * mu_sigma;
     } else {
       fractionTransverse3rdThird += mu;
+      fractionTransverse3rdThird_sigma += mu_sigma * mu_sigma;
     }
   }  
   if ( mu_Evis > 1.0E-06 ) {
+    G4cout << "  sumR_1 = " << fractionTransverse1stThird << " +/- "
+           << std::sqrt( fractionTransverse1stThird_sigma ) << G4endl
+           << "  sumR_2 = " << fractionTransverse2ndThird << " +/- "
+           << std::sqrt( fractionTransverse2ndThird_sigma ) << G4endl
+           << "  sumR_3 = " << fractionTransverse3rdThird << " +/- "
+           << std::sqrt( fractionTransverse3rdThird_sigma ) << G4endl;
+    if ( fractionTransverse1stThird > 1.0E-06 ) {
+      fractionTransverse1stThird_sigma /=
+	( fractionTransverse1stThird * fractionTransverse1stThird );
+    } 
     fractionTransverse1stThird /= mu_Evis;
+    fractionTransverse1stThird_sigma = fractionTransverse1stThird *
+      std::sqrt( fractionTransverse1stThird_sigma +  
+		 ( mu_Evis_sigma / mu_Evis ) * ( mu_Evis_sigma / mu_Evis ) );
+
+    if ( fractionTransverse2ndThird > 1.0E-06 ) {
+      fractionTransverse2ndThird_sigma /=
+	( fractionTransverse2ndThird * fractionTransverse2ndThird );
+    } 
     fractionTransverse2ndThird /= mu_Evis;
+    fractionTransverse2ndThird_sigma = fractionTransverse2ndThird *
+      std::sqrt( fractionTransverse2ndThird_sigma +  
+		 ( mu_Evis_sigma / mu_Evis ) * ( mu_Evis_sigma / mu_Evis ) );
+
+    if ( fractionTransverse3rdThird > 1.0E-06 ) {
+      fractionTransverse3rdThird_sigma /=
+	( fractionTransverse3rdThird * fractionTransverse3rdThird );
+    } 
     fractionTransverse3rdThird /= mu_Evis;
+    fractionTransverse3rdThird_sigma = fractionTransverse3rdThird *
+      std::sqrt( fractionTransverse3rdThird_sigma +  
+		 ( mu_Evis_sigma / mu_Evis ) * ( mu_Evis_sigma / mu_Evis ) );
   }
   G4cout << " transverse fraction in the 1st third = "
-         << fractionTransverse1stThird*100.0 << " %" << std::endl
+         << fractionTransverse1stThird*100.0 << " +/- "
+         << fractionTransverse1stThird_sigma*100.0 << " %" << std::endl
 	 << "                            2nd       = "
-         << fractionTransverse2ndThird*100.0 << " %" << std::endl
+         << fractionTransverse2ndThird*100.0 << " +/- " 
+         << fractionTransverse2ndThird_sigma*100.0 << " %" << std::endl
 	 << "                            3rd       = "
-         << fractionTransverse3rdThird*100.0 << " %" << std::endl;
+         << fractionTransverse3rdThird*100.0 << " +/- " 
+         << fractionTransverse3rdThird_sigma*100.0 << " %" << std::endl;
+
   // ***TEMPORARY WORK-AROUND*** in order to set properly the error bars
   // of a weighted histogram, until this possibility will be added 
   // in AIDA::IHistogram1D . But it does not work!
@@ -1928,11 +2532,30 @@ void StatAccepTestAnalysis::finish() {
     width_Evis += std::abs( *cit - mu_Evis );
   }
   width_Evis *= std::sqrt( 3.141592654/2.0 ) / n ;
-  G4cout << " Visible energy information [MeV] " << G4endl; 
-  G4cout << "\t mu_Evis    = " << mu_Evis << G4endl
-         << "\t sigma_Evis = " << width_Evis << G4endl
-         << "\t energy resolution = " << width_Evis/mu_Evis << G4endl
-         << "\t sampling fraction = " << mu_Evis/beamEnergy << G4endl;
+  G4double width_Evis_sigma = width_Evis / std::sqrt( 2.0*(n - 1) );
+  G4double energyResolution = 0.0;
+  G4double energyResolution_sigma = 0.0;
+  G4double samplingFraction = 0.0;
+  G4double samplingFraction_sigma = 0.0;
+  if ( mu_Evis > 1.0E-06) {
+    energyResolution = width_Evis / mu_Evis;
+    if ( width_Evis > 1.0E-06 ) {
+      energyResolution_sigma = energyResolution *
+	std::sqrt( ( width_Evis_sigma * width_Evis_sigma ) / ( width_Evis * width_Evis ) 
+		   +
+		   ( mu_Evis_sigma * mu_Evis_sigma ) / ( mu_Evis + mu_Evis ) );
+    }
+    samplingFraction = mu_Evis / beamEnergy;
+    samplingFraction_sigma = samplingFraction * mu_Evis_sigma / mu_Evis;
+  }
+
+  G4cout << " Visible energy information [MeV] " << G4endl
+	 << "\t mu_Evis    = " << mu_Evis << " +/- " << mu_Evis_sigma << G4endl
+         << "\t sigma_Evis = " << width_Evis << " +/- " << width_Evis_sigma << G4endl
+         << "\t energy resolution = " << energyResolution << " +/- "  
+	 << energyResolution_sigma << G4endl
+         << "\t sampling fraction = " << samplingFraction << " +/- " 
+	 << samplingFraction_sigma << G4endl;
 
   if ( tree ) tree->commit();
 
@@ -1952,8 +2575,10 @@ void StatAccepTestAnalysis::finish() {
 	caseName += "# total";
 	if ( i == 0 ) {
 	  sum = numStep;
+	  sum2 = numStep2;
 	} else {
 	  sum = numTrack;
+	  sum2 = numTrack2;
 	}
 	break;
       }
@@ -1961,8 +2586,10 @@ void StatAccepTestAnalysis::finish() {
 	caseName += "# positives";
 	if ( i == 0 ) {
 	  sum = numStepPositive;
+	  sum2 = numStepPositive2;
 	} else {
 	  sum = numTrackPositive;
+	  sum2 = numTrackPositive2;
 	}
 	break;
       }
@@ -1970,8 +2597,10 @@ void StatAccepTestAnalysis::finish() {
 	caseName += "# neutrals";
 	if ( i == 0 ) {
 	  sum = numStepNeutral;
+	  sum2 = numStepNeutral2;
 	} else {
 	  sum = numTrackNeutral;
+	  sum2 = numTrackNeutral2;
 	}
 	break;
       }
@@ -1979,8 +2608,10 @@ void StatAccepTestAnalysis::finish() {
 	caseName += "# negatives";
 	if ( i == 0 ) {
 	  sum = numStepNegative;
+	  sum2 = numStepNegative2;
 	} else {
 	  sum = numTrackNegative;
+	  sum2 = numTrackNegative2;
 	}
 	break;
       }
@@ -1988,8 +2619,10 @@ void StatAccepTestAnalysis::finish() {
 	caseName += "# particles with 0 PDG code";
 	if ( i == 0 ) {
 	  sum = numStepPDGCodeZero;
+	  sum2 = numStepPDGCodeZero2;
 	} else {
 	  sum = numTrackPDGCodeZero;
+	  sum2 = numTrackPDGCodeZero2;
 	}
 	break;
       }
@@ -1997,17 +2630,21 @@ void StatAccepTestAnalysis::finish() {
 	caseName += "# particles with Unrecognized PDG code";
 	if ( i == 0 ) {
 	  sum = numStepPDGCodeUnrecognized;
+	  sum2 = numStepPDGCodeUnrecognized2;
 	} else {
 	  sum = numTrackPDGCodeUnrecognized;
+	  sum2 = numTrackPDGCodeUnrecognized2;
 	}
 	break;
       }
       case 6 : {
 	caseName += "# electromagnetic (e+ , e- , gammas)";
 	if ( i == 0 ) {
-	  sum = numStepEM ;
+	  sum = numStepEM;
+	  sum2 = numStepEM2;
 	} else {
 	  sum = numTrackEM;
+	  sum2 = numTrackEM2;
 	}
 	break;
       }
@@ -2015,8 +2652,10 @@ void StatAccepTestAnalysis::finish() {
 	caseName += "# electroweak (mu+, mu-, tau+, tau-, neutrinos)";
 	if ( i == 0 ) {
 	  sum = numStepEWK;
+	  sum2 = numStepEWK2;
 	} else {
 	  sum = numTrackEWK;
+	  sum2 = numTrackEWK2;
 	}
 	break;
       }
@@ -2024,8 +2663,10 @@ void StatAccepTestAnalysis::finish() {
 	caseName += "# hadrons";
 	if ( i == 0 ) {
 	  sum = numStepHAD;
+	  sum2 = numStepHAD2;
 	} else {
 	  sum = numTrackHAD;
+	  sum2 = numTrackHAD2;
 	}
 	break;
       }
@@ -2033,8 +2674,10 @@ void StatAccepTestAnalysis::finish() {
 	caseName += "# mesons";
 	if ( i == 0 ) {
 	  sum = numStepMeson;
+	  sum2 = numStepMeson2;
 	} else {
 	  sum = numTrackMeson;
+	  sum2 = numTrackMeson2;
 	}
 	break;
       }
@@ -2042,8 +2685,10 @@ void StatAccepTestAnalysis::finish() {
 	caseName += "# baryons";
 	if ( i == 0 ) {
 	  sum = numStepBaryon;
+	  sum2 = numStepBaryon2;
 	} else {
 	  sum = numTrackBaryon;
+	  sum2 = numTrackBaryon2;
 	}
 	break;
       }
@@ -2051,8 +2696,10 @@ void StatAccepTestAnalysis::finish() {
 	caseName += "# light mesons (u/ubar/d/dbar)";
 	if ( i == 0 ) {
 	  sum = numStepMesonLight;
+	  sum2 = numStepMesonLight2;
 	} else {
 	  sum = numTrackMesonLight;
+	  sum2 = numTrackMesonLight2;
 	}
 	break;
       }
@@ -2060,8 +2707,10 @@ void StatAccepTestAnalysis::finish() {
 	caseName += "# light baryons (u/ubar/d/dbar)";
 	if ( i == 0 ) {
 	  sum = numStepBaryonLight;
+	  sum2 = numStepBaryonLight2;
 	} else {
 	  sum = numTrackBaryonLight;
+	  sum2 = numTrackBaryonLight2;
 	}
 	break;
       }
@@ -2069,8 +2718,10 @@ void StatAccepTestAnalysis::finish() {
 	caseName += "# strange (s/sbar) mesons";
 	if ( i == 0 ) {
 	  sum = numStepMesonStrange;
+	  sum2 = numStepMesonStrange2;
 	} else {
 	  sum = numTrackMesonStrange;
+	  sum2 = numTrackMesonStrange2;
 	}
 	break;
       }
@@ -2078,8 +2729,10 @@ void StatAccepTestAnalysis::finish() {
 	caseName += "# strange (s/sbar) baryons";
 	if ( i == 0 ) {
 	  sum = numStepBaryonStrange;
+	  sum2 = numStepBaryonStrange2;
 	} else {
 	  sum = numTrackBaryonStrange;
+	  sum2 = numTrackBaryonStrange2;
 	}
 	break;
       }
@@ -2087,8 +2740,10 @@ void StatAccepTestAnalysis::finish() {
 	caseName += "# heavy (c/cbar or b/bbar) mesons";
 	if ( i == 0 ) {
 	  sum = numStepMesonHeavy;
+	  sum2 = numStepMesonHeavy2;
 	} else {
 	  sum = numTrackMesonHeavy;
+	  sum2 = numTrackMesonHeavy2;
 	}
 	break;
       }
@@ -2096,8 +2751,10 @@ void StatAccepTestAnalysis::finish() {
 	caseName += "# heavy (c/cbar or b/bbar) baryons";
 	if ( i == 0 ) {
 	  sum = numStepBaryonHeavy;
+	  sum2 = numStepBaryonHeavy2;
 	} else {
 	  sum = numTrackBaryonHeavy;
+	  sum2 = numTrackBaryonHeavy2;
 	}
 	break;
       }
@@ -2105,8 +2762,10 @@ void StatAccepTestAnalysis::finish() {
 	caseName += "# electrons";
 	if ( i == 0 ) {
 	  sum = numStepElectron;
+	  sum2 = numStepElectron2;
 	} else {
 	  sum = numTrackElectron;
+	  sum2 = numTrackElectron2;
 	}
 	break;
       }
@@ -2114,8 +2773,10 @@ void StatAccepTestAnalysis::finish() {
 	caseName += "# gammas";
 	if ( i == 0 ) {
 	  sum = numStepGamma;
+	  sum2 = numStepGamma2;
 	} else {
 	  sum = numTrackGamma;
+	  sum2 = numTrackGamma2;
 	}
 	break;
       }
@@ -2123,8 +2784,10 @@ void StatAccepTestAnalysis::finish() {
 	caseName += "# positrons";
 	if ( i == 0 ) {
 	  sum = numStepPositron;
+	  sum2 = numStepPositron2;
 	} else {
 	  sum = numTrackPositron;
+	  sum2 = numTrackPositron2;
 	}
 	break;
       }
@@ -2132,8 +2795,10 @@ void StatAccepTestAnalysis::finish() {
 	caseName += "# mu-";
 	if ( i == 0 ) {
 	  sum = numStepMuMinus;
+	  sum2 = numStepMuMinus2;
 	} else {
 	  sum = numTrackMuMinus;
+	  sum2 = numTrackMuMinus2;
 	}
 	break;
       }
@@ -2141,8 +2806,10 @@ void StatAccepTestAnalysis::finish() {
 	caseName += "# mu+";
 	if ( i == 0 ) {
 	  sum = numStepMuPlus;
+	  sum2 = numStepMuPlus2;
 	} else {
 	  sum = numTrackMuPlus;
+	  sum2 = numTrackMuPlus2;
 	}
 	break;
       }
@@ -2150,8 +2817,10 @@ void StatAccepTestAnalysis::finish() {
 	caseName += "# tau-";
 	if ( i == 0 ) {
 	  sum = numStepTauMinus;
+	  sum2 = numStepTauMinus2;
 	} else {
 	  sum = numTrackTauMinus;
+	  sum2 = numTrackTauMinus2;
 	}
 	break;
       }
@@ -2159,8 +2828,10 @@ void StatAccepTestAnalysis::finish() {
 	caseName += "# tau+";
 	if ( i == 0 ) {
 	  sum = numStepTauPlus;
+	  sum2 = numStepTauPlus2;
 	} else {
 	  sum = numTrackTauPlus;
+	  sum2 = numTrackTauPlus2;
 	}
 	break;
       }
@@ -2168,8 +2839,10 @@ void StatAccepTestAnalysis::finish() {
 	caseName += "# neutrinos";
 	if ( i == 0 ) {
 	  sum = numStepNeutrino;
+	  sum2 = numStepNeutrino2;
 	} else {
 	  sum = numTrackNeutrino;
+	  sum2 = numTrackNeutrino2;
 	}
 	break;
       }
@@ -2177,8 +2850,10 @@ void StatAccepTestAnalysis::finish() {
 	caseName += "# pi+";
 	if ( i == 0 ) {
 	  sum = numStepPiPlus;
+	  sum2 = numStepPiPlus2;
 	} else {
 	  sum = numTrackPiPlus;
+	  sum2 = numTrackPiPlus2;
 	}
 	break;
       }
@@ -2186,8 +2861,10 @@ void StatAccepTestAnalysis::finish() {
 	caseName += "# pi0";
 	if ( i == 0 ) {
 	  sum = numStepPi0;
+	  sum2 = numStepPi02;
 	} else {
 	  sum = numTrackPi0;
+	  sum2 = numTrackPi02;
 	}
 	break;
       }
@@ -2195,8 +2872,10 @@ void StatAccepTestAnalysis::finish() {
 	caseName += "# pi-";
 	if ( i == 0 ) {
 	  sum = numStepPiMinus;
+	  sum2 = numStepPiMinus2;
 	} else {
 	  sum = numTrackPiMinus;
+	  sum2 = numTrackPiMinus2;
 	}
 	break;
       }
@@ -2204,8 +2883,10 @@ void StatAccepTestAnalysis::finish() {
 	caseName += "# K+";
 	if ( i == 0 ) {
 	  sum = numStepKPlus;
+	  sum2 = numStepKPlus2;
 	} else {
 	  sum = numTrackKPlus;
+	  sum2 = numTrackKPlus2;
 	}
 	break;
       }
@@ -2213,8 +2894,10 @@ void StatAccepTestAnalysis::finish() {
 	caseName += "# K-neutral (K0/K0bar or K0_S/K0_L)";
 	if ( i == 0 ) {
 	  sum = numStepKNeutral;
+	  sum2 = numStepKNeutral2;
 	} else {
 	  sum = numTrackKNeutral;
+	  sum2 = numTrackKNeutral2;
 	}
 	break;
       }
@@ -2222,8 +2905,10 @@ void StatAccepTestAnalysis::finish() {
 	caseName += "# K-";
 	if ( i == 0 ) {
 	  sum = numStepKMinus;
+	  sum2 = numStepKMinus2;
 	} else {
 	  sum = numTrackKMinus;
+	  sum2 = numTrackKMinus2;
 	}
 	break;
       }
@@ -2231,8 +2916,10 @@ void StatAccepTestAnalysis::finish() {
 	caseName += "# protons";
 	if ( i == 0 ) {
 	  sum = numStepProton;
+	  sum2 = numStepProton2;
 	} else {
 	  sum = numTrackProton;
+	  sum2 = numTrackProton2;
 	}
 	break;
       }
@@ -2240,8 +2927,10 @@ void StatAccepTestAnalysis::finish() {
 	caseName += "# anti-protons";
 	if ( i == 0 ) {
 	  sum = numStepAntiProton;
+	  sum2 = numStepAntiProton2;
 	} else {
 	  sum = numTrackAntiProton;
+	  sum2 = numTrackAntiProton2;
 	}
 	break;
       }
@@ -2249,8 +2938,10 @@ void StatAccepTestAnalysis::finish() {
 	caseName += "# neutrons";
 	if ( i == 0 ) {
 	  sum = numStepNeutron;
+	  sum2 = numStepNeutron2;
 	} else {
 	  sum = numTrackNeutron;
+	  sum2 = numTrackNeutron2;
 	}
 	break;
       }
@@ -2258,8 +2949,10 @@ void StatAccepTestAnalysis::finish() {
 	caseName += "# anti-neutrons";
 	if ( i == 0 ) {
 	  sum = numStepAntiNeutron;
+	  sum2 = numStepAntiNeutron2;
 	} else {
 	  sum = numTrackAntiNeutron;
+	  sum2 = numTrackAntiNeutron2;
 	}
 	break;
       }
@@ -2270,132 +2963,378 @@ void StatAccepTestAnalysis::finish() {
 	  break;
 	}
       }
-      mu       = sum / n;
-      mu_sigma = std::sqrt( sum ) / n;
+      mu = sum / n;
+      sigma = std::sqrt( std::abs( ( sum2 - sum*sum/n ) ) / (n - 1.0) );
+      mu_sigma = sigma / std::sqrt( n );
       G4cout << "\t" << caseName << " = " << mu  
 	     << " +/- " << mu_sigma << G4endl;
     }
   }
 
   // Print information about track length:
-  if ( numTrackElectron + numTrackPositron > 0.0 ) {
-    electronTrackLength /= ( numTrackElectron + numTrackPositron );
+  G4cout << G4endl << " Average track LENGTH [mm] " << G4endl;
+  G4double nn = 0.0;
+  for ( int iCase = 0; iCase < 7; iCase++ ) {
+    if ( iCase == 1  ||  iCase == 5 ) continue; // Exclude muons and pi0s
+    std::string caseName;
+    switch ( iCase ) {
+    case 0 : {
+      nn = numTrackElectron + numTrackPositron;
+      sum  = electronTrackLength;
+      sum2 = electronTrackLength2; 
+      caseName = "electron/positron";
+      break;
+    }
+    case 1 : {
+      nn = numTrackMuMinus + numTrackMuPlus;
+      sum  = muonTrackLength;
+      sum2 = muonTrackLength2; 
+      caseName = "muon-/muon+";
+      break;
+    }
+    case 2 : {
+      nn = numTrackPiPlus + numTrackPiMinus;
+      sum  = pionChargedTrackLength;
+      sum2 = pionChargedTrackLength2; 
+      caseName = "pion-/pion+";
+      break;
+    }
+    case 3 : {
+      nn = numTrackProton;
+      sum  = protonTrackLength;
+      sum2 = protonTrackLength2; 
+      caseName = "proton";
+      break;
+    }
+    case 4 : {
+      nn = numTrackGamma;
+      sum  = gammaTrackLength;
+      sum2 = gammaTrackLength2; 
+      caseName = "gamma";
+      break;
+    }
+    case 5 : {
+      nn = numTrackPi0;
+      sum  = pion0TrackLength;
+      sum2 = pion0TrackLength2; 
+      caseName = "pion0";
+      break;
+    }
+    case 6 : {
+      nn = numTrackNeutron;
+      sum  = neutronTrackLength;
+      sum2 = neutronTrackLength2; 
+      caseName = "neutron";
+      break;
+    }
+    }
+    mu = mu_sigma = 0.0;
+    if ( nn > 0.0 ) {
+      mu = sum / nn;
+      if ( nn <= 1.0 ) nn = 2.0;
+      sigma = std::sqrt( std::abs( ( sum2 - sum*sum/nn ) ) / (nn - 1.0) );
+      mu_sigma = sigma / std::sqrt( nn );
+    }
+    G4cout << "\t" << caseName << " : " << mu << " +/- " << mu_sigma << G4endl;
   }
-  if ( numTrackMuMinus + numTrackMuPlus > 0.0 ) {
-    muonTrackLength /= ( numTrackMuMinus + numTrackMuPlus );
-  }
-  if ( numTrackPiPlus + numTrackPiMinus > 0.0 ) {
-    pionChargedTrackLength /= ( numTrackPiPlus + numTrackPiMinus );
-  }
-  if ( numTrackProton > 0.0 ) {
-    protonTrackLength /= numTrackProton;
-  }
-  if ( numTrackGamma > 0 ) {
-    gammaTrackLength /= numTrackGamma;
-  }
-  if ( numTrackPi0 > 0 ) {
-    pion0TrackLength /= numTrackPi0;
-  }
-  if ( numTrackNeutron > 0 ) {
-    neutronTrackLength /= numTrackNeutron;
-  }
-  G4cout << G4endl << " Average track LENGTH [mm] " << G4endl
-         << "\t electron/positron  : " << electronTrackLength << std::endl
-    //     << "\t muon-/muon+        : " << muonTrackLength << std::endl
-         << "\t pion-/pion+        : " << pionChargedTrackLength << std::endl
-         << "\t proton             : " << protonTrackLength << std::endl
-         << "\t gamma              : " << gammaTrackLength << std::endl
-    //     << "\t pion0              : " << pion0TrackLength << std::endl
-	 << "\t neutron            : " << neutronTrackLength << std::endl;
 
   // Print information about step length and number of steps
-  G4cout << G4endl << " Average step LENGTH [mm] and number of steps " << G4endl;
-  G4double averageNumberOfSteps = 1.0;
-  if ( numTrackElectron + numTrackPositron > 0.0 ) {
-    averageNumberOfSteps = 
-      ( numStepElectron + numStepPositron ) /
-      ( numTrackElectron + numTrackPositron );
-    G4cout << "\t electron/positron  : " 
-	   << electronTrackLength / averageNumberOfSteps 
-	   << "\t numSteps = " << averageNumberOfSteps << G4endl;
+  G4cout << G4endl << " Average numer of steps and step LENGTH [mm]" << G4endl;
+  for ( int iCase = 0; iCase < 7; iCase++ ) {
+    if ( iCase == 1  ||  iCase == 5 ) continue; // Exclude muons and pi0s
+    std::string caseName;
+    G4double numerator_a = 0.0;
+    G4double numerator_b = 0.0;
+    G4double numerator_a2 = 0.0;
+    G4double numerator_b2 = 0.0;
+    G4double denominator_a = 0.0;
+    G4double denominator_b = 0.0;
+    G4double denominator_a2 = 0.0;
+    G4double denominator_b2 = 0.0;
+    G4double trackLength = 0.0;
+    G4double trackLength2 = 0.0;
+    switch ( iCase ) {
+    case 0 : {
+      numerator_a = numStepElectron;
+      numerator_b = numStepPositron;
+      denominator_a = numTrackElectron;
+      denominator_b = numTrackPositron;
+      numerator_a2 = numStepElectron2;
+      numerator_b2 = numStepPositron2;
+      denominator_a2 = numTrackElectron2;
+      denominator_b2 = numTrackPositron2;
+      trackLength = electronTrackLength;
+      trackLength2 = electronTrackLength2;
+      caseName = "electron/positron";
+      break;
+    }
+    case 1 : {
+      numerator_a = numStepMuMinus;
+      numerator_b = numStepMuPlus;
+      denominator_a = numTrackMuMinus;
+      denominator_b = numTrackMuPlus;
+      numerator_a2 = numStepMuMinus2;
+      numerator_b2 = numStepMuPlus2;
+      denominator_a2 = numTrackMuMinus2;
+      denominator_b2 = numTrackMuPlus2;
+      trackLength = muonTrackLength;
+      trackLength2 = muonTrackLength2;
+      caseName = "muon-/muon+";
+     break;
+    }
+    case 2 : {
+      numerator_a = numStepPiMinus;
+      numerator_b = numStepPiPlus;
+      denominator_a = numTrackPiMinus;
+      denominator_b = numTrackPiPlus;
+      numerator_a2 = numStepPiMinus2;
+      numerator_b2 = numStepPiPlus2;
+      denominator_a2 = numTrackPiMinus2;
+      denominator_b2 = numTrackPiPlus2;
+      trackLength = pionChargedTrackLength;
+      trackLength2 = pionChargedTrackLength2;
+      caseName = "pion-/pion+";
+      break;
+    }
+    case 3 : {
+      numerator_a = numStepProton;
+      numerator_b = 0.0;
+      denominator_a = numTrackProton;
+      denominator_b = 0.0;
+      numerator_a2 = numStepProton2;
+      numerator_b2 = 0.0;
+      denominator_a2 = numTrackProton2;
+      denominator_b2 = 0.0;
+      trackLength = protonTrackLength;
+      trackLength2 = protonTrackLength2;
+      caseName = "proton";
+      break;
+    }
+    case 4 : {
+      numerator_a = numStepGamma;
+      numerator_b = 0.0;
+      denominator_a = numTrackGamma;
+      denominator_b = 0.0;
+      numerator_a2 = numStepGamma2;
+      numerator_b2 = 0.0;
+      denominator_a2 = numTrackGamma2;
+      denominator_b2 = 0.0;
+      trackLength = gammaTrackLength;
+      trackLength2 = gammaTrackLength2;
+      caseName = "gamma";
+      break;
+    }
+    case 5 : {
+      numerator_a = numStepPi0;
+      numerator_b = 0.0;
+      denominator_a = numTrackPi0;
+      denominator_b = 0.0;
+      numerator_a2 = numStepPi02;
+      numerator_b2 = 0.0;
+      denominator_a2 = numTrackPi02;
+      denominator_b2 = 0.0;
+      trackLength = pion0TrackLength;
+      trackLength2 = pion0TrackLength2;
+      caseName = "pion0";
+      break;
+    }
+    case 6 : {
+      numerator_a = numStepNeutron;
+      numerator_b = 0.0;
+      denominator_a = numTrackNeutron;
+      denominator_b = 0.0;
+      numerator_a2 = numStepNeutron2;
+      numerator_b2 = 0.0;
+      denominator_a2 = numTrackNeutron2;
+      denominator_b2 = 0.0;
+      trackLength = neutronTrackLength;
+      trackLength2 = neutronTrackLength2;
+      caseName = "neutron";
+      break;
+    }
+    }
+    G4double sigma2_numerator_a = 
+      ( std::abs( ( numerator_a2 - numerator_a*numerator_a/n ) ) / (n - 1.0) ) / n ;
+    G4double sigma2_numerator_b = 
+      ( std::abs( ( numerator_b2 - numerator_b*numerator_b/n ) ) / (n - 1.0) ) / n ;
+    G4double sigma2_denominator_a = 
+      ( std::abs( ( denominator_a2 - denominator_a*denominator_a/n ) ) / (n - 1.0) ) / n;
+    G4double sigma2_denominator_b = 
+      ( std::abs( ( denominator_b2 - denominator_b*denominator_b/n ) ) / (n - 1.0) ) / n;
+    numerator_a /= n;
+    numerator_b /= n;
+    nn = denominator_a + denominator_b;
+    if ( nn <= 1.0 ) nn = 2;
+    denominator_a /= n;
+    denominator_b /= n;
+    G4double mu_numSteps = 0.0;
+    G4double mu_numSteps_sigma = 0.0;
+    if ( ( denominator_a + denominator_b ) > 0.0 ) {
+      mu_numSteps = ( numerator_a + numerator_b ) / ( denominator_a + denominator_b );
+      if ( ( numerator_a + numerator_b ) > 0.0 ) {
+	mu_numSteps_sigma = mu_numSteps * 
+	  std::sqrt( ( sigma2_numerator_a + sigma2_numerator_b ) / 
+		     ( ( numerator_a + numerator_b ) * 
+		       ( numerator_a + numerator_b ) )
+		     +
+		     ( sigma2_denominator_a + sigma2_denominator_b ) / 
+		     ( ( denominator_a + denominator_b ) * 
+		       ( denominator_a + denominator_b ) ) );
+      }
+    }
+    G4cout << "\t" << caseName << " : numSteps = " 
+	   << mu_numSteps << " +/- " << mu_numSteps_sigma << G4endl;
+
+    G4double sigma2_trackLength =  
+      ( std::abs( ( trackLength2 - trackLength*trackLength/nn ) ) / (nn - 1.0) ) / nn;
+    trackLength /= nn;
+    G4double mu_stepLength = 0.0;
+    G4double mu_stepLength_sigma = 0.0;
+    if ( mu_numSteps > 0.0 ) {
+      mu_stepLength = trackLength / mu_numSteps;
+      mu_stepLength_sigma = mu_stepLength * 
+	std::sqrt( sigma2_trackLength / 
+		   ( trackLength * trackLength ) 
+		   +
+		   ( mu_numSteps_sigma * mu_numSteps_sigma ) / 
+		   ( mu_numSteps * mu_numSteps ) );
+    }
+    G4cout << "\t \t stepLength = " << mu_stepLength << " +/- " 
+	   << mu_stepLength_sigma << G4endl;
   }
-  if ( numTrackMuMinus + numTrackMuPlus > 0.0 ) {
-    averageNumberOfSteps = 
-      ( numStepMuMinus + numStepMuPlus ) /
-      ( numTrackMuMinus + numTrackMuPlus );
-    //G4cout << "\t muon-/muon+        : " 
-    //       << muonTrackLength / averageNumberOfSteps 
-    //	     << "\t numSteps = " << averageNumberOfSteps << G4endl;
-  }
-  if ( numTrackPiPlus + numTrackPiMinus > 0.0 ) {
-    averageNumberOfSteps =
-      ( numStepPiMinus + numStepPiPlus ) /
-      ( numTrackPiMinus + numTrackPiPlus );
-    G4cout << "\t pion-/pion+        : " 
-	   << pionChargedTrackLength / averageNumberOfSteps 
-	   << "\t numSteps = " << averageNumberOfSteps << G4endl;
-  }
-  if ( numTrackProton > 0.0 ) {
-    averageNumberOfSteps = numStepProton / numTrackProton;
-    G4cout << "\t proton             : "
-	   << protonTrackLength / averageNumberOfSteps 
-	   << "\t numSteps = " << averageNumberOfSteps << G4endl;
-  }
-  if ( numTrackGamma > 0.0 ) {
-    averageNumberOfSteps = numStepGamma / numTrackGamma;
-    G4cout << "\t gamma              : " 
-	   << gammaTrackLength / averageNumberOfSteps 
-	   << "\t numSteps = " << averageNumberOfSteps << G4endl;
-  }
-  if ( numTrackPi0 > 0.0 ) {
-    averageNumberOfSteps = numStepPi0 / numTrackPi0;
-    //G4cout << "\t pion0              : " 
-    //	     << pion0TrackLength / averageNumberOfSteps 
-    //	     << "\t numSteps = " << averageNumberOfSteps << G4endl;
-  }
-  if ( numTrackNeutron > 0.0 ) {
-    averageNumberOfSteps = numStepNeutron / numTrackNeutron;
-    G4cout << "\t neutron            : " 
-	   << neutronTrackLength / averageNumberOfSteps 
-	   << "\t numSteps = " << averageNumberOfSteps << G4endl;
-  } 
 
   // Print information about exiting kinetic energy.
+  sum  = kinEnergyExiting; 
+  sum2 = kinEnergyExiting2;
+  mu = sum / n;
+  sigma = std::sqrt( std::abs( ( sum2 - sum*sum/n ) ) / (n - 1.0) );
+  mu_sigma = sigma / std::sqrt( n );
   G4cout << G4endl << " Average exiting Kinetic Energy = " 
-         << kinEnergyExiting / n << " MeV " << G4endl;
-  if ( kinEnergyExiting > 1.0E-06 ) {
-    G4cout << "\t fraction due to Gammas      = " 
-	   << 100.0 * kinEnergyExitingGammas / kinEnergyExiting << " %" << G4endl
-	   << "\t fraction due to Neutrons    = " 
-	   << 100.0 * kinEnergyExitingNeutrons / kinEnergyExiting << " %" << G4endl
-	   << "\t fraction due to Neutrinos   = " 
-	   << 100.0 * kinEnergyExitingNeutrinos / kinEnergyExiting << " %" << G4endl
-	   << "\t fraction due to Muons       = " 
-	   << 100.0 * kinEnergyExitingMuons / kinEnergyExiting << " %" << G4endl
-	   << "\t fraction due to e- and e+   = " 
-	   << 100.0 * kinEnergyExitingElectrons / kinEnergyExiting << " %" << G4endl
-	   << "\t fraction due to Others      = " 
-	   << 100.0 * kinEnergyExitingOthers / kinEnergyExiting << " %" << G4endl
-           << "\t number of exiting particles = " 
-           << numExiting / n << G4endl
-           << "\t number of exiting Gammas    = " 
-           << numExitingGammas / n 
-           << " (" << 100.0 * numExitingGammas / numExiting << " %)" << G4endl
-           << "\t number of exiting Neutrons  = " 
-           << numExitingNeutrons / n 
-           << " (" << 100.0 * numExitingNeutrons / numExiting << " %)" << G4endl
-           << "\t number of exiting Neutrinos = " 
-           << numExitingNeutrinos / n
-           << " (" << 100.0 * numExitingNeutrinos / numExiting << " %)" << G4endl
-           << "\t number of exiting Muons     = " 
-           << numExitingMuons / n 
-           << " (" << 100.0 * numExitingMuons / numExiting << " %)" << G4endl
-           << "\t number of exiting e- and e+ = " 
-           << numExitingElectrons / n 
-           << " (" << 100.0 * numExitingElectrons / numExiting << " %)" << G4endl
-           << "\t number of exiting Others    = " 
-           << numExitingOthers / n 
-           << " (" << 100.0 * numExitingOthers / numExiting << " %)" << G4endl;
+         << mu << " +/- " << mu_sigma << " MeV " << G4endl;
+  if ( mu > 1.0E-06 ) {
+    G4double mu_tot = mu;
+    G4double mu_tot_sigma = mu_sigma;
+    for ( int iCase = 0; iCase < 6; iCase++ ) {
+      std::string caseName;
+      switch ( iCase ) {
+      case 0 : {
+	sum  = kinEnergyExitingGammas; 
+	sum2 = kinEnergyExitingGammas2; 
+        caseName = "Gammas";
+	break;
+      }
+      case 1 : {
+	sum  = kinEnergyExitingNeutrons; 
+	sum2 = kinEnergyExitingNeutrons2; 
+        caseName = "Neutrons";
+	break;
+      }
+      case 2 : {
+	sum  = kinEnergyExitingNeutrinos; 
+	sum2 = kinEnergyExitingNeutrinos2; 
+        caseName = "Neutrinos";
+	break;
+      }
+      case 3 : {
+	sum  = kinEnergyExitingMuons; 
+	sum2 = kinEnergyExitingMuons2; 
+        caseName = "Muons";
+	break;
+      }
+      case 4 : {
+	sum  = kinEnergyExitingElectrons; 
+	sum2 = kinEnergyExitingElectrons2; 
+        caseName = "Electrons";
+	break;
+      }
+      case 5 : {
+	sum  = kinEnergyExitingOthers; 
+	sum2 = kinEnergyExitingOthers2; 
+        caseName = "Others";
+	break;
+      }
+      }
+      mu = sum / n;
+      sigma = std::sqrt( std::abs( ( sum2 - sum*sum/n ) ) / (n - 1.0) );
+      mu_sigma = sigma / std::sqrt( n );
+      G4double ratio = mu / mu_tot ;
+      G4double ratio_sigma = 0.0;
+      if ( mu > 1.0E-06 ) {
+	ratio_sigma = ratio * 
+	  std::sqrt( ( mu_sigma / mu ) * ( mu_sigma / mu ) +
+		     ( mu_tot_sigma / mu_tot ) * ( mu_tot_sigma / mu_tot ) );
+      }
+      G4cout << "\t fraction due to " << caseName << " = " 
+	     << 100.0 * ratio << " +/- " << 100.0 * ratio_sigma << " %" << G4endl;
+    }
+
+    sum  = numExiting;
+    sum2 = numExiting2;
+    mu = sum / n;
+    sigma = std::sqrt( std::abs( ( sum2 - sum*sum/n ) ) / (n - 1.0) );
+    mu_sigma = sigma / std::sqrt( n );
+    G4cout << "\t number of exiting particles = " 
+	   << mu << " +/- " << mu_sigma << G4endl;
+    if ( mu > 1.0E-06 ) {
+      mu_tot = mu;
+      mu_tot_sigma = mu_sigma;
+      for ( int iCase = 0; iCase < 6; iCase++ ) {
+	std::string caseName;
+	switch ( iCase ) {
+	case 0 : {
+	  sum  = numExitingGammas; 
+	  sum2 = numExitingGammas2; 
+	  caseName = "Gammas";
+	  break;
+	}
+	case 1 : {
+	  sum  = numExitingNeutrons; 
+	  sum2 = numExitingNeutrons2; 
+	  caseName = "Neutrons";
+	  break;
+	}
+	case 2 : {
+	  sum  = numExitingNeutrinos; 
+	  sum2 = numExitingNeutrinos2; 
+	  caseName = "Neutrinos";
+	  break;
+	}
+	case 3 : {
+	  sum  = numExitingMuons; 
+	  sum2 = numExitingMuons2; 
+	  caseName = "Muons";
+	  break;
+	}
+	case 4 : {
+	  sum  = numExitingElectrons; 
+	  sum2 = numExitingElectrons2; 
+	  caseName = "Electrons";
+	  break;
+	}
+	case 5 : {
+	  sum  = numExitingOthers; 
+	  sum2 = numExitingOthers2; 
+	  caseName = "Others";
+	  break;
+	}
+	}
+	mu = sum / n;
+	sigma = std::sqrt( std::abs( ( sum2 - sum*sum/n ) ) / (n - 1.0) );
+	mu_sigma = sigma / std::sqrt( n );
+	G4double ratio = mu / mu_tot ;
+	G4double ratio_sigma = 0.0;
+	if ( mu > 1.0E-06 ) {
+	  ratio_sigma = ratio * 
+	    std::sqrt( ( mu_sigma / mu ) * ( mu_sigma / mu ) +
+		       ( mu_tot_sigma / mu_tot ) * ( mu_tot_sigma / mu_tot ) );
+	}
+	G4cout << "\t number of exiting " << caseName << " = " 
+	       << mu << " +/- " << mu_sigma << "  ("
+	       << 100.0 * ratio 
+	//     << " +/- " << 100.0 * ratio_sigma 
+	       << " %)" << G4endl;
+      }
+    }
   }
 
 }

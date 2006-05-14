@@ -92,6 +92,7 @@ void StatAccepTestEventAction::EndOfEventAction(const G4Event* evt){
 			  incidentParticleEnergy / MeV,
 			  energyDepositedInActiveCalorimeterLayer / MeV,
 			  totalEdepAllParticles / MeV );
+    analysis->endOfEvent();
   }
 
   // Now print out the information.

@@ -69,6 +69,11 @@ public:
   // Notice that the kinetic energy is defined negative when the particle 
   // is going backward with respect to the beam direction.
 
+  void endOfEvent();
+  // Inform that the event if finished: this is useful to calculate
+  // properly the statistical error of the quantities defined per
+  // event.
+
 private:
   
   StatAccepTestAnalysis();
@@ -218,7 +223,12 @@ private:
   AIDA::IHistogram1D* pionMinusSpectrumWeighted4[10];
   AIDA::IHistogram1D* pionMinusSpectrumWeighted5[10];
 
-  // Keep the count of the number of steps and tracks.
+  // Keep the count of the total number of steps and tracks,
+  // for all events (so at the end it is necessary to divide
+  // by the number of events). 
+  // To evaluate the statistical errors, we keep also the sum
+  // of the square of the total number of steps and tracks 
+  // per event.
   // We use doubles instead of integers to avoid overflow problems.
   G4double numStep;
   G4double numStepPositive, numStepNeutral, numStepNegative;
@@ -241,6 +251,27 @@ private:
   G4double numStepProton, numStepAntiProton;
   G4double numStepNeutron, numStepAntiNeutron;
 
+  G4double numStep2;
+  G4double numStepPositive2, numStepNeutral2, numStepNegative2;
+  G4double numStepPDGCodeZero2, numStepPDGCodeUnrecognized2;
+  G4double numStepEM2;             
+  G4double numStepEWK2;            
+  G4double numStepHAD2;            
+  G4double numStepMeson2, numStepBaryon2;     
+  G4double numStepMesonLight2, numStepBaryonLight2;
+  G4double numStepMesonStrange2, numStepBaryonStrange2;
+  G4double numStepMesonHeavy2, numStepBaryonHeavy2;
+  G4double numStepElectron2, numStepGamma2, numStepPositron2;
+  G4double numStepMuMinus2, numStepMuPlus2;
+  G4double numStepTauMinus2, numStepTauPlus2;
+  G4double numStepNeutrino2;
+  G4double numStepPiPlus2, numStepPi02, numStepPiMinus2;
+  G4double numStepKPlus2;
+  G4double numStepKNeutral2;
+  G4double numStepKMinus2;
+  G4double numStepProton2, numStepAntiProton2;
+  G4double numStepNeutron2, numStepAntiNeutron2;
+
   G4double numTrack;
   G4double numTrackPositive, numTrackNeutral, numTrackNegative;
   G4double numTrackPDGCodeZero, numTrackPDGCodeUnrecognized;
@@ -262,7 +293,33 @@ private:
   G4double numTrackProton, numTrackAntiProton;
   G4double numTrackNeutron, numTrackAntiNeutron;
 
+  G4double numTrack2;
+  G4double numTrackPositive2, numTrackNeutral2, numTrackNegative2;
+  G4double numTrackPDGCodeZero2, numTrackPDGCodeUnrecognized2;
+  G4double numTrackEM2;
+  G4double numTrackEWK2;
+  G4double numTrackHAD2;
+  G4double numTrackMeson2, numTrackBaryon2;     
+  G4double numTrackMesonLight2, numTrackBaryonLight2;
+  G4double numTrackMesonStrange2, numTrackBaryonStrange2;
+  G4double numTrackMesonHeavy2, numTrackBaryonHeavy2;
+  G4double numTrackElectron2, numTrackGamma2, numTrackPositron2;
+  G4double numTrackMuMinus2, numTrackMuPlus2;
+  G4double numTrackTauMinus2, numTrackTauPlus2;
+  G4double numTrackNeutrino2;
+  G4double numTrackPiPlus2, numTrackPi02, numTrackPiMinus2;
+  G4double numTrackKPlus2;
+  G4double numTrackKNeutral2;
+  G4double numTrackKMinus2;
+  G4double numTrackProton2, numTrackAntiProton2;
+  G4double numTrackNeutron2, numTrackAntiNeutron2;
+
   // Count the track length of some particles.
+  // These variables keep the sum over all tracks of all events
+  // (so at the end we have to divide by the total number of
+  //  tracks in all events).
+  // To compute the statistical uncertainty, we keep also the sum
+  // of the squares.
   // To avoid bias in the track length due to the big world volume
   // (which can affect significantly the track length of neutrons)
   // we consider only those tracks that are fully contained inside
@@ -275,7 +332,19 @@ private:
   G4double pion0TrackLength;         // pi0       
   G4double neutronTrackLength;       // neutron (not anti_neutron)
 
+  G4double electronTrackLength2;
+  G4double muonTrackLength2;     
+  G4double pionChargedTrackLength2;
+  G4double protonTrackLength2;     
+  G4double gammaTrackLength2;      
+  G4double pion0TrackLength2;      
+  G4double neutronTrackLength2;    
+
   // Monitor the kinetic energy of particles exiting the calorimeter.
+  // These variables keep the sum over all events (so at the end
+  // we have to divide by the number of events).
+  // To evaluate the statistical errors, we keep also the sum
+  // of the squares, event by event.
   G4double kinEnergyExiting;          // total
   G4double kinEnergyExitingGammas;    // due only to gammas
   G4double kinEnergyExitingNeutrons;  // due only to neutrons
@@ -290,6 +359,21 @@ private:
   G4double numExitingMuons;           // number of exiting muons
   G4double numExitingElectrons;       // number of exiting e- and e+
   G4double numExitingOthers;          // number of other particles
+
+  G4double kinEnergyExiting2;          
+  G4double kinEnergyExitingGammas2;    
+  G4double kinEnergyExitingNeutrons2;  
+  G4double kinEnergyExitingNeutrinos2; 
+  G4double kinEnergyExitingMuons2;     
+  G4double kinEnergyExitingElectrons2; 
+  G4double kinEnergyExitingOthers2;    
+  G4double numExiting2;                
+  G4double numExitingGammas2;          
+  G4double numExitingNeutrons2;        
+  G4double numExitingNeutrinos2;       
+  G4double numExitingMuons2;           
+  G4double numExitingElectrons2;       
+  G4double numExitingOthers2;          
 
 };
 
