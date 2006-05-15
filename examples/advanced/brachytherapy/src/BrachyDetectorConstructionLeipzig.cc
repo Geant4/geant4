@@ -35,7 +35,7 @@
 //    *******************************************
 //
 //
-// $Id: BrachyDetectorConstructionLeipzig.cc,v 1.8 2006-05-12 14:57:54 guatelli Exp $
+// $Id: BrachyDetectorConstructionLeipzig.cc,v 1.9 2006-05-15 08:26:54 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -43,12 +43,7 @@
 #include "BrachyDetectorConstructionLeipzig.hh"
 #include "G4CSGSolid.hh"
 #include "G4Sphere.hh"
-//#include "G4MaterialPropertyVector.hh"
-//#include "G4SDManager.hh"
-//#include "G4SubtractionSolid.hh"
 #include "G4RunManager.hh"
-//#include "G4MaterialPropertiesTable.hh"
-//#include "G4Material.hh"
 #include "G4Box.hh"
 #include "G4Tubs.hh"
 #include "G4LogicalVolume.hh"
@@ -81,11 +76,12 @@ BrachyDetectorConstructionLeipzig::~BrachyDetectorConstructionLeipzig()
 
 void  BrachyDetectorConstructionLeipzig::ConstructLeipzig(G4VPhysicalVolume*   mother)
 {
-  G4Colour  red     (1.0, 0.0, 0.0) ;
+  G4Colour  red     (1.0, 0.0, 0.0) ; 
+  G4Colour  lblue   (0.0, 0.0, .75);
 
-  G4Material* capsuleMat = pMaterial->GetMat("Stainless steel");
-  G4Material* iridium = pMaterial->GetMat("Iridium");
-  G4Material* tungsten =pMaterial->GetMat("Tungsten");
+  G4Material* capsuleMat = pMaterial -> GetMat("Stainless steel");
+  G4Material* iridium = pMaterial -> GetMat("Iridium");
+  G4Material* tungsten =pMaterial -> GetMat("Tungsten");
 
   //Iridium source ...
 
@@ -145,13 +141,19 @@ void  BrachyDetectorConstructionLeipzig::ConstructLeipzig(G4VPhysicalVolume*   m
                                       false,
                                       0);
 
-  G4VisAttributes* simpleCapsuleVisAtt= new G4VisAttributes(red); 
+  G4VisAttributes* simpleCapsuleVisAtt = new G4VisAttributes(red); 
   simpleCapsuleVisAtt -> SetVisibility(true); 
   simpleCapsuleVisAtt -> SetForceSolid(true); 
   capsuleLog -> SetVisAttributes(simpleCapsuleVisAtt); 
 
-  G4VisAttributes* simpleCapsuleTipVisAtt= new G4VisAttributes(red); 
+  G4VisAttributes* simpleCapsuleTipVisAtt = new G4VisAttributes(red); 
   simpleCapsuleTipVisAtt -> SetVisibility(true); 
   simpleCapsuleTipVisAtt -> SetForceSolid(true); 
   capsuleTipLog -> SetVisAttributes(simpleCapsuleTipVisAtt);
+ 
+  G4VisAttributes* applicatorVisAtt = new G4VisAttributes(lblue);
+  applicatorVisAtt -> SetVisibility(true);
+  applicatorVisAtt -> SetForceWireframe(true);
+  applicator1Log ->  SetVisAttributes(applicatorVisAtt);  
+  applicator2Log ->  SetVisAttributes(applicatorVisAtt);  
 }

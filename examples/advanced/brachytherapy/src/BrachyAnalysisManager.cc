@@ -29,7 +29,7 @@
 //    *                             *
 //    *******************************
 //
-// $Id: BrachyAnalysisManager.cc,v 1.16 2006-05-12 13:23:48 guatelli Exp $
+// $Id: BrachyAnalysisManager.cc,v 1.17 2006-05-15 08:26:54 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifdef  G4ANALYSIS_USE
@@ -103,7 +103,7 @@ void BrachyAnalysisManager::book()
   //creating a 1D histograms
   // Histogram containing the initial energy (MeV) of the photons delivered by the radioactive core
   h2 = histFact -> createHistogram1D("20","Initial Energy", //histoID, histo name 
-				     100,0.,1.);            //bins' number, xmin, xmax
+				     1000,0.,1.);            //bins' number, xmin, xmax
    
   // Histogram containing the energy deposit in the plane containing the source, along the axis 
   // perpendicular to the source main axis

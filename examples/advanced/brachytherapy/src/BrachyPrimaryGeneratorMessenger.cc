@@ -31,7 +31,7 @@
 //    *****************************************
 //
 //
-// $Id: BrachyPrimaryGeneratorMessenger.cc,v 1.1 2006-05-12 17:08:06 guatelli Exp $
+// $Id: BrachyPrimaryGeneratorMessenger.cc,v 1.2 2006-05-15 08:26:54 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -67,7 +67,7 @@ BrachyPrimaryGeneratorMessenger::~BrachyPrimaryGeneratorMessenger()
 
 void BrachyPrimaryGeneratorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 { 
-   // Change the energy of the emitted photons
+   // Change the energy of the emitted photons (iridium - iodium source)
   if(command == primaryParticleEnergySpectrumCmd)
     primaryAction -> SwitchEnergy(newValue); 
 }

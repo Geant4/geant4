@@ -34,7 +34,7 @@
 //    *                                          *
 //    ********************************************
 //
-// $Id: BrachyPrimaryGeneratorActionIr.cc,v 1.9 2005-06-27 15:27:21 gunter Exp $
+// $Id: BrachyPrimaryGeneratorActionIr.cc,v 1.10 2006-05-15 08:26:54 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "BrachyPrimaryGeneratorActionIr.hh"
@@ -48,7 +48,7 @@
 #include "Randomize.hh"  
 #include "G4Event.hh"
 #include "G4ParticleGun.hh"
-#include "G4IonTable.hh"
+//#include "G4IonTable.hh"
 #include "G4UImanager.hh"
 #include "G4RunManager.hh"
 
@@ -70,14 +70,15 @@ void BrachyPrimaryGeneratorActionIr::GeneratePrimaries(G4Event* anEvent)
   BrachyAnalysisManager* analysis = BrachyAnalysisManager::getInstance();
 #endif
 
+  // Define primary particle type
   G4ParticleTable* pParticleTable = G4ParticleTable::GetParticleTable();
   G4String ParticleName = "gamma";
-  G4ParticleDefinition* pParticle = pParticleTable->FindParticle(ParticleName);
-  particleGun->SetParticleDefinition(pParticle);
+  G4ParticleDefinition* pParticle = pParticleTable -> FindParticle(ParticleName);
+  particleGun -> SetParticleDefinition(pParticle);
  
-  //  Random generation of gamma source point inside the Iodium core
+  //  Random generation of gamma source point inside the Iridium core
   G4double x,y,z;
-  G4double radius= 0.30*mm;
+  G4double radius = 0.30*mm;
   do{
     x = (G4UniformRand()-0.5)*(radius)/0.5;
     y = (G4UniformRand()-0.5)*(radius)/0.5;
@@ -86,7 +87,8 @@ void BrachyPrimaryGeneratorActionIr::GeneratePrimaries(G4Event* anEvent)
   z = (G4UniformRand()-0.5)*1.75*mm/0.5 -1.975*mm  ;
 
   G4ThreeVector position(x,y,z);
-  particleGun->SetParticlePosition(position);
+  particleGun -> SetParticlePosition(position);
+
   // Random generation of the impulse direction
   G4double a,b,c;
   G4double n;
@@ -104,13 +106,16 @@ void BrachyPrimaryGeneratorActionIr::GeneratePrimaries(G4Event* anEvent)
   G4ThreeVector direction(a,b,c);
   particleGun->SetParticleMomentumDirection(direction);
 
-  primaryParticleEnergy = 356*keV;
+  // Primary particle energy
+  primaryParticleEnergy = 356.*keV;
   particleGun->SetParticleEnergy(primaryParticleEnergy);
  
   //1D Histogram of primary particle energy ...
 #ifdef G4ANALYSIS_USE
-  analysis->PrimaryParticleEnergySpectrum(primaryParticleEnergy);
+  analysis -> PrimaryParticleEnergySpectrum(primaryParticleEnergy);
 #endif   
-  particleGun->GeneratePrimaryVertex(anEvent);
+  
+  // Generate a primary particle
+  particleGun -> GeneratePrimaryVertex(anEvent);
 }
 

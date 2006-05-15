@@ -4,4 +4,4 @@
 /source/switch Iodium
 /primary/energy Iodium                                              
 /run/initialize
-/run/beamOn  5000
+/run/beamOn  20000

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: BrachyPhantomSD.hh,v 1.7 2005-11-22 12:47:35 guatelli Exp $
+// $Id: BrachyPhantomSD.hh,v 1.8 2006-05-15 08:26:54 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //    ********************************
@@ -34,7 +34,6 @@
 #define BrachyPhantomSD_h 1
 
 #include "G4VSensitiveDetector.hh"
-#include "BrachyPhantomHit.hh"
 
 class G4Step;
 class G4HCofThisEvent;
@@ -52,9 +51,6 @@ public:
   void clear();
   void DrawAll();
   void PrintAll();
-
-private:
-   BrachyPhantomHitsCollection* phantomCollection;
 };
 #endif
 

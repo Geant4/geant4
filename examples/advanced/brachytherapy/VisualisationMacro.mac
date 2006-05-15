@@ -18,4 +18,7 @@
 /vis/scene/endOfEventAction accumulate
 /vis/viewer/update
 /run/initialize
-
+/vis/viewer/zoom 5
+#/source/switch Iodium
+#/primary/energy Iodium   
+#/phantom/selectMaterial Lead

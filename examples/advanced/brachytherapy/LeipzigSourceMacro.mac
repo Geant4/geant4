@@ -3,4 +3,4 @@
 /event/verbose 0
 /source/switch Leipzig
 /run/initialize
-/run/beamOn  5000
+/run/beamOn  20000

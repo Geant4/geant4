@@ -30,11 +30,10 @@
 //    *                              *
 //    ********************************
 //
-// $Id: BrachyPhantomSD.cc,v 1.9 2005-11-22 12:47:35 guatelli Exp $
+// $Id: BrachyPhantomSD.cc,v 1.10 2006-05-15 08:26:54 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "BrachyPhantomSD.hh"
-#include "BrachyPhantomHit.hh"
 #include "BrachyAnalysisManager.hh"
 #include "BrachyDetectorConstruction.hh"
 #include "G4Track.hh"
@@ -46,13 +45,8 @@
 #include "G4SDManager.hh"
 #include "G4ParticleDefinition.hh"
 
-//....
-
 BrachyPhantomSD::BrachyPhantomSD(G4String name):G4VSensitiveDetector(name)
 {
- G4String HCname;
- SensitiveDetectorName = name;
- collectionName.insert(HCname="phantomCollection");
 }
 
 BrachyPhantomSD::~BrachyPhantomSD()
@@ -62,59 +56,63 @@ BrachyPhantomSD::~BrachyPhantomSD()
 
 void BrachyPhantomSD::Initialize(G4HCofThisEvent* HCE)
 {
-  phantomCollection = new BrachyPhantomHitsCollection
-                          (SensitiveDetectorName,collectionName[0]); 
-  static G4int HCID = -1;
-  if(HCID<0)
-  { HCID = G4SDManager::GetSDMpointer()->GetCollectionID(collectionName[0]); }
-  HCE->AddHitsCollection( HCID, phantomCollection ); 
- 
 }
 
 G4bool BrachyPhantomSD::ProcessHits(G4Step* aStep, G4TouchableHistory* ROhist)
 {
+  //
+  // The energy deposit of the hits is stored in histograms and ntuples
+  //
+
   if(!ROhist)
     return false;
-
-  if(aStep->GetPreStepPoint()->GetPhysicalVolume()->GetName() != "PhantomPhys")
+  
+  // Check the volume
+  if(aStep -> GetPreStepPoint() -> GetPhysicalVolume() -> GetName() != "PhantomPhys")
     return false;
 
-  G4double energyDeposit = aStep->GetTotalEnergyDeposit();
+  // 
+  G4double energyDeposit = aStep -> GetTotalEnergyDeposit();
+
+  // Check that the energy deposit is not null
   if(energyDeposit == 0.)
     return false;
           
   if(energyDeposit != 0)                       
-	    { 
-           
+	    {            
 	      // Read Voxel indexes: i is the x index, k is the z index
+	      G4int j = ROhist -> GetReplicaNumber();
 	      G4int k = ROhist -> GetReplicaNumber(1);
 	      G4int i = ROhist -> GetReplicaNumber(2);
-	      G4int j = ROhist -> GetReplicaNumber();
   
-	      G4int numberOfVoxelZ = 300;
-	      G4double voxelWidthZ = 1. *mm;
-	      G4double x = (-numberOfVoxelZ+1+2*i)*voxelWidthZ/2; 
-	      G4double y = (- numberOfVoxelZ+1+2*j)*voxelWidthZ/2;
-	      G4double z = (- numberOfVoxelZ+1+2*k)*voxelWidthZ/2;
+	      G4int numberOfVoxel = 300;
+	      G4double voxelWidth = 1. *mm;
+	
+              // Retrieve the coordinates of the center of the voxel where
+              // the energy deposit is located
+	      G4double x = ( - numberOfVoxel + 1+ 2*i )* voxelWidth/2; 
+	      G4double y = ( - numberOfVoxel + 1+ 2*j )* voxelWidth/2;
+	      G4double z = ( - numberOfVoxel + 1+ 2*k )* voxelWidth/2;
 
 #ifdef G4ANALYSIS_USE	
 	      BrachyAnalysisManager* analysis = 
 		BrachyAnalysisManager::getInstance();   
-	      analysis -> FillNtupleWithEnergy(x,y,z,energyDeposit);
-	      if (y<0.8*mm && y> -0.8*mm)
+             
+              // Fill the ntuple with position and energy deposit in the phantom
+	      analysis -> FillNtupleWithEnergy(x,y,z,energyDeposit/MeV);
+
+	      if (y < 0.8 * mm && y > -0.8 * mm)
 		{ 
+                  // Fill a 2D histogram with the energy deposit in the plane
+                  // containing the source
 		  analysis -> FillHistogramWithEnergy(x,z,energyDeposit/MeV);
    
-		  if (z<0.8*mm && z> -0.8*mm)                
+                  //  Fill 1D histogram with the energy deposit 
+                  // along the axis perpendicular to the main axis of the source
+		  if (z < 0.8 * mm && z > -0.8 * mm)                
 		    analysis -> DoseDistribution(x,energyDeposit/MeV);
 		}
 #endif  
-	      
-  // Store the energy deposit and position in a Hit collection
-  BrachyPhantomHit* newHit = new BrachyPhantomHit();
-  newHit -> SetEdep(energyDeposit);
-  newHit -> SetPosition(x,y,z);
-  phantomCollection -> insert( newHit );
 	    }
   return true;
 }
