@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MollerBhabhaModel.cc,v 1.24 2006-02-11 11:26:27 maire Exp $
+// $Id: G4MollerBhabhaModel.cc,v 1.25 2006-05-15 09:53:23 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -45,6 +45,7 @@
 // 25-07-05 Add protection in calculation of recoil direction for the case 
 //          of complete energy transfer from e+ to e- (V.Ivanchenko)
 // 06-02-06 ComputeCrossSectionPerElectron, ComputeCrossSectionPerAtom (mma)
+// 15-05-06 Fix MinEnergyCut (V.Ivanchenko)
 //
 //
 // Class Description:
@@ -96,7 +97,9 @@ void G4MollerBhabhaModel::SetParticle(const G4ParticleDefinition* p)
 G4double G4MollerBhabhaModel::MinEnergyCut(const G4ParticleDefinition*,
                                            const G4MaterialCutsCouple* couple)
 {
-  return couple->GetMaterial()->GetIonisation()->GetMeanExcitationEnergy();
+  G4double electronDensity = couple->GetMaterial()->GetElectronDensity();
+  G4double Zeff  = electronDensity/couple->GetMaterial()->GetTotNbOfAtomsPerVolume();
+  return 0.25*sqrt(Zeff)*keV;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
