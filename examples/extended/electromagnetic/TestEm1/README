@@ -1,4 +1,4 @@
-$Id: README,v 1.20 2006-03-27 16:01:03 maire Exp $
+$Id: README,v 1.21 2006-05-15 14:38:15 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -7,11 +7,10 @@ $Id: README,v 1.20 2006-03-27 16:01:03 maire Exp $
 
                             TestEm1
                             -------
-
-  This example has been setup to test individualy the electromagnetic processes.
-
-  In addition, it illustrates how to use the concept of 'process' in order 
-  to implement a constraint on the step size of the particle trajectories.
+  How to count processes.
+  How to activate/inactivate processes.
+  How to survey the tracking, in perticular the range of charged particles.
+  How to define a maximum step size.
 	
  1 - GEOMETRY DEFINITION
  

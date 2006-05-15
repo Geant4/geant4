@@ -1,4 +1,4 @@
-$Id: README,v 1.4 2006-05-10 11:15:33 maire Exp $
+$Id: README,v 1.5 2006-05-15 14:43:01 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,9 +8,9 @@ $Id: README,v 1.4 2006-05-10 11:15:33 maire Exp $
                             TestEm14
                             --------
 
-	This test allows to compute the total cross section of one or several
-	processes and to plot the final state at interaction point.
-	The method is exposed below : see item Physics. 
+	How to compute cross sections from the direct evaluation of the mean
+	free path ( see below, item Physics).
+	How to plot final state of a process.	 
 	
  1- GEOMETRY DEFINITION
  

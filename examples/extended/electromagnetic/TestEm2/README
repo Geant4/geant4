@@ -1,4 +1,4 @@
-$Id: README,v 1.22 2006-01-20 12:10:28 maire Exp $
+$Id: README,v 1.23 2006-05-15 14:38:40 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -7,9 +7,9 @@ $Id: README,v 1.22 2006-01-20 12:10:28 maire Exp $
 
                             TestEm2
                             -------
-     This example allows to do the shower development of an single primary
-     particle, and to survey the physics processes which occur,
-     with printing and visualization.
+			    
+     How to do shower profiles in an homogenous medium, with virtual
+     voxelisation.
 
  1- GEOMETRY DEFINITION
 

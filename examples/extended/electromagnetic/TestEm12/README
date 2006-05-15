@@ -1,4 +1,4 @@
-$Id: README,v 1.4 2006-04-11 12:02:41 maire Exp $
+$Id: README,v 1.5 2006-05-15 14:42:19 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,11 +8,9 @@ $Id: README,v 1.4 2006-04-11 12:02:41 maire Exp $
                             TestEm12
                             --------
 
-     This example is devoted to the energy deposited by particles which
-     across a given material.
-         
-     In addition, it illustrates how to use the concept of 'process' in order 
-     to implement a constraint on the step size of the particle trajectories.
+
+     How to plot a depth dose profile in spherical geometry.        
+
 	
  1- GEOMETRY DEFINITION
  
