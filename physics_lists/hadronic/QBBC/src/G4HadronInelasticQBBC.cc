@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HadronInelasticQBBC.cc,v 1.5 2006-05-11 08:24:40 vnivanch Exp $
+// $Id: G4HadronInelasticQBBC.cc,v 1.6 2006-05-15 11:31:39 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -100,7 +100,8 @@ void G4HadronInelasticQBBC::ConstructProcess()
   if(wasActivated) return;
   wasActivated = true;
 
-  if(verbose > 1) G4cout << "### HadronInelasticQBBC Construct Process" << G4endl;
+  if(verbose > 1) 
+    G4cout << "### HadronInelasticQBBC Construct Process" << G4endl;
 
   G4double minEstring  = 8*GeV;
   G4double maxEcascade = 10.*GeV;
@@ -209,15 +210,22 @@ void G4HadronInelasticQBBC::ConstructProcess()
 	  Register(particle,theNeutronFission,hpf,"HP");
 	}
 
-	if(bertFlag)       Register(particle,hp,theBERT,"Bertini");
-        else if(chipsFlag) Register(particle,hp,theCHIPS,"CHIPS");
-	else {
-	  G4HadronicInteraction* theBIC = new G4BinaryCascade();
-	  theBIC->SetMinEnergy(emin);
-	  theBIC->SetMaxEnergy(maxEcascade);
-	  Register(particle,hp,theBIC,"Binary");
+        G4HadronicInteraction* theB;
+        G4String s;
+	if(bertFlag) {
+	  theB = new G4CascadeInterface();
+          s = "Bertini";
+        } else if(chipsFlag) {
+	  theB = new G4StringChipsInterface();
+          s = "CHIPS";
+	} else {
+	  theB = new G4BinaryCascade();
+          s = "Binary";
 	}
-
+	theB->SetMinEnergy(emin);
+	theB->SetMaxEnergy(maxEcascade);
+	Register(particle,hp,theB,s);
+	
 	G4HadronicInteraction* theC = new G4LCapture();
 	theC->SetMinEnergy(emin);
 	theC->SetMaxEnergy(maxEcascade);
