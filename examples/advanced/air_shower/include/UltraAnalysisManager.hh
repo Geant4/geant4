@@ -74,8 +74,6 @@ public:
 private:
   static UltraAnalysisManager* instance;
 
-public:
-
   AIDA::IAnalysisFactory*  aFact;
   AIDA::ITree*             theTree;
   AIDA::IHistogramFactory *histFact;
