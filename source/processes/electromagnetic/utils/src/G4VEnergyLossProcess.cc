@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.87 2006-05-15 09:30:35 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.88 2006-05-15 09:51:23 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -759,6 +759,7 @@ void G4VEnergyLossProcess::SampleSubCutSecondaries(
     chargeSqRatio*(((*theSubLambdaTable)[currentMaterialIndex])->
                    GetValue(preStepScaledEnergy, b));
   G4double length = step.GetStepLength();
+  currentCut = subcut;
   if(length*cross < 1.e-9) return;
   /*  
   if(-1 < verboseLevel) 
@@ -766,7 +767,6 @@ void G4VEnergyLossProcess::SampleSubCutSecondaries(
 	   << " cross(1/mm)= " << cross*mm << ">>>"
     << G4endl;
   */
-  currentCut = subcut;
 
   // Sample subcutoff secondaries
   G4StepPoint* preStepPoint = step.GetPreStepPoint();
