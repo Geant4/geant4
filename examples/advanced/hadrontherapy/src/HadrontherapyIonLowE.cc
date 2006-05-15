@@ -62,8 +62,8 @@ void HadrontherapyIonLowE::ConstructProcess()
       G4String particleName = particle -> GetParticleName();
       G4double charge = particle -> GetPDGCharge();
   
-      // Electromagnetic interactions for protons, pions, deuteron, triton, alpha particles, He3
-      // ions.
+      // Electromagnetic interactions for protons, pions, generic hadrons
+      // deuteron, triton, alpha particles, He3, ions.
      if (( charge != 0. ) && particleName != "e+" && particleName != "mu+" &&
 	  particleName != "e-" && particleName != "mu-") 
 	{
@@ -73,7 +73,6 @@ void HadrontherapyIonLowE::ConstructProcess()
 	      // ***** Ionisation ***** //
 	      // ICRU49 parameterisation is the default option
               G4hLowEnergyIonisation* ionisation = new G4hLowEnergyIonisation();		
-	     
 	      // Set the nuclear stopping power
 	      ionisation -> SetNuclearStoppingOn() ;
 	  

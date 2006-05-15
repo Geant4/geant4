@@ -60,7 +60,9 @@ void HadrontherapyIonStandard::ConstructProcess()
       G4String particleName = particle -> GetParticleName();
       G4double charge = particle -> GetPDGCharge();
   
-      if (particleName == "GenericIon"|| particleName == "alpha" || particleName == "He3")
+      if (particleName == "GenericIon"|| 
+	  particleName == "alpha" ||
+	  particleName == "He3")
 	{
 	  G4ionIonisation* ionisation = new G4ionIonisation();
 	  G4VProcess*  multipleScattering = new G4MultipleScattering(); 

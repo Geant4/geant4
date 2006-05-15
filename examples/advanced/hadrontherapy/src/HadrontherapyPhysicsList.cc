@@ -219,6 +219,7 @@ void HadrontherapyPhysicsList::AddPhysicsList(const G4String& name)
 	}
     }
 
+  // ******** Positrons ********//
   // Register standard processes for positrons
   if (name == "positron-standard") 
     {

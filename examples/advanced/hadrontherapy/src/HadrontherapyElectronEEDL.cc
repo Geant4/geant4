@@ -56,9 +56,9 @@ void HadrontherapyElectronEEDL::ConstructProcess()
 
   while( (*theParticleIterator)() )
     {
-      G4ParticleDefinition* particle = theParticleIterator->value();
-      G4ProcessManager* manager = particle->GetProcessManager();
-      G4String particleName = particle->GetParticleName();
+      G4ParticleDefinition* particle = theParticleIterator -> value();
+      G4ProcessManager* manager = particle -> GetProcessManager();
+      G4String particleName = particle -> GetParticleName();
      
       if (particleName == "e-") 
 	{
