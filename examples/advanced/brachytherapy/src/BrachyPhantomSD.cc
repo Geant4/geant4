@@ -30,7 +30,7 @@
 //    *                              *
 //    ********************************
 //
-// $Id: BrachyPhantomSD.cc,v 1.10 2006-05-15 08:26:54 guatelli Exp $
+// $Id: BrachyPhantomSD.cc,v 1.11 2006-05-15 08:35:45 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "BrachyPhantomSD.hh"
@@ -54,7 +54,7 @@ BrachyPhantomSD::~BrachyPhantomSD()
   
 }
 
-void BrachyPhantomSD::Initialize(G4HCofThisEvent* HCE)
+void BrachyPhantomSD::Initialize(G4HCofThisEvent*)
 {
 }
 
@@ -68,10 +68,10 @@ G4bool BrachyPhantomSD::ProcessHits(G4Step* aStep, G4TouchableHistory* ROhist)
     return false;
   
   // Check the volume
-  if(aStep -> GetPreStepPoint() -> GetPhysicalVolume() -> GetName() != "PhantomPhys")
+  if(aStep -> GetPreStepPoint() -> GetPhysicalVolume() -> 
+     GetName() != "PhantomPhys")
     return false;
 
-  // 
   G4double energyDeposit = aStep -> GetTotalEnergyDeposit();
 
   // Check that the energy deposit is not null
@@ -80,7 +80,10 @@ G4bool BrachyPhantomSD::ProcessHits(G4Step* aStep, G4TouchableHistory* ROhist)
           
   if(energyDeposit != 0)                       
 	    {            
-	      // Read Voxel indexes: i is the x index, k is the z index
+	      // Read Voxel indexes: 
+	      // i is the x index, 
+	      // j is the y index
+	      // k is the z index
 	      G4int j = ROhist -> GetReplicaNumber();
 	      G4int k = ROhist -> GetReplicaNumber(1);
 	      G4int i = ROhist -> GetReplicaNumber(2);
