@@ -61,9 +61,10 @@
 #include "HadrontherapyProtonBinary.hh"
 #include "HadrontherapyMuonStandard.hh"
 #include "HadrontherapyDecay.hh"
-#include "HadrontherapyProtonBertini.hh"
-
-
+#include "HadrontherapyParticles.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4ParticleTypes.hh"
+#include "G4ParticleTable.hh"
 HadrontherapyPhysicsList::HadrontherapyPhysicsList(): G4VModularPhysicsList(),
 						      electronIsRegistered(false), 
 						      positronIsRegistered(false), 
@@ -73,11 +74,20 @@ HadrontherapyPhysicsList::HadrontherapyPhysicsList(): G4VModularPhysicsList(),
 						      muonIsRegistered(false),
 						      decayIsRegistered(false)
 {
+  //
   // The threshold of production of secondaries is fixed to 10. mm
   // for all the particles, in all the experimental set-up
+  // The phantom is defined as a Geant4 Region. Here the cut is fixed to 0.001 * mm.
+  //
+ 
   defaultCutValue = 10. * mm;
+
   messenger = new HadrontherapyPhysicsListMessenger(this);
+
   SetVerboseLevel(1);
+
+  // Register all the particles involved in the experimental set-up
+  RegisterPhysics( new HadrontherapyParticles("particles") );
 }
 
 HadrontherapyPhysicsList::~HadrontherapyPhysicsList()
@@ -89,13 +99,16 @@ void HadrontherapyPhysicsList::AddPhysicsList(const G4String& name)
 {
   G4cout << "Adding PhysicsList component " << name << G4endl;
   
-  //
-  // Electromagnetic physics. 
+  //*************************//
+  // Electromagnetic physics //
+  //*************************//
   //
   // The user can choose three alternative approaches:
   // Standard, Low Energy based on the Livermore libraries and Low Energy Penelope
   //
 
+  // ******** PHOTONS ********//
+  
   // Register standard processes for photons
   if (name == "photon-standard") 
     {
@@ -149,6 +162,8 @@ void HadrontherapyPhysicsList::AddPhysicsList(const G4String& name)
 	  photonIsRegistered = true;
 	}
     }
+
+   // ******** Electrons ********//
 
   // Register standard processes for electrons
   if (name == "electron-standard") 
@@ -491,34 +506,7 @@ if (name == "proton-precompound-binary")
 //--------------------------------------------------------------------------------------------
 // End Hadronic Binary models
 //--------------------------------------------------------------------------------------------
-//--------------------------------------------------------------------------------------------
-//Begin Hadronic Bertini model
-//--------------------------------------------------------------------------------------------
-
-// Bertini is a model indipendent from precompound
-
-
-if (name == "bertini") 
-    {
-      if (protonHadronicIsRegistered) 
-	{
-	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name  
-		 << " cannot be registered ---- decay List already existing" 
-                 << G4endl;
-	} 
-      else 
-	{
-	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name 
-                 << " is registered" << G4endl;
-	  RegisterPhysics( new HadrontherapyProtonBertini(name) );
-	  protonHadronicIsRegistered = true;
-	}
-
-    }
-
-//--------------------------------------------------------------------------------------------
-// End Hadronic Bertini model
-//--------------------------------------------------------------------------------------------  
+  
   if (electronIsRegistered && positronIsRegistered && photonIsRegistered &&
       ionIsRegistered) 
     {
@@ -532,8 +520,6 @@ if (name == "bertini")
       G4cout << " Hadronic physics is registered" << G4endl;
     }     
 }
-
-
 
 void HadrontherapyPhysicsList::SetCuts()
 {  

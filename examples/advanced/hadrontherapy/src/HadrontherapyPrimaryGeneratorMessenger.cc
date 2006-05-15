@@ -37,7 +37,6 @@
 #include "HadrontherapyPrimaryGeneratorMessenger.hh"
 #include "HadrontherapyPrimaryGeneratorAction.hh"
 #include "G4UIdirectory.hh"
-#include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithADouble.hh"
 
@@ -45,6 +44,10 @@ HadrontherapyPrimaryGeneratorMessenger::HadrontherapyPrimaryGeneratorMessenger(
                                              HadrontherapyPrimaryGeneratorAction* HadrontherapyGun)
 :HadrontherapyAction(HadrontherapyGun)
 { 
+  //
+  // Definition of the interactive commands to modify the parameters of the
+  // generation of primary particles
+  // 
  beamParametersDir = new G4UIdirectory("/beam/");
  beamParametersDir -> SetGuidance("set parameters of beam");
  
@@ -62,64 +65,59 @@ HadrontherapyPrimaryGeneratorMessenger::HadrontherapyPrimaryGeneratorMessenger(
  sigmaMomentumYCmd -> SetParameterName("momentum",false);
  sigmaMomentumYCmd -> AvailableForStates(G4State_PreInit,G4State_Idle);   
 
-
  sigmaMomentumZCmd = new G4UIcmdWithADouble("/beam/momentum/sigmaZ",this);
  sigmaMomentumZCmd -> SetGuidance("set sigma momentum z");
  sigmaMomentumZCmd -> SetParameterName("momentum",false);
  sigmaMomentumZCmd -> AvailableForStates(G4State_PreInit,G4State_Idle);   
 
-
  meanKineticEnergyCmd = new G4UIcmdWithADoubleAndUnit("/beam/energy/meanEnergy",this);
- meanKineticEnergyCmd->SetGuidance("set mean Kinetic energy");
- meanKineticEnergyCmd->SetParameterName("Energy",false);
- meanKineticEnergyCmd->SetDefaultUnit("MeV");
- meanKineticEnergyCmd->SetUnitCandidates("eV keV MeV GeV TeV");
- meanKineticEnergyCmd->AvailableForStates(G4State_PreInit,G4State_Idle);   
-
+ meanKineticEnergyCmd -> SetGuidance("set mean Kinetic energy");
+ meanKineticEnergyCmd -> SetParameterName("Energy",false);
+ meanKineticEnergyCmd -> SetDefaultUnit("MeV");
+ meanKineticEnergyCmd -> SetUnitCandidates("eV keV MeV GeV TeV");
+ meanKineticEnergyCmd -> AvailableForStates(G4State_PreInit,G4State_Idle);   
  
  sigmaEnergyCmd = new G4UIcmdWithADoubleAndUnit("/beam/energy/sigmaEnergy",this);
- sigmaEnergyCmd->SetGuidance("set sigma energy");
- sigmaEnergyCmd->SetParameterName("Energy",false);
- sigmaEnergyCmd->SetDefaultUnit("keV");
- sigmaEnergyCmd->SetUnitCandidates("eV keV MeV GeV TeV");
- sigmaEnergyCmd->AvailableForStates(G4State_PreInit,G4State_Idle);   
+ sigmaEnergyCmd -> SetGuidance("set sigma energy");
+ sigmaEnergyCmd -> SetParameterName("Energy",false);
+ sigmaEnergyCmd -> SetDefaultUnit("keV");
+ sigmaEnergyCmd -> SetUnitCandidates("eV keV MeV GeV TeV");
+ sigmaEnergyCmd -> AvailableForStates(G4State_PreInit,G4State_Idle);   
  
-
  XpositionCmd = new G4UIcmdWithADoubleAndUnit("/beam/position/Xposition",this);
- XpositionCmd->SetGuidance("set x coordinate of particle");
- XpositionCmd->SetParameterName("position",false);
- XpositionCmd->SetDefaultUnit("mm");
- XpositionCmd->SetUnitCandidates("mm cm m");
- XpositionCmd->AvailableForStates(G4State_PreInit,G4State_Idle);   
-
+ XpositionCmd -> SetGuidance("set x coordinate of particle");
+ XpositionCmd -> SetParameterName("position",false);
+ XpositionCmd -> SetDefaultUnit("mm");
+ XpositionCmd -> SetUnitCandidates("mm cm m");
+ XpositionCmd -> AvailableForStates(G4State_PreInit,G4State_Idle);   
 
  YpositionCmd = new G4UIcmdWithADoubleAndUnit("/beam/position/Yposition",this);
- YpositionCmd->SetGuidance("set y coordinate of particle");
- YpositionCmd->SetParameterName("position",false);
- YpositionCmd->SetDefaultUnit("mm");
- YpositionCmd->SetUnitCandidates("mm cm m");
- YpositionCmd->AvailableForStates(G4State_PreInit,G4State_Idle);   
+ YpositionCmd -> SetGuidance("set y coordinate of particle");
+ YpositionCmd -> SetParameterName("position",false);
+ YpositionCmd -> SetDefaultUnit("mm");
+ YpositionCmd -> SetUnitCandidates("mm cm m");
+ YpositionCmd -> AvailableForStates(G4State_PreInit,G4State_Idle);   
 
  sigmaYCmd = new G4UIcmdWithADoubleAndUnit("/beam/position/Yposition/sigmaY",this);
- sigmaYCmd->SetGuidance("set sigma y");
- sigmaYCmd->SetParameterName("position",false);
- sigmaYCmd->SetDefaultUnit("mm");
- sigmaYCmd->SetUnitCandidates("mm cm m");
- sigmaYCmd->AvailableForStates(G4State_PreInit,G4State_Idle);   
-
+ sigmaYCmd -> SetGuidance("set sigma y");
+ sigmaYCmd -> SetParameterName("position",false);
+ sigmaYCmd -> SetDefaultUnit("mm");
+ sigmaYCmd -> SetUnitCandidates("mm cm m");
+ sigmaYCmd -> AvailableForStates(G4State_PreInit,G4State_Idle);   
 
  ZpositionCmd = new G4UIcmdWithADoubleAndUnit("/beam/position/Zposition",this);
- ZpositionCmd->SetGuidance("set z coordinate of particle");
- ZpositionCmd->SetParameterName("position",false);
- ZpositionCmd->SetDefaultUnit("mm");
- ZpositionCmd->SetUnitCandidates("mm cm m");
- ZpositionCmd->AvailableForStates(G4State_PreInit,G4State_Idle);   
+ ZpositionCmd -> SetGuidance("set z coordinate of particle");
+ ZpositionCmd -> SetParameterName("position",false);
+ ZpositionCmd -> SetDefaultUnit("mm");
+ ZpositionCmd -> SetUnitCandidates("mm cm m");
+ ZpositionCmd -> AvailableForStates(G4State_PreInit,G4State_Idle);   
 
- sigmaZCmd = new G4UIcmdWithADoubleAndUnit("/beam/position/Zposition/sigmaZ",this);sigmaZCmd->SetGuidance("set sigma z");
- sigmaZCmd->SetParameterName("position",false);
- sigmaZCmd->SetDefaultUnit("mm");
- sigmaZCmd->SetUnitCandidates("mm cm m");
- sigmaZCmd->AvailableForStates(G4State_PreInit,G4State_Idle);   
+ sigmaZCmd = new G4UIcmdWithADoubleAndUnit("/beam/position/Zposition/sigmaZ",this);
+ sigmaZCmd -> SetGuidance("set sigma z");
+ sigmaZCmd -> SetParameterName("position",false);
+ sigmaZCmd -> SetDefaultUnit("mm");
+ sigmaZCmd -> SetUnitCandidates("mm cm m");
+ sigmaZCmd -> AvailableForStates(G4State_PreInit,G4State_Idle);   
 }
 
 HadrontherapyPrimaryGeneratorMessenger::~HadrontherapyPrimaryGeneratorMessenger()
@@ -143,35 +141,35 @@ void HadrontherapyPrimaryGeneratorMessenger::SetNewValue(G4UIcommand* command,G4
 {
   if ( command == meanKineticEnergyCmd )                                                                        
     { HadrontherapyAction -> SetmeanKineticEnergy(meanKineticEnergyCmd
-						  ->GetNewDoubleValue(newValue));}
+						  -> GetNewDoubleValue(newValue));}
   if ( command == sigmaEnergyCmd )                                                                        
     { HadrontherapyAction -> SetsigmaEnergy(sigmaEnergyCmd
-					    ->GetNewDoubleValue(newValue));}
+					    -> GetNewDoubleValue(newValue));}
   if ( command == XpositionCmd )                                                                        
     { HadrontherapyAction -> SetXposition(XpositionCmd
-					  ->GetNewDoubleValue(newValue));}
+					  -> GetNewDoubleValue(newValue));}
 
   if ( command == YpositionCmd )                                                                        
     { HadrontherapyAction -> SetYposition(YpositionCmd
-					  ->GetNewDoubleValue(newValue));}
+					  -> GetNewDoubleValue(newValue));}
 
   if ( command == ZpositionCmd )                                                                        
     { HadrontherapyAction -> SetZposition(ZpositionCmd
-					  ->GetNewDoubleValue(newValue));}
+					  -> GetNewDoubleValue(newValue));}
 
   if ( command == sigmaYCmd )                                                                        
     { HadrontherapyAction -> SetsigmaY(sigmaYCmd
-				       ->GetNewDoubleValue(newValue));}
+				       -> GetNewDoubleValue(newValue));}
 
   if ( command == sigmaZCmd )                                                                        
     { HadrontherapyAction -> SetsigmaZ(sigmaZCmd
-				       ->GetNewDoubleValue(newValue));}
+				       -> GetNewDoubleValue(newValue));}
 
   if ( command == sigmaMomentumYCmd )                                                                        
     { HadrontherapyAction -> SetsigmaMomentumY(sigmaMomentumYCmd
-					       ->GetNewDoubleValue(newValue));}
+					       -> GetNewDoubleValue(newValue));}
 
   if ( command == sigmaMomentumZCmd )                                                                        
     { HadrontherapyAction -> SetsigmaMomentumZ(sigmaMomentumZCmd
-					       ->GetNewDoubleValue(newValue));}
+					       -> GetNewDoubleValue(newValue));}
 }                 

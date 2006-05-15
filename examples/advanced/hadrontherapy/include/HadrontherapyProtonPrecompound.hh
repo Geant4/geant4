@@ -38,9 +38,7 @@
 #define HadrontherapyProtonPrecompound_h 1
 
 #include "G4VPhysicsConstructor.hh"
-#include "globals.hh"
 #include "G4ExcitationHandler.hh"  
-
 #include "G4VPhysicsConstructor.hh"
 #include "globals.hh"
 
@@ -48,12 +46,8 @@
 #include "G4HadronFissionProcess.hh"
 #include "G4HadronCaptureProcess.hh"
 #include "G4ProtonInelasticProcess.hh"
-
 #include "G4ProcessManager.hh"
-
-#include "G4ExcitationHandler.hh"  
 #include "G4PreCompoundModel.hh"   
-
 #include "G4ProtonInelasticCrossSection.hh"
 #include "G4TheoFSGenerator.hh"
 #include "G4ExcitationHandler.hh"
@@ -86,7 +80,6 @@
 #include "G4LETritonInelastic.hh"
 #include "G4AlphaInelasticProcess.hh"
 #include "G4LEAlphaInelastic.hh"
-
 #include "G4PionPlusInelasticProcess.hh"
 #include "G4PionMinusInelasticProcess.hh"
 #include "G4PiNuclearCrossSection.hh"

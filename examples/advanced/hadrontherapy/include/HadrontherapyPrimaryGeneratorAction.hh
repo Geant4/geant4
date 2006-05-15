@@ -51,11 +51,10 @@ public:
   ~HadrontherapyPrimaryGeneratorAction();
   
 public:
- 
-
+  // Methods to change the parameters of primary particle generation 
+  // interactively
   void SetsigmaEnergy(G4double);
   void SetmeanKineticEnergy(G4double);
-  void SetDefaultPrimaryParticle();
   void GeneratePrimaries(G4Event*);
   void SetXposition(G4double);
   void SetYposition(G4double);
@@ -64,7 +63,9 @@ public:
   void SetsigmaZ(G4double);
   void SetsigmaMomentumY(G4double);
   void SetsigmaMomentumZ(G4double);
-  
+    
+private:
+  void SetDefaultPrimaryParticle();
   G4double meanKineticEnergy;
   G4double sigmaEnergy;
   G4double X0;

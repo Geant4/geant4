@@ -56,21 +56,31 @@ void HadrontherapyIonLowE::ConstructProcess()
   while( (*theParticleIterator)() )
     {
       G4ParticleDefinition* particle = theParticleIterator -> value();
+
       G4ProcessManager* manager = particle -> GetProcessManager();
+
       G4String particleName = particle -> GetParticleName();
       G4double charge = particle -> GetPDGCharge();
   
-    if (( charge != 0. ) && particleName != "e+" && particleName != "mu+" &&
+      // Electromagnetic interactions for protons, pions, deuteron, triton, alpha particles, He3
+      // ions.
+     if (( charge != 0. ) && particleName != "e+" && particleName != "mu+" &&
 	  particleName != "e-" && particleName != "mu-") 
 	{
 	  if((!particle -> IsShortLived()) &&
 	     (particle -> GetParticleName() != "chargedgeantino"))
 	    {
-	      // ICRU49 parameterisation is the default one
+	      // ***** Ionisation ***** //
+	      // ICRU49 parameterisation is the default option
               G4hLowEnergyIonisation* ionisation = new G4hLowEnergyIonisation();		
+	     
+	      // Set the nuclear stopping power
 	      ionisation -> SetNuclearStoppingOn() ;
 	  
+              // ***** Multiple scattering ***** //
 	      G4VProcess*  multipleScattering = new G4MultipleScattering(); 
+	  
+              // Activate the processes
 	      manager -> AddProcess(multipleScattering, -1,1,1);   
 	      manager -> AddProcess(ionisation, -1,2,2);
 	      manager -> AddProcess(new G4StepLimiter(),-1,-1, 3);

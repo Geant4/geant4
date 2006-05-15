@@ -42,11 +42,8 @@
 
 class HadrontherapyPrimaryGeneratorAction;
 class G4UIdirectory;
-class G4UIcmdWithAString;
 class G4UIcmdWithADoubleAndUnit;
 class G4UIcmdWithADouble;
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class HadrontherapyPrimaryGeneratorMessenger: public G4UImessenger
 {
@@ -55,7 +52,6 @@ class HadrontherapyPrimaryGeneratorMessenger: public G4UImessenger
    ~HadrontherapyPrimaryGeneratorMessenger();
     
   void SetNewValue(G4UIcommand*, G4String);
-
 
  private:
     HadrontherapyPrimaryGeneratorAction* HadrontherapyAction; 
@@ -75,8 +71,6 @@ class HadrontherapyPrimaryGeneratorMessenger: public G4UImessenger
 
 
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 

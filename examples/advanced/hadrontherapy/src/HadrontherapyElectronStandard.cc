@@ -51,7 +51,7 @@ void HadrontherapyElectronStandard::ConstructProcess()
 {
   // Add standard processes for electrons
   
-  theParticleIterator->reset();
+  theParticleIterator -> reset();
 
   while( (*theParticleIterator)() )
     {

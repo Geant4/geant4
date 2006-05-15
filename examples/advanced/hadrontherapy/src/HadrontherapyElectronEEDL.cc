@@ -62,11 +62,11 @@ void HadrontherapyElectronEEDL::ConstructProcess()
      
       if (particleName == "e-") 
 	{
-	  manager->AddProcess(new G4MultipleScattering,     -1, 1,1);
-	  manager->AddProcess(new G4LowEnergyIonisation,    -1, 2,2);
+	  manager -> AddProcess(new G4MultipleScattering,     -1, 1,1);
+	  manager -> AddProcess(new G4LowEnergyIonisation,    -1, 2,2);
 	  G4LowEnergyBremsstrahlung* brem = new G4LowEnergyBremsstrahlung();
-          manager->AddProcess(brem,-1,-1,3);
-          manager->AddProcess(new G4StepLimiter(),          -1,-1, 3);
+          manager -> AddProcess(brem,-1,-1,3);
+          manager -> AddProcess(new G4StepLimiter(),          -1,-1, 3);
 	}   
     }
 }

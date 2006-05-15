@@ -62,10 +62,6 @@
 
 int main(int argc ,char ** argv)
 {
-  HepRandom::setTheEngine(new RanecuEngine);
-  G4int seed=time(NULL);
-  HepRandom ::setTheSeed(seed);
-
   G4RunManager* runManager = new G4RunManager;
 
   // Initialize the geometry

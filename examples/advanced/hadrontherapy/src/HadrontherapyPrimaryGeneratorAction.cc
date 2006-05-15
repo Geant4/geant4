@@ -34,7 +34,6 @@
 // * cirrone@lns.infn.it
 // ----------------------------------------------------------------------------
 #include "HadrontherapyPrimaryGeneratorAction.hh"
-#include "HadrontherapyDetectorConstruction.hh"
 #include "HadrontherapyPrimaryGeneratorMessenger.hh"
 #include "G4Event.hh"
 #include "G4ParticleGun.hh"
@@ -45,13 +44,16 @@
 HadrontherapyPrimaryGeneratorAction::HadrontherapyPrimaryGeneratorAction()
 {
   gunMessenger = new HadrontherapyPrimaryGeneratorMessenger(this);
+
   particleGun  = new G4ParticleGun();
+
   SetDefaultPrimaryParticle();  
 }  
 
 HadrontherapyPrimaryGeneratorAction::~HadrontherapyPrimaryGeneratorAction()
 {
   delete particleGun;
+
   delete gunMessenger;
 }
   
@@ -61,18 +63,23 @@ void HadrontherapyPrimaryGeneratorAction::SetDefaultPrimaryParticle()
   // Default primary particle
   // ****************************
   
+  // Define primary particles: protons
   G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
-  G4ParticleDefinition* particle = particleTable->FindParticle("proton");
-  particleGun->SetParticleDefinition(particle); 
-  particleGun->SetParticleMomentumDirection(G4ThreeVector(1.,0.,0.));
+  G4ParticleDefinition* particle = particleTable -> FindParticle("proton");
+  particleGun -> SetParticleDefinition(particle); 
 
-  G4double defaultMeanKineticEnergy = 63.550 *MeV;
+  // Define the energy of primary particles:
+  // gaussian distribution with mean energy = 63.450 *MeV
+  // and sigma = 400.0 *keV
+  G4double defaultMeanKineticEnergy = 63.450 *MeV;
   meanKineticEnergy = defaultMeanKineticEnergy;
 
-  G4double defaultsigmaEnergy = 350.0 *keV;
+  G4double defaultsigmaEnergy = 400.0 *keV;
   sigmaEnergy = defaultsigmaEnergy;
 
-  G4double defaultX0 = -3195.58 *mm;  
+  // Define the parameters of the initial position: 
+  // the y, z coordinates have a gaussian distribution
+  G4double defaultX0 = -3248.59 *mm;  
   X0 = defaultX0;
 
   G4double defaultY0 = 0.0 *mm;  
@@ -81,13 +88,19 @@ void HadrontherapyPrimaryGeneratorAction::SetDefaultPrimaryParticle()
   G4double defaultZ0 = 0.0 *mm;  
   Z0 = defaultZ0;
 
-  G4double defaultsigmaY = 4 *mm;  
+  G4double defaultsigmaY = 1 *mm;  
   sigmaY = defaultsigmaY;
 
-  G4double defaultsigmaZ = 4 *mm;  
+  G4double defaultsigmaZ = 1 *mm;  
   sigmaZ = defaultsigmaZ;
 
+  // Define the parameters of the momentum of primary particles: 
+  // The momentum along the y and z axis has a gaussian distribution
+  G4double defaultsigmaMomentumY = 0.0001;  
+  sigmaMomentumY = defaultsigmaMomentumY;
 
+  G4double defaultsigmaMomentumZ = 0.0001;  
+  sigmaMomentumZ = defaultsigmaMomentumZ;
 }
 
 void HadrontherapyPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
@@ -122,53 +135,49 @@ void HadrontherapyPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   G4double kineticEnergy = G4RandGauss::shoot( meanKineticEnergy, sigmaEnergy );
   particleGun -> SetParticleEnergy ( kineticEnergy );
 
-   // Set the direction of the primary particles
-  G4double momentumY;
-  G4double momentumZ, angMomentumZ;
-  G4double angMomentumX, momentumX;
-  G4double sigmaMomentum = 0.00000001; 
-  
-      angMomentumZ = G4RandGauss::shoot( 1.5708, sigmaMomentum);
-  
-      angMomentumX = G4RandGauss::shoot( 0., sigmaMomentum);
-      
-      momentumX = cos(angMomentumX);
-      
-      momentumY = sin(angMomentumX);
+  // Set the direction of the primary particles
+  G4double momentumX = 1.0;
+  G4double momentumY = 0.0;
+  G4double momentumZ = 0.0;
 
-      momentumZ = cos(angMomentumZ);
-  
+  if ( sigmaMomentumY  > 0.0 )
+    {
+      momentumY += G4RandGauss::shoot( 0., sigmaMomentumY );
+    }
+  if ( sigmaMomentumZ  > 0.0 )
+    {
+      momentumZ += G4RandGauss::shoot( 0., sigmaMomentumZ );
+    }
+ 
+  particleGun -> SetParticleMomentumDirection( G4ThreeVector(momentumX,momentumY,momentumZ) );
 
-  particleGun->SetParticleMomentumDirection(G4ThreeVector(momentumX,momentumY,momentumZ));
   // Generate a primary particle
   particleGun -> GeneratePrimaryVertex( anEvent ); 
-
 } 
 
-
-void HadrontherapyPrimaryGeneratorAction::SetmeanKineticEnergy (G4double  val )  
+void HadrontherapyPrimaryGeneratorAction::SetmeanKineticEnergy (G4double val )  
 { meanKineticEnergy = val;} 
 
-void HadrontherapyPrimaryGeneratorAction::SetsigmaEnergy (G4double  val )  
+void HadrontherapyPrimaryGeneratorAction::SetsigmaEnergy (G4double val )  
 { sigmaEnergy = val;}
 
-void HadrontherapyPrimaryGeneratorAction::SetXposition (G4double  val )  
+void HadrontherapyPrimaryGeneratorAction::SetXposition (G4double val )  
 { X0 = val;}
 
-void HadrontherapyPrimaryGeneratorAction::SetYposition (G4double  val )  
+void HadrontherapyPrimaryGeneratorAction::SetYposition (G4double val )  
 { Y0 = val;}
 
-void HadrontherapyPrimaryGeneratorAction::SetZposition (G4double  val )  
+void HadrontherapyPrimaryGeneratorAction::SetZposition (G4double val )  
 { Z0 = val;}
 
-void HadrontherapyPrimaryGeneratorAction::SetsigmaY (G4double  val )  
+void HadrontherapyPrimaryGeneratorAction::SetsigmaY (G4double val )  
 { sigmaY = val;}
 
-void HadrontherapyPrimaryGeneratorAction::SetsigmaZ (G4double  val )  
+void HadrontherapyPrimaryGeneratorAction::SetsigmaZ (G4double val )  
 { sigmaZ = val;}
 
-void HadrontherapyPrimaryGeneratorAction::SetsigmaMomentumY (G4double  val )  
+void HadrontherapyPrimaryGeneratorAction::SetsigmaMomentumY (G4double val )  
 { sigmaMomentumY = val;}
 
-void HadrontherapyPrimaryGeneratorAction::SetsigmaMomentumZ (G4double  val )  
+void HadrontherapyPrimaryGeneratorAction::SetsigmaMomentumZ (G4double val )  
 { sigmaMomentumZ = val;}

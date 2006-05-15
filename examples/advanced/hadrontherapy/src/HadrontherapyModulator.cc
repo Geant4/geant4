@@ -52,7 +52,6 @@
 #include "G4Transform3D.hh"
 #include "G4ios.hh"
 #include <fstream>
-#include <sstream>
 #include "G4RunManager.hh"
 
 HadrontherapyModulator::HadrontherapyModulator():physiMotherMod(0),

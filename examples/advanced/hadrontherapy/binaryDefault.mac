@@ -20,17 +20,14 @@
 /tracking/verbose 0
 /run/verbose 0
 /event/verbose 0
-
 # SETTING FOR THE PHYSICS MODELS
 /physics/addPhysics photon-epdl
 /physics/addPhysics electron-eedl
 /physics/addPhysics positron-standard
 /physics/addPhysics ion-LowE
-/physics/addPhysics muon-standard
-#/physics/addPhysics decay
 /physics/addPhysics proton-precompound-binary
-
-/physics/addPhysics proton-precompoundFermi
+/physics/addPhysics muon-standard
+/physics/addPhysics decay
 /run/initialize
 
 # IF YOU WANT A RANGE SHIFTER PLEASE CHANGE
@@ -39,9 +36,9 @@
  
 #/beamLine/RangeShifter/thickness 0 cm
 #/beamLine/RangeShifter/RSMat Water
+#/tracking/verbose 1
+/beam/energy/meanEnergy 25 MeV
+/run/beamOn 1
 
-/vis/viewer/flush
-#/beam/energy/meanEnergy 25 MeV
-/run/beamOn 100
 
 
