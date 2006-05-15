@@ -293,8 +293,9 @@ G4RotationMatrix G4PhotoElectricAngularGeneratorPolarized::PhotoElectronRotation
   G4double mK = direction.mag();
   G4double mS = polarization.mag();
   G4ThreeVector polarization2 = polarization;
+  G4double mTolerance = 1e-6;
 
-  if(!(polarization.isOrthogonal(direction,1e-6)) || mS == 0){
+  if(!(polarization.isOrthogonal(direction,tolerance)) || mS == 0){
     G4ThreeVector d0 = direction.unit();
     G4ThreeVector a1 = SetPerpendicularVector(d0); 
     G4ThreeVector a0 = a1.unit(); 
@@ -337,8 +338,9 @@ void G4PhotoElectricAngularGeneratorPolarized::PhotoElectronGetMajorantSurfaceAa
   bMin = betaArray[0];
   bStep = betaArray[1];
   indexMax = (G4int)betaArray[2];
+  const G4double mTolerance = 1e-9;
 
-  G4int k = (G4int)((beta-bMin+1e-9)/bStep);    
+  G4int k = (G4int)((beta-bMin+mTolerance)/bStep);    
     
   if(k < 0)
     k = 0;
