@@ -1,4 +1,4 @@
-$Id: History,v 1.248 2006-05-15 17:47:04 pia Exp $
+$Id: History,v 1.249 2006-05-15 17:48:55 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -21,7 +21,7 @@ committal in the CVS repository !
              Improved design and implementation of photoelectric angular 
              distribution models
 
-2.05.2006   MGP, tag emlowen-V08-00-02
+12.05.2006   MGP, tag emlowen-V08-00-02
              Same as emlowen-V08-00-00, with updated History
 
 12.05.2006   MGP, tag emlowen-V08-00-01
