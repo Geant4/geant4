@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmModelManager.hh,v 1.17 2006-05-13 18:51:37 vnivanch Exp $
+// $Id: G4EmModelManager.hh,v 1.18 2006-05-15 06:22:24 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -147,6 +147,8 @@ public:
 
   G4VEmModel* GetModel(G4int);
 
+  G4int NumberOfModels() const;
+
   void AddEmModel(G4int, G4VEmModel*, G4VEmFluctuationModel*, const G4Region*);
   
   void UpdateEmModel(const G4String&, G4double, G4double);
@@ -213,6 +215,13 @@ inline const G4DataVector* G4EmModelManager::Cuts() const
 inline const G4DataVector* G4EmModelManager::SubCutoff() const
 {
   return &theSubCuts;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4int G4EmModelManager::NumberOfModels() const
+{
+  return nEmModels;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

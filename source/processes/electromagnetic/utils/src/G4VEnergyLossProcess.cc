@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.85 2006-05-13 19:24:39 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.86 2006-05-15 06:22:24 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -114,8 +114,6 @@
 #include "G4VEmModel.hh"
 #include "G4VEmFluctuationModel.hh"
 #include "G4DataVector.hh"
-#include "G4PhysicsTable.hh"
-#include "G4PhysicsVector.hh"
 #include "G4PhysicsLogVector.hh"
 #include "G4VParticleChange.hh"
 #include "G4Gamma.hh"
@@ -193,12 +191,17 @@ G4VEnergyLossProcess::G4VEnergyLossProcess(const G4String& name,
 
   navigator = (G4TransportationManager::GetTransportationManager())
                                        ->GetNavigatorForTracking();
+  const G4int n = 7;
+  vstrag = new G4PhysicsLogVector(keV, GeV, n);
+  G4double s[n] = {-0.2, -0.85, -1.3, -1.578, -1.76, -1.85, -1.9};
+  for(G4int i=0; i<n; i++) {vstrag->PutValue(i, s[i]);}
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4VEnergyLossProcess::~G4VEnergyLossProcess()
 {
+  delete vstrag;
   Clear();
 
   if ( !baseParticle ) {
@@ -279,6 +282,7 @@ void G4VEnergyLossProcess::PreparePhysicsTable(
   preStepLambda = 0.0;
   mfpKinEnergy  = DBL_MAX;
   preStepMFP    = DBL_MAX;
+  fRange        = DBL_MAX;
 
   // Base particle and set of models can be defined here
   InitialiseEnergyLossProcess(particle, baseParticle);
@@ -599,10 +603,11 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
     G4double r = GetScaledRangeForScaledEnergy(preStepScaledEnergy);
     G4double x = r - length/reduceFactor;
     if(x < 0.0) {
-      if(0 < verboseLevel && nWarnings<10) {
+      if(0 < verboseLevel && nWarnings<0) {
 	G4cout << "WARNING! G4VEnergyLossProcess::AlongStepDoIt: x= " << x
 	       << " for eScaled(MeV)= " << preStepScaledEnergy/MeV
 	       << " step(mm)= " << length/mm
+	       << " range(mm)= " << fRange/mm
 	       << " for " << track.GetDefinition()->GetParticleName()
 	       << G4endl;
 	nWarnings++;

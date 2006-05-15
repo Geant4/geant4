@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.hh,v 1.54 2006-05-13 18:51:37 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.hh,v 1.55 2006-05-15 06:22:24 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -91,14 +91,14 @@
 #include "G4UnitsTable.hh"
 #include "G4ParticleChangeForLoss.hh"
 #include "G4EmTableType.hh"
+#include "G4PhysicsTable.hh"
+#include "G4PhysicsVector.hh"
 
 class G4Step;
 class G4ParticleDefinition;
 class G4VEmModel;
 class G4VEmFluctuationModel;
 class G4DataVector;
-class G4PhysicsTable;
-class G4PhysicsVector;
 class G4Region;
 class G4Navigator;
 
@@ -318,6 +318,8 @@ public:
   // Access to models
   G4VEmModel* GetModelByIndex(G4int idx = 0);
 
+  G4int NumberOfModels();
+
 protected:
 
   void SetParticle(const G4ParticleDefinition* p);
@@ -393,6 +395,8 @@ private:
   const G4ParticleDefinition* baseParticle;
   const G4ParticleDefinition* secondaryParticle;
   const G4ParticleDefinition* thePositron;
+
+  G4PhysicsVector*            vstrag;
 
   // cash
   const G4Material*           currentMaterial;
@@ -495,13 +499,15 @@ inline G4double G4VEnergyLossProcess::GetSubDEDXForScaledEnergy(G4double e)
 inline G4double G4VEnergyLossProcess::GetRange(G4double& kineticEnergy,
                                          const G4MaterialCutsCouple* couple)
 {
-  DefineMaterial(couple);
-  G4double x = DBL_MAX;
-  if(theCSDARangeTable)
-    x = GetLimitScaledRangeForScaledEnergy(kineticEnergy*massRatio)
-      * reduceFactor;
-  else if(theRangeTableForLoss)
-    x = GetScaledRangeForScaledEnergy(kineticEnergy*massRatio)*reduceFactor;
+  G4double x = fRange;
+  if(kineticEnergy != preStepKinEnergy || couple != currentCouple) { 
+    DefineMaterial(couple);
+    if(theCSDARangeTable)
+      x = GetLimitScaledRangeForScaledEnergy(kineticEnergy*massRatio)
+	* reduceFactor;
+    else if(theRangeTableForLoss)
+      x = GetScaledRangeForScaledEnergy(kineticEnergy*massRatio)*reduceFactor;
+  }
   return x;
 }
 
@@ -701,6 +707,11 @@ inline G4double G4VEnergyLossProcess::GetContinuousStepLimit(const G4Track&,
 
 inline G4double G4VEnergyLossProcess::SampleRange()
 {
+  G4double e = amu_c2*preStepKinEnergy/particle->GetPDGMass();
+  G4bool b;
+  G4double s = fRange*std::pow(10.,vstrag->GetValue(e,b));
+  G4double x = fRange + G4RandGauss::shoot(0.0,s);
+  if(x > 0.0) fRange = x;
   return fRange;
 }
 
@@ -868,6 +879,13 @@ inline void G4VEnergyLossProcess::AddCollaborativeProcess(
 inline G4VEmModel* G4VEnergyLossProcess::GetModelByIndex(G4int idx)
 {
   return modelManager->GetModel(idx);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4int G4VEnergyLossProcess::NumberOfModels()
+{
+  return modelManager->NumberOfModels();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
