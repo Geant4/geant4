@@ -58,8 +58,10 @@ public:
   G4PhotoElectricAngularGeneratorSimple(const G4String& name);
 
   ~G4PhotoElectricAngularGeneratorSimple();
-  G4ThreeVector GetPhotoElectronDirection(const G4ThreeVector& direction, const G4double kineticEnergy, const G4ThreeVector& polarization, const G4int shellId) const;
-  //G4ThreeVector GetPhotoElectronDirection(const G4ThreeVector& direction, const G4double kineticEnergy, const G4ThreeVector&, const G4int );
+  G4ThreeVector GetPhotoElectronDirection(const G4ThreeVector& direction, 
+					  const G4double kineticEnergy, 
+					  const G4ThreeVector& polarization, 
+					  const G4int shellId) const;
 
   void PrintGeneratorInformation() const;
 

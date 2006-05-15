@@ -57,7 +57,10 @@ public:
 
   ~G4PhotoElectricAngularGeneratorPolarized();
 
-  G4ThreeVector GetPhotoElectronDirection(const G4ThreeVector& direction, const G4double kineticEnergy, const G4ThreeVector& polarization, const G4int shellId) const;
+  G4ThreeVector GetPhotoElectronDirection(const G4ThreeVector& direction, 
+					  const G4double kineticEnergy, 
+					  const G4ThreeVector& polarization, 
+					  const G4int shellId) const;
 
   void PrintGeneratorInformation() const;
 
@@ -70,12 +73,24 @@ private:
   G4PhotoElectricAngularGeneratorPolarized & operator=(const  G4PhotoElectricAngularGeneratorPolarized &right);
   G4PhotoElectricAngularGeneratorPolarized(const  G4PhotoElectricAngularGeneratorPolarized&);
 
-private:
-  void PhotoElectronGetMajorantSurfaceAandCParameters(const G4int shellLevel, const G4double beta, G4double *majorantSurfaceParameterA, G4double *majorantSurfaceParameterC) const;
-  void PhotoElectronGeneratePhiAndTheta(const G4int shellLevel, const G4double beta, const G4double aBeta, 
-				         const G4double cBeta, G4double *pphi, G4double *ptheta) const;
-  G4ThreeVector PhotoElectronComputeFinalDirection(const G4RotationMatrix& rotation, const G4double theta, const G4double phi) const;
-  G4RotationMatrix PhotoElectronRotationMatrix(const G4ThreeVector& direction, const G4ThreeVector& polarization) const;
+  void PhotoElectronGetMajorantSurfaceAandCParameters(const G4int shellLevel, 
+						      const G4double beta, 
+						      G4double *majorantSurfaceParameterA, 
+						      G4double *majorantSurfaceParameterC) const;
+
+  void PhotoElectronGeneratePhiAndTheta(const G4int shellLevel, 
+					const G4double beta, 
+					const G4double aBeta, 
+					const G4double cBeta, 
+					G4double *pphi, 
+					G4double *ptheta) const;
+
+  G4ThreeVector PhotoElectronComputeFinalDirection(const G4RotationMatrix& rotation, 
+						   const G4double theta, 
+						   const G4double phi) const;
+
+  G4RotationMatrix PhotoElectronRotationMatrix(const G4ThreeVector& direction, 
+					       const G4ThreeVector& polarization) const;
 
   G4double GetMax(const G4double arg1, const G4double arg2) const;
 

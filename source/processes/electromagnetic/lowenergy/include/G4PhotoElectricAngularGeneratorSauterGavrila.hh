@@ -60,7 +60,10 @@ public:
 
   ~G4PhotoElectricAngularGeneratorSauterGavrila();
 
-  G4ThreeVector GetPhotoElectronDirection(const G4ThreeVector& direction, const G4double kineticEnergy, const G4ThreeVector& polarization, const G4int shellId) const;
+  G4ThreeVector GetPhotoElectronDirection(const G4ThreeVector& direction, 
+					  const G4double kineticEnergy, 
+					  const G4ThreeVector& polarization, 
+					  const G4int shellId) const;
 
   void PrintGeneratorInformation() const;
 
