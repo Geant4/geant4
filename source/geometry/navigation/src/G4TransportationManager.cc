@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TransportationManager.cc,v 1.11 2006-05-15 16:55:31 asaim Exp $
+// $Id: G4TransportationManager.cc,v 1.12 2006-05-15 17:00:25 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -182,7 +182,7 @@ G4Navigator* G4TransportationManager::GetNavigator( const G4String& worldName )
    // Check if world of that name already exists, create a navigator and register it
    //
    G4Navigator* aNavigator = 0;
-   G4VPhysicalVolume* aWorld = GetParallelWorld(worldName);
+   G4VPhysicalVolume* aWorld = IsWorldExisting(worldName);
    if(aWorld)
    {
       aNavigator = new G4Navigator();
