@@ -1,4 +1,4 @@
-$Id: History,v 1.247 2006-05-12 20:10:23 pia Exp $
+$Id: History,v 1.248 2006-05-15 17:47:04 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,16 +17,18 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-12.05.2006   MGP, tag emlowen-V08-00-02
+15.05.2006   MGP, tag emlowen-V08-00-03
+             Improved design and implementation of photoelectric angular 
+             distribution models
+
+2.05.2006   MGP, tag emlowen-V08-00-02
              Same as emlowen-V08-00-00, with updated History
 
 12.05.2006   MGP, tag emlowen-V08-00-01
              New developments: photoelectric angular distribution models
              The photoelectric angular distribution models have some
-             questionable design features (function arguments passed
-             by value etc.), and very poor code implementation, not
-             respecting the Geant4 coding guidelines and basic 
-             coding conventions
+             temporary design features (function arguments passed
+             by value etc.), and preliminary code implementation,
              (subset of the previous tag emlowen-V08-00-00 for
               incremental testing)
 
@@ -34,10 +36,8 @@ committal in the CVS repository !
              New developments: photoelectric angular distribution models
                                Geant4-DNA very lowE physics processes in water
              The photoelectric angular distribution models have some
-             questionable design features (function arguments passed
-             by value etc.), and very poor code implementation, not
-             respecting the Geant4 coding guidelines and basic 
-             coding conventions
+             temporary design features (function arguments passed
+             by value etc.), and preliminary code implementation
              The Geant4-DNA processes are in a beta-release status
 
 20.12.2005   R.Capra, tag emlowen-V08-00-RC
