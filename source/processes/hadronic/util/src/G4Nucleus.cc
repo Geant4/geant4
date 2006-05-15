@@ -36,6 +36,7 @@
  // M.G. Pia, 2 Oct 1998: modified GetFermiMomentum to avoid memory leaks
  
 #include "G4Nucleus.hh"
+#include "G4NucleiProperties.hh"
 #include "Randomize.hh"
 #include "G4HadronicException.hh"
  
@@ -180,50 +181,8 @@ G4ReactionProduct G4Nucleus::GetThermalNucleus(G4double targetMass, G4double tem
  G4double
   G4Nucleus::AtomicMass( const G4double A, const G4double Z ) const
   {
-    // derived from original FORTRAN code ATOMAS by H. Fesefeldt (2-Dec-1986)
-    //
-    // Computes atomic mass in MeV
-    // units for A example:  A = material->GetA()/(g/mole);
-    //
-    // Note:  can't just use aEff and zEff since the Nuclear Reaction
-    //        function needs to calculate atomic mass for various values of A and Z
-
-    const G4double electron_mass = G4Electron::Electron()->GetPDGMass()/MeV;
-    const G4double proton_mass = G4Proton::Proton()->GetPDGMass()/MeV;
-    const G4double neutron_mass = G4Neutron::Neutron()->GetPDGMass()/MeV;
-    const G4double deuteron_mass = G4Deuteron::Deuteron()->GetPDGMass()/MeV;
-    const G4double alpha_mass = G4Alpha::Alpha()->GetPDGMass()/MeV;
-    
-    G4int myZ = G4int(Z + 0.5);
-    G4int myA = G4int(A + 0.5);
-    if( myA <= 0 )return DBL_MAX;
-    if( myZ > myA)return DBL_MAX;
-    if( myA == 1 )
-    {
-      if( myZ == 0 )return neutron_mass*MeV;
-      if( myZ == 1 )return proton_mass*MeV + electron_mass*MeV;   // hydrogen
-    }
-    else if( myA == 2 && myZ == 1 )
-    {
-      return deuteron_mass*MeV;
-    }
-    else if( myA == 4 && myZ == 2 )
-    {
-      return alpha_mass*MeV;
-    }
-    //
-    // Weitzsaecker's Mass formula
-    //
-    G4double mass =
-      (A-Z)*neutron_mass + Z*proton_mass + Z*electron_mass
-      - 15.67*A                                          // nuclear volume
-      + 17.23*std::pow(A,2./3.)                               // surface energy
-      + 93.15*std::pow(A/2.-Z,2.)/A                           // asymmetry
-      + 0.6984523*std::pow(Z,2.)*std::pow(A,-1./3.);               // coulomb
-    G4int ipp = (myA - myZ)%2;            // pairing
-    G4int izz = myZ%2;
-    if( ipp == izz )mass += (ipp+izz-1) * 12.0 * std::pow(A,-0.5);
-    return mass*MeV;
+    // Now returns (atomic mass - electron masses) 
+    return G4NucleiProperties::GetNuclearMass(A, Z);
   }
  
  G4double
