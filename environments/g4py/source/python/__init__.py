@@ -1,4 +1,4 @@
-# $Id: __init__.py,v 1.2 2006-04-25 08:09:45 kmura Exp $
+# $Id: __init__.py,v 1.3 2006-05-15 10:46:21 kmura Exp $
 """
 # ==================================================================
 #  [Geant4] module package
@@ -48,8 +48,6 @@ from G4visualization  import *
 from G4graphics_reps  import *
 from HEPUnit          import *
 from colortable       import *
-from g4viscp          import *
-
 
 # ==================================================================
 # globals, which start with "g"
@@ -57,7 +55,6 @@ from g4viscp          import *
 # ------------------------------------------------------------------
 # gRunManager
 # ------------------------------------------------------------------
-#global gRunManager, gRunManagerKernel
 if(G4RunManager.GetRunManager() == None):
   gRunManager= G4RunManager()
 else:
@@ -67,58 +64,51 @@ gRunManagerKernel= G4RunManagerKernel.GetRunManagerKernel()
 # ------------------------------------------------------------------
 # gEventManager
 # ------------------------------------------------------------------
-#global gEventManager
 gEventManager= G4EventManager.GetEventManager()
 
 # ------------------------------------------------------------------
 # gStackManager
 # ------------------------------------------------------------------
-#global gStackManager
 gStackManager= gEventManager.GetStackManager()
 
 # ------------------------------------------------------------------
 # gTrackingManager
 # ------------------------------------------------------------------
-#global gTrackingManager
 gTrackingManager= gEventManager.GetTrackingManager()
 
 # ------------------------------------------------------------------
 # gStateManager
 # ------------------------------------------------------------------
-#global gStateManager
 gStateManager= G4StateManager.GetStateManager()
 
 # ------------------------------------------------------------------
 # gTransportationManager
 # ------------------------------------------------------------------
-#global gTransportationManager
 gTransportationManager= G4TransportationManager.GetTransportationManager()
 
 # ------------------------------------------------------------------
 # gParticleTable
 # ------------------------------------------------------------------
-#global gParticleTable
 gParticleTable= G4ParticleTable.GetParticleTable()
-
-#global gParticleIterator
 gParticleIterator= PyG4ParticleList()
 
 # ------------------------------------------------------------------
 # gProcessTable
 # ------------------------------------------------------------------
-#global gProcessTable
 gProcessTable= G4ProcessTable.GetProcessTable()
+
+# ------------------------------------------------------------------
+# gEmCalculator
+# ------------------------------------------------------------------
+gEmCalculator= G4EmCalculator()
 
 # ------------------------------------------------------------------
 # gNistManager (since 7.1)
 # ------------------------------------------------------------------
-#global gNistManager
-
 material_class_list= dir(G4materials)
 qfind= (material_class_list.count("G4NistManager") >0)
 if(qfind) :
   gNistManager= G4NistManager.Instance()
-
 
 # ------------------------------------------------------------------
 # gVisManager
@@ -179,14 +169,14 @@ if(G4VisManager.GetConcreteInstance() == None):
 # ------------------------------------------------------------------
 # functions
 # ------------------------------------------------------------------
-#global gApplyUICommand
 gApplyUICommand= G4interface.ApplyUICommand
-
-#global gGetCurrentValues
 gGetCurrentValues= G4interface.GetCurrentValues
-
-#global gStartUISession
 gStartUISession= G4interface.StartUISession
+
+# EmCalculator
+from emcalculator import *
+gCalculatePhotonCrossSection= CalculatePhotonCrossSection
+gCalculateDEDX= CalculateDEDX
 
 # ==================================================================
 # extentions
