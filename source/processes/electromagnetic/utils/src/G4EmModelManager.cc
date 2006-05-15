@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmModelManager.cc,v 1.34 2006-05-13 18:51:38 vnivanch Exp $
+// $Id: G4EmModelManager.cc,v 1.35 2006-05-15 09:30:34 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -406,14 +406,15 @@ const G4DataVector* G4EmModelManager::Initialise(const G4ParticleDefinition* p,
 
       G4double tcutmin = model->MinEnergyCut(particle, couple);
 
-      cut = std::max(cut, tcutmin);
-      subcut = std::max(subcut, tcutmin);
+      if(cut < tcutmin) cut = tcutmin;
+      if(subcut < tcutmin) subcut = tcutmin;
       if(1 < verboseLevel) {
             G4cout << "The model # " << j
                    << "; tcutmin(MeV)= " << tcutmin/MeV
                    << "; tcut(MeV)= " << cut/MeV
                    << "; tsubcut(MeV)= " << subcut/MeV
-                    << G4endl;
+                   << " for " << particle->GetParticleName()
+		   << G4endl;
       }
     }
     theCuts.push_back(cut);
@@ -451,7 +452,7 @@ void G4EmModelManager::FillDEDXVector(G4PhysicsVector* aVector,
 
   size_t i = couple->GetIndex();
   G4double cut = theCuts[i];
-  G4double subcut = 0;
+  G4double subcut = 0.0;
 
   if(fTotal == tType) cut = DBL_MAX;
   else if(fSubRestricted == tType) subcut = theSubCuts[i];
@@ -462,6 +463,7 @@ void G4EmModelManager::FillDEDXVector(G4PhysicsVector* aVector,
 	   << "  Ecut(MeV)= " << cut
 	   << "  Esubcut(MeV)= " << subcut
 	   << "  Type " << tType
+	   << "  for " << particle->GetParticleName()
            << G4endl;
   }
 
@@ -491,7 +493,7 @@ void G4EmModelManager::FillDEDXVector(G4PhysicsVector* aVector,
   e = upperEkin[regModels->ModelIndex(0)];
   G4VEmModel* model = models[regModels->ModelIndex(0)]; 
   dedxHigh[0] = 0.0;
-  if(model) {
+  if(model && cut > subcut) {
     dedxHigh[0] = model->ComputeDEDX(couple,particle,e,cut);
     if(subcut > 0.0) 
       dedxHigh[0] -= model->ComputeDEDX(couple,particle,e,subcut);
@@ -505,11 +507,13 @@ void G4EmModelManager::FillDEDXVector(G4PhysicsVector* aVector,
       dedxLow[j] = models[idx]->ComputeDEDX(couple,particle,e,cut);
       if(subcut > 0.0) 
 	dedxLow[j] -= models[idx]->ComputeDEDX(couple,particle,e,subcut);
+      if(subcut == cut) dedxLow[j] = 0.0;
 
       e = upperEkin[idx];
       dedxHigh[j] = models[idx]->ComputeDEDX(couple,particle,e,cut);
       if(subcut > 0.0) 
 	dedxHigh[j] -= models[idx]->ComputeDEDX(couple,particle,e,subcut);
+      if(subcut == cut) dedxHigh[j] = 0.0;
     }
 
     for(j=1; j<nmod; j++) {
@@ -539,8 +543,10 @@ void G4EmModelManager::FillDEDXVector(G4PhysicsVector* aVector,
 
     model = models[regModels->ModelIndex(k)];
     G4double dedx = 0.0;
-    if(model) {
+    G4double dedx0 = 0.0;
+    if(model && cut > subcut) {
       dedx = model->ComputeDEDX(couple,particle,e,cut); 
+      dedx0 = dedx;
       if(subcut > 0.0) dedx -= model->ComputeDEDX(couple,particle,e,subcut); 
       dedx *= fac;
     }
@@ -550,6 +556,7 @@ void G4EmModelManager::FillDEDXVector(G4PhysicsVector* aVector,
         G4cout << "Material= " << couple->GetMaterial()->GetName()
                << "   E(MeV)= " << e/MeV
                << "  dEdx(MeV/mm)= " << dedx*mm/MeV
+               << "  dEdx0(MeV/mm)= " << dedx0*mm/MeV
                << "  fac= " << fac
                << G4endl;
     }

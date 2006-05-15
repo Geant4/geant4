@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.86 2006-05-15 06:22:24 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.87 2006-05-15 09:30:35 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -172,9 +172,9 @@ G4VEnergyLossProcess::G4VEnergyLossProcess(const G4String& name,
   useSubCutoff(false)
 {
 
-  lowestKinEnergy      = 1.*eV;
-  minKinEnergy         = 0.1*keV;
-  maxKinEnergy         = 100.0*GeV;
+  lowestKinEnergy  = 1.*eV;
+  minKinEnergy     = 0.1*keV;
+  maxKinEnergy     = 100.0*GeV;
   maxKinEnergyCSDA = 1.0*GeV;
 
   pParticleChange = &fParticleChange;
@@ -668,7 +668,6 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
 	  eloss -= GetSubDEDXForScaledEnergy(preStepScaledEnergy)*length;
           if(eloss < 0.0) eloss = 0.0;
 	  SampleSubCutSecondaries(scTracks, step, cut, currentModel);
-
 	  if(nProcesses) {
 	    for(G4int i=0; i<nProcesses; i++) {
 	      (scProcesses[i])->SampleSubCutSecondaries(scTracks, step, rcut, 
@@ -760,7 +759,6 @@ void G4VEnergyLossProcess::SampleSubCutSecondaries(
     chargeSqRatio*(((*theSubLambdaTable)[currentMaterialIndex])->
                    GetValue(preStepScaledEnergy, b));
   G4double length = step.GetStepLength();
-  currentCut = subcut;
   if(length*cross < 1.e-9) return;
   /*  
   if(-1 < verboseLevel) 
