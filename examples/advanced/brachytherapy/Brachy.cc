@@ -77,9 +77,10 @@ int main(int argc ,char ** argv)
 
   G4String sensitiveDetectorName = "Phantom";
 
-  // Initialize the Physics component
+  // Initialize the physics component
   pRunManager -> SetUserInitialization(new BrachyPhysicsList);
 
+  // Initialize the detector component
   BrachyDetectorConstruction  *pDetectorConstruction = new  BrachyDetectorConstruction(sensitiveDetectorName);
   pRunManager -> SetUserInitialization(pDetectorConstruction);
 

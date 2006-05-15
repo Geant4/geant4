@@ -2,8 +2,7 @@
 /control/verbose 1
 /run/verbose 0
 /event/verbose 0
-/run/initialize
-/run/beamOn  40000
+/run/beamOn  20000
 
 
 

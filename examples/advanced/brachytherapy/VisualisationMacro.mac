@@ -17,8 +17,9 @@
 /tracking/storeTrajectory 1
 /vis/scene/endOfEventAction accumulate
 /vis/viewer/update
-/run/initialize
+/vis/scene/transientsAction none
+##/primary/energy Iodium   
+##/source/switch Iodium
 /vis/viewer/zoom 5
-#/source/switch Iodium
-#/primary/energy Iodium   
-#/phantom/selectMaterial Lead
+/run/beamOn 100
+
