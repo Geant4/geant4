@@ -61,12 +61,12 @@
 
 // BINARY + PRECOMPOUND PHYSICS LIST
 //
-// BINARY + PRECOMPOUND + EVAPORATION(DEFAULT EVAPORATION) NO FERMI BREAK-UP FOR PROTONS, NEUTRONS AND PIONS
+// BINARY + PRECOMPOUND + EVAPORATION(DEFAULT EVAPORATION) FOR PROTONS, NEUTRONS AND PIONS
 // 
 // LEP MODEL UP TO 100 MEV AND BINARY ION MODEL BETWEEN 80 MEV AND 40. GEV 
 // FOR  DEUTERON, TRITON, HE3, ALPHA
 // 
-//FISSION AND HADRON CAPTURE FOR NEUTRONS BETWEEN 0. MEV AND 100. TEV
+// FISSION AND HADRON CAPTURE FOR NEUTRONS BETWEEN 0. MEV AND 100. TEV
 //
 HadrontherapyProtonBinary::HadrontherapyProtonBinary(const G4String& name): 
   G4VPhysicsConstructor(name)
@@ -77,7 +77,7 @@ HadrontherapyProtonBinary::HadrontherapyProtonBinary(const G4String& name):
   LEPHighLimit = 100.*MeV;
 
   // Energy limits for protons, neutrons and pions
-  precompoundLowLimit = 100.*MeV;
+  precompoundLowLimit = 0.*MeV;
   precompoundHighLimit = 300.*MeV;
   neutronLowLimit = 0.*TeV;
   neutronHighLimit = 100.*TeV;

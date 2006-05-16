@@ -58,6 +58,7 @@
 #include "HadrontherapyProtonPrecompoundFermi.hh"
 #include "HadrontherapyProtonPrecompoundGEM.hh"
 #include "HadrontherapyProtonPrecompoundGEMFermi.hh"
+#include "HadrontherapyProtonBertini.hh"
 #include "HadrontherapyProtonBinary.hh"
 #include "HadrontherapyMuonStandard.hh"
 #include "HadrontherapyDecay.hh"
@@ -253,7 +254,8 @@ void HadrontherapyPhysicsList::AddPhysicsList(const G4String& name)
 	  positronIsRegistered = true;
 	}
     }
-  
+ 
+  // ******** HADRONS AND IONS ********//
   // Register Low Energy  processes for protons and ions
   // Stopping power parameterisation: ICRU49 (default model)
   
@@ -505,7 +507,31 @@ if (name == "proton-precompound-binary")
     }
 
 //--------------------------------------------------------------------------------------------
-// End Hadronic Binary models
+// Begin Hadronic Bertini model
+//--------------------------------------------------------------------------------------------
+
+//  Bertini model for protons, pions and neutrons
+
+if (name == "proton-bertini") 
+    {
+      if (protonHadronicIsRegistered) 
+	{
+	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name  
+		 << " cannot be registered ---- decay List already existing" 
+                 << G4endl;
+	} 
+      else 
+	{
+	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name 
+                 << " is registered" << G4endl;
+	  RegisterPhysics( new HadrontherapyProtonBertini(name) );
+	  protonHadronicIsRegistered = true;
+	}
+
+    }
+
+//--------------------------------------------------------------------------------------------
+// End Hadronic models
 //--------------------------------------------------------------------------------------------
   
   if (electronIsRegistered && positronIsRegistered && photonIsRegistered &&

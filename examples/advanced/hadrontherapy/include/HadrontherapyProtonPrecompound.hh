@@ -112,26 +112,26 @@ private:
 
 
   // Proton inelastic proces
-  G4ProtonInelasticProcess       theIPProton;
+  G4ProtonInelasticProcess       protonInelasticProcess;
   // Cross Section for proton inelastic process
-  G4ProtonInelasticCrossSection  thePXSec;
+  G4ProtonInelasticCrossSection  protonInelasticCrossSection;
 
   // Neutron inelastic process
-  G4NeutronInelasticProcess	 theIPNeutron;
+  G4NeutronInelasticProcess	 neutronInelasticProcess;
   // Cross Section for neutron inelastic process
-  G4NeutronInelasticCrossSection   theNXSec;
+  G4NeutronInelasticCrossSection neutronInelasticCrossSection;
 
   // Deuteron inelastic process
-  G4DeuteronInelasticProcess      theIPdeuteron;
+  G4DeuteronInelasticProcess     deuteronInelasticProcess;
      
   // Tritium inelastic process
-  G4TritonInelasticProcess        theIPtriton;
+  G4TritonInelasticProcess       tritonInelasticProcess;
 
   // Alpha inelastic process
-  G4AlphaInelasticProcess         theIPalpha;
+  G4AlphaInelasticProcess        alphaInelasticProcess;
  
   // He3 inelastic process
-  G4HadronInelasticProcess*       theIPHe3; 
+  G4HadronInelasticProcess*      He3InelasticProcess; 
 };
 #endif
 

@@ -64,7 +64,8 @@ void HadrontherapyIonLowE::ConstructProcess()
   
       // Electromagnetic interactions for protons, pions, generic hadrons
       // deuteron, triton, alpha particles, He3, ions.
-     if (( charge != 0. ) && particleName != "e+" && particleName != "mu+" &&
+    
+      if (( charge != 0. ) && particleName != "e+" && particleName != "mu+" &&
 	  particleName != "e-" && particleName != "mu-") 
 	{
 	  if((!particle -> IsShortLived()) &&

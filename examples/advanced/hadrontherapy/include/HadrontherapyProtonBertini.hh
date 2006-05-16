@@ -84,7 +84,7 @@
 class HadrontherapyProtonBertini: public G4VPhysicsConstructor 
 {
  public:
-   HadrontherapyProtonBertini(const G4String& name = "protonBertini");
+   HadrontherapyProtonBertini(const G4String& name = "proton-bertini");
    virtual ~HadrontherapyProtonBertini();
 
  protected:
