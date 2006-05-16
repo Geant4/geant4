@@ -83,6 +83,7 @@ HadrontherapyPhysicsList::HadrontherapyPhysicsList(): G4VModularPhysicsList(),
  
   defaultCutValue = 10. * mm;
 
+  // Messenger: it is possible to activate interactively physics processes and models
   messenger = new HadrontherapyPhysicsListMessenger(this);
 
   SetVerboseLevel(1);
@@ -392,7 +393,7 @@ void HadrontherapyPhysicsList::AddPhysicsList(const G4String& name)
  
 
 //--------------------------------------------------------------------------------------------
-//Begin Hadronic Precompound models
+// Begin Hadronic Precompound models
 //--------------------------------------------------------------------------------------------
 //
 // Register the hadronic physics for protons, neutrons, ions

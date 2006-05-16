@@ -95,5 +95,5 @@ void HadrontherapyMuonStandard::ConstructProcess()
 	    pmanager -> AddProcess(new G4MuonMinusCaptureAtRest(), 0,-1,-1);
 	}
     }
-  G4cout << "Muon processes are active!"<<G4endl;
+  // G4cout << "Muon processes are active!"<<G4endl;
 }

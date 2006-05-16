@@ -51,9 +51,9 @@
 /vis/scene/endOfEventAction accumulate
 /vis/viewer/update
 /vis/scene/transientsAction none
+/run/beamOn 1000
 
-/beam/energy/meanEnergy 63.5 MeV
-/run/beamOn 500
+
 
 
 

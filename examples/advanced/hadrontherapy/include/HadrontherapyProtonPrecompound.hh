@@ -129,9 +129,6 @@ private:
 
   // Alpha inelastic process
   G4AlphaInelasticProcess        alphaInelasticProcess;
- 
-  // He3 inelastic process
-  G4HadronInelasticProcess*      He3InelasticProcess; 
 };
 #endif
 

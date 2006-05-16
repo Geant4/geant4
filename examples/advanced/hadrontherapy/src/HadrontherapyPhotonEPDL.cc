@@ -50,7 +50,8 @@ HadrontherapyPhotonEPDL::~HadrontherapyPhotonEPDL()
 
 void HadrontherapyPhotonEPDL::ConstructProcess()
 {
-  // Add EPDL processes for photons
+  // Add electromagnetic processes for photons, Low Energy Package,
+  // model based on EPDL Libraries
   
   theParticleIterator -> reset();
 

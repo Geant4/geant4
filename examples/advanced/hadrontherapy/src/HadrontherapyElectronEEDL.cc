@@ -50,7 +50,7 @@ HadrontherapyElectronEEDL::~HadrontherapyElectronEEDL()
 
 void HadrontherapyElectronEEDL::ConstructProcess()
 {
-  // Add EEDL processes for electrons
+  // Add electromagnetic processes for electrons - Low Energy Package, EEDL libraries
   
   theParticleIterator->reset();
 

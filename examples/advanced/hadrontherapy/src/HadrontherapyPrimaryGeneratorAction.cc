@@ -43,6 +43,7 @@
 
 HadrontherapyPrimaryGeneratorAction::HadrontherapyPrimaryGeneratorAction()
 {
+  // Define the messenger
   gunMessenger = new HadrontherapyPrimaryGeneratorMessenger(this);
 
   particleGun  = new G4ParticleGun();
@@ -71,7 +72,7 @@ void HadrontherapyPrimaryGeneratorAction::SetDefaultPrimaryParticle()
   // Define the energy of primary particles:
   // gaussian distribution with mean energy = 63.450 *MeV
   // and sigma = 400.0 *keV
-  G4double defaultMeanKineticEnergy = 63.450 *MeV;
+  G4double defaultMeanKineticEnergy = 63.50 *MeV;
   meanKineticEnergy = defaultMeanKineticEnergy;
 
   G4double defaultsigmaEnergy = 400.0 *keV;
