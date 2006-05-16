@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TransportationManager.cc,v 1.12 2006-05-15 17:00:25 asaim Exp $
+// $Id: G4TransportationManager.cc,v 1.13 2006-05-16 11:00:00 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -59,7 +59,7 @@ G4TransportationManager::G4TransportationManager()
     trackingNavigator->Activate(true);
     fNavigators.push_back(trackingNavigator);
     fActiveNavigators.push_back(trackingNavigator);
-    fWorlds.push_back(trackingNavigator->GetWorldVolume()); // NULL will be registered
+    fWorlds.push_back(trackingNavigator->GetWorldVolume()); // NULL registered
 
     fGeomMessenger     = new G4GeometryMessenger(this);
     fFieldManager      = new G4FieldManager();
@@ -141,7 +141,7 @@ void G4TransportationManager::ClearNavigators()
 // GetParallelWorld()
 //
 // Provided the name of a world volume, returns the associated world pointer.
-// If not existing, create (allocate) but NOT register it in the collection.
+// If not existing, create (allocate) and register it in the collection.
 //
 G4VPhysicalVolume*
 G4TransportationManager::GetParallelWorld( const G4String& worldName )
@@ -151,8 +151,7 @@ G4TransportationManager::GetParallelWorld( const G4String& worldName )
    {
      wPV = GetNavigatorForTracking()->GetWorldVolume();
      G4LogicalVolume* wLV = wPV->GetLogicalVolume();
-     wLV = new G4LogicalVolume(wLV->GetSolid(),
-                               0,
+     wLV = new G4LogicalVolume(wLV->GetSolid(), 0,
                                worldName);
      wPV = new G4PVPlacement (wPV->GetRotation(),
                               wPV->GetTranslation(),
@@ -166,8 +165,8 @@ G4TransportationManager::GetParallelWorld( const G4String& worldName )
 // GetNavigator()
 //
 // Provided the name of a world volume, returns the associated navigator.
-// If not existing, create it and register it in the collection, generate
-// appropriate parallel world for it and register it in the collection.
+// If not existing, create it and register it in the collection, throw an
+// exception if the associated parallel world does not exist.
 //
 G4Navigator* G4TransportationManager::GetNavigator( const G4String& worldName )
 {
@@ -179,7 +178,8 @@ G4Navigator* G4TransportationManager::GetNavigator( const G4String& worldName )
       if ((*pNav)->GetWorldVolume()->GetName() == worldName) { return *pNav; }
    }
 
-   // Check if world of that name already exists, create a navigator and register it
+   // Check if world of that name already exists,
+   // create a navigator and register it
    //
    G4Navigator* aNavigator = 0;
    G4VPhysicalVolume* aWorld = IsWorldExisting(worldName);
@@ -205,8 +205,8 @@ G4Navigator* G4TransportationManager::GetNavigator( const G4String& worldName )
 // GetNavigator()
 //
 // Provided a pointer to a world volume, returns the associated navigator.
-// If world volume not existing, register it in the collection and create
-// the associated navigator.
+// Create it in case not existing and add it to the collection.
+// If world volume not existing, issue an exception.
 //
 G4Navigator* G4TransportationManager::GetNavigator( G4VPhysicalVolume* aWorld )
 {
@@ -300,9 +300,10 @@ G4int G4TransportationManager::ActivateNavigator( G4Navigator* aNavigator )
    aNavigator->Activate(true);
    G4int id = 0;
    std::vector<G4Navigator*>::iterator pActiveNav;
-   for(pActiveNav=fActiveNavigators.begin();pActiveNav!=fActiveNavigators.end();pActiveNav++)
+   for(pActiveNav=fActiveNavigators.begin();
+       pActiveNav!=fActiveNavigators.end(); pActiveNav++)
    {
-      if(*pActiveNav == aNavigator) return id;
+      if (*pActiveNav == aNavigator)  { return id; }
       id++;
    }
    
@@ -372,7 +373,8 @@ G4VPhysicalVolume*
 G4TransportationManager::IsWorldExisting ( const G4String& name )
 {
    std::vector<G4VPhysicalVolume*>::iterator pWorld = fWorlds.begin();
-   if(*pWorld==0) *pWorld=fNavigators[0]->GetWorldVolume();
+   if (*pWorld==0)  { *pWorld=fNavigators[0]->GetWorldVolume(); }
+
    for (pWorld=fWorlds.begin(); pWorld!=fWorlds.end(); pWorld++)
    {
       if ((*pWorld)->GetName() == name ) { return *pWorld; }
