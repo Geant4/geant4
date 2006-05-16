@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MatScanMessenger.hh,v 1.1 2006-05-04 19:42:47 asaim Exp $
+// $Id: G4MatScanMessenger.hh,v 1.2 2006-05-16 21:57:14 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -37,6 +37,7 @@
 class G4UIdirectory;
 class G4UIcmdWithoutParameter;
 class G4UIcommand;
+class G4UIcmdWith3Vector;
 class G4UIcmdWith3VectorAndUnit;
 class G4UIcmdWithABool;
 class G4UIcmdWithAString;
@@ -59,6 +60,7 @@ class G4MatScanMessenger : public G4UImessenger
     G4UIcommand* thetaCmd;
     G4UIcommand* phiCmd;
     G4UIcommand* singleCmd;
+    G4UIcmdWith3Vector* single2Cmd;
     G4UIcmdWithABool* regSenseCmd;
     G4UIcmdWithAString* regionCmd;
     G4UIcmdWith3VectorAndUnit* eyePosCmd;

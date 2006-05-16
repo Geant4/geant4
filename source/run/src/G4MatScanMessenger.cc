@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MatScanMessenger.cc,v 1.1 2006-05-04 19:42:47 asaim Exp $
+// $Id: G4MatScanMessenger.cc,v 1.2 2006-05-16 21:57:14 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -36,6 +36,7 @@
 #include "G4UIcmdWithoutParameter.hh"
 #include "G4UIcmdWithABool.hh"
 #include "G4UIcmdWith3VectorAndUnit.hh"
+#include "G4UIcmdWith3Vector.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4MaterialScanner.hh"
 #include "G4ThreeVector.hh"
@@ -106,6 +107,10 @@ G4MatScanMessenger::G4MatScanMessenger(G4MaterialScanner* p1)
   par->SetDefaultValue("deg");
   par->SetParameterCandidates(singleCmd->UnitsList(singleCmd->CategoryOf("deg")));
   singleCmd->SetParameter(par);
+
+  single2Cmd = new G4UIcmdWith3Vector("/control/matScan/singleTo",this);
+  single2Cmd->SetGuidance("Measure thicknesss for one direction defined by a unit vector.");
+  single2Cmd->SetParameterName("X","Y","Z",false);
 
   eyePosCmd = new G4UIcmdWith3VectorAndUnit("/control/matScan/eyePosition",this);
   eyePosCmd->SetGuidance("Define the eye position.");
@@ -204,7 +209,7 @@ void G4MatScanMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
   { theScanner->SetRegionSensitive(regSenseCmd->GetNewBoolValue(newValue)); }
   else if(command==regionCmd)
   { if(theScanner->SetRegionName(newValue)) theScanner->SetRegionSensitive(true); }
-  else if(command==singleCmd)
+  else if(command==singleCmd || command==single2Cmd)
   {
     G4int ntheta = theScanner->GetNTheta();
     G4double thetaMin = theScanner->GetThetaMin();
@@ -213,12 +218,23 @@ void G4MatScanMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
     G4double phiMin = theScanner->GetPhiMin();
     G4double phiSpan = theScanner->GetPhiSpan();
 
-    G4Tokenizer next( newValue );
-    G4double theta = StoD(next());
-    G4double phi = StoD(next());
-    G4String unit = next();
-    theta *= singleCmd->ValueOf(unit);
-    phi *= singleCmd->ValueOf(unit);
+    G4double theta = 0.;
+    G4double phi = 0.;
+    if(command==singleCmd)
+    {
+      G4Tokenizer next( newValue );
+      theta = StoD(next());
+      phi = StoD(next());
+      G4String unit = next();
+      theta *= singleCmd->ValueOf(unit);
+      phi *= singleCmd->ValueOf(unit);
+    }
+    else if(command==single2Cmd)
+    {
+      G4ThreeVector v = single2Cmd->GetNew3VectorValue(newValue);
+      theta = v.theta();
+      phi = v.phi();
+    }
     theScanner->SetNTheta(1);
     theScanner->SetThetaMin(theta);
     theScanner->SetThetaSpan(0.);
