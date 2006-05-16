@@ -141,17 +141,17 @@
     //
     // calculate Q-value of reactions
     //
-    G4double theAtomicMass = targetNucleus.AtomicMass( N, Z )-(Z)*G4Electron::Electron()->GetPDGMass();
+    G4double theAtomicMass = targetNucleus.AtomicMass( N, Z );
     G4double massVec[9];
-    massVec[0] = targetNucleus.AtomicMass( N+1.0, Z+1.0 )-(Z+1.0)*G4Electron::Electron()->GetPDGMass();
-    massVec[1] = targetNucleus.AtomicMass( N    , Z+1.0 )-(Z+1.0)*G4Electron::Electron()->GetPDGMass();
+    massVec[0] = targetNucleus.AtomicMass( N+1.0, Z+1.0 );
+    massVec[1] = targetNucleus.AtomicMass( N    , Z+1.0 );
     massVec[2] = theAtomicMass;
-    massVec[3] = targetNucleus.AtomicMass( N-1.0, Z     )-(Z)*G4Electron::Electron()->GetPDGMass();
-    massVec[4] = targetNucleus.AtomicMass( N-2.0, Z     )-(Z)*G4Electron::Electron()->GetPDGMass();
-    massVec[5] = targetNucleus.AtomicMass( N-3.0, Z-1.0 )-(Z-1.0)*G4Electron::Electron()->GetPDGMass();
-    massVec[6] = targetNucleus.AtomicMass( N-1.0, Z+1.0 )-(Z+1.0)*G4Electron::Electron()->GetPDGMass();
+    massVec[3] = targetNucleus.AtomicMass( N-1.0, Z     );
+    massVec[4] = targetNucleus.AtomicMass( N-2.0, Z     );
+    massVec[5] = targetNucleus.AtomicMass( N-3.0, Z-1.0 );
+    massVec[6] = targetNucleus.AtomicMass( N-1.0, Z+1.0 );
     massVec[7] = massVec[3];
-    massVec[8] = targetNucleus.AtomicMass( N-1.0, Z-1.0 )-(Z-1.0)*G4Electron::Electron()->GetPDGMass();
+    massVec[8] = targetNucleus.AtomicMass( N-1.0, Z-1.0 );
     
     G4FastVector<G4ReactionProduct,4> vec;  // vec will contain the secondary particles
     G4int vecLen = 0;
