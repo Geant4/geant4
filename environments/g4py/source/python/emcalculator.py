@@ -1,4 +1,4 @@
-#$Id: emcalculator.py,v 1.1 2006-05-15 10:46:47 kmura Exp $
+#$Id: emcalculator.py,v 1.2 2006-05-16 04:34:07 kmura Exp $
 """
 # ==================================================================
 #   Python module
@@ -14,7 +14,7 @@ from Geant4 import *
 # ==================================================================
 # Photon Cross Section
 # ==================================================================
-def CalculatePhotonCrossSection(mat, elist, verbose=0, \
+def CalculatePhotonCrossSection(mat, elist, verbose=0,
                                 plist=["compt", "", "phot", "conv"]):
   """
   Calculate photon cross section for a given material and
@@ -52,17 +52,17 @@ def CalculatePhotonCrossSection(mat, elist, verbose=0, \
   for ekin in elist:
     xsec= {}
     xsec["compt"] \
-      = gEmCalculator.ComputeCrossSectionPerVolume(ekin, "gamma", plist[0], \
+      = gEmCalculator.ComputeCrossSectionPerVolume(ekin, "gamma", plist[0],
                                                    mat) * cm2/g
     xsec["rayleigh"] \
-      = gEmCalculator.ComputeCrossSectionPerVolume(ekin, "gamma", plist[1], \
+      = gEmCalculator.ComputeCrossSectionPerVolume(ekin, "gamma", plist[1],
                                                    mat) * cm2/g
     
     xsec["phot"] \
-      = gEmCalculator.ComputeCrossSectionPerVolume(ekin, "gamma", plist[2], \
+      = gEmCalculator.ComputeCrossSectionPerVolume(ekin, "gamma", plist[2],
                                                    mat) * cm2/g
     xsec["conv"] \
-      = gEmCalculator.ComputeCrossSectionPerVolume(ekin, "gamma", plist[3], \
+      = gEmCalculator.ComputeCrossSectionPerVolume(ekin, "gamma", plist[3],
                                                    mat) * cm2/g
 
     xsec["tot"]= xsec["compt"] + xsec["rayleigh"] + xsec["phot"] + xsec["conv"]
@@ -71,7 +71,7 @@ def CalculatePhotonCrossSection(mat, elist, verbose=0, \
 
     if(verbose>0):    
       print " %8.3e   %8.3e   %8.3e   %8.3e   %8.3e   %8.3e" \
-            % (ekin/MeV, xsec["compt"]/(cm2/g), xsec["rayleigh"]/(cm2/g), \
+            % (ekin/MeV, xsec["compt"]/(cm2/g), xsec["rayleigh"]/(cm2/g), 
                xsec["phot"]/(cm2/g), xsec["conv"]/(cm2/g), xsec["tot"]/(cm2/g))
       
   return xsection_list
@@ -80,7 +80,7 @@ def CalculatePhotonCrossSection(mat, elist, verbose=0, \
 # ==================================================================
 # Stopping Power
 # ==================================================================
-def CalculateDEDX(part, mat, elist, verbose=0, \
+def CalculateDEDX(part, mat, elist, verbose=0, 
                   plist=["eIoni", "eBrem", "muIoni", "muBrems", "hIoni"]):
   """
   Calculate stopping powers for a give particle, material and
@@ -135,7 +135,7 @@ def CalculateDEDX(part, mat, elist, verbose=0, \
 
     if(verbose>0):    
       print " %8.3e     %8.3e     %8.3e     %8.3e" \
-            % (ekin/MeV, dedx["ioni"]/(MeV*cm2/g), \
+            % (ekin/MeV, dedx["ioni"]/(MeV*cm2/g), 
                dedx["brems"]/(MeV*cm2/g), dedx["tot"]/(MeV*cm2/g) )
         
 
