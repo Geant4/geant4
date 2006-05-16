@@ -97,7 +97,7 @@ export G4LIB_USE_STEP=1
 # New data for emlowen-V03-02-45: affected tests 14,17,20!
 #export G4LEDATA=$G4INSTALL/../G4EMLOW0.4
 
-export G4LEDATA=/afs/cern.ch/sw/geant4/dev/data/G4EMLOW3.0
+export G4LEDATA=/afs/cern.ch/sw/geant4/dev/data/G4EMLOW4.0
 #export G4LEDATA=$G4INSTALL/../G4EMLOW3.0
 
 #export G4ANALYSIS_USE=1
