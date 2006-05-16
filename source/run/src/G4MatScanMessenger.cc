@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MatScanMessenger.cc,v 1.2 2006-05-16 21:57:14 asaim Exp $
+// $Id: G4MatScanMessenger.cc,v 1.3 2006-05-16 22:40:35 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -232,7 +232,7 @@ void G4MatScanMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
     else if(command==single2Cmd)
     {
       G4ThreeVector v = single2Cmd->GetNew3VectorValue(newValue);
-      theta = v.theta();
+      theta = 90.*deg - v.theta();
       phi = v.phi();
     }
     theScanner->SetNTheta(1);
