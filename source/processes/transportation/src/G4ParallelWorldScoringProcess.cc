@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelWorldScoringProcess.cc,v 1.2 2006-05-06 08:52:53 asaim Exp $
+// $Id: G4ParallelWorldScoringProcess.cc,v 1.3 2006-05-17 16:34:05 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -111,6 +111,7 @@ void G4ParallelWorldScoringProcess::StartTracking(G4Track*trk)
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // Activate navigator and get the navigator ID
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+G4cout << " G4ParallelWorldScoringProcess::StartTracking" << G4endl;
   if(fGhostNavigator)
   { fNavigatorID = fTransportationManager->ActivateNavigator(fGhostNavigator); }
   else
@@ -122,10 +123,14 @@ void G4ParallelWorldScoringProcess::StartTracking(G4Track*trk)
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Setup initial touchables
+// Let PathFinder initialize
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-  fPathFinder->Locate(trk->GetPosition(),trk->GetMomentumDirection());
+  fPathFinder->PrepareNewTrack(trk->GetPosition(),trk->GetMomentumDirection());
   fOldGhostTouchable = fPathFinder->CreateTouchableHandle(fNavigatorID);
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// Setup initial touchables
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   fGhostPreStepPoint->SetTouchableHandle(fOldGhostTouchable);
   fNewGhostTouchable = fOldGhostTouchable;
@@ -163,6 +168,7 @@ G4VParticleChange* G4ParallelWorldScoringProcess::AtRestDoIt(
   G4VSensitiveDetector* aSD = 0;
   if(fOldGhostTouchable->GetVolume())
   { aSD = fOldGhostTouchable->GetVolume()->GetLogicalVolume()->GetSensitiveDetector(); }
+  fOnBoundary = false;
   CopyStep(step);
   fGhostPreStepPoint->SetSensitiveDetector(aSD);
 
@@ -301,8 +307,9 @@ G4double G4ParallelWorldScoringProcess::AlongStepGetPhysicalInteractionLength(
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // ComputeStep
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    returnedStep = fPathFinder->ComputeStep(fFieldTrack,currentMinimumStep,fNavigatorID,
-       track.GetCurrentStepNumber(),fGhostSafety,eLimited,endTrack);
+    returnedStep
+      = fPathFinder->ComputeStep(fFieldTrack,currentMinimumStep,fNavigatorID,
+                     track.GetCurrentStepNumber(),fGhostSafety,eLimited,endTrack);
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     if(eLimited == kDoNot)
     {
@@ -312,7 +319,7 @@ G4double G4ParallelWorldScoringProcess::AlongStepGetPhysicalInteractionLength(
     else
     {
       // Track is on the boundary
-      fOnBoundary = false;
+      fOnBoundary = true;
     }
   }
 
@@ -343,8 +350,16 @@ void G4ParallelWorldScoringProcess::CopyStep(const G4Step & step)
   fGhostStep->SetControlFlag(step.GetControlFlag());
 
   *fGhostPreStepPoint = *(step.GetPreStepPoint());
-
   *fGhostPostStepPoint = *(step.GetPostStepPoint());
+
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// Set StepStatus for ghost world
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  if(fOnBoundary)
+  { fGhostPostStepPoint->SetStepStatus(fGeomBoundary); }
+  else if(fGhostPostStepPoint->GetStepStatus()==fGeomBoundary)
+  { fGhostPostStepPoint->SetStepStatus(fPostStepDoItProc); }
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 }
 
 void G4ParallelWorldScoringProcess::Verbose(const G4Step& step) const
