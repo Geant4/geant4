@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PathFinder.hh,v 1.6 2006-04-28 17:19:25 japost Exp $
+// $Id: G4PathFinder.hh,v 1.7 2006-05-17 11:38:34 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // class G4PathFinder 
@@ -79,7 +79,9 @@ class G4PathFinder
 			       G4FieldTrack      &EndState );
      // Compute the next geometric Step  -- Curved or linear
 
-   void Locate( const G4ThreeVector& position, const G4ThreeVector& direction); 
+   void Locate( const G4ThreeVector& position, 
+		const G4ThreeVector& direction,
+		G4bool  relativeSearch= true); 
      // Relocate global point in all navigators, and update them.
 
    void PrepareNewTrack( G4ThreeVector position, G4ThreeVector direction); 
