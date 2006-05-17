@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PathFinder.hh,v 1.7 2006-05-17 11:38:34 japost Exp $
+// $Id: G4PathFinder.hh,v 1.8 2006-05-17 15:52:37 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // class G4PathFinder 
@@ -57,7 +57,7 @@ class G4Navigator;
 #include "G4TouchableHandle.hh"
 #include "G4FieldTrack.hh"
 
-enum   ELimited { kDoNot, kUnique, kSharedTransport, kSharedOther } ; 
+enum   ELimited { kDoNot, kUnique, kSharedTransport, kSharedOther, kUndefLimited } ; 
 
 class G4PathFinder
 {
@@ -89,6 +89,7 @@ class G4PathFinder
 
    G4TouchableHandle CreateTouchableHandle( G4int navId) const;
    // Also? G4TouchableCreator& GetTouchableCreator( G4int navId ) const; 
+   inline G4VPhysicalVolume* GetLocatedVolume( G4int navId ) const; 
 
   // -----------------------------------------------------------------
    inline void SetChargeMomentumMass( G4double charge,     // in e+ units
@@ -97,7 +98,7 @@ class G4PathFinder
 
    inline G4bool         IsParticleLooping() const;
 
-   inline G4int  SetVerboseLevel( G4int verbose= -1 );
+   inline G4int  SetVerboseLevel(G4int lev=-1);
   // inline G4int  GetVerboseLevel() const;
 
  public:  // with description
@@ -154,15 +155,19 @@ class G4PathFinder
    // G4int   fNoNavigators; 
    G4bool  fNewTrack;               // Flag a new track (ensure first step)
 
-   static const G4int MaxNav = 8;   // rename to kMaxNoNav ??
-   // enum EMaximumNavs { MaxNav = 8; }
-   ELimited      fLimitedStep[MaxNav];
-   G4bool        fLimitTruth[MaxNav];
-   G4Navigator*  fpNavigator[MaxNav];   // G4Navigator** fpNavigator;
-   G4double      fCurrentStepSize[MaxNav]; 
-   G4double      fNewSafety[ MaxNav ]; 
+   static const G4int fMaxNav = 8;   // rename to kMaxNoNav ??
+   // enum EMaximumNavs { fMaxNav = 8; }
 
+   // Global state (retained during stepping for one track
+   G4Navigator*  fpNavigator[fMaxNav];   // G4Navigator** fpNavigator;
+   // State after a step computation 
+   ELimited      fLimitedStep[fMaxNav];
+   G4bool        fLimitTruth[fMaxNav];
+   G4double      fCurrentStepSize[fMaxNav]; 
+   G4double      fNewSafety[ fMaxNav ]; 
    G4double      fMinSafety, fMinStep; 
+   // State after calling 'locate'
+   G4VPhysicalVolume* fLocatedVolume[fMaxNav];
 
    // G4TransportationManager* fpTransportManager; 
 
@@ -173,12 +178,20 @@ class G4PathFinder
      // For debuging purposes
    G4int  fMax_loop_count;
     // Limit for the number of sub-steps taken in one call to ComputeStep
-
 };
 
 // ********************************************************************
 // Inline methods.
 // ********************************************************************
+inline G4VPhysicalVolume* G4PathFinder::GetLocatedVolume( G4int navId ) const
+{  G4VPhysicalVolume* vol=0;  
+   if( (navId < fMaxNav) && (navId >=0) ) { vol= fLocatedVolume[navId]; }
+   return vol; 
+}
+
+inline G4int  G4PathFinder::SetVerboseLevel(G4int newLevel)
+{  G4int old= fVerboseLevel;  fVerboseLevel= newLevel; return old;
+}
 // #include "G4PathFinder.icc"
 
 #endif 
