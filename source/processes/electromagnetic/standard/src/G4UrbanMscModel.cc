@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel.cc,v 1.13 2006-05-11 14:11:05 urban Exp $
+// $Id: G4UrbanMscModel.cc,v 1.14 2006-05-17 08:55:03 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -83,6 +83,10 @@
 // 11-05-06 name of data member safety changed to presafety, some new data
 //          members added (frscaling1,frscaling2,tlimitminfix,nstepmax)
 //          changes in ComputeTruePathLengthLimit,SampleCosineTheta (L.Urban)
+// 17-05-06 parameters of theta0 in SampleCosineTheta changed
+//          c_highland  13.6*MeV ---> 13.26*MeV,
+//          corr_highland  0.555 ---> 0.54,
+//          value of data member geommin changed (5 nm -> 1 nm) (L.Urban)
 //
 
 // Class Description:
@@ -137,7 +141,7 @@ G4UrbanMscModel::G4UrbanMscModel(G4double m_facrange, G4double m_dtrl,
   tlimitminfix  = 5.e-6*mm;            
   nstepmax      = 25.;
   geombig       = 1.e50*mm;
-  geommin       = 5.e-6*mm;
+  geommin       = 1.e-6*mm;
   presafety        = 0.*mm;
   facsafety     = 0.20;
   particle      = 0;
@@ -768,12 +772,12 @@ G4double G4UrbanMscModel::SampleCosineTheta(G4double trueStepLength,
       //  from a  parametrization similar to the Highland formula
       // ( Highland formula: Particle Physics Booklet, July 2002, eq. 26.10)
       // here : theta0 = 13.6*MeV*Q*(t/X0)**0.555/(beta*cp) 
-      const G4double xsi = 3., c_highland = 13.6*MeV ;
+      const G4double xsi = 3., c_highland = 13.26*MeV ;
       G4double betacp = sqrt(currentKinEnergy*(currentKinEnergy+2.*mass)*
                              KineticEnergy*(KineticEnergy+2.*mass)/
                           ((currentKinEnergy+mass)*(KineticEnergy+mass)));
       G4double tailpar = c_highland/betacp ;
-      const G4double corr_highland=0.555 ;
+      const G4double corr_highland=0.54;
       G4double theta0 = tailpar*charge*exp(corr_highland*
                           log(trueStepLength/currentRadLength)) ;
 
