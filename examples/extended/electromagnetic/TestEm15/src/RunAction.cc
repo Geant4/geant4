@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.2 2006-05-11 11:46:04 maire Exp $
+// $Id: RunAction.cc,v 1.3 2006-05-17 14:53:51 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -150,9 +150,9 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
          << " +- "                    << G4BestUnit( rmsGPL,"Length")
          <<   "\n lateralDisplac :\t" << G4BestUnit(MeanLaD,"Length")
          << " +- "                    << G4BestUnit( rmsLaD,"Length")
-         <<   "\n Psi            :\t" << MeanPsi/mrad 
+         <<   "\n Psi            :\t" << MeanPsi/mrad << " mrad"
 	 << " +- "                    << rmsPsi /mrad << " mrad"
-         <<   "  ("                   << MeanPsi/deg 
+         <<   "  ("                   << MeanPsi/deg  << " deg"
 	 << " +- "                    << rmsPsi /deg  << " deg)"
          << G4endl;
 	 	 	 
