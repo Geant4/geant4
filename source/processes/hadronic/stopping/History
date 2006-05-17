@@ -16,3 +16,6 @@ code and to keep track of all tags.
 
 20-Jan-2006 Gunter Folger  (hadr-stopping-V08-00-00)
 -  set process type to fHadronic for all processes in hadronic/stopping
+
+17-May-2006 Vladimir Ivantchenko (hadr-stopping-V08-00-01)
+-  clean up energy/momentum balance for G4MuonMinusCaptureAtRest

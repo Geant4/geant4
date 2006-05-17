@@ -32,12 +32,12 @@
 //                   by Vladimir Ivanchenko
 //                     E-mail: Vladimir.Ivantchenko@cern.ch
 //                            April 2000
-// **************************************************************
+//
 //-----------------------------------------------------------------------------
 
 #ifndef G4MuMinusCaptureCascade_h
 #define G4MuMinusCaptureCascade_h 1
-#include <iomanip> 
+
 #include "globals.hh"
 #include "Randomize.hh" 
 
@@ -55,42 +55,42 @@
 class G4MuMinusCaptureCascade
  
 { 
-  private:
+public:
+ 
+  G4MuMinusCaptureCascade();
+ 
+  ~G4MuMinusCaptureCascade();
+
+  G4int DoCascade(const G4double Z, const G4double massA, 
+		  G4GHEKinematicsVector* Cascade);
+
+  void DoBoundMuonMinusDecay(G4double Z, G4double massA, 
+			     G4int* nCascade, G4GHEKinematicsVector* Cascade);
+
+private:
+
+  G4double GetKShellEnergy(G4double Z);
+
+  G4double GetLinApprox(const size_t N, const G4double X[], const G4double Y[], 
+			G4double Xuser);
+
+  G4ThreeVector GetRandomVec();
+
+private:
+
   // hide assignment operator as private 
-      G4MuMinusCaptureCascade& operator=(const G4MuMinusCaptureCascade &right);
-      G4MuMinusCaptureCascade(const G4MuMinusCaptureCascade& );
-   
-  public:
- 
-      G4MuMinusCaptureCascade();
- 
-     ~G4MuMinusCaptureCascade();
+  G4MuMinusCaptureCascade& operator=(const G4MuMinusCaptureCascade &right);
+  G4MuMinusCaptureCascade(const G4MuMinusCaptureCascade& );
 
-      G4int DoCascade(const G4double Z, const G4double massA, 
-                            G4GHEKinematicsVector* Cascade);
+  void AddNewParticle(G4ParticleDefinition* aParticle,
+		      G4ThreeVector Momentum,
+		      G4double mass,
+		      G4int* nParticle,
+		      G4GHEKinematicsVector* Cascade);
 
-      void DoBoundMuonMinusDecay(G4double Z, G4double massA, 
-                                 G4int* nCascade, G4GHEKinematicsVector* Cascade);
-
-  private:
-
-      G4double GetKShellEnergy(G4double Z);
-
-      G4double GetLinApprox(const size_t N, const G4double X[], const G4double Y[], 
-                            G4double Xuser);
-
-      G4ThreeVector GetRandomVec();
-
-
-      void AddNewParticle(G4ParticleDefinition* aParticle,
-                          G4ThreeVector Momentum,
-                          G4double mass,
-                          G4int* nParticle,
-                          G4GHEKinematicsVector* Cascade);
-
-      G4double Emass, MuMass;
-      G4ParticleDefinition* theElectron;
-      G4ParticleDefinition* theGamma;
+  G4double Emass, MuMass;
+  G4ParticleDefinition* theElectron;
+  G4ParticleDefinition* theGamma;
 
 };
 

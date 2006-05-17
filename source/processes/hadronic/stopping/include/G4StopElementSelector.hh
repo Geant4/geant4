@@ -30,7 +30,7 @@
 //
 // File: G4StopElementSelector
 //
-// Author:        V.Ivanchenko (Vladimir.Ivanchenko@cern.ch)
+// Author:        V.Ivanchenko (Vladimir.Ivantchenko@cern.ch)
 // 
 // Creation date: 2 April 2000
 //
@@ -46,6 +46,7 @@
 //
 // Modifications: 
 // 18/08/2000  V.Ivanchenko Update description
+// 17/05/2006  V.Ivanchenko Cleanup
 //
 //-----------------------------------------------------------------------------
 
@@ -53,34 +54,26 @@
 #define G4StopElementSelector_h 1
  
 #include "globals.hh"
-#include "Randomize.hh" 
-#include "G4ParticleDefinition.hh"
-#include <iomanip>
 #include "G4Element.hh"
-#include "G4Material.hh"
-#include "G4MaterialTable.hh"
-#include "G4MuonMinus.hh"
 
-class G4StopElementSelector
- 
+class G4Material;
+
+class G4StopElementSelector 
 { 
-  private:
+public:
+ 
+  G4StopElementSelector();
+  
+  ~G4StopElementSelector();
+
+  G4Element* GetElement(const G4Material* aMaterial);
+  G4double  GetMuonCaptureRate(G4double Z, G4double A);
+  G4double  GetMuonDecayRate(G4double Z, G4double A);
+
+private:
   // hide assignment operator as private 
-      G4StopElementSelector& operator=(const G4StopElementSelector &right);
-      G4StopElementSelector(const G4StopElementSelector& );
-   
-  public:
- 
-     G4StopElementSelector();
- 
-    ~G4StopElementSelector();
-
-     G4Element* GetElement(const G4Material* aMaterial);
-     G4double  GetMuonCaptureRate(G4double Z, G4double A);
-     G4double  GetMuonDecayRate(G4double Z, G4double A);
-
-  private:
-
+  G4StopElementSelector& operator=(const G4StopElementSelector &right);
+  G4StopElementSelector(const G4StopElementSelector& );
 
 };
 

@@ -21,27 +21,43 @@
 // ********************************************************************
 //
 //
+// ------------------------------------------------------------
+//      GEANT 4 class file
+//
+//      ------------ G4MuonMinusCaptureAtRest physics process ------
+//                   by Larry Felawka (TRIUMF)
+//                     E-mail: felawka@alph04.triumf.ca
+//                   and Art Olin (TRIUMF)
+//                     E-mail: olin@triumf.ca
+//                            April 1998
+//-----------------------------------------------------------------------------
+//
+// Modifications: 
+// 18/08/2000  V.Ivanchenko Update description
+// 17/05/2006  V.Ivanchenko Cleanup
+//
+//-----------------------------------------------------------------------------
 
 #include "G4MuonMinusCaptureAtRest.hh"
 #include "G4DynamicParticle.hh"
-#include "G4ParticleTypes.hh"
+//#include "G4ParticleTypes.hh"
 #include "Randomize.hh"
-#include <string.h>
+//#include <string.h>
 #include <cmath>
-#include <stdio.h>
-#include <sys/types.h>
-#include <sys/stat.h>
+//#include <stdio.h>
+//#include <sys/types.h>
+//#include <sys/stat.h>
 #include "G4He3.hh"
 #include "G4NeutrinoMu.hh"
 #include "G4Fragment.hh"
 #include "G4ReactionProductVector.hh"
 #include "G4Proton.hh"
 #include "G4PionPlus.hh"
+#include "G4MuonMinus.hh"
 
 G4MuonMinusCaptureAtRest::G4MuonMinusCaptureAtRest(const G4String& processName,
-                                      G4ProcessType   aType ) :
-    G4VRestProcess (processName, aType), nCascade(0), targetCharge(0),
-    targetAtomicMass(0)
+						   G4ProcessType   aType ) :
+    G4VRestProcess (processName, aType), nCascade(0), targetZ(0),targetA(0)
 {
   Cascade     = new G4GHEKinematicsVector [17];
   pSelector = new G4StopElementSelector();
@@ -61,69 +77,6 @@ IsApplicable(const G4ParticleDefinition& particle)
   return ( &particle == G4MuonMinus::MuonMinus() );
 
 }
-/*
-G4double G4MuonMinusCaptureAtRest::
-GetMeanLifeTime(const G4Track& track, G4ForceCondition* )
-{
-  GetCaptureIsotope( track );
-  return (tDelay );
-
-}
-
-void G4MuonMinusCaptureAtRest::
-GetCaptureIsotope(const G4Track& track)
-{
-
-  // Ask selector to choose the element
-
-  G4Material * aMaterial = track.GetMaterial();
-  G4Element* theElement  = pSelector->GetElement(aMaterial);
-  targetCharge           = theElement->GetZ();
-  targetAtomicMass       = theElement->GetN();
-
-  // Calculate total capture velosity
-
-  G4double lambdac  = pSelector->GetMuonCaptureRate(targetCharge,targetAtomicMass);
-           lambdac += pSelector->GetMuonDecayRate(targetCharge,targetAtomicMass);
-
-  // ===  Throw for capture  time.
-
-  G4double tDelay = -(G4double)log(G4UniformRand()) / lambdac;
-
-  return;
-
-} 
-*/
-
-G4double G4MuonMinusCaptureAtRest::
-AtRestGetPhysicalInteractionLength(const G4Track&, G4ForceCondition* condition)
-{
-  // beggining of tracking
-  //ResetNumberOfInteractionLengthLeft();
-
-  // condition is set to "Not Forced"
-  *condition = NotForced;
-  // condition is set to "ExclusivelyForced" by V.Ivanchenko
-  //     *condition = ExclusivelyForced;
-
-  // get mean life time
-  //  currentInteractionLength = GetMeanLifeTime(track, condition);
-  /*
-  if ((currentInteractionLength <0.0) || (verboseLevel>2)){
-    G4cout << "G4MuonMinusCaptureAtRestProcess::AtRestGetPhysicalInteractionLength ";
-    G4cout << "[ " << GetProcessName() << "]" <<G4endl;
-    track.GetDynamicParticle()->DumpInfo();
-    G4cout << " in Material  " << track.GetMaterial()->GetName() <<G4endl;
-    G4cout << "MeanLifeTime = " << currentInteractionLength/ns << "[ns]" <<G4endl;
-  }
-
-  // Return 0 interaction length to get for this process
-  // the 100% probability
-  */
-  return 0.0;
-  //  return theNumberOfInteractionLengthLeft * currentInteractionLength;
-
-}
 
 //
 // Handles MuonMinuss at rest; a MuonMinus can either create secondaries or
@@ -133,46 +86,55 @@ AtRestGetPhysicalInteractionLength(const G4Track&, G4ForceCondition* condition)
 G4VParticleChange* G4MuonMinusCaptureAtRest::
 AtRestDoIt(const G4Track& track,const G4Step&)
 {
-  static int reactionCount=0;
-  if(getenv("MuonMinusCaptureAtRestPrint"))
-  {
-    G4cout << " ++ G4MuonMinusCaptureAtRest::AtRestDoIt is start " << ++reactionCount<<G4endl;
-  }
   aParticleChange.Initialize(track);
-
- // if (verboseLevel > 1) {
- // }
 
   // select element and get Z,A.
   G4Element* aEle = pSelector->GetElement(track.GetMaterial());
-  targetCharge = aEle->GetZ();
-  targetAtomicMass = aEle->GetN();
+  targetZ = aEle->GetZ();
+  targetA = aEle->GetN();
+
+  G4IsotopeVector* isv = aEle->GetIsotopeVector();
+  G4int ni = 0;
+  if(isv) ni = isv->size();
+  if(ni == 1) {
+    targetA = G4double(aEle->GetIsotope(0)->GetN());
+  } else if(ni > 0) {
+    G4double* ab = aEle->GetRelativeAbundanceVector();
+    G4double y = G4UniformRand();
+    G4int j = -1;
+    ni--;
+    do {
+      j++;
+      y -= ab[j];
+    } while (y > 0.0 && j < ni);
+    targetA = G4double(aEle->GetIsotope(j)->GetN());
+  }
   
   // Do the electromagnetic cascade of the muon in the nuclear field.
   nCascade = 0;
-  G4double mass = GetTargetMass(targetAtomicMass,targetCharge);
-  nCascade      = pEMCascade->DoCascade(targetCharge, mass, Cascade);
+  targetMass = G4NucleiProperties::GetNuclearMass(targetA, targetZ);
+  nCascade   = pEMCascade->DoCascade(targetZ, targetMass, Cascade);
 
   // Decide on Decay or Capture, and doit.
-  G4double lambdac  = pSelector->GetMuonCaptureRate(targetCharge,targetAtomicMass);
-  G4double lambdad  = pSelector->GetMuonDecayRate(targetCharge,targetAtomicMass);
+  G4double lambdac  = pSelector->GetMuonCaptureRate(targetZ, targetA);
+  G4double lambdad  = pSelector->GetMuonDecayRate(targetZ, targetA);
   G4double lambda   = lambdac + lambdad;
 
   // ===  Throw for capture  time.
 
   G4double tDelay = -std::log(G4UniformRand()) / lambda;
   
-  G4ReactionProductVector * captureResult=0;
+  G4ReactionProductVector * captureResult = 0;
   G4int nEmSecondaries = nCascade;
   G4int nSecondaries = nCascade;
 
   if( G4UniformRand()*lambda > lambdac) 
   {
-    pEMCascade->DoBoundMuonMinusDecay(targetCharge, mass, &nEmSecondaries, Cascade);
+    pEMCascade->DoBoundMuonMinusDecay(targetZ, targetMass, &nEmSecondaries, Cascade);
   } 
   else 
   {
-    captureResult = DoMuCapture(track.GetKineticEnergy());
+    captureResult = DoMuCapture();
   }
 
   // fill the final state
@@ -220,35 +182,14 @@ AtRestDoIt(const G4Track& track,const G4Step&)
   }
 
   aParticleChange.ProposeLocalEnergyDeposit(0.0);
+  aParticleChange.ProposeTrackStatus(fStopAndKill); 
 
-  aParticleChange.ProposeTrackStatus(fStopAndKill); // Kill the incident MuonMinus
-
-//   clear InteractionLengthLeft
-
-  ResetNumberOfInteractionLengthLeft();
-
-  if(getenv("MuonMinusCaptureAtRestPrint"))
-  {
-    G4cout << " -- G4MuonMinusCaptureAtRest::AtRestDoIt is end " << reactionCount<<G4endl;
-  }
   return &aParticleChange;
-
 }
 
-
-G4double G4MuonMinusCaptureAtRest::GetTargetMass(G4double a, G4double z)
+G4ReactionProductVector * G4MuonMinusCaptureAtRest::DoMuCapture()
 {
-  G4double result;
-  result = G4ParticleTable::GetParticleTable()
-           ->GetIonTable()->GetIonMass(G4lrint(z), G4lrint(a));
-  return result;
-} 
-
-
-
-G4ReactionProductVector * G4MuonMinusCaptureAtRest::DoMuCapture(G4double aMuKinetic)
-{
-    static G4double zeff[100] = {
+  static G4double zeff[100] = {
     1.,1.98,2.95,3.89,4.8,5.72,6.61,7.49,8.32,9.12,9.95,10.69,11.48,12.22,
     12.91,13.64,14.24,14.89,15.53,16.15,16.75,17.38,18.04,18.49,
     19.06,19.59,20.1,20.66,21.12,21.61,22.02,22.43,22.84,23.24,
@@ -262,117 +203,142 @@ G4ReactionProductVector * G4MuonMinusCaptureAtRest::DoMuCapture(G4double aMuKine
 
   // Get the muon 4-vector
   //  G4cout << "G4MuonMinusCaptureAtRest::DoMuCapture called " << G4endl;
-  G4int idxx = G4lrint(targetCharge)-1;
+  G4int idxx = G4lrint(targetZ)-1;
   if(idxx>99) idxx=99;  
   G4double q = zeff[idxx];
   G4double zeff2 = q*q;
-  G4double muonBindingEnergy = 0.5*zeff2 * G4MuonMinus::MuonMinusDefinition()->GetPDGMass() 
-                               * fine_structure_const*fine_structure_const;
-  G4double availableEnergy = aMuKinetic;
-  availableEnergy += G4MuonMinus::MuonMinusDefinition()->GetPDGMass();
-  availableEnergy -= muonBindingEnergy;
-  
-  G4ThreeVector aMu3Mom(0,0,0);
-  G4LorentzVector aMuMom(availableEnergy,aMu3Mom);
-  
-  // pick random proton.
-  G4double residualMass=0;
-  G4double targetMass=0;
-  G4ThreeVector pResInCMS;
+  G4double mumass = G4MuonMinus::MuonMinus()->GetPDGMass();
+  G4double muonBindingEnergy = 0.5*zeff2*mumass*fine_structure_const*fine_structure_const;
+  // Energy on K-shell
+  G4double muEnergy = mumass + muonBindingEnergy;
+  G4double availableEnergy = targetMass + mumass - muonBindingEnergy;
+
+  G4double cost = 2.*G4UniformRand() - 1.0;
+  G4double sint = std::sqrt((1.0 - cost)*(1.0 + cost));
+  G4double phi  = twopi*G4UniformRand();
+  G4ThreeVector aMu3Mom(sint*std::cos(phi),sint*std::sin(phi),cost);
+  G4double pmu  = std::sqrt(muEnergy*muEnergy + mumass*mumass);
+  G4LorentzVector aMuMom(muEnergy,aMu3Mom*pmu);
+
+  G4double residualMass = G4NucleiProperties::GetNuclearMass(targetA, targetZ - 1.0);
+  G4LorentzVector momResidual;
+  G4ReactionProductVector * aPreResult;
+  G4ReactionProduct* aNu = new G4ReactionProduct();
+  aNu->SetDefinition( G4NeutrinoMu::NeutrinoMu() );
+
+  // proton as a target
+  if(targetA < 1.5) {
+
+    G4double Ecms = mumass + proton_mass_c2 - muonBindingEnergy;
+    G4double Enu  = 0.5*(Ecms - neutron_mass_c2*neutron_mass_c2/Ecms);
+
+    // make the nu, and transform to lab;
+    G4double cost = 2.*G4UniformRand() - 1.0;
+    G4double sint = std::sqrt((1.0 - cost)*(1.0 + cost));
+    G4double phi  = twopi*G4UniformRand();
+    G4ThreeVector nu3Mom(sint*std::cos(phi),sint*std::sin(phi),cost);
+    nu3Mom *= Enu;
+
+    aPreResult = new G4ReactionProductVector();
+
+    G4ReactionProduct* aN = new G4ReactionProduct();
+    aN->SetDefinition( G4Neutron::Neutron() );
+    aN->SetTotalEnergy( Ecms - Enu );
+    aN->SetMomentum( -nu3Mom );
+
+    aNu->SetTotalEnergy( Enu );
+    aNu->SetMomentum( nu3Mom );
+    aPreResult->push_back(aN ); 
+    aPreResult->push_back(aNu); 
+    if(verboseLevel > 1)
+      G4cout << "G4MuonMinusCaptureAtRest::DoMuCapture on H " 
+	     <<" EkinN(MeV)= " << (Ecms - Enu - neutron_mass_c2)/GeV
+	     <<" Enu(MeV)= "<<aNu->GetTotalEnergy()/MeV<<G4endl;
+
+    return aPreResult;
+  }
+
+  // pick random proton inside nucleus 
   G4double eEx=0;
-  G4double eRest = 0;
-  G4ReactionProduct* aNu=0;
-  do
-  {
-    theN.Init(targetAtomicMass, targetCharge); 
+  do {
+    theN.Init(targetA, targetZ); 
     G4ThreeVector fermiMom;
     G4Nucleon * aNucleon = 0;
-    G4int theProtonCounter = G4lrint( 0.5 + targetCharge * G4UniformRand() );
+    G4int theProtonCounter = G4lrint( 0.5 + targetZ * G4UniformRand() );
     G4int counter = 0;
     theN.StartLoop();
-    while( (aNucleon=theN.GetNextNucleon()) )
-    {
-      if( aNucleon->GetDefinition() == G4Proton::ProtonDefinition() )
-      {
+
+    while( (aNucleon=theN.GetNextNucleon()) ) {
+
+      if( aNucleon->GetDefinition() == G4Proton::Proton() ) {
 	counter++;
-	if(counter == theProtonCounter)
-	{
+	if(counter == theProtonCounter) {
           fermiMom = aNucleon->GetMomentum().vect();
 	  break;
 	}
       }
     }
 
-    // Gett the nu momentum in the CMS
-    G4double aNMass = G4Proton::ProtonDefinition()->GetPDGMass()/2.;
-    G4LorentzVector theNeutronMom(std::sqrt(aNMass*aNMass+fermiMom.mag2()), fermiMom);
-    G4LorentzVector theCMS = theNeutronMom+aMuMom;
-    G4double p1 = (theCMS.mag()*theCMS.mag()-aNMass*aNMass)/(2.*theCMS.mag());
-    G4LorentzRotation toCMS = theCMS.boostVector();
-    G4LorentzRotation toLab = toCMS.inverse();
+    // Get the nu momentum in the CMS
+    G4LorentzVector thePMom(std::sqrt(proton_mass_c2*proton_mass_c2 + fermiMom.mag2()), 
+			    fermiMom);
+    G4LorentzVector   theCMS = thePMom + aMuMom;
+    G4ThreeVector bst = theCMS.boostVector();
+
+    momResidual = G4LorentzVector(0.0,0.0,0.0,availableEnergy);
+
+    G4double Ecms = theCMS.mag();
+    G4double Enu  = 0.5*(Ecms - neutron_mass_c2*neutron_mass_c2/Ecms);
 
     // make the nu, and transform to lab;
-    G4double cosTh = G4UniformRand();
-    G4double phi = twopi*G4UniformRand();
-    G4double theta = std::acos(cosTh);
-    G4double sinth = std::sin(theta);
-    G4ThreeVector randUnit(sinth*std::cos(phi), sinth*std::sin(phi), std::cos(theta) );
-    G4LorentzVector finNuMom(p1, p1*randUnit);
-
+    cost = 2.*G4UniformRand() - 1.0;
+    sint = std::sqrt((1.0 - cost)*(1.0 + cost));
+    phi  = twopi*G4UniformRand();
+    G4ThreeVector nu3Mom(sint*std::cos(phi),sint*std::sin(phi),cost);
+    G4LorentzVector nuMom(Enu,aMu3Mom*Enu);
+    
     // make the neutrino an mu-neutrino with the above momentum and get the residual properties
-    if(aNu) delete aNu;
-    aNu = new G4ReactionProduct();
-    aNu->SetDefinition( G4NeutrinoMu::NeutrinoMuDefinition() );
-    pResInCMS = -finNuMom.vect();
+    nuMom.boost(bst);
+    momResidual -= nuMom;
 
     // nu in lab.
-    finNuMom*=toLab;
-    aNu->SetTotalEnergy( finNuMom.t() );
-    aNu->SetMomentum( finNuMom.vect() );
-    residualMass =  
-             G4ParticleTable::GetParticleTable()
-	     ->GetIonTable()->GetIonMass(G4lrint(targetCharge-1), G4lrint(targetAtomicMass));
-    targetMass = 
-             G4ParticleTable::GetParticleTable()
-	     ->GetIonTable()->GetIonMass(G4lrint(targetCharge), G4lrint(targetAtomicMass));
-    eRest = targetMass+availableEnergy-residualMass-finNuMom.t();
+    aNu->SetTotalEnergy( nuMom.t() );
+    aNu->SetMomentum( nuMom.vect() );
 
     // Call pre-compound on the rest.
-    eEx = std::sqrt( (residualMass+eRest)*(residualMass+eRest) - pResInCMS.mag2() ) - residualMass;
-  }
-  while(eEx<=0);
-  G4LorentzVector resV(residualMass+eRest, pResInCMS);
-  G4LorentzRotation toBreit = resV.boostVector();
-  G4LorentzRotation fromBreit = toBreit.inverse();
-  resV*=toBreit;
+    eEx = momResidual.mag() - residualMass;
+  } while(eEx <= 0.0);
+  
+  G4ThreeVector fromBreit = momResidual.boostVector();
   G4Fragment anInitialState;
-  anInitialState.SetA(G4lrint(targetAtomicMass));
-  anInitialState.SetZ(G4lrint(targetCharge-1));
+  anInitialState.SetA(G4lrint(targetA));
+  anInitialState.SetZ(G4lrint(targetZ) - 1);
   anInitialState.SetNumberOfParticles(2);
   anInitialState.SetNumberOfCharged(0);
   anInitialState.SetNumberOfHoles(1);
-  anInitialState.SetMomentum(resV);
-  G4ReactionProductVector * aPreResult = theHandler.BreakItUp(anInitialState);
+  anInitialState.SetMomentum(momResidual);
+  aPreResult = theHandler.BreakItUp(anInitialState);
 
   G4ReactionProductVector::iterator ires;
   G4double eBal = availableEnergy;
   for(ires=aPreResult->begin(); ires!=aPreResult->end(); ires++)
   {
     G4LorentzVector itV((*ires)->GetTotalEnergy(), (*ires)->GetMomentum());
-    itV*=fromBreit;
+    itV.boost(fromBreit);
     (*ires)->SetTotalEnergy(itV.t());
     (*ires)->SetMomentum(itV.vect());
-    eBal-=itV.t()-itV.mag();
+    eBal -= itV.t();
   }
   // fill neutrino into result
   aPreResult->push_back(aNu);
-  eBal-=aNu->GetMomentum().mag();
-  if(getenv("MuonMinusCaptureAtRestPrint"))
-  {
-    G4cout << "    Rough energy balance is "<<eBal<<" "
-           <<availableEnergy<<" "<<aNu->GetMomentum().mag()<<G4endl;
-  }    
-  // return
+  eBal -= aNu->GetTotalEnergy();
+  if(verboseLevel > 1)
+    G4cout << "G4MuonMinusCaptureAtRest::DoMuCapture:  Nsec= " 
+	   << aPreResult->size() << " Ebalance(MeV)= " << eBal/MeV
+           << " Eex(MeV)= " << eEx/MeV
+	   <<" E0(GeV)= " <<availableEnergy/GeV
+	   <<" Enu(MeV)= "<<aNu->GetTotalEnergy()/MeV<<G4endl;
+
   return aPreResult;
 } 
 

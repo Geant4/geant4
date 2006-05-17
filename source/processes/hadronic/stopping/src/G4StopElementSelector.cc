@@ -23,7 +23,7 @@
 //
 //
 // --------------------------------------------------------------
-//      GEANT 4 class implementation file --- Copyright CERN 1998
+//      GEANT4 class file 
 //      CERN Geneva Switzerland
 //
 // File: G4StopElementSelector
@@ -38,17 +38,21 @@
 // Selection between decay/capture for mu-
 // N.C.Mukhopadhyay Phys. Rep. 30 (1977) 1.
 //
-// Class Description: End 
-//
-//-----------------------------------------------------------------------------
 //
 // Modifications: 
 // 18/08/2000  V.Ivanchenko Update description
+// 17/05/2006  V.Ivanchenko Cleanup
 //
 //-----------------------------------------------------------------------------
 
 #include "G4StopElementSelector.hh"
-#include <vector>
+#include "Randomize.hh" 
+//#include "G4ParticleDefinition.hh"
+//#include <iomanip>
+#include "G4Material.hh"
+//#include "G4MaterialTable.hh"
+//#include "G4MuonMinus.hh"
+//#include <vector>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
