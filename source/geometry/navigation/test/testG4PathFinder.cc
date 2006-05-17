@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4PathFinder.cc,v 1.1 2006-04-28 19:55:13 japost Exp $
+// $Id: testG4PathFinder.cc,v 1.2 2006-05-17 16:18:53 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $ 
 //
 // 
@@ -57,7 +57,7 @@
 G4VPhysicalVolume* BuildGeometry()
 {
 
-    G4Box *myBigBox= new G4Box ("BixBox",25,25,20);
+    G4Box *myBigBox= new G4Box ("BixBox",250*cm,250*cm,200*cm);
 
     G4LogicalVolume *worldLog=
       new G4LogicalVolume(myBigBox,0, "World",0,0,0);
@@ -67,26 +67,52 @@ G4VPhysicalVolume* BuildGeometry()
 			"World",worldLog, 0,false,0);
     // No displacement, no mother pointer - world!
 
-    G4Box *myBox=new G4Box("cube-10",10,10,10);
+    G4Box *myBox=new G4Box("cube-10",10*cm,10*cm,10*cm);
     G4LogicalVolume *boxLog=
                 new G4LogicalVolume(myBox,0, "Crystal Box",0,0,0);
 
-    G4Box *mySlab= new G4Box("slab",10,25,10);
-    G4LogicalVolume *slabLog=new G4LogicalVolume(mySlab,0,
-						 "Crystal Slab",0,0,0);
-    new G4PVPlacement(0,G4ThreeVector(-15,15,-10), "Target 1",boxLog,
+    new G4PVPlacement(0,G4ThreeVector(15*cm,0,0),  "Target 01",boxLog,
 		      worldPhys,false,1);
-    new G4PVPlacement(0,G4ThreeVector(-15,-15,-10), "Target 2",boxLog,
+    new G4PVPlacement(0,G4ThreeVector(25*cm,0,0),  "Target 02",boxLog,
+		      worldPhys,false,2);
+    new G4PVPlacement(0,G4ThreeVector(-15*cm,0,0), "Target 03",boxLog,
+		      worldPhys,false,3);
+    new G4PVPlacement(0,G4ThreeVector(-25*cm,0,0), "Target 04",boxLog,
+		      worldPhys,false,4);
+    new G4PVPlacement(0,G4ThreeVector(0,15*cm,0),  "Target 11",boxLog,
+		      worldPhys,false,11);
+    new G4PVPlacement(0,G4ThreeVector(0,25*cm,0),  "Target 12",boxLog,
+		      worldPhys,false,12);
+    new G4PVPlacement(0,G4ThreeVector(0,-15*cm,0), "Target 13",boxLog,
+		      worldPhys,false,13);
+    new G4PVPlacement(0,G4ThreeVector(0,-25*cm,0), "Target 14",boxLog,
+		      worldPhys,false,14);
+    new G4PVPlacement(0,G4ThreeVector(0,0,15*cm),  "Target 21",boxLog,
+		      worldPhys,false,21);
+    new G4PVPlacement(0,G4ThreeVector(0,0,25*cm),  "Target 22",boxLog,
+		      worldPhys,false,22);
+    new G4PVPlacement(0,G4ThreeVector(0,0,-15*cm), "Target 23",boxLog,
+		      worldPhys,false,23);
+    new G4PVPlacement(0,G4ThreeVector(0,0,-25*cm), "Target 24",boxLog,
+		      worldPhys,false,24);
+
+
+    new G4PVPlacement(0,G4ThreeVector(-15*cm,15*cm,-10*cm), "Target 101",boxLog,
+		      worldPhys,false,1);
+    new G4PVPlacement(0,G4ThreeVector(-15*cm,-15*cm,-10*cm), "Target 102",boxLog,
 		      worldPhys,false,2);
 
+    G4Box *mySlab= new G4Box("slab",10*cm,25*cm,10*cm);
+    G4LogicalVolume *slabLog=new G4LogicalVolume(mySlab,0,
+						 "Crystal Slab",0,0,0);
     // G4PVPlacement *offYPhys=
-    new G4PVPlacement(0,G4ThreeVector(15,0,-10), "Target 3",slabLog,
+    new G4PVPlacement(0,G4ThreeVector(15*cm,0,-10*cm), "Target 3",slabLog,
 		      worldPhys,false,3);
 
-    new G4PVPlacement(0,G4ThreeVector(0,15,10), "Target 4",boxLog,
+    new G4PVPlacement(0,G4ThreeVector(0,15*cm,10*cm), "Target 4",boxLog,
 		      worldPhys,false,4);
     
-    new G4PVPlacement(0,G4ThreeVector(0,-15,10), "Target 5",boxLog,
+    new G4PVPlacement(0,G4ThreeVector(0,-15*cm,10*cm), "Target 5",boxLog,
 		      worldPhys,false,5);
 
 
@@ -97,30 +123,76 @@ G4VPhysicalVolume* BuildGeometry()
 //
 // Test LocateGlobalPointAndSetup
 //
-G4bool testG4PathFinder1(G4VPhysicalVolume *pTopNode)
+G4PathFinder* setupPathFinder(G4VPhysicalVolume *pTopNode)
 {
     MyNavigator myNav;
-    G4Navigator* pNav= new G4Navigator();   // (&myNav); 
+    G4Navigator* pNav;
 
-    G4VPhysicalVolume *located;
-    myNav.SetWorldVolume(pTopNode);
+    G4int navId;
+    G4bool useMyNav= false;
+    G4bool overwriteNav= false;
 
+    pNav= new G4Navigator();   // (&myNav); 
+    // pNav= (&myNav); 
+
+    if( useMyNav ){ 
+       pNav= (&myNav); 
+       myNav.SetWorldVolume(pTopNode);
+    }else{
+       pNav->SetWorldVolume(pTopNode);
+    }
+ 
     G4PathFinder* pathFinder= G4PathFinder::GetInstance();
                //===========  --------------------------
     static G4TransportationManager* transportMgr=
       G4TransportationManager::GetTransportationManager(); 
+  
+    G4Navigator*
+    origNav= transportMgr->GetNavigatorForTracking();
+    origNav->SetWorldVolume(pTopNode);
 
-    G4bool 
-    registered=  transportMgr->RegisterNavigator( pNav ); 
-    assert( registered ); 
+    navId= transportMgr->ActivateNavigator( origNav ); 
+    G4cout << " navId for original Navigator for tracking is " << navId << G4endl;
+    
+    if( overwriteNav ){ 
+      transportMgr->DeActivateNavigator( origNav );  
+      G4cout << " DeActivated Navigator " << origNav << G4endl;  
 
-    G4int navId= transportMgr->ActivateNavigator( pNav ); 
-    assert ( registered == 0 ); 
+      // G4bool 
+      // registered=  transportMgr->RegisterNavigator( pNav ); 
+      // assert( registered ); 
+      transportMgr->SetNavigatorForTracking(pNav);
+      G4cout << " Setting new Navigator for Tracking " << pNav << G4endl;  
+      // transportMgr->SetWorldVolume( pTopNode );
+
+#if 0
+      G4cout << " Attempting to de-register original mass navigator." << G4endl;
+      transportMgr->DeRegisterNavigator( origNav );  // Cannot de-register Mass Navigator
+      G4cout << "   --> De-registration sucessful. " << G4endl;
+#endif
+
+      navId= transportMgr->ActivateNavigator( pNav ); 
+      G4cout << " navId for new  Navigator for tracking is " << navId << G4endl;
+      assert ( navId == 1 ); 
+    }
+ 
+    return pathFinder; 
+}
+
+G4bool testG4PathFinder1(G4VPhysicalVolume *) // pTopNode)
+{
+    static G4TransportationManager* transportMgr=
+      G4TransportationManager::GetTransportationManager(); 
+    static G4PathFinder* pathFinder= G4PathFinder::GetInstance();
+
+    G4Navigator *pNav= transportMgr->GetNavigatorForTracking();
+
+    G4int navId=1 ;  // Asserted above -- but generally must 'store' this number!
 
     G4ThreeVector position( 0., 0., 0.), dirUx(1.,0.,0.); 
     pathFinder->PrepareNewTrack( position, dirUx ); 
   //==========  ---------------
-    // Should also locate !!
+    // Also locates !!
 
     G4double t0=0.0, Ekin=100.00*MeV, restMass= 0.511*MeV, charge= -1, magDipole=0.0, s=0.0; 
     G4ThreeVector Spin(0.,0.,0.); 
@@ -128,17 +200,54 @@ G4bool testG4PathFinder1(G4VPhysicalVolume *pTopNode)
                   endFT('a');     //  Default values for return
 
     G4int stepNo=0; 
-    G4double steplen= 1.0 * mm, safetyRet=0.0; 
+    G4double steplen= 123.00 * mm, safetyRet=0.0; 
     ELimited  limited;
+    G4cout << " test:  input FT = " << startFT << G4endl
+	   << "                   " 
+	   << " len = " << steplen
+	   << " navId = " << navId << " stepNo = " << stepNo << G4endl; 
+    G4double stepdone= 
     pathFinder->ComputeStep( startFT, steplen, navId, stepNo, safetyRet, limited, endFT );
   //==========  -----------
 
-    transportMgr->DeActivateNavigator( pNav ); 
-    transportMgr->DeRegisterNavigator( pNav ); 
-    
-    exit(1); 
+    G4VPhysicalVolume *located;
+
+    G4ThreeVector endPoint = endFT.GetPosition(); 
+    G4ThreeVector endDirection= endFT.GetMomentumDirection(); 
+    pathFinder->Locate( endPoint, endDirection ); 
+  //==========  ------
+    located= pathFinder->GetLocatedVolume( navId ); 
+
+    pathFinder->ComputeStep( startFT, steplen, navId, stepNo, safetyRet, limited, endFT );   
+    // Should not move, since the 'stepNo' is the same !!
+ 
+    startFT.SetPosition( endPoint ); 
+    stepdone= 
+      pathFinder->ComputeStep( startFT, steplen, navId, ++stepNo, 
+			       safetyRet, limited, endFT );   
+    pathFinder->Locate( endFT.GetPosition(), endFT.GetMomentumDirection() ); 
+    located= pathFinder->GetLocatedVolume( navId ); 
+    if (!located) return true;
+    // exit(1); 
+
+    startFT= endFT; 
+    pathFinder->ComputeStep( startFT, steplen, navId, ++stepNo, safetyRet, limited, endFT );   
+    pathFinder->Locate( endFT.GetPosition(), endFT.GetMomentumDirection() ); 
+    located= pathFinder->GetLocatedVolume( navId ); 
+
+    assert(!pNav->LocateGlobalPointAndSetup(G4ThreeVector(kInfinity,0,0),0,false));
+    located=pNav->LocateGlobalPointAndSetup(G4ThreeVector(0,0,0),0,false);
+    assert(located->GetName()=="World");
+
+    return true;
+ 
+    // transportMgr->DeActivateNavigator( pNav ); 
+    // ----- // transportMgr->DeRegisterNavigator( pNav );  // Cannot de-register Mass Navigator
+    //  exit(1); 
     
     //--------------------   END                   --------------------------------
+    // G4VPhysicalVolume *located;
+    MyNavigator& myNav= dynamic_cast<MyNavigator&>(*pNav);
 
     assert(!myNav.LocateGlobalPointAndSetup(G4ThreeVector(kInfinity,0,0),0,false));
     located=myNav.LocateGlobalPointAndSetup(G4ThreeVector(0,0,0),0,false);
@@ -319,10 +428,19 @@ int main()
     G4VPhysicalVolume *myTopNode;
     myTopNode=BuildGeometry();	// Build the geometry
     G4GeometryManager::GetInstance()->CloseGeometry(false);
+    G4PathFinder* pPathFinder;
+
+    pPathFinder= setupPathFinder(myTopNode);
+
     testG4PathFinder1(myTopNode);
     // testG4Navigator2(myTopNode);
 // Repeat tests but with full voxels
     G4GeometryManager::GetInstance()->OpenGeometry();
+    return 0;
+    //  exit(1); 
+
+    // --- Future 2nd test 
+
     G4GeometryManager::GetInstance()->CloseGeometry(true);
     testG4PathFinder1(myTopNode);
     // testG4Navigator2(myTopNode);
