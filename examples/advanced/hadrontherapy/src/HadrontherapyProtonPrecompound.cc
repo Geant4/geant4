@@ -61,6 +61,8 @@
 #include "G4ProtonInelasticProcess.hh"
 #include "G4ProtonInelasticCrossSection.hh"
 #include "G4HadronCaptureProcess.hh"
+#include "G4BinaryLightIonReaction.hh" 
+#include "G4HadronInelasticProcess.hh"
 //
 // PRECOMPOUND PHYSICS LIST
 //
@@ -266,7 +268,18 @@ void HadrontherapyProtonPrecompound::ConstructProcess()
 
   // He3
   particle = G4He3::He3();
+
+  G4HadronInelasticProcess* He3inelasticProcess = 
+  new G4HadronInelasticProcess("He3Inelastic",particle);
+  
+  G4BinaryLightIonReaction * ionBinaryCascade= new G4BinaryLightIonReaction;
+ 
+  He3inelasticProcess -> AddDataSet(TripathiCrossSection);
+  He3inelasticProcess -> AddDataSet(aShen);
+  He3inelasticProcess -> RegisterMe(ionBinaryCascade);
+ 
   pmanager = particle -> GetProcessManager();
+  pmanager -> AddDiscreteProcess(He3inelasticProcess);
   pmanager -> AddDiscreteProcess(elastic_scattering); 
   
   ////////////////////

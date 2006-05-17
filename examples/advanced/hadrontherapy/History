@@ -9,7 +9,11 @@ $Id: History, v 1.6 2004/02/27  G.A.P. Cirrone
                       Category History file
                       ---------------------
 
-16.05.2006  S. Guatelli (hadrontherapy-V08-00-00)
+17.05.2006  S. Guatelli (hadrontherapy-V08-00-02)
+         - Bug deleted with He3 in the HadrontherapyProtonPrecompound physics
+           list
+
+16.05.2006  S. Guatelli (hadrontherapy-V08-00-01)
          - Comments in the primary particle component and in the physics component
 
 18.04.2006 G.A.P. Cirrone (hadrontherapy-V07-08-01)
