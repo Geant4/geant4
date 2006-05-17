@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PathFinder.cc,v 1.3 2006-05-17 11:36:15 japost Exp $
+// $Id: G4PathFinder.cc,v 1.4 2006-05-17 15:56:40 japost Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4PathFinder Implementation
@@ -63,16 +63,25 @@ G4PathFinder::GetInstance()
 
 G4PathFinder::G4PathFinder() 
   // : fpActiveNavigators()
-  : fEndState( G4ThreeVector(), G4ThreeVector(), 0., 0., 0., 0., 0.)
+  : fEndState( G4ThreeVector(), G4ThreeVector(), 0., 0., 0., 0., 0.),
+       fVerboseLevel(1)
 {
-   // fpActiveNavigators= new std::vec<G4Navigator>;  // Null 
    fNoActiveNavigators= 0; 
-   // fNoNavigators= 0; 
 
    fMinSafety= -1.0;  // Invalid value
    fMinStep=   -1.0;  // 
    fNewTrack= false; 
+
+   G4int num;
+   for( num=0; num<= fMaxNav; ++num ) {
+      fpNavigator[num] =  0;   
+      fLimitTruth[num] = false;
+      fLimitedStep[num] = kUndefLimited;
+      fCurrentStepSize[num] = -1.0; 
+      fLocatedVolume[num] = 0; 
+   }
    // fpNavigator= new[MaxNav] (G4Navigator*); 
+
 }
 
 G4PathFinder::~G4PathFinder() 
@@ -92,13 +101,21 @@ G4PathFinder::ComputeStep( const G4FieldTrack &InitialFieldTrack,
   // ---
   static G4int lastStepNo= -1;
   G4int navigatorNo=-1; 
-  G4cout << " -------------------------" <<  G4endl;
-  G4cout << " G4PathFinder::ComputeStep - entered " << G4endl;
-  G4cout << "   - stepNo = " << stepNo 
-         << " navigatorId = " << navigatorId 
-	 << " proposed step len = " << proposedStepLength
+  if( fVerboseLevel > 2 ){ 
+    G4cout << " -------------------------" <<  G4endl;
+    G4cout << " G4PathFinder::ComputeStep - entered " << G4endl;
+    G4cout << "   - stepNo = " << stepNo 
+	   << " navigatorId = " << navigatorId 
+	   << " proposed step len = " << proposedStepLength
+	   << G4endl;
+  }
+  G4cout << " PF::ComputeStep: step= " << stepNo 
+	 << " nav = " << navigatorId 
+	 << " try step-len " << proposedStepLength
+	 << " from " << InitialFieldTrack.GetPosition()
+	 << " dir  " << InitialFieldTrack.GetMomentumDirection()
 	 << G4endl;
-
+ 
   if( navigatorId <= fNoActiveNavigators ){
     navigatorNo= navigatorId;
   } else { 
@@ -111,15 +128,18 @@ G4PathFinder::ComputeStep( const G4FieldTrack &InitialFieldTrack,
     // 
     // G4cout << " initial = " << InitialFieldTrack << G4endl;
     G4FieldTrack currentState= InitialFieldTrack;
-    G4cout << " current = " << currentState << G4endl;
+    if( fVerboseLevel > 1 )
+      G4cout << " current = " << currentState << G4endl;
     // DoNextCurvedStep( currentState, proposedState ); 
     DoNextLinearStep( currentState, proposedStepLength ); 
     lastStepNo= stepNo; 
   }
   else{ 
-    G4cout << " G4P::CS -> Not calling DoNextLinearStep: " 
-	   << " stepNo= " << stepNo << " last= " << lastStepNo 
-	   << " new= " << fNewTrack << G4endl; 
+    if( fVerboseLevel > 1 ){ 
+      G4cout << " G4P::CS -> Not calling DoNextLinearStep: " 
+	     << " stepNo= " << stepNo << " last= " << lastStepNo 
+	     << " new= " << fNewTrack << G4endl; 
+    }
   } 
 
   fNewTrack= false; 
@@ -135,13 +155,19 @@ G4PathFinder::ComputeStep( const G4FieldTrack &InitialFieldTrack,
 static G4TransportationManager* pTransportManager= 
        G4TransportationManager::GetTransportationManager();
 
-// Check and cache set of active navigators
-// 
+// ----------------------------------------------------------------------
+
 void
 G4PathFinder::PrepareNewTrack( const G4ThreeVector position, 
                                const G4ThreeVector direction )
 {
-  G4cout << " G4PathFinder::PrepareNewTrack - entered " << G4endl;
+  // Key purposes:
+  //   - Check and cache set of active navigators
+  //   - Reset state for new track
+  G4int num=0; 
+
+  if( fVerboseLevel > 1 ) 
+    G4cout << " G4PathFinder::PrepareNewTrack - entered " << G4endl;
   // static G4TransportationManager* pTransportManager= 
   //       G4TransportationManager::GetTransportationManager();
 
@@ -149,26 +175,38 @@ G4PathFinder::PrepareNewTrack( const G4ThreeVector position,
 
   // Message the G4NavigatorPanel / Dispatcher to find active navigators
   G4ThreeVector point(0.0, 0.0, 0.0); 
-
   std::vector<G4Navigator*>::iterator pNavigatorIter; 
+
   fNoActiveNavigators=  pTransportManager-> GetNoActiveNavigators();
+  if( fNoActiveNavigators > fMaxNav ){
+    G4cerr << "Too many active Navigators (worlds). G4PathFinder fails." 
+	   << G4endl;
+    G4cout << " Fatal error: Transportation Manager reports "
+	   << fNoActiveNavigators 
+	   << " which is more than the number allowed = "
+	   << fMaxNav << G4endl;
+    G4Exception("G4PathFinder::PrepareNewTrack()",
+		"",  FatalException,
+		"Too many active Navigators / worlds"); 
+  }
+
   pNavigatorIter= pTransportManager-> GetActiveNavigatorsIterator();
-  G4int num=1; 
-  //  for ( ; pNavigatorIter<pNavigatorIter; ; ++pNavigatorIter ) { FIXME ---- TO DO 
   for( num=1; num<= fNoActiveNavigators; ++pNavigatorIter,++num ) {
  
-     // Keep information in carray ... for use in creating touchables at least
-     fpNavigator[num] =  *pNavigatorIter;   // OR *(pNav);  ???
-     // fStatus[numNav]= 
+     // Keep information in carray ... for creating touchables - at least
+     fpNavigator[num] =  *pNavigatorIter;   
      fLimitTruth[num] = false;
      fLimitedStep[num] = kDoNot;
      fCurrentStepSize[num] = 0.0; 
+     fLocatedVolume[num] = 0; 
   }
 
-  Locate( position, direction, false );   //  At least the first location 
-                                          //   for each Navigator must not be relative
+  Locate( position, direction, false );   
+  // The first location for each Navigator must be non-relative
+  //   or else call ResetStackAndState() for each Navigator
 
-  G4cout << " G4PathFinder::PrepareNewTrack : exiting. " << G4endl;
+  if( fVerboseLevel > 1 ) 
+    G4cout << " G4PathFinder::PrepareNewTrack : exiting. " << G4endl;
 }
 
 void
@@ -180,15 +218,14 @@ G4PathFinder::Locate( const   G4ThreeVector& position,
   std::vector<G4Navigator*>::iterator pNavIter= pTransportManager->GetActiveNavigatorsIterator(); 
   G4int num=0; 
 
-  G4cout << " --------------------   -------" <<  G4endl;
-  G4cout << " G4PathFinder::Locate : entered " << G4endl;
+  if( fVerboseLevel > 2 ){
+    G4cout << " G4PathFinder::Locate : entered " << G4endl;
+    G4cout << " --------------------   -------" <<  G4endl;
+    G4cout << "   Locating at position " << position
+	   << "  with direction " << direction 
+	   << "  relative= " << relative << G4endl;
+  }
 
-  G4cout << "   Locating at position " << position
-	 << "  with direction " << direction 
-	 << "  relative= " << relative 
-	 << G4endl;
-  // for ( pNav= fActiveNavigators::begin(); pNav != fActiveNavigators::end(); pNav++ ) {
-//for ( num=0; num<fNoActiveNavigators ; ++pNavIter,++num ) {
   for ( num=1; num<= fNoActiveNavigators ; ++pNavIter,++num ) {
      //  ... who limited the step ....
 
@@ -201,26 +238,36 @@ G4PathFinder::Locate( const   G4ThreeVector& position,
      //*************************************//
 					     relative,     // relative,
 					     false);   // direction
+     // Set the state related to the location
+     fLocatedVolume[num] = pLocated; 
+     // fStateId = kLocated; 
+
      // } else {
      //    (*pNavIter)->LocateGlobalPointWithinVolume( position ); 
      // }
-     fLimitedStep[num] = kDoNot; 
-     fCurrentStepSize[num] = 0.0;      
 
+     // Clear state related to the step
+     fLimitedStep[num]   = kDoNot; 
+     fCurrentStepSize[num] = 0.0;      
+    
      G4cout << " Located in world " << num 
 	    << "  used geomLimStp " << fLimitTruth[num]
 	    << "  - found in volume " << pLocated ; 
-     G4cout << "  name = " ; 
+     G4cout << "  name = '" ; 
 
      if( pLocated ){ 
-        G4cout << pLocated->GetName(); 
+        G4cout << pLocated->GetName() << "'"; 
+	G4cout << " - CopyNo= " << pLocated->GetCopyNo(); 
      } else { 
-        G4cout <<  " Null or Not-Set "; 
+        G4cout <<  "Null'   Id: Not-Set "; 
      }
-     G4cout << G4endl; 
+     G4cout  << G4endl; 
   }
-  G4cout << " G4PathFinder::Locate : exiting. " << G4endl;
-  G4cout << G4endl;
+
+  if( fVerboseLevel > 2 ){
+    G4cout << " G4PathFinder::Locate : exiting. " << G4endl;
+    G4cout << G4endl;
+  }
 }
 
 G4TouchableHandle 
@@ -291,9 +338,11 @@ G4PathFinder::DoNextLinearStep( const G4FieldTrack &initialState,
   G4double safety= 0.0, step=0.0;
   G4double minSafety= DBL_MAX, minStep= DBL_MAX;
 
-  G4cout << " G4PathFinder::DoNextLinearStep : entered " << G4endl;
-  G4cout << "   Input field track= " << initialState << G4endl;
-  G4cout << "   Requested step= " << proposedStepLength << G4endl;
+  if( fVerboseLevel > 2 ){
+    G4cout << " G4PathFinder::DoNextLinearStep : entered " << G4endl;
+    G4cout << "   Input field track= " << initialState << G4endl;
+    G4cout << "   Requested step= " << proposedStepLength << G4endl;
+  }
 
   std::vector<G4Navigator*>::iterator pNavigatorIter;
 
@@ -333,9 +382,11 @@ G4PathFinder::DoNextLinearStep( const G4FieldTrack &initialState,
 
   this->WhichLimited(); 
 
-  G4cout << " G4PathFinder::DoNextLinearStep : exits returning " << minStep << G4endl;
-  G4cout << "   Endpoint values = " << fEndState << G4endl;
-  G4cout << G4endl;
+  if( fVerboseLevel > 2 ){
+    G4cout << " G4PathFinder::DoNextLinearStep : exits returning " << minStep << G4endl;
+    G4cout << "   Endpoint values = " << fEndState << G4endl;
+    G4cout << G4endl;
+  }
 
   return minStep;
 }
@@ -350,7 +401,8 @@ G4PathFinder::WhichLimited()       // Flag which processes limited the step
   // ELimited defaultElim= kDoNot;
   ELimited shared= kSharedOther; 
 
-  G4cout << " G4PathFinder::WhichLimited - entered " << G4endl;
+  if( fVerboseLevel > 2 )
+    G4cout << " G4PathFinder::WhichLimited - entered " << G4endl;
 
   // Assume that [0] is Mass / Transport
   G4bool transportLimited = (fCurrentStepSize[IdTransport] == fMinStep); 
@@ -422,5 +474,7 @@ G4PathFinder::WhichLimited()       // Flag which processes limited the step
     G4cout << " " << WorldName ; 
     G4cout << G4endl;
   }
-  G4cout << " G4PathFinder::WhichLimited - exiting. " << G4endl;
+
+  if( fVerboseLevel > 2 )
+    G4cout << " G4PathFinder::WhichLimited - exiting. " << G4endl;
 }
