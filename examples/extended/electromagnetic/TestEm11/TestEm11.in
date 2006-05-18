@@ -1,4 +1,4 @@
-# $Id: TestEm11.in,v 1.4 2006-04-11 14:59:45 maire Exp $
+# $Id: TestEm11.in,v 1.5 2006-05-18 16:36:21 vnivanch Exp $
 #
 # limit the step size from histo 1
 #
@@ -27,4 +27,4 @@
 #
 /testem/event/printModulo 10000
 #
-/run/beamOn 100000
+/run/beamOn 20000
