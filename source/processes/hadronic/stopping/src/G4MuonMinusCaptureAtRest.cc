@@ -310,13 +310,14 @@ G4ReactionProductVector * G4MuonMinusCaptureAtRest::DoMuCapture()
   } while(eEx <= 0.0);
   
   G4ThreeVector fromBreit = momResidual.boostVector();
+  G4LorentzVector fscm(0.0,0.0,0.0,  momResidual.mag());
   G4Fragment anInitialState;
   anInitialState.SetA(G4lrint(targetA));
   anInitialState.SetZ(G4lrint(targetZ) - 1);
   anInitialState.SetNumberOfParticles(2);
   anInitialState.SetNumberOfCharged(0);
   anInitialState.SetNumberOfHoles(1);
-  anInitialState.SetMomentum(momResidual);
+  anInitialState.SetMomentum(fscm);
   aPreResult = theHandler.BreakItUp(anInitialState);
 
   G4ReactionProductVector::iterator ires;
