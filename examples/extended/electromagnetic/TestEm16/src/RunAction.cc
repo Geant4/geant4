@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.1 2006-05-18 14:25:10 vnivanch Exp $
+// $Id: RunAction.cc,v 1.2 2006-05-18 16:11:58 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -42,7 +42,7 @@
 RunAction::RunAction()
 :af(0), tree(0)
 {
-  for (G4int j=0; j<6; j++) histo[j] = 0;
+  for (G4int j=0; j<n_histos; j++) histo[j] = 0;
 
 #ifdef G4ANALYSIS_USE
  // Creating the analysis factory

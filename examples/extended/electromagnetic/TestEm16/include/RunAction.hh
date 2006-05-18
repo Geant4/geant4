@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.hh,v 1.1 2006-05-18 14:25:10 vnivanch Exp $
+// $Id: RunAction.hh,v 1.2 2006-05-18 16:11:55 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -31,6 +31,8 @@
 
 #include "G4UserRunAction.hh"
 #include "globals.hh"
+
+    const int n_histos = 3;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -59,7 +61,7 @@ class RunAction : public G4UserRunAction
   private:
     AIDA::IAnalysisFactory* af;
     AIDA::ITree* tree;
-    AIDA::IHistogram1D* histo[3]; // 3 histograms
+    AIDA::IHistogram1D* histo[n_histos]; // 3 histograms
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
