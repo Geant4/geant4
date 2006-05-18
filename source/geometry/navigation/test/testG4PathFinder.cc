@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4PathFinder.cc,v 1.2 2006-05-17 16:18:53 japost Exp $
+// $Id: testG4PathFinder.cc,v 1.3 2006-05-18 17:00:05 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $ 
 //
 // 
@@ -227,17 +227,33 @@ G4bool testG4PathFinder1(G4VPhysicalVolume *) // pTopNode)
 			       safetyRet, limited, endFT );   
     pathFinder->Locate( endFT.GetPosition(), endFT.GetMomentumDirection() ); 
     located= pathFinder->GetLocatedVolume( navId ); 
-    if (!located) return true;
-    // exit(1); 
+    if (located) {
+      G4cout << " Located in volume " << located->GetName()
+	     << "  id= " << located->GetCopyNo() << G4endl; 
+    }else{
+      G4cout << " Step " << stepNo << " is the last one." << G4endl; 
+      return true;
+    }
 
-    startFT= endFT; 
-    pathFinder->ComputeStep( startFT, steplen, navId, ++stepNo, safetyRet, limited, endFT );   
-    pathFinder->Locate( endFT.GetPosition(), endFT.GetMomentumDirection() ); 
-    located= pathFinder->GetLocatedVolume( navId ); 
+    do{ 
+      startFT= endFT; 
+      stepdone= 
+        pathFinder->ComputeStep( startFT, steplen, navId, ++stepNo, safetyRet, limited, endFT );   
+      pathFinder->Locate( endFT.GetPosition(), endFT.GetMomentumDirection() ); 
+      located= pathFinder->GetLocatedVolume( navId ); 
+    } while ( located );
+
+    G4cout << " Step " << stepNo << " is the last one." << G4endl; 
+    return true; 
 
     assert(!pNav->LocateGlobalPointAndSetup(G4ThreeVector(kInfinity,0,0),0,false));
     located=pNav->LocateGlobalPointAndSetup(G4ThreeVector(0,0,0),0,false);
     assert(located->GetName()=="World");
+
+
+
+
+
 
     return true;
  
