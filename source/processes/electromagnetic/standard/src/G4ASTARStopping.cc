@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4ASTARStopping.cc,v 1.2 2006-04-26 16:57:11 vnivanch Exp $
+// $Id: G4ASTARStopping.cc,v 1.3 2006-05-18 18:26:19 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 //---------------------------------------------------------------------------
@@ -30,6 +30,10 @@
 // Description: Data on stopping power
 //
 // Author:      A.Ivantchenko 21.04.2006
+//
+// Organisation:        QinetiQ Ltd, UK
+// Customer:            ESA/ESTEC, NOORDWIJK
+// Contract:            CSMAN-5288
 //
 // Modifications:
 // 

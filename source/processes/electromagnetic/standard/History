@@ -1,4 +1,4 @@
-$Id: History,v 1.237 2006-05-17 18:32:58 vnivanch Exp $
+$Id: History,v 1.238 2006-05-18 18:27:50 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,7 @@ committal in the CVS repository !
 
 17 May 06: V.Ivanchenko (emstand-V08-00-24)
 - G4UrbanMscModel - L.Urban improve scattering in thin layers
+- G4ASTARStopping, G4PSTARStopping improve comments  
 
 15 May 06: V.Ivanchenko (emstand-V08-00-23)
 - G4MollerBhabhaMOdel - fix MinEnergyCut
