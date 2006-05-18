@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em10DetectorConstruction.cc,v 1.28 2006-03-12 14:17:52 grichine Exp $
+// $Id: Em10DetectorConstruction.cc,v 1.29 2006-05-18 08:16:42 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -131,7 +131,10 @@ G4VPhysicalVolume* Em10DetectorConstruction::ConstructDetectorXTR()
   else
   {
     G4cout<<"Experimental setup is unsupported. Check /XTRdetector/setup "<<G4endl;
-    return 0;
+    G4cout<<"Run default: barr90 "<<G4endl;
+    return SetUpBarr90();
+
+    //  return 0;
   }
 }
 
@@ -242,26 +245,26 @@ G4VPhysicalVolume* Em10DetectorConstruction::SimpleSetUpALICE()
    
   fWindowZ = fStartZ + fRadThick + fWindowThick/2. + 15.0*mm ;    
       			                  
-  G4Box* solidWindowR = new G4Box("WindowR",fAbsorberRadius+0.001,
-                                          fAbsorberRadius+0.001,
-                                          fWindowThick/2.+0.001  ); 
+  //  G4Box* solidWindowR = new G4Box("WindowR",fAbsorberRadius+0.001,
+  //                                        fAbsorberRadius+0.001,
+  //                                        fWindowThick/2.+0.001  ); 
                           
-  G4LogicalVolume* logicWindowR = new G4LogicalVolume(solidWindowR,
-                                     fWorldMaterial, "WindowR");
+  //  G4LogicalVolume* logicWindowR = new G4LogicalVolume(solidWindowR,
+  //                                   fWorldMaterial, "WindowR");
  
-  G4VPhysicalVolume*    physiWindowR = new G4PVPlacement(0,		   
-                        G4ThreeVector(0.,0.,fWindowZ),        
-                              "WindowR",logicWindowR,fPhysicsWorld,false,0);
+  //  G4VPhysicalVolume*    physiWindowR = new G4PVPlacement(0,		   
+  //                      G4ThreeVector(0.,0.,fWindowZ),        
+  //                            "WindowR",logicWindowR,fPhysicsWorld,false,0);
   // window 
       			                  
-  G4Box* solidWindow = new G4Box("Window",fAbsorberRadius,
-                                   fAbsorberRadius, fWindowThick/2.); 
+  //  G4Box* solidWindow = new G4Box("Window",fAbsorberRadius,
+  //                                 fAbsorberRadius, fWindowThick/2.); 
                           
-  G4LogicalVolume* logicWindow = new G4LogicalVolume(solidWindow,
-                                     fWindowMat, "Window"); 
+  //  G4LogicalVolume* logicWindow = new G4LogicalVolume(solidWindow,
+  //                                   fWindowMat, "Window"); 
 
-  G4VPhysicalVolume*    physiWindow = new G4PVPlacement(0, G4ThreeVector(0.,0.,0.),        
-                              "Window", logicWindow, physiWindowR, false, 0); 
+  //  G4VPhysicalVolume*    physiWindow = new G4PVPlacement(0, G4ThreeVector(0.,0.,0.),        
+  //                         "Window", logicWindow, physiWindowR, false, 0); 
 
 
   fGapZ = fWindowZ + fWindowThick/2. + fGapThick/2. + 0.01*mm ;    
@@ -494,10 +497,10 @@ G4VPhysicalVolume* Em10DetectorConstruction::SetUpALICE06()
                                                      fPipeMat, // fWorldMaterial, // 
                                                      "Pipe");
 
-    G4VPhysicalVolume*    physiPipe = new G4PVPlacement(0,
-                                       G4ThreeVector(0., 0., zPipe),
-                                      "Pipe1",logicPipe,
-                                       fPhysicsWorld,false,0);
+    //    G4VPhysicalVolume*    physiPipe = new G4PVPlacement(0,
+    //                                 G4ThreeVector(0., 0., zPipe),
+    //                                "Pipe1",logicPipe,
+    //                                  fPhysicsWorld,false,0);
 
     G4cout<<"zPipe = "<<zPipe/mm<<" mm"<<G4endl;
     G4cout<<"fPipeLength = "<<fPipeLength/mm<<" mm"<<G4endl<<G4endl;
@@ -526,26 +529,26 @@ G4VPhysicalVolume* Em10DetectorConstruction::SetUpALICE06()
   G4double zMylar1 = zPipe - fPipeLength/2. - fMylarThick/2. - 0.001*mm;
   G4double zMylar2 = zPipe + fPipeLength/2. + fMylarThick/2. + 0.001*mm;
 
-  G4Box* solidMylar = new G4Box("MylarB",fAbsorberRadius*0.6,
-                                fAbsorberRadius*0.6,
-                                fMylarThick/2.);
+  //  G4Box* solidMylar = new G4Box("MylarB",fAbsorberRadius*0.6,
+  //                              fAbsorberRadius*0.6,
+  //                               fMylarThick/2.);
 
-  G4LogicalVolume* logicMylar = new G4LogicalVolume(solidMylar,
-                                                    fWindowMat,
-                                                    "MylarL");
+  //  G4LogicalVolume* logicMylar = new G4LogicalVolume(solidMylar,
+  //                                                  fWindowMat,
+  //                                                  "MylarL");
   
   if ( fPipe ) 
   {
 
-    G4VPhysicalVolume* physiMylar1 = new G4PVPlacement(0,
-                               G4ThreeVector( 0., 0., zMylar1),
-                               "Mylar1", logicMylar, fPhysicsWorld,
-                                           false, 0);
+    //    G4VPhysicalVolume* physiMylar1 = new G4PVPlacement(0,
+    //                         G4ThreeVector( 0., 0., zMylar1),
+    //                          "Mylar1", logicMylar, fPhysicsWorld,
+    //                                      false, 0);
 
-    G4VPhysicalVolume* physiMylar2 = new G4PVPlacement(0,
-                                G4ThreeVector(0., 0., zMylar2),
-                                "Mylar2", logicMylar, fPhysicsWorld,
-                                   false, 0);
+    //  G4VPhysicalVolume* physiMylar2 = new G4PVPlacement(0,
+    //                             G4ThreeVector(0., 0., zMylar2),
+    //                            "Mylar2", logicMylar, fPhysicsWorld,
+    //                               false, 0);
 
       G4cout<<"zMylar1 = "<<zMylar1/mm<<" mm"<<G4endl;
       G4cout<<"zMylar2 = "<<zMylar2/mm<<" mm"<<G4endl;
@@ -560,9 +563,9 @@ G4VPhysicalVolume* Em10DetectorConstruction::SetUpALICE06()
   {
     zMylar += ( fPipeLength + pipeDist );
   }
-  G4VPhysicalVolume*    physiMylar = new G4PVPlacement(0,
-                        G4ThreeVector(0., 0., zMylar),
-                        "Mylar",logicMylar,fPhysicsWorld,false,0);
+  //  G4VPhysicalVolume*    physiMylar = new G4PVPlacement(0,
+  //                       G4ThreeVector(0., 0., zMylar),
+  //                      "Mylar",logicMylar,fPhysicsWorld,false,0);
 
 
   G4cout<<"zMylar = "<<zMylar/mm<<" mm"<<G4endl;
@@ -753,26 +756,26 @@ G4VPhysicalVolume* Em10DetectorConstruction::SetUpBari05()
  	
   // Drift Electrode on both sides of Radiator:
 
-  G4Box* solidElectrode = new G4Box("Electrode",fAbsorberRadius*1.1,
-                                                fAbsorberRadius*1.1,
-                                                fElectrodeThick/2.);
+  //  G4Box* solidElectrode = new G4Box("Electrode",fAbsorberRadius*1.1,
+  //                                            fAbsorberRadius*1.1,
+  //                                             fElectrodeThick/2.);
 
-  G4LogicalVolume* logicElectrode = new G4LogicalVolume(solidElectrode,
-                                                        fElectrodeMat,
-                                                        "Electrode");
+  //  G4LogicalVolume* logicElectrode = new G4LogicalVolume(solidElectrode,
+  //                                                       fElectrodeMat,
+  //                                                        "Electrode");
 
   G4double zElectrode1 = fRadZ - fRadThick/2. - fElectrodeThick/2.;
   G4double zElectrode2 = fRadZ + fRadThick/2. + fElectrodeThick/2.;
 
-  G4VPhysicalVolume*    physiElectrode1 = new G4PVPlacement(0,
-                                       G4ThreeVector(0.,0.,zElectrode1),
-                                      "Electrode1",logicElectrode,
-                                       fPhysicsWorld,false,0);
+  //  G4VPhysicalVolume*    physiElectrode1 = new G4PVPlacement(0,
+  //                                       G4ThreeVector(0.,0.,zElectrode1),
+  //                                     "Electrode1",logicElectrode,
+  //                                      fPhysicsWorld,false,0);
 
-  G4VPhysicalVolume*    physiElectrode2 = new G4PVPlacement(0,
-                                       G4ThreeVector(0.,0.,zElectrode2),
-                                      "Electrode1",logicElectrode,
-                                       fPhysicsWorld,false,0);
+  // G4VPhysicalVolume*    physiElectrode2 = new G4PVPlacement(0,
+  //                                      G4ThreeVector(0.,0.,zElectrode2),
+  //                                    "Electrode1",logicElectrode,
+  //                                     fPhysicsWorld,false,0);
 
 
   G4cout<<"zElectrode1 = "<<zElectrode1/mm<<" mm"<<G4endl;
@@ -796,13 +799,13 @@ G4VPhysicalVolume* Em10DetectorConstruction::SetUpBari05()
   if ( fabs(pipe) > 1.e-15 ) 
   {
 
-    G4Box* solidPipe = new G4Box("Pipe",fAbsorberRadius*0.5,
-                                 fAbsorberRadius*0.5,
-                                 fPipeLength/2. );
+    //    G4Box* solidPipe = new G4Box("Pipe",fAbsorberRadius*0.5,
+    //                              fAbsorberRadius*0.5,
+    //                              fPipeLength/2. );
 
-    G4LogicalVolume* logicPipe = new G4LogicalVolume(solidPipe,
-                                                     fPipeMat,
-                                                     "Pipe");
+    //    G4LogicalVolume* logicPipe = new G4LogicalVolume(solidPipe,
+    //                                                  fPipeMat,
+    //                                                  "Pipe");
 
     // magnetic field in Pipe:
     // if( fMagField ) delete fMagField; //delete the existing mag field
@@ -812,10 +815,10 @@ G4VPhysicalVolume* Em10DetectorConstruction::SetUpBari05()
     // fieldMgr->CreateChordFinder(fMagField);
     // if ( fabs(field) > 1.e-15 ) logicPipe->SetFieldManager(fieldMgr, true);
 
-    G4VPhysicalVolume*    physiPipe = new G4PVPlacement(0,
-                                       G4ThreeVector(0.,0.,zPipe),
-                                      "Pipe1",logicPipe,
-                                       fPhysicsWorld,false,0);
+    //    G4VPhysicalVolume*    physiPipe = new G4PVPlacement(0,
+    //                                   G4ThreeVector(0.,0.,zPipe),
+    //                                  "Pipe1",logicPipe,
+    //                                   fPhysicsWorld,false,0);
 
     G4cout<<"zPipe = "<<zPipe/mm<<" mm"<<G4endl;
     G4cout<<"fPipeLength = "<<fPipeLength/mm<<" mm"<<G4endl<<G4endl;
@@ -828,26 +831,26 @@ G4VPhysicalVolume* Em10DetectorConstruction::SetUpBari05()
   G4double zMylar1 = zPipe - fPipeLength/2. - fMylarThick/2 - 0.01*mm;
   G4double zMylar2 = zPipe + fPipeLength/2. + fMylarThick/2 + 0.01*mm;
 
-  G4Box* solidMylar = new G4Box("Mylar",fAbsorberRadius*0.6,
-                                fAbsorberRadius*0.6,
-                                fMylarThick/2.);
+  //  G4Box* solidMylar = new G4Box("Mylar",fAbsorberRadius*0.6,
+  //                              fAbsorberRadius*0.6,
+  //                              fMylarThick/2.);
 
-  G4LogicalVolume* logicMylar = new G4LogicalVolume(solidMylar,
-                                                    fWindowMat,
-                                                    "Mylar");
+  //  G4LogicalVolume* logicMylar = new G4LogicalVolume(solidMylar,
+  //                                                  fWindowMat,
+  //                                                  "Mylar");
 
   if ( fabs(pipe) > 1.e-15 ) 
   {
 
-    G4VPhysicalVolume* physiMylar1 = new G4PVPlacement(0,
-                               G4ThreeVector( 0., 0., zMylar1),
-                               "Mylar1", logicMylar, fPhysicsWorld,
-                                           false, 0);
+    //    G4VPhysicalVolume* physiMylar1 = new G4PVPlacement(0,
+    //                           G4ThreeVector( 0., 0., zMylar1),
+    //                            "Mylar1", logicMylar, fPhysicsWorld,
+    //                                        false, 0);
 
-    G4VPhysicalVolume* physiMylar2 = new G4PVPlacement(0,
-                                G4ThreeVector(0.,0.,zMylar2),
-                                "Mylar2", logicMylar, fPhysicsWorld,
-                                   false, 0);
+    //  G4VPhysicalVolume* physiMylar2 = new G4PVPlacement(0,
+    //                             G4ThreeVector(0.,0.,zMylar2),
+    //                             "Mylar2", logicMylar, fPhysicsWorld,
+    //                                false, 0);
 
       G4cout<<"zMylar1 = "<<zMylar1/mm<<" mm"<<G4endl;
       G4cout<<"zMylar2 = "<<zMylar2/mm<<" mm"<<G4endl;
@@ -861,9 +864,9 @@ G4VPhysicalVolume* Em10DetectorConstruction::SetUpBari05()
 
   if ( fabs(pipe) > 1.e-15 ) zMylar += ( fPipeLength + pipeDist );
 
-  G4VPhysicalVolume*    physiMylar = new G4PVPlacement(0,
-                        G4ThreeVector(0.,0.,zMylar),
-                        "Mylar",logicMylar,fPhysicsWorld,false,0);
+  //  G4VPhysicalVolume*    physiMylar = new G4PVPlacement(0,
+  //                       G4ThreeVector(0.,0.,zMylar),
+  //                      "Mylar",logicMylar,fPhysicsWorld,false,0);
 
 
   G4cout<<"zMylar = "<<zMylar/mm<<" mm"<<G4endl;
@@ -1014,26 +1017,26 @@ G4VPhysicalVolume* Em10DetectorConstruction::SetUpHarris73()
    
   fWindowZ = fStartZ + fRadThick + fWindowThick/2. + 15.0*mm ;    
       			                  
-  G4Box* solidWindowR = new G4Box("WindowR",fAbsorberRadius+0.001,
-                                          fAbsorberRadius+0.001,
-                                          fWindowThick/2.+0.001  ); 
+  // G4Box* solidWindowR = new G4Box("WindowR",fAbsorberRadius+0.001,
+  //                                        fAbsorberRadius+0.001,
+  //                                        fWindowThick/2.+0.001  ); 
                           
-  G4LogicalVolume* logicWindowR = new G4LogicalVolume(solidWindowR,
-                                     fWorldMaterial, "WindowR");
+  //  G4LogicalVolume* logicWindowR = new G4LogicalVolume(solidWindowR,
+  //                                    fWorldMaterial, "WindowR");
  
-  G4VPhysicalVolume*    physiWindowR = new G4PVPlacement(0,		   
-                        G4ThreeVector(0.,0.,fWindowZ),        
-                              "WindowR",logicWindowR,fPhysicsWorld,false,0);
+  //  G4VPhysicalVolume*    physiWindowR = new G4PVPlacement(0,		   
+  //                       G4ThreeVector(0.,0.,fWindowZ),        
+  //                             "WindowR",logicWindowR,fPhysicsWorld,false,0);
   // window 
       			                  
-  G4Box* solidWindow = new G4Box("Window",fAbsorberRadius,
-                                   fAbsorberRadius, fWindowThick/2.); 
+  // G4Box* solidWindow = new G4Box("Window",fAbsorberRadius,
+  //                                  fAbsorberRadius, fWindowThick/2.); 
                           
-  G4LogicalVolume* logicWindow = new G4LogicalVolume(solidWindow,
-                                     fWindowMat, "Window"); 
+  //  G4LogicalVolume* logicWindow = new G4LogicalVolume(solidWindow,
+  //                                   fWindowMat, "Window"); 
 
-  G4VPhysicalVolume*    physiWindow = new G4PVPlacement(0, G4ThreeVector(0.,0.,0.),        
-                              "Window", logicWindow, physiWindowR, false, 0); 
+  //  G4VPhysicalVolume*    physiWindow = new G4PVPlacement(0, G4ThreeVector(0.,0.,0.),        
+  //                             "Window", logicWindow, physiWindowR, false, 0); 
 
 
   fGapZ = fWindowZ + fWindowThick/2. + fGapThick/2. + 0.01*mm ;    
@@ -1115,7 +1118,7 @@ G4VPhysicalVolume* Em10DetectorConstruction::SetUpWatase86()
 
 
   G4Material* Li = fMat->GetMaterial("Li");
-  G4Material* Air   = fMat->GetMaterial("Air");
+  //  G4Material* Air   = fMat->GetMaterial("Air");
   G4Material* He   = fMat->GetMaterial("He");
   G4Material* Al   = fMat->GetMaterial("Al");
   G4Material* Mylar = fMat->GetMaterial("Mylar");
@@ -1183,26 +1186,26 @@ G4VPhysicalVolume* Em10DetectorConstruction::SetUpWatase86()
    
   fWindowZ = fStartZ + fRadThick + fWindowThick/2. + 15.0*mm ;    
       			                  
-  G4Box* solidWindowR = new G4Box("WindowR",fAbsorberRadius+0.001,
-                                          fAbsorberRadius+0.001,
-                                          fWindowThick/2.+0.001  ); 
+  // G4Box* solidWindowR = new G4Box("WindowR",fAbsorberRadius+0.001,
+  //                                         fAbsorberRadius+0.001,
+  //                                         fWindowThick/2.+0.001  ); 
                           
-  G4LogicalVolume* logicWindowR = new G4LogicalVolume(solidWindowR,
-                                     fWorldMaterial, "WindowR");
+  // G4LogicalVolume* logicWindowR = new G4LogicalVolume(solidWindowR,
+  //                                    fWorldMaterial, "WindowR");
  
-  G4VPhysicalVolume*    physiWindowR = new G4PVPlacement(0,		   
-                        G4ThreeVector(0.,0.,fWindowZ),        
-                              "WindowR",logicWindowR,fPhysicsWorld,false,0);
+  //  G4VPhysicalVolume*    physiWindowR = new G4PVPlacement(0,		   
+  //                    G4ThreeVector(0.,0.,fWindowZ),        
+  //                          "WindowR",logicWindowR,fPhysicsWorld,false,0);
   // window 
       			                  
-  G4Box* solidWindow = new G4Box("Window",fAbsorberRadius,
-                                   fAbsorberRadius, fWindowThick/2.); 
+  // G4Box* solidWindow = new G4Box("Window",fAbsorberRadius,
+  //                                 fAbsorberRadius, fWindowThick/2.); 
                           
-  G4LogicalVolume* logicWindow = new G4LogicalVolume(solidWindow,
-                                     fWindowMat, "Window"); 
+  //  G4LogicalVolume* logicWindow = new G4LogicalVolume(solidWindow,
+  //                                    fWindowMat, "Window"); 
 
-  G4VPhysicalVolume*    physiWindow = new G4PVPlacement(0, G4ThreeVector(0.,0.,0.),        
-                              "Window", logicWindow, physiWindowR, false, 0); 
+  //  G4VPhysicalVolume*    physiWindow = new G4PVPlacement(0, G4ThreeVector(0.,0.,0.),        
+  //                            "Window", logicWindow, physiWindowR, false, 0); 
 
 
   fGapZ = fWindowZ + fWindowThick/2. + fGapThick/2. + 0.01*mm ;    
@@ -1352,26 +1355,26 @@ G4VPhysicalVolume* Em10DetectorConstruction::SetUpBarr90()
    
   fWindowZ = fStartZ + fRadThick + fWindowThick/2. + 15.0*mm ;    
       			                  
-  G4Box* solidWindowR = new G4Box("WindowR",fAbsorberRadius+0.001,
-                                          fAbsorberRadius+0.001,
-                                          fWindowThick/2.+0.001  ); 
+  // G4Box* solidWindowR = new G4Box("WindowR",fAbsorberRadius+0.001,
+  //                                         fAbsorberRadius+0.001,
+  //                                         fWindowThick/2.+0.001  ); 
                           
-  G4LogicalVolume* logicWindowR = new G4LogicalVolume(solidWindowR,
-                                     fWorldMaterial, "WindowR");
- 
-  G4VPhysicalVolume*    physiWindowR = new G4PVPlacement(0,		   
-                        G4ThreeVector(0.,0.,fWindowZ),        
-                              "WindowR",logicWindowR,fPhysicsWorld,false,0);
+  // G4LogicalVolume* logicWindowR = new G4LogicalVolume(solidWindowR,
+  //                                    fWorldMaterial, "WindowR");
+  //
+  //  G4VPhysicalVolume*    physiWindowR = new G4PVPlacement(0,		   
+  //                       G4ThreeVector(0.,0.,fWindowZ),        
+  //                             "WindowR",logicWindowR,fPhysicsWorld,false,0);
   // window 
       			                  
-  G4Box* solidWindow = new G4Box("Window",fAbsorberRadius,
-                                   fAbsorberRadius, fWindowThick/2.); 
+  // G4Box* solidWindow = new G4Box("Window",fAbsorberRadius,
+  //                                 fAbsorberRadius, fWindowThick/2.); 
                           
-  G4LogicalVolume* logicWindow = new G4LogicalVolume(solidWindow,
-                                     fWindowMat, "Window"); 
+  // G4LogicalVolume* logicWindow = new G4LogicalVolume(solidWindow,
+  //                                   fWindowMat, "Window"); 
 
-  G4VPhysicalVolume*    physiWindow = new G4PVPlacement(0, G4ThreeVector(0.,0.,0.),        
-                              "Window", logicWindow, physiWindowR, false, 0); 
+  //  G4VPhysicalVolume*    physiWindow = new G4PVPlacement(0, G4ThreeVector(0.,0.,0.),        
+  //                            "Window", logicWindow, physiWindowR, false, 0); 
 
 
   fGapZ = fWindowZ + fWindowThick/2. + fGapThick/2. + 0.01*mm ;    

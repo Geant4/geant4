@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: XTRComptonScattering.cc,v 1.2 2006-05-04 14:59:12 grichine Exp $
+// $Id: XTRComptonScattering.cc,v 1.3 2006-05-18 08:16:42 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -302,7 +302,7 @@ G4VParticleChange* XTRComptonScattering::PostStepDoIt(const G4Track& aTrack,
  
 {
    aParticleChange.Initialize(aTrack);
-   G4Material* aMaterial                     = aTrack.GetMaterial();
+   //   G4Material* aMaterial                     = aTrack.GetMaterial();
 
    const G4DynamicParticle* aDynamicGamma = aTrack.GetDynamicParticle();
    G4double GammaEnergy0 = aDynamicGamma->GetKineticEnergy();
@@ -421,9 +421,9 @@ G4VParticleChange* XTRComptonScattering::PostStepDoIt(const G4Track& aTrack,
    
    if (GammaEnergy1 > fMinGammaEnergy)
      {
-       aParticleChange.ProposeEnergy( GammaEnergy1 );
+       //   aParticleChange.ProposeEnergy( GammaEnergy1 );
      }
-   else
+   //   else
      {
        localEnergyDeposit += GammaEnergy1;    
        aParticleChange.ProposeEnergy(0.) ;
