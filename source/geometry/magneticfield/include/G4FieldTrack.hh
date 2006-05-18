@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FieldTrack.hh,v 1.17 2006-05-08 18:23:29 japost Exp $
+// $Id: G4FieldTrack.hh,v 1.18 2006-05-18 15:46:23 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -147,9 +147,6 @@ class  G4FieldTrack
      friend  std::ostream&
              operator<<( std::ostream& os, const G4FieldTrack& SixVec);
 
-     class  G4ChargeState;
-     G4ChargeState* GetChargeState(){ return fpChargeState; } 
-
    private:
 
      G4double  SixVector[6];
@@ -162,11 +159,11 @@ class  G4FieldTrack
      G4ThreeVector fSpin;
      G4ThreeVector fMomentumDir;
 
-     G4FieldTrack::G4ChargeState* fpChargeState;   // Charge & moments     // -----------------------------------------------------
      private:   //  Implementation detail -- daughter class
 
        class G4ChargeState
        {
+       // Charge & moments     // -------------------------------------
        public:  // without description
 	 G4ChargeState(G4double charge,                       G4double magnetic_dipole_moment= 0.0,  
 		       G4double electric_dipole_moment= 0.0,  G4double magnetic_charge= 0.0);  
@@ -192,9 +189,10 @@ class  G4FieldTrack
 	 G4double fElec_dipole;
 	 G4double fMagneticCharge;  // for magnetic monopole
        };
+       G4ChargeState* fpChargeState;
+       // G4FieldTrack::G4ChargeState* fpChargeState;
 
-       // G4ChargeState *fpChargeState; 
-
+       G4ChargeState* GetChargeState(){ return fpChargeState; } 
 }; 
 
 #include "G4FieldTrack.icc"
