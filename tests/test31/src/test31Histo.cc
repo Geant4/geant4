@@ -386,7 +386,7 @@ void test31Histo::TableControl()
       
     if(ii == 1) proc_name = mu_name;
     else if(ii == 2) proc_name = h_name;
-    else if(ii == 4) proc_name = ion_name;
+    else if(ii == 4) {proc_name = ion_name;}
     G4cout << "================================================================" << G4endl;
     G4cout << "   Tables control for  " << namep[ii] << G4endl;
     G4cout << "   Material            " << mat_name << G4endl;
@@ -395,10 +395,12 @@ void test31Histo::TableControl()
     for(G4int ij=0; ij<ne; ij++) {
     
       G4double e = e0[ij];
-      G4double dedx0 = cal.ComputeTotalDEDX(e,part,mat,e);
-      G4double dedx  = cal.ComputeElectronicDEDX(e,part,mat,e);
+      G4double e1 = e;
+      if(ii >= 5) e1 *= part->GetPDGMass()/amu_c2;
+      G4double dedx0 = cal.ComputeTotalDEDX(e1,part,mat,e1);
+      G4double dedx  = cal.ComputeElectronicDEDX(e1,part,mat,e1);
       G4cout << ij << ".   e(MeV)= " << e/MeV 
-	     << "  e0= " << e
+	     << "  ei= " << e1/MeV
 	     << ";  Computed  dedx(MeV*cm^2/mg)= " << dedx*fact
 	     << ";  Total  dedx(MeV*cm^2/mg)= " << dedx0*fact
 	     << G4endl;

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EmMuonBuilder.cc,v 1.3 2006-04-28 18:05:26 vnivanch Exp $
+// $Id: G4EmMuonBuilder.cc,v 1.4 2006-05-19 19:13:18 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -44,6 +44,7 @@
 #include "G4ProcessManager.hh"
 
 #include "G4MultipleScattering.hh"
+#include "G4MuonMinusCaptureAtRest.hh"
 
 #include "G4MuIonisation.hh"
 #include "G4MuBremsstrahlung.hh"
@@ -111,6 +112,9 @@ void G4EmMuonBuilder::ConstructProcess()
   pmanager->AddProcess(mubrem,    -1,-1,3);
   pmanager->AddProcess(mupair,    -1,-1,4);
 
+  G4MuonMinusCaptureAtRest* muc = new G4MuonMinusCaptureAtRest();
+  muc->SetVerboseLevel(2);
+  pmanager->AddRestProcess(muc);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

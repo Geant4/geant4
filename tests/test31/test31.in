@@ -25,7 +25,7 @@
 /gun/particle ion
 /gun/ion 6 12 6
 /gun/particle e-
-/run/beamOn 500
+/run/beamOn 100
 #
 #/testem/histo/fileName            t_mu_st.paw
 /gun/particle mu-
