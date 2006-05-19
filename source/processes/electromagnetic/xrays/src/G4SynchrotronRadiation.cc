@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SynchrotronRadiation.cc,v 1.2 2006-05-19 10:05:28 vnivanch Exp $
+// $Id: G4SynchrotronRadiation.cc,v 1.3 2006-05-19 10:08:50 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------
@@ -56,7 +56,8 @@ G4SynchrotronRadiation::G4SynchrotronRadiation(const G4String& processName,
   theElectron ( G4Electron::Electron() ),
   thePositron ( G4Positron::Positron() ), fAlpha(0.0), fRootNumber(80)
 {
-  G4TransportationManager* transportMgr = G4TransportationManager::GetTransportationManager();
+  G4TransportationManager* transportMgr = 
+    G4TransportationManager::GetTransportationManager();
 
   fFieldPropagator = transportMgr->GetPropagatorInField();
 
@@ -99,8 +100,6 @@ G4SynchrotronRadiation::GetMeanFreePath( const G4Track& trackData,
                    aDynamicParticle->GetMass();
 
   G4double particleCharge = aDynamicParticle->GetDefinition()->GetPDGCharge();
-
-  G4double KineticEnergy = aDynamicParticle->GetKineticEnergy();
 
   if ( gamma < 1.0e3 )  MeanFreePath = DBL_MAX;
   else
