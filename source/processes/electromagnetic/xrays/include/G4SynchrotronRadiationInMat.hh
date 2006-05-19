@@ -21,23 +21,24 @@
 // ********************************************************************
 //
 //
-// $Id: G4SynchrotronRadiation.hh,v 1.2 2006-05-19 10:05:27 vnivanch Exp $
+// $Id: G4SynchrotronRadiationInMat.hh,v 1.1 2006-05-19 10:05:28 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class header file
 //      CERN Geneva Switzerland
 //
-//
-//      History:
+//      
+//      History: 
 //      21-5-98  1 version , V. Grichine
 //      28-05-01, V.Ivanchenko minor changes to provide ANSI -wall compilation
+//      19-05-06, V.Ivanchenko rename from G4SynchrotronRadiation
 //
 //
 // ------------------------------------------------------------
 
-#ifndef G4SynchrotronRadiation_h
-#define G4SynchrotronRadiation_h 1
+#ifndef G4SynchrotronRadiationInMat_h
+#define G4SynchrotronRadiationInMat_h 1
 
 #include "G4ios.hh"
 #include "globals.hh"
@@ -52,23 +53,37 @@
 #include "G4Track.hh"
 #include "G4Step.hh"
 
+
 #include "G4Gamma.hh"
 #include "G4Electron.hh"
 #include "G4Positron.hh"
 
 
-class G4SynchrotronRadiation : public G4VDiscreteProcess
+#include "G4PhysicsTable.hh"
+#include "G4PhysicsLogVector.hh"
+
+
+class G4SynchrotronRadiationInMat : public G4VDiscreteProcess
 {
 public:
 
-  G4SynchrotronRadiation(const G4String& pName = "SynchrotronRadiation",
-		         G4ProcessType type = fElectromagnetic);
+  G4SynchrotronRadiationInMat(const G4String& processName =
+                              "SynchrotronRadiation",
+                              G4ProcessType type = fElectromagnetic);
 
-  virtual ~G4SynchrotronRadiation();
+  virtual ~G4SynchrotronRadiationInMat();
+
+private:
+
+  G4SynchrotronRadiationInMat & operator=(const G4SynchrotronRadiationInMat &right);
+
+  G4SynchrotronRadiationInMat(const G4SynchrotronRadiationInMat&);
+
+public:  /////////////////    Post Step functions  //////////////////////////
 
   G4double GetMeanFreePath( const G4Track& track,
-                                     G4double previousStepSize,
-                                     G4ForceCondition* condition );
+                            G4double previousStepSize,
+                            G4ForceCondition* condition );
 
   G4VParticleChange *PostStepDoIt( const G4Track& track,
                                       const G4Step& Step    );
@@ -81,39 +96,62 @@ public:
   G4double GetProbSpectrumSRforInt( G4double );
   G4double GetIntProbSR( G4double );
 
+  G4double GetProbSpectrumSRforEnergy( G4double );
+  G4double GetEnergyProbSR( G4double );
+
   G4double GetIntegrandForAngleK( G4double );
   G4double GetAngleK( G4double );
   G4double GetAngleNumberAtGammaKsi( G4double );
 
-  G4double InvSynFracInt(G4double x);
-  G4double Chebyshev(G4double a,G4double b,const G4double c[],G4int m,G4double x);
 
-  void PrintInfoDefinition();
 
   G4bool IsApplicable(const G4ParticleDefinition&);
 
-  G4double GetLambdaConst() { return fLambdaConst; };
-  G4double GetEnergyConst() { return fEnergyConst; };
+  static G4double GetLambdaConst(){ return fLambdaConst; };
+  static G4double GetEnergyConst(){ return fEnergyConst; };
 
   void SetRootNumber(G4int rn){ fRootNumber = rn; };
+  void SetVerboseLevel(G4int v){ fVerboseLevel = v; };
   void SetKsi(G4double ksi){ fKsi = ksi; };
   void SetEta(G4double eta){ fEta = eta; };
   void SetPsiGamma(G4double psg){ fPsiGamma = psg; };
   void SetOrderAngleK(G4double ord){ fOrderAngleK = ord; }; // should be 1/3 or 2/3
 
-private:
+  protected:
 
-  G4SynchrotronRadiation & operator=(const G4SynchrotronRadiation &right);
-  G4SynchrotronRadiation(const G4SynchrotronRadiation&);
+  private:
 
-  G4ParticleDefinition*       theGamma;
+  static const G4double fLambdaConst;
+
+  static const G4double fEnergyConst;
+
+  static const G4double fIntegralProbabilityOfSR[200];
+
+
+  const G4double
+  LowestKineticEnergy;   // low  energy limit of the cross-section formula
+
+  const G4double
+  HighestKineticEnergy;  // high energy limit of the cross-section formula
+
+  G4int TotBin;          // number of bins in the tables
+
+  G4double CutInRange;
+
+  const G4ParticleDefinition* theGamma;
   const G4ParticleDefinition* theElectron;
   const G4ParticleDefinition* thePositron;
 
-  G4double fLambdaConst;
-  G4double fEnergyConst;
+  const G4double* GammaCutInKineticEnergy;
+  const G4double* ElectronCutInKineticEnergy;
+  const G4double* PositronCutInKineticEnergy;
+  const G4double* ParticleCutInKineticEnergy;
 
-  const G4double fIntegralProbabilityOfSR[200];
+
+  G4double GammaCutInKineticEnergyNow;
+  G4double ElectronCutInKineticEnergyNow;
+  G4double PositronCutInKineticEnergyNow;
+  G4double ParticleCutInKineticEnergyNow;
 
   G4double fAlpha;
   G4int    fRootNumber;
@@ -122,6 +160,8 @@ private:
   G4double fEta;             //
   G4double fOrderAngleK;     // 1/3 or 2/3
 
+
+  G4int    fVerboseLevel;
   G4PropagatorInField* fFieldPropagator;
 
 };
@@ -129,27 +169,14 @@ private:
 //////////////////////////  INLINE METHODS  /////////////////////////////
 
 inline G4bool
-G4SynchrotronRadiation::IsApplicable( const G4ParticleDefinition& particle )
+G4SynchrotronRadiationInMat::IsApplicable( const G4ParticleDefinition& particle )
 {
 
   return ( ( &particle == (const G4ParticleDefinition *)theElectron ) ||
-           ( &particle == (const G4ParticleDefinition *)thePositron )    );
+            ( &particle == (const G4ParticleDefinition *)thePositron )    );
 
   // return ( particle.GetPDGCharge() != 0.0 );
 }
 
-inline G4double G4SynchrotronRadiation::Chebyshev(G4double a,G4double b,const G4double c[],G4int m,G4double x)
-{
-  G4double y;
-  G4double y2=2.0*(y=(2.0*x-a-b)/(b-a)); // Change of variable.
-  G4double d=0,dd=0;
-  for (G4int j=m-1;j>=1;j--) // Clenshaw's recurrence.
-  { G4double sv=d;
-	d=y2*d-dd+c[j];
-	dd=sv;
-  }
-  return y*d-dd+0.5*c[0];
-}
-
-#endif  // end of G4SynchrotronRadiation.hh
+#endif  // end of G4SynchrotronRadiationInMat.hh
 

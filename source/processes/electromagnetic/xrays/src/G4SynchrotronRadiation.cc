@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SynchrotronRadiation.cc,v 1.1 2006-04-05 13:32:03 vnivanch Exp $
+// $Id: G4SynchrotronRadiation.cc,v 1.2 2006-05-19 10:05:28 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------
@@ -32,6 +32,7 @@
 //      21-5-98 V.Grichine
 //      28-05-01, V.Ivanchenko minor changes to provide ANSI -wall compilation 
 //      04.03.05, V.Grichine: get local field interface      
+//      18-05-06 Energy spectrum from function rather than table
 //                    
 // 
 //
@@ -40,120 +41,49 @@
 
 #include "G4SynchrotronRadiation.hh"
 #include "G4Integrator.hh"
+#include "G4UnitsTable.hh"
 
-////////////////////////////////////////////////////////////////////
-//
-// Constant for calculation of mean free path
-//
+using namespace std;
 
-const G4double
-G4SynchrotronRadiation::fLambdaConst = sqrt(3.0)*electron_mass_c2/
-                                       (2.5*fine_structure_const*eplus*c_light) ;
-
-/////////////////////////////////////////////////////////////////////
-//
-// Constant for calculation of characterictic energy
-//
-
-const G4double
-G4SynchrotronRadiation::fEnergyConst = 1.5*c_light*c_light*eplus*hbar_Planck/
-                                       electron_mass_c2  ;
-
-////////////////////////////////////////////////////////////////////
-//
-// Array of integral probability of synchrotron photons:
-//
-// the corresponding energy = 0.0001*i*i*(characteristic energy)
-//
-
-const G4double
-G4SynchrotronRadiation::fIntegralProbabilityOfSR[200] =
-{
-  1.000000e+00,	9.428859e-01,	9.094095e-01,	8.813971e-01,	8.565154e-01,
-  8.337008e-01,	8.124961e-01,	7.925217e-01,	7.735517e-01,	7.554561e-01,
-  7.381233e-01,	7.214521e-01,	7.053634e-01,	6.898006e-01,	6.747219e-01,
-  6.600922e-01,	6.458793e-01,	6.320533e-01,	6.185872e-01,	6.054579e-01,
-  5.926459e-01,	5.801347e-01,	5.679103e-01,	5.559604e-01,	5.442736e-01,
-  5.328395e-01,	5.216482e-01,	5.106904e-01,	4.999575e-01,	4.894415e-01,
-  4.791351e-01,	4.690316e-01,	4.591249e-01,	4.494094e-01,	4.398800e-01,
-  4.305320e-01,	4.213608e-01,	4.123623e-01,	4.035325e-01,	3.948676e-01,
-  3.863639e-01,	3.780179e-01,	3.698262e-01,	3.617858e-01,	3.538933e-01,
-  3.461460e-01,	3.385411e-01,	3.310757e-01,	3.237474e-01,	3.165536e-01,
-  3.094921e-01,	3.025605e-01,	2.957566e-01,	2.890784e-01,	2.825237e-01,
-  2.760907e-01,	2.697773e-01,	2.635817e-01,	2.575020e-01,	2.515365e-01,
-  2.456834e-01,	2.399409e-01,	2.343074e-01,	2.287812e-01,	2.233607e-01,
-  2.180442e-01,	2.128303e-01,	2.077174e-01,	2.027040e-01,	1.977885e-01,
-  1.929696e-01,	1.882457e-01,	1.836155e-01,	1.790775e-01,	1.746305e-01,
-  1.702730e-01,	1.660036e-01,	1.618212e-01,	1.577243e-01,	1.537117e-01,
-  1.497822e-01,	1.459344e-01,	1.421671e-01,	1.384791e-01,	1.348691e-01,
-  1.313360e-01,	1.278785e-01,	1.244956e-01,	1.211859e-01,	1.179483e-01,
-  1.147818e-01,	1.116850e-01,	1.086570e-01,	1.056966e-01,	1.028026e-01,
-  9.997405e-02,	9.720975e-02,	9.450865e-02,	9.186969e-02,	8.929179e-02,
-  8.677391e-02,	8.431501e-02,	8.191406e-02,	7.957003e-02,	7.728192e-02,
-  7.504872e-02,	7.286944e-02,	7.074311e-02,	6.866874e-02,	6.664538e-02,
-  6.467208e-02,	6.274790e-02,	6.087191e-02,	5.904317e-02,	5.726079e-02,
-  5.552387e-02,	5.383150e-02,	5.218282e-02,	5.057695e-02,	4.901302e-02,
-  4.749020e-02,	4.600763e-02,	4.456450e-02,	4.315997e-02,	4.179325e-02,
-  4.046353e-02,	3.917002e-02,	3.791195e-02,	3.668855e-02,	3.549906e-02,
-  3.434274e-02,	3.321884e-02,	3.212665e-02,	3.106544e-02,	3.003452e-02,
-  2.903319e-02,	2.806076e-02,	2.711656e-02,	2.619993e-02,	2.531021e-02,
-  2.444677e-02,	2.360897e-02,	2.279620e-02,	2.200783e-02,	2.124327e-02,
-  2.050194e-02,	1.978324e-02,	1.908662e-02,	1.841151e-02,	1.775735e-02,
-  1.712363e-02,	1.650979e-02,	1.591533e-02,	1.533973e-02,	1.478250e-02,
-  1.424314e-02,	1.372117e-02,	1.321613e-02,	1.272755e-02,	1.225498e-02,
-  1.179798e-02,	1.135611e-02,	1.092896e-02,	1.051609e-02,	1.011712e-02,
-  9.731635e-03,	9.359254e-03,	8.999595e-03,	8.652287e-03,	8.316967e-03,
-  7.993280e-03,	7.680879e-03,	7.379426e-03,	7.088591e-03,	6.808051e-03,
-  6.537491e-03,	6.276605e-03,	6.025092e-03,	5.782661e-03,	5.549027e-03,
-  5.323912e-03,	5.107045e-03,	4.898164e-03,	4.697011e-03,	4.503336e-03,
-  4.316896e-03,	4.137454e-03,	3.964780e-03,	3.798649e-03,	3.638843e-03,
-  3.485150e-03,	3.337364e-03,	3.195284e-03,	3.058715e-03,	2.927469e-03,
-  2.801361e-03,	2.680213e-03,	2.563852e-03,	2.452110e-03,	2.344824e-03
-};
- 
-///////////////////////////////////////////////////////////////////////    
+///////////////////////////////////////////////////////////////////////
 //
 //  Constructor
 //
 
-using namespace std;
- 
 G4SynchrotronRadiation::G4SynchrotronRadiation(const G4String& processName,
   G4ProcessType type):G4VDiscreteProcess (processName, type),
-  LowestKineticEnergy (10.*keV),
-  HighestKineticEnergy (100.*TeV),
-  TotBin(200),
   theGamma (G4Gamma::Gamma() ),
   theElectron ( G4Electron::Electron() ),
-  thePositron ( G4Positron::Positron() ), fAlpha(0.0), fRootNumber(80),
-  fVerboseLevel( verboseLevel )
+  thePositron ( G4Positron::Positron() ), fAlpha(0.0), fRootNumber(80)
 {
   G4TransportationManager* transportMgr = G4TransportationManager::GetTransportationManager();
 
   fFieldPropagator = transportMgr->GetPropagatorInField();
 
+  fLambdaConst = sqrt(3.0)*electron_mass_c2/
+                           (2.5*fine_structure_const*eplus*c_light) ;
+  fEnergyConst = 1.5*c_light*c_light*eplus*hbar_Planck/electron_mass_c2  ;
 }
- 
+
 /////////////////////////////////////////////////////////////////////////
 //
 // Destructor
 //
- 
+
 G4SynchrotronRadiation::~G4SynchrotronRadiation()
 {
      ;
 }
- 
- 
+
 /////////////////////////////// METHODS /////////////////////////////////
 //
 //
 // Production of synchrotron X-ray photon
 // GEANT4 internal units.
-// 
+//
 
 
-G4double 
+G4double
 G4SynchrotronRadiation::GetMeanFreePath( const G4Track& trackData,
                                                G4double,
                                                G4ForceCondition* condition)
@@ -162,10 +92,7 @@ G4SynchrotronRadiation::GetMeanFreePath( const G4Track& trackData,
   G4double MeanFreePath;
 
   const G4DynamicParticle* aDynamicParticle = trackData.GetDynamicParticle();
-  // G4Material* aMaterial = trackData.GetMaterial();
 
-  //G4bool isOutRange ;
- 
   *condition = NotForced ;
 
   G4double gamma = aDynamicParticle->GetTotalEnergy()/
@@ -175,7 +102,7 @@ G4SynchrotronRadiation::GetMeanFreePath( const G4Track& trackData,
 
   G4double KineticEnergy = aDynamicParticle->GetKineticEnergy();
 
-  if ( KineticEnergy <  LowestKineticEnergy || gamma < 1.0e3 )  MeanFreePath = DBL_MAX; 
+  if ( gamma < 1.0e3 )  MeanFreePath = DBL_MAX;
   else
   {
 
@@ -189,7 +116,7 @@ G4SynchrotronRadiation::GetMeanFreePath( const G4Track& trackData,
     {
       fieldMgr = fFieldPropagator->FindAndSetFieldManager( trackData.GetVolume() );
 
-      if ( fieldMgr != 0 ) 
+      if ( fieldMgr != 0 )
       {
         // If the field manager has no field, there is no field !
 
@@ -197,7 +124,7 @@ G4SynchrotronRadiation::GetMeanFreePath( const G4Track& trackData,
       }
     }
     if ( fieldExertsForce )
-    {  
+    {
       pField = fieldMgr->GetDetectorField() ;
       G4ThreeVector  globPosition = trackData.GetPosition();
 
@@ -209,29 +136,36 @@ G4SynchrotronRadiation::GetMeanFreePath( const G4Track& trackData,
 
       pField->GetFieldValue( globPosVec, FieldValueVec );
 
-      FieldValue = G4ThreeVector( FieldValueVec[0], 
-                                   FieldValueVec[1], 
+      FieldValue = G4ThreeVector( FieldValueVec[0],
+                                   FieldValueVec[1],
                                    FieldValueVec[2]   );
 
-       
-       
-      G4ThreeVector unitMomentum = aDynamicParticle->GetMomentumDirection(); 
+
+
+      G4ThreeVector unitMomentum = aDynamicParticle->GetMomentumDirection();
       G4ThreeVector unitMcrossB  = FieldValue.cross(unitMomentum) ;
       G4double perpB             = unitMcrossB.mag() ;
       G4double beta              = aDynamicParticle->GetTotalMomentum()/
                                    (aDynamicParticle->GetTotalEnergy()    );
 
       if( perpB > 0.0 ) MeanFreePath = fLambdaConst*beta/perpB;
-      else              MeanFreePath = DBL_MAX;       
+      else              MeanFreePath = DBL_MAX;
     }
-    else  MeanFreePath = DBL_MAX;    
+    else  MeanFreePath = DBL_MAX;
   }
-  if(fVerboseLevel > 0)
-  {
+  if(verboseLevel > 1)
     G4cout<<"G4SynchrotronRadiation::MeanFreePath = "<<MeanFreePath/m<<" m"<<G4endl;
-  }
-  return MeanFreePath; 
-} 
+
+  return MeanFreePath;
+  static G4double iCalled=0;
+  const G4double nprint=0;
+  iCalled++;
+  if(iCalled<nprint) G4cout << "G4SynchrotronRadiation::GetMeanFreePath iCalled=" << iCalled << " MeanFreePath="
+	<< std::setw(20) << std::setprecision(6) << G4BestUnit(MeanFreePath, "Length")
+	<< " Lorentz beta=" << aDynamicParticle->GetTotalMomentum()/ (aDynamicParticle->GetTotalEnergy())
+	<< G4endl;
+  return MeanFreePath;
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -264,7 +198,7 @@ G4SynchrotronRadiation::PostStepDoIt(const G4Track& trackData,
   if( (particleCharge != 0.0) )
   {
     fieldMgr = fFieldPropagator->FindAndSetFieldManager( trackData.GetVolume() );
-    if ( fieldMgr != 0 ) 
+    if ( fieldMgr != 0 )
     {
       // If the field manager has no field, there is no field !
 
@@ -272,7 +206,7 @@ G4SynchrotronRadiation::PostStepDoIt(const G4Track& trackData,
     }
   }
   if ( fieldExertsForce )
-  {  
+  {
     pField = fieldMgr->GetDetectorField() ;
     G4ThreeVector  globPosition = trackData.GetPosition() ;
     G4double  globPosVec[3], FieldValueVec[3] ;
@@ -281,11 +215,11 @@ G4SynchrotronRadiation::PostStepDoIt(const G4Track& trackData,
     globPosVec[2] = globPosition.z() ;
 
     pField->GetFieldValue( globPosVec, FieldValueVec ) ;
-    FieldValue = G4ThreeVector( FieldValueVec[0], 
-                                   FieldValueVec[1], 
+    FieldValue = G4ThreeVector( FieldValueVec[0],
+                                   FieldValueVec[1],
                                    FieldValueVec[2]   );
-       
-    G4ThreeVector unitMomentum = aDynamicParticle->GetMomentumDirection(); 
+
+    G4ThreeVector unitMomentum = aDynamicParticle->GetMomentumDirection();
     G4ThreeVector unitMcrossB = FieldValue.cross(unitMomentum);
     G4double perpB = unitMcrossB.mag() ;
     if(perpB > 0.0)
@@ -294,7 +228,7 @@ G4SynchrotronRadiation::PostStepDoIt(const G4Track& trackData,
 
       G4double energyOfSR = GetRandomEnergySR(gamma,perpB);
 
-      if(fVerboseLevel > 0)
+      if(verboseLevel > 0)
       {
         G4cout<<"SR photon energy = "<<energyOfSR/keV<<" keV"<<G4endl;
       }
@@ -305,22 +239,22 @@ G4SynchrotronRadiation::PostStepDoIt(const G4Track& trackData,
         return G4VDiscreteProcess::PostStepDoIt(trackData,stepData);
       }
       G4double kineticEnergy = aDynamicParticle->GetKineticEnergy();
-      G4ParticleMomentum 
+      G4ParticleMomentum
       particleDirection = aDynamicParticle->GetMomentumDirection();
 
       // M-C of its direction
-      
+
       G4double Teta = G4UniformRand()/gamma ;    // Very roughly
 
       G4double Phi  = twopi * G4UniformRand() ;
 
-      G4double dirx = sin(Teta)*cos(Phi) , 
-               diry = sin(Teta)*sin(Phi) , 
+      G4double dirx = sin(Teta)*cos(Phi) ,
+               diry = sin(Teta)*sin(Phi) ,
                dirz = cos(Teta) ;
 
       G4ThreeVector gammaDirection ( dirx, diry, dirz);
-      gammaDirection.rotateUz(particleDirection);   
- 
+      gammaDirection.rotateUz(particleDirection);
+
       // polarization of new gamma
 
       // G4double sx =  cos(Teta)*cos(Phi);
@@ -334,9 +268,9 @@ G4SynchrotronRadiation::PostStepDoIt(const G4Track& trackData,
       // gammaPolarization.rotateUz(particleDirection);
 
       // create G4DynamicParticle object for the SR photon
- 
-      G4DynamicParticle* aGamma= new G4DynamicParticle ( G4Gamma::Gamma(),
-                                                         gammaDirection, 
+
+      G4DynamicParticle* aGamma= new G4DynamicParticle ( theGamma,
+                                                         gammaDirection,
                                                          energyOfSR      );
       aGamma->SetPolarization( gammaPolarization.x(),
                                gammaPolarization.y(),
@@ -344,165 +278,105 @@ G4SynchrotronRadiation::PostStepDoIt(const G4Track& trackData,
 
 
       aParticleChange.SetNumberOfSecondaries(1);
-      aParticleChange.AddSecondary(aGamma); 
+      aParticleChange.AddSecondary(aGamma);
 
-      // Update the incident particle 
-   
+      // Update the incident particle
+
       G4double newKinEnergy = kineticEnergy - energyOfSR ;
-      
+      aParticleChange.ProposeLocalEnergyDeposit (0.);
+
       if (newKinEnergy > 0.)
       {
         aParticleChange.ProposeMomentumDirection( particleDirection );
         aParticleChange.ProposeEnergy( newKinEnergy );
-        aParticleChange.ProposeLocalEnergyDeposit (0.); 
-      } 
+      }
       else
-      { 
+      {
         aParticleChange.ProposeEnergy( 0. );
-        aParticleChange.ProposeLocalEnergyDeposit (0.);
-        G4double charge = aDynamicParticle->GetDefinition()->GetPDGCharge();   
-        if (charge<0.)
-        {
-           aParticleChange.ProposeTrackStatus(fStopAndKill) ;
-	}
-        else      
-        {
-          aParticleChange.ProposeTrackStatus(fStopButAlive) ;
-	}
-      } 
-    }       
-    else
-    {
-      return G4VDiscreteProcess::PostStepDoIt(trackData,stepData);
+      }
     }
-  }     
+  }
   return G4VDiscreteProcess::PostStepDoIt(trackData,stepData);
 }
 
-
-G4double 
-G4SynchrotronRadiation::GetPhotonEnergy( const G4Track& trackData,
-                                         const G4Step&  )
-
-{
-  G4int i ;
-  G4double energyOfSR = -1.0 ;
-  //G4Material* aMaterial=trackData.GetMaterial() ;
-
-  const G4DynamicParticle* aDynamicParticle=trackData.GetDynamicParticle();
-
-  G4double gamma = aDynamicParticle->GetTotalEnergy()/
-                   (aDynamicParticle->GetMass()              ) ;
-
-  G4double particleCharge = aDynamicParticle->GetDefinition()->GetPDGCharge();
-
-  G4ThreeVector  FieldValue;
-  const G4Field*   pField = 0 ;
-
-  G4FieldManager* fieldMgr=0;
-  G4bool          fieldExertsForce = false;
-
-  if( (particleCharge != 0.0) )
-  {
-    fieldMgr = fFieldPropagator->FindAndSetFieldManager( trackData.GetVolume() );
-    if ( fieldMgr != 0 ) 
-    {
-      // If the field manager has no field, there is no field !
-
-      fieldExertsForce = ( fieldMgr->GetDetectorField() != 0 );
-    }
-  }
-  if ( fieldExertsForce )
-  {  
-    pField = fieldMgr->GetDetectorField();
-    G4ThreeVector  globPosition = trackData.GetPosition();
-    G4double  globPosVec[3], FieldValueVec[3];
-
-    globPosVec[0] = globPosition.x();
-    globPosVec[1] = globPosition.y();
-    globPosVec[2] = globPosition.z();
-
-    pField->GetFieldValue( globPosVec, FieldValueVec );
-    FieldValue = G4ThreeVector( FieldValueVec[0], 
-                                   FieldValueVec[1], 
-                                   FieldValueVec[2]   );
-       
-    G4ThreeVector unitMomentum = aDynamicParticle->GetMomentumDirection(); 
-    G4ThreeVector unitMcrossB  = FieldValue.cross(unitMomentum) ;
-    G4double perpB             = unitMcrossB.mag();
-    if( perpB > 0.0 )
-    {
-      // M-C of synchrotron photon energy
-
-      G4double random = G4UniformRand() ;
-      for(i=0;i<200;i++)
-      {
-        if(random >= fIntegralProbabilityOfSR[i]) break ;
-      }
-      energyOfSR = 0.0001*i*i*fEnergyConst*gamma*gamma*perpB ;
-
-      // check against insufficient energy
-
-      if(energyOfSR <= 0.0)
-      {
-        return -1.0 ;
-      }
-      //G4double kineticEnergy = aDynamicParticle->GetKineticEnergy();
-      //G4ParticleMomentum 
-      //particleDirection = aDynamicParticle->GetMomentumDirection();
-
-      // Gamma production cut in this material
-      //G4double 
-      //gammaEnergyCut = (G4Gamma::GetCutsInEnergy())[aMaterial->GetIndex()];
-
-      // SR photon has energy more than the current material cut
-      // M-C of its direction
-      
-      //G4double Teta = G4UniformRand()/gamma ;    // Very roughly
-
-      //G4double Phi  = twopi * G4UniformRand() ;
-    }       
-    else
-    {
-      return -1.0 ;
-    }
-  }     
-  return energyOfSR ;
-}
 
 /////////////////////////////////////////////////////////////////////////////////
 //
 //
 
-G4double G4SynchrotronRadiation::GetRandomEnergySR(G4double gamma, G4double perpB)
+G4double G4SynchrotronRadiation::InvSynFracInt(G4double x)
+// direct generation
 {
-  G4int i, iMax;
-  G4double energySR, random, position;
+  // from 0 to 0.7
+  const G4double aa1=0  ,aa2=0.7;
+  const G4int ncheb1=27;
+  static const G4double cheb1[] =
+  { 1.22371665676046468821,0.108956475422163837267,0.0383328524358594396134,0.00759138369340257753721,
+   0.00205712048644963340914,0.000497810783280019308661,0.000130743691810302187818,0.0000338168760220395409734,
+   8.97049680900520817728e-6,2.38685472794452241466e-6,6.41923109149104165049e-7,1.73549898982749277843e-7,
+   4.72145949240790029153e-8,1.29039866111999149636e-8,3.5422080787089834182e-9,9.7594757336403784905e-10,
+   2.6979510184976065731e-10,7.480422622550977077e-11,2.079598176402699913e-11,5.79533622220841193e-12,
+   1.61856011449276096e-12,4.529450993473807e-13,1.2698603951096606e-13,3.566117394511206e-14,1.00301587494091e-14,
+   2.82515346447219e-15,7.9680747949792e-16};
+  //   from 0.7 to 0.9132260271183847
+  const G4double aa3=0.9132260271183847;
+  const G4int ncheb2=27;
+  static const G4double cheb2[] =
+  { 1.1139496701107756,0.3523967429328067,0.0713849171926623,0.01475818043595387,0.003381255637322462,
+	0.0008228057599452224,0.00020785506681254216,0.00005390169253706556,0.000014250571923902464,3.823880733161044e-6,
+	1.0381966089136036e-6,2.8457557457837253e-7,7.86223332179956e-8,2.1866609342508474e-8,6.116186259857143e-9,
+	1.7191233618437565e-9,4.852755117740807e-10,1.3749966961763457e-10,3.908961987062447e-11,1.1146253766895824e-11,
+	3.1868887323415814e-12,9.134319791300977e-13,2.6211077371181566e-13,7.588643377757906e-14,2.1528376972619e-14,
+	6.030906040404772e-15,1.9549163926819867e-15};
+   // Chebyshev with exp/log  scale
+   // a = -Log[1 - SynFracInt[1]]; b = -Log[1 - SynFracInt[7]];
+  const G4double aa4=2.4444485538746025480,aa5=9.3830728608909477079;
+  const G4int ncheb3=28;
+  static const G4double cheb3[] =
+  { 1.2292683840435586977,0.160353449247864455879,-0.0353559911947559448721,0.00776901561223573936985,
+   -0.00165886451971685133259,0.000335719118906954279467,-0.0000617184951079161143187,9.23534039743246708256e-6,
+   -6.06747198795168022842e-7,-3.07934045961999778094e-7,1.98818772614682367781e-7,-8.13909971567720135413e-8,
+   2.84298174969641838618e-8,-9.12829766621316063548e-9,2.77713868004820551077e-9,-8.13032767247834023165e-10,
+   2.31128525568385247392e-10,-6.41796873254200220876e-11,1.74815310473323361543e-11,-4.68653536933392363045e-12,
+   1.24016595805520752748e-12,-3.24839432979935522159e-13,8.44601465226513952994e-14,-2.18647276044246803998e-14,
+   5.65407548745690689978e-15,-1.46553625917463067508e-15,3.82059606377570462276e-16,-1.00457896653436912508e-16};
+  const G4double aa6=33.122936966163038145;
+  const G4int ncheb4=27;
+  static const G4double cheb4[] =
+  {1.69342658227676741765,0.0742766400841232319225,-0.019337880608635717358,0.00516065527473364110491,
+   -0.00139342012990307729473,0.000378549864052022522193,-0.000103167085583785340215,0.0000281543441271412178337,
+   -7.68409742018258198651e-6,2.09543221890204537392e-6,-5.70493140367526282946e-7,1.54961164548564906446e-7,
+   -4.19665599629607704794e-8,1.13239680054166507038e-8,-3.04223563379021441863e-9,8.13073745977562957997e-10,
+   -2.15969415476814981374e-10,5.69472105972525594811e-11,-1.48844799572430829499e-11,3.84901514438304484973e-12,
+   -9.82222575944247161834e-13,2.46468329208292208183e-13,-6.04953826265982691612e-14,1.44055805710671611984e-14,
+   -3.28200813577388740722e-15,6.96566359173765367675e-16,-1.294122794852896275e-16};
 
-  iMax = 200;
-  random = G4UniformRand();
-
-  for( i = 0; i < iMax; i++ )
-  {
-    if( random >= fIntegralProbabilityOfSR[i] ) break;
+  if(x<aa2)      return x*x*x*Chebyshev(aa1,aa2,cheb1,ncheb1,x);
+  else if(x<aa3) return       Chebyshev(aa2,aa3,cheb2,ncheb2,x);
+  else if(x<1-0.0000841363)
+  { G4double y=-log(1-x);
+	return y*Chebyshev(aa4,aa5,cheb3,ncheb3,y);
   }
-  if(i <= 0 )        position = G4UniformRand(); // 0.
-  else if( i>= iMax) position = G4double(iMax);
-  else position = i + G4UniformRand(); // -1
-  // 
-  // it was in initial implementation:
-  //       energyOfSR = 0.0001*i*i*fEnergyConst*gamma*gamma*perpB ;
-
-  energySR = 0.0001*position*position*fEnergyConst*gamma*gamma*perpB;
-
-  if( energySR  < 0. ) energySR = 0.;
-
-  return energySR;
+  else
+  { G4double y=-log(1-x);
+	return y*Chebyshev(aa5,aa6,cheb4,ncheb4,y);
+  }
 }
 
-/////////////////////////////////////////////////////////////////////////
-//
-// return
+G4double G4SynchrotronRadiation::GetRandomEnergySR(G4double gamma, G4double perpB)
+{
+  static G4double iCalled=0;
+  const G4double nprint=0;
+  iCalled++;
+  G4double Ecr=fEnergyConst*gamma*gamma*perpB;
+  G4double energySR=Ecr*InvSynFracInt(G4UniformRand());
+  if(iCalled<nprint)
+  { G4cout << "hbudebug G4SynchrotronRadiation::GetRandomEnergySR iCalled=" << iCalled
+	<< " Ecr="      << G4BestUnit(Ecr,"Energy")
+	<< " energySR=" << G4BestUnit(energySR,"Energy") << G4endl;
+  }
+  return energySR;
+}
 
 G4double G4SynchrotronRadiation::GetProbSpectrumSRforInt( G4double t)
 {
@@ -536,45 +410,6 @@ G4double G4SynchrotronRadiation::GetIntProbSR( G4double ksi)
            &G4SynchrotronRadiation::GetProbSpectrumSRforInt, a, n);
 
   result *= 3./5./pi;
-
-  return result;
-}
-
-/////////////////////////////////////////////////////////////////////////
-//
-// return an auxiliary function for K_5/3 integral representation
-
-G4double G4SynchrotronRadiation::GetProbSpectrumSRforEnergy( G4double t)
-{
-  G4double result, hypCos=std::cosh(t);
-  
-  result = std::cosh(5.*t/3.)*std::exp(t - fKsi*hypCos); // fKsi > 0. !
-  result /= hypCos;
-  return result;
-}
-
-///////////////////////////////////////////////////////////////////////////
-//
-// return the probability to emit SR photon energy with relative energy
-// energy/energy_c >= ksi
-// for ksi <= 0. P = 1., however the method works for ksi > 0 only!
-
-G4double G4SynchrotronRadiation::GetEnergyProbSR( G4double ksi)
-{
-  if (ksi <= 0.) return 1.0;
-  fKsi = ksi; // should be > 0. !
-  G4int n;
-  G4double result, a;
-
-  a = fAlpha;        // always = 0.
-  n = fRootNumber;   // around default = 80
-
-  G4Integrator<G4SynchrotronRadiation, G4double(G4SynchrotronRadiation::*)(G4double)> integral;
-
-  result = integral.Laguerre(this, 
-           &G4SynchrotronRadiation::GetProbSpectrumSRforEnergy, a, n);
-
-  result *= 9.*std::sqrt(3.)*ksi/8./pi;
 
   return result;
 }
@@ -640,16 +475,14 @@ G4double G4SynchrotronRadiation::GetAngleNumberAtGammaKsi( G4double gpsi)
   return result;
 }
 
+void G4SynchrotronRadiation::PrintInfoDefinition() // not yet called, usually called from BuildPhysicsTable
+{
+  G4String comments ="Incoherent Synchrotron Radiation\n";
+  G4cout << G4endl << GetProcessName() << ":  " << comments
+         << "good description for long magnets at all energies" << G4endl;
+}
 
 ///////////////////// end of G4SynchrotronRadiation.cc
-
-
-
-
-
-
-
-
 
 
 
