@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: StackingAction.cc,v 1.4 2004-12-02 16:19:11 vnivanch Exp $
+// $Id: StackingAction.cc,v 1.5 2006-05-19 14:35:29 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -75,8 +75,9 @@ StackingAction::ClassifyNewTrack(const G4Track* aTrack)
 
   //stack or delete secondaries
   G4ClassificationOfNewTrack status = fUrgent;
-  if (killSecondary)         status = fKill;
-  
+  if (killSecondary) 
+    {eventaction->AddEnergy(energy);  status = fKill;}
+    
   return status;
 }
 

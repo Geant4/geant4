@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.20 2005-12-06 11:46:46 gcosmo Exp $
+// $Id: RunAction.cc,v 1.21 2006-05-19 14:35:29 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -141,12 +141,14 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   G4double energy = primary->GetParticleGun()->GetParticleEnergy();
 
   G4EmCalculator emCalculator;
-  G4double dEdxTable = 0.;
+  G4double dEdxTable = 0., dEdxFull = 0.;
   if (particle->GetPDGCharge()!= 0.) { 
     dEdxTable = emCalculator.GetDEDX(energy,particle,material);
+    dEdxFull  = emCalculator.ComputeTotalDEDX(energy,particle,material);    
   }
   G4double stopTable = dEdxTable/density;
-  
+  G4double stopFull  = dEdxFull /density; 
+   
   //Stopping Power from simulation.
   //    
   G4double meandEdx  = EnergyDeposit/length;
@@ -154,7 +156,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
 
   G4cout << "\n ======================== run summary ======================\n";
 
-  G4int prec = G4cout.precision(2);
+  G4int prec = G4cout.precision(3);
   
   G4cout << "\n The run was " << TotNbofEvents << " " << partName << " of "
          << G4BestUnit(energy,"Energy") << " through " 
@@ -168,14 +170,19 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
          << G4BestUnit(rmsEdep,      "Energy") 
          << G4endl;
 	 
-  G4cout << "\n Mean dE/dx  = " << meandEdx/(MeV/cm) << " MeV/cm"
-         << "\t stopping Power = " << stopPower/(MeV*cm2/g) << " MeV*cm2/g"
-	 << G4endl;
-	 	 
-  G4cout << " (from Table = " << dEdxTable/(MeV/cm) << " MeV/cm)"
-         << "\t (from Table    = " << stopTable/(MeV*cm2/g) << " MeV*cm2/g)"
+  G4cout << " -----> Mean dE/dx = " << meandEdx/(MeV/cm) << " MeV/cm"
+         << "\t(" << stopPower/(MeV*cm2/g) << " MeV*cm2/g)"
 	 << G4endl;
 	 
+  G4cout << "\n From formulas :" << G4endl; 
+  G4cout << "   restricted dEdx = " << dEdxTable/(MeV/cm) << " MeV/cm"
+         << "\t(" << stopTable/(MeV*cm2/g) << " MeV*cm2/g)"
+	 << G4endl;
+	 
+  G4cout << "   full dEdx       = " << dEdxFull/(MeV/cm) << " MeV/cm"
+         << "\t(" << stopFull/(MeV*cm2/g) << " MeV*cm2/g)"
+	 << G4endl;
+	 	 
   G4cout << "\n Total track length (charged) in absorber per event = "
          << G4BestUnit(TrakLenCharged,"Length") << " +- "
          << G4BestUnit(rmsTLCh,       "Length") << G4endl;
