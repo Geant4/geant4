@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4TwistedTrap.cc,v 1.8 2005-12-19 12:45:04 link Exp $
+// $Id: testG4TwistedTrap.cc,v 1.9 2006-05-19 13:42:00 gcosmo Exp $
 // GEANT4 tag $Name: 
 //
 
@@ -132,7 +132,7 @@ G4bool testG4TwistedTrap()
       G4cout << "Spoint " << Spoint << " " <<  dist << " " << side << G4endl ;
     }
 
-    t3.CreatePolyhedron() ;
+    // t3.CreatePolyhedron() ;
 
     return true;
 }

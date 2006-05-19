@@ -155,7 +155,7 @@ int main()
 
   EInside side ;  
   for ( G4int i = 0 ; i < 3 ; i++ ) {
-    //    G4cout << "Event " << i << G4endl << G4endl ;
+    // G4cout << "Event " << i << G4endl << G4endl ;
     Spoint = t1.GetPointOnSurface() ;
     side = t1.Inside(Spoint) ;
     dist = t1.DistanceToIn(Spoint, -Spoint/Spoint.mag()) ;
@@ -170,9 +170,6 @@ int main()
   G4bool what;
   what = testDistanceToIn();
 
-  G4cout <<" Note that there is also a test for the GetPointOnSurface() method "<<G4endl
-	 << " .../solids/tests directory."<< G4endl << G4endl; 
-    
   G4cout << G4endl;
   G4cout << "*********************************************************************" <<G4endl;
   G4cout << "******************* END OF TEST - THANK YOU!!! **********************" <<G4endl;
