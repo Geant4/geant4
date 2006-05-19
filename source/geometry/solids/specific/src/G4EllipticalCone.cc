@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EllipticalCone.cc,v 1.9 2005-12-20 12:59:38 gcosmo Exp $
+// $Id: G4EllipticalCone.cc,v 1.10 2006-05-19 13:42:32 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Implementation of G4EllipticalCone class
@@ -67,7 +67,7 @@ G4EllipticalCone::G4EllipticalCone(const G4String& pName,
                                          G4double  pySemiAxis,
                                          G4double  pzMax,
                                          G4double  pzTopCut)
-  : G4VSolid(pName), fpPolyhedron(0), fCubicVolume(0.)
+  : G4VSolid(pName), fpPolyhedron(0), fCubicVolume(0.), zTopCut(0.)
 {
 
   // Check Semi-Axis
@@ -403,10 +403,6 @@ G4double G4EllipticalCone::DistanceToIn( const G4ThreeVector& p,
   // Check z = -dz planer surface
   //
 
-#ifdef G4SPECSDEBUG    
-  G4cout << "DToIn: check -dz planar surface" << G4endl ;
-#endif
-
   if (sigz < halfTol)
   {
     //
@@ -469,10 +465,6 @@ G4double G4EllipticalCone::DistanceToIn( const G4ThreeVector& p,
   //
   // Check z = +dz planer surface
   //
-
-#ifdef G4SPECSDEBUG    
-  G4cout << "DToIn: check +dz planar surface" << G4endl ;
-#endif
 
   sigz = p.z() - zTopCut;
   
@@ -561,9 +553,6 @@ G4double G4EllipticalCone::DistanceToIn( const G4ThreeVector& p,
   // if we are here then it either intersects or grazes the curved surface 
   // or it does not intersect at all
   //
-#ifdef G4SPECSDEBUG    
-  G4cout << "DToIn: if we are here then it either intersects or grazes the curved surface" << G4endl ;
-#endif
 
   G4double A = sqr(v.x()/xSemiAxis) + sqr(v.y()/ySemiAxis) - sqr(v.z());
   G4double B = 2*(v.x()*p.x()/sqr(xSemiAxis) + 
@@ -622,9 +611,9 @@ G4double G4EllipticalCone::DistanceToIn( const G4ThreeVector& p,
   }
 
 #ifdef G4SPECSDEBUG    
-    G4cout << "DToIn: plus,minus, lambda = " << plus
-           << ", " << minus << ", " << lambda << G4endl ;
-    G4cout << "DToIn: distMin = " << distMin << G4endl ;
+//  G4cout << "DToIn: plus,minus, lambda = " << plus
+//         << ", " << minus << ", " << lambda << G4endl ;
+//  G4cout << "DToIn: distMin = " << distMin << G4endl ;
 #endif
 
     
