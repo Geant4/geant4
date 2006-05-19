@@ -1,4 +1,4 @@
-# $Id: TestEm12.in,v 1.5 2006-04-11 13:20:37 maire Exp $
+# $Id: TestEm12.in,v 1.6 2006-05-19 15:35:15 maire Exp $
 #
 # limit the step size from histos 1 and 8
 #
@@ -29,6 +29,6 @@
 /testem/histo/setcsdaRange       2.037 cm
 /testem/histo/setHisto 8 120  0.   1.2 none	#normalized edep profile
 #
-/testem/event/printModulo 2000
+/testem/event/printModulo 1000
 #
-/run/beamOn 20000
+/run/beamOn 10000
