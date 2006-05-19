@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: PhysicsList.hh,v 1.1 2006-05-18 14:25:10 vnivanch Exp $
+// $Id: PhysicsList.hh,v 1.2 2006-05-19 10:53:54 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -34,30 +34,35 @@
 
 class PhysicsListMessenger;
 class G4GammaConversionToMuons;
+class G4VDiscreteProcess;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class PhysicsList: public G4VUserPhysicsList
 {
-  public:
-    PhysicsList();
-   ~PhysicsList();
+public:
+  PhysicsList();
+  ~PhysicsList();
 
-    // Construct particles
-    void ConstructParticle();
-    void ConstructBosons();
-    void ConstructLeptons();
+  // Construct particles
+  void ConstructParticle();
+  void ConstructBosons();
+  void ConstructLeptons();
 
-    void SetCuts();
+  void SetCuts();
+  void SetAnalysticalSR(G4bool val) {dType = val;};
 
-    // Construct processes and register them
-    void ConstructProcess();
-    void ConstructGeneral();
-    void ConstructEM();
+  // Construct processes and register them
+  void ConstructProcess();
+  void ConstructGeneral();
+  void ConstructEM();
 
-  private:
-     PhysicsListMessenger*  pMes;
-     G4GammaConversionToMuons* theGammaToMuPairProcess;
+private:
+
+  PhysicsListMessenger*  pMes;
+  G4GammaConversionToMuons* theGammaToMuPairProcess;
+  G4VDiscreteProcess* theSynRadProcess;
+  G4bool   dType;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

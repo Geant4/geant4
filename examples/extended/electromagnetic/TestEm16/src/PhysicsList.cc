@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.1 2006-05-18 14:25:10 vnivanch Exp $
+// $Id: PhysicsList.cc,v 1.2 2006-05-19 10:53:54 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -34,6 +34,20 @@
 #include "G4ParticleTypes.hh"
 #include "G4ParticleTable.hh"
 
+#include "G4GammaConversionToMuons.hh"
+
+#include "G4MultipleScattering.hh"
+
+#include "G4eIonisation.hh"
+#include "G4eBremsstrahlung.hh"
+#include "G4eplusAnnihilation.hh"
+
+#include "G4MuIonisation.hh"
+#include "G4MuBremsstrahlung.hh"
+#include "G4MuPairProduction.hh"
+#include "G4SynchrotronRadiation.hh"
+#include "G4SynchrotronRadiationInMat.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsList::PhysicsList()
@@ -42,13 +56,19 @@ PhysicsList::PhysicsList()
   defaultCutValue = 1.*km;
   pMes = new PhysicsListMessenger(this);
   theGammaToMuPairProcess = 0;
+  theSynRadProcess = 0;
   SetVerboseLevel(1);
+  dType = true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsList::~PhysicsList()
-{ delete pMes; }
+{ 
+  delete pMes;
+  delete theSynRadProcess;
+  delete theGammaToMuPairProcess;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -102,23 +122,11 @@ void PhysicsList::ConstructProcess()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4GammaConversionToMuons.hh"
-
-#include "G4MultipleScattering.hh"
-
-#include "G4eIonisation.hh"
-#include "G4eBremsstrahlung.hh"
-#include "G4eplusAnnihilation.hh"
-
-#include "G4MuIonisation.hh"
-#include "G4MuBremsstrahlung.hh"
-#include "G4MuPairProduction.hh"
-#include "G4SynchrotronRadiation.hh"
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void PhysicsList::ConstructEM()
 {
+  if(dType) theSynRadProcess = new G4SynchrotronRadiation();
+  else      theSynRadProcess = new G4SynchrotronRadiationInMat();
+
   theParticleIterator->reset();
   while( (*theParticleIterator)() ){
     G4ParticleDefinition* particle = theParticleIterator->value();
@@ -129,22 +137,22 @@ void PhysicsList::ConstructEM()
       // gamma    allow  only   gamma -> mu+mu-
       theGammaToMuPairProcess=new G4GammaConversionToMuons;
       pmanager->AddDiscreteProcess(theGammaToMuPairProcess);
-
+      
     } else if (particleName == "e-") {
       //electron
       pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
       pmanager->AddProcess(new G4eIonisation,       -1, 2,2);
       pmanager->AddProcess(new G4eBremsstrahlung,   -1, 3,3);
-      pmanager->AddProcess(new G4SynchrotronRadiation,-1,-1,4);
-
+      pmanager->AddProcess(theSynRadProcess, -1, -1, 4);
+     
     } else if (particleName == "e+") {
       //positron
       pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
       pmanager->AddProcess(new G4eIonisation,       -1, 2,2);
       pmanager->AddProcess(new G4eBremsstrahlung,   -1, 3,3);
       pmanager->AddProcess(new G4eplusAnnihilation,  0,-1,4);
-      pmanager->AddProcess(new G4SynchrotronRadiation,-1,-1,4);
-
+      pmanager->AddProcess(theSynRadProcess, -1, -1, 5);
+      
     } else if( particleName == "mu+" ||
                particleName == "mu-"    ) {
       //muon
@@ -152,7 +160,7 @@ void PhysicsList::ConstructEM()
       pmanager->AddProcess(new G4MuIonisation,      -1, 2,2);
       pmanager->AddProcess(new G4MuBremsstrahlung,  -1, 3,3);
       pmanager->AddProcess(new G4MuPairProduction,  -1, 4,4);
-
+      
     }
   }
 }
@@ -183,7 +191,6 @@ void PhysicsList::ConstructGeneral()
 void PhysicsList::SetCuts()
 {
   if (verboseLevel >0){
-    G4cout << "PhysicsList::SetCuts:";
     G4cout << "CutLength : " << G4BestUnit(defaultCutValue,"Length") << G4endl;
   }
 

@@ -1,0 +1,212 @@
+
+*************************************************************
+ Geant4 version Name: geant4-08-00-ref-02    (10-February-2006)
+                      Copyright : Geant4 Collaboration
+                      Reference : NIM A 506 (2003), 250-303
+                            WWW : http://cern.ch/geant4
+*************************************************************
+
+
+***** Table : Nb of materials = 4 *****
+
+ Material: Beryllium     density:  1.848 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  35.276 cm 
+   --->  Element: Beryllium ( )   Z =  4.0   N =   9.0   A =   9.01 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+
+ Material:   Carbon     density:  2.265 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  18.851 cm 
+   --->  Element: Carbon ( )   Z =  6.0   N =  12.0   A =  12.01 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+
+ Material:     Iron     density:  7.870 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.759 cm 
+   --->  Element: Iron ( )   Z = 26.0   N =  55.9   A =  55.85 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+
+ Material:   Vacuum     density:  0.000 kg/m3   temperature: 296.15 K  pressure:   0.00 atm  RadLength: 25050962965.731 km 
+   --->  Element: Vacuum ( )   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+
+
+Visualization Manager instantiating...
+Visualization Manager initialising...
+Registering graphics systems...
+
+You have successfully registered the following graphics systems.
+Current available graphics systems are:
+  ASCIITree (ATree)
+  DAWNFILE (DAWNFILE)
+  GAGTree (GAGTree)
+  G4HepRep (HepRepXML)
+  G4HepRepFile (HepRepFile)
+  RayTracer (RayTracer)
+  VRML1FILE (VRML1FILE)
+  VRML2FILE (VRML2FILE)
+  FukuiRenderer (DAWN)
+  OpenGLImmediateX (OGLIX)
+  OpenGLStoredX (OGLSX)
+  VRML1 (VRML1)
+  VRML2 (VRML2)
+
+Registering model factories...
+
+You have successfully registered the following model factories.
+Registered model factories:
+drawByCharge
+drawByParticleID
+drawByOriginVolume
+
+Registered models: 
+None
+
+Registered filter factories:
+particleFilter
+
+Registered Filters:
+None
+
+G4ANALYSIS_USE was not set, there will be no AIDA histos
+/run/verbose 2
+/testem/det/setMat Vacuum
+#
+/run/initialize
+userDetector->Construct() start.
+
+ The Box is 500 m   of Vacuum
+Vacuum is registered to the default region.
+physicsList->Construct() start.
+physicsList->Construct() start.
+physicsList->setCut() start.
+CutLength : 1 km 
+#
+/process/activate SynchrotronRadiation
+#
+# inactivate other processes to make SynchrotronRadiation more visible
+/process/inactivate msc
+/process/inactivate eIoni
+/process/inactivate eBrem
+#
+/testem/det/setField 1 tesla
+/gun/particle e-
+/gun/energy 9.9994890009 GeV
+# next is 30 degree angle  sin 30deg = 0.5  cos 30 deg = 0.866025403
+#/gun/direction 0.5 0 0.866025403
+/run/beamOn 10
+
+GammaToMuPair:  gamma->mu+mu- Bethe Heitler process.
+        good cross section parametrization from 422.634 MeV to 1e+12 GeV for all Z.
+
+msc:  Model variant of multiple scattering for e-
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+
+eIoni:   tables are built for  e-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+
+eBrem:   tables are built for  e-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Total cross sections from a parametrisation based on the EEDL data library. 
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
+eIoni:   tables are built for  e+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+
+eBrem:   tables are built for  e+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Total cross sections from a parametrisation based on the EEDL data library. 
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
+annihil:       Heilter model of formula of annihilation into 2 photons
+      tables are built for  e+
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+
+msc:  Model variant of multiple scattering for mu+
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+
+muIoni:   tables are built for  mu+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
+      radiative corrections for E > 1 GeV
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
+muBrems:   tables are built for  mu+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+
+muPairProd:   tables are built for  mu+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+
+muIoni:   tables are built for  mu-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
+      radiative corrections for E > 1 GeV
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
+muBrems:   tables are built for  mu-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+
+muPairProd:   tables are built for  mu-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+
+Region <DefaultRegionForTheWorld> -- appears in <Vacuum> world volume
+ Materials : Vacuum 
+ Production cuts :  gamma 1 km     e- 1 km     e+ 1 km 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Vacuum
+ Range cuts        :  gamma 1 km     e- 1 km     e+ 1 km 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start closing geometry.
+G4GeometryManager::ReportVoxelStats -- Voxel Statistics
+
+    Total memory consumed for geometry optimisation:   0 kByte
+    Total CPU time elapsed for geometry optimisation: 0 seconds
+### Run 0 start.
+
+--------- Ranecu engine status ---------
+ Initial seed (index) = 0
+ Current couple of seeds = 9876, 54321
+----------------------------------------
+Start Run processing.
+
+---> Begin of Event: 0
+Run terminated.
+Run Summary
+  Number of events processed : 10
+  User=0.13s Real=0.23s Sys=0s
+
+--------- Ranecu engine status ---------
+ Initial seed (index) = 0
+ Current couple of seeds = 1910797386, 2010387573
+----------------------------------------
+Graphics systems deleted.
+Visualization Manager deleting...
+UserDetectorConstruction deleted.
+UserPhysicsList deleted.
+UserRunAction deleted.
+UserPrimaryGenerator deleted.
+G4 kernel has come to Quit state.
+EventManager deleted.
+UImanager deleted.
+StateManager deleted.
+RunManagerKernel is deleted.
+RunManager is deleting.

@@ -1,0 +1,25 @@
+# $Id: TestEm16.in,v 1.1 2006-05-19 10:54:18 vnivanch Exp $
+#
+# Macro file for "TestEm16.cc"
+# (can be run in batch, without graphic)
+#
+#
+/control/verbose 2
+/run/verbose 2
+/testem/det/setMat Vacuum
+#
+/run/initialize
+#
+/process/activate SynchrotronRadiation
+#
+# inactivate other processes to make SynchrotronRadiation more visible
+/process/inactivate msc
+/process/inactivate eIoni
+/process/inactivate eBrem
+#
+/testem/det/setField 1 tesla
+/gun/particle e-
+/gun/energy 9.9994890009 GeV
+# next is 30 degree angle  sin 30deg = 0.5  cos 30 deg = 0.866025403
+#/gun/direction 0.5 0 0.866025403
+/run/beamOn 10
