@@ -610,6 +610,7 @@ int main()
 
     G4cout<<"CalculateExtent is OK "<<G4endl ;
 
+  delete rotDz5;
   G4int out =0 ;
   return out ;
 }
