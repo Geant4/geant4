@@ -14,23 +14,22 @@
 
 StatAccepTestSensitiveCalorimeter::
 StatAccepTestSensitiveCalorimeter( const G4String name, const G4int numberOfReplicasIn )
-  : G4VSensitiveDetector(name), calCollection(0), 
-    numberOfReplicas( numberOfReplicasIn )
-{
+  : G4VSensitiveDetector( name ), calCollection( 0 ), 
+    numberOfReplicas( numberOfReplicasIn ) {
   for ( int i = 0; i < numberOfReplicas; i++ ) {
     positionID.push_back( -1 );
   }
   G4String HCname;
-  collectionName.insert(HCname="calCollection");
+  collectionName.insert( HCname="calCollection" );
 }
 
 
 StatAccepTestSensitiveCalorimeter::~StatAccepTestSensitiveCalorimeter() {}
 
 
-void StatAccepTestSensitiveCalorimeter::Initialize(G4HCofThisEvent* ) {
-  calCollection = new StatAccepTestCalorimeterHitsCollection
-    (SensitiveDetectorName,collectionName[0]);
+void StatAccepTestSensitiveCalorimeter::Initialize( G4HCofThisEvent* ) {
+  calCollection = 
+    new StatAccepTestCalorimeterHitsCollection( SensitiveDetectorName,collectionName[0] );
   positionID.clear();
   for ( int i = 0; i < numberOfReplicas; i++ ) {
     positionID.push_back( -1 );
@@ -39,7 +38,7 @@ void StatAccepTestSensitiveCalorimeter::Initialize(G4HCofThisEvent* ) {
 
 
 G4bool StatAccepTestSensitiveCalorimeter::
-ProcessHits(G4Step* aStep, G4TouchableHistory* ) {
+ProcessHits( G4Step* aStep, G4TouchableHistory* ) {
 
   G4double edep = aStep->GetTotalEnergyDeposit() * aStep->GetTrack()->GetWeight();
   // Multiply the energy deposit with the weight of the track,
@@ -96,17 +95,19 @@ ProcessHits(G4Step* aStep, G4TouchableHistory* ) {
   }
   // -----------------------------------------------------------------
 
-  G4int replica = aStep->GetPreStepPoint()->GetTouchable()->GetReplicaNumber(1);
+  G4int replica = aStep->GetPreStepPoint()->GetTouchable()->GetReplicaNumber( 1 );
 
   G4double radius = std::sqrt( aStep->GetPreStepPoint()->GetPosition().x() *
 			       aStep->GetPreStepPoint()->GetPosition().x() +
 			       aStep->GetPreStepPoint()->GetPosition().y() *
 			       aStep->GetPreStepPoint()->GetPosition().y() );  
 
-  // G4cout << " StatAccepTestSensitiveCalorimeter::ProcessHits : DEBUG Info" << G4endl
-  //        << "\t z = " << aStep->GetPreStepPoint()->GetPosition().z()/mm 
-  //        << " mm ;  replica = " << replica << " ;  radius = " << radius/mm 
-  //        << " mm" << G4endl; //***DEBUG***
+  G4int particlePDG = aStep->GetTrack()->GetDefinition()->GetPDGEncoding();
+
+  //G4cout << " StatAccepTestSensitiveCalorimeter::ProcessHits : DEBUG Info" << G4endl
+  //       << "\t z = " << aStep->GetPreStepPoint()->GetPosition().z()/mm 
+  //       << " mm ;  replica = " << replica  << " ;  radius = " << radius/mm 
+  //       << " mm ;  particlePDG - " << particlePDG << G4endl; //***DEBUG***
 
   if ( replica >= numberOfReplicas ) {
     G4cout << " StatAccepTestSensitiveCalorimeter::ProcessHits: ***ERROR*** "
@@ -119,37 +120,39 @@ ProcessHits(G4Step* aStep, G4TouchableHistory* ) {
     StatAccepTestCalorimeterHit* calHit = new StatAccepTestCalorimeterHit();
     calHit->SetEdep( edep );
     calHit->SetLayer( replica );
+
     G4int iPos = calCollection->insert( calHit );
     positionID[ replica ] = iPos - 1;
-    // G4cout << " StatAccepTestSensitiveCalorimeter::ProcessHits: DEBUG Info " << G4endl
-    //        << "\t New Calorimeter Hit : Energy = " 
-    //        << edep / MeV << " MeV " << G4endl; //***DEBUG*** 
+    //G4cout << " StatAccepTestSensitiveCalorimeter::ProcessHits: DEBUG Info " << G4endl
+    //       << "\t New Calorimeter Hit : Energy = " 
+    //       << edep / MeV << " MeV " << G4endl; //***DEBUG*** 
   } else { 
-    (*calCollection)[ positionID[ replica ] ]->AddEdep(edep);
-    // G4cout << " StatAccepTestSensitiveCalorimeter::ProcessHits : DEBUG Info " 
-    //        << G4endl << "\t Old Calorimter Hit : Added energy = " 
-    //        << " \t Added energy = " << edep / MeV << " MeV " << G4endl; //***DEBUG*** 
+    (*calCollection)[ positionID[ replica ] ]->AddEdep( edep );
+    //G4cout << " StatAccepTestSensitiveCalorimeter::ProcessHits : DEBUG Info " 
+    //       << G4endl << "\t Old Calorimter Hit : Added energy = " 
+    //       << " \t Added energy = " << edep / MeV << " MeV " << G4endl; //***DEBUG*** 
   }
 
   // We need to fill the shower profile information at this point,
-  // because in the EventActiononly the hit collection is available
+  // because in the EventAction only the hit collection is available
   // and the hits do not have information about the radius of each
-  // energy deposition that contributed.
+  // energy deposition that contributed (and also about the PDG code
+  // of the particle that made such energy deposition).
   StatAccepTestAnalysis* analysis = StatAccepTestAnalysis::getInstance();
   if ( analysis ) {
-    analysis->fillShowerProfile( replica, radius, edep );
+    analysis->fillShowerProfile( replica, radius, edep, particlePDG );
   }
 
   return true;
 }
 
 
-void StatAccepTestSensitiveCalorimeter::EndOfEvent(G4HCofThisEvent* HCE) {
+void StatAccepTestSensitiveCalorimeter::EndOfEvent( G4HCofThisEvent* HCE ) {
   static G4int HCID = -1;
   if ( HCID < 0 ) { 
-    HCID = G4SDManager::GetSDMpointer()->GetCollectionID(collectionName[0]);
+    HCID = G4SDManager::GetSDMpointer()->GetCollectionID( collectionName[0] );
   }
-  HCE->AddHitsCollection( HCID, calCollection);
+  HCE->AddHitsCollection( HCID, calCollection );
   if ( ! calCollection->entries() ) {
     // G4cout << " StatAccepTestSensitiveCalorimeter::EndOfEvent : DEBUG Info " << G4endl
     //        << "\t NO calorimeter hit! " << G4endl; //***DEBUG***

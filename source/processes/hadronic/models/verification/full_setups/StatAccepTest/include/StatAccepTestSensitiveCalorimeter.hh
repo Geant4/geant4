@@ -17,9 +17,9 @@ public:
 				     const G4int numberOfReplicasIn );
   ~StatAccepTestSensitiveCalorimeter();
 
-  void Initialize(G4HCofThisEvent* HCE);
-  G4bool ProcessHits(G4Step* aStep, G4TouchableHistory* ROhist);
-  void EndOfEvent(G4HCofThisEvent* HCE);
+  void Initialize( G4HCofThisEvent* HCE );
+  G4bool ProcessHits( G4Step* aStep, G4TouchableHistory* ROhist );
+  void EndOfEvent( G4HCofThisEvent* HCE );
 
   void clear();
   void DrawAll();

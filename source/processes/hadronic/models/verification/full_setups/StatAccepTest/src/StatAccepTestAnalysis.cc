@@ -130,6 +130,132 @@ void StatAccepTestAnalysis::init() {
   numberOfEvents = 0;
   vecEvis.clear();
 
+  sumEdepAct_electron  = 0.0;
+  sumEdepAct_electron2 = 0.0;
+  sumEdepTot_electron  = 0.0;
+  sumEdepTot_electron2 = 0.0;
+  sumL_electron.clear();
+  sumL_electron2.clear();
+  longitudinalProfile_electron.clear();
+  for ( int layer = 0; layer < numberOfReadoutLayers; layer++ ) {
+    longitudinalProfile_electron.push_back( 0.0 );
+    sumL_electron.push_back( 0.0 );
+    sumL_electron2.push_back( 0.0 );
+  }
+  sumR_electron.clear();
+  sumR_electron2.clear();
+  transverseProfile_electron.clear();
+  for ( int ir = 0; ir < numberOfRadiusBins; ir++ ) {
+    transverseProfile_electron.push_back( 0.0 );
+    sumR_electron.push_back( 0.0 );
+    sumR_electron2.push_back( 0.0 );
+  } 
+
+  sumEdepAct_muon  = 0.0;
+  sumEdepAct_muon2 = 0.0;
+  sumEdepTot_muon  = 0.0;
+  sumEdepTot_muon2 = 0.0;
+  sumL_muon.clear();
+  sumL_muon2.clear();
+  longitudinalProfile_muon.clear();
+  for ( int layer = 0; layer < numberOfReadoutLayers; layer++ ) {
+    longitudinalProfile_muon.push_back( 0.0 );
+    sumL_muon.push_back( 0.0 );
+    sumL_muon2.push_back( 0.0 );
+  }
+  sumR_muon.clear();
+  sumR_muon2.clear();
+  transverseProfile_muon.clear();
+  for ( int ir = 0; ir < numberOfRadiusBins; ir++ ) {
+    transverseProfile_muon.push_back( 0.0 );
+    sumR_muon.push_back( 0.0 );
+    sumR_muon2.push_back( 0.0 );
+  } 
+
+  sumEdepAct_pion  = 0.0;
+  sumEdepAct_pion2 = 0.0;
+  sumEdepTot_pion  = 0.0;
+  sumEdepTot_pion2 = 0.0;
+  sumL_pion.clear();
+  sumL_pion2.clear();
+  longitudinalProfile_pion.clear();
+  for ( int layer = 0; layer < numberOfReadoutLayers; layer++ ) {
+    longitudinalProfile_pion.push_back( 0.0 );
+    sumL_pion.push_back( 0.0 );
+    sumL_pion2.push_back( 0.0 );
+  }
+  sumR_pion.clear();
+  sumR_pion2.clear();
+  transverseProfile_pion.clear();
+  for ( int ir = 0; ir < numberOfRadiusBins; ir++ ) {
+    transverseProfile_pion.push_back( 0.0 );
+    sumR_pion.push_back( 0.0 );
+    sumR_pion2.push_back( 0.0 );
+  } 
+
+  sumEdepAct_kaon  = 0.0;
+  sumEdepAct_kaon2 = 0.0;
+  sumEdepTot_kaon  = 0.0;
+  sumEdepTot_kaon2 = 0.0;
+  sumL_kaon.clear();
+  sumL_kaon2.clear();
+  longitudinalProfile_kaon.clear();
+  for ( int layer = 0; layer < numberOfReadoutLayers; layer++ ) {
+    longitudinalProfile_kaon.push_back( 0.0 );
+    sumL_kaon.push_back( 0.0 );
+    sumL_kaon2.push_back( 0.0 );
+  }
+  sumR_kaon.clear();
+  sumR_kaon2.clear();
+  transverseProfile_kaon.clear();
+  for ( int ir = 0; ir < numberOfRadiusBins; ir++ ) {
+    transverseProfile_kaon.push_back( 0.0 );
+    sumR_kaon.push_back( 0.0 );
+    sumR_kaon2.push_back( 0.0 );
+  } 
+
+  sumEdepAct_proton  = 0.0;
+  sumEdepAct_proton2 = 0.0;
+  sumEdepTot_proton  = 0.0;
+  sumEdepTot_proton2 = 0.0;
+  sumL_proton.clear();
+  sumL_proton2.clear();
+  longitudinalProfile_proton.clear();
+  for ( int layer = 0; layer < numberOfReadoutLayers; layer++ ) {
+    longitudinalProfile_proton.push_back( 0.0 );
+    sumL_proton.push_back( 0.0 );
+    sumL_proton2.push_back( 0.0 );
+  }
+  sumR_proton.clear();
+  sumR_proton2.clear();
+  transverseProfile_proton.clear();
+  for ( int ir = 0; ir < numberOfRadiusBins; ir++ ) {
+    transverseProfile_proton.push_back( 0.0 );
+    sumR_proton.push_back( 0.0 );
+    sumR_proton2.push_back( 0.0 );
+  } 
+
+  sumEdepAct_pdg0  = 0.0;
+  sumEdepAct_pdg02 = 0.0;
+  sumEdepTot_pdg0  = 0.0;
+  sumEdepTot_pdg02 = 0.0;
+  sumL_pdg0.clear();
+  sumL_pdg02.clear();
+  longitudinalProfile_pdg0.clear();
+  for ( int layer = 0; layer < numberOfReadoutLayers; layer++ ) {
+    longitudinalProfile_pdg0.push_back( 0.0 );
+    sumL_pdg0.push_back( 0.0 );
+    sumL_pdg02.push_back( 0.0 );
+  }
+  sumR_pdg0.clear();
+  sumR_pdg02.clear();
+  transverseProfile_pdg0.clear();
+  for ( int ir = 0; ir < numberOfRadiusBins; ir++ ) {
+    transverseProfile_pdg0.push_back( 0.0 );
+    sumR_pdg0.push_back( 0.0 );
+    sumR_pdg02.push_back( 0.0 );
+  } 
+
   numStep = 0.0;
   numStepPositive = numStepNeutral = numStepNegative = 0.0;
   numStepPDGCodeZero = numStepPDGCodeUnrecognized = 0.0;
@@ -354,10 +480,10 @@ void StatAccepTestAnalysis::init( const G4int numberOfReplicasIn,
       //            -1. to +1. GeV  (2000 bins) - energy in GeV
       //        4 : Particle flux up to 0.1 GeV (backward going have negative energy)
       //            -0.1 to +0.1 GeV  (2000 bins) - energy in GeV
-      //        5 : LOG10(energy/MeV) Particle flux from 0.1 keV up to 100 GeV 
+      //        5 : LOG10(energy/MeV) Particle flux from 0.1 keV up to 1000 GeV 
       //            (backward going are REMOVED)
-      //            -4.0 to +5.0  (1000 logarithmic bins) 
-      //            energy in MeV from  0.1 keV to 100 GeV
+      //            -4.0 to +6.0  (1000 logarithmic bins) 
+      //            energy in MeV from  0.1 keV to 1000 GeV
       // Example:
       //   5201 is the histogram of energy of gammas passing into the 
       //   second layer (index #1) binned linearly between -10 and 10 GeV.
@@ -410,10 +536,10 @@ void StatAccepTestAnalysis::init( const G4int numberOfReplicasIn,
 	sprintf( histotag, "Elec./Pos. Log10 Energy Spectrum in Active Layer %d in MeV",
 		 iLayer );
 	//emSpectrum5[ iLayer ] = 
-	//  histoFactory->createHistogram1D( id, histotag, 1000, -4.0, 5.0 );
+	//  histoFactory->createHistogram1D( id, histotag, 1000, -4.0, 6.0 );
 	sprintf( id, "%d", iLayer+91500 );
 	emSpectrumWeighted5[ iLayer ] = 
-	  histoFactory->createHistogram1D( id, histotag, 1000, -4.0, 5.0 );
+	  histoFactory->createHistogram1D( id, histotag, 1000, -4.0, 6.0 );
 
 	sprintf( id, "%d", iLayer+2100 );
 	sprintf( histotag, "Pion Lin. Energy Spectrum in Active Layer %d in GeV", 
@@ -455,10 +581,10 @@ void StatAccepTestAnalysis::init( const G4int numberOfReplicasIn,
 	sprintf( histotag, "Pion Log10 Energy Spectrum in Active Layer %d in MeV", 
 		 iLayer );
 	//pionSpectrum5[ iLayer ] = 
-	//  histoFactory->createHistogram1D( id, histotag, 1000, -4.0, 5.0 );
+	//  histoFactory->createHistogram1D( id, histotag, 1000, -4.0, 6.0 );
 	sprintf( id, "%d", iLayer+92500 );
 	pionSpectrumWeighted5[ iLayer ] = 
-	  histoFactory->createHistogram1D( id, histotag, 1000, -4.0, 5.0 );
+	  histoFactory->createHistogram1D( id, histotag, 1000, -4.0, 6.0 );
 
 	sprintf( id, "%d", iLayer+3100 );
 	sprintf( histotag, "Proton Lin. Energy Spectrum in Active Layer %d in GeV",
@@ -500,10 +626,10 @@ void StatAccepTestAnalysis::init( const G4int numberOfReplicasIn,
 	sprintf( histotag, "Proton Log10 Energy Spectrum in Active Layer %d in MeV",
 		 iLayer );
 	//protonSpectrum5[ iLayer ] = 
-	//  histoFactory->createHistogram1D( id, histotag, 1000, -4.0, 5.0 );
+	//  histoFactory->createHistogram1D( id, histotag, 1000, -4.0, 6.0 );
 	sprintf( id, "%d", iLayer+93500 );
 	protonSpectrumWeighted5[ iLayer ] = 
-	  histoFactory->createHistogram1D( id, histotag, 1000, -4.0, 5.0 );
+	  histoFactory->createHistogram1D( id, histotag, 1000, -4.0, 6.0 );
 
 	sprintf( id, "%d", iLayer+4100 );
 	sprintf( histotag, "Neutron Lin. Energy Spectrum in Active Layer %d in GeV", 
@@ -545,10 +671,10 @@ void StatAccepTestAnalysis::init( const G4int numberOfReplicasIn,
 	sprintf( histotag, "Neutron Log10 Energy Spectrum in Active Layer %d in MeV",
 		 iLayer );
 	//neutronSpectrum5[ iLayer ] = 
-	//  histoFactory->createHistogram1D( id, histotag, 1000, -4.0, 5.0 );
+	//  histoFactory->createHistogram1D( id, histotag, 1000, -4.0, 6.0 );
 	sprintf( id, "%d", iLayer+94500 );
 	neutronSpectrumWeighted5[ iLayer ] = 
-	  histoFactory->createHistogram1D( id, histotag, 1000, -4.0, 5.0 );
+	  histoFactory->createHistogram1D( id, histotag, 1000, -4.0, 6.0 );
 
 	sprintf( id, "%d", iLayer+5100 );
 	sprintf( histotag, "Gamma Lin. Energy Spectrum in Active Layer%d   in GeV", 
@@ -590,10 +716,10 @@ void StatAccepTestAnalysis::init( const G4int numberOfReplicasIn,
 	sprintf( histotag, "Gamma Log10 Energy Spectrum in Active Layer %d in MeV",
 		 iLayer );
 	//gammaSpectrum5[ iLayer ] = 
-	//  histoFactory->createHistogram1D( id, histotag, 1000, -4.0, 5.0 );
+	//  histoFactory->createHistogram1D( id, histotag, 1000, -4.0, 6.0 );
 	sprintf( id, "%d", iLayer+95500 );
 	gammaSpectrumWeighted5[ iLayer ] = 
-	  histoFactory->createHistogram1D( id, histotag, 1000, -4.0, 5.0 );
+	  histoFactory->createHistogram1D( id, histotag, 1000, -4.0, 6.0 );
 
 	sprintf( id, "%d", iLayer+6100 );
 	sprintf( histotag, "PionPlus Lin. Energy Spectrum in Active Layer %d in GeV", 
@@ -635,10 +761,10 @@ void StatAccepTestAnalysis::init( const G4int numberOfReplicasIn,
 	sprintf( histotag, "PionPlus Log10 Energy Spectrum in Active Layer %d in MeV", 
 		 iLayer );
 	//pionPlusSpectrum5[ iLayer ] = 
-	//  histoFactory->createHistogram1D( id, histotag, 1000, -4.0, 5.0 );
+	//  histoFactory->createHistogram1D( id, histotag, 1000, -4.0, 6.0 );
 	sprintf( id, "%d", iLayer+96500 );
 	pionPlusSpectrumWeighted5[ iLayer ] = 
-	  histoFactory->createHistogram1D( id, histotag, 1000, -4.0, 5.0 );
+	  histoFactory->createHistogram1D( id, histotag, 1000, -4.0, 6.0 );
 
 	sprintf( id, "%d", iLayer+7100 );
 	sprintf( histotag, "PionMinus Lin. Energy Spectrum in Active Layer %d in GeV", 
@@ -680,10 +806,10 @@ void StatAccepTestAnalysis::init( const G4int numberOfReplicasIn,
 	sprintf( histotag, "PionMinus Log10 Energy Spectrum in Active Layer %d in MeV", 
 		 iLayer );
 	//pionMinusSpectrum5[ iLayer ] = 
-	//  histoFactory->createHistogram1D( id, histotag, 1000, -4.0, 5.0 );
+	//  histoFactory->createHistogram1D( id, histotag, 1000, -4.0, 6.0 );
 	sprintf( id, "%d", iLayer+97500 );
 	pionMinusSpectrumWeighted5[ iLayer ] = 
-	  histoFactory->createHistogram1D( id, histotag, 1000, -4.0, 5.0 );
+	  histoFactory->createHistogram1D( id, histotag, 1000, -4.0, 6.0 );
       }
   }
 }                       
@@ -944,7 +1070,8 @@ void StatAccepTestAnalysis::fillNtuple( float incidentParticleId,
 
 
 void StatAccepTestAnalysis::
-fillShowerProfile( G4int replica, G4double radius, G4double edep ) {
+fillShowerProfile( G4int replica, const G4double radius, 
+		   const G4double edep, const G4int particlePDG ) {
 
   if ( replica >= numberOfReplicas ) {
     G4cout << " StatAccepTestAnalysis::fillShowerProfile : ***ERROR*** " << G4endl
@@ -979,6 +1106,50 @@ fillShowerProfile( G4int replica, G4double radius, G4double edep ) {
   //       << " \t radius = " << radius / mm 
   //       << " mm   iBinRadius = " << iBinRadius << G4endl
   //       << " \t edep = " << edep << " MeV "  << G4endl;  //***DEBUG***
+
+  // Consider now the separate contribution due to the following particles:
+  //    -  electron (e-  and  e+    together)
+  //    -  muons    (mu- and  mu+   together)
+  //    -  pions    (pi- and  pi+   together)
+  //    -  kaons    (k-  and  k+    together)
+  //    -  protons  (p   and  pbar  together)
+  //    -  pdg0     (particles with PDG code = 0)
+  if ( particlePDG == G4Electron::ElectronDefinition()->GetPDGEncoding()  ||
+       particlePDG == G4Positron::PositronDefinition()->GetPDGEncoding() ) {
+    sumEdepAct_electron += edep;
+    sumEdepTot_electron += edep;
+    longitudinalProfile_electron[ readoutLayer ] += edep;
+    transverseProfile_electron[ iBinRadius ] += edep;
+  } else if ( particlePDG == G4MuonMinus::MuonMinusDefinition()->GetPDGEncoding()  ||
+	      particlePDG == G4MuonPlus::MuonPlusDefinition()->GetPDGEncoding() ) {
+    sumEdepAct_muon += edep;
+    sumEdepTot_muon += edep;
+    longitudinalProfile_muon[ readoutLayer ] += edep;
+    transverseProfile_muon[ iBinRadius ] += edep;
+  } else if ( particlePDG == G4PionPlus::PionPlusDefinition()->GetPDGEncoding()  ||
+	      particlePDG == G4PionMinus::PionMinusDefinition()->GetPDGEncoding() ) {
+    sumEdepAct_pion += edep;
+    sumEdepTot_pion += edep;
+    longitudinalProfile_pion[ readoutLayer ] += edep;
+    transverseProfile_pion[ iBinRadius ] += edep;
+  } else if ( particlePDG == G4KaonMinus::KaonMinusDefinition()->GetPDGEncoding()  ||
+	      particlePDG == G4KaonPlus::KaonPlusDefinition()->GetPDGEncoding() ) {
+    sumEdepAct_kaon += edep;
+    sumEdepTot_kaon += edep;
+    longitudinalProfile_kaon[ readoutLayer ] += edep;
+    transverseProfile_kaon[ iBinRadius ] += edep;
+  } else if ( particlePDG == G4Proton::ProtonDefinition()->GetPDGEncoding()  ||
+	      particlePDG == G4AntiProton::AntiProtonDefinition()->GetPDGEncoding() ) {
+    sumEdepAct_proton += edep;
+    sumEdepTot_proton += edep;
+    longitudinalProfile_proton[ readoutLayer ] += edep;
+    transverseProfile_proton[ iBinRadius ] += edep;
+  } else if ( particlePDG == 0 ) {
+    sumEdepAct_pdg0 += edep;
+    sumEdepTot_pdg0 += edep;
+    longitudinalProfile_pdg0[ readoutLayer ] += edep;
+    transverseProfile_pdg0[ iBinRadius ] += edep;
+  }
 
 }
 
@@ -1050,6 +1221,49 @@ void StatAccepTestAnalysis::infoStep( const G4Step* aStep ) {
   // 					 aStep->GetTotalEnergyDeposit() / MeV );
   //   }    
   // }
+
+  // Update the information on the energy deposition in the absorber
+  // for the following particles (in the case of the energy deposition
+  // in active layer, it has already been considered in the method
+  // StatAccepTestAnalysis::fillShowerProfile):
+  //    -  electron (e-  and  e+    together)
+  //    -  muons    (mu- and  mu+   together)
+  //    -  pions    (pi- and  pi+   together)
+  //    -  kaons    (k-  and  k+    together)
+  //    -  protons  (p   and  pbar  together)
+  //    -  pdg0     (particles with PDG code = 0)
+  if ( aStep->GetTrack()->GetVolume()->GetName() == "physiAbsorber" ) {
+    G4double edep = aStep->GetTotalEnergyDeposit() * aStep->GetTrack()->GetWeight();
+    if ( aStep->GetTrack()->GetDefinition() == 
+	 G4Electron::ElectronDefinition()  ||
+	 aStep->GetTrack()->GetDefinition() == 
+	 G4Positron::PositronDefinition() ) {
+      sumEdepTot_electron += edep;
+    } else if ( aStep->GetTrack()->GetDefinition() == 
+		G4MuonMinus::MuonMinusDefinition()  ||
+		aStep->GetTrack()->GetDefinition() == 
+		G4MuonPlus::MuonPlusDefinition() ) {
+      sumEdepTot_muon += edep;
+    } else if ( aStep->GetTrack()->GetDefinition() == 
+		G4PionPlus::PionPlusDefinition()  ||
+		aStep->GetTrack()->GetDefinition() == 
+		G4PionMinus::PionMinusDefinition() ) {
+      sumEdepTot_pion += edep;
+    } else if ( aStep->GetTrack()->GetDefinition() == 
+		G4KaonMinus::KaonMinusDefinition()  ||
+		aStep->GetTrack()->GetDefinition() == 
+		G4KaonPlus::KaonPlusDefinition() ) {
+      sumEdepTot_kaon += edep;
+    } else if ( aStep->GetTrack()->GetDefinition() == 
+		G4Proton::ProtonDefinition()  ||
+		aStep->GetTrack()->GetDefinition() == 
+		G4AntiProton::AntiProtonDefinition() ) {
+      sumEdepTot_proton += edep;
+    } else if ( aStep->GetTrack()->GetDefinition()->GetPDGEncoding() == 0 ) {
+      sumEdepTot_pdg0 += edep;
+    }
+  }
+
 }
 
 
@@ -2246,6 +2460,144 @@ void StatAccepTestAnalysis::endOfEvent() {
   numExitingElectrons_previous = numExitingElectrons;
   numExitingOthers_previous = numExitingOthers;
 
+  // Do the same trick for the energy deposits and shower profiles
+  // of the following group of particles:
+  // e- and e+ together
+  static G4double sumEdepAct_electron_previous = 0.0;
+  sumEdepAct_electron2 += ( sumEdepAct_electron - sumEdepAct_electron_previous ) *
+                          ( sumEdepAct_electron - sumEdepAct_electron_previous );
+  sumEdepAct_electron_previous = sumEdepAct_electron;
+  static G4double sumEdepTot_electron_previous = 0.0;
+  sumEdepTot2 += ( sumEdepTot_electron - sumEdepTot_electron_previous ) *
+                 ( sumEdepTot_electron - sumEdepTot_electron_previous );
+  sumEdepTot_electron_previous = sumEdepTot_electron;
+  for ( int iLayer = 0; iLayer < numberOfReadoutLayers; iLayer++ ) {
+    sumL_electron[ iLayer ]  += longitudinalProfile_electron[ iLayer ];
+    sumL_electron2[ iLayer ] += longitudinalProfile_electron[ iLayer ] * 
+                                longitudinalProfile_electron[ iLayer ];  
+    longitudinalProfile_electron[ iLayer ] = 0.0;  // Reset it for the next event.
+  }
+  for ( int iBinR = 0; iBinR < numberOfRadiusBins; iBinR++ ) {
+    sumR_electron[ iBinR ]  += transverseProfile_electron[ iBinR ];
+    sumR_electron2[ iBinR ] += transverseProfile_electron[ iBinR ] * 
+                               transverseProfile_electron[ iBinR ];  
+    transverseProfile_electron[ iBinR ] = 0.0;  // Reset it for the next event.
+  }
+
+  // mu- and m+ together
+  static G4double sumEdepAct_muon_previous = 0.0;
+  sumEdepAct_muon2 += ( sumEdepAct_muon - sumEdepAct_muon_previous ) *
+                      ( sumEdepAct_muon - sumEdepAct_muon_previous );
+  sumEdepAct_muon_previous = sumEdepAct_muon;
+  static G4double sumEdepTot_muon_previous = 0.0;
+  sumEdepTot2 += ( sumEdepTot_muon - sumEdepTot_muon_previous ) *
+                 ( sumEdepTot_muon - sumEdepTot_muon_previous );
+  sumEdepTot_muon_previous = sumEdepTot_muon;
+  for ( int iLayer = 0; iLayer < numberOfReadoutLayers; iLayer++ ) {
+    sumL_muon[ iLayer ]  += longitudinalProfile_muon[ iLayer ];
+    sumL_muon2[ iLayer ] += longitudinalProfile_muon[ iLayer ] * 
+                            longitudinalProfile_muon[ iLayer ];  
+    longitudinalProfile_muon[ iLayer ] = 0.0;  // Reset it for the next event.
+  }
+  for ( int iBinR = 0; iBinR < numberOfRadiusBins; iBinR++ ) {
+    sumR_muon[ iBinR ]  += transverseProfile_muon[ iBinR ];
+    sumR_muon2[ iBinR ] += transverseProfile_muon[ iBinR ] * 
+                           transverseProfile_muon[ iBinR ];  
+    transverseProfile_muon[ iBinR ] = 0.0;  // Reset it for the next event.
+  }
+
+  // pi+ and pi- together
+  static G4double sumEdepAct_pion_previous = 0.0;
+  sumEdepAct_pion2 += ( sumEdepAct_pion - sumEdepAct_pion_previous ) *
+                      ( sumEdepAct_pion - sumEdepAct_pion_previous );
+  sumEdepAct_pion_previous = sumEdepAct_pion;
+  static G4double sumEdepTot_pion_previous = 0.0;
+  sumEdepTot2 += ( sumEdepTot_pion - sumEdepTot_pion_previous ) *
+                 ( sumEdepTot_pion - sumEdepTot_pion_previous );
+  sumEdepTot_pion_previous = sumEdepTot_pion;
+  for ( int iLayer = 0; iLayer < numberOfReadoutLayers; iLayer++ ) {
+    sumL_pion[ iLayer ]  += longitudinalProfile_pion[ iLayer ];
+    sumL_pion2[ iLayer ] += longitudinalProfile_pion[ iLayer ] * 
+                            longitudinalProfile_pion[ iLayer ];  
+    longitudinalProfile_pion[ iLayer ] = 0.0;  // Reset it for the next event.
+  }
+  for ( int iBinR = 0; iBinR < numberOfRadiusBins; iBinR++ ) {
+    sumR_pion[ iBinR ]  += transverseProfile_pion[ iBinR ];
+    sumR_pion2[ iBinR ] += transverseProfile_pion[ iBinR ] * 
+                           transverseProfile_pion[ iBinR ];  
+    transverseProfile_pion[ iBinR ] = 0.0;  // Reset it for the next event.
+  }
+
+  // k+ and k- together
+  static G4double sumEdepAct_kaon_previous = 0.0;
+  sumEdepAct_kaon2 += ( sumEdepAct_kaon - sumEdepAct_kaon_previous ) *
+                      ( sumEdepAct_kaon - sumEdepAct_kaon_previous );
+  sumEdepAct_kaon_previous = sumEdepAct_kaon;
+  static G4double sumEdepTot_kaon_previous = 0.0;
+  sumEdepTot2 += ( sumEdepTot_kaon - sumEdepTot_kaon_previous ) *
+                 ( sumEdepTot_kaon - sumEdepTot_kaon_previous );
+  sumEdepTot_kaon_previous = sumEdepTot_kaon;
+  for ( int iLayer = 0; iLayer < numberOfReadoutLayers; iLayer++ ) {
+    sumL_kaon[ iLayer ]  += longitudinalProfile_kaon[ iLayer ];
+    sumL_kaon2[ iLayer ] += longitudinalProfile_kaon[ iLayer ] * 
+                            longitudinalProfile_kaon[ iLayer ];  
+    longitudinalProfile_kaon[ iLayer ] = 0.0;  // Reset it for the next event.
+  }
+  for ( int iBinR = 0; iBinR < numberOfRadiusBins; iBinR++ ) {
+    sumR_kaon[ iBinR ]  += transverseProfile_kaon[ iBinR ];
+    sumR_kaon2[ iBinR ] += transverseProfile_kaon[ iBinR ] * 
+                           transverseProfile_kaon[ iBinR ];  
+    transverseProfile_kaon[ iBinR ] = 0.0;  // Reset it for the next event.
+  }
+
+  // p and pbar together
+  static G4double sumEdepAct_proton_previous = 0.0;
+  sumEdepAct_proton2 += ( sumEdepAct_proton - sumEdepAct_proton_previous ) *
+                        ( sumEdepAct_proton - sumEdepAct_proton_previous );
+  sumEdepAct_proton_previous = sumEdepAct_proton;
+  static G4double sumEdepTot_proton_previous = 0.0;
+  sumEdepTot2 += ( sumEdepTot_proton - sumEdepTot_proton_previous ) *
+                 ( sumEdepTot_proton - sumEdepTot_proton_previous );
+  sumEdepTot_proton_previous = sumEdepTot_proton;
+  for ( int iLayer = 0; iLayer < numberOfReadoutLayers; iLayer++ ) {
+    sumL_proton[ iLayer ]  += longitudinalProfile_proton[ iLayer ];
+    sumL_proton2[ iLayer ] += longitudinalProfile_proton[ iLayer ] * 
+                              longitudinalProfile_proton[ iLayer ];  
+    longitudinalProfile_proton[ iLayer ] = 0.0;  // Reset it for the next event.
+  }
+  for ( int iBinR = 0; iBinR < numberOfRadiusBins; iBinR++ ) {
+    sumR_proton[ iBinR ]  += transverseProfile_proton[ iBinR ];
+    sumR_proton2[ iBinR ] += transverseProfile_proton[ iBinR ] * 
+                             transverseProfile_proton[ iBinR ];  
+    transverseProfile_proton[ iBinR ] = 0.0;  // Reset it for the next event.
+  }
+
+  static G4double sumEdepAct_pdg0_previous = 0.0;
+  sumEdepAct_pdg02 += ( sumEdepAct_pdg0 - sumEdepAct_pdg0_previous ) *
+                      ( sumEdepAct_pdg0 - sumEdepAct_pdg0_previous );
+  sumEdepAct_pdg0_previous = sumEdepAct_pdg0;
+  static G4double sumEdepTot_pdg0_previous = 0.0;
+  sumEdepTot2 += ( sumEdepTot_pdg0 - sumEdepTot_pdg0_previous ) *
+                 ( sumEdepTot_pdg0 - sumEdepTot_pdg0_previous );
+  sumEdepTot_pdg0_previous = sumEdepTot_pdg0;
+  for ( int iLayer = 0; iLayer < numberOfReadoutLayers; iLayer++ ) {
+    sumL_pdg0[ iLayer ]  += longitudinalProfile_pdg0[ iLayer ];
+    sumL_pdg02[ iLayer ] += longitudinalProfile_pdg0[ iLayer ] * 
+                            longitudinalProfile_pdg0[ iLayer ];  
+    longitudinalProfile_pdg0[ iLayer ] = 0.0;  // Reset it for the next event.
+  }
+  for ( int iBinR = 0; iBinR < numberOfRadiusBins; iBinR++ ) {
+    sumR_pdg0[ iBinR ]  += transverseProfile_pdg0[ iBinR ];
+    sumR_pdg02[ iBinR ] += transverseProfile_pdg0[ iBinR ] * 
+                           transverseProfile_pdg0[ iBinR ];  
+    transverseProfile_pdg0[ iBinR ] = 0.0;  // Reset it for the next event.
+  }
+
+
+  //***HERE***
+
+
+
 }
 
 void StatAccepTestAnalysis::finish() {
@@ -2323,6 +2675,8 @@ void StatAccepTestAnalysis::finish() {
   mu_sigma = sigma / std::sqrt( n );
   G4cout << " Average <E> [MeV] deposited in the whole calorimeter = " 
          << mu << " +/- " << mu_sigma << G4endl;
+  G4double mu_Etot = mu;             // For later usage.
+  G4double mu_Etot_sigma = mu_sigma; //  "    "     "
 
   G4double fractionLongitudinal1stQuarter = 0.0;
   G4double fractionLongitudinal2ndQuarter = 0.0;
@@ -2558,6 +2912,329 @@ void StatAccepTestAnalysis::finish() {
 	 << samplingFraction_sigma << G4endl;
 
   if ( tree ) tree->commit();
+
+  // Print information on the different particle contributions to
+  // the visible energy, the total energy, and the shower shapes.
+
+  G4cout << G4endl << " Contributions of the main particle types [MeV] " << G4endl;
+  for ( int iCase = 0; iCase < 6; iCase++ ) {
+
+    std::string caseName = "";
+    G4double sumVis = 0.0;
+    G4double sumVis2 = 0.0;
+    G4double sumTot = 0.0;
+    G4double sumTot2 = 0.0;
+    std::vector< G4double > vecSumL;
+    std::vector< G4double > vecSumL2;
+    std::vector< G4double > vecSumR;
+    std::vector< G4double > vecSumR2;
+
+    switch ( iCase ) {
+    case 0 : {
+      caseName = "electron";
+      sumVis = sumEdepAct_electron;
+      sumVis2 = sumEdepAct_electron2;
+      sumTot = sumEdepTot_electron;
+      sumTot2 = sumEdepTot_electron2;
+      for ( int iLayer = 0; iLayer < numberOfReadoutLayers; iLayer++ ) {
+	vecSumL.push_back( sumL_electron[ iLayer ] );
+	vecSumL2.push_back( sumL_electron2[ iLayer ] );
+      }
+      for ( int iBinR = 0; iBinR < numberOfRadiusBins; iBinR++ ) {
+	vecSumR.push_back( sumR_electron[ iBinR ] );
+	vecSumR2.push_back( sumR_electron2[ iBinR ] );
+      }
+      break;
+    }
+    case 1 : {
+      caseName = "muon";
+      sumVis = sumEdepAct_muon;
+      sumVis2 = sumEdepAct_muon2;
+      sumTot = sumEdepTot_muon;
+      sumTot2 = sumEdepTot_muon2;
+      for ( int iLayer = 0; iLayer < numberOfReadoutLayers; iLayer++ ) {
+	vecSumL.push_back( sumL_muon[ iLayer ] );
+	vecSumL2.push_back( sumL_muon2[ iLayer ] );
+      }
+      for ( int iBinR = 0; iBinR < numberOfRadiusBins; iBinR++ ) {
+	vecSumR.push_back( sumR_muon[ iBinR ] );
+	vecSumR2.push_back( sumR_muon2[ iBinR ] );
+      }
+      break;
+    }
+    case 2 : {
+      caseName = "pion";
+      sumVis = sumEdepAct_pion;
+      sumVis2 = sumEdepAct_pion2;
+      sumTot = sumEdepTot_pion;
+      sumTot2 = sumEdepTot_pion2;
+      for ( int iLayer = 0; iLayer < numberOfReadoutLayers; iLayer++ ) {
+	vecSumL.push_back( sumL_pion[ iLayer ] );
+	vecSumL2.push_back( sumL_pion2[ iLayer ] );
+      }
+      for ( int iBinR = 0; iBinR < numberOfRadiusBins; iBinR++ ) {
+	vecSumR.push_back( sumR_pion[ iBinR ] );
+	vecSumR2.push_back( sumR_pion2[ iBinR ] );
+      }
+      break;
+    }
+    case 3 : {
+      caseName = "kaon";
+      sumVis = sumEdepAct_kaon;
+      sumVis2 = sumEdepAct_kaon2;
+      sumTot = sumEdepTot_kaon;
+      sumTot2 = sumEdepTot_kaon2;
+      for ( int iLayer = 0; iLayer < numberOfReadoutLayers; iLayer++ ) {
+	vecSumL.push_back( sumL_kaon[ iLayer ] );
+	vecSumL2.push_back( sumL_kaon2[ iLayer ] );
+      }
+      for ( int iBinR = 0; iBinR < numberOfRadiusBins; iBinR++ ) {
+	vecSumR.push_back( sumR_kaon[ iBinR ] );
+	vecSumR2.push_back( sumR_kaon2[ iBinR ] );
+      }
+      break;
+    }
+    case 4 : {
+      caseName = "proton";
+      sumVis = sumEdepAct_proton;
+      sumVis2 = sumEdepAct_proton2;
+      sumTot = sumEdepTot_proton;
+      sumTot2 = sumEdepTot_proton2;
+      for ( int iLayer = 0; iLayer < numberOfReadoutLayers; iLayer++ ) {
+	vecSumL.push_back( sumL_proton[ iLayer ] );
+	vecSumL2.push_back( sumL_proton2[ iLayer ] );
+      }
+      for ( int iBinR = 0; iBinR < numberOfRadiusBins; iBinR++ ) {
+	vecSumR.push_back( sumR_proton[ iBinR ] );
+	vecSumR2.push_back( sumR_proton2[ iBinR ] );
+      }
+      break;
+    }
+    case 5 : {
+      caseName = "pdg0";
+      sumVis = sumEdepAct_pdg0;
+      sumVis2 = sumEdepAct_pdg02;
+      sumTot = sumEdepTot_pdg0;
+      sumTot2 = sumEdepTot_pdg02;
+      for ( int iLayer = 0; iLayer < numberOfReadoutLayers; iLayer++ ) {
+	vecSumL.push_back( sumL_pdg0[ iLayer ] );
+	vecSumL2.push_back( sumL_pdg02[ iLayer ] );
+      }
+      for ( int iBinR = 0; iBinR < numberOfRadiusBins; iBinR++ ) {
+	vecSumR.push_back( sumR_pdg0[ iBinR ] );
+	vecSumR2.push_back( sumR_pdg02[ iBinR ] );
+      }
+      break;
+    }
+    } // End of switch
+
+    G4cout << "\t Particle type: " << caseName << G4endl;
+ 
+    G4double f, f_sigma;
+
+    sum  = sumVis;
+    sum2 = sumVis2;
+    mu       = sum / n;
+    sigma    = std::sqrt( std::abs( sum2 - sum*sum/n ) / (n - 1.0) );
+    mu_sigma = sigma / std::sqrt( n );
+    f = 0.0;
+    f_sigma = 0.0;
+    if ( mu_Evis > 1.0E-06 ) {
+      f = mu / mu_Evis;
+      if ( mu > 1.0E-06 ) {
+	f_sigma = f * std::sqrt( ( (mu_sigma*mu_sigma) / (mu*mu) ) +
+				 ( (mu_Evis_sigma*mu_Evis_sigma) / (mu_Evis*mu_Evis) ) );
+      }
+    }
+    G4cout << "\t \t <E_vis> = " << mu << " +/- " << mu_sigma 
+	   << "  ( " << 100.0*f << " +/- " << 100.0*f_sigma << " % )" << G4endl;
+    G4double particle_mu_Evis = mu;             // For later usage.
+    G4double particle_mu_Evis_sigma = mu_sigma; //  "    "     "
+
+    sum  = sumTot;
+    sum2 = sumTot2;
+    mu       = sum / n;
+    sigma    = std::sqrt( std::abs( sum2 - sum*sum/n ) / (n - 1.0) );
+    mu_sigma = sigma / std::sqrt( n );
+    f = 0.0;
+    f_sigma = 0.0;
+    if ( mu_Etot > 1.0E-06 ) {
+      f = mu / mu_Etot;
+      if ( mu > 1.0E-06 ) {
+	f_sigma = f * std::sqrt( ( (mu_sigma*mu_sigma) / (mu*mu) ) +
+				 ( (mu_Etot_sigma*mu_Etot_sigma) / (mu_Etot*mu_Etot) ) );
+      }
+    }
+    G4cout << "\t \t <E_tot> = " << mu << " +/- " << mu_sigma 
+	   << "  ( " << 100.0*f << " +/- " << 100.0*f_sigma << " % )" << G4endl;
+
+    G4double fLongitudinal1stQuarter = 0.0;
+    G4double fLongitudinal2ndQuarter = 0.0;
+    G4double fLongitudinal3rdQuarter = 0.0;
+    G4double fLongitudinal4thQuarter = 0.0;
+    G4double fLongitudinal1stQuarter_sigma = 0.0;
+    G4double fLongitudinal2ndQuarter_sigma = 0.0;
+    G4double fLongitudinal3rdQuarter_sigma = 0.0;
+    G4double fLongitudinal4thQuarter_sigma = 0.0;
+    G4cout << "\t \t Average <E> [MeV] in each Layer " << G4endl; 
+    for ( int iLayer = 0; iLayer < numberOfReadoutLayers; iLayer++ ) {
+      sum  = vecSumL[ iLayer ];
+      sum2 = vecSumL2[ iLayer ];
+      mu       = sum / n;
+      sigma    = std::sqrt( std::abs( ( sum2 - sum*sum/n ) ) / (n - 1.0) );
+      mu_sigma = sigma / std::sqrt( n );
+      G4cout << "\t \t \t layer = " << iLayer << "\t <E> = " 
+	     << mu << " +/- " << mu_sigma << G4endl;
+      if ( iLayer < numberOfReadoutLayers/4 ) {
+	fLongitudinal1stQuarter += mu;
+	fLongitudinal1stQuarter_sigma += mu_sigma * mu_sigma;
+      } else if ( iLayer < 2*numberOfReadoutLayers/4 ) {
+	fLongitudinal2ndQuarter += mu;
+	fLongitudinal2ndQuarter_sigma += mu_sigma * mu_sigma;
+      } else if ( iLayer < 3*numberOfReadoutLayers/4 ) {
+	fLongitudinal3rdQuarter += mu;
+	fLongitudinal3rdQuarter_sigma += mu_sigma * mu_sigma;
+      } else {
+	fLongitudinal4thQuarter += mu;
+	fLongitudinal4thQuarter_sigma += mu_sigma * mu_sigma;
+      }
+    }
+    if ( particle_mu_Evis > 1.0E-06 ) {
+      G4cout << "\t \t  sumL_1 = " << fLongitudinal1stQuarter << " +/- "
+	     << std::sqrt( fLongitudinal1stQuarter_sigma ) << G4endl
+	     << "\t \t  sumL_2 = " << fLongitudinal2ndQuarter << " +/- "
+	     << std::sqrt( fLongitudinal2ndQuarter_sigma ) << G4endl
+	     << "\t \t  sumL_3 = " << fLongitudinal3rdQuarter << " +/- "
+	     << std::sqrt( fLongitudinal3rdQuarter_sigma ) << G4endl
+	     << "\t \t  sumL_4 = " << fLongitudinal4thQuarter << " +/- "
+	     << std::sqrt( fLongitudinal4thQuarter_sigma ) << G4endl;
+      if ( fLongitudinal1stQuarter > 1.0E-06 ) { 
+	fLongitudinal1stQuarter_sigma /= 
+	  ( fLongitudinal1stQuarter * fLongitudinal1stQuarter );
+      }
+      fLongitudinal1stQuarter /= particle_mu_Evis;
+      fLongitudinal1stQuarter_sigma = fLongitudinal1stQuarter *
+	std::sqrt( fLongitudinal1stQuarter_sigma +
+		   ( particle_mu_Evis_sigma / particle_mu_Evis ) * 
+		   ( particle_mu_Evis_sigma / particle_mu_Evis ) );
+      
+      if ( fLongitudinal2ndQuarter > 1.0E-06 ) { 
+	fLongitudinal2ndQuarter_sigma /= 
+	  ( fLongitudinal2ndQuarter * fLongitudinal2ndQuarter );
+      }
+      fLongitudinal2ndQuarter /= particle_mu_Evis;
+      fLongitudinal2ndQuarter_sigma = fLongitudinal2ndQuarter *
+	std::sqrt( fLongitudinal2ndQuarter_sigma +
+		   ( particle_mu_Evis_sigma / particle_mu_Evis ) * 
+		   ( particle_mu_Evis_sigma / particle_mu_Evis ) );
+
+      if ( fLongitudinal3rdQuarter > 1.0E-06 ) { 
+	fLongitudinal3rdQuarter_sigma /= 
+	  ( fLongitudinal3rdQuarter * fLongitudinal3rdQuarter );
+      }
+      fLongitudinal3rdQuarter /= particle_mu_Evis;
+      fLongitudinal3rdQuarter_sigma = fLongitudinal3rdQuarter *
+	std::sqrt( fLongitudinal3rdQuarter_sigma +
+		   ( particle_mu_Evis_sigma / particle_mu_Evis ) * 
+		   ( particle_mu_Evis_sigma / particle_mu_Evis ) );
+      
+      if ( fLongitudinal4thQuarter > 1.0E-06 ) { 
+	fLongitudinal4thQuarter_sigma /= 
+	  ( fLongitudinal4thQuarter * fLongitudinal4thQuarter );
+      }
+      fLongitudinal4thQuarter /= particle_mu_Evis;
+      fLongitudinal4thQuarter_sigma = fLongitudinal4thQuarter *
+	std::sqrt( fLongitudinal4thQuarter_sigma +
+		   ( particle_mu_Evis_sigma / particle_mu_Evis ) * 
+		   ( particle_mu_Evis_sigma / particle_mu_Evis ) );
+    }
+    G4cout << "\t \t longitudinal fraction in the 1st quarter = "
+	   << fLongitudinal1stQuarter*100.0 << " +/- "
+	   << fLongitudinal1stQuarter_sigma*100.0 << " %" << std::endl
+	   << "\t \t                              2nd         = "
+	   << fLongitudinal2ndQuarter*100.0 << " +/- "
+	   << fLongitudinal2ndQuarter_sigma*100.0 << " %" << std::endl
+	   << "\t \t                              3rd         = "
+	   << fLongitudinal3rdQuarter*100.0 << " +/- "
+	   << fLongitudinal3rdQuarter_sigma*100.0 << " %" << std::endl
+	   << "\t \t                              4th         = "
+	   << fLongitudinal4thQuarter*100.0 << " +/- "
+	   << fLongitudinal4thQuarter_sigma*100.0 << " %" << std::endl;
+    
+    G4double fTransverse1stThird = 0.0;
+    G4double fTransverse2ndThird = 0.0;
+    G4double fTransverse3rdThird = 0.0;
+    G4double fTransverse1stThird_sigma = 0.0;
+    G4double fTransverse2ndThird_sigma = 0.0;
+    G4double fTransverse3rdThird_sigma = 0.0;
+    G4cout << "\t \t Average <E> [MeV] in each Radius bin " << G4endl; 
+    for ( int iBinR = 0; iBinR < numberOfRadiusBins; iBinR++ ) {
+      sum  = vecSumR[ iBinR ];
+      sum2 = vecSumR2[ iBinR ];
+      mu       = sum / n;
+      sigma    = std::sqrt( std::abs( ( sum2 - sum*sum/n ) ) / (n - 1.0) );
+      mu_sigma = sigma / std::sqrt( n );
+      G4cout << "\t \t \t iBinR = " << iBinR << "\t <E> = " 
+	     << mu << " +/- " << mu_sigma << G4endl;
+      if ( iBinR < numberOfRadiusBins/3 ) {
+	fTransverse1stThird += mu;
+	fTransverse1stThird_sigma += mu_sigma * mu_sigma;
+      } else if ( iBinR < 2*numberOfRadiusBins/3 ) {
+	fTransverse2ndThird += mu;
+	fTransverse2ndThird_sigma += mu_sigma * mu_sigma;
+      } else {
+	fTransverse3rdThird += mu;
+	fTransverse3rdThird_sigma += mu_sigma * mu_sigma;
+      }
+    }  
+    if ( particle_mu_Evis > 1.0E-06 ) {
+      G4cout << "\t \t  sumR_1 = " << fTransverse1stThird << " +/- "
+	     << std::sqrt( fTransverse1stThird_sigma ) << G4endl
+	     << "\t \t  sumR_2 = " << fTransverse2ndThird << " +/- "
+	     << std::sqrt( fTransverse2ndThird_sigma ) << G4endl
+	     << "\t \t  sumR_3 = " << fTransverse3rdThird << " +/- "
+	     << std::sqrt( fTransverse3rdThird_sigma ) << G4endl;
+      if ( fTransverse1stThird > 1.0E-06 ) {
+	fTransverse1stThird_sigma /=
+	  ( fTransverse1stThird * fTransverse1stThird );
+      } 
+      fTransverse1stThird /= particle_mu_Evis;
+      fTransverse1stThird_sigma = fTransverse1stThird *
+	std::sqrt( fTransverse1stThird_sigma +  
+		   ( particle_mu_Evis_sigma / particle_mu_Evis ) * 
+		   ( particle_mu_Evis_sigma / particle_mu_Evis ) );
+
+      if ( fTransverse2ndThird > 1.0E-06 ) {
+	fTransverse2ndThird_sigma /=
+	  ( fTransverse2ndThird * fTransverse2ndThird );
+      } 
+      fTransverse2ndThird /= particle_mu_Evis;
+      fTransverse2ndThird_sigma = fTransverse2ndThird *
+	std::sqrt( fTransverse2ndThird_sigma +  
+		   ( particle_mu_Evis_sigma / particle_mu_Evis ) * 
+		   ( particle_mu_Evis_sigma / particle_mu_Evis ) );
+      
+      if ( fTransverse3rdThird > 1.0E-06 ) {
+	fTransverse3rdThird_sigma /=
+	  ( fTransverse3rdThird * fTransverse3rdThird );
+      } 
+      fTransverse3rdThird /= particle_mu_Evis;
+      fTransverse3rdThird_sigma = fTransverse3rdThird *
+	std::sqrt( fTransverse3rdThird_sigma +  
+		   ( particle_mu_Evis_sigma / particle_mu_Evis ) * 
+		   ( particle_mu_Evis_sigma / particle_mu_Evis ) );
+    }
+    G4cout << "\t \t transverse fraction in the 1st third = "
+	   << fTransverse1stThird*100.0 << " +/- "
+	   << fTransverse1stThird_sigma*100.0 << " %" << std::endl
+	   << "\t \t                            2nd       = "
+	   << fTransverse2ndThird*100.0 << " +/- " 
+	   << fTransverse2ndThird_sigma*100.0 << " %" << std::endl
+	   << "\t \t                            3rd       = "
+	   << fTransverse3rdThird*100.0 << " +/- " 
+	   << fTransverse3rdThird_sigma*100.0 << " %" << std::endl;
+    
+  } // End of the loop over the particle types.
 
   // Print information regarding the average number of steps and tracks
   // per event.

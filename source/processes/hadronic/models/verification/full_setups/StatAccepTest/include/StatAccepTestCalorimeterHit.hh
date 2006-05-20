@@ -14,10 +14,10 @@ public:
 
   StatAccepTestCalorimeterHit();
   ~StatAccepTestCalorimeterHit();
-  StatAccepTestCalorimeterHit(const StatAccepTestCalorimeterHit &right);
+  StatAccepTestCalorimeterHit( const StatAccepTestCalorimeterHit &right );
   // Constructors and Destructor.
 
-  const StatAccepTestCalorimeterHit& operator=(const StatAccepTestCalorimeterHit &right);
+  const StatAccepTestCalorimeterHit& operator=( const StatAccepTestCalorimeterHit & right );
   // Assignment operator.
 
 public:
@@ -25,12 +25,12 @@ public:
   void Draw();
   void Print();
   
-  inline void SetEdep(const G4double de);
-  inline void AddEdep(const G4double de);
+  inline void SetEdep( const G4double de );
+  inline void AddEdep( const G4double de );
   inline G4double GetEdep() const;
   // Set/Add/Get methods for the deposited energy.
 
-  inline void SetLayer(const G4int layerNum);
+  inline void SetLayer( const G4int layerNum );
   inline G4int GetLayer() const;
   // Set/Get methods for the layer number. 
 
@@ -55,13 +55,14 @@ inline G4double StatAccepTestCalorimeterHit::GetEdep() const {
 }
 
 
-inline void StatAccepTestCalorimeterHit::SetLayer(const G4int layerNum) { 
+inline void StatAccepTestCalorimeterHit::SetLayer( const G4int layerNum ) { 
   layer = layerNum;
 }
 
 inline G4int StatAccepTestCalorimeterHit::GetLayer() const { 
   return layer;
 }
+
 
 #endif
 

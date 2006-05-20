@@ -50,7 +50,8 @@ public:
                    float totalEnergyDepositedInCalorimeter );
   // This method is supposed to be called at most once for each event.  
 
-  void fillShowerProfile( G4int replica, G4double radius, G4double edep );
+  void fillShowerProfile( G4int replica, const G4double radius, 
+			  const G4double edep, const G4int particlePDG );
   // This method is called by StatAccepTestSensitiveCalorimeter at each step
   // in the active layer of the calorimeter.
 
@@ -117,6 +118,64 @@ private:
   std::vector< G4double > sumL2;
   std::vector< G4double > sumR;
   std::vector< G4double > sumR2;
+
+  // Keep also separate information on the visible energy and on the
+  // longitudinal and transverse shower profile contributions of the
+  // following particles:
+  // e-  and  e+ together
+  G4double sumEdepAct_electron, sumEdepAct_electron2;
+  G4double sumEdepTot_electron, sumEdepTot_electron2;
+  std::vector< G4double > sumL_electron;
+  std::vector< G4double > sumL_electron2;
+  std::vector< G4double > sumR_electron;
+  std::vector< G4double > sumR_electron2;
+  std::vector< G4double > longitudinalProfile_electron;
+  std::vector< G4double > transverseProfile_electron; 
+  // mu-  and  mu+ together
+  G4double sumEdepAct_muon, sumEdepAct_muon2;
+  G4double sumEdepTot_muon, sumEdepTot_muon2;
+  std::vector< G4double > sumL_muon;
+  std::vector< G4double > sumL_muon2;
+  std::vector< G4double > sumR_muon;
+  std::vector< G4double > sumR_muon2;
+  std::vector< G4double > longitudinalProfile_muon;
+  std::vector< G4double > transverseProfile_muon; 
+  // pi-  and  pi+ together
+  G4double sumEdepAct_pion, sumEdepAct_pion2;
+  G4double sumEdepTot_pion, sumEdepTot_pion2;
+  std::vector< G4double > sumL_pion;
+  std::vector< G4double > sumL_pion2;
+  std::vector< G4double > sumR_pion;
+  std::vector< G4double > sumR_pion2;
+  std::vector< G4double > longitudinalProfile_pion;
+  std::vector< G4double > transverseProfile_pion; 
+  // k-  and  k+ together
+  G4double sumEdepAct_kaon, sumEdepAct_kaon2;
+  G4double sumEdepTot_kaon, sumEdepTot_kaon2;
+  std::vector< G4double > sumL_kaon;
+  std::vector< G4double > sumL_kaon2;
+  std::vector< G4double > sumR_kaon;
+  std::vector< G4double > sumR_kaon2;
+  std::vector< G4double > longitudinalProfile_kaon;
+  std::vector< G4double > transverseProfile_kaon; 
+  // proton  and  anti-proton together:
+  G4double sumEdepAct_proton, sumEdepAct_proton2;
+  G4double sumEdepTot_proton, sumEdepTot_proton2;
+  std::vector< G4double > sumL_proton;
+  std::vector< G4double > sumL_proton2;
+  std::vector< G4double > sumR_proton;
+  std::vector< G4double > sumR_proton2;
+  std::vector< G4double > longitudinalProfile_proton;
+  std::vector< G4double > transverseProfile_proton; 
+  // all particles with PDG=0
+  G4double sumEdepAct_pdg0, sumEdepAct_pdg02;
+  G4double sumEdepTot_pdg0, sumEdepTot_pdg02;
+  std::vector< G4double > sumL_pdg0;
+  std::vector< G4double > sumL_pdg02;
+  std::vector< G4double > sumR_pdg0;
+  std::vector< G4double > sumR_pdg02;
+  std::vector< G4double > longitudinalProfile_pdg0;
+  std::vector< G4double > transverseProfile_pdg0; 
 
   // Due to the non-gaussian visible energy distribution, the width 
   // of it cannot be estimated as the sigma of the gaussian fit; on

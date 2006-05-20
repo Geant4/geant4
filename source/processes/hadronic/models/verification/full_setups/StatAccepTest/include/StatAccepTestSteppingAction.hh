@@ -13,7 +13,7 @@ public:
 
 public:
 
-  virtual void UserSteppingAction(const G4Step*);
+  virtual void UserSteppingAction( const G4Step* );
   // The main method to define.
 
   inline G4double getTotalEdepAllParticles() const;

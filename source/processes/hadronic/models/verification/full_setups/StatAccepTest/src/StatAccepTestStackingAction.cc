@@ -168,7 +168,7 @@ StatAccepTestStackingAction::~StatAccepTestStackingAction() {
 
 
 G4ClassificationOfNewTrack 
-StatAccepTestStackingAction::ClassifyNewTrack(const G4Track * aTrack) {
+StatAccepTestStackingAction::ClassifyNewTrack( const G4Track * aTrack ) {
 
   G4ClassificationOfNewTrack result( fUrgent );
 

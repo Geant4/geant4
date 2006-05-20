@@ -14,8 +14,8 @@ public:
   StatAccepTestEventAction();
   ~StatAccepTestEventAction();
 
-  virtual void StartOfEventAction(const G4Event* evt);    
-  virtual void EndOfEventAction(const G4Event* evt);    
+  virtual void StartOfEventAction( const G4Event* evt );    
+  virtual void EndOfEventAction( const G4Event* evt );    
 
 private:
 

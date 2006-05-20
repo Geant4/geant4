@@ -18,7 +18,7 @@ StatAccepTestSteppingAction::StatAccepTestSteppingAction() :
 StatAccepTestSteppingAction::~StatAccepTestSteppingAction() {}
 
 
-void StatAccepTestSteppingAction::UserSteppingAction(const G4Step * theStep) {
+void StatAccepTestSteppingAction::UserSteppingAction( const G4Step * theStep ) {
 
   // 10-Apr-2006 : Added energy spectra.
   // We are considering here the kinetic energy spectra of some types

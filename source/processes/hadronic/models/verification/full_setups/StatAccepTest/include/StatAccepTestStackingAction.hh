@@ -15,7 +15,7 @@ class StatAccepTestStackingAction : public G4UserStackingAction {
   StatAccepTestStackingAction();
   virtual ~StatAccepTestStackingAction();
 
-  virtual G4ClassificationOfNewTrack ClassifyNewTrack(const G4Track* aTrack);
+  virtual G4ClassificationOfNewTrack ClassifyNewTrack( const G4Track* aTrack );
   // For gammas, electrons, and positrons it does the following
   // simple russian roulette biasing method:
   // if a particle of the above types is below a certain energy

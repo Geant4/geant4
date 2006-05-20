@@ -23,9 +23,9 @@ public:
   
   G4VPhysicalVolume* Construct();
 
-  void SetMagField(G4double fieldValue);
-  void SetAbsorberMaterial(const G4String name);
-  void SetActiveMaterial(const G4String name);
+  void SetMagField( const G4double fieldValue );
+  void SetAbsorberMaterial( const G4String name );
+  void SetActiveMaterial( const G4String name );
   // Use by the messenger.
 
   inline G4Material* GetAbsorberMaterial() const;

@@ -1,6 +1,19 @@
                  History file
                  ------------
 
+20-May-2006 - A.Ribon (statAccepTest-V08-00-12)
+- Corrected the computation of the statistical errors, and
+  added statistical errors to any computed quantity.
+  Added the information on visible energy, total energy, 
+  longitudinal and transverse shower profile for the
+  following particles:  o  electron (e- and e+);
+                        o  muons (mu- and mu+); 
+                        o  pions (pi+ and pi-);
+                        o  kaons (k- and k+);
+                        o  protons (p and pbar);
+                        o  pdg0.
+
+
 13-Apr-2006 - A.Ribon (statAccepTest-V08-00-11)
 - Added kinetic spectra in some active layers, and
   counting of the exiting energies.

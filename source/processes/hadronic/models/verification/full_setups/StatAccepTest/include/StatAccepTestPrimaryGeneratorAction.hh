@@ -16,7 +16,7 @@ public:
 
 public:
 
-  void GeneratePrimaries(G4Event* anEvent);
+  void GeneratePrimaries( G4Event* anEvent );
 
 private:
 

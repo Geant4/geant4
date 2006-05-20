@@ -11,14 +11,14 @@ StatAccepTestRunAction::~StatAccepTestRunAction() {
 }
 
 
-void StatAccepTestRunAction::BeginOfRunAction(const G4Run* aRun) {
+void StatAccepTestRunAction::BeginOfRunAction( const G4Run* aRun ) {
   G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
   // Reset the histograms/ntuples of the eventual previous run.
   StatAccepTestAnalysis::getInstance()->init();
 }
 
 
-void StatAccepTestRunAction::EndOfRunAction(const G4Run* ) {
+void StatAccepTestRunAction::EndOfRunAction( const G4Run* ) {
   // Commit the histograms/ntuples.
   StatAccepTestAnalysis::getInstance()->finish();
 }   
