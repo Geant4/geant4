@@ -1113,7 +1113,7 @@ fillShowerProfile( G4int replica, const G4double radius,
   //    -  pions    (pi- and  pi+   together)
   //    -  kaons    (k-  and  k+    together)
   //    -  protons  (p   and  pbar  together)
-  //    -  pdg0     (particles with PDG code = 0)
+  //    -  pdg0     (all particles with PDG code = 0)
   if ( particlePDG == G4Electron::ElectronDefinition()->GetPDGEncoding()  ||
        particlePDG == G4Positron::PositronDefinition()->GetPDGEncoding() ) {
     sumEdepAct_electron += edep;
@@ -1231,7 +1231,7 @@ void StatAccepTestAnalysis::infoStep( const G4Step* aStep ) {
   //    -  pions    (pi- and  pi+   together)
   //    -  kaons    (k-  and  k+    together)
   //    -  protons  (p   and  pbar  together)
-  //    -  pdg0     (particles with PDG code = 0)
+  //    -  pdg0     (all particles with PDG code = 0)
   if ( aStep->GetTrack()->GetVolume()->GetName() == "physiAbsorber" ) {
     G4double edep = aStep->GetTotalEnergyDeposit() * aStep->GetTrack()->GetWeight();
     if ( aStep->GetTrack()->GetDefinition() == 
@@ -2460,16 +2460,16 @@ void StatAccepTestAnalysis::endOfEvent() {
   numExitingElectrons_previous = numExitingElectrons;
   numExitingOthers_previous = numExitingOthers;
 
-  // Do the same trick for the energy deposits and shower profiles
-  // of the following group of particles:
-  // e- and e+ together
+  // Apply the same trick for the energy deposits and shower profiles
+  // of the following groups of particles:
+  // e-  and  e+  together
   static G4double sumEdepAct_electron_previous = 0.0;
   sumEdepAct_electron2 += ( sumEdepAct_electron - sumEdepAct_electron_previous ) *
                           ( sumEdepAct_electron - sumEdepAct_electron_previous );
   sumEdepAct_electron_previous = sumEdepAct_electron;
   static G4double sumEdepTot_electron_previous = 0.0;
-  sumEdepTot2 += ( sumEdepTot_electron - sumEdepTot_electron_previous ) *
-                 ( sumEdepTot_electron - sumEdepTot_electron_previous );
+  sumEdepTot_electron2 += ( sumEdepTot_electron - sumEdepTot_electron_previous ) *
+                          ( sumEdepTot_electron - sumEdepTot_electron_previous );
   sumEdepTot_electron_previous = sumEdepTot_electron;
   for ( int iLayer = 0; iLayer < numberOfReadoutLayers; iLayer++ ) {
     sumL_electron[ iLayer ]  += longitudinalProfile_electron[ iLayer ];
@@ -2484,14 +2484,14 @@ void StatAccepTestAnalysis::endOfEvent() {
     transverseProfile_electron[ iBinR ] = 0.0;  // Reset it for the next event.
   }
 
-  // mu- and m+ together
+  // mu-  and  mu+  together
   static G4double sumEdepAct_muon_previous = 0.0;
   sumEdepAct_muon2 += ( sumEdepAct_muon - sumEdepAct_muon_previous ) *
                       ( sumEdepAct_muon - sumEdepAct_muon_previous );
   sumEdepAct_muon_previous = sumEdepAct_muon;
   static G4double sumEdepTot_muon_previous = 0.0;
-  sumEdepTot2 += ( sumEdepTot_muon - sumEdepTot_muon_previous ) *
-                 ( sumEdepTot_muon - sumEdepTot_muon_previous );
+  sumEdepTot_muon2 += ( sumEdepTot_muon - sumEdepTot_muon_previous ) *
+                      ( sumEdepTot_muon - sumEdepTot_muon_previous );
   sumEdepTot_muon_previous = sumEdepTot_muon;
   for ( int iLayer = 0; iLayer < numberOfReadoutLayers; iLayer++ ) {
     sumL_muon[ iLayer ]  += longitudinalProfile_muon[ iLayer ];
@@ -2506,14 +2506,14 @@ void StatAccepTestAnalysis::endOfEvent() {
     transverseProfile_muon[ iBinR ] = 0.0;  // Reset it for the next event.
   }
 
-  // pi+ and pi- together
+  // pi+  and  pi-  together
   static G4double sumEdepAct_pion_previous = 0.0;
   sumEdepAct_pion2 += ( sumEdepAct_pion - sumEdepAct_pion_previous ) *
                       ( sumEdepAct_pion - sumEdepAct_pion_previous );
   sumEdepAct_pion_previous = sumEdepAct_pion;
   static G4double sumEdepTot_pion_previous = 0.0;
-  sumEdepTot2 += ( sumEdepTot_pion - sumEdepTot_pion_previous ) *
-                 ( sumEdepTot_pion - sumEdepTot_pion_previous );
+  sumEdepTot_pion2 += ( sumEdepTot_pion - sumEdepTot_pion_previous ) *
+                      ( sumEdepTot_pion - sumEdepTot_pion_previous );
   sumEdepTot_pion_previous = sumEdepTot_pion;
   for ( int iLayer = 0; iLayer < numberOfReadoutLayers; iLayer++ ) {
     sumL_pion[ iLayer ]  += longitudinalProfile_pion[ iLayer ];
@@ -2528,14 +2528,14 @@ void StatAccepTestAnalysis::endOfEvent() {
     transverseProfile_pion[ iBinR ] = 0.0;  // Reset it for the next event.
   }
 
-  // k+ and k- together
+  // k+  and  k-  together
   static G4double sumEdepAct_kaon_previous = 0.0;
   sumEdepAct_kaon2 += ( sumEdepAct_kaon - sumEdepAct_kaon_previous ) *
                       ( sumEdepAct_kaon - sumEdepAct_kaon_previous );
   sumEdepAct_kaon_previous = sumEdepAct_kaon;
   static G4double sumEdepTot_kaon_previous = 0.0;
-  sumEdepTot2 += ( sumEdepTot_kaon - sumEdepTot_kaon_previous ) *
-                 ( sumEdepTot_kaon - sumEdepTot_kaon_previous );
+  sumEdepTot_kaon2 += ( sumEdepTot_kaon - sumEdepTot_kaon_previous ) *
+                      ( sumEdepTot_kaon - sumEdepTot_kaon_previous );
   sumEdepTot_kaon_previous = sumEdepTot_kaon;
   for ( int iLayer = 0; iLayer < numberOfReadoutLayers; iLayer++ ) {
     sumL_kaon[ iLayer ]  += longitudinalProfile_kaon[ iLayer ];
@@ -2550,14 +2550,14 @@ void StatAccepTestAnalysis::endOfEvent() {
     transverseProfile_kaon[ iBinR ] = 0.0;  // Reset it for the next event.
   }
 
-  // p and pbar together
+  // p  and  pbar  together
   static G4double sumEdepAct_proton_previous = 0.0;
   sumEdepAct_proton2 += ( sumEdepAct_proton - sumEdepAct_proton_previous ) *
                         ( sumEdepAct_proton - sumEdepAct_proton_previous );
   sumEdepAct_proton_previous = sumEdepAct_proton;
   static G4double sumEdepTot_proton_previous = 0.0;
-  sumEdepTot2 += ( sumEdepTot_proton - sumEdepTot_proton_previous ) *
-                 ( sumEdepTot_proton - sumEdepTot_proton_previous );
+  sumEdepTot_proton2 += ( sumEdepTot_proton - sumEdepTot_proton_previous ) *
+                        ( sumEdepTot_proton - sumEdepTot_proton_previous );
   sumEdepTot_proton_previous = sumEdepTot_proton;
   for ( int iLayer = 0; iLayer < numberOfReadoutLayers; iLayer++ ) {
     sumL_proton[ iLayer ]  += longitudinalProfile_proton[ iLayer ];
@@ -2572,13 +2572,14 @@ void StatAccepTestAnalysis::endOfEvent() {
     transverseProfile_proton[ iBinR ] = 0.0;  // Reset it for the next event.
   }
 
+  // all particles with PDG code = 0
   static G4double sumEdepAct_pdg0_previous = 0.0;
   sumEdepAct_pdg02 += ( sumEdepAct_pdg0 - sumEdepAct_pdg0_previous ) *
                       ( sumEdepAct_pdg0 - sumEdepAct_pdg0_previous );
   sumEdepAct_pdg0_previous = sumEdepAct_pdg0;
   static G4double sumEdepTot_pdg0_previous = 0.0;
-  sumEdepTot2 += ( sumEdepTot_pdg0 - sumEdepTot_pdg0_previous ) *
-                 ( sumEdepTot_pdg0 - sumEdepTot_pdg0_previous );
+  sumEdepTot_pdg02 += ( sumEdepTot_pdg0 - sumEdepTot_pdg0_previous ) *
+                      ( sumEdepTot_pdg0 - sumEdepTot_pdg0_previous );
   sumEdepTot_pdg0_previous = sumEdepTot_pdg0;
   for ( int iLayer = 0; iLayer < numberOfReadoutLayers; iLayer++ ) {
     sumL_pdg0[ iLayer ]  += longitudinalProfile_pdg0[ iLayer ];
@@ -2593,12 +2594,8 @@ void StatAccepTestAnalysis::endOfEvent() {
     transverseProfile_pdg0[ iBinR ] = 0.0;  // Reset it for the next event.
   }
 
-
-  //***HERE***
-
-
-
 }
+
 
 void StatAccepTestAnalysis::finish() {
 
