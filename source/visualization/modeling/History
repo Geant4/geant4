@@ -1,4 +1,4 @@
-$Id: History,v 1.66 2006-05-12 13:02:03 allison Exp $
+$Id: History,v 1.67 2006-05-22 07:38:06 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,10 @@ committal in the CVS repository !
 
 History file for visualization/modeling
 ---------------------------------------
+
+22nd May 2006  John Allison  (modeling-V08-00-10)
+- Remove dependency on Run.
+- G4ModelingParameters.cc: Protect operator<< for zero fpDefaultVisAttributes.
 
 12th May 2006  John Allison  (modeling-V08-00-09)
 - G4TrajectoriesModel and G4HitsModel: Removed dependency on G4RunManager.
