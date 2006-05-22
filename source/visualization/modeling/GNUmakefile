@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.10 2006-05-22 07:26:24 allison Exp $
+# $Id: GNUmakefile,v 1.11 2006-05-22 08:49:27 allison Exp $
 # --------------------------------------------------------------
 # GNUmakefile for modeling library.  John Allison, 31/12/1997.
 # --------------------------------------------------------------
@@ -9,7 +9,7 @@ ifndef G4INSTALL
   G4INSTALL = ../../..
 endif
 
-GLOBLIBS  = libG4run.lib libG4event.lib
+GLOBLIBS  = libG4event.lib
 GLOBLIBS += libG4tracking.lib libG4processes.lib libG4digits_hits.lib
 GLOBLIBS += libG4track.lib libG4particles.lib libG4geometry.lib
 GLOBLIBS += libG4materials.lib libG4graphics_reps.lib
