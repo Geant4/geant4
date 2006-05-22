@@ -1,4 +1,4 @@
-$Id: History,v 1.53 2006-05-13 12:52:54 allison Exp $
+$Id: History,v 1.54 2006-05-22 08:43:44 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -24,6 +24,18 @@ committal in the CVS repository !
 
 History file for visualization management sub-category
 ------------------------------------------------------
+
+22nd May 2006 John Allison  (visman-V08-00-18)
+- G4VisManager:
+  o Added SetReprocessing (for transients).
+  o Reduce dependency on Run (get event from event manager).
+  o (Includes some event copying stuff - commented out.)
+- G4VSceneHandler.cc: Require Idle state for transient re-computation.
+- G4Scene:
+  o Remove Clear().  (Not used.)
+  o Add printing and testing for fRecomputeTransients.  (Forgot in
+    visman-V08-00-08.)
+- /vis/.../list commands: Default verbosity "warnings".
 
 13th May 2006 John Allison  (visman-V08-00-17)
 - Provided identity transformation for 2D drawing.  A temporary
