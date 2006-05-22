@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ModelingParameters.cc,v 1.8 2006-02-08 15:12:21 allison Exp $
+// $Id: G4ModelingParameters.cc,v 1.9 2006-05-22 07:29:59 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -206,7 +206,10 @@ void G4ModelingParameters::PrintDifferences
 std::ostream& operator << (std::ostream& os, const G4ModelingParameters& mp) {
   os << "Modeling parameters and options:";
 
-  os << "\n  Default vis. attributes: " << *mp.fpDefaultVisAttributes;
+  const G4VisAttributes* va = mp.fpDefaultVisAttributes;
+  os << "\n  Default vis. attributes: ";
+  if (va) os << *va;
+  else os << "none";
 
   os << "\n  Current requested drawing style: ";
   switch (mp.fDrawingStyle) {
