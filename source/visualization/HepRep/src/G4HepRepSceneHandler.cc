@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HepRepSceneHandler.cc,v 1.95 2006-04-19 11:43:58 allison Exp $
+// $Id: G4HepRepSceneHandler.cc,v 1.96 2006-05-22 08:54:13 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -44,7 +44,7 @@
 
 //G4
 #include "G4Vector3D.hh"
-#include "G4RunManagerKernel.hh"
+#include "G4Version.hh"
 #include "G4Types.hh"
 #include "G4Point3D.hh"
 #include "G4Normal3D.hh"
@@ -1336,7 +1336,10 @@ void G4HepRepSceneHandler::addTopLevelAttributes(HepRepType* type) {
     type->addAttValue("Generator", G4String("Geant4"));
 
     type->addAttDef(  "GeneratorVersion", "Version of the Generator", "General", "");
-    type->addAttValue("GeneratorVersion", G4RunManagerKernel::GetRunManagerKernel()->GetVersionString());
+    G4String versionString = G4Version;
+    versionString = versionString.substr(1,versionString.size()-2);
+    versionString = " Geant4 version " + versionString + "   " + G4Date;
+    type->addAttValue("GeneratorVersion", versionString);
     
     const G4ViewParameters parameters = GetCurrentViewer()->GetViewParameters();
     const G4Vector3D& viewPointDirection = parameters.GetViewpointDirection();    
