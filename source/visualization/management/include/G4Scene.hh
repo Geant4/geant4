@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scene.hh,v 1.15 2006-03-06 14:30:59 allison Exp $
+// $Id: G4Scene.hh,v 1.16 2006-05-22 07:41:47 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -98,7 +98,7 @@ public: // With description
   // requests a scene traversal.
 
   //////////////////////////////////////////////
-  // Add, Set, Clear functions...
+  // Add and Set functions...
 
   G4bool AddRunDurationModel (G4VModel*, G4bool warn = false);
   // Adds models of type which are expected to last for the duration
@@ -125,9 +125,6 @@ public: // With description
   std::vector<G4VModel*>& SetEndOfEventModelList ();
   // Allows you to change the model list - do with care!
 
-  void Clear ();
-  // Clears and destroys models in all lists.
-
   void SetRefreshAtEndOfEvent(G4bool);
   // If set true, the visualization manager will request viewer to
   // refresh "transient" objects, such as hits, at end of event.
@@ -142,6 +139,9 @@ public: // With description
   // If set true, the visualization manager will attempt to re-run
   // events in order to reconstruct trajectories, etc., when the
   // viewer requests a scene traversal.
+
+  //////////////////////////////////////////////
+  // Other functions...
 
   void CalculateExtent();
   // (Re-)calculates the extent from the extents of its models.
