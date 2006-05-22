@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmProcessOptions.cc,v 1.16 2006-05-10 09:23:39 vnivanch Exp $
+// $Id: G4EmProcessOptions.cc,v 1.17 2006-05-22 18:14:17 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -39,6 +39,7 @@
 // 24-03-05 Add ApplyCuts and RandomStep (V.Ivanchenko)
 // 10-01-06 PreciseRange -> CSDARange (V.Ivantchenko)
 // 10-05-06 Add command MscStepLimit to G4LossTableManager (V.Ivantchenko) 
+// 22-05-06 Add SetBremsstrahlungTh (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -413,6 +414,13 @@ void G4EmProcessOptions::SetMscStepLimitation(G4bool algorithm,
 void G4EmProcessOptions::SetLPMFlag(G4bool val)
 {
   theManager->SetLPMFlag(val);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4EmProcessOptions::SetBremsstrahlungTh(G4double val)
+{
+  theManager->SetBremsstrahlungTh(val);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

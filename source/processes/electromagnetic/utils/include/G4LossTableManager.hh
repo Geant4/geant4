@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.hh,v 1.39 2006-05-10 09:51:21 vnivanch Exp $
+// $Id: G4LossTableManager.hh,v 1.40 2006-05-22 18:14:17 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -54,6 +54,7 @@
 // 20-01-06 Introduce GetSubDEDX method (VI)
 // 26-01-06 Rename GetRange -> GetRangeFromRestricteDEDX (V.Ivanchenko)
 // 10-05-06 Add methods  SetMscStepLimitation, FacRange and MscFlag (VI)
+// 22-05-06 Add methods  Set/Get bremsTh (VI)
 //
 // Class Description:
 //
@@ -188,6 +189,8 @@ public:
 
   void SetLPMFlag(G4bool val);
 
+  void SetBremsstrahlungTh(G4double val);
+
   void SetVerbose(G4int val);
 
   G4EnergyLossMessenger* GetMessenger();
@@ -201,6 +204,8 @@ public:
   G4bool MscFlag() const;
 
   G4double FacRange() const;
+
+  G4double BremsstrahlungTh() const;
 
   const std::vector<G4VEnergyLossProcess*>& GetEnergyLossProcessVector();
 
@@ -274,6 +279,7 @@ private:
   G4double maxKinEnergy;
   G4double maxKinEnergyForMuons;
   G4double facRange;
+  G4double bremsTh;
 
   G4LossTableBuilder*         tableBuilder;
   G4EnergyLossMessenger*      theMessenger;

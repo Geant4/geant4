@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.cc,v 1.71 2006-05-10 09:51:22 vnivanch Exp $
+// $Id: G4LossTableManager.cc,v 1.72 2006-05-22 18:14:17 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -60,6 +60,7 @@
 // 20-01-06 Introduce G4EmTableType to remove repeating code (VI)
 // 23-03-06 Set flag isIonisation (VI)
 // 10-05-06 Add methods  SetMscStepLimitation, FacRange and MscFlag (VI)
+// 22-05-06 Add methods  Set/Get bremsTh (VI)
 //
 // Class Description:
 //
@@ -150,6 +151,7 @@ G4LossTableManager::G4LossTableManager()
   flagLPM = true;
   flagMSC = true;
   facRange = 0.02;
+  bremsTh = DBL_MAX;
   mscActive = false;
   verbose = 1;
 }
@@ -816,6 +818,20 @@ G4bool G4LossTableManager::MscFlag() const
 G4double G4LossTableManager::FacRange() const
 {
   return facRange;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4LossTableManager::SetBremsstrahlungTh(G4double val) 
+{
+  bremsTh = val;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4LossTableManager::BremsstrahlungTh() const
+{
+  return bremsTh;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

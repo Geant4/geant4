@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmProcessOptions.hh,v 1.7 2006-04-10 11:03:23 vnivanch Exp $
+// $Id: G4EmProcessOptions.hh,v 1.8 2006-05-22 18:14:17 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -37,6 +37,7 @@
 //
 // Modifications:
 // 10-01-06 PreciseRange -> CSDARange (V.Ivantchenko)
+// 22-05-06 Add SetBremsstrahlungTh (V.Ivanchenko)
 //
 //
 // Class Description:
@@ -103,6 +104,8 @@ public:
   void SetMscStepLimitation(G4bool algorithm, G4double factor = -1.);
 
   void SetLPMFlag(G4bool val);
+
+  void SetBremsstrahlungTh(G4double val);
 
 private:
 
