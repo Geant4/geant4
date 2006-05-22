@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.icc,v 1.15 2006-05-12 13:32:05 allison Exp $
+// $Id: G4VisManager.icc,v 1.16 2006-05-22 08:24:22 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -124,6 +124,10 @@ inline void G4VisManager::SetWindowSizeHint (G4int xHint, G4int yHint) {
 
 inline void G4VisManager::SetXGeometryString (const G4String& geomString) {
   fXGeometryString = geomString;
+}
+
+inline void G4VisManager::SetReprocessing (G4bool reprocessing) {
+  fReprocessing = reprocessing;
 }
 
 inline void G4VisManager::SetReprocessingLastEvent (G4bool reprocessing) {

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.hh,v 1.56 2006-05-12 13:32:04 allison Exp $
+// $Id: G4VisManager.hh,v 1.57 2006-05-22 08:24:22 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -346,6 +346,7 @@ public: // With description
   void              SetVerboseLevel             (Verbosity);
   void              SetWindowSizeHint           (G4int xHint, G4int yHint);
   void              SetXGeometryString          (const G4String&);
+  void              SetReprocessing             (G4bool);
   void              SetReprocessingLastEvent    (G4bool);
 
 
@@ -418,6 +419,7 @@ protected:
   G4int fEventCount;
   G4String fBeginOfLastRunRandomStatus;
   G4String fBeginOfLastEventRandomStatus;
+  G4bool fReprocessing;
   G4bool fReprocessingLastEvent;
   G4int fLastRunID;
   G4int fLastEventID;
