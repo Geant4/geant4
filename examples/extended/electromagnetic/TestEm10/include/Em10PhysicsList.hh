@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em10PhysicsList.hh,v 1.9 2005-12-19 16:05:38 grichine Exp $
+// $Id: Em10PhysicsList.hh,v 1.10 2006-05-22 19:05:49 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -32,116 +32,74 @@
 #include "G4VModularPhysicsList.hh"
 #include "globals.hh"
 
-class G4PhotoElectricEffect;
-class G4ComptonScattering;
-class G4GammaConversion;
-
-class G4MultipleScattering;
-
-class G4PAIonisation ;
 class G4ForwardXrayTR ;
-class G4eIonisation;
-class G4eBremsstrahlung;
-class G4eplusAnnihilation;
-
-class G4MuIonisation;
-class G4MuBremsstrahlung;
-class G4MuPairProduction;
-
-class G4hIonisation;
-
 class Em10StepCut;
-
 class Em10DetectorConstruction;
-// class ALICEDetectorConstruction;
 class Em10PhysicsListMessenger;
 class G4ProductionCuts;
 
 
 class Em10PhysicsList: public G4VModularPhysicsList  // G4VUserPhysicsList
 {
-  public:
-    Em10PhysicsList( Em10DetectorConstruction*);
-  // Em10PhysicsList( ALICEDetectorConstruction*);
-   ~Em10PhysicsList();
+public:
+  Em10PhysicsList( Em10DetectorConstruction*);
 
-  protected:
-    // Construct particle and physics
-    void ConstructParticle();
-    void ConstructProcess();
+  ~Em10PhysicsList();
+
+  // Construct particle and physics
+  void ConstructParticle();
+  void ConstructProcess();
  
-    void SetCuts();
+  void SetCuts();
 
-  protected:
+private:
     // these methods Construct particles 
-    void ConstructBosons();
-    void ConstructLeptons();
-    void ConstructMesons();
-    void ConstructBarions();
+  void ConstructBosons();
+  void ConstructLeptons();
+  void ConstructMesons();
+  void ConstructBarions();
 
-  protected:
+  // these methods Construct physics processes and register them
 
-    // these methods Construct physics processes and register them
+  void AddParameterisation();
+  void ConstructGeneral();
+  void ConstructEM();
 
-    void AddParameterisation();
-    void ConstructGeneral();
-    void ConstructEM();
+public:
 
-  public:
+  void SetGammaCut(G4double);
+  void SetElectronCut(G4double);
 
-    void SetGammaCut(G4double);
-    void SetElectronCut(G4double);
+  void SetRegGammaCut(G4double    cut){fGammaCut    = cut;};
+  void SetRegElectronCut(G4double cut){fElectronCut = cut;};
+  void SetRegPositronCut(G4double cut){fPositronCut = cut;};
 
-    void SetRegGammaCut(G4double    cut){fGammaCut    = cut;};
-    void SetRegElectronCut(G4double cut){fElectronCut = cut;};
-    void SetRegPositronCut(G4double cut){fPositronCut = cut;};
+  void SetRadiatorCuts();
+  void SetDetectorCuts();
 
-    void SetRadiatorCuts();
-    void SetDetectorCuts();
+  void SetMaxStep(G4double);
+  void SetXTRModel(G4String m) {fXTRModel = m; G4cout<<fXTRModel<<G4endl;}; 
 
-    void SetMaxStep(G4double);
-    void SetMinElectronEnergy(G4double E){fMinElectronEnergy=E;};     
-    void SetMinGammaEnergy(G4double E)   {fMinGammaEnergy=E;};       
-  void SetXTRModel(G4String m)   {fXTRModel = m; G4cout<<fXTRModel<<G4endl;};       
+private:
 
-  public:   
+  G4double MaxChargedStep;
 
-    G4double MaxChargedStep;
+  G4ForwardXrayTR*       fForwardXrayTR ;
 
-  private:
+  Em10StepCut* theeminusStepCut ;
+  Em10StepCut* theeplusStepCut ;
 
-    G4PhotoElectricEffect* thePhotoElectricEffect;
-    G4ComptonScattering*   theComptonScattering;
-    G4GammaConversion*     theGammaConversion;
+  G4double cutForGamma;
+  G4double cutForElectron, cutForPositron;
 
-    G4MultipleScattering*  theeminusMultipleScattering;
-    G4eIonisation*         theeminusIonisation;
-    G4eBremsstrahlung*     theeminusBremsstrahlung;
+  Em10DetectorConstruction* pDet;
 
-    G4ForwardXrayTR*       fForwardXrayTR ;
+  Em10PhysicsListMessenger* physicsListMessenger;
 
-    G4MultipleScattering*  theeplusMultipleScattering;
-    G4eIonisation*         theeplusIonisation;
-    G4eBremsstrahlung*     theeplusBremsstrahlung;
-    G4eplusAnnihilation*   theeplusAnnihilation;
-
-    Em10StepCut* theeminusStepCut ;
-    Em10StepCut* theeplusStepCut ;
-
-    G4double cutForGamma;
-    G4double cutForElectron, cutForPositron;
-
-    Em10DetectorConstruction* pDet;
-  //  ALICEDetectorConstruction* apDet;
-    Em10PhysicsListMessenger* physicsListMessenger;
-
-    G4double fMinElectronEnergy;      // minimalEnergy of produced electrons
-    G4double fMinGammaEnergy; 
-        // minimalEnergy of scattered photons
-    G4ProductionCuts* fRadiatorCuts;
-    G4ProductionCuts* fDetectorCuts;
-    G4double fElectronCut, fGammaCut, fPositronCut;
-    G4String fXTRModel;
+  G4ProductionCuts* fRadiatorCuts;
+  G4ProductionCuts* fDetectorCuts;
+  G4double fElectronCut, fGammaCut, fPositronCut;
+  G4String fXTRModel;
 };
 
 #endif

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em10PhysicsListMessenger.cc,v 1.7 2005-12-19 16:05:38 grichine Exp $
+// $Id: Em10PhysicsListMessenger.cc,v 1.8 2006-05-22 19:05:49 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -59,20 +59,6 @@ Em10PhysicsListMessenger::Em10PhysicsListMessenger(Em10PhysicsList* List)
   cutECmd->SetDefaultValue(1.);
   cutECmd->SetDefaultUnit("mm");
   cutECmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-
-  eMinEnergyCmd = new G4UIcmdWithADoubleAndUnit("/emphyslist/eMinEnergy",this);
-  eMinEnergyCmd->SetGuidance("Set cut values by energy in Photo-Comp for e-");
-  eMinEnergyCmd->SetParameterName("range",true);
-  eMinEnergyCmd->SetDefaultValue(1.);
-  eMinEnergyCmd->SetDefaultUnit("keV");
-  eMinEnergyCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-
-  gMinEnergyCmd = new G4UIcmdWithADoubleAndUnit("/emphyslist/gMinEnergy",this);
-  gMinEnergyCmd->SetGuidance("Set cut values by energy in Compton for gamma");
-  gMinEnergyCmd->SetParameterName("range",true);
-  gMinEnergyCmd->SetDefaultValue(1.);
-  gMinEnergyCmd->SetDefaultUnit("keV");
-  gMinEnergyCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   setMaxStepCmd = new G4UIcmdWithADoubleAndUnit("/step/setMaxStep",this);
   setMaxStepCmd->SetGuidance("Set max. step length in the detector");
@@ -131,9 +117,6 @@ Em10PhysicsListMessenger::~Em10PhysicsListMessenger()
   delete cutGCmd;
   delete cutECmd;
 
-  delete eMinEnergyCmd;
-  delete gMinEnergyCmd;
-
   delete setMaxStepCmd;
 
   delete ElectronCutCmd;
@@ -152,10 +135,6 @@ void Em10PhysicsListMessenger::SetNewValue(G4UIcommand* command,G4String newValu
     { Em10List->SetElectronCut(eCmd->GetNewDoubleValue(newValue));}
   if(command == setMaxStepCmd)
     { Em10List->SetMaxStep(setMaxStepCmd->GetNewDoubleValue(newValue));}
-  if(command == eMinEnergyCmd)
-    { Em10List->SetMinElectronEnergy(eMinEnergyCmd->GetNewDoubleValue(newValue));}
-  if(command == gMinEnergyCmd)
-    { Em10List->SetMinGammaEnergy(gMinEnergyCmd->GetNewDoubleValue(newValue));}
 
   if( command == ElectronCutCmd )
   {

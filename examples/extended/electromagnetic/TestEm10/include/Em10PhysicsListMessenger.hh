@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em10PhysicsListMessenger.hh,v 1.5 2005-12-19 16:05:38 grichine Exp $
+// $Id: Em10PhysicsListMessenger.hh,v 1.6 2006-05-22 19:05:49 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -60,8 +60,6 @@ class Em10PhysicsListMessenger: public G4UImessenger
     G4UIcmdWithADoubleAndUnit* cutPCmd;
     G4UIcmdWithADoubleAndUnit* rCmd;
     G4UIcmdWithADoubleAndUnit* eCmd;
-    G4UIcmdWithADoubleAndUnit* eMinEnergyCmd;
-    G4UIcmdWithADoubleAndUnit* gMinEnergyCmd;
 
     G4UIcmdWithADoubleAndUnit* ElectronCutCmd;
     G4UIcmdWithADoubleAndUnit* PositronCutCmd;
