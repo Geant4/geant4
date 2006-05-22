@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlung.cc,v 1.42 2005-04-08 12:39:58 vnivanch Exp $
+// $Id: G4eBremsstrahlung.cc,v 1.43 2006-05-22 18:22:07 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -63,6 +63,7 @@
 // 04-11-04 add gamma threshold (V.Ivanchenko)
 // 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
 // 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
+// 22-05-06 Use gammaThreshold from manager (V.Ivantchenko)
 //
 // -------------------------------------------------------------------
 //
@@ -74,6 +75,7 @@
 #include "G4eBremsstrahlungModel.hh"
 #include "G4UniversalFluctuation.hh"
 #include "G4UnitsTable.hh"
+#include "G4LossTableManager.hh"
 
 #include "G4ProductionCutsTable.hh"
 #include "G4MaterialCutsCouple.hh"
@@ -104,6 +106,7 @@ G4eBremsstrahlung::~G4eBremsstrahlung()
 void G4eBremsstrahlung::InitialiseEnergyLossProcess(const G4ParticleDefinition* p,
                                                     const G4ParticleDefinition*)
 {
+  gammaThreshold = G4LossTableManager::Instance()->BremsstrahlungTh();
   if(!isInitialised) {
     isInitialised = true;
     particle = p;
