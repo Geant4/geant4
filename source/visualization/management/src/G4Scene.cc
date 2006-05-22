@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scene.cc,v 1.18 2006-05-12 13:24:10 allison Exp $
+// $Id: G4Scene.cc,v 1.19 2006-05-22 07:42:48 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -141,16 +141,6 @@ G4bool G4Scene::AddEndOfEventModel (G4VModel* pModel, G4bool warn) {
   return true;
 }
 
-void G4Scene::Clear () {
-  size_t i;
-  for (i = 0; i < fRunDurationModelList.size(); ++i) {
-    delete fRunDurationModelList[i];
-  }
-  for (i = 0; i < fEndOfEventModelList.size(); ++i) {
-    delete fEndOfEventModelList[i];
-  }
-}
-
 std::ostream& operator << (std::ostream& os, const G4Scene& s) {
 
   size_t i;
@@ -181,6 +171,11 @@ std::ostream& operator << (std::ostream& os, const G4Scene& s) {
   else os << "accumulate";
   os << "\"";
 
+  os << "\n  Transients action set to \"";
+  if (s.fRecomputeTransients) os << "rerun";
+  else os << "none";
+  os << "\"";
+
   return os;
 }
 
@@ -191,7 +186,8 @@ G4bool G4Scene::operator != (const G4Scene& s) const {
       (fExtent               != s.fExtent)              ||
       !(fStandardTargetPoint == s.fStandardTargetPoint) ||
       fRefreshAtEndOfEvent   != s.fRefreshAtEndOfEvent  ||
-      fRefreshAtEndOfRun     != s.fRefreshAtEndOfRun
+      fRefreshAtEndOfRun     != s.fRefreshAtEndOfRun    ||
+      fRecomputeTransients   != s.fRecomputeTransients
       ) return true;
 
   for (size_t i = 0; i < fRunDurationModelList.size (); i++) {
