@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.cc,v 1.63 2006-05-13 12:46:24 allison Exp $
+// $Id: G4VSceneHandler.cc,v 1.64 2006-05-22 08:42:50 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -69,6 +69,7 @@
 #include "G4VTrajectory.hh"
 #include "G4VHit.hh"
 #include "Randomize.hh"
+#include "G4StateManager.hh"
 #include "G4RunManager.hh"
 
 G4VSceneHandler::G4VSceneHandler (G4VGraphicsSystem& system, G4int id, const G4String& name):
@@ -549,13 +550,26 @@ void G4VSceneHandler::ProcessScene (G4VViewer&) {
   fReadyForTransients = true;
 
   // Now (re-)do transients (trajectories, hits, user drawing, etc.)...
+  if (fpScene->GetRecomputeTransients()) {  // ...if requested...
+
+    // Allowed only in idle state...
+    G4StateManager* stateManager = G4StateManager::GetStateManager();
+    G4ApplicationState currentState = stateManager->GetCurrentState();
+    if(currentState != G4State_Idle) {
+      if (verbosity >= G4VisManager::warnings) {
+	G4cout << 
+	  "Cannot re-compute transients during existing run."
+	  "\n  Trajectories, etc., will be lost."
+	       << G4endl;
+      }
+    } else {
+
   // Uses run manager via UImanager->ApplyCommand("/run/beamOn") so
   // only makes sense if a run manager exists.  More than that - the
   // random number status strings are created by G4RunManager, so they
   // are null if a G4RunManager does not exist...
   G4RunManager* runManager = G4RunManager::GetRunManager();
-  if (runManager &&
-      fpScene->GetRecomputeTransients()) {  // ...and if requested...
+  if (runManager) {
     if (visManager->GetEventCount()) {  // Must have had some prior event(s)...
       if (fpScene->GetRefreshAtEndOfEvent()) {
 	// Check if transients have been drawn.  Note: Use the flag in
@@ -572,6 +586,7 @@ void G4VSceneHandler::ProcessScene (G4VViewer&) {
 	  std::istringstream
 	    iss(visManager->GetBeginOfLastEventRandomStatus());
 	  CLHEP::HepRandom::restoreFullState(iss);
+	  visManager->SetReprocessing(true);
 	  visManager->SetReprocessingLastEvent(true);
 	  G4int runID = visManager->GetLastRunID();
 	  runManager->SetRunIDCounter(runID);
@@ -600,12 +615,15 @@ void G4VSceneHandler::ProcessScene (G4VViewer&) {
 	  std::istringstream iss(visManager->GetBeginOfLastRunRandomStatus());
 	  CLHEP::HepRandom::restoreFullState(iss);
 	  G4int nEvents = visManager->GetEventCount();
+	  visManager->SetReprocessing(true);
 	  G4int runID = visManager->GetLastRunID();
 	  runManager->SetRunIDCounter(runID);
 	  runManager->BeamOn(nEvents);
 	}
       }
     }
+  }
+  }
   }
 
   fMarkForClearingTransientStore = tmpMarkForClearingTransientStore;
