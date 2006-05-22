@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VisManager.cc,v 1.95 2006-05-12 13:32:03 allison Exp $
+// $Id: G4VisManager.cc,v 1.96 2006-05-22 08:41:38 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -86,6 +86,7 @@ G4VisManager::G4VisManager ():
   fVerbose         (1),
   fpStateDependent (0),
   fEventCount      (0),
+  fReprocessing (false),
   fReprocessingLastEvent (false),
   fLastRunID       (0),
   fLastEventID     (0),
@@ -1006,12 +1007,113 @@ void G4VisManager::PrintInvalidPointers () const {
   }
 }
 
+/************* Event copy stuff *******************************
+#include "G4PrimaryVertex.hh"
+#include "G4PrimaryParticle.hh"
+
+G4String fLastEventRandomStatus;
+G4Event* fLastEvent;
+std::vector<G4String> fEventsRandomStatus;
+std::vector<G4Event*> fEvents;
+
+G4PrimaryParticle* CopyParticles(G4PrimaryParticle* pp)
+{
+  G4PrimaryParticle* newPP = 0;
+  G4PrimaryParticle* previousPP = 0;
+  while (pp) {
+    G4PrimaryParticle* tmpPP = new G4PrimaryParticle(*pp);
+    tmpPP->ClearNextParticlePointer();
+    G4PrimaryParticle* daughters = pp->GetDaughter();
+    G4PrimaryParticle* newDaughters = CopyParticles(daughters);
+    tmpPP->SetDaughter(newDaughters);
+    if (!newPP) newPP = tmpPP;
+    else previousPP->SetNext(tmpPP);
+    previousPP = tmpPP;
+    pp = pp->GetNext();
+  }
+  // Set user info = 0???
+  return newPP;
+}
+
+// Not needed?
+void DeleteParticles(G4PrimaryParticle* pp)
+{
+  while (pp) {
+    G4PrimaryParticle* daughters = pp->GetDaughter();
+    DeleteParticles(daughters);
+    G4PrimaryParticle* oldPP = pp;
+    pp = pp->GetNext();
+    delete oldPP;
+  }
+}
+
+G4PrimaryVertex* CopyVertices(G4PrimaryVertex* pv)
+{
+  G4PrimaryVertex* newPV = 0;
+  G4PrimaryVertex* previousPV = 0;
+  while (pv) {
+    G4PrimaryVertex* tmpPV = new G4PrimaryVertex(*pv);
+    tmpPV->ClearNextVertexPointer();
+    G4PrimaryParticle* primaryParticle = pv->GetPrimary();
+    G4PrimaryParticle* newPrimaryParticle = CopyParticles(primaryParticle);
+    tmpPV->SetPrimary(newPrimaryParticle);
+    if (!newPV) newPV = tmpPV;
+    else previousPV->SetNext(tmpPV);
+    previousPV = tmpPV;
+    pv = pv->GetNext();
+  }
+  // Set user info = 0???
+  return newPV;
+}
+
+// Not needed?
+void DeleteVertices(G4PrimaryVertex* pv)
+{
+  while (pv) {
+    G4PrimaryParticle* primaryParticle = pv->GetPrimary();
+    DeleteParticles(primaryParticle);
+    G4PrimaryVertex* oldPV = pv;
+    pv = pv->GetNext();
+    delete oldPV;
+  }
+}
+
+G4Event* CreateDeepCopy(const G4Event* event)
+{
+  G4Event* newEvent = new G4Event(*event);
+  G4PrimaryVertex* primaryVertex = event->GetPrimaryVertex();
+  G4PrimaryVertex* newPrimaryVertex = CopyVertices(primaryVertex);
+  newEvent->AddPrimaryVertex(newPrimaryVertex);
+  // Set user info = 0???
+  return newEvent;
+}
+
+// Not needed?
+void DeleteEvent(G4Event* event)
+{
+  if (event) {
+    G4PrimaryVertex* primaryVertex = event->GetPrimaryVertex();
+    DeleteVertices(primaryVertex);
+    delete event;
+  }
+}
+************ Event copy stuff ***********************************/
+
 void G4VisManager::BeginOfRun ()
 {
   //G4cout << "G4VisManager::BeginOfRun" << G4endl;
   fEventCount = 0;
   fTransientsDrawnThisRun = false;
   if (fpSceneHandler) fpSceneHandler->SetTransientsDrawnThisRun(false);
+/************* Event copy stuff *******************************
+  if (!fReprocessing) {
+    fEventsRandomStatus.clear();
+    std::vector<G4Event*>::iterator i;
+    //for (i = fEvents.begin(); i != fEvents.end(); ++i) DeleteEvent(*i);
+    for (i = fEvents.begin(); i != fEvents.end(); ++i) delete *i;
+    fEvents.clear();
+  }
+************ Event copy stuff ***********************************/
 }
 
 void G4VisManager::BeginOfEvent ()
@@ -1019,8 +1121,8 @@ void G4VisManager::BeginOfEvent ()
   //G4cout << "G4VisManager::BeginOfEvent" << G4endl;
   G4RunManager* runManager = G4RunManager::GetRunManager();
   if (runManager) {
-    if (!fEventCount) {  // First event.  Do run stuff here because
-			 // currentRun is still zero, curiously, in
+    if (!fEventCount) {  // First event.  Do run stuff here because,
+			 // curiously, currentRun is still zero in
 			 // BeginOfRun.
       fBeginOfLastRunRandomStatus =
         runManager->GetRandomNumberStatusForThisRun();
@@ -1041,12 +1143,29 @@ void G4VisManager::BeginOfEvent ()
     fBeginOfLastEventRandomStatus = oss.str();
     ************************************************/
     G4Event* currentEvent =
-      const_cast<G4Event*>(runManager->GetCurrentEvent());
+      G4EventManager::GetEventManager()->GetNonconstCurrentEvent();
     if (currentEvent) {
       if (fReprocessingLastEvent) currentEvent->SetEventID(fLastEventID);
       else fLastEventID = currentEvent->GetEventID();
     }
-    fReprocessingLastEvent = false;
+
+    /************* Event copy stuff *******************************
+    // If not triggered by transient re-computation in
+    // G4VSceneHandler::ProcessScene (and re-computation requested)...
+    if (!fReprocessing && fpScene && fpScene->GetRecomputeTransients()) {
+      const G4Event* event =
+	G4EventManager::GetEventManager()->GetConstCurrentEvent();
+      std::ostringstream oss;
+      CLHEP::HepRandom::saveFullState(oss);
+      fLastEventRandomStatus = oss.str();
+      fLastEvent = CreateDeepCopy(event);
+      if (!fpScene->GetRefreshAtEndOfEvent()) {
+	fEventsRandomStatus.push_back(fLastEventRandomStatus);
+	fEvents.push_back(fLastEvent);
+      }
+    }
+    ************ Event copy stuff ***********************************/
+
   }
   fTransientsDrawnThisEvent = false;
   if (fpSceneHandler) fpSceneHandler->SetTransientsDrawnThisEvent(false);
@@ -1108,6 +1227,8 @@ void G4VisManager::EndOfRun ()
       }
     }
   }
+  fReprocessing = false;
+  fReprocessingLastEvent = false;
 }
 
 void G4VisManager::ClearTransientStoreIfMarked(){
