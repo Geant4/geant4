@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommands.cc,v 1.12 2006-05-22 08:22:30 allison Exp $
+// $Id: G4VisCommands.cc,v 1.13 2006-05-22 10:03:14 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/ top level commands - John Allison  5th February 2001
@@ -89,7 +89,7 @@ G4String G4VisCommandList::GetCurrentValue (G4UIcommand*)
   return "";
 }
 
-void G4VisCommandList::SetNewValue (G4UIcommand* command, G4String newValue)
+void G4VisCommandList::SetNewValue (G4UIcommand*, G4String newValue)
 {
   G4String& verbosityString = newValue;
   //G4VisManager::Verbosity verbosity =
