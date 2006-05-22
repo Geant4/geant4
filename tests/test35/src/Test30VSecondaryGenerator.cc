@@ -53,6 +53,10 @@ Test30VSecondaryGenerator::Test30VSecondaryGenerator(G4HadronicInteraction* hadi
   const G4ElementVector* ev = material->GetElementVector();
   G4int Z = (G4int)(((*ev)[0])->GetZ() + 0.5);
   G4int N = (G4int)(((*ev)[0])->GetN() + 0.5);
+  if( material->GetName() == "D") {
+    Z = 1;
+    N = 2;
+  }
   G4cout << "Nucleus with N= " << N << "  Z= " << Z << G4endl;
   targetNucleus.SetParameters((G4double)N, (G4double)Z);
   mass = targetNucleus.AtomicMass((G4double)N, (G4double)Z);

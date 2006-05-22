@@ -92,6 +92,11 @@
 
 #include "G4Timer.hh"
 
+#include <fstream>
+#include <string>
+#include <iostream>
+#include <sstream>
+
 using namespace std;
 
 int main(int argc, char** argv)
@@ -122,7 +127,7 @@ int main(int argc, char** argv)
   G4int     nangl    = 0;
   G4int     nanglpi  = 0;
   G4int     nmompi   = 0;
-  G4String hFile     = "hbook.paw";
+  G4String hFile     = "hbook";
   G4double theStep   = 0.01*micrometer;
   G4double range     = 1.0*micrometer;
   G4double  emax     = 160.*MeV;
@@ -377,6 +382,7 @@ int main(int argc, char** argv)
     G4ParticleDefinition* part = (G4ParticleTable::GetParticleTable())->FindParticle(namePart);
 
     G4VProcess* proc = phys->GetProcess(nameGen, namePart, material);
+    /*
     G4ExcitationHandler* theDeExcitation = phys->GetDeExcitation();
     G4PreCompoundModel* thePreCompound = phys->GetPreCompound();
     if (gtran && thePreCompound) thePreCompound->UseGNASHTransition();
@@ -386,6 +392,7 @@ int main(int argc, char** argv)
       evp->SetGEMChannel();
       theDeExcitation->SetEvaporation(evp);
     }
+    */
     G4double amass = phys->GetNucleusMass();
 
     if(!proc) {
@@ -395,16 +402,16 @@ int main(int argc, char** argv)
 	     exit(1);
     }
 
-    G4int maxn = (G4int)((*(material->GetElementVector()))[0]->GetN()) + 1;
-    // G4int maxz = (G4int)((*(material->GetElementVector()))[0]->GetZ()) + 1;
+    G4int maxn = (G4int)((*(material->GetElementVector()))[0]->GetN());
+    G4int maxz = (G4int)((*(material->GetElementVector()))[0]->GetZ());
 
     G4cout << "The particle:  " << part->GetParticleName() << G4endl;
-    G4cout << "The material:  " << material->GetName() << "  Amax= " << maxn << G4endl;
+    G4cout << "The material:  " << material->GetName() 
+	   << "  Z= " << maxz << "  A= " << maxn << G4endl;
     G4cout << "The step:      " << theStep/mm << " mm" << G4endl;
     G4cout << "The position:  " << aPosition/mm << " mm" << G4endl;
     G4cout << "The direction: " << aDirection << G4endl;
     G4cout << "The time:      " << aTime/ns << " ns" << G4endl;
-
 
     // -------------------------------------------------------------------
 
@@ -415,7 +422,7 @@ int main(int argc, char** argv)
     std::auto_ptr< AIDA::ITreeFactory > tf( af->createTreeFactory() );
 
     // Creating a tree mapped to a new hbook file.
-    std::auto_ptr< AIDA::ITree > tree( tf->create( hFile,  "hbook", false, true) );
+    std::auto_ptr< AIDA::ITree > tree( tf->create( hFile+".paw", "hbook", false, true) );
     std::cout << "Tree store : " << tree->storeName() << std::endl;
 
     // Creating a tuple factory, whose tuples will be handled by the tree
@@ -423,9 +430,6 @@ int main(int argc, char** argv)
 
     const G4int nhisto = 10;
     AIDA::IHistogram1D* h[nhisto];
-    //    AIDA::IHistogram2D* h2;
-    //AIDA::ITuple* ntuple1 = 0;
-
 
     G4double mass = part->GetPDGMass();
     if(m_pmax == 0.0) m_pmax = emax;
@@ -556,6 +560,10 @@ int main(int argc, char** argv)
     double harpcs[50][20];
     int    nmomtetm[50][20];
     double harpcsm[50][20];
+    double respip[50][20];
+    double respin[50][20];
+    double errpip[50][20];
+    double errpin[50][20];
     double dthetad = angpi[nanglpi-1]/double(nanglpi);
     double mom0 = 0.0;
     for(int k=0; k<nmompi; k++) {
@@ -724,12 +732,28 @@ int main(int argc, char** argv)
     G4cout << "###### Cross section per bin for pi+" << std::setw(6) << G4endl;
     G4cout << G4endl;    
 
+    for(int k=0; k<nmompi; k++) {
+      for(int j=0; j<nanglpi; j++) {
+        respip[k][j] = double(nmomtet[k][j])*harpcs[k][j];
+        respin[k][j] = double(nmomtetm[k][j])*harpcsm[k][j];
+        errpip[k][j] = respip[k][j]/sqrt(double(nmomtet[k][j]));
+        errpin[k][j] = respin[k][j]/sqrt(double(nmomtetm[k][j]));
+      }
+    }
+    ofstream* fout = new ofstream();
+    string fname = hFile+"_pi+.dpdo";
+    fout->open(fname.c_str(), std::ios::out|std::ios::trunc);
+    ofstream* fout1 = new ofstream();
+    string fname1 = hFile+"_pi-.dpdo";
+    fout1->open(fname1.c_str(), std::ios::out|std::ios::trunc);
+
     mom0 = 0.0;
     G4double mom1;
     G4double dsdm[50];    
     G4double dsda[20];    
     G4double dsdmm[50];    
     G4double dsdam[20];    
+    
     G4double cross;
     G4double crossm;
     for(int k=0; k<nmompi; k++) {
@@ -743,17 +767,21 @@ int main(int argc, char** argv)
       G4double ang1 = 0.0;
 
       for(int j=0; j<nanglpi; j++) {
-        ang1 = angpi[j];
-        cross = double(nmomtet[k][j])*harpcs[k][j];
-        crossm= double(nmomtetm[k][j])*harpcsm[k][j];
+        ang1  = angpi[j];
+        cross = respip[k][j];
+        crossm= respin[k][j];
         G4cout << "  " << cross;
+        (*fout) << mom0/GeV << " " << mom1/GeV << " " << ang0 << " " << ang1 
+		<< " " << cross << " " << errpip[k][j] << endl; 
+	(*fout1)<< mom0/GeV << " " << mom1/GeV << " " << ang0 << " " << ang1 
+		<< " " << crossm << " " << errpin[k][j] << endl; 
 
         if(k>0) {
           x = (mom1 - mom0)/GeV;
           dsda[j]  += cross*x;
 	  dsdam[j] += crossm*x;
         } else {
-          dsda[j] = 0.0;
+          dsda[j]  = 0.0;
 	  dsdam[j] = 0.0;
 	}
         if(j>0) {
@@ -761,8 +789,6 @@ int main(int argc, char** argv)
           dsdm[k]  += cross*x;
 	  dsdmm[k] += crossm*x;
 	}
-
-	harpcsm[k][j] = crossm;
 
         ang0 = ang1;
       }
@@ -785,6 +811,7 @@ int main(int argc, char** argv)
     }
     G4cout << G4endl;
     G4cout << G4endl;    
+
     G4cout << "#################################################################" << G4endl;
     G4cout << "## ds/do(mb/strad) for pi- with momentum cut: " 
            << mompi[0] << "  -  " << mompi[nmompi-1] 
@@ -810,12 +837,14 @@ int main(int argc, char** argv)
 	       << G4endl;
 
 	for(int j=0; j<nanglpi; j++) {
-	  G4cout << "  " << harpcsm[k][j];
+	  G4cout << "  " << respin[k][j];
 	}
 	G4cout << G4endl;
 	mom0 = mom1;
       }
     }
+    fout->close();
+    fout1->close();
 
     G4cout << "###### End of run # " << run << "     ######" << G4endl;
     G4cout.precision(prec);
@@ -828,3 +857,4 @@ int main(int argc, char** argv)
 
   G4cout << "###### End of test #####" << G4endl;
 }
+
