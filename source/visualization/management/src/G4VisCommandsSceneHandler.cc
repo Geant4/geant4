@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneHandler.cc,v 1.30 2006-05-12 13:18:39 allison Exp $
+// $Id: G4VisCommandsSceneHandler.cc,v 1.31 2006-05-22 08:22:30 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/sceneHandler commands - John Allison  10th October 1998
@@ -307,7 +307,7 @@ G4VisCommandSceneHandlerList::G4VisCommandSceneHandlerList () {
   parameter -> SetDefaultValue ("all");
   fpCommand -> SetParameter (parameter);
   parameter = new G4UIparameter ("verbosity", 's', omitable = true);
-  parameter -> SetDefaultValue ("0");
+  parameter -> SetDefaultValue ("warnings");
   fpCommand -> SetParameter (parameter);
 }
 

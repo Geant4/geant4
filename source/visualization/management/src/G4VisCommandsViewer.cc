@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewer.cc,v 1.57 2006-05-12 13:18:39 allison Exp $
+// $Id: G4VisCommandsViewer.cc,v 1.58 2006-05-22 08:22:30 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer commands - John Allison  25th October 1998
@@ -468,7 +468,7 @@ G4VisCommandViewerList::G4VisCommandViewerList () {
   fpCommand -> SetParameter (parameter);
   parameter = new G4UIparameter ("verbosity", 's',
 				 omitable = true);
-  parameter -> SetDefaultValue ("0");
+  parameter -> SetDefaultValue ("warnings");
   fpCommand -> SetParameter (parameter);
 }
 

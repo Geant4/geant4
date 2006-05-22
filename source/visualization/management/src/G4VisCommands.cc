@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommands.cc,v 1.11 2006-05-12 14:42:46 allison Exp $
+// $Id: G4VisCommands.cc,v 1.12 2006-05-22 08:22:30 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/ top level commands - John Allison  5th February 2001
@@ -76,7 +76,7 @@ G4VisCommandList::G4VisCommandList ()
   fpCommand = new G4UIcmdWithAString("/vis/list", this);
   fpCommand -> SetGuidance("Lists visualization parameters.");
   fpCommand -> SetParameterName("verbosity", omitable=true);
-  fpCommand -> SetDefaultValue("0");
+  fpCommand -> SetDefaultValue("warnings");
 }
 
 G4VisCommandList::~G4VisCommandList ()
