@@ -63,8 +63,12 @@ void Test30Material::Initialise()
 G4Material* Test30Material::GetMaterial(const G4String& name)
 { 
   G4Material* ma = G4NistManager::Instance()->FindOrBuildMaterial(name);
+  if(!ma) ma = G4NistManager::Instance()->FindOrBuildMaterial("G4_"+name);
 	
-  G4cout << "Material is selected: " << ma->GetName() << G4endl;
+  if(ma)
+    G4cout << "Material is selected: " << ma->GetName() << G4endl;
+  else 
+    G4cout << "ERROR: Material " << name << " is not found out" << G4endl;
   return ma;
 }	
 
