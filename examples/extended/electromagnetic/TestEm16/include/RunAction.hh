@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.hh,v 1.2 2006-05-18 16:11:55 maire Exp $
+// $Id: RunAction.hh,v 1.3 2006-05-23 16:13:01 hbu Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -57,6 +57,10 @@ class RunAction : public G4UserRunAction
     void   EndOfRunAction(const G4Run*);
 
     AIDA::IHistogram1D* GetHisto(G4int id) {return histo[id];}
+
+    G4int n_gam_sync; // number of synchrotron radiation photons generated
+    G4double e_gam_sync, e_gam_sync2, e_gam_sync_max; // energy of synchrotron radiation photons generated
+    G4double lam_gam_sync; // step length between synchrotron radiation photons
 
   private:
     AIDA::IAnalysisFactory* af;

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.2 2006-05-18 16:11:58 maire Exp $
+// $Id: RunAction.cc,v 1.3 2006-05-23 16:13:01 hbu Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -30,6 +30,7 @@
 
 #include "G4Run.hh"
 #include "G4RunManager.hh"
+#include "G4UnitsTable.hh"
 
 #include "Randomize.hh"
 
@@ -43,6 +44,11 @@ RunAction::RunAction()
 :af(0), tree(0)
 {
   for (G4int j=0; j<n_histos; j++) histo[j] = 0;
+  n_gam_sync = 0;
+  e_gam_sync = 0;
+  e_gam_sync2 = 0;
+  e_gam_sync_max =0;
+  lam_gam_sync = 0;
 
 #ifdef G4ANALYSIS_USE
  // Creating the analysis factory
@@ -85,6 +91,7 @@ RunAction::RunAction()
 
 RunAction::~RunAction()
 {
+
 #ifdef G4ANALYSIS_USE
   bool debug=true;
   bool Commit_Ok=tree->commit();       // Writing the histograms to the file
@@ -118,6 +125,21 @@ void RunAction::EndOfRunAction(const G4Run*)
 {
   // show Rndm status
   CLHEP::HepRandom::showEngineStatus();
+
+  if(n_gam_sync>0)
+  {
+    G4double Emean = e_gam_sync/n_gam_sync;
+    G4double E_rms = sqrt(e_gam_sync2/n_gam_sync - Emean*Emean);
+    G4cout
+    << "Summary for synchrotron radiation :" << '\n' << std::setprecision(4)
+    << "  Number of photons = " << n_gam_sync << '\n'
+    << "  Emean             = " << Emean/keV << " +/- "
+    << E_rms/(keV * sqrt((G4double) n_gam_sync)) << " keV" << '\n'
+    << "  E_rms             = " << G4BestUnit(E_rms,"Energy") << '\n'
+    << "  Energy Max / Mean = " << e_gam_sync_max / Emean << '\n'
+    << "  MeanFreePath      = " << G4BestUnit(lam_gam_sync/n_gam_sync,"Length") << '\n';
+  }
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

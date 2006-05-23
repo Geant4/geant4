@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: SteppingAction.cc,v 1.1 2006-05-18 14:25:10 vnivanch Exp $
+// $Id: SteppingAction.cc,v 1.2 2006-05-23 16:13:01 hbu Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -58,22 +58,26 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
  static G4int iCalled=0;
  const  G4int nprint=0; // set to 10 to get debug print for first 10 calls
 
- if (processName == "SynchrotronRadiation")
+ if (processName == "SynRad")
  {
    iCalled++;
    G4StepPoint* PrePoint = aStep->GetPreStepPoint();
-   G4double      Eelec  = PrePoint->GetTotalEnergy();
-   G4ThreeVector Pelec  = PrePoint->GetMomentum();
    G4TrackVector* secondary = fpSteppingManager->GetSecondary();
    size_t lp=(*secondary).size(); // size of secondary vector,   (*secondary)[lp-1]  points to the last photon generated
    if(lp)
    {
 	 G4double      Egamma =  (*secondary)[lp-1]->GetTotalEnergy();
-     G4ThreeVector PGamma = (*secondary)[lp-1]->GetMomentum();
-	 G4bool IsGamma = (*secondary)[lp-1]->GetDefinition() == G4Gamma::GammaDefinition();
-
+     runAction->n_gam_sync++;
+     runAction->e_gam_sync += Egamma;
+     runAction->e_gam_sync2 += Egamma*Egamma;
+     if(Egamma > runAction->e_gam_sync_max) runAction->e_gam_sync_max = Egamma;
+     runAction->lam_gam_sync += aStep->GetStepLength();
      if(iCalled<nprint)
      {
+       G4double      Eelec  = PrePoint->GetTotalEnergy();
+       G4ThreeVector Pelec  = PrePoint->GetMomentum();
+       G4ThreeVector PGamma = (*secondary)[lp-1]->GetMomentum();
+	   G4bool IsGamma = (*secondary)[lp-1]->GetDefinition() == G4Gamma::GammaDefinition();
        G4cout << "UserSteppingAction processName=" << process->GetProcessName()
          << " Step Length=" << std::setw(6) << G4BestUnit(aStep->GetStepLength(),"Length")
          << " Eelec=" << G4BestUnit(Eelec,"Energy")

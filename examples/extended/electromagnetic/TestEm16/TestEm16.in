@@ -1,4 +1,4 @@
-# $Id: TestEm16.in,v 1.1 2006-05-19 10:54:18 vnivanch Exp $
+# $Id: TestEm16.in,v 1.2 2006-05-23 16:13:01 hbu Exp $
 #
 # Macro file for "TestEm16.cc"
 # (can be run in batch, without graphic)
@@ -10,7 +10,7 @@
 #
 /run/initialize
 #
-/process/activate SynchrotronRadiation
+/process/activate SynRad
 #
 # inactivate other processes to make SynchrotronRadiation more visible
 /process/inactivate msc
@@ -22,4 +22,9 @@
 /gun/energy 9.9994890009 GeV
 # next is 30 degree angle  sin 30deg = 0.5  cos 30 deg = 0.866025403
 #/gun/direction 0.5 0 0.866025403
-/run/beamOn 10
+#
+# expected results is:
+# Emean = 20.48 keV
+# E_rms = 37.18 keV
+#
+/run/beamOn 100

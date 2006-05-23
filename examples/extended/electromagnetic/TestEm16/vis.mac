@@ -34,7 +34,7 @@
 #
 /testem/event/drawTracks all
 
-/process/activate SynchrotronRadiation
+/process/activate SynRad
 
 # inactivate other processes to make SynchrotronRadiation more visible
 /process/inactivate msc
