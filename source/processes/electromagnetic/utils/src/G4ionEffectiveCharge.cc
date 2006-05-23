@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4ionEffectiveCharge.cc,v 1.11 2006-04-28 17:30:20 vnivanch Exp $
+// $Id: G4ionEffectiveCharge.cc,v 1.12 2006-05-23 06:42:58 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -38,6 +38,7 @@
 // 12.09.2004 Set low energy limit to 1 keV (V.Ivanchenko) 
 // 25.01.2005 Add protection - min Charge 0.1 eplus (V.Ivanchenko) 
 // 28.04.2006 Set upper energy limit to 50 MeV (V.Ivanchenko) 
+// 23.05.2006 Set upper energy limit to Z*10 MeV (V.Ivanchenko) 
 //
 
 // -------------------------------------------------------------------
@@ -55,7 +56,7 @@
 G4ionEffectiveCharge::G4ionEffectiveCharge()
 {
   chargeCorrection = 1.0;
-  energyHighLimit  = 50.0*MeV;
+  energyHighLimit  = 10.0*MeV;
   energyLowLimit   = 1.0*keV;
   energyBohr       = 25.*keV;
   massFactor       = amu_c2/(proton_mass_c2*keV);
@@ -85,7 +86,7 @@ G4double G4ionEffectiveCharge::EffectiveCharge(const G4ParticleDefinition* p,
   // Vol.1, Pergamon Press, 1985
   // Fast ions or hadrons
   G4double reducedEnergy = kineticEnergy * proton_mass_c2/mass ;
-  if( reducedEnergy > energyHighLimit || Zi < 1.5 ) return charge;
+  if( reducedEnergy > Zi*energyHighLimit || Zi < 1.5 ) return charge;
 
   static G4double vFermi[92] = {
     1.0309,  0.15976, 0.59782, 1.0781,  1.0486,  1.0,     1.058,   0.93942, 0.74562, 0.3424,

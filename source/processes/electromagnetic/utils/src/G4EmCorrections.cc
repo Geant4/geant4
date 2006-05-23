@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmCorrections.cc,v 1.17 2006-05-13 17:57:40 vnivanch Exp $
+// $Id: G4EmCorrections.cc,v 1.18 2006-05-23 06:42:58 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -101,9 +101,15 @@ G4double G4EmCorrections::HighOrderCorrections(const G4ParticleDefinition* p,
   G4double Mott   = MottCorrection (p, mat, e);
   G4double FSize  = FiniteSizeCorrection (p, mat, e);
 
-  G4double eloss = (2.0*(Barkas + Bloch) + FSize + Mott)*
-    material->GetElectronDensity() * q2 *  twopi_mc2_rcl2 /beta2;
-  return eloss;
+  G4double sum = (2.0*(Barkas + Bloch) + FSize + Mott);
+
+  if(verbose > 1)
+    G4cout << "EmCorrections: E(MeV)= " << e/MeV << " Barkas= " << Barkas
+	   << " Bloch= " << Bloch << " Mott= " << Mott << " Fsize= " << FSize
+	   << " Sum= " << sum << G4endl; 
+
+  sum *= material->GetElectronDensity() * q2 *  twopi_mc2_rcl2 /beta2;
+  return sum;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -426,7 +432,9 @@ G4double G4EmCorrections::BarkasCorrection(const G4ParticleDefinition* p,
       G4int iw = Index(W, engBarkas, 47);
       val = Value(W, engBarkas[iw], engBarkas[iw+1], corBarkas[iw], corBarkas[iw+1]);
     }
-    BarkasTerm += val*atomDensity[i] * std::sqrt(1.0/(Z*X))/ X;
+    //    G4cout << "i= " << i << " b= " << b << " W= " << W 
+    // << " Z= " << Z << " X= " << X << " val= " << val<< G4endl;
+    BarkasTerm += val*atomDensity[i] / (std::sqrt(Z*X)*X);
   }
 
   BarkasTerm *= 1.29*charge/material->GetTotNbOfAtomsPerVolume();
