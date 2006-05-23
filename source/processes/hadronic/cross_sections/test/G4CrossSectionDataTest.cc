@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CrossSectionDataTest.cc,v 1.4 2001-08-01 17:03:19 hpw Exp $
+// $Id: G4CrossSectionDataTest.cc,v 1.5 2006-05-23 15:12:21 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -73,14 +73,21 @@ int main()
 
    G4Element* theElement;
    G4Material* theMaterial;
-   switch (choice) {
+
+   switch (choice) 
+   {
     case 1:
-      theElement = new G4Element("Be    ", "Be", 4, 63.54*g/mole);
+
+      theElement = new G4Element("copper    ", "Cu", 4, 63.54*g/mole);
+
       theMaterial = new G4Material("copper", 4., 63.54*g/mole, 8.96*g/cm3, 
                                    kStateSolid);
       break;
+
     case 2:
+
       theElement = new G4Element("uranium", "U", 92, 238.03*g/mole);
+
       theMaterial = new G4Material("uranium", 92., 238.03*g/mole, 18.95*g/cm3, 
                                    kStateSolid);
       break;
@@ -103,111 +110,172 @@ int main()
    G4ParticleDefinition* theParticleDefinition;
    G4VProcess* theProcess;
 
-   switch (choice) {
+   switch (choice) 
+   {
     case 1:
+
       theParticleDefinition = G4Proton::ProtonDefinition();
       theProcess = new G4ProtonInelasticProcess("Inelastic");
       break;
+
     case 2:
+
       theParticleDefinition = G4PionPlus::PionPlusDefinition();
       theProcess = new G4PionPlusInelasticProcess("Inelastic");
       break;
+
     case 3:
+
       theParticleDefinition = G4Neutron::NeutronDefinition();
       theProcess = new G4NeutronInelasticProcess("Inelastic");
       break;
+
     case 4:
+
       theParticleDefinition = G4KaonPlus::KaonPlusDefinition();
       theProcess = new G4KaonPlusInelasticProcess("Inelastic");
       break;
+
     case 5:
+
       theParticleDefinition = G4KaonZeroShort::KaonZeroShortDefinition();
       theProcess = new G4KaonZeroSInelasticProcess("Inelastic");
       break;
+
     case 6:
+
       theParticleDefinition = G4PionMinus::PionMinusDefinition();
       break;
    }
    //   G4cout << "Dumping particle info:" << G4endl;
    //   theParticleDefinition->DumpTable();
-
-   G4double ekin;
+   G4int i, iMax=70;
+   G4double kinEnergy;
    G4cout << "Kinetic energy in GeV: "<<G4endl;
-   G4cin >> ekin;
+   G4cin >> kinEnergy;
 
 // Make a dynamic particle too
    G4DynamicParticle* theDynamicParticle;
-   theDynamicParticle = new G4DynamicParticle(theParticleDefinition,
-                                              G4ParticleMomentum(1.,0.,0.), 
-                                              ekin*GeV);
+
 // Process definition
 
    G4cout << " 1 elastic" << G4endl;
    G4cout << " 2 fission" << G4endl;
    G4cout << " 3 capture" << G4endl;
    G4cout << " 4 inelastic" << G4endl;
+
    G4cin >> choice;
 
-   G4CrossSectionDataStore theCrossSectionDataStore;
 
-   G4HadronElasticDataSet theElasticDataSet;
-   G4HadronFissionDataSet theFissionDataSet;
-   theFissionDataSet.SetVerboseLevel(2);
-   G4HadronCaptureDataSet theCaptureDataSet;
-   G4HadronInelasticDataSet theInelasticDataSet;
 
-   G4HadronCrossSectionPlugin theCrossSectionPlugin;
-   theCrossSectionPlugin.SetVerboseLevel(2);
 
-   G4double sig = 0, mfp = 0;
+     G4CrossSectionDataStore theCrossSectionDataStore;
 
-   switch (choice) {
-    case 1:
-      theProcess = new G4HadronElasticProcess("ELASTIC");
-      ((G4HadronElasticProcess*)theProcess)->
-         SetCrossSectionDataStore(&theCrossSectionDataStore);
-      theCrossSectionDataStore.AddDataSet(&theElasticDataSet);
-      theCrossSectionDataStore.AddDataSet(&theCrossSectionPlugin);
-      mfp = ((G4HadronElasticProcess*)theProcess)->
-               GetMeanFreePathBasic(theDynamicParticle, theMaterial);
+     G4HadronElasticDataSet theElasticDataSet;
+
+     G4HadronFissionDataSet theFissionDataSet;
+
+     theFissionDataSet.SetVerboseLevel(2);
+
+     G4HadronCaptureDataSet theCaptureDataSet;
+
+     G4HadronInelasticDataSet theInelasticDataSet;
+
+
+     G4HadronCrossSectionPlugin theCrossSectionPlugin;
+
+     // theCrossSectionPlugin.SetVerboseLevel(2);
+
+     G4double sig = 0, mfp = 0;
+
+     switch (choice) 
+     {
+      case 1:
+
+        theProcess = new G4HadronElasticProcess("ELASTIC");
+
+      // ((G4HadronElasticProcess*)theProcess)->
+      //   SetCrossSectionDataStore(&theCrossSectionDataStore);
+
+        theCrossSectionDataStore.AddDataSet(&theElasticDataSet);
+
+        theCrossSectionDataStore.AddDataSet(&theCrossSectionPlugin);
+
+      // mfp = ((G4HadronElasticProcess*)theProcess)->
+      //         GetMeanFreePathBasic(theDynamicParticle, theMaterial);
       break;
-    case 2:
-      theProcess = new G4HadronFissionProcess("Fission");
-      ((G4HadronFissionProcess*)theProcess)->
-         SetCrossSectionDataStore(&theCrossSectionDataStore);
-      theCrossSectionDataStore.AddDataSet(&theFissionDataSet);
+
+      case 2:
+
+        theProcess = new G4HadronFissionProcess("Fission");
+
+      // ((G4HadronFissionProcess*)theProcess)->
+      //    SetCrossSectionDataStore(&theCrossSectionDataStore);
+
+        theCrossSectionDataStore.AddDataSet(&theFissionDataSet);
+
       //      theCrossSectionDataStore.AddDataSet(&theCrossSectionPlugin);
-      mfp = ((G4HadronFissionProcess*)theProcess)->
-               GetMeanFreePathBasic(theDynamicParticle, theMaterial);
+
+      // mfp = ((G4HadronFissionProcess*)theProcess)->
+      //         GetMeanFreePathBasic(theDynamicParticle, theMaterial);
       break;
-    case 3:
-      theProcess = new G4HadronCaptureProcess("Capture");
-      ((G4HadronCaptureProcess*)theProcess)->
-         SetCrossSectionDataStore(&theCrossSectionDataStore);
-      theCrossSectionDataStore.AddDataSet(&theCaptureDataSet);
-      theCrossSectionDataStore.AddDataSet(&theCrossSectionPlugin);
-      mfp = ((G4HadronCaptureProcess*)theProcess)->
-               GetMeanFreePathBasic(theDynamicParticle, theMaterial);
-      break;
-    case 4:
+
+
+      case 3:
+
+        theProcess = new G4HadronCaptureProcess("Capture");
+
+      // ((G4HadronCaptureProcess*)theProcess)->
+      //    SetCrossSectionDataStore(&theCrossSectionDataStore);
+
+        theCrossSectionDataStore.AddDataSet(&theCaptureDataSet);
+
+        theCrossSectionDataStore.AddDataSet(&theCrossSectionPlugin);
+
+      //mfp = ((G4HadronCaptureProcess*)theProcess)->
+      //       GetMeanFreePathBasic(theDynamicParticle, theMaterial);
+        break;
+
+      case 4:
       //      theProcess = new G4HadronInelasticProcess("Inelastic",
       //                                                theParticleDefinition);
-      ((G4HadronInelasticProcess*)theProcess)->
-         SetCrossSectionDataStore(&theCrossSectionDataStore);
-      theCrossSectionDataStore.AddDataSet(&theInelasticDataSet);
-      theCrossSectionDataStore.AddDataSet(&theCrossSectionPlugin);
+
+      // ((G4HadronInelasticProcess*)theProcess)->
+      //    SetCrossSectionDataStore(&theCrossSectionDataStore);
+
+        theCrossSectionDataStore.AddDataSet(&theInelasticDataSet);
+
+        theCrossSectionDataStore.AddDataSet(&theCrossSectionPlugin);
+
       //      mfp = ((G4HadronInelasticProcess*)theProcess)->
       //               GetMeanFreePathBasic(theDynamicParticle, theMaterial);
       break;
-   }
+     }
 
-   //   sig = theCrossSectionDataStore.GetCrossSection(theDynamicParticle,
-   //                                                  theElement);
-   sig = theCrossSectionDataStore.GetCrossSection(theDynamicParticle,
-                                                  theElement, 273*kelvin);
+     //   sig = theCrossSectionDataStore.GetCrossSection(theDynamicParticle,
+     //                                                  theElement);
    G4cout << theProcess->GetProcessName() << " cross section for " << 
-           theParticleDefinition->GetParticleName() <<
+            theParticleDefinition->GetParticleName() <<
            " on " << theElement->GetName() << G4endl;
-   G4cout << sig/millibarn << " mb" << G4endl;
-   G4cout << "Mean free path = " << mfp << " mm" << G4endl;
+   G4cout<<"energy in GeV"<<"\t"<<"cross-section in millibarn"<<G4endl;
+
+   kinEnergy = 1.;
+
+   for(i = 0; i < iMax; i++)
+   {
+   
+     theDynamicParticle = new G4DynamicParticle(theParticleDefinition,
+                                              G4ParticleMomentum(1.,0.,0.), 
+                                              kinEnergy*GeV);
+     sig = theCrossSectionDataStore.GetCrossSection(theDynamicParticle,
+                                                    theElement, 273*kelvin);
+
+     // G4cout << theProcess->GetProcessName() << " cross section for " << 
+     //       theParticleDefinition->GetParticleName() <<
+     //      " on " << theElement->GetName() << G4endl;
+     G4cout << kinEnergy <<" Gev, \t"<< sig/millibarn << " mb" << G4endl;
+     // G4cout << "Mean free path = " << mfp << " mm" << G4endl;
+
+     kinEnergy *= 1.1;
+   }
 }

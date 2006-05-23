@@ -1,64 +1,25 @@
-# $Id: GNUmakefile,v 1.5 2002-02-07 17:03:09 hpw Exp $
-# ----------------------------------------------------------------
-# Makes test program in environment variable G4TARGET.
-# ----------------------------------------------------------------
+# $Id: GNUmakefile,v 1.6 2006-05-23 15:12:21 grichine Exp $
+# --------------------------------------------------------------
+# GNUmakefile for tests module.  Gabriele Cosmo, 27/06/98.
+# --------------------------------------------------------------
+
+# name := SolidsChecker
+# G4TARGET := $(name)
+
 
 ifndef G4TARGET
   G4TARGET := $(TESTTARGET)
 endif
 
+
 ifndef G4INSTALL
-  G4INSTALL = ../../../../..
+  G4INSTALL = ../../
 endif
 
-G4EXEC_BUILD = true
+#G4EXLIB := true
 
-include $(G4INSTALL)/config/architecture.gmk
+.PHONY: all
 
-ifeq ($(G4TARGET),G4HadronAtRestTest)
-  LDSTUBS :=  $(G4TMP)/$(G4SYSTEM)/$(G4TARGET)/G4HadronAtRestTestStub.o
-  EXTRALIBDIR := -L/cern/pro/lib
-  EXTRALIBS := -lpacklib $(FCLIBS) $(LDSTUBS)
-  LFLAGS += $(EXTRALIBDIR)
-  LOADLIBS += $(EXTRALIBS)
-endif
-
-# Override some variables for binmake.gmk.
-#
-INCFLAGS := \
-            -I$(G4BASE)/global/management/include \
-            -I$(G4BASE)/global/HEPRandom/include \
-            -I$(G4BASE)/global/HEPGeometry/include \
-            -I$(G4BASE)/geometry/management/include \
-            -I$(G4BASE)/geometry/volumes/include \
-            -I$(G4BASE)/geometry/magneticfield/include \
-            -I$(G4BASE)/geometry/solids/CSG/include \
-            -I$(G4BASE)/event/include \
-            -I$(G4BASE)/graphics_reps/include \
-            -I$(G4BASE)/track/include \
-            -I$(G4BASE)/tracking/include \
-            -I$(G4BASE)/processes/management/include \
-            -I$(G4BASE)/materials/include \
-            -I$(G4BASE)/particles/management/include \
-            -I$(G4BASE)/particles/bosons/include \
-            -I$(G4BASE)/particles/leptons/include \
-            -I$(G4BASE)/particles/hadrons/mesons/include \
-            -I$(G4BASE)/particles/hadrons/barions/include \
-            -I$(G4BASE)/particles/hadrons/ions/include \
-            -I$(G4BASE)/processes/general/include \
-            -I$(G4BASE)/processes/management/include \
-            -I$(G4BASE)/processes/hadronic/include \
-            -I$(G4BASE)/processes/hadronic/processes/include \
-            -I$(G4BASE)/processes/hadronic/management/include \
-            -I$(G4BASE)/processes/hadronic/util/include \
-            -I$(G4BASE)/processes/hadronic/cross_sections/include \
-            -I$(G4BASE)/processes/hadronic/models/neutron_hp/include \
-            -I$(G4BASE)/processes/electromagnetic/standard/include \
-            -I$(G4BASE)/processes/electromagnetic/muons/include \
-            -I$(G4BASE)/processes/electromagnetic/utils/include \
-            -I$(G4BASE)/processes/electromagnetic/xrays/include \
-            -I$(G4BASE)/run/include \
-            -I$(G4BASE)/digits+hits/include \
-            -I$(G4BASE)/intercoms/include
+all: bin
 
 include $(G4INSTALL)/config/binmake.gmk
