@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PathFinder.hh,v 1.8 2006-05-17 15:52:37 japost Exp $
+// $Id: G4PathFinder.hh,v 1.9 2006-05-23 17:55:10 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // class G4PathFinder 
@@ -123,6 +123,7 @@ class G4PathFinder
 			       G4double            proposedStepLength); 
 
   void WhichLimited();
+  void PrintLimited();   // Print key details out - for debugging
   // 
   // void SetTrajectoryFilter(G4VCurvedTrajectoryFilter* filter);
   //   Set the filter that examines & stores 'intermediate' 
@@ -164,8 +165,10 @@ class G4PathFinder
    ELimited      fLimitedStep[fMaxNav];
    G4bool        fLimitTruth[fMaxNav];
    G4double      fCurrentStepSize[fMaxNav]; 
-   G4double      fNewSafety[ fMaxNav ]; 
-   G4double      fMinSafety, fMinStep; 
+   G4double      fNewSafety[ fMaxNav ];      // Safety for starting point
+   G4double      fMinSafety;
+   G4double      fMinStep;      // As reported by Navigators -- can be kInfinity
+   G4double      fTrueMinStep;  // Corrected in case >= proposed 
    // State after calling 'locate'
    G4VPhysicalVolume* fLocatedVolume[fMaxNav];
 
@@ -173,6 +176,7 @@ class G4PathFinder
 
    G4FieldTrack    fEndState;
      // End point storage
+   G4int           fLastStepNo, fCurrentStepNo; 
    G4bool      fParticleIsLooping;
    G4int  fVerboseLevel;
      // For debuging purposes
