@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PathFinder.cc,v 1.4 2006-05-17 15:56:40 japost Exp $
+// $Id: G4PathFinder.cc,v 1.5 2006-05-23 17:59:25 japost Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4PathFinder Implementation
@@ -64,6 +64,7 @@ G4PathFinder::GetInstance()
 G4PathFinder::G4PathFinder() 
   // : fpActiveNavigators()
   : fEndState( G4ThreeVector(), G4ThreeVector(), 0., 0., 0., 0., 0.),
+       fLastStepNo(-1), 
        fVerboseLevel(1)
 {
    fNoActiveNavigators= 0; 
@@ -89,6 +90,8 @@ G4PathFinder::~G4PathFinder()
    // delete[] fpNavigator;
 }
 
+// static G4int lastStepNo= -1;
+
 G4double 
 G4PathFinder::ComputeStep( const G4FieldTrack &InitialFieldTrack, 
 				 G4double     proposedStepLength,
@@ -99,19 +102,18 @@ G4PathFinder::ComputeStep( const G4FieldTrack &InitialFieldTrack,
 				 G4FieldTrack &EndState )
 {
   // ---
-  static G4int lastStepNo= -1;
   G4int navigatorNo=-1; 
   if( fVerboseLevel > 2 ){ 
     G4cout << " -------------------------" <<  G4endl;
     G4cout << " G4PathFinder::ComputeStep - entered " << G4endl;
-    G4cout << "   - stepNo = " << stepNo 
-	   << " navigatorId = " << navigatorId 
-	   << " proposed step len = " << proposedStepLength
+    G4cout << "   - stepNo = "  << std::setw(4) << stepNo  << " "
+	   << " navigatorId = " << std::setw(2) << navigatorId  << " "
+	   << " proposed step len = " << proposedStepLength << " "
 	   << G4endl;
   }
   G4cout << " PF::ComputeStep: step= " << stepNo 
 	 << " nav = " << navigatorId 
-	 << " try step-len " << proposedStepLength
+	 << " trial-step-len " << proposedStepLength
 	 << " from " << InitialFieldTrack.GetPosition()
 	 << " dir  " << InitialFieldTrack.GetMomentumDirection()
 	 << G4endl;
@@ -124,20 +126,24 @@ G4PathFinder::ComputeStep( const G4FieldTrack &InitialFieldTrack,
     G4Exception( "G4PathFinder::ComputeStep: Bad Navigator Id" ); 
   }
 
-  if( (stepNo != lastStepNo) || fNewTrack ){
+  if( fNewTrack || (stepNo != fLastStepNo)  ){
     // 
     // G4cout << " initial = " << InitialFieldTrack << G4endl;
     G4FieldTrack currentState= InitialFieldTrack;
     if( fVerboseLevel > 1 )
       G4cout << " current = " << currentState << G4endl;
+
+    fCurrentStepNo = stepNo; 
     // DoNextCurvedStep( currentState, proposedState ); 
+
     DoNextLinearStep( currentState, proposedStepLength ); 
-    lastStepNo= stepNo; 
+    //--------------
+    fLastStepNo= stepNo; 
   }
   else{ 
     if( fVerboseLevel > 1 ){ 
       G4cout << " G4P::CS -> Not calling DoNextLinearStep: " 
-	     << " stepNo= " << stepNo << " last= " << lastStepNo 
+	     << " stepNo= " << stepNo << " last= " << fLastStepNo 
 	     << " new= " << fNewTrack << G4endl; 
     }
   } 
@@ -365,11 +371,17 @@ G4PathFinder::DoNextLinearStep( const G4FieldTrack &initialState,
      if( step < minStep ) { minStep= step; } 
      //  Later can reduce the proposed step to the latest minStep value
 
+     // if( step == kInfinity ) { step = proposedStepLength; }
      fCurrentStepSize[num] = step; 
      fNewSafety[num]= safety; 
   } 
   fMinSafety= minSafety;
   fMinStep=   minStep; 
+
+  if( fMinStep == kInfinity ){
+     minStep = proposedStepLength;   //  Use this below for endpoint !!
+  }
+  fTrueMinStep = minStep;
 
   // Set the EndState
   G4ThreeVector endPosition;
@@ -413,8 +425,11 @@ G4PathFinder::WhichLimited()       // Flag which processes limited the step
   for ( num= 1; num <= fNoActiveNavigators; num++ ) { 
     G4bool limitedStep;
 
-    limitedStep = ( fCurrentStepSize[num] == fMinStep ); 
-    
+    G4double step= fCurrentStepSize[num]; 
+
+    limitedStep = ( step == fMinStep ); 
+    // if( step == kInfinity ) { fCurrentStepSize[num] = proposedStepLength; }
+   
     fLimitTruth[ num ] = limitedStep; 
     if( limitedStep ) {
       noLimited++;  
@@ -438,19 +453,43 @@ G4PathFinder::WhichLimited()       // Flag which processes limited the step
 #endif
   }
 
+#ifndef G4NO_VERBOSE
+  this->PrintLimited();   // --> for tracing 
+  if( fVerboseLevel > 2 ){
+    // this->PrintLimited();  
+    G4cout << " G4PathFinder::WhichLimited - exiting. " << G4endl;
+  }
+#endif
+
+}
+
+void
+G4PathFinder::PrintLimited()
+{
   static G4String StrDoNot("DoNot"), StrUnique("Unique"), StrUndefined("Undefined"),
     StrSharedTransport("SharedTransport"),  StrSharedOther("SharedOther");
   // Report results -- for checking   
-  G4cout << "G4PathFinder::WhichLimited reports: " << G4endl;
-  G4cout << "  Mininum step = " << fMinStep << G4endl; 
-  G4cout <<  std::setw(4) << " No " 
+  G4cout << "G4PathFinder::PrintLimited reports: " ; 
+  G4cout << "  Minimum step (true)= " << fTrueMinStep 
+	 << "  reported min = " << fMinStep 
+	 << G4endl; 
+  if(  (fCurrentStepNo <= 2) || (fVerboseLevel>=2) ) {
+  G4cout << std::setw(6) << " Step# "  << " "
+	 << std::setw(6) << " NavId "  << " "
 	 << std::setw(10) << " step-size " 
 	 << std::setw(24) << " Limited:   bool, flag" 
          << std::setw(10) << "  World " 
 	 << G4endl;  
+  }
+  int num;
   for ( num= 1; num <= fNoActiveNavigators; num++ ) { 
-    G4cout << std::setw(4) << num  
-	   << std::setw(10) << fCurrentStepSize[num]
+    G4double stepLen = fCurrentStepSize[num]; 
+    if( stepLen > fTrueMinStep ) { 
+      stepLen = fTrueMinStep;     // did not limit (went as far as asked)
+    }
+    G4cout << std::setw(6) << fCurrentStepNo  << " " 
+	   << std::setw(6) << num  << " "
+	   << std::setw(10) << stepLen
 	   << std::setw(8) << "         "
 	   << std::setw(8) << fLimitTruth[num] << " ";
     G4String limitedStr;
@@ -476,5 +515,5 @@ G4PathFinder::WhichLimited()       // Flag which processes limited the step
   }
 
   if( fVerboseLevel > 2 )
-    G4cout << " G4PathFinder::WhichLimited - exiting. " << G4endl;
+    G4cout << " G4PathFinder::PrintLimited - exiting. " << G4endl;
 }
