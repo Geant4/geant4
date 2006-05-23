@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FieldTrack.cc,v 1.11 2006-05-08 18:00:14 japost Exp $
+// $Id: G4FieldTrack.cc,v 1.12 2006-05-23 14:09:52 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -54,7 +54,8 @@ G4FieldTrack::G4FieldTrack( const G4ThreeVector& pPosition,
    fRestMass_c2(restMass_c2),
    fLabTimeOfFlight(LaboratoryTimeOfFlight), 
    // fProperTimeOfFlight(0.0),
-   fMomentumDir(pMomentumDirection)
+   fMomentumDir(pMomentumDirection),
+   fChargeState(  charge, magnetic_dipole_moment ) 
 {
   G4double momentum  = std::sqrt(kineticEnergy*kineticEnergy
                             +2.0*restMass_c2*kineticEnergy);
@@ -63,7 +64,7 @@ G4FieldTrack::G4FieldTrack( const G4ThreeVector& pPosition,
   SetCurvePnt( pPosition, pMomentum, curve_length );
   InitialiseSpin( Spin ); 
 
-  fpChargeState = new G4ChargeState( charge, magnetic_dipole_moment ); 
+  // fpChargeState = new G4ChargeState( charge, magnetic_dipole_moment ); 
 }
 
 G4FieldTrack::G4FieldTrack( const G4ThreeVector& pPosition, 
@@ -79,7 +80,8 @@ G4FieldTrack::G4FieldTrack( const G4ThreeVector& pPosition,
    fRestMass_c2(restMass_c2),
    fLabTimeOfFlight(pLaboratoryTimeOfFlight), 
    fProperTimeOfFlight(pProperTimeOfFlight),
-   fMomentumDir(pMomentumDirection)
+   fMomentumDir(pMomentumDirection), 
+   fChargeState( DBL_MAX ) //  charge not set 
 {
   G4double momentum  = std::sqrt(kineticEnergy*kineticEnergy
                             +2.0*restMass_c2*kineticEnergy);
@@ -92,16 +94,17 @@ G4FieldTrack::G4FieldTrack( const G4ThreeVector& pPosition,
   else         Spin= *pSpin;
   InitialiseSpin( Spin ); 
 
-  fpChargeState = new G4ChargeState( DBL_MAX );     //  charge not yet set !!
+  // fpChargeState = new G4ChargeState( DBL_MAX );  //  charge not yet set !!
 }
 
 G4FieldTrack::G4FieldTrack( char )                  //  Nothing is set !!
-  : fRestMass_c2(0.0), fLabTimeOfFlight(0.0)
+  : fRestMass_c2(0.0), fLabTimeOfFlight(0.0),
+   fChargeState( DBL_MAX ) //  charge not set 
 {
   G4ThreeVector Zero(0.0, 0.0, 0.0);
   SetCurvePnt( Zero, Zero, 0.0 );
   InitialiseSpin( Zero ); 
-  fpChargeState = new G4ChargeState( DBL_MAX );   
+  // fpChargeState = new G4ChargeState( DBL_MAX );   
 }
 
 void G4FieldTrack::
@@ -110,38 +113,16 @@ void G4FieldTrack::
 			 G4double electric_dipole_moment, //   ditto
 			 G4double magnetic_charge )       //   ditto
 {
-  fpChargeState= new G4ChargeState(  charge, magnetic_dipole_moment, 
-				     electric_dipole_moment, magnetic_charge
-                                  ); 
+  fChargeState.SetChargeAndMoments( charge,  magnetic_dipole_moment, 
+		      electric_dipole_moment,  magnetic_charge ); 
 
-  // TO-DO: fix the memory leak that this creates 
-  //   -- the old one (which may be shared by other copies) is
-  //      left to hang loose in this alpha implementation  ---    JA, 28 Apr 2006
-}
+  // fpChargeState->SetChargeAndMoments( charge,  magnetic_dipole_moment, 
+  //	      electric_dipole_moment,  magnetic_charge ); 
 
-// Implementation methods for the embedded class G4ChargeState
-//                                ----------------------------
-
-G4FieldTrack::G4ChargeState::G4ChargeState(G4double charge,
-			     G4double magnetic_dipole_moment,  
-			     G4double electric_dipole_moment,  
-			     G4double magnetic_charge)
-{
-   fCharge= charge;
-   fMagn_dipole= magnetic_dipole_moment;
-   fElec_dipole= electric_dipole_moment;
-   fMagneticCharge= magnetic_charge;    
-}  
-
-void 
-G4FieldTrack::G4ChargeState::SetChargeAndMoments(G4double charge, 
-				   G4double magnetic_dipole_moment,   // default: do not change
-				   G4double electric_dipole_moment,   // 
-				   G4double magnetic_charge )
-        //  Revise the charge and potentially all moments
-{
-   fCharge= charge;
-   if( magnetic_dipole_moment < DBL_MAX) fMagn_dipole= magnetic_dipole_moment;
-   if( electric_dipole_moment < DBL_MAX) fElec_dipole= electric_dipole_moment;
-   if( magnetic_charge < DBL_MAX)        fMagneticCharge= magnetic_charge;    
+  // TO-DO: Improve the implementation using handles
+  //   -- and handle to the old one (which can be shared by other copies) and
+  //      must not be left to hang loose 
+  // 
+  // fpChargeState= new G4ChargeState(  charge, magnetic_dipole_moment, 
+  //			     electric_dipole_moment, magnetic_charge  ); 
 }
