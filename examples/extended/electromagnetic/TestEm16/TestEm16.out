@@ -73,7 +73,7 @@ physicsList->Construct() start.
 physicsList->setCut() start.
 CutLength : 1 km 
 #
-/process/activate SynchrotronRadiation
+/process/activate SynRad
 #
 # inactivate other processes to make SynchrotronRadiation more visible
 /process/inactivate msc
@@ -85,7 +85,12 @@ CutLength : 1 km
 /gun/energy 9.9994890009 GeV
 # next is 30 degree angle  sin 30deg = 0.5  cos 30 deg = 0.866025403
 #/gun/direction 0.5 0 0.866025403
-/run/beamOn 10
+#
+# expected results is:
+# Emean = 20.48 keV
+# E_rms = 37.18 keV
+#
+/run/beamOn 100
 
 GammaToMuPair:  gamma->mu+mu- Bethe Heitler process.
         good cross section parametrization from 422.634 MeV to 1e+12 GeV for all Z.
@@ -105,6 +110,9 @@ eBrem:   tables are built for  e-
       Total cross sections from a parametrisation based on the EEDL data library. 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
+SynRad:  Incoherent Synchrotron Radiation
+      good description for long magnets at all energies
 
 eIoni:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -189,15 +197,27 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 Start Run processing.
 
 ---> Begin of Event: 0
+G4SynchrotronRadiation::GetMeanFreePath :
+  MeanFreePath = 16.18 cm 
+G4SynchrotronRadiation::GetRandomEnergySR :
+  Ecr   = 66.5 keV
+  Emean = 20.48 keV
+  E_rms = 37.18 keV
 Run terminated.
 Run Summary
-  Number of events processed : 10
-  User=0.13s Real=0.23s Sys=0s
+  Number of events processed : 100
+  User=1.05s Real=1.07s Sys=0.01s
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1910797386, 2010387573
+ Current couple of seeds = 714921540, 1917393864
 ----------------------------------------
+Summary for synchrotron radiation :
+  Number of photons = 64881
+  Emean             = 20.26 +/- 0.1447 keV
+  E_rms             = 36.85 keV
+  Energy Max / Mean = 29.53
+  MeanFreePath      = 16.12 cm 
 Graphics systems deleted.
 Visualization Manager deleting...
 UserDetectorConstruction deleted.

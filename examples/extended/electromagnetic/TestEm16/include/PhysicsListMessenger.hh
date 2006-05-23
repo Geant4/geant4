@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: PhysicsListMessenger.hh,v 1.1 2006-05-18 14:25:10 vnivanch Exp $
+// $Id: PhysicsListMessenger.hh,v 1.2 2006-05-23 17:05:45 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -35,23 +35,25 @@
 class PhysicsList;
 class G4UIdirectory;
 class G4UIcmdWithADouble;
+class G4UIcmdWithAString;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class PhysicsListMessenger: public G4UImessenger
 {
-  public:
+public:
 
-    PhysicsListMessenger(PhysicsList*);
-   ~PhysicsListMessenger();
+  PhysicsListMessenger(PhysicsList*);
+  virtual ~PhysicsListMessenger();
 
-    void SetNewValue(G4UIcommand*, G4String);
+  void SetNewValue(G4UIcommand*, G4String);
 
-  private:
+private:
 
-    PhysicsList*        physList;
+  PhysicsList*        physList;
 
-    G4UIdirectory*      physDir;
+  G4UIdirectory*      physDir;
+  G4UIcmdWithAString* srCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

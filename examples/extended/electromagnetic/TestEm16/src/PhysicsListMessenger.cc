@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: PhysicsListMessenger.cc,v 1.1 2006-05-18 14:25:10 vnivanch Exp $
+// $Id: PhysicsListMessenger.cc,v 1.2 2006-05-23 17:05:45 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -31,6 +31,7 @@
 #include "PhysicsList.hh"
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithADouble.hh"
+#include "G4UIcmdWithAString.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -39,6 +40,12 @@ PhysicsListMessenger::PhysicsListMessenger(PhysicsList* physL)
 {
   physDir = new G4UIdirectory("/testem/phys/");
   physDir->SetGuidance("physics list commands");
+
+  srCmd = new G4UIcmdWithAString("/testem/phys/SynRad",this);
+  srCmd->SetGuidance("Select Synhrotron Radiation process.");
+  srCmd->SetParameterName("sr",false);
+  srCmd->AvailableForStates(G4State_PreInit);
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -46,12 +53,18 @@ PhysicsListMessenger::PhysicsListMessenger(PhysicsList* physL)
 PhysicsListMessenger::~PhysicsListMessenger()
 {
   delete physDir;
+  delete srCmd;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PhysicsListMessenger::SetNewValue(G4UIcommand* command,
                                           G4String newValue)
-{ }
+{ 
+  if( command == srCmd ) { 
+    if(newValue == "SRinMat") physList->SetAnalysticalSR(false);
+    else                      physList->SetAnalysticalSR(true);
+  }
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
