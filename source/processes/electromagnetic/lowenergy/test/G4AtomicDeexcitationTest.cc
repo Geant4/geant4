@@ -20,81 +20,170 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+#include "G4AtomicTransitionManager.hh"
 #include "G4AtomicDeexcitation.hh"
 #include "globals.hh"
 #include "G4ios.hh"
 #include <vector>
 #include "G4DynamicParticle.hh"
+#include "AIDA/AIDA.h"
+#include "Randomize.hh"
 
+using namespace CLHEP;
 
-int main() { 
+int main(int argc, char* argv[]){
+
+  time_t seconds = time(NULL);
+  G4int seed = seconds;
+  
+  // choose the Random engine
+  CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
+  CLHEP::HepRandom::setTheSeed(seed);
+
   G4int Z;
   G4int a;
   G4int b;
+  G4int startId;
   G4int vacancyId;
   G4int numberOfRun;
+  G4int batch;
+  if (argv[1]) {batch = atoi(argv[1]);}
+  G4String fileName;
+  if (argv[3]) {fileName = argv[3];}
+  else {fileName = "transitions.xml";}
 
-  G4cout << "Enter Z " << G4endl;
-  G4cin >> a;
-  G4cout << "Enter the id of the vacancy" << G4endl;
-  G4cin >> vacancyId;
-  G4cout<<"Enter the number of runs "<<G4endl;
-  G4cin>> numberOfRun;
-
+  AIDA::ITree* tree;
+  AIDA::IAnalysisFactory* analysisFactory;
+  AIDA::ITupleFactory* tupleFactory;
+  AIDA::ITuple* tupleFluo;
+  if (batch != 1) {
+    G4cout << "Enter Z " << G4endl;
+    G4cin >> a;
+    G4cout << "Enter the id of the vacancy" << G4endl;
+    G4cin >> startId;
+    G4cout<<"Enter the number of runs "<<G4endl;
+    G4cin>> numberOfRun;
+  }
+  else {
+    
+    a = 0;
+    startId = -1;
+    numberOfRun = atoi(argv[2]);
+  }
+  analysisFactory = AIDA_createAnalysisFactory();
+  AIDA::ITreeFactory* treeFactory = analysisFactory->createTreeFactory();
+  tree = treeFactory->create(fileName,"xml",false,true);
+  tupleFactory = analysisFactory->createTupleFactory(*tree);
+  // Book tuple column names
+  std::vector<std::string> columnNames;
+  // Book tuple column types
+  std::vector<std::string> columnTypes;
+  
+  //if Z=0 a number of runs numberOfRun is generated for all the elements 
   if (a==0)
     {
       a = 6;
       b = 98;
+      
+      columnNames.push_back("Atomic Number");
+      columnNames.push_back("Particle");
+      columnNames.push_back("Energies");
+      
+      columnTypes.push_back("int");
+      columnTypes.push_back("int");
+      columnTypes.push_back("double");
+      tupleFluo = tupleFactory->create("10", "Total Tuple", columnNames, columnTypes, "");
+      assert(tupleFluo);
     }
   else { b = a;} 
   
-  
-  
+  G4AtomicTransitionManager* transitionManager = G4AtomicTransitionManager::Instance();
+ 
   G4AtomicDeexcitation* deexcitation = new G4AtomicDeexcitation;
+  std::map<G4int,G4int> shellNumberTable;
   
   deexcitation->ActivateAugerElectronProduction(true);
   
-
   for (Z = a; Z<=b; Z++) {    
   G4cout << "******** Z = "<< Z << "*********" << G4endl;
-    for(G4int i = 0; i<numberOfRun;i++){ 
-      G4cout<<"begin of run "<<i<<G4endl;
-      std::vector<G4DynamicParticle*>* vectorOfParticles;
-      
-      vectorOfParticles = deexcitation-> GenerateParticles(Z,vacancyId);
-      
-      G4cout<<  vectorOfParticles->size()<<" particles in the vector "<<G4endl;
-      
-      for (G4int k=0; k< vectorOfParticles->size();k++)
-	{
-	  G4DynamicParticle* newParticle = (*vectorOfParticles)[k];
-	  if ( newParticle->GetDefinition()->GetParticleName() == "e-" )
-	    {
-	      G4cout <<" An auger has been generated"<<G4endl;
-	      G4cout<<" vectorOfParticles ["<<k<<"]:"<<G4endl;
-	      G4cout<<"Non zero particle. Index: "<<k<<G4endl;
-	      
-	      G4DynamicParticle* newElectron = (*vectorOfParticles)[k];
-	      
-	      
-	      G4ThreeVector augerDirection =newElectron ->GetMomentum();
-	      
-	      G4double  augerEnergy =newElectron ->GetKineticEnergy();
-	      G4cout<< "The Auger electron has a kinetic energy = "<<augerEnergy
-		    <<" MeV " <<G4endl;
 
+  G4int numberOfPossibleShell = transitionManager->NumberOfShells(Z);
+
+  shellNumberTable[Z] = numberOfPossibleShell;
+  G4int min = 0;
+  G4int max = 0;
+  std::vector<G4DynamicParticle*>* vectorOfParticles;
+
+    for(G4int i = 0; i<numberOfRun;i++){ 
+      G4cout<<"begin of run "<< i <<G4endl;
+      vectorOfParticles = 0;
+      // if shellID = -1 the test runs on every shell of the atom
+      if (startId == -1){
+	min = 1;
+	max = shellNumberTable[Z];
+      }
+      else {
+	min = startId;
+	max = min;
+      }
+
+      for (vacancyId = min; vacancyId <= max; vacancyId++) { 
+
+      
+	vectorOfParticles = deexcitation-> GenerateParticles(Z,vacancyId);
+      
+	G4cout<<  vectorOfParticles->size()<<" particles in the vector "<<G4endl;
+      
+	for (G4int k=0; k< vectorOfParticles->size();k++)
+	  {
+	    G4DynamicParticle* newParticle = (*vectorOfParticles)[k];
+	    if ( newParticle->GetDefinition()->GetParticleName() == "e-")
+	      {
+		G4DynamicParticle* newElectron = (*vectorOfParticles)[k];
+		G4ThreeVector augerDirection =newElectron ->GetMomentum();
+		G4double  augerEnergy =newElectron ->GetKineticEnergy();
+		if (startId==-1){
+		  
+		  tupleFluo->fill(0,Z);
+		  tupleFluo->fill(1,0);
+		  tupleFluo->fill(2,augerEnergy);
+		  tupleFluo->addRow();
+		  
+		}
+		else{	      
+		  
+		  G4cout <<" An auger has been generated"<<G4endl;
+		  G4cout<<" vectorOfParticles ["<<k<<"]:"<<G4endl;
+		  G4cout<<"Non zero particle. Index: "<<k<<G4endl;
+		  G4cout<< "The Auger electron has a kinetic energy = "<<augerEnergy
+			<<" MeV " <<G4endl;
+		  
+		}
+	      }
+	    else{
+	      G4ThreeVector photonDirection = newParticle ->GetMomentum();
+	      G4double  photonEnergy =newParticle ->GetKineticEnergy();
+	      
+	      if (startId==-1){
+		tupleFluo->fill(0,Z);
+		tupleFluo->fill(1,1);
+		tupleFluo->fill(2,photonEnergy);
+		tupleFluo->addRow();		
+	      }
+	      else{
+		
+		G4cout<<" vectorOfParticles ["<<k<<"]:"<<G4endl;
+		G4cout<<"Non zero particle. Index: "<<k<<G4endl;
+		G4cout<< "The photon has a kinetic energy = "<<photonEnergy
+		      <<" MeV " <<G4endl;
+	      }
 	    }
-	  else{
-	    G4cout<<" vectorOfParticles ["<<k<<"]:"<<G4endl;
-	    G4cout<<"Non zero particle. Index: "<<k<<G4endl;
-	    
-	    G4ThreeVector photonDirection = newParticle ->GetMomentum();
-	    
-	    G4double  photonEnergy =newParticle ->GetKineticEnergy();
-	    G4cout<< "The photon has a kinetic energy = "<<photonEnergy
-		  <<" MeV " <<G4endl;
 	  }
-	}
+      }
+      if (batch == 1){
+	tree->commit(); // Write histos in file. 
+	tree->close();
+      }
       delete vectorOfParticles;
     }
   }  
