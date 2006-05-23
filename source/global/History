@@ -1,4 +1,4 @@
-$Id: History,v 1.159 2006-05-03 10:00:04 gcosmo Exp $
+$Id: History,v 1.160 2006-05-23 10:05:50 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May 03, 2006  G.Cosmo (global-V08-00-03)
+- Clear entries in table in destructor of G4UnitDefinition.
 
 May 03, 2006  G.Cosmo (global-V08-00-02)
 - Added G4VNotifier class, renamed from G4VStoreNotifier implemented inside
