@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03SteppingAction.cc,v 1.9 2005-02-02 17:11:11 maire Exp $
+// $Id: ExN03SteppingAction.cc,v 1.10 2006-05-23 18:38:18 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -55,7 +55,7 @@ ExN03SteppingAction::~ExN03SteppingAction()
 void ExN03SteppingAction::UserSteppingAction(const G4Step* aStep)
 {
   const G4Track* track = aStep->GetTrack();
-  G4VPhysicalVolume* volume = track->GetVolume();
+  G4VPhysicalVolume* volume = step->GetPreStepPoint()->GetVolume();
   
   // collect energy and track length step by step
   G4double edep = aStep->GetTotalEnergyDeposit();
@@ -66,9 +66,6 @@ void ExN03SteppingAction::UserSteppingAction(const G4Step* aStep)
       
   if (volume == detector->GetAbsorber()) eventaction->AddAbs(edep,stepl);
   if (volume == detector->GetGap())      eventaction->AddGap(edep,stepl);
-       
- // save the random number seed of this event, under condition
- //// if(condition) G4RunManager::GetRunManager()->rndmSaveThisEvent();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
