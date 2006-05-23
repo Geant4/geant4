@@ -21,10 +21,34 @@
 // ********************************************************************
 //
 //
-// $Id: G4FieldTrack.icc,v 1.17 2006-05-08 18:23:29 japost Exp $
+// $Id: G4FieldTrack.icc,v 1.18 2006-05-23 14:07:02 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
+
+// Implementation methods for the embedded class G4ChargeState
+//                                ----------------------------
+inline G4FieldTrack::
+G4ChargeState::G4ChargeState(G4double charge,
+			     G4double magnetic_dipole_moment,  
+			     G4double electric_dipole_moment,  
+			     G4double magnetic_charge)
+{
+   fCharge= charge;
+   fMagn_dipole= magnetic_dipole_moment;
+   fElec_dipole= electric_dipole_moment;
+   fMagneticCharge= magnetic_charge;    
+}  
+
+inline G4FieldTrack::
+G4ChargeState::G4ChargeState( 
+  const G4FieldTrack::G4ChargeState::G4ChargeState& right )
+{ 
+  fCharge= right.fCharge;
+  fMagn_dipole= right.fMagn_dipole; 
+  fElec_dipole= right.fElec_dipole;
+  fMagneticCharge= right.fMagneticCharge;
+}
 
 inline void
 G4FieldTrack::InitialiseSpin( const G4ThreeVector& Spin )
@@ -36,6 +60,20 @@ G4FieldTrack::InitialiseSpin( const G4ThreeVector& Spin )
   // fHasSpin = (fSpin != ZeroVec); 
 }
 
+inline void G4FieldTrack::
+G4ChargeState::SetChargeAndMoments(G4double charge, 
+				   G4double magnetic_dipole_moment,  
+				   G4double electric_dipole_moment,
+				   G4double magnetic_charge )
+   //  Revise the charge and potentially all moments.
+   //   By default do not change mdm, edm, mag charge. 
+{
+   fCharge= charge;
+   if( magnetic_dipole_moment < DBL_MAX) fMagn_dipole= magnetic_dipole_moment;
+   if( electric_dipole_moment < DBL_MAX) fElec_dipole= electric_dipole_moment;
+   if( magnetic_charge < DBL_MAX)        fMagneticCharge= magnetic_charge;    
+}
+
 inline
 G4FieldTrack::G4FieldTrack( const G4FieldTrack&  rStVec  )
  : fDistanceAlongCurve( rStVec.fDistanceAlongCurve),
@@ -45,7 +83,8 @@ G4FieldTrack::G4FieldTrack( const G4FieldTrack&  rStVec  )
    fProperTimeOfFlight( rStVec.fProperTimeOfFlight ), 
    // fMomentumModulus( rStVec.fMomentumModulus ),
    fSpin( rStVec.fSpin ), 
-   fMomentumDir( rStVec.fMomentumDir )
+   fMomentumDir( rStVec.fMomentumDir ),
+   fChargeState( rStVec.fChargeState )
 {
   SixVector[0]= rStVec.SixVector[0];
   SixVector[1]= rStVec.SixVector[1];
@@ -54,12 +93,15 @@ G4FieldTrack::G4FieldTrack( const G4FieldTrack&  rStVec  )
   SixVector[4]= rStVec.SixVector[4];
   SixVector[5]= rStVec.SixVector[5];
 
-  fpChargeState= 0;
+  // fpChargeState= new G4ChargeState( *rStVec.fpChargeState );
+  // Can share charge state only when using handles etc
+  //   fpChargeState = rStVec.fpChargeState;  
 }
 
 inline
 G4FieldTrack::~G4FieldTrack()
 {
+  // delete fpChargeState; 
 }
 
 inline G4FieldTrack& 
@@ -294,7 +336,9 @@ G4FieldTrack & G4FieldTrack::operator = ( const G4FieldTrack& rStVec )
   //  SetMomentumModulus( rStVec.GetMomentumModulus());
   SetMomentumDir( rStVec.fMomentumDir );
 
-  fpChargeState= rStVec.fpChargeState;
+  fChargeState= rStVec.fChargeState;
+  // (*fpChargeState)= *(rStVec.fpChargeState);
+  // fpChargeState= rStVec.fpChargeState; // Handles!!
   return *this;
 }
 
