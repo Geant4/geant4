@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UnitsTable.cc,v 1.32 2006-02-16 14:23:50 maire Exp $
+// $Id: G4UnitsTable.cc,v 1.33 2006-05-23 10:04:06 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -81,6 +81,7 @@ G4UnitDefinition::~G4UnitDefinition()
   {
     delete theUnitsTable[i];
   }
+  theUnitsTable.clear();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
