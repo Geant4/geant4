@@ -1,4 +1,4 @@
-$Id: History,v 1.46 2006-05-22 08:25:12 gcosmo Exp $
+$Id: History,v 1.47 2006-05-23 18:03:42 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May 23rd, 2006 - J.Apostolakis (geomnav-V08-00-02)
+------------------------------
+- Added new prototype class G4PathFinder to coupled navigation
+  in parallel geometries.
 
 May 22nd, 2006 - G.Cosmo (geomnav-V08-00-01)
 ------------------------
