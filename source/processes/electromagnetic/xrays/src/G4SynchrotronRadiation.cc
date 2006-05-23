@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SynchrotronRadiation.cc,v 1.3 2006-05-19 10:08:50 vnivanch Exp $
+// $Id: G4SynchrotronRadiation.cc,v 1.4 2006-05-23 16:02:22 hbu Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------
@@ -32,7 +32,7 @@
 //      21-5-98 V.Grichine
 //      28-05-01, V.Ivanchenko minor changes to provide ANSI -wall compilation 
 //      04.03.05, V.Grichine: get local field interface      
-//      18-05-06 Energy spectrum from function rather than table
+//      18-05-06 H. Burkhardt: Energy spectrum from function rather than table
 //                    
 // 
 //
@@ -40,7 +40,7 @@
 ///////////////////////////////////////////////////////////////////////////
 
 #include "G4SynchrotronRadiation.hh"
-#include "G4Integrator.hh"
+// #include "G4Integrator.hh"
 #include "G4UnitsTable.hh"
 
 using namespace std;
@@ -54,7 +54,7 @@ G4SynchrotronRadiation::G4SynchrotronRadiation(const G4String& processName,
   G4ProcessType type):G4VDiscreteProcess (processName, type),
   theGamma (G4Gamma::Gamma() ),
   theElectron ( G4Electron::Electron() ),
-  thePositron ( G4Positron::Positron() ), fAlpha(0.0), fRootNumber(80)
+  thePositron ( G4Positron::Positron() )
 {
   G4TransportationManager* transportMgr = 
     G4TransportationManager::GetTransportationManager();
@@ -64,6 +64,7 @@ G4SynchrotronRadiation::G4SynchrotronRadiation(const G4String& processName,
   fLambdaConst = sqrt(3.0)*electron_mass_c2/
                            (2.5*fine_structure_const*eplus*c_light) ;
   fEnergyConst = 1.5*c_light*c_light*eplus*hbar_Planck/electron_mass_c2  ;
+  verboseLevel=1;
 }
 
 /////////////////////////////////////////////////////////////////////////
@@ -144,25 +145,39 @@ G4SynchrotronRadiation::GetMeanFreePath( const G4Track& trackData,
       G4ThreeVector unitMomentum = aDynamicParticle->GetMomentumDirection();
       G4ThreeVector unitMcrossB  = FieldValue.cross(unitMomentum) ;
       G4double perpB             = unitMcrossB.mag() ;
-      G4double beta              = aDynamicParticle->GetTotalMomentum()/
-                                   (aDynamicParticle->GetTotalEnergy()    );
 
-      if( perpB > 0.0 ) MeanFreePath = fLambdaConst*beta/perpB;
+      if( perpB > 0.0 ) MeanFreePath = fLambdaConst/perpB;
       else              MeanFreePath = DBL_MAX;
+
+      static G4bool FirstTime=true;
+      if(verboseLevel > 0 && FirstTime)
+      {
+        G4cout << "G4SynchrotronRadiation::GetMeanFreePath :" << '\n' << std::setprecision(4)
+          << "  MeanFreePath = " << G4BestUnit(MeanFreePath, "Length")
+  	      << G4endl;
+        if(verboseLevel > 1)
+        {
+          G4ThreeVector pvec=aDynamicParticle->GetMomentum();
+          G4double Btot=FieldValue.getR();
+          G4double ptot=pvec.getR();
+          G4double rho= ptot / (MeV * c_light * Btot ); // full bending radius
+          G4double Theta=unitMomentum.theta(FieldValue); // angle between particle and field
+          G4cout
+	        << "  B = " << Btot/tesla << " Tesla"
+            << "  perpB = " << perpB/tesla << " Tesla"
+            << "  Theta = " << Theta << " sin(Theta)=" << sin(Theta) << '\n'
+            << "  ptot  = " << G4BestUnit(ptot,"Energy")
+            << "  rho   = " << G4BestUnit(rho,"Length")
+  	        << G4endl;
+        }
+	    FirstTime=false;
+      }
     }
     else  MeanFreePath = DBL_MAX;
-  }
-  if(verboseLevel > 1)
-    G4cout<<"G4SynchrotronRadiation::MeanFreePath = "<<MeanFreePath/m<<" m"<<G4endl;
 
-  return MeanFreePath;
-  static G4double iCalled=0;
-  const G4double nprint=0;
-  iCalled++;
-  if(iCalled<nprint) G4cout << "G4SynchrotronRadiation::GetMeanFreePath iCalled=" << iCalled << " MeanFreePath="
-	<< std::setw(20) << std::setprecision(6) << G4BestUnit(MeanFreePath, "Length")
-	<< " Lorentz beta=" << aDynamicParticle->GetTotalMomentum()/ (aDynamicParticle->GetTotalEnergy())
-	<< G4endl;
+
+  }
+
   return MeanFreePath;
 }
 
@@ -227,10 +242,6 @@ G4SynchrotronRadiation::PostStepDoIt(const G4Track& trackData,
 
       G4double energyOfSR = GetRandomEnergySR(gamma,perpB);
 
-      if(verboseLevel > 0)
-      {
-        G4cout<<"SR photon energy = "<<energyOfSR/keV<<" keV"<<G4endl;
-      }
       // check against insufficient energy
 
       if( energyOfSR <= 0.0 )
@@ -364,124 +375,35 @@ G4double G4SynchrotronRadiation::InvSynFracInt(G4double x)
 
 G4double G4SynchrotronRadiation::GetRandomEnergySR(G4double gamma, G4double perpB)
 {
-  static G4double iCalled=0;
-  const G4double nprint=0;
-  iCalled++;
+
   G4double Ecr=fEnergyConst*gamma*gamma*perpB;
-  G4double energySR=Ecr*InvSynFracInt(G4UniformRand());
-  if(iCalled<nprint)
-  { G4cout << "hbudebug G4SynchrotronRadiation::GetRandomEnergySR iCalled=" << iCalled
-	<< " Ecr="      << G4BestUnit(Ecr,"Energy")
-	<< " energySR=" << G4BestUnit(energySR,"Energy") << G4endl;
+
+  static G4bool FirstTime=true;
+  if(verboseLevel > 0 && FirstTime)
+  { G4double Emean=8./(15.*sqrt(3.))*Ecr; // mean photon energy
+    G4double E_rms=sqrt(211./675.)*Ecr; // rms of photon energy distribution
+    G4cout << "G4SynchrotronRadiation::GetRandomEnergySR :" << '\n' << std::setprecision(4)
+	<< "  Ecr   = "    << G4BestUnit(Ecr,"Energy") << '\n'
+	<< "  Emean = "    << G4BestUnit(Emean,"Energy") << '\n'
+	<< "  E_rms = "    << G4BestUnit(E_rms,"Energy") << G4endl;
+    FirstTime=false;
   }
+
+  G4double energySR=Ecr*InvSynFracInt(G4UniformRand());
   return energySR;
 }
 
-G4double G4SynchrotronRadiation::GetProbSpectrumSRforInt( G4double t)
+
+void G4SynchrotronRadiation::BuildPhysicsTable(const G4ParticleDefinition& part)
 {
-  G4double result, hypCos2, hypCos=std::cosh(t);
-
-  hypCos2 = hypCos*hypCos;  
-  result = std::cosh(5.*t/3.)*std::exp(t-fKsi*hypCos); // fKsi > 0. !
-  result /= hypCos2;
-  return result;
-}
-
-///////////////////////////////////////////////////////////////////////////
-//
-// return the probability to emit SR photon with relative energy
-// energy/energy_c >= ksi
-// for ksi <= 0. P = 1., however the method works for ksi > 0 only!
-
-G4double G4SynchrotronRadiation::GetIntProbSR( G4double ksi)
-{
-  if (ksi <= 0.) return 1.0;
-  fKsi = ksi; // should be > 0. !
-  G4int n;
-  G4double result, a;
-
-  a = fAlpha;        // always = 0.
-  n = fRootNumber;   // around default = 80
-
-  G4Integrator<G4SynchrotronRadiation, G4double(G4SynchrotronRadiation::*)(G4double)> integral;
-
-  result = integral.Laguerre(this, 
-           &G4SynchrotronRadiation::GetProbSpectrumSRforInt, a, n);
-
-  result *= 3./5./pi;
-
-  return result;
-}
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// 
-
-G4double G4SynchrotronRadiation::GetIntegrandForAngleK( G4double t)
-{
-  G4double result, hypCos=std::cosh(t);
-  
-  result  = std::cosh(fOrderAngleK*t)*std::exp(t - fEta*hypCos); // fEta > 0. !
-  result /= hypCos;
-  return result;
-}
-
-//////////////////////////////////////////////////////////////////////////
-//
-// Return K 1/3 or 2/3 for angular distribution
-
-G4double G4SynchrotronRadiation::GetAngleK( G4double eta)
-{
-  fEta = eta; // should be > 0. !
-  G4int n;
-  G4double result, a;
-
-  a = fAlpha;        // always = 0.
-  n = fRootNumber;   // around default = 80
-
-  G4Integrator<G4SynchrotronRadiation, G4double(G4SynchrotronRadiation::*)(G4double)> integral;
-
-  result = integral.Laguerre(this, 
-           &G4SynchrotronRadiation::GetIntegrandForAngleK, a, n);
-
-  return result;
-}
-
-/////////////////////////////////////////////////////////////////////////
-//
-// Relative angle diff distribution for given fKsi, which is set externally
-
-G4double G4SynchrotronRadiation::GetAngleNumberAtGammaKsi( G4double gpsi)
-{
-  G4double result, funK, funK2, gpsi2 = gpsi*gpsi;
-
-  fPsiGamma    = gpsi;
-  fEta         = 0.5*fKsi*(1 + gpsi2)*std::sqrt(1 + gpsi2);
- 
-  fOrderAngleK = 1./3.;
-  funK         = GetAngleK(fEta); 
-  funK2        = funK*funK;
-
-  result       = gpsi2*funK2/(1 + gpsi2);
-
-  fOrderAngleK = 2./3.;
-  funK         = GetAngleK(fEta); 
-  funK2        = funK*funK;
-
-  result      += funK2;
-  result      *= (1 + gpsi2)*fKsi;
-     
-  return result;
+  if(0 < verboseLevel && &part==theElectron ) PrintInfoDefinition();
 }
 
 void G4SynchrotronRadiation::PrintInfoDefinition() // not yet called, usually called from BuildPhysicsTable
 {
   G4String comments ="Incoherent Synchrotron Radiation\n";
   G4cout << G4endl << GetProcessName() << ":  " << comments
-         << "good description for long magnets at all energies" << G4endl;
+         << "      good description for long magnets at all energies" << G4endl;
 }
 
 ///////////////////// end of G4SynchrotronRadiation.cc
-
-
-

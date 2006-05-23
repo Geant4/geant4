@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SynchrotronRadiation.hh,v 1.2 2006-05-19 10:05:27 vnivanch Exp $
+// $Id: G4SynchrotronRadiation.hh,v 1.3 2006-05-23 16:02:22 hbu Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -32,6 +32,7 @@
 //      History:
 //      21-5-98  1 version , V. Grichine
 //      28-05-01, V.Ivanchenko minor changes to provide ANSI -wall compilation
+//      23-05-06, H. Burkhardt: Energy spectrum from function rather than table
 //
 //
 // ------------------------------------------------------------
@@ -61,7 +62,7 @@ class G4SynchrotronRadiation : public G4VDiscreteProcess
 {
 public:
 
-  G4SynchrotronRadiation(const G4String& pName = "SynchrotronRadiation",
+  G4SynchrotronRadiation(const G4String& pName = "SynRad",
 		         G4ProcessType type = fElectromagnetic);
 
   virtual ~G4SynchrotronRadiation();
@@ -78,28 +79,11 @@ public:
 
   G4double GetRandomEnergySR( G4double, G4double );
 
-  G4double GetProbSpectrumSRforInt( G4double );
-  G4double GetIntProbSR( G4double );
-
-  G4double GetIntegrandForAngleK( G4double );
-  G4double GetAngleK( G4double );
-  G4double GetAngleNumberAtGammaKsi( G4double );
-
   G4double InvSynFracInt(G4double x);
   G4double Chebyshev(G4double a,G4double b,const G4double c[],G4int m,G4double x);
-
-  void PrintInfoDefinition();
-
   G4bool IsApplicable(const G4ParticleDefinition&);
-
-  G4double GetLambdaConst() { return fLambdaConst; };
-  G4double GetEnergyConst() { return fEnergyConst; };
-
-  void SetRootNumber(G4int rn){ fRootNumber = rn; };
-  void SetKsi(G4double ksi){ fKsi = ksi; };
-  void SetEta(G4double eta){ fEta = eta; };
-  void SetPsiGamma(G4double psg){ fPsiGamma = psg; };
-  void SetOrderAngleK(G4double ord){ fOrderAngleK = ord; }; // should be 1/3 or 2/3
+  void BuildPhysicsTable(const G4ParticleDefinition& );
+  void PrintInfoDefinition();
 
 private:
 
@@ -113,21 +97,11 @@ private:
   G4double fLambdaConst;
   G4double fEnergyConst;
 
-  const G4double fIntegralProbabilityOfSR[200];
-
-  G4double fAlpha;
-  G4int    fRootNumber;
-  G4double fKsi;             // omega/omega_c
-  G4double fPsiGamma;        // Psi-angle*gamma
-  G4double fEta;             //
-  G4double fOrderAngleK;     // 1/3 or 2/3
-
   G4PropagatorInField* fFieldPropagator;
 
 };
 
 //////////////////////////  INLINE METHODS  /////////////////////////////
-
 inline G4bool
 G4SynchrotronRadiation::IsApplicable( const G4ParticleDefinition& particle )
 {
