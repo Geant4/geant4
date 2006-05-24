@@ -72,7 +72,7 @@ if [ "$1" = "lib" ] ; then
   if [ "$2" = "all" ] ; then 
     # Go in source and spawn libs reconstruction :
     cd $G4INSTALL/source
-    (date;time $MAKECMD global ;date) > $dir/gmake.log 2>&1
+    (date;time $MAKECMD -j 2 global ;date) > $dir/gmake.log 2>&1
     exit
   else
     # Go in source/$2 and spawn category reconstruction :
