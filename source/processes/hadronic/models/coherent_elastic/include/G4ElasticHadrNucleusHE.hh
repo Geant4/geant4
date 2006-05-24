@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4ElasticHadrNucleusHE.hh,v 1.18 2006-05-09 16:31:39 vnivanch Exp $
+// $Id: G4ElasticHadrNucleusHE.hh,v 1.19 2006-05-24 19:12:48 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -61,7 +61,7 @@
 #define   ONE      5        //  The number of steps on E
 #define   AreaNumb 6        //  The number of order steps on E
 #define   ONQ2XE   ONQ2*ONE //  The dimension of a distr. func. array
-#define   MaxN     10       //  The atomic number where the calculation
+#define   MaxN     100      //  The atomic number where the calculation
                             //  on the formula is changed on the integral
                             //  one
 
