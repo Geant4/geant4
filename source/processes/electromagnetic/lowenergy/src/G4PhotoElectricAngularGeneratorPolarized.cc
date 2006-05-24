@@ -133,8 +133,8 @@ G4ThreeVector G4PhotoElectricAngularGeneratorPolarized::GetPhotoElectronDirectio
   G4double cBeta = 0; // Majorant surface parameter (function of the outgoing electron kinetic energy)
 
   G4int shellLevel = 0;
-  if(shellId <  3) shellLevel = 0; // K-shell // Polarized model for K-shell
-  if(shellId >= 3) shellLevel = 1; // L1-shell // Polarized model for L1 and higher shells
+  if(shellId <  2) shellLevel = 0; // K-shell  // Polarized model for K-shell
+  if(shellId >= 2) shellLevel = 1; // L1-shell // Polarized model for L1 and higher shells
 
   // For the outgoing kinetic energy find the current majorant surface parameters
   PhotoElectronGetMajorantSurfaceAandCParameters( shellLevel, beta, &aBeta, &cBeta);
