@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.10 2006-02-16 16:52:33 maire Exp $
+// $Id: PhysicsList.cc,v 1.11 2006-05-24 13:42:00 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -60,6 +60,8 @@
 
 #include "G4Decay.hh"
 #include "G4EmProcessOptions.hh"
+
+#include "G4StepLimiter.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -178,6 +180,7 @@ void PhysicsList::ConstructEM()
       pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
       pmanager->AddProcess(new G4eIonisation,       -1, 2,2);
       pmanager->AddProcess(new G4eBremsstrahlung,   -1, 3,3);
+      pmanager->AddProcess(new G4StepLimiter,       -1,-1,4);      
 
     } else if (particleName == "e+") {
       //positron
@@ -192,6 +195,7 @@ void PhysicsList::ConstructEM()
       eehadProcess             = new G4eeToHadrons();
       pmanager->AddDiscreteProcess(theAnnihiToMuPairProcess);
       pmanager->AddDiscreteProcess(eehadProcess);
+      pmanager->AddDiscreteProcess(new G4StepLimiter);
        
     } else if( particleName == "mu+" ||
                particleName == "mu-"    ) {
@@ -200,19 +204,23 @@ void PhysicsList::ConstructEM()
       pmanager->AddProcess(new G4MuIonisation,      -1, 2,2);
       pmanager->AddProcess(new G4MuBremsstrahlung,  -1, 3,3);
       pmanager->AddProcess(new G4MuPairProduction,  -1, 4,4);
+      pmanager->AddProcess(new G4StepLimiter,       -1,-1,5);            
       
     } else if( particleName == "anti_proton") {
       pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
       pmanager->AddProcess(new G4hhIonisation,      -1, 2,2);
+      pmanager->AddProcess(new G4StepLimiter,       -1,-1,3);       
 
     } else if( particleName == "GenericIon") {
       pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
       pmanager->AddProcess(new G4ionIonisation,     -1, 2,2);
+      pmanager->AddProcess(new G4StepLimiter,       -1,-1,3);       
       
     } else if( particle->GetPDGCharge() != 0.0 && !particle->IsShortLived()
             && particleName != "chargedgeantino") {
       pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
       pmanager->AddProcess(new G4hIonisation,       -1, 2,2);
+      pmanager->AddProcess(new G4StepLimiter,       -1,-1,3);       
     }
   }
   
