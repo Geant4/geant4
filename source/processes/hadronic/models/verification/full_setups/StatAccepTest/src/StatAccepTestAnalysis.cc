@@ -88,7 +88,7 @@ StatAccepTestAnalysis* StatAccepTestAnalysis::getInstance() {
 
 
 void StatAccepTestAnalysis::init() {
-  // G4cout << " StatAccepTestAnalysis::init() : Cleaning up..." << G4endl;
+  //G4cout << " StatAccepTestAnalysis::init() : Cleaning up..." << G4endl;
 
   // We need to reset the content of the tuple and the
   // profile containers at the beginning of a new Run,
@@ -339,7 +339,6 @@ void StatAccepTestAnalysis::init() {
   gammaTrackLength = 0.0;
   pion0TrackLength = 0.0;
 
-  neutronTrackLength2 = 0.0;
   electronTrackLength2 = 0.0;
   muonTrackLength2 = 0.0;
   pionChargedTrackLength2 = 0.0;
@@ -421,12 +420,12 @@ void StatAccepTestAnalysis::init( const G4int numberOfReplicasIn,
 	histoFactory->createHistogram1D("50", "Longitudinal shower profile", 
 					numberOfReadoutLayers, 0.0, 
 					1.0*numberOfReadoutLayers );
-      // G4cout << " Created longitudinalProfileHisto " << G4endl;
+      //G4cout << " Created longitudinalProfileHisto " << G4endl;
       // // // if ( ! tree->find( "60" ) ) {
       transverseProfileHisto = 
 	histoFactory->createHistogram1D("60", "Transverse shower profile", 
 					numberOfRadiusBins, 0.0, 1.0*numberOfRadiusBins );
-      // G4cout << " Created transverseProfileHisto " << G4endl;
+      //G4cout << " Created transverseProfileHisto " << G4endl;
 
       // Step Energy versus step Length.
       // stepEvsL_active = 
@@ -992,13 +991,13 @@ void StatAccepTestAnalysis::fillNtuple( float incidentParticleId,
     maxEdepTot = totalEnergyDepositedInCalorimeter;
   }
   if (tuple) {
-    // G4cout << " StatAccepTestAnalysis::fillNtuple : DEBUG Info " << G4endl
-    //        << "\t incidentParticleId = " << incidentParticleId << G4endl
-    //        << "\t incidentParticleEnergy = " << incidentParticleEnergy << G4endl
-    //        << "\t totalEnergyDepositedInActiveLayers = " 
-    //        << totalEnergyDepositedInActiveLayers << G4endl
-    //        << "\t totalEnergyDepositedInCalorimeter = " 
-    //        << totalEnergyDepositedInCalorimeter << G4endl;       // ***DEBUG***
+    //G4cout << " StatAccepTestAnalysis::fillNtuple : DEBUG Info " << G4endl
+    //       << "\t incidentParticleId = " << incidentParticleId << G4endl
+    //       << "\t incidentParticleEnergy = " << incidentParticleEnergy << G4endl
+    //       << "\t totalEnergyDepositedInActiveLayers = " 
+    //       << totalEnergyDepositedInActiveLayers << G4endl
+    //       << "\t totalEnergyDepositedInCalorimeter = " 
+    //       << totalEnergyDepositedInCalorimeter << G4endl;       // ***DEBUG***
 
     tuple->fill( tuple->findColumn( "ID" ), incidentParticleId );
     tuple->fill( tuple->findColumn( "E" ), incidentParticleEnergy );
@@ -1031,17 +1030,17 @@ void StatAccepTestAnalysis::fillNtuple( float incidentParticleId,
 
   // Reset the longitudinal and transverse profiles, for the next event.
   for ( int layer = 0; layer < numberOfReadoutLayers; layer++ ) {
-    // G4cout << " StatAccepTestAnalysis::fillNtuple : DEBUG Info " << G4endl
-    //        << "\t Longitudinal profile: layer = " << layer
-    //        << "   energy = " << longitudinalProfile[ layer ] / MeV 
-    //        << " MeV " << G4endl;                                 //***DEBUG***
+    //G4cout << " StatAccepTestAnalysis::fillNtuple : DEBUG Info " << G4endl
+    //       << "\t Longitudinal profile: layer = " << layer
+    //       << "   energy = " << longitudinalProfile[ layer ] / MeV 
+    //       << " MeV " << G4endl;                                 //***DEBUG***
     longitudinalProfile[ layer ] = 0.0;
   }
   for ( int ir = 0; ir < numberOfRadiusBins; ir++ ) {
-    // G4cout << " StatAccepTestAnalysis::fillNtuple : DEBUG Info " << G4endl
-    //        << "\t Transverse profile: iBinRadius = " << ir / mm
-    //        << " mm   energy = " << transverseProfile[ ir ] / MeV 
-    //        << " MeV " << G4endl;                                 //***DEBUG***
+    //G4cout << " StatAccepTestAnalysis::fillNtuple : DEBUG Info " << G4endl
+    //       << "\t Transverse profile: iBinRadius = " << ir / mm
+    //       << " mm   energy = " << transverseProfile[ ir ] / MeV 
+    //       << " MeV " << G4endl;                                 //***DEBUG***
     transverseProfile[ ir ] = 0.0;
   }
 
@@ -1057,8 +1056,8 @@ void StatAccepTestAnalysis::fillNtuple( float incidentParticleId,
   if ( numberOfEvents % 1000 == 0 ) {
     if ( tree ) {
       tree->commit();
-      // G4cout << " tree commit ,  at event=" << numberOfEvents-1 
-      //       << G4endl; //***DEBUG***
+      //G4cout << " tree commit ,  at event=" << numberOfEvents-1 
+      //      << G4endl; //***DEBUG***
     }
   }
 
@@ -2653,7 +2652,7 @@ void StatAccepTestAnalysis::finish() {
   if ( n <= 1.0 ) {
     n = 2.0;         // To avoid division by zero in  sigma
   }
-  // G4cout << " n=" << n << G4endl;                             //***DEBUG***
+  //G4cout << " n=" << n << G4endl;                             //***DEBUG***
   G4double sum, sum2, mu, sigma, mu_sigma;
   sum  = sumEdepAct;
   sum2 = sumEdepAct2;
