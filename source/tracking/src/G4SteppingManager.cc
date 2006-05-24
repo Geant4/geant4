@@ -21,10 +21,10 @@
 // ********************************************************************
 //
 //
-// $Id: G4SteppingManager.cc,v 1.35 2006-05-24 11:43:26 tsasaki Exp $
+// $Id: G4SteppingManager.cc,v 1.36 2006-05-24 13:04:44 tsasaki Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// Last checked in at $Date: 2006-05-24 11:43:26 $ by $Author: tsasaki $
+// Last checked in at $Date: 2006-05-24 13:04:44 $ by $Author: tsasaki $
 //
 //---------------------------------------------------------------
 //
@@ -121,6 +121,12 @@ G4StepStatus G4SteppingManager::Stepping()
 #ifdef G4VERBOSE
             // !!!!! Verbose
              if(verboseLevel>0) fVerbose->NewStep();
+	     else 
+             if(verboseLevel==-1) { 
+		 G4VSteppingVerbose::SetSilent(1);
+	     }
+	     else
+ 		 G4VSteppingVerbose::SetSilent(0);
 #endif 
 
 // Store last PostStepPoint to PreStepPoint, and swap current and nex

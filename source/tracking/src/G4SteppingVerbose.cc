@@ -21,10 +21,10 @@
 // ********************************************************************
 //
 //
-// $Id: G4SteppingVerbose.cc,v 1.18 2006-05-24 11:43:26 tsasaki Exp $
+// $Id: G4SteppingVerbose.cc,v 1.19 2006-05-24 13:04:44 tsasaki Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// Last checked in at $Date: 2006-05-24 11:43:26 $ by $Author: tsasaki $
+// Last checked in at $Date: 2006-05-24 13:04:44 $ by $Author: tsasaki $
 //
 //---------------------------------------------------------------
 //
@@ -361,6 +361,7 @@ void G4SteppingVerbose::DPSLUserLimit()
 void G4SteppingVerbose::DPSLPostStep()
 /////////////////////////////////////////////
 {
+  if(Silent==1){ return; }
   CopyState();
 
   if( verboseLevel > 5 ){
@@ -384,7 +385,7 @@ void G4SteppingVerbose::DPSLPostStep()
 void G4SteppingVerbose::DPSLAlongStep()
 /////////////////////////////////////////////
 {
-   if(Silent==1){ return; }
+  if(Silent==1){ return; }
   CopyState();
 
   if( verboseLevel > 5 ){

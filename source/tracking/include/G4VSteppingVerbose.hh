@@ -21,10 +21,10 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSteppingVerbose.hh,v 1.17 2006-05-24 11:43:26 tsasaki Exp $
+// $Id: G4VSteppingVerbose.hh,v 1.18 2006-05-24 13:04:44 tsasaki Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// Last checked in at $Date: 2006-05-24 11:43:26 $ by $Author: tsasaki $
+// Last checked in at $Date: 2006-05-24 13:04:44 $ by $Author: tsasaki $
 //  
 //---------------------------------------------------------------
 //
@@ -75,12 +75,18 @@ protected:    // to force 'singleton'
 public:  
   virtual ~G4VSteppingVerbose();
   //
+protected:  
+  static G4VSteppingVerbose* fInstance;// pointer to the instance 
+  static G4int Silent; //flag for verbosity
+  static G4int SilentStepInfo; //another flag for verbosity
 public:   // with description
 // static methods to set/get the object's pointer 
-  static void SetInstance(G4VSteppingVerbose* Instance);
-  static G4VSteppingVerbose* GetInstance();
-  static G4int Silent;
-  static G4int SilentStepInfo;
+    static void SetInstance(G4VSteppingVerbose* Instance){ fInstance=Instance;};
+  static G4VSteppingVerbose* GetInstance(){return fInstance;};
+  static G4int GetSilent(){return Silent;};
+  static void SetSilent(G4int fSilent){Silent==fSilent;};
+  static G4int GetSilentStepInfo(){return SilentStepInfo;};
+  static void SetSilentStepInfo(G4int fSilent){SilentStepInfo==fSilent;};
 // these method are invoked in the SteppingManager 
   virtual void NewStep() = 0;
   void CopyState();
@@ -100,8 +106,6 @@ public:   // with description
   virtual void VerboseParticleChange() = 0;
   // Member data
 
-protected:  // pointer to the instance 
-  static G4VSteppingVerbose* fInstance;
 protected:
   G4SteppingManager* fManager;
   

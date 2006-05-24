@@ -21,10 +21,10 @@
 // ********************************************************************
 //
 //
-// $Id: G4TrackingMessenger.cc,v 1.11 2006-05-24 11:43:26 tsasaki Exp $
+// $Id: G4TrackingMessenger.cc,v 1.12 2006-05-24 13:04:44 tsasaki Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// Last checked in at $Date: 2006-05-24 11:43:26 $ by $Author: tsasaki $
+// Last checked in at $Date: 2006-05-24 13:04:44 $ by $Author: tsasaki $
 //
 //---------------------------------------------------------------
 //
@@ -82,6 +82,7 @@ G4TrackingMessenger::G4TrackingMessenger(G4TrackingManager * trMan)
   VerboseCmd = new G4UIcmdWithAnInteger("/tracking/verbose",this);
 #ifdef G4VERBOSE
   VerboseCmd->SetGuidance("Set Verbose level of tracking category.");
+  VerboseCmd->SetGuidance(" -1 : Silent.");
   VerboseCmd->SetGuidance(" 0 : Silent.");
   VerboseCmd->SetGuidance(" 1 : Minium information of each Step.");
   VerboseCmd->SetGuidance(" 2 : Addition to Level=1, info of secondary particles.");
@@ -93,7 +94,7 @@ G4TrackingMessenger::G4TrackingMessenger(G4TrackingManager * trMan)
   VerboseCmd->SetGuidance("     from each AlongStepPostStep process."); 
   VerboseCmd->SetParameterName("verbose_level",true);
   VerboseCmd->SetDefaultValue(0);
-  VerboseCmd->SetRange("verbose_level >=0  ");
+  VerboseCmd->SetRange("verbose_level >=-1  ");
 #else 
   VerboseCmd->SetGuidance("You need to recompile the tracking category defining G4VERBOSE ");  
 #endif

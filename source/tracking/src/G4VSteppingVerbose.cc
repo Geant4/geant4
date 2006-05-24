@@ -21,10 +21,10 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSteppingVerbose.cc,v 1.12 2006-05-24 11:43:26 tsasaki Exp $
+// $Id: G4VSteppingVerbose.cc,v 1.13 2006-05-24 13:04:44 tsasaki Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// Last checked in at $Date: 2006-05-24 11:43:26 $ by $Author: tsasaki $
+// Last checked in at $Date: 2006-05-24 13:04:44 $ by $Author: tsasaki $
 //  
 //---------------------------------------------------------------
 //
@@ -51,14 +51,6 @@ G4VSteppingVerbose::G4VSteppingVerbose() :verboseLevel(0){
   if(fInstance!= NULL) G4Exception("G4SteppingVerbose is the singleton. Only one SteppingVerbose class can be instantiated.");
 }
 G4VSteppingVerbose::~G4VSteppingVerbose(){;}
-void G4VSteppingVerbose::SetInstance(G4VSteppingVerbose* Instance)
-    {
-      fInstance = Instance;
-    }
-G4VSteppingVerbose* G4VSteppingVerbose::GetInstance()
-    {
-      return fInstance;
-    }
 
 //////////////////////////////////////////////////////////////////
 void G4VSteppingVerbose::SetManager(G4SteppingManager* const fMan)
