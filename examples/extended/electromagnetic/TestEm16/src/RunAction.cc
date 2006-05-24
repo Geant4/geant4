@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.3 2006-05-23 16:13:01 hbu Exp $
+// $Id: RunAction.cc,v 1.4 2006-05-24 12:58:49 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -64,18 +64,18 @@ RunAction::RunAction()
    G4String options = "--noErrors uncompress";
    tree = tf->create("testem16.hbook","hbook",readOnly,createNew,options);
    //tree = tf->create("testem16.root", "root",readOnly,createNew,options);
-   //tree = tf->create("testem16.xml" ,"xml"  ,readOnly,createNew,options); // standard AIDA
+   //tree = tf->create("testem16.xml" ,"xml"  ,readOnly,createNew,options);
    delete tf;
 
    if (tree) {
-     // Creating a histogram factory
-     AIDA::IHistogramFactory* hf = af->createHistogramFactory(*tree);
+    // Creating a histogram factory
+    AIDA::IHistogramFactory* hf = af->createHistogramFactory(*tree);
 
-     // Creating histograms
-     static const G4double Ecr=66.5025;
-     histo[0] = hf->createHistogram1D("1","SynRad Energy in keV",100, 0 ,5.*Ecr);
-     histo[1] = hf->createHistogram1D("2","SynRad Power  in keV",100, 0 ,5.*Ecr);
-     histo[2] = hf->createHistogram1D("3","Path Length in m",100, 0, 1.6);
+    // Creating histograms
+    const G4double Ecr=66.5025;
+    histo[0] = hf->createHistogram1D("1","SynRad Energy in keV",100, 0 ,5.*Ecr);
+    histo[1] = hf->createHistogram1D("2","SynRad Power  in keV",100, 0 ,5.*Ecr);
+    histo[2] = hf->createHistogram1D("3","Path Length in m",100, 0, 1.6);
 
      delete hf;
      G4cout << "\n----> Histogram tree is opened" << G4endl;
@@ -95,12 +95,14 @@ RunAction::~RunAction()
 #ifdef G4ANALYSIS_USE
   bool debug=true;
   bool Commit_Ok=tree->commit();       // Writing the histograms to the file
-  if(Commit_Ok)
-  { if(debug) G4cout << "tree->commit() ok. Writing of histogram file done" << '\n';
-  }
+  if (Commit_Ok)
+    { if(debug) G4cout << "tree->commit() ok. Writing of histogram file done" 
+                       << '\n';
+    }
   else if(!Commit_Ok)
-  { G4cout << "tree->commit() not successful, no histogram file written" << '\n';
-  }
+    { G4cout << "tree->commit() not successful, no histogram file written" 
+                      << '\n';
+    }
   tree->close();        // and closing the tree (and the file)
 
   delete tree;
@@ -123,9 +125,6 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
 
 void RunAction::EndOfRunAction(const G4Run*)
 {
-  // show Rndm status
-  CLHEP::HepRandom::showEngineStatus();
-
   if(n_gam_sync>0)
   {
     G4double Emean = e_gam_sync/n_gam_sync;
@@ -137,9 +136,12 @@ void RunAction::EndOfRunAction(const G4Run*)
     << E_rms/(keV * sqrt((G4double) n_gam_sync)) << " keV" << '\n'
     << "  E_rms             = " << G4BestUnit(E_rms,"Energy") << '\n'
     << "  Energy Max / Mean = " << e_gam_sync_max / Emean << '\n'
-    << "  MeanFreePath      = " << G4BestUnit(lam_gam_sync/n_gam_sync,"Length") << '\n';
+    << "  MeanFreePath      = " << G4BestUnit(lam_gam_sync/n_gam_sync,"Length")
+    << G4endl;
   }
-
+  
+  // show Rndm status
+  CLHEP::HepRandom::showEngineStatus();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: SteppingAction.cc,v 1.2 2006-05-23 16:13:01 hbu Exp $
+// $Id: SteppingAction.cc,v 1.3 2006-05-24 12:58:49 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -63,23 +63,29 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
    iCalled++;
    G4StepPoint* PrePoint = aStep->GetPreStepPoint();
    G4TrackVector* secondary = fpSteppingManager->GetSecondary();
-   size_t lp=(*secondary).size(); // size of secondary vector,   (*secondary)[lp-1]  points to the last photon generated
-   if(lp)
+
+   //(*secondary)[lp-1]  points to the last photon generated
+   //   
+   size_t lp=(*secondary).size();
+   if (lp)
    {
-	 G4double      Egamma =  (*secondary)[lp-1]->GetTotalEnergy();
+     G4double  Egamma =  (*secondary)[lp-1]->GetTotalEnergy();
      runAction->n_gam_sync++;
      runAction->e_gam_sync += Egamma;
      runAction->e_gam_sync2 += Egamma*Egamma;
-     if(Egamma > runAction->e_gam_sync_max) runAction->e_gam_sync_max = Egamma;
+     if (Egamma > runAction->e_gam_sync_max) runAction->e_gam_sync_max = Egamma;
      runAction->lam_gam_sync += aStep->GetStepLength();
-     if(iCalled<nprint)
+     if (iCalled<nprint)
      {
        G4double      Eelec  = PrePoint->GetTotalEnergy();
        G4ThreeVector Pelec  = PrePoint->GetMomentum();
        G4ThreeVector PGamma = (*secondary)[lp-1]->GetMomentum();
-	   G4bool IsGamma = (*secondary)[lp-1]->GetDefinition() == G4Gamma::GammaDefinition();
+       G4bool IsGamma = 
+            ((*secondary)[lp-1]->GetDefinition() == G4Gamma::GammaDefinition());
+	    
        G4cout << "UserSteppingAction processName=" << process->GetProcessName()
-         << " Step Length=" << std::setw(6) << G4BestUnit(aStep->GetStepLength(),"Length")
+         << " Step Length=" << std::setw(6) 
+	                    << G4BestUnit(aStep->GetStepLength(),"Length")
          << " Eelec=" << G4BestUnit(Eelec,"Energy")
          << " Pelec=" << G4BestUnit(Pelec,"Energy")
          << " IsGamma=" << IsGamma
@@ -87,7 +93,7 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
          << " PGamma=" << G4BestUnit(PGamma,"Energy")
          << " #secondaries lp=" << lp
          << '\n';
-	 }
+      }
 
 #ifdef G4ANALYSIS_USE
      // fill histos
