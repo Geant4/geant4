@@ -21,10 +21,10 @@
 // ********************************************************************
 //
 //
-// $Id: G4RichTrajectory.hh,v 1.1 2005-11-24 12:47:36 allison Exp $
+// $Id: G4RichTrajectory.hh,v 1.2 2006-05-24 11:43:26 tsasaki Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//
+// Last checked in at $Date: 2006-05-24 11:43:26 $ by $Author: tsasaki $
 //---------------------------------------------------------------
 //
 // G4RichTrajectory.hh

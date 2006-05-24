@@ -21,9 +21,10 @@
 // ********************************************************************
 //
 //
-// $Id: G4TrackVector.hh,v 1.9 2003-06-16 17:13:10 gunter Exp $
+// $Id: G4TrackVector.hh,v 1.10 2006-05-24 11:43:26 tsasaki Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+// Last checked in at $Date: 2006-05-24 11:43:26 $ by $Author: tsasaki $
 //
 //---------------------------------------------------------------
 //

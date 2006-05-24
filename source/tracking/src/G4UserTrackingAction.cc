@@ -21,9 +21,10 @@
 // ********************************************************************
 //
 //
-// $Id: G4UserTrackingAction.cc,v 1.7 2005-11-22 21:04:07 asaim Exp $
+// $Id: G4UserTrackingAction.cc,v 1.8 2006-05-24 11:43:26 tsasaki Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+// Last checked in at $Date: 2006-05-24 11:43:26 $ by $Author: tsasaki $
 //
 // ---------------------------------------------------------------
 //

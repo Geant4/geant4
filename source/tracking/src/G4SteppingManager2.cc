@@ -21,10 +21,11 @@
 // ********************************************************************
 //
 //
-// $Id: G4SteppingManager2.cc,v 1.26 2006-01-13 12:52:34 mkossov Exp $
+// $Id: G4SteppingManager2.cc,v 1.27 2006-05-24 11:43:26 tsasaki Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
+// Last checked in at $Date: 2006-05-24 11:43:26 $ by $Author: tsasaki $
 //---------------------------------------------------------------
 //
 // G4SteppingManager2.cc
@@ -235,7 +236,12 @@ void G4SteppingManager::GetProcessNumber()
        }
 
     	  // Transportation is assumed to be the last process in the vector
-       if(kp == MAXofAlongStepLoops-1) fStepStatus = fGeomBoundary;
+       if(kp == MAXofAlongStepLoops-1) {
+	   if (fTrack->GetNextVolume() != 0)
+	       fStepStatus = fGeomBoundary;
+	   else
+	       fStepStatus = fWorldBoundary;	
+       }
      }
 
      // Make sure to check the safety, even if Step is not limited 

@@ -21,9 +21,10 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTrajectory.cc,v 1.8 2005-11-15 03:52:26 tinslay Exp $
+// $Id: G4VTrajectory.cc,v 1.9 2006-05-24 11:43:26 tsasaki Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+// Last checked in at $Date: 2006-05-24 11:43:26 $ by $Author: tsasaki $
 //
 // ---------------------------------------------------------------
 //

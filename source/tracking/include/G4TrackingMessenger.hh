@@ -21,9 +21,10 @@
 // ********************************************************************
 //
 //
-// $Id: G4TrackingMessenger.hh,v 1.7 2001-07-11 10:08:41 gunter Exp $
+// $Id: G4TrackingMessenger.hh,v 1.8 2006-05-24 11:43:26 tsasaki Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+// Last checked in at $Date: 2006-05-24 11:43:26 $ by $Author: tsasaki $
 //
 //---------------------------------------------------------------
 //

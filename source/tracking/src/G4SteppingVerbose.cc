@@ -21,9 +21,10 @@
 // ********************************************************************
 //
 //
-// $Id: G4SteppingVerbose.cc,v 1.17 2006-03-08 22:08:59 tsasaki Exp $
+// $Id: G4SteppingVerbose.cc,v 1.18 2006-05-24 11:43:26 tsasaki Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+// Last checked in at $Date: 2006-05-24 11:43:26 $ by $Author: tsasaki $
 //
 //---------------------------------------------------------------
 //
