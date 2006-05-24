@@ -1,4 +1,4 @@
-$Id: History,v 1.250 2006-05-22 18:14:17 vnivanch Exp $
+$Id: History,v 1.251 2006-05-24 19:11:18 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -20,6 +20,7 @@ committal in the CVS repository !
 22 May 06: V.Ivant (emutils-V08-00-18)
 - G4EmProcessOptions, G4LossTableManager - add Get/SetBremsstrahlungTh
   method requested by CMS
+- G4ionEffectiveCharge make upper limit of the model proportional to Z
 
 14 May 06: V.Ivant (emutils-V08-00-17)
 - G4VEnergyLossProcess, G4VEmProcess, G4VMultipleScattering - add
