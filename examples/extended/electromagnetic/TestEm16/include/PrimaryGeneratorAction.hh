@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: PrimaryGeneratorAction.hh,v 1.1 2006-05-18 14:25:10 vnivanch Exp $
+// $Id: PrimaryGeneratorAction.hh,v 1.2 2006-05-24 12:58:49 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -35,7 +35,6 @@
 class G4ParticleGun;
 class G4Event;
 class DetectorConstruction;
-class PrimaryGeneratorMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -46,14 +45,11 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
    ~PrimaryGeneratorAction();
 
   public:
-    void SetRndmBeam(G4double val)  {rndmBeam = val;}
     void GeneratePrimaries(G4Event*);
 
   private:
     G4ParticleGun*             particleGun;
     DetectorConstruction*      Detector;
-    G4double                   rndmBeam;
-    PrimaryGeneratorMessenger* gunMessenger;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

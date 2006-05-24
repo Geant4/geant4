@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.hh,v 1.1 2006-05-18 14:25:10 vnivanch Exp $
+// $Id: DetectorConstruction.hh,v 1.2 2006-05-24 12:58:49 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -32,7 +32,6 @@
 #include "G4VUserDetectorConstruction.hh"
 #include "globals.hh"
 
-class G4LogicalVolume;
 class G4Material;
 class G4UniformMagField;
 class G4UserLimits;
@@ -71,7 +70,6 @@ class DetectorConstruction : public G4VUserDetectorConstruction
   private:
 
      G4VPhysicalVolume*    pBox;
-     G4LogicalVolume*      lBox;
 
      G4double              BoxSize;
      G4Material*           aMaterial;

@@ -1,4 +1,4 @@
-$Id: README,v 1.1 2006-05-18 14:25:11 vnivanch Exp $
+$Id: README,v 1.2 2006-05-24 12:58:49 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -7,8 +7,7 @@ $Id: README,v 1.1 2006-05-18 14:25:11 vnivanch Exp $
 
                             TestEm16
                             --------
-     This example is intended to test the process of synchrotron
-     radiation. The geometry is the same as that of TestEm6
+      Simulate synchrotron radiation
 	
  1- GEOMETRY DEFINITION
 
@@ -19,7 +18,7 @@ $Id: README,v 1.1 2006-05-18 14:25:11 vnivanch Exp $
 	- the (full) size of the box.
      The default is 500 m of vacuum.
 
-     In addition a transverse uniform magnetic field can be applied.
+     A transverse uniform magnetic field can be applied.
  
      The default geometry is constructed in DetectorConstruction class,
      but all of the above parameters can be changed interactively via
@@ -40,7 +39,7 @@ $Id: README,v 1.1 2006-05-18 14:25:11 vnivanch Exp $
      and its energy are set in the PrimaryGeneratorAction class, and can
      changed via the G4 build-in commands of ParticleGun class (see
      the macros provided with this example).
-     The default is an ekectron of 10 GeV.
+     The default is an positron of 10 GeV.
      	
      In addition one can choose randomly the impact point of the incident
      particle. The corresponding interactive command is built in

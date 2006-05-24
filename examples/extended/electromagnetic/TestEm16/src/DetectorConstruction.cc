@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.cc,v 1.1 2006-05-18 14:25:10 vnivanch Exp $
+// $Id: DetectorConstruction.cc,v 1.2 2006-05-24 12:58:49 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -46,7 +46,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorConstruction::DetectorConstruction()
-:pBox(0), lBox(0), BoxSize(500*m), aMaterial(0), magField(0)
+:pBox(0), BoxSize(500*m), aMaterial(0), magField(0)
 {
   DefineMaterials();
   SetMaterial("Iron");
@@ -80,10 +80,11 @@ void DetectorConstruction::DefineMaterials()
  new G4Material("Carbon",    z= 6., a= 12.011*g/mole,   density= 2.265*g/cm3);
  new G4Material("Iron",      z=26., a= 55.85*g/mole,    density= 7.870*g/cm3);
 
- // define a vacuum with a restgas pressure of 10nTorr N2 as typical for accelerators
- G4double const Torr  = atmosphere/760.; // 1 Torr
- G4double pressure, temperature = 296.150*kelvin; // 23 degree Celsius
- new G4Material("Vacuum", z=7., a=14.01*g/mole, density= 1.516784e-11*kg/m3, kStateGas, temperature, pressure= 10e-9*Torr);
+ // define a vacuum with a restgas pressure  typical for accelerators
+ G4double const Torr  = atmosphere/760.; 	// 1 Torr
+ G4double pressure = 10e-9*Torr, temperature = 296.150*kelvin; 	// 23  Celsius
+ new G4Material("Vacuum", z=7., a=14.01*g/mole, density= 1.516784e-11*kg/m3,
+                 kStateGas, temperature, pressure);
 
  G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 }
@@ -100,7 +101,8 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
   G4Box*
   sBox = new G4Box("Container",				//its name
                    BoxSize/2,BoxSize/2,BoxSize/2);	//its dimensions
-		   			
+
+  G4LogicalVolume*		   			
   lBox = new G4LogicalVolume(sBox,			//its shape
                              aMaterial,			//its material
                              aMaterial->GetName());	//its name

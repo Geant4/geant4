@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.2 2006-05-19 10:53:54 vnivanch Exp $
+// $Id: PhysicsList.cc,v 1.3 2006-05-24 12:58:49 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -34,7 +34,9 @@
 #include "G4ParticleTypes.hh"
 #include "G4ParticleTable.hh"
 
-#include "G4GammaConversionToMuons.hh"
+#include "G4ComptonScattering.hh"
+#include "G4GammaConversion.hh"
+#include "G4PhotoElectricEffect.hh"
 
 #include "G4MultipleScattering.hh"
 
@@ -45,8 +47,11 @@
 #include "G4MuIonisation.hh"
 #include "G4MuBremsstrahlung.hh"
 #include "G4MuPairProduction.hh"
+
 #include "G4SynchrotronRadiation.hh"
 #include "G4SynchrotronRadiationInMat.hh"
+
+#include "G4StepLimiter.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -54,11 +59,9 @@ PhysicsList::PhysicsList()
 : G4VUserPhysicsList()
 {
   defaultCutValue = 1.*km;
+  
+  SRType = true; 
   pMes = new PhysicsListMessenger(this);
-  theGammaToMuPairProcess = 0;
-  theSynRadProcess = 0;
-  SetVerboseLevel(1);
-  dType = true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -66,8 +69,6 @@ PhysicsList::PhysicsList()
 PhysicsList::~PhysicsList()
 { 
   delete pMes;
-  delete theSynRadProcess;
-  delete theGammaToMuPairProcess;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -124,9 +125,6 @@ void PhysicsList::ConstructProcess()
 
 void PhysicsList::ConstructEM()
 {
-  if(dType) theSynRadProcess = new G4SynchrotronRadiation();
-  else      theSynRadProcess = new G4SynchrotronRadiationInMat();
-
   theParticleIterator->reset();
   while( (*theParticleIterator)() ){
     G4ParticleDefinition* particle = theParticleIterator->value();
@@ -134,24 +132,33 @@ void PhysicsList::ConstructEM()
     G4String particleName = particle->GetParticleName();
 
     if (particleName == "gamma") {
-      // gamma    allow  only   gamma -> mu+mu-
-      theGammaToMuPairProcess=new G4GammaConversionToMuons;
-      pmanager->AddDiscreteProcess(theGammaToMuPairProcess);
-      
+      // gamma
+      pmanager->AddDiscreteProcess(new G4PhotoElectricEffect);
+      pmanager->AddDiscreteProcess(new G4ComptonScattering);
+      pmanager->AddDiscreteProcess(new G4GammaConversion);
+            
     } else if (particleName == "e-") {
       //electron
-      pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
-      pmanager->AddProcess(new G4eIonisation,       -1, 2,2);
-      pmanager->AddProcess(new G4eBremsstrahlung,   -1, 3,3);
-      pmanager->AddProcess(theSynRadProcess, -1, -1, 4);
+      pmanager->AddProcess(new G4MultipleScattering,        -1, 1,1);
+      pmanager->AddProcess(new G4eIonisation,               -1, 2,2);
+      pmanager->AddProcess(new G4eBremsstrahlung,           -1, 3,3);
+      if (SRType)
+      pmanager->AddProcess(new G4SynchrotronRadiation,      -1,-1,4);
+      else
+      pmanager->AddProcess(new G4SynchrotronRadiationInMat, -1,-1,4); 
+      pmanager->AddProcess(new G4StepLimiter,               -1,-1,5);
      
     } else if (particleName == "e+") {
       //positron
-      pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
-      pmanager->AddProcess(new G4eIonisation,       -1, 2,2);
-      pmanager->AddProcess(new G4eBremsstrahlung,   -1, 3,3);
-      pmanager->AddProcess(new G4eplusAnnihilation,  0,-1,4);
-      pmanager->AddProcess(theSynRadProcess, -1, -1, 5);
+      pmanager->AddProcess(new G4MultipleScattering,        -1, 1,1);
+      pmanager->AddProcess(new G4eIonisation,               -1, 2,2);
+      pmanager->AddProcess(new G4eBremsstrahlung,           -1, 3,3);
+      pmanager->AddProcess(new G4eplusAnnihilation,          0,-1,4);
+      if (SRType)
+      pmanager->AddProcess(new G4SynchrotronRadiation,      -1,-1,5);
+      else
+      pmanager->AddProcess(new G4SynchrotronRadiationInMat, -1,-1,5);       
+      pmanager->AddProcess(new G4StepLimiter,               -1,-1,6);
       
     } else if( particleName == "mu+" ||
                particleName == "mu-"    ) {
