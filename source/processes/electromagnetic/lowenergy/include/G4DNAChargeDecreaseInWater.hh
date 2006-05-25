@@ -21,42 +21,43 @@
 // ********************************************************************
 //
 //
-// $Id: G4DNAChargeDecreaseInWater.hh,v 1.2 2005-12-20 13:50:31 capra Exp $
+// $Id: G4DNAChargeDecreaseInWater.hh,v 1.3 2006-05-25 17:57:09 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #ifndef   G4DNACHARGEDECREASEINWATER_HH
- #define  G4DNACHARGEDECREASEINWATER_HH 1
+#define  G4DNACHARGEDECREASEINWATER_HH 1
 
- #include "G4VDNAProcessInWater.hh"
+#include "G4VDNAProcessInWater.hh"
 
- // TotalCrossSectionPolicy must provide:
- //  - [protected] const G4ParticleDefinition * IncomingParticleDefinition(void)
- //  - [protected] G4double TotalCrossSection(G4double k, G4int z)
- //  - [protected] void BuildTotalCrossSection(void)
- //  - [protected] G4int RandomizePartialCrossSection(G4double k, G4int z)
+// TotalCrossSectionPolicy must provide:
+//  - [protected] const G4ParticleDefinition * IncomingParticleDefinition(void)
+//  - [protected] G4double TotalCrossSection(G4double k, G4int z)
+//  - [protected] void BuildTotalCrossSection(void)
+//  - [protected] G4int RandomizePartialCrossSection(G4double k, G4int z)
 
- // FinalStatesPolicy must provide:
- //  - [protected] G4bool KillIncomingParticle(G4double k)
- //  - [protected] void BuildFinalStatesData(void)
- //  - [protected] G4int NumberOfFinalStates(G4int finalStateIndex)
- //  - [protected] G4double OverallBindingEnergyConstant(G4int finalStateIndex)
+// FinalStatesPolicy must provide:
+//  - [protected] G4bool KillIncomingParticle(G4double k)
+//  - [protected] void BuildFinalStatesData(void)
+//  - [protected] G4int NumberOfFinalStates(G4int finalStateIndex)
+//  - [protected] G4double OverallBindingEnergyConstant(G4int finalStateIndex)
 
- template<typename TotalCrossSectionPolicy, typename FinalStatesPolicy>
- class G4DNAChargeDecreaseInWater : public G4VDNAProcessInWater<TotalCrossSectionPolicy, FinalStatesPolicy>
- {
-  public:
-                                         G4DNAChargeDecreaseInWater(const G4String & name) : G4VDNAProcessInWater<TotalCrossSectionPolicy, FinalStatesPolicy>(name) {}
-   virtual                              ~G4DNAChargeDecreaseInWater() {}
+template<typename TotalCrossSectionPolicy, typename FinalStatesPolicy>
+class G4DNAChargeDecreaseInWater : public G4VDNAProcessInWater<TotalCrossSectionPolicy, FinalStatesPolicy>
+{
+public:
+  G4DNAChargeDecreaseInWater(const G4String& name) : G4VDNAProcessInWater<TotalCrossSectionPolicy, FinalStatesPolicy>(name) {}
 
-   virtual G4VParticleChange *           PostStepDoIt(const G4Track & aTrack, const G4Step & aStep);
+  virtual ~G4DNAChargeDecreaseInWater() {}
 
-  private:
-   // Hides default constructor and assignment operator as private
-                                         G4DNAChargeDecreaseInWater(const G4DNAChargeDecreaseInWater & copy);
-   G4DNAChargeDecreaseInWater &              operator=(const G4DNAChargeDecreaseInWater & right);
- };
+  virtual G4VParticleChange* PostStepDoIt(const G4Track & aTrack, const G4Step & aStep);
 
- #include "G4DNAChargeDecreaseInWater.icc"
+private:
+  // Hides default constructor and assignment operator as private
+  G4DNAChargeDecreaseInWater(const G4DNAChargeDecreaseInWater & copy);
+  G4DNAChargeDecreaseInWater& operator=(const G4DNAChargeDecreaseInWater & right);
+};
+
+#include "G4DNAChargeDecreaseInWater.icc"
 #endif /* G4DNACHARGEDECREASEINWATER_HH */
 

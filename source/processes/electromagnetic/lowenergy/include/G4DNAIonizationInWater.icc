@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DNAIonizationInWater.icc,v 1.1 2005-09-13 08:59:06 zfrancis Exp $
+// $Id: G4DNAIonizationInWater.icc,v 1.2 2006-05-25 17:57:10 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -29,11 +29,11 @@
 #include "G4Electron.hh"
 
  template<typename TotalCrossSectionPolicy, typename FinalStatesPolicy>
- G4VParticleChange *                      G4DNAIonizationInWater<TotalCrossSectionPolicy, FinalStatesPolicy> :: PostStepDoIt(const G4Track & aTrack, const G4Step & aStep)
+ G4VParticleChange* G4DNAIonizationInWater<TotalCrossSectionPolicy, FinalStatesPolicy> :: PostStepDoIt(const G4Track & aTrack, const G4Step & aStep)
  {
   const G4int z(10); // H2O number of electrons
 
-  aParticleChange.Initialize(aTrack);
+  this->aParticleChange.Initialize(aTrack);
 
   const G4DynamicParticle* aDynamicParticle = aTrack.GetDynamicParticle();
   G4double k = aDynamicParticle->GetKineticEnergy();
@@ -74,13 +74,13 @@
       finalPy /= finalMomentum;
       finalPz /= finalMomentum;
 
-  aParticleChange.ProposeMomentumDirection( finalPx,finalPy,finalPz );
-  aParticleChange.ProposeEnergy(k-bindingEnergy-secondaryKinetic);
-  aParticleChange.ProposeLocalEnergyDeposit(bindingEnergy);
-  aParticleChange.SetNumberOfSecondaries(1);
+  this->aParticleChange.ProposeMomentumDirection( finalPx,finalPy,finalPz );
+  this->aParticleChange.ProposeEnergy(k-bindingEnergy-secondaryKinetic);
+  this->aParticleChange.ProposeLocalEnergyDeposit(bindingEnergy);
+  this->aParticleChange.SetNumberOfSecondaries(1);
 
   G4DynamicParticle* aElectron = new G4DynamicParticle(G4Electron::Electron(),DeltaDirection,secondaryKinetic);
-  aParticleChange.AddSecondary(aElectron);
+  this->aParticleChange.AddSecondary(aElectron);
 
   return G4VDNAProcessInWater<TotalCrossSectionPolicy, FinalStatesPolicy>::PostStepDoIt(aTrack, aStep);
  }

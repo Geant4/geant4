@@ -21,37 +21,39 @@
 // ********************************************************************
 //
 //
-// $Id: G4DNAProtonChargeIncreaseTotalCrossSectionPolicy.hh,v 1.1 2005-09-15 18:24:17 zfrancis Exp $
+// $Id: G4DNAProtonChargeIncreaseTotalCrossSectionPolicy.hh,v 1.2 2006-05-25 17:57:10 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
-#ifndef   G4DNAPROTONCHARGEINCREASETOTALCROSSSECTIONPOLICY_HH
- #define  G4DNAPROTONCHARGEINCREASETOTALCROSSSECTIONPOLICY_HH 1
+#ifndef G4DNAPROTONCHARGEINCREASETOTALCROSSSECTIONPOLICY_HH
+#define G4DNAPROTONCHARGEINCREASETOTALCROSSSECTIONPOLICY_HH 1
 
- #include "G4DNACrossSectionDataSet.hh"
+#include "G4DNACrossSectionDataSet.hh"
 
- // IncomingParticlePolicy must provide:
- //  - [protected] const G4ParticleDefinition * IncomingParticleDefinition(void);
+// IncomingParticlePolicy must provide:
+//  - [protected] const G4ParticleDefinition * IncomingParticleDefinition(void);
+// ---- MGP ---- WARNING: added dummy implementation to allow compilation with gcc 3.4.5 (25/05/2006)
 
- // EnergyLimitsPolicy must provide:
- //  - [protected] const double lowEnergyLimit
- //  - [protected] const double zeroBelowLowEnergyLimit
- //  - [protected] const double highEnergyLimit
- //  - [protected] const double zeroAboveLowEnergyLimit
+// EnergyLimitsPolicy must provide:
+//  - [protected] const double lowEnergyLimit
+//  - [protected] const double zeroBelowLowEnergyLimit
+//  - [protected] const double highEnergyLimit
+//  - [protected] const double zeroAboveLowEnergyLimit
 
- template <typename IncomingParticlePolicy, typename EnergyLimitsPolicy>
- class G4DNAProtonChargeIncreaseTotalCrossSectionPolicy : public IncomingParticlePolicy, public EnergyLimitsPolicy
- {
-  protected:
-                                        G4DNAProtonChargeIncreaseTotalCrossSectionPolicy() {}
-                                       ~G4DNAProtonChargeIncreaseTotalCrossSectionPolicy() {}
+template <typename IncomingParticlePolicy, typename EnergyLimitsPolicy>
+class G4DNAProtonChargeIncreaseTotalCrossSectionPolicy : public IncomingParticlePolicy, public EnergyLimitsPolicy
+{
+protected:
+  G4DNAProtonChargeIncreaseTotalCrossSectionPolicy() {}
+  ~G4DNAProtonChargeIncreaseTotalCrossSectionPolicy() {}
 
-   G4double                             TotalCrossSection(G4double k, G4int z) const;
-   void                                 BuildTotalCrossSection(void) const {}
+  G4double TotalCrossSection(G4double k, G4int z) const;
+  void BuildTotalCrossSection(void) const {}
+  G4int RandomizePartialCrossSection(G4double k, G4int z) {return 0;}
 
-   // Hides default constructor and assignment operator as private
-                                        G4DNAProtonChargeIncreaseTotalCrossSectionPolicy(const G4DNAProtonChargeIncreaseTotalCrossSectionPolicy & copy);
-   G4DNAProtonChargeIncreaseTotalCrossSectionPolicy & operator=(const G4DNAProtonChargeIncreaseTotalCrossSectionPolicy & right);
- };
+  // Hides default constructor and assignment operator as private
+  G4DNAProtonChargeIncreaseTotalCrossSectionPolicy(const G4DNAProtonChargeIncreaseTotalCrossSectionPolicy & copy);
+  G4DNAProtonChargeIncreaseTotalCrossSectionPolicy & operator=(const G4DNAProtonChargeIncreaseTotalCrossSectionPolicy & right);
+};
 
 #include "G4DNAProtonChargeIncreaseTotalCrossSectionPolicy.icc"
 #endif /* G4DNAPROTONCHARGEINCREASETOTALCROSSSECTIONPOLICY_HH */

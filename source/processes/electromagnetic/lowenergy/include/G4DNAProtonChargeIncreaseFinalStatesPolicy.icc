@@ -31,25 +31,25 @@
  #include "G4Proton.hh"
 
  template <typename EnergyLimitsPolicy>
- G4bool                                 G4DNAProtonChargeIncreaseFinalStatesPolicy<EnergyLimitsPolicy>::KillIncomingParticle(G4double energy) const
+ G4bool G4DNAProtonChargeIncreaseFinalStatesPolicy<EnergyLimitsPolicy>::KillIncomingParticle(G4double energy) const
  {
  if(energy < EnergyLimitsPolicy::lowEnergyLimit) return(true);
  else return (false);
  }
 
  template <typename EnergyLimitsPolicy>
- G4int                               G4DNAProtonChargeIncreaseFinalStatesPolicy<EnergyLimitsPolicy>::NumberOfFinalStates(void) const
+ G4int G4DNAProtonChargeIncreaseFinalStatesPolicy<EnergyLimitsPolicy>::NumberOfFinalStates(G4int) const
 
  {
  return(1);
  }
 
  template <typename EnergyLimitsPolicy>
- void                               G4DNAProtonChargeIncreaseFinalStatesPolicy<EnergyLimitsPolicy>::BuildFinalStatesData(void) const
+ void G4DNAProtonChargeIncreaseFinalStatesPolicy<EnergyLimitsPolicy>::BuildFinalStatesData(void) const
  {}
 
  template <typename EnergyLimitsPolicy>
- G4ParticleDefinition*                               G4DNAProtonChargeIncreaseFinalStatesPolicy<EnergyLimitsPolicy>::OutgoingParticleDefinition(G4int finalStateIndex)
+ G4ParticleDefinition* G4DNAProtonChargeIncreaseFinalStatesPolicy<EnergyLimitsPolicy>::OutgoingParticleDefinition(G4int finalStateIndex)
  {
  G4double dummy;
  dummy = finalStateIndex; //Just a dummy variable
@@ -57,7 +57,7 @@
  }
 
  template <typename EnergyLimitsPolicy>
- G4double                               G4DNAProtonChargeIncreaseFinalStatesPolicy<EnergyLimitsPolicy>::ElectronsBindingEnergyConstant(G4int finalStateIndex) const
+ G4double G4DNAProtonChargeIncreaseFinalStatesPolicy<EnergyLimitsPolicy>::ElectronsBindingEnergyConstant(G4int finalStateIndex) const
  {
  if(finalStateIndex==1)return(13.6*eV);
  else {G4cout<<"Warning in ProtonChargeIncreaseProcess not a permitted finalStateIndex Value !"<<G4endl;

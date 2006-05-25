@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DNAChargeIncreaseInWater.icc,v 1.2 2005-12-20 13:50:31 capra Exp $
+// $Id: G4DNAChargeIncreaseInWater.icc,v 1.3 2006-05-25 17:57:10 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -29,11 +29,11 @@
  #include "G4Electron.hh"
 
  template<typename TotalCrossSectionPolicy, typename FinalStatesPolicy>
- G4VParticleChange *                      G4DNAChargeIncreaseInWater<TotalCrossSectionPolicy, FinalStatesPolicy> :: PostStepDoIt(const G4Track & aTrack, const G4Step & aStep)
+ G4VParticleChange* G4DNAChargeIncreaseInWater<TotalCrossSectionPolicy, FinalStatesPolicy>::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
  {
-  aParticleChange.Initialize(aTrack);
-  aParticleChange.ProposeLocalEnergyDeposit(0.);
-  aParticleChange.ProposeTrackStatus(fStopAndKill);
+  this->aParticleChange.Initialize(aTrack);
+  this->aParticleChange.ProposeLocalEnergyDeposit(0.);
+  this->aParticleChange.ProposeTrackStatus(fStopAndKill);
   
   G4double inK(aTrack.GetDynamicParticle()->GetKineticEnergy());
   
@@ -48,19 +48,19 @@
   {
    G4String message;
    message="G4DNAChargeIncreaseInWater<>::PostStepDoIt - Final kinetic energy is below 0! Process ";
-   message+=GetProcessName();
+   message+=this->GetProcessName();
    
    G4Exception(message);
   }
   
-  aParticleChange.SetNumberOfSecondaries(n+1);
-  aParticleChange.AddSecondary(new G4DynamicParticle(FinalStatesPolicy::OutgoingParticleDefinition(finalStateIndex), aTrack.GetDynamicParticle()->GetMomentumDirection(), outK));
+  this->aParticleChange.SetNumberOfSecondaries(n+1);
+  this->aParticleChange.AddSecondary(new G4DynamicParticle(FinalStatesPolicy::OutgoingParticleDefinition(finalStateIndex), aTrack.GetDynamicParticle()->GetMomentumDirection(), outK));
 
   while (n>0)
   {
    n--;
    
-   aParticleChange.AddSecondary(new G4DynamicParticle(FinalStatesPolicy::OutgoingParticleDefinition(finalStateIndex), aTrack.GetDynamicParticle()->GetMomentumDirection(), electronK));
+   this->aParticleChange.AddSecondary(new G4DynamicParticle(FinalStatesPolicy::OutgoingParticleDefinition(finalStateIndex), aTrack.GetDynamicParticle()->GetMomentumDirection(), electronK));
   }
  
   return G4VDNAProcessInWater<TotalCrossSectionPolicy, FinalStatesPolicy>::PostStepDoIt(aTrack, aStep);

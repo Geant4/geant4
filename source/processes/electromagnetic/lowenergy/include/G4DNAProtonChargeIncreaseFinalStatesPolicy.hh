@@ -27,37 +27,43 @@
 #ifndef  G4DNAProtonChargeIncreaseFinalStatesPolicy_HH
 #define  G4DNAProtonChargeIncreaseFinalStatesPolicy_HH 1
 
- #include "G4DNACrossSectionDataSet.hh"
+#include "G4DNACrossSectionDataSet.hh"
 
- // IncomingParticlePolicy must provide:
- //  - [protected] const G4ParticleDefinition * IncomingParticleDefinition(void);
+// IncomingParticlePolicy must provide:
+//  - [protected] const G4ParticleDefinition * IncomingParticleDefinition(void);
 
- // EnergyLimitsPolicy must provide:
- //  - [protected] const double lowEnergyLimit
- //  - [protected] const double zeroBelowLowEnergyLimit
- //  - [protected] const double highEnergyLimit
- //  - [protected] const double zeroAboveLowEnergyLimit
+// EnergyLimitsPolicy must provide:
+//  - [protected] const double lowEnergyLimit
+//  - [protected] const double zeroBelowLowEnergyLimit
+//  - [protected] const double highEnergyLimit
+//  - [protected] const double zeroAboveLowEnergyLimit
 
- template <typename EnergyLimitsPolicy>
- class G4DNAProtonChargeIncreaseFinalStatesPolicy : public EnergyLimitsPolicy
- {
-  protected:
-                                        G4DNAProtonChargeIncreaseFinalStatesPolicy() {}
-                                       ~G4DNAProtonChargeIncreaseFinalStatesPolicy() {}
+template <typename EnergyLimitsPolicy>
+class G4DNAProtonChargeIncreaseFinalStatesPolicy : public EnergyLimitsPolicy
+{
+protected:
+  G4DNAProtonChargeIncreaseFinalStatesPolicy() {}
+  ~G4DNAProtonChargeIncreaseFinalStatesPolicy() {}
 
+  // ---- MGP ---- The following line added to allow compilation with gcc 3.4.5, but it makes no sense! 25/05/2006
+  G4double IncomingParticleBindingEnergyConstant (G4int) const {return 0.;}
 
-  G4bool                                KillIncomingParticle(G4double energy) const;
-  void                                  BuildFinalStatesData(void) const;
-  G4int                                 NumberOfFinalStates(void) const;
-  G4ParticleDefinition*                 OutgoingParticleDefinition(G4int finalStateIndex);
-  G4double                              ElectronsBindingEnergyConstant(G4int finalStateIndex) const;
+  G4bool KillIncomingParticle(G4double energy) const;
+
+  void BuildFinalStatesData(void) const;
+
+  G4int NumberOfFinalStates(G4int ) const;
+
+  G4ParticleDefinition* OutgoingParticleDefinition(G4int finalStateIndex);
+
+  G4double ElectronsBindingEnergyConstant(G4int finalStateIndex) const;
 
   // Hides default constructor and assignment operator as private
-                                        G4DNAProtonChargeIncreaseFinalStatesPolicy(const G4DNAProtonChargeIncreaseFinalStatesPolicy & copy);
-   G4DNAProtonChargeIncreaseFinalStatesPolicy & operator=(const G4DNAProtonChargeIncreaseFinalStatesPolicy & right);
- };
+  G4DNAProtonChargeIncreaseFinalStatesPolicy(const G4DNAProtonChargeIncreaseFinalStatesPolicy & copy);
+  G4DNAProtonChargeIncreaseFinalStatesPolicy & operator=(const G4DNAProtonChargeIncreaseFinalStatesPolicy & right);
+};
 
- #include "G4DNAProtonChargeIncreaseFinalStatesPolicy.icc"
+#include "G4DNAProtonChargeIncreaseFinalStatesPolicy.icc"
 #endif /* G4DNAProtonChargeIncreaseFinalStatesPolicy_HH */
 
 

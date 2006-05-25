@@ -21,28 +21,31 @@
 // ********************************************************************
 //
 //
-// $Id: G4VLowEnergyTestableDiscreteProcess.hh,v 1.1 2005-05-31 09:58:40 capra Exp $
+// $Id: G4VLowEnergyTestableDiscreteProcess.hh,v 1.2 2006-05-25 17:57:10 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #ifndef G4VLowEnergyTestableDiscreteProcess_hh
- #define G4VLowEnergyTestableDiscreteProcess_hh 1
+#define G4VLowEnergyTestableDiscreteProcess_hh 1
  
- #include "G4VDiscreteProcess.hh"
+#include "G4VDiscreteProcess.hh"
  
- class G4VLowEnergyTestableDiscreteProcess : public G4VDiscreteProcess
- {
-  public:
-                                         G4VLowEnergyTestableDiscreteProcess(const G4String & name) : G4VDiscreteProcess(name) {}
-   virtual                              ~G4VLowEnergyTestableDiscreteProcess() {}
+class G4VLowEnergyTestableDiscreteProcess : public G4VDiscreteProcess
+{
+public:
+
+  G4VLowEnergyTestableDiscreteProcess(const G4String & name) : G4VDiscreteProcess(name) {}
+
+  virtual ~G4VLowEnergyTestableDiscreteProcess() {}
  
-   G4double                              DumpMeanFreePath(const G4Track & aTrack, G4double previousStepSize, G4ForceCondition * condition) { return GetMeanFreePath(aTrack, previousStepSize, condition); }
+  G4double DumpMeanFreePath(const G4Track & aTrack, G4double previousStepSize, G4ForceCondition * condition)
+  { return GetMeanFreePath(aTrack, previousStepSize, condition); }
    
-  private:
-   // Hides default constructor and assignment operator as private 
-                                         G4VLowEnergyTestableDiscreteProcess();
-   G4VLowEnergyTestableDiscreteProcess & operator=(const G4VLowEnergyTestableDiscreteProcess & right);
- };
+private:
+  // Hides default constructor and assignment operator as private 
+  G4VLowEnergyTestableDiscreteProcess();
+  G4VLowEnergyTestableDiscreteProcess & operator=(const G4VLowEnergyTestableDiscreteProcess & right);
+};
 
 #endif /* G4VLowEnergyTestableDiscreteProcess_hh */
 

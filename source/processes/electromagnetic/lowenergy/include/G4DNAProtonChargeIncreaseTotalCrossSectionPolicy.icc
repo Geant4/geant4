@@ -21,15 +21,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4DNAProtonChargeIncreaseTotalCrossSectionPolicy.icc,v 1.1 2005-09-15 18:24:17 zfrancis Exp $
+// $Id: G4DNAProtonChargeIncreaseTotalCrossSectionPolicy.icc,v 1.2 2006-05-25 17:57:10 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #ifdef   G4DNAPROTONCHARGEINCREASETOTALCROSSSECTIONPOLICY_HH
- #include "Randomize.hh"
+#include "Randomize.hh"
 
  template <typename IncomingParticlePolicy, typename EnergyLimitsPolicy>
- G4double                               G4DNAProtonChargeIncreaseTotalCrossSectionPolicy<IncomingParticlePolicy, EnergyLimitsPolicy> :: TotalCrossSection(G4double k, G4int z) const
+ G4double G4DNAProtonChargeIncreaseTotalCrossSectionPolicy<IncomingParticlePolicy, EnergyLimitsPolicy> :: TotalCrossSection(G4double k, G4int z) const
  {
   if (k < EnergyLimitsPolicy::lowEnergyLimit)
   {

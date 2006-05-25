@@ -21,28 +21,27 @@
 // ********************************************************************
 //
 //
-// $Id: G4DNAProtonChargeIncrease.cc,v 1.2 2005-09-16 08:41:52 zfrancis Exp $
+// $Id: G4DNAProtonChargeIncrease.cc,v 1.3 2006-05-25 17:58:43 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4DNAProtonChargeIncrease.hh"
 #include "G4DNAGenericIonsManager.hh"
 
-                                        G4DNAProtonChargeIncreaseEnergyLimitsPolicy :: G4DNAProtonChargeIncreaseEnergyLimitsPolicy()
-:
- lowEnergyLimit(100*eV),
- zeroBelowLowEnergyLimit(false),
- highEnergyLimit(100*MeV),
- zeroAboveHighEnergyLimit(true)
+G4DNAProtonChargeIncreaseEnergyLimitsPolicy::G4DNAProtonChargeIncreaseEnergyLimitsPolicy() :
+  lowEnergyLimit(100*eV),
+  zeroBelowLowEnergyLimit(false),
+  highEnergyLimit(100*MeV),
+  zeroAboveHighEnergyLimit(true)
 {
 }
 
-                                        G4DNAProtonChargeIncreaseIncomingParticlePolicy :: G4DNAProtonChargeIncreaseIncomingParticlePolicy()
-
-{}
-
-const G4ParticleDefinition *            G4DNAProtonChargeIncreaseIncomingParticlePolicy :: IncomingParticleDefinition(void) const
+G4DNAProtonChargeIncreaseIncomingParticlePolicy::G4DNAProtonChargeIncreaseIncomingParticlePolicy()
 {
- G4DNAGenericIonsManager *instance;
- instance = G4DNAGenericIonsManager::Instance();
- return instance->GetIon("hydrogen");
+}
+
+const G4ParticleDefinition* G4DNAProtonChargeIncreaseIncomingParticlePolicy::IncomingParticleDefinition(void) const
+{
+  G4DNAGenericIonsManager* instance;
+  instance = G4DNAGenericIonsManager::Instance();
+  return instance->GetIon("hydrogen");
 }

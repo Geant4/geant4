@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DNAExcitationInWater.icc,v 1.1 2005-07-20 10:01:54 capra Exp $
+// $Id: G4DNAExcitationInWater.icc,v 1.2 2006-05-25 17:57:10 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -31,18 +31,18 @@
  {
   const G4int z(10); // H2O number of electrons
   
-  aParticleChange.Initialize(aTrack);
+  this->aParticleChange.Initialize(aTrack);
   
   G4double k;
   k=aTrack.GetDynamicParticle()->GetKineticEnergy();
   
-  G4int excitationLevel(RandomizePartialCrossSection(k, z));
-  G4double excitationEnergy(EnergyConstant(excitationLevel));
+  G4int excitationLevel(this->RandomizePartialCrossSection(k, z));
+  G4double excitationEnergy(this->EnergyConstant(excitationLevel));
   
-  aParticleChange.ProposeEnergy(k-excitationEnergy);
-  aParticleChange.ProposeLocalEnergyDeposit(excitationEnergy);
-  aParticleChange.ProposeMomentumDirection(aTrack.GetDynamicParticle()->GetMomentumDirection());
-  aParticleChange.SetNumberOfSecondaries(0);
+  this->aParticleChange.ProposeEnergy(k-excitationEnergy);
+  this->aParticleChange.ProposeLocalEnergyDeposit(excitationEnergy);
+  this->aParticleChange.ProposeMomentumDirection(aTrack.GetDynamicParticle()->GetMomentumDirection());
+  this->aParticleChange.SetNumberOfSecondaries(0);
   
   return G4VDNAProcessInWater<TotalCrossSectionPolicy, FinalStatesPolicy>::PostStepDoIt(aTrack, aStep);
  }

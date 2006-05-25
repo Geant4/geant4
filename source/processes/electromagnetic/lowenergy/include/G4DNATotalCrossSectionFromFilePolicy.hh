@@ -21,52 +21,52 @@
 // ********************************************************************
 //
 //
-// $Id: G4DNATotalCrossSectionFromFilePolicy.hh,v 1.3 2005-09-10 09:34:33 capra Exp $
+// $Id: G4DNATotalCrossSectionFromFilePolicy.hh,v 1.4 2006-05-25 17:57:10 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef   G4DNATOTALCROSSSECTIONFROMFILEPOLICY_HH
- #define  G4DNATOTALCROSSSECTIONFROMFILEPOLICY_HH 1
+#define  G4DNATOTALCROSSSECTIONFROMFILEPOLICY_HH 1
  
- #include "G4DNACrossSectionDataSet.hh"
+#include "G4DNACrossSectionDataSet.hh"
  
- // IncomingParticlePolicy must provide:
- //  - [protected] const G4ParticleDefinition * IncomingParticleDefinition(void);
+// IncomingParticlePolicy must provide:
+//  - [protected] const G4ParticleDefinition * IncomingParticleDefinition(void);
  
- // DataFilePolicy must provide:
- //  - [public] static const double lowEnergyLimit
- //  - [public] static const double zeroBelowLowEnergyLimit
- //  - [public] static const double highEnergyLimit
- //  - [public] static const double zeroAboveLowEnergyLimit
- //  - [public] static const double dataFileEnergyUnit
- //  - [public] static const double dataFileCrossSectionUnit
- //  - [public] static char const * const dataFileName
+// DataFilePolicy must provide:
+//  - [public] static const double lowEnergyLimit
+//  - [public] static const double zeroBelowLowEnergyLimit
+//  - [public] static const double highEnergyLimit
+//  - [public] static const double zeroAboveLowEnergyLimit
+//  - [public] static const double dataFileEnergyUnit
+//  - [public] static const double dataFileCrossSectionUnit
+//  - [public] static char const * const dataFileName
  
- // InterpolationAlgorithmPolicy must inherit from [public] G4VDataSetAlgorithm
+// InterpolationAlgorithmPolicy must inherit from [public] G4VDataSetAlgorithm
 
- template <typename IncomingParticlePolicy, typename DataFilePolicy, typename InterpolationAlgorithmPolicy>
- class G4DNATotalCrossSectionFromFilePolicy : public IncomingParticlePolicy
- {
-  protected:
-                                        G4DNATotalCrossSectionFromFilePolicy();
-                                       ~G4DNATotalCrossSectionFromFilePolicy();
+template <typename IncomingParticlePolicy, typename DataFilePolicy, typename InterpolationAlgorithmPolicy>
+class G4DNATotalCrossSectionFromFilePolicy : public IncomingParticlePolicy
+{
+protected:
+  G4DNATotalCrossSectionFromFilePolicy();
+  ~G4DNATotalCrossSectionFromFilePolicy();
  
-   G4double                             TotalCrossSection(G4double k, G4int z) const;
-   G4int                                RandomizePartialCrossSection(G4double k, G4int z);
-   G4int                                NumberOfPartialCrossSections(void);
-   void                                 BuildTotalCrossSection(void);
+  G4double TotalCrossSection(G4double k, G4int z) const;
+  G4int RandomizePartialCrossSection(G4double k, G4int z);
+  G4int NumberOfPartialCrossSections(void);
+  void  BuildTotalCrossSection(void);
 
-  private:
-   void                                 Free(void);
+private:
+  void Free(void);
   
-   G4DNACrossSectionDataSet *           dataset;
-   G4double *                           valuesBuffer;
-   DataFilePolicy                       dataFilePolicy;
+  G4DNACrossSectionDataSet* dataset;
+  G4double* valuesBuffer;
+  DataFilePolicy dataFilePolicy;
 
-   // Hides default constructor and assignment operator as private 
-                                        G4DNATotalCrossSectionFromFilePolicy(const G4DNATotalCrossSectionFromFilePolicy & copy);
-   G4DNATotalCrossSectionFromFilePolicy & operator=(const G4DNATotalCrossSectionFromFilePolicy & right);
- };
+  // Hides default constructor and assignment operator as private 
+  G4DNATotalCrossSectionFromFilePolicy(const G4DNATotalCrossSectionFromFilePolicy & copy);
+  G4DNATotalCrossSectionFromFilePolicy & operator=(const G4DNATotalCrossSectionFromFilePolicy & right);
+};
  
- #include "G4DNATotalCrossSectionFromFilePolicy.icc"
+#include "G4DNATotalCrossSectionFromFilePolicy.icc"
 #endif /* G4DNATOTALCROSSSECTIONFROMFILEPOLICY_HH */
 

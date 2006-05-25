@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DNAElectronElasticScatteringInWater.icc,v 1.1 2005-06-24 10:07:13 capra Exp $
+// $Id: G4DNAElectronElasticScatteringInWater.icc,v 1.2 2006-05-25 17:57:10 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -29,7 +29,7 @@
  template<typename TotalCrossSectionPolicy, typename FinalStatesPolicy>
  G4VParticleChange *                      G4DNAElectronElasticScatteringInWater<TotalCrossSectionPolicy, FinalStatesPolicy> :: PostStepDoIt(const G4Track & aTrack, const G4Step & aStep)
  {
-  aParticleChange.Initialize(aTrack);
+  this->aParticleChange.Initialize(aTrack);
   
   G4double k;
   k=aTrack.GetDynamicParticle()->GetKineticEnergy();
@@ -56,9 +56,9 @@
   
   G4ThreeVector zPrimeVers((xDir*xVers + yDir*yVers + cosTheta*zVers).unit());
  
-  aParticleChange.ProposeEnergy(k);
-  aParticleChange.ProposeMomentumDirection(zPrimeVers);
-  aParticleChange.SetNumberOfSecondaries(0);
+  this->aParticleChange.ProposeEnergy(k);
+  this->aParticleChange.ProposeMomentumDirection(zPrimeVers);
+  this->aParticleChange.SetNumberOfSecondaries(0);
   
   return G4VDNAProcessInWater<TotalCrossSectionPolicy, FinalStatesPolicy>::PostStepDoIt(aTrack, aStep);
  }

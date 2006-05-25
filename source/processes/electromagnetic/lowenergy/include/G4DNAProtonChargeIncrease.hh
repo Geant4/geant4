@@ -21,39 +21,43 @@
 // ********************************************************************
 //
 //
-// $Id: G4DNAProtonChargeIncrease.hh,v 1.1 2005-09-15 18:24:17 zfrancis Exp $
+// $Id: G4DNAProtonChargeIncrease.hh,v 1.2 2006-05-25 17:57:10 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef   G4DNAPROTONCHARGEINCREASE_HH
- #define  G4DNAPROTONCHARGEINCREASE_HH 1
+#define  G4DNAPROTONCHARGEINCREASE_HH 1
 
- #include "G4DNAChargeIncreaseInWater.hh"
- #include "G4DNAProtonChargeIncreaseTotalCrossSectionPolicy.hh"
- #include "G4DNAProtonChargeIncreaseFinalStatesPolicy.hh"
- #include "G4DNAStopAndKillBelowEnergyLimitPolicy.hh"
+#include "G4DNAChargeIncreaseInWater.hh"
+#include "G4DNAProtonChargeIncreaseTotalCrossSectionPolicy.hh"
+#include "G4DNAProtonChargeIncreaseFinalStatesPolicy.hh"
+#include "G4DNAStopAndKillBelowEnergyLimitPolicy.hh"
 
- class G4DNAProtonChargeIncreaseEnergyLimitsPolicy
- {
-  protected:
-                      G4DNAProtonChargeIncreaseEnergyLimitsPolicy();
+class G4DNAProtonChargeIncreaseEnergyLimitsPolicy
+{
+protected:
+  G4DNAProtonChargeIncreaseEnergyLimitsPolicy();
 
-   const G4double     lowEnergyLimit;
-   const G4bool       zeroBelowLowEnergyLimit;
-   const G4double     highEnergyLimit;
-   const G4bool       zeroAboveHighEnergyLimit;
- };
+  const G4double     lowEnergyLimit;
+  const G4bool       zeroBelowLowEnergyLimit;
+  const G4double     highEnergyLimit;
+  const G4bool       zeroAboveHighEnergyLimit;
+};
 
- class G4DNAProtonChargeIncreaseIncomingParticlePolicy
- {
-  protected:
-                                        G4DNAProtonChargeIncreaseIncomingParticlePolicy();
-   const G4ParticleDefinition *         IncomingParticleDefinition(void) const;
- };
+class G4DNAProtonChargeIncreaseIncomingParticlePolicy
+{
+protected:
+  G4DNAProtonChargeIncreaseIncomingParticlePolicy();
+  const G4ParticleDefinition* IncomingParticleDefinition(void) const;
+};
 
- class G4DNAProtonChargeIncrease : public G4DNAChargeIncreaseInWater<G4DNAProtonChargeIncreaseTotalCrossSectionPolicy<G4DNAProtonChargeIncreaseIncomingParticlePolicy, G4DNAProtonChargeIncreaseEnergyLimitsPolicy>, G4DNAProtonChargeIncreaseFinalStatesPolicy<G4DNAProtonChargeIncreaseEnergyLimitsPolicy> >
- {
-  public:
-                                         G4DNAProtonChargeIncrease(const G4String & name = "G4DNAProtonChargeIncrease") : G4DNAChargeIncreaseInWater<G4DNAProtonChargeIncreaseTotalCrossSectionPolicy<G4DNAProtonChargeIncreaseIncomingParticlePolicy, G4DNAProtonChargeIncreaseEnergyLimitsPolicy>, G4DNAProtonChargeIncreaseFinalStatesPolicy<G4DNAProtonChargeIncreaseEnergyLimitsPolicy> > (name) {}
-   virtual                              ~G4DNAProtonChargeIncrease() {}
- };
+class G4DNAProtonChargeIncrease : public G4DNAChargeIncreaseInWater<G4DNAProtonChargeIncreaseTotalCrossSectionPolicy<G4DNAProtonChargeIncreaseIncomingParticlePolicy, G4DNAProtonChargeIncreaseEnergyLimitsPolicy>, G4DNAProtonChargeIncreaseFinalStatesPolicy<G4DNAProtonChargeIncreaseEnergyLimitsPolicy> >
+{
+public:
+  G4DNAProtonChargeIncrease(const G4String& name = "G4DNAProtonChargeIncrease") : 
+    G4DNAChargeIncreaseInWater<G4DNAProtonChargeIncreaseTotalCrossSectionPolicy<G4DNAProtonChargeIncreaseIncomingParticlePolicy, G4DNAProtonChargeIncreaseEnergyLimitsPolicy>, 
+			       G4DNAProtonChargeIncreaseFinalStatesPolicy<G4DNAProtonChargeIncreaseEnergyLimitsPolicy> > 
+  (name) {}
+
+  virtual ~G4DNAProtonChargeIncrease() {}
+};
 #endif /* G4DNAPROTONCHARGEINCREASE_HH */
