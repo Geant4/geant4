@@ -1,4 +1,4 @@
-$Id: History,v 1.352 2006-05-25 14:47:26 allison Exp $
+$Id: History,v 1.353 2006-05-25 14:48:41 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -24,7 +24,8 @@ committal in the CVS repository !
 History file for visualization category
 ---------------------------------------
 
-25th May 2006  John Allison
+--------------------------------------------
+25th May 2006  John Allison  (vis-V08-00-08)
 - visman-V08-00-19:
   o Changed re-computation of transients default to "off".
   o Indent printing of models plus other minor improvements.
