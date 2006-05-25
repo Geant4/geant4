@@ -1,9 +1,12 @@
-$Id: History,v 1.93 2006-05-25 09:12:37 allison Exp $
+$Id: History,v 1.94 2006-05-25 09:14:30 allison Exp $
 
 History file for visualization/test subdirectory
 ------------------------------------------------
 
 $Log: not supported by cvs2svn $
+Revision 1.93  2006/05/25 09:12:37  allison
+Removed standalone - moved to examples/extended/visualization.
+
 Revision 1.92  2006/05/12 12:41:21  allison
 vistest-V08-00-06
 
