@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: UVA_VisAction.cc,v 1.1 2005-10-18 18:09:14 allison Exp $
+// $Id: UVA_VisAction.cc,v 1.2 2006-05-25 07:59:46 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "UVA_VisAction.hh"
@@ -41,12 +41,12 @@ void UVA_VisAction::Draw() {
     G4Orb orb("my_logo_orb", 1*m);
     G4Box box("my_cut_box", 1*m, 1*m, 1*m);
     G4SubtractionSolid logo("my_logo", &orb, &box, G4Translate3D(-1*m,1*m,1*m));
-    G4VisAttributes va1(G4Colour::Red);
+    G4VisAttributes va1(G4Colour::Red());
     va1.SetForceSolid(true);
     pVisManager->Draw(logo,va1,G4Translate3D(0,-1*m,4.5*m));
 
     G4Text text("My beautiful logo");
-    G4VisAttributes va2(G4Colour::Magenta);
+    G4VisAttributes va2(G4Colour::Magenta());
     text.SetVisAttributes(va2);
     text.SetScreenSize(12.);
     pVisManager->Draw(text,G4Translate3D(0,0,3.5*m));
