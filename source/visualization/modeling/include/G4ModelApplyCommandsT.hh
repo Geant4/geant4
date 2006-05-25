@@ -19,7 +19,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4ModelApplyCommandsT.hh,v 1.1 2006-05-02 20:47:40 tinslay Exp $
+// $Id: G4ModelApplyCommandsT.hh,v 1.2 2006-05-25 14:11:14 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Abstract model messenges. Derived classes should implement
@@ -292,7 +292,7 @@ G4ModelCmdApplyBool<M>::~G4ModelCmdApplyBool()
 }
 
 template <typename M>
-void G4ModelCmdApplyBool<M>::SetNewValue(G4UIcommand* cmd, G4String newValue)
+void G4ModelCmdApplyBool<M>::SetNewValue(G4UIcommand*, G4String newValue)
 {
   Apply(fpCmd->GetNewBoolValue(newValue));
 }
@@ -386,7 +386,7 @@ G4ModelCmdApplyDouble<M>::~G4ModelCmdApplyDouble()
 }
 
 template <typename M>
-void G4ModelCmdApplyDouble<M>::SetNewValue(G4UIcommand* cmd, G4String newValue)
+void G4ModelCmdApplyDouble<M>::SetNewValue(G4UIcommand*, G4String newValue)
 {
   Apply(fpCmd->GetNewDoubleValue(newValue));
 }
