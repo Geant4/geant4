@@ -1,4 +1,4 @@
-$Id: History,v 1.54 2006-05-22 08:43:44 allison Exp $
+$Id: History,v 1.55 2006-05-25 14:45:49 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -24,6 +24,13 @@ committal in the CVS repository !
 
 History file for visualization management sub-category
 ------------------------------------------------------
+
+25th May 2006 John Allison  (visman-V08-00-19)
+- G4Scene.cc: Changed default fRecomputeTransients to false.
+- G4VisCommandsViewerSet.cc: /vis/viewer/set/style - remove candidates.
+  Use first letter only (so "/vis/viewer/set/style wire" works, for example.)
+- G4VisFilter/List/ModelManager.hh: Indent printing of models.
+- G4VUserVisAction.hh: Add forward declaration of class G4VGraphicsScene.
 
 22nd May 2006 John Allison  (visman-V08-00-18)
 - G4VisManager:
