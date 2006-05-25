@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: MyEventAction.cc,v 1.12 2006-05-12 12:36:45 allison Exp $
+// $Id: MyEventAction.cc,v 1.13 2006-05-25 09:03:03 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -70,7 +70,7 @@ void MyEventAction::EndOfEventAction(const G4Event* anEvent)
   static int coutCount = 0;
   if (coutCount < 10) {
     coutCount++;
-    G4cout << "MySteppingAction::EndOfEventActionAction called." << G4endl;
+    G4cout << "MyEventAction::EndOfEventActionAction called." << G4endl;
   }
 
   const G4Event* evt = anEvent;
