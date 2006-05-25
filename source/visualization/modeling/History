@@ -1,4 +1,4 @@
-$Id: History,v 1.67 2006-05-22 07:38:06 allison Exp $
+$Id: History,v 1.68 2006-05-25 14:11:46 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,10 @@ committal in the CVS repository !
 
 History file for visualization/modeling
 ---------------------------------------
+
+25th May 2006  John Allison  (modeling-V08-00-11)
+- G4VModelFactory.hh: Indent printing of models.
+- G4ModelApplyCommandsT.hh: Fix trivial compiler warnings.
 
 22nd May 2006  John Allison  (modeling-V08-00-10)
 - Remove dependency on Run.
