@@ -19,7 +19,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VisListManager.hh,v 1.5 2006-04-21 17:40:41 tinslay Exp $
+// $Id: G4VisListManager.hh,v 1.6 2006-05-25 14:31:39 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Jane Tinslay, John Allison, Joseph Perl October 2005
@@ -122,11 +122,11 @@ void
 G4VisListManager<T>::Print(std::ostream& ostr, const G4String& name) const
 {
   if (0 == fMap.size()) {
-    G4cout<<"None"<<G4endl;
+    G4cout<<"  None"<<std::endl;
     return;
   }
     
-  ostr<<"Current: "<<fpCurrent->Name()<<std::endl;
+  ostr<<"  Current: "<<fpCurrent->Name()<<std::endl;
 
   if (!name.isNull()) {
     // Print out specified object
@@ -143,7 +143,7 @@ G4VisListManager<T>::Print(std::ostream& ostr, const G4String& name) const
     typename std::map<G4String, T*>::const_iterator iter = fMap.begin();
     while (iter != fMap.end()) {
       iter->second->Print(ostr);
-      ostr<<G4endl;
+      ostr<<std::endl;
       iter++;
     }
   }

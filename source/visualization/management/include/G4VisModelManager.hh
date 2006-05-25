@@ -19,7 +19,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VisModelManager.hh,v 1.2 2006-04-21 17:40:41 tinslay Exp $
+// $Id: G4VisModelManager.hh,v 1.3 2006-05-25 14:31:39 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Generic model manager. Manages models, associated
@@ -146,7 +146,7 @@ template <typename Model>
 void
 G4VisModelManager<Model>::Print(std::ostream& ostr, const G4String& name) const
 {
-  ostr<<"Registered model factories:"<<G4endl;
+  ostr<<"Registered model factories:"<<std::endl;
 
   typename std::vector<Factory*>::const_iterator iter = fFactoryList.begin();
 
@@ -155,10 +155,10 @@ G4VisModelManager<Model>::Print(std::ostream& ostr, const G4String& name) const
     iter++;
   }
 
-  if (0 == fFactoryList.size()) ostr<<"None"<<G4endl;
+  if (0 == fFactoryList.size()) ostr<<"  None"<<std::endl;
 
-  ostr<<G4endl;
-  ostr<<"Registered models: "<<G4endl;
+  ostr<<std::endl;
+  ostr<<"Registered models: "<<std::endl;
 
   fpModelList->Print(ostr, name);
 }

@@ -19,7 +19,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VisFilterManager.hh,v 1.2 2006-04-21 17:40:41 tinslay Exp $
+// $Id: G4VisFilterManager.hh,v 1.3 2006-05-25 14:31:39 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Filter manager. Manages filter models, factories, messengers, 
@@ -197,7 +197,7 @@ template <typename T>
 void
 G4VisFilterManager<T>::Print(std::ostream& ostr, const G4String& name) const
 { 
-  ostr<<"Registered filter factories:"<<G4endl;
+  ostr<<"Registered filter factories:"<<std::endl;
   typename std::vector<Factory*>::const_iterator iterFactory = fFactoryList.begin();
 
   while (iterFactory != fFactoryList.end()) {
@@ -205,10 +205,10 @@ G4VisFilterManager<T>::Print(std::ostream& ostr, const G4String& name) const
     iterFactory++;
   }
 
-  if (0 == fFactoryList.size()) ostr<<"None"<<G4endl;
+  if (0 == fFactoryList.size()) ostr<<"  None"<<std::endl;
 
-  ostr<<G4endl;
-  ostr<<"Registered Filters:"<<G4endl;
+  ostr<<std::endl;
+  ostr<<"Registered filters:"<<std::endl;
 
   typename std::vector<Filter*>::const_iterator iterFilter = fFilterList.begin();
 
@@ -222,7 +222,7 @@ G4VisFilterManager<T>::Print(std::ostream& ostr, const G4String& name) const
     iterFilter++;
   }
 
-  if (0 == fFilterList.size()) ostr<<"None"<<G4endl;
+  if (0 == fFilterList.size()) ostr<<"  None"<<std::endl;
 }
 
 template <typename T>
