@@ -1,4 +1,4 @@
-$Id: History,v 1.351 2006-05-25 09:18:01 allison Exp $
+$Id: History,v 1.352 2006-05-25 14:47:26 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -25,6 +25,10 @@ History file for visualization category
 ---------------------------------------
 
 25th May 2006  John Allison
+- visman-V08-00-19:
+  o Changed re-computation of transients default to "off".
+  o Indent printing of models plus other minor improvements.
+- modeling-V08-00-11: Indent printing of models, fix trivial compiler warnings.
 - vistest-V08-00-07: Removed standalone - moved to
   examples/extended/visualization.
 
