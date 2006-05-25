@@ -32,6 +32,6 @@
 /tracking/storeTrajectory 1
 /vis/scene/add/trajectories
 # (if you prefer refreshing each event, comment out next line)
-/vis/scene/endOfEventAction accumulate
+#/vis/scene/endOfEventAction accumulate
 #
-/run/beamOn 10
+#/run/beamOn 10
