@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewerSet.cc,v 1.39 2006-03-28 16:27:28 allison Exp $
+// $Id: G4VisCommandsViewerSet.cc,v 1.40 2006-05-25 14:38:51 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer/set commands - John Allison  16th May 2000
@@ -257,11 +257,11 @@ G4VisCommandsViewerSet::G4VisCommandsViewerSet ():
   fpCommandSectionPlane->SetParameter(parameter);
 
   fpCommandStyle = new G4UIcmdWithAString ("/vis/viewer/set/style",this);
-  fpCommandStyle->SetGuidance ("Set style of drawing.");
+  fpCommandStyle->SetGuidance
+    ("Set style of drawing - w[ireframe] or s[urface].");
   fpCommandStyle->SetGuidance 
     ("(Hidden line drawing is controlled by \"/vis/viewer/set/hiddenEdge\".)");
   fpCommandStyle->SetParameterName ("style",omitable = false);
-  fpCommandStyle->SetCandidates("w wireframe s surface");
 
   fpCommandUpThetaPhi = new G4UIcommand
     ("/vis/viewer/set/upThetaPhi", this);
