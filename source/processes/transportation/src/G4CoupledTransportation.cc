@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CoupledTransportation.cc,v 1.1 2006-05-26 19:49:10 japost Exp $
+// $Id: G4CoupledTransportation.cc,v 1.2 2006-05-26 22:43:42 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //  GEANT 4 class implementation
@@ -122,9 +122,13 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
   if( fStartedNewTrack || track.GetCurrentStepNumber()==1 ) {
     // fPathFinder->PrepareNewTrack( startPosition, startMomentumDir ); // Out G480
     G4cout << " Calling PathFinder::Locate() from " 
-	   << " G4CoupledTransportation::AlongStepGPIL " << G4endl;
+	   << " G4CoupledTransportation::AlongStepGPIL " 
+	   << " with startedNewTrack= " << fStartedNewTrack
+	   << "  and step number= " << track.GetCurrentStepNumber()
+	   << G4endl;
     fPathFinder->Locate( startPosition, startMomentumDir );   // For now -- out in G480
     fCurrentTouchableHandle = track.GetTouchableHandle(); 
+    fStartedNewTrack= false; 
   }
 
   // The Step Point safety can be limited by other geometries and/or the 
@@ -533,7 +537,7 @@ G4VParticleChange* G4CoupledTransportation::PostStepDoIt( const G4Track& track,
     // fCurrentTouchable will now become the previous touchable, 
     // and what was the previous will be freed.
     // (Needed because the preStepPoint can point to the previous touchable)
-
+G4cout << "G4CoupledTransportation::PostStepDoIt --- fNavigatorId = " << fNavigatorId << G4endl;
     fCurrentTouchableHandle= 
       fPathFinder->CreateTouchableHandle( fNavigatorId );
 
