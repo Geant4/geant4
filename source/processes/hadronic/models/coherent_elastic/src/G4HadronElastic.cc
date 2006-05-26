@@ -176,9 +176,11 @@ G4HadFinalState* G4HadronElastic::ApplyYourself(
 
   if(gtype == fSWave)         t = G4UniformRand()*tmax;
   else if(gtype == fHElastic) t = hElastic->SampleT(theParticle,plab,Z,A);
-  else                        t = GeV*GeV*SampleT(ptot,m1,m2,atno2);
+  else if(gtype == fLElastic) t = GeV*GeV*SampleT(ptot,m1,m2,atno2);
 
-  //  G4cout <<"type= " << gtype <<" t= " << t << " tmax= " << tmax << G4endl;
+  if(verboseLevel>1)
+    G4cout <<"type= " << gtype <<" t= " << t << " tmax= " << tmax 
+	   << " ptot= " << ptot << G4endl;
 
   // Sampling in CM system
   G4double phi  = G4UniformRand()*twopi;
@@ -193,16 +195,17 @@ G4HadFinalState* G4HadronElastic::ApplyYourself(
   p1 = p1.unit();
   v1.rotateUz(p1);
   v1 *= ptot;
-  G4LorentzVector nlv11(v1.x(),v1.y(),v1.z(),std::sqrt(ptot*ptot + m1*m1));
-  G4LorentzVector nlv01 = lv0 + lv1 - nlv11;
-  nlv01.boost(bst);
-  nlv11.boost(bst); 
+  G4LorentzVector nlv1(v1.x(),v1.y(),v1.z(),std::sqrt(ptot*ptot + m1*m1));
+  G4LorentzVector nlv0 = lv0 + lv1 - nlv1;
 
-  G4double eFinal = nlv11.e() - m1;
+  nlv0.boost(bst);
+  nlv1.boost(bst); 
+
+  G4double eFinal = nlv1.e() - m1;
   if (verboseLevel > 1) 
-    G4cout << " P0= "<< nlv01 << "   P1= "
-	   << nlv11<<" m= " << m1 << " ekin0= " << eFinal 
-	   << " ekin1= " << nlv01.e() - m2 
+    G4cout << " P0= "<< nlv0 << "   P1= "
+	   << nlv1<<" m= " << m1 << " ekin0= " << eFinal 
+	   << " ekin1= " << nlv0.e() - m2 
 	   <<G4endl;
   if(eFinal < 0.0) {
     G4cout << "G4HadronElastic WARNING ekin= " << eFinal
@@ -214,12 +217,12 @@ G4HadFinalState* G4HadronElastic::ApplyYourself(
     eFinal = 0.0;
   }
 
-  theParticleChange.SetMomentumChange(nlv11.vect().unit());
+  theParticleChange.SetMomentumChange(nlv1.vect().unit());
   theParticleChange.SetEnergyChange(eFinal);
   
-  G4double erec =  nlv01.e() - m2;
+  G4double erec =  nlv0.e() - m2;
   if(erec > ekinlim) {
-    G4DynamicParticle * aSec = new G4DynamicParticle(theDef, nlv01);
+    G4DynamicParticle * aSec = new G4DynamicParticle(theDef, nlv0);
     theParticleChange.AddSecondary(aSec);
   } else {
     theParticleChange.SetLocalEnergyDeposit(erec);

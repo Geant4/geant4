@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElasticHadrNucleusHE.cc,v 1.26 2006-05-09 16:31:59 vnivanch Exp $
+// $Id: G4ElasticHadrNucleusHE.cc,v 1.27 2006-05-26 19:13:55 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  G4ElasticHadrNucleusHE class 
@@ -209,7 +209,7 @@ G4int G4ElasticHadrNucleusHE::ReadOfData(const G4ParticleDefinition * aHadron,
   if(getenv("G4ELASTICDATA")) 
     {
       sPath =  getenv("G4ELASTICDATA");
-      // sPath =  sPath+"/Elastic/";
+      sPath =  sPath+"/Elastic/";
     }
   else  sPath =       "./Elastic/";
 
