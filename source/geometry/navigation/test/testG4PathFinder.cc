@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4PathFinder.cc,v 1.4 2006-05-26 20:10:07 japost Exp $
+// $Id: testG4PathFinder.cc,v 1.5 2006-05-26 22:25:11 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $ 
 //
 // 
@@ -162,18 +162,11 @@ G4PathFinder* setupPathFinder(G4VPhysicalVolume *pTopNode)
       transportMgr->DeActivateNavigator( origNav );  
       G4cout << " DeActivated Navigator " << origNav << G4endl;  
 
-      // G4bool 
-      // registered=  transportMgr->RegisterNavigator( pNav ); 
+      // G4bool registered=  transportMgr->RegisterNavigator( pNav ); 
       // assert( registered ); 
       transportMgr->SetNavigatorForTracking(pNav);
       G4cout << " Setting new Navigator for Tracking " << pNav << G4endl;  
       // transportMgr->SetWorldVolume( pTopNode );
-
-#if 0
-      G4cout << " Attempting to de-register original mass navigator." << G4endl;
-      transportMgr->DeRegisterNavigator( origNav );  // Cannot de-register Mass Navigator
-      G4cout << "   --> De-registration sucessful. " << G4endl;
-#endif
 
       navId= transportMgr->ActivateNavigator( pNav ); 
       G4cout << " navId for new  Navigator for tracking is " << navId << G4endl;
