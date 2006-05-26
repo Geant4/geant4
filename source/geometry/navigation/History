@@ -1,4 +1,4 @@
-$Id: History,v 1.47 2006-05-23 18:03:42 japost Exp $
+$Id: History,v 1.48 2006-05-26 22:34:01 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,25 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May 27th, 2006 - J.Apostolakis (geomnav-V08-00-03)
+------------------------------
+- G4PathFinder revised significantly
+  * Workaround for problem of CreateHistory() when outside world
+  * Revised for new counting of Navigator Ids (Makoto)
+  * Added MovePoint() method that signals if it moved
+  * Added state to cope with cases where a full step is taken.
+    ie to cope with steps that return kInfinity
+
+    New state:
+      RelocatedPoint  to show if it is moved
+      TrueMinStep   (finite whereas reported can be kInfinity)
+    and to aid in clarifying the state of the (singleton) object:
+      LastStepNo    - already kept in one method (static), now exposed
+      CurrentStepNo - mostly for debugging and printing out
+
+    Small improvements in tests.
+
 
 May 23rd, 2006 - J.Apostolakis (geomnav-V08-00-02)
 ------------------------------
