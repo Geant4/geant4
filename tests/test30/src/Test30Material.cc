@@ -39,6 +39,8 @@
 #include "G4Material.hh"
 #include "G4NistManager.hh"
 
+using namespace std;
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 Test30Material::Test30Material()
@@ -55,7 +57,8 @@ Test30Material::~Test30Material()
 
 void Test30Material::Initialise()
 {
-  new G4Material("D", 1.,  2.0*g/mole, 1.*g/cm3);
+  //  G4Material* ma = new G4Material("D", 1.,  2.0*g/mole, 1.*g/cm3);
+  // G4cout << ma->GetName() << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

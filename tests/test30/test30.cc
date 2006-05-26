@@ -78,6 +78,7 @@
 #include "G4Deuteron.hh"
 #include "G4Triton.hh"
 #include "G4IonTable.hh"
+
 #include "G4ForceCondition.hh"
 #include "G4Box.hh"
 #include "G4PVPlacement.hh"
@@ -85,11 +86,14 @@
 #include "G4GRSVolume.hh"
 
 #include "G4UnitsTable.hh"
+#include "G4SystemOfUnits.hh"
+
 #include "G4ExcitationHandler.hh"
 #include "G4PreCompoundModel.hh"
 #include "G4Evaporation.hh"
 
 #include "G4StateManager.hh"
+#include "G4NistManager.hh"
 
 #include <memory> // for the auto_ptr(T>
 #include "AIDA/AIDA.h"
@@ -102,6 +106,7 @@ int main(int argc, char** argv)
   G4cout << "======        Cascade Test (test30) Start       ========" << G4endl;
   G4cout << "========================================================" << G4endl;
 
+  G4NistManager::Instance()->SetVerbose(2);
   G4String  namePart = "proton";
   G4bool    ionParticle = false;
   G4bool    Shen = false;
@@ -674,6 +679,7 @@ int main(int argc, char** argv)
 
     G4Track* gTrack;
     gTrack = new G4Track(&dParticle,aTime,aPosition);
+    //G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 
     // Step
 
@@ -817,7 +823,8 @@ int main(int argc, char** argv)
 		 << "   m(MeV)= " << m/MeV
 		 << "   Etot(MeV)= " << (e+m)/MeV
 		 << "   pt(MeV)= " << pt/MeV
-                 << " has deg = " << mom.phi()/degree
+                 << " has sin(tet)= " << pt/p
+                 << " phi(deg)= " << mom.phi()/degree
                  << G4endl;
         }
 

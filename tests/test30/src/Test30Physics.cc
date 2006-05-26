@@ -201,10 +201,14 @@ G4VProcess* Test30Physics::GetProcess(const G4String& gen_name,
   // Choose generator
 
   if(gen_name == "lepar") {
-    if(part_name == "proton")   sg = new Test30VSecondaryGenerator(new G4LEProtonInelastic(),mat);
-    else if(part_name == "pi+") sg = new Test30VSecondaryGenerator(new G4LEPionPlusInelastic(),mat);
-    else if(part_name == "pi-") sg = new Test30VSecondaryGenerator(new G4LEPionMinusInelastic(),mat);
-    else if(part_name == "neutron") sg = new Test30VSecondaryGenerator(new G4LENeutronInelastic(),mat);
+    if(part_name == "proton")   
+      sg = new Test30VSecondaryGenerator(new G4LEProtonInelastic(),mat);
+    else if(part_name == "pi+") 
+      sg = new Test30VSecondaryGenerator(new G4LEPionPlusInelastic(),mat);
+    else if(part_name == "pi-") 
+      sg = new Test30VSecondaryGenerator(new G4LEPionMinusInelastic(),mat);
+    else if(part_name == "neutron") 
+      sg = new Test30VSecondaryGenerator(new G4LENeutronInelastic(),mat);
     theProcess->SetSecondaryGenerator(sg);
     man->AddDiscreteProcess(theProcess);
 
@@ -259,7 +263,7 @@ G4VProcess* Test30Physics::GetProcess(const G4String& gen_name,
     man->AddDiscreteProcess(theProcess);
 
   } else if(gen_name == "Elastic") {
-    G4HadronElastic* els = new G4HadronElastic();
+    G4HadronElastic* els = new G4HadronElastic(0.0);
     sg = new Test30VSecondaryGenerator(els, mat);
     theProcess->SetSecondaryGenerator(sg);
     man->AddDiscreteProcess(theProcess);
