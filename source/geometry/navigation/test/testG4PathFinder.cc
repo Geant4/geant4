@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4PathFinder.cc,v 1.3 2006-05-18 17:00:05 japost Exp $
+// $Id: testG4PathFinder.cc,v 1.4 2006-05-26 20:10:07 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $ 
 //
 // 
@@ -120,6 +120,9 @@ G4VPhysicalVolume* BuildGeometry()
 }
 
 #include "G4TransportationManager.hh"
+
+G4int navIdExpected= 0;  // New convention in G4TransportationManager
+
 //
 // Test LocateGlobalPointAndSetup
 //
@@ -130,7 +133,8 @@ G4PathFinder* setupPathFinder(G4VPhysicalVolume *pTopNode)
 
     G4int navId;
     G4bool useMyNav= false;
-    G4bool overwriteNav= false;
+    // G4bool overwriteNav= false;  // Default
+    G4bool overwriteNav= true;  // Second option 'new'
 
     pNav= new G4Navigator();   // (&myNav); 
     // pNav= (&myNav); 
@@ -173,7 +177,7 @@ G4PathFinder* setupPathFinder(G4VPhysicalVolume *pTopNode)
 
       navId= transportMgr->ActivateNavigator( pNav ); 
       G4cout << " navId for new  Navigator for tracking is " << navId << G4endl;
-      assert ( navId == 1 ); 
+      assert ( navId == navIdExpected ); 
     }
  
     return pathFinder; 
