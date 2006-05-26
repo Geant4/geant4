@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PathFinder.cc,v 1.5 2006-05-23 17:59:25 japost Exp $
+// $Id: G4PathFinder.cc,v 1.6 2006-05-26 22:02:03 japost Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4PathFinder Implementation
@@ -64,6 +64,7 @@ G4PathFinder::GetInstance()
 G4PathFinder::G4PathFinder() 
   // : fpActiveNavigators()
   : fEndState( G4ThreeVector(), G4ThreeVector(), 0., 0., 0., 0., 0.),
+       fRelocatedPoint(true),
        fLastStepNo(-1), 
        fVerboseLevel(1)
 {
@@ -154,6 +155,10 @@ G4PathFinder::ComputeStep( const G4FieldTrack &InitialFieldTrack,
   pNewSafety  = fNewSafety[ navigatorNo ]; 
   limitedStep = fLimitedStep[ navigatorNo ];
   EndState = fEndState;  // set in DoNextLinearStep  ( right ? )
+  fRelocatedPoint= false;
+
+  G4cout << " G4PathFinder returns " << fCurrentStepSize[ navigatorNo ]
+	 << " for Navigator " << navigatorNo << G4endl; 
 
   return fCurrentStepSize[ navigatorNo ];
 }
@@ -178,6 +183,7 @@ G4PathFinder::PrepareNewTrack( const G4ThreeVector position,
   //       G4TransportationManager::GetTransportationManager();
 
   fNewTrack= true; 
+  this->MovePoint();   // Signal further that the last status is wiped
 
   // Message the G4NavigatorPanel / Dispatcher to find active navigators
   G4ThreeVector point(0.0, 0.0, 0.0); 
@@ -192,7 +198,7 @@ G4PathFinder::PrepareNewTrack( const G4ThreeVector position,
 	   << " which is more than the number allowed = "
 	   << fMaxNav << G4endl;
     G4Exception("G4PathFinder::PrepareNewTrack()",
-		"",  FatalException,
+		"TooManyNavigators",  FatalException,
 		"Too many active Navigators / worlds"); 
   }
 
@@ -211,8 +217,31 @@ G4PathFinder::PrepareNewTrack( const G4ThreeVector position,
   // The first location for each Navigator must be non-relative
   //   or else call ResetStackAndState() for each Navigator
 
+  fRelocatedPoint= false; 
+
   if( fVerboseLevel > 1 ) 
     G4cout << " G4PathFinder::PrepareNewTrack : exiting. " << G4endl;
+}
+
+void
+G4PathFinder::MovePoint()
+{
+  fRelocatedPoint= true;
+}
+
+static 
+void ReportMove( G4ThreeVector OldVector, G4ThreeVector NewVector, G4String Quantity )
+{
+    G4ThreeVector moveVec = ( NewVector - OldVector );
+
+    G4cerr << G4endl
+	   << "**************************************************************" << G4endl;
+    G4cerr << "Endpoint has moved between value returned by ComputeStep"
+	   << " and call to Locate. " << G4endl
+	   << "Change of " << Quantity << " is " << moveVec.mag() / mm << " mm long, "
+	   << " and its vector is " << (1.0/mm) * moveVec << " mm " << G4endl
+	   << "Endpoint of ComputeStep was " << OldVector
+	   << " and current position to locate is " << NewVector << G4endl;
 }
 
 void
@@ -224,7 +253,16 @@ G4PathFinder::Locate( const   G4ThreeVector& position,
   std::vector<G4Navigator*>::iterator pNavIter= pTransportManager->GetActiveNavigatorsIterator(); 
   G4int num=0; 
 
+  G4ThreeVector lastPosition= fEndState.GetPosition(); 
+  G4ThreeVector moveVec = (position - lastPosition );
+  if( (!fNewTrack) && (!fRelocatedPoint) && (moveVec.mag2() > 0.0) ){
+     ReportMove( position, lastPosition, "Position" ); 
+     G4Exception( "G4PathFinder::Locate", "LocateUnexpectedPoint", 
+	 	  FatalException,  "Location is not where last ComputeStep ended."); 
+  }
+
   if( fVerboseLevel > 2 ){
+    G4cout << G4endl << G4endl; 
     G4cout << " G4PathFinder::Locate : entered " << G4endl;
     G4cout << " --------------------   -------" <<  G4endl;
     G4cout << "   Locating at position " << position
@@ -274,6 +312,7 @@ G4PathFinder::Locate( const   G4ThreeVector& position,
     G4cout << " G4PathFinder::Locate : exiting. " << G4endl;
     G4cout << G4endl;
   }
+  fRelocatedPoint= false;
 }
 
 G4TouchableHandle 
