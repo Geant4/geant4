@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PathFinder.cc,v 1.7 2006-05-26 22:08:55 japost Exp $
+// $Id: G4PathFinder.cc,v 1.8 2006-05-26 22:23:08 japost Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4PathFinder Implementation
@@ -324,6 +324,20 @@ G4PathFinder::CreateTouchableHandle( G4int navId ) const
 G4cout << "G4PathFinder::CreateTouchableHandle : navId = " << navId << " -- " << GetNavigator(navId) << G4endl;
   G4TouchableHistory* touchHist;
   touchHist= GetNavigator(navId) -> CreateTouchableHistory(); 
+
+  // return G4TouchableHandle(touchHist); 
+     //-------->  Problem with out of world !!
+
+  // G4TouchableHistory* touchHist= new G4TouchableHistory(); 
+
+  G4VPhysicalVolume* locatedVolume= fLocatedVolume[navId]; 
+  if( locatedVolume == 0 )
+     {
+       // Workaround to ensure that the touchable is fixed !! // TODO: fix
+       touchHist->UpdateYourself( locatedVolume, 
+				  touchHist->GetHistory() );
+     }
+    
   return G4TouchableHandle(touchHist); 
 }
 
