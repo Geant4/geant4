@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4NavigationHistory.cc,v 1.6 2003-11-02 16:06:32 gcosmo Exp $
+// $Id: testG4NavigationHistory.cc,v 1.7 2006-05-26 21:36:21 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -104,9 +104,14 @@ G4bool testG4NavigationHistory()
     // assert(nHist.GetReplicaNo(1)==0);
     assert(nHist.GetVolume(0)==&detectorPhys);
     assert(nHist.GetVolume(1)==&offMXPhys);
-    
+
+    // Test a null History 
+    G4NavigationHistory nullHist;
+    assert(nullHist.GetDepth()==0);
+    assert(nullHist.GetVolume(0)==0); 
+    assert(nullHist.GetReplicaNo(0)==(-1));   
 //
-// END test of G4NaviagtionHistory
+// END test of G4NavigationHistory
 //
     return true;
 }
