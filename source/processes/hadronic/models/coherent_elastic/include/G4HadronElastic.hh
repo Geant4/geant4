@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HadronElastic.hh,v 1.3 2006-05-09 16:31:45 vnivanch Exp $
+// $Id: G4HadronElastic.hh,v 1.4 2006-05-26 11:23:37 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -62,7 +62,7 @@ public:
 
   G4HadronElastic(G4double elim = 100.*keV, 
 		  G4double plow = 200.*MeV, 
-		  G4double phigh= DBL_MAX);
+		  G4double ehigh= DBL_MAX);
 
   virtual ~G4HadronElastic();
  
@@ -73,7 +73,7 @@ public:
 
   void SetMomentumLow(G4double value);
 
-  void SetMomentumHigh(G4double value);
+  void SetKinEnergyHigh(G4double value);
 
 private:
 
@@ -102,7 +102,7 @@ private:
 
   G4double ekinlim;  // in MeV
   G4double plablow;  // in MeV/c
-  G4double plabhigh;  // in MeV/c
+  G4double ekinhigh;  // in MeV/c
 };
 
 inline void G4HadronElastic::SetMomentumLow(G4double value)
@@ -110,9 +110,9 @@ inline void G4HadronElastic::SetMomentumLow(G4double value)
   plablow = value;
 }
 
-inline void G4HadronElastic::SetMomentumHigh(G4double value)
+inline void G4HadronElastic::SetKinEnergyHigh(G4double value)
 {
-  plabhigh = value;
+  ekinhigh = value;
 }
 
 #endif

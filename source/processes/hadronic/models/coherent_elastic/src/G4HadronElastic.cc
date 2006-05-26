@@ -66,14 +66,14 @@ enum G4ElasticGenerator
   fSWave
 };
 
-G4HadronElastic::G4HadronElastic(G4double elim, G4double plow, G4double phigh) 
+G4HadronElastic::G4HadronElastic(G4double elim, G4double plow, G4double ehigh) 
   : G4HadronicInteraction()
 {
   SetMinEnergy( 0.0*GeV );
   SetMaxEnergy( DBL_MAX );
   verboseLevel= 0;
   plablow     = plow;
-  plabhigh    = phigh;
+  ekinhigh    = ehigh;
   ekinlim     = elim;
   qCManager   = G4QElasticCrossSection::GetPointer();
   hElastic    = new G4ElasticHadrNucleusHE();
@@ -94,8 +94,8 @@ G4VQCrossSection* G4HadronElastic::GetCS()
   return qCManager;
 }
 
-G4HadFinalState*
-G4HadronElastic::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& targetNucleus)
+G4HadFinalState* G4HadronElastic::ApplyYourself(
+		 const G4HadProjectile& aTrack, G4Nucleus& targetNucleus)
 {
   theParticleChange.Clear();
   const G4HadProjectile* aParticle = &aTrack;
@@ -108,9 +108,11 @@ G4HadronElastic::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& targetN
 
 
   G4double plab = aParticle->GetTotalMomentum();
+  G4double ekin = aParticle->GetKineticEnergy();
   if (verboseLevel > 1) 
-    G4cout << "G4HadronElastic::DoIt: Incident particle plab=" << plab/GeV << " GeV/c " 
-	   << " ekin(MeV) = " << aParticle->GetKineticEnergy()/MeV << "  " 
+    G4cout << "G4HadronElastic::DoIt: Incident particle plab=" 
+	   << plab/GeV << " GeV/c " 
+	   << " ekin(MeV) = " << ekin/MeV << "  " 
 	   << aParticle->GetDefinition()->GetParticleName() << G4endl;
 
   // Scattered particle referred to axis of incident particle
@@ -155,7 +157,7 @@ G4HadronElastic::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& targetN
     gtype = fQElastic;
     if(Z == 1 && N == 2) N = 1;
     else if (Z == 2 && N == 1) N = 2;
-  } else if(plab >= plabhigh) {
+  } else if(ekin >= ekinhigh) {
     gtype = fHElastic;
   } else if(plab <= plablow) {
     gtype = fSWave;
@@ -196,31 +198,31 @@ G4HadronElastic::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& targetN
   nlv01.boost(bst);
   nlv11.boost(bst); 
 
-  G4double ekin = nlv11.e() - m1;
+  G4double eFinal = nlv11.e() - m1;
   if (verboseLevel > 1) 
     G4cout << " P0= "<< nlv01 << "   P1= "
-	   << nlv11<<" m= " << m1 << " ekin0= " << ekin 
+	   << nlv11<<" m= " << m1 << " ekin0= " << eFinal 
 	   << " ekin1= " << nlv01.e() - m2 
 	   <<G4endl;
-  if(ekin < 0.0) {
-    G4cout << "G4HadronElastic WARNING ekin= " << ekin 
+  if(eFinal < 0.0) {
+    G4cout << "G4HadronElastic WARNING ekin= " << eFinal
 	   << " after scattering of " 
 	   << aParticle->GetDefinition()->GetParticleName()
 	   << " p(GeV/c)= " << plab
 	   << " on " << theDef->GetParticleName()
 	   << G4endl;
-    ekin = 0.0;
+    eFinal = 0.0;
   }
 
   theParticleChange.SetMomentumChange(nlv11.vect().unit());
-  theParticleChange.SetEnergyChange(ekin);
+  theParticleChange.SetEnergyChange(eFinal);
   
-  ekin =  nlv01.e() - m2;
-  if(ekin > ekinlim) {
+  G4double erec =  nlv01.e() - m2;
+  if(erec > ekinlim) {
     G4DynamicParticle * aSec = new G4DynamicParticle(theDef, nlv01);
     theParticleChange.AddSecondary(aSec);
   } else {
-    theParticleChange.SetLocalEnergyDeposit(ekin);
+    theParticleChange.SetLocalEnergyDeposit(erec);
   }
   //   G4cout << " ion info "<<atno2 << " "<<A<<" "<<Z<<" "<<zTarget<<G4endl;
   return &theParticleChange;
