@@ -21,13 +21,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4PathFinder.cc,v 1.6 2006-05-26 22:02:03 japost Exp $
+// $Id: G4PathFinder.cc,v 1.7 2006-05-26 22:08:55 japost Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4PathFinder Implementation
 //
 // Original author:  John Apostolakis,  April 2006
-//
+// Revisions:
+//  21.05.06 J.Apostolakis First implementation coworks with MassNavigator
+//  23.05.06 M.Asai        Change to new navigator numbering of G4Transp..Manager
 // --------------------------------------------------------------------
 
 #include "G4PathFinder.hh"
@@ -131,7 +133,7 @@ G4PathFinder::ComputeStep( const G4FieldTrack &InitialFieldTrack,
     // 
     // G4cout << " initial = " << InitialFieldTrack << G4endl;
     G4FieldTrack currentState= InitialFieldTrack;
-    if( fVerboseLevel > 1 )
+    // if( fVerboseLevel > 1 )
       G4cout << " current = " << currentState << G4endl;
 
     fCurrentStepNo = stepNo; 
@@ -203,7 +205,7 @@ G4PathFinder::PrepareNewTrack( const G4ThreeVector position,
   }
 
   pNavigatorIter= pTransportManager-> GetActiveNavigatorsIterator();
-  for( num=1; num<= fNoActiveNavigators; ++pNavigatorIter,++num ) {
+  for( num=0; num< fNoActiveNavigators; ++pNavigatorIter,++num ) {
  
      // Keep information in carray ... for creating touchables - at least
      fpNavigator[num] =  *pNavigatorIter;   
@@ -270,7 +272,7 @@ G4PathFinder::Locate( const   G4ThreeVector& position,
 	   << "  relative= " << relative << G4endl;
   }
 
-  for ( num=1; num<= fNoActiveNavigators ; ++pNavIter,++num ) {
+  for ( num=0; num< fNoActiveNavigators ; ++pNavIter,++num ) {
      //  ... who limited the step ....
 
      // G4Navigator pNav= *pNavIter;
@@ -319,6 +321,7 @@ G4TouchableHandle
 G4PathFinder::CreateTouchableHandle( G4int navId ) const
    // Also? G4TouchableCreator& GetTouchableCreator( navId ) const; 
 {
+G4cout << "G4PathFinder::CreateTouchableHandle : navId = " << navId << " -- " << GetNavigator(navId) << G4endl;
   G4TouchableHistory* touchHist;
   touchHist= GetNavigator(navId) -> CreateTouchableHistory(); 
   return G4TouchableHandle(touchHist); 
@@ -360,7 +363,7 @@ G4PathFinder::DoNextCurvedStep( const G4FieldTrack &fieldTrack,
   G4cout << fieldTrack << proposedStepLength  << G4endl;
   // std::vector<G4Navigator*>::iterator pNavigatorIter; 
   G4int num=0;  
-  for ( num= 1; num <= fNoActiveNavigators; num++ ) { 
+  for ( num= 0; num < fNoActiveNavigators; num++ ) { 
 
      // navigator= this->GetNavigator(num); 
 
@@ -397,7 +400,7 @@ G4PathFinder::DoNextLinearStep( const G4FieldTrack &initialState,
   G4ThreeVector initialDirection= initialState.GetMomentumDirection();
 
   G4int num=0; 
-  for( num=1; num<= fNoActiveNavigators; ++pNavigatorIter,++num ) {
+  for( num=0; num< fNoActiveNavigators; ++pNavigatorIter,++num ) {
      // navigator= this->GetNavigator(num); 
      safety= DBL_MAX;
 
@@ -413,6 +416,7 @@ G4PathFinder::DoNextLinearStep( const G4FieldTrack &initialState,
      // if( step == kInfinity ) { step = proposedStepLength; }
      fCurrentStepSize[num] = step; 
      fNewSafety[num]= safety; 
+G4cout << "G4PathFinder::DoNextLinearStep : Navigator [" << num << "] -- step size " << step << G4endl;
   } 
   fMinSafety= minSafety;
   fMinStep=   minStep; 
@@ -425,8 +429,10 @@ G4PathFinder::DoNextLinearStep( const G4FieldTrack &initialState,
   // Set the EndState
   G4ThreeVector endPosition;
 
+G4cout << "G4PathFinder::DoNextLinearStep : initialPosition : " << initialPosition << G4endl;
   fEndState= initialState; 
   endPosition= initialPosition + minStep * initialDirection ; 
+G4cout << "G4PathFinder::DoNextLinearStep : endPosition : " << endPosition << G4endl;
   fEndState.SetPosition( endPosition ); 
   fEndState.SetProperTimeOfFlight( -1.000 );   // Not defined YET
   // fEndState.SetMomentum( initialState.GetMomentum ); 
@@ -461,7 +467,7 @@ G4PathFinder::WhichLimited()       // Flag which processes limited the step
      shared= kSharedTransport;
   }
 
-  for ( num= 1; num <= fNoActiveNavigators; num++ ) { 
+  for ( num= 0; num < fNoActiveNavigators; num++ ) { 
     G4bool limitedStep;
 
     G4double step= fCurrentStepSize[num]; 
@@ -485,7 +491,7 @@ G4PathFinder::WhichLimited()       // Flag which processes limited the step
 #if 0
     else{
       // Processes limiting are not unique
-      for ( num= 1; num <= fNoActiveNavigators; num++ ) { 
+      for ( num= 0; num < fNoActiveNavigators; num++ ) { 
 	if( Limited[num] ) fLimitedStep[ last ] = kUnique; 
       }
     }
@@ -521,7 +527,7 @@ G4PathFinder::PrintLimited()
 	 << G4endl;  
   }
   int num;
-  for ( num= 1; num <= fNoActiveNavigators; num++ ) { 
+  for ( num= 0; num < fNoActiveNavigators; num++ ) { 
     G4double stepLen = fCurrentStepSize[num]; 
     if( stepLen > fTrueMinStep ) { 
       stepLen = fTrueMinStep;     // did not limit (went as far as asked)
