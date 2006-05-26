@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PathFinder.hh,v 1.9 2006-05-23 17:55:10 japost Exp $
+// $Id: G4PathFinder.hh,v 1.10 2006-05-26 22:00:05 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // class G4PathFinder 
@@ -115,6 +115,9 @@ class G4PathFinder
    inline void    SetMaxLoopCount( G4int new_max );
      // A maximum for the number of steps that a (looping) particle can take.
 
+ public:  // without description
+   void MovePoint();  // Signal that location will be moved 
+
  protected:  // without description
   G4double  DoNextCurvedStep(  const G4FieldTrack  &FieldTrack,
 			       G4double            proposedStepLength); 
@@ -176,6 +179,11 @@ class G4PathFinder
 
    G4FieldTrack    fEndState;
      // End point storage
+   G4bool fRelocatedPoint;   //  Signals that point was or is being moved 
+                             //  from the position of the last location
+                             //   or the endpoint resulting from ComputeStep 
+                             //   -- invalidates fEndState
+
    G4int           fLastStepNo, fCurrentStepNo; 
    G4bool      fParticleIsLooping;
    G4int  fVerboseLevel;
