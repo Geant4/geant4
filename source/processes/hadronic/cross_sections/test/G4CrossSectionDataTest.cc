@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CrossSectionDataTest.cc,v 1.5 2006-05-23 15:12:21 grichine Exp $
+// $Id: G4CrossSectionDataTest.cc,v 1.6 2006-05-26 07:31:14 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -32,9 +32,22 @@
 //
 
 
+
+#include "G4ios.hh"
+#include <fstream>
+#include <cmath>
+#include "globals.hh"
+#include "Randomize.hh"
+#include "G4UnitsTable.hh"
+
+#include <iomanip>
+
+
+
 #include "G4PionPlus.hh"
 #include "G4Proton.hh"
 #include "G4Element.hh"
+#include "G4NistManager.hh"
 
 #include "G4HadronElasticProcess.hh"
 //#include "G4HadronInelasticProcess.hh"
@@ -64,34 +77,95 @@
 
 int main()
 {
-// Element definition
+  // Element definition
 
-   G4cout << " 1 copper" << G4endl;
-   G4cout << " 2 uranium" << G4endl;
-   G4int choice;
-   G4cin >> choice;
+  G4cout << " 1 copper" << G4endl;
+  G4cout << " 2 iron" << G4endl;
+  G4cout << " 3 lead" << G4endl;
+  G4cout << " 4 hydrogen" << G4endl;
+  G4cout << " 5 oxigen" << G4endl;
+  G4cout << " 6 carbon" << G4endl;
+  G4cout << " 7 nitrogen" << G4endl;
+  G4cout << " 8 argon" << G4endl;
+  G4cout << " 9 silicon" << G4endl;
+  G4cout << "10 tugnsten" << G4endl;
+  G4cout << "11 uranium" << G4endl;
+  G4int choice;
+  G4cin >> choice;
 
-   G4Element* theElement;
-   G4Material* theMaterial;
+  G4Element*     theElement;
+  G4Material*    theMaterial;
+  G4NistManager* man = G4NistManager::Instance();
+  man->SetVerbose(1);
 
-   switch (choice) 
-   {
+  switch (choice) 
+  {
     case 1:
 
-      theElement = new G4Element("copper    ", "Cu", 4, 63.54*g/mole);
-
-      theMaterial = new G4Material("copper", 4., 63.54*g/mole, 8.96*g/cm3, 
-                                   kStateSolid);
+      theElement  = man->FindOrBuildElement("Cu");
+      theMaterial = man->FindOrBuildMaterial("G4_Cu");
       break;
 
     case 2:
 
-      theElement = new G4Element("uranium", "U", 92, 238.03*g/mole);
-
-      theMaterial = new G4Material("uranium", 92., 238.03*g/mole, 18.95*g/cm3, 
-                                   kStateSolid);
+      theElement  = man->FindOrBuildElement("Fe");
+      theMaterial = man->FindOrBuildMaterial("G4_Fe");
       break;
-   }
+
+    case 3:
+
+      theElement  = man->FindOrBuildElement("Pb");
+      theMaterial = man->FindOrBuildMaterial("G4_Pb");
+      break;
+
+    case 4:
+
+      theElement  = man->FindOrBuildElement("H");
+      theMaterial = man->FindOrBuildMaterial("G4_H");
+      break;
+
+    case 5:
+
+      theElement  = man->FindOrBuildElement("O");
+      theMaterial = man->FindOrBuildMaterial("G4_O");
+      break;
+
+    case 6:
+
+      theElement  = man->FindOrBuildElement("C");
+      theMaterial = man->FindOrBuildMaterial("G4_C");
+      break;
+
+    case 7:
+
+      theElement  = man->FindOrBuildElement("N");
+      theMaterial = man->FindOrBuildMaterial("G4_N");
+      break;
+
+    case 8:
+
+      theElement  = man->FindOrBuildElement("Ar");
+      theMaterial = man->FindOrBuildMaterial("G4_Ar");
+      break;
+
+    case 9:
+
+      theElement  = man->FindOrBuildElement("Si");
+      theMaterial = man->FindOrBuildMaterial("G4_Si");
+      break;
+
+    case 10:
+
+      theElement  = man->FindOrBuildElement("W");
+      theMaterial = man->FindOrBuildMaterial("G4_W");
+      break;
+
+    case 11:
+
+      theElement  = man->FindOrBuildElement("U");
+      theMaterial = man->FindOrBuildMaterial("G4_U");
+      break;  
+  }
    //   G4cout << "Dumping element info:" << G4endl;
    //   theElement->DumpInfo();
    //   G4cout << "Dumping material info:" << G4endl;
@@ -99,19 +173,19 @@ int main()
 
 // Particle definition
 
-   G4cout << " 1 proton" << G4endl;
-   G4cout << " 2 pion+" << G4endl;
-   G4cout << " 3 neutron" << G4endl;
-   G4cout << " 4 kaon+" << G4endl;
-   G4cout << " 5 kaon0short" << G4endl;
-   G4cout << " 6 pion-" << G4endl;
-   G4cin >> choice;
+  G4cout << " 1 proton" << G4endl;
+  G4cout << " 2 pion+" << G4endl;
+  G4cout << " 3 neutron" << G4endl;
+  G4cout << " 4 kaon+" << G4endl;
+  G4cout << " 5 kaon0short" << G4endl;
+  G4cout << " 6 pion-" << G4endl;
+  G4cin >> choice;
 
-   G4ParticleDefinition* theParticleDefinition;
-   G4VProcess* theProcess;
+  G4ParticleDefinition* theParticleDefinition;
+  G4VProcess* theProcess;
 
-   switch (choice) 
-   {
+  switch (choice) 
+  {
     case 1:
 
       theParticleDefinition = G4Proton::ProtonDefinition();
@@ -146,50 +220,46 @@ int main()
 
       theParticleDefinition = G4PionMinus::PionMinusDefinition();
       break;
-   }
+  }
    //   G4cout << "Dumping particle info:" << G4endl;
    //   theParticleDefinition->DumpTable();
-   G4int i, iMax=70;
-   G4double kinEnergy;
-   G4cout << "Kinetic energy in GeV: "<<G4endl;
-   G4cin >> kinEnergy;
+  G4int i, iMax=70;
+  G4double kinEnergy;
+  // G4cout << "Kinetic energy in GeV: "<<G4endl;
+  // G4cin >> kinEnergy;
 
 // Make a dynamic particle too
-   G4DynamicParticle* theDynamicParticle;
+  G4DynamicParticle* theDynamicParticle;
 
 // Process definition
 
-   G4cout << " 1 elastic" << G4endl;
-   G4cout << " 2 fission" << G4endl;
-   G4cout << " 3 capture" << G4endl;
-   G4cout << " 4 inelastic" << G4endl;
+  G4cout << " 1 elastic" << G4endl;
+  G4cout << " 2 fission" << G4endl;
+  G4cout << " 3 capture" << G4endl;
+  G4cout << " 4 inelastic" << G4endl;
 
-   G4cin >> choice;
+  G4cin >> choice;
 
+  /////////////////////////////
 
+  G4CrossSectionDataStore  theCrossSectionDataStore;
 
-
-     G4CrossSectionDataStore theCrossSectionDataStore;
-
-     G4HadronElasticDataSet theElasticDataSet;
-
-     G4HadronFissionDataSet theFissionDataSet;
-
-     theFissionDataSet.SetVerboseLevel(2);
-
-     G4HadronCaptureDataSet theCaptureDataSet;
-
-     G4HadronInelasticDataSet theInelasticDataSet;
+  G4HadronElasticDataSet   theElasticDataSet;
+  G4HadronCaptureDataSet   theCaptureDataSet;
+  G4HadronInelasticDataSet theInelasticDataSet;
 
 
-     G4HadronCrossSectionPlugin theCrossSectionPlugin;
+  G4HadronFissionDataSet   theFissionDataSet;
+  theFissionDataSet.SetVerboseLevel(2);
 
-     // theCrossSectionPlugin.SetVerboseLevel(2);
+  G4HadronCrossSectionPlugin theCrossSectionPlugin;
 
-     G4double sig = 0, mfp = 0;
+  // theCrossSectionPlugin.SetVerboseLevel(2);
 
-     switch (choice) 
-     {
+  G4double sig = 0;   // , mfp = 0;
+
+  switch (choice) 
+  {
       case 1:
 
         theProcess = new G4HadronElasticProcess("ELASTIC");
@@ -250,32 +320,40 @@ int main()
       //      mfp = ((G4HadronInelasticProcess*)theProcess)->
       //               GetMeanFreePathBasic(theDynamicParticle, theMaterial);
       break;
-     }
+  }
 
      //   sig = theCrossSectionDataStore.GetCrossSection(theDynamicParticle,
      //                                                  theElement);
-   G4cout << theProcess->GetProcessName() << " cross section for " << 
-            theParticleDefinition->GetParticleName() <<
-           " on " << theElement->GetName() << G4endl;
-   G4cout<<"energy in GeV"<<"\t"<<"cross-section in millibarn"<<G4endl;
 
-   kinEnergy = 1.;
+  std::ofstream writef("txs.dat", std::ios::out ) ;
+  writef.setf( std::ios::scientific, std::ios::floatfield );
 
-   for(i = 0; i < iMax; i++)
-   {
+  kinEnergy = 1.*GeV;
+
+  for(i = 0; i < iMax; i++)
+  {
    
      theDynamicParticle = new G4DynamicParticle(theParticleDefinition,
                                               G4ParticleMomentum(1.,0.,0.), 
-                                              kinEnergy*GeV);
+                                              kinEnergy);
      sig = theCrossSectionDataStore.GetCrossSection(theDynamicParticle,
                                                     theElement, 273*kelvin);
 
      // G4cout << theProcess->GetProcessName() << " cross section for " << 
      //       theParticleDefinition->GetParticleName() <<
      //      " on " << theElement->GetName() << G4endl;
-     G4cout << kinEnergy <<" Gev, \t"<< sig/millibarn << " mb" << G4endl;
+     G4cout << kinEnergy/GeV <<" GeV, \t"<< sig/millibarn << " mb" << G4endl;
      // G4cout << "Mean free path = " << mfp << " mm" << G4endl;
 
+     writef << kinEnergy/GeV <<"\t"<< sig/millibarn << G4endl;
+
      kinEnergy *= 1.1;
-   }
-}
+     delete theDynamicParticle;
+  }
+  G4cout<<"energy in GeV"<<"\t"<<"cross-section in millibarn"<<G4endl;
+  G4cout << theProcess->GetProcessName() << " cross section for " << 
+            theParticleDefinition->GetParticleName() <<
+           " on " << theElement->GetName() << G4endl;
+
+  return 1;
+} // end of main
