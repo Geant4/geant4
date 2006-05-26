@@ -1,6 +1,6 @@
 G4FieldManager::G4FieldManager constructor #1:  Used G4ChordFinder argument 0
  navId for original Navigator for tracking is 0
- Located in world 0  used geomLimStp 0  - found in volume 0x837b400  name = 'World' - CopyNo= 0
+ Located in world 0  used geomLimStp 0  - found in volume   name = 'World' - CopyNo= 0
  test:  input FT =  (  X= 0 0 0  V= 100.51 0 0  v2= 100.51 mdm= 1 l= 0 ) 
                     len = 123 navId = 1 stepNo = 0
  PF::ComputeStep: step= 0 nav = 1 trial-step-len 123 from (0,0,0) dir  (1,0,0)
@@ -11,7 +11,7 @@ G4PathFinder::PrintLimited reports:   Minimum step (true)= 50  reported min = 50
  Step#   NavId   step-size    Limited:   bool, flag    World 
      0      0         50                1  SharedOther World
  G4PathFinder returns -1 for Navigator 1
- Located in world 0  used geomLimStp 1  - found in volume 0x837b668  name = 'Target 01' - CopyNo= 1
+ Located in world 0  used geomLimStp 1  - found in volume   name = 'Target 01' - CopyNo= 1
  PF::ComputeStep: step= 0 nav = 1 trial-step-len 123 from (0,0,0) dir  (1,0,0)
  G4PathFinder returns -1 for Navigator 1
  PF::ComputeStep: step= 1 nav = 1 trial-step-len 123 from (50,0,0) dir  (1,0,0)
@@ -22,6 +22,6 @@ G4PathFinder::PrintLimited reports:   Minimum step (true)= 123  reported min = 9
  Step#   NavId   step-size    Limited:   bool, flag    World 
      1      0        123                1  SharedOther World
  G4PathFinder returns -1 for Navigator 1
- Located in world 0  used geomLimStp 1  - found in volume 0x837b668  name = 'Target 01' - CopyNo= 1
+ Located in world 0  used geomLimStp 1  - found in volume   name = 'Target 01' - CopyNo= 1
  Step 1 is the last one.
  Step 1 is the last one.
