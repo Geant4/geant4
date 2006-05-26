@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRangeToEnergyConverter.cc,v 1.5 2006-01-18 05:44:27 kurasige Exp $
+// $Id: G4VRangeToEnergyConverter.cc,v 1.6 2006-05-26 00:40:58 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -55,7 +55,11 @@ G4VRangeToEnergyConverter::G4VRangeToEnergyConverter(const G4VRangeToEnergyConve
 G4VRangeToEnergyConverter & G4VRangeToEnergyConverter::operator=(const G4VRangeToEnergyConverter &right)
 {
   if (this == &right) return *this;
-  if (theLossTable) delete theLossTable;
+  if (theLossTable) {
+    theLossTable->clearAndDestroy();
+    delete theLossTable;
+    theLossTable=0;
+ }
 
   NumberOfElements = right.NumberOfElements;
   TotBin = right.TotBin;
@@ -81,7 +85,11 @@ G4VRangeToEnergyConverter & G4VRangeToEnergyConverter::operator=(const G4VRangeT
 
 G4VRangeToEnergyConverter::~G4VRangeToEnergyConverter()
 { 
-  if (theLossTable) delete  theLossTable;
+  if (theLossTable) {  
+    theLossTable->clearAndDestroy();
+    delete theLossTable;
+  }
+  theLossTable=0;
 }
 
 G4int G4VRangeToEnergyConverter::operator==(const G4VRangeToEnergyConverter &right) const
@@ -126,6 +134,7 @@ G4double G4VRangeToEnergyConverter::Convert(G4double rangeCut,
     }
     delete rangeVector;
   }
+
   return theKineticEnergyCuts;
 }
 
@@ -245,7 +254,10 @@ void G4VRangeToEnergyConverter::BuildLossTable()
 {
    //  Build dE/dx tables for elements
   if (size_t(NumberOfElements) != G4Element::GetNumberOfElements()) {
-    if (theLossTable!=0) delete theLossTable;
+    if (theLossTable!=0) {
+      theLossTable->clearAndDestroy();
+      delete theLossTable;
+    }
     theLossTable =0; 
     NumberOfElements = 0;
   }
@@ -261,20 +273,21 @@ void G4VRangeToEnergyConverter::BuildLossTable()
       G4cout << " NumberOfElements=" << NumberOfElements <<G4endl;
     }
 #endif
-  }
+ 
 
-  // fill the loss table
-  for (size_t j=0; j<size_t(NumberOfElements); j++){
-    G4double Value;
-    G4LossVector* aVector= new
-            G4LossVector(LowestEnergy, HighestEnergy, TotBin);
-    for (size_t i=0; i<size_t(TotBin); i++) {
-      Value = ComputeLoss(  (*G4Element::GetElementTable())[j]->GetZ(),
-                            aVector->GetLowEdgeEnergy(i)
-                          );
-      aVector->PutValue(i,Value);
+    // fill the loss table
+    for (size_t j=0; j<size_t(NumberOfElements); j++){
+      G4double Value;
+      G4LossVector* aVector= new
+	G4LossVector(LowestEnergy, HighestEnergy, TotBin);
+      for (size_t i=0; i<size_t(TotBin); i++) {
+	Value = ComputeLoss(  (*G4Element::GetElementTable())[j]->GetZ(),
+			      aVector->GetLowEdgeEnergy(i)
+			      );
+	aVector->PutValue(i,Value);
+      }
+      theLossTable->insert(aVector);
     }
-    theLossTable->insert(aVector);
   }
 }
 
