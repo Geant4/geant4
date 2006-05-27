@@ -1,8 +1,8 @@
 # vis.mac
 
 #/vis/open OGLIX
-/vis/open OGLIXm
-#/vis/open VRMLFILE
+/vis/open OGLSX
+#vis/open VRML2FILE
 
 /vis/viewer/refresh
 

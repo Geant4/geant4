@@ -178,7 +178,7 @@ class App(Frame):
     self.particleVar.set("e-")
     ra1 = { }
     pos1=1
-    for i in ("gamma", "e-",  "e+", "mu-", "mu+"):
+    for i in ("proton", "gamma", "e-",  "e+", "mu-", "mu+"):
       ra1[i] = Radiobutton(self, text=i, variable=self.particleVar, value=i)
       ra1[i].grid(row=8, column=pos1, sticky=W)
       pos1=pos1+1
@@ -224,7 +224,7 @@ class App(Frame):
     processLabel.grid(row=11, column=0, sticky=W)
     procTab = {}
     
-    self.processList = ["phot", "compt", "conv", "msc", "eIoni", "eBrem", "annihil","muIoni", "muBrems"]
+    self.processList = ["phot", "compt", "conv", "msc", "eIoni", "eBrem", "annihil","muIoni", "muBrems", "hIoni"]
     pos=1
     self.processVar = {}
     for i in self.processList:
@@ -286,7 +286,7 @@ class App(Frame):
 
       print "Now geometry updated"
 
-      gApplyUICommand("/vis/viewer/flush")
+#      gApplyUICommand("/vis/viewer/flush")
       self.cmd_particle(self.particleVar.get())
       self.cmd_energy(self.energyVar.get())
 
@@ -298,7 +298,8 @@ class App(Frame):
         pg.SetParticlePosition(G4ThreeVector(position*mm, (i-eventNum/2)*5.*mm, 0.*cm))
         gRunManager.BeamOn(1)
         sleep(0.01)
-
+      gApplyUICommand("/vis/viewer/flush")
+      
   def cmd_setProcess(self):
     for i in self.processList:
       if self.processVar[i].get() == 0:

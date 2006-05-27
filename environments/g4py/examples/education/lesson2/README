@@ -1,0 +1,33 @@
+26 May 2006 
+Geant4.8.1 release
+
+*********  ExN03.py script ***********
+
+This example id derived from examples/novice/N03.
+You can 
+  - choose the materials of absorber and gap 
+  - set the thickness of the absorber and gap
+  - set the lateral (in YZ plane) size of the sandwitch cal.
+  - choose an incedent particle
+  - set its energy
+  - set the number of events to run
+  - toggle on/off of the electromagnetic processes
+  - set cut length
+  - set magnetic field
+  - typein any Geant4 command (except related with the above functions) and execute it
+
+How to run it?
+    %python ExN03.py
+
+You can visualize with OpenGL stored mode or VRML.
+
+*********  ExN03-Wired.py script ***********
+This script uses Wired to visualize events.
+
+In this script, the wired is hard coded just like;
+
+Popen("/home/yoshidah/Wired/bin/wired" +  " -file g4hr_00.wir.heprep", shell=True)
+
+So, please modify this line for your environment. Also You have to specify the
+directory where *.heprep file is stored.
+The file g4hr_00.wir.heprep is overwritten to display successive enevt.
