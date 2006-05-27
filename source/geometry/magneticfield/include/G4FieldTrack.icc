@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FieldTrack.icc,v 1.18 2006-05-23 14:07:02 japost Exp $
+// $Id: G4FieldTrack.icc,v 1.19 2006-05-27 01:10:44 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -42,7 +42,7 @@ G4ChargeState::G4ChargeState(G4double charge,
 
 inline G4FieldTrack::
 G4ChargeState::G4ChargeState( 
-  const G4FieldTrack::G4ChargeState::G4ChargeState& right )
+  const G4FieldTrack::G4ChargeState& right )
 { 
   fCharge= right.fCharge;
   fMagn_dipole= right.fMagn_dipole; 
