@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CoupledTransportation.cc,v 1.2 2006-05-26 22:43:42 japost Exp $
+// $Id: G4CoupledTransportation.cc,v 1.3 2006-05-27 00:15:09 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //  GEANT 4 class implementation
@@ -213,8 +213,7 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
 						   currentSafety,
 						   limitedStep,
 						   endTrackState ) ;
-      G4cout << " PathFinder ComputeStep returns" << lengthAlongCurve
-	     << G4endl; 
+      // G4cout << " PathFinder ComputeStep returns " << lengthAlongCurve << G4endl; 
     
       if( lengthAlongCurve < currentMinimumStep){
          geometryStepLength   = lengthAlongCurve ;
@@ -376,46 +375,41 @@ G4VParticleChange* G4CoupledTransportation::AlongStepDoIt( const G4Track& track,
      if (fpDynamicParticle->GetDefinition()== fOpticalPhoton)
      {
         //  A photon is in the medium of the final point
-        //  during the step, so it has the final velocity.
+        //  during the step, so Peter says it has the final velocity.
         deltaTime = stepLength * finalInverseVel ;
-	G4cout << " dt = s * initV " 
-	       << "  s = "   << stepLength
-	       << " finalV= " << finalInverseVel << G4endl; 
+	// G4cout << " dt = s * initV "  << "  s = "   << stepLength
+	//        << " finalV= " << finalInverseVel << G4endl; 
      }
      else if (finalVelocity > 0.0)
      {
         // deltaTime = stepLength/finalVelocity ;
         G4double meanInverseVelocity = 0.5 * ( initialInverseVel + finalInverseVel );
         deltaTime = stepLength * meanInverseVelocity ;
-	G4cout << " dt = s * mean(1/v) " 
-	       << "  s = " << stepLength
-	       << "  mean(1/v)= "  << meanInverseVelocity
-	       << G4endl;
+	// G4cout << " dt = s * mean(1/v) , with " << "  s = " << stepLength
+	//     << "  mean(1/v)= "  << meanInverseVelocity << G4endl;
      }
      else
      {
         deltaTime = stepLength * initialInverseVel ;
-	G4cout << " dt = s * initV " 
-	       << "  s = "   << stepLength
-	       << " initV= " << initialInverseVel << G4endl; 
+	// G4cout << " dt = s * initV "  << "  s = "   << stepLength
+	//        << " initV= " << initialInverseVel << G4endl; 
      }  //  Could do with better estimate for final step (finalVelocity = 0) ?
 
      fCandidateEndGlobalTime   = startTime + deltaTime ;
 
-     G4cout << " Calculated global time from start = " << startTime << " and "
-	    << " delta time = " << deltaTime << G4endl;
+     // G4cout << " Calculated global time from start = " << startTime << " and "
+     //        << " delta time = " << deltaTime << G4endl;
   }
   else
   {
      deltaTime = fCandidateEndGlobalTime - startTime ;
-     G4cout << " Calculated global time from candidate end time = "
-	    << fCandidateEndGlobalTime
-	    << " and start time = " << startTime << G4endl;
+     // G4cout << " Calculated global time from candidate end time = "
+     //    << fCandidateEndGlobalTime << " and start time = " << startTime << G4endl;
   }
 
-  G4cout << " G4CoupledTransportation::AlongStepDoIt  "
-	 << " has time computed = " << fEndGlobalTimeComputed  << " and " 
-	 << " is proposing end time " << fCandidateEndGlobalTime << G4endl; 
+  // G4cout << " G4CoupledTransportation::AlongStepDoIt  "
+  // << " flag whether computed time = " << fEndGlobalTimeComputed  << " and " 
+  // << " is proposes end time " << fCandidateEndGlobalTime << G4endl; 
   fParticleChange.ProposeGlobalTime( fCandidateEndGlobalTime ) ;
 
   // Now Correct by Lorentz factor to get "proper" deltaTime
