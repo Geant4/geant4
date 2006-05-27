@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PathFinder.hh,v 1.10 2006-05-26 22:00:05 japost Exp $
+// $Id: G4PathFinder.hh,v 1.11 2006-05-27 00:10:30 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // class G4PathFinder 
@@ -116,7 +116,8 @@ class G4PathFinder
      // A maximum for the number of steps that a (looping) particle can take.
 
  public:  // without description
-   void MovePoint();  // Signal that location will be moved 
+   void MovePoint(){ fRelocatedPoint= true; }
+       // Signal that location will be moved -- internal use primarily
 
  protected:  // without description
   G4double  DoNextCurvedStep(  const G4FieldTrack  &FieldTrack,
@@ -174,6 +175,8 @@ class G4PathFinder
    G4double      fTrueMinStep;  // Corrected in case >= proposed 
    // State after calling 'locate'
    G4VPhysicalVolume* fLocatedVolume[fMaxNav];
+   G4ThreeVector      fLastLocatedPosition; 
+   // G4ThreeVector      fLastLocatedDirection; 
 
    // G4TransportationManager* fpTransportManager; 
 
