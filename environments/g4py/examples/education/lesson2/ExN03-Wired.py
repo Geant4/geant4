@@ -255,7 +255,7 @@ class App(Frame):
 
 #        gunYZpos = str((i-eventNum/2)*5) + ". 0. mm"
 #        gApplyUICommand("/gun/position -40. " + gunYZpos)
-      gRunManager.BeamOn(2)
+      gRunManager.BeamOn(1)
       gApplyUICommand("/vis/viewer/flush") # test HepRepFile
 #        sleep(0.01)
 
@@ -267,7 +267,10 @@ class App(Frame):
       else:
          gProcessTable.SetProcessActivation(i, 1)
 #         print "Process " + i + " activated"
-        
+      gApplyUICommand("/run/physicsModified")
+      print "Physics modified"
+
+      
   def cmd_g4command(self):
     gApplyUICommand(self.g4commandVar.get())
       
