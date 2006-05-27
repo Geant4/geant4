@@ -1,8 +1,11 @@
 # vis.mac
 
-#/vis/open OGLIX
+#OpenGL Stored mode to accumulate trajectories
+
 /vis/open OGLSX
-#/vis/open VRMLFILE
+
+#VRML viewer is usable if you defined env variables
+#/vis/open VRML2FILE
 
 /vis/viewer/refresh
 
