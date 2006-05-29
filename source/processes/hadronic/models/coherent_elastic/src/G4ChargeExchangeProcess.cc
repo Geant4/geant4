@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChargeExchangeProcess.cc,v 1.1 2006-05-29 12:43:07 vnivanch Exp $
+// $Id: G4ChargeExchangeProcess.cc,v 1.2 2006-05-29 14:52:18 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -205,8 +205,8 @@ G4double G4ChargeExchangeProcess::GetMicroscopicCrossSection(
            << "  in Z= " << iz
 	   << G4endl;
   G4bool b;
-  x *= factors->GetValue(momentum, b);
   G4double A = elm->GetN();
+  x *= factors->GetValue(momentum, b)/std::pow(A, 0.42);
   if(theParticle == thePiPlus || theParticle == theProton ||
      theParticle == theKPlus  || theParticle == theANeutron)
     x *= (1.0 - Z/A);

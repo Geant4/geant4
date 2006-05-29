@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HadronElastic.cc,v 1.11 2006-05-29 12:43:07 vnivanch Exp $
+// $Id: G4HadronElastic.cc,v 1.12 2006-05-29 14:52:18 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -98,7 +98,7 @@ G4HadFinalState* G4HadronElastic::ApplyYourself(
 {
   theParticleChange.Clear();
   const G4HadProjectile* aParticle = &aTrack;
-  G4double atno2 = targetNucleus.GetN();
+  G4double aTarget = targetNucleus.GetN();
   G4double zTarget = targetNucleus.GetZ();
 
   // Elastic scattering off Hydrogen
@@ -116,7 +116,7 @@ G4HadFinalState* G4HadronElastic::ApplyYourself(
   G4double m1 = theParticle->GetPDGMass();
 
   G4int Z = static_cast<G4int>(zTarget);
-  G4int A = static_cast<G4int>(atno2);
+  G4int A = static_cast<G4int>(aTarget);
   G4int N = A - Z;
   G4int projPDG = theParticle->GetPDGEncoding();
   if (verboseLevel > 1) 
@@ -172,7 +172,7 @@ G4HadFinalState* G4HadronElastic::ApplyYourself(
 
   if(gtype == fSWave)         t = G4UniformRand()*tmax;
   else if(gtype == fHElastic) t = hElastic->SampleT(theParticle,plab,Z,A);
-  else if(gtype == fLElastic) t = GeV*GeV*SampleT(ptot,m1,m2,atno2);
+  else if(gtype == fLElastic) t = GeV*GeV*SampleT(ptot,m1,m2,aTarget);
 
   if(verboseLevel>1)
     G4cout <<"type= " << gtype <<" t= " << t << " tmax= " << tmax 
@@ -223,7 +223,7 @@ G4HadFinalState* G4HadronElastic::ApplyYourself(
   } else {
     theParticleChange.SetLocalEnergyDeposit(erec);
   }
-  //   G4cout << " ion info "<<atno2 << " "<<A<<" "<<Z<<" "<<zTarget<<G4endl;
+
   return &theParticleChange;
 }
 
