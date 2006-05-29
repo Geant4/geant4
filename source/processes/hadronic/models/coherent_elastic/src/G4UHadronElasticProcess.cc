@@ -20,6 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: G4UHadronElasticProcess.cc,v 1.12 2006-05-29 12:43:07 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Geant4 Hadron Elastic Scattering Process -- header file
 // 
@@ -45,8 +47,8 @@
 #include "G4NeutronHPElasticData.hh"
 #include "G4HadronElastic.hh"
  
-G4UHadronElasticProcess::G4UHadronElasticProcess(const G4String& processName, G4bool fl)
-  : G4HadronicProcess(processName), flagHP(fl), first(true)
+G4UHadronElasticProcess::G4UHadronElasticProcess(const G4String& pName, G4bool fl)
+  : G4HadronicProcess(pName), flagHP(fl), first(true)
 {
   AddDataSet(new G4HadronElasticDataSet);
   theProton = G4Proton::Proton();
@@ -70,6 +72,7 @@ BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
 {
   if(first) {
     first = false;
+    if(!qCManager) qCManager = G4QElasticCrossSection::GetPointer();
     theParticle = &aParticleType;
     pPDG = theParticle->GetPDGEncoding();
     if(theParticle == theNeutron && flagHP) 
@@ -78,7 +81,8 @@ BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
     store = G4HadronicProcess::GetCrossSectionDataStore();
      
     if(verboseLevel>1) 
-      G4cout << "G4UHadronElasticProcess for " << theParticle->GetParticleName() 
+      G4cout << "G4UHadronElasticProcess for " 
+	     << theParticle->GetParticleName() 
 	     << G4endl; 
   }
   store->BuildPhysicsTable(aParticleType);
@@ -110,7 +114,7 @@ G4double G4UHadronElasticProcess::GetMeanFreePath(const G4Track& track,
 	   << "  p(GeV)= " << dp->GetTotalMomentum()/GeV
 	   << " in " << material->GetName()
 	   << G4endl; 
-  if(cross > DBL_MIN) cross = 0.0;
+
   for (G4int i=0; i<nelm; i++) {
     const G4Element* elm = (*theElementVector)[i];
     G4double x = GetMicroscopicCrossSection(dp, elm, temp);
@@ -152,7 +156,8 @@ G4double G4UHadronElasticProcess::GetMicroscopicCrossSection(
 	    if(verboseLevel>1) 
 	      G4cout << "G4UHadronElasticProcess compute CHIPS CS for Z= 1, N= " 
 		     << N << " pdg= " << pPDG 
-		     << " mom(GeV)= " << momentum/GeV << "  " << qCManager << G4endl; 
+		     << " mom(GeV)= " << momentum/GeV 
+		     << "  " << qCManager << G4endl; 
 	    G4double y = ab[j]*
 	      qCManager->GetCrossSection(false,momentum,1,N,pPDG);
 	    xsecH[N] += y;
@@ -194,10 +199,10 @@ G4VParticleChange* G4UHadronElasticProcess::PostStepDoIt(
 				  const G4Track& track, 
 				  const G4Step& step)
 {
-  SetDispatch(this);
-
+  G4ForceCondition* cn = 0;
   aParticleChange.Initialize(track);
-  if(cross < DBL_MIN) return G4VDiscreteProcess::PostStepDoIt(track,step);
+  G4double mfp = GetMeanFreePath(track, 0.0, cn);
+  if(mfp == DBL_MAX) return G4VDiscreteProcess::PostStepDoIt(track,step);
 
   G4double kineticEnergy = track.GetKineticEnergy();
   G4Material* material = track.GetMaterial();
@@ -252,12 +257,13 @@ G4VParticleChange* G4UHadronElasticProcess::PostStepDoIt(
 
   aParticleChange.Initialize(track);
   G4HadFinalState* result = hadi->ApplyYourself(thePro, targetNucleus);
-  /*
-  G4cout << "Efin= " << result->GetEnergyChange()
-  	 << " de= " << result->GetLocalEnergyDeposit()
-	 << " nsec= " << result->GetNumberOfSecondaries()
-	 << G4endl;
-  */
+  
+  if(verboseLevel>1) 
+    G4cout << "Efin= " << result->GetEnergyChange()
+	   << " de= " << result->GetLocalEnergyDeposit()
+	   << " nsec= " << result->GetNumberOfSecondaries()
+	   << G4endl;
+  
   aParticleChange.ProposeEnergy(result->GetEnergyChange());
   aParticleChange.ProposeMomentumDirection(result->GetMomentumChange());
   if(result->GetNumberOfSecondaries() > 0) {
@@ -277,7 +283,6 @@ G4bool G4UHadronElasticProcess::
 IsApplicable(const G4ParticleDefinition& aParticleType)
 {
    return (aParticleType == *(G4PionPlus::PionPlus()) ||
-           aParticleType == *(G4PionZero::PionZero()) ||
            aParticleType == *(G4PionMinus::PionMinus()) ||
            aParticleType == *(G4KaonPlus::KaonPlus()) ||
            aParticleType == *(G4KaonZeroShort::KaonZeroShort()) ||

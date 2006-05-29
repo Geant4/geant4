@@ -20,15 +20,17 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: G4HadronElastic.cc,v 1.11 2006-05-29 12:43:07 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // Physics model class G4HadronElastic (derived from G4LElastic)
 //
+//
 // G4 Model: Low-energy Elastic scattering with 4-momentum balance
 // F.W. Jones, TRIUMF, 04-JUN-96
+// Uses  G4ElasticHadrNucleusHE and G4VQCrossSection
 //
-// use -scheme for elastic scattering: HPW, 20th June 1997
-// most of the code comes from the old Low-energy Elastic class
 //
 // 25-JUN-98 FWJ: replaced missing Initialize for ParticleChange.
 // 09-Set-05 V.Ivanchenko HARP version of the model: fix scattering
@@ -58,14 +60,6 @@
 #include "G4Deuteron.hh"
 #include "G4Alpha.hh"
 
-enum G4ElasticGenerator
-{
-  fLElastic = 0,
-  fHElastic,
-  fQElastic,
-  fSWave
-};
-
 G4HadronElastic::G4HadronElastic(G4double elim, G4double plow, G4double ehigh) 
   : G4HadronicInteraction()
 {
@@ -94,6 +88,11 @@ G4VQCrossSection* G4HadronElastic::GetCS()
   return qCManager;
 }
 
+G4ElasticHadrNucleusHE* G4HadronElastic::GetHElastic()
+{
+  return hElastic;
+}
+
 G4HadFinalState* G4HadronElastic::ApplyYourself(
 		 const G4HadProjectile& aTrack, G4Nucleus& targetNucleus)
 {
@@ -101,11 +100,8 @@ G4HadFinalState* G4HadronElastic::ApplyYourself(
   const G4HadProjectile* aParticle = &aTrack;
   G4double atno2 = targetNucleus.GetN();
   G4double zTarget = targetNucleus.GetZ();
-  theParticleChange.SetEnergyChange(aTrack.GetKineticEnergy());
-  theParticleChange.SetMomentumChange(aTrack.Get4Momentum().vect().unit());
 
   // Elastic scattering off Hydrogen
-
 
   G4double plab = aParticle->GetTotalMomentum();
   G4double ekin = aParticle->GetKineticEnergy();

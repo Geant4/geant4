@@ -21,101 +21,101 @@
 // ********************************************************************
 //
 //
-// $Id: G4HadronElastic.hh,v 1.6 2006-05-29 12:43:07 vnivanch Exp $
+// $Id: G4ChargeExchange.hh,v 1.1 2006-05-29 12:43:07 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
-// G4 Model: Low energy elastic scattering with 4-momentum balance 
-// Derived fron G4LElastic of F.W. Jones, TRIUMF, 04-JUN-96
-// Uses  G4ElasticHadrNucleusHE and G4VQCrossSection
-//  
+// G4 Model: Charge and strangness exchange based on G4LightMedia model
+//           28 May 2006 V.Ivanchenko
+//
 // Modified:
-// 14-Dec-05 V.Ivanchenko rename the class
-// 13-Apr-06 V.Ivanchenko move to coherent_elastic 
 //
 //
+
+#ifndef G4ChargeExchange_h
+#define G4ChargeExchange_h 1
+
 // Class Description
-// Final state production model for hadron nuclear elastic scattering; 
+// Final state production model for hadron nuclear coherent charge exchange;
 // Class Description - End
 
-
-#ifndef G4HadronElastic_h
-#define G4HadronElastic_h 1
- 
 #include "globals.hh"
 #include "G4HadronicInteraction.hh"
 #include "G4HadProjectile.hh"
 #include "G4Nucleus.hh"
 
-enum G4ElasticGenerator
-{
-  fLElastic = 0,
-  fHElastic,
-  fQElastic,
-  fSWave
-};
-
 class G4ParticleDefinition;
 class G4VQCrossSection;
 class G4ElasticHadrNucleusHE;
+class G4HadronElastic;
 
-class G4HadronElastic : public G4HadronicInteraction
+class G4ChargeExchange : public G4HadronicInteraction
 {
 public:
 
-  G4HadronElastic(G4double elim = 100.*keV, 
-		  G4double plow = 200.*MeV, 
-		  G4double ehigh= GeV);
+  G4ChargeExchange(G4HadronElastic* hel = 0,
+                   G4double elim = 100.*keV,
+	           G4double plow = 200.*MeV,
+		   G4double ehigh= GeV);
 
-  virtual ~G4HadronElastic();
- 
-  G4HadFinalState * ApplyYourself(const G4HadProjectile & aTrack, 
-				  G4Nucleus & targetNucleus);
+  virtual ~G4ChargeExchange();
 
-  G4VQCrossSection* GetCS();
-
-  G4ElasticHadrNucleusHE* GetHElastic();
+  virtual G4HadFinalState * ApplyYourself(
+                   const G4HadProjectile & aTrack,
+                   G4Nucleus & targetNucleus);
 
   void SetMomentumLow(G4double value);
 
   void SetKinEnergyHigh(G4double value);
 
-  G4double SampleT(G4double p, G4double m1, G4double m2, G4double A);
-
 private:
-
-  G4int Rtmi(G4double* x, G4double xli, G4double xri, G4double eps, 
-	     G4int iend,
-	     G4double aa, G4double bb, G4double cc, G4double dd, 
-	     G4double rr);
-
-  G4double Fctcos(G4double t, 
-		  G4double aa, G4double bb, G4double cc, G4double dd, 
-		  G4double rr);
-
-  void Defs1(G4double p, G4double px, G4double py, G4double pz, 
-	     G4double pxinc, G4double pyinc, G4double pzinc, 
-	     G4double* pxnew, G4double* pynew, G4double* pznew);
 
   G4VQCrossSection*           qCManager;
   G4ElasticHadrNucleusHE*     hElastic;
+  G4HadronElastic*            fElastic;
+  G4bool                      native;
 
-  const G4ParticleDefinition* theProton;
-  const G4ParticleDefinition* theNeutron;
-  const G4ParticleDefinition* theDeuteron;
-  const G4ParticleDefinition* theAlpha;
+  G4ParticleDefinition* theProton;
+  G4ParticleDefinition* theNeutron;
+  G4ParticleDefinition* theAProton;
+  G4ParticleDefinition* theANeutron;
+  G4ParticleDefinition* thePiPlus;
+  G4ParticleDefinition* thePiMinus;
+  G4ParticleDefinition* thePiZero;
+  G4ParticleDefinition* theKPlus;
+  G4ParticleDefinition* theKMinus;
+  G4ParticleDefinition* theK0S;
+  G4ParticleDefinition* theK0L;
+  G4ParticleDefinition* theL;
+  G4ParticleDefinition* theAntiL;
+  G4ParticleDefinition* theSPlus;
+  G4ParticleDefinition* theASPlus;
+  G4ParticleDefinition* theSMinus;
+  G4ParticleDefinition* theASMinus;
+  G4ParticleDefinition* theS0;
+  G4ParticleDefinition* theAS0;
+  G4ParticleDefinition* theXiMinus;
+  G4ParticleDefinition* theXi0;
+  G4ParticleDefinition* theAXiMinus;
+  G4ParticleDefinition* theAXi0;
+  G4ParticleDefinition* theOmega;
+  G4ParticleDefinition* theAOmega;
+  G4ParticleDefinition* theD;
+  G4ParticleDefinition* theT;
+  G4ParticleDefinition* theA;
+  G4ParticleDefinition* theHe3;
 
   G4double ekinlim;  // in MeV
   G4double plablow;  // in MeV/c
   G4double ekinhigh;  // in MeV/c
 };
 
-inline void G4HadronElastic::SetMomentumLow(G4double value)
+inline void G4ChargeExchange::SetMomentumLow(G4double value)
 {
   plablow = value;
 }
 
-inline void G4HadronElastic::SetKinEnergyHigh(G4double value)
+inline void G4ChargeExchange::SetKinEnergyHigh(G4double value)
 {
   ekinhigh = value;
 }
