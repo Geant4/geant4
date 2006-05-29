@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4ElasticHadrNucleusHE.hh,v 1.19 2006-05-24 19:12:48 vnivanch Exp $
+// $Id: G4ElasticHadrNucleusHE.hh,v 1.20 2006-05-29 14:42:42 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -207,8 +207,9 @@ public:
 
   std::vector<ElasticData> SetOfElasticData;
 
-  G4IonTable                * MyIonTable;
-  G4DiffElasticHadrNucleus    aDiffElHadNcls;
+  G4IonTable*                MyIonTable;
+  G4DiffElasticHadrNucleus   aDiffElHadNcls;
+  G4DynamicParticle*         aParticle; 
 
   G4int     Nstep,         // The number of steps on Q2
             iKindWork,     // 
