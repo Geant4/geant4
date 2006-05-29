@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QElasticCrossSection.cc,v 1.5 2006-05-08 16:51:03 mkossov Exp $
+// $Id: G4QElasticCrossSection.cc,v 1.6 2006-05-29 09:15:11 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -247,19 +247,19 @@ G4double G4QElasticCrossSection::GetPTables(G4double LP,G4double ILP, G4int PDG,
 {
   static const G4double pwd=2727;
   const G4int n_npel=24;                // #of parameters for np-elastic (<nPoints=50)
-  const G4int n_ppel=29;                // #of parameters for pp-elastic (<nPoints=50)
+  const G4int n_ppel=32;                // #of parameters for pp-elastic (<nPoints=50)
   const G4int n_pdel=30;                // #of parameters for pp-elastic (<nPoints=50)
   const G4int n_phe4=32;                // #of parameters for phe4-elastic (<nPoints=50)
   //                      -0- -1-  -2- -3- -4-  -5- -6- -7- -8- -9--10--11--12--13- -14-
   G4double np_el[n_npel]={12.,.05,.0001,5.,.35,6.75,.14,19.,.6,6.75,.14,13.,.14,.6,.00013,
                           75.,.001,7.2,4.32,.012,2.5,0.0,12.,.34};
   //                      -15--16--17- -18- -19--20--21--22--23-
-  //                       -0-   -1-  -2- -3- -4- -5-  -6-  -7-   -8-  -9-  -10-  -11-
-  G4double pp_el[n_ppel]={2.865,18.9,.6461,3.,9.,.425,.4276,.0022,4.8,73.1,2.868,2.848,
-                          6.951,.6772,2.848,8.385,.006,11.56,1.508,.5,1.32,.0004,.01,1.384,
-                          3.58,.227,97469.,8583.,0.};
-  //                       -12-  -13-  -14- -15-  -16-  -17- -18- -19- -20- -21- -22- -23-
-  //                      -24- -25-  -26-  -27- -28-
+  //                       -0-   -1-  -2- -3- -4- -5-  -6-  -7-  -8--9--10--11--12--13-
+  G4double pp_el[n_ppel]={2.865,18.9,.6461,3.,9.,.425,.4276,.0022,5.,74.,3.,3.4,.2,.17,
+                          .001,8.,.055,3.64,5.e-5,4000.,1500.,.46,1.2e6,3.5e6,5.e-5,1.e10,
+                          8.5e8,1.e10,1.1,3.4e6,6.8e6,0.};
+  //                      -14--15- -16- -17- -18-  -19- -20- -21- -22-  -23-   -24-  -25-
+  //                       -26- -27-  -28- -29- -30- -31-
   //                      -0- -1--2- -3-  -4-  -5-  -6-    -7-  -8- -9- -10--11--12--13-
   G4double pd_el[n_pdel]={7.5,.09,5.,.06,.0013,.1,.000006,1.287,.001,34.,.4,4.726,7.5,.1,
                           .05,.000017,.0004,1.15,5.5,.13,.02,.1911,4.857,46.,40.,2.,.01,
@@ -287,12 +287,12 @@ G4double G4QElasticCrossSection::GetPTables(G4double LP,G4double ILP, G4int PDG,
     //p2=p*p;p3=p2*p;sp=sqrt(p);p2s=p2*sp;lp=log(p);dl1=lp-(3.=par(3));p4=p2*p2; p=|3-mom|
 				//CS=2.865/p2s/(1+.0022/p2s)+(18.9+.6461*dl1*dl1+9./p)/(1.+.425*lp)/(1.+.4276/p4);
     //   par(0)       par(7)     par(1) par(2)      par(4)      par(5)         par(6)
-    //dl2=lp-4.8, s1=(73.1+2.868*dl2*dl2)/(1+2.848/p4/p), b1=(6.951+.6772*lp)/(1+2.848/p4)
-    //      par(8)  par(9) par(10)           par(11)       par(12)par(13)        par(14)
-    //ss=0., s2=(8.385/p2+11.56)/(p2+.006); b2=1.508+.5/p; ssp=sqrt(sp);
-    //par(28)    par(15)     par(16)     par(17) par(18) par(19)
-    //s3=exp(-p/(1.32+.0004*p)/(1+.01*p^1.384)+3.58); b3=.227*ssp*(1+97469./p3)/(1+8583/p2)
-    //        par(20) par(21)   par(22) par(23) par(24) par(25)      par(26)      par(27)
+    //dl2=lp-5., s1=(74.+3.*dl2*dl2)/(1+3.4/p4/p)+(.2/p2+17.*p)/(p4+.001*sp),
+    //     par(8) par(9) par(10)        par(11)   par(12)par(13)    par(14)
+    // b1=8.*p**.055/(1.+3.64/p3); s2=5.e-5+4000./(p4+1500.*p); b2=.46+1.2e6/(p4+3.5e6/sp);
+    // par(15) par(16)  par(17)     par(18) par(19)  par(20)   par(21) par(22)  par(23)
+    // s3=5.e-5+1.e10/(p4*p4+8.5e8*p2+1.e10); b3=1.1+3.4e6/(p4+6.8e6); ss=0.
+    //  par(24) par(25)     par(26)  par(27) par(28) par(29)  par(30)   par(31)
     //
     //-- Total pd elastic cross section cs & s1/b1/ss(main), s2/b2(tail1), s3/b3(u-chan) --
     //p2=p*p;p3=p2*p;sp=sqrt(p);p2s=p2*sp;lp=log(p);dl1=lp-(5.=par(2));p4=p2*p2; p=|3-mom|
@@ -463,9 +463,9 @@ G4double G4QElasticCrossSection::GetExchangeT(G4int tgZ, G4int tgN, G4int PDG)
     if(ds1>.0001)G4cout<<"*Warn*G4QElCS::GetExT:1p "<<ts1<<"#"<<lastTM<<",d="<<ds1<<G4endl;
 #endif
     G4double E2=lastTM*theB2;
-  		G4double R2=(1.-std::exp(-E2));
+  		G4double R2=(1.-std::exp(-E2*E2*E2));
 #ifdef ppdebug
-    G4double ts2=-std::log(1.-R2)/theB2;
+    G4double ts2=std::pow(-std::log(1.-R2),.333333333)/theB2;
     G4double ds2=std::fabs(ts2-lastTM)/lastTM;
     if(ds2>.0001)G4cout<<"*Warn*G4QElCS::GetExT:2p "<<ts2<<"#"<<lastTM<<",d="<<ds2<<G4endl;
 #endif
@@ -477,12 +477,12 @@ G4double G4QElasticCrossSection::GetExchangeT(G4int tgZ, G4int tgN, G4int PDG)
     if(ds3>.0001)G4cout<<"*Warn*G4QElCS::GetExT:3p "<<ts3<<"#"<<lastTM<<",d="<<ds3<<G4endl;
 #endif
   		G4double I1=R1*theS1/theB1;
-  		G4double I2=R2*theS2/theB2;
-				G4double I3=R3*theS3/theB3;
+  		G4double I2=R2*theS2;
+				G4double I3=R3*theS3;
     G4double I12=I1+I2;
     G4double rand=(I12+I3)*G4UniformRand();
     if     (rand<I1 ) q2=-std::log(1.-R1*G4UniformRand())/theB1;
-				else if(rand<I12) q2=-std::log(1.-R2*G4UniformRand())/theB2;
+				else if(rand<I12) q2=std::pow(-std::log(1.-R2*G4UniformRand()),.33333333333)/theB2;
     else              q2=-std::log(1.-R3*G4UniformRand())/theB3;
   }
   else if((PDG==2212 || PDG==2112) && (tgZ==1 && tgN==1 || tgZ==2 && tgN==2))
@@ -589,18 +589,17 @@ G4double G4QElasticCrossSection::GetTabValues(G4double lp, G4int PDG, G4int tgZ,
   }
   else if(PDG==2212 && tgZ==1 && tgN==0)
   {
-    G4double ssp=std::sqrt(sp);           // sqrt(sqrt(p))=p^.25
     G4double p2s=p2*sp;
 		  G4double dl1=lp-lastPAR[3];
 		  G4double dl2=lp-lastPAR[8];
-    theSS=lastPAR[28];
-    theS1=(lastPAR[9]+lastPAR[10]*dl2*dl2)/(1.+lastPAR[11]/p4/p);
-    theB1=(lastPAR[12]+lastPAR[13]*lp)/(1.+lastPAR[14]/p4);
-    theS2=(lastPAR[15]/p2+lastPAR[16])/(p2+lastPAR[17]);
-    theB2=lastPAR[18]+lastPAR[19]/p; 
-    theS3=std::exp( -p/(lastPAR[20]+lastPAR[21]*p)/(1.+lastPAR[22]*std::pow(p,lastPAR[23]))
-               +lastPAR[24] );
-    theB3=lastPAR[25]*ssp*(1.+lastPAR[26]/p3)/(1.+lastPAR[27]/p2); 
+    theSS=lastPAR[31];
+    theS1=(lastPAR[9]+lastPAR[10]*dl2*dl2)/(1.+lastPAR[11]/p4/p)+
+          (lastPAR[12]/p2+lastPAR[13]*p)/(p4+lastPAR[14]*sp);
+    theB1=lastPAR[15]*std::pow(p,lastPAR[16])/(1.+lastPAR[17]/p3);
+    theS2=lastPAR[18]+lastPAR[19]/(p4+lastPAR[20]*p);
+    theB2=lastPAR[21]+lastPAR[22]/(p4+lastPAR[23]/sp); 
+    theS3=lastPAR[24]+lastPAR[25]/(p4*p4+lastPAR[26]*p2+lastPAR[27]);
+    theB3=lastPAR[28]+lastPAR[29]/(p4+lastPAR[30]); 
 #ifdef tdebug
     G4cout<<"G4QElasticCS::GetTableValues:(pp) TM="<<lastTM<<",S1="<<theS1<<",B1="<<theB1
           <<",S2="<<theS2<<",B2="<<theB2<<",S3="<<theS1<<",B3="<<theB1<<G4endl;
