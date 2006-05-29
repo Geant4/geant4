@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: SteppingAction.cc,v 1.2 2006-05-11 11:46:04 maire Exp $
+// $Id: SteppingAction.cc,v 1.3 2006-05-29 15:02:56 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -54,7 +54,7 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   G4StepPoint* prePoint = aStep->GetPreStepPoint();
   
   // if World --> return
-  if (prePoint->GetPhysicalVolume() == detector->GetWorld()) return;
+  if (prePoint->GetTouchable()->GetVolume() == detector->GetWorld()) return;
   
   // here we enter in the absorber Box
   // kill the event anyway after the first step
