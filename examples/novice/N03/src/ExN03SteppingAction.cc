@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03SteppingAction.cc,v 1.12 2006-05-24 15:18:21 maire Exp $
+// $Id: ExN03SteppingAction.cc,v 1.13 2006-05-29 10:39:55 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -55,7 +55,8 @@ ExN03SteppingAction::~ExN03SteppingAction()
 void ExN03SteppingAction::UserSteppingAction(const G4Step* aStep)
 {
   // get volume of the current step
-  G4VPhysicalVolume* volume = aStep->GetPreStepPoint()->GetPhysicalVolume();
+  G4VPhysicalVolume* volume 
+  = aStep->GetPreStepPoint()->GetTouchable()->GetVolume();
   
   // collect energy and track length step by step
   G4double edep = aStep->GetTotalEnergyDeposit();
