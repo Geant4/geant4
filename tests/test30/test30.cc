@@ -389,8 +389,9 @@ int main(int argc, char** argv)
 
     if(!end) break;
 
-    //       G4StateManager* g4State=G4StateManager::GetStateManager();
-    //  if (! g4State->SetNewState(G4State_Init)) G4cout << "error changing G4state"<< G4endl;;   
+    G4StateManager* g4State=G4StateManager::GetStateManager();
+    if (! g4State->SetNewState(G4State_Init)) 
+      G4cout << "error changing G4state"<< G4endl;;   
 
     G4cout << "###### Start new run # " << run << "     #####" << G4endl;
 
@@ -410,7 +411,8 @@ int main(int argc, char** argv)
       part = (G4ParticleTable::GetParticleTable())->GetIon(ionZ, ionA, 0.);
     }
     if (! part ) {
-      G4cout << " Sorry, No definition for particle" <<namePart << " found" << G4endl;
+      G4cout << " Sorry, No definition for particle" <<namePart 
+	     << " found" << G4endl;
       G4Exception(" ");  
     }
     G4VProcess* proc = phys->GetProcess(nameGen, namePart, material);
@@ -436,7 +438,8 @@ int main(int argc, char** argv)
     // G4int maxz = (G4int)((*(material->GetElementVector()))[0]->GetZ()) + 1;
 
     G4cout << "The particle:  " << part->GetParticleName() << G4endl;
-    G4cout << "The material:  " << material->GetName() << "  Amax= " << maxn << G4endl;
+    G4cout << "The material:  " << material->GetName() 
+	   << "  Amax= " << maxn << G4endl;
     G4cout << "The step:      " << theStep/mm << " mm" << G4endl;
     G4cout << "The position:  " << aPosition/mm << " mm" << G4endl;
     G4cout << "The direction: " << aDirection << G4endl;
@@ -452,16 +455,11 @@ int main(int argc, char** argv)
     std::auto_ptr< AIDA::ITreeFactory > tf( af->createTreeFactory() );
 
     // Creating a tree mapped to a new hbook file.
-    std::auto_ptr< AIDA::ITree > tree( tf->create( hFile,  "hbook", false, true) );
+    std::auto_ptr< AIDA::ITree > tree( tf->create( hFile,"hbook", false,true));
     std::cout << "Tree store : " << tree->storeName() << std::endl;
-
-    // Creating a tuple factory, whose tuples will be handled by the tree
-    //   std::auto_ptr< AIDA::ITupleFactory > tpf( af->createTupleFactory( *tree ) );
 
     const G4int nhisto = 63;
     AIDA::IHistogram1D* h[nhisto];
-    //    AIDA::IHistogram2D* h2;
-    //AIDA::ITuple* ntuple1 = 0;
 
     G4double mass = part->GetPDGMass();
     G4double pmax = std::sqrt(energy*(energy + 2.0*mass));
@@ -473,8 +471,10 @@ int main(int argc, char** argv)
 
     if(usepaw) {
 
-      // Creating a histogram factory, whose histograms will be handled by the tree
-      std::auto_ptr< AIDA::IHistogramFactory > hf( af->createHistogramFactory( *tree ) );
+      // Creating a histogram factory, whose histograms 
+      // will be handled by the tree
+      std::auto_ptr< AIDA::IHistogramFactory > 
+	hf( af->createHistogramFactory( *tree ) );
 
       // Creating an 1-dimensional histogram in the root directory of the tree
 
@@ -486,7 +486,8 @@ int main(int argc, char** argv)
 
       h[0]=hf->createHistogram1D("1","Number of Secondaries",50,-0.5,49.5);
       h[1]=hf->createHistogram1D("2","Type of secondary",10,-0.5,9.5);
-      h[2]=hf->createHistogram1D("3","Phi(degrees) of Secondaries",90,-180.0,180.0);
+      h[2]=hf->createHistogram1D("3","Phi(degrees) of Secondaries",
+				 90,-180.0,180.0);
       h[3]=hf->createHistogram1D("4","Pz (MeV) for protons",100,-pmax,pmax);
       h[4]=hf->createHistogram1D("5","Pz (MeV) for pi-",100,-pmax,pmax);
       h[5]=hf->createHistogram1D("6","Pz (MeV) for pi+",100,-pmax,pmax);
@@ -515,7 +516,8 @@ int main(int argc, char** argv)
       h[24]=hf->createHistogram1D("25","cos(theta) protons",nbinsa,-1.,1.);
       h[25]=hf->createHistogram1D("26","cos(theta) neutrons",nbinsa,-1.,1.);
 
-      h[26]=hf->createHistogram1D("27","Baryon number (mbn)",maxn,-0.5,(G4double)maxn + 0.5);
+      h[26]=hf->createHistogram1D("27","Baryon number (mbn)",
+				  maxn,-0.5,(G4double)maxn + 0.5);
 
       if(nangl>0)
        h[27]=hf->createHistogram1D("28","ds/dE for neutrons at theta = 0",nbinsd,0.,emax);
@@ -538,7 +540,7 @@ int main(int argc, char** argv)
       if(nangl>9)
        h[36]=hf->createHistogram1D("37","ds/dE for neutrons at theta = 9",nbinsd,0.,emax);
       if(nangl>10)
-       h[37]=hf->createHistogram1D("38","ds/dE for neutrons at theta = 10",nbinsd,0.,emax);
+	h[37]=hf->createHistogram1D("38","ds/dE for neutrons at theta = 10",nbinsd,0.,emax);
       if(nangl>11)
        h[38]=hf->createHistogram1D("39","ds/dE for neutrons at theta = 11",nbinsd,0.,emax);
       if(nangl>12)
@@ -762,26 +764,20 @@ int main(int argc, char** argv)
 
         sec = aChange->GetSecondary(i)->GetDynamicParticle();
         pd  = sec->GetDefinition();
-        mom = sec->GetMomentumDirection();
-        e   = sec->GetKineticEnergy();
-
-	if (e < 0.0) {
-           e = 0.0;
-	}
+        fm  = sec->Get4Momentum();
+        mom = sec->GetMomentum();
 
 	// for exclusive reaction 2 particles in final state
         if(!inclusive && nbar != 2) break;
 
         m = pd->GetPDGMass();
-	p = std::sqrt(e*(e + 2.0*m));
-	mom *= p;
-        fm = G4LorentzVector(mom, e + m);
+	p = mom.mag();
         labv -= fm;
-        mom = (*rot)*mom;
         px = mom.x();
         py = mom.y();
         pz = mom.z();
         pt = std::sqrt(px*px +py*py);
+        e  = fm.e() - m;
 
         theta = mom.theta();
         G4double cost  = std::cos(theta);
