@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLWin32Viewer.cc,v 1.15 2006-05-12 13:06:12 allison Exp $
+// $Id: G4OpenGLWin32Viewer.cc,v 1.16 2006-05-30 06:25:31 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -62,23 +62,6 @@ void G4OpenGLWin32Viewer::ShowView (
 {
   if(!fHDC) return;
   glFlush ();
-  // Empty the Windows message queue :
-  MSG event;
-  while ( ::PeekMessage(&event, NULL, 0, 0, PM_REMOVE) ) {
-    ::TranslateMessage(&event);
-    ::DispatchMessage (&event);
-  }
-}
-
-//////////////////////////////////////////////////////////////////////////////
-void G4OpenGLWin32Viewer::FinishView (
-) 
-//////////////////////////////////////////////////////////////////////////////
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
-{
-  if(!fHDC) return;
-  if (doublebuffer) ::SwapBuffers(fHDC);
-  else glFlush ();
   // Empty the Windows message queue :
   MSG event;
   while ( ::PeekMessage(&event, NULL, 0, 0, PM_REMOVE) ) {

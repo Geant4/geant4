@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateWin32Viewer.cc,v 1.12 2006-01-26 11:59:09 allison Exp $
+// $Id: G4OpenGLImmediateWin32Viewer.cc,v 1.13 2006-05-30 06:25:31 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -100,6 +100,24 @@ void G4OpenGLImmediateWin32Viewer::DrawView () {
   ProcessView ();
   FinishView ();
 
+}
+
+//////////////////////////////////////////////////////////////////////////////
+void G4OpenGLImmediateWin32Viewer::FinishView (
+) 
+//////////////////////////////////////////////////////////////////////////////
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
+{
+  if(!fHDC) return;
+
+  glFlush ();
+
+  // Empty the Windows message queue :
+  MSG event;
+  while ( ::PeekMessage(&event, NULL, 0, 0, PM_REMOVE) ) {
+    ::TranslateMessage(&event);
+    ::DispatchMessage (&event);
+  }
 }
 
 #endif

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateWin32Viewer.hh,v 1.7 2002-10-16 10:44:14 johna Exp $
+// $Id: G4OpenGLImmediateWin32Viewer.hh,v 1.8 2006-05-30 06:25:31 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -49,6 +49,7 @@ public:
 				const G4String& name = "");
   void Initialise ();
   void DrawView ();
+  void FinishView ();
 };
 
 #endif

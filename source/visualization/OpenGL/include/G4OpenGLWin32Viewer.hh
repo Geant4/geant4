@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLWin32Viewer.hh,v 1.11 2003-06-25 09:01:08 gcosmo Exp $
+// $Id: G4OpenGLWin32Viewer.hh,v 1.12 2006-05-30 06:25:31 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -47,7 +47,6 @@ public:
   virtual ~G4OpenGLWin32Viewer ();
   void SetView ();
   void ShowView ();
-  void FinishView ();
 protected:
   void GetWin32Connection ();
   void CreateGLWin32Context ();
@@ -55,12 +54,12 @@ protected:
 protected:
   G4int WinSize_x;
   G4int WinSize_y;
+  HDC fHDC;
 private:
   static LRESULT CALLBACK WindowProc(HWND,UINT,WPARAM,LPARAM);
   static bool SetWindowPixelFormat(HDC);
 private:
   HWND fWindow;
-  HDC fHDC;
   HGLRC fHGLRC;
 };
 

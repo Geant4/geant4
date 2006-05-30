@@ -1,4 +1,4 @@
-$Id: History,v 1.67 2006-05-12 13:36:34 allison Exp $
+$Id: History,v 1.68 2006-05-30 06:25:31 perl Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,11 @@ committal in the CVS repository !
 
 History file for visualization/OpenGL
 -------------------------------------
+
+29th May 2006  Joseph Perl  (opengl-V08-00-07)
+- G4OpenGLWin32Viewer, G4OpenGLImmediateWin32Viewer, G4OpenGLStoredWin32Viewer:
+  Removed common FinishView and instead made separate FinishView for the two different
+  versions of this viewer since each wants a different buffer swapping behaviour.
 
 12th May 2006  John Allison  (opengl-V08-00-06)
 - G4OpenGLWin32Viewer: Fixed buffer swapping behaviour.
