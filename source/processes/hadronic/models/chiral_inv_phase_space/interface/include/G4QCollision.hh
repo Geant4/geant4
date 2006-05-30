@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4QCollision.hh,v 1.4 2005-11-30 16:26:42 mkossov Exp $
+// $Id: G4QCollision.hh,v 1.5 2006-05-30 06:50:13 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCollision header ----------------
@@ -93,7 +93,7 @@
 #include "G4QTauNuclearCrossSection.hh"
 #include "G4QNuMuNuclearCrossSection.hh"
 #include "G4QANuMuNuclearCrossSection.hh"
-#include "G4QuasmonString.hh"
+//#include "G4QuasmonString.hh"
 #include "G4QPDGToG4Particle.hh"
 #include <vector>
 

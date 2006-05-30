@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4QCollision.cc,v 1.8 2006-03-22 13:54:39 mkossov Exp $
+// $Id: G4QCollision.cc,v 1.9 2006-05-30 06:50:13 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCollision class -----------------
@@ -736,67 +736,67 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
 #ifdef debug
   G4cout<<"G4QCollision::PostStepDoIt: projPDG="<<projPDG<<", targPDG="<<targPDG<<G4endl;
 #endif
-  G4QHadron* pH = new G4QHadron(projPDG,proj4M);                // ---> DELETED -->--   -+
-  if(momentum<1000.) // Condition for using G4QEnvironment (not G4QuasmonString)         |
-		{ //                                                                                   |
-    G4QHadronVector projHV;                                 //                           |
-    projHV.push_back(pH);                                   // DESTROYED over 2 lines -+ |
-    G4QEnvironment* pan= new G4QEnvironment(projHV,targPDG);// ---> DELETED --->-----+ | |
-    std::for_each(projHV.begin(), projHV.end(), DeleteQHadron()); // <---<------<----+-+-+
-    projHV.clear(); // <------------<---------------<-------------------<------------+-+ .
+  G4QHadron* pH = new G4QHadron(projPDG,proj4M);                // ---> DELETED -->--  -+
+  //if(momentum<1000.) // Condition for using G4QEnvironment (not G4QuasmonString)      |
+		{ //                                                                                  |
+    G4QHadronVector projHV;                                 //                          |
+    projHV.push_back(pH);                                   // DESTROYED over 2 lines-+ |
+    G4QEnvironment* pan= new G4QEnvironment(projHV,targPDG);// ---> DELETED --->----+ | |
+    std::for_each(projHV.begin(), projHV.end(), DeleteQHadron()); // <---<------<---+-+-+
+    projHV.clear(); // <------------<---------------<-------------------<-----------+-+ .
 #ifdef debug
-    G4cout<<"G4QCollision::PostStepDoIt: pPDG="<<projPDG<<", mp="<<mp<<G4endl; //    |   .
+    G4cout<<"G4QCollision::PostStepDoIt: pPDG="<<projPDG<<", mp="<<mp<<G4endl; //   |   .
 #endif
-    try                                                           //                 |   .
-	   {                                                             //                 |   .
-	     delete output;                                              //                 |   .
-      output = pan->Fragment();// DESTROYED in the end of the LOOP work space        |   .
-    }                                                             //                 |   .
-    catch (G4QException& error)//                                                    |   .
-	   {                                                             //                 |   .
+    try                                                           //                |   .
+	   {                                                             //                |   .
+	     delete output;                                              //                |   .
+      output = pan->Fragment();// DESTROYED in the end of the LOOP work space       |   .
+    }                                                             //                |   .
+    catch (G4QException& error)//                                                   |   .
+	   {                                                             //                |   .
 	     //#ifdef pdebug
-      G4cerr<<"***G4QCollision::PostStepDoIt: G4QE Exception is catched"<<G4endl; // |   .
+      G4cerr<<"***G4QCollision::PostStepDoIt: G4QE Exception is catched"<<G4endl;// |   .
 	     //#endif
-      G4Exception("G4QCollision::PostStepDoIt:","27",FatalException,"CHIPS Crash");//|   .
-    }                                                             //                 |   .
-    delete pan;                              // Delete the Nuclear Environment <--<--+   .
-  } //                                                                                   .
-  else               // Use G4QuasmonString                                              .
-		{ //                                                                                   ^
-    G4QuasmonString* pan= new G4QuasmonString(pH,false,targPDG,false);//-> DELETED --+   |
-    delete pH;                                                    // --------<-------+---+
+      G4Exception("G4QCollision::PostStepDoIt:","27",FatalException,"CHIPSCrash");//|   .
+    }                                                             //                |   .
+    delete pan;                              // Delete the Nuclear Environment <-<--+   .
+  } //                                                                                  .
+  //else               // Use G4QuasmonString                                             .
+		//{ //                                                                                  ^
+  //  G4QuasmonString* pan= new G4QuasmonString(pH,false,targPDG,false);//-> DELETED --+  |
+  //  delete pH;                                                    // --------<-------+--+
 #ifdef debug
-    G4double mp=G4QPDGCode(projPDG).GetMass();   // Mass of the projectile particle  |
-    G4cout<<"G4QCollision::PostStepDoIt: pPDG="<<projPDG<<", pM="<<mp<<G4endl; //    |
+  //  G4double mp=G4QPDGCode(projPDG).GetMass();   // Mass of the projectile particle  |
+  //  G4cout<<"G4QCollision::PostStepDoIt: pPDG="<<projPDG<<", pM="<<mp<<G4endl; //    |
 #endif
-    //G4int tNH=0;                    // Prototype of the number of secondaries inOut|
-    try                                                           //                 |
-	   {                                                             //                 |
-				  delete output;                                            //                   |
-      output = pan->Fragment();// DESTROYED in the end of the LOOP work space        |
-      // @@@@@@@@@@@@@@ Temporary for the testing purposes --- Begin                 |
-      //tNH=pan->GetNOfHadrons();     // For the test purposes of the String         |
-      //if(tNH==2)                    // At least 2 hadrons are in the Constr.Output |
-				  //{//                                                                          |
-      //  elF=true;                   // Just put a flag for the ellastic Scattering |
-	     //  delete output;              // Delete a prototype of dummy G4QHadronVector |
-      //  output = pan->GetHadrons(); // DESTROYED in the end of the LOOP work space |
-      //}//                                                                          |
-      //eWei=pan->GetWeight();        // Just an example for the weight of the event |
+  //  //G4int tNH=0;                    // Prototype of the number of secondaries inOut|
+  //  try                                                           //                 |
+	 //  {                                                             //                 |
+		//		  delete output;                                            //                   |
+  //    output = pan->Fragment();// DESTROYED in the end of the LOOP work space        |
+  //    // @@@@@@@@@@@@@@ Temporary for the testing purposes --- Begin                 |
+  //    //tNH=pan->GetNOfHadrons();     // For the test purposes of the String         |
+  //    //if(tNH==2)                    // At least 2 hadrons are in the Constr.Output |
+		//		  //{//                                                                          |
+  //    //  elF=true;                   // Just put a flag for the ellastic Scattering |
+	 //    //  delete output;              // Delete a prototype of dummy G4QHadronVector |
+  //    //  output = pan->GetHadrons(); // DESTROYED in the end of the LOOP work space |
+  //    //}//                                                                          |
+  //    //eWei=pan->GetWeight();        // Just an example for the weight of the event |
 #ifdef debug
-      //G4cout<<"=====>>G4QCollision::PostStepDoIt: elF="<<elF<<",n="<<tNH<<G4endl;//|
+  //    //G4cout<<"=====>>G4QCollision::PostStepDoIt: elF="<<elF<<",n="<<tNH<<G4endl;//|
 #endif
-      // @@@@@@@@@@@@@@ Temporary for the testing purposes --- End                   |
-    }                                                             //                 |
-    catch (G4QException& error)//                                                    |
-	   {                                                             //                 |
-	     //#ifdef pdebug
-      G4cerr<<"***G4QCollision::PostStepDoIt: GEN Exception is catched"<<G4endl; //  |
-	     //#endif
-      G4Exception("G4QCollision::AtRestDoIt:","27",FatalException,"QString Excep");//|
-    }                                                             //                 |
-    delete pan;                              // Delete the Nuclear Environment ---<--+
-  }
+  //    // @@@@@@@@@@@@@@ Temporary for the testing purposes --- End                   |
+  //  }                                                             //                 |
+  //  catch (G4QException& error)//                                                    |
+	 //  {                                                             //                 |
+	 //    //#ifdef pdebug
+  //    G4cerr<<"***G4QCollision::PostStepDoIt: GEN Exception is catched"<<G4endl; //  |
+	 //    //#endif
+  //    G4Exception("G4QCollision::AtRestDoIt:","27",FatalException,"QString Excep");//|
+  //  }                                                             //                 |
+  //  delete pan;                              // Delete the Nuclear Environment ---<--+
+  //}
   aParticleChange.Initialize(track);
   G4double localtime = track.GetGlobalTime();
   G4ThreeVector position = track.GetPosition();

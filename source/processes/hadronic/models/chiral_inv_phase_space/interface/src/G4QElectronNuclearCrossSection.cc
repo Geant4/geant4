@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QElectronNuclearCrossSection.cc,v 1.5 2006-05-02 10:15:36 mkossov Exp $
+// $Id: G4QElectronNuclearCrossSection.cc,v 1.6 2006-05-30 06:50:13 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -149,21 +149,21 @@ G4double G4QElectronNuclearCrossSection::CalculateCrossSection(G4bool CS, G4int 
   if(J3.size()) G4cout<<", p="<<J3[0];
   G4cout<<", N="<<targN<<", onlyCS="<<CS<<",E="<<lastE<<",th="<<EMi<<G4endl;
 #endif
-  if (lastE<=EMi)                      // Energy is below the minimum energy in the table
-  {
-    lastE=0.;
-    lastG=0.;
-    lastSig=0.;
-#ifdef pdebug
-				G4cout<<"---> G4QElectronNucCS::CalcCS: CS=0  as lastE="<<lastE<<" < "<<EMi<<G4endl;
-#endif
-    return 0.;
-  }
   G4double A=targN+targZ;            // New A (can differ from G4double targetAtomicNumber)
   if(F<=0)                           // This isotope was not the last used isotop
   {
     if(F<0)                          // This isotope was found in DAMDB =========> RETRIEVE
-				{
+				{                                // ...........................................========
+      if (lastE<=EMi)                // Energy is below the minimum energy in the table
+      {
+        lastE=0.;
+        lastG=0.;
+        lastSig=0.;
+#ifdef pdebug
+				    G4cout<<"G4QElectronNucCS::CalcCS: Old CS=0 as lastE="<<lastE<<" < "<<EMi<<G4endl;
+#endif
+        return 0.;
+      }
       lastJ1 =J1[I];                 // Pointer to the prepared J1 function
       lastJ2 =J2[I];                 // Pointer to the prepared J2 function
       lastJ3 =J3[I];                 // Pointer to the prepared J3 function
@@ -193,11 +193,14 @@ G4double G4QElectronNuclearCrossSection::CalculateCrossSection(G4bool CS, G4int 
 	   } // End of creation of the new set of parameters
   } // End of parameters udate
   // ============================== NOW Calculate the Cross Section =====================
-  if (lastE<=lastTH)                 // Check that muKiE is higher than ThreshE
+  if (lastE<=lastTH || lastE<=EMi)   // Check that muKiE is higher than ThreshE
   {
     lastE=0.;
     lastG=0.;
     lastSig=0.;
+#ifdef pdebug
+				G4cout<<"G4QElectronNucCS::CalcCS:CS=0 as T="<<lastE<<"<"<<EMi<<" || "<<lastTH<<G4endl;
+#endif
     return 0.;
   }
   G4double lE=std::log(lastE);       // log(muE) (it is necessary for the fit)

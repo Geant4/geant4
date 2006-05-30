@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VQCrossSection.cc,v 1.7 2006-05-02 10:15:36 mkossov Exp $
+// $Id: G4VQCrossSection.cc,v 1.8 2006-05-30 06:50:13 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -122,7 +122,7 @@ G4double G4VQCrossSection::GetCrossSection(G4bool fCS, G4double pMom, G4int tgZ,
     lastZ   = tgZ;                     // The last Z of the calculated nucleus
     lastI   = colN.size();             // Size of the Associative Memory DB in the heap
     j  = 0;                            // A#0f records found in DB for this projectile
-    if(lastI) for(G4int i=0;i<lastI;i++) if(colPDG[i]==pPDG) // The partType is found
+    if(lastI) for(G4int i=0; i<lastI; i++) if(colPDG[i]==pPDG) // The partType is found
 	   {                                  // The nucleus with projPDG is found in AMDB
       if(colN[i]==tgN && colZ[i]==tgZ)
 						{
@@ -155,11 +155,18 @@ G4double G4VQCrossSection::GetCrossSection(G4bool fCS, G4double pMom, G4int tgZ,
 #ifdef pdebug
         G4cout<<"G4VQCS::G:UpdateDB P="<<pMom<<",f="<<fCS<<",lI="<<lastI<<",j="<<j<<G4endl;
 #endif
-        lastCS=CalculateCrossSection(fCS,-1,j,lastPDG,lastZ,lastN,pMom);//read & update
+        lastCS=CalculateCrossSection(fCS,-1,j,lastPDG,lastZ,lastN,pMom); // read & update
 #ifdef pdebug
         G4cout<<"G4VQCS::GetCrosSec: *****> New (inDB) Calculated CS="<<lastCS<<G4endl;
         //CalculateCrossSection(fCS,-27,j,lastPDG,lastZ,lastN,pMom); // DUMMY TEST
 #endif
+        if(lastCS<=0. && pEn>lastTH)    // Correct the threshold
+        {
+#ifdef pdebug
+          G4cout<<"G4VQCS::GetCS: New T="<<pEn<<"(CS=0) > Threshold="<<lastTH<<G4endl;
+#endif
+          lastTH=pEn;
+        }
         break;                           // Go out of the LOOP
       }
 #ifdef pdebug
@@ -171,22 +178,25 @@ G4double G4VQCrossSection::GetCrossSection(G4bool fCS, G4double pMom, G4int tgZ,
 	   }
 	   if(!in)                            // This nucleus has not been calculated previously
 	   {
-      lastTH = ThresholdEnergy(tgZ, tgN); // The Threshold Energy which is now the last
-#ifdef pdebug
-      G4cout<<"G4VQCrossSection::GetCrossSection: New Thresh="<<lastTH<<",T="<<pEn<<G4endl;
-#endif
-      if(pEn<=lastTH)
-      {
-#ifdef pdebug
-        G4cout<<"G4VQCS::GetCS: New T="<<pEn<<"<Threshold="<<lastTH<<",CS=0,OutDB"<<G4endl;
-#endif
-        return 0.;                     // Momentum is below the Threshold value
-      }
 #ifdef pdebug
       G4cout<<"G4VQCS::GetCrosSec: CalcNew P="<<pMom<<",f="<<fCS<<",lastI="<<lastI<<G4endl;
 #endif
       //!!The slave functions must provide cross-sections in millibarns (mb) !! (not in IU)
       lastCS=CalculateCrossSection(fCS,0,j,lastPDG,lastZ,lastN,pMom); //calculate & create
+      if(lastCS<=0.)
+						{
+        lastTH = ThresholdEnergy(tgZ, tgN); // The Threshold Energy which is now the last
+#ifdef pdebug
+        G4cout<<"G4VQCrossSection::GetCrossSection:NewThresh="<<lastTH<<",T="<<pEn<<G4endl;
+#endif
+        if(pEn>lastTH)
+        {
+#ifdef pdebug
+          G4cout<<"G4VQCS::GetCS: First T="<<pEn<<"(CS=0) > Threshold="<<lastTH<<G4endl;
+#endif
+          lastTH=pEn;
+        }
+						}
 #ifdef pdebug
       G4cout<<"G4VQCS::GetCrosSec: New CS="<<lastCS<<",lZ="<<lastN<<",lN="<<lastZ<<G4endl;
       //CalculateCrossSection(fCS,-27,j,lastPDG,lastZ,lastN,pMom); // DUMMY TEST
