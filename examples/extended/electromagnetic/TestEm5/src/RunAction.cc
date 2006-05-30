@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.21 2006-05-19 14:35:29 maire Exp $
+// $Id: RunAction.cc,v 1.22 2006-05-30 12:28:57 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -64,10 +64,13 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   nbStepsCharged = nbStepsCharged2 = 0.;
   nbStepsNeutral = nbStepsNeutral2 = 0.;
   MscProjecTheta = MscProjecTheta2 = 0.;
+  MscThetaCentral = 3*ComputeMscHighland();
 
   nbGamma = nbElect = nbPosit = 0;
 
   Transmit[0] = Transmit[1] = Reflect[0] = Reflect[1] = 0;
+  
+  MscEntryCentral = 0;
 
   histoManager->book();
 
@@ -122,11 +125,13 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   reflect[0] = 100.*Reflect[0]/TotNbofEvents;
   reflect[1] = 100.*Reflect[1]/TotNbofEvents;
 
-  G4double rmsMsc = 0.;
-  if (Transmit[1] > 0) {
-    MscProjecTheta /= (2*Transmit[1]); MscProjecTheta2 /= (2*Transmit[1]);
+  G4double rmsMsc = 0., tailMsc = 0.;
+  if (MscEntryCentral > 0) {
+    MscProjecTheta /= MscEntryCentral; MscProjecTheta2 /= MscEntryCentral;
     rmsMsc = MscProjecTheta2 - MscProjecTheta*MscProjecTheta;
     if (rmsMsc > 0.) rmsMsc = std::sqrt(rmsMsc);
+    tailMsc = 100.- (100.*MscEntryCentral)/(2*Transmit[1]);
+    
   }
   
   //Stopping Power from input Table.
@@ -216,11 +221,16 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   // compute width of the Gaussian central part of the MultipleScattering
   //
   if (histoManager->HistoExist(6)) {
-    G4cout << "\n MultipleScattering: rms proj angle of transmit primary particle = "
-         << rmsMsc/mrad << " mrad " << G4endl;
+    G4cout << "\n MultipleScattering:" 
+           << "\n  rms proj angle of transmit primary particle = "
+           << rmsMsc/mrad << " mrad (central part only)" << G4endl;
 
-    G4cout << " MultipleScattering: computed theta0 (Highland formula)          = "
- 	 << ComputeMscHighland()/mrad << " mrad" << G4endl;
+    G4cout << "  computed theta0 (Highland formula)          = "
+ 	   << ComputeMscHighland()/mrad << " mrad" << G4endl;
+	   
+    G4cout << "  central part defined as +- "
+ 	   << MscThetaCentral/mrad << " mrad; " 
+	   << "  Tail ratio = " << tailMsc << " %" << G4endl;	   
   }	 
 
   G4cout.precision(prec);

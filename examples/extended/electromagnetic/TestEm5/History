@@ -1,4 +1,4 @@
-$Id: History,v 1.73 2006-05-19 14:35:29 maire Exp $
+$Id: History,v 1.74 2006-05-30 12:28:57 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,11 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+30-05-06 mma (testem5-V08-00-03)
+- SteppingAction. prePoint->GetTouchable()->GetVolume()
+- RunAction. Msc proj angle : compute rms of central part only
+- new macros for e- backscattering : acosta.mac tavora.mac 
      
 19-05-06 mma (testem5-V08-00-02)
 - update README

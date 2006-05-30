@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: EventMessenger.cc,v 1.3 2004-09-24 09:58:07 maire Exp $
+// $Id: EventMessenger.cc,v 1.4 2006-05-30 12:28:57 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -43,10 +43,10 @@ EventMessenger::EventMessenger(EventAction* EvAct)
   
   DrawCmd = new G4UIcmdWithAString("/testem/event/drawTracks",this);
   DrawCmd->SetGuidance("Draw the tracks in the event");
-  DrawCmd->SetGuidance("  Choice : none,charged, all");
+  DrawCmd->SetGuidance("  Choice : none,charged,neutral,all");
   DrawCmd->SetParameterName("choice",true);
   DrawCmd->SetDefaultValue("all");
-  DrawCmd->SetCandidates("none charged all");
+  DrawCmd->SetCandidates("none charged neutral all");
   DrawCmd->AvailableForStates(G4State_Idle);
   
   PrintCmd = new G4UIcmdWithAnInteger("/testem/event/printModulo",this);

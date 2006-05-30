@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.hh,v 1.5 2004-06-21 10:57:11 maire Exp $
+// $Id: RunAction.hh,v 1.6 2006-05-30 12:28:57 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -66,7 +66,9 @@ class RunAction : public G4UserRunAction
                  {TrakLenNeutral += length; TrakLenNeutral2 += length*length;};
 
     void AddMscProjTheta (G4double theta)
-                 {MscProjecTheta += theta;  MscProjecTheta2 += theta*theta;};
+                 {if (std::abs(theta) <= MscThetaCentral) { MscEntryCentral++;
+		    MscProjecTheta += theta;  MscProjecTheta2 += theta*theta;}
+		 };
 
     void CountStepsCharg (G4int nSteps)
                  {nbStepsCharged += nSteps; nbStepsCharged2 += nSteps*nSteps;};
@@ -96,8 +98,11 @@ class RunAction : public G4UserRunAction
     G4double nbStepsCharged, nbStepsCharged2;
     G4double nbStepsNeutral, nbStepsNeutral2;
     G4double MscProjecTheta, MscProjecTheta2;
+    G4double MscThetaCentral;
+    
     G4int    nbGamma, nbElect, nbPosit;
     G4int    Transmit[2],   Reflect[2];
+    G4int    MscEntryCentral;
 
     DetectorConstruction*   detector;
     PrimaryGeneratorAction* primary;

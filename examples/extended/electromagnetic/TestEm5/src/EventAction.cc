@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: EventAction.cc,v 1.4 2004-06-21 10:57:13 maire Exp $
+// $Id: EventAction.cc,v 1.5 2006-05-30 12:28:57 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -96,7 +96,10 @@ void EventAction::EndOfEventAction(const G4Event* evt)
                                       ((*(evt->GetTrajectoryContainer()))[i]);
         if (drawFlag == "all") trj->DrawTrajectory(1000);
         else if ((drawFlag == "charged")&&(trj->GetCharge() != 0.))
-                               trj->DrawTrajectory(1000); 
+                               trj->DrawTrajectory(1000);
+        else if ((drawFlag == "neutral")&&(trj->GetCharge() == 0.))
+                               trj->DrawTrajectory(1000);
+			        
       }
   }  
 }
