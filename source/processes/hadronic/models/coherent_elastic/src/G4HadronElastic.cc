@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HadronElastic.cc,v 1.12 2006-05-29 14:52:18 vnivanch Exp $
+// $Id: G4HadronElastic.cc,v 1.13 2006-05-30 08:52:23 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -170,9 +170,17 @@ G4HadFinalState* G4HadronElastic::ApplyYourself(
     else gtype = fSWave;
   }
 
-  if(gtype == fSWave)         t = G4UniformRand()*tmax;
-  else if(gtype == fHElastic) t = hElastic->SampleT(theParticle,plab,Z,A);
-  else if(gtype == fLElastic) t = GeV*GeV*SampleT(ptot,m1,m2,aTarget);
+  if(gtype == fLElastic) {
+    t = GeV*GeV*SampleT(ptot,m1,m2,aTarget);
+    if(t > tmax) gtype = fSWave;
+  }
+
+  if(gtype == fHElastic) {
+    t = hElastic->SampleT(theParticle,plab,Z,A);
+    if(t > tmax) gtype = fSWave;
+  }
+
+  if(gtype == fSWave) t = G4UniformRand()*tmax;
 
   if(verboseLevel>1)
     G4cout <<"type= " << gtype <<" t= " << t << " tmax= " << tmax 
