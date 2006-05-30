@@ -42,7 +42,7 @@
 # TO SET THE RANGE SHIFTER
 #/beamLine/RangeShifter/thickness 4 cm
 #/beamLine/RangeShifter/RSMat Water
-
+#/tracking/verbose 1
 # SET OF THE VISUALISATION CHARACTERISTICS
 /vis/scene/create
 /vis/open OGLIX
@@ -51,7 +51,8 @@
 /vis/scene/endOfEventAction accumulate
 /vis/viewer/update
 /vis/scene/transientsAction none
-/run/beamOn 1000
+/run/beamOn 100
+
 
 
 

@@ -44,7 +44,8 @@
 
 
 /vis/viewer/flush
-/run/beamOn 10000
+/run/beamOn 1000
+
 
 
 
