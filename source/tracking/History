@@ -1,4 +1,4 @@
-$Id: History,v 1.101 2006-05-24 13:04:44 tsasaki Exp $
+$Id: History,v 1.102 2006-05-30 15:00:11 gcosmo Exp $
 $Name: not supported by cvs2svn $ 
 -------------------------------------------------------------------
 
@@ -17,15 +17,19 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-Last checked in at $Date: 2006-05-24 13:04:44 $ by $Author: tsasaki $ 
 
-24 May 2006 T. Sasaki
+30 May 2006 G. Cosmo (tracking-V08-00-02)
+- Fixed online implementation of SetSilent() and SetSilentStepInfo()
+  in G4VSteppingVerbose.
+
+24 May 2006 T. Sasaki (tracking-V08-00-01)
 - New flags are introduced in G4VSteppingVerbose to give more control
 24 May 2006 T. Sasaki
 - a bug fix for StepStatus when the track is outside of WorldBoundary 
 - New header was inserted to all of the files to check the last update 
 09 March 2006 T. Sasaki
 - Added Silent and SilentStepInfo member to G4VStepverbose
+
 24 November 2005 J. Allison (tracking-V07-01-05)
 - Added G4RichTrajectory and G4RichTrajectoryPoint.
 - Updated comments in G4VTrajectory.hh and G4VTrajectoryPoint.hh
