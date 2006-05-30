@@ -204,22 +204,22 @@ void HadrontherapyProtonBertini::ConstructProcess()
   pmanager -> AddDiscreteProcess(elastic_scattering); 
 
   // He3
-  particle = G4He3::He3();
-  pmanager = particle->GetProcessManager();
+  // particle = G4He3::He3();
+//   pmanager = particle->GetProcessManager();
   
-  // Binary Cascade inelastic scattering for ions
-  G4BinaryLightIonReaction * theGenIonBC= new G4BinaryLightIonReaction;
-  // Inelastic Scattering for ions
-  G4HadronInelasticProcess* theIPHe3 = new G4HadronInelasticProcess("He3Inelastic",particle);
-  // Active the Tripathi and aShen Cross Section
-  theIPHe3 -> AddDataSet(TripathiCrossSection);
-  theIPHe3 -> AddDataSet(aShen);
-  // Register the Alpha Binary Cascade Model
-  theIPHe3 -> RegisterMe(theGenIonBC);
-  // Active the Inelastic Process for He3
-  pmanager -> AddDiscreteProcess(theIPHe3);
-  // Active the Hadron Elastic Process
-  pmanager -> AddDiscreteProcess(elastic_scattering); 
+//   // Binary Cascade inelastic scattering for ions
+//   G4BinaryLightIonReaction * theGenIonBC= new G4BinaryLightIonReaction;
+//   // Inelastic Scattering for ions
+//   G4HadronInelasticProcess* theIPHe3 = new G4HadronInelasticProcess("He3Inelastic",particle);
+//   // Active the Tripathi and aShen Cross Section
+//   theIPHe3 -> AddDataSet(TripathiCrossSection);
+//   theIPHe3 -> AddDataSet(aShen);
+//   // Register the Alpha Binary Cascade Model
+//   theIPHe3 -> RegisterMe(theGenIonBC);
+//   // Active the Inelastic Process for He3
+//   pmanager -> AddDiscreteProcess(theIPHe3);
+//   // Active the Hadron Elastic Process
+//   pmanager -> AddDiscreteProcess(elastic_scattering); 
 
 // Neutron processes
   particle = G4Neutron::Neutron();

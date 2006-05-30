@@ -250,16 +250,16 @@ void HadrontherapyProtonBinary::ConstructProcess()
 
   /////////////////////////////////////////////////////////////////////////////
   // He3
-  particle = G4He3::He3();
-  pmanager = particle->GetProcessManager();
-  G4BinaryLightIonReaction * theGenIonBC= new G4BinaryLightIonReaction;
-  G4HadronInelasticProcess* theIPHe3 =
-    new G4HadronInelasticProcess("He3Inelastic",particle);
-  theIPHe3 -> AddDataSet(TripathiCrossSection);
-  theIPHe3 -> AddDataSet(aShen);
-  theIPHe3 -> RegisterMe(theGenIonBC);
-  pmanager -> AddDiscreteProcess(theIPHe3);
-  pmanager -> AddDiscreteProcess(elastic); //ELASTIC SCATTERING
+ //  particle = G4He3::He3();
+//   pmanager = particle->GetProcessManager();
+//   G4BinaryLightIonReaction * theGenIonBC= new G4BinaryLightIonReaction;
+//   G4HadronInelasticProcess* theIPHe3 =
+//     new G4HadronInelasticProcess("He3Inelastic",particle);
+//   theIPHe3 -> AddDataSet(TripathiCrossSection);
+//   theIPHe3 -> AddDataSet(aShen);
+//   theIPHe3 -> RegisterMe(theGenIonBC);
+//   pmanager -> AddDiscreteProcess(theIPHe3);
+//   pmanager -> AddDiscreteProcess(elastic); //ELASTIC SCATTERING
   
   
 }

@@ -267,20 +267,20 @@ void HadrontherapyProtonPrecompound::ConstructProcess()
   pmanager -> AddDiscreteProcess(elastic_scattering); 
 
   // He3
-  particle = G4He3::He3();
+  // particle = G4He3::He3();
 
-  G4HadronInelasticProcess* He3inelasticProcess = 
-  new G4HadronInelasticProcess("He3Inelastic",particle);
+  // G4HadronInelasticProcess* He3inelasticProcess = 
+  //new G4HadronInelasticProcess("He3Inelastic",particle);
   
-  G4BinaryLightIonReaction * ionBinaryCascade= new G4BinaryLightIonReaction;
+  //G4BinaryLightIonReaction * ionBinaryCascade= new G4BinaryLightIonReaction;
  
-  He3inelasticProcess -> AddDataSet(TripathiCrossSection);
-  He3inelasticProcess -> AddDataSet(aShen);
-  He3inelasticProcess -> RegisterMe(ionBinaryCascade);
+  //He3inelasticProcess -> AddDataSet(TripathiCrossSection);
+  //He3inelasticProcess -> AddDataSet(aShen);
+  //He3inelasticProcess -> RegisterMe(ionBinaryCascade);
  
-  pmanager = particle -> GetProcessManager();
-  pmanager -> AddDiscreteProcess(He3inelasticProcess);
-  pmanager -> AddDiscreteProcess(elastic_scattering); 
+  //pmanager = particle -> GetProcessManager();
+  //pmanager -> AddDiscreteProcess(He3inelasticProcess);
+  //pmanager -> AddDiscreteProcess(elastic_scattering); 
   
   ////////////////////
   // HADRON CAPTURE //

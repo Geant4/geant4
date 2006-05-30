@@ -9,6 +9,10 @@ $Id: History, v 1.6 2004/02/27  G.A.P. Cirrone
                       Category History file
                       ---------------------
 
+30.05.2006  S. Guatelli (hadrontherapy-V08-00-04)
+         - Bug deleted in all the hadronic phsyics lists; the hadronic
+           processes are not activated for He3 at the moment.
+
 17.05.2006  S. Guatelli (hadrontherapy-V08-00-02)
          - Bug deleted with He3 in the HadrontherapyProtonPrecompound physics
            list
