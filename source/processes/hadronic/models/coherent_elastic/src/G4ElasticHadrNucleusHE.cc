@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElasticHadrNucleusHE.cc,v 1.28 2006-05-29 14:42:42 vnivanch Exp $
+// $Id: G4ElasticHadrNucleusHE.cc,v 1.29 2006-05-30 08:18:15 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  G4ElasticHadrNucleusHE class 
@@ -35,7 +35,8 @@
 //  19.05.04 Variant for G4 6.1: The 'ApplyYourself' was changed
 //  14.11.05 The HE elastic scattering on proton is added (N.Starkov)
 //  23.11.05 int -> G4int, fabs -> abs (V.Ivanchenko)
-//  09.05.06 N.Starkov propose new method SamppleT (V.Ivanchenko)
+//  09.05.06 N.Starkov propose new method SampleT (V.Ivanchenko)
+//  30.05.06 Add protection against absence the data (V.Ivanchenko)
 //
 
 #include  "G4ElasticHadrNucleusHE.hh"
@@ -227,16 +228,12 @@ G4int G4ElasticHadrNucleusHE::ReadOfData(const G4ParticleDefinition * aHadron,
       G4cout <<" The Name of File is "<<sNameFile.str()<<G4endl;
     }
 
-  //    MyIonTable     = const_cast<G4IonTable *>
-  //        (G4ParticleTable::GetParticleTable()->GetIonTable());
-
   GetNucleusParameters(aNucleus);
 
   iContr         = iPoE;
   Nstep          = ONQ2;
   iKindWork      = 4;
-  //    G4double   nuclMass = (G4double) iNnucl;
-  //    R1             = 0.74*std::pow(nuclMass,0.3333)*5.0;
+
   maxQ2          = GetQ2limit(R1);   //   MeV^2
 
   G4String str = sNameFile.str();
@@ -292,69 +289,71 @@ G4int G4ElasticHadrNucleusHE::ReadOfData(const G4ParticleDefinition * aHadron,
 
 G4double G4ElasticHadrNucleusHE::GetQ2limit(G4double R1)
 {
-     G4double maxQ2 = 35*1000*1000/R1/R1;
-                 dQ2   = maxQ2/(Nstep*3./2.-1.);
+  G4double maxQ2 = 35*1000*1000/R1/R1;
+  dQ2   = maxQ2/(Nstep*3./2.-1.);
 
-     iQ2[0] = 1;
+  iQ2[0] = 1;
 
-     for(G4int ii=1; ii<Nstep; ii++)
-          iQ2[ii] = ii<Nstep/2 ? iQ2[ii-1]+dQ2 : iQ2[ii-1]+2*dQ2;
+  for(G4int ii=1; ii<Nstep; ii++)
+    iQ2[ii] = ii<Nstep/2 ? iQ2[ii-1]+dQ2 : iQ2[ii-1]+2*dQ2;
 
-     return maxQ2;
-   }
+  return maxQ2;
+}
 
 //  ========================================================
 
-void  G4ElasticHadrNucleusHE::
+G4bool G4ElasticHadrNucleusHE::
        GetHadronNucleusData(const G4ParticleDefinition* PartDef,
                             G4Nucleus         * aNucleus,
                             ElasticData       & ElD)
 {
-      ElD.Clean();
+  ElD.Clean();
 
-      G4int     nN       = (G4int) aNucleus->GetN();
-      G4String  hadrName = PartDef->GetParticleName();
+  G4int     nN       = (G4int) aNucleus->GetN();
+  G4String  hadrName = PartDef->GetParticleName();
+      
+  G4int SizeData = SetOfElasticData.size();
 
-      G4int SizeData = SetOfElasticData.size();
+  G4int NumberOfRecord = -1;
 
-      G4int NumberOfRecord = 0;
-
-      if( SizeData!= 0)
-      {
-        for(G4int kk = 0; kk<SizeData; kk++)
+  if( SizeData!= 0)
+    {
+      for(G4int kk = 0; kk<SizeData; kk++)
         {
           if( SetOfElasticData[kk].nuclAtomicNumber == nN &&
-                  SetOfElasticData[kk].hadrName == hadrName)
-                NumberOfRecord = kk;
+	      SetOfElasticData[kk].hadrName == hadrName) 
+	    {
+	      NumberOfRecord = kk;
+	      break;
+	    }
         }
-      }
+    }
 
-        if(NumberOfRecord > 0)
-        {
-          ElD = SetOfElasticData[NumberOfRecord-0];
-        }
-        else
-        {
-         G4int TestFile = ReadOfData(PartDef, aNucleus);
-         SizeData       = SetOfElasticData.size();
-         NumberOfRecord = SizeData-1;
+  if(NumberOfRecord >= 0)
+    {
+      ElD = SetOfElasticData[NumberOfRecord];
+    }
+  else
+    {
+      G4int TestFile = ReadOfData(PartDef, aNucleus);
+      SizeData       = SetOfElasticData.size();
+      NumberOfRecord = SizeData-1;
 
-          if(TestFile < 0)
-          {
-  G4cout<<" File for elastic scattering of hadron  \""
-        <<hadrName<<"\""<<G4endl;
-  G4cout<<"  on nucleus \""
-        <<nN<<"\"  does not exist!"<<G4endl;
-  G4cout<<"  You must prepare it by costructor: "<<G4endl;
-  G4cout<<
- "  G4ElasticHadrNucleusHE(G4DynamicParticle *, G4Nucleus *) "
-        <<G4endl;
-          return;
-          }
-          else ElD = SetOfElasticData[NumberOfRecord];
-        }
-
-        SizeData = SetOfElasticData.size();
+      if(TestFile < 0)
+	{
+	  G4cout<<" File for elastic scattering of hadron  \""
+		<<hadrName<<"\""<<G4endl;
+	  G4cout<<"  on nucleus \""
+		<<nN<<"\"  does not exist!"<<G4endl;
+	  G4cout<<"  You must prepare it by costructor: "<<G4endl;
+	  G4cout<<
+	    "  G4ElasticHadrNucleusHE(G4DynamicParticle *, G4Nucleus *) "
+		<<G4endl;
+          return false;
+	}
+      else ElD = SetOfElasticData[NumberOfRecord];
+    }
+  return true;
 }
 
 //  ++++++++++++++++++  ApplayYourself  ++++++++++++++++++++
@@ -404,7 +403,8 @@ G4HadFinalState * G4ElasticHadrNucleusHE::ApplyYourself(
   if(nA>1) {
     ElasticData ElD;
 
-    GetHadronNucleusData(hadrDef, aNucl, ElD);               
+    if(!GetHadronNucleusData(hadrDef, aNucl, ElD))
+      return &theParticleChange;               
     ranQ2 = RandomElastic1(aParticle, & ElD);
   }
   else ranQ2 = HadronProtonQ2(aParticle);
@@ -475,7 +475,7 @@ G4double G4ElasticHadrNucleusHE::SampleT(
 				 G4double labMomentum,
 				 G4int Z,  G4int A)
 {
-  G4double               Q2;
+  G4double Q2 = 0.0;
   G4DynamicParticle* dHadron = new G4DynamicParticle();
   dHadron->SetDefinition(const_cast<G4ParticleDefinition*>(p));
   G4ThreeVector mom(0.0,0.0,labMomentum);
@@ -487,8 +487,8 @@ G4double G4ElasticHadrNucleusHE::SampleT(
       ElasticData ElD;
 
       pNucleus.SetParameters(G4double(A), G4double(Z));
-      GetHadronNucleusData(dHadron->GetDefinition(), &pNucleus, ElD);
-      Q2 = RandomElastic1(dHadron, &ElD);
+      if(GetHadronNucleusData(dHadron->GetDefinition(), &pNucleus, ElD))
+	Q2 = RandomElastic1(dHadron, &ElD);
     }
   else  Q2 = HadronProtonQ2(dHadron);
 

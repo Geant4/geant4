@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4ElasticHadrNucleusHE.hh,v 1.20 2006-05-29 14:42:42 vnivanch Exp $
+// $Id: G4ElasticHadrNucleusHE.hh,v 1.21 2006-05-30 08:18:15 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -35,6 +35,7 @@
 //  19.05.04 Variant for G4 6.1: The 'ApplyYourself' was changed
 //  14.11.05 The HE elastic scattering on proton is added (N.Starkov)
 //  23.11.05 cleanup (V.Ivanchenko)
+//  30.05.06 Add protection against absence the data (V.Ivanchenko)
 //
 
 #ifndef G4ElasticHadrNucleusHE_h
@@ -149,9 +150,9 @@ public:
   G4double RandomElastic1( const G4DynamicParticle *   aHadron,
 			   const ElasticData       *   aData);
 
-  void  GetHadronNucleusData(const G4ParticleDefinition* aParticle,
-			     G4Nucleus         * aNucleus,
-			     ElasticData & ElD );
+  G4bool GetHadronNucleusData(const G4ParticleDefinition* aParticle,
+			      G4Nucleus         * aNucleus,
+			      ElasticData & ElD );
 
   G4int   ReadOfData(const G4ParticleDefinition * aParticle,
 		     G4Nucleus            * aNucleus);
