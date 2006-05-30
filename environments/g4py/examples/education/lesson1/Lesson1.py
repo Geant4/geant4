@@ -65,7 +65,7 @@ def ConstructGeom():
 
   water_phantom= G4EzVolume("WaterPhantom")
   water_phantom.CreateBoxVolume(water, 110.*cm, 110.*cm, 10.*cm)
-  water_phantom.SetColor(0., 0.9, 1.0)
+
   water_phantom_pv = water_phantom.PlaceIt(G4ThreeVector(0.,0.,0.*cm))
 
 # ==================================================================
@@ -209,13 +209,35 @@ class App(Frame):
 
 #on Run butto do...    
   def cmd_beamOn(self):
-      water_phantom.SetMaterial(absorber[self.materialVar.get()])
+      materialChosen = self.materialVar.get()
+      water_phantom.SetMaterial(absorber[materialChosen])
+
+      if materialChosen == "water":
+          water_phantom.SetColor(0., 0.9, 1.0)
+
+      if materialChosen == "air":
+          water_phantom.SetColor(0.9, 0.9, 1.0)
+
+      if materialChosen == "lead":
+          water_phantom.SetColor(0.2, 0.2, 0.2)
+
+      if materialChosen == "iron":
+          water_phantom.SetColor(0.7, 0.5, 0.7)
+
+      if materialChosen == "aluminum":
+          water_phantom.SetColor(.7, 0.9, 1.0)
+
+      if materialChosen == "gold":
+          water_phantom.SetColor(1., 0.9, .0)
+          
       self.solid.SetZHalfLength(self.thickVar.get() * mm/2.0)
 #      gControlExecute("oglx.mac") #draw for each run
       gApplyUICommand("/vis/viewer/flush")
 
       self.cmd_particle(self.particleVar.get())
       self.cmd_energy(self.energyVar.get())
+# TODO later to reflesh text
+      gApplyUICommand("/vis/scene/add/text 0 610 610 mm 20 0 0  " + "                                            ")
       gApplyUICommand("/vis/scene/add/text 0 610 610 mm 20 0 0  " + self.materialVar.get() + " = " + str(self.thickVar.get()) + "mm " + self.particleVar.get() + " = "+self.energyVar.get() + "MeV")
 
       eventNum = self.eventVar.get()
