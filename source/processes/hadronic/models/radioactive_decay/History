@@ -14,6 +14,11 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+29 May 2006 Dennis Wright (radioactive_decay-V08-00-03)
+   (tagging change by Fan Lei on 17 Feb 2006)
+-  G4RadioactiveDecay.cc : in method IsApplicable() add test for negative 
+   lifetime 
+
 16 February 2006 Vladimir Ivanchenko (radioactive_decay-V08-00-02)
 -  G4RadioactiveDecay::IsApplicable - fix problem connected with
    8.0 particle design
