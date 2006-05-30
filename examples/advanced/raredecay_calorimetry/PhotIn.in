@@ -13,8 +13,10 @@
 /run/setCutForRegqion Region0 0.2 mm
 /run/setCutForRegion Region1 2 mm
 /run/setCutForRegion Region2 2 cm
+/PhotIn/projParticle pi-
+/PhotIn/projEnergy 100.
 /run/dumpRegion
-/run/beamOn 1
+/run/beamOn 3
 /run/dumpCouples
 ##
 ##

@@ -1,4 +1,4 @@
-# $Id: new_phys_lists.gmk,v 1.1 2005-11-04 13:51:36 mkossov Exp $
+# $Id: new_phys_lists.gmk,v 1.2 2006-05-30 07:22:42 mkossov Exp $
 # --------------------------------------------------------------
 # new physics-lists setup
 # --------------------------------------------------------------
@@ -11,13 +11,13 @@
 #endif
 
 EXTRALIBS += -lG4physlists_lists
+EXTRALIBS += -lG4physlists_ghad
 EXTRALIBS += -lG4physlists_inelastic
 EXTRALIBS += -lG4physlists_neut
 EXTRALIBS += -lG4physlists_rest
 EXTRALIBS += -lG4physlists_stem
 EXTRALIBS += -lG4physlists_chips
 EXTRALIBS += -lG4physlists_elastic
-EXTRALIBS += -lG4physlists_ghad
 EXTRALIBS += -lG4physlists_gn     
 EXTRALIBS += -lG4physlists_ions   
 EXTRALIBS += -lG4physlists_leem

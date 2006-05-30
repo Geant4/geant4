@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.3 2005-12-09 16:44:21 mkossov Exp $
+# $Id: GNUmakefile,v 1.4 2006-05-30 07:22:42 mkossov Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -14,9 +14,9 @@ endif
 include $(G4INSTALL)/config/architecture.gmk
 
 # New Lists definition is necessary only for comparison with the new lists
-include hadronic_lists.gmk
+###include hadronic_lists.gmk
 # New Lists definition is necessary only while it is out of the G4 kernel
-include new_phys_lists.gmk
+###include new_phys_lists.gmk
 
 #G4ANALYSIS_USE:= 1
 
