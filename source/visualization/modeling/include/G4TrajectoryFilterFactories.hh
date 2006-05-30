@@ -19,7 +19,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-/// $Id: G4TrajectoryFilterFactories.hh,v 1.1 2006-03-28 18:01:18 tinslay Exp $
+/// $Id: G4TrajectoryFilterFactories.hh,v 1.2 2006-05-30 18:44:36 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -35,6 +35,23 @@
 #include "G4VModelFactory.hh"
 #include "G4VTrajectory.hh"
 
+// Charge filter
+class G4TrajectoryChargeFilterFactory : public G4VModelFactory< G4VFilter<G4VTrajectory>  > {
+
+public: // With description
+
+  typedef std::vector<G4UImessenger*> Messengers;
+  typedef std::pair< G4VFilter<G4VTrajectory> *, Messengers > ModelAndMessengers;
+
+  G4TrajectoryChargeFilterFactory();
+
+  virtual ~G4TrajectoryChargeFilterFactory();
+  
+  ModelAndMessengers Create(const G4String& placement, const G4String& name);
+    
+};
+
+// Particle filter
 class G4TrajectoryParticleFilterFactory : public G4VModelFactory< G4VFilter<G4VTrajectory>  > {
 
 public: // With description
@@ -49,6 +66,23 @@ public: // With description
   ModelAndMessengers Create(const G4String& placement, const G4String& name);
     
 };
+
+// Origin volume filter
+class G4TrajectoryOriginVolumeFilterFactory : public G4VModelFactory< G4VFilter<G4VTrajectory>  > {
+
+public: // With description
+
+  typedef std::vector<G4UImessenger*> Messengers;
+  typedef std::pair< G4VFilter<G4VTrajectory> *, Messengers > ModelAndMessengers;
+
+  G4TrajectoryOriginVolumeFilterFactory();
+
+  virtual ~G4TrajectoryOriginVolumeFilterFactory();
+  
+  ModelAndMessengers Create(const G4String& placement, const G4String& name);
+    
+};
+
 
 #endif
 

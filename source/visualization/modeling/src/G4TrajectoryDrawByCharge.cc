@@ -19,7 +19,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4TrajectoryDrawByCharge.cc,v 1.6 2006-05-02 20:47:40 tinslay Exp $
+// $Id: G4TrajectoryDrawByCharge.cc,v 1.7 2006-05-30 18:44:36 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Jane Tinslay, John Allison, Joseph Perl November 2005
@@ -108,6 +108,7 @@ G4TrajectoryDrawByCharge::Set(const G4String& charge, const G4String& colour)
     o << "Invalid charge "<<charge;
     G4Exception   
       ("G4TrajectoryDrawByCharge::Set(const G4int& charge, const G4String& colour)", "InvalidCharge", JustWarning, o.str().c_str());
+    return;
   }
 
   return Set(myCharge, colour);
