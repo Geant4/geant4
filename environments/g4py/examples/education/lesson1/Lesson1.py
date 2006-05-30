@@ -65,6 +65,7 @@ def ConstructGeom():
 
   water_phantom= G4EzVolume("WaterPhantom")
   water_phantom.CreateBoxVolume(water, 110.*cm, 110.*cm, 10.*cm)
+  water_phantom.SetColor(0., 0.9, 1.0)
   water_phantom_pv = water_phantom.PlaceIt(G4ThreeVector(0.,0.,0.*cm))
 
 # ==================================================================
@@ -162,7 +163,7 @@ class App(Frame):
 
 #start a run button row=7
     startBut = Button(self, bg="orange", text="Start a run", command=self.cmd_beamOn)
-    startBut.grid(row=7, column=0, sticky=W)
+    startBut.grid(row=0, column=0, sticky=W)
 
 #Zoom in/out Pan X Y row=8
     visLabel = Label(self, text="viewer", bg="orange")
@@ -171,25 +172,40 @@ class App(Frame):
     visLabel.grid(row=8, column=0, sticky=W)
     expandBut.grid(row=8, column=1, sticky=W)
     shrinkBut.grid(row=8, column=2, sticky=W)
-    panLabel = Label(self, text="Pan X Y (mm)")
-    self.panXYVar = StringVar()
-    panXYEnt = Entry(self, textvariable=self.panXYVar)
-    panBut = Button(self, bg="orange", text="OK", command=self.cmd_pan)
-    panLabel.grid(row=8, column=3, sticky=W)
-    panXYEnt.grid(row=8, column=4)
-    panBut.grid(row=8, column=5)
+
+    upBut = Button(self, text="Up", command=self.cmd_up)
+    downBut = Button(self, text="Down", command=self.cmd_down)
+    upBut.grid(row=8, column=3, sticky=W)
+    downBut.grid(row=8, column=4, sticky=W)
+
+    leftBut = Button(self, text="Left", command=self.cmd_left)
+    rightBut = Button(self, text="Right", command=self.cmd_right)
+    leftBut.grid(row=8, column=5, sticky=W)
+    rightBut.grid(row=8, column=6, sticky=W)
+# later
+#    resetBut = Button(self, text="Reset", command=self.cmd_reset)
+#    resetBut.grid(row=8, column=7, sticky=W)
+
+
+#    panLabel = Label(self, text="Pan X Y (mm)")
+#    self.panXYVar = StringVar()
+#    panXYEnt = Entry(self, textvariable=self.panXYVar)
+#    panBut = Button(self, bg="orange", text="OK", command=self.cmd_pan)
+#    panLabel.grid(row=8, column=3, sticky=W)
+#    panXYEnt.grid(row=8, column=4)
+#    panBut.grid(row=8, column=5)
 #Geant4 command entry row = 9
-    g4comLabel = Label(self, text="Geant4 command")
-    self.g4commandVar = StringVar()
-    commandEntry = Entry(self, textvariable=self.g4commandVar)
-    comBut = Button(self, bg="orange", text="Execute", command=self.cmd_g4command)
-    g4comLabel.grid(row=9, column=0, sticky=W)
-    commandEntry.grid(row=9, column=1, columnspan=4, sticky=E+W)
-    comBut.grid(row=9, column=5)
+#    g4comLabel = Label(self, text="Geant4 command")
+#    self.g4commandVar = StringVar()
+#    commandEntry = Entry(self, textvariable=self.g4commandVar)
+#    comBut = Button(self, bg="orange", text="Execute", command=self.cmd_g4command)
+#    g4comLabel.grid(row=9, column=0, sticky=W)
+#    commandEntry.grid(row=9, column=1, columnspan=4, sticky=E+W)
+#    comBut.grid(row=9, column=5)
 
 #exit row = 10    
     exitBut = Button(self, bg="red", text="End all", command=sys.exit)
-    exitBut.grid(row=0, column=0, sticky=W)
+    exitBut.grid(row=0, column=6, sticky=W)
 
 #on Run butto do...    
   def cmd_beamOn(self):
@@ -227,13 +243,25 @@ class App(Frame):
   def cmd_expand(self):
     gApplyUICommand("/vis/viewer/zoom 1.2")
 
-  def cmd_pan(self):
-    gApplyUICommand("/vis/viewer/pan " + self.panXYVar.get() + " "  + " mm")
+  def cmd_up(self):
+    gApplyUICommand("/vis/viewer/pan "   + " 0.  10. mm")
+
+  def cmd_down(self):
+    gApplyUICommand("/vis/viewer/pan " +  " 0. -10.  mm")
+
+  def cmd_right(self):
+    gApplyUICommand("/vis/viewer/pan " +  " -1. 0.  mm")
+
+  def cmd_left(self):
+    gApplyUICommand("/vis/viewer/pan "   + " 1. 0. mm")
 
 
   def cmd_shrink(self):
     gApplyUICommand("/vis/viewer/zoom 0.8")
 
+
+#  def cmd_reset(self):
+#    gApplyUICommand("/vis/viewer/pan "   + " 0. 0. mm")
 
     
   def __init__(self, master=None):
