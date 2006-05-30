@@ -23,6 +23,7 @@ ELECTROMAGNETIC += 11 12 ## Energy deposited by particles which cross a material
 ELECTROMAGNETIC += 13 ## Photon processes
 ELECTROMAGNETIC += 14 ## Total cross sections
 ELECTROMAGNETIC += 15 ## Multiple Scattering
+ELECTROMAGNETIC += 16 ## Simulate synchrotron radiation
 ELECTROMAGNETIC += 17 ## Muon interactions
 
 # Symbolic links to extended g3tog4 examples using test601, etc...
