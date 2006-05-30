@@ -30,7 +30,7 @@
 //    *                              *
 //    ********************************
 //
-// $Id: BrachyPhantomSD.cc,v 1.11 2006-05-15 08:35:45 guatelli Exp $
+// $Id: BrachyPhantomSD.cc,v 1.12 2006-05-30 12:32:17 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "BrachyPhantomSD.hh"
@@ -93,9 +93,9 @@ G4bool BrachyPhantomSD::ProcessHits(G4Step* aStep, G4TouchableHistory* ROhist)
 	
               // Retrieve the coordinates of the center of the voxel where
               // the energy deposit is located
-	      G4double x = ( - numberOfVoxel + 1+ 2*i )* voxelWidth/2; 
-	      G4double y = ( - numberOfVoxel + 1+ 2*j )* voxelWidth/2;
-	      G4double z = ( - numberOfVoxel + 1+ 2*k )* voxelWidth/2;
+	      x = ( - numberOfVoxel + 1+ 2*i )* voxelWidth/2; 
+	      y = ( - numberOfVoxel + 1+ 2*j )* voxelWidth/2;
+	      z = ( - numberOfVoxel + 1+ 2*k )* voxelWidth/2;
 
 #ifdef G4ANALYSIS_USE	
 	      BrachyAnalysisManager* analysis = 

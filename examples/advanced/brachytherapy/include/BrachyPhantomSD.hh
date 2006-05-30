@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: BrachyPhantomSD.hh,v 1.8 2006-05-15 08:26:54 guatelli Exp $
+// $Id: BrachyPhantomSD.hh,v 1.9 2006-05-30 12:32:17 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //    ********************************
@@ -51,6 +51,11 @@ public:
   void clear();
   void DrawAll();
   void PrintAll();
+
+private:
+  G4double x;
+  G4double y;
+  G4double z;
 };
 #endif
 
