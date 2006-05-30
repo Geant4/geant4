@@ -253,14 +253,8 @@
     // Cache current, target, and secondaries
     G4ReactionProduct saveCurrent = currentParticle;
     G4ReactionProduct saveTarget = targetParticle;
-    G4FastVector<G4ReactionProduct,GHADLISTSIZE> savevec;
-    G4int savevecLen = 0;
-    savevec.Initialize( 0 );
-    for (G4int i = 0; i < vecLen; i++) {
-      G4ReactionProduct* p = new G4ReactionProduct;
-      *p = *vec[i];
-      savevec.SetElement( savevecLen++, p );
-    }
+    std::vector<G4ReactionProduct> savevec;
+    for (G4int i = 0; i < vecLen; i++) savevec.push_back(*vec[i]);
 
     if( annihilation || (vecLen >= 6) ||
         (modifiedOriginal.GetKineticEnergy()/GeV >= 1.0) &&
@@ -301,11 +295,10 @@
         for (G4int i = 0; i < vecLen; i++) delete vec[i];
         vecLen = 0;
         vec.Initialize( 0 );
-        for (G4int i = 0; i < savevecLen; i++) {
+        for (G4int i = 0; i < G4int(savevec.size()); i++) {
           G4ReactionProduct* p = new G4ReactionProduct;
-          *p = *savevec[i];
+          *p = savevec[i];
           vec.SetElement( vecLen++, p );
-          delete savevec[i];
         }
       }
 
@@ -329,6 +322,7 @@
 	 throw G4HadReentrentException(__FILE__, __LINE__, "Failing to calculate momenta");
        }
     }
+
     if( finishedTwoClu )
     {
       Rotate(vec, vecLen);
@@ -425,6 +419,7 @@
       if (std::fabs(aE)<.1*eV) aE=.1*eV;
       theParticleChange.SetEnergyChange( aE );
     }
+
     if( targetParticle.GetMass() > 0.0 )  // targetParticle can be eliminated in TwoBody
     {
       G4DynamicParticle *p1 = new G4DynamicParticle;
@@ -434,6 +429,7 @@
       p1->SetMomentum( momentum );
       theParticleChange.AddSecondary( p1 );
     }
+
     G4DynamicParticle *p;
     for( i=0; i<vecLen; ++i )
     {
