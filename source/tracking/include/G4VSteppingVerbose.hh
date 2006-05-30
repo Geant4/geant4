@@ -21,10 +21,10 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSteppingVerbose.hh,v 1.18 2006-05-24 13:04:44 tsasaki Exp $
+// $Id: G4VSteppingVerbose.hh,v 1.19 2006-05-30 14:50:28 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// Last checked in at $Date: 2006-05-24 13:04:44 $ by $Author: tsasaki $
+// Last checked in at $Date: 2006-05-30 14:50:28 $ by $Author: gcosmo $
 //  
 //---------------------------------------------------------------
 //
@@ -81,12 +81,12 @@ protected:
   static G4int SilentStepInfo; //another flag for verbosity
 public:   // with description
 // static methods to set/get the object's pointer 
-    static void SetInstance(G4VSteppingVerbose* Instance){ fInstance=Instance;};
-  static G4VSteppingVerbose* GetInstance(){return fInstance;};
-  static G4int GetSilent(){return Silent;};
-  static void SetSilent(G4int fSilent){Silent==fSilent;};
-  static G4int GetSilentStepInfo(){return SilentStepInfo;};
-  static void SetSilentStepInfo(G4int fSilent){SilentStepInfo==fSilent;};
+    static void SetInstance(G4VSteppingVerbose* Instance){fInstance=Instance;}
+  static G4VSteppingVerbose* GetInstance(){return fInstance;}
+  static G4int GetSilent(){return Silent;}
+  static void SetSilent(G4int fSilent){Silent=fSilent;}
+  static G4int GetSilentStepInfo(){return SilentStepInfo;}
+  static void SetSilentStepInfo(G4int fSilent){SilentStepInfo=fSilent;}
 // these method are invoked in the SteppingManager 
   virtual void NewStep() = 0;
   void CopyState();
