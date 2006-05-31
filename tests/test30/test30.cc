@@ -458,7 +458,7 @@ int main(int argc, char** argv)
     std::auto_ptr< AIDA::ITree > tree( tf->create( hFile,"hbook", false,true));
     std::cout << "Tree store : " << tree->storeName() << std::endl;
 
-    const G4int nhisto = 63;
+    const G4int nhisto = 62;
     AIDA::IHistogram1D* h[nhisto];
 
     G4double mass = part->GetPDGMass();
@@ -579,13 +579,12 @@ int main(int argc, char** argv)
       if(nangl>4)
 	h[55]=hf->createHistogram1D("56","ds/dE for neutrons at theta = 4",nbinlog,0.,logmax);
 
-      h[56]=hf->createHistogram1D("57","Ekin (MeV) for 1st particle",120,0.,energy*1.2/MeV);
-      h[57]=hf->createHistogram1D("58","Ekin (MeV) for 2nd particle",120,0.,energy*1.2/MeV);
-      h[58]=hf->createHistogram1D("59","cos(Theta) for 1st particle in Lab.Sys.",nbinsa,-1.,1.);
-      h[59]=hf->createHistogram1D("60","cos(Theta) for 2nd particle in Lab.Sys.",nbinsa,-1.,1.);
-      h[60]=hf->createHistogram1D("61","cos(Theta) for 1st particle in CM.Sys.",nbinsa,-1.,1.);
-      h[61]=hf->createHistogram1D("62","cos(Theta) for 2nd particle in CM.Sys.",nbinsa,-1.,1.);
-      h[62]=hf->createHistogram1D("63","cos(Theta) for 1 & 2 particle in CM.Sys.",nbinsa,-1.,1.);
+      h[56]=hf->createHistogram1D("57","Ekin (MeV) for recoil particle",120,0.,energy*1.2/MeV);
+      h[57]=hf->createHistogram1D("58","Ekin (MeV) for primary particle",120,0.,energy*1.2/MeV);
+      h[58]=hf->createHistogram1D("59","cos(Theta) for recoil particle in Lab.Sys.",nbinsa,-1.,1.);
+      h[59]=hf->createHistogram1D("60","cos(Theta) for primary particle in Lab.Sys.",nbinsa,-1.,1.);
+      h[60]=hf->createHistogram1D("61","cos(Theta) for recoil particle in CM.Sys.",nbinsa,-1.,1.);
+      h[61]=hf->createHistogram1D("62","cos(Theta) for primary particle in CM.Sys.",nbinsa,-1.,1.);
 
       G4cout << "Histograms is initialised nbins=" << nbins
              << G4endl;
@@ -791,12 +790,10 @@ int main(int argc, char** argv)
 	    h[56]->fill(e/MeV,1.0);
 	    h[58]->fill(cost,factora);
 	    h[60]->fill(costcm,factora);
-	    h[62]->fill(costcm,factora);
 	  } else if(i==1) {
 	    h[57]->fill(e/MeV,1.0);
 	    h[59]->fill(cost,factora);
 	    h[61]->fill(costcm,factora);
-	    h[62]->fill(costcm,factora);
 	  }
           h[2]->fill(mom.phi()/degree,1.0);
           if(pd == neutron) h[23]->fill(mom.phi()/degree,1.0);
