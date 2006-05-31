@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PathFinder.hh,v 1.12 2006-05-31 17:02:45 japost Exp $
+// $Id: G4PathFinder.hh,v 1.13 2006-05-31 17:24:28 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // class G4PathFinder 
@@ -101,6 +101,9 @@ class G4PathFinder
                                       G4double pMass );  
 
    inline G4bool         IsParticleLooping() const;
+
+   G4double       GetCurrentSafety() const { return fMinSafety; }
+     // Minimum value of safety after last ComputeStep
 
    inline G4int  SetVerboseLevel(G4int lev=-1);
   // inline G4int  GetVerboseLevel() const;
