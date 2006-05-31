@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DiffElasticHadrNucleus.cc,v 1.19 2006-05-31 07:58:53 vnivanch Exp $
+// $Id: G4DiffElasticHadrNucleus.cc,v 1.20 2006-05-31 09:45:05 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  Geant4 class G4DiffElasticHadrNucleus  
@@ -528,11 +528,11 @@ G4double G4DiffElasticHadrNucleus::
                               G4Nucleus         *  aNucleus, 
                               G4double             aQ2,
                               G4int                Kind)
-   {
-     G4double J0qb, Re;
-     G4double HadrEnergy = aHadron->GetTotalEnergy()/GeV;  //  GeV
-     G4int    Nucleus    = (G4int)aNucleus->GetN();
-     G4double MassH      = aHadron->GetMass()/GeV;
+{
+  G4double J0qb, Re;
+  G4double HadrEnergy = aHadron->GetTotalEnergy()/GeV;  //  GeV
+  G4int    Nucleus    = (G4int)aNucleus->GetN();
+  G4double MassH      = aHadron->GetMass()/GeV;
 
   if(Nucleus==2 || Nucleus==3)
     G4Exception(" This nucleus is very light for this model !!!");
@@ -543,22 +543,23 @@ G4double G4DiffElasticHadrNucleus::
   if(HadrEnergy-MassH < 1.0)
     G4Exception(" The hadron energy is very low for this model !!!");
 
-      G4HadronValues::GetHadronValues(aHadron);
+  G4HadronValues::GetHadronValues(aHadron);
 
-      G4double Q2 = aQ2/GeV/GeV;             //  GeV
+  G4double Q2 = aQ2/GeV/GeV;             //  GeV
 
 //      G4double S, MassN, EcmH;
-      G4int kk;      
-      G4double ValB;
-      G4double ReIntSumm=0.0, ImIntSumm=0.0, Section;
-      G4double S, MassN, EcmH, Mnojit;
+  G4int kk;      
+  G4double ValB;
+  G4double ReIntSumm=0.0, ImIntSumm=0.0, Section;
+  G4double S, MassN, EcmH;
+  G4double Mnojit = 0.0;
 
-      if(Kind == 0)
-      {
-        switch(Nucleus)
+  if(Kind == 0)
+    {
+      switch(Nucleus)
         {
-         case(208) :   r0      = 1.125;
-                       r01     = 1.16*0.0;
+ 	 case(208) :   r0      = 1.125;
+	               r01     = 1.16*0.0;
                        break;
          case(90) :    r0       = 1.12;
                        r01      = 1.16*0.0;
@@ -588,16 +589,7 @@ G4double G4DiffElasticHadrNucleus::
          default  :    Re = std::pow(static_cast<double>(Nucleus), 0.3333);
                        r0 = 1.16*(1.0-1.16/Re/Re);
         }
-/*
-//               MassH       = aHadron->GetMass()/1000;
-               MassN       = Nucleus*0.938;
-               S           = 2*MassN*HadrEnergy+MassN*MassN+MassH*MassH;
-               EcmH        = (S-MassN*MassN+MassH*MassH)/2/std::sqrt(S);
-               MomentumCMN = std::sqrt(EcmH*EcmH-MassH*MassH);
-*/
 
-//      if(Kind == 0)
-//      {
         MassH       = aHadron->GetMass()/GeV;
 	MassN       = aNucleus->AtomicMass(aNucleus->GetN(),aNucleus->GetZ())/GeV;
         S           = 2*MassN*HadrEnergy+MassN*MassN+MassH*MassH;
@@ -616,43 +608,38 @@ G4double G4DiffElasticHadrNucleus::
 
         GetIntegrandB(Nucleus);
         InCohI = 0.0;
-      }
+    }
 
-//     if(Kind==0) InCohI = 0.0;
+  G4double Simps = 4;
 
-     G4double Simps = 4;
+  for(kk=0; kk<NpointsB; kk++)
+    {
+      ValB = stepB*kk;
 
-     for(kk=0; kk<NpointsB; kk++)
-      {
-        ValB = stepB*kk;
+      if(Kind==0) InCohI += Thick[kk]*ValB*Simps*Mnojit*
+		    std::exp(-HadrTot*2.568*Thick[kk]);
 
-        if(Kind==0) InCohI += Thick[kk]*ValB*Simps*Mnojit*
-                                std::exp(-HadrTot*2.568*Thick[kk]);
 
-//                       *2.0*3.1416*stepB
-//                       /16/3.1416*std::pow(HadrTot*2.568,2)*
-//                       (1+std::pow(HadrReIm,2))/2.56;
+      J0qb = MyJ0(std::sqrt(Q2)*ValB)*ValB;
+      ReIntSumm += J0qb*ReIntegrand[kk];
+      ImIntSumm += J0qb*ImIntegrand[kk];
+      if(Simps>3) Simps = 2;
+    }
 
-        J0qb = MyJ0(std::sqrt(Q2)*ValB)*ValB;
-        ReIntSumm += J0qb*ReIntegrand[kk];
-        ImIntSumm += J0qb*ImIntegrand[kk];
-        if(Simps>3) Simps = 2;
-      }
-
-     InCoh  = InCohI*
+  InCoh  = InCohI*
 //   2.0*3.1416*stepB
 // /16/3.1416*std::pow(HadrTot*2.568,2)*
 //      (1+std::pow(HadrReIm,2))/2.568*
-     std::exp(-HadrSlope*Q2)/3;
+    std::exp(-HadrSlope*Q2)/3;
 
-     Section = (ReIntSumm*ReIntSumm+ImIntSumm*ImIntSumm)
+  Section = (ReIntSumm*ReIntSumm+ImIntSumm*ImIntSumm)
        /twopi*2.568*MomentumCMN*MomentumCMN 
                 *stepB*stepB/3;
 
 //     Section = (ReIntSumm*ReIntSumm+ImIntSumm*ImIntSumm)
 //                /2.0/Pi1*2.568*MomentumCMN*MomentumCMN;
 
-   return Section;
+  return Section;
    }  
 //  =====================================================
    void  G4DiffElasticHadrNucleus::
