@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LowEnergyBraggModel.cc,v 1.4 2004-10-11 08:45:34 vnivanch Exp $
+// $Id: G4LowEnergyBraggModel.cc,v 1.5 2006-05-31 07:46:23 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -155,7 +155,7 @@ G4double G4LowEnergyBraggModel::ComputeDEDX(const G4MaterialCutsCouple* couple,
     dedx  = parameterization->TheValue(p, material, kineticEnergy);
   else {
     G4double e = lowestKinEnergy/massRate;
-    dedx  = (parameterization->TheValue(p, material, e))*sqrt(kineticEnergy/e);
+    dedx  = (parameterization->TheValue(p, material, e))*std::sqrt(kineticEnergy/e);
   }
 
   if (cutEnergy < tmax) {
@@ -166,7 +166,7 @@ G4double G4LowEnergyBraggModel::ComputeDEDX(const G4MaterialCutsCouple* couple,
     G4double beta2 = bg2/(gam*gam);
     G4double x     = cutEnergy/tmax;
 
-    G4double delta = log(x) - (1.0 - x)*beta2;
+    G4double delta = std::log(x) - (1.0 - x)*beta2;
     if(spin == 0.5) {
       G4double y = tmax/(kineticEnergy + mass);
       delta += 0.25*y*y*(1.0 - x*x);
@@ -202,7 +202,7 @@ G4double G4LowEnergyBraggModel::CrossSection(const G4MaterialCutsCouple* couple,
     G4double energy  = kineticEnergy + mass;
     G4double energy2 = energy*energy;
     G4double beta2   = kineticEnergy*(kineticEnergy + 2.0*mass)/energy2;
-    cross = 1.0/cutEnergy - 1.0/maxEnergy - beta2*log(maxEnergy/cutEnergy)/tmax;
+    cross = 1.0/cutEnergy - 1.0/maxEnergy - beta2*std::log(maxEnergy/cutEnergy)/tmax;
 
 // +term for spin=1/2 particle
     if( 0.5 == spin ) {
@@ -254,15 +254,15 @@ G4DynamicParticle* G4LowEnergyBraggModel::SampleSecondary(
   } while( grej*G4UniformRand() >= f );
 
   G4double deltaMomentum =
-           sqrt(deltaKinEnergy * (deltaKinEnergy + 2.0*electron_mass_c2));
-  G4double totMomentum = sqrt(energy2 - mass*mass);
+           std::sqrt(deltaKinEnergy * (deltaKinEnergy + 2.0*electron_mass_c2));
+  G4double totMomentum = std::sqrt(energy2 - mass*mass);
   G4double cost = deltaKinEnergy * (energy + electron_mass_c2) /
                                    (deltaMomentum * totMomentum);
-  G4double sint = sqrt(1.0 - cost*cost);
+  G4double sint = std::sqrt(1.0 - cost*cost);
 
   G4double phi = twopi * G4UniformRand() ;
 
-  G4ThreeVector deltaDirection(sint*cos(phi),sint*sin(phi), cost) ;
+  G4ThreeVector deltaDirection(sint*std::cos(phi),sint*std::sin(phi), cost) ;
   deltaDirection.rotateUz(momentum);
 
   // create G4DynamicParticle object for delta ray

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DNAHydrogenChargeIncreaseTotalCrossSectionPolicy.icc,v 1.1 2005-12-20 13:40:25 capra Exp $
+// $Id: G4DNAHydrogenChargeIncreaseTotalCrossSectionPolicy.icc,v 1.2 2006-05-31 07:46:23 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -56,7 +56,7 @@
  const G4double i = 12.61*eV;
  const G4double nu = 0.943;
  const G4double j = 27.7*keV;
- totalCrossSection = (s0*pow(10*a/keV,omega)*pow(k/keV-i/keV, nu)) / (pow(j/keV,omega+nu) + pow(k/keV,omega+nu));*/
+ totalCrossSection = (s0*std::pow(10*a/keV,omega)*std::pow(k/keV-i/keV, nu)) / (std::pow(j/keV,omega+nu) + std::pow(k/keV,omega+nu));*/
  
  //----------Following model is proposed by Dingfelder--------------
  const  G4double aa=2.835;
@@ -68,8 +68,8 @@
  
  G4double t = k / (proton_mass_c2/electron_mass_c2); 
  G4double x = t / rr; 
- G4double sigmal = 4.0*pi*Bohr_radius/nm*Bohr_radius/nm*fac*cc*(pow(x,dd));
- G4double sigmah = 4.0*pi*Bohr_radius/nm*Bohr_radius/nm*fac*(aa*log(1.0+x)+bb)/x;
+ G4double sigmal = 4.0*pi*Bohr_radius/nm*Bohr_radius/nm*fac*cc*(std::pow(x,dd));
+ G4double sigmah = 4.0*pi*Bohr_radius/nm*Bohr_radius/nm*fac*(aa*std::log(1.0+x)+bb)/x;
  totalCrossSection = 1.0/(1.0/sigmal + 1.0/sigmah);
 
  return totalCrossSection*m*m;

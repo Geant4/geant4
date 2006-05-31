@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VDNAProcessInWater.icc,v 1.2 2005-09-12 16:41:19 capra Exp $
+// $Id: G4VDNAProcessInWater.icc,v 1.3 2006-05-31 07:46:23 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifdef    G4VDNAPROCESSINWATER_HH
@@ -72,7 +72,7 @@
   
   // Water validation consists in checking that density is 1. and that Oxigen and Hydrogen are the only two elements of the material
 
-  if (fabs(theMaterial->GetDensity()*cm3/g-1.)<0.1)
+  if (std::fabs(theMaterial->GetDensity()*cm3/g-1.)<0.1)
    if (theMaterial->GetNumberOfElements()==2)
    {
     const G4Element * element1(theMaterial->GetElement(0));

@@ -175,14 +175,14 @@ void G4PhotoElectricAngularGeneratorPolarized::PhotoElectronGeneratePhiAndTheta(
     if(shellLevel == 0){
 
       // Polarized Gavrila Cross-Section for K-shell (1959)
-      theta=std::sqrt(((exp(rand2*std::log(1+cBeta*pi*pi)))-1)/cBeta);
+      theta=std::sqrt(((std::exp(rand2*std::log(1+cBeta*pi*pi)))-1)/cBeta);
       crossSectionMajorantFunctionValue = CrossSectionMajorantFunction(theta, cBeta);
       crossSectionValue = DSigmaKshellGavrila1959(beta, theta, phi);
 
     } else {
 
       //  Polarized Gavrila Cross-Section for other shells (L1-shell) (1961)
-      theta = std::sqrt(((exp(rand2*std::log(1+cBeta*pi*pi)))-1)/cBeta);
+      theta = std::sqrt(((std::exp(rand2*std::log(1+cBeta*pi*pi)))-1)/cBeta);
       crossSectionMajorantFunctionValue = CrossSectionMajorantFunction(theta, cBeta);
       crossSectionValue = DSigmaL1shellGavrila(beta, theta, phi);
 

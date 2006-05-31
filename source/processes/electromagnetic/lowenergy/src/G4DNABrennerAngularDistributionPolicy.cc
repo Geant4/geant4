@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DNABrennerAngularDistributionPolicy.cc,v 1.1 2005-06-24 10:07:13 capra Exp $
+// $Id: G4DNABrennerAngularDistributionPolicy.cc,v 1.2 2006-05-31 07:46:23 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -34,7 +34,7 @@ G4double                                 G4DNABrennerAngularDistributionPolicy :
 {
  //  d sigma_el                         1                                 beta(K)
  // ------------ (K) ~ --------------------------------- + ---------------------------------
- //   d Omega           (1 + 2 gamma(K) - cos(theta))^2     (1 + 2 delta(K) + cos(theta))^2
+ //   d Omega           (1 + 2 gamma(K) - std::cos(theta))^2     (1 + 2 delta(K) + std::cos(theta))^2
  //
  // Maximum is < 1/(4 gamma(K)^2) + beta(K)/(4 delta(K)^2)
  //

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VLowEnergyDiscretePhotonProcess.cc,v 1.3 2005-06-24 09:59:02 capra Exp $
+// $Id: G4VLowEnergyDiscretePhotonProcess.cc,v 1.4 2006-05-31 07:46:23 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------
@@ -152,8 +152,8 @@ G4ThreeVector G4VLowEnergyDiscretePhotonProcess::GetPhotonPolarization(const G4D
   
       G4double angle(G4UniformRand() * twopi);
   
-      e1*=cos(angle);
-      e2*=sin(angle);
+      e1*=std::cos(angle);
+      e2*=std::sin(angle);
   
       photonPolarization=e1+e2;
     }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DNAProtonChargeIncreaseTotalCrossSectionPolicy.hh,v 1.2 2006-05-25 17:57:10 pia Exp $
+// $Id: G4DNAProtonChargeIncreaseTotalCrossSectionPolicy.hh,v 1.3 2006-05-31 07:46:23 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef G4DNAPROTONCHARGEINCREASETOTALCROSSSECTIONPOLICY_HH
@@ -48,7 +48,7 @@ protected:
 
   G4double TotalCrossSection(G4double k, G4int z) const;
   void BuildTotalCrossSection(void) const {}
-  G4int RandomizePartialCrossSection(G4double k, G4int z) {return 0;}
+  G4int RandomizePartialCrossSection(G4double, G4int) {return 0;}
 
   // Hides default constructor and assignment operator as private
   G4DNAProtonChargeIncreaseTotalCrossSectionPolicy(const G4DNAProtonChargeIncreaseTotalCrossSectionPolicy & copy);

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LowEnergyPolarizedRayleighTest.cc,v 1.3 2005-06-24 10:03:57 capra Exp $
+// $Id: G4LowEnergyPolarizedRayleighTest.cc,v 1.4 2006-05-31 07:46:23 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------
@@ -546,7 +546,7 @@ G4Step * GenerateStep(const struct Options & options)
  G4ThreeVector vecB(vecA.cross(momentumDirection));
  G4double beta(twopi * G4UniformRand());
 
- G4ThreeVector polarizationDirection(vecA * cos(beta)+ vecB * sin(beta));
+ G4ThreeVector polarizationDirection(vecA * std::cos(beta)+ vecB * std::sin(beta));
  
  G4double lnEnergyMin=std::log(options.minEnergy);
  G4double lnEnergyMax=std::log(options.maxEnergy); 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DNAEmfietzoglouAngularDistributionPolicy.cc,v 1.1 2005-06-24 10:07:13 capra Exp $
+// $Id: G4DNAEmfietzoglouAngularDistributionPolicy.cc,v 1.2 2006-05-31 07:46:23 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4DNAEmfietzoglouAngularDistributionPolicy.hh"
@@ -32,9 +32,9 @@ G4double                                G4DNAEmfietzoglouAngularDistributionPoli
 {
  //  d sigma_el                sigma_Ruth(K)
  // ------------ (K) ~ -----------------------------  
- //   d Omega           (1 + 2 n(K) - cos(theta))^2
+ //   d Omega           (1 + 2 n(K) - std::cos(theta))^2
  //
- // We extract cos(theta) distributed as (1 + 2 n(K) - cos(theta))^-2
+ // We extract std::cos(theta) distributed as (1 + 2 n(K) - std::cos(theta))^-2
  //
  // Maximum is for theta=0: 1/(4 n(K)^2) (When n(K) is positive, that is always satisfied within the validity of the process)
  //

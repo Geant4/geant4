@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DNADingfelderChargeChangeTotalCrossSectionPolicy.icc,v 1.1 2005-12-20 13:41:32 capra Exp $
+// $Id: G4DNADingfelderChargeChangeTotalCrossSectionPolicy.icc,v 1.2 2006-05-31 07:46:23 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -95,7 +95,7 @@
  G4double                             	G4DNADingfelderChargeChangeTotalCrossSectionPolicy<IncomingParticlePolicy, EnergyLimitsPolicy> :: PartialCrossSection(G4double k, G4int /* z */, G4int index)
  {
   //
-  // sigma(T) = f0 10 ^ y(log10(T/eV))
+  // sigma(T) = f0 10 ^ y(std::log10(T/eV))
   //
   //         /  a0 x + b0                    x < x0
   //         |

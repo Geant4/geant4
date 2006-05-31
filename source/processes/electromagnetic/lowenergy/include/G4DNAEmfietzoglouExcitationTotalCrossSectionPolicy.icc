@@ -118,7 +118,7 @@
   const G4double r(13.6*eV) ;
 //  z=z*1;  
   if(t<EnergyConstant(excitationLevelIndex)) return(0.); 
-  G4double excSigma = ( aj[excitationLevelIndex] / (2.*pi*Bohr_radius)) * (EnergyConstant(excitationLevelIndex) / t) * log(cj[excitationLevelIndex]*(t/r)) * pow((1.- (EnergyConstant(excitationLevelIndex)/t)), pj[excitationLevelIndex]);
+  G4double excSigma = ( aj[excitationLevelIndex] / (2.*pi*Bohr_radius)) * (EnergyConstant(excitationLevelIndex) / t) * std::log(cj[excitationLevelIndex]*(t/r)) * std::pow((1.- (EnergyConstant(excitationLevelIndex)/t)), pj[excitationLevelIndex]);
 return(excSigma * sigma0);
  }
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DNAIonizationInWater.icc,v 1.2 2006-05-25 17:57:10 pia Exp $
+// $Id: G4DNAIonizationInWater.icc,v 1.3 2006-05-31 07:46:23 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -41,7 +41,7 @@
   G4double particleMass = aDynamicParticle->GetDefinition()->GetPDGMass();
   G4double TotalEnergy = k + particleMass;
   G4double Psquare = k*(TotalEnergy+particleMass);
-  G4double TotalMomentum = sqrt(Psquare);
+  G4double TotalMomentum = std::sqrt(Psquare);
 
 
   G4int ionizationShell(TotalCrossSectionPolicy::RandomizePartialCrossSection(k,z));
@@ -52,13 +52,13 @@
   G4double cosTheta = 0.;
   G4double phi = 0.; 
   FinalStatesPolicy::RandomizeEjectedElectronDirection(k,secondaryKinetic, cosTheta, phi);
-  G4double sinTheta = sqrt(1.-cosTheta*cosTheta);
-  G4double dirx = sinTheta*cos(phi),diry = sinTheta*sin(phi),dirz = cosTheta;
+  G4double sinTheta = std::sqrt(1.-cosTheta*cosTheta);
+  G4double dirx = sinTheta*std::cos(phi),diry = sinTheta*std::sin(phi),dirz = cosTheta;
   G4ThreeVector DeltaDirection(dirx,diry,dirz);
   DeltaDirection.rotateUz(primaryDirection);
 
 
-  G4double DeltaTotalMomentum = sqrt(secondaryKinetic*(secondaryKinetic +
+  G4double DeltaTotalMomentum = std::sqrt(secondaryKinetic*(secondaryKinetic +
                                                      2.*electron_mass_c2 ));
 
    //Primary Particle Direction
@@ -69,7 +69,7 @@
       G4double finalPz = TotalMomentum*primaryDirection.z()
                         - DeltaTotalMomentum*DeltaDirection.z();
       G4double finalMomentum =
-                sqrt(finalPx*finalPx+finalPy*finalPy+finalPz*finalPz);
+                std::sqrt(finalPx*finalPx+finalPy*finalPy+finalPz*finalPz);
       finalPx /= finalMomentum;
       finalPy /= finalMomentum;
       finalPz /= finalMomentum;

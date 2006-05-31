@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LowEnergyPolarizedRayleigh.cc,v 1.5 2005-06-27 15:29:17 gunter Exp $
+// $Id: G4LowEnergyPolarizedRayleigh.cc,v 1.6 2006-05-31 07:46:23 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------
@@ -101,7 +101,7 @@ G4VParticleChange* G4LowEnergyPolarizedRayleigh::PostStepDoIt(const G4Track&  aT
   G4ThreeVector x(GetPhotonPolarization(*incomingPhoton));
   G4ThreeVector y(z.cross(x));
  
-  // z' = cos(phi)*sin(theta) x + sin(phi)*sin(theta) y + cos(theta) z
+  // z' = std::cos(phi)*std::sin(theta) x + std::sin(phi)*std::sin(theta) y + std::cos(theta) z
   G4double xDir;
   G4double yDir;
   G4double zDir;
@@ -115,7 +115,7 @@ G4VParticleChange* G4LowEnergyPolarizedRayleigh::PostStepDoIt(const G4Track&  aT
   G4ThreeVector xPrime(x.perpPart(zPrime).unit());
   G4ThreeVector yPrime(zPrime.cross(xPrime));
  
-  // outgoingPhotonPolarization is directed as x' cos(beta) + y' sin(beta)
+  // outgoingPhotonPolarization is directed as x' std::cos(beta) + y' std::sin(beta)
   G4ThreeVector outcomingPhotonPolarization(xPrime*std::cos(beta) + yPrime*std::sin(beta));
  
   aParticleChange.ProposeEnergy(incomingPhotonEnergy);
@@ -133,11 +133,11 @@ G4VParticleChange* G4LowEnergyPolarizedRayleigh::PostStepDoIt(const G4Track&  aT
 G4double G4LowEnergyPolarizedRayleigh::GenerateCosTheta(G4double incomingPhotonEnergy, G4int zAtom) const
 {
   //  d sigma                                                                    k0
-  // --------- =  r0^2 * pi * F^2(x, Z) * ( 2 - sin^2 theta) * sin (theta), x = ---- sin(theta/2)
+  // --------- =  r0^2 * pi * F^2(x, Z) * ( 2 - sin^2 theta) * std::sin (theta), x = ---- std::sin(theta/2)
   //  d theta                                                                    hc
  
   //  d sigma                                             k0          1 - y
-  // --------- = r0^2 * pi * F^2(x, Z) * ( 1 + y^2), x = ---- sqrt ( ------- ), y = cos(theta)
+  // --------- = r0^2 * pi * F^2(x, Z) * ( 1 + y^2), x = ---- std::sqrt ( ------- ), y = std::cos(theta)
   //    d y                                               hc            2
 
   //              Z

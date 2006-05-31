@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PenelopePhotoElectric.cc,v 1.10 2005-06-27 15:29:20 gunter Exp $
+// $Id: G4PenelopePhotoElectric.cc,v 1.11 2006-05-31 07:46:23 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: L. Pandola
@@ -345,7 +345,7 @@ G4double G4PenelopePhotoElectric::SampleElectronDirection(G4double energy)
   G4double gtr = 0;
   
   //2) sampling. Eq. (2.31) of Penelope Manual
-  // tsam = 1-cos(theta)
+  // tsam = 1-std::cos(theta)
   // gtr = rejection function according to Eq. (2.28)
   do{
     G4double rand = G4UniformRand();
