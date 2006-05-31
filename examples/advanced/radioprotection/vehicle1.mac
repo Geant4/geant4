@@ -37,7 +37,8 @@
 # Generation of primary particles
 /gun/data gcr_min_z=1.txt
 #/tracking/verbose 1
-/run/beamOn 1000
+/run/beamOn 500
+
 
 
 

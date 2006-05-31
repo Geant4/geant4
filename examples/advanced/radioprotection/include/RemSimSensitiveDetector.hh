@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RemSimSensitiveDetector.hh,v 1.3 2005-09-08 06:56:18 guatelli Exp $
+// $Id: RemSimSensitiveDetector.hh,v 1.4 2006-05-31 08:56:54 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Code developed by: S.Guatelli, guatelli@ge.infn.it
@@ -37,16 +37,16 @@ class G4TouchableHistory;
 class RemSimSensitiveDetector : public G4VSensitiveDetector
 {
 
-  public:
-      RemSimSensitiveDetector (G4String name);
-      ~RemSimSensitiveDetector();
+public:
+  RemSimSensitiveDetector (G4String name);
+  ~RemSimSensitiveDetector();
 
-      void Initialize(G4HCofThisEvent*HCE);
-      G4bool ProcessHits(G4Step*aStep,G4TouchableHistory*);
-      void EndOfEvent(G4HCofThisEvent*HCE);
+  void Initialize(G4HCofThisEvent*HCE);
+  G4bool ProcessHits(G4Step*aStep,G4TouchableHistory*);
+  void EndOfEvent(G4HCofThisEvent*HCE);
 
-  private:
-
+private:
+  G4int i;
 };
 #endif
 

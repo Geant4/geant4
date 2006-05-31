@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RemSimSensitiveDetector.cc,v 1.13 2006-05-31 08:49:51 guatelli Exp $
+// $Id: RemSimSensitiveDetector.cc,v 1.14 2006-05-31 08:56:54 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Code developed by: S.Guatelli, guatelli@ge.infn.it
@@ -54,9 +54,11 @@ G4bool RemSimSensitiveDetector::ProcessHits(G4Step* aStep,
  
   if(edep==0.) return false;
 
+  i = ROhist -> GetReplicaNumber();
+
 #ifdef G4ANALYSIS_USE
   RemSimAnalysisManager* analysis = RemSimAnalysisManager::getInstance();
-  G4int i = ROhist -> GetReplicaNumber();
+  
   // Energy deposit in the phantom
   analysis -> energyDepositStore(i,edep/MeV);
   G4double xx = aStep -> GetPreStepPoint() -> GetPosition().x();
