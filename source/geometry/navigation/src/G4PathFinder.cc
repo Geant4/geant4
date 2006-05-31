@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PathFinder.cc,v 1.9 2006-05-27 00:13:09 japost Exp $
+// $Id: G4PathFinder.cc,v 1.10 2006-05-31 17:03:30 japost Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4PathFinder Implementation
@@ -108,7 +108,7 @@ G4PathFinder::ComputeStep( const G4FieldTrack &InitialFieldTrack,
   G4int navigatorNo=-1; 
 
 
-  if( fVerboseLevel > 2 ){ 
+  if( 1 ) {   //  ( fVerboseLevel > 2 ){ 
     G4cout << " -------------------------" <<  G4endl;
     G4cout << " G4PathFinder::ComputeStep - entered " << G4endl;
     G4cout << "   - stepNo = "  << std::setw(4) << stepNo  << " "
@@ -276,13 +276,14 @@ G4PathFinder::Locate( const   G4ThreeVector& position,
   std::vector<G4Navigator*>::iterator pNavIter= pTransportManager->GetActiveNavigatorsIterator(); 
   G4int num=0; 
 
-  G4ThreeVector lastPosition= fEndState.GetPosition(); 
-  G4ThreeVector moveVec = (position - lastPosition );
+  G4ThreeVector lastEndPosition= fEndState.GetPosition(); 
+  G4ThreeVector moveVec = (position - lastEndPosition );
   G4double      moveLenSq= moveVec.mag2();
   if( (!fNewTrack) && (!fRelocatedPoint) && ( moveLenSq> 0.0) ){
-     ReportMove( position, lastPosition, "Position" ); 
+     ReportMove( position, lastEndPosition, "Position" ); 
      G4Exception( "G4PathFinder::Locate", "LocateUnexpectedPoint", 
-	 	  FatalException,  "Location is not where last ComputeStep ended."); 
+	 	  JustWarning,   // FatalException,  
+		  "Location is not where last ComputeStep ended."); 
   }
   fLastLocatedPosition= position; 
 
@@ -290,11 +291,10 @@ G4PathFinder::Locate( const   G4ThreeVector& position,
     G4cout << G4endl; 
     G4cout << " G4PathFinder::Locate : entered " << G4endl;
     G4cout << " --------------------   -------" <<  G4endl;
-    G4cout << "   Locating at position " << position
-	   << "  with direction " << direction 
+    G4cout << "   Locating at position " << position << "  with direction " << direction 
 	   << "  relative= " << relative << G4endl;
     if ( (fVerboseLevel > 1) || ( moveLenSq > 0.0) ){ 
-       G4cout << "  lastPosition = " << lastPosition
+       G4cout << "  lastEndPosition = " << lastEndPosition
 	      << "  moveVec = " << moveVec
 	      << "  newTr = " << fNewTrack 
 	      << "  relocated = " << fRelocatedPoint << G4endl;
@@ -325,7 +325,7 @@ G4PathFinder::Locate( const   G4ThreeVector& position,
      fLimitedStep[num]   = kDoNot; 
      fCurrentStepSize[num] = 0.0;      
     
-     G4cout << " Located in world " << num 
+     G4cout << " Located in world " << num << " at " << position
 	    << "  used geomLimStp " << fLimitTruth[num]
 	    << "  - found in volume " << pLocated ; 
      G4cout << "  name = '" ; 
@@ -343,6 +343,66 @@ G4PathFinder::Locate( const   G4ThreeVector& position,
     G4cout << " G4PathFinder::Locate : exiting. " << G4endl;
     G4cout << G4endl;
   }
+  fRelocatedPoint= false;
+}
+
+void
+G4PathFinder::ReLocate( const   G4ThreeVector& position )
+  //	const   G4ThreeVector& direction, G4bool relative  )
+{
+  // Locate the point in each geometry
+  std::vector<G4Navigator*>::iterator pNavIter= pTransportManager->GetActiveNavigatorsIterator(); 
+  G4int num=0; 
+
+  // Check that move since last location or relocation is within safety
+  // 
+  G4ThreeVector lastPositionLocated= fLastLocatedPosition; 
+  G4ThreeVector moveVec = (position - lastPositionLocated );
+  G4double      moveLenSq= moveVec.mag2();
+  if( (!fNewTrack) && ( moveLenSq > fMinSafety*fMinSafety) ){
+     ReportMove( position, lastPositionLocated, "Position" ); 
+     G4cout << " Moved by " << std::sqrt(moveLenSq) 
+	    << " compared to safety " << fMinSafety << G4endl; 
+     G4Exception( "G4PathFinder::ReLocate", "RelocatePointTooFar", 
+	 	   FatalException,  
+		  "ReLocation is further than safety from last location."); 
+  }
+
+  if( 1 ) {            // ( fVerboseLevel > 2 ){
+    G4cout << G4endl; 
+    G4cout << " G4PathFinder::ReLocate : entered " << G4endl;
+    G4cout << " ----------------------   -------" <<  G4endl;
+    G4cout << "  *Re*Locating at position " << position  << G4endl; 
+      // << "  with direction " << direction 
+      // << "  relative= " << relative << G4endl;
+    if ( (fVerboseLevel > -1) || ( moveLenSq > 0.0) ){ 
+       G4cout << "  lastPositionLocated = " << lastPositionLocated
+	      << "  moveVec = " << moveVec
+	      << "  newTr = " << fNewTrack 
+	      << "  relocated = " << fRelocatedPoint << G4endl;
+    }
+  }
+
+  for ( num=0; num< fNoActiveNavigators ; ++pNavIter,++num ) {
+
+     //  ... none limited the step
+
+     (*pNavIter)->LocateGlobalPointWithinVolume( position ); 
+     //*************************************//
+
+     // Clear state related to the step
+     fLimitedStep[num]   = kDoNot; 
+     fCurrentStepSize[num] = 0.0;      
+    
+     G4cout << " ReLocated in world " << num << " at " << position << G4endl;
+  }
+
+  if( fVerboseLevel > 2 ){
+    G4cout << " G4PathFinder::ReLocate : exiting. " << G4endl;
+    G4cout << G4endl;
+  }
+
+  fLastLocatedPosition= position; 
   fRelocatedPoint= false;
 }
 
