@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4UHadronElasticProcess.cc,v 1.12 2006-05-29 12:43:07 vnivanch Exp $
+// $Id: G4UHadronElasticProcess.cc,v 1.13 2006-05-31 18:06:34 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Geant4 Hadron Elastic Scattering Process -- header file
@@ -114,7 +114,7 @@ G4double G4UHadronElasticProcess::GetMeanFreePath(const G4Track& track,
 	   << "  p(GeV)= " << dp->GetTotalMomentum()/GeV
 	   << " in " << material->GetName()
 	   << G4endl; 
-
+ 
   for (G4int i=0; i<nelm; i++) {
     const G4Element* elm = (*theElementVector)[i];
     G4double x = GetMicroscopicCrossSection(dp, elm, temp);
@@ -199,9 +199,9 @@ G4VParticleChange* G4UHadronElasticProcess::PostStepDoIt(
 				  const G4Track& track, 
 				  const G4Step& step)
 {
-  G4ForceCondition* cn = 0;
+  G4ForceCondition   cn;
   aParticleChange.Initialize(track);
-  G4double mfp = GetMeanFreePath(track, 0.0, cn);
+  G4double mfp = GetMeanFreePath(track, 0.0, &cn);
   if(mfp == DBL_MAX) return G4VDiscreteProcess::PostStepDoIt(track,step);
 
   G4double kineticEnergy = track.GetKineticEnergy();
