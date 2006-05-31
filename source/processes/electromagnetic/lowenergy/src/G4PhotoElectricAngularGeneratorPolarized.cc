@@ -229,7 +229,7 @@ G4double G4PhotoElectricAngularGeneratorPolarized::DSigmaKshellGavrila1959(const
               (sinTheta2 * cosPhi2)/std::pow(oneBetaCosTheta,3) + (1-sqrtOneBeta2)*
               (1-sqrtOneBeta2)/(4*oneBeta2_to_3_2) * sinTheta2/std::pow(oneBetaCosTheta,3);
 
-  secondTerm = std::sqrt(1 - sqrtOneBeta2)/(std::pow(2,3.5)*beta2*std::pow(oneBetaCosTheta,2.5)) *
+  secondTerm = std::sqrt(1 - sqrtOneBeta2)/(std::pow(2.,3.5)*beta2*std::pow(oneBetaCosTheta,2.5)) *
                (4*beta2/sqrtOneBeta2 * sinTheta2*cosPhi2/oneBetaCosTheta + 4*beta/oneBeta2 * cosTheta * cosPhi2
                - 4*(1-sqrtOneBeta2)/oneBeta2 *(1+cosPhi2) - beta2 * (1-sqrtOneBeta2)/oneBeta2 * sinTheta2/oneBetaCosTheta
                + 4*beta2*(1-sqrtOneBeta2)/oneBeta2_to_3_2 - 4*beta*(1-sqrtOneBeta2)*(1-sqrtOneBeta2)/oneBeta2_to_3_2 * cosTheta)
@@ -265,7 +265,7 @@ G4double G4PhotoElectricAngularGeneratorPolarized::DSigmaL1shellGavrila(const G4
               *  (sinTheta2 * cosPhi2)/std::pow(oneBetaCosTheta,3) + (1-sqrtOneBeta2)*
               (1-sqrtOneBeta2)/(4*oneBeta2_to_3_2) * sinTheta2/std::pow(oneBetaCosTheta,3);
 
-  secondTerm = std::sqrt(1 - sqrtOneBeta2)/(std::pow(2,3.5)*beta2*std::pow(oneBetaCosTheta,2.5)) *
+  secondTerm = std::sqrt(1 - sqrtOneBeta2)/(std::pow(2.,3.5)*beta2*std::pow(oneBetaCosTheta,2.5)) *
                (4*beta2/sqrtOneBeta2 * sinTheta2*cosPhi2/oneBetaCosTheta + 4*beta/oneBeta2 * cosTheta * cosPhi2
                - 4*(1-sqrtOneBeta2)/oneBeta2 *(1+cosPhi2) - beta2 * (1-sqrtOneBeta2)/oneBeta2 * sinTheta2/oneBetaCosTheta
                + 4*beta2*(1-sqrtOneBeta2)/oneBeta2_to_3_2 - 4*beta*(1-sqrtOneBeta2)*(1-sqrtOneBeta2)/oneBeta2_to_3_2 * cosTheta)
