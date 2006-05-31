@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4UHadronElasticProcess.cc,v 1.13 2006-05-31 18:06:34 vnivanch Exp $
+// $Id: G4UHadronElasticProcess.cc,v 1.14 2006-05-31 18:30:13 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Geant4 Hadron Elastic Scattering Process -- header file
@@ -141,7 +141,7 @@ G4double G4UHadronElasticProcess::GetMicroscopicCrossSection(
   G4int iz = G4int(elm->GetZ());
   G4double x = 0.0;
   // CHIPS cross sections
-  if(iz <= -2 && (theParticle == theProton || theParticle == theNeutron)) {
+  if(iz <= 2 && (theParticle == theProton || theParticle == theNeutron)) {
     G4double momentum = dp->GetTotalMomentum();
     if(iz == 1) {
       G4IsotopeVector* isv = elm->GetIsotopeVector(); 
