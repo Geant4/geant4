@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PathFinder.hh,v 1.11 2006-05-27 00:10:30 japost Exp $
+// $Id: G4PathFinder.hh,v 1.12 2006-05-31 17:02:45 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // class G4PathFinder 
@@ -82,7 +82,11 @@ class G4PathFinder
    void Locate( const G4ThreeVector& position, 
 		const G4ThreeVector& direction,
 		G4bool  relativeSearch= true); 
-     // Relocate global point in all navigators, and update them.
+     // Make primary relocation of global point in all navigators, and update them.
+
+   void ReLocate( const G4ThreeVector& position ); 
+     // Make secondary relocation of global point (within safety only) 
+     //   in all navigators, and update them.
 
    void PrepareNewTrack( G4ThreeVector position, G4ThreeVector direction); 
      // Check and cache set of active navigators
