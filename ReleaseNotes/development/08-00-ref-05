@@ -1,0 +1,362 @@
+
+                       geant4-08-00-ref-05
+                       ===================
+
+Some of the development/fixes included since the last reference tag are:
+
+  o Introducing new material scanner utility.
+  o Extended G4AssemblyVolume to support assembly of assemblies and
+    reflection of volumes.
+  o Fixed memory leak in G4VRangeToEnergyConverter::BuildLossTable()
+    responsible for observed run-time memory increase in case of large
+    number of loaded materials.
+  o Development Beta-release of photoelectric angular distribution models
+    DNA very low=energy processes in water.
+  o Improved multiple-scattering in thin layers.
+  o Introduction of muon-muclear, photo-nuclear, electro-nuclear
+    and tau-nuclear reactions in CHIPS hadronic model.
+  o Installed option to turn off neutron suspension in HP-Elastic models.
+  o The WLS time delay can now be a delta function or exponential for
+    optical processes.
+
+---------- Reference-tag 'Release Notes' -----------
+
+
+Summarised, the list of changes is the following:
+
+event                                            event-V08-00-03
+-----
+- G4EventManager:
+  o Set G4Event pointer before the G4State is changed.
+  o Store random number status to G4Event.
+- Imported G4RayShooter class from visualization/RayTracer.
+
+geometry/magneticfield                           field-V08-00-05
+----------------------
+- G4FieldTrack
+  o Added charge and moments to FieldTrack, with accessors.
+  o Added new constructors, one with charge and without velocity
+    and one taking a const reference to Spin,
+  o New implementation method UpdateFourMomentum().
+  o Streaming operator takes const reference and outputs momentum
+    and direction magnitudes.
+
+geometry/management                              geommng-V08-00-05
+-------------------
+- Modified G4VStoreNotifier class to be now a typedef of G4VNotifier which
+  is moved in the 'global' module. Adapted stores to the new configuration.
+- Moved G4AssemblyTriplet class to 'volumes' module.
+- G4Region:
+  o Added inclusion of <algorithm> to resolve compilation error on WIN32-VC.
+  o Fixed compilation warning for unused variable.
+- G4VPhysicalVolume: return 'const G4String&' for GetName() instead of a
+  string copy.
+
+geometry/navigation                              geomnav-V08-00-01
+-------------------
+- Extended G4TransportationManager to handle multiple navigators.
+  Preserved interface for navigation in mass/tracking geometry.
+- Added activation flag to G4Navigator and related accessor methods.
+
+geometry/solids/Boolean                          geom-bool-V08-00-00
+-----------------------
+- Fix in G4IntersectionSolid::CalculateExtent() for the correctly handling
+  extent computation for nested intersections and always respect the rule
+  pMax > pMin.
+
+geometry/solids/specific                         geom-specific-V08-00-08
+------------------------
+- Fix in G4Ellipsoid::SetZCuts() and G4EllipticalTube::SetZCut() for usage
+  of uninitialised variables.
+- Cleared compilation warning on SUN-CC in G4TriangularFacet implementation.
+- Added 4 unit tests for G4TessellatedSolid.
+
+geometry/volumes                                 geomvol-V08-00-04
+----------------
+- G4AssemblyVolume:
+  o Now G4AssemblyVolume can support assembly of assemblies and reflections.
+    Reviewed and modified MakeImprint() methods to act recursively.
+  o Added methods GetVolumesIterator() and TotalImprintedVolumes() for
+    accessing the list of physical-volumes imprinted.
+  o Cleaned up comments and descriptions.
+- Extended overlaps check also for reflection of placements.
+- Moved G4AssemblyTriplet class from 'management' module.
+- Protect against checking overlaps on world volume placement ...
+
+global                                           global-V08-00-03
+------
+- Added G4VNotifier class, renamed from G4VStoreNotifier implemented inside
+  the geometry module. The class is a simple abstract class allowing for
+  implementation of user notifiers to be activated for example at
+  registration/deregistration of objects in stores.
+- Clear entries in table in destructor of G4UnitDefinition.
+
+graphics_reps                                    greps-V08-00-03
+-------------
+- Add FilterTrajectory() method to G4VVisManager.
+
+materials                                        materials-V08-00-03
+---------
+- G4NistManager:
+  o Added GetIsotopeAbundance() method.
+  o Added warning flag to control standard output.
+- G4NistElementBuider: added GetIsotopeAbundance() method.
+- G4NistMaterialBuider: added warning flag to control standard output.
+
+parameterisations/gflash                         gflash-V08-00-00
+------------------------
+- Fixed compilation warning on SUN-CC in GFlashSamplingShowerParameterisation
+  implementation.
+
+particles                                        particles-V08-00-05
+---------
+- Fixed memory leak in G4MuonDecayChannel.
+  Addressing problem report #864.
+
+processes/cuts                                   procuts-V08-00-01
+--------------
+- Fixed memory leak in G4VRangeToEnergyConverter::BuildLossTable(),
+  fixing a problem detected and reported by ATLAS.
+
+processes/electromagnetic/lowenergy              emlowen-V08-00-06
+-----------------------------------
+- New developments: photoelectric angular distribution models Geant4-DNA
+  very lowE physics processes in water.
+  The photoelectric angular distribution models have some temporary design
+  features (function arguments passed by value etc.), and preliminary code
+  implementation
+  The present version of the DNA processes is meant as a first beta release,
+  and is not suitable for physics application yet.
+
+processes/electromagnetic/muons                  emmuons-V08-00-03
+-------------------------------
+- G4EnergyLossForExtrapolator: fixed compilation warning.
+
+processes/electromagnetic/standard               emstand-V08-00-25
+----------------------------------
+- New class G4WaterStopping for light ion stopping in water.
+- New classes G4ASTARStopping and G4PSTARStopping with NIST data on stopping
+  powers, used by G4BraggModel and G4BraggIonModel
+- G4eBremsstrahlung: use 'gammaThreshold' from G4LossTableManager for
+  more easier initialisation (CMS request).
+- G4MollerBhabhaModel: fix for 'MinEnergyCut'.
+- G4BetheBlochModel: use different formula for muons and hadrons for 'tmax'.
+- G4ionIonisation: added possibility to use user data on stopping power.
+- G4hIonisation: spin/mass effect update.
+- G4MultipleScattering:
+  o Changed values of data members 'tkinlimit', 'factail'.
+  o Providing possibility of reinitialisation of 'facrange' and
+    'steppingAlgorithm' parameters between runs.
+- G4UrbanMscModel:
+  o Improved scattering in thin layers.
+  o New data members; changes in ComputeTruePathLengthLimit(),
+    and in SampleCosineTheta().
+
+processes/electromagnetic/utils                  emutils-V08-00-18
+-------------------------------
+- G4VEnergyLossProcess, G4VEmProcess, G4VMultipleScattering:
+  o Added GetModelByIndex() and NumberOfModels() methods.
+  o Added random step sampling  to G4VEnergyLossProcess and minor
+    fix to subcut.
+- G4EmProcessOptions, G4LossTableManager:
+  o Added Get/SetBremsstrahlungTh() method (CMS request).
+- G4EmCalculator:
+  o Added correction from user data on stopping power.
+- G4LOssTableManager:
+  o Added methods SetMscStepLimitation(), FacRange(), and MscFlag().
+  o Added command 'MscStepLimitation' in G4LossTableMessenger.
+- G4EmCorrections:
+  o Added correction from user data on stopping power.
+  o Added finite size correction and cleanup.
+  o Fixed compilation warning at SUN.
+- G4EmCalculator: removed debug output.
+- G4ionEffectiveCharge: extended upper limit to 50 MeV.
+
+processes/electromagnetic/xrays                  xrays-V08-00-03
+-------------------------------
+- Split G4SynchrotronRadiation in two processes: G4SynchrotronRadiation
+  and G4SynchrotronRadiationInMat.
+
+processes/hadronic/models/cascade                hadr-casc-V08-00-00
+---------------------------------
+- Removed G4BERTINI_KAON conditional assembly flags.
+- G4ElasticCascadeInterface derives from G4VIntraNuclearTransportModel
+  instead of G4HadronElastic. Check for case when no elastic scattering
+  occurs. If so, return original bullet and target.
+
+processes/hadronic/models/coherent_elastic       ghad-cohe-V08-00-03
+------------------------------------------
+- Moved G4LElasticB from low_energy module and renamed to G4HadronElastic.
+  Bug fixes: removed charge exchange option, removed low limit on primary
+  momentum; added limit on secondary kinetic energy; added only s-wave
+  regime for low momentum scattering. Use np scattering from CHIPS model;
+  fixed run time warnings.
+- Added new process G4UHadronElasticProcess allowing to use G4Isotopes
+  composition of elements defined by user and uses cross sections from
+  CHIPS model and HP models when appropriate.
+
+processes/hadronic/models/chiral../body          hadr-chips-body-V08-00-03
+---------------------------------------
+- Fixed problem of negative value to sqrt() in G4Quasmon and G4QEnvironment.
+
+processes/hadronic/models/chiral../interface     hadr-chips-inter-V08-00-08
+--------------------------------------------
+- Introduction of CHIPS muon-muclear, photo-nuclear, electro-nuclear
+  and tau-nuclear reactions.
+- Upgraded cashing method for the CHIPS cross-sections.
+- G4QElastic:
+  o High t exponential improvement of pp elastic.
+  o Added isotop-symmetric nd(=pd) and nHe4(=pHe4).
+
+processes/hadronic/models/low_energy             hadr-lep-V08-00-01
+------------------------------------
+- Removed subtraction of electron masses from atomic mass in some low
+  energy models. This is because the method G4Nucleus::AtomicMass()
+  now already makes the subtraction.
+- Moved G4LElasticB to coherent_elastic module.
+
+processes/hadronic/models/management             hadr-modman-V08-00-02
+------------------------------------
+- G4InelasticInteraction: in method CalculateMomenta(), save current target
+  and secondaries in case annihilation fails in GenerateXandPt(), then restore
+  them for use in TwoCluster(). Fixed memory leak in method CalculateMomenta()
+  where target, projectile and secondaries are cached.
+
+processes/hadronic/models/neutron_hp             hadr-hpn-V08-00-02
+------------------------------------
+- Installed option to turn off neutron suspension in HP-Elastic models.
+- Added method DoNotSuspend() to G4NeutronHPElastic and G4NeutronHPorLElastic.
+
+processes/hadronic/stopping                      hadr-stopping-V08-00-01
+---------------------------
+- Fixed 4-momentum balance in mu- stopping.
+
+processes/hadronic/util                          hadr-util-V08-00-05
+-----------------------
+- G4Nucleus:
+  o Replaced code in method AtomicMass() with:
+       G4NucleiProperties::GetNuclearMass(A, Z)
+    for agreement with other methods for getting nucleus mass.
+  o Note: new version has electron masses subtracted, while old version
+    included them
+- G4ReactionDynamics:
+  o In energy balance part of method GenerateXandPt, try removing pions and
+    kaons before removing nucleons.
+  o In method GetFinalStateNucleons(), improved and simplified nucleon
+    counting.
+  o Method SuppressChargedPions(): check available CM energy before changing
+    pion to nucleon, also extended test for anti-particles to include strange
+    particles.
+  o In methods GenerateXandPt() and TwoCluster(), call GenerateNBodyEvent()
+    a second time if energy sum is violated, this time with total system
+    energy.
+  o In method TwoCluster(), use annihilation black track energy when
+    annihilation channel occurs.
+
+processes/optical                                op-V08-00-01
+-----------------
+- The WLS time delay can now be a delta function or exponential.
+  New classes: G4VWLSTimeGeneratorProfile, G4WLSTimeGeneratorProfileDelta
+  and G4WLSTimeGeneratorProfileExponential.
+
+run                                              run-V08-00-03
+---
+- Introducing new material scanner utility.
+- Store random number status in G4Run and G4Event.
+
+tracking                                         tracking-V08-00-02
+--------
+- Bug fix for StepStatus when a track is outside of WorldBoundary.
+  Addressing problem report #866.
+- G4VSteppingVerbose:
+  o New flags introduced for more verbosity control.
+  o Added Silent and SilentStepInfo data members.
+- New CVS header inserted to all of files.
+
+visualization                                    vis-V08-00-07
+-------------
+- Main features:
+  o Added protection against non-instantiation of run manager.
+  o Improved protection for null models and parameters.
+  o Improved trajectory drawing.
+  o Final refinements for re-computation of transients.
+- management:
+  o Added new commands /vis/list and /vis/scene/add/eventID.
+- modeling:
+  o Removed dependency on G4RunManager.
+  o G4CallbackModel: added G4VGraphicsScene argument to operator().
+  o Added context to trajectory drawers.
+  o Added generic drawer, G4TrajectoryGenericDrawer.
+- OpenGL:
+  o G4OpenGLWin32Viewer: fixed buffer swapping behaviour.
+- Raytracer:
+  o Moved G4RayShooter class to Event category.
+
+examples                                         examples-V08-00-05
+--------
+- Updated reference outputs.
+- examples/advanced/raredecay_calorimetry       raredecay- V08-00-00
+  o New example simulating a simplified sandwitch calorimeter for
+    estimate importance of photonuclear reactions for photon inefficiency
+    and compare effectiveness of different absorbers to reduce it.
+- extended/electromagnetic/TestEm0 (testem0-V08-00-03)
+  o Modified binning for CSDA range table.
+- extended/electromagnetic/TestEm1 (testem1-V08-00-04)
+- extended/electromagnetic/TestEm2 (testem2-V08-00-04)
+  o Updated README
+- extended/electromagnetic/TestEm3 (testem3-V08-00-03)
+  o Use touchable in stepping-action.
+  o Updated README
+- extended/electromagnetic/TestEm4 (testem4-V08-00-01)
+  o Updated README
+- extended/electromagnetic/TestEm5 (testem5-V08-00-02)
+  o Count energy of killed secondaries.
+  o Print full dEdx.
+  o Updated README
+- extended/electromagnetic/TestEm6 (testem6-V08-00-01)
+  o Register G4StepLimiter in PhysicsList.
+- extended/electromagnetic/TestEm7 (testem7-V08-00-04)
+  o Use touchable in stepping-action.
+  o Updated README
+- extended/electromagnetic/TestEm9 (testem9-V08-00-00)
+  o Updated README
+- extended/electromagnetic/TestEm10 (testem10-V08-00-01)
+  o General cleanup and removed obsolete files.
+- extended/electromagnetic/TestEm11 (testem11-V08-00-02)
+- extended/electromagnetic/TestEm12 (testem12-V08-00-02)
+  o Updated README
+- extended/electromagnetic/TestEm13 (testem13-V08-00-08)
+- extended/electromagnetic/TestEm14 (testem14-V08-00-04)
+  o Added protection in DetectorConstruction::UpdateDeometry().
+  o Updated README
+- extended/electromagnetic/TestEm15 (testem15-V08-00-04)
+  o Added protection in DetectorConstruction::UpdateDeometry().
+  o Added phi correlation.
+  o Use touchable in stepping-action.
+  o Updated README
+- extended/electromagnetic/TestEm16 (testem16-V08-00-01)
+  o New example for the simulation of synchrotron radiation.
+- extended/electromagnetic/TestEm16 (testem17-V08-00-00)
+  o New example to check implementation of the processes
+    of muon interactions: ionization, direct (e+,e-) production,
+    bremsstrahlung, mu-nuclear interaction.
+- examples/extended/optical/LXe (LXe-V08-00-01)
+  o Exhibit choice of WLS time delay via new classes of
+    G4VWLSTimeGeneratorProfile.
+- examples/extended/visualization (exam-ext-vis-V08-00-00)
+  o New example "perspective". Follow changes in G4Colour statics.
+- examples/novice/N03 (exampleN03-V08-00-02)
+  o Use preStepPoint and touchable in stepping-action.
+
+tests                                            tests-V08-00-05
+-----
+- Updated reference outputs and GNUmakefile.
+- test01 (test01-V08-00-02)
+  o Added 'Assembly2' and 'Assembly3' exercising a setup made of an
+    assembly of assemblies and a setup with reflections respectively.
+  o Added complete honeycomb detector to the setup.
+  o Corrected primary generators for computation of world extent.
+  o Corrected problem of overlap in boolean constructs.
+  o Corrected implementation of boolean detector for switching command.
+  o Added more useful printout and updated input macros.
+
