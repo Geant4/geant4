@@ -26,7 +26,7 @@
 //    *                                *
 //    **********************************
 //
-// $Id: RemSimAnalysisManager.hh,v 1.9 2006-03-15 09:54:15 guatelli Exp $
+// $Id: RemSimAnalysisManager.hh,v 1.10 2006-05-31 08:49:49 guatelli Exp $
 //
 // Author: Susanna Guatelli (guatelli@ge.infn.it)
 //
@@ -62,21 +62,13 @@ public:
 
   void energyDepositStore(G4int, G4double); 
   // Collect the energy deposit in the phantom 
-                                           
-  void primaryParticleEnergyDistribution(G4double);
-  // Distribution of the Initial energy of primary particles
+  // deriving from primary and secondary particles                                         
 
-  void primaryParticleEnergy(G4double);
+  void primaryParticleEnergyDistribution(G4double);
   // Initial energy of primary particles
 
   void SecondaryEnergyDeposit(G4int, G4double);
   // Energy deposit given by secondary particles in the phantom
-
- void SecondaryProtonEnergyDeposit(G4int, G4double);
-  // Energy deposit given by secondary protons in the phantom
-
- void SecondaryPionEnergyDeposit(G4int, G4double);
-  // Energy deposit given by secondary pions in the phantom
 
   void PrimaryInitialEnergyIn(G4double);
   // Initial energy of primary particles impinging on the phantom
@@ -91,14 +83,19 @@ public:
   // Energy of primary particles outgoing the phantom 
 
   void particleShape(G4double, G4double);
+  // Position of the energy deposits in the phantom, projected in the plane perpendicular
+  // to the direction of the primary particles (z axis)
 
   void energyDepShape(G4double, G4double, G4double);
-  void eDepSec(G4int, G4double);
+  // Energy deposits in the phantom, projected in the plane perpendicular
+  // to the direction of the primary particles (z axis)
 
   void SetFormat(G4String);
-  void SecondaryInPhantom(G4int);
+  // At the moment it is not possible to switch the formta of the file
+  // Number of secondary particles produced in the phantom
+  void SecondaryInPhantom(G4int); 
 
-  // energy spectrum of secondaries originated in the phantom
+  // Energy spectrum of secondary particles originated in the phantom
   void SecondaryProtonInPhantom(G4double);
   void SecondaryNeutronInPhantom(G4double);
   void SecondaryPionInPhantom(G4double);
@@ -119,8 +116,11 @@ public:
   void SecondaryMuonInPhantomSlice(G4double);
   void SecondaryOtherInPhantomSlice(G4double);
 
+  // Number of secondary particles reaching the phantom
   void SecondaryReachingThePhantom(G4int);
- void SecondaryProtonReachingThePhantom(G4double);
+
+  // Energy spectrum of secondary particles reaching the phantom
+  void SecondaryProtonReachingThePhantom(G4double);
   void SecondaryNeutronReachingThePhantom(G4double);
   void SecondaryPionReachingThePhantom(G4double);
   void SecondaryAlphaReachingThePhantom(G4double);
@@ -129,20 +129,13 @@ public:
   void SecondaryGammaReachingThePhantom(G4double);
   void SecondaryMuonReachingThePhantom(G4double);
   void SecondaryOtherReachingThePhantom(G4double);
+  
+ // Number of secondary particles produced in the vehicle
   void SecondaryInVehicle(G4int);
 
-  void ProtonSecondSlice(G4double);
-  void PionSecondSlice(G4double);
-  void Proton15Slice(G4double energy);
-  void Pion15Slice(G4double energy);
-  void Proton16Slice(G4double energy);
-  void Pion16Slice(G4double energy);
- 
-
- void finish();
+  void finish();
 
 private:
-
   static RemSimAnalysisManager* instance;
   RemSimAnalysisManager();
 
@@ -150,15 +143,13 @@ private:
   AIDA::ITreeFactory*      treeFact;
   AIDA::ITree*             theTree;
 
-  AIDA::IDataPointSetFactory *  dataPointFactory; 
+  AIDA::IDataPointSetFactory * dataPointFactory; 
   AIDA::IHistogramFactory*     histogramFactory;
 
-  AIDA::IDataPointSet *  dataPoint; 
+  AIDA::IDataPointSet* dataPoint; 
   AIDA::IHistogram1D* energyDeposit; 
   AIDA::IHistogram1D* primary;  
   AIDA::IHistogram1D* secondaryDeposit; 
-  AIDA::IHistogram1D* secondaryProtonEnergyDeposit; 
-  AIDA::IHistogram1D* secondaryPionEnergyDeposit; 
   AIDA::IHistogram1D* primaryInitialE;
   AIDA::IHistogram1D* primaryInitialEout;
   AIDA::IHistogram1D* initialE;
@@ -198,13 +189,7 @@ private:
   AIDA::IHistogram1D* histo_muon_slice;
   AIDA::IHistogram1D* histo_other_slice;
   AIDA::IHistogram1D* histo_vehicle;
-  AIDA::IHistogram1D* proton_secondslice;
-  AIDA::IHistogram1D* pion_secondslice;
-  AIDA::IHistogram1D* proton_15slice;
-  AIDA::IHistogram1D* pion_15slice;
-  AIDA::IHistogram1D* proton_16slice;
-  AIDA::IHistogram1D* pion_16slice;
-
+ 
   G4String fileFormat; 
 };
 #endif

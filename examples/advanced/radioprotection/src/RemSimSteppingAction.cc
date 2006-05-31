@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RemSimSteppingAction.cc,v 1.8 2006-03-15 09:54:15 guatelli Exp $
+// $Id: RemSimSteppingAction.cc,v 1.9 2006-05-31 08:49:51 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -93,17 +93,20 @@ void RemSimSteppingAction::UserSteppingAction(const G4Step* aStep)
 		   particleName == "IonSi28")
 		{
 		 G4int baryon = aStep -> GetTrack() -> GetDefinition() -> GetBaryonNumber();
-		 // plot of MeV/nucl
+		
+                 // Initial energy of primary particles impinging on the phantom
 		 analysis -> PrimaryInitialEnergyIn((initialEnergy/baryon)/MeV);
+                 
+		 // Energy of primary particles impinging on the phantom
 	         analysis -> PrimaryEnergyIn((particleEnergy/baryon)/MeV);
 		}
 		}
-              // secondary particle reaching the astronaut
-	      else {
+	        // secondary particle reaching the astronaut
+	        else {
        
-               // if i =0  secondary proton, i =1 neutron, i=2 pion, i=3 alpha, 
-               // i =4 other, i=5 electron, i = 6 gamma, i=7 positrons, 
-               // i=8 muons, i=9 neutrinos
+		  // if i =0  secondary proton, i =1 neutron, i=2 pion, i=3 alpha, 
+		  // i =4 other, i=5 electron, i = 6 gamma, i=7 positrons, 
+		  // i=8 muons, i=9 neutrinos
 
 		if (particleName == "proton") 
 		  {
@@ -154,7 +157,8 @@ void RemSimSteppingAction::UserSteppingAction(const G4Step* aStep)
 			       else {
 				 if (particleName == "nu_e" || particleName == "nu_mu" ||
                                      particleName == "anti_nu_e" || particleName == "anti_nu_mu")
-				 { analysis -> SecondaryReachingThePhantom(9);}
+				 { analysis -> SecondaryReachingThePhantom(9);
+				}
 			       else{ 
 				 analysis -> SecondaryReachingThePhantom(4);
 				 analysis -> SecondaryOtherReachingThePhantom(particleEnergy/MeV);
@@ -166,84 +170,14 @@ void RemSimSteppingAction::UserSteppingAction(const G4Step* aStep)
 		       }
 		     }
 		  }
-	    }
+	         }
 	      }
 	    }
 	}
     }
-
-  // secondaries that enter in the second, 15th and 16th  slice of the phantom
-  if(oldVolumeName == "phantom") 
-    { 
-      if (volume) 
-	{         
-	  G4String volumeName = volume -> GetName();
-	  if (volumeName == "phantom")
-	    { 
-	      if(aStep -> GetTrack() -> GetTrackID()!= 1) // secondary particle
-		{
-		  G4double zIn = aStep -> GetPreStepPoint() -> GetPosition().z();
-		  G4double zOut = aStep -> GetPostStepPoint() -> GetPosition().z();
-		  G4String particleName = (aStep -> GetTrack() -> GetDynamicParticle()
-					   -> GetDefinition() -> GetParticleName());
-		  G4double particleEnergy = aStep->GetTrack() -> GetKineticEnergy();
-		
-		  if( (zIn < -14. * cm) && (zOut > - 14.* cm)) // What enters in the second slice
-		    { 
-		      if (particleName == "proton") 
-			{analysis -> ProtonSecondSlice(particleEnergy/MeV); 
-			//	G4cout <<"Particle: "<< particleName<<"I slice -- zin: " <<zIn <<"zout: "
-			//      << zOut <<"Energy: "<< particleEnergy<<G4endl;
-			}
-			if (particleName == "pi+" ||
-			  particleName == "pi-" ||
-			  particleName == "pi0" )
-			  {
-			    analysis -> PionSecondSlice(particleEnergy/MeV);
-			    //  G4cout <<"Particle: "<< particleName<<"I slice -- zin: " <<zIn <<"zout: "
-			    //   << zOut <<"Energy: "<< particleEnergy<<G4endl;
-		    }
-		    }
-		  if ( (zIn < -1. * cm) && (zOut > - 1.* cm)) // What enters in the 15th slice
-		    { 
-		 
-		      if (particleName == "proton")
-			{analysis -> Proton15Slice(particleEnergy/MeV); 
-			//	G4cout <<"Particle: "<< particleName<<"15th slice -- zin: " <<zIn <<"zout: "
-			//      << zOut <<"Energy: "<< particleEnergy<<G4endl;
-			}		     
-		      if (particleName == "pi+" ||
-			  particleName == "pi-" ||
-			  particleName == "pi0" )
-			{analysis -> Pion15Slice(particleEnergy/MeV);
-	
-			//G4cout <<"Particle: "<< particleName<<"15th slice -- zin: " <<zIn <<"zout: "
-			//      << zOut <<"Energy: "<< particleEnergy<<G4endl;
-			}
-		    }
-		  if ( (zIn < 0. * cm) && (zOut > 0.* cm)) // What enters in the 16th slice
-		    { 
-		 
-		      if (particleName == "proton") 
-			{analysis -> Proton16Slice(particleEnergy/MeV);
-			//G4cout <<"Particle: "<< particleName<<"16th slice -- zin: " <<zIn <<"zout: "
-			//      << zOut <<"Energy: "<< particleEnergy<<G4endl;
-			}
-		      if (particleName == "pi+" ||
-			  particleName == "pi-" ||
-			  particleName == "pi0" )
-			{
-			  analysis -> Pion16Slice(particleEnergy/MeV);
-			  //G4cout <<"Particle: "<< particleName<<"16th slice -- zin: " <<zIn <<"zout: "
-			  //	 << zOut <<"Energy: "<< particleEnergy<<G4endl;
-			}	    }
-		}
-	    }
-	}
-    }
-	       
+   
 	   
-  // primaries outgoing the phantom
+  // Primar particles outgoing the phantom
   if(oldVolumeName == "phantom") 
     { 
       if (volume) 
@@ -273,7 +207,8 @@ void RemSimSteppingAction::UserSteppingAction(const G4Step* aStep)
 	    }
 	}
     }
-  // Analysis of the secondaries generated in the phantom
+
+  // Analysis of the secondary particles generated in the phantom
 
   G4SteppingManager*  steppingManager = fpSteppingManager;
   G4Track* theTrack = aStep -> GetTrack();
@@ -290,8 +225,10 @@ void RemSimSteppingAction::UserSteppingAction(const G4Step* aStep)
        // in the vehicle
        G4String volumeName = (*fSecondary)[lp1] -> GetVolume() -> GetName(); 
        G4String secondaryParticleName =  (*fSecondary)[lp1]->GetDefinition() -> GetParticleName();  
-       G4double secondaryParticleKineticEnergy =  (*fSecondary)[lp1] -> GetKineticEnergy();     
-       // if the secondaries are originated in the phantom....
+       G4double secondaryParticleKineticEnergy =  (*fSecondary)[lp1] -> GetKineticEnergy(); 
+       G4String process = (*fSecondary)[lp1]-> GetCreatorProcess()-> GetProcessName();   
+      
+       // If the secondaries are originated in the phantom....
        if (volumeName == "phantom")
 	 {
 	 
@@ -325,7 +262,7 @@ void RemSimSteppingAction::UserSteppingAction(const G4Step* aStep)
 		     analysis -> SecondaryInPhantom(2);
 		     analysis -> SecondaryPionInPhantom(secondaryParticleKineticEnergy/MeV);
 		     slice = slice + translation;
-		     analysis -> SecondaryPionInPhantomSlice(slice/cm);
+		     analysis -> SecondaryPionInPhantomSlice(slice/cm);  
 		   }
 		 else{
 		   if (secondaryParticleName == "alpha") 
@@ -386,6 +323,7 @@ void RemSimSteppingAction::UserSteppingAction(const G4Step* aStep)
 	       }
 	     }
 	 }
+
        // secondary particles produced in the multilayer + shielding
        else{ 
 	 if (volumeName != "world")
@@ -457,7 +395,7 @@ void RemSimSteppingAction::UserSteppingAction(const G4Step* aStep)
 	       (process != "LowEnPhotoElec") && 
 	       (process != "LowEnRayleigh") && 
 	       (process != "LowEnConversion"))
-	     G4cout << "Hadronic Process:" << process << G4endl;
+     	     G4cout << "Hadronic Process:" << process << G4endl;
 	 }
      }
 }

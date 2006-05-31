@@ -9,7 +9,7 @@
 0. INTRODUCTION
 
 The Radioprotection example derives from a Geant4 application
- ( look www.ge.infn.it/geant4/space/remsim for more details ) whose scope 
+( look www.ge.infn.it/geant4/space/remsim for more details ) whose scope 
 is to evaluate the dose in astronauts, in vehicle concepts and 
 Moon surface habitat configurations, in a defined interplanetary space
 radiation environment. 
@@ -111,14 +111,16 @@ The example is provided of:
 - Hadronic processes for p and alpha particles as primary particles.
 
 The user can choose the Bertini cascade approach or the
- binary cascade approach for the modeling of proton hadronic physics.
+binary cascade approach for the modeling of proton hadronic physics.
 
 3. PRIMARY PARTICLES
-Primary particles are generated through the General Particle Source.
-Galactic Cosmic Protons (CREME 96) are generated from a point set in 
+
+Primary particles are generated according spectra derived from the differential flux (CREME 96).
+gcr_min_z=1.txt and gcr_min_z=2.txt contain the differential flux 
+of galactic cosmic protons and alpha particles with respect to the energy (MeV/nucl). 
+These files are read by the primary particle component of the application and the spectra are derived.
+Primary particles are generated from a point set in 
 the position (0., 0., -25. m), with a direction (0., 0., 1.) by default.
-The energy spectrum of the primary particles follows the 
-differential energy distribution described in gcrZ=1gps.mac.
 The user can change these parameters interactively.
 
 4. STEPPING
@@ -159,13 +161,67 @@ The file contains histograms:
   
     - 90 (2)   Project the  energy  deposit of the hits on the plane xy
 
-5.1 UI
+    - 100 (1)  Secondary particles produced in the phantom
 
-- The user can select the format of the output file if the analysis
-is active:
+    - 110 (1)  Energy of secondary p produced in the phantom
 
-/analysis/formatFile hbook
-/analysis/formatFile xml
+    - 120 (1)  Energy of secondary n produced in the phantom
+
+    - 130 (1)  Energy of secondary pions produced in the phantom
+
+    - 140 (1)  Energy of secondary alpha produced in the phantom
+
+    - 150 (1)  Energy of secondary e+ produced in the phantom
+
+    - 160 (1)  Energy of secondary e- produced in the phantom
+
+    - 170 (1)  Energy of secondary gamma produced in the phantom
+
+    - 180 (1)  Energy of secondary mu produced in the phantom
+
+    - 190 (1)  Energy of secondary other particles produced in the phantom
+
+    - 200 (1)  Phantom Slice where secondary protons are produced
+
+    - 210 (1)  Phantom Slice where secondary neutrons are produced
+
+    - 220 (1)   Phantom Slice where secondary pions are produced
+
+    - 230 (1)   Phantom Slice where secondary alpha are produced
+
+    - 240 (1)   Phantom Slice where secondary positrons are produced
+
+    - 250 (1)   Phantom Slice where secondary electrons are produced
+
+    - 260 (1)   Phantom Slice where secondary gamma are produced
+
+    - 270 (1)   Phantom Slice where secondary muons are produced
+
+    - 280 (1)   Phantom Slice where secondary other particles are produced
+
+    - 300 (1)   secondary particles reaching the phantom
+
+    - 310 (1)   Energy of secondary p reaching the phantom
+
+    - 320 (1)   Energy of secondary n reaching the phantom
+
+    - 330 (1)   Energy of secondary pions reaching in the phantom
+
+    - 340 (1)   Energy of secondary alpha reaching the phantom
+
+    - 350 (1)   Energy of secondary e+ reaching the phantom
+
+    - 360 (1)   Energy of secondary e- reaching the phantom
+
+    - 370 (1)   Energy of secondary gamma reaching  the phantom
+
+    - 380 (1)   Energy of secondary mu reaching the phantom
+
+    - 390 (1)   Energy of secondary other particles reaching the phantom
+
+    - 400 (1)   Energy of secondary neutrinos produced in the phantom
+
+    - 500 (1)   secondary particles in the vehicle
 
 6.SET-UP 
                                                                         
@@ -181,12 +237,13 @@ G4LEVELGAMMADATA points to  PhotoEvaporation data
 G4RADIOACTIVEDATA points to Radioactive Decay data
 NeutronHPCrossSections points to  neutron data - G4NDL3.7
 
-Setup for analysis: AIDA 3.2.1, PI 1.3.3                                
+Setup for analysis: AIDA 3.2.1, PI 1.3.8                             
 
 Users can download the analysis tools from:  
                                                                         
 http://aida.freehep.org/
-http://www.cern.ch/PI                                                                                                                                   
+http://www.cern.ch/PI                   
+                                                                                                                
 7. HOW TO RUN THE EXAMPLE
 
 example macros are provided:
@@ -209,6 +266,6 @@ Author : Susanna Guatelli
 
 for comments, advices, doubts and questions: guatelli@ge.infn.it
 
-last modified: Susanna Guatelli 2/12/2005
+last modified: Susanna Guatelli 31/5/2006
 
 

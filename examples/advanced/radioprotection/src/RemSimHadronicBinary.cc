@@ -26,7 +26,7 @@
 //    *                                    *
 //    **************************************
 //
-// $Id: RemSimHadronicBinary.cc,v 1.4 2006-03-15 09:54:15 guatelli Exp $
+// $Id: RemSimHadronicBinary.cc,v 1.5 2006-05-31 08:49:50 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author : Susanna Guatelli, guatelli@ge.infn.it
@@ -224,7 +224,6 @@ void RemSimHadronicBinary::ConstructProcess()
   pipinelProc -> AddDataSet(pion_XC);
   pipinelProc -> RegisterMe(LEP_pip_model);
   pipinelProc -> RegisterMe(QGSP_model);                                                
-  pimMan -> AddRestProcess(new G4PiMinusAbsorptionAtRest, ordDefault);
   pipMan -> AddDiscreteProcess(pipinelProc);
 
   // ******************************************
@@ -245,7 +244,8 @@ void RemSimHadronicBinary::ConstructProcess()
   G4PionMinusInelasticProcess* piminelProc = new G4PionMinusInelasticProcess();
   piminelProc -> AddDataSet(pion_XC);
   piminelProc -> RegisterMe(LEP_pim_model);
-  piminelProc -> RegisterMe(QGSP_model);
+  piminelProc -> RegisterMe(QGSP_model); 
+  //pimMan -> AddRestProcess(new G4PiMinusAbsorptionAtRest, ordDefault);
   pimMan -> AddDiscreteProcess(piminelProc);
 
   // ******************************************

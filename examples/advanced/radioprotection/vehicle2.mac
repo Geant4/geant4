@@ -31,19 +31,11 @@
 ################
 /run/initialize
 # Generation of primary particles
-/gps/particle proton
-/gps/pos/type Point
-/gps/pos/centre 0. 0. -25. m
-/gps/direction 0. 0. 1.
-# Monoenergetic proton beam 
-/gps/ene/type Mono
-/gps/ene/mono 400 MeV
+/gun/energy 500 MeV
 # Geometry configuration
 /configuration/choose vehicle
 /configuration/AddShielding On
-#/configuration/AddShielding Off
 /configuration/AddSPE On
-#/configuration/AddSPE Off
 /run/beamOn 50
 
 

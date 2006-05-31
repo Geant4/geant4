@@ -29,11 +29,17 @@
 #/tracking/storeTrajectory 1
 #/vis/scene/endOfEventAction accumulate
 ########################################
+### Choose Moon habitat 
 /configuration/choose moon
+#### Add the roof and set its thickness to 0.5 m
 /configuration/AddRoof On
-/roof/thickness 2. m
-/control/execute gcrZ=1gps.mac
-/run/beamOn 10
+/roof/thickness 0.5 m
+# Galactic cosmic alpha particles
+/gun/particle alpha
+/gun/data gcr_min_z=2.txt
+/run/beamOn 100
+
+
 
 
 

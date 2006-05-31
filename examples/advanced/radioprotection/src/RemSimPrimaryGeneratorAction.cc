@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RemSimPrimaryGeneratorAction.cc,v 1.15 2006-03-15 09:54:15 guatelli Exp $// Author: Susanna Guatelli, guatelli@ge.infn.it
+// $Id: RemSimPrimaryGeneratorAction.cc,v 1.16 2006-05-31 08:49:50 guatelli Exp $// Author: Susanna Guatelli, guatelli@ge.infn.it
 
 #include "RemSimPrimaryGeneratorAction.hh"
 #ifdef G4ANALYSIS_USE  
@@ -31,10 +31,8 @@
 #include "G4ParticleGun.hh"
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
-//#include <CLHEP/Random/RandGeneral.h>
 #include "Randomize.hh"
 #include <fstream>
-#include <strstream>
 #include "G4DataVector.hh"
 #include "RemSimPrimaryGeneratorMessenger.hh"
 #include <math.h>
@@ -84,30 +82,27 @@ G4double RemSimPrimaryGeneratorAction::GetInitialEnergy()
 void RemSimPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
  G4int baryon = particleGun -> GetParticleDefinition() -> GetBaryonNumber();
+
+ // Generate the energy spectrum of primary particles according to 
+ // the flux reported in the .txt file (firt column = Energy (MeV/nucl),
+ // second column = differnetila flux). The fluxes are derived from CREME96  
  if (readFile == true)
-  {
- 
-// Uniform number between 0. and 1.
+  { 
+  // Uniform number between 0. and 1.
   G4double random = G4UniformRand();
-  //  G4cout << "random :" << random<< G4endl; 
+  
   G4int nbelow = 0;	  // largest k such that I[k] is known to be <= rand
   G4int nabove = size;  // largest k such that I[k] is known to be >  rand
   G4int middle;
   
   while (nabove > nbelow+1) {
     middle = (nabove + nbelow+1)>>1;
-    //    G4cout << middle << "middle" << G4endl;
     if (random >= cumulate[middle]) {
       nbelow = middle;
     } else {
       nabove = middle;
     }
   }
-
-// after this loop, nabove is always nbelow+1 and they straddle rad:
-//  nabove == nbelow+1;
-//    assert ( (*cumulate)[nbelow] <= rand );
-//    assert (  (*cumulate)[nabove] >= rand );  
    
  // Linear interpolation
 
@@ -133,6 +128,7 @@ void RemSimPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
  G4double energy_plot = (particleGun -> GetParticleEnergy())/baryon; 
  // plot of MeV/nucl
   RemSimAnalysisManager* analysis = RemSimAnalysisManager::getInstance();
+  // Plot the energy spectrum of primary particles 
  analysis -> primaryParticleEnergyDistribution(energy_plot/MeV);
 #endif 
  
@@ -141,19 +137,17 @@ particleGun -> GeneratePrimaryVertex(anEvent);
 
 void RemSimPrimaryGeneratorAction::ReadProbability(G4String fileName)
 {
-  
+  // This method allows to read the .txt files containing the
+  // fluxes of the galactic cosmic rays derived form CREME96
   readFile = true;
-  char nameChar[100] = {""};
-  std::ostrstream ost(nameChar, 100, std::ios::out);
- ost << fileName <<".dat";
-  G4String name(nameChar);
-
-  std::ifstream file(fileName);
+  
+  std::ifstream file(fileName, std::ios::in);
   std::filebuf* lsdp = file.rdbuf();
   
   if (! (lsdp->is_open()) )
     {
-	  G4String excep = "RemSimPrimaryGenerator - data file: " + fileName + " not found";
+	  G4String excep = "RemSimPrimaryGenerator - data file: " 
+                            + fileName + " not found";
 	  G4Exception(excep);
     }
 
@@ -171,7 +165,7 @@ void RemSimPrimaryGeneratorAction::ReadProbability(G4String fileName)
       //                                       -2   
       if (a == -1 || a == -2)
 	{
-	  G4cout << "End of file!!!"<< G4endl;   
+        
 	}
       else
 	{
@@ -186,18 +180,15 @@ void RemSimPrimaryGeneratorAction::ReadProbability(G4String fileName)
 	    {
 	   G4double data_value = a;
            data -> push_back(data_value);
-           //G4cout<< "probability: "<< data_value << G4endl; 
+          //G4cout<< "probability: "<< data_value << G4endl; 
 	   k=1;
            index++; 
 	    }  
-	}
-	  	
-	  
+	}	 
     } while (a != -2); // end of file
   
   file.close();
   size = index -1 ;
-  G4cout<< "numer of rows: " << size << G4endl; 
   cumulate = new G4double[size+1];
   energy = new G4double[size+1];
   cumulate[0] = 0;
@@ -210,18 +201,12 @@ void RemSimPrimaryGeneratorAction::ReadProbability(G4String fileName)
   cumulate[ptn +1] = cumulate[ptn] + weight;
   energy[ptn+1] = (*energies)[ptn+1];
  } 
- 
- for (G4int ptn = 0; ptn < size+1; ptn++ ) {
- // G4cout <<"Energy: " << energy[ptn] << "Cumulate: " << cumulate[ptn] << G4endl;
- }
   
- // Normalise the cumulate to 1 (that corresponds to the last value
+ // Normalise the cumulate to 1 (that corresponds to the last value)
  for ( G4int ptn= 0; ptn < size + 1; ptn++ ) 
 {            
   cumulate[ptn] /= cumulate[size];  
-  // G4cout <<"Energy: " << energy[ptn] << " Normalized Cumulate: " << cumulate[ptn] << G4endl;
 }
-
 }
 
 

@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.17 2006-03-15 09:54:15 guatelli Exp $
+$Id: History,v 1.18 2006-05-31 08:51:21 guatelli Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,10 @@ $Id: History,v 1.17 2006-03-15 09:54:15 guatelli Exp $
 
                       Category History file
                       ---------------------
+31th May 2006 Susanna Guatelli(radioprotection-V08-00-01)
+- Added histograms
+- Added comments 
+
 15th March 2006 Susanna Guatelli(radioprotection-V08-00-00)
 - Pion absorption at rest introduced in  RemSimHadronicBinary.cc
 - Added more histograms
