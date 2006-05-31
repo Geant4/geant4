@@ -1,4 +1,4 @@
-$Id: History,v 1.68 2006-05-30 06:25:31 perl Exp $
+$Id: History,v 1.69 2006-05-31 02:25:23 perl Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,11 @@ committal in the CVS repository !
 
 History file for visualization/OpenGL
 -------------------------------------
+
+30th May 2006  Joseph Perl  (opengl-V08-00-08)
+- G4OpenGLImmediateWin32Viewer: Removed tests on doublebuffer since that
+  variable seems to have random behavior and should be assumed false for
+  this viewer.
 
 29th May 2006  Joseph Perl  (opengl-V08-00-07)
 - G4OpenGLWin32Viewer, G4OpenGLImmediateWin32Viewer, G4OpenGLStoredWin32Viewer:

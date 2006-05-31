@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateWin32Viewer.cc,v 1.13 2006-05-30 06:25:31 perl Exp $
+// $Id: G4OpenGLImmediateWin32Viewer.cc,v 1.14 2006-05-31 02:25:23 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -55,10 +55,8 @@ void G4OpenGLImmediateWin32Viewer::Initialise () {
 
   // If a double buffer context has been forced upon us, ignore the
   // back buffer for this OpenGLImmediate view.
-  if (doublebuffer) {
-    doublebuffer = false;
-    glDrawBuffer (GL_FRONT);
-  }
+  doublebuffer = false;
+  glDrawBuffer (GL_FRONT);
 
   // clear the buffers and window.
   ClearView ();
@@ -72,10 +70,8 @@ void G4OpenGLImmediateWin32Viewer::DrawView () {
 
   // If a double buffer context has been forced upon us, ignore the
   // back buffer for this OpenGLImmediate view.
-  if (doublebuffer) {
-    doublebuffer = false;
-    glDrawBuffer (GL_FRONT);
-  }
+  doublebuffer = false;
+  glDrawBuffer (GL_FRONT);
 
   G4ViewParameters::DrawingStyle style = GetViewParameters().GetDrawingStyle();
 
