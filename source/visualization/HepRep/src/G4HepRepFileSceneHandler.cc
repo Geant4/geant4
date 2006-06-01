@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HepRepFileSceneHandler.cc,v 1.41 2006-06-01 05:02:09 perl Exp $
+// $Id: G4HepRepFileSceneHandler.cc,v 1.42 2006-06-01 18:46:57 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -31,6 +31,7 @@
 #include "G4HepRepFileSceneHandler.hh"
 #include "G4HepRepFile.hh"
 
+#include "G4Version.hh"
 #include "G4VSolid.hh"
 #include "G4PhysicalVolumeModel.hh"
 #include "G4VPhysicalVolume.hh"
@@ -673,13 +674,26 @@ void G4HepRepFileSceneHandler::AddCompound (const G4VHit& hit) {
     hepRepXMLWriter->addInstance();
   }
 
+  // Find out the current HitType.
+  G4String hitType = "Hits";
+  if (hitAttValues) {
+    G4bool found = false;
+	for (iAttVal = hitAttValues->begin();
+	iAttVal != hitAttValues->end() && !found; ++iAttVal) {
+	  if (strcmp(iAttVal->GetName(),"HitType")==0) {
+		hitType = iAttVal->GetValue();
+		found = true;
+	  }
+	}
+  }
+
   // Add the Hits Type.
   G4String previousName = hepRepXMLWriter->prevTypeName[1];
-  hepRepXMLWriter->addType("Hits",1);
+  hepRepXMLWriter->addType(hitType,1);
 
   // If this is the first hit of this event,
   // specify attribute values common to all hits.
-  if (strcmp("Hits",previousName)!=0) {
+  if (strcmp(hitType,previousName)!=0) {
     hepRepXMLWriter->addAttValue("Layer",130);
 
     // Take all Hit attDefs from first hit.
@@ -796,7 +810,7 @@ void G4HepRepFileSceneHandler::AddPrimitive(const G4Text&) {
   haveVisible = true;
   AddHepRepInstance("Text", text);
 
-  hepRepXMLWriter->addAttValue("VAlign", "Bottom");
+  hepRepXMLWriter->addAttValue("VAlign", "Top");
   hepRepXMLWriter->addAttValue("HAlign", "Left");
   hepRepXMLWriter->addAttValue("FontName", "Arial");
   hepRepXMLWriter->addAttValue("FontStyle", "Plain");
@@ -820,8 +834,8 @@ void G4HepRepFileSceneHandler::AddPrimitive(const G4Text&) {
   hepRepXMLWriter->addPrimitive();
 
   hepRepXMLWriter->addAttValue("Text", text.GetText());
-  hepRepXMLWriter->addAttValue("VPos", text.GetXOffset());
-  hepRepXMLWriter->addAttValue("HPos", text.GetYOffset());
+  hepRepXMLWriter->addAttValue("VPos", .99-text.GetYOffset());
+  hepRepXMLWriter->addAttValue("HPos", text.GetXOffset());
 }
 
 
@@ -1117,6 +1131,12 @@ void G4HepRepFileSceneHandler::CheckFileOpen() {
     hepRepXMLWriter->open(newFileSpec);
     fileCounter++;
 
+    hepRepXMLWriter->addAttDef("Generator", "HepRep Data Generator", "Physics","");
+    G4String versionString = G4Version;
+    versionString = versionString.substr(1,versionString.size()-2);
+    versionString = " Geant4 version " + versionString + "   " + G4Date;
+	hepRepXMLWriter->addAttValue("Generator", versionString);
+	
     hepRepXMLWriter->addAttDef("LVol", "Logical Volume", "Physics","");
     hepRepXMLWriter->addAttDef("Region", "Cuts Region", "Physics","");
     hepRepXMLWriter->addAttDef("RootRegion", "Root Region", "Physics","");
