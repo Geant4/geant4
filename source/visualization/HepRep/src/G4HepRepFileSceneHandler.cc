@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HepRepFileSceneHandler.cc,v 1.40 2006-05-04 14:57:01 allison Exp $
+// $Id: G4HepRepFileSceneHandler.cc,v 1.41 2006-06-01 05:02:09 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -792,7 +792,36 @@ void G4HepRepFileSceneHandler::AddPrimitive(const G4Text&) {
 	 << G4endl;
   PrintThings();
 #endif
-  G4cout << "G4HepRepFileSceneHandler::AddPrimitive G4Text : not yet implemented. " << G4endl;
+
+  haveVisible = true;
+  AddHepRepInstance("Text", text);
+
+  hepRepXMLWriter->addAttValue("VAlign", "Bottom");
+  hepRepXMLWriter->addAttValue("HAlign", "Left");
+  hepRepXMLWriter->addAttValue("FontName", "Arial");
+  hepRepXMLWriter->addAttValue("FontStyle", "Plain");
+  hepRepXMLWriter->addAttValue("FontSize", "12");
+  hepRepXMLWriter->addAttValue("FontHasBanner", "TRUE");
+  hepRepXMLWriter->addAttValue("FontBannerColor", "0,0,0");
+
+  const G4Colour& colour = GetTextColour(text);
+  float redness = colour.GetRed();
+  float greenness = colour.GetGreen();
+  float blueness = colour.GetBlue();
+    
+  // Avoiding drawing anything black on black.  
+  if (redness==0. && greenness==0. && blueness==0.) {
+	redness = 1.;
+	greenness = 1.;
+	blueness = 1.;
+  }
+  hepRepXMLWriter->addAttValue("FontColor",redness,greenness,blueness);
+
+  hepRepXMLWriter->addPrimitive();
+
+  hepRepXMLWriter->addAttValue("Text", text.GetText());
+  hepRepXMLWriter->addAttValue("VPos", text.GetXOffset());
+  hepRepXMLWriter->addAttValue("HPos", text.GetYOffset());
 }
 
 
@@ -949,29 +978,33 @@ void G4HepRepFileSceneHandler::AddHepRepInstance(const char* primName,
 
     int layer;
 
-    if (strcmp("Line",primName)==0) {
-      hepRepXMLWriter->addType("Trajectories",1);
-      layer = 100;
-    } else {
-      if (strcmp(hepRepXMLWriter->prevTypeName[1],"Trajectories")==0 &&
-	  strcmp("Square",primName)==0)
-      {
-	hepRepXMLWriter->addType("AuxiliaryPoints",2);
-	layer = 110;
-      } else {
-        if (strcmp(hepRepXMLWriter->prevTypeName[1],"Trajectories")==0 &&
-	    strcmp("Circle",primName)==0)
-	{
-	  hepRepXMLWriter->addType("StepPoints",2);
-	  layer = 120;
+    if (strcmp("Text",primName)==0) {
+	  hepRepXMLWriter->addType("EventID",1);
 	} else {
-	  hepRepXMLWriter->addType("Hits",1);
-	  layer = 130;
-	}
-      }
+	  if (strcmp("Line",primName)==0) {
+	    hepRepXMLWriter->addType("Trajectories",1);
+		layer = 100;
+	  } else {
+		if (strcmp(hepRepXMLWriter->prevTypeName[1],"Trajectories")==0 &&
+		strcmp("Square",primName)==0)
+		{
+		  hepRepXMLWriter->addType("AuxiliaryPoints",2);
+		  layer = 110;
+		} else {
+		  if (strcmp(hepRepXMLWriter->prevTypeName[1],"Trajectories")==0 &&
+		  strcmp("Circle",primName)==0)
+		  {
+			hepRepXMLWriter->addType("StepPoints",2);
+			layer = 120;
+		  } else {
+			hepRepXMLWriter->addType("Hits",1);
+		    layer = 130;
+		  }
+	    }
+	  }
+      hepRepXMLWriter->addAttValue("Layer",layer);
     }
 
-    hepRepXMLWriter->addAttValue("Layer",layer);
 
     hepRepXMLWriter->addInstance();
 
