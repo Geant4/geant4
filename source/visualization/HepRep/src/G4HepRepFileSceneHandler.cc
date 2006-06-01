@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HepRepFileSceneHandler.cc,v 1.42 2006-06-01 18:46:57 perl Exp $
+// $Id: G4HepRepFileSceneHandler.cc,v 1.43 2006-06-01 20:26:51 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -794,11 +794,7 @@ void G4HepRepFileSceneHandler::AddPrimitive (const G4Polymarker& line) {
 }
 
 
-#ifdef G4HEPREPFILEDEBUG
 void G4HepRepFileSceneHandler::AddPrimitive(const G4Text& text) {
-#else
-void G4HepRepFileSceneHandler::AddPrimitive(const G4Text&) {
-#endif
 #ifdef G4HEPREPFILEDEBUG
   G4cout <<
     "G4HepRepFileSceneHandler::AddPrimitive(const G4Text& text) called:"
