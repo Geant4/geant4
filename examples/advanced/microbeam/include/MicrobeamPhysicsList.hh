@@ -1,5 +1,5 @@
 // -------------------------------------------------------------------
-// $Id: MicrobeamPhysicsList.hh,v 1.2 2006-04-10 14:47:31 sincerti Exp $
+// $Id: MicrobeamPhysicsList.hh,v 1.3 2006-06-01 22:25:19 sincerti Exp $
 // -------------------------------------------------------------------
 
 #ifndef MicrobeamPhysicsList_h

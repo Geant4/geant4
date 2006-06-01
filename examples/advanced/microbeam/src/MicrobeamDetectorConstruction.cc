@@ -1,5 +1,5 @@
 // -------------------------------------------------------------------
-// $Id: MicrobeamDetectorConstruction.cc,v 1.2 2006-04-10 14:47:32 sincerti Exp $
+// $Id: MicrobeamDetectorConstruction.cc,v 1.3 2006-06-01 22:25:19 sincerti Exp $
 // -------------------------------------------------------------------
 
 #include "MicrobeamDetectorConstruction.hh"
@@ -587,32 +587,9 @@ G4VPhysicalVolume* MicrobeamDetectorConstruction::ConstructMicrobeamLine()
 
   SetNbOfPixelsInPhantom (myMicrobeamPhantomConfiguration.GetPhantomTotalPixels());
 
-  SetMassPhantom(
-  	  densityPhantom
-	  *myMicrobeamPhantomConfiguration.GetPhantomTotalPixels()
-	  *myMicrobeamPhantomConfiguration.GetPixelSizeX()
-	  *myMicrobeamPhantomConfiguration.GetPixelSizeY()
-	  *myMicrobeamPhantomConfiguration.GetPixelSizeZ()
-	  *1e-6
-	  );
+  SetMassNucleus(myMicrobeamPhantomConfiguration.GetNucleusMass());
 
-  SetMassNucleus(
-  	  densityNucleus
-	  *myMicrobeamPhantomConfiguration.GetNucleusTotalPixels()
-	  *myMicrobeamPhantomConfiguration.GetPixelSizeX()
-	  *myMicrobeamPhantomConfiguration.GetPixelSizeY()
-	  *myMicrobeamPhantomConfiguration.GetPixelSizeZ()
-	  *1e-6
-	  );
-
-  SetMassCytoplasm(
-  	  densityCytoplasm
-	  *myMicrobeamPhantomConfiguration.GetCytoplasmTotalPixels()
-	  *myMicrobeamPhantomConfiguration.GetPixelSizeX()
-	  *myMicrobeamPhantomConfiguration.GetPixelSizeY()
-	  *myMicrobeamPhantomConfiguration.GetPixelSizeZ()
-	  *1e-6
-	  );
+  SetMassCytoplasm(myMicrobeamPhantomConfiguration.GetCytoplasmMass());
 
   // PHANTOM
 

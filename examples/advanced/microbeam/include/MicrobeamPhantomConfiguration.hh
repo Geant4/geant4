@@ -1,5 +1,5 @@
 // -------------------------------------------------------------------
-// $Id: MicrobeamPhantomConfiguration.hh,v 1.2 2006-04-10 14:47:31 sincerti Exp $
+// $Id: MicrobeamPhantomConfiguration.hh,v 1.3 2006-06-01 22:25:19 sincerti Exp $
 // -------------------------------------------------------------------
 
 #ifndef MicrobeamPhantomConfiguration_h
@@ -21,6 +21,8 @@ public:
    G4float GetPixelSizeX() {return dx;}  
    G4float GetPixelSizeY() {return dy;}  
    G4float GetPixelSizeZ() {return dz;}  
+   G4float GetCytoplasmMass() {return cytoplasmMass;}  
+   G4float GetNucleusMass()   {return nucleusMass;}  
 
    G4ThreeVector GetVoxelThreeVector(G4int i) {return voxelThreeVector[i];}
 
@@ -32,6 +34,8 @@ private:
    static G4float dx;
    static G4float dy;
    static G4float dz;
+   static G4float nucleusMass;
+   static G4float cytoplasmMass;
    
    G4ThreeVector * voxelThreeVector;
 

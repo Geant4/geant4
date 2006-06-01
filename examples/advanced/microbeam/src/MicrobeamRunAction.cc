@@ -1,5 +1,5 @@
 // -------------------------------------------------------------------
-// $Id: MicrobeamRunAction.cc,v 1.2 2006-04-10 14:47:32 sincerti Exp $
+// $Id: MicrobeamRunAction.cc,v 1.3 2006-06-01 22:25:20 sincerti Exp $
 // -------------------------------------------------------------------
 
 #include "G4VVisManager.hh"
@@ -43,7 +43,6 @@ void MicrobeamRunAction::BeginOfRunAction(const G4Run* /*aRun*/)
   DoseN = 0;
   DoseC = 0;
     
-  massPhantom   = Detector->GetMassPhantom();
   massCytoplasm = Detector->GetMassCytoplasm();
   massNucleus   = Detector->GetMassNucleus();
   nbOfPixels = Detector->GetNbOfPixelsInPhantom();

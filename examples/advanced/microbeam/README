@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: README,v 1.6 2006-04-10 14:47:31 sincerti Exp $
+$Id: README,v 1.7 2006-06-01 22:25:19 sincerti Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -195,7 +195,7 @@ A graphical output obtained with this macro for 40000 incident alpha particles
 is shown in the file microbeam.gif
 
 The simulation predicts that 95% of the incident alpha particles detected by the
-gas detector are located within a circle of 10 µm in diameter on the target, in 
+gas detector are located within a circle of 10 um in diameter on the target, in 
 nice agreement with experimental measurements performed on the CENBG setup.
 
 ---------------------------------------------------------------------------

@@ -1,5 +1,5 @@
 // -------------------------------------------------------------------
-// $Id: MicrobeamPhysicsList.cc,v 1.2 2006-04-10 14:47:32 sincerti Exp $
+// $Id: MicrobeamPhysicsList.cc,v 1.3 2006-06-01 22:25:20 sincerti Exp $
 // -------------------------------------------------------------------
 
 #include "G4ParticleDefinition.hh"

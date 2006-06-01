@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.5 2006-04-10 14:47:31 sincerti Exp $
+$Id: History,v 1.6 2006-06-01 22:25:19 sincerti Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -9,6 +9,5 @@ $Id: History,v 1.5 2006-04-10 14:47:31 sincerti Exp $
                        Package History file
                        --------------------
 
-10 Apr 2006 - S. Incerti, added density treatment and web site
 06 Apr 2006 - S. Incerti, updated README file
 04 Apr 2006 - MGP, package created

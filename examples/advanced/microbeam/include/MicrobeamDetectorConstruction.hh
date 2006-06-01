@@ -1,5 +1,5 @@
 // -------------------------------------------------------------------
-// $Id: MicrobeamDetectorConstruction.hh,v 1.2 2006-04-10 14:47:31 sincerti Exp $
+// $Id: MicrobeamDetectorConstruction.hh,v 1.3 2006-06-01 22:25:19 sincerti Exp $
 // -------------------------------------------------------------------
 
 #ifndef MicrobeamDetectorConstruction_h
@@ -37,9 +37,6 @@ public:
 
   G4VPhysicalVolume* Construct();
      
-  void SetMassPhantom(G4float mN){ massPhantom = mN;}
-  G4float GetMassPhantom(){return massPhantom;}          
-
   void SetMassNucleus(G4float mN){ massNucleus = mN;}
   G4float GetMassNucleus(){return massNucleus;}          
 

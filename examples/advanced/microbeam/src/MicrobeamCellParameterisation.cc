@@ -1,5 +1,5 @@
 // -------------------------------------------------------------------
-// $Id: MicrobeamCellParameterisation.cc,v 1.2 2006-04-10 14:47:32 sincerti Exp $
+// $Id: MicrobeamCellParameterisation.cc,v 1.3 2006-06-01 22:25:19 sincerti Exp $
 // -------------------------------------------------------------------
 
 #include "G4VPhysicalVolume.hh"
@@ -42,18 +42,20 @@ MicrobeamCellParameterisation::MicrobeamCellParameterisation
    fMap = fopen("phantom.dat","r");
    while (1) 
    {  
-      if (nlines >=0 && nlines <=1) ncols = fscanf(fMap,"%f %f %f",&tmp,&tmp,&sizeZ);
-      if (nlines ==2) ncols = fscanf(fMap,"%i %i %i",&shiftX,&shiftY,&shiftZ); // VOXEL SHIFT IN Z ASSUMED TO BE NEGATIVE
-      if (nlines >2 ) ncols = fscanf(fMap,"%f %f %f %f %f %f",&x,&y,&z,&mat,&den,&tmp);
-      if (ncols < 0) break;
+      if (nlines >= 0  && nlines <=1 ) ncols = fscanf(fMap,"%f %f %f",&tmp,&tmp,&sizeZ);
+      if (nlines == 2) ncols = fscanf(fMap,"%i %i %i",&shiftX,&shiftY,&shiftZ); // VOXEL SHIFT IN Z ASSUMED TO BE NEGATIVE
+      if (nlines == 3) ncols = fscanf(fMap,"%f %f %f",&tmp,&tmp,&tmp);
+      if (nlines == 4) ncols = fscanf(fMap,"%f %f %f",&tmp,&tmp,&tmp);
+      if (nlines >  4) ncols = fscanf(fMap,"%f %f %f %f %f %f",&x,&y,&z,&mat,&den,&tmp);
+      if (ncols  <  0) break;
 
       G4ThreeVector v(x+shiftX,y+shiftY,z-1500/sizeZ-shiftZ); // VOXEL SHIFT TO CENTER PHANTOM
       
-      if (nlines>2) 
+      if (nlines>4) 
       {
-	  mapCell[nlines-3]=v; 
-	  material[nlines-3]=mat;
-	  mass[nlines-3]=den;
+	  mapCell[nlines-5]=v; 
+	  material[nlines-5]=mat;
+	  mass[nlines-5]=den;
       }	  
 
       nlines++;    
