@@ -42,7 +42,7 @@ processes                    John Apostolakis                John Apostolakis
 "/"/models/abrasion          flei@space.qinetiq.com          Fan Lei
 "/"/models/binary_cascade    Gunter.Folger@cern.ch           Gunter Folger
 "/"/models/cascade           aatos.heikkinen@cern.ch         Aatos Heikkinen
-"/"/"/chiral_inv_phase_space Mikhail.Kossov@cern.ch          Mikhail Kossov
+"/"/"/chiral_inv_phase_space Mikhail.Kosov@cern.ch           Mikhail Kossov
 "/"/"/coherent_elastic       Nikolai.Starkov@cern.ch         Nikolai Starkov
 "/"/"/de_excitation          aatos.heikkinen@cern.ch         Aatos Heikkinen
 "/"/"/"/ablation             PRTruscott@space.qinetiq.com    Pete Truscott
@@ -110,6 +110,7 @@ examples/advanced            asai@slac.stanford.edu          Makoto Asai
   medical_linac              Michela.Piergentili@ge.infn.it  Michela Piergentili
   purging_magnet             John.Apostolakis@cern.ch        John Apostolakis
   radioprotection            Susanna.Guatelli@ge.infn.it     Susanna Guatelli
+  raredecay_calorimetry      Mikhail.Kosov@cern.ch           Mikhail Kossov
   Rich                       Alberto.Ribon@cern.ch           Alberto Ribon
   Tiara                      Alexander.Howard@cern.ch        Alexander Howard
   underground_physics        Alexander.Howard@cern.ch        Alexander Howard 
@@ -121,9 +122,7 @@ examples/extended/electromagnetic:
   TestEm1,2,5,6,7,9          Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
   TestEm3,4                  Michel.Maire@lapp.in2p3.fr      Michel Maire
   TestEm8,10                 Vladimir.Grichine@cern.ch       Vladimir Grichine
-  TestEm11                   Michel.Maire@lapp.in2p3.fr      Michel Maire
-  MuonProcesses              Michel.Maire@lapp.in2p3.fr      Michel Maire
-  PhotonProcesses            Michel.Maire@lapp.in2p3.fr      Michel Maire
+  TestEm11,12,13,14,15,16,17 Michel.Maire@lapp.in2p3.fr      Michel Maire
 examples/extended/eventgenerator:
   exgps                      flei@space.qinetiq.com          Fan Lei
   HepMCEx01,02               Koichi.Murakami@kek.jp          Koichi Murakami
@@ -150,6 +149,7 @@ examples/extended/runAndEvent:
   RE01                       asai@slac.stanford.edu          Makoto Asai
   RE02                       asai@slac.stanford.edu          Makoto Asai
 examples/extended/visualization:
+  perspective                John.Allison@man.ac.uk          John Allison
   standalone                 John.Allison@man.ac.uk          John Allison
   userVisAction              John.Allison@man.ac.uk          John Allison
 tests                        Serguei.Sadilov@cern.ch         Serguei Sadilov
