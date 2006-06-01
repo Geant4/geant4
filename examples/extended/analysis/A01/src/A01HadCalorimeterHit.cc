@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: A01HadCalorimeterHit.cc,v 1.7 2005-06-07 10:50:02 perl Exp $
+// $Id: A01HadCalorimeterHit.cc,v 1.8 2006-06-01 18:07:06 perl Exp $
 // --------------------------------------------------------------
 //
 
@@ -117,8 +117,8 @@ const std::map<G4String,G4AttDef>* A01HadCalorimeterHit::GetAttDefs() const
     G4String Row("Row");
     (*store)[Row] = G4AttDef(Row,"Row ID","Bookkeeping","","G4int");
 
-    // G4String Time("Time");
-    //(*store)[Time] = G4AttDef(Time,"Time","Physics","G4BestUnit","G4double");
+    G4String Time("Time");
+    (*store)[Time] = G4AttDef(Time,"Time","Physics","G4BestUnit","G4double");
 
     G4String Energy("Energy");
     (*store)[Energy] = G4AttDef(Energy,"Energy Deposited","Physics","G4BestUnit","G4double");
@@ -148,9 +148,9 @@ std::vector<G4AttValue>* A01HadCalorimeterHit::CreateAttValues() const
   values->push_back
     (G4AttValue("Row",G4UIcommand::ConvertToString(rowID),""));
 
-  //G4double noTime = 0.*s;
-  //values->push_back
-  //  (G4AttValue("Time",G4BestUnit(noTime,"Time"),""));
+  G4double noTime = 0.*s;
+  values->push_back
+    (G4AttValue("Time",G4BestUnit(noTime,"Time"),""));
 
   values->push_back
     (G4AttValue("Energy",G4BestUnit(edep,"Energy"),""));

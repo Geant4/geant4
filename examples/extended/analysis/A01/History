@@ -1,4 +1,4 @@
-$Id: History,v 1.37 2006-06-01 05:20:30 perl Exp $
+$Id: History,v 1.38 2006-06-01 18:07:06 perl Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -10,8 +10,8 @@ $Id: History,v 1.37 2006-06-01 05:20:30 perl Exp $
      ----------------------------------------------------------
 
 ---------------------------------------------------------------------------  
-31 May 2006 - Joseph Perl (exampleA01-V08-00-01)
-- Add Time attribute to DriftChamber and Hodoscope Hits.
+1 June 2006 - Joseph Perl (exampleA01-V08-00-01)
+- Add Time attribute to Hit classes.
 
 2 June 2005 - Joseph Perl (exampleA01-V07-00-05)
 - Add G4Atts to the four hit classes.
