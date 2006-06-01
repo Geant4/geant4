@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HepRepFileViewer.cc,v 1.13 2005-10-13 17:23:42 allison Exp $
+// $Id: G4HepRepFileViewer.cc,v 1.14 2006-06-01 19:37:47 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4HepRepFileViewer.hh"
@@ -41,7 +41,9 @@ G4HepRepFileViewer::G4HepRepFileViewer
   fDefaultVP.SetCulling(false);
 }
 
-G4HepRepFileViewer::~G4HepRepFileViewer() {}
+G4HepRepFileViewer::~G4HepRepFileViewer() {
+  ShowView ();
+}
 
 void G4HepRepFileViewer::SetView() {
 #ifdef G4HEPREPFILEDEBUG
