@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessManagerMessenger.cc,v 1.8 2005-11-21 03:47:32 kurasige Exp $
+// $Id: G4ProcessManagerMessenger.cc,v 1.9 2006-06-01 11:27:17 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -37,6 +37,7 @@
 //    13 June 1997, H. Kurashige   : The 1st version created.
 //    10 Nov. 1997  H. Kurashige   : fixed bugs 
 //    08 jan. 1998  H. Kurashige   : new UIcommnds 
+//    02 June 2006  M. Maire       : add physicsModified in activate/inactivate
 //
 //---------------------------------------------------------------
 
@@ -162,12 +163,15 @@ void G4ProcessManagerMessenger::SetNewValue(G4UIcommand * command,G4String newVa
     } 
  
   } else if( command==activateCmd ) {
-    //Commnad   /particle/process/Activate
+    //Commnad   /particle/process/activate
     theManager->SetProcessActivation(activateCmd->GetNewIntValue(newValue), true);
-
+    G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");
+    
   } else if( command==inactivateCmd ) {
     //Commnad   /particle/process/inactivate
     theManager->SetProcessActivation(inactivateCmd->GetNewIntValue(newValue), false);
+    G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");
+    
   } else if( command==verboseCmd ) {
     //Commnad   /particle/process/Verbose
     //  inputstream for newValues 

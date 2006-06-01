@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessTableMessenger.cc,v 1.15 2005-11-21 03:47:32 kurasige Exp $
+// $Id: G4ProcessTableMessenger.cc,v 1.16 2006-06-01 11:27:17 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -37,6 +37,7 @@
 //  History:
 //    15 Aug. 1998, H. Kurashige  
 //   Use STL vector instead of RW vector    1. Mar 00 H.Kurashige
+//    02 June 2006, add physicsModified in activate/inactivate  (mma)
 //
 //---------------------------------------------------------------
 
@@ -341,6 +342,7 @@ void G4ProcessTableMessenger::SetNewValue(G4UIcommand * command,G4String newValu
 						fActive);
 	}
       }
+      G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");
       //  process/activate , inactivate
     } 
   }
