@@ -6,28 +6,39 @@
                             WWW : http://cern.ch/geant4
 *************************************************************
 
-Now Detector is SimpleBox
-Daughter CSG/Boolean will be made of Pb
-Now CGS is Box
-Now Boolean is Intersection
-fSize = 0
-# /run/verbose 2
-#
-# SimpleBox geometry made by Pb
-# Geantino 100 GeV to the direction (1.,0.,0.)
-# 10 events
-#
-/mydet/SwitchDetector SimpleBox
-Now Detector is SimpleBox
-/mydet/SelectMaterial Pb
-Daughter CSG/Boolean will be made of Pb
-/gun/particle geantino
-/gun/energy 100 GeV
-/gun/direction 1 0 0
-/run/initialize
-Tst01PhysicsList::SetCuts:/tracking/verbose 1
-/run/beamOn 1
 
+           -------------------------
+           Now Detector is SimpleBox
+           -------------------------
+
+
+---> Daughter CSG/Boolean will be made of Pb
+
+---> CGS solid is Box
+---> Boolean operation is Intersection
+
+           -------------------------
+           Now Detector is SimpleBox
+           -------------------------
+
+
+---> Daughter CSG/Boolean will be made of Pb
+
+---> CGS solid is Box
+---> Boolean operation is Intersection
+World Size factor = 34641
+
+           -------------------------
+           Now Detector is SimpleBox
+           -------------------------
+
+Total imprinted physical volumes for AssemblyDetector-1: 20
+Total imprinted physical volumes for AssemblyDetector-2: 6600
+Total imprinted physical volumes for AssemblyDetector-3: 4
+
+---> Daughter CSG/Boolean will be made of Pb
+
+Tst01PhysicsList::SetCuts:
 *********************************************************************************************************
 * G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
 *********************************************************************************************************
@@ -35,18 +46,9 @@ Tst01PhysicsList::SetCuts:/tracking/verbose 1
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0     1e+05        0        0         0       SPhys initStep
     1    2e+04        0        0     1e+05        0    2e+04     2e+04  OutOfWorld Transportation
-/tracking/verbose 0
-/run/beamOn 10
-#
-# SimpleBox geometry made by Al
-# Geantino 100 GeV to the direction (0.,1.,0.)
-# 10 events
-#
-/mydet/SelectMaterial Al
-Daughter CSG/Boolean will be made of Al
-/gun/direction 0 1 0
-/tracking/verbose 1
-/run/beamOn 1
+
+---> Daughter CSG/Boolean will be made of Al
+
 
 *********************************************************************************************************
 * G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
@@ -55,18 +57,9 @@ Daughter CSG/Boolean will be made of Al
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0     1e+05        0        0         0       SPhys initStep
     1        0    2e+04        0     1e+05        0    2e+04     2e+04  OutOfWorld Transportation
-/tracking/verbose 0
-/run/beamOn 10
-#
-# SimpleBox geometry made by Air
-# Geantino 100 GeV to the direction (1.,1.,0.)
-# 10 events
-#
-/mydet/SelectMaterial Air
-Daughter CSG/Boolean will be made of Air
-/gun/direction 1 1 0
-/tracking/verbose 1
-/run/beamOn 1
+
+---> Daughter CSG/Boolean will be made of Air
+
 
 *********************************************************************************************************
 * G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
@@ -75,75 +68,191 @@ Daughter CSG/Boolean will be made of Air
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0     1e+05        0        0         0       SPhys initStep
     1    2e+04    2e+04        0     1e+05        0 2.83e+04  2.83e+04  OutOfWorld Transportation
-/tracking/verbose 0
-/run/beamOn 10
-#
-# Honeycomb geometry
-# Geantino 100 GeV to the direction (1.,0.,0.)
-# 10 events
-#
-/mydet/SwitchDetector Honeycomb
-Now Detector is Honeycomb
-/gun/direction 1 0 0
-/tracking/verbose 1
-/run/beamOn 1
+
+           -------------------------
+           Now Detector is Honeycomb
+           -------------------------
+
 
 *********************************************************************************************************
 * G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0        0        0     1e+05        0        0         0       WPhys initStep
-    1    2e+04        0        0     1e+05        0    2e+04     2e+04  OutOfWorld Transportation
-/tracking/verbose 0
-/run/beamOn 10
-#
-# Honeycomb geometry
-# Geantino 100 GeV to the direction (0.,1.,0.)
-# 10 events
-#
-/gun/direction 0 1 0
-/tracking/verbose 1
-/run/beamOn 1
+    0        0        0        0     1e+05        0        0         0 TPhysA_13_23 initStep
+    1      150        0        0     1e+05        0      150       150 TPhysA_13_24 Transportation
+    2      600        0        0     1e+05        0      450       600 TPhysA_13_25 Transportation
+    3 1.05e+03        0        0     1e+05        0      450  1.05e+03 TPhysA_13_26 Transportation
+    4  1.5e+03        0        0     1e+05        0      450   1.5e+03 TPhysA_13_27 Transportation
+    5 1.95e+03        0        0     1e+05        0      450  1.95e+03 TPhysA_13_28 Transportation
+    6  2.4e+03        0        0     1e+05        0      450   2.4e+03 TPhysA_13_29 Transportation
+    7 2.85e+03        0        0     1e+05        0      450  2.85e+03 TPhysA_13_30 Transportation
+    8  3.3e+03        0        0     1e+05        0      450   3.3e+03 TPhysA_13_31 Transportation
+    9 3.75e+03        0        0     1e+05        0      450  3.75e+03 TPhysA_13_32 Transportation
+   10  4.2e+03        0        0     1e+05        0      450   4.2e+03 TPhysA_13_33 Transportation
+   11 4.65e+03        0        0     1e+05        0      450  4.65e+03 TPhysA_13_34 Transportation
+   12  5.1e+03        0        0     1e+05        0      450   5.1e+03 TPhysA_13_35 Transportation
+   13 5.55e+03        0        0     1e+05        0      450  5.55e+03 TPhysA_13_36 Transportation
+   14    6e+03        0        0     1e+05        0      450     6e+03 TPhysA_13_37 Transportation
+   15 6.45e+03        0        0     1e+05        0      450  6.45e+03 TPhysA_13_38 Transportation
+   16  6.9e+03        0        0     1e+05        0      450   6.9e+03 TPhysA_13_39 Transportation
+   17 7.35e+03        0        0     1e+05        0      450  7.35e+03 TPhysA_13_40 Transportation
+   18  7.8e+03        0        0     1e+05        0      450   7.8e+03 TPhysA_13_41 Transportation
+   19 8.25e+03        0        0     1e+05        0      450  8.25e+03 TPhysA_13_42 Transportation
+   20  8.7e+03        0        0     1e+05        0      450   8.7e+03 TPhysA_13_43 Transportation
+   21 9.15e+03        0        0     1e+05        0      450  9.15e+03 TPhysA_13_44 Transportation
+   22  9.6e+03        0        0     1e+05        0      450   9.6e+03 TPhysA_13_45 Transportation
+   23    1e+04        0        0     1e+05        0      450     1e+04 TPhysA_13_46 Transportation
+   24 1.05e+04        0        0     1e+05        0      450  1.05e+04 TPhysA_13_47 Transportation
+   25  1.1e+04        0        0     1e+05        0      450   1.1e+04 TPhysA_13_48 Transportation
+   26 1.14e+04        0        0     1e+05        0      450  1.14e+04 TPhysA_13_49 Transportation
+   27 1.18e+04        0        0     1e+05        0      450  1.18e+04 TPhysA_13_50 Transportation
+   28 1.23e+04        0        0     1e+05        0      450  1.23e+04     CalPhys Transportation
+   29  1.5e+04        0        0     1e+05        0  2.7e+03   1.5e+04       WPhys Transportation
+   30    2e+04        0        0     1e+05        0    5e+03     2e+04  OutOfWorld Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0        0        0     1e+05        0        0         0       WPhys initStep
-    1        0    2e+04        0     1e+05        0    2e+04     2e+04  OutOfWorld Transportation
-/tracking/verbose 0
-/run/beamOn 10
-#
-# Honeycomb geometry
-# Geantino 100 GeV to the direction (1.,1.,0.)
-# 10 events
-#
-/gun/direction 1 1 0
-/tracking/verbose 1
-/run/beamOn 1
+    0        0        0        0     1e+05        0        0         0 TPhysA_13_23 initStep
+    1        0      212        0     1e+05        0      212       212     CalPhys Transportation
+    2        0      232        0     1e+05        0     20.2       232 TPhysB_14_23 Transportation
+    3        0      568        0     1e+05        0      335       568     CalPhys Transportation
+    4        0      588        0     1e+05        0     20.2       588 TPhysA_14_23 Transportation
+    5        0 1.01e+03        0     1e+05        0      424  1.01e+03     CalPhys Transportation
+    6        0 1.03e+03        0     1e+05        0     20.2  1.03e+03 TPhysB_15_23 Transportation
+    7        0 1.37e+03        0     1e+05        0      335  1.37e+03     CalPhys Transportation
+    8        0 1.39e+03        0     1e+05        0     20.2  1.39e+03 TPhysA_15_23 Transportation
+    9        0 1.81e+03        0     1e+05        0      424  1.81e+03     CalPhys Transportation
+   10        0 1.83e+03        0     1e+05        0     20.2  1.83e+03 TPhysB_16_23 Transportation
+   11        0 2.17e+03        0     1e+05        0      335  2.17e+03     CalPhys Transportation
+   12        0 2.19e+03        0     1e+05        0     20.2  2.19e+03 TPhysA_16_23 Transportation
+   13        0 2.61e+03        0     1e+05        0      424  2.61e+03     CalPhys Transportation
+   14        0 2.63e+03        0     1e+05        0     20.2  2.63e+03 TPhysB_17_23 Transportation
+   15        0 2.97e+03        0     1e+05        0      335  2.97e+03     CalPhys Transportation
+   16        0 2.99e+03        0     1e+05        0     20.2  2.99e+03 TPhysA_17_23 Transportation
+   17        0 3.41e+03        0     1e+05        0      424  3.41e+03     CalPhys Transportation
+   18        0 3.43e+03        0     1e+05        0     20.2  3.43e+03 TPhysB_18_23 Transportation
+   19        0 3.77e+03        0     1e+05        0      335  3.77e+03     CalPhys Transportation
+   20        0 3.79e+03        0     1e+05        0     20.2  3.79e+03 TPhysA_18_23 Transportation
+   21        0 4.21e+03        0     1e+05        0      424  4.21e+03     CalPhys Transportation
+   22        0 4.23e+03        0     1e+05        0     20.2  4.23e+03 TPhysB_19_23 Transportation
+   23        0 4.57e+03        0     1e+05        0      335  4.57e+03     CalPhys Transportation
+   24        0 4.59e+03        0     1e+05        0     20.2  4.59e+03 TPhysA_19_23 Transportation
+   25        0 5.01e+03        0     1e+05        0      424  5.01e+03     CalPhys Transportation
+   26        0 5.03e+03        0     1e+05        0     20.2  5.03e+03 TPhysB_20_23 Transportation
+   27        0 5.37e+03        0     1e+05        0      335  5.37e+03     CalPhys Transportation
+   28        0 5.39e+03        0     1e+05        0     20.2  5.39e+03 TPhysA_20_23 Transportation
+   29        0 5.81e+03        0     1e+05        0      424  5.81e+03     CalPhys Transportation
+   30        0 5.83e+03        0     1e+05        0     20.2  5.83e+03 TPhysB_21_23 Transportation
+   31        0 6.17e+03        0     1e+05        0      335  6.17e+03     CalPhys Transportation
+   32        0 6.19e+03        0     1e+05        0     20.2  6.19e+03 TPhysA_21_23 Transportation
+   33        0 6.61e+03        0     1e+05        0      424  6.61e+03     CalPhys Transportation
+   34        0 6.63e+03        0     1e+05        0     20.2  6.63e+03 TPhysB_22_23 Transportation
+   35        0 6.97e+03        0     1e+05        0      335  6.97e+03     CalPhys Transportation
+   36        0 6.99e+03        0     1e+05        0     20.2  6.99e+03 TPhysA_22_23 Transportation
+   37        0 7.41e+03        0     1e+05        0      424  7.41e+03     CalPhys Transportation
+   38        0 7.43e+03        0     1e+05        0     20.2  7.43e+03 TPhysB_23_23 Transportation
+   39        0 7.77e+03        0     1e+05        0      335  7.77e+03     CalPhys Transportation
+   40        0 7.79e+03        0     1e+05        0     20.2  7.79e+03 TPhysA_23_23 Transportation
+   41        0 8.21e+03        0     1e+05        0      424  8.21e+03     CalPhys Transportation
+   42        0 8.23e+03        0     1e+05        0     20.2  8.23e+03 TPhysB_24_23 Transportation
+   43        0 8.57e+03        0     1e+05        0      335  8.57e+03     CalPhys Transportation
+   44        0 8.59e+03        0     1e+05        0     20.2  8.59e+03 TPhysA_24_23 Transportation
+   45        0 9.01e+03        0     1e+05        0      424  9.01e+03     CalPhys Transportation
+   46        0 9.03e+03        0     1e+05        0     20.2  9.03e+03 TPhysB_25_23 Transportation
+   47        0 9.37e+03        0     1e+05        0      335  9.37e+03     CalPhys Transportation
+   48        0 9.39e+03        0     1e+05        0     20.2  9.39e+03 TPhysA_25_23 Transportation
+   49        0 9.81e+03        0     1e+05        0      424  9.81e+03     CalPhys Transportation
+   50        0 9.83e+03        0     1e+05        0     20.2  9.83e+03 TPhysB_26_23 Transportation
+   51        0 1.02e+04        0     1e+05        0      335  1.02e+04     CalPhys Transportation
+   52        0  1.5e+04        0     1e+05        0 4.83e+03   1.5e+04       WPhys Transportation
+   53        0    2e+04        0     1e+05        0    5e+03     2e+04  OutOfWorld Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0        0        0     1e+05        0        0         0       WPhys initStep
-    1    2e+04    2e+04        0     1e+05        0 2.83e+04  2.83e+04  OutOfWorld Transportation
-/tracking/verbose 0
-/run/beamOn 10
-#
-# Assembly geometry
-# Geantino 100 GeV to the direction (0.,0.,1.)
-# 10 events
-#
-/mydet/SwitchDetector Assembly
-Now Detector is Assembly
-/gun/position  600  600 -601 mm
-/gun/direction 0      0    1
-/tracking/verbose 1
-/run/beamOn 1
+    0        0        0        0     1e+05        0        0         0 TPhysA_13_23 initStep
+    1      117      117        0     1e+05        0      166       166     CalPhys Transportation
+    2      177      177        0     1e+05        0     84.1       250 TPhysB_14_23 Transportation
+    3      373      373        0     1e+05        0      278       528     CalPhys Transportation
+    4      376      376        0     1e+05        0        4       532 TPhysB_14_24 Transportation
+    5      624      624        0     1e+05        0      350       882     CalPhys Transportation
+    6      654      654        0     1e+05        0     42.6       925 TPhysA_14_25 Transportation
+    7      971      971        0     1e+05        0      449  1.37e+03     CalPhys Transportation
+    8      985      985        0     1e+05        0     19.2  1.39e+03 TPhysB_15_25 Transportation
+    9 1.27e+03 1.27e+03        0     1e+05        0      397  1.79e+03     CalPhys Transportation
+   10  1.3e+03  1.3e+03        0     1e+05        0     44.8  1.83e+03 TPhysB_15_26 Transportation
+   11  1.4e+03  1.4e+03        0     1e+05        0      150  1.98e+03     CalPhys Transportation
+   12 1.52e+03 1.52e+03        0     1e+05        0      160  2.14e+03 TPhysA_15_27 Transportation
+   13 1.81e+03 1.81e+03        0     1e+05        0      414  2.56e+03     CalPhys Transportation
+   14 1.82e+03 1.82e+03        0     1e+05        0     12.8  2.57e+03 TPhysB_16_27 Transportation
+   15 2.13e+03 2.13e+03        0     1e+05        0      444  3.02e+03     CalPhys Transportation
+   16 2.18e+03 2.18e+03        0     1e+05        0     60.6  3.08e+03 TPhysA_16_28 Transportation
+   17  2.4e+03  2.4e+03        0     1e+05        0      318  3.39e+03 TPhysA_16_29 Transportation
+   18 2.62e+03 2.62e+03        0     1e+05        0      318  3.71e+03     CalPhys Transportation
+   19 2.67e+03 2.67e+03        0     1e+05        0     60.6  3.77e+03 TPhysB_17_29 Transportation
+   20 2.98e+03 2.98e+03        0     1e+05        0      444  4.22e+03     CalPhys Transportation
+   21 2.99e+03 2.99e+03        0     1e+05        0     12.8  4.23e+03 TPhysA_17_30 Transportation
+   22 3.28e+03 3.28e+03        0     1e+05        0      414  4.64e+03     CalPhys Transportation
+   23  3.4e+03  3.4e+03        0     1e+05        0      160   4.8e+03 TPhysB_18_30 Transportation
+   24  3.5e+03  3.5e+03        0     1e+05        0      150  4.95e+03     CalPhys Transportation
+   25 3.53e+03 3.53e+03        0     1e+05        0     44.8     5e+03 TPhysB_18_31 Transportation
+   26 3.82e+03 3.82e+03        0     1e+05        0      397   5.4e+03     CalPhys Transportation
+   27 3.83e+03 3.83e+03        0     1e+05        0     19.2  5.41e+03 TPhysA_18_32 Transportation
+   28 4.15e+03 4.15e+03        0     1e+05        0      449  5.86e+03     CalPhys Transportation
+   29 4.18e+03 4.18e+03        0     1e+05        0     42.6  5.91e+03 TPhysB_19_32 Transportation
+   30 4.42e+03 4.42e+03        0     1e+05        0      350  6.26e+03     CalPhys Transportation
+   31 4.43e+03 4.43e+03        0     1e+05        0        4  6.26e+03 TPhysB_19_33 Transportation
+   32 4.62e+03 4.62e+03        0     1e+05        0      278  6.54e+03     CalPhys Transportation
+   33 4.68e+03 4.68e+03        0     1e+05        0     84.1  6.62e+03 TPhysA_19_34 Transportation
+   34 4.99e+03 4.99e+03        0     1e+05        0      437  7.06e+03     CalPhys Transportation
+   35    5e+03    5e+03        0     1e+05        0     9.68  7.07e+03 TPhysB_20_34 Transportation
+   36  5.3e+03  5.3e+03        0     1e+05        0      427   7.5e+03     CalPhys Transportation
+   37 5.38e+03 5.38e+03        0     1e+05        0      115  7.61e+03 TPhysA_20_35 Transportation
+   38 5.54e+03 5.54e+03        0     1e+05        0      226  7.84e+03     CalPhys Transportation
+   39 5.55e+03 5.55e+03        0     1e+05        0     17.1  7.86e+03 TPhysA_20_36 Transportation
+   40 5.82e+03 5.82e+03        0     1e+05        0      376  8.23e+03     CalPhys Transportation
+   41 5.84e+03 5.84e+03        0     1e+05        0       29  8.26e+03 TPhysB_21_36 Transportation
+   42 6.16e+03 6.16e+03        0     1e+05        0      450  8.71e+03     CalPhys Transportation
+   43 6.18e+03 6.18e+03        0     1e+05        0       29  8.74e+03 TPhysA_21_37 Transportation
+   44 6.45e+03 6.45e+03        0     1e+05        0      376  9.12e+03     CalPhys Transportation
+   45 6.46e+03 6.46e+03        0     1e+05        0     17.1  9.13e+03 TPhysA_21_38 Transportation
+   46 6.62e+03 6.62e+03        0     1e+05        0      226  9.36e+03     CalPhys Transportation
+   47  6.7e+03  6.7e+03        0     1e+05        0      115  9.47e+03 TPhysB_22_38 Transportation
+   48    7e+03    7e+03        0     1e+05        0      427   9.9e+03     CalPhys Transportation
+   49 7.01e+03 7.01e+03        0     1e+05        0     9.68  9.91e+03 TPhysA_22_39 Transportation
+   50 7.32e+03 7.32e+03        0     1e+05        0      437  1.03e+04     CalPhys Transportation
+   51 7.38e+03 7.38e+03        0     1e+05        0     84.1  1.04e+04 TPhysB_23_39 Transportation
+   52 7.57e+03 7.57e+03        0     1e+05        0      278  1.07e+04     CalPhys Transportation
+   53 7.58e+03 7.58e+03        0     1e+05        0        4  1.07e+04 TPhysB_23_40 Transportation
+   54 7.82e+03 7.82e+03        0     1e+05        0      350  1.11e+04     CalPhys Transportation
+   55 7.85e+03 7.85e+03        0     1e+05        0     42.6  1.11e+04 TPhysA_23_41 Transportation
+   56 8.17e+03 8.17e+03        0     1e+05        0      449  1.16e+04     CalPhys Transportation
+   57 8.18e+03 8.18e+03        0     1e+05        0     19.2  1.16e+04 TPhysB_24_41 Transportation
+   58 8.47e+03 8.47e+03        0     1e+05        0      397   1.2e+04     CalPhys Transportation
+   59  8.5e+03  8.5e+03        0     1e+05        0     44.8   1.2e+04 TPhysB_24_42 Transportation
+   60  8.6e+03  8.6e+03        0     1e+05        0      150  1.22e+04     CalPhys Transportation
+   61 8.72e+03 8.72e+03        0     1e+05        0      160  1.23e+04 TPhysA_24_43 Transportation
+   62 9.01e+03 9.01e+03        0     1e+05        0      414  1.27e+04     CalPhys Transportation
+   63 9.02e+03 9.02e+03        0     1e+05        0     12.8  1.28e+04 TPhysB_25_43 Transportation
+   64 9.33e+03 9.33e+03        0     1e+05        0      444  1.32e+04     CalPhys Transportation
+   65 9.38e+03 9.38e+03        0     1e+05        0     60.6  1.33e+04 TPhysA_25_44 Transportation
+   66  9.6e+03  9.6e+03        0     1e+05        0      318  1.36e+04 TPhysA_25_45 Transportation
+   67 9.82e+03 9.82e+03        0     1e+05        0      318  1.39e+04     CalPhys Transportation
+   68 9.87e+03 9.87e+03        0     1e+05        0     60.6   1.4e+04 TPhysB_26_45 Transportation
+   69 1.02e+04 1.02e+04        0     1e+05        0      444  1.44e+04     CalPhys Transportation
+   70  1.5e+04  1.5e+04        0     1e+05        0 6.81e+03  2.12e+04       WPhys Transportation
+   71    2e+04    2e+04        0     1e+05        0 7.07e+03  2.83e+04  OutOfWorld Transportation
+
+           -------------------------
+           Now Detector is Assembly
+           -------------------------
+
 
 *********************************************************************************************************
 * G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
@@ -161,18 +270,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     8      600      600      300     1e+05        0      100       901 AssemblyDetector Transportation
     9      600      600      450     1e+05        0      150  1.05e+03 av_1_impr_5_AssemblyCellLog_pv_0 Transportation
    10      600      600      550     1e+05        0      100  1.15e+03 AssemblyDetector Transportation
-   11      600      600    1e+03     1e+05        0      450   1.6e+03  OutOfWorld Transportation
-/tracking/verbose 0
-/run/beamOn 10
-#
-# Assembly geometry
-# Geantino 100 GeV to the direction (1.,1.,1.)
-# 10 events
-#
-/gun/position  0 0 0 mm
-/gun/direction 1 1 1
-/tracking/verbose 1
-/run/beamOn 1
+   11      600      600    1e+04     1e+05        0 9.45e+03  1.06e+04  OutOfWorld Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
@@ -184,17 +282,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     2      300      300      300     1e+05        0      173       520 AssemblyDetector Transportation
     3      450      450      450     1e+05        0      260       779 av_1_impr_5_AssemblyCellLog_pv_0 Transportation
     4      550      550      550     1e+05        0      173       953 AssemblyDetector Transportation
-    5    1e+03    1e+03    1e+03     1e+05        0      779  1.73e+03  OutOfWorld Transportation
-/tracking/verbose 0
-/run/beamOn 10
-#
-# Assembly geometry
-# Geantino 100 GeV to the direction (-1.,-1.,-1.)
-# 10 events
-#
-/gun/direction -1 -1 -1
-/tracking/verbose 1
-/run/beamOn 1
+    5    1e+04    1e+04    1e+04     1e+05        0 1.64e+04  1.73e+04  OutOfWorld Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
@@ -206,6 +294,129 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     2     -300     -300     -300     1e+05        0      173       520 AssemblyDetector Transportation
     3     -450     -450     -450     1e+05        0      260       779 av_1_impr_1_AssemblyCellLog_pv_2 Transportation
     4     -550     -550     -550     1e+05        0      173       953 AssemblyDetector Transportation
-    5   -1e+03   -1e+03   -1e+03     1e+05        0      779  1.73e+03  OutOfWorld Transportation
-/tracking/verbose 0
-/run/beamOn 10
+    5   -1e+04   -1e+04   -1e+04     1e+05        0 1.64e+04  1.73e+04  OutOfWorld Transportation
+
+           -------------------------
+           Now Detector is Assembly2
+           -------------------------
+
+
+*********************************************************************************************************
+* G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0        0   -1e+04        0     1e+05        0        0         0      world2 initStep
+    1        0 -6.82e+03        0     1e+05        0 3.18e+03  3.18e+03 av_4_impr_71_PLATE_pv_0 Transportation
+    2        0 -6.78e+03        0     1e+05        0       40  3.22e+03      world2 Transportation
+    3        0 -6.52e+03        0     1e+05        0      260  3.48e+03 av_4_impr_70_PLATE_pv_0 Transportation
+    4        0 -6.48e+03        0     1e+05        0       40  3.52e+03      world2 Transportation
+    5        0 -6.12e+03        0     1e+05        0      360  3.88e+03 av_4_impr_138_PLATE_pv_0 Transportation
+    6        0 -6.08e+03        0     1e+05        0       40  3.92e+03      world2 Transportation
+    7        0 -5.82e+03        0     1e+05        0      260  4.18e+03 av_4_impr_139_PLATE_pv_0 Transportation
+    8        0 -5.78e+03        0     1e+05        0       40  4.22e+03      world2 Transportation
+    9        0 -5.42e+03        0     1e+05        0      360  4.58e+03 av_4_impr_57_PLATE_pv_0 Transportation
+   10        0 -5.38e+03        0     1e+05        0       40  4.62e+03      world2 Transportation
+   11        0 -5.12e+03        0     1e+05        0      260  4.88e+03 av_4_impr_56_PLATE_pv_0 Transportation
+   12        0 -5.08e+03        0     1e+05        0       40  4.92e+03      world2 Transportation
+   13        0 -4.72e+03        0     1e+05        0      360  5.28e+03 av_4_impr_124_PLATE_pv_0 Transportation
+   14        0 -4.68e+03        0     1e+05        0       40  5.32e+03      world2 Transportation
+   15        0 -4.42e+03        0     1e+05        0      260  5.58e+03 av_4_impr_125_PLATE_pv_0 Transportation
+   16        0 -4.38e+03        0     1e+05        0       40  5.62e+03      world2 Transportation
+   17        0 -4.02e+03        0     1e+05        0      360  5.98e+03 av_4_impr_43_PLATE_pv_0 Transportation
+   18        0 -3.98e+03        0     1e+05        0       40  6.02e+03      world2 Transportation
+   19        0 -3.72e+03        0     1e+05        0      260  6.28e+03 av_4_impr_42_PLATE_pv_0 Transportation
+   20        0 -3.68e+03        0     1e+05        0       40  6.32e+03      world2 Transportation
+   21        0 -3.32e+03        0     1e+05        0      360  6.68e+03 av_4_impr_110_PLATE_pv_0 Transportation
+   22        0 -3.28e+03        0     1e+05        0       40  6.72e+03      world2 Transportation
+   23        0 -3.02e+03        0     1e+05        0      260  6.98e+03 av_4_impr_111_PLATE_pv_0 Transportation
+   24        0 -2.98e+03        0     1e+05        0       40  7.02e+03      world2 Transportation
+   25        0 -2.62e+03        0     1e+05        0      360  7.38e+03 av_4_impr_29_PLATE_pv_0 Transportation
+   26        0 -2.58e+03        0     1e+05        0       40  7.42e+03      world2 Transportation
+   27        0 -2.32e+03        0     1e+05        0      260  7.68e+03 av_4_impr_28_PLATE_pv_0 Transportation
+   28        0 -2.28e+03        0     1e+05        0       40  7.72e+03      world2 Transportation
+   29        0 -1.92e+03        0     1e+05        0      360  8.08e+03 av_4_impr_96_PLATE_pv_0 Transportation
+   30        0 -1.88e+03        0     1e+05        0       40  8.12e+03      world2 Transportation
+   31        0 -1.62e+03        0     1e+05        0      260  8.38e+03 av_4_impr_97_PLATE_pv_0 Transportation
+   32        0 -1.58e+03        0     1e+05        0       40  8.42e+03      world2 Transportation
+   33        0 -1.22e+03        0     1e+05        0      360  8.78e+03 av_4_impr_15_PLATE_pv_0 Transportation
+   34        0 -1.18e+03        0     1e+05        0       40  8.82e+03      world2 Transportation
+   35        0     -920        0     1e+05        0      260  9.08e+03 av_4_impr_14_PLATE_pv_0 Transportation
+   36        0     -880        0     1e+05        0       40  9.12e+03      world2 Transportation
+   37        0     -520        0     1e+05        0      360  9.48e+03 av_4_impr_82_PLATE_pv_0 Transportation
+   38        0     -480        0     1e+05        0       40  9.52e+03      world2 Transportation
+   39        0     -220        0     1e+05        0      260  9.78e+03 av_4_impr_83_PLATE_pv_0 Transportation
+   40        0     -180        0     1e+05        0       40  9.82e+03      world2 Transportation
+   41        0      180        0     1e+05        0      360  1.02e+04 av_4_impr_8_PLATE_pv_0 Transportation
+   42        0      220        0     1e+05        0       40  1.02e+04      world2 Transportation
+   43        0      480        0     1e+05        0      260  1.05e+04 av_4_impr_7_PLATE_pv_0 Transportation
+   44        0      520        0     1e+05        0       40  1.05e+04      world2 Transportation
+   45        0      880        0     1e+05        0      360  1.09e+04 av_4_impr_75_PLATE_pv_0 Transportation
+   46        0      920        0     1e+05        0       40  1.09e+04      world2 Transportation
+   47        0 1.18e+03        0     1e+05        0      260  1.12e+04 av_4_impr_76_PLATE_pv_0 Transportation
+   48        0 1.22e+03        0     1e+05        0       40  1.12e+04      world2 Transportation
+   49        0 1.58e+03        0     1e+05        0      360  1.16e+04 av_4_impr_22_PLATE_pv_0 Transportation
+   50        0 1.62e+03        0     1e+05        0       40  1.16e+04      world2 Transportation
+   51        0 1.88e+03        0     1e+05        0      260  1.19e+04 av_4_impr_21_PLATE_pv_0 Transportation
+   52        0 1.92e+03        0     1e+05        0       40  1.19e+04      world2 Transportation
+   53        0 2.28e+03        0     1e+05        0      360  1.23e+04 av_4_impr_89_PLATE_pv_0 Transportation
+   54        0 2.32e+03        0     1e+05        0       40  1.23e+04      world2 Transportation
+   55        0 2.58e+03        0     1e+05        0      260  1.26e+04 av_4_impr_90_PLATE_pv_0 Transportation
+   56        0 2.62e+03        0     1e+05        0       40  1.26e+04      world2 Transportation
+   57        0 2.98e+03        0     1e+05        0      360   1.3e+04 av_4_impr_36_PLATE_pv_0 Transportation
+   58        0 3.02e+03        0     1e+05        0       40   1.3e+04      world2 Transportation
+   59        0 3.28e+03        0     1e+05        0      260  1.33e+04 av_4_impr_35_PLATE_pv_0 Transportation
+   60        0 3.32e+03        0     1e+05        0       40  1.33e+04      world2 Transportation
+   61        0 3.68e+03        0     1e+05        0      360  1.37e+04 av_4_impr_103_PLATE_pv_0 Transportation
+   62        0 3.72e+03        0     1e+05        0       40  1.37e+04      world2 Transportation
+   63        0 3.98e+03        0     1e+05        0      260   1.4e+04 av_4_impr_104_PLATE_pv_0 Transportation
+   64        0 4.02e+03        0     1e+05        0       40   1.4e+04      world2 Transportation
+   65        0 4.38e+03        0     1e+05        0      360  1.44e+04 av_4_impr_50_PLATE_pv_0 Transportation
+   66        0 4.42e+03        0     1e+05        0       40  1.44e+04      world2 Transportation
+   67        0 4.68e+03        0     1e+05        0      260  1.47e+04 av_4_impr_49_PLATE_pv_0 Transportation
+   68        0 4.72e+03        0     1e+05        0       40  1.47e+04      world2 Transportation
+   69        0 5.08e+03        0     1e+05        0      360  1.51e+04 av_4_impr_117_PLATE_pv_0 Transportation
+   70        0 5.12e+03        0     1e+05        0       40  1.51e+04      world2 Transportation
+   71        0 5.38e+03        0     1e+05        0      260  1.54e+04 av_4_impr_118_PLATE_pv_0 Transportation
+   72        0 5.42e+03        0     1e+05        0       40  1.54e+04      world2 Transportation
+   73        0 5.78e+03        0     1e+05        0      360  1.58e+04 av_4_impr_64_PLATE_pv_0 Transportation
+   74        0 5.82e+03        0     1e+05        0       40  1.58e+04      world2 Transportation
+   75        0 6.08e+03        0     1e+05        0      260  1.61e+04 av_4_impr_63_PLATE_pv_0 Transportation
+   76        0 6.12e+03        0     1e+05        0       40  1.61e+04      world2 Transportation
+   77        0 6.48e+03        0     1e+05        0      360  1.65e+04 av_4_impr_131_PLATE_pv_0 Transportation
+   78        0 6.52e+03        0     1e+05        0       40  1.65e+04      world2 Transportation
+   79        0 6.78e+03        0     1e+05        0      260  1.68e+04 av_4_impr_132_PLATE_pv_0 Transportation
+   80        0 6.82e+03        0     1e+05        0       40  1.68e+04      world2 Transportation
+   81        0    2e+04        0     1e+05        0 1.32e+04     3e+04  OutOfWorld Transportation
+
+           -------------------------
+           Now Detector is Assembly3
+           -------------------------
+
+
+*********************************************************************************************************
+* G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0   -1e+04      300        0     1e+05        0        0         0      world3 initStep
+    1 -1.6e+03      300        0     1e+05        0  8.4e+03   8.4e+03 av_5_impr_1_CONS_pv_1 Transportation
+    2     -600      300        0     1e+05        0    1e+03   9.4e+03      world3 Transportation
+    3      600      300        0     1e+05        0  1.2e+03  1.06e+04 av_5_impr_1_CONS_pv_0 Transportation
+    4  1.6e+03      300        0     1e+05        0    1e+03  1.16e+04      world3 Transportation
+    5    2e+04      300        0     1e+05        0 1.84e+04     3e+04  OutOfWorld Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0   -1e+04      500        0     1e+05        0        0         0      world3 initStep
+    1 -1.6e+03      500        0     1e+05        0  8.4e+03   8.4e+03 av_5_impr_1_CONS_pv_1 Transportation
+    2 -1.1e+03      500        0     1e+05        0      500   8.9e+03      world3 Transportation
+    3  1.1e+03      500        0     1e+05        0  2.2e+03  1.11e+04 av_5_impr_1_CONS_pv_0 Transportation
+    4  1.6e+03      500        0     1e+05        0      500  1.16e+04      world3 Transportation
+    5    2e+04      500        0     1e+05        0 1.84e+04     3e+04  OutOfWorld Transportation
+
+!!! Test completed !!!
+

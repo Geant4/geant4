@@ -31,6 +31,7 @@ Registering model factories...
 
 You have successfully registered the following model factories.
 Registered model factories:
+generic
 drawByCharge
 drawByParticleID
 drawByOriginVolume
@@ -184,6 +185,7 @@ ionIoni:   tables are built for  GenericIon
       Lambda tables from threshold to 100 TeV in 120 bins.
       Scaling relation is used to proton dE/dx and range
       Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for alpha particles below.
+      Stopping Power data for 8 ion/material pairs are used.
       Step function: finalRange(mm)= 0.1, dRoverRange= 0.1, integral: 1
 
 hIoni:   tables are built for  anti_proton
@@ -191,20 +193,6 @@ hIoni:   tables are built for  anti_proton
       Lambda tables from threshold to 100 TeV in 120 bins.
       Scaling relation is used to proton dE/dx and range
       Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for protons below.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
-
-hIoni:   tables are built for  kaon+
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Scaling relation is used to proton dE/dx and range
-      Bether-Bloch model for Escaled > 1.05231 MeV, ICRU49 parametrisation for protons below.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
-
-hIoni:   tables are built for  kaon-
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Scaling relation is used to proton dE/dx and range
-      Bether-Bloch model for Escaled > 1.05231 MeV, ICRU49 parametrisation for protons below.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 msc:  Model variant of multiple scattering for mu+
@@ -332,28 +320,28 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=50.11s Real=57.8s Sys=7.22s
+  User=52.38s Real=60.33s Sys=7.34s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started
 ========================================================
 Number of events             100
-Average number of e-         1328
-Average number of gamma      703
-Average number of e+         48.51
-Average number of steps      4601
-Edep 1x1 =                   0.8304 +- 0.002972  res=  3.579 %
-Edep 3x3 =                   0.9577 +- 0.001293  res=  1.35 %
-Edep 5x5 =                   0.9796 +- 0.0008967  res=  0.9154 %
+Average number of e-         1325
+Average number of gamma      703.1
+Average number of e+         48.11
+Average number of steps      4606
+Edep 1x1 =                   0.8291 +- 0.003254  res=  3.925 %
+Edep 3x3 =                   0.9555 +- 0.001635  res=  1.711 %
+Edep 5x5 =                   0.978 +- 0.00107  res=  1.094 %
 ========================================================
 
 
 <<<<<ACCEPTANCE>>>>> 100 events for Crystal Calorimeter
-Edep1x1: 0.8304  delEdep1x1= 0.004363 nrms= 1.243
-Erms1x1: 0.02972  delErms1x1= -0.005382 nrms= -1.533
-Edep3x3: 0.9577  delEdep3x3= 0.001317 nrms= 0.8229
-Erms3x3: 0.01293  delErms3x3= -0.003068 nrms= -1.918
-Edep5x5: 0.9796  delEdep5x5= 0.0005502 nrms= 0.4624
-Erms5x5: 0.008967  delErms5x5= -0.002933 nrms= -2.465
+Edep1x1: 0.8291  delEdep1x1= 0.00309 nrms= 0.8803
+Erms1x1: 0.03254  delErms1x1= -0.002562 nrms= -0.7298
+Edep3x3: 0.9555  delEdep3x3= -0.0009376 nrms= -0.586
+Erms3x3: 0.01635  delErms3x3= 0.0003471 nrms= 0.2169
+Edep5x5: 0.978  delEdep5x5= -0.0009607 nrms= -0.8073
+Erms5x5: 0.0107  delErms5x5= -0.001201 nrms= -1.009
 <<<<<END>>>>>   IS ACCEPTED
 
 /vis/viewer/update

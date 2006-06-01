@@ -74,6 +74,7 @@ Registering model factories...
 
 You have successfully registered the following model factories.
 Registered model factories:
+generic
 drawByCharge
 drawByParticleID
 drawByOriginVolume
@@ -150,20 +151,6 @@ hIoni:   tables are built for  proton
       Lambda tables from threshold to 100 TeV in 120 bins.
       Scaling relation is used to proton dE/dx and range
       Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for protons below.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
-
-hIoni:   tables are built for  kaon+
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Scaling relation is used to proton dE/dx and range
-      Bether-Bloch model for Escaled > 1.05231 MeV, ICRU49 parametrisation for protons below.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
-
-hIoni:   tables are built for  kaon-
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Scaling relation is used to proton dE/dx and range
-      Bether-Bloch model for Escaled > 1.05231 MeV, ICRU49 parametrisation for protons below.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 msc:  Model variant of multiple scattering for mu+
@@ -291,7 +278,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.03s Real=0.04s Sys=0.01s
+  User=0.05s Real=0.06s Sys=0.01s
 ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
 
 ========= Table of registered couples ==============================
@@ -316,7 +303,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=2.65s Real=2.65s Sys=0s
+  User=2.92s Real=2.93s Sys=0s
 ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
 Set field value to (0,0,1000) Gauss 
 
@@ -340,7 +327,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.26s Real=0.26s Sys=0s
+  User=0.29s Real=0.29s Sys=0s
 ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
 Graphics systems deleted.
 Visualization Manager deleting...

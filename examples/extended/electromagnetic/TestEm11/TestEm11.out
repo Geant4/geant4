@@ -57,6 +57,7 @@ Registering model factories...
 
 You have successfully registered the following model factories.
 Registered model factories:
+generic
 drawByCharge
 drawByParticleID
 drawByOriginVolume
@@ -112,7 +113,7 @@ PhysicsList::SetCuts:CutLength : 1 mm
 #
 /testem/event/printModulo 10000
 #
-/run/beamOn 100000
+/run/beamOn 20000
 
 phot:  Total cross sections from Sandia parametrisation. 
 
@@ -180,6 +181,7 @@ ionIoni:   tables are built for  GenericIon
       Lambda tables from threshold to 100 TeV in 120 bins.
       Scaling relation is used to proton dE/dx and range
       Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for alpha particles below.
+      Stopping Power data for 8 ion/material pairs are used.
       Step function: finalRange(mm)= 0.1, dRoverRange= 0.1, integral: 1
       CSDA range table up to 1 GeV in 70 bins.
 
@@ -188,22 +190,6 @@ hIoni:   tables are built for  anti_proton
       Lambda tables from threshold to 100 TeV in 120 bins.
       Scaling relation is used to proton dE/dx and range
       Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for protons below.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
-      CSDA range table up to 1 GeV in 70 bins.
-
-hIoni:   tables are built for  kaon+
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Scaling relation is used to proton dE/dx and range
-      Bether-Bloch model for Escaled > 1.05231 MeV, ICRU49 parametrisation for protons below.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
-      CSDA range table up to 1 GeV in 70 bins.
-
-hIoni:   tables are built for  kaon-
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Scaling relation is used to proton dE/dx and range
-      Bether-Bloch model for Escaled > 1.05231 MeV, ICRU49 parametrisation for protons below.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
       CSDA range table up to 1 GeV in 70 bins.
 
@@ -298,47 +284,31 @@ Start Run processing.
 ---> Begin of Event: 0
 
 ---> Begin of Event: 10000
-
----> Begin of Event: 20000
-
----> Begin of Event: 30000
-
----> Begin of Event: 40000
-
----> Begin of Event: 50000
-
----> Begin of Event: 60000
-
----> Begin of Event: 70000
-
----> Begin of Event: 80000
-
----> Begin of Event: 90000
 Run terminated.
 Run Summary
-  Number of events processed : 100000
-  User=791.81s Real=1679.83s Sys=699.47s
+  Number of events processed : 20000
+  User=151.36s Real=322.7s Sys=140.14s
 
  ======================== run summary ======================
 
- The run consists of 100000 e- of 500.00 keV through 1.00 mm  of G4_Si (density: 2.33 g/cm3 )
+ The run consists of 20000 e- of 500.00 keV through 1.00 mm  of G4_Si (density: 2.33 g/cm3 )
 
  ============================================================
 
- Total Energy deposited        = 453.004 keV +- 99.651 keV
+ Total Energy deposited        = 451.259 keV +- 99.216 keV
 
- Track length of primary track = 869.756 um  +- 181.671 um 
+ Track length of primary track = 867.103 um  +- 178.865 um 
  Range from EmCalculator       = 937.365 um  (from full dE/dx)
 
- Projected range               = 336.422 um  +- 202.793 um 
+ Projected range               = 312.554 um  +- 200.604 um 
 
- Nb of steps of primary track  = 87.49 +- 18.16	 Step size= 9.932 um  +- 92.620 nm 
+ Nb of steps of primary track  = 87.23 +- 17.87	 Step size= 9.935 um  +- 59.364 nm 
 
- absorbed = 79.69 %   transmit = 5.21 %   reflected = 15.10 %
+ absorbed = 78.59 %   transmit = 4.82 %   reflected = 16.59 %
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1531979934, 735368099
+ Current couple of seeds = 431591907, 1496536939
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

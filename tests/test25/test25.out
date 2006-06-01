@@ -83,20 +83,6 @@ hIoni:   tables are built for  anti_proton
       Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for protons below.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
-hIoni:   tables are built for  kaon+
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Scaling relation is used to proton dE/dx and range
-      Bether-Bloch model for Escaled > 1.05231 MeV, ICRU49 parametrisation for protons below.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
-
-hIoni:   tables are built for  kaon-
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Scaling relation is used to proton dE/dx and range
-      Bether-Bloch model for Escaled > 1.05231 MeV, ICRU49 parametrisation for protons below.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
-
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
@@ -177,7 +163,28 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
+
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
+ Materials : Copper 
+ Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Copper
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.9e+295 J      e- 9.5e+02 GeV    e+ 7.8e+02 GeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0.01s Real=0.01s Sys=0s
 
 Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : Copper 
@@ -219,28 +226,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
-
-Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
- Materials : Copper 
- Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : Copper
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.9e+295 J      e- 9.5e+02 GeV    e+ 7.8e+02 GeV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-Start Run processing.
-Run terminated.
-Run Summary
-  Number of events processed : 1
-  User=1s Real=1.21s Sys=0.11s
+  User=1.26s Real=1.5s Sys=0.14s
 
 Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : Copper 
@@ -261,7 +247,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=1.53s Real=1.63s Sys=0.1s
+  User=1.05s Real=1.15s Sys=0.1s
 
 Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : Copper 
@@ -282,7 +268,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=1.64s Real=1.84s Sys=0.17s
+  User=4.58s Real=5.16s Sys=0.56s
 SimpleBox is now made of Cu
 
 Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
@@ -304,7 +290,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.11s Real=0.13s Sys=0.02s
+  User=0.09s Real=0.09s Sys=0s
 
 Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : Copper 
@@ -325,7 +311,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.27s Real=0.28s Sys=0.01s
+  User=0.37s Real=0.42s Sys=0.05s
 
 Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : Copper 
@@ -346,7 +332,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.84s Real=0.94s Sys=0.1s
+  User=0.3s Real=0.34s Sys=0.04s
 
 Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : Copper 
@@ -367,7 +353,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=1.16s Real=1.22s Sys=0.06s
+  User=1.07s Real=1.39s Sys=0.1s
 
 Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : Copper 
@@ -388,7 +374,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=1.33s Real=1.65s Sys=0.12s
+  User=0.83s Real=0.9s Sys=0.07s
 
 Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : Copper 
@@ -409,7 +395,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=1.31s Real=1.46s Sys=0.15s
+  User=1.33s Real=1.46s Sys=0.13s
 SimpleBox is now made of U
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
 The cut in range [1000 (mm)]   is too big   for material  idx=4
@@ -486,20 +472,6 @@ hIoni:   tables are built for  anti_proton
       Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for protons below.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
-hIoni:   tables are built for  kaon+
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Scaling relation is used to proton dE/dx and range
-      Bether-Bloch model for Escaled > 1.0523107 MeV, ICRU49 parametrisation for protons below.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
-
-hIoni:   tables are built for  kaon-
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Scaling relation is used to proton dE/dx and range
-      Bether-Bloch model for Escaled > 1.0523107 MeV, ICRU49 parametrisation for protons below.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
-
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
@@ -632,33 +604,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
-
-Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
- Materials : Uranium 
- Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : No      recalculation needed : No 
- Material : Copper
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.8802232e+295 J      e- 949.55059 GeV    e+ 779.78768 GeV
-
-Index : 1     used in the geometry : Yes     recalculation needed : No 
- Material : Uranium
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.8802232e+295 J      e- 2.8802232e+295 J      e+ 2.8802232e+295 J  
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-Start Run processing.
-Run terminated.
-Run Summary
-  Number of events processed : 1
-  User=1.75s Real=2s Sys=0.22s
+  User=1.99s Real=2.17s Sys=0.13s
 
 Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : Uranium 
@@ -685,7 +631,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=2.06s Real=2.26s Sys=0.18s
+  User=1.98s Real=2.2s Sys=0.21s
 
 Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : Uranium 
@@ -708,11 +654,36 @@ Index : 1     used in the geometry : Yes     recalculation needed : No
 ====================================================================
 
 Start Run processing.
- G4NuclearLevelManager: nuclide (91,237) does not have a gamma levels file
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=7.59s Real=8.36s Sys=0.73s
+  User=3.84s Real=4.19s Sys=0.33s
+
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
+ Materials : Uranium 
+ Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : No      recalculation needed : No 
+ Material : Copper
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.8802232e+295 J      e- 949.55059 GeV    e+ 779.78768 GeV
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : Uranium
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.8802232e+295 J      e- 2.8802232e+295 J      e+ 2.8802232e+295 J  
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=3.46s Real=4s Sys=0.52s
 SimpleBox is now made of U
 
 Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
@@ -739,7 +710,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.16s Real=0.19s Sys=0.03s
+  User=0.13s Real=0.14s Sys=0.01s
 
 Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : Uranium 
@@ -765,7 +736,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=1.01s Real=1.12s Sys=0.11s
+  User=0.47s Real=0.52s Sys=0.05s
 
 Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : Uranium 
@@ -791,7 +762,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=3.76s Real=4.23s Sys=0.45s
+  User=0.19s Real=0.22s Sys=0.03s
 
 Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : Uranium 
@@ -817,7 +788,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=1.19s Real=1.33s Sys=0.12s
+  User=3.11s Real=3.47s Sys=0.34s
 
 Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : Uranium 
@@ -843,7 +814,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=6.02s Real=6.59s Sys=0.55s
+  User=2.4s Real=2.68s Sys=0.28s
 
 Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : Uranium 
@@ -869,7 +840,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=6.34s Real=7.09s Sys=0.5s
+  User=0.41s Real=0.41s Sys=0s
 SimpleBox is now made of Si
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
 The cut in range [1000 (mm)]   is too big   for material  idx=1
@@ -940,20 +911,6 @@ hIoni:   tables are built for  anti_proton
       Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for protons below.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
-hIoni:   tables are built for  kaon+
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Scaling relation is used to proton dE/dx and range
-      Bether-Bloch model for Escaled > 1.0523107 MeV, ICRU49 parametrisation for protons below.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
-
-hIoni:   tables are built for  kaon-
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Scaling relation is used to proton dE/dx and range
-      Bether-Bloch model for Escaled > 1.0523107 MeV, ICRU49 parametrisation for protons below.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
-
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
@@ -1039,7 +996,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0.01s Sys=0.01s
+  User=0s Real=0s Sys=0s
 
 Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : Silicon 
@@ -1101,7 +1058,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.27s Real=0.3s Sys=0.03s
+  User=0.15s Real=0.15s Sys=0s
 
 Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : Silicon 
@@ -1132,7 +1089,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.23s Real=0.25s Sys=0.02s
+  User=0.3s Real=0.33s Sys=0.03s
 
 Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : Silicon 
@@ -1163,7 +1120,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.72s Real=0.81s Sys=0.09s
+  User=0.05s Real=0.06s Sys=0.01s
 
 Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : Silicon 
@@ -1194,7 +1151,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.12s Real=0.12s Sys=0s
+  User=0.91s Real=1.09s Sys=0.15s
 SimpleBox is now made of Si
 
 Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
@@ -1226,7 +1183,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.15s Real=0.16s Sys=0.01s
+  User=0.17s Real=0.18s Sys=0.01s
 
 Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : Silicon 
@@ -1257,7 +1214,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.12s Real=0.15s Sys=0.03s
+  User=0.16s Real=0.16s Sys=0s
 
 Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : Silicon 
@@ -1288,7 +1245,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.19s Real=0.23s Sys=0.04s
+  User=0.21s Real=0.22s Sys=0.01s
 
 Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : Silicon 
@@ -1319,7 +1276,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.27s Real=0.29s Sys=0.02s
+  User=0.3s Real=0.3s Sys=0s
 
 Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : Silicon 
@@ -1350,7 +1307,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.53s Real=0.6s Sys=0.07s
+  User=0.38s Real=0.46s Sys=0.08s
 
 Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Materials : Silicon 
@@ -1381,7 +1338,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.77s Real=0.81s Sys=0.04s
+  User=0.87s Real=1s Sys=0.13s
 SimpleBox is now made of H
 
 conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
@@ -1447,20 +1404,6 @@ hIoni:   tables are built for  anti_proton
       Lambda tables from threshold to 100 TeV in 120 bins.
       Scaling relation is used to proton dE/dx and range
       Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for protons below.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
-
-hIoni:   tables are built for  kaon+
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Scaling relation is used to proton dE/dx and range
-      Bether-Bloch model for Escaled > 1.0523107 MeV, ICRU49 parametrisation for protons below.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
-
-hIoni:   tables are built for  kaon-
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Scaling relation is used to proton dE/dx and range
-      Bether-Bloch model for Escaled > 1.0523107 MeV, ICRU49 parametrisation for protons below.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 msc:  Model variant of multiple scattering for mu+

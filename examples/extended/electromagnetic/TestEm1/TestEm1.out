@@ -69,6 +69,7 @@ Registering model factories...
 
 You have successfully registered the following model factories.
 Registered model factories:
+generic
 drawByCharge
 drawByParticleID
 drawByOriginVolume
@@ -182,6 +183,7 @@ ionIoni:   tables are built for  GenericIon
       Lambda tables from threshold to 100 TeV in 120 bins.
       Scaling relation is used to proton dE/dx and range
       Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for alpha particles below.
+      Stopping Power data for 8 ion/material pairs are used.
       Step function: finalRange(mm)= 0.1, dRoverRange= 0.1, integral: 1
       CSDA range table up to 1 GeV in 70 bins.
 
@@ -190,22 +192,6 @@ hIoni:   tables are built for  anti_proton
       Lambda tables from threshold to 100 TeV in 120 bins.
       Scaling relation is used to proton dE/dx and range
       Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for protons below.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
-      CSDA range table up to 1 GeV in 70 bins.
-
-hIoni:   tables are built for  kaon+
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Scaling relation is used to proton dE/dx and range
-      Bether-Bloch model for Escaled > 1.05231 MeV, ICRU49 parametrisation for protons below.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
-      CSDA range table up to 1 GeV in 70 bins.
-
-hIoni:   tables are built for  kaon-
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Scaling relation is used to proton dE/dx and range
-      Bether-Bloch model for Escaled > 1.05231 MeV, ICRU49 parametrisation for protons below.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
       CSDA range table up to 1 GeV in 70 bins.
 
@@ -301,7 +287,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=85.07s Real=113.62s Sys=22.99s
+  User=88.29s Real=121.83s Sys=28.88s
 
  ======================== run summary ======================
 
@@ -309,29 +295,29 @@ Run Summary
 
  ============================================================
 
- total energy deposit: 99.798 MeV
+ total energy deposit: 99.783 MeV
 
- nb tracks/event   neutral:     27.813   charged:     148.24
- nb  steps/event   neutral:     141.11   charged:     330.81
+ nb tracks/event   neutral:     27.951   charged:     148.47
+ nb  steps/event   neutral:     141.41   charged:     363.77
 
  nb of process calls per event: 
-          eBrem       eIoni       compt        phot         msc        conv     annihilTransportation
-         26.104      187.82       113.3      25.455      115.47       1.422       1.423        0.94
+          eBrem       eIoni       compt        phot         mscTransportation        conv     annihil
+         26.174      188.17      113.46      25.501      147.96      0.9905      1.4625       1.463
 
 ---------------------------------------------------------
  Primary particle : 
- true Range = 11.18 cm    rms = 3.8208 cm 
- proj Range = 9.7062 cm    rms = 3.5337 cm 
- proj/true  = 0.8682
- transverse dispersion at end = 1.7363 cm 
-      mass true Range from simulation = 30.185 g/cm2 
+ true Range = 11.121 cm    rms = 3.8093 cm 
+ proj Range = 9.5817 cm    rms = 3.5013 cm 
+ proj/true  = 0.86158
+ transverse dispersion at end = 1.8005 cm 
+      mass true Range from simulation = 30.027 g/cm2 
        from PhysicsTable (csda range) = 31.791 g/cm2 
 ---------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1254525812, 14370761
+ Current couple of seeds = 486808439, 1322415313
 ----------------------------------------
 #
 /process/eLoss/verbose 0
@@ -359,7 +345,7 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1254525812, 14370761
+ Current couple of seeds = 486808439, 1322415313
 ----------------------------------------
 Start Run processing.
 
@@ -367,7 +353,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=170.38s Real=221.61s Sys=45.32s
+  User=174.95s Real=230.94s Sys=50.78s
 
  ======================== run summary ======================
 
@@ -375,29 +361,29 @@ Run Summary
 
  ============================================================
 
- total energy deposit: 99.767 MeV
+ total energy deposit: 99.793 MeV
 
- nb tracks/event   neutral:     36.489   charged:     291.33
- nb  steps/event   neutral:     146.97   charged:     736.56
+ nb tracks/event   neutral:     36.393   charged:      290.7
+ nb  steps/event   neutral:     146.05   charged:     775.79
 
  nb of process calls per event: 
           eIoni       eBrem         msc        phot       compt        conv     annihilTransportation
-         450.12      34.626      250.36      34.106      110.48      1.4515      1.4515      0.9385
+         449.81      34.605      289.96      34.055      109.65       1.397      1.3975       0.949
 
 ---------------------------------------------------------
  Primary particle : 
- true Range = 11.12 cm    rms = 3.9055 cm 
- proj Range = 9.6381 cm    rms = 3.6155 cm 
- proj/true  = 0.86675
- transverse dispersion at end = 1.7861 cm 
-      mass true Range from simulation = 30.024 g/cm2 
+ true Range = 11.149 cm    rms = 3.8924 cm 
+ proj Range = 9.5626 cm    rms = 3.5687 cm 
+ proj/true  = 0.85772
+ transverse dispersion at end = 1.9027 cm 
+      mass true Range from simulation = 30.102 g/cm2 
        from PhysicsTable (csda range) = 31.791 g/cm2 
 ---------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 258357454, 105833891
+ Current couple of seeds = 763249003, 2053971629
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

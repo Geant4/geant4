@@ -57,6 +57,7 @@ Registering model factories...
 
 You have successfully registered the following model factories.
 Registered model factories:
+generic
 drawByCharge
 drawByParticleID
 drawByOriginVolume
@@ -116,9 +117,9 @@ PhysicsList::SetCuts:CutLength : 1 mm
 ----> SetHisto 8: d(E/E0)/d(r/r0) along r/r0;  120 bins from 0 none to 1.2 none
       stepMax = 200 um 
 #
-/testem/event/printModulo 2000
+/testem/event/printModulo 1000
 #
-/run/beamOn 20000
+/run/beamOn 10000
 
 phot:  Total cross sections from Sandia parametrisation. 
 
@@ -186,6 +187,7 @@ ionIoni:   tables are built for  GenericIon
       Lambda tables from threshold to 100 TeV in 120 bins.
       Scaling relation is used to proton dE/dx and range
       Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for alpha particles below.
+      Stopping Power data for 8 ion/material pairs are used.
       Step function: finalRange(mm)= 0.1, dRoverRange= 0.1, integral: 1
       CSDA range table up to 1 GeV in 70 bins.
 
@@ -194,22 +196,6 @@ hIoni:   tables are built for  anti_proton
       Lambda tables from threshold to 100 TeV in 120 bins.
       Scaling relation is used to proton dE/dx and range
       Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for protons below.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
-      CSDA range table up to 1 GeV in 70 bins.
-
-hIoni:   tables are built for  kaon+
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Scaling relation is used to proton dE/dx and range
-      Bether-Bloch model for Escaled > 1.05231 MeV, ICRU49 parametrisation for protons below.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
-      CSDA range table up to 1 GeV in 70 bins.
-
-hIoni:   tables are built for  kaon-
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Scaling relation is used to proton dE/dx and range
-      Bether-Bloch model for Escaled > 1.05231 MeV, ICRU49 parametrisation for protons below.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
       CSDA range table up to 1 GeV in 70 bins.
 
@@ -303,46 +289,46 @@ Start Run processing.
 
 ---> Begin of Event: 0
 
+---> Begin of Event: 1000
+
 ---> Begin of Event: 2000
+
+---> Begin of Event: 3000
 
 ---> Begin of Event: 4000
 
+---> Begin of Event: 5000
+
 ---> Begin of Event: 6000
+
+---> Begin of Event: 7000
 
 ---> Begin of Event: 8000
 
----> Begin of Event: 10000
-
----> Begin of Event: 12000
-
----> Begin of Event: 14000
-
----> Begin of Event: 16000
-
----> Begin of Event: 18000
+---> Begin of Event: 9000
 Run terminated.
 Run Summary
-  Number of events processed : 20000
-  User=1215.86s Real=1522.71s Sys=248.45s
+  Number of events processed : 10000
+  User=615.18s Real=775.55s Sys=127.67s
 
  ======================== run summary ======================
 
- The run consists of 20000 e- of 4.00 MeV through 3.00 cm  of G4_WATER (density: 1.00 g/cm3 )
+ The run consists of 10000 e- of 4.00 MeV through 3.00 cm  of G4_WATER (density: 1.00 g/cm3 )
 
  ============================================================
 
- Total Energy deposited        = 3.936 MeV +- 231.730 keV
+ Total Energy deposited        = 3.942 MeV +- 203.122 keV
 
- Track length of primary track = 2.018 cm  +- 2.797 mm 
+ Track length of primary track = 2.020 cm  +- 2.712 mm 
  Range from EmCalculator       = 2.021 cm  (from full dE/dx)
 
- Projected range               = 1.316 cm  +- 4.184 mm 
+ Projected range               = 1.267 cm  +- 3.984 mm 
 
- Nb of steps of primary track  = 238.68 +- 31.23	 Step size= 84.525 um  +- 4.582 um 
+ Nb of steps of primary track  = 239.01 +- 30.16	 Step size= 84.518 um  +- 4.494 um 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 2098654453, 1346428279
+ Current couple of seeds = 886262852, 1206969110
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

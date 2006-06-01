@@ -56,6 +56,7 @@ Registering model factories...
 
 You have successfully registered the following model factories.
 Registered model factories:
+generic
 drawByCharge
 drawByParticleID
 drawByOriginVolume
@@ -144,21 +145,21 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=165.66s Real=213.77s Sys=45.69s
+  User=166.22s Real=216.54s Sys=48.05s
 
                               SUMMARY
-                         energy deposit :   94.70 % E0 +-    1.34 % E0
-                         charged traklen:  480.91 radl +-    6.90 radl
-                         neutral traklen: 4436.50 radl +-  135.22 radl
+                         energy deposit :   94.73 % E0 +-    1.01 % E0
+                         charged traklen:  481.00 radl +-    5.31 radl
+                         neutral traklen: 4480.68 radl +-  124.78 radl
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1118812840, 314883357
+ Current couple of seeds = 883291145, 1147291742
 ----------------------------------------
 
 <<<<ACCEPTANCE>>>> 100 events for Total Energy in Absorber
-Edep: 0.94701485  delEdep= 0.0020148499 nrms= 2.0988019
-Erms: 0.013438367  delErms= 0.0038383673 nrms= 3.9982993
+Edep: 0.94734711  delEdep= 0.0023471143 nrms= 2.4449107
+Erms: 0.010138023  delErms= 0.00053802299 nrms= 0.56044062
 <<<<END>>>>   IS ACCEPTED
 
 Graphics systems deleted.

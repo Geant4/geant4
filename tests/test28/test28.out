@@ -115,20 +115,6 @@ hIoni:   tables are built for  anti_proton
       Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for protons below.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
-hIoni:   tables are built for  kaon+
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Scaling relation is used to proton dE/dx and range
-      Bether-Bloch model for Escaled > 1.05231 MeV, ICRU49 parametrisation for protons below.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
-
-hIoni:   tables are built for  kaon-
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Scaling relation is used to proton dE/dx and range
-      Bether-Bloch model for Escaled > 1.05231 MeV, ICRU49 parametrisation for protons below.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
-
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
@@ -206,12 +192,16 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     Total memory consumed for geometry optimisation:   0 kByte
     Total CPU time elapsed for geometry optimisation: 0 seconds
 Start Run processing.
- G4NuclearLevelManager: nuclide (91,232) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (91,237) does not have a gamma levels file
  G4NuclearLevelManager: nuclide (91,238) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (93,236) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (91,227) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (91,232) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (91,225) does not have a gamma levels file
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=8.9s Real=9.2s Sys=0.11s
+  User=8.8s Real=8.9s Sys=0.1s
 #
 # deuteron at 1 GeV/nucleon on H 
 #
@@ -284,20 +274,6 @@ hIoni:   tables are built for  anti_proton
       Lambda tables from threshold to 1e+02 TeV in 120 bins.
       Scaling relation is used to proton dE/dx and range
       Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for protons below.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
-
-hIoni:   tables are built for  kaon+
-      dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
-      Lambda tables from threshold to 1e+02 TeV in 120 bins.
-      Scaling relation is used to proton dE/dx and range
-      Bether-Bloch model for Escaled > 1.1 MeV, ICRU49 parametrisation for protons below.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
-
-hIoni:   tables are built for  kaon-
-      dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
-      Lambda tables from threshold to 1e+02 TeV in 120 bins.
-      Scaling relation is used to proton dE/dx and range
-      Bether-Bloch model for Escaled > 1.1 MeV, ICRU49 parametrisation for protons below.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 msc:  Model variant of multiple scattering for mu+
@@ -385,7 +361,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0s Real=0s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 #
 # deuteron at 1 GeV/nucleon on Silicon 
 #
@@ -461,20 +437,6 @@ hIoni:   tables are built for  anti_proton
       Lambda tables from threshold to 100 TeV in 120 bins.
       Scaling relation is used to proton dE/dx and range
       Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for protons below.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
-
-hIoni:   tables are built for  kaon+
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Scaling relation is used to proton dE/dx and range
-      Bether-Bloch model for Escaled > 1.0523107 MeV, ICRU49 parametrisation for protons below.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
-
-hIoni:   tables are built for  kaon-
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Scaling relation is used to proton dE/dx and range
-      Bether-Bloch model for Escaled > 1.0523107 MeV, ICRU49 parametrisation for protons below.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 msc:  Model variant of multiple scattering for mu+
@@ -564,11 +526,10 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     Total memory consumed for geometry optimisation:   0 kByte
     Total CPU time elapsed for geometry optimisation: 0 seconds
 Start Run processing.
- G4NuclearLevelManager: nuclide (15,27) does not have a gamma levels file
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=3.97s Real=4.2s Sys=0.05s
+  User=3.83s Real=3.92s Sys=0.08s
 #
 #
 # deuteron at 200 MeV in U
@@ -610,11 +571,11 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     Total memory consumed for geometry optimisation:   0 kByte
     Total CPU time elapsed for geometry optimisation: 0 seconds
 Start Run processing.
- G4NuclearLevelManager: nuclide (91,225) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (89,222) does not have a gamma levels file
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.23s Real=0.25s Sys=0.01s
+  User=0.12s Real=0.12s Sys=0s
 #
 # deuteron at 200 MeV/nucleon on H 
 #
@@ -702,7 +663,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.18s Real=0.18s Sys=0s
+  User=0.12s Real=0.13s Sys=0.01s
 #
 #  .....end deuteron.............
 #
@@ -745,13 +706,14 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     Total memory consumed for geometry optimisation:   0 kByte
     Total CPU time elapsed for geometry optimisation: 0 seconds
 Start Run processing.
+ G4NuclearLevelManager: nuclide (2,2) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (91,230) does not have a gamma levels file
  G4NuclearLevelManager: nuclide (1,3) does not have a gamma levels file
  G4NuclearLevelManager: nuclide (1,2) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (2,3) does not have a gamma levels file
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=4.1s Real=4.1s Sys=0.02s
+  User=2.1s Real=2.2s Sys=0.04s
 #
 # alpha at 1 GeV/nucleon on H 
 #
@@ -795,7 +757,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0s Real=0s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 #
 # alpha at 1 GeV/nucleon on Silicon 
 #
@@ -836,11 +798,11 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     Total memory consumed for geometry optimisation:   0 kByte
     Total CPU time elapsed for geometry optimisation: 0 seconds
 Start Run processing.
- G4NuclearLevelManager: nuclide (2,2) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (2,3) does not have a gamma levels file
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=1.3s Real=1.3s Sys=0.03s
+  User=1.55s Real=1.56s Sys=0.01s
 #
 # deuteron at 200 MeV/nucleon in U
 #
@@ -859,19 +821,19 @@ Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Uranium
  Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.9e+295 J      e- 2.9e+295 J      e+ 2.9e+295 J  
+ Energy thresholds :  gamma 2.8802232e+295 J      e- 2.8802232e+295 J      e+ 2.8802232e+295 J  
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : H
  Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 9.9e+02 eV     e- 7.1e+02 keV    e+ 6.8e+02 keV
+ Energy thresholds :  gamma 990 eV     e- 708.90956 keV    e+ 683.20614 keV
 
 Index : 2     used in the geometry : No      recalculation needed : No 
  Material : Silicon
  Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.9e+295 J      e- 1 GeV    e+ 9.6e+02 MeV
+ Energy thresholds :  gamma 2.8802232e+295 J      e- 1.0114457 GeV    e+ 962.84668 MeV
 
 ====================================================================
 
@@ -884,7 +846,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.13s Real=0.17s Sys=0.02s
+  User=0.01s Real=0.01s Sys=0s
 #
 # alpha at 200 MeV/nucleon on H 
 #
@@ -925,11 +887,10 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     Total memory consumed for geometry optimisation:   0 kByte
     Total CPU time elapsed for geometry optimisation: 0 seconds
 Start Run processing.
- G4NuclearLevelManager: nuclide (2,4) does not have a gamma levels file
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.03s Real=0.03s Sys=0s
+  User=0.02s Real=0.02s Sys=0s
 #
 # alpha at 200 MeV/nucleon on Silicon 
 #
@@ -973,7 +934,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.19s Real=0.2s Sys=0s
+  User=0.02s Real=0.03s Sys=0.01s
 #
 #  .....end alpha............
 #
@@ -1017,30 +978,21 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     Total memory consumed for geometry optimisation:   0 kByte
     Total CPU time elapsed for geometry optimisation: 0 seconds
 Start Run processing.
- G4NuclearLevelManager: nuclide (22,53) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (8,22) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (7,21) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (5,17) does not have a gamma levels file
  G4NuclearLevelManager: nuclide (3,9) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (2,6) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (91,227) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (88,229) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (89,222) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (89,221) does not have a gamma levels file
  G4NuclearLevelManager: nuclide (87,218) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (27,65) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (1,5) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (91,237) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (91,230) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (18,47) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (11,31) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (9,23) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (11,27) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (26,64) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (16,40) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (19,47) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (87,229) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (2,4) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (88,233) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (86,229) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (21,56) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (14,35) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (12,33) does not have a gamma levels file
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=34s Real=35s Sys=0.63s
+  User=28s Real=29s Sys=0.46s
 #
 # C(12,6)++ at 1 GeV/nucleon on H 
 #
@@ -1085,7 +1037,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0s Real=0s Sys=0s
+  User=0.13s Real=0.19s Sys=0.06s
 #
 # C(12,6)++ at 1 GeV/nucleon on Silicon 
 #
@@ -1127,13 +1079,12 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     Total memory consumed for geometry optimisation:   0 kByte
     Total CPU time elapsed for geometry optimisation: 0 seconds
 Start Run processing.
- G4NuclearLevelManager: nuclide (2,8) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (6,9) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (3,4) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (1,1) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (1,4) does not have a gamma levels file
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=9.4s Real=10.23s Sys=0.75s
+  User=7s Real=7.68s Sys=0.64s
 #
 # C(12,6)++ at 1 GeV/nucleon on Water 
 #
@@ -1207,20 +1158,6 @@ hIoni:   tables are built for  anti_proton
       Lambda tables from threshold to 100 TeV in 120 bins.
       Scaling relation is used to proton dE/dx and range
       Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for protons below.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
-
-hIoni:   tables are built for  kaon+
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Scaling relation is used to proton dE/dx and range
-      Bether-Bloch model for Escaled > 1.0523107 MeV, ICRU49 parametrisation for protons below.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
-
-hIoni:   tables are built for  kaon-
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Scaling relation is used to proton dE/dx and range
-      Bether-Bloch model for Escaled > 1.0523107 MeV, ICRU49 parametrisation for protons below.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 msc:  Model variant of multiple scattering for mu+
@@ -1315,14 +1252,11 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     Total memory consumed for geometry optimisation:   0 kByte
     Total CPU time elapsed for geometry optimisation: 0 seconds
 Start Run processing.
- G4NuclearLevelManager: nuclide (4,6) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (8,14) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (1,1) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (9,15) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (2,6) does not have a gamma levels file
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=6.44s Real=7.66s Sys=0.88s
+  User=4.78s Real=5.72s Sys=0.86s
 #
 #
 # C(12,6)++ at 200 MeV in U
@@ -1370,11 +1304,13 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     Total memory consumed for geometry optimisation:   0 kByte
     Total CPU time elapsed for geometry optimisation: 0 seconds
 Start Run processing.
- G4NuclearLevelManager: nuclide (89,229) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (92,228) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (21,53) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (2,7) does not have a gamma levels file
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=2.1s Real=2.2s Sys=0.04s
+  User=6.3s Real=6.6s Sys=0.12s
 #
 # C(12,6)++ at 200 MeV/nucleon on H 
 #
@@ -1424,7 +1360,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0s Real=0s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 #
 # C(12,6)++ at 200 MeV/nucleon on Silicon 
 #
@@ -1474,7 +1410,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=3.4s Real=3.8s Sys=0.34s
+  User=2.2s Real=2.7s Sys=0.3s
 #
 #  .....end C(12,6)++............
 #
@@ -1560,20 +1496,6 @@ hIoni:   tables are built for  anti_proton
       Lambda tables from threshold to 1e+02 TeV in 120 bins.
       Scaling relation is used to proton dE/dx and range
       Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for protons below.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
-
-hIoni:   tables are built for  kaon+
-      dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
-      Lambda tables from threshold to 1e+02 TeV in 120 bins.
-      Scaling relation is used to proton dE/dx and range
-      Bether-Bloch model for Escaled > 1.1 MeV, ICRU49 parametrisation for protons below.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
-
-hIoni:   tables are built for  kaon-
-      dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
-      Lambda tables from threshold to 1e+02 TeV in 120 bins.
-      Scaling relation is used to proton dE/dx and range
-      Bether-Bloch model for Escaled > 1.1 MeV, ICRU49 parametrisation for protons below.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 msc:  Model variant of multiple scattering for mu+
@@ -1673,10 +1595,12 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     Total memory consumed for geometry optimisation:   0 kByte
     Total CPU time elapsed for geometry optimisation: 0 seconds
 Start Run processing.
+ G4NuclearLevelManager: nuclide (19,48) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (6,17) does not have a gamma levels file
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=2.7s Real=3s Sys=0.14s
+  User=6.7s Real=6.9s Sys=0.15s
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
 UserRunAction deleted.

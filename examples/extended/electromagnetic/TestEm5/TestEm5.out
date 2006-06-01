@@ -25,6 +25,7 @@ Registering model factories...
 
 You have successfully registered the following model factories.
 Registered model factories:
+generic
 drawByCharge
 drawByParticleID
 drawByOriginVolume
@@ -144,6 +145,7 @@ ionIoni:   tables are built for  GenericIon
       Lambda tables from threshold to 100 TeV in 120 bins.
       Scaling relation is used to proton dE/dx and range
       Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for alpha particles below.
+      Stopping Power data for 8 ion/material pairs are used.
       Step function: finalRange(mm)= 0.1, dRoverRange= 0.1, integral: 1
 
 hIoni:   tables are built for  anti_proton
@@ -151,20 +153,6 @@ hIoni:   tables are built for  anti_proton
       Lambda tables from threshold to 100 TeV in 120 bins.
       Scaling relation is used to proton dE/dx and range
       Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for protons below.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
-
-hIoni:   tables are built for  kaon+
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Scaling relation is used to proton dE/dx and range
-      Bether-Bloch model for Escaled > 1.05231 MeV, ICRU49 parametrisation for protons below.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
-
-hIoni:   tables are built for  kaon-
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Scaling relation is used to proton dE/dx and range
-      Bether-Bloch model for Escaled > 1.05231 MeV, ICRU49 parametrisation for protons below.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 msc:  Model variant of multiple scattering for mu+
@@ -280,24 +268,26 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=140.96s Real=433.71s Sys=133.26s
+  User=136.79s Real=416.57s Sys=136.06s
 
  ======================== run summary ======================
 
- The run was 100000 pi+ of 5 GeV through 20 um  of Silicon (density: 2.3 g/cm3 )
+ The run was 100000 pi+ of 5 GeV through 20 um  of Silicon (density: 2.33 g/cm3 )
 
- Total energy deposit in absorber per event = 6.306 keV +- 15.74 eV 
+ Total energy deposit in absorber per event = 6.316 keV +- 16.15 eV 
+ -----> Mean dE/dx = 3.158 MeV/cm	(1.355 MeV*cm2/g)
 
- Mean dE/dx  = 3.153 MeV/cm	 stopping Power = 1.353 MeV*cm2/g
- (from Table = 2.807 MeV/cm)	 (from Table    = 1.205 MeV*cm2/g)
+ From formulas :
+   restricted dEdx = 2.806 MeV/cm	(1.204 MeV*cm2/g)
+   full dEdx       = 4.696 MeV/cm	(2.016 MeV*cm2/g)
 
- Total track length (charged) in absorber per event = 20.31 um  +- 7.906 nm 
- Total track length (neutral) in absorber per event = 4.222 Ang +- 2.014 Ang
+ Total track length (charged) in absorber per event = 20.33 um  +- 8.292 nm 
+ Total track length (neutral) in absorber per event = 0 fm  +- 0 fm 
 
- Number of steps (charged) in absorber per event = 4.216 +- 8.892e-06
- Number of steps (neutral) in absorber per event = 5e-05 +- 8.892e-06
+ Number of steps (charged) in absorber per event = 4.339 +- 9.106e-06
+ Number of steps (neutral) in absorber per event = 0 +- 0
 
- Number of secondaries per event : Gammas = 5e-05;   electrons = 0.03612;   positrons = 0
+ Number of secondaries per event : Gammas = 0;   electrons = 0.03652;   positrons = 0
 
  Number of events with the primary particle transmitted = 100 %
  Number of events with at least  1 particle transmitted (same charge as primary) = 100 %
@@ -305,12 +295,12 @@ Run Summary
  Number of events with the primary particle reflected = 0 %
  Number of events with at least  1 particle reflected (same charge as primary) = 0 %
 
- MultipleScattering: rms proj angle of transmit primary particle = 0.03172 mrad 
+ MultipleScattering: rms proj angle of transmit primary particle = 0.04698 mrad 
  MultipleScattering: computed theta0 (Highland formula)          = 0.02627 mrad
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 758933996, 1829523824
+ Current couple of seeds = 1728014667, 1847164391
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

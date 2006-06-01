@@ -95,20 +95,6 @@ hIoni:   tables are built for  anti_proton
       Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for protons below.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
-hIoni:   tables are built for  kaon+
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Scaling relation is used to proton dE/dx and range
-      Bether-Bloch model for Escaled > 1.05231 MeV, ICRU49 parametrisation for protons below.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
-
-hIoni:   tables are built for  kaon-
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Scaling relation is used to proton dE/dx and range
-      Bether-Bloch model for Escaled > 1.05231 MeV, ICRU49 parametrisation for protons below.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
-
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
@@ -164,10 +150,10 @@ hIoni:   tables are built for  pi-
       Scaling relation is used to proton dE/dx and range
       Bether-Bloch model for Escaled > 0.297504 MeV, ICRU49 parametrisation for protons below.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
- G4NuclearLevelManager: nuclide (76,199) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (79,202) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (79,203) does not have a gamma levels file
  G4NuclearLevelManager: nuclide (79,201) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (74,188) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (77,197) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (79,202) does not have a gamma levels file
 #
 # neutron at 100 GeV in Pb
 #
@@ -176,7 +162,6 @@ hIoni:   tables are built for  pi-
 /mydet/SelectMaterial Pb
 SimpleBox is now made of Pb
 /run/beamOn 200
- G4NuclearLevelManager: nuclide (75,193) does not have a gamma levels file
 #
 # pi+ at 100 GeV in Pb
 #
@@ -185,6 +170,7 @@ SimpleBox is now made of Pb
 /mydet/SelectMaterial Pb
 SimpleBox is now made of Pb
 /run/beamOn 200
+ G4NuclearLevelManager: nuclide (76,196) does not have a gamma levels file
 #
 # pi- at 100 GeV in Pb
 #
@@ -193,7 +179,7 @@ SimpleBox is now made of Pb
 /mydet/SelectMaterial Pb
 SimpleBox is now made of Pb
 /run/beamOn 200
- G4NuclearLevelManager: nuclide (77,197) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (78,201) does not have a gamma levels file
 #
 # kaon+ at 100 GeV in Pb
 #
@@ -202,8 +188,6 @@ SimpleBox is now made of Pb
 /mydet/SelectMaterial Pb
 SimpleBox is now made of Pb
 /run/beamOn 200
- G4NuclearLevelManager: nuclide (78,202) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (77,199) does not have a gamma levels file
 #
 # kaon- at 100 GeV in Pb
 #
@@ -212,6 +196,7 @@ SimpleBox is now made of Pb
 /mydet/SelectMaterial Pb
 SimpleBox is now made of Pb
 /run/beamOn 200
+ G4NuclearLevelManager: nuclide (79,203) does not have a gamma levels file
 #
 # kaon0S at 100 GeV in Pb
 #
@@ -228,6 +213,7 @@ SimpleBox is now made of Pb
 /mydet/SelectMaterial Pb
 SimpleBox is now made of Pb
 /run/beamOn 200
+ G4NuclearLevelManager: nuclide (77,199) does not have a gamma levels file
 #
 # proton at 100 GeV in Al
 #
@@ -303,20 +289,6 @@ hIoni:   tables are built for  anti_proton
       Lambda tables from threshold to 100 TeV in 120 bins.
       Scaling relation is used to proton dE/dx and range
       Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for protons below.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
-
-hIoni:   tables are built for  kaon+
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Scaling relation is used to proton dE/dx and range
-      Bether-Bloch model for Escaled > 1.0523107 MeV, ICRU49 parametrisation for protons below.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
-
-hIoni:   tables are built for  kaon-
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Scaling relation is used to proton dE/dx and range
-      Bether-Bloch model for Escaled > 1.0523107 MeV, ICRU49 parametrisation for protons below.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 msc:  Model variant of multiple scattering for mu+
@@ -430,7 +402,6 @@ SimpleBox is now made of Al
 /mydet/SelectMaterial Al
 SimpleBox is now made of Al
 /run/beamOn 200
- G4NuclearLevelManager: nuclide (8,14) does not have a gamma levels file
 #
 # proton at 100 GeV in Air
 #
@@ -503,20 +474,6 @@ hIoni:   tables are built for  anti_proton
       Lambda tables from threshold to 100 TeV in 120 bins.
       Scaling relation is used to proton dE/dx and range
       Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for protons below.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
-
-hIoni:   tables are built for  kaon+
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Scaling relation is used to proton dE/dx and range
-      Bether-Bloch model for Escaled > 1.0523107 MeV, ICRU49 parametrisation for protons below.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
-
-hIoni:   tables are built for  kaon-
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Scaling relation is used to proton dE/dx and range
-      Bether-Bloch model for Escaled > 1.0523107 MeV, ICRU49 parametrisation for protons below.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 msc:  Model variant of multiple scattering for mu+

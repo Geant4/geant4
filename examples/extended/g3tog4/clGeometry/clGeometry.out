@@ -27,6 +27,7 @@ Registering model factories...
 
 You have successfully registered the following model factories.
 Registered model factories:
+generic
 drawByCharge
 drawByParticleID
 drawByOriginVolume
@@ -160,20 +161,6 @@ hIoni:   tables are built for  anti_proton
       Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for protons below.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
-hIoni:   tables are built for  kaon+
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Scaling relation is used to proton dE/dx and range
-      Bether-Bloch model for Escaled > 1.05231 MeV, ICRU49 parametrisation for protons below.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
-
-hIoni:   tables are built for  kaon-
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Scaling relation is used to proton dE/dx and range
-      Bether-Bloch model for Escaled > 1.05231 MeV, ICRU49 parametrisation for protons below.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
-
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
@@ -254,9 +241,9 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     Voxelisation: top CPU users:
     Percent   Total CPU    System CPU       Memory  Volume
     -------   ----------   ----------     --------  ----------
-     100.00         0.01         0.00            0k HALL
+     100.00         0.01         0.00            0k TUB2
+       0.00         0.00         0.00            0k HALL
        0.00         0.00         0.00            2k TUB1
-       0.00         0.00         0.00            0k TUB2
        0.00         0.00         0.00            0k BXD1_2_ENV
        0.00         0.00         0.00            0k BXD1_3_ENV
        0.00         0.00         0.00            0k BXD1_4_ENV
@@ -266,8 +253,8 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
     -------   --------     ------   ------   --------   ----------    ----------
       60.02          2k         1       60         60         0.00    TUB1
-      11.92          0k         2        8         18         0.01    HALL
-       6.39          0k         1        5          5         0.00    TUB2
+      11.92          0k         2        8         18         0.00    HALL
+       6.39          0k         1        5          5         0.01    TUB2
        5.42          0k         1        4          4         0.00    BXD1_2_ENV
        5.42          0k         1        4          4         0.00    BXD1_3_ENV
        5.42          0k         1        4          4         0.00    BXD1_4_ENV
@@ -283,13 +270,13 @@ Start Run processing.
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0     -1.5        0     1e+03        0        0         0        TBD1 initStep
-    1        0     -1.5        0     1e+03        0        0         0        HALL Transportation
-    2        0    4e+03        0     1e+03 1.12e-22    4e+03     4e+03  OutOfWorld Transportation
+    0        0     -1.5        0     1e+03        0        0         0        HALL initStep
+    1        0    4e+03        0     1e+03 1.12e-22    4e+03     4e+03  OutOfWorld Transportation
 >>> Event 0
     1 trajectories stored in this event.
 G4VisManager: Using G4TrajectoryDrawByCharge as default trajectory model.
 See commands in /vis/modeling/trajectories/ for other options.
+Trajectory drawing configuration will be based on imode value of 50
 WARNING: G4VisManager::IsValidView(): Attempt to draw when no graphics system
   has been instantiated.  Use "/vis/open" or "/vis/sceneHandler/create".
   Alternatively, to avoid this message, suppress instantiation of vis
@@ -329,15 +316,14 @@ Start Run processing.
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0     -1.5        0     1e+03        0        0         0        TBD1 initStep
-    1        0     -1.5        0     1e+03        0        0         0        HALL Transportation
-    2        0    4e+03        0     1e+03 1.12e-22    4e+03     4e+03  OutOfWorld Transportation
+    0        0     -1.5        0     1e+03        0        0         0        HALL initStep
+    1        0    4e+03        0     1e+03 1.12e-22    4e+03     4e+03  OutOfWorld Transportation
 >>> Event 0
     1 trajectories stored in this event.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0s Real=0.02s Sys=0.01s
 /gun/particle e-
 /run/beamOn 1
 
@@ -367,15 +353,14 @@ Start Run processing.
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0     -1.5        0     1e+03        0        0         0        TBD1 initStep
-    1        0     -1.5        0     1e+03        0        0         0        HALL Transportation
-    2        0    4e+03        0     1e+03 1.75e-22    4e+03     4e+03  OutOfWorld Transportation
+    0        0     -1.5        0     1e+03        0        0         0        HALL initStep
+    1        0    4e+03        0     1e+03 1.75e-22    4e+03     4e+03  OutOfWorld Transportation
 >>> Event 0
     1 trajectories stored in this event.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 /gun/particle e+
 /run/beamOn 1
 
@@ -405,15 +390,14 @@ Start Run processing.
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0     -1.5        0     1e+03        0        0         0        TBD1 initStep
-    1        0     -1.5        0     1e+03        0        0         0        HALL Transportation
-    2        0    4e+03        0     1e+03 1.75e-22    4e+03     4e+03  OutOfWorld Transportation
+    0        0     -1.5        0     1e+03        0        0         0        HALL initStep
+    1        0    4e+03        0     1e+03 1.75e-22    4e+03     4e+03  OutOfWorld Transportation
 >>> Event 0
     1 trajectories stored in this event.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 /gun/position   0. 1.5 0. mm
 /gun/direction  1.  0.   0.
 /gun/energy 1 GeV
@@ -446,15 +430,14 @@ Start Run processing.
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0      1.5        0     1e+03        0        0         0        TBD1 initStep
-    1        0      1.5        0     1e+03        0        0         0        HALL Transportation
-    2    4e+03      1.5        0     1e+03 1.12e-22    4e+03     4e+03  OutOfWorld Transportation
+    0        0      1.5        0     1e+03        0        0         0        HALL initStep
+    1    4e+03      1.5        0     1e+03 1.12e-22    4e+03     4e+03  OutOfWorld Transportation
 >>> Event 0
     1 trajectories stored in this event.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 /gun/particle mu+
 /run/beamOn 1
 
@@ -484,15 +467,14 @@ Start Run processing.
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0      1.5        0     1e+03        0        0         0        TBD1 initStep
-    1        0      1.5        0     1e+03        0        0         0        HALL Transportation
-    2    4e+03      1.5        0     1e+03 1.12e-22    4e+03     4e+03  OutOfWorld Transportation
+    0        0      1.5        0     1e+03        0        0         0        HALL initStep
+    1    4e+03      1.5        0     1e+03 1.12e-22    4e+03     4e+03  OutOfWorld Transportation
 >>> Event 0
     1 trajectories stored in this event.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 /gun/particle e-
 /run/beamOn 1
 
@@ -522,15 +504,14 @@ Start Run processing.
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0      1.5        0     1e+03        0        0         0        TBD1 initStep
-    1        0      1.5        0     1e+03        0        0         0        HALL Transportation
-    2    4e+03      1.5        0     1e+03 1.75e-22    4e+03     4e+03  OutOfWorld Transportation
+    0        0      1.5        0     1e+03        0        0         0        HALL initStep
+    1    4e+03      1.5        0     1e+03 1.75e-22    4e+03     4e+03  OutOfWorld Transportation
 >>> Event 0
     1 trajectories stored in this event.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 /gun/particle e+
 /run/beamOn 1
 
@@ -560,15 +541,14 @@ Start Run processing.
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0      1.5        0     1e+03        0        0         0        TBD1 initStep
-    1        0      1.5        0     1e+03        0        0         0        HALL Transportation
-    2    4e+03      1.5        0     1e+03 1.75e-22    4e+03     4e+03  OutOfWorld Transportation
+    0        0      1.5        0     1e+03        0        0         0        HALL initStep
+    1    4e+03      1.5        0     1e+03 1.75e-22    4e+03     4e+03  OutOfWorld Transportation
 >>> Event 0
     1 trajectories stored in this event.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 Graphics systems deleted.
 Visualization Manager deleting...
 UserDetectorConstruction deleted.

@@ -25,6 +25,7 @@ Registering model factories...
 
 You have successfully registered the following model factories.
 Registered model factories:
+generic
 drawByCharge
 drawByParticleID
 drawByOriginVolume
@@ -140,11 +141,11 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=95.17s Real=368.58s Sys=114.95s
+  User=96.43s Real=350.9s Sys=119.64s
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 926540076, 1388652356
+ Current couple of seeds = 759153061, 381217352
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

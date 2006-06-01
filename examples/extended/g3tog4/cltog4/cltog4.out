@@ -126,20 +126,6 @@ hIoni:   tables are built for  anti_proton
       Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for protons below.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
-hIoni:   tables are built for  kaon+
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Scaling relation is used to proton dE/dx and range
-      Bether-Bloch model for Escaled > 1.05231 MeV, ICRU49 parametrisation for protons below.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
-
-hIoni:   tables are built for  kaon-
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Scaling relation is used to proton dE/dx and range
-      Bether-Bloch model for Escaled > 1.05231 MeV, ICRU49 parametrisation for protons below.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
-
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
@@ -216,9 +202,8 @@ Start Run processing.
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0      -15        0     1e+03        0        0         0        TBD1 initStep
-    1        0      -15        0     1e+03        0        0         0        HALL Transportation
-    2        0    4e+03        0     1e+03        0 4.02e+03  4.02e+03  OutOfWorld Transportation
+    0        0      -15        0     1e+03        0        0         0        HALL initStep
+    1        0    4e+03        0     1e+03        0 4.02e+03  4.02e+03  OutOfWorld Transportation
 >>>>>>>> Primary direction: (0,1,0)
 
 *********************************************************************************************************
@@ -226,9 +211,8 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0      -15        0     1e+03        0        0         0        TBD1 initStep
-    1        0      -15        0     1e+03        0        0         0        HALL Transportation
-    2        0    4e+03        0     1e+03        0 4.02e+03  4.02e+03  OutOfWorld Transportation
+    0        0      -15        0     1e+03        0        0         0        HALL initStep
+    1        0    4e+03        0     1e+03        0 4.02e+03  4.02e+03  OutOfWorld Transportation
 >>>>>>>> Primary direction: (0,1,0)
 
 *********************************************************************************************************
@@ -236,9 +220,8 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0      -15        0     1e+03        0        0         0        TBD1 initStep
-    1        0      -15        0     1e+03        0        0         0        HALL Transportation
-    2        0    4e+03        0     1e+03        0 4.02e+03  4.02e+03  OutOfWorld Transportation
+    0        0      -15        0     1e+03        0        0         0        HALL initStep
+    1        0    4e+03        0     1e+03        0 4.02e+03  4.02e+03  OutOfWorld Transportation
 >>>>>>>> Primary direction: (0,1,0)
 
 *********************************************************************************************************
@@ -246,9 +229,8 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0      -15        0     1e+03        0        0         0        TBD1 initStep
-    1        0      -15        0     1e+03        0        0         0        HALL Transportation
-    2        0    4e+03        0     1e+03        0 4.02e+03  4.02e+03  OutOfWorld Transportation
+    0        0      -15        0     1e+03        0        0         0        HALL initStep
+    1        0    4e+03        0     1e+03        0 4.02e+03  4.02e+03  OutOfWorld Transportation
 >>>>>>>> Primary direction: (0,1,0)
 
 *********************************************************************************************************
@@ -256,9 +238,8 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0      -15        0     1e+03        0        0         0        TBD1 initStep
-    1        0      -15        0     1e+03        0        0         0        HALL Transportation
-    2        0    4e+03        0     1e+03        0 4.02e+03  4.02e+03  OutOfWorld Transportation
+    0        0      -15        0     1e+03        0        0         0        HALL initStep
+    1        0    4e+03        0     1e+03        0 4.02e+03  4.02e+03  OutOfWorld Transportation
 >>>>>>>> Primary direction: (0,1,0)
 
 *********************************************************************************************************
@@ -266,9 +247,8 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0      -15        0     1e+03        0        0         0        TBD1 initStep
-    1        0      -15        0     1e+03        0        0         0        HALL Transportation
-    2        0    4e+03        0     1e+03        0 4.02e+03  4.02e+03  OutOfWorld Transportation
+    0        0      -15        0     1e+03        0        0         0        HALL initStep
+    1        0    4e+03        0     1e+03        0 4.02e+03  4.02e+03  OutOfWorld Transportation
 >>>>>>>> Primary direction: (0,1,0)
 
 *********************************************************************************************************
@@ -276,9 +256,8 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0      -15        0     1e+03        0        0         0        TBD1 initStep
-    1        0      -15        0     1e+03        0        0         0        HALL Transportation
-    2        0    4e+03        0     1e+03        0 4.02e+03  4.02e+03  OutOfWorld Transportation
+    0        0      -15        0     1e+03        0        0         0        HALL initStep
+    1        0    4e+03        0     1e+03        0 4.02e+03  4.02e+03  OutOfWorld Transportation
 >>>>>>>> Primary direction: (0,1,0)
 
 *********************************************************************************************************
@@ -286,9 +265,8 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0      -15        0     1e+03        0        0         0        TBD1 initStep
-    1        0      -15        0     1e+03        0        0         0        HALL Transportation
-    2        0    4e+03        0     1e+03        0 4.02e+03  4.02e+03  OutOfWorld Transportation
+    0        0      -15        0     1e+03        0        0         0        HALL initStep
+    1        0    4e+03        0     1e+03        0 4.02e+03  4.02e+03  OutOfWorld Transportation
 >>>>>>>> Primary direction: (0,1,0)
 
 *********************************************************************************************************
@@ -296,9 +274,8 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0      -15        0     1e+03        0        0         0        TBD1 initStep
-    1        0      -15        0     1e+03        0        0         0        HALL Transportation
-    2        0    4e+03        0     1e+03        0 4.02e+03  4.02e+03  OutOfWorld Transportation
+    0        0      -15        0     1e+03        0        0         0        HALL initStep
+    1        0    4e+03        0     1e+03        0 4.02e+03  4.02e+03  OutOfWorld Transportation
 >>>>>>>> Primary direction: (0,1,0)
 
 *********************************************************************************************************
@@ -306,11 +283,10 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0      -15        0     1e+03        0        0         0        TBD1 initStep
-    1        0      -15        0     1e+03        0        0         0        HALL Transportation
-    2        0    4e+03        0     1e+03        0 4.02e+03  4.02e+03  OutOfWorld Transportation
+    0        0      -15        0     1e+03        0        0         0        HALL initStep
+    1        0    4e+03        0     1e+03        0 4.02e+03  4.02e+03  OutOfWorld Transportation
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.01s Real=0.03s Sys=0s
+  User=0.03s Real=0.04s Sys=0.01s
 G4 kernel has come to Quit state.

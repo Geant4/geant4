@@ -80,6 +80,7 @@ Registering model factories...
 
 You have successfully registered the following model factories.
 Registered model factories:
+generic
 drawByCharge
 drawByParticleID
 drawByOriginVolume
@@ -159,20 +160,6 @@ hIoni:   tables are built for  anti_proton
       Lambda tables from threshold to 100 TeV in 120 bins.
       Scaling relation is used to proton dE/dx and range
       Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for protons below.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
-
-hIoni:   tables are built for  kaon+
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Scaling relation is used to proton dE/dx and range
-      Bether-Bloch model for Escaled > 1.05231 MeV, ICRU49 parametrisation for protons below.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
-
-hIoni:   tables are built for  kaon-
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Scaling relation is used to proton dE/dx and range
-      Bether-Bloch model for Escaled > 1.05231 MeV, ICRU49 parametrisation for protons below.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 msc:  Model variant of multiple scattering for mu+
@@ -265,16 +252,16 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
  Current couple of seeds = 9876, 54321
 ----------------------------------------
 ---> End of event: 0
-   Absorber: total energy: 258.50732 MeV       total track length: 18.068876 cm 
-        Gap: total energy: 14.074924 MeV       total track length: 6.7780465 cm 
+   Absorber: total energy: 283.57012 MeV       total track length: 19.954777 cm 
+        Gap: total energy: 4.4491408 MeV       total track length: 2.1543629 cm 
 
 --------------------End of Run------------------------------
 
- mean Energy in Absorber : 258.50732 MeV +- 0 eV 
- mean Energy in Gap      : 14.074924 MeV +- 0 eV 
+ mean Energy in Absorber : 283.57012 MeV +- 0 eV 
+ mean Energy in Gap      : 4.4491408 MeV +- 0 eV 
 
- mean trackLength in Absorber : 18.068876 cm  +- 0 fm 
- mean trackLength in Gap      : 6.7780465 cm  +- 0 fm 
+ mean trackLength in Absorber : 19.954777 cm  +- 0 fm 
+ mean trackLength in Gap      : 2.1543629 cm  +- 0 fm 
 
 ------------------------------------------------------------
      Transportation,                msc,              hIoni,              eIoni
@@ -287,19 +274,19 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1719661222, 141507600
+ Current couple of seeds = 338525291, 1799411122
 ----------------------------------------
 ---> End of event: 0
-   Absorber: total energy: 274.40543 MeV       total track length: 19.487254 cm 
-        Gap: total energy: 19.27733 MeV       total track length: 9.9162451 cm 
+   Absorber: total energy: 279.77483 MeV       total track length: 19.138933 cm 
+        Gap: total energy: 18.217211 MeV       total track length: 8.9370413 cm 
 
 --------------------End of Run------------------------------
 
- mean Energy in Absorber : 274.40543 MeV +- 0 eV 
- mean Energy in Gap      : 19.27733 MeV +- 0 eV 
+ mean Energy in Absorber : 279.77483 MeV +- 0 eV 
+ mean Energy in Gap      : 18.217211 MeV +- 0 eV 
 
- mean trackLength in Absorber : 19.487254 cm  +- 0 fm 
- mean trackLength in Gap      : 9.9162451 cm  +- 0 fm 
+ mean trackLength in Absorber : 19.138933 cm  +- 0 fm 
+ mean trackLength in Gap      : 8.9370413 cm  +- 0 fm 
 
 ------------------------------------------------------------
 
@@ -369,20 +356,6 @@ hIoni:   tables are built for  anti_proton
       Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for protons below.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
-hIoni:   tables are built for  kaon+
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Scaling relation is used to proton dE/dx and range
-      Bether-Bloch model for Escaled > 1.0523107 MeV, ICRU49 parametrisation for protons below.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
-
-hIoni:   tables are built for  kaon-
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Scaling relation is used to proton dE/dx and range
-      Bether-Bloch model for Escaled > 1.0523107 MeV, ICRU49 parametrisation for protons below.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
-
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
@@ -444,19 +417,19 @@ hIoni:   tables are built for  pi-
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1857469984, 384253620
+ Current couple of seeds = 1407282749, 871241566
 ----------------------------------------
 ---> End of event: 0
-   Absorber: total energy: 365.85161 MeV       total track length: 86.46101 cm 
-        Gap: total energy: 66.516915 MeV       total track length: 1.8553205 m  
+   Absorber: total energy: 409.11438 MeV       total track length: 97.540775 cm 
+        Gap: total energy: 90.811946 MeV       total track length: 2.5190215 m  
 
 --------------------End of Run------------------------------
 
- mean Energy in Absorber : 365.85161 MeV +- 0 eV 
- mean Energy in Gap      : 66.516915 MeV +- 0 eV 
+ mean Energy in Absorber : 409.11438 MeV +- 0 eV 
+ mean Energy in Gap      : 90.811946 MeV +- 0 eV 
 
- mean trackLength in Absorber : 86.46101 cm  +- 0 fm 
- mean trackLength in Gap      : 1.8553205 m   +- 0 fm 
+ mean trackLength in Absorber : 97.540775 cm  +- 0 fm 
+ mean trackLength in Gap      : 2.5190215 m   +- 0 fm 
 
 ------------------------------------------------------------
-rackLength in Gap      : 1.8553205 m   +- 0 fm 
+trackLength in Gap      : 2.5190215 m   +- 0 fm 

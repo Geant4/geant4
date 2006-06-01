@@ -92,20 +92,6 @@ hIoni:   tables are built for  anti_proton
       Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for protons below.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
-hIoni:   tables are built for  kaon+
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Scaling relation is used to proton dE/dx and range
-      Bether-Bloch model for Escaled > 1.05231 MeV, ICRU49 parametrisation for protons below.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
-
-hIoni:   tables are built for  kaon-
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Scaling relation is used to proton dE/dx and range
-      Bether-Bloch model for Escaled > 1.05231 MeV, ICRU49 parametrisation for protons below.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
-
 muIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
@@ -171,5 +157,5 @@ Test23 event # 700
 Test23 event # 800
 Test23 event # 900
 Test23 event # 1000
-Test23_Result: gam=2734(0.8878397), e-=15068(0.43799887), e+=75(2.5419819), p=348(5.2115586), n=1630(4.4051686), d=96(4.0851427), t=50(7.2800553), He3=9(8.8393523), alph=382(5.7852311), nu=1000(69.625682), anu=129(32.853664), others=16232*0.14258829
+Test23_Result: gam=2724(0.81506954), e-=15093(0.43472604), e+=53(3.3760314), p=365(4.5600027), n=2053(3.9499327), d=65(5.2192765), t=56(6.8425148), He3=2(14.63998), alph=364(5.9872185), nu=1000(69.287747), anu=130(34.538163), others=20726*0.1215728
 Test23 is done

@@ -29,6 +29,7 @@ Registering model factories...
 
 You have successfully registered the following model factories.
 Registered model factories:
+generic
 drawByCharge
 drawByParticleID
 drawByOriginVolume
@@ -106,6 +107,7 @@ ionIoni:   tables are built for  GenericIon
       Lambda tables from threshold to 100 TeV in 120 bins.
       Scaling relation is used to proton dE/dx and range
       Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for alpha particles below.
+      Stopping Power data for 8 ion/material pairs are used.
       Step function: finalRange(mm)= 0.1, dRoverRange= 0.1, integral: 1
 
 hIoni:   tables are built for  anti_proton
@@ -113,20 +115,6 @@ hIoni:   tables are built for  anti_proton
       Lambda tables from threshold to 100 TeV in 120 bins.
       Scaling relation is used to proton dE/dx and range
       Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for protons below.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
-
-hIoni:   tables are built for  kaon+
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Scaling relation is used to proton dE/dx and range
-      Bether-Bloch model for Escaled > 1.05231 MeV, ICRU49 parametrisation for protons below.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
-
-hIoni:   tables are built for  kaon-
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Scaling relation is used to proton dE/dx and range
-      Bether-Bloch model for Escaled > 1.05231 MeV, ICRU49 parametrisation for protons below.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 msc:  Model variant of multiple scattering for mu+
@@ -189,9 +177,9 @@ Stage 0->1 : 1 hits found in the muon chamber.
 Stage 1->2 : 0 isolated muon found.
 ++++++++ event aborted
 >>> Event 0
-     21 hits are stored in ExN04TrackerHitsCollection.
+     20 hits are stored in ExN04TrackerHitsCollection.
      4 hits are stored in ExN04CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 0.17204617 (GeV)
+     Total energy deposition in calorimeter : 0.18169765 (GeV)
      1 hits are stored in ExN04MuonHitsCollection.
 ### Run 1 start.
 Stage 0->1 : 1 hits found in the muon chamber.
@@ -199,16 +187,16 @@ Stage 1->2 : 0 isolated muon found.
 ++++++++ event aborted
 >>> Event 0
      21 hits are stored in ExN04TrackerHitsCollection.
-     3 hits are stored in ExN04CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 0.17287767 (GeV)
+     1 hits are stored in ExN04CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 0.17977153 (GeV)
      1 hits are stored in ExN04MuonHitsCollection.
 Stage 0->1 : 1 hits found in the muon chamber.
 Stage 1->2 : 0 isolated muon found.
 ++++++++ event aborted
 >>> Event 1
-     21 hits are stored in ExN04TrackerHitsCollection.
-     1 hits are stored in ExN04CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 0.17464187 (GeV)
+     20 hits are stored in ExN04TrackerHitsCollection.
+     4 hits are stored in ExN04CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 0.18206758 (GeV)
      1 hits are stored in ExN04MuonHitsCollection.
 Graphics systems deleted.
 Visualization Manager deleting...

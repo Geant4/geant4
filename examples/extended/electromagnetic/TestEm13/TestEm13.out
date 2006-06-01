@@ -79,6 +79,7 @@ Registering model factories...
 
 You have successfully registered the following model factories.
 Registered model factories:
+generic
 drawByCharge
 drawByParticleID
 drawByOriginVolume
@@ -111,7 +112,6 @@ physicsList->setCut() start.
 #
 /gun/particle gamma
 /gun/energy 100 keV
-#
 /run/beamOn 100000
 
 phot:  Total cross sections from Sandia parametrisation. 
@@ -166,6 +166,7 @@ ionIoni:   tables are built for  GenericIon
       Lambda tables from threshold to 100 TeV in 120 bins.
       Scaling relation is used to proton dE/dx and range
       Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for alpha particles below.
+      Stopping Power data for 8 ion/material pairs are used.
       Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 0
 
 hIoni:   tables are built for  anti_proton
@@ -173,20 +174,6 @@ hIoni:   tables are built for  anti_proton
       Lambda tables from threshold to 100 TeV in 120 bins.
       Scaling relation is used to proton dE/dx and range
       Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for protons below.
-      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 0
-
-hIoni:   tables are built for  kaon+
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Scaling relation is used to proton dE/dx and range
-      Bether-Bloch model for Escaled > 1.05231 MeV, ICRU49 parametrisation for protons below.
-      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 0
-
-hIoni:   tables are built for  kaon-
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Scaling relation is used to proton dE/dx and range
-      Bether-Bloch model for Escaled > 1.05231 MeV, ICRU49 parametrisation for protons below.
       Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 0
 
 muIoni:   tables are built for  mu+
@@ -287,7 +274,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=21.29s Real=21.54s Sys=0s
+  User=22.02s Real=22.11s Sys=0s
 
  The run consists of 100000 gamma of 100 keV through 1 cm  of Water (density: 1 g/cm3 )
 
@@ -307,7 +294,6 @@ Run Summary
 #
 /gun/particle e-
 /gun/energy 100 MeV
-#
 /run/beamOn 100000
 
 Region <DefaultRegionForTheWorld> -- appears in <Water> world volume
@@ -355,7 +341,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=22.38s Real=22.64s Sys=0s
+  User=22.56s Real=22.83s Sys=0s
 
  The run consists of 100000 e- of 100 MeV through 1 cm  of Water (density: 1 g/cm3 )
 
