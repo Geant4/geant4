@@ -22,7 +22,7 @@
 //
 //
 // -*- C++ -*-
-// $Id: g4_gdml_read_write.cc,v 1.4 2005-05-03 10:21:16 allison Exp $
+// $Id: g4_gdml_read_write.cc,v 1.5 2006-06-01 10:23:26 witoldp Exp $
 //
 // Author: Radovan Chytracek 2000 - 2004
 //         Witek Pokorski
@@ -47,7 +47,7 @@
 #include "g4rwPrimaryGeneratorAction.hh"
 
 //g4 writer
-#include "WriterG4/G4GDMLWriter.h"
+#include "G4Writer/G4GDMLWriter.h"
 
 
 int main()
@@ -75,7 +75,7 @@ int main()
     G4TransportationManager::GetTransportationManager()->
     GetNavigatorForTracking()->GetWorldVolume();
   
-  G4GDMLWriter g4writer("schema/gdml_2.0.xsd", "g4writertest.gdml");
+  G4GDMLWriter g4writer("GDMLschema/gdml.xsd", "g4writertest.gdml");
   
   try
   {
