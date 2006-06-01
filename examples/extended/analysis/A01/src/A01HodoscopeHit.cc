@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: A01HodoscopeHit.cc,v 1.7 2005-06-07 10:50:02 perl Exp $
+// $Id: A01HodoscopeHit.cc,v 1.8 2006-06-01 05:20:30 perl Exp $
 // --------------------------------------------------------------
 //
 #include "A01HodoscopeHit.hh"
@@ -105,8 +105,8 @@ const std::map<G4String,G4AttDef>* A01HodoscopeHit::GetAttDefs() const
     G4String Row("Row");
     (*store)[Row] = G4AttDef(Row,"Row ID","Bookkeeping","","G4int");
 
-    //G4String Time("Time");
-    //(*store)[Time] = G4AttDef(Time,"Time","Physics","G4BestUnit","G4double");
+    G4String Time("Time");
+    (*store)[Time] = G4AttDef(Time,"Time","Physics","G4BestUnit","G4double");
 
     G4String Energy("Energy");
     (*store)[Energy] = G4AttDef(Energy,"Energy Deposited","Physics","G4BestUnit","G4double");
@@ -136,8 +136,8 @@ std::vector<G4AttValue>* A01HodoscopeHit::CreateAttValues() const
   values->push_back
     (G4AttValue("Row"," ",""));
 
-  //values->push_back
-  //  (G4AttValue("Time",G4BestUnit(time,"Time"),""));
+  values->push_back
+    (G4AttValue("Time",G4BestUnit(time,"Time"),""));
 
   G4double noEnergy = 0.*MeV;
   values->push_back
