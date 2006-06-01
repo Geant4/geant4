@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: MedLinac.cc,v 1.9 2005-12-07 14:27:39 guatelli Exp $
+// $Id: MedLinac.cc,v 1.10 2006-06-01 21:42:58 mpiergen Exp $
 //
 // --------------------------------------------------------------
 //      GEANT 4 -  medical_linac
@@ -126,7 +126,7 @@ MedLinacDetectorConstruction::GetInstance(sensitiveDetectorName);
  if (session)   // Define UI session for interactive mode.
     { 
       G4cout<<" UI session starts ..."<< G4endl; 
-       UI -> ApplyCommand("/control/execute vis.mac");    
+       UI -> ApplyCommand("/control/execute macro.mac");    
        session->SessionStart();
        delete session;
     }

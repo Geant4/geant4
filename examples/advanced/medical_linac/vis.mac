@@ -205,4 +205,6 @@
 /energy 6.0 MeV
 /sourceType 0.127 MeV
 /vis/viewer/update
-/run/beamOn 1000
+/run/beamOn 10
+
+

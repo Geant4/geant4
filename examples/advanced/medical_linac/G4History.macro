@@ -1,22 +1,6 @@
 /run/verbose 2
 /run/initialize
-/vis/scene/create
-/vis/open OGLIX
-/vis/sceneHandler/create OGLIX
-/vis/sceneHandler/attach
-/vis/viewer/create ! ! 600
-/vis/viewer/refresh
-/vis/viewer/update
-/vis/viewer/set/viewpointThetaPhi 70 20 deg
-/vis/viewer/refresh
-/vis/viewer/zoom 1
-/vis/viewer/refresh
-/vis/viewer/flush
-/vis/viewer/refresh viewer-0
-/vis/viewer/update viewer-0
-/run/initialize
 /tracking/storeTrajectory 1
-/vis/scene/endOfEventAction accumulate
 /Phantom/dimension 15. cm
 /Phantom/Nvoxels 150
 /Phantom/maxStep 0.2 mm
@@ -190,5 +174,4 @@
 /vis/scene/notifyHandlers scene-0
 /energy 6.0 MeV
 /sourceType 0.127 MeV
-/vis/viewer/update
-/run/beamOn 1000
+/run/beamOn 10
