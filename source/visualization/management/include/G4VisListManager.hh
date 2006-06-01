@@ -19,7 +19,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VisListManager.hh,v 1.6 2006-05-25 14:31:39 allison Exp $
+// $Id: G4VisListManager.hh,v 1.7 2006-06-01 15:47:44 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Jane Tinslay, John Allison, Joseph Perl October 2005
@@ -46,13 +46,16 @@ public: // With description
 
   virtual ~G4VisListManager();
 
-  void Register(T* ptr);
   // Register ptr. Manager assumes ownership and
   // ptr becomes current
+  void Register(T* ptr);
 
   void SetCurrent(const G4String& name);
+
+  // Accessors
   const T* Current() const {return fpCurrent;}
-  
+  const std::map<G4String, T*>& Map() const;
+
   // Print configuration
   void Print(std::ostream& ostr, const G4String& name="") const;
 
@@ -147,6 +150,13 @@ G4VisListManager<T>::Print(std::ostream& ostr, const G4String& name) const
       iter++;
     }
   }
+}
+
+template <typename T>
+const std::map<G4String, T*>&
+G4VisListManager<T>::Map() const
+{
+  return fMap;
 }
 
 #endif
