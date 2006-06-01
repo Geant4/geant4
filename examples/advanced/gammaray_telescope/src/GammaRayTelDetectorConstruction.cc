@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelDetectorConstruction.cc,v 1.12 2005-06-03 13:27:55 flongo Exp $
+// $Id: GammaRayTelDetectorConstruction.cc,v 1.13 2006-06-01 11:28:14 flongo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -59,6 +59,8 @@
 #include "G4Colour.hh"
 
 #include "G4ios.hh"
+#include "G4RegionStore.hh"
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -929,6 +931,10 @@ void GammaRayTelDetectorConstruction::UpdateGeometry()
 {
   //  delete payloadSD;
   G4RunManager::GetRunManager()->DefineWorldVolume(ConstructPayload());
+  G4RunManager::GetRunManager()->PhysicsHasBeenModified();
+  G4RegionStore::GetInstance()->UpdateMaterialList(physiWorld);
+
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
