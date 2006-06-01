@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProductionCutsTable.cc,v 1.12 2005-08-18 16:52:52 asaim Exp $
+// $Id: G4ProductionCutsTable.cc,v 1.13 2006-06-01 13:08:57 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -54,8 +54,10 @@ G4ProductionCutsTable* G4ProductionCutsTable::fG4ProductionCutsTable = 0;
 
 G4ProductionCutsTable* G4ProductionCutsTable::GetProductionCutsTable()
 { 
-  if(!fG4ProductionCutsTable)
-  { fG4ProductionCutsTable = new G4ProductionCutsTable(); }
+   static G4ProductionCutsTable theProductionCutsTable;
+   if(!fG4ProductionCutsTable){
+     fG4ProductionCutsTable = &theProductionCutsTable;
+   }
   return fG4ProductionCutsTable;
 }
 
@@ -79,6 +81,7 @@ G4ProductionCutsTable::G4ProductionCutsTable(const G4ProductionCutsTable& )
 
 G4ProductionCutsTable::~G4ProductionCutsTable()
 {
+
   for(CoupleTableIterator itr=coupleTable.begin();itr!=coupleTable.end();itr++)
   { delete (*itr); }
   coupleTable.clear();
@@ -90,6 +93,7 @@ G4ProductionCutsTable::~G4ProductionCutsTable()
     if(rangeDoubleVector[i]!=0) delete [] rangeDoubleVector[i];
     if(energyDoubleVector[i]!=0) delete [] energyDoubleVector[i];
   }
+  fG4ProductionCutsTable =0;
 }
 
 void G4ProductionCutsTable::UpdateCoupleTable(G4VPhysicalVolume* currentWorld)
