@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: g4rwDetectorConstruction.cc,v 1.1 2004-12-06 11:01:14 radoone Exp $
+// $Id: g4rwDetectorConstruction.cc,v 1.2 2006-06-01 10:21:40 witoldp Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -35,7 +35,7 @@
 
 #include "g4rwDetectorConstruction.hh"
 
-#include "Processor/GDMLProcessor.h"
+#include "G4Processor/GDMLProcessor.h"
 
 // Added here just to help resolve properly dependencies
 #include "G4BooleanSolid.hh"
