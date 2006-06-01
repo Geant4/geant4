@@ -21,21 +21,23 @@
 // ********************************************************************
 //
 //
+// $Id: G4ElectronNuclearProcess.hh,v 1.4 2006-06-01 15:32:48 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
- // Hadronic Process: Ion Inelastic Process
- // J.P. Wellisch, CERN, Apr. 14 2000
- // Last modified: 03-Apr-1997
+// Class Description:
+//
+// Process for electron nuclear inelastic scattering; 
+// to be used in your physics list in case you need this physics.
+//
+
+// Hadronic Process: Ion Inelastic Process
+// J.P. Wellisch, CERN, Apr. 14 2000
+// Last modified: 03-Apr-1997
 
 #ifndef G4ElectronNuclearProcess_h
 #define G4ElectronNuclearProcess_h 1
  
-// Class Description
-// Process for electron nuclear inelastic scattering; 
-// to be used in your physics list in case you need this physics.
-// Class Description - End
-
 #include "G4HadronInelasticProcess.hh"
-#include "G4Electron.hh"
 #include "G4ElectroNuclearCrossSection.hh"
  
 
@@ -43,17 +45,9 @@
  {
  public:
     
-    G4ElectronNuclearProcess(
-     const G4String& processName = "ElectroNuclear" ) :
+    G4ElectronNuclearProcess( const G4String& processName = "ElectroNuclear" );
+    ~G4ElectronNuclearProcess();
 
-    G4HadronInelasticProcess( processName, G4Electron::Electron() )
-    { 
-      G4CrossSectionDataStore * theStore = GetCrossSectionDataStore();
-      theStore->AddDataSet(&theData);
-    } 
-    
-    ~G4ElectronNuclearProcess()
-    { }
  private:
  
    G4ElectroNuclearCrossSection theData;

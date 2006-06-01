@@ -21,36 +21,22 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhotoNuclearProcess.hh,v 1.6 2006-06-01 15:32:50 gcosmo Exp $
+// $Id: G4ElectronNuclearProcess.cc,v 1.1 2006-06-01 15:32:51 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// Class Description
-// Process for photon nuclear inelastic scattering; 
-// to be used in your physics list in case you need this physics.
-//
 
-// Hadronic Process: Ion Inelastic Process
-// J.P. Wellisch, CERN, Apr. 14 2000
-// Last modified: 03-Apr-1997
+#include "G4ElectronNuclearProcess.hh" 
+#include "G4Electron.hh"
 
-#ifndef G4PhotoNuclearProcess_h
-#define G4PhotoNuclearProcess_h 1
- 
-#include "G4HadronInelasticProcess.hh"
-#include "G4PhotoNuclearCrossSection.hh"
- 
-
- class G4PhotoNuclearProcess : public G4HadronInelasticProcess
- {
- public:
+G4ElectronNuclearProcess::
+G4ElectronNuclearProcess(const G4String& processName)
+  : G4HadronInelasticProcess( processName, G4Electron::Electron() )
+{ 
+  G4CrossSectionDataStore * theStore = GetCrossSectionDataStore();
+  theStore->AddDataSet(&theData);
+} 
     
-    G4PhotoNuclearProcess( const G4String& processName = "PhotonInelastic" );
-    ~G4PhotoNuclearProcess();
-
- private:
- 
-   G4PhotoNuclearCrossSection theData;
- };
-
-#endif
+G4ElectronNuclearProcess::~G4ElectronNuclearProcess()
+{
+}
 
