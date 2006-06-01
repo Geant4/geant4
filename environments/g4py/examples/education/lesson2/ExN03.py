@@ -256,14 +256,28 @@ class App(Frame):
     magLabel.grid(row=15, column=0, sticky=W)
     mag.grid(row=15, column=1, columnspan=5, sticky=W)
 
-#Geant4 command entry row = 16
+
+#absorber material selection row=16
+    viewerLabel = Label(self, bg="green", text="Viewer")
+    viewerLabel.grid(row=16, column=0, sticky=W)
+    self.viewerVar = StringVar()
+    self.viewerVar.set("OpenGL")
+    viewers = { }
+    pos=1
+    for i in ("OpenGL", "VRML"):
+      viewers[i] = Radiobutton(self, text=i, variable=self.viewerVar, value=i, command=self.cmd_viewer)
+      viewers[i].grid(row=16, column=pos, sticky=W)
+      pos=pos+1
+
+
+#Geant4 command entry row = 17
     g4comLabel = Label(self, text="Geant4 command", bg="orange")
     self.g4commandVar = StringVar()
     commandEntry = Entry(self, textvariable=self.g4commandVar, width=15)
     comBut = Button(self, bg="orange", text="Execute", command=self.cmd_g4command)
-    g4comLabel.grid(row=16, column=0, sticky=W)
-    commandEntry.grid(row=16, column=1, columnspan=3, sticky=E+W)
-    comBut.grid(row=16, column=5)
+    g4comLabel.grid(row=17, column=0, sticky=W)
+    commandEntry.grid(row=17, column=1, columnspan=3, sticky=E+W)
+    comBut.grid(row=17, column=5)
 
 #exit row = 0    
     exitBut = Button(self, bg="red", text="End all", command=sys.exit)
@@ -319,6 +333,15 @@ class App(Frame):
   def cmd_energy(self, penergy):
     gApplyUICommand("/gun/energy " + penergy + " MeV")
 
+
+  def cmd_viewer(self):
+    if self.viewerVar.get() == "OpenGL":
+#      gApplyUICommand("/vis/scene/notifyHandlers")
+      gApplyUICommand("/control/execute oglx.mac")
+
+    if self.viewerVar.get() == "VRML":
+      gApplyUICommand("/control/execute vrml.mac")
+    
 
   def cmd_expand(self):
     gApplyUICommand("/vis/viewer/zoom 1.2")
