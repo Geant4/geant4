@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.3 2004-12-06 14:26:14 gcosmo Exp $
+# $Id: GNUmakefile,v 1.4 2006-06-01 10:15:14 witoldp Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.
 # Author: Radovan Chytracek
@@ -10,7 +10,7 @@ G4TARGET := $(name)
 G4EXLIB := true
 
 ifndef SCRAM_ARCH
-  SCRAM_ARCH := rh73_gcc323
+  SCRAM_ARCH := slc3_ia32_gcc323
 endif
 
 ifndef G4INSTALL
@@ -18,25 +18,27 @@ ifndef G4INSTALL
 endif
 
 ifndef GDML_BASE
-  GDML_BASE := /afs/cern.ch/sw/lcg/app/releases/GDML/pro
+  GDML_BASE := /afs/cern.ch/sw/lcg/app/releases/GDML/GDML_2_6_0
+endif
+
+ifndef XERCESCROOT
+  XERCESCROOT := /afs/cern.ch/sw/lcg/external/XercesC/2.7.0/${SCRAM_ARCH}
 endif
 
 CPPFLAGS    += \
-               -I$(GDML_BASE)/include \
-               -I$(GDML_BASE)/geant4/include \
-               -I$(XERCESCROOT)/include
+		-I$(GDML_BASE)/include \
+	       	-I$(XERCESCROOT)/include
 
 EXTRALIBS   += \
-               -L$(GDML_BASE)/geant4/$(SCRAM_ARCH)/lib \
-               -llcg_G4GDMLProcessor \
-               -llcg_G4GDMLSubscribers \
-               -llcg_G4GDMLProcessor \
-               -llcg_G4GDMLWriter \
                -L$(GDML_BASE)/$(SCRAM_ARCH)/lib \
-               -llcg_GDMLSaxana \
-               -llcg_GDMLProcesses \
-               -llcg_GDMLWriter \
-               -L$(XERCESCROOT)/lib -lxerces-c
+               -lG4Evaluator \
+               -lG4Processor \
+               -lG4Subscribers \
+               -lG4Writer \
+               -lSaxana \
+               -lProcesses \
+               -lWriter \
+               -L$(XERCESCROOT)/lib -lxerces-c 
 
 .PHONY: all
 all: lib bin
