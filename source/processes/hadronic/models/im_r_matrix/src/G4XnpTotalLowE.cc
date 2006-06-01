@@ -89,7 +89,7 @@ G4XnpTotalLowE::G4XnpTotalLowE()
   _eMax = std::exp(std::log(_eMinTable) + _tableSize * _eStepLog) * GeV;
 
   // Protections: validity limits must be compatible with available data
-
+//  @@GF  this ought to be _lowLimit < _eMin
   if (_eMin < _lowLimit)
     throw G4HadronicException(__FILE__, __LINE__, "G4XnpTotalLowE::G4XnpTotalLowE - Low energy limit not valid");
     
