@@ -40,7 +40,7 @@
 #include "G4KaonMinus.hh"
 #include "G4KaonPlus.hh"
 
-const G4double G4XPDGTotal::_lowLimit = 2.99999 * GeV;
+const G4double G4XPDGTotal::_lowLimit = 3. * GeV;  //  2.99999 * GeV;
 const G4double G4XPDGTotal::_highLimit = DBL_MAX;
 
 // Parameters of the PDG total cross-section fit (Rev. Particle Properties, 1998)
@@ -198,10 +198,12 @@ G4double G4XPDGTotal::CrossSection(const G4KineticTrack& trk1,
 	      const G4double eta2 = -0.55;
 	      
 	      if (sqrtS < eMinFit || sqrtS > eMaxFit)
-		G4cout << "WARNING! G4XPDGTotal::PDGTotal extrapolating cross section at " 
+	      {
+	          G4cout << "WARNING! G4XPDGTotal::PDGTotal extrapolating cross section at " 
 		       << sqrtS / GeV 
 		       << " GeV outside the PDG fit range "
 		       << eMinFit / GeV << " - " << eMaxFit / GeV << " GeV " << G4endl;
+	      }
 	      
 	      G4double s = (sqrtS * sqrtS) / (GeV*GeV);
 	      
