@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HadronElastic.cc,v 1.13 2006-05-30 08:52:23 vnivanch Exp $
+// $Id: G4HadronElastic.cc,v 1.14 2006-06-01 08:05:19 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -176,7 +176,7 @@ G4HadFinalState* G4HadronElastic::ApplyYourself(
   }
 
   if(gtype == fHElastic) {
-    t = hElastic->SampleT(theParticle,plab,Z,A);
+    t = hElastic->SampleT1(theParticle,plab,Z,A);
     if(t > tmax) gtype = fSWave;
   }
 
