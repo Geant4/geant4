@@ -7,7 +7,7 @@ Separation of QES (W<M_N+m_pi) is planned at this time.
   ------------------------------------------------------------------------------
   >>>>Emin=0.111651,lEi=-2.19238,lEa=5.70378,dlE=0.394808 (sig_t, 10^-38 cm^2 GeV^-1)
 -----------------+----------+
-I(Idx)dQ2,exp=.67| I(Idx)dy | NOT UP TO DATE
+I(Idx)dQ2,exp=.67| I(Idx)dy | ! NOT UP TO DATE !
 -----------------+----------+
  E_nu   sig_t/E  | sig_t/E  |
 -----------------+----------+

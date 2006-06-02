@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.1 2005-12-16 14:16:49 mkossov Exp $
+# $Id: GNUmakefile,v 1.2 2006-06-02 12:37:30 mkossov Exp $
 # ----------------------------------------------------------------
 # Makes the calculation program in environment variable G4TARGET.
 # ----------------------------------------------------------------
@@ -45,6 +45,7 @@ INCFLAGS := \
             -I$(G4BASE)/processes/hadronic/util/include \
             -I$(G4BASE)/processes/hadronic/cross_sections/include \
             -I$(G4BASE)/processes/hadronic/models/neutron_hp/include \
+            -I$(G4BASE)/processes/hadronic/models/chiral_inv_phase_space/body/include \
             -I$(G4BASE)/processes/electromagnetic/standard/include \
             -I$(G4BASE)/processes/electromagnetic/muons/include \
             -I$(G4BASE)/processes/electromagnetic/utils/include \
