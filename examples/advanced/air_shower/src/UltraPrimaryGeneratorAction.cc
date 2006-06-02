@@ -63,15 +63,6 @@ UltraPrimaryGeneratorAction::UltraPrimaryGeneratorAction()
   G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
   G4String particleName;
 
-  // electron
-  //    G4ParticleDefinition* electron = particleTable->FindParticle(particleName="e-");
-  // pi-minus
-  //  G4ParticleDefinition* particle = particleTable->FindParticle(particleName="pi-");
-  // proton
-  //  G4ParticleDefinition* particle = particleTable->FindParticle(particleName="proton");
-  // mu-minus
-  //    G4ParticleDefinition*     muon = particleTable->FindParticle(particleName="mu-");
-
   G4ParticleDefinition* opticalphoton = particleTable->FindParticle(particleName="opticalphoton");
 
   //....PARTICLE DEFINITIONS
@@ -89,7 +80,7 @@ UltraPrimaryGeneratorAction::UltraPrimaryGeneratorAction()
   G4SPSPosDistribution *posDist = particleGun->GetCurrentSource()->GetPosDist() ;
   posDist->SetPosDisType("Plane");
   posDist->SetPosDisShape("Circle");
-  posDist->SetRadius(10.0*cm);
+  posDist->SetRadius(20.0*cm);
 
 #ifdef ULTRA_MIRROR_USE
 #define ULTRA_REFLECTION_USE
