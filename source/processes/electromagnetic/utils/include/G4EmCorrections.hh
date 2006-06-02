@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmCorrections.hh,v 1.6 2006-05-13 17:57:40 vnivanch Exp $
+// $Id: G4EmCorrections.hh,v 1.7 2006-06-02 16:25:27 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -243,9 +243,9 @@ private:
 
 inline G4int G4EmCorrections::Index(G4double x, G4double* y, G4int n)
 {
-  G4int idx = n-1;
-  do {idx--;} while (idx>0 && x<y[idx]);
-  return idx;
+  G4int iddd = n-1;
+  do {iddd--;} while (iddd>0 && x<y[iddd]);
+  return iddd;
 }
 
 inline G4double G4EmCorrections::Value(G4double xv, G4double x1, G4double x2,
@@ -254,12 +254,15 @@ inline G4double G4EmCorrections::Value(G4double xv, G4double x1, G4double x2,
   return y1 + (y2 - y1)*(xv - x1)/(x2 - x1);
 }
 
-inline G4double G4EmCorrections::Value2(G4double xv, G4double yv, G4double x1, G4double x2,
+inline G4double G4EmCorrections::Value2(G4double xv, G4double yv, 
+					G4double x1, G4double x2,
                                         G4double y1, G4double y2,
-					G4double z11, G4double z21, G4double z12, G4double z22)
+					G4double z11, G4double z21, 
+					G4double z12, G4double z22)
 {
   return (z11*(x2-xv)*(y2-yv) + z22*(xv-x1)*(yv-y1) +
-	  0.5*(z12*((x2-xv)*(yv-y1)+(xv-x1)*(y2-yv))+z21*((xv-x1)*(y2-yv)+(yv-y1)*(x2-xv))))
+	  0.5*(z12*((x2-xv)*(yv-y1)+(xv-x1)*(y2-yv))+
+	       z21*((xv-x1)*(y2-yv)+(yv-y1)*(x2-xv))))
          / ((x2-x1)*(y2-y1));
 }
 

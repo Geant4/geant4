@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmCorrections.cc,v 1.18 2006-05-23 06:42:58 vnivanch Exp $
+// $Id: G4EmCorrections.cc,v 1.19 2006-06-02 16:25:27 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -1377,7 +1377,7 @@ void G4EmCorrections::Initialise()
 
   };
 
-  const G4double tau[93] = {
+  const G4double ntau[93] = {
      0.0,
  -251.1, 512.8, 1724, 649, 658.8, 594.1, 946.6, 969.2, 1154, 997.8,
  939.3, 775.5, 619.9, 848.3, 973.4, 1035, 1252, 698.8, 1043, 1080,
@@ -1393,7 +1393,7 @@ void G4EmCorrections::Initialise()
 
   for(i=0; i<93; i++) {
     MSH[i] = mm[i];
-    TAU[i] = tau[i];
+    TAU[i] = ntau[i];
   }
   const G4double coseb[14] = {0.0,0.05,0.1,0.15,0.2,0.3,0.4,0.5,0.6,0.8,
                               1.0,1.2,1.5,2.0};
