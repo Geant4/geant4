@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CoupledTransportation.hh,v 1.1 2006-05-26 19:49:10 japost Exp $
+// $Id: G4CoupledTransportation.hh,v 1.2 2006-06-02 19:44:14 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -123,7 +123,7 @@ class G4CoupledTransportation : public G4VProcess
 
   public:  // without description
 
-     void StartTracking();  // For G480 :  G4Track* aTrack); 
+     void StartTracking(G4Track* aTrack); 
 
      G4double AtRestGetPhysicalInteractionLength(
                              const G4Track& ,
