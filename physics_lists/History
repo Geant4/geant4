@@ -1,4 +1,4 @@
-$Id: History,v 1.3 2005-12-03 14:35:25 gcosmo Exp $
+$Id: History,v 1.4 2006-06-02 18:18:31 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,15 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+02.05.2006, V.Ivanchenko - phys-lists-V08-00-00
+- Fix destructor for G4MiscLHEPBuilder
+- Fix problem in destructors of G4DecayPhysics and G4ElectroNuclearBuilder
+- Fix typo in LHEP PhysicsList
+- fix minor typo in G4EmMessenger
+- rename G4EmStandardPhysics71 ->G4EmStandardPhysics72;
+- define StepFunction of e+ and e- (1.0, 1.0*mm) for G4EmStandardPhysics71
+  in order to have backward compatibility with the previous release
 
 02.12.2005, G.Folger & V.Ivantchenko - phys-lists-V07-01-01
 - Includes tags: emphys-V07-01-01 and hadr-lists-V07-01-02.
