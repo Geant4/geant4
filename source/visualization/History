@@ -1,4 +1,4 @@
-$Id: History,v 1.353 2006-05-25 14:48:41 allison Exp $
+$Id: History,v 1.354 2006-06-02 09:14:36 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,13 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+2nd June 2006  John Allison
+- DAWN-V08-00-03: Handle file closing in DAWNFILE destructor.
+- VRML-V08-00-01: Protect zero model pointer.
+
+30th May 2006  Joseph Perl
+- opengl-V08-00-08: Fixed buffering problem in Win32.
 
 --------------------------------------------
 25th May 2006  John Allison  (vis-V08-00-08)
