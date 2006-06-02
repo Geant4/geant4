@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DAWNFILESceneHandler.cc,v 1.15 2006-05-04 14:52:21 allison Exp $
+// $Id: G4DAWNFILESceneHandler.cc,v 1.16 2006-06-02 09:06:39 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Satoshi TANAKA
@@ -126,8 +126,14 @@ G4DAWNFILESceneHandler::~G4DAWNFILESceneHandler ()
 #if defined DEBUG_FR_SCENE
 	G4cerr << "***** ~G4DAWNFILESceneHandler" << G4endl;
 #endif 
+	if( FRIsInModeling() ) 
+	  {
+			//----- End of modeling
+			// !EndModeling, !DrawAll, !CloseDevice,
+			// close g4.prim
+		FREndModeling();
+	}
   ClearStore (); // clear current scene
-
 }
 
 //-----
