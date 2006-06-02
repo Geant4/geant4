@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: SteppingAction.cc,v 1.5 2006-05-30 12:28:57 maire Exp $
+// $Id: SteppingAction.cc,v 1.6 2006-06-02 13:32:51 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -51,7 +51,7 @@ SteppingAction::~SteppingAction()
 
 void SteppingAction::UserSteppingAction(const G4Step* aStep)
 {
- if (aStep->GetPreStepPoint()->GetTouchable()->GetVolume() 
+ if (aStep->GetPreStepPoint()->GetTouchableHandle()->GetVolume() 
      != detector->GetAbsorber()) return;
  
  eventaction->AddEnergy (aStep->GetTotalEnergyDeposit());
