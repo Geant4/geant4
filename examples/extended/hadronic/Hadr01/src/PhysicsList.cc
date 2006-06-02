@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.cc,v 1.1 2006-06-02 19:00:01 vnivanch Exp $
+// $Id: PhysicsList.cc,v 1.2 2006-06-02 19:06:40 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -57,6 +57,13 @@
 
 #include "G4LossTableManager.hh"
 #include "G4UnitsTable.hh"
+
+#include "G4ProcessManager.hh"
+#include "G4ParticleTypes.hh"
+#include "G4ParticleTable.hh"
+#include "G4Gamma.hh"
+#include "G4Electron.hh"
+#include "G4Positron.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -111,7 +118,7 @@ void PhysicsList::ConstructProcess()
   for(size_t i=0; i<hadronPhys.size(); i++) {
     hadronPhys[i]->ConstructProcess();
   }
-  AddStepMax();
+
   // Define energy interval for loss processes
   G4EmProcessOptions emOptions;
   emOptions.SetMinEnergy(0.1*keV);
@@ -273,36 +280,6 @@ void PhysicsList::SetStandardList(G4bool flagHP)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#include "StepMax.hh"
-
-#include "G4ProcessManager.hh"
-#include "G4ParticleTypes.hh"
-#include "G4ParticleTable.hh"
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void PhysicsList::AddStepMax()
-{
-  // Step limitation seen as a process
-  stepMaxProcess = new StepMax();
-
-  theParticleIterator->reset();
-  while ((*theParticleIterator)()){
-    G4ParticleDefinition* particle = theParticleIterator->value();
-    G4ProcessManager* pmanager = particle->GetProcessManager();
-
-    if (stepMaxProcess->IsApplicable(*particle) && !particle->IsShortLived()){
-      pmanager ->AddDiscreteProcess(stepMaxProcess);
-    }
-  }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#include "G4Gamma.hh"
-#include "G4Electron.hh"
-#include "G4Positron.hh"
 
 void PhysicsList::SetCuts()
 {

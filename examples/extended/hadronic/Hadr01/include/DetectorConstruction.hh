@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: DetectorConstruction.hh,v 1.1 2006-06-02 19:00:00 vnivanch Exp $
+// $Id: DetectorConstruction.hh,v 1.2 2006-06-02 19:06:39 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 /////////////////////////////////////////////////////////////////////////
 //
-// IION: Simple Phantom
+// IION: Simple Target
 //
 // Created: 31.01.03 V.Ivanchenko
 //
@@ -47,7 +47,7 @@
 #include "G4Material.hh"
 
 class CheckVolumeSD;
-class PhantomSD;
+class TargetSD;
 class G4LogicalVolume;
 class DetectorMessenger;
 
@@ -93,7 +93,7 @@ private:
   G4Material* worldMaterial;
 
   CheckVolumeSD* checkSD;
-  PhantomSD*     phantomSD;
+  TargetSD*     phantomSD;
 
   G4LogicalVolume* logicA;
   G4LogicalVolume* logicB;

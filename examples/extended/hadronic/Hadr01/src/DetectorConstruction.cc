@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: DetectorConstruction.cc,v 1.1 2006-06-02 19:00:00 vnivanch Exp $
+// $Id: DetectorConstruction.cc,v 1.2 2006-06-02 19:06:40 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 /////////////////////////////////////////////////////////////////////////
 //
-// IION: Simple Phantom
+// IION: Simple Target
 //
 // Created: 31.01.03 V.Ivanchenko
 //
@@ -59,7 +59,7 @@
 #include "G4UnitsTable.hh"
 #include "G4ios.hh"
 
-#include "PhantomSD.hh"
+#include "TargetSD.hh"
 #include "CheckVolumeSD.hh"
 #include "G4SDManager.hh"
 #include "HistoManager.hh"
@@ -77,7 +77,7 @@ DetectorConstruction::DetectorConstruction()
   DefineMaterials();
   checkSD = new CheckVolumeSD("checkSD");
   (G4SDManager::GetSDMpointer())->AddNewDetector( checkSD );
-  phantomSD = new PhantomSD("phantomSD");
+  phantomSD = new TargetSD("phantomSD");
   (G4SDManager::GetSDMpointer())->AddNewDetector( phantomSD );
 }
 
@@ -149,10 +149,10 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
   logicB = new G4LogicalVolume( solidB,gapMaterial,"Gaps");
   new G4PVPlacement(0,G4ThreeVector(),logicB,"World",logicC,false,0);
   //
-  // Phantom volume
+  // Target volume
   //
-  G4Tubs* solidA = new G4Tubs("Phantom",0.,radius,width*0.5,0.,twopi);
-  logicA = new G4LogicalVolume( solidA,absMaterial,"Phantom");
+  G4Tubs* solidA = new G4Tubs("Target",0.,radius,width*0.5,0.,twopi);
+  logicA = new G4LogicalVolume( solidA,absMaterial,"Target");
   logicA->SetSensitiveDetector(phantomSD);
 
 
@@ -161,10 +161,10 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
 
   for(G4int i=0; i<nAbs; i++) {
     physC = new G4PVPlacement(0,G4ThreeVector(0.0,0.0,z),
-                                       logicA,"Phantom",logicB,false,i);
+                                       logicA,"Target",logicB,false,i);
     z += width + gap;
   }
-  G4cout << "### Phantom consist of " << nAbs
+  G4cout << "### Target consist of " << nAbs
          << " disks of R(mm)= " << radius/mm
          << " disks of Width(mm)= " << width/mm
          << " with gap(mm)= " << gap/mm

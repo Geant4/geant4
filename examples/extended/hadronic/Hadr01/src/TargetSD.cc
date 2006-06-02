@@ -23,7 +23,7 @@
 // -------------------------------------------------------------
 //
 //
-//      ---------- PhantomSD -------------
+//      ---------- TargetSD -------------
 //              
 //  Modified:
 //
@@ -32,7 +32,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-#include "PhantomSD.hh"
+#include "TargetSD.hh"
 
 #include "G4RunManager.hh"
 #include "G4VPhysicalVolume.hh"
@@ -47,7 +47,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-PhantomSD::PhantomSD(const G4String& name)
+TargetSD::TargetSD(const G4String& name)
  :G4VSensitiveDetector(name),
   theHisto(HistoManager::GetPointer()),
   evno(0)
@@ -55,22 +55,22 @@ PhantomSD::PhantomSD(const G4String& name)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-PhantomSD::~PhantomSD()
+TargetSD::~TargetSD()
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void PhantomSD::Initialize(G4HCofThisEvent*)
+void TargetSD::Initialize(G4HCofThisEvent*)
 {
   evno++;
   if(0 < theHisto->GetVerbose())
-    G4cout << "PhantomSD: Begin Of Event # " << evno << G4endl;
+    G4cout << "TargetSD: Begin Of Event # " << evno << G4endl;
 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4bool PhantomSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
+G4bool TargetSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 {
   theHisto->AddStep(aStep->GetTrack()->GetDefinition(), 
 		    aStep->GetPreStepPoint()->GetKineticEnergy() );
@@ -89,7 +89,7 @@ G4bool PhantomSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
   theHisto->AddEnergy(edep,length,p1);
 
   if(1 < theHisto->GetVerbose()) {
-      G4cout << "PhantomSD: energy = " << edep/MeV
+      G4cout << "TargetSD: energy = " << edep/MeV
              << " MeV is deposited at the step from " << p1
              << " to " << p2 << G4endl;
   }
@@ -99,18 +99,18 @@ G4bool PhantomSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void PhantomSD::EndOfEvent(G4HCofThisEvent*)
+void TargetSD::EndOfEvent(G4HCofThisEvent*)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void PhantomSD::clear()
+void TargetSD::clear()
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 
-void PhantomSD::PrintAll()
+void TargetSD::PrintAll()
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

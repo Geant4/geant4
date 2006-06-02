@@ -20,12 +20,12 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-#ifndef PhantomSD_h
-#define PhantomSD_h 1
+#ifndef TargetSD_h
+#define TargetSD_h 1
 
 // -------------------------------------------------------------
 //
-//      ---------- PhantomSD -------------
+//      ---------- TargetSD -------------
 //
 //  Modified:
 //
@@ -44,23 +44,23 @@ class G4TouchableHistory;
 class G4HCofThisEvent;
 class HistoManager;
 
-class PhantomSD : public G4VSensitiveDetector
+class TargetSD : public G4VSensitiveDetector
 {
 public: // Without description
 
-      PhantomSD(const G4String&);
-     ~PhantomSD();
+  TargetSD(const G4String&);
+  virtual ~TargetSD();
 
-      void Initialize(G4HCofThisEvent*);
-      G4bool ProcessHits(G4Step*,G4TouchableHistory*);
-      void EndOfEvent(G4HCofThisEvent*);
-      void clear();
-      void PrintAll();
+  void Initialize(G4HCofThisEvent*);
+  G4bool ProcessHits(G4Step*,G4TouchableHistory*);
+  void EndOfEvent(G4HCofThisEvent*);
+  void clear();
+  void PrintAll();
 
-  private:
+private:
 
-      HistoManager* theHisto;
-      G4int evno;
+  HistoManager* theHisto;
+  G4int evno;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
