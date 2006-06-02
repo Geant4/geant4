@@ -12,6 +12,8 @@ import ExN03pl
 import ParticleGun, MedicalBeam
 import sys
 from time import *
+from subprocess import *
+import os
 
 # ==================================================================
 # main
@@ -83,9 +85,6 @@ pg.SetParticleMomentumDirection(G4ThreeVector(1.,0.,0.))
 # ------------------------------------------------------------------
 gRunManager.Initialize()
 
-# visualization
-gApplyUICommand("/control/execute oglx.mac")
-
 # beamOn
 #gRunManager.BeamOn(3)
 
@@ -98,13 +97,50 @@ gApplyUICommand("/control/execute oglx.mac")
 #gProcessTable.SetProcessActivation("annihil", 0)
 
 
+# visualization 
+# OGLSX, VRML and HEPREP sceneHandlers are all created with names
+gApplyUICommand("/vis/sceneHandler/create OGLSX OGLSX")
+gApplyUICommand("/vis/sceneHandler/create VRML2FILE VRML")
+gApplyUICommand("/vis/sceneHandler/create HepRepFile HEPREP")
+
+#  OGLSX is the default so, viewer is created and volume is drawn
+gApplyUICommand("/vis/viewer/create OGLSX oglsxviewer")
+gApplyUICommand("/vis/drawVolume")
+gApplyUICommand("/vis/scene/add/trajectories")
+
+gApplyUICommand("/tracking/storeTrajectory 1")
+gApplyUICommand("/vis/scene/endOfEventAction accumulate")
+gApplyUICommand("/vis/scene/endOfRunAction accumulate")
+gApplyUICommand("/vis/viewer/select  oglsxviewer")
+
+# viewers VRML and Wired are tested by their envs vars
+# if their envs var are set, then viewers are created and drawVolume
+
+global heprepViewer, heprepDir, heprepName
+heprepViewer = os.environ.get("G4HEPREPFILE_VIEWER")
+heprepDir = os.environ.get("G4HEPREPFILE_DIR")
+heprepName = os.environ.get("G4HEPREPFILE_NAME")
+if heprepViewer is not None:
+  gApplyUICommand("/vis/viewer/create HEPREP wired")
+  gApplyUICommand("/vis/drawVolume")
+
+# VRML viewers name is user defined
+vrmlDir = os.environ.get("G4VRML_DEST_DIR")
+vrmlViewer = os.environ.get("G4VRMLFILE_VIEWER")
+
+if vrmlViewer is not None:
+  gApplyUICommand("/vis/viewer/create VRML vrmlviewer")
+  gApplyUICommand("/vis/drawVolume")
+
+
+
 # creating widgets using grid layout
 
 from Tkinter import *
 
 class App(Frame):
 
-  
+  g4pipe = 0
   
   def init(self):
 
@@ -257,15 +293,18 @@ class App(Frame):
     mag.grid(row=15, column=1, columnspan=5, sticky=W)
 
 
-#absorber material selection row=16
+# viewer selection row=16
     viewerLabel = Label(self, bg="green", text="Viewer")
     viewerLabel.grid(row=16, column=0, sticky=W)
     self.viewerVar = StringVar()
-    self.viewerVar.set("OpenGL")
+    self.viewerVar.set("")
+    stateOfViewer = {"OpenGL":"normal", "VRML":"normal", "Wired":"normal"}
+    if vrmlViewer is None: stateOfViewer["VRML"] = "disabled"
+    if heprepViewer is None: stateOfViewer["Wired"] = "disabled"
     viewers = { }
     pos=1
-    for i in ("OpenGL", "VRML"):
-      viewers[i] = Radiobutton(self, text=i, variable=self.viewerVar, value=i, command=self.cmd_viewer)
+    for i in ("OpenGL", "VRML", "Wired"):
+      viewers[i] = Radiobutton(self, text=i, variable=self.viewerVar, value=i, command=self.cmd_viewer, state=stateOfViewer[i])
       viewers[i].grid(row=16, column=pos, sticky=W)
       pos=pos+1
 
@@ -274,6 +313,7 @@ class App(Frame):
     g4comLabel = Label(self, text="Geant4 command", bg="orange")
     self.g4commandVar = StringVar()
     commandEntry = Entry(self, textvariable=self.g4commandVar, width=15)
+    self.g4commandVar.set("/vis/viewer/zoom 1.2")
     comBut = Button(self, bg="orange", text="Execute", command=self.cmd_g4command)
     g4comLabel.grid(row=17, column=0, sticky=W)
     commandEntry.grid(row=17, column=1, columnspan=3, sticky=E+W)
@@ -336,11 +376,32 @@ class App(Frame):
 
   def cmd_viewer(self):
     if self.viewerVar.get() == "OpenGL":
-#      gApplyUICommand("/vis/scene/notifyHandlers")
-      gApplyUICommand("/control/execute oglx.mac")
+      gApplyUICommand("/vis/viewer/select oglsxviewer")
+      gApplyUICommand("/vis/scene/add/trajectories")
+
+      gApplyUICommand("/tracking/storeTrajectory 1")
+      gApplyUICommand("/vis/scene/endOfEventAction accumulate")
+      gApplyUICommand("/vis/scene/endOfRunAction accumulate")
 
     if self.viewerVar.get() == "VRML":
-      gApplyUICommand("/control/execute vrml.mac")
+      gApplyUICommand("/vis/viewer/select vrmlviewer")
+      gApplyUICommand("/vis/scene/add/trajectories")
+
+      gApplyUICommand("/tracking/storeTrajectory 1")
+      gApplyUICommand("/vis/scene/endOfEventAction accumulate")
+      gApplyUICommand("/vis/scene/endOfRunAction accumulate")
+
+    if self.viewerVar.get() == "Wired":
+      gApplyUICommand("/vis/viewer/select wired")
+      gApplyUICommand("/vis/scene/add/trajectories")
+
+      gApplyUICommand("/tracking/storeTrajectory 1")
+      gApplyUICommand("/vis/scene/endOfEventAction accumulate")
+      gApplyUICommand("/vis/scene/endOfRunAction accumulate")
+
+      if self.g4pipe == 0:
+        Popen("$HOME/Wired/bin/wired" +  " -file " + heprepDir + "/" + heprepName +".heprep", shell=True)
+        self.g4pipe = 1
     
 
   def cmd_expand(self):
