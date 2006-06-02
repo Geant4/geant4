@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CoupledTransportation.hh,v 1.2 2006-06-02 19:44:14 japost Exp $
+// $Id: G4CoupledTransportation.hh,v 1.3 2006-06-02 22:02:18 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -64,7 +64,7 @@ class G4CoupledTransportation : public G4VProcess
 
   public:  // with description
 
-     G4CoupledTransportation( G4int verbosityLevel= 1);
+     G4CoupledTransportation( G4int verbosityLevel= 0); 
      ~G4CoupledTransportation(); 
 
      G4double      AlongStepGetPhysicalInteractionLength(
