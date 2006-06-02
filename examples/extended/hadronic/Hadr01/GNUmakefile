@@ -1,10 +1,10 @@
-# $Id: GNUmakefile,v 1.1 2006-06-01 18:17:31 vnivanch Exp $
+# $Id: GNUmakefile,v 1.2 2006-06-02 19:00:00 vnivanch Exp $
 # GEANT4 tag $Name: not supported by cvs2svn $
 # --------------------------------------------------------------
 # GNUmakefile for examples module with AIDA interface
 # --------------------------------------------------------------
 
-name := IonBeam
+name := Hadr01
 G4TARGET := $(name)
 G4EXLIB := true
 

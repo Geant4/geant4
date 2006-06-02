@@ -20,83 +20,46 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: hadr01.cc,v 1.2 2006-06-02 19:00:00 vnivanch Exp $
+// $Id: StackingMessenger.cc,v 1.1 2006-06-02 19:00:02 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4RunManager.hh"
-#include "G4UImanager.hh"
-#include "G4UIterminal.hh"
-#include "G4UItcsh.hh"
-#include "Randomize.hh"
+#include "StackingMessenger.hh"
 
-#include "DetectorConstruction.hh"
-#include "PhysicsList.hh"
-#include "PrimaryGeneratorAction.hh"
-#include "SteppingVerbose.hh"
-
-#include "RunAction.hh"
-#include "EventAction.hh"
 #include "StackingAction.hh"
-
-#include "G4VisExecutive.hh"
+#include "G4UIdirectory.hh"
+#include "G4UIcmdWithABool.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-int main(int argc,char** argv) {
+StackingMessenger::StackingMessenger(StackingAction* stack)
+:stackAction(stack)
+{
+  stackDir = new G4UIdirectory("/testem/stack/");
+  stackDir->SetGuidance("stacking control");
+   
+  killCmd = new G4UIcmdWithABool("/testem/stack/killSecondaries",this);
+  killCmd->SetGuidance("  Choice : true false");
+  killCmd->SetParameterName("choice",true);
+  killCmd->SetDefaultValue(true);
+}
 
-  //choose the Random engine
-  HepRandom::setTheEngine(new RanecuEngine);
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-  //Construct the default run manager
-  G4RunManager * runManager = new G4RunManager;
+StackingMessenger::~StackingMessenger()
+{
+  delete killCmd;
+  delete stackDir;
+}
 
-  //set mandatory initialization classes
-  DetectorConstruction* det = new DetectorConstruction();
-  runManager->SetUserInitialization(det);
-  runManager->SetUserInitialization(new PhysicsList);
-  runManager->SetUserAction(new PrimaryGeneratorAction(det));
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-  //set user action classes
-  runManager->SetUserAction(new RunAction());
-  runManager->SetUserAction(new EventAction());
-  runManager->SetUserAction(new StackingAction());
-
-  //get the pointer to the User Interface manager
-  G4UImanager* UI = G4UImanager::GetUIpointer();
-  G4VisManager* visManager = 0;
-
-  if (argc==1)   // Define UI terminal for interactive mode
-    {
-#ifdef G4VIS_USE
-      //visualization manager
-      visManager = new G4VisExecutive;
-      visManager->Initialize();
-#endif
-      G4UIsession* session = 0;
-#ifdef G4UI_USE_TCSH
-      session = new G4UIterminal(new G4UItcsh);
-#else
-      session = new G4UIterminal();
-#endif
-      session->SessionStart();
-      delete session;
-    }
-  else           // Batch mode
-    {
-     G4String command = "/control/execute ";
-     G4String fileName = argv[1];
-     UI->ApplyCommand(command+fileName);
-    }
-
-  //job termination
-  if(visManager) delete visManager;
-  delete runManager;
-
-  return 0;
+void StackingMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
+{     
+  if(command == killCmd)
+    {stackAction->SetKillStatus(killCmd->GetNewBoolValue(newValue));}               
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

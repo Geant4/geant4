@@ -20,83 +20,76 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: hadr01.cc,v 1.2 2006-06-02 19:00:00 vnivanch Exp $
+// $Id: StackingAction.cc,v 1.1 2006-06-02 19:00:02 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4RunManager.hh"
-#include "G4UImanager.hh"
-#include "G4UIterminal.hh"
-#include "G4UItcsh.hh"
-#include "Randomize.hh"
-
-#include "DetectorConstruction.hh"
-#include "PhysicsList.hh"
-#include "PrimaryGeneratorAction.hh"
-#include "SteppingVerbose.hh"
-
-#include "RunAction.hh"
-#include "EventAction.hh"
 #include "StackingAction.hh"
 
-#include "G4VisExecutive.hh"
+#include "HistoManager.hh"
+#include "StackingMessenger.hh"
+
+#include "G4Track.hh"
+#include "G4Neutron.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-int main(int argc,char** argv) {
+StackingAction::StackingAction()
+{
+  verbose        = 1;
+  killSecondary  = false;
+  stackMessenger = new StackingMessenger(this);
+  histoManager   = HistoManager::GetPointer();
+  tmin           = 90.*keV; 
+  tmax           = 110.*keV; 
+}
 
-  //choose the Random engine
-  HepRandom::setTheEngine(new RanecuEngine);
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-  //Construct the default run manager
-  G4RunManager * runManager = new G4RunManager;
+StackingAction::~StackingAction()
+{
+  delete stackMessenger;
+}
 
-  //set mandatory initialization classes
-  DetectorConstruction* det = new DetectorConstruction();
-  runManager->SetUserInitialization(det);
-  runManager->SetUserInitialization(new PhysicsList);
-  runManager->SetUserAction(new PrimaryGeneratorAction(det));
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-  //set user action classes
-  runManager->SetUserAction(new RunAction());
-  runManager->SetUserAction(new EventAction());
-  runManager->SetUserAction(new StackingAction());
+G4ClassificationOfNewTrack
+StackingAction::ClassifyNewTrack(const G4Track* aTrack)
+{
+  if (aTrack->GetTrackStatus() == fAlive) 
+    histoManager->ScoreNewTrack(aTrack);
+  //keep primary particle
+  if (aTrack->GetParentID() == 0) return fUrgent;
 
-  //get the pointer to the User Interface manager
-  G4UImanager* UI = G4UImanager::GetUIpointer();
-  G4VisManager* visManager = 0;
+  //
+  //energy spectrum of secondaries
+  //
+  G4double e = aTrack->GetKineticEnergy();
+  const G4ParticleDefinition* p = aTrack->GetDefinition();
+  //  G4double m = p->GetPDGMass();
 
-  if (argc==1)   // Define UI terminal for interactive mode
-    {
-#ifdef G4VIS_USE
-      //visualization manager
-      visManager = new G4VisExecutive;
-      visManager->Initialize();
-#endif
-      G4UIsession* session = 0;
-#ifdef G4UI_USE_TCSH
-      session = new G4UIterminal(new G4UItcsh);
-#else
-      session = new G4UIterminal();
-#endif
-      session->SessionStart();
-      delete session;
-    }
-  else           // Batch mode
-    {
-     G4String command = "/control/execute ";
-     G4String fileName = argv[1];
-     UI->ApplyCommand(command+fileName);
-    }
+  if(verbose > 1 && p == G4Neutron::Neutron()
+     && ( e < 2.*eV ||( e < tmax && e> tmin)) ) {
 
-  //job termination
-  if(visManager) delete visManager;
-  delete runManager;
+    G4int pid = aTrack->GetParentID();
+    const G4String name = aTrack->GetDefinition()->GetParticleName();
+    G4cout << "Track #"
+	   << aTrack->GetTrackID() << " of " << name
+	   << " E(keV)= " << e/keV
+	   << " produced by " 
+	   << histoManager->CurrentDefinition()->GetParticleName()
+	   << " ID= " << pid
+	   << " with E(MeV)= " << histoManager->CurrentKinEnergy()/MeV
+	   << G4endl;
+  }
 
-  return 0;
+  //stack or delete secondaries
+  G4ClassificationOfNewTrack status = fUrgent;
+  if (killSecondary)         status = fKill;
+  
+  return status;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
