@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HepRepFileSceneHandler.cc,v 1.44 2006-06-01 23:48:05 perl Exp $
+// $Id: G4HepRepFileSceneHandler.cc,v 1.45 2006-06-02 05:42:56 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -616,6 +616,25 @@ void G4HepRepFileSceneHandler::AddCompound (const G4VTrajectory& traj) {
 }
 
 
+void G4HepRepFileSceneHandler::InitTrajectory() {
+		// For every trajectory, add an instance of Type Trajectory.
+		hepRepXMLWriter->addInstance();
+		
+		// Write out the trajectory's attribute values.
+		if (trajAttValues) {
+			std::vector<G4AttValue>::iterator iAttVal;
+			for (iAttVal = trajAttValues->begin();
+				 iAttVal != trajAttValues->end(); ++iAttVal)
+				hepRepXMLWriter->addAttValue(iAttVal->GetName(), iAttVal->GetValue());
+			delete trajAttValues; 
+		}
+		
+		// Clean up trajectory attributes.
+		if (trajAttDefs)
+			delete trajAttDefs;
+}
+
+
 void G4HepRepFileSceneHandler::AddCompound (const G4VHit& hit) {
 #ifdef G4HEPREPFILEDEBUG
 	G4cout << "G4HepRepFileSceneHandler::AddCompound(G4VHit&) " << G4endl;
@@ -623,9 +642,9 @@ void G4HepRepFileSceneHandler::AddCompound (const G4VHit& hit) {
 	
 	// Pointers to hold hit attribute values and definitions.
 	std::vector<G4AttValue>* rawHitAttValues = hit.CreateAttValues();
-	std::vector<G4AttValue>* hitAttValues =
+	hitAttValues =
     new std::vector<G4AttValue>;
-	std::map<G4String,G4AttDef>* hitAttDefs =
+	hitAttDefs =
     new std::map<G4String,G4AttDef>;
 	
 	// Iterators to use with attribute values and definitions.
@@ -705,11 +724,21 @@ void G4HepRepFileSceneHandler::AddCompound (const G4VHit& hit) {
 		}
 	} // end of special treatment for when this is the first hit.
 	
+	// Now that we have written out all of the attributes that are based on the
+	// hit's particulars, call base class to deconstruct hit into a primitives.
+	drawingHit = true;
+	G4VSceneHandler::AddCompound(hit);  // Invoke default action.
+	drawingHit = false;
+}
+
+
+void G4HepRepFileSceneHandler::InitHit() {	
 	// For every hit, add an instance of Type Hit.
 	hepRepXMLWriter->addInstance();
 	
 	// Write out the hit's attribute values.
 	if (hitAttValues) {
+		std::vector<G4AttValue>::iterator iAttVal;
 		for (iAttVal = hitAttValues->begin();
 			 iAttVal != hitAttValues->end(); ++iAttVal)
 			hepRepXMLWriter->addAttValue(iAttVal->GetName(), iAttVal->GetValue());
@@ -719,12 +748,6 @@ void G4HepRepFileSceneHandler::AddCompound (const G4VHit& hit) {
 	// Clean up hit attributes.
 	if (hitAttDefs)
 		delete hitAttDefs;
-	
-	// Now that we have written out all of the attributes that are based on the
-	// hit's particulars, call base class to deconstruct hit into a primitives.
-	drawingHit = true;
-	G4VSceneHandler::AddCompound(hit);  // Invoke default action.
-	drawingHit = false;
 }
 
 
@@ -737,29 +760,14 @@ void G4HepRepFileSceneHandler::AddPrimitive(const G4Polyline& polyline) {
 	PrintThings();
 #endif
 	
-	haveVisible = true;
-	AddHepRepInstance("Line", polyline);
-	
 	if (fpVisAttribs && (fpVisAttribs->IsVisible()==0) && cullInvisibleObjects)
 		return;
 	
-	if (drawingTraj) {
-		// For every trajectory, add an instance of Type Trajectory.
-		hepRepXMLWriter->addInstance();
-		
-		// Write out the trajectory's attribute values.
-		if (trajAttValues) {
-			std::vector<G4AttValue>::iterator iAttVal;
-			for (iAttVal = trajAttValues->begin();
-				 iAttVal != trajAttValues->end(); ++iAttVal)
-				hepRepXMLWriter->addAttValue(iAttVal->GetName(), iAttVal->GetValue());
-			delete trajAttValues; 
-		}
-		
-		// Clean up trajectory attributes.
-		if (trajAttDefs)
-			delete trajAttDefs;
-	}
+	if (drawingTraj)
+		InitTrajectory();
+	
+	haveVisible = true;
+	AddHepRepInstance("Line", polyline);
 	
 	hepRepXMLWriter->addPrimitive();
 	
@@ -779,11 +787,14 @@ void G4HepRepFileSceneHandler::AddPrimitive (const G4Polymarker& line) {
 	PrintThings();
 #endif
 	
-	haveVisible = true;
-	AddHepRepInstance("Point", line);
-	
 	if (fpVisAttribs && (fpVisAttribs->IsVisible()==0) && cullInvisibleObjects)
 		return;
+	
+	if (drawingHit)
+		InitHit();
+	
+	haveVisible = true;
+	AddHepRepInstance("Point", line);
 	
 	hepRepXMLWriter->addAttValue("MarkName", "Dot");
 	hepRepXMLWriter->addAttValue("MarkSize", 4);
@@ -847,11 +858,14 @@ void G4HepRepFileSceneHandler::AddPrimitive(const G4Circle& circle) {
 	PrintThings();
 #endif
 	
-	haveVisible = true;
-	AddHepRepInstance("Point", circle);
-	
 	if (fpVisAttribs && (fpVisAttribs->IsVisible()==0) && cullInvisibleObjects)
 		return;
+	
+	if (drawingHit)
+		InitHit();
+	
+	haveVisible = true;
+	AddHepRepInstance("Point", circle);
 	
 	hepRepXMLWriter->addAttValue("MarkName", "Dot");
 	hepRepXMLWriter->addAttValue("MarkSize", 4);
@@ -872,11 +886,14 @@ void G4HepRepFileSceneHandler::AddPrimitive(const G4Square& square) {
 	PrintThings();
 #endif
 	
-	haveVisible = true;
-	AddHepRepInstance("Point", square);
-	
 	if (fpVisAttribs && (fpVisAttribs->IsVisible()==0) && cullInvisibleObjects)
 		return;
+	
+	if (drawingHit)
+		InitHit();
+	
+	haveVisible = true;
+	AddHepRepInstance("Point", square);
 	
 	hepRepXMLWriter->addAttValue("MarkName", "Square");
 	hepRepXMLWriter->addAttValue("MarkSize", 4);
@@ -896,13 +913,16 @@ void G4HepRepFileSceneHandler::AddPrimitive(const G4Polyhedron& polyhedron) {
 	PrintThings();
 #endif
 	
-	haveVisible = true;
-	AddHepRepInstance("Polygon", polyhedron);
-	
 	if (fpVisAttribs && (fpVisAttribs->IsVisible()==0) && cullInvisibleObjects)
 		return;
 	
 	if(polyhedron.GetNoFacets()==0)return;
+	
+	if (drawingHit)
+		InitHit();
+	
+	haveVisible = true;
+	AddHepRepInstance("Polygon", polyhedron);
 	
 	G4Normal3D surfaceNormal;
 	G4Point3D vertex;

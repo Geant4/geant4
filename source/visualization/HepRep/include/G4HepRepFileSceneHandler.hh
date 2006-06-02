@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HepRepFileSceneHandler.hh,v 1.23 2006-06-01 23:48:05 perl Exp $
+// $Id: G4HepRepFileSceneHandler.hh,v 1.24 2006-06-02 05:42:56 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -74,7 +74,9 @@ public:
   void AddSolid(const G4Polyhedra&);
   void AddSolid(const G4VSolid&);
   void AddCompound (const G4VTrajectory&);
+  void InitTrajectory();
   void AddCompound (const G4VHit&);
+  void InitHit();
   // void PreAddSolid(const G4Transform3D& objectTransformation,
   //                 const G4VisAttributes&);
   // void PostAddSolid();
@@ -138,6 +140,8 @@ private:
   
   std::vector<G4AttValue>* trajAttValues;
   std::map<G4String,G4AttDef>* trajAttDefs;
+  std::vector<G4AttValue>* hitAttValues;
+  std::map<G4String,G4AttDef>* hitAttDefs;
   
 #ifdef G4HEPREPFILEDEBUG
   void PrintThings();
