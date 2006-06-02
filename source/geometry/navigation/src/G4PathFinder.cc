@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PathFinder.cc,v 1.10 2006-05-31 17:03:30 japost Exp $
+// $Id: G4PathFinder.cc,v 1.11 2006-06-02 19:42:01 japost Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4PathFinder Implementation
@@ -68,7 +68,7 @@ G4PathFinder::G4PathFinder()
   : fEndState( G4ThreeVector(), G4ThreeVector(), 0., 0., 0., 0., 0.),
        fRelocatedPoint(true),
        fLastStepNo(-1), 
-       fVerboseLevel(2)
+       fVerboseLevel(0)
 {
    fNoActiveNavigators= 0; 
    fLastLocatedPosition= G4ThreeVector( DBL_MAX, DBL_MAX, DBL_MAX ); 
@@ -108,7 +108,7 @@ G4PathFinder::ComputeStep( const G4FieldTrack &InitialFieldTrack,
   G4int navigatorNo=-1; 
 
 
-  if( 1 ) {   //  ( fVerboseLevel > 2 ){ 
+  if( fVerboseLevel > 2 ){ 
     G4cout << " -------------------------" <<  G4endl;
     G4cout << " G4PathFinder::ComputeStep - entered " << G4endl;
     G4cout << "   - stepNo = "  << std::setw(4) << stepNo  << " "
@@ -135,7 +135,7 @@ G4PathFinder::ComputeStep( const G4FieldTrack &InitialFieldTrack,
     // 
     // G4cout << " initial = " << InitialFieldTrack << G4endl;
     G4FieldTrack currentState= InitialFieldTrack;
-    // if( fVerboseLevel > 1 )
+    if( fVerboseLevel > 1 )
       G4cout << " current = " << currentState << G4endl;
 
     fCurrentStepNo = stepNo; 
@@ -158,7 +158,11 @@ G4PathFinder::ComputeStep( const G4FieldTrack &InitialFieldTrack,
 
       // fRelocatedPoint= true;  //  It has moved !!
       this->MovePoint(); 
-      G4cout << " Calling PathFinder::Locate() from G4PathFinder::ComputeStep() " << G4endl;
+      
+      if( fVerboseLevel > 2 ) { 
+	G4cout << " Calling PathFinder::Locate() from G4PathFinder::ComputeStep() " << G4endl;
+      }
+
       Locate( newPosition, newDirection ); 
 
     }
@@ -185,8 +189,11 @@ G4PathFinder::ComputeStep( const G4FieldTrack &InitialFieldTrack,
   EndState = fEndState;  // set in DoNextLinearStep  ( right ? )
   fRelocatedPoint= false;
 
-  G4cout << " G4PathFinder returns " << fCurrentStepSize[ navigatorNo ]
-	 << " for Navigator " << navigatorNo << G4endl; 
+
+  if( fVerboseLevel > 1 ){ 
+    G4cout << " G4PathFinder::ComputeStep returns " << fCurrentStepSize[ navigatorNo ]
+	   << " for Navigator " << navigatorNo << G4endl; 
+  }
 
   return fCurrentStepSize[ navigatorNo ];
 }
@@ -241,7 +248,9 @@ G4PathFinder::PrepareNewTrack( const G4ThreeVector position,
      fLocatedVolume[num] = 0; 
   }
 
+  if( fVerboseLevel > 1 ) 
   G4cout << " Calling PathFinder::Locate() from G4PathFinder::PrepareNewTrack() " << G4endl;
+
   Locate( position, direction, false );   
   // The first location for each Navigator must be non-relative
   //   or else call ResetStackAndState() for each Navigator
@@ -325,23 +334,25 @@ G4PathFinder::Locate( const   G4ThreeVector& position,
      fLimitedStep[num]   = kDoNot; 
      fCurrentStepSize[num] = 0.0;      
     
-     G4cout << " Located in world " << num << " at " << position
-	    << "  used geomLimStp " << fLimitTruth[num]
-	    << "  - found in volume " << pLocated ; 
-     G4cout << "  name = '" ; 
-
-     if( pLocated ){ 
-        G4cout << pLocated->GetName() << "'"; 
-	G4cout << " - CopyNo= " << pLocated->GetCopyNo(); 
-     } else { 
-        G4cout <<  "Null'   Id: Not-Set "; 
+     if( fVerboseLevel > 2 ){
+       G4cout << " Located in world " << num << " at " << position
+	      << "  used geomLimStp " << fLimitTruth[num]
+	      << "  - found in volume " << pLocated ; 
+       G4cout << "  name = '" ; 
+       
+       if( pLocated ){ 
+	 G4cout << pLocated->GetName() << "'"; 
+	 G4cout << " - CopyNo= " << pLocated->GetCopyNo(); 
+       } else { 
+	 G4cout <<  "Null'   Id: Not-Set "; 
+       }
+       G4cout  << G4endl; 
      }
-     G4cout  << G4endl; 
-  }
+
+  } // ending for (num= ....
 
   if( fVerboseLevel > 2 ){
-    G4cout << " G4PathFinder::Locate : exiting. " << G4endl;
-    G4cout << G4endl;
+    G4cout << " G4PathFinder::Locate : exiting. " << G4endl << G4endl; 
   }
   fRelocatedPoint= false;
 }
@@ -368,7 +379,7 @@ G4PathFinder::ReLocate( const   G4ThreeVector& position )
 		  "ReLocation is further than safety from last location."); 
   }
 
-  if( 1 ) {            // ( fVerboseLevel > 2 ){
+  if( fVerboseLevel > 2 ){
     G4cout << G4endl; 
     G4cout << " G4PathFinder::ReLocate : entered " << G4endl;
     G4cout << " ----------------------   -------" <<  G4endl;
@@ -410,7 +421,10 @@ G4TouchableHandle
 G4PathFinder::CreateTouchableHandle( G4int navId ) const
    // Also? G4TouchableCreator& GetTouchableCreator( navId ) const; 
 {
-G4cout << "G4PathFinder::CreateTouchableHandle : navId = " << navId << " -- " << GetNavigator(navId) << G4endl;
+  if( fVerboseLevel > 2 ){
+    G4cout << "G4PathFinder::CreateTouchableHandle : navId = " << navId << " -- " << GetNavigator(navId) << G4endl;
+  }
+
   G4TouchableHistory* touchHist;
   touchHist= GetNavigator(navId) -> CreateTouchableHistory(); 
 
@@ -520,7 +534,9 @@ G4PathFinder::DoNextLinearStep( const G4FieldTrack &initialState,
      fCurrentStepSize[num] = step; 
      fNewSafety[num]= safety; 
 
-     G4cout << "G4PathFinder::DoNextLinearStep : Navigator [" << num << "] -- step size " << step << G4endl;
+     if( fVerboseLevel > 2 ){
+       G4cout << "G4PathFinder::DoNextLinearStep : Navigator [" << num << "] -- step size " << step << G4endl;
+     }
   } 
   fMinSafety= minSafety;
   fMinStep=   minStep; 
@@ -536,13 +552,15 @@ G4PathFinder::DoNextLinearStep( const G4FieldTrack &initialState,
   fEndState= initialState; 
   endPosition= initialPosition + minStep * initialDirection ; 
 
-  G4cout << "G4PathFinder::DoNextLinearStep : "
-	 << " initialPosition = " << initialPosition 
-	 << " and endPosition = " << endPosition<< G4endl;
+  if( fVerboseLevel > 1 ){
+    G4cout << "G4PathFinder::DoNextLinearStep : "
+	   << " initialPosition = " << initialPosition 
+	   << " and endPosition = " << endPosition<< G4endl;
+  }
+
   fEndState.SetPosition( endPosition ); 
   fEndState.SetProperTimeOfFlight( -1.000 );   // Not defined YET
   // fEndState.SetMomentum( initialState.GetMomentum ); 
-
   this->WhichLimited(); 
 
   if( fVerboseLevel > 2 ){
@@ -588,24 +606,13 @@ G4PathFinder::WhichLimited()       // Flag which processes limited the step
       fLimitedStep[num] = kDoNot;
     }
   }
-  if( last > -1 ){ 
-    if( noLimited == 1 ) {
-      fLimitedStep[ last ] = kUnique; 
-    }
-#if 0
-    else{
-      // Processes limiting are not unique
-      for ( num= 0; num < fNoActiveNavigators; num++ ) { 
-	if( Limited[num] ) fLimitedStep[ last ] = kUnique; 
-      }
-    }
-#endif
+  if( (last > -1) && (noLimited == 1 ) ){
+    fLimitedStep[ last ] = kUnique; 
   }
 
 #ifndef G4NO_VERBOSE
-  this->PrintLimited();   // --> for tracing 
-  if( fVerboseLevel > 2 ){
-    // this->PrintLimited();  
+  if( fVerboseLevel > 0 ){
+    this->PrintLimited();   // --> for tracing 
     G4cout << " G4PathFinder::WhichLimited - exiting. " << G4endl;
   }
 #endif
