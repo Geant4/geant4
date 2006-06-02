@@ -1,4 +1,4 @@
-$Id: History,v 1.83 2006-06-02 07:00:20 gbarrand Exp $
+$Id: History,v 1.84 2006-06-02 07:01:45 gbarrand Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -21,9 +21,9 @@ History file for visualization/OpenInventor
 -------------------------------------------
 
 2 June 2006  Guy Barrand :
-- G4OpenInvenotXt : have an Initialize method in order to init
-  Xt and Inventor only is really used (when creating a viewer
-  or a scene handler).
+- G4OpenInvenot, G4OpenInvenotXt, G4OpenInvenotWin : have an Initialize 
+  method in order to init Xt and Inventor only is really used 
+  (when creating a viewer or a scene handler).
 
 19th April 2006  Gabriele Cosmo  (openinventor-V08-00-04)
 - Use cmath instead of math.h.

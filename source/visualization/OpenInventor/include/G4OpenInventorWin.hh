@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorWin.hh,v 1.1 2004-04-08 09:37:30 gbarrand Exp $
+// $Id: G4OpenInventorWin.hh,v 1.2 2006-06-02 07:01:45 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // OpenInventor graphics system factory.
@@ -38,6 +38,10 @@ public:
   G4OpenInventorWin ();
   virtual ~G4OpenInventorWin ();
   G4VViewer* CreateViewer(G4VSceneHandler&,const G4String& name = "");
+private:
+  virtual void Initialize();
+private:
+  bool fInited;
 };
 
 #endif

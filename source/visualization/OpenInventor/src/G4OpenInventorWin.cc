@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorWin.cc,v 1.4 2004-04-08 10:49:57 gbarrand Exp $
+// $Id: G4OpenInventorWin.cc,v 1.5 2006-06-02 07:01:52 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // OpenInventor graphics system factory.
@@ -39,7 +39,14 @@
 
 G4OpenInventorWin::G4OpenInventorWin ()
 :G4OpenInventor("OpenInventorWin","OIWin32",G4VGraphicsSystem::threeD)
+,fInited(false)
 {
+}
+
+void G4OpenInventorWin::Initialize ()
+{
+  if(fInited) return; //Done
+
   SetInteractorManager (G4Win32::getInstance());
   GetInteractorManager () -> RemoveDispatcher((G4DispatchFunction)G4Win32::dispatchWin32Event);  
   GetInteractorManager () -> AddDispatcher((G4DispatchFunction)SoWin::dispatchEvent);
@@ -49,11 +56,14 @@ G4OpenInventorWin::G4OpenInventorWin ()
   SoWin::init(toplevel);
 
   InitNodes();
+
+  fInited = true;
 }
 
 G4OpenInventorWin::~G4OpenInventorWin () {}
 G4VViewer* G4OpenInventorWin::CreateViewer (G4VSceneHandler& scene, const G4String& name) 
 {
+  Initialize();
   G4OpenInventorSceneHandler* pScene = (G4OpenInventorSceneHandler*)&scene;
   return new G4OpenInventorWinViewer (*pScene, name);
 }
