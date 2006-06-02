@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HepRepFileSceneHandler.cc,v 1.45 2006-06-02 05:42:56 perl Exp $
+// $Id: G4HepRepFileSceneHandler.cc,v 1.46 2006-06-02 05:58:06 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -89,6 +89,7 @@ G4VSceneHandler(system, fSceneIdCount++, name)
 	haveVisible = false;
 	drawingTraj = false;
 	drawingHit = false;
+	doneInitHit = false;
 }
 
 
@@ -550,6 +551,9 @@ void G4HepRepFileSceneHandler::AddCompound (const G4VTrajectory& traj) {
 		G4VSceneHandler::AddCompound(traj);  // Invoke default action.
 		drawingTraj = false;
 		pTrModel->SetDrawingMode(drawingMode);
+	} else {
+	// Initialize the trajectory instance if it wasn't done by the AddPrimitive(...polyline).
+		InitTrajectory();
 	}
 	
 	if (drawingMode!=0) {
@@ -617,21 +621,21 @@ void G4HepRepFileSceneHandler::AddCompound (const G4VTrajectory& traj) {
 
 
 void G4HepRepFileSceneHandler::InitTrajectory() {
-		// For every trajectory, add an instance of Type Trajectory.
-		hepRepXMLWriter->addInstance();
-		
-		// Write out the trajectory's attribute values.
-		if (trajAttValues) {
-			std::vector<G4AttValue>::iterator iAttVal;
-			for (iAttVal = trajAttValues->begin();
-				 iAttVal != trajAttValues->end(); ++iAttVal)
-				hepRepXMLWriter->addAttValue(iAttVal->GetName(), iAttVal->GetValue());
-			delete trajAttValues; 
-		}
-		
-		// Clean up trajectory attributes.
-		if (trajAttDefs)
-			delete trajAttDefs;
+	// For every trajectory, add an instance of Type Trajectory.
+	hepRepXMLWriter->addInstance();
+	
+	// Write out the trajectory's attribute values.
+	if (trajAttValues) {
+		std::vector<G4AttValue>::iterator iAttVal;
+		for (iAttVal = trajAttValues->begin();
+			 iAttVal != trajAttValues->end(); ++iAttVal)
+			hepRepXMLWriter->addAttValue(iAttVal->GetName(), iAttVal->GetValue());
+		delete trajAttValues; 
+	}
+	
+	// Clean up trajectory attributes.
+	if (trajAttDefs)
+		delete trajAttDefs;
 }
 
 
@@ -643,9 +647,9 @@ void G4HepRepFileSceneHandler::AddCompound (const G4VHit& hit) {
 	// Pointers to hold hit attribute values and definitions.
 	std::vector<G4AttValue>* rawHitAttValues = hit.CreateAttValues();
 	hitAttValues =
-    new std::vector<G4AttValue>;
+		new std::vector<G4AttValue>;
 	hitAttDefs =
-    new std::map<G4String,G4AttDef>;
+		new std::map<G4String,G4AttDef>;
 	
 	// Iterators to use with attribute values and definitions.
 	std::vector<G4AttValue>::iterator iAttVal;
@@ -727,27 +731,32 @@ void G4HepRepFileSceneHandler::AddCompound (const G4VHit& hit) {
 	// Now that we have written out all of the attributes that are based on the
 	// hit's particulars, call base class to deconstruct hit into a primitives.
 	drawingHit = true;
+	doneInitHit = false;
 	G4VSceneHandler::AddCompound(hit);  // Invoke default action.
 	drawingHit = false;
 }
 
 
-void G4HepRepFileSceneHandler::InitHit() {	
-	// For every hit, add an instance of Type Hit.
-	hepRepXMLWriter->addInstance();
-	
-	// Write out the hit's attribute values.
-	if (hitAttValues) {
-		std::vector<G4AttValue>::iterator iAttVal;
-		for (iAttVal = hitAttValues->begin();
-			 iAttVal != hitAttValues->end(); ++iAttVal)
-			hepRepXMLWriter->addAttValue(iAttVal->GetName(), iAttVal->GetValue());
-		delete hitAttValues;
+void G4HepRepFileSceneHandler::InitHit() {
+	if (!doneInitHit) {
+		// For every hit, add an instance of Type Hit.
+		hepRepXMLWriter->addInstance();
+		
+		// Write out the hit's attribute values.
+		if (hitAttValues) {
+			std::vector<G4AttValue>::iterator iAttVal;
+			for (iAttVal = hitAttValues->begin();
+				 iAttVal != hitAttValues->end(); ++iAttVal)
+				hepRepXMLWriter->addAttValue(iAttVal->GetName(), iAttVal->GetValue());
+			delete hitAttValues;
+		}
+		
+		// Clean up hit attributes.
+		if (hitAttDefs)
+			delete hitAttDefs;
+		
+		doneInitHit = true;
 	}
-	
-	// Clean up hit attributes.
-	if (hitAttDefs)
-		delete hitAttDefs;
 }
 
 

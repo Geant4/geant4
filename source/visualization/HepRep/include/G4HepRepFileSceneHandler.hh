@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HepRepFileSceneHandler.hh,v 1.24 2006-06-02 05:42:56 perl Exp $
+// $Id: G4HepRepFileSceneHandler.hh,v 1.25 2006-06-02 05:58:06 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -137,6 +137,7 @@ private:
   G4bool haveVisible;
   G4bool drawingTraj;
   G4bool drawingHit;
+  G4bool doneInitHit;
   
   std::vector<G4AttValue>* trajAttValues;
   std::map<G4String,G4AttDef>* trajAttDefs;
