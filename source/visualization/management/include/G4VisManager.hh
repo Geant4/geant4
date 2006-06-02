@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.hh,v 1.57 2006-05-22 08:24:22 allison Exp $
+// $Id: G4VisManager.hh,v 1.58 2006-06-02 16:07:56 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -125,6 +125,7 @@ class G4VisManager: public G4VVisManager {
   friend class G4RTMessenger;
   friend class G4OpenGLXmViewerMessenger;
   friend class G4XXXSceneHandler;
+  friend class G4HepRepFileSceneHandler;
 
   // Management friends...
   friend class G4VSceneHandler;
@@ -301,6 +302,8 @@ public: // With description
   void Enable();
   void Disable();
   // Global enable/disable functions.
+
+  const G4VTrajectoryModel* CurrentTrajDrawModel() const;
 
   G4VUserVisAction*            GetUserAction               () const;
   G4VisExtent                  GetUserActionExtent         () const;

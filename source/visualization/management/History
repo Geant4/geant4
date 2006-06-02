@@ -1,4 +1,4 @@
-$Id: History,v 1.57 2006-06-01 15:47:44 tinslay Exp $
+$Id: History,v 1.58 2006-06-02 16:07:56 tinslay Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -24,6 +24,10 @@ committal in the CVS repository !
 
 History file for visualization management sub-category
 ------------------------------------------------------
+2nd June 2006 Jane Tinslay
+- Add accessor for current trajectory drawing model
+- Make G4HepRepFileSceneHandler a friend of G4VisManager
+
 1st June 2006 Jane Tinslay
 - Add accessor in G4VisListManager
 
