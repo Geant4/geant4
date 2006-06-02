@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CoupledTransportation.cc,v 1.4 2006-06-02 18:55:58 japost Exp $
+// $Id: G4CoupledTransportation.cc,v 1.5 2006-06-02 22:09:45 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //  GEANT 4 class implementation
@@ -124,7 +124,6 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
   // G4double   theTime        = track.GetGlobalTime() ;
 
   if( fStartedNewTrack || track.GetCurrentStepNumber()==1 ) {
-    // fPathFinder->PrepareNewTrack( startPosition, startMomentumDir ); // Out G480
     if( fVerboseLevel > 0 ){
       G4cout << " Calling PathFinder::Locate() from " 
 	     << " G4CoupledTransportation::AlongStepGPIL " 
@@ -629,7 +628,7 @@ G4VParticleChange* G4CoupledTransportation::PostStepDoIt( const G4Track& track,
 //   object at the start of a new track or the resumption of a suspended track. 
 
 void 
-G4CoupledTransportation::StartTracking()   // For 8.0 :  G4Track* aTrack) // G48
+G4CoupledTransportation::StartTracking(G4Track* aTrack) // G48
 {
 
   static G4TransportationManager* transportMgr=  
@@ -648,8 +647,8 @@ G4CoupledTransportation::StartTracking()   // For 8.0 :  G4Track* aTrack) // G48
   if( fVerboseLevel > 1 ){
     G4cout << " Navigator Id obtained in StartTracking " << fNavigatorId << G4endl;
   }
-  G4ThreeVector position(0.0, 0.0, 0.0); // = track.GetPosition(); 
-  G4ThreeVector direction(0.0, 0.0, 0.0); // = track.GetMomentumDirection(); // G48
+  G4ThreeVector position = aTrack->GetPosition(); 
+  G4ThreeVector direction = aTrack->GetMomentumDirection(); // G48
 
   if( fVerboseLevel > 1 ){
     G4cout << " Calling PathFinder::PrepareNewTrack from    " 
@@ -682,7 +681,7 @@ G4CoupledTransportation::StartTracking()   // For 8.0 :  G4Track* aTrack) // G48
   
   // Update the current touchable handle  (from the track's)
   //
-  // fCurrentTouchableHandle = aTrack->GetTouchableHandle();  // G480
+  fCurrentTouchableHandle = aTrack->GetTouchableHandle();  // G480
 }
 
 void
