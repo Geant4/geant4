@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CoupledTransportation.cc,v 1.3 2006-05-27 00:15:09 japost Exp $
+// $Id: G4CoupledTransportation.cc,v 1.4 2006-06-02 18:55:58 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //  GEANT 4 class implementation
@@ -62,8 +62,12 @@ G4CoupledTransportation::G4CoupledTransportation( G4int verboseLevel )
   fFieldPropagator = transportMgr->GetPropagatorInField() ;
   // fGlobalFieldMgr = transportMgr->GetFieldManager() ;
   fNavigatorId= transportMgr->ActivateNavigator( fMassNavigator ); 
-  G4cout << " Navigator Id obtained in G4CoupledTransportation constructor " << fNavigatorId << G4endl;
-
+  if( fVerboseLevel > 0 ){
+    G4cout << " G4CoupledTransportation constructor: ----- " << G4endl;
+    G4cout << " Verbose level is " << fVerboseLevel << G4endl;
+    G4cout << " Navigator Id obtained in G4CoupledTransportation constructor " 
+	   << fNavigatorId << G4endl;
+  }
   fPathFinder=  G4PathFinder::GetInstance(); 
 
   fCurrentTouchableHandle = G4TouchableHandle( 0 );  // new G4TouchableHistory();
@@ -121,11 +125,13 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
 
   if( fStartedNewTrack || track.GetCurrentStepNumber()==1 ) {
     // fPathFinder->PrepareNewTrack( startPosition, startMomentumDir ); // Out G480
-    G4cout << " Calling PathFinder::Locate() from " 
-	   << " G4CoupledTransportation::AlongStepGPIL " 
-	   << " with startedNewTrack= " << fStartedNewTrack
-	   << "  and step number= " << track.GetCurrentStepNumber()
-	   << G4endl;
+    if( fVerboseLevel > 0 ){
+      G4cout << " Calling PathFinder::Locate() from " 
+	     << " G4CoupledTransportation::AlongStepGPIL " 
+	     << " with startedNewTrack= " << fStartedNewTrack
+	     << "  and step number= " << track.GetCurrentStepNumber()
+	     << G4endl;
+    }
     fPathFinder->Locate( startPosition, startMomentumDir );   // For now -- out in G480
     fCurrentTouchableHandle = track.GetTouchableHandle(); 
     fStartedNewTrack= false; 
@@ -214,10 +220,13 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
 						   limitedStep,
 						   endTrackState ) ;
       // G4cout << " PathFinder ComputeStep returns " << lengthAlongCurve << G4endl; 
-    
+
+      if( limitedStep == kUnique || limitedStep == kSharedTransport ) {
+	 fGeometryLimitedStep = true ;
+      }
       if( lengthAlongCurve < currentMinimumStep){
          geometryStepLength   = lengthAlongCurve ;
-	 fGeometryLimitedStep = true ;
+         // Old code:   fGeometryLimitedStep = true ;
       } else {
          geometryStepLength   = currentMinimumStep ;
       }
@@ -234,8 +243,9 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
   // Get the End-Position and End-Momentum (Dir-ection)
   fTransportEndPosition = endTrackState.GetPosition() ;
 
-  G4cout << " G4CT::CS End Position = " << fTransportEndPosition << G4endl; 
-
+  if( fVerboseLevel > 1 ){
+    G4cout << " G4CT::CS End Position = " << fTransportEndPosition << G4endl; 
+  }
   // Momentum:  Magnitude and direction can be changed too now ...
   //
   fMomentumChanged         = true ; 
@@ -520,8 +530,11 @@ G4VParticleChange* G4CoupledTransportation::PostStepDoIt( const G4Track& track,
 
   // If the Step was determined by the volume boundary, relocate the particle
   // The pathFinder will know that the geometry limited the step (!?)
-  G4cout << " Calling PathFinder::Locate() from " 
-	 << " G4CoupledTransportation::PostStepDoIt " << G4endl;
+
+  if( fVerboseLevel > 0 ){
+     G4cout << " Calling PathFinder::Locate() from " 
+	    << " G4CoupledTransportation::PostStepDoIt " << G4endl;
+  }
   fPathFinder->Locate( track.GetPosition(), 
 		       track.GetMomentumDirection(),
 		       true); 
@@ -531,14 +544,20 @@ G4VParticleChange* G4CoupledTransportation::PostStepDoIt( const G4Track& track,
     // fCurrentTouchable will now become the previous touchable, 
     // and what was the previous will be freed.
     // (Needed because the preStepPoint can point to the previous touchable)
-G4cout << "G4CoupledTransportation::PostStepDoIt --- fNavigatorId = " << fNavigatorId << G4endl;
+    if( fVerboseLevel > 0 )
+      G4cout << "G4CoupledTransportation::PostStepDoIt --- fNavigatorId = " 
+	     << fNavigatorId << G4endl;
+
     fCurrentTouchableHandle= 
       fPathFinder->CreateTouchableHandle( fNavigatorId );
 
     // Check whether the particle is out of the world volume 
     // If so it has exited and must be killed.
     //
-G4cout << "CHECK !!!!!!!!!!! fCurrentTouchableHandle->GetVolume() = " << fCurrentTouchableHandle->GetVolume() << G4endl;
+    if( fVerboseLevel > 1 ){
+       G4cout << "CHECK !!!!!!!!!!! fCurrentTouchableHandle->GetVolume() = " 
+	      << fCurrentTouchableHandle->GetVolume() << G4endl;
+    }
     if( fCurrentTouchableHandle->GetVolume() == 0 )
     {
        fParticleChange.ProposeTrackStatus( fStopAndKill ) ;
@@ -547,9 +566,11 @@ G4cout << "CHECK !!!!!!!!!!! fCurrentTouchableHandle->GetVolume() = " << fCurren
     fParticleChange.SetTouchableHandle( fCurrentTouchableHandle ) ;
   }
   else                 // fGeometryLimitedStep  is false
-  {                    
-G4cout << "G4CoupledTransportation::PostStepDoIt --- fGeometryLimitedStep = false !!!" << G4endl;
-
+  { 
+    if( fVerboseLevel > 1 ){
+       G4cout << "G4CoupledTransportation::PostStepDoIt -- fGeometryLimitedStep = false !!" 
+	      << G4endl;
+    }
     // This serves only to move the Navigator's location
     //
     // fLinearNavigator->LocateGlobalPointWithinVolume( track.GetPosition() ) ;
@@ -623,13 +644,17 @@ G4CoupledTransportation::StartTracking()   // For 8.0 :  G4Track* aTrack) // G48
 
   fMassNavigator = transportMgr->GetNavigatorForTracking() ; 
   fNavigatorId= transportMgr->ActivateNavigator( fMassNavigator );  // Confirm it!
-  G4cout << " Navigator Id obtained in StartTracking " << fNavigatorId << G4endl;
 
+  if( fVerboseLevel > 1 ){
+    G4cout << " Navigator Id obtained in StartTracking " << fNavigatorId << G4endl;
+  }
   G4ThreeVector position(0.0, 0.0, 0.0); // = track.GetPosition(); 
   G4ThreeVector direction(0.0, 0.0, 0.0); // = track.GetMomentumDirection(); // G48
 
-  G4cout << " Calling PathFinder::PrepareNewTrack from    " 
-	 << " G4CoupledTransportation::StartTracking -- which calls Locate()" << G4endl;
+  if( fVerboseLevel > 1 ){
+    G4cout << " Calling PathFinder::PrepareNewTrack from    " 
+	   << " G4CoupledTransportation::StartTracking -- which calls Locate()" << G4endl;
+  }
   fPathFinder->PrepareNewTrack( position, direction); 
                 // track.GetPosition(), track.GetMomentumDirection() );  //G48
   // This implies a call to 
@@ -641,7 +666,7 @@ G4CoupledTransportation::StartTracking()   // For 8.0 :  G4Track* aTrack) // G48
   fPreviousSftOrigin = G4ThreeVector(0.,0.,0.) ;
   
 #if 0
-  // Put back in for 8.0   -- G48
+  // Put back in for 8.0   -- G480
   // reset looping counter -- for motion in field
   if( aTrack->GetCurrentStepNumber()==1 ) {
      fNoLooperTrials= 0; 
