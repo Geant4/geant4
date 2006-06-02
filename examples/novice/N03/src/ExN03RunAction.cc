@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03RunAction.cc,v 1.16 2005-07-22 15:27:33 maire Exp $
+// $Id: ExN03RunAction.cc,v 1.17 2006-06-02 16:43:49 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -99,8 +99,8 @@ void ExN03RunAction::EndOfRunAction(const G4Run* aRun)
   
   //print
   //
-  G4cout << "\n--------------------End of Run------------------------------\n";
   G4cout
+     << "\n--------------------End of Run------------------------------\n"
      << "\n mean Energy in Absorber : " << G4BestUnit(sumEAbs,"Energy")
      << " +- "                          << G4BestUnit(rmsEAbs,"Energy")  
      << "\n mean Energy in Gap      : " << G4BestUnit(sumEGap,"Energy")
@@ -112,9 +112,8 @@ void ExN03RunAction::EndOfRunAction(const G4Run* aRun)
      << " +- "                               << G4BestUnit(rmsLAbs,"Length")  
      << "\n mean trackLength in Gap      : " << G4BestUnit(sumLGap,"Length")
      << " +- "                               << G4BestUnit(rmsLGap,"Length")
-     << G4endl; 
-          
-  G4cout << "\n------------------------------------------------------------\n";
+     << "\n------------------------------------------------------------\n"
+     << G4endl;   
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
