@@ -6,6 +6,9 @@
 /control/verbose 1
 /control/saveHistory
 /run/verbose 1
+/gun/sourceGen true
+/run/initialize
+
 
 /control/execute emstd.mac
 
