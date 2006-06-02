@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN02TrackerSD.cc,v 1.7 2003-05-28 09:54:10 gcosmo Exp $
+// $Id: ExN02TrackerSD.cc,v 1.8 2006-06-02 11:39:39 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -69,8 +69,8 @@ G4bool ExN02TrackerSD::ProcessHits(G4Step* aStep,G4TouchableHistory*)
 
   ExN02TrackerHit* newHit = new ExN02TrackerHit();
   newHit->SetTrackID  (aStep->GetTrack()->GetTrackID());
-  newHit->SetChamberNb(aStep->GetPreStepPoint()->GetTouchable()
-                                               ->GetReplicaNumber());
+  newHit->SetChamberNb(aStep->GetPreStepPoint()->GetTouchableHandle()
+                                               ->GetCopyNumber());
   newHit->SetEdep     (edep);
   newHit->SetPos      (aStep->GetPostStepPoint()->GetPosition());
   trackerCollection->insert( newHit );
