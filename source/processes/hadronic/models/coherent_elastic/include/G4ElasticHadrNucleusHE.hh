@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElasticHadrNucleusHE.hh,v 1.22 2006-05-31 07:58:53 vnivanch Exp $
+// $Id: G4ElasticHadrNucleusHE.hh,v 1.23 2006-06-02 17:47:01 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4ElasticHadrNucleusHe.hh
@@ -76,9 +76,9 @@ public:
   G4double  TableCrossSec[ONQ2XE*AreaNumb];
   G4double  CurrentT;
   G4int     CurrentN, Nstep;
-  G4double  RandMax, maxQ2;
+  G4double  RandMax, theMaxQ2;
   G4double  Weight, dQ2;
-  G4double  R1, R2, Pnucl, Aeff;
+  G4double  theR1, R2, Pnucl, Aeff;
   NucleusParameters NucPar;     
     
   ElasticData() {;}
@@ -101,11 +101,11 @@ public:
        for(k = 0; k< ONQ2XE*AreaNumb; k++)
                 TableCrossSec[k] = t.TableCrossSec[k];
 
-       R1    = t.R1;
+       theR1    = t.theR1;
        R2    = t.R2;
        Aeff  = t.Aeff;
        Pnucl = t.Pnucl;
-       maxQ2 = t.maxQ2;
+       theMaxQ2 = t.theMaxQ2;
        dQ2   = t.dQ2;
        NucPar = t.NucPar;
 
@@ -126,11 +126,11 @@ public:
           for(k = 0; k< ONQ2XE*AreaNumb; k++)
                       TableCrossSec[k] = t.TableCrossSec[k];
 
-          R1    = t.R1;
+          theR1 = t.theR1;
           R2    = t.R2;
           Aeff  = t.Aeff;
           Pnucl = t.Pnucl;
-          maxQ2 = t.maxQ2;
+          theMaxQ2 = t.theMaxQ2;
           NucPar = t.NucPar;
           dQ2    = t.dQ2;
 
@@ -150,14 +150,14 @@ public:
 
        for(k = 0; k< ONQ2XE*AreaNumb; k++) TableCrossSec[k] = 0;
 
-          R1    = 0;
+          theR1    = 0;
           R2    = 0;
           Aeff  = 0;
           Pnucl = 0;
-          maxQ2 = 0;
+          theMaxQ2 = 0;
      }
 
-  G4double GetQ2limit(G4double R1);
+  G4double GetQ2limit(G4double aR1);
   G4int    GetNumberE(G4double E);
 };
 
@@ -194,7 +194,7 @@ public:
   G4int   ReadOfData(G4ParticleDefinition * aParticle,
 		     G4Nucleus            * aNucleus);
 
-  G4double GetQ2limit(G4double R1);
+  G4double GetQ2limit(G4double aR1);
 
   void  CreationArray(const G4DynamicParticle * aHadron,
 		      G4Nucleus         * aNucleus);
@@ -231,7 +231,7 @@ public:
   G4double  Weight;
   G4int     HadrCode;
   G4String  HadronName;
-  G4double  R1, R2, Pnucl, Aeff;
+  //  G4double  RR1, R2, Pnucl, Aeff;
 
   std::vector<ElasticData> SetOfElasticData;
   ElasticData       ElD;

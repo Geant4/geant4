@@ -14,6 +14,10 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+2 June 2006 - V.Ivanchenko (ghad-cohe-V08-00-06)
+-----------------------------------------------
+  Fix complilation warnings at SUN (V.Ivanchenko) 
+
 1 June 2006 - V.Ivanchenko (ghad-cohe-V08-00-05)
 -----------------------------------------------
   Add regime of HElastic which is not using data files (N.Starkov)
