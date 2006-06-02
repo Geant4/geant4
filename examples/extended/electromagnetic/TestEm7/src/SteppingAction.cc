@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: SteppingAction.cc,v 1.8 2006-05-29 14:32:46 maire Exp $
+// $Id: SteppingAction.cc,v 1.9 2006-06-02 14:14:49 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -61,9 +61,10 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
 
  //fill tallies
  //
- G4VPhysicalVolume* pVolume = prePoint->GetTouchable()->GetVolume();
- if (pVolume->GetLogicalVolume() == detector->GetLogicalTally()) 
-    runAction->FillTallyEdep(pVolume->GetCopyNo(), edep);
+ G4TouchableHandle touchable = prePoint->GetTouchableHandle();
+ G4LogicalVolume* lVolume = touchable->GetVolume()->GetLogicalVolume();
+ if (lVolume == detector->GetLogicalTally())
+     runAction->FillTallyEdep(touchable->GetCopyNumber(), edep);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
