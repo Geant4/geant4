@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FRSceneFunc.icc,v 1.12 2006-05-04 14:52:18 allison Exp $
+// $Id: G4FRSceneFunc.icc,v 1.13 2006-06-02 09:06:15 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -338,15 +338,15 @@ void G4FRSCENEHANDLER::SendNdiv ( void )
 	G4int	num_division = FR_DEFALUT_NDIV_VALUE ;
 
 		//-----  number used for dividing a curved surface, Ndiv
-	if ( GetModel() ) {
+	// if ( GetModel() ) {  ?? Why test for model.  Can be zero.  JA ??
 	   num_division = fpViewer->GetViewParameters().GetNoOfSides();
-	} else {
+	// } else {
 #if defined DEBUG_FR_SCENE
 	   G4cerr << "WARNING: GetNoOfSides() failed. " ;
 	   G4cerr << "The default value " << num_division ;
 	   G4cerr << " is assigned." << G4endl;
 #endif
-	}
+	//}
 
 		//---------- Error recovery for too small Ndiv
 	num_division = ( num_division < 3 ? 3 : num_division ); 
