@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorXt.cc,v 1.2 2004-11-22 15:00:48 gbarrand Exp $
+// $Id: G4OpenInventorXt.cc,v 1.3 2006-06-02 06:56:32 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,7 +41,14 @@
 
 G4OpenInventorXt::G4OpenInventorXt ()
 :G4OpenInventor("OpenInventorXt","OIX",G4VGraphicsSystem::threeD)
+,fInited(false)
 {
+}
+
+void G4OpenInventorXt::Initialize()
+{
+  if(fInited) return; //Done
+
   SetInteractorManager (G4Xt::getInstance ());
   GetInteractorManager () -> 
     RemoveDispatcher((G4DispatchFunction)XtDispatchEvent);  
@@ -49,7 +56,6 @@ G4OpenInventorXt::G4OpenInventorXt ()
     AddDispatcher   ((G4DispatchFunction)SoXt::dispatchEvent);
 
   Widget top = (Widget)GetInteractorManager()->GetMainInteractor();
-
 
   if(getenv("XENVIRONMENT")==NULL) {
     XrmDatabase database = XrmGetDatabase(XtDisplay(top));
@@ -74,11 +80,14 @@ G4OpenInventorXt::G4OpenInventorXt ()
   SoXt::init(top);
 
   InitNodes();
+
+  fInited = true;
 }
 
 G4OpenInventorXt::~G4OpenInventorXt () {}
 G4VViewer* G4OpenInventorXt::CreateViewer (G4VSceneHandler& scene, const G4String& name) 
 {
+  Initialize();
   G4OpenInventorSceneHandler* pScene = (G4OpenInventorSceneHandler*)&scene;
   return new G4OpenInventorXtViewer (*pScene, name);
 }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorXt.hh,v 1.1 2004-04-08 09:37:30 gbarrand Exp $
+// $Id: G4OpenInventorXt.hh,v 1.2 2006-06-02 06:56:32 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -40,6 +40,10 @@ public:
   G4OpenInventorXt ();
   virtual ~G4OpenInventorXt ();
   G4VViewer* CreateViewer(G4VSceneHandler&,const G4String& name = "");
+private:
+  virtual void Initialize();
+private:
+  bool fInited;
 };
 
 #endif

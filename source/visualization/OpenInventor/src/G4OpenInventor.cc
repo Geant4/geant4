@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventor.cc,v 1.18 2005-10-17 07:39:26 gbarrand Exp $
+// $Id: G4OpenInventor.cc,v 1.19 2006-06-02 06:56:32 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifdef G4VIS_BUILD_OI_DRIVER
@@ -64,6 +64,7 @@ G4VInteractorManager* G4OpenInventor::GetInteractorManager () {
   return interactorManager;
 }
 G4VSceneHandler* G4OpenInventor::CreateSceneHandler (const G4String& name) {
+  Initialize();
   G4VSceneHandler* p = new G4OpenInventorSceneHandler (*this, name);
   return    p;
 }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventor.hh,v 1.7 2004-04-08 09:39:37 gbarrand Exp $
+// $Id: G4OpenInventor.hh,v 1.8 2006-06-02 06:56:32 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Guy Barrand 26 Mar 1998.
@@ -44,6 +44,8 @@ public:
   G4VInteractorManager* GetInteractorManager();
   G4VSceneHandler* CreateSceneHandler (const G4String& name);
   void InitNodes();
+private:
+  virtual void Initialize() = 0;
 private:
   G4VInteractorManager* interactorManager;
 };
