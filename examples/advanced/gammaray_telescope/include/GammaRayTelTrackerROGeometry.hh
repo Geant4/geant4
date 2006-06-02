@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelTrackerROGeometry.hh,v 1.3 2001-11-29 11:19:17 griccard Exp $
+// $Id: GammaRayTelTrackerROGeometry.hh,v 1.4 2006-06-02 07:32:31 flongo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //      GEANT 4 class header file
@@ -47,8 +47,11 @@ public:
   GammaRayTelTrackerROGeometry(G4String);
   ~GammaRayTelTrackerROGeometry();
 
-private:
+protected:
+
   G4VPhysicalVolume* Build();
+
+private:
   GammaRayTelDetectorConstruction* GammaRayTelDetector;
   //pointer to the geometry
 };
