@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTel.cc,v 1.14 2006-06-02 05:24:27 flongo Exp $
+// $Id: GammaRayTel.cc,v 1.15 2006-06-02 07:26:50 flongo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -122,7 +122,7 @@ int main(int argc, char** argv)
 #endif
   
   // Initialize G4 kernel
-  runManager->Initialize();
+  //  runManager->Initialize();
   
   // Get the pointer to the UI manager
   G4UImanager* UI = G4UImanager::GetUIpointer();

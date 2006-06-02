@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelPrimaryGeneratorMessenger.hh,v 1.3 2001-07-11 09:56:57 gunter Exp $
+// $Id: GammaRayTelPrimaryGeneratorMessenger.hh,v 1.4 2006-06-02 07:28:58 flongo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -48,6 +48,7 @@ class GammaRayTelPrimaryGeneratorAction;
 class G4UIcmdWithAString;
 class G4UIcmdWithAnInteger;
 class G4UIcmdWithADoubleAndUnit;
+class G4UIcmdWithABool;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -65,6 +66,8 @@ private:
   G4UIcmdWithAnInteger*        SourceTypeCmd;
   G4UIcmdWithADoubleAndUnit*   VertexRadiusCmd;
   G4UIcmdWithAnInteger*        SpectrumTypeCmd;
+  G4UIcmdWithABool*            SourceGenCmd;
+
 };
 
 #endif

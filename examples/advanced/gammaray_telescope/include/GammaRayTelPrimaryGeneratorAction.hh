@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelPrimaryGeneratorAction.hh,v 1.6 2001-11-29 11:19:17 griccard Exp $
+// $Id: GammaRayTelPrimaryGeneratorAction.hh,v 1.7 2006-06-02 07:28:58 flongo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -49,6 +49,7 @@ class G4ParticleGun;
 class G4Event;
 class GammaRayTelDetectorConstruction;
 class GammaRayTelPrimaryGeneratorMessenger;
+class G4GeneralParticleSource;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -65,15 +66,19 @@ public:
   void SetSourceType(G4int val) { nSourceType = val;}
   void SetSpectrumType(G4int val) { nSpectrumType = val;}
   void SetVertexRadius(G4double val) { dVertexRadius = val;}
+  void SetSourceGen(G4bool val) { sourceGun = val;}
   
 private:
-  G4ParticleGun*                particleGun;	  
+  G4ParticleGun*                particleGun;
+  G4GeneralParticleSource*      particleSource;	  
   GammaRayTelDetectorConstruction*    GammaRayTelDetector;  
   GammaRayTelPrimaryGeneratorMessenger* gunMessenger; 
   G4String                      rndmFlag;    //flag for a random impact point
   G4int                         nSourceType;
   G4double                      dVertexRadius;
   G4int                         nSpectrumType;
+  G4bool                        sourceGun; // false for GeneralParticleSource
+  
 };
 
 #endif

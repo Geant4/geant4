@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelPrimaryGeneratorMessenger.cc,v 1.6 2002-12-11 17:13:38 gcosmo Exp $
+// $Id: GammaRayTelPrimaryGeneratorMessenger.cc,v 1.7 2006-06-02 07:28:42 flongo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -42,6 +42,7 @@
 #include "G4UIcmdWithAnInteger.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
+#include "G4UIcmdWithABool.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -76,6 +77,15 @@ GammaRayTelPrimaryGeneratorMessenger::GammaRayTelPrimaryGeneratorMessenger
   SpectrumTypeCmd->SetParameterName("choice",true);
   SpectrumTypeCmd->SetDefaultValue((G4int)0);
   SpectrumTypeCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
+
+  SourceGenCmd = new G4UIcmdWithABool("/gun/sourceGen",this);
+  SourceGenCmd->SetGuidance("Select the native Generation");
+  SourceGenCmd->SetGuidance("  Choice : true(native), false(GPS)");
+  SourceGenCmd->SetParameterName("choice",true);
+  SourceGenCmd->SetDefaultValue((G4bool)true);
+  SourceGenCmd->AvailableForStates(G4State_PreInit);
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -86,6 +96,7 @@ GammaRayTelPrimaryGeneratorMessenger::~GammaRayTelPrimaryGeneratorMessenger()
   delete SourceTypeCmd;
   delete VertexRadiusCmd;
   delete SpectrumTypeCmd;
+  delete SourceGenCmd;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -103,6 +114,9 @@ void GammaRayTelPrimaryGeneratorMessenger::SetNewValue(G4UIcommand * command,G4S
   
   if( command == SpectrumTypeCmd )
     { GammaRayTelAction->SetSpectrumType(SpectrumTypeCmd->GetNewIntValue(newValue));}
+
+  if( command == SourceGenCmd )
+    { GammaRayTelAction->SetSourceGen(SourceGenCmd->GetNewBoolValue(newValue));}
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
