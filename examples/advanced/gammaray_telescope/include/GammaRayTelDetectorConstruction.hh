@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelDetectorConstruction.hh,v 1.8 2006-06-02 07:29:46 flongo Exp $
+// $Id: GammaRayTelDetectorConstruction.hh,v 1.9 2006-06-02 15:59:30 flongo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //      GEANT 4 class header file
@@ -320,7 +320,6 @@ inline void GammaRayTelDetectorConstruction::ComputePayloadParameters()
   
   WorldSizeZ = 1.5*PayloadSizeZ; WorldSizeXY = 1.5*PayloadSizeXY;
 
-  G4cout << "SONO qui" << G4endl;
 }
 
 #endif
