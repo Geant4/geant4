@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelDigi.cc,v 1.3 2003-05-30 15:09:00 flongo Exp $
+// $Id: GammaRayTelDigi.cc,v 1.4 2006-06-02 17:09:55 flongo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -45,6 +45,8 @@ GammaRayTelDigi::GammaRayTelDigi()
   PlaneType = 0; 
   PlaneNumber = 0;
   StripNumber=0;
+  DigiType = 0;
+  Energy =0.;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -60,6 +62,8 @@ GammaRayTelDigi::GammaRayTelDigi(const GammaRayTelDigi& right)
   PlaneType = right.PlaneType; 
   PlaneNumber = right.PlaneNumber;
   StripNumber = right.StripNumber;
+  DigiType = right.DigiType;
+  Energy= right.Energy;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -69,6 +73,8 @@ const GammaRayTelDigi& GammaRayTelDigi::operator=(const GammaRayTelDigi& right)
   PlaneType = right.PlaneType; 
   PlaneNumber = right.PlaneNumber;
   StripNumber = right.StripNumber;
+  DigiType = right.DigiType;
+  Energy= right.Energy;
   return *this;
 }
 
@@ -76,7 +82,7 @@ const GammaRayTelDigi& GammaRayTelDigi::operator=(const GammaRayTelDigi& right)
 
 int GammaRayTelDigi::operator==(const GammaRayTelDigi& right) const
 { 
- return ((PlaneType==right.PlaneType)&&(PlaneNumber==right.PlaneNumber)&&(StripNumber==right.StripNumber)); 
+ return ((PlaneType==right.PlaneType)&&(PlaneNumber==right.PlaneNumber)&&(StripNumber==right.StripNumber)&&(DigiType==right.DigiType)&&(Energy==right.Energy)); 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelDigitizer.cc,v 1.4 2003-06-16 16:46:23 gunter Exp $
+// $Id: GammaRayTelDigitizer.cc,v 1.5 2006-06-02 17:09:55 flongo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -38,6 +38,9 @@
 #include "GammaRayTelDigitizerMessenger.hh"
 
 #include "GammaRayTelTrackerHit.hh"
+#include "GammaRayTelCalorimeterHit.hh"
+#include "GammaRayTelAnticoincidenceHit.hh"
+
 #include "G4EventManager.hh"
 #include "G4Event.hh"
 #include "G4SDManager.hh"
@@ -57,6 +60,8 @@ GammaRayTelDigitizer::GammaRayTelDigitizer(G4String name)
   G4String colName = "DigitsCollection";
   collectionName.push_back(colName);
   Energy_Threshold = 120.*keV;
+  TotalEnergy = 0.;
+  ACDThreshold = 15*keV;
 
 //create a messenger for this class
   digiMessenger = new GammaRayTelDigitizerMessenger(this);
@@ -75,25 +80,38 @@ GammaRayTelDigitizer::~GammaRayTelDigitizer()
 void GammaRayTelDigitizer::Digitize()
 {
   DigitsCollection = new GammaRayTelDigitsCollection
-  	("TrackerDigitizer","DigitsCollection"); // to create the Digi Collection
+  	("GammaRayTelDigitizer","DigitsCollection"); // to create the Digi Collection
   
   G4DigiManager* DigiMan = G4DigiManager::GetDMpointer();
   
-  G4int THCID; 
+  G4int THCID; // TrackerCollection
+  G4int CHCID; // CalorimeterCollection
+  G4int AHCID; // AnticoincidenceCollection
 
-
-  // hits collections IDs
- 
-  THCID = DigiMan->GetHitsCollectionID("TrackerCollection");
-
-  // Hits collection
+  TotalEnergy = 0.; // at each event
   
-  GammaRayTelTrackerHitsCollection* THC = 0;
-
+  // TKR Hits collection
   
+  THCID = DigiMan->GetHitsCollectionID("TrackerCollection");  
+  GammaRayTelTrackerHitsCollection* THC = 0; 
   THC = (GammaRayTelTrackerHitsCollection*)
-		 (DigiMan->GetHitsCollection(THCID));
-  
+    (DigiMan->GetHitsCollection(THCID));
+
+
+  // CAL Hits collection
+
+  CHCID = DigiMan->GetHitsCollectionID("CalorimeterCollection");
+  GammaRayTelCalorimeterHitsCollection* CHC = 0;
+  CHC = (GammaRayTelCalorimeterHitsCollection*)
+		 (DigiMan->GetHitsCollection(CHCID));
+
+  // ACD Hits collection
+
+  AHCID = DigiMan->GetHitsCollectionID("AnticoincidenceCollection");  
+  GammaRayTelAnticoincidenceHitsCollection* AHC = 0;
+  AHC = (GammaRayTelAnticoincidenceHitsCollection*)
+		 (DigiMan->GetHitsCollection(AHCID));
+
   
   if (THC)
     {
@@ -114,29 +132,80 @@ void GammaRayTelDigitizer::Digitize()
 	      Digi->SetPlaneNumber(NPlane);
 	      Digi->SetPlaneType(IsX);
 	      Digi->SetStripNumber(NStrip);
+	      Digi->SetDigiType(0);
+	      Digi->SetEnergy(0.);
 	      DigitsCollection->insert(Digi);	
 	    }  
 	}
-      
-      G4cout << "Number of tracker digits in this event =  " 
-	     << DigitsCollection->entries()  
-	// << " " << DigitsCollection->GetName()  
-	// << " " << DigitsCollection->GetDMname() 
-	     << G4endl;
-      
-      
-      StoreDigiCollection(DigitsCollection);
-
-      G4int DCID = -1;
-      if(DCID<0)
-	{ 
-	  //	  DigiMan->List();
-	  DCID = DigiMan->GetDigiCollectionID("TrackerDigitizer/DigitsCollection");
-	}
-      
-      
     }
+  if (CHC)
+    {
+      G4int n_hit = CHC->entries();
+      
+      for (G4int i=0;i<n_hit;i++)
+	{
+	  TotalEnergy +=(*CHC)[i]->GetEdepCAL();
+	}
+      // digi generation only if energy deposit greater than 0.
+      
+      if (TotalEnergy>0.)
+	{
+	  GammaRayTelDigi* Digi = new GammaRayTelDigi();
+	  Digi->SetPlaneNumber(0);
+	  Digi->SetPlaneType(0);
+	  Digi->SetStripNumber(0);
+	  Digi->SetDigiType(1);
+	  Digi->SetEnergy(TotalEnergy);
+	  DigitsCollection->insert(Digi);	
+	}  
+
+    }
+
+  if (AHC)
+    {
+      G4int n_hit = AHC->entries();
+      
+      for (G4int i=0;i<n_hit;i++)
+	{
+	  G4double energy = (*AHC)[i]->GetEdepACD();
+	  G4int type = (*AHC)[i]->GetACDTileNumber();
+	  
+	  // digi generation only if energy deposit greater than 0.
+	  
+	  if (energy>ACDThreshold)
+	    {
+	      GammaRayTelDigi* Digi = new GammaRayTelDigi();
+	      Digi->SetPlaneNumber(0);
+	      Digi->SetPlaneType(0);
+	      Digi->SetStripNumber(type);
+	      Digi->SetDigiType(2);
+	      Digi->SetEnergy(energy);
+	      DigitsCollection->insert(Digi);	
+	    }  
+	  
+	}
+    }
+  
+  if (THC||AHC||CHC){
+    G4cout << "Number of digits in this event =  " 
+	   << DigitsCollection->entries()  
+      // << " " << DigitsCollection->GetName()  
+      // << " " << DigitsCollection->GetDMname() 
+	   << G4endl;
+  }
+  
+  StoreDigiCollection(DigitsCollection);
+  
+  G4int DCID = -1;
+  if(DCID<0)
+    { 
+      //	  DigiMan->List();
+      DCID = DigiMan->GetDigiCollectionID("GammaRayTelDigitizer/DigitsCollection");
+    }
+  
+  
 }
+
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

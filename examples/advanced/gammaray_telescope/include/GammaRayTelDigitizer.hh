@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelDigitizer.hh,v 1.2 2001-11-29 09:34:17 flongo Exp $
+// $Id: GammaRayTelDigitizer.hh,v 1.3 2006-06-02 17:08:57 flongo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //      GEANT 4 class header file
@@ -59,7 +59,9 @@ public:
 private:
   
   GammaRayTelDigitsCollection*  DigitsCollection;
-  G4double Energy_Threshold;
+  G4double Energy_Threshold; // for TKR digi
+  G4double TotalEnergy; // for CAL analysis
+  G4double ACDThreshold; // for ACD analysis
   GammaRayTelDigitizerMessenger* digiMessenger;
 
 };
