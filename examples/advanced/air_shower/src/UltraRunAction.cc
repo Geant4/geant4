@@ -87,13 +87,6 @@ void UltraRunAction::BeginOfRunAction(const G4Run* aRun)
       CLHEP::HepRandom::saveEngineStatus("beginOfRun.rndm");
     }
 
-  G4UImanager* UI = G4UImanager::GetUIpointer();
-  G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
-
-  if(pVVisManager)
-  {
-    UI->ApplyCommand("/vis/scene/notifyHandlers");
-  } 
 }
 
 // //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -110,14 +103,6 @@ void UltraRunAction::EndOfRunAction(const G4Run* aRun)
   // Write histograms to file
   G4cout << "Close and Save Histograms" << G4endl;
   G4cout << "### Run " << aRun->GetRunID() << " ended." << G4endl;
-
-  G4UImanager* UI = G4UImanager::GetUIpointer();
-  G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
-
-  if(pVVisManager)
-  {
-    UI->ApplyCommand("/vis/drawVolume");
-  } 
 
 #ifdef G4ANALYSIS_USE
   UltraAnalysisManager* analysis = UltraAnalysisManager::getInstance();
