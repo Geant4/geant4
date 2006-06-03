@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HepRepFileSceneHandler.cc,v 1.46 2006-06-02 05:58:06 perl Exp $
+// $Id: G4HepRepFileSceneHandler.cc,v 1.47 2006-06-03 05:27:44 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -51,6 +51,9 @@
 #include "G4AttDef.hh"
 #include "G4AttValue.hh"
 #include "G4AttCheck.hh"
+#include "G4VisManager.hh"
+#include "G4VisTrajContext.hh"
+#include "G4VTrajectoryModel.hh"
 
 //HepRep
 #include "G4HepRepFileXMLWriter.hh"
@@ -97,6 +100,10 @@ G4HepRepFileSceneHandler::~G4HepRepFileSceneHandler() {}
 
 
 void G4HepRepFileSceneHandler::BeginModeling() {
+    G4VisManager* visManager = G4VisManager::GetInstance();
+    const G4VTrajectoryModel* model = visManager->CurrentTrajDrawModel();
+    trajContext = & model->GetContext();
+	
 	G4VSceneHandler::BeginModeling();  // Required: see G4VSceneHandler.hh.
 }
 
@@ -416,7 +423,7 @@ void G4HepRepFileSceneHandler::AddCompound (const G4VTrajectory& traj) {
 	if (!pTrModel) G4Exception
 		("G4HepRepFileSceneHandler::AddCompound(const G4VTrajectory&): Not a G4TrajectoriesModel.");
 	G4int drawingMode = pTrModel->GetDrawingMode();
-	
+		
 	// Pointers to hold trajectory attribute values and definitions.
 	std::vector<G4AttValue>* rawTrajAttValues = traj.CreateAttValues();
 	trajAttValues =
@@ -491,7 +498,8 @@ void G4HepRepFileSceneHandler::AddCompound (const G4VTrajectory& traj) {
 		// Take all TrajectoryPoint attDefs from first point of first trajectory.
 		// Would rather be able to get these attDefs without needing a reference from any
 		// particular point, but don't know how to do that.
-		if (drawingMode!=0 && traj.GetPointEntries()>0) {
+		if ((drawingMode!=0 || trajContext->GetDrawStepPts() || trajContext->GetDrawAuxPts())
+			&& traj.GetPointEntries()>0) {
 			G4VTrajectoryPoint* aTrajectoryPoint = traj.GetPoint(0);
 			
 			// Pointers to hold trajectory point attribute values and definitions.
@@ -545,18 +553,29 @@ void G4HepRepFileSceneHandler::AddCompound (const G4VTrajectory& traj) {
 	// Now that we have written out all of the attributes that are based on the
 	// trajectory's particulars, call base class to deconstruct trajectory into a polyline.
 	// Note that this means color will correctly come from the polyline's VisAttribs.
-	if (drawingMode>=0) {
+	// Temporarily disable point drawing before calling base class to avoid having the base class
+	// draw the points (we want to draw them ourselves instead).
+	if (drawingMode>0 || (drawingMode==0 && trajContext->GetDrawLine())) {
 		pTrModel->SetDrawingMode(0);
+		// Thought I would need to turn off point drawing during call to decompose trajectory
+		// into primitives, but for reasons I don't understand, doesn't seem necessary.
+		// Point primitive is not called anyway.	
+    	//const G4bool drawStepPts(trajContext->GetDrawStepPts());
+	    //const G4bool drawAuxPts(trajContext->GetDrawAuxPts());
+		//trajContext->SetDrawStepPts(false);
+		//trajContext->SetDrawAuxPts(false);
 		drawingTraj = true;
 		G4VSceneHandler::AddCompound(traj);  // Invoke default action.
 		drawingTraj = false;
 		pTrModel->SetDrawingMode(drawingMode);
+		//trajContext->SetDrawStepPts(drawStepPts);
+		//trajContext->SetDrawAuxPts(drawAuxPts);
 	} else {
 	// Initialize the trajectory instance if it wasn't done by the AddPrimitive(...polyline).
 		InitTrajectory();
 	}
 	
-	if (drawingMode!=0) {
+	if (drawingMode!=0 || trajContext->GetDrawStepPts() || trajContext->GetDrawAuxPts()) {
 		// Create Trajectory Points as a subType of Trajectories.
 		// Note that we should create this heprep type even if there are no actual points.
 		// This allows the user to tell that points don't exist (admittedly odd) rather
@@ -567,7 +586,14 @@ void G4HepRepFileSceneHandler::AddCompound (const G4VTrajectory& traj) {
 		// Specify attributes common to all trajectory points.
 		if (strcmp("Trajectory Points",previousName)!=0) {
 			hepRepXMLWriter->addAttValue("DrawAs","Point");
-			hepRepXMLWriter->addAttValue("MarkSize",std::abs(drawingMode)/1000);
+			
+			G4int markSize;
+			if (drawingMode==0)
+				markSize = (G4int) trajContext->GetStepPtsSize();
+			else
+				markSize = std::abs(drawingMode/1000);
+			hepRepXMLWriter->addAttValue("MarkSize",markSize);
+			
 			hepRepXMLWriter->addAttValue("Layer",110);
 			hepRepXMLWriter->addAttValue("Visibility","True");
 		}

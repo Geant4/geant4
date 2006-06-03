@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HepRepFileSceneHandler.hh,v 1.25 2006-06-02 05:58:06 perl Exp $
+// $Id: G4HepRepFileSceneHandler.hh,v 1.26 2006-06-03 05:27:44 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -52,6 +52,7 @@
 class G4VPhysicalVolume;
 class G4LogicalVolume;
 class G4ModelingParameters;
+class G4VisTrajContext;
 
 class G4HepRepFileSceneHandler: public G4VSceneHandler {
 
@@ -138,6 +139,8 @@ private:
   G4bool drawingTraj;
   G4bool drawingHit;
   G4bool doneInitHit;
+  
+  const G4VisTrajContext* trajContext;
   
   std::vector<G4AttValue>* trajAttValues;
   std::map<G4String,G4AttDef>* trajAttDefs;
