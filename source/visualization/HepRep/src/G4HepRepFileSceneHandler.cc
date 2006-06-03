@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HepRepFileSceneHandler.cc,v 1.47 2006-06-03 05:27:44 perl Exp $
+// $Id: G4HepRepFileSceneHandler.cc,v 1.48 2006-06-03 07:28:26 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -423,7 +423,7 @@ void G4HepRepFileSceneHandler::AddCompound (const G4VTrajectory& traj) {
 	if (!pTrModel) G4Exception
 		("G4HepRepFileSceneHandler::AddCompound(const G4VTrajectory&): Not a G4TrajectoriesModel.");
 	G4int drawingMode = pTrModel->GetDrawingMode();
-		
+	
 	// Pointers to hold trajectory attribute values and definitions.
 	std::vector<G4AttValue>* rawTrajAttValues = traj.CreateAttValues();
 	trajAttValues =
@@ -557,9 +557,7 @@ void G4HepRepFileSceneHandler::AddCompound (const G4VTrajectory& traj) {
 	// draw the points (we want to draw them ourselves instead).
 	if (drawingMode>0 || (drawingMode==0 && trajContext->GetDrawLine())) {
 		pTrModel->SetDrawingMode(0);
-		// Thought I would need to turn off point drawing during call to decompose trajectory
-		// into primitives, but for reasons I don't understand, doesn't seem necessary.
-		// Point primitive is not called anyway.	
+		// Should turn off point drawing during call to decompose trajectory into primitives.
     	//const G4bool drawStepPts(trajContext->GetDrawStepPts());
 	    //const G4bool drawAuxPts(trajContext->GetDrawAuxPts());
 		//trajContext->SetDrawStepPts(false);
@@ -571,7 +569,7 @@ void G4HepRepFileSceneHandler::AddCompound (const G4VTrajectory& traj) {
 		//trajContext->SetDrawStepPts(drawStepPts);
 		//trajContext->SetDrawAuxPts(drawAuxPts);
 	} else {
-	// Initialize the trajectory instance if it wasn't done by the AddPrimitive(...polyline).
+		// Initialize the trajectory instance if it wasn't done by the AddPrimitive(...polyline).
 		InitTrajectory();
 	}
 	
@@ -800,6 +798,8 @@ void G4HepRepFileSceneHandler::AddPrimitive(const G4Polyline& polyline) {
 	
 	if (drawingTraj)
 		InitTrajectory();
+	if (drawingHit)
+		InitHit();
 	
 	haveVisible = true;
 	AddHepRepInstance("Line", polyline);
@@ -1016,15 +1016,12 @@ void G4HepRepFileSceneHandler::AddHepRepInstance(const char* primName,
 		currentDepth = pPVModel->GetCurrentDepth();
 	}
 	
-	// Should be able to just test on fReadyForTransients, but this seems to
-	// be falsely false if no geometry has yet been drawn.
-	// So I test on both !pCurrentPV (means no geometry has yet been drawn)
-	// and fReadyForTransients.
+	//G4cout << "pCurrentPV:" << pCurrentPV << ", readyForTransients:" << fReadyForTransients << G4endl;
 	if (drawingTraj || drawingHit) {
 		// In this case, HepRep type, layer and instance were already created
 		// in the AddCompound method.
 	}
-	else if (!pCurrentPV || fReadyForTransients) {
+	else if (fReadyForTransients) {
 		if (strcmp("Event Data",hepRepXMLWriter->prevTypeName[0])!=0) {
 			hepRepXMLWriter->addType("Event Data",0);
 			hepRepXMLWriter->addInstance();
@@ -1050,16 +1047,16 @@ void G4HepRepFileSceneHandler::AddHepRepInstance(const char* primName,
 			hepRepXMLWriter->addType("EventID",1);
 		} else {
 			if (strcmp("Line",primName)==0) {
-				hepRepXMLWriter->addType("Trajectories",1);
+				hepRepXMLWriter->addType("TransientPolylines",1);
 				layer = 100;
 			} else {
-				if (strcmp(hepRepXMLWriter->prevTypeName[1],"Trajectories")==0 &&
+				if (strcmp(hepRepXMLWriter->prevTypeName[1],"TransientPolylines")==0 &&
 					strcmp("Square",primName)==0)
 				{
 					hepRepXMLWriter->addType("AuxiliaryPoints",2);
 					layer = 110;
 				} else {
-					if (strcmp(hepRepXMLWriter->prevTypeName[1],"Trajectories")==0 &&
+					if (strcmp(hepRepXMLWriter->prevTypeName[1],"TransientPolylines")==0 &&
 						strcmp("Circle",primName)==0)
 					{
 						hepRepXMLWriter->addType("StepPoints",2);
@@ -1073,6 +1070,29 @@ void G4HepRepFileSceneHandler::AddHepRepInstance(const char* primName,
 			hepRepXMLWriter->addAttValue("Layer",layer);
 		}
 		
+		hepRepXMLWriter->addInstance();
+		
+		// Handle Type declaration for Axes, Ruler, etc.
+	} else if (pCurrentPV==0) {
+		if (strcmp("AxesEtc",hepRepXMLWriter->prevTypeName[0])!=0) {
+			hepRepXMLWriter->addType("AxesEtc",0);
+			hepRepXMLWriter->addInstance();
+		}
+		
+		int layer;
+		
+		if (strcmp("Text",primName)==0) {
+			hepRepXMLWriter->addType("Text",1);
+		} else {
+			if (strcmp("Line",primName)==0) {
+				hepRepXMLWriter->addType("Polylines",1);
+				layer = 100;
+			} else {
+				hepRepXMLWriter->addType("Points",1);
+				layer = 130;
+			}
+			hepRepXMLWriter->addAttValue("Layer",layer);
+		}
 		
 		hepRepXMLWriter->addInstance();
 		
@@ -1160,7 +1180,7 @@ void G4HepRepFileSceneHandler::AddHepRepInstance(const char* primName,
 	else
 		hepRepXMLWriter->addAttValue("LineColor",redness,greenness,blueness);
 	
-    hepRepXMLWriter->addAttValue("Visibility",isVisible);
+	hepRepXMLWriter->addAttValue("Visibility",isVisible);
 }
 
 
