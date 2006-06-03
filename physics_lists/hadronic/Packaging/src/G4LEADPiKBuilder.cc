@@ -33,7 +33,10 @@ G4LEADPiKBuilder()
 }
 
 G4LEADPiKBuilder::
-~G4LEADPiKBuilder() {}
+~G4LEADPiKBuilder() 
+{
+  delete theModel;
+}
 
 void G4LEADPiKBuilder::
 Build(G4HadronElasticProcess * ) {}

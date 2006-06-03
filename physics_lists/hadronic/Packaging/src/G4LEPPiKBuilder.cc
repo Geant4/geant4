@@ -40,7 +40,11 @@ G4LEPPiKBuilder()
 }
 
 G4LEPPiKBuilder::
-~G4LEPPiKBuilder() {}
+~G4LEPPiKBuilder() 
+{
+  delete theElasticModel;
+  delete theLEPionPlusModel;
+}
 
 void G4LEPPiKBuilder::
 Build(G4HadronElasticProcess * aP)

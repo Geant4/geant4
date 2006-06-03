@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4PiKBuilder.cc,v 1.3 2005-11-29 16:55:45 gunter Exp $
+// $Id: G4PiKBuilder.cc,v 1.4 2006-06-03 19:02:34 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -59,28 +59,19 @@ G4PiKBuilder(): wasActivated(false)
 
 G4PiKBuilder::
 ~G4PiKBuilder(){
-  if(wasActivated)
-  {
-    G4ProcessManager * theProcMan;
-    theProcMan = G4PionPlus::PionPlus()->GetProcessManager();
-    if(theProcMan) theProcMan->RemoveProcess(thePionPlusElasticProcess);
-    if(theProcMan) theProcMan->RemoveProcess(thePionPlusInelastic);
-    theProcMan = G4PionMinus::PionMinus()->GetProcessManager();
-    if(theProcMan) theProcMan->RemoveProcess(thePionMinusElasticProcess);
-    if(theProcMan) theProcMan->RemoveProcess(thePionMinusInelastic);
-    theProcMan = G4KaonPlus::KaonPlus()->GetProcessManager();
-    if(theProcMan) theProcMan->RemoveProcess(theKaonPlusElasticProcess);
-    if(theProcMan) theProcMan->RemoveProcess(theKaonPlusInelastic);
-    theProcMan = G4KaonMinus::KaonMinus()->GetProcessManager();
-    if(theProcMan) theProcMan->RemoveProcess(theKaonMinusElasticProcess);
-    if(theProcMan) theProcMan->RemoveProcess(theKaonMinusInelastic);
-    theProcMan = G4KaonZeroLong::KaonZeroLong()->GetProcessManager();
-    if(theProcMan) theProcMan->RemoveProcess(theKaonZeroLElasticProcess);
-    if(theProcMan) theProcMan->RemoveProcess(theKaonZeroLInelastic);
-    theProcMan = G4KaonZeroShort::KaonZeroShort()->GetProcessManager();
-    if(theProcMan) theProcMan->RemoveProcess(theKaonZeroSElasticProcess);
-    if(theProcMan) theProcMan->RemoveProcess(theKaonZeroSInelastic);
-  }
+  delete thePionPlusElasticProcess;
+  delete thePionMinusElasticProcess;
+  delete theKaonPlusElasticProcess;
+  delete theKaonMinusElasticProcess;
+  delete theKaonZeroLElasticProcess;
+  delete theKaonZeroSElasticProcess;
+
+  delete thePionPlusInelastic;
+  delete thePionMinusInelastic;
+  delete theKaonPlusInelastic;
+  delete theKaonMinusInelastic;
+  delete theKaonZeroLInelastic;
+  delete theKaonZeroSInelastic;
 }
 
 void G4PiKBuilder::

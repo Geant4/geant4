@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HadronElasticPhysics.cc,v 1.6 2006-05-09 08:01:55 vnivanch Exp $
+// $Id: G4HadronElasticPhysics.cc,v 1.7 2006-06-03 19:02:03 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -58,7 +58,7 @@ G4HadronElasticPhysics::G4HadronElasticPhysics(const G4String& name,
     wasActivated(false)
 {
   if(verbose > 1) G4cout << "### HadronElasticPhysics" << G4endl;
-  pLimit = 200.*MeV;
+  pLimit = 20.*MeV;
   edepLimit = 100.*keV; 
 }
 

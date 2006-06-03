@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4ElectroNuclearBuilder.cc,v 1.3 2006-04-25 09:38:08 vnivanch Exp $
+// $Id: G4ElectroNuclearBuilder.cc,v 1.4 2006-06-03 19:01:59 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -63,7 +63,7 @@ G4ElectroNuclearBuilder::~G4ElectroNuclearBuilder()
     delete theElectroReaction;
     delete theGammaReaction;
     delete theModel;
-    delete theCascade;
+    delete theCascade; 
   }
 }
 

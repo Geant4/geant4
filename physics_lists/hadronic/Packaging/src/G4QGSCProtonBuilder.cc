@@ -47,6 +47,7 @@ G4QGSCProtonBuilder::
   delete theCascade;
   delete theStringDecay;
   delete theStringModel; 
+  delete theModel;
 }
 
 void G4QGSCProtonBuilder::

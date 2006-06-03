@@ -43,7 +43,10 @@
  }
 
  G4BinaryNeutronBuilder::
- ~G4BinaryNeutronBuilder() {}
+ ~G4BinaryNeutronBuilder() 
+{
+  delete theModel;
+}
 
  void G4BinaryNeutronBuilder::
  Build(G4HadronElasticProcess * )

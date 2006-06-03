@@ -50,12 +50,6 @@
  G4ProtonBuilder::
  ~G4ProtonBuilder() 
  {
-   if(wasActivated)
-   {
-     G4ProcessManager * theProcMan = G4Proton::Proton()->GetProcessManager();
-     if(theProcMan) theProcMan->RemoveProcess(theProtonElasticProcess);
-     if(theProcMan) theProcMan->RemoveProcess(theProtonInelastic);
-   }
    delete theProtonElasticProcess;
    delete theProtonInelastic;
  }

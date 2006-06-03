@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmMessenger.cc,v 1.3 2006-02-15 14:24:29 vnivanch Exp $
+// $Id: G4EmMessenger.cc,v 1.4 2006-06-03 19:01:59 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -69,6 +69,8 @@ G4EmMessenger::~G4EmMessenger()
 {
   delete theSynch;
   delete theGN;
+  delete aDir1;
+  delete aDir2;
 }
 
 void G4EmMessenger::SetNewValue(G4UIcommand* aComm, G4String aS)

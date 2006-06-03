@@ -50,6 +50,7 @@ G4QGSPNeutronBuilder::
   delete theStringModel;
   delete thePreEquilib;
   delete theCascade;
+  delete theModel;
 }
 
 void G4QGSPNeutronBuilder::

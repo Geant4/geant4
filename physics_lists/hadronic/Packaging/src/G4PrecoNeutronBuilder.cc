@@ -34,7 +34,10 @@ G4PrecoNeutronBuilder()
 }
 
 G4PrecoNeutronBuilder::
-~G4PrecoNeutronBuilder() {}
+~G4PrecoNeutronBuilder() 
+{
+  delete theModel;
+}
 
 void G4PrecoNeutronBuilder::
 Build(G4HadronElasticProcess * )

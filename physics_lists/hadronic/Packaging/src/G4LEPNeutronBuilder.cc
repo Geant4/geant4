@@ -35,7 +35,13 @@ G4LEPNeutronBuilder()
 }
 
 G4LEPNeutronBuilder::
-~G4LEPNeutronBuilder() {}
+~G4LEPNeutronBuilder() 
+{
+  delete theElasticModel;
+  delete theNeutronFissionModel;
+  delete theNeutronCaptureModel;
+  delete theLENeutronModel;
+}
 
 void G4LEPNeutronBuilder::
 Build(G4HadronElasticProcess * aP)

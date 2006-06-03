@@ -33,7 +33,11 @@ G4LEPProtonBuilder()
 }
 
 G4LEPProtonBuilder::
-~G4LEPProtonBuilder() {}
+~G4LEPProtonBuilder() 
+{
+  delete theElasticModel;
+  delete theLEProtonModel;
+}
 
 void G4LEPProtonBuilder::
 Build(G4HadronElasticProcess * aP)

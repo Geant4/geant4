@@ -56,6 +56,9 @@
  ~G4FTFPProtonBuilder() 
  {
    delete theStringDecay;
+   delete theStringModel;
+   delete theModel;
+   delete theCascade;
  }
 
  void G4FTFPProtonBuilder::

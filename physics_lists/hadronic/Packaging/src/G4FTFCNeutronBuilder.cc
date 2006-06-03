@@ -47,6 +47,7 @@
    delete theCascade;
    delete theStringDecay;
    delete theStringModel;
+   delete theModel;
  }
 
  void G4FTFCNeutronBuilder::

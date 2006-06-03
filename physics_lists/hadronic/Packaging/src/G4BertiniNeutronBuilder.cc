@@ -43,7 +43,10 @@ Build(G4NeutronInelasticProcess * aP)
 }
 
 G4BertiniNeutronBuilder::
-~G4BertiniNeutronBuilder() {}
+~G4BertiniNeutronBuilder() 
+{
+  delete theModel;
+}
 
 void G4BertiniNeutronBuilder::
 Build(G4HadronElasticProcess * )

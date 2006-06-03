@@ -33,7 +33,10 @@ G4LEADProtonBuilder()
 }
 
 G4LEADProtonBuilder::
-~G4LEADProtonBuilder() {}
+~G4LEADProtonBuilder() 
+{
+  delete theModel;
+}
 
 void G4LEADProtonBuilder::
 Build(G4HadronElasticProcess * )

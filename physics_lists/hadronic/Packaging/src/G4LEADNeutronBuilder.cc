@@ -33,7 +33,10 @@
  }
 
  G4LEADNeutronBuilder::
- ~G4LEADNeutronBuilder() {}
+ ~G4LEADNeutronBuilder() 
+{
+  delete theModel;
+}
 
  void G4LEADNeutronBuilder::
  Build(G4NeutronInelasticProcess * aP)

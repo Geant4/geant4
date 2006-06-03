@@ -47,6 +47,7 @@
    delete theStringDecay;
    delete theStringModel;
    delete theCascade;
+   delete theModel;
  }
 
  void G4QGSCNeutronBuilder::

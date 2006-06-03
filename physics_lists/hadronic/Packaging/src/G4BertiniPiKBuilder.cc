@@ -36,7 +36,10 @@
  }
 
  G4BertiniPiKBuilder::
- ~G4BertiniPiKBuilder() {}
+ ~G4BertiniPiKBuilder() 
+{
+  delete theModel;
+}
 
  void G4BertiniPiKBuilder::
  Build(G4PionPlusInelasticProcess * aP)

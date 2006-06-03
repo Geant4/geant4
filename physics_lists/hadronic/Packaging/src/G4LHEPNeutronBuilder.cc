@@ -33,7 +33,12 @@
  }
 
  G4LHEPNeutronBuilder::
- ~G4LHEPNeutronBuilder() {}
+ ~G4LHEPNeutronBuilder() 
+{
+  delete theElasticModel;
+  delete theLENeutronModel;
+  delete theHENeutronModel;
+}
 
  void G4LHEPNeutronBuilder::
  Build(G4NeutronInelasticProcess * aP)

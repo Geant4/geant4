@@ -65,6 +65,7 @@
    delete theCascade;
    delete theStringDecay;
    delete theStringModel;
+   delete theModel;
  }
 
  // 2002 by J.P. Wellisch

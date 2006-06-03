@@ -36,7 +36,10 @@ G4BinaryPiKBuilder()
 }
 
 G4BinaryPiKBuilder::
-~G4BinaryPiKBuilder() {}
+~G4BinaryPiKBuilder() 
+{
+  delete theModel;
+}
 
 void G4BinaryPiKBuilder::
 Build(G4HadronElasticProcess * ) {}

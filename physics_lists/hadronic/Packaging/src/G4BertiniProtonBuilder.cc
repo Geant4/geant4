@@ -34,7 +34,10 @@ G4BertiniProtonBuilder()
 }
 
 G4BertiniProtonBuilder::
-~G4BertiniProtonBuilder() {}
+~G4BertiniProtonBuilder() 
+{
+  delete theModel;
+}
 
 void G4BertiniProtonBuilder::
 Build(G4HadronElasticProcess * )
