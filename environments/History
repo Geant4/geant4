@@ -1,4 +1,4 @@
-$Id: History,v 1.16 2006-06-03 08:06:02 hajime Exp $
+$Id: History,v 1.17 2006-06-04 22:26:34 kmura Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+envs-V08-00-02 05 June 2006  Koichi Murakami
+  - update g4py
+    - modifications for new version (8.1)
+    - disclamer is added
+
 envs-V08-00-01 03 June 2006  Hajime Yoshida
   - addition of new Geant4Py educational examples
 	-- g4py/examples/education/lesson1  => measurement of the mass attenuation coefficient
