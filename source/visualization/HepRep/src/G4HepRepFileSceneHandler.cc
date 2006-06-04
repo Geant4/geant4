@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HepRepFileSceneHandler.cc,v 1.50 2006-06-04 19:40:06 perl Exp $
+// $Id: G4HepRepFileSceneHandler.cc,v 1.51 2006-06-04 20:32:40 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -823,6 +823,11 @@ void G4HepRepFileSceneHandler::AddPrimitive (const G4Polymarker& line) {
 	
 	if (fpVisAttribs && (fpVisAttribs->IsVisible()==0) && cullInvisibleObjects)
 		return;
+		
+	MarkerSizeType sizeType;
+	G4double size = GetMarkerSize (line, sizeType);
+	if (sizeType==world)
+		size = 4.;
 	
 	if (drawingTraj) {
 		drawTrajPts = true;
@@ -836,7 +841,7 @@ void G4HepRepFileSceneHandler::AddPrimitive (const G4Polymarker& line) {
 	AddHepRepInstance("Point", line);
 	
 	hepRepXMLWriter->addAttValue("MarkName", "Dot");
-	hepRepXMLWriter->addAttValue("MarkSize", 4);
+	hepRepXMLWriter->addAttValue("MarkSize", (G4int) size);
 	
 	hepRepXMLWriter->addPrimitive();
 	
@@ -855,6 +860,11 @@ void G4HepRepFileSceneHandler::AddPrimitive(const G4Text& text) {
 	<< G4endl;
 	PrintThings();
 #endif
+		
+	MarkerSizeType sizeType;
+	G4double size = GetMarkerSize (text, sizeType);
+	if (sizeType==world)
+		size = 12.;
 	
 	haveVisible = true;
 	AddHepRepInstance("Text", text);
@@ -863,7 +873,7 @@ void G4HepRepFileSceneHandler::AddPrimitive(const G4Text& text) {
 	hepRepXMLWriter->addAttValue("HAlign", "Left");
 	hepRepXMLWriter->addAttValue("FontName", "Arial");
 	hepRepXMLWriter->addAttValue("FontStyle", "Plain");
-	hepRepXMLWriter->addAttValue("FontSize", "12");
+	hepRepXMLWriter->addAttValue("FontSize", (G4int) size);
 	hepRepXMLWriter->addAttValue("FontHasBanner", "TRUE");
 	hepRepXMLWriter->addAttValue("FontBannerColor", "0,0,0");
 	
@@ -899,6 +909,11 @@ void G4HepRepFileSceneHandler::AddPrimitive(const G4Circle& circle) {
 	
 	if (fpVisAttribs && (fpVisAttribs->IsVisible()==0) && cullInvisibleObjects)
 		return;
+		
+	MarkerSizeType sizeType;
+	G4double size = GetMarkerSize (circle, sizeType);
+	if (sizeType==world)
+		size = 4.;
 	
 	if (drawingTraj) {
 		drawTrajPts = true;
@@ -912,7 +927,7 @@ void G4HepRepFileSceneHandler::AddPrimitive(const G4Circle& circle) {
 	AddHepRepInstance("Point", circle);
 	
 	hepRepXMLWriter->addAttValue("MarkName", "Dot");
-	hepRepXMLWriter->addAttValue("MarkSize", 4);
+	hepRepXMLWriter->addAttValue("MarkSize", (G4int) size);
 	
 	hepRepXMLWriter->addPrimitive();
 	
@@ -932,6 +947,11 @@ void G4HepRepFileSceneHandler::AddPrimitive(const G4Square& square) {
 	
 	if (fpVisAttribs && (fpVisAttribs->IsVisible()==0) && cullInvisibleObjects)
 		return;
+		
+	MarkerSizeType sizeType;
+	G4double size = GetMarkerSize (square, sizeType);
+	if (sizeType==world)
+		size = 4.;
 	
 	if (drawingTraj) {
 		drawTrajPts = true;
@@ -945,7 +965,7 @@ void G4HepRepFileSceneHandler::AddPrimitive(const G4Square& square) {
 	AddHepRepInstance("Point", square);
 	
 	hepRepXMLWriter->addAttValue("MarkName", "Square");
-	hepRepXMLWriter->addAttValue("MarkSize", 4);
+	hepRepXMLWriter->addAttValue("MarkSize", (G4int) size);
 	
 	hepRepXMLWriter->addPrimitive();
 	
