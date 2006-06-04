@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: MyDetectorConstruction.cc,v 1.34 2006-03-28 15:39:20 allison Exp $
+// $Id: MyDetectorConstruction.cc,v 1.35 2006-06-04 19:38:05 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -39,6 +39,7 @@
 #include "G4ElementTable.hh"
 #include "G4Box.hh"
 #include "G4Tubs.hh"
+#include "G4Cons.hh"
 #include "G4Sphere.hh"
 #include "G4Orb.hh"
 #include "G4Trap.hh"
@@ -547,6 +548,13 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct()
   G4LogicalVolume* eTubeLog = new G4LogicalVolume(eTube,Ar,"e-tube-log");
   new G4PVPlacement(G4Translate3D(G4ThreeVector(-200.*cm,-200.*cm,0)),
 		    "e-tube-phys", eTubeLog,
+		    experimentalHall_phys,false,0);
+
+  //-------------------------------------------- G4Cons
+  G4VSolid* eCons = new G4Cons("e-cons",50.*cm,70.*cm,100.*cm,140.*cm,200.*cm,0,twopi);
+  G4LogicalVolume* eConsLog = new G4LogicalVolume(eCons,Ar,"e-cons-log");
+  new G4PVPlacement(G4Translate3D(G4ThreeVector(-200.*cm,-200.*cm,60*cm)),
+		    "e-cons-phys", eConsLog,
 		    experimentalHall_phys,false,0);
 
   /*
