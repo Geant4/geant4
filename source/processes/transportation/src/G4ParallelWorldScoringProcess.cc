@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelWorldScoringProcess.cc,v 1.3 2006-05-17 16:34:05 asaim Exp $
+// $Id: G4ParallelWorldScoringProcess.cc,v 1.4 2006-06-04 06:03:50 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -106,7 +106,7 @@ SetParallelWorld(G4VPhysicalVolume* parallelWorld)
 // StartTracking
 //
 //------------------------------------------------------
-void G4ParallelWorldScoringProcess::StartTracking(G4Track*trk)
+void G4ParallelWorldScoringProcess::StartTracking(G4Track* trk)
 {
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // Activate navigator and get the navigator ID
@@ -122,16 +122,17 @@ G4cout << " G4ParallelWorldScoringProcess::StartTracking" << G4endl;
   }
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+G4cout << "G4ParallelWorldScoringProcess::StartTracking <<<<<<<<<<<<<<<<<< " << G4endl;
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // Let PathFinder initialize
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   fPathFinder->PrepareNewTrack(trk->GetPosition(),trk->GetMomentumDirection());
-  fOldGhostTouchable = fPathFinder->CreateTouchableHandle(fNavigatorID);
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Setup initial touchables
+// Setup initial touchables for the first step
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  fOldGhostTouchable = fPathFinder->CreateTouchableHandle(fNavigatorID);
   fGhostPreStepPoint->SetTouchableHandle(fOldGhostTouchable);
   fNewGhostTouchable = fOldGhostTouchable;
   fGhostPostStepPoint->SetTouchableHandle(fNewGhostTouchable);
@@ -228,13 +229,20 @@ G4VParticleChange* G4ParallelWorldScoringProcess::PostStepDoIt(
   CopyStep(step);
   fGhostPreStepPoint->SetSensitiveDetector(aSD);
 
+  //  fPathFinder->Locate( track.GetPosition(),
+  //                       track.GetMomentumDirection(),
+  //                       true);
+
+  //  fPathFinder->Locate(step.GetPostStepPoint()->GetPosition(),
+  //                      step.GetPostStepPoint()->GetMomentumDirection());
+
   if(fOnBoundary)
   {
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // Locate the point and get new touchable
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    fPathFinder->Locate(step.GetPostStepPoint()->GetPosition(),
-                        step.GetPostStepPoint()->GetMomentumDirection());
+  //??  fPathFinder->Locate(step.GetPostStepPoint()->GetPosition(),
+  //??                      step.GetPostStepPoint()->GetMomentumDirection());
     fNewGhostTouchable = fPathFinder->CreateTouchableHandle(fNavigatorID);
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   }
@@ -243,6 +251,9 @@ G4VParticleChange* G4ParallelWorldScoringProcess::PostStepDoIt(
 // Do I need this ??????????????????????????????????????????????????????????
 // fGhostNavigator->LocateGlobalPointWithinVolume(track.GetPosition());
 // ?????????????????????????????????????????????????????????????????????????
+
+    fPathFinder->ReLocate(track.GetPosition());
+
     // reuse the touchable
     fNewGhostTouchable = fOldGhostTouchable;
   }
@@ -288,8 +299,8 @@ G4double G4ParallelWorldScoringProcess::AlongStepGetPhysicalInteractionLength(
 
   if (previousStepSize > 0.)
   { fGhostSafety -= previousStepSize; }
-  else
-  { fGhostSafety = -1.; }
+//  else
+//  { fGhostSafety = -1.; }
   if (fGhostSafety < 0.) fGhostSafety = 0.0;
       
   // ------------------------------------------
@@ -298,8 +309,9 @@ G4double G4ParallelWorldScoringProcess::AlongStepGetPhysicalInteractionLength(
   if (currentMinimumStep <= fGhostSafety && currentMinimumStep > 0.)
   {
     // I have no chance to limit
-    returnedStep = fGhostSafety;
+    returnedStep = currentMinimumStep;
     fOnBoundary = false;
+    proposedSafety = fGhostSafety - currentMinimumStep;
   }
   else // (currentMinimumStep > fGhostSafety: I may limit the Step)
   {
@@ -313,14 +325,17 @@ G4double G4ParallelWorldScoringProcess::AlongStepGetPhysicalInteractionLength(
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     if(eLimited == kDoNot)
     {
-      returnedStep = fGhostSafety;
+      // Track is not on the boundary
       fOnBoundary = false;
+      fGhostSafety = fGhostNavigator->ComputeSafety(endTrack.GetPosition());
     }
     else
     {
       // Track is on the boundary
       fOnBoundary = true;
+      // proposedSafety = fGhostSafety;
     }
+    proposedSafety = fGhostSafety;
   }
 
   // ----------------------------------------------
@@ -328,7 +343,6 @@ G4double G4ParallelWorldScoringProcess::AlongStepGetPhysicalInteractionLength(
   // The SteppingManager will take care of keeping
   // the smallest one.
   // ----------------------------------------------
-  proposedSafety = fGhostSafety;
   return returnedStep;
 }
 
