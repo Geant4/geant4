@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HepRepFileSceneHandler.hh,v 1.26 2006-06-03 05:27:44 perl Exp $
+// $Id: G4HepRepFileSceneHandler.hh,v 1.27 2006-06-04 18:32:08 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -137,6 +137,8 @@ private:
   G4bool cullInvisibleObjects;
   G4bool haveVisible;
   G4bool drawingTraj;
+  G4bool doneInitTraj;
+  G4bool drawTrajPts;
   G4bool drawingHit;
   G4bool doneInitHit;
   

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HepRepFileSceneHandler.cc,v 1.48 2006-06-03 07:28:26 perl Exp $
+// $Id: G4HepRepFileSceneHandler.cc,v 1.49 2006-06-04 18:32:08 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -91,6 +91,8 @@ G4VSceneHandler(system, fSceneIdCount++, name)
 	
 	haveVisible = false;
 	drawingTraj = false;
+	doneInitTraj = false;
+	drawTrajPts = false;
 	drawingHit = false;
 	doneInitHit = false;
 }
@@ -552,28 +554,20 @@ void G4HepRepFileSceneHandler::AddCompound (const G4VTrajectory& traj) {
 	
 	// Now that we have written out all of the attributes that are based on the
 	// trajectory's particulars, call base class to deconstruct trajectory into a polyline.
-	// Note that this means color will correctly come from the polyline's VisAttribs.
-	// Temporarily disable point drawing before calling base class to avoid having the base class
-	// draw the points (we want to draw them ourselves instead).
-	if (drawingMode>0 || (drawingMode==0 && trajContext->GetDrawLine())) {
-		pTrModel->SetDrawingMode(0);
-		// Should turn off point drawing during call to decompose trajectory into primitives.
-    	//const G4bool drawStepPts(trajContext->GetDrawStepPts());
-	    //const G4bool drawAuxPts(trajContext->GetDrawAuxPts());
-		//trajContext->SetDrawStepPts(false);
-		//trajContext->SetDrawAuxPts(false);
-		drawingTraj = true;
-		G4VSceneHandler::AddCompound(traj);  // Invoke default action.
-		drawingTraj = false;
-		pTrModel->SetDrawingMode(drawingMode);
-		//trajContext->SetDrawStepPts(drawStepPts);
-		//trajContext->SetDrawAuxPts(drawAuxPts);
-	} else {
-		// Initialize the trajectory instance if it wasn't done by the AddPrimitive(...polyline).
-		InitTrajectory();
-	}
+	// If base class calls for drawing points, no points will actually be drawn there since we
+	// instead need to do point drawing from here (in order to obtain the points attributes,
+	// not available from AddPrimitive(...point).  Instead, such a call will just serve to set the
+	// flag that tells us that point drawing was requested for this trajectory (depends on several
+	// factors including i_mode, trajContext and filtering).
+	drawingTraj = true;
+	doneInitTraj = false;
+	drawTrajPts = false;
+	G4VSceneHandler::AddCompound(traj);
+	drawingTraj = false;
 	
-	if (drawingMode!=0 || trajContext->GetDrawStepPts() || trajContext->GetDrawAuxPts()) {
+	if (drawTrajPts) {
+		if (!doneInitTraj)
+			InitTrajectory();
 		// Create Trajectory Points as a subType of Trajectories.
 		// Note that we should create this heprep type even if there are no actual points.
 		// This allows the user to tell that points don't exist (admittedly odd) rather
@@ -641,25 +635,6 @@ void G4HepRepFileSceneHandler::AddCompound (const G4VTrajectory& traj) {
 			hepRepXMLWriter->addPoint(vertex.x(), vertex.y(), vertex.z());
 		}
 	}
-}
-
-
-void G4HepRepFileSceneHandler::InitTrajectory() {
-	// For every trajectory, add an instance of Type Trajectory.
-	hepRepXMLWriter->addInstance();
-	
-	// Write out the trajectory's attribute values.
-	if (trajAttValues) {
-		std::vector<G4AttValue>::iterator iAttVal;
-		for (iAttVal = trajAttValues->begin();
-			 iAttVal != trajAttValues->end(); ++iAttVal)
-			hepRepXMLWriter->addAttValue(iAttVal->GetName(), iAttVal->GetValue());
-		delete trajAttValues; 
-	}
-	
-	// Clean up trajectory attributes.
-	if (trajAttDefs)
-		delete trajAttDefs;
 }
 
 
@@ -761,6 +736,29 @@ void G4HepRepFileSceneHandler::AddCompound (const G4VHit& hit) {
 }
 
 
+void G4HepRepFileSceneHandler::InitTrajectory() {
+	if (!doneInitTraj) {
+		// For every trajectory, add an instance of Type Trajectory.
+		hepRepXMLWriter->addInstance();
+		
+		// Write out the trajectory's attribute values.
+		if (trajAttValues) {
+			std::vector<G4AttValue>::iterator iAttVal;
+			for (iAttVal = trajAttValues->begin();
+				 iAttVal != trajAttValues->end(); ++iAttVal)
+				hepRepXMLWriter->addAttValue(iAttVal->GetName(), iAttVal->GetValue());
+			delete trajAttValues; 
+		}
+		
+		// Clean up trajectory attributes.
+		if (trajAttDefs)
+			delete trajAttDefs;
+			
+		doneInitTraj = true;
+	}
+}
+
+
 void G4HepRepFileSceneHandler::InitHit() {
 	if (!doneInitHit) {
 		// For every hit, add an instance of Type Hit.
@@ -795,7 +793,7 @@ void G4HepRepFileSceneHandler::AddPrimitive(const G4Polyline& polyline) {
 	
 	if (fpVisAttribs && (fpVisAttribs->IsVisible()==0) && cullInvisibleObjects)
 		return;
-	
+
 	if (drawingTraj)
 		InitTrajectory();
 	if (drawingHit)
@@ -825,6 +823,11 @@ void G4HepRepFileSceneHandler::AddPrimitive (const G4Polymarker& line) {
 	if (fpVisAttribs && (fpVisAttribs->IsVisible()==0) && cullInvisibleObjects)
 		return;
 	
+	if (drawingTraj) {
+		drawTrajPts = true;
+		return;
+	}
+		
 	if (drawingHit)
 		InitHit();
 	
@@ -896,6 +899,11 @@ void G4HepRepFileSceneHandler::AddPrimitive(const G4Circle& circle) {
 	if (fpVisAttribs && (fpVisAttribs->IsVisible()==0) && cullInvisibleObjects)
 		return;
 	
+	if (drawingTraj) {
+		drawTrajPts = true;
+		return;
+	}
+	
 	if (drawingHit)
 		InitHit();
 	
@@ -923,6 +931,11 @@ void G4HepRepFileSceneHandler::AddPrimitive(const G4Square& square) {
 	
 	if (fpVisAttribs && (fpVisAttribs->IsVisible()==0) && cullInvisibleObjects)
 		return;
+	
+	if (drawingTraj) {
+		drawTrajPts = true;
+		return;
+	}	
 	
 	if (drawingHit)
 		InitHit();
@@ -952,6 +965,11 @@ void G4HepRepFileSceneHandler::AddPrimitive(const G4Polyhedron& polyhedron) {
 		return;
 	
 	if(polyhedron.GetNoFacets()==0)return;
+	
+	if (drawingTraj) {
+		drawTrajPts = true;
+		return;
+	}
 	
 	if (drawingHit)
 		InitHit();
@@ -1016,7 +1034,12 @@ void G4HepRepFileSceneHandler::AddHepRepInstance(const char* primName,
 		currentDepth = pPVModel->GetCurrentDepth();
 	}
 	
-	//G4cout << "pCurrentPV:" << pCurrentPV << ", readyForTransients:" << fReadyForTransients << G4endl;
+#ifdef G4HEPREPFILEDEBUG
+	G4cout <<
+	"pCurrentPV:" << pCurrentPV << ", readyForTransients:" << fReadyForTransients
+	<< G4endl;
+#endif
+
 	if (drawingTraj || drawingHit) {
 		// In this case, HepRep type, layer and instance were already created
 		// in the AddCompound method.

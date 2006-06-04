@@ -1,4 +1,4 @@
-.$Id: History,v 1.110 2006-06-03 07:34:23 perl Exp $
+.$Id: History,v 1.111 2006-06-04 18:32:08 perl Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,9 @@ committal in the CVS repository !
 
 History file for visualization/HepRep sub-category
 --------------------------------------------------
+
+4 June 2006 Joseph Perl  (vis-HepRep-V08-00-03)
+- G4HepRepFileSceneHandler: Bring trajectory points under control of filtering.
 
 2 June 2006 Joseph Perl  (vis-HepRep-V08-00-03)
 - G4HepRepFileSceneHandler: Support 2D Text.
