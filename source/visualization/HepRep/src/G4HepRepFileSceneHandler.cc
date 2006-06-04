@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HepRepFileSceneHandler.cc,v 1.49 2006-06-04 18:32:08 perl Exp $
+// $Id: G4HepRepFileSceneHandler.cc,v 1.50 2006-06-04 19:40:06 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -210,8 +210,8 @@ void G4HepRepFileSceneHandler::AddSolid(const G4Cons& cons) {
 		if (fpVisAttribs && (fpVisAttribs->IsVisible()==0) && cullInvisibleObjects)
 			return;
 		
-		G4Point3D vertex1(G4Point3D( 0., 0., cons.GetZHalfLength()));
-		G4Point3D vertex2(G4Point3D( 0., 0.,-cons.GetZHalfLength()));
+		G4Point3D vertex1(G4Point3D( 0., 0., -cons.GetZHalfLength()));
+		G4Point3D vertex2(G4Point3D( 0., 0.,  cons.GetZHalfLength()));
 		
 		vertex1 = (*fpObjectTransformation) * vertex1;
 		vertex2 = (*fpObjectTransformation) * vertex2;
@@ -254,8 +254,8 @@ void G4HepRepFileSceneHandler::AddSolid(const G4Tubs& tubs) {
 		if (fpVisAttribs && (fpVisAttribs->IsVisible()==0) && cullInvisibleObjects)
 			return;
 		
-		G4Point3D vertex1(G4Point3D( 0., 0., tubs.GetZHalfLength()));
-		G4Point3D vertex2(G4Point3D( 0., 0.,-tubs.GetZHalfLength()));
+		G4Point3D vertex1(G4Point3D( 0., 0., -tubs.GetZHalfLength()));
+		G4Point3D vertex2(G4Point3D( 0., 0.,  tubs.GetZHalfLength()));
 		
 		vertex1 = (*fpObjectTransformation) * vertex1;
 		vertex2 = (*fpObjectTransformation) * vertex2;
@@ -553,7 +553,8 @@ void G4HepRepFileSceneHandler::AddCompound (const G4VTrajectory& traj) {
 	} // end of special treatment for when this is the first trajectory.
 	
 	// Now that we have written out all of the attributes that are based on the
-	// trajectory's particulars, call base class to deconstruct trajectory into a polyline.
+	// trajectory's particulars, call base class to deconstruct trajectory into polyline and/or points
+	// (or nothing if trajectory is to be filtered out).
 	// If base class calls for drawing points, no points will actually be drawn there since we
 	// instead need to do point drawing from here (in order to obtain the points attributes,
 	// not available from AddPrimitive(...point).  Instead, such a call will just serve to set the
