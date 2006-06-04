@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HepRepFileSceneHandler.cc,v 1.51 2006-06-04 20:32:40 perl Exp $
+// $Id: G4HepRepFileSceneHandler.cc,v 1.52 2006-06-04 20:51:58 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -1172,9 +1172,9 @@ void G4HepRepFileSceneHandler::AddHepRepInstance(const char* primName,
 		hepRepXMLWriter->addAttValue("Solid", pCurrentLV->GetSolid()->GetName());
 		hepRepXMLWriter->addAttValue("EType", pCurrentLV->GetSolid()->GetEntityType());
 		hepRepXMLWriter->addAttValue("Material", pCurrentLV->GetMaterial()->GetName());
-		hepRepXMLWriter->addAttValue("Density", pCurrentLV->GetMaterial()->GetDensity());
+		hepRepXMLWriter->addAttValue("Density", pCurrentLV->GetMaterial()->GetDensity()*m3/kg);
 		hepRepXMLWriter->addAttValue("State", pCurrentLV->GetMaterial()->GetState());
-		hepRepXMLWriter->addAttValue("Radlen", pCurrentLV->GetMaterial()->GetRadlen());
+		hepRepXMLWriter->addAttValue("Radlen", pCurrentLV->GetMaterial()->GetRadlen()/m);
 	}
 	
 	hepRepXMLWriter->addAttValue("DrawAs",primName);
@@ -1261,9 +1261,9 @@ void G4HepRepFileSceneHandler::CheckFileOpen() {
 		hepRepXMLWriter->addAttDef("Solid", "Solid Name", "Physics","");
 		hepRepXMLWriter->addAttDef("EType", "Entity Type", "Physics","");
 		hepRepXMLWriter->addAttDef("Material", "Material Name", "Physics","");
-		hepRepXMLWriter->addAttDef("Density", "Material Density", "Physics","");
+		hepRepXMLWriter->addAttDef("Density", "Material Density", "Physics","kg/m3");
 		hepRepXMLWriter->addAttDef("State", "Material State", "Physics","");
-		hepRepXMLWriter->addAttDef("Radlen", "Material Radiation Length", "Physics","");
+		hepRepXMLWriter->addAttDef("Radlen", "Material Radiation Length", "Physics","m");
 	}
 }
 
