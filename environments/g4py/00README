@@ -1,10 +1,15 @@
-$Id: 00README,v 1.1 2006-02-27 09:29:42 kmura Exp $
+$Id: 00README,v 1.2 2006-06-04 22:17:28 kmura Exp $
 ==========================================================================
 Geant4Py
 
   Geant4Py is a set of python modules for using Geant4.
 
 ==========================================================================
+
+URL
+---
+http://www-geant4.kek.jp/projects/Geant4Py/
+
 
 System Requirements:
 -------------------
@@ -24,25 +29,9 @@ CLHEP
 
 BOOST-Python
   - version 1.32 or later
-  - Note that version 1.31 is not well-tested.
 
 (Optional)
 ROOT
-PAIDA
-
-
-Development Environment:
------------------------
-OS:             SuSE Linux 10.0 (x86-64)
-g++ :           4.0.2
-
-Python:         2.4
-Geant4:         8.0
-CLHEP:          1.9.2.2 / 2.0.2.2
-BOOST-Python:   1.33.1
-
-(Optional)
-ROOT:           5.08/00
 
 
 How to Install:
@@ -86,6 +75,8 @@ Fine tuning of the library path:
   --with-boost-libdir=DIR   BOOST-C++ library dir [/usr/lib]
   --with-boost-python-lib=LIB library name of libboost_python.so [boost_python]
 
+  --with-package-dir=DIR    Geant4 Package dir
+
 Enable/disable options: prefix with either --enable- or --disable-
   openglx      OpenGL support     [auto]
   openglxm     OpenGLXm support   [disable, $G4VIS_USE_OPENGLXM]
@@ -101,11 +92,11 @@ You can specify all parameters adopting your environment.
 
 For example, 
 # ./configure linux 
-  --with-g4-incdir=/opt/heplib/Geant4/geant4.8.0/include 
-  --with-g4-libdir=/opt/heplib/Geant4/geant4.8.0/slib/Linux-g++ 
-  --with-clhep-incdir=/opt/heplib/CLHEP/1.9.2.2/include 
-  --with-clhep-libdir=/opt/heplib/CLHEP/1.9.2.2/lib 
-  --with-clhep-lib=CLHEP-1.9.2.2
+  --with-g4-incdir=/opt/heplib/Geant4/geant4.8.1/include 
+  --with-g4-libdir=/opt/heplib/Geant4/geant4.8.1/slib/Linux-g++ 
+  --with-clhep-incdir=/opt/heplib/CLHEP/2.0.2.2/include 
+  --with-clhep-libdir=/opt/heplib/CLHEP/2.0.2.2/lib 
+  --with-clhep-lib=CLHEP-2.0.2.2
 
 The configuration script will create config/config.gmk, which describes 
 your envrionment.
@@ -145,7 +136,15 @@ Notes:
 1) >> IMPORTANT <<
 All users' libraries should be build in shared libaries.
 
-Have A Fun
+2) Development Environment:
+OS:             SuSE Linux 10.1 (x86-64)
+g++ :           4.1.0
+Python:         2.4.2
+CLHEP:          1.9.2.2 / 2.0.2.2
+BOOST-Python:   1.33.1
+ROOT:           5.10/00
+
+Have A Fun!!
 
 Koichi Murakami <Koichi.Murakami@kek.jp>
 
