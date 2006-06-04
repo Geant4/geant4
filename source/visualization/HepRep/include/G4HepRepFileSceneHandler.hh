@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HepRepFileSceneHandler.hh,v 1.27 2006-06-04 18:32:08 perl Exp $
+// $Id: G4HepRepFileSceneHandler.hh,v 1.28 2006-06-04 21:45:02 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -110,6 +110,9 @@ public:
 
   void BeginModeling();
   void EndModeling();
+  
+  void BeginPrimitives2D();
+  void EndPrimitives2D();
 
   //////////////////////////////////////////////////////////////
   // Administration functions.
@@ -136,6 +139,9 @@ private:
   G4bool fileOverwrite;
   G4bool cullInvisibleObjects;
   G4bool haveVisible;
+  G4bool inPrimitives2D;
+  G4bool warnedAbout3DText;
+  G4bool warnedAbout2DMarkers;
   G4bool drawingTraj;
   G4bool doneInitTraj;
   G4bool drawTrajPts;

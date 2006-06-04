@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HepRepFileSceneHandler.cc,v 1.52 2006-06-04 20:51:58 perl Exp $
+// $Id: G4HepRepFileSceneHandler.cc,v 1.53 2006-06-04 21:45:02 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -89,6 +89,9 @@ G4VSceneHandler(system, fSceneIdCount++, name)
 	else
 		cullInvisibleObjects = strcmp(getenv("G4HEPREPFILE_CULL"),"0");
 	
+	inPrimitives2D = false;
+	warnedAbout3DText = false;
+	warnedAbout2DMarkers = false;
 	haveVisible = false;
 	drawingTraj = false;
 	doneInitTraj = false;
@@ -112,6 +115,22 @@ void G4HepRepFileSceneHandler::BeginModeling() {
 
 void G4HepRepFileSceneHandler::EndModeling() {
 	G4VSceneHandler::EndModeling();  // Required: see G4VSceneHandler.hh.
+}
+
+void G4HepRepFileSceneHandler::BeginPrimitives2D () {
+#ifdef G4HEPREPFILEDEBUG
+	G4cout << "G4HepRepFileSceneHandler::BeginPrimitives2D() " << G4endl;
+#endif
+	inPrimitives2D = true;
+	G4VSceneHandler::BeginPrimitives2D();
+}
+
+void G4HepRepFileSceneHandler::EndPrimitives2D () {
+#ifdef G4HEPREPFILEDEBUG
+	G4cout << "G4HepRepFileSceneHandler::EndPrimitives2D() " << G4endl;
+#endif
+	G4VSceneHandler::EndPrimitives2D();
+	inPrimitives2D = false;
 }
 
 
@@ -794,6 +813,14 @@ void G4HepRepFileSceneHandler::AddPrimitive(const G4Polyline& polyline) {
 	
 	if (fpVisAttribs && (fpVisAttribs->IsVisible()==0) && cullInvisibleObjects)
 		return;
+		
+	if (inPrimitives2D) {
+		if (!warnedAbout2DMarkers) {
+			G4cout << "HepRepFile does not currently support 2D lines." << G4endl;
+			warnedAbout2DMarkers = true;
+		}
+		return;
+    }
 
 	if (drawingTraj)
 		InitTrajectory();
@@ -823,6 +850,14 @@ void G4HepRepFileSceneHandler::AddPrimitive (const G4Polymarker& line) {
 	
 	if (fpVisAttribs && (fpVisAttribs->IsVisible()==0) && cullInvisibleObjects)
 		return;
+		
+	if (inPrimitives2D) {
+		if (!warnedAbout2DMarkers) {
+			G4cout << "HepRepFile does not currently support 2D lines." << G4endl;
+			warnedAbout2DMarkers = true;
+		}
+		return;
+    }
 		
 	MarkerSizeType sizeType;
 	G4double size = GetMarkerSize (line, sizeType);
@@ -860,6 +895,16 @@ void G4HepRepFileSceneHandler::AddPrimitive(const G4Text& text) {
 	<< G4endl;
 	PrintThings();
 #endif
+		
+	if (!inPrimitives2D) {
+		if (!warnedAbout3DText) {
+			G4cout << "HepRepFile does not currently support 3D text." << G4endl;
+			G4cout << "HepRep browsers can directly display text attributes on request." << G4endl;
+			G4cout << "See Application Developers Guide for how to attach attributes to viewable objects." << G4endl;
+			warnedAbout3DText = true;
+		}
+		return;
+    }
 		
 	MarkerSizeType sizeType;
 	G4double size = GetMarkerSize (text, sizeType);
@@ -910,6 +955,14 @@ void G4HepRepFileSceneHandler::AddPrimitive(const G4Circle& circle) {
 	if (fpVisAttribs && (fpVisAttribs->IsVisible()==0) && cullInvisibleObjects)
 		return;
 		
+	if (inPrimitives2D) {
+		if (!warnedAbout2DMarkers) {
+			G4cout << "HepRepFile does not currently support 2D circles." << G4endl;
+			warnedAbout2DMarkers = true;
+		}
+		return;
+    }
+		
 	MarkerSizeType sizeType;
 	G4double size = GetMarkerSize (circle, sizeType);
 	if (sizeType==world)
@@ -947,6 +1000,14 @@ void G4HepRepFileSceneHandler::AddPrimitive(const G4Square& square) {
 	
 	if (fpVisAttribs && (fpVisAttribs->IsVisible()==0) && cullInvisibleObjects)
 		return;
+		
+	if (inPrimitives2D) {
+		if (!warnedAbout2DMarkers) {
+			G4cout << "HepRepFile does not currently support 2D squares." << G4endl;
+			warnedAbout2DMarkers = true;
+		}
+		return;
+    }
 		
 	MarkerSizeType sizeType;
 	G4double size = GetMarkerSize (square, sizeType);
