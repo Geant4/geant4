@@ -8,7 +8,7 @@
 from Geant4 import *
 import Qmaterials, NISTmaterials
 import Qgeom, ExN01geom, ExN03geom
-import ExN01pl, EMSTDpl, GenericPhysicsList
+import ExN01pl, EMSTDpl
 import ParticleGun, MedicalBeam
 
 
@@ -94,13 +94,7 @@ Setup0()
 #ExN01pl.Construct()
 
 # electron/gamma standard EM
-#EMSTDpl.Construct()
-
-# generic physics list
-genericPL= GenericPhysicsList.GenericPhysicsList()
-genericPL.RegisterPhysicsSet()
-gRunManager.SetUserInitialization(genericPL)
-
+EMSTDpl.Construct()
 
 # ------------------------------------------------------------------
 # setup for primary generator action

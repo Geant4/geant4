@@ -1,4 +1,26 @@
-// $Id: pyG4EmCalculator.cc,v 1.1 2006-04-25 08:13:51 kmura Exp $
+//
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
+//
+// $Id: pyG4EmCalculator.cc,v 1.2 2006-06-04 21:34:29 kmura Exp $
 // $Name: not supported by cvs2svn $
 // ====================================================================
 //   pyG4EmCalculator.cc
@@ -6,6 +28,7 @@
 //                                         2006 Q
 // ====================================================================
 #include <boost/python.hpp>
+#include "pyG4Version.hh"
 #include "G4EmCalculator.hh"
 #include "G4Region.hh"
 #include "G4Material.hh"
@@ -68,6 +91,7 @@ BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_GetCrossSectionPerVolume,
 				       GetCrossSectionPerVolume, 4, 5);
 
 // GetCrossSectionPerAtom
+#if G4VERSION_NUMBER <= 801
 G4double (G4EmCalculator::*f1_GetCrossSectionPerAtom)
   (G4double, const G4ParticleDefinition*, 
    const G4String&, const G4Material*, const G4Region*)
@@ -80,6 +104,7 @@ G4double (G4EmCalculator::*f2_GetCrossSectionPerAtom)
 
 BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_GetCrossSectionPerAtom, 
 				       GetCrossSectionPerAtom, 4, 5);
+#endif
 
 // GetMeanFreePath
 G4double (G4EmCalculator::*f1_GetMeanFreePath)
@@ -115,6 +140,36 @@ G4double (G4EmCalculator::*f1_ComputeNuclearDEDX)
 G4double (G4EmCalculator::*f2_ComputeNuclearDEDX)
   (G4double, const G4String&, const G4String&)
   = &G4EmCalculator::ComputeNuclearDEDX;
+
+
+#if G4VERSION_NUMBER >= 810
+// ComputeElectronicDEDX
+G4double (G4EmCalculator::*f1_ComputeElectronicDEDX)
+  (G4double, const G4ParticleDefinition*, const G4Material*, G4double)
+  = &G4EmCalculator::ComputeElectronicDEDX;
+
+G4double (G4EmCalculator::*f2_ComputeElectronicDEDX)
+  (G4double, const G4String&, const G4String&, G4double)
+  = &G4EmCalculator::ComputeElectronicDEDX;
+
+BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_ComputeElectronicDEDX, 
+                                       ComputeElectronicDEDX, 3, 4);
+
+
+// ComputeTotalDEDX
+G4double (G4EmCalculator::*f1_ComputeTotalDEDX)
+  (G4double, const G4ParticleDefinition*, const G4Material*, G4double)
+  = &G4EmCalculator::ComputeTotalDEDX;
+
+G4double (G4EmCalculator::*f2_ComputeTotalDEDX)
+  (G4double, const G4String&, const G4String&, G4double)
+  = &G4EmCalculator::ComputeTotalDEDX;
+
+BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_ComputeTotalDEDX, ComputeTotalDEDX, 
+                                       3, 4);
+
+#endif
+
 
 // ComputeCrossSectionPerVolume
 G4double (G4EmCalculator::*f1_ComputeCrossSectionPerVolume)
@@ -183,10 +238,12 @@ void export_G4EmCalculator()
 	 f1_GetCrossSectionPerVolume, f_GetCrossSectionPerVolume())
     .def("GetCrossSectionPerVolume",  
 	 f2_GetCrossSectionPerVolume, f_GetCrossSectionPerVolume())
+#if G4VERSION_NUMBER <= 801
     .def("GetCrossSectionPerAtom",  
-	 f1_GetCrossSectionPerAtom, f_GetCrossSectionPerAtom())
+         f1_GetCrossSectionPerAtom, f_GetCrossSectionPerAtom())
     .def("GetCrossSectionPerAtom",  
-	 f2_GetCrossSectionPerAtom, f_GetCrossSectionPerAtom())
+         f2_GetCrossSectionPerAtom, f_GetCrossSectionPerAtom())
+#endif
     .def("GetMeanFreePath",  f1_GetMeanFreePath,  f_GetMeanFreePath())
     .def("GetMeanFreePath",  f2_GetMeanFreePath,  f_GetMeanFreePath())
     // ---
@@ -198,15 +255,23 @@ void export_G4EmCalculator()
     .def("ComputeDEDX",            f2_ComputeDEDX,  f_ComputeDEDX())
     .def("ComputeNuclearDEDX",     f1_ComputeNuclearDEDX)
     .def("ComputeNuclearDEDX",     f2_ComputeNuclearDEDX)
+#if G4VERSION_NUMBER <= 810
+    .def("ComputeElectronicDEDX",  f1_ComputeElectronicDEDX,  
+         f_ComputeElectronicDEDX())
+    .def("ComputeDEDX",            f2_ComputeElectronicDEDX,  
+         f_ComputeElectronicDEDX())
+    .def("ComputeTotalDEDX",       f1_ComputeTotalDEDX,  f_ComputeTotalDEDX())
+    .def("ComputeTotalDEDX",       f2_ComputeTotalDEDX,  f_ComputeTotalDEDX())
+#endif
     // ---
     .def("ComputeCrossSectionPerVolume",
 	 f1_ComputeCrossSectionPerVolume, f_ComputeCrossSectionPerVolume())
     .def("ComputeCrossSectionPerVolume",
 	 f2_ComputeCrossSectionPerVolume, f_ComputeCrossSectionPerVolume())
     .def("ComputeCrossSectionPerAtom",
-	 f1_ComputeCrossSectionPerAtom, f_ComputeCrossSectionPerAtom())
+         f1_ComputeCrossSectionPerAtom, f_ComputeCrossSectionPerAtom())
     .def("ComputeCrossSectionPerAtom",
-	 f2_ComputeCrossSectionPerAtom, g_ComputeCrossSectionPerAtom())
+         f2_ComputeCrossSectionPerAtom, g_ComputeCrossSectionPerAtom())
     .def("ComputeMeanFreePath", 
 	 f1_ComputeMeanFreePath, f_ComputeMeanFreePath())
     .def("ComputeMeanFreePath",
