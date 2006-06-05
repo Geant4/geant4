@@ -1,4 +1,4 @@
-$Id: History,v 1.4 2006-06-04 22:21:46 kmura Exp $
+$Id: History,v 1.5 2006-06-05 04:16:52 kmura Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,8 +16,8 @@ Geant4Py is a Geant4-Python bridge.
 
 05 June 2006 K.Murakami
  - add disclaimer for .cc/.hh files
- - some modifications for 08-00-ref-04
-   (G4FieldManager/G4EmCalculator)
+ - some modifications for 08-00-ref-05
+   (G4FieldManager/G4EmCalculator/G4VPhysicalVolume)
 
 25 April 2006 K.Murakami
  - update to a revised version (local tag: g4py-weekly-23-Apr-06)
