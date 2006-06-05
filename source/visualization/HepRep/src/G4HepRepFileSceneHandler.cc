@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HepRepFileSceneHandler.cc,v 1.54 2006-06-05 07:48:37 perl Exp $
+// $Id: G4HepRepFileSceneHandler.cc,v 1.55 2006-06-05 16:54:45 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -1226,8 +1226,8 @@ void G4HepRepFileSceneHandler::AddHepRepInstance(const char* primName,
 				if (currentDepth>1) {
 					drawnMotherDepth = currentDepth-1;
 					while (strcmp(hepRepXMLWriter->prevTypeName[drawnMotherDepth],drawnMotherPV->GetName())!=0) {
-						G4cout << "Didn't find mother at depth:" << drawnMotherDepth << ", that depth had:" <<
-						hepRepXMLWriter->prevTypeName[drawnMotherDepth] << G4endl;
+						//G4cout << "Didn't find mother at depth:" << drawnMotherDepth << ", that depth had:" <<
+						//hepRepXMLWriter->prevTypeName[drawnMotherDepth] << G4endl;
 						drawnMotherDepth--;
 						if (drawnMotherDepth==0) {
 							//G4cout << "Got to drawnMotherDepth of zero.  Giving up." << G4endl;
