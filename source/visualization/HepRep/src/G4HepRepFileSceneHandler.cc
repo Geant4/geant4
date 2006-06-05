@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HepRepFileSceneHandler.cc,v 1.53 2006-06-04 21:45:02 perl Exp $
+// $Id: G4HepRepFileSceneHandler.cc,v 1.54 2006-06-05 07:48:37 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -773,7 +773,7 @@ void G4HepRepFileSceneHandler::InitTrajectory() {
 		// Clean up trajectory attributes.
 		if (trajAttDefs)
 			delete trajAttDefs;
-			
+		
 		doneInitTraj = true;
 	}
 }
@@ -813,7 +813,7 @@ void G4HepRepFileSceneHandler::AddPrimitive(const G4Polyline& polyline) {
 	
 	if (fpVisAttribs && (fpVisAttribs->IsVisible()==0) && cullInvisibleObjects)
 		return;
-		
+	
 	if (inPrimitives2D) {
 		if (!warnedAbout2DMarkers) {
 			G4cout << "HepRepFile does not currently support 2D lines." << G4endl;
@@ -821,7 +821,7 @@ void G4HepRepFileSceneHandler::AddPrimitive(const G4Polyline& polyline) {
 		}
 		return;
     }
-
+	
 	if (drawingTraj)
 		InitTrajectory();
 	if (drawingHit)
@@ -850,7 +850,7 @@ void G4HepRepFileSceneHandler::AddPrimitive (const G4Polymarker& line) {
 	
 	if (fpVisAttribs && (fpVisAttribs->IsVisible()==0) && cullInvisibleObjects)
 		return;
-		
+	
 	if (inPrimitives2D) {
 		if (!warnedAbout2DMarkers) {
 			G4cout << "HepRepFile does not currently support 2D lines." << G4endl;
@@ -858,7 +858,7 @@ void G4HepRepFileSceneHandler::AddPrimitive (const G4Polymarker& line) {
 		}
 		return;
     }
-		
+	
 	MarkerSizeType sizeType;
 	G4double size = GetMarkerSize (line, sizeType);
 	if (sizeType==world)
@@ -868,7 +868,7 @@ void G4HepRepFileSceneHandler::AddPrimitive (const G4Polymarker& line) {
 		drawTrajPts = true;
 		return;
 	}
-		
+	
 	if (drawingHit)
 		InitHit();
 	
@@ -895,7 +895,7 @@ void G4HepRepFileSceneHandler::AddPrimitive(const G4Text& text) {
 	<< G4endl;
 	PrintThings();
 #endif
-		
+	
 	if (!inPrimitives2D) {
 		if (!warnedAbout3DText) {
 			G4cout << "HepRepFile does not currently support 3D text." << G4endl;
@@ -905,7 +905,7 @@ void G4HepRepFileSceneHandler::AddPrimitive(const G4Text& text) {
 		}
 		return;
     }
-		
+	
 	MarkerSizeType sizeType;
 	G4double size = GetMarkerSize (text, sizeType);
 	if (sizeType==world)
@@ -954,7 +954,7 @@ void G4HepRepFileSceneHandler::AddPrimitive(const G4Circle& circle) {
 	
 	if (fpVisAttribs && (fpVisAttribs->IsVisible()==0) && cullInvisibleObjects)
 		return;
-		
+	
 	if (inPrimitives2D) {
 		if (!warnedAbout2DMarkers) {
 			G4cout << "HepRepFile does not currently support 2D circles." << G4endl;
@@ -962,7 +962,7 @@ void G4HepRepFileSceneHandler::AddPrimitive(const G4Circle& circle) {
 		}
 		return;
     }
-		
+	
 	MarkerSizeType sizeType;
 	G4double size = GetMarkerSize (circle, sizeType);
 	if (sizeType==world)
@@ -1000,7 +1000,7 @@ void G4HepRepFileSceneHandler::AddPrimitive(const G4Square& square) {
 	
 	if (fpVisAttribs && (fpVisAttribs->IsVisible()==0) && cullInvisibleObjects)
 		return;
-		
+	
 	if (inPrimitives2D) {
 		if (!warnedAbout2DMarkers) {
 			G4cout << "HepRepFile does not currently support 2D squares." << G4endl;
@@ -1008,7 +1008,7 @@ void G4HepRepFileSceneHandler::AddPrimitive(const G4Square& square) {
 		}
 		return;
     }
-		
+	
 	MarkerSizeType sizeType;
 	G4double size = GetMarkerSize (square, sizeType);
 	if (sizeType==world)
@@ -1118,10 +1118,10 @@ void G4HepRepFileSceneHandler::AddHepRepInstance(const char* primName,
 	
 #ifdef G4HEPREPFILEDEBUG
 	G4cout <<
-	"pCurrentPV:" << pCurrentPV << ", readyForTransients:" << fReadyForTransients
-	<< G4endl;
+		"pCurrentPV:" << pCurrentPV << ", readyForTransients:" << fReadyForTransients
+		<< G4endl;
 #endif
-
+	
 	if (drawingTraj || drawingHit) {
 		// In this case, HepRep type, layer and instance were already created
 		// in the AddCompound method.
@@ -1211,9 +1211,42 @@ void G4HepRepFileSceneHandler::AddHepRepInstance(const char* primName,
 		}
 		
 		// Re-insert any layers of the hierarchy that were removed by G4's culling process.
-		while (hepRepXMLWriter->typeDepth < (currentDepth-1)) {
-			hepRepXMLWriter->addType("G4 Culled Layer", hepRepXMLWriter->typeDepth + 1);
-			hepRepXMLWriter->addInstance();
+		// Don't bother checking if same type name as last instance.
+		if(strcmp(hepRepXMLWriter->prevTypeName[currentDepth],pCurrentPV->GetName())!=0) {
+			//G4cout << "Looking for mother of:" << pCurrentLV->GetName() << G4endl;
+			typedef G4PhysicalVolumeModel::G4PhysicalVolumeNodeID PVNodeID;
+			typedef std::vector<PVNodeID> PVPath;
+			const PVPath& drawnPVPath = pPVModel->GetDrawnPVPath();
+			PVPath::const_reverse_iterator ri = ++drawnPVPath.rbegin();
+			G4int drawnMotherDepth = 0;
+			if (ri != drawnPVPath.rend()) {
+				// This volume has a mother.
+				G4VPhysicalVolume* drawnMotherPV = ri->GetPhysicalVolume();
+				// Find this mother's depth by examining prevTypeNames.
+				if (currentDepth>1) {
+					drawnMotherDepth = currentDepth-1;
+					while (strcmp(hepRepXMLWriter->prevTypeName[drawnMotherDepth],drawnMotherPV->GetName())!=0) {
+						G4cout << "Didn't find mother at depth:" << drawnMotherDepth << ", that depth had:" <<
+						hepRepXMLWriter->prevTypeName[drawnMotherDepth] << G4endl;
+						drawnMotherDepth--;
+						if (drawnMotherDepth==0) {
+							//G4cout << "Got to drawnMotherDepth of zero.  Giving up." << G4endl;
+							break;
+						}
+					}
+				}
+			} else {
+				// This volume has no mother.  Must be a top level volume.
+				//G4cout << "Mother must be very top" << G4endl;
+			}
+			
+			while (drawnMotherDepth < (currentDepth-1)) {
+				G4String culledParentName = "Culled parent of " + pCurrentPV->GetName();
+				//G4cout << "Inserting culled layer " << culledParentName << " at depth:" << drawnMotherDepth+1 << G4endl;
+				hepRepXMLWriter->addType(culledParentName, drawnMotherDepth+1);
+				hepRepXMLWriter->addInstance();
+				drawnMotherDepth ++;
+			}
 		}
 		
 		if (currentDepth!=0) {
