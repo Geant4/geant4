@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: pyG4EmCalculator.cc,v 1.2 2006-06-04 21:34:29 kmura Exp $
+// $Id: pyG4EmCalculator.cc,v 1.3 2006-06-05 02:33:05 kmura Exp $
 // $Name: not supported by cvs2svn $
 // ====================================================================
 //   pyG4EmCalculator.cc
@@ -255,7 +255,7 @@ void export_G4EmCalculator()
     .def("ComputeDEDX",            f2_ComputeDEDX,  f_ComputeDEDX())
     .def("ComputeNuclearDEDX",     f1_ComputeNuclearDEDX)
     .def("ComputeNuclearDEDX",     f2_ComputeNuclearDEDX)
-#if G4VERSION_NUMBER <= 810
+#if G4VERSION_NUMBER >= 810
     .def("ComputeElectronicDEDX",  f1_ComputeElectronicDEDX,  
          f_ComputeElectronicDEDX())
     .def("ComputeDEDX",            f2_ComputeElectronicDEDX,  
