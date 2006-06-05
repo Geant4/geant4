@@ -1,4 +1,4 @@
-$Id: History,v 1.18 2006-06-04 22:32:41 kmura Exp $
+$Id: History,v 1.19 2006-06-05 04:40:27 kmura Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,13 +17,16 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+envs-V08-00-04 05 June 2006  Koichi Murakami
+  - additional moddifications of g4py for G4 8.1 (08-00-ref-05)
+
 envs-V08-00-03 05 June 2006  Koichi Murakami
   - History file is updated. 
   - same as the previous
 
 envs-V08-00-02 05 June 2006  Koichi Murakami
   - update g4py
-    - modifications for new version (8.1)
+    - modifications for new version (8.1) (08-00-ref-04)
     - disclamer is added
 
 envs-V08-00-01 03 June 2006  Hajime Yoshida
