@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: pyG4VPhysicalVolume.cc,v 1.3 2006-06-04 21:34:29 kmura Exp $
+// $Id: pyG4VPhysicalVolume.cc,v 1.4 2006-06-05 03:58:58 kmura Exp $
 // $Name: not supported by cvs2svn $
 // ====================================================================
 //   pyG4VPhysicalVolume.cc
@@ -28,6 +28,7 @@
 //                                         2005 Q
 // ====================================================================
 #include <boost/python.hpp>
+#include "pyG4Version.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
 #include "G4VPVParameterisation.hh"
@@ -82,7 +83,12 @@ void export_G4VPhysicalVolume()
 	 return_internal_reference<>())
     // ---
     .def("SetName",             &G4VPhysicalVolume::SetName)
+#if G4VERSION_NUMBER <= 801
     .def("GetName",             &G4VPhysicalVolume::GetName)
+#else
+    .def("GetName",             &G4VPhysicalVolume::GetName,
+         return_value_policy<return_by_value>())
+#endif
     .def("SetCopyNo",           &G4VPhysicalVolume::SetCopyNo)
     .def("GetCopyNo",           &G4VPhysicalVolume::GetCopyNo)
     // ---
