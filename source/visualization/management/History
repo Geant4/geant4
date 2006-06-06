@@ -1,4 +1,4 @@
-$Id: History,v 1.59 2006-06-05 08:03:47 perl Exp $
+$Id: History,v 1.60 2006-06-06 15:54:17 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -24,6 +24,10 @@ committal in the CVS repository !
 
 History file for visualization management sub-category
 ------------------------------------------------------
+
+6th June 2006 John Allison  (visman-V08-00-21)
+- G4VisCommandsViewer: /vis/viewer/create: Fixed view params copy to self.
+
 4th June 2006 Joseph Perl (visman-V08-00-20)
 - This tag includes all the changes below.
 
