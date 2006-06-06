@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03EventActionMessenger.cc,v 1.9 2002-12-16 16:37:27 maire Exp $
+// $Id: ExN03EventActionMessenger.cc,v 1.10 2006-06-06 17:15:41 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -57,7 +57,6 @@ ExN03EventActionMessenger::ExN03EventActionMessenger(ExN03EventAction* EvAct)
   PrintCmd->SetGuidance("Print events modulo n");
   PrintCmd->SetParameterName("EventNb",false);
   PrintCmd->SetRange("EventNb>0");
-  PrintCmd->AvailableForStates(G4State_Idle);     
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -1,4 +1,4 @@
-$Id: History,v 1.101 2006-06-02 11:03:22 maire Exp $
+$Id: History,v 1.102 2006-06-06 17:15:41 maire Exp $
 --------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+06-06-06 mma (exampleN03-V08-00-04)
+- gui.mac : /N03/event/printModulo
      
 02-06-06 mma (exampleN03-V08-00-03)
 - stepping action: replace Touchable by TouchableHandle
