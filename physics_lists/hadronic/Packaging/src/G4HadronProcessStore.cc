@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HadronProcessStore.cc,v 1.2 2006-05-08 07:49:20 vnivanch Exp $
+// $Id: G4HadronProcessStore.cc,v 1.3 2006-06-06 16:43:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -154,9 +154,9 @@ void G4HadronProcessStore::Register(G4HadronicProcess* proc,
   for(; k<n_model; k++) {if(model[k] == mod) break;}
   
   if(i == n_proc || j == n_part) 
-    p_map.insert(std::make_pair(part,proc));
+    p_map.insert(std::multimap<PD,HP>::value_type(part,proc));
 
-  m_map.insert(std::make_pair(proc,mod));
+  m_map.insert(std::multimap<HP,HI>::value_type(proc,mod));
     
   if(i == n_proc) {
     n_proc++;
