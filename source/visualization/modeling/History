@@ -1,4 +1,4 @@
-$Id: History,v 1.71 2006-06-05 08:06:26 perl Exp $
+$Id: History,v 1.72 2006-06-06 15:45:47 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,12 @@ committal in the CVS repository !
 
 History file for visualization/modeling
 ---------------------------------------
+
+6th June 2006  John Allison (modeling-V08-00-13)
+- G4TrajectoryChargeFilter.cc: Added #include <sstream> for Sun compiler.
+- G4PhysicalVolumeModel::Validate: Relaxed requirement for modeling parameters.
+  (Caused crash after change of geometry.)
+
 2nd June 2006 Joseph Perl (modeling-V08-00-12)
 - G4VisTrajContext: change default of point sizes from 0 to 2
 
