@@ -1,4 +1,4 @@
-$Id: History,v 1.7 2006-06-06 16:48:31 vnivanch Exp $
+$Id: History,v 1.8 2006-06-06 17:06:17 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,7 @@ track of all tags.
 
 06.06.2006, V.Ivanchenko - phys-lists-V08-00-02
 - Fix compilation error at SUN
+- Use Bertini for kaons in QBBC 
 
 03.06.2006, V.Ivanchenko - phys-lists-V08-00-01
 - Fix number of destructors
