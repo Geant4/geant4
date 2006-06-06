@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4StoppingHadronBuilder.cc,v 1.4 2005-12-02 12:40:04 vnivanch Exp $
+// $Id: G4StoppingHadronBuilder.cc,v 1.5 2006-06-06 16:47:45 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HadronProcessStore.cc,v 1.3 2006-06-06 16:43:18 gcosmo Exp $
+// $Id: G4HadronProcessStore.cc,v 1.4 2006-06-06 16:47:45 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -142,9 +142,9 @@ G4double G4HadronProcessStore::GetElasticCrossSectionPerIsotope(
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 void G4HadronProcessStore::Register(G4HadronicProcess* proc, 
-		const G4ParticleDefinition* part,
-		G4HadronicInteraction* mod,
-		const G4String& name)
+				    const G4ParticleDefinition* part,
+				    G4HadronicInteraction* mod,
+				    const G4String& name)
 {
   G4int i=0;
   for(; i<n_proc; i++) {if(process[i] == proc) break;}
@@ -155,7 +155,7 @@ void G4HadronProcessStore::Register(G4HadronicProcess* proc,
   
   if(i == n_proc || j == n_part) 
     p_map.insert(std::multimap<PD,HP>::value_type(part,proc));
-
+ 
   m_map.insert(std::multimap<HP,HI>::value_type(proc,mod));
     
   if(i == n_proc) {
@@ -291,7 +291,7 @@ G4HadronicProcess* G4HadronProcessStore::FindInelasticProcess(
       hp = it->second;
       break;
     }
-  }  
+  }   
 
   return hp;
 }

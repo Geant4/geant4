@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HadronElasticPhysics.cc,v 1.7 2006-06-03 19:02:03 vnivanch Exp $
+// $Id: G4HadronElasticPhysics.cc,v 1.8 2006-06-06 16:47:45 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------

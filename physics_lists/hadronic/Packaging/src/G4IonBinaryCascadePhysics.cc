@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4IonBinaryCascadePhysics.cc,v 1.1 2006-04-24 11:25:57 vnivanch Exp $
+// $Id: G4IonBinaryCascadePhysics.cc,v 1.2 2006-06-06 16:47:45 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------

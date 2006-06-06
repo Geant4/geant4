@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmMessenger.cc,v 1.4 2006-06-03 19:01:59 vnivanch Exp $
+// $Id: G4EmMessenger.cc,v 1.5 2006-06-06 16:47:44 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HadronProcessStore.hh,v 1.2 2006-05-08 07:49:20 vnivanch Exp $
+// $Id: G4HadronProcessStore.hh,v 1.3 2006-06-06 16:47:44 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -114,8 +114,8 @@ private:
   typedef G4HadronicProcess* HP;
   typedef G4HadronicInteraction* HI;
 
-  std::multimap<PD,HP,std::less<PD> > p_map;
-  std::multimap<HP,HI,std::less<HP> > m_map;
+  std::multimap<PD,HP> p_map;
+  std::multimap<HP,HI> m_map;
 
   std::vector<G4HadronicProcess*> process;
   std::vector<G4HadronicInteraction*> model;

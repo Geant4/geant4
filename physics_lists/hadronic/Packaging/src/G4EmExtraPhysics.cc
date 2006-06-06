@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmExtraPhysics.cc,v 1.2 2005-12-01 18:19:45 gunter Exp $
+// $Id: G4EmExtraPhysics.cc,v 1.3 2006-06-06 16:47:44 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------

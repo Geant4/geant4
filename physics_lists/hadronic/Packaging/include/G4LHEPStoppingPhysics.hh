@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LHEPStoppingPhysics.hh,v 1.1 2006-05-04 16:48:39 vnivanch Exp $
+// $Id: G4LHEPStoppingPhysics.hh,v 1.2 2006-06-06 16:47:44 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------

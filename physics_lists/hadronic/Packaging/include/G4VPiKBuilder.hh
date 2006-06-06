@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VPiKBuilder.hh,v 1.2 2005-11-25 15:38:50 gunter Exp $
+// $Id: G4VPiKBuilder.hh,v 1.3 2006-06-06 16:47:44 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
