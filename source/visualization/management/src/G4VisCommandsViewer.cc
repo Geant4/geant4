@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewer.cc,v 1.58 2006-05-22 08:22:30 allison Exp $
+// $Id: G4VisCommandsViewer.cc,v 1.59 2006-06-06 15:53:56 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer commands - John Allison  25th October 1998
@@ -312,7 +312,16 @@ void G4VisCommandViewerCreate::SetNewValue (G4UIcommand*, G4String newValue) {
     }
   }
   // Refresh if appropriate...
-  if (newViewer) SetViewParameters(newViewer, newViewer->GetViewParameters());
+  if (newViewer) {
+    if (newViewer->GetViewParameters().IsAutoRefresh()) {
+      G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/refresh");
+    }
+    else {
+      if (verbosity >= G4VisManager::confirmations) {
+	G4cout << "Issue /vis/viewer/refresh to see effect." << G4endl;
+      }
+    }
+  }
 }
 
 ////////////// /vis/viewer/dolly and dollyTo ////////////////////////////
