@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HadronInelasticQLHEP.cc,v 1.4 2006-05-11 08:24:40 vnivanch Exp $
+// $Id: G4HadronInelasticQLHEP.cc,v 1.5 2006-06-06 17:05:09 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -297,7 +297,7 @@ void G4HadronInelasticQLHEP::ConstructProcess()
 	else        AddHEP(particle, hp, 25.*GeV, 100.*TeV);
        
 	AddLEP(particle, hp, minELEP, maxELEP);
-	//	if(bertFlag) Register(particle,hp,theBERT,"Bertini");
+	if(bertFlag) Register(particle,hp,theBERT,"Bertini");
 
       } else {
 
