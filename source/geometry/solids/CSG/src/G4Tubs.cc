@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Tubs.cc,v 1.57 2005-11-09 15:03:09 gcosmo Exp $
+// $Id: G4Tubs.cc,v 1.58 2006-06-06 08:32:27 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -290,8 +290,8 @@ G4bool G4Tubs::CalculateExtent( const EAxis              pAxis,
           // Y limits don't cross max/min x => compute max delta x,
           // hence new mins/maxs
 
-          diff1   = std::sqrt(fRMax*fRMax - yoff1*yoff1);
-          diff2   = std::sqrt(fRMax*fRMax - yoff2*yoff2);
+          diff1   = ((fRMax*fRMax - yoff1*yoff1)>0.) ? std::sqrt(fRMax*fRMax - yoff1*yoff1) : 0.;
+          diff2   = ((fRMax*fRMax - yoff2*yoff2)>0.) ? std::sqrt(fRMax*fRMax - yoff2*yoff2) : 0.;
           maxDiff = (diff1 > diff2) ? diff1:diff2;
           newMin  = xoffset - maxDiff;
           newMax  = xoffset + maxDiff;
@@ -315,8 +315,8 @@ G4bool G4Tubs::CalculateExtent( const EAxis              pAxis,
           // X limits don't cross max/min y => compute max delta y,
           // hence new mins/maxs
 
-          diff1   = std::sqrt(fRMax*fRMax - xoff1*xoff1) ;
-          diff2   = std::sqrt(fRMax*fRMax - xoff2*xoff2) ;
+          diff1   = ((fRMax*fRMax - xoff1*xoff1)>0.) ? std::sqrt(fRMax*fRMax - xoff1*xoff1) : 0.;
+          diff2   = ((fRMax*fRMax - xoff2*xoff2)>0.) ? std::sqrt(fRMax*fRMax - xoff2*xoff2) : 0.;
           maxDiff = (diff1 > diff2) ? diff1 : diff2 ;
           newMin  = yoffset - maxDiff ;
           newMax  = yoffset + maxDiff ;
@@ -639,6 +639,8 @@ G4ThreeVector G4Tubs::SurfaceNormal( const G4ThreeVector& p ) const
 #ifdef G4CSGDEBUG
     G4Exception("G4Tube::SurfaceNormal(p)", "Notification", JustWarning, 
                 "Point p is not on surface !?" );
+    G4cout.precision(20);
+    G4cout<<"G4Tubs::SN ( "<<p.x()<<", "<<p.y()<<", "<<p.z()<<" ); "<<G4endl<<G4endl;
 #endif 
      norm = ApproxSurfaceNormal(p);
   }
