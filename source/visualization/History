@@ -1,4 +1,4 @@
-$Id: History,v 1.357 2006-06-06 15:56:27 allison Exp $
+$Id: History,v 1.358 2006-06-06 16:35:08 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -24,7 +24,8 @@ committal in the CVS repository !
 History file for visualization category
 ---------------------------------------
 
-6th June 2006  John Allison
+-------------------------------------------
+6th June 2006  John Allison (vis-V08-00-10)
 - modeling-V08-00-13: Fixes for Sun and bug fix in G4PhysicalVolumeModel.
 - visman-V08-00-21: /vis/viewer/create: Fixed view params copy to self.
 
