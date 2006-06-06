@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeModel.cc,v 1.44 2006-05-04 14:19:22 allison Exp $
+// $Id: G4PhysicalVolumeModel.cc,v 1.45 2006-06-06 15:45:25 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -585,9 +585,6 @@ void G4PhysicalVolumeModel::DescribeSolid
 
 G4bool G4PhysicalVolumeModel::Validate (G4bool warn)
 {
-  if (!fpMP) G4Exception
-    ("G4PhysicalVolumeModel::Validate: No modeling parameters.");
-
   G4VPhysicalVolume* world =
     G4TransportationManager::GetTransportationManager ()
     -> GetNavigatorForTracking () -> GetWorldVolume ();
@@ -600,7 +597,7 @@ G4bool G4PhysicalVolumeModel::Validate (G4bool warn)
   G4PhysicalVolumeSearchScene searchScene
     (&searchModel, fTopPVName, fTopPVCopyNo);
   G4ModelingParameters mp;  // Default modeling parameters for this search.
-  mp.SetDefaultVisAttributes(fpMP->GetDefaultVisAttributes());
+  mp.SetDefaultVisAttributes(fpMP? fpMP->GetDefaultVisAttributes(): 0);
   searchModel.SetModelingParameters (&mp);
   searchModel.DescribeYourselfTo (searchScene);
   G4VPhysicalVolume* foundVolume = searchScene.GetFoundVolume ();
