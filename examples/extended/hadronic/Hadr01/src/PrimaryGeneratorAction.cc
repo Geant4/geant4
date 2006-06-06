@@ -20,37 +20,32 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: PrimaryGeneratorAction.cc,v 1.1 2006-06-02 19:00:02 vnivanch Exp $
+// $Id: PrimaryGeneratorAction.cc,v 1.2 2006-06-06 19:48:38 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-//
 //
 /////////////////////////////////////////////////////////////////////////
 //
-// IION: primary generator - pencil beam
+// EventActionMessenger
 //
 // Created: 31.01.03 V.Ivanchenko
 //
 // Modified:
+// 04.06.2006 Adoptation of hadr01 (V.Ivanchenko)
 //
 ////////////////////////////////////////////////////////////////////////
 //
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 #include "PrimaryGeneratorAction.hh"
-#include "DetectorConstruction.hh"
-#include "G4Event.hh"
+#include "G4ParticleGun.hh"
+#include "HistoManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PrimaryGeneratorAction::PrimaryGeneratorAction(DetectorConstruction* det)
-:detector(det)
+PrimaryGeneratorAction::PrimaryGeneratorAction()
 {
-  G4int n_particle = 1;
-  particleGun  = new G4ParticleGun(n_particle);
+  particleGun  = new G4ParticleGun(1);
   particleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
+  histo = HistoManager::GetPointer();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -64,7 +59,7 @@ PrimaryGeneratorAction::~PrimaryGeneratorAction()
 
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
-  G4double zVertex = detector->GetGeneratorPosZ();
+  G4double zVertex = -(5.0*mm + histo->Length());
   particleGun->SetParticlePosition(G4ThreeVector(0.,0.,zVertex));
   particleGun->GeneratePrimaryVertex(anEvent);
 }

@@ -20,11 +20,20 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: EventActionMessenger.hh,v 1.1 2006-06-02 19:00:00 vnivanch Exp $
+// $Id: EventActionMessenger.hh,v 1.2 2006-06-06 19:48:38 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/////////////////////////////////////////////////////////////////////////
+//
+// EventActionMessenger
+//
+// Created: 31.01.03 V.Ivanchenko
+//
+// Modified:
+// 04.06.2006 Adoptation of hadr01 (V.Ivanchenko)
+//
+////////////////////////////////////////////////////////////////////////
+//
 
 #ifndef EventActionMessenger_h
 #define EventActionMessenger_h 1
@@ -41,16 +50,19 @@ class G4UIcmdWithAnInteger;
 class EventActionMessenger: public G4UImessenger
 {
 public:
+
   EventActionMessenger(EventAction*);
-  ~EventActionMessenger();
+  virtual ~EventActionMessenger();
     
   void SetNewValue(G4UIcommand*, G4String);
     
 private:
 
-  EventAction* eventAction;   
-  G4UIcmdWithAString* DrawCmd;
-  G4UIcmdWithAnInteger* PrintCmd;    
+  EventAction*          eventAction;   
+  G4UIcmdWithAString*   drawCmd;
+  G4UIcmdWithAnInteger* printCmd;    
+  G4UIcmdWithAnInteger* dCmd;    
+
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

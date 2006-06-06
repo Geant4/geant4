@@ -20,25 +20,20 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: DetectorConstruction.cc,v 1.2 2006-06-02 19:06:40 vnivanch Exp $
+// $Id: DetectorConstruction.cc,v 1.3 2006-06-06 19:48:38 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-//
 //
 /////////////////////////////////////////////////////////////////////////
 //
-// IION: Simple Target
+// DetectorConstruction
 //
-// Created: 31.01.03 V.Ivanchenko
+// Created: 31.01.2003 V.Ivanchenko
 //
 // Modified:
+// 04.06.2006 Adoptation of hadr01 (V.Ivanchenko)
 //
 ////////////////////////////////////////////////////////////////////////
-//
-
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+// 
 
 #include "DetectorConstruction.hh"
 #include "DetectorMessenger.hh"
@@ -70,43 +65,31 @@
 
 DetectorConstruction::DetectorConstruction()
 {
-  logicA = 0;
-  logicB = 0;
-  logicW = 0;
+  logicTarget = 0;
+  logicCheck  = 0;
+  logicWorld  = 0;
   detectorMessenger = new DetectorMessenger(this);
-  DefineMaterials();
+
+  radius = 10.*cm;
+
+  targetMaterial = G4NistManager::Instance()->FindOrBuildMaterial("G4_Al");
+  worldMaterial = G4NistManager::Instance()->FindOrBuildMaterial("G4_Galactic");
+
+  // Prepare sensitive detectors
   checkSD = new CheckVolumeSD("checkSD");
   (G4SDManager::GetSDMpointer())->AddNewDetector( checkSD );
-  phantomSD = new TargetSD("phantomSD");
-  (G4SDManager::GetSDMpointer())->AddNewDetector( phantomSD );
+  targetSD = new TargetSD("targetSD");
+  (G4SDManager::GetSDMpointer())->AddNewDetector( targetSD );
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorConstruction::~DetectorConstruction()
-{ delete detectorMessenger;}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+{ 
+  delete detectorMessenger;
+}
 
 G4VPhysicalVolume* DetectorConstruction::Construct()
-{
-  return ConstructVolumes();
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void DetectorConstruction::DefineMaterials()
-{
-  G4NistManager* man = G4NistManager::Instance();
-  man->SetVerbose(1);
-  worldMaterial = man->FindOrBuildMaterial("G4_AIR");
-  gapMaterial   = man->FindOrBuildMaterial("G4_AIR");
-  absMaterial   = man->FindOrBuildMaterial("G4_WATER");
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
 {
   // Cleanup old geometry
 
@@ -114,74 +97,59 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
   G4LogicalVolumeStore::GetInstance()->Clean();
   G4SolidStore::GetInstance()->Clean();
 
-  G4double fac = 1.2;
-  G4double fac2= 1.01;
+  // Sizes
+  G4double checkR  = radius + mm;
+  G4double worldR  = radius + cm;
+  G4double targetZ = HistoManager::GetPointer()->Length()*0.5; 
+  G4double checkZ  = targetZ + mm;
+  G4double worldZ  = targetZ + cm;
 
-  HistoManager* hManager = HistoManager::GetPointer();
+  G4int nSlices    = HistoManager::GetPointer()->NumberOfSlices();
+  G4double sliceZ  = targetZ/G4double(nSlices);
 
-  G4double radius = hManager->AbsRadius();
-  G4double width  = hManager->AbsWidth();
-  G4double gap    = hManager->GapWidth();
-  G4int nAbs      = hManager->NumberOfAbs();
-
-  G4double checkZ = 0.5*(width+gap)*nAbs;
-  G4double worldZ = checkZ*fac;
   //
   // World
   //
-  G4Tubs* solidW = new G4Tubs("World",0.,radius*fac,worldZ,0.,twopi);
-  logicW = new G4LogicalVolume( solidW,worldMaterial,"World");
+  G4Tubs* solidW = new G4Tubs("World",0.,worldR,worldZ,0.,twopi);
+  logicWorld = new G4LogicalVolume( solidW,worldMaterial,"World");
   G4VPhysicalVolume* world = new G4PVPlacement(0,G4ThreeVector(),
-                                       logicW,"World",0,false,0);
+                                       logicWorld,"World",0,false,0);
   //
   // Check volume
   //
-  G4Tubs* solidC = new G4Tubs("Check",0.,radius*fac2,checkZ*fac2,0.,twopi);
-  G4LogicalVolume* logicC = new G4LogicalVolume( solidC,worldMaterial,"World");
-  G4VPhysicalVolume* physC = new G4PVPlacement(0,G4ThreeVector(),
-                                       logicC,"World",logicW,false,0);
-  logicC->SetSensitiveDetector(checkSD);
+  G4Tubs* solidC = new G4Tubs("Check",0.,checkR,checkZ,0.,twopi);
+  logicCheck = new G4LogicalVolume( solidC,worldMaterial,"World");
+  //  G4VPhysicalVolume* physC = 
+  new G4PVPlacement(0,G4ThreeVector(),logicCheck,"World",logicWorld,false,0);
+  logicCheck->SetSensitiveDetector(checkSD);
 
-  //
-  // All gaps
-  //
-  G4Tubs* solidB = new G4Tubs("Gaps",0.,radius,checkZ,0.,twopi);
-  logicB = new G4LogicalVolume( solidB,gapMaterial,"Gaps");
-  new G4PVPlacement(0,G4ThreeVector(),logicB,"World",logicC,false,0);
   //
   // Target volume
   //
-  G4Tubs* solidA = new G4Tubs("Target",0.,radius,width*0.5,0.,twopi);
-  logicA = new G4LogicalVolume( solidA,absMaterial,"Target");
-  logicA->SetSensitiveDetector(phantomSD);
+  G4Tubs* solidA = new G4Tubs("Target",0.,radius,sliceZ,0.,twopi);
+  logicTarget = new G4LogicalVolume( solidA,targetMaterial,"Target");
+  logicTarget->SetSensitiveDetector(targetSD);
 
+  G4double z = sliceZ - targetZ;
 
-  G4double z = -checkZ + 0.5*width + gap;
-  genPosZ = -checkZ*fac2 - 0.001*mm;
-
-  for(G4int i=0; i<nAbs; i++) {
-    physC = new G4PVPlacement(0,G4ThreeVector(0.0,0.0,z),
-                                       logicA,"Target",logicB,false,i);
-    z += width + gap;
+  for(G4int i=0; i<nSlices; i++) {
+    // physC = 
+    new G4PVPlacement(0,G4ThreeVector(0.0,0.0,z),logicTarget,"Target",logicCheck,false,i);
+    z += 2.0*sliceZ;
   }
-  G4cout << "### Target consist of " << nAbs
+  G4cout << "### Target consist of " << nSlices
          << " disks of R(mm)= " << radius/mm
-         << " disks of Width(mm)= " << width/mm
-         << " with gap(mm)= " << gap/mm
-         << " of " << absMaterial->GetName() <<  "  ###" << G4endl;
+         << " disks of Width(mm)= " << 2.0*sliceZ/mm
+         << " of " << targetMaterial->GetName() <<  "  ###" << G4endl;
 
-  // color regions
+  // colors
+  logicWorld->SetVisAttributes(G4VisAttributes::Invisible);
 
   G4VisAttributes* regWcolor = new G4VisAttributes(G4Colour(0.3, 0.3, 0.3));
-  logicW->SetVisAttributes(regWcolor);
+  logicCheck->SetVisAttributes(regWcolor);
 
   G4VisAttributes* regCcolor = new G4VisAttributes(G4Colour(0., 0.3, 0.7));
-  logicC->SetVisAttributes(regCcolor);
-
-  //G4VisAttributes* regAcolor = new G4VisAttributes(G4Colour(0., 0.7, 0.3));
-  //logicA->SetVisAttributes(regAcolor);
-  logicA->SetVisAttributes(G4VisAttributes::Invisible);
-  logicB->SetVisAttributes(G4VisAttributes::Invisible);
+  logicTarget->SetVisAttributes(regCcolor);
 
   G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 
@@ -190,27 +158,15 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void DetectorConstruction::SetAbsMaterial(const G4String& mat)
+void DetectorConstruction::SetTargetMaterial(const G4String& mat)
 {
   // search the material by its name
   G4Material* material = G4NistManager::Instance()->FindOrBuildMaterial(mat);
 
-  if (material) {
-    absMaterial = material;
-    if(logicA) logicA->SetMaterial(absMaterial);
-  }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void DetectorConstruction::SetGapMaterial(const G4String& mat)
-{
-  // search the material by its name
-  G4Material* material = G4NistManager::Instance()->FindOrBuildMaterial(mat);
-
-  if (material) {
-    gapMaterial = material;
-    if(logicB) logicB->SetMaterial(gapMaterial);
+  if (material && material != targetMaterial) {
+    targetMaterial = material;
+    if(logicTarget) logicTarget->SetMaterial(targetMaterial);
+    G4RunManager::GetRunManager()->PhysicsHasBeenModified();
   }
 }
 
@@ -221,9 +177,10 @@ void DetectorConstruction::SetWorldMaterial(const G4String& mat)
   // search the material by its name
   G4Material* material = G4NistManager::Instance()->FindOrBuildMaterial(mat);
 
-  if (material) {
+  if (material && material != worldMaterial) {
     worldMaterial = material;
-    if(logicW) logicW->SetMaterial(worldMaterial);
+    if(logicWorld) logicWorld->SetMaterial(worldMaterial);
+    G4RunManager::GetRunManager()->PhysicsHasBeenModified();
   }
 }
 
@@ -231,7 +188,17 @@ void DetectorConstruction::SetWorldMaterial(const G4String& mat)
 
 void DetectorConstruction::UpdateGeometry()
 {
-  G4RunManager::GetRunManager()->DefineWorldVolume(ConstructVolumes());
+  G4RunManager::GetRunManager()->GeometryHasBeenModified();
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void DetectorConstruction::SetTargetRadius(G4double val)  
+{
+  if(val > 0.0) {
+    radius = val;
+    G4RunManager::GetRunManager()->GeometryHasBeenModified();
+  } 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

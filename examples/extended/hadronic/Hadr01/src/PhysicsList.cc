@@ -21,12 +21,20 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.cc,v 1.2 2006-06-02 19:06:40 vnivanch Exp $
+// $Id: PhysicsList.cc,v 1.3 2006-06-06 19:48:38 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/////////////////////////////////////////////////////////////////////////
+//
+// PhysicsList
+//
+// Created: 31.04.2006 V.Ivanchenko
+//
+// Modified:
+// 04.06.2006 Adoptation of hadr01 (V.Ivanchenko)
+//
+////////////////////////////////////////////////////////////////////////
+// 
 
 #include "PhysicsList.hh"
 #include "PhysicsListMessenger.hh"
@@ -56,7 +64,6 @@
 #include "G4HadronProcessStore.hh"
 
 #include "G4LossTableManager.hh"
-#include "G4UnitsTable.hh"
 
 #include "G4ProcessManager.hh"
 #include "G4ParticleTypes.hh"
@@ -75,18 +82,13 @@ PhysicsList::PhysicsList() : G4VModularPhysicsList()
   cutForElectron  = defaultCutValue;
   cutForPositron  = defaultCutValue;
 
-  stepMaxProcess  = 0;
-
   pMessenger = new PhysicsListMessenger(this);
-
-  SetVerboseLevel(1);
 
   // Particles
   particleList = new G4DecayPhysics("decays");
 
   // EM physics
-  emName = G4String("standard");
-  emPhysicsList = new G4EmStandardPhysics(emName);
+  emPhysicsList = new G4EmStandardPhysics("standard");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -119,12 +121,6 @@ void PhysicsList::ConstructProcess()
     hadronPhys[i]->ConstructProcess();
   }
 
-  // Define energy interval for loss processes
-  G4EmProcessOptions emOptions;
-  emOptions.SetMinEnergy(0.1*keV);
-  emOptions.SetMaxEnergy(100.*GeV);
-  emOptions.SetDEDXBinning(180);
-  emOptions.SetLambdaBinning(180);
   G4HadronProcessStore::Instance()->Dump(1);
 }
 
@@ -135,27 +131,8 @@ void PhysicsList::AddPhysicsList(const G4String& name)
   if (verboseLevel>0)
     G4cout << "PhysicsList::AddPhysicsList: <" << name << ">" << G4endl;
 
-  if (name == "elastic" || name == "elasticB") {
 
-    hadronPhys.push_back( new G4HadronElasticPhysics(name));
-
-  } else if (name == "binary") {
-
-    hadronPhys.push_back( new G4HadronInelasticQBBC("QBBC",1));
-
-  } else if (name == "binary_ion") {
-
-    hadronPhys.push_back( new G4IonBinaryCascadePhysics(name));
-
-  } else if (name == "gamma_nuc") {
-
-    hadronPhys.push_back( new G4EmExtraPhysics(name));
-
-  } else if (name == "stopping") {
-
-    hadronPhys.push_back( new G4QStoppingPhysics(name));
-
-  } else if (name == "LHEP") {
+  if (name == "LHEP") {
 
     hadronPhys.push_back( new HadronPhysicsLHEP());
 
@@ -320,6 +297,12 @@ void PhysicsList::SetCutForPositron(G4double cut)
 {
   cutForPositron = cut;
   SetParticleCuts(cutForPositron, G4Positron::Positron());
+}
+
+void PhysicsList::List()
+{
+  G4cout << "### PhysicsLists available: LHEP LHEP_BERT LHEP_BERT_HP LHEP_BIC LHEP_BIC_HP" << G4endl; 
+  G4cout << "                            QGSC QGSP QGSP_BERT QGSP_BERT_HP QGSP_BIC QBBC" << G4endl; 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

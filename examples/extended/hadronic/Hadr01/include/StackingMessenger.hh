@@ -20,11 +20,21 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: StackingMessenger.hh,v 1.1 2006-06-02 19:00:00 vnivanch Exp $
+// $Id: StackingMessenger.hh,v 1.2 2006-06-06 19:48:38 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//
+/////////////////////////////////////////////////////////////////////////
+//
+// StackingMessenger
+//
+// Created: 31.05.2006 V.Ivanchenko
+//
+// Modified:
+// 04.06.2006 Adoptation of hadr01 (V.Ivanchenko)
+//
+////////////////////////////////////////////////////////////////////////
+//
 
 #ifndef StackingMessenger_h
 #define StackingMessenger_h 1
@@ -33,24 +43,26 @@
 #include "globals.hh"
 
 class StackingAction;
-class G4UIdirectory;
 class G4UIcmdWithABool;
+class G4UIcmdWithAString;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class StackingMessenger: public G4UImessenger
 {
-  public:
-    StackingMessenger(StackingAction*);
-   ~StackingMessenger();
+public:
+
+  StackingMessenger(StackingAction*);
+  virtual ~StackingMessenger();
     
-    void SetNewValue(G4UIcommand*, G4String);
+  void SetNewValue(G4UIcommand*, G4String);
     
-  private:
-    StackingAction*    stackAction;
+private:
     
-    G4UIdirectory*     stackDir;          
-    G4UIcmdWithABool*  killCmd;
+  StackingAction*     stackAction;
+    
+  G4UIcmdWithABool*   killCmd;
+  G4UIcmdWithAString* kCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

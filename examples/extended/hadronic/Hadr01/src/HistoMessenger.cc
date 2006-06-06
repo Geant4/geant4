@@ -21,11 +21,20 @@
 // ********************************************************************
 //
 //
-// $Id: HistoMessenger.cc,v 1.1 2006-06-02 19:00:00 vnivanch Exp $
+// $Id: HistoMessenger.cc,v 1.2 2006-06-06 19:48:38 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/////////////////////////////////////////////////////////////////////////
+//
+// HistoMessenger
+//
+// Created: 31.01.2003 V.Ivanchenko
+//
+// Modified:
+// 04.06.2006 Adoptation of hadr01 (V.Ivanchenko)
+//
+////////////////////////////////////////////////////////////////////////
+// 
 
 #include "HistoMessenger.hh"
 
@@ -37,20 +46,17 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-HistoMessenger::HistoMessenger(Histo* manager)
-:histo (manager)
+HistoMessenger::HistoMessenger(Histo* man) : histo (man)
 {
-  histoDir = new G4UIdirectory("/testem/histo/");
-  histoDir->SetGuidance("histograms control");
 
-  factoryCmd = new G4UIcmdWithAString("/testem/histo/fileName",this);
+  factoryCmd = new G4UIcmdWithAString("/testhadr/HistoName",this);
   factoryCmd->SetGuidance("set name for the histograms file");
 
-  fileCmd = new G4UIcmdWithAString("/testem/histo/fileType",this);
-  fileCmd->SetGuidance("set type (hbook, XML) for the histograms file");
-  fileCmd->SetCandidates("hbook root XML");
+  fileCmd = new G4UIcmdWithAString("/testhadr/HistoType",this);
+  fileCmd->SetGuidance("set type (hbook, root, aida) for the histograms file");
+  fileCmd->SetCandidates("hbook root aida");
    
-  histoCmd = new G4UIcommand("/testem/histo/setHisto",this);
+  histoCmd = new G4UIcommand("/testhadr/SetHisto",this);
   histoCmd->SetGuidance("Set bining of the histo number ih :");
   histoCmd->SetGuidance("  nbBins; valMin; valMax; unit (of vmin and vmax)");
   //
@@ -85,7 +91,6 @@ HistoMessenger::~HistoMessenger()
   delete fileCmd;
   delete histoCmd;
   delete factoryCmd;
-  delete histoDir;  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

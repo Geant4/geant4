@@ -21,15 +21,20 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.hh,v 1.1 2006-06-02 19:00:00 vnivanch Exp $
+// $Id: PhysicsList.hh,v 1.2 2006-06-06 19:48:38 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/////////////////////////////////////////////////////////////////////////
 //
-// 14.10.02 (V.Ivanchenko) provide modular list on base of old PhysicsList
+// PhysicsList
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+// Created: 31.04.2006 V.Ivanchenko
+//
+// Modified:
+// 04.06.2006 Adoptation of hadr01 (V.Ivanchenko)
+//
+////////////////////////////////////////////////////////////////////////
+// 
 
 #ifndef PhysicsList_h
 #define PhysicsList_h 1
@@ -38,7 +43,6 @@
 #include "globals.hh"
 
 class G4VPhysicsConstructor;
-class StepMax;
 class PhysicsListMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -46,6 +50,7 @@ class PhysicsListMessenger;
 class PhysicsList: public G4VModularPhysicsList
 {
 public:
+
   PhysicsList();
   virtual ~PhysicsList();
 
@@ -58,10 +63,8 @@ public:
         
   void AddPhysicsList(const G4String& name);
   void ConstructProcess();
+  void List();
   
-  void AddStepMax();       
-  StepMax* GetStepMaxProcess() {return stepMaxProcess;};
-
 private:
 
   void SetStandardList(G4bool);
@@ -73,9 +76,6 @@ private:
   G4VPhysicsConstructor*  emPhysicsList;
   G4VPhysicsConstructor*  particleList;
   std::vector<G4VPhysicsConstructor*>  hadronPhys;
-  G4String emName;
-    
-  StepMax* stepMaxProcess;
     
   PhysicsListMessenger* pMessenger;
 };

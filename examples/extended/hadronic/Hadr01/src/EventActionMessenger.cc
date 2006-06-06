@@ -20,11 +20,20 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: EventActionMessenger.cc,v 1.1 2006-06-02 19:00:00 vnivanch Exp $
+// $Id: EventActionMessenger.cc,v 1.2 2006-06-06 19:48:38 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/////////////////////////////////////////////////////////////////////////
+//
+// EventActionMessenger
+//
+// Created: 31.01.03 V.Ivanchenko
+//
+// Modified:
+// 04.06.2006 Adoptation of hadr01 (V.Ivanchenko)
+//
+////////////////////////////////////////////////////////////////////////
+//
 
 #include "EventActionMessenger.hh"
 
@@ -37,27 +46,35 @@
 EventActionMessenger::EventActionMessenger(EventAction* EvAct)
 :eventAction(EvAct)
 { 
-  DrawCmd = new G4UIcmdWithAString("/testem/event/drawTracks",this);
-  DrawCmd->SetGuidance("Draw the tracks in the event");
-  DrawCmd->SetGuidance("  Choice : none,charged, all");
-  DrawCmd->SetParameterName("choice",true);
-  DrawCmd->SetDefaultValue("all");
-  DrawCmd->SetCandidates("none charged all");
-  DrawCmd->AvailableForStates(G4State_Idle);
+  drawCmd = new G4UIcmdWithAString("/testhadr/DrawTracks", this);
+  drawCmd->SetGuidance("Draw the tracks in the event");
+  drawCmd->SetGuidance("  Choice : neutral, charged, all");
+  drawCmd->SetParameterName("choice",true);
+  drawCmd->SetDefaultValue("all");
+  drawCmd->SetCandidates("none charged all");
+  drawCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   
-  PrintCmd = new G4UIcmdWithAnInteger("/testem/event/printModulo",this);
-  PrintCmd->SetGuidance("Print events modulo n");
-  PrintCmd->SetParameterName("EventNb",false);
-  PrintCmd->SetRange("EventNb>0");
-  PrintCmd->AvailableForStates(G4State_Idle);      
+  printCmd = new G4UIcmdWithAnInteger("/testhadr/PrintModulo",this);
+  printCmd->SetGuidance("Print events modulo n");
+  printCmd->SetParameterName("EventNb",false);
+  printCmd->SetRange("EventNb>0");
+  printCmd->AvailableForStates(G4State_PreInit,G4State_Idle);      
+
+  dCmd = new G4UIcmdWithAnInteger("/testhadr/DebugEvent",this);
+  dCmd->SetGuidance("D event to debug");
+  dCmd->SetParameterName("fNb",false);
+  dCmd->SetRange("fNb>0");
+  dCmd->AvailableForStates(G4State_PreInit,G4State_Idle);      
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 EventActionMessenger::~EventActionMessenger()
 {
-  delete DrawCmd;
-  delete PrintCmd;   
+  delete drawCmd;
+  delete printCmd;   
+  delete dCmd;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -65,11 +82,14 @@ EventActionMessenger::~EventActionMessenger()
 void EventActionMessenger::SetNewValue(G4UIcommand* command,
                                           G4String newValue)
 { 
-  if(command == DrawCmd)
+  if(command == drawCmd)
     {eventAction->SetDrawFlag(newValue);}
     
-  if(command == PrintCmd)
-    {eventAction->SetPrintModulo(PrintCmd->GetNewIntValue(newValue));}           
+  if(command == printCmd)
+    {eventAction->SetPrintModulo(printCmd->GetNewIntValue(newValue));}           
+
+  if(command == dCmd)
+    {eventAction->AddEventToDebug(dCmd->GetNewIntValue(newValue));}           
    
 }
 

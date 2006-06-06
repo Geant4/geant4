@@ -20,19 +20,23 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// -------------------------------------------------------------
+// $Id: EventAction.cc,v 1.2 2006-06-06 19:48:38 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
+/////////////////////////////////////////////////////////////////////////
 //
-//      ---------- EventAction -------------
+// EventAction
 //
-//  Modified: 05.04.01 Vladimir Ivanchenko new design of IBREM
+// Created: 31.04.2006 V.Ivanchenko
 //
-// -------------------------------------------------------------
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+// Modified:
+// 04.06.2006 Adoptation of hadr01 (V.Ivanchenko)
+//
+////////////////////////////////////////////////////////////////////////
+// 
 
 #include "EventAction.hh"
+#include "G4Event.hh"
 #include "HistoManager.hh"
 #include "EventActionMessenger.hh"
 
@@ -45,15 +49,11 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 EventAction::EventAction():
-  nEvt(0),
-  verbose(0),
   printModulo(100),
   nSelected(0),
-  //  drawFlag("all")
-  drawFlag("charged")
-  // drawFlag("neutral")
+  drawFlag("all"),
+  debugStarted(false)
 {
-  // drawFlags = all, charged, neutral, charged+n
   eventMessenger = new EventActionMessenger(this);
   UI = G4UImanager::GetUIpointer();
   selectedEvents.clear();
@@ -62,44 +62,33 @@ EventAction::EventAction():
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 EventAction::~EventAction()
-{}
+{
+  delete eventMessenger;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void EventAction::BeginOfEventAction(const G4Event*)
+void EventAction::BeginOfEventAction(const G4Event* evt)
 {
   // New event
-  nEvt++;
-  (HistoManager::GetPointer())->BeginOfEvent();
+  G4int nEvt = evt->GetEventID();
 
   if(nSelected>0) {
     for(G4int i=0; i<nSelected; i++) {
       if(nEvt == selectedEvents[i]) {
         UI->ApplyCommand("/random/saveThisEvent");
+        UI->ApplyCommand("/tracking/verbose  2");
+        debugStarted = true;
+        break;
       }
     }
   }
 
-  // Switch on verbose mode
-  //  if(hi->GetFirstEventToDebug() == nEvt) {
-  if(9985 == nEvt) {
-    verbose = 1;
-    (G4UImanager::GetUIpointer())->ApplyCommand("/tracking/verbose 2");
-
-  }
-
-  // Switch off verbose mode
-  //  if(hi->GetLastEventToDebug() == nEvt-1) {
-  if(nEvt == 9986) {
-    verbose = 0;
-    (G4UImanager::GetUIpointer())->ApplyCommand("/tracking/verbose 0");
-  }
-
   // Initialize user actions
-  if(verbose > 0 || G4int(nEvt/printModulo)*printModulo == nEvt) {
+  if(HistoManager::GetPointer()->GetVerbose() > 0 || 
+     G4int(nEvt/printModulo)*printModulo == nEvt) 
     G4cout << "EventAction: Event # "
            << nEvt << " started" << G4endl;
-  }
 
 }
 
@@ -107,7 +96,6 @@ void EventAction::BeginOfEventAction(const G4Event*)
 
 void EventAction::EndOfEventAction(const G4Event* evt)
 {
-  (HistoManager::GetPointer())->EndOfEvent();
   G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
 
   if(pVVisManager) {
@@ -125,13 +113,16 @@ void EventAction::EndOfEventAction(const G4Event* evt)
       else if ((drawFlag == "charged+n")&&((t->GetCharge() != 0.)||
                                            (t->GetCharge()==0.&&t->GetParticleName()=="neutron")))
                              t->DrawTrajectory(1000);
-   }
+    }
   }
 
-  if(verbose > 0) {
-    G4cout << "EventAction: Event # "
-           << nEvt << " ended" << G4endl;
+  if(debugStarted) {
+    UI->ApplyCommand("/tracking/verbose  0");
+    debugStarted = false;
   }
+
+  if(HistoManager::GetPointer()->GetVerbose() > 1) 
+    G4cout << "EventAction: Event ended" << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

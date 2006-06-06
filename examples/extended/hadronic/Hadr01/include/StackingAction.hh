@@ -20,11 +20,20 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: StackingAction.hh,v 1.1 2006-06-02 19:00:00 vnivanch Exp $
+// $Id: StackingAction.hh,v 1.2 2006-06-06 19:48:38 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/////////////////////////////////////////////////////////////////////////
+//
+// StackingAction
+//
+// Created: 31.04.2006 V.Ivanchenko
+//
+// Modified:
+// 04.06.2006 Adoptation of hadr01 (V.Ivanchenko)
+//
+////////////////////////////////////////////////////////////////////////
+// 
 
 #ifndef StackingAction_h
 #define StackingAction_h 1
@@ -34,30 +43,30 @@
 
 class HistoManager;
 class StackingMessenger;
+class G4Track;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class StackingAction : public G4UserStackingAction
 {
 public:
+
   StackingAction();
   virtual ~StackingAction();
    
-  void SetKillStatus(G4bool value) {killSecondary = value;};
-  void SetVerbose(G4int value)     {verbose = value;};
+  void SetKillStatus(G4bool value)    {killSecondary = value;};
+  void SetKill(const G4String& name)  {pname = name;};
      
   G4ClassificationOfNewTrack ClassifyNewTrack(const G4Track*);
     
 private:
 
-  HistoManager*       histoManager;
-    
-  G4bool              killSecondary;
-  G4int               verbose;
+  HistoManager*       histoManager;    
   StackingMessenger*  stackMessenger;
 
-  G4double            tmin;        
-  G4double            tmax;        
+  G4String            pname;
+  G4bool              killSecondary;
+
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -20,48 +20,52 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: CheckVolumeSD.hh,v 1.2 2006-06-06 19:48:38 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+/////////////////////////////////////////////////////////////////////////
+//
+// CheckVolumeSD
+//
+// Created: 31.01.2003 V.Ivanchenko
+//
+// Modified:
+// 04.06.2006 Adoptation of hadr01 (V.Ivanchenko)
+//
+////////////////////////////////////////////////////////////////////////
+// 
+
 #ifndef CheckVolumeSD_h
 #define CheckVolumeSD_h 1
 
-// -------------------------------------------------------------
-//
-//
-//  Modified:
-//
-// -------------------------------------------------------------
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4VSensitiveDetector.hh"
-#include "G4HCofThisEvent.hh"
-#include "G4TouchableHistory.hh"
-#include "G4Step.hh"
 #include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+class G4Step;
+class G4TouchableHistory;
+class G4HCofThisEvent;
 class HistoManager;
-class G4particleDefinition;
 
 class CheckVolumeSD : public G4VSensitiveDetector
 {
 public: // Without description
 
-      CheckVolumeSD(const G4String&);
-     ~CheckVolumeSD();
+  CheckVolumeSD(const G4String&);
+  virtual ~CheckVolumeSD();
 
-      void Initialize(G4HCofThisEvent*);
-      G4bool ProcessHits(G4Step*,G4TouchableHistory*);
-      void EndOfEvent(G4HCofThisEvent*);
-      void clear();
-      void PrintAll();
+  void Initialize(G4HCofThisEvent*);
+  G4bool ProcessHits(G4Step*,G4TouchableHistory*);
+  void EndOfEvent(G4HCofThisEvent*);
+  void clear();
+  void PrintAll();
 
-  private:
+private:
 
-      HistoManager* theHisto;
-      const G4ParticleDefinition* theNeutron;
-      G4int    evno;
+  HistoManager*  theHisto;
+
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

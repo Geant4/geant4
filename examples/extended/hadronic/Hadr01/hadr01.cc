@@ -21,8 +21,21 @@
 // ********************************************************************
 //
 //
-// $Id: hadr01.cc,v 1.2 2006-06-02 19:00:00 vnivanch Exp $
+// $Id: hadr01.cc,v 1.3 2006-06-06 19:48:38 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
+//
+// -------------------------------------------------------------
+//      GEANT4 hadr01
+//
+//  Application demonstrating Geant4 hadronic physics:
+//  beam interaction with a target
+//
+//  Authors: A.Bagulya, I.Gudowska, V.Ivanchenko, N.Starkov
+//
+//  Modified: 
+//
+// -------------------------------------------------------------
+//
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -36,7 +49,6 @@
 #include "DetectorConstruction.hh"
 #include "PhysicsList.hh"
 #include "PrimaryGeneratorAction.hh"
-#include "SteppingVerbose.hh"
 
 #include "RunAction.hh"
 #include "EventAction.hh"
@@ -55,10 +67,9 @@ int main(int argc,char** argv) {
   G4RunManager * runManager = new G4RunManager;
 
   //set mandatory initialization classes
-  DetectorConstruction* det = new DetectorConstruction();
-  runManager->SetUserInitialization(det);
+  runManager->SetUserInitialization(new DetectorConstruction());
   runManager->SetUserInitialization(new PhysicsList);
-  runManager->SetUserAction(new PrimaryGeneratorAction(det));
+  runManager->SetUserAction(new PrimaryGeneratorAction());
 
   //set user action classes
   runManager->SetUserAction(new RunAction());

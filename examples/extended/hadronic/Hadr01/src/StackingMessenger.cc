@@ -20,30 +20,42 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: StackingMessenger.cc,v 1.1 2006-06-02 19:00:02 vnivanch Exp $
+// $Id: StackingMessenger.cc,v 1.2 2006-06-06 19:48:38 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/////////////////////////////////////////////////////////////////////////
+//
+// StackingMessenger
+//
+// Created: 31.05.2006 V.Ivanchenko
+//
+// Modified:
+// 04.06.2006 Adoptation of hadr01 (V.Ivanchenko)
+//
+////////////////////////////////////////////////////////////////////////
+//
 
 #include "StackingMessenger.hh"
 
 #include "StackingAction.hh"
-#include "G4UIdirectory.hh"
 #include "G4UIcmdWithABool.hh"
+#include "G4UIcmdWithAString.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 StackingMessenger::StackingMessenger(StackingAction* stack)
 :stackAction(stack)
 {
-  stackDir = new G4UIdirectory("/testem/stack/");
-  stackDir->SetGuidance("stacking control");
-   
-  killCmd = new G4UIcmdWithABool("/testem/stack/killSecondaries",this);
+  killCmd = new G4UIcmdWithABool("/testhadr/KillAllSecondaries",this);
   killCmd->SetGuidance("  Choice : true false");
   killCmd->SetParameterName("choice",true);
-  killCmd->SetDefaultValue(true);
+  killCmd->SetDefaultValue(false);
+
+  kCmd = new G4UIcmdWithAString("/testhadr/Kill", this);
+  kCmd->SetGuidance("Kill secondary particles of defined type");
+  kCmd->SetParameterName("ch", true);
+  kCmd->SetDefaultValue("none");
+  kCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -51,7 +63,7 @@ StackingMessenger::StackingMessenger(StackingAction* stack)
 StackingMessenger::~StackingMessenger()
 {
   delete killCmd;
-  delete stackDir;
+  delete kCmd;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -59,7 +71,10 @@ StackingMessenger::~StackingMessenger()
 void StackingMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 {     
   if(command == killCmd)
-    {stackAction->SetKillStatus(killCmd->GetNewBoolValue(newValue));}               
+    stackAction->SetKillStatus(killCmd->GetNewBoolValue(newValue));               
+
+  if(command == kCmd)
+    stackAction->SetKill(newValue);               
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

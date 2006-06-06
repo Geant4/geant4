@@ -20,36 +20,35 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// -------------------------------------------------------------
+// $Id: CheckVolumeSD.cc,v 1.2 2006-06-06 19:48:38 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
-//      ---------- CheckVolumeSD -------------
+/////////////////////////////////////////////////////////////////////////
 //
-//  Modified:
+// CheckVolumeSD
 //
-// -------------------------------------------------------------
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+// Created: 31.01.2003 V.Ivanchenko
+//
+// Modified:
+// 04.06.2006 Adoptation of hadr01 (V.Ivanchenko)
+//
+////////////////////////////////////////////////////////////////////////
+// 
 
 #include "CheckVolumeSD.hh"
-
-#include "G4ParticleDefinition.hh"
-#include "G4VPhysicalVolume.hh"
-#include "G4LogicalVolume.hh"
-#include "G4Track.hh"
-#include "G4Positron.hh"
-#include "globals.hh"
 #include "HistoManager.hh"
-#include "G4Neutron.hh"
+#include "G4HCofThisEvent.hh"
+#include "G4TouchableHistory.hh"
+#include "G4Step.hh"
+#include "G4Track.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 CheckVolumeSD::CheckVolumeSD(const G4String& name)
- :G4VSensitiveDetector(name),
-  theHisto(HistoManager::GetPointer()),
-  theNeutron(G4Neutron::Neutron()),
-  evno(0)
-{}
+ :G4VSensitiveDetector(name)
+{
+  theHisto = HistoManager::GetPointer();
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -59,27 +58,14 @@ CheckVolumeSD::~CheckVolumeSD()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void CheckVolumeSD::Initialize(G4HCofThisEvent*)
-{
-  evno++;
-  if(0 < theHisto->GetVerbose())
-    G4cout << "CheckVolumeSD: Begin Of Event # " << evno << G4endl;
-}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4bool CheckVolumeSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 {
   const G4Track* track = aStep->GetTrack();
-  const G4ParticleDefinition* p = track->GetDefinition();
-  if (p == theNeutron) {
-    theHisto->AddLeakingNeutron(track->GetKineticEnergy(),track->GetPosition());
-  } else if(p->GetPDGCharge() != 0.0) {
-    if(p->GetPDGMass() > 120.0*MeV && p->GetParticleType() != "nucleus")
-      theHisto->AddLeakingHadron(track->GetKineticEnergy(),track->GetPosition(),p);
-  }
-  if(1 < theHisto->GetVerbose()) {
-      G4cout << "CheckVolumeSD: new neutron " << G4endl;
-  }
+  if(track->GetTrackID() > 1) theHisto->AddLeakingParticle(track);
   return true;
 }
 
@@ -94,7 +80,6 @@ void CheckVolumeSD::clear()
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 
 void CheckVolumeSD::PrintAll()
 {}

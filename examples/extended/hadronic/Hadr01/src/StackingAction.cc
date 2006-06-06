@@ -20,11 +20,20 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: StackingAction.cc,v 1.1 2006-06-02 19:00:02 vnivanch Exp $
+// $Id: StackingAction.cc,v 1.2 2006-06-06 19:48:38 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/////////////////////////////////////////////////////////////////////////
+//
+// StackingAction
+//
+// Created: 31.04.2006 V.Ivanchenko
+//
+// Modified:
+// 04.06.2006 Adoptation of hadr01 (V.Ivanchenko)
+//
+////////////////////////////////////////////////////////////////////////
+// 
 
 #include "StackingAction.hh"
 
@@ -32,18 +41,16 @@
 #include "StackingMessenger.hh"
 
 #include "G4Track.hh"
-#include "G4Neutron.hh"
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 StackingAction::StackingAction()
 {
-  verbose        = 1;
-  killSecondary  = false;
   stackMessenger = new StackingMessenger(this);
   histoManager   = HistoManager::GetPointer();
-  tmin           = 90.*keV; 
-  tmax           = 110.*keV; 
+  killSecondary  = false;
+  pname          = ""; 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -58,37 +65,28 @@ StackingAction::~StackingAction()
 G4ClassificationOfNewTrack
 StackingAction::ClassifyNewTrack(const G4Track* aTrack)
 {
+  G4ClassificationOfNewTrack status = fUrgent;
+
   if (aTrack->GetTrackStatus() == fAlive) 
     histoManager->ScoreNewTrack(aTrack);
-  //keep primary particle
-  if (aTrack->GetParentID() == 0) return fUrgent;
 
-  //
-  //energy spectrum of secondaries
-  //
-  G4double e = aTrack->GetKineticEnergy();
-  const G4ParticleDefinition* p = aTrack->GetDefinition();
-  //  G4double m = p->GetPDGMass();
+  const G4String name = aTrack->GetDefinition()->GetParticleName();
 
-  if(verbose > 1 && p == G4Neutron::Neutron()
-     && ( e < 2.*eV ||( e < tmax && e> tmin)) ) {
-
-    G4int pid = aTrack->GetParentID();
-    const G4String name = aTrack->GetDefinition()->GetParticleName();
+  if(histoManager->GetVerbose() > 1 ) {
     G4cout << "Track #"
 	   << aTrack->GetTrackID() << " of " << name
-	   << " E(keV)= " << e/keV
+	   << " E(MeV)= " << aTrack->GetKineticEnergy()/MeV
 	   << " produced by " 
 	   << histoManager->CurrentDefinition()->GetParticleName()
-	   << " ID= " << pid
+	   << " ID= " << aTrack->GetParentID()
 	   << " with E(MeV)= " << histoManager->CurrentKinEnergy()/MeV
 	   << G4endl;
   }
 
   //stack or delete secondaries
-  G4ClassificationOfNewTrack status = fUrgent;
-  if (killSecondary)         status = fKill;
-  
+  if (killSecondary)      status = fKill;
+  else if(pname == name)  status = fKill; 
+
   return status;
 }
 

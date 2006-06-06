@@ -21,43 +21,39 @@
 // ********************************************************************
 //
 //
-// $Id: PrimaryGeneratorAction.hh,v 1.1 2006-06-02 19:00:00 vnivanch Exp $
+// $Id: PrimaryGeneratorAction.hh,v 1.2 2006-06-06 19:48:38 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 /////////////////////////////////////////////////////////////////////////
 //
-// IION: primary generator - pencil beam
+// EventActionMessenger
 //
 // Created: 31.01.03 V.Ivanchenko
 //
 // Modified:
+// 04.06.2006 Adoptation of hadr01 (V.Ivanchenko)
 //
 ////////////////////////////////////////////////////////////////////////
 //
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef PrimaryGeneratorAction_h
 #define PrimaryGeneratorAction_h 1
 
 #include "G4VUserPrimaryGeneratorAction.hh"
-#include "G4ParticleGun.hh"
 #include "globals.hh"
 
-class G4Event;
-class DetectorConstruction;
+class G4ParticleGun;
+class HistoManager;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
 public:
-  PrimaryGeneratorAction(DetectorConstruction*);
-  ~PrimaryGeneratorAction();
+  PrimaryGeneratorAction();
+  virtual ~PrimaryGeneratorAction();
 
-public:
   void GeneratePrimaries(G4Event*);
   G4ParticleGun* GetParticleGun() {return particleGun;};
 
@@ -66,8 +62,8 @@ private:
   PrimaryGeneratorAction & operator=(const PrimaryGeneratorAction &right);
   PrimaryGeneratorAction(const PrimaryGeneratorAction&);
 
-  G4ParticleGun*         particleGun;
-  DetectorConstruction*  detector; 
+  G4ParticleGun*   particleGun;
+  HistoManager*    histo; 
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

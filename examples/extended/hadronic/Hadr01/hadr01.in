@@ -1,0 +1,23 @@
+#================================================
+#     Macro file for hadr01
+#     06.06.2006 V.Ivanchneko
+#================================================
+/control/verbose 2
+/run/verbose 1
+/tracking/verbose 0
+#
+/testhadr/TargetMat        G4_Al 
+/testhadr/TargetRadius     1  cm
+/testhadr/TargetLength     10 cm
+/testhadr/NumberDivZ       100
+/testhadr/PrintModulo      10
+#
+/testhadr/CutsAll          1 mm
+/testhadr/Physics          QGSP_BERT
+#
+/run/initialize
+#
+/gun/particle proton
+/gun/energy 3. GeV
+/run/beamOn 100
+#

@@ -20,24 +20,20 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: DetectorConstruction.hh,v 1.2 2006-06-02 19:06:39 vnivanch Exp $
+// $Id: DetectorConstruction.hh,v 1.3 2006-06-06 19:48:38 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-//
 //
 /////////////////////////////////////////////////////////////////////////
 //
-// IION: Simple Target
+// DetectorConstruction
 //
-// Created: 31.01.03 V.Ivanchenko
+// Created: 31.01.2003 V.Ivanchenko
 //
 // Modified:
+// 04.06.2006 Adoptation of hadr01 (V.Ivanchenko)
 //
 ////////////////////////////////////////////////////////////////////////
-//
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+// 
 
 #ifndef DetectorConstruction_h
 #define DetectorConstruction_h 1
@@ -62,42 +58,32 @@ public:
 
 public:
 
-  void SetAbsMaterial(const G4String&);
-  void SetGapMaterial(const G4String&);
-  void SetWorldMaterial(const G4String&);
-
   G4VPhysicalVolume* Construct();
+
+  void SetWorldMaterial(const G4String&);
+  void SetTargetMaterial(const G4String&);
+
+  void SetTargetRadius(G4double val);
 
   void UpdateGeometry();
 
-  G4double GetGeneratorPosZ()         {return genPosZ;}
-
 private:
-
-  void DefineMaterials();
-  G4VPhysicalVolume* ConstructVolumes();
 
   DetectorConstruction & operator=(const DetectorConstruction &right);
   DetectorConstruction(const DetectorConstruction&);
 
   G4double radius;
-  G4double width;
-  G4double gap;
-  G4double worldZ;
-  G4double genPosZ;
 
-  G4int    nAbs;
+  G4Material*  targetMaterial;
+  G4Material*  worldMaterial;
 
-  G4Material* absMaterial;
-  G4Material* gapMaterial;
-  G4Material* worldMaterial;
+  CheckVolumeSD*   checkSD;
+  TargetSD*        targetSD;
 
-  CheckVolumeSD* checkSD;
-  TargetSD*     phantomSD;
+  G4LogicalVolume* logicTarget;
+  G4LogicalVolume* logicCheck;
+  G4LogicalVolume* logicWorld;
 
-  G4LogicalVolume* logicA;
-  G4LogicalVolume* logicB;
-  G4LogicalVolume* logicW;
   DetectorMessenger* detectorMessenger;
 
 };

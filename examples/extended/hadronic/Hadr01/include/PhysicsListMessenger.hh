@@ -21,13 +21,21 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsListMessenger.hh,v 1.1 2006-06-02 19:00:00 vnivanch Exp $
+// $Id: PhysicsListMessenger.hh,v 1.2 2006-06-06 19:48:38 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+//
+/////////////////////////////////////////////////////////////////////////
+//
+// PhysicsListMessenger
+//
+// Created: 31.01.2006 V.Ivanchenko
+//
+// Modified:
+// 04.06.2006 Adoptation of hadr01 (V.Ivanchenko)
+//
+////////////////////////////////////////////////////////////////////////
 // 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef PhysicsListMessenger_h
 #define PhysicsListMessenger_h 1
@@ -38,6 +46,7 @@
 class PhysicsList;
 class G4UIcmdWithADoubleAndUnit;
 class G4UIcmdWithAString;
+class G4UIcmdWithoutParameter;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -46,7 +55,7 @@ class PhysicsListMessenger: public G4UImessenger
 public:
   
   PhysicsListMessenger(PhysicsList* );
-  ~PhysicsListMessenger();
+  virtual ~PhysicsListMessenger();
     
   void SetNewValue(G4UIcommand*, G4String);
     
@@ -56,10 +65,10 @@ private:
     
   G4UIcmdWithADoubleAndUnit* gammaCutCmd;
   G4UIcmdWithADoubleAndUnit* electCutCmd;
-  G4UIcmdWithADoubleAndUnit* protoCutCmd;
+  G4UIcmdWithADoubleAndUnit* posCutCmd;
   G4UIcmdWithADoubleAndUnit* allCutCmd;
   G4UIcmdWithAString*        pListCmd;
-    
+  G4UIcmdWithoutParameter*   listCmd;  
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

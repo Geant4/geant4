@@ -20,34 +20,31 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: EventAction.hh,v 1.2 2006-06-06 19:48:38 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+/////////////////////////////////////////////////////////////////////////
+//
+// EventAction
+//
+// Created: 31.04.2006 V.Ivanchenko
+//
+// Modified:
+// 04.06.2006 Adoptation of hadr01 (V.Ivanchenko)
+//
+////////////////////////////////////////////////////////////////////////
+// 
+
 #ifndef EventAction_h
 #define EventAction_h 1
  
-// -------------------------------------------------------------
-//
-//
-// -------------------------------------------------------------
-//      GEANT4 
-//
-//      History: based on object model of
-//      2nd December 1995, G.Cosmo
-//      ---------- EventAction -------------
-//              
-//  Modified: 05.04.01 Vladimir Ivanchenko new design of  
-// 
-// -------------------------------------------------------------
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 #include "G4UserEventAction.hh"
-
-#include "G4Event.hh"
 #include "globals.hh"
 #include <vector>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+class G4Event;
 class EventActionMessenger;
 class G4UImanager;
 
@@ -55,27 +52,29 @@ class EventAction : public G4UserEventAction
 {
 public: // Without description
 
-    EventAction();
-   ~EventAction();
+  EventAction();
+  virtual ~EventAction();
 
-    void BeginOfEventAction(const G4Event*);
-    void   EndOfEventAction(const G4Event*);
+  void BeginOfEventAction(const G4Event*);
+  void   EndOfEventAction(const G4Event*);
 
-    void SetPrintModulo(G4int val)  {printModulo = val;};
-    void SetDrawFlag(G4String val)  {drawFlag = val;};
-    void AddselectedEvent(G4int val) {selectedEvents.push_back(val);
-                                      nSelected++;};
+  void SetPrintModulo(G4int val)   {printModulo = val;};
+  void SetDrawFlag(G4String val)   {drawFlag = val;};
+  void AddEventToDebug(G4int val)  {selectedEvents.push_back(val);
+                                    nSelected++;};
 
-  private:
+private:
 
-    EventActionMessenger* eventMessenger;
-    G4UImanager*          UI;
-    G4int    nEvt;
-    G4int    verbose;
-    G4int    printModulo;
-    G4int    nSelected;
-    G4String drawFlag;
-    std::vector<G4int> selectedEvents;
+  EventActionMessenger* eventMessenger;
+  G4UImanager*          UI;
+  std::vector<G4int>    selectedEvents;
+
+  G4int        printModulo;
+  G4int        nSelected;
+
+  // drawFlags = all, charged, neutral, charged+n
+  G4String     drawFlag;
+  G4bool       debugStarted;
 
 };
 

@@ -20,19 +20,23 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: TargetSD.hh,v 1.3 2006-06-06 19:48:38 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+/////////////////////////////////////////////////////////////////////////
+//
+// TargetSD
+//
+// Created: 31.01.2003 V.Ivanchenko
+//
+// Modified:
+// 04.06.2006 Adoptation of hadr01 (V.Ivanchenko)
+//
+////////////////////////////////////////////////////////////////////////
+// 
+
 #ifndef TargetSD_h
 #define TargetSD_h 1
-
-// -------------------------------------------------------------
-//
-//      ---------- TargetSD -------------
-//
-//  Modified:
-//
-// -------------------------------------------------------------
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4VSensitiveDetector.hh"
 #include "globals.hh"
@@ -59,8 +63,8 @@ public: // Without description
 
 private:
 
-  HistoManager* theHisto;
-  G4int evno;
+  HistoManager*  theHisto;
+
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

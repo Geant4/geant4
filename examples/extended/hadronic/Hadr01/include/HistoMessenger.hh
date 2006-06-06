@@ -20,15 +20,22 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-
 //
-// $Id: HistoMessenger.hh,v 1.1 2006-06-02 19:00:00 vnivanch Exp $
+// $Id: HistoMessenger.hh,v 1.2 2006-06-06 19:48:38 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+/////////////////////////////////////////////////////////////////////////
 //
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+// HistoMessenger
+//
+// Created: 31.01.2003 V.Ivanchenko
+//
+// Modified:
+// 04.06.2006 Adoptation of hadr01 (V.Ivanchenko)
+//
+////////////////////////////////////////////////////////////////////////
+// 
+//
 
 #ifndef HistoMessenger_h
 #define HistoMessenger_h 1
@@ -39,7 +46,6 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class Histo;
-class G4UIdirectory;
 class G4UIcommand;
 class G4UIcmdWithAString;
 
@@ -47,18 +53,17 @@ class G4UIcmdWithAString;
 
 class HistoMessenger: public G4UImessenger
 {
-  public:
+public:
 
-   HistoMessenger(Histo* );
-  ~HistoMessenger();
+  HistoMessenger(Histo* );
+  virtual ~HistoMessenger();
 
-   void SetNewValue(G4UIcommand* ,G4String );
+  void SetNewValue(G4UIcommand* ,G4String );
 
-  private:
+private:
 
    Histo*                  histo;
    
-   G4UIdirectory*          histoDir;   
    G4UIcmdWithAString*     factoryCmd;
    G4UIcmdWithAString*     fileCmd;
    G4UIcommand*            histoCmd;    

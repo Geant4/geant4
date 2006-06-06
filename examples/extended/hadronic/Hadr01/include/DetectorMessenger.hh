@@ -21,23 +21,21 @@
 // ********************************************************************
 //
 //
-// $Id: DetectorMessenger.hh,v 1.1 2006-06-02 19:00:00 vnivanch Exp $
+// $Id: DetectorMessenger.hh,v 1.2 2006-06-06 19:48:38 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 /////////////////////////////////////////////////////////////////////////
 //
-// test26: Cut per region physics
+// DetectorMessenger
 //
 // Created: 31.01.03 V.Ivanchenko
 //
 // Modified:
+// 04.06.2006 Adoptation of hadr01 (V.Ivanchenko)
 //
 ////////////////////////////////////////////////////////////////////////
 //
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef DetectorMessenger_h
 #define DetectorMessenger_h 1
@@ -50,7 +48,6 @@ class G4UIdirectory;
 class G4UIcmdWithABool;
 class G4UIcmdWithAString;
 class G4UIcmdWithAnInteger;
-class G4UIcmdWith3Vector;
 class G4UIcmdWithADoubleAndUnit;
 class G4UIcmdWithoutParameter;
 
@@ -59,31 +56,25 @@ class G4UIcmdWithoutParameter;
 class DetectorMessenger: public G4UImessenger
 {
 public:
+
   DetectorMessenger(DetectorConstruction* );
   virtual ~DetectorMessenger();
 
   void SetNewValue(G4UIcommand*, G4String);
 
 private:
+
   DetectorConstruction* Detector;
 
-  G4UIdirectory*             testemDir;
-  G4UIcmdWithAString*        MaterCmd;
-  G4UIcmdWithAString*        Mat1Cmd;
-  G4UIcmdWithAString*        Mat2Cmd;
-  G4UIcmdWithADoubleAndUnit* l1Cmd;
-  G4UIcmdWithADoubleAndUnit* l2Cmd;
-  G4UIcmdWithADoubleAndUnit* l3Cmd;
-  G4UIcmdWithADoubleAndUnit* enCmd;
-  G4UIcmdWithADoubleAndUnit* eeCmd;
-  G4UIcmdWithADoubleAndUnit* egCmd;
-  G4UIcmdWithAnInteger*      NEbinsCmd;
-  G4UIcmdWithAnInteger*      NXYbinsCmd;
-  G4UIcmdWithAnInteger*      NbinCmd;
-  G4UIcmdWithAnInteger*      NumOfAbsCmd;
+  G4UIdirectory*             testDir;
+  G4UIcmdWithAString*        matCmd;
+  G4UIcmdWithAString*        mat1Cmd;
+  G4UIcmdWithADoubleAndUnit* rCmd;
+  G4UIcmdWithADoubleAndUnit* lCmd;
+  G4UIcmdWithAnInteger*      binCmd;
+  G4UIcmdWithAnInteger*      nOfAbsCmd;
   G4UIcmdWithAnInteger*      verbCmd;
-  G4UIcmdWithoutParameter*   UpdateCmd;
-  G4UIcmdWithABool*          ntupCmd;
+  G4UIcmdWithoutParameter*   updateCmd;
 
 };
 
