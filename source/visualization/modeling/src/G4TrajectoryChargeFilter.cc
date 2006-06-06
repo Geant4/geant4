@@ -19,7 +19,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4TrajectoryChargeFilter.cc,v 1.1 2006-05-30 18:44:36 tinslay Exp $
+// $Id: G4TrajectoryChargeFilter.cc,v 1.2 2006-06-06 15:35:40 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Filter trajectories according to charge. Only registered 
@@ -28,6 +28,7 @@
 // Jane Tinslay May 2006
 //
 #include "G4TrajectoryChargeFilter.hh"
+#include <sstream>
 
 G4TrajectoryChargeFilter::G4TrajectoryChargeFilter(const G4String& name)
   :G4SmartFilter<G4VTrajectory>(name)
