@@ -7,8 +7,6 @@
 /control/verbose 2
 /run/verbose 2
 #
-/run/initialize
-#
 # Create empty scene ("world" is default)
 /vis/scene/create
 #
@@ -22,7 +20,7 @@
 #
 # Draw scene
 /vis/viewer/set/viewpointThetaPhi 90 0 deg
-/vis/viewer/zoom 1.4
+/vis/viewer/zoom 1.0
 /vis/viewer/flush
 #
 # for drawing the tracks
@@ -30,6 +28,15 @@
 /tracking/storeTrajectory 1
 /vis/scene/endOfEventAction accumulate
 #
-#/testem/event/drawTracks all
-/testem/event/drawTracks charged
+#/testhadr/DrawTracks      charged
+/testhadr/TargetMat        G4_Al 
+/testhadr/TargetRadius     1  cm
+/testhadr/TargetLength     10 cm
+/testhadr/NumberDivZ       100
+/testhadr/DrawTracks       all
+/testhadr/CutsAll          1 mm
+/testhadr/Physics          QBBC
+#
+/run/initialize
+#
 

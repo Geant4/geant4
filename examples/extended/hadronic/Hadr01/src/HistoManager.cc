@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.2 2006-06-06 19:48:38 vnivanch Exp $
+// $Id: HistoManager.cc,v 1.3 2006-06-07 11:51:13 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -311,7 +311,7 @@ void HistoManager::ScoreNewTrack(const G4Track* track)
     } else if ( pd == G4Proton::Proton()) {
       n_proton++;
       histo->fill(4,e,1.0);
-    } else if ( pd == G4Neutron::Neutron()) {
+    } else if ( pd == neutron) {
       n_neutron++;
       histo->fill(5,e,1.0);
     } else if ( pd == G4AntiProton::AntiProton()) {
@@ -375,7 +375,6 @@ void HistoManager::AddLeakingParticle(const G4Track* track)
 {
   const G4ParticleDefinition* pd = track->GetDefinition(); 
   G4double e = std::log10(track->GetKineticEnergy()/MeV);
-  //  G4double q = pd->GetPDGCharge();
 
   G4ThreeVector pos = track->GetPosition();
   G4ThreeVector dir = track->GetMomentumDirection();
@@ -395,7 +394,7 @@ void HistoManager::AddLeakingParticle(const G4Track* track)
     // Backward
   } else if (z < -absZ0 && dir.z() < 0.0) {
     if(pd == neutron) {
-    n_neu_leak++;
+      n_neu_leak++;
       histo->fill(16,e,1.0);
     } else isLeaking = true;
 
@@ -403,7 +402,7 @@ void HistoManager::AddLeakingParticle(const G4Track* track)
   } else if (std::abs(z) < absZ0 && x*dir.x() + y*dir.y() > 0.0) {
     isLeaking = true;
     if(pd == neutron) {
-    n_neu_back++;
+      n_neu_back++;
       histo->fill(14,e,1.0);
     } else isLeaking = true;
   }
