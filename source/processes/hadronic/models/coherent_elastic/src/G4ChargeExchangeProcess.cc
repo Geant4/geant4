@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChargeExchangeProcess.cc,v 1.2 2006-05-29 14:52:18 vnivanch Exp $
+// $Id: G4ChargeExchangeProcess.cc,v 1.3 2006-06-07 09:22:34 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -114,13 +114,13 @@ BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
 
       G4double F[n] = {0.33,0.27,0.29,0.31,0.27,0.18,0.13,0.1,0.09,0.07};
       factors = new G4PhysicsLinearVector(0.0,1.8*GeV,n);
-      for(size_t i=0; i<n; i++) {factors->PutValue(i,F[n]);}
+      for(size_t i=0; i<n; i++) {factors->PutValue(i,F[i]);}
 
     } else {
 
       G4double F[n] = {0.50,0.45,0.40,0.35,0.30,0.25,0.06,0.04,0.005,0.0};
       factors = new G4PhysicsLinearVector(0.0,3.6*GeV,n);
-      for(size_t i=0; i<n; i++) {factors->PutValue(i,F[n]);}
+      for(size_t i=0; i<n; i++) {factors->PutValue(i,F[i]);}
     }
 
     if(verboseLevel>1)
