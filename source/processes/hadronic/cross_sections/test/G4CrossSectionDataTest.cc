@@ -21,12 +21,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4CrossSectionDataTest.cc,v 1.6 2006-05-26 07:31:14 grichine Exp $
+// $Id: G4CrossSectionDataTest.cc,v 1.7 2006-06-07 13:53:12 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // Test of G4CrossSectionDataStore and G4CrossSectionDataSet classes
 //
+// History:
+//
+// 29.05.06 V.Grichine: NIST elements/materials, write in file
 // F.W. Jones, TRIUMF, 22-JAN-98
 //                     19-MAY-98
 //
@@ -91,8 +94,8 @@ int main()
   G4cout << "10 tugnsten" << G4endl;
   G4cout << "11 uranium" << G4endl;
   G4int choice;
-  G4cin >> choice;
-
+  // G4cin >> choice;
+  choice = 1;
   G4Element*     theElement;
   G4Material*    theMaterial;
   G4NistManager* man = G4NistManager::Instance();
@@ -179,7 +182,8 @@ int main()
   G4cout << " 4 kaon+" << G4endl;
   G4cout << " 5 kaon0short" << G4endl;
   G4cout << " 6 pion-" << G4endl;
-  G4cin >> choice;
+  //  G4cin >> choice;
+  choice = 3;
 
   G4ParticleDefinition* theParticleDefinition;
   G4VProcess* theProcess;
@@ -223,9 +227,13 @@ int main()
   }
    //   G4cout << "Dumping particle info:" << G4endl;
    //   theParticleDefinition->DumpTable();
-  G4int i, iMax=70;
+
+
+  G4int i, iMax = 70;
   G4double kinEnergy;
-  // G4cout << "Kinetic energy in GeV: "<<G4endl;
+ 
+
+ // G4cout << "Kinetic energy in GeV: "<<G4endl;
   // G4cin >> kinEnergy;
 
 // Make a dynamic particle too
@@ -238,7 +246,8 @@ int main()
   G4cout << " 3 capture" << G4endl;
   G4cout << " 4 inelastic" << G4endl;
 
-  G4cin >> choice;
+  // G4cin >> choice;
+  choice = 4;
 
   /////////////////////////////
 
@@ -328,9 +337,9 @@ int main()
   std::ofstream writef("txs.dat", std::ios::out ) ;
   writef.setf( std::ios::scientific, std::ios::floatfield );
 
-  kinEnergy = 1.*GeV;
+  kinEnergy = 500.*GeV; //1.
 
-  for(i = 0; i < iMax; i++)
+  // for(i = 0; i < iMax; i++)
   {
    
      theDynamicParticle = new G4DynamicParticle(theParticleDefinition,
@@ -345,7 +354,7 @@ int main()
      G4cout << kinEnergy/GeV <<" GeV, \t"<< sig/millibarn << " mb" << G4endl;
      // G4cout << "Mean free path = " << mfp << " mm" << G4endl;
 
-     writef << kinEnergy/GeV <<"\t"<< sig/millibarn << G4endl;
+     // writef << kinEnergy/GeV <<"\t"<< sig/millibarn << G4endl;
 
      kinEnergy *= 1.1;
      delete theDynamicParticle;
