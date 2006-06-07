@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.cc,v 1.64 2006-05-22 08:42:50 allison Exp $
+// $Id: G4VSceneHandler.cc,v 1.65 2006-06-07 22:18:05 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -516,6 +516,7 @@ void G4VSceneHandler::ProcessScene (G4VViewer&) {
       pModel -> SetModelingParameters (pMP);
       SetModel (pModel);  // Store for use by derived class.
       pModel -> DescribeYourselfTo (*this);
+      pModel -> SetModelingParameters (0);
     }
 
     // Repeat if required...
@@ -526,6 +527,7 @@ void G4VSceneHandler::ProcessScene (G4VViewer&) {
 	pModel -> SetModelingParameters (pMP);
 	SetModel (pModel);  // Store for use by derived class.
 	pModel -> DescribeYourselfTo (*this);
+	pModel -> SetModelingParameters (0);
       }
       fSecondPass = false;
       fSecondPassRequested = false;
