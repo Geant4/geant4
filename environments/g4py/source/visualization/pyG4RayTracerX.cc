@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: pyG4RayTracerX.cc,v 1.3 2006-06-04 21:34:29 kmura Exp $
+// $Id: pyG4RayTracerX.cc,v 1.4 2006-06-07 05:03:10 kmura Exp $
 // $Name: not supported by cvs2svn $
 // ====================================================================
 //   pyG4RayTracerX.cc
@@ -43,7 +43,7 @@ using namespace boost::python;
 // ====================================================================
 void export_G4RayTracerX()
 {
-  class_<G4RayTracerX, bases<G4VGraphicsSystem> >
+  class_<G4RayTracerX, G4RayTracerX*, bases<G4VGraphicsSystem> >
     ("G4RayTracerX", "RayTracerX visualization module")
     ;
 }

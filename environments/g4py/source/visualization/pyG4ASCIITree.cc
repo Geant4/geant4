@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: pyG4ASCIITree.cc,v 1.3 2006-06-04 21:34:29 kmura Exp $
+// $Id: pyG4ASCIITree.cc,v 1.4 2006-06-07 05:03:10 kmura Exp $
 // $Name: not supported by cvs2svn $
 // ====================================================================
 //   pyG4ASCIITree.cc
@@ -37,7 +37,7 @@ using namespace boost::python;
 // ====================================================================
 void export_G4ASCIITree()
 {
-  class_<G4ASCIITree, bases<G4VGraphicsSystem> >
+  class_<G4ASCIITree, G4ASCIITree*, bases<G4VGraphicsSystem> >
     ("G4ASCIITree", "ASCII tree visualization module")
     ;
 }

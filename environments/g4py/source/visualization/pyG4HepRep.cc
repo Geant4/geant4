@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: pyG4HepRep.cc,v 1.3 2006-06-04 21:34:29 kmura Exp $
+// $Id: pyG4HepRep.cc,v 1.4 2006-06-07 05:03:10 kmura Exp $
 // $Name: not supported by cvs2svn $
 // ====================================================================
 //   pyG4HepRep.cc
@@ -37,7 +37,7 @@ using namespace boost::python;
 // ====================================================================
 void export_G4HepRep()
 {
-  class_<G4HepRep, bases<G4VGraphicsSystem> >
+  class_<G4HepRep, G4HepRep*, bases<G4VGraphicsSystem> >
     ("G4HepRep", "HepRep visualization module")
     ;
 }
