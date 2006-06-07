@@ -1,4 +1,4 @@
-$Id: History,v 1.72 2006-06-06 15:45:47 allison Exp $
+$Id: History,v 1.73 2006-06-07 22:14:04 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,9 @@ committal in the CVS repository !
 
 History file for visualization/modeling
 ---------------------------------------
+
+7th June 2006  John Allison (modeling-V08-00-14)
+- G4PhysicalVolumeModel.cc: Added protection for zero vis atts.
 
 6th June 2006  John Allison (modeling-V08-00-13)
 - G4TrajectoryChargeFilter.cc: Added #include <sstream> for Sun compiler.
