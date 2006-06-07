@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Transportation.cc,v 1.56 2006-05-08 09:32:04 japost Exp $
+// $Id: G4Transportation.cc,v 1.57 2006-06-07 14:26:59 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // ------------------------------------------------------------
@@ -92,8 +92,17 @@ G4Transportation::G4Transportation( G4int verboseLevel )
   //  is constructed.
   // Instead later the method DoesGlobalFieldExist() is called
 
-  fCurrentTouchableHandle = new G4TouchableHistory();
-  
+  // Small memory leak from this new
+  //    fCurrentTouchableHandle = new G4TouchableHistory();
+  // Fixes: 
+  // 1) static G4TouchableHistory sfNullTouchableHistory = new G4TouchableHistory();
+  //    fCurrentTouchableHandle = new G4TouchableHandle( sfNullTouchableHistory );
+  // 2) set it to (G4TouchableHistory*) 0 
+  //    fCurrentTouchableHandle = new G4TouchableHandle( (G4TouchableHistory*) 0 ); 
+  // 3) Below:
+  static G4TouchableHandle nullTouchableHandle;  // Points to (G4VTouchable*) 0
+  fCurrentTouchableHandle = nullTouchableHandle; 
+
   fEndGlobalTimeComputed  = false;
   fCandidateEndGlobalTime = 0;
 }
@@ -102,6 +111,15 @@ G4Transportation::G4Transportation( G4int verboseLevel )
 
 G4Transportation::~G4Transportation()
 {
+
+  // --- Alternative code to delete 'junk data' in touchable handle
+  //  ** Corresponds to the case that the constructor has
+  //       fCurrentTouchableHandle = new G4TouchableHistory();
+  //  ** Likely incorrect - as at the end of the simulation 
+  //     the handle no longer holds the original 'null' history
+  // G4VTouchable*  pTouchable= fCurrentTouchableHandle();  //  Incorrect
+  // delete  pTouchable;  // Incorrect
+
   if( (fVerboseLevel > 0) && (fSumEnergyKilled > 0.0 ) ){ 
     G4cout << " G4Transportation: Statistics for looping particles " << G4endl;
     G4cout << "   Sum of energy of loopers killed: " <<  fSumEnergyKilled << G4endl;
