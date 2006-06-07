@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChangeForLoss.hh,v 1.16 2006-02-08 11:24:24 vnivanch Exp $
+// $Id: G4ParticleChangeForLoss.hh,v 1.17 2006-06-07 17:16:42 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -37,6 +37,7 @@
 //   15.04.05 V.Ivanchenko inline update methods
 //   30.01.06 V.Ivanchenko add ProposedMomentumDirection for AlongStep
 //                         and ProposeWeight for PostStep
+//   07.06.06 V.Ivanchenko RemoveProposedMomentumDirection from AlongStep
 //
 // ------------------------------------------------------------
 //
@@ -192,7 +193,6 @@ inline void G4ParticleChangeForLoss::InitializeForAlongStep(const G4Track& track
   InitializeSecondaries(track);
   theParentWeight = track.GetWeight();
   proposedKinEnergy = track.GetKineticEnergy();
-  proposedMomentumDirection = track.GetMomentumDirection();
   currentCharge = track.GetDynamicParticle()->GetCharge();
 }
 
@@ -226,7 +226,6 @@ inline G4Step* G4ParticleChangeForLoss::UpdateStepForAlongStep(G4Step* pStep)
     kinEnergy = 0.0;
   } else {
     pPostStepPoint->SetCharge( currentCharge );
-    pPostStepPoint->SetMomentumDirection( proposedMomentumDirection );
   }
   pPostStepPoint->SetKineticEnergy( kinEnergy );
 
