@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.78 2006-06-06 14:51:45 gcosmo Exp $
+# $Id: GNUmakefile,v 1.79 2006-06-07 10:18:10 gcosmo Exp $
 # -----------------------------------------------------------------
 # "gmake" makes default libraries for each subdomain.
 # "gmake global" makes global libraries for each subdomain.
@@ -130,7 +130,7 @@ endif
 banner:
 	@echo "*************************************************************"
 	@echo " Installation Geant4 version $$Name: not supported by cvs2svn $ "
-	@echo " Copyright @ 1994-2006 Geant4 Collaboration                            "
+	@echo " Copyright (C) 1994-2006 Geant4 Collaboration                            "
 	@echo "*************************************************************"
 
 clean_libs::
