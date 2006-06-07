@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.88 2006-05-15 09:51:23 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.89 2006-06-07 17:09:59 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -94,6 +94,7 @@
 // 20-01-06 Introduce G4EmTableType and reducing number of methods (VI)
 // 22-03-06 Add control on warning printout AlongStep (VI)
 // 23-03-06 Use isIonisation flag (V.Ivanchenko)
+// 07-06-06 Do not reflect AlongStep in subcutoff regime (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -688,8 +689,7 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
               mom -= t->GetMomentum();
 	    }      
 	    scTracks.clear();
-            mom = mom.unit();
-	    fParticleChange.SetProposedMomentumDirection(mom);            
+	    //	    fParticleChange.SetProposedMomentum(mom);            
 	  }
 	}
       }

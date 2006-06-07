@@ -1,4 +1,4 @@
-$Id: History,v 1.252 2006-06-02 16:25:27 vnivanch Exp $
+$Id: History,v 1.253 2006-06-07 17:09:59 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+07 June 06: V.Ivant (emutils-V08-00-20)
+- G4VEnergyLossProcess - Do not change particle momentum AlongStep
 
 02 June 06: V.Ivant (emutils-V08-00-19)
 - G4EmCorrections - fix compilation warnings at SUN
