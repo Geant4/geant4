@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeModel.cc,v 1.45 2006-06-06 15:45:25 allison Exp $
+// $Id: G4PhysicalVolumeModel.cc,v 1.46 2006-06-07 22:13:41 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -423,7 +423,13 @@ void G4PhysicalVolumeModel::DescribeAndDescend
   // Make decision to draw...
   const G4VisAttributes* pVisAttribs = pLV->GetVisAttributes();
   if (!pVisAttribs) pVisAttribs = fpMP->GetDefaultVisAttributes();
-  // Beware - pVisAttribs might still be zero.
+  // Beware - pVisAttribs might still be zero - create a temporary default one...
+  G4bool visAttsCreated = false;
+  if (!pVisAttribs) {
+    pVisAttribs = new G4VisAttributes;
+    visAttsCreated = true;
+  }
+
   G4bool thisToBeDrawn = true;
 
   // There are various reasons why this volume
@@ -516,6 +522,9 @@ void G4PhysicalVolumeModel::DescribeAndDescend
       }
     }
   }
+
+  // Vis atts for this volume no longer needed if created...
+  if (visAttsCreated) delete pVisAttribs;
 
   if (daughtersToBeDrawn) {
     for (G4int iDaughter = 0; iDaughter < nDaughters; iDaughter++) {
