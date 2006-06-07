@@ -65,7 +65,7 @@ struct CB_G4UserTrackingAction : G4UserTrackingAction,
 // ====================================================================
 void export_G4UserTrackingAction()
 {
-  class_<CB_G4UserTrackingAction, boost::noncopyable>
+  class_<CB_G4UserTrackingAction, CB_G4UserTrackingAction*, boost::noncopyable>
     ("G4UserTrackingAction", "tracking action class")
     // ---
     .def("PreUserTrackingAction", 

@@ -54,7 +54,7 @@ struct CB_G4UserSteppingAction : G4UserSteppingAction,
 // ====================================================================
 void export_G4UserSteppingAction()
 {
-  class_<CB_G4UserSteppingAction, boost::noncopyable>
+  class_<CB_G4UserSteppingAction, CB_G4UserSteppingAction*, boost::noncopyable>
     ("G4UserSteppingAction", "stepping action class")
 
     .def("UserSteppingAction", &G4UserSteppingAction::UserSteppingAction,

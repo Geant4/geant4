@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: pyG4VUserPhysicsList.cc,v 1.3 2006-06-04 21:34:29 kmura Exp $
+// $Id: pyG4VUserPhysicsList.cc,v 1.4 2006-06-07 05:22:06 kmura Exp $
 // $Name: not supported by cvs2svn $
 // ====================================================================
 //   pyG4VUserPhysicsList.cc
@@ -76,7 +76,7 @@ using namespace pyG4VUserPhysicsList;
 // ====================================================================
 void export_G4VUserPhysicsList()
 {
-  class_<CB_G4VUserPhysicsList, boost::noncopyable>
+  class_<CB_G4VUserPhysicsList, CB_G4VUserPhysicsList*, boost::noncopyable>
     ("G4VUserPhysicsList", "base class of user physics list")
     // ---
     .def("ConstructParticle",

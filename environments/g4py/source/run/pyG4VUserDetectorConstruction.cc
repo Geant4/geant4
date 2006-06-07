@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: pyG4VUserDetectorConstruction.cc,v 1.3 2006-06-04 21:34:29 kmura Exp $
+// $Id: pyG4VUserDetectorConstruction.cc,v 1.4 2006-06-07 05:22:06 kmura Exp $
 // $Name: not supported by cvs2svn $
 // ====================================================================
 //   pyG4VUserDetectorConstruction.cc
@@ -56,7 +56,8 @@ using namespace pyG4VUserDetectorConstruction;
 // ====================================================================
 void export_G4VUserDetectorConstruction()
 {
-  class_<CB_G4VUserDetectorConstruction, boost::noncopyable>
+  class_<CB_G4VUserDetectorConstruction, CB_G4VUserDetectorConstruction*,
+    boost::noncopyable>
     ("G4VUserDetectorConstruction",
      "base class of user detector construction")
 

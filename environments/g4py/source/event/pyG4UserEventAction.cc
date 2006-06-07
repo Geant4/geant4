@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: pyG4UserEventAction.cc,v 1.3 2006-06-04 21:34:28 kmura Exp $
+// $Id: pyG4UserEventAction.cc,v 1.4 2006-06-07 05:22:05 kmura Exp $
 // $Name: not supported by cvs2svn $
 // ====================================================================
 //   pyG4UserEventAction.cc
@@ -62,7 +62,7 @@ struct CB_G4UserEventAction : G4UserEventAction,
 // ====================================================================
 void export_G4UserEventAction()
 {
-  class_<CB_G4UserEventAction, boost::noncopyable>
+  class_<CB_G4UserEventAction, CB_G4UserEventAction*, boost::noncopyable>
     ( "G4UserEventAction", "event action class")
     
     .def("BeginOfEventAction", &G4UserEventAction::BeginOfEventAction,

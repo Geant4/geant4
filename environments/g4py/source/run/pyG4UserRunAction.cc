@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: pyG4UserRunAction.cc,v 1.3 2006-06-04 21:34:29 kmura Exp $
+// $Id: pyG4UserRunAction.cc,v 1.4 2006-06-07 05:22:06 kmura Exp $
 // $Name: not supported by cvs2svn $
 // ====================================================================
 //   pyG4UserRunAction.cc
@@ -61,7 +61,7 @@ struct CB_G4UserRunAction : G4UserRunAction, wrapper<G4UserRunAction> {
 // ====================================================================
 void export_G4UserRunAction()
 {
-  class_<CB_G4UserRunAction, boost::noncopyable>
+  class_<CB_G4UserRunAction, CB_G4UserRunAction*, boost::noncopyable>
     ( "G4UserRunAction", "run action class")
     // ---
     .def("BeginOfRunAction", &G4UserRunAction::BeginOfRunAction,
