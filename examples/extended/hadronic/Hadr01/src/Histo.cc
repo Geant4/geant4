@@ -49,11 +49,12 @@
 Histo::Histo(G4int ver)
 {
   verbose    = ver;
-  histName   = "histo.paw";
+  histName   = "histo";
   histType   = "hbook";
+  option     = "--noErrors uncompress";
   nHisto     = 0;
   defaultAct = 1;
-  tupleName  = "tuple.paw";
+  tupleName  = "tuple.hbook";
   tupleId    = "100";
   tupleList  = "";
   ntup       = 0;
@@ -71,7 +72,6 @@ Histo::~Histo()
 #ifdef G4ANALYSIS_USE
   for(G4int i=0; i<nHisto; i++) {
     if(histo[i]) delete histo[i];
-  G4cout<<" Destructor "<<G4endl;
   }
   delete messenger;
 #endif
@@ -94,8 +94,8 @@ void Histo::book()
     G4cout<<"Histo books tree factory ......... "<<G4endl;
 
   // Creating a tree mapped to a new hbook file.
-  //tree = tf->create(histName,histType,false,false);
-  tree = tf->create(histName,histType,false,false,"uncompress");
+  G4String name = histName + "." + histType;
+  tree = tf->create(name, histType, false, true, option);
   G4cout << "Histo: tree store : " << tree->storeName() << G4endl;
 
   // Creating a histogram factory, whose histograms will be handled by the tree
@@ -130,7 +130,29 @@ void Histo::save()
   G4cout << "Closing the tree..." << G4endl;
   tree->close();
   G4cout << "Histograms and Ntuples are saved" << G4endl;
+  for(G4int i=0; i<nHisto; i++) {
+    if(histo[i]) histo[i]->reset();
+  }
 #endif
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void Histo::reset()
+{
+#ifdef G4ANALYSIS_USE
+  for(G4int i=0; i<nHisto; i++) {
+    if(histo[i]) histo[i]->reset();
+  }
+#endif
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void Histo::setFileType(const G4String& nam) 
+{
+  if(nam == "hbook" || nam == "root" || nam == "aida") histType = nam;
+  else if(nam == "XML" || nam == "xml") histType = "aida";
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -138,6 +160,11 @@ void Histo::save()
 void Histo::add1D(const G4String& id, const G4String& name, G4int nb,
                   G4double x1, G4double x2, G4double u)
 {
+  if(nHisto > 0) {
+    for(G4int i=0; i<nHisto; i++) {
+      if(ids[i] == id) return;
+    }
+  }
 
   if(verbose > 0) 
     G4cout << "New histogram will be booked: #" << id << "  <" << name

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: Histo.hh,v 1.1 2006-06-02 19:00:00 vnivanch Exp $
+// $Id: Histo.hh,v 1.2 2006-06-07 15:17:26 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef Histo_h
@@ -71,6 +71,9 @@ public:
   void save();
   // Save histogramms to file
 
+  void reset();
+  // Reset histogramms 
+
   void add1D(const G4String&, const G4String&, G4int nb=100, G4double x1=0., 
                                                G4double x2=1., G4double u=1.);
   // In this method histogramms are predefined
@@ -94,7 +97,9 @@ public:
 
   void setFileName(const G4String& nam) {histName = nam;};
 
-  void setFileType(const G4String& nam) {if(nam == "XML") histType = "XML";};
+  void setFileOption(const G4String& nam) {option = nam;};
+
+  void setFileType(const G4String& nam);
 
   void print(G4int i);
 
@@ -104,6 +109,7 @@ private:
 
   G4String histName;
   G4String histType;
+  G4String option;
   G4String tupleName;
   G4String tupleId;
   G4String tupleList;

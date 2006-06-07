@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: HistoMessenger.hh,v 1.2 2006-06-06 19:48:38 vnivanch Exp $
+// $Id: HistoMessenger.hh,v 1.3 2006-06-07 15:17:26 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /////////////////////////////////////////////////////////////////////////
@@ -48,6 +48,7 @@
 class Histo;
 class G4UIcommand;
 class G4UIcmdWithAString;
+class G4UIcmdWithAnInteger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -62,11 +63,13 @@ public:
 
 private:
 
-   Histo*                  histo;
+  Histo*                  histo;
    
-   G4UIcmdWithAString*     factoryCmd;
-   G4UIcmdWithAString*     fileCmd;
-   G4UIcommand*            histoCmd;    
+  G4UIcmdWithAString*     factoryCmd;
+  G4UIcmdWithAString*     fileCmd;
+  G4UIcmdWithAString*     optCmd;
+  G4UIcmdWithAnInteger*   printCmd;
+  G4UIcommand*            histoCmd;    
  
 };
 

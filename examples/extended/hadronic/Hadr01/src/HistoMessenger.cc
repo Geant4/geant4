@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: HistoMessenger.cc,v 1.2 2006-06-06 19:48:38 vnivanch Exp $
+// $Id: HistoMessenger.cc,v 1.3 2006-06-07 15:17:26 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /////////////////////////////////////////////////////////////////////////
@@ -43,6 +43,7 @@
 #include "G4UIcommand.hh"
 #include "G4UIparameter.hh"
 #include "G4UIcmdWithAString.hh"
+#include "G4UIcmdWithAnInteger.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -55,7 +56,15 @@ HistoMessenger::HistoMessenger(Histo* man) : histo (man)
   fileCmd = new G4UIcmdWithAString("/testhadr/HistoType",this);
   fileCmd->SetGuidance("set type (hbook, root, aida) for the histograms file");
   fileCmd->SetCandidates("hbook root aida");
+
+  optCmd = new G4UIcmdWithAString("/testhadr/HistoOption",this);
+  optCmd->SetGuidance("set AIDA option for the histograms file");
    
+  printCmd = new G4UIcmdWithAnInteger("/testhadr/HistoPrint",this);
+  printCmd->SetGuidance("Print histogram by ID, if ID=0 - all.");
+  printCmd->SetParameterName("pr",false);
+  printCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
   histoCmd = new G4UIcommand("/testhadr/SetHisto",this);
   histoCmd->SetGuidance("Set bining of the histo number ih :");
   histoCmd->SetGuidance("  nbBins; valMin; valMax; unit (of vmin and vmax)");
@@ -91,6 +100,8 @@ HistoMessenger::~HistoMessenger()
   delete fileCmd;
   delete histoCmd;
   delete factoryCmd;
+  delete optCmd;
+  delete printCmd;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -102,6 +113,12 @@ void HistoMessenger::SetNewValue(G4UIcommand* command,G4String newValues)
 
   if (command == fileCmd)
     histo->setFileType(newValues);
+
+  if (command == optCmd)
+    histo->setFileOption(newValues);
+
+  if (command == printCmd)
+    histo->print(printCmd->GetNewIntValue(newValues));
     
   if (command == histoCmd)
    { G4int ih,nbBins; G4double vmin,vmax; char unts[30];

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.cc,v 1.3 2006-06-06 19:48:38 vnivanch Exp $
+// $Id: DetectorConstruction.cc,v 1.4 2006-06-07 15:17:26 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /////////////////////////////////////////////////////////////////////////
@@ -44,6 +44,7 @@
 
 #include "G4RunManager.hh"
 
+#include "G4GeometryManager.hh"
 #include "G4PhysicalVolumeStore.hh"
 #include "G4LogicalVolumeStore.hh"
 #include "G4SolidStore.hh"
@@ -93,6 +94,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 {
   // Cleanup old geometry
 
+  G4GeometryManager::GetInstance()->OpenGeometry();
   G4PhysicalVolumeStore::GetInstance()->Clean();
   G4LogicalVolumeStore::GetInstance()->Clean();
   G4SolidStore::GetInstance()->Clean();
@@ -138,9 +140,11 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     z += 2.0*sliceZ;
   }
   G4cout << "### Target consist of " << nSlices
-         << " disks of R(mm)= " << radius/mm
-         << " disks of Width(mm)= " << 2.0*sliceZ/mm
-         << " of " << targetMaterial->GetName() <<  "  ###" << G4endl;
+         << " of " << targetMaterial->GetName() 
+         << " disks with R(mm)= " << radius/mm
+         << "  Width(mm)= " << 2.0*sliceZ/mm
+         << "  Total Length(mm)= " << 2.0*targetZ/mm
+         <<  "  ###" << G4endl;
 
   // colors
   logicWorld->SetVisAttributes(G4VisAttributes::Invisible);
@@ -188,7 +192,7 @@ void DetectorConstruction::SetWorldMaterial(const G4String& mat)
 
 void DetectorConstruction::UpdateGeometry()
 {
-  G4RunManager::GetRunManager()->GeometryHasBeenModified();
+  G4RunManager::GetRunManager()->DefineWorldVolume(Construct());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

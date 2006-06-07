@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.3 2006-06-07 11:51:13 vnivanch Exp $
+// $Id: HistoManager.cc,v 1.4 2006-06-07 15:17:26 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -103,7 +103,7 @@ HistoManager::~HistoManager()
 void HistoManager::bookHisto()
 {
   histo->add1D("1",
-    "Energy deposition (MeV/mm/event) in phantom",nSlices,0.0,length/mm,MeV/mm);
+    "Energy deposition (MeV/mm/event) in the target",nSlices,0.0,length/mm,MeV/mm);
 
   histo->add1D("2",
     "Log10 Energy (MeV) of gammas",nBinsE,-5.,5.,1.0);
@@ -112,7 +112,7 @@ void HistoManager::bookHisto()
     "Log10 Energy (MeV) of electrons",nBinsE,-5.,5.,1.0);
 
   histo->add1D("4",
-    "Log10 Energy (MeV) of positrns",nBinsE,-5.,5.,1.0);
+    "Log10 Energy (MeV) of positrons",nBinsE,-5.,5.,1.0);
 
   histo->add1D("5",
     "Log10 Energy (MeV) of protons",nBinsE,-5.,5.,1.0);
@@ -191,10 +191,8 @@ void HistoManager::BeginOfRun()
   histo->book();
 
   if(verbose > 0) 
-  {
     G4cout << "HistoManager: Histograms are booked and run has been started"
            <<G4endl<<"  BeginOfRun (After histo->book)"<< G4endl;
-  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -251,7 +249,7 @@ void HistoManager::EndOfRun()
   G4cout << std::setprecision(4) << "Average number of ions               " << xio << G4endl;
   G4cout << std::setprecision(4) << "Average number of forward neutrons   " << xnf << G4endl;
   G4cout << std::setprecision(4) << "Average number of reflected neutrons " << xnb << G4endl;
-  G4cout << std::setprecision(4) << "Average number of backword neutrons  " << xnbw << G4endl;
+  G4cout << std::setprecision(4) << "Average number of leaked neutrons    " << xnbw << G4endl;
   G4cout << std::setprecision(4) << "Average number of proton leak        " << xpl << G4endl;
   G4cout << std::setprecision(4) << "Average number of pion leak          " << xal << G4endl;
   G4cout<<"========================================================"<<G4endl;
@@ -264,6 +262,7 @@ void HistoManager::EndOfRun()
 
   if(verbose > 1) histo->print(0);
   histo->save();
+  histo->reset();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -385,21 +384,21 @@ void HistoManager::AddLeakingParticle(const G4Track* track)
   G4bool isLeaking = false;
 
   // Forward 
-  if(z > absZ0 && dir.z() > 0.0) {
+  if(z > -absZ0 && dir.z() > 0.0) {
     if(pd == neutron) {
       n_neu_forw++;
       histo->fill(15,e,1.0);
     } else isLeaking = true;
 
     // Backward
-  } else if (z < -absZ0 && dir.z() < 0.0) {
+  } else if (z < absZ0 && dir.z() < 0.0) {
     if(pd == neutron) {
       n_neu_leak++;
       histo->fill(16,e,1.0);
     } else isLeaking = true;
 
     // Side
-  } else if (std::abs(z) < absZ0 && x*dir.x() + y*dir.y() > 0.0) {
+  } else if (std::abs(z) <= -absZ0 && x*dir.x() + y*dir.y() > 0.0) {
     isLeaking = true;
     if(pd == neutron) {
       n_neu_back++;
