@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4PathFinder.cc,v 1.5 2006-05-26 22:25:11 japost Exp $
+// $Id: testG4PathFinder.cc,v 1.6 2006-06-08 16:53:31 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $ 
 //
 // 
@@ -51,6 +51,10 @@
 //   For the unit under test 
 //                                 #include "G4Navigator.hh"
 #include "G4PathFinder.hh"
+
+#include <iomanip>
+
+G4bool  printing= true;    //  false for minimum output, true to debug/check
 
 // Build simple geometry:
 // 4 small cubes + 1 slab (all G4Boxes) are positioned inside a larger cuboid
@@ -184,7 +188,7 @@ G4bool testG4PathFinder1(G4VPhysicalVolume *) // pTopNode)
 
     G4Navigator *pNav= transportMgr->GetNavigatorForTracking();
 
-    G4int navId=1 ;  // Asserted above -- but generally must 'store' this number!
+    G4int navId= navIdExpected;  // As checked/ asserted above !
 
     G4ThreeVector position( 0., 0., 0.), dirUx(1.,0.,0.); 
     pathFinder->PrepareNewTrack( position, dirUx ); 
@@ -214,42 +218,60 @@ G4bool testG4PathFinder1(G4VPhysicalVolume *) // pTopNode)
     pathFinder->Locate( endPoint, endDirection ); 
   //==========  ------
     located= pathFinder->GetLocatedVolume( navId ); 
+    if (located && printing ) {
+      G4cout << " Located in volume " << located->GetName()
+	     << "  id= " << located->GetCopyNo() << G4endl; 
+    }
 
+    G4double stepAgain=
     pathFinder->ComputeStep( startFT, steplen, navId, stepNo, safetyRet, limited, endFT );   
     // Should not move, since the 'stepNo' is the same !!
  
-    startFT.SetPosition( endPoint ); 
-    stepdone= 
-      pathFinder->ComputeStep( startFT, steplen, navId, ++stepNo, 
-			       safetyRet, limited, endFT );   
-    pathFinder->Locate( endFT.GetPosition(), endFT.GetMomentumDirection() ); 
-    located= pathFinder->GetLocatedVolume( navId ); 
-    if (located) {
-      G4cout << " Located in volume " << located->GetName()
-	     << "  id= " << located->GetCopyNo() << G4endl; 
-    }else{
-      G4cout << " Step " << stepNo << " is the last one." << G4endl; 
-      return true;
-    }
+    G4double endSafety= pathFinder->ComputeSafety( endFT.GetPosition() );  
 
+    G4cout.precision(5); 
     do{ 
       startFT= endFT; 
+
       stepdone= 
         pathFinder->ComputeStep( startFT, steplen, navId, ++stepNo, safetyRet, limited, endFT );   
       pathFinder->Locate( endFT.GetPosition(), endFT.GetMomentumDirection() ); 
       located= pathFinder->GetLocatedVolume( navId ); 
+
+      if( std::fabs(safetyRet-endSafety) > 1.0e-9 * safetyRet ) { 
+	G4cerr << " Problem in safety at new point " 
+	       << " Last endpoint returned " << endSafety
+	       << " while new computeStep gives " 
+	       << G4endl;
+      }
+
+      endSafety= pathFinder->ComputeSafety( endFT.GetPosition() ); 
+
+      G4double truestep= (stepdone < steplen ) ? stepdone : steplen; 
+      if ( printing ) {
+	G4cout << " Step " << std::setw(3) << stepNo << "   " 
+	       << " start-safety= " << std::setw(7) << safetyRet << "  " 
+	       << " step-length= "  << std::setw(7) << truestep / mm << " mm " 
+	       << " to " << endFT.GetPosition() << "  " ; 
+	if( located ) {
+	    G4cout
+	       << " new volume= " << std::setw(10) << located->GetName()
+	       << "  copyNo= " << located->GetCopyNo(); 
+	}
+	G4cout << " end-safety= " << endSafety;
+	if( located )  G4cout << G4endl;
+      }
     } while ( located );
 
-    G4cout << " Step " << stepNo << " is the last one." << G4endl; 
+    G4cout << "  Last Step it exits the World. Located = " << located << G4endl; 
+    G4cout << G4endl;
+    // G4cout << " Step " << stepNo << " is the last one, it exits the World." << G4endl; 
     return true; 
 
+    ////  OLD Checks ......
     assert(!pNav->LocateGlobalPointAndSetup(G4ThreeVector(kInfinity,0,0),0,false));
     located=pNav->LocateGlobalPointAndSetup(G4ThreeVector(0,0,0),0,false);
     assert(located->GetName()=="World");
-
-
-
-
 
 
     return true;
