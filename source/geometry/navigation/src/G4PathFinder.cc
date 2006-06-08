@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PathFinder.cc,v 1.11 2006-06-02 19:42:01 japost Exp $
+// $Id: G4PathFinder.cc,v 1.12 2006-06-08 16:51:00 japost Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4PathFinder Implementation
@@ -416,6 +416,34 @@ G4PathFinder::ReLocate( const   G4ThreeVector& position )
   fLastLocatedPosition= position; 
   fRelocatedPoint= false;
 }
+
+// -----------------------------------------------------------------------------
+
+G4double  G4PathFinder::ComputeSafety( const G4ThreeVector& position )
+     // Recompute safety for the relevant point
+{
+    G4double minSafety= DBL_MAX; 
+    // G4cout << " G4PathFinder::ComputeSafety - entered " << G4endl;
+  
+    std::vector<G4Navigator*>::iterator pNavigatorIter;
+    pNavigatorIter= pTransportManager-> GetActiveNavigatorsIterator();
+
+    G4int num=0; 
+    for( num=0; num< fNoActiveNavigators; ++pNavigatorIter,++num ) {
+
+       G4double safety;
+       safety= (*pNavigatorIter)->ComputeSafety( position ); 
+  
+       if( safety < minSafety ){ minSafety = safety; } 
+       // fNewSafety[num]= safety; 
+    } 
+
+    // G4cout << " G4PathFinder::ComputeSafety - exits, returning " << minSafety << G4endl;
+    return minSafety; 
+}
+
+
+// -----------------------------------------------------------------------------
 
 G4TouchableHandle 
 G4PathFinder::CreateTouchableHandle( G4int navId ) const
