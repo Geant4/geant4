@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: HistoMessenger.cc,v 1.3 2006-06-07 15:17:26 vnivanch Exp $
+// $Id: HistoMessenger.cc,v 1.4 2006-06-08 09:21:46 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /////////////////////////////////////////////////////////////////////////
@@ -44,6 +44,7 @@
 #include "G4UIparameter.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithAnInteger.hh"
+#include <sstream>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -120,16 +121,16 @@ void HistoMessenger::SetNewValue(G4UIcommand* command,G4String newValues)
   if (command == printCmd)
     histo->print(printCmd->GetNewIntValue(newValues));
     
-  if (command == histoCmd)
-   { G4int ih,nbBins; G4double vmin,vmax; char unts[30];
-     const char* t = newValues;
-     std::istringstream is(t);
-     is >> ih >> nbBins >> vmin >> vmax >> unts;
-     G4String unit = unts;
-     G4double vUnit = 1. ;
-     if (unit != "none") vUnit = G4UIcommand::ValueOf(unit);
-     histo->setHisto1D(ih,nbBins,vmin,vmax,vUnit);
-   }      
+  if (command == histoCmd) { 
+    G4int ih, nbBins;
+    G4double vmin,vmax; 
+    G4String unit;
+    std::istringstream is(newValues);
+    is >> ih >> nbBins >> vmin >> vmax >> unit;
+    G4double vUnit = 1. ;
+    if (unit != "none" && unit != "") vUnit = G4UIcommand::ValueOf(unit);
+    histo->setHisto1D(ih,nbBins,vmin,vmax,vUnit);
+  }      
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
