@@ -20,6 +20,9 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: HadronPhysicsQGSC.hh,v 1.3 2006-06-08 13:13:09 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
 //---------------------------------------------------------------------------
 //
 // ClassName:   HadronPhysicsQGSC
@@ -28,8 +31,10 @@
 //
 // Modified:
 // 23.11.2005 G.Folger: don't  keep processes as data members, but new these
+// 08.06.2006 V.Ivanchenko: remove stopping
 //
 //----------------------------------------------------------------------------
+
 #ifndef HadronPhysicsQGSC_h
 #define HadronPhysicsQGSC_h 1
 
@@ -37,7 +42,6 @@
 #include "G4ios.hh"
 
 #include "G4VPhysicsConstructor.hh"
-#include "G4StoppingHadronBuilder.hh"
 #include "G4MiscLHEPBuilder.hh"
 
 #include "G4PiKBuilder.hh"
@@ -77,10 +81,7 @@ class HadronPhysicsQGSC : public G4VPhysicsConstructor
     G4QGSCProtonBuilder * theQGSCPro;    
     
     G4MiscLHEPBuilder * theMiscLHEP;
-    G4StoppingHadronBuilder * theStoppingHadron;
 };
-
-// 2002 by J.P. Wellisch
 
 #endif
 

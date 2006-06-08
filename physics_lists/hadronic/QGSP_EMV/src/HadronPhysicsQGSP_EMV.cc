@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: HadronPhysicsQGSP_EMV.cc,v 1.1 2005-12-16 09:56:57 gunter Exp $
+// $Id: HadronPhysicsQGSP_EMV.cc,v 1.2 2006-06-08 13:13:09 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -32,7 +32,9 @@
 //
 // Modified:
 // 21.11.2005 G.Folger:  migration to non static particles
+// 08.06.2006 V.Ivanchenko: remove stopping
 //
+
 #include "HadronPhysicsQGSP_EMV.hh"
 
 #include "globals.hh"
@@ -67,12 +69,10 @@ void HadronPhysicsQGSP_EMV::CreateModels()
   theLEPPiK->SetMaxEnergy(25*GeV);
   
   theMiscLHEP=new G4MiscLHEPBuilder;
-  theStoppingHadron=new G4StoppingHadronBuilder;
 }
 
 HadronPhysicsQGSP_EMV::~HadronPhysicsQGSP_EMV()
 {
-   delete theStoppingHadron;
    delete theMiscLHEP;
    delete theQGSPPro;
    delete theLEPPro;
@@ -103,7 +103,5 @@ void HadronPhysicsQGSP_EMV::ConstructProcess()
   thePro->Build();
   thePiK->Build();
   theMiscLHEP->Build();
-  theStoppingHadron->Build();
-//  theHadronQED.Build();
 }
-// 2002 by J.P. Wellisch
+

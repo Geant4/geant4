@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: HadronPhysicsLHEP_GN.hh,v 1.2 2005-12-01 18:48:15 gunter Exp $
+// $Id: HadronPhysicsLHEP_GN.hh,v 1.3 2006-06-08 13:13:08 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -30,7 +30,8 @@
 // Author: 2002 J.P. Wellisch
 //
 // Modified:
-// 1.12.2005 G.Folger: don't  keep processes as data members, but new these
+//  1.12.2005 G.Folger: don't  keep processes as data members, but new these
+// 08.06.2006 V.Ivanchenko: remove stopping
 //
 //----------------------------------------------------------------------------
 //
@@ -41,7 +42,6 @@
 #include "G4ios.hh"
 
 #include "G4VPhysicsConstructor.hh"
-#include "G4StoppingHadronBuilder.hh"
 #include "G4MiscLHEPBuilder.hh"
 
 #include "G4LHEPPiKBuilder.hh"
@@ -75,10 +75,7 @@ class HadronPhysicsLHEP_GN : public G4VPhysicsConstructor
     G4LHEPProtonBuilder * theLHEPPro;
     
     G4MiscLHEPBuilder * theMiscLHEP;
-    G4StoppingHadronBuilder * theStoppingHadron;
 };
-
-// 2002 by J.P. Wellisch
 
 #endif
 

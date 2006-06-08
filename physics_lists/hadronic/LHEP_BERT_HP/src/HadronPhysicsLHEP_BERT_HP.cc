@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: HadronPhysicsLHEP_BERT_HP.cc,v 1.3 2005-12-02 16:16:59 gunter Exp $
+// $Id: HadronPhysicsLHEP_BERT_HP.cc,v 1.4 2006-06-08 13:13:07 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -31,6 +31,7 @@
 //
 // Modified:
 //  1.12.2005 G.Folger: migration to non static particles
+// 08.06.2006 V.Ivanchenko: remove stopping
 //
 //----------------------------------------------------------------------------
 //
@@ -71,7 +72,6 @@ void HadronPhysicsLHEP_BERT_HP::CreateModels()
   thePiK->RegisterMe(theLHEPPiK=new G4LHEPPiKBuilder);
   
   theMiscLHEP=new G4MiscLHEPBuilder;
-  theStoppingHadron=new G4StoppingHadronBuilder;  
 }
 
 HadronPhysicsLHEP_BERT_HP::~HadronPhysicsLHEP_BERT_HP()
@@ -89,7 +89,6 @@ HadronPhysicsLHEP_BERT_HP::~HadronPhysicsLHEP_BERT_HP()
     delete theBertiniPro;
     
     delete theMiscLHEP;
-    delete theStoppingHadron;
 }
 
 void HadronPhysicsLHEP_BERT_HP::ConstructParticle()
@@ -112,6 +111,5 @@ void HadronPhysicsLHEP_BERT_HP::ConstructProcess()
   thePro->Build();
   thePiK->Build();
   theMiscLHEP->Build();
-  theStoppingHadron->Build();
 }
-// 2002 by J.P. Wellisch
+

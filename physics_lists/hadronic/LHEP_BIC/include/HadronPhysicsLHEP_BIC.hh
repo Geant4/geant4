@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: HadronPhysicsLHEP_BIC.hh,v 1.3 2005-12-02 16:13:42 gunter Exp $
+// $Id: HadronPhysicsLHEP_BIC.hh,v 1.4 2006-06-08 13:13:08 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -31,6 +31,7 @@
 //
 // Modified:
 //  1.12.2005 G.Folger: migration to non static particles
+// 08.06.2006 V.Ivanchenko: remove stopping
 //
 //----------------------------------------------------------------------------
 //
@@ -41,7 +42,6 @@
 #include "G4ios.hh"
 
 #include "G4VPhysicsConstructor.hh"
-#include "G4StoppingHadronBuilder.hh"
 #include "G4MiscLHEPBuilder.hh"
 
 #include "G4PiKBuilder.hh"
@@ -79,10 +79,7 @@ class HadronPhysicsLHEP_BIC : public G4VPhysicsConstructor
     G4BinaryProtonBuilder * theBinaryPro;
     
     G4MiscLHEPBuilder * theMiscLHEP;
-    G4StoppingHadronBuilder * theStoppingHadron;
 };
-
-// 2002 by J.P. Wellisch
 
 #endif
 

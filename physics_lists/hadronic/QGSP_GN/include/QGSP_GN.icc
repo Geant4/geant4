@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: QGSP_GN.icc,v 1.7 2005-12-05 18:25:06 vnivanch Exp $
+// $Id: QGSP_GN.icc,v 1.8 2006-06-08 13:13:09 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -34,6 +34,7 @@
 // 30.11.2005 G.Folger: Register EmStandard first,
 //                      Use EmStandard71 
 // 02.12.2005 V.Ivanchenko: rename components
+// 08.06.2006 V.Ivanchenko: migration to CHIPS stopping 
 //
 //----------------------------------------------------------------------------
 //
@@ -55,9 +56,10 @@
 #include "G4EmStandardPhysics71.hh"
 #include "G4EmExtraPhysics.hh"
 #include "G4IonPhysics.hh"
+#include "G4QStoppingPhysics.hh"
 
 #include "G4DataQuestionaire.hh"
-#include "HadronPhysicsQGSP.hh"
+#include "HadronPhysicsQGSP_GN.hh"
 
 template<class T> TQGSP_GN<T>::TQGSP_GN(G4int ver):  T()
 {
@@ -79,7 +81,10 @@ template<class T> TQGSP_GN<T>::TQGSP_GN(G4int ver):  T()
   this->RegisterPhysics( new G4DecayPhysics("decay",ver) );
 
    // Hadron Physics
-  this->RegisterPhysics(  new HadronPhysicsQGSP("hadron"));
+  this->RegisterPhysics(  new HadronPhysicsQGSP_GN("hadron"));
+
+  // Stopping Physics
+  this->RegisterPhysics( new G4QStoppingPhysics("stopping"));
 
   // Ion Physics
   this->RegisterPhysics( new G4IonPhysics("ion"));

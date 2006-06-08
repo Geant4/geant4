@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: HadronPhysicsLHEP_LEAD_HP.hh,v 1.3 2005-12-02 18:29:46 gunter Exp $
+// $Id: HadronPhysicsLHEP_LEAD_HP.hh,v 1.4 2006-06-08 13:13:08 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -32,6 +32,7 @@
 // Modified:
 // 30.11.2005 G.Folger: migration to non static particles
 // 30.11.2005 G.Folger: Register EmStandard first, split Em Standard and Extra
+// 08.06.2006 V.Ivanchenko: remove stopping
 //
 //----------------------------------------------------------------------------
 //
@@ -42,7 +43,6 @@
 #include "G4ios.hh"
 
 #include "G4VPhysicsConstructor.hh"
-#include "G4StoppingHadronBuilder.hh"
 #include "G4MiscLHEPBuilder.hh"
 
 #include "G4PiKBuilder.hh"
@@ -84,10 +84,7 @@ class HadronPhysicsLHEP_LEAD_HP : public G4VPhysicsConstructor
     G4LEADProtonBuilder * theLEADPro;    
     
     G4MiscLHEPBuilder * theMiscLHEP;
-    G4StoppingHadronBuilder * theStoppingHadron;
 };
-
-// 2002 by J.P. Wellisch
 
 #endif
 

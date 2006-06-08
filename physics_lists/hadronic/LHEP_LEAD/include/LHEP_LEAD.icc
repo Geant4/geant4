@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: LHEP_LEAD.icc,v 1.7 2005-12-05 18:25:06 vnivanch Exp $
+// $Id: LHEP_LEAD.icc,v 1.8 2006-06-08 13:13:08 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -32,6 +32,7 @@
 // Modified:
 // 30.11.2005 G.Folger: migration to non static particles
 // 30.11.2005 G.Folger: Register EmStandard first, split Em Standard and Extra
+// 08.06.2006 V.Ivanchenko: migration to CHIPS stopping
 //
 //----------------------------------------------------------------------------
 //
@@ -52,6 +53,7 @@
 #include "G4EmStandardPhysics.hh"
 #include "G4EmExtraPhysics.hh"
 #include "G4IonPhysics.hh"
+#include "G4QStoppingPhysics.hh"
 
 #include "G4DataQuestionaire.hh"
 #include "HadronPhysicsLHEP_LEAD.hh"
@@ -77,6 +79,9 @@ template<class T> TLHEP_LEAD<T>::TLHEP_LEAD(G4int ver):  T()
 
    // Hadron Physics
   this->RegisterPhysics(  new HadronPhysicsLHEP_LEAD("hadron"));
+
+  // Stopping Physics
+  this->RegisterPhysics( new G4QStoppingPhysics("stopping"));
 
   // Ion Physics
   this->RegisterPhysics( new G4IonPhysics("ion"));

@@ -1,4 +1,4 @@
-$Id: History,v 1.8 2006-06-06 17:06:17 vnivanch Exp $
+$Id: History,v 1.9 2006-06-08 13:15:51 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+08.06.2006, V.Ivanchenko - phys-lists-V08-00-03
+- Migrade stopping physics to CHIPS for all except LBE and LHEP
+- HadronPhysicsQGSP_GN - fix name of the builder
 
 06.06.2006, V.Ivanchenko - phys-lists-V08-00-02
 - Fix compilation error at SUN

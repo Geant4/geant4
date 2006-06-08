@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: LHEP_GN.icc,v 1.9 2005-12-06 19:11:48 gcosmo Exp $
+// $Id: LHEP_GN.icc,v 1.10 2006-06-08 13:13:08 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -33,6 +33,7 @@
 // 30.11.2005 G.Folger: migration to non static particles
 // 30.11.2005 G.Folger: Register EmStandard first, split Em Standard and Extra
 // 02.12.2005 V.Ivanchenko: rename components
+// 08.06.2006 V.Ivanchenko: migration to CHIPS stopping
 //
 //----------------------------------------------------------------------------
 //
@@ -54,6 +55,7 @@
 #include "G4EmStandardPhysics.hh"
 #include "G4EmExtraPhysics.hh"
 #include "G4IonPhysics.hh"
+#include "G4QStoppingPhysics.hh"
 
 #include "G4DataQuestionaire.hh"
 #include "HadronPhysicsLHEP_GN.hh"
@@ -79,6 +81,9 @@ template<class T> TLHEP_GN<T>::TLHEP_GN(G4int ver):  T()
 
    // Hadron Physics
   this->RegisterPhysics(  new HadronPhysicsLHEP_GN("hadron"));
+
+  // Stopping Physics
+  this->RegisterPhysics( new G4QStoppingPhysics("stopping"));
 
   // Ion Physics
   this->RegisterPhysics( new G4IonPhysics("ion"));

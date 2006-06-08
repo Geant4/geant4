@@ -20,6 +20,20 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: HadronPhysicsQGSC_LEAD.cc,v 1.4 2006-06-08 13:13:09 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+//---------------------------------------------------------------------------
+//
+// ClassName: HadronPhysiosQGSC_LEAD
+//
+// Author: 2002 J.P. Wellisch
+//
+// Modified:
+// 28.11.2005 G.Folger: migration to non static particles
+// 08.06.2006 V.Ivanchenko: remove stopping
+//
+
 #include "HadronPhysicsQGSC_LEAD.hh"
 
 #include "globals.hh"
@@ -60,7 +74,6 @@ void HadronPhysicsQGSC_LEAD::CreateModels()
   theLEPPiK->SetMinEnergy(4.99*GeV);
 
   theMiscLHEP=new G4MiscLHEPBuilder;
-  theStoppingHadron=new G4StoppingHadronBuilder;
 }
 
 HadronPhysicsQGSC_LEAD::~HadronPhysicsQGSC_LEAD()
@@ -81,7 +94,6 @@ HadronPhysicsQGSC_LEAD::~HadronPhysicsQGSC_LEAD()
   delete theLEADProton;
   
   delete theMiscLHEP;
-  delete theStoppingHadron;
 }
 
 void HadronPhysicsQGSC_LEAD::ConstructParticle()
@@ -104,6 +116,5 @@ void HadronPhysicsQGSC_LEAD::ConstructProcess()
   thePro->Build();
   thePiK->Build();
   theMiscLHEP->Build();
-  theStoppingHadron->Build();
 }
-// 2002 by J.P. Wellisch
+

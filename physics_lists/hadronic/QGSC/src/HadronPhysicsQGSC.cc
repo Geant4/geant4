@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: HadronPhysicsQGSC.cc,v 1.2 2005-11-29 17:01:51 gunter Exp $
+// $Id: HadronPhysicsQGSC.cc,v 1.3 2006-06-08 13:13:09 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -31,6 +31,7 @@
 //
 // Modified:
 // 21.11.2005 G.Folger: don't  keep processes as data members, but new these
+// 08.06.2006 V.Ivanchenko: remove stopping
 //
 //----------------------------------------------------------------------------
 //
@@ -68,12 +69,10 @@ void HadronPhysicsQGSC::CreateModels()
   theLEPPiK->SetMaxEnergy(25*GeV);
   
   theMiscLHEP=new G4MiscLHEPBuilder;
-  theStoppingHadron=new G4StoppingHadronBuilder;
 }
 
 HadronPhysicsQGSC::~HadronPhysicsQGSC() 
 {
-   delete theStoppingHadron;
    delete theMiscLHEP;
    delete theQGSCPro;
    delete theLEPPro;
@@ -103,6 +102,5 @@ void HadronPhysicsQGSC::ConstructProcess()
   thePro->Build();
   thePiK->Build();
   theMiscLHEP->Build();
-  theStoppingHadron->Build();
 }
-// 2002 by J.P. Wellisch
+

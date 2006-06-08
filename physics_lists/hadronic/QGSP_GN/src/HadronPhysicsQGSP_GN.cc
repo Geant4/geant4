@@ -21,19 +21,21 @@
 // ********************************************************************
 //
 //
-// $Id: HadronPhysicsQGSP.cc,v 1.2 2005-11-29 17:03:07 gunter Exp $
+// $Id: HadronPhysicsQGSP_GN.cc,v 1.1 2006-06-08 13:13:09 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
-// ClassName:   HadronPhysicsQGSP
+// ClassName:   HadronPhysicsQGSP_GN
 //
 // Author: 2002 J.P. Wellisch
 //
 // Modified:
 // 21.11.2005 G.Folger:  migration to non static particles
+// 08.06.2006 V.Ivanchenko: remove stopping
 //
-#include "HadronPhysicsQGSP.hh"
+
+#include "HadronPhysicsQGSP_GN.hh"
 
 #include "globals.hh"
 #include "G4ios.hh"
@@ -45,11 +47,11 @@
 #include "G4BaryonConstructor.hh"
 #include "G4ShortLivedConstructor.hh"
 
-HadronPhysicsQGSP::HadronPhysicsQGSP(const G4String& name)
+HadronPhysicsQGSP_GN::HadronPhysicsQGSP_GN(const G4String& name)
                     :  G4VPhysicsConstructor(name) 
 {}
 
-void HadronPhysicsQGSP::CreateModels()
+void HadronPhysicsQGSP_GN::CreateModels()
 {
   theNeutrons=new G4NeutronBuilder;
   theNeutrons->RegisterMe(theQGSPNeutron=new G4QGSPNeutronBuilder);
@@ -67,12 +69,10 @@ void HadronPhysicsQGSP::CreateModels()
   theLEPPiK->SetMaxEnergy(25*GeV);
   
   theMiscLHEP=new G4MiscLHEPBuilder;
-  theStoppingHadron=new G4StoppingHadronBuilder;
 }
 
-HadronPhysicsQGSP::~HadronPhysicsQGSP()
+HadronPhysicsQGSP_GN::~HadronPhysicsQGSP_GN()
 {
-   delete theStoppingHadron;
    delete theMiscLHEP;
    delete theQGSPPro;
    delete theLEPPro;
@@ -83,7 +83,7 @@ HadronPhysicsQGSP::~HadronPhysicsQGSP()
 }
 
 
-void HadronPhysicsQGSP::ConstructParticle()
+void HadronPhysicsQGSP_GN::ConstructParticle()
 {
   G4MesonConstructor pMesonConstructor;
   pMesonConstructor.ConstructParticle();
@@ -96,14 +96,12 @@ void HadronPhysicsQGSP::ConstructParticle()
 }
 
 #include "G4ProcessManager.hh"
-void HadronPhysicsQGSP::ConstructProcess()
+void HadronPhysicsQGSP_GN::ConstructProcess()
 {
   CreateModels();
   theNeutrons->Build();
   thePro->Build();
   thePiK->Build();
   theMiscLHEP->Build();
-  theStoppingHadron->Build();
-//  theHadronQED.Build();
 }
-// 2002 by J.P. Wellisch
+

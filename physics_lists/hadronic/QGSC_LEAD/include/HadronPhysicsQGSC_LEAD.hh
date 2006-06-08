@@ -20,6 +20,20 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: HadronPhysicsQGSC_LEAD.hh,v 1.4 2006-06-08 13:13:09 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+//---------------------------------------------------------------------------
+//
+// ClassName: HadronPhysiosQGSC_LEAD
+//
+// Author: 2002 J.P. Wellisch
+//
+// Modified:
+// 28.11.2005 G.Folger: migration to non static particles
+// 08.06.2006 V.Ivanchenko: remove stopping
+//
+
 #ifndef HadronPhysicsQGSC_LEAD_h
 #define HadronPhysicsQGSC_LEAD_h 1
 
@@ -27,7 +41,6 @@
 #include "G4ios.hh"
 
 #include "G4VPhysicsConstructor.hh"
-#include "G4StoppingHadronBuilder.hh"
 #include "G4MiscLHEPBuilder.hh"
 
 #include "G4PiKBuilder.hh"
@@ -73,10 +86,7 @@ class HadronPhysicsQGSC_LEAD : public G4VPhysicsConstructor
     G4LEADProtonBuilder * theLEADProton;
     
     G4MiscLHEPBuilder * theMiscLHEP;
-    G4StoppingHadronBuilder * theStoppingHadron;
 };
-
-// 2002 by J.P. Wellisch
 
 #endif
 

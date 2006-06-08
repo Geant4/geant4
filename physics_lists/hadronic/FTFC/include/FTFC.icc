@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: FTFC.icc,v 1.7 2005-12-05 18:25:06 vnivanch Exp $
+// $Id: FTFC.icc,v 1.8 2006-06-08 13:13:07 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -34,6 +34,7 @@
 // 30.11.2005 G.Folger: Register EmStandard first, split Em Standard and Extra
 // 02.12.2005 V.Ivanchenko: rename components
 // 05.12.2005 V.Ivanchenko add controlled verbosity
+// 08.06.2006 V.Ivanchenko: migration to CHIPS stopping
 //
 //----------------------------------------------------------------------------
 //
@@ -55,6 +56,7 @@
 #include "G4EmStandardPhysics.hh"
 #include "G4EmExtraPhysics.hh"
 #include "G4IonPhysics.hh"
+#include "G4QStoppingPhysics.hh"
 
 #include "G4DataQuestionaire.hh"
 #include "HadronPhysicsFTFC.hh"
@@ -80,6 +82,9 @@ template<class T> TFTFC<T>::TFTFC(G4int ver):  T()
 
    // Hadron Physics
   this->RegisterPhysics(  new HadronPhysicsFTFC("hadron"));
+
+  // Stopping Physics
+  this->RegisterPhysics( new G4QStoppingPhysics("stopping"));
 
   // Ion Physics
   this->RegisterPhysics( new G4IonPhysics("ion"));

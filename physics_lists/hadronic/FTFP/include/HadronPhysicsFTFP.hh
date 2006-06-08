@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: HadronPhysicsFTFP.hh,v 1.2 2005-11-29 17:00:07 gunter Exp $
+// $Id: HadronPhysicsFTFP.hh,v 1.3 2006-06-08 13:13:07 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -31,6 +31,7 @@
 //
 // Modified:
 // 23.11.2005 G.Folger: migration to non static particles
+// 08.06.2006 V.Ivanchenko: remove stopping
 //
 //----------------------------------------------------------------------------
 //
@@ -41,7 +42,6 @@
 #include "G4ios.hh"
 
 #include "G4VPhysicsConstructor.hh"
-#include "G4StoppingHadronBuilder.hh"
 #include "G4MiscLHEPBuilder.hh"
 
 #include "G4PiKBuilder.hh"
@@ -81,10 +81,8 @@ class HadronPhysicsFTFP : public G4VPhysicsConstructor
     G4FTFPProtonBuilder * theFTFPPro;    
     
     G4MiscLHEPBuilder * theMiscLHEP;
-    G4StoppingHadronBuilder * theStoppingHadron;
-};
 
-// 2002 by J.P. Wellisch
+};
 
 #endif
 

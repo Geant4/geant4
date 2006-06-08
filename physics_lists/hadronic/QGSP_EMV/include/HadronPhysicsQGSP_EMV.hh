@@ -20,6 +20,19 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: HadronPhysicsQGSP_EMV.hh,v 1.2 2006-06-08 13:13:09 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+//---------------------------------------------------------------------------
+//
+// ClassName: HadronPhysiosQGSP_EMV
+//
+// Author: 2005 G.Folger
+//
+// Modified:
+// 08.06.2006 V.Ivanchenko: remove stopping
+//
+
 #ifndef HadronPhysicsQGSP_EMV_h
 #define HadronPhysicsQGSP_EMV_h 1
 
@@ -27,7 +40,6 @@
 #include "G4ios.hh"
 
 #include "G4VPhysicsConstructor.hh"
-#include "G4StoppingHadronBuilder.hh"
 #include "G4MiscLHEPBuilder.hh"
 
 #include "G4PiKBuilder.hh"
@@ -67,10 +79,7 @@ class HadronPhysicsQGSP_EMV : public G4VPhysicsConstructor
     G4QGSPProtonBuilder * theQGSPPro;    
     
     G4MiscLHEPBuilder * theMiscLHEP;
-    G4StoppingHadronBuilder * theStoppingHadron;
 };
-
-// 2002 by J.P. Wellisch
 
 #endif
 

@@ -20,14 +20,28 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-#ifndef HadronPhysicsQGSP_h
-#define HadronPhysicsQGSP_h 1
+//
+// $Id: HadronPhysicsQGSP_GN.hh,v 1.1 2006-06-08 13:13:09 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+//---------------------------------------------------------------------------
+//
+// ClassName:   HadronPhysicsQGSP_GN
+//
+// Author: 2002 J.P. Wellisch
+//
+// Modified:
+// 21.11.2005 G.Folger:  migration to non static particles
+// 08.06.2006 V.Ivanchenko: remove stopping
+//
+
+#ifndef HadronPhysicsQGSP_GN_h
+#define HadronPhysicsQGSP_GN_h 1
 
 #include "globals.hh"
 #include "G4ios.hh"
 
 #include "G4VPhysicsConstructor.hh"
-#include "G4StoppingHadronBuilder.hh"
 #include "G4MiscLHEPBuilder.hh"
 
 #include "G4PiKBuilder.hh"
@@ -42,11 +56,11 @@
 #include "G4LEPNeutronBuilder.hh"
 #include "G4QGSPNeutronBuilder.hh"
 
-class HadronPhysicsQGSP : public G4VPhysicsConstructor
+class HadronPhysicsQGSP_GN : public G4VPhysicsConstructor
 {
   public: 
-    HadronPhysicsQGSP(const G4String& name ="hadron");
-    virtual ~HadronPhysicsQGSP();
+    HadronPhysicsQGSP_GN(const G4String& name ="hadron");
+    virtual ~HadronPhysicsQGSP_GN();
 
   public: 
     virtual void ConstructParticle();
@@ -67,10 +81,7 @@ class HadronPhysicsQGSP : public G4VPhysicsConstructor
     G4QGSPProtonBuilder * theQGSPPro;    
     
     G4MiscLHEPBuilder * theMiscLHEP;
-    G4StoppingHadronBuilder * theStoppingHadron;
 };
-
-// 2002 by J.P. Wellisch
 
 #endif
 

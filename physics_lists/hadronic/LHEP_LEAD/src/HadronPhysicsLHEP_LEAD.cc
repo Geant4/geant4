@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: HadronPhysicsLHEP_LEAD.cc,v 1.3 2005-12-02 18:24:30 gunter Exp $
+// $Id: HadronPhysicsLHEP_LEAD.cc,v 1.4 2006-06-08 13:13:08 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -31,6 +31,7 @@
 //
 // Modified:
 //  1.12.2005 G.Folger: migration to non static particles
+// 08.06.2006 V.Ivanchenko: remove stopping
 //
 //----------------------------------------------------------------------------
 //
@@ -68,7 +69,6 @@ void HadronPhysicsLHEP_LEAD::CreateModels()
   theLHEPPiK->SetMinEnergy(4.99*GeV);
 
   theMiscLHEP=new G4MiscLHEPBuilder;
-  theStoppingHadron=new G4StoppingHadronBuilder;
 }
 
 HadronPhysicsLHEP_LEAD::~HadronPhysicsLHEP_LEAD()
@@ -86,7 +86,6 @@ HadronPhysicsLHEP_LEAD::~HadronPhysicsLHEP_LEAD()
   delete theLEADPro;    
   
   delete theMiscLHEP;
-  delete theStoppingHadron;
 }
 
 void HadronPhysicsLHEP_LEAD::ConstructParticle()
@@ -109,6 +108,5 @@ void HadronPhysicsLHEP_LEAD::ConstructProcess()
   thePro->Build();
   thePiK->Build();
   theMiscLHEP->Build();
-  theStoppingHadron->Build();
 }
-// 2002 by J.P. Wellisch
+

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: HadronPhysicsLHEP_GN.cc,v 1.2 2005-12-01 18:48:15 gunter Exp $
+// $Id: HadronPhysicsLHEP_GN.cc,v 1.3 2006-06-08 13:13:08 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -31,8 +31,10 @@
 //
 // Modified:
 //  1.12.2005 G.Folger: don't  keep processes as data members, but new these
+// 08.06.2006 V.Ivanchenko: remove stopping
 //
 //----------------------------------------------------------------------------
+
 #include "HadronPhysicsLHEP_GN.hh"
 
 #include "globals.hh"
@@ -84,7 +86,6 @@ void HadronPhysicsLHEP_GN::ConstructParticle()
   pShortLivedConstructor.ConstructParticle();  
   
   theMiscLHEP=new G4MiscLHEPBuilder;
-  theStoppingHadron=new G4StoppingHadronBuilder;
 }
 
 #include "G4ProcessManager.hh"
@@ -95,6 +96,5 @@ void HadronPhysicsLHEP_GN::ConstructProcess()
   thePro->Build();
   thePiK->Build();
   theMiscLHEP->Build();
-  theStoppingHadron->Build();
 }
 // 2002 by J.P. Wellisch
