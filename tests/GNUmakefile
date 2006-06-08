@@ -97,7 +97,9 @@ HADRONICSDIRS = test02 test11 test12 test13 test15 test16 test21 test22 test23 t
 
 #temp ADV_EXAMPLES += 01 02  03 04 05 06 07
 
-ADV_EXAMPLES += 08
+ADV_EXAMPLES += 02 03 08
+
+HADR_EXAMPLES += 01
 
 MEDICAL += 01
 
@@ -170,10 +172,16 @@ endif
 	  (cd test7$$nn && $(MAKE)); \
 	done;:
 
-
+# ADV_EXAMPLES
 	@$(ECHO) Making Advanced examples...
 	@for nn in $(ADV_EXAMPLES); do \
 	(cd test10$$nn && $(MAKE)); \
+	done;:
+
+# HADR_EXAMPLES	
+	@$(ECHO) Making Hadronic examples...
+	@for nn in $(HADR_EXAMPLES); do \
+	(cd test60$$nn && $(MAKE)); \
 	done;:
 
 
@@ -455,6 +463,11 @@ examples_links_binaries:
 	@for nn in $(ELECTROMAGNETIC); do \
 	  ln -s TestEm$$nn $(G4WORKDIR)/bin/$(G4SYSTEM)/test50$$nn; \
 	done;:
+	
+# HADR_EXAMPLES
+	@for nn in $(HADR_EXAMPLES); do \
+	  ln -s hadr$$nn $(G4WORKDIR)/bin/$(G4SYSTEM)/test60$$nn; \
+	done;:	
 
 #temp
 # Persistency
@@ -495,6 +508,11 @@ examples_links_binaries:
 #temp
 # OLAP
 #	ln -s olapex    $(G4WORKDIR)/bin/$(G4SYSTEM)/test1001; \
+
+# ADV_EXAMPLES
+	@ln -s Microbeam $(G4WORKDIR)/bin/$(G4SYSTEM)/test1002; \
+	ln -s PhotIn $(G4WORKDIR)/bin/$(G4SYSTEM)/test1003; \
+	true
 
 #temp
 # GDML
