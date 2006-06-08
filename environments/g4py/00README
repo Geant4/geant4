@@ -1,4 +1,4 @@
-$Id: 00README,v 1.2 2006-06-04 22:17:28 kmura Exp $
+$Id: 00README,v 1.3 2006-06-08 01:34:34 kmura Exp $
 ==========================================================================
 Geant4Py
 
@@ -110,17 +110,24 @@ That's all!
 
 How to Use:
 -----------
-Some environment variables are required to use Geant4Py modules:
-+--------------------------------------------------------------------+
- PYTHONPATH         | Python module search directory
-                    | Geant4Py library path ($G4PY_INSTALL/lib) 
-                    | should be added.
- LD_LIBRARY_PATH    | additional shared library path to be searched
-+--------------------------------------------------------------------+
+Some environment variables are required at run time.
 
-Note that library paths to an user library as well as Geant4, CLHEP and 
-Boost are specified via "-rpath" linker option, so their paths do not
-have to be added to "LD_LIBRARY_PATH".
+* PYTHONPATH
+Python module search directories, given by a colon-separated list 
+of directories. 
+Practically, $(INSTALL_PATH)/lib:$(INSTALL_PATH)/lib/site-modules is ok.
+
+* LD_LIBRARY_PATH
+Additional shared library path to be searched.
+
+Some libraries paths are already specified via "-rpath" linker option, 
+so these paths do not have to be added to "LD_LIBRARY_PATH".
+ * Geant4
+ * CLHEP
+ * Boost
+ * $(INSTALL_PATH)/lib
+ * $(G4PY_EXLIB_LIBDIR) specified in a module makefile.
+
 
 You can import Geant4Py modules in Python just like
 
