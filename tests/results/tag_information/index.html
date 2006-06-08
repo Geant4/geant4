@@ -34,7 +34,7 @@
 </div>
 
 Report on Errors and Warnings arising from system testing on the
-<blink><b>geant4-08-00-ref-04</b></blink> development tag.
+<blink><b>geant4-08-00-ref-05</b></blink> development tag.
 
 <p>
 NOTE: the complete set of tests has not been run, with Large_N(umbers of events),
@@ -46,9 +46,9 @@ NOTE: the complete set of tests has not been run, with Large_N(umbers of events)
                                                                                                             
                1        2           3         4        5             6      7         8           9          10
 -----------+---------+---------+----------+----------+---------+---------+----------+----------+---------+---------+
-           | SUN-CC  | SUN-CC  | Linux-g++| Linux-g++|Linux-g++|Linux-g++| Linux-icc| Linux-icc|WIN32-VC7|WIN32-VC7|
-           |debug_54 |optim_55 |opt.amd64 |deb.amd64 |opt.SLC3 |deb.SLC3 |	 opt|	 deb   |  optim  |  debug  |
-  	   | sungeant| refsol8 |    refslc3-amd64    |pcgeant3 | pcgeant3| pcg4speed| pcg4speed|pcepsft16|pcepsft16|
+           | SUN-CC  | SUN-CC  | Linux-g++| Linux-g++|Linux-g++|Linux-g++| Linux-g++| Linux-icc|WIN32-VC7|WIN32-VC7|
+           |debug_54 |optim_55 |op.SLC4.64|de.SLC4.64|opt.SLC3 |opt.SLC4 |deb.SLC4  |	 deb   |  optim  |  debug  |
+  	   | sungeant| refsol8 |    lxcert-amd64     |pcgeant3 |    lxcert-i386     | pcg4speed|pcepsft16|pcepsft16|
 -----------+---------+---------+----------+----------+---------+---------+----------+----------+---------+---------+
 test01     |	     |         |	  |	     |         |	 |	    |	       |	 |	   |
 test02     |	     |         |	  |	     |         |	 |	    |	       |	 |	   |
@@ -61,8 +61,8 @@ test09     |	     |         |	  |	     |         |	 |	    |	       |	 |	   |
 test10     |	     |         |	  |	     |         |	 |	    |	       |	 |	   |
 -----------+---------+---------+----------+----------+---------+---------+----------+----------+---------+---------+
 test11     |	     |         |	  |	     |         |	 |	    |	       |	 |	   |
-test12     |	     |         |   WL4    |          |  WL2    |         |	    |	       |	 |	   |
-test13     |         |  WL2WL4 |          |  WL1     |  WL1    |  WL1    |	    |	       |   WL1   |  WL1    |
+test12     |	     |         |   WL4    |          |  WL2    |  WL4    |  WL2WL4  |	       |	 |	   |
+test13     |         |  WL1    |   WL1    |  WL1     |  WL1WL2 |  WL1    |  WL1	    |	       |   WL1   |  WL1    |
 test14     |	     |         |	  |	     |         |	 |	    |	       |	 |	   |
 test15     |	     |         |	  |	     |         |	 |	    |	       |	 |	   |
 -----------+---------+---------+----------+----------+---------+---------+----------+----------+---------+---------+
@@ -70,12 +70,13 @@ test16     |	     |         |	  |	     |         |	 |	    |	       |	 |	   |
 test17     |	     |         |	  |	     |         |	 |	    |	       |	 |	   |
 test18     |	     |         |	  |	     |         |	 |	    |	       |	 |	   |
 test20     |	     |         |	  |	     |         |	 |	    |	       |	 |	   |
-test21     |         |   EL3   |   WL2    |   WL2    |  WL5    |    	 |	    |	       |	 | EL2     |
+test21     |         |   WL1   |   WL1    |   WL2    |  WL2    |  WL2WL5 |	    |	       |	 | EL2     |
 test22     |	     |         |	  |	     |         |	 |	    |	       |	 |	   |
 test24     |	     |         |	  |	     |         |	 |	    |	       |	 |	   |
 test25     |	     |         |	  |	     |         |	 |	    |	       |	 |	   |
+test27     |	     |         |	  |	     |         |	 |   WN4    |	       |	 |	   |
 test29	   |         |         |      	  |          |         |   	 |	    |	       |         |         |
-test33	   |  WN1    |   WN1   |   WN1	  |  WN1     |  WN1    |  WN1 	 |	    |	       |   WN1   | WN1     |
+test33	   |         |   WN1   |   WN1	  |  WN1     |  WN1    |  WN1 	 |	    |	       |   WN1   | WN1     |
 test34	   |  WN2    |   WN2   |   WN2	  |  WN2     |  WN2    |  WN2 	 |	    |	       |         |         |
 -----------+---------+---------+----------+----------+---------+---------+----------+----------+---------+---------+
 test103    |	     |         |	  |	     |         |	 |	    |	       |	 |	   |
@@ -129,7 +130,7 @@ Warning : Region <EM_calo_region> does not have specific production cuts,
 
 
 	 
-WL4			   
+WL4, WN4			   
 ------------
 RandGeneral constructed nothing in bins - will use flat distribution
 
@@ -172,6 +173,8 @@ WN3
             **Test29:#1:n=1,4M=(0,0,0;-0.853281),Charge=0,BaryN=0, R=(0,0,0;0),D2=0.853281,nN=2
              Test29:#0,PDG=90002003,m=4667.84(4667.84),4M=(0,0,0;4667.84),T=0,r4M=(0,0,0;-0.853281)
 
+WN4 = WL4
+------------
 
 
 EL1
