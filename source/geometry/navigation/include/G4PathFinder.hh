@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PathFinder.hh,v 1.13 2006-05-31 17:24:28 japost Exp $
+// $Id: G4PathFinder.hh,v 1.14 2006-06-08 16:50:05 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // class G4PathFinder 
@@ -104,6 +104,9 @@ class G4PathFinder
 
    G4double       GetCurrentSafety() const { return fMinSafety; }
      // Minimum value of safety after last ComputeStep
+
+   G4double       ComputeSafety( const G4ThreeVector& pGlobalPoint ); 
+     // Recompute safety for the relevant point - the endpoint of the last step!!
 
    inline G4int  SetVerboseLevel(G4int lev=-1);
   // inline G4int  GetVerboseLevel() const;
