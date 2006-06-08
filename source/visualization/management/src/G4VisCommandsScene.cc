@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsScene.cc,v 1.52 2006-05-22 08:22:30 allison Exp $
+// $Id: G4VisCommandsScene.cc,v 1.53 2006-06-08 20:02:15 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/scene commands - John Allison  9th August 1998
@@ -245,9 +245,9 @@ void G4VisCommandSceneEndOfRunAction::SetNewValue (G4UIcommand*,
 	  "\n  Use \"/vis/scene/endOfEventAction accumulate\"."
 	       << G4endl;
       }
-      else {
-	pScene->SetRefreshAtEndOfRun(false);
-      }
+    }
+    else {
+      pScene->SetRefreshAtEndOfRun(false);
     }
   }
   else if (action == "refresh") {
