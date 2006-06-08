@@ -448,6 +448,23 @@ examples_links_source:
 	  done; \
 	done;:
 
+	@testdir=test1002; \
+	exdir=$(G4INSTALL)/examples/advanced/microbeam; \
+         ln -s $$exdir $$testdir; \
+         ln -s microbeam.mac  $$testdir/test1002.in;  \
+         ln -s microbeam.out $$testdir/test1002.out; :
+	 
+	@testdir=test1003; \
+	exdir=$(G4INSTALL)/examples/advanced/raredecay_calorimetry; \
+         ln -s $$exdir $$testdir; \
+         ln -s PhotIn.in  $$testdir/test1003.in;  \
+         ln -s PhotIn.out $$testdir/test1003.out; :
+	 
+	@testdir=test6001; \
+	exdir=$(G4INSTALL)/examples/extended/hadronic/Hadr01; \
+         ln -s $$exdir $$testdir; \
+         ln -s hadr01.in  $$testdir/test6001.in;  \
+         ln -s hadr01.out $$testdir/test6001.out; :	 	 
 ###########################################################################
 examples_links_binaries:
 
@@ -657,6 +674,14 @@ clean_examples_links_binaries:
 
 # Truc for test33/test33_1
 	@rm -f $(G4WORKDIR)/bin/$(G4SYSTEM)/test33_1;:
+	
+# Advanced
+	@rm -f $(G4WORKDIR)/bin/$(G4SYSTEM)/test1002;:
+	@rm -f $(G4WORKDIR)/bin/$(G4SYSTEM)/test1003;:
+	
+# Hadronic
+	@rm -f $(G4WORKDIR)/bin/$(G4SYSTEM)/test6001;:	
+########################################################################
 
 # Hadronics Tests
 hadronics:
