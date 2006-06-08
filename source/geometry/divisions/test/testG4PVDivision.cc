@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4PVDivision.cc,v 1.2 2004-12-02 09:31:22 gcosmo Exp $
+// $Id: testG4PVDivision.cc,v 1.3 2006-06-08 15:55:03 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // test for G4PVDivision classes
@@ -195,9 +195,9 @@ void generateRandomPoints()
   G4double posX, posY, posZ;
 
   for( G4int ii = 0; ii < numberOfPoints; ii++ ) {
-    posX = RandFlat::shoot(-theWorldDim, theWorldDim);
-    posY = RandFlat::shoot(-theWorldDim, theWorldDim);
-    posZ = RandFlat::shoot(-3*theWorldDim, 3*theWorldDim);
+    posX = CLHEP::RandFlat::shoot(-theWorldDim, theWorldDim);
+    posY = CLHEP::RandFlat::shoot(-theWorldDim, theWorldDim);
+    posZ = CLHEP::RandFlat::shoot(-3*theWorldDim, 3*theWorldDim);
     fout << posX << " " << posY << " " << posZ << G4endl;
   }
 }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExVDivTester.cc,v 1.4 2005-11-09 14:49:46 gcosmo Exp $
+// $Id: ExVDivTester.cc,v 1.5 2006-06-08 15:54:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class ExVDivTester Implementation file
@@ -160,9 +160,9 @@ void ExVDivTester::GenerateRandomPoints()
 
   numberOfPoints = 1000;
   for( G4int ii = 0; ii < numberOfPoints; ii++ ) {
-    posX = RandFlat::shoot(-theWorldLengthXY, theWorldLengthXY);
-    posY = RandFlat::shoot(-theWorldLengthXY, theWorldLengthXY);
-    posZ = RandFlat::shoot(-theWorldLengthZ, theWorldLengthZ);
+    posX = CLHEP::RandFlat::shoot(-theWorldLengthXY, theWorldLengthXY);
+    posY = CLHEP::RandFlat::shoot(-theWorldLengthXY, theWorldLengthXY);
+    posZ = CLHEP::RandFlat::shoot(-theWorldLengthZ, theWorldLengthZ);
     fout << posX << " " << posY << " " << posZ << G4endl;
   }
 }
