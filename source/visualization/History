@@ -1,4 +1,4 @@
-$Id: History,v 1.359 2006-06-07 22:20:41 allison Exp $
+$Id: History,v 1.360 2006-06-08 20:09:08 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,10 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+------------------------------------------
+8th June 2006 John Allison (vis-V08-00-12)
+- visman-V08-00-23: Fixed bug in /vis/scene/endOfRunAction.
 
 -------------------------------------------
 7th June 2006  John Allison (vis-V08-00-11)
