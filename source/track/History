@@ -1,4 +1,4 @@
-$Id: History,v 1.86 2006-06-07 17:18:11 vnivanch Exp $
+$Id: History,v 1.87 2006-06-09 00:12:32 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+June 09, 06 M.Asai (track-V08-00-04)
+- Introducing G4FieldTrackUpdator class.
+- GNUmakefile now includes geometry/magneticfield
 
 June 07, 06 V.Ivanchenko (track-V08-00-03)
 -  G4ParticleChangeForLoss - remove momentum change AlongStep
