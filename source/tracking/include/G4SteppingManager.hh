@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SteppingManager.hh,v 1.27 2006-06-02 12:24:58 gcosmo Exp $
+// $Id: G4SteppingManager.hh,v 1.28 2006-06-09 04:49:45 tsasaki Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //---------------------------------------------------------------
@@ -340,7 +340,7 @@ public: //without description
   }
 
   inline G4TrackVector* G4SteppingManager::GetfSecondary(){
-   return fSecondary;
+   return fStep->GetfSecondary();
   }
   inline G4Step* G4SteppingManager::GetfStep(){
    return fStep;
@@ -454,7 +454,7 @@ public: //without description
   }
 
   inline G4TrackVector* G4SteppingManager::GetSecondary() const {
-    return fSecondary; 
+    return fStep->GetSecondary(); 
   }
 
   inline void G4SteppingManager::SetNavigator(G4Navigator* value){

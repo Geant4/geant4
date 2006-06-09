@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SteppingManager.cc,v 1.37 2006-06-02 12:24:58 gcosmo Exp $
+// $Id: G4SteppingManager.cc,v 1.38 2006-06-09 04:49:45 tsasaki Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------
@@ -56,8 +56,9 @@ G4SteppingManager::G4SteppingManager()
 {
 
 // Construct simple 'has-a' related objects
-   fSecondary = new G4TrackVector();
    fStep = new G4Step();
+//   fSecondary = new G4TrackVector();
+   fSecondary = fStep->NewSecondaryVector( );
    fPreStepPoint  = fStep->GetPreStepPoint();
    fPostStepPoint = fStep->GetPostStepPoint();
 #ifdef G4VERBOSE
