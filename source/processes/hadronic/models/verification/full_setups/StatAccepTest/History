@@ -1,6 +1,11 @@
                  History file
                  ------------
 
+09-Jun-2006 - A.Ribon (statAccepTest-V08-00-13)
+- Use the new statistical toolkit, not anymore inside PI.
+  Prepare for the June 2006 release.
+
+
 20-May-2006 - A.Ribon (statAccepTest-V08-00-12)
 - Corrected the computation of the statistical errors, and
   added statistical errors to any computed quantity.

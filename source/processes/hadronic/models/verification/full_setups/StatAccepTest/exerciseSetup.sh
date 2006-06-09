@@ -1,6 +1,6 @@
 #
 #***LOOKHERE***
-export VO_GEANT4_SW_DIR=/users/ribon/dirGrid
+export VO_GEANT4_SW_DIR=/data/dirGrid/dirJun06
 #
 export DIR_INSTALLATIONS=$VO_GEANT4_SW_DIR/dirInstallations
 #
@@ -58,6 +58,10 @@ export G4ANALYSIS_USE=1
 export PI_DIR=$DIR_INSTALLATIONS/dirPI
 export PATH=$PI_DIR/bin:$PATH
 eval `aida-config --runtime sh`
+#
+# --- Statistical toolkit ---
+export DIR_STAT=$DIR_INSTALLATIONS/dirStatisticalToolkit/packages
+export LD_LIBRARY_PATH=$DIR_STAT/StatisticsTesting/src/.libs:$LD_LIBRARY_PATH
 #
 # --- GSL : this is needed only for  dirStat/pvalue.cpp ---
 export GSL_DIR=$DIR_INSTALLATIONS/dirGSL

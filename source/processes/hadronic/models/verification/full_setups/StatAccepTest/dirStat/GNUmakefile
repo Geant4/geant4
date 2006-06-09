@@ -4,17 +4,14 @@ OBJ_DIR = ${PWD}
 OBJS    = ${addprefix ${OBJ_DIR}/,${SRCS:.cpp=.o}}
 EXES    = ${addprefix ${OBJ_DIR}/,${SRCS:.cpp=}}
 
-###C_INCLUDES += -I${STAT_DIR} -I${GSL_INCLUDES}
-###C_INCLUDES += -I${STAT_DIR}/Comparison/include 
-###C_INCLUDES += -I${STAT_DIR}/StatisticsTesting 
 C_INCLUDES += -I${PI_DIR}/include
-C_INCLUDES += -I${PI_DIR}/include/StatisticsTesting
+C_INCLUDES += -I${DIR_STAT}/StatisticsTesting/include -I${DIR_STAT}/UserLayer-aida 
 C_INCLUDES += -I${GSL_DIR}/include/gsl 
 C_INCLUDES += `aida-config --includes`
 
-GSL_LIBS=-L${GSL_DIR}/lib -lgsl -lgslcblas
-
-LIBS += -llcg_StatisticsTesting `aida-config --libs` ${GSL_LIBS} 
+LIBS += -L${DIR_STAT}/StatisticsTesting/src/.libs -lStatisticsTesting 
+LIBS += `aida-config --libs` 
+LIBS += -L${GSL_DIR}/lib -lgsl -lgslcblas 
 
 C_FLAGS += --pic 
 

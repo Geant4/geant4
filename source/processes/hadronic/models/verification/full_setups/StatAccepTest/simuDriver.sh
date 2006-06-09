@@ -55,6 +55,7 @@ echo ' BFIELD      =' $BFIELD
 #--- Run the first reference ---
 #
 ( if [ X$SIM_REF1 == XYes ] ; then
+#
     ###echo " I AM HERE 1 " ;
     export REF=$REF1 ;
     export LABEL=$REF-$PHYSICS-$CALORIMETER-$PARTICLE-$ENERGY-$EVENTS ;
@@ -72,6 +73,23 @@ echo ' BFIELD      =' $BFIELD
     mv run.g4 run.g4-$LABEL ;
     mv setup.sh setup.sh-$LABEL ;
     . setup.sh-$LABEL ;
+#
+    echo '  '
+    echo '--- Check platform / environment --- '
+    echo '*** g++ -v ***' ;                    g++ -v                    ; echo ' '
+    echo '*** which g++ ***' ;                 which g++                 ; echo ' '
+    echo '*** uname -a ***' ;                  uname -a                  ; echo ' '
+    echo '*** cat /etc/issue ***' ;            cat /etc/issue         
+    echo '*** cat /etc/cpuinfo ***' ;          cat /proc/cpuinfo
+    echo '*** DIR_INSTALLATIONS = '            $DIR_INSTALLATIONS        ; echo ' '
+    echo '*** ls -lh $DIR_INSTALLATIONS ***' ; ls -lh $DIR_INSTALLATIONS ; echo ' '
+    echo '*** G4INSTALL = '                    $G4INSTALL                ; echo ' '
+    echo '*** ls -lh $G4INSTALL ***' ;         ls -lh $G4INSTALL         ; echo ' '
+    echo '*** PWD = '                          $PWD                      ; echo ' '
+    echo '*** ls -lh $PWD *** ' ;              ls -lh $PWD
+    echo '------------------------------------ '    
+    echo '  ' ;
+#
     echo '  '; echo ' G4INSTALL = ' $G4INSTALL; echo ' running REF = ' $REF ; echo '  ' ;
     rm -rf tmp/ ;
     gmake ;
@@ -79,11 +97,19 @@ echo ' BFIELD      =' $BFIELD
     mainStatAccepTest-$REF-$PHYSICS run.g4-$LABEL > output.log-$LABEL 2>&1 ;
 ###    mainStatAccepTest-$REF-$PHYSICS run.g4-$LABEL ;
     mv ntuple.hbook ntuple.hbook-$LABEL ;
+#
+    echo ' '
+    echo '--- Check results after running 1st reference ---' 
+    echo '*** ls -lth ***' ;  ls -lth
+    echo '-------------------------------------------------'
+    echo ' '
+#
   fi )
 #
 #--- Run the second reference ---
 #
 ( if [ X$SIM_REF2 == XYes ] ; then
+#
     ###echo " I AM HERE 2 " ;
     export REF=$REF2 ; 
     export LABEL=$REF-$PHYSICS-$CALORIMETER-$PARTICLE-$ENERGY-$EVENTS ;
@@ -108,11 +134,19 @@ echo ' BFIELD      =' $BFIELD
     mainStatAccepTest-$REF-$PHYSICS run.g4-$LABEL > output.log-$LABEL 2>&1 ;
 ###    mainStatAccepTest-$REF-$PHYSICS run.g4-$LABEL ;
     mv ntuple.hbook ntuple.hbook-$LABEL ;
+#
+    echo ' '
+    echo '--- Check results after running 2nd reference ---' 
+    echo '*** ls -lth ***' ;  ls -lth
+    echo '-------------------------------------------------'
+    echo ' '
+#
   fi )
 #
 #--- Run the statistical tests ---
 #
 ( if [ X$RUN_STAT == XYes ] ; then
+#
     ###echo " I AM HERE 3 " ;
     export LABEL=$PHYSICS-$CALORIMETER-$PARTICLE-$ENERGY-$EVENTS ;
     if [ X$BFIELD != X ] ; then
@@ -130,6 +164,13 @@ echo ' BFIELD      =' $BFIELD
     rm -f pvalue.o pvalue ;
     gmake ;
     python driver.py $REF1 $REF2 $LABEL ; 
+#
+    echo ' '
+    echo '--- Check results after running statistical test ---' 
+    echo '*** ls -lth ***' ;  ls -lth
+    echo '-------------------------------------------------'
+    echo ' '
+#
   fi )
 #
 echo ' ========== END simuDriver.sh ========== '

@@ -43,7 +43,7 @@
 
 #include "AIDA/AIDA.h"
 #include "AIDA/ICloud1D.h" 
-#include "StatisticsTesting/StatisticsComparator.h"
+#include "UserLayer-aida/StatisticsComparator.h"
 #include "ComparisonResult.h"
 
 #include "Chi2ComparisonAlgorithm.h"                    

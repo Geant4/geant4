@@ -218,7 +218,8 @@ g4file.close()
 
 setupFile = open( "setup.sh", "w" )
 
-###setupFile.write( "export VO_GEANT4_SW_DIR=/users/ribon/dirGrid \n" )  #***LOOKHERE***
+###setupFile.write( "export VO_GEANT4_SW_DIR=/data/dirGrid/dirJun06 \n" )   #***LOOKHERE***
+
 setupFile.write( "export DIR_INSTALLATIONS=$VO_GEANT4_SW_DIR/dirInstallations \n" )
 
 setupFile.write( "export PATH=$DIR_INSTALLATIONS/dirGCC/bin:$PATH \n" )
@@ -268,6 +269,9 @@ setupFile.write( "export G4ANALYSIS_USE=1 \n" )
 setupFile.write( "export PI_DIR=$DIR_INSTALLATIONS/dirPI \n" )
 setupFile.write( "export PATH=$PI_DIR/bin:${PATH} \n" )
 setupFile.write( "eval `aida-config --runtime sh` \n" )
+
+setupFile.write( "export DIR_STAT=$DIR_INSTALLATIONS/dirStatisticalToolkit/packages \n" )
+setupFile.write( "export LD_LIBRARY_PATH=$DIR_STAT/StatisticsTesting/src/.libs:$LD_LIBRARY_PATH \n" )
 
 setupFile.write( "export GSL_DIR=$DIR_INSTALLATIONS/dirGSL \n" )
 setupFile.write( "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$GSL_DIR/lib \n" )
