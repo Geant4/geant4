@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProductionCutsTable.cc,v 1.13 2006-06-01 13:08:57 kurasige Exp $
+// $Id: G4ProductionCutsTable.cc,v 1.14 2006-06-09 00:38:58 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -81,12 +81,17 @@ G4ProductionCutsTable::G4ProductionCutsTable(const G4ProductionCutsTable& )
 
 G4ProductionCutsTable::~G4ProductionCutsTable()
 {
+  if (defaultProductionCuts !=0) {
+    delete defaultProductionCuts;
+    defaultProductionCuts =0;
+  }
 
-  for(CoupleTableIterator itr=coupleTable.begin();itr!=coupleTable.end();itr++)
-  { delete (*itr); }
+  for(CoupleTableIterator itr=coupleTable.begin();itr!=coupleTable.end();itr++){
+    delete (*itr); 
+  }
   coupleTable.clear();
-  for(size_t i=0;i< NumberOfG4CutIndex;i++)
-  {
+
+  for(size_t i=0;i< NumberOfG4CutIndex;i++){
     delete rangeCutTable[i];
     delete energyCutTable[i];
     delete converters[i];
@@ -98,8 +103,7 @@ G4ProductionCutsTable::~G4ProductionCutsTable()
 
 void G4ProductionCutsTable::UpdateCoupleTable(G4VPhysicalVolume* currentWorld)
 {
-  if(firstUse)
-  {
+  if(firstUse){
     if(G4ParticleTable::GetParticleTable()->FindParticle("gamma"))
     { converters[0] = new G4RToEConvForGamma(); }
     if(G4ParticleTable::GetParticleTable()->FindParticle("e-"))
@@ -111,7 +115,8 @@ void G4ProductionCutsTable::UpdateCoupleTable(G4VPhysicalVolume* currentWorld)
 
   // Reset "used" flags of all couples
   for(CoupleTableIterator CoupleItr=coupleTable.begin();
-      CoupleItr!=coupleTable.end();CoupleItr++){ 
+        CoupleItr!=coupleTable.end();CoupleItr++) 
+  {
     (*CoupleItr)->SetUseFlag(false); 
   }
 

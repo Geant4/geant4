@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4PhysicsTableHelper.cc,v 1.3 2004-12-15 15:42:37 gunter Exp $
+// $Id: G4PhysicsTableHelper.cc,v 1.4 2006-06-09 00:38:58 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -163,6 +163,8 @@ G4bool G4PhysicsTableHelper::RetrievePhysicsTable(G4PhysicsTable* physTable,
       physTable->ClearFlag(i);
     }
   }
+  tempTable->clear();
+  delete tempTable;
 
   return true;
 }
