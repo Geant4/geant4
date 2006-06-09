@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Step.hh,v 1.12 2005-02-11 19:08:23 dwright Exp $
+// $Id: G4Step.hh,v 1.13 2006-06-09 04:53:43 tsasaki Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -67,7 +67,7 @@
 #include "G4StepStatus.hh"          // Include from 'track'
 class G4Polyline;                   // Forward declaration.
 class G4Track;                      // Forward declaration.
-
+#include "G4TrackVector.hh"           // Include from 'tracking'
 
 ////////////
 class G4Step
@@ -155,7 +155,14 @@ class G4Step
      //
    G4SteppingControl fpSteppingControlFlag;     
     // A flag to control SteppingManager behavier from process
-
+// Secondary buckets
+public:
+   G4TrackVector* GetSecondary() const;
+   G4TrackVector* GetfSecondary();
+   G4TrackVector* NewSecondaryVector();
+   void SetSecondary( G4TrackVector* value);
+private:    
+   G4TrackVector* fSecondary;
 
   // Prototyping implementation of smooth representation of curved
   // trajectories. (jacek 30/10/2002)
