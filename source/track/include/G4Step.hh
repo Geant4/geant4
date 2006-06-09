@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Step.hh,v 1.13 2006-06-09 04:53:43 tsasaki Exp $
+// $Id: G4Step.hh,v 1.14 2006-06-09 04:59:53 tsasaki Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -160,6 +160,7 @@ public:
    G4TrackVector* GetSecondary() const;
    G4TrackVector* GetfSecondary();
    G4TrackVector* NewSecondaryVector();
+   void DeleteSecondaryVector();
    void SetSecondary( G4TrackVector* value);
 private:    
    G4TrackVector* fSecondary;

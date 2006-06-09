@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Step.icc,v 1.12 2006-06-09 04:53:43 tsasaki Exp $
+// $Id: G4Step.icc,v 1.13 2006-06-09 04:59:54 tsasaki Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -238,12 +238,6 @@ inline G4TrackVector* G4Step::NewSecondaryVector()  {
    fSecondary=new G4TrackVector();
    return fSecondary;
     }
-
-
-
-
-
-
-
-
-
+inline void G4Step::DeleteSecondaryVector()  {
+   delete fSecondary;
+    }
