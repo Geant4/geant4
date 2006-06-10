@@ -1,4 +1,4 @@
-# $Id: TestEm2.in,v 1.20 2006-01-13 17:43:59 maire Exp $
+# $Id: TestEm2.in,v 1.21 2006-06-10 14:29:08 maire Exp $
 #
 # Macro file for "TestEm2.cc"
 # (can be run in batch, without graphic)
@@ -21,7 +21,6 @@
 /testem/phys/setCuts 1.0 mm
 #
 /run/initialize
-/testem/phys/verbose  0
 #
 /gun/particle e-
 /gun/energy 5 GeV

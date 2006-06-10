@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: PhysicsListMessenger.cc,v 1.3 2004-11-29 14:49:28 vnivanch Exp $
+// $Id: PhysicsListMessenger.cc,v 1.4 2006-06-10 14:29:08 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -32,8 +32,6 @@
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithAString.hh"
-#include "G4UIcmdWithAnInteger.hh"
-#include "G4LossTableManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -75,11 +73,6 @@ PhysicsListMessenger::PhysicsListMessenger(PhysicsList* pPhys)
   pListCmd->SetGuidance("Add modula physics list.");
   pListCmd->SetParameterName("PList",false);
   pListCmd->AvailableForStates(G4State_PreInit);  
-
-  verbCmd = new G4UIcmdWithAnInteger("/testem/phys/verbose",this);  
-  verbCmd->SetGuidance("Set verbose level for processes");
-  verbCmd->SetParameterName("pVerb",false);
-  verbCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -91,8 +84,7 @@ PhysicsListMessenger::~PhysicsListMessenger()
   delete protoCutCmd;
   delete allCutCmd;
   delete pListCmd;
-  delete verbCmd;
-  delete physDir;  
+  delete physDir;    
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -116,9 +108,6 @@ void PhysicsListMessenger::SetNewValue(G4UIcommand* command,
       pPhysicsList->SetCutForElectron(cut);
       pPhysicsList->SetCutForPositron(cut);
     } 
-
-  if( command == verbCmd )
-   { G4LossTableManager::Instance()->SetVerbose(verbCmd->GetNewIntValue(newValue));}
 
   if( command == pListCmd )
    { pPhysicsList->AddPhysicsList(newValue);}

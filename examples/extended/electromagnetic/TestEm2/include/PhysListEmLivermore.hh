@@ -21,43 +21,44 @@
 // ********************************************************************
 //
 //
-// $Id: G4EmMuonBuilder52.hh,v 1.1 2004-05-04 08:32:50 vnivanch Exp $
+// $Id: PhysListEmLivermore.hh,v 1.1 2006-06-10 14:29:08 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef G4EmMuonBuilder52_h
-#define G4EmMuonBuilder52_h 1
+#ifndef PhysListEmLivermore_h
+#define PhysListEmLivermore_h 1
 
 #include "G4VPhysicsConstructor.hh"
 #include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class G4EmMuonBuilder52 : public G4VPhysicsConstructor
+class PhysListEmLivermore : public G4VPhysicsConstructor
 {
-public:
-  G4EmMuonBuilder52(const G4String& name = "EM_stan_muons");
-  virtual ~G4EmMuonBuilder52();
+  public: 
+    PhysListEmLivermore(const G4String& name = "Livermore");
+   ~PhysListEmLivermore();
 
-public:
-  // This method is dummy for physics
-  virtual void ConstructParticle();
-
-  // This method will be invoked in the Construct() method.
-  // each physics process will be instantiated and
-  // registered to the process manager of each particle type
-  virtual void ConstructProcess();
-
-private:
-
-   // hide assignment operator
-  G4EmMuonBuilder52 & operator=(const G4EmMuonBuilder52 &right);
-  G4EmMuonBuilder52(const G4EmMuonBuilder52&);
-
+  public: 
+    // This method is dummy for physics
+    void ConstructParticle() {};
+ 
+    // This method will be invoked in the Construct() method.
+    // each physics process will be instantiated and
+    // registered to the process manager of each particle type 
+    void ConstructProcess();
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
+
+
+
+
+
+
+
+

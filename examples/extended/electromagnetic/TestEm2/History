@@ -1,4 +1,4 @@
-$Id: History,v 1.64 2006-05-19 12:49:15 maire Exp $
+$Id: History,v 1.65 2006-06-10 14:29:08 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,11 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+09-06-06 mma (testem2-V08-00-05)
+- PhysicsList : remove all Builders, replaced by PhysListEm.
+- PrimaryGenerator : allow /gun/particle/position  
+- RunAction : add printout of Moliere radius
      
 19-05-06 mma (testem2-V08-00-04)
 - update README

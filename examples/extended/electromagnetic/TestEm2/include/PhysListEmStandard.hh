@@ -21,44 +21,44 @@
 // ********************************************************************
 //
 //
-// $Id: G4EmQEDBuilder.hh,v 1.2 2004-11-24 13:17:53 vnivanch Exp $
+// $Id: PhysListEmStandard.hh,v 1.3 2006-06-10 14:29:08 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef G4EmQEDBuilder_h
-#define G4EmQEDBuilder_h 1
+#ifndef PhysListEmStandard_h
+#define PhysListEmStandard_h 1
 
 #include "G4VPhysicsConstructor.hh"
 #include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class G4EmQEDBuilder : public G4VPhysicsConstructor
+class PhysListEmStandard : public G4VPhysicsConstructor
 {
-public:
-  G4EmQEDBuilder(const G4String& name = "EM_stan_QED");
-  virtual ~G4EmQEDBuilder();
+  public: 
+    PhysListEmStandard(const G4String& name = "standard");
+   ~PhysListEmStandard();
 
-public:
-  // This method is dummy for physics
-  virtual void ConstructParticle();
-
-  // This method will be invoked in the Construct() method.
-  // each physics process will be instantiated and
-  // registered to the process manager of each particle type
-  virtual void ConstructProcess();
-
-private:
-
-   // hide assignment operator
-  G4EmQEDBuilder & operator=(const G4EmQEDBuilder &right);
-  G4EmQEDBuilder(const G4EmQEDBuilder&);
-
+  public: 
+    // This method is dummy for physics
+    void ConstructParticle() {};
+ 
+    // This method will be invoked in the Construct() method.
+    // each physics process will be instantiated and
+    // registered to the process manager of each particle type 
+    void ConstructProcess();
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
+
+
+
+
+
+
+
 

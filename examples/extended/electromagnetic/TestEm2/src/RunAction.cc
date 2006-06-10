@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.19 2006-01-13 17:43:59 maire Exp $
+// $Id: RunAction.cc,v 1.20 2006-06-10 14:29:08 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -324,6 +324,19 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
 #endif
    }
 
+  //find Moliere confinement
+  //
+  const G4double EMoliere = 90.;
+  G4double iMoliere = 0.;
+  if ((MeanERadialCumul[0]       <= EMoliere) &&
+      (MeanERadialCumul[nRbin-1] >= EMoliere)) {
+    G4int imin = 0;
+    while( (imin < nRbin-1) && (MeanERadialCumul[imin] < EMoliere) ) imin++;
+    G4double ratio = (EMoliere - MeanERadialCumul[imin]) /
+                     (MeanERadialCumul[imin+1] - MeanERadialCumul[imin]);
+    iMoliere = 1. + imin + ratio;
+  }  		     
+      
   //track length
   //
   norme = 1./(NbOfEvents*(Det->GetMaterial()->GetRadlen()));
@@ -389,17 +402,24 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
      }
   }
   
-  G4cout << G4endl;    
-  G4cout << std::setw(37) << "SUMMARY" << G4endl;
-  G4cout << std::setw(42) << "energy deposit : "
+  G4cout << "\n SUMMARY \n" << G4endl;
+  G4cout << " energy deposit : "
          << std::setw(7)  << MeanELongitCumul[nLbin-1] << " % E0 +- "
          << std::setw(7)  <<  rmsELongitCumul[nLbin-1] << " % E0" << G4endl;
-  G4cout << std::setw(42) << "charged traklen: "
+  G4cout << " charged traklen: "
          << std::setw(7)  << MeanChargTrLength << " radl +- "
          << std::setw(7)  <<  rmsChargTrLength << " radl" << G4endl;
-  G4cout << std::setw(42) << "neutral traklen: "
+  G4cout << " neutral traklen: "
          << std::setw(7)  << MeanNeutrTrLength << " radl +- "
          << std::setw(7)  <<  rmsNeutrTrLength << " radl" << G4endl;
+	 
+  if (iMoliere > 0. ) {
+    G4double RMoliere1 = iMoliere*Det->GetdRradl();
+    G4double RMoliere2 = iMoliere*Det->GetdRlength(); 	 
+    G4cout << "\n " << EMoliere << " % confinement: radius = "
+           << RMoliere1 << " radl  ("
+	   << G4BestUnit( RMoliere2, "Length") << ")" << G4endl;
+  }	   
 
   G4cout.setf(mode,std::ios::floatfield);
   G4cout.precision(prec);

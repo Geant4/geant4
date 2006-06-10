@@ -1,4 +1,4 @@
-# $Id: run05.mac,v 1.3 2006-01-13 17:43:59 maire Exp $
+# $Id: run05.mac,v 1.4 2006-06-10 14:29:08 maire Exp $
 #
 #
 # Macro file for "TestEm2.cc"
@@ -19,7 +19,6 @@
 /gun/energy 100 MeV
 /run/beamOn 10
 #
-/testem/phys/verbose 0
 /run/particle/applyCuts
 /run/beamOn 10
 /run/dumpCouples
@@ -29,6 +28,7 @@
 /testem/det/setLbin 9 1.11
 /testem/det/setRbin 6 0.111
 /testem/det/update
+/gun/position 0 0 0 cm
 /run/beamOn 10
 /run/dumpCouples
 #

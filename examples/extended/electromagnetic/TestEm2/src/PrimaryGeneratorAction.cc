@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: PrimaryGeneratorAction.cc,v 1.3 2006-01-13 14:20:27 maire Exp $
+// $Id: PrimaryGeneratorAction.cc,v 1.4 2006-06-10 14:29:08 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -61,8 +61,11 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
   //this function is called at the begin of event
   //
-  G4double position = -0.5*(detector->GetfullLength());
-  particleGun->SetParticlePosition(G4ThreeVector(0.*cm,0.*cm,position));     
+  const G4ThreeVector zero;
+  if (particleGun->GetParticlePosition() == zero) {
+    G4double position = -0.5*(detector->GetfullLength());
+    particleGun->SetParticlePosition(G4ThreeVector(0.*cm,0.*cm,position));
+  }       
   particleGun->GeneratePrimaryVertex(anEvent);
 }
 

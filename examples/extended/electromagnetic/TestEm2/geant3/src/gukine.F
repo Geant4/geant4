@@ -15,7 +15,7 @@
       DATA VERTEX/3*0./                                                         
       DATA PLAB  /3*0./                                                         
 *                                                            
-      VERTEX(3) = - Z1     + 0.0001                                 
+      VERTEX(3) = - Z1     + 0.0001                         
       CALL GSVERT(VERTEX,0,0,0,0,NVERT)                          
 *                                                         
       JPA = LQ(JPART-IKINE)                              

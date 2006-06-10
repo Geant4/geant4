@@ -21,44 +21,44 @@
 // ********************************************************************
 //
 //
-// $Id: G4EmHadronBuilder.hh,v 1.2 2004-11-24 13:17:53 vnivanch Exp $
+// $Id: PhysListEmG4v52.hh,v 1.3 2006-06-10 14:29:08 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef G4EmHadronBuilder_h
-#define G4EmHadronBuilder_h 1
+#ifndef PhysListEmG4v52_h
+#define PhysListEmG4v52_h 1
 
 #include "G4VPhysicsConstructor.hh"
 #include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class G4EmHadronBuilder : public G4VPhysicsConstructor
+class PhysListEmG4v52 : public G4VPhysicsConstructor
 {
-public:
-  G4EmHadronBuilder(const G4String& name = "EM_stand_had");
-  virtual ~G4EmHadronBuilder();
+  public: 
+    PhysListEmG4v52(const G4String& name = "g4v52");
+   ~PhysListEmG4v52();
 
-public:
-  // This method is dummy for physics
-  virtual void ConstructParticle();
-
-  // This method will be invoked in the Construct() method.
-  // each physics process will be instantiated and
-  // registered to the process manager of each particle type
-  virtual void ConstructProcess();
-
-private:
-
-   // hide assignment operator
-  G4EmHadronBuilder & operator=(const G4EmHadronBuilder &right);
-  G4EmHadronBuilder(const G4EmHadronBuilder&);
-
+  public: 
+    // This method is dummy for physics. 
+    void ConstructParticle() {};
+ 
+    // This method will be invoked in the Construct() method.
+    // each physics process will be instantiated and
+    // registered to the process manager of each particle type 
+    void ConstructProcess();
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
+
+
+
+
+
+
+
 

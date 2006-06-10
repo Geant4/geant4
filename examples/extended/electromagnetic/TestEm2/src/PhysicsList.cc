@@ -20,58 +20,41 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.9 2006-01-17 15:14:58 maire Exp $
+// $Id: PhysicsList.cc,v 1.10 2006-06-10 14:29:08 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//---------------------------------------------------------------------------
-//
-// ClassName:   PhysicsList
-//
-// Author:      V.Ivanchenko 03.05.2004
-//
-// Modified: 
-// 03-10-05 Add Builders 71 (V.Ivanchenko)
-// 17.01.06 remove few Builders (mma)
-//
-//----------------------------------------------------------------------------
-//
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "PhysicsList.hh"
 #include "PhysicsListMessenger.hh"
 
-#include "G4EmQEDBuilder.hh"
-#include "G4EmMuonBuilder.hh"
-#include "G4EmHadronBuilder.hh"
-#include "G4EmHighEnergyBuilder.hh"
+#include "PhysListEmStandard.hh"
+#include "PhysListEmG4v52.hh"
 
-#include "G4EmQEDBuilder52.hh"
-#include "G4EmMuonBuilder52.hh"
-#include "G4EmHadronBuilder52.hh"
+#include "PhysListEmLivermore.hh"
+#include "PhysListEmPenelope.hh"
 
-#include "G4UnitsTable.hh"
 #include "G4LossTableManager.hh"
-#include "G4EmProcessOptions.hh"
+#include "G4UnitsTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PhysicsList::PhysicsList() 
-: G4VModularPhysicsList()
+PhysicsList::PhysicsList() : G4VModularPhysicsList()
 {
-  emBuilderIsRegisted = false;
-  heBuilderIsRegisted = false;
-  
-  verbose = 0;
-  //  G4LossTableManager::Instance()->SetVerbose(0);
-  
+  G4LossTableManager::Instance();
   defaultCutValue = 1.*mm;
   cutForGamma     = defaultCutValue;
   cutForElectron  = defaultCutValue;
   cutForPositron  = defaultCutValue;
 
   pMessenger = new PhysicsListMessenger(this);
+
+  SetVerboseLevel(1);
+
+  // EM physics
+  emPhysicsList = new PhysListEmStandard(emName = "standard");
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -79,6 +62,7 @@ PhysicsList::PhysicsList()
 PhysicsList::~PhysicsList()
 {
   delete pMessenger;
+  delete emPhysicsList;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -131,8 +115,6 @@ PhysicsList::~PhysicsList()
 
 void PhysicsList::ConstructParticle()
 {
-  if (verbose > 0) G4cout << "Construte Particles" << G4endl;
-
 // pseudo-particles
   G4Geantino::GeantinoDefinition();
   G4ChargedGeantino::ChargedGeantinoDefinition();
@@ -183,73 +165,77 @@ void PhysicsList::ConstructParticle()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+#include "G4ProcessManager.hh"
+
 void PhysicsList::ConstructProcess()
 {
-  if (verbose > 0)  G4cout << "Construct Processes" << G4endl;
+  // transportation
+  //
+  AddTransportation();
   
-  if(!emBuilderIsRegisted) AddPhysicsList("standard");
-  G4VModularPhysicsList::ConstructProcess();
+  // electromagnetic physics list
+  //
+  emPhysicsList->ConstructProcess();
   
   // decay process
   //
   AddDecay();
-  
+
   // step limitation (as a full process)
   //  
   AddStepMax();
-  
-  // Define energy interval for loss processes
-  //
-  //G4EmProcessOptions emOptions;
-  //emOptions.SetMinEnergy(0.1*keV);
-  //emOptions.SetMaxEnergy(100.*GeV);
-  //emOptions.SetDEDXBinning(90);
-  //emOptions.SetLambdaBinning(90);
-  //emOptions.SetBuildPreciseRange(false);
-  //emOptions.SetVerbose(0);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PhysicsList::AddPhysicsList(const G4String& name)
 {
-  if(verbose > 0) {
-    G4cout << "Add Physics <" << name 
-           << "> emBuilderIsRegisted= " << emBuilderIsRegisted
-           << G4endl;
+  if (verboseLevel>-1) {
+    G4cout << "PhysicsList::AddPhysicsList: <" << name << ">" << G4endl;
   }
-  if ((name == "standard") && !emBuilderIsRegisted) {
-    RegisterPhysics(new G4EmQEDBuilder());
-    RegisterPhysics(new G4EmMuonBuilder());
-    RegisterPhysics(new G4EmHadronBuilder());
-    emBuilderIsRegisted = true;
-    G4cout << "PhysicsList::AddPhysicsList <" << name << ">" << G4endl;    
 
-  } else if (name == "g4v52" && !emBuilderIsRegisted) {
-    RegisterPhysics(new G4EmQEDBuilder52());
-    RegisterPhysics(new G4EmMuonBuilder52());
-    RegisterPhysics(new G4EmHadronBuilder52());
-    emBuilderIsRegisted = true;
-    G4cout << "PhysicsList::AddPhysicsList <" << name << ">" << G4endl;
+  if (name == emName) return;
+
+  if (name == "standard") {
+
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new PhysListEmStandard(name);
+
+  } else if (name == "g4v52") {
+
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new PhysListEmG4v52(name);
     
-  } else if (name == "high_energy" && !heBuilderIsRegisted) {
-    RegisterPhysics(new G4EmHighEnergyBuilder());
-    heBuilderIsRegisted = true;
-    G4cout << "PhysicsList::AddPhysicsList <" << name << ">" << G4endl;
+  } else if (name == "livermore") {
+
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new PhysListEmLivermore(name);
     
+  } else if (name == "penelope") {
+
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new PhysListEmPenelope(name);
+        
   } else {
-    G4cout << "PhysicsList::AddPhysicsList <" << name << ">" 
-           << " fail - module is already regitered or is unknown " << G4endl;
+
+    G4cout << "PhysicsList::AddPhysicsList: <" << name << ">"
+           << " is not defined"
+           << G4endl;
   }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4ProcessManager.hh"
 #include "G4Decay.hh"
 
 void PhysicsList::AddDecay()
 {
+  // decay process
+  //
   G4Decay* fDecayProcess = new G4Decay();
 
   theParticleIterator->reset();
@@ -299,11 +285,18 @@ void PhysicsList::AddStepMax()
 void PhysicsList::SetCuts()
 {
 
+  if (verboseLevel >0){
+    G4cout << "PhysicsList::SetCuts:";
+    G4cout << "CutLength : " << G4BestUnit(defaultCutValue,"Length") << G4endl;
+  }
+
+  // set cut values for gamma at first and for e- second and next for e+,
+  // because some processes for e+/e- need cut values for gamma
   SetCutValue(cutForGamma, "gamma");
   SetCutValue(cutForElectron, "e-");
   SetCutValue(cutForPositron, "e+");
 
-  if (verbose>0) DumpCutValuesTable();
+  if (verboseLevel>0) DumpCutValuesTable();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -331,3 +324,4 @@ void PhysicsList::SetCutForPositron(G4double cut)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+

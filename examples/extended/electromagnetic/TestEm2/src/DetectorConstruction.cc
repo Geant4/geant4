@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 // 
-// $Id: DetectorConstruction.cc,v 1.9 2006-01-13 17:43:59 maire Exp $
+// $Id: DetectorConstruction.cc,v 1.10 2006-06-10 14:29:08 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -108,6 +108,8 @@ void DetectorConstruction::DefineMaterials()
 
   new G4Material("Iron",        z=26., a= 55.85*g/mole, density= 7.87*g/cm3);
 
+  new G4Material("Lead",        z=82., a=207.19*g/mole, density=11.35*g/cm3);
+  
   G4Material* BGO = 
   new G4Material("BGO", density= 7.10*g/cm3, ncomponents=3);
   BGO->AddElement(O , natoms=12);
