@@ -299,6 +299,7 @@ mainProgram.write( "#include \"StatAccepTestEventAction.hh\" \n" )
 mainProgram.write( "#include \"StatAccepTestRunAction.hh\" \n" )
 mainProgram.write( "#include \"StatAccepTestTrackingAction.hh\" \n" )
 mainProgram.write( "#include \"StatAccepTestStackingAction.hh\" \n" )
+mainProgram.write( "#include \"StatAccepTestAnalysis.hh\" \n" )
 mainProgram.write( "#include \"G4UIterminal.hh\" \n" )
 mainProgram.write( "#ifdef G4UI_USE_TCSH \n" )
 mainProgram.write( "  #include \"G4UItcsh.hh\" \n" )
@@ -337,6 +338,9 @@ if ( float( EnergyValue.split()[0] ) < energyThresholdInGeVNoBiasBelow ) :
     mainProgram.write( "  //runManager->SetUserAction( new StatAccepTestStackingAction ); \n" )
 else :
     mainProgram.write( "  runManager->SetUserAction( new StatAccepTestStackingAction ); \n" )
+
+#***LOOKHERE*** Switch off the histograms (leave only the ntuple).
+mainProgram.write( "  StatAccepTestAnalysis::getInstance()->setIsHistogramOn( false ); \n" )
 
 mainProgram.write( "#ifdef G4VIS_USE \n" )
 mainProgram.write( "  StatAccepTestVisManager *visManager = new StatAccepTestVisManager; \n" )

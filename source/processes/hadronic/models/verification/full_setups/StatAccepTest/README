@@ -1,5 +1,5 @@
 
- Last update: 10-Apr-2006
+ Last update: 11-Jun-2006
  ========================
 
  This directory contains a configurable calorimeter setup to be used
@@ -70,12 +70,16 @@
  transverse energy deposition sum over all the active layers, 
  in a certain number of radial bins.
 
- In the same HBOOK file, also a number of histograms have been
- added, describing (see src/StatAccepTestAnalysis.cc for more
- information):
+ In the same HBOOK file, also a number of histograms can be
+ produced, describing the following information:
     -  step energy vs. step length (2D histograms)
     -  kinetic energy spectra of some particles, entering
        some active layers.
+ (Please look for ***LOOKHERE*** in src/StatAccepTestAnalysis.cc
+  to switch on/off these histograms, which can also be steered
+  from the main program. By default, the 2D histograms (step
+  energy vs. length) are switched off, whereas the others are
+  active.)
 
  The ntuple is then used in the stand-alone (i.e. independent from
  Geant4) program  pvalue , in the subdirectory dirStat/.

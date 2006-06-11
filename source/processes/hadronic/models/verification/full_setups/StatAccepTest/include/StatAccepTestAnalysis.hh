@@ -75,9 +75,18 @@ public:
   // properly the statistical error of the quantities defined per
   // event.
 
+  void setIsHistogramOn( const bool choice );
+  // Allow to switch on/off all the histograms, with the only 
+  // exception of the ntuple which is always saved.
+
 private:
   
   StatAccepTestAnalysis();
+
+  static bool isHistogramOn; // To have only the ntuple in the HBOOK file.
+
+  static bool is2DHistogramStepLvsEOn; // To switch on the 2D histograms of
+                                       // step length vs. step energy.
 
   void classifyParticle( const bool isTrack, const G4ParticleDefinition* particleDef );
   
@@ -435,6 +444,7 @@ private:
   G4double numExitingOthers2;          
 
 };
+
 
 #endif
 

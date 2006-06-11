@@ -12,6 +12,7 @@
 #include "StatAccepTestRunAction.hh" 
 #include "StatAccepTestTrackingAction.hh" 
 #include "StatAccepTestStackingAction.hh" 
+#include "StatAccepTestAnalysis.hh"
 #include "G4UIterminal.hh" 
 #ifdef G4UI_USE_TCSH 
   #include "G4UItcsh.hh" 
@@ -43,6 +44,7 @@ int main(int argc,char** argv) {
   runManager->SetUserAction( new StatAccepTestEventAction ); 
   runManager->SetUserAction( new StatAccepTestTrackingAction ); 
   //runManager->SetUserAction( new StatAccepTestStackingAction ); 
+  //StatAccepTestAnalysis::getInstance()->setIsHistogramOn( false );
 #ifdef G4VIS_USE 
   StatAccepTestVisManager *visManager = new StatAccepTestVisManager; 
   visManager->Initialize(); 

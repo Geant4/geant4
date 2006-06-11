@@ -1,6 +1,11 @@
                  History file
                  ------------
 
+11-Jun-2006 - A.Ribon (statAccepTest-V08-00-14)
+- Proper handling of the histograms.
+  Ready for the June 2006 release.
+
+
 09-Jun-2006 - A.Ribon (statAccepTest-V08-00-13)
 - Use the new statistical toolkit, not anymore inside PI.
   Prepare for the June 2006 release.
