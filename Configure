@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.76 2005-12-13 10:02:37 stesting Exp $
+# $Id: Configure,v 1.77 2006-06-11 17:42:33 stesting Exp $
 #
-# Generated on Tue Dec 13 11:01:04 CET 2005 [metaconfig 3.0 PL70]
+# Generated on Sun Jun 11 19:38:25 CEST 2006 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -177,6 +177,12 @@ g4clhep_base_dir=''
 g4clhep_include_dir=''
 g4clhep_lib=''
 g4clhep_lib_dir=''
+g4lib_build_shared=''
+g4lib_build_static=''
+g4lib_use_dll=''
+g4lib_use_dyn=''
+g4lib_use_shared=''
+g4lib_use_static=''
 g4global=''
 g4granular=''
 g4lib_use_granular=''
@@ -205,6 +211,7 @@ g4vis_build_raytracerx_driver=''
 g4vis_build_vrml_driver=''
 g4vis_build_vrmlfile_driver=''
 g4vis_oglhome=''
+g4vis_oivhome=''
 g4vis_use_asciitree=''
 g4vis_use_dawn=''
 g4vis_use_dawnfile=''
@@ -2760,6 +2767,8 @@ gans=$ans
 		dflt=$g4data
 		fn='d~'
 		. ./getfile
+
+		if [ X$g4data != X$ans ] ; then
 		g4data=$ans
 
 		g4levelgammadata=$g4data/PhotonEvaporation
@@ -2767,6 +2776,7 @@ gans=$ans
 		g4ledata=$g4data/G4EMLOW3.0
 		g4neutronhpcrosssections=$g4data/G4NDL3.7
 		g4elasticdata=$g4data/G4ELASTIC1.1
+		fi
 # done
 
 ###################################################################
@@ -3152,54 +3162,7 @@ done
 
 fi
 
-###############################################
-if test "X$g4system" = "XDarwin-g++" ; then
-
-while test 1 = 1  ; do
-
-g4message=`cat << EOM
-
-By default 'static'  libraries are built.
-
-Do you want to build dynamic libraries?
-EOM`
-
-dflt=$g4lib_build_dyn
-rp=$g4message
-. ./myread
-gans=$ans
-
-	case $gans in
-	
-	n*|N*) 
-		g4lib_build_dyn=n
-		g4lib_build_shared=n
-		g4lib_build_static=y
-		break
-		;;
-	y*|Y*) 
-		g4lib_build_dyn=y
-		g4lib_build_shared=n
-		g4lib_build_static=n
-
-#		g4lib_build_static=""
-#		g4lib_use_shared=1
-#		g4lib_use_static=""
-		break
-		;;
-#	[eE]) 
-#		break
-#		;;
-#	*) 
-#		echo " "
-#		break
-#		;;
-	esac
-done
-
-fi
-
-if test "X$g4system" != "XWIN32-VC" -a "X$g4system" != "XWIN32-VC7" -a "X$g4system" != "XDarwin-g++" ; then
+if test "X$g4system" != "XWIN32-VC" -a "X$g4system" != "XWIN32-VC7" ; then
 
 while test 1 = 1  ; do
 
@@ -4257,11 +4220,75 @@ gans=$ans
 		g4vis_use_oix=y
 		;;
 	esac
+
+############################################################
+oiv_dirs=`find /usr/local/lib /usr/lib -name libInventor\*|xargs echo`
+#echo ogl_dirs=$ogl_dirs
+
+if test "X$oiv_dirs" != "X" ; then
+
+g4oiv_base_dir_found=`echo $oiv_dirs|cut -d" " -f1`
+#echo g4ogl_base_dir_found=$g4ogl_base_dir_found
+
+# That's right: should be twice! (e.g./usr/local/lib/libGLU.so -> /usr/local)
+g4oiv_base_dir_found=`dirname $g4oiv_base_dir_found`
+g4oiv_base_dir_found=`dirname $g4oiv_base_dir_found`
+
+	g4vis_oivhome=$g4oiv_base_dir_found
+else
+case "$g4vis_oivhome" in
+'')
+	g4vis_oivhome=/usr
+	;;
+esac
+fi
+
+##########################################################################
+
+if test "X$oiv_dirs" != "X" ; then
+
+g4message=`cat << EOM
+
+  OIVHOME/include
+  OIVHOME/lib
+
+You have selected to use OpenInventor driver.
+Specify the correct path (OIVHOME) where OpenInventor is installed in your system.
+It was found in:
+EOM`
+
+else
+
+g4message=`cat << EOM
+
+  OIVHOME/include
+  OIVHOME/lib
+
+You have selected to use OpenInventor driver.
+Specify the correct path (OIVHOME) where OpenInventor is installed in your system
+(set by defalt):
+EOM`
+
+fi
+
+dflt=$g4vis_oivhome
+fn='d~'
+rp=$g4message
+. ./getfile
+g4vis_oivhome=$ans
+
+if test "X$g4osname" = "XLinux"; then 
+
+if test "X$g4vis_oivhome" = "X/usr" -o "X$g4vis_oivhome" = "X/usr/local"; then
+g4vis_oivhome=""
+fi
+fi
+
 ###############################################
 
 g4message=`cat << EOM
 
-  G4VIS_BUILD_RAYTRACERXX_DRIVER
+  G4VIS_BUILD_RAYTRACERX_DRIVER
   G4VIS_USE_RAYTRACERX
 
 Allows for interactive ray-tracing graphics through X11.
@@ -4503,7 +4530,7 @@ gans=y
 ;;
 esac
 
-if test "X$g4system" != "XWIN32-VC" -a "X$g4system" != "XWIN32-VC7"; then
+if test "X$g4system" != "XWIN32-VC" -a "X$g4system" != "XWIN32-VC7" -a "X$g4system" != "XDarwin-g++"; then
 
 if [ X$g4vis_build_openglx_driver = Xy ] || [ X$g4vis_build_openglxm_driver = Xy ] || [ X$g4vis_build_openglwin32_driver = Xy ] ; then 
 
@@ -4793,7 +4820,13 @@ g4install='$g4install'
 g4ledata='$g4ledata'
 g4levelgammadata='$g4levelgammadata'
 g4lib='$g4lib'
+g4lib_build_shared='$g4lib_build_shared'
+g4lib_build_static='$g4lib_build_static'
+g4lib_use_dll='$g4lib_use_dll'
+g4lib_use_dyn='$g4lib_use_dyn'
 g4lib_use_granular='$g4lib_use_granular'
+g4lib_use_shared='$g4lib_use_shared'
+g4lib_use_static='$g4lib_use_static'
 g4make='$g4make'
 g4neutronhpcrosssections='$g4neutronhpcrosssections'
 g4osname='$g4osname'
@@ -4824,6 +4857,7 @@ g4vis_build_raytracerx_driver='$g4vis_build_raytracerx_driver'
 g4vis_build_vrml_driver='$g4vis_build_vrml_driver'
 g4vis_build_vrmlfile_driver='$g4vis_build_vrmlfile_driver'
 g4vis_oglhome='$g4vis_oglhome'
+g4vis_oivhome='$g4vis_oivhome'
 g4vis_use_asciitree='$g4vis_use_asciitree'
 g4vis_use_dawn='$g4vis_use_dawn'
 g4vis_use_dawnfile='$g4vis_use_dawnfile'
