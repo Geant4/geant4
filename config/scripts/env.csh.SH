@@ -348,21 +348,6 @@ endif
 : In the following dollars and backticks do not need the extra backslash.
 $spitshell >>env.csh <<'!NO!SUBS!'
 
-#
-# Shared libraries
-#
-if ( "X$G4LIB_BUILD_SHARED" != "X" ) then
-if ( "X$LD_LIBRARY_PATH" != "X" )  then
-setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${G4LIB}/${G4SYATEM}
-else
-setenv LD_LIBRARY_PATH ${G4LIB}/${G4SYATEM}
-endif
-endif
-
-#
-# For BIN
-#
-setenv PATH ${PATH}:${G4WORKDIR}/bin/${G4SYSTEM}
 
 #+
 #
@@ -384,6 +369,22 @@ setenv G4WORKDIR $HOME/geant4
 
 endif
 endif
+
+#
+# Shared libraries
+#
+if ( "X$G4LIB_BUILD_SHARED" != "X" ) then
+if ( "X$LD_LIBRARY_PATH" != "X" )  then
+setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${G4LIB}/${G4SYSTEM}
+else
+setenv LD_LIBRARY_PATH ${G4LIB}/${G4SYSTEM}
+endif
+endif
+
+#
+# For BIN
+#
+setenv PATH ${PATH}:${G4WORKDIR}/bin/${G4SYSTEM}
 
 !NO!SUBS!
 chmod 755 env.csh

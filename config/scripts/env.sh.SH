@@ -488,24 +488,6 @@ fi
 : In the following dollars and backticks do not need the extra backslash.
 $spitshell >>env.sh <<'!NO!SUBS!'
 
-#
-# Shared libraries
-#
-if [ X$G4LIB_BUILD_SHARED != X ] ; then
-if [ X$LD_LIBRARY_PATH != X ] ; then
-LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${G4LIB}/${G4SYATEM}
-export LD_LIBRARY_PATH
-else
-LD_LIBRARY_PATH=${G4LIB}/${G4SYATEM}
-export LD_LIBRARY_PATH
-fi
-fi
-
-#
-# For BIN
-#
-PATH=${PATH}:${G4WORKDIR}/bin/${G4SYSTEM}
-export PATH
 
 #+
 #
@@ -538,6 +520,25 @@ fi # if platforms
 fi
 
 fi
+
+#
+# Shared libraries
+#
+if [ X$G4LIB_BUILD_SHARED != X ] ; then
+if [ X$LD_LIBRARY_PATH != X ] ; then
+LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${G4LIB}/${G4SYSTEM}
+export LD_LIBRARY_PATH
+else
+LD_LIBRARY_PATH=${G4LIB}/${G4SYSTEM}
+export LD_LIBRARY_PATH
+fi
+fi
+
+#
+# For BIN
+#
+PATH=${PATH}:${G4WORKDIR}/bin/${G4SYSTEM}
+export PATH
 
 !NO!SUBS!
 chmod 755 env.sh
