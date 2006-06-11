@@ -1,5 +1,5 @@
 ?RCS:
-?MAKE:g4lib_build_shared g4lib_build_static g4lib_use_shared g4lib_use_static g4lib_use_dyn g$lib_use_dll: \
+?MAKE:g4lib_build_shared g4lib_build_static g4lib_use_shared g4lib_use_static g4lib_use_dyn g4lib_use_dll: \
 	Myread Getfile cat rm test
 ?MAKE:	-pick add $@ %<
 ?S:g4osname:
