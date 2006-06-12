@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DAWNFILESceneHandler.cc,v 1.16 2006-06-02 09:06:39 allison Exp $
+// $Id: G4DAWNFILESceneHandler.cc,v 1.17 2006-06-12 08:19:49 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Satoshi TANAKA
@@ -126,7 +126,7 @@ G4DAWNFILESceneHandler::~G4DAWNFILESceneHandler ()
 #if defined DEBUG_FR_SCENE
 	G4cerr << "***** ~G4DAWNFILESceneHandler" << G4endl;
 #endif 
-	if( FRIsInModeling() ) 
+	if (fPrimDest.IsOpen()) 
 	  {
 			//----- End of modeling
 			// !EndModeling, !DrawAll, !CloseDevice,
