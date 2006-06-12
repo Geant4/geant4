@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DAWNFILEViewer.cc,v 1.18 2006-01-23 20:11:27 allison Exp $
+// $Id: G4DAWNFILEViewer.cc,v 1.19 2006-06-12 08:22:02 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Satoshi TANAKA
@@ -111,10 +111,14 @@ G4DAWNFILEViewer::ClearView( void )
 #if defined DEBUG_FR_VIEW
 	G4cerr << "***** G4DAWNFILEViewer::ClearView (): No effects " << G4endl;
 #endif
-	fSceneHandler.fPrimDest.Rewind();
-	fSceneHandler.SendStr( FR_G4_PRIM_HEADER );
-	fSceneHandler.FRflag_in_modeling = false;
-	fSceneHandler.FRBeginModeling();
+	if (fSceneHandler.fPrimDest.IsOpen()) {
+	  fSceneHandler.fPrimDest.Close();
+	  // Re-open with same filename...
+	  fSceneHandler.fPrimDest.Open(fSceneHandler.fG4PrimFileName);
+	  fSceneHandler.SendStr( FR_G4_PRIM_HEADER );
+	  fSceneHandler.FRflag_in_modeling = false;
+	  fSceneHandler.FRBeginModeling();
+	}
 }
 
 
