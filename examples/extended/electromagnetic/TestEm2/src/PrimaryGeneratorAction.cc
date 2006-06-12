@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: PrimaryGeneratorAction.cc,v 1.4 2006-06-10 14:29:08 maire Exp $
+// $Id: PrimaryGeneratorAction.cc,v 1.5 2006-06-12 10:53:26 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -44,8 +44,9 @@ PrimaryGeneratorAction::PrimaryGeneratorAction (DetectorConstruction* det)
   G4ParticleDefinition* particle
                  = G4ParticleTable::GetParticleTable()->FindParticle("e-");
   particleGun->SetParticleDefinition(particle);
+  particleGun->SetParticleEnergy(5.*GeV);  
+  particleGun->SetParticlePosition(initPos = G4ThreeVector(-1*cm,-1*cm,-1*cm));  
   particleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
-  particleGun->SetParticleEnergy(5.*GeV);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -61,8 +62,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
   //this function is called at the begin of event
   //
-  const G4ThreeVector zero;
-  if (particleGun->GetParticlePosition() == zero) {
+  if (particleGun->GetParticlePosition() == initPos) {
     G4double position = -0.5*(detector->GetfullLength());
     particleGun->SetParticlePosition(G4ThreeVector(0.*cm,0.*cm,position));
   }       
