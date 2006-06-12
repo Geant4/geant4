@@ -1,5 +1,5 @@
-#ifndef HsQGSCInterface_h
-#define HsQGSCInterface_h
+#ifndef HsFTFCInterface_h
+#define HsFTFCInterface_h
 
 //----------------------------------------------------------------------------
 //
@@ -19,17 +19,18 @@
 #include "G4VIntraNuclearTransportModel.hh"
 #include "G4TheoFSGenerator.hh"
 #include "G4StringChipsParticleLevelInterface.hh"
-#include "G4QGSModel.hh"
 #include "G4QGSParticipants.hh"
 #include "G4QGSMFragmentation.hh"
 #include "G4ExcitedStringDecay.hh"
 
-class HsQGSCInterface : public G4VIntraNuclearTransportModel
+class G4FTFModel;
+
+class HsFTFCInterface : public G4VIntraNuclearTransportModel
 {
 public:
-  HsQGSCInterface();
+  HsFTFCInterface();
 
-  virtual ~HsQGSCInterface();
+  virtual ~HsFTFCInterface();
 
   virtual G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack, 
                                                  G4Nucleus& theNucleus);
@@ -38,11 +39,11 @@ public:
                                                G4V3DNucleus*) {return 0;}; 
 private:
   
-  G4TheoFSGenerator * theModel;
+  G4TheoFSGenerator*    theModel;
   G4StringChipsParticleLevelInterface * theCascade;
-  G4QGSModel< G4QGSParticipants > theStringModel;
-  G4QGSMFragmentation theFragmentation;
-  G4ExcitedStringDecay * theStringDecay;
+  G4QGSMFragmentation   theFragmentation;
+  G4ExcitedStringDecay* theStringDecay;
+  G4FTFModel*           theStringModel;
 
 };
 #endif

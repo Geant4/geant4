@@ -31,7 +31,7 @@ class HsQGSPInterface : public G4VIntraNuclearTransportModel
 public:
   HsQGSPInterface();
 
-  ~HsQGSPInterface();
+  virtual ~HsQGSPInterface();
 
   virtual G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack, 
                                                  G4Nucleus& theNucleus);
