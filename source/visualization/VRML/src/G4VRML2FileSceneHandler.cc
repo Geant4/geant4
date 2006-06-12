@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRML2FileSceneHandler.cc,v 1.12 2005-06-02 17:43:47 allison Exp $
+// $Id: G4VRML2FileSceneHandler.cc,v 1.13 2006-06-12 08:29:00 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4VRML2FileSceneHandler.cc
@@ -117,6 +117,7 @@ G4VRML2FileSceneHandler::~G4VRML2FileSceneHandler()
 #if defined DEBUG_FR_SCENE
 	G4cerr << "***** ~G4VRML2FileSceneHandler" << G4endl;
 #endif 
+	VRMLEndModeling();
 }
 
 
