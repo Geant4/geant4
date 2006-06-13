@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: pyG4Track.cc,v 1.3 2006-06-04 21:34:29 kmura Exp $
+// $Id: pyG4Track.cc,v 1.4 2006-06-13 05:07:25 kmura Exp $
 // $Name: not supported by cvs2svn $
 // ====================================================================
 //   pyG4Track.cc
@@ -29,6 +29,7 @@
 // ====================================================================
 #include <boost/python.hpp>
 #include "G4Track.hh"
+#include "G4VProcess.hh"
 
 using namespace boost::python;
 
@@ -50,8 +51,8 @@ void export_G4Track()
     .def("GetGlobalTime",          &G4Track::GetGlobalTime)
     .def("GetLocalTime",           &G4Track::GetLocalTime) 
     .def("GetProperTime",          &G4Track::GetProperTime)
-    //.def("GetVolume",            &G4Track::GetVolume,
-    //return_value_policy<reference_existing_object>())
+    .def("GetVolume",            &G4Track::GetVolume,
+         return_value_policy<reference_existing_object>())
     .def("GetMaterial",            &G4Track::GetMaterial,
 	 return_value_policy<reference_existing_object>())
     .def("GetTouchable",           &G4Track::GetTouchable,
@@ -67,6 +68,8 @@ void export_G4Track()
 	 return_value_policy<return_by_value>())
     .def("GetTrackStatus",         &G4Track::GetTrackStatus)
     .def("GetTrackLength",         &G4Track::GetTrackLength)
+    .def("GetStep",                &G4Track::GetStep,
+    	 return_value_policy<reference_existing_object>())
     .def("GetCurrentStepNumber",   &G4Track::GetCurrentStepNumber)
     .def("GetStepLength",          &G4Track::GetStepLength)
     .def("GetVertexPosition",      &G4Track::GetVertexPosition,
@@ -74,10 +77,10 @@ void export_G4Track()
     .def("GetVertexMomentumDirection", &G4Track::GetVertexMomentumDirection,
 	 return_value_policy<return_by_value>())
     .def("GetVertexKineticEnergy", &G4Track::GetVertexKineticEnergy)
-    //.def("GetLogicalVolumeAtVertex", &G4Track::GetLogicalVolumeAtVertex,
-    //	 return_value_policy<reference_existing_object>())
-    //.def("GetCreatorProcess",   &G4Track::GetCreatorProcess,
-    //	 return_value_policy<reference_existing_object>())
+    .def("GetLogicalVolumeAtVertex", &G4Track::GetLogicalVolumeAtVertex,
+    	 return_value_policy<reference_existing_object>())
+    .def("GetCreatorProcess",   &G4Track::GetCreatorProcess,
+    	 return_value_policy<reference_existing_object>())
     .def("GetWeight",              &G4Track::GetWeight)
     .def("SetWeight",              &G4Track::SetWeight)
     ;
