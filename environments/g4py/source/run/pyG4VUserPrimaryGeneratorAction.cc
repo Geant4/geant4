@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: pyG4VUserPrimaryGeneratorAction.cc,v 1.4 2006-06-07 05:22:06 kmura Exp $
+// $Id: pyG4VUserPrimaryGeneratorAction.cc,v 1.5 2006-06-13 09:54:43 kmura Exp $
 // $Name: not supported by cvs2svn $
 // ====================================================================
 //   pyG4VUserPrimaryGeneratorAction.cc
@@ -42,7 +42,8 @@ struct CB_G4VUserPrimaryGeneratorAction :
   G4VUserPrimaryGeneratorAction, wrapper<G4VUserPrimaryGeneratorAction> {
   
   void GeneratePrimaries(G4Event* anEvent) {
-    get_override("GeneratePrimaries")(&anEvent);
+    //get_override("GeneratePrimaries")(&anEvent);
+    get_override("GeneratePrimaries")(boost::ref(anEvent));
   }
 };
 
