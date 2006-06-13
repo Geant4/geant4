@@ -1,4 +1,4 @@
-$Id: History,v 1.7 2006-06-13 09:33:34 kmura Exp $
+$Id: History,v 1.8 2006-06-13 16:33:50 kmura Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,7 @@ Geant4Py is a Geant4-Python bridge.
  - update expose of G4Track
  - change python calls pass-by-reference
    (XXXUserAction::XXXAction())
+ - change install path of site-modules (lib/site-modules -> lib/)
 
 07 June 2006 K.Murakami
  - fix segmentation fault at termination
