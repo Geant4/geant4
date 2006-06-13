@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IntegratorTest.cc,v 1.8 2004-11-12 17:38:33 gcosmo Exp $
+// $Id: G4IntegratorTest.cc,v 1.9 2006-06-13 13:59:59 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Test program for G4Integrator class. The function std::exp(-x)*std::cos(x) is
@@ -45,6 +45,48 @@ G4double GlobalCos( G4double x ){  return std::cos(x) ; }
 G4double GlobalHermite(G4double x){  return x*x*std::cos(x) ; }
 
 
+G4double fY;
+G4int    fN = 100;
+
+G4double X1 = -3.25/5.;
+G4double X2 =  3.25/5.;
+
+G4double Y1 = -7.5/5.;
+G4double Y2 =  7.5/5.;
+
+G4double Harp(G4double  x)
+{
+
+  G4double tmp = std::sqrt(1 +  x*x + fY*fY);
+   tmp        *= 1 +  x*x + fY*fY ;
+   return        1/tmp;
+}
+
+
+G4double HarpX(G4double y)
+{
+  fY = y;
+  G4SimpleIntegration myIntegrand(Harp);
+  return myIntegrand.Simpson(X1,X2,fN); 
+  // return myIntegrand.Gauss(X1,X2,fN); 
+}
+
+
+
+
+
+
+G4double HarpY()
+{
+  // G4int i;
+  G4SimpleIntegration myIntegrand(HarpX);
+  // G4double sum =0.;
+  // for(i = 0; i < fN; i++)
+  G4double result = myIntegrand.Simpson(Y1,Y2,fN); 
+  return result/twopi;
+
+}
+
 class B
 {
   typedef G4double (B::* PBmem)(G4double);
@@ -61,9 +103,13 @@ public:
 
   G4double TestHermite(G4double x){  return x*x*std::cos(x) ; }
 
+  G4double HarpX(G4double);
+  G4double HarpY(G4double);
+
+
   void Integrand() ;
 
-} ;
+};
 
 
 void B::Integrand()
@@ -210,6 +256,11 @@ int main()
             <<"  and n-point Jacobi =  "
 	    <<jacobi<<G4endl ;
    }
+
+
+
+   G4cout<<"Ivanchenko integral = "<<HarpY()<<G4endl;
+
 
    return 0;
 }
