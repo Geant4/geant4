@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: pyG4UserStackingAction.cc,v 1.4 2006-06-07 05:22:05 kmura Exp $
+// $Id: pyG4UserStackingAction.cc,v 1.5 2006-06-13 09:32:31 kmura Exp $
 // $Name: not supported by cvs2svn $
 // ====================================================================
 //   pyG4UserStackingAction.cc
@@ -44,7 +44,7 @@ struct CB_G4UserStackingAction : G4UserStackingAction,
   // ClassifyNewTrack
   G4ClassificationOfNewTrack ClassifyNewTrack(const G4Track* aTrack) {
     if(const override& f= get_override("ClassifyNewTrack")) {
-      return f(aTrack);
+      return f(boost::ref(aTrack));
     } else
       return G4UserStackingAction::ClassifyNewTrack(aTrack);
   }

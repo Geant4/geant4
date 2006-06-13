@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: pyG4UserEventAction.cc,v 1.4 2006-06-07 05:22:05 kmura Exp $
+// $Id: pyG4UserEventAction.cc,v 1.5 2006-06-13 09:32:30 kmura Exp $
 // $Name: not supported by cvs2svn $
 // ====================================================================
 //   pyG4UserEventAction.cc
@@ -41,7 +41,7 @@ struct CB_G4UserEventAction : G4UserEventAction,
   // BeginOfEventAction
   void BeginOfEventAction(const G4Event* anEvent) {
     if(const override& f= get_override("BeginOfEventAction")) {
-      f(anEvent);
+      f(boost::ref(anEvent));
     } else
       G4UserEventAction::BeginOfEventAction(anEvent);
   }
@@ -49,7 +49,7 @@ struct CB_G4UserEventAction : G4UserEventAction,
   // EndOfEventAction
   void EndOfEventAction(const G4Event* anEvent) {
     if(const override& f= get_override("EndOfEventAction")) {
-      f(anEvent);
+      f(boost::ref(anEvent));
     } else {
       G4UserEventAction::EndOfEventAction(anEvent);
     }    

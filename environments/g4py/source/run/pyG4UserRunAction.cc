@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: pyG4UserRunAction.cc,v 1.4 2006-06-07 05:22:06 kmura Exp $
+// $Id: pyG4UserRunAction.cc,v 1.5 2006-06-13 09:35:01 kmura Exp $
 // $Name: not supported by cvs2svn $
 // ====================================================================
 //   pyG4UserRunAction.cc
@@ -40,7 +40,7 @@ struct CB_G4UserRunAction : G4UserRunAction, wrapper<G4UserRunAction> {
   // BeginOfRunAction
   void BeginOfRunAction(const G4Run* aRun) {
     if(const override& f= get_override("BeginOfRunAction")) {
-      f(aRun);
+      f(boost::ref(aRun));
     } else
       G4UserRunAction::BeginOfRunAction(aRun);
   }
@@ -48,7 +48,7 @@ struct CB_G4UserRunAction : G4UserRunAction, wrapper<G4UserRunAction> {
   // EndOfRunAction
   void EndOfRunAction(const G4Run* aRun) {
     if(const override& f= get_override("EndOfRunAction")) {
-      f(aRun);
+      f(boost::ref(aRun));
     } else {
       G4UserRunAction::EndOfRunAction(aRun);
     }
