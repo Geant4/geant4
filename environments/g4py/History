@@ -1,4 +1,4 @@
-$Id: History,v 1.6 2006-06-07 05:24:39 kmura Exp $
+$Id: History,v 1.7 2006-06-13 09:33:34 kmura Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -13,6 +13,12 @@ Geant4Py is a Geant4-Python bridge.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+13 June 2006 K.Murakami
+ - update 00README
+ - update expose of G4Track
+ - change python calls pass-by-reference
+   (XXXUserAction::XXXAction())
 
 07 June 2006 K.Murakami
  - fix segmentation fault at termination
