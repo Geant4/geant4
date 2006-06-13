@@ -42,7 +42,7 @@ struct CB_G4UserTrackingAction : G4UserTrackingAction,
   // PreUserTrackingAction
   void PreUserTrackingAction(const G4Track* atrack) {
     if(const override& f= get_override("PreUserTrackingAction")) {
-      f(atrack);
+      f(boost::ref(atrack));
     } else {
       G4UserTrackingAction::PreUserTrackingAction(atrack);
     }
@@ -51,7 +51,7 @@ struct CB_G4UserTrackingAction : G4UserTrackingAction,
   // PostUserTrackingAction
   void PostUserTrackingAction(const G4Track* atrack) {
     if(const override& f= get_override("PostUserTrackingAction")) {
-      f(atrack);
+      f(boost::ref(atrack));
     } else {
       G4UserTrackingAction::PostUserTrackingAction(atrack);
     }

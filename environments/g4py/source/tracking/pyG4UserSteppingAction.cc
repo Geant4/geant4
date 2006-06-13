@@ -41,7 +41,7 @@ struct CB_G4UserSteppingAction : G4UserSteppingAction,
   // UserSteppingAction
   void UserSteppingAction(const G4Step* astep) {
     if(const override& f= get_override("UserSteppingAction")) {
-      f(astep);
+      f(boost::ref(astep));
     } else {
       G4UserSteppingAction::UserSteppingAction(astep);
     }
