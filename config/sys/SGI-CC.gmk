@@ -13,19 +13,34 @@ ifeq ($(G4SYSTEM),SGI-CC)
     endif
   endif
   CXXFLAGS  += -ptused
+  CPPFLAGS  += -DSOCKET_IRIX_SOLARIS
   FC        := f77
   FCLIBS    := -lftn
   SHEXT     := so
-  X11FLAGS  := -I/usr/include/X11/extensions -I/usr/include/X11
-  X11LIBS   := -L/usr/lib -lXmu -lXt -lXext -lX11
-  XMLIBS    := -L/usr/lib -lXm
+  ifndef X11FLAGS
+    X11FLAGS  := -I/usr/include/X11/extensions -I/usr/include/X11
+  endif
+  ifndef X11LIBS
+    X11LIBS   := -L/usr/lib -lXmu -lXt -lXext -lX11
+  endif
+  ifndef XMFLAGS
+    XMFLAGS   :=
+  endif
+  ifndef XMLIBS
+    XMLIBS    := -L/usr/lib -lXm
+  endif
+  ifndef XAWFLAGS
+    XAWFLAGS   :=
+  endif
+  ifndef XAWLIBS
+    XAWLIBS    := -lXaw
+  endif
   ifndef OGLFLAGS
     OGLFLAGS  :=
   endif
   ifndef OGLLIBS
     OGLLIBS   := -L/usr/lib -lGLU -lGL
   endif
-  CPPFLAGS += -DSOCKET_IRIX_SOLARIS
 
   define build-granular-shared-lib
     @echo "Shared Libraries not supported on $(G4SYSTEM)

@@ -42,10 +42,24 @@ ifeq ($(G4SYSTEM),Linux-g++)
   FCLIBS := -lg2c -lnsl
   ECHO    := /bin/echo -e
   SHEXT   := so
-  X11FLAGS  := -I/usr/include/X11/extensions -I/usr/include/X11
-  X11LIBS   := -L/usr/X11R6/lib  -lXmu -lXt -lXext -lX11 -lSM -lICE
-  XMFLAGS   := -I/usr/X11R6/include
-  XMLIBS    := -lXm -lXpm
+  ifndef X11FLAGS
+    X11FLAGS  := -I/usr/include/X11/extensions -I/usr/include/X11
+  endif
+  ifndef X11LIBS
+    X11LIBS   := -L/usr/X11R6/lib  -lXmu -lXt -lXext -lX11 -lSM -lICE
+  endif
+  ifndef XMFLAGS
+    XMFLAGS   := -I/usr/X11R6/include
+  endif
+  ifndef XMLIBS
+    XMLIBS    := -lXm -lXpm
+  endif
+  ifndef XAWFLAGS
+    XAWFLAGS   := -I/usr/X11R6/include
+  endif
+  ifndef XAWLIBS
+    XAWLIBS    := -lXaw
+  endif
   DLDLIBS   := -ldl
   ifndef OGLFLAGS
     OGLFLAGS  := -I$(OGLHOME)/include 
@@ -53,7 +67,6 @@ ifeq ($(G4SYSTEM),Linux-g++)
   ifndef OGLLIBS
     OGLLIBS   := -L$(OGLHOME)/lib -lGLU -lGL
   endif
-  OIVFLAGS  += -I$(OIHOME)/include 
   define build-granular-shared-lib
     @libdir=`(cd $(@D);/bin/pwd)`; \
      cd $(G4TMPDIR); \

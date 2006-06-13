@@ -16,12 +16,24 @@ ifeq ($(G4SYSTEM),AIX-xlC)
   FC := xlf
   FCFLAGS += -qextname
   FCLIBS := -lxlf90 -lxlf
-  X11FLAGS  := -I/usr/include/X11/extensions -I/usr/include/X11
-  X11LIBS   := -L/usr/lib -lXmu -lX11 -lXext
-  XMFLAGS   := -I/usr/include/Motif1.2
-  XMLIBS    := -L/usr/lib -lXm -lXt -lX11
-  XAWFLAGS  := -I/usr/include/X11
-  XAWLIBS   := -L/usr/lib -lXaw -lXmu -lXt -lX11 -lXext
+  ifndef X11FLAGS
+    X11FLAGS  := -I/usr/include/X11/extensions -I/usr/include/X11
+  endif
+  ifndef X11LIBS
+    X11LIBS   := -L/usr/lib -lXmu -lX11 -lXext
+  endif
+  ifndef XMFLAGS
+    XMFLAGS   := -I/usr/include/Motif1.2
+  endif
+  ifndef XMLIBS
+    XMLIBS    := -L/usr/lib -lXm -lXt -lX11
+  endif
+  ifndef XAWFLAGS
+    XAWFLAGS  := -I/usr/include/X11
+  endif
+  ifndef XAWLIBS
+    XAWLIBS   := -L/usr/lib -lXaw -lXmu -lXt -lX11 -lXext
+  endif
   ifndef OGLFLAGS
     OGLFLAGS  := -I$(OGLHOME)/include 
   endif
