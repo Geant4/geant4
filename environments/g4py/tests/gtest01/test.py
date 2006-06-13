@@ -32,21 +32,21 @@ class MyRunAction(G4UserRunAction):
 
   def BeginOfRunAction(self, run):
     print "*** #event to be processed (BRA)=",
-    run.numberOfEventToBeProcessed
+    run.GetNumberOfEventToBeProcessed()
 
   def EndOfRunAction(self, run):
-    print "*** run end run(ERA)=", run.runID
+    print "*** run end run(ERA)=", run.GetRunID()
 
 # ------------------------------------------------------------------
 class MyEventAction(G4UserEventAction):
   "My Event Action"
 
   #def BeginOfEventAction(self, event):
-    #print "*** current event (BEA)=", event.eventID
+    #print "*** current event (BEA)=", event.GetEventID()
   #  pass
 
   #def EndOfEventAction(self, event):
-  #  print "*** current event (EEA)=", event.eventID
+  #  print "*** current event (EEA)=", event.GetEventID()
 
 # ------------------------------------------------------------------
 class MySteppingAction(G4UserSteppingAction):
