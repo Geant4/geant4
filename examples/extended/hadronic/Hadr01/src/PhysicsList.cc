@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.cc,v 1.4 2006-06-13 17:18:36 vnivanch Exp $
+// $Id: PhysicsList.cc,v 1.5 2006-06-13 18:22:37 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /////////////////////////////////////////////////////////////////////////
@@ -137,7 +137,7 @@ void PhysicsList::AddPhysicsList(const G4String& name)
   if (name == "LHEP") {
 
     hadronPhys.push_back( new HadronPhysicsLHEP());
-    hadronPhys.push_back( new G4IonPhysics("stopping"));
+    hadronPhys.push_back( new G4IonPhysics("ion"));
 
   } else if (name == "em72") {
 
@@ -148,55 +148,55 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 
     hadronPhys.push_back( new HadronPhysicsLHEP_BERT());
     hadronPhys.push_back( new G4QStoppingPhysics("stopping"));
-    hadronPhys.push_back( new G4IonPhysics("stopping"));
+    hadronPhys.push_back( new G4IonPhysics("ion"));
 
   } else if (name == "LHEP_BERT_HP") {
 
     hadronPhys.push_back( new HadronPhysicsLHEP_BERT_HP());
     hadronPhys.push_back( new G4QStoppingPhysics("stopping"));
-    hadronPhys.push_back( new G4IonPhysics("stopping"));
+    hadronPhys.push_back( new G4IonPhysics("ion"));
 
   } else if (name == "LHEP_BIC") {
 
     hadronPhys.push_back( new HadronPhysicsLHEP_BIC());
     hadronPhys.push_back( new G4QStoppingPhysics("stopping"));
-    hadronPhys.push_back( new G4IonPhysics("stopping"));
+    hadronPhys.push_back( new G4IonPhysics("ion"));
 
   } else if (name == "LHEP_BIC_HP") {
 
     hadronPhys.push_back( new HadronPhysicsLHEP_BIC_HP());
     hadronPhys.push_back( new G4QStoppingPhysics("stopping"));
-    hadronPhys.push_back( new G4IonPhysics("stopping"));
+    hadronPhys.push_back( new G4IonPhysics("ion"));
 
   } else if (name == "QGSC") {
 
     hadronPhys.push_back( new HadronPhysicsQGSC());
     hadronPhys.push_back( new G4QStoppingPhysics("stopping"));
-    hadronPhys.push_back( new G4IonPhysics("stopping"));
+    hadronPhys.push_back( new G4IonPhysics("ion"));
 
   } else if (name == "QGSP") {
 
     hadronPhys.push_back( new HadronPhysicsQGSP());
     hadronPhys.push_back( new G4QStoppingPhysics("stopping"));
-    hadronPhys.push_back( new G4IonPhysics("stopping"));
+    hadronPhys.push_back( new G4IonPhysics("ion"));
 
   } else if (name == "QGSP_BERT") {
 
     hadronPhys.push_back( new HadronPhysicsQGSP_BERT());
     hadronPhys.push_back( new G4QStoppingPhysics("stopping"));
-    hadronPhys.push_back( new G4IonPhysics("stopping"));
+    hadronPhys.push_back( new G4IonPhysics("ion"));
 
   } else if (name == "QGSP_BERT_HP") {
 
     hadronPhys.push_back( new HadronPhysicsQGSP_BERT_HP());
     hadronPhys.push_back( new G4QStoppingPhysics("stopping"));
-    hadronPhys.push_back( new G4IonPhysics("stopping"));
+    hadronPhys.push_back( new G4IonPhysics("ion"));
 
   } else if (name == "QGSP_BIC") {
 
     hadronPhys.push_back( new HadronPhysicsQGSP_BIC());
     hadronPhys.push_back( new G4QStoppingPhysics("stopping"));
-    hadronPhys.push_back( new G4IonPhysics("stopping"));
+    hadronPhys.push_back( new G4IonPhysics("ion"));
 
   } else if (name == "QBBC") {
 
