@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 #-------------------------------------------------------------------
-# Last update: 11-Jun-2006
+# Last update: 13-Jun-2006
 #
 # This script has 2 input arguments, and should be run as:
 #
@@ -114,7 +114,9 @@ def funExtract( theFile ) :
     pdg0fR2 = (0.0, 0.0)
     pdg0fR3 = (0.0, 0.0)
     muonEvis = (0.0, 0.0)
+    muonEtot = (0.0, 0.0)
     kaonEvis = (0,0, 0.0)
+    kaonEtot = (0,0, 0.0)
     electronLength = (0.0, 0.0)
     pionLength = (0.0, 0.0)
     protonLength = (0.0, 0.0)
@@ -1239,6 +1241,14 @@ def compareTwo( x, sigma_x, y, sigma_y ) :
     # Notice that these two differences can be positive or
     # negative, because they are calculated from (y - x).
 
+    # Protect against extremely large values.
+    if ( sigma_x > 1.0E+20 ) :
+        print " ***WARNING*** crazy sigma_x = ", sigma_x
+        sigma_x = 1.0E+20
+    if ( sigma_y > 1.0E+20 ) :
+        print " ***WARNING*** crazy sigma_y = ", sigma_y
+        sigma_y = 1.0E+20
+
     sigmaDiff = 0.0
     if ( sigma_x > 0.0  or  sigma_y > 0.0 ) :
         sigma = math.sqrt( sigma_x*sigma_x + sigma_y*sigma_y )    
@@ -1286,8 +1296,8 @@ else :
                 exitFracMuonsA, exitFracElectronsA, exitFracOthersA,
                 exitNumA, exitNumGammasA, exitNumNeutronsA, exitNumNeutrinosA,
                 exitNumMuonsA, exitNumElectronsA, exitNumOthersA
-                ) = funExtract( fileA )  
-    
+                ) = funExtract( fileA )
+
     valuesB = ( cpuTimeB, visEnergyB, totEnergyB,
                 listLB, fL1B, fL2B, fL3B, fL4B,
                 listRB, fR1B, fR2B, fR3B,
@@ -1314,8 +1324,18 @@ else :
                 exitNumMuonsB, exitNumElectronsB, exitNumOthersB
                 ) = funExtract( fileB )
 
-    doStatisticalComparison( valuesA, valuesB )
-
+    skip = 0
+    if ( cpuTimeA < 1.0E-9 ) :
+        print " ***WARNING*** : 1st file WITHOUT RUN SUMMARY! "
+        skip = 1
+    if ( cpuTimeB < 1.0E-9 ) :
+        print " ***WARNING*** : 2nd file WITHOUT RUN SUMMARY! "
+        skip = 1
+    if ( skip ) :
+        print "      ---> Skipping comparison!"
+    else :
+        doStatisticalComparison( valuesA, valuesB )
+        
     fileA.close()
     fileB.close()
 
