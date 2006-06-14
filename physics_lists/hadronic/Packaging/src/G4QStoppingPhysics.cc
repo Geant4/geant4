@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4QStoppingPhysics.cc,v 1.2 2006-06-06 16:47:45 vnivanch Exp $
+// $Id: G4QStoppingPhysics.cc,v 1.3 2006-06-14 12:05:25 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -77,6 +77,8 @@ void G4QStoppingPhysics::ConstructParticle()
 
 void G4QStoppingPhysics::ConstructProcess()
 {
+  if(verbose > 1) G4cout << "### G4QStoppingPhysics::ConstructProcess " 
+			  << wasActivated << G4endl;
   if(wasActivated) return;
   wasActivated = true;
 
@@ -89,6 +91,7 @@ void G4QStoppingPhysics::ConstructProcess()
   G4ParticleDefinition* particle=0;
   G4ProcessManager* pmanager=0;
 
+  theParticleIterator->reset();
   while( (*theParticleIterator)() )
   {
     particle = theParticleIterator->value();
