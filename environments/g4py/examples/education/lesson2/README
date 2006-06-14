@@ -19,8 +19,8 @@ For example,
 
 To use Wired, download it and install under your directory. Java Runtime
 Environment is necessary.
-Then set;
-      setenv G4HEPREPFILE_VIEWER $HOME/Wired/bin/wired
+Then set, for example;
+      setenv G4HEPREPFILE_VIEWER $HOME/Wired/bin/wired <= any path you use
       setenv G4HEPREPFILE_DIR    $HOME/tmp/
       setenv G4HEPREPFILE_NAME lesson2_00  <= any name you choose.
       setenv G4HEPREPFILE_OVERWRITE 1      <= to reuse the file for "next event"
@@ -35,6 +35,8 @@ file and to activate the viewer, you have to set all of the above variables
 in the shell where you activate ExN03.py script.
 
 
+NOTICE) VRML viewer blocks the window (modal), so that you have to exit it to
+display another run.
 
 *********  ExN03.py script ***********
 

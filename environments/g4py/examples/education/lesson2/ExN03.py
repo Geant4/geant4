@@ -340,7 +340,7 @@ class App(Frame):
 
       print "Now geometry updated"
 
-#      gApplyUICommand("/vis/viewer/flush")
+
       self.cmd_particle(self.particleVar.get())
       self.cmd_energy(self.energyVar.get())
 
@@ -352,7 +352,7 @@ class App(Frame):
         pg.SetParticlePosition(G4ThreeVector(position*mm, (i-eventNum/2)*5.*mm, 0.*cm))
         gRunManager.BeamOn(1)
         sleep(0.01)
-      gApplyUICommand("/vis/viewer/flush")
+      gApplyUICommand("/vis/viewer/update")
       
   def cmd_setProcess(self):
     for i in self.processList:
@@ -400,7 +400,7 @@ class App(Frame):
       gApplyUICommand("/vis/scene/endOfRunAction accumulate")
 
       if self.g4pipe == 0:
-        Popen("$HOME/Wired/bin/wired" +  " -file " + heprepDir + "/" + heprepName +".heprep", shell=True)
+        Popen(heprepViewer +  " -file " + heprepDir + "/" + heprepName +".heprep", shell=True)
         self.g4pipe = 1
     
 
