@@ -1,5 +1,5 @@
 #----------------------------------------------------------------
-# Last update: 09-Apr-2006
+# Last update: 14-June-2006
 #
 # There are three proposals for the ILC electromagnetic 
 # calorimeter, and five for the ILC hadronic calorimeter.
@@ -34,8 +34,8 @@
 /event/verbose 0 
 /tracking/verbose 0 
 #
-/gun/particle e-
-#/gun/particle pi-
+#/gun/particle e-
+/gun/particle pi-
 #
 /gun/energy 100 GeV
 #
