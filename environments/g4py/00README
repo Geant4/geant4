@@ -1,4 +1,4 @@
-$Id: 00README,v 1.3 2006-06-08 01:34:34 kmura Exp $
+$Id: 00README,v 1.4 2006-06-14 01:28:37 kmura Exp $
 ==========================================================================
 Geant4Py
 
@@ -115,7 +115,7 @@ Some environment variables are required at run time.
 * PYTHONPATH
 Python module search directories, given by a colon-separated list 
 of directories. 
-Practically, $(INSTALL_PATH)/lib:$(INSTALL_PATH)/lib/site-modules is ok.
+Practically, $(INSTALL_PATH)/lib is ok.
 
 * LD_LIBRARY_PATH
 Additional shared library path to be searched.
