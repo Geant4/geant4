@@ -573,112 +573,106 @@ int main (int, char **) {
   std::cout << " ------------ Starting tests ------------- " << std::endl;
   
   std::cout << "Observable 1";
-  ComparisonResult resultBinC2_1 = comparatorBinC2.compare( cA1bis->histogram(), 
-							    cB1bis->histogram() );
+  ComparisonResult resultBinC2_1; 
+  // = comparatorBinC2.compare( cA1bis->histogram(), cB1bis->histogram() );
   ComparisonResult resultUnbinKS_1  = comparatorUnbinKS.compare( *cA1, *cB1 ); 
   ComparisonResult resultUnbinCVM_1 = comparatorUnbinCVM.compare( *cA1, *cB1 ); 
   ComparisonResult resultUnbinAD_1  = comparatorUnbinAD.compare( *cA1, *cB1 ); 
-  if ( resultBinC2_1.quality()    < pvalueThreshold  || 
-       resultUnbinKS_1.quality()  < pvalueThreshold  ||
-       resultUnbinCVM_1.quality() < pvalueThreshold  ||
-       resultUnbinAD_1.quality()  < pvalueThreshold ) {
+  if ( ( resultBinC2_1.isDefined()  &&  
+	 resultBinC2_1.quality() < pvalueThreshold )  || 
+       ( resultUnbinKS_1.isDefined()  &&  
+	 resultUnbinKS_1.quality() < pvalueThreshold )  ||
+       ( resultUnbinCVM_1.isDefined()  &&  
+	 resultUnbinCVM_1.quality() < pvalueThreshold )  ||
+       ( resultUnbinAD_1.isDefined()  &&  
+	 resultUnbinAD_1.quality() < pvalueThreshold ) ) {
     std::cout << "\t ***WARNING***";
   }
   std::cout << std::endl;
-  std::cout << "  Chi2" << "  d=" << resultBinC2_1.distance()
-	    << "  ndf=" << resultBinC2_1.ndf() 
-	    << "  pvalue=" << resultBinC2_1.quality() << std::endl;
-  std::cout << "  KS" << "  d=" << resultUnbinKS_1.distance()
-	    << "  ndf=" << resultUnbinKS_1.ndf() 
-	    << "  pvalue=" << resultUnbinKS_1.quality() << std::endl;
-  std::cout << "  CVM" << "  d=" << resultUnbinCVM_1.distance()
-	    << "  ndf=" << resultUnbinCVM_1.ndf() 
-	    << "  pvalue=" << resultUnbinCVM_1.quality() << std::endl;
-  std::cout << "  AD" << "  d=" << resultUnbinAD_1.distance()
-	    << "  ndf=" << resultUnbinAD_1.ndf() 
-	    << "  pvalue=" << resultUnbinAD_1.quality() << std::endl;
-      
+  if ( resultBinC2_1.isDefined() ) {
+    std::cout << "  Chi2" << "  d=" << resultBinC2_1.distance()
+	      << "  ndf=" << resultBinC2_1.ndf() 
+	      << "  pvalue=" << resultBinC2_1.quality() << std::endl;
+  } else {
+    //std::cout << "  Chi2" << "  not defined! " << std::endl;
+  }
+  if ( resultUnbinKS_1.isDefined() ) {
+    std::cout << "  KS" << "  d=" << resultUnbinKS_1.distance()
+	      << "  ndf=" << resultUnbinKS_1.ndf() 
+	      << "  pvalue=" << resultUnbinKS_1.quality() << std::endl;
+  } else {
+    std::cout << "  KS" << "  not defined! " << std::endl;
+  }
+  if ( resultUnbinCVM_1.isDefined() ) {
+    std::cout << "  CVM" << "  d=" << resultUnbinCVM_1.distance()
+	      << "  ndf=" << resultUnbinCVM_1.ndf() 
+	      << "  pvalue=" << resultUnbinCVM_1.quality() << std::endl;
+  } else {
+    std::cout << "  CVM" << "  not defined! " << std::endl;
+  }
+  if ( resultUnbinAD_1.isDefined() ) {
+    std::cout << "  AD" << "  d=" << resultUnbinAD_1.distance()
+	      << "  ndf=" << resultUnbinAD_1.ndf() 
+	      << "  pvalue=" << resultUnbinAD_1.quality() << std::endl;
+  } else {
+    std::cout << "  AD" << "  not defined! " << std::endl;
+  }
+
   std::cout << "Observable 2";
-  ComparisonResult resultBinC2_2 = comparatorBinC2.compare( cA2bis->histogram(), 
-							    cB2bis->histogram() );
+  ComparisonResult resultBinC2_2; 
+  // = comparatorBinC2.compare( cA2bis->histogram(), cB2bis->histogram() );
   ComparisonResult resultUnbinKS_2  = comparatorUnbinKS.compare( *cA2, *cB2 ); 
   ComparisonResult resultUnbinCVM_2 = comparatorUnbinCVM.compare( *cA2, *cB2 ); 
   ComparisonResult resultUnbinAD_2  = comparatorUnbinAD.compare( *cA2, *cB2 ); 
-  if ( resultBinC2_2.quality()    < pvalueThreshold  || 
-       resultUnbinKS_2.quality()  < pvalueThreshold  ||
-       resultUnbinCVM_2.quality() < pvalueThreshold  ||
-       resultUnbinAD_2.quality()  < pvalueThreshold ) {
+  if ( ( resultBinC2_2.isDefined()  &&  
+	 resultBinC2_2.quality() < pvalueThreshold )  || 
+       ( resultUnbinKS_2.isDefined()  &&  
+	 resultUnbinKS_2.quality() < pvalueThreshold )  ||
+       ( resultUnbinCVM_2.isDefined()  &&  
+	 resultUnbinCVM_2.quality() < pvalueThreshold )  ||
+       ( resultUnbinAD_2.isDefined()  &&  
+	 resultUnbinAD_2.quality() < pvalueThreshold ) ) {
     std::cout << "\t ***WARNING***";
   }
   std::cout << std::endl;
-  std::cout << "  Chi2" << "  d=" << resultBinC2_2.distance()
-	    << "  ndf=" << resultBinC2_2.ndf() 
-	    << "  pvalue=" << resultBinC2_2.quality() << std::endl;
-  std::cout << "  KS" << "  d=" << resultUnbinKS_2.distance()
-            << "  ndf=" << resultUnbinKS_2.ndf() 
-            << "  pvalue=" << resultUnbinKS_2.quality() << std::endl;
-  std::cout << "  CVM" << "  d=" << resultUnbinCVM_2.distance()
-            << "  ndf=" << resultUnbinCVM_2.ndf() 
-            << "  pvalue=" << resultUnbinCVM_2.quality() << std::endl;
-  std::cout << "  AD" << "  d=" << resultUnbinAD_2.distance()
-            << "  ndf=" << resultUnbinAD_2.ndf() 
-            << "  pvalue=" << resultUnbinAD_2.quality() << std::endl;
+  if ( resultBinC2_2.isDefined() ) {
+    std::cout << "  Chi2" << "  d=" << resultBinC2_2.distance()
+	      << "  ndf=" << resultBinC2_2.ndf() 
+	      << "  pvalue=" << resultBinC2_2.quality() << std::endl;
+  } else {
+    //std::cout << "  Chi2" << "  not defined! " << std::endl;
+  }
+  if ( resultUnbinKS_2.isDefined() ) {
+    std::cout << "  KS" << "  d=" << resultUnbinKS_2.distance()
+	      << "  ndf=" << resultUnbinKS_2.ndf() 
+	      << "  pvalue=" << resultUnbinKS_2.quality() << std::endl;
+  } else {
+    std::cout << "  KS" << "  not defined! " << std::endl;
+  }
+  if ( resultUnbinCVM_2.isDefined() ) {
+    std::cout << "  CVM" << "  d=" << resultUnbinCVM_2.distance()
+	      << "  ndf=" << resultUnbinCVM_2.ndf() 
+	      << "  pvalue=" << resultUnbinCVM_2.quality() << std::endl;
+  } else {
+    std::cout << "  CVM" << "  not defined! " << std::endl;
+  }
+  if ( resultUnbinAD_2.isDefined() ) {
+    std::cout << "  AD" << "  d=" << resultUnbinAD_2.distance()
+	      << "  ndf=" << resultUnbinAD_2.ndf() 
+	      << "  pvalue=" << resultUnbinAD_2.quality() << std::endl;
+  } else {
+    std::cout << "  AD" << "  not defined! " << std::endl;
+  }
 
-  // For the time being, we comment out the tests for the longitudinal 
-  // and transverse shower shapes because the error bars are not correct, 
-  // due to a "feature" of PI which does not allow us to set the proper 
-  // errors.
-
-  // std::cout << "Observable 3";  // Longitudinal shower shape: Only binned tests.
-  // ComparisonResult resultBinC2_3  = comparatorBinC2.compare( histL_A, histL_B );
-  // ComparisonResult resultBinCVM_3 = comparatorBinCVM.compare( histL_A, histL_B );
-  // ComparisonResult resultBinAD_3  = comparatorBinAD.compare( histL_A, histL_B );
-  // if ( resultBinC2_3.quality()  < pvalueThreshold  ||
-  //      resultBinCVM_3.quality() < pvalueThreshold  ||
-  //      resultBinAD_3.quality()  < pvalueThreshold ) {
-  //   std::cout << "\t ***WARNING***";
-  // }
-  // std::cout << std::endl;
-  // std::cout << "  Chi2" << "  d=" << resultBinC2_3.distance()
-  // 	       << "  ndf=" << resultBinC2_3.ndf() 
-  // 	       << "  pvalue=" << resultBinC2_3.quality() << std::endl;
-  // std::cout << "  CVM binned" << "  d=" << resultBinCVM_3.distance()
-  // 	       << "  ndf=" << resultBinCVM_3.ndf() 
-  // 	       << "  pvalue=" << resultBinCVM_3.quality() << std::endl;
-  // std::cout << "  AD binned" << "  d=" << resultBinAD_3.distance()
-  // 	       << "  ndf=" << resultBinAD_3.ndf() 
-  // 	       << "  pvalue=" << resultBinAD_3.quality() << std::endl;
-  // 
-  // std::cout << "Observable 4";  // Transverse shower shape: Only binned tests.
-  // ComparisonResult resultBinC2_4  = comparatorBinC2.compare( histR_A, histR_B );
-  // ComparisonResult resultBinCVM_4 = comparatorBinCVM.compare( histR_A, histR_B );
-  // ComparisonResult resultBinAD_4  = comparatorBinAD.compare( histR_A, histR_B );
-  // if ( resultBinC2_4.quality()  < pvalueThreshold  ||
-  //      resultBinCVM_4.quality() < pvalueThreshold  ||
-  //      resultBinAD_4.quality()  < pvalueThreshold ) {
-  //   std::cout << "\t ***WARNING***";
-  // }
-  // std::cout << std::endl;
-  // std::cout << "  Chi2" << "  d=" << resultBinC2_4.distance()
-  // 	       << "  ndf=" << resultBinC2_4.ndf() 
-  // 	       << "  pvalue=" << resultBinC2_4.quality() << std::endl;
-  // std::cout << "  CVM binned" << "  d=" << resultBinCVM_4.distance()
-  // 	       << "  ndf=" << resultBinCVM_4.ndf() 
-  // 	       << "  pvalue=" << resultBinCVM_4.quality() << std::endl;
-  // std::cout << "  AD binned" << "  d=" << resultBinAD_4.distance()
-  // 	       << "  ndf=" << resultBinAD_4.ndf() 
-  // 	       << "  pvalue=" << resultBinAD_4.quality() << std::endl;
-  
   std::vector< ComparisonResult > resultBinC2_L;
   std::vector< ComparisonResult > resultUnbinKS_L;
   std::vector< ComparisonResult > resultUnbinCVM_L;
   std::vector< ComparisonResult > resultUnbinAD_L;
   for ( int i = 0; i < numberOfReplicas; i++ ) {
     std::cout << "Observable L" << i;   
-    ComparisonResult resultBinC2_Lvalue = 
-      comparatorBinC2.compare( cALbis[i]->histogram(), cBLbis[i]->histogram() );
+    ComparisonResult resultBinC2_Lvalue; 
+    // = comparatorBinC2.compare( cALbis[i]->histogram(), cBLbis[i]->histogram() );
     resultBinC2_L.push_back( resultBinC2_Lvalue );
-
     ComparisonResult resultUnbinKS_Lvalue = 
       comparatorUnbinKS.compare( *cAL[i], *cBL[i] );
     resultUnbinKS_L.push_back( resultUnbinKS_Lvalue );
@@ -688,25 +682,45 @@ int main (int, char **) {
     ComparisonResult resultUnbinAD_Lvalue = 
       comparatorUnbinAD.compare( *cAL[i], *cBL[i] );
     resultUnbinAD_L.push_back( resultUnbinAD_Lvalue );
-    if ( resultBinC2_Lvalue.quality()    < pvalueThreshold ||
-	 resultUnbinKS_Lvalue.quality()  < pvalueThreshold ||
-	 resultUnbinCVM_Lvalue.quality() < pvalueThreshold ||
-	 resultUnbinAD_Lvalue.quality()  < pvalueThreshold ) {
+    if ( ( resultBinC2_Lvalue.isDefined()  &&  
+	   resultBinC2_Lvalue.quality() < pvalueThreshold )  || 
+	 ( resultUnbinKS_Lvalue.isDefined()  &&  
+	   resultUnbinKS_Lvalue.quality() < pvalueThreshold )  ||
+	 ( resultUnbinCVM_Lvalue.isDefined()  &&  
+	   resultUnbinCVM_Lvalue.quality() < pvalueThreshold )  ||
+	 ( resultUnbinAD_Lvalue.isDefined()  &&  
+	   resultUnbinAD_Lvalue.quality() < pvalueThreshold ) ) {
       std::cout << "\t ***WARNING***";
     }
     std::cout << std::endl;
-    std::cout << "  Chi2" << "  d=" << resultBinC2_Lvalue.distance()
-  	      << "  ndf=" << resultBinC2_Lvalue.ndf() 
-  	      << "  pvalue=" << resultBinC2_Lvalue.quality() << std::endl;
-    std::cout << "  KS" << "  d=" << resultUnbinKS_Lvalue.distance()
-  	      << "  ndf=" << resultUnbinKS_Lvalue.ndf() 
-  	      << "  pvalue=" << resultUnbinKS_Lvalue.quality() << std::endl;
-    std::cout << "  CVM" << "  d=" << resultUnbinCVM_Lvalue.distance()
-  	      << "  ndf=" << resultUnbinCVM_Lvalue.ndf() 
-  	      << "  pvalue=" << resultUnbinCVM_Lvalue.quality() << std::endl;
-    std::cout << "  AD" << "  d=" << resultUnbinAD_Lvalue.distance()
-  	      << "  ndf=" << resultUnbinAD_Lvalue.ndf() 
-  	      << "  pvalue=" << resultUnbinAD_Lvalue.quality() << std::endl;
+    if ( resultBinC2_Lvalue.isDefined() ) {
+      std::cout << "  Chi2" << "  d=" << resultBinC2_Lvalue.distance()
+		<< "  ndf=" << resultBinC2_Lvalue.ndf() 
+		<< "  pvalue=" << resultBinC2_Lvalue.quality() << std::endl;
+    } else {
+      //std::cout << "  Chi2" << "  not defined! " << std::endl;
+    }
+    if ( resultUnbinKS_Lvalue.isDefined() ) {
+      std::cout << "  KS" << "  d=" << resultUnbinKS_Lvalue.distance()
+		<< "  ndf=" << resultUnbinKS_Lvalue.ndf() 
+		<< "  pvalue=" << resultUnbinKS_Lvalue.quality() << std::endl;
+    } else {
+      std::cout << "  KS" << "  not defined! " << std::endl;
+    }
+    if ( resultUnbinCVM_Lvalue.isDefined() ) {
+      std::cout << "  CVM" << "  d=" << resultUnbinCVM_Lvalue.distance()
+		<< "  ndf=" << resultUnbinCVM_Lvalue.ndf() 
+		<< "  pvalue=" << resultUnbinCVM_Lvalue.quality() << std::endl;
+    } else {
+      std::cout << "  CVM" << "  not defined! " << std::endl;
+    }
+    if ( resultUnbinAD_Lvalue.isDefined() ) {
+      std::cout << "  AD" << "  d=" << resultUnbinAD_Lvalue.distance()
+		<< "  ndf=" << resultUnbinAD_Lvalue.ndf() 
+		<< "  pvalue=" << resultUnbinAD_Lvalue.quality() << std::endl;
+    } else {
+      std::cout << "  AD" << "  not defined! " << std::endl;
+    }
   }
 
   std::vector< ComparisonResult > resultBinC2_R;
@@ -715,10 +729,9 @@ int main (int, char **) {
   std::vector< ComparisonResult > resultUnbinAD_R;
   for ( int i = 0; i < numberOfRadiusBins; i++ ) {
     std::cout << "Observable R" << i;   
-    ComparisonResult resultBinC2_Rvalue = 
-      comparatorBinC2.compare( cARbis[i]->histogram(), cBRbis[i]->histogram() );
+    ComparisonResult resultBinC2_Rvalue; 
+    // = comparatorBinC2.compare( cARbis[i]->histogram(), cBRbis[i]->histogram() );
     resultBinC2_R.push_back( resultBinC2_Rvalue );
-
     ComparisonResult resultUnbinKS_Rvalue = 
       comparatorUnbinKS.compare( *cAR[i], *cBR[i] );
     resultUnbinKS_R.push_back( resultUnbinKS_Rvalue );
@@ -728,25 +741,45 @@ int main (int, char **) {
     ComparisonResult resultUnbinAD_Rvalue = 
       comparatorUnbinAD.compare( *cAR[i], *cBR[i] );
     resultUnbinAD_R.push_back( resultUnbinAD_Rvalue );
-    if ( resultBinC2_Rvalue.quality()    < pvalueThreshold ||
-	 resultUnbinKS_Rvalue.quality()  < pvalueThreshold ||
-	 resultUnbinCVM_Rvalue.quality() < pvalueThreshold ||
-	 resultUnbinAD_Rvalue.quality()  < pvalueThreshold ) {
+    if ( ( resultBinC2_Rvalue.isDefined()  &&  
+	   resultBinC2_Rvalue.quality() < pvalueThreshold )  || 
+	 ( resultUnbinKS_Rvalue.isDefined()  &&  
+	   resultUnbinKS_Rvalue.quality() < pvalueThreshold )  ||
+	 ( resultUnbinCVM_Rvalue.isDefined()  &&  
+	   resultUnbinCVM_Rvalue.quality() < pvalueThreshold )  ||
+	 ( resultUnbinAD_Rvalue.isDefined()  &&  
+	   resultUnbinAD_Rvalue.quality() < pvalueThreshold ) ) {
       std::cout << "\t ***WARNING***";
     }
     std::cout << std::endl;
-    std::cout << "  Chi2" << "  d=" << resultBinC2_Rvalue.distance()
-  	      << "  ndf=" << resultBinC2_Rvalue.ndf() 
-  	      << "  pvalue=" << resultBinC2_Rvalue.quality() << std::endl;
-    std::cout << "  KS" << "  d=" << resultUnbinKS_Rvalue.distance()
-  	      << "  ndf=" << resultUnbinKS_Rvalue.ndf() 
-  	      << "  pvalue=" << resultUnbinKS_Rvalue.quality() << std::endl;
-    std::cout << "  CVM" << "  d=" << resultUnbinCVM_Rvalue.distance()
-  	      << "  ndf=" << resultUnbinCVM_Rvalue.ndf() 
-  	      << "  pvalue=" << resultUnbinCVM_Rvalue.quality() << std::endl;
-    std::cout << "  AD" << "  d=" << resultUnbinAD_Rvalue.distance()
-  	      << "  ndf=" << resultUnbinAD_Rvalue.ndf() 
-  	      << "  pvalue=" << resultUnbinAD_Rvalue.quality() << std::endl;
+    if ( resultBinC2_Rvalue.isDefined() ) {
+      std::cout << "  Chi2" << "  d=" << resultBinC2_Rvalue.distance()
+		<< "  ndf=" << resultBinC2_Rvalue.ndf() 
+		<< "  pvalue=" << resultBinC2_Rvalue.quality() << std::endl;
+    } else {
+      //std::cout << "  Chi2" << "  not defined! " << std::endl;
+    }
+    if ( resultUnbinKS_Rvalue.isDefined() ) {
+      std::cout << "  KS" << "  d=" << resultUnbinKS_Rvalue.distance()
+		<< "  ndf=" << resultUnbinKS_Rvalue.ndf() 
+		<< "  pvalue=" << resultUnbinKS_Rvalue.quality() << std::endl;
+    } else {
+      std::cout << "  KS" << "  not defined! " << std::endl;
+    }
+    if ( resultUnbinCVM_Rvalue.isDefined() ) {
+      std::cout << "  CVM" << "  d=" << resultUnbinCVM_Rvalue.distance()
+		<< "  ndf=" << resultUnbinCVM_Rvalue.ndf() 
+		<< "  pvalue=" << resultUnbinCVM_Rvalue.quality() << std::endl;
+    } else {
+      std::cout << "  CVM" << "  not defined! " << std::endl;
+    }
+    if ( resultUnbinAD_Rvalue.isDefined() ) {
+      std::cout << "  AD" << "  d=" << resultUnbinAD_Rvalue.distance()
+		<< "  ndf=" << resultUnbinAD_Rvalue.ndf() 
+		<< "  pvalue=" << resultUnbinAD_Rvalue.quality() << std::endl;
+    } else {
+      std::cout << "  AD" << "  not defined! " << std::endl;
+    }
   }
 
   std::cout << " ------------ Ending tests ------------- " << std::endl;
