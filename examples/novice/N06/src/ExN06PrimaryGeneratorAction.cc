@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN06PrimaryGeneratorAction.cc,v 1.4 2005-06-27 15:28:09 gunter Exp $
+// $Id: ExN06PrimaryGeneratorAction.cc,v 1.5 2006-06-15 21:02:53 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -29,6 +29,8 @@
 
 #include "ExN06PrimaryGeneratorAction.hh"
 #include "ExN06PrimaryGeneratorMessenger.hh"
+
+#include "Randomize.hh"
 
 #include "G4Event.hh"
 #include "G4ParticleGun.hh"
@@ -70,6 +72,14 @@ ExN06PrimaryGeneratorAction::~ExN06PrimaryGeneratorAction()
 void ExN06PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
   particleGun->GeneratePrimaryVertex(anEvent);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void ExN06PrimaryGeneratorAction::SetOptPhotonPolar()
+{
+ G4double angle = G4UniformRand() * 360.0*deg;
+ SetOptPhotonPolar(angle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

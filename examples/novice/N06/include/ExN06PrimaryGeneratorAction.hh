@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN06PrimaryGeneratorAction.hh,v 1.4 2003-01-23 15:34:23 maire Exp $
+// $Id: ExN06PrimaryGeneratorAction.hh,v 1.5 2006-06-15 21:01:34 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -47,6 +47,8 @@ class ExN06PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 
   public:
     void GeneratePrimaries(G4Event*);
+
+    void SetOptPhotonPolar();
     void SetOptPhotonPolar(G4double);
 
   private:
