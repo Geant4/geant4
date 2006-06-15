@@ -1,0 +1,35 @@
+#================================================
+#     Macro file for hadr01
+#     06.06.2006 V.Ivanchneko
+#================================================
+/control/verbose 2
+/run/verbose 1
+/tracking/verbose 0
+#
+/testhadr/TargetMat        G4_Pb
+/testhadr/TargetRadius     10 cm
+/testhadr/TargetLength     20 cm
+/testhadr/NumberDivZ       100
+/testhadr/PrintModulo      10
+#
+/testhadr/CutsAll          1 mm
+#/testhadr/Physics          QGSP_BERT
+#/testhadr/Physics          QGSP
+/testhadr/Physics          QGSP_EMV
+#/testhadr/Physics          QGSC
+#/testhadr/Physics          QBBC
+#/testhadr/Physics          QQGSP
+#/testhadr/Physics          QQGSP_EL
+#/testhadr/Physics          QQGSP_NEL
+#/testhadr/Physics          QQGSP_NION
+#/testhadr/Physics           LHEP
+#/testhadr/Physics           em72
+#
+/run/initialize
+#/process/eLoss/MscStepLimit 0.2 false
+/testhadr/HistoName         p_pb_20gev_qgsp_emv
+#
+/gun/particle proton
+/gun/energy 20. GeV
+/run/beamOn 100
+#

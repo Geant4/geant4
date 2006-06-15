@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.3 2006-06-06 19:48:38 vnivanch Exp $
+# $Id: GNUmakefile,v 1.4 2006-06-15 18:13:12 vnivanch Exp $
 # GEANT4 tag $Name: not supported by cvs2svn $
 # --------------------------------------------------------------
 # GNUmakefile for examples module with AIDA interface
@@ -22,8 +22,9 @@ endif
 include $(G4INSTALL)/config/architecture.gmk
 
 EXTRALIBS += -L$(G4LIB)/plists/$(G4SYSTEM)
-EXTRALIBS += -lLHEP -lLHEP_BERT -lLHEP_BIC -lLHEP_BIC_HP -lLHEP_BERT_HP -lQGSP -lFTFC
-EXTRALIBS += -lLHEP_PRECO -lQGSC -lQGSP_BERT -lQGSP_BIC -lQGSP_BERT_HP -lQBBC -lPackaging
+EXTRALIBS += -lLHEP -lLHEP_BERT -lLHEP_BIC -lLHEP_BIC_HP -lLHEP_BERT_HP
+EXTRALIBS += -lLHEP_PRECO -lQGSP -lQGSP_EMV -lFTFC
+EXTRALIBS +=  -lQGSC -lQGSP_BERT -lQGSP_BIC -lQGSP_BERT_HP -lQBBC -lPackaging
 
 CPPFLAGS += \
             -I$(G4INSTALL)/physics_lists/hadronic/Packaging/include \
@@ -39,6 +40,7 @@ CPPFLAGS += \
             -I$(G4INSTALL)/physics_lists/hadronic/QGSP_BERT/include \
             -I$(G4INSTALL)/physics_lists/hadronic/QGSP_BERT_HP/include \
             -I$(G4INSTALL)/physics_lists/hadronic/QGSP_BIC/include \
+            -I$(G4INSTALL)/physics_lists/hadronic/QGSP_EMV/include \
             -I$(G4INSTALL)/physics_lists/hadronic/QBBC/include \
 
 # for the aida-config command see the README file

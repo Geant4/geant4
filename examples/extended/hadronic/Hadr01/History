@@ -1,4 +1,4 @@
-$Id: History,v 1.5 2006-06-13 17:19:56 vnivanch Exp $
+$Id: History,v 1.6 2006-06-15 18:14:49 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,8 +15,11 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+15-06-06 V.Ivant (exhadr01-V08-00-04)
+- Modify PhysicsList according to the PhysicsList phys-lists-V08-00-06
+
 13-06-06 V.Ivant (exhadr01-V08-00-03)
-- Modify PhysicsList according to the last update of physics_list 
+- Modify PhysicsList according to the PhysicsList phys-lists-V08-00-03
 
 08-06-06 V.Ivant (exhadr01-V08-00-02)
 - Fix compilation error at SUN
