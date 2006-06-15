@@ -343,6 +343,7 @@ void StatAccepTestAnalysis::init() {
   protonTrackLength = 0.0;
   gammaTrackLength = 0.0;
   pion0TrackLength = 0.0;
+  neutronTrackLength = 0.0;
 
   electronTrackLength2 = 0.0;
   muonTrackLength2 = 0.0;
