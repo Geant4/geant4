@@ -3,7 +3,8 @@
 /gun/particle opticalphoton
 /gun/energy 3 eV
 /gun/direction 5 -3 0
-/N06/gun/optPhotonPolar 90 deg
+# /N06/gun/optPhotonPolar 90 deg
+/N06/gun/optPhotonPolar
 #
 /tracking/verbose 1
 #
