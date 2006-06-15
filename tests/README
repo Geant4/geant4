@@ -1,4 +1,4 @@
-$Id: README,v 1.13 2005-11-22 15:39:45 gcosmo Exp $
+$Id: README,v 1.14 2006-06-15 13:56:57 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -20,14 +20,16 @@ represented by *.out files.
 This set of tests is going to be extended in future, to become more and more
 exhaustive and complete.
  
-test01 ## Geometry - CSG solids and navigator.
-       ## (Action? Augment, plus Booleans.)
+test01 ## Geometry - CSG solids and navigator:
+       ## including Boolean, assemblies, reflection and calorimeter benchmark.
 test02 ## Standard e.m. processes. Low energy and high energy
        ## hadronic processes and stopping, including coherent
        ## elastic scattering.  (Derived originally from ExN04)
        ## (Action? Split into (a) em, (b) had with higher em cuts)
+test05 ## Geometry - Tessellated solids and General Particle Source.
+       ## (Action? Eventually add CAD input setup.)
 test06 ## Integral approach electromagnetic processes.  Simple box.
-       ## (Action?  Add muon test script)
+       ## (Action? Add muon test script)
 test07 ## Statistical evaluation prototype.  (Derived originally from ExN03)
 test09 ## Basic e.m. processes, Polarised Compton, new photelectric
        ## effect, synchrotron radiation, simple box.

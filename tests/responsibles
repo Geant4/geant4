@@ -131,6 +131,8 @@ examples/extended/g3tog4     Gabriele.Cosmo@cern.ch          Gabriele Cosmo
 examples/extended/gdml       Witold.Pokorski@cern.ch         Witold Pokorski
 examples/extended/geometry   Gabriele.Cosmo@cern.ch          Gabriele Cosmo
   olap                       Gabriele.Cosmo@cern.ch          Gabriele Cosmo
+examples/extended/hadronic
+  Hadr01                     Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
 examples/extended/medical    MariaGrazia.Pia@ge.infn.it	     Maria Grazia Pia
   DICOM                      Susanna.Guatelli@ge.infn.it     Susanna Guatelli
   GammaTherapy               Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
@@ -142,7 +144,7 @@ examples/extended/parallel:
 examples/extended/parameterisations:
   gflash                     Joanna.Weng@cern.ch             Joanna Weng
 examples/extended/persistency:
-  PersEx01                   Gabriele.Cosmo@cern.ch          Gabriele Cosmo
+  P01                        Witold.Pokorski@cern.ch         Witold Pokorski
 examples/extended/radioactivedecay:
   exrdm                      flei@space.qinetiq.com          Fan Lei
 examples/extended/runAndEvent:
@@ -158,7 +160,7 @@ tests                        Serguei.Sadilov@cern.ch         Serguei Sadilov
       test02.hadron          dwright@slac.stanford.edu       Dennis Wright
       test03                 (not currently used - see tests/GNUmakefile)
       test04                 (not currently used - see tests/GNUmakefile)
-      test05                 (not currently used - see tests/GNUmakefile)
+      test05                 Gabriele.Cosmo@cern.ch          Gabriele Cosmo
       test06                 Michel.Maire@lapp.in2p3.fr      Michel Maire
       test07                 Serguei.Sadilov@cern.ch         Serguei Sadilov
       test08                 (not currently used - see tests/GNUmakefile)
