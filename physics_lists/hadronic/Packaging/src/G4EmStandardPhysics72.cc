@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmStandardPhysics72.cc,v 1.3 2006-06-15 17:05:25 vnivanch Exp $
+// $Id: G4EmStandardPhysics72.cc,v 1.4 2006-06-15 17:50:14 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -144,12 +144,16 @@ void G4EmStandardPhysics72::ConstructProcess()
 
       msc = new G4MultipleScattering();
       msc->MscStepLimitation(false,0.2);
+      G4eIonisation* eion = new G4eIonisation;
+      eion->ActivateSubCutoff(true);
+      G4eBremsstrahlung* brem = new G4eBremsstrahlung();
+      brem->ActivateSubCutoff(true);
       if(verbose > 1)
         G4cout << "### EmStandard72 instantiates eIoni and msc71 for " 
                << particleName << G4endl;
       pmanager->AddProcess(msc, -1, 1, 1);
-      pmanager->AddProcess(new G4eIonisation,          -1, 2, 2);
-      pmanager->AddProcess(new G4eBremsstrahlung(),    -1, 3, 3);
+      pmanager->AddProcess(eion,-1, 2, 2);
+      pmanager->AddProcess(brem,-1,-3, 3);
 
     } else if (particleName == "e+") {
 
@@ -160,7 +164,7 @@ void G4EmStandardPhysics72::ConstructProcess()
                << particleName << G4endl;
       pmanager->AddProcess(msc, -1, 1, 1);
       pmanager->AddProcess(new G4eIonisation,          -1, 2, 2);
-      pmanager->AddProcess(new G4eBremsstrahlung,      -1, 3, 3);
+      pmanager->AddProcess(new G4eBremsstrahlung,      -1,-3, 3);
       pmanager->AddProcess(new G4eplusAnnihilation,     0,-1, 4);
 
     } else if (particleName == "mu+" ||
@@ -173,8 +177,8 @@ void G4EmStandardPhysics72::ConstructProcess()
                << particleName << G4endl;
       pmanager->AddProcess(msc,-1, 1, 1);
       pmanager->AddProcess(new G4MuIonisation,        -1, 2, 2);
-      pmanager->AddProcess(new G4MuBremsstrahlung,    -1, 3, 3);
-      pmanager->AddProcess(new G4MuPairProduction,    -1, 4, 4);
+      pmanager->AddProcess(new G4MuBremsstrahlung,    -1,-3, 3);
+      pmanager->AddProcess(new G4MuPairProduction,    -1,-4, 4);
 
     } else if (particleName == "alpha" ||
                particleName == "He3" ||
@@ -218,7 +222,7 @@ void G4EmStandardPhysics72::ConstructProcess()
   G4EmProcessOptions opt;
   opt.SetVerbose(verbose);
   //  opt.SetMscStepLimitation(false, 0.2);
-  opt.SetSubCutoff(true);
+  //  opt.SetSubCutoff(true);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
