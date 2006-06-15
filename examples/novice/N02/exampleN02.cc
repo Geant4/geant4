@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: exampleN02.cc,v 1.9 2005-05-03 10:21:16 allison Exp $
+// $Id: exampleN02.cc,v 1.10 2006-06-15 16:45:15 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -49,13 +49,14 @@
 
 int main(int argc,char** argv) {
 
-  //my Verbose output class
-  G4VSteppingVerbose::SetInstance(new ExN02SteppingVerbose);
+  // User Verbose output class
+  G4VSteppingVerbose* ExN02verbosity = new ExN02SteppingVerbose;
+  G4VSteppingVerbose::SetInstance(ExN02verbosity);
   
   // Run manager
   G4RunManager * runManager = new G4RunManager;
 
-  // UserInitialization classes (mandatory)
+  // User Initialization classes (mandatory)
   ExN02DetectorConstruction* ExN02detector = new ExN02DetectorConstruction;
   runManager->SetUserInitialization(ExN02detector);
   runManager->SetUserInitialization(new ExN02PhysicsList);
@@ -66,7 +67,7 @@ int main(int argc,char** argv) {
   visManager->Initialize();
 #endif
    
-  // UserAction classes
+  // User Action classes
   runManager->SetUserAction(new ExN02PrimaryGeneratorAction(ExN02detector));
   runManager->SetUserAction(new ExN02RunAction);  
   runManager->SetUserAction(new ExN02EventAction);
@@ -75,7 +76,7 @@ int main(int argc,char** argv) {
   //Initialize G4 kernel
   runManager->Initialize();
       
-  //get the pointer to the User Interface manager 
+  // Get the pointer to the User Interface manager 
   G4UImanager * UI = G4UImanager::GetUIpointer();  
 
   if(argc==1)

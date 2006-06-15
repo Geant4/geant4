@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: exampleN03.cc,v 1.25 2005-12-06 10:48:08 gcosmo Exp $
+// $Id: exampleN03.cc,v 1.26 2006-06-15 16:50:09 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -62,8 +62,9 @@ int main(int argc,char** argv) {
   // choose the Random engine
   CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
   
-  //my Verbose output class
-  G4VSteppingVerbose::SetInstance(new ExN03SteppingVerbose);
+  // User Verbose output class
+  G4VSteppingVerbose* verbosity = new ExN03SteppingVerbose;
+  G4VSteppingVerbose::SetInstance(verbosity);
      
   // Construct the default run manager
   G4RunManager * runManager = new G4RunManager;

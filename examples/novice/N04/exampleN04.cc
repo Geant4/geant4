@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: exampleN04.cc,v 1.9 2005-05-03 10:21:16 allison Exp $
+// $Id: exampleN04.cc,v 1.10 2006-06-15 16:55:07 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -56,7 +56,8 @@
 
 int main(int argc,char** argv)
 {
-  G4VSteppingVerbose::SetInstance(new ExN04SteppingVerbose);
+  G4VSteppingVerbose* verbosity = new ExN04SteppingVerbose;
+  G4VSteppingVerbose::SetInstance(verbosity);
   
   G4RunManager* runManager = new G4RunManager;
 

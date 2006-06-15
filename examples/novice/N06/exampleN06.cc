@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: exampleN06.cc,v 1.11 2005-12-06 10:56:06 gcosmo Exp $
+// $Id: exampleN06.cc,v 1.12 2006-06-15 16:58:20 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -77,8 +77,9 @@ int main(int argc,char** argv) {
   G4long myseed = 345354;
   CLHEP::HepRandom::setTheSeed(myseed);
   
-  //my Verbose output class
-  G4VSteppingVerbose::SetInstance(new ExN06SteppingVerbose);
+  // User Verbose output class
+  G4VSteppingVerbose* verbosity = new ExN06SteppingVerbose;
+  G4VSteppingVerbose::SetInstance(verbosity);
   
   // Run manager
   G4RunManager* runManager = new G4RunManager;
