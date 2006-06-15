@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: QGSC.icc,v 1.9 2006-06-08 13:13:09 vnivanch Exp $
+// $Id: QGSC.icc,v 1.10 2006-06-15 14:16:18 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -34,6 +34,7 @@
 // 30.11.2005 G.Folger: Register EmStandard first, split Em Standard and Extra
 // 02.12.2005 V.Ivanchenko: rename components
 // 08.06.2006 V.Ivanchenko: migration to CHIPS stopping
+// 13.06.2006 G.Folger: Migrate to HadronElasticPhysics with improved elastic
 //
 //----------------------------------------------------------------------------
 //
@@ -55,6 +56,7 @@
 #include "G4EmExtraPhysics.hh"
 #include "G4IonPhysics.hh"
 #include "G4QStoppingPhysics.hh"
+#include "G4HadronElasticPhysics.hh"
 
 #include "G4DataQuestionaire.hh"
 #include "HadronPhysicsQGSC.hh"
@@ -77,6 +79,9 @@ template<class T> TQGSC<T>::TQGSC(G4int ver):  T()
 
   // Decays
   this->RegisterPhysics( new G4DecayPhysics("decay",ver) );
+
+   // Hadron Elastic scattering
+  this-> RegisterPhysics( new G4HadronElasticPhysics("elastic",ver,false));
 
    // Hadron Physics
   this->RegisterPhysics(  new HadronPhysicsQGSC("hadron"));

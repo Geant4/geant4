@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: LHEP.icc,v 1.8 2005-12-05 18:25:06 vnivanch Exp $
+// $Id: LHEP.icc,v 1.9 2006-06-15 14:16:18 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -33,6 +33,7 @@
 // 25.11.2005 G.Folger: migration to non static particles
 // 30.11.2005 G.Folger: Register EmStandard first, split Em Standard and Extra
 // 02.12.2005 V.Ivanchenko: rename components
+// 14.06.2006 G.Folger: Migrate to HadronElasticPhysics using G4LElastic
 //
 //----------------------------------------------------------------------------
 //
@@ -53,6 +54,7 @@
 #include "G4EmStandardPhysics.hh"
 #include "G4EmExtraPhysics.hh"
 #include "G4IonPhysics.hh"
+#include "G4HadronElasticPhysics.hh"
 
 #include "G4DataQuestionaire.hh"
 #include "HadronPhysicsLHEP.hh"
@@ -75,6 +77,9 @@ template<class T> TLHEP<T>::TLHEP(G4int ver):  T()
 
   // General Physics - i.e. decay
   this->RegisterPhysics( new G4DecayPhysics("decay",ver) );
+
+   // Hadron Elastic scattering
+  this-> RegisterPhysics( new G4HadronElasticPhysics("LElastic",ver,false));
 
    // Hadron Physics
   this->RegisterPhysics(  new HadronPhysicsLHEP("hadron"));

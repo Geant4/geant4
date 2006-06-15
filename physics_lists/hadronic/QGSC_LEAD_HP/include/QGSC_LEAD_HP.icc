@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: QGSC_LEAD_HP.icc,v 1.8 2006-06-08 13:13:09 vnivanch Exp $
+// $Id: QGSC_LEAD_HP.icc,v 1.9 2006-06-15 14:16:18 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -31,6 +31,7 @@
 //
 // Modified:
 // 30.11.2005 G.Folger: Register EmStandard first, split Em Standard and Extra
+// 15.06.2006 G.Folger: Migrate to HadronElasticPhysics using improved elastic
 //
 //----------------------------------------------------------------------------
 //
@@ -53,6 +54,7 @@
 #include "G4EmExtraPhysics.hh"
 #include "G4IonPhysics.hh"
 #include "G4QStoppingPhysics.hh"
+#include "G4HadronElasticPhysics.hh"
 
 #include "G4DataQuestionaire.hh"
 #include "HadronPhysicsQGSC_LEAD_HP.hh"
@@ -75,6 +77,9 @@ template<class T> TQGSC_LEAD_HP<T>::TQGSC_LEAD_HP(G4int ver):  T()
 
   // Decays
   this->RegisterPhysics( new G4DecayPhysics("decay",ver) );
+
+   // Hadron Elastic scattering
+  this-> RegisterPhysics( new G4HadronElasticPhysics("elastic",ver,true));
 
    // Hadron Physics
   this->RegisterPhysics(  new HadronPhysicsQGSC_LEAD_HP("hadron"));

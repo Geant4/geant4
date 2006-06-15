@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: QGSP_GN.icc,v 1.8 2006-06-08 13:13:09 vnivanch Exp $
+// $Id: QGSP_GN.icc,v 1.9 2006-06-15 14:16:19 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -35,6 +35,7 @@
 //                      Use EmStandard71 
 // 02.12.2005 V.Ivanchenko: rename components
 // 08.06.2006 V.Ivanchenko: migration to CHIPS stopping 
+// 15.06.2006 G.Folger: Migrate to HadronElasticPhysics using improved elastic
 //
 //----------------------------------------------------------------------------
 //
@@ -57,6 +58,7 @@
 #include "G4EmExtraPhysics.hh"
 #include "G4IonPhysics.hh"
 #include "G4QStoppingPhysics.hh"
+#include "G4HadronElasticPhysics.hh"
 
 #include "G4DataQuestionaire.hh"
 #include "HadronPhysicsQGSP_GN.hh"
@@ -79,6 +81,9 @@ template<class T> TQGSP_GN<T>::TQGSP_GN(G4int ver):  T()
 
   // General Physics - i.e. decay
   this->RegisterPhysics( new G4DecayPhysics("decay",ver) );
+
+   // Hadron Elastic scattering
+  this-> RegisterPhysics( new G4HadronElasticPhysics("elastic",ver,false));
 
    // Hadron Physics
   this->RegisterPhysics(  new HadronPhysicsQGSP_GN("hadron"));
