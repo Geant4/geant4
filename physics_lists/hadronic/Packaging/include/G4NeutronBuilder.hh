@@ -20,12 +20,25 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+//---------------------------------------------------------------------------
+//
+// ClassName:   G4NeutronBuilder
+//
+// Author: 2002 J.P. Wellisch
+//
+// Modified:
+// 16.11.2005 G.Folger: don't  keep processes as data members, but new these
+// 13.06.2006 G.Folger: (re)move elastic scatterring 
+//
+//----------------------------------------------------------------------------
+//
 #ifndef G4NeutronBuilder_h
 #define G4NeutronBuilder_h 1
 
 #include "globals.hh"
 
-#include "G4HadronElasticProcess.hh"
 #include "G4HadronFissionProcess.hh"
 #include "G4HadronCaptureProcess.hh"
 #include "G4NeutronInelasticProcess.hh"
@@ -44,7 +57,6 @@ class G4NeutronBuilder
     void RegisterMe(G4VNeutronBuilder * aB) {theModelCollections.push_back(aB);}
 
   private:
-    G4HadronElasticProcess * theNeutronElasticProcess;
     G4NeutronInelasticProcess * theNeutronInelastic;
     G4HadronFissionProcess * theNeutronFission;
     G4HadronCaptureProcess  * theNeutronCapture;

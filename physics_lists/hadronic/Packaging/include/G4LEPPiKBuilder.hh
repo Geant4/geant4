@@ -28,8 +28,6 @@
 
 #include "G4VPiKBuilder.hh"
 
-#include "G4LElastic.hh"
-
 #include "G4LEPionPlusInelastic.hh"
 #include "G4LEPionMinusInelastic.hh"
 #include "G4LEKaonPlusInelastic.hh"
@@ -70,9 +68,7 @@ class G4LEPPiKBuilder : public G4VPiKBuilder
     G4double theMin;
     G4double theMinPion;
     G4double theMax;
-    
-    G4LElastic * theElasticModel;
-    
+        
     G4LEPionPlusInelastic* theLEPionPlusModel;
     G4LEPionMinusInelastic* theLEPionMinusModel;
     G4LEKaonPlusInelastic* theLEKaonPlusModel;

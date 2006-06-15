@@ -20,6 +20,20 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+//---------------------------------------------------------------------------
+//
+// ClassName:   G4NeutronBuilder
+//
+// Author: 2002 J.P. Wellisch
+//
+// Modified:
+// 16.11.2005 G.Folger: don't  keep processes as data members, but new these
+// 13.06.2006 G.Folger: (re)move elastic scatterring 
+//
+//----------------------------------------------------------------------------
+//
 #include "G4NeutronBuilder.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
@@ -28,7 +42,6 @@
 G4NeutronBuilder::
 G4NeutronBuilder(): wasActivated(false) 
 {
-  theNeutronElasticProcess = new G4HadronElasticProcess;
   theNeutronInelastic = new G4NeutronInelasticProcess;
   theNeutronCapture = new G4HadronCaptureProcess;
   theNeutronFission = new G4HadronFissionProcess;
@@ -38,7 +51,6 @@ G4NeutronBuilder(): wasActivated(false)
 G4NeutronBuilder::
 ~G4NeutronBuilder() 
 {
-  delete theNeutronElasticProcess;
   delete theNeutronInelastic;
   delete theNeutronCapture;
   delete theNeutronFission;
@@ -51,13 +63,11 @@ Build()
   std::vector<G4VNeutronBuilder *>::iterator i;
   for(i=theModelCollections.begin(); i!=theModelCollections.end(); i++)
   {
-    (*i)->Build(theNeutronElasticProcess);
     (*i)->Build(theNeutronInelastic);
     (*i)->Build(theNeutronCapture);
     (*i)->Build(theNeutronFission);
   }
   G4ProcessManager * theProcMan = G4Neutron::Neutron()->GetProcessManager();
-  theProcMan->AddDiscreteProcess(theNeutronElasticProcess);
   theProcMan->AddDiscreteProcess(theNeutronInelastic);
   theProcMan->AddDiscreteProcess(theNeutronCapture);
   theProcMan->AddDiscreteProcess(theNeutronFission);

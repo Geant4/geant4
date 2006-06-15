@@ -33,7 +33,6 @@
 G4LEPPiKBuilder::
 G4LEPPiKBuilder()  
 {
-  theElasticModel = new G4LElastic();
   theMin = 0;
   theMax = 55*GeV;
   theMinPion = theMin;
@@ -42,14 +41,13 @@ G4LEPPiKBuilder()
 G4LEPPiKBuilder::
 ~G4LEPPiKBuilder() 
 {
-  delete theElasticModel;
   delete theLEPionPlusModel;
 }
 
 void G4LEPPiKBuilder::
-Build(G4HadronElasticProcess * aP)
+Build(G4HadronElasticProcess *)
 {
-  aP->RegisterMe(theElasticModel);
+    G4cout << "Info - G4LEPPiKBuilder::Build() not adding elastic" << G4endl;
 }
 
 void G4LEPPiKBuilder::

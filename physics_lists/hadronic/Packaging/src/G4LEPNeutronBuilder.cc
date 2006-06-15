@@ -37,19 +37,15 @@ G4LEPNeutronBuilder()
 G4LEPNeutronBuilder::
 ~G4LEPNeutronBuilder() 
 {
-  delete theElasticModel;
   delete theNeutronFissionModel;
   delete theNeutronCaptureModel;
   delete theLENeutronModel;
 }
 
 void G4LEPNeutronBuilder::
-Build(G4HadronElasticProcess * aP)
+Build(G4HadronElasticProcess *)
 {
-  theElasticModel = new G4LElastic();
-  theElasticModel->SetMinEnergy(theMin);
-  theElasticModel->SetMaxEnergy(theMax);
-  aP->RegisterMe(theElasticModel);
+     G4cout << "Info - G4LEPNeutronBuilder::Build() not adding elastic" << G4endl;
 }
 
 void G4LEPNeutronBuilder::

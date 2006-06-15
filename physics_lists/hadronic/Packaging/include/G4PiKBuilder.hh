@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4PiKBuilder.hh,v 1.3 2006-06-06 16:47:44 vnivanch Exp $
+// $Id: G4PiKBuilder.hh,v 1.4 2006-06-15 14:15:50 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -31,6 +31,7 @@
 //
 // Modified:
 // 16.11.2005 G.Folger: don't  keep processes as data members, but new these
+// 13.06.2006 G.Folger: (re)move elastic scatterring 
 //
 //----------------------------------------------------------------------------
 //
@@ -39,7 +40,6 @@
 
 #include "globals.hh"
 
-#include "G4HadronElasticProcess.hh"
 #include "G4ProtonInelasticProcess.hh"
 #include "G4VPiKBuilder.hh"
 
@@ -56,13 +56,6 @@ class G4PiKBuilder
     void RegisterMe(G4VPiKBuilder * aB) {theModelCollections.push_back(aB);}
 
   private:
-    G4HadronElasticProcess* thePionPlusElasticProcess;
-    G4HadronElasticProcess* thePionMinusElasticProcess;
-    G4HadronElasticProcess* theKaonPlusElasticProcess;
-    G4HadronElasticProcess* theKaonMinusElasticProcess;
-    G4HadronElasticProcess* theKaonZeroLElasticProcess;
-    G4HadronElasticProcess* theKaonZeroSElasticProcess;
-
     G4PionPlusInelasticProcess*  thePionPlusInelastic;
     G4PionMinusInelasticProcess* thePionMinusInelastic;
     G4KaonPlusInelasticProcess*  theKaonPlusInelastic;

@@ -29,7 +29,6 @@
 #include "G4ProtonInelasticProcess.hh"
 #include "G4VProtonBuilder.hh"
 
-#include "G4LElastic.hh"   
 #include "G4LEProtonInelastic.hh"
 
 class G4LEPProtonBuilder : public G4VProtonBuilder
@@ -54,7 +53,6 @@ class G4LEPProtonBuilder : public G4VProtonBuilder
   private:
     G4double theMin;
     G4double theMax;
-    G4LElastic * theElasticModel;
     G4LEProtonInelastic * theLEProtonModel;
 
 };

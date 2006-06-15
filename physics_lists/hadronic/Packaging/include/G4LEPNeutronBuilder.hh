@@ -31,7 +31,6 @@
 #include "G4NeutronInelasticProcess.hh"
 #include "G4VNeutronBuilder.hh"
 
-#include "G4LElastic.hh"   
 #include "G4LFission.hh"
 #include "G4LCapture.hh"
 #include "G4LENeutronInelastic.hh"
@@ -73,7 +72,6 @@ class G4LEPNeutronBuilder : public G4VNeutronBuilder
     G4double theMax;
     G4double theIMax;
 
-    G4LElastic * theElasticModel;
     G4LENeutronInelastic * theLENeutronModel;
     G4LFission * theNeutronFissionModel;
     G4LCapture * theNeutronCaptureModel;

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4PiKBuilder.cc,v 1.5 2006-06-06 16:47:45 vnivanch Exp $
+// $Id: G4PiKBuilder.cc,v 1.6 2006-06-15 14:15:50 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -31,6 +31,7 @@
 //
 // Modified:
 // 16.11.2005 G.Folger: don't  keep processes as data members, but new these
+// 13.06.2006 G.Folger: (re)move elastic scatterring 
 //
 //----------------------------------------------------------------------------
 //
@@ -42,13 +43,6 @@
 G4PiKBuilder::
 G4PiKBuilder(): wasActivated(false) 
 {  
-  thePionPlusElasticProcess=new G4HadronElasticProcess;
-  thePionMinusElasticProcess=new G4HadronElasticProcess;
-  theKaonPlusElasticProcess=new G4HadronElasticProcess;
-  theKaonMinusElasticProcess=new G4HadronElasticProcess;
-  theKaonZeroLElasticProcess=new G4HadronElasticProcess;
-  theKaonZeroSElasticProcess=new G4HadronElasticProcess;
-
   thePionPlusInelastic=new G4PionPlusInelasticProcess;
   thePionMinusInelastic=new G4PionMinusInelasticProcess;
   theKaonPlusInelastic=new G4KaonPlusInelasticProcess;
@@ -59,13 +53,6 @@ G4PiKBuilder(): wasActivated(false)
 
 G4PiKBuilder::
 ~G4PiKBuilder(){
-  delete thePionPlusElasticProcess;
-  delete thePionMinusElasticProcess;
-  delete theKaonPlusElasticProcess;
-  delete theKaonMinusElasticProcess;
-  delete theKaonZeroLElasticProcess;
-  delete theKaonZeroSElasticProcess;
-
   delete thePionPlusInelastic;
   delete thePionMinusInelastic;
   delete theKaonPlusInelastic;
@@ -82,13 +69,6 @@ Build()
   std::vector<G4VPiKBuilder *>::iterator i;
   for(i=theModelCollections.begin(); i!=theModelCollections.end(); i++)
   {
-    (*i)->Build(thePionPlusElasticProcess);
-    (*i)->Build(thePionMinusElasticProcess);
-    (*i)->Build(theKaonPlusElasticProcess);
-    (*i)->Build(theKaonMinusElasticProcess);
-    (*i)->Build(theKaonZeroLElasticProcess);
-    (*i)->Build(theKaonZeroSElasticProcess);
-
     (*i)->Build(thePionPlusInelastic);
     (*i)->Build(thePionMinusInelastic);
     (*i)->Build(theKaonPlusInelastic);
@@ -98,27 +78,21 @@ Build()
   }
   G4ProcessManager * theProcMan;
   theProcMan = G4PionPlus::PionPlus()->GetProcessManager();
-  theProcMan->AddDiscreteProcess(thePionPlusElasticProcess);
   theProcMan->AddDiscreteProcess(thePionPlusInelastic);
   
   theProcMan = G4PionMinus::PionMinus()->GetProcessManager();
-  theProcMan->AddDiscreteProcess(thePionMinusElasticProcess);
   theProcMan->AddDiscreteProcess(thePionMinusInelastic);
   
   theProcMan = G4KaonPlus::KaonPlus()->GetProcessManager();
-  theProcMan->AddDiscreteProcess(theKaonPlusElasticProcess);
   theProcMan->AddDiscreteProcess(theKaonPlusInelastic);
   
   theProcMan = G4KaonMinus::KaonMinus()->GetProcessManager();
-  theProcMan->AddDiscreteProcess(theKaonMinusElasticProcess);
   theProcMan->AddDiscreteProcess(theKaonMinusInelastic);
   
   theProcMan = G4KaonZeroLong::KaonZeroLong()->GetProcessManager();
-  theProcMan->AddDiscreteProcess(theKaonZeroLElasticProcess);
   theProcMan->AddDiscreteProcess(theKaonZeroLInelastic);
   
   theProcMan = G4KaonZeroShort::KaonZeroShort()->GetProcessManager();
-  theProcMan->AddDiscreteProcess(theKaonZeroSElasticProcess);
   theProcMan->AddDiscreteProcess(theKaonZeroSInelastic);
 }
 // 2002 by J.P. Wellisch

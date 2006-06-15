@@ -29,16 +29,11 @@
 G4MiscLHEPBuilder::G4MiscLHEPBuilder(): wasActivated(false) {}
 G4MiscLHEPBuilder::~G4MiscLHEPBuilder()
 {
-  if(wasActivated)
-  {
-    delete theElasticModel;
-  }
 }
 
 void G4MiscLHEPBuilder::Build()
 {
   G4ProcessManager * aProcMan = 0;
-  theElasticModel = new G4LElastic;
   wasActivated = true;
   
   // anti-Proton
@@ -48,8 +43,6 @@ void G4MiscLHEPBuilder::Build()
   theAntiProtonInelastic.RegisterMe(theLEAntiProtonModel);
   theAntiProtonInelastic.RegisterMe(theHEAntiProtonModel);
   aProcMan->AddDiscreteProcess(&theAntiProtonInelastic);
-  theAntiProtonElasticProcess.RegisterMe(theElasticModel);
-  aProcMan->AddDiscreteProcess(&theAntiProtonElasticProcess);
 
   // AntiNeutron
   aProcMan = G4AntiNeutron::AntiNeutron()->GetProcessManager();
@@ -58,8 +51,6 @@ void G4MiscLHEPBuilder::Build()
   theAntiNeutronInelastic.RegisterMe(theLEAntiNeutronModel);
   theAntiNeutronInelastic.RegisterMe(theHEAntiNeutronModel);
   aProcMan->AddDiscreteProcess(&theAntiNeutronInelastic);
-  theAntiNeutronElasticProcess.RegisterMe(theElasticModel);
-  aProcMan->AddDiscreteProcess(&theAntiNeutronElasticProcess);
 
   // Lambda
   aProcMan = G4Lambda::Lambda()->GetProcessManager();
@@ -68,8 +59,6 @@ void G4MiscLHEPBuilder::Build()
   theLambdaInelastic.RegisterMe(theLELambdaModel);
   theLambdaInelastic.RegisterMe(theHELambdaModel);
   aProcMan->AddDiscreteProcess(&theLambdaInelastic);
-  theLambdaElasticProcess.RegisterMe(theElasticModel);
-  aProcMan->AddDiscreteProcess(&theLambdaElasticProcess);
   
   // AntiLambda
   aProcMan = G4AntiLambda::AntiLambda()->GetProcessManager();
@@ -78,8 +67,6 @@ void G4MiscLHEPBuilder::Build()
   theAntiLambdaInelastic.RegisterMe(theLEAntiLambdaModel);
   theAntiLambdaInelastic.RegisterMe(theHEAntiLambdaModel);
   aProcMan->AddDiscreteProcess(&theAntiLambdaInelastic);
-  theAntiLambdaElasticProcess.RegisterMe(theElasticModel);
-  aProcMan->AddDiscreteProcess(&theAntiLambdaElasticProcess);
     
   // SigmaMinus
   aProcMan = G4SigmaMinus::SigmaMinus()->GetProcessManager();
@@ -88,8 +75,6 @@ void G4MiscLHEPBuilder::Build()
   theSigmaMinusInelastic.RegisterMe(theLESigmaMinusModel);
   theSigmaMinusInelastic.RegisterMe(theHESigmaMinusModel);
   aProcMan->AddDiscreteProcess(&theSigmaMinusInelastic);
-  theSigmaMinusElasticProcess.RegisterMe(theElasticModel);
-  aProcMan->AddDiscreteProcess(&theSigmaMinusElasticProcess);
 
   // anti-SigmaMinus
   aProcMan = G4AntiSigmaMinus::AntiSigmaMinus()->GetProcessManager();
@@ -98,8 +83,6 @@ void G4MiscLHEPBuilder::Build()
   theAntiSigmaMinusInelastic.RegisterMe(theLEAntiSigmaMinusModel);
   theAntiSigmaMinusInelastic.RegisterMe(theHEAntiSigmaMinusModel);
   aProcMan->AddDiscreteProcess(&theAntiSigmaMinusInelastic);
-  theAntiSigmaMinusElasticProcess.RegisterMe(theElasticModel);
-  aProcMan->AddDiscreteProcess(&theAntiSigmaMinusElasticProcess);
 
   // SigmaPlus
   aProcMan = G4SigmaPlus::SigmaPlus()->GetProcessManager();
@@ -108,8 +91,6 @@ void G4MiscLHEPBuilder::Build()
   theSigmaPlusInelastic.RegisterMe(theLESigmaPlusModel);
   theSigmaPlusInelastic.RegisterMe(theHESigmaPlusModel);
   aProcMan->AddDiscreteProcess(&theSigmaPlusInelastic);
-  theSigmaPlusElasticProcess.RegisterMe(theElasticModel);
-  aProcMan->AddDiscreteProcess(&theSigmaPlusElasticProcess);
 
   // anti-SigmaPlus
   aProcMan = G4AntiSigmaPlus::AntiSigmaPlus()->GetProcessManager();
@@ -118,8 +99,6 @@ void G4MiscLHEPBuilder::Build()
   theAntiSigmaPlusInelastic.RegisterMe(theLEAntiSigmaPlusModel);
   theAntiSigmaPlusInelastic.RegisterMe(theHEAntiSigmaPlusModel);
   aProcMan->AddDiscreteProcess(&theAntiSigmaPlusInelastic);
-  theAntiSigmaPlusElasticProcess.RegisterMe(theElasticModel);
-  aProcMan->AddDiscreteProcess(&theAntiSigmaPlusElasticProcess);
 
   // XiMinus
   aProcMan = G4XiMinus::XiMinus()->GetProcessManager();
@@ -128,8 +107,6 @@ void G4MiscLHEPBuilder::Build()
   theXiMinusInelastic.RegisterMe(theLEXiMinusModel);
   theXiMinusInelastic.RegisterMe(theHEXiMinusModel);
   aProcMan->AddDiscreteProcess(&theXiMinusInelastic);
-  theXiMinusElasticProcess.RegisterMe(theElasticModel);
-  aProcMan->AddDiscreteProcess(&theXiMinusElasticProcess);
 
   // anti-XiMinus
   aProcMan = G4AntiXiMinus::AntiXiMinus()->GetProcessManager();
@@ -138,8 +115,6 @@ void G4MiscLHEPBuilder::Build()
   theAntiXiMinusInelastic.RegisterMe(theLEAntiXiMinusModel);
   theAntiXiMinusInelastic.RegisterMe(theHEAntiXiMinusModel);
   aProcMan->AddDiscreteProcess(&theAntiXiMinusInelastic);
-  theAntiXiMinusElasticProcess.RegisterMe(theElasticModel);
-  aProcMan->AddDiscreteProcess(&theAntiXiMinusElasticProcess);
 
   // XiZero
   aProcMan = G4XiZero::XiZero()->GetProcessManager();
@@ -148,8 +123,6 @@ void G4MiscLHEPBuilder::Build()
   theXiZeroInelastic.RegisterMe(theLEXiZeroModel);
   theXiZeroInelastic.RegisterMe(theHEXiZeroModel);
   aProcMan->AddDiscreteProcess(&theXiZeroInelastic);
-  theXiZeroElasticProcess.RegisterMe(theElasticModel);
-  aProcMan->AddDiscreteProcess(&theXiZeroElasticProcess);
 
   // anti-XiZero
   aProcMan = G4AntiXiZero::AntiXiZero()->GetProcessManager();
@@ -158,8 +131,6 @@ void G4MiscLHEPBuilder::Build()
   theAntiXiZeroInelastic.RegisterMe(theLEAntiXiZeroModel);
   theAntiXiZeroInelastic.RegisterMe(theHEAntiXiZeroModel);
   aProcMan->AddDiscreteProcess(&theAntiXiZeroInelastic);
-  theAntiXiZeroElasticProcess.RegisterMe(theElasticModel);
-  aProcMan->AddDiscreteProcess(&theAntiXiZeroElasticProcess);
 
   // OmegaMinus
   aProcMan = G4OmegaMinus::OmegaMinus()->GetProcessManager();
@@ -168,8 +139,6 @@ void G4MiscLHEPBuilder::Build()
   theOmegaMinusInelastic.RegisterMe(theLEOmegaMinusModel);
   theOmegaMinusInelastic.RegisterMe(theHEOmegaMinusModel);
   aProcMan->AddDiscreteProcess(&theOmegaMinusInelastic);
-  theOmegaMinusElasticProcess.RegisterMe(theElasticModel);
-  aProcMan->AddDiscreteProcess(&theOmegaMinusElasticProcess);
 
   // anti-OmegaMinus
   aProcMan = G4AntiOmegaMinus::AntiOmegaMinus()->GetProcessManager();
@@ -178,8 +147,6 @@ void G4MiscLHEPBuilder::Build()
   theAntiOmegaMinusInelastic.RegisterMe(theLEAntiOmegaMinusModel);
   theAntiOmegaMinusInelastic.RegisterMe(theHEAntiOmegaMinusModel);
   aProcMan->AddDiscreteProcess(&theAntiOmegaMinusInelastic);
-  theAntiOmegaMinusElasticProcess.RegisterMe(theElasticModel);
-  aProcMan->AddDiscreteProcess(&theAntiOmegaMinusElasticProcess);
 }
 
 // 2002 by J.P. Wellisch
