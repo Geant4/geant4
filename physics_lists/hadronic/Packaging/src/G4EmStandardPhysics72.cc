@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmStandardPhysics72.cc,v 1.2 2006-06-06 16:47:45 vnivanch Exp $
+// $Id: G4EmStandardPhysics72.cc,v 1.3 2006-06-15 17:05:25 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -31,6 +31,7 @@
 //
 // Modified:
 // 19.12.2005 V.Ivanchenko rename 71 -> 72
+// 15.06.2006 V.Ivanchenko use this class as a constructor of fast EM physics
 //
 //----------------------------------------------------------------------------
 //
@@ -45,6 +46,8 @@
 #include "G4PhotoElectricEffect.hh"
 
 #include "G4MultipleScattering71.hh"
+#include "G4MultipleScattering.hh"
+#include "G4UrbanMscModel.hh"
 
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
@@ -123,6 +126,7 @@ void G4EmStandardPhysics72::ConstructParticle()
 void G4EmStandardPhysics72::ConstructProcess()
 {
   // Add standard EM Processes
+  G4MultipleScattering* msc = 0;
 
   theParticleIterator->reset();
   while( (*theParticleIterator)() ){
@@ -138,19 +142,23 @@ void G4EmStandardPhysics72::ConstructProcess()
 
     } else if (particleName == "e-") {
 
+      msc = new G4MultipleScattering();
+      msc->MscStepLimitation(false,0.2);
       if(verbose > 1)
         G4cout << "### EmStandard72 instantiates eIoni and msc71 for " 
                << particleName << G4endl;
-      pmanager->AddProcess(new G4MultipleScattering71, -1, 1, 1);
+      pmanager->AddProcess(msc, -1, 1, 1);
       pmanager->AddProcess(new G4eIonisation,          -1, 2, 2);
       pmanager->AddProcess(new G4eBremsstrahlung(),    -1, 3, 3);
 
     } else if (particleName == "e+") {
 
+      msc = new G4MultipleScattering();
+      msc->MscStepLimitation(false,0.2);
       if(verbose > 1)
         G4cout << "### EmStandard72 instantiates eIoni and msc71 for " 
                << particleName << G4endl;
-      pmanager->AddProcess(new G4MultipleScattering71, -1, 1, 1);
+      pmanager->AddProcess(msc, -1, 1, 1);
       pmanager->AddProcess(new G4eIonisation,          -1, 2, 2);
       pmanager->AddProcess(new G4eBremsstrahlung,      -1, 3, 3);
       pmanager->AddProcess(new G4eplusAnnihilation,     0,-1, 4);
@@ -158,10 +166,12 @@ void G4EmStandardPhysics72::ConstructProcess()
     } else if (particleName == "mu+" ||
                particleName == "mu-"    ) {
 
+      msc = new G4MultipleScattering();
+      msc->MscStepLimitation(false,0.2);
       if(verbose > 1)
         G4cout << "### EmStandard72 instantiates muIoni and msc71 for " 
                << particleName << G4endl;
-      pmanager->AddProcess(new G4MultipleScattering71,-1, 1, 1);
+      pmanager->AddProcess(msc,-1, 1, 1);
       pmanager->AddProcess(new G4MuIonisation,        -1, 2, 2);
       pmanager->AddProcess(new G4MuBremsstrahlung,    -1, 3, 3);
       pmanager->AddProcess(new G4MuPairProduction,    -1, 4, 4);
@@ -170,10 +180,12 @@ void G4EmStandardPhysics72::ConstructProcess()
                particleName == "He3" ||
                particleName == "GenericIon") {
 
+      msc = new G4MultipleScattering();
+      msc->MscStepLimitation(false,0.2);
       if(verbose > 1)
         G4cout << "### EmStandard72 instantiates ionIoni and msc71 for " 
                << particleName << G4endl;
-      pmanager->AddProcess(new G4MultipleScattering71, -1, 1, 1);
+      pmanager->AddProcess(msc, -1, 1, 1);
       pmanager->AddProcess(new G4ionIonisation,        -1, 2, 2);
 
     } else if (particleName == "anti_omega-" ||
@@ -197,14 +209,16 @@ void G4EmStandardPhysics72::ConstructProcess()
       if(verbose > 1)
         G4cout << "### EmStandard72 instantiates hIoni and msc71 for " 
                << particleName << G4endl;
-      pmanager->AddProcess(new G4MultipleScattering71, -1, 1, 1);
+      msc = new G4MultipleScattering();
+      msc->MscStepLimitation(false,0.2);
+      pmanager->AddProcess(msc, -1, 1, 1);
       pmanager->AddProcess(new G4hIonisation,          -1, 2, 2);
     }
   }
   G4EmProcessOptions opt;
   opt.SetVerbose(verbose);
-  //  if(!mscStepLimit) 
-  //  opt.SetMscStepLimitation(false);
+  //  opt.SetMscStepLimitation(false, 0.2);
+  opt.SetSubCutoff(true);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

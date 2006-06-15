@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmStandardPhysics71.cc,v 1.10 2006-06-06 16:47:45 vnivanch Exp $
+// $Id: G4EmStandardPhysics71.cc,v 1.11 2006-06-15 17:05:25 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -207,8 +207,6 @@ void G4EmStandardPhysics71::ConstructProcess()
   }
   G4EmProcessOptions opt;
   opt.SetVerbose(verbose);
-  //  if(!mscStepLimit) 
-  //  opt.SetMscStepLimitation(false);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
