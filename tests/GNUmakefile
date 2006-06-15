@@ -53,7 +53,7 @@ SUBDIRS += test02
                     ## Archived (cvs rm) - was indentical to ExN06 and no
                     ## longer maintained.
 # SUBDIRS += test04 ## Persistency.  Retired.
-# SUBDIRS += test05
+SUBDIRS += test05
 SUBDIRS += test06
 SUBDIRS += test07
 # SUBDIRS += test08 ## Old em test.  Archived (cvs rm) for now.
