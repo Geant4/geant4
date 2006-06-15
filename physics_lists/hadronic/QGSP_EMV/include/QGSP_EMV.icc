@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: QGSP_EMV.icc,v 1.4 2006-06-15 17:05:26 vnivanch Exp $
+// $Id: QGSP_EMV.icc,v 1.5 2006-06-15 17:58:18 ribon Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -54,7 +54,7 @@
 #include <iomanip>   
 
 #include "G4DecayPhysics.hh"
-#include "G4EmStandardPhysics71.hh"
+#include "G4EmStandardPhysics72.hh"
 #include "G4EmExtraPhysics.hh"
 #include "G4IonPhysics.hh"
 #include "G4QStoppingPhysics.hh"
