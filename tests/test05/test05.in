@@ -1,0 +1,20 @@
+#
+# Macro file for the initialization phase of test05
+# when runing in interactive mode
+#
+# Sets some default verbose
+#
+/control/verbose 2
+/run/verbose 2
+#
+/tracking/verbose 1
+/gps/pos/type Plane
+/gps/pos/centre 0 0 -1 mm
+/gps/pos/shape Square
+/gps/pos/halfx 10 cm
+/gps/pos/halfy 10 cm
+/gps/direction 0 0 1
+#
+/run/beamOn 100
+#
+exit
