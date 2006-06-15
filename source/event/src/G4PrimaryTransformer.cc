@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PrimaryTransformer.cc,v 1.23 2005-05-30 07:05:47 asaim Exp $
+// $Id: G4PrimaryTransformer.cc,v 1.24 2006-06-15 23:44:06 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -35,6 +35,7 @@
 #include "G4DecayProducts.hh"
 #include "G4UnitsTable.hh"
 #include "G4ios.hh"
+#include "Randomize.hh"
 
 G4PrimaryTransformer::G4PrimaryTransformer()
 :verboseLevel(0),trackID(0),unknown(0),unknownParticleDefined(false)
@@ -101,6 +102,9 @@ void G4PrimaryTransformer::GenerateSingleTrack
      (G4PrimaryParticle* primaryParticle,
       G4double x0,G4double y0,G4double z0,G4double t0,G4double wv)
 {
+  static G4ParticleDefinition* optPhoton = 0;
+  if(!optPhoton) optPhoton = particleTable->FindParticle("opticalphoton");
+
   G4ParticleDefinition* partDef = GetDefinition(primaryParticle);
   if(!IsGoodForTrack(partDef))
   // The particle cannot be converted to G4Track, check daughters
@@ -134,9 +138,30 @@ void G4PrimaryTransformer::GenerateSingleTrack
 #endif
     G4DynamicParticle* DP = 
       new G4DynamicParticle(partDef,primaryParticle->GetMomentum());
-    DP->SetPolarization(primaryParticle->GetPolX(),
-                        primaryParticle->GetPolY(),
-                        primaryParticle->GetPolZ());
+    if(partDef==optPhoton && primaryParticle->GetPolarization().mag2()==0.)
+    {
+      G4Exception("G4PrimaryTransformer::GenerateSingleTrack","ZeroPolarization",JustWarning,
+                  "Polarization of the optical photon is null. Random polarization is assumed.");
+
+      G4double angle = G4UniformRand() * 360.0*deg;
+      G4ThreeVector normal (1., 0., 0.);
+      G4ThreeVector kphoton = DP->GetMomentumDirection();
+      G4ThreeVector product = normal.cross(kphoton);
+      G4double modul2       = product*product;
+
+      G4ThreeVector e_perpend (0., 0., 1.);
+      if (modul2 > 0.) e_perpend = (1./std::sqrt(modul2))*product;
+      G4ThreeVector e_paralle    = e_perpend.cross(kphoton);
+
+      G4ThreeVector polar = std::cos(angle)*e_paralle + std::sin(angle)*e_perpend;
+      DP->SetPolarization(polar.x(),polar.y(),polar.z());
+    }
+    else
+    {
+      DP->SetPolarization(primaryParticle->GetPolX(),
+                          primaryParticle->GetPolY(),
+                          primaryParticle->GetPolZ());
+    }
     if(primaryParticle->GetProperTime()>0.0)
     { DP->SetPreAssignedDecayProperTime(primaryParticle->GetProperTime()); }
     // Set Charge if it is specified

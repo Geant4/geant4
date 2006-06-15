@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PrimaryTransformer.hh,v 1.10 2005-04-27 01:32:46 asaim Exp $
+// $Id: G4PrimaryTransformer.hh,v 1.11 2006-06-15 23:44:06 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -34,6 +34,7 @@
 class G4Event;
 class G4PrimaryVertex;
 #include "G4PrimaryParticle.hh"
+#include "G4DynamicParticle.hh"
 
 // class description:
 //
