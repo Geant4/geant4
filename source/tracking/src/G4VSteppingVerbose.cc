@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSteppingVerbose.cc,v 1.14 2006-06-02 12:24:58 gcosmo Exp $
+// $Id: G4VSteppingVerbose.cc,v 1.15 2006-06-15 15:42:21 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------
@@ -130,4 +130,33 @@ void G4VSteppingVerbose::CopyState()
    fGPILSelection = fManager->GetfGPILSelection();
 }
 
+void G4VSteppingVerbose::SetInstance(G4VSteppingVerbose* Instance)
+{
+  fInstance=Instance;
+}
+
+G4VSteppingVerbose* G4VSteppingVerbose::GetInstance()
+{
+  return fInstance;
+}
+
+G4int G4VSteppingVerbose::GetSilent()
+{
+  return Silent;
+}
+
+void G4VSteppingVerbose::SetSilent(G4int fSilent)
+{
+  Silent=fSilent;
+}
+
+G4int G4VSteppingVerbose::GetSilentStepInfo()
+{
+  return SilentStepInfo;
+}
+
+void G4VSteppingVerbose::SetSilentStepInfo(G4int fSilent)
+{
+  SilentStepInfo=fSilent;
+}
 
