@@ -1,4 +1,4 @@
-$Id: History,v 1.105 2006-06-15 15:42:45 gcosmo Exp $
+$Id: History,v 1.106 2006-06-15 15:43:53 gcosmo Exp $
 $Name: not supported by cvs2svn $ 
 -------------------------------------------------------------------
 
@@ -17,6 +17,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+09 June 2006 T. Sasaki
+- Secondary vector is now owned by G4Step and G4TrackVector class has 
+  been moved in the track category
 
 15 June 2006 G. Cosmo (tracking-V08-00-04)
 - Fixed implementation of static methods in G4VSteppingVerbose to be
