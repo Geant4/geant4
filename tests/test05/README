@@ -1,0 +1,21 @@
+$Id: README,v 1.5 2006-06-15 13:48:12 gcosmo Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                                Test05
+                                ------
+
+  The purpose of this test is to exercise the G4TessellatedSolid class and 
+  its related surface types (triangular and quadrangular surface) forming a
+  combined G4 geometry made by facets. It also exercises the General Particle
+  Source framework.
+
+  Author: Fan Lei
+  Contributors: Gabriele Cosmo
+
+  To run it you can use:
+
+    test05 test05.in

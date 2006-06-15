@@ -1,0 +1,20 @@
+$Id: History,v 1.13 2006-06-15 13:48:12 gcosmo Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    Test 05 History file
+                    --------------------
+This file should be used by the test developer to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+June 14, 2006  Gabriele Cosmo (test05-V08-00-00)
+- Created first version of this test, taken from unit test of mixed
+  combination of tessellated-solids.
