@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN06PrimaryGeneratorMessenger.cc,v 1.1 2003-01-23 15:34:32 maire Exp $
+// $Id: ExN06PrimaryGeneratorMessenger.cc,v 1.2 2006-06-15 21:04:30 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -49,7 +49,8 @@ ExN06PrimaryGeneratorMessenger::ExN06PrimaryGeneratorMessenger(
   polarCmd->SetGuidance("  angle w.r.t. (k,n) plane");
   polarCmd->SetParameterName("angle",true);
   polarCmd->SetUnitCategory("Angle");  
-  polarCmd->SetDefaultValue(0.);
+  polarCmd->SetDefaultValue(-360.0);
+  polarCmd->SetDefaultUnit("deg");
   polarCmd->AvailableForStates(G4State_Idle);
 }
 
@@ -66,8 +67,14 @@ ExN06PrimaryGeneratorMessenger::~ExN06PrimaryGeneratorMessenger()
 void ExN06PrimaryGeneratorMessenger::SetNewValue(
                                         G4UIcommand* command, G4String newValue)
 { 
-  if( command == polarCmd )
-   { ExN06Action->SetOptPhotonPolar(polarCmd->GetNewDoubleValue(newValue));}
+  if( command == polarCmd ) {
+      G4double angle = polarCmd->GetNewDoubleValue(newValue);
+      if ( angle == -360.0*deg ) {
+         ExN06Action->SetOptPhotonPolar();
+      } else {
+         ExN06Action->SetOptPhotonPolar(angle);
+      }
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
