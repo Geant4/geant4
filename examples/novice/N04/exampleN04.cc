@@ -21,19 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: exampleN04.cc,v 1.10 2006-06-15 16:55:07 gcosmo Exp $
+// $Id: exampleN04.cc,v 1.11 2006-06-16 10:15:52 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // --------------------------------------------------------------
 //      GEANT 4 - exampleN04
-//
 // --------------------------------------------------------------
-// Comments
-//
-// 
-// --------------------------------------------------------------
-
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
@@ -56,35 +50,59 @@
 
 int main(int argc,char** argv)
 {
+  // User Verbose output class
+  //
   G4VSteppingVerbose* verbosity = new ExN04SteppingVerbose;
   G4VSteppingVerbose::SetInstance(verbosity);
   
+  // Run manager
+  //
   G4RunManager* runManager = new G4RunManager;
 
-  runManager->SetUserInitialization(new ExN04DetectorConstruction);
-  runManager->SetUserInitialization(new QGSP);
+  // User Initialization classes (mandatory)
+  //
+  G4VUserDetectorConstruction* detector = new ExN04DetectorConstruction;
+  runManager->SetUserInitialization(detector);
+  //
+  G4VUserPhysicsList* physics = new QGSP;
+  runManager->SetUserInitialization(physics);
   
 #ifdef G4VIS_USE
   // Visualization, if you choose to have it!
+  //
   G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
 #endif
 
   runManager->Initialize();
 
-  runManager->SetUserAction(new ExN04PrimaryGeneratorAction);
-  runManager->SetUserAction(new ExN04RunAction);  
-  runManager->SetUserAction(new ExN04EventAction);
-  runManager->SetUserAction(new ExN04StackingAction);
-  runManager->SetUserAction(new ExN04TrackingAction);
-  runManager->SetUserAction(new ExN04SteppingAction);
+  // User Action classes
+  //
+  G4VUserPrimaryGeneratorAction* gen_action = new ExN04PrimaryGeneratorAction;
+  runManager->SetUserAction(gen_action);
+  //
+  G4UserRunAction* run_action = new ExN04RunAction;
+  runManager->SetUserAction(run_action);
+  //
+  G4UserEventAction* event_action = new ExN04EventAction;
+  runManager->SetUserAction(event_action);
+  //
+  G4UserStackingAction* stacking_action = new ExN04StackingAction;
+  runManager->SetUserAction(stacking_action);
+  //
+  G4UserTrackingAction* tracking_action = new ExN04TrackingAction;
+  runManager->SetUserAction(tracking_action);
+  //
+  G4UserSteppingAction* stepping_action = new ExN04SteppingAction;
+  runManager->SetUserAction(stepping_action);
   
   //get the pointer to the User Interface manager   
   G4UImanager* UImanager = G4UImanager::GetUIpointer();  
 
-  if(argc==1)
+  if(argc==1)  // Define (G)UI terminal for interactive mode
   {
-    // G4UIterminal is a (dumb) terminal.
+    // G4UIterminal is a (dumb) terminal
+    //
 #ifdef G4UI_USE_TCSH
     G4UIsession* session = new G4UIterminal(new G4UItcsh);      
 #else
@@ -94,18 +112,22 @@ int main(int argc,char** argv)
     session->SessionStart();
     delete session;
   }
-  else
+  else   // Batch mode
   {
     G4String command = "/control/execute ";
     G4String fileName = argv[1];
     UImanager->ApplyCommand(command+fileName);
   }
 
-  delete runManager;
+  // Free the store: user actions, physics_list and detector_description are
+  //                 owned and deleted by the run manager, so they should not
+  //                 be deleted in the main() program !
+
 #ifdef G4VIS_USE
   delete visManager;
 #endif
+  delete runManager;
+  delete verbosity;
 
   return 0;
 }
-

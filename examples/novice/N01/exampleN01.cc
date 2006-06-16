@@ -21,17 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: exampleN01.cc,v 1.4 2002-01-09 17:23:47 ranjard Exp $
+// $Id: exampleN01.cc,v 1.5 2006-06-16 10:20:01 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // --------------------------------------------------------------
-//      GEANT 4 - exampleN01 
-//
-// --------------------------------------------------------------
-// Comments
-//
-// 
+//      GEANT 4 - exampleN01
 // --------------------------------------------------------------
 
 #include "G4RunManager.hh"
@@ -41,34 +36,49 @@
 #include "ExN01PhysicsList.hh"
 #include "ExN01PrimaryGeneratorAction.hh"
 
-
 int main()
 {
   // Construct the default run manager
+  //
   G4RunManager* runManager = new G4RunManager;
 
   // set mandatory initialization classes
-  runManager->SetUserInitialization(new ExN01DetectorConstruction);
-  runManager->SetUserInitialization(new ExN01PhysicsList);
+  //
+  G4VUserDetectorConstruction* detector = new ExN01DetectorConstruction;
+  runManager->SetUserInitialization(detector);
+  //
+  G4VUserPhysicsList* physics = new ExN01PhysicsList;
+  runManager->SetUserInitialization(physics);
 
   // set mandatory user action class
-  runManager->SetUserAction(new ExN01PrimaryGeneratorAction);
+  //
+  G4VUserPrimaryGeneratorAction* gen_action = new ExN01PrimaryGeneratorAction;
+  runManager->SetUserAction(gen_action);
 
   // Initialize G4 kernel
+  //
   runManager->Initialize();
 
-  // get the pointer to the UI manager and set verbosities
+  // Get the pointer to the UI manager and set verbosities
+  //
   G4UImanager* UI = G4UImanager::GetUIpointer();
   UI->ApplyCommand("/run/verbose 1");
   UI->ApplyCommand("/event/verbose 1");
   UI->ApplyCommand("/tracking/verbose 1");
 
-  // start a run
-  int numberOfEvent = 3;
+  // Start a run
+  //
+  G4int numberOfEvent = 3;
   runManager->BeamOn(numberOfEvent);
 
-  // job termination
+  // Job termination
+  //
+  // Free the store: user actions, physics_list and detector_description are
+  //                 owned and deleted by the run manager, so they should not
+  //                 be deleted in the main() program !
+  //
   delete runManager;
+
   return 0;
 }
 
