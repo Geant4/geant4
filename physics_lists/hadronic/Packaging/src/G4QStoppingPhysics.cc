@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4QStoppingPhysics.cc,v 1.3 2006-06-14 12:05:25 vnivanch Exp $
+// $Id: G4QStoppingPhysics.cc,v 1.4 2006-06-16 09:59:29 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -36,7 +36,6 @@
 
 #include "G4QStoppingPhysics.hh"
 
-#include "G4MuonMinusCaptureAtRest.hh"
 #include "G4QCaptureAtRest.hh"
 
 #include "G4ParticleDefinition.hh"

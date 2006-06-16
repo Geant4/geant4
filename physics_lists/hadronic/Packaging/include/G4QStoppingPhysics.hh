@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4QStoppingPhysics.hh,v 1.2 2006-06-06 16:47:44 vnivanch Exp $
+// $Id: G4QStoppingPhysics.hh,v 1.3 2006-06-16 09:59:29 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -39,8 +39,8 @@
 
 #include "globals.hh"
 #include "G4VPhysicsConstructor.hh"
+#include "G4MuonMinusCaptureAtRest.hh"
 
-class G4MuonMinusCaptureAtRest;
 class G4QCaptureAtRest;
 
 class G4QStoppingPhysics : public G4VPhysicsConstructor
