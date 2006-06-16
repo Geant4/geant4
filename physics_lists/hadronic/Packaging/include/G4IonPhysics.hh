@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4IonPhysics.hh,v 1.3 2006-06-06 16:47:44 vnivanch Exp $
+// $Id: G4IonPhysics.hh,v 1.4 2006-06-16 17:41:31 ribon Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -41,8 +41,6 @@
 
 #include "G4VPhysicsConstructor.hh"
 
-class  G4LElastic;
-class  G4HadronElasticProcess;
 class  G4DeuteronInelasticProcess;
 class  G4LEDeuteronInelastic;
 class  G4TritonInelasticProcess;
@@ -66,29 +64,19 @@ public:
   virtual void ConstructProcess();
 
 private:
-  // Elastic Process
-  G4LElastic*                 theElasticModel;
-
-  // Generic Ion physics
-  G4HadronElasticProcess*     theIonElasticProcess;
 
   // Deuteron physics
-  G4HadronElasticProcess*     theDElasticProcess;
   G4DeuteronInelasticProcess* fDeuteronProcess;
   G4LEDeuteronInelastic*      fDeuteronModel;
 
   // Triton physics
-  G4HadronElasticProcess*     theTElasticProcess;
   G4TritonInelasticProcess*   fTritonProcess;
   G4LETritonInelastic*        fTritonModel;
 
   // Alpha physics
-  G4HadronElasticProcess*     theAElasticProcess;
   G4AlphaInelasticProcess*    fAlphaProcess;
   G4LEAlphaInelastic*         fAlphaModel;
 
-  // He3 physics
-  G4HadronElasticProcess*     theHe3ElasticProcess;
 
   G4bool wasActivated;
 };

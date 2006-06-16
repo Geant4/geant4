@@ -29,7 +29,6 @@
 #include "G4ProtonInelasticProcess.hh"
 #include "G4VProtonBuilder.hh"
 
-#include "G4LElastic.hh"   
 #include "G4LEProtonInelastic.hh"
 #include "G4HEProtonInelastic.hh"
 
@@ -41,7 +40,7 @@ class G4LHEPProtonBuilder : public G4VProtonBuilder
 
   public: 
     virtual void Build(G4ProtonInelasticProcess * aP);
-    virtual void Build(G4HadronElasticProcess * aP);
+    virtual void Build(G4HadronElasticProcess *);
     
     void SetMinEnergy(G4double aM) 
     {
@@ -49,7 +48,6 @@ class G4LHEPProtonBuilder : public G4VProtonBuilder
     }
 
   private:
-    G4LElastic * theElasticModel;
     G4LEProtonInelastic * theLEProtonModel;
     G4HEProtonInelastic * theHEProtonModel;
     

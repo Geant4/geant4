@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4IonPhysics.cc,v 1.3 2006-06-06 16:47:45 vnivanch Exp $
+// $Id: G4IonPhysics.cc,v 1.4 2006-06-16 17:41:31 ribon Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -35,8 +35,6 @@
 //
 
 #include "G4IonPhysics.hh"
-#include "G4HadronElasticProcess.hh"
-#include "G4LElastic.hh"
 
 #include "G4DeuteronInelasticProcess.hh"
 #include "G4LEDeuteronInelastic.hh"
@@ -63,18 +61,12 @@ G4IonPhysics::~G4IonPhysics()
 {
   if(wasActivated) {
 
-    delete theElasticModel;
-    delete theIonElasticProcess;
-    delete theDElasticProcess;
     delete fDeuteronProcess;
     delete fDeuteronModel;
-    delete theTElasticProcess;
     delete fTritonProcess;
     delete fTritonModel;
-    delete theAElasticProcess;
     delete fAlphaProcess;
     delete fAlphaModel;
-    delete theHe3ElasticProcess;
 
    }
  }
@@ -83,33 +75,12 @@ void G4IonPhysics::ConstructProcess()
 {
   G4ProcessManager * pManager = 0;
 
-  // Elastic Process
-  theElasticModel = new G4LElastic();
-
-  theIonElasticProcess = new G4HadronElasticProcess();
-  theDElasticProcess   = new G4HadronElasticProcess();
-  theTElasticProcess   = new G4HadronElasticProcess();
-  theAElasticProcess   = new G4HadronElasticProcess();
-  theHe3ElasticProcess = new G4HadronElasticProcess();
-
-  theIonElasticProcess->RegisterMe(theElasticModel);
-  theDElasticProcess->RegisterMe(theElasticModel);
-  theTElasticProcess->RegisterMe(theElasticModel);
-  theAElasticProcess->RegisterMe(theElasticModel);
-  theHe3ElasticProcess->RegisterMe(theElasticModel);
-
-  // Generic Ion
-  pManager = G4GenericIon::GenericIon()->GetProcessManager();
-  // add process
-  pManager->AddDiscreteProcess(theIonElasticProcess);
-
-  // Deuteron
+ // Deuteron
   pManager = G4Deuteron::Deuteron()->GetProcessManager();
   // add process
   fDeuteronModel = new G4LEDeuteronInelastic();
   fDeuteronProcess = new G4DeuteronInelasticProcess();
   fDeuteronProcess->RegisterMe(fDeuteronModel);
-  pManager->AddDiscreteProcess(theDElasticProcess);
   pManager->AddDiscreteProcess(fDeuteronProcess);
 
   // Triton
@@ -118,7 +89,6 @@ void G4IonPhysics::ConstructProcess()
   fTritonModel = new G4LETritonInelastic();
   fTritonProcess = new G4TritonInelasticProcess();
   fTritonProcess->RegisterMe(fTritonModel);
-  pManager->AddDiscreteProcess(theTElasticProcess);
   pManager->AddDiscreteProcess(fTritonProcess);
 
   // Alpha
@@ -127,13 +97,7 @@ void G4IonPhysics::ConstructProcess()
   fAlphaModel = new G4LEAlphaInelastic();
   fAlphaProcess = new G4AlphaInelasticProcess();
   fAlphaProcess->RegisterMe(fAlphaModel);
-  pManager->AddDiscreteProcess(theAElasticProcess);
   pManager->AddDiscreteProcess(fAlphaProcess);
-
-  // He3
-  pManager = G4He3::He3()->GetProcessManager();
-  // add process
-  pManager->AddDiscreteProcess(theHe3ElasticProcess);
 
   wasActivated = true;
 }

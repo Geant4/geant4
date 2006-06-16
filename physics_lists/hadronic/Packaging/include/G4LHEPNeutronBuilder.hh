@@ -31,7 +31,6 @@
 #include "G4NeutronInelasticProcess.hh"
 #include "G4VNeutronBuilder.hh"
 
-#include "G4LElastic.hh"   
 #include "G4LFission.hh"
 #include "G4LCapture.hh"
 #include "G4LENeutronInelastic.hh"
@@ -44,7 +43,7 @@ class G4LHEPNeutronBuilder : public G4VNeutronBuilder
     virtual ~G4LHEPNeutronBuilder();
 
   public: 
-    virtual void Build(G4HadronElasticProcess * aP);
+    virtual void Build(G4HadronElasticProcess *);
     virtual void Build(G4HadronFissionProcess * aP);
     virtual void Build(G4HadronCaptureProcess * aP);
     virtual void Build(G4NeutronInelasticProcess * aP);
@@ -60,7 +59,6 @@ class G4LHEPNeutronBuilder : public G4VNeutronBuilder
     }
 
   private:
-    G4LElastic * theElasticModel;
     G4LENeutronInelastic * theLENeutronModel;
     G4HENeutronInelastic * theHENeutronModel;
     G4LFission * theNeutronFissionModel;

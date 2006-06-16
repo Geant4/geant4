@@ -26,7 +26,6 @@
 #include "globals.hh"
 #include "G4ios.hh"
 
-#include "G4LElastic.hh"
 #include "G4VPiKBuilder.hh"
 
 #include "G4LEPionPlusInelastic.hh"
@@ -50,7 +49,7 @@ class G4LHEPPiKBuilder : public G4VPiKBuilder
     virtual ~G4LHEPPiKBuilder();
     
   public: 
-    virtual void Build(G4HadronElasticProcess * aP);
+    virtual void Build(G4HadronElasticProcess *);
     virtual void Build(G4PionPlusInelasticProcess * aP);
     virtual void Build(G4PionMinusInelasticProcess * aP);
     virtual void Build(G4KaonPlusInelasticProcess * aP);
@@ -71,8 +70,6 @@ class G4LHEPPiKBuilder : public G4VPiKBuilder
   private:
     G4double theM;
     G4double theMinPion;
-    
-    G4LElastic * theElasticModel;
     
     // Pi + 
     G4LEPionPlusInelastic* theLEPionPlusModel;

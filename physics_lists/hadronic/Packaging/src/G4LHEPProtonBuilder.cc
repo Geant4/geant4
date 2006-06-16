@@ -34,16 +34,13 @@ G4LHEPProtonBuilder()
 G4LHEPProtonBuilder::
 ~G4LHEPProtonBuilder() 
 {
-  delete theElasticModel;
   delete theLEProtonModel;
   delete theHEProtonModel;
 }
 
 void G4LHEPProtonBuilder::
-Build(G4HadronElasticProcess * aP)
+Build(G4HadronElasticProcess *)
 {
-  theElasticModel = new G4LElastic();
-  aP->RegisterMe(theElasticModel);
 }
 
 void G4LHEPProtonBuilder::

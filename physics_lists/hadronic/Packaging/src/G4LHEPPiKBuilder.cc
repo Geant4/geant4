@@ -33,7 +33,6 @@
 G4LHEPPiKBuilder::
 G4LHEPPiKBuilder()  
 {
-  theElasticModel = new G4LElastic();
   theM = 0;
   theMinPion = theM;
 }
@@ -41,15 +40,13 @@ G4LHEPPiKBuilder()
 G4LHEPPiKBuilder::
 ~G4LHEPPiKBuilder() 
 {
-  delete theElasticModel;
   delete theLEPionPlusModel;
   delete theHEPionPlusModel;
 }
 
 void G4LHEPPiKBuilder::
-Build(G4HadronElasticProcess * aP)
+Build(G4HadronElasticProcess *)
 {
-  aP->RegisterMe(theElasticModel);
 }
 
 void G4LHEPPiKBuilder::

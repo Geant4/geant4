@@ -35,7 +35,6 @@
  G4LHEPNeutronBuilder::
  ~G4LHEPNeutronBuilder() 
 {
-  delete theElasticModel;
   delete theLENeutronModel;
   delete theHENeutronModel;
 }
@@ -61,11 +60,8 @@
  }
 
  void G4LHEPNeutronBuilder::
- Build(G4HadronElasticProcess * aP)
+ Build(G4HadronElasticProcess *)
  {
-   theElasticModel = new G4LElastic();
-   theElasticModel->SetMinEnergy(theMin);
-   aP->RegisterMe(theElasticModel);
  }
 
  void G4LHEPNeutronBuilder::
