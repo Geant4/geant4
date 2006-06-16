@@ -1,4 +1,4 @@
-$Id: History,v 1.46 2006-06-15 16:55:22 gcosmo Exp $
+$Id: History,v 1.47 2006-06-16 10:16:45 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+16-06-06 Gabriele Cosmo (exampleN04-V08-00-01)
+- Use coherent allocation scheme for user-classes and
+  initialisation in main().
 
 15-06-06 Gabriele Cosmo (exampleN04-V08-00-00)
 - Separate instantiation of the user-stepping-verbose class from
