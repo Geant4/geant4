@@ -1,4 +1,4 @@
-$Id: History,v 1.32 2006-06-15 20:58:57 gum Exp $
+$Id: History,v 1.33 2006-06-16 10:13:58 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+16th June 2006 Gabriele Cosmo (exampleN06-V08-00-02)
+- Use coherent allocation scheme for user-classes and
+  initialisation in main().
 
 15th June 2006 Peter Gumplinger (exampleN06-V08-00-01)
 - add new method ExN06PrimaryGeneratorAction::SetOptPhotonPolar()
