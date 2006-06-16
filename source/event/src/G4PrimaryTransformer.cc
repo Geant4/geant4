@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PrimaryTransformer.cc,v 1.24 2006-06-15 23:44:06 asaim Exp $
+// $Id: G4PrimaryTransformer.cc,v 1.25 2006-06-16 17:11:58 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -103,6 +103,7 @@ void G4PrimaryTransformer::GenerateSingleTrack
       G4double x0,G4double y0,G4double z0,G4double t0,G4double wv)
 {
   static G4ParticleDefinition* optPhoton = 0;
+  static G4int nWarn = 0;
   if(!optPhoton) optPhoton = particleTable->FindParticle("opticalphoton");
 
   G4ParticleDefinition* partDef = GetDefinition(primaryParticle);
@@ -140,8 +141,13 @@ void G4PrimaryTransformer::GenerateSingleTrack
       new G4DynamicParticle(partDef,primaryParticle->GetMomentum());
     if(partDef==optPhoton && primaryParticle->GetPolarization().mag2()==0.)
     {
-      G4Exception("G4PrimaryTransformer::GenerateSingleTrack","ZeroPolarization",JustWarning,
-                  "Polarization of the optical photon is null. Random polarization is assumed.");
+      if(nWarn<10)
+      {
+        G4Exception("G4PrimaryTransformer::GenerateSingleTrack","ZeroPolarization",JustWarning,
+                    "Polarization of the optical photon is null. Random polarization is assumed.");
+        G4cerr << "This warning message is issued up to 10 times." << G4endl;
+        nWarn++;
+      }
 
       G4double angle = G4UniformRand() * 360.0*deg;
       G4ThreeVector normal (1., 0., 0.);
