@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.4 2006-06-01 10:15:14 witoldp Exp $
+# $Id: GNUmakefile,v 1.5 2006-06-16 16:52:41 witoldp Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.
 # Author: Radovan Chytracek
@@ -9,20 +9,8 @@ name := g4_gdml_read_write
 G4TARGET := $(name)
 G4EXLIB := true
 
-ifndef SCRAM_ARCH
-  SCRAM_ARCH := slc3_ia32_gcc323
-endif
-
 ifndef G4INSTALL
   G4INSTALL = ../../..
-endif
-
-ifndef GDML_BASE
-  GDML_BASE := /afs/cern.ch/sw/lcg/app/releases/GDML/GDML_2_6_0
-endif
-
-ifndef XERCESCROOT
-  XERCESCROOT := /afs/cern.ch/sw/lcg/external/XercesC/2.7.0/${SCRAM_ARCH}
 endif
 
 CPPFLAGS    += \
@@ -30,7 +18,7 @@ CPPFLAGS    += \
 	       	-I$(XERCESCROOT)/include
 
 EXTRALIBS   += \
-               -L$(GDML_BASE)/$(SCRAM_ARCH)/lib \
+               -L$(GDML_LIB) \
                -lG4Evaluator \
                -lG4Processor \
                -lG4Subscribers \
@@ -42,6 +30,16 @@ EXTRALIBS   += \
 
 .PHONY: all
 all: lib bin
+ifndef XERCESCROOT	
+	@echo XERCESCROOT not defined!
+endif
+ifndef GDML_BASE
+	@echo GDML_BASE not defined!
+endif
+ifndef GDML_LIB
+	@echo GDML_LIB not defined!
+endif
+
 
 include $(G4INSTALL)/config/binmake.gmk
 
