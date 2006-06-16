@@ -1,0 +1,8 @@
+<lcgdict>
+<class name="std::basic_string<char>" />
+<class name="G4String"/>
+<class name="G4VHit"/>
+<class name="ExP01TrackerHit"/>
+<class name="std::vector<ExP01TrackerHit*>"/>
+<class name="CLHEP::Hep3Vector"/>
+</lcgdict>
