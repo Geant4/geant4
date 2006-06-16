@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.1 2006-06-16 12:31:12 gcosmo Exp $
+# $Id: GNUmakefile,v 1.2 2006-06-16 13:08:03 gcosmo Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -48,5 +48,8 @@ endif
 	gcc -o ${G4WORKDIR}/bin/${G4SYSTEM}/readHits readHits.cc \
 	-Iinclude -I${ROOTSYS}/include -I${G4INCLUDE} -I${CLHEP_INCLUDE_DIR} \
 	${EXTRALIBS} -L${CLHEP_LIB_DIR} -l${CLHEP_LIB} -L${G4LIB}/${G4SYSTEM} ${LDLIBS2}
+
+clean_all: clean
+	@$(RM) hits.root
 
 include $(G4INSTALL)/config/binmake.gmk
