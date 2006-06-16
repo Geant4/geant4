@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmStandardPhysics72.cc,v 1.4 2006-06-15 17:50:14 vnivanch Exp $
+// $Id: G4EmStandardPhysics72.cc,v 1.5 2006-06-16 15:28:06 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -143,7 +143,7 @@ void G4EmStandardPhysics72::ConstructProcess()
     } else if (particleName == "e-") {
 
       msc = new G4MultipleScattering();
-      msc->MscStepLimitation(false,0.2);
+      msc->MscStepLimitation(true,0.1);
       G4eIonisation* eion = new G4eIonisation;
       eion->ActivateSubCutoff(true);
       G4eBremsstrahlung* brem = new G4eBremsstrahlung();
@@ -158,7 +158,7 @@ void G4EmStandardPhysics72::ConstructProcess()
     } else if (particleName == "e+") {
 
       msc = new G4MultipleScattering();
-      msc->MscStepLimitation(false,0.2);
+      msc->MscStepLimitation(true,0.1);
       if(verbose > 1)
         G4cout << "### EmStandard72 instantiates eIoni and msc71 for " 
                << particleName << G4endl;
