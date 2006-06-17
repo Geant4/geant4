@@ -1,17 +1,29 @@
 #!/usr/bin/python
 
 #--------------------------------------------------------------------
-# Last update: 17-Dec-2005
+# Last update: 17-Jun-2006
 #
-# This script should be run in the directory which has, as immediate
-# subdirectories, the results of the Grid validation testing,
-# which consist of tar-balls (one per subdirectory, each subdirectory
-# being a job).
+# This script should be run in the directory which has, either
+# as immediate subdirectories (in the case of Patricia's framework)
+# or in the same directory (in the case of GANGA/DIANE framework),
+# the results of the Grid validation testing, which consist of
+# tar-balls (a flat list of them in the case of GANGA/DIANE, or
+# one per subdirectory, each subdirectory being a job, in the case
+# of Patricia's framework).
 #
-# The script does is following: it goes in each subdirectory, unpackes
-# the tar-ball, keep a statistics of the files that should be contained
-# in such tar-ball, and look if the jobs have started running but not
-# terminated normally.
+# The script does the following.
+# First, if the tar-balls are all collected in the same main directory,
+# then subdirectories are created for each of them, keeping a similar
+# name, and then each tar-ball is moved in its corresponding
+# subdirectory.
+# Then it goes in each subdirectory (whether already present, as in
+# the case of Patricia's framework, or created in the previous step,
+# as in the case of GANGA/DIANE), with the only eventual exception
+# of "worker_*" subdirectories, if present (which is the case for
+# GANGA/DIANE framework), and unpackes the tar-ball, keep a
+# statistics of the files that should be contained in such tar-ball,
+# and look if the jobs have started running but not terminated
+# normally.
 # At the end, it prints out the above information, both as overall
 # statistics and also by calorimeter, by beam particle type, by
 # beam energy, by observables, and also produces the following files:
@@ -21,6 +33,10 @@
 #                              Geant4 job(s) started running but
 #                              did not terminated normally.
 #   o  listPS.txt : a list of .ps files that should be examined.
+#   o  listExpectedTarBallsFound, listExpectedTarBallsNotFound :
+#                   a list of the expected tar-balls that have been
+#                   found and not found, respectively.
+#                   See ***LOOKHERE*** to select the expected cases.
 #
 # This script can be run also to get only the statistics, without
 # unpacking the tar-balls: to do so, comment the line where
@@ -34,6 +50,26 @@
 import os
 import sys
 import string
+
+#***LOOKHERE*** Select the expected cases, to get at the end the
+#               list of missing cases (i.e. jobs that are either
+#               running or that never get back).
+listCalorimeters = ( 'FeSci', 'CuSci', 'CuLAr', 'WLAr', 'PbSci', 'PbLAr', 'PbWO4' )
+
+listBeamParticles = ( 'e-', 'pi+', 'pi-', 'k+', 'k-', 'p', 'n',
+#
+###                      'k0L',      # Selected only for the full production
+#
+                      )
+                      
+listBeamEnergies = ( '1GeV', '9GeV', '20GeV', '50GeV', '200GeV',                     
+#
+###                     '2GeV', '3GeV', '4GeV', '5GeV', '6GeV', '7GeV', '8GeV',
+###                     '10GeV', '30GeV', '60GeV', '80GeV',
+###                     '100GeV', '120GeV', '150GeV', '180GeV',
+###                     '250GeV', '300GeV'
+#
+                     )
 
 # The following dictionaries keep track, calorimeter by calorimeter,
 # beam particle by beam particle, and beam energy by beam energy, 
@@ -149,13 +185,39 @@ dictObservablesPS = { '1':0,
                       'R9':0,
                       'R>9':0 }
 
+os.system( "ls -1 *.tgz > listTarBalls.txt" )
+listTarBalls = open( "listTarBalls.txt" )
+for fileName in listTarBalls :
+    #print fileName.strip()
+    pureName = fileName.split( ".tgz" )[0]
+    #print " pureName = ", pureName
+    nameDir = "dir" + pureName
+    if ( os.path.exists( nameDir ) ) :
+        print " directory = ", nameDir, " existed already!"
+    else :
+        os.system( "mkdir " + nameDir )
+        print " directory = ", nameDir, " created!"
+        os.system( "mv " + fileName.strip() + " " + nameDir + "/." )
+listTarBalls.close()
+
+dictCases = {}
+for calo in listCalorimeters :
+    for particle in listBeamParticles :
+        for energy in listBeamEnergies :
+            case = calo + "-" + particle + "-" + energy
+            #print " case = ", case
+            dictCases[ case ] = 0
+print " Number of cases = ", len( dictCases )
+
+os.system( "ls -1F | grep / > listDir.txt" )
+listDir = open( "listDir.txt", "r" )
+
 listDirFailed = open( "listDirFailed.txt", "w" )
 listDirRunCrashed = open( "listDirRunCrashed.txt", "w" )
 listDirEnergyNotConserved = open( "listDirEnergyNotConserved.txt", "w" )
 listPS = open( "listPS.txt", "w" )
-
-os.system( "ls -1F | grep / > listDir.txt" )
-listDir = open( "listDir.txt", "r" )
+listExpectedTarBallsFound = open( "listExpectedTarBallsFound.txt", "w" )
+listExpectedTarBallsNotFound = open( "listExpectedTarBallsNotFound.txt", "w" )
 
 countDir = 0
 countDirWithRunCrashes = 0
@@ -166,6 +228,8 @@ countDirWithPS = 0
 countPS = 0
 
 for dir in listDir :
+    if ( dir.find( "worker_" ) > -1 ) :
+        continue
     #print dir
     countDir += 1 
     saveDir = os.getcwd()
@@ -184,6 +248,13 @@ for dir in listDir :
     foundPS = 0
     for iFile in listFiles :
         #print " iFile=", iFile
+
+        if ( iFile.find( ".tgz" ) > -1 ) :
+            for case in dictCases.keys() :
+                if ( iFile.find( case ) > -1 ) :
+                    dictCases[ case ] = 1
+                    break
+                
         if ( iFile.find( "output.log-" ) > -1 ) :
             # Look for runs that started but did not terminate.
             # Look also for total energy non conservation.
@@ -262,7 +333,20 @@ for dir in listDir :
     os.system( "rm listFiles.txt" )
     os.chdir( saveDir)
 
+countExpectedTarBallsFound = 0
+countExpectedTarBallsNotFound = 0
+for case in dictCases.keys() :
+    #print " case = ", case
+    if ( dictCases[ case ] ) :
+        listExpectedTarBallsFound.write( case + "\n" )
+        countExpectedTarBallsFound += 1
+    else :
+        listExpectedTarBallsNotFound.write( case + "\n" )
+        countExpectedTarBallsNotFound += 1
+
 print " Summary: "
+print " Number of found expected tar-balls = ", countExpectedTarBallsFound
+print " Number of NOT found expected tar-balls = ", countExpectedTarBallsNotFound
 print " Number of directories = ", countDir
 print " Number of directories with Run crashes = ", countDirWithRunCrashes
 print " Number of directories with Energy NOT conserved = ", \
