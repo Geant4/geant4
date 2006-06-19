@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.3 2006-04-18 08:46:34 vnivanch Exp $
+// $Id: RunAction.cc,v 1.4 2006-06-19 10:32:27 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -34,6 +34,7 @@
 #include "G4ProcessManager.hh"
 #include "G4UnitsTable.hh"
 #include "G4EmCalculator.hh"
+#include "G4Electron.hh"
 
 #include <vector>
 
@@ -66,12 +67,13 @@ void RunAction::BeginOfRunAction(const G4Run*)
   G4Material* material = detector->GetMaterial();
   G4String matName     = material->GetName();
   G4double density     = material->GetDensity();
-  
+  G4double radl        = material->GetRadlen();  
 
   G4cout << "\n " << partName << " ("
          << G4BestUnit(energy,"Energy") << ") in " 
 	 << material->GetName() << " (density: " 
-	 << G4BestUnit(density,"Volumic Mass") << ")" << G4endl;
+	 << G4BestUnit(density,"Volumic Mass") << ";   radiation length: "
+	 << G4BestUnit(radl,   "Length")       << ")" << G4endl;	 
 
   // get cuts	 
   GetCuts();
@@ -239,7 +241,9 @@ void RunAction::BeginOfRunAction(const G4Run*)
   G4cout << "\n \n  transport mean free path : " 
          << "\t" << std::setw(8) << G4BestUnit(MSmfp1,"Length")
          << " (" << std::setw(8) << G4BestUnit(MSmfp2,"Mass/Surface") << ")";
-	 
+
+  if (particle == G4Electron::Electron()) CriticalEnergy();
+  	 
   G4cout << "\n-------------------------------------------------------------\n";
   G4cout << G4endl;
        
@@ -285,6 +289,58 @@ void RunAction::GetCuts()
   energyCut[2] =      
          (*(theCoupleTable->GetEnergyCutsVector(idxG4PositronCut)))[index];
 
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void RunAction::CriticalEnergy()
+{
+  // compute e- critical energy (Rossi definition) and Moliere radius.
+  // Review of Particle Physics - Eur. Phys. J. C3 (1998) page 147
+  //
+  G4EmCalculator emCal;
+    
+  const G4Material* material = detector->GetMaterial();
+  const G4double radl = material->GetRadlen();
+  G4double ekin = 5*MeV;
+  G4double deioni;
+  G4double err  = 1., errmax = 0.001;
+  G4int    iter = 0 , itermax = 10;  
+  while (err > errmax && iter < itermax) {
+    iter++;          
+    deioni  = radl*
+              emCal.ComputeDEDX(ekin,G4Electron::Electron(),"eIoni",material);
+    err = std::abs(deioni - ekin)/ekin;
+    ekin = deioni;
+  }
+  G4cout << "\n \n  critical energy (Rossi)  : " 
+         << "\t" << std::setw(8) << G4BestUnit(ekin,"Energy");
+	 
+  //Pdg formula (only for single material)
+  G4double pdga[2] = { 610*MeV, 710*MeV };
+  G4double pdgb[2] = { 1.24, 0.92 };
+  G4double EcPdg = 0.;
+  
+  if (material->GetNumberOfElements() == 1) {
+    G4int istat = 0;
+    if (material->GetState() == kStateGas) istat = 1;  
+    G4double Zeff = material->GetZ() + pdgb[istat];
+    EcPdg = pdga[istat]/Zeff;
+    G4cout << "\t\t\t (from Pdg formula : " 
+           << std::setw(8) << G4BestUnit(EcPdg,"Energy") << ")";    
+  }
+     
+ const G4double Es = 21.2052*MeV;
+ G4double rMolier1 = Es/ekin, rMolier2 = rMolier1*radl;
+ G4cout << "\n  Moliere radius           : "
+        << "\t" << std::setw(8) << rMolier1 << " X0 "   
+        << "= " << std::setw(8) << G4BestUnit(rMolier2,"Length");
+	
+ if (material->GetNumberOfElements() == 1) {
+    G4double rMPdg = radl*Es/EcPdg;
+    G4cout << "\t (from Pdg formula : " 
+           << std::setw(8) << G4BestUnit(rMPdg,"Length") << ")";    
+  }	 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

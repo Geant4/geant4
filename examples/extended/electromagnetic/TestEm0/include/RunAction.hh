@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.hh,v 1.1 2006-03-18 11:02:15 maire Exp $
+// $Id: RunAction.hh,v 1.2 2006-06-19 10:32:27 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -51,6 +51,7 @@ class RunAction : public G4UserRunAction
     void   EndOfRunAction(const G4Run*);
     
     void GetCuts();
+    void CriticalEnergy();
                                     
   private:
     DetectorConstruction*   detector;
