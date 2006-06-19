@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 #--------------------------------------------------------------------
-# Last update: 17-Jun-2006
+# Last update: 19-Jun-2006
 #
 # This script should be run in the directory which has, either
 # as immediate subdirectories (in the case of Patricia's framework)
@@ -54,6 +54,14 @@ import string
 #***LOOKHERE*** Select the expected cases, to get at the end the
 #               list of missing cases (i.e. jobs that are either
 #               running or that never get back).
+listPhysicsLists = ( \
+                     'LHEP',
+                     'QGSP',
+                     'QGSC',
+                     'QGSP_BIC',
+                     'QGSP_BERT',
+                     )
+
 listCalorimeters = ( 'FeSci', 'CuSci', 'CuLAr', 'WLAr', 'PbSci', 'PbLAr', 'PbWO4' )
 
 listBeamParticles = ( 'e-', 'pi+', 'pi-', 'k+', 'k-', 'p', 'n',
@@ -201,12 +209,13 @@ for fileName in listTarBalls :
 listTarBalls.close()
 
 dictCases = {}
-for calo in listCalorimeters :
-    for particle in listBeamParticles :
-        for energy in listBeamEnergies :
-            case = calo + "-" + particle + "-" + energy
-            #print " case = ", case
-            dictCases[ case ] = 0
+for phylis in listPhysicsLists :
+    for calo in listCalorimeters :
+        for particle in listBeamParticles :
+            for energy in listBeamEnergies :
+                case = phylis + "-" + calo + "-" + particle + "-" + energy
+                #print " case = ", case
+                dictCases[ case ] = 0
 print " Number of cases = ", len( dictCases )
 
 os.system( "ls -1F | grep / > listDir.txt" )
