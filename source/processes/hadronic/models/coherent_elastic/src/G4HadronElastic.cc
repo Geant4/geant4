@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HadronElastic.cc,v 1.15 2006-06-01 14:00:10 vnivanch Exp $
+// $Id: G4HadronElastic.cc,v 1.16 2006-06-19 08:08:39 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -149,10 +149,8 @@ G4HadFinalState* G4HadronElastic::ApplyYourself(
 
   // Choose generator
   G4ElasticGenerator gtype = fLElastic;
-  if ((theParticle == theProton || theParticle == theNeutron) && Z <= 2) {
+  if ((theParticle == theProton || theParticle == theNeutron) && Z == 1) {
     gtype = fQElastic;
-    if(Z == 1 && N == 2) N = 1;
-    else if (Z == 2 && N == 1) N = 2;
   } else if(ekin >= ekinhigh) {
     gtype = fHElastic;
   } else if(plab <= plablow) {
@@ -192,7 +190,7 @@ G4HadFinalState* G4HadronElastic::ApplyYourself(
   if(std::abs(cost) > 1.0) cost = -1.0 + 2.0*G4UniformRand();
   G4double sint = std::sqrt((1.0-cost)*(1.0+cost));
   
-  if (verboseLevel > 1) 
+  if (verboseLevel>1) 
     G4cout << "cos(t)=" << cost << " sin(t)=" << sint << G4endl;
 
   G4ThreeVector v1(sint*std::cos(phi),sint*std::sin(phi),cost);
