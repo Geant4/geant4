@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmExtraPhysics.cc,v 1.3 2006-06-06 16:47:44 vnivanch Exp $
+// $Id: G4EmExtraPhysics.cc,v 1.4 2006-06-19 21:34:47 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -31,6 +31,7 @@
 //
 // Modified:
 // 10.11.2005 V.Ivanchenko edit to provide a standard
+// 19.06.2006 V.Ivanchenko add mu-nuclear process
 //
 //----------------------------------------------------------------------------
 //
@@ -48,8 +49,8 @@
 
 G4EmExtraPhysics::G4EmExtraPhysics(const G4String& name): G4VPhysicsConstructor(name),
   wasActivated(false), synchOn(false),
-  gammNucOn(true), theElectronSynch(0), thePositronSynch(0),
-  theGNPhysics(0)
+  gammNucOn(true), muNucOn(false), theElectronSynch(0), thePositronSynch(0),
+  theGNPhysics(0),theMuNuc1(0),theMuNuc2(0)
 {
   theMessenger = new G4EmMessenger(this);
 }
@@ -60,6 +61,8 @@ G4EmExtraPhysics::~G4EmExtraPhysics()
   if(theElectronSynch) delete theElectronSynch;
   if(thePositronSynch) delete thePositronSynch;
   if(theGNPhysics)     delete theGNPhysics;
+  if(theMuNuc1)        delete theMuNuc1;
+  if(theMuNuc2)        delete theMuNuc2;
 }
 
 void G4EmExtraPhysics::Synch(G4String & newState)
@@ -72,6 +75,12 @@ void G4EmExtraPhysics::GammaNuclear(G4String & newState)
 {
   if(newState == "on") gammNucOn = true;
   else                 gammNucOn = false;
+}
+
+void G4EmExtraPhysics::MuonNuclear(G4String & newState)
+{
+  if(newState == "on") muNucOn = true;
+  else                 muNucOn = false;
 }
 
 void G4EmExtraPhysics::ConstructParticle()
@@ -98,5 +107,14 @@ void G4EmExtraPhysics::ConstructProcess()
   if (gammNucOn) {
     theGNPhysics = new G4ElectroNuclearBuilder();
     theGNPhysics->Build();
+  }
+  if(muNucOn) {
+    pManager  = G4MuonPlus::MuonPlus()->GetProcessManager();
+    theMuNuc1 = new G4MuNuclearInteraction("muNucl");
+    pManager->AddDiscreteProcess(theMuNuc1);
+
+    pManager  = G4MuonMinus::MuonMinus()->GetProcessManager();
+    theMuNuc2 = new G4MuNuclearInteraction("muNucl");
+    pManager->AddDiscreteProcess(theMuNuc2);
   }
 }

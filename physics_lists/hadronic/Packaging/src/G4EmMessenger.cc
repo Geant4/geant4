@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmMessenger.cc,v 1.5 2006-06-06 16:47:44 vnivanch Exp $
+// $Id: G4EmMessenger.cc,v 1.6 2006-06-19 21:34:47 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -31,6 +31,7 @@
 //
 // Modified:
 // 09.11.2005 V.Ivanchenko edit to provide a standard
+// 19.06.2006 V.Ivanchenko add mu-nuclear process
 //
 //----------------------------------------------------------------------------
 //
@@ -63,12 +64,21 @@ G4EmMessenger::G4EmMessenger(G4EmExtraPhysics* ab)
   theGN->SetCandidates("on off");
   theGN->SetDefaultValue("on");
   theGN->AvailableForStates(G4State_PreInit);
+
+  // command for muon nuclear physics.
+  theMUN = new G4UIcmdWithAString("/physics_engine/tailor/MuonNuclear",this);
+  theMUN->SetGuidance("Switching on muon nuclear physics.");
+  theMUN->SetParameterName("status","off");
+  theMUN->SetCandidates("on off");
+  theMUN->SetDefaultValue("off");
+  theMUN->AvailableForStates(G4State_PreInit);
 }
 
 G4EmMessenger::~G4EmMessenger()
 {
   delete theSynch;
   delete theGN;
+  delete theMUN;
   delete aDir1;
   delete aDir2;
 }
@@ -77,4 +87,5 @@ void G4EmMessenger::SetNewValue(G4UIcommand* aComm, G4String aS)
 {
   if(aComm==theSynch) theB->Synch(aS);
   if(aComm==theGN)    theB->GammaNuclear(aS);
+  if(aComm==theMUN)   theB->MuonNuclear(aS);
 }

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: QGSP_EMV.icc,v 1.6 2006-06-16 15:28:06 vnivanch Exp $
+// $Id: QGSP_EMV.icc,v 1.7 2006-06-19 21:34:47 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -36,6 +36,7 @@
 // 02.12.2005 V.Ivanchenko: rename components
 // 08.06.2006 V.Ivanchenko: migration to CHIPS stopping
 // 15.06.2006 G.Folger: Migrate to HadronElasticPhysics using improved elastic
+// 19.06.2006 V.Ivanchenko: use 7 mm default cut
 //
 //----------------------------------------------------------------------------
 //

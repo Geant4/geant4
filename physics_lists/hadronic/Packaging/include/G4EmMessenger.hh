@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmMessenger.hh,v 1.3 2006-06-06 16:47:44 vnivanch Exp $
+// $Id: G4EmMessenger.hh,v 1.4 2006-06-19 21:34:47 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -31,6 +31,7 @@
 //
 // Modified:
 // 09.11.2005 V.Ivanchenko edit to provide a standard
+// 19.06.2006 V.Ivanchenko add mu-nuclear process
 //
 //----------------------------------------------------------------------------
 //
@@ -56,6 +57,7 @@ private:
   G4EmExtraPhysics*   theB;
   G4UIcmdWithAString* theSynch;
   G4UIcmdWithAString* theGN;
+  G4UIcmdWithAString* theMUN;
   G4UIdirectory*      aDir1;
   G4UIdirectory*      aDir2;
 };

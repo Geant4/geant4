@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmExtraPhysics.hh,v 1.3 2006-06-06 16:47:44 vnivanch Exp $
+// $Id: G4EmExtraPhysics.hh,v 1.4 2006-06-19 21:34:47 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -31,6 +31,7 @@
 //
 // Modified:
 // 10.11.2005 V.Ivanchenko edit to provide a standard
+// 19.06.2006 V.Ivanchenko add mu-nuclear process
 //
 //----------------------------------------------------------------------------
 //
@@ -45,6 +46,7 @@
 
 #include "G4SynchrotronRadiation.hh"
 #include "G4ElectroNuclearBuilder.hh"
+#include "G4MuNuclearInteraction.hh"
 
 class G4EmExtraPhysics : public G4VPhysicsConstructor
 {
@@ -57,17 +59,21 @@ public:
 
   void Synch(G4String & aState);
   void GammaNuclear(G4String & aState);
+  void MuonNuclear(G4String & aState);
 
 private:
 
   G4bool wasActivated;
   G4bool synchOn;
   G4bool gammNucOn;
+  G4bool muNucOn;
 
   G4EmMessenger*           theMessenger;
   G4SynchrotronRadiation*  theElectronSynch;
   G4SynchrotronRadiation*  thePositronSynch;
   G4ElectroNuclearBuilder* theGNPhysics;
+  G4MuNuclearInteraction*  theMuNuc1;
+  G4MuNuclearInteraction*  theMuNuc2;
 };
 
 #endif
