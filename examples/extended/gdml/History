@@ -1,4 +1,4 @@
-$Id: History,v 1.7 2006-06-19 09:40:06 witoldp Exp $
+$Id: History,v 1.8 2006-06-19 12:11:11 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,10 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-June 19th, 2006 W. Pokorski
-- updated makefile (added G4Evaluator for new version of GDML)
 
-3rd May 2005  John Allison  (examples-V07-00-03)
+June 19th, 2006  W.Pokorski - exgdml-V08-00-00
+- Added G4Evaluator for new version of GDML.
+- Updated GNUmakefile.
+
+May 3rd, 2005  J.Allison
 - Replaced vis manager with G4VisExecutive.
 
 Dec 7th, 2004  R.Chytracek, W.Pokorski - exgdml-V06-02-00
