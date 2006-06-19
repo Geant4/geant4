@@ -57,19 +57,26 @@
       return &theParticleChange;      
     }
 
-    G4double N = targetNucleus.GetN();
+    G4double A = targetNucleus.GetN();
     G4double Z = targetNucleus.GetZ();
-    G4double theAtomicMass = targetNucleus.AtomicMass( N, Z );
+    G4double theAtomicMass = targetNucleus.AtomicMass( A, Z );
     G4double massVec[9];
-    massVec[0] = targetNucleus.AtomicMass( N+2.0, Z+1.0 );
-    massVec[1] = targetNucleus.AtomicMass( N+1.0, Z+1.0 );
-    massVec[2] = targetNucleus.AtomicMass( N+1.0, Z     );
+    massVec[0] = targetNucleus.AtomicMass( A+2.0, Z+1.0 );
+    massVec[1] = targetNucleus.AtomicMass( A+1.0, Z+1.0 );
+    massVec[2] = targetNucleus.AtomicMass( A+1.0, Z     );
     massVec[3] = theAtomicMass;
-    massVec[4] = targetNucleus.AtomicMass( N-1.0, Z     );
-    massVec[5] = targetNucleus.AtomicMass( N-2.0, Z-1.0 );
-    massVec[6] = targetNucleus.AtomicMass( N,     Z+1.0 );
+    massVec[4] = 0.;
+    if (A > 1.0 && A-1.0 > Z) 
+        massVec[4] = targetNucleus.AtomicMass( A-1.0, Z     );
+    massVec[5] = 0.;
+    if (A > 2.0 && Z > 1.0 && A-2.0 > Z-1.0) 
+        massVec[5] = targetNucleus.AtomicMass( A-2.0, Z-1.0 );
+    massVec[6] = 0.;
+    if (A > Z+1.0) 
+        massVec[6] = targetNucleus.AtomicMass( A,     Z+1.0 );
     massVec[7] = massVec[3];
-    massVec[8] = targetNucleus.AtomicMass( N,     Z-1.0 );
+    massVec[8] = 0.;
+    if (Z > 1.0) massVec[8] = targetNucleus.AtomicMass( A,Z-1.0 );
     
     G4FastVector<G4ReactionProduct,4> vec;  // vec will contain the secondary particles
     G4int vecLen = 0;

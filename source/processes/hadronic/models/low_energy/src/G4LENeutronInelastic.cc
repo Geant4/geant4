@@ -218,13 +218,25 @@
     G4double massVec[9];
     massVec[0] = targetNucleus.AtomicMass( A+1.0, Z     );
     massVec[1] = theAtomicMass;
-    massVec[2] = targetNucleus.AtomicMass( A    , Z-1.0 );
-    massVec[3] = targetNucleus.AtomicMass( A-1.0, Z-1.0 );
-    massVec[4] = targetNucleus.AtomicMass( A-2.0, Z-1.0 );
-    massVec[5] = targetNucleus.AtomicMass( A-3.0, Z-2.0 );
-    massVec[6] = targetNucleus.AtomicMass( A-1.0, Z     );
+    massVec[2] = 0.;
+    if (Z > 1.0) 
+        massVec[2] = targetNucleus.AtomicMass( A    , Z-1.0 );
+    massVec[3] = 0.;
+    if (Z > 1.0 && A > 1.0) 
+        massVec[3] = targetNucleus.AtomicMass( A-1.0, Z-1.0 );
+    massVec[4] = 0.;
+    if (Z > 1.0 && A > 2.0 && A-2.0 > Z-1.0)
+        massVec[4] = targetNucleus.AtomicMass( A-2.0, Z-1.0 );
+    massVec[5] = 0.;
+    if (Z > 2.0 && A > 3.0 && A-3.0 > Z-2.0)
+        massVec[5] = targetNucleus.AtomicMass( A-3.0, Z-2.0 );
+    massVec[6] = 0.;
+    if (A > 1.0 && A-1.0 > Z) 
+        massVec[6] = targetNucleus.AtomicMass( A-1.0, Z     );
     massVec[7] = massVec[3];
-    massVec[8] = targetNucleus.AtomicMass( A-1.0, Z-2.0 );
+    massVec[8] = 0.;
+    if (Z > 2.0 && A > 1.0)
+        massVec[8] = targetNucleus.AtomicMass( A-1.0, Z-2.0 );
     
     theReactionDynamics.NuclearReaction( vec, vecLen, originalIncident,
                                          targetNucleus, theAtomicMass, massVec );
