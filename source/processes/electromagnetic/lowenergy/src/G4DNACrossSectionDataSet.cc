@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DNACrossSectionDataSet.cc,v 1.1 2005-07-07 16:26:10 capra Exp $
+// $Id: G4DNACrossSectionDataSet.cc,v 1.2 2006-06-19 15:08:49 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Riccardo Capra <capra@ge.infn.it>
@@ -35,6 +35,7 @@
 #include "G4VDataSetAlgorithm.hh"
 #include "G4EMDataSet.hh"
 #include <vector>
+#include <fstream>
 #include <sstream>
 
 
