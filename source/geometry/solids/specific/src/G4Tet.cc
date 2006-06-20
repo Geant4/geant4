@@ -25,7 +25,7 @@
 // *                                                                  *
 // ********************************************************************
 //
-// $Id: G4Tet.cc,v 1.7 2005-11-10 15:59:19 allison Exp $
+// $Id: G4Tet.cc,v 1.8 2006-06-20 10:07:08 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Tet
@@ -53,7 +53,7 @@
 
 #include "G4Tet.hh"
 
-const char G4Tet::CVSVers[]="$Id: G4Tet.cc,v 1.7 2005-11-10 15:59:19 allison Exp $";
+const char G4Tet::CVSVers[]="$Id: G4Tet.cc,v 1.8 2006-06-20 10:07:08 gcosmo Exp $";
 
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
@@ -642,6 +642,21 @@ G4ThreeVector G4Tet::GetPointOnSurface() const
   else if( (chose>=aOne) && (chose < aOne+aTwo) ) {return p2;}
   else if( (chose>=aOne+aTwo) && (chose<aOne+aTwo+aThree) ) {return p3;}
   return p4;
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// GetVertices
+
+std::vector<G4ThreeVector> G4Tet::GetVertices() const 
+{
+  std::vector<G4ThreeVector> vertices(4);
+  vertices[0] = fAnchor;
+  vertices[1] = fP2;
+  vertices[2] = fP3;
+  vertices[3] = fP4;
+
+  return vertices;
 }
 
 // Methods for visualisation

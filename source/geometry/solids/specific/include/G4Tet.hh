@@ -26,7 +26,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Tet.hh,v 1.5 2005-11-10 15:59:19 allison Exp $
+// $Id: G4Tet.hh,v 1.6 2006-06-20 10:07:08 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -112,7 +112,7 @@ class G4Tet : public G4VSolid
       // persistifiable objects.
 
     const char* CVSHeaderVers()
-      { return "$Id: G4Tet.hh,v 1.5 2005-11-10 15:59:19 allison Exp $"; }
+      { return "$Id: G4Tet.hh,v 1.6 2006-06-20 10:07:08 gcosmo Exp $"; }
     const char* CVSFileVers()
       { return CVSVers; }
     void PrintWarnings(G4bool flag)
@@ -121,6 +121,8 @@ class G4Tet : public G4VSolid
                                   G4ThreeVector p2,
                                   G4ThreeVector p3,
                                   G4ThreeVector p4);
+    std::vector<G4ThreeVector> GetVertices() const;
+      // Return the four vertices of the shape.
 
   protected:  // with description
 
