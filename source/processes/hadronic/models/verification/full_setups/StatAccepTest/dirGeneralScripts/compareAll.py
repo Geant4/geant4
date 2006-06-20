@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 #--------------------------------------------------------------------
-# Last update: 13-Jun-2006
+# Last update: 20-Jun-2006
 #
 # This script should be run in the directory which has, as immediate
 # subdirectories, the results of the Grid validation testing,
@@ -1503,8 +1503,8 @@ for dir in listDir :
                                       ( dictBeamEResults[ iEnergy ][0] + 1,
                                         updatedResults )
                     
-    fileA.close()
-    fileB.close()
+        fileA.close()
+        fileB.close()
 
 print " "
 print " === SUMMARY === "
