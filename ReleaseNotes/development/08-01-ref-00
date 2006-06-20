@@ -1,0 +1,279 @@
+
+                       geant4-08-01-ref-00
+                       ===================
+
+Some of the development/fixes included since the last reference tag are:
+
+  o Enhancements to physics-lists and new configurations available.
+  o Fix in G4ParticleChangeForLoss to remove momentum change for AlongStep()
+    responsible for breaking transportation in field for charged particles
+    in previous development releases.
+  o New examples: advanced/microbeam, extended/hadronic/Hadr01,
+    extended/persistency/P01.
+  o Enhancements and fixes to the Configure script.
+
+---------- Reference-tag 'Release Notes' -----------
+
+
+Summarised, the list of changes is the following:
+
+config                                           config-V08-00-02
+------
+- Configure script (Configure-V08-00-02):
+  o Automatically set LD_LIBRARY_PATH for shared libraries
+    and binary PATH to binaries in the scripts.
+  o Fixed problem on setting shared libraries and corrected setting of
+    OGLHOME for MacOSX.
+  o Fixed typo for RAYTRACERX.
+  o Fixed problem in caching of DATA paths.
+  o Correct check/set for OpenInventor visualization driver.
+  o Probe for existance of X11, XM, XAW.
+- source/GNUmakefile (source-gmk-V08-00-00)
+  o Modified printout.
+- Removed defaults for X11, XM, XAW flags in architecture.gmk
+  and added explicit settings in architecture specific setups protected
+  for optional customisation.
+
+event                                            event-V08-00-04
+-----
+- Added zero vector check for polarization of optical photon in
+  G4PrimaryTransformer.
+
+geometry/divisions                               geomdiv-V08-00-03
+------------------
+- Minor fixes in unit tests.
+
+geometry/solids/CSG                              geom-csg-V08-00-01
+-------------------
+- G4Tubs: added protection against NaNs in CalculateExtent() to avoid
+  sqrt() of negative numbers due to round-off.
+- Updated unit tests testG4Sphere and testDistanceAccuracy.
+
+geometry/solids/specific                         geom-specific-V08-00-10
+------------------------
+- G4Polycone: added protection against NaNs in G4PolyconeSide::Normal()
+  for points at the origin.
+- Added accessor method GetVertices() in G4Tet to return the list of
+  vertices composing the solid. Required for GDML persistency. 
+
+global                                           global-V08-00-04
+------
+- Updated date for release 8.1 in G4Version.hh.
+
+processes/cuts                                   procuts-V08-00-03
+--------------
+- Fixed memory leaks in G4ProductionCutsTable and G4PhysicsTableHelper.
+
+processes/electromagnetic/utils                  emutils-V08-00-20
+-------------------------------
+- G4VEnergyLossProcess: fix not to change particle momentum for AlongStep().
+- G4EmCorrections: fixed compilation warnings on SUN-CC.
+
+processes/hadronic                               hadr-V08-00-00
+------------------
+- Comprehensive tag for release 8.1.
+- models/chiral_inv_phase_space/body (hadr-chips-body-V08-00-05)
+  o Introduced class G4QBesIKJY for Bessel I0/I1 and K0/K1 functions
+    in CHIPS Model.
+- models/coherent_elastic (ghad-cohe-V08-00-08)
+  o Added G4ChargeExchangeProcess. Cleanup of G4HadronElastic.
+  o Added regime of HElastic which is not using data files.
+  o Fixed compilation warnings at SUN-CC and WIN32-VC.
+  o Use sampling of final state for n, p scattering on deuteron
+    and alpha from LElastic.
+- models/de_excitation (hadr-deex-V08-00-03)
+  o photon_evaporation: in method G4NuclearLevelManager::MakeLevels(),
+    restrict the missing file warning to Z > 10.
+- models/im_r_matrix (had-im_r-V08-00-01)
+  o Minor bug fix in G4XPDGTotal and G4XnpTotalLowE.
+- models/low_energy (hadr-lep-V08-00-02)
+  o Avoid warning of bad (A,Z) from AtomicMass() by checking (A,Z) before
+    calling this method. Affects p, n, d, t. 
+- models/neutron_hp (hadr-hpn-V08-00-03)
+  o G4NeutronHPCaptureFS: changed default status of PhotonEvaporaton.
+  o Minor bug fix in G4NeutronHPContAngularPar and G4NeutronHPFissionFS.
+- models/parton_string/hadronization (had-hadronization-V08-00-01)
+  o Fixed charge check in G4HadronBuilder.
+- models/radioactive_decay (radioactive_decay-V08-00-03)
+  o Added test for negative lifetime in G4RadioactiveDecay::IsApplicable();
+    fixed problem connected with particle design in 8.0,
+- processes (hadr-proc-V08-00-00)
+  o Moved constructor and destructor for G4ElectronNuclearProcess and
+    G4PhotoNuclearProcess to be not inline.
+
+processes/management                             procman-V08-00-01
+--------------------
+- Added 'physicsModified' in activate/inactivate UI commands.
+
+track                                            track-V08-00-03
+-----
+- G4ParticleChangeForLoss: fix to remove momentum change for AlongStep()
+  responsible for breaking transportation in field for charged particles
+  in the past development releases.
+
+tracking                                         tracking-V08-00-04
+--------
+- Fixed implementation of static methods in G4VSteppingVerbose to be
+  NOT inline. Required also to allow DLL working on Windows.
+- Restored original CVS headers to files...
+
+visualization                                    vis-V08-00-13
+-------------
+- management (visman-V08-00-23)
+  o Changed re-computation of transients default to "off".
+  o Indent printing of models plus other minor improvements.
+  o Fixed bug in /vis/scene/endOfRunAction.
+  o Zeroed modeling parameters pointer after use.
+  o /vis/viewer/create: fixed view parameters copy to self.
+  o Removed obsolete G4Scene:Clear().
+  o Require Idle state for transient re-computation.
+  o Reduced dependency on Run category (still used for transient
+    re-computation).
+  o /vis/.../list commands: Default verbosity changed to "warnings".
+- modeling (modeling-V08-00-14)
+  o Removed dependency on Run category.
+  o Protect zero pointer in output of G4ModelingParameters.
+  o Added protection for zero visualization attributes.
+  o Fixes for SUN-CC and bug fix in G4PhysicalVolumeModel.
+  o Indent printing of models, fix trivial compiler warnings.
+- DAWN (DAWN-V08-00-04)
+  o Fixed rewind and file closure on exit.
+  o Handle file closing in DAWNFILE destructor.
+- HepRep (vis-HepRep-V08-00-03)
+  o Improvements to HepRepFile.
+  o Removed dependency on Run category.
+- OpenGL (opengl-V08-00-08)
+  o Fixed buffering problem in WIN32-VC.
+- VRML (VRML-V08-00-02)
+  o Fixed rewind and file closure on exit.
+  o Protect zero model pointer.
+
+environments                                     envs-V08-00-07
+------------
+- Fixed problems of segmentation fault at termination in Geant4Py and
+  changed Python calls pass-by-reference.
+- Change install path of site-modules (lib/site-modules -> lib/) in Geant4Py
+  and removed COPYING statement.
+- Added new Geant4Py educational examples:
+  o education/lesson1 => measurement of the mass attenuation coefficient.
+  o education/lesson2 => Pythonized novice/N03.
+
+physics_lists                                    phys-lists-V08-00-10
+-------------
+- Archived 'electromagnetic' subdirectory.
+- Added QBBC Physics List: version of physics free of LHEP models but
+  using Binary, BinaryIon, Bertini, CHIPS, QGSC, FTFC.
+  QBBC is extended in order to have more options; added extra builders
+  QBBC, QBEC, QBEC_HP, QGSP, QGSP_BERT, QGSP_EL, QGSP_STP.
+  Using Bertini for kaons in QBBC.
+- Migrated stopping physics to CHIPS for all except LBE and LHEP.
+- Moved elastic out of Neutron/Proton/PIK- builders, and use
+  G4HadronElasticPhysics directly in PL.
+- Added mu-nuclear option to G4EmExtraBuilder.
+- Fixed bug in G4QStoppingPhysics and updated QGSP_EMV list.
+- Renamed G4EmStandardPhysics71 to G4EmStandardPhysics72:
+  o Defined StepFunction of e+ and e- (1.0, 1.0*mm) for G4EmStandardPhysics71
+    in order to have backward compatibility with the previous release.
+  o Added commands and fixed minor typo in G4EmMessenger.
+- Fixed problem in destructors of G4DecayPhysics and G4ElectroNuclearBuilder.
+  Fixed destructor also for G4MiscLHEPBuilder.
+- Fixed name of builder for HadronPhysicsQGSP_GN.
+- Renamed G4LElasticB to G4HadronElastic.
+
+examples                                         examples-V08-01-00
+--------
+- Updated reference outputs.
+- advanced/air_shower (air_shower-V08-00-01)
+  o RunAction: removed use of visualization UI commands, and small
+    changes in PrimaryGeneratorAction.
+- advanced/brachytherapy (brachy-V08-00-02)
+  o Delete hits collection. Energy deposit and position are stored
+    directly in histograms and ntuples in BrachyPhantomSD.
+  o Iteration in the management of the primary particles.
+  o More comments in code and README updated.
+- advanced/gammaray_telescope (gammaray_telescope-V08-00-02)
+  o Updates in Digi section, Physics Models, Source Generation.
+- advanced/hadrontherapy (hadrontherapy-V08-00-04)
+  o Changed the beam line according with a modification in the real
+    CATANA beam line considered as model.
+  o Improved the random generator.
+  o Bug fixed in all the hadronic physics lists; the hadronic
+    processes are not activated for He3 at the moment.
+  o Corrected a bug in the primary generator action on SetParticleMomentum().
+  o Comments in the primary particle and physics components.
+- advanced/medical_linac (medical_linac-V08-00-01)
+  o Changes in input macros.
+- advanced/microbeam (microbeam-V08-00-04)
+  o New example simulating the cellular irradiation beam line installed on
+    the AIFIRA electrostatic accelerator facility located at CENBG,
+    Bordeaux-Gradignan, France.
+- advanced/radioprotection (radioprotection-V08-00-01)
+  o Introduced pion absorption at rest in RemSimHadronicBinary.
+  o Primary particle generator can handle spectra.
+  o Added histograms and comments.
+- extended/analysis/A01 (exampleA01-V08-00-01)
+  o Added Time attribute to Hit classes.
+- extended/electromagnetic/TestEm0 (testem0-V08-00-04)
+  o Compute e- critical energy and Moliere radius.
+- extended/electromagnetic/TestEm2 (testem2-V08-00-05)
+  o PhysicsList: removed all Builders, replaced by PhysListEm.
+  o PrimaryGenerator: allow /gun/particle/position.
+  o RunAction: added printout of Moliere radius.
+- extended/electromagnetic/TestEm3 (testem3-V08-00-04)
+  o SteppingAction: replaced Touchable by TouchableHandle.
+- extended/electromagnetic/TestEm5 (testem5-V08-00-04)
+  o SteppingAction: use prePoint->GetTouchableHandle()->GetVolume().
+  o RunAction: Multiple-scattering projected angle, compute rms of
+    central part only.
+  o New input macros for e- back-scattering: acosta.mac tavora.mac.
+- extended/electromagnetic/TestEm7 (testem7-V08-00-05)
+- extended/electromagnetic/TestEm15 (testem15-V08-00-05)
+  o SteppingAction: use prePoint->GetTouchableHandle()->GetVolume().
+- extended/gdml (exgdml-V08-00-00)
+  o Added G4Evaluator for new version of GDML and updated GNUmakefile.
+- extended/hadronic/Hadr01 (exhadr01-V08-00-04)
+  o New example based on the IION application developed for simulation of
+    proton or ion beam interaction with a water target. Different aspects of
+    beam target interaction are demonstrated in the example including
+    logitudinal profile of energy deposition, spectra of secondary particles,
+    spectra of particles leaving the target. The results are presented in a
+    form of average numbers and histograms.
+- extended/persistency (persistencyEx-V08-00-00)
+  o Archived old PersEx01 example based on CINT dictionary.
+  o Introduced new example P01 for persistency using the Reflex tool.
+- examples/novice/N01 (exampleN01-V08-00-00)
+- examples/novice/N02 (exampleN02-V08-00-03)
+  o Use coherent allocation scheme for user-classes and initialisation
+    in main().
+- examples/novice/N03 (exampleN03-V08-00-06)
+  o Use coherent allocation scheme for user-classes and initialisation
+    in main(). Separate instantiation of the user-stepping-verbose class
+    from initialisation of the G4VSteppingVerbose singleton.
+  o gui.mac: remove call to /N03/event/printModulo.
+  o SteppingAction: replace Touchable by TouchableHandle.
+- examples/novice/N04 (exampleN04-V08-00-01)
+- examples/novice/N05 (exampleN05-V08-00-00)
+  o Use coherent allocation scheme for user-classes and initialisation
+    in main().
+- examples/novice/N06 (exampleN06-V08-00-02)
+  o Use coherent allocation scheme for user-classes and initialisation
+    in main(). Separate instantiation of the user-stepping-verbose class
+    from initialisation of the G4VSteppingVerbose singleton.
+  o Added new method SetOptPhotonPolar() to PrimaryGeneratorAction
+    to set a random linear polarization when the command
+    '/N06/gun/optPhotonPolar' is given without arguments
+- examples/novice/N07 (exampleN07-V08-00-00)
+  o Fixed a bug in SetGapMaterial() in DetectorConstruction.
+  o Added method AddMaterial() in DetectorConstruction and modified
+    DetectorMessenger class accordingly.
+  o Updated sample.mac and retrieve.mac for modified DetectorMessenger.
+  o Use coherent allocation scheme for user-classes and initialisation
+    in main().
+
+tests                                            tests-V08-01-00
+-----
+- Updated reference outputs and GNUmakefile (tests-gmk-V08-00-06).
+- test05 (test05-V08-00-00)
+  o First version of the test, exercising a mixed combination of
+    tessellated-solids.
+
