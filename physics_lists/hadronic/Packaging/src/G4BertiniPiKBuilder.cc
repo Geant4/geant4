@@ -62,23 +62,35 @@
  Build(G4HadronElasticProcess * ) {}
 
  void G4BertiniPiKBuilder::
- Build(G4KaonPlusInelasticProcess * )
+ Build(G4KaonPlusInelasticProcess * aP)
  {
+   aP->RegisterMe(theModel);
+   theModel->SetMinEnergy(theMin);
+   theModel->SetMaxEnergy(theMax);
  }
 
  void G4BertiniPiKBuilder::
- Build(G4KaonMinusInelasticProcess * )
+ Build(G4KaonMinusInelasticProcess * aP)
  {
+   aP->RegisterMe(theModel);
+   theModel->SetMinEnergy(theMin);
+   theModel->SetMaxEnergy(theMax);
  }
 
  void G4BertiniPiKBuilder::
- Build(G4KaonZeroLInelasticProcess * )
+ Build(G4KaonZeroLInelasticProcess * aP)
  {
+   aP->RegisterMe(theModel);
+   theModel->SetMinEnergy(theMin);
+   theModel->SetMaxEnergy(theMax);
  }
 
  void G4BertiniPiKBuilder::
- Build(G4KaonZeroSInelasticProcess * )
+ Build(G4KaonZeroSInelasticProcess * aP)
  {
+   aP->RegisterMe(theModel);
+   theModel->SetMinEnergy(theMin);
+   theModel->SetMaxEnergy(theMax);
  }
 
  // 2002 by J.P. Wellisch

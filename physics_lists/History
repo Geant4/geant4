@@ -1,4 +1,4 @@
-$Id: History,v 1.16 2006-06-20 11:41:26 vnivanch Exp $
+$Id: History,v 1.17 2006-06-20 17:27:36 gunter Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,9 @@ track of all tags.
 
 - Add Binary Cascade for Ions to BIC PhysicsLists
 
+20.06.2006, G.Folger - phys-lists-V08-00-11
+ -  Use Bertini cascade for Kaons (K+,K-, K0L, k0S)
+ 
 20.06.2006, V.Ivanchenko - phys-lists-V08-00-10
 - Add mu-nuclear option to G4EmExtraBuilder
 - Add commands to G4EmMessenger

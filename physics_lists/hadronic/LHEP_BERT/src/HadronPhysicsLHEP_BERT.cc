@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: HadronPhysicsLHEP_BERT.cc,v 1.4 2006-06-08 13:13:07 vnivanch Exp $
+// $Id: HadronPhysicsLHEP_BERT.cc,v 1.5 2006-06-20 17:27:36 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -32,6 +32,7 @@
 // Modified:
 //  1.12.2005 G.Folger: migration to non static particles
 // 08.06.2006 V.Ivanchenko: remove stopping
+// 20.06.2006 G.Folger: Bertini applies to Kaons, i.e. use SetMinEnergy instead of SetMinPionEnergy
 //
 //----------------------------------------------------------------------------
 //
@@ -69,7 +70,7 @@ void HadronPhysicsLHEP_BERT::CreateModels()
   thePiK=new G4PiKBuilder;
   thePiK->RegisterMe(theLHEPPiK=new G4LHEPPiKBuilder);
   thePiK->RegisterMe(theBertiniPiK=new G4BertiniPiKBuilder);
-  theLHEPPiK->SetMinPionEnergy(9.5*GeV);
+  theLHEPPiK->SetMinEnergy(9.5*GeV);
   theBertiniPiK->SetMaxEnergy(9.9*GeV);
 
   theMiscLHEP=new G4MiscLHEPBuilder;
