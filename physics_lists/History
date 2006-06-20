@@ -1,4 +1,4 @@
-$Id: History,v 1.14 2006-06-19 21:34:47 vnivanch Exp $
+$Id: History,v 1.15 2006-06-20 09:49:29 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,7 @@ track of all tags.
 
 20.06.2006, V.Ivanchenko - phys-lists-V08-00-10
 - Add mu-nuclear option to G4EmExtraBuilder
+- Add commands to G4EmMessenger
 
 17.06.2006, G.Folger - phys-lists-V08-00-09
 - Remove remaining elastic pointers from LHEP builders to 

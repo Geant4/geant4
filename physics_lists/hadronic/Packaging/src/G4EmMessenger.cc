@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmMessenger.cc,v 1.6 2006-06-19 21:34:47 vnivanch Exp $
+// $Id: G4EmMessenger.cc,v 1.7 2006-06-20 09:49:29 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -55,7 +55,7 @@ G4EmMessenger::G4EmMessenger(G4EmExtraPhysics* ab)
   theSynch->SetParameterName("status","off");
   theSynch->SetCandidates("on off");
   theSynch->SetDefaultValue("off");
-  theSynch->AvailableForStates(G4State_PreInit);
+  theSynch->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   // command for gamma nuclear physics.
   theGN = new G4UIcmdWithAString("/physics_engine/tailor/GammaNuclear",this);
@@ -63,7 +63,7 @@ G4EmMessenger::G4EmMessenger(G4EmExtraPhysics* ab)
   theGN->SetParameterName("status","off");
   theGN->SetCandidates("on off");
   theGN->SetDefaultValue("on");
-  theGN->AvailableForStates(G4State_PreInit);
+  theGN->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   // command for muon nuclear physics.
   theMUN = new G4UIcmdWithAString("/physics_engine/tailor/MuonNuclear",this);
@@ -71,7 +71,7 @@ G4EmMessenger::G4EmMessenger(G4EmExtraPhysics* ab)
   theMUN->SetParameterName("status","off");
   theMUN->SetCandidates("on off");
   theMUN->SetDefaultValue("off");
-  theMUN->AvailableForStates(G4State_PreInit);
+  theMUN->AvailableForStates(G4State_PreInit,G4State_Idle);
 }
 
 G4EmMessenger::~G4EmMessenger()
