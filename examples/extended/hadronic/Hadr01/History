@@ -1,4 +1,4 @@
-$Id: History,v 1.6 2006-06-15 18:14:49 vnivanch Exp $
+$Id: History,v 1.7 2006-06-20 12:06:11 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+20-06-06 V.Ivant (exhadr01-V08-00-05)
+- Modify PhysicsList according to the PhysicsList phys-lists-V08-00-10
 
 15-06-06 V.Ivant (exhadr01-V08-00-04)
 - Modify PhysicsList according to the PhysicsList phys-lists-V08-00-06
