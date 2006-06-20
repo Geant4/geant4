@@ -231,7 +231,7 @@ examples                                         examples-V08-01-00
   o SteppingAction: use prePoint->GetTouchableHandle()->GetVolume().
 - extended/gdml (exgdml-V08-00-00)
   o Added G4Evaluator for new version of GDML and updated GNUmakefile.
-- extended/hadronic/Hadr01 (exhadr01-V08-00-04)
+- extended/hadronic/Hadr01 (exhadr01-V08-00-05)
   o New example based on the IION application developed for simulation of
     proton or ion beam interaction with a water target. Different aspects of
     beam target interaction are demonstrated in the example including
