@@ -292,6 +292,10 @@ visualization                                    vis-V08-00-07
 - Raytracer:
   o Moved G4RayShooter class to Event category.
 
+data sets
+---------
+- New data set for low-energy electromagnetic processes: G4EMLOW 4.0.
+
 examples                                         examples-V08-00-05
 --------
 - Updated reference outputs.
