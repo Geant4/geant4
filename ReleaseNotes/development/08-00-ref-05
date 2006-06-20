@@ -340,7 +340,7 @@ examples                                         examples-V08-00-05
   o Updated README
 - extended/electromagnetic/TestEm16 (testem16-V08-00-01)
   o New example for the simulation of synchrotron radiation.
-- extended/electromagnetic/TestEm16 (testem17-V08-00-00)
+- extended/electromagnetic/TestEm17 (testem17-V08-00-00)
   o New example to check implementation of the processes
     of muon interactions: ionization, direct (e+,e-) production,
     bremsstrahlung, mu-nuclear interaction.

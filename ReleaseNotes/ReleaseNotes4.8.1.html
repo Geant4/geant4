@@ -198,6 +198,7 @@ please refer to the related History files provided in most packages):
   <LI>Fixed typo for <TT>RAYTRACERX</TT>.</LI>
   <LI>Fixed problem in caching of DATA paths.</LI>
   <LI>Correct check/set for OpenInventor visualization driver.</LI>
+  <LI>Probe for existance of X11, XM, XAW.</LI>
   </UL></LI>
 <LI><TT>Darwin-g++</TT>: corrected linker options for generation of dynamic
     libraries. Now dynamic libraries on MacOSX work correctly. Tested on
@@ -516,8 +517,11 @@ please refer to the related History files provided in most packages):
         <LI>Fix in <TT>G4Ellipsoid::SetZCuts()</TT> and
             <TT>G4EllipticalTube::SetZCut()</TT> for usage of uninitialised
             variables.</LI>
-        <LI>Added protection against <TT>NaN</TT>s in
+        <LI><TT>G4Polycone</TT>: added protection against <TT>NaN</TT>s in
             <TT>G4PolyconeSide::Normal()</TT> for points at the origin.</LI>
+        <LI>Added accessor method <TT>GetVertices()</TT> in <TT>G4Tet</TT> to
+            return the list of vertices composing the solid. Required for
+            GDML persistency.</LI>
         </UL></LI>
     </UL></LI>
 <LI><B>Volumes</B>
@@ -934,17 +938,17 @@ please refer to the related History files provided in most packages):
     QBBC is extended in order to have more options; added extra builders
     QBBC, QBEC, QBEC_HP, QGSP, QGSP_BERT, QGSP_EL, QGSP_STP.
     Using Bertini for kaons in QBBC.</LI>
-<LI>Migrate stopping physics to CHIPS for all except LBE and LHEP.</LI>
+<LI>Migrated stopping physics to CHIPS for all except LBE and LHEP.</LI>
 <LI>Moved elastic out of Neutron/Proton/PIK- builders, and use
     <TT>G4HadronElasticPhysics</TT> directly in PL.</LI>
-<LI>Fix bug in <TT>G4QStoppingPhysics</TT>.</LI>
-<LI>Updated QGSP_EMV list.</LI>
+<LI>Added mu-nuclear option to <TT>G4EmExtraBuilder</TT>.</LI>
+<LI>Fixed bug in <TT>G4QStoppingPhysics</TT> and updated QGSP_EMV list.</LI>
 <LI>Renamed <TT>G4EmStandardPhysics71</TT> to <TT>G4EmStandardPhysics72</TT>.</LI>
     <UL>
     <LI>Defined <TT>StepFunction</TT> of <TT>e+</TT> and <TT>e-</TT> (1.0,
         1.0*mm) for <TT>G4EmStandardPhysics71</TT> in order to have backward
         compatibility with the previous release.</LI>
-    <LI>Fixed minor typo in <TT>G4EmMessenger</TT>.</LI>
+    <LI>Added commands and fixed minor typo in <TT>G4EmMessenger</TT>.</LI>
     </UL></LI>
 <LI>Fixed problem in destructors of <TT>G4DecayPhysics</TT> and
     <TT>G4ElectroNuclearBuilder</TT>. Fixed destructor also for
@@ -1004,7 +1008,7 @@ please refer to the related History files provided in most packages):
         </UL></LI>
     <LI>radioprotection
         <UL>
-        <LI>Pion absorption at rest introduced in <TT>RemSimHadronicBinary</TT>.</LI>
+        <LI>Introduced pion absorption at rest in <TT>RemSimHadronicBinary</TT>.</LI>
         <LI>Primary particle generator can handle spectra.</LI>
         <LI>Added histograms and comments.</LI>
         </UL></LI>
@@ -1150,7 +1154,7 @@ please refer to the related History files provided in most packages):
         <UL>
         <LI>New example based on the IION application developed for
             simulation of proton or ion beam interaction with a water target.
-            Different aspects of beam target interaction are demonstrating in the
+            Different aspects of beam target interaction are demonstrated in the
             example including logitudinal profile of energy deposition, spectra of
             secondary  particles, spectra of particles leaving the target. The
             results are presented in a form of average numbers and histograms.</LI>
@@ -1180,15 +1184,16 @@ please refer to the related History files provided in most packages):
         </UL></LI>
     <LI>N06
         <UL>
-        <LI>Added new method <TT>ExN06PrimaryGeneratorAction::SetOptPhotonPolar()</TT>
-            to set a random linear polarization when the command  
-            <TT>/N06/gun/optPhotonPolar</TT> is given without arguments.</LI>
+        <LI>Added new method <TT>PSetOptPhotonPolar()</TT> in
+            <TT>PrimaryGeneratorAction</TT> to set a random linear polarization when
+            the command <TT>/N06/gun/optPhotonPolar</TT> is given without
+            arguments.</LI>
         </UL></LI>
     <LI>N07
         <UL>
-        <LI>Fixed a bug in <TT>ExN07DetectorConstruction::SetGapMaterial()</TT>.</LI>
-        <LI>Added method <TT>ExN07DetectorConstruction::AddMaterial()</TT> and
-            modified <TT>ExN07DetectorMessenger</TT> class accordingly.</LI>
+        <LI>Fixed a bug in <TT>SetGapMaterial()</TT> in <TT>DetectorConstruction</TT>.</LI>
+        <LI>Added method <TT>AddMaterial()</TT> to <TT>DetectorConstruction</TT> and
+            modified <TT>DetectorMessenger</TT> class accordingly.</LI>
         <LI>Updated <TT>sample.mac</tT> and <TT>retrieve.mac</TT> for modified
             messenger.</LI>
         </UL></LI>
