@@ -1,4 +1,4 @@
-$Id: History,v 1.107 2006-05-27 01:12:50 japost Exp $
+$Id: History,v 1.108 2006-06-21 10:38:52 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+June 21st, 2006  J.Apostolakis - field-V08-01-00
+-----------------------------
+Added SetEquationOfMotion method - needed for Geant4e
+
 May 27th, 2006  J.Apostolakis - field-V08-00-05
 -----------------------------
 - G4FieldTrack: Fix for simple compilation error on Sun.
