@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HadronElastic.cc,v 1.16 2006-06-19 08:08:39 vnivanch Exp $
+// $Id: G4HadronElastic.cc,v 1.17 2006-06-21 08:43:47 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -105,7 +105,7 @@ G4HadFinalState* G4HadronElastic::ApplyYourself(
 
   G4double plab = aParticle->GetTotalMomentum();
   G4double ekin = aParticle->GetKineticEnergy();
-  if (verboseLevel > 1) 
+  if (verboseLevel >1) 
     G4cout << "G4HadronElastic::DoIt: Incident particle plab=" 
 	   << plab/GeV << " GeV/c " 
 	   << " ekin(MeV) = " << ekin/MeV << "  " 
@@ -119,7 +119,7 @@ G4HadFinalState* G4HadronElastic::ApplyYourself(
   G4int A = static_cast<G4int>(aTarget);
   G4int N = A - Z;
   G4int projPDG = theParticle->GetPDGEncoding();
-  if (verboseLevel > 1) 
+  if (verboseLevel>1) 
     G4cout << "G4HadronElastic for " << theParticle->GetParticleName()
 	   << " PDGcode= " << projPDG << " on nucleus Z= " << Z 
 	   << " A= " << A << " N= " << N 
@@ -149,7 +149,8 @@ G4HadFinalState* G4HadronElastic::ApplyYourself(
 
   // Choose generator
   G4ElasticGenerator gtype = fLElastic;
-  if ((theParticle == theProton || theParticle == theNeutron) && Z == 1) {
+  if ((theParticle == theProton || theParticle == theNeutron) && Z == 1
+    && N == 0) {
     gtype = fQElastic;
   } else if(ekin >= ekinhigh) {
     gtype = fHElastic;
@@ -159,7 +160,7 @@ G4HadFinalState* G4HadronElastic::ApplyYourself(
 
   // Sample t
   if(gtype == fQElastic) {
-    if (verboseLevel > 1) 
+    if (verboseLevel >1) 
       G4cout << "G4HadronElastic: Z= " << Z << " N= " 
 	     << N << " pdg= " <<  projPDG
 	     << " mom(GeV)= " << plab/GeV << "  " << qCManager << G4endl; 
