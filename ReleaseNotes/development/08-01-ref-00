@@ -158,18 +158,19 @@ environments                                     envs-V08-00-07
   o education/lesson1 => measurement of the mass attenuation coefficient.
   o education/lesson2 => Pythonized novice/N03.
 
-physics_lists                                    phys-lists-V08-00-10
+physics_lists                                    phys-lists-V08-00-11
 -------------
 - Archived 'electromagnetic' subdirectory.
 - Added QBBC Physics List: version of physics free of LHEP models but
   using Binary, BinaryIon, Bertini, CHIPS, QGSC, FTFC.
   QBBC is extended in order to have more options; added extra builders
   QBBC, QBEC, QBEC_HP, QGSP, QGSP_BERT, QGSP_EL, QGSP_STP.
-  Using Bertini for kaons in QBBC.
+- Using Bertini Cascade for kaons (K+,K-, K0L, k0S).
 - Migrated stopping physics to CHIPS for all except LBE and LHEP.
 - Moved elastic out of Neutron/Proton/PIK- builders, and use
   G4HadronElasticPhysics directly in PL.
 - Added mu-nuclear option to G4EmExtraBuilder.
+- Added Binary Cascade for Ions to BIC physics lists.
 - Fixed bug in G4QStoppingPhysics and updated QGSP_EMV list.
 - Renamed G4EmStandardPhysics71 to G4EmStandardPhysics72:
   o Defined StepFunction of e+ and e- (1.0, 1.0*mm) for G4EmStandardPhysics71
