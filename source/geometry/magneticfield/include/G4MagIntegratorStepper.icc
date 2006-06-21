@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagIntegratorStepper.icc,v 1.8 2004-12-02 09:55:19 gcosmo Exp $
+// $Id: G4MagIntegratorStepper.icc,v 1.9 2006-06-21 09:54:16 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -29,6 +29,14 @@ inline
 G4EquationOfMotion* G4MagIntegratorStepper::GetEquationOfMotion()
 {
   return  fEquation_Rhs;
+} 
+
+inline void
+ G4MagIntegratorStepper::SetEquationOfMotion(G4EquationOfMotion* newEquation)
+{
+  if( newEquation != 0 ) {
+    fEquation_Rhs= newEquation;
+  }
 } 
 
 inline

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagIntegratorStepper.hh,v 1.10 2003-10-31 14:35:52 gcosmo Exp $
+// $Id: G4MagIntegratorStepper.hh,v 1.11 2006-06-21 09:54:16 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -94,17 +94,7 @@ class G4MagIntegratorStepper
      inline G4EquationOfMotion *GetEquationOfMotion(); 
        // As some steppers (eg RKG3) require other methods of Eq_Rhs
        // this function allows for access to them.
-
-  public:  // without description
-
-#if 0
-     void
-     SetChargeAndMomentum( G4double particleCharge, // in e+ units
-                           G4double MomentumXc)
-       //  Supply the standard Evaluation of the Right Hand side 
-       //   of the associated equation.
-       {theEquation_Rhs -> SetChargeAndMomentum(particleCharge, MomentumXc);}
-#endif 
+     inline void SetEquationOfMotion(G4EquationOfMotion* newEquation); 
 
   private:
   
