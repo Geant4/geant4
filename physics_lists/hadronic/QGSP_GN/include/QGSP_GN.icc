@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: QGSP_GN.icc,v 1.9 2006-06-15 14:16:19 gunter Exp $
+// $Id: QGSP_GN.icc,v 1.10 2006-06-21 16:38:01 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -68,7 +68,7 @@ template<class T> TQGSP_GN<T>::TQGSP_GN(G4int ver):  T()
   // default cut value  (1.0mm) 
   // defaultCutValue = 1.0*mm;
   G4DataQuestionaire it(photon);
-  G4cout << "<<< Geant4 Physics List simulation engine: QGSP_GN 3.0"<<G4endl;
+  G4cout << "<<< Geant4 Physics List simulation engine: QGSP_GN 3.1"<<G4endl;
   G4cout <<G4endl;
   this->defaultCutValue = 0.7*mm;  
   this->SetVerboseLevel(ver);

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: LHEP_GN.icc,v 1.11 2006-06-15 14:16:18 gunter Exp $
+// $Id: LHEP_GN.icc,v 1.12 2006-06-21 16:37:57 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -67,7 +67,7 @@ template<class T> TLHEP_GN<T>::TLHEP_GN(G4int ver):  T()
   // default cut value  (1.0mm) 
   // defaultCutValue = 1.0*mm;
   G4DataQuestionaire it(photon);
-  G4cout << "<<< Geant4 Physics List simulation engine: LHEP_GN 3.0"<<G4endl;
+  G4cout << "<<< Geant4 Physics List simulation engine: LHEP_GN 3.1"<<G4endl;
   G4cout <<G4endl;
   this->defaultCutValue = 0.7*mm;  
   this->SetVerboseLevel(ver);

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: FTFP.icc,v 1.9 2006-06-15 14:16:18 gunter Exp $
+// $Id: FTFP.icc,v 1.10 2006-06-21 16:37:56 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -67,7 +67,7 @@ template<class T> TFTFP<T>::TFTFP(G4int ver):  T()
   // default cut value  (1.0mm) 
   // defaultCutValue = 1.0*mm;
   G4DataQuestionaire it(photon);
-  G4cout << "<<< Geant4 Physics List simulation engine: FTFP 4.0"<<G4endl;
+  G4cout << "<<< Geant4 Physics List simulation engine: FTFP 4.1"<<G4endl;
   G4cout <<G4endl;
   this->defaultCutValue = 0.7*mm;  
   this->SetVerboseLevel(ver);
