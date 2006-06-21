@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: pyG4UserStackingAction.cc,v 1.5 2006-06-13 09:32:31 kmura Exp $
+// $Id: pyG4UserStackingAction.cc,v 1.6 2006-06-21 06:58:03 kmura Exp $
 // $Name: not supported by cvs2svn $
 // ====================================================================
 //   pyG4UserStackingAction.cc
@@ -76,7 +76,7 @@ using namespace pyG4UserStackingAction;
 // ====================================================================
 void export_G4UserStackingAction()
 {
-  class_<G4UserStackingAction, G4UserStackingAction*, boost::noncopyable>
+  class_<CB_G4UserStackingAction, CB_G4UserStackingAction*, boost::noncopyable>
     ("G4UserStackingAction", "stacking action class")
     // ---
     .def("ClassifyNewTrack",  &G4UserStackingAction::ClassifyNewTrack,
