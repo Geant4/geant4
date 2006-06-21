@@ -3880,7 +3880,7 @@ void StatAccepTestAnalysis::finish() {
     trackLength /= nn;
     G4double mu_stepLength = 0.0;
     G4double mu_stepLength_sigma = 0.0;
-    if ( mu_numSteps > 0.0 ) {
+    if ( mu_numSteps > 0.0  &&  trackLength > 1.0E-06*mm ) {
       mu_stepLength = trackLength / mu_numSteps;
       mu_stepLength_sigma = mu_stepLength * 
 	std::sqrt( sigma2_trackLength / 
