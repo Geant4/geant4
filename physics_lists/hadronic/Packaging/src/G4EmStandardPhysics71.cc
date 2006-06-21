@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmStandardPhysics71.cc,v 1.11 2006-06-15 17:05:25 vnivanch Exp $
+// $Id: G4EmStandardPhysics71.cc,v 1.12 2006-06-21 18:09:19 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -31,6 +31,7 @@
 //
 // Modified:
 // 19.12.2005 V.Ivanchenko StepFunction for electrons (1.0, 1.0*mm)
+// 21.06.2006 V.Ivanchenko use recent msc with step limitation off
 //
 //----------------------------------------------------------------------------
 //
@@ -45,6 +46,7 @@
 #include "G4PhotoElectricEffect.hh"
 
 #include "G4MultipleScattering71.hh"
+#include "G4MultipleScattering.hh"
 
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
@@ -143,9 +145,9 @@ void G4EmStandardPhysics71::ConstructProcess()
                << particleName << G4endl;
       G4eIonisation* eioni = new G4eIonisation();
       eioni->SetStepFunction(1.0, 1.0*mm);
-      pmanager->AddProcess(new G4MultipleScattering71, -1, 1, 1);
-      pmanager->AddProcess(eioni,                      -1, 2, 2);
-      pmanager->AddProcess(new G4eBremsstrahlung(),    -1, 3, 3);
+      pmanager->AddProcess(new G4MultipleScattering,  -1, 1, 1);
+      pmanager->AddProcess(eioni,                     -1, 2, 2);
+      pmanager->AddProcess(new G4eBremsstrahlung(),   -1, 3, 3);
 
     } else if (particleName == "e+") {
 
@@ -154,10 +156,10 @@ void G4EmStandardPhysics71::ConstructProcess()
                << particleName << G4endl;
       G4eIonisation* eioni = new G4eIonisation();
       eioni->SetStepFunction(1.0, 1.0*mm);
-      pmanager->AddProcess(new G4MultipleScattering71, -1, 1, 1);
-      pmanager->AddProcess(eioni,                      -1, 2, 2);
-      pmanager->AddProcess(new G4eBremsstrahlung,      -1, 3, 3);
-      pmanager->AddProcess(new G4eplusAnnihilation,     0,-1, 4);
+      pmanager->AddProcess(new G4MultipleScattering, -1, 1, 1);
+      pmanager->AddProcess(eioni,                    -1, 2, 2);
+      pmanager->AddProcess(new G4eBremsstrahlung,    -1, 3, 3);
+      pmanager->AddProcess(new G4eplusAnnihilation,   0,-1, 4);
 
     } else if (particleName == "mu+" ||
                particleName == "mu-"    ) {
@@ -165,7 +167,7 @@ void G4EmStandardPhysics71::ConstructProcess()
       if(verbose > 1)
         G4cout << "### EmStandard71 instantiates muIoni and msc71 for " 
                << particleName << G4endl;
-      pmanager->AddProcess(new G4MultipleScattering71,-1, 1, 1);
+      pmanager->AddProcess(new G4MultipleScattering  ,-1, 1, 1);
       pmanager->AddProcess(new G4MuIonisation,        -1, 2, 2);
       pmanager->AddProcess(new G4MuBremsstrahlung,    -1, 3, 3);
       pmanager->AddProcess(new G4MuPairProduction,    -1, 4, 4);
@@ -177,8 +179,8 @@ void G4EmStandardPhysics71::ConstructProcess()
       if(verbose > 1)
         G4cout << "### EmStandard71 instantiates ionIoni and msc71 for " 
                << particleName << G4endl;
-      pmanager->AddProcess(new G4MultipleScattering71, -1, 1, 1);
-      pmanager->AddProcess(new G4ionIonisation,        -1, 2, 2);
+      pmanager->AddProcess(new G4MultipleScattering,  -1, 1, 1);
+      pmanager->AddProcess(new G4ionIonisation,       -1, 2, 2);
 
     } else if (particleName == "anti_omega-" ||
                particleName == "anti_proton" ||
@@ -201,12 +203,13 @@ void G4EmStandardPhysics71::ConstructProcess()
       if(verbose > 1)
         G4cout << "### EmStandard71 instantiates hIoni and msc71 for " 
                << particleName << G4endl;
-      pmanager->AddProcess(new G4MultipleScattering71, -1, 1, 1);
-      pmanager->AddProcess(new G4hIonisation,          -1, 2, 2);
+      pmanager->AddProcess(new G4MultipleScattering, -1, 1, 1);
+      pmanager->AddProcess(new G4hIonisation,        -1, 2, 2);
     }
   }
   G4EmProcessOptions opt;
   opt.SetVerbose(verbose);
+  opt.SetMscStepLimitation(false, 0.2);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

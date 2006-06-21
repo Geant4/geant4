@@ -20,33 +20,34 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: QGSP_EMV.hh,v 1.2 2006-06-21 18:09:19 vnivanch Exp $
+// $Id: QGSP_EMX.hh,v 1.1 2006-06-21 18:09:20 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
-// ClassName: QGSP_EMV
+// ClassName: LHEP_EMX
 //
-// Author: 2005 V.Ivanchenko
+// Author: 2006 V.Ivanchenko
 //
 // Modified:
+// 21.06.2006 V.Ivanchenko crerate from QGSP_EMV
 //
 //----------------------------------------------------------------------------
 //
 
-#ifndef TQGSP_EMV_h
-#define TQGSP_EMV_h 1
+#ifndef TQGSP_EMX_h
+#define TQGSP_EMX_h 1
 
 #include "G4VModularPhysicsList.hh"
 #include "globals.hh"
 #include "CompileTimeConstraints.hh"
 
 template<class T>
-class TQGSP_EMV: public T
+class TQGSP_EMX: public T
 {
 public:
-  TQGSP_EMV(G4int ver = 1);
-  virtual ~TQGSP_EMV();
+  TQGSP_EMX(G4int ver = 1);
+  virtual ~TQGSP_EMX();
   
 public:
   // SetCuts() 
@@ -55,10 +56,8 @@ public:
 private:
   enum {ok = CompileTimeConstraints::IsA<T, G4VModularPhysicsList>::ok };
 };
-#include "QGSP_EMV.icc"
-typedef TQGSP_EMV<G4VModularPhysicsList> QGSP_EMV;
-
-// 2002 by J.P. Wellisch
+#include "QGSP_EMX.icc"
+typedef TQGSP_EMX<G4VModularPhysicsList> QGSP_EMX;
 
 #endif
 

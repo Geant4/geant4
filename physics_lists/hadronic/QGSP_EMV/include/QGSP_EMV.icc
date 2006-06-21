@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: QGSP_EMV.icc,v 1.8 2006-06-21 16:38:01 gunter Exp $
+// $Id: QGSP_EMV.icc,v 1.9 2006-06-21 18:09:19 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -36,7 +36,7 @@
 // 02.12.2005 V.Ivanchenko: rename components
 // 08.06.2006 V.Ivanchenko: migration to CHIPS stopping
 // 15.06.2006 G.Folger: Migrate to HadronElasticPhysics using improved elastic
-// 19.06.2006 V.Ivanchenko: use 7 mm default cut
+// 21.06.2006 V.Ivanchenko: use v71 EM physics
 //
 //----------------------------------------------------------------------------
 //
@@ -55,7 +55,7 @@
 #include <iomanip>   
 
 #include "G4DecayPhysics.hh"
-#include "G4EmStandardPhysics72.hh"
+#include "G4EmStandardPhysics71.hh"
 #include "G4EmExtraPhysics.hh"
 #include "G4IonPhysics.hh"
 #include "G4QStoppingPhysics.hh"
@@ -69,11 +69,11 @@ template<class T> TQGSP_EMV<T>::TQGSP_EMV(G4int ver):  T()
   G4DataQuestionaire it(photon);
   G4cout << "<<< Geant4 Physics List simulation engine: QGSP_EMV 3.1"<<G4endl;
   G4cout <<G4endl;
-  this->defaultCutValue = 7.*mm;  
+  this->defaultCutValue = 0.7*mm;  
   this->SetVerboseLevel(ver);
 
   // EM Physics
-  this->RegisterPhysics( new G4EmStandardPhysics72("standard EM fast",ver));
+  this->RegisterPhysics( new G4EmStandardPhysics71("standard EM v71",ver));
 
   // Synchroton Radiation & GN Physics
   this->RegisterPhysics( new G4EmExtraPhysics("extra EM"));
