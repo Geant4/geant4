@@ -399,6 +399,33 @@ echo "On this machine the OGLHOME=\$OGLHOME"
 fi
 fi 
 
+#+
+if [ X$g4vis_oivhome != X ] ; then
+OIVHOME="$g4vis_oivhome"
+export OIVHOME
+if [ X\$g4non_display = X ] ; then
+echo "On this machine the OIVHOME=\$OIVHOME"
+fi
+fi 
+
+#+
+if [ X$g4vis_build_openglxm_driver != X ] ; then
+XMFLAGS="$g4vis_xmflags"
+export XMFLAGS
+if [ X\$g4non_display = X ] ; then
+echo "On this machine the XMFLAGS=\$XMFLAGS"
+fi
+fi 
+
+#+
+if [ X$g4vis_build_openglxm_driver != X ] ; then
+XMLIBS="$g4vis_xmlibs"
+export XMLIBS
+if [ X\$g4non_display = X ] ; then
+echo "On this machine the XMLIBS=\$XMLIBS"
+fi
+fi 
+
 #
 # Use G3TOG4 module
 #

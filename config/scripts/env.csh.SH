@@ -207,7 +207,7 @@ endif
 
 #+
 if ( X$g4vis_build_oix_driver == Xy ) then
-setenv G4VIS_BUILD_OIX_DRIVER 1
+setenv G4VIS_BUILD_OX_DRIVER 1
 echo "On this machine the G4VIS_BUILD_OIX_DRIVER=\$G4VIS_BUILD_OIX_DRIVER"
 endif
 
@@ -281,6 +281,24 @@ endif
 if ( X$g4vis_oglhome != X )  then
 setenv OGLHOME "$g4vis_oglhome"
 echo "On this machine the OGLHOME=\$OGLHOME"
+endif 
+
+#+
+if ( X$g4vis_oivhome != X )  then
+setenv OIVHOME "$g4vis_oivhome"
+echo "On this machine the OIVHOME=\$OIVHOME"
+endif 
+
+#+
+if ( X$g4vis_xmflags != X )  then
+setenv XMFLAGS "$g4vis_xmflags"
+echo "On this machine the XMFLAGS=\$XMFLAGS"
+endif 
+
+#+
+if ( X$g4vis_xmlibs != X )  then
+setenv XMLIBS "$g4vis_xmlibs"
+echo "On this machine the XMLIBS=\$XMLIBS"
 endif 
 
 #
