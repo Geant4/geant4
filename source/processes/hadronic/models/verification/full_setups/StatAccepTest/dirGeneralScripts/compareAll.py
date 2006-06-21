@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 #--------------------------------------------------------------------
-# Last update: 20-Jun-2006
+# Last update: 21-Jun-2006
 #
 # This script should be run in the directory which has, as immediate
 # subdirectories, the results of the Grid validation testing,
@@ -33,8 +33,8 @@
 #
 # At the end, the script prints out also a summary results of the
 # average discrepancies (if larger than the above thresholds),
-# both as overall statistics and also by calorimeter, by
-# beam particle type, by beam energy.
+# both as overall statistics and also by physics list, by calorimeter,
+# by beam particle type, by beam energy.
 #
 # This script has not input argument, and should be run as:
 #         $  python compareAll.py
@@ -1328,6 +1328,12 @@ def doUpdateResults( resultsToBeUpdated, resultsNew ) :
 countResults = 0
 sumResults = []
 
+dictPhysicsListResults = { 'LHEP':[ 0, [] ],
+                           'QGSP':[ 0, [] ],
+                           'QGSC':[ 0, [] ],
+                           'QGSP_BIC':[ 0, [] ],
+                           'QGSP_BERT':[ 0, [] ] }
+
 dictCaloResults = { 'FeSci':[ 0, [] ] ,
                     'CuSci':[ 0, [] ],
                     'CuLAr':[ 0, [] ],
@@ -1475,7 +1481,16 @@ for dir in listDir :
         if ( len( updatedResults ) ) :
             countResults += 1
             sumResults = updatedResults
-        
+
+        for iPhysics in dictPhysicsListResults.keys() :
+            if ( nameFileA.find( "-" + iPhysics + "-" ) > -1 ) :
+                updatedResults = doUpdateResults( dictPhysicsListResults[ iPhysics ][1],
+                                                  listResultsThisCase )
+                if ( len( updatedResults ) ) :
+                    dictPhysicsListResults[ iPhysics ] = \
+                                            ( dictPhysicsListResults[ iPhysics ][0] + 1,
+                                              updatedResults )
+
         for iDetector in dictCaloResults.keys() :
             if ( nameFileA.find( "-" + iDetector + "-" ) > -1 ) :
                 updatedResults = doUpdateResults( dictCaloResults[ iDetector ][1],
@@ -1522,6 +1537,23 @@ if ( countResults ) :
             print "sigma , ",
             print '%.2f' % ( relativeDifference*100.0 ),
             print "%"
+print " "
+print " --- Physics List --- "
+for iPhysics in dictPhysicsListResults.items() :
+    print "\t --- ", iPhysics[0], "---"
+    counts = iPhysics[1][0]
+    print "\t counts =", counts
+    if ( counts ) :
+        for result in iPhysics[1][1] :
+            sigmaDifference = result[3][0] / float( counts )
+            relativeDifference = result[3][1] / float( counts )    
+            if ( math.fabs( sigmaDifference ) > thresholdSigmaDifference  and
+                 math.fabs( relativeDifference ) > thresholdRelativeDifference ) :
+                print "\t", result[0], " diff:",
+                print '%.2f' % sigmaDifference,
+                print "sigma , ",
+                print '%.2f' % ( relativeDifference*100.0 ),
+                print "%"
 print " "
 print " --- Calorimeter --- "
 for iCalo in dictCaloResults.items() :
