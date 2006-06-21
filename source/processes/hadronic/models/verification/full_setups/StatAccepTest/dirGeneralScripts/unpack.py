@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 #--------------------------------------------------------------------
-# Last update: 19-Jun-2006
+# Last update: 21-Jun-2006
 #
 # This script should be run in the directory which has, either
 # as immediate subdirectories (in the case of Patricia's framework)
@@ -37,6 +37,13 @@
 #                   a list of the expected tar-balls that have been
 #                   found and not found, respectively.
 #                   See ***LOOKHERE*** to select the expected cases.
+#   o  listDirNan : a list of the directories where we have found
+#                   at least a "nan" in one of the output.log-* files.
+#   o  listDirWarnings : a list of the directories where we have found
+#                        at least a warning message in one of the
+#                        output.log-* files.
+#   o  listWarningMessages : a list of all the warning messages
+#                            found in the output.log-* files.
 #
 # This script can be run also to get only the statistics, without
 # unpacking the tar-balls: to do so, comment the line where
@@ -227,6 +234,9 @@ listDirEnergyNotConserved = open( "listDirEnergyNotConserved.txt", "w" )
 listPS = open( "listPS.txt", "w" )
 listExpectedTarBallsFound = open( "listExpectedTarBallsFound.txt", "w" )
 listExpectedTarBallsNotFound = open( "listExpectedTarBallsNotFound.txt", "w" )
+listDirNan = open( "listDirNan.txt", "w" )
+listDirWarnings = open( "listDirWarnings.txt", "w" )
+listWarningMessages = open( "listWarningMessages.txt", "w" )
 
 countDir = 0
 countDirWithRunCrashes = 0
@@ -235,6 +245,10 @@ countDirWithNtuples = 0
 countDirWithPvalues = 0
 countDirWithPS = 0
 countPS = 0
+countDirWithNan = 0
+countNan = 0
+countDirWithWarnings = 0
+countWarnings = 0
 
 for dir in listDir :
     if ( dir.find( "worker_" ) > -1 ) :
@@ -255,6 +269,8 @@ for dir in listDir :
     foundNtuples = 0
     foundPvalues = 0
     foundPS = 0
+    foundNan = 0
+    foundWarning = 0
     for iFile in listFiles :
         #print " iFile=", iFile
 
@@ -273,6 +289,13 @@ for dir in listDir :
             runTerminated = 0
             for line in fileOutput :
                 #print " line=", line.strip()
+                if ( line.lower().find( "nan" ) > -1 ) :
+                    foundNan = 1
+                    countNan += 1
+                if ( line.lower().find( "warning" ) > -1 ) :
+                    foundWarning = 1
+                    countWarnings += 1
+                    listWarningMessages.write( line )
                 if ( line.find( "Start Run processing." ) > -1 ) :
                     runStarted = 1
                     #print "  ***RUN STARTED*** : ", line.strip()
@@ -337,6 +360,12 @@ for dir in listDir :
         countDirWithPS += 1
     if ( not foundNtuples  or  not foundPvalues ) :
         listDirFailed.write( currentDir + "\n" )
+    if ( foundNan ) :
+        countDirWithNan += 1
+        listDirNan.write( currentDir + "\n" )
+    if ( foundWarning ) :
+        countDirWithWarnings += 1
+        listDirWarnings.write( currentDir + "\n" )
 
     listFiles.close()
     os.system( "rm listFiles.txt" )
@@ -360,6 +389,10 @@ print " Number of directories = ", countDir
 print " Number of directories with Run crashes = ", countDirWithRunCrashes
 print " Number of directories with Energy NOT conserved = ", \
       countDirWithEnergyNotConserved
+print " Number of directories with nan = ", countDirWithNan,
+print "  ( # nan messages = ", countNan, ")"
+print " Number of directories with warnings = ", countDirWithWarnings,
+print "  ( # warning messages = ", countWarnings, ")"
 print " Number of directories with Ntuples = ", countDirWithNtuples
 print " Number of directories with p-values = ", countDirWithPvalues
 print " Number of directories with .PS = ", countDirWithPS
@@ -432,7 +465,11 @@ listDirFailed.close()
 listDirRunCrashed.close()
 listDirEnergyNotConserved.close()
 listPS.close()
-
+listExpectedTarBallsFound.close()
+listExpectedTarBallsNotFound.close()
+listDirNan.close()
+listDirWarnings.close()
+listWarningMessages.close()
 
 #-------------------------------------------------------------------
 
