@@ -290,15 +290,39 @@ echo "On this machine the OIVHOME=\$OIVHOME"
 endif 
 
 #+
-if ( X$g4vis_xmflags != X )  then
+if ( X$g4vis_build_openglxm_driver != X )  then
 setenv XMFLAGS "$g4vis_xmflags"
 echo "On this machine the XMFLAGS=\$XMFLAGS"
 endif 
 
 #+
-if ( X$g4vis_xmlibs != X )  then
+if ( X$g4vis_build_openglxm_driver != X )  then
 setenv XMLIBS "$g4vis_xmlibs"
 echo "On this machine the XMLIBS=\$XMLIBS"
+endif 
+
+#+
+if ( X$g4ui_build_xm_session != X )  then
+setenv XMFLAGS "$g4vis_xmflags"
+echo "On this machine the XMFLAGS=\$XMFLAGS"
+endif 
+
+#+
+if ( X$g4ui_build_xm_session != X )  then
+setenv XMLIBS "$g4vis_xmlibs"
+echo "On this machine the XMLIBS=\$XMLIBS"
+endif 
+
+#+
+if ( X$g4ui_build_xaw_session != X )  then
+setenv XAWFLAGS "$g4ui_xawflags"
+echo "On this machine the XAWFLAGS=\$XAWFLAGS"
+endif 
+
+#+
+if ( X$g4ui_build_xaw_session != X )  then
+setenv XAWLIBS "$g4ui_xawlibs"
+echo "On this machine the XAWLIBS=\$XAWLIBS"
 endif 
 
 #
