@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4ExactHelixStepper.hh,v 1.1 2005-02-15 17:37:07 japost Exp $ 
+// $Id: G4ExactHelixStepper.hh,v 1.2 2006-06-22 09:27:26 japost Exp $ 
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -63,11 +63,13 @@ class G4ExactHelixStepper : public G4MagHelicalStepper
     virtual  void DumbStepper( const G4double y[],
                                G4ThreeVector   Bfld,
                                G4double  h,
-                               G4double yout[] ) = 0;
+                               G4double yout[] );
       // Performs a 'dump' Step without error calculation.
   
     G4double DistChord() const;
       // Estimate maximum distance of curved solution and chord ... 
+
+    virtual G4int IntegratorOrder() const;
 
   private:
 
