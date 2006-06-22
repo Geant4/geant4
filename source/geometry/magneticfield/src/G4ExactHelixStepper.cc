@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExactHelixStepper.cc,v 1.2 2006-06-22 09:28:53 japost Exp $ 
+// $Id: G4ExactHelixStepper.cc,v 1.3 2006-06-22 10:22:55 japost Exp $ 
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  Helix a-la-Explicity Euler: x_1 = x_0 + helix(h)
@@ -32,7 +32,7 @@
 //  As the field is assumed constant, an error is not calculated.
 // 
 //  Author: J. Apostolakis, 28 Jan 2005
-//     Adapted from ExplicitEuler of W.Wander 
+//     Implementation adapted from ExplicitEuler of W.Wander 
 // -------------------------------------------------------------------
 
 #include "G4ExactHelixStepper.hh"
@@ -52,6 +52,8 @@ G4ExactHelixStepper::G4ExactHelixStepper(G4Mag_EqRhs *EqRhs)
    }
 }
 
+G4ExactHelixStepper::~G4ExactHelixStepper() {} 
+
 void
 G4ExactHelixStepper::Stepper( const G4double yInput[],
 		              const G4double*,
@@ -62,26 +64,27 @@ G4ExactHelixStepper::Stepper( const G4double yInput[],
    const G4int nvar = 6 ;
 
    G4int i;
-   G4double      yTemp[7], yIn[7] ;
-   G4ThreeVector Bfld_value, Bfld_midpoint;
+   // G4double      yTemp[7], yIn[7] ;
+   G4ThreeVector Bfld_value;
 
    for(i=0;i<nvar;i++)  {
-      yIn[i]=     yInput[i];
+      // yIn[i]=     yInput[i];
       fYInSav[i]= yInput[i];
    }
 
-   MagFieldEvaluate(yIn, Bfld_value) ;        
+   MagFieldEvaluate(yInput, Bfld_value) ;        
    fBfieldValue= Bfld_value;  // Save it for chord if needed.
+   fLastStepSize = hstep;     //   ditto
 
    // DumbStepper(yIn, Bfld_value, hstep, yTemp);
-   AdvanceHelix(yIn, Bfld_value, hstep, yTemp);
+   AdvanceHelix(yInput, Bfld_value, hstep, yOut);
 
    // We are assuming a constant field: helix is exact.
    for(i=0;i<nvar;i++) {
      yErr[i] = 0.0 ;
    }
 
-   yInitialEHS = G4ThreeVector( yIn[0],   yIn[1],   yIn[2]); 
+   yInitialEHS = G4ThreeVector( yInput[0],   yInput[1],   yInput[2]); 
    yFinalEHS   = G4ThreeVector( yOut[0],  yOut[1],  yOut[2]); 
 }
 
