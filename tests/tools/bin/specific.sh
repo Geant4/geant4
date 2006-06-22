@@ -24,7 +24,7 @@ export  REF=prod
 fi
 
 #export CLHEP_VERSION=pro
-export CLHEP_VERSION=1.9.2.2
+export CLHEP_VERSION=1.9.2.3
 
 if [ $G4DEBUG ]; then
 export DEBOPT=debug
@@ -121,17 +121,13 @@ if [ `uname -n | grep refsol8` ]; then
     export LD_LIBRARY_PATH=/usr/local/gcc-alt-3.2.3/lib:${LD_LIBRARY_PATH}
     # No Persistency tonight ...
     unset G4USE_HEPODBMS
-#    export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/SUN-CC/$CLHEP_VERSION
-
-# Test new (1.9.2.0) CLHEP
-    export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/pro/SUN-CC
-#    export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/new/SUN-CC
-#    export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/new/sunos58_CC54
-
+#    export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/pro/SUN-CC
 #    export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/1.9.1.2/sunos58_CC54
 
   export G4WORKDIR=/afs/cern.ch/sw/geant4/stt/$REF/$G4SYSTEM/$DEBOPT
   export G4LIB=$G4WORKDIR/lib
+# Take CLHEP with links to lcg area
+  export CLHEP_BASE_DIR=$G4WORKDIR/clhep
 
   # G4 build flags :
   #######export G4UI_BUILD_XM_SESSION=1
@@ -317,16 +313,12 @@ if [ `uname -n | grep sungeant` ]; then
        export G4EXAMPLE_FDID=207
     fi
 #    export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/SUN-CC/$CLHEP_VERSION
-
-# Test new (1.9.2.0) CLHEP
-    export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/pro/SUN-CC
-#    export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/new/SUN-CC
-#    export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/new/sunos58_CC54
-
 #    export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/1.9.1.2/SUN-CC
   fi
   export G4WORKDIR=/afs/cern.ch/sw/geant4/stt/$REF/$G4SYSTEM/$DEBOPT
   export G4LIB=$G4WORKDIR/lib
+# Take CLHEP with links to lcg area
+  export CLHEP_BASE_DIR=$G4WORKDIR/clhep
   # G4 build flags :
   #######export G4UI_BUILD_XM_SESSION=1
   #######export G4VIS_BUILD_OPENGLXM_DRIVER=1
@@ -372,10 +364,12 @@ if [ `uname -n | grep sundev008` ]; then
        . $G4INSTALL/examples/extended/persistency/PersistentEx01/g4odbms_setup.sh
        export G4EXAMPLE_FDID=207
     fi
-    export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/SUN-CC/$CLHEP_VERSION
+#    export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/SUN-CC/$CLHEP_VERSION
   fi
   export G4WORKDIR=/afs/cern.ch/sw/geant4/stt/$REF/$G4SYSTEM/$DEBOPT
   export G4LIB=$G4WORKDIR/lib
+# Take CLHEP with links to lcg area
+  export CLHEP_BASE_DIR=$G4WORKDIR/clhep  
   # G4 build flags :
   #######export G4UI_BUILD_XM_SESSION=1
   #######export G4VIS_BUILD_OPENGLXM_DRIVER=1
@@ -544,19 +538,12 @@ if [ $UNAMEN = pcgeant3.cern.ch ]; then
 #  export G4WORKDIR=/afs/cern.ch/sw/geant4/stt/$REF/$G4SYSTEM/$DEBOPT
   export G4WORKDIR=/afs/cern.ch/sw/geant4/stt/$REF/Linux-g++/$DEBOPT
   export G4LIB=$G4WORKDIR/lib
-#  export CLHEP_BASE_DIR=/home/stesting/CLHEP
-#  export CLHEP_BASE_DIR=/afs/cern.ch/sw/lhcxx/specific/redhat61/gcc-2.95.2/CLHEP/1.7.0.0/
-#
-#  export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/Linux-g++/RH73/$CLHEP_VERSION
-
-# Test new (1.9.2.0) CLHEP
-  export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/pro/Linux-g++
+# Take CLHEP with links to lcg area
+  export CLHEP_BASE_DIR=$G4WORKDIR/clhep 
+#  export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/pro/Linux-g++
 #  export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/new/Linux-g++
 #  export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/new/slc3_gcc323/
 
-#  export CLHEP_BASE_DIR=/home2/stesting/newA_CLHEP
-
-#  export CLHEP_BASE_DIR=/home2/stesting/local
 #  export G4_NO_CBRT=1
 
 ## Compiler
@@ -587,9 +574,10 @@ if [ $UNAMEN = lxcert-i386 ]; then
   export G4WORKDIR=/afs/cern.ch/sw/geant4/stt/$REF/Linux-g++/$DEBOPT
   export G4LIB=$G4WORKDIR/lib
 
-# Test new (1.9.2.2) CLHEP
-  export CLHEP_BASE_DIR=/scratch/stesting/clhep
-
+# Take CLHEP with links to lcg area
+  export CLHEP_BASE_DIR=$G4WORKDIR/clhep
+#  export CLHEP_BASE_DIR=/scratch/stesting/clhep
+  
   # Shareable library
   #####################
 #  export G4LIB_BUILD_SHARED=1
@@ -613,7 +601,7 @@ if [ $UNAMEN = lxplus072.cern.ch ]; then
   export G4WORKDIR=/afs/cern.ch/sw/geant4/stt/$REF/Linux-g++/$DEBOPT
   export G4LIB=$G4WORKDIR/lib
 
-# Test new (1.9.2.2) CLHEP
+# Take CLHEP with links to lcg area
   export CLHEP_BASE_DIR=$G4WORKDIR/clhep
 
   # Shareable library
@@ -639,7 +627,7 @@ if [ $UNAMEN = lxcert-amd64 ]; then
   export G4WORKDIR=/afs/cern.ch/sw/geant4/stt/$REF/Linux-g++/$DEBOPT
   export G4LIB=$G4WORKDIR/lib
 
-# Use (1.9.2.2) CLHEP
+# Take CLHEP with links to lcg area
   export CLHEP_BASE_DIR=$G4WORKDIR/clhep
   
   export EXTRALIBS=" -L/usr/X11R6/lib64/ "
@@ -723,12 +711,11 @@ if [ $UNAMEN = pcgeant5.cern.ch ]; then
 #  export G4WORKDIR=/afs/cern.ch/sw/geant4/stt/$REF/$G4SYSTEM/$DEBOPT
   export G4WORKDIR=/afs/cern.ch/sw/geant4/stt/$REF/Linux-g++/$DEBOPT
   export G4LIB=$G4WORKDIR/lib
-#  export CLHEP_BASE_DIR=/home/stesting/CLHEP
-#  export CLHEP_BASE_DIR=/afs/cern.ch/sw/lhcxx/specific/redhat61/gcc-2.95.2/CLHEP/1.7.0.0/
-#
-#  export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/Linux-g++/RH73/$CLHEP_VERSION
+# Take CLHEP with links to lcg area
+  export CLHEP_BASE_DIR=$G4WORKDIR/clhep
+
 #  export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/pro/Linux-g++
-  export CLHEP_BASE_DIR=/home2/stesting/newA_CLHEP
+#  export CLHEP_BASE_DIR=/home2/stesting/newA_CLHEP
 
 #  export CLHEP_BASE_DIR=/home2/stesting/local
 #  export G4_NO_CBRT=1
@@ -763,14 +750,11 @@ echo $G4SYSTEM
 #  export G4WORKDIR=/afs/cern.ch/sw/geant4/stt/$REF/$G4SYSTEM/$DEBOPT
   export G4WORKDIR=/scratch/stesting/work/geant4
   export G4LIB=$G4WORKDIR/lib
-#  export CLHEP_BASE_DIR=/home/stesting/CLHEP
-#  export CLHEP_BASE_DIR=/afs/cern.ch/sw/lhcxx/specific/redhat61/gcc-2.95.2/CLHEP/1.7.0.0/
-#
-#  export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/Linux-g++/RH73/$CLHEP_VERSION
-#   export CLHEP_BASE_DIR=/afs/cern.ch/sw/lcg/external/clhep/1.9.0.2/rh73_gcc323/
-  export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/pro/Linux-g++
+#  Take CLHEP with links to lcg area
+  export CLHEP_BASE_DIR=$G4WORKDIR/clhep
+  
+#  export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/pro/Linux-g++
 
-#  export CLHEP_BASE_DIR=/home2/stesting/local
 #  export G4_NO_CBRT=1
 
 ## Compiler
@@ -803,9 +787,9 @@ if [ $UNAMEN = pcgeant4 ]; then
   export G4STTDIR=/afs/cern.ch/sw/geant4/stt/$REF/testtools/geant4/tests/tools
   export G4WORKDIR=/afs/cern.ch/sw/geant4/stt/$REF/$G4SYSTEM/$DEBOPT
   export G4LIB=$G4WORKDIR/lib
-#  export CLHEP_BASE_DIR=/home/stesting/CLHEP
-#  export CLHEP_BASE_DIR=/afs/cern.ch/sw/lhcxx/specific/redhat61/gcc-2.95.2/CLHEP/1.7.0.0/
-  export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/Linux-g++/RH73/$CLHEP_VERSION
+# Take CLHEP with links to lcg area  
+  export CLHEP_BASE_DIR=$G4WORKDIR/clhep
+  
 #  export G4_NO_CBRT=1
 
 ## Compiler
@@ -853,13 +837,8 @@ if [ $UNAMEN = pcgeant2 ]; then
   export G4STTDIR=/afs/cern.ch/sw/geant4/stt/$REF/testtools/geant4/tests/tools
   export G4WORKDIR=/afs/cern.ch/sw/geant4/stt/$REF/$G4SYSTEM/$DEBOPT
   export G4LIB=$G4WORKDIR/lib
-#  export CLHEP_BASE_DIR=/home/stesting/CLHEP
-#  export CLHEP_BASE_DIR=/afs/cern.ch/sw/lhcxx/specific/redhat61/gcc-2.95.2/CLHEP/1.7.0.0/
-#  export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/Linux-g++/$CLHEP_VERSION
-
-# Test new (1.9.2.0) CLHEP
-    export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/pro/redhat73_gcc2952
-#    export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/new/redhat73_gcc323
+# Take CLHEP with links to lcg area
+  export CLHEP_BASE_DIR=$G4WORKDIR/clhep
 
 #  export G4_NO_CBRT=1
 
