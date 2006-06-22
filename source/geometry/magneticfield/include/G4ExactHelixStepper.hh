@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4ExactHelixStepper.hh,v 1.2 2006-06-22 09:27:26 japost Exp $ 
+// $Id: G4ExactHelixStepper.hh,v 1.3 2006-06-22 10:20:37 japost Exp $ 
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -49,7 +49,7 @@ class G4ExactHelixStepper : public G4MagHelicalStepper
   public:  // with description
 
     G4ExactHelixStepper(G4Mag_EqRhs *EqRhs);
-    virtual ~G4ExactHelixStepper();
+    ~G4ExactHelixStepper();
   
     void Stepper( const G4double y[],
                   const G4double dydx[],
@@ -60,10 +60,10 @@ class G4ExactHelixStepper : public G4MagHelicalStepper
       // Provides helix starting at y[0 to 6]
       // Outputs yout[] and ZERO estimated error yerr[]=0.
   
-    virtual  void DumbStepper( const G4double y[],
-                               G4ThreeVector   Bfld,
-                               G4double  h,
-                               G4double yout[] );
+    void DumbStepper( const G4double y[],
+                            G4ThreeVector   Bfld,
+                            G4double  h,
+                            G4double yout[] );
       // Performs a 'dump' Step without error calculation.
   
     G4double DistChord() const;
