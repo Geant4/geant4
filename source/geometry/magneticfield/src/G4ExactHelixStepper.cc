@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExactHelixStepper.cc,v 1.1 2005-02-15 17:36:29 japost Exp $ 
+// $Id: G4ExactHelixStepper.cc,v 1.2 2006-06-22 09:28:53 japost Exp $ 
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  Helix a-la-Explicity Euler: x_1 = x_0 + helix(h)
@@ -39,6 +39,19 @@
 #include "G4ThreeVector.hh"
 #include "G4LineSection.hh"
 
+
+G4ExactHelixStepper::G4ExactHelixStepper(G4Mag_EqRhs *EqRhs)
+  : G4MagHelicalStepper(EqRhs),
+    fBfieldValue(DBL_MAX, DBL_MAX, DBL_MAX), yInitialEHS(DBL_MAX), yFinalEHS(-DBL_MAX),
+    fLastStepSize( DBL_MAX )
+{
+   const G4int nvar = 6 ;
+   G4int i; 
+   for(i=0;i<nvar;i++)  {
+     fYInSav[i]= DBL_MAX;
+   }
+}
+
 void
 G4ExactHelixStepper::Stepper( const G4double yInput[],
 		              const G4double*,
@@ -52,7 +65,10 @@ G4ExactHelixStepper::Stepper( const G4double yInput[],
    G4double      yTemp[7], yIn[7] ;
    G4ThreeVector Bfld_value, Bfld_midpoint;
 
-   for(i=0;i<nvar;i++) yIn[i]=yInput[i];
+   for(i=0;i<nvar;i++)  {
+      yIn[i]=     yInput[i];
+      fYInSav[i]= yInput[i];
+   }
 
    MagFieldEvaluate(yIn, Bfld_value) ;        
    fBfieldValue= Bfld_value;  // Save it for chord if needed.
@@ -77,6 +93,9 @@ G4ExactHelixStepper::DumbStepper( const G4double  yIn[],
 {
   // Assuming a constant field: solution is a helix
   AdvanceHelix(yIn, Bfld, h, yOut);
+
+  G4Exception("G4ExactHelixStepper::DumbStepper should not be called.",
+	      "EHS:NoDumbStepper", FatalException, "Stepper must do all the work." ); 
 }  
 
 G4double
@@ -101,4 +120,10 @@ G4ExactHelixStepper::DistChord() const
   return G4LineSection::Distline( yMidPointEHS, yInitialEHS, yFinalEHS );
   // This is a class method that gives distance of Mid 
   //  from the Chord between the Initial and Final points.
+}
+
+G4int
+G4ExactHelixStepper::IntegratorOrder() const 
+{
+  return 1; 
 }
