@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testPropagateMagField.cc,v 1.29 2004-12-02 09:55:21 gcosmo Exp $
+// $Id: testPropagateMagField.cc,v 1.30 2006-06-22 10:34:22 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -227,6 +227,7 @@ G4VPhysicalVolume* BuildGeometry()
 #include "G4HelixExplicitEuler.hh"
 #include "G4HelixSimpleRunge.hh"
 #include "G4HelixImplicitEuler.hh"
+#include "G4ExactHelixStepper.hh"
 #include "G4ExplicitEuler.hh"
 #include "G4ImplicitEuler.hh"
 #include "G4SimpleRunge.hh"
@@ -257,7 +258,8 @@ G4FieldManager* SetupField(G4int type)
       case 6: pStepper = new G4HelixImplicitEuler( fEquation ); break;
       case 7: pStepper = new G4HelixSimpleRunge( fEquation ); break;
       case 8: pStepper = new G4CashKarpRKF45( fEquation );    break;
-      case 9: pStepper = new G4RKG3_Stepper( fEquation );    break;
+      case 9: pStepper = new G4ExactHelixStepper( fEquation );    break;
+      case 10: pStepper = new G4RKG3_Stepper( fEquation );    break;
       default: pStepper = 0;
     }
     
