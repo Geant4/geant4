@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagHelicalStepper.hh,v 1.9 2005-02-15 17:37:27 japost Exp $
+// $Id: G4MagHelicalStepper.hh,v 1.10 2006-06-22 10:36:16 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -51,7 +51,7 @@ class G4MagHelicalStepper : public G4MagIntegratorStepper
     G4MagHelicalStepper(G4Mag_EqRhs *EqRhs);
     virtual ~G4MagHelicalStepper();
   
-    void Stepper( const G4double y[],
+    virtual void Stepper( const G4double y[],    // VIRTUAL for ExactHelix - temporary
                   const G4double dydx[],
                         G4double h,
                         G4double yout[],
