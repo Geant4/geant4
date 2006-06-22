@@ -1,4 +1,4 @@
-$Id: History,v 1.109 2006-06-21 11:19:11 japost Exp $
+$Id: History,v 1.110 2006-06-22 10:28:55 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+June 21st, 2006  J.Apostolakis - field-V08-00-06
+-----------------------------
+- G4ExactHelixStepper: taking out class 
+   (provisional tag in case of difficulties with class, revisions)
+
 June 21st, 2006  J.Apostolakis - field-V08-01-00
 -----------------------------
 - G4MagIntegratorStepper
