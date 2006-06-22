@@ -43,6 +43,12 @@ geometry/divisions                               geomdiv-V08-00-03
 ------------------
 - Minor fixes in unit tests.
 
+geometry/magneticfield                           field-V08-00-07
+----------------------
+- G4ExactHelixStepper: reintroduced corrected class.
+- G4MagHelicalStepper: made Stepper() method virtual to enable
+  G4ExactHelixStepper to override it.
+
 geometry/solids/CSG                              geom-csg-V08-00-01
 -------------------
 - G4Tubs: added protection against NaNs in CalculateExtent() to avoid
@@ -75,12 +81,13 @@ processes/hadronic                               hadr-V08-00-00
 - models/chiral_inv_phase_space/body (hadr-chips-body-V08-00-05)
   o Introduced class G4QBesIKJY for Bessel I0/I1 and K0/K1 functions
     in CHIPS Model.
-- models/coherent_elastic (ghad-cohe-V08-00-08)
+- models/coherent_elastic (ghad-cohe-V08-00-09)
   o Added G4ChargeExchangeProcess. Cleanup of G4HadronElastic.
   o Added regime of HElastic which is not using data files.
   o Fixed compilation warnings at SUN-CC and WIN32-VC.
   o Use sampling of final state for n, p scattering on deuteron
     and alpha from LElastic.
+  o Fix to remove occasional NaN values at scattering on deuteron.
 - models/de_excitation (hadr-deex-V08-00-03)
   o photon_evaporation: in method G4NuclearLevelManager::MakeLevels(),
     restrict the missing file warning to Z > 10.
@@ -158,7 +165,7 @@ environments                                     envs-V08-00-07
   o education/lesson1 => measurement of the mass attenuation coefficient.
   o education/lesson2 => Pythonized novice/N03.
 
-physics_lists                                    phys-lists-V08-00-11
+physics_lists                                    phys-lists-V08-00-12
 -------------
 - Archived 'electromagnetic' subdirectory.
 - Added QBBC Physics List: version of physics free of LHEP models but
@@ -171,7 +178,8 @@ physics_lists                                    phys-lists-V08-00-11
   G4HadronElasticPhysics directly in PL.
 - Added mu-nuclear option to G4EmExtraBuilder.
 - Added Binary Cascade for Ions to BIC physics lists.
-- Fixed bug in G4QStoppingPhysics and updated QGSP_EMV list.
+- Fixed bug in G4QStoppingPhysics; updated QGSP_EMV list, using EM physics
+  v71. Created new QGSP_EMX list using EM physics v72.
 - Renamed G4EmStandardPhysics71 to G4EmStandardPhysics72:
   o Defined StepFunction of e+ and e- (1.0, 1.0*mm) for G4EmStandardPhysics71
     in order to have backward compatibility with the previous release.

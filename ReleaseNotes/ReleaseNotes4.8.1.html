@@ -458,6 +458,9 @@ please refer to the related History files provided in most packages):
             and one taking a const reference to <TT>Spin</TT>.</LI>
         <LI>New implementation method <TT>UpdateFourMomentum()</TT>.</LI>
         </UL></LI>
+    <LI>Correction in <TT>G4ExactHelixStepper</TT> and made <TT>Stepper()</TT>
+        method virtual in <TT>G4MagHelicalStepper</TT> to enable
+        <TT>G4ExactHelixStepper</TT> to override it.</LI>
     <LI>Streaming operator takes <TT>const</TT> reference and outputs momentum
         and direction magnitudes.</LI>
     </UL></LI>
@@ -652,6 +655,7 @@ please refer to the related History files provided in most packages):
       <LI>Added s-wave only regime for low momentum scattering.</LI>
       <LI>Add code from high energy elastic scattering which does not use
           data files.</LI>
+      <LI>Fix to remove occasional NaN values at scattering on deuteron.</LI>
       </UL></LI>
     <LI>For both <TT>G4UHadronElasticProcess</TT> and <TT>G4LElastic</TT> use
         np scattering from CHIPS.</LI>
@@ -943,7 +947,8 @@ please refer to the related History files provided in most packages):
     <TT>G4HadronElasticPhysics</TT> directly in PL.</LI>
 <LI>Added mu-nuclear option to <TT>G4EmExtraBuilder</TT>.</LI>
 <LI>Added Binary Cascade for Ions to BIC physics lists.</LI>
-<LI>Fixed bug in <TT>G4QStoppingPhysics</TT> and updated QGSP_EMV list.</LI>
+<LI>Fixed bug in <TT>G4QStoppingPhysics</TT>; updated QGSP_EMV list, using
+    EM physics v71. Created new QGSP_EMX list using EM physics v72.</LI>
 <LI>Renamed <TT>G4EmStandardPhysics71</TT> to <TT>G4EmStandardPhysics72</TT>.</LI>
     <UL>
     <LI>Defined <TT>StepFunction</TT> of <TT>e+</TT> and <TT>e-</TT> (1.0,
