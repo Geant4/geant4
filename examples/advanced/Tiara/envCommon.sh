@@ -38,7 +38,7 @@ fi
 export SWIG_INCDIRS="-I${SWIG_BASE_DIR}/lib/swig_lib -I${SWIG_BASE_DIR}/lib/swig_lib/python"
 if [ -n $SWIG ]; then
     echo SWIG executable is $SWIG
-endif
+else
     export SWIG=${SWIG_BASE_DIR}/bin/swig
     echo setting SWIG executable to $SWIG
 fi
