@@ -8,7 +8,8 @@
 #       mu-, mu+, e-, e+, gamma, 
 #       pi-, pi+, kaon-, kaon+, kaon0L, 
 #       neutron, proton,
-#       anti_neutron, anti_proton.
+#       anti_neutron, anti_proton,
+#       deuteron, triton, alpha.
 #  2) Choice of the  * Beam Energy * :
 #       1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 20, 30, 40, 50, 60, 80,
 #       100, 120, 150, 180, 200, 250, 300, 1000    GeV.
@@ -69,6 +70,9 @@
 /gun/particle proton
 #/gun/particle anti_neutron
 #/gun/particle anti_proton
+#/gun/particle deuteron 
+#/gun/particle triton 
+#/gun/particle alpha 
 #
 #=======================  BEAM ENERGY  ====================
 #

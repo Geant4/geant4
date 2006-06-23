@@ -72,7 +72,8 @@ if ( PHYSICS != "LHEP"          and
      PHYSICS != "QGSP_BERT"     and
      PHYSICS != "QGSP_BIC"      and
      PHYSICS != "QGSP_BERT_HP"  and
-     PHYSICS != "QGSC" 
+     PHYSICS != "QGSC"          and
+     PHYSICS != "QGSP_EMV" 
    ) :
     print '  ***ERROR*** in build.py : WRONG PHYSICS LIST = ', PHYSICS
     sys.exit(0)        
@@ -84,7 +85,8 @@ dictParticle = { 'mu-':'mu-'   , 'mu+':'mu+'  ,
                  'pi+':'pi+'   , 'pi-':'pi-'  ,
                  'k+':'kaon+'  , 'k-':'kaon-' , 'k0L':'kaon0L' ,
                  'n':'neutron' , 'p':'proton' ,
-                 'nbar':'anti_neutron' , 'pbar':'anti_proton' }
+                 'nbar':'anti_neutron' , 'pbar':'anti_proton' ,
+                 'd':'deuteron' , 't':'triton', 'alpha':'alpha' }
 if ( dictParticle.has_key( PARTICLE ) ) :
     ParticleType = dictParticle[ PARTICLE ]
 else :
@@ -294,6 +296,7 @@ mainProgram.write( "#include \"QGSP_BERT.hh\" \n" )
 ###mainProgram.write( "#include \"QGSP_BERT_HP.hh\" \n" )
 mainProgram.write( "#include \"QGSP_BIC.hh\" \n" )
 mainProgram.write( "#include \"QGSC.hh\" \n" )
+mainProgram.write( "#include \"QGSP_EMV.hh\" \n" )
 mainProgram.write( "#include \"StatAccepTestPrimaryGeneratorAction.hh\" \n" )
 mainProgram.write( "#include \"StatAccepTestEventAction.hh\" \n" )
 mainProgram.write( "#include \"StatAccepTestRunAction.hh\" \n" )
