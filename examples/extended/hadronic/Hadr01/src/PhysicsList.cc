@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.cc,v 1.9 2006-06-20 14:16:25 vnivanch Exp $
+// $Id: PhysicsList.cc,v 1.10 2006-06-23 10:46:54 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /////////////////////////////////////////////////////////////////////////
@@ -41,6 +41,7 @@
 
 #include "G4DecayPhysics.hh"
 #include "G4EmStandardPhysics72.hh"
+#include "G4EmStandardPhysics71.hh"
 #include "G4EmStandardPhysics.hh"
 #include "G4HadronElasticPhysics.hh"
 #include "G4QStoppingPhysics.hh"
@@ -60,7 +61,6 @@
 #include "HadronPhysicsQGSP_BERT.hh"
 #include "HadronPhysicsQGSC.hh"
 #include "HadronPhysicsQGSP.hh"
-#include "HadronPhysicsQGSP_EMV.hh"
 #include "G4HadronInelasticQBBC.hh"
 #include "G4HadronInelasticQLHEP.hh"
 #include "G4IonPhysics.hh"
@@ -147,6 +147,11 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     delete emPhysicsList;
     emPhysicsList = new G4EmStandardPhysics72("standard");
 
+  } else if (name == "em_71") {
+
+    delete emPhysicsList;
+    emPhysicsList = new G4EmStandardPhysics71("standard");
+
   } else if (name == "LHEP_BERT") {
 
     hadronPhys.push_back( new G4EmExtraPhysics("gamma_nuc"));
@@ -193,15 +198,20 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     hadronPhys.push_back( new G4QStoppingPhysics("stopping"));
     hadronPhys.push_back( new G4IonPhysics("ion"));
 
+  } else if (name == "LHEP_EMV") {
+
+    AddPhysicsList("em_71");
+    AddPhysicsList("LHEP");
+
   } else if (name == "QGSP_EMV") {
 
+    AddPhysicsList("em_71");
+    AddPhysicsList("QGSP");
+
+  } else if (name == "QGSP_EMX") {
+
     AddPhysicsList("em_fast");
-    hadronPhys.push_back( new G4EmExtraPhysics("gamma_nuc"));
-    hadronPhys.push_back( new G4HadronElasticPhysics("elastic",
-						     verboseLevel,false));
-    hadronPhys.push_back( new HadronPhysicsQGSP());
-    hadronPhys.push_back( new G4QStoppingPhysics("stopping"));
-    hadronPhys.push_back( new G4IonPhysics("ion"));
+    AddPhysicsList("QGSP");
 
   } else if (name == "QGSP_BERT") {
 

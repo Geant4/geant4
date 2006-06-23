@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: hadr01.cc,v 1.3 2006-06-06 19:48:38 vnivanch Exp $
+// $Id: hadr01.cc,v 1.4 2006-06-23 10:46:54 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------
@@ -61,10 +61,10 @@
 int main(int argc,char** argv) {
 
   //choose the Random engine
-  HepRandom::setTheEngine(new RanecuEngine);
+  CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine());
 
   //Construct the default run manager
-  G4RunManager * runManager = new G4RunManager;
+  G4RunManager * runManager = new G4RunManager();
 
   //set mandatory initialization classes
   runManager->SetUserInitialization(new DetectorConstruction());
