@@ -587,8 +587,8 @@ fi
 #
 # Shared libraries
 #
-if [ X$G4LIB_BUILD_SHARED != X ] ; then
-if [ X$LD_LIBRARY_PATH != X ] ; then
+if [ $G4LIB_BUILD_SHARED ] ; then
+if [ $LD_LIBRARY_PATH ] ; then
 LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${G4LIB}/${G4SYSTEM}
 export LD_LIBRARY_PATH
 else

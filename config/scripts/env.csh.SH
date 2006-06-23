@@ -207,7 +207,7 @@ endif
 
 #+
 if ( X$g4vis_build_oix_driver == Xy ) then
-setenv G4VIS_BUILD_OX_DRIVER 1
+setenv G4VIS_BUILD_OIX_DRIVER 1
 echo "On this machine the G4VIS_BUILD_OIX_DRIVER=\$G4VIS_BUILD_OIX_DRIVER"
 endif
 
@@ -415,8 +415,8 @@ endif
 #
 # Shared libraries
 #
-if ( "X$G4LIB_BUILD_SHARED" != "X" ) then
-if ( "X$LD_LIBRARY_PATH" != "X" )  then
+if ( ${?G4LIB_BUILD_SHARED} ) then
+if ( ${?LD_LIBRARY_PATH} )  then
 setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${G4LIB}/${G4SYSTEM}
 else
 setenv LD_LIBRARY_PATH ${G4LIB}/${G4SYSTEM}
