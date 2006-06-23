@@ -140,6 +140,38 @@ if [ `uname -n | grep refsol8` ]; then
   #######export G4VIS_BUILD_OIX_DRIVER=1
 fi
 
+if [ `uname -n | grep refsol9` ]; then
+  export CVSROOT=/afs/cern.ch/sw/geant4/cvs
+  export G4INSTALL=/afs/cern.ch/sw/geant4/stt/$REF/src/geant4
+  export G4STTDIR=/afs/cern.ch/sw/geant4/stt/$REF/testtools/geant4/tests/tools
+    export G4SYSTEM=SUN-CC
+    export DEBOPT=${DEBOPT}_55
+
+    unset G4USE_OSPACE
+
+    export PATH=/afs/cern.ch/project/sun/solaris/opt/SUNWspro8/bin:${PATH}
+    export PATH=/usr/local/gcc-alt-3.2.3/bin:${PATH}
+#    export LD_LIBRARY_PATH=/afs/cern.ch/project/sun/solaris/opt/SUNWspro8/lib:${LD_LIBRARY_PATH}
+#    export LD_LIBRARY_PATH=/usr/local/gcc-alt-3.2.3/lib:${LD_LIBRARY_PATH}
+    # No Persistency tonight ...
+    unset G4USE_HEPODBMS
+
+  export G4WORKDIR=/afs/cern.ch/sw/geant4/stt/$REF/$G4SYSTEM/$DEBOPT
+  export G4LIB=$G4WORKDIR/lib
+# Take CLHEP with links to lcg area
+  export CLHEP_BASE_DIR=$G4WORKDIR/clhep
+
+  # G4 build flags :
+  #######export G4UI_BUILD_XM_SESSION=1
+  #######export G4VIS_BUILD_OPENGLXM_DRIVER=1
+  export G4VIS_BUILD_OPENGLX_DRIVER=1
+#  export G4VIS_USE_OPENGLX=1
+  export OGLHOME=/usr/local
+  export OGLFLAGS="-I$OGLHOME/include"
+  export OGLLIBS="-L$OGLHOME/lib -lMesaGLU -lMesaGL"
+  #######export G4VIS_BUILD_OIX_DRIVER=1
+fi
+
 if [ `uname -n | grep tersk08` ]; then
 #  export CVSROOT=/afs/cern.ch/sw/geant4/cvs
   export G4INSTALL=/afs/slac.stanford.edu/u/ec/wilko/glast/g4test/stt/dev2/geant4
