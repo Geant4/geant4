@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.78 2006-06-21 20:45:09 stesting Exp $
+# $Id: Configure,v 1.79 2006-06-23 14:12:58 stesting Exp $
 #
-# Generated on Wed Jun 21 22:40:39 CEST 2006 [metaconfig 3.0 PL70]
+# Generated on Fri Jun 23 16:11:59 CEST 2006 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -3858,7 +3858,7 @@ You have selected to use XAW based user interfaces.
 But XAW was not found in expected place.
 Please specify the correct path where XAW is installed in your system.
 
-You can set '-' (without quotation) to CANCEL the XAW flag at all.
+You can set '-' (without quotation) to CANCEL the XAW flag at all:
 
 EOM`
 
@@ -4025,7 +4025,7 @@ You have selected to use XM Motif based user interfaces.
 But XM Motif was not found in expected place.
 Please specify the correct path where Xm is installed in your system.
 
-You can set '-' (without quotation) to CANCEL the XM flag at all.
+You can set '-' (without quotation) to CANCEL the XM flag at all:
 
 EOM`
 
@@ -4473,7 +4473,7 @@ You have selected to use OPENGLXM driver.
 But it was not found in expected place.
 Please specify the correct path where Xm is installed in your system.
 
-You can set '-' (without quotation) to CANCEL the XM flag at all.
+You can set '-' (without quotation) to CANCEL the XM flag at all:
 
 EOM`
 
@@ -4694,17 +4694,29 @@ g4message=`cat << EOM
   OIVHOME/lib
 
 You have selected to use OpenInventor driver.
-Specify the correct path (OIVHOME) where OpenInventor is installed in your system
-(set by defalt):
+But it was not found in expected place.
+Please specify the correct path where OpenInventor is installed in your system.
+
+You can set '-' (without quotation) to CANCEL the XM flag at all:
+
 EOM`
 
-fi
-
-dflt=$g4vis_oivhome
-fn='d~'
+dflt=""
+fn='d~(-)'
 rp=$g4message
 . ./getfile
+
+if test "X$ans" != "X-" ; then
+
 g4vis_oivhome=$ans
+
+else
+
+g4vis_build_oix_driver=n
+g4vis_use_oix=n
+
+fi
+fi
 
 if test "X$g4osname" = "XLinux"; then 
 
@@ -5008,17 +5020,35 @@ g4message=`cat << EOM
   OGLHOME/lib
 
 You have selected to use OpenGL driver.
-Specify the correct path (OGLHOME) where OpenGL is installed in your system
-(set by defalt):
+But it was not found in expected place.
+Please specify the correct path where OpenGL is installed in your system.
+
+You can set '-' (without quotation) to CANCEL the OpenGL flag at all:
+
 EOM`
 
-fi
-
-dflt=$g4vis_oglhome
-fn='d~'
+dflt=""
+fn='d~(-)'
 rp=$g4message
 . ./getfile
+
+if test "X$ans" != "X-" ; then
+
 g4vis_oglhome=$ans
+
+else
+
+g4vis_build_openglx_driver=n
+g4vis_use_openglx=n
+
+g4vis_build_openglxm_driver=n
+g4vis_use_openglxm=n
+
+g4vis_build_openglwin32_driver=n
+g4vis_use_openglwin32=n
+
+fi
+fi
 
 if test "X$g4osname" = "XLinux"; then 
 
