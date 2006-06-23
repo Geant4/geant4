@@ -25,7 +25,7 @@
 //   GEANT 4 - Underground Dark Matter Detector Advanced Example
 //
 //      For information related to this code contact: Alex Howard
-//      e-mail: a.s.howard@ic.ac.uk
+//      e-mail: alexander.howard@cern.ch
 // --------------------------------------------------------------
 // Comments
 //

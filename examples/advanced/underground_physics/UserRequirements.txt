@@ -1,6 +1,6 @@
 UNDERGROUND PHYSICS ADVANCED EXAMPLE - DMX
 
-UserRequirements.txt - Alex Howard, e-mail: a.s.howard@ic.ac.uk, 29/11/01.
+UserRequirements.txt - Alex Howard, e-mail: alexander.howard@cern.ch, 29/11/01.
 
 Introduction:
 

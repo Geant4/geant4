@@ -24,7 +24,7 @@
 // $Id: DMXAnalysisManager.cc
 // GEANT4 tag $Name:
 //
-// Author: Alex Howard (a.s.howard@ic.ac.uk)
+// Author: Alex Howard (alexander.howard@cern.ch)
 //
 // History:
 // -----------
