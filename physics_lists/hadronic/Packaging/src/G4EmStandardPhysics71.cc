@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmStandardPhysics71.cc,v 1.12 2006-06-21 18:09:19 vnivanch Exp $
+// $Id: G4EmStandardPhysics71.cc,v 1.13 2006-06-23 08:23:03 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -32,6 +32,7 @@
 // Modified:
 // 19.12.2005 V.Ivanchenko StepFunction for electrons (1.0, 1.0*mm)
 // 21.06.2006 V.Ivanchenko use recent msc with step limitation off
+// 23.06.2006 V.Ivanchenko set dRoverRange = 0.8 for e- and e+
 //
 //----------------------------------------------------------------------------
 //
@@ -144,7 +145,7 @@ void G4EmStandardPhysics71::ConstructProcess()
         G4cout << "### EmStandard71 instantiates eIoni and msc71 for " 
                << particleName << G4endl;
       G4eIonisation* eioni = new G4eIonisation();
-      eioni->SetStepFunction(1.0, 1.0*mm);
+      eioni->SetStepFunction(0.8, 1.0*mm);
       pmanager->AddProcess(new G4MultipleScattering,  -1, 1, 1);
       pmanager->AddProcess(eioni,                     -1, 2, 2);
       pmanager->AddProcess(new G4eBremsstrahlung(),   -1, 3, 3);
@@ -155,7 +156,7 @@ void G4EmStandardPhysics71::ConstructProcess()
         G4cout << "### EmStandard71 instantiates eIoni and msc71 for " 
                << particleName << G4endl;
       G4eIonisation* eioni = new G4eIonisation();
-      eioni->SetStepFunction(1.0, 1.0*mm);
+      eioni->SetStepFunction(0.8, 1.0*mm);
       pmanager->AddProcess(new G4MultipleScattering, -1, 1, 1);
       pmanager->AddProcess(eioni,                    -1, 2, 2);
       pmanager->AddProcess(new G4eBremsstrahlung,    -1, 3, 3);

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4IonBinaryCascadePhysics.cc,v 1.2 2006-06-06 16:47:45 vnivanch Exp $
+// $Id: G4IonBinaryCascadePhysics.cc,v 1.3 2006-06-23 08:23:03 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -30,6 +30,7 @@
 // Author:      V.Ivanchenko 09.11.2005
 //
 // Modified:
+// 23.06.06 V.Ivanchenko set emaxLHEP=1 TeV
 //
 //----------------------------------------------------------------------------
 //
@@ -58,7 +59,7 @@ G4IonBinaryCascadePhysics::G4IonBinaryCascadePhysics(const G4String& name,
   :  G4VPhysicsConstructor(name), verbose(verb), wasActivated(false)
 {
   emax     = 20.*GeV;
-  emaxLHEP = 100.*MeV;
+  emaxLHEP = 1.*TeV;
   eminBIC  = 0.*MeV;
   if(verbose > 1) G4cout << "### G4IonBinaryCascadePhysics" << G4endl;
 }
@@ -115,7 +116,7 @@ void G4IonBinaryCascadePhysics::AddProcess(const G4String& name,
   hmodel->SetMaxEnergy(emax);
   if(lmodel) {
     hadi->RegisterMe(lmodel);
-    hmodel->SetMinEnergy(0.0);
+    hmodel->SetMinEnergy(emax - MeV);
     hmodel->SetMaxEnergy(emaxLHEP);
   }  
   if(verbose > 1) {
