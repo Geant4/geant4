@@ -1,5 +1,5 @@
 // -------------------------------------------------------------------
-// $Id: MicrobeamPrimaryGeneratorAction.cc,v 1.3 2006-06-01 22:25:20 sincerti Exp $
+// $Id: MicrobeamPrimaryGeneratorAction.cc,v 1.4 2006-06-23 10:53:39 sincerti Exp $
 // -------------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -43,8 +43,8 @@ void MicrobeamPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   G4double sizeMax = 0.5*micrometer; // INITIAL BEAM POSITION UNIFORMLY SPREAD ON A DISK
   while (! (std::sqrt(x0*x0+y0*y0)<= sizeMax) )
   {
-    x0 = RandFlat::shoot(-sizeMax,sizeMax);
-    y0 = RandFlat::shoot(-sizeMax,sizeMax);
+    x0 = CLHEP::RandFlat::shoot(-sizeMax,sizeMax);
+    y0 = CLHEP::RandFlat::shoot(-sizeMax,sizeMax);
   }
   
   // INITIAL BEAM ENERGY

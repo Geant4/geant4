@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: README,v 1.7 2006-06-01 22:25:19 sincerti Exp $
+$Id: README,v 1.8 2006-06-23 10:53:39 sincerti Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,12 +16,7 @@ a. Centre d'Etudes Nucleaires de Bordeaux-Gradignan
 (CENBG), IN2P3 / CNRS / Bordeaux 1 University, 33175 Gradignan, France
 * e-mail:incerti@cenbg.in2p3.fr
 
-More information on the Microbeam example can be found in the Microbeam 
-documentation available at http://www.ge.infn.it/geant4/examples/
-
-You may also send an e-mail to incerti@cenbg.in2p3.fr
-
-Last modified by S. Incerti, 10/04/2006
+Last modified by S. Incerti, 23/06/2006
 
 ---->0. INTRODUCTION.                                                    
                                                                        
@@ -151,9 +146,10 @@ In interactive mode, run:
 
 > $G4WORDIR/bin/Linux-g++/Microbeam
 
-The macro microbeam.mac is executed by default. The Microbeam code reads 
-the phantom.dat file containing all the necessary information describing 
-the cell phantom. 10 alphas particles are generated.
+The macro microbeam.mac is executed by default. To get vizualisation, make
+sure to uncomment the /vis/... lines in the microbeam.mac macro.
+The Microbeam code reads the phantom.dat file containing all the necessary 
+information describing the cell phantom. 10 alphas particles are generated.
 
 
 ---->5. PHYSICS
@@ -184,8 +180,8 @@ alpha particle just before penetrating into the targeted cell;
 * beamPosition.txt : gives the beam transverse position distribution(X and Y) 
 just before penetrating into the targeted cell;
 
-These files can be easily analyzed using the provided ROOT macro file plot.C; 
-to do so :
+These files can be easily analyzed using for example the provided ROOT macro 
+file plot.C; to do so :
 * be sure to have ROOT installed on your machine
 * be sure to be in the microbeam directory
 * launch ROOT by typing root

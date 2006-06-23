@@ -1,5 +1,5 @@
 // -------------------------------------------------------------------
-// $Id: MicrobeamRunAction.cc,v 1.3 2006-06-01 22:25:20 sincerti Exp $
+// $Id: MicrobeamRunAction.cc,v 1.4 2006-06-23 10:53:39 sincerti Exp $
 // -------------------------------------------------------------------
 
 #include "G4VVisManager.hh"
@@ -32,8 +32,8 @@ void MicrobeamRunAction::BeginOfRunAction(const G4Run* /*aRun*/)
   // save Rndm status
   if (saveRndm > 0)
     { 
-      HepRandom::showEngineStatus();
-      HepRandom::saveEngineStatus("beginOfRun.rndm");
+      CLHEP::HepRandom::showEngineStatus();
+      CLHEP::HepRandom::saveEngineStatus("beginOfRun.rndm");
     }
  
   numEvent = 0;
@@ -69,8 +69,8 @@ void MicrobeamRunAction::EndOfRunAction(const G4Run* /*aRun*/)
   // save Rndm status
   if (saveRndm == 1)
   { 
-    HepRandom::showEngineStatus();
-    HepRandom::saveEngineStatus("endOfRun.rndm");
+    CLHEP::HepRandom::showEngineStatus();
+    CLHEP::HepRandom::saveEngineStatus("endOfRun.rndm");
   }   
   
   FILE *myFile;

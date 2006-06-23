@@ -1,5 +1,5 @@
 // -------------------------------------------------------------------
-// $Id: MicrobeamEventAction.cc,v 1.3 2006-06-01 22:25:19 sincerti Exp $
+// $Id: MicrobeamEventAction.cc,v 1.4 2006-06-23 10:53:39 sincerti Exp $
 // -------------------------------------------------------------------
 
 #include "G4Event.hh"
@@ -78,6 +78,8 @@ if (G4VVisManager::GetConcreteInstance())
 	} 
 
             //save rndm status
+      
+      /*
       if (Run->GetRndmFreq() == 2)
 	{
 	  HepRandom::saveEngineStatus("endOfEvent.rndm");   
@@ -87,7 +89,8 @@ if (G4VVisManager::GetConcreteInstance())
 	      //G4cout << "\n---> End of Event: " << evtNb << G4endl;
 	      //HepRandom::showEngineStatus();
 	    }
-	}    
+	}
+      */    
     }
 
 }
