@@ -2,8 +2,7 @@
 echo have to set PI_DIR and PYTHON_LIB_DIR and SWIG_BASE_DIR
 if [ -n $SWIG_BASE_DIR ]; then
     echo SWIG_BASE_DIR default is /usr/local
-##    export SWIG_BASE_DIR=/usr/local
-    export SWIG_BASE_DIR=/usr
+    export SWIG_BASE_DIR=/usr/local
 else
     echo SWIG_BASE_DIR is $SWIG_BASE_DIR
 fi
