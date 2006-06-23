@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.79 2006-06-23 14:12:58 stesting Exp $
+# $Id: Configure,v 1.80 2006-06-23 14:38:31 stesting Exp $
 #
-# Generated on Fri Jun 23 16:11:59 CEST 2006 [metaconfig 3.0 PL70]
+# Generated on Fri Jun 23 16:30:34 CEST 2006 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -2940,7 +2940,7 @@ else
 g4message=`cat << EOM
 
 Could not find CLHEP installed on this system!
-Please, specify where CLHEP is installed (set by default):
+Please, specify where CLHEP is installed:
 
 CLHEP_BASE_DIR:			$g4clhep_base_dir
 
@@ -2949,7 +2949,7 @@ According to it will be set:
 CLHEP_INCLUDE_DIR		
 CLHEP_LIB_DIR			
 
-You will be asked about customizing these next.
+You will be asked about customizing these next:
 EOM`
 
 fi
@@ -2963,7 +2963,7 @@ rp=$g4message
 #	case $gans in
 
 #	1) 
-		dflt=$g4clhep_base_dir
+		dflt=""
 		fn='d~'
 #		rp="Where is CLHEP installed?"
 		. ./getfile
