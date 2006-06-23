@@ -76,6 +76,11 @@ int main(int argc,char** argv) {
   
  G4UIsession* session=0;
   
+#ifdef G4VIS_USE
+  // visualization manager
+  G4VisManager* visManager = 0;
+#endif
+
   if (argc==1)   // Define UI session for interactive mode.
     {
       // G4UIterminal is a (dumb) terminal.
@@ -88,14 +93,14 @@ int main(int argc,char** argv) {
       session = new G4UIterminal();
 #endif
 #endif
-    }
-  
 #ifdef G4VIS_USE
   // visualization manager
-  G4VisManager* visManager = new G4VisExecutive;
+  visManager = new G4VisExecutive;
   visManager->Initialize();
 #endif
 
+    }
+  
   // output environment variables:
 #ifdef G4ANALYSIS_USE
   G4cout << G4endl << G4endl << G4endl 
@@ -159,7 +164,7 @@ int main(int argc,char** argv) {
 
   // job termination
 #ifdef G4VIS_USE
-  delete visManager;
+  if(visManager) delete visManager;
 #endif
   delete runManager;
 
