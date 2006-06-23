@@ -1,6 +1,11 @@
                  History file
                  ------------
 
+23-Jun-2006 - A.Ribon (statAccepTest-V08-00-16)
+- Small fix to the evaluation of the primary beam
+  energy. Tag for the Grid whole production.
+
+
 14-Jun-2006 - A.Ribon (statAccepTest-V08-00-15)
 - Exclude Chi2 test.
 
