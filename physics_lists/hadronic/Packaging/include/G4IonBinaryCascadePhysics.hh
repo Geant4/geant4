@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4IonBinaryCascadePhysics.hh,v 1.2 2006-06-06 16:47:44 vnivanch Exp $
+// $Id: G4IonBinaryCascadePhysics.hh,v 1.3 2006-06-23 10:00:11 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -39,6 +39,11 @@
 
 #include "globals.hh"
 #include "G4VPhysicsConstructor.hh"
+
+#include "G4LEDeuteronInelastic.hh"
+#include "G4LETritonInelastic.hh"
+#include "G4LEAlphaInelastic.hh"
+
 #include <vector>
 
 class G4HadronInelasticProcess;
@@ -46,6 +51,7 @@ class G4HadronicInteraction;
 class G4TripathiLightCrossSection;
 class G4TripathiCrossSection;
 class G4IonsShenCrossSection;
+
 
 class G4IonBinaryCascadePhysics : public G4VPhysicsConstructor
 {
@@ -75,6 +81,10 @@ private:
   G4TripathiCrossSection* fTripathi;
   G4TripathiLightCrossSection* fTripathiLight;
   G4IonsShenCrossSection* fShen;
+
+  G4LEDeuteronInelastic*  fLEDModel;
+  G4LETritonInelastic*    fLETModel;
+  G4LEAlphaInelastic*     fLEAModel;
 
   G4double emax;
   G4double emaxLHEP;

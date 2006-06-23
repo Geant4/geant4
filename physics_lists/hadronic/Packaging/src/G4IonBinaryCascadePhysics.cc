@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4IonBinaryCascadePhysics.cc,v 1.3 2006-06-23 08:23:03 vnivanch Exp $
+// $Id: G4IonBinaryCascadePhysics.cc,v 1.4 2006-06-23 10:00:11 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -70,6 +70,9 @@ G4IonBinaryCascadePhysics::~G4IonBinaryCascadePhysics()
     delete fTripathi;
     delete fTripathiLight;
     delete fShen;
+    delete fLEDModel;
+    delete fLETModel;
+    delete fLEAModel;
     G4int i;
     G4int n = p_list.size();
     for(i=0; i<n; i++) {delete p_list[i];}
@@ -89,12 +92,14 @@ void G4IonBinaryCascadePhysics::ConstructProcess()
   fTripathi = new G4TripathiCrossSection;
   fTripathiLight = new G4TripathiLightCrossSection;
 
-  //    new G4LEDeuteronInelastic;
+  fLEDModel = new G4LEDeuteronInelastic();
+  fLETModel = new G4LETritonInelastic();
+  fLEAModel = new G4LEAlphaInelastic();
 
-  AddProcess("dInelastic", G4Deuteron::Deuteron(), fBC, 0);
-  AddProcess("tInelastic",G4Triton::Triton(),  fBC, 0);
+  AddProcess("dInelastic", G4Deuteron::Deuteron(), fBC, fLEDModel);
+  AddProcess("tInelastic",G4Triton::Triton(),  fBC, fLETModel);
   AddProcess("He3Inelastic",G4He3::He3(),  fBC, 0);
-  AddProcess("alphaInelastic", G4Alpha::Alpha(),  fBC, 0);
+  AddProcess("alphaInelastic", G4Alpha::Alpha(),  fBC, fLEAModel);
   AddProcess("ionInelastic",G4GenericIon::GenericIon(),  fBC, 0);
 
 }
