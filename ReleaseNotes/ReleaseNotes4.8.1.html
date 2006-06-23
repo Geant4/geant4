@@ -931,6 +931,7 @@ please refer to the related History files provided in most packages):
         wrappers.</LI>
     <LI>examples, tests and associated configuration files.</LI>
     </UL></LI>
+<LI>Removed dependency on Gain module in MOMO.</LI>
 </UL>
 
 <A NAME="lst-notes">
@@ -955,6 +956,8 @@ please refer to the related History files provided in most packages):
         1.0*mm) for <TT>G4EmStandardPhysics71</TT> in order to have backward
         compatibility with the previous release.</LI>
     <LI>Added commands and fixed minor typo in <TT>G4EmMessenger</TT>.</LI>
+    <LI>Set dRoverRange=0.8 for EM physics v71.</LI>
+    <LI>Set emaxLHEP=1 TeV for light ions.</LI>
     </UL></LI>
 <LI>Fixed problem in destructors of <TT>G4DecayPhysics</TT> and
     <TT>G4ElectroNuclearBuilder</TT>. Fixed destructor also for
@@ -1027,7 +1030,12 @@ please refer to the related History files provided in most packages):
         </UL></LI>
     <LI>Tiara
         <UL>
-        <LI>Re-engineered example to remove Python layer and simplify setup.</LI>
+        <LI>Minor updates.</LI>
+        </UL></LI>
+    <LI>underground_physics
+        <UL>
+        <LI>Removed visualisation warnings when running in batch mode.</LI>
+        <LI>Replaced obsolete e-mail address in headers.</LI>
         </UL></LI>
     </UL></LI>
 <LI><B>extended</B>

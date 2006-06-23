@@ -155,17 +155,21 @@ visualization                                    vis-V08-00-13
   o Fixed rewind and file closure on exit.
   o Protect zero model pointer.
 
-environments                                     envs-V08-00-07
+environments                                     envs-V08-00-08
 ------------
-- Fixed problems of segmentation fault at termination in Geant4Py and
-  changed Python calls pass-by-reference.
-- Change install path of site-modules (lib/site-modules -> lib/) in Geant4Py
-  and removed COPYING statement.
-- Added new Geant4Py educational examples:
-  o education/lesson1 => measurement of the mass attenuation coefficient.
-  o education/lesson2 => Pythonized novice/N03.
+- Geant4Py:
+  o Fixed problems of segmentation fault at termination and changed Python
+    calls pass-by-reference.
+  o Changeed install path of site-modules (lib/site-modules -> lib/) and
+    removed COPYING statement.
+  o Added new educational examples:
+    + education/lesson1 => measurement of the mass attenuation coefficient.
+    + education/lesson2 => Pythonized novice/N03.
+- MOMO:
+  o MOMO.jar is now distributed without Gain.
+  o MomoHome/vis.mac revised for new vis (taken from exampleN03).
 
-physics_lists                                    phys-lists-V08-00-12
+physics_lists                                    phys-lists-V08-00-13
 -------------
 - Archived 'electromagnetic' subdirectory.
 - Added QBBC Physics List: version of physics free of LHEP models but
@@ -184,6 +188,8 @@ physics_lists                                    phys-lists-V08-00-12
   o Defined StepFunction of e+ and e- (1.0, 1.0*mm) for G4EmStandardPhysics71
     in order to have backward compatibility with the previous release.
   o Added commands and fixed minor typo in G4EmMessenger.
+  o Set dRoverRange=0.8 for EM physics v71.
+  o Set emaxLHEP=1 TeV for light ions.
 - Fixed problem in destructors of G4DecayPhysics and G4ElectroNuclearBuilder.
   Fixed destructor also for G4MiscLHEPBuilder.
 - Fixed name of builder for HadronPhysicsQGSP_GN.
@@ -220,6 +226,9 @@ examples                                         examples-V08-01-00
   o Introduced pion absorption at rest in RemSimHadronicBinary.
   o Primary particle generator can handle spectra.
   o Added histograms and comments.
+- advanced/underground_physics (dmx-V08-00-02)
+  o Removed visualisation warnings when running in batch mode.
+  o Replaced obsolete e-mail address in headers.
 - extended/analysis/A01 (exampleA01-V08-00-01)
   o Added Time attribute to Hit classes.
 - extended/electromagnetic/TestEm0 (testem0-V08-00-04)
