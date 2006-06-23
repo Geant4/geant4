@@ -53,9 +53,18 @@ void StatAccepTestSteppingAction::UserSteppingAction( const G4Step * theStep ) {
   }
 
   StatAccepTestAnalysis::getInstance()->infoStep( theStep );
- 
-  if ( primaryParticleId == 0 ) {
+
+  // Store the information about the ID and the kinetic energy 
+  // of the primary particle, at the first step of the first event.
+  // Notice that for the kinetic energy, we are considering the 
+  // "pre-step" point of such first step.
+  // Be careful that the condition "primaryParticleId == 0"
+  // cannot be used to check if it is the first step, because
+  // ions have PDG code = 0.
+  static bool isFirstStep = 1;
+  if ( isFirstStep ) {
     if ( theStep->GetTrack()->GetParentID() == 0 ) {
+      isFirstStep = 0;
       primaryParticleId = theStep->GetTrack()->GetDefinition()->GetPDGEncoding();
       primaryParticleEnergy = theStep->GetPreStepPoint()->GetKineticEnergy();
     }
