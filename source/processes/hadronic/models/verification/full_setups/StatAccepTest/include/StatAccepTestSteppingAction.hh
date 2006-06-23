@@ -33,6 +33,7 @@ private:
   G4double totalEdepAllParticles;
   G4int    primaryParticleId;
   G4double primaryParticleEnergy;
+  G4bool   isFirstStepOfTheEvent;
 
 };
 

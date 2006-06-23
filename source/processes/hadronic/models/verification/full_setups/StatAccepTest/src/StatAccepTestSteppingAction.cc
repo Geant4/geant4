@@ -12,7 +12,8 @@
 
 StatAccepTestSteppingAction::StatAccepTestSteppingAction() : 
   totalEdepAllParticles( 0.0 ),
-  primaryParticleId( 0 ), primaryParticleEnergy( 0.0 ) {}
+  primaryParticleId( 0 ), primaryParticleEnergy( 0.0 ),
+  isFirstStepOfTheEvent( true ) {}
 
 
 StatAccepTestSteppingAction::~StatAccepTestSteppingAction() {}
@@ -61,12 +62,11 @@ void StatAccepTestSteppingAction::UserSteppingAction( const G4Step * theStep ) {
   // Be careful that the condition "primaryParticleId == 0"
   // cannot be used to check if it is the first step, because
   // ions have PDG code = 0.
-  static bool isFirstStep = 1;
-  if ( isFirstStep ) {
+  if ( isFirstStepOfTheEvent ) {
     if ( theStep->GetTrack()->GetParentID() == 0 ) {
-      isFirstStep = 0;
       primaryParticleId = theStep->GetTrack()->GetDefinition()->GetPDGEncoding();
       primaryParticleEnergy = theStep->GetPreStepPoint()->GetKineticEnergy();
+      isFirstStepOfTheEvent = false;
     }
   }
 
@@ -88,5 +88,6 @@ void StatAccepTestSteppingAction::reset() {
   totalEdepAllParticles = 0.0;
   primaryParticleId = 0;
   primaryParticleEnergy = 0.0;
+  isFirstStepOfTheEvent = true;
 }
 
