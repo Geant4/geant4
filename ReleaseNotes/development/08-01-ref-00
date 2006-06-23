@@ -169,31 +169,28 @@ environments                                     envs-V08-00-08
   o MOMO.jar is now distributed without Gain.
   o MomoHome/vis.mac revised for new vis (taken from exampleN03).
 
-physics_lists                                    phys-lists-V08-00-13
+physics_lists                                    phys-lists-V08-00-14
 -------------
-- Archived 'electromagnetic' subdirectory.
-- Added QBBC Physics List: version of physics free of LHEP models but
-  using Binary, BinaryIon, Bertini, CHIPS, QGSC, FTFC.
-  QBBC is extended in order to have more options; added extra builders
-  QBBC, QBEC, QBEC_HP, QGSP, QGSP_BERT, QGSP_EL, QGSP_STP.
-- Using Bertini Cascade for kaons (K+,K-, K0L, k0S).
-- Migrated stopping physics to CHIPS for all except LBE and LHEP.
+- Archived 'electromagnetic' subdirectory, Physics Lists for EM use 
+  cases are provided together with geant4 examples. In particular 
+  extended electromagnetic examples demonstrates how to use
+  standard EM physics, how to use available options and provide
+  extensions. 
+- Providing G4QStoppingPhysics based on the CHIPS model for simulation 
+  of capture at rest of negatively charged hadrons; using it in all QGS 
+  and FTF type physics lists.
 - Moved elastic out of Neutron/Proton/PIK- builders, and use
-  G4HadronElasticPhysics directly in PL.
-- Added mu-nuclear option to G4EmExtraBuilder.
+  G4HadronElasticPhysics directly in all.
+- Using Bertini Cascade for kaons (K+,K-, K0L, k0S).
 - Added Binary Cascade for Ions to BIC physics lists.
-- Fixed bug in G4QStoppingPhysics; updated QGSP_EMV list, using EM physics
-  v71. Created new QGSP_EMX list using EM physics v72.
-- Renamed G4EmStandardPhysics71 to G4EmStandardPhysics72:
-  o Defined StepFunction of e+ and e- (1.0, 1.0*mm) for G4EmStandardPhysics71
-    in order to have backward compatibility with the previous release.
-  o Added commands and fixed minor typo in G4EmMessenger.
-  o Set dRoverRange=0.8 for EM physics v71.
-  o Set emaxLHEP=1 TeV for light ions.
-- Fixed problem in destructors of G4DecayPhysics and G4ElectroNuclearBuilder.
-  Fixed destructor also for G4MiscLHEPBuilder.
+- Added experimental QGSP_EMX physics list providing an alternative
+  standard EM physics requiring less CPU in comparison with QGSP.
+- Added mu-nuclear option to G4EmExtraBuilder.
+- Added experimental QBBC Physics List: version of physics free of 
+  LHEP models but using Binary, BinaryIon, Bertini, CHIPS, QGSC, FTFC.
+- Fixed problem in destructors of G4DecayPhysics and
+  G4ElectroNuclearBuilder and G4MiscLHEPBuilder.
 - Fixed name of builder for HadronPhysicsQGSP_GN.
-- Renamed G4LElasticB to G4HadronElastic.
 
 examples                                         examples-V08-01-00
 --------
@@ -218,7 +215,7 @@ examples                                         examples-V08-01-00
   o Comments in the primary particle and physics components.
 - advanced/medical_linac (medical_linac-V08-00-01)
   o Changes in input macros.
-- advanced/microbeam (microbeam-V08-00-04)
+- advanced/microbeam (microbeam-V08-00-05)
   o New example simulating the cellular irradiation beam line installed on
     the AIFIRA electrostatic accelerator facility located at CENBG,
     Bordeaux-Gradignan, France.
@@ -249,7 +246,7 @@ examples                                         examples-V08-01-00
   o SteppingAction: use prePoint->GetTouchableHandle()->GetVolume().
 - extended/gdml (exgdml-V08-00-00)
   o Added G4Evaluator for new version of GDML and updated GNUmakefile.
-- extended/hadronic/Hadr01 (exhadr01-V08-00-05)
+- extended/hadronic/Hadr01 (exhadr01-V08-00-06)
   o New example based on the IION application developed for simulation of
     proton or ion beam interaction with a water target. Different aspects of
     beam target interaction are demonstrated in the example including

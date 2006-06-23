@@ -69,7 +69,7 @@ Official platforms:
 More verified configurations:
 <UL>
 <LI>SUN Solaris 5.8, C++ CC-5.5</LI>
-<LI>Linux, gcc-4.1.0</LI>
+<LI>Linux, gcc-4.1.1</LI>
 <LI>Linux, Intel-icc 8.0</LI>
 <LI>MacOS 10.4, gcc-4.0.1</LI>
 <LI>Windows/XP and CygWin Tools with: Visual C++ 8.0 (Visual Studio 2005)</LI>
@@ -166,11 +166,44 @@ of libraries (or a full recompilation) and a recompilation of user applications
 is required.
 
 <P> </P>
+<B>Standard Electromagnetic physics</B>
+<P> </P>
+Some improvements are introduced to multiple scattering. 
+As a consequence of these changes in the model, the following applies in
+this release:
+<UL>
+<LI>the simulation of the back-scattering is improved;</LI>
+<LI>the scattering in very thin layers is better than the one in version 8.0;</LI>
+<LI>the tail of the angular distribution is now material dependent;</LI>
+<LI>the visible energy in sampling calorimeters is less sensitive
+    to the value of the production threshold.</LI>
+</UL>
+The so-called <I>subcutoff</I> regime of using smaller cuts in vicinity of 
+the geometrical boundary has been updated and verified. The simulation 
+of ionization for ions was also improved. The data from NIST  databases 
+for protons and helium ion and ICRU73 data for the carbon ion are 
+included for the first time. An interface to add user data on stopping
+power for particular ion in particular media is provided.<BR>
+A new version of the Synchrotron radiation is released.<BR>
+The user interfaces allowing to set/access EM options, cross sections and
+stopping powers are extended and improved.
+
+<P> </P>
 <B>Hadronic physics: Bertini Cascade</B>
 <P> </P>
 In this release, the <TT>G4BERTINI_KAON</TT> conditional assembly flag has
 been removed from the Bertini Cascade code, so that it is no longer needed
 for the user to set them to instruct Bertini handling of strange particles.
+
+<P> </P>
+<B>Physics Lists</B>
+<P> </P>
+Physics lists are updated in order to utilize recent developments
+in hadronic and electromagnetic physics. In particular, the more advance
+model sampling of capture of negatively charged hadrons at rest is used.
+The new elastic process combining available models of elastic scattering
+is introduced with significant improvement of elastic scattering on 
+hydrogen; the Binary and Bertini cascade developments are also utilized.
 
 <P> </P>
 <A NAME="7."></A>
@@ -224,178 +257,247 @@ please refer to the related History files provided in most packages):
 <UL>
 <LI><B>Standard</B>
     <UL>
-- G4MultipleScattering: changed value of 'facgeom' (4 -> 3.5)
-  tlimitmin = facrange*50*micrometer.
-- G4MscModel: changed tail of angular distribution.
-- Substituted method SetStepLimits() by SetStepFunction().
-- Moved initialisation of default values to constructors.
-- Fixed cases of NaN value for delta direction when zero cut.
-- G4MscModel:
-  o Removed some data members and code cleaning; revised 'z' sampling.
-  o Now computing transport cross section.
-- G4MscModel71: Now computing transport cross section.
-- G4MultipleScattering:
-  o Added set function for data member 'factail'; z sampling by default.
-- G4eplusAnnihilation: removed cut dependance in AtRestDoIt().
-- G4PAIModel: providing hiding of some technical verbose messages.
-- G4PolarizedComptonScattering: return G4ComptonScattering52::PostStepDoIt().
-- G4hIonisation52, G4eIonisation52, G4eBremsstrahlung52: functions
-  ComputeCrossSectionPerAtom() and ComputeRestrictedMeandEdx() now public.
-- Moved G4LossTableManager::Instance()->EmCorrections() in constructor.
-- Added functions:
-  o ComputeCrossSectionPerElectron/Atom() for G4BraggModel, G4BraggIonModel,
-    G4eeToTwoGammaModel, G4MollerBhabhaModel and G4BetheBlochModel.
-  o G4PEEffectModel::ComputeMeanFreePath().
-  o G4eBremsstrahlungModel::ComputeCrossSectionPerAtom().
-- Removed obsolete G4SCProcessorStand class.
-- Removed function InitialiseCrossSectionPerAtom() in G4BetheHeitlerModel.
-- Reorganisation of classes: archived G4MscModel class, optimised
-  interfaces and introduced G4UrbanMscModel class for G4MultipleScattering:
-  o Bug fix in the SampleCosineTheta() method and fixed a problem of
-    non-initialised variable.
-  o Make stepping algorithm be active for ions by default.
-  o Fixed bug in cross section in G4MscModel71 class introduced in ref-02.
-- G4eBremsstrahlungModel:
-  o Fixed problem of initialisation in the case when cuts are not defined
-    (needed for extrapolator and for unit tests)
-  o Fixed problem of energy loss calculation below 10 MeV.
-- G4KleinNishinaModel:
-  o Removed upper energy limit to have a smooth cross section.
-- G4SynchrotronRadiation:
-  o Introduced new methods for angular distribution.
-  o Updated methods for calculation of integral number spectrum.
-  o Updated to set polarisation and work with local magnetic-fields
-    attached to single volumes.
-- G4PAImodel and G4PAIPhotonMOdel:
-  o Important fixes for very low energy hadrons
-- Added first test-prototype of elastic Coulomb scattering.
-- G4hIonisation: added mass and spin effects (important for pion ionisation).
-- Moved G4SynchrotronRadiation to 'xrays' module and fixed bug for unit
-  polarisation in PostStepDoIt().
-- New class G4WaterStopping for light ion stopping in water.
-- New classes G4ASTARStopping and G4PSTARStopping with NIST data on stopping
-  powers, used by G4BraggModel and G4BraggIonModel
-- G4eBremsstrahlung: use 'gammaThreshold' from G4LossTableManager for
-  more easier initialisation (CMS request).
-- G4MollerBhabhaModel: fix for 'MinEnergyCut'.
-- G4BetheBlochModel: use different formula for muons and hadrons for 'tmax'.
-- G4ionIonisation: added possibility to use user data on stopping power.
-- G4hIonisation: spin/mass effect update.
-- G4MultipleScattering:
-  o Changed values of data members 'tkinlimit', 'factail'.
-  o Providing possibility of reinitialisation of 'facrange' and
-    'steppingAlgorithm' parameters between runs.
-- G4UrbanMscModel:
-  o Improved scattering in thin layers.
-  o New data members; changes in ComputeTruePathLengthLimit(),
-    and in SampleCosineTheta().
-    <LI></LI>
+    <LI>Substituted method <TT>SetStepLimits()</TT> by
+        <TT>SetStepFunction()</TT> in all energy loss processes.</LI>
+    <LI>Moved initialization of default values to constructors of all models
+        and processes to fix problems at initialization for the case of many
+        runs in one macro.</LI>
+    <LI><TT>G4MultipleScattering</TT>:
+        <UL>
+        <LI>Step limit calculation moved to model part <TT>G4UrbanMscModel</TT>.</LI>
+        <LI>Changed values of data members 'tkinlimit', 'factail';
+        <LI>Providing possibility of reinitialization of 'facrange' and
+            'steppingAlgorithm' parameters between runs;
+        <LI>Changed default value of 'facgeom' (4 -> 3.5)
+        <LI>Added set function for data member <TT>factail</TT>; <TT>z</TT>
+            sampling by default.</LI>
+        </UL></LI>
+    <LI><TT>G4MscModel</TT> renamed <TT>G4UrbanMscModel</TT>: 
+        <UL>
+        <LI>Changed the value of the parameter <TT>theta0</TT>,
+            improved scattering in thin layers.</LI>
+        <LI>Changes in <TT>ComputeTruePathLengthLimit()</TT>:
+            modified 'scaling' of <TT>facrange</TT> for high energies,
+            data member <TT>tlimitmin = max(lambda0/25, 5 nm)</TT>.</LI>
+        <LI>Changes in <TT>SampleCosineTheta()</TT>, changed tail of angular
+            distribution.</LI>
+        <LI>Removed some data members and code cleaning; revised <TT>z</TT>
+            sampling.</LI>
+        <LI>Now computing transport cross section and not mfp.</LI>
+        <LI>Bug fix in the <TT>SampleCosineTheta()</TT> method and fixed a
+            problem of non-initialized variable.</LI>
+        <LI>Make stepping algorithm be active for ions by default.</LI>
+        </UL></LI>
+    <LI><TT>G4MscModel71</TT>: now computing transport cross section and not
+        mfp.</LI>
+    <LI>Added first test-prototype classes of elastic Coulomb scattering:
+        <TT>G4eCoulombScatteringModel</TT>, <TT>G4CoulombScatteringModel</TT>,
+        <TT>G4CoulombScattering</TT>.</LI>
+    <LI><TT>G4PolarizedComptonScattering</TT>, <TT>G4ComptonScattering52</TT>,
+        <TT>G4hIonisation52</TT>, <TT>G4eIonisation52</TT>,
+        <TT>G4eBremsstrahlung52</TT>: methods
+        <TT>ComputeCrossSectionPerAtom()</TT> and
+        <TT>ComputeRestrictedMeandEdx()</TT> are now public.</LI>
+    <LI><TT>G4BraggModel</TT>, <TT>G4BraggIonModel</TT>,
+        <TT>G4eeToTwoGammaModel</TT>, <TT>G4MollerBhabhaModel</TT>
+        <TT>G4BetheBlochModel</TT>, <TT>G4PEEffectModel</TT>,
+        <TT>G4eBremsstrahlungModel</TT>: added functions
+        <TT>ComputeCrossSectionPerElectron/Atom()</TT>.</LI>
+    <LI><TT>G4MollerBhabhaModel</TT>: fixed computation of <TT>MinEnergyCut</TT>,
+        important for <TT>dEdx</TT> calculation with small cut value (< 10 mum)
+        in media with high Z (like lead).</LI>
+    <LI><TT>G4hIonisation</TT>: added mass and spin effects (important for
+        pion ionization at high and moderate energies).</LI>
+    <LI><TT>G4BetheBlochModel</TT>: use different formula for muons and hadrons
+        for max energy transfer to delta-electrons (taking into account hadron
+        size effects, important for ionization of very energetic hadrons).</LI>
+    <LI><TT>G4BraggModel</TT> and <TT>G4BraggIonModel</TT>: added usage of the
+        new classes <TT>G4STARStopping</TT> and <TT>G4PSTARStopping</TT> with
+        NIST data on stopping powers.</LI>
+    <LI><TT>G4PAIModel</TT> and <TT>G4PAIPhotonModel</TT>: 
+        <UL>
+        <LI>Fixed cases of NaN value for delta direction when zero cut.</LI>
+        <LI>Fixed problem for low energy hadrons.</LI>
+        <LI>Providing hiding of some technical verbose messages.</LI>
+        </UL></LI>
+    <LI><TT>G4ionIonisation</TT>:
+        <UL>
+        <LI>Moved <TT>G4LossTableManager::Instance()->EmCorrections()</TT>
+            to constructor to avoid problems at initialization for many runs
+            in one macro.</LI>
+        <LI>Added usage of the new class <TT>G4WaterStopping</TT> for light
+            ion stopping in water.</LI>
+        <LI>Added a possibility to use user data on stopping power.</LI>
+        </UL></LI>
+    <LI><TT>G4BetheHeitlerModel</TT>: removed obsolete function
+        <TT>InitialiseCrossSectionPerAtom()</TT>.</LI>
+    <LI><TT>G4eBremsstrahlung</TT>: use <TT>gammaThreshold</TT> from
+        <TT>G4LossTableManager</TT> for more easier initialization (CMS
+        request).</LI>
+    <LI><TT>G4eBremsstrahlungModel</TT>:
+        <UL>
+        <LI>Fixed problem of initialization in the case when cuts are not
+            defined (needed for extrapolation and for unit tests).</LI>
+        <LI>Fixed problem of energy loss calculation below <TT>10 MeV</TT>.</LI>
+        </UL></LI>
+    <LI><TT>G4KleinNishinaModel</TT>: removed upper energy limit to have a
+        smooth cross section.</LI>
+    <LI><TT>G4eplusAnnihilation</TT>: removed cut dependence in
+        <TT>AtRestDoIt()</TT>.</LI>
+    <LI>Removed obsolete <TT>G4SCProcessorStand</TT> class.</LI>
     </UL></LI>
 <LI><B>Muons</B>
     <UL>
-- Substituted method SetStepLimits() by SetStepFunction().
-- Moved initialisation of default values to constructors.
-- Added functions ComputeCrossSectionPerElectron/Atom() in G4MuBetheBlochModel.
-- Added function ComputeCrossSectionPerAtom() in G4MuBremsstrahlungModel
-  and G4MuPairProductionModel.
-- G4MuIonisation52, G4MuBremsstrahlung52, G4MuPairProduction52: function
-  ComputeMicroscopicCrossSection() is now public.
-- G4MuBremsstrahlungModel: fixed problem of initialisation in the case
-  when cuts are not defined (needed for extrapolator and for unit tests)
-- G4EnergyLossForExtrapolator: fixed bug in units, added muon tables, moved
-  initialisation from the constructor to the first public call, added verbose
-  variable into constructor.
-- G4EnergyLossForExtrapolator: fixed compilation warning.
-    <LI></LI>
+    <LI>Substituted method <TT>SetStepLimits()</TT> by
+        <TT>SetStepFunction()</TT> in all energy loss processes.</LI>
+    <LI>Moved initialization of default values to constructors of all models
+        and processes to fix problems at initialization for the case of many
+        runs in one macro.</LI>
+    <LI><TT>G4MuBetheBlochModel</TT>, <TT>G4MuBremsstrahlungModel</TT> and
+        <TT>G4MuPairProductionModel</TT>: added functions
+        <TT>ComputeCrossSectionPerElectron/Atom()</TT>.</LI>
+    <LI><TT>G4MuIonisation52</TT>, <TT>G4MuBremsstrahlung52</TT>,
+        <TT>G4MuPairProduction52</TT>: method
+        <TT>ComputeMicroscopicCrossSection()</TT> is now public.</LI>
+    <LI><TT>G4MuBremsstrahlungModel</TT>: fixed problem of initialization in
+        the case when cuts are not defined (needed for extrapolation and for
+        unit tests).</LI>
+    <LI><TT>G4EnergyLossForExtrapolator</TT>:
+        <UL>
+        <LI>Fixed bug in units.</LI>
+        <LI>Added muon tables.</LI>
+        <LI>Moved initialization from the constructor to the first public
+            call; added verbose variable into constructor.</LI>
+        </UL></LI>
     </UL></LI>
 <LI><B>HighEnergy</B>
-- Substituted method SetStepLimits() by SetStepFunction().
-- Moved initialisation of default values to constructors.
-- Added functions ComputeCrossSectionPerElectron/Atom() in G4BraggModel
-  and G4BraggIonModel.
     <UL>
-    <LI></LI>
+    <LI>Moved initialization of default values to constructors of all models
+        and processes to fix problems at initialization for the case of many
+        runs in one macro.</LI>
     </UL></LI>
 <LI><B>Utils</B>
     <UL>
-- G4VEnergyLossProcess:
-  o Simplified subcutoff calculation.
-  o Remove 'minStepLimit' member and use 'finalRange'.
-  o Reset 'currentCouple' when StepFunction is changed.
-  o Recalculation of 'presafety' for subcutoff.
-  o Update energy constraint for subcutoff.
-  o Added energy correction to subcutoff.
-- G4EmCalculator: added GetCSDARange() method.
-- Added G4EmTableType enumerator and use it to reduce code duplication.
-- G4VEmProcess: removed dependence on G4NistManager.
-- Substituted PreciseRange with CSDARange.
-- Substituted method SetStepLimits() by SetStepFunction().
-- G4VEnergyLossProcess:
-  o Fix for subcutoff simulation.
-  o Improved printout.
-- G4VmultipleScattering: Lambda table keeps now cross section.
-- G4VEmProcess::ComputeCrossSectionPerAtom(): put default value A=0,
-  G4VEmModel::ComputeCrossSectionPerAtom(): put default value A=0,
-  to keep compatibility with version 5.2.
-  Added method G4VEmModel::ComputeMeanFreePath().
-- Removed obsolete interface class G4VSCProcessor.
-- Optimised interfaces to multiple-scattering model, modified classes
-  G4VEmModel and G4VMultipleScattering
-- G4EmCalculator:
-  o Corrections in GetCrossSectionPerVolume(), GetCrossSectionPerAtom(),
-    ComputeCrossSectionPerAtom().
-  o Added public methods ComputeTotalDEDX(), ComputeElectronicDEDX();
-    updated GetDEDX() for ions.
-- Energy loss:
-  o G4LossTableBuilder & G4LossTableManager: fixed logic to ensure rebuild
-    of PhysicsTable in the regime activate/desactivate processes.
-    Set flag 'isIonisation' for processes in G4LossTableManager.
-    Fixed compilation warnings on gcc-3.4.4 in G4LossTableBuilder.
-  o G4VEnergyLossProcess: added store energy loss tables for bremsstrahlung.
-    Added SetDynamicMassCharge(), used by ionIonisation; make use of flag
-    'isIonisation' in AlongStep, PrintInfo, and StoreTables.
-- Added dummy class G4DummyModel.
-- G4EmCalculator: fixed problem for gammas concerning
-  GetCrossSectionPerVolume().
-- Added flag of LPM effect to G4LossTableMessenger, G4LossTableManager and
-  G4EmProcessOptions.
-- Fixed problem of activation/deactivation in G4LossTableManager.
-- G4VEnergyLossProcess, G4VEmProcess, G4VMultipleScattering:
-  o Added GetModelByIndex() and NumberOfModels() methods.
-  o Added random step sampling  to G4VEnergyLossProcess and minor
-    fix to subcut.
-- G4EmProcessOptions, G4LossTableManager:
-  o Added Get/SetBremsstrahlungTh() method (CMS request).
-- G4EmCalculator:
-  o Added correction from user data on stopping power.
-- G4LOssTableManager:
-  o Added methods SetMscStepLimitation(), FacRange(), and MscFlag().
-  o Added command 'MscStepLimitation' in G4LossTableMessenger.
-- G4EmCorrections:
-  o Added correction from user data on stopping power.
-  o Added finite size correction and cleanup.
-  o Fixed compilation warning at SUN.
-- G4EmCalculator: removed debug output.
-- G4ionEffectiveCharge: extended upper limit to 50 MeV.
-- G4EmCorrections: fixed compilation warnings at SUN.
-- G4VEnergyLossProcess: do not change particle momentum AlongStep().
-   <LI></LI>
+    <LI><TT>G4EmProcessOptions</TT>:
+        <UL>
+        <LI>Added method <TT>SetLPMFlag()</TT> in order to set flag of LPM
+            effect.</LI>
+        <LI>Added method <TT>SetBremsstrahlungTh()</TT> (CMS request).</LI>
+        <LI>Added method <TT>SetBuildCSDARange()</TT>.</LI>
+        </UL></LI>
+    <LI><TT>G4EnergyLossMessenger</TT>: added commands
+        <TT>MscStepLimitation</TT>. <TT>CSDARange</TT> and <TT>LPM</TT>.</LI>
+    <LI><TT>G4VEnergyLossProcess</TT>:
+        <UL>
+        <LI>Subcutoff calculation significantly updated, results of tests
+            show that this regime can be used for sampling calorimeters.</LI>
+        <LI>Added option to sample range straggling at the last step 
+            of a particle.</LI>
+        <LI>Reset <TT>currentCouple</TT> when StepFunction is changed (fixed
+            initialization problem for case of many runs in a macro).</LI>
+        <LI>Added store energy loss tables for bremsstrahlung.</LI>
+        <LI>Added method <TT>SetDynamicMassCharge()</TT>, used by
+            ionIonisation; make use of flag <TT>isIonisation</TT> in
+            AlongStep, PrintInfo, and StoreTables (needed for
+            activate/inactivate regime).</LI>
+        <LI>Added <TT>GetModelByIndex()</TT> and NumberOfModels()</TT>
+            methods.</LI>
+        <LI>Fixed extra cout for heavy ions in gas.</LI>
+        <LI>Renamed in all places <TT>PreciseRange</TT> to <TT>CSDARange</TT>.</LI>
+        <LI>Substituted <TT>SetStepLimits()</TT> with <TT>SetStepFunction()</TT>.</LI>
+        <LI>Improved printout.</LI>
+        <LI>Remove <TT>minStepLimit</TT> member and use <TT>finalRange</TT>.</LI>
+        </UL></LI>
+    <LI><TT>G4VEmProcess</TT>:
+        <UL>
+        <LI><TT>ComputeCrossSectionPerAtom()</TT>: put default value
+            <TT>A=0</TT>, to keep compatibility with version 5.2.</LI>
+        <LI>Added <TT>GetModelByIndex()</TT> and <TT>NumberOfModels()</TT>
+            methods.</LI>
+        <LI>Removed dependence on <TT>G4NistManager</TT>.</LI>
+        </UL></LI>
+    <LI><TT>G4VMultipleScattering</TT>:
+        <UL>
+        <LI>Added <TT>GetModelByIndex()</TT> and <TT>NumberOfModels()</TT>
+            methods.</LI>
+        <LI>Lambda table keeps now cross section and not mfp.</LI>
+        </UL></LI>
+    <LI><TT>G4VEmModel</TT>:
+        <UL>
+        <LI><TT>ComputeCrossSectionPerAtom()</TT>: put default value
+            <TT>A=0</TT>, to keep compatibility with version 5.2.</LI>
+        <LI>Added method <TT>ComputeMeanFreePath()</TT>.</LI>
+        <LI>Optimized interfaces to multiple-scattering model.</LI>
+        </UL></LI>
+    <LI><TT>G4LossTableManager</TT>:
+        <UL>
+        <LI>Added methods <TT>SetMscStepLimitation()</TT>,
+            <TT>FacRange()</TT>, and <TT>MscFlag()</TT>.</LI>
+        <LI>Substituted <TT>PreciseRange</TT> with <TT>CSDARange</TT>.</LI>
+        <LI>Fixed logic to ensure rebuilding of PhysicsTable in the regime 
+            of activate/deactivate processes.</LI>
+        <LI>Set flag <TT>isIonisation</TT> for a process holding table with
+            sum of <TT>dEdx</TT> and added flag of LPM effect.</LI>
+        <LI>Added Get/SetBremsstrahlungTh() methods (CMS request).</LI>
+        </UL></LI>
+    <LI><TT>G4EmTableType</TT> enumerator is added to reduce code duplication
+        inside <TT>G4LossTableManager</TT>, <TT>G4VEnergyLossProcess</TT> and
+        other classes.</LI>
+    <LI><TT>G4EmCorrections</TT>:
+        <UL>
+        <LI>Substituted <TT>PreciseRange</TT> with <TT>CSDARange</TT>.</LI>
+        <LI>Introduced an option to peak up user data for stopping power
+            for particular ion and media.</LI>
+        <LI>Added finite size correction - important for high energy 
+            hadrons and ions.</LI>
+        <LI>Cleanup of the code.</LI>
+        </UL></LI>
+    <LI><TT>G4EmCalculator</TT>:
+        <UL>
+        <LI>Added <TT>GetCSDARange()</TT> method.</LI>
+        <LI>Corrections/bug fixes in <TT>GetCrossSectionPerVolume()</TT>,
+            <TT>GetCrossSectionPerAtom()</TT> and
+            <TT>ComputeCrossSectionPerAtom()</TT>.</LI>
+        <LI>Added public methods <TT>ComputeTotalDEDX()</TT> and
+            <TT>ComputeElectronicDEDX()</TT>; updated <TT>GetDEDX()</TT>
+            for ions.</LI>
+        <LI>Fixed problem for gammas concerning
+            <TT>GetCrossSectionPerVolume()</TT>.</LI>
+        </UL></LI>
+    <LI><TT>G4ionEffectiveCharge</TT>: extended upper limit to <TT>50 MeV</TT>
+        (important for ions with large Z).</LI>
+    <LI>Added dummy class <TT>G4DummyModel</TT>.</LI>
+    <LI>Removed obsolete interface class <TT>G4VSCProcessor</TT>.</LI>
     </UL></LI>
 <LI><B>Xrays</B>
     <UL>
-- New algorithm for XTR angular distribution based on the transparent regular
-  radiator. The method can help for more precise estimation of XTR angular
-  distribution needed in tracking applications of XTR detectors (ATLAS).
-- Updated tested algorithm for XTR angular distribution based on the
-  transparent regular radiator. The method takes into account the angular
-  distribution for given energy and gets activated by SetAngleRadDistr(true)
-  method just after the construction of XTR object.
-- Moved G4SynchrotronRadiation from 'standard' module
-- Tuned angular distribution of XTR according to transparent regular
-  approximation.
-- Split G4SynchrotronRadiation in two processes: G4SynchrotronRadiation
-  and G4SynchrotronRadiationInMat.
-    <LI></LI>
+    <LI><TT>G4TransitionRadiation</TT>:
+        <UL>
+        <LI>New algorithm for XTR angular distribution based on the transparent
+            regular radiator. The method can help for more precise estimation
+            of XTR angular distribution needed in tracking applications of XTR
+            detectors (ATLAS request).</LI>
+        <LI>Updated tested algorithm for XTR angular distribution based on the
+            transparent regular radiator. The method takes into account the
+            angular distribution for given energy and gets activated by
+            <TT>SetAngleRadDistr(true)</TT> method just after the construction
+            of XTR object.</LI>
+        <LI>Tuned angular distribution of XTR according to transparent regular
+            approximation.</LI>
+        </UL></LI>
+    <LI><TT>G4SynchrotronRadiation</TT>:
+        <UL>
+        <LI>Moved to module <TT>xrays</TT> from <TT>standard</TT>.</LI>
+        <LI>Split in two processes: <TT>G4SynchrotronRadiation</TT> and
+            <TT>G4SynchrotronRadiationInMat</TT>, the first using analytical
+            solution for description of the gamma spectrum, the second one
+            using numerical integration.</LI>
+        <LI>Introduced new methods for angular distribution.</LI>
+        <LI>Updated methods for calculation of integral number spectrum.</LI>
+        <LI>Enhanced to set polarization and work with local magnetic-fields
+            attached to single volumes.</LI>
+        <LI>Fixed bug for unit polarization in <TT>PostStepDoIt()</TT>.</LI>
+        </UL></LI>
     </UL></LI>
 </UL>
 
@@ -937,33 +1039,25 @@ please refer to the related History files provided in most packages):
 <A NAME="lst-notes">
 <H3><I>Physics lists</I></H3></A>
 <UL>
-<LI>Archived 'electromagnetic' subdirectory.</LI>
-<LI>Added QBBC Physics List: version of physics free of LHEP models but
-    using Binary, BinaryIon, Bertini, CHIPS, QGSC, FTFC.
-    QBBC is extended in order to have more options; added extra builders
-    QBBC, QBEC, QBEC_HP, QGSP, QGSP_BERT, QGSP_EL, QGSP_STP.</LI>
+<LI>Archived 'electromagnetic' subdirectory. Physics lists for EM use 
+    cases are provided together within the geant4 examples. In particular 
+    extended electromagnetic examples demonstrates how to use standard EM
+    physics, how to use available options and provide extensions.</LI>
+<LI>Providing <TT>G4QStoppingPhysics</TT> based on the CHIPS model for
+    simulation of capture at rest of negatively charged hadrons; using it in
+    all QGS and FTF type physics lists.</LI>
+<LI>Moved elastic out of Neutron/Proton/PIK- builders. Now using
+    <TT>G4HadronElasticPhysics</TT> directly in all.</LI>
 <LI>Using Bertini Cascade for kaons (K+,K-, K0L, k0S).</LI>
-<LI>Migrated stopping physics to CHIPS for all except LBE and LHEP.</LI>
-<LI>Moved elastic out of Neutron/Proton/PIK- builders, and use
-    <TT>G4HadronElasticPhysics</TT> directly in PL.</LI>
-<LI>Added mu-nuclear option to <TT>G4EmExtraBuilder</TT>.</LI>
 <LI>Added Binary Cascade for Ions to BIC physics lists.</LI>
-<LI>Fixed bug in <TT>G4QStoppingPhysics</TT>; updated QGSP_EMV list, using
-    EM physics v71. Created new QGSP_EMX list using EM physics v72.</LI>
-<LI>Renamed <TT>G4EmStandardPhysics71</TT> to <TT>G4EmStandardPhysics72</TT>.</LI>
-    <UL>
-    <LI>Defined <TT>StepFunction</TT> of <TT>e+</TT> and <TT>e-</TT> (1.0,
-        1.0*mm) for <TT>G4EmStandardPhysics71</TT> in order to have backward
-        compatibility with the previous release.</LI>
-    <LI>Added commands and fixed minor typo in <TT>G4EmMessenger</TT>.</LI>
-    <LI>Set dRoverRange=0.8 for EM physics v71.</LI>
-    <LI>Set emaxLHEP=1 TeV for light ions.</LI>
-    </UL></LI>
+<LI>Added experimental QGSP_EMX physics list providing an alternative
+    standard EM physics, requiring less CPU in comparison with QGSP.</LI>
+<LI>Added mu-nuclear option to <TT>G4EmExtraBuilder</TT>.</LI>
+<LI>Added experimental QBBC Physics List: version of physics free of 
+    LHEP models but using Binary, BinaryIon, Bertini, CHIPS, QGSC, FTFC.</LI>
 <LI>Fixed problem in destructors of <TT>G4DecayPhysics</TT> and
-    <TT>G4ElectroNuclearBuilder</TT>. Fixed destructor also for
-    <TT>G4MiscLHEPBuilder</TT>.</LI>
+    <TT>G4ElectroNuclearBuilder</TT> and <TT>G4MiscLHEPBuilder</TT>.</LI>
 <LI>Fixed name of builder for <TT>HadronPhysicsQGSP_GN</TT>.</LI>
-<LI>Renamed <TT>G4LElasticB</TT> to <TT>G4HadronElastic</TT>.</LI>
 </UL>
 
 <A NAME="data-notes">
