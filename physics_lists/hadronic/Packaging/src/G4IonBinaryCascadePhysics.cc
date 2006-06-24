@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4IonBinaryCascadePhysics.cc,v 1.4 2006-06-23 10:00:11 vnivanch Exp $
+// $Id: G4IonBinaryCascadePhysics.cc,v 1.5 2006-06-24 14:41:52 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -31,6 +31,7 @@
 //
 // Modified:
 // 23.06.06 V.Ivanchenko set emaxLHEP=1 TeV
+// 24.06.06 V.Ivanchenko fix typo
 //
 //----------------------------------------------------------------------------
 //
@@ -116,19 +117,20 @@ void G4IonBinaryCascadePhysics::AddProcess(const G4String& name,
   hadi->AddDataSet(fTripathi);
   hadi->AddDataSet(fTripathiLight);
   hadi->AddDataSet(fShen);
-  hadi->RegisterMe(hmodel);
   hmodel->SetMinEnergy(eminBIC);
   hmodel->SetMaxEnergy(emax);
+  hadi->RegisterMe(hmodel);
   if(lmodel) {
+    lmodel->SetMinEnergy(emax - MeV);
+    lmodel->SetMaxEnergy(emaxLHEP);
     hadi->RegisterMe(lmodel);
-    hmodel->SetMinEnergy(emax - MeV);
-    hmodel->SetMaxEnergy(emaxLHEP);
   }  
   if(verbose > 1) {
     G4cout << "Register " << hadi->GetProcessName()
 	   << " for " << p->GetParticleName()
-	   << " Binary Cascade for E(MeV)= " << eminBIC << " - " << emax 
-	   <<G4endl;
+	   << " Binary Cascade for E(MeV)= " << eminBIC << " - " << emax;
+    if(lmodel) G4cout  << " LHEP for E(MeV)= " << emax-MeV << " - " << emaxLHEP;
+    G4cout << G4endl;
   }
 }
 
