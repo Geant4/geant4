@@ -1,5 +1,5 @@
 // -------------------------------------------------------------------
-// $Id: Microbeam.cc,v 1.5 2006-06-23 10:53:39 sincerti Exp $
+// $Id: Microbeam.cc,v 1.6 2006-06-24 19:29:12 sincerti Exp $
 // -------------------------------------------------------------------
 //  GEANT4 - Microbeam example
 //  Developed by S. Incerti et al.
@@ -31,7 +31,7 @@
 int main(int argc,char** argv) {
 
   // choose the Random engine
-  CLHEP::HepRandom::setTheEngine(new RanecuEngine);
+  CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
   
   // verbose output class
   G4VSteppingVerbose::SetInstance(new MicrobeamSteppingVerbose);

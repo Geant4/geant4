@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.7 2006-06-23 10:53:39 sincerti Exp $
+$Id: History,v 1.8 2006-06-24 19:29:12 sincerti Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -9,6 +9,6 @@ $Id: History,v 1.7 2006-06-23 10:53:39 sincerti Exp $
                        Package History file
                        --------------------
 
-23 Jun 2006 - S. Incerti, corrected for CLHEP 2.0.2.3 compatibility
+24 Jun 2006 - S. Incerti, corrected for CLHEP 2.0.2.3 compatibility
 06 Apr 2006 - S. Incerti, updated README file
 04 Apr 2006 - MGP, package created
