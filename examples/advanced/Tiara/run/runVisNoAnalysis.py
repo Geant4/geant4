@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# $Id: runVisNoAnalysis.py,v 1.3 2006-06-26 09:48:36 ahoward Exp $
+# $Id: runVisNoAnalysis.py,v 1.4 2006-06-26 09:52:43 ahoward Exp $
 # -------------------------------------------------------------------
 # GEANT4 tag $Name: not supported by cvs2svn $
 # -------------------------------------------------------------------
@@ -149,9 +149,9 @@ tApp = tiaraApplication.TiaraApplet(tiaraSpecs,
 
 # chise if you want to run in a timed mode (for a given time) or in
 # the visualization mode to see the detector.
-##tApp.visMode()
-timeForOneRun = 1 * myUtils.min
-tApp.timedMode(timeForOneRun)
+tApp.visMode()
+##timeForOneRun = 1 * myUtils.min
+##tApp.timedMode(timeForOneRun)
 
 tApp.specifyPhysicsList(physList, particleCut)
 
