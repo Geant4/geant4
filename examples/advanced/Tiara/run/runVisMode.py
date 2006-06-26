@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# $Id: runVisMode.py,v 1.5 2005-03-17 19:48:27 daquinog Exp $
+# $Id: runVisMode.py,v 1.6 2006-06-26 09:43:46 ahoward Exp $
 # -------------------------------------------------------------------
 # GEANT4 tag $Name: not supported by cvs2svn $
 # -------------------------------------------------------------------
@@ -161,12 +161,12 @@ tApp.buildGeometry()
 
 tiara_dir = os.environ["TIARA_BASE"]
 
-primGenBuilder = tiaraGenerators.\
-                 TiaraDPSEnergyGenerator(tiaraSpecs,
-                                         tiara_dir +
-                                         "/data/expDataConverted/dpsSource.xml")
+##primGenBuilder = tiaraGenerators.\
+##                 TiaraDPSEnergyGenerator(tiaraSpecs,
+##                                         tiara_dir +
+##                                         "/data/expDataConverted/dpsSource.xml")
 #primGenBuilder = tiaraGenerators.TiaraPrimaryGenerator(tiaraSpecs)
-#primGenBuilder = tiaraGenerators.FixedEnergyPrimaryGenerator(tiaraSpecs)
+primGenBuilder = tiaraGenerators.FixedEnergyPrimaryGenerator(tiaraSpecs)
 
 tApp.setPrimaryGenerator(primGenBuilder.primGen)
 

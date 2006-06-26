@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# $Id: runVisNoAnalysis.py,v 1.1 2006-06-26 09:37:35 ahoward Exp $
+# $Id: runVisNoAnalysis.py,v 1.2 2006-06-26 09:43:46 ahoward Exp $
 # -------------------------------------------------------------------
 # GEANT4 tag $Name: not supported by cvs2svn $
 # -------------------------------------------------------------------
@@ -149,8 +149,8 @@ tApp = tiaraApplication.TiaraApplet(tiaraSpecs,
 
 # chise if you want to run in a timed mode (for a given time) or in
 # the visualization mode to see the detector.
-tApp.visMode()
-
+##tApp.visMode()
+tApp.timedMode(0)
 
 tApp.specifyPhysicsList(physList, particleCut)
 
@@ -161,12 +161,12 @@ tApp.buildGeometry()
 
 tiara_dir = os.environ["TIARA_BASE"]
 
-primGenBuilder = tiaraGenerators.\
-                 TiaraDPSEnergyGenerator(tiaraSpecs,
-                                         tiara_dir +
-                                         "/data/expDataConverted/dpsSource.xml")
+##primGenBuilder = tiaraGenerators.\
+##                 TiaraDPSEnergyGenerator(tiaraSpecs,
+##                                         tiara_dir +
+##                                         "/data/expDataConverted/dpsSource.xml")
 #primGenBuilder = tiaraGenerators.TiaraPrimaryGenerator(tiaraSpecs)
-#primGenBuilder = tiaraGenerators.FixedEnergyPrimaryGenerator(tiaraSpecs)
+primGenBuilder = tiaraGenerators.FixedEnergyPrimaryGenerator(tiaraSpecs)
 
 tApp.setPrimaryGenerator(primGenBuilder.primGen)
 
