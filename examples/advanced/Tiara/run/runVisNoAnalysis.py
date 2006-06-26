@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# $Id: runVisNoAnalysis.py,v 1.4 2006-06-26 09:52:43 ahoward Exp $
+# $Id: runVisNoAnalysis.py,v 1.5 2006-06-26 10:12:05 ahoward Exp $
 # -------------------------------------------------------------------
 # GEANT4 tag $Name: not supported by cvs2svn $
 # -------------------------------------------------------------------
@@ -163,6 +163,8 @@ tApp.buildGeometry()
 tiara_dir = os.environ["TIARA_BASE"]
 
 tApp.setPhysics()
+
+tApp.visAdd()
 
 ##primGenBuilder = tiaraGenerators.\
 ##                 TiaraDPSEnergyGenerator(tiaraSpecs,
