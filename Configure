@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.83 2006-06-26 10:53:00 stesting Exp $
+# $Id: Configure,v 1.84 2006-06-26 18:23:36 stesting Exp $
 #
-# Generated on Mon Jun 26 12:00:39 CEST 2006 [metaconfig 3.0 PL70]
+# Generated on Mon Jun 26 20:23:05 CEST 2006 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -2867,7 +2867,7 @@ gans=$ans
 done
 
 
-if test "X$g4system" != "XWIN32-VC" -a "X$g4system" != "XWIN32-VC7"; then
+if test "X$g4clhep_base_dir" = "X" ; then
 
 clhep_dirs=`find $g4clhep_base_dir /usr/local/include /usr/include -type d -name CLHEP 2>/dev/null |xargs echo`
 #echo clhep_dirs=$clhep_dirs
@@ -2913,13 +2913,17 @@ esac
 
 case "$g4clhep_lib" in
 '')
+	if test "X$g4system" = "XWIN32-VC" -o "X$g4system" = "XWIN32-VC7"; then
+	g4clhep_lib="CLHEP.lib"
+	else
 	g4clhep_lib=CLHEP
+	fi
 	;;
 esac
 
 #while test 1 = 1  ; do
 
-if test "X$g4vis_xmhome" != "X" ; then
+if test "X$g4clhep_base_dir" != "X" ; then
 clhep_dirs=$g4clhep_base_dir
 fi
 
@@ -4816,6 +4820,7 @@ fi
 
 fi # if !WIN
 
+######################################################################
 if test "X$g4system" = "XWIN32-VC" -o "X$g4system" = "XWIN32-VC7"; then
 
 g4message=`cat << EOM
@@ -4848,6 +4853,7 @@ gans=$ans
 	esac
 
 fi # if WIN
+###########################################
 
 if test "X$g4system" != "XWIN32-VC" -a "X$g4system" != "XWIN32-VC7"; then
 
@@ -5092,6 +5098,7 @@ gans=$ans
 ########################################################
 fi # if !WIN
 
+###############################################################
 if test "X$g4system" = "XWIN32-VC" -o "X$g4system" = "XWIN32-VC7"; then
 
 g4message=`cat << EOM
@@ -5123,6 +5130,7 @@ gans=$ans
 	esac
 
 fi # if WIN
+################################################################
 
 if test "X$g4system" != "XWIN32-VC" -a "X$g4system" != "XWIN32-VC7"; then
 
