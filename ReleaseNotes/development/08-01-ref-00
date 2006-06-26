@@ -169,7 +169,7 @@ environments                                     envs-V08-00-08
   o MOMO.jar is now distributed without Gain.
   o MomoHome/vis.mac revised for new vis (taken from exampleN03).
 
-physics_lists                                    phys-lists-V08-00-14
+physics_lists                                    phys-lists-V08-00-15
 -------------
 - Archived 'electromagnetic' subdirectory, Physics Lists for EM use 
   cases are provided together with geant4 examples. In particular 
@@ -215,7 +215,7 @@ examples                                         examples-V08-01-00
   o Comments in the primary particle and physics components.
 - advanced/medical_linac (medical_linac-V08-00-01)
   o Changes in input macros.
-- advanced/microbeam (microbeam-V08-00-05)
+- advanced/microbeam (microbeam-V08-00-06)
   o New example simulating the cellular irradiation beam line installed on
     the AIFIRA electrostatic accelerator facility located at CENBG,
     Bordeaux-Gradignan, France.
@@ -223,6 +223,8 @@ examples                                         examples-V08-01-00
   o Introduced pion absorption at rest in RemSimHadronicBinary.
   o Primary particle generator can handle spectra.
   o Added histograms and comments.
+- advanced/Tiara (tiara-V08-00-05)
+  o Updated environment script and makefiles.
 - advanced/underground_physics (dmx-V08-00-02)
   o Removed visualisation warnings when running in batch mode.
   o Replaced obsolete e-mail address in headers.
