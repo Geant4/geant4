@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.82 2006-06-26 00:10:51 stesting Exp $
+# $Id: Configure,v 1.83 2006-06-26 10:53:00 stesting Exp $
 #
-# Generated on Mon Jun 26 02:08:49 CEST 2006 [metaconfig 3.0 PL70]
+# Generated on Mon Jun 26 12:00:39 CEST 2006 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -2734,7 +2734,7 @@ esac
 
 case "$g4neutronhpcrosssections" in
 '')
-	g4neutronhpcrosssections=$g4data/G4NDL3.7
+	g4neutronhpcrosssections=$g4data/G4NDL3.8
 	;;
 esac
 
@@ -2783,7 +2783,7 @@ gans=$ans
 		g4levelgammadata=$g4data/PhotonEvaporation2.0
 		g4radioactivedata=$g4data/RadiativeDecay3.0
 		g4ledata=$g4data/G4EMLOW4.0
-		g4neutronhpcrosssections=$g4data/G4NDL3.7
+		g4neutronhpcrosssections=$g4data/G4NDL3.8
 		g4elasticdata=$g4data/G4ELASTIC1.1
 		fi
 # done
@@ -2843,7 +2843,7 @@ gans=$ans
 	4) 
 		dflt=$g4neutronhpcrosssections
 		fn='f~'
-		rp="Where is G4NDL3.7 data installed?"
+		rp="Where is G4NDL3.8 data installed?"
 		. ./getfile
 		g4neutronhpcrosssections=$ans
 		;;
@@ -3908,7 +3908,7 @@ rp=$g4message
 
 cend="no"
 while test "$cend" = "no" ; do
-if test -e "$ans/include/Xaw" || [ "X$ans" = "X-"  ]; then
+if test -e "$ans/include/X11/Xaw" || [ "X$ans" = "X-"  ]; then
 cend="yes"
 if test "X$ans" != "X-" ; then
 
@@ -3964,7 +3964,7 @@ rp=$g4message
 
 cend="no"
 while test "$cend" = "no" ; do
-if test -e "$ans/include/Xaw" || [ "X$ans" = "X-"  ]; then
+if test -e "$ans/include/X11/Xaw" || [ "X$ans" = "X-"  ]; then
 cend="yes"
 if test "X$ans" != "X-" ; then
 
@@ -5308,11 +5308,11 @@ esac
 
 if test "X$g4system" != "XWIN32-VC" -a "X$g4system" != "XWIN32-VC7" -a "X$g4system" != "XDarwin-g++"; then
 
-echo PASS1
+#echo PASS1
 
 if [ X$g4vis_build_openglx_driver = Xy ] || [ X$g4vis_build_openglxm_driver = Xy ] || [ X$g4vis_build_openglwin32_driver = Xy ] ; then 
 
-echo PASS2
+#echo PASS2
 
 #####################################################################
 ogl_dirs=`find $g4vis_oglhome /usr/X11R6/include /usr/local/include /usr/include -type d -name GL 2>/dev/null|xargs echo`
