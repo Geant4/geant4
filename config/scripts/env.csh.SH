@@ -378,7 +378,7 @@ echo "On this machine the G4LIB_USE_GRANULAR=\$G4LIB_USE_GRANULAR"
 endif
 
 # Check for Windows!
-if ( "X$G4SYSTEM" != "XWIN32-VC" && "X$G4SYSTEM" != "XWIN32-VC7" ) then
+if ( "X\$G4SYSTEM" != "XWIN32-VC" && "X\$G4SYSTEM" != "XWIN32-VC7" ) then
 setenv G4UI_USE_TCSH 1
 echo "On this machine the G4UI_USE_TCSH=\$G4UI_USE_TCSH"
 endif

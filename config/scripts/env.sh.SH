@@ -532,7 +532,7 @@ fi
 fi 
 
 # Check for Windows!
-if test "X$G4SYSTEM" != "XWIN32-VC" -a "X$G4SYSTEM" != "XWIN32-VC7"; then
+if test "X\$G4SYSTEM" != "XWIN32-VC" -a "X\$G4SYSTEM" != "XWIN32-VC7"; then
 #+
 #
 # UI_USE_TCSH for Unix
