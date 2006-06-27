@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.cc,v 1.72 2006-05-22 18:14:17 vnivanch Exp $
+// $Id: G4LossTableManager.cc,v 1.73 2006-06-27 14:04:38 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -317,7 +317,7 @@ void G4LossTableManager::EnergyLossProcessIsInitialised(
     }
   }
 
-  if(!all_tables_are_built) loss_map.clear();
+  //  if(!all_tables_are_built) loss_map.clear();
   currentParticle = 0;
 
   SetParameters(p);
