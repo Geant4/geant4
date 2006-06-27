@@ -223,8 +223,10 @@ examples                                         examples-V08-01-00
   o Introduced pion absorption at rest in RemSimHadronicBinary.
   o Primary particle generator can handle spectra.
   o Added histograms and comments.
-- advanced/Tiara (tiara-V08-00-05)
+- advanced/Tiara (tiara-V08-00-08)
   o Updated environment script and makefiles.
+  o fixed configuration script, GNUmakefiles and python scripts to work for
+    runSimNoAnalysis.py and also corrected Vis scripts for non-static particles
 - advanced/underground_physics (dmx-V08-00-02)
   o Removed visualisation warnings when running in batch mode.
   o Replaced obsolete e-mail address in headers.
