@@ -1,4 +1,4 @@
-# $Id: linuxx8664gcc.gmk,v 1.2 2006-04-25 05:50:05 kmura Exp $
+# $Id: linuxx8664gcc.gmk,v 1.3 2006-06-27 06:40:14 kmura Exp $
 # $Name: not supported by cvs2svn $
 # ===========================================================
 #   System specific terms
@@ -45,8 +45,8 @@ endif
 
 
 # building a shared library
-ifdef BOOST_LIBDIR
-  rpath0 := $(BOOST_LIBDIR)
+ifdef Q_BOOST_LIBDIR
+  rpath0 := $(Q_BOOST_LIBDIR)
 endif
 
 ifdef G4PY_EXLIB_LIBDIR
