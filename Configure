@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.84 2006-06-26 18:23:36 stesting Exp $
+# $Id: Configure,v 1.85 2006-06-27 11:15:19 stesting Exp $
 #
-# Generated on Mon Jun 26 20:23:05 CEST 2006 [metaconfig 3.0 PL70]
+# Generated on Tue Jun 27 13:10:27 CEST 2006 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -2887,39 +2887,18 @@ g4clhep_base_dir_found=`dirname $g4clhep_base_dir_found`
 
 	g4clhep_base_dir=$g4clhep_base_dir_found
 
-else
-case "$g4clhep_base_dir" in
-'')
-	if test "X$g4system" = "XWIN32-VC" -o "X$g4system" = "XWIN32-VC7"; then
-	g4clhep_base_dir="c:/usr/local"
-	else
-	g4clhep_base_dir=/usr/local
-	fi
-	;;
-esac
+#else
+#case "$g4clhep_base_dir" in
+#'')
+#	if test "X$g4system" = "XWIN32-VC" -o "X$g4system" = "XWIN32-VC7"; then
+#	g4clhep_base_dir="c:/usr/local"
+#	else
+#	g4clhep_base_dir=/usr/local
+#	fi
+#	;;
+#esac
 fi
 
-case "$g4clhep_include_dir" in
-'')
-	g4clhep_include_dir=$g4clhep_base_dir/include
-	;;
-esac
-
-case "$g4clhep_lib_dir" in
-'')
-	g4clhep_lib_dir=$g4clhep_base_dir/lib
-	;;
-esac
-
-case "$g4clhep_lib" in
-'')
-	if test "X$g4system" = "XWIN32-VC" -o "X$g4system" = "XWIN32-VC7"; then
-	g4clhep_lib="CLHEP.lib"
-	else
-	g4clhep_lib=CLHEP
-	fi
-	;;
-esac
 
 #while test 1 = 1  ; do
 
@@ -3012,7 +2991,7 @@ fi
 
 #dflt="Press [Enter] for default settings"
 #fn='d~'
-rp=$g4message
+#####rp=$g4message
 #. ./myread
 #gans=$ans
 
@@ -3025,8 +3004,8 @@ rp=$g4message
 ##		. ./getfile
 ##		g4clhep_base_dir=$ans
 
-		g4clhep_include_dir=$ans/include
-		g4clhep_lib_dir=$ans/lib
+#####		g4clhep_include_dir=$ans/include
+#####		g4clhep_lib_dir=$ans/lib
 #		;;
 #	2) 
 #		dflt=$g4clhep_include_dir
@@ -3057,6 +3036,28 @@ rp=$g4message
 #		;;
 #	esac
 #done
+
+case "$g4clhep_include_dir" in
+'')
+	g4clhep_include_dir=$g4clhep_base_dir/include
+	;;
+esac
+
+case "$g4clhep_lib_dir" in
+'')
+	g4clhep_lib_dir=$g4clhep_base_dir/lib
+	;;
+esac
+
+case "$g4clhep_lib" in
+'')
+	if test "X$g4system" = "XWIN32-VC" -o "X$g4system" = "XWIN32-VC7"; then
+	g4clhep_lib="CLHEP.lib"
+	else
+	g4clhep_lib=CLHEP
+	fi
+	;;
+esac
 
 while test 1 = 1  ; do
 
@@ -3875,12 +3876,12 @@ g4xaw_base_dir_found=`dirname $g4xaw_base_dir_found`
 g4xaw_base_dir_found=`dirname $g4xaw_base_dir_found`
 
 	g4ui_xawhome=$g4xaw_base_dir_found
-else
-case "$g4ui_xawhome" in
-'')
-	g4ui_xawhome=/usr/X11R6/
-	;;
-esac
+#else
+#case "$g4ui_xawhome" in
+#'')
+#	g4ui_xawhome=/usr/X11R6/
+#	;;
+#esac
 fi
 fi
 
@@ -4109,12 +4110,12 @@ g4xm_base_dir_found=`dirname $g4xm_base_dir_found`
 g4xm_base_dir_found=`dirname $g4xm_base_dir_found`
 
 	g4vis_xmhome=$g4xm_base_dir_found
-else
-case "$g4vis_xmhome" in
-'')
-	g4vis_xmhome=/usr/X11R6/
-	;;
-esac
+#else
+#case "$g4vis_xmhome" in
+#'')
+#	g4vis_xmhome=/usr/X11R6/
+#	;;
+#esac
 fi
 fi
 
@@ -4633,12 +4634,12 @@ g4xm_base_dir_found=`dirname $g4xm_base_dir_found`
 g4xm_base_dir_found=`dirname $g4xm_base_dir_found`
 
 	g4vis_xmhome=$g4xm_base_dir_found
-else
-case "$g4vis_xmhome" in
-'')
-	g4vis_xmhome=/usr/X11R6/
-	;;
-esac
+#else
+#case "$g4vis_xmhome" in
+#'')
+#	g4vis_xmhome=/usr/X11R6/
+#	;;
+#esac
 fi
 fi
 
@@ -4931,12 +4932,12 @@ g4oiv_base_dir_found=`dirname $g4oiv_base_dir_found`
 g4oiv_base_dir_found=`dirname $g4oiv_base_dir_found`
 
 	g4vis_oivhome=$g4oiv_base_dir_found
-else
-case "$g4vis_oivhome" in
-'')
-	g4vis_oivhome=/usr
-	;;
-esac
+#else
+#case "$g4vis_oivhome" in
+#'')
+#	g4vis_oivhome=/usr
+#	;;
+#esac
 fi
 
 ##########################################################################
@@ -5128,6 +5129,159 @@ gans=$ans
 		g4vis_use_oiwin32=y
 		;;
 	esac
+
+############################################################
+if test "X$g4vis_build_oiwin32_driver" = "Xy" ; then
+
+oiv_dirs=`find $g4vis_oivhome /usr/X11R6/include /usr/local/include /usr/include  -type d -name Inventor 2>/dev/null|xargs echo`
+#echo ogl_dirs=$ogl_dirs
+
+if test "X$oiv_dirs" != "X" ; then
+
+g4oiv_base_dir_found=`echo $oiv_dirs|cut -d" " -f1`
+#echo g4ogl_base_dir_found=$g4ogl_base_dir_found
+
+# That's right: should be twice! (e.g./usr/local/lib/libGLU.so -> /usr/local)
+g4oiv_base_dir_found=`dirname $g4oiv_base_dir_found`
+g4oiv_base_dir_found=`dirname $g4oiv_base_dir_found`
+
+	g4vis_oivhome=$g4oiv_base_dir_found
+#else
+#case "$g4vis_oivhome" in
+#'')
+#	g4vis_oivhome=/usr
+#	;;
+#esac
+fi
+
+##########################################################################
+
+if test "X$g4vis_oivhome" != "X" ; then
+oiv_dirs=$g4vis_oivhome
+fi
+
+if test "X$oiv_dirs" != "X" ; then
+
+g4message=`cat << EOM
+
+  OIVHOME/include
+  OIVHOME/lib
+
+You have selected to use OpenInventor driver.
+Specify the correct path (OIVHOME) where OpenInventor is installed in your system.
+It was found in $g4vis_oivhome. Press [Enter] to set this path or type the correct one.
+
+You can set '-' (without quotation) to CANCEL the OpenInventor flag at all:
+
+EOM`
+
+dflt=$g4vis_oivhome
+fn='d~(-)'
+rp=$g4message
+. ./getfile
+
+cend="no"
+while test "$cend" = "no" ; do
+if test -e "$ans/include/Inventor" || [ "X$ans" = "X-"  ]; then
+cend="yes"
+if test "X$ans" != "X-" ; then
+
+g4vis_oivhome=$ans
+
+else
+
+g4vis_build_oiwin32_driver=n
+g4vis_use_oiwin32=n
+
+fi
+else
+
+g4message=`cat << EOM
+
+  OIVHOME/include
+  OIVHOME/lib
+
+You have selected to use OpenInventor driver.
+But it was not found in $ans.
+Please specify the correct path where OpenInventor is installed in your system.
+
+You can set '-' (without quotation) to CANCEL the OpenInventor flag at all:
+
+EOM`
+
+dflt=""
+fn='d~(-)'
+rp=$g4message
+. ./getfile
+fi
+done
+
+else
+
+g4message=`cat << EOM
+
+  OIVHOME/include
+  OIVHOME/lib
+
+You have selected to use OpenInventor driver.
+But it was not found in expected place.
+Please specify the correct path where OpenInventor is installed in your system.
+
+You can set '-' (without quotation) to CANCEL the OpenInventor flag at all:
+
+EOM`
+
+dflt=""
+fn='d~(-)'
+rp=$g4message
+. ./getfile
+
+cend="no"
+while test "$cend" = "no" ; do
+if test -e "$ans/include/Inventor" || [ "X$ans" = "X-"  ]; then
+cend="yes"
+if test "X$ans" != "X-" ; then
+
+g4vis_oivhome=$ans
+
+else
+
+g4vis_build_oiwin32_driver=n
+g4vis_use_oiwin32=n
+
+fi
+else
+
+g4message=`cat << EOM
+
+  OIVHOME/include
+  OIVHOME/lib
+
+You have selected to use OpenInventor driver.
+But it was not found in $ans.
+Please specify the correct path where OpenInventor is installed in your system.
+
+You can set '-' (without quotation) to CANCEL the OpenInventor flag at all:
+
+EOM`
+
+dflt=""
+fn='d~(-)'
+rp=$g4message
+. ./getfile
+fi
+done
+fi
+
+if test "X$g4osname" = "XLinux"; then 
+
+if test "X$g4vis_oivhome" = "X/usr" -o "X$g4vis_oivhome" = "X/usr/local"; then
+g4vis_oivhome=""
+fi
+fi
+fi # g4vis_build_oiwin32_driver
+
+###############################################
 
 fi # if WIN
 ################################################################
@@ -5336,12 +5490,12 @@ g4ogl_base_dir_found=`dirname $g4ogl_base_dir_found`
 g4ogl_base_dir_found=`dirname $g4ogl_base_dir_found`
 
 	g4vis_oglhome=$g4ogl_base_dir_found
-else
-case "$g4vis_oglhome" in
-'')
-	g4vis_oglhome=/usr
-	;;
-esac
+#else
+#case "$g4vis_oglhome" in
+#'')
+#	g4vis_oglhome=/usr
+#	;;
+#esac
 fi
 
 ##########################################################################
