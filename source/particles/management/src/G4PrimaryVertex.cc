@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PrimaryVertex.cc,v 1.1 2005-03-25 00:40:32 asaim Exp $
+// $Id: G4PrimaryVertex.cc,v 1.2 2006-06-27 23:31:15 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -33,18 +33,18 @@ G4Allocator<G4PrimaryVertex> aPrimaryVertexAllocator;
 
 G4PrimaryVertex::G4PrimaryVertex()
 :X0(0.),Y0(0.),Z0(0.),T0(0.),theParticle(0),theTail(0),
- nextVertex(0),numberOfParticle(0),Weight0(1.0),userInfo(0)
+ nextVertex(0),tailVertex(0),numberOfParticle(0),Weight0(1.0),userInfo(0)
 {;}
 
 G4PrimaryVertex::G4PrimaryVertex(
           G4double x0,G4double y0,G4double z0,G4double t0)
 :X0(x0),Y0(y0),Z0(z0),T0(t0),theParticle(0),theTail(0),
- nextVertex(0),numberOfParticle(0),Weight0(1.0),userInfo(0)
+ nextVertex(0),tailVertex(0),numberOfParticle(0),Weight0(1.0),userInfo(0)
 {;}
 
 G4PrimaryVertex::G4PrimaryVertex(G4ThreeVector xyz0,G4double t0)
 :T0(t0),theParticle(0),theTail(0),
- nextVertex(0),numberOfParticle(0),Weight0(1.0),userInfo(0)
+ nextVertex(0),tailVertex(0),numberOfParticle(0),Weight0(1.0),userInfo(0)
 {
   X0=xyz0.x();
   Y0=xyz0.y();
