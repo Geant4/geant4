@@ -47,9 +47,11 @@ int main(int argc, char* argv[]){
   G4int vacancyId;
   G4int numberOfRun;
   G4int batch;
+  G4int element;
   if (argv[1]) {batch = atoi(argv[1]);}
   G4String fileName;
-  if (argv[3]) {fileName = argv[3];}
+  if (argv[3]) {element = atoi(argv[3]);}
+  if (argv[4]) {fileName = argv[4];}
   else {fileName = "transitions.xml";}
 
   AIDA::ITree* tree;
@@ -82,10 +84,14 @@ int main(int argc, char* argv[]){
   //if Z=0 a number of runs numberOfRun is generated for all the elements 
   if (a==0)
     {
-      a = 6;
-      b = 98;
-      
-      columnNames.push_back("Atomic Number");
+      if (element == 0) { 
+	a = 6;
+	b = 98;
+      }
+      else {
+	a = element;
+	b = a;}
+      columnNames.push_back("AtomicNumber");
       columnNames.push_back("Particle");
       columnNames.push_back("Energies");
       
@@ -94,6 +100,7 @@ int main(int argc, char* argv[]){
       columnTypes.push_back("double");
       tupleFluo = tupleFactory->create("10", "Total Tuple", columnNames, columnTypes, "");
       assert(tupleFluo);
+
     }
   else { b = a;} 
   
