@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4NistMaterialBuilder.cc,v 1.12 2006-05-11 08:37:00 vnivanch Exp $
+// $Id: G4NistMaterialBuilder.cc,v 1.13 2006-06-27 13:02:56 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -38,6 +38,7 @@
 // 31-10-05 Add chemical effect and gas properties (V.Ivanchenko)
 // 27.02.06 V.Ivanchneko add ConstructNewGasMaterial
 // 11.05.06 V.Ivanchneko add warning flag to FindMaterial method
+// 27.06.06 V.Ivanchneko fix graphite description
 //
 // -------------------------------------------------------------------
 //
@@ -1666,7 +1667,7 @@ void G4NistMaterialBuilder::NistCompoundMaterials()
   AddElementByWeightFraction( 1, 0.094935);
   AddElementByWeightFraction( 6, 0.905065);
 
-  AddMaterial("G4_GRAPHITE", 1.7, 0, 78., 1);
+  AddMaterial("G4_GRAPHITE", 1.7, 6, 78.);
   nNIST = nMaterials;
   AddChemicalFormula("G4_GRAPHITE","Graphite");
 }
