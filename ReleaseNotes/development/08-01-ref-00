@@ -192,6 +192,14 @@ physics_lists                                    phys-lists-V08-00-15
   G4ElectroNuclearBuilder and G4MiscLHEPBuilder.
 - Fixed name of builder for HadronPhysicsQGSP_GN.
 
+data
+----
+- New data set for high-precision neutron processes: G4NDL 3.9:
+  o Added data for Antimony, Hafnium, Technetium, Samarium, Neodymium
+    and Gadorinium.
+  o Updated inelastic data for 17_nat_Chlorine, 28_62_Nickel and removed
+    data for 32_70/2/3/4/6_Germanium.
+
 examples                                         examples-V08-01-00
 --------
 - Updated reference outputs.
