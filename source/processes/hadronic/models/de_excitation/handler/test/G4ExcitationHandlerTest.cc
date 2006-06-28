@@ -153,7 +153,7 @@ int main()
 
       G4ThreeVector p(px,py,pz);
       G4double nuclearMass = G4NucleiProperties::GetNuclearMass(A,Z);
-      G4LorentzVector p4(p,sqrt((nuclearMass+excitation)*(nuclearMass+excitation)));
+      G4LorentzVector p4(p,std::sqrt((nuclearMass+excitation)*(nuclearMass+excitation)));
 
       G4Fragment nucleus(A,Z,p4);
 

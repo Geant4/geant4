@@ -14,7 +14,7 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * authors in the GEANT4 collaboration.                             *
+// * GEANT4 collaboration.                                            *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
@@ -63,7 +63,7 @@ void strucf(int A, double x, double Q2, double& f2, double& xf3, double& fL)
     double H=1.22;
     if(A==1)                   // Proton
 		  {
-      r=sqrt(Q2/1.66);
+      r=std::sqrt(Q2/1.66);
       max=.5;
     }
     else if(A<13)              // Light nuclei
@@ -83,9 +83,9 @@ void strucf(int A, double x, double Q2, double& f2, double& xf3, double& fL)
     }
     else G4cout<<"strucf: A="<<A<<" <= 0"<< G4endl;
     //
-    N=3.+.3581*log(1.+Q2/.04); // a#of partons in the nonperturbative phase space
+    N=3.+.3581*std::log(1.+Q2/.04); // a#of partons in the nonperturbative phase space
     Del=(1.+r)/(12.5+r/max);
-    double S=pow(1.+.6/Q2,-1.-Del);
+    double S=std::pow(1.+.6/Q2,-1.-Del);
     D=H*S*(1.-.5*S);
     V=3*(1.-D)*(N-1.);
     double cc=Q2/.08;
@@ -93,7 +93,7 @@ void strucf(int A, double x, double Q2, double& f2, double& xf3, double& fL)
     //double C=(1.+cc2)/(1.+cc2/.24);              // Weak?
     double C=(1.+cc2)/(1.+cc2/.24)/(1.+Q2/21.6); // EM
     double c3=C+C+C;
-    double uu=exp(lGam(N-Del)-lGam(N-1.)-lGam(1.-Del))/N;
+    double uu=std::exp(lGam(N-Del)-lGam(N-1.)-lGam(1.-Del))/N;
     U2=(c3+N-3.)*uu;
     U3=c3*uu;
     //UU=uu+uu+uu; // @@
@@ -108,8 +108,8 @@ void strucf(int A, double x, double Q2, double& f2, double& xf3, double& fL)
     mV  =V;
   }  
   // From here the Q2 coefficients are used
-  double x1=pow(1.-x,N-2.);
-  double pp=D*pow(x,-Del)*x1;
+  double x1=std::pow(1.-x,N-2.);
+  double pp=D*std::pow(x,-Del)*x1;
   double dir=V*x*x1;
   double per=U2*pp;
 		f2 = per + dir;
@@ -129,7 +129,7 @@ void getFun(int A, double lx, double Q2, double* f)
 {
   double f2=0., xf3=0., fL=0.;
   if (lx>0.5) G4cerr<<"***getFun: ln(x)="<<lx<<">.5"<<G4endl;
-  double x=exp(lx);
+  double x=std::exp(lx);
   double x2=x*x;
   strucf(A, x, Q2, f2, xf3, fL);
   f[0]=f2;             // direct part
@@ -194,7 +194,7 @@ int main()
   double f[5];                    // A working array
   int    A=12;                    // Neucleus for which calculations should be done
   double lEnuMin=0;               // LogLog of Minimum energy of neutrino
-  double lEnuMax=log(1.+log(300./EminMu)); // LogLog of Maximum energy of neutrino
+  double lEnuMax=std::log(1.+std::log(300./EminMu)); // LogLog of Maximum energy of neutrino
   int    nE=31;
   double dlE=(lEnuMax-lEnuMin)/nE;
   lEnuMin+=dlE/10;
@@ -202,7 +202,7 @@ int main()
   G4cout<<"Emin="<<EminMu<<",lEi="<<lEnuMin<<",lEa="<<lEnuMax<<",dlE="<<dlE<<G4endl;
   for(double lEnu=lEnuMin; lEnu<lEnuMax; lEnu+=dlE)
 		{
-    double Enu=exp(exp(lEnu)-1.)*EminMu; // Energy of neutrino/anti-neutrino
+    double Enu=std::exp(std::exp(lEnu)-1.)*EminMu; // Energy of neutrino/anti-neutrino
     double dEnu=Enu+Enu;          // doubled energy of nu/anu
     double Enu2=Enu*Enu;          // squared energy of nu/anu
     double Emu=Enu-mmu;           // Free Energy of neutrino/anti-neutrino
@@ -213,18 +213,18 @@ int main()
     double DISmsig=1.e20;         // Total remembered DIS cross-section
     double dEMN=(dEnu+MN)*ME;
     double MEm=ME-hmmu2;
-    double sqE=Enu*sqrt(MEm*MEm-mmu2*MN2);
+    double sqE=Enu*std::sqrt(MEm*MEm-mmu2*MN2);
     double E2M=MN*Enu2-(Enu+MN)*hmmu2;
     double ymax=(E2M+sqE)/dEMN;
     double ymin=(E2M-sqE)/dEMN;
     double rmin=1.-ymin;
     double rhm2E=hmmu2/Enu2;
-    double Q2min=(Enu2+Enu2)*(rmin-rhm2E-sqrt(rmin*rmin-rhm2E-rhm2E));
+    double Q2min=(Enu2+Enu2)*(rmin-rhm2E-std::sqrt(rmin*rmin-rhm2E-rhm2E));
     double Q2max=dME*ymax;
     int    nQ2=8;
     //G4cout<<"*** E="<<Enu<<", Q2i="<<Q2min<<" < Q2a="<<Q2max<<", yi="<<ymin<<" < ya="
     //      <<ymax<<G4endl;
-    while(fabs(DIStsig-DISmsig)/DIStsig>reps)
+    while(std::fabs(DIStsig-DISmsig)/DIStsig>reps)
     {
       DISmsig=DIStsig;
       DIStsig=0.;
@@ -237,19 +237,19 @@ int main()
         double Q2M=Q2+MW2;
         double dik=MW4/Q2M/Q2M;
         double qmc=Q2+mcV;
-        double lXQES=log((sqrt(qmc*qmc+Q2*fMN2)-qmc)/dMN2); // Quasielastic boundary
+        double lXQES=std::log((std::sqrt(qmc*qmc+Q2*fMN2)-qmc)/dMN2); // Quasielastic boundary
         //double lXQES=log(Q2/(Q2+mcV)); // Quasielastic boundary (W=MN+m_c)
         //double xN=Q2/dME;
-        double xN=Q2/MN/(Emu+sqrt(Emu2+Q2));
+        double xN=Q2/MN/(Emu+std::sqrt(Emu2+Q2));
         //double lXmin=log(xN/ymax);
-        double lXmin=log(xN);
+        double lXmin=std::log(xN);
         // ****** QE ********
         //if(lXQES>lXmin) lXmin=lXQES;   // A cut which leaves only QES
         // *** End of QE^^^^^
         double lXmax=0.;               // QES is in DIS
         //double lXmax=lXQES;          // Cut off quasielastic
         int    nX=8;
-        while(fabs(DISxint-DISmint)/DISxint>xeps)
+        while(std::fabs(DISxint-DISmint)/DISxint>xeps)
         {
           DISmint=DISxint;
           DISxint=0.;

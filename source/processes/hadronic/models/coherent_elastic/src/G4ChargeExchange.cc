@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChargeExchange.cc,v 1.1 2006-05-29 12:43:07 vnivanch Exp $
+// $Id: G4ChargeExchange.cc,v 1.2 2006-06-28 13:59:59 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -294,7 +294,7 @@ G4HadFinalState* G4ChargeExchange::ApplyYourself(
   G4double sint = std::sqrt((1.0-cost)*(1.0+cost));
 
   if (verboseLevel > 1)
-    G4cout << "cos(t)=" << cost << " sin(t)=" << sint << G4endl;
+    G4cout << "cos(t)=" << cost << " std::sin(t)=" << sint << G4endl;
 
   G4ThreeVector v1(sint*std::cos(phi),sint*std::sin(phi),cost);
   p1 = p1.unit();

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PrimaryTransformer.cc,v 1.25 2006-06-16 17:11:58 asaim Exp $
+// $Id: G4PrimaryTransformer.cc,v 1.26 2006-06-28 13:58:13 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 

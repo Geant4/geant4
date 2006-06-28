@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4QCaptureAtRest.cc,v 1.1 2005-11-25 20:29:25 mkossov Exp $
+// $Id: G4QCaptureAtRest.cc,v 1.2 2006-06-28 13:59:35 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCaptureAtRest class -----------------
@@ -302,7 +302,7 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
     // For low energy neutrons the threshold of the capture must be checked
     G4QPDGCode QPDGbase;
     mAT=QPDGbase.GetNuclMass(Z,N,0);          // mass of the GS target nucleus
-    G4double mAR=sqrt(mAT*(mAT+totNE+totNE)+mNeut2); // Real compound mass
+    G4double mAR=std::sqrt(mAT*(mAT+totNE+totNE)+mNeut2); // Real compound mass
     G4double mAN=QPDGbase.GetNuclMass(Z,N+1,0); // mass of the GS compound nucleus
     mAP=QPDGbase.GetNuclMass(Z-1,N+1,0);      // M_GSCompoundNucleus-proton
     G4double mAA=1000000.; // Default (light nuclei) mass of the GSCompoundNucleus-alpha
@@ -315,8 +315,8 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
       if(totNE-mNeut<.0001) chargExElastic=true; // neutron is too soft -> chargeExchange
       else
 						{
-        G4double probP=sqrt(eProt*(dmProt+eProt));
-        G4double probN=sqrt(eNeut*(dmNeut+eNeut));
+        G4double probP=std::sqrt(eProt*(dmProt+eProt));
+        G4double probN=std::sqrt(eNeut*(dmNeut+eNeut));
         if((probN+probP)*G4UniformRand()<probN) neutronElastic=true; // nElastic Scattering
         else chargExElastic=true; // proton's phase space is bigger -> chargeExchange
       }

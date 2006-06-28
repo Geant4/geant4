@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: MedicalBeam.cc,v 1.3 2006-06-04 21:36:35 kmura Exp $
+// $Id: MedicalBeam.cc,v 1.4 2006-06-28 13:42:45 gunter Exp $
 // $Name: not supported by cvs2svn $
 // ====================================================================
 //   MedicalBeam.cc
@@ -77,7 +77,7 @@ G4ThreeVector MedicalBeam::GenerateBeamDirection() const
   }
 
   G4double sin0= dr/SSD;
-  G4double cos0= std::sqrt(1.-sqrt(sin0));
+  G4double cos0= std::sqrt(1.-std::sqrt(sin0));
 
   G4double dcos, dsin, dphi, z;
 

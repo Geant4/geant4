@@ -1,3 +1,25 @@
+//
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
+//
 //#define CHECK_MOMC
 
 #include <iomanip.h>
@@ -146,9 +168,9 @@ G4int testINCAll(G4int nCollisions, G4int bulletType, G4double momZ, G4double A,
     std::vector<G4double>  bulletMomentum(4, 0.0);
     G4double mass = 0.93827;
     bulletMomentum[3] = momZ;
-    bulletMomentum[3] = sqrt(bulletMomentum[3] * bulletMomentum[3] + 2 * bulletMomentum[3] * mass); // only this is used in tests
-    bulletMomentum[2] = sqrt(bulletMomentum[2] * bulletMomentum[2] + 2 * bulletMomentum[2] * mass);
-    bulletMomentum[1] = sqrt(bulletMomentum[1] * bulletMomentum[1] + 2 * bulletMomentum[1] * mass); 
+    bulletMomentum[3] = std::sqrt(bulletMomentum[3] * bulletMomentum[3] + 2 * bulletMomentum[3] * mass); // only this is used in tests
+    bulletMomentum[2] = std::sqrt(bulletMomentum[2] * bulletMomentum[2] + 2 * bulletMomentum[2] * mass);
+    bulletMomentum[1] = std::sqrt(bulletMomentum[1] * bulletMomentum[1] + 2 * bulletMomentum[1] * mass); 
 
     bull = new G4InuclElementaryParticle(bulletMomentum, bulletType); // counts mom[0] = E tot from mom[1]-mom[3]
    
@@ -166,9 +188,9 @@ G4int testINCAll(G4int nCollisions, G4int bulletType, G4double momZ, G4double A,
       targ->setEnergy();      
 
       std::vector<G4double>  bmom = bull->getMomentum();
-      eInit = sqrt(bmom[0] * bmom[0]);
+      eInit = std::sqrt(bmom[0] * bmom[0]);
       std::vector<G4double> tmom = targ->getMomentum();
-      eInit += sqrt(tmom[0] * tmom[0]);
+      eInit += std::sqrt(tmom[0] * tmom[0]);
 
       if (verboseLevel > 2) {
 	G4cout << "Target:  " << G4endl;  
@@ -194,9 +216,9 @@ G4int testINCAll(G4int nCollisions, G4int bulletType, G4double momZ, G4double A,
 	targIsH = new G4InuclElementaryParticle(targetMomentum, 1);
 
 	std::vector<G4double>  bmom = bull->getMomentum();
-	eInit = sqrt(bmom[0] * bmom[0]);
+	eInit = std::sqrt(bmom[0] * bmom[0]);
 	std::vector<G4double> tmom = targIsH->getMomentum();
-	eInit += sqrt(tmom[0] * tmom[0]);
+	eInit += std::sqrt(tmom[0] * tmom[0]);
 
 	do {
 	  if (verboseLevel > 1) {
@@ -276,7 +298,7 @@ G4int printData(G4int i) {
     
       std::vector<G4double> m = ifrag->getMomentum();
 
-      eTot  += sqrt(m[0] * m[0]);
+      eTot  += std::sqrt(m[0] * m[0]);
 
       G4ThreeVector mom(m[1], m[2], m[3]);    
       ekin = ifrag->getKineticEnergy() * GeV;
@@ -331,7 +353,7 @@ G4int printData(G4int i) {
 
     for(ipart = particles.begin(); ipart != particles.end(); ipart++) {
       std::vector<G4double> mom = ipart->getMomentum();
-      eTot   += sqrt(mom[0] * mom[0]);
+      eTot   += std::sqrt(mom[0] * mom[0]);
 
       // std::vector<G4double>  mom(3, 0.0);
       ekin = ipart->getKineticEnergy() * GeV;
@@ -475,7 +497,7 @@ G4int test() {
     G4double mX = 0.0;
     G4double mass = 0.93827;
 
-    G4double e = sqrt(mZ * mZ + mY * mY + mX * mX + mass * mass);
+    G4double e = std::sqrt(mZ * mZ + mY * mY + mX * mX + mass * mass);
 
     m[3] = mZ;
 
@@ -489,7 +511,7 @@ G4int test() {
 
 
     cout << endl << ">>> kinetic energy ok in z-dir" << endl;
-    m[3] = sqrt(momZ * momZ + 2 * momZ * mass);
+    m[3] = std::sqrt(momZ * momZ + 2 * momZ * mass);
     bull = new G4InuclElementaryParticle(m, 1);
     bull->printParticle();
 
@@ -499,7 +521,7 @@ G4int test() {
     m[3] = mZ;
     m[2] = 0;
     m[1] = 0;
-    m[0] = sqrt(m[1] * m[1] + m[2] * m[2] + m[3] * m[3] + mass * mass);
+    m[0] = std::sqrt(m[1] * m[1] + m[2] * m[2] + m[3] * m[3] + mass * mass);
 
     // fix m so that  ekin with the mass gets ok.
 
@@ -512,17 +534,17 @@ G4int test() {
     bull = new G4InuclElementaryParticle(m, 1); // expects full mom[0]-mom[3] with correct E tot
     bull->printParticle();
 
-    G4double pLength = sqrt(m[0] * m[0] - mass * mass); cout << " pLength " << pLength  << endl;
-    G4double mLength = sqrt(m[1] * m[1] + m[2] * m[2] + m[3] * m[3]); cout << " mLength " << mLength << endl;
+    G4double pLength = std::sqrt(m[0] * m[0] - mass * mass); cout << " pLength " << pLength  << endl;
+    G4double mLength = std::sqrt(m[1] * m[1] + m[2] * m[2] + m[3] * m[3]); cout << " mLength " << mLength << endl;
 
     G4double scale = 1;
     m[3] = m[3] * scale;
     m[2] = m[2] * scale;
     m[1] = m[1] * scale;
 
-    m[3] = sqrt(m[3] * m[3] + 2 * m[3] * mass);
-    m[2] = sqrt(m[2] * m[2] + 2 * m[2] * mass);
-    m[1] = sqrt(m[1] * m[1] + 2 * m[1] * mass); 
+    m[3] = std::sqrt(m[3] * m[3] + 2 * m[3] * mass);
+    m[2] = std::sqrt(m[2] * m[2] + 2 * m[2] * mass);
+    m[1] = std::sqrt(m[1] * m[1] + 2 * m[1] * mass); 
 
     //    bull = new G4InuclElementaryParticle(bulletMomentum, bulletType); // counts mom[0] = E tot from mom[1]-mom[3]
     //    bull = new G4InuclParticle(bulletMomentum); // expects full mom[0]-mom[3] with correct E tot

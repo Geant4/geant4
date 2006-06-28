@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4QElastic.cc,v 1.4 2006-04-27 16:39:58 mkossov Exp $
+// $Id: G4QElastic.cc,v 1.5 2006-06-28 13:59:39 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QElastic class -----------------

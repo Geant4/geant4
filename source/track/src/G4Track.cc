@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Track.cc,v 1.27 2006-03-29 03:51:18 kurasige Exp $
+// $Id: G4Track.cc,v 1.28 2006-06-28 14:00:13 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //

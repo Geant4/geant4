@@ -14,7 +14,7 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * authors in the GEANT4 collaboration.                             *
+// * GEANT4 collaboration.                                            *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
@@ -65,13 +65,13 @@ int main()
     for(int i=1; i<nSub; i++)
     {
       s+=dSub;
-      G4double r=pow(s,(n-1.5)/1.5);
+      G4double r=std::pow(s,(n-1.5)/1.5);
       G4double x=0.5;
 		    if(n==3)
 		    {
         if    (r==0.5) x=0.5;
-        else if(r<0.5) x=sqrt(r+r)*(.5+.1579*(r-.5));
-        else           x=1.-sqrt(2.-r-r)*(.5+.1579*(.5-r));
+        else if(r<0.5) x=std::sqrt(r+r)*(.5+.1579*(r-.5));
+        else           x=1.-std::sqrt(2.-r-r)*(.5+.1579*(.5-r));
       }
       else
 		    {
@@ -79,7 +79,7 @@ int main()
         G4double r1=n1;
         G4double r2=r1-1.;
         G4double rr=r2/r1;
-        G4double rp=pow(rr,n1);
+        G4double rp=std::pow(rr,n1);
         G4double p2=rp+rp;
         if  (r==rr)  x=p2;
         else
@@ -94,8 +94,8 @@ int main()
 								      {
                 if(n>10)                         // >10(11)
                 {
-                  pr=.614/pow((n+1+1.25),.75);
-                  pra=.915/pow((n+1+6.7),1.75);
+                  pr=.614/std::pow((n+1+1.25),.75);
+                  pra=.915/std::pow((n+1+6.7),1.75);
                 }
 												    else                             // 10
                 {
@@ -146,7 +146,7 @@ int main()
                 }
               }
             }
-            x=pow((r/p2),(1.-rr+pra))*(rr+pr*(r-p2));
+            x=std::pow((r/p2),(1.-rr+pra))*(rr+pr*(r-p2));
           }
           else
           {
@@ -177,7 +177,7 @@ int main()
 												    else    sr=.15135;               // 4
               }
             }
-            x=1.-sqrt((1.-r)/(1.-p2))*(1.-rr+sr*(p2-r));
+            x=1.-std::sqrt((1.-r)/(1.-p2))*(1.-rr+sr*(p2-r));
           }
         }
       }

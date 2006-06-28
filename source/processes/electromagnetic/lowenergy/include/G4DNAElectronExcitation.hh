@@ -1,4 +1,3 @@
-
 //
 // ********************************************************************
 // * DISCLAIMER                                                       *
@@ -22,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DNAElectronExcitation.hh,v 1.1 2005-07-26 12:24:13 zfrancis Exp $
+// $Id: G4DNAElectronExcitation.hh,v 1.2 2006-06-28 13:58:29 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef   G4DNAELECTRONEXCITATION_HH

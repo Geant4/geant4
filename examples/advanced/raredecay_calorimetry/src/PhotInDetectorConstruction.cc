@@ -18,10 +18,10 @@
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
-// **************************************************************************
+// ********************************************************************
 //
 //
-// $Id: PhotInDetectorConstruction.cc,v 1.3 2005-12-09 16:44:21 mkossov Exp $
+// $Id: PhotInDetectorConstruction.cc,v 1.4 2006-06-28 13:57:45 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ***************************************************************************

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RandomDetector.cc,v 1.3 2005-06-27 15:27:51 gunter Exp $
+// $Id: RandomDetector.cc,v 1.4 2006-06-28 13:57:55 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 

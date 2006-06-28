@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4AnalyticalPolSolver.cc,v 1.5 2005-06-27 15:28:48 gunter Exp $
+// $Id: testG4AnalyticalPolSolver.cc,v 1.6 2006-06-28 13:58:17 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Test program for G4AnalyticalPolSolver class. 

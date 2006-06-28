@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em10DetectorConstruction.cc,v 1.29 2006-05-18 08:16:42 grichine Exp $
+// $Id: Em10DetectorConstruction.cc,v 1.30 2006-06-28 13:57:47 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -796,7 +796,7 @@ G4VPhysicalVolume* Em10DetectorConstruction::SetUpBari05()
   // G4double field         = 1.0;   // field in helium pipe used?
   // G4double fieldStrength = 1.0*tesla;  // field strength in pipe
 
-  if ( fabs(pipe) > 1.e-15 ) 
+  if ( std::fabs(pipe) > 1.e-15 ) 
   {
 
     //    G4Box* solidPipe = new G4Box("Pipe",fAbsorberRadius*0.5,
@@ -839,7 +839,7 @@ G4VPhysicalVolume* Em10DetectorConstruction::SetUpBari05()
   //                                                  fWindowMat,
   //                                                  "Mylar");
 
-  if ( fabs(pipe) > 1.e-15 ) 
+  if ( std::fabs(pipe) > 1.e-15 ) 
   {
 
     //    G4VPhysicalVolume* physiMylar1 = new G4PVPlacement(0,
@@ -862,7 +862,7 @@ G4VPhysicalVolume* Em10DetectorConstruction::SetUpBari05()
 
   G4double zMylar = zElectrode2 + fElectrodeThick/2. + fMylarThick/2. + 1.0*mm;
 
-  if ( fabs(pipe) > 1.e-15 ) zMylar += ( fPipeLength + pipeDist );
+  if ( std::fabs(pipe) > 1.e-15 ) zMylar += ( fPipeLength + pipeDist );
 
   //  G4VPhysicalVolume*    physiMylar = new G4PVPlacement(0,
   //                       G4ThreeVector(0.,0.,zMylar),

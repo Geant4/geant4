@@ -1,4 +1,4 @@
- //
+//
 // ********************************************************************
 // * DISCLAIMER                                                       *
 // *                                                                  *
@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DNAProtonRuddIonization.cc,v 1.2 2005-09-15 09:03:58 zfrancis Exp $
+// $Id: G4DNAProtonRuddIonization.cc,v 1.3 2006-06-28 13:58:39 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4DNAProtonRuddIonization.hh"

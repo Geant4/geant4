@@ -1,4 +1,4 @@
- //
+//
 // ********************************************************************
 // * DISCLAIMER                                                       *
 // *                                                                  *
@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DNAProtonBornExcitation.cc,v 1.1 2005-09-21 09:18:35 zfrancis Exp $
+// $Id: G4DNAProtonBornExcitation.cc,v 1.2 2006-06-28 13:58:37 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4DNAProtonBornExcitation.hh"

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HadronValues.cc,v 1.14 2005-11-24 19:05:56 vnivanch Exp $
+// $Id: G4HadronValues.cc,v 1.15 2006-06-28 14:00:07 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -182,7 +182,7 @@ G4HadronValues::GetHadronValues(const G4DynamicParticle* aHadron)
          case 2:             //   pi plus
 
             if(HadrMoment>2.0)
-              HadrTot    = 10.6+2.*log(HadrEnergy)+
+              HadrTot    = 10.6+2.*std::log(HadrEnergy)+
                               25*std::pow(HadrEnergy,-0.43);           // mb
             else HadrTot = 40-50*(HadrMoment-1.5)*(HadrMoment-1.7);
               HadrSlope = 7.28+0.245*std::log(sHadr);                  //GeV-2 

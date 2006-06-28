@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.2 2006-05-11 11:46:04 maire Exp $
+// $Id: HistoManager.cc,v 1.3 2006-06-28 13:57:49 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -170,7 +170,7 @@ void HistoManager::SetHisto(G4int ih,
 		  "Multiple Scattering. Angular distrib: theta_plane",	//6
 		  "Multiple Scattering. Phi-position angle",		//7
 		  "Multiple Scattering. Phi-direction angle",		//8
-		  "Multiple Scattering. Correlation: cos(phiPos-phiDir)"//9
+		  "Multiple Scattering. Correlation: std::cos(phiPos-phiDir)"//9
                  };
 
 

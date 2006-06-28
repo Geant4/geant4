@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HadronElastic.cc,v 1.17 2006-06-21 08:43:47 vnivanch Exp $
+// $Id: G4HadronElastic.cc,v 1.18 2006-06-28 14:00:05 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -192,7 +192,7 @@ G4HadFinalState* G4HadronElastic::ApplyYourself(
   G4double sint = std::sqrt((1.0-cost)*(1.0+cost));
   
   if (verboseLevel>1) 
-    G4cout << "cos(t)=" << cost << " sin(t)=" << sint << G4endl;
+    G4cout << "cos(t)=" << cost << " std::sin(t)=" << sint << G4endl;
 
   G4ThreeVector v1(sint*std::cos(phi),sint*std::sin(phi),cost);
   p1 = p1.unit();

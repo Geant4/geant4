@@ -14,7 +14,7 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * authors in the GEANT4 collaboration.                             *
+// * GEANT4 collaboration.                                            *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
@@ -35,23 +35,23 @@
 
 // All calculations have been done for C12 nucleus
 
-double nuE(double E) { return .9673/(1.+.323/E/E)/pow(E,.78);} // (E is in GeV)
+double nuE(double E) { return .9673/(1.+.323/E/E)/std::pow(E,.78);} // (E is in GeV)
 
 double nuX(double E, double r, double p) // (E is in GeV, r=Q2/Q2max, p=1.+nuE(E))
 {
   double y=p-r;
   double p3=(.3088+.0012352*E)/(1.+1.836/E/E);
-  return pow(y,6)*(r+p3)/(p3*r+1.);
+  return std::pow(y,6)*(r+p3)/(p3*r+1.);
 }
 
-double anuE(double E) { return .875/(1.+.2977/E/E)/pow(E,.78);} // (E is in GeV)
+double anuE(double E) { return .875/(1.+.2977/E/E)/std::pow(E,.78);} // (E is in GeV)
 
 double anuX(double E, double r, double p) // (E is in GeV, r=Q2/Q2max, p=1+anuE(E))
 {
 		double	E2=E*E;
   double y=p-r;
-  double p3=(13.88+.9373*(1.+.000033*E2)*sqrt(E))/(1.+(10.12+1.532/E2)/E);
-  return pow(y,6)*(r+p3)/(p3*r+1.);
+  double p3=(13.88+.9373*(1.+.000033*E2)*std::sqrt(E))/(1.+(10.12+1.532/E2)/E);
+  return std::pow(y,6)*(r+p3)/(p3*r+1.);
 }
 
 int main()
@@ -62,8 +62,8 @@ int main()
   const double MN=.931494043;    // Nucleon mass (inside nucleus, atomic mass unit, GeV)
   const double Emin=mmu+mmu2/(MN+MN); // the threshold energy in GeV
   const double Emax=390.;        // the maximum energy in GeV
-  const double lEmi=log(Emin);   // logarithm of the threshold energy in GeV
-  const double lEma=log(Emax);   // logarithm of the maximum energy in GeV
+  const double lEmi=std::log(Emin);   // logarithm of the threshold energy in GeV
+  const double lEma=std::log(Emax);   // logarithm of the maximum energy in GeV
   const int    power=7;          // power for the magic variable (E-dependent)
   const double pconv=1./power;   // conversion power for the magic variable
   //           =========
@@ -82,16 +82,16 @@ int main()
   for(double len=lEmi+hE; len<lEma; len+=dE)
   {
     //G4cout<<"log(E)="<<len<<G4endl;
-    double en=exp(len);
+    double en=std::exp(len);
     double shift=0.;
     if(nu) shift=1.+nuE(en);
     else   shift=1.+anuE(en);
-    double Xma=pow(shift,power);
-    double Xmi=pow((shift-1.),power);
+    double Xma=std::pow(shift,power);
+    double Xmi=std::pow((shift-1.),power);
     int    nX=8;
     double DISmsig=0.;
     double DIStsig=1.;
-    while(fabs(DIStsig-DISmsig)/DIStsig>eps)
+    while(std::fabs(DIStsig-DISmsig)/DIStsig>eps)
     {
       DISmsig=DIStsig;
       DIStsig=0.;
@@ -100,7 +100,7 @@ int main()
       double hX=dX/2;
       for(double X=Xmi+hX; X<Xma; X+=dX)
 				  {
-        double r=shift-pow(X,pconv); // the same for nu and anu
+        double r=shift-std::pow(X,pconv); // the same for nu and anu
         if(nu) DIStsig+=nuX(en,r,shift);  // neutrino
         else   DIStsig+=anuX(en,r,shift); // anti-neutrino
       }
@@ -122,7 +122,7 @@ int main()
     G4cout<<"E="<<en<<", Xl_min="<<Xmi<<G4endl;
     for(double X=Xmi+hX; X<Xma; X+=dX)
 		  {
-      double r=shift-pow(X,pconv); // the same for nu and anu
+      double r=shift-std::pow(X,pconv); // the same for nu and anu
       if(nu) DIStsig+=nuX(en,r,shift);  // neutrino
       else   DIStsig+=anuX(en,r,shift); // anti-neutrino
       if(DIStsig>sum+eps)
@@ -166,7 +166,7 @@ int main()
       double hX=rX/2;
       for(double X=Xmi+hX; X<Xm; X+=rX)
 		  		{
-        double r=shift-pow(X,pconv); // the same for nu and anu
+        double r=shift-std::pow(X,pconv); // the same for nu and anu
         if(nu) DIStsig+=nuX(en,r,shift);  // neutrino
         else   DIStsig+=anuX(en,r,shift); // anti-neutrino
       }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElasticHadrNucleusHE.cc,v 1.31 2006-06-02 17:47:01 vnivanch Exp $
+// $Id: G4ElasticHadrNucleusHE.cc,v 1.32 2006-06-28 14:00:03 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //G4ElasticHadrNucleusHE.cc
 //
@@ -554,7 +554,7 @@ G4HadFinalState * G4ElasticHadrNucleusHE::ApplyYourself(
 
   // G4cout << "Entering elastic scattering 3"<<G4endl;
   if (verboseLevel > 1) 
-    G4cout << "cos(t)=" << cost << " sin(t)=" << sint << G4endl;
+    G4cout << "cos(t)=" << cost << " std::sin(t)=" << sint << G4endl;
 
   G4ThreeVector v1(sint*std::cos(phi),sint*std::sin(phi),cost);
   p1 = p1.unit();
@@ -709,7 +709,7 @@ G4HadFinalState * G4ElasticHadrNucleusHE::ApplyYourself(
 
    G4double D0  = F12*F2+F1*F32+F3*F22-F32*F2-F22*F1-F12*F3;
 
-   if(abs(D0) < 0.00000001 || kk == 2)
+   if(std::abs(D0) < 0.00000001 || kk == 2)
    { 
     ranQ2 = (*(Q+kk-1)+(ranUni-*(F+kk-1))*
                  (*(Q+kk)-*(Q+kk-1))

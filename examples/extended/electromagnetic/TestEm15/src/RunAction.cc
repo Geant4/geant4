@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.3 2006-05-17 14:53:51 maire Exp $
+// $Id: RunAction.cc,v 1.4 2006-06-28 13:57:51 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -160,7 +160,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
          <<   "  ("                   << rmsTeta/deg  << " deg)"
          <<   "\n phi correlation:\t" << MeanCorrel 
 	 << " +- "                    << rmsCorrel
-	 << "  (cos(phi_pos - phi_dir))"	 	 
+	 << "  (std::cos(phi_pos - phi_dir))"	 	 
          << G4endl;
 	 
 

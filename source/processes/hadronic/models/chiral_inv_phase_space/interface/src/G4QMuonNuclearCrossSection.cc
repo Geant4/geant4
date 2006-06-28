@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QMuonNuclearCrossSection.cc,v 1.5 2006-05-30 06:50:13 mkossov Exp $
+// $Id: G4QMuonNuclearCrossSection.cc,v 1.6 2006-06-28 13:59:45 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //

@@ -632,8 +632,8 @@ void Tst01DetectorConstruction::ConstructDetectors()
   // without generating overlaps (they are self-contained)
   for (G4int i2=0; i2<6; i2++) {
     G4double phi =  60.*i2 * deg;
-    G4double xp = dshift*sin(phi);
-    G4double yp = -dshift*cos(phi);
+    G4double xp = dshift*std::sin(phi);
+    G4double yp = -dshift*std::cos(phi);
     rot = new G4RotationMatrix(*rot1);
     rot->rotateZ(phi); 
     G4ThreeVector pos(xp, yp,0.);
@@ -653,7 +653,7 @@ void Tst01DetectorConstruction::ConstructDetectors()
     row->AddPlacedAssembly(cell, pos2, 0);
   }
 
-  G4double dxrow = 3.*(dshift+10.*cm)*tan(30.*deg);
+  G4double dxrow = 3.*(dshift+10.*cm)*std::tan(30.*deg);
   G4double dyrow = dshift+10.*cm;
   G4int nrows = 5;
   for (G4int i4=0; i4<nrows; i4++) {

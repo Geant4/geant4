@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QANuMuNuclearCrossSection.cc,v 1.6 2006-02-06 09:35:57 mkossov Exp $
+// $Id: G4QANuMuNuclearCrossSection.cc,v 1.7 2006-06-28 13:59:33 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -296,8 +296,8 @@ G4double G4QANuMuNuclearCrossSection::GetQEL_ExchangeQ2()
   G4double rhm2E=hmmu2/Enu2;
   G4double Q2mi=(Enu2+Enu2)*(rmin-rhm2E-std::sqrt(rmin*rmin-rhm2E-rhm2E)); // Q2_min(E_nu)
   G4double Q2ma=dME*ymax;                                                  // Q2_max(E_nu)
-  G4double Xma=pow((1.+Q2mi),power);  // X_max(E_nu)
-  G4double Xmi=pow((1.+Q2ma),power);  // X_min(E_nu)
+  G4double Xma=std::pow((1.+Q2mi),power);  // X_max(E_nu)
+  G4double Xmi=std::pow((1.+Q2ma),power);  // X_min(E_nu)
   // Find the integral values integ(Xmi) & integ(Xma) using the direct table
   G4double rXi=(Xmi-Xmin)/dX;
   G4int    iXi=static_cast<int>(rXi);
@@ -322,7 +322,7 @@ G4double G4QANuMuNuclearCrossSection::GetQEL_ExchangeQ2()
   G4double dint=intx-intc;
   G4double mX=Xl[intc];
   G4double X=mX+dint*(Xl[intc+1]-mX);
-  G4double Q2=pow(X,pconv)-1.;
+  G4double Q2=std::pow(X,pconv)-1.;
   return Q2*GeV*GeV;
 }
 
@@ -513,10 +513,10 @@ G4double G4QANuMuNuclearCrossSection::GetNQE_ExchangeQ2()
   if(Q2ma>Q2nq) Q2ma=Q2nq;            // Correction for Non Quasi Elastic
   // --- now r_min=Q2mi/Q2ma and r_max=1.; when r is randomized -> Q2=r*Q2ma ---
   G4double Rmi=Q2mi/Q2ma;
-  G4double shift=.875/(1.+.2977/Enu/Enu)/pow(Enu,.78);
+  G4double shift=.875/(1.+.2977/Enu/Enu)/std::pow(Enu,.78);
   // --- E-interpolation must be done in a log scale ---
-  G4double Xmi=pow((shift-Rmi),power);// X_min(E_nu)
-  G4double Xma=pow((shift-1.),power); // X_max(E_nu)
+  G4double Xmi=std::pow((shift-Rmi),power);// X_min(E_nu)
+  G4double Xma=std::pow((shift-1.),power); // X_max(E_nu)
   // Find the integral values integ(Xmi) & integ(Xma) using the direct table
   G4double idX=dX[fE]+dE*(dX[sE]-dX[fE]); // interpolated X step
   G4double iXmi=Xmin[fE]+dE*(Xmin[sE]-Xmin[fE]); // interpolated X minimum
@@ -553,7 +553,7 @@ G4double G4QANuMuNuclearCrossSection::GetNQE_ExchangeQ2()
   G4double mXr=Xl[sE][intc];
   G4double Xrb=mXr+dint*(Xl[sE][intc+1]-mXr);
   G4double X=Xlb+dE*(Xrb-Xlb);        // interpolated X value
-  G4double R=shift-pow(X,pconv);
+  G4double R=shift-std::pow(X,pconv);
   G4double Q2=R*Q2ma;
   return Q2*GeV*GeV;
 }
@@ -564,7 +564,7 @@ G4double G4QANuMuNuclearCrossSection::GetDirectPart(G4double Q2)
   G4double f=Q2/4.62;
   G4double ff=f*f;
   G4double r=ff*ff;
-  G4double s=pow((1.+.6/Q2),(-1.-(1.+r)/(12.5+r/.3)));
+  G4double s=std::pow((1.+.6/Q2),(-1.-(1.+r)/(12.5+r/.3)));
   //@@ It is the same for nu/anu, but for nu it is a bit less, and for anu a bit more (par)
   return 1.-s*(1.-s/2);
 }

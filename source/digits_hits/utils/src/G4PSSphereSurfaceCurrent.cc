@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSSphereSurfaceCurrent.cc,v 1.3 2005-11-17 22:53:38 asaim Exp $
+// $Id: G4PSSphereSurfaceCurrent.cc,v 1.4 2006-06-28 13:58:11 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4PSSphereSurfaceCurrent
@@ -98,7 +98,7 @@ G4int G4PSSphereSurfaceCurrent::IsSelectedSurface(G4Step* aStep, G4Sphere* spher
                       +localpos1.z()*localpos1.z();
     G4double InsideRadius2 = 
       sphereSolid->GetInsideRadius()*sphereSolid->GetInsideRadius();
-    if(fabs( localR2 - InsideRadius2 ) < kCarTolerance ){
+    if(std::fabs( localR2 - InsideRadius2 ) < kCarTolerance ){
       return fCurrent_In;
     }
   }
@@ -113,7 +113,7 @@ G4int G4PSSphereSurfaceCurrent::IsSelectedSurface(G4Step* aStep, G4Sphere* spher
                       +localpos2.z()*localpos2.z();
     G4double InsideRadius2 = 
       sphereSolid->GetInsideRadius()*sphereSolid->GetInsideRadius();
-    if(fabs( localR2 - InsideRadius2 ) < kCarTolerance ){
+    if(std::fabs( localR2 - InsideRadius2 ) < kCarTolerance ){
       return fCurrent_Out;
     }
   }

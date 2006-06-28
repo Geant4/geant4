@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuonDecayChannel.cc,v 1.15 2006-04-28 06:32:30 kurasige Exp $
+// $Id: G4MuonDecayChannel.cc,v 1.16 2006-06-28 13:58:25 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -140,18 +140,18 @@ do {
 
   G4double costheta,sintheta,rphi,rtheta,rpsi;
   costheta= 1.-2./Ee-2./Ene+2./Ene/Ee;
-  sintheta=sqrt(1.-costheta*costheta);
+  sintheta=std::sqrt(1.-costheta*costheta);
   
 
   rphi=twopi*G4UniformRand()*rad;
-  rtheta=(acos(2.*G4UniformRand()-1.));
+  rtheta=(std::acos(2.*G4UniformRand()-1.));
   rpsi=twopi*G4UniformRand()*rad;
 
   G4RotationMatrix rot;
   rot.set(rphi,rtheta,rpsi);
 
   //electron 0
-  daughtermomentum[0]=sqrt(Ee*Ee*EMax*EMax+2.0*Ee*EMax * daughtermass[0]);
+  daughtermomentum[0]=std::sqrt(Ee*Ee*EMax*EMax+2.0*Ee*EMax * daughtermass[0]);
   G4ThreeVector direction0(0.0,0.0,1.0);
 
   direction0 *= rot;
@@ -162,7 +162,7 @@ do {
   
   //electronic neutrino  1
 
-  daughtermomentum[1]=sqrt(Ene*Ene*EMax*EMax+2.0*Ene*EMax * daughtermass[1]);
+  daughtermomentum[1]=std::sqrt(Ene*Ene*EMax*EMax+2.0*Ene*EMax * daughtermass[1]);
   G4ThreeVector direction1(sintheta,0.0,costheta);
 
   direction1 *= rot;
@@ -172,7 +172,7 @@ do {
 
   //muonnic neutrino 2
   
-     daughtermomentum[2]=sqrt(Enm*Enm*EMax*EMax +2.0*Enm*EMax*daughtermass[2]);
+     daughtermomentum[2]=std::sqrt(Enm*Enm*EMax*EMax +2.0*Enm*EMax*daughtermass[2]);
   G4ThreeVector direction2(-Ene/Enm*sintheta,0,-Ee/Enm-Ene/Enm*costheta);
 
   direction2 *= rot;

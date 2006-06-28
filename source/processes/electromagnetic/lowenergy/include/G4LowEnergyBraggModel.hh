@@ -19,8 +19,8 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-// 
-// $Id: G4LowEnergyBraggModel.hh,v 1.4 2004-10-11 08:41:28 vnivanch Exp $
+//
+// $Id: G4LowEnergyBraggModel.hh,v 1.5 2006-06-28 13:58:31 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------

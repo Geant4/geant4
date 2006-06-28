@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DiffElasticHadrNucleus.cc,v 1.21 2006-06-02 17:47:01 vnivanch Exp $
+// $Id: G4DiffElasticHadrNucleus.cc,v 1.22 2006-06-28 14:00:01 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  Geant4 class G4DiffElasticHadrNucleus  
@@ -668,7 +668,7 @@ G4double G4DiffElasticHadrNucleus::
      EcmH   = (Sh+HM2-PM2)/2/SqrtS;
      EcmP   = (Sh-HM2+PM2)/2/SqrtS;
 
-     Kcm    = sqrt(EcmH*EcmH-HM2);
+     Kcm    = std::sqrt(EcmH*EcmH-HM2);
      MaxT   = 4*Kcm*Kcm;
 
      BoundaryP[0]=9.0; BoundaryTG[0]=5.0;BoundaryTL[0]=MaxT/2.0;
@@ -702,7 +702,7 @@ G4double G4DiffElasticHadrNucleus::
     G4double dSigPodT;
 
     dSigPodT = SigTot*SigTot*(1+ReOnIm*ReOnIm)*(
-                  Coeff1*std::exp(-Slope1*sqrt(aQ2))+
+                  Coeff1*std::exp(-Slope1*std::sqrt(aQ2))+
                   Coeff2*std::exp( Slope2*(ConstU+aQ2))+
                   (1-Coeff1-Coeff0)*std::exp(-Slope*aQ2)+
                  +Coeff0*std::exp(-Slope0*aQ2)

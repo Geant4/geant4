@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSFlatSurfaceFlux.cc,v 1.3 2005-11-19 03:16:07 asaim Exp $
+// $Id: G4PSFlatSurfaceFlux.cc,v 1.4 2006-06-28 13:58:09 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4PSFlatSurfaceFlux
@@ -101,7 +101,7 @@ G4int G4PSFlatSurfaceFlux::IsSelectedSurface(G4Step* aStep, G4Box* boxSolid){
     G4ThreeVector stppos1= aStep->GetPreStepPoint()->GetPosition();
     G4ThreeVector localpos1 = 
       theTouchable->GetHistory()->GetTopTransform().TransformPoint(stppos1);
-    if(fabs( localpos1.z() + boxSolid->GetZHalfLength())<kCarTolerance ){
+    if(std::fabs( localpos1.z() + boxSolid->GetZHalfLength())<kCarTolerance ){
       return fFlux_In;
     }
   }
@@ -111,7 +111,7 @@ G4int G4PSFlatSurfaceFlux::IsSelectedSurface(G4Step* aStep, G4Box* boxSolid){
     G4ThreeVector stppos2= aStep->GetPostStepPoint()->GetPosition();
     G4ThreeVector localpos2 = 
       theTouchable->GetHistory()->GetTopTransform().TransformPoint(stppos2);
-    if(fabs( localpos2.z() + boxSolid->GetZHalfLength())<kCarTolerance ){
+    if(std::fabs( localpos2.z() + boxSolid->GetZHalfLength())<kCarTolerance ){
       return fFlux_Out;
     }
   }

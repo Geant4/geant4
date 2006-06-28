@@ -14,7 +14,7 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * authors in the GEANT4 collaboration.                             *
+// * GEANT4 collaboration.                                            *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
@@ -76,8 +76,8 @@ int main()
     0.00,0.00,0.00,2.48,3.05,3.11,3.09,3.08,3.10,2.70,2.90,2.95,3.00,2.97,2.98,3.00,3.05,
     2.94,2.93,2.86,2.99,3.01,2.85,2.84,2.72,2.76,2.81,2.77,2.72,2.75,2.78,2.74,2.72,2.72,
     2.70,2.74,2.70,2.70,2.64,2.63,2.61,2.59,2.63,2.57,2.63,2.62,2.62,2.67,2.65};
-  const G4double iE=log(106.);      // Start logarithm energy
-  const G4double fE=log(50000.);    // Finish logarithm energy (each 2.75 percent)
+  const G4double iE=std::log(106.);      // Start logarithm energy
+  const G4double fE=std::log(50000.);    // Finish logarithm energy (each 2.75 percent)
   const G4double dE=(fE-iE)/(nC-1); // Step in logarithm energy
   std::ofstream fileGDR("GDR.out", std::ios::out);
   fileGDR.setf( std::ios::scientific, std::ios::floatfield );
@@ -87,7 +87,7 @@ int main()
   for(G4int m=0; m<mN; m++)
   {
     G4double A=mA[m];
-    G4double lnA=log(A);
+    G4double lnA=std::log(A);
     G4double A2=A*A;
     G4double red=1.+16/A2/A2;
     G4double rho1=(3.2+.75*lnA)/red;
@@ -134,15 +134,15 @@ int main()
 	for(G4int em=0; em<mC; em++)
 	{
       ekin+=1.;
-      G4double z=log(ekin);
+      G4double z=std::log(ekin);
       G4double ds=z-du;
-	  G4double sigd=da/(1.+ds*ds/dw)/(1.+exp(rr*(tr-z))); // Delta contribution
-	  G4double g1=exp(rho1-z)/(1.+exp(3*(tau1-z)));
-	  G4double g2=exp(2*(rho2-z))/(1.+exp(6*(tau2-z)));
+	  G4double sigd=da/(1.+ds*ds/dw)/(1.+std::exp(rr*(tr-z))); // Delta contribution
+	  G4double g1=std::exp(rho1-z)/(1.+std::exp(3*(tau1-z)));
+	  G4double g2=std::exp(2*(rho2-z))/(1.+std::exp(6*(tau2-z)));
       G4double g4=0.;
-      if(A>3.5)g4=exp(4*(rho4-z))/(1.+exp(12*(tau4-z)));
+      if(A>3.5)g4=std::exp(4*(rho4-z))/(1.+std::exp(12*(tau4-z)));
       G4double g8=0.;
-      if(A>6.5)g8=exp(8*(rho8-z))/(1.+exp(24*(tau8-z)));
+      if(A>6.5)g8=std::exp(8*(rho8-z))/(1.+std::exp(24*(tau8-z)));
       G4double sig=sigd+g1+g2+g4+g8;
       np++;
       if(np==7)
@@ -163,8 +163,8 @@ int main()
     G4double A2=A*A;
     fileRes<<"  static const G4double SH"<<n<<"[nH]={"<<G4endl<<"    ";
     G4cout<<"**** A_high="<<A<<G4endl;
-    G4double lnA=log(A);
-    G4double slA=sqrt(lnA);
+    G4double lnA=std::log(A);
+    G4double slA=std::sqrt(lnA);
     G4double red=1.+16/A2/A2;
     G4double rho1=(3.2+.75*lnA)/red;
     G4double tau1=(6.6-.5*lnA)/red;
@@ -224,20 +224,20 @@ int main()
 	{
       z+=dE;
       G4double ds=z-du;
-      G4double fr=1.+exp(rr*(tr-z));
+      G4double fr=1.+std::exp(rr*(tr-z));
 	  G4double sigd=da/(1.+ds*ds/dw); // Delta contribution
       G4double hs=z-hu;
 	  G4double sigh=ha/(1.+hs*hs/hw); // HighR contribution
 	  G4double g1=0.;
-      if(A>1.5)g1=exp(rho1-z)/(1.+exp(3*(tau1-z)));
+      if(A>1.5)g1=std::exp(rho1-z)/(1.+std::exp(3*(tau1-z)));
 	  G4double g2=0.;
-      if(A>1.5)g2=exp(2*(rho2-z))/(1.+exp(6*(tau2-z)));
+      if(A>1.5)g2=std::exp(2*(rho2-z))/(1.+std::exp(6*(tau2-z)));
       G4double g4=0.;
-      if(A<2.5)g4=exp(4*(rho4-z))/(1.+exp(12*(tau4-z)));
+      if(A<2.5)g4=std::exp(4*(rho4-z))/(1.+std::exp(12*(tau4-z)));
       G4double g8=0.;
-      if(A<2.5)g8=exp(8*(rho8-z))/(1.+exp(24*(tau8-z)));
-      G4double hp=.0375*(z-16.5)+sh*exp(-.11*z);
-      G4double fp=hp/(1.+exp(4*(7.-z)));
+      if(A<2.5)g8=std::exp(8*(rho8-z))/(1.+std::exp(24*(tau8-z)));
+      G4double hp=.0375*(z-16.5)+sh*std::exp(-.11*z);
+      G4double fp=hp/(1.+std::exp(4*(7.-z)));
       G4double sig=(sigd+sigh)/fr+g1+g2+g4+g8+sp*fp;
       np++;
       if(np==7)

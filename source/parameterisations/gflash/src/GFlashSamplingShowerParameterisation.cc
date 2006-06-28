@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: GFlashSamplingShowerParameterisation.cc,v 1.4 2006-05-08 12:26:54 gcosmo Exp $
+// $Id: GFlashSamplingShowerParameterisation.cc,v 1.5 2006-06-28 13:58:23 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -222,16 +222,16 @@ GenerateLongitudinalProfile(G4double Energy)
 void
 GFlashSamplingShowerParameterisation::ComputeLongitudinalParameters(G4double y)
 {
-  AveLogTmaxh  = log(std::max(ParAveT1 +log(y),0.1));  //ok 
-  AveLogAlphah = log(std::max(ParAveA1 + (ParAveA2+ParAveA3/Zeff)*log(y),.1)); //ok
+  AveLogTmaxh  = std::log(std::max(ParAveT1 +std::log(y),0.1));  //ok 
+  AveLogAlphah = std::log(std::max(ParAveA1 + (ParAveA2+ParAveA3/Zeff)*std::log(y),.1)); //ok
   //hom  
-  SigmaLogTmaxh  = std::min(0.5,1.00/( ParSigLogT1 + ParSigLogT2*log(y)) );  //ok
-  SigmaLogAlphah = std::min(0.5,1.00/( ParSigLogA1 + ParSigLogA2*log(y)));  //ok
-  Rhoh           = ParRho1+ParRho2*log(y);//ok
+  SigmaLogTmaxh  = std::min(0.5,1.00/( ParSigLogT1 + ParSigLogT2*std::log(y)) );  //ok
+  SigmaLogAlphah = std::min(0.5,1.00/( ParSigLogA1 + ParSigLogA2*std::log(y)));  //ok
+  Rhoh           = ParRho1+ParRho2*std::log(y);//ok
   // if sampling 
-  AveLogTmax  = std::max(0.1,log(exp(AveLogTmaxh)
+  AveLogTmax  = std::max(0.1,std::log(std::exp(AveLogTmaxh)
               + ParsAveT1/Fs + ParsAveT2*(1-ehat)));  //ok
-  AveLogAlpha = std::max(0.1,log(exp(AveLogAlphah)
+  AveLogAlpha = std::max(0.1,std::log(std::exp(AveLogAlphah)
               + (ParsAveA1/Fs)));  //ok
   //
   SigmaLogTmax  = std::min(0.5,1.00/( ParsSigLogT1
@@ -247,14 +247,14 @@ void GFlashSamplingShowerParameterisation::GenerateEnergyProfile(G4double /* y *
 { 
   G4double Correlation1 = std::sqrt((1+Rho)/2);
   G4double Correlation2 = std::sqrt((1-Rho)/2);
-  G4double Correlation1h = sqrt((1+Rhoh)/2);
-  G4double Correlation2h = sqrt((1-Rhoh)/2);
+  G4double Correlation1h = std::sqrt((1+Rhoh)/2);
+  G4double Correlation2h = std::sqrt((1-Rhoh)/2);
   G4double Random1 = G4RandGauss::shoot();
   G4double Random2 = G4RandGauss::shoot();
 
-  Tmax  = std::max(1.,exp( AveLogTmax  + SigmaLogTmax  *
+  Tmax  = std::max(1.,std::exp( AveLogTmax  + SigmaLogTmax  *
   (Correlation1*Random1 + Correlation2*Random2) ));
-  Alpha = std::max(1.1,exp( AveLogAlpha + SigmaLogAlpha *
+  Alpha = std::max(1.1,std::exp( AveLogAlpha + SigmaLogAlpha *
   (Correlation1*Random1 - Correlation2*Random2) ));
   Beta  = (Alpha-1.00)/Tmax;
   //Parameters for Enenrgy Profile including correaltion and sigmas  
@@ -283,7 +283,7 @@ GFlashSamplingShowerParameterisation::
 ApplySampling(const G4double DEne, const G4double )
 {
   G4double DEneFluctuated = DEne;
-  G4double Resolution     = pow(SamplingResolution,2);
+  G4double Resolution     = std::pow(SamplingResolution,2);
 
   //       +pow(NoiseResolution,2)/  //@@@@@@@@ FIXME 
   //                         Energy*(1.*MeV)+
@@ -389,10 +389,10 @@ ComputeRadialParameters(G4double Energy, G4double Tau)
 
   // sampling calorimeter  
 
-  RadiusCore   = RadiusCore + ParsRC1*(1-ehat) + ParsRC2/Fs*exp(-Tau); //ok
+  RadiusCore   = RadiusCore + ParsRC1*(1-ehat) + ParsRC2/Fs*std::exp(-Tau); //ok
   WeightCore   = WeightCore + (1-ehat)
-                            * (ParsWC1+ParsWC2/Fs * exp(-pow((Tau-1.),2))); //ok
-  RadiusTail   = RadiusTail + (1-ehat)* ParsRT1+ ParsRT2/Fs *exp(-Tau);     //ok  
+                            * (ParsWC1+ParsWC2/Fs * std::exp(-std::pow((Tau-1.),2))); //ok
+  RadiusTail   = RadiusTail + (1-ehat)* ParsRT1+ ParsRT2/Fs *std::exp(-Tau);     //ok  
 }
 
 // ------------------------------------------------------------

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4QHBook.cc,v 1.2 2005-06-27 15:33:34 gunter Exp $
+// $Id: G4QHBook.cc,v 1.3 2006-06-28 14:00:25 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QHBook ----------------

@@ -14,7 +14,7 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * authors in the GEANT4 collaboration.                             *
+// * GEANT4 collaboration.                                            *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
@@ -161,7 +161,7 @@ G4int CalculateParameters(G4int iPDG, G4double HadrMoment) // HadrMoment is in M
     }
     break;
   case 2:                                      // =====>>>  pi plus
-    if(HadrMoment>2.) HadrTot = 10.6+2.*log(HadrEnergy)+25*std::pow(HadrEnergy,-0.43);// mb
+    if(HadrMoment>2.) HadrTot = 10.6+2.*std::log(HadrEnergy)+25*std::pow(HadrEnergy,-0.43);// mb
     else HadrTot = 40-50*(HadrMoment-1.5)*(HadrMoment-1.7);
     HadrSlope = 7.28+0.245*std::log(sHadr);                                // GeV^-2 
     HadrReIm  = 0.2*std::log(sHadr/100)*std::pow(sHadr,-0.15);             // no dim
@@ -639,7 +639,7 @@ G4double CHIPS_Tb(G4int  A, G4double b)              // T(b) in fm-2
   if(A!=Am)
 		{
     B=.0008*A*A;                                     // no units
-    D=.42*pow(A,-.26);                               // fm^-2
+    D=.42*std::pow(A,-.26);                               // fm^-2
     C=A*D/pi/std::log(1.+B);                         // fm^-2
   }
   G4double E=B*std::exp(-D*b*b);

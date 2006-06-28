@@ -1,3 +1,25 @@
+//
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
+//
 #include "G4ios.hh"
 #include "G4ThreeVector.hh"
 #include "G4LorentzVector.hh"
@@ -18,7 +40,7 @@ int main() {
 
   // Set constanst and create terminology
   G4double cutOff = 20 * MeV;
-  G4double fm = 1.0 * pow(10.0, -15);
+  G4double fm = 1.0 * std::pow(10.0, -15);
   G4double oneThird = 0.3333333333333;
   enum particleType {proton, neutron};
   // Eenum channelType {pionProduction, };
@@ -54,10 +76,10 @@ int main() {
     // Select the impact parameter b
     G4double targetNucleusA = targetNucleusN + targetNucleusZ;
     G4double radius0        = 1.0 * fm;                                       // radius of hydrogen atom nucleus
-    G4double bMax           = radius0 * fm / pow(targetNucleusA, oneThird) ;  // radius of atom with a = n + z
-    G4double b              = bMax * sqrt(G4UniformRand());
+    G4double bMax           = radius0 * fm / std::pow(targetNucleusA, oneThird) ;  // radius of atom with a = n + z
+    G4double b              = bMax * std::sqrt(G4UniformRand());
     G4double z              = b;                                              // x, y, z coordinates of impact point
-    G4double x              = - sqrt(sqr(bMax) - sqr(z));
+    G4double x              = - std::sqrt(sqr(bMax) - sqr(z));
     G4double y              = 0;
     //    G4cout << radius0 << " " << bMax << endl;
     G4cout << "impact point (x, y, z) : "  << "\t" << x <<", " << "\t" << y << ", " << "\t" << z  << G4endl;
@@ -65,9 +87,9 @@ int main() {
     // *) Find the interaction distance b
     G4double xSecNeutron = 1 * millibarn;
     G4double xSecProton  = 1 * millibarn;
-    G4double lambda      = 4 * pi * targetNucleusA * pow(radius0, 3) /
+    G4double lambda      = 4 * pi * targetNucleusA * std::pow(radius0, 3) /
       (3 * (targetNucleusZ * xSecProton + targetNucleusN * xSecNeutron));
-    b = - lambda * log(G4UniformRand());
+    b = - lambda * std::log(G4UniformRand());
 
     G4cout << "interaction distance   : " << "\t" << b << G4endl;
 
@@ -82,8 +104,8 @@ int main() {
     G4cout << "target particle        : " << "\t" << targetParticle << G4endl;
 
     // Choose the struck nucleon momentum
-    G4double qMax = (300.0 / radius0) * pow(10, -15) * MeV;
-    G4double q    = qMax * sqrt(G4UniformRand());
+    G4double qMax = (300.0 / radius0) * std::pow(10, -15) * MeV;
+    G4double q    = qMax * std::sqrt(G4UniformRand());
 
     G4cout << "target  momentum       : " << "\t" << q << G4endl;
 

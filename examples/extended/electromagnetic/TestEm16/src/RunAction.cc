@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.4 2006-05-24 12:58:49 maire Exp $
+// $Id: RunAction.cc,v 1.5 2006-06-28 13:57:53 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -128,12 +128,12 @@ void RunAction::EndOfRunAction(const G4Run*)
   if(n_gam_sync>0)
   {
     G4double Emean = e_gam_sync/n_gam_sync;
-    G4double E_rms = sqrt(e_gam_sync2/n_gam_sync - Emean*Emean);
+    G4double E_rms = std::sqrt(e_gam_sync2/n_gam_sync - Emean*Emean);
     G4cout
     << "Summary for synchrotron radiation :" << '\n' << std::setprecision(4)
     << "  Number of photons = " << n_gam_sync << '\n'
     << "  Emean             = " << Emean/keV << " +/- "
-    << E_rms/(keV * sqrt((G4double) n_gam_sync)) << " keV" << '\n'
+    << E_rms/(keV * std::sqrt((G4double) n_gam_sync)) << " keV" << '\n'
     << "  E_rms             = " << G4BestUnit(E_rms,"Energy") << '\n'
     << "  Energy Max / Mean = " << e_gam_sync_max / Emean << '\n'
     << "  MeanFreePath      = " << G4BestUnit(lam_gam_sync/n_gam_sync,"Length")

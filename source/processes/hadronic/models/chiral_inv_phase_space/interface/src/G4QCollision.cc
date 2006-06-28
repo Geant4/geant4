@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4QCollision.cc,v 1.9 2006-05-30 06:50:13 mkossov Exp $
+// $Id: G4QCollision.cc,v 1.10 2006-06-28 13:59:37 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCollision class -----------------
@@ -698,8 +698,8 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
       //@@ inFuture use N=GetNPartons and directFraction=GetDirectPart, @@ W2...
       G4double r=G4UniformRand();
       G4double r1=0.5;                                  // (1-x)
-      if(r<0.5)      r1=sqrt(r+r)*(.5+.1579*(r-.5));
-      else if(r>0.5) r1=1.-sqrt(2.-r-r)*(.5+.1579*(.5-r));
+      if(r<0.5)      r1=std::sqrt(r+r)*(.5+.1579*(r-.5));
+      else if(r>0.5) r1=1.-std::sqrt(2.-r-r)*(.5+.1579*(.5-r));
       G4double xn=1.-mudM/Momentum;             // Normalization of (1-x) [x>mudM/Mom]
       G4double x1=xn*r1;                        // (1-x)
       G4double x=1.-x1;                         // x=2k/M

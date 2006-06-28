@@ -14,7 +14,7 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * authors in the GEANT4 collaboration.                             *
+// * GEANT4 collaboration.                                            *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
@@ -56,14 +56,14 @@ int main()
   G4double sig=0.;
   for(G4int n=0; n<6; n++)
   {
-	G4double lekin = log(low[n]);
-	G4double dlekin= exp((log(log(high[n]))-log(lekin))/(nC-1));
+	G4double lekin = std::log(low[n]);
+	G4double dlekin= std::exp((std::log(std::log(high[n]))-std::log(lekin))/(nC-1));
 	lekin /= dlekin;
 	//G4cout<<"n="<<n<<", low="<<low[n]<<", high="<<high[n]<<", np="<<nC<<", d="<<dlekin<<G4endl;
 	for(G4int ll=0; ll<nC; ll++)
 	{
 	  lekin*=dlekin;
-      G4double ekin=exp(lekin);
+      G4double ekin=std::exp(lekin);
 	  theDynamicParticle = new G4DynamicParticle(theParticleDefinition,
 												 G4ParticleMomentum(1.,0.,0.), ekin*MeV);
 	  sig = gammaACrossSection.GetCrossSection(theDynamicParticle,theElement[n])/millibarn;

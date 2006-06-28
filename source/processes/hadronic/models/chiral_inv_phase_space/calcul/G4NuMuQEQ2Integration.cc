@@ -14,7 +14,7 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * authors in the GEANT4 collaboration.                             *
+// * GEANT4 collaboration.                                            *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
@@ -41,10 +41,10 @@ double nuQ2(double Q2) // (Q2 is in GeV^2)
   // -1-    -2-   -3-   -4-   -5-   -6-   -7-   -8-   -9-   -10-  -11-
   // 2.068 2.634 4.333 3.000 10.59 .0011 18.74 1.484 134950 .0755 4.5
   G4double y=Q2/3;
-  G4double z=pow((Q2/2.634),4.333);
+  G4double z=std::pow((Q2/2.634),4.333);
 		// The first (1.+Q2)**4.5 fuctor is just normalization, which payed back by 1/(1+Q2)^3.5
-  G4double f=pow((1.+Q2),4.5)*
-				(1.+z*(1.+18.74*exp(-Q2/1.484)-134950*exp(-Q2/.0755)))/pow((1.+y+.0011*y*y),10.59);
+  G4double f=std::pow((1.+Q2),4.5)*
+				(1.+z*(1.+18.74*std::exp(-Q2/1.484)-134950*std::exp(-Q2/.0755)))/std::pow((1.+y+.0011*y*y),10.59);
   //G4cout<<"Q2="<<Q2<<", y="<<y<<", z="<<z<<", f="<<f<<G4endl;
   return f;
 }
@@ -56,9 +56,9 @@ double anuQ2(double Q2)
   // .2000 .0100 .3000 .4000 3.900 .0150 .2000 6.500 0.000 .00000001
   G4double  y=Q2/.4;
   G4double  y2=y*y;
-  G4double  z=pow((Q2/.01),-.3);
+  G4double  z=std::pow((Q2/.01),-.3);
 		// The first (1.+Q2)**6.5 fuctor is just normalization, which payed back by 1/(1+Q2)^5.5
-  G4double f=(1.+z)*pow((1+Q2),6.5)*pow(Q2,-.2)/pow((1.+y+(.015+.00000001*y2)*y2),3.9);
+  G4double f=(1.+z)*std::pow((1+Q2),6.5)*std::pow(Q2,-.2)/std::pow((1.+y+(.015+.00000001*y2)*y2),3.9);
   //G4cout<<"Q2="<<Q2<<", y="<<y<<", z="<<z<<", f="<<f<<G4endl;
   return f;
 }
@@ -111,7 +111,7 @@ int main()
   double Q2o=1.;
   double Q2v=0.;
 		int nit=0;
-  while (fabs(Q2v-Q2o)>eps && nit<10)
+  while (std::fabs(Q2v-Q2o)>eps && nit<10)
   {
     nit++;
     double Emm=Emo;               // Candidate for the next point is predefined
@@ -120,13 +120,13 @@ int main()
     double ME=Enu*MN;             // M*E
     double dEMN=(dEnu+MN)*ME;
     double MEm=ME-hmmu2;
-    double sqE=Enu*sqrt(MEm*MEm-mmu2*MN2);
+    double sqE=Enu*std::sqrt(MEm*MEm-mmu2*MN2);
     double E2M=MN*Enu2-(Enu+MN)*hmmu2;
     //double ymax=(E2M+sqE)/dEMN;
     double ymin=(E2M-sqE)/dEMN;
     double rmin=1.-ymin;
     double rhm2E=hmmu2/Enu2;
-    Q2i=(Enu2+Enu2)*(rmin-rhm2E-sqrt(rmin*rmin-rhm2E-rhm2E)); // minQ2 for Enu
+    Q2i=(Enu2+Enu2)*(rmin-rhm2E-std::sqrt(rmin*rmin-rhm2E-rhm2E)); // minQ2 for Enu
     //G4cout<<"MinSearch: E="<<Enu<<": Q2="<<Q2i<<G4endl;
     if(Emv>0.0001) // Not initialization (not first two) Use three points
 				{
@@ -174,20 +174,20 @@ int main()
   double Xmax=0.;
 		if(nu)
   {
-    Xmin=pow(1+Q2max,-3.5);
-    Xmax=pow(1+Q2min,-3.5);
+    Xmin=std::pow(1+Q2max,-3.5);
+    Xmax=std::pow(1+Q2min,-3.5);
 		}  
   else
   {
-    Xmin=pow(1+Q2max,-5.5);
-    Xmax=pow(1+Q2min,-5.5);
+    Xmin=std::pow(1+Q2max,-5.5);
+    Xmax=std::pow(1+Q2min,-5.5);
 		}
   G4cout<<"Ei="<<Enu<<":Q2i="<<Q2min<<",Q2a="<<Q2max<<",Xmi="<<Xmin<<",Xma="<<Xmax<<G4endl;
   int    nQ2=8;                 // nitial #Of points for the overall integration
   double DISmsig=0.;
   double DIStsig=1.;
 		double Q2=0.;                 // Prototype for the integration 
-  while(fabs(DIStsig-DISmsig)/DIStsig>eps)
+  while(std::fabs(DIStsig-DISmsig)/DIStsig>eps)
   {
     DISmsig=DIStsig;
     DIStsig=0.;
@@ -198,12 +198,12 @@ int main()
 				{
       if(nu) // neutrino
 						{
-        Q2=pow(X,-.2857142); // -1./3.5
+        Q2=std::pow(X,-.2857142); // -1./3.5
         DIStsig+=nuQ2(Q2);
       }
       else  // anti-neutrino
 						{
-        Q2=pow(X,-.1818182); // -1./5.5
+        Q2=std::pow(X,-.1818182); // -1./5.5
         DIStsig+=anuQ2(Q2);
       }
     }
@@ -227,12 +227,12 @@ int main()
 		{
     if(nu) // neutrino
 				{
-      Q2=pow(X,-.2857142); // -1./3.5
+      Q2=std::pow(X,-.2857142); // -1./3.5
       DIStsig+=nuQ2(Q2);
     }
     else  // anti-neutrino
 				{
-      Q2=pow(X,-.1818182); // -1./5.5
+      Q2=std::pow(X,-.1818182); // -1./5.5
       DIStsig+=anuQ2(Q2);
     }
     if(DIStsig>sum+eps)
@@ -259,17 +259,17 @@ int main()
 				{
       if(nu) // neutrino
 						{
-        Q2=pow(X,-.2857142); // -1./3.5
+        Q2=std::pow(X,-.2857142); // -1./3.5
         DIStsig+=nuQ2(Q2);
       }
       else  // anti-neutrino
 						{
-        Q2=pow(X,-.1818182); // -1./5.5
+        Q2=std::pow(X,-.1818182); // -1./5.5
         DIStsig+=anuQ2(Q2);
       }
     }
     DIStsig*=dX;
-    G4cout<<"i="<<i<<", v="<<DIStsig<<", d="<<fabs(DIStsig-inl[i])/DIStsig<<G4endl;
+    G4cout<<"i="<<i<<", v="<<DIStsig<<", d="<<std::fabs(DIStsig-inl[i])/DIStsig<<G4endl;
   }
   // ***************** Calculate the direct table *****************
   dX=(Xmax-Xmin)/niQ2;
@@ -284,12 +284,12 @@ int main()
 				{
       if(nu) // neutrino
 						{
-        Q2=pow(X,-.2857142); // -1./3.5
+        Q2=std::pow(X,-.2857142); // -1./3.5
         DIStsig+=nuQ2(Q2);
       }
       else  // anti-neutrino
 						{
-        Q2=pow(X,-.1818182); // -1./5.5
+        Q2=std::pow(X,-.1818182); // -1./5.5
         DIStsig+=anuQ2(Q2);
       }
     }
