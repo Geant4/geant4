@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN05PionShowerModel.cc,v 1.14 2005-12-06 10:54:47 gcosmo Exp $
+// $Id: ExN05PionShowerModel.cc,v 1.15 2006-06-28 18:34:22 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "ExN05PionShowerModel.hh"
@@ -125,10 +125,13 @@ void ExN05PionShowerModel::Explode(const G4FastTrack& fastTrack)
   // shoot the energy spots:
   G4double Energy = fastTrack.GetPrimaryTrack()->GetKineticEnergy();
   G4int nSpot = 50;
-  G4double deposit = Energy/double(nSpot);;
+  G4double deposit = Energy/double(nSpot);
   ExN05EnergySpot eSpot;
   eSpot.SetEnergy(deposit);
   G4ThreeVector ePoint;
+
+  // clear the spot list before use
+  feSpotList.clear();
 
   G4double z, r, phi;
   for (int i = 0; i < nSpot; i++)
