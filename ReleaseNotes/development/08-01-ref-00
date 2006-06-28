@@ -66,6 +66,10 @@ global                                           global-V08-00-04
 ------
 - Updated date for release 8.1 in G4Version.hh.
 
+materials                                        materials-V08-00-04
+---------
+- G4NistMaterialBuilder: fixed graphite description.
+
 processes/cuts                                   procuts-V08-00-03
 --------------
 - Fixed memory leaks in G4ProductionCutsTable and G4PhysicsTableHelper.
