@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.86 2006-06-28 09:29:06 stesting Exp $
+# $Id: Configure,v 1.87 2006-06-28 11:24:25 stesting Exp $
 #
-# Generated on Wed Jun 28 11:28:10 CEST 2006 [metaconfig 3.0 PL70]
+# Generated on Wed Jun 28 13:14:07 CEST 2006 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -701,7 +701,10 @@ while expr "X\$ans" : "X!" >/dev/null; do
 	*)
 		case "\$aok" in
 		y)
-			echo "*** Substitution done -- please confirm."
+			echo
+			echo "*** The last screen is repeated with "
+			echo "*** substitution done and placed as default."
+			echo "*** Please confirm or change."
 			xxxm="\$ans"
 			ans=\`echo $n "\$ans$c" | tr '\012' ' '\`
 			xxxm="\$ans"
