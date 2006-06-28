@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.85 2006-06-27 11:15:19 stesting Exp $
+# $Id: Configure,v 1.86 2006-06-28 09:29:06 stesting Exp $
 #
-# Generated on Tue Jun 27 13:10:27 CEST 2006 [metaconfig 3.0 PL70]
+# Generated on Wed Jun 28 11:28:10 CEST 2006 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -2734,7 +2734,7 @@ esac
 
 case "$g4neutronhpcrosssections" in
 '')
-	g4neutronhpcrosssections=$g4data/G4NDL3.8
+	g4neutronhpcrosssections=$g4data/G4NDL3.9
 	;;
 esac
 
@@ -2783,7 +2783,7 @@ gans=$ans
 		g4levelgammadata=$g4data/PhotonEvaporation2.0
 		g4radioactivedata=$g4data/RadiativeDecay3.0
 		g4ledata=$g4data/G4EMLOW4.0
-		g4neutronhpcrosssections=$g4data/G4NDL3.8
+		g4neutronhpcrosssections=$g4data/G4NDL3.9
 		g4elasticdata=$g4data/G4ELASTIC1.1
 		fi
 # done
@@ -2843,7 +2843,7 @@ gans=$ans
 	4) 
 		dflt=$g4neutronhpcrosssections
 		fn='f~'
-		rp="Where is G4NDL3.8 data installed?"
+		rp="Where is G4NDL3.9 data installed?"
 		. ./getfile
 		g4neutronhpcrosssections=$ans
 		;;
