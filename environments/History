@@ -1,4 +1,4 @@
-$Id: History,v 1.23 2006-06-23 01:38:15 hajime Exp $
+$Id: History,v 1.24 2006-06-29 06:15:06 kmura Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -18,9 +18,19 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+envs-V08-00-09 29 June 2006 Koichi Murakami
+  [g4py]
+  - fix rpath of boost_python (config/sys/linux.gmk, linuxx8664gcc.gmk)
+  - "site-modules/primaries/MedicalBeam/MedicalMeam.cc"
+    fix a bug in calculation of cos from a sin value
+  - remove duplicated DISCLAIMER (ExN03PhysicsList.cc/hh in site-modules)
+
 envs-V08-00-08 23 June 2006 Hajime Yoshida
    - MOMO.jar is now without Gain
    - MomoHome/vis.mac revbised for new vis (taken from N03)
+   [g4py]
+   - sh version of configure script
+   - G4UserStackingAction: fixed for not being called
 
 envs-V08-00-07 14 June 2006  Koichi Murakami
   [g4py]
