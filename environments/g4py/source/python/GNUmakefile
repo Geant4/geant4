@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.2 2006-04-25 08:09:45 kmura Exp $
+# $Id: GNUmakefile,v 1.3 2006-06-29 01:39:00 kmura Exp $
 # $Name: not supported by cvs2svn $
 # ===========================================================
 #   Makefile for building Geant4Py modules
@@ -21,7 +21,7 @@ all: $(pycs) $(pyos)
 install: $(pycs) $(pyos)
 	@echo ... intall "*.py" into $(G4PY_LIBDIR)
 	@if [ ! -d $(G4PY_LIBDIR) ]; then install -d $(G4PY_LIBDIR); fi
-	@install -m 755 $(pys) $(pycs) $(pyos) $(G4PY_LIBDIR)
+	@install -m 644 $(pys) $(pycs) $(pyos) $(G4PY_LIBDIR)
 
 clean:
 	@-\rm -f $(pycs) $(pyos)
