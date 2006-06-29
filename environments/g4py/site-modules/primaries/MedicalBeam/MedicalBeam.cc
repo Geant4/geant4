@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: MedicalBeam.cc,v 1.4 2006-06-28 13:42:45 gunter Exp $
+// $Id: MedicalBeam.cc,v 1.5 2006-06-29 01:58:11 kmura Exp $
 // $Name: not supported by cvs2svn $
 // ====================================================================
 //   MedicalBeam.cc
@@ -43,7 +43,7 @@ using namespace CLHEP;
 //
 // ====================================================================
 
-//////////////////////////
+///////////////////////////////////
 MedicalBeam::MedicalBeam()
   : particle(0), 
     kineticE(1.*MeV),
@@ -51,7 +51,7 @@ MedicalBeam::MedicalBeam()
     SSD(1.*m), 
     fieldShape(MedicalBeam::SQUARE),
     fieldR(10.*cm)
-//////////////////////////
+///////////////////////////////////
 {
   fieldXY[0]= fieldXY[1]= 10.*cm;
 }
@@ -77,7 +77,7 @@ G4ThreeVector MedicalBeam::GenerateBeamDirection() const
   }
 
   G4double sin0= dr/SSD;
-  G4double cos0= std::sqrt(1.-std::sqrt(sin0));
+  G4double cos0= std::sqrt(1.-sqr(sin0));
 
   G4double dcos, dsin, dphi, z;
 
