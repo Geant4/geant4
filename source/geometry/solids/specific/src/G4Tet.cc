@@ -1,17 +1,19 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
 // * Vanderbilt University Free Electron Laser Center                 *
@@ -25,7 +27,7 @@
 // *                                                                  *
 // ********************************************************************
 //
-// $Id: G4Tet.cc,v 1.8 2006-06-20 10:07:08 gcosmo Exp $
+// $Id: G4Tet.cc,v 1.9 2006-06-29 18:49:00 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Tet
@@ -53,7 +55,7 @@
 
 #include "G4Tet.hh"
 
-const char G4Tet::CVSVers[]="$Id: G4Tet.cc,v 1.8 2006-06-20 10:07:08 gcosmo Exp $";
+const char G4Tet::CVSVers[]="$Id: G4Tet.cc,v 1.9 2006-06-29 18:49:00 gunter Exp $";
 
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
