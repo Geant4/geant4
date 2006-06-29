@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.13 2006-03-28 15:03:08 maire Exp $
+// $Id: PhysicsList.cc,v 1.14 2006-06-29 16:44:23 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -138,9 +138,9 @@ void PhysicsList::ConstructParticle()
 void PhysicsList::ConstructProcess()
 {
   AddTransportation();
-  AddDecay();
   emPhysicsList->ConstructProcess();
   for(size_t i=0; i<hadronPhys.size(); i++) hadronPhys[i]->ConstructProcess();
+  AddDecay();  
   AddStepMax();
 }
 
