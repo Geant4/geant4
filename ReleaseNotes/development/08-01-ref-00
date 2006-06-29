@@ -11,6 +11,7 @@ Some of the development/fixes included since the last reference tag are:
   o New examples: advanced/microbeam, extended/hadronic/Hadr01,
     extended/persistency/P01.
   o Enhancements and fixes to the Configure script.
+  o Added new disclaimer statement and license.
 
 ---------- Reference-tag 'Release Notes' -----------
 
@@ -159,7 +160,7 @@ visualization                                    vis-V08-00-13
   o Fixed rewind and file closure on exit.
   o Protect zero model pointer.
 
-environments                                     envs-V08-00-08
+environments                                     envs-V08-00-09
 ------------
 - Geant4Py:
   o Fixed problems of segmentation fault at termination and changed Python
@@ -169,6 +170,8 @@ environments                                     envs-V08-00-08
   o Added new educational examples:
     + education/lesson1 => measurement of the mass attenuation coefficient.
     + education/lesson2 => Pythonized novice/N03.
+  o Fixed rpath of boost_python for Linux.
+  o Fixed a bug in calculation of cos() from a sin() value.
 - MOMO:
   o MOMO.jar is now distributed without Gain.
   o MomoHome/vis.mac revised for new vis (taken from exampleN03).
@@ -283,9 +286,10 @@ examples                                         examples-V08-01-00
   o gui.mac: remove call to /N03/event/printModulo.
   o SteppingAction: replace Touchable by TouchableHandle.
 - examples/novice/N04 (exampleN04-V08-00-01)
-- examples/novice/N05 (exampleN05-V08-00-00)
+- examples/novice/N05 (exampleN05-V08-00-01)
   o Use coherent allocation scheme for user-classes and initialisation
     in main().
+  o Fixed a memory leak in ExN05PionShowerModel.
 - examples/novice/N06 (exampleN06-V08-00-02)
   o Use coherent allocation scheme for user-classes and initialisation
     in main(). Separate instantiation of the user-stepping-verbose class
