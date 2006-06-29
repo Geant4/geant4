@@ -71,7 +71,7 @@ export G4TMP=$G4WORKDIR/tmp
 #export NeutronHPCrossSections=$G4INSTALL/../G4NDL0.2
 #export NeutronHPCrossSections=$G4INSTALL/../G4NDL3.1
 #export NeutronHPCrossSections=/afs/cern.ch/sw/geant4/dev/data/G4NDL3.5
-export NeutronHPCrossSections=/afs/cern.ch/sw/geant4/dev/data/G4NDL3.8
+export NeutronHPCrossSections=/afs/cern.ch/sw/geant4/dev/data/G4NDL3.9
 #export NeutronHPCrossSections=/afs/cern.ch/sw/geant4/dev/data/G4NDL0.2
 
 # set only in dev1! (to save space)
