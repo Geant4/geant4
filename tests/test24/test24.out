@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V08-00-01    (10-February-2006)
+ Geant4 version Name: global-V08-00-04    (30-June-2006)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -192,7 +192,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=19s Real=20s Sys=0.28s
+  User=19s Real=19s Sys=0.19s
 #
 # neutron at 10 GeV in U
 #
@@ -224,7 +224,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=18s Real=18s Sys=0.22s
+  User=18s Real=18s Sys=0.21s
 #
 # pi+ at 10 GeV in U
 #
@@ -255,7 +255,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=16s Real=17s Sys=0.16s
+  User=16s Real=17s Sys=0.09s
 #
 # pi- at 10 GeV in U
 #
@@ -290,7 +290,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=18s Real=18s Sys=0.12s
+  User=18s Real=18s Sys=0.06s
 #
 # proton at 10 GeV in Cu
 #
@@ -448,7 +448,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=9.7s Real=11s Sys=0.44s
+  User=9.7s Real=10s Sys=0.3s
 #
 # neutron at 10 GeV in Cu
 #
@@ -482,7 +482,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=7.6s Real=8s Sys=0.2s
+  User=7.5s Real=7.8s Sys=0.09s
 #
 # pi+ at 10 GeV in Cu
 #
@@ -516,7 +516,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=6.7s Real=7s Sys=0.13s
+  User=6.8s Real=6.9s Sys=0.06s
 #
 # pi- at 10 GeV in Cu
 #
@@ -550,7 +550,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=6.18s Real=6.25s Sys=0s
+  User=6.09s Real=6.26s Sys=0.03s
 #
 # proton at 10 GeV in Si
 #
@@ -710,13 +710,11 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
 ====================================================================
 
 Start Run processing.
- G4NuclearLevelManager: nuclide (5,9) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (2,4) does not have a gamma levels file
  G4NuclearLevelManager: nuclide (14,25) does not have a gamma levels file
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=3.88s Real=4.3s Sys=0.1s
+  User=3.84s Real=3.98s Sys=0.09s
 #
 # neutron at 10 GeV in Si
 #
@@ -755,7 +753,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=2.82s Real=2.92s Sys=0.02s
+  User=2.76s Real=2.82s Sys=0.04s
 #
 # pi+ at 10 GeV in Si
 #
@@ -794,7 +792,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=3.83s Real=3.85s Sys=0s
+  User=3.81s Real=3.83s Sys=0s
 #
 # pi- at 10 GeV in Si
 #
@@ -833,7 +831,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=3.41s Real=3.49s Sys=0.01s
+  User=3.4s Real=3.45s Sys=0.02s
 #
 # proton at 10 GeV in H
 #
@@ -998,7 +996,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.01s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 #
 # neutron at 10 GeV in H
 #
@@ -1042,7 +1040,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0s Real=0s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 #
 # pi+ at 10 GeV in H
 #

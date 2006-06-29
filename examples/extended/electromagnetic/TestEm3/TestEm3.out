@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V08-00-01    (10-February-2006)
+ Geant4 version Name: global-V08-00-04    (30-June-2006)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -25,19 +25,21 @@ Registering model factories...
 
 You have successfully registered the following model factories.
 Registered model factories:
-generic
-drawByCharge
-drawByParticleID
-drawByOriginVolume
+  generic
+  drawByCharge
+  drawByParticleID
+  drawByOriginVolume
 
 Registered models: 
-None
+  None
 
 Registered filter factories:
-particleFilter
+  chargeFilter
+  particleFilter
+  originVolumeFilter
 
-Registered Filters:
-None
+Registered filters:
+  None
 
 /run/verbose 2
 #
@@ -287,7 +289,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=105.79s Real=147.74s Sys=40.41s
+  User=106.64s Real=148.3s Sys=40.47s
 
 ------------------------------------------------------------
 material             Total Edep   sqrt(E0(GeV))*rmsE/Emean     total tracklen 

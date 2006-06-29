@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V08-00-01    (10-February-2006)
+ Geant4 version Name: global-V08-00-04    (30-June-2006)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -25,19 +25,21 @@ Registering model factories...
 
 You have successfully registered the following model factories.
 Registered model factories:
-generic
-drawByCharge
-drawByParticleID
-drawByOriginVolume
+  generic
+  drawByCharge
+  drawByParticleID
+  drawByOriginVolume
 
 Registered models: 
-None
+  None
 
 Registered filter factories:
-particleFilter
+  chargeFilter
+  particleFilter
+  originVolumeFilter
 
-Registered Filters:
-None
+Registered filters:
+  None
 
 
 The materials defined are : 
@@ -2552,7 +2554,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
    24  -78.7 um  -12.4 um    -13 cm  1e+03 GeV  40.3 keV  17.1 cm   2.78 m       Tracker         msc
    25  -80.3 um  -12.7 um  -8.19 cm  1e+03 GeV    14 keV  4.81 cm   2.83 m       Tracker      muIoni
    26  -81.1 um  -12.8 um  -5.88 cm  1e+03 GeV  5.49 keV  2.31 cm   2.85 m       Tracker      muIoni
-   27  -83.2 um  -13.2 um 0.00711 fm  1e+03 GeV  11.5 keV  5.88 cm   2.91 m       Tracker  Transportation
+   27  -83.2 um  -13.2 um 0.0142 fm  1e+03 GeV  11.5 keV  5.88 cm   2.91 m       Tracker  Transportation
    28  -85.2 um  -13.5 um   5.71 cm  1e+03 GeV  35.1 keV  5.71 cm   2.97 m       Chamber         msc
    29  -87.3 um  -13.8 um   11.4 cm  1e+03 GeV  48.8 keV  5.71 cm   3.02 m       Chamber         msc
    30  -89.3 um  -14.1 um   17.1 cm  1e+03 GeV  33.6 keV  5.71 cm   3.08 m       Chamber         msc

@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V08-00-01    (10-February-2006)
+ Geant4 version Name: global-V08-00-04    (30-June-2006)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -31,19 +31,21 @@ Registering model factories...
 
 You have successfully registered the following model factories.
 Registered model factories:
-generic
-drawByCharge
-drawByParticleID
-drawByOriginVolume
+  generic
+  drawByCharge
+  drawByParticleID
+  drawByOriginVolume
 
 Registered models: 
-None
+  None
 
 Registered filter factories:
-particleFilter
+  chargeFilter
+  particleFilter
+  originVolumeFilter
 
-Registered Filters:
-None
+Registered filters:
+  None
 
 /run/verbose 1
 #/tracking/verbose 1
@@ -320,7 +322,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=52.38s Real=60.33s Sys=7.34s
+  User=51.51s Real=58.97s Sys=7.09s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started
 ========================================================

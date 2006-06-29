@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V08-00-01    (10-February-2006)
+ Geant4 version Name: global-V08-00-04    (30-June-2006)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -25,19 +25,21 @@ Registering model factories...
 
 You have successfully registered the following model factories.
 Registered model factories:
-generic
-drawByCharge
-drawByParticleID
-drawByOriginVolume
+  generic
+  drawByCharge
+  drawByParticleID
+  drawByOriginVolume
 
 Registered models: 
-None
+  None
 
 Registered filter factories:
-particleFilter
+  chargeFilter
+  particleFilter
+  originVolumeFilter
 
-Registered Filters:
-None
+Registered filters:
+  None
 
  hist file = g4.p11
  Nb of bins in Edep plot = 65
@@ -157,7 +159,7 @@ Lorentz Factor	XTR photon number
 8.085e+04	3.149
 9.283e+04	3.149
 
-total time for build X-ray TR energy loss tables = 0.59 s
+total time for build X-ray TR energy loss tables = 0.6 s
 
 SynRad:  Incoherent Synchrotron Radiation
       good description for long magnets at all energies
@@ -231,7 +233,7 @@ Lorentz Factor	XTR photon number
 8.085e+04	3.149
 9.283e+04	3.149
 
-total time for build X-ray TR energy loss tables = 0.59 s
+total time for build X-ray TR energy loss tables = 0.6 s
 
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
@@ -339,7 +341,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=18.93s Real=24.57s Sys=5.27s
+  User=19.34s Real=24.61s Sys=5.1s
  ================== run summary =====================
  end of Run TotNbofEvents = 1000
     mean charged track length   in absorber=44.1278 +- 0.523115  mm  

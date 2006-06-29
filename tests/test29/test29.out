@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V08-00-01    (10-February-2006)
+ Geant4 version Name: global-V08-00-04    (30-June-2006)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -9,4 +9,4 @@
 Test29: (6,6) ion is OK, Run State=Init
 Test29:Par's: T=1.800000e+02,S=3.000000e-01,Eta=3.000000e-01,nop=152,p=0.000000e+00,e=0.000000e+00,pPDG=13,tPDG=90006006,nEv=100,fN=7.500000e-01,fD=5.000000e-02,cP=5.000000e+00,rM=9.990000e+00,sA=8.000000e-01
 Test29:NewRun: Targ=90006006,Proj=13, 1 of 1
-Test29:CalculationTimePerEvent= 1.560000e-02 s
+Test29:CalculationTimePerEvent= 1.540000e-02 s

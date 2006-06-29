@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V08-00-01    (10-February-2006)
+ Geant4 version Name: global-V08-00-04    (30-June-2006)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -74,19 +74,21 @@ Registering model factories...
 
 You have successfully registered the following model factories.
 Registered model factories:
-generic
-drawByCharge
-drawByParticleID
-drawByOriginVolume
+  generic
+  drawByCharge
+  drawByParticleID
+  drawByOriginVolume
 
 Registered models: 
-None
+  None
 
 Registered filter factories:
-particleFilter
+  chargeFilter
+  particleFilter
+  originVolumeFilter
 
-Registered Filters:
-None
+Registered filters:
+  None
 
 
  The  WORLD   is made of 44000mm of Air, the transverse size (R) of the world is 22000 mm. 
@@ -233,52 +235,19 @@ Start Run processing.
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
     0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
-    1          0 fm  4.0138452 cm   21.79201 m         500 MeV0.00049462122 eV  20.288442 cm  20.288442 cm      World  Transportation           0 fm            0 fm           -1 mm 
-    2          0 fm  4.2819411 cm      21.74 m         500 MeV0.00012702207 eV  5.2102091 cm  25.498651 cm   RadSlice  Transportation           0 fm            0 fm           -1 mm 
-    3          0 fm  6.6513318 cm   21.58699 m         500 MeV0.00037896524 eV  15.544449 cm    41.0431 cm   Radiator  Transportation           0 fm            0 fm           -1 mm 
-    4          0 fm  1.0783461 m    21.58699 m         500 MeV0.0038748302 eV  1.5893832 m   1.9998142 m       World  Transportation           0 fm            0 fm           -1 mm 
-    5          0 fm  1.0783461 m    21.58699 m         500 MeV         0 eV          0 fm  1.9998142 m    Radiator  Transportation           0 fm            0 fm           -1 mm 
-    6          0 fm  2.0901789 m    21.58699 m         500 MeV0.0038748302 eV  1.5893832 m   3.5891975 m       World  Transportation           0 fm            0 fm           -1 mm 
-    7          0 fm  2.0901789 m    21.58699 m         500 MeV         0 eV          0 fm  3.5891975 m    Radiator  Transportation           0 fm            0 fm           -1 mm 
-    8          0 fm  3.1020117 m    21.58699 m         500 MeV0.0038748302 eV  1.5893832 m   5.1785807 m       World  Transportation           0 fm            0 fm           -1 mm 
-    9          0 fm  3.1020117 m    21.58699 m         500 MeV         0 eV          0 fm  5.1785807 m    Radiator  Transportation           0 fm            0 fm           -1 mm 
-   10          0 fm  4.1138445 m    21.58699 m         500 MeV0.0038748302 eV  1.5893832 m    6.767964 m       World  Transportation           0 fm            0 fm           -1 mm 
-   11          0 fm  4.1138445 m    21.58699 m         500 MeV         0 eV          0 fm   6.767964 m    Radiator  Transportation           0 fm            0 fm           -1 mm 
-   12          0 fm  5.1256773 m    21.58699 m         500 MeV0.0038748302 eV  1.5893832 m   8.3573472 m       World  Transportation           0 fm            0 fm           -1 mm 
-   13          0 fm  5.1256773 m    21.58699 m         500 MeV         0 eV          0 fm  8.3573472 m    Radiator  Transportation           0 fm            0 fm           -1 mm 
-   14          0 fm  6.1375101 m    21.58699 m         500 MeV0.0038748302 eV  1.5893832 m   9.9467304 m       World  Transportation           0 fm            0 fm           -1 mm 
-   15          0 fm  6.1375101 m    21.58699 m         500 MeV         0 eV          0 fm  9.9467304 m    Radiator  Transportation           0 fm            0 fm           -1 mm 
-   16          0 fm  7.1493429 m    21.58699 m         500 MeV0.0038748302 eV  1.5893832 m   11.536114 m       World  Transportation           0 fm            0 fm           -1 mm 
-   17          0 fm  7.1493429 m    21.58699 m         500 MeV         0 eV          0 fm  11.536114 m    Radiator  Transportation           0 fm            0 fm           -1 mm 
-   18          0 fm  8.1611757 m    21.58699 m         500 MeV0.0038748302 eV  1.5893832 m   13.125497 m       World  Transportation           0 fm            0 fm           -1 mm 
-   19          0 fm  8.1611757 m    21.58699 m         500 MeV         0 eV          0 fm  13.125497 m    Radiator  Transportation           0 fm            0 fm           -1 mm 
-   20          0 fm  9.1730085 m    21.58699 m         500 MeV0.0038748302 eV  1.5893832 m    14.71488 m       World  Transportation           0 fm            0 fm           -1 mm 
-   21          0 fm  9.1730085 m    21.58699 m         500 MeV         0 eV          0 fm   14.71488 m    Radiator  Transportation           0 fm            0 fm           -1 mm 
-   22          0 fm  10.184841 m    21.58699 m         500 MeV0.0038748302 eV  1.5893832 m   16.304263 m       World  Transportation           0 fm            0 fm           -1 mm 
-   23          0 fm  10.184841 m    21.58699 m         500 MeV         0 eV          0 fm  16.304263 m    Radiator  Transportation           0 fm            0 fm           -1 mm 
-   24          0 fm  11.196674 m    21.58699 m         500 MeV0.0038748302 eV  1.5893832 m   17.893647 m       World  Transportation           0 fm            0 fm           -1 mm 
-   25          0 fm  11.196674 m    21.58699 m         500 MeV         0 eV          0 fm  17.893647 m    Radiator  Transportation           0 fm            0 fm           -1 mm 
-   26          0 fm  12.208507 m    21.58699 m         500 MeV0.0038748302 eV  1.5893832 m    19.48303 m       World  Transportation           0 fm            0 fm           -1 mm 
-   27          0 fm  12.208507 m    21.58699 m         500 MeV         0 eV          0 fm   19.48303 m    Radiator  Transportation           0 fm            0 fm           -1 mm 
-   28          0 fm   13.22034 m    21.58699 m         500 MeV0.0038748302 eV  1.5893832 m   21.072413 m       World  Transportation           0 fm            0 fm           -1 mm 
-   29          0 fm   13.22034 m    21.58699 m         500 MeV         0 eV          0 fm  21.072413 m    Radiator  Transportation           0 fm            0 fm           -1 mm 
-   30          0 fm  14.232172 m    21.58699 m         500 MeV0.0038748302 eV  1.5893832 m   22.661796 m       World  Transportation           0 fm            0 fm           -1 mm 
-   31          0 fm  14.232172 m    21.58699 m         500 MeV         0 eV          0 fm  22.661796 m    Radiator  Transportation           0 fm            0 fm           -1 mm 
-   32          0 fm  15.244005 m    21.58699 m         500 MeV0.0038748302 eV  1.5893832 m    24.25118 m       World  Transportation           0 fm            0 fm           -1 mm 
-   33          0 fm  15.244005 m    21.58699 m         500 MeV         0 eV          0 fm   24.25118 m    Radiator  Transportation           0 fm            0 fm           -1 mm 
-   34          0 fm  16.255838 m    21.58699 m         500 MeV0.0038748302 eV  1.5893832 m   25.840563 m       World  Transportation           0 fm            0 fm           -1 mm 
-   35          0 fm  16.255838 m    21.58699 m         500 MeV         0 eV          0 fm  25.840563 m    Radiator  Transportation           0 fm            0 fm           -1 mm 
-   36          0 fm  17.267671 m    21.58699 m         500 MeV0.0038748302 eV  1.5893832 m   27.429946 m       World  Transportation           0 fm            0 fm           -1 mm 
-   37          0 fm  17.267671 m    21.58699 m         500 MeV         0 eV          0 fm  27.429946 m    Radiator  Transportation           0 fm            0 fm           -1 mm 
-   38          0 fm  18.279504 m    21.58699 m         500 MeV0.0038748302 eV  1.5893832 m   29.019329 m       World  Transportation           0 fm            0 fm           -1 mm 
-   39          0 fm  18.279504 m    21.58699 m         500 MeV         0 eV          0 fm  29.019329 m    Radiator  Transportation           0 fm            0 fm           -1 mm 
-   40          0 fm  19.291336 m    21.58699 m         500 MeV0.0038748302 eV  1.5893832 m   30.608713 m       World  Transportation           0 fm            0 fm           -1 mm 
-   41          0 fm  19.291336 m    21.58699 m         500 MeV         0 eV          0 fm  30.608713 m    Radiator  Transportation           0 fm            0 fm           -1 mm 
-   42          0 fm  20.089441 m          22 m         500 MeV0.0050528233 eV  2.0725741 m   32.681287 m  OutOfWorld  Transportation           0 fm            0 fm           -1 mm 
+    1          0 fm  4.0138452 cm   21.79201 m         500 MeV0.00049462122 eV  20.288442 cm  20.288442 cm      World  Transportation           0 fm    390.36094 um    -920.6619 um 
+    2          0 fm  6.5801508 cm      21.74 m         500 MeV0.00014147067 eV  5.8028638 cm  26.091306 cm   RadSlice  Transportation           0 fm    493.16452 um   -869.93607 um 
+    3          0 fm  19.942498 cm   21.58699 m         500 MeV0.00049864186 eV  20.453361 cm  46.544667 cm   Radiator  Transportation           0 fm    795.60591 um   -605.81452 um 
+    4          0 fm  81.240793 cm   21.58699 m         500 MeV0.0016053626 eV  65.848987 cm  1.1239365 m       World  Transportation           0 fm    795.60595 um    605.81447 um 
+    5          0 fm  94.603131 cm      21.74 m         500 MeV0.00049864169 eV  20.453354 cm  1.3284701 m    Radiator  Transportation           0 fm     493.1647 um    869.93596 um 
+    6          0 fm  98.923943 cm      21.84 m         500 MeV0.00026609458 eV  10.914704 cm  1.4376171 m    RadSlice  Transportation           0 fm    295.50359 um    955.34163 um 
+    7          0 fm  1.0118328 m     21.9895 m         500 MeV0.0003699973 eV  15.176601 cm  1.5893831 m       World  Transportation           0 fm    2.1925711 Ang        1000 um 
+    8          0 fm  1.0118318 m     21.9905 m         500 MeV2.4379474e-06 eV  1.0000007 mm  1.5903831 m    Absorber  Transportation           0 fm   -1.9763919 um    999.99805 um 
+    9          0 fm  1.0117238 m          22 m         500 MeV2.3162324e-05 eV  9.5007541 mm  1.5998839 m  OutOfWorld  Transportation           0 fm     -20.7542 um    999.78461 um 
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.05s Real=0.06s Sys=0.01s
+  User=0.01s Real=0.02s Sys=0.01s
 ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
 
 ========= Table of registered couples ==============================
@@ -303,7 +272,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=2.92s Real=2.93s Sys=0s
+  User=0.33s Real=0.35s Sys=0s
 ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
 Set field value to (0,0,1000) Gauss 
 
@@ -327,7 +296,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.29s Real=0.29s Sys=0s
+  User=0.03s Real=0.03s Sys=0s
 ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
 Graphics systems deleted.
 Visualization Manager deleting...

@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V08-00-01    (10-February-2006)
+ Geant4 version Name: global-V08-00-04    (30-June-2006)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -83,16 +83,16 @@ class. See G4VisExecutive for an example.
 
 You have successfully registered the following model factories.
 Registered model factories:
-None
+  None
 
 Registered models: 
-None
+  None
 
 Registered filter factories:
-None
+  None
 
-Registered Filters:
-None
+Registered filters:
+  None
 
 /run/verbose 1
 #/tracking/verbose 1
@@ -316,7 +316,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=31.7s Real=38.99s Sys=6.56s
+  User=32.64s Real=39.65s Sys=6.46s
 
 ============   SUMMARY   ============
 
@@ -429,7 +429,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=2.54000000s Real=3.88000000s Sys=1.12000000s
+  User=2.46000000s Real=3.91000000s Sys=1.25000000s
 
 ============   SUMMARY   ============
 
@@ -541,7 +541,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=2.59000000s Real=3.78000000s Sys=1.04000000s
+  User=2.59000000s Real=3.88000000s Sys=1.08000000s
 
 ============   SUMMARY   ============
 
@@ -653,7 +653,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=32.42000000s Real=39.34000000s Sys=6.16000000s
+  User=33.26000000s Real=39.97000000s Sys=6.16000000s
 
 ============   SUMMARY   ============
 

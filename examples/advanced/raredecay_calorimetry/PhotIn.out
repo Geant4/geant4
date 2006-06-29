@@ -1,0 +1,705 @@
+
+*************************************************************
+ Geant4 version Name: global-V08-00-04    (30-June-2006)
+                      Copyright : Geant4 Collaboration
+                      Reference : NIM A 506 (2003), 250-303
+                            WWW : http://cern.ch/geant4
+*************************************************************
+
+PhotInPrimaryGeneratorAction::Constructor: part=gamma, E=100
+Visualization Manager instantiating...
+Visualization Manager initialising...
+Registering graphics systems...
+PhotInVisManager::RegisterGraphicsSystems: chosen graphics systems
+Current available graphics systems are:
+  ASCIITree (ATree)
+  DAWNFILE (DAWNFILE)
+  GAGTree (GAGTree)
+  G4HepRepFile (HepRepFile)
+  G4HepRep (HepRepXML)
+  RayTracer (RayTracer)
+  VRML1FILE (VRML1FILE)
+  VRML2FILE (VRML2FILE)
+
+You have successfully registered the following graphics systems.
+Current available graphics systems are:
+  ASCIITree (ATree)
+  DAWNFILE (DAWNFILE)
+  GAGTree (GAGTree)
+  G4HepRepFile (HepRepFile)
+  G4HepRep (HepRepXML)
+  RayTracer (RayTracer)
+  VRML1FILE (VRML1FILE)
+  VRML2FILE (VRML2FILE)
+
+Registering model factories...
+G4VisManager: No model factories registered with G4VisManager.
+G4VisManager::RegisterModelFactories() should be overridden in derived
+class. See G4VisExecutive for an example.
+
+You have successfully registered the following model factories.
+Registered model factories:
+  None
+
+Registered models: 
+  None
+
+Registered filter factories:
+  None
+
+Registered filters:
+  None
+
+PhotInPrimaryGeneratorAction::SetDetector: is called
+/run/verbose 1
+##/tracking/verbose 6
+/run/initialize
+PhotInPhysicsList::ConstructProcess: is called 
+PhotInPhysList::ConstructProcess: Part=B+
+PhotInPhysList::ConstructProcess: Part=B-
+PhotInPhysList::ConstructProcess: Part=B0
+PhotInPhysList::ConstructProcess: Part=Bs0
+PhotInPhysList::ConstructProcess: Part=D+
+PhotInPhysList::ConstructProcess: Part=D-
+PhotInPhysList::ConstructProcess: Part=D0
+PhotInPhysList::ConstructProcess: Part=Ds+
+PhotInPhysList::ConstructProcess: Part=Ds-
+PhotInPhysList::ConstructProcess: Part=GenericIon
+PhotInPhysList::ConstructProcess: Part=He3
+PhotInPhysList::ConstructProcess: Part=J/psi
+PhotInPhysList::ConstructProcess: Part=N(1440)+
+PhotInPhysList::ConstructProcess: Part=N(1440)0
+PhotInPhysList::ConstructProcess: Part=N(1520)+
+PhotInPhysList::ConstructProcess: Part=N(1520)0
+PhotInPhysList::ConstructProcess: Part=N(1535)+
+PhotInPhysList::ConstructProcess: Part=N(1535)0
+PhotInPhysList::ConstructProcess: Part=N(1650)+
+PhotInPhysList::ConstructProcess: Part=N(1650)0
+PhotInPhysList::ConstructProcess: Part=N(1675)+
+PhotInPhysList::ConstructProcess: Part=N(1675)0
+PhotInPhysList::ConstructProcess: Part=N(1680)+
+PhotInPhysList::ConstructProcess: Part=N(1680)0
+PhotInPhysList::ConstructProcess: Part=N(1700)+
+PhotInPhysList::ConstructProcess: Part=N(1700)0
+PhotInPhysList::ConstructProcess: Part=N(1710)+
+PhotInPhysList::ConstructProcess: Part=N(1710)0
+PhotInPhysList::ConstructProcess: Part=N(1720)+
+PhotInPhysList::ConstructProcess: Part=N(1720)0
+PhotInPhysList::ConstructProcess: Part=N(1900)+
+PhotInPhysList::ConstructProcess: Part=N(1900)0
+PhotInPhysList::ConstructProcess: Part=N(1990)+
+PhotInPhysList::ConstructProcess: Part=N(1990)0
+PhotInPhysList::ConstructProcess: Part=N(2090)+
+PhotInPhysList::ConstructProcess: Part=N(2090)0
+PhotInPhysList::ConstructProcess: Part=N(2190)+
+PhotInPhysList::ConstructProcess: Part=N(2190)0
+PhotInPhysList::ConstructProcess: Part=N(2220)+
+PhotInPhysList::ConstructProcess: Part=N(2220)0
+PhotInPhysList::ConstructProcess: Part=N(2250)+
+PhotInPhysList::ConstructProcess: Part=N(2250)0
+PhotInPhysList::ConstructProcess: Part=a0(1450)+
+PhotInPhysList::ConstructProcess: Part=a0(1450)-
+PhotInPhysList::ConstructProcess: Part=a0(1450)0
+PhotInPhysList::ConstructProcess: Part=a0(980)+
+PhotInPhysList::ConstructProcess: Part=a0(980)-
+PhotInPhysList::ConstructProcess: Part=a0(980)0
+PhotInPhysList::ConstructProcess: Part=a1(1260)+
+PhotInPhysList::ConstructProcess: Part=a1(1260)-
+PhotInPhysList::ConstructProcess: Part=a1(1260)0
+PhotInPhysList::ConstructProcess: Part=a2(1320)+
+PhotInPhysList::ConstructProcess: Part=a2(1320)-
+PhotInPhysList::ConstructProcess: Part=a2(1320)0
+PhotInPhysList::ConstructProcess: Part=alpha
+PhotInPhysList::ConstructProcess: Part=anti_B0
+PhotInPhysList::ConstructProcess: Part=anti_Bs0
+PhotInPhysList::ConstructProcess: Part=anti_D0
+PhotInPhysList::ConstructProcess: Part=anti_N(1440)+
+PhotInPhysList::ConstructProcess: Part=anti_N(1440)0
+PhotInPhysList::ConstructProcess: Part=anti_N(1520)+
+PhotInPhysList::ConstructProcess: Part=anti_N(1520)0
+PhotInPhysList::ConstructProcess: Part=anti_N(1535)+
+PhotInPhysList::ConstructProcess: Part=anti_N(1535)0
+PhotInPhysList::ConstructProcess: Part=anti_N(1650)+
+PhotInPhysList::ConstructProcess: Part=anti_N(1650)0
+PhotInPhysList::ConstructProcess: Part=anti_N(1675)+
+PhotInPhysList::ConstructProcess: Part=anti_N(1675)0
+PhotInPhysList::ConstructProcess: Part=anti_N(1680)+
+PhotInPhysList::ConstructProcess: Part=anti_N(1680)0
+PhotInPhysList::ConstructProcess: Part=anti_N(1700)+
+PhotInPhysList::ConstructProcess: Part=anti_N(1700)0
+PhotInPhysList::ConstructProcess: Part=anti_N(1710)+
+PhotInPhysList::ConstructProcess: Part=anti_N(1710)0
+PhotInPhysList::ConstructProcess: Part=anti_N(1720)+
+PhotInPhysList::ConstructProcess: Part=anti_N(1720)0
+PhotInPhysList::ConstructProcess: Part=anti_N(1900)+
+PhotInPhysList::ConstructProcess: Part=anti_N(1900)0
+PhotInPhysList::ConstructProcess: Part=anti_N(1990)+
+PhotInPhysList::ConstructProcess: Part=anti_N(1990)0
+PhotInPhysList::ConstructProcess: Part=anti_N(2090)+
+PhotInPhysList::ConstructProcess: Part=anti_N(2090)0
+PhotInPhysList::ConstructProcess: Part=anti_N(2190)+
+PhotInPhysList::ConstructProcess: Part=anti_N(2190)0
+PhotInPhysList::ConstructProcess: Part=anti_N(2220)+
+PhotInPhysList::ConstructProcess: Part=anti_N(2220)0
+PhotInPhysList::ConstructProcess: Part=anti_N(2250)+
+PhotInPhysList::ConstructProcess: Part=anti_N(2250)0
+PhotInPhysList::ConstructProcess: Part=anti_b_quark
+PhotInPhysList::ConstructProcess: Part=anti_c_quark
+PhotInPhysList::ConstructProcess: Part=anti_d_quark
+PhotInPhysList::ConstructProcess: Part=anti_dd1_diquark
+PhotInPhysList::ConstructProcess: Part=anti_delta(1600)+
+PhotInPhysList::ConstructProcess: Part=anti_delta(1600)++
+PhotInPhysList::ConstructProcess: Part=anti_delta(1600)-
+PhotInPhysList::ConstructProcess: Part=anti_delta(1600)0
+PhotInPhysList::ConstructProcess: Part=anti_delta(1620)+
+PhotInPhysList::ConstructProcess: Part=anti_delta(1620)++
+PhotInPhysList::ConstructProcess: Part=anti_delta(1620)-
+PhotInPhysList::ConstructProcess: Part=anti_delta(1620)0
+PhotInPhysList::ConstructProcess: Part=anti_delta(1700)+
+PhotInPhysList::ConstructProcess: Part=anti_delta(1700)++
+PhotInPhysList::ConstructProcess: Part=anti_delta(1700)-
+PhotInPhysList::ConstructProcess: Part=anti_delta(1700)0
+PhotInPhysList::ConstructProcess: Part=anti_delta(1900)+
+PhotInPhysList::ConstructProcess: Part=anti_delta(1900)++
+PhotInPhysList::ConstructProcess: Part=anti_delta(1900)-
+PhotInPhysList::ConstructProcess: Part=anti_delta(1900)0
+PhotInPhysList::ConstructProcess: Part=anti_delta(1905)+
+PhotInPhysList::ConstructProcess: Part=anti_delta(1905)++
+PhotInPhysList::ConstructProcess: Part=anti_delta(1905)-
+PhotInPhysList::ConstructProcess: Part=anti_delta(1905)0
+PhotInPhysList::ConstructProcess: Part=anti_delta(1910)+
+PhotInPhysList::ConstructProcess: Part=anti_delta(1910)++
+PhotInPhysList::ConstructProcess: Part=anti_delta(1910)-
+PhotInPhysList::ConstructProcess: Part=anti_delta(1910)0
+PhotInPhysList::ConstructProcess: Part=anti_delta(1920)+
+PhotInPhysList::ConstructProcess: Part=anti_delta(1920)++
+PhotInPhysList::ConstructProcess: Part=anti_delta(1920)-
+PhotInPhysList::ConstructProcess: Part=anti_delta(1920)0
+PhotInPhysList::ConstructProcess: Part=anti_delta(1930)+
+PhotInPhysList::ConstructProcess: Part=anti_delta(1930)++
+PhotInPhysList::ConstructProcess: Part=anti_delta(1930)-
+PhotInPhysList::ConstructProcess: Part=anti_delta(1930)0
+PhotInPhysList::ConstructProcess: Part=anti_delta(1950)+
+PhotInPhysList::ConstructProcess: Part=anti_delta(1950)++
+PhotInPhysList::ConstructProcess: Part=anti_delta(1950)-
+PhotInPhysList::ConstructProcess: Part=anti_delta(1950)0
+PhotInPhysList::ConstructProcess: Part=anti_delta+
+PhotInPhysList::ConstructProcess: Part=anti_delta++
+PhotInPhysList::ConstructProcess: Part=anti_delta-
+PhotInPhysList::ConstructProcess: Part=anti_delta0
+PhotInPhysList::ConstructProcess: Part=anti_k(1460)0
+PhotInPhysList::ConstructProcess: Part=anti_k0_star(1430)0
+PhotInPhysList::ConstructProcess: Part=anti_k1(1270)0
+PhotInPhysList::ConstructProcess: Part=anti_k1(1400)0
+PhotInPhysList::ConstructProcess: Part=anti_k2(1770)0
+PhotInPhysList::ConstructProcess: Part=anti_k2_star(1430)0
+PhotInPhysList::ConstructProcess: Part=anti_k2_star(1980)0
+PhotInPhysList::ConstructProcess: Part=anti_k3_star(1780)0
+PhotInPhysList::ConstructProcess: Part=anti_k_star(1410)0
+PhotInPhysList::ConstructProcess: Part=anti_k_star(1680)0
+PhotInPhysList::ConstructProcess: Part=anti_k_star0
+PhotInPhysList::ConstructProcess: Part=anti_kaon0
+PhotInPhysList::ConstructProcess: Part=anti_lambda
+PhotInPhysList::ConstructProcess: Part=anti_lambda(1405)
+PhotInPhysList::ConstructProcess: Part=anti_lambda(1520)
+PhotInPhysList::ConstructProcess: Part=anti_lambda(1600)
+PhotInPhysList::ConstructProcess: Part=anti_lambda(1670)
+PhotInPhysList::ConstructProcess: Part=anti_lambda(1690)
+PhotInPhysList::ConstructProcess: Part=anti_lambda(1800)
+PhotInPhysList::ConstructProcess: Part=anti_lambda(1810)
+PhotInPhysList::ConstructProcess: Part=anti_lambda(1820)
+PhotInPhysList::ConstructProcess: Part=anti_lambda(1830)
+PhotInPhysList::ConstructProcess: Part=anti_lambda(1890)
+PhotInPhysList::ConstructProcess: Part=anti_lambda(2100)
+PhotInPhysList::ConstructProcess: Part=anti_lambda(2110)
+PhotInPhysList::ConstructProcess: Part=anti_lambda_c+
+PhotInPhysList::ConstructProcess: Part=anti_neutron
+PhotInPhysList::ConstructProcess: Part=anti_nu_e
+PhotInPhysList::ConstructProcess: Part=anti_nu_mu
+PhotInPhysList::ConstructProcess: Part=anti_nu_tau
+PhotInPhysList::ConstructProcess: Part=anti_omega-
+PhotInPhysList::ConstructProcess: Part=anti_omega_c0
+PhotInPhysList::ConstructProcess: Part=anti_proton
+PhotInPhysList::ConstructProcess: Part=anti_s_quark
+PhotInPhysList::ConstructProcess: Part=anti_sd0_diquark
+PhotInPhysList::ConstructProcess: Part=anti_sd1_diquark
+PhotInPhysList::ConstructProcess: Part=anti_sigma(1385)+
+PhotInPhysList::ConstructProcess: Part=anti_sigma(1385)-
+PhotInPhysList::ConstructProcess: Part=anti_sigma(1385)0
+PhotInPhysList::ConstructProcess: Part=anti_sigma(1660)+
+PhotInPhysList::ConstructProcess: Part=anti_sigma(1660)-
+PhotInPhysList::ConstructProcess: Part=anti_sigma(1660)0
+PhotInPhysList::ConstructProcess: Part=anti_sigma(1670)+
+PhotInPhysList::ConstructProcess: Part=anti_sigma(1670)-
+PhotInPhysList::ConstructProcess: Part=anti_sigma(1670)0
+PhotInPhysList::ConstructProcess: Part=anti_sigma(1750)+
+PhotInPhysList::ConstructProcess: Part=anti_sigma(1750)-
+PhotInPhysList::ConstructProcess: Part=anti_sigma(1750)0
+PhotInPhysList::ConstructProcess: Part=anti_sigma(1775)+
+PhotInPhysList::ConstructProcess: Part=anti_sigma(1775)-
+PhotInPhysList::ConstructProcess: Part=anti_sigma(1775)0
+PhotInPhysList::ConstructProcess: Part=anti_sigma(1915)+
+PhotInPhysList::ConstructProcess: Part=anti_sigma(1915)-
+PhotInPhysList::ConstructProcess: Part=anti_sigma(1915)0
+PhotInPhysList::ConstructProcess: Part=anti_sigma(1940)+
+PhotInPhysList::ConstructProcess: Part=anti_sigma(1940)-
+PhotInPhysList::ConstructProcess: Part=anti_sigma(1940)0
+PhotInPhysList::ConstructProcess: Part=anti_sigma(2030)+
+PhotInPhysList::ConstructProcess: Part=anti_sigma(2030)-
+PhotInPhysList::ConstructProcess: Part=anti_sigma(2030)0
+PhotInPhysList::ConstructProcess: Part=anti_sigma+
+PhotInPhysList::ConstructProcess: Part=anti_sigma-
+PhotInPhysList::ConstructProcess: Part=anti_sigma0
+PhotInPhysList::ConstructProcess: Part=anti_sigma_c+
+PhotInPhysList::ConstructProcess: Part=anti_sigma_c++
+PhotInPhysList::ConstructProcess: Part=anti_sigma_c0
+PhotInPhysList::ConstructProcess: Part=anti_ss1_diquark
+PhotInPhysList::ConstructProcess: Part=anti_su0_diquark
+PhotInPhysList::ConstructProcess: Part=anti_su1_diquark
+PhotInPhysList::ConstructProcess: Part=anti_t_quark
+PhotInPhysList::ConstructProcess: Part=anti_u_quark
+PhotInPhysList::ConstructProcess: Part=anti_ud0_diquark
+PhotInPhysList::ConstructProcess: Part=anti_ud1_diquark
+PhotInPhysList::ConstructProcess: Part=anti_uu1_diquark
+PhotInPhysList::ConstructProcess: Part=anti_xi(1530)-
+PhotInPhysList::ConstructProcess: Part=anti_xi(1530)0
+PhotInPhysList::ConstructProcess: Part=anti_xi(1690)-
+PhotInPhysList::ConstructProcess: Part=anti_xi(1690)0
+PhotInPhysList::ConstructProcess: Part=anti_xi(1820)-
+PhotInPhysList::ConstructProcess: Part=anti_xi(1820)0
+PhotInPhysList::ConstructProcess: Part=anti_xi(1950)-
+PhotInPhysList::ConstructProcess: Part=anti_xi(1950)0
+PhotInPhysList::ConstructProcess: Part=anti_xi(2030)-
+PhotInPhysList::ConstructProcess: Part=anti_xi(2030)0
+PhotInPhysList::ConstructProcess: Part=anti_xi-
+PhotInPhysList::ConstructProcess: Part=anti_xi0
+PhotInPhysList::ConstructProcess: Part=anti_xi_c+
+PhotInPhysList::ConstructProcess: Part=anti_xi_c0
+PhotInPhysList::ConstructProcess: Part=b1(1235)+
+PhotInPhysList::ConstructProcess: Part=b1(1235)-
+PhotInPhysList::ConstructProcess: Part=b1(1235)0
+PhotInPhysList::ConstructProcess: Part=b_quark
+PhotInPhysList::ConstructProcess: Part=c_quark
+PhotInPhysList::ConstructProcess: Part=chargedgeantino
+PhotInPhysList::ConstructProcess: Part=d_quark
+PhotInPhysList::ConstructProcess: Part=dd1_diquark
+PhotInPhysList::ConstructProcess: Part=delta(1600)+
+PhotInPhysList::ConstructProcess: Part=delta(1600)++
+PhotInPhysList::ConstructProcess: Part=delta(1600)-
+PhotInPhysList::ConstructProcess: Part=delta(1600)0
+PhotInPhysList::ConstructProcess: Part=delta(1620)+
+PhotInPhysList::ConstructProcess: Part=delta(1620)++
+PhotInPhysList::ConstructProcess: Part=delta(1620)-
+PhotInPhysList::ConstructProcess: Part=delta(1620)0
+PhotInPhysList::ConstructProcess: Part=delta(1700)+
+PhotInPhysList::ConstructProcess: Part=delta(1700)++
+PhotInPhysList::ConstructProcess: Part=delta(1700)-
+PhotInPhysList::ConstructProcess: Part=delta(1700)0
+PhotInPhysList::ConstructProcess: Part=delta(1900)+
+PhotInPhysList::ConstructProcess: Part=delta(1900)++
+PhotInPhysList::ConstructProcess: Part=delta(1900)-
+PhotInPhysList::ConstructProcess: Part=delta(1900)0
+PhotInPhysList::ConstructProcess: Part=delta(1905)+
+PhotInPhysList::ConstructProcess: Part=delta(1905)++
+PhotInPhysList::ConstructProcess: Part=delta(1905)-
+PhotInPhysList::ConstructProcess: Part=delta(1905)0
+PhotInPhysList::ConstructProcess: Part=delta(1910)+
+PhotInPhysList::ConstructProcess: Part=delta(1910)++
+PhotInPhysList::ConstructProcess: Part=delta(1910)-
+PhotInPhysList::ConstructProcess: Part=delta(1910)0
+PhotInPhysList::ConstructProcess: Part=delta(1920)+
+PhotInPhysList::ConstructProcess: Part=delta(1920)++
+PhotInPhysList::ConstructProcess: Part=delta(1920)-
+PhotInPhysList::ConstructProcess: Part=delta(1920)0
+PhotInPhysList::ConstructProcess: Part=delta(1930)+
+PhotInPhysList::ConstructProcess: Part=delta(1930)++
+PhotInPhysList::ConstructProcess: Part=delta(1930)-
+PhotInPhysList::ConstructProcess: Part=delta(1930)0
+PhotInPhysList::ConstructProcess: Part=delta(1950)+
+PhotInPhysList::ConstructProcess: Part=delta(1950)++
+PhotInPhysList::ConstructProcess: Part=delta(1950)-
+PhotInPhysList::ConstructProcess: Part=delta(1950)0
+PhotInPhysList::ConstructProcess: Part=delta+
+PhotInPhysList::ConstructProcess: Part=delta++
+PhotInPhysList::ConstructProcess: Part=delta-
+PhotInPhysList::ConstructProcess: Part=delta0
+PhotInPhysList::ConstructProcess: Part=deuteron
+PhotInPhysList::ConstructProcess: Part=e+
+PhotInPhysList::ConstructProcess: Part=e-
+PhotInPhysList::ConstructProcess: Part=eta
+PhotInPhysList::ConstructProcess: Part=eta(1295)
+PhotInPhysList::ConstructProcess: Part=eta(1475)
+PhotInPhysList::ConstructProcess: Part=eta2(1645)
+PhotInPhysList::ConstructProcess: Part=eta2(1870)
+PhotInPhysList::ConstructProcess: Part=eta_prime
+PhotInPhysList::ConstructProcess: Part=f0(1370)
+PhotInPhysList::ConstructProcess: Part=f0(1500)
+PhotInPhysList::ConstructProcess: Part=f0(1710)
+PhotInPhysList::ConstructProcess: Part=f0(600)
+PhotInPhysList::ConstructProcess: Part=f0(980)
+PhotInPhysList::ConstructProcess: Part=f1(1285)
+PhotInPhysList::ConstructProcess: Part=f1(1420)
+PhotInPhysList::ConstructProcess: Part=f2(1270)
+PhotInPhysList::ConstructProcess: Part=f2(1810)
+PhotInPhysList::ConstructProcess: Part=f2(2010)
+PhotInPhysList::ConstructProcess: Part=f2_prime(1525)
+PhotInPhysList::ConstructProcess: Part=gamma
+PhotInPhysList::ConstructProcess: Part=geantino
+PhotInPhysList::ConstructProcess: Part=gluon
+PhotInPhysList::ConstructProcess: Part=h1(1170)
+PhotInPhysList::ConstructProcess: Part=h1(1380)
+PhotInPhysList::ConstructProcess: Part=k(1460)+
+PhotInPhysList::ConstructProcess: Part=k(1460)-
+PhotInPhysList::ConstructProcess: Part=k(1460)0
+PhotInPhysList::ConstructProcess: Part=k0_star(1430)+
+PhotInPhysList::ConstructProcess: Part=k0_star(1430)-
+PhotInPhysList::ConstructProcess: Part=k0_star(1430)0
+PhotInPhysList::ConstructProcess: Part=k1(1270)+
+PhotInPhysList::ConstructProcess: Part=k1(1270)-
+PhotInPhysList::ConstructProcess: Part=k1(1270)0
+PhotInPhysList::ConstructProcess: Part=k1(1400)+
+PhotInPhysList::ConstructProcess: Part=k1(1400)-
+PhotInPhysList::ConstructProcess: Part=k1(1400)0
+PhotInPhysList::ConstructProcess: Part=k2(1770)+
+PhotInPhysList::ConstructProcess: Part=k2(1770)-
+PhotInPhysList::ConstructProcess: Part=k2(1770)0
+PhotInPhysList::ConstructProcess: Part=k2_star(1430)+
+PhotInPhysList::ConstructProcess: Part=k2_star(1430)-
+PhotInPhysList::ConstructProcess: Part=k2_star(1430)0
+PhotInPhysList::ConstructProcess: Part=k2_star(1980)+
+PhotInPhysList::ConstructProcess: Part=k2_star(1980)-
+PhotInPhysList::ConstructProcess: Part=k2_star(1980)0
+PhotInPhysList::ConstructProcess: Part=k3_star(1780)+
+PhotInPhysList::ConstructProcess: Part=k3_star(1780)-
+PhotInPhysList::ConstructProcess: Part=k3_star(1780)0
+PhotInPhysList::ConstructProcess: Part=k_star(1410)+
+PhotInPhysList::ConstructProcess: Part=k_star(1410)-
+PhotInPhysList::ConstructProcess: Part=k_star(1410)0
+PhotInPhysList::ConstructProcess: Part=k_star(1680)+
+PhotInPhysList::ConstructProcess: Part=k_star(1680)-
+PhotInPhysList::ConstructProcess: Part=k_star(1680)0
+PhotInPhysList::ConstructProcess: Part=k_star+
+PhotInPhysList::ConstructProcess: Part=k_star-
+PhotInPhysList::ConstructProcess: Part=k_star0
+PhotInPhysList::ConstructProcess: Part=kaon+
+PhotInPhysList::ConstructProcess: Part=kaon-
+PhotInPhysList::ConstructProcess: Part=kaon0
+PhotInPhysList::ConstructProcess: Part=kaon0L
+PhotInPhysList::ConstructProcess: Part=kaon0S
+PhotInPhysList::ConstructProcess: Part=lambda
+PhotInPhysList::ConstructProcess: Part=lambda(1405)
+PhotInPhysList::ConstructProcess: Part=lambda(1520)
+PhotInPhysList::ConstructProcess: Part=lambda(1600)
+PhotInPhysList::ConstructProcess: Part=lambda(1670)
+PhotInPhysList::ConstructProcess: Part=lambda(1690)
+PhotInPhysList::ConstructProcess: Part=lambda(1800)
+PhotInPhysList::ConstructProcess: Part=lambda(1810)
+PhotInPhysList::ConstructProcess: Part=lambda(1820)
+PhotInPhysList::ConstructProcess: Part=lambda(1830)
+PhotInPhysList::ConstructProcess: Part=lambda(1890)
+PhotInPhysList::ConstructProcess: Part=lambda(2100)
+PhotInPhysList::ConstructProcess: Part=lambda(2110)
+PhotInPhysList::ConstructProcess: Part=lambda_c+
+PhotInPhysList::ConstructProcess: Part=mu+
+PhotInPhysList::ConstructProcess: Part=mu-
+PhotInPhysList::ConstructProcess: Part=neutron
+PhotInPhysList::ConstructProcess: Part=nu_e
+PhotInPhysList::ConstructProcess: Part=nu_mu
+PhotInPhysList::ConstructProcess: Part=nu_tau
+PhotInPhysList::ConstructProcess: Part=omega
+PhotInPhysList::ConstructProcess: Part=omega(1420)
+PhotInPhysList::ConstructProcess: Part=omega(1650)
+PhotInPhysList::ConstructProcess: Part=omega-
+PhotInPhysList::ConstructProcess: Part=omega3(1670)
+PhotInPhysList::ConstructProcess: Part=omega_c0
+PhotInPhysList::ConstructProcess: Part=opticalphoton
+PhotInPhysList::ConstructProcess: Part=phi
+PhotInPhysList::ConstructProcess: Part=phi(1680)
+PhotInPhysList::ConstructProcess: Part=phi3(1850)
+PhotInPhysList::ConstructProcess: Part=pi(1300)+
+PhotInPhysList::ConstructProcess: Part=pi(1300)-
+PhotInPhysList::ConstructProcess: Part=pi(1300)0
+PhotInPhysList::ConstructProcess: Part=pi+
+PhotInPhysList::ConstructProcess: Part=pi-
+PhotInPhysList::ConstructProcess: Part=pi0
+PhotInPhysList::ConstructProcess: Part=pi2(1670)+
+PhotInPhysList::ConstructProcess: Part=pi2(1670)-
+PhotInPhysList::ConstructProcess: Part=pi2(1670)0
+PhotInPhysList::ConstructProcess: Part=proton
+PhotInPhysList::ConstructProcess: Part=rho(1450)+
+PhotInPhysList::ConstructProcess: Part=rho(1450)-
+PhotInPhysList::ConstructProcess: Part=rho(1450)0
+PhotInPhysList::ConstructProcess: Part=rho(1700)+
+PhotInPhysList::ConstructProcess: Part=rho(1700)-
+PhotInPhysList::ConstructProcess: Part=rho(1700)0
+PhotInPhysList::ConstructProcess: Part=rho+
+PhotInPhysList::ConstructProcess: Part=rho-
+PhotInPhysList::ConstructProcess: Part=rho0
+PhotInPhysList::ConstructProcess: Part=rho3(1690)+
+PhotInPhysList::ConstructProcess: Part=rho3(1690)-
+PhotInPhysList::ConstructProcess: Part=rho3(1690)0
+PhotInPhysList::ConstructProcess: Part=s_quark
+PhotInPhysList::ConstructProcess: Part=sd0_diquark
+PhotInPhysList::ConstructProcess: Part=sd1_diquark
+PhotInPhysList::ConstructProcess: Part=sigma(1385)+
+PhotInPhysList::ConstructProcess: Part=sigma(1385)-
+PhotInPhysList::ConstructProcess: Part=sigma(1385)0
+PhotInPhysList::ConstructProcess: Part=sigma(1660)+
+PhotInPhysList::ConstructProcess: Part=sigma(1660)-
+PhotInPhysList::ConstructProcess: Part=sigma(1660)0
+PhotInPhysList::ConstructProcess: Part=sigma(1670)+
+PhotInPhysList::ConstructProcess: Part=sigma(1670)-
+PhotInPhysList::ConstructProcess: Part=sigma(1670)0
+PhotInPhysList::ConstructProcess: Part=sigma(1750)+
+PhotInPhysList::ConstructProcess: Part=sigma(1750)-
+PhotInPhysList::ConstructProcess: Part=sigma(1750)0
+PhotInPhysList::ConstructProcess: Part=sigma(1775)+
+PhotInPhysList::ConstructProcess: Part=sigma(1775)-
+PhotInPhysList::ConstructProcess: Part=sigma(1775)0
+PhotInPhysList::ConstructProcess: Part=sigma(1915)+
+PhotInPhysList::ConstructProcess: Part=sigma(1915)-
+PhotInPhysList::ConstructProcess: Part=sigma(1915)0
+PhotInPhysList::ConstructProcess: Part=sigma(1940)+
+PhotInPhysList::ConstructProcess: Part=sigma(1940)-
+PhotInPhysList::ConstructProcess: Part=sigma(1940)0
+PhotInPhysList::ConstructProcess: Part=sigma(2030)+
+PhotInPhysList::ConstructProcess: Part=sigma(2030)-
+PhotInPhysList::ConstructProcess: Part=sigma(2030)0
+PhotInPhysList::ConstructProcess: Part=sigma+
+PhotInPhysList::ConstructProcess: Part=sigma-
+PhotInPhysList::ConstructProcess: Part=sigma0
+PhotInPhysList::ConstructProcess: Part=sigma_c+
+PhotInPhysList::ConstructProcess: Part=sigma_c++
+PhotInPhysList::ConstructProcess: Part=sigma_c0
+PhotInPhysList::ConstructProcess: Part=ss1_diquark
+PhotInPhysList::ConstructProcess: Part=su0_diquark
+PhotInPhysList::ConstructProcess: Part=su1_diquark
+PhotInPhysList::ConstructProcess: Part=t_quark
+PhotInPhysList::ConstructProcess: Part=tau+
+PhotInPhysList::ConstructProcess: Part=tau-
+PhotInPhysList::ConstructProcess: Part=triton
+PhotInPhysList::ConstructProcess: Part=u_quark
+PhotInPhysList::ConstructProcess: Part=ud0_diquark
+PhotInPhysList::ConstructProcess: Part=ud1_diquark
+PhotInPhysList::ConstructProcess: Part=uu1_diquark
+PhotInPhysList::ConstructProcess: Part=xi(1530)-
+PhotInPhysList::ConstructProcess: Part=xi(1530)0
+PhotInPhysList::ConstructProcess: Part=xi(1690)-
+PhotInPhysList::ConstructProcess: Part=xi(1690)0
+PhotInPhysList::ConstructProcess: Part=xi(1820)-
+PhotInPhysList::ConstructProcess: Part=xi(1820)0
+PhotInPhysList::ConstructProcess: Part=xi(1950)-
+PhotInPhysList::ConstructProcess: Part=xi(1950)0
+PhotInPhysList::ConstructProcess: Part=xi(2030)-
+PhotInPhysList::ConstructProcess: Part=xi(2030)0
+PhotInPhysList::ConstructProcess: Part=xi-
+PhotInPhysList::ConstructProcess: Part=xi0
+PhotInPhysList::ConstructProcess: Part=xi_c+
+PhotInPhysList::ConstructProcess: Part=xi_c0
+PhotInPhysicsList::SetCuts: default cut length : 1 mm 
+/run/dumpRegion
+
+Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Materials : Vac 
+ Production cuts :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+
+Region <Region0> -- appears in <World> world volume
+ Materials : Aluminium Scintillator 
+ Production cuts :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+
+Region <Region1> -- appears in <World> world volume
+ Materials : Aluminium Scintillator 
+ Production cuts :  gamma 1 cm     e- 1 cm     e+ 1 cm 
+
+Region <Region2> -- appears in <World> world volume
+ Materials : Aluminium Scintillator 
+ Production cuts :  gamma 10 cm     e- 10 cm     e+ 10 cm 
+/PhotIn/projParticle pi+
+PhotInPrimaryGeneratorAction::SetProjectileName:Before Name=pi+, oldName=gamma
+PhotInPrimaryGeneratorAction::SetProjectileName: After Name=pi+
+/PhotIn/projEnergy 100.
+PhotInPrimaryGeneratorAction::SetProjectileEnergy: before E=100
+PhotInPrimaryGeneratorAction::SetProjectileEnergy: before E=100
+/run/beamOn 1
+
+conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
+      sampling secondary e+e- according to the Bethe-Heitler model
+      tables are built for  gamma
+      Lambda tables from 1.022 MeV to 100 GeV in 100 bins.
+
+compt:  Total cross sections has a good parametrisation from 10 KeV to (100/Z) GeV
+      Sampling according Klein-Nishina model
+      tables are built for  gamma
+      Lambda tables from 100 eV  to 100 GeV in 90 bins.
+
+phot:  Total cross sections from Sandia parametrisation. 
+
+msc:  Model variant of multiple scattering for e-
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+
+eIoni:   tables are built for  e-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
+eBrem:   tables are built for  e-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Total cross sections from a parametrisation based on the EEDL data library. 
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+
+eIoni:   tables are built for  e+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
+eBrem:   tables are built for  e+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Total cross sections from a parametrisation based on the EEDL data library. 
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+
+annihil:       Heilter model of formula of annihilation into 2 photons
+      tables are built for  e+
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+
+annihil:       Heilter model of formula of annihilation into 2 photons
+      tables are built for  e+
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+
+msc:  Model variant of multiple scattering for proton
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+
+hIoni:   tables are built for  proton
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for protons below.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
+msc:  Model variant of multiple scattering for GenericIon
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+
+hIoni:   tables are built for  anti_proton
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for protons below.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
+msc:  Model variant of multiple scattering for mu+
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+
+muIoni:   tables are built for  mu+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
+      radiative corrections for E > 1 GeV
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
+muBrems:   tables are built for  mu+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+
+muPairProd:   tables are built for  mu+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+
+muIoni:   tables are built for  mu-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
+      radiative corrections for E > 1 GeV
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
+muBrems:   tables are built for  mu-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+
+muPairProd:   tables are built for  mu-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+
+hIoni:   tables are built for  pi+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 0.297504 MeV, ICRU49 parametrisation for protons below.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
+msc:  Model variant of multiple scattering for pi-
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+
+hIoni:   tables are built for  pi-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 0.297504 MeV, ICRU49 parametrisation for protons below.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Vac
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 6.88731 keV    e- 596.68 keV    e+ 568.011 keV
+ Region(s) which use this couple : 
+    Region0
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : Scintillator
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 2.36895 keV    e- 355.791 keV    e+ 347.138 keV
+ Region(s) which use this couple : 
+    Region0
+
+Index : 3     used in the geometry : Yes     recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma 1 cm     e- 1 cm     e+ 1 cm 
+ Energy thresholds :  gamma 20.4949 keV    e- 4.54874 MeV    e+ 4.2772 MeV
+ Region(s) which use this couple : 
+    Region1
+
+Index : 4     used in the geometry : Yes     recalculation needed : No 
+ Material : Scintillator
+ Range cuts        :  gamma 1 cm     e- 1 cm     e+ 1 cm 
+ Energy thresholds :  gamma 5.69883 keV    e- 2.20017 MeV    e+ 2.06883 MeV
+ Region(s) which use this couple : 
+    Region1
+
+Index : 5     used in the geometry : Yes     recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma 10 cm     e- 10 cm     e+ 10 cm 
+ Energy thresholds :  gamma 79.141 keV    e- 56.7407 MeV    e+ 54.0144 MeV
+ Region(s) which use this couple : 
+    Region2
+
+Index : 6     used in the geometry : Yes     recalculation needed : No 
+ Material : Scintillator
+ Range cuts        :  gamma 10 cm     e- 10 cm     e+ 10 cm 
+ Energy thresholds :  gamma 18.8645 keV    e- 23.386 MeV    e+ 22.2624 MeV
+ Region(s) which use this couple : 
+    Region2
+
+====================================================================
+
+Start Run processing.
+PhotInPrimaryGeneratorAction::GeneratePrimaries: pi+,E=100
+PhotInPrimaryGeneratorAction::GeneratePrimaries: part&E're redefined

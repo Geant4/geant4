@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V08-00-01    (10-February-2006)
+ Geant4 version Name: global-V08-00-04    (30-June-2006)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -25,19 +25,21 @@ Registering model factories...
 
 You have successfully registered the following model factories.
 Registered model factories:
-generic
-drawByCharge
-drawByParticleID
-drawByOriginVolume
+  generic
+  drawByCharge
+  drawByParticleID
+  drawByOriginVolume
 
 Registered models: 
-None
+  None
 
 Registered filter factories:
-particleFilter
+  chargeFilter
+  particleFilter
+  originVolumeFilter
 
-Registered Filters:
-None
+Registered filters:
+  None
 
 /run/verbose 2
 #
@@ -268,7 +270,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=136.79s Real=416.57s Sys=136.06s
+  User=135.87s Real=450.49s Sys=134.62s
 
  ======================== run summary ======================
 
@@ -295,8 +297,10 @@ Run Summary
  Number of events with the primary particle reflected = 0 %
  Number of events with at least  1 particle reflected (same charge as primary) = 0 %
 
- MultipleScattering: rms proj angle of transmit primary particle = 0.04698 mrad 
- MultipleScattering: computed theta0 (Highland formula)          = 0.02627 mrad
+ MultipleScattering:
+  rms proj angle of transmit primary particle = 0.02813 mrad (central part only)
+  computed theta0 (Highland formula)          = 0.02627 mrad
+  central part defined as +- 0.0788 mrad;   Tail ratio = 2.927 %
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0

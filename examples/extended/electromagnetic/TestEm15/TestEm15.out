@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V08-00-01    (10-February-2006)
+ Geant4 version Name: global-V08-00-04    (30-June-2006)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -82,19 +82,21 @@ Registering model factories...
 
 You have successfully registered the following model factories.
 Registered model factories:
-generic
-drawByCharge
-drawByParticleID
-drawByOriginVolume
+  generic
+  drawByCharge
+  drawByParticleID
+  drawByOriginVolume
 
 Registered models: 
-None
+  None
 
 Registered filter factories:
-particleFilter
+  chargeFilter
+  particleFilter
+  originVolumeFilter
 
-Registered Filters:
-None
+Registered filters:
+  None
 
 /run/verbose 2
 #
@@ -110,7 +112,9 @@ physicsList->Construct() start.
 physicsList->setCut() start.
 #
 /process/inactivate eIoni
+/run/physicsModified
 /process/inactivate eBrem
+/run/physicsModified
 #
 /gun/particle e-
 #
@@ -288,7 +292,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=3.7s Real=3.7s Sys=0s
+  User=3.6s Real=3.6s Sys=0s
 
  The run consists of 10000 e- of 5 MeV through 100 m   of Water (density: 1 g/cm3 )
 
@@ -300,7 +304,7 @@ Run Summary
  Psi            :	145.41 mrad +- 24.099 mrad  (8.3313 deg +- 1.3808 deg)
 
  Theta_plane    :	241.4 mrad  (13.831 deg)
- phi correlation:	0.10775 +- 0.152  (cos(phi_pos - phi_dir))
+ phi correlation:	0.10775 +- 0.152  (std::cos(phi_pos - phi_dir))
 
  Verification from G4EmCalculator. 
 
@@ -352,7 +356,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=3.5s Real=3.5s Sys=0s
+  User=3.4s Real=3.4s Sys=0s
 
  The run consists of 10000 e- of 100 keV through 100 m   of Water (density: 1 g/cm3 )
 
@@ -364,7 +368,7 @@ Run Summary
  Psi            :	137.93 mrad +- 22.728 mrad  (7.903 deg +- 1.3022 deg)
 
  Theta_plane    :	235.78 mrad  (13.509 deg)
- phi correlation:	0.11174 +- 0.14473  (cos(phi_pos - phi_dir))
+ phi correlation:	0.11174 +- 0.14473  (std::cos(phi_pos - phi_dir))
 
  Verification from G4EmCalculator. 
 

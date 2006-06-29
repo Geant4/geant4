@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V08-00-01    (10-February-2006)
+ Geant4 version Name: global-V08-00-04    (30-June-2006)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -39,16 +39,16 @@ class. See G4VisExecutive for an example.
 
 You have successfully registered the following model factories.
 Registered model factories:
-None
+  None
 
 Registered models: 
-None
+  None
 
 Registered filter factories:
-None
+  None
 
-Registered Filters:
-None
+Registered filters:
+  None
 
 
 ***** Table : Nb of materials = 11 *****

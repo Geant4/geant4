@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V08-00-01    (10-February-2006)
+ Geant4 version Name: global-V08-00-04    (30-June-2006)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -38,19 +38,21 @@ Registering model factories...
 
 You have successfully registered the following model factories.
 Registered model factories:
-generic
-drawByCharge
-drawByParticleID
-drawByOriginVolume
+  generic
+  drawByCharge
+  drawByParticleID
+  drawByOriginVolume
 
 Registered models: 
-None
+  None
 
 Registered filter factories:
-particleFilter
+  chargeFilter
+  particleFilter
+  originVolumeFilter
 
-Registered Filters:
-None
+Registered filters:
+  None
 
 /run/verbose 2
 #
@@ -347,7 +349,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 Run terminated.
 Run Summary
   Number of events processed : 5
-  User=0.03s Real=0.05s Sys=0s
+  User=0.03s Real=0.13s Sys=0.03s
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
@@ -1230,7 +1232,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 Run terminated.
 Run Summary
   Number of events processed : 5
-  User=0.23s Real=0.27s Sys=0.02s
+  User=0.25s Real=0.53s Sys=0.19s
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
@@ -1395,7 +1397,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 Run terminated.
 Run Summary
   Number of events processed : 2
-  User=0.03s Real=0.06s Sys=0.01s
+  User=0.04s Real=0.1s Sys=0.05s
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0

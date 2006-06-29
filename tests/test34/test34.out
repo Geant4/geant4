@@ -5,7 +5,7 @@
 +-------------------------------------------------------+
 
 *************************************************************
- Geant4 version Name: global-V08-00-01    (10-February-2006)
+ Geant4 version Name: global-V08-00-04    (30-June-2006)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -197,9 +197,9 @@ Internal GetUserElapsed Time: 0.08
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.09
+Internal Real Elapsed Time is: 0.08
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.09
+Internal GetUserElapsed Time: 0.08
 ******************************************
  ------ Tst34EventAction::End of event nr. 1  -----
   5297 hits are stored in Tst34HitsCollection 
@@ -210,9 +210,9 @@ Internal GetUserElapsed Time: 0.09
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.08
+Internal Real Elapsed Time is: 0.07
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.08
+Internal GetUserElapsed Time: 0.07
 ******************************************
  ------ Tst34EventAction::End of event nr. 2  -----
   5492 hits are stored in Tst34HitsCollection 
@@ -224,8 +224,8 @@ Internal GetUserElapsed Time: 0.08
 
 ******************************************
 Internal Real Elapsed Time is: 0.08
-Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.08
+Internal System Elapsed Time: 0.01
+Internal GetUserElapsed Time: 0.07
 ******************************************
  ------ Tst34EventAction::End of event nr. 3  -----
   5302 hits are stored in Tst34HitsCollection 
@@ -249,7 +249,7 @@ Internal GetUserElapsed Time: 0.07
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.09
+Internal Real Elapsed Time is: 0.07
 Internal System Elapsed Time: 0
 Internal GetUserElapsed Time: 0.07
 ******************************************
@@ -301,7 +301,7 @@ Internal GetUserElapsed Time: 0.07
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.08
+Internal Real Elapsed Time is: 0.12
 Internal System Elapsed Time: 0
 Internal GetUserElapsed Time: 0.08
 ******************************************
@@ -311,7 +311,7 @@ Internal GetUserElapsed Time: 0.08
 number of events = 10
 
 ******************************************
-Total Real Elapsed Time is: 5.59
-Total System Elapsed Time: 0.06
-Total GetUserElapsed Time: 5.48
+Total Real Elapsed Time is: 5.67
+Total System Elapsed Time: 0.14
+Total GetUserElapsed Time: 5.42
 ******************************************

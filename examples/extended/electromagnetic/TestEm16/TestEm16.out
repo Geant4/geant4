@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V08-00-01    (10-February-2006)
+ Geant4 version Name: global-V08-00-04    (30-June-2006)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -41,19 +41,21 @@ Registering model factories...
 
 You have successfully registered the following model factories.
 Registered model factories:
-generic
-drawByCharge
-drawByParticleID
-drawByOriginVolume
+  generic
+  drawByCharge
+  drawByParticleID
+  drawByOriginVolume
 
 Registered models: 
-None
+  None
 
 Registered filter factories:
-particleFilter
+  chargeFilter
+  particleFilter
+  originVolumeFilter
 
-Registered Filters:
-None
+Registered filters:
+  None
 
 G4ANALYSIS_USE was not set, there will be no AIDA histos
 /run/verbose 2
@@ -72,12 +74,19 @@ CutLength : 1 km
 #
 # inactivate other processes to make SynchrotronRadiation more visible
 /process/inactivate msc
+/run/physicsModified
 /process/inactivate eIoni
+/run/physicsModified
 /process/inactivate eBrem
+/run/physicsModified
 /process/inactivate annihil
+/run/physicsModified
 /process/inactivate phot
+/run/physicsModified
 /process/inactivate compt
+/run/physicsModified
 /process/inactivate conv
+/run/physicsModified
 #
 /testem/det/setField 0.1 tesla
 #
@@ -213,7 +222,7 @@ G4SynchrotronRadiation::GetRandomEnergySR :
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=4.94s Real=5.36s Sys=0.1s
+  User=4.83s Real=5.12s Sys=0.06s
 Summary for synchrotron radiation :
   Number of photons = 27201
   Emean             = 2.016 +/- 0.02196 keV
