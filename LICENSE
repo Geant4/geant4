@@ -2,8 +2,8 @@ Geant4 Software License
 Version 1.0, 28 June 2006
 
 Copyright (c) Copyright Holders of the Geant4 Collaboration, 1994-2006.
-See http://cern.ch/license for details on the copyright holders.  All rights
-not expressly granted under this license are reserved.
+See http://cern.ch/geant4/license for details on the copyright holders.  All
+rights not expressly granted under this license are reserved.
 
 This software includes voluntary contributions made to Geant4.
 See http://cern.ch/geant4 for more information on Geant4.
@@ -20,7 +20,7 @@ license is subject to the following conditions:
 
 2. The user documentation,if any,included with a redistribution,must include
    the following notice:"This product includes software developed by Members
-   of the Geant4 Collaboration (http://cern.ch/geant4 )."
+   of the Geant4 Collaboration ( http://cern.ch/geant4 )."
    If that  is  where  third-party  acknowledgments  normally  appear,  this
    acknowledgment  must  be  reproduced  in  the  modified  version  of this
    software itself.
