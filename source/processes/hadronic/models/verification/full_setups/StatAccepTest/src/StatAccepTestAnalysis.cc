@@ -17,6 +17,8 @@
 //***LOOKHERE***
 bool StatAccepTestAnalysis::isHistogramOn = true;
 bool StatAccepTestAnalysis::is2DHistogramStepLvsEOn = false;
+bool StatAccepTestAnalysis::isHistogramSpectrumUnweightedOn = false;
+bool StatAccepTestAnalysis::isHistogramSpectrumWeightedOn = true;  
 
 
 StatAccepTestAnalysis* StatAccepTestAnalysis::instance = 0;
@@ -511,317 +513,423 @@ void StatAccepTestAnalysis::init( const G4int numberOfReplicasIn,
 	sprintf( id, "%d", iLayer+1100 );
 	sprintf( histotag, "Elec./Pos. Lin. Energy Spectrum in Active Layer %d in GeV",
 		 iLayer );
-	emSpectrum1[ iLayer ] = 
-	  histoFactory->createHistogram1D( id, histotag, 2000, -100.0, 100.0 );
+	if ( isHistogramSpectrumUnweightedOn ) {
+	  emSpectrum1[ iLayer ] = 
+	    histoFactory->createHistogram1D( id, histotag, 2000, -100.0, 100.0 );
+	}
 	sprintf( id, "%d", iLayer+91100 );
-	emSpectrumWeighted1[ iLayer ] = 
-	  histoFactory->createHistogram1D( id, histotag, 2000, -100.0, 100.0 );
-
+	if ( isHistogramSpectrumWeightedOn ) {
+	  emSpectrumWeighted1[ iLayer ] = 
+	    histoFactory->createHistogram1D( id, histotag, 2000, -100.0, 100.0 );
+	}
 	sprintf( id, "%d", iLayer+1200 );
 	sprintf( histotag, "Elec./Pos. Lin. Energy Spectrum in Active Layer %d in GeV",
 		 iLayer );
-	emSpectrum2[ iLayer ] = 
-	  histoFactory->createHistogram1D( id, histotag, 2000, -10.0, 10.0 );
+	if ( isHistogramSpectrumUnweightedOn ) {
+	  emSpectrum2[ iLayer ] = 
+	    histoFactory->createHistogram1D( id, histotag, 2000, -10.0, 10.0 );
+	}
 	sprintf( id, "%d", iLayer+91200 );
-	emSpectrumWeighted2[ iLayer ] = 
-	  histoFactory->createHistogram1D( id, histotag, 2000, -10.0, 10.0 );
-
+	if ( isHistogramSpectrumWeightedOn ) {
+	  emSpectrumWeighted2[ iLayer ] = 
+	    histoFactory->createHistogram1D( id, histotag, 2000, -10.0, 10.0 );
+	}
 	sprintf( id, "%d", iLayer+1300 );
 	sprintf( histotag, "Elec./Pos. Lin. Energy Spectrum in Active Layer %d in GeV",
 		 iLayer );
-	emSpectrum3[ iLayer ] = 
-	  histoFactory->createHistogram1D( id, histotag, 2000, -1.0, 1.0 );
+	if ( isHistogramSpectrumUnweightedOn ) {
+	  emSpectrum3[ iLayer ] = 
+	    histoFactory->createHistogram1D( id, histotag, 2000, -1.0, 1.0 );
+	}
 	sprintf( id, "%d", iLayer+91300 );
-	emSpectrumWeighted3[ iLayer ] = 
-	  histoFactory->createHistogram1D( id, histotag, 2000, -1.0, 1.0 );
-
+	if ( isHistogramSpectrumWeightedOn ) {
+	  emSpectrumWeighted3[ iLayer ] = 
+	    histoFactory->createHistogram1D( id, histotag, 2000, -1.0, 1.0 );
+	}
 	sprintf( id, "%d", iLayer+1400 );
 	sprintf( histotag, "Elec./Pos. Lin. Energy Spectrum in Active Layer %d in GeV",
 		 iLayer );
-	emSpectrum4[ iLayer ] = 
-	  histoFactory->createHistogram1D( id, histotag, 2000, -0.1, 0.1 );
+	if ( isHistogramSpectrumUnweightedOn ) {
+	  emSpectrum4[ iLayer ] = 
+	    histoFactory->createHistogram1D( id, histotag, 2000, -0.1, 0.1 );
+	}
 	sprintf( id, "%d", iLayer+91400 );
-	emSpectrumWeighted4[ iLayer ] = 
-	  histoFactory->createHistogram1D( id, histotag, 2000, -0.1, 0.1 );
-
+	if ( isHistogramSpectrumWeightedOn ) {
+	  emSpectrumWeighted4[ iLayer ] = 
+	    histoFactory->createHistogram1D( id, histotag, 2000, -0.1, 0.1 );
+	}
 	sprintf( id, "%d", iLayer+1500 );
 	sprintf( histotag, "Elec./Pos. Log10 Energy Spectrum in Active Layer %d in MeV",
 		 iLayer );
-	emSpectrum5[ iLayer ] = 
-	  histoFactory->createHistogram1D( id, histotag, 1000, -4.0, 6.0 );
+	if ( isHistogramSpectrumUnweightedOn ) {
+	  emSpectrum5[ iLayer ] = 
+	    histoFactory->createHistogram1D( id, histotag, 1000, -4.0, 6.0 );
+	}
 	sprintf( id, "%d", iLayer+91500 );
-	emSpectrumWeighted5[ iLayer ] = 
-	  histoFactory->createHistogram1D( id, histotag, 1000, -4.0, 6.0 );
-
+	if ( isHistogramSpectrumWeightedOn ) {
+	  emSpectrumWeighted5[ iLayer ] = 
+	    histoFactory->createHistogram1D( id, histotag, 1000, -4.0, 6.0 );
+	}
 	sprintf( id, "%d", iLayer+2100 );
 	sprintf( histotag, "Pion Lin. Energy Spectrum in Active Layer %d in GeV", 
 		 iLayer) ;
-	pionSpectrum1[ iLayer ] = 
-	  histoFactory->createHistogram1D( id, histotag, 2000, -100.0, 100.0 );
+	if ( isHistogramSpectrumUnweightedOn ) {
+	  pionSpectrum1[ iLayer ] = 
+	    histoFactory->createHistogram1D( id, histotag, 2000, -100.0, 100.0 );
+	}
 	sprintf( id, "%d", iLayer+92100 );
-	pionSpectrumWeighted1[ iLayer ] = 
-	  histoFactory->createHistogram1D( id, histotag, 2000, -100.0, 100.0 );
-
+	if ( isHistogramSpectrumWeightedOn ) {
+	  pionSpectrumWeighted1[ iLayer ] = 
+	    histoFactory->createHistogram1D( id, histotag, 2000, -100.0, 100.0 );
+	}
 	sprintf( id, "%d", iLayer+2200 );
 	sprintf( histotag, "Pion Lin. Energy Spectrum in Active Layer %d in GeV", 
 		 iLayer );
-	pionSpectrum2[ iLayer ] = 
-	  histoFactory->createHistogram1D( id, histotag, 2000, -10.0, 10.0 );
+	if ( isHistogramSpectrumUnweightedOn ) {
+	  pionSpectrum2[ iLayer ] = 
+	    histoFactory->createHistogram1D( id, histotag, 2000, -10.0, 10.0 );
+	}
 	sprintf( id, "%d", iLayer+92200 );
-	pionSpectrumWeighted2[ iLayer ] = 
-	  histoFactory->createHistogram1D( id, histotag, 2000, -10.0, 10.0 );
-
+	if ( isHistogramSpectrumWeightedOn ) {
+	  pionSpectrumWeighted2[ iLayer ] = 
+	    histoFactory->createHistogram1D( id, histotag, 2000, -10.0, 10.0 );
+	}
 	sprintf( id, "%d", iLayer+2300 );
 	sprintf( histotag, "Pion Lin. Energy Spectrum in Active Layer %d in GeV", 
 		 iLayer );
-	pionSpectrum3[ iLayer ] = 
-	  histoFactory->createHistogram1D( id, histotag, 2000, -1.0, 1.0 );
+	if ( isHistogramSpectrumUnweightedOn ) {
+	  pionSpectrum3[ iLayer ] = 
+	    histoFactory->createHistogram1D( id, histotag, 2000, -1.0, 1.0 );
+	}
 	sprintf( id, "%d", iLayer+92300 );
-	pionSpectrumWeighted3[ iLayer ] = 
-	  histoFactory->createHistogram1D( id, histotag, 2000, -1.0, 1.0 );
-
+	if ( isHistogramSpectrumWeightedOn ) {
+	  pionSpectrumWeighted3[ iLayer ] = 
+	    histoFactory->createHistogram1D( id, histotag, 2000, -1.0, 1.0 );
+	}
 	sprintf( id, "%d", iLayer+2400 );
 	sprintf( histotag, "Pion Lin. Energy Spectrum in Active Layer %d in GeV", 
 		 iLayer );
-	pionSpectrum4[ iLayer ] = 
-	  histoFactory->createHistogram1D( id, histotag, 2000, -0.1, 0.1 );
+	if ( isHistogramSpectrumUnweightedOn ) {
+	  pionSpectrum4[ iLayer ] = 
+	    histoFactory->createHistogram1D( id, histotag, 2000, -0.1, 0.1 );
+	}
 	sprintf( id, "%d", iLayer+92400 );
-	pionSpectrumWeighted4[ iLayer ] = 
-	  histoFactory->createHistogram1D( id, histotag, 2000, -0.1, 0.1 );
-
+	if ( isHistogramSpectrumWeightedOn ) {
+	  pionSpectrumWeighted4[ iLayer ] = 
+	    histoFactory->createHistogram1D( id, histotag, 2000, -0.1, 0.1 );
+	}
 	sprintf( id, "%d", iLayer+2500 );
 	sprintf( histotag, "Pion Log10 Energy Spectrum in Active Layer %d in MeV", 
 		 iLayer );
-	pionSpectrum5[ iLayer ] = 
-	  histoFactory->createHistogram1D( id, histotag, 1000, -4.0, 6.0 );
+	if ( isHistogramSpectrumUnweightedOn ) {
+	  pionSpectrum5[ iLayer ] = 
+	    histoFactory->createHistogram1D( id, histotag, 1000, -4.0, 6.0 );
+	}
 	sprintf( id, "%d", iLayer+92500 );
-	pionSpectrumWeighted5[ iLayer ] = 
-	  histoFactory->createHistogram1D( id, histotag, 1000, -4.0, 6.0 );
-
+	if ( isHistogramSpectrumWeightedOn ) {
+	  pionSpectrumWeighted5[ iLayer ] = 
+	    histoFactory->createHistogram1D( id, histotag, 1000, -4.0, 6.0 );
+	}
 	sprintf( id, "%d", iLayer+3100 );
 	sprintf( histotag, "Proton Lin. Energy Spectrum in Active Layer %d in GeV",
 		 iLayer );
-	protonSpectrum1[ iLayer ] = 
-	  histoFactory->createHistogram1D( id, histotag, 2000, -100.0, 100.0 );
+	if ( isHistogramSpectrumUnweightedOn ) {
+	  protonSpectrum1[ iLayer ] = 
+	    histoFactory->createHistogram1D( id, histotag, 2000, -100.0, 100.0 );
+	}
 	sprintf( id, "%d", iLayer+93100 );
-	protonSpectrumWeighted1[ iLayer ] = 
-	  histoFactory->createHistogram1D( id, histotag, 2000, -100.0, 100.0 );
-
+	if ( isHistogramSpectrumWeightedOn ) {
+	  protonSpectrumWeighted1[ iLayer ] = 
+	    histoFactory->createHistogram1D( id, histotag, 2000, -100.0, 100.0 );
+	}
 	sprintf( id, "%d", iLayer+3200 );
 	sprintf( histotag, "Proton Lin. Energy Spectrum in Active Layer %d in GeV", 
 		 iLayer );
-	protonSpectrum2[ iLayer ] = 
-	  histoFactory->createHistogram1D( id, histotag, 2000, -10.0, 10.0 );
+	if ( isHistogramSpectrumUnweightedOn ) {
+	  protonSpectrum2[ iLayer ] = 
+	    histoFactory->createHistogram1D( id, histotag, 2000, -10.0, 10.0 );
+	}
 	sprintf( id, "%d", iLayer+93200 );
-	protonSpectrumWeighted2[ iLayer ] = 
-	  histoFactory->createHistogram1D( id, histotag, 2000, -10.0, 10.0 );
-
+	if ( isHistogramSpectrumWeightedOn ) {
+	  protonSpectrumWeighted2[ iLayer ] = 
+	    histoFactory->createHistogram1D( id, histotag, 2000, -10.0, 10.0 );
+	}
 	sprintf( id, "%d", iLayer+3300 );
 	sprintf( histotag, "Proton Lin. Energy Spectrum in Active Layer %d in GeV", 
 		 iLayer );
-	protonSpectrum3[ iLayer ] = 
-	  histoFactory->createHistogram1D( id, histotag, 2000, -1.0, 1.0 );
+	if ( isHistogramSpectrumUnweightedOn ) {
+	  protonSpectrum3[ iLayer ] = 
+	    histoFactory->createHistogram1D( id, histotag, 2000, -1.0, 1.0 );
+	}
 	sprintf( id, "%d", iLayer+93300 );
-	protonSpectrumWeighted3[ iLayer ] = 
-	  histoFactory->createHistogram1D( id, histotag, 2000, -1.0, 1.0 );
-
+	if ( isHistogramSpectrumWeightedOn ) {
+	  protonSpectrumWeighted3[ iLayer ] = 
+	    histoFactory->createHistogram1D( id, histotag, 2000, -1.0, 1.0 );
+	}
 	sprintf( id, "%d", iLayer+3400 );
 	sprintf( histotag, "Proton Lin. Energy Spectrum in Active Layer %d in GeV", 
 		 iLayer );
-	protonSpectrum4[ iLayer ] = 
-	  histoFactory->createHistogram1D( id, histotag, 2000, -0.1, 0.1 );
+	if ( isHistogramSpectrumUnweightedOn ) {
+	  protonSpectrum4[ iLayer ] = 
+	    histoFactory->createHistogram1D( id, histotag, 2000, -0.1, 0.1 );
+	}
 	sprintf( id, "%d", iLayer+93400 );
-	protonSpectrumWeighted4[ iLayer ] = 
-	  histoFactory->createHistogram1D( id, histotag, 2000, -0.1, 0.1 );
-
+	if ( isHistogramSpectrumWeightedOn ) {
+	  protonSpectrumWeighted4[ iLayer ] = 
+	    histoFactory->createHistogram1D( id, histotag, 2000, -0.1, 0.1 );
+	}
 	sprintf( id, "%d", iLayer+3500 );
 	sprintf( histotag, "Proton Log10 Energy Spectrum in Active Layer %d in MeV",
 		 iLayer );
-	protonSpectrum5[ iLayer ] = 
-	  histoFactory->createHistogram1D( id, histotag, 1000, -4.0, 6.0 );
+	if ( isHistogramSpectrumUnweightedOn ) {
+	  protonSpectrum5[ iLayer ] = 
+	    histoFactory->createHistogram1D( id, histotag, 1000, -4.0, 6.0 );
+	}
 	sprintf( id, "%d", iLayer+93500 );
-	protonSpectrumWeighted5[ iLayer ] = 
-	  histoFactory->createHistogram1D( id, histotag, 1000, -4.0, 6.0 );
-
+	if ( isHistogramSpectrumWeightedOn ) {
+	  protonSpectrumWeighted5[ iLayer ] = 
+	    histoFactory->createHistogram1D( id, histotag, 1000, -4.0, 6.0 );
+	}
 	sprintf( id, "%d", iLayer+4100 );
 	sprintf( histotag, "Neutron Lin. Energy Spectrum in Active Layer %d in GeV", 
 		 iLayer );
-	neutronSpectrum1[ iLayer ] = 
-	  histoFactory->createHistogram1D( id, histotag, 2000, -100.0, 100.0 );
+	if ( isHistogramSpectrumUnweightedOn ) {
+	  neutronSpectrum1[ iLayer ] = 
+	    histoFactory->createHistogram1D( id, histotag, 2000, -100.0, 100.0 );
+	}
 	sprintf( id, "%d", iLayer+94100 );
-	neutronSpectrumWeighted1[ iLayer ] = 
-	  histoFactory->createHistogram1D( id, histotag, 2000, -100.0, 100.0 );
-
+	if ( isHistogramSpectrumWeightedOn ) {
+	  neutronSpectrumWeighted1[ iLayer ] = 
+	    histoFactory->createHistogram1D( id, histotag, 2000, -100.0, 100.0 );
+	}
 	sprintf( id, "%d", iLayer+4200 );
 	sprintf( histotag, "Neutron Lin. Energy Spectrum in Active Layer%d   in GeV",
 		 iLayer );
-	neutronSpectrum2[ iLayer ] = 
-	  histoFactory->createHistogram1D( id, histotag, 2000, -10.0, 10.0 );
+	if ( isHistogramSpectrumUnweightedOn ) {
+	  neutronSpectrum2[ iLayer ] = 
+	    histoFactory->createHistogram1D( id, histotag, 2000, -10.0, 10.0 );
+	}
 	sprintf( id, "%d", iLayer+94200 );
-	neutronSpectrumWeighted2[ iLayer ] = 
-	  histoFactory->createHistogram1D( id, histotag, 2000, -10.0, 10.0 );
-
+	if ( isHistogramSpectrumWeightedOn ) {
+	  neutronSpectrumWeighted2[ iLayer ] = 
+	    histoFactory->createHistogram1D( id, histotag, 2000, -10.0, 10.0 );
+	}
 	sprintf( id, "%d", iLayer+4300 );
 	sprintf( histotag, "Neutron Lin. Energy Spectrum in Active Layer%d   in GeV",
 		 iLayer );
-	neutronSpectrum3[ iLayer ] = 
-	  histoFactory->createHistogram1D( id, histotag, 2000, -1.0, 1.0 );
+	if ( isHistogramSpectrumUnweightedOn ) {
+	  neutronSpectrum3[ iLayer ] = 
+	    histoFactory->createHistogram1D( id, histotag, 2000, -1.0, 1.0 );
+	}
 	sprintf( id, "%d", iLayer+94300 );
-	neutronSpectrumWeighted3[ iLayer ] = 
-	  histoFactory->createHistogram1D( id, histotag, 2000, -1.0, 1.0 );
-
+	if ( isHistogramSpectrumWeightedOn ) {
+	  neutronSpectrumWeighted3[ iLayer ] = 
+	    histoFactory->createHistogram1D( id, histotag, 2000, -1.0, 1.0 );
+	}
 	sprintf( id, "%d", iLayer+4400 );
 	sprintf( histotag, "Neutron Lin. Energy Spectrum in Active Layer%d   in GeV",
 		 iLayer );
-	neutronSpectrum4[ iLayer ] = 
-	  histoFactory->createHistogram1D( id, histotag, 2000, -0.1, 0.1 );
+	if ( isHistogramSpectrumUnweightedOn ) {
+	  neutronSpectrum4[ iLayer ] = 
+	    histoFactory->createHistogram1D( id, histotag, 2000, -0.1, 0.1 );
+	}
 	sprintf( id, "%d", iLayer+94400 );
-	neutronSpectrumWeighted4[ iLayer ] = 
-	  histoFactory->createHistogram1D( id, histotag, 2000, -0.1, 0.1 );
-
+	if ( isHistogramSpectrumWeightedOn ) {
+	  neutronSpectrumWeighted4[ iLayer ] = 
+	    histoFactory->createHistogram1D( id, histotag, 2000, -0.1, 0.1 );
+	}
 	sprintf( id, "%d", iLayer+4500 );
 	sprintf( histotag, "Neutron Log10 Energy Spectrum in Active Layer %d in MeV",
 		 iLayer );
-	neutronSpectrum5[ iLayer ] = 
-	  histoFactory->createHistogram1D( id, histotag, 1000, -4.0, 6.0 );
+	if ( isHistogramSpectrumUnweightedOn ) {
+	  neutronSpectrum5[ iLayer ] = 
+	    histoFactory->createHistogram1D( id, histotag, 1000, -4.0, 6.0 );
+	}
 	sprintf( id, "%d", iLayer+94500 );
-	neutronSpectrumWeighted5[ iLayer ] = 
-	  histoFactory->createHistogram1D( id, histotag, 1000, -4.0, 6.0 );
-
+	if ( isHistogramSpectrumWeightedOn ) {
+	  neutronSpectrumWeighted5[ iLayer ] = 
+	    histoFactory->createHistogram1D( id, histotag, 1000, -4.0, 6.0 );
+	}
 	sprintf( id, "%d", iLayer+5100 );
 	sprintf( histotag, "Gamma Lin. Energy Spectrum in Active Layer%d   in GeV", 
 		 iLayer );
-	gammaSpectrum1[ iLayer ] = 
-	  histoFactory->createHistogram1D( id, histotag, 2000, -100.0, 100.0 );
+	if ( isHistogramSpectrumUnweightedOn ) {
+	  gammaSpectrum1[ iLayer ] = 
+	    histoFactory->createHistogram1D( id, histotag, 2000, -100.0, 100.0 );
+	}
 	sprintf( id, "%d", iLayer+95100 );
-	gammaSpectrumWeighted1[ iLayer ] = 
-	  histoFactory->createHistogram1D( id, histotag, 2000, -100.0, 100.0 );
-
+	if ( isHistogramSpectrumWeightedOn ) {
+	  gammaSpectrumWeighted1[ iLayer ] = 
+	    histoFactory->createHistogram1D( id, histotag, 2000, -100.0, 100.0 );
+	}
 	sprintf( id, "%d", iLayer+5200 );
 	sprintf( histotag, "Gamma Lin. Energy Spectrum in Active Layer %d in GeV", 
 		 iLayer );
-	gammaSpectrum2[ iLayer ] = 
-	  histoFactory->createHistogram1D( id, histotag, 2000, -10.0, 10.0 );
+	if ( isHistogramSpectrumUnweightedOn ) {
+	  gammaSpectrum2[ iLayer ] = 
+	    histoFactory->createHistogram1D( id, histotag, 2000, -10.0, 10.0 );
+	}
 	sprintf( id, "%d", iLayer+95200 );
-	gammaSpectrumWeighted2[ iLayer ] = 
-	  histoFactory->createHistogram1D( id, histotag, 2000, -10.0, 10.0 );
-
+	if ( isHistogramSpectrumWeightedOn ) {
+	  gammaSpectrumWeighted2[ iLayer ] = 
+	    histoFactory->createHistogram1D( id, histotag, 2000, -10.0, 10.0 );
+	}
 	sprintf( id, "%d", iLayer+5300 );
 	sprintf( histotag, "Gamma Lin. Energy Spectrum in Active Layer %d in GeV", 
 		 iLayer );
-	gammaSpectrum3[ iLayer ] = 
-	  histoFactory->createHistogram1D( id, histotag, 2000, -1.0, 1.0 );
+	if ( isHistogramSpectrumUnweightedOn ) {
+	  gammaSpectrum3[ iLayer ] = 
+	    histoFactory->createHistogram1D( id, histotag, 2000, -1.0, 1.0 );
+	}
 	sprintf( id, "%d", iLayer+95300 );
-	gammaSpectrumWeighted3[ iLayer ] = 
-	  histoFactory->createHistogram1D( id, histotag, 2000, -1.0, 1.0 );
-
+	if ( isHistogramSpectrumWeightedOn ) {
+	  gammaSpectrumWeighted3[ iLayer ] = 
+	    histoFactory->createHistogram1D( id, histotag, 2000, -1.0, 1.0 );
+	}
 	sprintf( id, "%d", iLayer+5400 );
 	sprintf( histotag, "Gamma Lin. Energy Spectrum in Active Layer %d in GeV", 
 		 iLayer );
-	gammaSpectrum4[ iLayer ] = 
-	  histoFactory->createHistogram1D( id, histotag, 2000, -0.1, 0.1 );
+	if ( isHistogramSpectrumUnweightedOn ) {
+	  gammaSpectrum4[ iLayer ] = 
+	    histoFactory->createHistogram1D( id, histotag, 2000, -0.1, 0.1 );
+	}
 	sprintf( id, "%d", iLayer+95400 );
-	gammaSpectrumWeighted4[ iLayer ] = 
-	  histoFactory->createHistogram1D( id, histotag, 2000, -0.1, 0.1 );
-
+	if ( isHistogramSpectrumWeightedOn ) {
+	  gammaSpectrumWeighted4[ iLayer ] = 
+	    histoFactory->createHistogram1D( id, histotag, 2000, -0.1, 0.1 );
+	}
 	sprintf( id, "%d", iLayer+5500 );
 	sprintf( histotag, "Gamma Log10 Energy Spectrum in Active Layer %d in MeV",
 		 iLayer );
-	gammaSpectrum5[ iLayer ] = 
-	  histoFactory->createHistogram1D( id, histotag, 1000, -4.0, 6.0 );
+	if ( isHistogramSpectrumUnweightedOn ) {
+	  gammaSpectrum5[ iLayer ] = 
+	    histoFactory->createHistogram1D( id, histotag, 1000, -4.0, 6.0 );
+	}
 	sprintf( id, "%d", iLayer+95500 );
-	gammaSpectrumWeighted5[ iLayer ] = 
-	  histoFactory->createHistogram1D( id, histotag, 1000, -4.0, 6.0 );
-
+	if ( isHistogramSpectrumWeightedOn ) {
+	  gammaSpectrumWeighted5[ iLayer ] = 
+	    histoFactory->createHistogram1D( id, histotag, 1000, -4.0, 6.0 );
+	}
 	sprintf( id, "%d", iLayer+6100 );
 	sprintf( histotag, "PionPlus Lin. Energy Spectrum in Active Layer %d in GeV", 
 		 iLayer) ;
-	pionPlusSpectrum1[ iLayer ] = 
-	  histoFactory->createHistogram1D( id, histotag, 2000, -100.0, 100.0 );
+	if ( isHistogramSpectrumUnweightedOn ) {
+	  pionPlusSpectrum1[ iLayer ] = 
+	    histoFactory->createHistogram1D( id, histotag, 2000, -100.0, 100.0 );
+	}
 	sprintf( id, "%d", iLayer+96100 );
-	pionPlusSpectrumWeighted1[ iLayer ] = 
-	  histoFactory->createHistogram1D( id, histotag, 2000, -100.0, 100.0 );
-
+	if ( isHistogramSpectrumWeightedOn ) {
+	  pionPlusSpectrumWeighted1[ iLayer ] = 
+	    histoFactory->createHistogram1D( id, histotag, 2000, -100.0, 100.0 );
+	}
 	sprintf( id, "%d", iLayer+6200 );
 	sprintf( histotag, "Pion Plus Lin. Energy Spectrum in Active Layer %d in GeV", 
 		 iLayer );
-	pionPlusSpectrum2[ iLayer ] = 
-	  histoFactory->createHistogram1D( id, histotag, 2000, -10.0, 10.0 );
+	if ( isHistogramSpectrumUnweightedOn ) {
+	  pionPlusSpectrum2[ iLayer ] = 
+	    histoFactory->createHistogram1D( id, histotag, 2000, -10.0, 10.0 );
+	}
 	sprintf( id, "%d", iLayer+96200 );
-	pionPlusSpectrumWeighted2[ iLayer ] = 
-	  histoFactory->createHistogram1D( id, histotag, 2000, -10.0, 10.0 );
-
+	if ( isHistogramSpectrumWeightedOn ) {
+	  pionPlusSpectrumWeighted2[ iLayer ] = 
+	    histoFactory->createHistogram1D( id, histotag, 2000, -10.0, 10.0 );
+	}
 	sprintf( id, "%d", iLayer+6300 );
 	sprintf( histotag, "PionPlus Lin. Energy Spectrum in Active Layer %d in GeV", 
 		 iLayer );
-	pionPlusSpectrum3[ iLayer ] = 
-	  histoFactory->createHistogram1D( id, histotag, 2000, -1.0, 1.0 );
+	if ( isHistogramSpectrumUnweightedOn ) {
+	  pionPlusSpectrum3[ iLayer ] = 
+	    histoFactory->createHistogram1D( id, histotag, 2000, -1.0, 1.0 );
+	}
 	sprintf( id, "%d", iLayer+96300 );
-	pionPlusSpectrumWeighted3[ iLayer ] = 
-	  histoFactory->createHistogram1D( id, histotag, 2000, -1.0, 1.0 );
-
+	if ( isHistogramSpectrumWeightedOn ) {
+	  pionPlusSpectrumWeighted3[ iLayer ] = 
+	    histoFactory->createHistogram1D( id, histotag, 2000, -1.0, 1.0 );
+	}
 	sprintf( id, "%d", iLayer+6400 );
 	sprintf( histotag, "PionPlus Lin. Energy Spectrum in Active Layer %d in GeV", 
 		 iLayer );
-	pionPlusSpectrum4[ iLayer ] = 
-	  histoFactory->createHistogram1D( id, histotag, 2000, -0.1, 0.1 );
+	if ( isHistogramSpectrumUnweightedOn ) {
+	  pionPlusSpectrum4[ iLayer ] = 
+	    histoFactory->createHistogram1D( id, histotag, 2000, -0.1, 0.1 );
+	}
 	sprintf( id, "%d", iLayer+96400 );
-	pionPlusSpectrumWeighted4[ iLayer ] = 
-	  histoFactory->createHistogram1D( id, histotag, 2000, -0.1, 0.1 );
-
+	if ( isHistogramSpectrumWeightedOn ) {
+	  pionPlusSpectrumWeighted4[ iLayer ] = 
+	    histoFactory->createHistogram1D( id, histotag, 2000, -0.1, 0.1 );
+	}
 	sprintf( id, "%d", iLayer+6500 );
 	sprintf( histotag, "PionPlus Log10 Energy Spectrum in Active Layer %d in MeV", 
 		 iLayer );
-	pionPlusSpectrum5[ iLayer ] = 
-	  histoFactory->createHistogram1D( id, histotag, 1000, -4.0, 6.0 );
+	if ( isHistogramSpectrumUnweightedOn ) {
+	  pionPlusSpectrum5[ iLayer ] = 
+	    histoFactory->createHistogram1D( id, histotag, 1000, -4.0, 6.0 );
+	}
 	sprintf( id, "%d", iLayer+96500 );
-	pionPlusSpectrumWeighted5[ iLayer ] = 
-	  histoFactory->createHistogram1D( id, histotag, 1000, -4.0, 6.0 );
-
+	if ( isHistogramSpectrumWeightedOn ) {
+	  pionPlusSpectrumWeighted5[ iLayer ] = 
+	    histoFactory->createHistogram1D( id, histotag, 1000, -4.0, 6.0 );
+	}
 	sprintf( id, "%d", iLayer+7100 );
 	sprintf( histotag, "PionMinus Lin. Energy Spectrum in Active Layer %d in GeV", 
 		 iLayer) ;
-	pionMinusSpectrum1[ iLayer ] = 
-	  histoFactory->createHistogram1D( id, histotag, 2000, -100.0, 100.0 );
+	if ( isHistogramSpectrumUnweightedOn ) {
+	  pionMinusSpectrum1[ iLayer ] = 
+	    histoFactory->createHistogram1D( id, histotag, 2000, -100.0, 100.0 );
+	}
 	sprintf( id, "%d", iLayer+97100 );
-	pionMinusSpectrumWeighted1[ iLayer ] = 
-	  histoFactory->createHistogram1D( id, histotag, 2000, -100.0, 100.0 );
-
+	if ( isHistogramSpectrumWeightedOn ) {
+	  pionMinusSpectrumWeighted1[ iLayer ] = 
+	    histoFactory->createHistogram1D( id, histotag, 2000, -100.0, 100.0 );
+	}
 	sprintf( id, "%d", iLayer+7200 );
 	sprintf( histotag, "Pion Minus Lin. Energy Spectrum in Active Layer %d in GeV", 
 		 iLayer );
-	pionMinusSpectrum2[ iLayer ] = 
-	  histoFactory->createHistogram1D( id, histotag, 2000, -10.0, 10.0 );
+	if ( isHistogramSpectrumUnweightedOn ) {
+	  pionMinusSpectrum2[ iLayer ] = 
+	    histoFactory->createHistogram1D( id, histotag, 2000, -10.0, 10.0 );
+	}
 	sprintf( id, "%d", iLayer+97200 );
-	pionMinusSpectrumWeighted2[ iLayer ] = 
-	  histoFactory->createHistogram1D( id, histotag, 2000, -10.0, 10.0 );
-
+	if ( isHistogramSpectrumWeightedOn ) {
+	  pionMinusSpectrumWeighted2[ iLayer ] = 
+	    histoFactory->createHistogram1D( id, histotag, 2000, -10.0, 10.0 );
+	}
 	sprintf( id, "%d", iLayer+7300 );
 	sprintf( histotag, "PionMinus Lin. Energy Spectrum in Active Layer %d in GeV", 
 		 iLayer );
-	pionMinusSpectrum3[ iLayer ] = 
-	  histoFactory->createHistogram1D( id, histotag, 2000, -1.0, 1.0 );
+	if ( isHistogramSpectrumUnweightedOn ) {
+	  pionMinusSpectrum3[ iLayer ] = 
+	    histoFactory->createHistogram1D( id, histotag, 2000, -1.0, 1.0 );
+	}
 	sprintf( id, "%d", iLayer+97300 );
-	pionMinusSpectrumWeighted3[ iLayer ] = 
-	  histoFactory->createHistogram1D( id, histotag, 2000, -1.0, 1.0 );
-
+	if ( isHistogramSpectrumWeightedOn ) {
+	  pionMinusSpectrumWeighted3[ iLayer ] = 
+	    histoFactory->createHistogram1D( id, histotag, 2000, -1.0, 1.0 );
+	}
 	sprintf( id, "%d", iLayer+7400 );
 	sprintf( histotag, "PionMinus Lin. Energy Spectrum in Active Layer %d in GeV", 
 		 iLayer );
-	pionMinusSpectrum4[ iLayer ] = 
-	  histoFactory->createHistogram1D( id, histotag, 2000, -0.1, 0.1 );
+	if ( isHistogramSpectrumUnweightedOn ) {
+	  pionMinusSpectrum4[ iLayer ] = 
+	    histoFactory->createHistogram1D( id, histotag, 2000, -0.1, 0.1 );
+	}
 	sprintf( id, "%d", iLayer+97400 );
-	pionMinusSpectrumWeighted4[ iLayer ] = 
-	  histoFactory->createHistogram1D( id, histotag, 2000, -0.1, 0.1 );
-
+	if ( isHistogramSpectrumWeightedOn ) {
+	  pionMinusSpectrumWeighted4[ iLayer ] = 
+	    histoFactory->createHistogram1D( id, histotag, 2000, -0.1, 0.1 );
+	}
 	sprintf( id, "%d", iLayer+7500 );
 	sprintf( histotag, "PionMinus Log10 Energy Spectrum in Active Layer %d in MeV", 
 		 iLayer );
-	pionMinusSpectrum5[ iLayer ] = 
-	  histoFactory->createHistogram1D( id, histotag, 1000, -4.0, 6.0 );
+	if ( isHistogramSpectrumUnweightedOn ) {
+	  pionMinusSpectrum5[ iLayer ] = 
+	    histoFactory->createHistogram1D( id, histotag, 1000, -4.0, 6.0 );
+	}
 	sprintf( id, "%d", iLayer+97500 );
-	pionMinusSpectrumWeighted5[ iLayer ] = 
-	  histoFactory->createHistogram1D( id, histotag, 1000, -4.0, 6.0 );
+	if ( isHistogramSpectrumWeightedOn ) {
+	  pionMinusSpectrumWeighted5[ iLayer ] = 
+	    histoFactory->createHistogram1D( id, histotag, 1000, -4.0, 6.0 );
+	}
       }
   }
 }                       
@@ -854,38 +962,43 @@ void StatAccepTestAnalysis::fillSpectrum( const G4ParticleDefinition* particleDe
     //       << "  Ekin=" << std::abs( kinEnergy ) 
     //	     <<  "  p=" << p << " MeV" << G4endl;       //***DEBUG***
   }
+  G4double p_inGeV = p / GeV;
   if ( particleDef == G4Electron::ElectronDefinition() || 
        particleDef == G4Positron::PositronDefinition() ) {
-    emSpectrum1[ sampleLayer ]->fill( kinEnergy/GeV );
-    emSpectrum2[ sampleLayer ]->fill( kinEnergy/GeV );
-    emSpectrum3[ sampleLayer ]->fill( kinEnergy/GeV );
-    emSpectrum4[ sampleLayer ]->fill( kinEnergy/GeV );
-    if ( kinEnergy > 0.0 ) {
-      emSpectrum5[ sampleLayer ]->fill( std::log10( kinEnergy/MeV ) );
+    if ( isHistogramSpectrumUnweightedOn ) {
+      emSpectrum1[ sampleLayer ]->fill( kinEnergy/GeV );
+      emSpectrum2[ sampleLayer ]->fill( kinEnergy/GeV );
+      emSpectrum3[ sampleLayer ]->fill( kinEnergy/GeV );
+      emSpectrum4[ sampleLayer ]->fill( kinEnergy/GeV );
+      if ( kinEnergy > 0.0 ) {
+	emSpectrum5[ sampleLayer ]->fill( std::log10( kinEnergy/MeV ) );
+      }
     }
-    if ( p > 0.0 ) {
-      emSpectrumWeighted1[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p );
-      emSpectrumWeighted2[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p );
-      emSpectrumWeighted3[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p );
-      emSpectrumWeighted4[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p );
+    if ( p > 0.0  &&  isHistogramSpectrumWeightedOn ) {
+      emSpectrumWeighted1[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p_inGeV );
+      emSpectrumWeighted2[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p_inGeV );
+      emSpectrumWeighted3[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p_inGeV );
+      emSpectrumWeighted4[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p_inGeV );
       if ( kinEnergy > 0.0 ) {
 	emSpectrumWeighted5[ sampleLayer ]->fill( std::log10( kinEnergy/MeV ), 
 						  1.0/(p*std::abs(kinEnergy)) );
       }
     }
   } else if ( particleDef == G4Gamma::GammaDefinition() ) {
-    gammaSpectrum1[ sampleLayer ]->fill( kinEnergy/GeV );
-    gammaSpectrum2[ sampleLayer ]->fill( kinEnergy/GeV );
-    gammaSpectrum3[ sampleLayer ]->fill( kinEnergy/GeV );
-    gammaSpectrum4[ sampleLayer ]->fill( kinEnergy/GeV );
-    if ( kinEnergy > 0.0 ) {
-      gammaSpectrum5[ sampleLayer ]->fill( std::log10( kinEnergy/MeV ) );  
+    if ( isHistogramSpectrumUnweightedOn ) {
+      gammaSpectrum1[ sampleLayer ]->fill( kinEnergy/GeV );
+      gammaSpectrum2[ sampleLayer ]->fill( kinEnergy/GeV );
+      gammaSpectrum3[ sampleLayer ]->fill( kinEnergy/GeV );
+      gammaSpectrum4[ sampleLayer ]->fill( kinEnergy/GeV );
+      if ( kinEnergy > 0.0 ) {
+	gammaSpectrum5[ sampleLayer ]->fill( std::log10( kinEnergy/MeV ) );  
+      }
     }
-    if ( p > 0.0 ) {
-      gammaSpectrumWeighted1[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p );
-      gammaSpectrumWeighted2[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p );
-      gammaSpectrumWeighted3[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p );
-      gammaSpectrumWeighted4[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p );
+    if ( p > 0.0  &&  isHistogramSpectrumWeightedOn ) {
+      gammaSpectrumWeighted1[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p_inGeV );
+      gammaSpectrumWeighted2[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p_inGeV );
+      gammaSpectrumWeighted3[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p_inGeV );
+      gammaSpectrumWeighted4[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p_inGeV );
       if ( kinEnergy > 0.0 ) {
 	gammaSpectrumWeighted5[ sampleLayer ]->fill( std::log10( kinEnergy/MeV ), 
 						     1.0/(p*std::abs(kinEnergy)) );
@@ -894,18 +1007,20 @@ void StatAccepTestAnalysis::fillSpectrum( const G4ParticleDefinition* particleDe
   } else if ( particleDef == G4PionPlus::PionPlusDefinition() ||
 	      particleDef == G4PionMinus::PionMinusDefinition() ||
 	      particleDef == G4PionZero::PionZeroDefinition() ) {
-    pionSpectrum1[ sampleLayer ]->fill( kinEnergy/GeV );
-    pionSpectrum2[ sampleLayer ]->fill( kinEnergy/GeV );
-    pionSpectrum3[ sampleLayer ]->fill( kinEnergy/GeV );
-    pionSpectrum4[ sampleLayer ]->fill( kinEnergy/GeV );
-    if ( kinEnergy > 0.0 ) {
-      pionSpectrum5[ sampleLayer ]->fill( std::log10( kinEnergy/MeV ) );
+    if ( isHistogramSpectrumUnweightedOn ) {
+      pionSpectrum1[ sampleLayer ]->fill( kinEnergy/GeV );
+      pionSpectrum2[ sampleLayer ]->fill( kinEnergy/GeV );
+      pionSpectrum3[ sampleLayer ]->fill( kinEnergy/GeV );
+      pionSpectrum4[ sampleLayer ]->fill( kinEnergy/GeV );
+      if ( kinEnergy > 0.0 ) {
+	pionSpectrum5[ sampleLayer ]->fill( std::log10( kinEnergy/MeV ) );
+      }
     }
-    if ( p > 0.0 ) {
-      pionSpectrumWeighted1[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p );
-      pionSpectrumWeighted2[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p );
-      pionSpectrumWeighted3[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p );
-      pionSpectrumWeighted4[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p );
+    if ( p > 0.0  &&  isHistogramSpectrumWeightedOn ) {
+      pionSpectrumWeighted1[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p_inGeV );
+      pionSpectrumWeighted2[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p_inGeV );
+      pionSpectrumWeighted3[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p_inGeV );
+      pionSpectrumWeighted4[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p_inGeV );
       if ( kinEnergy > 0.0 ) {
 	pionSpectrumWeighted5[ sampleLayer ]->fill( std::log10( kinEnergy/MeV ),
 						    1.0/(p*std::abs(kinEnergy)) );
@@ -914,18 +1029,20 @@ void StatAccepTestAnalysis::fillSpectrum( const G4ParticleDefinition* particleDe
     // Now separate between pi+ and pi-, because they have, 
     // in general, different spectra.
     if ( particleDef == G4PionPlus::PionPlusDefinition() ) { 
-      pionPlusSpectrum1[ sampleLayer ]->fill( kinEnergy/GeV );
-      pionPlusSpectrum2[ sampleLayer ]->fill( kinEnergy/GeV );
-      pionPlusSpectrum3[ sampleLayer ]->fill( kinEnergy/GeV );
-      pionPlusSpectrum4[ sampleLayer ]->fill( kinEnergy/GeV );
-      if ( kinEnergy > 0.0 ) {
-	pionPlusSpectrum5[ sampleLayer ]->fill( std::log10( kinEnergy/MeV ) );
+      if ( isHistogramSpectrumUnweightedOn ) {
+	pionPlusSpectrum1[ sampleLayer ]->fill( kinEnergy/GeV );
+	pionPlusSpectrum2[ sampleLayer ]->fill( kinEnergy/GeV );
+	pionPlusSpectrum3[ sampleLayer ]->fill( kinEnergy/GeV );
+	pionPlusSpectrum4[ sampleLayer ]->fill( kinEnergy/GeV );
+	if ( kinEnergy > 0.0 ) {
+	  pionPlusSpectrum5[ sampleLayer ]->fill( std::log10( kinEnergy/MeV ) );
+	}
       }
-      if ( p > 0.0 ) {
-	pionPlusSpectrumWeighted1[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p );
-	pionPlusSpectrumWeighted2[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p );
-	pionPlusSpectrumWeighted3[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p );
-	pionPlusSpectrumWeighted4[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p );
+      if ( p > 0.0  &&  isHistogramSpectrumWeightedOn ) {
+	pionPlusSpectrumWeighted1[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p_inGeV );
+	pionPlusSpectrumWeighted2[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p_inGeV );
+	pionPlusSpectrumWeighted3[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p_inGeV );
+	pionPlusSpectrumWeighted4[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p_inGeV );
 	if ( kinEnergy > 0.0 ) {
 	  pionPlusSpectrumWeighted5[ sampleLayer ]->fill( std::log10( kinEnergy/MeV ),
 							  1.0/(p*std::abs(kinEnergy)) );
@@ -933,18 +1050,20 @@ void StatAccepTestAnalysis::fillSpectrum( const G4ParticleDefinition* particleDe
       }
     }
     if ( particleDef == G4PionMinus::PionMinusDefinition() ) { 
-      pionMinusSpectrum1[ sampleLayer ]->fill( kinEnergy/GeV );
-      pionMinusSpectrum2[ sampleLayer ]->fill( kinEnergy/GeV );
-      pionMinusSpectrum3[ sampleLayer ]->fill( kinEnergy/GeV );
-      pionMinusSpectrum4[ sampleLayer ]->fill( kinEnergy/GeV );
-      if ( kinEnergy > 0.0 ) {
-	//pionMinusSpectrum5[ sampleLayer ]->fill( std::log10( kinEnergy/MeV ) );
+      if ( isHistogramSpectrumUnweightedOn ) {
+	pionMinusSpectrum1[ sampleLayer ]->fill( kinEnergy/GeV );
+	pionMinusSpectrum2[ sampleLayer ]->fill( kinEnergy/GeV );
+	pionMinusSpectrum3[ sampleLayer ]->fill( kinEnergy/GeV );
+	pionMinusSpectrum4[ sampleLayer ]->fill( kinEnergy/GeV );
+	if ( kinEnergy > 0.0 ) {
+	  pionMinusSpectrum5[ sampleLayer ]->fill( std::log10( kinEnergy/MeV ) );
+	}
       }
-      if ( p > 0.0 ) {
-	pionMinusSpectrumWeighted1[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p );
-	pionMinusSpectrumWeighted2[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p );
-	pionMinusSpectrumWeighted3[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p );
-	pionMinusSpectrumWeighted4[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p );
+      if ( p > 0.0  &&  isHistogramSpectrumWeightedOn ) {
+	pionMinusSpectrumWeighted1[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p_inGeV );
+	pionMinusSpectrumWeighted2[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p_inGeV );
+	pionMinusSpectrumWeighted3[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p_inGeV );
+	pionMinusSpectrumWeighted4[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p_inGeV );
 	if ( kinEnergy > 0.0 ) {
 	  pionMinusSpectrumWeighted5[ sampleLayer ]->fill( std::log10( kinEnergy/MeV ),
 							   1.0/(p*std::abs(kinEnergy)) );
@@ -952,36 +1071,40 @@ void StatAccepTestAnalysis::fillSpectrum( const G4ParticleDefinition* particleDe
       }
     }
   } else if ( particleDef == G4Proton::ProtonDefinition() ) {
-    protonSpectrum1[ sampleLayer ]->fill( kinEnergy/GeV );
-    protonSpectrum2[ sampleLayer ]->fill( kinEnergy/GeV );
-    protonSpectrum3[ sampleLayer ]->fill( kinEnergy/GeV );
-    protonSpectrum4[ sampleLayer ]->fill( kinEnergy/GeV );
-    if ( kinEnergy > 0.0 ) {
-      protonSpectrum5[ sampleLayer ]->fill( std::log10( kinEnergy/MeV ) );  
+    if ( isHistogramSpectrumUnweightedOn ) {
+      protonSpectrum1[ sampleLayer ]->fill( kinEnergy/GeV );
+      protonSpectrum2[ sampleLayer ]->fill( kinEnergy/GeV );
+      protonSpectrum3[ sampleLayer ]->fill( kinEnergy/GeV );
+      protonSpectrum4[ sampleLayer ]->fill( kinEnergy/GeV );
+      if ( kinEnergy > 0.0 ) {
+	protonSpectrum5[ sampleLayer ]->fill( std::log10( kinEnergy/MeV ) );  
+      }
     }
-    if ( p > 0.0 ) {
-      protonSpectrumWeighted1[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p );
-      protonSpectrumWeighted2[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p );
-      protonSpectrumWeighted3[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p );
-      protonSpectrumWeighted4[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p );
+    if ( p > 0.0  &&  isHistogramSpectrumWeightedOn ) {
+      protonSpectrumWeighted1[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p_inGeV );
+      protonSpectrumWeighted2[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p_inGeV );
+      protonSpectrumWeighted3[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p_inGeV );
+      protonSpectrumWeighted4[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p_inGeV );
       if ( kinEnergy > 0.0 ) {
 	protonSpectrumWeighted5[ sampleLayer ]->fill( std::log10( kinEnergy/MeV ),
 						      1.0/(p*std::abs(kinEnergy)) );
       }
     }
   } else if ( particleDef == G4Neutron::NeutronDefinition() ) {
-    neutronSpectrum1[ sampleLayer ]->fill( kinEnergy/GeV );
-    neutronSpectrum2[ sampleLayer ]->fill( kinEnergy/GeV );
-    neutronSpectrum3[ sampleLayer ]->fill( kinEnergy/GeV );
-    neutronSpectrum4[ sampleLayer ]->fill( kinEnergy/GeV );
-    if ( kinEnergy > 0.0 ) {
-      neutronSpectrum5[ sampleLayer ]->fill( std::log10( kinEnergy/MeV ) );
+    if ( isHistogramSpectrumUnweightedOn ) {
+      neutronSpectrum1[ sampleLayer ]->fill( kinEnergy/GeV );
+      neutronSpectrum2[ sampleLayer ]->fill( kinEnergy/GeV );
+      neutronSpectrum3[ sampleLayer ]->fill( kinEnergy/GeV );
+      neutronSpectrum4[ sampleLayer ]->fill( kinEnergy/GeV );
+      if ( kinEnergy > 0.0 ) {
+	neutronSpectrum5[ sampleLayer ]->fill( std::log10( kinEnergy/MeV ) );
+      }
     }
-    if ( p > 0.0 ) {
-      neutronSpectrumWeighted1[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p );
-      neutronSpectrumWeighted2[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p );
-      neutronSpectrumWeighted3[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p );
-      neutronSpectrumWeighted4[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p );
+    if ( p > 0.0  &&  isHistogramSpectrumWeightedOn ) {
+      neutronSpectrumWeighted1[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p_inGeV );
+      neutronSpectrumWeighted2[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p_inGeV );
+      neutronSpectrumWeighted3[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p_inGeV );
+      neutronSpectrumWeighted4[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p_inGeV );
       if ( kinEnergy > 0.0 ) {
 	neutronSpectrumWeighted5[ sampleLayer ]->fill( std::log10( kinEnergy/MeV ),
 						       1.0/(p*std::abs(kinEnergy)) );

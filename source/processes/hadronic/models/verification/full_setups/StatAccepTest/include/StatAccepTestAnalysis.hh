@@ -87,6 +87,9 @@ private:
 
   static bool is2DHistogramStepLvsEOn; // To switch on the 2D histograms of
                                        // step length vs. step energy.
+ 
+  static bool isHistogramSpectrumUnweightedOn;  // To switch on/off the
+  static bool isHistogramSpectrumWeightedOn;    // unweighted/weighted histograms.
 
   void classifyParticle( const bool isTrack, const G4ParticleDefinition* particleDef );
   
