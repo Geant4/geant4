@@ -1,4 +1,4 @@
-$Id: History,v 1.110 2006-06-01 14:27:18 gcosmo Exp $
+$Id: History,v 1.111 2006-06-30 07:18:54 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,21 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+30th June 2006  Gabriele Cosmo (examples-V08-01-00)
+- Updated reference outputs according to reference tag geant4-08-01-ref-00.
+- Changed disclaimer on each file.
+- Includes tags: air_shower-V08-00-01, brachy-V08-00-02, microbeam-V08-00-06,
+                 gammaray_telescope-V08-00-02, hadrontherapy-V08-00-04,
+                 medical_linac-V08-00-01, radioprotection-V08-00-01,
+                 tiara-V08-00-08, dmx-V08-00-02, exampleA01-V08-00-01,
+                 testem0-V08-00-04, testem2-V08-00-05, testem3-V08-00-04,
+                 testem5-V08-00-04, testem7-V08-00-05, testem15-V08-00-05,
+                 exgdml-V08-00-00, exhadr01-V08-00-06, persistencyEx-V08-00-00,
+                 exampleN01-V08-00-00, exampleN02-V08-00-03,
+                 exampleN03-V08-00-06, exampleN04-V08-00-01,
+                 exampleN05-V08-00-01, exampleN06-V08-00-02,
+                 exampleN07-V08-00-00
 
 1st June 2006  Gabriele Cosmo (examples-V08-00-05)
 - Updated reference outputs according to reference tag geant4-08-00-ref-05.
