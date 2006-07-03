@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4XXXStoredSceneHandler.cc,v 1.4 2006-06-29 21:27:48 gunter Exp $
+// $Id: G4XXXStoredSceneHandler.cc,v 1.5 2006-07-03 16:52:50 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,11 +44,8 @@
 #include "G4Circle.hh"
 #include "G4Square.hh"
 #include "G4Polyhedron.hh"
-#include "G4NURBS.hh"
-#include "G4VTrajectory.hh"
-#include "G4AttDef.hh"
-#include "G4AttValue.hh"
 #include "G4UnitsTable.hh"
+#include "G4AttCheck.hh"
 
 #include <sstream>
 
@@ -93,7 +90,14 @@ void G4XXXStoredSceneHandler::PrintThings() {
 void G4XXXStoredSceneHandler::PreAddSolid
 (const G4Transform3D& objectTransformation,
  const G4VisAttributes& visAttribs)
-{  
+{
+
+#ifdef G4XXXStoredDEBUG
+  const std::map<G4String,G4AttDef>* attDefs = visAttribs.GetAttDefs();
+  const std::vector<G4AttValue>* attValues = visAttribs.GetAttValues();
+  G4cout << G4AttCheck(attValues, attDefs) << G4endl;
+#endif
+
   G4VSceneHandler::PreAddSolid(objectTransformation, visAttribs);
 
   // Create a place for current solid...

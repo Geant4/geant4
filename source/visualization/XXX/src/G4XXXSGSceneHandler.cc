@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4XXXSGSceneHandler.cc,v 1.3 2006-06-29 21:27:39 gunter Exp $
+// $Id: G4XXXSGSceneHandler.cc,v 1.4 2006-07-03 16:52:49 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -46,10 +46,6 @@
 #include "G4Circle.hh"
 #include "G4Square.hh"
 #include "G4Polyhedron.hh"
-#include "G4NURBS.hh"
-#include "G4VTrajectory.hh"
-#include "G4AttDef.hh"
-#include "G4AttValue.hh"
 #include "G4UnitsTable.hh"
 
 #include <sstream>
