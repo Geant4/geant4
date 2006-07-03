@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeModel.hh,v 1.28 2006-06-29 21:30:34 gunter Exp $
+// $Id: G4PhysicalVolumeModel.hh,v 1.29 2006-07-03 19:18:11 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -68,15 +68,17 @@ public: // With description
 
   class G4PhysicalVolumeNodeID {
   public:
-    G4PhysicalVolumeNodeID(G4VPhysicalVolume* pPV = 0, G4int iCopyNo = 0):
-      fpPV(pPV), fCopyNo(iCopyNo) {}
+    G4PhysicalVolumeNodeID
+    (G4VPhysicalVolume* pPV = 0, G4int iCopyNo = 0, G4int depth = 0):
+      fpPV(pPV), fCopyNo(iCopyNo), fNonCulledDepth(depth) {}
     G4VPhysicalVolume* GetPhysicalVolume() const {return fpPV;}
     G4int GetCopyNo() const {return fCopyNo;}
+    G4int GetNonCulledDepth() const {return fNonCulledDepth;}
     G4bool operator< (const G4PhysicalVolumeNodeID& right) const;
-    G4bool operator== (const G4PhysicalVolumeNodeID& right) const;
   private:
     G4VPhysicalVolume* fpPV;
     G4int fCopyNo;
+    G4int fNonCulledDepth;
   };
   // Nested class for identifying physical volume nodes.
 
