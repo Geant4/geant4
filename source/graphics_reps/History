@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.98 2006-05-04 15:18:38 allison Exp $
+cvs log $Id: History,v 1.99 2006-07-03 11:00:39 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+3rd July 2006  John Allison  (greps-V08-01-00)
+- G4AttCheck.cc:
+  o Added G4bool to the list of allowed G4AttValue value types.
+  o Added Density to the list of units categories.
+- G4AttDefStore: Added GetName.
 
 2nd May 2006 Jane Tinslay (greps-V08-00-03)
 - Add FilterTrajectory method to G4VVisManager
