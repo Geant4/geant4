@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneAdd.cc,v 1.65 2006-06-29 21:29:44 gunter Exp $
+// $Id: G4VisCommandsSceneAdd.cc,v 1.66 2006-07-03 19:35:34 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // /vis/scene commands - John Allison  9th August 1998
 
@@ -503,7 +503,6 @@ void G4VisCommandSceneAddLogicalVolume::SetNewValue (G4UIcommand*,
 	     << "\n (and also, if necessary, /vis/viewer/flush)"
              << G4endl;
     }
-    return;
   }
 
   G4VModel* model = new G4LogicalVolumeModel
@@ -526,7 +525,11 @@ void G4VisCommandSceneAddLogicalVolume::SetNewValue (G4UIcommand*,
 	     << G4endl;
     }
   }
-  else G4VisCommandsSceneAddUnsuccessful(verbosity);
+  else {
+    G4VisCommandsSceneAddUnsuccessful(verbosity);
+    return;
+  }
+
   UpdateVisManagerScene (currentSceneName);
 }
 
@@ -1610,6 +1613,10 @@ void G4VisCommandSceneAddVolume::SetNewValue (G4UIcommand*,
 	     << G4endl;
     }
   }
-  else G4VisCommandsSceneAddUnsuccessful(verbosity);
+  else {
+    G4VisCommandsSceneAddUnsuccessful(verbosity);
+    return;
+  }
+
   UpdateVisManagerScene (currentSceneName);
 }
