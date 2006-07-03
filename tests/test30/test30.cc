@@ -129,6 +129,7 @@ int main(int argc, char** argv)
   G4int     nbinspi  = 20;
   G4int     nangl    = 0;
   G4int     nanglpi  = 0;
+  G4int     modu     = 10000;
   G4String hFile     = "hbook.paw";
   G4double theStep   = 0.01*micrometer;
   G4double range     = 1.0*micrometer;
@@ -343,6 +344,8 @@ int main(int argc, char** argv)
       } else if(line == "#step(mm)") {
         (*fin) >> theStep;
         theStep *= mm;
+      } else if(line == "#print") {
+        (*fin) >> modu;
       } else if(line == "#eBound(MeV)") {
         (*fin) >> eBound;
         eBound *= MeV;
@@ -721,6 +724,7 @@ int main(int argc, char** argv)
     G4LorentzVector labv, fm;
     G4double e, p, m, px, py, pz, pt, theta;
     G4VParticleChange* aChange = 0;
+    G4int warn = 0;
 
     for (G4int iter=0; iter<nevt; iter++) {
 
@@ -746,7 +750,7 @@ int main(int argc, char** argv)
       G4double de = aChange->GetLocalEnergyDeposit();
       G4int n = aChange->GetNumberOfSecondaries();
 
-      if(iter == 1000*(iter/1000)) {
+      if(iter == modu*(iter/modu)) {
         G4cerr << "##### " << iter << "-th event  #####" << G4endl;
       }
 
@@ -799,25 +803,28 @@ int main(int argc, char** argv)
           if(pd == neutron) h[23]->fill(mom.phi()/degree,1.0);
 	}
 
-	if( e == 0.0 || pt == 0.0) {
-          G4cout << "Warning! in event # " << iter 
-	         << i << "-th secondary  "
+	if( (e == 0.0 || pt == 0.0) && warn < 50 ) {
+          warn++;
+          G4cout << "Warning! evt# " << iter 
+	         << "  " << i << "-th sec  "
 		 << pd->GetParticleName() << "   Ekin(MeV)= "
                  << e/MeV
                  << " Pt(MeV/c)= " << pt/MeV
 		 << G4endl;
 	}
 	de += e;
-        if(verbose>0 || std::fabs(mom.phi()/degree - 90.) < 0.001) {
-          G4cout << i << "-th secondary  "
-		 << pd->GetParticleName() << "   Ekin(MeV)= "
+        if((verbose>0 || std::fabs(mom.phi()/degree - 90.) < 0.001 ) && warn < 50) {
+          warn++;
+          G4cout << "Warning! evt# " << iter 
+                 << "  " << i << "-th sec  "
+		 << pd->GetParticleName() << "  Ekin(MeV)= "
                  << e/MeV
-		 << "   p(MeV)= " << mom/MeV
-		 << "   m(MeV)= " << m/MeV
-		 << "   Etot(MeV)= " << (e+m)/MeV
-		 << "   pt(MeV)= " << pt/MeV
-                 << " has sin(tet)= " << pt/p
-                 << " phi(deg)= " << mom.phi()/degree
+		 << "  p(MeV)= " << mom/MeV
+		 << "  m(MeV)= " << m/MeV
+		 << "  Etot(MeV)= " << (e+m)/MeV
+		 << "  pt(MeV)= " << pt/MeV
+                 << "  sin(tet)= " << pt/p
+                 << "  phi(deg)= " << mom.phi()/degree
                  << G4endl;
         }
 
