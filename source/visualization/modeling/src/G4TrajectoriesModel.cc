@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TrajectoriesModel.cc,v 1.18 2006-06-29 21:33:02 gunter Exp $
+// $Id: G4TrajectoriesModel.cc,v 1.19 2006-07-03 19:21:12 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -52,7 +52,9 @@ void G4TrajectoriesModel::DescribeYourselfTo (G4VGraphicsScene& sceneHandler) {
     G4TrajectoryContainer* TC = event -> GetTrajectoryContainer ();
     if (TC) {
       for (G4int iT = 0; iT < TC->entries(); iT++) {
-	sceneHandler.AddCompound (*((*TC) [iT]));
+	G4VTrajectory* pTraj = (*TC) [iT];
+	// Debug: pTraj->ShowTrajectory();
+	sceneHandler.AddCompound (*pTraj);
       }
     }
   }
