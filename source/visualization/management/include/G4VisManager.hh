@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.hh,v 1.59 2006-06-29 21:29:06 gunter Exp $
+// $Id: G4VisManager.hh,v 1.60 2006-07-03 20:09:18 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -105,6 +105,7 @@ template <typename T> class G4VFilter;
 template <typename T> class G4VisFilterManager;
 template <typename T> class G4VisModelManager;
 template <typename T> class G4VModelFactory;
+class G4Event;
 
 namespace {
   // Useful typedef's
@@ -337,6 +338,10 @@ public: // With description
   G4int                        GetLastRunID                    () const;
   G4bool                       GetTransientsDrawnThisRun       () const;
   G4bool                       GetTransientsDrawnThisEvent     () const;
+  const G4String&              GetLastEventRandomStatus        () const;
+  G4Event*                     GetLastEvent                    () const;
+  const std::vector<G4String>& GetEventsRandomStatus           () const;
+  const std::vector<G4Event*>& GetEvents                       () const;
 
   void SetUserAction (G4VUserVisAction* pVisAction,
 		      const G4VisExtent& = G4VisExtent::NullExtent);
@@ -354,7 +359,8 @@ public: // With description
   void              SetXGeometryString          (const G4String&);
   void              SetReprocessing             (G4bool);
   void              SetReprocessingLastEvent    (G4bool);
-
+  void              ResetTransientsDrawnFlags   ();
+  void              SetMaxNumberOfEventsForReprocessing(G4int);
 
   /////////////////////////////////////////////////////////////////////
   // Utility functions.
@@ -391,7 +397,7 @@ protected:
 
   void RegisterMessengers              ();   // Command messengers.
   void PrintAvailableGraphicsSystems   () const;
-  void PrintAvailableModels            () const;
+  void PrintAvailableModels            (Verbosity) const;
   void PrintInvalidPointers            () const;
   G4bool IsValidView ();
   // True if view is valid.  Prints messages and sanitises various data.
@@ -431,6 +437,11 @@ protected:
   G4int fLastEventID;
   G4bool fTransientsDrawnThisRun;
   G4bool fTransientsDrawnThisEvent;
+  G4String fLastEventRandomStatus;
+  G4Event* fpLastEvent;
+  std::vector<G4String> fEventsRandomStatus;
+  std::vector<G4Event*> fEvents;
+  G4int fMaxNumberOfEventsForReprocessing;
 
 private:
 
