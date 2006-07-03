@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewer.hh,v 1.13 2006-06-29 21:18:18 gunter Exp $
+// $Id: G4OpenGLViewer.hh,v 1.14 2006-07-03 16:38:13 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -62,7 +62,7 @@ protected:
   void InitializeGLView ();
   virtual void CreateFontLists () {}
   G4Colour background;      //the OpenGL clear colour
-  G4bool doublebuffer,      //are we using a double buffered visual?
+  G4bool
     transparency_enabled,   //is alpha blending enabled?
     antialiasing_enabled,   //is antialiasing enabled?
     haloing_enabled;        //is haloing enabled for wireframe?

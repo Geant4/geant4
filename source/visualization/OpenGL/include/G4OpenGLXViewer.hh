@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXViewer.hh,v 1.23 2006-06-29 21:18:22 gunter Exp $
+// $Id: G4OpenGLXViewer.hh,v 1.24 2006-07-03 16:38:13 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -56,7 +56,6 @@ public:
   virtual ~G4OpenGLXViewer ();
   void SetView ();
   void ShowView ();
-  void FinishView ();
   void print();
 
 protected:
@@ -89,7 +88,7 @@ protected:
 		   int inColour,
 		   unsigned int width,
 		   unsigned int height);
-  GLXContext create_GL_print_context (XVisualInfo*& pvi, G4bool& db);
+  GLXContext create_GL_print_context (XVisualInfo*& pvi);
 
   XWindowAttributes                 xwa;
   Display                           *dpy;

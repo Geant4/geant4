@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredXViewer.cc,v 1.19 2006-06-29 21:19:26 gunter Exp $
+// $Id: G4OpenGLStoredXViewer.cc,v 1.20 2006-07-03 16:38:13 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -111,6 +111,12 @@ void G4OpenGLStoredXViewer::DrawView () {
       FinishView ();
     }
   }
+}
+
+void G4OpenGLStoredXViewer::FinishView () {
+  glXWaitGL (); //Wait for effects of all previous OpenGL commands to
+                //be propogated before progressing.
+  glXSwapBuffers (dpy, win);  
 }
 
 #endif

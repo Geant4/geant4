@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredXmViewer.cc,v 1.19 2006-06-29 21:19:30 gunter Exp $
+// $Id: G4OpenGLStoredXmViewer.cc,v 1.20 2006-07-03 16:38:13 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -76,6 +76,8 @@ void G4OpenGLStoredXmViewer::Initialise () {
   
   glEnable (GL_BLEND);
   glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+  glDrawBuffer (GL_BACK);
 }
 
 void G4OpenGLStoredXmViewer::DrawView () {
@@ -114,6 +116,12 @@ void G4OpenGLStoredXmViewer::DrawView () {
       FinishView ();
     }
   }
+}
+
+void G4OpenGLStoredXmViewer::FinishView () {
+  glXWaitGL (); //Wait for effects of all previous OpenGL commands to
+                //be propogated before progressing.
+  glXSwapBuffers (dpy, win);  
 }
 
 #endif

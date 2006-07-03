@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateXmViewer.hh,v 1.8 2006-06-29 21:17:54 gunter Exp $
+// $Id: G4OpenGLImmediateXmViewer.hh,v 1.9 2006-07-03 16:38:13 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -54,6 +54,7 @@ public:
   virtual ~G4OpenGLImmediateXmViewer ();
   void Initialise ();
   void DrawView ();
+  void FinishView ();
 
 };
 

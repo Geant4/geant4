@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXViewer.cc,v 1.30 2006-06-29 21:19:38 gunter Exp $
+// $Id: G4OpenGLXViewer.cc,v 1.31 2006-07-03 16:38:13 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -124,15 +124,6 @@ void G4OpenGLXViewer::ShowView () {
   glXWaitGL (); //Wait for effects of all previous OpenGL commands to
                 //be propogated before progressing.
   glFlush ();
-}
-
-void G4OpenGLXViewer::FinishView () {
-  glXWaitGL (); //Wait for effects of all previous OpenGL commands to
-                //be propogated before progressing.
-  if (doublebuffer == true) {
-    glXSwapBuffers (dpy, win);  
-  }
-  else glFlush ();
 }
 
 void G4OpenGLXViewer::GetXConnection () {
@@ -395,7 +386,6 @@ vi_stored (0)
   if (vi_single_buffer) {
     vi_immediate = vi_single_buffer;
     attributeList = snglBuf_RGBA;
-    doublebuffer = false;
   }
   
   if (!vi_immediate){
@@ -403,7 +393,6 @@ vi_stored (0)
     if (vi_double_buffer) {
       vi_immediate = vi_double_buffer;
       attributeList = dblBuf_RGBA;
-      doublebuffer = true;
     }
   }
 
@@ -412,7 +401,6 @@ vi_stored (0)
   if (vi_double_buffer) {
     vi_stored = vi_double_buffer;
     attributeList = dblBuf_RGBA;
-    doublebuffer = true;
   }
 
   if (!vi_immediate || !vi_stored) {
@@ -472,14 +460,10 @@ void G4OpenGLXViewer::print() {
   } else {
 
     XVisualInfo* pvi;
-    G4bool new_db;
-    G4bool last_db;
-    GLXContext pcx = create_GL_print_context(pvi, new_db);
+    GLXContext pcx = create_GL_print_context(pvi);
     GLXContext tmp_cx;
     tmp_cx = cx;
     cx=pcx;
-    last_db=doublebuffer;
-    doublebuffer=new_db;
     
     Pixmap pmap = XCreatePixmap (dpy,
 				 XRootWindow (dpy, pvi->screen),
@@ -509,7 +493,6 @@ void G4OpenGLXViewer::print() {
     
     win=tmp_win;
     cx=tmp_cx;
-    doublebuffer=last_db;
     
     glXMakeCurrent (dpy,
 		    glxpmap,
@@ -948,21 +931,16 @@ void G4OpenGLXViewer::spewSortedFeedback(FILE * file, GLint size, GLfloat * buff
   free(prims);
 }
 
-GLXContext G4OpenGLXViewer::create_GL_print_context(XVisualInfo*& pvi, G4bool& db) {
+GLXContext G4OpenGLXViewer::create_GL_print_context(XVisualInfo*& pvi) {
   
   pvi = glXChooseVisual (dpy,
 			 XDefaultScreen (dpy),
 			 snglBuf_RGBA);
 
-  if (pvi) {
-    db=false;
-  } else {
+  if (!pvi) {
     pvi = glXChooseVisual (dpy,
 			   XDefaultScreen (dpy),
 			   dblBuf_RGBA);
-    if (!pvi) {
-      db=true;
-    }
   }
 
   return glXCreateContext (dpy,
