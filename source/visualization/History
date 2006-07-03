@@ -1,4 +1,4 @@
-$Id: History,v 1.361 2006-06-12 08:35:10 allison Exp $
+$Id: History,v 1.362 2006-07-03 20:24:56 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,18 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+--------------------------------------------------------------------
+3rd July 2006  John Allison  (vis-V08-01-00 - needs greps-V08-01-00)
+- modeling-V08-01-00: Added G4Atts for solids.  (Needs greps-V08-01-00.)
+- visman-V08-01-00:
+  o /vis/scene/transientsAction: Added max number of events parameter.
+  o Added /vis/viewer/clearTransients.
+  o Improved /vis/list.
+  o (Commented out) code for event copying.
+- vistree-V08-01-00: ASCIITree: Layout improvement.
+- visXXX-V08-01-00: General tidy and improvement to XXXFile.
+- vistest-V08-01-00: Protect against zero run manager pointer.
 
 ---------------------------------------------
 12th June 2006  John Allison  (vis-V08-00-13)
