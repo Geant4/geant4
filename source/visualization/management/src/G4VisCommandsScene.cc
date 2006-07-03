@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsScene.cc,v 1.54 2006-06-29 21:29:42 gunter Exp $
+// $Id: G4VisCommandsScene.cc,v 1.55 2006-07-03 19:29:27 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/scene commands - John Allison  9th August 1998
@@ -98,6 +98,7 @@ void G4VisCommandSceneCreate::SetNewValue (G4UIcommand*, G4String newValue) {
   if (iScene < nScenes) {
     if (verbosity >= G4VisManager::warnings) {
       G4cout << "WARNING: Scene \"" << newName << "\" already exists."
+	     << "\n  New scene not created."
 	     << G4endl;
     }
   } else {
@@ -179,6 +180,9 @@ void G4VisCommandSceneEndOfEventAction::SetNewValue (G4UIcommand*,
     }
     return;
   }
+
+  // Change of transients behaviour, so...
+  fpVisManager->ResetTransientsDrawnFlags();
 
   if (verbosity >= G4VisManager::confirmations) {
     G4cout << "End of event action set to \"";
@@ -265,6 +269,9 @@ void G4VisCommandSceneEndOfRunAction::SetNewValue (G4UIcommand*,
     }
     return;
   }
+
+  // Change of transients behaviour, so...
+  fpVisManager->ResetTransientsDrawnFlags();
 
   if (verbosity >= G4VisManager::confirmations) {
     G4cout << "End of run action set to \"";
@@ -566,15 +573,21 @@ void G4VisCommandSceneSelect::SetNewValue (G4UIcommand*, G4String newValue) {
 
 G4VisCommandSceneTransientsAction::G4VisCommandSceneTransientsAction () {
   G4bool omitable;
-  fpCommand = new G4UIcmdWithAString ("/vis/scene/transientsAction", this);
+  fpCommand = new G4UIcommand ("/vis/scene/transientsAction", this);
   fpCommand -> SetGuidance
     ("Rerun events to get transienst (trajectories, etc.), when needed.");
   fpCommand -> SetGuidance
     ("Note: ineffective in absence of instantiated run manager.");
-  fpCommand -> SetParameterName ("action", omitable = true);
-  fpCommand -> SetCandidates ("rerun none");
-  fpCommand -> SetDefaultValue ("rerun");
-
+  G4UIparameter* parameter;
+  parameter = new G4UIparameter ("action", 's', omitable = true);
+  parameter -> SetDefaultValue ("rerun");
+  parameter -> SetParameterCandidates ("rerun none");
+  fpCommand -> SetParameter (parameter);
+  parameter = new G4UIparameter ("maxNumber", 'i', omitable = true);
+  parameter -> SetDefaultValue (100);
+  parameter -> SetGuidance
+  ("Maximum number of events stored for reprocessing. Unlimited if negative.");
+  fpCommand -> SetParameter (parameter);
 }
 
 G4VisCommandSceneTransientsAction::~G4VisCommandSceneTransientsAction () {
@@ -591,8 +604,9 @@ void G4VisCommandSceneTransientsAction::SetNewValue (G4UIcommand*,
   G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
 
   G4String action;
+  G4int maxNumberOfEventsForReprocessing;
   std::istringstream is (newValue);
-  is >> action;
+  is >> action >> maxNumberOfEventsForReprocessing;
 
   G4Scene* pScene = fpVisManager->GetCurrentScene();
   if (!pScene) {
@@ -625,10 +639,19 @@ void G4VisCommandSceneTransientsAction::SetNewValue (G4UIcommand*,
     return;
   }
 
+  fpVisManager->SetMaxNumberOfEventsForReprocessing
+    (maxNumberOfEventsForReprocessing);
+
+  // Change of transients behaviour, so...
+  fpVisManager->ResetTransientsDrawnFlags();
+
   if (verbosity >= G4VisManager::confirmations) {
     G4cout << "Transients action set to \"";
     if (pScene->GetRecomputeTransients()) G4cout << "rerun";
     else G4cout << "none";
-    G4cout << "\"" << G4endl;
+    G4cout << "\"\n  Maximum number of events stored for reprocessing: "
+	   << maxNumberOfEventsForReprocessing
+	   << " (unlimited if negative)."
+	   << G4endl;
   }
 }

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsScene.hh,v 1.17 2006-06-29 21:28:40 gunter Exp $
+// $Id: G4VisCommandsScene.hh,v 1.18 2006-07-03 19:29:27 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/scene commands - John Allison  9th August 1998
@@ -136,7 +136,7 @@ private:
   G4VisCommandSceneTransientsAction (const G4VisCommandSceneTransientsAction&);
   G4VisCommandSceneTransientsAction& operator =
   (const G4VisCommandSceneTransientsAction&);
-  G4UIcmdWithAString* fpCommand;
+  G4UIcommand* fpCommand;
 };
 
 #endif
