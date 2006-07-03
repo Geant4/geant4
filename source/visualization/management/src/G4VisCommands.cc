@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommands.cc,v 1.14 2006-06-29 21:29:34 gunter Exp $
+// $Id: G4VisCommands.cc,v 1.15 2006-07-03 19:34:28 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/ top level commands - John Allison  5th February 2001
@@ -95,15 +95,23 @@ G4String G4VisCommandList::GetCurrentValue (G4UIcommand*)
 void G4VisCommandList::SetNewValue (G4UIcommand*, G4String newValue)
 {
   G4String& verbosityString = newValue;
-  //G4VisManager::Verbosity verbosity =
-  //  fpVisManager->GetVerbosityValue(verbosityString);
+  G4VisManager::Verbosity verbosity =
+    fpVisManager->GetVerbosityValue(verbosityString);
 
   fpVisManager->PrintAvailableGraphicsSystems();
   G4cout << G4endl;
-  fpVisManager->PrintAvailableModels();
+  fpVisManager->PrintAvailableModels(verbosity);
   G4cout << G4endl;
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
   UImanager->ApplyCommand(G4String("/vis/viewer/list ! ") + verbosityString);
+  if (verbosity < G4VisManager::parameters)
+    G4cout <<
+  "\nTo get more information, \"/vis/list all all\" or use individual commands"
+  "\n  such as (use \"ls\" or \"help\"):"
+  "\n    /vis/viewer/list"
+  "\n    /vis/modeling/trajectories/list"
+  "\n    /vis/filtering/trajectories/list"
+	   << G4endl;
 }
 
 ////////////// /vis/verbose ///////////////////////////////////////
