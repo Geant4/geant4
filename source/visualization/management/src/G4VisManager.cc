@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VisManager.cc,v 1.98 2006-06-29 21:30:00 gunter Exp $
+// $Id: G4VisManager.cc,v 1.99 2006-07-03 20:13:33 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -94,7 +94,9 @@ G4VisManager::G4VisManager ():
   fLastRunID       (0),
   fLastEventID     (0),
   fTransientsDrawnThisRun   (false),
-  fTransientsDrawnThisEvent (false)
+  fTransientsDrawnThisEvent (false),
+  fpLastEvent      (0),
+  fMaxNumberOfEventsForReprocessing (100)
   // All other objects use default constructors.
 {
   fpTrajDrawModelMgr = new G4VisModelManager<G4VTrajectoryModel>("/vis/modeling/trajectories");
@@ -182,6 +184,9 @@ G4VisManager::~G4VisManager () {
   for (i = 0; i < fDirectoryList.size (); ++i) {
     delete fDirectoryList[i];
   }
+
+  delete fpLastEvent;
+  for (size_t i = 0; i < fEvents.size(); ++i) delete fEvents[i];
 
   delete fpTrajDrawModelMgr;
   delete fpTrajFilterMgr;
@@ -276,7 +281,7 @@ void G4VisManager::Initialise () {
     G4cout <<
       "\nYou have successfully registered the following model factories."
 	 << G4endl;
-    PrintAvailableModels ();
+    PrintAvailableModels (fVerbosity);
     G4cout << G4endl;
   }
 
@@ -749,10 +754,7 @@ void G4VisManager::SetCurrentScene (G4Scene* pScene) {
   if (pScene != fpScene) {
     // A change of scene.  Therefore reset transients drawn flags.  All
     // memory of previous transient proceessing thereby erased...
-    fTransientsDrawnThisRun = false;
-    if (fpSceneHandler) fpSceneHandler->SetTransientsDrawnThisRun(false);
-    fTransientsDrawnThisEvent = false;
-    if (fpSceneHandler) fpSceneHandler->SetTransientsDrawnThisEvent(false);
+    ResetTransientsDrawnFlags();
   }
   fpScene = pScene;
 }
@@ -941,6 +943,7 @@ void G4VisManager::RegisterMessengers () {
   directory -> SetGuidance ("Operations on Geant4 viewers.");
   fDirectoryList.push_back (directory);
   RegisterMessenger(new G4VisCommandViewerClear);
+  RegisterMessenger(new G4VisCommandViewerClearTransients);
   RegisterMessenger(new G4VisCommandViewerCreate);
   RegisterMessenger(new G4VisCommandViewerDolly);
   RegisterMessenger(new G4VisCommandViewerFlush);
@@ -990,11 +993,62 @@ void G4VisManager::PrintAvailableGraphicsSystems () const {
   G4cout << G4endl;
 }
 
-void G4VisManager::PrintAvailableModels () const
+void G4VisManager::PrintAvailableModels (Verbosity verbosity) const
 {
-  fpTrajDrawModelMgr->Print(G4cout);
+  {
+
+    // Mark current models!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+    //fpTrajDrawModelMgr->Print(G4cout);
+    G4cout << "Registered model factories:" << G4endl;
+    const std::vector<G4VModelFactory<G4VTrajectoryModel>*>& factoryList =
+      fpTrajDrawModelMgr->FactoryList();
+    if (factoryList.empty()) G4cout << "  None" << G4endl;
+    else {
+      std::vector<G4VModelFactory<G4VTrajectoryModel>*>::const_iterator i;
+      for (i = factoryList.begin(); i != factoryList.end(); ++i)
+	(*i)->Print(G4cout);
+    }
+    const G4VisListManager<G4VTrajectoryModel>* listManager =
+      fpTrajDrawModelMgr->ListManager();
+    const std::map<G4String, G4VTrajectoryModel*>& modelMap =
+      listManager->Map();
+    if (!modelMap.empty()) {
+      G4cout << "\nRegistered models:" << G4endl;
+      std::map<G4String, G4VTrajectoryModel*>::const_iterator i;
+      for (i = modelMap.begin(); i != modelMap.end(); ++i) {
+	G4cout << "  " << i->second->Name();
+	if (i->second == listManager->Current()) G4cout << " (Current)";
+	G4cout << G4endl;
+	if (verbosity >= parameters) i->second->Print(G4cout);
+      }
+    }
+  }
+
   G4cout << G4endl;
-  fpTrajFilterMgr->Print(G4cout);
+
+  {
+    //fpTrajFilterMgr->Print(G4cout);
+    G4cout << "Registered filter factories:" << G4endl;
+    const std::vector<G4VModelFactory<G4VFilter<G4VTrajectory> >*>&
+      factoryList = fpTrajFilterMgr->FactoryList();
+    if (factoryList.empty()) G4cout << "  None" << G4endl;
+    else {
+      std::vector<G4VModelFactory<G4VFilter<G4VTrajectory> >*>::const_iterator i;
+      for (i = factoryList.begin(); i != factoryList.end(); ++i)
+	(*i)->Print(G4cout);
+    }
+    const std::vector<G4VFilter<G4VTrajectory>*>&
+      filterList = fpTrajFilterMgr->FilterList();
+    if (!filterList.empty()) {
+      G4cout << "\nRegistered filters:" << G4endl;
+      std::vector<G4VFilter<G4VTrajectory>*>::const_iterator i;
+      for (i = filterList.begin(); i != filterList.end(); ++i) {
+	G4cout << "  " << (*i)->GetName() << G4endl;
+	if (verbosity >= parameters) (*i)->PrintAll(G4cout);
+      }
+    }
+  }
 }
 
 void G4VisManager::PrintInvalidPointers () const {
@@ -1022,113 +1076,18 @@ void G4VisManager::PrintInvalidPointers () const {
   }
 }
 
-/************* Event copy stuff *******************************
-#include "G4PrimaryVertex.hh"
-#include "G4PrimaryParticle.hh"
-
-G4String fLastEventRandomStatus;
-G4Event* fLastEvent;
-std::vector<G4String> fEventsRandomStatus;
-std::vector<G4Event*> fEvents;
-
-G4PrimaryParticle* CopyParticles(G4PrimaryParticle* pp)
-{
-  G4PrimaryParticle* newPP = 0;
-  G4PrimaryParticle* previousPP = 0;
-  while (pp) {
-    G4PrimaryParticle* tmpPP = new G4PrimaryParticle(*pp);
-    tmpPP->ClearNextParticlePointer();
-    G4PrimaryParticle* daughters = pp->GetDaughter();
-    G4PrimaryParticle* newDaughters = CopyParticles(daughters);
-    tmpPP->SetDaughter(newDaughters);
-    if (!newPP) newPP = tmpPP;
-    else previousPP->SetNext(tmpPP);
-    previousPP = tmpPP;
-    pp = pp->GetNext();
-  }
-  // Set user info = 0???
-  return newPP;
-}
-
-// Not needed?
-void DeleteParticles(G4PrimaryParticle* pp)
-{
-  while (pp) {
-    G4PrimaryParticle* daughters = pp->GetDaughter();
-    DeleteParticles(daughters);
-    G4PrimaryParticle* oldPP = pp;
-    pp = pp->GetNext();
-    delete oldPP;
-  }
-}
-
-G4PrimaryVertex* CopyVertices(G4PrimaryVertex* pv)
-{
-  G4PrimaryVertex* newPV = 0;
-  G4PrimaryVertex* previousPV = 0;
-  while (pv) {
-    G4PrimaryVertex* tmpPV = new G4PrimaryVertex(*pv);
-    tmpPV->ClearNextVertexPointer();
-    G4PrimaryParticle* primaryParticle = pv->GetPrimary();
-    G4PrimaryParticle* newPrimaryParticle = CopyParticles(primaryParticle);
-    tmpPV->SetPrimary(newPrimaryParticle);
-    if (!newPV) newPV = tmpPV;
-    else previousPV->SetNext(tmpPV);
-    previousPV = tmpPV;
-    pv = pv->GetNext();
-  }
-  // Set user info = 0???
-  return newPV;
-}
-
-// Not needed?
-void DeleteVertices(G4PrimaryVertex* pv)
-{
-  while (pv) {
-    G4PrimaryParticle* primaryParticle = pv->GetPrimary();
-    DeleteParticles(primaryParticle);
-    G4PrimaryVertex* oldPV = pv;
-    pv = pv->GetNext();
-    delete oldPV;
-  }
-}
-
-G4Event* CreateDeepCopy(const G4Event* event)
-{
-  G4Event* newEvent = new G4Event(*event);
-  G4PrimaryVertex* primaryVertex = event->GetPrimaryVertex();
-  G4PrimaryVertex* newPrimaryVertex = CopyVertices(primaryVertex);
-  newEvent->AddPrimaryVertex(newPrimaryVertex);
-  // Set user info = 0???
-  return newEvent;
-}
-
-// Not needed?
-void DeleteEvent(G4Event* event)
-{
-  if (event) {
-    G4PrimaryVertex* primaryVertex = event->GetPrimaryVertex();
-    DeleteVertices(primaryVertex);
-    delete event;
-  }
-}
-************ Event copy stuff ***********************************/
-
 void G4VisManager::BeginOfRun ()
 {
   //G4cout << "G4VisManager::BeginOfRun" << G4endl;
   fEventCount = 0;
   fTransientsDrawnThisRun = false;
   if (fpSceneHandler) fpSceneHandler->SetTransientsDrawnThisRun(false);
-/************* Event copy stuff *******************************
   if (!fReprocessing) {
+    delete fpLastEvent; fpLastEvent = 0;
     fEventsRandomStatus.clear();
-    std::vector<G4Event*>::iterator i;
-    //for (i = fEvents.begin(); i != fEvents.end(); ++i) DeleteEvent(*i);
-    for (i = fEvents.begin(); i != fEvents.end(); ++i) delete *i;
+    for (size_t i = 0; i < fEvents.size(); ++i) delete fEvents[i];
     fEvents.clear();
   }
-************ Event copy stuff ***********************************/
 }
 
 void G4VisManager::BeginOfEvent ()
@@ -1141,22 +1100,12 @@ void G4VisManager::BeginOfEvent ()
 			 // BeginOfRun.
       fBeginOfLastRunRandomStatus =
         runManager->GetRandomNumberStatusForThisRun();
-      /*************************************************
-      std::ostringstream oss;
-      CLHEP::HepRandom::saveFullState(oss);
-      fBeginOfLastRunRandomStatus = oss.str();
-      ************************************************/
       const G4Run* currentRun = runManager->GetCurrentRun();
       if (currentRun) fLastRunID = currentRun->GetRunID();
       else fLastRunID++;
     }
     fBeginOfLastEventRandomStatus =
       runManager->GetRandomNumberStatusForThisEvent();
-    /*************************************************
-    std::ostringstream oss;
-    CLHEP::HepRandom::saveFullState(oss);
-    fBeginOfLastEventRandomStatus = oss.str();
-    ************************************************/
     G4Event* currentEvent =
       G4EventManager::GetEventManager()->GetNonconstCurrentEvent();
     if (currentEvent) {
@@ -1164,7 +1113,7 @@ void G4VisManager::BeginOfEvent ()
       else fLastEventID = currentEvent->GetEventID();
     }
 
-    /************* Event copy stuff *******************************
+    /* Record event in case required for transient re-computation...
     // If not triggered by transient re-computation in
     // G4VSceneHandler::ProcessScene (and re-computation requested)...
     if (!fReprocessing && fpScene && fpScene->GetRecomputeTransients()) {
@@ -1172,14 +1121,33 @@ void G4VisManager::BeginOfEvent ()
 	G4EventManager::GetEventManager()->GetConstCurrentEvent();
       std::ostringstream oss;
       CLHEP::HepRandom::saveFullState(oss);
-      fLastEventRandomStatus = oss.str();
-      fLastEvent = CreateDeepCopy(event);
-      if (!fpScene->GetRefreshAtEndOfEvent()) {
-	fEventsRandomStatus.push_back(fLastEventRandomStatus);
-	fEvents.push_back(fLastEvent);
+      if (fpScene->GetRefreshAtEndOfEvent()) {
+	fLastEventRandomStatus = oss.str();
+	delete fpLastEvent;
+	fpLastEvent = event->CreateCopyWithIDAndPrimaries();
+      } else {
+	G4int currentSize = fEvents.size();
+	if (fMaxNumberOfEventsForReprocessing > 0 &&
+	    currentSize >= fMaxNumberOfEventsForReprocessing) {
+	  G4cout << "G4VisManager::BeginOfEvent: Requesting more than "
+		 << fMaxNumberOfEventsForReprocessing
+		 << " events for transients reprocessing."
+	    "\n  Transients reprocessing suspended."
+	    "\n  Re-activate with \"/vis/scene/transientsAction rerun <N>\","
+	    "\n  where N is the maximum number you wish to allow."
+	    "\n  N < 0 means \"unlimited\"."
+		 << G4endl;
+	  fpScene->SetRecomputeTransients(false);
+	  fEventsRandomStatus.clear();
+	  for (size_t i = 0; i < fEvents.size(); ++i) delete fEvents[i];
+	  fEvents.clear();
+	} else {
+	  fEventsRandomStatus.push_back(oss.str());
+	  fEvents.push_back(event->CreateCopyWithIDAndPrimaries());
+	}
       }
     }
-    ************ Event copy stuff ***********************************/
+    */
 
   }
   fTransientsDrawnThisEvent = false;
@@ -1258,6 +1226,18 @@ void G4VisManager::ClearTransientStoreIfMarked(){
   // transient reprocessing is not done too early.
   fTransientsDrawnThisEvent = fpSceneHandler->GetTransientsDrawnThisEvent();
   fTransientsDrawnThisRun = fpSceneHandler->GetTransientsDrawnThisRun();
+}
+
+void G4VisManager::ResetTransientsDrawnFlags()
+{
+  fTransientsDrawnThisRun = false;
+  fTransientsDrawnThisEvent = false;
+  G4SceneHandlerListConstIterator i;
+  for (i = fAvailableSceneHandlers.begin();
+       i != fAvailableSceneHandlers.end(); ++i) {
+    (*i)->SetTransientsDrawnThisEvent(false);
+    (*i)->SetTransientsDrawnThisRun(false);
+  }
 }
 
 G4String G4VisManager::ViewerShortName (const G4String& viewerName) const {
