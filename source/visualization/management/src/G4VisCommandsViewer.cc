@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewer.cc,v 1.60 2006-06-29 21:29:48 gunter Exp $
+// $Id: G4VisCommandsViewer.cc,v 1.61 2006-07-03 19:32:44 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer commands - John Allison  25th October 1998
@@ -107,6 +107,55 @@ void G4VisCommandViewerClear::SetNewValue (G4UIcommand*, G4String newValue) {
   viewer->FinishView();
   if (verbosity >= G4VisManager::confirmations) {
     G4cout << "Viewer \"" << clearName << "\" cleared." << G4endl;
+  }
+
+}
+
+////////////// /vis/viewer/clearTransients //////////////////////////
+
+G4VisCommandViewerClearTransients::G4VisCommandViewerClearTransients () {
+  G4bool omitable, currentAsDefault;
+  fpCommand = new G4UIcmdWithAString ("/vis/viewer/clearTransients", this);
+  fpCommand -> SetGuidance ("Clears transients from viewer.");
+  fpCommand -> SetGuidance 
+  ("By default, operates on current viewer.  Specified viewer becomes current."
+     "\n\"/vis/viewer/list\" to see  possible viewer names.");
+  fpCommand -> SetParameterName ("viewer-name",
+				 omitable = true,
+				 currentAsDefault = true);
+}
+
+G4VisCommandViewerClearTransients::~G4VisCommandViewerClearTransients () {
+  delete fpCommand;
+}
+
+G4String G4VisCommandViewerClearTransients::GetCurrentValue (G4UIcommand*) {
+  G4VViewer* viewer = fpVisManager -> GetCurrentViewer ();
+    return viewer ? viewer -> GetName () : G4String("none");
+}
+
+void G4VisCommandViewerClearTransients::SetNewValue (G4UIcommand*, G4String newValue) {
+
+  G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
+
+  G4String& clearName = newValue;
+  G4VViewer* viewer = fpVisManager -> GetViewer (clearName);
+  if (!viewer) {
+    if (verbosity >= G4VisManager::errors) {
+      G4cout << "ERROR: Viewer \"" << clearName
+	     << "\" not found - \"/vis/viewer/list\" to see possibilities."
+	     << G4endl;
+    }
+    return;
+  }
+
+  G4VSceneHandler* sceneHandler = viewer->GetSceneHandler();
+  sceneHandler->SetMarkForClearingTransientStore(false);
+  fpVisManager->ResetTransientsDrawnFlags();
+  sceneHandler->ClearTransientStore();
+  if (verbosity >= G4VisManager::confirmations) {
+    G4cout << "Viewer \"" << clearName << "\" cleared of transients."
+	   << G4endl;
   }
 
 }
