@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ASCIITreeSceneHandler.cc,v 1.29 2006-06-29 21:24:57 gunter Exp $
+// $Id: G4ASCIITreeSceneHandler.cc,v 1.30 2006-07-03 16:46:45 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -181,7 +181,7 @@ void G4ASCIITreeSceneHandler::RequestPrimitives(const G4VSolid& solid) {
   typedef G4PhysicalVolumeModel::G4PhysicalVolumeNodeID PVNodeID;
   typedef std::vector<PVNodeID> PVPath;
   const PVPath& drawnPVPath = pPVModel->GetDrawnPVPath();
-  G4int currentDepth = pPVModel->GetCurrentDepth();
+  //G4int currentDepth = pPVModel->GetCurrentDepth();
   G4VPhysicalVolume* pCurrentPV = pPVModel->GetCurrentPV();
   G4LogicalVolume* pCurrentLV = pPVModel->GetCurrentLV();
   G4Material* pCurrentMaterial = pPVModel->GetCurrentMaterial();
@@ -207,8 +207,10 @@ void G4ASCIITreeSceneHandler::RequestPrimitives(const G4VSolid& solid) {
 	  thisID->GetPhysicalVolume()->GetLogicalVolume()) {
 	// For each one previously found (if more than one, they must
 	// have different mothers)...
+	// To avoid compilation errors on VC++ .Net 7.1...
 	// Previously:
 	//   PVNodeID previousMotherID = ++(i->rbegin());
+	// (Should that have been: PVNodeID::const_iterator previousMotherID?)
 	// Replace
 	//   previousMotherID == i->rend()
 	// by
@@ -239,7 +241,7 @@ void G4ASCIITreeSceneHandler::RequestPrimitives(const G4VSolid& solid) {
 
   // Print indented text...
   if (pCurrentPV) {
-    for (G4int i = 0; i < currentDepth; i++ ) *fpOutFile << "  ";
+    for (size_t i = 0; i < drawnPVPath.size(); i++ ) *fpOutFile << "  ";
 
     *fpOutFile << "\"" << pCurrentPV->GetName()
 	       << "\":" << pCurrentPV->GetCopyNo();
