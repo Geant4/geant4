@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AttCheck.cc,v 1.8 2006-06-29 19:06:34 gunter Exp $
+// $Id: G4AttCheck.cc,v 1.9 2006-07-03 11:00:16 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4AttCheck.hh"
@@ -50,12 +50,14 @@ G4AttCheck::G4AttCheck
     fUnitCategories.insert("Energy");
     fUnitCategories.insert("Time");
     fUnitCategories.insert("Electric charge");
+    fUnitCategories.insert("Volumic Mass");  // (Density)
 
     // Corresponding Standard Units...
     fStandardUnits["Length"] = "m";
     fStandardUnits["Energy"] = "MeV";
     fStandardUnits["Time"] = "ns";
     fStandardUnits["Electric charge"] = "e+";
+    fStandardUnits["Volumic Mass"] = "kg/m3";
 
     // Legal Categories...
     fCategories.insert("Bookkeeping");
@@ -86,6 +88,7 @@ G4AttCheck::G4AttCheck
     fValueTypes.insert("G4int");
     fValueTypes.insert("G4double");
     fValueTypes.insert("G4ThreeVector");
+    fValueTypes.insert("G4bool");
   }
 }
 
