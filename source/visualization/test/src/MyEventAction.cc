@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: MyEventAction.cc,v 1.14 2006-06-29 21:34:26 gunter Exp $
+// $Id: MyEventAction.cc,v 1.15 2006-07-03 16:56:11 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -88,9 +88,10 @@ void MyEventAction::EndOfEventAction(const G4Event* anEvent)
 #endif
 
   if (coutCount < 10) {
-    G4cout << ">>> Run "
-	<< G4RunManager::GetRunManager()->GetCurrentRun()->GetRunID()
-	<< " Event " << anEvent->GetEventID() << G4endl;
+    G4RunManager* runManager = G4RunManager::GetRunManager();
+    const G4Run* currentRun = runManager? runManager->GetCurrentRun(): 0;
+    if (currentRun) G4cout << ">>> Run " << currentRun->GetRunID();
+    G4cout << " Event " << anEvent->GetEventID() << G4endl;
   }
 
 #ifdef DRAWTRAJHIT
@@ -139,10 +140,11 @@ void MyEventAction::EndOfEventAction(const G4Event* anEvent)
     scale.SetVisAttributes(va);
     pVVisManager->Draw(scale);
 
+    G4RunManager* runManager = G4RunManager::GetRunManager();
+    const G4Run* currentRun = runManager? runManager->GetCurrentRun(): 0;
     std::ostringstream oss;
-    oss << "Run "
-	<< G4RunManager::GetRunManager()->GetCurrentRun()->GetRunID()
-	<< " Event " << anEvent->GetEventID();
+    if (currentRun) oss << "Run " << currentRun->GetRunID();
+    oss << " Event " << anEvent->GetEventID();
     //G4Text text(oss.str(), G4Point3D(400.*cm, 400.*cm, -400.*cm));
     G4Text text(oss.str(), G4Point3D(0., -0.9, 0.));
     text.SetScreenSize(18);
