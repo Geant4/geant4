@@ -1,9 +1,12 @@
-$Id: History,v 1.98 2006-07-03 16:56:42 allison Exp $
+$Id: History,v 1.99 2006-07-03 16:57:20 allison Exp $
 
 History file for visualization/test subdirectory
 ------------------------------------------------
 
 $Log: not supported by cvs2svn $
+Revision 1.98  2006/07/03 16:56:42  allison
+Protect against zero run manager pointer.
+
 Revision 1.97  2006/06/05 08:13:38  perl
 Update history
 
