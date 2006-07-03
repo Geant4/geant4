@@ -1,4 +1,4 @@
-$Id: History,v 1.73 2006-06-07 22:14:04 allison Exp $
+$Id: History,v 1.74 2006-07-03 19:23:06 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,12 @@ committal in the CVS repository !
 
 History file for visualization/modeling
 ---------------------------------------
+
+3rd July 2006  John Allison  (modeling-V08-01-00)
+- Needs greps-V08-01-00.
+- G4PhysicalVolumeModel::G4PhysicalVolumeNodeID: Added GetNonCulledDepth.
+- G4PhysicalVolumeModel.cc: Also added G4Atts for solids.
+- G4TrajectoriesModel.cc: Added debug code.
 
 7th June 2006  John Allison (modeling-V08-00-14)
 - G4PhysicalVolumeModel.cc: Added protection for zero vis atts.
