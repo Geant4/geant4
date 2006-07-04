@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst21DetectorMessenger.cc,v 1.3 2006-06-29 21:48:27 gunter Exp $
+// $Id: Tst21DetectorMessenger.cc,v 1.4 2006-07-04 09:27:20 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -47,10 +47,10 @@ Tst21DetectorMessenger::Tst21DetectorMessenger(Tst21DetectorConstruction * myDC)
 
   selMatCmd = new G4UIcmdWithAString("/mydet/SelectMaterial",this);
   selMatCmd->SetGuidance("Select Material of the SimpleBox.");
-  selMatCmd->SetGuidance("  Choice : Air, Al, Pb (default)");
+  selMatCmd->SetGuidance("  Choice : Air, He, Be, C, Al, Pb (default)");
   selMatCmd->SetParameterName("choice",true);
   selMatCmd->SetDefaultValue("Pb");
-  selMatCmd->SetCandidates("Air Al Pb");
+  selMatCmd->SetCandidates("Air He Be C Al Pb");
   selMatCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   myDetector->SelectMaterial(defParam="Pb");

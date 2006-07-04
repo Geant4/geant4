@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst21DetectorConstruction.cc,v 1.3 2006-06-29 21:48:25 gunter Exp $
+// $Id: Tst21DetectorConstruction.cc,v 1.4 2006-07-04 09:27:20 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -44,7 +44,7 @@
 #include "G4ios.hh"
 
 Tst21DetectorConstruction::Tst21DetectorConstruction()
-:simpleBoxLog(0),selectedMaterial(0),Air(0),Al(0),Pb(0)
+:simpleBoxLog(0),selectedMaterial(0),Air(0),He(0),Be(0),C(0),Al(0),Pb(0)
 {
   detectorMessenger = new Tst21DetectorMessenger(this);
   materialChoice = "Pb";
@@ -82,6 +82,27 @@ void Tst21DetectorConstruction::SelectMaterialPointer()
     Air->AddElement(elO, .3);
   }
 
+  if(!He)
+  {
+    a = 4.0027*g/mole;
+    density = 2.*g/cm3; // Unnatural, just for the test
+    He = new G4Material(name="Helium", z=2., a, density);
+  }
+
+  if(!Be)
+  {
+    a = 9.012*g/mole;
+    density = 1.848*g/cm3;
+    Be = new G4Material(name="Beryllium", z=4., a, density);
+  }
+
+  if(!C)
+  {
+    a = 12.*g/mole;
+    density = 2.27*g/cm3;
+    C = new G4Material(name="Carbon", z=6., a, density);
+  }
+
   if(!Al)
   {
     a = 26.98*g/mole;
@@ -96,12 +117,12 @@ void Tst21DetectorConstruction::SelectMaterialPointer()
     Pb = new G4Material(name="Lead", z=82., a, density);
   }
 
-  if(materialChoice=="Air")
-  { selectedMaterial = Air; }
-  else if(materialChoice=="Al")
-  { selectedMaterial = Al; }
-  else
-  { selectedMaterial = Pb; }
+  if    (materialChoice=="Air") selectedMaterial = Air;
+  else if(materialChoice=="He") selectedMaterial = He;
+  else if(materialChoice=="Be") selectedMaterial = Be;
+  else if(materialChoice=="C")  selectedMaterial = C;
+  else if(materialChoice=="Al") selectedMaterial = Al;
+  else                          selectedMaterial = Pb;
 
   if(simpleBoxLog)
   { simpleBoxLog->SetMaterial(selectedMaterial); }

@@ -311,12 +311,12 @@ void Tst21PhysicsList::ConstructHad()
     
     // a cascade interface interface to chiral invriant phase space decay
     // at particle level.
-    G4StringChipsParticleLevelInterface * theCascade = new G4StringChipsParticleLevelInterface();
+    G4StringChipsParticleLevelInterface* theCascade = new G4StringChipsParticleLevelInterface();
 	
     // here come the high energy parts
     // the string model; still not quite according to design - Explicite use of the forseen interfaces 
     // will be tested and documented in this program by beta-02 at latest.
-    G4VPartonStringModel * theStringModel;
+    G4VPartonStringModel* theStringModel;
     theStringModel = new G4QGSModel<G4QGSParticipants>;
     theTheoModel->SetTransport(theCascade);
     theTheoModel->SetHighEnergyGenerator(theStringModel);
