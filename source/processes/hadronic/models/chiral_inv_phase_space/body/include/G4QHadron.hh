@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QHadron.hh,v 1.31 2006-06-29 20:06:15 gunter Exp $
+// $Id: G4QHadron.hh,v 1.32 2006-07-05 08:24:16 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QHadron ----------------
@@ -135,11 +135,11 @@ inline void            G4QHadron::SetQPDG(const G4QPDGCode& newQPDG)
   //  theQPDG=G4QPDGCode(22);
   //  valQ=G4QContent(0,0,0,0,0,0);    
   //}
-  else if(PDG>80000000)DefineQC(PDG);
+  else if(PDG>80000000) DefineQC(PDG);
   else
   {
     G4cerr<<"***G4QHadron::SetQPDG: QPDG="<<newQPDG<<G4endl;
-    throw G4QException("***G4QHadron::SetQPDG: Impossible QPDG");
+    throw G4QException("***G4QHadron::SetQPDG: Impossible QPDG Probably a Chipolino");
   }
 }
 inline void   G4QHadron::SetQC(const G4QContent& newQC)              {valQ=newQC;}
