@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronInelasticQBBC.cc,v 1.8 2006-06-29 18:03:05 gunter Exp $
+// $Id: G4HadronInelasticQBBC.cc,v 1.9 2006-07-05 16:12:43 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -33,6 +33,7 @@
 // Author: 11 April 2006 V. Ivanchenko
 //
 // Modified:
+// 05.07.2006 V.Ivanchenko fix problem of initialisation of HP
 //
 //----------------------------------------------------------------------------
 //
@@ -74,8 +75,11 @@ G4HadronInelasticQBBC::G4HadronInelasticQBBC(const G4String& name,
   : G4VPhysicsConstructor(name), verbose(ver), ftfFlag(ftf), bertFlag(bert), 
     chipsFlag(chips), hpFlag(hp), wasActivated(false)
 {
-  if(verbose > 1) G4cout << "### HadronInelasticQBBC" << G4endl;
+  if(verbose > -1) G4cout << "### HadronInelasticQBBC" << G4endl;
   store = G4HadronProcessStore::Instance();
+  theHPXSecI = 0;
+  theHPXSecC = 0;
+  theHPXSecF = 0;
 }
 
 G4HadronInelasticQBBC::~G4HadronInelasticQBBC()
@@ -86,6 +90,9 @@ G4HadronInelasticQBBC::~G4HadronInelasticQBBC()
     delete theQGStringModel;
     delete theFTFStringDecay;
     delete theFTFStringModel;
+    delete theHPXSecI;
+    delete theHPXSecC;
+    delete theHPXSecF;
   }
 }
 
@@ -201,10 +208,13 @@ void G4HadronInelasticQBBC::ConstructProcess()
 
 	G4double emin = 0.0;
 	if(hpFlag) {
-	  emin = 19.9;
-	  hp->AddDataSet(&theHPXSecI);
-	  theNeutronCapture->AddDataSet(&theHPXSecC);
-	  theNeutronFission->AddDataSet(&theHPXSecF);
+	  emin = 19.5*MeV;
+          theHPXSecI = new G4NeutronHPInelasticData;
+          theHPXSecC = new G4NeutronHPCaptureData;
+	  theHPXSecF = new G4NeutronHPFissionData;
+	  hp->AddDataSet(theHPXSecI);
+	  theNeutronCapture->AddDataSet(theHPXSecC);
+	  theNeutronFission->AddDataSet(theHPXSecF);
           G4NeutronHPInelastic* hpi = new G4NeutronHPInelastic();
           G4NeutronHPCapture* hpc = new G4NeutronHPCapture();
           G4NeutronHPFission* hpf = new G4NeutronHPFission();
