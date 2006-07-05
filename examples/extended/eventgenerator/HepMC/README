@@ -4,26 +4,22 @@
   This directory contains examples for using HepMC as an interface with 
 various Monte Carlo event generators, such as PYTHIA. 
 
-  In the version 1.80 of CLHEP, HepMC is merged into a part of CLHEP.
-Toghether with this migration, the generic interfaces with HepMC is 
-provied in the G4 main tree from the release of Geant4.5.0.
-But there are differences between the original HepMC and the CLHEP version
-in terms of the I/O scheme. So, in this directory, a pair of codes for 
-each example, one for original HepMC and the other for the CLHEP version 
-which is tagged with "-clhep", is prepared.
-
+  HepMC is also currently part of CLHEP, but there are differences between
+the original HepMC package and the one included in CLHEP in terms of the I/O.
+Two examples are shown here: one for original HepMC and the other for the
+CLHEP version (tagged with "-clhep").
 
 Requirements for external software packages
 -------------------------------------------
-HepMC (now, migrated into CLHEP(1.80))
-  tested version : 1.21 (latest at 28/May/02)
-  URL: http://mdobbs.home.cern.ch/mdobbs/HepMC/
+HepMC:
+  tested version : 1.27.02
+  http://lcgapp.cern.ch/project/spi/extsoft/packages.php?pkg=HepMC
+  http://cern.ch/mdobbs/HepMC/
 
-  Note that the original HepMC can be currently compiled only with gcc, 
-  so examples were tested only with gcc.
+  Note: examples were tested only on Linux with gcc.
 
 PYTHIA
-  tested version 6.205
+  Tested version 6.205 (CERNLIB 2005)
   URL: http://www.thep.lu.se/~torbjorn/Pythia.html
 
 
@@ -95,16 +91,13 @@ hepmc_ascii.in
 
 How to compile
 --------------
-To build these examples, directory names including HepMC and PYTHIA 
-library have to be given in GNUmakefile.  Please modify the next two lines 
-in GNUmakefile;
-
-  HEPMC_DIR   := xxxxx    # HepMC installed directory
-                            (required only for using the original version)
-  CERNLIB_DIR := xxxxx    # directory including PYTHIA library
+To build HepMCEx01 and HepMCEx02 examples, the directory path where the
+HepMC package is installed must be provided through the variable HEPMC_DIR.
+PYTHIA 6.205 must be installed through CERNLIB 2005 and the bin path correctly
+added in PATH.
 
 Notes
 -----
 We attached a sample HepMC Ascii data file, "data/example_MyPhyia.dat",
-which contains ten PYTHIA events created by "data/example_MyPythia.cxx(cc)".
+which contains 10 PYTHIA events created by "data/example_MyPythia.cxx(cc)".
 
