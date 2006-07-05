@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronInelasticQLHEP.cc,v 1.7 2006-07-05 16:12:43 vnivanch Exp $
+// $Id: G4HadronInelasticQLHEP.cc,v 1.8 2006-07-05 17:17:11 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -323,6 +323,7 @@ void G4HadronInelasticQLHEP::ConstructProcess()
 	       << " added for " << pname << G4endl;
     }
   }
+  store->Dump(verbose);
 }
 
 void G4HadronInelasticQLHEP::AddLEP(G4ParticleDefinition* particle,

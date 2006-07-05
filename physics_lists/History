@@ -1,4 +1,4 @@
-$Id: History,v 1.23 2006-06-24 14:41:50 vnivanch Exp $
+$Id: History,v 1.24 2006-07-05 17:17:11 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,11 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+05.07.2006, V.Ivanchenko - phys-lists-V08-01-00
+- Fix initialisation problem for QBBC_HP
+- Fix HP regime for G4NadronElasticPhysics
+- Add cout of the list of processes and models for QBBC
 
 24.06.2006, V.Ivanchenko - phys-lists-V08-00-15
 - Fix typo in BinaryIon builder
