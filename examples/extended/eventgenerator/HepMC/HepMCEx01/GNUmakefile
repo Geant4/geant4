@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.3 2006-07-05 11:06:36 gcosmo Exp $
+# $Id: GNUmakefile,v 1.4 2006-07-05 11:53:02 gcosmo Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -24,7 +24,7 @@ include $(G4INSTALL)/config/binmake.gmk
 
 # if you do not use Pythia library, comment out the next line.
 #
-#G4LIB_USE_PYTHIA := 1
+G4LIB_USE_PYTHIA := 1
 ifdef G4LIB_USE_PYTHIA
   CPPFLAGS += -DG4LIB_USE_PYTHIA
 endif
