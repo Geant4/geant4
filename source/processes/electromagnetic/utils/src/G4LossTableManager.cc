@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.cc,v 1.73 2006-06-27 14:04:38 vnivanch Exp $
+// $Id: G4LossTableManager.cc,v 1.74 2006-07-05 17:44:51 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -61,6 +61,7 @@
 // 23-03-06 Set flag isIonisation (VI)
 // 10-05-06 Add methods  SetMscStepLimitation, FacRange and MscFlag (VI)
 // 22-05-06 Add methods  Set/Get bremsTh (VI)
+// 05-06-06 Do not clear loss_table map between runs (VI)
 //
 // Class Description:
 //
@@ -194,6 +195,7 @@ void G4LossTableManager::Register(G4VEnergyLossProcess* p)
   all_tables_are_built = false;
   if(!lossFluctuationFlag) p->SetLossFluctuations(false);
   if(subCutoffFlag)        p->ActivateSubCutoff(true);
+  if(rndmStepFlag)         p->SetRandomStep(true);
   if(stepFunctionActive)   p->SetStepFunction(maxRangeVariation, maxFinalStep);
   if(integralActive)       p->SetIntegral(integral);
   if(minEnergyActive)      p->SetMinKinEnergy(minKinEnergy);
@@ -614,8 +616,13 @@ void G4LossTableManager::SetMinSubRange(G4double val)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-void G4LossTableManager::SetRandomStep(G4bool)
-{}
+void G4LossTableManager::SetRandomStep(G4bool val)
+{
+  rndmStepFlag = val;
+  for(G4int i=0; i<n_loss; i++) {
+    if(loss_vector[i]) loss_vector[i]->SetRandomStep(val);
+  }
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
