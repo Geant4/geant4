@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.cc,v 1.11 2006-06-29 17:24:21 gunter Exp $
+// $Id: PhysicsList.cc,v 1.12 2006-07-06 09:22:49 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /////////////////////////////////////////////////////////////////////////
@@ -255,6 +255,12 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     SetStandardList(true);
     hadronPhys.push_back( new G4HadronInelasticQBBC("QBBC",verboseLevel,
 						    false,false,false,true));
+
+  } else if (name == "QBEC_HP") {
+
+    SetStandardList(true);
+    hadronPhys.push_back( new G4HadronInelasticQBBC("QBBC",verboseLevel,
+						    false,true,false,true));
 
   } else if (name == "QBBC_CHIPS") {
 

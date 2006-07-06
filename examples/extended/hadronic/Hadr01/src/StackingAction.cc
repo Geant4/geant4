@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: StackingAction.cc,v 1.3 2006-06-29 17:24:30 gunter Exp $
+// $Id: StackingAction.cc,v 1.4 2006-07-06 09:22:49 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /////////////////////////////////////////////////////////////////////////
@@ -85,6 +85,7 @@ StackingAction::ClassifyNewTrack(const G4Track* aTrack)
 	   << " with E(MeV)= " << histoManager->CurrentKinEnergy()/MeV
 	   << G4endl;
   }
+  if(aTrack->GetTrackID() == 1) return status;
 
   //stack or delete secondaries
   if (killSecondary)      status = fKill;
