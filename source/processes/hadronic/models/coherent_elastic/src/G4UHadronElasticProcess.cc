@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UHadronElasticProcess.cc,v 1.16 2006-07-06 17:44:46 vnivanch Exp $
+// $Id: G4UHadronElasticProcess.cc,v 1.17 2006-07-06 18:11:12 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Geant4 Hadron Elastic Scattering Process -- header file
@@ -32,7 +32,7 @@
 //  
 // Modified:
 // 24-Apr-06 V.Ivanchenko add neutron scattering on hydrogen from CHIPS
-// 07-Jun-06 V.Ivanchenko fix problem of rotation
+// 07-Jun-06 V.Ivanchenko fix problem of rotation of final state
 //
 //
 
