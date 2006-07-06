@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.9 2006-04-29 02:24:01 asaim Exp $
+# $Id: GNUmakefile,v 1.10 2006-07-06 15:31:13 asaim Exp $
 # ------------------------------------------------------------
 # GNUmakefile for transportation library.  G.Folger 10-Dec-97.
 # ------------------------------------------------------------
@@ -26,9 +26,7 @@ CPPFLAGS += \
             -I$(G4BASE)/processes/cuts/include \
 	    -I$(G4BASE)/particles/management/include \
 	    -I$(G4BASE)/materials/include \
-	    -I$(G4BASE)/intercoms/include \
-	    -I$(G4BASE)/digits_hits/detector/include \
-	    -I$(G4BASE)/digits_hits/hits/include
+	    -I$(G4BASE)/intercoms/include
 
 ifdef G4DEBUG_TRANSPORT
   CPPFLAGS += -DG4DEBUG_TRANSPORT
