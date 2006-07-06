@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UHadronElasticProcess.cc,v 1.15 2006-06-29 20:09:37 gunter Exp $
+// $Id: G4UHadronElasticProcess.cc,v 1.16 2006-07-06 17:44:46 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Geant4 Hadron Elastic Scattering Process -- header file
@@ -32,6 +32,7 @@
 //  
 // Modified:
 // 24-Apr-06 V.Ivanchenko add neutron scattering on hydrogen from CHIPS
+// 07-Jun-06 V.Ivanchenko fix problem of rotation
 //
 //
 
@@ -250,6 +251,7 @@ G4VParticleChange* G4UHadronElasticProcess::PostStepDoIt(
     ChooseHadronicInteraction( kineticEnergy, material, elm);
 
   // Initialize the hadronic projectile from the track
+  //  G4cout << "track " << track.GetDynamicParticle()->Get4Momentum()<<G4endl;
   G4HadProjectile thePro(track);
   if(verboseLevel>1) 
     G4cout << "G4UHadronElasticProcess::PostStepDoIt for " 
@@ -260,18 +262,26 @@ G4VParticleChange* G4UHadronElasticProcess::PostStepDoIt(
 
   aParticleChange.Initialize(track);
   G4HadFinalState* result = hadi->ApplyYourself(thePro, targetNucleus);
+  G4ThreeVector indir = track.GetMomentumDirection();
+  G4ThreeVector outdir = (result->GetMomentumChange()).rotateUz(indir);
   
   if(verboseLevel>1) 
     G4cout << "Efin= " << result->GetEnergyChange()
 	   << " de= " << result->GetLocalEnergyDeposit()
 	   << " nsec= " << result->GetNumberOfSecondaries()
+	   << " dir= " << outdir
 	   << G4endl;
   
   aParticleChange.ProposeEnergy(result->GetEnergyChange());
-  aParticleChange.ProposeMomentumDirection(result->GetMomentumChange());
+  aParticleChange.ProposeMomentumDirection(outdir);
   if(result->GetNumberOfSecondaries() > 0) {
     aParticleChange.SetNumberOfSecondaries(1);
     G4DynamicParticle* p = result->GetSecondary(0)->GetParticle();
+    G4ThreeVector pdir = p->GetMomentumDirection();
+    // G4cout << "recoil " << pdir << G4endl;
+    pdir = pdir.rotateUz(indir);
+    // G4cout << "recoil rotated " << pdir << G4endl;
+    p->SetMomentumDirection(pdir);
     aParticleChange.AddSecondary(p);
   } else {
     aParticleChange.SetNumberOfSecondaries(0);
