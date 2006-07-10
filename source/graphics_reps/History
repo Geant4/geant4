@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.100 2006-07-10 15:20:11 allison Exp $
+cvs log $Id: History,v 1.101 2006-07-10 15:23:10 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -18,6 +18,7 @@ committal in the CVS repository !
      ----------------------------------------------------------
 
 10th July 2006  John Allison  (greps-V08-01-01)
+- Co-works with vis-V08-01-01.
 - G4VGraphicsScene.hh: Removed Establish/DecommissionSpecials.
 - G4VisAttributes:
   o Added ForceLineSegmentsPerCircle.
