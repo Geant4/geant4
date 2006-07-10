@@ -1,4 +1,4 @@
-$Id: History,v 1.63 2006-07-03 20:23:07 allison Exp $
+$Id: History,v 1.64 2006-07-10 15:55:12 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -24,6 +24,14 @@ committal in the CVS repository !
 
 History file for visualization management sub-category
 ------------------------------------------------------
+
+10th July 2006  John Allison (visman-V08-01-01)
+- Co-works with greps-V08-01-01.
+- G4VSceneHandler:
+  o Removed Establish/DecommissionSpecials.
+  o Respect rationalised G4ModelingParameters.
+  o Added GetNoOfSides that respects forced line segments per circle.
+- G4VisCommandsScene.cc: Spelling correction.
 
 3rd July 2006  John Allison (visman-V08-01-00)
 - /vis/scene/transientsAction: Added max number of events parameter.
