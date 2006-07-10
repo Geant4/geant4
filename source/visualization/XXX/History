@@ -1,4 +1,4 @@
-$Id: History,v 1.21 2006-07-03 16:53:08 allison Exp $
+$Id: History,v 1.22 2006-07-10 15:43:22 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,10 @@ committal in the CVS repository !
 
 History file for visualization/XXX sub-category (a template graphics system)
 ---------------------------------------------------------------------------
+
+10th July 2006  John Allison  (visXXX-V08-01-01)
+- G4XXXStoredSceneHandler.cc: Gets solid's G4Atts created by
+  G4PhysicalVolumeModel.
 
 3rd July 2006  John Allison  (visXXX-V08-01-00)
 - General tidy and improvement to XXXFile.
