@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.99 2006-07-03 11:00:39 allison Exp $
+cvs log $Id: History,v 1.100 2006-07-10 15:20:11 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+10th July 2006  John Allison  (greps-V08-01-01)
+- G4VGraphicsScene.hh: Removed Establish/DecommissionSpecials.
+- G4VisAttributes:
+  o Added ForceLineSegmentsPerCircle.
+  o Cosmetic re-oredering of methods,
 
 3rd July 2006  John Allison  (greps-V08-01-00)
 - G4AttCheck.cc:
