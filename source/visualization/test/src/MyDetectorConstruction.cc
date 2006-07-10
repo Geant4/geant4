@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: MyDetectorConstruction.cc,v 1.36 2006-06-29 21:34:22 gunter Exp $
+// $Id: MyDetectorConstruction.cc,v 1.37 2006-07-10 16:18:05 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -440,6 +440,7 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct()
   G4VisAttributes * PD_att_crystal
     = new G4VisAttributes(G4Colour(1.,0.,1.));
   PD_att_crystal->SetForceAuxEdgeVisible(true);
+  PD_att_crystal->SetForceLineSegmentsPerCircle(100);
   PD_log_crystal->SetVisAttributes(PD_att_crystal);
 
   G4RotationMatrix rm;
@@ -549,14 +550,14 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct()
   //-------------------------------------------- Elliptical Tube
   G4VSolid* eTube = new G4EllipticalTube("e-tube",100.*cm,50.*cm,100.*cm);
   G4LogicalVolume* eTubeLog = new G4LogicalVolume(eTube,Ar,"e-tube-log");
-  new G4PVPlacement(G4Translate3D(G4ThreeVector(-200.*cm,-200.*cm,0)),
+  new G4PVPlacement(G4Translate3D(G4ThreeVector(-400.*cm,0.,0)),
 		    "e-tube-phys", eTubeLog,
 		    experimentalHall_phys,false,0);
 
   //-------------------------------------------- G4Cons
   G4VSolid* eCons = new G4Cons("e-cons",50.*cm,70.*cm,100.*cm,140.*cm,200.*cm,0,twopi);
   G4LogicalVolume* eConsLog = new G4LogicalVolume(eCons,Ar,"e-cons-log");
-  new G4PVPlacement(G4Translate3D(G4ThreeVector(-200.*cm,-200.*cm,60*cm)),
+  new G4PVPlacement(G4Translate3D(G4ThreeVector(-300.*cm,-200.*cm,60*cm)),
 		    "e-cons-phys", eConsLog,
 		    experimentalHall_phys,false,0);
 
