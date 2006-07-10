@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4XXXStoredSceneHandler.cc,v 1.5 2006-07-03 16:52:50 allison Exp $
+// $Id: G4XXXStoredSceneHandler.cc,v 1.6 2006-07-10 15:41:40 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -45,6 +45,8 @@
 #include "G4Square.hh"
 #include "G4Polyhedron.hh"
 #include "G4UnitsTable.hh"
+#include "G4AttDef.hh"
+#include "G4AttValue.hh"
 #include "G4AttCheck.hh"
 
 #include <sstream>
@@ -91,14 +93,30 @@ void G4XXXStoredSceneHandler::PreAddSolid
 (const G4Transform3D& objectTransformation,
  const G4VisAttributes& visAttribs)
 {
-
-#ifdef G4XXXStoredDEBUG
-  const std::map<G4String,G4AttDef>* attDefs = visAttribs.GetAttDefs();
-  const std::vector<G4AttValue>* attValues = visAttribs.GetAttValues();
-  G4cout << G4AttCheck(attValues, attDefs) << G4endl;
-#endif
-
   G4VSceneHandler::PreAddSolid(objectTransformation, visAttribs);
+
+  // Get user G4Atts...
+  const std::map<G4String,G4AttDef>* userAttDefs = visAttribs.GetAttDefs();
+  if (userAttDefs) {
+#ifdef G4XXXStoredDEBUG
+    const std::vector<G4AttValue>* userAttValues = visAttribs.GetAttValues();
+    G4cout << G4AttCheck(userAttValues, userAttDefs) << G4endl;
+#endif
+  }
+
+  // Get solid's G4Atts created by G4PhysicalVolumeModel...
+  G4PhysicalVolumeModel* pPVModel =
+    dynamic_cast<G4PhysicalVolumeModel*>(fpModel);
+  if (pPVModel) {
+    const std::map<G4String,G4AttDef>* solidAttDefs = pPVModel->GetAttDefs();
+    if (solidAttDefs) {
+#ifdef G4XXXStoredDEBUG
+      const std::vector<G4AttValue>* solidAttValues = pPVModel->CreateAttValues();
+      G4cout << G4AttCheck(solidAttValues, solidAttDefs) << G4endl;
+      delete solidAttValues;  // These must be deleted after use.
+#endif
+    }
+  }
 
   // Create a place for current solid...
   fCurrentItem = fStore.insert(fStore.end(), G4String("\nPreAddSolid:\n"));
