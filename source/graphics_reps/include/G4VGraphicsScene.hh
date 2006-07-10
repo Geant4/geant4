@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VGraphicsScene.hh,v 1.8 2006-06-29 19:06:12 gunter Exp $
+// $Id: G4VGraphicsScene.hh,v 1.9 2006-07-10 15:19:29 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // John Allison  19th July 1996
 //
@@ -138,17 +138,6 @@ public: // With description
   virtual void AddPrimitive (const G4Polymarker&) = 0;
   virtual void AddPrimitive (const G4Polyhedron&) = 0;
   virtual void AddPrimitive (const G4NURBS&)      = 0;
-
-  ///////////////////////////////////////////////////////////////////
-  // Special functions for particular models.
-
-  virtual void EstablishSpecials (G4PhysicalVolumeModel&) {}
-  // Used to establish any special relationships between scene and
-  // this particular type of model - non-pure, i.e., no requirement to
-  // implement.  See G4PhysicalVolumeModel.hh for details.
-
-  virtual void DecommissionSpecials (G4PhysicalVolumeModel&) {}
-  // Used to reverse the effect of EstablishSpecials, if required.
 
 };
 
