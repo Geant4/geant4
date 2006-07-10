@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeModel.cc,v 1.48 2006-07-03 19:22:05 allison Exp $
+// $Id: G4PhysicalVolumeModel.cc,v 1.49 2006-07-10 15:59:59 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -95,12 +95,7 @@ G4PhysicalVolumeModel::G4PhysicalVolumeModel
   fpCurrentLV     (0),
   fpCurrentMaterial (0),
   fCurtailDescent (false),
-  fpClippingPolyhedron (0),
-  fpCurrentDepth     (0),
-  fppCurrentPV       (0),
-  fppCurrentLV       (0),
-  fppCurrentMaterial (0),
-  fpDrawnPVPath      (0)
+  fpClippingPolyhedron (0)
 {
   std::ostringstream o;
   o << fpTopPV -> GetCopyNo ();
@@ -124,16 +119,13 @@ void G4PhysicalVolumeModel::CalculateExtent ()
     const G4ModelingParameters* tempMP = fpMP;
     G4ModelingParameters mParams
       (0,      // No default vis attributes needed.
-       G4ModelingParameters::wireframe,
+       G4ModelingParameters::wf,  // wireframe (not relevant for this).
        true,   // Global culling.
        true,   // Cull invisible volumes.
        false,  // Density culling.
        0.,     // Density (not relevant if density culling false).
        true,   // Cull daughters of opaque mothers.
-       24,     // No of sides (not relevant for this operation).
-       true,   // View geometry.
-       false,  // View hits - not relevant for physical volume model.
-       false); // View digis - not relevant for physical volume model.
+       24);    // No of sides (not relevant for this operation).
     fpMP = &mParams;
     DescribeYourselfTo (bsScene);
     G4double radius = bsScene.GetRadius();
@@ -160,13 +152,8 @@ void G4PhysicalVolumeModel::DescribeYourselfTo
   if (!fpMP) G4Exception
     ("G4PhysicalVolumeModel::DescribeYourselfTo: No modeling parameters.");
 
-  sceneHandler.EstablishSpecials (*this);
-  // See .hh file for explanation of this mechanism.
-
   // For safety...
   fCurrentDepth = 0;
-  // ...and in working space in scene handler, if required...
-  if (fpCurrentDepth) *fpCurrentDepth = 0;
 
   G4Transform3D startingTransformation = fTransform;
 
@@ -182,21 +169,6 @@ void G4PhysicalVolumeModel::DescribeYourselfTo
   fpCurrentLV       = 0;
   fpCurrentMaterial = 0;
   fDrawnPVPath.clear();
-  // ...and in working space in scene handler, if required...
-  if (fpCurrentDepth)     *fpCurrentDepth     = 0;
-  if (fppCurrentPV)       *fppCurrentPV       = 0;
-  if (fppCurrentLV)       *fppCurrentLV       = 0;
-  if (fppCurrentMaterial) *fppCurrentMaterial = 0;
-  if (fpDrawnPVPath)      fpDrawnPVPath->clear();
-
-  sceneHandler.DecommissionSpecials (*this);
-
-  // Clear pointers to working space.
-  fpCurrentDepth     = 0;
-  fppCurrentPV       = 0;
-  fppCurrentLV       = 0;
-  fppCurrentMaterial = 0;
-  fpDrawnPVPath      = 0;
 }
 
 G4String G4PhysicalVolumeModel::GetCurrentTag () const
@@ -214,20 +186,6 @@ G4String G4PhysicalVolumeModel::GetCurrentTag () const
 G4String G4PhysicalVolumeModel::GetCurrentDescription () const
 {
   return "G4PhysicalVolumeModel " + GetCurrentTag ();
-}
-
-void G4PhysicalVolumeModel::DefinePointersToWorkingSpace
-(G4int*              pCurrentDepth,
- G4VPhysicalVolume** ppCurrentPV,
- G4LogicalVolume**   ppCurrentLV,
- G4Material**        ppCurrentMaterial,
- std::vector<G4PhysicalVolumeNodeID>* pDrawnPVPath)
-{
-  fpCurrentDepth     = pCurrentDepth;
-  fppCurrentPV       = ppCurrentPV;
-  fppCurrentLV       = ppCurrentLV;
-  fppCurrentMaterial = ppCurrentMaterial;
-  fpDrawnPVPath      = pDrawnPVPath;
 }
 
 void G4PhysicalVolumeModel::VisitGeometryAndGetVisReps
@@ -380,11 +338,6 @@ void G4PhysicalVolumeModel::DescribeAndDescend
   fpCurrentPV = pVPV;
   fpCurrentLV = pLV;
   fpCurrentMaterial = pMaterial;
-  // ...and store in scene handler's working space, if required...
-  if (fpCurrentDepth)     *fpCurrentDepth     = fCurrentDepth;
-  if (fppCurrentPV)       *fppCurrentPV       = pVPV;
-  if (fppCurrentLV)       *fppCurrentLV       = pLV;
-  if (fppCurrentMaterial) *fppCurrentMaterial = pMaterial;
 
   const G4RotationMatrix objectRotation = pVPV -> GetObjectRotationValue ();
   const G4ThreeVector&  translation     = pVPV -> GetTranslation ();
@@ -463,91 +416,13 @@ void G4PhysicalVolumeModel::DescribeAndDescend
 
   if (thisToBeDrawn) {
 
-    // Add G4Atts...
-    // Going to modify G4VisAttributes and restore at end...
-    G4VisAttributes* pNonConstVisAttribs = const_cast<G4VisAttributes*>(pVisAttribs);
-
-    // Remember existing G4Atts, if any (restore after)...
-    const std::map<G4String,G4AttDef>* priorAttDefs = pVisAttribs->GetAttDefs();
-    G4String priorName;
-    if (priorAttDefs) priorName = G4AttDefStore::GetName(priorAttDefs);
-
-    // Create unique att defs...
-    G4bool isNew;
-    std::map<G4String,G4AttDef>* store
-      = G4AttDefStore::GetInstance(priorName + "G4PhysicalVolumeModel", isNew);
-    if (isNew) {
-      if (priorAttDefs) *store = *priorAttDefs;  // Copy prior att defs, if any.
-      // Add new att defs specific to local requirement...
-      (*store)["PVol"] =
-	G4AttDef("PVol","Physical Volume","Bookkeeping","","G4String");
-      (*store)["Copy"] =
-	G4AttDef("Copy","Physical Volume Copy No.","Bookkeeping","","G4int");
-      (*store)["LVol"] =
-	G4AttDef("LVol","Logical Volume","Bookkeeping","","G4String");
-      (*store)["Region"] =
-	G4AttDef("Region","Cuts Region","Bookkeeping","","G4String");
-      (*store)["RootRegion"] =
-	G4AttDef("RootRegion","Root Region (0/1 = false/true)",
-		 "Bookkeeping","","G4bool");
-      (*store)["Solid"] =
-	G4AttDef("Solid","Solid Name","Bookkeeping","","G4String");
-      (*store)["EType"] =
-	G4AttDef("EType","Entity Type","Bookkeeping","","G4String");
-      (*store)["Material"] =
-	G4AttDef("Material","Material Name","Bookkeeping","","G4String");
-      (*store)["Density"] =
-	G4AttDef("Density","Material Density","Physics","G4BestUnit","G4double");
-      (*store)["State"] =
-	G4AttDef("State","Material State (enum undefined,solid,liquid,gas)",
-		 "Bookkeeping","","G4String");
-      (*store)["Radlen"] =
-	G4AttDef("Radlen","Material Radiation Length","Physics","G4BestUnit","G4double");
-    }
-    pNonConstVisAttribs->SetAttDefs(store);
-
-    // Remember existing G4Atts, if any (restore after)...
-    const std::vector<G4AttValue>* priorAttValues = pVisAttribs->GetAttValues();
-    // Create values vector...
-    std::vector<G4AttValue>* values;
-    // ...which is a copy of prior att values vector, if any...
-    if (priorAttValues) values = new std::vector<G4AttValue>(*priorAttValues);
-    // ...or just an empty vector...
-    else values = new std::vector<G4AttValue>;
-    // Add new att values specific to local requirement...
-    values->push_back(G4AttValue("PVol", pVPV->GetName(),""));
-    std::ostringstream oss; oss << pVPV->GetCopyNo();
-    values->push_back(G4AttValue("Copy", oss.str(),""));
-    values->push_back(G4AttValue("LVol", pLV->GetName(),""));
-    values->push_back(G4AttValue("Region", pLV->GetRegion()->GetName(),""));
-    oss.str(""); oss << pLV->IsRootRegion();
-    values->push_back(G4AttValue("RootRegion", oss.str(),""));
-    values->push_back(G4AttValue("Solid", pSol->GetName(),""));
-    values->push_back(G4AttValue("EType", pSol->GetEntityType(),""));
-    values->push_back(G4AttValue("Material", pMaterial->GetName(),""));
-    values->push_back
-      (G4AttValue("Density", G4BestUnit(pMaterial->GetDensity(),"Volumic Mass"),""));
-    oss.str(""); oss << pMaterial->GetState();
-    values->push_back(G4AttValue("State", oss.str(),""));
-    values->push_back
-      (G4AttValue("Radlen", G4BestUnit(pMaterial->GetRadlen(),"Length"),""));
-    pNonConstVisAttribs->SetAttValues(values);
-
-    // Update path of physical volumes...
+    // Update path of drawn physical volumes...
     G4int copyNo = fpCurrentPV->GetCopyNo();
     fDrawnPVPath.push_back
       (G4PhysicalVolumeNodeID(fpCurrentPV,copyNo,fCurrentDepth));
-    if (fpDrawnPVPath) {
-      fpDrawnPVPath->push_back
-	(G4PhysicalVolumeNodeID(fpCurrentPV,copyNo,fCurrentDepth));
-    }
 
     DescribeSolid (theNewAT, pSol, pVisAttribs, sceneHandler);
 
-    // Restore vis atts and delete att values...
-    pNonConstVisAttribs->SetAttValues(priorAttValues);
-    pNonConstVisAttribs->SetAttDefs(priorAttDefs);
-    delete values;
   }
 
   // Make decision to draw daughters, if any.  There are various
@@ -621,12 +496,9 @@ void G4PhysicalVolumeModel::DescribeAndDescend
   // Reset for normal descending of next volume at this level...
   fCurtailDescent = false;
 
-  // Pop item from path of physical volumes...
+  // Pop item from path of drawn physical volumes...
   if (thisToBeDrawn) {
     fDrawnPVPath.pop_back();
-    if (fpDrawnPVPath) {
-      fpDrawnPVPath->pop_back();
-    }
   }
 }
 
@@ -713,4 +585,58 @@ G4bool G4PhysicalVolumeModel::Validate (G4bool warn)
     }
     return false;
   }
+}
+
+const std::map<G4String,G4AttDef>* G4PhysicalVolumeModel::GetAttDefs() const
+{
+    G4bool isNew;
+    std::map<G4String,G4AttDef>* store
+      = G4AttDefStore::GetInstance("G4PhysicalVolumeModel", isNew);
+    if (isNew) {
+      (*store)["PVol"] =
+	G4AttDef("PVol","Physical Volume","Bookkeeping","","G4String");
+      (*store)["Copy"] =
+	G4AttDef("Copy","Physical Volume Copy No.","Bookkeeping","","G4int");
+      (*store)["LVol"] =
+	G4AttDef("LVol","Logical Volume","Bookkeeping","","G4String");
+      (*store)["Region"] =
+	G4AttDef("Region","Cuts Region","Bookkeeping","","G4String");
+      (*store)["RootRegion"] =
+	G4AttDef("RootRegion","Root Region (0/1 = false/true)","Bookkeeping","","G4bool");
+      (*store)["Solid"] =
+	G4AttDef("Solid","Solid Name","Bookkeeping","","G4String");
+      (*store)["EType"] =
+	G4AttDef("EType","Entity Type","Bookkeeping","","G4String");
+      (*store)["Material"] =
+	G4AttDef("Material","Material Name","Bookkeeping","","G4String");
+      (*store)["Density"] =
+	G4AttDef("Density","Material Density","Physics","G4BestUnit","G4double");
+      (*store)["State"] =
+	G4AttDef("State","Material State (enum undefined,solid,liquid,gas)","Bookkeeping","","G4String");
+      (*store)["Radlen"] =
+	G4AttDef("Radlen","Material Radiation Length","Physics","G4BestUnit","G4double");
+    }
+    return store;
+}
+
+std::vector<G4AttValue>* G4PhysicalVolumeModel::CreateAttValues() const
+{
+    std::vector<G4AttValue>* values = new std::vector<G4AttValue>;
+    std::ostringstream oss;
+    values->push_back(G4AttValue("PVol", fpCurrentPV->GetName(),""));
+    oss << fpCurrentPV->GetCopyNo();
+    values->push_back(G4AttValue("Copy", oss.str(),""));
+    values->push_back(G4AttValue("LVol", fpCurrentLV->GetName(),""));
+    values->push_back(G4AttValue("Region", fpCurrentLV->GetRegion()->GetName(),""));
+    oss.str(""); oss << fpCurrentLV->IsRootRegion();
+    values->push_back(G4AttValue("RootRegion", oss.str(),""));
+    G4VSolid* pSol = fpCurrentLV->GetSolid();
+    values->push_back(G4AttValue("Solid", pSol->GetName(),""));
+    values->push_back(G4AttValue("EType", pSol->GetEntityType(),""));
+    values->push_back(G4AttValue("Material", fpCurrentMaterial->GetName(),""));
+    values->push_back(G4AttValue("Density", G4BestUnit(fpCurrentMaterial->GetDensity(),"Volumic Mass"),""));
+    oss.str(""); oss << fpCurrentMaterial->GetState();
+    values->push_back(G4AttValue("State", oss.str(),""));
+    values->push_back(G4AttValue("Radlen", G4BestUnit(fpCurrentMaterial->GetRadlen(),"Length"),""));
+    return values;
 }
