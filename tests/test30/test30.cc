@@ -461,7 +461,7 @@ int main(int argc, char** argv)
     std::auto_ptr< AIDA::ITree > tree( tf->create( hFile,"hbook", false,true));
     std::cout << "Tree store : " << tree->storeName() << std::endl;
 
-    const G4int nhisto = 62;
+    const G4int nhisto = 63;
     AIDA::IHistogram1D* h[nhisto];
 
     G4double mass = part->GetPDGMass();
@@ -581,13 +581,15 @@ int main(int argc, char** argv)
 	h[54]=hf->createHistogram1D("55","ds/dE for neutrons at theta = 3",nbinlog,0.,logmax);
       if(nangl>4)
 	h[55]=hf->createHistogram1D("56","ds/dE for neutrons at theta = 4",nbinlog,0.,logmax);
+      if(nangl>5)
+	h[56]=hf->createHistogram1D("57","ds/dE for neutrons at theta = 5",nbinlog,0.,logmax);
 
-      h[56]=hf->createHistogram1D("57","Ekin (MeV) for recoil particle",120,0.,energy*1.2/MeV);
       h[57]=hf->createHistogram1D("58","Ekin (MeV) for primary particle",120,0.,energy*1.2/MeV);
       h[58]=hf->createHistogram1D("59","cos(Theta) for recoil particle in Lab.Sys.",nbinsa,-1.,1.);
       h[59]=hf->createHistogram1D("60","cos(Theta) for primary particle in Lab.Sys.",nbinsa,-1.,1.);
       h[60]=hf->createHistogram1D("61","cos(Theta) for recoil particle in CM.Sys.",nbinsa,-1.,1.);
       h[61]=hf->createHistogram1D("62","cos(Theta) for primary particle in CM.Sys.",nbinsa,-1.,1.);
+      h[62]=hf->createHistogram1D("63","Ekin (MeV) for recoil particle",120,0.,energy*1.2/MeV);
 
       G4cout << "Histograms is initialised nbins=" << nbins
              << G4endl;
