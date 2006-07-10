@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.hh,v 1.33 2006-06-29 21:28:08 gunter Exp $
+// $Id: G4VSceneHandler.hh,v 1.34 2006-07-10 15:47:38 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -190,14 +190,6 @@ public: // With description
   virtual void AddPrimitive (const G4Polyhedron&) = 0;  
   virtual void AddPrimitive (const G4NURBS&)      = 0;       
 
-  ///////////////////////////////////////////////////////////////
-  // Other inherited functions.
-
-  virtual void EstablishSpecials (G4PhysicalVolumeModel&);
-  // Used to establish any special relationships between scene handler and this
-  // particular type of model - non-pure, i.e., no requirement to
-  // implement.  See G4PhysicalVolumeModel.hh for details.
-
   //////////////////////////////////////////////////////////////
   // Access functions.
   const G4String&     GetName           () const;
@@ -241,9 +233,14 @@ public: // With description
   // current view parameter.
 
   G4bool GetAuxEdgeVisible (const G4VisAttributes*);
-  // Returns auxiliary edge visiblility from current view parameters,
+  // Returns auxiliary edge visibility from current view parameters,
   // unless the user has forced through the vis attributes, thereby
   // over-riding the current view parameter.
+
+  G4int GetNoOfSides(const G4VisAttributes* pVisAttribs);
+  // Returns no. of sides (lines segments per circle) from current
+  // view parameters, unless the user has forced through the vis
+  // attributes, thereby over-riding the current view parameter.
 
   G4double GetMarkerSize (const G4VMarker&, MarkerSizeType&);
   // Returns applicable marker size (diameter) and type (in second
@@ -318,10 +315,6 @@ protected:
 					       // object transformation.
   G4int              fNestingDepth; // For Begin/EndPrimitives.
   const G4VisAttributes* fpVisAttribs;  // Working vis attributes.
-  G4int              fCurrentDepth; // Current depth of geom. hierarchy.
-  G4VPhysicalVolume* fpCurrentPV;   // Current physical volume.
-  G4LogicalVolume*   fpCurrentLV;   // Current logical volume.
-  G4Material*        fpCurrentMaterial; // Current material.
   const G4Transform3D fIdentityTransformation;
 
 private:
