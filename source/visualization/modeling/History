@@ -1,4 +1,4 @@
-$Id: History,v 1.74 2006-07-03 19:23:06 allison Exp $
+$Id: History,v 1.75 2006-07-10 16:15:56 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,16 @@ committal in the CVS repository !
 
 History file for visualization/modeling
 ---------------------------------------
+
+10th July 2006  John Allison  (modeling-V08-01-01)
+- Co-works with greps-V08-01-01.
+- G4VModel: Removed GetG4PhysicalVolumeModel.
+- G4ModelingParameters:
+  o Removed RepStyle, ViewGeom, ViewHits and ViewDigis (not used).
+  o Reduced number of constructors.
+- G4PhysicalVolumeModel:
+  o Removed Establish/DecommissionSpecials to conform with greps-V08-01-01.
+  o Rationalised G4Atts: Added GetAttDefs/CreateAttValues.
 
 3rd July 2006  John Allison  (modeling-V08-01-00)
 - Needs greps-V08-01-00.
