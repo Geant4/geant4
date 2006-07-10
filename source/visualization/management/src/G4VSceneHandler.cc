@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.cc,v 1.67 2006-07-03 20:15:39 allison Exp $
+// $Id: G4VSceneHandler.cc,v 1.68 2006-07-10 15:50:43 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -92,10 +92,7 @@ G4VSceneHandler::G4VSceneHandler (G4VGraphicsSystem& system, G4int id, const G4S
   fpModel                (0),
   fpObjectTransformation (0),
   fNestingDepth          (0),
-  fpVisAttribs           (0),
-  fCurrentDepth          (0),
-  fpCurrentPV            (0),
-  fpCurrentLV            (0)
+  fpVisAttribs           (0)
 {
   G4VisManager* pVMan = G4VisManager::GetInstance ();
   fpScene = pVMan -> GetCurrentScene ();
@@ -266,13 +263,6 @@ void G4VSceneHandler::AddViewerToList (G4VViewer* pViewer) {
   fViewerList.push_back (pViewer);
 }
 
-void G4VSceneHandler::EstablishSpecials (G4PhysicalVolumeModel& pvModel) {
-  pvModel.DefinePointersToWorkingSpace (&fCurrentDepth,
-					&fpCurrentPV,
-					&fpCurrentLV,
-					&fpCurrentMaterial);
-}
-
 void G4VSceneHandler::AddPrimitive (const G4Scale& scale) {
 
   const G4double margin(0.01);
@@ -427,12 +417,14 @@ void G4VSceneHandler::RequestPrimitives (const G4VSolid& solid) {
   BeginPrimitives (*fpObjectTransformation);
   G4NURBS* pNURBS = 0;
   G4Polyhedron* pPolyhedron = 0;
+  const G4VisAttributes* pVisAttribs =
+    fpViewer -> GetApplicableVisAttributes (fpVisAttribs);
   switch (fpViewer -> GetViewParameters () . GetRepStyle ()) {
   case G4ViewParameters::nurbs:
     pNURBS = solid.CreateNURBS ();
     if (pNURBS) {
       pNURBS -> SetVisAttributes
-	(fpViewer -> GetApplicableVisAttributes (fpVisAttribs));
+	(fpViewer -> GetApplicableVisAttributes (pVisAttribs));
       AddPrimitive (*pNURBS);
       delete pNURBS;
       break;
@@ -451,13 +443,11 @@ void G4VSceneHandler::RequestPrimitives (const G4VSolid& solid) {
     // Dropping through to polyhedron...
   case G4ViewParameters::polyhedron:
   default:
-    G4Polyhedron::SetNumberOfRotationSteps
-      (fpViewer -> GetViewParameters () . GetNoOfSides ());
+    G4Polyhedron::SetNumberOfRotationSteps (GetNoOfSides (pVisAttribs));
     pPolyhedron = solid.GetPolyhedron ();
     G4Polyhedron::ResetNumberOfRotationSteps ();
     if (pPolyhedron) {
-      pPolyhedron -> SetVisAttributes
-	(fpViewer -> GetApplicableVisAttributes (fpVisAttribs));
+      pPolyhedron -> SetVisAttributes (pVisAttribs);
       AddPrimitive (*pPolyhedron);
     }
     else {
@@ -480,6 +470,9 @@ void G4VSceneHandler::ProcessScene (G4VViewer&) {
 
   if (!fpScene) return;
 
+  G4VisManager* visManager = G4VisManager::GetInstance();
+  G4VisManager::Verbosity verbosity = visManager->GetVerbosity();
+
   fReadyForTransients = false;
 
   // Clear stored scene, if any, i.e., display lists, scene graphs.
@@ -491,9 +484,6 @@ void G4VSceneHandler::ProcessScene (G4VViewer&) {
   // recomputing transients below.)  Restore it again at end...
   G4bool tmpMarkForClearingTransientStore = fMarkForClearingTransientStore;
   fMarkForClearingTransientStore = false;
-
-  G4VisManager* visManager = G4VisManager::GetInstance();
-  G4VisManager::Verbosity verbosity = visManager->GetVerbosity();
 
   // Traverse geometry tree and send drawing primitives to window(s).
 
@@ -530,7 +520,7 @@ void G4VSceneHandler::ProcessScene (G4VViewer&) {
 	pModel -> SetModelingParameters (pMP);
 	SetModel (pModel);  // Store for use by derived class.
 	pModel -> DescribeYourselfTo (*this);
-        pModel -> SetModelingParameters (0);
+	pModel -> SetModelingParameters (0);
       }
       fSecondPass = false;
       fSecondPassRequested = false;
@@ -688,7 +678,7 @@ void G4VSceneHandler::ProcessScene (G4VViewer&) {
 	  }
 	}
       } // End event copying way. */
-    }  // Else if (visManager->fReprocessing)
+    }  // End else if (visManager->fReprocessing)
 
     visManager->SetReprocessing(false);
 
@@ -697,7 +687,8 @@ void G4VSceneHandler::ProcessScene (G4VViewer&) {
   fMarkForClearingTransientStore = tmpMarkForClearingTransientStore;
 }
 
-G4ModelingParameters* G4VSceneHandler::CreateModelingParameters () {
+G4ModelingParameters* G4VSceneHandler::CreateModelingParameters ()
+{
   // Create modeling parameters from View Parameters...
   const G4ViewParameters& vp = fpViewer -> GetViewParameters ();
 
@@ -720,21 +711,6 @@ G4ModelingParameters* G4VSceneHandler::CreateModelingParameters () {
     break;
   }
 
-  // Convert rep styles...
-  G4ModelingParameters::RepStyle modelRepStyle =
-    G4ModelingParameters::wireframe;
-  if (vp.GetDrawingStyle () != G4ViewParameters::wireframe) {
-    switch (vp.GetRepStyle ()) {
-    default:
-    case G4ViewParameters::polyhedron:
-      modelRepStyle = G4ModelingParameters::polyhedron;
-      break;
-    case G4ViewParameters::nurbs:
-      modelRepStyle = G4ModelingParameters::nurbs;
-      break;
-    }
-  }
-
   // Decide if covered daughters are really to be culled...
   G4bool reallyCullCovered =
     vp.IsCullingCovered()   // Culling daughters depends also on...
@@ -745,16 +721,12 @@ G4ModelingParameters* G4VSceneHandler::CreateModelingParameters () {
   G4ModelingParameters* pModelingParams = new G4ModelingParameters
     (vp.GetDefaultVisAttributes (),
      modelDrawingStyle,
-     modelRepStyle,
      vp.IsCulling (),
      vp.IsCullingInvisible (),
      vp.IsDensityCulling (),
      vp.GetVisibleDensity (),
      reallyCullCovered,
-     vp.GetNoOfSides (),
-     vp.IsViewGeom (),
-     vp.IsViewHits (),
-     vp.IsViewDigis ()
+     vp.GetNoOfSides ()
      );
 
   return pModelingParams;
@@ -842,6 +814,25 @@ G4double G4VSceneHandler::GetMarkerSize (const G4VMarker& marker,
   if (size <= 0.) size = 1.;
   size *= fpViewer -> GetViewParameters().GetGlobalMarkerScale();
   return size;
+}
+
+G4int G4VSceneHandler::GetNoOfSides(const G4VisAttributes* pVisAttribs)
+{
+  // No. of sides (lines segments per circle) is normally determined
+  // by the view parameters, but it can be overriddden by the
+  // ForceLineSegmentsPerCircle in the vis attributes.
+  G4int lineSegmentsPerCircle = fpViewer->GetViewParameters().GetNoOfSides();
+  if (pVisAttribs->GetForcedLineSegmentsPerCircle() > 0)
+    lineSegmentsPerCircle = pVisAttribs->GetForcedLineSegmentsPerCircle();
+  const G4int nSegmentsMin = 12;
+  if (lineSegmentsPerCircle < nSegmentsMin) {
+    lineSegmentsPerCircle = nSegmentsMin;
+    G4cout <<
+      "G4VSceneHandler::GetNoOfSides: attempt to set the"
+      "\nnumber of line segements per circle < " << nSegmentsMin
+         << "; forced to " << lineSegmentsPerCircle << G4endl;
+  }
+  return lineSegmentsPerCircle;
 }
 
 std::ostream& operator << (std::ostream& os, const G4VSceneHandler& s) {
