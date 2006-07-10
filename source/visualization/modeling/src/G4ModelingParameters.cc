@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ModelingParameters.cc,v 1.10 2006-06-29 21:32:48 gunter Exp $
+// $Id: G4ModelingParameters.cc,v 1.11 2006-07-10 16:04:05 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -40,73 +40,17 @@
 G4ModelingParameters::G4ModelingParameters ():
   fpDefaultVisAttributes (0),
   fDrawingStyle          (wf),
-  fRepStyle              (polyhedron),
   fCulling               (false),
   fCullInvisible         (false),
   fDensityCulling        (false),
   fVisibleDensity        (0.01 * g / cm3),
   fCullCovered           (false),
-  fNoOfSides             (24),
-  fViewGeom              (true),
-  fViewHits              (true),
-  fViewDigis             (true)
-{}
-
-G4ModelingParameters::G4ModelingParameters
-(const G4VisAttributes* pDefaultVisAttributes,
- G4ModelingParameters::RepStyle repStyle,
- G4bool isCulling,
- G4bool isCullingInvisible,
- G4bool isDensityCulling,
- G4double visibleDensity,
- G4bool isCullingCovered,
- G4int noOfSides
- ):
-  fpDefaultVisAttributes (pDefaultVisAttributes),
-  fDrawingStyle   (wf),
-  fRepStyle       (repStyle),
-  fCulling        (isCulling),
-  fCullInvisible  (isCullingInvisible),
-  fDensityCulling (isDensityCulling),
-  fVisibleDensity (visibleDensity),
-  fCullCovered    (isCullingCovered),
-  fNoOfSides      (noOfSides),
-  fViewGeom       (true),
-  fViewHits       (true),
-  fViewDigis      (true)
-{}
-
-G4ModelingParameters::G4ModelingParameters
-(const G4VisAttributes* pDefaultVisAttributes,
- G4ModelingParameters::RepStyle repStyle,
- G4bool isCulling,
- G4bool isCullingInvisible,
- G4bool isDensityCulling,
- G4double visibleDensity,
- G4bool isCullingCovered,
- G4int noOfSides,
- G4bool isViewGeom,
- G4bool isViewHits,
- G4bool isViewDigis
- ):
-  fpDefaultVisAttributes (pDefaultVisAttributes),
-  fDrawingStyle   (wf),
-  fRepStyle       (repStyle),
-  fCulling        (isCulling),
-  fCullInvisible  (isCullingInvisible),
-  fDensityCulling (isDensityCulling),
-  fVisibleDensity (visibleDensity),
-  fCullCovered    (isCullingCovered),
-  fNoOfSides      (noOfSides),
-  fViewGeom       (isViewGeom),
-  fViewHits       (isViewHits),
-  fViewDigis      (isViewDigis)
+  fNoOfSides             (24)
 {}
 
 G4ModelingParameters::G4ModelingParameters
 (const G4VisAttributes* pDefaultVisAttributes,
  G4ModelingParameters::DrawingStyle drawingStyle,
- G4ModelingParameters::RepStyle repStyle,
  G4bool isCulling,
  G4bool isCullingInvisible,
  G4bool isDensityCulling,
@@ -116,44 +60,12 @@ G4ModelingParameters::G4ModelingParameters
  ):
   fpDefaultVisAttributes (pDefaultVisAttributes),
   fDrawingStyle   (drawingStyle),
-  fRepStyle       (repStyle),
   fCulling        (isCulling),
   fCullInvisible  (isCullingInvisible),
   fDensityCulling (isDensityCulling),
   fVisibleDensity (visibleDensity),
   fCullCovered    (isCullingCovered),
-  fNoOfSides      (noOfSides),
-  fViewGeom       (true),
-  fViewHits       (true),
-  fViewDigis      (true)
-{}
-
-G4ModelingParameters::G4ModelingParameters
-(const G4VisAttributes* pDefaultVisAttributes,
- G4ModelingParameters::DrawingStyle drawingStyle,
- G4ModelingParameters::RepStyle repStyle,
- G4bool isCulling,
- G4bool isCullingInvisible,
- G4bool isDensityCulling,
- G4double visibleDensity,
- G4bool isCullingCovered,
- G4int noOfSides,
- G4bool isViewGeom,
- G4bool isViewHits,
- G4bool isViewDigis
- ):
-  fpDefaultVisAttributes (pDefaultVisAttributes),
-  fDrawingStyle   (drawingStyle),
-  fRepStyle       (repStyle),
-  fCulling        (isCulling),
-  fCullInvisible  (isCullingInvisible),
-  fDensityCulling (isDensityCulling),
-  fVisibleDensity (visibleDensity),
-  fCullCovered    (isCullingCovered),
-  fNoOfSides      (noOfSides),
-  fViewGeom       (isViewGeom),
-  fViewHits       (isViewHits),
-  fViewDigis      (isViewDigis)
+  fNoOfSides      (noOfSides)
 {}
 
 G4ModelingParameters::~G4ModelingParameters () {}
@@ -187,27 +99,8 @@ G4int G4ModelingParameters::SetNoOfSides (G4int nSides) {
   return fNoOfSides;
 }
 
-void G4ModelingParameters::PrintDifferences
-(const G4ModelingParameters& that) const {
-
-  if (
-      (fpDefaultVisAttributes != that.fpDefaultVisAttributes) ||
-      (fDrawingStyle          != that.fDrawingStyle)          ||
-      (fRepStyle              != that.fRepStyle)              ||
-      (fCulling               != that.fCulling)               ||
-      (fCullInvisible         != that.fCullInvisible)         ||
-      (fDensityCulling        != that.fDensityCulling)        ||
-      (fVisibleDensity        != that.fVisibleDensity)        ||
-      (fCullCovered           != that.fCullCovered)           ||
-      (fNoOfSides             != that.fNoOfSides)             ||
-      (fViewGeom              != that.fViewGeom)              ||
-      (fViewHits              != that.fViewHits)              ||
-      (fViewDigis             != that.fViewDigis))
-    G4cout << "Difference in 1st batch." << G4endl;
-}
-
 std::ostream& operator << (std::ostream& os, const G4ModelingParameters& mp) {
-  os << "Modeling parameters and options:";
+  os << "Modeling parameters:";
 
   const G4VisAttributes* va = mp.fpDefaultVisAttributes;
   os << "\n  Default vis. attributes: ";
@@ -224,17 +117,6 @@ std::ostream& operator << (std::ostream& os, const G4ModelingParameters& mp) {
     os << "surface (hsr)"; break;
   case G4ModelingParameters::hlhsr:
     os << "surface and edges (hlhsr)"; break;
-  default: os << "unrecognised"; break;
-  }
-
-  os << "\n  Representation style for graphics reps, if needed: ";
-  switch (mp.fRepStyle) {
-  case G4ModelingParameters::wireframe:
-    os << "wireframe"; break;
-  case G4ModelingParameters::polyhedron:
-    os << "polyhedron"; break;
-  case G4ModelingParameters::nurbs:
-    os << "nurbs"; break;
   default: os << "unrecognised"; break;
   }
 
@@ -260,18 +142,6 @@ std::ostream& operator << (std::ostream& os, const G4ModelingParameters& mp) {
   os << "\n  No. of sides used in circle polygon approximation: "
      << mp.fNoOfSides;
 
-  os << "\n  View geometry: ";
-  if (mp.fViewGeom) os << "true";
-  else os << "false";
-
-  os << "\n  View hits    : ";
-  if (mp.fViewHits) os << "true";
-  else os << "false";
-
-  os << "\n  View digits  : ";
-  if (mp.fViewDigis) os << "true";
-  else os << "false";
-
   return os;
 }
 
@@ -280,16 +150,12 @@ G4bool G4ModelingParameters::operator !=
 
   if (
       (*fpDefaultVisAttributes != *mp.fpDefaultVisAttributes) ||
-      (fDrawingStyle           != mp.fDrawingStyle)           ||
-      (fRepStyle               != mp.fRepStyle)               ||
       (fCulling                != mp.fCulling)                ||
       (fCullInvisible          != mp.fCullInvisible)          ||
       (fDensityCulling         != mp.fDensityCulling)         ||
       (fCullCovered            != mp.fCullCovered)            ||
-      (fNoOfSides              != mp.fNoOfSides)              ||
-      (fViewGeom               != mp.fViewGeom)               ||
-      (fViewHits               != mp.fViewHits)               ||
-      (fViewDigis              != mp.fViewDigis))
+      (fNoOfSides              != mp.fNoOfSides)
+      )
     return true;
 
   if (fDensityCulling &&
