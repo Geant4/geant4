@@ -23,37 +23,40 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pymodG4processes.cc,v 1.6 2006-07-12 05:43:18 kmura Exp $
+// $Id: pyG4ProductionCutsTable.cc,v 1.1 2006-07-12 05:43:54 kmura Exp $
 // $Name: not supported by cvs2svn $
 // ====================================================================
-//   pymodG4processes.cc
+//   pyG4ProductionCutsTable.cc
 //
 //                                         2005 Q
 // ====================================================================
 #include <boost/python.hpp>
+#include "G4ProductionCutsTable.hh"
 
 using namespace boost::python;
 
 // ====================================================================
 // module definition
 // ====================================================================
-void export_G4ProcessManager();
-void export_G4ProcessTable();
-void export_G4VProcess();
-void export_G4ProcVector();
-void export_G4ProcessType();
-void export_G4EmCalculator();
-void export_G4LossTableManager();
-void export_G4ProductionCutsTable();
-
-BOOST_PYTHON_MODULE(G4processes)
+void export_G4ProductionCutsTable()
 {
-  export_G4ProcessManager();
-  export_G4ProcessTable();
-  export_G4VProcess();
-  export_G4ProcVector();
-  export_G4ProcessType();
-  export_G4EmCalculator();
-  export_G4LossTableManager();
-  export_G4ProductionCutsTable();
+  class_<G4ProductionCutsTable, boost::noncopyable>
+    ("G4ProductionCutsTable", "production cuts table", no_init)    
+    .def("GetProductionCutsTable", 
+         &G4ProductionCutsTable::GetProductionCutsTable,
+         return_value_policy<reference_existing_object>())
+    .staticmethod("GetProductionCutsTable")
+
+    // internally used methods are limmitted to be exposed...
+
+    // ---
+    .def("GetLowEdgeEnergy",   &G4ProductionCutsTable::GetLowEdgeEnergy)
+    .def("GetHighEdgeEnergy",  &G4ProductionCutsTable::GetHighEdgeEnergy)
+    .def("DumpCouples",        &G4ProductionCutsTable::DumpCouples)
+    .def("IsModified",         &G4ProductionCutsTable::IsModified)
+    // ---
+    .def("SetVerboseLevel",    &G4ProductionCutsTable::SetVerboseLevel)
+    .def("GetVerboseLevel",    &G4ProductionCutsTable::GetVerboseLevel)
+    ;
 }
+
