@@ -1,4 +1,4 @@
-# $Id: __init__.py,v 1.4 2006-06-23 17:05:42 kmura Exp $
+# $Id: __init__.py,v 1.5 2006-07-12 05:12:11 kmura Exp $
 """
 # ==================================================================
 #  [Geant4] module package
@@ -96,6 +96,11 @@ gParticleIterator= PyG4ParticleList()
 # gProcessTable
 # ------------------------------------------------------------------
 gProcessTable= G4ProcessTable.GetProcessTable()
+
+# ------------------------------------------------------------------
+# gLossTableManager
+# ------------------------------------------------------------------
+gLossTableManager= G4LossTableManager.Instance()
 
 # ------------------------------------------------------------------
 # gEmCalculator
