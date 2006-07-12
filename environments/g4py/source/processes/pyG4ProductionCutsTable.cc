@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4ProductionCutsTable.cc,v 1.1 2006-07-12 05:43:54 kmura Exp $
+// $Id: pyG4ProductionCutsTable.cc,v 1.2 2006-07-12 06:29:02 kmura Exp $
 // $Name: not supported by cvs2svn $
 // ====================================================================
 //   pyG4ProductionCutsTable.cc
@@ -52,6 +52,7 @@ void export_G4ProductionCutsTable()
     // ---
     .def("GetLowEdgeEnergy",   &G4ProductionCutsTable::GetLowEdgeEnergy)
     .def("GetHighEdgeEnergy",  &G4ProductionCutsTable::GetHighEdgeEnergy)
+    .def("SetEnergyRange",     &G4ProductionCutsTable::SetEnergyRange)
     .def("DumpCouples",        &G4ProductionCutsTable::DumpCouples)
     .def("IsModified",         &G4ProductionCutsTable::IsModified)
     // ---
