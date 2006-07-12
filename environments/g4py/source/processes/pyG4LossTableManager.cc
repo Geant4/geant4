@@ -23,35 +23,54 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pymodG4processes.cc,v 1.5 2006-07-12 05:07:13 kmura Exp $
+// $Id: pyG4LossTableManager.cc,v 1.1 2006-07-12 05:07:13 kmura Exp $
 // $Name: not supported by cvs2svn $
 // ====================================================================
-//   pymodG4processes.cc
+//   pyG4LossTableManager.cc
 //
 //                                         2005 Q
 // ====================================================================
 #include <boost/python.hpp>
+#include "G4LossTableManager.hh"
 
 using namespace boost::python;
 
 // ====================================================================
 // module definition
 // ====================================================================
-void export_G4ProcessManager();
-void export_G4ProcessTable();
-void export_G4VProcess();
-void export_G4ProcVector();
-void export_G4ProcessType();
-void export_G4EmCalculator();
-void export_G4LossTableManager();
-
-BOOST_PYTHON_MODULE(G4processes)
+void export_G4LossTableManager()
 {
-  export_G4ProcessManager();
-  export_G4ProcessTable();
-  export_G4VProcess();
-  export_G4ProcVector();
-  export_G4ProcessType();
-  export_G4EmCalculator();
-  export_G4LossTableManager();
+  class_<G4LossTableManager, boost::noncopyable>
+    ("G4LossTableManager", "energy loss table manager", no_init)
+    .def("Instance",    &G4LossTableManager::Instance,
+         return_value_policy<reference_existing_object>())
+    .staticmethod("Instance")
+
+    // internally used methods are limmitted to be exposed...
+
+    // ----
+    .def("SetLossFluctuations",  &G4LossTableManager::SetLossFluctuations)
+    .def("SetSubCutoff",         &G4LossTableManager::SetSubCutoff)
+    .def("SetIntegral",          &G4LossTableManager::SetIntegral)
+    .def("SetRandomStep",        &G4LossTableManager::SetRandomStep)
+    .def("SetMinSubRange",       &G4LossTableManager::SetMinSubRange)
+    .def("SetMinEnergy",         &G4LossTableManager::SetMinEnergy)
+    .def("SetMaxEnergy",         &G4LossTableManager::SetMaxEnergy)
+    .def("SetMaxEnergyForCSDARange", 
+         &G4LossTableManager::SetMaxEnergyForCSDARange)
+    .def("SetMaxEnergyForMuons", &G4LossTableManager::SetMaxEnergyForMuons)
+    .def("SetStepFunction",      &G4LossTableManager::SetStepFunction)
+    .def("SetBuildCSDARange",    &G4LossTableManager::SetBuildCSDARange)
+    .def("SetLPMFlag",           &G4LossTableManager::SetLPMFlag)
+    .def("SetBremsstrahlungTh",  &G4LossTableManager::SetBremsstrahlungTh)
+    .def("SetVerbose",           &G4LossTableManager::SetVerbose)
+    // ---
+    .def("BuildCSDARange",       &G4LossTableManager::BuildCSDARange)
+    .def("LPMFlag",              &G4LossTableManager::LPMFlag)
+    .def("SetMscStepLimitation", &G4LossTableManager::SetMscStepLimitation)
+    .def("MscFlag",              &G4LossTableManager::MscFlag)
+    .def("FacRange",             &G4LossTableManager::FacRange)
+    .def("BremsstrahlungTh",     &G4LossTableManager::BremsstrahlungTh)
+    ;
 }
+
