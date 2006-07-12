@@ -1,4 +1,4 @@
-# $Id: __init__.py,v 1.5 2006-07-12 05:12:11 kmura Exp $
+# $Id: __init__.py,v 1.6 2006-07-12 05:51:30 kmura Exp $
 """
 # ==================================================================
 #  [Geant4] module package
@@ -101,6 +101,11 @@ gProcessTable= G4ProcessTable.GetProcessTable()
 # gLossTableManager
 # ------------------------------------------------------------------
 gLossTableManager= G4LossTableManager.Instance()
+
+# ------------------------------------------------------------------
+# gProductionCutsTable
+# ------------------------------------------------------------------
+gProductionCutsTable= G4ProductionCutsTable.GetProductionCutsTable()
 
 # ------------------------------------------------------------------
 # gEmCalculator
