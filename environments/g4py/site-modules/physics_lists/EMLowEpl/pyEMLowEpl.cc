@@ -23,10 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyEMLowEpl.cc,v 1.1 2006-07-12 08:46:18 kmura Exp $
+// $Id: pyEMLowEpl.cc,v 1.2 2006-07-12 09:18:08 kmura Exp $
 // $Name: not supported by cvs2svn $
 // ====================================================================
-//   pyEMSTDpl.cc
+//   pyEMLowEpl.cc
 //
 //   [Qgeom]
 //   a site-module of Geant4Py
