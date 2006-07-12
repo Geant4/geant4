@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UHadronElasticProcess.cc,v 1.17 2006-07-06 18:11:12 vnivanch Exp $
+// $Id: G4UHadronElasticProcess.cc,v 1.18 2006-07-12 17:15:41 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Geant4 Hadron Elastic Scattering Process -- header file
@@ -103,7 +103,7 @@ G4double G4UHadronElasticProcess::GetMeanFreePath(const G4Track& track,
   G4double x = DBL_MAX;
 
   // The process is effective only above the threshold
-  if(dp->GetKineticEnergy() < thEnergy) return x;
+  //  if(dp->GetKineticEnergy() < thEnergy) return x;
 
   // Compute cross sesctions
   const G4ElementVector* theElementVector = material->GetElementVector();
