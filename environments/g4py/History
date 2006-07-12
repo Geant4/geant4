@@ -1,4 +1,4 @@
-$Id: History,v 1.14 2006-06-29 02:04:49 kmura Exp $
+$Id: History,v 1.15 2006-07-12 05:46:22 kmura Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -13,6 +13,10 @@ Geant4Py is a Geant4-Python bridge.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+12 July 2006 K.Murakami
+ - add exposures of G4LossTableManager, G4ProductionCutsTable
+ - add site-modules/utls/MCScore
 
 29 June 2006 K.Murakami
  - "site-modules/primaries/MedicalBeam/MedicalMeam.cc"
