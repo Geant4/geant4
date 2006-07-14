@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SteppingVerbose.cc,v 1.21 2006-06-29 21:16:07 gunter Exp $
+// $Id: G4SteppingVerbose.cc,v 1.22 2006-07-14 14:00:46 tsasaki Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------
@@ -370,6 +370,12 @@ void G4SteppingVerbose::DPSLPostStep()
            << " : ProcName = " << fCurrentProcess->GetProcessName() << " (";
     if(fCondition==ExclusivelyForced){
       G4cout << "ExclusivelyForced)" << G4endl;
+    }
+    else if(fCondition==StronglyForced){
+      G4cout << "StronglyForced)" << G4endl;
+    }
+){
+      G4cout << "Conditionally)" << G4endl;
     }
     else if(fCondition==Conditionally){
       G4cout << "Conditionally)" << G4endl;
