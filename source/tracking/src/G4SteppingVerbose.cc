@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SteppingVerbose.cc,v 1.22 2006-07-14 14:00:46 tsasaki Exp $
+// $Id: G4SteppingVerbose.cc,v 1.23 2006-07-14 14:13:57 tsasaki Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------
@@ -373,9 +373,6 @@ void G4SteppingVerbose::DPSLPostStep()
     }
     else if(fCondition==StronglyForced){
       G4cout << "StronglyForced)" << G4endl;
-    }
-){
-      G4cout << "Conditionally)" << G4endl;
     }
     else if(fCondition==Conditionally){
       G4cout << "Conditionally)" << G4endl;

@@ -1,4 +1,4 @@
-$Id: History,v 1.106 2006-06-15 15:43:53 gcosmo Exp $
+$Id: History,v 1.107 2006-07-14 14:13:54 tsasaki Exp $
 $Name: not supported by cvs2svn $ 
 -------------------------------------------------------------------
 
@@ -18,6 +18,8 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+13 July 2006 T.sasaki
+- Fix on G4StepingVerbose for ForceConditions
 09 June 2006 T. Sasaki
 - Secondary vector is now owned by G4Step and G4TrackVector class has 
   been moved in the track category
