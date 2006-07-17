@@ -85,27 +85,14 @@ G4GlauberGribovCrossSection::G4GlauberGribovCrossSection()
 G4double G4GlauberGribovCrossSection::
 GetCrossSection(const G4DynamicParticle* aParticle, const G4Element* anElement, G4double )
 {
-  G4double xsection = 0.0;
-
-  G4int Ap = aParticle->GetDefinition()->GetBaryonNumber();
-  // G4int Zp = int ( aParticle->GetDefinition()->GetPDGCharge() / eplus + 0.5 ); 
-  G4double ke_per_N = aParticle->GetKineticEnergy() / Ap; 
-
-  G4int At = G4int ( anElement->GetN() + 0.5 );
-  // G4int Zt = G4int ( anElement->GetZ() + 0.5 );  
-
-// Apply energy check, if less than lower limit then 0 value is returned
-
-  if (  ke_per_N < fLowerLimit )  return xsection;
- 
+  G4double xsection;
+  G4int At           = G4int ( anElement->GetN() + 0.5 );
   G4double one_third = 1.0 / 3.0;
+  G4double cubicrAt  = std::pow ( G4double(At) , G4double(one_third) ); 
 
-  G4double cubicrAt = std::pow ( G4double(At) , G4double(one_third) ); 
+  G4double sigma     = GetHadronNucleaonXsc(aParticle, anElement);
 
-  G4double sigma = GetHadronNucleaonXsc(aParticle, anElement);
-
-
-  G4double R = fRadiusConst * cubicrAt;
+  G4double R             = fRadiusConst*cubicrAt;
   G4double nucleusSquare = pi*R*R; 
 
   xsection =  nucleusSquare* std::log( 1 + At*sigma/nucleusSquare );
