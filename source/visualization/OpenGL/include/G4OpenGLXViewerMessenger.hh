@@ -24,59 +24,36 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredX.cc,v 1.12 2006-07-17 15:04:22 allison Exp $
+// $Id: G4OpenGLXViewerMessenger.hh,v 1.1 2006-07-17 15:04:22 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-//
-// 
-// Andrew Walkden  10th February 1997
-// OpenGL graphics system factory.
-
 
 #ifdef G4VIS_BUILD_OPENGLX_DRIVER
 
-#include "G4VisFeaturesOfOpenGL.hh"
-#include "G4VSceneHandler.hh"
-#include "G4OpenGLSceneHandler.hh"
-#include "G4OpenGLViewer.hh"
-#include "G4OpenGLStoredX.hh"
-#include "G4OpenGLStoredXViewer.hh"
-#include "G4OpenGLXViewerMessenger.hh"
+#ifndef G4OPENGLXVIEWERMESSENGER_HH
+#define G4OPENGLXVIEWERMESSENGER_HH
 
-G4OpenGLStoredX::G4OpenGLStoredX ():
-  G4VGraphicsSystem ("OpenGLStoredX",
-		     "OGLSX",
-		     G4VisFeaturesOfOpenGLSX (),
-		     G4VGraphicsSystem::threeD)
-{
-  G4OpenGLXViewerMessenger::GetInstance();
-}
+#include "G4UImessenger.hh"
 
-G4OpenGLStoredX::~G4OpenGLStoredX () {}
+#include "G4String.hh"
 
-G4VSceneHandler* G4OpenGLStoredX::CreateSceneHandler (const G4String& name) {
-  G4VSceneHandler* pScene = new G4OpenGLStoredSceneHandler (*this, name);
-  return    pScene;
-}
+class G4OpenGLXViewer;
+class G4UIdirectory;
+class G4UIcmdWithABool;
 
-G4VViewer* G4OpenGLStoredX::CreateViewer (G4VSceneHandler& scene,
-				      const G4String& name) {
-  G4VViewer* pView =
-    new G4OpenGLStoredXViewer ((G4OpenGLStoredSceneHandler&) scene, name);
-  if (pView) {
-    if (pView -> GetViewId () < 0) {
-      delete pView;
-      pView = 0;
-      G4cerr << "G4OpenGLStoredX::CreateViewer: error flagged by"
-	" negative view id in G4OpenGLStoredXViewer creation."
-	"\n Destroying view and returning null pointer." << G4endl;
-    }
-  }
-  else {
-    G4cerr << "G4OpenGLStoredX::CreateViewer: null pointer on"
-      " new G4OpenGLStoredXViewer." << G4endl;
-  }
-  return pView;
-}
+class G4OpenGLXViewerMessenger: public G4UImessenger {
+public:
+  static G4OpenGLXViewerMessenger* GetInstance();  // Singleton constructor.
+  ~G4OpenGLXViewerMessenger();
+  void SetNewValue (G4UIcommand*, G4String);
+
+private:
+  G4OpenGLXViewerMessenger();  // Private constructor.
+  static G4OpenGLXViewerMessenger* fpInstance;
+  G4UIdirectory* fpDirectory;
+  G4UIdirectory* fpDirectorySet;
+  G4UIcmdWithABool* fpCommandPrintEPS;
+};
 
 #endif
 
+#endif

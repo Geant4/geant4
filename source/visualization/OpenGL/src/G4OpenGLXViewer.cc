@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXViewer.cc,v 1.31 2006-07-03 16:38:13 allison Exp $
+// $Id: G4OpenGLXViewer.cc,v 1.32 2006-07-17 15:04:22 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -122,8 +122,23 @@ void G4OpenGLXViewer::SetView () {
 
 void G4OpenGLXViewer::ShowView () {
   glXWaitGL (); //Wait for effects of all previous OpenGL commands to
-                //be propogated before progressing.
+                //be propagated before progressing.
   glFlush ();
+  if (print_on_show) {
+    // Keep copy of print_string to preserve Xm behaviour...
+    char* tmp_string = new char[50];
+    strcpy (tmp_string, print_string);
+    // Make new print string...
+    static G4int file_count = 0;
+    std::ostringstream oss;
+    oss << "G4OpenGL_" << file_count++ << ".eps";
+    strcpy (print_string, oss.str().c_str());
+    // Print eps file...
+    print();
+    // Restore print_string for Xm...
+    strcpy (print_string, tmp_string);
+    delete tmp_string;
+  }
 }
 
 void G4OpenGLXViewer::GetXConnection () {
@@ -343,6 +358,7 @@ G4VViewer (scene, -1),
 G4OpenGLViewer (scene),
 print_colour (true),
 vectored_ps (true),
+print_on_show (false),
 vi_immediate (0),
 vi_stored (0)
 {
@@ -793,7 +809,7 @@ G4float* G4OpenGLXViewer::spewPrimitiveEPS (FILE* file, GLfloat* loc) {
     std::ostringstream oss;
     oss << "Incomplete implementation.  Unexpected token (" << token << ").";
     G4Exception("G4OpenGLXViewer::spewPrimitiveEPS",
-		"Writing_eps_file_01",
+		"Unexpected token",
 		FatalException,
 		oss.str().c_str());
   }
@@ -860,8 +876,8 @@ void G4OpenGLXViewer::spewSortedFeedback(FILE * file, GLint size, GLfloat * buff
       /* XXX Left as an excersie to the reader. */
       std::ostringstream oss;
       oss << "Incomplete implementation.  Unexpected token (" << token << ").";
-      G4Exception("G4OpenGLXViewer::spewPrimitiveEPS",
-		  "Writing_eps_file_02",
+      G4Exception("G4OpenGLXViewer::spewSortedFeedback",
+		  "Unexpected token",
 		  FatalException,
 		  oss.str().c_str());
     }

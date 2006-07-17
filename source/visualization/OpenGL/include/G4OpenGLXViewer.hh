@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXViewer.hh,v 1.24 2006-07-03 16:38:13 allison Exp $
+// $Id: G4OpenGLXViewer.hh,v 1.25 2006-07-17 15:04:22 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -56,6 +56,7 @@ public:
   virtual ~G4OpenGLXViewer ();
   void SetView ();
   void ShowView ();
+  void SetPrintOnShow (G4bool doit) {print_on_show = doit;}
   void print();
 
 protected:
@@ -69,7 +70,8 @@ protected:
 
   char                              print_string[50];
   G4bool                            print_colour,
-                                    vectored_ps;
+                                    vectored_ps,
+                                    print_on_show;
 
 //////////////////////////////Vectored PostScript production functions//////////////////////////////
   void printBuffer(GLint, GLfloat*);
