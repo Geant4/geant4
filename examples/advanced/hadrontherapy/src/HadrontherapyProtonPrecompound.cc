@@ -169,6 +169,39 @@ void HadrontherapyProtonPrecompound::ConstructProcess()
   pmanager -> AddDiscreteProcess(&neutronInelasticProcess);
   // Activate the neutron elastic scattering
   pmanager -> AddDiscreteProcess(elastic_scattering); 
+  
+  ////////////////////
+  // HADRON CAPTURE //
+  ////////////////////
+
+  G4HadronCaptureProcess* neutronCapture = new G4HadronCaptureProcess();
+
+  G4LCapture* capture_model = new G4LCapture();
+
+  // Set the energy range for the capture model
+  capture_model -> SetMinEnergy(neutronLowLimit);
+  capture_model -> SetMaxEnergy(neutronHighLimit);
+
+  // Register the capture model
+  neutronCapture -> RegisterMe(capture_model);
+  // Active the capture process
+  pmanager -> AddDiscreteProcess(neutronCapture);
+
+ ////////////// 
+ // FISSION  //
+ /////////////
+
+  // Process for induced fission
+  G4HadronFissionProcess* fission = new G4HadronFissionProcess();
+  //Final state production model for induced fission
+  G4LFission* fission_model = new G4LFission();
+  // Set the energy range for the fission model
+  fission_model -> SetMinEnergy(neutronLowLimit);
+  fission_model -> SetMaxEnergy(neutronHighLimit);
+  // Register the fission model
+  fission -> RegisterMe(fission_model); 
+  // Active the fission process
+  pmanager -> AddDiscreteProcess(fission);  
 
   ////////////////		  
   // Pions plus //
@@ -285,39 +318,7 @@ void HadrontherapyProtonPrecompound::ConstructProcess()
   //pmanager = particle -> GetProcessManager();
   //pmanager -> AddDiscreteProcess(He3inelasticProcess);
   //pmanager -> AddDiscreteProcess(elastic_scattering); 
-  
-  ////////////////////
-  // HADRON CAPTURE //
-  ////////////////////
 
-  G4HadronCaptureProcess* neutronCapture = new G4HadronCaptureProcess();
-
-  G4LCapture* capture_model = new G4LCapture();
-
-  // Set the energy range for the capture model
-  capture_model -> SetMinEnergy(neutronLowLimit);
-  capture_model -> SetMaxEnergy(neutronHighLimit);
-
-  // Register the capture model
-  neutronCapture -> RegisterMe(capture_model);
-  // Active the capture process
-  pmanager -> AddDiscreteProcess(neutronCapture);
-
- ////////////// 
- // FISSION  //
- /////////////
-
-  // Process for induced fission
-  G4HadronFissionProcess* fission = new G4HadronFissionProcess();
-  //Final state production model for induced fission
-  G4LFission* fission_model = new G4LFission();
-  // Set the energy range for the fission model
-  fission_model -> SetMinEnergy(neutronLowLimit);
-  fission_model -> SetMaxEnergy(neutronHighLimit);
-  // Register the fission model
-  fission -> RegisterMe(fission_model); 
-  // Active the fission process
-  pmanager -> AddDiscreteProcess(fission);  
 }
 
 
