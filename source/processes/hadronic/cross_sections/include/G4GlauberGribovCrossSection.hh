@@ -54,14 +54,7 @@ public:
   G4GlauberGribovCrossSection ();
    
   virtual
-  G4bool IsApplicable(const G4DynamicParticle* aDP, const G4Element*)
-  {
-    G4int baryonNumber = aDP->GetDefinition()->GetBaryonNumber();
-    G4double kineticEnergy = aDP->GetKineticEnergy();
- 
-    if ( kineticEnergy / baryonNumber <= fUpperLimit ) return true;
-                                                       return false;
-  }
+  G4bool IsApplicable(const G4DynamicParticle* aDP, const G4Element*);
 
   virtual
   G4double GetCrossSection(const G4DynamicParticle*, 
@@ -79,7 +72,11 @@ public:
 
   G4double CalculateEcmValue ( const G4double , const G4double , const G4double ); 
 
-  G4double CalculateCeValue ( const G4double ); 
+  G4double CalcMandelstamS( const G4double , const G4double , const G4double );
+
+  G4double GetTotalGlauberGribovXsc()    { return fTotalXsc;     }; 
+  G4double GetElasticGlauberGribovXsc()  { return fElasticXsc;   }; 
+  G4double GetInelasticGlauberGribovXsc(){ return fInelasticXsc; }; 
 
 private:
 
