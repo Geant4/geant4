@@ -25,7 +25,7 @@
 //
 
 //
-// $Id: DetectorConstruction.cc,v 1.5 2006-06-29 16:35:46 gunter Exp $
+// $Id: DetectorConstruction.cc,v 1.6 2006-07-21 16:45:44 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -47,6 +47,9 @@
 #include "G4SolidStore.hh"
 
 #include "G4UnitsTable.hh"
+
+#include "G4RunManager.hh"
+#include "G4NistManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -172,12 +175,12 @@ void DetectorConstruction::PrintParameters()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4RunManager.hh"
-
 void DetectorConstruction::SetMaterial(G4String materialChoice)
 {
   // search the material by its name
-  G4Material* pttoMaterial = G4Material::GetMaterial(materialChoice);
+  G4Material* pttoMaterial =
+    G4NistManager::Instance()->FindOrBuildMaterial(materialChoice);
+
   if (pttoMaterial) {
     aMaterial = pttoMaterial;
     if (pBox) G4RunManager::GetRunManager()
