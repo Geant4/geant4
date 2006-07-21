@@ -26,6 +26,7 @@
 
 //#define debug
 //#define pdebug
+//#define ppdebug
 
 #include "G4StringChipsParticleLevelInterface.hh"
 #include "globals.hh"
@@ -40,6 +41,21 @@
 #include "G4HadronicException.hh"
 // #define CHIPSdebug
 // #define CHIPSdebug_1
+
+#ifdef hdebug_SCPLI
+const G4int G4StringChipsParticleLevelInterface::nbh=200;
+G4double    G4StringChipsParticleLevelInterface::bhmax=20.;
+G4double    G4StringChipsParticleLevelInterface::ehmax=20.;
+G4double    G4StringChipsParticleLevelInterface::bhdb=0.;
+G4double    G4StringChipsParticleLevelInterface::ehde=0.;
+G4double    G4StringChipsParticleLevelInterface::toth=0.;
+G4int       G4StringChipsParticleLevelInterface::bover=0;
+G4int       G4StringChipsParticleLevelInterface::eover=0;
+G4int*      G4StringChipsParticleLevelInterface::bhis =
+                                       new G4int[G4StringChipsParticleLevelInterface::nbh];
+G4int*      G4StringChipsParticleLevelInterface::ehis =
+                                       new G4int[G4StringChipsParticleLevelInterface::nbh];
+#endif
 
 G4StringChipsParticleLevelInterface::G4StringChipsParticleLevelInterface()
 {
@@ -157,12 +173,23 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
   G4double radius2 = theNucleus->GetNuclearRadius(theInnerCoreDensityCut*perCent);
   radius2 *= radius2;
   G4double pathlength = 0.;
-#ifdef pdebug
+#ifdef ppdebug
   G4cout<<"G4StringChipsParticleLevelInterface::Propagate: r="<<std::sqrt(radius2)/fermi
         <<", b="<<std::sqrt(inpactPar2)/fermi<<", R="<<theNucleus->GetOuterRadius()/fermi
         <<", b/r="<<std::sqrt(inpactPar2/radius2)<<G4endl; 
 #endif
   if(radius2 - inpactPar2>0) pathlength = 2.*std::sqrt(radius2 - inpactPar2);
+#ifdef hdebug_SCPLI
+  toth+=1.;                                 // increment total number of measurements
+  G4double bfm=std::sqrt(inpactPar2)/fermi; // impact parameter
+  G4double efm=pathlength/fermi;            // energy absorption length
+  G4int    nbi=static_cast<G4int>(bfm/bhdb);
+  G4int    nei=static_cast<G4int>(efm/ehde);
+  if(nbi<nbh) bhis[nbi]++;
+  else        bover++;
+  if(nei<nbh) ehis[nei]++;
+  else        eover++;
+#endif
   G4double theEnergyLostInFragmentation = theEnergyLossPerFermi*pathlength/fermi;
   
   // now select all particles in range
