@@ -63,11 +63,12 @@
 #include "G4ios.hh"
 
 
-FCALTestbeamSetup::FCALTestbeamSetup() {
+FCALTestbeamSetup::FCALTestbeamSetup()
+{
 #include "FCALTestbeamSetupParameters.input"
-};
+}
 
-FCALTestbeamSetup::~FCALTestbeamSetup() {};
+FCALTestbeamSetup::~FCALTestbeamSetup() {}
 
 G4VPhysicalVolume * FCALTestbeamSetup::Construct()
 {
@@ -432,7 +433,4 @@ G4VPhysicalVolume * FCALTestbeamSetup::Construct()
 
   return PhysicalMother;
 
-};
-
-
-
+}
