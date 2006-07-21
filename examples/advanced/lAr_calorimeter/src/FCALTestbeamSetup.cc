@@ -63,8 +63,7 @@
 #include "G4ios.hh"
 
 
-FCALTestbeamSetup::FCALTestbeamSetup()
-{
+FCALTestbeamSetup::FCALTestbeamSetup() : FCALTBSetupSD(0) {
 #include "FCALTestbeamSetupParameters.input"
 }
 

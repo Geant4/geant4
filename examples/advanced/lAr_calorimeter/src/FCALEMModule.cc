@@ -56,7 +56,9 @@
 #include <fstream>
 #include <cstdlib>
 
-FCALEMModule::FCALEMModule() {
+FCALEMModule::FCALEMModule() : 
+  FcalEmModuleSD(0)
+ {
   F1LArGapID   = new G4int[2400];
   F1LArIX      = new G4int[2400];
   F1LArJY      = new G4int[2400];

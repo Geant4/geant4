@@ -57,8 +57,9 @@
 #include "G4ios.hh"
 
 
-FCALHadModule::FCALHadModule() {
-
+FCALHadModule::FCALHadModule() :
+  FcalHadModuleSD(0)
+{
   F2LArGapID = new G4int[2600];
   F2LArIX     = new G4int[2600];
   F2LArJY     = new G4int[2600];

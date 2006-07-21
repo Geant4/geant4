@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: FCALHadModuleSD.cc,v 1.9 2006-06-29 16:03:03 gunter Exp $
+// $Id: FCALHadModuleSD.cc,v 1.10 2006-07-21 11:45:53 ribon Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -50,7 +50,8 @@
 #include <fstream>
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-FCALHadModuleSD::FCALHadModuleSD(G4String name) : G4VSensitiveDetector(name)
+FCALHadModuleSD::FCALHadModuleSD(G4String name) : G4VSensitiveDetector(name),
+						  InitF2(0)
 {
    HadModule = new FCALHadModule(); 
 }
