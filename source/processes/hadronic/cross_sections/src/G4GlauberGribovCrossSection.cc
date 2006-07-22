@@ -119,7 +119,8 @@ GetCrossSection(const G4DynamicParticle* aParticle, const G4Element* anElement, 
   G4double one_third = 1.0 / 3.0;
   G4double cubicrAt  = std::pow ( At , G4double(one_third) ); 
 
-  G4double sigma     = GetHadronNucleaonXsc(aParticle, anElement);
+  // G4double sigma     = GetHadronNucleaonXsc(aParticle, anElement);
+  G4double sigma     = GetHadronNucleaonXscPDG(aParticle, anElement);
 
   G4double R             = fRadiusConst*cubicrAt;
   G4double nucleusSquare = 2.*pi*R*R; 
@@ -206,6 +207,115 @@ G4GlauberGribovCrossSection::GetHadronNucleaonXsc(const G4DynamicParticle* aPart
   else  // as proton ??? 
   {
     xsection = At*(21.70*std::pow(sMand,0.0808) + 56.08*std::pow(sMand,-0.4525));
+  } 
+  xsection *= millibarn;
+  return xsection;
+}
+
+
+/////////////////////////////////////////////////////////////////////////////////////
+//
+// Returns hadron-nucleon Xsc according to PDG parametrisation (2005):
+// http://pdg.lbl.gov/2006/reviews/hadronicrpp.pdf
+
+G4double 
+G4GlauberGribovCrossSection::GetHadronNucleaonXscPDG(const G4DynamicParticle* aParticle, 
+                                                  const G4Element* anElement          )
+{
+  G4double xsection;
+
+  G4double At = anElement->GetN();  // number of nucleons 
+  G4double Zt = anElement->GetZ();  // number of protons
+
+  G4double Nt = At-Zt;              // number of neutrons
+  if (Nt < 0.) Nt = 0.;  
+
+
+  G4double targ_mass = G4ParticleTable::GetParticleTable()->
+  GetIonTable()->GetIonMass( G4int(Zt+0.5) , G4int(At+0.5) );
+
+  G4double proj_mass     = aParticle->GetMass();
+  G4double proj_momentum = aParticle->GetMomentum().mag();
+
+  G4double sMand = CalcMandelstamS ( proj_mass , targ_mass , proj_momentum );
+  sMand         /= GeV*GeV;  // in GeV for parametrisation
+
+  // General PDG fit constants
+
+  G4double s0   = 5.38*5.38; // in Gev^2
+  G4double eta1 = 0.458;
+  G4double eta2 = 0.458;
+  G4double B    = 0.308;
+
+
+  const G4ParticleDefinition* theParticle = aParticle->GetDefinition();
+  
+
+  if(theParticle == theNeutron) // proton-neutron fit 
+  {
+    xsection = At*( 35.80 + B*std::pow(std::log(sMand/s0),2.) 
+                          + 40.15*std::pow(sMand,-eta1) - 30.*std::pow(sMand,-eta2));
+  } 
+  else if(theParticle == theProton) 
+  {
+    xsection  = Zt*( 35.45 + B*std::pow(std::log(sMand/s0),2.) 
+                          + 42.53*std::pow(sMand,-eta1) - 33.34*std::pow(sMand,-eta2));
+
+    xsection += Nt*( 35.80 + B*std::pow(std::log(sMand/s0),2.) 
+                          + 40.15*std::pow(sMand,-eta1) - 30.*std::pow(sMand,-eta2));
+  } 
+  else if(theParticle == theAProton) 
+  {
+    xsection  = Zt*( 35.45 + B*std::pow(std::log(sMand/s0),2.) 
+                          + 42.53*std::pow(sMand,-eta1) + 33.34*std::pow(sMand,-eta2));
+
+    xsection += Nt*( 35.80 + B*std::pow(std::log(sMand/s0),2.) 
+                          + 40.15*std::pow(sMand,-eta1) + 30.*std::pow(sMand,-eta2));
+  } 
+  else if(theParticle == thePiPlus) 
+  {
+    xsection  = At*( 20.86 + B*std::pow(std::log(sMand/s0),2.) 
+                          + 19.24*std::pow(sMand,-eta1) - 6.03*std::pow(sMand,-eta2));
+  } 
+  else if(theParticle == thePiMinus) 
+  {
+    xsection  = At*( 20.86 + B*std::pow(std::log(sMand/s0),2.) 
+                          + 19.24*std::pow(sMand,-eta1) + 6.03*std::pow(sMand,-eta2));
+  } 
+  else if(theParticle == theKPlus) 
+  {
+    xsection  = Zt*( 17.91 + B*std::pow(std::log(sMand/s0),2.) 
+                          + 7.14*std::pow(sMand,-eta1) - 13.45*std::pow(sMand,-eta2));
+
+    xsection += Nt*( 17.87 + B*std::pow(std::log(sMand/s0),2.) 
+                          + 5.17*std::pow(sMand,-eta1) - 7.23*std::pow(sMand,-eta2));
+  } 
+  else if(theParticle == theKMinus) 
+  {
+    xsection  = Zt*( 17.91 + B*std::pow(std::log(sMand/s0),2.) 
+                          + 7.14*std::pow(sMand,-eta1) + 13.45*std::pow(sMand,-eta2));
+
+    xsection += Nt*( 17.87 + B*std::pow(std::log(sMand/s0),2.) 
+                          + 5.17*std::pow(sMand,-eta1) + 7.23*std::pow(sMand,-eta2));
+  }
+  else if(theParticle == theSMinus) 
+  {
+    xsection  = At*( 35.20 + B*std::pow(std::log(sMand/s0),2.) 
+                          - 199.*std::pow(sMand,-eta1) + 264.*std::pow(sMand,-eta2));
+  } 
+  else if(theParticle == theGamma) // modify later on
+  {
+    xsection  = At*( 0.0 + B*std::pow(std::log(sMand/s0),2.) 
+                          + 0.032*std::pow(sMand,-eta1) - 0.0*std::pow(sMand,-eta2));
+   
+  } 
+  else  // as proton ??? 
+  {
+    xsection  = Zt*( 35.45 + B*std::pow(std::log(sMand/s0),2.) 
+                          + 42.53*std::pow(sMand,-eta1) - 33.34*std::pow(sMand,-eta2));
+
+    xsection += Nt*( 35.80 + B*std::pow(std::log(sMand/s0),2.) 
+                          + 40.15*std::pow(sMand,-eta1) - 30.*std::pow(sMand,-eta2));
   } 
   xsection *= millibarn;
   return xsection;

@@ -69,6 +69,7 @@ public:
   {G4cout << "G4GlauberGribovCrossSection: uses Glauber-Gribov formula"<<G4endl;}
 
   G4double GetHadronNucleaonXsc(const G4DynamicParticle*, const G4Element*);
+  G4double GetHadronNucleaonXscPDG(const G4DynamicParticle*, const G4Element*);
 
   G4double CalculateEcmValue ( const G4double , const G4double , const G4double ); 
 
