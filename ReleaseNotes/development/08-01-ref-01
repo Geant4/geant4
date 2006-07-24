@@ -1,0 +1,76 @@
+
+                       geant4-08-01-ref-01
+                       ===================
+
+Some of the development/fixes included since the last reference tag are:
+
+  o Fixed problem in rotation of final state in the coherent_elastic module
+    affecting elastic scattering in hadronic physics.
+  o In physics-lists, fixed initialisation problem for QBBC_HP and corrected
+    flag for HP regime in G4HadronElasticPhysics() to be 'true' for LHEP_HP
+    and QGSP_HP.
+
+---------- Reference-tag 'Release Notes' -----------
+
+Tags marked with (*) are included in patch-01.
+
+Summarised, the list of changes is the following:
+
+geometry/management                              geommng-V08-01-00	(*)
+-------------------
+- Fixed problem in G4Region::ScanVolumeTree() for volume scanning
+  related to nested parameterisations.
+
+global                                           global-V08-01-00	(*)
+------
+- Updated date for patch-01 to release 8.1 in G4Version.hh.
+
+processes/electromagnetic/utils                  emutils-V08-01-00	(*)
+-------------------------------
+- Do not clear loss table map in G4LossTableManager to avoid crash for
+  activation/desactivation of regime with ion gun.
+  Propagating 'RandomStep' flag to processes.
+
+processes/hadronic
+------------------
+- models/chiral_inv_phase_space/body (hadr-chips-body-V08-01-00)	(*)
+  o Bug fix in QGSC for redefenition of Chipolino.
+  o Fixed light cone boost bug, causing an error message from vectors.
+- models/coherent_elastic (hadr-cohe-V08-01-01)				(*)
+  o Fixed problem in rotation of final state which needs to be done in
+    PostStep of the process and not at model level.
+  o Removed 1 keV limit from G4UHadronElasticProcess.
+- models/radioactive_decay (radioactive_decay-V08-01-00)		(*)
+  o Added test for negative lifetime in G4RadioactiveDecay::IsApplicable();
+    fixed problem connected with particle design in 8.0,
+- processes (hadr-proc-V08-00-00)
+  o G4NuclearDecayChannel::BetaDecayIt(): make additional check for
+    negative sqrt() argument in 'daughtermomentum[1]'.
+
+physics_lists                                    phys-lists-V08-01-01	(*)
+-------------
+- Fixed initialisation problem for QBBC_HP
+- Corrected flag for HP regime in G4HadronElasticPhysics() to be 'true'
+  for LHEP_HP and QGSP_HP.
+- Added cout of list of processes and models for QBBC.
+
+examples                                         examples-V08-01-01
+--------
+- Updated reference outputs.
+- advanced/composite_calorimeter (ccal-V08-01-00)			(*)
+  o Updated hadronic physics list to be consistent with validation runs.
+- advanced/lAr_calorimeter (lAr_calorimeter-V08-01-00)			(*)
+  o Updated hadronic physics list to be consistent with validation runs.
+  o Fixed few problems of use of non-initialised variables.
+  o Fixed compilation problems on gcc-4.X.
+- extended/eventgenerator/HepMC (exHepMC-V08-01-00)			(*)
+  o Updated physics lists to conform with non-static particles.
+- extended/parallel/ParN02 (ParN02-V08-01-00)				(*)
+- extended/parallel/ParN04 (ParN04-V08-01-00)				(*)
+  o Updated physics lists to conform with non-static particles.
+
+tests                                            tests-V08-01-01
+-----
+- Updated reference outputs.
+- test21 (test21-V08-01-00)
+  o QGSC test can be used for He, Be, and C materials.
