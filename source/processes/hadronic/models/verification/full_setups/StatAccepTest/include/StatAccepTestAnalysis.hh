@@ -179,15 +179,17 @@ private:
   std::vector< G4double > sumR_proton2;
   std::vector< G4double > longitudinalProfile_proton;
   std::vector< G4double > transverseProfile_proton; 
-  // all particles with PDG code = 0
-  G4double sumEdepAct_pdg0, sumEdepAct_pdg02;
-  G4double sumEdepTot_pdg0, sumEdepTot_pdg02;
-  std::vector< G4double > sumL_pdg0;
-  std::vector< G4double > sumL_pdg02;
-  std::vector< G4double > sumR_pdg0;
-  std::vector< G4double > sumR_pdg02;
-  std::vector< G4double > longitudinalProfile_pdg0;
-  std::vector< G4double > transverseProfile_pdg0; 
+  // nuclei: all particles with PDG code = 0 and neutrons together
+  // (since G4 8.1, neutrons can deposit energy, which corresponds
+  //  to elastic recoiled nuclei below a certain kinetic energy);
+  G4double sumEdepAct_nuclei, sumEdepAct_nuclei2;
+  G4double sumEdepTot_nuclei, sumEdepTot_nuclei2;
+  std::vector< G4double > sumL_nuclei;
+  std::vector< G4double > sumL_nuclei2;
+  std::vector< G4double > sumR_nuclei;
+  std::vector< G4double > sumR_nuclei2;
+  std::vector< G4double > longitudinalProfile_nuclei;
+  std::vector< G4double > transverseProfile_nuclei; 
 
   // Due to the non-gaussian visible energy distribution, the width 
   // of it cannot be estimated as the sigma of the gaussian fit; on

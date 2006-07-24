@@ -242,25 +242,25 @@ void StatAccepTestAnalysis::init() {
     sumR_proton2.push_back( 0.0 );
   } 
 
-  sumEdepAct_pdg0  = 0.0;
-  sumEdepAct_pdg02 = 0.0;
-  sumEdepTot_pdg0  = 0.0;
-  sumEdepTot_pdg02 = 0.0;
-  sumL_pdg0.clear();
-  sumL_pdg02.clear();
-  longitudinalProfile_pdg0.clear();
+  sumEdepAct_nuclei  = 0.0;
+  sumEdepAct_nuclei2 = 0.0;
+  sumEdepTot_nuclei  = 0.0;
+  sumEdepTot_nuclei2 = 0.0;
+  sumL_nuclei.clear();
+  sumL_nuclei2.clear();
+  longitudinalProfile_nuclei.clear();
   for ( int layer = 0; layer < numberOfReadoutLayers; layer++ ) {
-    longitudinalProfile_pdg0.push_back( 0.0 );
-    sumL_pdg0.push_back( 0.0 );
-    sumL_pdg02.push_back( 0.0 );
+    longitudinalProfile_nuclei.push_back( 0.0 );
+    sumL_nuclei.push_back( 0.0 );
+    sumL_nuclei2.push_back( 0.0 );
   }
-  sumR_pdg0.clear();
-  sumR_pdg02.clear();
-  transverseProfile_pdg0.clear();
+  sumR_nuclei.clear();
+  sumR_nuclei2.clear();
+  transverseProfile_nuclei.clear();
   for ( int ir = 0; ir < numberOfRadiusBins; ir++ ) {
-    transverseProfile_pdg0.push_back( 0.0 );
-    sumR_pdg0.push_back( 0.0 );
-    sumR_pdg02.push_back( 0.0 );
+    transverseProfile_nuclei.push_back( 0.0 );
+    sumR_nuclei.push_back( 0.0 );
+    sumR_nuclei2.push_back( 0.0 );
   } 
 
   numStep = 0.0;
@@ -1250,7 +1250,7 @@ fillShowerProfile( G4int replica, const G4double radius,
   //    -  pions    (pi- and  pi+   together)
   //    -  kaons    (k-  and  k+    together)
   //    -  protons  (p   and  pbar  together)
-  //    -  pdg0     (all particles with PDG code = 0)
+  //    -  nuclei   (all particles with PDG code = 0 and neutrons together)
   if ( particlePDG == G4Electron::ElectronDefinition()->GetPDGEncoding()  ||
        particlePDG == G4Positron::PositronDefinition()->GetPDGEncoding() ) {
     sumEdepAct_electron += edep;
@@ -1281,11 +1281,12 @@ fillShowerProfile( G4int replica, const G4double radius,
     sumEdepTot_proton += edep;
     longitudinalProfile_proton[ readoutLayer ] += edep;
     transverseProfile_proton[ iBinRadius ] += edep;
-  } else if ( particlePDG == 0 ) {
-    sumEdepAct_pdg0 += edep;
-    sumEdepTot_pdg0 += edep;
-    longitudinalProfile_pdg0[ readoutLayer ] += edep;
-    transverseProfile_pdg0[ iBinRadius ] += edep;
+  } else if ( particlePDG == 0  || 
+	      particlePDG == G4Neutron::NeutronDefinition()->GetPDGEncoding() ) {
+    sumEdepAct_nuclei += edep;
+    sumEdepTot_nuclei += edep;
+    longitudinalProfile_nuclei[ readoutLayer ] += edep;
+    transverseProfile_nuclei[ iBinRadius ] += edep;
   }
 
 }
@@ -1370,7 +1371,7 @@ void StatAccepTestAnalysis::infoStep( const G4Step* aStep ) {
   //    -  pions    (pi- and  pi+   together)
   //    -  kaons    (k-  and  k+    together)
   //    -  protons  (p   and  pbar  together)
-  //    -  pdg0     (all particles with PDG code = 0)
+  //    -  nuclei   (all particles with PDG code = 0 and neutrons together)
   if ( aStep->GetTrack()->GetVolume()->GetName() == "physiAbsorber" ) {
     G4double edep = aStep->GetTotalEnergyDeposit() * aStep->GetTrack()->GetWeight();
     if ( aStep->GetTrack()->GetDefinition() == 
@@ -1398,8 +1399,10 @@ void StatAccepTestAnalysis::infoStep( const G4Step* aStep ) {
 		aStep->GetTrack()->GetDefinition() == 
 		G4AntiProton::AntiProtonDefinition() ) {
       sumEdepTot_proton += edep;
-    } else if ( aStep->GetTrack()->GetDefinition()->GetPDGEncoding() == 0 ) {
-      sumEdepTot_pdg0 += edep;
+    } else if ( aStep->GetTrack()->GetDefinition()->GetPDGEncoding() == 0   ||
+		aStep->GetTrack()->GetDefinition() == 
+		G4Neutron::NeutronDefinition() ) {
+      sumEdepTot_nuclei += edep;
     }
   }
 
@@ -2712,25 +2715,25 @@ void StatAccepTestAnalysis::endOfEvent() {
   }
 
   // all particles with PDG code = 0
-  static G4double sumEdepAct_pdg0_previous = 0.0;
-  sumEdepAct_pdg02 += ( sumEdepAct_pdg0 - sumEdepAct_pdg0_previous ) *
-                      ( sumEdepAct_pdg0 - sumEdepAct_pdg0_previous );
-  sumEdepAct_pdg0_previous = sumEdepAct_pdg0;
-  static G4double sumEdepTot_pdg0_previous = 0.0;
-  sumEdepTot_pdg02 += ( sumEdepTot_pdg0 - sumEdepTot_pdg0_previous ) *
-                      ( sumEdepTot_pdg0 - sumEdepTot_pdg0_previous );
-  sumEdepTot_pdg0_previous = sumEdepTot_pdg0;
+  static G4double sumEdepAct_nuclei_previous = 0.0;
+  sumEdepAct_nuclei2 += ( sumEdepAct_nuclei - sumEdepAct_nuclei_previous ) *
+                        ( sumEdepAct_nuclei - sumEdepAct_nuclei_previous );
+  sumEdepAct_nuclei_previous = sumEdepAct_nuclei;
+  static G4double sumEdepTot_nuclei_previous = 0.0;
+  sumEdepTot_nuclei2 += ( sumEdepTot_nuclei - sumEdepTot_nuclei_previous ) *
+                        ( sumEdepTot_nuclei - sumEdepTot_nuclei_previous );
+  sumEdepTot_nuclei_previous = sumEdepTot_nuclei;
   for ( int iLayer = 0; iLayer < numberOfReadoutLayers; iLayer++ ) {
-    sumL_pdg0[ iLayer ]  += longitudinalProfile_pdg0[ iLayer ];
-    sumL_pdg02[ iLayer ] += longitudinalProfile_pdg0[ iLayer ] * 
-                            longitudinalProfile_pdg0[ iLayer ];  
-    longitudinalProfile_pdg0[ iLayer ] = 0.0;  // Reset it for the next event.
+    sumL_nuclei[ iLayer ]  += longitudinalProfile_nuclei[ iLayer ];
+    sumL_nuclei2[ iLayer ] += longitudinalProfile_nuclei[ iLayer ] * 
+                              longitudinalProfile_nuclei[ iLayer ];  
+    longitudinalProfile_nuclei[ iLayer ] = 0.0;  // Reset it for the next event.
   }
   for ( int iBinR = 0; iBinR < numberOfRadiusBins; iBinR++ ) {
-    sumR_pdg0[ iBinR ]  += transverseProfile_pdg0[ iBinR ];
-    sumR_pdg02[ iBinR ] += transverseProfile_pdg0[ iBinR ] * 
-                           transverseProfile_pdg0[ iBinR ];  
-    transverseProfile_pdg0[ iBinR ] = 0.0;  // Reset it for the next event.
+    sumR_nuclei[ iBinR ]  += transverseProfile_nuclei[ iBinR ];
+    sumR_nuclei2[ iBinR ] += transverseProfile_nuclei[ iBinR ] * 
+                             transverseProfile_nuclei[ iBinR ];  
+    transverseProfile_nuclei[ iBinR ] = 0.0;  // Reset it for the next event.
   }
 
 }
@@ -3147,18 +3150,18 @@ void StatAccepTestAnalysis::finish() {
       break;
     }
     case 5 : {
-      caseName = "pdg0";
-      sumVis = sumEdepAct_pdg0;
-      sumVis2 = sumEdepAct_pdg02;
-      sumTot = sumEdepTot_pdg0;
-      sumTot2 = sumEdepTot_pdg02;
+      caseName = "nuclei";
+      sumVis = sumEdepAct_nuclei;
+      sumVis2 = sumEdepAct_nuclei2;
+      sumTot = sumEdepTot_nuclei;
+      sumTot2 = sumEdepTot_nuclei2;
       for ( int iLayer = 0; iLayer < numberOfReadoutLayers; iLayer++ ) {
-	vecSumL.push_back( sumL_pdg0[ iLayer ] );
-	vecSumL2.push_back( sumL_pdg02[ iLayer ] );
+	vecSumL.push_back( sumL_nuclei[ iLayer ] );
+	vecSumL2.push_back( sumL_nuclei2[ iLayer ] );
       }
       for ( int iBinR = 0; iBinR < numberOfRadiusBins; iBinR++ ) {
-	vecSumR.push_back( sumR_pdg0[ iBinR ] );
-	vecSumR2.push_back( sumR_pdg02[ iBinR ] );
+	vecSumR.push_back( sumR_nuclei[ iBinR ] );
+	vecSumR2.push_back( sumR_nuclei2[ iBinR ] );
       }
       break;
     }
