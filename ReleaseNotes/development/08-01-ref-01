@@ -25,6 +25,11 @@ global                                           global-V08-01-00	(*)
 ------
 - Updated date for patch-01 to release 8.1 in G4Version.hh.
 
+processes/electromagnetic/muons                  emmuons-V08-01-00	(*)
+-------------------------------
+- G4EnergyLossForExtrapolator: fixed misprint in name for method
+  EnergyDispersion().
+
 processes/electromagnetic/utils                  emutils-V08-01-00	(*)
 -------------------------------
 - Do not clear loss table map in G4LossTableManager to avoid crash for

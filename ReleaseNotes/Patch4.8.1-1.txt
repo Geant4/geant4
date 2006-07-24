@@ -18,6 +18,9 @@ List of fixes included in this public patch since the public release 8.1:
 
   o Electromagnetic processes:
     -------------------------
+    + muons:
+      o G4EnergyLossForExtrapolator: fixed misprint in name for method
+        EnergyDispersion().
     + utils:
       o Do not clear loss table map in G4LossTableManager to avoid crash
         for activation/desactivation of regime with ion gun.
