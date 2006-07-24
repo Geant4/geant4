@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: remsim.cc,v 1.13 2006-06-29 16:22:02 gunter Exp $
+// $Id: remsim.cc,v 1.14 2006-07-24 09:53:27 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4RunManager.hh"
@@ -42,6 +42,7 @@
 #ifdef G4ANALYSIS_USE
 #include "RemSimAnalysisManager.hh"
 #endif 
+#include "G4UItcsh.hh"
 
 int main(int argc,char** argv)
 {
