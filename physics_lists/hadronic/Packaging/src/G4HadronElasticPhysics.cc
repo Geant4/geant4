@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronElasticPhysics.cc,v 1.10 2006-07-05 16:12:43 vnivanch Exp $
+// $Id: G4HadronElasticPhysics.cc,v 1.11 2006-07-24 09:51:01 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -35,6 +35,7 @@
 // Modified:
 // 05.07.2006 V.Ivanchenko define process by particle name; 
 //                         fix problem of initialisation of HP
+// 24.07.2006 V.Ivanchenko add G4NeutronHPElasticData
 //
 //----------------------------------------------------------------------------
 //
@@ -46,6 +47,7 @@
 #include "G4HadronicInteraction.hh"
 #include "G4LElastic.hh"
 #include "G4NeutronHPElastic.hh"
+#include "G4NeutronHPElasticData.hh"
 
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
@@ -174,7 +176,7 @@ void G4HadronElasticPhysics::ConstructProcess()
 	store->Register(hel,particle,neutronHPModel,"HP");
 	hel->RegisterMe(neutronModel);
 	store->Register(hel,particle,neutronModel,mname);
-
+	hel->AddDataSet(new G4NeutronHPElasticData());
       } else {
 	hel->RegisterMe(model);
 	store->Register(hel,particle,model,mname);
