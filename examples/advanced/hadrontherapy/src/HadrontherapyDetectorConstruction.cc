@@ -171,7 +171,7 @@ void HadrontherapyDetectorConstruction::ConstructPhantom()
 
   G4Material* water = material -> GetMat("Water");
 
-  ComputeVoxelSize();
+  //ComputeVoxelSize();
 
   //----------------------
   // Water phantom  
