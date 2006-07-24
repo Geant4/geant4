@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronElasticPhysics.cc,v 1.11 2006-07-24 09:51:01 vnivanch Exp $
+// $Id: G4HadronElasticPhysics.cc,v 1.12 2006-07-24 11:30:53 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -35,7 +35,7 @@
 // Modified:
 // 05.07.2006 V.Ivanchenko define process by particle name; 
 //                         fix problem of initialisation of HP
-// 24.07.2006 V.Ivanchenko add G4NeutronHPElasticData
+// 24.07.2006 V.Ivanchenko add G4NeutronHPElasticData and set pLimit=60 MeV/c
 //
 //----------------------------------------------------------------------------
 //
@@ -66,7 +66,7 @@ G4HadronElasticPhysics::G4HadronElasticPhysics(const G4String& name,
     wasActivated(false)
 {
   if(verbose > 1) G4cout << "### HadronElasticPhysics" << G4endl;
-  pLimit = 20.*MeV;
+  pLimit = 60.*MeV;
   edepLimit = 100.*keV; 
   model = 0;
   neutronModel = 0;

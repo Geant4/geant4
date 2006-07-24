@@ -1,4 +1,4 @@
-$Id: History,v 1.26 2006-07-24 09:50:58 vnivanch Exp $
+$Id: History,v 1.27 2006-07-24 11:30:53 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,7 @@ track of all tags.
 
 24.07.2006, V.Ivanchenko - phys-lists-V08-01-02
 - Fix - add G4NeutronHPElasticData in the PL, not inside the process
+- Use pLimit=60 MeV/c instead of 20 MeV/c
 
 14.07.06, G.Folger       - phys-lists-V08-01-01
 - Correct flag for HP in G4HadronElasticPhysics() to true for
