@@ -68,6 +68,10 @@ examples                                         examples-V08-01-01
   o Updated hadronic physics list to be consistent with validation runs.
   o Fixed few problems of use of non-initialised variables.
   o Fixed compilation problems on gcc-4.X.
+- advanced/hadrontherapy (hadrontherapy-V08-01-01)			(*)
+  o Corrected hadronic physics list for Precompund model.
+- advanced/radioprotection (radioprotection-V08-01-00)			(*)
+  o Added missing inclusion of G4UItcsh.hh inside main().
 - extended/eventgenerator/HepMC (exHepMC-V08-01-00)			(*)
   o Updated physics lists to conform with non-static particles.
 - extended/parallel/ParN02 (ParN02-V08-01-00)				(*)

@@ -56,6 +56,10 @@ List of fixes included in this public patch since the public release 8.1:
       o Updated hadronic physics list to be consistent with validation runs.
       o Fixed few problems of use of non-initialised variables.
       o Fixed compilation problems on gcc-4.X.
+    + advanced/hadrontherapy
+      o Corrected hadronic physics list for Precompund model.
+    + advanced/radioprotection
+      o Added missing inclusion of G4UItcsh.hh inside main().
     + extended/eventgenerator/HepMC
       o Updated physics lists to conform with non-static particles.
     + extended/parallel/ParN02
