@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HadronElastic.hh,v 1.11 2006-06-29 20:09:03 gunter Exp $
+// $Id: G4HadronElastic.hh,v 1.12 2006-07-24 11:28:59 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -35,6 +35,7 @@
 // Modified:
 // 14-Dec-05 V.Ivanchenko rename the class
 // 13-Apr-06 V.Ivanchenko move to coherent_elastic 
+// 24-Jul-06 V.Ivanchenko add ekinlowCHIPS
 //
 //
 // Class Description
@@ -108,9 +109,10 @@ private:
   const G4ParticleDefinition* theDeuteron;
   const G4ParticleDefinition* theAlpha;
 
-  G4double ekinlim;  // in MeV
-  G4double plablow;  // in MeV/c
-  G4double ekinhigh;  // in MeV/c
+  G4double ekinlim;  
+  G4double plablow;  
+  G4double ekinhigh;  
+  G4double ekinlowCHIPS;
 };
 
 inline void G4HadronElastic::SetMomentumLow(G4double value)

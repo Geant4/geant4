@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronElastic.cc,v 1.20 2006-07-06 17:44:46 vnivanch Exp $
+// $Id: G4HadronElastic.cc,v 1.21 2006-07-24 11:28:59 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -49,6 +49,7 @@
 //           add s-wave regim below some momentum        
 // 24-Apr-06 V.Ivanchenko add neutron scattering on hydrogen from CHIPS
 // 07-Jun-06 V.Ivanchenko fix problem of rotation
+// 24-Jul-06 V.Ivanchenko add ekinlowCHIPS
 //
 
 #include "G4HadronElastic.hh"
@@ -73,6 +74,7 @@ G4HadronElastic::G4HadronElastic(G4double elim, G4double plow, G4double ehigh)
   plablow     = plow;
   ekinhigh    = ehigh;
   ekinlim     = elim;
+  ekinlowCHIPS= 20.*MeV;
   qCManager   = G4QElasticCrossSection::GetPointer();
   hElastic    = new G4ElasticHadrNucleusHE();
 
@@ -157,6 +159,7 @@ G4HadFinalState* G4HadronElastic::ApplyYourself(
   if ((theParticle == theProton || theParticle == theNeutron) && Z == 1
     && N == 0) {
     gtype = fQElastic;
+    if(ekin < ekinlowCHIPS) gtype = fSWave;
   } else if(ekin >= ekinhigh) {
     gtype = fHElastic;
   } else if(plab <= plablow) {
