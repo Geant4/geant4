@@ -52,13 +52,11 @@ processes/hadronic
   o G4NuclearDecayChannel::BetaDecayIt(): make additional check for
     negative sqrt() argument in 'daughtermomentum[1]'.
 
-physics_lists                                    phys-lists-V08-01-02	(*)
+physics_lists                                    phys-lists-V08-01-01	(*)
 -------------
 - Fixed initialisation problem for QBBC_HP
 - Corrected flag for HP regime in G4HadronElasticPhysics() to be 'true'
   for LHEP_HP and QGSP_HP.
-- Added G4NeutronHPElasticData in HP physics lists for hadron elastic
-  physics. Use pLimit=60 MeV/c instead of 20 MeV/c.
 - Added cout of list of processes and models for QBBC.
 
 examples                                         examples-V08-01-01
