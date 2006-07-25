@@ -228,20 +228,20 @@ Index : 1     used in the geometry : Yes     recalculation needed : No
 
 ### Run 0 start.
 number of event = 1000
- User=31.5s Real=38.38s Sys=6.44s
+ User=61.65s Real=68.19s Sys=6.41s
 #
 /gun/particle proton
 /run/beamOn 1000
 ### Run 1 start.
 number of event = 1000
- User=21.85s Real=26.37s Sys=4.15s
+ User=41.26s Real=45.42s Sys=4.15s
 /gun/particle pi-
 /run/beamOn 1000
 ### Run 2 start.
 number of event = 1000
- User=26.89s Real=32.34s Sys=5.06s
+ User=51.69s Real=56.61s Sys=4.92s
 /gun/particle pi+
 /run/beamOn 1000
 ### Run 3 start.
 number of event = 1000
- User=27.96s Real=34.01s Sys=5.72s
+ User=54.84s Real=59.86s Sys=5.02s

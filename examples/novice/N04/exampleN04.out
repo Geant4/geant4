@@ -7,8 +7,8 @@
 *************************************************************
 
 
-<<< Geant4 Physics List engine packaging library: PACK 5.1
-<<< Geant4 Physics List simulation engine: QGSP 3.1
+<<< Geant4 Physics List engine packaging library: PACK 5.0
+<<< Geant4 Physics List simulation engine: QGSP 3.0
 
 Visualization Manager instantiating...
 Visualization Manager initialising...
@@ -245,7 +245,7 @@ Stage 1->2 : 0 isolated muon found.
 Run terminated.
 Run Summary
   Number of events processed : 3
-  User=1.22s Real=1.41s Sys=0.06s
+  User=2.22s Real=2.46s Sys=0.08s
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.

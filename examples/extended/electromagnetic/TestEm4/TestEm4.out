@@ -143,7 +143,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=93.58s Real=383.02s Sys=118.87s
+  User=99.19s Real=967.55s Sys=69.46s
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
