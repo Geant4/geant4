@@ -25,6 +25,10 @@ global                                           global-V08-01-00	(*)
 ------
 - Updated date for patch-01 to release 8.1 in G4Version.hh.
 
+particles                                        particles-V08-01-00	(*)
+---------
+- Code cleanup for G4PrimaryVertex class.
+
 processes/electromagnetic/muons                  emmuons-V08-01-00	(*)
 -------------------------------
 - G4EnergyLossForExtrapolator: fixed misprint in name for method
@@ -48,9 +52,6 @@ processes/hadronic
 - models/radioactive_decay (radioactive_decay-V08-01-00)		(*)
   o Added test for negative lifetime in G4RadioactiveDecay::IsApplicable();
     fixed problem connected with particle design in 8.0,
-- processes (hadr-proc-V08-00-00)
-  o G4NuclearDecayChannel::BetaDecayIt(): make additional check for
-    negative sqrt() argument in 'daughtermomentum[1]'.
 
 physics_lists                                    phys-lists-V08-01-01	(*)
 -------------
@@ -64,12 +65,12 @@ examples                                         examples-V08-01-01
 - Updated reference outputs.
 - advanced/composite_calorimeter (ccal-V08-01-00)			(*)
   o Updated hadronic physics list to be consistent with validation runs.
+- advanced/hadrontherapy (hadrontherapy-V08-01-01)			(*)
+  o Corrected hadronic physics list for Precompund model.
 - advanced/lAr_calorimeter (lAr_calorimeter-V08-01-00)			(*)
   o Updated hadronic physics list to be consistent with validation runs.
   o Fixed few problems of use of non-initialised variables.
   o Fixed compilation problems on gcc-4.X.
-- advanced/hadrontherapy (hadrontherapy-V08-01-01)			(*)
-  o Corrected hadronic physics list for Precompund model.
 - advanced/radioprotection (radioprotection-V08-01-00)			(*)
   o Added missing inclusion of G4UItcsh.hh inside main().
 - extended/eventgenerator/HepMC (exHepMC-V08-01-00)			(*)
