@@ -57,6 +57,7 @@
 #include "G4ProtonInelasticCrossSection.hh"
 #include "G4NeutronInelasticCrossSection.hh"
 #include "G4HadronInelasticDataSet.hh"
+#include "G4PiNuclearCrossSection.hh"
 
 #include "G4ParticleTable.hh"
 #include "G4ParticleChange.hh"
@@ -152,15 +153,15 @@ int main(int argc, char** argv)
   G4ParticleTable* partTable = G4ParticleTable::GetParticleTable();
   partTable->SetReadiness();
 
-  G4double ang[15] = {0.0};
-  G4double bng1[15] = {0.0};
-  G4double bng2[15] = {0.0};
-  G4double cng[15] = {0.0};
-  G4double angpi[10] = {0.0};
-  G4double mompi[10] = {0.0};
-  G4double bngpi1[10] = {0.0};
-  G4double bngpi2[10] = {0.0};
-  G4double cngpi[10] = {0.0};
+  G4double ang[20] = {0.0};
+  G4double bng1[20] = {0.0};
+  G4double bng2[20] = {0.0};
+  G4double cng[20] = {0.0};
+  G4double angpi[20] = {0.0};
+  G4double mompi[20] = {0.0};
+  G4double bngpi1[20] = {0.0};
+  G4double bngpi2[20] = {0.0};
+  G4double cngpi[20] = {0.0};
 
   // Track
   G4ThreeVector aPosition = G4ThreeVector(0.,0.,0.);
@@ -490,6 +491,8 @@ int main(int argc, char** argv)
       cs = new G4ProtonInelasticCrossSection();
     } else if(part == neutron && material->GetElement(0)->GetZ() > 1.5) {
       cs = new G4NeutronInelasticCrossSection();
+    } else if((part == pin || part == pip) && material->GetElement(0)->GetZ() > 1.5) {
+      cs = new G4PiNuclearCrossSection();
     } else {
       cs = new G4HadronInelasticDataSet();
     }
@@ -568,26 +571,25 @@ int main(int argc, char** argv)
     double errpip[50][20];
     double errpin[50][20];
     double errpi0[50][20];
-    double dthetad = angpi[nanglpi-1]/double(nanglpi);
+    //    double dthetad = angpi[nanglpi-1]/double(nanglpi);
     double mom0 = 0.0;
     for(int k=0; k<nmompi; k++) {
       double dp = mompi[k] - mom0;
       double ang0 = 0.0;
       for(int j=0; j<nanglpi; j++) {
-        nmomtet[k][j] = 0;
+        nmomtet[k][j]  = 0;
         nmomtetm[k][j] = 0;
         nmomtet0[k][j] = 0;
-        harpcs[k][j] = coeff/(twopi*dp*(cos(ang0) - cos(angpi[j])));
-	harpcsm[k][j] = harpcs[k][j];
-	harpcs0[k][j] = harpcs[k][j];
+        harpcs[k][j]   = coeff/(twopi*dp*(cos(ang0) - cos(angpi[j])));
+	harpcsm[k][j]  = harpcs[k][j];
+	harpcs0[k][j]  = harpcs[k][j];
         ang0 = angpi[j];
       }
       mom0 = mompi[k];
     }    
 
-    G4cout << "dTheta= " << dthetad 
-	   << " nbinTheta= " << nanglpi 
-	   << " nbinP= " << nmompi << G4endl; 
+    G4cout << " nbinTheta= " << nanglpi 
+	   << " nbinP= " << nmompi << " ang0= " << angpi[0] << G4endl; 
 
     G4Track* gTrack;
     gTrack = new G4Track(&dParticle,aTime,aPosition);
@@ -642,10 +644,9 @@ int main(int argc, char** argv)
       labv = G4LorentzVector(0.0, 0.0, pmax, energy + mass + amass);
       aChange = proc->PostStepDoIt(*gTrack,*step);
 
-      //      G4double de = aChange->GetLocalEnergyDeposit();
       G4int n = aChange->GetNumberOfSecondaries();
 
-      if(verbose==1 and iter == 1000*(iter/1000)) 
+      if(verbose>=1 and iter == 1000*(iter/1000)) 
         G4cout << "##### " << iter << "-th event  #####" << G4endl;
 
       G4int nbar = 0;
@@ -669,7 +670,6 @@ int main(int argc, char** argv)
 
         theta = mom.theta();
         double cost  = cos(theta);
-	//        double sint  = sin(theta);
 
         m = pd->GetPDGMass();
 	p = sqrt(e*(e + 2.0*m));
@@ -709,10 +709,15 @@ int main(int argc, char** argv)
 	if(p < mompi[nmompi-1] && theta < angpi[nanglpi-1] 
 	   && (pd == pip || pd == pin || pd == pi0)) {
 
-	  int kang = int(theta/dthetad);
+	  int kang = -1;
 	  int kp   = -1;
-	  do {kp++;} while (p > mompi[kp]);  
-	  if(pd == pip)      nmomtet[kp][kang] += 1;
+	  do {kp++;}   while (p > mompi[kp]);  
+	  do {kang++;} while (theta > angpi[kang]);  
+	  if(verbose>=1)
+	    G4cout << pd->GetParticleName() << "  p= "<<p
+		   << "  theta= " << theta<< " kp= " << kp << " kang= " << kang
+		   <<G4endl; 
+	  if(pd == pip)      nmomtet[kp][kang]  += 1;
 	  else if(pd == pin) nmomtetm[kp][kang] += 1;
 	  else               nmomtet0[kp][kang] += 1;
 	}        
@@ -741,12 +746,21 @@ int main(int argc, char** argv)
 
     for(int k=0; k<nmompi; k++) {
       for(int j=0; j<nanglpi; j++) {
-        respip[k][j] = double(nmomtet[k][j])*harpcs[k][j];
+        respip[k][j] = double(nmomtet[k][j]) *harpcs[k][j];
         respin[k][j] = double(nmomtetm[k][j])*harpcsm[k][j];
         respi0[k][j] = double(nmomtet0[k][j])*harpcs0[k][j];
-        errpip[k][j] = respip[k][j]/sqrt(double(nmomtet[k][j]));
-        errpin[k][j] = respin[k][j]/sqrt(double(nmomtetm[k][j]));
-        errpi0[k][j] = respi0[k][j]/sqrt(double(nmomtet0[k][j]));
+
+        if(nmomtet[k][j] > 0)
+	  errpip[k][j] = (respip[k][j])/sqrt(double(nmomtet[k][j]));
+        else  errpip[k][j] = 0.0;
+
+        if(nmomtetm[k][j] > 0)
+	  errpin[k][j] = (respin[k][j])/sqrt(double(nmomtetm[k][j]));
+        else  errpin[k][j] = 0.0;
+
+        if(nmomtet0[k][j] > 0)
+	  errpi0[k][j] = (respi0[k][j])/sqrt(double(nmomtet0[k][j]));
+        else  errpi0[k][j] = 0.0;
       }
     }
     ofstream* fout = new ofstream();
