@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V08-00-04    (30-June-2006)
+ Geant4 version Name: geant4-08-01-patch-01-ref    (27-July-2006)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -201,7 +201,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=8.7s Real=9.1s Sys=0.15s
+  User=9.8s Real=10s Sys=0.05s
 #
 # deuteron at 1 GeV/nucleon on H 
 #
@@ -529,7 +529,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=3.83s Real=3.94s Sys=0.08s
+  User=2.8s Real=2.86s Sys=0.06s
 #
 #
 # deuteron at 200 MeV in U
@@ -575,7 +575,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.12s Real=0.12s Sys=0s
+  User=0.13s Real=0.13s Sys=0s
 #
 # deuteron at 200 MeV/nucleon on H 
 #
@@ -619,7 +619,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.01s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 #
 # deuteron at 200 MeV/nucleon on Silicon 
 #
@@ -663,7 +663,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.1s Real=0.12s Sys=0.02s
+  User=0.1s Real=0.1s Sys=0s
 #
 #  .....end deuteron.............
 #
@@ -710,7 +710,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=2.1s Real=2.2s Sys=0.05s
+  User=2.3s Real=2.3s Sys=0.01s
 #
 # alpha at 1 GeV/nucleon on H 
 #
@@ -754,7 +754,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0s Real=0s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 #
 # alpha at 1 GeV/nucleon on Silicon 
 #
@@ -798,7 +798,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=1.52s Real=1.56s Sys=0.04s
+  User=1.25s Real=1.25s Sys=0s
 #
 # deuteron at 200 MeV/nucleon in U
 #
@@ -842,7 +842,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.02s Real=0.02s Sys=0s
+  User=0s Real=0.01s Sys=0.01s
 #
 # alpha at 200 MeV/nucleon on H 
 #
@@ -886,7 +886,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.02s Real=0.02s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 #
 # alpha at 200 MeV/nucleon on Silicon 
 #
@@ -930,7 +930,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.02s Real=0.03s Sys=0.01s
+  User=0.01s Real=0.02s Sys=0s
 #
 #  .....end alpha............
 #
@@ -984,7 +984,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=28s Real=28s Sys=0.42s
+  User=27s Real=28s Sys=0.11s
 #
 # C(12,6)++ at 1 GeV/nucleon on H 
 #
@@ -1029,7 +1029,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.13s Real=0.19s Sys=0.06s
+  User=0.08s Real=0.1s Sys=0.02s
 #
 # C(12,6)++ at 1 GeV/nucleon on Silicon 
 #
@@ -1074,7 +1074,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=6.94s Real=7.64s Sys=0.67s
+  User=5.45s Real=5.62s Sys=0.15s
 #
 # C(12,6)++ at 1 GeV/nucleon on Water 
 #
@@ -1245,7 +1245,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=4.95s Real=5.74s Sys=0.69s
+  User=3.74s Real=3.94s Sys=0.18s
 #
 #
 # C(12,6)++ at 200 MeV in U
@@ -1293,12 +1293,11 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     Total memory consumed for geometry optimisation:   0 kByte
     Total CPU time elapsed for geometry optimisation: 0 seconds
 Start Run processing.
- G4NuclearLevelManager: nuclide (92,228) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (21,53) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (90,235) does not have a gamma levels file
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=6.3s Real=6.4s Sys=0.09s
+  User=2.2s Real=2.2s Sys=0.01s
 #
 # C(12,6)++ at 200 MeV/nucleon on H 
 #
@@ -1348,7 +1347,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0s Real=0s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 #
 # C(12,6)++ at 200 MeV/nucleon on Silicon 
 #
@@ -1398,7 +1397,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=2.3s Real=2.5s Sys=0.23s
+  User=2.6s Real=2.75s Sys=0.15s
 #
 #  .....end C(12,6)++............
 #
@@ -1412,66 +1411,66 @@ Run Summary
 SimpleBox is now made of Pb
 /run/beamOn 1
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
-The cut in range [1e+03 (mm)]   is too big   for material  idx=3
-The cut in energy is set1.8e+305GeV 
+The cut in range [1000 (mm)]   is too big   for material  idx=3
+The cut in energy is set1.7976931e+305GeV 
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for e-
-The cut in range [1e+03 (mm)]   is too big   for material  idx=3
-The cut in energy is set1.8e+305GeV 
+The cut in range [1000 (mm)]   is too big   for material  idx=3
+The cut in energy is set1.7976931e+305GeV 
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for e+
-The cut in range [1e+03 (mm)]   is too big   for material  idx=3
-The cut in energy is set1.8e+305GeV 
+The cut in range [1000 (mm)]   is too big   for material  idx=3
+The cut in energy is set1.7976931e+305GeV 
 
 conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
       sampling secondary e+e- according to the Bethe-Heitler model
       tables are built for  gamma
-      Lambda tables from 1 MeV to 1e+02 GeV in 100 bins.
+      Lambda tables from 1.0219981 MeV to 100 GeV in 100 bins.
 
 compt:  Total cross sections has a good parametrisation from 10 KeV to (100/Z) GeV
       Sampling according Klein-Nishina model
       tables are built for  gamma
-      Lambda tables from 1e+02 eV  to 1e+02 GeV in 90 bins.
+      Lambda tables from 100 eV  to 100 GeV in 90 bins.
 
 phot:  Total cross sections from Sandia parametrisation. 
 
 msc:  Model variant of multiple scattering for e-
-      Lambda tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 eIoni:   tables are built for  e-
-      dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
-      Lambda tables from threshold to 1e+02 TeV in 120 bins.
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 eBrem:   tables are built for  e-
-      dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
-      Lambda tables from threshold to 1e+02 TeV in 120 bins.
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
       Total cross sections from a parametrisation based on the EEDL data library. 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
 
 eIoni:   tables are built for  e+
-      dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
-      Lambda tables from threshold to 1e+02 TeV in 120 bins.
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 eBrem:   tables are built for  e+
-      dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
-      Lambda tables from threshold to 1e+02 TeV in 120 bins.
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
       Total cross sections from a parametrisation based on the EEDL data library. 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
 
 annihil:       Heilter model of formula of annihilation into 2 photons
       tables are built for  e+
-      Lambda tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
 
 msc:  Model variant of multiple scattering for proton
-      Lambda tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 hIoni:   tables are built for  proton
-      dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
-      Lambda tables from threshold to 1e+02 TeV in 120 bins.
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
       Scaling relation is used to proton dE/dx and range
       Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for protons below.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
@@ -1480,66 +1479,66 @@ msc:  Model variant of multiple scattering for GenericIon
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 hIoni:   tables are built for  anti_proton
-      dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
-      Lambda tables from threshold to 1e+02 TeV in 120 bins.
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
       Scaling relation is used to proton dE/dx and range
       Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for protons below.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 msc:  Model variant of multiple scattering for mu+
-      Lambda tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 muIoni:   tables are built for  mu+
-      dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
-      Lambda tables from threshold to 1e+02 TeV in 120 bins.
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 muBrems:   tables are built for  mu+
-      dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
-      Lambda tables from threshold to 1e+02 TeV in 120 bins.
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
       Parametrised model 
 
 muPairProd:   tables are built for  mu+
-      dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
-      Lambda tables from threshold to 1e+02 TeV in 120 bins.
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
       Parametrised model 
 
 muIoni:   tables are built for  mu-
-      dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
-      Lambda tables from threshold to 1e+02 TeV in 120 bins.
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 muBrems:   tables are built for  mu-
-      dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
-      Lambda tables from threshold to 1e+02 TeV in 120 bins.
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
       Parametrised model 
 
 muPairProd:   tables are built for  mu-
-      dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
-      Lambda tables from threshold to 1e+02 TeV in 120 bins.
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
       Parametrised model 
 
 hIoni:   tables are built for  pi+
-      dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
-      Lambda tables from threshold to 1e+02 TeV in 120 bins.
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
       Scaling relation is used to proton dE/dx and range
-      Bether-Bloch model for Escaled > 0.3 MeV, ICRU49 parametrisation for protons below.
+      Bether-Bloch model for Escaled > 0.29750425 MeV, ICRU49 parametrisation for protons below.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 msc:  Model variant of multiple scattering for pi-
-      Lambda tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 hIoni:   tables are built for  pi-
-      dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
-      Lambda tables from threshold to 1e+02 TeV in 120 bins.
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
       Scaling relation is used to proton dE/dx and range
-      Bether-Bloch model for Escaled > 0.3 MeV, ICRU49 parametrisation for protons below.
+      Bether-Bloch model for Escaled > 0.29750425 MeV, ICRU49 parametrisation for protons below.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
@@ -1551,27 +1550,27 @@ Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
 Index : 0     used in the geometry : No      recalculation needed : No 
  Material : Uranium
  Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.9e+295 J      e- 2.9e+295 J      e+ 2.9e+295 J  
+ Energy thresholds :  gamma 2.8802232e+295 J      e- 2.8802232e+295 J      e+ 2.8802232e+295 J  
 
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : H
  Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 9.9e+02 eV     e- 7.1e+02 keV    e+ 6.8e+02 keV
+ Energy thresholds :  gamma 990 eV     e- 708.90956 keV    e+ 683.20614 keV
 
 Index : 2     used in the geometry : No      recalculation needed : No 
  Material : Silicon
  Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.9e+295 J      e- 1 GeV    e+ 9.6e+02 MeV
+ Energy thresholds :  gamma 2.8802232e+295 J      e- 1.0114457 GeV    e+ 962.84668 MeV
 
 Index : 3     used in the geometry : No      recalculation needed : No 
  Material : Water
  Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 8.3e+02 keV    e- 3.2e+02 MeV    e+ 3e+02 MeV
+ Energy thresholds :  gamma 834.15882 keV    e- 317.96904 MeV    e+ 302.69093 MeV
 
 Index : 4     used in the geometry : Yes     recalculation needed : No 
  Material : Lead
  Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.9e+295 J      e- 2.9e+295 J      e+ 2.9e+295 J  
+ Energy thresholds :  gamma 2.8802232e+295 J      e- 2.8802232e+295 J      e+ 2.8802232e+295 J  
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -1583,11 +1582,10 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     Total memory consumed for geometry optimisation:   0 kByte
     Total CPU time elapsed for geometry optimisation: 0 seconds
 Start Run processing.
- G4NuclearLevelManager: nuclide (19,48) does not have a gamma levels file
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=6.8s Real=7s Sys=0.09s
+  User=9.7s Real=10s Sys=0.08s
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
 UserRunAction deleted.
