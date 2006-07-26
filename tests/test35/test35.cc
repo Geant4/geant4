@@ -560,10 +560,14 @@ int main(int argc, char** argv)
     double harpcs[50][20];
     int    nmomtetm[50][20];
     double harpcsm[50][20];
+    int    nmomtet0[50][20];
+    double harpcs0[50][20];
     double respip[50][20];
     double respin[50][20];
+    double respi0[50][20];
     double errpip[50][20];
     double errpin[50][20];
+    double errpi0[50][20];
     double dthetad = angpi[nanglpi-1]/double(nanglpi);
     double mom0 = 0.0;
     for(int k=0; k<nmompi; k++) {
@@ -572,8 +576,10 @@ int main(int argc, char** argv)
       for(int j=0; j<nanglpi; j++) {
         nmomtet[k][j] = 0;
         nmomtetm[k][j] = 0;
+        nmomtet0[k][j] = 0;
         harpcs[k][j] = coeff/(twopi*dp*(cos(ang0) - cos(angpi[j])));
 	harpcsm[k][j] = harpcs[k][j];
+	harpcs0[k][j] = harpcs[k][j];
         ang0 = angpi[j];
       }
       mom0 = mompi[k];
@@ -701,13 +707,14 @@ int main(int argc, char** argv)
 	}
 
 	if(p < mompi[nmompi-1] && theta < angpi[nanglpi-1] 
-	   && (pd == pip || pd == pin )) {
+	   && (pd == pip || pd == pin || pd == pi0)) {
 
 	  int kang = int(theta/dthetad);
 	  int kp   = -1;
 	  do {kp++;} while (p > mompi[kp]);  
-	  if(pd == pip) nmomtet[kp][kang] += 1;
-	  else          nmomtetm[kp][kang] += 1;
+	  if(pd == pip)      nmomtet[kp][kang] += 1;
+	  else if(pd == pin) nmomtetm[kp][kang] += 1;
+	  else               nmomtet0[kp][kang] += 1;
 	}        
         delete aChange->GetSecondary(i);
       }
@@ -736,8 +743,10 @@ int main(int argc, char** argv)
       for(int j=0; j<nanglpi; j++) {
         respip[k][j] = double(nmomtet[k][j])*harpcs[k][j];
         respin[k][j] = double(nmomtetm[k][j])*harpcsm[k][j];
+        respi0[k][j] = double(nmomtet0[k][j])*harpcs0[k][j];
         errpip[k][j] = respip[k][j]/sqrt(double(nmomtet[k][j]));
         errpin[k][j] = respin[k][j]/sqrt(double(nmomtetm[k][j]));
+        errpi0[k][j] = respi0[k][j]/sqrt(double(nmomtet0[k][j]));
       }
     }
     ofstream* fout = new ofstream();
@@ -746,6 +755,9 @@ int main(int argc, char** argv)
     ofstream* fout1 = new ofstream();
     string fname1 = hFile+"_pi-.dpdo";
     fout1->open(fname1.c_str(), std::ios::out|std::ios::trunc);
+    ofstream* fout2 = new ofstream();
+    string fname2 = hFile+"_pi0.dpdo";
+    fout2->open(fname2.c_str(), std::ios::out|std::ios::trunc);
 
     mom0 = 0.0;
     G4double mom1;
@@ -756,6 +768,7 @@ int main(int argc, char** argv)
     
     G4double cross;
     G4double crossm;
+    G4double cross0;
     for(int k=0; k<nmompi; k++) {
       mom1 = mompi[k];
       dsdm[k] = 0.0;
@@ -770,11 +783,14 @@ int main(int argc, char** argv)
         ang1  = angpi[j];
         cross = respip[k][j];
         crossm= respin[k][j];
+        cross0= respi0[k][j];
         G4cout << "  " << cross;
         (*fout) << mom0/GeV << " " << mom1/GeV << " " << ang0 << " " << ang1 
 		<< " " << cross << " " << errpip[k][j] << endl; 
 	(*fout1)<< mom0/GeV << " " << mom1/GeV << " " << ang0 << " " << ang1 
 		<< " " << crossm << " " << errpin[k][j] << endl; 
+	(*fout2)<< mom0/GeV << " " << mom1/GeV << " " << ang0 << " " << ang1 
+		<< " " << cross0 << " " << errpi0[k][j] << endl; 
 
         if(k>0) {
           x = (mom1 - mom0)/GeV;
