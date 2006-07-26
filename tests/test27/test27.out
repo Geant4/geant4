@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V08-00-04    (30-June-2006)
+ Geant4 version Name: geant4-08-01-patch-01-ref    (27-July-2006)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -184,7 +184,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=7.9s Real=8.3s Sys=0.14s
+  User=8s Real=8.3s Sys=0.06s
 #
 # deuteron at 1 GeV/nucleon on H 
 #
@@ -339,7 +339,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.01s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 #
 # deuteron at 1 GeV/nucleon on Silicon 
 #
@@ -502,7 +502,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=3.4s Real=3.55s Sys=0.05s
+  User=2.37s Real=2.46s Sys=0.03s
 #
 #
 # deuteron at 200 MeV in U
@@ -542,7 +542,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.02s Real=0.03s Sys=0.01s
+  User=0.02s Real=0.02s Sys=0s
 #
 # deuteron at 200 MeV/nucleon on H 
 #
@@ -620,7 +620,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.32s Real=0.35s Sys=0.01s
+  User=0.21s Real=0.25s Sys=0.01s
 #
 #  .....end deuteron.............
 #
@@ -661,7 +661,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=2.14s Real=2.21s Sys=0.03s
+  User=2.32s Real=2.33s Sys=0.01s
 #
 # alpha at 1 GeV/nucleon on H 
 #
@@ -739,7 +739,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.82s Real=0.83s Sys=0.01s
+  User=0.68s Real=0.71s Sys=0.01s
 #
 # deuteron at 200 MeV/nucleon in U
 #
@@ -898,11 +898,11 @@ Start Run processing.
  G4NuclearLevelManager: nuclide (93,231) does not have a gamma levels file
  G4NuclearLevelManager: nuclide (91,232) does not have a gamma levels file
  G4NuclearLevelManager: nuclide (88,232) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (89,222) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (91,225) does not have a gamma levels file
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=12.28s Real=12.51s Sys=0.11s
+  User=12.14s Real=12.39s Sys=0.05s
 #
 # C(12,6)++ at 1 GeV/nucleon on H 
 #
@@ -942,7 +942,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.02s Real=0.02s Sys=0s
+  User=0s Real=0s Sys=0s
 #
 # C(12,6)++ at 1 GeV/nucleon on Silicon 
 #
@@ -979,11 +979,10 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
 ====================================================================
 
 Start Run processing.
- G4NuclearLevelManager: nuclide (16,28) does not have a gamma levels file
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=4.04s Real=4.09s Sys=0.02s
+  User=3.17s Real=3.25s Sys=0.01s
 #
 # C(12,6)++ at 1 GeV/nucleon on Water 
 #
@@ -1149,7 +1148,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=2.16s Real=2.26s Sys=0.06s
+  User=2.09s Real=2.18s Sys=0s
 #
 #
 # C(12,6)++ at 200 MeV in U
@@ -1192,11 +1191,12 @@ Index : 3     used in the geometry : No      recalculation needed : No
 ====================================================================
 
 Start Run processing.
- G4NuclearLevelManager: nuclide (98,246) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (96,240) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (98,243) does not have a gamma levels file
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.09s Real=0.09s Sys=0s
+  User=0.18s Real=0.19s Sys=0s
 #
 # C(12,6)++ at 200 MeV/nucleon on H 
 #
@@ -1286,7 +1286,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.15s Real=0.16s Sys=0.01s
+  User=0.24s Real=0.28s Sys=0.03s
 #
 #  .....end C(12,6)++............
 #
@@ -1469,7 +1469,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.1s Real=0.13s Sys=0.01s
+  User=0.04s Real=0.04s Sys=0s
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
 UserRunAction deleted.

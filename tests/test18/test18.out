@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V08-00-04    (30-June-2006)
+ Geant4 version Name: geant4-08-01-patch-01-ref    (27-July-2006)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -221,7 +221,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.12s Real=0.35s Sys=0.01s
+  User=0.04s Real=0.05s Sys=0s
 /vis/show/view
     1000.000           1           0     Na24[0.0]
          499           1   2.256e+05     e-
@@ -270,7 +270,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.08s Real=0.15s Sys=0.01s
+  User=0.02s Real=0.03s Sys=0.01s
 /vis/show/view
        1e+03           1           0     Ne24[0.0]
     1.14e+03           1       51.57     e-
@@ -324,7 +324,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.03s Real=0.05s Sys=0.01s
+  User=0.02s Real=0.02s Sys=0s
 /vis/show/view
        1e+03           1           0     F24[0.0]
     8.06e+03           1       0.062     e-
@@ -382,7 +382,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.05s Real=0.05s Sys=0s
+  User=0.02s Real=0.02s Sys=0s
 /vis/show/view
        1e+03           1           0     Al24[0.0]
     4.35e+03           1      0.6077     e+
@@ -433,7 +433,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.02s Sys=0.01s
+  User=0s Real=0s Sys=0s
 /vis/show/view
        1e+03           1           0     Na24[472.0]
          472           1     0.02063     gamma
@@ -484,7 +484,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.03s Real=0.04s Sys=0s
+  User=0.01s Real=0.02s Sys=0s
 /vis/show/view
        1e+03           1           0     Cr46[0.0]
     5.64e+03           1      0.3928     e+
@@ -538,7 +538,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.02s Real=0.04s Sys=0s
+  User=0s Real=0.02s Sys=0s
 /vis/show/view
        1e+03           1           0     Po215[0.0]
     7.39e+03           1    0.001676     alpha
