@@ -91,6 +91,8 @@ private:
   static bool isHistogramSpectrumUnweightedOn;  // To switch on/off the
   static bool isHistogramSpectrumWeightedOn;    // unweighted/weighted histograms.
 
+  static bool isCountingProcessesOn; // To switch on/off the counting of processes.
+
   void classifyParticle( const bool isTrack, const G4ParticleDefinition* particleDef );
   
   static StatAccepTestAnalysis* instance;
@@ -447,6 +449,27 @@ private:
   G4double numExitingMuons2;           
   G4double numExitingElectrons2;       
   G4double numExitingOthers2;          
+
+  // Count number of inelastic and stoppingAtRest processes.
+  G4int numInelasticProcesses;
+  G4int numProtonInelasticProcesses;
+  G4int numAntiProtonInelasticProcesses;
+  G4int numNeutronInelasticProcesses;
+  G4int numAntiNeutronInelasticProcesses;
+  G4int numPionPlusInelasticProcesses;
+  G4int numPionMinusInelasticProcesses;
+  G4int numKaonPlusInelasticProcesses;
+  G4int numKaonMinusInelasticProcesses;
+  G4int numKaonNeutralInelasticProcesses;
+  G4int numOtherInelasticProcesses;
+  G4int numStoppingAtRestProcesses;
+  G4int numAntiProtonStoppingAtRestProcesses;
+  G4int numNeutronStoppingAtRestProcesses;
+  G4int numAntiNeutronStoppingAtRestProcesses;
+  G4int numPionMinusStoppingAtRestProcesses;
+  G4int numKaonMinusStoppingAtRestProcesses;
+  G4int numKaonNeutralStoppingAtRestProcesses;
+  G4int numOtherStoppingAtRestProcesses;
 
 };
 

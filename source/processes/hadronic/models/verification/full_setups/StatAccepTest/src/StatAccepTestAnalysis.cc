@@ -19,6 +19,7 @@ bool StatAccepTestAnalysis::isHistogramOn = true;
 bool StatAccepTestAnalysis::is2DHistogramStepLvsEOn = false;
 bool StatAccepTestAnalysis::isHistogramSpectrumUnweightedOn = false;
 bool StatAccepTestAnalysis::isHistogramSpectrumWeightedOn = true;  
+bool StatAccepTestAnalysis::isCountingProcessesOn = false;  
 
 
 StatAccepTestAnalysis* StatAccepTestAnalysis::instance = 0;
@@ -384,6 +385,26 @@ void StatAccepTestAnalysis::init() {
   numExitingMuons2 = 0.0;
   numExitingElectrons2 = 0.0;
   numExitingOthers2 = 0.0;
+
+  numInelasticProcesses = 0;
+  numProtonInelasticProcesses = 0;
+  numAntiProtonInelasticProcesses = 0;
+  numNeutronInelasticProcesses = 0;
+  numAntiNeutronInelasticProcesses = 0;
+  numPionPlusInelasticProcesses = 0;
+  numPionMinusInelasticProcesses = 0;
+  numKaonPlusInelasticProcesses = 0;
+  numKaonMinusInelasticProcesses = 0;
+  numKaonNeutralInelasticProcesses = 0;
+  numOtherInelasticProcesses = 0;
+  numStoppingAtRestProcesses = 0;
+  numAntiProtonStoppingAtRestProcesses = 0;
+  numNeutronStoppingAtRestProcesses = 0;
+  numAntiNeutronStoppingAtRestProcesses = 0;
+  numPionMinusStoppingAtRestProcesses = 0;
+  numKaonMinusStoppingAtRestProcesses = 0;
+  numKaonNeutralStoppingAtRestProcesses = 0;
+  numOtherStoppingAtRestProcesses = 0;
 
 }                       
 
@@ -1293,7 +1314,104 @@ fillShowerProfile( G4int replica, const G4double radius,
 
 
 void StatAccepTestAnalysis::infoStep( const G4Step* aStep ) {
+
   classifyParticle( false , aStep->GetTrack()->GetDefinition() );
+
+  // Count the number of inelastic and stoppingAtRest processes.
+  if ( StatAccepTestAnalysis::isCountingProcessesOn ) { 
+    G4String processStr( aStep->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName() );  
+    //G4cout << " Process = " << processStr << G4endl; //***DEBUG***
+    if ( processStr.find( "Inelastic" ) != G4String::npos  ||
+	 processStr.find( "CHIPSNuclearAbsorptionAtRest" ) != G4String::npos ) {
+      //G4cout << " Process = " << processStr 
+      //       << "\t particle = " 
+      //       <<  aStep->GetTrack()->GetDefinition()->GetPDGEncoding() 
+      //       << "\t" << aStep->GetTrack()->GetDefinition()->GetParticleName()
+      //       << G4endl;  //***DEBUG***
+
+      if ( processStr.find( "Inelastic" ) != G4String::npos ) {
+	numInelasticProcesses++;
+	if ( aStep->GetTrack()->GetDefinition() == 
+	     G4Proton::ProtonDefinition() ) {
+          numProtonInelasticProcesses++;
+	} else if ( aStep->GetTrack()->GetDefinition() == 
+		    G4AntiProton::AntiProtonDefinition() ) {
+          numAntiProtonInelasticProcesses++;
+	} else if ( aStep->GetTrack()->GetDefinition() == 
+		    G4Neutron::NeutronDefinition() ) {
+          numNeutronInelasticProcesses++;
+	} else if ( aStep->GetTrack()->GetDefinition() == 
+		    G4AntiNeutron::AntiNeutronDefinition() ) {
+          numAntiNeutronInelasticProcesses++;
+	} else if ( aStep->GetTrack()->GetDefinition() == 
+		    G4PionPlus::PionPlusDefinition() ) {
+          numPionPlusInelasticProcesses++;
+	} else if ( aStep->GetTrack()->GetDefinition() == 
+		    G4PionMinus::PionMinusDefinition() ) {
+          numPionMinusInelasticProcesses++;
+	} else if ( aStep->GetTrack()->GetDefinition() == 
+		    G4KaonPlus::KaonPlusDefinition() ) {
+          numKaonPlusInelasticProcesses++;
+	} else if ( aStep->GetTrack()->GetDefinition() == 
+		    G4KaonMinus::KaonMinusDefinition() ) {
+          numKaonMinusInelasticProcesses++;
+	} else if ( aStep->GetTrack()->GetDefinition() == 
+		    G4KaonZero::KaonZeroDefinition()  ||
+                    aStep->GetTrack()->GetDefinition() == 
+                    G4AntiKaonZero::AntiKaonZeroDefinition()  ||
+                    aStep->GetTrack()->GetDefinition() == 
+                    G4KaonZeroLong::KaonZeroLongDefinition()  ||
+                    aStep->GetTrack()->GetDefinition() == 
+                    G4KaonZeroShort::KaonZeroShortDefinition() ) {
+          numKaonNeutralInelasticProcesses++;
+        } else {
+	  numOtherInelasticProcesses++;
+	  //G4cout << " OtherInelasticProcess = " << processStr 
+	  //	   << "\t particle = " 
+	  //	   <<  aStep->GetTrack()->GetDefinition()->GetPDGEncoding() 
+	  //	   << "\t" << aStep->GetTrack()->GetDefinition()->GetParticleName()
+	  //	   << G4endl;  //***DEBUG***
+        }
+      }
+
+      if ( processStr.find( "CHIPSNuclearAbsorptionAtRest" ) != G4String::npos ) {
+	numStoppingAtRestProcesses++;
+	if ( aStep->GetTrack()->GetDefinition() == 
+	     G4AntiProton::AntiProtonDefinition() ) {
+          numAntiProtonStoppingAtRestProcesses++;
+	} else if ( aStep->GetTrack()->GetDefinition() == 
+		    G4Neutron::NeutronDefinition() ) {
+          numNeutronStoppingAtRestProcesses++;
+	} else if ( aStep->GetTrack()->GetDefinition() == 
+		    G4AntiNeutron::AntiNeutronDefinition() ) {
+          numAntiNeutronStoppingAtRestProcesses++;
+	} else if ( aStep->GetTrack()->GetDefinition() == 
+		    G4PionMinus::PionMinusDefinition() ) {
+          numPionMinusStoppingAtRestProcesses++;
+	} else if ( aStep->GetTrack()->GetDefinition() == 
+		    G4KaonMinus::KaonMinusDefinition() ) {
+          numKaonMinusStoppingAtRestProcesses++;
+	} else if ( aStep->GetTrack()->GetDefinition() == 
+		    G4KaonZero::KaonZeroDefinition()  ||
+                    aStep->GetTrack()->GetDefinition() == 
+                    G4AntiKaonZero::AntiKaonZeroDefinition()  ||
+                    aStep->GetTrack()->GetDefinition() == 
+                    G4KaonZeroLong::KaonZeroLongDefinition()  ||
+                    aStep->GetTrack()->GetDefinition() == 
+                    G4KaonZeroShort::KaonZeroShortDefinition() ) {
+          numKaonNeutralStoppingAtRestProcesses++;
+        } else {
+	  numOtherStoppingAtRestProcesses++;
+	  //G4cout << " OtherAtRestProcess = " << processStr 
+	  //	   << "\t particle = " 
+	  //	   <<  aStep->GetTrack()->GetDefinition()->GetPDGEncoding() 
+	  //	   << "\t" << aStep->GetTrack()->GetDefinition()->GetParticleName()
+	  //	   << G4endl;  //***DEBUG***
+        }
+      }
+
+    }  
+  }
 
   // 2D plots on Step Energy vs. Step Length.
   if ( isHistogramOn && is2DHistogramStepLvsEOn ) {
@@ -1425,7 +1543,8 @@ void StatAccepTestAnalysis::infoTrack( const G4Track* aTrack ) {
     //if ( ! ( aTrack->GetVolume()->GetName() == "expHall" ||
     //	     aTrack->GetVolume()->GetName() == "physiAbsorber" ||
     //	     aTrack->GetVolume()->GetName() == "physiActive" ) ) {
-    //  G4cout << " ***STRANGE VOLUME *** : " << aTrack->GetVolume()->GetName() << G4endl;
+    //  G4cout << " ***STRANGE VOLUME *** : " 
+    //          << aTrack->GetVolume()->GetName() << G4endl;
     //}
   
     // To avoid bias in the track length due to the big world volume
@@ -4151,6 +4270,69 @@ void StatAccepTestAnalysis::finish() {
 	       << " %)" << G4endl;
       }
     }
+  }
+
+  // Print information about number of inelastic and stoppingAtRest processes.
+  if ( StatAccepTestAnalysis::isCountingProcessesOn ) { 
+    G4cout << G4endl
+           << " Number of inelastic and stoppingAtRest processes (total, not per event)" 
+	   << G4endl
+           << "\t numInelasticProcesses = " 
+	   << numInelasticProcesses << G4endl
+           << "\t numProtonInelasticProcesses = " 
+	   << numProtonInelasticProcesses << G4endl
+	   << "\t numAntiProtonInelasticProcesses = " 
+	   << numAntiProtonInelasticProcesses << G4endl
+	   << "\t numNeutronInelasticProcesses = " 
+	   << numNeutronInelasticProcesses << G4endl
+	   << "\t numAntiNeutronInelasticProcesses = " 
+	   << numAntiNeutronInelasticProcesses << G4endl
+	   << "\t numPionPlusInelasticProcesses = " 
+	   << numPionPlusInelasticProcesses << G4endl
+	   << "\t numPionMinusInelasticProcesses = " 
+	   << numPionMinusInelasticProcesses << G4endl
+	   << "\t numKaonPlusInelasticProcesses = " 
+	   << numKaonPlusInelasticProcesses << G4endl
+	   << "\t numKaonMinusInelasticProcesses = " 
+	   << numKaonMinusInelasticProcesses << G4endl
+	   << "\t numKaonNeutralInelasticProcesses = " 
+	   << numKaonNeutralInelasticProcesses << G4endl
+	   << "\t numOtherInelasticProcesses = " 
+	   << numOtherInelasticProcesses << G4endl
+	   << "\t numStoppingAtRestProcesses = " 
+	   << numStoppingAtRestProcesses << G4endl
+	   << "\t numAntiProtonStoppingAtRestProcesses = " 
+	   << numAntiProtonStoppingAtRestProcesses << G4endl
+	   << "\t numNeutronStoppingAtRestProcesses = " 
+	   << numNeutronStoppingAtRestProcesses << G4endl
+	   << "\t numAntiNeutronStoppingAtRestProcesses = " 
+	   << numAntiNeutronStoppingAtRestProcesses << G4endl
+	   << "\t numPionMinusStoppingAtRestProcesses = " 
+	   << numPionMinusStoppingAtRestProcesses << G4endl
+	   << "\t numKaonMinusStoppingAtRestProcesses = " 
+	   << numKaonMinusStoppingAtRestProcesses << G4endl
+	   << "\t numKaonNeutralStoppingAtRestProcesses = " 
+	   << numKaonNeutralStoppingAtRestProcesses << G4endl
+	   << "\t numOtherStoppingAtRestProcesses = " 
+	   << numOtherStoppingAtRestProcesses 
+	   << G4endl;
+    if ( numInelasticProcesses != 
+	 ( numProtonInelasticProcesses + numAntiProtonInelasticProcesses +
+	   numNeutronInelasticProcesses + numAntiNeutronInelasticProcesses +
+	   numPionPlusInelasticProcesses + numPionMinusInelasticProcesses +
+	   numKaonPlusInelasticProcesses + numKaonMinusInelasticProcesses +
+	   numKaonNeutralInelasticProcesses + numOtherInelasticProcesses ) ) {
+      G4cout << " NOT CONSERVED #inelastic processes " << G4endl;
+    }
+    if ( numStoppingAtRestProcesses != 
+	 ( numAntiProtonStoppingAtRestProcesses +
+	   numNeutronStoppingAtRestProcesses + numAntiNeutronStoppingAtRestProcesses +
+	   numPionMinusStoppingAtRestProcesses +
+	   numKaonMinusStoppingAtRestProcesses +
+	   numKaonNeutralStoppingAtRestProcesses + numOtherStoppingAtRestProcesses ) ) {
+      G4cout << " NOT CONSERVED #stoppingAtRest processes " << G4endl;
+    }
+
   }
 
 }
