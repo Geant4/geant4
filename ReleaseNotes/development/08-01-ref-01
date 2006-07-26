@@ -53,11 +53,12 @@ processes/hadronic
   o Added test for negative lifetime in G4RadioactiveDecay::IsApplicable();
     fixed problem connected with particle design in 8.0,
 
-physics_lists                                    phys-lists-V08-01-01	(*)
+physics_lists                                    phys-lists-V08-01-03	(*)
 -------------
 - Fixed initialisation problem for QBBC_HP
 - Corrected flag for HP regime in G4HadronElasticPhysics() to be 'true'
   for LHEP_HP and QGSP_HP.
+- Added G4NeutronHPElasticData in HP physics lists for hadron elastic physics.
 - Added cout of list of processes and models for QBBC.
 
 examples                                         examples-V08-01-01
