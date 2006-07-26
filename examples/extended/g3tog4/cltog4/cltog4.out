@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V08-00-04    (30-June-2006)
+ Geant4 version Name: geant4-08-01-patch-01-ref    (27-July-2006)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -288,5 +288,5 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.04s Real=0.1s Sys=0s
+  User=0.01s Real=0.05s Sys=0.01s
 G4 kernel has come to Quit state.
