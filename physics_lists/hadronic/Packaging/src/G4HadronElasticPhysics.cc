@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronElasticPhysics.cc,v 1.12 2006-07-24 11:30:53 vnivanch Exp $
+// $Id: G4HadronElasticPhysics.cc,v 1.13 2006-07-26 09:45:25 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -66,7 +66,7 @@ G4HadronElasticPhysics::G4HadronElasticPhysics(const G4String& name,
     wasActivated(false)
 {
   if(verbose > 1) G4cout << "### HadronElasticPhysics" << G4endl;
-  pLimit = 60.*MeV;
+  pLimit = 20.*MeV;
   edepLimit = 100.*keV; 
   model = 0;
   neutronModel = 0;
