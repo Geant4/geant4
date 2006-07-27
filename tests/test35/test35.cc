@@ -146,22 +146,16 @@ int main(int argc, char** argv)
   const G4ParticleDefinition* pin = G4PionMinus::PionMinus();
   const G4ParticleDefinition* pip = G4PionPlus::PionPlus();
   const G4ParticleDefinition* pi0 = G4PionZero::PionZero();
-  const G4ParticleDefinition* deu = G4Deuteron::DeuteronDefinition();
-  const G4ParticleDefinition* tri = G4Triton::TritonDefinition();
-  const G4ParticleDefinition* alp = G4Alpha::AlphaDefinition();
-  const G4ParticleDefinition* ion = G4GenericIon::GenericIon();
+  //  const G4ParticleDefinition* deu = G4Deuteron::DeuteronDefinition();
+  // const G4ParticleDefinition* tri = G4Triton::TritonDefinition();
+  // const G4ParticleDefinition* alp = G4Alpha::AlphaDefinition();
+  //const G4ParticleDefinition* ion = G4GenericIon::GenericIon();
   G4ParticleTable* partTable = G4ParticleTable::GetParticleTable();
   partTable->SetReadiness();
 
   G4double ang[20] = {0.0};
-  G4double bng1[20] = {0.0};
-  G4double bng2[20] = {0.0};
-  G4double cng[20] = {0.0};
   G4double angpi[20] = {0.0};
   G4double mompi[20] = {0.0};
-  G4double bngpi1[20] = {0.0};
-  G4double bngpi2[20] = {0.0};
-  G4double cngpi[20] = {0.0};
 
   // Track
   G4ThreeVector aPosition = G4ThreeVector(0.,0.,0.);
@@ -169,11 +163,8 @@ int main(int argc, char** argv)
   G4ThreeVector aDirection      = G4ThreeVector(0.0,0.0,1.0);
   G4double nx = 0.0, ny = 0.0, nz = 0.0;
 
-
   G4cout.setf( std::ios::scientific, std::ios::floatfield );
 
-
-  // -------------------------------------------------------------------
   // Control on input
 
   if(argc < 2) {
@@ -189,7 +180,6 @@ int main(int argc, char** argv)
     exit(1);
   }
 
-  // -------------------------------------------------------------------
   //--------- Materials definition ---------
 
   Test30Material*  mate = new Test30Material();
@@ -208,7 +198,6 @@ int main(int argc, char** argv)
 
   assert(pFrame);
 
-  // -------------------------------------------------------------------
   // ---- Read input file
   G4cout << "Available commands are: " << G4endl;
   G4cout << "#events" << G4endl;
@@ -251,8 +240,6 @@ int main(int argc, char** argv)
   G4cout << "#GEMEvaporation" << G4endl;
   G4cout << "#eBound" << G4endl;
   G4cout << "#kBound" << G4endl;
-
-
 
   G4String line, line1;
   G4bool end = true;
@@ -380,41 +367,30 @@ int main(int argc, char** argv)
 	     exit(1);
     }
 
-    G4ParticleDefinition* part = (G4ParticleTable::GetParticleTable())->FindParticle(namePart);
+    G4ParticleDefinition* part = 
+      (G4ParticleTable::GetParticleTable())->FindParticle(namePart);
 
     G4VProcess* proc = phys->GetProcess(nameGen, namePart, material);
-    /*
-    G4ExcitationHandler* theDeExcitation = phys->GetDeExcitation();
-    G4PreCompoundModel* thePreCompound = phys->GetPreCompound();
-    if (gtran && thePreCompound) thePreCompound->UseGNASHTransition();
-    if (gemis && thePreCompound) thePreCompound->UseHETCEmission();
-    if (nevap) {
-      G4Evaporation* evp = new G4Evaporation();
-      evp->SetGEMChannel();
-      theDeExcitation->SetEvaporation(evp);
-    }
-    */
     G4double amass = phys->GetNucleusMass();
 
-    if(!proc) {
+    if(!proc) { 
       G4cout << "For particle: " << part->GetParticleName()
 	     << " generator " << nameGen << " is unavailable"
 	     << G4endl;
-	     exit(1);
+      exit(1);
     }
+    const G4Element* elm = material->GetElement(0); 
 
-    G4int maxn = (G4int)((*(material->GetElementVector()))[0]->GetN());
-    G4int maxz = (G4int)((*(material->GetElementVector()))[0]->GetZ());
+    G4int A = (G4int)(elm->GetN()+0.5);
+    G4int Z = (G4int)(elm->GetZ()+0.5);
 
     G4cout << "The particle:  " << part->GetParticleName() << G4endl;
     G4cout << "The material:  " << material->GetName() 
-	   << "  Z= " << maxz << "  A= " << maxn << G4endl;
+	   << "  Z= " << Z << "  A= " << A << G4endl;
     G4cout << "The step:      " << theStep/mm << " mm" << G4endl;
     G4cout << "The position:  " << aPosition/mm << " mm" << G4endl;
     G4cout << "The direction: " << aDirection << G4endl;
     G4cout << "The time:      " << aTime/ns << " ns" << G4endl;
-
-    // -------------------------------------------------------------------
 
     // Creating the analysis factory
     std::auto_ptr< AIDA::IAnalysisFactory > af( AIDA_createAnalysisFactory() );
@@ -438,11 +414,6 @@ int main(int argc, char** argv)
     if(m_p > 0.0) energy = sqrt(m_p*m_p + mass*mass);
 
     G4double pmax = sqrt(energy*(energy + 2.0*mass));
-    // G4double binlog = log10(ebinlog);
-    // G4int nbinlog = (G4int)(log10(2.0*emax)/binlog);
-    // G4double logmax = binlog*nbinlog;
-    //    G4double bine = emax/(G4double)nbinse;
-    //    G4double bind = emax/(G4double)nbinsd;
 
     double m_pmin = 0.0;
     double m_ptmax = 0.65;
@@ -481,108 +452,55 @@ int main(int argc, char** argv)
       G4cout << "Histograms is initialised nbins=" << nbins
              << G4endl;
     }
-    // Create a DynamicParticle
 
+    // Create a DynamicParticle
     G4DynamicParticle dParticle(part,aDirection,energy);
     G4VCrossSectionDataSet* cs = 0;
     G4double cross_sec = 0.0;
 
-    if(part == proton && material->GetElement(0)->GetZ() > 1.5) {
+    if(part == proton && Z > 1 && nameGen != "lepar") 
       cs = new G4ProtonInelasticCrossSection();
-    } else if(part == neutron && material->GetElement(0)->GetZ() > 1.5) {
+    else if(part == neutron && Z > 1 && nameGen != "lepar") 
       cs = new G4NeutronInelasticCrossSection();
-    } else if((part == pin || part == pip) && material->GetElement(0)->GetZ() > 1.5) {
+    else if((part == pin || part == pip) && Z > 1 && nameGen != "lepar") 
       cs = new G4PiNuclearCrossSection();
-    } else {
+    else 
       cs = new G4HadronInelasticDataSet();
-    }
 
     if(cs) {
       cs->BuildPhysicsTable(*part);
-      cross_sec = cs->GetCrossSection(&dParticle, material->GetElement(0));
+      cross_sec = cs->GetCrossSection(&dParticle, elm);
     } else {
       cross_sec = (G4HadronCrossSections::Instance())->
-        GetInelasticCrossSection(&dParticle, material->GetElement(0));
+        GetInelasticCrossSection(&dParticle, elm);
     }
 
     G4double factor = cross_sec*MeV*1000.0*(G4double)nbinse/(energy*barn*(G4double)nevt);
-    //    G4double factora= cross_sec*MeV*1000.0*(G4double)nbinsa/(twopi*2.0*barn*(G4double)nevt);
-    //    G4double factorb= cross_sec*1000.0/(barn*(G4double)nevt);
     G4cout << "### factor  = " << factor
-      //           << "### factora = " << factor
            << "    cross(b)= " << cross_sec/barn << G4endl;
 
-    if(nangl > 0) {
-      for(G4int k=0; k<nangl; k++) {
-
-        if(nangl == 1) {
-          bng1[0] = std::max(0.0,ang[0] - dangl);
-          bng2[0] = std::min(180., ang[0] + dangl);
-        } else if(k == 0) {
-          bng1[0] = std::max(0.0,ang[0] - dangl);
-          bng2[0] = std::min(0.5*(ang[0] + ang[1]), ang[0] + dangl);
-        } else if(k < nangl-1) {
-          bng1[k] = std::max(bng2[k-1], ang[k]-dangl);
-          bng2[k] = std::min(0.5*(ang[k] + ang[k+1]), ang[k] + dangl);
-        } else {
-          bng1[k] = std::max(bng2[k-1], ang[k]-dangl);
-          bng2[k] = std::min(180., ang[k] + dangl);
-        }
-
-        cng[k] = cross_sec*MeV*1000.0*(G4double)nbinsd/
-         (twopi*(cos(degree*bng1[k]) - cos(degree*bng2[k]))*
-                barn*emax*(G4double)nevt);
-      }
-    }
-
-    if(nanglpi > 0) {
-      for(G4int k=0; k<nanglpi; k++) {
-
-        if(nangl == 1) {
-          bngpi1[0] = std::max(0.0,angpi[0] - dangl);
-          bngpi2[0] = std::min(180., angpi[0] + dangl);
-        } else if(k == 0) {
-          bngpi1[0] = std::max(0.0,angpi[0] - dangl);
-          bngpi2[0] = std::min(0.5*(angpi[0] + angpi[1]), angpi[0] + dangl);
-        } else if(k < nanglpi-1) {
-          bngpi1[k] = std::max(bngpi2[k-1], angpi[k]-dangl);
-          bngpi2[k] = std::min(0.5*(angpi[k] + angpi[k+1]), angpi[k] + dangl);
-        } else {
-          bngpi1[k] = std::max(bngpi2[k-1], angpi[k]-dangl);
-          bngpi2[k] = std::min(180., angpi[k] + dangl);
-        }
-
-        cngpi[k] = cross_sec*MeV*1000.0*(G4double)nbinspi/
-         (twopi*(cos(degree*bngpi1[k]) - cos(degree*bngpi2[k]))*
-                 barn*emax*(G4double)nevt);
-      }
-    }
-
     double coeff = cross_sec*GeV*1000.0/(barn*(G4double)nevt);
-    int    nmomtet[50][20];
-    double harpcs[50][20];
+    int    nmomtet [50][20];
     int    nmomtetm[50][20];
-    double harpcsm[50][20];
     int    nmomtet0[50][20];
-    double harpcs0[50][20];
+    double harpcs[50][20];
     double respip[50][20];
     double respin[50][20];
     double respi0[50][20];
     double errpip[50][20];
     double errpin[50][20];
     double errpi0[50][20];
-    //    double dthetad = angpi[nanglpi-1]/double(nanglpi);
+
     double mom0 = 0.0;
-    for(int k=0; k<nmompi; k++) {
+    int j, k;
+    for(k=0; k<nmompi; k++) {
       double dp = mompi[k] - mom0;
       double ang0 = 0.0;
-      for(int j=0; j<nanglpi; j++) {
+      for(j=0; j<nanglpi; j++) {
         nmomtet[k][j]  = 0;
         nmomtetm[k][j] = 0;
         nmomtet0[k][j] = 0;
         harpcs[k][j]   = coeff/(twopi*dp*(cos(ang0) - cos(angpi[j])));
-	harpcsm[k][j]  = harpcs[k][j];
-	harpcs0[k][j]  = harpcs[k][j];
         ang0 = angpi[j];
       }
       mom0 = mompi[k];
@@ -629,7 +547,7 @@ int main(int argc, char** argv)
 
     for (G4int iter=0; iter<nevt; iter++) {
 
-      if(verbose>1) 
+      if(verbose>=1) 
         G4cout << "### " << iter << "-th event start " << G4endl;
 
       G4double e0 = energy;
@@ -705,6 +623,12 @@ int main(int argc, char** argv)
           h[1]->fill(float(n_pi),1.0);
 
 	}
+	if((verbose >1) ||
+	   (verbose==1 && (pd == pip || pd == pin || pd == pi0)))
+	  G4cout << i << "-th secondary: " 
+		 << pd->GetParticleName() << "  p= "<<p
+		 << "  theta= " << theta
+		 << G4endl; 
 
 	if(p < mompi[nmompi-1] && theta < angpi[nanglpi-1] 
 	   && (pd == pip || pd == pin || pd == pi0)) {
@@ -714,12 +638,13 @@ int main(int argc, char** argv)
 	  do {kp++;}   while (p > mompi[kp]);  
 	  do {kang++;} while (theta > angpi[kang]);  
 	  if(verbose>=1)
-	    G4cout << pd->GetParticleName() << "  p= "<<p
-		   << "  theta= " << theta<< " kp= " << kp << " kang= " << kang
+	    G4cout << " kp= " << kp << " kang= " << kang
 		   <<G4endl; 
-	  if(pd == pip)      nmomtet[kp][kang]  += 1;
+
+	  if(pd == pip)      nmomtet [kp][kang] += 1;
 	  else if(pd == pin) nmomtetm[kp][kang] += 1;
 	  else               nmomtet0[kp][kang] += 1;
+
 	}        
         delete aChange->GetSecondary(i);
       }
@@ -744,23 +669,23 @@ int main(int argc, char** argv)
     G4cout << "###### Cross section per bin for pi+" << std::setw(6) << G4endl;
     G4cout << G4endl;    
 
-    for(int k=0; k<nmompi; k++) {
-      for(int j=0; j<nanglpi; j++) {
+    for(k=0; k<nmompi; k++) {
+      for(j=0; j<nanglpi; j++) {
         respip[k][j] = double(nmomtet[k][j]) *harpcs[k][j];
-        respin[k][j] = double(nmomtetm[k][j])*harpcsm[k][j];
-        respi0[k][j] = double(nmomtet0[k][j])*harpcs0[k][j];
+        respin[k][j] = double(nmomtetm[k][j])*harpcs[k][j];
+        respi0[k][j] = double(nmomtet0[k][j])*harpcs[k][j];
 
         if(nmomtet[k][j] > 0)
 	  errpip[k][j] = (respip[k][j])/sqrt(double(nmomtet[k][j]));
-        else  errpip[k][j] = 0.0;
+        else  errpip[k][j] = harpcs[k][j];
 
         if(nmomtetm[k][j] > 0)
 	  errpin[k][j] = (respin[k][j])/sqrt(double(nmomtetm[k][j]));
-        else  errpin[k][j] = 0.0;
+        else  errpin[k][j] = harpcs[k][j];
 
         if(nmomtet0[k][j] > 0)
 	  errpi0[k][j] = (respi0[k][j])/sqrt(double(nmomtet0[k][j]));
-        else  errpi0[k][j] = 0.0;
+        else  errpi0[k][j] = harpcs[k][j];
       }
     }
     ofstream* fout = new ofstream();
@@ -779,11 +704,14 @@ int main(int argc, char** argv)
     G4double dsda[20];    
     G4double dsdmm[50];    
     G4double dsdam[20];    
+    G4double dsdm0[50];    
+    G4double dsda0[20];    
     
     G4double cross;
     G4double crossm;
     G4double cross0;
-    for(int k=0; k<nmompi; k++) {
+
+    for(k=0; k<nmompi; k++) {
       mom1 = mompi[k];
       dsdm[k] = 0.0;
       G4cout << "## Next momentum bin " 
@@ -793,7 +721,7 @@ int main(int argc, char** argv)
       G4double ang0 = 0.0;
       G4double ang1 = 0.0;
 
-      for(int j=0; j<nanglpi; j++) {
+      for(j=0; j<nanglpi; j++) {
         ang1  = angpi[j];
         cross = respip[k][j];
         crossm= respin[k][j];
@@ -810,14 +738,17 @@ int main(int argc, char** argv)
           x = (mom1 - mom0)/GeV;
           dsda[j]  += cross*x;
 	  dsdam[j] += crossm*x;
+	  dsda0[j] += cross0*x;
         } else {
           dsda[j]  = 0.0;
 	  dsdam[j] = 0.0;
+	  dsda0[j] = 0.0;
 	}
         if(j>0) {
           x = twopi*(cos(ang0) - cos(ang1));
           dsdm[k]  += cross*x;
 	  dsdmm[k] += crossm*x;
+	  dsdm0[k] += cross0*x;
 	}
 
         ang0 = ang1;
@@ -830,43 +761,77 @@ int main(int argc, char** argv)
     G4cout << "## ds/do(mb/strad) for pi+ with momentum cut: " 
            << mompi[0] << "  -  " << mompi[nmompi-1] 
            << "  MeV/c" << G4endl;
-    for(int j=0; j<nanglpi; j++) {
+    for(j=0; j<nanglpi; j++) {
       G4cout << "  " << dsda[j];
     }
-    G4cout << G4endl;    
+    G4cout << G4endl;  
     G4cout << "## ds/dp(mb/GeV) for pi+ with theta cut " 
            << angpi[0] << "  -  " << angpi[nanglpi-1] << " radian" << G4endl;
-    for(int kk=0; kk<nmompi; kk++) {
-      G4cout << "  " << dsdm[kk];
+    cross = 0.0;
+    mom0  = 0.0;
+    for(k=0; k<nmompi; k++) {
+      G4cout << "  " << dsdm[k];
+      cross += dsdm[k]*(mompi[k] - mom0)/GeV;
+      mom0 = mompi[k];
     }
     G4cout << G4endl;
+    G4cout << "## cross_tot(bn)= " << cross/1000 << G4endl;  
     G4cout << G4endl;    
+
+    G4cout << "#################################################################" << G4endl;
+    G4cout << "## ds/do(mb/strad) for pi0 with momentum cut: " 
+           << mompi[0] << "  -  " << mompi[nmompi-1] 
+           << "  MeV/c" << G4endl;
+    cross = 0.0;
+    for(j=0; j<nanglpi; j++) {
+      G4cout << "  " << dsda0[j];
+    }
+    G4cout << G4endl;    
+    G4cout << G4endl;    
+    G4cout << "## ds/dp(mb/GeV) for pi0 with theta cut " 
+           << angpi[0] << "  -  " << angpi[nanglpi-1] << " radian" << G4endl;
+    cross = 0.0;
+    mom0  = 0.0;
+    for(k=0; k<nmompi; k++) {
+      G4cout << "  " << dsdm0[k];
+      cross += dsdm0[k]*(mompi[k] - mom0)/GeV;
+      mom0 = mompi[k];
+    }
+    G4cout << G4endl;
+    G4cout << "## cross_tot(bn)= " << cross/1000 << G4endl;  
+    G4cout << G4endl;
 
     G4cout << "#################################################################" << G4endl;
     G4cout << "## ds/do(mb/strad) for pi- with momentum cut: " 
            << mompi[0] << "  -  " << mompi[nmompi-1] 
            << "  MeV/c" << G4endl;
-    for(int j=0; j<nanglpi; j++) {
+    for(j=0; j<nanglpi; j++) {
       G4cout << "  " << dsdam[j];
     }
     G4cout << G4endl;    
     G4cout << G4endl;    
     G4cout << "## ds/dp(mb/GeV) for pi- with theta cut " 
            << angpi[0] << "  -  " << angpi[nanglpi-1] << " radian" << G4endl;
-    for(int kk=0; kk<nmompi; kk++) {
-      G4cout << "  " << dsdmm[kk];
+    cross = 0.0;
+    mom0  = 0.0;
+    for(k=0; k<nmompi; k++) {
+      G4cout << "  " << dsdmm[k];
+      cross += dsdmm[k]*(mompi[k] - mom0)/GeV;
+      mom0 = mompi[k];
     }
     G4cout << G4endl;
+    G4cout << "## cross_tot(bn)= " << cross/1000 << G4endl;  
     G4cout << G4endl;
+
     mom0 = 0.0;
     if(mom0 == 0.0) {
-      for(int k=0; k<nmompi; k++) {
+      for(k=0; k<nmompi; k++) {
 	double mom1 = mompi[k];
 	G4cout << "## Next momentum bin " 
 	       << mom0 << "  -  " << mom1 << "  MeV/c" 
 	       << G4endl;
 
-	for(int j=0; j<nanglpi; j++) {
+	for(j=0; j<nanglpi; j++) {
 	  G4cout << "  " << respin[k][j];
 	}
 	G4cout << G4endl;
@@ -878,7 +843,6 @@ int main(int argc, char** argv)
 
     G4cout << "###### End of run # " << run << "     ######" << G4endl;
     G4cout.precision(prec);
-
   }  
 
   delete mate;
