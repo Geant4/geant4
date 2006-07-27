@@ -461,6 +461,10 @@ private:
   G4int numKaonPlusInelasticProcesses;
   G4int numKaonMinusInelasticProcesses;
   G4int numKaonNeutralInelasticProcesses;
+  G4int numLambdaInelasticProcesses;
+  G4int numAntiLambdaInelasticProcesses;
+  G4int numSigmaMinusInelasticProcesses;
+  G4int numMuonMinusInelasticProcesses;
   G4int numOtherInelasticProcesses;
   G4int numStoppingAtRestProcesses;
   G4int numAntiProtonStoppingAtRestProcesses;
@@ -469,6 +473,10 @@ private:
   G4int numPionMinusStoppingAtRestProcesses;
   G4int numKaonMinusStoppingAtRestProcesses;
   G4int numKaonNeutralStoppingAtRestProcesses;
+  G4int numLambdaStoppingAtRestProcesses;
+  G4int numAntiLambdaStoppingAtRestProcesses;
+  G4int numSigmaMinusStoppingAtRestProcesses;
+  G4int numMuonMinusStoppingAtRestProcesses;
   G4int numOtherStoppingAtRestProcesses;
 
 };
