@@ -111,8 +111,8 @@ int main(int argc, char** argv)
   G4bool    ionParticle = false;
   G4bool    Shen = false;
   G4int     ionZ(0), ionA(0);
-  G4String  nameMat  = "Si";
-  G4String  nameGen  = "stringCHIPS";
+  G4String  nameMat  = "G4_Al";
+  G4String  nameGen  = "Binary";
   G4bool    logx     = false;
   G4bool    usepaw   = false;
   G4bool    inclusive= true;
@@ -402,6 +402,11 @@ int main(int argc, char** argv)
 	     << G4endl;
 	     exit(1);
     }
+    const G4Element* elm = material->GetElement(0); 
+
+    G4int A = (G4int)(elm->GetN()+0.5);
+    G4int Z = (G4int)(elm->GetZ()+0.5);
+
     G4ParticleDefinition* part(0);
     if (!ionParticle) {
       part = (G4ParticleTable::GetParticleTable())->FindParticle(namePart);
@@ -432,7 +437,7 @@ int main(int argc, char** argv)
 	     exit(1);
     }
 
-    G4int maxn = (G4int)((*(material->GetElementVector()))[0]->GetN()) + 1;
+    G4int maxn = A + 1;
 
     G4cout << "The particle:  " << part->GetParticleName() << G4endl;
     G4cout << "The material:  " << material->GetName() 
@@ -595,8 +600,8 @@ int main(int argc, char** argv)
       G4cout << "Histograms is initialised nbins=" << nbins
              << G4endl;
     }
-    // Create a DynamicParticle
 
+    // Create a DynamicParticle
     G4DynamicParticle dParticle(part,aDirection,energy);
     G4VCrossSectionDataSet* cs = 0;
     G4double cross_sec = 0.0;
@@ -604,11 +609,11 @@ int main(int argc, char** argv)
     if(nameGen == "LElastic" || nameGen == "Elastic" || 
        nameGen == "HElastic" || nameGen == "BertiniElastic") {
       cs = new G4HadronElasticDataSet();
-    } else if(part == proton && material->GetElement(0)->GetZ() > 1.5) {
+    } else if(part == proton && Z > 1 && nameGen != "lepar") {
       cs = new G4ProtonInelasticCrossSection();
-    } else if(part == neutron && material->GetElement(0)->GetZ() > 1.5) {
+    } else if(part == neutron && Z > 1 && nameGen != "lepar") {
       cs = new G4NeutronInelasticCrossSection();
-    } else if((part == pip || part == pin) && material->GetElement(0)->GetZ() > 1.5) {
+    } else if((part == pip || part == pin) && Z > 1 && nameGen != "lepar") {
       cs = new G4PiNuclearCrossSection();
     } else if( ionParticle ) {
       if ( Shen ) {
@@ -624,10 +629,10 @@ int main(int argc, char** argv)
 
     if(cs) {
       cs->BuildPhysicsTable(*part);
-      cross_sec = cs->GetCrossSection(&dParticle, material->GetElement(0));
+      cross_sec = cs->GetCrossSection(&dParticle, elm);
     } else {
       cross_sec = (G4HadronCrossSections::Instance())->
-        GetInelasticCrossSection(&dParticle, material->GetElement(0));
+        GetInelasticCrossSection(&dParticle, elm);
     }
 
     G4double factor = cross_sec*MeV*1000.0*(G4double)nbinse/(energy*barn*(G4double)nevt);
@@ -686,10 +691,8 @@ int main(int argc, char** argv)
 
     G4Track* gTrack;
     gTrack = new G4Track(&dParticle,aTime,aPosition);
-    //G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 
     // Step
-
     G4Step* step;
     step = new G4Step();
     step->SetTrack(gTrack);
@@ -731,9 +734,8 @@ int main(int argc, char** argv)
 
     for (G4int iter=0; iter<nevt; iter++) {
 
-      if(verbose>1) {
+      if(verbose>1) 
         G4cout << "### " << iter << "-th event start " << G4endl;
-      }
 
       G4double e0 = energy;
       do {
@@ -753,9 +755,8 @@ int main(int argc, char** argv)
       G4double de = aChange->GetLocalEnergyDeposit();
       G4int n = aChange->GetNumberOfSecondaries();
 
-      if(iter == modu*(iter/modu)) {
-        G4cerr << "##### " << iter << "-th event  #####" << G4endl;
-      }
+      if(iter == modu*(iter/modu)) 
+        G4cout << "##### " << iter << "-th event  #####" << G4endl;
 
       G4int nbar = 0;
 
@@ -920,9 +921,8 @@ int main(int argc, char** argv)
         delete aChange->GetSecondary(i);
       }
 
-      if(verbose > 0) {
+      if(verbose > 0) 
         G4cout << "Energy/Momentum balance= " << labv << G4endl;
-      }
 
       px = labv.px();
       py = labv.py();
@@ -952,7 +952,7 @@ int main(int argc, char** argv)
       tree->close();
     }
 
-    G4cerr << "###### End of run # " << run << "     ######" << G4endl;
+    G4cout << "###### End of run # " << run << "     ######" << G4endl;
 
   } while(end);
 
