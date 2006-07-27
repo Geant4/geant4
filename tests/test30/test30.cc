@@ -143,14 +143,14 @@ int main(int argc, char** argv)
   G4bool gtran = false;
   G4bool gemis = false;
 
-  G4double ang[15] = {0.0};
-  G4double bng1[15] = {0.0};
-  G4double bng2[15] = {0.0};
-  G4double cng[15] = {0.0};
-  G4double angpi[10] = {0.0};
-  G4double bngpi1[10] = {0.0};
-  G4double bngpi2[10] = {0.0};
-  G4double cngpi[10] = {0.0};
+  G4double ang[20] = {0.0};
+  G4double bng1[20] = {0.0};
+  G4double bng2[20] = {0.0};
+  G4double cng[20] = {0.0};
+  G4double angpi[20] = {0.0};
+  G4double bngpi1[20] = {0.0};
+  G4double bngpi2[20] = {0.0};
+  G4double cngpi[20] = {0.0};
   float bestZ[250] = {
     0.0, 1.0, 1.0, 2.0, 2.0, 0.0, 0.0, 4.0, 0.0, 0.0,   //0
     4.0, 0.0, 0.0, 0.0, 6.0, 0.0, 0.0, 0.0, 9.0, 0.0,   //10
@@ -178,17 +178,13 @@ int main(int argc, char** argv)
     0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,          //230
     0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };        //240
 
-
-
   // Track
   G4ThreeVector aPosition = G4ThreeVector(0.,0.,0.);
   G4double      aTime     = 0. ;
   G4ThreeVector aDirection      = G4ThreeVector(0.0,0.0,1.0);
   G4double nx = 0.0, ny = 0.0, nz = 0.0;
 
-
   G4cout.setf( std::ios::scientific, std::ios::floatfield );
-
 
   // -------------------------------------------------------------------
   // Control on input
@@ -222,7 +218,6 @@ int main(int argc, char** argv)
   G4LogicalVolume* lFrame = new G4LogicalVolume(sFrame,material,"Box",0,0,0);
   G4PVPlacement* pFrame = new G4PVPlacement(0,G4ThreeVector(),"Box",
                                             lFrame,0,false,0);
-
   assert(pFrame);
 
   // -------------------------------------------------------------------
@@ -438,7 +433,6 @@ int main(int argc, char** argv)
     }
 
     G4int maxn = (G4int)((*(material->GetElementVector()))[0]->GetN()) + 1;
-    // G4int maxz = (G4int)((*(material->GetElementVector()))[0]->GetZ()) + 1;
 
     G4cout << "The particle:  " << part->GetParticleName() << G4endl;
     G4cout << "The material:  " << material->GetName() 
@@ -447,7 +441,6 @@ int main(int argc, char** argv)
     G4cout << "The position:  " << aPosition/mm << " mm" << G4endl;
     G4cout << "The direction: " << aDirection << G4endl;
     G4cout << "The time:      " << aTime/ns << " ns" << G4endl;
-
 
     // -------------------------------------------------------------------
 
@@ -466,11 +459,19 @@ int main(int argc, char** argv)
 
     G4double mass = part->GetPDGMass();
     G4double pmax = std::sqrt(energy*(energy + 2.0*mass));
-    G4double binlog = std::log10(ebinlog);
-    G4int nbinlog = (G4int)(std::log10(2.0*emax)/binlog);
-    G4double logmax = binlog*nbinlog;
     G4double bine = emax/(G4double)nbinse;
     G4double bind = emax/(G4double)nbinsd;
+
+    G4double binlog = std::log10(ebinlog);
+    G4int binlog10 = G4int(1.0/binlog);
+    if( binlog10 <= 0) binlog10 = 1;
+    binlog = 1.0/G4double(binlog10);
+    G4int nbinlog = (G4int)(std::log10(10.0*emax/MeV));
+    G4double logmax = G4double(nbinlog);
+    nbinlog++;
+    nbinlog *= binlog10;
+    G4cout << "### Log10 scale from -1 to " << logmax 
+	   << " in " << nbinlog << " bins" << G4endl; 
 
     if(usepaw) {
 
@@ -570,19 +571,19 @@ int main(int argc, char** argv)
       if(nanglpi>4)
        h[49]=hf->createHistogram1D("50","ds/dE for pi+ at theta = 4",nbinspi,0.,emaxpi);
 
-      h[50]=hf->createHistogram1D("51","E(MeV) neutrons",nbinlog,0.,logmax);
+      h[50]=hf->createHistogram1D("51","E(MeV) neutrons",nbinlog,-1.,logmax);
       if(nangl>0)
-	h[51]=hf->createHistogram1D("52","ds/dE for neutrons at theta = 0",nbinlog,0.,logmax);
+	h[51]=hf->createHistogram1D("52","ds/dE for neutrons at theta = 0",nbinlog,-1.,logmax);
       if(nangl>1)
-	h[52]=hf->createHistogram1D("53","ds/dE for neutrons at theta = 1",nbinlog,0.,logmax);
+	h[52]=hf->createHistogram1D("53","ds/dE for neutrons at theta = 1",nbinlog,-1.,logmax);
       if(nangl>2)
-	h[53]=hf->createHistogram1D("54","ds/dE for neutrons at theta = 2",nbinlog,0.,logmax);
+	h[53]=hf->createHistogram1D("54","ds/dE for neutrons at theta = 2",nbinlog,-1.,logmax);
       if(nangl>3)
-	h[54]=hf->createHistogram1D("55","ds/dE for neutrons at theta = 3",nbinlog,0.,logmax);
+	h[54]=hf->createHistogram1D("55","ds/dE for neutrons at theta = 3",nbinlog,-1.,logmax);
       if(nangl>4)
-	h[55]=hf->createHistogram1D("56","ds/dE for neutrons at theta = 4",nbinlog,0.,logmax);
+	h[55]=hf->createHistogram1D("56","ds/dE for neutrons at theta = 4",nbinlog,-1.,logmax);
       if(nangl>5)
-	h[56]=hf->createHistogram1D("57","ds/dE for neutrons at theta = 5",nbinlog,0.,logmax);
+	h[56]=hf->createHistogram1D("57","ds/dE for neutrons at theta = 5",nbinlog,-1.,logmax);
 
       h[57]=hf->createHistogram1D("58","Ekin (MeV) for primary particle",120,0.,energy*1.2/MeV);
       h[58]=hf->createHistogram1D("59","cos(Theta) for recoil particle in Lab.Sys.",nbinsa,-1.,1.);
@@ -889,8 +890,8 @@ int main(int argc, char** argv)
             h[14]->fill(e/MeV, 1.0);
 	    h[22]->fill(e/MeV, factor);
             G4double ee = std::log10(e/MeV);
-            G4int    nb = (G4int)(ee/binlog);
-            G4double e1 = binlog*nb;
+            G4int    nbb= (G4int)((ee + 1.0)/binlog);
+            G4double e1 = binlog*nbb;
             G4double e2 = e1 + binlog;
             e1 = std::pow(10., e1);
             e2 = std::pow(10., e2) - e1;
@@ -900,7 +901,7 @@ int main(int argc, char** argv)
             for(G4int kk=0; kk<nangl; kk++) {
               if(bng1[kk] <= thetad && thetad <= bng2[kk]) {
                 h[27+kk]->fill(e/MeV, cng[kk]);
-                if(kk < 5) h[51+kk]->fill(ee, cng[kk]*bind/e2);
+                if(kk < 6) h[51+kk]->fill(ee, cng[kk]*bind/e2);
                 break;
 	      }
 	    }
