@@ -265,7 +265,7 @@ G4VProcess* Test30Physics::GetProcess(const G4String& gen_name,
     theModel->SetHighEnergyGenerator(theStringModel);
     G4ExcitedStringDecay* theStringDecay = new G4ExcitedStringDecay(new G4LundStringFragmentation());
     theStringModel->SetFragmentationModel(theStringDecay);
-    theModel->SetMinEnergy(4.*GeV);
+    theModel->SetMinEnergy(GeV);
     sg = new Test30VSecondaryGenerator(theModel, mat);
     theProcess->SetSecondaryGenerator(sg);
     man->AddDiscreteProcess(theProcess);
@@ -279,7 +279,7 @@ G4VProcess* Test30Physics::GetProcess(const G4String& gen_name,
     theModel->SetHighEnergyGenerator(theStringModel);
     G4ExcitedStringDecay* theStringDecay = new G4ExcitedStringDecay(new G4LundStringFragmentation());
     theStringModel->SetFragmentationModel(theStringDecay);
-    theModel->SetMinEnergy(4.*GeV);
+    theModel->SetMinEnergy(GeV);
     sg = new Test30VSecondaryGenerator(theModel, mat);
     theProcess->SetSecondaryGenerator(sg);
     man->AddDiscreteProcess(theProcess);
@@ -293,7 +293,7 @@ G4VProcess* Test30Physics::GetProcess(const G4String& gen_name,
     model->SetHighEnergyGenerator(stringmodel);
     stringmodel->SetFragmentationModel(stringDecay);
     model->SetTransport(cascade);
-    model->SetMinEnergy(4.*GeV);
+    model->SetMinEnergy(GeV);
     sg = new Test30VSecondaryGenerator(model, mat);
     theProcess->SetSecondaryGenerator(sg);
     man->AddDiscreteProcess(theProcess);

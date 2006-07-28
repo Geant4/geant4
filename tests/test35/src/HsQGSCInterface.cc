@@ -26,7 +26,7 @@ HsQGSCInterface::HsQGSCInterface()
   theModel->SetHighEnergyGenerator(&theStringModel);
   theStringDecay = new G4ExcitedStringDecay(&theFragmentation);
   theStringModel.SetFragmentationModel(theStringDecay);
-  theModel->SetMinEnergy(6.*GeV);
+  theModel->SetMinEnergy(GeV);
   theModel->SetMaxEnergy(100*TeV);
 }
 
