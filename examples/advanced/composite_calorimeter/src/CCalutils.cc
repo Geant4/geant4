@@ -93,7 +93,8 @@ std::ostream& tab(std::ostream& os) {
 
 
 std::istream& jump(std::istream& is) {
-  char first, second;
+  char first = ' ';
+  char second = ' ';
   is.ignore(999,'\n');
   do {
     is.get(first);

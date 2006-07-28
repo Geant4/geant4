@@ -81,7 +81,7 @@ CCalEndOfEventAction::~CCalEndOfEventAction() {
   if (theOrg)
     delete theOrg;
   if (SDnames)
-    delete SDnames;
+    delete[] SDnames;
   G4cout << "CCalEndOfEventAction deleted" << G4endl;
 }
 
