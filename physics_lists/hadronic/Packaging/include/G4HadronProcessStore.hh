@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronProcessStore.hh,v 1.4 2006-06-29 17:58:35 gunter Exp $
+// $Id: G4HadronProcessStore.hh,v 1.5 2006-08-02 10:56:59 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -73,6 +73,11 @@ public:
   G4double GetInelasticCrossSectionPerVolume(
     const G4ParticleDefinition *aParticle,
     G4double kineticEnergy,
+    const G4Material *material);
+
+  G4double GetInelasticCrossSectionPerAtom(
+    const G4ParticleDefinition *aParticle,
+    G4double kineticEnergy,
     const G4Element *anElement);
 
   G4double GetInelasticCrossSectionPerIsotope(
@@ -81,6 +86,11 @@ public:
     G4int Z, G4int A);
 
   G4double GetElasticCrossSectionPerVolume(
+    const G4ParticleDefinition *aParticle,
+    G4double kineticEnergy,
+    const G4Material *material);
+
+  G4double GetElasticCrossSectionPerAtom(
     const G4ParticleDefinition *aParticle,
     G4double kineticEnergy,
     const G4Element *anElement);
@@ -125,9 +135,7 @@ private:
   std::vector<G4String> modelName;
   std::vector<PD> particle;
 
-  // cash
   HP   currentProcess;
-  HP   currentModel;
   PD   currentParticle;
 
   G4DynamicParticle localDP;
