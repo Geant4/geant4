@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChargeExchangeProcess.cc,v 1.5 2006-07-06 18:11:08 vnivanch Exp $
+// $Id: G4ChargeExchangeProcess.cc,v 1.6 2006-08-02 10:55:54 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -35,6 +35,7 @@
 // Modified:
 // 24-Apr-06 V.Ivanchenko add neutron scattering on hydrogen from CHIPS
 // 07-Jun-06 V.Ivanchenko fix problem of rotation of final state
+// 25-Jul-06 V.Ivanchenko add 19 MeV low energy for CHIPS
 //
 //
 
@@ -56,7 +57,7 @@
 G4ChargeExchangeProcess::G4ChargeExchangeProcess(const G4String& procName)
   : G4HadronicProcess(procName), first(true)
 {
-  thEnergy = 1.*keV;
+  thEnergy = 19.*MeV;
   verboseLevel= 1;
   qCManager = 0;
   AddDataSet(new G4HadronElasticDataSet);
@@ -188,7 +189,8 @@ G4double G4ChargeExchangeProcess::GetMicroscopicCrossSection(
   if(iz == 1) return x;
   // CHIPS cross sections
   G4double momentum = dp->GetTotalMomentum();
-  if(iz <= -2 && (theParticle == theProton || theParticle == theNeutron)) {
+  if(iz == 2 && dp->GetKineticEnergy() > thEnergy &&
+     (theParticle == theProton || theParticle == theNeutron)) {
     G4double momentum = dp->GetTotalMomentum();
     if(verboseLevel>1)
       G4cout << "G4ChargeExchangeProcess compute CHIPS CS for Z= 2, N=2 "

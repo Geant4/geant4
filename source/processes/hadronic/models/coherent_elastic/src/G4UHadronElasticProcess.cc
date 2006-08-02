@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UHadronElasticProcess.cc,v 1.19 2006-07-24 10:37:57 vnivanch Exp $
+// $Id: G4UHadronElasticProcess.cc,v 1.20 2006-08-02 10:55:54 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Geant4 Hadron Elastic Scattering Process -- header file
@@ -33,6 +33,7 @@
 // Modified:
 // 24-Apr-06 V.Ivanchenko add neutron scattering on hydrogen from CHIPS
 // 07-Jun-06 V.Ivanchenko fix problem of rotation of final state
+// 25-Jul-06 V.Ivanchenko add 19 MeV low energy for CHIPS
 //
 //
 
@@ -48,16 +49,14 @@
 #include "G4IsotopeVector.hh"
 #include "G4Neutron.hh"
 #include "G4Proton.hh"
-//#include "G4NeutronHPElasticData.hh"
 #include "G4HadronElastic.hh"
  
-G4UHadronElasticProcess::G4UHadronElasticProcess(const G4String& pName, G4bool fl)
-  : G4HadronicProcess(pName), flagHP(fl), first(true)
+G4UHadronElasticProcess::G4UHadronElasticProcess(const G4String& pName, G4double elow)
+  : G4HadronicProcess(pName), thEnergy(elow), first(true)
 {
   AddDataSet(new G4HadronElasticDataSet);
   theProton = G4Proton::Proton();
   theNeutron = G4Neutron::Neutron();
-  thEnergy = 1.*keV;
   verboseLevel= 1;
   qCManager = 0;
 }
@@ -79,14 +78,13 @@ BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
     if(!qCManager) qCManager = G4QElasticCrossSection::GetPointer();
     theParticle = &aParticleType;
     pPDG = theParticle->GetPDGEncoding();
-    //    if(theParticle == theNeutron && flagHP) 
-    //  AddDataSet(new G4NeutronHPElasticData());
 
     store = G4HadronicProcess::GetCrossSectionDataStore();
      
-    if(verboseLevel>1) 
+    if(verboseLevel>1 || (verboseLevel==1 && theParticle == theNeutron)) 
       G4cout << "G4UHadronElasticProcess for " 
-	     << theParticle->GetParticleName() 
+	     << theParticle->GetParticleName()
+	     << "  Elow(MeV)= " << thEnergy/MeV 
 	     << G4endl; 
   }
   store->BuildPhysicsTable(aParticleType);
@@ -101,9 +99,6 @@ G4double G4UHadronElasticProcess::GetMeanFreePath(const G4Track& track,
   const G4Material* material = track.GetMaterial();
   cross = 0.0;
   G4double x = DBL_MAX;
-
-  // The process is effective only above the threshold
-  //  if(dp->GetKineticEnergy() < thEnergy) return x;
 
   // Compute cross sesctions
   const G4ElementVector* theElementVector = material->GetElementVector();
@@ -145,7 +140,8 @@ G4double G4UHadronElasticProcess::GetMicroscopicCrossSection(
   G4int iz = G4int(elm->GetZ());
   G4double x = 0.0;
   // CHIPS cross sections
-  if(iz <= 2 && (theParticle == theProton || theParticle == theNeutron)) {
+  if(iz <= 2 && dp->GetKineticEnergy() > thEnergy && 
+     (theParticle == theProton || theParticle == theNeutron)) {
     G4double momentum = dp->GetTotalMomentum();
     if(iz == 1) {
       G4IsotopeVector* isv = elm->GetIsotopeVector(); 
@@ -156,17 +152,16 @@ G4double G4UHadronElasticProcess::GetMicroscopicCrossSection(
 	x = 0.0;
 	for(G4int j=0; j<ni; j++) {
 	  G4int N = elm->GetIsotope(j)->GetN() - 1;
-	  if(N == 0 || N == 1) {
-	    if(verboseLevel>1) 
-	      G4cout << "G4UHadronElasticProcess compute CHIPS CS for Z= 1, N= " 
-		     << N << " pdg= " << pPDG 
-		     << " mom(GeV)= " << momentum/GeV 
-		     << "  " << qCManager << G4endl; 
-	    G4double y = ab[j]*
-	      qCManager->GetCrossSection(false,momentum,1,N,pPDG);
-	    xsecH[N] += y;
-	    x += y;
-	  }
+          if(N > 1) N = 1;
+	  if(verboseLevel>1) 
+	    G4cout << "G4UHadronElasticProcess compute CHIPS CS for Z= 1, N= " 
+		   << N << " pdg= " << pPDG 
+		   << " mom(GeV)= " << momentum/GeV 
+		   << "  " << qCManager << G4endl; 
+	  G4double y = ab[j]*
+	    qCManager->GetCrossSection(false,momentum,1,N,pPDG);
+	  xsecH[N] += y;
+	  x += y;
 	}
       } else {
 	if(verboseLevel>1) 
@@ -189,6 +184,19 @@ G4double G4UHadronElasticProcess::GetMicroscopicCrossSection(
 	     << G4endl; 
     x = store->GetCrossSection(dp, elm, temp);
   }
+  // NaN finder
+  if(!(x < 0.0 || x >= 0.0)) {
+    if (verboseLevel > -1) {
+      G4cout << "G4UHadronElasticProcess:WARNING: Z= " << iz  
+	     << " pdg= " <<  pPDG
+	     << " mom(GeV)= " << dp->GetTotalMomentum()/GeV 
+	     << " cross= " << x 
+	     << " set to zero"
+	     << G4endl; 
+    }
+    x = 0.0;
+  }
+
   if(verboseLevel>1) 
     G4cout << "G4UHadronElasticProcess cross(mb)= " << x/millibarn 
            << "  E(MeV)= " << dp->GetKineticEnergy()
