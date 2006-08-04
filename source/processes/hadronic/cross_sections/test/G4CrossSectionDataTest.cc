@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CrossSectionDataTest.cc,v 1.8 2006-07-20 12:48:28 grichine Exp $
+// $Id: G4CrossSectionDataTest.cc,v 1.9 2006-08-04 14:05:33 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -95,10 +95,16 @@ int main()
   G4cout << " 8 argon" << G4endl;
   G4cout << " 9 silicon" << G4endl;
   G4cout << "10 tugnsten" << G4endl;
-  G4cout << "11 uranium" << G4endl;
+  G4cout << "11 cadmium" << G4endl;
+  G4cout << "12 uranium" << G4endl;
+  G4cout << "13 berillium" << G4endl;
+  G4cout << "14 aluminium" << G4endl;
   G4int choice;
   // G4cin >> choice;
-  choice = 6;
+  choice = 4;
+
+
+
   G4Element*     theElement;
   G4Material*    theMaterial;
   G4NistManager* man = G4NistManager::Instance();
@@ -168,8 +174,26 @@ int main()
 
     case 11:
 
+      theElement  = man->FindOrBuildElement("Cd");
+      theMaterial = man->FindOrBuildMaterial("G4_Cd");
+      break; 
+ 
+    case 12:
+
       theElement  = man->FindOrBuildElement("U");
       theMaterial = man->FindOrBuildMaterial("G4_U");
+      break;
+  
+    case 13:
+
+      theElement  = man->FindOrBuildElement("Be");
+      theMaterial = man->FindOrBuildMaterial("G4_Be");
+      break; 
+ 
+    case 14:
+
+      theElement  = man->FindOrBuildElement("Al");
+      theMaterial = man->FindOrBuildMaterial("G4_Al");
       break;  
   }
    //   G4cout << "Dumping element info:" << G4endl;
@@ -186,7 +210,7 @@ int main()
   G4cout << " 5 kaon0short" << G4endl;
   G4cout << " 6 pion-" << G4endl;
   //  G4cin >> choice;
-  choice = 1;
+  choice = 3;
 
   G4ParticleDefinition* theParticleDefinition;
   G4VProcess* theProcess;
@@ -340,9 +364,9 @@ int main()
   std::ofstream writef("txs.dat", std::ios::out ) ;
   writef.setf( std::ios::scientific, std::ios::floatfield );
 
-  kinEnergy = 457.*GeV; //1.
+  kinEnergy = 1.*GeV; //1.
 
-
+  /*
   // for(i = 0; i < iMax; i++)
   {
    
@@ -363,7 +387,7 @@ int main()
      // kinEnergy *= 1.1;
      delete theDynamicParticle;
   }
-
+  */
   // Check Glauber-Gribov model
   G4cout<<"Check Glauber-Gribov model"<<G4endl;
 
@@ -374,7 +398,7 @@ int main()
   G4double ggTotXsc, ggElaXsc, ggIneXsc;
 
 
-  // for(i = 0; i < iMax; i++)
+  for(i = 0; i < iMax; i++)
   {
    
      theDynamicParticle = new G4DynamicParticle(theParticleDefinition,
@@ -392,19 +416,29 @@ int main()
             <<  ggElaXsc/millibarn << " mb" << G4endl;
      // G4cout << "Mean free path = " << mfp << " mm" << G4endl;
 
-     // writegg << kinEnergy/GeV <<"\t"<< /mi ggTotXscllibarn << G4endl;
+     writegg << kinEnergy/GeV <<"\t"<< ggTotXsc/millibarn <<"\t"<< ggElaXsc/millibarn << G4endl;
 
      kinEnergy *= 1.1;
      delete theDynamicParticle;
   }
 
+  /*
+  G4double At = 1.;
 
+  for(i = 0; i < iMax; i++)
+  {
+    G4double nuclRadius = ggXsc.GetNucleusRadius(At); 
+    G4cout << "At = "<<At<<"      R = "<<nuclRadius/fermi<<";   " 
+           << ggXsc.GetRadiusConst()*std::pow(At, 1./3.)/fermi<<G4endl;
+    At *= 1.1;   
+  }
+  */
 
   G4cout<<"energy in GeV"<<"\t"<<"cross-section in millibarn"<<G4endl;
   G4cout << theProcess->GetProcessName() << " cross section for " << 
             theParticleDefinition->GetParticleName() <<
            " on " << theElement->GetName() << G4endl;
-
+  G4cout <<"with atomic weight = "<<theElement->GetN() << G4endl;
 
 
   return 1;

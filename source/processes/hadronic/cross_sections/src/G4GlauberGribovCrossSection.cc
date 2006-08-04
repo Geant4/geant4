@@ -115,15 +115,13 @@ G4double G4GlauberGribovCrossSection::
 GetCrossSection(const G4DynamicParticle* aParticle, const G4Element* anElement, G4double )
 {
   G4double xsection;
-  G4double At           = anElement->GetN();
-  G4double one_third = 1.0 / 3.0;
-  G4double cubicrAt  = std::pow ( At , G4double(one_third) ); 
+  G4double R             = GetNucleusRadius(aParticle, anElement); 
+  G4double nucleusSquare = 2.*pi*R*R; 
+
 
   // G4double sigma     = GetHadronNucleaonXsc(aParticle, anElement);
   G4double sigma     = GetHadronNucleaonXscPDG(aParticle, anElement);
 
-  G4double R             = fRadiusConst*cubicrAt;
-  G4double nucleusSquare = 2.*pi*R*R; 
   G4double ratio = sigma/nucleusSquare;
 
   xsection =  nucleusSquare*std::log( 1. + ratio );
@@ -234,6 +232,8 @@ G4GlauberGribovCrossSection::GetHadronNucleaonXscPDG(const G4DynamicParticle* aP
   G4double targ_mass = G4ParticleTable::GetParticleTable()->
   GetIonTable()->GetIonMass( G4int(Zt+0.5) , G4int(At+0.5) );
 
+  targ_mass = 1.*GeV;
+
   G4double proj_mass     = aParticle->GetMass();
   G4double proj_momentum = aParticle->GetMomentum().mag();
 
@@ -253,8 +253,10 @@ G4GlauberGribovCrossSection::GetHadronNucleaonXscPDG(const G4DynamicParticle* aP
 
   if(theParticle == theNeutron) // proton-neutron fit 
   {
-    xsection = At*( 35.80 + B*std::pow(std::log(sMand/s0),2.) 
+    xsection = Zt*( 35.80 + B*std::pow(std::log(sMand/s0),2.) 
                           + 40.15*std::pow(sMand,-eta1) - 30.*std::pow(sMand,-eta2));
+    xsection  += Nt*( 35.45 + B*std::pow(std::log(sMand/s0),2.) 
+		      + 42.53*std::pow(sMand,-eta1) - 33.34*std::pow(sMand,-eta2)); // pp for nn
   } 
   else if(theParticle == theProton) 
   {
@@ -317,8 +319,109 @@ G4GlauberGribovCrossSection::GetHadronNucleaonXscPDG(const G4DynamicParticle* aP
     xsection += Nt*( 35.80 + B*std::pow(std::log(sMand/s0),2.) 
                           + 40.15*std::pow(sMand,-eta1) - 30.*std::pow(sMand,-eta2));
   } 
-  xsection *= millibarn;
+  xsection *= millibarn; // parametrised in mb
   return xsection;
+}
+
+////////////////////////////////////////////////////////////////////////////////////
+//
+//
+
+G4double 
+G4GlauberGribovCrossSection::GetNucleusRadius( const G4DynamicParticle* aParticle, 
+                                               const G4Element* anElement          )
+{
+  G4double At       = anElement->GetN();
+  G4double oneThird = 1.0/3.0;
+  G4double cubicrAt = std::pow (At, oneThird); 
+
+
+  G4double R;  // = fRadiusConst*cubicrAt;
+  /*  
+  G4double tmp = std::pow( cubicrAt-1., 3.);
+  tmp         += At;
+  tmp         *= 0.5;
+
+  if (At > 20.)   // 20.
+  {
+    R = fRadiusConst*std::pow (tmp, oneThird); 
+  }
+  else
+  {
+    R = fRadiusConst*cubicrAt; 
+  }
+  */
+  
+  R = fRadiusConst*cubicrAt;
+
+  G4double meanA  = 21.;
+  G4double tauA1  = 40.; 
+  G4double tauA2  = 10.; 
+  G4double tauA3  = 5.; 
+
+  G4double a1 = 0.85;
+  G4double b1 = 1. - a1;
+  G4double b2 = 0.3;
+  G4double b3 = 4.;
+
+  if (At > 20.)   // 20.
+  {
+    R *= ( a1 + b1*std::exp( -(At - meanA)/tauA1) ); 
+  }
+  else if (At > 3.5)
+  {
+    R *= ( 1.0 + b2*( 1. - std::exp( (At - meanA)/tauA2) ) ); 
+  }
+  else 
+  {
+    R *= ( 1.0 + b3*( 1. - std::exp( (At - meanA)/tauA3) ) ); 
+  }
+  
+  return R;
+}
+////////////////////////////////////////////////////////////////////////////////////
+//
+//
+
+G4double 
+G4GlauberGribovCrossSection::GetNucleusRadius(G4double At)
+{
+  G4double oneThird = 1.0/3.0;
+  G4double cubicrAt = std::pow (At, oneThird); 
+
+
+  G4double R;  // = fRadiusConst*cubicrAt;
+
+  /*
+  G4double tmp = std::pow( cubicrAt-1., 3.);
+  tmp         += At;
+  tmp         *= 0.5;
+
+  if (At > 20.)
+  {
+    R = fRadiusConst*std::pow (tmp, oneThird); 
+  }
+  else
+  {
+    R = fRadiusConst*cubicrAt; 
+  }
+  */
+
+  R = fRadiusConst*cubicrAt;
+
+  G4double meanA = 20.;
+  G4double tauA  = 20.; 
+
+  if (At > 20.)   // 20.
+  {
+    R *= ( 0.8 + 0.2*std::exp( -(At - meanA)/tauA) ); 
+  }
+  else
+  {
+    R *= ( 1.0 + 0.1*( 1. - std::exp( (At - meanA)/tauA) ) ); 
+  }
+
+  return R;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////

@@ -78,6 +78,10 @@ public:
   G4double GetTotalGlauberGribovXsc()    { return fTotalXsc;     }; 
   G4double GetElasticGlauberGribovXsc()  { return fElasticXsc;   }; 
   G4double GetInelasticGlauberGribovXsc(){ return fInelasticXsc; }; 
+  G4double GetRadiusConst()              { return fRadiusConst;  }; 
+
+  G4double GetNucleusRadius(const G4DynamicParticle*, const G4Element*);
+  G4double GetNucleusRadius(G4double At);
 
 private:
 
