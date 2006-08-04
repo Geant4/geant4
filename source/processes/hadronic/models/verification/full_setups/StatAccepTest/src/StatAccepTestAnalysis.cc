@@ -20,6 +20,7 @@ bool StatAccepTestAnalysis::is2DHistogramStepLvsEOn = false;
 bool StatAccepTestAnalysis::isHistogramSpectrumUnweightedOn = false;
 bool StatAccepTestAnalysis::isHistogramSpectrumWeightedOn = true;  
 bool StatAccepTestAnalysis::isCountingProcessesOn = false;  
+bool StatAccepTestAnalysis::isMapParticleNamesOn = false;  
 
 
 StatAccepTestAnalysis* StatAccepTestAnalysis::instance = 0;
@@ -413,6 +414,8 @@ void StatAccepTestAnalysis::init() {
   numSigmaMinusStoppingAtRestProcesses = 0;
   numMuonMinusStoppingAtRestProcesses = 0;
   numOtherStoppingAtRestProcesses = 0;
+
+  mapParticleNames.clear();
 
 }                       
 
@@ -1552,7 +1555,7 @@ void StatAccepTestAnalysis::infoStep( const G4Step* aStep ) {
 
 void StatAccepTestAnalysis::infoTrack( const G4Track* aTrack ) {
 
-  if ( aTrack->GetTrackStatus() == fStopAndKill ) {
+  if ( aTrack->GetTrackStatus() == fStopAndKill ) {   
     //G4cout << "\t --- Info Track when fStopAndKill --- " << G4endl
     //	     << "\t TrackID = " << aTrack->GetTrackID() 
     //       << "\t Name = " << aTrack->GetDefinition()->GetParticleName() << G4endl
@@ -1643,8 +1646,22 @@ void StatAccepTestAnalysis::infoTrack( const G4Track* aTrack ) {
 	numExitingOthers++;
       }
     }
-  } else {
+  } else {  // When a track is created.
+
     classifyParticle( true , aTrack->GetDefinition() );
+
+    if ( StatAccepTestAnalysis::isMapParticleNamesOn  &&  
+	 aTrack->GetDefinition() != G4Gamma::GammaDefinition()  &&
+	 aTrack->GetDefinition() != G4Electron::ElectronDefinition()  &&
+	 aTrack->GetDefinition() != G4Positron::PositronDefinition() ) {
+      std::string particleName = aTrack->GetDefinition()->GetParticleName();
+      if ( mapParticleNames.find( particleName ) == mapParticleNames.end() ) {
+	mapParticleNames.insert( std::pair< std::string, int >( particleName, 1 ) );
+      } else {
+	mapParticleNames.find( particleName )->second += 1;
+      }
+    }
+
   }
 }
 
@@ -4381,6 +4398,20 @@ void StatAccepTestAnalysis::finish() {
     }
   }
 
+  // Print information about the names of particles and the total 
+  // number of times they have been created (excluding e-, e+, gamma).
+  if ( StatAccepTestAnalysis::isMapParticleNamesOn ) { 
+    G4cout << G4endl
+           << " Particle names and total (not per event) tracks created \n"
+           << " (excluding e-, e+, gamma)"  
+	   << G4endl;
+    for ( std::map< std::string, int >::const_iterator cit = mapParticleNames.begin(); 
+	  cit != mapParticleNames.end(); ++cit ) {
+      G4cout << "\t particle = " << cit->first 
+	     << "\t total number of tracks = " << cit->second
+	     << G4endl;
+    }   
+  }
 }
 
 

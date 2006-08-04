@@ -3,6 +3,7 @@
 
 #include "globals.hh"
 #include <vector>
+#include <map>
 #include "G4ThreeVector.hh"
 
 namespace AIDA {
@@ -92,6 +93,8 @@ private:
   static bool isHistogramSpectrumWeightedOn;    // unweighted/weighted histograms.
 
   static bool isCountingProcessesOn; // To switch on/off the counting of processes.
+
+  static bool isMapParticleNamesOn;  // To switch on/off the map of particle names.
 
   void classifyParticle( const bool isTrack, const G4ParticleDefinition* particleDef );
   
@@ -478,6 +481,10 @@ private:
   G4int numSigmaMinusStoppingAtRestProcesses;
   G4int numMuonMinusStoppingAtRestProcesses;
   G4int numOtherStoppingAtRestProcesses;
+
+  // List of particles names and total count of the number of
+  // tracks of such particle type (excluding e-, e+, gamma).
+  std::map< std::string, int > mapParticleNames;
 
 };
 
