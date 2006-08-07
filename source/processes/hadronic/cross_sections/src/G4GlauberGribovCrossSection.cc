@@ -81,7 +81,7 @@ G4GlauberGribovCrossSection::G4GlauberGribovCrossSection()
 //
 
 G4bool 
-G4GlauberGribovCrossSection::IsApplicable(const G4DynamicParticle* aDP, const G4Element*)
+G4GlauberGribovCrossSection::IsApplicable(const G4DynamicParticle* aDP, const G4Element*  anElement)
 {
   G4bool applicable  = false;
   G4int baryonNumber     = aDP->GetDefinition()->GetBaryonNumber();
@@ -90,6 +90,7 @@ G4GlauberGribovCrossSection::IsApplicable(const G4DynamicParticle* aDP, const G4
   const G4ParticleDefinition* theParticle = aDP->GetDefinition();
  
   if ( kineticEnergy / baryonNumber <= fUpperLimit &&
+       anElement->GetZ() > 1. &&      // >=  He
        ( theParticle == theProton    ||
          theParticle == theAProton   ||
          theParticle == theGamma     ||
@@ -355,12 +356,14 @@ G4GlauberGribovCrossSection::GetNucleusRadius( const G4DynamicParticle* aParticl
   R = fRadiusConst*cubicrAt;
 
   G4double meanA  = 21.;
+
   G4double tauA1  = 40.; 
   G4double tauA2  = 10.; 
   G4double tauA3  = 5.; 
 
   G4double a1 = 0.85;
   G4double b1 = 1. - a1;
+
   G4double b2 = 0.3;
   G4double b3 = 4.;
 
