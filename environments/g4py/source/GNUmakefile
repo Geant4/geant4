@@ -1,11 +1,11 @@
-# $Id: GNUmakefile,v 1.2 2006-04-25 08:09:43 kmura Exp $
+# $Id: GNUmakefile,v 1.3 2006-08-08 05:20:09 kmura Exp $
 # $Name: not supported by cvs2svn $
 # ===========================================================
 #   Makefile for building Geant4Py modules
 # ===========================================================
 include  ../config/config.gmk
 
-SUBDIR1 := global interface run event tracking track
+SUBDIR1 := global interface intercoms run event tracking track
 SUBDIR1 += geometry materials particles processes digits_hits
 SUBDIR2 := visualization graphics_reps 
 SUBDIR3 := python

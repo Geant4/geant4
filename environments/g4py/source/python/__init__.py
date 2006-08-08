@@ -1,4 +1,4 @@
-# $Id: __init__.py,v 1.7 2006-07-12 05:53:19 kmura Exp $
+# $Id: __init__.py,v 1.8 2006-08-08 05:20:09 kmura Exp $
 """
 # ==================================================================
 #  [Geant4] module package
@@ -13,8 +13,8 @@
 # ==================================================================
 # docs
 # ==================================================================
-__version__ = '1.0.1'
-__date__    = '12/July/2006'
+__version__ = '1.0.2'
+__date__    = '13/Aug/2006'
 __author__  = 'K.Murakami (Koichi.Murakami@kek.jp)'
 __url__     = 'http://www-geant4.kek.jp/projects/Geant4Py/'
 
@@ -34,6 +34,7 @@ def PrintVersion():
 # import submodules
 # ==================================================================
 from G4interface      import *
+from G4intercoms      import *
 from G4global         import *
 from G4run            import *
 from G4event          import *
@@ -60,6 +61,11 @@ if(G4RunManager.GetRunManager() == None):
 else:
   gRunManager= G4RunManager.GetRunManager()
 gRunManagerKernel= G4RunManagerKernel.GetRunManagerKernel()
+
+# ------------------------------------------------------------------
+# gUImanager
+# ------------------------------------------------------------------
+gUImanager= G4UImanager.GetUIpointer()
 
 # ------------------------------------------------------------------
 # gEventManager
@@ -179,8 +185,10 @@ if(G4VisManager.GetConcreteInstance() == None):
 # ------------------------------------------------------------------
 # functions
 # ------------------------------------------------------------------
-gApplyUICommand= G4interface.ApplyUICommand
-gGetCurrentValues= G4interface.GetCurrentValues
+gControlExecute= gUImanager.ExecuteMacroFile
+gApplyUICommand= G4intercoms.ApplyUICommand
+gGetCurrentValues= gUImanager.GetCurrentValues
+
 gStartUISession= G4interface.StartUISession
 
 # EmCalculator
@@ -241,10 +249,3 @@ def ListMaterial(self):
 
 G4MaterialTable.ListMaterial = ListMaterial
 
-# ------------------------------------------------------------------
-# execute G4 macro
-# ------------------------------------------------------------------
-def gControlExecute(g4mac):
-  ui_command= "/control/execute " + g4mac
-  gApplyUICommand(ui_command)
-  

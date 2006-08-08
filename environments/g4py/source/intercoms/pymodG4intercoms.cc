@@ -23,10 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pymodG4interface.cc,v 1.5 2006-08-08 05:20:09 kmura Exp $
+// $Id: pymodG4intercoms.cc,v 1.1 2006-08-08 05:20:57 kmura Exp $
 // $Name: not supported by cvs2svn $
 // ====================================================================
-//   pymodG4interface.cc [Geant4Py module]
+//   pymodG4intercoms.cc [Geant4Py module]
 //
 //                                         2005 Q
 // ====================================================================
@@ -38,10 +38,16 @@ using namespace boost::python;
 // module definition
 // ====================================================================
 
-void export_G4UIterminal();
+void export_G4UImanager();
+void export_G4UIcommandTree();
+void export_G4UIcommand();
+void export_G4UIparameter();
 
-BOOST_PYTHON_MODULE(G4interface)
+BOOST_PYTHON_MODULE(G4intercoms)
 {
-  export_G4UIterminal();
+  export_G4UImanager();
+  export_G4UIcommandTree();
+  export_G4UIcommand();
+  export_G4UIparameter();
 }
 

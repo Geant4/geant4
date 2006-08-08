@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4UImanager.cc,v 1.4 2006-06-29 15:34:01 gunter Exp $
+// $Id: pyG4UImanager.cc,v 1.1 2006-08-08 05:20:57 kmura Exp $
 // $Name: not supported by cvs2svn $
 // ====================================================================
 //   pyG4UImanager.cc
@@ -31,10 +31,11 @@
 //   G4UImanager class is pure singleton, so it cannnot be exposed
 //   from BPL. Functionality of G4UImanager is exposed in global
 //   name space via wrappers.
-//                                         2005 Q
+//                                         2006 Q
 // ====================================================================
 #include <boost/python.hpp>
 #include "G4UImanager.hh"
+#include "G4UIcommandTree.hh"
 
 using namespace boost::python;
 
@@ -42,6 +43,15 @@ using namespace boost::python;
 // wrappers
 // ====================================================================
 namespace pyG4UImanager {
+
+// ApplyCommand
+G4int(G4UImanager::*f1_ApplyCommand)(const char*)= &G4UImanager::ApplyCommand;
+G4int(G4UImanager::*f2_ApplyCommand)(G4String)= &G4UImanager::ApplyCommand;
+
+// CreateHTML
+BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_CreateHTML, CreateHTML, 0, 1);
+
+
 
 //////////////////////////////////////////////
 G4int ApplyUICommand_1(const G4String& cmdstr)
@@ -100,15 +110,6 @@ G4int ApplyUICommand_2(const std::string& cmdstr)
   return ApplyUICommand_1(cmdstr);
 }
 
-
-////////////////////////////////////////////////
-std::string GetCurrentValues(const char* cmdstr)
-////////////////////////////////////////////////
-{
-  G4UImanager* UImgr= G4UImanager::GetUIpointer();
-  return UImgr-> GetCurrentValues(cmdstr);  
-}
-
 };
 
 using namespace pyG4UImanager;
@@ -118,8 +119,31 @@ using namespace pyG4UImanager;
 // ====================================================================
 void export_G4UImanager()
 {
+ class_<G4UImanager, boost::noncopyable>
+   ("G4UImanager", "UI manager class", no_init)
+   .def("GetUIpointer",  &G4UImanager::GetUIpointer,
+        return_value_policy<reference_existing_object>())
+   .staticmethod("GetUIpointer")
+   // ---
+   .def("GetCurrentValues", &G4UImanager::GetCurrentValues)
+   .def("ExecuteMacroFile", &G4UImanager::ExecuteMacroFile)
+   .def("ApplyCommand",     f1_ApplyCommand)
+   .def("ApplyCommand",     f2_ApplyCommand)
+   .def("CreateHTML",       &G4UImanager::CreateHTML, f_CreateHTML())
+   // ---
+   .def("SetPauseAtBeginOfEvent", &G4UImanager::SetPauseAtBeginOfEvent)
+   .def("GetPauseAtBeginOfEvent", &G4UImanager::GetPauseAtBeginOfEvent)
+   .def("SetPauseAtEndOfEvent",   &G4UImanager::SetPauseAtEndOfEvent)
+   .def("GetPauseAtEndOfEvent",   &G4UImanager::GetPauseAtEndOfEvent)
+   .def("SetVerboseLevel",        &G4UImanager::SetVerboseLevel)
+   .def("GetVerboseLevel",        &G4UImanager::GetVerboseLevel)
+   // ---
+   .def("GetTree",   &G4UImanager::GetTree,
+        return_value_policy<reference_existing_object>())
+   ;
+
+  // ---
   def("ApplyUICommand",    ApplyUICommand_1);
   def("ApplyUICommand",    ApplyUICommand_2);
-  def("GetCurrentValues",  GetCurrentValues);
-}
 
+}

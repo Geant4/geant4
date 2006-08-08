@@ -23,25 +23,67 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pymodG4interface.cc,v 1.5 2006-08-08 05:20:09 kmura Exp $
+// $Id: pyG4UIcommand.cc,v 1.1 2006-08-08 05:20:57 kmura Exp $
 // $Name: not supported by cvs2svn $
 // ====================================================================
-//   pymodG4interface.cc [Geant4Py module]
+//   pyG4UIcommand.cc
 //
-//                                         2005 Q
+//                                         2006 Q
 // ====================================================================
 #include <boost/python.hpp>
+#include "G4UIcommand.hh"
+#include "G4UImessenger.hh"
 
 using namespace boost::python;
 
 // ====================================================================
+// thin wrappers
+// ====================================================================
+namespace pyG4UIcommand {
+
+// GetStateList (returning python list)
+list f_GetStateList(G4UIcommand* acommand)
+{
+  list pyStateList;
+  std::vector<G4ApplicationState>* stateList= acommand->GetStateList();
+
+  for(G4int i=0; i< stateList->size(); i++) {
+    pyStateList.append(&(*stateList)[i]);
+  }
+
+  return pyStateList;
+}
+
+};                                                                              
+
+using namespace pyG4UIcommand;                                                  
+
+// ====================================================================
 // module definition
 // ====================================================================
-
-void export_G4UIterminal();
-
-BOOST_PYTHON_MODULE(G4interface)
+void export_G4UIcommand()
 {
-  export_G4UIterminal();
+  class_<G4UIcommand, G4UIcommand*>
+    ("G4UIcommand", "UI command")
+    .def(init<const char*, G4UImessenger*>())
+    // ---
+    .def("GetCurrentValue",     &G4UIcommand::GetCurrentValue)
+    .def("IsAvailable",         &G4UIcommand::IsAvailable)
+    .def("List",                &G4UIcommand::List)
+    .def("GetRange",            &G4UIcommand::GetRange,
+         return_value_policy<return_by_value>())
+    .def("GetGuidanceEntries",  &G4UIcommand::GetGuidanceEntries)
+    .def("GetGuidanceLine",     &G4UIcommand::GetGuidanceLine,
+         return_value_policy<return_by_value>())
+    .def("GetCommandPath",      &G4UIcommand::GetCommandPath,
+         return_value_policy<return_by_value>())
+    .def("GetCommandName",      &G4UIcommand::GetCommandName,
+         return_value_policy<return_by_value>())
+    .def("GetParameterEntries", &G4UIcommand::GetParameterEntries)
+    .def("GetParameter",        &G4UIcommand::GetParameter,
+         return_value_policy<reference_existing_object>())
+    .def("GetStateList",        f_GetStateList)
+    .def("GetTitle",            &G4UIcommand::GetTitle)
+    ;
 }
 

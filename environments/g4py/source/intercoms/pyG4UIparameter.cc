@@ -23,25 +23,37 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pymodG4interface.cc,v 1.5 2006-08-08 05:20:09 kmura Exp $
+// $Id: pyG4UIparameter.cc,v 1.1 2006-08-08 05:20:57 kmura Exp $
 // $Name: not supported by cvs2svn $
 // ====================================================================
-//   pymodG4interface.cc [Geant4Py module]
+//   pyG4UIparameter.cc
 //
-//                                         2005 Q
+//                                         2006 Q
 // ====================================================================
 #include <boost/python.hpp>
+#include "G4UIparameter.hh"
 
 using namespace boost::python;
 
 // ====================================================================
 // module definition
 // ====================================================================
-
-void export_G4UIterminal();
-
-BOOST_PYTHON_MODULE(G4interface)
+void export_G4UIparameter()
 {
-  export_G4UIterminal();
+  class_<G4UIparameter, G4UIparameter*>
+    ("G4UIparameter", "UI parameter")
+    // constructors
+    .def(init<char>())
+    .def(init<const char*, char, G4bool>())
+    // ---
+    .def("List",                   &G4UIparameter::List)
+    .def("GetDefaultValue",        &G4UIparameter::GetDefaultValue)
+    .def("GetParameterType",       &G4UIparameter::GetParameterType)
+    .def("GetParameterRange",      &G4UIparameter::GetParameterRange)
+    .def("GetParameterName",       &G4UIparameter::GetParameterName)
+    .def("GetParameterCandidates", &G4UIparameter::GetParameterCandidates)
+    .def("IsOmittable",            &G4UIparameter::IsOmittable)
+    .def("GetCurrentAsDefault",    &G4UIparameter::GetCurrentAsDefault)
+    .def("GetParameterGuidance",   &G4UIparameter::GetParameterGuidance)
+    ;
 }
-
