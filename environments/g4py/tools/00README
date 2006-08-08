@@ -1,4 +1,4 @@
-$Id: 00README,v 1.2 2006-08-08 09:31:39 kmura Exp $
+$Id: 00README,v 1.3 2006-08-08 09:59:45 kmura Exp $
 ==========================================================================
 Geant4Py
 
@@ -18,4 +18,66 @@ Additonal setup script for co-building global shared libraries
 
 A small setup script helps co-build global shared libraries,
 in addition to an existing granular static environment.
+
+
+g4autobuild
+-----------
+An automatic build tool. The tool takes care of multiple Geant4/CLHEP instances
+(granular static libray, global static library and global shared library),
+configuring visualization and UI environments. The building procedures 
+are fully automatized, avoiding duplicated building processes.
+
+A sample configuration file is as follows;
+---------------------------------------------------------------------
+#
+# G4SYS
+#
+G4SYS Linux-g++
+
+#
+# Base directory of Geant4 builds
+#
+G4BASE /opt/heplib/Geant4
+
+#
+# Base directory of CLHEP
+#
+CLHEPBASE /opt/heplib/CLHEP
+
+#
+# G4 version and CLHEP version (starting with "-")
+#
+# G4 version          CLHEP version
+- geant4.8.1.p01      2.0.2.3
+- geant4.8.1          2.0.2.3
+
+#
+# Visualization Options (starting with "v")
+# G4VIS_BUILD_XXX_DRIVER and G4VIS_USE_XXX are activated.
+#
+v DAWN
+v VRML
+v RAYTRACERX_DRIVER
+v OPENGLX
+
+#
+# UI Options (starting with "u")
+# G4UI_USE_XXX is activated.
+#
+u TCSH
+u GAG
+---------------------------------------------------------------------
+
+Users just specify the base directories of Geant4 and CLHEP, 
+and give combinations of their versions.
+
+Then, type
+
+  $ ./g4autobuild
+
+. A series of building processes will start.
+
+The "status" directory will be created by the script. Note that null files 
+(named geant4-%version%-xxx) associated with tasks will be created in this
+directory after finishing each task. These files works as flags for task status.
 
