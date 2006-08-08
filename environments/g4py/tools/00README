@@ -1,4 +1,4 @@
-$Id: 00README,v 1.1 2006-08-08 04:46:04 kmura Exp $
+$Id: 00README,v 1.2 2006-08-08 09:31:39 kmura Exp $
 ==========================================================================
 Geant4Py
 
@@ -17,5 +17,5 @@ env
 Additonal setup script for co-building global shared libraries
 
 A small setup script helps co-build global shared libraries,
-in addition to the existing granular static environment.
+in addition to an existing granular static environment.
 

@@ -1,4 +1,4 @@
-#$Id: env+.sh,v 1.1 2006-08-08 04:46:04 kmura Exp $
+#$Id: env+.sh,v 1.2 2006-08-08 09:32:52 kmura Exp $
 # ======================================================================
 #  [sh version]
 #  Additonal setup script for co-building global shared libraries
@@ -6,7 +6,7 @@
 #  In dafault situation, Geant4 creates and uses "granular static libraries".
 #  But, Python interface requires "global shared library".
 #  This small setup script helps co-build global shared libraries,
-#  in addition to the existing granular static environment.
+#  in addition to an existing granular static environment.
 #
 #  After sourcing "env.csh", which is created by the "Configure" script,
 #  source this file additionally, then "make global".
