@@ -1,0 +1,21 @@
+$Id: 00README,v 1.1 2006-08-08 04:46:04 kmura Exp $
+==========================================================================
+Geant4Py
+
+  Geant4Py is a set of python modules for using Geant4.
+
+Tools package
+
+  In dafault situation, Geant4 creates and uses "granular static libraries".
+  But, Python interface requires "global shared library".
+  This directory contains some utility tools for helping build 
+  Geant4 environment for using Python interface.
+==========================================================================
+
+env
+---
+Additonal setup script for co-building global shared libraries
+
+A small setup script helps co-build global shared libraries,
+in addition to the existing granular static environment.
+
