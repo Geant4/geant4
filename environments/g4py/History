@@ -1,4 +1,4 @@
-$Id: History,v 1.17 2006-07-12 08:48:16 kmura Exp $
+$Id: History,v 1.18 2006-08-08 05:14:29 kmura Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,15 @@ Geant4Py is a Geant4-Python bridge.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+06 August 2006 K.Murakami (1.0.2)
+ - modify config tools for building on MacOSX (some side-effects)
+ - add tools dir for support tools for building user environment
+ - add intercoms dir (move pyG4UImanager.cc from interfacr to intercoms)
+ - new exposed staffs; 
+   G4UImanager, G4UIcommandTree, G4UIcommand, G4UIparameter
+ - __init__.py is updeted
+   (gUImanager as global, and some modifications)
+   
 12 July 2006 K.Murakami (1.0.1)
  - add exposures of G4LossTableManager, G4ProductionCutsTable
  - add site-modules/utls/MCScore
