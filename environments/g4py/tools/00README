@@ -1,4 +1,4 @@
-$Id: 00README,v 1.4 2006-08-09 01:40:42 kmura Exp $
+$Id: 00README,v 1.5 2006-08-09 06:26:23 kmura Exp $
 ==========================================================================
 Geant4Py
 
@@ -80,4 +80,22 @@ Then, type
 The "status" directory will be created by the script. Note that null files 
 (named geant4-%version%-xxx) associated with tasks will be created in this
 directory after finishing each task. These files works as flags for task status.
+
+
+g4package
+---------
+A packaging tool. CLHEP and Geant4 libraries and headers are packed into 
+a specified directory. This script contains a special care for embedded 
+MacOSX(Mach-O) library paths. Using the packaged libraries makes free from
+setting DYLD_LIBRARY_PATH in MacOSX, especially for CLHEP.
+
+For example, on MacOSX,
+
+$ ./g4pack --with-g4system=Darwin-g++ \
+   --with-g4-dir=/opt/heplib/Geant4/geant4.8.1.p01 \
+   --with-clhep-dir=/opt/heplib/CLHEP/2.0.2.3 \
+   --with-install-dir=/Library/Frameworks/Geant4.framework/Versions/8.1.1
+
+creates new package in a "g4" directory. Then you can copy it to the framework
+directory specified.
 
