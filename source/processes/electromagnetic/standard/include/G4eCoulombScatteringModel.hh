@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.hh,v 1.3 2006-08-01 11:43:20 vnivanch Exp $
+// $Id: G4eCoulombScatteringModel.hh,v 1.4 2006-08-09 09:47:17 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -40,6 +40,7 @@
 // Modifications:
 // 01.08.06 V.Ivanchenko extend upper limit of table to TeV and review the
 //          logic of building - only elements from G4ElementTable
+// 08.08.06 V.Ivanchenko build internal table in ekin scale, introduce faclim
 //
 // Class Description:
 //
@@ -59,6 +60,7 @@
 
 #include "G4VEmModel.hh"
 #include "G4PhysicsTable.hh"
+#include "globals.hh"
 
 class G4ParticleChangeForGamma;
 
@@ -106,9 +108,11 @@ private:
   G4double                  a0;
   G4double                  cosThetaMin;
   G4double                  cosThetaMax;
-  G4double                  lowMomentum;
-  G4double                  highMomentum;
+  G4double                  lowKEnergy;
+  G4double                  highKEnergy;
   G4double                  q2Limit;
+  G4double                  alpha2;
+  G4double                  faclim;
 
   G4int                     nbins;
   G4int                     nmax;
@@ -127,15 +131,11 @@ inline G4double G4eCoulombScatteringModel::ComputeCrossSectionPerAtom(
                                              G4double, G4double)
 {
   G4double x;
+  G4bool b;
   if(theCrossSectionTable) {
-    G4bool b;
-    G4double mass = p->GetPDGMass();
-    G4double momentum2 = kinEnergy*(kinEnergy + 2.0*mass);
-    G4double e     = kinEnergy + mass;
-    G4double beta2 = momentum2/(e*e);
-    x = (((*theCrossSectionTable)[index[G4int(Z)]]))->GetValue(momentum2, b)
-      / (momentum2*beta2);
+    x = std::exp((((*theCrossSectionTable)[index[G4int(Z)]]))->GetValue(kinEnergy, b));
   } else x = CalculateCrossSectionPerAtom(p, kinEnergy, Z);
+
   //  G4cout << "G4eCoulombScatteringModel: e= " << kinEnergy << "  cs= " << x << G4endl;
   return x;
 }

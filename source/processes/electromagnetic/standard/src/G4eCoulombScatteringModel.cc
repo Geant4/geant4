@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.cc,v 1.3 2006-08-01 11:43:20 vnivanch Exp $
+// $Id: G4eCoulombScatteringModel.cc,v 1.4 2006-08-09 09:47:17 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -40,6 +40,7 @@
 // Modifications:
 // 01.08.06 V.Ivanchenko extend upper limit of table to TeV and review the
 //          logic of building - only elements from G4ElementTable
+// 08.08.06 V.Ivanchenko build internal table in ekin scale, introduce faclim
 //
 // Class Description:
 //
@@ -66,17 +67,18 @@ G4eCoulombScatteringModel::G4eCoulombScatteringModel(
     theCrossSectionTable(0),
     cosThetaMin(cos(thetaMin)),
     cosThetaMax(cos(thetaMax)),
-    lowMomentum(keV),
-    highMomentum(TeV),
+    lowKEnergy(keV),
+    highKEnergy(TeV),
     q2Limit(tlim),
+    alpha2(fine_structure_const*fine_structure_const),
+    faclim(1.0),
     nbins(12),
     nmax(100),
     buildTable(build),
     isInitialised(false)
 {
-  G4double p0 = hbarc/(Bohr_radius*0.885);
-  a0 = 0.25*p0*p0;
-  p0 = electron_mass_c2*classic_electr_radius;
+  a0 = 0.25*alpha2*electron_mass_c2*electron_mass_c2/(0.885*0.885);
+  G4double p0 = electron_mass_c2*classic_electr_radius;
   coeff = twopi*p0*p0;
 }
 
@@ -106,26 +108,24 @@ void G4eCoulombScatteringModel::Initialise(const G4ParticleDefinition* p,
   if(!buildTable || p->GetParticleName() == "GenericIon") return;
 
   // Compute cross section multiplied by Ptot^2*beta^2
-  theCrossSectionTable = new G4PhysicsTable(nmax);
+  theCrossSectionTable = new G4PhysicsTable();
   G4PhysicsLogVector* ptrVector;
-  G4double mom2, value;
-  G4double pmin = lowMomentum*lowMomentum;
-  G4double pmax = highMomentum*highMomentum;
-  nbins = G4int(log10(pmax/pmin)/2.) + 1;
+  G4double e, value;
+  nbins = 2*G4int(log10(highKEnergy/lowKEnergy));
 
   const  G4ElementTable* elmt = G4Element::GetElementTable();
   size_t nelm =  G4Element::GetNumberOfElements();
 
   for(size_t j=0; j<nelm; j++) { 
 
-    ptrVector  = new G4PhysicsLogVector(pmin, pmax, nbins);
+    ptrVector  = new G4PhysicsLogVector(lowKEnergy, highKEnergy, nbins);
     const G4Element* elm = (*elmt)[j]; 
     G4double Z =  elm->GetZ();
     index[G4int(Z)] = j;
     for(G4int i=0; i<=nbins; i++) {
-      mom2   = ptrVector->GetLowEdgeEnergy( i ) ;
-      value  = CalculateCrossSectionPerAtom(p, mom2, Z);  
-      ptrVector->PutValue( i, value );
+      e     = ptrVector->GetLowEdgeEnergy( i ) ;
+      value = CalculateCrossSectionPerAtom(p, e, Z);  
+      ptrVector->PutValue( i, log(value) );
     }
 
     theCrossSectionTable->insert(ptrVector);
@@ -136,22 +136,37 @@ void G4eCoulombScatteringModel::Initialise(const G4ParticleDefinition* p,
 
 G4double G4eCoulombScatteringModel::CalculateCrossSectionPerAtom(
 		             const G4ParticleDefinition* p,      
-			     G4double momentum2, 
+			     G4double kinEnergy, 
 			     G4double Z)
 {
   G4double cross = 0.0;
   G4double m     = p->GetPDGMass();
-  G4double q     = p->GetPDGCharge()/eplus;
-  G4double mass2 = m*m;
-  G4double costm = std::max(cosThetaMax, 1.0 - q2Limit/2.0*momentum2);
+  G4double mom2  = kinEnergy*(kinEnergy + 2.0*m);
+  G4double costm = std::max(cosThetaMax, 1.0 - 0.5*q2Limit/mom2);
   if(costm < cosThetaMin) {
-    G4double invbeta2 = 1.0 +  mass2/momentum2;
-    G4double a = 2.0*pow(Z,0.666666667)*a0*
-      (1.13 + 3.76*invbeta2*Z*Z*fine_structure_const*fine_structure_const)/momentum2 + 1.0;
-    cross = coeff*q*q*Z*Z*(cosThetaMin - costm)/((a - cosThetaMin)*(a - costm));
+    G4double q        = p->GetPDGCharge()/eplus;
+    G4double Z2       = Z*Z;
+    G4double invbeta2 = 1.0 +  m*m/mom2;
+    G4double fac = std::min(faclim, 1.13 + 3.76*invbeta2*Z2*alpha2);
+    G4double A = pow(Z,0.6666667)*a0*fac/mom2;
+    G4double a = 2.0*A + 1.0;
+    cross = coeff*q*q*Z2*invbeta2*(cosThetaMin - costm)/
+      ((a - cosThetaMin)*(a - costm)*mom2);
+    if(Z == 13 || Z == 79) {
+      G4cout << "## e= " << kinEnergy << "  beta= " << sqrt (1.0/invbeta2)
+	     <<"  Z= " << Z 
+	     << " sig(bn)= " << cross/barn 
+	     << "  cosMax= " <<  costm 
+	     << "  cosMin= " <<  cosThetaMin 
+	     << G4endl;
+      G4double atommass = 27.0;
+      if(Z == 79) atommass = 197.0;
+      G4double u0 = 1.e+6*atommass*cm2/(cross*Avogadro);
+      G4double u1 = 0.5*u0/( A* ( (1.0 + A)*log(1.0 + 1.0/A) -1.0 ) );
+      G4cout << "  l0= " << u0 << "  l1= " << u1 
+	     << "   A= " << A << G4endl;
+    }
   }
-  //  G4cout << "p= " << sqrt(momentum2) << "  Z= " << Z 
-  //	 << " cross= " << cross << " " <<G4endl;
   return cross;
 }
 
@@ -168,21 +183,22 @@ std::vector<G4DynamicParticle*>* G4eCoulombScatteringModel::SampleSecondaries(
   
   G4double mass      = dp->GetMass();
   G4double kinEnergy = dp->GetKineticEnergy();
-  G4double momentum2 = kinEnergy*(kinEnergy + 2.0*mass);
-  G4double invbeta2  = (kinEnergy + mass)*(kinEnergy + mass)/momentum2;
+  G4double mom2      = kinEnergy*(kinEnergy + 2.0*mass);
 
   const G4Element* elm = SelectRandomAtom(aMaterial, p, kinEnergy);
   G4double Z  = elm->GetZ();
 
-  G4double a = 2.*pow(Z,0.666666667)*a0*
-    (1.13 + 3.76*invbeta2*Z*Z*fine_structure_const*fine_structure_const)/momentum2 + 1.0;
-  G4double costm = std::max(cosThetaMax, 1.0 - q2Limit/2.0*momentum2);
+  G4double invbeta2  = 1.0 + mass*mass/mom2;
+  G4double fac = std::min(faclim, 1.13 + 3.76*invbeta2*Z*Z*alpha2);
+  G4double a = 2.*pow(Z,0.666666667)*a0*fac/mom2 + 1.0;
+  G4double costm = std::max(cosThetaMax, 1.0 - q2Limit/2.0*mom2);
   if(costm > cosThetaMin) return 0; 
 
   G4double cost = a - (a - cosThetaMin)*(a - costm)/
     (a - cosThetaMin + G4UniformRand()*(cosThetaMin - costm));
   if(std::abs(cost) > 1.) {
-    G4cout << "G4eCoulombScatteringModel::SampleSecondaries WARNING cost= " << cost << G4endl;
+    G4cout << "G4eCoulombScatteringModel::SampleSecondaries WARNING cost= " 
+	   << cost << G4endl;
     if(cost < -1.) cost = -1.0;
     else           cost =  1.0;
   }

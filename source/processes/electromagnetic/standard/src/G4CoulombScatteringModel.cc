@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CoulombScatteringModel.cc,v 1.3 2006-08-01 11:43:20 vnivanch Exp $
+// $Id: G4CoulombScatteringModel.cc,v 1.4 2006-08-09 09:47:17 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -40,6 +40,7 @@
 // Modifications:
 // 01.08.06 V.Ivanchenko extend upper limit of table to TeV and review the
 //          logic of building - only elements from G4ElementTable
+// 08.08.06 V.Ivanchenko build internal table in ekin scale, introduce faclim
 //
 // Class Description:
 //
@@ -69,17 +70,18 @@ G4CoulombScatteringModel::G4CoulombScatteringModel(
     theCrossSectionTable(0),
     cosThetaMin(cos(thetaMin)),
     cosThetaMax(cos(thetaMax)),
-    lowMomentum(keV),
-    highMomentum(TeV),
+    lowKEnergy(keV),
+    highKEnergy(TeV),
     q2Limit(tlim),
+    alpha2(fine_structure_const*fine_structure_const),
+    faclim(1.0),
     nbins(12),
     nmax(100),
     buildTable(build),
     isInitialised(false)
 {
-  G4double p0 = hbarc/(Bohr_radius*0.885);
-  a0 = 0.25*p0*p0;
-  p0 = electron_mass_c2*classic_electr_radius;
+  a0 = 0.25*alpha2*electron_mass_c2*electron_mass_c2/(0.885*0.885);
+  G4double p0 = electron_mass_c2*classic_electr_radius;
   coeff = twopi*p0*p0;
   theMatManager    = G4NistManager::Instance();
   theParticleTable = G4ParticleTable::GetParticleTable();
@@ -114,24 +116,23 @@ void G4CoulombScatteringModel::Initialise(const G4ParticleDefinition* p,
   // Compute cross section multiplied by Ptot^2*beta^2
   theCrossSectionTable = new G4PhysicsTable(nmax);
   G4PhysicsLogVector* ptrVector;
-  G4double mom2, value;
-  G4double pmin = lowMomentum*lowMomentum;
-  G4double pmax = highMomentum*highMomentum;
-  nbins = G4int(log10(pmax/pmin)/2.0) + 1;
+  G4double e, value;
+  nbins = 2*G4int(log10(highKEnergy/lowKEnergy));
+
   const  G4ElementTable* elmt = G4Element::GetElementTable();
   size_t nelm =  G4Element::GetNumberOfElements();
 
   for(size_t j=0; j<nelm; j++) { 
 
-    ptrVector  = new G4PhysicsLogVector(pmin, pmax, nbins);
+    ptrVector  = new G4PhysicsLogVector(lowKEnergy, highKEnergy, nbins);
     const G4Element* elm = (*elmt)[j]; 
     G4double Z =  elm->GetZ();
     index[G4int(Z)] = j;
  
     for(G4int i=0; i<=nbins; i++) {
-      mom2   = ptrVector->GetLowEdgeEnergy( i ) ;
-      value  = CalculateCrossSectionPerAtom(p, mom2, Z);  
-      ptrVector->PutValue( i, value );
+      e     = ptrVector->GetLowEdgeEnergy( i ) ;
+      value = CalculateCrossSectionPerAtom(p, e, Z);  
+      ptrVector->PutValue( i, log(value) );
     }
 
     theCrossSectionTable->insert(ptrVector);
@@ -142,16 +143,17 @@ void G4CoulombScatteringModel::Initialise(const G4ParticleDefinition* p,
 
 G4double G4CoulombScatteringModel::CalculateCrossSectionPerAtom(
 		             const G4ParticleDefinition* p,      
-			     G4double mom2, 
+			     G4double kinEnergy, 
 			     G4double Z)
 {
   G4double cross= 0.0;
   G4int iz      = G4int(Z);
   G4double m    = p->GetPDGMass();
+  G4double mom2 = kinEnergy*(kinEnergy + 2.0*m);
   G4double mass2= m*m;
   G4double q    = p->GetPDGCharge()/eplus;
   G4double m1   = theMatManager->GetAtomicMassAmu(iz)*amu_c2;
-  G4double etot = sqrt(mom2 + mass2) + m1;
+  G4double etot = kinEnergy + m + m1;
   G4double ptot = sqrt(mom2);
   G4double bet  = ptot/etot;
   G4double gam  = 1.0/sqrt((1.0 - bet)*(1.0 + bet));
@@ -163,10 +165,12 @@ G4double G4CoulombScatteringModel::CalculateCrossSectionPerAtom(
   // Cross section in CM system 
   if(costm < cosThetaMin) {
     G4double invbeta2 = 1.0 +  mass2/momentum2;
-    G4double a = 2.0*pow(Z,0.666666667)*a0*
-      (1.13 + 3.76*invbeta2*Z*Z*fine_structure_const*fine_structure_const)/momentum2 + 1.0;
+    G4double fac = std::min(faclim, 1.13 + 3.76*invbeta2*Z*Z*alpha2);
+    G4double A = pow(Z,0.6666667)*a0*fac/mom2;
+    G4double a = 2.0*A + 1.0;
     G4double f = q * Z * m1 /(m + m1);
-    cross = coeff*f*f*(cosThetaMin - costm)/((a - cosThetaMin)*(a - costm));
+    cross = coeff*f*f*invbeta2*(cosThetaMin - costm)/
+      ((a - cosThetaMin)*(a - costm)*momentum2);
   }
   //G4cout << "p= " << mom << "  Z= " << Z << "  a= " << a 
   //<< " cross= " << cross << " m1(GeV)=  " << m1/GeV <<G4endl;
@@ -228,8 +232,8 @@ std::vector<G4DynamicParticle*>* G4CoulombScatteringModel::SampleSecondaries(
   G4double momentum2 = p1.mag2();
   G4double invbeta2  = 1.0 + m1*m1/momentum2;
 
-  G4double a = 2.*pow(Z,0.666666667)*a0*
-    (1.13 + 3.76*invbeta2*Z*Z*fine_structure_const*fine_structure_const)/momentum2 + 1.0;
+  G4double fac = std::min(faclim, 1.13 + 3.76*invbeta2*Z*Z*alpha2);
+  G4double a = 2.*pow(Z,0.666666667)*a0*fac/momentum2 + 1.0;
 
   G4double costm = std::max(cosThetaMax, 1.0 - q2Limit/2.0*momentum2);
   if(1 == iz && p == theProton) costm = std::max(0.0, costm);
@@ -238,7 +242,8 @@ std::vector<G4DynamicParticle*>* G4CoulombScatteringModel::SampleSecondaries(
   G4double cost = a - (a - cosThetaMin)*(a - costm)/
     (a - cosThetaMin + G4UniformRand()*(cosThetaMin - costm));
   if(std::abs(cost) > 1.) {
-    G4cout << "G4CoulombScatteringModel::SampleSecondaries WARNING cost= " << cost << G4endl;
+    G4cout << "G4CoulombScatteringModel::SampleSecondaries WARNING cost= " 
+	   << cost << G4endl;
     if(cost < -1.) cost = -1.0;
     else           cost =  1.0;
   }
