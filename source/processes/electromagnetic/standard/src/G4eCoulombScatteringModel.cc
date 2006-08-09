@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.cc,v 1.4 2006-08-09 09:47:17 vnivanch Exp $
+// $Id: G4eCoulombScatteringModel.cc,v 1.5 2006-08-09 09:51:01 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -152,6 +152,7 @@ G4double G4eCoulombScatteringModel::CalculateCrossSectionPerAtom(
     G4double a = 2.0*A + 1.0;
     cross = coeff*q*q*Z2*invbeta2*(cosThetaMin - costm)/
       ((a - cosThetaMin)*(a - costm)*mom2);
+    /*
     if(Z == 13 || Z == 79) {
       G4cout << "## e= " << kinEnergy << "  beta= " << sqrt (1.0/invbeta2)
 	     <<"  Z= " << Z 
@@ -166,6 +167,7 @@ G4double G4eCoulombScatteringModel::CalculateCrossSectionPerAtom(
       G4cout << "  l0= " << u0 << "  l1= " << u1 
 	     << "   A= " << A << G4endl;
     }
+    */
   }
   return cross;
 }
