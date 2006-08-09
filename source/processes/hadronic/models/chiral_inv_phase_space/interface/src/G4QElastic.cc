@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QElastic.cc,v 1.6 2006-06-29 20:08:32 gunter Exp $
+// $Id: G4QElastic.cc,v 1.7 2006-08-09 10:19:22 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QElastic class -----------------
@@ -37,6 +37,7 @@
 //#define debug
 //#define pdebug
 //#define tdebug
+#define nandebug
 
 #include "G4QElastic.hh"
 
@@ -368,6 +369,7 @@ G4VParticleChange* G4QElastic::PostStepDoIt(const G4Track& track, const G4Step& 
   aParticleChange.Initialize(track);
   G4double localtime = track.GetGlobalTime();
   G4ThreeVector position = track.GetPosition();
+  G4TouchableHandle trTouchable = track.GetTouchableHandle();
   //
   G4int targPDG=90000000+Z*1000+N;         // CHIPS PDG Code of the target nucleus
   G4QPDGCode targQPDG(targPDG);
@@ -388,6 +390,10 @@ G4VParticleChange* G4QElastic::PostStepDoIt(const G4Track& track, const G4Step& 
 #ifdef debug
   G4cout<<"G4QElast::PSDI:pPDG="<<projPDG<<",P="<<Momentum<<",CS="<<xSec/millibarn<<G4endl;
 #endif
+#ifdef nandebug
+  if(xSec>0. || xSec<0. || xSec==0);
+  else  G4cout<<"******G4QElast::PSDI:xSec="<<xSec/millibarn<<G4endl;
+#endif
   // @@ check a possibility to separate p, n, or alpha (!)
   if(xSec <= 0.) // The cross-section iz 0 -> Do Nothing
   {
@@ -399,6 +405,12 @@ G4VParticleChange* G4QElastic::PostStepDoIt(const G4Track& track, const G4Step& 
     return G4VDiscreteProcess::PostStepDoIt(track,step);
   }
   G4double mint=CSmanager->GetExchangeT(Z,N,projPDG); // -t in MeV^2
+#ifdef nandebug
+  if(mint>-.0000001);
+  else  G4cout<<"******G4QElast::PSDI:-t="<<mint<<G4endl;
+  G4cout<<"G4QElast::PSDI:pPDG="<<projPDG<<",tPDG="<<targPDG<<",P="<<Momentum<<",CS="
+        <<xSec<<",-t="<<mint<<G4endl;
+#endif
   // @@ only for pp: M_1=M_2=M_p, (1-cost)=(-t)/T/M
   // G4double cost=1.-mint/kinEnergy/tM;      // cos(theta) in CMS
   // In general
@@ -468,6 +480,7 @@ G4VParticleChange* G4QElastic::PostStepDoIt(const G4Track& track, const G4Step& 
   G4cout<<"G4QElastic::PSDoIt:p="<<curD<<curD.mag()<<",e="<<curE<<",m="<<curM<<G4endl;
 #endif
   G4Track* aNewTrack = new G4Track(theSec, localtime, position );
+  aNewTrack->SetTouchableHandle(trTouchable);
   aParticleChange.AddSecondary( aNewTrack );
 #ifdef debug
     G4cout<<"G4QElastic::PostStepDoIt: **** PostStepDoIt is done ****"<<G4endl;

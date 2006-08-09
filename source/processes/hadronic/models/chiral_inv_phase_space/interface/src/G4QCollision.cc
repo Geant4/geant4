@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QCollision.cc,v 1.11 2006-06-29 20:08:30 gunter Exp $
+// $Id: G4QCollision.cc,v 1.12 2006-08-09 10:19:22 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCollision class -----------------
@@ -803,6 +803,7 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
   aParticleChange.Initialize(track);
   G4double localtime = track.GetGlobalTime();
   G4ThreeVector position = track.GetPosition();
+  G4TouchableHandle trTouchable = track.GetTouchableHandle();
   // --- the scattered hadron with changed nature can be added here ---
   if(scat)
   {
@@ -908,7 +909,8 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
     G4cout<<"G4QCollis::PSDoIt:p="<<curD<<curD.mag()<<",e="<<curE<<",m="<<curM<<G4endl;// |
 #endif
     G4Track* aNewTrack = new G4Track(theSec, localtime, position ); //                    ^
-    aParticleChange.AddSecondary( aNewTrack ); //                                         |
+    aNewTrack->SetTouchableHandle(trTouchable);                     //                    |
+    aParticleChange.AddSecondary( aNewTrack );                      //                    |
 #ifdef debug
     G4cout<<"G4QCollision::PostStepDoIt:#"<<i<<" is done."<<G4endl; //                    |
 #endif

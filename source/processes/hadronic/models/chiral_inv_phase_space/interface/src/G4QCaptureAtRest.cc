@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QCaptureAtRest.cc,v 1.3 2006-06-29 20:08:28 gunter Exp $
+// $Id: G4QCaptureAtRest.cc,v 1.4 2006-08-09 10:19:22 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCaptureAtRest class -----------------
@@ -289,6 +289,7 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
 #endif
   G4double      localtime = track.GetGlobalTime();
   G4ThreeVector position  = track.GetPosition();
+  G4TouchableHandle trTouchable = track.GetTouchableHandle();
   localtime += Time;
 	 std::vector<G4double>* cascE = new std::vector<G4double>;
 	 std::vector<G4Track*>* cascT = new std::vector<G4Track*>;
@@ -549,6 +550,7 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
         else       theSec = new G4DynamicParticle(G4Gamma::Gamma(),RndmDir(),-ener);
         projLV-=theSec->Get4Momentum();
         G4Track* aNewTrack = new G4Track(theSec, localtime, position );
+        aNewTrack->SetTouchableHandle(trTouchable);
         cascT->push_back(aNewTrack);
       }
     }
@@ -680,6 +682,7 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
     G4cout<<"G4QCapAtRest::AtRDoIt:p="<<curD<<curD.mag()<<",e="<<curE<<",m="<<curM<<G4endl;
 #endif
     G4Track* aNewTrack = new G4Track(theSec, localtime, position );
+    aNewTrack->SetTouchableHandle(trTouchable);
     aParticleChange.AddSecondary( aNewTrack );
 #ifdef debug
     G4cout<<"G4QCaptureAtRest::AtRestDoIt:#"<<i<<" is done."<<G4endl;
