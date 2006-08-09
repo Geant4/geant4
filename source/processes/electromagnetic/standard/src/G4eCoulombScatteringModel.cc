@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.cc,v 1.5 2006-08-09 09:51:01 vnivanch Exp $
+// $Id: G4eCoulombScatteringModel.cc,v 1.6 2006-08-09 17:57:03 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -101,7 +101,8 @@ void G4eCoulombScatteringModel::Initialise(const G4ParticleDefinition* p,
   isInitialised = true;
 
   if(pParticleChange)
-    fParticleChange = reinterpret_cast<G4ParticleChangeForGamma*>(pParticleChange);
+    fParticleChange = 
+      reinterpret_cast<G4ParticleChangeForGamma*>(pParticleChange);
   else
     fParticleChange = new G4ParticleChangeForGamma();
 
@@ -193,11 +194,11 @@ std::vector<G4DynamicParticle*>* G4eCoulombScatteringModel::SampleSecondaries(
   G4double invbeta2  = 1.0 + mass*mass/mom2;
   G4double fac = std::min(faclim, 1.13 + 3.76*invbeta2*Z*Z*alpha2);
   G4double a = 2.*pow(Z,0.666666667)*a0*fac/mom2 + 1.0;
-  G4double costm = std::max(cosThetaMax, 1.0 - q2Limit/2.0*mom2);
+  G4double costm = std::max(cosThetaMax, 1.0 - 0.5*q2Limit/mom2);
   if(costm > cosThetaMin) return 0; 
 
-  G4double cost = a - (a - cosThetaMin)*(a - costm)/
-    (a - cosThetaMin + G4UniformRand()*(cosThetaMin - costm));
+  G4double cost = a - (a - costm)/
+    (1.0 + G4UniformRand()*(cosThetaMin - costm)/(a - cosThetaMin));
   if(std::abs(cost) > 1.) {
     G4cout << "G4eCoulombScatteringModel::SampleSecondaries WARNING cost= " 
 	   << cost << G4endl;

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CoulombScatteringModel.cc,v 1.4 2006-08-09 09:47:17 vnivanch Exp $
+// $Id: G4CoulombScatteringModel.cc,v 1.5 2006-08-09 17:57:03 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -107,7 +107,8 @@ void G4CoulombScatteringModel::Initialise(const G4ParticleDefinition* p,
   isInitialised = true;
 
   if(pParticleChange)
-    fParticleChange = reinterpret_cast<G4ParticleChangeForGamma*>(pParticleChange);
+    fParticleChange = 
+      reinterpret_cast<G4ParticleChangeForGamma*>(pParticleChange);
   else
     fParticleChange = new G4ParticleChangeForGamma();
 
@@ -192,7 +193,8 @@ G4double G4CoulombScatteringModel::SelectIsotope(const G4Element* elm)
       if (x <= 0.0) break;
     }
     if(idx >= ni) {
-      G4cout << "G4CoulombScatteringModel::SelectIsotope WARNING: abandance vector for"
+      G4cout << "G4CoulombScatteringModel::SelectIsotope WARNING: "
+	     << "abandance vector for"
 	     << elm->GetName() << " is not normalised to unit" << G4endl;
     } else {
       N = G4double(elm->GetIsotope(idx)->GetN());
@@ -213,7 +215,8 @@ std::vector<G4DynamicParticle*>* G4CoulombScatteringModel::SampleSecondaries(
   const G4Material* aMaterial = couple->GetMaterial();
   const G4ParticleDefinition* p = dp->GetDefinition();
 
-  const G4Element* elm = SelectRandomAtom(aMaterial, p, dp->GetKineticEnergy());
+  const G4Element* elm = 
+    SelectRandomAtom(aMaterial, p, dp->GetKineticEnergy());
   G4double Z  = elm->GetZ();
   G4double N  = SelectIsotope(elm);
   G4int iz    = G4int(Z);
@@ -235,7 +238,7 @@ std::vector<G4DynamicParticle*>* G4CoulombScatteringModel::SampleSecondaries(
   G4double fac = std::min(faclim, 1.13 + 3.76*invbeta2*Z*Z*alpha2);
   G4double a = 2.*pow(Z,0.666666667)*a0*fac/momentum2 + 1.0;
 
-  G4double costm = std::max(cosThetaMax, 1.0 - q2Limit/2.0*momentum2);
+  G4double costm = std::max(cosThetaMax, 1.0 - 0.5*q2Limit/momentum2);
   if(1 == iz && p == theProton) costm = std::max(0.0, costm);
   if(costm > cosThetaMin) return fvect; 
 

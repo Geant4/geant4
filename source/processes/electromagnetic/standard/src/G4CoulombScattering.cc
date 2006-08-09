@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CoulombScattering.cc,v 1.4 2006-08-09 10:02:51 vnivanch Exp $
+// $Id: G4CoulombScattering.cc,v 1.5 2006-08-09 17:57:03 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -63,6 +63,7 @@ G4CoulombScattering::G4CoulombScattering(const G4String& name)
   SetLambdaBinning(80);
   SetMinKinEnergy(1.0*keV);
   SetMaxKinEnergy(100.0*GeV);
+  buildTableFlag = true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -77,7 +78,7 @@ void G4CoulombScattering::InitialiseProcess(const G4ParticleDefinition*)
   if(!isInitialised) {
     isInitialised = true;
     //    SetVerboseLevel(3);
-    SetBuildTableFlag(true);
+    SetBuildTableFlag(buildTableFlag);
     SetStartFromNullFlag(false);
     SetLambdaFactor(0.8);
     SetSecondaryParticle(0);
@@ -85,13 +86,13 @@ void G4CoulombScattering::InitialiseProcess(const G4ParticleDefinition*)
     G4double emax = MaxKinEnergy();
     if(GetProcessName() == "eCoulombScat") {
       G4eCoulombScatteringModel* model = 
-	new G4eCoulombScatteringModel(thetaMin,thetaMax,true,q2Max);
+	new G4eCoulombScatteringModel(thetaMin,thetaMax,buildTableFlag,q2Max);
       model->SetLowEnergyLimit(emin);
       model->SetHighEnergyLimit(emax);
       AddEmModel(1, model);
     } else {
       G4CoulombScatteringModel* model = 
-	new G4CoulombScatteringModel(thetaMin,thetaMax,true,q2Max);
+	new G4CoulombScatteringModel(thetaMin,thetaMax,buildTableFlag,q2Max);
       model->SetLowEnergyLimit(emin);
       model->SetHighEnergyLimit(emax);
       AddEmModel(1, model);
