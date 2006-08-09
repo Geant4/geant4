@@ -27,6 +27,8 @@
 // J.P. Wellisch, Nov-1996
 // A prototype of the low energy neutron transport model.
 //
+// 02-08-06 Modified Harmonise to reslove cross section trouble at high-end. T. KOI
+//
 #include "G4NeutronHPElementData.hh"
 
   G4NeutronHPElementData::G4NeutronHPElementData()
@@ -173,7 +175,11 @@
 //    G4cout << "Harmonise 4: "<< p <<" "<<passive->GetVectorLength()<<" "<<m<<G4endl;
     while (p!=passive->GetVectorLength())
     {
-      theMerge->SetData(m++, passive->GetEnergy(p), passive->GetXsec(p));
+      // Modified by T. KOI
+      //theMerge->SetData(m++, passive->GetEnergy(p), passive->GetXsec(p));
+      G4double x = passive->GetEnergy(p);
+      G4double y = std::max(0., active->GetXsec(x));
+      theMerge->SetData(m++, x, passive->GetXsec(p)+y);
       p++;
     }
 //    G4cout <<"Harmonise 5: "<< theMerge->GetVectorLength() << " " << m << G4endl;

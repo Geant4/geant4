@@ -27,6 +27,8 @@
 // J.P. Wellisch, Nov-1996
 // A prototype of the low energy neutron transport model.
 //
+// 08-08-06 delete unnecessary and harmed declaration; Bug Report[857]
+//
 #include "G4NeutronHPFission.hh"
 
   G4NeutronHPFission::G4NeutronHPFission()
@@ -66,7 +68,7 @@
     {
       xSec = new G4double[n];
       G4double sum=0;
-      G4int i, index;
+      G4int i;
       const G4double * NumAtomsPerVolume = theMaterial->GetVecNbOfAtomsPerVolume();
       G4double rWeight;    
       G4NeutronHPThermalBoost aThermalE;
