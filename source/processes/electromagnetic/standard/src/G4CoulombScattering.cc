@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CoulombScattering.cc,v 1.3 2006-08-01 11:43:20 vnivanch Exp $
+// $Id: G4CoulombScattering.cc,v 1.4 2006-08-09 10:02:51 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -57,7 +57,8 @@
 using namespace std;
 
 G4CoulombScattering::G4CoulombScattering(const G4String& name)
-  : G4VEmProcess(name),thetaMin(0.5),thetaMax(pi),q2Max(DBL_MAX),isInitialised(false)
+  : G4VEmProcess(name),thetaMin(0.0),thetaMax(pi),q2Max(DBL_MAX),
+    isInitialised(false)
 {
   SetLambdaBinning(80);
   SetMinKinEnergy(1.0*keV);
