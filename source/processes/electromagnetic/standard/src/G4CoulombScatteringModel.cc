@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CoulombScatteringModel.cc,v 1.5 2006-08-09 17:57:03 vnivanch Exp $
+// $Id: G4CoulombScatteringModel.cc,v 1.6 2006-08-10 11:57:52 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -74,7 +74,7 @@ G4CoulombScatteringModel::G4CoulombScatteringModel(
     highKEnergy(TeV),
     q2Limit(tlim),
     alpha2(fine_structure_const*fine_structure_const),
-    faclim(1.0),
+    faclim(10.0),
     nbins(12),
     nmax(100),
     buildTable(build),
@@ -242,6 +242,7 @@ std::vector<G4DynamicParticle*>* G4CoulombScatteringModel::SampleSecondaries(
   if(1 == iz && p == theProton) costm = std::max(0.0, costm);
   if(costm > cosThetaMin) return fvect; 
 
+  /*
   G4double cost = a - (a - cosThetaMin)*(a - costm)/
     (a - cosThetaMin + G4UniformRand()*(cosThetaMin - costm));
   if(std::abs(cost) > 1.) {
@@ -251,6 +252,21 @@ std::vector<G4DynamicParticle*>* G4CoulombScatteringModel::SampleSecondaries(
     else           cost =  1.0;
   }
   G4double sint = sqrt((1.0 + cost)*(1.0 - cost));
+  */
+  G4double c1  = 1.0 - costm;
+  G4double c2  = 1.0 - cosThetaMin;
+  G4double x   = G4UniformRand();
+  G4double y   = (a + c2)/(c1 - c2);
+  G4double st2 = 0.5*(c1*y - a*x)/(y + x); 
+  if(st2 < 0.0) {
+    G4cout << "G4CoulombScatteringModel::SampleSecondaries WARNING st2= " 
+	   << st2 << G4endl;
+    st2 = 0.0;
+  }
+
+  G4double tet = 2.0*asin(sqrt(st2));
+  G4double cost= cos(tet);
+  G4double sint= sin(tet);
 
   G4double phi  = twopi * G4UniformRand();
 
@@ -263,7 +279,8 @@ std::vector<G4DynamicParticle*>* G4CoulombScatteringModel::SampleSecondaries(
   lfv1.boost(bst);
   lfv2.boost(bst);
 
-  fParticleChange->ProposeMomentumDirection(lfv1.vect().unit());   
+  G4ThreeVector newdir = lfv1.vect().unit();
+  fParticleChange->ProposeMomentumDirection(newdir);   
   G4double ekin = lfv1.e() - m1;
   if(ekin < 0.0) ekin = 0.0;
   fParticleChange->SetProposedKineticEnergy(ekin);

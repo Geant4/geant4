@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.cc,v 1.7 2006-08-10 08:43:56 vnivanch Exp $
+// $Id: G4eCoulombScatteringModel.cc,v 1.8 2006-08-10 11:57:52 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -230,7 +230,7 @@ std::vector<G4DynamicParticle*>* G4eCoulombScatteringModel::SampleSecondaries(
   G4ThreeVector newDirection(cos(phi)*sint,sin(phi)*sint,cost);
   newDirection.rotateUz(direction);   
 
-  fParticleChange->ProposeMomentumDirection(direction);   
+  fParticleChange->ProposeMomentumDirection(newDirection);   
  
   return 0;
 }
