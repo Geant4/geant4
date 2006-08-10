@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.cc,v 1.11 2006-06-29 16:55:29 gunter Exp $
+// $Id: DetectorConstruction.cc,v 1.12 2006-08-10 13:16:43 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -44,6 +44,7 @@
 #include "G4SolidStore.hh"
 
 #include "G4UnitsTable.hh"
+#include "G4NistManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -326,7 +327,9 @@ void DetectorConstruction::PrintCalorParameters()
 void DetectorConstruction::SetAbsorberMaterial(G4String materialChoice)
 {
   // search the material by its name
-  G4Material* pttoMaterial = G4Material::GetMaterial(materialChoice);     
+  G4Material* pttoMaterial =
+    G4NistManager::Instance()->FindOrBuildMaterial(materialChoice);
+
   if (pttoMaterial) AbsorberMaterial = pttoMaterial;                  
 }
 
@@ -335,7 +338,9 @@ void DetectorConstruction::SetAbsorberMaterial(G4String materialChoice)
 void DetectorConstruction::SetWorldMaterial(G4String materialChoice)
 {
   // search the material by its name
-  G4Material* pttoMaterial = G4Material::GetMaterial(materialChoice);     
+  G4Material* pttoMaterial =
+    G4NistManager::Instance()->FindOrBuildMaterial(materialChoice);
+
   if (pttoMaterial) WorldMaterial = pttoMaterial;
 }
     
