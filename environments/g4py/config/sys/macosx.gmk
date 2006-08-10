@@ -1,4 +1,4 @@
-# $Id: macosx.gmk,v 1.3 2006-08-08 05:11:44 kmura Exp $
+# $Id: macosx.gmk,v 1.4 2006-08-10 08:49:08 kmura Exp $
 # $Name: not supported by cvs2svn $
 # ===========================================================
 #   System specific terms
@@ -56,7 +56,7 @@ endif
 ifdef LOCALLIB
   install_path := $(PWD)
 else
-  install_path := $(G4PY_LIBDIR)
+  install_path := $(Q_LIBDIR)
 endif
 
 

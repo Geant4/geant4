@@ -1,4 +1,4 @@
-# $Id: linux.gmk,v 1.4 2006-08-08 05:11:44 kmura Exp $
+# $Id: linux.gmk,v 1.5 2006-08-10 08:49:08 kmura Exp $
 # $Name: not supported by cvs2svn $
 # ===========================================================
 #   System specific terms
@@ -65,9 +65,10 @@ ifdef COMPILE_G4PY
   ifneq ($(Q_CLHEP_LIBDIR), $(Q_G4_LIBDIR))
    rpath3 := :$(Q_CLHEP_LIBDIR)
   endif
+  rpath4 := $(Q_LIBDIR)
 endif
 
-rpathflag := -Wl,-rpath,$(rpath0):$(rpath1):$(rpath2):$(rpath3)
+rpathflag := -Wl,-rpath,$(rpath0):$(rpath1):$(rpath2):$(rpath3):$(rpath4)
 
 ifdef CPPVERBOSE
   define build-library
