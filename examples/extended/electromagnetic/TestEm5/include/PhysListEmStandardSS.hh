@@ -23,55 +23,44 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysListIonBinaryCascade.hh,v 1.6 2006-08-10 08:44:39 vnivanch Exp $
+// $Id: PhysListEmStandardSS.hh,v 1.1 2006-08-10 08:45:14 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-//
-// Class Description:
-//      This class is an derived class of G4VPhysicsConstructor
-//      It is provide PhysicsList for Binary Cascade for
-//      protons and neutrons with the energy E<3 GeV
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef PhysListIonBinaryCascade_h
-#define PhysListIonBinaryCascade_h 1
+#ifndef PhysListEmStandardSS_h
+#define PhysListEmStandardSS_h 1
 
 #include "G4VPhysicsConstructor.hh"
 #include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class G4DeuteronInelasticProcess;
-class G4TritonInelasticProcess;
-class G4AlphaInelasticProcess;
-class G4HadronInelasticProcess;
-
-class PhysListIonBinaryCascade : public G4VPhysicsConstructor
+class PhysListEmStandardSS : public G4VPhysicsConstructor
 {
-public:
-  PhysListIonBinaryCascade(const G4String& name = "binary_ion");
-  virtual ~PhysListIonBinaryCascade();
+public: 
+  PhysListEmStandardSS(const G4String& name = "standardSS");
+  virtual ~PhysListEmStandardSS();
 
-public:
-  // This method will be invoked in the Construct() method.
-  // each particle type will be instantiated
+public: 
+  // This method is dummy for physics
   void ConstructParticle() {};
-
+ 
   // This method will be invoked in the Construct() method.
   // each physics process will be instantiated and
-  // registered to the process manager of each particle type
+  // registered to the process manager of each particle type 
   void ConstructProcess();
-
-private:
-
-  G4DeuteronInelasticProcess*     theIPdeuteron;
-  G4TritonInelasticProcess*       theIPtriton;
-  G4AlphaInelasticProcess*        theIPalpha;
-  G4HadronInelasticProcess*       theIPGenericIon;
-
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
+
+
+
+
+
+
+
+

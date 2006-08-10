@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysListHadronElastic.hh,v 1.4 2006-06-29 16:54:58 gunter Exp $
+// $Id: PhysListHadronElastic.hh,v 1.5 2006-08-10 08:44:39 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Class Description:
@@ -37,30 +37,31 @@
 #define PhysListHadronElastic_h 1
 
 #include "G4VPhysicsConstructor.hh"
-#include "G4HadronElasticProcess.hh"
 #include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+class G4UHadronElasticProcess;
+
 class PhysListHadronElastic : public G4VPhysicsConstructor
 {
-  public: 
-    PhysListHadronElastic(const G4String& name = "elastic");
-    virtual ~PhysListHadronElastic();
+public: 
+  PhysListHadronElastic(const G4String& name = "elastic");
+  virtual ~PhysListHadronElastic();
 
-  public: 
-    // This method will be invoked in the Construct() method. 
-    // each particle type will be instantiated
-    void ConstructParticle() {};
+public: 
+  // This method will be invoked in the Construct() method. 
+  // each particle type will be instantiated
+  void ConstructParticle() {};
  
-    // This method will be invoked in the Construct() method.
-    // each physics process will be instantiated and
-    // registered to the process manager of each particle type 
-    void ConstructProcess();
+  // This method will be invoked in the Construct() method.
+  // each physics process will be instantiated and
+  // registered to the process manager of each particle type 
+  void ConstructProcess();
 
-  private:
-    // Elastic Process
-    G4HadronElasticProcess theElasticProcess;
+private:
+  // Elastic Process
+  G4UHadronElasticProcess* theElasticProcess;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

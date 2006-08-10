@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysListEmLivermore.hh,v 1.2 2006-06-29 16:54:51 gunter Exp $
+// $Id: PhysListEmLivermore.hh,v 1.3 2006-08-10 08:44:39 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -40,18 +40,18 @@
 
 class PhysListEmLivermore : public G4VPhysicsConstructor
 {
-  public: 
-    PhysListEmLivermore(const G4String& name = "Livermore");
-   ~PhysListEmLivermore();
+public: 
+  PhysListEmLivermore(const G4String& name = "Livermore");
+  virtual ~PhysListEmLivermore();
 
-  public: 
-    // This method is dummy for physics
-    void ConstructParticle() {};
+public: 
+  // This method is dummy for physics
+  void ConstructParticle() {};
  
-    // This method will be invoked in the Construct() method.
-    // each physics process will be instantiated and
-    // registered to the process manager of each particle type 
-    void ConstructProcess();
+  // This method will be invoked in the Construct() method.
+  // each physics process will be instantiated and
+  // registered to the process manager of each particle type 
+  void ConstructProcess();
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

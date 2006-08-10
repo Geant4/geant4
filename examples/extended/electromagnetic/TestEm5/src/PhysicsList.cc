@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.14 2006-06-29 16:44:23 maire Exp $
+// $Id: PhysicsList.cc,v 1.15 2006-08-10 08:44:39 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -30,6 +30,7 @@
 #include "PhysicsListMessenger.hh"
 
 #include "PhysListEmStandard.hh"
+#include "PhysListEmStandardSS.hh"
 #include "PhysListEmG4v52.hh"
 #include "PhysListEmG4v71.hh"
 #include "PhysListEmLivermore.hh"
@@ -40,6 +41,33 @@
 
 #include "G4LossTableManager.hh"
 #include "G4UnitsTable.hh"
+
+#include "G4ParticleDefinition.hh"
+#include "G4ProcessManager.hh"
+#include "G4Decay.hh"
+#include "StepMax.hh"
+
+// Bosons
+#include "G4ChargedGeantino.hh"
+#include "G4Geantino.hh"
+#include "G4Gamma.hh"
+#include "G4OpticalPhoton.hh"
+
+// leptons
+#include "G4MuonPlus.hh"
+#include "G4MuonMinus.hh"
+#include "G4NeutrinoMu.hh"
+#include "G4AntiNeutrinoMu.hh"
+
+#include "G4Electron.hh"
+#include "G4Positron.hh"
+#include "G4NeutrinoE.hh"
+#include "G4AntiNeutrinoE.hh"
+
+// Hadrons
+#include "G4MesonConstructor.hh"
+#include "G4BaryonConstructor.hh"
+#include "G4IonConstructor.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -70,30 +98,6 @@ PhysicsList::~PhysicsList()
   for(size_t i=0; i<hadronPhys.size(); i++) delete hadronPhys[i];
   delete pMessenger;  
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-// Bosons
-#include "G4ChargedGeantino.hh"
-#include "G4Geantino.hh"
-#include "G4Gamma.hh"
-#include "G4OpticalPhoton.hh"
-
-// leptons
-#include "G4MuonPlus.hh"
-#include "G4MuonMinus.hh"
-#include "G4NeutrinoMu.hh"
-#include "G4AntiNeutrinoMu.hh"
-
-#include "G4Electron.hh"
-#include "G4Positron.hh"
-#include "G4NeutrinoE.hh"
-#include "G4AntiNeutrinoE.hh"
-
-// Hadrons
-#include "G4MesonConstructor.hh"
-#include "G4BaryonConstructor.hh"
-#include "G4IonConstructor.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -144,13 +148,6 @@ void PhysicsList::ConstructProcess()
   AddStepMax();
 }
 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#include "G4ParticleDefinition.hh"
-#include "G4ProcessManager.hh"
-#include "G4Decay.hh"
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PhysicsList::AddDecay()
@@ -175,10 +172,6 @@ void PhysicsList::AddDecay()
     }
   }
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#include "StepMax.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -214,6 +207,12 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     emName = name;
     delete emPhysicsList;
     emPhysicsList = new PhysListEmStandard(name);
+
+  } else if (name == "standardSS") {
+
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new PhysListEmStandardSS(name);
 
   } else if (name == "g4v52") {
 

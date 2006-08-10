@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysListEmG4v52.hh,v 1.4 2006-06-29 16:54:47 gunter Exp $
+// $Id: PhysListEmG4v52.hh,v 1.5 2006-08-10 08:44:39 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -39,18 +39,18 @@
 
 class PhysListEmG4v52 : public G4VPhysicsConstructor
 {
-  public: 
-    PhysListEmG4v52(const G4String& name = "g4v52");
-   ~PhysListEmG4v52();
+public: 
+  PhysListEmG4v52(const G4String& name = "g4v52");
+  virtual ~PhysListEmG4v52();
 
-  public: 
-    // This method is dummy for physics. 
-    void ConstructParticle() {};
+public: 
+  // This method is dummy for physics. 
+  void ConstructParticle() {};
  
-    // This method will be invoked in the Construct() method.
-    // each physics process will be instantiated and
-    // registered to the process manager of each particle type 
-    void ConstructProcess();
+  // This method will be invoked in the Construct() method.
+  // each physics process will be instantiated and
+  // registered to the process manager of each particle type 
+  void ConstructProcess();
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
