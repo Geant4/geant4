@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronElastic.cc,v 1.23 2006-08-10 15:44:28 vnivanch Exp $
+// $Id: G4HadronElastic.cc,v 1.24 2006-08-10 15:59:38 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -50,7 +50,7 @@
 // 24-Apr-06 V.Ivanchenko add neutron scattering on hydrogen from CHIPS
 // 07-Jun-06 V.Ivanchenko fix problem of rotation
 // 25-Jul-06 V.Ivanchenko add 19 MeV low energy, below which S-wave is sampled
-// 02-Aug-06 V.Ivanchenko extand the aria of S-wave for pions
+// 02-Aug-06 V.Ivanchenko introduce energy cut on the aria of S-wave for pions
 //
 
 #include "G4HadronElastic.hh"
@@ -77,6 +77,7 @@ G4HadronElastic::G4HadronElastic(G4double plow, G4double elim, G4double ehigh)
   ekinIon     = elim;
   ekinhigh    = ehigh;
   ekinlow     = 19.*MeV;
+  ekinpi      = MeV;
   plablow     = plow;
 
   qCManager   = G4QElasticCrossSection::GetPointer();
@@ -166,7 +167,9 @@ G4HadFinalState* G4HadronElastic::ApplyYourself(
     gtype = fQElastic;
   } else {
     if(ekin >= ekinhigh)     gtype = fHElastic;
-    else if((theParticle == thePionPlus || theParticle == thePionMinus) && ekin <= GeV) 
+    else if((theParticle == thePionPlus || 
+	     theParticle == thePionMinus) && 
+	    (ekin <= ekinpi || plab <= plablow)) 
       gtype = fSWave;
     else if(plab <= plablow) gtype = fSWave;
   }

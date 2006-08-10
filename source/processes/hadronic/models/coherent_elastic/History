@@ -17,7 +17,7 @@ code and to keep track of all tags.
 10 August 2006 - V.Ivanchenko (hadr-cohe-V08-01-03)
 ---------------------------------------------------
   Introduce NaN check inside G4HadronElastic, G4ChargeExchange,
-  and G4UHadronElasticProcess
+  and G4UHadronElasticProcess;  
 
 24 July 2006 - V.Ivanchenko (hadr-cohe-V08-01-02)
 -----------------------------------------------
