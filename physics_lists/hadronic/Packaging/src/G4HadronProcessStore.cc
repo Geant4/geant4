@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronProcessStore.cc,v 1.6 2006-08-02 10:57:00 vnivanch Exp $
+// $Id: G4HadronProcessStore.cc,v 1.7 2006-08-10 17:18:29 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -35,9 +35,10 @@
 //
 // Author:        Vladimir Ivanchenko
 //
-// Creation date: 03.01.2002
+// Creation date: 03.05.2006
 //
 // Modifications:
+// 04.08.06 V.Ivanchenko add computation of cross sections
 //
 //
 // Class Description:

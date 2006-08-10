@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronElasticPhysics.cc,v 1.15 2006-08-10 16:15:30 vnivanch Exp $
+// $Id: G4HadronElasticPhysics.cc,v 1.16 2006-08-10 17:18:29 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -35,7 +35,8 @@
 // Modified:
 // 05.07.2006 V.Ivanchenko define process by particle name; 
 //                         fix problem of initialisation of HP
-// 24.07.2006 V.Ivanchenko add G4NeutronHPElasticData and set pLimit=60 MeV/c
+// 24.07.2006 V.Ivanchenko add G4NeutronHPElasticData 
+// 10.08.2006 V.Ivanchenko separate neutrons from other particles
 //
 //----------------------------------------------------------------------------
 //
@@ -108,17 +109,13 @@ void G4HadronElasticPhysics::ConstructProcess()
   G4HadronicProcess* hel = 0;
   G4VQCrossSection* man = 0; 
 
-  G4double ekinlow = 19.0*MeV;
-
   if(mname == "elastic") {
-    G4HadronElastic* he = new G4HadronElastic(edepLimit);
-    he->SetKinEnergyLow(ekinlow);
+    G4HadronElastic* he = new G4HadronElastic(pLimit,edepLimit);
     model = he;
     man = he->GetCS();
   } else {
     model = new G4LElastic();
   }
-  model->SetMaxEnergy(100.*TeV);
 
   theParticleIterator->reset();
   while( (*theParticleIterator)() )
@@ -151,7 +148,7 @@ void G4HadronElasticPhysics::ConstructProcess()
       
       G4ProcessManager* pmanager = particle->GetProcessManager();
       if(mname == "elastic") {
-	G4UHadronElasticProcess* h = new G4UHadronElasticProcess("hElastic",ekinlow);
+	G4UHadronElasticProcess* h = new G4UHadronElasticProcess("hElastic");
 	h->SetQElasticCrossSection(man);
         hel = h;
       } else {                   
@@ -166,9 +163,8 @@ void G4HadronElasticPhysics::ConstructProcess()
 
       G4ProcessManager* pmanager = particle->GetProcessManager();
       if(mname == "elastic") {
-	G4UHadronElasticProcess* h = new G4UHadronElasticProcess("hElastic",ekinlow);
-	G4HadronElastic* nhe = new G4HadronElastic(edepLimit);
-        nhe->SetKinEnergyLow(ekinlow);
+	G4UHadronElasticProcess* h = new G4UHadronElasticProcess("hElastic");
+	G4HadronElastic* nhe = new G4HadronElastic(pLimit,edepLimit);
 	neutronModel = nhe;
 	h->SetQElasticCrossSection(nhe->GetCS());
         hel = h;
@@ -176,7 +172,6 @@ void G4HadronElasticPhysics::ConstructProcess()
 	hel = new G4HadronElasticProcess();
 	neutronModel = new G4LElastic();
       }
-      neutronModel->SetMaxEnergy(100.*TeV);
 
       if(hpFlag) {
 	neutronModel->SetMinEnergy(19.5*MeV);

@@ -1,4 +1,4 @@
-$Id: History,v 1.28 2006-07-26 09:45:25 vnivanch Exp $
+$Id: History,v 1.29 2006-08-10 17:18:29 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+- G4NadronElasticPhysics - configure neutrons separately
+  from other hadrons
+- G4HadronProcessStore - implement computation of cross sections
 
 26.07.2006, V.Ivanchenko - phys-lists-V08-01-03
 - Return pLimit= 20 MeV/c
