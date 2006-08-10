@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronElasticPhysics.cc,v 1.14 2006-08-02 10:56:59 vnivanch Exp $
+// $Id: G4HadronElasticPhysics.cc,v 1.15 2006-08-10 16:15:30 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -151,7 +151,7 @@ void G4HadronElasticPhysics::ConstructProcess()
       
       G4ProcessManager* pmanager = particle->GetProcessManager();
       if(mname == "elastic") {
-	G4UHadronElasticProcess* h = new G4UHadronElasticProcess("Elastic",ekinlow);
+	G4UHadronElasticProcess* h = new G4UHadronElasticProcess("hElastic",ekinlow);
 	h->SetQElasticCrossSection(man);
         hel = h;
       } else {                   
@@ -166,7 +166,7 @@ void G4HadronElasticPhysics::ConstructProcess()
 
       G4ProcessManager* pmanager = particle->GetProcessManager();
       if(mname == "elastic") {
-	G4UHadronElasticProcess* h = new G4UHadronElasticProcess("Elastic",ekinlow);
+	G4UHadronElasticProcess* h = new G4UHadronElasticProcess("hElastic",ekinlow);
 	G4HadronElastic* nhe = new G4HadronElastic(edepLimit);
         nhe->SetKinEnergyLow(ekinlow);
 	neutronModel = nhe;
