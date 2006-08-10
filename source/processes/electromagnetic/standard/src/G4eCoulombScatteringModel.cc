@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.cc,v 1.6 2006-08-09 17:57:03 vnivanch Exp $
+// $Id: G4eCoulombScatteringModel.cc,v 1.7 2006-08-10 08:43:56 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -71,13 +71,13 @@ G4eCoulombScatteringModel::G4eCoulombScatteringModel(
     highKEnergy(TeV),
     q2Limit(tlim),
     alpha2(fine_structure_const*fine_structure_const),
-    faclim(1.0),
+    faclim(10.0),
     nbins(12),
     nmax(100),
     buildTable(build),
     isInitialised(false)
 {
-  a0 = 0.25*alpha2*electron_mass_c2*electron_mass_c2/(0.885*0.885);
+  a0 = alpha2*electron_mass_c2*electron_mass_c2/(0.885*0.885);
   G4double p0 = electron_mass_c2*classic_electr_radius;
   coeff = twopi*p0*p0;
 }
@@ -146,12 +146,12 @@ G4double G4eCoulombScatteringModel::CalculateCrossSectionPerAtom(
   G4double costm = std::max(cosThetaMax, 1.0 - 0.5*q2Limit/mom2);
   if(costm < cosThetaMin) {
     G4double q        = p->GetPDGCharge()/eplus;
-    G4double Z2       = Z*Z;
+    G4double Z2       = Z*Z*q*q;
     G4double invbeta2 = 1.0 +  m*m/mom2;
     G4double fac = std::min(faclim, 1.13 + 3.76*invbeta2*Z2*alpha2);
     G4double A = pow(Z,0.6666667)*a0*fac/mom2;
     G4double a = 2.0*A + 1.0;
-    cross = coeff*q*q*Z2*invbeta2*(cosThetaMin - costm)/
+    cross = coeff*Z2*invbeta2*(cosThetaMin - costm)/
       ((a - cosThetaMin)*(a - costm)*mom2);
     /*
     if(Z == 13 || Z == 79) {
@@ -190,13 +190,15 @@ std::vector<G4DynamicParticle*>* G4eCoulombScatteringModel::SampleSecondaries(
 
   const G4Element* elm = SelectRandomAtom(aMaterial, p, kinEnergy);
   G4double Z  = elm->GetZ();
+  G4double q  = p->GetPDGCharge()/eplus;
+  G4double Z2 = Z*Z*q*q;
 
   G4double invbeta2  = 1.0 + mass*mass/mom2;
-  G4double fac = std::min(faclim, 1.13 + 3.76*invbeta2*Z*Z*alpha2);
-  G4double a = 2.*pow(Z,0.666666667)*a0*fac/mom2 + 1.0;
+  G4double fac = std::min(faclim, 1.13 + 3.76*invbeta2*Z2*alpha2);
+  G4double a = 2.*pow(Z,0.666666667)*a0*fac/mom2;
   G4double costm = std::max(cosThetaMax, 1.0 - 0.5*q2Limit/mom2);
   if(costm > cosThetaMin) return 0; 
-
+  /*
   G4double cost = a - (a - costm)/
     (1.0 + G4UniformRand()*(cosThetaMin - costm)/(a - cosThetaMin));
   if(std::abs(cost) > 1.) {
@@ -206,6 +208,21 @@ std::vector<G4DynamicParticle*>* G4eCoulombScatteringModel::SampleSecondaries(
     else           cost =  1.0;
   }
   G4double sint = sqrt((1.0 + cost)*(1.0 - cost));
+  */
+  G4double c1  = 1.0 - costm;
+  G4double c2  = 1.0 - cosThetaMin;
+  G4double x   = G4UniformRand();
+  G4double y   = (a + c2)/(c1 - c2);
+  G4double st2 = 0.5*(c1*y - a*x)/(y + x); 
+  if(st2 < 0.0) {
+    G4cout << "G4eCoulombScatteringModel::SampleSecondaries WARNING st2= " 
+	   << st2 << G4endl;
+    st2 = 0.0;
+  }
+
+  G4double tet = 2.0*asin(sqrt(st2));
+  G4double cost= cos(tet);
+  G4double sint= sin(tet);
 
   G4double phi  = twopi * G4UniformRand();
 
