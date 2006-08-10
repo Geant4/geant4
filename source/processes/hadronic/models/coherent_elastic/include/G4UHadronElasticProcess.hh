@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UHadronElasticProcess.hh,v 1.6 2006-08-02 10:55:54 vnivanch Exp $
+// $Id: G4UHadronElasticProcess.hh,v 1.7 2006-08-10 15:44:28 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Geant4 Hadron Elastic Scattering Process -- header file
@@ -91,7 +91,6 @@ private:
   G4double        thEnergy;
 
   G4int    pPDG;
-  G4bool   flagHP;
   G4bool   first;
 };
 

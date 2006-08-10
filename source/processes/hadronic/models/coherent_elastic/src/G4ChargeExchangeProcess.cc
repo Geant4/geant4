@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChargeExchangeProcess.cc,v 1.6 2006-08-02 10:55:54 vnivanch Exp $
+// $Id: G4ChargeExchangeProcess.cc,v 1.7 2006-08-10 15:44:28 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -204,6 +204,20 @@ G4double G4ChargeExchangeProcess::GetMicroscopicCrossSection(
 	     << G4endl;
     x = store->GetCrossSection(dp, elm, temp);
   }
+
+  // NaN finder
+  if(!(x < 0.0 || x >= 0.0)) {
+    if (verboseLevel > -1) {
+      G4cout << "G4ChargeExchangeProcess WARNING: Z= " << iz  
+	     << " pdg= " <<  pPDG
+	     << " mom(GeV)= " << dp->GetTotalMomentum()/GeV 
+	     << " cross= " << x 
+	     << " set to zero"
+	     << G4endl; 
+    }
+    x = 0.0;
+  }
+
   if(verboseLevel>1)
     G4cout << "G4ChargeExchangeProcess cross(mb)= " << x/millibarn
            << "  E(MeV)= " << dp->GetKineticEnergy()

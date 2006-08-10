@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UHadronElasticProcess.cc,v 1.20 2006-08-02 10:55:54 vnivanch Exp $
+// $Id: G4UHadronElasticProcess.cc,v 1.21 2006-08-10 15:44:28 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Geant4 Hadron Elastic Scattering Process -- header file
@@ -240,7 +240,9 @@ G4VParticleChange* G4UHadronElasticProcess::PostStepDoIt(
   if(ni == 1) { 
     A = G4double(elm->GetIsotope(0)->GetN());
   } else if(ni > 1) {
-    if(iz == 1 && theParticle == theProton) {
+
+    // Special treatment of hydrogen
+    if(iz == 1 && (theParticle == theProton || theParticle == theNeutron)) {
       A = 1.;
       if(G4UniformRand()*(xsecH[0] + xsec[1]) > xsec[0]) A = 2.;
     } else {

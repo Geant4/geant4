@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronElastic.cc,v 1.22 2006-08-02 10:55:54 vnivanch Exp $
+// $Id: G4HadronElastic.cc,v 1.23 2006-08-10 15:44:28 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -50,6 +50,7 @@
 // 24-Apr-06 V.Ivanchenko add neutron scattering on hydrogen from CHIPS
 // 07-Jun-06 V.Ivanchenko fix problem of rotation
 // 25-Jul-06 V.Ivanchenko add 19 MeV low energy, below which S-wave is sampled
+// 02-Aug-06 V.Ivanchenko extand the aria of S-wave for pions
 //
 
 #include "G4HadronElastic.hh"
@@ -64,16 +65,19 @@
 #include "G4Neutron.hh"
 #include "G4Deuteron.hh"
 #include "G4Alpha.hh"
+#include "G4PionPlus.hh"
+#include "G4PionMinus.hh"
 
-G4HadronElastic::G4HadronElastic(G4double elim, G4double ehigh) 
+G4HadronElastic::G4HadronElastic(G4double plow, G4double elim, G4double ehigh) 
   : G4HadronicInteraction()
 {
   SetMinEnergy( 0.0*GeV );
-  SetMaxEnergy( DBL_MAX );
+  SetMaxEnergy( 100.*TeV );
   verboseLevel= 0;
-  ekinlim     = elim;
+  ekinIon     = elim;
   ekinhigh    = ehigh;
   ekinlow     = 19.*MeV;
+  plablow     = plow;
 
   qCManager   = G4QElasticCrossSection::GetPointer();
   hElastic    = new G4ElasticHadrNucleusHE();
@@ -82,6 +86,8 @@ G4HadronElastic::G4HadronElastic(G4double elim, G4double ehigh)
   theNeutron  = G4Neutron::Neutron();
   theDeuteron = G4Deuteron::Deuteron();
   theAlpha    = G4Alpha::Alpha();
+  thePionPlus = G4PionPlus::PionPlus();
+  thePionMinus= G4PionMinus::PionMinus();
 }
 
 G4HadronElastic::~G4HadronElastic()
@@ -160,7 +166,9 @@ G4HadFinalState* G4HadronElastic::ApplyYourself(
     gtype = fQElastic;
   } else {
     if(ekin >= ekinhigh)     gtype = fHElastic;
-    else if(ekin <= ekinlow) gtype = fSWave;
+    else if((theParticle == thePionPlus || theParticle == thePionMinus) && ekin <= GeV) 
+      gtype = fSWave;
+    else if(plab <= plablow) gtype = fSWave;
   }
 
   // Sample t
@@ -173,7 +181,7 @@ G4HadFinalState* G4HadronElastic::ApplyYourself(
     else if(Z == 2 && N == 1) N = 2;
     G4double cs = qCManager->GetCrossSection(false,plab,Z,N,projPDG);
     if(cs > 0.0) t = qCManager->GetExchangeT(Z,N,projPDG);
-    else gtype = fSWave;
+    else gtype = fLElastic;
   }
 
   if(gtype == fLElastic) {
@@ -250,7 +258,7 @@ G4HadFinalState* G4HadronElastic::ApplyYourself(
 	   << nlv0<<" m= " << m2 << " ekin(MeV)= " << erec 
 	   <<G4endl;
 
-  if(erec > ekinlim) {
+  if(erec > ekinIon) {
     G4DynamicParticle * aSec = new G4DynamicParticle(theDef, nlv0);
     theParticleChange.AddSecondary(aSec);
   } else {

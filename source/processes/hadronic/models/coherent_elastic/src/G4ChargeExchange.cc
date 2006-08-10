@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChargeExchange.cc,v 1.5 2006-08-02 10:55:54 vnivanch Exp $
+// $Id: G4ChargeExchange.cc,v 1.6 2006-08-10 15:44:28 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -56,13 +56,13 @@ G4ChargeExchange::G4ChargeExchange(G4HadronElastic* hel, G4double elim,
   ekinhigh(ehigh)
 {
   SetMinEnergy( 0.0*GeV );
-  SetMaxEnergy( DBL_MAX );
+  SetMaxEnergy( 100.*TeV );
   ekinlow = 19.0*MeV;
 
   verboseLevel= 0;
   if(!fElastic) {
     native = true;
-    fElastic = new G4HadronElastic(elim, ehigh);
+    fElastic = new G4HadronElastic();
   }
   qCManager   = fElastic->GetCS();
   hElastic    = fElastic->GetHElastic();

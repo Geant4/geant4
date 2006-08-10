@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HadronElastic.hh,v 1.13 2006-08-02 10:55:54 vnivanch Exp $
+// $Id: G4HadronElastic.hh,v 1.14 2006-08-10 15:44:28 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -67,7 +67,8 @@ class G4HadronElastic : public G4HadronicInteraction
 {
 public:
 
-  G4HadronElastic(G4double elim = 100.*keV, 
+  G4HadronElastic(G4double plow = 20.0*MeV,
+                  G4double elim = 100.*keV, 
 		  G4double ehigh= DBL_MAX);
 
   virtual ~G4HadronElastic();
@@ -78,6 +79,10 @@ public:
   G4VQCrossSection* GetCS();
 
   G4ElasticHadrNucleusHE* GetHElastic();
+
+  void SetIonKinEnergyLimit(G4double value);
+
+  void SetPlabLow(G4double value);
 
   void SetKinEnergyLow(G4double value);
 
@@ -107,11 +112,24 @@ private:
   const G4ParticleDefinition* theNeutron;
   const G4ParticleDefinition* theDeuteron;
   const G4ParticleDefinition* theAlpha;
+  const G4ParticleDefinition* thePionPlus;
+  const G4ParticleDefinition* thePionMinus;
 
-  G4double ekinlim;  
+  G4double ekinIon;  
   G4double ekinlow;  
   G4double ekinhigh;  
+  G4double plablow;
 };
+
+inline void G4HadronElastic::SetIonKinEnergyLimit(G4double value)
+{
+  ekinIon = value;
+}
+
+inline void G4HadronElastic::SetPlabLow(G4double value)
+{
+  plablow = value;
+}
 
 inline void G4HadronElastic::SetKinEnergyLow(G4double value)
 {
