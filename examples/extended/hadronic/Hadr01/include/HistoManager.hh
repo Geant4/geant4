@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.hh,v 1.3 2006-06-29 17:23:42 gunter Exp $
+// $Id: HistoManager.hh,v 1.4 2006-08-11 14:38:11 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------

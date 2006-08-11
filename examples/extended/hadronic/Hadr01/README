@@ -80,6 +80,13 @@ The choice of the physics is provided by the UI command:
 
 /testhadr/Physics     QGSP
 
+The command 
+
+/testhadr/Physics     PHYSLIST
+
+allows allows to download a physics configuration defined by an environment
+variable PHYSLIST. 
+
 To see the list of available configurations one can use
 
 /testhadr/ListPhysics
@@ -145,6 +152,8 @@ histograms using UI command:
 
 The following types are available: hbook, root, aida. They will be 
 stored in the file "name.hbook", "name.root", or "name.aida". 
+If the environment variable HISTODIR is defined, files are stored in this 
+subdirectory.
 
 To show the contence of a histogram ID=i the commands may be applied:
 
