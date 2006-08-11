@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.cc,v 1.12 2006-07-06 09:22:49 vnivanch Exp $
+// $Id: PhysicsList.cc,v 1.13 2006-08-11 19:19:22 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /////////////////////////////////////////////////////////////////////////
@@ -87,6 +87,7 @@ PhysicsList::PhysicsList() : G4VModularPhysicsList()
   cutForGamma     = defaultCutValue;
   cutForElectron  = defaultCutValue;
   cutForPositron  = defaultCutValue;
+  dump            = false;
 
   pMessenger = new PhysicsListMessenger(this);
 
@@ -127,7 +128,7 @@ void PhysicsList::ConstructProcess()
     hadronPhys[i]->ConstructProcess();
   }
 
-  G4HadronProcessStore::Instance()->Dump(1);
+  if(dump) G4HadronProcessStore::Instance()->Dump(1);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
@@ -158,30 +159,42 @@ void PhysicsList::AddPhysicsList(const G4String& name)
   } else if (name == "LHEP_BERT") {
 
     hadronPhys.push_back( new G4EmExtraPhysics("gamma_nuc"));
-    hadronPhys.push_back( new G4HadronElasticPhysics("elastic",
+    hadronPhys.push_back( new G4HadronElasticPhysics("LElastic",
 						     verboseLevel,false));
     hadronPhys.push_back( new HadronPhysicsLHEP_BERT());
     hadronPhys.push_back( new G4QStoppingPhysics("stopping"));
     hadronPhys.push_back( new G4IonPhysics("ion"));
+    dump = true;
 
   } else if (name == "LHEP_BERT_HP") {
 
     hadronPhys.push_back( new G4EmExtraPhysics("gamma_nuc"));
-    hadronPhys.push_back( new G4HadronElasticPhysics("elastic",
+    hadronPhys.push_back( new G4HadronElasticPhysics("LElastic",
 						     verboseLevel,false));
     hadronPhys.push_back( new HadronPhysicsLHEP_BERT_HP());
     hadronPhys.push_back( new G4QStoppingPhysics("stopping"));
     hadronPhys.push_back( new G4IonPhysics("ion"));
+    dump = true;
 
   } else if (name == "LHEP_BIC") {
 
-    SetStandardList(false);
+    hadronPhys.push_back( new G4EmExtraPhysics("gamma_nuc"));
+    hadronPhys.push_back( new G4HadronElasticPhysics("LElastic",
+						     verboseLevel,false));
     hadronPhys.push_back( new HadronPhysicsLHEP_BIC());
+    hadronPhys.push_back( new G4QStoppingPhysics("stopping"));
+    hadronPhys.push_back( new G4IonBinaryCascadePhysics("binary_ion"));
+    dump = true;
 
   } else if (name == "LHEP_BIC_HP") {
 
-    SetStandardList(true);
+    hadronPhys.push_back( new G4EmExtraPhysics("gamma_nuc"));
+    hadronPhys.push_back( new G4HadronElasticPhysics("LElastic",
+						     verboseLevel,false));
     hadronPhys.push_back( new HadronPhysicsLHEP_BIC_HP());
+    hadronPhys.push_back( new G4QStoppingPhysics("stopping"));
+    hadronPhys.push_back( new G4IonBinaryCascadePhysics("binary_ion"));
+    dump = true;
 
   } else if (name == "QGSC") {
 
@@ -191,6 +204,7 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     hadronPhys.push_back( new HadronPhysicsQGSC());
     hadronPhys.push_back( new G4QStoppingPhysics("stopping"));
     hadronPhys.push_back( new G4IonPhysics("ion"));
+    dump = true;
 
   } else if (name == "QGSP") {
 
@@ -200,21 +214,25 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     hadronPhys.push_back( new HadronPhysicsQGSP());
     hadronPhys.push_back( new G4QStoppingPhysics("stopping"));
     hadronPhys.push_back( new G4IonPhysics("ion"));
+    dump = true;
 
   } else if (name == "LHEP_EMV") {
 
     AddPhysicsList("em_71");
     AddPhysicsList("LHEP");
+    dump = true;
 
   } else if (name == "QGSP_EMV") {
 
     AddPhysicsList("em_71");
     AddPhysicsList("QGSP");
+    dump = true;
 
   } else if (name == "QGSP_EMX") {
 
     AddPhysicsList("em_fast");
     AddPhysicsList("QGSP");
+    dump = true;
 
   } else if (name == "QGSP_BERT") {
 
@@ -224,6 +242,7 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     hadronPhys.push_back( new HadronPhysicsQGSP_BERT());
     hadronPhys.push_back( new G4QStoppingPhysics("stopping"));
     hadronPhys.push_back( new G4IonPhysics("ion"));
+    dump = true;
 
   } else if (name == "QGSP_BERT_HP") {
 
@@ -233,11 +252,13 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     hadronPhys.push_back( new HadronPhysicsQGSP_BERT_HP());
     hadronPhys.push_back( new G4QStoppingPhysics("stopping"));
     hadronPhys.push_back( new G4IonPhysics("ion"));
+    dump = true;
 
   } else if (name == "QGSP_BIC") {
 
     SetStandardList(false);
     hadronPhys.push_back( new HadronPhysicsQGSP_BIC());
+    dump = true;
 
   } else if (name == "QBBC") {
 

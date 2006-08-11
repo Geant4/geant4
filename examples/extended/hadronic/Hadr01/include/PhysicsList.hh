@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.hh,v 1.3 2006-06-29 17:23:48 gunter Exp $
+// $Id: PhysicsList.hh,v 1.4 2006-08-11 19:19:21 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /////////////////////////////////////////////////////////////////////////
@@ -81,6 +81,7 @@ private:
   std::vector<G4VPhysicsConstructor*>  hadronPhys;
     
   PhysicsListMessenger* pMessenger;
+  G4bool dump;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
