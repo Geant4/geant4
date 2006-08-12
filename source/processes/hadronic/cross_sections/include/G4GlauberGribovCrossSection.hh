@@ -52,6 +52,7 @@ class G4GlauberGribovCrossSection : public G4VCrossSectionDataSet
 public:
 
   G4GlauberGribovCrossSection ();
+  virtual ~G4GlauberGribovCrossSection ();
    
   virtual
   G4bool IsApplicable(const G4DynamicParticle* aDP, const G4Element*);
