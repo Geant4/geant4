@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.hh,v 1.60 2006-07-03 20:09:18 allison Exp $
+// $Id: G4VisManager.hh,v 1.61 2006-08-14 12:55:02 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -127,6 +127,9 @@ class G4VisManager: public G4VVisManager {
   friend class G4RayTrajectory;
   friend class G4RayTracerSceneHandler;
   friend class G4RTMessenger;
+  friend class G4OpenGLStoredSceneHandler;
+  friend class G4OpenGLViewerMessenger;
+  friend class G4OpenGLXViewerMessenger;
   friend class G4OpenGLXmViewerMessenger;
   friend class G4XXXSceneHandler;
   friend class G4HepRepFileSceneHandler;
