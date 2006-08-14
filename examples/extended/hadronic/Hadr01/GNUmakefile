@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.5 2006-06-23 10:46:54 vnivanch Exp $
+# $Id: GNUmakefile,v 1.6 2006-08-14 10:50:00 vnivanch Exp $
 # GEANT4 tag $Name: not supported by cvs2svn $
 # --------------------------------------------------------------
 # GNUmakefile for examples module with AIDA interface
@@ -48,7 +48,6 @@ CPPFLAGS += \
 # for the aida-config command see the README file
 ifdef G4ANALYSIS_USE
   CPPFLAGS += `aida-config --include`
-  LDFLAGS  += `aida-config --lib`
   LOADLIBS += `aida-config --lib`
 endif
 
