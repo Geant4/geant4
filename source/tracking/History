@@ -1,4 +1,4 @@
-$Id: History,v 1.108 2006-07-14 14:20:05 tsasaki Exp $
+$Id: History,v 1.109 2006-08-14 17:39:55 asaim Exp $
 $Name: not supported by cvs2svn $ 
 -------------------------------------------------------------------
 
@@ -18,8 +18,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+14 August 2006 M.Asai (tracking-V08-01-03)
+- Fix "double-deletion" in the destructor of G4SteppingManager.
+
 13 July 2006 T.sasaki (tracking-V08-01-02)
 - Fix on G4StepingVerbose for ForceConditions
+
 09 June 2006 T. Sasaki
 - Secondary vector is now owned by G4Step and G4TrackVector class has 
   been moved in the track category
