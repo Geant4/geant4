@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TrajectoryModelFactories.cc,v 1.5 2006-06-29 21:33:18 gunter Exp $
+// $Id: G4TrajectoryModelFactories.cc,v 1.6 2006-08-14 11:50:27 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Jane Tinslay, John Allison, Joseph Perl October 2005
@@ -59,6 +59,8 @@ namespace {
     messengers.push_back(new G4ModelCmdSetAuxPtsSize<G4VisTrajContext>(context, placement));
     messengers.push_back(new G4ModelCmdSetAuxPtsType<G4VisTrajContext>(context, placement));
     messengers.push_back(new G4ModelCmdSetAuxPtsFillStyle<G4VisTrajContext>(context, placement));
+
+    messengers.push_back(new G4ModelCmdSetTimeSliceInterval<G4VisTrajContext>(context, placement));
   }
 }
 
