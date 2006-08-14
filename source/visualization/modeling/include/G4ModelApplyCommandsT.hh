@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ModelApplyCommandsT.hh,v 1.3 2006-06-29 21:30:20 gunter Exp $
+// $Id: G4ModelApplyCommandsT.hh,v 1.4 2006-08-14 11:37:23 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Abstract model messenges. Derived classes should implement
@@ -38,6 +38,7 @@
 #include "G4String.hh"
 #include "G4UIcmdWithABool.hh"
 #include "G4UIcmdWithADouble.hh"
+#include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithAnInteger.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcommand.hh"
@@ -391,6 +392,54 @@ G4ModelCmdApplyDouble<M>::~G4ModelCmdApplyDouble()
 
 template <typename M>
 void G4ModelCmdApplyDouble<M>::SetNewValue(G4UIcommand*, G4String newValue)
+{
+  Apply(fpCmd->GetNewDoubleValue(newValue));
+}
+
+///////////////////////////////////////////////////////////////////////////
+//ApplyDoubleAndUnit command
+template <typename M>
+class G4ModelCmdApplyDoubleAndUnit : public G4VModelCommand<M> {
+
+public: // With description
+
+  G4ModelCmdApplyDoubleAndUnit(M* model, const G4String& placement, const G4String& cmdName);
+
+  virtual ~G4ModelCmdApplyDoubleAndUnit();
+
+  void SetNewValue(G4UIcommand* command, G4String newValue);
+
+protected:
+
+  // Implement in derived class
+  virtual void Apply(const G4double&) = 0;
+
+  G4UIcmdWithADoubleAndUnit* Command() {return fpCmd;}
+
+private:
+
+  G4UIcmdWithADoubleAndUnit* fpCmd;
+
+};
+
+template <typename M>
+G4ModelCmdApplyDoubleAndUnit<M>::G4ModelCmdApplyDoubleAndUnit(M* model, const G4String& placement, const G4String& cmdName)
+  :G4VModelCommand<M>(model)
+{
+  G4String dir = placement+"/"+model->Name()+"/"+cmdName;
+
+  fpCmd = new G4UIcmdWithADoubleAndUnit(dir, this);
+  fpCmd->SetParameterName("DoubleAndUnit", false);
+}
+
+template <typename M>
+G4ModelCmdApplyDoubleAndUnit<M>::~G4ModelCmdApplyDoubleAndUnit()
+{  
+  delete fpCmd;
+}
+
+template <typename M>
+void G4ModelCmdApplyDoubleAndUnit<M>::SetNewValue(G4UIcommand*, G4String newValue)
 {
   Apply(fpCmd->GetNewDoubleValue(newValue));
 }
