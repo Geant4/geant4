@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXViewer.cc,v 1.32 2006-07-17 15:04:22 allison Exp $
+// $Id: G4OpenGLXViewer.cc,v 1.33 2006-08-14 12:03:36 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -806,12 +806,18 @@ G4float* G4OpenGLXViewer::spewPrimitiveEPS (FILE* file, GLfloat* loc) {
     break;
   default:
     /* XXX Left as an excersie to the reader. */
-    std::ostringstream oss;
-    oss << "Incomplete implementation.  Unexpected token (" << token << ").";
-    G4Exception("G4OpenGLXViewer::spewPrimitiveEPS",
-		"Unexpected token",
-		FatalException,
-		oss.str().c_str());
+    static G4bool spewPrimitiveEPSWarned = false;
+    if (!spewPrimitiveEPSWarned) {
+      std::ostringstream oss;
+      oss <<
+	"Incomplete implementation.  Unexpected token (" << token << ")."
+	"\n  (Seems to be caused by text.)";
+      G4Exception("G4OpenGLXViewer::spewPrimitiveEPS",
+		  "Unexpected token",
+		  JustWarning,
+		  oss.str().c_str());
+      spewPrimitiveEPSWarned = true;
+    }
   }
   return loc;
 }
@@ -874,12 +880,19 @@ void G4OpenGLXViewer::spewSortedFeedback(FILE * file, GLint size, GLfloat * buff
       break;
     default:
       /* XXX Left as an excersie to the reader. */
-      std::ostringstream oss;
-      oss << "Incomplete implementation.  Unexpected token (" << token << ").";
-      G4Exception("G4OpenGLXViewer::spewSortedFeedback",
-		  "Unexpected token",
-		  FatalException,
-		  oss.str().c_str());
+      static G4bool spewSortedFeedbackWarned = false;
+      if (!spewSortedFeedbackWarned) {
+	std::ostringstream oss;
+	oss <<
+	  "Incomplete implementation.  Unexpected token (" << token << ")."
+	  "\n  (Seems to be caused by text.)";
+	G4Exception("G4OpenGLXViewer::spewSortedFeedback",
+		    "Unexpected token",
+		    JustWarning,
+		    oss.str().c_str());
+	spewSortedFeedbackWarned = true;
+      }
+      nprimitives++;
     }
   }
 
