@@ -1,9 +1,12 @@
-$Id: History,v 1.102 2006-08-14 11:26:12 allison Exp $
+$Id: History,v 1.103 2006-08-14 11:26:49 allison Exp $
 
 History file for visualization/test subdirectory
 ------------------------------------------------
 
 $Log: not supported by cvs2svn $
+Revision 1.102  2006/08/14 11:26:12  allison
+Added MyTrackingAction - uses G4RichTrajectory and triggers auxiliary points.
+
 Revision 1.101  2006/07/10 16:18:33  allison
 vistest-V08-01-01
 
