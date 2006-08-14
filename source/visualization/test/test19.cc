@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: test19.cc,v 1.26 2006-06-29 21:33:30 gunter Exp $
+// $Id: test19.cc,v 1.27 2006-08-14 11:25:53 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,6 +44,7 @@
 #include "MyPrimaryGeneratorAction.hh"
 #include "MyEventAction.hh"
 #include "MySteppingAction.hh"
+#include "MyTrackingAction.hh"
 
 #include "G4UIterminal.hh"
 #include "G4UItcsh.hh"
@@ -129,6 +130,7 @@ int main (int argc, char** argv) {
   runManager -> SetUserAction (new MyPrimaryGeneratorAction);
   runManager -> SetUserAction (new MyEventAction);
   runManager -> SetUserAction (new MySteppingAction);
+  runManager -> SetUserAction (new MyTrackingAction);
 
   //Initialize G4 kernel
   //runManager->Initialize();  // Do this with /run/initialize so that
