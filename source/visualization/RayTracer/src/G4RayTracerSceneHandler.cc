@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RayTracerSceneHandler.cc,v 1.8 2006-06-29 21:24:13 gunter Exp $
+// $Id: G4RayTracerSceneHandler.cc,v 1.9 2006-08-14 13:12:16 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4RayTracerSceneHandler.hh"
@@ -45,6 +45,9 @@ G4RayTracerSceneHandler::G4RayTracerSceneHandler(G4VGraphicsSystem& system,
     if (!pScene) {
       // Create new scene like /vis/scene/create...
       fpScene = new G4Scene("dummy-ray-tracer-scene");
+      // Add dummy run-duration model to avoid world being added and
+      // notifyHandler being invoked...
+      fpScene->AddWorldIfEmpty();
       // Avoid code triggered at end of events...
       fpScene->SetRefreshAtEndOfEvent(false);
       // Avoid re-computing transients.
