@@ -1,4 +1,4 @@
-$Id: History,v 1.9 2006-08-11 14:38:11 vnivanch Exp $
+$Id: History,v 1.10 2006-08-14 10:50:39 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -18,6 +18,7 @@ track of all tags.
 11-08-06 V.Ivant (exhadr01-V08-01-00)
 - Add PhysList and directory for histograms definition via environment
   variable
+- Fix link of AIDA
 
 23-06-06 V.Ivant (exhadr01-V08-00-06)
 - Fix compilation problem for CLHEP 2.0..; use correct em builders for EMV, EMX
