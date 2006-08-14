@@ -1,4 +1,4 @@
-$Id: History,v 1.75 2006-07-10 16:15:56 allison Exp $
+$Id: History,v 1.76 2006-08-14 11:53:09 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,13 @@ committal in the CVS repository !
 
 History file for visualization/modeling
 ---------------------------------------
+
+14th August 2006  John Allison  (modeling-V08-01-02)
+- G4ModelApplyCommandsT.hh: Added G4ModelCmdApplyDoubleAndUnit.
+- G4ModelCommandsT.hh: Added G4ModelCmdSetTimeSliceInterval.
+- G4VisTrajContext: Added TimeSliceInterval.
+- G4TrajectoryModelFactories: Instantiated G4ModelCmdSetTimeSliceInterval.
+- G4TrajectoryDrawerUtils.cc: Added time slicing.
 
 10th July 2006  John Allison  (modeling-V08-01-01)
 - Co-works with greps-V08-01-01.
