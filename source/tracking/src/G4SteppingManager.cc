@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SteppingManager.cc,v 1.39 2006-06-09 04:58:35 tsasaki Exp $
+// $Id: G4SteppingManager.cc,v 1.40 2006-08-14 17:35:35 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------
@@ -97,7 +97,7 @@ G4SteppingManager::~G4SteppingManager()
 
 // Destruct simple 'has-a' objects
    fStep->DeleteSecondaryVector();
-   delete fSecondary;
+///////////////////////////   delete fSecondary;
    delete fStep;
    delete fSelectedAtRestDoItVector;
    delete fSelectedAlongStepDoItVector;
