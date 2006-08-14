@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredViewer.cc,v 1.14 2006-06-29 21:19:18 gunter Exp $
+// $Id: G4OpenGLStoredViewer.cc,v 1.15 2006-08-14 12:21:11 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -103,14 +103,16 @@ void G4OpenGLStoredViewer::DrawDisplayLists () {
   if (fG4OpenGLStoredSceneHandler.fTopPODL)
     glCallList (fG4OpenGLStoredSceneHandler.fTopPODL);
   
-  G4int nTODLs = fG4OpenGLStoredSceneHandler.fTODLList.size ();
-  for (int i = 0; i < nTODLs; i++) {
-    glPushMatrix();
-    G4OpenGLTransform3D oglt
-      (fG4OpenGLStoredSceneHandler.fTODLTransformList [i]);
-    glMultMatrixd (oglt.GetGLMatrix ());
-    glCallList (fG4OpenGLStoredSceneHandler.fTODLList[i]);
-    glPopMatrix();
+  for (size_t i = 0; i < fG4OpenGLStoredSceneHandler.fTOList.size(); ++i) {
+    G4OpenGLStoredSceneHandler::TO& to =
+      fG4OpenGLStoredSceneHandler.fTOList[i];
+    if (to.fEndTime >= fStartTime && to.fStartTime <= fEndTime) {
+      glPushMatrix();
+      G4OpenGLTransform3D oglt (to.fTransform);
+      glMultMatrixd (oglt.GetGLMatrix ());
+      glCallList (to.fDisplayListId);
+      glPopMatrix();
+    }
   }
 }
 

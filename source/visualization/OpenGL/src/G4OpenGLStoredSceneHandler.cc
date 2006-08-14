@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredSceneHandler.cc,v 1.28 2006-06-29 21:19:16 gunter Exp $
+// $Id: G4OpenGLStoredSceneHandler.cc,v 1.29 2006-08-14 12:21:11 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -46,6 +46,16 @@
 #include "G4PhysicalVolumeModel.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
+#include "G4TrajectoriesModel.hh"
+#include "G4VisManager.hh"
+#include "G4VTrajectoryModel.hh"
+#include "G4AttDef.hh"
+#include "G4AttValue.hh"
+#include "G4AttCheck.hh"
+#include "G4UIcommand.hh"
+#include "G4Polyline.hh"
+#include "G4Circle.hh"
+#include "G4Square.hh"
 
 G4OpenGLStoredSceneHandler::G4OpenGLStoredSceneHandler (G4VGraphicsSystem& system,
 					  const G4String& name):
@@ -56,6 +66,69 @@ fTopPODL (0)
 
 G4OpenGLStoredSceneHandler::~G4OpenGLStoredSceneHandler ()
 {}
+
+void G4OpenGLStoredSceneHandler::AddPrimitive (const G4Polyline& polyline)
+{
+  // Get vis attributes - pick up defaults if none.
+  const G4VisAttributes* pVA =
+    fpViewer->GetApplicableVisAttributes(polyline.GetVisAttributes());
+  const std::vector<G4AttValue>* attValues = pVA->GetAttValues();
+  if (attValues) {
+    TO& to = fTOList.back();
+    for (std::vector<G4AttValue>::const_iterator i = attValues->begin();
+	 i != attValues->end(); ++i) {
+      if (i->GetName() == "_t1") {
+	to.fStartTime = G4UIcommand::ConvertToDimensionedDouble(i->GetValue());
+      }
+      if (i->GetName() == "_t2") {
+	to.fEndTime = G4UIcommand::ConvertToDimensionedDouble(i->GetValue());
+      }
+    }
+  }
+  G4OpenGLSceneHandler::AddPrimitive(polyline);
+}
+
+void G4OpenGLStoredSceneHandler::AddPrimitive (const G4Circle& circle)
+{
+  // Get vis attributes - pick up defaults if none.
+  const G4VisAttributes* pVA =
+    fpViewer->GetApplicableVisAttributes(circle.GetVisAttributes());
+  const std::vector<G4AttValue>* attValues = pVA->GetAttValues();
+  if (attValues) {
+    TO& to = fTOList.back();
+    for (std::vector<G4AttValue>::const_iterator i = attValues->begin();
+	 i != attValues->end(); ++i) {
+      if (i->GetName() == "_t1") {
+	to.fStartTime = G4UIcommand::ConvertToDimensionedDouble(i->GetValue());
+      }
+      if (i->GetName() == "_t2") {
+	to.fEndTime = G4UIcommand::ConvertToDimensionedDouble(i->GetValue());
+      }
+    }
+  }
+  G4OpenGLSceneHandler::AddPrimitive(circle);
+}
+
+void G4OpenGLStoredSceneHandler::AddPrimitive (const G4Square& square)
+{
+  // Get vis attributes - pick up defaults if none.
+  const G4VisAttributes* pVA =
+    fpViewer->GetApplicableVisAttributes(square.GetVisAttributes());
+  const std::vector<G4AttValue>* attValues = pVA->GetAttValues();
+  if (attValues) {
+    TO& to = fTOList.back();
+    for (std::vector<G4AttValue>::const_iterator i = attValues->begin();
+	 i != attValues->end(); ++i) {
+      if (i->GetName() == "_t1") {
+	to.fStartTime = G4UIcommand::ConvertToDimensionedDouble(i->GetValue());
+      }
+      if (i->GetName() == "_t2") {
+	to.fEndTime = G4UIcommand::ConvertToDimensionedDouble(i->GetValue());
+      }
+    }
+  }
+  G4OpenGLSceneHandler::AddPrimitive(square);
+}
 
 void G4OpenGLStoredSceneHandler::BeginPrimitives
 (const G4Transform3D& objectTransformation) {
@@ -74,8 +147,8 @@ void G4OpenGLStoredSceneHandler::BeginPrimitives
   }
   if (fMemoryForDisplayLists) {
     if (fReadyForTransients) {
-      fTODLList.push_back (fDisplayListId);
-      fTODLTransformList.push_back (objectTransformation);
+      TO to(fDisplayListId, objectTransformation);
+      fTOList.push_back(to);
       glDrawBuffer (GL_FRONT);
       glPushMatrix();
       G4OpenGLTransform3D oglt (objectTransformation);
@@ -83,8 +156,7 @@ void G4OpenGLStoredSceneHandler::BeginPrimitives
       glNewList (fDisplayListId, GL_COMPILE_AND_EXECUTE);
     }
     else {
-      fPODLList.push_back (fDisplayListId);
-      fPODLTransformList.push_back (objectTransformation);
+      fPOList.push_back(PO(fDisplayListId, objectTransformation));
       glNewList (fDisplayListId, GL_COMPILE);
     }
   } else {
@@ -123,14 +195,12 @@ void G4OpenGLStoredSceneHandler::BeginPrimitives2D()
   }
   if (fMemoryForDisplayLists) {
     if (fReadyForTransients) {
-      fTODLList.push_back (fDisplayListId);
-      fTODLTransformList.push_back (G4Transform3D());  // Identity (ignored).
+      fTOList.push_back(TO(fDisplayListId));
       glDrawBuffer (GL_FRONT);
       glNewList (fDisplayListId, GL_COMPILE_AND_EXECUTE);
     }
     else {
-      fPODLList.push_back (fDisplayListId);
-      fPODLTransformList.push_back (G4Transform3D());  // Identity (ignored).
+      fPOList.push_back(PO(fDisplayListId));
       glNewList (fDisplayListId, GL_COMPILE);
     }
   } else {
@@ -185,11 +255,11 @@ void G4OpenGLStoredSceneHandler::EndModeling () {
   }
   else {
     glNewList (fTopPODL, GL_COMPILE_AND_EXECUTE); {
-      for (size_t i = 0; i < fPODLList.size (); i++) {
+      for (size_t i = 0; i < fPOList.size (); i++) {
 	glPushMatrix();
-	G4OpenGLTransform3D oglt (fPODLTransformList [i]);
+	G4OpenGLTransform3D oglt (fPOList[i].fTransform);
 	glMultMatrixd (oglt.GetGLMatrix ());
-	glCallList (fPODLList[i]);
+	glCallList (fPOList[i].fDisplayListId);
 	glPopMatrix();
       }
     }
@@ -208,55 +278,30 @@ void G4OpenGLStoredSceneHandler::ClearStore () {
 
   G4VSceneHandler::ClearStore ();  // Sets need kernel visit, etc.
 
-  size_t i;
-
   // Delete OpenGL permanent display lists.
-  for (i = 0; i < fPODLList.size (); i++) {
-    if (fPODLList [i]) {
-      glDeleteLists (fPODLList [i], 1);
-    } else {
-      G4cerr << "Warning : NULL display List in fPODLList." << G4endl;
-    }
-  }
-
+  for (size_t i = 0; i < fPOList.size (); i++)
+    glDeleteLists (fPOList[i].fDisplayListId, 1);
   if (fTopPODL) glDeleteLists (fTopPODL, 1);
   fTopPODL = 0;
 
   // Clear other lists, dictionary, etc.
-  fPODLList.clear ();
-  fPODLTransformList.clear ();
+  fPOList.clear ();
   fSolidMap.clear ();
 
   // ...and clear transient store...
-  for (i = 0; i < fTODLList.size (); i++) {
-    if (fTODLList [i]) {
-      glDeleteLists (fTODLList [i], 1);
-    } else {
-      G4cerr << "Warning : NULL display List in fTODLList." << G4endl;
-    }
-  }
-  fTODLList.clear ();
-  fTODLTransformList.clear ();
+  for (size_t i = 0; i < fTOList.size (); i++)
+    glDeleteLists(fTOList[i].fDisplayListId, 1);
+  fTOList.clear ();
 }
 
 void G4OpenGLStoredSceneHandler::ClearTransientStore () {
 
   G4VSceneHandler::ClearTransientStore ();
 
-  size_t i;
-
-  // Delete OpenGL transient display lists.
-  for (i = 0; i < fTODLList.size (); i++) {
-    if (fTODLList [i]) {
-      glDeleteLists (fTODLList [i], 1);
-    } else {
-      G4cerr << "Warning : NULL display List in fTODLList." << G4endl;
-    }
-  }
-
-  // Clear other lists, dictionary, etc.
-  fTODLList.clear ();
-  fTODLTransformList.clear ();
+  // Delete OpenGL transient display lists and Transient Objects themselves.
+  for (size_t i = 0; i < fTOList.size (); i++)
+    glDeleteLists(fTOList[i].fDisplayListId, 1);
+  fTOList.clear ();
 
   // Make sure screen corresponds to graphical database...
   if (fpViewer) {
@@ -329,8 +374,7 @@ void G4OpenGLStoredSceneHandler::RequestPrimitives (const G4VSolid& solid)
 	// ...and if the solid has already been rendered...
 	(fSolidMap.find (pSolid) != fSolidMap.end ())) {
       fDisplayListId = fSolidMap [pSolid];
-      fPODLList.push_back (fDisplayListId);
-      fPODLTransformList.push_back (*fpObjectTransformation);
+      fPOList.push_back(PO(fDisplayListId,*fpObjectTransformation));
     }
     else {
       G4VSceneHandler::RequestPrimitives (solid);

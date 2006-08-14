@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredSceneHandler.hh,v 1.18 2006-06-29 21:18:00 gunter Exp $
+// $Id: G4OpenGLStoredSceneHandler.hh,v 1.19 2006-08-14 12:21:11 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -48,7 +48,7 @@
 class G4OpenGLStored;
 
 class G4OpenGLStoredSceneHandler: public G4OpenGLSceneHandler {
-    
+
 public:
   G4OpenGLStoredSceneHandler (G4VGraphicsSystem& system, const G4String& name = "");
   virtual ~G4OpenGLStoredSceneHandler ();
@@ -58,6 +58,26 @@ public:
   void EndPrimitives2D ();
   void BeginModeling ();
   void EndModeling ();
+  void AddPrimitive (const G4Polyline&);
+  void AddPrimitive (const G4Circle&);
+  void AddPrimitive (const G4Square&);
+  // Explicitly invoke base class methods to avoid warnings about
+  // hiding of base class methods...
+  void AddPrimitive (const G4Text& text) {
+    G4OpenGLSceneHandler::AddPrimitive (text);
+  }
+  void AddPrimitive (const G4Polyhedron& polyhedron) {
+    G4OpenGLSceneHandler::AddPrimitive (polyhedron);
+  }
+  void AddPrimitive (const G4NURBS& nurbs) {
+    G4OpenGLSceneHandler::AddPrimitive (nurbs);
+  }
+  void AddPrimitive(const G4Polymarker& polymarker) {
+    G4OpenGLSceneHandler::AddPrimitive (polymarker);
+  }
+  void AddPrimitive (const G4Scale& scale) {
+    G4OpenGLSceneHandler::AddPrimitive (scale);
+  }
 private:
   friend class G4OpenGLStoredViewer;
   // ..allows access to P/TODLs.
@@ -69,13 +89,25 @@ private:
   G4bool  fMemoryForDisplayLists;   // avoid memory overflow
   
   // PODL = Persistent Object Display List.
-  GLint           fTopPODL;       // List which calls the other PODLs.
-  std::vector<G4int> fPODLList; 
-  std::vector<G4Transform3D> fPODLTransformList; 
+  GLint  fTopPODL;                  // List which calls the other PODLs.
+  struct PO {
+    PO(G4int id, const G4Transform3D& tr = G4Transform3D()):
+      fDisplayListId(id), fTransform(tr) {}
+    G4int fDisplayListId;
+    G4Transform3D fTransform;
+  };
+  std::vector<PO> fPOList; 
   
-  // TODL = Transient  Object Display List.
-  std::vector<G4int> fTODLList; 
-  std::vector<G4Transform3D> fTODLTransformList; 
+  // TO = Transparent Object.
+  struct TO {
+    TO(G4int id, const G4Transform3D& tr = G4Transform3D()):
+      fDisplayListId(id), fTransform(tr),
+      fStartTime(-DBL_MAX), fEndTime(DBL_MAX) {}
+    G4int fDisplayListId;
+    G4Transform3D fTransform;
+    G4double fStartTime, fEndTime;  // Time range (e.g., for trajectory steps).
+  };
+  std::vector<TO> fTOList; 
   
   // Stop-gap solution of structure re-use.
   // A proper implementation would use geometry hierarchy.
