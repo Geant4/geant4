@@ -1,4 +1,4 @@
-$Id: History,v 1.64 2006-07-10 15:55:12 allison Exp $
+$Id: History,v 1.65 2006-08-14 13:05:09 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -24,6 +24,13 @@ committal in the CVS repository !
 
 History file for visualization management sub-category
 ------------------------------------------------------
+
+14th August 2006  John Allison  (visman-V08-01-02)
+- G4VisManager.hh: Added some OpenGL friends.
+- G4VisCommandsCompound.cc: /vis/drawVolume: re-ordered "attach"
+  before "add/volume".  Catches non-existing handlers better.  Overall
+  effect of compound command unchanged.
+- G4VSceneHandler.cc: Added (commented out) code for "event refreshing".
 
 10th July 2006  John Allison (visman-V08-01-01)
 - Co-works with greps-V08-01-01.
