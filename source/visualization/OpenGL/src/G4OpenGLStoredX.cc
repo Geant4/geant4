@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredX.cc,v 1.12 2006-07-17 15:04:22 allison Exp $
+// $Id: G4OpenGLStoredX.cc,v 1.13 2006-08-14 12:07:19 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -40,6 +40,7 @@
 #include "G4OpenGLViewer.hh"
 #include "G4OpenGLStoredX.hh"
 #include "G4OpenGLStoredXViewer.hh"
+#include "G4OpenGLViewerMessenger.hh"
 #include "G4OpenGLXViewerMessenger.hh"
 
 G4OpenGLStoredX::G4OpenGLStoredX ():
@@ -48,6 +49,7 @@ G4OpenGLStoredX::G4OpenGLStoredX ():
 		     G4VisFeaturesOfOpenGLSX (),
 		     G4VGraphicsSystem::threeD)
 {
+  G4OpenGLViewerMessenger::GetInstance();
   G4OpenGLXViewerMessenger::GetInstance();
 }
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredWin32.cc,v 1.13 2006-06-29 21:19:20 gunter Exp $
+// $Id: G4OpenGLStoredWin32.cc,v 1.14 2006-08-14 12:07:19 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -39,12 +39,16 @@
 #include "G4OpenGLViewer.hh"
 #include "G4OpenGLStoredWin32.hh"
 #include "G4OpenGLStoredWin32Viewer.hh"
+#include "G4OpenGLViewerMessenger.hh"
 
 G4OpenGLStoredWin32::G4OpenGLStoredWin32 ():
   G4VGraphicsSystem ("OpenGLStoredWin32",
 		     "OGLSWin32",
 		     G4VisFeaturesOfOpenGLSWin32 (),
-		     G4VGraphicsSystem::threeD) {}
+		     G4VGraphicsSystem::threeD)
+{
+  G4OpenGLViewerMessenger::GetInstance();
+}
 
 G4VSceneHandler* G4OpenGLStoredWin32::CreateSceneHandler
 (const G4String& name) {
