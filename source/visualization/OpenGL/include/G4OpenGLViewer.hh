@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewer.hh,v 1.14 2006-07-03 16:38:13 allison Exp $
+// $Id: G4OpenGLViewer.hh,v 1.15 2006-08-14 11:59:48 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -46,6 +46,7 @@ class G4OpenGLViewer: virtual public G4VViewer {
   friend class G4OpenGLSceneHandler;
   friend class G4OpenGLImmediateSceneHandler;
   friend class G4OpenGLStoredSceneHandler;
+  friend class G4OpenGLViewerMessenger;
 
 public:
   void ClearView  ();
@@ -66,10 +67,8 @@ protected:
     transparency_enabled,   //is alpha blending enabled?
     antialiasing_enabled,   //is antialiasing enabled?
     haloing_enabled;        //is haloing enabled for wireframe?
+  G4double fStartTime, fEndTime;  // Time range (e.g., for trajectory steps).
 };
-
-class G4OpenGLImmediateSceneHandler;
-class G4OpenGLStoredSceneHandler;
 
 #endif
 
