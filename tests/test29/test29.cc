@@ -50,6 +50,7 @@
 //#define smear
 //#define escan
 //#define debug
+//#define rdebug
 //#define pdebug
 //#define mtst
 // ------------------------------------- FLAGS ------------------
@@ -101,9 +102,11 @@
 #include "G4He3.hh"
 #include "G4ForceCondition.hh"
 #include "G4Box.hh"
+#include "G4Ellipsoid.hh"
 #include "G4PVPlacement.hh"
 #include "G4Step.hh"
 #include "G4GRSVolume.hh"
+#include "G4GRSSolid.hh"
 
 #include "Test29Physics.hh"
 #include "Test29PhysicsList.hh"
@@ -494,11 +497,26 @@ int main()
     G4cout<<"Test29: The direction:"<<aDirection<<G4endl;
     G4cout<<"Test29: The time:     "<<aTime/ns<<" ns"<<G4endl;
 #endif
+    // Geometry
+
+    G4double dimX = 100.0*cm;
+    G4double dimY = 100.0*cm;
+    G4double dimZ = 100.0*cm;
+
+    G4Box* sFrame = new G4Box ("Box",dimX, dimY, dimZ);
+    G4LogicalVolume* lFrame = new G4LogicalVolume(sFrame,material,"Box",0,0,0);
+    G4PVPlacement* pFrame = new G4PVPlacement(0,G4ThreeVector(),"Box",lFrame,0,false,0);
+
+    assert(pFrame);
+
+    //const G4RotationMatrix* rotation=pFrame->GetFrameRotation();
+
     // Step Definition
     G4Step* step = new G4Step();
     step->SetTrack(gTrack);          // Step is initialized by the Track (?)
 
     G4StepPoint* aPoint = new G4StepPoint(); // It cant be initialized right away (!?)
+    /////G4TouchableHandle touch = aPoint->GetTouchableHandle();
     aPoint->SetPosition(aPosition);
     aPoint->SetMaterial(material);
     G4double safety = 10000.*cm;
@@ -520,6 +538,19 @@ int main()
     step->SetStepLength(theStep);    // Step is set byCard above
 #ifdef pverb
     G4cout<<"Test29: The end point is defined and filled in the step "<<G4endl;
+#endif
+    G4Navigator* nav = new G4Navigator;
+#ifdef pverb
+    G4cout<<"Test29: The Navigator is defined "<<G4endl;
+#endif
+    nav->SetWorldVolume(pFrame);
+#ifdef pverb
+    G4cout<<"Test29: The Box frame is set "<<G4endl;
+#endif
+    //G4VTouchable* vtouch = nav->CreateTouchableHistory();
+    G4TouchableHandle touch(nav->CreateTouchableHistory());
+#ifdef pverb
+    G4cout<<"Test29: The TouchableHandle is defined "<<G4endl;
 #endif
     G4Timer* timer = new G4Timer();
     timer->Start();
@@ -556,6 +587,7 @@ int main()
 
       gTrack->SetStep(step);            // Now step is included in the Track (see above)
       gTrack->SetKineticEnergy(energy); // Duplication of Kin. Energy for the Track (?!)
+      gTrack->SetTouchableHandle(touch);// Set Box touchable history
 
       //aChange = proc->PostStepDoIt(*gTrack,*step); // For onFlight
       aChange = proc->AtRestDoIt(*gTrack,*step);  // For At Rest (step is defined twice?)
@@ -619,6 +651,24 @@ int main()
           c=90000000+chrg*999+bary;
         }
         m   = pd->GetPDGMass();
+#ifdef rdebug
+        G4int ac=std::abs(c);
+        if(ac<10000 && ac>100)
+								{
+          G4int dc=0;
+								  if(ac<1000)                  // Mesons
+										{
+            dc=ac%100;
+            dc=ac-dc*100;
+          }
+          else                         // Baryons
+										{
+            dc=ac%1000;
+            dc=ac-dc*1000;
+          }
+          if(dc>2) G4cout<<"Test29: Resonance PDG="<<c<<", m="<<m<<G4endl;
+								}
+#endif
         mom = sec->GetMomentumDirection();
         e   = sec->GetKineticEnergy();
 	       if (e < -0.0)
@@ -632,7 +682,7 @@ int main()
         lorV = G4LorentzVector(mom, e + m);    // "e" is a Kinetic energy!
         totSum -= lorV;
 #ifdef debug
-        G4cout<<"Test29: 4M="<<lorV<<" is subtracted, sum4M="<<totSum<<",m="<<m<<G4endl;
+        G4cout<<"Test29: PDG="<<c<<", 4M="<<lorV<<", resid4M="<<totSum<<", m="<<m<<G4endl;
 #endif
         if(std::fabs(m-lorV.m())>.005)
 	       {
