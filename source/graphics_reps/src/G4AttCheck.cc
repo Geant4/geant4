@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AttCheck.cc,v 1.9 2006-07-03 11:00:16 allison Exp $
+// $Id: G4AttCheck.cc,v 1.10 2006-08-14 11:12:46 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4AttCheck.hh"
@@ -126,7 +126,7 @@ G4bool G4AttCheck::Check(const G4String& leader) const {
 	G4cerr << '\n' << leader;
       }
       G4cerr <<
-	"\nERROR " << iError << ": Null definitions map<G4String,G4AttDef>*"
+	"\nG4AttCheck: ERROR " << iError << ": Null definitions pointer"
 	"\n*******************************************************"
 	     << G4endl;
       return error;
@@ -148,7 +148,7 @@ G4bool G4AttCheck::Check(const G4String& leader) const {
 	  G4cerr << '\n' << leader;
 	}
 	G4cerr <<
-	  "\nERROR " << iError << ": No G4AttDef for G4AttValue \""
+	  "\nG4AttCheck: ERROR " << iError << ": No G4AttDef for G4AttValue \""
 	       <<  valueName << "\": " << value <<
 	  "\n*******************************************************"
 	       << G4endl;
@@ -167,7 +167,7 @@ G4bool G4AttCheck::Check(const G4String& leader) const {
 	    G4cerr << '\n' << leader;
 	  }
 	  G4cerr <<
-	    "\nERROR " << iError << ": Illegal Category Field \""
+	    "\nG4AttCheck: ERROR " << iError << ": Illegal Category Field \""
 		 << category << "\" for G4AttValue \""
 		 << valueName << "\": " << value <<
 	    "\n  Possible Categories:";
@@ -190,7 +190,7 @@ G4bool G4AttCheck::Check(const G4String& leader) const {
 	    G4cerr << '\n' << leader;
 	  }
 	  G4cerr <<
-	    "\nERROR " << iError << ": Illegal Extra field \""
+	    "\nG4AttCheck: ERROR " << iError << ": Illegal Extra field \""
 		 << extra << "\" for G4AttValue \""
 		 << valueName << "\": " << value <<
 	    "\n  Possible Extra fields if Category==\"Physics\":\n    ";
@@ -213,7 +213,7 @@ G4bool G4AttCheck::Check(const G4String& leader) const {
 	    G4cerr << '\n' << leader;
 	  }
 	  G4cerr <<
-	    "\nERROR " << iError << ": Illegal Value Type field \""
+	    "\nG4AttCheck: ERROR " << iError << ": Illegal Value Type field \""
 		 << valueType << "\" for G4AttValue \""
 		 << valueName << "\": " << value <<
 	    "\n  Possible Value Types:";
@@ -233,6 +233,15 @@ G4bool G4AttCheck::Check(const G4String& leader) const {
 
 std::ostream& operator<< (std::ostream& os, const G4AttCheck& ac) {
   using namespace std;
+  if (!ac.fpValues) {
+    // A null values vector is a valid situation.
+    os << "G4AttCheck: zero values pointer." << endl;
+    return os;
+  }
+  if (!ac.fpDefinitions) {
+    os << "G4AttCheck: ERROR: zero definitions pointer." << endl;
+    return os;
+  }
   vector<G4AttValue>::const_iterator iValue;
   for (iValue = ac.fpValues->begin(); iValue != ac.fpValues->end(); ++iValue) {
     const G4String& valueName = iValue->GetName();
@@ -242,7 +251,7 @@ std::ostream& operator<< (std::ostream& os, const G4AttCheck& ac) {
     G4bool error = false;
     if (iDef == ac.fpDefinitions->end()) {
       error = true;
-      os << "ERROR: No G4AttDef for G4AttValue \""
+      os << "G4AttCheck: ERROR: No G4AttDef for G4AttValue \""
 	 << valueName << "\": " << value << endl;
     } else {
       const G4String& category = iDef->second.GetCategory();
@@ -251,7 +260,7 @@ std::ostream& operator<< (std::ostream& os, const G4AttCheck& ac) {
       if (ac.fCategories.find(category) == ac.fCategories.end()) {
 	error = true;
 	os <<
-	  "ERROR: Illegal Category Field \"" << category
+	  "G4AttCheck: ERROR: Illegal Category Field \"" << category
 	   << "\" for G4AttValue \"" << valueName << "\": " << value <<
 	  "\n  Possible Categories:";
 	set<G4String>::iterator i;
@@ -263,8 +272,8 @@ std::ostream& operator<< (std::ostream& os, const G4AttCheck& ac) {
       if(category == "Physics" && ac.fUnits.find(extra) == ac.fUnits.end()) {
 	error = true;
 	os <<
-	  "ERROR: Illegal Extra field \""<< extra << "\" for G4AttValue \""
-	   << valueName << "\": " << value <<
+	  "G4AttCheck: ERROR: Illegal Extra field \""<< extra
+	   << "\" for G4AttValue \"" << valueName << "\": " << value <<
 	  "\n  Possible Extra fields if Category==\"Physics\":\n    ";
 	set<G4String>::iterator i;
 	for (i = ac.fUnits.begin(); i != ac.fUnits.end(); ++i) {
@@ -275,7 +284,7 @@ std::ostream& operator<< (std::ostream& os, const G4AttCheck& ac) {
       if (ac.fValueTypes.find(valueType) == ac.fValueTypes.end()) {
 	error = true;
 	os <<
-	  "ERROR: Illegal Value Type field \"" << valueType
+	  "G4AttCheck: ERROR: Illegal Value Type field \"" << valueType
 	   << "\" for G4AttValue \"" << valueName << "\": " << value <<
 	  "\n  Possible Value Types:";
 	set<G4String>::iterator i;
