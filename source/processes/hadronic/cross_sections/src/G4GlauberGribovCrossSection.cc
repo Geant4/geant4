@@ -76,16 +76,19 @@ G4GlauberGribovCrossSection::G4GlauberGribovCrossSection()
   theHe3      = G4He3::He3();
 }
 
-//////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
 //
 //
 
 G4GlauberGribovCrossSection::~G4GlauberGribovCrossSection()
-{} 
+{
+}
 
-///////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////////////////
 //
 //
+
 
 G4bool 
 G4GlauberGribovCrossSection::IsApplicable(const G4DynamicParticle* aDP, const G4Element*  anElement)
@@ -96,7 +99,7 @@ G4GlauberGribovCrossSection::IsApplicable(const G4DynamicParticle* aDP, const G4
 
   const G4ParticleDefinition* theParticle = aDP->GetDefinition();
  
-  if ( kineticEnergy  <= fUpperLimit && kineticEnergy  >= fLowerLimit &&
+  if ( kineticEnergy  >= fLowerLimit &&
        anElement->GetZ() > 1. &&      // >=  He
        ( theParticle == theProton    ||
          theParticle == theAProton   ||
@@ -105,7 +108,8 @@ G4GlauberGribovCrossSection::IsApplicable(const G4DynamicParticle* aDP, const G4
          theParticle == thePiMinus   ||
          theParticle == theKPlus     ||
          theParticle == theKMinus    || 
-         theParticle == theNeutron      ) ) applicable = true;
+         theParticle == theNeutron   ||
+         theParticle == theSMinus) ) applicable = true;
   return applicable;
 }
 
@@ -228,10 +232,27 @@ G4double
 G4GlauberGribovCrossSection::GetHadronNucleaonXscPDG(const G4DynamicParticle* aParticle, 
                                                   const G4Element* anElement          )
 {
-  G4double xsection;
-
   G4double At = anElement->GetN();  // number of nucleons 
   G4double Zt = anElement->GetZ();  // number of protons
+
+
+  return GetHadronNucleaonXscPDG( aParticle, At, Zt );
+}
+
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////
+//
+// Returns hadron-nucleon Xsc according to PDG parametrisation (2005):
+// http://pdg.lbl.gov/2006/reviews/hadronicrpp.pdf
+//  At = number of nucleons,  Zt = number of protons 
+
+G4double 
+G4GlauberGribovCrossSection::GetHadronNucleaonXscPDG(const G4DynamicParticle* aParticle, 
+                                                     G4double At,  G4double Zt )
+{
+  G4double xsection;
 
   G4double Nt = At-Zt;              // number of neutrons
   if (Nt < 0.) Nt = 0.;  
@@ -240,7 +261,7 @@ G4GlauberGribovCrossSection::GetHadronNucleaonXscPDG(const G4DynamicParticle* aP
   G4double targ_mass = G4ParticleTable::GetParticleTable()->
   GetIonTable()->GetIonMass( G4int(Zt+0.5) , G4int(At+0.5) );
 
-  targ_mass = 1.*GeV;
+  targ_mass = 0.939*GeV;  // ~mean neutron and proton ???
 
   G4double proj_mass     = aParticle->GetMass();
   G4double proj_momentum = aParticle->GetMomentum().mag();
