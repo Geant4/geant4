@@ -90,13 +90,13 @@ G4GlauberGribovCrossSection::~G4GlauberGribovCrossSection()
 G4bool 
 G4GlauberGribovCrossSection::IsApplicable(const G4DynamicParticle* aDP, const G4Element*  anElement)
 {
-  G4bool applicable  = false;
-  G4int baryonNumber     = aDP->GetDefinition()->GetBaryonNumber();
+  G4bool applicable      = false;
+  // G4int baryonNumber     = aDP->GetDefinition()->GetBaryonNumber();
   G4double kineticEnergy = aDP->GetKineticEnergy();
 
   const G4ParticleDefinition* theParticle = aDP->GetDefinition();
  
-  if ( kineticEnergy / baryonNumber <= fUpperLimit &&
+  if ( kineticEnergy  <= fUpperLimit && kineticEnergy  >= fLowerLimit &&
        anElement->GetZ() > 1. &&      // >=  He
        ( theParticle == theProton    ||
          theParticle == theAProton   ||
