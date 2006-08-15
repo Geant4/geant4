@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronElasticPhysics.cc,v 1.16 2006-08-10 17:18:29 vnivanch Exp $
+// $Id: G4HadronElasticPhysics.cc,v 1.17 2006-08-15 14:19:32 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -47,8 +47,6 @@
 #include "G4HadronElasticProcess.hh"
 #include "G4HadronicInteraction.hh"
 #include "G4LElastic.hh"
-#include "G4NeutronHPElastic.hh"
-#include "G4NeutronHPElasticData.hh"
 
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
