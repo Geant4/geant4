@@ -44,7 +44,7 @@
 //       1         2         3         4         5         6         7         8         9
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 
-//#define nout
+#define nout
 //#define pscan
 //#define smear
 //#define escan
@@ -52,6 +52,7 @@
 //#define tdebug
 //#define debug
 //#define pdebug
+//#define hdebug
 // ------------------------------------- FLAGS ------------------
 #include "G4UIterminal.hh"
 #include "globals.hh"
@@ -71,8 +72,21 @@
 #include "G4ProcessManager.hh"
 #include "G4VParticleChange.hh"
 #include "G4ParticleChange.hh"
-#include "G4QCaptureAtRest.hh"
+
 #include "G4QCollision.hh"
+#include "G4TheoFSGenerator.hh"
+#include "G4StringChipsParticleLevelInterface.hh"
+#include "G4QGSModel.hh"
+#include "G4QGSParticipants.hh"
+#include "G4QGSMFragmentation.hh"
+#include "G4ExcitedStringDecay.hh"
+#include "G4ProtonInelasticProcess.hh"
+#include "G4ProtonInelasticCrossSection.hh"
+#include "G4PionPlusInelasticProcess.hh"
+#include "G4PiNuclearCrossSection.hh"
+#include "G4PionMinusInelasticProcess.hh"
+#include "G4KaonPlusInelasticProcess.hh"
+#include "G4KaonMinusInelasticProcess.hh"
 //#include "G4QuasmonString.hh"
 
 #include "G4ApplicationState.hh"
@@ -82,6 +96,7 @@
 #include "G4ParticleTable.hh"
 #include "G4ParticleChange.hh"
 #include "G4DynamicParticle.hh"
+#include "G4ShortLivedConstructor.hh"
 #include "G4AntiProton.hh"
 #include "G4Neutron.hh"
 #include "G4Proton.hh"
@@ -133,11 +148,14 @@
 #include "G4Timer.hh"
 #include "time.h"
 
-//#define debug
-
 //int main(int argc, char** argv)
 int main()
 {
+#ifdef hdebug
+		G4StringChipsParticleLevelInterface::SetMaxB(20.); // Impact parameter limit
+		G4StringChipsParticleLevelInterface::SetMaxE(20.); // Energy deposition limit
+		G4StringChipsParticleLevelInterface::Reset();   // Initialize historgamming in the class
+#endif
   const G4int nTg=5;   // Length of the target list for the Performance test
   G4int tli[nTg]={90001000,90002002,90007007,90027032,90092146}; // PDG Codes of targets
   G4String tnm[nTg]={"Hydrogen","Helium","Nitrogen","Cobalt","Uranium"}; // Target names
@@ -157,170 +175,10 @@ int main()
   G4double tVal[nT];           // -t values for centers of bins of the t-hystogram
   G4int tSig[nT];              // t-histogram (filled and reset many times
 #endif
-  const G4int nAZ=270;         // Dimension of the table
-  const G4int mAZ=266;         // Maximum filled A (at present). Must be mAZ<nAZ
-  // Best Z for the given A - changed by MK (@@Not one-to-one correspondance! Make alt "-")
-  const G4int bestZ[nAZ] = {
-     0,  1,  1,  2,  2,  0,  3,  3,  4,  4,   //0
-     5,  5,  6,  6,  7,  7,  8,  8,  8,  9,   //10
-    10, 10, 10, 11, 12, 12, 12, 13, 14, 14,   //20
-    14, 15, 16, 16, 16, 17, 18, 17, 18, 19,   //30
-    18, 19, 20, 20, 20, 21, 22, 22, 23, 23,   //40
-    22, 23, 24, 24, 26, 25, 26, 26, 28, 27,   //50
-    28, 28, 28, 29, 30, 29, 30, 30, 30, 31,   //60
-    32, 31, 32, 32, 32, 33, 34, 34, 34, 35,   //70
-    34, 35, 36, 36, 36, 37, 39, 36, 38, 39,   //80
-    40, 40, 41, 40, 40, 42, 42, 42, 42, 44,   //90
-    44, 44, 44, 45, 44, 46, 46, 47, 46, 47,   //100
-    48, 48, 48, 48, 48, 49, 50, 50, 50, 50,   //110
-    50, 51, 50, 51, 50, 52, 52, 53, 52, 54,   //120
-    52, 54, 54, 55, 54, 56, 54, 56, 56, 57,   //130
-    58, 59, 60, 60, 60, 60, 60, 62, 62, 62,   //140
-    62, 63, 62, 63, 62, 64, 64, 64, 64, 65,   //150
-    64, 66, 66, 66, 66, 67, 68, 68, 68, 69,   //160
-    68, 70, 70, 70, 70, 71, 70, 72, 72, 72,   //170
-    72, 73, 74, 74, 74, 75, 74, 75, 76, 76,   //180
-    76, 77, 76, 77, 78, 78, 78, 79, 80, 80,   //190
-    80, 80, 80, 81, 80, 81, 82, 82, 82, 83,   //200
-    82,  0, 82,  0, 82,  0, 84,  0,  0,  0,   //210
-    86,  0, 86, 87, 88,  0, 88, 89, 88, 89,   //220
-    89, 91, 90,  0, 92, 92,  0, 93, 92, 94,   //230
-     0,  0,  0, 95, 94,  0,  0, 96,  0,  0,   //240
-     0, 98, 99,  0,  0,  0,  0,100,101,102,   //250
-   103,104,105,106,  0,108,109,  0,  0,  0};  //260
-  // 0   1   2   3   4   5   6   7   8   9
-  // Second candidate
-  const G4int secoZ[nAZ] = {
-     0,  0,  0,  1,  0,  0,  0,  4,  0,  0,   //0
-     4,  6,  5,  7,  0,  8,  0,  0,  0,  8,   //10
-     0,  0,  0,  0,  0,  0,  0,  0,  0,  0,   //20
-     0,  0, 15,  0,  0, 16,  0,  0,  0,  0,   //30
-    20, 20,  0,  0,  0,  0, 20,  0,  0,  0,   //40
-    24,  0,  0,  0, 24,  0,  0,  0, 26,  0,   //50
-    27,  0,  0,  0, 28,  0,  0,  0,  0,  0,   //60
-    30,  0,  0,  0, 34,  0, 32,  0,  0,  0,   //70
-    36,  0, 34,  0, 38,  0, 38, 38,  0,  0,   //80
-     0,  0, 42,  0, 42,  0, 44,  0, 44,  0,   //90
-    42,  0, 46,  0, 46,  0, 48,  0, 48,  0,   //100
-    46,  0, 50, 49, 50, 50, 48,  0,  0,  0,   //110
-    52,  0, 52,  0, 52,  0, 54,  0, 54,  0,   //120
-    54,  0, 56,  0, 56,  0, 56,  0, 58,  0,   //130
-    54,  0, 58,  0, 62, 61,  0,  0, 60,  0,   //140
-    60,  0, 64,  0, 64,  0, 66,  0, 66,  0,   //150
-    66,  0, 68,  0, 68,  0,  0,  0, 70,  0,   //160
-    70,  0,  0,  0, 72,  0, 72,  0,  0,  0,   //170
-    74,  0,  0,  0, 76,  0, 76, 76,  0,  0,   //180
-    78,  0, 78,  0,  0,  0, 80,  0, 78,  0,   //190
-     0,  0,  0,  0, 82,  0,  0,  0,  0, 84,   //200
-    84,  0, 83,  0, 83,  0,  0,  0,  0,  0,   //210
-     0,  0,  0,  0,  0,  0,  0,  0, 89,  0,   //220
-     0,  0,  0,  0, 93,  0,  0,  0, 93,  0,   //230
-     0,  0,  0,  0,  0,  0,  0, 97,  0,  0,   //240
-     0,  0,  0,  0,  0,  0,  0,  0,  0,  0,   //250
-     0,  0,107,  0,  0,  0,  0,  0,  0,  0};  //260
-  // 0   1   2   3   4   5   6   7   8   9
-  // Second candidate
-  const G4int thrdZ[nAZ] = {
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //0
-    0, 0, 7, 0, 0, 0, 0, 0, 0, 0,   //10
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //20
-    0, 0, 0, 0, 0,20, 0, 0, 0, 0,   //30
-   19, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //40
-   23, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //50
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //60
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //70
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //80
-    0, 0,36, 0,38, 0,40, 0, 0, 0,   //90
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //100
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //110
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //120
-   56, 0,50, 0, 0, 0,58, 0,57, 0,   //130
-    0, 0, 0, 0, 0, 0, 0, 0,65, 0,   //140
-    0, 0,66, 0, 0, 0, 0, 0, 0, 0,   //150
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //160
-    0, 0, 0, 0, 0, 0,71, 0, 0, 0,   //170
-   73, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //180
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //190
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //200
-   83, 0,84, 0,84, 0, 0, 0, 0, 0,   //210
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //220
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //230
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //240
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //250
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0};  //260
-  //0  1  2  3  4  5  6  7  8  9
-  // Fourth candidate (only two isotopes)
-  const G4int quadZ[nAZ] = {
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //0
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //10
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //20
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //30
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //40
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //50
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //60
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //70
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //80
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //90
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //100
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //110
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //120
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //130
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //140
-    0, 0,67, 0, 0, 0, 0, 0, 0, 0,   //150
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //160
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //170
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //180
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //190
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //200
-   85, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //210
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //220
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //230
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //240
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //250
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0};  //260
-  //0  1  2  3  4  5  6  7  8  9
-
-  // Test of not overlaping four tables above (can be commented)
-  if(mAZ>=nAZ) G4cout<<"***Test19: Too big mAZ="<<mAZ<<", nAZ="<<nAZ<<G4endl;
-
   // Run manager
   G4RunManager* runManager = new G4RunManager;
   runManager->SetUserInitialization(new Test19PhysicsList);
 		G4StateManager::GetStateManager()->SetNewState(G4State_Init); // To let create ions
-  G4ParticleDefinition* ionDefinition=0;
-  ionDefinition=G4ParticleTable::GetParticleTable()->FindIon(6,12,0,6);
-		if(!ionDefinition)
-		{
-    G4cerr<<"*** Error! *** Test29:(6,6) ion can not be defined"<<G4endl;
-    return 0;
-  }
-  else G4cout<<"Test29: (6,6) ion is OK, Run State="<<G4StateManager::GetStateManager()->
-              GetStateString(G4StateManager::GetStateManager()->GetCurrentState())<<G4endl;
-
-  for(G4int a=1; a<nAZ; a++)
-  {
-    G4int z1=bestZ[a]; // First table
-    G4int z2=secoZ[a]; // Second table
-    G4int z3=thrdZ[a]; // Third table
-    G4int z4=quadZ[a]; // Fourth table
-    if(z2)
-	   {
-      if(z1==z2)G4cout<<"#"<<a<<": z1="<<z1<<" = z2="<<z2<<", z3="<<z3<<",z4="<<z4<<G4endl;
-      if(z3)
-	     {
-        if(z1==z3)G4cout<<"#"<<a<<",z1="<<z1<<" = z3="<<z3<<",z2="<<z2<<",z4="<<z4<<G4endl;
-        if(z2==z3)G4cout<<"#"<<a<<",z1="<<z1<<",z2="<<z2<<" = z3="<<z3<<",z4="<<z4<<G4endl;
-        if(z4)
-	       {
-          if(z1==z4)G4cout<<"#"<<a<<",z1="<<z1<<"=z4="<<z4<<",z2="<<z2<<",z3="<<z3<<G4endl;
-          if(z2==z4)G4cout<<"#"<<a<<",z1="<<z1<<",z2="<<z2<<"=z4="<<z4<<",z3="<<z3<<G4endl;
-          if(z3==z4)G4cout<<"#"<<a<<",z1="<<z1<<",z2="<<z2<<",z3="<<z3<<"=z4="<<z4<<G4endl;
-        }
-      }
-      else if(z4) G4cout<<"#"<<a<<",z1="<<z1<<",z2="<<z2<<",z3=0.(!) & z4="<<z4<<G4endl;
-    }
-    else if(z3||z4)G4cout<<"#"<<a<<",z1="<<z1<<",z2=0.(!) & z3="<<z3<<" & z4="<<z4<<G4endl;
-  }
 #ifdef debug
   G4cout<<"Test19: Prepare G4QHBook files or ntuples"<<G4endl;
 #endif
@@ -358,6 +216,119 @@ int main()
   G4QCollision::SetParameters(temperature,ssin2g,eteps,fN,fD,cP,rM,nop,sA);
   G4QCollision::SetManual();
   // ********** Now momb is a momentum of the incident particle, if =0 => LOOP ************
+  // Not necessary for CHIPS, only for GHAD: fake force condition
+  G4ForceCondition* cond = new G4ForceCondition;
+  *cond=NotForced;
+  // Construct all particles of G4
+  ///G4ParticlePhysics* allParticles = new G4ParticlePhysics(); // Short cut from IntPhysL
+  ///allParticles->ConstructParticle();
+// pseudo-particles
+  G4Geantino::GeantinoDefinition();
+  G4ChargedGeantino::ChargedGeantinoDefinition();
+  
+// gamma
+  G4Gamma::GammaDefinition();
+  
+// optical photon
+  G4OpticalPhoton::OpticalPhotonDefinition();
+
+// leptons
+  G4Electron::ElectronDefinition();
+  G4Positron::PositronDefinition();
+  G4MuonPlus::MuonPlusDefinition();
+  G4MuonMinus::MuonMinusDefinition();
+  G4TauPlus::TauPlusDefinition();
+  G4TauMinus::TauMinusDefinition();
+
+  G4NeutrinoE::NeutrinoEDefinition();
+  G4AntiNeutrinoE::AntiNeutrinoEDefinition();
+  G4NeutrinoMu::NeutrinoMuDefinition();
+  G4AntiNeutrinoMu::AntiNeutrinoMuDefinition();  
+  G4NeutrinoTau::NeutrinoTauDefinition();
+  G4AntiNeutrinoTau::AntiNeutrinoTauDefinition();  
+
+// mesons
+  G4PionPlus::PionPlusDefinition();
+  G4PionMinus::PionMinusDefinition();
+  G4PionZero::PionZeroDefinition();
+
+  G4Eta::EtaDefinition();
+  G4EtaPrime::EtaPrimeDefinition();
+
+  G4KaonPlus::KaonPlusDefinition();
+  G4KaonMinus::KaonMinusDefinition();
+  G4KaonZero::KaonZeroDefinition();
+  G4AntiKaonZero::AntiKaonZeroDefinition();
+  G4KaonZeroLong::KaonZeroLongDefinition();
+  G4KaonZeroShort::KaonZeroShortDefinition();
+
+  G4DMesonPlus::DMesonPlusDefinition();
+  G4DMesonMinus::DMesonMinusDefinition();
+  G4DMesonZero::DMesonZeroDefinition();
+  G4AntiDMesonZero::AntiDMesonZeroDefinition();
+  G4DsMesonPlus::DsMesonPlusDefinition();
+  G4DsMesonMinus::DsMesonMinusDefinition();
+  G4JPsi::JPsiDefinition();
+
+  G4BMesonPlus::BMesonPlusDefinition();
+  G4BMesonMinus::BMesonMinusDefinition();
+  G4BMesonZero::BMesonZeroDefinition();
+  G4AntiBMesonZero::AntiBMesonZeroDefinition();
+  G4BsMesonZero::BsMesonZeroDefinition();
+  G4AntiBsMesonZero::AntiBsMesonZeroDefinition();
+
+// barions
+  G4Proton::ProtonDefinition();
+  G4AntiProton::AntiProtonDefinition();
+  G4Neutron::NeutronDefinition();
+  G4AntiNeutron::AntiNeutronDefinition();
+
+  G4Lambda::LambdaDefinition();
+  G4SigmaPlus::SigmaPlusDefinition();
+  G4SigmaZero::SigmaZeroDefinition();
+  G4SigmaMinus::SigmaMinusDefinition();
+  G4XiMinus::XiMinusDefinition();
+  G4XiZero::XiZeroDefinition();
+  G4OmegaMinus::OmegaMinusDefinition();
+
+  G4AntiLambda::AntiLambdaDefinition();
+  G4AntiSigmaPlus::AntiSigmaPlusDefinition();
+  G4AntiSigmaZero::AntiSigmaZeroDefinition();
+  G4AntiSigmaMinus::AntiSigmaMinusDefinition();
+  G4AntiXiMinus::AntiXiMinusDefinition();
+  G4AntiXiZero::AntiXiZeroDefinition();
+  G4AntiOmegaMinus::AntiOmegaMinusDefinition();
+
+  G4LambdacPlus::LambdacPlusDefinition();
+  G4SigmacPlusPlus::SigmacPlusPlusDefinition();
+  G4SigmacPlus::SigmacPlusDefinition();
+  G4SigmacZero::SigmacZeroDefinition();
+  G4XicPlus::XicPlusDefinition();
+  G4XicZero::XicZeroDefinition();
+  G4OmegacZero::OmegacZeroDefinition();
+
+  G4AntiLambdacPlus::AntiLambdacPlusDefinition();
+  G4AntiSigmacPlusPlus::AntiSigmacPlusPlusDefinition();
+  G4AntiSigmacPlus::AntiSigmacPlusDefinition();
+  G4AntiSigmacZero::AntiSigmacZeroDefinition();
+  G4AntiXicPlus::AntiXicPlusDefinition();
+  G4AntiXicZero::AntiXicZeroDefinition();
+  G4AntiOmegacZero::AntiOmegacZeroDefinition();
+
+// ions
+  G4Deuteron::DeuteronDefinition();
+  G4Triton::TritonDefinition();
+  G4He3::He3Definition();
+  G4Alpha::AlphaDefinition();
+  G4GenericIon::GenericIonDefinition();
+  //////////  IonC12::IonDefinition();
+  //  Construct light ions @@ Is that the same as above?
+  G4IonConstructor pConstructor;
+  pConstructor.ConstructParticle();
+  //  Construct shortlived particles
+  G4ShortLivedConstructor pShortLivedConstructor;
+  pShortLivedConstructor.ConstructParticle();  
+  //
   G4double mp=G4QPDGCode(pPDG).GetMass();
   G4double ep=mp;
   G4int cnE=1;
@@ -424,7 +395,51 @@ int main()
   // Different Process Managers are used for the atRest and onFlight processes
 		//G4ProcessManager* man = new G4ProcessManager(part); //Does not help to go out
   //G4VDiscreteProcess* proc = new G4QCollision;
-  G4QCollision* proc = new G4QCollision;
+  G4QCollision* proc = new G4QCollision;              // A simple CHIPS process
+  // **************** GHAD process definition starts here
+		///G4TheoFSGenerator* aModel = new G4TheoFSGenerator;           // The same for QGS & FTF
+  ///G4StringChipsParticleLevelInterface* theCHIPS=new G4StringChipsParticleLevelInterface;
+#ifdef pdebug
+  ///G4cout<<"Tst19:*> Nuclear fragmentation model is defined"<<G4endl;
+#endif
+  // ------------- Defines a Kind of nuclear fragmentation model--------
+  ///aModel->SetTransport(theCHIPS);
+		///G4QGSModel<G4QGSParticipants>* aStringModel = new G4QGSModel<G4QGSParticipants>;
+#ifdef pdebug
+  ///G4cout<<"Tst19:*> Intranuclear transport model is defined"<<G4endl;
+#endif
+		// ----------- Defines a Kind of the QGS model -------------
+  ///G4QGSMFragmentation aFragmentation;       // @@ Can be a general solution (move up)
+  ///G4ExcitedStringDecay* aStringDecay = new G4ExcitedStringDecay(&aFragmentation);
+  ///aStringModel->SetFragmentationModel(aStringDecay);
+  ///aModel->SetHighEnergyGenerator(aStringModel);
+#ifdef pdebug
+  ///G4cout<<"Tst19:*> String model is defined"<<G4endl;
+#endif
+  // ----------- Defines energy limits of the model ----------
+		///aModel->SetMinEnergy(8*GeV);                // Do we need this ?
+		///aModel->SetMaxEnergy(100*TeV);              // Do we need that ?
+  ///G4HadronInelasticProcess* proc = 0;
+  ///if     (pPDG==2212) proc = new G4ProtonInelasticProcess;
+  ///else if(pPDG==-211) proc = new G4PionMinusInelasticProcess;
+  ///else if(pPDG== 211) proc = new G4PionPlusInelasticProcess;
+  ///else if(pPDG==-321) proc = new G4KaonMinusInelasticProcess;
+  ///else if(pPDG== 321) proc = new G4KaonPlusInelasticProcess;
+  ///else G4cout<<"-Error-Tst19: Process is not defined for PDG="<<pPDG<<G4endl;
+  /////G4HadronInelasticProcess* proc = proc;    //@@ Can be a general solution (move up)
+  // ------------- The process must be charged by the model ------------------------
+  ///proc->RegisterMe(aModel); // from G4HadronicProcess
+  //G4ProtonInelasticCrossSection* theCS = new G4ProtonInelasticCrossSection;
+  ///G4VCrossSectionDataSet* theCS = new G4ProtonInelasticCrossSection;
+  ///if(pPDG==2212) theCS = new G4ProtonInelasticCrossSection;
+  ///else           theCS = new G4PiNuclearCrossSection; // @@ There is no pi+,pi-,K=,K-(?)
+  ///proc->AddDataSet(theCS);   // Can not be skipped for the event generator
+		//proc->AddDiscreteProcess(theInelasticProcess); // Charged by "aModel"
+		//}
+  //G4QCollision* proc = new G4QCollision; // This is a universal process of CHIPS
+  //G4VRestProcess* proc = new G4QCaptureAtRest;
+  //G4QCaptureAtRest* proc = new G4QCaptureAtRest;
+  // **************** GHAD process definition stops here ****************
   if(!proc)
   {
     G4cout<<"Tst19: there is no G4QCollision process"<<G4endl;
@@ -433,8 +448,14 @@ int main()
 #ifdef debug
   G4cout<<"Test19:--***-- process is created --***--" << G4endl; // only one run
 #endif
+  // !! Only for CHIPS
   proc->SetParameters(temperature, ssin2g, eteps, fN, fD, cP, rM, nop, sA);
+  //
   //man->AddDiscreteProcess(proc); //Does not help to go out
+#ifdef hdebug
+  G4Timer* timer = new G4Timer();
+  timer->Start();
+#endif
   G4int nTot=npart*tgm*cnE;
   G4int nCur=0;
   for(G4int pnb=0; pnb<npart; pnb++) // LOOP over particles
@@ -560,7 +581,8 @@ int main()
       G4cout<<"Test19: Material="<<material->GetName()<<", Element[0]="<<curEl->GetName()
 												<<",A[0]="<<(*(curEl->GetIsotopeVector()))[0]->GetN()<<" is selected."<<G4endl;
      }
-  			G4cout<<"Test19:NewRun:Targ="<<tPDG<<",Proj="<<pPDG<<", "<<nCur<<" of "<<nTot<<G4endl;
+  			G4cout<<"Test19:NewRun: Targ="<<tPDG<<", Proj="<<pPDG<<", E="<<energy<<" MeV, Run #"
+           <<nCur<<" of "<<nTot<<G4endl;
      G4double mt=G4QPDGCode(tPDG).GetMass();             // @@ just for check
      G4QContent tQC=G4QPDGCode(tPDG).GetQuarkContent();
      G4int    ct=tQC.GetCharge();
@@ -595,6 +617,18 @@ int main()
      step->SetStepLength(theStep);    // Step is set byCard above
 #ifdef pverb
      G4cout<<"Test19: The end point is defined and filled in the step "<<G4endl;
+#endif
+     G4Navigator* nav = new G4Navigator;
+#ifdef pverb
+     G4cout<<"Test19: The Navigator is defined "<<G4endl;
+#endif
+     nav->SetWorldVolume(pFrame);
+#ifdef pverb
+     G4cout<<"Test19: The Box frame is set "<<G4endl;
+#endif
+     G4TouchableHandle touch(nav->CreateTouchableHistory());
+#ifdef pverb
+    G4cout<<"Test19: The TouchableHandle is defined "<<G4endl;
 #endif
      G4Timer* timer = new G4Timer();
      timer->Start();
@@ -638,6 +672,12 @@ int main()
 
       gTrack->SetStep(step);            // Now step is included in the Track (see above)
       gTrack->SetKineticEnergy(energy); // Duplication of Kin. Energy for the Track (?!)
+      gTrack->SetTouchableHandle(touch);// Set Box touchable history
+#ifdef debug
+      G4cout<<"Test19: Before the fake proc->GetMeanFreePath call"<<G4endl;
+#endif
+      // CHIPS does not need it: keep only for GHAD
+						proc->GetMeanFreePath(*gTrack,0.1,cond); // Fake call to avoid complains of GHAD
 #ifdef debug
       G4cout<<"Test19: Before PostStepDoIt"<<G4endl;
 #endif
@@ -648,13 +688,21 @@ int main()
       G4int nSec = aChange->GetNumberOfSecondaries();
       //G4cout<<"Test19: "<<nSec<<" secondary particles are generated"<<G4endl;
       G4double totCharge = totC;
+      // !! Only for CHIPS
       G4int    curN=proc->GetNumberOfNeutronsInTarget();
+      // for GHAD
+      ///G4int    curN = tgN;
+      //
       G4int    dBN = curN-tgN;
       G4int    totBaryN = totBN+dBN;
       G4int    curPDG=tPDG+dBN;
       G4double curM=G4QPDGCode(curPDG).GetMass(); // Update mass of the TargetNucleus
       totSum = G4LorentzVector(0., 0., pmax, et+curM-mt);
+      // !! Only for CHIPS
       G4LorentzVector Residual=proc->GetEnegryMomentumConservation();
+      // for GHAD
+      ///G4LorentzVector Residual(0.,0.,0.,0.);
+      //
 #ifdef debug
       G4double de = aChange->GetLocalEnergyDeposit();// Init TotalEnergy by EnergyDeposit
       G4cout<<"Test19: "<<nSec<<" secondary particles are generated, dE="<<de<<G4endl;
@@ -787,8 +835,8 @@ int main()
 #ifdef pdebug
       G4cout<<">TEST19:r4M="<<totSum<<ss<<",rCh="<<totCharge<<",rBaryN="<<totBaryN<<G4endl;
 #endif
-	     //if (1>2) // @@ The check is temporary closed
-						if (totCharge ||totBaryN || ss>.27 || alarm || nGamma&&!EGamma)
+	     //if (1>2) // @@ The check is temporary closed for not CHIPS
+						if (totCharge ||totBaryN || ss>.27 || alarm || nGamma&&!EGamma) // Only for CHIPS
       {
         totSum = G4LorentzVector(0., 0., pmax, et);
         G4cerr<<"**Test19:#"<<iter<<":n="<<nSec<<",4M="<<totSum<<",Charge="<<totCharge
@@ -865,6 +913,27 @@ int main()
   //G4cout << "Test19: Before ntp" << G4endl;
 	 delete ntp; // Delete the class to fill the#of events
   //G4cout << "Test19: After ntp" << G4endl;
+#endif
+#ifdef hdebug
+  timer->Stop();
+		G4int    nbnh=G4StringChipsParticleLevelInterface::GetNbn();
+		G4double hbdb=G4StringChipsParticleLevelInterface::GetDB();
+		//G4double hede=G4StringChipsParticleLevelInterface::GetDE(); // The same now
+		G4double toth=G4StringChipsParticleLevelInterface::GetTot();
+		G4double ovrb=G4StringChipsParticleLevelInterface::GetBov();
+		G4double ovre=G4StringChipsParticleLevelInterface::GetEov();
+  G4cout<<"Test19:TimePerEvent="<<timer->GetUserElapsed()/toth<<", N="<<toth
+        <<", overB="<<ovrb/toth<<", overE="<<ovre/toth<<G4endl;
+  delete timer;
+  G4double bc=-hbdb/2;
+  for(G4int ih=0; ih<nbnh; ih++)
+		{
+    bc+=hbdb;
+    G4double nE=G4StringChipsParticleLevelInterface::GetE(ih);
+    G4double nB=G4StringChipsParticleLevelInterface::GetB(ih);
+    G4cout<<"Test19:be="<<bc<<" "<<nE/toth<<" "<<std::sqrt(nE)/toth
+          <<" "<<nB/toth/bc<<" "<<std::sqrt(nB)/toth/bc<<G4endl;
+  }
 #endif
   delete runManager;
 #ifdef pverb
