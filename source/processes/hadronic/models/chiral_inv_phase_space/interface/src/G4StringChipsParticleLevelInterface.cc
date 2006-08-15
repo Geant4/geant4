@@ -25,6 +25,7 @@
 //
 
 //#define debug
+//#define trapdebug
 //#define pdebug
 //#define ppdebug
 
@@ -256,6 +257,7 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
   G4ReactionProductVector* theResult = new G4ReactionProductVector;
   G4ReactionProduct* theSec;
   G4KineticTrackVector* secondaries;
+  G4KineticTrackVector* secsec;
 #ifdef pdebug
   G4cout<<"G4StringChipsParticleLevelInterface::Propagate: Absorption nS="
         <<theSorted.size()<<G4endl; 
@@ -486,42 +488,84 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
     G4KineticTrack* aResult = (*current).second;
     G4ParticleDefinition* pdef=aResult->GetDefinition();
     secondaries = NULL;
-    if(pdef->GetPDGWidth() > 0 && pdef->GetPDGLifeTime() < 5E-17*s )
+    //if(pdef->GetPDGWidth() > 0 && pdef->GetPDGLifeTime() < 5E-17*s ) // HPW version
+    if ( pdef->IsShortLived() )
     {
-      secondaries = aResult->Decay();  // @@ Uses standard Decay, which is now wrong!
+      secondaries = aResult->Decay();
+      for (unsigned int aSecondary=0; aSecondary<secondaries->size(); aSecondary++)
+      {
+        G4KineticTrack* bResult=secondaries->operator[](aSecondary);
+        G4ParticleDefinition* sdef=bResult->GetDefinition();
+        if ( sdef->IsShortLived() )
+        {
+          secsec = bResult->Decay();
+          for (unsigned int bSecondary=0; bSecondary<secsec->size(); bSecondary++)
+          {
+             G4KineticTrack* cResult=secsec->operator[](bSecondary);
+             G4ParticleDefinition* cdef=cResult->GetDefinition();
+             theSec = new G4ReactionProduct(cdef);
+             G4LorentzVector cur4Mom = cResult->Get4Momentum();
+             cur4Mom.boost(targ4Mom.boostVector());
+             theSec->SetTotalEnergy(cur4Mom.t());
+             theSec->SetMomentum(cur4Mom.vect());
+#ifdef trapdebug
+				         if(cdef->GetPDGEncoding()==113) G4cout
+                <<"G4StringChipsParticleLevelInterface::Propagate: *Rho0* QGS dec2 PDG="
+                <<cdef->GetPDGEncoding()<<",4M="<<cur4Mom<<", grandparPDG= "
+                <<pdef->GetPDGEncoding()<<", parPDG= "<<sdef->GetPDGEncoding()<<G4endl; 
+#endif
+#ifdef pdebug
+				         G4cout<<"G4StringChipsParticleLevelInterface::Propagate: *OUT* QGS dec2 PDG="
+              <<sdef->GetPDGEncoding()<<",4M="<<cur4Mom<<G4endl; 
+#endif
+             theResult->push_back(theSec);
+          }
+          std::for_each(secsec->begin(), secsec->end(), DeleteKineticTrack());
+          delete secsec;
+        }
+        else
+        {
+          theSec = new G4ReactionProduct(sdef);
+          G4LorentzVector current4Mom = bResult->Get4Momentum();
+          current4Mom.boost(targ4Mom.boostVector());
+          theSec->SetTotalEnergy(current4Mom.t());
+          theSec->SetMomentum(current4Mom.vect());
+#ifdef trapdebug
+				      if(sdef->GetPDGEncoding()==113)
+            G4cout<<"G4StringChipsParticleLevelInterface::Propagate:*Rho0* QGS decay PDG="
+                  <<sdef->GetPDGEncoding()<<",4M="<<current4Mom<<", parentPDG= "
+                  <<pdef->GetPDGEncoding()<<G4endl; 
+        //throw G4HadronicException(__FILE__,__LINE__,
+        //                          "G4StringChipsParticleLevelInterface: Rho0 is found!");
+#endif
+#ifdef pdebug
+				      G4cout<<"G4StringChipsParticleLevelInterface::Propagate: *OUT* QGS decay PDG="
+                <<sdef->GetPDGEncoding()<<",4M="<<current4Mom<<G4endl; 
+#endif
+          theResult->push_back(theSec);
+        }
+      }
+      std::for_each(secondaries->begin(), secondaries->end(), DeleteKineticTrack());
+      delete secondaries;
     }
-    if ( secondaries == NULL )
+    else
     {
       theSec = new G4ReactionProduct(aResult->GetDefinition());
       G4LorentzVector current4Mom = aResult->Get4Momentum();
       current4Mom.boost(targ4Mom.boostVector());
       theSec->SetTotalEnergy(current4Mom.t());
       theSec->SetMomentum(current4Mom.vect());
+#ifdef trapdebug
+				  if(aResult->GetDefinition()->GetPDGEncoding()==113)
+        G4cout<<"G4StringChipsParticleLevelInterface::Propagate: *OUT* QGS stable PDG="
+              <<aResult->GetDefinition()->GetPDGEncoding()<<",4M="<<current4Mom<<G4endl; 
+#endif
 #ifdef pdebug
 				  G4cout<<"G4StringChipsParticleLevelInterface::Propagate: *OUT* QGS stable PDG="
             <<aResult->GetDefinition()->GetPDGEncoding()<<",4M="<<current4Mom<<G4endl; 
 #endif
       theResult->push_back(theSec);
     } 
-    else
-    {
-      for (unsigned int aSecondary=0; aSecondary<secondaries->size(); aSecondary++)
-      {
-        theSec=new G4ReactionProduct(secondaries->operator[](aSecondary)->GetDefinition());
-        G4LorentzVector current4Mom = secondaries->operator[](aSecondary)->Get4Momentum();
-        current4Mom.boost(targ4Mom.boostVector());
-        theSec->SetTotalEnergy(current4Mom.t());
-        theSec->SetMomentum(current4Mom.vect());
-#ifdef pdebug
-				    G4cout<<"G4StringChipsParticleLevelInterface::Propagate: *OUT* QGS decay PDG="
-              <<secondaries->operator[](aSecondary)->GetDefinition()->GetPDGEncoding()
-              <<",4M="<<current4Mom<<G4endl; 
-#endif
-        theResult->push_back(theSec);
-      }
-      std::for_each(secondaries->begin(), secondaries->end(), DeleteKineticTrack());
-      delete secondaries;
-    }
   }
   std::for_each(theSecondaries->begin(), theSecondaries->end(), DeleteKineticTrack());
   delete theSecondaries;

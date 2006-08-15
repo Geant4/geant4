@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QCaptureAtRest.cc,v 1.4 2006-08-09 10:19:22 mkossov Exp $
+// $Id: G4QCaptureAtRest.cc,v 1.5 2006-08-15 17:13:22 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCaptureAtRest class -----------------
@@ -289,7 +289,13 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
 #endif
   G4double      localtime = track.GetGlobalTime();
   G4ThreeVector position  = track.GetPosition();
+#ifdef debug
+  G4cout<<"G4QCaptureAtRest::AtRestDoIt: t="<<localtime<<", p="<<position<<G4endl;
+#endif
   G4TouchableHandle trTouchable = track.GetTouchableHandle();
+#ifdef debug
+  G4cout<<"G4QCaptureAtRest::AtRestDoIt: touch="<<trTouchable<<G4endl;
+#endif
   localtime += Time;
 	 std::vector<G4double>* cascE = new std::vector<G4double>;
 	 std::vector<G4Track*>* cascT = new std::vector<G4Track*>;
