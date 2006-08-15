@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.hh,v 1.56 2006-06-29 19:54:49 gunter Exp $
+// $Id: G4VEnergyLossProcess.hh,v 1.57 2006-08-15 16:21:39 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -335,13 +335,14 @@ protected:
 
   G4double GetCurrentRange() const;
 
+  G4PhysicsVector* LambdaPhysicsVector(const G4MaterialCutsCouple*, G4double cut);
+
 private:
 
   // Clear tables
   void Clear();
 
   void DefineMaterial(const G4MaterialCutsCouple* couple);
-  G4PhysicsVector* LambdaPhysicsVector(const G4MaterialCutsCouple*, G4double cut);
 
   // Returnd values for scaled energy and base particles mass
   //
