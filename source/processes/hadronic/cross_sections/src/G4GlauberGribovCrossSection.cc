@@ -41,7 +41,7 @@
 
 G4GlauberGribovCrossSection::G4GlauberGribovCrossSection() 
 : fUpperLimit( 10000 * GeV ),
-  fLowerLimit( 1 * GeV ),
+  fLowerLimit( 3 * GeV ),
   fRadiusConst( 1.08*fermi )  // 1.1, 1.3 ?
 {
   theGamma    = G4Gamma::Gamma();
