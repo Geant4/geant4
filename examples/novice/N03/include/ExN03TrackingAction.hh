@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03TrackingAction.hh,v 1.5 2006-08-16 15:44:06 allison Exp $
+// $Id: ExN03TrackingAction.hh,v 1.6 2006-08-16 15:54:30 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -32,7 +32,6 @@
 #include "G4UserTrackingAction.hh"
 
 class G4Track;
-class G4PropagatorInField;
 
 ///////////////////////////
 class ExN03TrackingAction : public G4UserTrackingAction
