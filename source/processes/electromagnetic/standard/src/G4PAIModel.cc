@@ -586,6 +586,7 @@ G4PAIModel::SampleSecondaries( const G4MaterialCutsCouple* matCC,
   {
     G4cout<<"Tkin of secondary e- <= 0."<<G4endl;
     G4cout<<"G4PAIModel::SampleSecondary::deltaTkin = "<<deltaTkin<<G4endl;
+    G4cout<<"G4PAIModel::SampleSecondary::deltaTkin = "<<deltaTkin<<G4endl;
     // deltaTkin = 10*eV;
     G4cout<<"Set G4PAIModel::SampleSecondary::deltaTkin = "<<deltaTkin<<G4endl;
   }
@@ -594,7 +595,8 @@ G4PAIModel::SampleSecondaries( const G4MaterialCutsCouple* matCC,
   if(deltaTkin > kineticEnergy && 
      particleMass != electron_mass_c2) deltaTkin = kineticEnergy;
   if (deltaTkin > 0.5*kineticEnergy && 
-     dp->GetDefinition()->GetParticleName() == "e-") deltaTkin = 0.5*kineticEnergy;
+     (dp->GetDefinition()->GetParticleName() == "e-" || 
+     dp->GetDefinition()->GetParticleName() == "e+")    ) deltaTkin = 0.5*kineticEnergy;
 
   G4double deltaTotalMomentum = sqrt(deltaTkin*(deltaTkin + 2. * electron_mass_c2 ));
   G4double totalMomentum      = sqrt(pSquare);
