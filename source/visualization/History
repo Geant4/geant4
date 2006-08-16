@@ -1,4 +1,4 @@
-$Id: History,v 1.367 2006-08-16 12:51:48 allison Exp $
+$Id: History,v 1.368 2006-08-16 16:12:14 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,9 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+16th August 2006  John Allison
+- modeling-V08-01-03: Improved robustness of time slicing.
 
 ----------------------------------------------
 16th August 2006  John Allison  (vis-V08-01-03)
