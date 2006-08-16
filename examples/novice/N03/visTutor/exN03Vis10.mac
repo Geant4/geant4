@@ -59,9 +59,9 @@
 #   Shift + pick a volume : see mother.                               #
 #  - in viewing mode (cursor is the hand)                             #
 #   Left-button + pointer move : rotate.                              #
-#   Ctrl+Left-button + pointer move : pane.                           #
+#   Ctrl+Left-button + pointer move : pan.                            #
 #   Ctrl+Shift+Left-button + pointer move : scale.                    #
-#   Middle-button + pointer move : pane.                              #
+#   Middle-button + pointer move : pan.                               #
 #                                                                     #
 #######################################################################
 
