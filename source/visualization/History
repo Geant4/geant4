@@ -1,4 +1,4 @@
-$Id: History,v 1.366 2006-08-16 10:41:58 allison Exp $
+$Id: History,v 1.367 2006-08-16 12:51:48 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -24,7 +24,8 @@ committal in the CVS repository !
 History file for visualization category
 ---------------------------------------
 
-16th August 2006  John Allison
+----------------------------------------------
+16th August 2006  John Allison  (vis-V08-01-03)
 - opengl-V08-01-03:
   o Fixed Solaris compilation problem.
   o Added /vis/ogl/set/fade and displayHeadTime.
