@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ModelCommandsT.hh,v 1.8 2006-08-14 11:39:52 allison Exp $
+// $Id: G4ModelCommandsT.hh,v 1.9 2006-08-16 16:09:01 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Generic model messenges. 
@@ -618,8 +618,10 @@ public:
   G4ModelCmdSetTimeSliceInterval(M* model, const G4String& placement)
     :G4ModelCmdApplyDoubleAndUnit<M>(model, placement, "setTimeSliceInterval")
   {
-    G4ModelCmdApplyDoubleAndUnit<M>::Command()->SetGuidance
+    G4UIcmdWithADoubleAndUnit* cmd = G4ModelCmdApplyDoubleAndUnit<M>::Command();
+    cmd->SetGuidance
       ("Set time slice interval.  Give unit, e.g., \"0.1 ns\"");
+    cmd->SetUnitCategory("Time");
   }
   
 protected:
