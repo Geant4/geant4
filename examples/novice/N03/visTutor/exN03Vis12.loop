@@ -1,0 +1,2 @@
+/vis/ogl/set/startTime {startTime} ns {timeRange} ns
+/vis/viewer/update
