@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TrajectoryDrawerUtils.cc,v 1.7 2006-08-14 11:51:45 allison Exp $
+// $Id: G4TrajectoryDrawerUtils.cc,v 1.8 2006-08-16 16:05:38 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Jane Tinslay, John Allison, Joseph Perl November 2005
@@ -157,8 +157,13 @@ namespace G4TrajectoryDrawerUtils {
           }
         }
 	if (!foundPreTime || !foundPostTime) {
-	  G4cout << "G4TrajectoryDrawerUtils::GetTimes: times not found."
-		 << G4endl;
+	  static G4bool warnedTimesNotFound = false;
+	  if (!warnedTimesNotFound) {
+	    G4cout <<
+	      "WARNING: G4TrajectoryDrawerUtils::GetTimes: times not found."
+		   << G4endl;
+	    warnedTimesNotFound = true;
+	  }
 	  return;
 	}
       }
@@ -200,21 +205,28 @@ namespace G4TrajectoryDrawerUtils {
 
     newTrajectoryLine.push_back(trajectoryLine[0]);
     newTrajectoryLineTimes.push_back(trajectoryLineTimes[0]);
-    for (size_t i = 1; i < trajectoryLine.size(); ++i) {
-      for (G4double t =
-	     (int(trajectoryLineTimes[i - 1]/timeIncrement) + 1) *
-	     timeIncrement;
-	   t <= trajectoryLineTimes[i];
-	   t += timeIncrement) {
-	G4ThreeVector pos = trajectoryLine[i - 1] +
-	  (trajectoryLine[i] - trajectoryLine[i - 1]) *
-	  ((t - trajectoryLineTimes[i - 1]) / 
-	  (trajectoryLineTimes[i] - trajectoryLineTimes[i - 1]));
-	newTrajectoryLine.push_back(pos);
-	newTrajectoryLineTimes.push_back(t);
+    size_t lineSize = trajectoryLine.size();
+    if (lineSize > 1) {
+      for (size_t i = 1; i < trajectoryLine.size(); ++i) {
+	G4double deltaT = trajectoryLineTimes[i] - trajectoryLineTimes[i - 1];
+	if (deltaT > 0.) {
+	  G4double practicalTimeIncrement = 
+	    std::max(timeIncrement, deltaT / 100.);
+	  for (G4double t =
+		 (int(trajectoryLineTimes[i - 1]/practicalTimeIncrement) + 1) *
+		 practicalTimeIncrement;
+	       t <= trajectoryLineTimes[i];
+	       t += practicalTimeIncrement) {
+	    G4ThreeVector pos = trajectoryLine[i - 1] +
+	      (trajectoryLine[i] - trajectoryLine[i - 1]) *
+	      ((t - trajectoryLineTimes[i - 1]) / deltaT);
+	    newTrajectoryLine.push_back(pos);
+	    newTrajectoryLineTimes.push_back(t);
+	  }
+	}
+	newTrajectoryLine.push_back(trajectoryLine[i]);
+	newTrajectoryLineTimes.push_back(trajectoryLineTimes[i]);
       }
-      newTrajectoryLine.push_back(trajectoryLine[i]);
-      newTrajectoryLineTimes.push_back(trajectoryLineTimes[i]);
     }
 
     trajectoryLine = newTrajectoryLine;
