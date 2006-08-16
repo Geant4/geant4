@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredSceneHandler.cc,v 1.29 2006-08-14 12:21:11 allison Exp $
+// $Id: G4OpenGLStoredSceneHandler.cc,v 1.30 2006-08-16 10:34:36 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -67,66 +67,60 @@ fTopPODL (0)
 G4OpenGLStoredSceneHandler::~G4OpenGLStoredSceneHandler ()
 {}
 
-void G4OpenGLStoredSceneHandler::AddPrimitive (const G4Polyline& polyline)
+void G4OpenGLStoredSceneHandler::AddPrimitivePreamble(const G4Visible& visible)
 {
-  // Get vis attributes - pick up defaults if none.
-  const G4VisAttributes* pVA =
-    fpViewer->GetApplicableVisAttributes(polyline.GetVisAttributes());
-  const std::vector<G4AttValue>* attValues = pVA->GetAttValues();
-  if (attValues) {
-    TO& to = fTOList.back();
-    for (std::vector<G4AttValue>::const_iterator i = attValues->begin();
-	 i != attValues->end(); ++i) {
-      if (i->GetName() == "_t1") {
-	to.fStartTime = G4UIcommand::ConvertToDimensionedDouble(i->GetValue());
-      }
-      if (i->GetName() == "_t2") {
-	to.fEndTime = G4UIcommand::ConvertToDimensionedDouble(i->GetValue());
+  const G4Colour& c = GetColour (visible);
+
+  if (fMemoryForDisplayLists && fReadyForTransients) {
+
+    TO& to = fTOList.back();  // Transient object information.
+
+    // Get vis attributes - pick up defaults if none.
+    const G4VisAttributes* pVA =
+      fpViewer->GetApplicableVisAttributes(visible.GetVisAttributes());
+
+    // Get time information from vis attributes, if any.
+    const std::vector<G4AttValue>* attValues = pVA->GetAttValues();
+    if (attValues) {
+      for (std::vector<G4AttValue>::const_iterator i = attValues->begin();
+	   i != attValues->end(); ++i) {
+	if (i->GetName() == "_t1") {
+	  to.fStartTime = G4UIcommand::ConvertToDimensionedDouble(i->GetValue());
+	}
+	if (i->GetName() == "_t2") {
+	  to.fEndTime = G4UIcommand::ConvertToDimensionedDouble(i->GetValue());
+	}
       }
     }
+
+    // Keep colour out of display list so that it can be applied independently.
+    glEndList();
+    to.fColour = c;
+    glColor3d (c.GetRed (), c.GetGreen (), c.GetBlue ());
+    glNewList (fDisplayListId, GL_COMPILE_AND_EXECUTE);
+      
+  } else {
+
+    // Make sure colour is set in other cases.
+    glColor3d (c.GetRed (), c.GetGreen (), c.GetBlue ());
   }
+}
+
+void G4OpenGLStoredSceneHandler::AddPrimitive (const G4Polyline& polyline)
+{
+  AddPrimitivePreamble(polyline);
   G4OpenGLSceneHandler::AddPrimitive(polyline);
 }
 
 void G4OpenGLStoredSceneHandler::AddPrimitive (const G4Circle& circle)
 {
-  // Get vis attributes - pick up defaults if none.
-  const G4VisAttributes* pVA =
-    fpViewer->GetApplicableVisAttributes(circle.GetVisAttributes());
-  const std::vector<G4AttValue>* attValues = pVA->GetAttValues();
-  if (attValues) {
-    TO& to = fTOList.back();
-    for (std::vector<G4AttValue>::const_iterator i = attValues->begin();
-	 i != attValues->end(); ++i) {
-      if (i->GetName() == "_t1") {
-	to.fStartTime = G4UIcommand::ConvertToDimensionedDouble(i->GetValue());
-      }
-      if (i->GetName() == "_t2") {
-	to.fEndTime = G4UIcommand::ConvertToDimensionedDouble(i->GetValue());
-      }
-    }
-  }
+  AddPrimitivePreamble(circle);
   G4OpenGLSceneHandler::AddPrimitive(circle);
 }
 
 void G4OpenGLStoredSceneHandler::AddPrimitive (const G4Square& square)
 {
-  // Get vis attributes - pick up defaults if none.
-  const G4VisAttributes* pVA =
-    fpViewer->GetApplicableVisAttributes(square.GetVisAttributes());
-  const std::vector<G4AttValue>* attValues = pVA->GetAttValues();
-  if (attValues) {
-    TO& to = fTOList.back();
-    for (std::vector<G4AttValue>::const_iterator i = attValues->begin();
-	 i != attValues->end(); ++i) {
-      if (i->GetName() == "_t1") {
-	to.fStartTime = G4UIcommand::ConvertToDimensionedDouble(i->GetValue());
-      }
-      if (i->GetName() == "_t2") {
-	to.fEndTime = G4UIcommand::ConvertToDimensionedDouble(i->GetValue());
-      }
-    }
-  }
+  AddPrimitivePreamble(square);
   G4OpenGLSceneHandler::AddPrimitive(square);
 }
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLSceneHandler.cc,v 1.43 2006-06-29 21:19:14 gunter Exp $
+// $Id: G4OpenGLSceneHandler.cc,v 1.44 2006-08-16 10:34:36 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -97,8 +97,7 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyline& line)
   G4int nPoints = line.size ();
   if (nPoints <= 0) return;
 
-  const G4Colour& c = GetColour (line);
-  glColor3d (c.GetRed (), c.GetGreen (), c.GetBlue ());
+  // Note: colour treated in sub-class.
 
   if (fpViewer -> GetViewParameters ().IsMarkerNotHidden ())
     glDisable (GL_DEPTH_TEST);
@@ -172,9 +171,8 @@ void G4OpenGLSceneHandler::AddCircleSquare
 (const G4VMarker& marker,
  G4int nSides) {
 
-  const G4Colour& c = GetColour (marker);
-  glColor3d (c.GetRed (), c.GetGreen (), c.GetBlue ());
-  
+  // Note: colour treated in sub-class.
+
   if (fpViewer -> GetViewParameters ().IsMarkerNotHidden ())
     glDisable (GL_DEPTH_TEST);
   else {glEnable (GL_DEPTH_TEST); glDepthFunc (GL_LESS);}

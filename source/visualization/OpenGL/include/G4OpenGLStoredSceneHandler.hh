@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredSceneHandler.hh,v 1.19 2006-08-14 12:21:11 allison Exp $
+// $Id: G4OpenGLStoredSceneHandler.hh,v 1.20 2006-08-16 10:34:36 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -49,7 +49,10 @@ class G4OpenGLStored;
 
 class G4OpenGLStoredSceneHandler: public G4OpenGLSceneHandler {
 
+  friend class G4OpenGLStoredViewer;  // ..allows access to P/TODLs.
+
 public:
+
   G4OpenGLStoredSceneHandler (G4VGraphicsSystem& system, const G4String& name = "");
   virtual ~G4OpenGLStoredSceneHandler ();
   void BeginPrimitives (const G4Transform3D& objectTransformation);
@@ -78,12 +81,14 @@ public:
   void AddPrimitive (const G4Scale& scale) {
     G4OpenGLSceneHandler::AddPrimitive (scale);
   }
-private:
-  friend class G4OpenGLStoredViewer;
-  // ..allows access to P/TODLs.
   void ClearStore ();
   void ClearTransientStore ();
+
+protected:
+
   void RequestPrimitives (const G4VSolid& solid);
+  void AddPrimitivePreamble(const G4Visible& visible);
+
   static G4int     fSceneIdCount;   // static counter for OpenGLStored scenes.
   G4int            fDisplayListId;  // Workspace.
   G4bool  fMemoryForDisplayLists;   // avoid memory overflow
@@ -106,6 +111,7 @@ private:
     G4int fDisplayListId;
     G4Transform3D fTransform;
     G4double fStartTime, fEndTime;  // Time range (e.g., for trajectory steps).
+    G4Colour fColour;
   };
   std::vector<TO> fTOList; 
   

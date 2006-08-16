@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredViewer.cc,v 1.15 2006-08-14 12:21:11 allison Exp $
+// $Id: G4OpenGLStoredViewer.cc,v 1.16 2006-08-16 10:34:36 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -37,9 +37,9 @@
 
 #include "G4OpenGLStoredViewer.hh"
 
-#include "G4ios.hh"
-
 #include "G4OpenGLStoredSceneHandler.hh"
+#include "G4Text.hh"
+#include "G4UnitsTable.hh"
 
 G4OpenGLStoredViewer::G4OpenGLStoredViewer
 (G4OpenGLStoredSceneHandler& sceneHandler):
@@ -110,9 +110,36 @@ void G4OpenGLStoredViewer::DrawDisplayLists () {
       glPushMatrix();
       G4OpenGLTransform3D oglt (to.fTransform);
       glMultMatrixd (oglt.GetGLMatrix ());
+      G4Colour& c = to.fColour;
+      G4double bsf = 1.;  // Brightness scaling factor.
+      if (fFadeFactor > 0. && to.fEndTime < fEndTime)
+	bsf = 1. - fFadeFactor *
+	  ((fEndTime - to.fEndTime) / (fEndTime - fStartTime));
+      glColor3d(bsf * c.GetRed (), bsf * c.GetGreen (), bsf * c.GetBlue ());
       glCallList (to.fDisplayListId);
       glPopMatrix();
     }
+  }
+
+  // Display time at "head" of time range, which is fEndTime...
+  if (fDisplayHeadTime) {
+    glMatrixMode (GL_PROJECTION);
+    glPushMatrix();
+    glLoadIdentity();
+    glOrtho (-1., 1., -1., 1., -DBL_MAX, DBL_MAX);
+    glMatrixMode (GL_MODELVIEW);
+    glPushMatrix();
+    glLoadIdentity();
+    G4Text headTimeText(G4BestUnit(fEndTime,"Time"),
+			G4Point3D(fDisplayHeadTimeX, fDisplayHeadTimeY, 0.));
+    headTimeText.SetScreenSize(24);
+    G4VisAttributes visAtts(G4Colour(0,1,1));
+    headTimeText.SetVisAttributes(&visAtts);
+    fG4OpenGLStoredSceneHandler.AddPrimitive(headTimeText);
+    glMatrixMode (GL_PROJECTION);
+    glPopMatrix();
+    glMatrixMode (GL_MODELVIEW);
+    glPopMatrix();
   }
 }
 

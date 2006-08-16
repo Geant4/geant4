@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewer.hh,v 1.15 2006-08-14 11:59:48 allison Exp $
+// $Id: G4OpenGLViewer.hh,v 1.16 2006-08-16 10:34:36 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -68,6 +68,9 @@ protected:
     antialiasing_enabled,   //is antialiasing enabled?
     haloing_enabled;        //is haloing enabled for wireframe?
   G4double fStartTime, fEndTime;  // Time range (e.g., for trajectory steps).
+  G4double fFadeFactor;  // 0: no fade; 1: maximum fade with time within range.
+  G4bool fDisplayHeadTime;  // Display head time (fEndTime) in 2D text.
+  G4double fDisplayHeadTimeX, fDisplayHeadTimeY;  // 2D screen coords.
 };
 
 #endif
