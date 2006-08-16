@@ -91,13 +91,15 @@
 #
 # Particle and its energy
 #
-/gun/particle e-
+/gun/particle e+
 /gun/energy 20000.0 MeV
 #
 #/tracking/verbose 1
 #
 /event/printModulo 1000
 /run/beamOn 10000
+#/tracking/verbose 0
+#/run/beamOn 1
 #
 
 
