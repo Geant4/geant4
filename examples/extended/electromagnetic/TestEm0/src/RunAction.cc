@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.5 2006-06-29 16:36:00 gunter Exp $
+// $Id: RunAction.cc,v 1.6 2006-08-17 13:50:45 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -54,7 +54,12 @@ RunAction::~RunAction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void RunAction::BeginOfRunAction(const G4Run*)
+void RunAction::BeginOfRunAction(const G4Run* )
+{ }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void RunAction::EndOfRunAction(const G4Run*)
 {
   //set precision for printing
   G4int prec = G4cout.precision(6);
@@ -112,11 +117,13 @@ void RunAction::BeginOfRunAction(const G4Run*)
   G4cout << "\n  processes :                ";
   for (size_t j=0; j<emName.size();j++)
     G4cout << "\t" << std::setw(13) << emName[j] << "\t";
+
   G4cout << "\t" << std::setw(13) <<"total";
       
   //instanciate EmCalculator
   G4EmCalculator emCal;
   //  emCal.SetVerbose(2);
+  //emCal.FindMaterial(material->GetName());
   
   //compute cross section per atom (only for single material)
   if (material->GetNumberOfElements() == 1) {
@@ -253,11 +260,6 @@ void RunAction::BeginOfRunAction(const G4Run*)
  // reset default precision
  G4cout.precision(prec);    
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void RunAction::EndOfRunAction(const G4Run* )
-{ }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

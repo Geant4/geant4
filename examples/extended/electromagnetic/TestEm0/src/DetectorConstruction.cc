@@ -25,7 +25,7 @@
 //
 
 //
-// $Id: DetectorConstruction.cc,v 1.6 2006-07-21 16:45:44 vnivanch Exp $
+// $Id: DetectorConstruction.cc,v 1.7 2006-08-17 13:50:45 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -143,18 +143,18 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
   G4LogicalVolumeStore::GetInstance()->Clean();
   G4SolidStore::GetInstance()->Clean();
 
-  G4Box*
-  sBox = new G4Box("Container",				//its name
-                   BoxSize/2,BoxSize/2,BoxSize/2);	//its dimensions
+  G4Box* 
+    sBox = new G4Box("Container",			//its name
+		     BoxSize/2,BoxSize/2,BoxSize/2);	//its dimensions
 		   
   G4LogicalVolume*
-  lBox = new G4LogicalVolume(sBox,			//its shape
-                             aMaterial,			//its material
-                             aMaterial->GetName());	//its name
+    lBox = new G4LogicalVolume(sBox,			//its shape
+			       aMaterial,		//its material
+			       aMaterial->GetName());	//its name
 
   pBox = new G4PVPlacement(0,				//no rotation
   			   G4ThreeVector(),		//at (0,0,0)
-                           lBox,			//its logical volume			   
+                           lBox,			//its logical volume
                            aMaterial->GetName(),	//its name
                            0,				//its mother  volume
                            false,			//no boolean operation
@@ -181,10 +181,9 @@ void DetectorConstruction::SetMaterial(G4String materialChoice)
   G4Material* pttoMaterial =
     G4NistManager::Instance()->FindOrBuildMaterial(materialChoice);
 
-  if (pttoMaterial) {
+  if (pttoMaterial && aMaterial != pttoMaterial) {
     aMaterial = pttoMaterial;
-    if (pBox) G4RunManager::GetRunManager()
-                             ->DefineWorldVolume(ConstructVolumes());
+    if (pBox) G4RunManager::GetRunManager()->Initialize();
   } else {
     G4cout << "\n--> warning from DetectorConstruction::SetMaterial : "
            << materialChoice << " not found" << G4endl;  
