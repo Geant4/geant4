@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.6 2006-08-17 13:50:45 vnivanch Exp $
+// $Id: RunAction.cc,v 1.7 2006-08-17 13:54:58 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -123,7 +123,7 @@ void RunAction::EndOfRunAction(const G4Run*)
   //instanciate EmCalculator
   G4EmCalculator emCal;
   //  emCal.SetVerbose(2);
-  //emCal.FindMaterial(material->GetName());
+  emCal.FindMaterial(material->GetName());
   
   //compute cross section per atom (only for single material)
   if (material->GetNumberOfElements() == 1) {
