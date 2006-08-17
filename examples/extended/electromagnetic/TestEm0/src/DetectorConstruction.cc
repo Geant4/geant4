@@ -25,7 +25,7 @@
 //
 
 //
-// $Id: DetectorConstruction.cc,v 1.7 2006-08-17 13:50:45 vnivanch Exp $
+// $Id: DetectorConstruction.cc,v 1.8 2006-08-17 16:06:02 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -37,6 +37,7 @@
 #include "DetectorMessenger.hh"
 
 #include "G4Material.hh"
+#include "G4NistManager.hh"
 #include "G4Box.hh"
 #include "G4LogicalVolume.hh"
 #include "G4PVPlacement.hh"
@@ -47,9 +48,6 @@
 #include "G4SolidStore.hh"
 
 #include "G4UnitsTable.hh"
-
-#include "G4RunManager.hh"
-#include "G4NistManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -128,7 +126,7 @@ void DetectorConstruction::DefineMaterials()
   new G4Material("Tungsten"   , z=74., a=183.85*g/mole, density= 19.30*g/cm3);
   new G4Material("Lead"       , z=82., a=207.19*g/mole, density= 11.35*g/cm3);
   new G4Material("Uranium"    , z=92., a=238.03*g/mole, density= 18.95*g/cm3);
-
+  
 
   G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 }
@@ -175,15 +173,18 @@ void DetectorConstruction::PrintParameters()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+#include "G4RunManager.hh"
+
 void DetectorConstruction::SetMaterial(G4String materialChoice)
 {
-  // search the material by its name
-  G4Material* pttoMaterial =
-    G4NistManager::Instance()->FindOrBuildMaterial(materialChoice);
+  // search the material by its name, or build it from nist data base
+  G4Material* pttoMaterial = 
+     G4NistManager::Instance()->FindOrBuildMaterial(materialChoice);
 
-  if (pttoMaterial && aMaterial != pttoMaterial) {
+  if (pttoMaterial) {
     aMaterial = pttoMaterial;
-    if (pBox) G4RunManager::GetRunManager()->Initialize();
+    if (pBox) G4RunManager::GetRunManager()
+                             ->DefineWorldVolume(ConstructVolumes());
   } else {
     G4cout << "\n--> warning from DetectorConstruction::SetMaterial : "
            << materialChoice << " not found" << G4endl;  
