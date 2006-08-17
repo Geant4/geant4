@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QCaptureAtRest.cc,v 1.5 2006-08-15 17:13:22 mkossov Exp $
+// $Id: G4QCaptureAtRest.cc,v 1.6 2006-08-17 15:58:05 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCaptureAtRest class -----------------
@@ -317,12 +317,16 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
     mAP=QPDGbase.GetNuclMass(Z-1,N+1,0);      // M_GSCompoundNucleus-proton
     G4double mAA=1000000.; // Default (light nuclei) mass of the GSCompoundNucleus-alpha
     if(Z>=2 && N>=1) mAA=QPDGbase.GetNuclMass(Z-2,N-1,0); // mass of GSCompNucleus-alpha
-    G4double eProt=mAR-mAP-mProt;
-    if(mAR<mAN && eProt>0.)
+    G4double eProt=mAR-mAP-mProt;             // Possible kin Enrgy of residual proton
+    if(mAR<mAN && eProt>0.)                   // Compound is impossible but ChEx's possible
     {
-      G4double eNeut=totNE-mNeut;
-      if(eNeut<0.) eNeut=0.;
-      if(totNE-mNeut<.0001) chargExElastic=true; // neutron is too soft -> chargeExchange
+#ifdef debug
+      G4cout<<"G4QCaptureAtRest::AtRestDoIt: n-Capture isn't possible mC="<<mAR<<" < mGS="
+            <<mAN<<", Ep="<<eProt<<G4endl;
+#endif
+      G4double eNeut=totNE-mNeut;             // Kinetic energy of the projectile neutron
+      if(eNeut<0.) eNeut=0.;                  // This is just an accuracy correction
+      if(eNeut<.0001) chargExElastic=true;    // neutron is too soft -> charge Exchange
       else
 						{
         G4double probP=std::sqrt(eProt*(dmProt+eProt));
@@ -331,10 +335,24 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
         else chargExElastic=true; // proton's phase space is bigger -> chargeExchange
       }
     }
-				else if(mAR<mAN||(mAR<mAP+mProt&&mAR<mAA+mAlph)) neutronElastic=true; // nElaScattering
+				else if(mAR<=mAN||(mAR<=mAP+mProt&&mAR<=mAA+mAlph)) // Impossible to radiate n or Alpha
+    {
+#ifdef debug
+    G4cout<<"G4QCaptureAtRest::AtRestDoIt: n-Capture only elastic is possible"<<G4endl;
+#endif
+      neutronElastic=true; // nElaScattering
+    }
+#ifdef debug
+    G4cout<<"G4QCaptureAtRest::AtRestDoIt: n-Capture El="<<neutronElastic<<", Ex="
+          <<chargExElastic<<G4endl;
+#endif
   }
   G4int           nuPDG=14;                  // Prototype for weak decay
   if(projPDG==15) nuPDG=16;
+#ifdef debug
+		G4int CV=0;
+  G4cout<<"G4QCaptureAtRest::AtRestDoIt:DecayIf is reached CV="<<CV<<G4endl;
+#endif
   if(projPDG==2112 && neutronElastic)        // Elastic scattering of low energy neutron
   {
 #ifdef debug
@@ -352,8 +370,12 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
     output->push_back(secnuc);               // Fill recoil nucleus to the output
     G4QHadron* neutron = new G4QHadron(2112,n4Mom);    // Create Hadron for the Neutron
     output->push_back(neutron);              // Fill the neutron to the output
+#ifdef debug
+    CV=27;
+    G4cout<<"G4QCaptureAtRest::AtRestDoIt:ElasN="<<n4Mom<<",A="<<a4Mom<<",CV="<<CV<<G4endl;
+#endif
   }
-  if(projPDG==2112 && chargExElastic)        // ChargeEx from neutron to proton: (n,p) reac
+  else if(projPDG==2112 && chargExElastic)   // ChargeEx from neutron to proton: (n,p) reac
   {
 #ifdef debug
     G4cout<<"G4QCaptureAtRest::AtRestDoIt:npChEx, 4M="<<proj4M<<",Z="<<Z<<",N="<<N<<G4endl;
@@ -371,6 +393,10 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
     output->push_back(secnuc);               // Fill recharged nucleus to the output
     G4QHadron* proton = new G4QHadron(2212,p4Mom); // Create Hadron for the Proton
     output->push_back(proton) ;              // Fill the proton to the output
+#ifdef debug
+    CV=21;
+    G4cout<<"G4QCaptureAtRest::AtRestDoIt:ChExP="<<p4Mom<<",A="<<a4Mom<<",CV="<<CV<<G4endl;
+#endif
   }
 		else if(projPDG==-211 && targPDG==90001000)// Use Panofsky Ratio for (p+pi-) system decay
   {                                          // (p+pi-=>n+pi0)/p+pi-=>n+gamma) = 3/2
@@ -589,6 +615,9 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
       G4Exception("G4QCaptureAtRest::AtRestDoIt:","27",FatalException,"Gen.CHIPS Except.");
     }                                                             //                 |
     delete pan;                              // Delete the Nuclear Environment <--<--+
+#ifdef debug
+	   G4cout<<"G4QCaptureAtRest::AtRestDoIt: CHIPS fragmentation is done, CV="<<CV<<G4endl;
+#endif
   }
   aParticleChange.Initialize(track);
   G4int tNH = output->size(); // A#of hadrons in the output without EM Cascade
