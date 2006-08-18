@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UnitsTable.cc,v 1.34 2006-06-29 19:04:32 gunter Exp $
+// $Id: G4UnitsTable.cc,v 1.35 2006-08-18 10:57:55 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -40,6 +40,7 @@
 // 07-02-06: GeV/cm MeV/cm keV/cm eV/cm ("Energy/Length")  (mma)
 // 15-02-06: g/cm2 ("Mass/Surface")
 //           MeV*cm2/g ..etc.. ("Energy*Surface/Mass")
+// 18-08-06: remove symbol mum (mma)
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -195,7 +196,6 @@ void G4UnitDefinition::BuildUnitsTable()
  new G4UnitDefinition("centimeter","cm"      ,"Length",centimeter); 
  new G4UnitDefinition("millimeter","mm"      ,"Length",millimeter);
  new G4UnitDefinition("micrometer","um"      ,"Length",micrometer);
- new G4UnitDefinition("micrometer","mum"     ,"Length",micrometer);
  new G4UnitDefinition( "nanometer","nm"      ,"Length",nanometer);
  new G4UnitDefinition(  "angstrom","Ang"     ,"Length",angstrom);    
  new G4UnitDefinition(     "fermi","fm"      ,"Length",fermi);

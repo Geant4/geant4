@@ -1,4 +1,4 @@
-$Id: History,v 1.162 2006-07-20 16:04:21 gcosmo Exp $
+$Id: History,v 1.163 2006-08-18 10:57:55 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+Aug 18, 2006  M.Maire 
+- G4UnitsTable: removed mum; use um instead.
 
 Jul 20, 2006  G.Cosmo (global-V08-01-00)
 - Changed date for release 8.1.p01.
