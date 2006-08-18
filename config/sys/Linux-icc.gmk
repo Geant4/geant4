@@ -30,7 +30,7 @@ ifeq ($(G4SYSTEM),Linux-icc)
   FC := g77
   FCFLAGS += -fno-automatic -fno-backslash -fno-second-underscore
   FCLIBS := -lg2c -lnsl
-  AR := xiar r
+  AR := ar r
   ECHO    := /bin/echo -e
   SHEXT   := so
   ifndef X11FLAGS
