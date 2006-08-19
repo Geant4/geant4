@@ -72,16 +72,16 @@ protected:
 						const G4KineticTrack& trk2) const;
 
   // Parameterisation
-  const G4double FcrossX(G4double e, G4double e0, G4double sigma, 
-			 G4double eParam, G4double power) const;
+  G4double FcrossX(G4double e, G4double e0, G4double sigma, 
+                   G4double eParam, G4double power) const;
 
   G4String FindKeyParticle(const G4KineticTrack& trk1,const G4KineticTrack& trk2) const;
   
   // Transverse pion mass
-  const G4double GetTransversePionMass() const;
+  G4double GetTransversePionMass() const;
 
   // Min string mass
-  const G4double GetMinStringMass() const;
+  G4double GetMinStringMass() const;
 
 private:  
 
