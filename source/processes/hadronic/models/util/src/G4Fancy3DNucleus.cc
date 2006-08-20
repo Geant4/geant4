@@ -397,11 +397,11 @@ void G4Fancy3DNucleus::ChooseFermiMomenta()
     	{
     		return Vector;
     	}
-    	const G4double size() const
+    	G4double size() const
     	{
     		return Size;
     	}
-    	const G4int index() const
+    	G4int index() const
     	{
     		return anInt;
     	}
