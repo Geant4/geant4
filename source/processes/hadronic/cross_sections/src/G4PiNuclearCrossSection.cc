@@ -297,11 +297,11 @@
  static G4double A75[92];
  if ( NeedInit )
  {
-    for (G4int i=0;i<92,++i)
+    for (G4int i=0; i<92; ++i)
     {
        A75[i]=std::pow(A[i],0.75);
     }
-    NeedInit=false
+    NeedInit=false;
  }
 
 //        for tabulated data, cross section scales with A^.75
