@@ -30,6 +30,8 @@
 
  // by J.P Wellisch, Sun Sep 15 2002.
  // corrected G.Folger 17-8-2006: inel. Ca pim was missing two number, + formatting
+ // updated   G.Folger 21-8-2006: Change scaling of cross section for elements not tabulated from scaling in Z^(2/3) to A^0.75
+ 
  // Implements P2-90-158;
 
 	const G4double G4PiNuclearCrossSection::e1[38] =     {.02, .04, .06, .08,  .1, .12, .13, .14, .15, .16, .17, .18, .19, .20, .22, .24, .26, .28, .30, .35, .40, .45,  0.5, 0.55,   0.6, 0.7,  0.8,  0.9,   1,   2,   3,   5,  10,   20,   50,  100,  500, 1000};
@@ -277,10 +279,36 @@
 
  G4double G4PiNuclearCrossSection::
  Interpolate(G4int Z1, G4int Z2, G4int Z, G4double x1, G4double x2)
+ { 
+//   Nucleon numbers obtained from G4NistManager G4 8.0
+ static const G4double A[92]=
+ 			{1.0001, 4.0000, 6.9241, 9.0000, 10.801, 12.011, 14.004, 16.004, 19.000, 20.188,
+			 23.000, 24.320, 27.000, 28.109, 31.000, 32.094, 35.484, 39.985, 39.135, 40.116,
+			 45.000, 47.918, 50.998, 52.055, 55.000, 55.910, 59.000, 58.760, 63.617, 65.468,
+			 69.798, 72.691, 75.000, 79.042, 79.986, 83.887, 85.557, 87.710, 89.000, 91.318,
+			 93.000, 96.025, 98.000, 101.16, 103.00, 106.51, 107.96, 112.51, 114.91, 118.81,
+			 121.86, 127.70, 127.00, 131.39, 133.00, 137.42, 139.00, 140.21, 141.00, 144.32,
+			 145.00, 150.45, 152.04, 157.33, 159.00, 162.57, 165.00, 167.32, 169.00, 173.10,
+			 175.03, 178.54, 181.00, 183.89, 186.25, 190.27, 192.25, 195.11, 197.00, 200.63,
+			 204.41, 207.24, 209.00, 209.00, 210.00, 222.00, 223.00, 226.00, 227.00, 232.00,
+			 231.00, 237.98};
+			 
+ static G4bool NeedInit=true;		     
+ static G4double A75[92];
+ if ( NeedInit )
  {
-   G4double result = 0;
-   G4double r1 = x1/std::pow(G4double(Z1), 2./3.)*std::pow(G4double(Z), 2./3.);
-   G4double r2 = x2/std::pow(G4double(Z2), 2./3.)*std::pow(G4double(Z), 2./3.);
-   result = (r1+r2)/2.;
+    for (G4int i=0;i<92,++i)
+    {
+       A75[i]=std::pow(A[i],0.75);
+    }
+    NeedInit=false
+ }
+
+//        for tabulated data, cross section scales with A^.75
+   G4double r1 = x1 / A75[Z1-1] * A75[Z-1];
+   G4double r2 = x2 / A75[Z2-1] * A75[Z-1];
+   G4double result=0.5*(r1+r2);
+//       G4cout << "x1/2, z1/2 z" <<x1<<" "<<x2<<" "<<Z1<<" "<<Z2<<" "<<Z<<G4endl;
+//       G4cout << "res1/2 " << r1 <<" " << r2 <<" " << result<< G4endl;
    return result;
  }
