@@ -34,9 +34,6 @@
 #include "CLHEP/HepMC/GenEvent.h"
 #include "CLHEP/HepMC/GenParticle.h"
 
-class HepMC::GenEvent;
-class HepMC::GenParticle;
-
 typedef std::pair<HepMC::GenEvent*, HepMC::GenParticle*> G4MCTGenParticle;
 
 #endif
