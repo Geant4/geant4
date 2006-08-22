@@ -1,4 +1,4 @@
-$Id: History,v 1.280 2006-08-22 10:51:57 gcosmo Exp $
+$Id: History,v 1.281 2006-08-22 12:41:42 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,8 @@ committal in the CVS repository !
      ----------------------------------------------------------
 
 18th August 2006  Gabriele Cosmo (config-V08-01-01)
-- Linux-icc: comment out G4RUNPATHOPTION flag which seems not to work.
+- Linux-icc: corrected G4RUNPATHOPTION flag to allow linking of applications
+  with shared libraries.
 
 18th August 2006  Gabriele Cosmo (config-V08-01-00)
 - Linux-icc: updated setup to support icc-9.X series.
