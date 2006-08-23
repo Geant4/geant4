@@ -1,4 +1,4 @@
-# $Id: __init__.py,v 1.8 2006-08-08 05:20:09 kmura Exp $
+# $Id: __init__.py,v 1.9 2006-08-23 04:50:17 kmura Exp $
 """
 # ==================================================================
 #  [Geant4] module package
@@ -181,6 +181,13 @@ if(G4VisManager.GetConcreteInstance() == None):
   gVisManager.RegisterGraphicsSystem(raytracer)
     
   gVisManager.Initialize()
+
+# ------------------------------------------------------------------
+# version information
+# ------------------------------------------------------------------
+gG4Version        = G4Version
+gG4Date           = G4Date
+gG4VERSION_NUMBER = G4VERSION_NUMBER
 
 # ------------------------------------------------------------------
 # functions
