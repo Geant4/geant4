@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4LossTableManager.cc,v 1.1 2006-07-12 05:07:13 kmura Exp $
+// $Id: pyG4LossTableManager.cc,v 1.2 2006-08-23 02:17:06 kmura Exp $
 // $Name: not supported by cvs2svn $
 // ====================================================================
 //   pyG4LossTableManager.cc
@@ -31,6 +31,7 @@
 //                                         2005 Q
 // ====================================================================
 #include <boost/python.hpp>
+#include "pyG4Version.hh"
 #include "G4LossTableManager.hh"
 
 using namespace boost::python;
@@ -56,21 +57,39 @@ void export_G4LossTableManager()
     .def("SetMinSubRange",       &G4LossTableManager::SetMinSubRange)
     .def("SetMinEnergy",         &G4LossTableManager::SetMinEnergy)
     .def("SetMaxEnergy",         &G4LossTableManager::SetMaxEnergy)
+
+#if G4VERSION_NUMBER >= 810
     .def("SetMaxEnergyForCSDARange", 
          &G4LossTableManager::SetMaxEnergyForCSDARange)
+#else
+    .def("SetMaxEnergyForPreciseRange", 
+         &G4LossTableManager::SetMaxEnergyForPreciseRange)
+#endif
+
     .def("SetMaxEnergyForMuons", &G4LossTableManager::SetMaxEnergyForMuons)
+
+#if G4VERSION_NUMBER >= 810
     .def("SetStepFunction",      &G4LossTableManager::SetStepFunction)
     .def("SetBuildCSDARange",    &G4LossTableManager::SetBuildCSDARange)
     .def("SetLPMFlag",           &G4LossTableManager::SetLPMFlag)
     .def("SetBremsstrahlungTh",  &G4LossTableManager::SetBremsstrahlungTh)
+#else
+    .def("SetStepLimits",        &G4LossTableManager::SetStepLimits)
+    .def("SetBuildPreciseRange", &G4LossTableManager::SetBuildPreciseRange)
+#endif
     .def("SetVerbose",           &G4LossTableManager::SetVerbose)
+
     // ---
+#if G4VERSION_NUMBER >= 810
     .def("BuildCSDARange",       &G4LossTableManager::BuildCSDARange)
     .def("LPMFlag",              &G4LossTableManager::LPMFlag)
     .def("SetMscStepLimitation", &G4LossTableManager::SetMscStepLimitation)
     .def("MscFlag",              &G4LossTableManager::MscFlag)
     .def("FacRange",             &G4LossTableManager::FacRange)
     .def("BremsstrahlungTh",     &G4LossTableManager::BremsstrahlungTh)
+#else
+    .def("BuildPreciseRange",    &G4LossTableManager::BuildPreciseRange)
+#endif
     ;
 }
 
