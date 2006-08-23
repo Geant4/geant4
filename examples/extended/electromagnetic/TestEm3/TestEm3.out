@@ -30,16 +30,10 @@ Registered model factories:
   drawByParticleID
   drawByOriginVolume
 
-Registered models: 
-  None
-
 Registered filter factories:
   chargeFilter
   particleFilter
   originVolumeFilter
-
-Registered filters:
-  None
 
 /run/verbose 2
 #
@@ -289,7 +283,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=108.16s Real=122.02s Sys=13.58s
+  User=106.42s Real=149.39s Sys=39.72s
 
 ------------------------------------------------------------
 material             Total Edep   sqrt(E0(GeV))*rmsE/Emean     total tracklen 

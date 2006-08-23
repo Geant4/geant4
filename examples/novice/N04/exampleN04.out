@@ -34,16 +34,10 @@ Registered model factories:
   drawByParticleID
   drawByOriginVolume
 
-Registered models: 
-  None
-
 Registered filter factories:
   chargeFilter
   particleFilter
   originVolumeFilter
-
-Registered filters:
-  None
 
 /run/verbose      1
 /tracking/verbose 0
@@ -159,6 +153,7 @@ muPairProd:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Parametrised model 
+G4UHadronElasticProcess for neutron  Elow(MeV)= 19
 
 hIoni:   tables are built for  pi+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -245,7 +240,7 @@ Stage 1->2 : 0 isolated muon found.
 Run terminated.
 Run Summary
   Number of events processed : 3
-  User=1.03s Real=1.18s Sys=0.04s
+  User=1.18s Real=1.33s Sys=0.07s
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.

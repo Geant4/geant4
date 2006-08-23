@@ -81,16 +81,10 @@ Registered model factories:
   drawByParticleID
   drawByOriginVolume
 
-Registered models: 
-  None
-
 Registered filter factories:
   chargeFilter
   particleFilter
   originVolumeFilter
-
-Registered filters:
-  None
 
 
  The  WORLD   is made of 800mm of Air, the transverse size (R) of the world is 200 mm. 
@@ -4598,7 +4592,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng  Ne
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.68s Real=0.97s Sys=0.26s
+  User=1.21s Real=2.7s Sys=0.94s
 ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
 Graphics systems deleted.
 Visualization Manager deleting...

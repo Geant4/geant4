@@ -46,16 +46,10 @@ Registered model factories:
   drawByParticleID
   drawByOriginVolume
 
-Registered models: 
-  None
-
 Registered filter factories:
   chargeFilter
   particleFilter
   originVolumeFilter
-
-Registered filters:
-  None
 
 G4ANALYSIS_USE was not set, there will be no AIDA histos
 /run/verbose 2
@@ -222,7 +216,7 @@ G4SynchrotronRadiation::GetRandomEnergySR :
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=6.17s Real=6.47s Sys=0.01s
+  User=4.8s Real=5.26s Sys=0.1s
 Summary for synchrotron radiation :
   Number of photons = 27201
   Emean             = 2.016 +/- 0.02196 keV

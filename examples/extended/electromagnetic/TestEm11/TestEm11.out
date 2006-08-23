@@ -62,16 +62,10 @@ Registered model factories:
   drawByParticleID
   drawByOriginVolume
 
-Registered models: 
-  None
-
 Registered filter factories:
   chargeFilter
   particleFilter
   originVolumeFilter
-
-Registered filters:
-  None
 
 /run/verbose 2
 #
@@ -289,7 +283,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20000
-  User=152.76s Real=222.24s Sys=47.12s
+  User=155.32s Real=329.97s Sys=139.24s
 
  ======================== run summary ======================
 

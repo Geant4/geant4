@@ -36,16 +36,10 @@ Registered model factories:
   drawByParticleID
   drawByOriginVolume
 
-Registered models: 
-  None
-
 Registered filter factories:
   chargeFilter
   particleFilter
   originVolumeFilter
-
-Registered filters:
-  None
 
 /run/verbose 1
 #/tracking/verbose 1
@@ -322,7 +316,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=49.84s Real=52.32s Sys=2.43s
+  User=51.02s Real=58.4s Sys=6.73s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started
 ========================================================

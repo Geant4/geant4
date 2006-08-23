@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V08-00-04    (30-June-2006)
+ Geant4 version Name: geant4-08-01-patch-01-ref    (27-July-2006)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -41,13 +41,7 @@ You have successfully registered the following model factories.
 Registered model factories:
   None
 
-Registered models: 
-  None
-
 Registered filter factories:
-  None
-
-Registered filters:
   None
 
 PhotInPrimaryGeneratorAction::SetDetector: is called
@@ -703,3 +697,129 @@ Index : 6     used in the geometry : Yes     recalculation needed : No
 Start Run processing.
 PhotInPrimaryGeneratorAction::GeneratePrimaries: pi+,E=100
 PhotInPrimaryGeneratorAction::GeneratePrimaries: part&E're redefined
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=28.26s Real=31.62s Sys=2.85s
+##############################################################
+ Run Summary - Number of events : 1
+##############################################################
+Region Region0
+====================
+ Production thresholds :
+ -----------------------
+ gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy deposition in Absorber 143.60305 MeV, in Gap 0 eV 
+ Number of secondaries in the event :
+ ------------------------------------
+ gamma in Absorber 6, in Gap      33
+ e-    in Absorber 136, in Gap 244
+ e+    in Absorber 1, in Gap 3
+ Minimum kinetic energy of generated secondaries :
+ -------------------------------------------------
+ gamma in Absorber = 7.6878055 keV, in Gap = 8.1581597 keV
+ e-    in Absorber = 42.339098 eV , in Gap = 72.829703 eV 
+ e+    in Absorber = 1.3931178 MeV    in Gap = 499.9748 keV
+ Mean total track length of neutrons in the event : in Absorber = 2.5697433 m  , in Gap = 0 fm 
+ Mean number of steps of charged particles in the event : in Absorber =54, in Gap = 0
+##############################################################
+Region Region1
+====================
+ Production thresholds :
+ -----------------------
+ gamma 1 cm     e- 1 cm     e+ 1 cm 
+ Energy deposition in Absorber 46.913176 GeV, in Gap 0 eV 
+ Number of secondaries in the event :
+ ------------------------------------
+ gamma in Absorber 1756, in Gap      7600
+ e-    in Absorber 18137, in Gap 39505
+ e+    in Absorber 102, in Gap 616
+ Minimum kinetic energy of generated secondaries :
+ -------------------------------------------------
+ gamma in Absorber = 5.7102938 keV, in Gap = 20.497356 keV
+ e-    in Absorber = 1.4835055 eV , in Gap = 0.044819116 eV 
+ e+    in Absorber = 294.43322 keV    in Gap = 130.04108 keV
+ Mean total track length of neutrons in the event : in Absorber = 27.054409 m  , in Gap = 0 fm 
+ Mean number of steps of charged particles in the event : in Absorber =661, in Gap = 0
+##############################################################
+Region Region2
+====================
+ Production thresholds :
+ -----------------------
+ gamma 10 cm     e- 10 cm     e+ 10 cm 
+ Energy deposition in Absorber 358.53356 MeV, in Gap 0 eV 
+ Number of secondaries in the event :
+ ------------------------------------
+ gamma in Absorber 25, in Gap      30
+ e-    in Absorber 212, in Gap 383
+ e+    in Absorber 2, in Gap 5
+ Minimum kinetic energy of generated secondaries :
+ -------------------------------------------------
+ gamma in Absorber = 22.773926 keV, in Gap = 88.116388 keV
+ e-    in Absorber = 8.8360405 eV , in Gap = 48.249497 eV 
+ e+    in Absorber = 4.7555301 MeV    in Gap = 3.0423704 MeV
+ Mean total track length of neutrons in the event : in Absorber = 3.3401393 m  , in Gap = 0 fm 
+ Mean number of steps of charged particles in the event : in Absorber =74, in Gap = 0
+##############################################################
+/run/dumpCouples
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Vac
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 6.8873065 keV    e- 596.68045 keV    e+ 568.01052 keV
+ Region(s) which use this couple : 
+    Region0
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : Scintillator
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 2.3689452 keV    e- 355.79082 keV    e+ 347.13789 keV
+ Region(s) which use this couple : 
+    Region0
+
+Index : 3     used in the geometry : Yes     recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma 1 cm     e- 1 cm     e+ 1 cm 
+ Energy thresholds :  gamma 20.494884 keV    e- 4.5487391 MeV    e+ 4.2771968 MeV
+ Region(s) which use this couple : 
+    Region1
+
+Index : 4     used in the geometry : Yes     recalculation needed : No 
+ Material : Scintillator
+ Range cuts        :  gamma 1 cm     e- 1 cm     e+ 1 cm 
+ Energy thresholds :  gamma 5.6988252 keV    e- 2.200168 MeV    e+ 2.0688264 MeV
+ Region(s) which use this couple : 
+    Region1
+
+Index : 5     used in the geometry : Yes     recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma 10 cm     e- 10 cm     e+ 10 cm 
+ Energy thresholds :  gamma 79.141018 keV    e- 56.740688 MeV    e+ 54.014351 MeV
+ Region(s) which use this couple : 
+    Region2
+
+Index : 6     used in the geometry : Yes     recalculation needed : No 
+ Material : Scintillator
+ Range cuts        :  gamma 10 cm     e- 10 cm     e+ 10 cm 
+ Energy thresholds :  gamma 18.864481 keV    e- 23.386044 MeV    e+ 22.262366 MeV
+ Region(s) which use this couple : 
+    Region2
+
+====================================================================
+
+##
+##
+##
+/run/setCutForRegqion Region0 0.2 mm
+Graphics systems deleted.
+Visualization Manager deleting...
+G4 kernel has come to Quit state.

@@ -197,9 +197,9 @@ Internal GetUserElapsed Time: 0.08
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.07
+Internal Real Elapsed Time is: 0.08
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.07
+Internal GetUserElapsed Time: 0.08
 ******************************************
  ------ Tst34EventAction::End of event nr. 1  -----
   5297 hits are stored in Tst34HitsCollection 
@@ -237,7 +237,7 @@ Internal GetUserElapsed Time: 0.07
 
 ******************************************
 Internal Real Elapsed Time is: 0.07
-Internal System Elapsed Time: 0
+Internal System Elapsed Time: 0.01
 Internal GetUserElapsed Time: 0.06
 ******************************************
  ------ Tst34EventAction::End of event nr. 4  -----
@@ -250,8 +250,8 @@ Internal GetUserElapsed Time: 0.06
 
 ******************************************
 Internal Real Elapsed Time is: 0.07
-Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.07
+Internal System Elapsed Time: 0.01
+Internal GetUserElapsed Time: 0.06
 ******************************************
  ------ Tst34EventAction::End of event nr. 5  -----
   5320 hits are stored in Tst34HitsCollection 
@@ -262,9 +262,9 @@ Internal GetUserElapsed Time: 0.07
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.07
+Internal Real Elapsed Time is: 0.06
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.07
+Internal GetUserElapsed Time: 0.06
 ******************************************
  ------ Tst34EventAction::End of event nr. 6  -----
   5320 hits are stored in Tst34HitsCollection 
@@ -275,9 +275,9 @@ Internal GetUserElapsed Time: 0.07
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.06
+Internal Real Elapsed Time is: 0.07
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.06
+Internal GetUserElapsed Time: 0.07
 ******************************************
  ------ Tst34EventAction::End of event nr. 7  -----
   5309 hits are stored in Tst34HitsCollection 
@@ -288,9 +288,9 @@ Internal GetUserElapsed Time: 0.06
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.07
+Internal Real Elapsed Time is: 0.06
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.07
+Internal GetUserElapsed Time: 0.06
 ******************************************
  ------ Tst34EventAction::End of event nr. 8  -----
   5346 hits are stored in Tst34HitsCollection 
@@ -311,7 +311,7 @@ Internal GetUserElapsed Time: 0.07
 number of events = 10
 
 ******************************************
-Total Real Elapsed Time is: 3.52
-Total System Elapsed Time: 0.05
-Total GetUserElapsed Time: 3.45
+Total Real Elapsed Time is: 5.57
+Total System Elapsed Time: 0.15
+Total GetUserElapsed Time: 5.34
 ******************************************

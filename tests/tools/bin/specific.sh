@@ -456,7 +456,7 @@ if [ $UNAMEN = pcitapi08 ]; then
 fi
 
 if [ $UNAMEN = pcg4speed.cern.ch ]; then
-  export DEBOPT=${DEBOPT}_NEWGCC
+  export DEBOPT=${DEBOPT}_slc3_ia32_icc9
   export CVSROOT=/afs/cern.ch/sw/geant4/cvs
   export G4SYSTEM=Linux-icc
   export G4INSTALL=/afs/cern.ch/sw/geant4/stt/$REF/src/geant4
@@ -464,7 +464,7 @@ if [ $UNAMEN = pcg4speed.cern.ch ]; then
   export G4WORKDIR=/afs/cern.ch/sw/geant4/stt/$REF/$G4SYSTEM/$DEBOPT
   export G4LIB=$G4WORKDIR/lib
 #  export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/Linux-g++/$CLHEP_VERSION
-  export CLHEP_BASE_DIR=/home/stesting/CLHEP-ia32/
+  export CLHEP_BASE_DIR=$G4WORKDIR/clhep
 
 # To link with AIDA (paths to libraries)
 #export G4ANALYSIS_AIDA_CONFIG_LIBS="-L/afs/cern.ch/sw/lhcxx/specific/redhat61/gcc-2.95.2/5.0.1/lib -lAnaphe_AIDA_AnalysisFactory_native -lAnaphe_AIDA_Annotation_native -lAnaphe_AIDA_Histogram_native -lAnaphe_AIDA_Tree_native -lAnaphe_AIDA_HBookStore -lg2c-forMinuit -lHepUtilities -lCLHEP -lAnaphe_AIDA_Tuple_native"
@@ -473,7 +473,7 @@ if [ $UNAMEN = pcg4speed.cern.ch ]; then
 
 #export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:"/afs/cern.ch/sw/lhcxx/specific/redhat61/gcc-2.95.2/5.0.1/lib"
 
-. /afs/cern.ch/sw/lcg/external/icc/8.0/rh73_ia32/bin/iccvars.sh
+. /afs/cern.ch/sw/lcg/external/icc/9.1.039/slc3_ia32_gcc323/bin/iccvars.sh
 
 # Only for one advanced example: 
 export CCAL_CONFPATH=./dataconf

@@ -43,16 +43,10 @@ Registered model factories:
   drawByParticleID
   drawByOriginVolume
 
-Registered models: 
-  None
-
 Registered filter factories:
   chargeFilter
   particleFilter
   originVolumeFilter
-
-Registered filters:
-  None
 
 /run/verbose 2
 #
@@ -349,7 +343,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 Run terminated.
 Run Summary
   Number of events processed : 5
-  User=0.01s Real=0.08s Sys=0.01s
+  User=0.01s Real=0.11s Sys=0.05s
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
@@ -1232,7 +1226,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 Run terminated.
 Run Summary
   Number of events processed : 5
-  User=0.16s Real=0.22s Sys=0.06s
+  User=0.24s Real=0.55s Sys=0.21s
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
@@ -1397,7 +1391,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 Run terminated.
 Run Summary
   Number of events processed : 2
-  User=0.03s Real=0.04s Sys=0.01s
+  User=0.03s Real=0.11s Sys=0.04s
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0

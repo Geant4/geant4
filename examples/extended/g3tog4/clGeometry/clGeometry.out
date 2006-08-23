@@ -32,16 +32,10 @@ Registered model factories:
   drawByParticleID
   drawByOriginVolume
 
-Registered models: 
-  None
-
 Registered filter factories:
   chargeFilter
   particleFilter
   originVolumeFilter
-
-Registered filters:
-  None
 
 /run/verbose 1
 /tracking/verbose 1
@@ -84,10 +78,12 @@ G3toG4 top level volume is HALL
 Top-level G3toG4 logical volume HALL G4VisAttributes: invisible, daughters visible, colour: (1,1,1,1)
   linestyle: solid, line width: 1
   drawing style: not forced, auxiliary edge visibility: not forced
+  line segments per circle: not forced.
   G4AttValue pointer is zero, G4AttDef pointer is zero
 Top-level G3toG4 logical volume HALL G4VisAttributes: invisible, daughters visible, colour: (1,1,1,1)
   linestyle: solid, line width: 1
   drawing style: not forced, auxiliary edge visibility: not forced
+  line segments per circle: not forced.
   G4AttValue pointer is zero, G4AttDef pointer is zero
 G4VUserPhysicsList::Construct()
 Construct processes 
@@ -288,7 +284,7 @@ WARNING: G4VisManager::IsValidView(): Attempt to draw when no graphics system
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0.07000000000000001s Sys=0s
+  User=0s Real=0.03s Sys=0s
 /gun/particle mu+
 /run/beamOn 1
 
@@ -399,7 +395,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0s Real=0.01s Sys=0s
 /gun/position   0. 1.5 0. mm
 /gun/direction  1.  0.   0.
 /gun/energy 1 GeV
@@ -439,7 +435,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 /gun/particle mu+
 /run/beamOn 1
 
@@ -513,7 +509,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0s Real=0.01s Sys=0.01s
 /gun/particle e+
 /run/beamOn 1
 

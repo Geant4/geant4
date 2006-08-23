@@ -30,16 +30,10 @@ Registered model factories:
   drawByParticleID
   drawByOriginVolume
 
-Registered models: 
-  None
-
 Registered filter factories:
   chargeFilter
   particleFilter
   originVolumeFilter
-
-Registered filters:
-  None
 
 --------------------------------------------------------
  Calorimeters are placed in parallel.
@@ -243,7 +237,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=23.77s Real=25.33s Sys=1.47s
+  User=22.23s Real=26.95s Sys=4.42s
 ############################################################
  Run Summary - Number of events : 10
 ############################################################
@@ -556,7 +550,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=27.17s Real=28.74s Sys=1.57s
+  User=25.73s Real=30.78s Sys=4.61s
 ############################################################
  Run Summary - Number of events : 10
 ############################################################
@@ -898,7 +892,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=7.03s Real=7.41s Sys=0.37s
+  User=6.53s Real=7.86s Sys=1.11s
 ############################################################
  Run Summary - Number of events : 10
 ############################################################
@@ -1271,7 +1265,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=12.95s Real=13.7s Sys=0.74s
+  User=11.99s Real=14.07s Sys=2.03s
 ############################################################
  Run Summary - Number of events : 10
 ############################################################

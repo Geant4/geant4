@@ -85,13 +85,7 @@ You have successfully registered the following model factories.
 Registered model factories:
   None
 
-Registered models: 
-  None
-
 Registered filter factories:
-  None
-
-Registered filters:
   None
 
 /run/verbose 1
@@ -316,7 +310,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=31.31s Real=33.56s Sys=2.06s
+  User=32.12s Real=38.94s Sys=6.12s
 
 ============   SUMMARY   ============
 
@@ -429,7 +423,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=2.50000000s Real=2.94000000s Sys=0.32000000s
+  User=2.73000000s Real=3.85000000s Sys=1.01000000s
 
 ============   SUMMARY   ============
 
@@ -541,7 +535,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=2.41000000s Real=2.91000000s Sys=0.36000000s
+  User=2.58000000s Real=3.80000000s Sys=1.02000000s
 
 ============   SUMMARY   ============
 
@@ -653,7 +647,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=31.49000000s Real=33.85000000s Sys=2.17000000s
+  User=31.86000000s Real=39.10000000s Sys=6.68000000s
 
 ============   SUMMARY   ============
 

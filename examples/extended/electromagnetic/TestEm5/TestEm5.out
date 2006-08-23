@@ -6,41 +6,6 @@
                             WWW : http://cern.ch/geant4
 *************************************************************
 
-Visualization Manager instantiating...
-Visualization Manager initialising...
-Registering graphics systems...
-
-You have successfully registered the following graphics systems.
-Current available graphics systems are:
-  ASCIITree (ATree)
-  DAWNFILE (DAWNFILE)
-  GAGTree (GAGTree)
-  G4HepRep (HepRepXML)
-  G4HepRepFile (HepRepFile)
-  RayTracer (RayTracer)
-  VRML1FILE (VRML1FILE)
-  VRML2FILE (VRML2FILE)
-
-Registering model factories...
-
-You have successfully registered the following model factories.
-Registered model factories:
-  generic
-  drawByCharge
-  drawByParticleID
-  drawByOriginVolume
-
-Registered models: 
-  None
-
-Registered filter factories:
-  chargeFilter
-  particleFilter
-  originVolumeFilter
-
-Registered filters:
-  None
-
 /run/verbose 2
 #
 /testem/det/setAbsMat Silicon
@@ -270,7 +235,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=85.5s Real=226.44s Sys=37.98s
+  User=144.35s Real=430.51s Sys=136.27s
 
  ======================== run summary ======================
 
@@ -306,8 +271,6 @@ Run Summary
  Initial seed (index) = 0
  Current couple of seeds = 1728014667, 1847164391
 ----------------------------------------
-Graphics systems deleted.
-Visualization Manager deleting...
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
 UserRunAction deleted.
