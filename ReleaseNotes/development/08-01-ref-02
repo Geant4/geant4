@@ -1,0 +1,161 @@
+
+                       geant4-08-01-ref-02
+                       ===================
+
+Some of the development/fixes included since the last reference tag are:
+
+  o Fixed energy non-conservation in G4PAIModel for positrons.
+  o Fixed a bug in cross sections for Ca, and nearby elements. Changed scheme
+    for interpolating non-tabulated elements. Added new cross section class
+    G4GlauberGribovCrossSection for proton, pion, kaon.
+  o Added trajectory time slicing in visualization.
+
+---------- Reference-tag 'Release Notes' -----------
+
+
+Summarised, the list of changes is the following:
+
+config                                           config-V08-01-01
+------
+- Linux-icc: updated setup to support Intel icc compiler 9.X series.
+
+global                                           global-V08-01-01
+------
+- G4UnitsTable: removed 'mum'; 'um' should be used instead.
+
+graphics_reps                                    greps-V08-01-02
+-------------
+- G4AttCheck:
+  o Added bool to the list of allowed G4AttValue value types.
+  o Added Density to the list of units categories.
+  o Improved error checking.
+- G4AttDefStore: added GetName() method.
+- G4VGraphicsScene: removed Establish/DecommissionSpecials.
+- G4VisAttributes:
+  o Added ForceLineSegmentsPerCircle.
+  o Cosmetic re-ordering of methods.
+
+processes/electromagnetic/standard               emstand-V08-01-01
+----------------------------------
+- Fixed energy non-conservation in G4PAIModel for positrons.
+- Fixed problems and added comments in the prototype classes for Coulomb
+  elastic scattering: G4CoulombScattering, G4CoulombScatteringModel and
+  G4eCoulombScatteringModel.
+- Set default limit on scattering angle to zero.
+
+processes/electromagnetic/utils                  emutils-V08-01-01
+-------------------------------
+- G4VEnergyLossProcess: made LambdaPhysicsVector() method protected.
+- G4ionEffectiveCharge: added protection for NULL pointer to material.
+
+processes/hadronic
+------------------
+- cross_sections (hadr-cross-V08-01-01)
+  o New cross section class G4GlauberGribovCrossSection for proton, pion,
+    kaon, (and maybe gamma and neutron): total and elastic cross sections.
+    Effective energies: 1-3 GeV.
+  o Fixed a bug in cross sections for Ca, and nearby elements.
+    Changed scheme for interpolating non-tabulated elements. 
+- models/chiral_inv_phase_space/interface (hadr-chips-inter-V08-01-03)
+  o QGSC is made the same as QGSP: not decay eta', but decay pho0 from
+    the phi0->pi0+rho0 decay.
+  o Fixed bug for low energy neutrons where neutron elastic was activated
+    instead of neutron capture.
+- models/coherent_elastic (hadr-cohe-V08-01-03)
+  o Introduced NaN check inside G4HadronElastic, G4ChargeExchange, and
+    G4UHadronElasticProcess.
+  o Removed HP data from G4UHadronElasticProcess (it is set in physics lists)
+    Added low energy threshold for QElastic 20 MeV inside G4HadronElastic.
+- models/de_excitation (hadr-deex-V08-01-00)
+  o Removed meaningless 'const' qualifier from return type of several
+    methods in multifragmentation and handler modules.
+- models/im_r_matrix (hadr-im_r-V08-01-02)
+  o Removed meaningless 'const' qualifier from return type of methods.
+- models/pre_equilibrium (hadr-pre-V08-01-00)
+  o Removed meaningless 'const' qualifier from return type of several
+    methods in exciton_model module.
+- models/util (hadr-modutl-V08-01-00)
+  o Removed meaningless 'const' qualifier from return type of method
+    G4Fancy3DNucleusHelper().
+
+persistency                                      persistency-V08-01-00
+-----------
+- Get Rid of useless forward declarations in G4MCTEvent and G4MCTGenParticle
+  header files. Clearing compilation warnings on icc-9.X compilers.
+
+track                                            track-V08-01-01
+-----
+- Moved G4TrackVector class from 'tracking' category.
+- Added secondary vector to G4Step.
+
+tracking                                         tracking-V08-01-03
+--------
+- Fix in G4SteppingVerbose for ForceConditions.
+- Fixed "double-deletion" problem in the destructor of G4SteppingManager.
+- Secondary vector is now owned by G4Step and G4TrackVector class has
+  been moved in the 'track' category.
+
+visualization                                    vis-V08-01-03
+-------------
+- management:
+  o /vis/scene/transientsAction: added max number of events parameter.
+  o Added command /vis/viewer/clearTransients and improved /vis/list.
+  o Removed Establish/DecommissionSpecials to conform with developments
+    in graphics_reps.
+  o Adapted to rationalised G4ModelingParameters.
+  o Added GetNoOfSides() that respects forced line segments per circle.
+  o Friendship extended to new OpenGL messengers.
+- modeling:
+  o Added G4Atts for solids.
+  o Added trajectory time slicing.
+  o Rationalised G4VModel and G4ModelingParameters.
+  o G4PhysicalVolumeModel: removed Establish/DecommissionSpecials to conform
+    with developments in graphics_reps, and rationalised G4Atts (added
+    GetAttDefs/CreateAttValues).
+- DAWN:
+  o Respects forced line segments per circle.
+- OpenGL:
+  o Implemented FinishView() in all viewers.
+  o Implemented display-by-time.
+  o Added commands: /vis/oglx/set/printEPS, /vis/ogl/set/startTime (and
+    endTime), /vis/ogl/set/fade and displayHeadTime.
+- Tree:
+  o Layout improvement in ASCIITree.
+- RayTracer:
+  o Improved robustness under vis manager control.
+- XXX:
+  o Gets solid's G4Atts created by G4PhysicalVolumeModel.
+  o General tidy and improvement to XXXFile.
+
+physics_lists                                    phys-lists-V08-01-05
+-------------
+- G4NadronElasticPhysics: configure neutrons separately from other hadrons.
+- G4HadronProcessStore: implemented computation of cross sections.
+
+examples                                         examples-V08-01-02
+--------
+- Updated reference outputs.
+- extended/analysis/AnaEx01 (AnaEx01-V08-01-00)
+  o Corrected text in README for AIDA setup.
+- extended/electromagnetic/TestEm0 (testem0-V08-01-01)
+  o Added interface to NIST materials.
+  o Correction in DetectorConstruction::SetMaterial().
+- extended/electromagnetic/TestEm5 (testem5-V08-01-00)
+  o Added interface to NIST materials.
+  o Added "standardSS" physics (single scattering instead of multiple).
+  o PhysicsList: moved AddDecay() after EM processes in ConstructProcess().
+- extended/hadronic/Hadr01 (exhadr01-V08-01-00)
+  o Added PhysList and directory for histograms definition via environment
+    variable and fixed setup for AIDA.
+- novice/N03 (exampleN03-V08-01-00)
+  o Added TrackingAction. Active code is commented out so it continues to
+    use G4Trajectory. Introduced so that the code can easily be instated
+    to get G4RichTrajectory for exN03Vis12.mac.
+  o Added visTutor/exN03Vis12.mac: demonstration of time slicing.
+
+tests                                            tests-V08-01-02
+-----
+- Updated reference outputs.
+- test19 (test19-V08-01-00)
+- test29 (test29-V08-01-00)
+  o Added TouchableHandle to the projectile track.
