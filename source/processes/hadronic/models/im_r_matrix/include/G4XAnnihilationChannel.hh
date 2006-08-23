@@ -75,17 +75,17 @@ private:
   G4XAnnihilationChannel(const G4XAnnihilationChannel &right);
   const G4XAnnihilationChannel& operator=(const G4XAnnihilationChannel &right);
   
-  const G4double Branch(const G4KineticTrack& trk1, 
-			const G4KineticTrack& trk2) const;
+  G4double Branch(const G4KineticTrack& trk1, 
+                  const G4KineticTrack& trk2) const;
 
-  const G4double VariableWidth(const G4KineticTrack& trk1, 
-			       const G4KineticTrack& trk2) const;
+  G4double VariableWidth(const G4KineticTrack& trk1, 
+                         const G4KineticTrack& trk2) const;
  
-  const G4double VariablePartialWidth(const G4KineticTrack& trk1, 
-				     const G4KineticTrack& trk2) const;
+  G4double VariablePartialWidth(const G4KineticTrack& trk1, 
+                                const G4KineticTrack& trk2) const;
 
-  const G4double NormalizedClebsch(const G4KineticTrack& trk1, 
-				   const G4KineticTrack& trk2) const;
+  G4double NormalizedClebsch(const G4KineticTrack& trk1, 
+                             const G4KineticTrack& trk2) const;
 
   G4double lowLimit;
   G4double highLimit;
