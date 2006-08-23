@@ -23,53 +23,25 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pymodG4global.cc,v 1.5 2006-08-23 04:43:56 kmura Exp $
+// $Id: pyG4Version.cc,v 1.1 2006-08-23 04:43:27 kmura Exp $
 // $Name: not supported by cvs2svn $
 // ====================================================================
-//   pymodG4global.cc [Geant4Py module]
+//   pyG4Version.cc
 //
-//                                         2005 Q
+//                                         2006 Q
 // ====================================================================
 #include <boost/python.hpp>
+#include "pyG4Version.hh"
 
 using namespace boost::python;
 
 // ====================================================================
 // module definition
 // ====================================================================
-
-void export_globals();
-void export_geomdefs();
-void export_G4StateManager();
-void export_G4ApplicationState();
-void export_G4String();
-void export_G4ThreeVector();
-void export_G4RotationMatrix();
-void export_G4Transform3D();
-void export_G4UnitsTable();
-void export_Randomize();
-void export_RandomEngines();
-void export_G4RandomDirection();
-void export_G4UserLimits();
-void export_G4Timer();
-void export_G4Version();
-
-BOOST_PYTHON_MODULE(G4global) 
+void export_G4Version()
 {
-  export_globals();
-  export_geomdefs();
-  export_G4StateManager();
-  export_G4ApplicationState();
-  export_G4String();
-  export_G4ThreeVector();
-  export_G4RotationMatrix();
-  export_G4Transform3D();
-  export_G4UnitsTable();
-  export_Randomize();
-  export_RandomEngines();
-  export_G4RandomDirection();
-  export_G4UserLimits();
-  export_G4Timer();
-  export_G4Version();
+  scope current;
+  current.attr("G4VERSION_NUMBER")= G4VERSION_NUMBER;
+  current.attr("G4Version")= G4Version.c_str();
+  current.attr("G4Date")= G4Date.c_str();
 }
-
