@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TrajectoryOriginVolumeFilter.cc,v 1.2 2006-06-29 21:33:20 gunter Exp $
+// $Id: G4TrajectoryOriginVolumeFilter.cc,v 1.3 2006-08-25 19:44:14 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Filter trajectories according to volume name. Only registered 
@@ -42,7 +42,7 @@ G4TrajectoryOriginVolumeFilter::G4TrajectoryOriginVolumeFilter(const G4String& n
 G4TrajectoryOriginVolumeFilter::~G4TrajectoryOriginVolumeFilter() {}
 
 bool
-G4TrajectoryOriginVolumeFilter::Evaluate(const G4VTrajectory& traj)
+G4TrajectoryOriginVolumeFilter::Evaluate(const G4VTrajectory& traj) const
 {
   G4Navigator* navigator = G4TransportationManager::GetTransportationManager()->GetNavigatorForTracking();
   

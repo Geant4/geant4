@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TrajectoryChargeFilter.cc,v 1.3 2006-06-29 21:33:04 gunter Exp $
+// $Id: G4TrajectoryChargeFilter.cc,v 1.4 2006-08-25 19:44:14 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Filter trajectories according to charge. Only registered 
@@ -41,7 +41,7 @@ G4TrajectoryChargeFilter::G4TrajectoryChargeFilter(const G4String& name)
 G4TrajectoryChargeFilter::~G4TrajectoryChargeFilter() {}
 
 bool
-G4TrajectoryChargeFilter::Evaluate(const G4VTrajectory& traj)
+G4TrajectoryChargeFilter::Evaluate(const G4VTrajectory& traj) const
 {
   G4double charge = traj.GetCharge();
 

@@ -1,4 +1,4 @@
-$Id: History,v 1.77 2006-08-16 16:10:35 allison Exp $
+$Id: History,v 1.78 2006-08-25 19:44:14 tinslay Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,8 @@ committal in the CVS repository !
 
 History file for visualization/modeling
 ---------------------------------------
+25th August 2006 Jane Tinslay
+- Follow G4VFilter const change
 
 16th August 2006  John Allison  (modeling-V08-01-03)
 - G4TrajectoryDrawerUtils.cc: Improved robustness of time slicing.

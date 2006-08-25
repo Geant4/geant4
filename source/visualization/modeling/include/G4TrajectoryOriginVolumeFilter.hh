@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TrajectoryOriginVolumeFilter.hh,v 1.2 2006-06-29 21:32:03 gunter Exp $
+// $Id: G4TrajectoryOriginVolumeFilter.hh,v 1.3 2006-08-25 19:44:14 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Filter trajectories according to volume name. Only registered 
@@ -48,7 +48,7 @@ public: // With description
   virtual ~G4TrajectoryOriginVolumeFilter();
 
   // Evaluate this trajectory
-  virtual bool Evaluate(const G4VTrajectory&);
+  virtual bool Evaluate(const G4VTrajectory&) const;
 
   // Print configuration
   virtual void Print(std::ostream& ostr) const;
