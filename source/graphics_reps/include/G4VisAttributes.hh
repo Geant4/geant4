@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisAttributes.hh,v 1.16 2006-07-10 15:18:01 allison Exp $
+// $Id: G4VisAttributes.hh,v 1.17 2006-08-26 15:10:06 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -104,6 +104,8 @@ public: // With description
   // will be composed of nSegments line segments.  If your solid has
   // curves of D degrees that you need to divide into N segments,
   // specify nSegments = N * 360 / D.
+  void SetStartTime           (G4double);
+  void SetEndTime             (G4double);
   void SetAttValues           (const std::vector<G4AttValue>*);
   void SetAttDefs             (const std::map<G4String,G4AttDef>*);
 
@@ -117,6 +119,8 @@ public: // With description
   ForcedDrawingStyle GetForcedDrawingStyle       () const;
   G4bool          IsForceAuxEdgeVisible          () const;
   G4int           GetForcedLineSegmentsPerCircle () const;
+  G4double        GetStartTime                   () const;
+  G4double        GetEndTime                     () const;
   const std::vector<G4AttValue>*     GetAttValues() const;
   const std::map<G4String,G4AttDef>* GetAttDefs  () const;
 
@@ -133,6 +137,7 @@ private:
   G4bool    fForceAuxEdgeVisible;  // Force drawing of auxilary edges. 
   G4int fForcedLineSegmentsPerCircle;  // Forced lines segments per
 				       // circle.  <=0 means not forced.
+  G4double fStartTime, fEndTime;   // Time range.
   const std::vector<G4AttValue>*     fAttValues;  // For picking, etc.
   const std::map<G4String,G4AttDef>* fAttDefs;    // Corresponding definitions.
 };

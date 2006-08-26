@@ -23,7 +23,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisAttributes.icc,v 1.10 2006-07-10 15:18:01 allison Exp $
+// $Id: G4VisAttributes.icc,v 1.11 2006-08-26 15:10:06 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -75,6 +75,14 @@ inline void G4VisAttributes::SetForceAuxEdgeVisible (G4bool force) {
   fForceAuxEdgeVisible = force;
 }
 
+inline void G4VisAttributes::SetStartTime(G4double time) {
+  fStartTime = time;
+}
+
+inline void G4VisAttributes::SetEndTime(G4double time) {
+  fEndTime = time;
+}
+
 inline void G4VisAttributes::SetAttValues
  (const std::vector<G4AttValue>* attValues){
   fAttValues = attValues;
@@ -117,6 +125,14 @@ inline G4bool G4VisAttributes::IsForceAuxEdgeVisible () const {
 
 inline G4int G4VisAttributes::GetForcedLineSegmentsPerCircle () const {
   return fForcedLineSegmentsPerCircle;
+}
+
+inline G4double G4VisAttributes::GetStartTime() const {
+  return fStartTime;
+}
+
+inline G4double G4VisAttributes::GetEndTime() const {
+  return fEndTime;
 }
 
 inline const std::vector<G4AttValue>*

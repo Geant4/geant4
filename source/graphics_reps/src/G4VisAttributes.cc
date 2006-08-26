@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisAttributes.cc,v 1.13 2006-07-10 15:18:01 allison Exp $
+// $Id: G4VisAttributes.cc,v 1.14 2006-08-26 15:10:06 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,6 +41,8 @@ fLineWidth           (1.),
 fForceDrawingStyle   (false),
 fForceAuxEdgeVisible (false),
 fForcedLineSegmentsPerCircle (0),  // <=0 means not forced.
+fStartTime           (-DBL_MAX),
+fEndTime             (DBL_MAX),
 fAttValues           (0),
 fAttDefs             (0)
 {}
@@ -54,6 +56,8 @@ fLineWidth           (1.),
 fForceDrawingStyle   (false),
 fForceAuxEdgeVisible (false),
 fForcedLineSegmentsPerCircle (0),  // <=0 means not forced.
+fStartTime           (-DBL_MAX),
+fEndTime             (DBL_MAX),
 fAttValues           (0),
 fAttDefs             (0)
 {}
@@ -67,6 +71,8 @@ fLineWidth           (1.),
 fForceDrawingStyle   (false),
 fForceAuxEdgeVisible (false),
 fForcedLineSegmentsPerCircle (0),  // <=0 means not forced.
+fStartTime           (-DBL_MAX),
+fEndTime             (DBL_MAX),
 fAttValues           (0),
 fAttDefs             (0)
 {}
@@ -80,6 +86,8 @@ fLineStyle          (unbroken),
 fLineWidth          (1.),
 fForceDrawingStyle  (false),
 fForcedLineSegmentsPerCircle (0),  // <=0 means not forced.
+fStartTime           (-DBL_MAX),
+fEndTime             (DBL_MAX),
 fAttValues          (0),
 fAttDefs            (0)
 {}
@@ -145,6 +153,7 @@ std::ostream& operator << (std::ostream& os, const G4VisAttributes& a) {
     } else {
       os << "not forced.";
     }
+    os << "\n  time range: (" << a.fStartTime << ',' << a.fEndTime << ')';
     os << "\n  G4AttValue pointer is ";
     if (a.fAttValues) {
       os << "non-";
@@ -171,6 +180,8 @@ G4bool G4VisAttributes::operator != (const G4VisAttributes& a) const {
       (fForceDrawingStyle  != a.fForceDrawingStyle)  ||
       (fForceAuxEdgeVisible!= a.fForceAuxEdgeVisible)||
       (fForcedLineSegmentsPerCircle != a.fForcedLineSegmentsPerCircle) ||
+      (fStartTime          != a.fStartTime)          ||
+      (fEndTime            != a.fEndTime)            ||
       (fAttValues          != a.fAttValues)          ||
       (fAttDefs            != a.fAttDefs)
       )
