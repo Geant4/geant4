@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChangeForGamma.hh,v 1.6 2006-08-26 18:51:07 vnivanch Exp $
+// $Id: G4ParticleChangeForGamma.hh,v 1.7 2006-08-26 18:55:40 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -212,7 +212,7 @@ inline G4Step* G4ParticleChangeForGamma::UpdateStepForPostStep(G4Step* pStep)
   // update weight
   // this feature is commented out, it should be overwritten in case
   // if energy loss processes will use biasing
-  if(!fParentWeightByProcess)
+  if (!fSetParentWeightByProcess)
     pPostStepPoint->SetWeight( theParentWeight );
   
   pStep->AddTotalEnergyDeposit( theLocalEnergyDeposit );
