@@ -1,4 +1,4 @@
-$Id: History,v 1.369 2006-08-26 16:18:58 allison Exp $
+$Id: History,v 1.370 2006-08-26 16:29:10 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -24,8 +24,8 @@ committal in the CVS repository !
 History file for visualization category
 ---------------------------------------
 
-26th August 2006  John Allison
-- modeling-V08-01-04 (requires greps-V08-01-03):
+26th August 2006  John Allison  (vis-V08-01-04 - requires greps-V08-01-03)
+- modeling-V08-01-04:
   o Fixed compilation warning.
   o Follow G4VFilter const change.
 
