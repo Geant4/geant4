@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.103 2006-08-25 19:39:39 tinslay Exp $
+cvs log $Id: History,v 1.104 2006-08-26 15:10:52 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+26th August 2006  John Allison  (greps-V08-01-03)
+- G4VisAttributes: Added time range.
+
 25th August 2006 Jane Tinslay
 - Make G4VFilter Accept method const
 
