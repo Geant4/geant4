@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TrajectoryDrawerUtils.cc,v 1.8 2006-08-16 16:05:38 allison Exp $
+// $Id: G4TrajectoryDrawerUtils.cc,v 1.9 2006-08-26 16:12:26 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Jane Tinslay, John Allison, Joseph Perl November 2005
@@ -119,8 +119,8 @@ namespace G4TrajectoryDrawerUtils {
     
   }
   
-  // It is important check that the size of times vectors produced by
-  // this function matches that of points vectors from GetPoints.  If
+  // It is important check that the sizes of times vectors produced by
+  // this function matches those of points vectors from GetPoints.  If
   // not, assume that the time information is invalid.
   static void GetTimes(const G4VTrajectory& traj,
 		       std::vector<G4double>& trajectoryLineTimes,
@@ -132,8 +132,8 @@ namespace G4TrajectoryDrawerUtils {
       G4VTrajectoryPoint* aTrajectoryPoint = traj.GetPoint(i);
 
       // Pre- and Post-Point times from the trajectory point...
-      G4double trajectoryPointPreTime;
-      G4double trajectoryPointPostTime;
+      G4double trajectoryPointPreTime = -DBL_MAX;
+      G4double trajectoryPointPostTime = DBL_MAX;
       std::vector<G4AttValue>* trajectoryPointAttValues =
         aTrajectoryPoint->CreateAttValues();
       if (!trajectoryPointAttValues) {
