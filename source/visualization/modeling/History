@@ -1,4 +1,4 @@
-$Id: History,v 1.78 2006-08-25 19:44:14 tinslay Exp $
+$Id: History,v 1.79 2006-08-26 16:13:35 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,10 @@ committal in the CVS repository !
 
 History file for visualization/modeling
 ---------------------------------------
+
+26th August 2006  John Allison  (modeling-V08-01-04)
+- G4TrajectoryDrawerUtils.cc: Fixed compilation warning.
+
 25th August 2006 Jane Tinslay
 - Follow G4VFilter const change
 
