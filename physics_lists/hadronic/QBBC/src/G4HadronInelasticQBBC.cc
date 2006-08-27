@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronInelasticQBBC.cc,v 1.10 2006-07-05 17:17:11 vnivanch Exp $
+// $Id: G4HadronInelasticQBBC.cc,v 1.11 2006-08-27 17:04:24 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -68,12 +68,12 @@
 #include "G4NeutronHPCapture.hh"
 
 #include "G4HadronProcessStore.hh"
+#include "G4UInelasticCrossSection.hh"
 
 G4HadronInelasticQBBC::G4HadronInelasticQBBC(const G4String& name, 
-					     G4int ver, G4bool ftf, G4bool bert, 
-					     G4bool chips, G4bool hp)
+    G4int ver, G4bool ftf, G4bool bert, G4bool chips, G4bool hp, G4bool glauber)
   : G4VPhysicsConstructor(name), verbose(ver), ftfFlag(ftf), bertFlag(bert), 
-    chipsFlag(chips), hpFlag(hp), wasActivated(false)
+    chipsFlag(chips), hpFlag(hp), glFlag(gl), wasActivated(false)
 {
   if(verbose > -1) G4cout << "### HadronInelasticQBBC" << G4endl;
   store = G4HadronProcessStore::Instance();
@@ -193,6 +193,8 @@ void G4HadronInelasticQBBC::ConstructProcess()
 	  theBIC->SetMaxEnergy(maxEcascade);
 	  Register(particle,hp,theBIC,"Binary");
 	}
+	if(glFlag) 
+	  hp->AddDataSet(new G4UInelasticCrossSection(particle));
 
       } else if(pname == "neutron") {
 	hp->AddDataSet(&theXSecN);
@@ -238,15 +240,15 @@ void G4HadronInelasticQBBC::ConstructProcess()
 	theB->SetMinEnergy(emin);
 	theB->SetMaxEnergy(maxEcascade);
 	Register(particle,hp,theB,s);
+	if(glFlag) 
+	  hp->AddDataSet(new G4UInelasticCrossSection(particle));
 	
 	G4HadronicInteraction* theC = new G4LCapture();
 	theC->SetMinEnergy(emin);
-	theC->SetMaxEnergy(maxEcascade);
 	Register(particle,theNeutronCapture,theC,"LCapture");
 
 	G4HadronicInteraction* theF = new G4LFission();
 	theF->SetMinEnergy(emin);
-	theF->SetMaxEnergy(maxEcascade);
 	Register(particle,theNeutronFission,theF,"LFission");
 
       } else if(pname == "pi-" || pname == "pi+") {
@@ -256,6 +258,8 @@ void G4HadronInelasticQBBC::ConstructProcess()
 
         if(chipsFlag) Register(particle,hp,theCHIPS,"CHIPS");
 	else          Register(particle,hp,theBERT,"Bertini");
+	if(glFlag) 
+	  hp->AddDataSet(new G4UInelasticCrossSection(particle));
 
       } else if(pname == "kaon-"     || 
 		pname == "kaon+"     || 
@@ -266,6 +270,8 @@ void G4HadronInelasticQBBC::ConstructProcess()
 
         if(chipsFlag) Register(particle,hp,theCHIPS,"CHIPS");
 	else          Register(particle,hp,theBERT,"Bertini");
+	if(glFlag) 
+	  hp->AddDataSet(new G4UInelasticCrossSection(particle));
 
       } else if(pname == "lambda"    || 
 		pname == "sigma-"    || 
@@ -276,14 +282,20 @@ void G4HadronInelasticQBBC::ConstructProcess()
 
         if(chipsFlag) Register(particle,hp,theCHIPS,"CHIPS");
 	else          Register(particle,hp,theBERT,"Bertini");
+	if(glFlag) 
+	  hp->AddDataSet(new G4UInelasticCrossSection(particle));
 
       } else if(pname == "anti_proton" || pname == "anti_neutron") {
 	Register(particle,hp,theFTFModel,"FTF");
         Register(particle,hp,theCHIPS,"CHIPS");
+	if(glFlag) 
+	  hp->AddDataSet(new G4UInelasticCrossSection(particle));
 
       } else {
 	Register(particle,hp,theFTFModel,"FTF");
         Register(particle,hp,theCHIPS,"CHIPS");
+	if(glFlag) 
+	  hp->AddDataSet(new G4UInelasticCrossSection(particle));
       }
 
       if(verbose > 1)

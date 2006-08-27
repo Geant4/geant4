@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronInelasticQBBC.hh,v 1.5 2006-07-05 16:12:43 vnivanch Exp $
+// $Id: G4HadronInelasticQBBC.hh,v 1.6 2006-08-27 17:04:22 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -67,7 +67,8 @@ public:
 
   G4HadronInelasticQBBC(const G4String& name = "inelastic",
 			G4int ver = 1, G4bool ftf = false, G4bool bert = false,
-			G4bool chips = false, G4bool hp = false);
+			G4bool chips = false, G4bool hp = false, 
+			G4bool glauber = false);
 
   virtual ~G4HadronInelasticQBBC();
 
@@ -108,6 +109,7 @@ private:
   G4bool   bertFlag;
   G4bool   chipsFlag;
   G4bool   hpFlag;
+  G4bool   glFlag;
   G4bool   wasActivated;
 };
 

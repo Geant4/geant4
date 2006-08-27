@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronElasticPhysics.cc,v 1.17 2006-08-15 14:19:32 vnivanch Exp $
+// $Id: G4HadronElasticPhysics.cc,v 1.18 2006-08-27 17:03:56 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -58,11 +58,12 @@
 
 #include "G4HadronProcessStore.hh"
 #include "G4VQCrossSection.hh"
+#include "G4UElasticCrossSection.hh"
 
-G4HadronElasticPhysics::G4HadronElasticPhysics(const G4String& name, 
-					       G4int ver, G4bool hp)
+G4HadronElasticPhysics::G4HadronElasticPhysics(
+    const G4String& name,  G4int ver, G4bool hp, G4bool glauber)
   : G4VPhysicsConstructor(name), mname(name), verbose(ver), hpFlag(hp), 
-    wasActivated(false)
+    glFlag(glauber),wasActivated(false)
 {
   if(verbose > 1) G4cout << "### HadronElasticPhysics" << G4endl;
   pLimit = 20.*MeV;
@@ -149,6 +150,7 @@ void G4HadronElasticPhysics::ConstructProcess()
 	G4UHadronElasticProcess* h = new G4UHadronElasticProcess("hElastic");
 	h->SetQElasticCrossSection(man);
         hel = h;
+        if(glFlag) hel->AddDataSet(new G4UElasticCrossSection());
       } else {                   
 	hel = new G4HadronElasticProcess();
       }
@@ -166,6 +168,7 @@ void G4HadronElasticPhysics::ConstructProcess()
 	neutronModel = nhe;
 	h->SetQElasticCrossSection(nhe->GetCS());
         hel = h;
+        if(glFlag) hel->AddDataSet(new G4UElasticCrossSection());
       } else {                   
 	hel = new G4HadronElasticProcess();
 	neutronModel = new G4LElastic();

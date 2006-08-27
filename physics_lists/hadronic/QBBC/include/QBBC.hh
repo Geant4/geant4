@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: QBBC.hh,v 1.4 2006-06-29 18:03:01 gunter Exp $
+// $Id: QBBC.hh,v 1.5 2006-08-27 17:04:23 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -48,7 +48,7 @@ class TQBBC: public T
 {
 public:
 
-  TQBBC(G4int ver = 1, const G4String& type = "QBBC");
+  TQBBC(G4int ver = 1, const G4String& type = "QBBC", G4bool glauber = false);
 
   virtual ~TQBBC();
   
