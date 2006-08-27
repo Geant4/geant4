@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronInelasticQBBC.cc,v 1.11 2006-08-27 17:04:24 vnivanch Exp $
+// $Id: G4HadronInelasticQBBC.cc,v 1.12 2006-08-27 17:15:27 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -73,7 +73,7 @@
 G4HadronInelasticQBBC::G4HadronInelasticQBBC(const G4String& name, 
     G4int ver, G4bool ftf, G4bool bert, G4bool chips, G4bool hp, G4bool glauber)
   : G4VPhysicsConstructor(name), verbose(ver), ftfFlag(ftf), bertFlag(bert), 
-    chipsFlag(chips), hpFlag(hp), glFlag(gl), wasActivated(false)
+    chipsFlag(chips), hpFlag(hp), glFlag(glauber), wasActivated(false)
 {
   if(verbose > -1) G4cout << "### HadronInelasticQBBC" << G4endl;
   store = G4HadronProcessStore::Instance();
