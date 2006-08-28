@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmModel.hh,v 1.42 2006-06-29 19:54:43 gunter Exp $
+// $Id: G4VEmModel.hh,v 1.43 2006-08-28 17:43:53 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -172,7 +172,7 @@ public:
 protected:
 
   virtual G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
-				      G4double kineticEnergy);
+				      G4double kineticEnergy);  
 
   //------------------------------------------------------------------------
   // Generic methods common to all models
@@ -202,6 +202,10 @@ public:
 
   const G4String& GetName() const;
 
+protected:
+
+  const G4Element* GetCurrentElement() const;
+
 private:
 
   //  hide assignment operator
@@ -214,7 +218,8 @@ private:
 
   G4VEmFluctuationModel* fluc;
 
-  const G4String  name;
+  const G4String   name;
+  const G4Element* currentElement;
 
 protected:
 
@@ -327,16 +332,25 @@ inline const G4Element* G4VEmModel::SelectRandomAtom(
 				               G4double tmax)
 {
   const G4ElementVector* theElementVector = material->GetElementVector();
-  const G4Element* elm = (*theElementVector)[0];
+  currentElement = (*theElementVector)[0];
   G4int nelm = material->GetNumberOfElements() - 1;
   if (nelm > 0) {
     G4double x = G4UniformRand()*
                  CrossSectionPerVolume(material,pd,kinEnergy,tcut,tmax);
-    G4int i = -1;
-    do {i++;} while (x > xsec[i] && i < nelm);
-    elm = (*theElementVector)[i];
+    for(G4int i=0; i<nelm; i++) {
+      if (x <= xsec[i]) {
+	currentElement = (*theElementVector)[i];
+	break;
+      }
+    }
   }
-  return elm;
+  return currentElement;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+inline const G4Element* G4VEmModel::GetCurrentElement() const
+{
+  return currentElement;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
