@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChangeForGamma.hh,v 1.7 2006-08-26 18:55:40 vnivanch Exp $
+// $Id: G4ParticleChangeForGamma.hh,v 1.8 2006-08-28 16:10:06 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -117,7 +117,7 @@ private:
   //  The final momentum direction of the current particle.
 
   G4ThreeVector proposedPolarization;
-  //  The final momentum direction of the current particle.
+  //  The final polarization of the current particle.
 };
 
 // ------------------------------------------------------------
