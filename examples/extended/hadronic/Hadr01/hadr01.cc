@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: hadr01.cc,v 1.7 2006-08-11 14:38:11 vnivanch Exp $
+// $Id: hadr01.cc,v 1.8 2006-08-28 13:54:13 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------
@@ -74,10 +74,12 @@ int main(int argc,char** argv) {
 
   //set mandatory initialization classes
   runManager->SetUserInitialization(new DetectorConstruction());
+
   runManager->SetUserInitialization(new PhysicsList);
   //runManager->SetUserInitialization(new QBBC(1,"QBEC_HP"));
   // runManager->SetUserInitialization(new LHEP_BIC_HP);
   //runManager->SetUserInitialization(new QGSP);
+
   runManager->SetUserAction(new PrimaryGeneratorAction());
 
   //set user action classes

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.6 2006-08-11 14:38:11 vnivanch Exp $
+// $Id: HistoManager.cc,v 1.7 2006-08-28 13:54:13 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -161,6 +161,12 @@ void HistoManager::bookHisto()
 
   histo->add1D("19",
     "log10 Energy (MeV) of leaking charged pions",nBinsE,-4.,6.,1.0);
+
+  histo->add1D("20",
+    "Log10 Energy (MeV) of pi+",nBinsE,-4.,6.,1.0);
+
+  histo->add1D("21",
+    "Log10 Energy (MeV) of pi-",nBinsE,-4.,6.,1.0);
 
 }
 
@@ -318,9 +324,16 @@ void HistoManager::ScoreNewTrack(const G4Track* track)
       histo->fill(5,e,1.0);
     } else if ( pd == G4AntiProton::AntiProton()) {
       n_aproton++;
-    } else if ( pd == G4PionPlus::PionPlus() || pd == G4PionMinus::PionMinus()) {
+    } else if ( pd == G4PionPlus::PionPlus() ) {
       n_cpions++;
       histo->fill(6,e,1.0);
+      histo->fill(19,e,1.0);
+
+    } else if ( pd == G4PionMinus::PionMinus()) {
+      n_cpions++;
+      histo->fill(6,e,1.0);
+      histo->fill(20,e,1.0);
+
     } else if ( pd == G4PionZero::PionZero()) {
       n_pi0++;
       histo->fill(7,e,1.0);

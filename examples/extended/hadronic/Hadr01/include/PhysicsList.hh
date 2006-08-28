@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.hh,v 1.4 2006-08-11 19:19:21 vnivanch Exp $
+// $Id: PhysicsList.hh,v 1.5 2006-08-28 13:54:13 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /////////////////////////////////////////////////////////////////////////
@@ -70,7 +70,7 @@ public:
   
 private:
 
-  void SetStandardList(G4bool);
+  void SetStandardList(G4bool flagHP = false, G4bool glauber = false);
 
   G4double cutForGamma;
   G4double cutForElectron;

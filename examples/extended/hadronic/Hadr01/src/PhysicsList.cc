@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.cc,v 1.13 2006-08-11 19:19:22 vnivanch Exp $
+// $Id: PhysicsList.cc,v 1.14 2006-08-28 13:54:14 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /////////////////////////////////////////////////////////////////////////
@@ -265,6 +265,12 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     SetStandardList(false);
     hadronPhys.push_back( new G4HadronInelasticQBBC("QBBC",verboseLevel));
 
+  } else if (name == "QBBCG") {
+
+    SetStandardList(false, true);
+    hadronPhys.push_back( new G4HadronInelasticQBBC("QBBC",verboseLevel,
+						    false,false,false,false,true));
+
   } else if (name == "QBBC_BERT") {
 
     SetStandardList(false);
@@ -325,11 +331,11 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-void PhysicsList::SetStandardList(G4bool flagHP)
+void PhysicsList::SetStandardList(G4bool flagHP, G4bool glauber)
 {
   hadronPhys.push_back( new G4EmExtraPhysics("gamma_nuc"));
   hadronPhys.push_back( new G4HadronElasticPhysics("elastic",verboseLevel,
-						   flagHP));
+						   flagHP,glauber));
   hadronPhys.push_back( new G4QStoppingPhysics("stopping"));
   hadronPhys.push_back( new G4IonBinaryCascadePhysics("binary_ion"));
 }
