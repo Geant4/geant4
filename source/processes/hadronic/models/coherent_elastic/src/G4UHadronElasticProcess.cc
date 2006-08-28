@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UHadronElasticProcess.cc,v 1.22 2006-08-24 13:45:57 vnivanch Exp $
+// $Id: G4UHadronElasticProcess.cc,v 1.23 2006-08-28 08:30:00 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Geant4 Hadron Elastic Scattering Process -- header file
@@ -83,11 +83,14 @@ BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
 
     store = G4HadronicProcess::GetCrossSectionDataStore();
      
-    if(verboseLevel>1 || (verboseLevel==1 && theParticle == theNeutron)) 
+    if(verboseLevel>1 || 
+       (verboseLevel==1 && theParticle == theNeutron)) {
+      G4cout << G4endl;
       G4cout << "G4UHadronElasticProcess for " 
 	     << theParticle->GetParticleName()
 	     << "  Elow(MeV)= " << thEnergy/MeV 
-	     << G4endl; 
+	     << G4endl;
+    } 
   }
   store->BuildPhysicsTable(aParticleType);
 }
