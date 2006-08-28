@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungModel.cc,v 1.33 2006-06-29 19:53:47 gunter Exp $
+// $Id: G4eBremsstrahlungModel.cc,v 1.34 2006-08-28 17:44:36 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -81,13 +81,13 @@ G4eBremsstrahlungModel::G4eBremsstrahlungModel(const G4ParticleDefinition* p,
                                                const G4String& nam)
   : G4VEmModel(nam),
   particle(0),
+  minThreshold(1.0*keV),
+  isElectron(true),
   highKinEnergy(100.*TeV),
   lowKinEnergy(1.0*keV),
-  minThreshold(1.0*keV),
   probsup(1.0),
   MigdalConstant(classic_electr_radius*electron_Compton_length*electron_Compton_length/pi),
   LPMconstant(fine_structure_const*electron_mass_c2*electron_mass_c2/(8.*pi*hbarc)),
-  isElectron(true),
   theLPMflag(true)
 {
   if(p) SetParticle(p);
