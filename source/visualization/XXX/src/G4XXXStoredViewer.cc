@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4XXXStoredViewer.cc,v 1.4 2006-06-29 21:27:50 gunter Exp $
+// $Id: G4XXXStoredViewer.cc,v 1.5 2006-08-29 16:11:25 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -117,19 +117,17 @@ G4bool G4XXXStoredViewer::CompareForKernelVisit(G4ViewParameters& lastVP)
   // Typical comparison.  Taken from OpenGL.
   if (
       (lastVP.GetDrawingStyle ()    != fVP.GetDrawingStyle ())    ||
+      (lastVP.IsAuxEdgeVisible ()   != fVP.IsAuxEdgeVisible ())   ||
       (lastVP.GetRepStyle ()        != fVP.GetRepStyle ())        ||
       (lastVP.IsCulling ()          != fVP.IsCulling ())          ||
       (lastVP.IsCullingInvisible () != fVP.IsCullingInvisible ()) ||
       (lastVP.IsDensityCulling ()   != fVP.IsDensityCulling ())   ||
       (lastVP.IsCullingCovered ()   != fVP.IsCullingCovered ())   ||
-      (lastVP.IsSection ()          != fVP.IsSection ())          ||
       // No need to visit kernel if section plane changes.
-      (lastVP.IsCutaway ()          != fVP.IsCutaway ())          ||
-      (lastVP.GetCutawayPlanes ().size () !=
-                                 fVP.GetCutawayPlanes ().size ()) ||
       // No need to visit kernel if cutaway planes change.
       (lastVP.IsExplode ()          != fVP.IsExplode ())          ||
       (lastVP.GetNoOfSides ()       != fVP.GetNoOfSides ())       ||
+      (lastVP.IsMarkerNotHidden ()  != fVP.IsMarkerNotHidden ())  ||
       (lastVP.GetBackgroundColour ()!= fVP.GetBackgroundColour ())
       ) {
     return true;
