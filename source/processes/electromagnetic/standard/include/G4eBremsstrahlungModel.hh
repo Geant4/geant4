@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungModel.hh,v 1.19 2006-08-28 17:44:36 vnivanch Exp $
+// $Id: G4eBremsstrahlungModel.hh,v 1.20 2006-08-29 14:00:24 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -108,7 +108,7 @@ protected:
   G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
 			      G4double kineticEnergy);
 
-  const G4Element* SelectRandomAtom(const G4MaterialCutsCouple* couple) const;
+  const G4Element* SelectRandomAtom(const G4MaterialCutsCouple* couple);
 
 private:
 

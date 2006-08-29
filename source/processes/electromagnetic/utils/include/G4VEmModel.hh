@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmModel.hh,v 1.43 2006-08-28 17:43:53 vnivanch Exp $
+// $Id: G4VEmModel.hh,v 1.44 2006-08-29 14:00:43 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -206,6 +206,8 @@ protected:
 
   const G4Element* GetCurrentElement() const;
 
+  void SetCurrentElement(const G4Element*);
+
 private:
 
   //  hide assignment operator
@@ -348,9 +350,17 @@ inline const G4Element* G4VEmModel::SelectRandomAtom(
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 inline const G4Element* G4VEmModel::GetCurrentElement() const
 {
   return currentElement;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline void G4VEmModel::SetCurrentElement(const G4Element* elm)
+{
+  currentElement = elm;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
