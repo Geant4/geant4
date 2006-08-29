@@ -151,25 +151,41 @@ G4bool G4OpenInventorViewer::CompareForKernelVisit(G4ViewParameters& vp) {
 
   if (
       (vp.GetDrawingStyle ()    != fVP.GetDrawingStyle ())    ||
+      (vp.IsAuxEdgeVisible ()   != fVP.IsAuxEdgeVisible ())   ||
       (vp.GetRepStyle ()        != fVP.GetRepStyle ())        ||
       (vp.IsCulling ()          != fVP.IsCulling ())          ||
       (vp.IsCullingInvisible () != fVP.IsCullingInvisible ()) ||
       (vp.IsDensityCulling ()   != fVP.IsDensityCulling ())   ||
       (vp.IsCullingCovered ()   != fVP.IsCullingCovered ())   ||
       (vp.IsSection ()          != fVP.IsSection ())          ||
-      // No need to visit kernel if section plane changes.
       (vp.IsCutaway ()          != fVP.IsCutaway ())          ||
-      (vp.GetCutawayPlanes ().size () !=
-                                 fVP.GetCutawayPlanes ().size ()) ||
-      // No need to visit kernel if cutaway planes change.
+      // This assumes use of generic clipping (sectioning, slicing,
+      // DCUT, cutaway).  If a decision is made to implement locally,
+      // this will need changing.  See G4OpenGLViewer::SetView,
+      // G4OpenGLStoredViewer.cc::CompareForKernelVisit and
+      // G4OpenGLStoredSceneHander::CreateSection/CutawayPolyhedron.
       (vp.IsExplode ()          != fVP.IsExplode ())          ||
-      (vp.GetNoOfSides ()       != fVP.GetNoOfSides ())
+      (vp.GetNoOfSides ()       != fVP.GetNoOfSides ())       ||
+      (vp.IsMarkerNotHidden ()  != fVP.IsMarkerNotHidden ())  ||
+      (vp.GetBackgroundColour ()!= fVP.GetBackgroundColour ())
       ) {
       return true;;
   }
   if (vp.IsDensityCulling () &&
       (vp.GetVisibleDensity () != fVP.GetVisibleDensity ()))
     return true;
+
+  if (vp.IsSection () &&
+      (vp.GetSectionPlane () != fVP.GetSectionPlane ()))
+    return true;
+
+  if (vp.IsCutaway ()) {
+    if (vp.GetCutawayPlanes ().size () !=
+	fVP.GetCutawayPlanes ().size ()) return true;
+    for (size_t i = 0; i < vp.GetCutawayPlanes().size(); ++i)
+      if (vp.GetCutawayPlanes()[i] != fVP.GetCutawayPlanes()[i])
+	return true;
+  }
 
   if (vp.IsExplode () &&
       (vp.GetExplodeFactor () != fVP.GetExplodeFactor ()))
