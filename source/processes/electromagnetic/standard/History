@@ -1,4 +1,4 @@
-$Id: History,v 1.243 2006-08-19 15:42:46 vnivanch Exp $
+$Id: History,v 1.244 2006-08-29 19:14:46 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+29 Aug 06: V.Ivanchenko (emstand-V08-01-02)
+- Provide changings required for new processes/models with  polarization:
+  G4KleinNishinaCompton - make some members protected
+  G4MollerBhabhaModel - make some members protected
+  G4eBremsstrahlungModel - reorganize SelectRandomAom method and make 
+	some members protected
 
 19 Aug 06: V.Ivanchenko (emstand-V08-01-01)
 - Fix energy non-conservation in G4PAIModel for positrons (V.Grichine)
