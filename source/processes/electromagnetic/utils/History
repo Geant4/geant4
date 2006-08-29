@@ -1,4 +1,4 @@
-$Id: History,v 1.255 2006-08-15 16:21:39 vnivanch Exp $
+$Id: History,v 1.256 2006-08-29 19:18:54 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+29 August 06: V.Ivant (emutils-V08-01-02)
+- G4VEmModel add member currentElement and protected Get/Set methods
 
 15 June 06: V.Ivant (emutils-V08-01-01)
 - G4VEnergyLossProcess - make protected LambdaPhysicsVector method

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmModel.hh,v 1.44 2006-08-29 14:00:43 vnivanch Exp $
+// $Id: G4VEmModel.hh,v 1.45 2006-08-29 19:18:54 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -58,6 +58,7 @@
 // 02-02-06 ComputeCrossSectionPerAtom: default value A=0. (mma)
 // 06-02-06 add method ComputeMeanFreePath() (mma)
 // 07-03-06 Optimize msc methods (V.Ivanchenko)
+// 29-06-06 Add member currentElement and Get/Set methods (V.Ivanchenko)
 //
 // Class Description:
 //
