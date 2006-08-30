@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneAdd.cc,v 1.66 2006-07-03 19:35:34 allison Exp $
+// $Id: G4VisCommandsSceneAdd.cc,v 1.67 2006-08-30 11:09:01 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // /vis/scene commands - John Allison  9th August 1998
 
@@ -1413,8 +1413,17 @@ G4VisCommandSceneAddVolume::G4VisCommandSceneAddVolume () {
   fpCommand -> SetGuidance
     ("If clip-volume-type is specified, the subsequent parameters are used to"
      "\nto define a clipping volume.  For example,"
-     "\n\"vis/scene/add/volume ! ! ! box km 0 1 0 1 0 1\" will draw the world"
+     "\n\"vis/scene/add/volume ! ! ! -box km 0 1 0 1 0 1\" will draw the world"
      "\nwith the positive octant cut away."); 
+  fpCommand -> SetGuidance
+    ("If clip-volume-type is prepended with '-', the clip-volume is subtracted"
+     "\n(cutaway). (This is the default if there is no prepended character.)"
+     "\nIf '*' is prepended, the intersection of the physical-volume and the"
+     "\nclip-volume is made. (You can make a section/DCUT with a thin box, for"
+     "\nexample).");
+  fpCommand -> SetGuidance
+    ("For \"box\", the parameters are xmin,xmax,ymin,ymax,zmin,zmax."
+     "\nOnly \"box\" is programmed at present.");
   G4UIparameter* parameter;
   parameter = new G4UIparameter ("physical-volume-name", 's', omitable = true);
   parameter -> SetDefaultValue ("world");
@@ -1430,12 +1439,9 @@ G4VisCommandSceneAddVolume::G4VisCommandSceneAddVolume () {
   parameter -> SetDefaultValue (G4Scene::UNLIMITED);
   fpCommand -> SetParameter (parameter);
   parameter = new G4UIparameter ("clip-volume-type", 's', omitable = true);
-  parameter -> SetParameterCandidates("none box");
+  parameter -> SetParameterCandidates("none box -box *box");
   parameter -> SetDefaultValue ("none");
-  parameter -> SetGuidance
-    ("For \"box\", the parameters are xmin,xmax,ymin,ymax,zmin,zmax."
-     // "\n Only \"box\" is programmed at present."); No '\n' for GAG (temp).
-     " Only \"box\" is programmed at present.");
+  parameter -> SetGuidance("[-|*]type.  See general guidance.");
   fpCommand -> SetParameter (parameter);
   parameter = new G4UIparameter ("parameter-unit", 's', omitable = true);
   parameter -> SetDefaultValue ("m");
@@ -1489,6 +1495,14 @@ void G4VisCommandSceneAddVolume::SetNewValue (G4UIcommand*,
   is >> name >> copyNo >> requestedDepthOfDescent
      >> clipVolumeType >> parameterUnit
      >> param1 >> param2 >> param3 >> param4 >> param5 >> param6;
+  G4PhysicalVolumeModel::ClippingMode clippingMode =
+    G4PhysicalVolumeModel::subtraction;  // Default subtraction mode.
+  if (clipVolumeType[size_t(0)] == '-') {
+    clipVolumeType = clipVolumeType.substr(1);  // Remove first character.
+  } else if (clipVolumeType[size_t(0)] == '*') {
+    clippingMode = G4PhysicalVolumeModel::intersection;
+    clipVolumeType = clipVolumeType.substr(1);
+  }
   G4double unit = G4UIcommand::ValueOf(parameterUnit);
   param1 *= unit; param2 *= unit; param3 *= unit;
   param4 *= unit; param5 *= unit; param6 *= unit;
@@ -1585,10 +1599,11 @@ void G4VisCommandSceneAddVolume::SetNewValue (G4UIcommand*,
     const G4double y0 = (param4 + param3) / 2.;
     const G4double z0 = (param6 + param5) / 2.;
     G4Box clippingBox("_clipping_box",dX,dY,dZ);
-    G4Polyhedron* clippingPolyhedron = new G4PolyhedronBox(dX,dY,dZ);
-    // Created on the heap and left there.
+    G4Polyhedron* clippingPolyhedron =
+      new G4PolyhedronBox(dX,dY,dZ);  // The model deletes.
     clippingPolyhedron->Transform(G4Translate3D(x0,y0,z0));
     model->SetClippingPolyhedron(clippingPolyhedron);
+    model->SetClippingMode(clippingMode);
   }  // If any other shape consider NumberOfRotationSides!!!!!!!!!!!
 
   const G4String& currentSceneName = pScene -> GetName ();
