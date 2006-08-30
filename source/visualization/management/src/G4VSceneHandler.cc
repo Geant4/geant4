@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.cc,v 1.70 2006-08-14 13:04:22 allison Exp $
+// $Id: G4VSceneHandler.cc,v 1.71 2006-08-30 10:57:56 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -74,6 +74,7 @@
 #include "Randomize.hh"
 #include "G4StateManager.hh"
 #include "G4RunManager.hh"
+#include "G4Transform3D.hh"
 
 G4VSceneHandler::G4VSceneHandler (G4VGraphicsSystem& system, G4int id, const G4String& name):
   fSystem                (system),
@@ -391,9 +392,9 @@ void G4VSceneHandler::AddPrimitive (const G4Polymarker& polymarker) {
   case G4Polymarker::squares:
     {
       for (size_t iPoint = 0; iPoint < polymarker.size (); iPoint++) {
-	G4Square Square (polymarker);
-	Square.SetPosition (polymarker[iPoint]);
-	AddPrimitive (Square);
+	G4Square square (polymarker);
+	square.SetPosition (polymarker[iPoint]);
+	AddPrimitive (square);
       }
     }
     break;
@@ -805,13 +806,56 @@ G4ModelingParameters* G4VSceneHandler::CreateModelingParameters ()
      vp.GetNoOfSides ()
      );
 
+  pModelingParams->SetWarning
+    (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::warnings);
+
+  pModelingParams->SetSectionPolyhedron(CreateSectionPolyhedron());
+  pModelingParams->SetCutawayPolyhedron(CreateCutawayPolyhedron());
+  // The polyhedron objects are deleted in the modeling parameters destructor.
+
   return pModelingParams;
+}
+
+const G4Polyhedron* G4VSceneHandler::CreateSectionPolyhedron()
+{
+  /* Disable for now.  Boolean processor not up to it.
+  const G4ViewParameters& vp = fpViewer->GetViewParameters();
+  if (vp.IsSection () ) {
+    G4double radius = fpScene->GetExtent().GetExtentRadius();
+    G4double safe = radius + fpScene->GetExtent().GetExtentCentre().mag();
+    G4Box sectionBox("clipper",
+		     safe, safe, 1.e-5 * radius);  // Thin in z-plane.
+    G4Polyhedron* sectioner = sectionBox.CreatePolyhedron();
+    const G4Plane3D& s = vp.GetSectionPlane ();
+    G4double a = s.a();
+    G4double b = s.b();
+    G4double c = s.c();
+    G4double d = s.d();
+    G4Transform3D transform = G4TranslateZ3D(-d);
+    const G4Normal3D normal(a,b,c);
+    if (normal != G4Normal3D(0,0,1)) {
+      const G4double angle = std::acos(normal.dot(G4Normal3D(0,0,1)));
+      const G4Vector3D axis = G4Normal3D(0,0,1).cross(normal);
+      transform = G4Rotate3D(angle, axis) * transform;
+    }
+    sectioner->Transform(transform);
+    return sectioner;
+  } else {
+    return 0;
+  }
+  */
+  return 0;
+}
+
+const G4Polyhedron* G4VSceneHandler::CreateCutawayPolyhedron()
+{
+  return 0;
 }
 
 const G4Colour& G4VSceneHandler::GetColour (const G4Visible& visible) {
   // Colour is determined by the applicable vis attributes.
   const G4Colour& colour = fpViewer ->
-    GetApplicableVisAttributes (visible.GetVisAttributes ()) ->  GetColour ();
+    GetApplicableVisAttributes (visible.GetVisAttributes ()) -> GetColour ();
   return colour;
 }
 
@@ -822,6 +866,16 @@ const G4Colour& G4VSceneHandler::GetTextColour (const G4Text& text) {
   }
   const G4Colour& colour = pVA -> GetColour ();
   return colour;
+}
+
+G4double G4VSceneHandler::GetLineWidth(const G4Visible& visible)
+{
+  G4double lineWidth = fpViewer->
+    GetApplicableVisAttributes(visible.GetVisAttributes())->GetLineWidth();
+  if (lineWidth < 1.) lineWidth = 1.;
+  lineWidth *= fpViewer -> GetViewParameters().GetGlobalLineWidthScale();
+  if (lineWidth < 1.) lineWidth = 1.;
+  return lineWidth;
 }
 
 G4ViewParameters::DrawingStyle G4VSceneHandler::GetDrawingStyle
@@ -870,8 +924,10 @@ G4bool G4VSceneHandler::GetAuxEdgeVisible (const G4VisAttributes* pVisAttribs) {
   return isAuxEdgeVisible;
 }
 
-G4double G4VSceneHandler::GetMarkerSize (const G4VMarker& marker, 
-				  G4VSceneHandler::MarkerSizeType& markerSizeType) {
+G4double G4VSceneHandler::GetMarkerSize
+(const G4VMarker& marker, 
+ G4VSceneHandler::MarkerSizeType& markerSizeType)
+{
   G4bool userSpecified = marker.GetWorldSize() || marker.GetScreenSize();
   const G4VMarker& defaultMarker =
     fpViewer -> GetViewParameters().GetDefaultMarker();
@@ -887,8 +943,9 @@ G4double G4VSceneHandler::GetMarkerSize (const G4VMarker& marker,
     // Draw in screen coordinates.
     markerSizeType = screen;
   }
-  if (size <= 0.) size = 1.;
+  if (size <= 1.) size = 1.;
   size *= fpViewer -> GetViewParameters().GetGlobalMarkerScale();
+  if (size <= 1.) size = 1.;
   return size;
 }
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.hh,v 1.34 2006-07-10 15:47:38 allison Exp $
+// $Id: G4VSceneHandler.hh,v 1.35 2006-08-30 10:57:56 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -221,11 +221,15 @@ public: // With description
 
   const G4Colour& GetColour (const G4Visible&);
   const G4Colour& GetColor  (const G4Visible&);
-  // The above return colour of G4Visible object, or default global colour.
+  // Returns colour of G4Visible object, or default global colour.
 
   const G4Colour& GetTextColour (const G4Text&);
   const G4Colour& GetTextColor  (const G4Text&);
-  // The above return colour of G4Text object, or default text colour.
+  // Returns colour of G4Text object, or default text colour.
+
+  G4double GetLineWidth(const G4Visible& visible);
+  // Returns line width of G4Visible object, or default line width.
+  // Multiplies by GlobalLineWidthScale.
 
   G4ViewParameters::DrawingStyle GetDrawingStyle (const G4VisAttributes*);
   // Returns drawing style from current view parameters, unless the user
@@ -245,19 +249,13 @@ public: // With description
   G4double GetMarkerSize (const G4VMarker&, MarkerSizeType&);
   // Returns applicable marker size (diameter) and type (in second
   // argument).  Uses global default marker if marker sizes are not
-  // set.
+  // set.  Multiplies by GlobalMarkerScale.
 
   G4double GetMarkerDiameter (const G4VMarker&, MarkerSizeType&);
   // Alias for GetMarkerSize.
 
   G4double GetMarkerRadius (const G4VMarker&, MarkerSizeType&);
   // GetMarkerSize / 2.
-
-  G4ModelingParameters* CreateModelingParameters ();
-  // Only the scene handler and view know what the Modeling Parameters should
-  // be.  For historical reasons, the GEANT4 Visualization Environment
-  // maintains its own Scene Data and View Parameters, which must be
-  // converted, when needed, to Modeling Parameters.
 
   //////////////////////////////////////////////////////////////
   // Administration functions.
@@ -291,6 +289,21 @@ protected:
   // Default routine used by default AddSolid ().
 
   virtual void RequestPrimitives (const G4VSolid& solid);
+
+  //////////////////////////////////////////////////////////////
+  // Other internal routines...
+
+  G4ModelingParameters* CreateModelingParameters ();
+  // Only the scene handler and view know what the Modeling Parameters should
+  // be.  For historical reasons, the GEANT4 Visualization Environment
+  // maintains its own Scene Data and View Parameters, which must be
+  // converted, when needed, to Modeling Parameters.
+
+  virtual const G4Polyhedron* CreateSectionPolyhedron ();
+  virtual const G4Polyhedron* CreateCutawayPolyhedron ();
+  // Generic clipping using the BooleanProcessor in graphics_reps is
+  // implemented in this class.  Subclasses that implement their own
+  // clipping should provide an override that returns zero.
 
   //////////////////////////////////////////////////////////////
   // Data members
