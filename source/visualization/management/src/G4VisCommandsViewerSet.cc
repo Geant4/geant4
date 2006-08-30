@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewerSet.cc,v 1.42 2006-08-30 10:50:03 allison Exp $
+// $Id: G4VisCommandsViewerSet.cc,v 1.43 2006-08-30 11:23:47 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer/set commands - John Allison  16th May 2000
@@ -485,7 +485,7 @@ void G4VisCommandsViewerSet::SetNewValue
 	  "\n  will be culled, i.e., not drawn, if this flag is true."
 	  "\n  Note: this is only effective in surface drawing style,"
 	  "\n  and then only if the volumes are visible and opaque, and then"
-	  "\n  only if no sections or cutways are in operation."
+	  "\n  only if no sections or cutaways are in operation."
 	       << G4endl;
       }
     }
