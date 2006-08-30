@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ViewParameters.cc,v 1.24 2006-06-29 21:29:30 gunter Exp $
+// $Id: G4ViewParameters.cc,v 1.25 2006-08-30 11:06:19 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -63,13 +63,11 @@ G4ViewParameters::G4ViewParameters ():
   fLightsMoveWithCamera (false),
   fRelativeLightpointDirection (G4Vector3D (1., 1., 1.)),
   fActualLightpointDirection (G4Vector3D (1., 1., 1.)),
-  fViewGeom (true),
-  fViewHits (true),
-  fViewDigis (true),
   fDefaultVisAttributes (),
   fDefaultTextVisAttributes (G4Colour (0., 0., 1.)),
   fDefaultMarker (),
   fGlobalMarkerScale (1.),
+  fGlobalLineWidthScale (1.),
   fMarkerNotHidden (true),
   fWindowSizeHintX (600),
   fWindowSizeHintY (600),
@@ -262,13 +260,11 @@ void G4ViewParameters::PrintDifferences (const G4ViewParameters& v) const {
       (fDolly                != v.fDolly)                ||
       (fRelativeLightpointDirection != v.fRelativeLightpointDirection)  ||
       (fLightsMoveWithCamera != v.fLightsMoveWithCamera) ||
-      (fViewGeom             != v.fViewGeom)             ||
-      (fViewHits             != v.fViewHits)             ||
-      (fViewDigis            != v.fViewDigis)            ||
       (fDefaultVisAttributes != v.fDefaultVisAttributes) ||
       (fDefaultTextVisAttributes != v.fDefaultTextVisAttributes) ||
       (fDefaultMarker        != v.fDefaultMarker)        ||
       (fGlobalMarkerScale    != v.fGlobalMarkerScale)    ||
+      (fGlobalLineWidthScale != v.fGlobalLineWidthScale) ||
       (fMarkerNotHidden      != v.fMarkerNotHidden)      ||
       (fWindowSizeHintX      != v.fWindowSizeHintX)      ||
       (fWindowSizeHintY      != v.fWindowSizeHintY)      ||
@@ -416,18 +412,6 @@ std::ostream& operator << (std::ostream& os, const G4ViewParameters& v) {
   os << "\n    Far distance:      " << farDistance;
   os << "\n    Front half height: " << right;
 
-  os << "\n  View geometry: ";
-  if (v.fViewGeom) os << "true";
-  else os << "false";
-
-  os << "\n  View hits    : ";
-  if (v.fViewHits) os << "true";
-  else os << "false";
-
-  os << "\n  View digits  : ";
-  if (v.fViewDigis) os << "true";
-  else os << "false";
-
   os << "\n  Default VisAttributes:\n  " << v.fDefaultVisAttributes;
 
   os << "\n  Default TextVisAttributes:\n  " << v.fDefaultTextVisAttributes;
@@ -435,6 +419,8 @@ std::ostream& operator << (std::ostream& os, const G4ViewParameters& v) {
   os << "\n  Default marker: " << v.fDefaultMarker;
 
   os << "\n  Global marker scale: " << v.fGlobalMarkerScale;
+
+  os << "\n  Global lineWidth scale: " << v.fGlobalLineWidthScale;
 
   os << "\n  Marker ";
   if (v.fMarkerNotHidden) os << "not ";
@@ -481,13 +467,11 @@ G4bool G4ViewParameters::operator != (const G4ViewParameters& v) const {
       (fDolly                != v.fDolly)                ||
       (fRelativeLightpointDirection != v.fRelativeLightpointDirection)  ||
       (fLightsMoveWithCamera != v.fLightsMoveWithCamera) ||
-      (fViewGeom             != v.fViewGeom)             ||
-      (fViewHits             != v.fViewHits)             ||
-      (fViewDigis            != v.fViewDigis)            ||
       (fDefaultVisAttributes != v.fDefaultVisAttributes) ||
       (fDefaultTextVisAttributes != v.fDefaultTextVisAttributes) ||
       (fDefaultMarker        != v.fDefaultMarker)        ||
       (fGlobalMarkerScale    != v.fGlobalMarkerScale)    ||
+      (fGlobalLineWidthScale != v.fGlobalLineWidthScale) ||
       (fMarkerNotHidden      != v.fMarkerNotHidden)      ||
       (fWindowSizeHintX      != v.fWindowSizeHintX)      ||
       (fWindowSizeHintY      != v.fWindowSizeHintY)      ||

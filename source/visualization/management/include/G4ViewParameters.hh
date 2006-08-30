@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ViewParameters.hh,v 1.21 2006-06-29 21:28:22 gunter Exp $
+// $Id: G4ViewParameters.hh,v 1.22 2006-08-30 11:06:19 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -140,13 +140,11 @@ public: // With description
   const G4Vector3D&      GetLightpointDirection  () const;  // Relative...
         G4Vector3D&      GetActualLightpointDirection  ();  // Actual...
   // ... depending on GetLightsMoveWithCamera.
-        G4bool           IsViewGeom              () const;
-        G4bool           IsViewHits              () const;
-        G4bool           IsViewDigis             () const;
   const G4VisAttributes* GetDefaultVisAttributes () const;
   const G4VisAttributes* GetDefaultTextVisAttributes () const;
   const G4VMarker&       GetDefaultMarker        () const;
         G4double         GetGlobalMarkerScale    () const;
+        G4double         GetGlobalLineWidthScale () const;
         G4bool           IsMarkerNotHidden       () const;
         G4int            GetWindowSizeHintX      () const;
         G4int            GetWindowSizeHintY      () const;
@@ -201,16 +199,11 @@ public: // With description
   void SetLightsMoveWithCamera (G4bool moves);
   void SetPan                  (G4double right, G4double up);
   void IncrementPan            (G4double right, G4double up);
-  void SetViewGeom             ();
-  void UnsetViewGeom           ();
-  void SetViewHits             ();
-  void UnsetViewHits           ();
-  void SetViewDigis            ();
-  void UnsetViewDigis          ();
   void SetDefaultVisAttributes (const G4VisAttributes&);
   void SetDefaultTextVisAttributes (const G4VisAttributes&);
   void SetDefaultMarker        (const G4VMarker& defaultMarker);
   void SetGlobalMarkerScale    (G4double globalMarkerScale);
+  void SetGlobalLineWidthScale (G4double globalLineWidthScale);
   void SetMarkerHidden         ();
   void SetMarkerNotHidden      ();
   void SetWindowSizeHint       (G4int xHint, G4int yHint);
@@ -249,13 +242,11 @@ private:
   G4Vector3D   fRelativeLightpointDirection;
   // i.e., rel. to object or camera accoding to G4bool fLightsMoveWithCamera.
   G4Vector3D   fActualLightpointDirection;
-  G4bool       fViewGeom;        // View geometry objects.
-  G4bool       fViewHits;        // View hits, if any.
-  G4bool       fViewDigis;       // View digis, if any.
   G4VisAttributes fDefaultVisAttributes;
   G4VisAttributes fDefaultTextVisAttributes;
   G4VMarker    fDefaultMarker;
   G4double     fGlobalMarkerScale;
+  G4double     fGlobalLineWidthScale;
   G4bool       fMarkerNotHidden;
   // True if transients are to be drawn and not hidden by
   // hidden-line-hidden-surface removal algorithms, e.g., z-buffer

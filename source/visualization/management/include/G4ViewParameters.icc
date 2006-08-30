@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ViewParameters.icc,v 1.11 2006-06-29 21:28:24 gunter Exp $
+// $Id: G4ViewParameters.icc,v 1.12 2006-08-30 11:06:19 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -128,18 +128,6 @@ inline G4bool G4ViewParameters::GetLightsMoveWithCamera () const {
   return fLightsMoveWithCamera;
 }
 
-inline G4bool G4ViewParameters::IsViewGeom () const {
-  return fViewGeom;
-}
-
-inline G4bool G4ViewParameters::IsViewHits () const {
-  return fViewHits;
-}
-
-inline G4bool G4ViewParameters::IsViewDigis () const {
-  return fViewDigis;
-}
-
 inline const G4VisAttributes*
 G4ViewParameters::GetDefaultVisAttributes () const {
   return &fDefaultVisAttributes;
@@ -156,6 +144,10 @@ inline const G4VMarker& G4ViewParameters::GetDefaultMarker () const {
 
 inline G4double G4ViewParameters::GetGlobalMarkerScale () const {
   return fGlobalMarkerScale;
+}
+
+inline G4double G4ViewParameters::GetGlobalLineWidthScale () const {
+  return fGlobalLineWidthScale;
 }
 
 inline G4bool G4ViewParameters::IsMarkerNotHidden () const {
@@ -273,30 +265,6 @@ inline void G4ViewParameters::SetLightsMoveWithCamera (G4bool moves) {
   fLightsMoveWithCamera = moves;
 }
 
-inline void G4ViewParameters::SetViewGeom () {
-  fViewGeom = true;
-}
-
-inline void G4ViewParameters::UnsetViewGeom () {
-  fViewGeom = false;
-}
-
-inline void G4ViewParameters::SetViewHits () {
-  fViewHits = true;
-}
-
-inline void G4ViewParameters::UnsetViewHits () {
-  fViewHits = false;
-}
-
-inline void G4ViewParameters::SetViewDigis () {
-  fViewDigis = true;
-}
-
-inline void G4ViewParameters::UnsetViewDigis () {
-  fViewDigis = false;
-}
-
 inline void G4ViewParameters::SetDefaultVisAttributes
 (const G4VisAttributes& defaultVisAttributes) {
   fDefaultVisAttributes = defaultVisAttributes;
@@ -315,6 +283,11 @@ G4ViewParameters::SetDefaultMarker (const G4VMarker& defaultMarker) {
 inline void
 G4ViewParameters::SetGlobalMarkerScale (G4double globalMarkerScale) {
   fGlobalMarkerScale = globalMarkerScale;
+}
+
+inline void
+G4ViewParameters::SetGlobalLineWidthScale (G4double globalLineWidthScale) {
+  fGlobalLineWidthScale = globalLineWidthScale;
 }
 
 inline void G4ViewParameters::SetMarkerHidden () {
