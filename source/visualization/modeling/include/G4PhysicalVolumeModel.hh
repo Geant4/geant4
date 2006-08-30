@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeModel.hh,v 1.30 2006-07-10 15:59:59 allison Exp $
+// $Id: G4PhysicalVolumeModel.hh,v 1.31 2006-08-30 10:26:40 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -50,6 +50,7 @@
 #include "G4VModel.hh"
 
 #include "G4Transform3D.hh"
+#include "G4Plane3D.hh"
 #include <iostream>
 #include <vector>
 #include <map>
@@ -68,6 +69,8 @@ class G4PhysicalVolumeModel: public G4VModel {
 public: // With description
 
   enum {UNLIMITED = -1};
+
+  enum ClippingMode {subtraction, intersection};
 
   class G4PhysicalVolumeNodeID {
   public:
@@ -109,7 +112,7 @@ public: // With description
 
   G4int GetRequestedDepth () const {return fRequestedDepth;}
 
-  const G4Polyhedron* GetClippingVolume () const
+  const G4Polyhedron* GetClippingPolyhedron () const
   {return fpClippingPolyhedron;}
 
   G4int GetCurrentDepth() const {return fCurrentDepth;}
@@ -158,6 +161,10 @@ public: // With description
     fpClippingPolyhedron = pClippingPolyhedron;
   }
 
+  void SetClippingMode (ClippingMode mode) {
+    fClippingMode = mode;
+  }
+
   G4bool Validate (G4bool warn);
   // Validate, but allow internal changes (hence non-const function).
 
@@ -199,8 +206,9 @@ protected:
   G4LogicalVolume*   fpCurrentLV;    // Current logical volume.
   G4Material*    fpCurrentMaterial;  // Current material.
   std::vector<G4PhysicalVolumeNodeID> fDrawnPVPath;
-  G4bool             fCurtailDescent;  // Can be set to curtail descent.
+  G4bool             fCurtailDescent;// Can be set to curtail descent.
   const G4Polyhedron*fpClippingPolyhedron;
+  ClippingMode       fClippingMode;
 
 private:
 

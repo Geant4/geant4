@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeModel.cc,v 1.49 2006-07-10 15:59:59 allison Exp $
+// $Id: G4PhysicalVolumeModel.cc,v 1.50 2006-08-30 10:26:40 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -95,7 +95,8 @@ G4PhysicalVolumeModel::G4PhysicalVolumeModel
   fpCurrentLV     (0),
   fpCurrentMaterial (0),
   fCurtailDescent (false),
-  fpClippingPolyhedron (0)
+  fpClippingPolyhedron (0),
+  fClippingMode   (subtraction)
 {
   std::ostringstream o;
   o << fpTopPV -> GetCopyNo ();
@@ -105,7 +106,10 @@ G4PhysicalVolumeModel::G4PhysicalVolumeModel
   CalculateExtent ();
 }
 
-G4PhysicalVolumeModel::~G4PhysicalVolumeModel () {}
+G4PhysicalVolumeModel::~G4PhysicalVolumeModel ()
+{
+  delete fpClippingPolyhedron;
+}
 
 void G4PhysicalVolumeModel::CalculateExtent ()
 {
@@ -286,14 +290,15 @@ void G4PhysicalVolumeModel::VisitGeometryAndGetVisReps
 	    ((G4Tubs*)pSol)->SetInnerRadius(width*n+offset);
 	    ((G4Tubs*)pSol)->SetOuterRadius(width*(n+1)+offset);
 	  } else {
-	    G4cout <<
-	      "G4PhysicalVolumeModel::VisitGeometryAndGetVisReps: WARNING:"
-	      "\n  built-in replicated volumes replicated in radius for "
-		   << pSol->GetEntityType() <<
-	      "-type\n  solids (your solid \""
-		   << pSol->GetName() <<
-	      "\") are not visualisable."
-		   << G4endl;
+	    if (fpMP->IsWarning())
+	      G4cout <<
+		"G4PhysicalVolumeModel::VisitGeometryAndGetVisReps: WARNING:"
+		"\n  built-in replicated volumes replicated in radius for "
+		     << pSol->GetEntityType() <<
+		"-type\n  solids (your solid \""
+		     << pSol->GetName() <<
+		"\") are not visualisable."
+		     << G4endl;
 	    visualisable = false;
 	  }
 	  break;
@@ -388,6 +393,8 @@ void G4PhysicalVolumeModel::DescribeAndDescend
     pVisAttribs = new G4VisAttributes;
     visAttsCreated = true;
   }
+
+  // From here, can assume pVisAttribs is a valid pointer.
 
   G4bool thisToBeDrawn = true;
 
@@ -509,39 +516,90 @@ void G4PhysicalVolumeModel::DescribeSolid
  G4VGraphicsScene& sceneHandler)
 {
   sceneHandler.PreAddSolid (theAT, *pVisAttribs);
-  if (fpClippingPolyhedron)  // Clip and force polyhedral representation...
-    {
-      G4Polyhedron clipper(*fpClippingPolyhedron);  // Local copy.
-      clipper.Transform(theAT.inverse());
 
-      G4Polyhedron::SetNumberOfRotationSteps (fpMP->GetNoOfSides());
-      G4Polyhedron* pClippee = pSol->GetPolyhedron();
-      G4Polyhedron::ResetNumberOfRotationSteps ();
-      if (pClippee)  // Solid can provide.
-	{
-	  G4Polyhedron clipped(pClippee->subtract(clipper));
-	  if(clipped.IsErrorBooleanProcess())
-	    {
-	      G4cout <<
- "WARNING: G4PhysicalVolumeModel::DescribeSolid: polyhedron for solid\n  \""
-		     << pSol->GetName() <<
- "\" skipped due to error during Boolean processing."
-		     << G4endl;
-	    }
-	  else
-	    {
-	      clipped.SetVisAttributes(pVisAttribs);
-	      sceneHandler.BeginPrimitives(theAT);
-	      sceneHandler.AddPrimitive(clipped);
-	      sceneHandler.EndPrimitives();
-	    }
+  const G4Polyhedron* pSectionPolyhedron = fpMP->GetSectionPolyhedron();
+  const G4Polyhedron* pCutawayPolyhedron = fpMP->GetCutawayPolyhedron();
+
+  if (!fpClippingPolyhedron && !pSectionPolyhedron && !pCutawayPolyhedron) {
+
+    pSol -> DescribeYourselfTo (sceneHandler);  // Standard treatment.
+
+  } else {
+
+    // Clipping, etc., performed by Boolean operations on polyhedron objects.
+
+    // First, get polyhedron for current solid...
+    G4Polyhedron::SetNumberOfRotationSteps (fpMP->GetNoOfSides());
+    G4Polyhedron* pOriginal = pSol->GetPolyhedron();
+    G4Polyhedron::ResetNumberOfRotationSteps ();
+    if (!pOriginal) {
+	if (fpMP->IsWarning())
+	  G4cout <<
+ "WARNING: G4PhysicalVolumeModel::DescribeSolid: solid\n  \""
+		 << pSol->GetName() <<
+ "\" has no polyhedron.  Cannot by clipped."
+		 << G4endl;
+	pSol -> DescribeYourselfTo (sceneHandler);  // Standard treatment.
+    } else {
+
+      G4Polyhedron resultant = *pOriginal;
+
+      if (fpClippingPolyhedron) {
+	G4Polyhedron clipper = *fpClippingPolyhedron;  // Local copy.
+	clipper.Transform(theAT.inverse());
+	switch (fClippingMode) {
+	default:
+	case subtraction: resultant = resultant.subtract(clipper); break;
+	case intersection: resultant = resultant.intersect(clipper); break;
 	}
+	if(resultant.IsErrorBooleanProcess()) {
+	  if (fpMP->IsWarning())
+	    G4cout <<
+ "WARNING: G4PhysicalVolumeModel::DescribeSolid: clipped polyhedron for"
+ "\n  solid \"" << pSol->GetName() <<
+ "\" not defined due to error during Boolean processing."
+		   << G4endl;
+	  // Nevertheless, keep resultant.
+	}
+      }
+
+      if (pSectionPolyhedron) {
+	G4Polyhedron sectioner = *pSectionPolyhedron;  // Local copy.
+	sectioner.Transform(theAT.inverse());
+	resultant = resultant.intersect(sectioner);
+	if(resultant.IsErrorBooleanProcess()) {
+	  if (fpMP->IsWarning())
+	    G4cout <<
+ "WARNING: G4PhysicalVolumeModel::DescribeSolid: sectioned polyhedron for"
+ "\n  solid \"" << pSol->GetName() <<
+ "\" not defined due to error during Boolean processing."
+		   << G4endl;
+	  // Nevertheless, keep resultant.
+	}
+      }
+
+      if (pCutawayPolyhedron) {
+	G4Polyhedron cutter = *pCutawayPolyhedron;  // Local copy.
+	cutter.Transform(theAT.inverse());
+	resultant = resultant.subtract(cutter);
+	if(resultant.IsErrorBooleanProcess()) {
+	  if (fpMP->IsWarning())
+	    G4cout <<
+ "WARNING: G4PhysicalVolumeModel::DescribeSolid: cutaway polyhedron for"
+ "\n  solid \"" << pSol->GetName() <<
+ "\" not defined due to error during Boolean processing."
+		   << G4endl;
+	  // Nevertheless, keep resultant.
+	}
+      }
+
+      // Finally, force polyhedron drawing...
+      resultant.SetVisAttributes(pVisAttribs);
+      sceneHandler.BeginPrimitives(theAT);
+      sceneHandler.AddPrimitive(resultant);
+      sceneHandler.EndPrimitives();
     }
-  else  // Standard treatment...
-    {
-      pSol -> DescribeYourselfTo (sceneHandler);
-      
-    }
+  }
   sceneHandler.PostAddSolid ();
 }
 
