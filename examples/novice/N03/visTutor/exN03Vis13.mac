@@ -22,10 +22,6 @@
 /vis/drawVolume
 /vis/scene/add/trajectories
 /vis/scene/add/eventID
-/vis/viewer/set/globalLineWidthScale 2
-/vis/ogl/set/fade 1
-/vis/ogl/set/displayHeadTime true
-/vis/ogl/set/displayLightFront true -90 0 0 mm
 
 # Set up drawByParticleID with time slicing
 /vis/modeling/trajectories/create/drawByParticleID
@@ -47,9 +43,13 @@
 
 # Create trajecgtories
 /gun/energy 10 GeV
+/vis/viewer/set/globalLineWidthScale 2
 /run/beamOn
 
 # Run time sequence
+/vis/ogl/set/fade 1
+/vis/ogl/set/displayHeadTime true
+/vis/ogl/set/displayLightFront true -90 0 0 mm
 /vis/viewer/panTo -9 0 cm
 /vis/viewer/zoomTo 2
 /control/alias timeRange 0.1
