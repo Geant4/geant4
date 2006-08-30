@@ -3,11 +3,11 @@
 #                                                                     #
 #  AUTHOR(S): John Allison                                            #
 #                                                                     #
-#  DATE: June 09, 2000                                                #
+#  DATE: 16th August 2006                                             #
 #                                                                     #
 #  CONTENTS: A basic macro for demonstrating time slicing             #
 #                                                                     #
-#  USAGE:  % $G4BINDIR/exampleN03  visTutor/exN03Vis6.mac             #
+#  USAGE:  % $G4BINDIR/exampleN03  visTutor/exN03Vis12.mac             #
 #                                                                     #
 #  REQUIRED PLATFORMS & SOFTWARES: Mac/Unix with X-Windows, OpenGL    #
 #                                                                     #
@@ -66,11 +66,13 @@
 /gun/energy 1 GeV
 /run/beamOn
 /control/alias timeRange 0.1
+/vis/ogl/set/displayLightFront true -90 0 0 mm
 /vis/verbose warnings
 /control/verbose 0
-/control/loop visTutor/exN03Vis12.loop startTime -{timeRange} 0.7 0.005
+/control/loop visTutor/exN03Vis12.loop startTime -{timeRange} 0.7 0.001
 /control/verbose 2
 /vis/verbose confirmations
+/vis/ogl/set/displayLightFront false
 
 # To see pi -> mu -> e decay.
 /gun/particle pi+
