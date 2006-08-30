@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ModelingParameters.cc,v 1.11 2006-07-10 16:04:05 allison Exp $
+// $Id: G4ModelingParameters.cc,v 1.12 2006-08-30 10:20:24 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -36,8 +36,10 @@
 #include "G4ios.hh"
 #include "G4VisAttributes.hh"
 #include "G4ExceptionSeverity.hh"
+#include "G4Polyhedron.hh"
 
 G4ModelingParameters::G4ModelingParameters ():
+  fWarning               (true),
   fpDefaultVisAttributes (0),
   fDrawingStyle          (wf),
   fCulling               (false),
@@ -45,7 +47,9 @@ G4ModelingParameters::G4ModelingParameters ():
   fDensityCulling        (false),
   fVisibleDensity        (0.01 * g / cm3),
   fCullCovered           (false),
-  fNoOfSides             (24)
+  fNoOfSides             (24),
+  fpSectionPolyhedron    (0),
+  fpCutawayPolyhedron    (0)
 {}
 
 G4ModelingParameters::G4ModelingParameters
@@ -58,6 +62,7 @@ G4ModelingParameters::G4ModelingParameters
  G4bool isCullingCovered,
  G4int noOfSides
  ):
+  fWarning        (true),
   fpDefaultVisAttributes (pDefaultVisAttributes),
   fDrawingStyle   (drawingStyle),
   fCulling        (isCulling),
@@ -65,19 +70,25 @@ G4ModelingParameters::G4ModelingParameters
   fDensityCulling (isDensityCulling),
   fVisibleDensity (visibleDensity),
   fCullCovered    (isCullingCovered),
-  fNoOfSides      (noOfSides)
+  fNoOfSides      (noOfSides),
+  fpSectionPolyhedron (0),
+  fpCutawayPolyhedron (0)
 {}
 
-G4ModelingParameters::~G4ModelingParameters () {}
+G4ModelingParameters::~G4ModelingParameters ()
+{
+  delete fpSectionPolyhedron;
+  delete fpCutawayPolyhedron;
+}
 
 void G4ModelingParameters::SetVisibleDensity (G4double visibleDensity) {
   const G4double reasonableMaximum = 10.0 * g / cm3;
-  if (visibleDensity < 0) {
+  if (visibleDensity < 0 && fWarning) {
     G4cout << "G4ModelingParameters::SetVisibleDensity: attempt to set negative "
       "density - ignored." << G4endl;
   }
   else {
-    if (fVisibleDensity > reasonableMaximum) {
+    if (fVisibleDensity > reasonableMaximum && fWarning) {
       G4cout << "G4ModelingParameters::SetVisibleDensity: density > "
 	   << reasonableMaximum
 	   << " g / cm3 - did you mean this?"
@@ -91,16 +102,21 @@ G4int G4ModelingParameters::SetNoOfSides (G4int nSides) {
   const G4int  nSidesMin = 12;
   if (nSides < nSidesMin) {
     nSides = nSidesMin;
-    G4cout << "G4ModelingParameters::SetNoOfSides: attempt to set the"
-      "\nnumber of sides per circle < " << nSidesMin
-	 << "; forced to" << nSides << G4endl;
+    if (fWarning)
+      G4cout << "G4ModelingParameters::SetNoOfSides: attempt to set the"
+	"\nnumber of sides per circle < " << nSidesMin
+	     << "; forced to" << nSides << G4endl;
   }
   fNoOfSides = nSides;
   return fNoOfSides;
 }
 
-std::ostream& operator << (std::ostream& os, const G4ModelingParameters& mp) {
-  os << "Modeling parameters:";
+std::ostream& operator << (std::ostream& os, const G4ModelingParameters& mp)
+{
+  os << "Modeling parameters (warning ";
+  if (mp.fWarning) os << "true";
+  else os << "false";
+  os << "):";
 
   const G4VisAttributes* va = mp.fpDefaultVisAttributes;
   os << "\n  Default vis. attributes: ";
@@ -142,6 +158,14 @@ std::ostream& operator << (std::ostream& os, const G4ModelingParameters& mp) {
   os << "\n  No. of sides used in circle polygon approximation: "
      << mp.fNoOfSides;
 
+  os << "\n  Section (DCUT) polyhedron pointer: ";
+  if (!mp.fpSectionPolyhedron) os << "non-";
+  os << "null";
+
+  os << "\n  Cutaway (DCUT) polyhedron pointer: ";
+  if (!mp.fpCutawayPolyhedron) os << "non-";
+  os << "null";
+
   return os;
 }
 
@@ -149,12 +173,15 @@ G4bool G4ModelingParameters::operator !=
 (const G4ModelingParameters& mp) const {
 
   if (
+      (fWarning                != mp.fWarning)                ||
       (*fpDefaultVisAttributes != *mp.fpDefaultVisAttributes) ||
       (fCulling                != mp.fCulling)                ||
       (fCullInvisible          != mp.fCullInvisible)          ||
       (fDensityCulling         != mp.fDensityCulling)         ||
       (fCullCovered            != mp.fCullCovered)            ||
-      (fNoOfSides              != mp.fNoOfSides)
+      (fNoOfSides              != mp.fNoOfSides)              ||
+      (fpSectionPolyhedron     != mp.fpSectionPolyhedron)     ||
+      (fpCutawayPolyhedron     != mp.fpCutawayPolyhedron)
       )
     return true;
 

@@ -24,12 +24,16 @@
 // ********************************************************************
 //
 //
-// $Id: G4ModelingParameters.icc,v 1.7 2006-07-10 16:04:05 allison Exp $
+// $Id: G4ModelingParameters.icc,v 1.8 2006-08-30 10:20:23 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // John Allison  31st December 1997.
 // Parameters associated with the modeling of GEANT4 objects.
+
+inline G4bool G4ModelingParameters::IsWarning () const {
+  return fWarning;
+}
 
 inline const G4VisAttributes*
 G4ModelingParameters::GetDefaultVisAttributes () const {
@@ -65,6 +69,16 @@ inline G4int G4ModelingParameters::GetNoOfSides () const {
   return fNoOfSides;
 }
 
+inline const G4Polyhedron* G4ModelingParameters::GetSectionPolyhedron () const
+{return fpSectionPolyhedron;}
+
+inline const G4Polyhedron* G4ModelingParameters::GetCutawayPolyhedron () const
+{return fpCutawayPolyhedron;}
+
+inline void G4ModelingParameters::SetWarning (G4bool value) {
+  fWarning = value;
+}
+
 inline void G4ModelingParameters::SetDefaultVisAttributes
 (const G4VisAttributes* pDefaultVisAttributes) {
   fpDefaultVisAttributes = pDefaultVisAttributes;
@@ -90,4 +104,14 @@ inline void G4ModelingParameters::SetDensityCulling (G4bool value) {
 
 inline void G4ModelingParameters::SetCullingCovered (G4bool value) {
   fCullCovered = value;
+}
+
+inline void G4ModelingParameters::SetSectionPolyhedron
+(const G4Polyhedron* pSectionPolyhedron) {
+  fpSectionPolyhedron = pSectionPolyhedron;
+}
+
+inline void G4ModelingParameters::SetCutawayPolyhedron
+(const G4Polyhedron* pCutawayPolyhedron) {
+  fpCutawayPolyhedron = pCutawayPolyhedron;
 }

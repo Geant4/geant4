@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ModelingParameters.hh,v 1.13 2006-07-10 16:04:05 allison Exp $
+// $Id: G4ModelingParameters.hh,v 1.14 2006-08-30 10:20:22 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -43,6 +43,7 @@
 class G4LogicalVolume;
 class G4VPhysicalVolume;
 class G4VisAttributes;
+class G4Polyhedron;
 
 class G4ModelingParameters {
 
@@ -77,6 +78,7 @@ public: // With description
   G4bool operator != (const G4ModelingParameters&) const;
 
   // Get and Is functions...
+  G4bool           IsWarning                     () const;
   const G4VisAttributes* GetDefaultVisAttributes () const;
   DrawingStyle     GetDrawingStyle               () const;
   G4bool           IsCulling                     () const;
@@ -85,8 +87,11 @@ public: // With description
   G4double         GetVisibleDensity             () const;
   G4bool           IsCullingCovered              () const;
   G4int            GetNoOfSides                  () const;
+  const G4Polyhedron* GetSectionPolyhedron       () const;
+  const G4Polyhedron* GetCutawayPolyhedron       () const;
 
   // Set functions...
+  void SetWarning              (G4bool);
   void SetDefaultVisAttributes (const G4VisAttributes* pDefaultVisAttributes);
   void SetDrawingStyle         (DrawingStyle);
   void SetCulling              (G4bool);
@@ -95,10 +100,13 @@ public: // With description
   void SetVisibleDensity       (G4double);
   void SetCullingCovered       (G4bool);
   G4int SetNoOfSides           (G4int);  // Returns actual number set.
+  void SetSectionPolyhedron    (const G4Polyhedron* pSectionPolyhedron);
+  void SetCutawayPolyhedron    (const G4Polyhedron* pCutawayPolyhedron);
 
 private:
 
   // Data members...
+  G4bool       fWarning;         // Print warnings if true.
   const G4VisAttributes* fpDefaultVisAttributes;
   DrawingStyle fDrawingStyle;    // Drawing style.
   G4bool       fCulling;         // Culling requested.
@@ -107,6 +115,8 @@ private:
   G4double     fVisibleDensity;  // ...density lower than this not drawn.
   G4bool       fCullCovered;     // Cull daughters covered by opaque mothers.
   G4int        fNoOfSides;       // ...if polygon approximates circle.
+  const G4Polyhedron* fpSectionPolyhedron;  // For generic section (DCUT).
+  const G4Polyhedron* fpCutawayPolyhedron;  // For generic cutaways.
 };
 
 #include "G4ModelingParameters.icc"
