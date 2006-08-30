@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TrajectoryDrawerUtils.cc,v 1.9 2006-08-26 16:12:26 allison Exp $
+// $Id: G4TrajectoryDrawerUtils.cc,v 1.10 2006-08-30 10:32:14 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Jane Tinslay, John Allison, Joseph Perl November 2005
@@ -38,10 +38,7 @@
 #include "G4VisTrajContext.hh"
 #include "G4VVisManager.hh"
 #include "G4UIcommand.hh"
-#include "G4AttDef.hh"
 #include "G4AttValue.hh"
-#include "G4AttCheck.hh"
-#include "G4UnitsTable.hh"
 
 namespace G4TrajectoryDrawerUtils {
 
@@ -119,14 +116,16 @@ namespace G4TrajectoryDrawerUtils {
     
   }
   
-  // It is important check that the sizes of times vectors produced by
-  // this function matches those of points vectors from GetPoints.  If
-  // not, assume that the time information is invalid.
   static void GetTimes(const G4VTrajectory& traj,
 		       std::vector<G4double>& trajectoryLineTimes,
 		       std::vector<G4double>& auxiliaryPointTimes,
 		       std::vector<G4double>& stepPointTimes)
   {
+    // It is important check that the sizes of times vectors produced
+    // by this function matches those of points vectors from
+    // GetPoints.  If not, assume that the time information is
+    // invalid.
+
     G4ThreeVector lastTrajectoryPointPosition;
     for (G4int i=0; i<traj.GetPointEntries(); i++) {
       G4VTrajectoryPoint* aTrajectoryPoint = traj.GetPoint(i);
@@ -195,11 +194,12 @@ namespace G4TrajectoryDrawerUtils {
     }    
   }
 
-  // Assumes valid arguments from GetPoints and GetTimes.
   static void SliceLine(G4double timeIncrement,
 			G4Polyline& trajectoryLine,
 			std::vector<G4double>& trajectoryLineTimes)
   {
+    // Assumes valid arguments from GetPoints and GetTimes.
+
     G4Polyline newTrajectoryLine;
     std::vector<G4double> newTrajectoryLineTimes;
 
@@ -283,20 +283,11 @@ namespace G4TrajectoryDrawerUtils {
 			   std::vector<G4double>& trajectoryLineTimes,
 			   std::vector<G4double>& auxiliaryPointTimes,
 			   std::vector<G4double>& stepPointTimes)
-{
-    G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
-    if (0 == pVVisManager) return;
-
+  {
     // Draw with time slice information
 
-    static std::map<G4String,G4AttDef>* pAttDefs = 0;
-    if (!pAttDefs) {
-      pAttDefs = new std::map<G4String,G4AttDef>;
-      (*pAttDefs)["_t1"] =
-	G4AttDef("_t1","Start time","Physics","G4BestUnit","G4double");
-      (*pAttDefs)["_t2"] =
-	G4AttDef("_t2","End time","Physics","G4BestUnit","G4double");
-    }
+    G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
+    if (0 == pVVisManager) return;
 
     if (myContext.GetDrawLine()) {
       G4VisAttributes trajectoryLineAttribs(myContext.GetLineColour());
@@ -306,13 +297,8 @@ namespace G4TrajectoryDrawerUtils {
 	G4Polyline slice;
 	slice.push_back(trajectoryLine[i -1]);
 	slice.push_back(trajectoryLine[i]);
-	std::vector<G4AttValue> attValues;
-	attValues.push_back
-	  (G4AttValue("_t1",G4BestUnit(trajectoryLineTimes[i - 1],"Time"),""));
-	attValues.push_back
-	  (G4AttValue("_t2",G4BestUnit(trajectoryLineTimes[i],"Time"),""));
-	trajectoryLineAttribs.SetAttValues(&attValues);
-	trajectoryLineAttribs.SetAttDefs(pAttDefs);
+	trajectoryLineAttribs.SetStartTime(trajectoryLineTimes[i - 1]);
+	trajectoryLineAttribs.SetEndTime(trajectoryLineTimes[i]);
 	slice.SetVisAttributes(&trajectoryLineAttribs);
 	pVVisManager->Draw(slice);
       }
@@ -328,13 +314,8 @@ namespace G4TrajectoryDrawerUtils {
 	point.SetMarkerType(myContext.GetAuxPtsType());
 	point.SetScreenSize(myContext.GetAuxPtsSize());
 	point.SetFillStyle(myContext.GetAuxPtsFillStyle());
-	std::vector<G4AttValue> attValues;
-	attValues.push_back
-	  (G4AttValue("_t1",G4BestUnit(auxiliaryPointTimes[i],"Time"),""));
-	attValues.push_back
-	  (G4AttValue("_t2",G4BestUnit(auxiliaryPointTimes[i],"Time"),""));
-	auxiliaryPointsAttribs.SetAttValues(&attValues);
-	auxiliaryPointsAttribs.SetAttDefs(pAttDefs);
+	auxiliaryPointsAttribs.SetStartTime(auxiliaryPointTimes[i]);
+	auxiliaryPointsAttribs.SetEndTime(auxiliaryPointTimes[i]);
 	point.SetVisAttributes(&auxiliaryPointsAttribs);
 	pVVisManager->Draw(point);
       }
@@ -350,13 +331,8 @@ namespace G4TrajectoryDrawerUtils {
 	point.SetMarkerType(myContext.GetStepPtsType());
 	point.SetScreenSize(myContext.GetStepPtsSize());
 	point.SetFillStyle(myContext.GetStepPtsFillStyle());
-	std::vector<G4AttValue> attValues;
-	attValues.push_back
-	  (G4AttValue("_t1",G4BestUnit(stepPointTimes[i],"Time"),""));
-	attValues.push_back
-	  (G4AttValue("_t2",G4BestUnit(stepPointTimes[i],"Time"),""));
-	stepPointsAttribs.SetAttValues(&attValues);
-	stepPointsAttribs.SetAttDefs(pAttDefs);
+	stepPointsAttribs.SetStartTime(stepPointTimes[i]);
+	stepPointsAttribs.SetEndTime(stepPointTimes[i]);
 	point.SetVisAttributes(&stepPointsAttribs);
 	pVVisManager->Draw(point);
       }
