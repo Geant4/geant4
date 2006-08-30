@@ -1,4 +1,4 @@
-$Id: History,v 1.65 2006-08-14 13:05:09 allison Exp $
+$Id: History,v 1.66 2006-08-30 11:10:57 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -24,6 +24,19 @@ committal in the CVS repository !
 
 History file for visualization management sub-category
 ------------------------------------------------------
+
+30th August 2006  John Allison  (visman-V08-01-03 - needs modeling-V08-01-05)
+- Added /vis/viewer/set/globalLineWidthScale.
+- Augmented /vis/scene/add/volume to include intersection of clipping volume
+  (only box -box *box at present).
+- G4VSceneHandler:
+  o Added GetLineWidth to take account of GlobalLineWidthScale.
+  o Added CreateSection/CutawayPolyhedron to exploit generic sectioning
+    (DCUT) and cutaways.  Currently not activated due to instabilities in
+    BooleanProcessor.
+- G4ViewParameters:
+  o Added GlobalLineWidthScale.
+  o Removed IsViewGeom/Hits/Digis (functionality available in G4Scene).
 
 14th August 2006  John Allison  (visman-V08-01-02)
 - G4VisManager.hh: Added some OpenGL friends.
