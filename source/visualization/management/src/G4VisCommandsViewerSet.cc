@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewerSet.cc,v 1.41 2006-06-29 21:29:50 gunter Exp $
+// $Id: G4VisCommandsViewerSet.cc,v 1.42 2006-08-30 10:50:03 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer/set commands - John Allison  16th May 2000
@@ -138,6 +138,14 @@ G4VisCommandsViewerSet::G4VisCommandsViewerSet ():
     ("Edges become visible/invisible in surface mode.");
   fpCommandEdge->SetParameterName("edge",omitable = true);
   fpCommandEdge->SetDefaultValue(true);
+
+  fpCommandGlobalLineWidthScale = new G4UIcmdWithADouble
+    ("/vis/viewer/set/globalLineWidthScale", this);
+  fpCommandGlobalLineWidthScale -> SetGuidance
+    ("Multiplies line widths by this factor.");
+  fpCommandGlobalLineWidthScale -> SetParameterName("scale-factorr",
+						    omitable=true);
+  fpCommandGlobalLineWidthScale->SetDefaultValue(1.);
 
   fpCommandGlobalMarkerScale = new G4UIcmdWithADouble
     ("/vis/viewer/set/globalMarkerScale", this);
@@ -336,6 +344,7 @@ G4VisCommandsViewerSet::~G4VisCommandsViewerSet() {
   delete fpCommandBackground;
   delete fpCommandCulling;
   delete fpCommandEdge;
+  delete fpCommandGlobalLineWidthScale;
   delete fpCommandGlobalMarkerScale;
   delete fpCommandHiddenEdge;
   delete fpCommandHiddenMarker;
@@ -553,6 +562,16 @@ void G4VisCommandsViewerSet::SetNewValue
       G4cout << "Drawing style of viewer \"" << currentViewer->GetName()
 	     << "\" set to " << vp.GetDrawingStyle()
 	     << G4endl;
+    }
+  }
+
+  else if (command == fpCommandGlobalLineWidthScale) {
+    G4double globalLineWidthScale
+      = fpCommandGlobalLineWidthScale->GetNewDoubleValue(newValue);
+    vp.SetGlobalLineWidthScale(globalLineWidthScale);
+    if (verbosity >= G4VisManager::confirmations) {
+      G4cout << "Global Line Width Scale changed to "
+	     << vp.GetGlobalLineWidthScale() << G4endl;
     }
   }
 
