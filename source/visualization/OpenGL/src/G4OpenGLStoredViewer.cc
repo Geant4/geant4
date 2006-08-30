@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredViewer.cc,v 1.16 2006-08-16 10:34:36 allison Exp $
+// $Id: G4OpenGLStoredViewer.cc,v 1.17 2006-08-30 11:56:15 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -39,6 +39,7 @@
 
 #include "G4OpenGLStoredSceneHandler.hh"
 #include "G4Text.hh"
+#include "G4Circle.hh"
 #include "G4UnitsTable.hh"
 
 G4OpenGLStoredViewer::G4OpenGLStoredViewer
@@ -69,19 +70,28 @@ G4bool G4OpenGLStoredViewer::CompareForKernelVisit(G4ViewParameters& lastVP) {
 
   if (
       (lastVP.GetDrawingStyle ()    != fVP.GetDrawingStyle ())    ||
+      (lastVP.IsAuxEdgeVisible ()   != fVP.IsAuxEdgeVisible ())   ||
       (lastVP.GetRepStyle ()        != fVP.GetRepStyle ())        ||
       (lastVP.IsCulling ()          != fVP.IsCulling ())          ||
       (lastVP.IsCullingInvisible () != fVP.IsCullingInvisible ()) ||
       (lastVP.IsDensityCulling ()   != fVP.IsDensityCulling ())   ||
       (lastVP.IsCullingCovered ()   != fVP.IsCullingCovered ())   ||
-      (lastVP.IsSection ()          != fVP.IsSection ())          ||
       // No need to visit kernel if section plane changes.
-      (lastVP.IsCutaway ()          != fVP.IsCutaway ())          ||
-      (lastVP.GetCutawayPlanes ().size () !=
-                                 fVP.GetCutawayPlanes ().size ()) ||
+      /**************************************************************
+      But...OpenGL no longer seems to reconstruct clipped edges, so
+      if we abandon this and use generic clipping in
+      G4OpenGLSceneHandler::CreateSectionPolyhedron we need to force
+      kernel visit here and below...
+      (lastVP.IsSection ()          != fVP.IsSection ())          ||
+      ***************************************************************/
       // No need to visit kernel if cutaway planes change.
+      /*************************************************************
+      But as for section planes...
+      (lastVP.IsCutaway ()          != fVP.IsCutaway ())          ||
+      ***************************************************************/
       (lastVP.IsExplode ()          != fVP.IsExplode ())          ||
       (lastVP.GetNoOfSides ()       != fVP.GetNoOfSides ())       ||
+      (lastVP.IsMarkerNotHidden ()  != fVP.IsMarkerNotHidden ())  ||
       (lastVP.GetBackgroundColour ()!= fVP.GetBackgroundColour ())
       ) {
     return true;
@@ -90,6 +100,22 @@ G4bool G4OpenGLStoredViewer::CompareForKernelVisit(G4ViewParameters& lastVP) {
   if (lastVP.IsDensityCulling () &&
       (lastVP.GetVisibleDensity () != fVP.GetVisibleDensity ()))
     return true;
+
+  /**************************************************************
+  if (lastVP.IsSection () &&
+      (lastVP.GetSectionPlane () != fVP.GetSectionPlane ()))
+    return true;
+  ***************************************************************/
+
+  /**************************************************************
+  if (lastVP.IsCutaway ()) {
+    if (lastVP.GetCutawayPlanes ().size () !=
+	fVP.GetCutawayPlanes ().size ()) return true;
+    for (size_t i = 0; i < lastVP.GetCutawayPlanes().size(); ++i)
+      if (lastVP.GetCutawayPlanes()[i] != fVP.GetCutawayPlanes()[i])
+	return true;
+  }
+  ***************************************************************/
 
   if (lastVP.IsExplode () &&
       (lastVP.GetExplodeFactor () != fVP.GetExplodeFactor ()))
@@ -106,7 +132,7 @@ void G4OpenGLStoredViewer::DrawDisplayLists () {
   for (size_t i = 0; i < fG4OpenGLStoredSceneHandler.fTOList.size(); ++i) {
     G4OpenGLStoredSceneHandler::TO& to =
       fG4OpenGLStoredSceneHandler.fTOList[i];
-    if (to.fEndTime >= fStartTime && to.fStartTime <= fEndTime) {
+    if (to.fEndTime >= fStartTime && to.fEndTime <= fEndTime) {
       glPushMatrix();
       G4OpenGLTransform3D oglt (to.fTransform);
       glMultMatrixd (oglt.GetGLMatrix ());
@@ -122,7 +148,7 @@ void G4OpenGLStoredViewer::DrawDisplayLists () {
   }
 
   // Display time at "head" of time range, which is fEndTime...
-  if (fDisplayHeadTime) {
+  if (fDisplayHeadTime && fEndTime < DBL_MAX) {
     glMatrixMode (GL_PROJECTION);
     glPushMatrix();
     glLoadIdentity();
@@ -132,14 +158,35 @@ void G4OpenGLStoredViewer::DrawDisplayLists () {
     glLoadIdentity();
     G4Text headTimeText(G4BestUnit(fEndTime,"Time"),
 			G4Point3D(fDisplayHeadTimeX, fDisplayHeadTimeY, 0.));
-    headTimeText.SetScreenSize(24);
-    G4VisAttributes visAtts(G4Colour(0,1,1));
+    headTimeText.SetScreenSize(fDisplayHeadTimeSize);
+    G4VisAttributes visAtts (G4Colour
+			     (fDisplayHeadTimeRed,
+			      fDisplayHeadTimeGreen,
+			      fDisplayHeadTimeBlue));
     headTimeText.SetVisAttributes(&visAtts);
     fG4OpenGLStoredSceneHandler.AddPrimitive(headTimeText);
     glMatrixMode (GL_PROJECTION);
     glPopMatrix();
     glMatrixMode (GL_MODELVIEW);
     glPopMatrix();
+  }
+
+  // Display light front...
+  if (fDisplayLightFront && fEndTime < DBL_MAX) {
+    G4double radius = 0.;
+    if (fEndTime > 0.) {
+      radius = fEndTime * c_light;
+    }
+    G4Circle lightFront(G4Point3D
+			(fDisplayLightFrontX,
+			 fDisplayLightFrontY,
+			 fDisplayLightFrontZ));
+    lightFront.SetWorldRadius(radius);
+    glColor3d(fDisplayLightFrontRed,
+	      fDisplayLightFrontGreen,
+	      fDisplayLightFrontBlue);
+    static_cast<G4OpenGLSceneHandler&>(fSceneHandler).
+      G4OpenGLSceneHandler::AddPrimitive(lightFront);
   }
 }
 
