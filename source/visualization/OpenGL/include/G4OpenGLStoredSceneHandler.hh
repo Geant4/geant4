@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredSceneHandler.hh,v 1.20 2006-08-16 10:34:36 allison Exp $
+// $Id: G4OpenGLStoredSceneHandler.hh,v 1.21 2006-08-30 11:43:57 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -64,6 +64,7 @@ public:
   void AddPrimitive (const G4Polyline&);
   void AddPrimitive (const G4Circle&);
   void AddPrimitive (const G4Square&);
+  void AddPrimitive (const G4Polymarker& polymarker);
   // Explicitly invoke base class methods to avoid warnings about
   // hiding of base class methods...
   void AddPrimitive (const G4Text& text) {
@@ -75,9 +76,6 @@ public:
   void AddPrimitive (const G4NURBS& nurbs) {
     G4OpenGLSceneHandler::AddPrimitive (nurbs);
   }
-  void AddPrimitive(const G4Polymarker& polymarker) {
-    G4OpenGLSceneHandler::AddPrimitive (polymarker);
-  }
   void AddPrimitive (const G4Scale& scale) {
     G4OpenGLSceneHandler::AddPrimitive (scale);
   }
@@ -88,10 +86,12 @@ protected:
 
   void RequestPrimitives (const G4VSolid& solid);
   void AddPrimitivePreamble(const G4Visible& visible);
+  void AddPrimitivePostamble();
 
   static G4int     fSceneIdCount;   // static counter for OpenGLStored scenes.
   G4int            fDisplayListId;  // Workspace.
   G4bool  fMemoryForDisplayLists;   // avoid memory overflow
+  G4int fAddPrimitivePreambleNestingDepth;
   
   // PODL = Persistent Object Display List.
   GLint  fTopPODL;                  // List which calls the other PODLs.

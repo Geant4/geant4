@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredSceneHandler.cc,v 1.30 2006-08-16 10:34:36 allison Exp $
+// $Id: G4OpenGLStoredSceneHandler.cc,v 1.31 2006-08-30 11:43:57 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -45,15 +45,8 @@
 
 #include "G4PhysicalVolumeModel.hh"
 #include "G4VPhysicalVolume.hh"
-#include "G4LogicalVolume.hh"
-#include "G4TrajectoriesModel.hh"
-#include "G4VisManager.hh"
-#include "G4VTrajectoryModel.hh"
-#include "G4AttDef.hh"
-#include "G4AttValue.hh"
-#include "G4AttCheck.hh"
-#include "G4UIcommand.hh"
 #include "G4Polyline.hh"
+#include "G4Polymarker.hh"
 #include "G4Circle.hh"
 #include "G4Square.hh"
 
@@ -61,6 +54,7 @@ G4OpenGLStoredSceneHandler::G4OpenGLStoredSceneHandler (G4VGraphicsSystem& syste
 					  const G4String& name):
 G4OpenGLSceneHandler (system, fSceneIdCount++, name),
 fMemoryForDisplayLists (true),
+fAddPrimitivePreambleNestingDepth (0),
 fTopPODL (0)
 {}
 
@@ -69,6 +63,11 @@ G4OpenGLStoredSceneHandler::~G4OpenGLStoredSceneHandler ()
 
 void G4OpenGLStoredSceneHandler::AddPrimitivePreamble(const G4Visible& visible)
 {
+  // Track nesting depth to avoid recursive calls, for example, from a
+  // G4Polymarker that invokes a G4Circle...
+  fAddPrimitivePreambleNestingDepth++;
+  if (fAddPrimitivePreambleNestingDepth > 1) return;
+
   const G4Colour& c = GetColour (visible);
 
   if (fMemoryForDisplayLists && fReadyForTransients) {
@@ -79,22 +78,14 @@ void G4OpenGLStoredSceneHandler::AddPrimitivePreamble(const G4Visible& visible)
     const G4VisAttributes* pVA =
       fpViewer->GetApplicableVisAttributes(visible.GetVisAttributes());
 
-    // Get time information from vis attributes, if any.
-    const std::vector<G4AttValue>* attValues = pVA->GetAttValues();
-    if (attValues) {
-      for (std::vector<G4AttValue>::const_iterator i = attValues->begin();
-	   i != attValues->end(); ++i) {
-	if (i->GetName() == "_t1") {
-	  to.fStartTime = G4UIcommand::ConvertToDimensionedDouble(i->GetValue());
-	}
-	if (i->GetName() == "_t2") {
-	  to.fEndTime = G4UIcommand::ConvertToDimensionedDouble(i->GetValue());
-	}
-      }
-    }
+    // Get time information from vis attributes.
+    to.fStartTime = pVA->GetStartTime();
+    to.fEndTime = pVA->GetEndTime();
 
-    // Keep colour out of display list so that it can be applied independently.
+    // Keep colour out of (already started) display list so that it
+    // can be applied independently.
     glEndList();
+    glDeleteLists(fDisplayListId, 1);
     to.fColour = c;
     glColor3d (c.GetRed (), c.GetGreen (), c.GetBlue ());
     glNewList (fDisplayListId, GL_COMPILE_AND_EXECUTE);
@@ -106,22 +97,37 @@ void G4OpenGLStoredSceneHandler::AddPrimitivePreamble(const G4Visible& visible)
   }
 }
 
+void G4OpenGLStoredSceneHandler::AddPrimitivePostamble()
+{
+  fAddPrimitivePreambleNestingDepth--;
+}
+
 void G4OpenGLStoredSceneHandler::AddPrimitive (const G4Polyline& polyline)
 {
   AddPrimitivePreamble(polyline);
   G4OpenGLSceneHandler::AddPrimitive(polyline);
+  AddPrimitivePostamble();
 }
 
 void G4OpenGLStoredSceneHandler::AddPrimitive (const G4Circle& circle)
 {
   AddPrimitivePreamble(circle);
   G4OpenGLSceneHandler::AddPrimitive(circle);
+  AddPrimitivePostamble();
 }
 
 void G4OpenGLStoredSceneHandler::AddPrimitive (const G4Square& square)
 {
   AddPrimitivePreamble(square);
   G4OpenGLSceneHandler::AddPrimitive(square);
+  AddPrimitivePostamble();
+}
+
+void G4OpenGLStoredSceneHandler::AddPrimitive (const G4Polymarker& polymarker)
+{
+  AddPrimitivePreamble(polymarker);
+  G4OpenGLSceneHandler::AddPrimitive(polymarker);
+  AddPrimitivePostamble();
 }
 
 void G4OpenGLStoredSceneHandler::BeginPrimitives
