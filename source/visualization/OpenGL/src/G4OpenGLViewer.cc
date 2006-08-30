@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewer.cc,v 1.26 2006-08-16 10:34:36 allison Exp $
+// $Id: G4OpenGLViewer.cc,v 1.27 2006-08-30 11:47:27 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -57,7 +57,18 @@ fEndTime(DBL_MAX),
 fFadeFactor(0.),
 fDisplayHeadTime(false),
 fDisplayHeadTimeX(-0.9),
-fDisplayHeadTimeY(-0.9)
+fDisplayHeadTimeY(-0.9),
+fDisplayHeadTimeSize(24.),
+fDisplayHeadTimeRed(0.),
+fDisplayHeadTimeGreen(1.),
+fDisplayHeadTimeBlue(1.),
+fDisplayLightFront(false),
+fDisplayLightFrontX(0.),
+fDisplayLightFrontY(0.),
+fDisplayLightFrontZ(0.),
+fDisplayLightFrontRed(0.),
+fDisplayLightFrontGreen(1.),
+fDisplayLightFrontBlue(0.)
 {
   // Make changes to view parameters for OpenGL...
   fVP.SetAutoRefresh(true);
@@ -165,7 +176,11 @@ void G4OpenGLViewer::SetView () {
   // Light position is "true" light direction, so must come after gluLookAt.
   glLightfv (GL_LIGHT0, GL_POSITION, lightPosition);
 
-  // Clip planes.
+  // OpenGL no longer seems to reconstruct clipped edges, so, when the
+  // BooleanProcessor is up to it, abandon this and use generic
+  // clipping in G4OpenGLSceneHandler::CreateSectionPolyhedron.  Also,
+  // force kernel visit on change of clipping plane in
+  // G4OpenGLStoredViewer::CompareForKernelVisit.
   if (fVP.IsSection () ) {  // pair of back to back clip planes.
     const G4Plane3D& s = fVP.GetSectionPlane ();
     double sArray[4];

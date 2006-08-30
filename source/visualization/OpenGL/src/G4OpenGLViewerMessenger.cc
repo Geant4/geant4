@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewerMessenger.cc,v 1.2 2006-08-16 10:33:54 allison Exp $
+// $Id: G4OpenGLViewerMessenger.cc,v 1.3 2006-08-30 11:47:27 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4OpenGLViewerMessenger.hh"
@@ -35,7 +35,6 @@
 #include "G4UIcommand.hh"
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithADouble.hh"
-#include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithABool.hh"
 #include "G4VisManager.hh"
 #include <sstream>
@@ -69,20 +68,79 @@ G4OpenGLViewerMessenger::G4OpenGLViewerMessenger()
   parameter = new G4UIparameter ("displayHeadTime", 'b', omitable = false);
   parameter->SetDefaultValue(false);
   fpCommandDisplayHeadTime->SetParameter(parameter);
-  parameter = new G4UIparameter ("screen-x", 'd', omitable = true);
-  parameter->SetGuidance("-1 < screen-x < 1");
+  parameter = new G4UIparameter ("screenX", 'd', omitable = true);
+  parameter->SetGuidance("-1 < screenX < 1");
+  parameter->SetParameterRange("screenX >= -1. && screenX <= 1.");
   parameter->SetDefaultValue(-0.9);
   fpCommandDisplayHeadTime->SetParameter(parameter);
-  parameter = new G4UIparameter ("screen-y", 'd', omitable = true);
-  parameter->SetGuidance("-1 < screen-y < 1");
+  parameter = new G4UIparameter ("screenY", 'd', omitable = true);
+  parameter->SetGuidance("-1 < screenY < 1");
+  parameter->SetParameterRange("screenY >= -1. && screenY <= 1.");
   parameter->SetDefaultValue(-0.9);
+  fpCommandDisplayHeadTime->SetParameter(parameter);
+  parameter = new G4UIparameter ("screenSize", 'd', omitable = true);
+  parameter->SetDefaultValue(24.);
+  fpCommandDisplayHeadTime->SetParameter(parameter);
+  parameter = new G4UIparameter ("red", 'd', omitable = true);
+  parameter->SetParameterRange("red >= 0. && red <= 1.");
+  parameter->SetDefaultValue(0.);
+  fpCommandDisplayHeadTime->SetParameter(parameter);
+  parameter = new G4UIparameter ("green", 'd', omitable = true);
+  parameter->SetParameterRange("green >= 0. && green <= 1.");
+  parameter->SetDefaultValue(1.);
+  fpCommandDisplayHeadTime->SetParameter(parameter);
+  parameter = new G4UIparameter ("blue", 'd', omitable = true);
+  parameter->SetParameterRange("blue >= 0. && blue <= 1.");
+  parameter->SetDefaultValue(1.);
   fpCommandDisplayHeadTime->SetParameter(parameter);
 
+  fpCommandDisplayLightFront =
+    new G4UIcommand("/vis/ogl/set/displayLightFront", this);
+  fpCommandDisplayLightFront->SetGuidance
+    ("Display the light front at head time.");
+  parameter = new G4UIparameter ("displayLightFront", 'b', omitable = false);
+  parameter->SetDefaultValue(false);
+  fpCommandDisplayLightFront->SetParameter(parameter);
+  parameter = new G4UIparameter ("originX", 'd', omitable = true);
+  parameter->SetDefaultValue(0.);
+  fpCommandDisplayLightFront->SetParameter(parameter);
+  parameter = new G4UIparameter ("originY", 'd', omitable = true);
+  parameter->SetDefaultValue(0.);
+  fpCommandDisplayLightFront->SetParameter(parameter);
+  parameter = new G4UIparameter ("originZ", 'd', omitable = true);
+  parameter->SetDefaultValue(0.);
+  fpCommandDisplayLightFront->SetParameter(parameter);
+  parameter = new G4UIparameter ("unit", 's', omitable = true);
+  parameter->SetDefaultValue("m");
+  fpCommandDisplayLightFront->SetParameter(parameter);
+  parameter = new G4UIparameter ("red", 'd', omitable = true);
+  parameter->SetParameterRange("red >= 0. && red <= 1.");
+  parameter->SetDefaultValue(0.);
+  fpCommandDisplayLightFront->SetParameter(parameter);
+  parameter = new G4UIparameter ("green", 'd', omitable = true);
+  parameter->SetParameterRange("green >= 0. && green <= 1.");
+  parameter->SetDefaultValue(1.);
+  fpCommandDisplayLightFront->SetParameter(parameter);
+  parameter = new G4UIparameter ("blue", 'd', omitable = true);
+  parameter->SetParameterRange("blue >= 0. && blue <= 1.");
+  parameter->SetDefaultValue(0.);
+  fpCommandDisplayLightFront->SetParameter(parameter);
+
   fpCommandEndTime =
-    new G4UIcmdWithADoubleAndUnit("/vis/ogl/set/endTime", this);
-  fpCommandEndTime->SetGuidance("Set end of range of track time.");
-  fpCommandEndTime->SetParameterName("end-time", omitable = false);
-  fpCommandEndTime->SetDefaultValue(DBL_MAX);
+    new G4UIcommand("/vis/ogl/set/endTime", this);
+  fpCommandEndTime->SetGuidance("Set end and range of track time.");
+  parameter = new G4UIparameter ("end-time", 'd', omitable = false);
+  parameter->SetDefaultValue(DBL_MAX);
+  fpCommandEndTime->SetParameter(parameter);
+  parameter = new G4UIparameter ("end-time-unit", 's', omitable = false);
+  parameter->SetDefaultValue("ns");
+  fpCommandEndTime->SetParameter(parameter);
+  parameter = new G4UIparameter ("time-range", 'd', omitable = true);
+  parameter->SetDefaultValue(-1.);
+  fpCommandEndTime->SetParameter(parameter);
+  parameter = new G4UIparameter ("time-range-unit", 's', omitable = true);
+  parameter->SetDefaultValue("ns");
+  fpCommandEndTime->SetParameter(parameter);
 
   fpCommandFade = new G4UIcmdWithADouble("/vis/ogl/set/fade", this);
   fpCommandFade->SetGuidance
@@ -101,7 +159,7 @@ G4OpenGLViewerMessenger::G4OpenGLViewerMessenger()
   parameter->SetDefaultValue("ns");
   fpCommandStartTime->SetParameter(parameter);
   parameter = new G4UIparameter ("time-range", 'd', omitable = true);
-  parameter->SetDefaultValue(DBL_MAX);
+  parameter->SetDefaultValue(-1.);
   fpCommandStartTime->SetParameter(parameter);
   parameter = new G4UIparameter ("time-range-unit", 's', omitable = true);
   parameter->SetDefaultValue("ns");
@@ -111,7 +169,10 @@ G4OpenGLViewerMessenger::G4OpenGLViewerMessenger()
 G4OpenGLViewerMessenger::~G4OpenGLViewerMessenger ()
 {
   delete fpCommandStartTime;
+  delete fpCommandFade;
   delete fpCommandEndTime;
+  delete fpCommandDisplayLightFront;
+  delete fpCommandDisplayHeadTime;
   delete fpDirectorySet;
   delete fpDirectory;
 }
@@ -156,22 +217,60 @@ void G4OpenGLViewerMessenger::SetNewValue
   if (command == fpCommandDisplayHeadTime)
     {
       G4String display;
-      G4double screenX, screenY;
+      G4double screenX, screenY, screenSize, red, green, blue;
       std::istringstream iss(newValue);
-      iss >> display >> screenX >> screenY;
+      iss >> display >> screenX >> screenY
+	  >> screenSize >> red >> green >> blue;
       pViewer->fDisplayHeadTime = command->ConvertToBool(display);
       pViewer->fDisplayHeadTimeX = screenX;
       pViewer->fDisplayHeadTimeY = screenY;
+      pViewer->fDisplayHeadTimeSize = screenSize;
+      pViewer->fDisplayHeadTimeRed = red;
+      pViewer->fDisplayHeadTimeGreen = green;
+      pViewer->fDisplayHeadTimeBlue = blue;
+    }
+
+  if (command == fpCommandDisplayLightFront)
+    {
+      G4String display, originX, originY, originZ, unit;
+      G4double red, green, blue;
+      std::istringstream iss(newValue);
+      iss >> display
+	  >> originX >> originY >> originZ >> unit
+	  >> red >> green >> blue;
+      pViewer->fDisplayLightFront = command->ConvertToBool(display);
+      pViewer->fDisplayLightFrontX =
+	command->ConvertToDimensionedDouble(G4String(originX + ' ' + unit));
+      pViewer->fDisplayLightFrontY =
+	command->ConvertToDimensionedDouble(G4String(originY + ' ' + unit));
+      pViewer->fDisplayLightFrontZ =
+	command->ConvertToDimensionedDouble(G4String(originZ + ' ' + unit));
+      pViewer->fDisplayLightFrontRed = red;
+      pViewer->fDisplayLightFrontGreen = green;
+      pViewer->fDisplayLightFrontBlue = blue;
     }
 
   if (command == fpCommandEndTime)
     {
-      pViewer->fEndTime = command->ConvertToDimensionedDouble(newValue);
+      G4String end_time_string, end_time_unit,
+	time_range_string, time_range_unit;
+      std::istringstream iss(newValue);
+      iss >> end_time_string >> end_time_unit
+	  >> time_range_string >> time_range_unit;
+      pViewer->fEndTime = command->ConvertToDimensionedDouble
+	(G4String(end_time_string + ' ' + end_time_unit));
+      G4double timeRange = command->ConvertToDimensionedDouble
+	(G4String(time_range_string + ' ' + time_range_unit));
+      if (timeRange > 0.) {
+	pViewer->fStartTime = pViewer->fEndTime - timeRange;
+      }
+      G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/refresh");
     }
 
   if (command == fpCommandFade)
     {
       pViewer->fFadeFactor = command->ConvertToDouble(newValue);
+      G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/refresh");
     }
 
   if (command == fpCommandStartTime)
@@ -185,9 +284,9 @@ void G4OpenGLViewerMessenger::SetNewValue
 	(G4String(start_time_string + ' ' + start_time_unit));
       G4double timeRange = command->ConvertToDimensionedDouble
 	(G4String(time_range_string + ' ' + time_range_unit));
-      pViewer->fEndTime = pViewer->fStartTime + timeRange;
-   }
-
-  G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/refresh");
-
+      if (timeRange > 0.) {
+	pViewer->fEndTime = pViewer->fStartTime + timeRange;
+      }
+      G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/refresh");
+    }
 }

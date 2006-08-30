@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewerMessenger.hh,v 1.2 2006-08-16 10:34:36 allison Exp $
+// $Id: G4OpenGLViewerMessenger.hh,v 1.3 2006-08-30 11:47:27 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef G4OPENGLVIEWERMESSENGER_HH
@@ -37,7 +37,6 @@
 class G4UIdirectory;
 class G4UIcommand;
 class G4UIcmdWithADouble;
-class G4UIcmdWithADoubleAndUnit;
 
 class G4OpenGLViewerMessenger: public G4UImessenger {
 public:
@@ -51,7 +50,8 @@ private:
   G4UIdirectory* fpDirectory;
   G4UIdirectory* fpDirectorySet;
   G4UIcommand* fpCommandDisplayHeadTime;
-  G4UIcmdWithADoubleAndUnit* fpCommandEndTime;
+  G4UIcommand* fpCommandDisplayLightFront;
+  G4UIcommand* fpCommandEndTime;
   G4UIcmdWithADouble* fpCommandFade;
   G4UIcommand* fpCommandStartTime;
 };

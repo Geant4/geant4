@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewer.hh,v 1.16 2006-08-16 10:34:36 allison Exp $
+// $Id: G4OpenGLViewer.hh,v 1.17 2006-08-30 11:47:27 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -71,6 +71,11 @@ protected:
   G4double fFadeFactor;  // 0: no fade; 1: maximum fade with time within range.
   G4bool fDisplayHeadTime;  // Display head time (fEndTime) in 2D text.
   G4double fDisplayHeadTimeX, fDisplayHeadTimeY;  // 2D screen coords.
+  G4double fDisplayHeadTimeSize;  // Screen size.
+  G4double fDisplayHeadTimeRed, fDisplayHeadTimeGreen, fDisplayHeadTimeBlue;
+  G4bool fDisplayLightFront;// Display light front at head time originating at
+  G4double fDisplayLightFrontX, fDisplayLightFrontY, fDisplayLightFrontZ;
+  G4double fDisplayLightFrontRed, fDisplayLightFrontGreen, fDisplayLightFrontBlue;
 };
 
 #endif
