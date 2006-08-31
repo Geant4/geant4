@@ -21,22 +21,26 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03TrackingAction.cc,v 1.5 2006-08-16 15:44:06 allison Exp $
+// $Id: ExN03TrackingAction.cc,v 1.6 2006-08-31 14:45:23 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 #include "ExN03TrackingAction.hh"
-//#include "G4SmoothTrajectory.hh"
 #include "G4RichTrajectory.hh"
 #include "G4TrackingManager.hh"
 #include "G4IdentityTrajectoryFilter.hh"
 #include "G4TransportationManager.hh"
 #include "G4PropagatorInField.hh"
 
-void ExN03TrackingAction::PreUserTrackingAction(const G4Track* aTrack)
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void ExN03TrackingAction::PreUserTrackingAction(const G4Track* track)
 {
   /* Instate the following code for advanced trajectory displaying
   // Require rich trajectory...
-  fpTrackingManager->SetTrajectory(new G4RichTrajectory(aTrack));
+  fpTrackingManager->SetTrajectory(new G4RichTrajectory(track));
 
   // Activate storing of auxiliary points for smoother trajectory...
   static G4IdentityTrajectoryFilter curvedFilter;
@@ -44,3 +48,5 @@ void ExN03TrackingAction::PreUserTrackingAction(const G4Track* aTrack)
     GetPropagatorInField()->SetTrajectoryFilter(&curvedFilter);
   */
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

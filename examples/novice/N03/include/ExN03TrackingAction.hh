@@ -21,10 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03TrackingAction.hh,v 1.6 2006-08-16 15:54:30 allison Exp $
+// $Id: ExN03TrackingAction.hh,v 1.7 2006-08-31 14:45:46 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef ExN03TrackingAction_h
 #define ExN03TrackingAction_h 1
@@ -33,13 +35,15 @@
 
 class G4Track;
 
-///////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 class ExN03TrackingAction : public G4UserTrackingAction
-///////////////////////////
 {
    public:
    virtual void PreUserTrackingAction(const G4Track* aTrack);
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 
