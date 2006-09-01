@@ -14,11 +14,21 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+31 Aug 2006 Vladimir Ivanchenko (hadr-cross-V08-01-02)
+------------------------------------------------------
 - new wrapper cross section classes  G4UInelasticCrossSection and 
   G4UElasticCrossSection which combine cross sections from different 
-  data sets (V.Ivanchenko)
+  data sets 
 - new G4UPiNuclearCrossSection providing another implementation 
-  of elastic and inelastic cross sections from Barashenkov (V.Ivanchenko)
+  of elastic and inelastic cross sections from Barashenkov 
+
+
+17, 21 Aug 2006 Gunter Folger (same tag as 31 Aug above)
+--------------------------------------------------------
+- added two missing Ca inelastic pi- entries, changed formatting
+- changed scaling of cross sections for elements not tabulated from scaling 
+  in Z^(2/3) to A^0.75
+
 
 11 Aug 2006 Dennis Wright (hadr-cross-V08-01-00)
 ------------------------------------------------
