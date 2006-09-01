@@ -357,8 +357,8 @@ G4GlauberGribovCrossSection::GetHadronNucleaonXscPDG(const G4DynamicParticle* aP
 //
 
 G4double 
-G4GlauberGribovCrossSection::GetNucleusRadius( const G4DynamicParticle* aParticle, 
-                                               const G4Element* anElement          )
+G4GlauberGribovCrossSection::GetNucleusRadius( const G4DynamicParticle* , 
+                                               const G4Element* anElement)
 {
   G4double At       = anElement->GetN();
   G4double oneThird = 1.0/3.0;
