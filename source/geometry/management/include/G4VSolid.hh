@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSolid.hh,v 1.22 2006-06-29 18:32:57 gunter Exp $
+// $Id: G4VSolid.hh,v 1.23 2006-09-04 08:32:54 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -175,6 +175,18 @@ class G4VSolid
       // or anyway to cache the computed value.
       // Note: the computed value is NOT cached.
 
+    virtual G4double GetSurfaceArea();
+      // Returns an estimation of the solid surface in internal units.
+      // This method may be overloaded by derived classes to compute the
+      // exact geometrical quantity for solids where this is possible,
+      // or anyway to cache the computed value.
+      // Note: the computed value is NOT cached.
+
+    virtual G4double EstimateSurfaceArea();
+      // Returns rough estimation (10%) of the solid surface in internal units.
+      // This method can be used for the fast estimate (volume estimation speed)
+      // of the surface of the simple solids without big variations of dimentions.
+
     virtual G4GeometryType  GetEntityType() const = 0;
       // Provide identification of the class of an object.
       // (required for persistency and STEP interface)
@@ -277,6 +289,18 @@ class G4VSolid
       // Calculate cubic volume based on Inside() method.
       // Accuracy is limited by the second argument or the statistics
       // expressed by the first argument.
+
+    G4double EstimateHomotheticSurface(G4int nStat) const;
+      // Estimate (15%) surface of simple solids based on Inside() method.
+      // Accuracy is limited by the second argument or the statistics
+      // expressed by the first argument.
+
+    G4double EstimateSkinSurface(G4int nStat, G4double d=0.) const;
+      // Calculate surface based on Inside() and DistanceToIn/Out()
+		    // methods. Accuracy is limited by the statistics (firstst
+      // argument) and skin thickness (secondnd argument). If d=0.,
+      // the thickness is defined automatically as 1% of the
+      // smallest dimention of the Solid. Implemented by M. Kosov.
 
 private:
 

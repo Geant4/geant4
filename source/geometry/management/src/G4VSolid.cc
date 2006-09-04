@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSolid.cc,v 1.28 2006-06-29 18:34:09 gunter Exp $
+// $Id: G4VSolid.cc,v 1.29 2006-09-04 08:32:54 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4VSolid
@@ -473,6 +473,31 @@ G4double G4VSolid::GetCubicVolume()
 
 ////////////////////////////////////////////////////////////////
 //
+// Returns an gomothety estimation of the solid surface area in
+// internal units. The number of statistics is fixed.
+
+G4double G4VSolid::EstimateSurfaceArea()
+{
+  G4int surfAreaStatistics = 10000000;
+  return EstimateHomotheticSurface(surfAreaStatistics);
+}
+
+////////////////////////////////////////////////////////////////
+//
+// Returns an estimation of the solid surface in internal units.
+// The number of statistics is fixed. This method may be overloaded
+// by derived classes to compute the exact geometrical quantity for
+// solids where this is possible or anyway to cache the computed
+// value. This implementation does NOT cache the computed value.
+
+G4double G4VSolid::GetSurfaceArea()
+{
+  G4int surfAreaStatistics = 10000000;
+  return EstimateSkinSurface(surfAreaStatistics);
+}
+
+////////////////////////////////////////////////////////////////
+//
 // Calculate cubic volume based on Inside() method.
 // Accuracy is limited by the second argument or the statistics
 // expressed by the first argument.
@@ -514,4 +539,129 @@ G4double G4VSolid::EstimateCubicVolume(G4int nStat, G4double epsilon) const
   }
   volume = (maxX-minX)*(maxY-minY)*(maxZ-minZ)*iInside/nStat;
   return volume;
+}
+
+////////////////////////////////////////////////////////////////
+//
+// Estimate surface area based on Inside(), DistanceToIn(), and
+// DistanceToOut() methods. Accuracy is limited by the statistics
+// defined by the first argument. Implemented by Mikhail Kosov.
+
+G4double G4VSolid::EstimateSkinSurface(G4int nStat, G4double d) const
+{
+  G4int inside=0;
+  G4double px,py,pz,minX,maxX,minY,maxY,minZ,maxZ,area;
+  G4bool yesno;
+  G4ThreeVector p;
+  EInside in;
+
+  // values needed for CalculateExtent signature
+
+  G4VoxelLimits limit;                // Unlimited
+  G4AffineTransform origin;
+
+  // min max extents of pSolid along X,Y,Z
+
+  yesno = this->CalculateExtent(kXAxis,limit,origin,minX,maxX);
+  yesno = this->CalculateExtent(kYAxis,limit,origin,minY,maxY);
+  yesno = this->CalculateExtent(kZAxis,limit,origin,minZ,maxZ);
+
+  // limits
+
+  if(nStat < 1000)    nStat   = 100;
+
+  G4double dX=maxX-minX;
+  G4double dY=maxY-minY;
+  G4double dZ=maxZ-minZ;
+  if(d<=0.)          // Automatic definition of skin thickness
+		{
+    G4double min=dX; if(dY<dX) min=dY; if(dZ<min) min=dZ;
+    d=.01*min;
+  }
+
+  G4double dd=d+d;
+  minX-=d; minY-=d; minZ-=d; dX+=dd; dY+=dd; dZ+=dd;
+
+  for(G4int i = 0; i < nStat; i++ )
+  {
+    px = minX+dX*G4UniformRand();
+    py = minY+dY*G4UniformRand();
+    pz = minZ+dZ*G4UniformRand();
+    p  = G4ThreeVector(px,py,pz);
+    in = this->Inside(p);
+    if(in != kOutside)
+    {
+      if  (DistanceToOut(p)<d) inside++;
+    }
+    else if(DistanceToIn(p)<d) inside++;
+  }
+  // @@ The conformal correction can be upgraded
+  area = dX*dY*dZ*inside/(d+d)/nStat;
+  return area;
+}
+
+////////////////////////////////////////////////////////////////
+//
+// Estimate surface area based on Inside() method and a homothetic
+// algorithm of the surface estimation. Accuracy is limited by the
+// statistics and systematics of the method. Implemented by M.Kosov.
+
+G4double G4VSolid::EstimateHomotheticSurface(G4int nStat) const
+{
+  G4double inside=0.;
+  G4double all=0.;
+  G4double px,py,pz,minX,maxX,minY,maxY,minZ,maxZ,area;
+  G4bool yesno;
+  G4ThreeVector p;
+  EInside in;
+
+  // values needed for CalculateExtent signature
+
+  G4VoxelLimits limit;                // Unlimited
+  G4AffineTransform origin;
+
+  // min max extents of pSolid along X,Y,Z
+
+  yesno = this->CalculateExtent(kXAxis,limit,origin,minX,maxX);
+  yesno = this->CalculateExtent(kYAxis,limit,origin,minY,maxY);
+  yesno = this->CalculateExtent(kZAxis,limit,origin,minZ,maxZ);
+
+  // limits
+
+  if(nStat < 100)    nStat   = 100;
+
+  G4double dX=maxX-minX;
+  G4double dY=maxY-minY;
+  G4double dZ=maxZ-minZ;
+  G4double minD=dX; if(dY<dX) minD=dY; if(dZ<minD) minD=dZ; minD/=2;
+  G4double maxD=std::sqrt(dX*dX+dY*dY+dZ*dZ)/4.;
+  G4double minoV=maxD; // Minimal out distance
+  G4double maxiV=0.;   // Maximum in distance
+  G4double miniV=maxD; // Minimal in distance (zero if no holes)
+		G4double fD=std::sqrt(maxD/minD);
+  for(G4int i = 0; i < nStat; i++ )
+  {
+    G4double sx = dX*G4UniformRand();
+    G4double sy = dY*G4UniformRand();
+    G4double sz = dZ*G4UniformRand();
+    px = minX+sx;
+    py = minY+sy;
+    pz = minZ+sz;
+    p  = G4ThreeVector(px,py,pz);
+    G4double r=std::sqrt(sx*sx+sy*sy+sz*sz);
+    G4double w=1./r;
+    all+=w;
+    in = this->Inside(p);
+    if(in != kOutside)
+    {
+      inside+=w;
+      if(maxiV<r) maxiV=r;
+      if(miniV>r) miniV=r;
+    }
+    else if(minoV>r) minoV=r;
+  }
+  // @@ The conformal correction can be upgraded
+  G4double fV=std::sqrt((maxiV+miniV)/minoV);
+  area = (dX*dY+dY*dZ+dZ*dX)*(fD+fD)*inside/all/fV;
+  return area;
 }
