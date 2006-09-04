@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredWin32Viewer.cc,v 1.17 2006-06-29 21:19:22 gunter Exp $
+// $Id: G4OpenGLStoredWin32Viewer.cc,v 1.18 2006-09-04 12:07:59 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -100,6 +100,15 @@ void G4OpenGLStoredWin32Viewer::DrawView () {
     if (!kernelVisitWasNeeded) {
       DrawDisplayLists ();
       FinishView ();
+    } else {
+    // However, union cutaways are implemented in DrawDisplayLists, so make
+    // an extra pass...
+      if (fVP.IsCutaway() &&
+	  fVP.GetCutawayMode() == G4ViewParameters::cutawayUnion) {
+	ClearView();
+	DrawDisplayLists ();
+	FinishView ();
+      }
     }
   }
 }

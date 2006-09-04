@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredViewer.cc,v 1.17 2006-08-30 11:56:15 allison Exp $
+// $Id: G4OpenGLStoredViewer.cc,v 1.18 2006-09-04 12:07:59 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -76,19 +76,13 @@ G4bool G4OpenGLStoredViewer::CompareForKernelVisit(G4ViewParameters& lastVP) {
       (lastVP.IsCullingInvisible () != fVP.IsCullingInvisible ()) ||
       (lastVP.IsDensityCulling ()   != fVP.IsDensityCulling ())   ||
       (lastVP.IsCullingCovered ()   != fVP.IsCullingCovered ())   ||
-      // No need to visit kernel if section plane changes.
-      /**************************************************************
-      But...OpenGL no longer seems to reconstruct clipped edges, so
-      if we abandon this and use generic clipping in
-      G4OpenGLSceneHandler::CreateSectionPolyhedron we need to force
-      kernel visit here and below...
       (lastVP.IsSection ()          != fVP.IsSection ())          ||
-      ***************************************************************/
-      // No need to visit kernel if cutaway planes change.
-      /*************************************************************
-      But as for section planes...
+      // Section (DCUT) implemented locally.  But still need to visit
+      // kernel if status changes so that back plane culling can be
+      // switched.
       (lastVP.IsCutaway ()          != fVP.IsCutaway ())          ||
-      ***************************************************************/
+      // Cutaways implemented locally.  But still need to visit kernel
+      // if status changes so that back plane culling can be switched.
       (lastVP.IsExplode ()          != fVP.IsExplode ())          ||
       (lastVP.GetNoOfSides ()       != fVP.GetNoOfSides ())       ||
       (lastVP.IsMarkerNotHidden ()  != fVP.IsMarkerNotHidden ())  ||
@@ -102,12 +96,16 @@ G4bool G4OpenGLStoredViewer::CompareForKernelVisit(G4ViewParameters& lastVP) {
     return true;
 
   /**************************************************************
+  Section (DCUT) implemented locally.  No need to visit kernel if
+  section plane itself changes.
   if (lastVP.IsSection () &&
       (lastVP.GetSectionPlane () != fVP.GetSectionPlane ()))
     return true;
   ***************************************************************/
 
   /**************************************************************
+  Cutaways implemented locally.  No need to visit kernel if cutaway
+  planes themselves change.
   if (lastVP.IsCutaway ()) {
     if (lastVP.GetCutawayPlanes ().size () !=
 	fVP.GetCutawayPlanes ().size ()) return true;
@@ -125,26 +123,45 @@ G4bool G4OpenGLStoredViewer::CompareForKernelVisit(G4ViewParameters& lastVP) {
 }
 
 void G4OpenGLStoredViewer::DrawDisplayLists () {
-  
-  if (fG4OpenGLStoredSceneHandler.fTopPODL)
-    glCallList (fG4OpenGLStoredSceneHandler.fTopPODL);
-  
-  for (size_t i = 0; i < fG4OpenGLStoredSceneHandler.fTOList.size(); ++i) {
-    G4OpenGLStoredSceneHandler::TO& to =
-      fG4OpenGLStoredSceneHandler.fTOList[i];
-    if (to.fEndTime >= fStartTime && to.fEndTime <= fEndTime) {
-      glPushMatrix();
-      G4OpenGLTransform3D oglt (to.fTransform);
-      glMultMatrixd (oglt.GetGLMatrix ());
-      G4Colour& c = to.fColour;
-      G4double bsf = 1.;  // Brightness scaling factor.
-      if (fFadeFactor > 0. && to.fEndTime < fEndTime)
-	bsf = 1. - fFadeFactor *
-	  ((fEndTime - to.fEndTime) / (fEndTime - fStartTime));
-      glColor3d(bsf * c.GetRed (), bsf * c.GetGreen (), bsf * c.GetBlue ());
-      glCallList (to.fDisplayListId);
-      glPopMatrix();
+
+  const G4Planes& cutaways = fVP.GetCutawayPlanes();
+  G4bool cutawayUnion = fVP.IsCutaway() &&
+    fVP.GetCutawayMode() == G4ViewParameters::cutawayUnion;
+  size_t nPasses = cutawayUnion? cutaways.size(): 1;
+  for (size_t i = 0; i < nPasses; ++i) {
+
+    if (cutawayUnion) {
+      double a[4];
+      a[0] = cutaways[i].a();
+      a[1] = cutaways[i].b();
+      a[2] = cutaways[i].c();
+      a[3] = cutaways[i].d();
+      glClipPlane (GL_CLIP_PLANE2, a);
+      glEnable (GL_CLIP_PLANE2);
     }
+
+    if (fG4OpenGLStoredSceneHandler.fTopPODL)
+      glCallList (fG4OpenGLStoredSceneHandler.fTopPODL);
+
+    for (size_t i = 0; i < fG4OpenGLStoredSceneHandler.fTOList.size(); ++i) {
+      G4OpenGLStoredSceneHandler::TO& to =
+	fG4OpenGLStoredSceneHandler.fTOList[i];
+      if (to.fEndTime >= fStartTime && to.fEndTime <= fEndTime) {
+	glPushMatrix();
+	G4OpenGLTransform3D oglt (to.fTransform);
+	glMultMatrixd (oglt.GetGLMatrix ());
+	G4Colour& c = to.fColour;
+	G4double bsf = 1.;  // Brightness scaling factor.
+	if (fFadeFactor > 0. && to.fEndTime < fEndTime)
+	  bsf = 1. - fFadeFactor *
+	    ((fEndTime - to.fEndTime) / (fEndTime - fStartTime));
+	glColor3d(bsf * c.GetRed (), bsf * c.GetGreen (), bsf * c.GetBlue ());
+	glCallList (to.fDisplayListId);
+	glPopMatrix();
+      }
+    }
+
+    if (cutawayUnion) glDisable (GL_CLIP_PLANE2);
   }
 
   // Display time at "head" of time range, which is fEndTime...

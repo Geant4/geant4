@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewer.cc,v 1.27 2006-08-30 11:47:27 allison Exp $
+// $Id: G4OpenGLViewer.cc,v 1.28 2006-09-04 12:07:59 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -196,10 +196,43 @@ void G4OpenGLViewer::SetView () {
     sArray[3] = -s.d() + radius * 1.e-05;
     glClipPlane (GL_CLIP_PLANE1, sArray);
     glEnable (GL_CLIP_PLANE1);
-  }
-  else {
+  } else {
     glDisable (GL_CLIP_PLANE0);
     glDisable (GL_CLIP_PLANE1);
+  }
+
+  const G4Planes& cutaways = fVP.GetCutawayPlanes();
+  size_t nPlanes = cutaways.size();
+  if (fVP.IsCutaway() &&
+      fVP.GetCutawayMode() == G4ViewParameters::cutawayIntersection &&
+      nPlanes > 0) {
+    double a[4];
+    a[0] = cutaways[0].a();
+    a[1] = cutaways[0].b();
+    a[2] = cutaways[0].c();
+    a[3] = cutaways[0].d();
+    glClipPlane (GL_CLIP_PLANE2, a);
+    glEnable (GL_CLIP_PLANE2);
+    if (nPlanes > 1) {
+      a[0] = cutaways[1].a();
+      a[1] = cutaways[1].b();
+      a[2] = cutaways[1].c();
+      a[3] = cutaways[1].d();
+      glClipPlane (GL_CLIP_PLANE3, a);
+      glEnable (GL_CLIP_PLANE3);
+    }
+    if (nPlanes > 2) {
+      a[0] = cutaways[2].a();
+      a[1] = cutaways[2].b();
+      a[2] = cutaways[2].c();
+      a[3] = cutaways[2].d();
+      glClipPlane (GL_CLIP_PLANE4, a);
+      glEnable (GL_CLIP_PLANE4);
+    }
+  } else {
+    glDisable (GL_CLIP_PLANE2);
+    glDisable (GL_CLIP_PLANE3);
+    glDisable (GL_CLIP_PLANE4);
   }
 
   // Background.

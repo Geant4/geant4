@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateViewer.cc,v 1.7 2006-06-29 21:19:00 gunter Exp $
+// $Id: G4OpenGLImmediateViewer.cc,v 1.8 2006-09-04 12:07:59 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,5 +41,30 @@ G4OpenGLImmediateViewer::G4OpenGLImmediateViewer (G4OpenGLImmediateSceneHandler&
 G4VViewer (scene, -1),
 G4OpenGLViewer (scene)
 {}
+
+void G4OpenGLImmediateViewer::ProcessView ()
+{
+  const G4Planes& cutaways = fVP.GetCutawayPlanes();
+  G4bool cutawayUnion = fVP.IsCutaway() &&
+    fVP.GetCutawayMode() == G4ViewParameters::cutawayUnion;
+  size_t nPasses = cutawayUnion? cutaways.size(): 1;
+  for (size_t i = 0; i < nPasses; ++i) {
+
+    if (cutawayUnion) {
+      double a[4];
+      a[0] = cutaways[i].a();
+      a[1] = cutaways[i].b();
+      a[2] = cutaways[i].c();
+      a[3] = cutaways[i].d();
+      glClipPlane (GL_CLIP_PLANE2, a);
+      glEnable (GL_CLIP_PLANE2);
+    }
+
+    NeedKernelVisit ();  // Always need to visit G4 kernel.
+    G4VViewer::ProcessView ();
+
+    if (cutawayUnion) glDisable (GL_CLIP_PLANE2);
+  }
+}
 
 #endif
