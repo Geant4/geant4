@@ -1,4 +1,4 @@
-$Id: History,v 1.372 2006-08-30 12:05:41 allison Exp $
+$Id: History,v 1.373 2006-09-04 11:53:49 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -24,6 +24,10 @@ committal in the CVS repository !
 History file for visualization category
 ---------------------------------------
 
+4th September 2006  John Allison
+- visman-V08-01-04: Added commands for cutaways.
+
+----------------------------------------------
 30th August 2006  John Allison  (vis-V08-01-05)
 - modeling-V08-01-05:
   o Implemented code for augmented /vis/scene/add/volume (subtraction
