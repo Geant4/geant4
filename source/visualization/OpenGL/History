@@ -1,4 +1,4 @@
-$Id: History,v 1.75 2006-08-30 12:01:38 allison Exp $
+$Id: History,v 1.76 2006-09-04 12:08:22 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,11 @@ committal in the CVS repository !
 
 History file for visualization/OpenGL
 -------------------------------------
+
+4th September 2006  John Allison  (opengl-V08-01-05)
+- Immediate mode: G4OpenGLImmediateSceneHandler.cc: Flush all
+  primitives (see detector being drawn).
+- /vis/oglx/set/printEPS: change parameter default to true.
 
 30th August 2006  John Allison  (opengl-V08-01-04)
 - G4OpenGLSceneHandler:
