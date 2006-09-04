@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateSceneHandler.cc,v 1.23 2006-08-16 10:34:36 allison Exp $
+// $Id: G4OpenGLImmediateSceneHandler.cc,v 1.24 2006-09-04 12:03:25 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -102,11 +102,13 @@ void G4OpenGLImmediateSceneHandler::BeginPrimitives
   glMultMatrixd (oglt.GetGLMatrix ());
 }
 
-void G4OpenGLImmediateSceneHandler::EndPrimitives () {
+void G4OpenGLImmediateSceneHandler::EndPrimitives ()
+{
   glPopMatrix();
-  if (fReadyForTransients) {
-    glFlush ();
-  }
+
+  // See all primitives immediately...
+  glFlush ();
+
   G4VSceneHandler::EndPrimitives ();
 }
 
@@ -133,9 +135,8 @@ void G4OpenGLImmediateSceneHandler::EndPrimitives2D()
   glMatrixMode (GL_MODELVIEW);
   glPopMatrix();
 
-  if (fReadyForTransients) {
-    glFlush ();
-  }
+  // See all primitives immediately...
+  glFlush ();
 
   G4VSceneHandler::EndPrimitives2D ();
 }
