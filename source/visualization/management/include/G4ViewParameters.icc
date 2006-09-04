@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ViewParameters.icc,v 1.12 2006-08-30 11:06:19 allison Exp $
+// $Id: G4ViewParameters.icc,v 1.13 2006-09-04 11:45:36 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -73,8 +73,11 @@ inline const G4Plane3D& G4ViewParameters::GetSectionPlane () const {
 }
 
 inline G4bool G4ViewParameters::IsCutaway () const {
-  return fCutaway;
+  return fCutawayPlanes.size() > 0;
 }
+
+inline G4ViewParameters::CutawayMode G4ViewParameters::GetCutawayMode () const
+{ return fCutawayMode;}
 
 inline const G4Planes& G4ViewParameters::GetCutawayPlanes () const {
   return fCutawayPlanes;
@@ -211,6 +214,15 @@ inline void G4ViewParameters::SetSectionPlane (const G4Plane3D& sectionPlane) {
 
 inline void G4ViewParameters::UnsetSectionPlane () {
   fSection = false;
+}
+
+inline void G4ViewParameters::SetCutawayMode
+(G4ViewParameters::CutawayMode cutawayMode) {
+  fCutawayMode = cutawayMode;
+}
+
+inline void G4ViewParameters::ClearCutawayPlanes () {
+  fCutawayPlanes.clear ();
 }
 
 inline void G4ViewParameters::SetViewpointDirection

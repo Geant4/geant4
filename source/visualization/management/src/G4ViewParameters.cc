@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ViewParameters.cc,v 1.25 2006-08-30 11:06:19 allison Exp $
+// $Id: G4ViewParameters.cc,v 1.26 2006-09-04 11:45:36 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -48,7 +48,7 @@ G4ViewParameters::G4ViewParameters ():
   fCullCovered (false),
   fSection (false),
   fSectionPlane (),
-  fCutaway (false),
+  fCutawayMode (cutawayUnion),
   fCutawayPlanes (),
   fExplode (false),
   fExplodeFactor (1.),
@@ -141,7 +141,6 @@ G4double G4ViewParameters::GetFrontHalfHeight (G4double nearDistance,
 // Useful quantities - end snippet.
 
 void G4ViewParameters::AddCutawayPlane (const G4Plane3D& cutawayPlane) {
-  fCutaway = true;
   if (fCutawayPlanes.size () < 3 ) {
     fCutawayPlanes.push_back (cutawayPlane);
   }
@@ -152,9 +151,15 @@ void G4ViewParameters::AddCutawayPlane (const G4Plane3D& cutawayPlane) {
   }
 }
 
-void G4ViewParameters::ClearCutawayPlanes () {
-  fCutaway = false;
-  fCutawayPlanes.clear ();
+void G4ViewParameters::ChangeCutawayPlane
+(size_t index, const G4Plane3D& cutawayPlane) {
+  if (index >= fCutawayPlanes.size()) {
+    G4cout <<
+      "ERROR: G4ViewParameters::ChangeCutawayPlane:"
+      "\n  Plane " << index << " does not exist." << G4endl;
+  } else {
+    fCutawayPlanes[index] = cutawayPlane;
+  }
 }
 
 void G4ViewParameters::SetVisibleDensity (G4double visibleDensity) {
@@ -249,7 +254,6 @@ void G4ViewParameters::PrintDifferences (const G4ViewParameters& v) const {
       (fVisibleDensity       != v.fVisibleDensity)       ||
       (fCullCovered          != v.fCullCovered)          ||
       (fSection              != v.fSection)              ||
-      (fCutaway              != v.fCutaway)              || 
       (fExplode              != v.fExplode)              ||
       (fNoOfSides            != v.fNoOfSides)            ||
       (fUpVector             != v.fUpVector)             ||
@@ -278,7 +282,7 @@ void G4ViewParameters::PrintDifferences (const G4ViewParameters& v) const {
       G4cout << "Difference in section planes batch." << G4endl;
   }
 
-  if (fCutaway) {
+  if (IsCutaway()) {
     if (fCutawayPlanes.size () != v.fCutawayPlanes.size ()) {
       G4cout << "Difference in no of cutaway planes." << G4endl;
     }
@@ -353,15 +357,14 @@ std::ostream& operator << (std::ostream& os, const G4ViewParameters& v) {
   if (v.fSection) os << "true, section/cut plane: " << v.fSectionPlane;
   else            os << "false";
 
-  os << "\n  Cutaway flag: ";
-  if (v.fCutaway) {
-    os << "true, cutaway planes: ";
+  if (v.IsCutaway()) {
+    os << "\n  Cutaway planes: ";
     for (size_t i = 0; i < v.fCutawayPlanes.size (); i++) {
       os << ' ' << v.fCutawayPlanes[i];
     }
   }
   else {
-    os << "false";
+    os << "\n  No cutaway planes";
   }
 
   os << "\n  Explode flag: ";
@@ -456,7 +459,7 @@ G4bool G4ViewParameters::operator != (const G4ViewParameters& v) const {
       (fDensityCulling       != v.fDensityCulling)       ||
       (fCullCovered          != v.fCullCovered)          ||
       (fSection              != v.fSection)              ||
-      (fCutaway              != v.fCutaway)              || 
+      (IsCutaway()           != v.IsCutaway())           ||
       (fExplode              != v.fExplode)              ||
       (fNoOfSides            != v.fNoOfSides)            ||
       (fUpVector             != v.fUpVector)             ||
@@ -486,7 +489,7 @@ G4bool G4ViewParameters::operator != (const G4ViewParameters& v) const {
   if (fSection &&
       (!(fSectionPlane == v.fSectionPlane))) return true;
 
-  if (fCutaway) {
+  if (IsCutaway()) {
     if (fCutawayPlanes.size () != v.fCutawayPlanes.size ())
       return true;
     else {

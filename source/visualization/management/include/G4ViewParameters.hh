@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ViewParameters.hh,v 1.22 2006-08-30 11:06:19 allison Exp $
+// $Id: G4ViewParameters.hh,v 1.23 2006-09-04 11:45:36 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -100,6 +100,11 @@ public: // With description
     nurbs       // Use G4NURBS.
   };
 
+  enum CutawayMode {
+    cutawayUnion,       // Union (addition) of result of each cutaway plane.
+    cutawayIntersection // Intersection (multiplication) " .
+  };
+
   friend std::ostream& operator << (std::ostream&,
 				      const DrawingStyle&);
 
@@ -125,6 +130,7 @@ public: // With description
         G4bool           IsSection               () const;
   const G4Plane3D&       GetSectionPlane         () const;
         G4bool           IsCutaway               () const;
+        CutawayMode      GetCutawayMode          () const;
   const G4Planes&        GetCutawayPlanes        () const;
         G4bool           IsExplode               () const;
         G4double         GetExplodeFactor        () const;
@@ -177,7 +183,9 @@ public: // With description
   void SetCullingCovered       (G4bool);
   void SetSectionPlane         (const G4Plane3D& sectionPlane);
   void UnsetSectionPlane       ();
+  void SetCutawayMode          (CutawayMode);
   void AddCutawayPlane         (const G4Plane3D& cutawayPlane);
+  void ChangeCutawayPlane      (size_t index, const G4Plane3D& cutawayPlane);
   void ClearCutawayPlanes      ();
   void SetExplodeFactor        (G4double explodeFactor);
   void UnsetExplodeFactor      ();
@@ -225,7 +233,7 @@ private:
   G4bool       fCullCovered;     // Cull daughters covered by opaque mothers.
   G4bool       fSection;         // Section drawing requested (DCUT in GEANT3).
   G4Plane3D    fSectionPlane;    // Cut plane for section drawing (DCUT).
-  G4bool       fCutaway;         // Cutaway flag.
+  CutawayMode  fCutawayMode;     // Cutaway mode.
   G4Planes     fCutawayPlanes;   // Set of planes used for cutaway.
   G4bool       fExplode;         // Explode flag.
   G4double     fExplodeFactor;
