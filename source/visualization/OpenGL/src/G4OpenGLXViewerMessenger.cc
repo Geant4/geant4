@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXViewerMessenger.cc,v 1.1 2006-07-17 15:04:22 allison Exp $
+// $Id: G4OpenGLXViewerMessenger.cc,v 1.2 2006-09-04 12:04:59 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifdef G4VIS_BUILD_OPENGLX_DRIVER
@@ -61,8 +61,8 @@ G4OpenGLXViewerMessenger::G4OpenGLXViewerMessenger()
   fpCommandPrintEPS =
     new G4UIcmdWithABool("/vis/oglx/set/printEPS", this);
   fpCommandPrintEPS->SetGuidance("Print Encapsulated PostScript file.");
-  fpCommandPrintEPS->SetParameterName("print", omitable = false);
-  fpCommandPrintEPS->SetDefaultValue(false);
+  fpCommandPrintEPS->SetParameterName("print", omitable = true);
+  fpCommandPrintEPS->SetDefaultValue(true);
 }
 
 G4OpenGLXViewerMessenger::~G4OpenGLXViewerMessenger ()
