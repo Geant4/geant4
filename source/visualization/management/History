@@ -1,4 +1,4 @@
-$Id: History,v 1.66 2006-08-30 11:10:57 allison Exp $
+$Id: History,v 1.67 2006-09-04 11:52:01 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -24,6 +24,11 @@ committal in the CVS repository !
 
 History file for visualization management sub-category
 ------------------------------------------------------
+
+4th September 2006  John Allison  (visman-V08-01-04)
+- G4ViewParameters: Added CutawayMode and ChangeCutawayPlane.
+- Added /vis/viewer/addCutawayPlane, changeCutawayPlane, clearCutawayPlanes
+  and /vis/viewer/set/cutawayMode.
 
 30th August 2006  John Allison  (visman-V08-01-03 - needs modeling-V08-01-05)
 - Added /vis/viewer/set/globalLineWidthScale.
