@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VisManager.cc,v 1.99 2006-07-03 20:13:33 allison Exp $
+// $Id: G4VisManager.cc,v 1.100 2006-09-04 11:51:29 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -942,7 +942,10 @@ void G4VisManager::RegisterMessengers () {
   directory = new G4UIdirectory ("/vis/viewer/");
   directory -> SetGuidance ("Operations on Geant4 viewers.");
   fDirectoryList.push_back (directory);
+  RegisterMessenger(new G4VisCommandViewerAddCutawayPlane);
+  RegisterMessenger(new G4VisCommandViewerChangeCutawayPlane);
   RegisterMessenger(new G4VisCommandViewerClear);
+  RegisterMessenger(new G4VisCommandViewerClearCutawayPlanes);
   RegisterMessenger(new G4VisCommandViewerClearTransients);
   RegisterMessenger(new G4VisCommandViewerCreate);
   RegisterMessenger(new G4VisCommandViewerDolly);
