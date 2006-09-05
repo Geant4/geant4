@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QElectronNuclearCrossSection.cc,v 1.8 2006-06-29 20:08:36 gunter Exp $
+// $Id: G4QElectronNuclearCrossSection.cc,v 1.9 2006-09-05 16:22:40 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -81,7 +81,7 @@ G4double G4QElectronNuclearCrossSection::ThresholdEnergy(G4int Z, G4int N, G4int
 
   G4int A=Z+N;
   if(A<1) return infEn;
-  else if(A==1) return 134.9766; // Pi0 threshold for the nucleon
+  else if(A==1) return 144.76; // Pi0 threshold in MeV for the proton: T>m+(m^2+2lm)/2M
   // CHIPS - Direct GEANT
   //G4double mT= G4QPDGCode(111).GetNuclMass(Z,N,0);
   G4double mT= 0.;
@@ -181,8 +181,8 @@ G4double G4QElectronNuclearCrossSection::CalculateCrossSection(G4bool CS, G4int 
       lastF   = GetFunctions(A,lastJ1,lastJ2,lastJ3);//newZeroPos and J-functions filling
       lastH   = alop*A*(1.-.072*std::log(A)); // like lastSP of G4PhotonuclearCrossSection
 #ifdef pdebug
-      G4cout<<"==>G4QElNCS::CalcCS:lJ1="<<lastJ1<<",lJ2="<<lastJ2<<",lJ3="<<lastJ3;
-      if(J3.size()) G4cout<<", p="<<J3[0];
+      G4cout<<"==>G4QElNCS::CalcCS: pJ1="<<lastJ1<<",pJ2="<<lastJ2<<",pJ3="<<lastJ3;
+      if(lastJ1) G4cout<<", J1="<<lastJ1[0]<<",J2="<<lastJ2[0]<<",J3="<<lastJ3[0];
       G4cout<<G4endl;
 #endif
       // *** The synchronization check ***
@@ -207,16 +207,16 @@ G4double G4QElectronNuclearCrossSection::CalculateCrossSection(G4bool CS, G4int 
     return 0.;
   }
   G4double lE=std::log(lastE);       // log(muE) (it is necessary for the fit)
-  lastG=lE-lmel;                     // Gamma of the electron (used to recover log(muE))
+  lastG=lE-lmel;                     // Gamma of the electron (used to recover log(eE))
   G4double dlg1=lastG+lastG-1.;
   G4double lgoe=lastG/lastE;
-  if(lE<lEMa) // Log fit is made explicitly to fix the last bin for the randomization
+  if(lE<lEMa)       // Log fit is made explicitly to fix the last bin for the randomization
   {
     G4double shift=(lE-lEMi)/dlnE;
     G4int    blast=static_cast<int>(shift);
 #ifdef pdebug
     G4cout<<"-->G4QElectronNuclearCS::CalcCrossSect:LOGfit b="<<blast<<",max="<<mL<<",lJ1="
-						    <<lastJ1<<",lJ2="<<lastJ2<<",lJ3="<<lastJ3<<G4endl;
+						    <<lastJ1<<",lJ2="<<lastJ2<<",lJ3="<<lastJ3<<",lEmin="<<lEMi<<",d="<<dlnE<<G4endl;
 #endif
     if(blast<0)   blast=0;
     if(blast>=mL) blast=mL-1;
@@ -229,11 +229,11 @@ G4double G4QElectronNuclearCrossSection::CalculateCrossSection(G4bool CS, G4int 
     lastSig= YNi+shift*(YNj-YNi);
     if(lastSig>YNj)lastSig=YNj;
 #ifdef pdebug
-    G4cout<<"G4QElectNucCS::CalcCS:S="<<lastSig<<",E="<<lE<<",Yi="<<YNi<<",Yj="<<YNj<<",M="
-          <<lEMa<<G4endl;
+    G4cout<<"G4QElectNucCS::CalcCS:S="<<lastSig<<",lE="<<lE<<",Yi="<<YNi<<",Yj="<<YNj
+          <<",J1="<<lastJ1[blast]<<",J2="<<lastJ2[blast]<<",J3="<<lastJ3[blast]<<G4endl;
     G4cout<<"G4QElectNucCS::CalcCS:s="<<shift<<",Jb="<<lastJ1[blast]<<",J="<<lastJ1[lastL];
     if(J3.size()) G4cout<<", p="<<J3[0];
-    G4cout<<",b="<<blast<<G4endl;
+    G4cout<<",b="<<blast<<",lEmax="<<lEMa<<",lgoe="<<lgoe<<G4endl;
 #endif
   }
   else
@@ -2380,24 +2380,31 @@ G4int G4QElectronNuclearCrossSection::GetFunctions(G4double  a, G4double* x,
   static const G4double* P2[nN]=
                              {P20,P21,P22,P23,P24,P25,P26,P27,P28,P29,P210,P211,P212,P213};
   // --------------------------------
+#ifdef pdebug
+  G4cout<<"G4QElNucCroSect::GetFunctions is called A="<<a<<G4endl;
+#endif
   G4int r=-1;                             // Low channel for J-functions
-  if(a<=.9999 || a>238.49)             // Plutonium 244 is forbidden
+  if(a<=.9999 || a>238.49)                // Plutonium 244 and higher are forbidden
   {
     G4cout<<"***G4QElectronNuclearCrossSection::GetFunctions: A="<<a<<"(?). No CS"<<G4endl;
     return r;
   }
-  G4int iA=static_cast<G4int>(a+.499); // Make the round integer of the atomic number
+  G4int iA=static_cast<G4int>(a+.499);    // Make the round integer of the atomic number
   G4double ai=iA;
   if(a!=ai) a=ai;
   for(G4int i=0; i<nN; i++)
   {
-    if(std::fabs(a-A[i])<.0005) // if A coincides with one of the basic A's -> get from Tab
+    if(std::fabs(a-A[i])<.5)              // if A coincides with the basic A, get from Tab
     {
       for(G4int k=0; k<nE; k++)
       {
         x[k]=P0[i][k];                    // J0
         y[k]=P1[i][k];                    // J1
         z[k]=P2[i][k];                    // J2
+#ifdef pdebug
+        G4cout<<"G4QElNucCroSect::GetFunctions:exact A="<<a<<",i="<<k<<",J1="<<x[k]<<",J2="
+              <<y[k]<<",J3="<<z[k]<<G4endl;
+#endif
 	     }
       r=L[i];                             // Low channel for the J-functions
     }
@@ -2418,6 +2425,10 @@ G4int G4QElectronNuclearCrossSection::GetFunctions(G4double  a, G4double* x,
         y[m]=yi+(P1[k][m]-yi)*b;
         G4double zi=P2[k1][m];
         z[m]=zi+(P2[k][m]-zi)*b;
+#ifdef pdebug
+        G4cout<<"G4QElNucCroSect::GetFunctions:inter A="<<a<<",i="<<m<<",J1="<<x[k]<<",J2="
+              <<y[k]<<",J3="<<z[k]<<G4endl;
+#endif
       }
       r=L[k];
       if(L[k1]<r) r=L[k1];

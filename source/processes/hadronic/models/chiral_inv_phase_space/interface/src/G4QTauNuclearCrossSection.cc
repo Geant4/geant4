@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QTauNuclearCrossSection.cc,v 1.7 2006-06-29 20:08:47 gunter Exp $
+// $Id: G4QTauNuclearCrossSection.cc,v 1.8 2006-09-05 16:22:40 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -85,7 +85,7 @@ G4double G4QTauNuclearCrossSection::ThresholdEnergy(G4int Z, G4int N, G4int)
 
   G4int A=Z+N;
   if(A<1) return infEn;
-  else if(A==1) return 135.; // Pi0 threshold for the nucleon
+  else if(A==1) return 1894114.; // Pi0 threshold in MeV for the proton: T>m+(m^2+2lm)/2M
   // CHIPS - Direct GEANT
   //G4double mT= G4QPDGCode(111).GetNuclMass(Z,N,0);
   G4double mT= 0.;

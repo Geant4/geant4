@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QCollision.cc,v 1.12 2006-08-09 10:19:22 mkossov Exp $
+// $Id: G4QCollision.cc,v 1.13 2006-09-05 16:22:40 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCollision class -----------------
@@ -461,7 +461,7 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
   std::vector<G4int>* IsN = ElIsoN[i];     // Vector of "#of neutrons" in the isotope El[i]
   G4int nofIsot=SPI->size();               // #of isotopes in the element i
 #ifdef debug
-		G4cout<<"G4QCollis::PosStDoIt:n="<<nofIsot<<",T="<<(*SPI)[nofIsot-1]<<",r="<<rnd<<G4endl;
+		G4cout<<"G4QCollis::PosStDoIt:n="<<nofIsot<<",T="<<(*SPI)[nofIsot-1]<<G4endl;
 #endif
   G4int j=0;
   if(nofIsot>1)
@@ -513,18 +513,20 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
     if(aProjPDG== 13) CSmanager=G4QMuonNuclearCrossSection::GetPointer();
     if(aProjPDG== 15) CSmanager=G4QTauNuclearCrossSection::GetPointer();
     // @@ Probably this is not necessary any more
-    G4double xSec=CSmanager->GetCrossSection(false,Momentum,Z,N);//Recalculate CrossSection
+    G4double xSec=CSmanager->GetCrossSection(false,Momentum,Z,N,aProjPDG);// Recalculate XS
     // @@ check a possibility to separate p, n, or alpha (!)
-    G4double photonEnergy = CSmanager->GetExchangeEnergy(); // Energy of EqivExchangePart
     if(xSec <= 0.) // The cross-section iz 0 -> Do Nothing
     {
-      G4cerr<<"-Warning-G4QCollision::PSDoIt: IsStillCalled photE="<<photonEnergy<<G4endl;
+#ifdef debug
+      G4cerr<<"G4QCollision::PSDoIt: Called for zero Cross-section"<<G4endl;
+#endif
       //Do Nothing Action insead of the reaction
       aParticleChange.ProposeEnergy(kinEnergy);
       aParticleChange.ProposeLocalEnergyDeposit(0.);
       aParticleChange.ProposeMomentumDirection(dir) ;
       return G4VDiscreteProcess::PostStepDoIt(track,step);
     }
+    G4double photonEnergy = CSmanager->GetExchangeEnergy(); // Energy of EqivExchangePart
     if( kinEnergy < photonEnergy )
     {
       //Do Nothing Action insead of the reaction
@@ -547,13 +549,15 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
     }
     // Update G4VParticleChange for the scattered muon
     G4VQCrossSection* thePhotonData=G4QPhotonNuclearCrossSection::GetPointer();
-    G4double sigNu=thePhotonData->GetCrossSection(true,photonEnergy,Z,N);// IntegratedCrSec
-    G4double sigK =thePhotonData->GetCrossSection(true, W, Z, N);        // Real CrossSect.
+    G4double sigNu=thePhotonData->GetCrossSection(true,photonEnergy,Z,N,22);//Integrated XS
+    G4double sigK =thePhotonData->GetCrossSection(true, W, Z, N, 22);       // Real XS
     G4double rndFraction = CSmanager->GetVirtualFactor(photonEnergy, photonQ2);
     if(sigNu*G4UniformRand()>sigK*rndFraction) 
     {
       //Do NothingToDo Action insead of the reaction
+#ifdef debug
       G4cout << "G4QCollision::PostStepDoIt: probability correction - DoNothing"<<G4endl;
+#endif
       aParticleChange.ProposeEnergy(kinEnergy);
       aParticleChange.ProposeLocalEnergyDeposit(0.);
       aParticleChange.ProposeMomentumDirection(dir) ;
@@ -610,7 +614,7 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
       scatPDG=-13;                       // secondary scattered mu+
     }
     // @@ Probably this is not necessary any more
-    G4double xSec=CSmanager->GetCrossSection(false,Momentum,Z,N);//Recalculate CrossSection
+    G4double xSec=CSmanager->GetCrossSection(false,Momentum,Z,N,aProjPDG);//Recalculate XS
     // @@ check a possibility to separate p, n, or alpha (!)
     if(xSec <= 0.) // The cross-section = 0 -> Do Nothing
     {
