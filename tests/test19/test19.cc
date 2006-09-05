@@ -162,9 +162,9 @@ int main()
   G4String tsy[nTg]={"1H","He","14N","59Co","238U"}; // Target symbols for the Target Loop
   G4Material* mat[nTg]={0,0,0,0,0}; // Material pointers for the Target Loop
   const G4int nPr=4;  // Length of the projectile list for the Performance test
-  G4int pli[nPr] = {22, 11, 13, 15}; // PDG Codes of the projectile particles
+  G4int pli[nPr] = {11, 13, 15, 22}; // PDG Codes of the projectile particles
   const G4int nEn=3;  // Length of the kin. energy list for the Performance test
-  G4double eli[nEn] = {27., 227., 999.}; //
+  G4double eli[nEn] = {27., 227., 999.}; // Kinetic energy values for the Loop
   // ^^^ End of the Performance On Flight test definition for targets/projectiles/energies
 #ifdef tdebug
   const G4int nT=20;           // Dimension of the t-distribution vectors
@@ -396,50 +396,50 @@ int main()
 		//G4ProcessManager* man = new G4ProcessManager(part); //Does not help to go out
   //G4VDiscreteProcess* proc = new G4QCollision;
   G4QCollision* proc = new G4QCollision;              // A simple CHIPS process
-  // **************** GHAD process definition starts here
-		///G4TheoFSGenerator* aModel = new G4TheoFSGenerator;           // The same for QGS & FTF
-  ///G4StringChipsParticleLevelInterface* theCHIPS=new G4StringChipsParticleLevelInterface;
+  // **************** GHAD process definition starts here *******************************
+		//G4TheoFSGenerator* aModel = new G4TheoFSGenerator;           // The same for QGS & FTF
+  //G4StringChipsParticleLevelInterface* theCHIPS=new G4StringChipsParticleLevelInterface;
 #ifdef pdebug
-  ///G4cout<<"Tst19:*> Nuclear fragmentation model is defined"<<G4endl;
+  //G4cout<<"Tst19:*> Nuclear fragmentation model is defined"<<G4endl;
 #endif
-  // ------------- Defines a Kind of nuclear fragmentation model--------
-  ///aModel->SetTransport(theCHIPS);
-		///G4QGSModel<G4QGSParticipants>* aStringModel = new G4QGSModel<G4QGSParticipants>;
+  //// ------------- Defines a Kind of nuclear fragmentation model--------
+  //aModel->SetTransport(theCHIPS);
+		//G4QGSModel<G4QGSParticipants>* aStringModel = new G4QGSModel<G4QGSParticipants>;
 #ifdef pdebug
-  ///G4cout<<"Tst19:*> Intranuclear transport model is defined"<<G4endl;
+  //G4cout<<"Tst19:*> Intranuclear transport model is defined"<<G4endl;
 #endif
-		// ----------- Defines a Kind of the QGS model -------------
-  ///G4QGSMFragmentation aFragmentation;       // @@ Can be a general solution (move up)
-  ///G4ExcitedStringDecay* aStringDecay = new G4ExcitedStringDecay(&aFragmentation);
-  ///aStringModel->SetFragmentationModel(aStringDecay);
-  ///aModel->SetHighEnergyGenerator(aStringModel);
+		//// ----------- Defines a Kind of the QGS model -------------
+  //G4QGSMFragmentation aFragmentation;       // @@ Can be a general solution (move up)
+  //G4ExcitedStringDecay* aStringDecay = new G4ExcitedStringDecay(&aFragmentation);
+  //aStringModel->SetFragmentationModel(aStringDecay);
+  //aModel->SetHighEnergyGenerator(aStringModel);
 #ifdef pdebug
-  ///G4cout<<"Tst19:*> String model is defined"<<G4endl;
+  //G4cout<<"Tst19:*> String model is defined"<<G4endl;
 #endif
-  // ----------- Defines energy limits of the model ----------
-		///aModel->SetMinEnergy(8*GeV);                // Do we need this ?
-		///aModel->SetMaxEnergy(100*TeV);              // Do we need that ?
-  ///G4HadronInelasticProcess* proc = 0;
-  ///if     (pPDG==2212) proc = new G4ProtonInelasticProcess;
-  ///else if(pPDG==-211) proc = new G4PionMinusInelasticProcess;
-  ///else if(pPDG== 211) proc = new G4PionPlusInelasticProcess;
-  ///else if(pPDG==-321) proc = new G4KaonMinusInelasticProcess;
-  ///else if(pPDG== 321) proc = new G4KaonPlusInelasticProcess;
-  ///else G4cout<<"-Error-Tst19: Process is not defined for PDG="<<pPDG<<G4endl;
+  //// ----------- Defines energy limits of the model ----------
+		//aModel->SetMinEnergy(8*GeV);                // Do we need this ?
+		//aModel->SetMaxEnergy(100*TeV);              // Do we need that ?
+  //G4HadronInelasticProcess* proc = 0;
+  //if     (pPDG==2212) proc = new G4ProtonInelasticProcess;
+  //else if(pPDG==-211) proc = new G4PionMinusInelasticProcess;
+  //else if(pPDG== 211) proc = new G4PionPlusInelasticProcess;
+  //else if(pPDG==-321) proc = new G4KaonMinusInelasticProcess;
+  //else if(pPDG== 321) proc = new G4KaonPlusInelasticProcess;
+  //else G4cout<<"-Error-Tst19: Process is not defined for PDG="<<pPDG<<G4endl;
   /////G4HadronInelasticProcess* proc = proc;    //@@ Can be a general solution (move up)
-  // ------------- The process must be charged by the model ------------------------
-  ///proc->RegisterMe(aModel); // from G4HadronicProcess
+  //// ------------- The process must be charged by the model ------------------------
+  //proc->RegisterMe(aModel); // from G4HadronicProcess
   //G4ProtonInelasticCrossSection* theCS = new G4ProtonInelasticCrossSection;
-  ///G4VCrossSectionDataSet* theCS = new G4ProtonInelasticCrossSection;
-  ///if(pPDG==2212) theCS = new G4ProtonInelasticCrossSection;
-  ///else           theCS = new G4PiNuclearCrossSection; // @@ There is no pi+,pi-,K=,K-(?)
-  ///proc->AddDataSet(theCS);   // Can not be skipped for the event generator
+  //G4VCrossSectionDataSet* theCS = new G4ProtonInelasticCrossSection;
+  //if(pPDG==2212) theCS = new G4ProtonInelasticCrossSection;
+  //else           theCS = new G4PiNuclearCrossSection; // @@ There is no pi+,pi-,K=,K-(?)
+  //proc->AddDataSet(theCS);   // Can not be skipped for the event generator
 		//proc->AddDiscreteProcess(theInelasticProcess); // Charged by "aModel"
 		//}
   //G4QCollision* proc = new G4QCollision; // This is a universal process of CHIPS
   //G4VRestProcess* proc = new G4QCaptureAtRest;
   //G4QCaptureAtRest* proc = new G4QCaptureAtRest;
-  // **************** GHAD process definition stops here ****************
+  // **************** GHAD process definition stops here *********************************
   if(!proc)
   {
     G4cout<<"Tst19: there is no G4QCollision process"<<G4endl;
@@ -449,7 +449,7 @@ int main()
   G4cout<<"Test19:--***-- process is created --***--" << G4endl; // only one run
 #endif
   // !! Only for CHIPS
-  proc->SetParameters(temperature, ssin2g, eteps, fN, fD, cP, rM, nop, sA);
+  ///proc->SetParameters(temperature, ssin2g, eteps, fN, fD, cP, rM, nop, sA);
   //
   //man->AddDiscreteProcess(proc); //Does not help to go out
 #ifdef hdebug
@@ -689,9 +689,9 @@ int main()
       //G4cout<<"Test19: "<<nSec<<" secondary particles are generated"<<G4endl;
       G4double totCharge = totC;
       // !! Only for CHIPS
-      G4int    curN=proc->GetNumberOfNeutronsInTarget();
+      ///G4int    curN=proc->GetNumberOfNeutronsInTarget();
       // for GHAD
-      ///G4int    curN = tgN;
+      G4int    curN = tgN;
       //
       G4int    dBN = curN-tgN;
       G4int    totBaryN = totBN+dBN;
@@ -699,9 +699,9 @@ int main()
       G4double curM=G4QPDGCode(curPDG).GetMass(); // Update mass of the TargetNucleus
       totSum = G4LorentzVector(0., 0., pmax, et+curM-mt);
       // !! Only for CHIPS
-      G4LorentzVector Residual=proc->GetEnegryMomentumConservation();
+      ///G4LorentzVector Residual=proc->GetEnegryMomentumConservation();
       // for GHAD
-      ///G4LorentzVector Residual(0.,0.,0.,0.);
+      G4LorentzVector Residual(0.,0.,0.,0.);
       //
 #ifdef debug
       G4double de = aChange->GetLocalEnergyDeposit();// Init TotalEnergy by EnergyDeposit
@@ -835,8 +835,8 @@ int main()
 #ifdef pdebug
       G4cout<<">TEST19:r4M="<<totSum<<ss<<",rCh="<<totCharge<<",rBaryN="<<totBaryN<<G4endl;
 #endif
-	     //if (1>2) // @@ The check is temporary closed for not CHIPS
-						if (totCharge ||totBaryN || ss>.27 || alarm || nGamma&&!EGamma) // Only for CHIPS
+	     if (1>2) // @@ The check is temporary closed for not CHIPS
+						//if (totCharge ||totBaryN || ss>.27 || alarm || nGamma&&!EGamma) // Only for CHIPS
       {
         totSum = G4LorentzVector(0., 0., pmax, et);
         G4cerr<<"**Test19:#"<<iter<<":n="<<nSec<<",4M="<<totSum<<",Charge="<<totCharge
