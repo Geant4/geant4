@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.104 2006-08-26 15:10:52 allison Exp $
+cvs log $Id: History,v 1.105 2006-09-06 20:58:11 tinslay Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,8 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+6th September 2006 Jane Tinslay
+- Add G4TypeKey & G4TypeKeyT classes
 
 26th August 2006  John Allison  (greps-V08-01-03)
 - G4VisAttributes: Added time range.
