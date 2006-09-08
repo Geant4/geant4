@@ -222,17 +222,17 @@ int main()
   // Construct all particles of G4
   ///G4ParticlePhysics* allParticles = new G4ParticlePhysics(); // Short cut from IntPhysL
   ///allParticles->ConstructParticle();
-// pseudo-particles
+  // pseudo-particles
   G4Geantino::GeantinoDefinition();
   G4ChargedGeantino::ChargedGeantinoDefinition();
   
-// gamma
+  // gamma
   G4Gamma::GammaDefinition();
   
-// optical photon
+  // optical photon
   G4OpticalPhoton::OpticalPhotonDefinition();
 
-// leptons
+  // leptons
   G4Electron::ElectronDefinition();
   G4Positron::PositronDefinition();
   G4MuonPlus::MuonPlusDefinition();
@@ -247,7 +247,7 @@ int main()
   G4NeutrinoTau::NeutrinoTauDefinition();
   G4AntiNeutrinoTau::AntiNeutrinoTauDefinition();  
 
-// mesons
+  // mesons
   G4PionPlus::PionPlusDefinition();
   G4PionMinus::PionMinusDefinition();
   G4PionZero::PionZeroDefinition();
@@ -277,7 +277,7 @@ int main()
   G4BsMesonZero::BsMesonZeroDefinition();
   G4AntiBsMesonZero::AntiBsMesonZeroDefinition();
 
-// barions
+  // barions
   G4Proton::ProtonDefinition();
   G4AntiProton::AntiProtonDefinition();
   G4Neutron::NeutronDefinition();
@@ -315,7 +315,7 @@ int main()
   G4AntiXicZero::AntiXicZeroDefinition();
   G4AntiOmegacZero::AntiOmegacZeroDefinition();
 
-// ions
+  // ions
   G4Deuteron::DeuteronDefinition();
   G4Triton::TritonDefinition();
   G4He3::He3Definition();
@@ -435,10 +435,6 @@ int main()
   //else           theCS = new G4PiNuclearCrossSection; // @@ There is no pi+,pi-,K=,K-(?)
   //proc->AddDataSet(theCS);   // Can not be skipped for the event generator
 		//proc->AddDiscreteProcess(theInelasticProcess); // Charged by "aModel"
-		//}
-  //G4QCollision* proc = new G4QCollision; // This is a universal process of CHIPS
-  //G4VRestProcess* proc = new G4QCaptureAtRest;
-  //G4QCaptureAtRest* proc = new G4QCaptureAtRest;
   // **************** GHAD process definition stops here *********************************
   if(!proc)
   {
@@ -449,7 +445,7 @@ int main()
   G4cout<<"Test19:--***-- process is created --***--" << G4endl; // only one run
 #endif
   // !! Only for CHIPS
-  ///proc->SetParameters(temperature, ssin2g, eteps, fN, fD, cP, rM, nop, sA);
+  proc->SetParameters(temperature, ssin2g, eteps, fN, fD, cP, rM, nop, sA);
   //
   //man->AddDiscreteProcess(proc); //Does not help to go out
 #ifdef hdebug
@@ -641,7 +637,8 @@ int main()
      G4LorentzVector totSum, lorV;
      G4double e, p, m, sm;
      // @@ G4double px, py, pz, pt;
-     G4VParticleChange* aChange = 0;
+     //G4VParticleChange* aChange = 0;
+     G4ParticleChange* aChange = 0;
      G4double e0 = energy+pMass;
      G4double pmax=std::sqrt(e0*e0-pMass*pMass);
      G4double et=e0+mt;
@@ -676,175 +673,100 @@ int main()
 #ifdef debug
       G4cout<<"Test19: Before the fake proc->GetMeanFreePath call"<<G4endl;
 #endif
-      // CHIPS does not need it: keep only for GHAD
 						proc->GetMeanFreePath(*gTrack,0.1,cond); // Fake call to avoid complains of GHAD
 #ifdef debug
       G4cout<<"Test19: Before PostStepDoIt"<<G4endl;
 #endif
-      aChange = proc->PostStepDoIt(*gTrack,*step); // For On Flight
+      aChange = static_cast<G4ParticleChange*>(proc->PostStepDoIt(*gTrack,*step)); // Up
 #ifdef debug
       G4cout<<"Test19: After PostStepDoIt"<<G4endl;
 #endif
       G4int nSec = aChange->GetNumberOfSecondaries();
-      //G4cout<<"Test19: "<<nSec<<" secondary particles are generated"<<G4endl;
-      G4double totCharge = totC;
-      // !! Only for CHIPS
-      ///G4int    curN=proc->GetNumberOfNeutronsInTarget();
-      // for GHAD
-      G4int    curN = tgN;
-      //
-      G4int    dBN = curN-tgN;
-      G4int    totBaryN = totBN+dBN;
-      G4int    curPDG=tPDG+dBN;
-      G4double curM=G4QPDGCode(curPDG).GetMass(); // Update mass of the TargetNucleus
-      totSum = G4LorentzVector(0., 0., pmax, et+curM-mt);
-      // !! Only for CHIPS
-      ///G4LorentzVector Residual=proc->GetEnegryMomentumConservation();
-      // for GHAD
-      G4LorentzVector Residual(0.,0.,0.,0.);
-      //
+      G4TrackStatus lead = aChange->GetTrackStatus();
 #ifdef debug
-      G4double de = aChange->GetLocalEnergyDeposit();// Init TotalEnergy by EnergyDeposit
-      G4cout<<"Test19: "<<nSec<<" secondary particles are generated, dE="<<de<<G4endl;
+      G4cout<<"Test19: "<<nSec<<" sec's, tSt="<<lead<<","<<fAlive<<",tC="<<totC<<G4endl;
 #endif
-      // @@ ----------------------- Begin
-      G4double weight = aChange->GetSecondary(0)->GetDynamicParticle()->GetKineticEnergy();
+      G4LorentzVector totSumM(0.,0.,0.,0.); 
+      if(nSec)
+      {
+        G4double totCharge = totC; 
+        // !! Only for CHIPS ----------------------------------------------
+        G4int    curN=proc->GetNumberOfNeutronsInTarget();
+        // for GHAD
+        //G4int    curN = tgN; 
+        // ---------------------------------------------------------------
+        G4int    dBN = curN-tgN;
+        G4int    totBaryN = totBN+dBN;
+        G4int    curPDG=tPDG+dBN;
+        G4double curM=G4QPDGCode(curPDG).GetMass(); // Update mass of the TargetNucleus
+        totSum = G4LorentzVector(0., 0., pmax, e0+curM);
+        if(lead==fAlive)
+        {
+          totCharge-=aChange->GetCharge();
+          G4double sen=aChange->GetEnergy();
+          G4double sma=aChange->GetMass();
+          const G4ThreeVector* smo=aChange->GetMomentumDirection();
+          G4double ten=sen+sma;
+          G4LorentzVector s4m(aChange->CalcMomentum(sen,*smo,sma),ten);
 #ifdef debug
-      G4cout<<"Test19:----------------: Weigh="<<weight<<G4endl;
+          G4cout<<"Test19: E="<<sen+sma<<",p="<<(*smo)*std::sqrt(ten*ten-sma*sma)<<G4endl;
+          G4cout<<"Test19: L4m="<<s4m<<",T4m="<<totSum<<", N="<<curN<<",M="<<curM<<G4endl;
 #endif
-      dTot+=weight;
-      if(nSec>1) dEl+=weight;
-      // @@ ----------------------- End
-      //G4int nbar = 0;
+          totSum-=s4m;
+										totSumM=totSum;
+#ifdef debug
+          G4cout<<"Test19: reduced ,tC="<<totC<<", T4m="<<totSum<<",E0="<<e0<<G4endl;
+#endif
+								}
+        // !! Only for CHIPS ---------------------------------------------
+        G4LorentzVector Residual=proc->GetEnegryMomentumConservation();
+        // for GHAD
+        //G4LorentzVector Residual(0.,0.,0.,0.);
+        // --------------------------------------------------------------
+#ifdef debug
+        G4double de = aChange->GetLocalEnergyDeposit();// Init TotalEnergy by EnergyDeposit
+        G4cout<<"Test19: "<<nSec<<" secondary particles are generated, dE="<<de<<G4endl;
+#endif
+        // @@ ----------------------- Begin
+        G4double weight=aChange->GetSecondary(0)->GetDynamicParticle()->GetKineticEnergy();
+#ifdef debug
+        G4cout<<"Test19:----------------: Weigh="<<weight<<G4endl;
+#endif
+        dTot+=weight;
+        if(nSec>1) dEl+=weight;
+        // @@ ----------------------- End
+        //G4int nbar = 0;
 
-      // @@ G4int npt=0;
-      G4int    c=0;    // Prototype of the PDG Code of the particle
-      G4int nGamma=0;
-      G4double EGamma=0;
-      G4int nP0=0;
-      G4int nPP=0;
-      G4int nPN=0;
-      G4int nKaons=0;
-      G4int nEta=0;
-      // @@ G4int nAlphas=0;
-      G4int nPhotons=0;
-      G4int nProtons=0;
-      G4int nNeutrons=0;
-      G4int nSpNeut=0;
-      // @@ G4int nSpAlph=0;
-      G4int nOmega=0;
-      // @@ G4int nDec=0;
-      // @@ G4int dirN=0;
+        // @@ G4int npt=0;
+        G4int    c=0;    // Prototype of the PDG Code of the particle
+        G4int nGamma=0;
+        G4double EGamma=0;
+        G4int nP0=0;
+        G4int nPP=0;
+        G4int nPN=0;
+        G4int nKaons=0;
+        G4int nEta=0;
+        // @@ G4int nAlphas=0;
+        G4int nPhotons=0;
+        G4int nProtons=0;
+        G4int nNeutrons=0;
+        G4int nSpNeut=0;
+        // @@ G4int nSpAlph=0;
+        G4int nOmega=0;
+        // @@ G4int nDec=0;
+        // @@ G4int dirN=0;
 #ifdef pdebug
-      G4cout<<"Test19:----DONE^^^^^^^*******^^^^^^^^:ir="<<iter<<": #ofH="<<nSec<<G4endl;
-      if(!(iter%100)) G4cerr<<"#"<<iter<<G4endl;
+        G4cout<<"Test19:----DONE^^^^^^^*******^^^^^^^^:ir="<<iter<<": #ofH="<<nSec<<G4endl;
+        if(!(iter%100)) G4cerr<<"#"<<iter<<G4endl;
 #endif
-      G4bool alarm=false;
-      // @@ G4bool rad=false;
-      // @@ G4bool hyp=false;
-      // @@ G4bool badPDG=false;
-      // ------- LOOP over secondary particles -------
-      for(G4int i=0; i<nSec; i++)
-      {
-        sec = aChange->GetSecondary(i)->GetDynamicParticle();
-        pd  = sec->GetDefinition();
-        c   = pd->GetPDGEncoding();
-        if(!c)
+        G4bool alarm=false;
+        // @@ G4bool rad=false;
+        // @@ G4bool hyp=false;
+        // @@ G4bool badPDG=false;
+        // ------- LOOP over secondary particles -------
+        for(G4int i=0; i<nSec; i++)
         {
-          G4int chrg=static_cast<G4int>(pd->GetPDGCharge());
-          G4int bary=static_cast<G4int>(pd->GetBaryonNumber());
-          c=90000000+chrg*999+bary;
-        }
-        m   = pd->GetPDGMass();
-        mom = sec->GetMomentumDirection();
-        e   = sec->GetKineticEnergy();
-	       if (e < 0.0)
-        {
-	         G4cerr<<"**Test19:Event#"<<iter<<",Hadron#"<<i<<", E="<<e<<" <0 (Set 0)"<<G4endl;
-          e = 0.0;
-        }
-	       // for exclusive reaction 2 particles in final state
-	       p = std::sqrt(e*(e + m + m));
-	       mom *= p;
-        //if(i==1) // Means the target secondary for the ellastic scattering
-								//{
-        //  G4double t=e*m;
-        //  t=t+t;
-        //  G4int tb=static_cast<G4int>(t/dT);
-        //  if(tb>nT1) tb=nT1;
-        //  tSig[tb]++;
-								//}
-        lorV = G4LorentzVector(mom, e+m);    // "e" is a Kinetic energy!
-        totSum -= lorV;
-        //if(fabs(m-lorV.m())>.005&&1>2) // @@ Temporary closed
-        if(std::fabs(m-lorV.m())>.005) // @@ Temporary closed
-	       {
-		        G4cerr<<"***Test19: m="<<lorV.m()<<" # "<<m<<", d="<<lorV.m()-m<<G4endl;
-          alarm=true;
-	       }
-        if(!(lorV.e()>=0||lorV.e()<0)   || !(lorV.px()>=0||lorV.px()<0) ||
-           !(lorV.py()>=0||lorV.py()<0) || !(lorV.pz()>=0||lorV.pz()<0))
-	       {
-		        G4cerr<<"***Test19: NAN in LorentzVector="<<lorV<<G4endl;
-          alarm=true;
-	       }
-        if(c==90000002||c==90002000||c==92000000)
-        {
-          G4cout<<"***Test19:***Dibaryon *** i="<<i<<", PDG="<<c<<G4endl;
-          alarm=true;
-        }
-        if(c==90000003||c==90003000||c==93000000)
-        {
-          G4cout<<"***Test19:***Tribaryon *** i="<<i<<", PDG="<<c<<G4endl;
-          alarm=true;
-        }
-        if(c==223) nOmega++;
-        if(c==22) nPhotons++;
-        if(c==311||c==321||c==-311||c==-321) nKaons++; // kaons
-        if(c==221) nEta++;                             // etas
-        //if(c==90002002) nAlphas++;                     // Alphas
-        if(c==2212) nProtons++;                        // Protons
-        if(c==2112) nNeutrons++;                       // Neutrons
-        if(c==2112 && std::fabs(e-1005.)<3.) nSpNeut++;// Dibar-Neutrons
-        //if(c==90002002 && e-m<7.) nSpAlph++;           // Special Alphas
-        if(c==111) nP0++;                              // Neutral  pions
-        if(c==-211) nPN++;                             // Negative pions
-        if(c==211) nPP++;                              // Positive pions
-        if(c==22) nGamma++;                            // Gammas
-        if(c==22) EGamma+=e;                           // Energy of gammas
-        G4int cCG=0;
-        G4int cBN=0;
-        if(std::abs(c)>99)                               // Do not count charge of leptons
-        {
-          cCG=static_cast<G4int>(pd->GetPDGCharge());
-          cBN=static_cast<G4int>(pd->GetBaryonNumber());
-          totCharge-=cCG;
-          totBaryN-=cBN;
-        }
-#ifdef pdebug
-        G4cout<<"Test19:#"<<i<<",PDG="<<c<<",C="<<cCG<<",B="<<cBN<<",4M="<<lorV<<m<<",T="
-              <<lorV.e()-m<<G4endl;
-#endif
-        //delete aChange->GetSecondary(i);
-	     } // End of the LOOP over secondaries
-	     //	delete secondaries in the end of the event       	 
-      G4double ss=std::fabs(totSum.t())+std::fabs(totSum.x())+std::fabs(totSum.y())+
-                  std::fabs(totSum.z());
-      G4double sr=std::fabs(Residual.t())+std::fabs(Residual.x())+std::fabs(Residual.y())+
-                  std::fabs(Residual.z());    
-#ifdef pdebug
-      G4cout<<">TEST19:r4M="<<totSum<<ss<<",rCh="<<totCharge<<",rBaryN="<<totBaryN<<G4endl;
-#endif
-	     if (1>2) // @@ The check is temporary closed for not CHIPS
-						//if (totCharge ||totBaryN || ss>.27 || alarm || nGamma&&!EGamma) // Only for CHIPS
-      {
-        totSum = G4LorentzVector(0., 0., pmax, et);
-        G4cerr<<"**Test19:#"<<iter<<":n="<<nSec<<",4M="<<totSum<<",Charge="<<totCharge
-              <<",BaryN="<<totBaryN<<", R="<<Residual<<",D2="<<ss<<",nN="<<curN<<G4endl;
-        if(nGamma&&!EGamma)G4cerr<<"***Test19: Egamma=0"<<G4endl;
-        for (G4int indx=0; indx<nSec; indx++)
-        {
-          sec = aChange->GetSecondary(indx)->GetDynamicParticle();
+          sec = aChange->GetSecondary(i)->GetDynamicParticle();
           pd  = sec->GetDefinition();
           c   = pd->GetPDGEncoding();
           if(!c)
@@ -855,28 +777,126 @@ int main()
           }
           m   = pd->GetPDGMass();
           mom = sec->GetMomentumDirection();
-          G4QPDGCode cQPDG(c);
-          sm   = cQPDG.GetMass();
           e   = sec->GetKineticEnergy();
+	         if (e < 0.0)
+          {
+	           G4cerr<<"**Test19:Event#"<<iter<<",Hadron#"<<i<<",E="<<e<<"<0 (Set 0)"<<G4endl;
+            e = 0.0;
+          }
+	         // for exclusive reaction 2 particles in final state
 	         p = std::sqrt(e*(e + m + m));
 	         mom *= p;
-          lorV = G4LorentzVector(mom, e + m);    // "e" is a Kinetic energy!
+          //if(i==1) // Means the target secondary for the ellastic scattering
+								  //{
+          //  G4double t=e*m;
+          //  t=t+t;
+          //  G4int tb=static_cast<G4int>(t/dT);
+          //  if(tb>nT1) tb=nT1;
+          //  tSig[tb]++;
+								  //}
+          lorV = G4LorentzVector(mom, e+m);    // "e" is a Kinetic energy!
           totSum -= lorV;
-          G4cerr<<"Test19:#"<<indx<<",PDG="<<c<<",m="<<m<<",4M="<<lorV<<",T="<<e
-                <<", d4M="<<totSum<<G4endl;
+          //if(fabs(m-lorV.m())>.005&&1>2) // @@ Temporary closed
+          if(std::fabs(m-lorV.m())>.005) // @@ Temporary closed
+	         {
+		          G4cerr<<"***Test19: m="<<lorV.m()<<" # "<<m<<", d="<<lorV.m()-m<<G4endl;
+            alarm=true;
+	         }
+          if(!(lorV.e()>=0||lorV.e()<0)   || !(lorV.px()>=0||lorV.px()<0) ||
+             !(lorV.py()>=0||lorV.py()<0) || !(lorV.pz()>=0||lorV.pz()<0))
+	         {
+		          G4cerr<<"***Test19: NAN in LorentzVector="<<lorV<<G4endl;
+            alarm=true;
+	         }
+          if(c==90000002||c==90002000||c==92000000)
+          {
+            G4cout<<"***Test19:***Dibaryon *** i="<<i<<", PDG="<<c<<G4endl;
+            alarm=true;
+          }
+          if(c==90000003||c==90003000||c==93000000)
+          {
+            G4cout<<"***Test19:***Tribaryon *** i="<<i<<", PDG="<<c<<G4endl;
+            alarm=true;
+          }
+          if(c==223) nOmega++;
+          if(c==22) nPhotons++;
+          if(c==311||c==321||c==-311||c==-321) nKaons++; // kaons
+          if(c==221) nEta++;                             // etas
+          //if(c==90002002) nAlphas++;                     // Alphas
+          if(c==2212) nProtons++;                        // Protons
+          if(c==2112) nNeutrons++;                       // Neutrons
+          if(c==2112 && std::fabs(e-1005.)<3.) nSpNeut++;// Dibar-Neutrons
+          //if(c==90002002 && e-m<7.) nSpAlph++;           // Special Alphas
+          if(c==111) nP0++;                              // Neutral  pions
+          if(c==-211) nPN++;                             // Negative pions
+          if(c==211) nPP++;                              // Positive pions
+          if(c==22) nGamma++;                            // Gammas
+          if(c==22) EGamma+=e;                           // Energy of gammas
+          G4int cCG=0;
+          G4int cBN=0;
+          if(std::abs(c)>99)                               // Do not count charge of leptons
+          {
+            cCG=static_cast<G4int>(pd->GetPDGCharge());
+            cBN=static_cast<G4int>(pd->GetBaryonNumber());
+            totCharge-=cCG;
+            totBaryN-=cBN;
+          }
+#ifdef pdebug
+          G4cout<<"Test19:#"<<i<<",PDG="<<c<<",C="<<cCG<<",B="<<cBN<<",4M="<<lorV<<m<<",T="
+                <<lorV.e()-m<<G4endl;
+#endif
+          //delete aChange->GetSecondary(i);
+	       } // End of the LOOP over secondaries
+	       //	delete secondaries in the end of the event       	 
+        G4double ss=std::fabs(totSum.t())+std::fabs(totSum.x())+std::fabs(totSum.y())+
+                    std::fabs(totSum.z());
+        G4double sr=std::fabs(Residual.t())+std::fabs(Residual.x())+
+                    std::fabs(Residual.y())+std::fabs(Residual.z());    
+#ifdef pdebug
+        G4cout<<">TEST19: r4M="<<totSum<<ss<<",rCh="<<totCharge<<",rBN="<<totBaryN<<G4endl;
+#endif
+	       //if (1>2) // @@ The check is temporary closed for not CHIPS
+						  if (totCharge ||totBaryN || ss>.27 || alarm || nGamma&&!EGamma) // Only for CHIPS
+        {
+          totSum = totSumM;
+          G4cerr<<"**Test19:#"<<iter<<":n="<<nSec<<",4M="<<totSum<<",Charge="<<totCharge
+                <<",BaryN="<<totBaryN<<", R="<<Residual<<",D2="<<ss<<",nN="<<curN<<G4endl;
+          if(nGamma&&!EGamma)G4cerr<<"***Test19: Egamma=0"<<G4endl;
+          for (G4int indx=0; indx<nSec; indx++)
+          {
+            sec = aChange->GetSecondary(indx)->GetDynamicParticle();
+            pd  = sec->GetDefinition();
+            c   = pd->GetPDGEncoding();
+            if(!c)
+            {
+              G4int chrg=static_cast<G4int>(pd->GetPDGCharge());
+              G4int bary=static_cast<G4int>(pd->GetBaryonNumber());
+              c=90000000+chrg*999+bary;
+            }
+            m   = pd->GetPDGMass();
+            mom = sec->GetMomentumDirection();
+            G4QPDGCode cQPDG(c);
+            sm   = cQPDG.GetMass();
+            e   = sec->GetKineticEnergy();
+	           p = std::sqrt(e*(e + m + m));
+	           mom *= p;
+            lorV = G4LorentzVector(mom, e + m);    // "e" is a Kinetic energy!
+            totSum -= lorV;
+            G4cerr<<"Test19:#"<<indx<<",PDG="<<c<<",m="<<m<<",4M="<<lorV<<",T="<<e
+                  <<", d4M="<<totSum<<G4endl;
+          }
+          if(sr>.27)G4Exception("***Test19: ALARM/baryn/chrg/energy/mom is not conserved");
         }
-        if(sr>.27)
-          G4Exception("***Test19: ALARM or baryn/charge/energy/momentum is not conserved");
-      }
 #ifndef nout
-	     ntp->FillEvt(aChange); // Fill the simulated event in the ASCII "ntuple"
+	       ntp->FillEvt(aChange); // Fill the simulated event in the ASCII "ntuple"
 #endif
-      // =============== May be print it here if it is not zero...
-      for(G4int ides=0; ides<nSec; ides++) delete aChange->GetSecondary(ides);
-      aChange->Clear();
+        // =============== May be print it here if it is not zero...
+        for(G4int ides=0; ides<nSec; ides++) delete aChange->GetSecondary(ides);
+        aChange->Clear();
 #ifdef debug
-      G4cout<<"Test19:--->>> After ntp.FillEvt"<<G4endl;
+        G4cout<<"Test19:--->>> After ntp.FillEvt"<<G4endl;
 #endif
+						} // End of nSec>0 IF
      } // End of the LOOP over events
      // Stop the timer to estimate the speed of the generation
      timer->Stop();
@@ -945,3 +965,9 @@ int main()
   //abort();
   //return EXIT_SUCCESS;
 }
+
+
+
+
+
+
