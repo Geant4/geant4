@@ -63,13 +63,13 @@ using namespace std;
 G4PAIModel::G4PAIModel(const G4ParticleDefinition* p, const G4String& nam)
   : G4VEmModel(nam),G4VEmFluctuationModel(nam),
   fVerbose(0),
+  fLowestGamma(1.005),
+  fHighestGamma(10000.),
   fTotBin(200),
   fMeanNumber(20),
   fParticle(0),
   fHighKinEnergy(100.*TeV),
   fLowKinEnergy(2.0*MeV),
-  fLowestGamma(1.005),
-  fHighestGamma(10000.),
   fTwoln10(2.0*log(10.0)),
   fBg2lim(0.0169),
   fTaulim(8.4146e-3)

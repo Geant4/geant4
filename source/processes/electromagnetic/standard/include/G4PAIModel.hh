@@ -132,10 +132,10 @@ private:
 
   // The vector over proton kinetic energies: the range of gammas
   G4int                fVerbose; 
-  G4double             fLowestKineticEnergy;
-  G4double             fHighestKineticEnergy;
   G4double             fLowestGamma;
   G4double             fHighestGamma;
+  G4double             fLowestKineticEnergy;
+  G4double             fHighestKineticEnergy;
   G4int                fTotBin;
   G4int                fMeanNumber;
   G4PhysicsLogVector*  fParticleEnergyVector ;
