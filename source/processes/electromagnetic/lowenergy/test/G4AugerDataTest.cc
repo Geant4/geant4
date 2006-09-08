@@ -44,13 +44,109 @@
 #include "G4ios.hh"
 #include <fstream>
 #include <iomanip>
-
+#include "AIDA/AIDA.h"
 #include "G4AugerData.hh"
 
-int main()
+int main(int argc, char* argv[])
 {
   G4cout.setf( std::ios::scientific, std::ios::floatfield );
 
+  if (argc == 2) {
+    G4int Z = atoi(argv[1]);
+    G4AugerData* dataSet = new G4AugerData();
+    //    dataSet->LoadData(Z);
+    G4int vac= dataSet->NumberOfVacancies(Z);
+
+    AIDA::ITree* tree;
+    AIDA::IAnalysisFactory* analysisFactory;
+    AIDA::IHistogramFactory* cloudFactory;
+    AIDA::ICloud1D* cloudAuger;
+
+    AIDA::ITree* treeTuple;
+    AIDA::ITupleFactory* tupleFactory;
+    AIDA::ITuple* tupleAuger;
+
+    analysisFactory = AIDA_createAnalysisFactory();
+    AIDA::ITreeFactory* treeFactory = analysisFactory->createTreeFactory();
+    G4String zString;
+    std::ostringstream stream;
+    stream << "auger" << Z << ".xml";
+    G4String fileName = stream.str();
+    tree = treeFactory->create(fileName,"xml",false,true);
+    cloudFactory = analysisFactory->createHistogramFactory(*tree);
+    cloudAuger = cloudFactory->createCloud1D("c1");
+    assert(cloudAuger);
+
+    stream.str("");
+    stream << "augerTuple" << Z << ".hbk";
+    G4String fileNameTuple = stream.str();
+    treeTuple = treeFactory->create(fileNameTuple,"hbook",false,true);
+    tupleFactory = analysisFactory->createTupleFactory(*treeTuple);
+    // Book tuple column names
+    std::vector<std::string> columnNames;
+    // Book tuple column types
+    std::vector<std::string> columnTypes;
+    columnNames.push_back("Z");
+    columnNames.push_back("DataType");
+    columnNames.push_back("ShellStart");
+    columnNames.push_back("ShellStop");
+    columnNames.push_back("ShellOrigAuger");
+    columnNames.push_back("Energy");
+    columnNames.push_back("Probability");
+    columnNames.push_back("EnUnc");
+    columnNames.push_back("Type");
+    
+    columnTypes.push_back("int");
+    columnTypes.push_back("int");
+    columnTypes.push_back("int");
+    columnTypes.push_back("int");
+    columnTypes.push_back("int");
+    columnTypes.push_back("double");
+    columnTypes.push_back("double");
+    columnTypes.push_back("double");
+    columnTypes.push_back("int");
+
+    tupleAuger = tupleFactory->create("10", "Total Tuple", columnNames, columnTypes, "");
+    assert(tupleAuger);
+
+  for (G4int vacancyIndex = 0; vacancyIndex<= vac-1; vacancyIndex++)
+    {
+
+      G4int n = dataSet->NumberOfTransitions(Z, vacancyIndex);
+      G4int id = dataSet->VacancyId(Z, vacancyIndex);
+      for (G4int initIndex = 0; initIndex < n; initIndex++){
+       	G4int startingShellId = dataSet->StartShellId(Z, vacancyIndex, initIndex);
+       	G4int nAuger = dataSet->NumberOfAuger(Z, vacancyIndex, startingShellId);
+
+	for (G4int augerIndex = 0; augerIndex < nAuger; augerIndex++){
+
+	G4double startingShellEnergy = dataSet-> StartShellEnergy(Z, vacancyIndex, startingShellId, augerIndex);
+	G4int augerShellId = dataSet-> AugerShellId(Z, vacancyIndex, startingShellId, augerIndex);
+	G4double startingShellProb = dataSet-> StartShellProb(Z, vacancyIndex, startingShellId, augerIndex);
+
+	cloudAuger->fill(startingShellEnergy);
+	tupleAuger->fill(0,Z);
+	tupleAuger->fill(1,0);
+	tupleAuger->fill(2,id);
+	tupleAuger->fill(3,startingShellId);
+	tupleAuger->fill(4,augerShellId);
+	tupleAuger->fill(5,startingShellEnergy);
+	tupleAuger->fill(6,startingShellProb);
+	tupleAuger->fill(7,startingShellEnergy*0.15);
+	tupleAuger->fill(8,0);
+	tupleAuger->addRow();
+
+	}
+      }
+    }
+  tree->commit(); // Write histos in file. 
+  tree->close();
+  treeTuple->commit(); // Write histos in file. 
+  treeTuple->close();
+  delete dataSet;      
+  }
+
+  else {
   G4cout << "Enter Z" << G4endl;
   G4int Z;
   G4cin >> Z;
@@ -149,7 +245,8 @@ int main()
     dataSet->PrintData(Z);
   */
   delete dataSet;
-  
+  }
+ 
   G4cout << "END OF THE MAIN PROGRAM" << G4endl;
 }
 
