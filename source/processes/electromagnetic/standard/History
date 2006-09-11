@@ -1,4 +1,4 @@
-$Id: History,v 1.247 2006-09-08 11:17:49 vnivanch Exp $
+$Id: History,v 1.248 2006-09-11 12:34:09 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+09 Sept 06: mma (emstand-V08-01-05)  
+- add/modify the function SetModel() in G4PhotoElectric, G4ComptonScattering,
+  G4GammaConversion, G4eplusAnnihilation
 
 08 Sep 06: V.Ivanchenko (emstand-V08-01-04) 
 - Bug fixed in PAI model concerning Tmax for electrons and positrons. Tmax 

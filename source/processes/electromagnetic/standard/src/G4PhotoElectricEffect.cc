@@ -23,11 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PhotoElectricEffect.cc,v 1.35 2006-06-29 19:53:26 gunter Exp $
+// $Id: G4PhotoElectricEffect.cc,v 1.36 2006-09-11 12:34:09 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
-//------------------ G4PhotoElectricEffect physics process -------------------------
+//------------------ G4PhotoElectricEffect physics process ---------------------
 //                   by Michel Maire, 24 May 1996
 //
 // 12-06-96, Added SelectRandomAtom() method, by M.Maire
@@ -61,8 +61,10 @@
 //           distribution (mma)
 // 15-01-03, photoelectron theta ditribution : return costeta=1 if gamma>5
 //           (helmut burkhardt)
-// 21-04-05  Migrate to model interface and inherit from G4VEmProcess (V.Ivanchenko)
+// 21-04-05  Migrate to model interface and inherit 
+//           from G4VEmProcess (V.Ivanchenko)
 // 04-05-05, Make class to be default (V.Ivanchenko)
+// 09-08-06, add SetModel(G4VEmModel*) (mma)
 // -----------------------------------------------------------------------------
 
 #include "G4PhotoElectricEffect.hh"
@@ -75,7 +77,8 @@ using namespace std;
 
 G4PhotoElectricEffect::G4PhotoElectricEffect(const G4String& processName,
   G4ProcessType type):G4VEmProcess (processName, type),
-    isInitialised(false)
+    isInitialised(false),
+    selectedModel(0)    
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -83,7 +86,7 @@ G4PhotoElectricEffect::G4PhotoElectricEffect(const G4String& processName,
 G4PhotoElectricEffect::~G4PhotoElectricEffect()
 {}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4PhotoElectricEffect::InitialiseProcess(const G4ParticleDefinition*)
 {
@@ -92,10 +95,10 @@ void G4PhotoElectricEffect::InitialiseProcess(const G4ParticleDefinition*)
     //    SetVerboseLevel(1);
     SetBuildTableFlag(false);
     SetSecondaryParticle(G4Electron::Electron());
-    G4VEmModel* model = new G4PEEffectModel();
-    model->SetLowEnergyLimit(MinKinEnergy());
-    model->SetHighEnergyLimit(MaxKinEnergy());
-    AddEmModel(1, model);
+    if(!selectedModel) selectedModel = new G4PEEffectModel();
+    selectedModel->SetLowEnergyLimit(MinKinEnergy());
+    selectedModel->SetHighEnergyLimit(MaxKinEnergy());
+    AddEmModel(1, selectedModel);
   }
 }
 
@@ -103,8 +106,17 @@ void G4PhotoElectricEffect::InitialiseProcess(const G4ParticleDefinition*)
 
 void G4PhotoElectricEffect::PrintInfo()
 {
-  G4cout << " Total cross sections from Sandia parametrisation. "
-         << G4endl;
+  G4cout
+    << " Total cross sections from Sandia parametrisation. "
+    << "\n      Sampling according " << selectedModel->GetName() << " model"  
+    << G4endl;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void G4PhotoElectricEffect::SetModel(G4VEmModel* model)
+{
+  selectedModel = model;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

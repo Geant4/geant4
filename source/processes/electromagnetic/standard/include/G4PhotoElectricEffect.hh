@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhotoElectricEffect.hh,v 1.20 2006-06-29 19:50:50 gunter Exp $
+// $Id: G4PhotoElectricEffect.hh,v 1.21 2006-09-11 12:34:09 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -55,6 +55,7 @@
 // 21-04-05, Redesign - use G4VEmProcess interface (V.Ivanchenko)
 // 02-05-05, move ParticleChange actions in model (mma)
 // 04-05-05, Make class to be default (V.Ivanchenko)
+// 09-08-06, add SetModel(G4VEmModel*) (mma)
 // -----------------------------------------------------------------------------
 
 // class description
@@ -90,6 +91,9 @@ public:  // with description
   // true for Gamma only.
   G4bool IsApplicable(const G4ParticleDefinition&);
 
+  // select model  
+  void SetModel(G4VEmModel*);
+
   // Print few lines of informations about the process: validity range,
   void PrintInfo();
 
@@ -105,19 +109,22 @@ protected:
 private:
 
   G4bool          isInitialised;
+  G4VEmModel*     selectedModel;  
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4bool G4PhotoElectricEffect::IsApplicable(const G4ParticleDefinition& p)
+inline 
+G4bool G4PhotoElectricEffect::IsApplicable(const G4ParticleDefinition& p)
 {
   return (&p == G4Gamma::Gamma());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline std::vector<G4DynamicParticle*>* G4PhotoElectricEffect::SecondariesPostStep(
+inline 
+std::vector<G4DynamicParticle*>* G4PhotoElectricEffect::SecondariesPostStep(
                                    G4VEmModel* model,
                              const G4MaterialCutsCouple* couple,
                              const G4DynamicParticle* dp)

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eplusAnnihilation.hh,v 1.19 2006-06-29 19:52:16 gunter Exp $
+// $Id: G4eplusAnnihilation.hh,v 1.20 2006-09-11 12:34:09 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -39,10 +39,12 @@
 //
 // Modifications:
 // 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivanchenko)
-// 15-03-05 Update interface according to changings in G4VEmProcess (V.Ivanchenko)
+// 15-03-05 Update interface according to changings 
+//           in G4VEmProcess (V.Ivanchenko)
 // 08-04-05 Major optimisation of internal interfaces (V.Ivanchenko)
 // 04-05-05 Make class to be default (V.Ivanchenko)
 // 04-12-05 SetProposedKineticEnergy(0.) for annihilated positron (mma)
+// 09-08-06 add SetModel(G4VEmModel*) (mma)
 //
 //
 // Class Description:
@@ -69,7 +71,10 @@ public:
 
   virtual ~G4eplusAnnihilation();
 
-  virtual G4bool IsApplicable(const G4ParticleDefinition& p);
+  G4bool IsApplicable(const G4ParticleDefinition& p);
+
+  // select model  
+  void SetModel(G4VEmModel*);  
 
   virtual G4VParticleChange* AtRestDoIt(
                              const G4Track& track,
@@ -93,13 +98,9 @@ protected:
                              const G4DynamicParticle*);
 
 private:
-
- // hide assignment operator
-  G4eplusAnnihilation & operator=(const G4eplusAnnihilation &right);
-  G4eplusAnnihilation(const G4eplusAnnihilation&);
   
-  G4bool isInitialised;
-
+  G4bool       isInitialised;
+  G4VEmModel*  selectedModel;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -112,7 +113,8 @@ inline G4bool G4eplusAnnihilation::IsApplicable(const G4ParticleDefinition& p)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4double G4eplusAnnihilation::AtRestGetPhysicalInteractionLength(
+inline 
+G4double G4eplusAnnihilation::AtRestGetPhysicalInteractionLength(
                               const G4Track&, G4ForceCondition* condition)
 {
   *condition = NotForced;
@@ -121,7 +123,8 @@ inline G4double G4eplusAnnihilation::AtRestGetPhysicalInteractionLength(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline std::vector<G4DynamicParticle*>* G4eplusAnnihilation::SecondariesPostStep(
+inline 
+std::vector<G4DynamicParticle*>* G4eplusAnnihilation::SecondariesPostStep(
                                                   G4VEmModel* model,
                                             const G4MaterialCutsCouple* couple,
                                             const G4DynamicParticle* dp)

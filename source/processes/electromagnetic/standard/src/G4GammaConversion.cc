@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GammaConversion.cc,v 1.25 2006-06-29 19:52:56 gunter Exp $
+// $Id: G4GammaConversion.cc,v 1.26 2006-09-11 12:34:09 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -59,8 +59,10 @@
 // 11-01-02 ComputeCrossSection: correction of extrapolation below EnergyLimit
 // 21-03-02 DoIt: correction of the e+e- angular distribution (bug 363) mma
 // 08-11-04 Remove of Store/Retrieve tables (V.Ivantchenko)
-// 19-04-05 Migrate to model interface and inherit from G4VEmProcess (V.Ivanchenko) 
+// 19-04-05 Migrate to model interface and inherit 
+//          from G4VEmProcess (V.Ivanchenko) 
 // 04-05-05, Make class to be default (V.Ivanchenko)
+// 09-08-06, add SetModel(G4VEmModel*) (mma)
 // -----------------------------------------------------------------------------
 
 #include "G4GammaConversion.hh"
@@ -73,7 +75,8 @@ using namespace std;
 
 G4GammaConversion::G4GammaConversion(const G4String& processName,
   G4ProcessType type):G4VEmProcess (processName, type),
-    isInitialised(false)
+    isInitialised(false),
+    selectedModel(0)    
 {
   SetLambdaBinning(100);
   SetMinKinEnergy(2.0*electron_mass_c2);
@@ -91,16 +94,15 @@ void G4GammaConversion::InitialiseProcess(const G4ParticleDefinition*)
 {
   if(!isInitialised) {
     isInitialised = true;
-    //    SetVerboseLevel(1);
     SetBuildTableFlag(true);
     SetSecondaryParticle(G4Electron::Electron());
     G4double emin = max(MinKinEnergy(), 2.0*electron_mass_c2);
     SetMinKinEnergy(emin);
     G4double emax = MaxKinEnergy();
-    G4VEmModel* model = new G4BetheHeitlerModel();
-    model->SetLowEnergyLimit(emin);
-    model->SetHighEnergyLimit(emax);
-    AddEmModel(1, model);
+    if(!selectedModel) selectedModel = new G4BetheHeitlerModel();
+    selectedModel->SetLowEnergyLimit(emin);
+    selectedModel->SetHighEnergyLimit(emax);
+    AddEmModel(1, selectedModel);
   } 
 }
 
@@ -108,10 +110,19 @@ void G4GammaConversion::InitialiseProcess(const G4ParticleDefinition*)
 
 void G4GammaConversion::PrintInfo()
 {
-  G4cout << " Total cross sections has a good parametrisation" 
-         << " from 1.5 MeV to 100 GeV for all Z;"
-         << "\n      sampling secondary e+e- according to the Bethe-Heitler model"
-         << G4endl;
+  G4cout
+    << " Total cross sections has a good parametrisation" 
+    << " from 1.5 MeV to 100 GeV for all Z;"
+    << "\n      sampling secondary e+e- according "
+    << selectedModel->GetName() << " model"
+    << G4endl;
 }         
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void G4GammaConversion::SetModel(G4VEmModel* model)
+{
+  selectedModel = model;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

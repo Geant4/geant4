@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GammaConversion.hh,v 1.18 2006-06-29 19:50:18 gunter Exp $
+// $Id: G4GammaConversion.hh,v 1.19 2006-09-11 12:34:09 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -49,6 +49,7 @@
 // 09-11-04, Remove Retrieve tables (V.Ivantchenko)
 // 19-04-05, Redesign - use G4VEmProcess interface (V.Ivantchenko)
 // 04-05-05, Make class to be default (V.Ivanchenko)
+// 09-08-06, add SetModel(G4VEmModel*) (mma)
 // -----------------------------------------------------------------------------
 
 // class description
@@ -84,6 +85,9 @@ public:  // with description
   // true for Gamma only.
   G4bool IsApplicable(const G4ParticleDefinition&);
 
+  // select model  
+  void SetModel(G4VEmModel*);
+
   // Print few lines of informations about the process: validity range,
   virtual void PrintInfo();
 
@@ -97,12 +101,9 @@ protected:
                              const G4DynamicParticle*);
 
 private:
-  
-  // hide assignment operator as private 
-  G4GammaConversion& operator=(const G4GammaConversion &right);
-  G4GammaConversion(const G4GammaConversion& );
      
-  G4bool          isInitialised;
+  G4bool       isInitialised;
+  G4VEmModel*  selectedModel;  
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

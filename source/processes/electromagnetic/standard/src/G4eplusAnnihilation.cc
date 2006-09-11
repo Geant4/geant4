@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eplusAnnihilation.cc,v 1.24 2006-06-29 19:53:57 gunter Exp $
+// $Id: G4eplusAnnihilation.cc,v 1.25 2006-09-11 12:34:09 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -43,6 +43,7 @@
 // 03-05-05 suppress Integral option (mma)
 // 04-05-05 Make class to be default (V.Ivanchenko)
 // 25-01-06 remove cut dependance in AtRestDoIt (mma)
+// 09-08-06 add SetModel(G4VEmModel*) (mma)
 //
 
 //
@@ -63,7 +64,7 @@
 using namespace std;
 
 G4eplusAnnihilation::G4eplusAnnihilation(const G4String& name)
-  : G4VEmProcess(name), isInitialised(false)
+  : G4VEmProcess(name), isInitialised(false), selectedModel(0)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -77,7 +78,6 @@ void G4eplusAnnihilation::InitialiseProcess(const G4ParticleDefinition*)
 {
   if(!isInitialised) {
     isInitialised = true;
-    //    SetVerboseLevel(3);
     SetBuildTableFlag(true);
     SetStartFromNullFlag(false);
     SetSecondaryParticle(G4Gamma::Gamma());
@@ -86,10 +86,10 @@ void G4eplusAnnihilation::InitialiseProcess(const G4ParticleDefinition*)
     SetLambdaBinning(120);
     SetMinKinEnergy(emin);
     SetMaxKinEnergy(emax);
-    G4VEmModel* em = new G4eeToTwoGammaModel();
-    em->SetLowEnergyLimit(emin);
-    em->SetHighEnergyLimit(emax);
-    AddEmModel(1, em);
+    if(!selectedModel) selectedModel = new G4eeToTwoGammaModel();
+    selectedModel->SetLowEnergyLimit(emin);
+    selectedModel->SetHighEnergyLimit(emax);
+    AddEmModel(1, selectedModel);
   }
 }
 
@@ -97,9 +97,17 @@ void G4eplusAnnihilation::InitialiseProcess(const G4ParticleDefinition*)
 
 void G4eplusAnnihilation::PrintInfo()
 {
-  G4cout << "      Heilter model of formula of annihilation into 2 photons"
-         << G4endl;
+  G4cout
+    << "      Sampling according " << selectedModel->GetName() << " model"   
+    << G4endl;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void G4eplusAnnihilation::SetModel(G4VEmModel* model)
+{
+  selectedModel = model;
+}  
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
