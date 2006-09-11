@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.105 2006-09-06 20:58:11 tinslay Exp $
+cvs log $Id: History,v 1.106 2006-09-11 09:30:20 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+11th September 2006  John Allison
+- Fixed G4AttCheck for dimensionless "Physics" attributes (were
+  previously "Bookkeeping").
+
 6th September 2006 Jane Tinslay
 - Add G4TypeKey & G4TypeKeyT classes
 
