@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ModelApplyCommandsT.hh,v 1.4 2006-08-14 11:37:23 allison Exp $
+// $Id: G4ModelApplyCommandsT.hh,v 1.5 2006-09-11 21:22:02 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Abstract model messenges. Derived classes should implement
@@ -76,7 +76,7 @@ private:
 
 template <typename M>
 G4ModelCmdApplyStringColour<M>::G4ModelCmdApplyStringColour(M* model, const G4String& placement, const G4String& cmdName)
-  :G4VModelCommand<M>(model)
+  :G4VModelCommand<M>(model, placement)
 {
   //Set variable colour through a string
   G4String dir = placement+"/"+model->Name()+"/"+cmdName;
@@ -183,7 +183,7 @@ private:
 
 template <typename M>
 G4ModelCmdApplyColour<M>::G4ModelCmdApplyColour(M* model, const G4String& placement, const G4String& cmdName)
-  :G4VModelCommand<M>(model)
+  :G4VModelCommand<M>(model, placement)
 {
   //Set colour through a string
   G4String dir = placement+"/"+model->Name()+"/"+cmdName;
@@ -282,7 +282,7 @@ private:
 
 template <typename M>
 G4ModelCmdApplyBool<M>::G4ModelCmdApplyBool(M* model, const G4String& placement, const G4String& cmdName)
-  :G4VModelCommand<M>(model)
+  :G4VModelCommand<M>(model, placement)
 {
   G4String dir = placement+"/"+model->Name()+"/"+cmdName;
   fpCmd = new G4UIcmdWithABool(dir, this);
@@ -330,7 +330,7 @@ private:
 
 template <typename M>
 G4ModelCmdApplyNull<M>::G4ModelCmdApplyNull(M* model, const G4String& placement, const G4String& cmdName)
-  :G4VModelCommand<M>(model)
+  :G4VModelCommand<M>(model, placement)
 {
   G4String dir = placement+"/"+model->Name()+"/"+cmdName;
   fpCmd = new G4UIcommand(dir, this);
@@ -376,7 +376,7 @@ private:
 
 template <typename M>
 G4ModelCmdApplyDouble<M>::G4ModelCmdApplyDouble(M* model, const G4String& placement, const G4String& cmdName)
-  :G4VModelCommand<M>(model)
+  :G4VModelCommand<M>(model, placement)
 {
   G4String dir = placement+"/"+model->Name()+"/"+cmdName;
 
@@ -424,7 +424,7 @@ private:
 
 template <typename M>
 G4ModelCmdApplyDoubleAndUnit<M>::G4ModelCmdApplyDoubleAndUnit(M* model, const G4String& placement, const G4String& cmdName)
-  :G4VModelCommand<M>(model)
+  :G4VModelCommand<M>(model, placement)
 {
   G4String dir = placement+"/"+model->Name()+"/"+cmdName;
 
@@ -471,7 +471,7 @@ private:
 
 template <typename M>
 G4ModelCmdApplyInteger<M>::G4ModelCmdApplyInteger(M* model, const G4String& placement, const G4String& cmdName)
-  :G4VModelCommand<M>(model)
+  :G4VModelCommand<M>(model, placement)
 {
   G4String dir = placement+"/"+model->Name()+"/"+cmdName;
 
@@ -519,7 +519,7 @@ private:
 
 template <typename M>
 G4ModelCmdApplyString<M>::G4ModelCmdApplyString(M* model, const G4String& placement, const G4String& cmdName)
-  :G4VModelCommand<M>(model)
+  :G4VModelCommand<M>(model, placement)
 {
   G4String dir = placement+"/"+model->Name()+"/"+cmdName;
 
