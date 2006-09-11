@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AttCheck.cc,v 1.10 2006-08-14 11:12:46 allison Exp $
+// $Id: G4AttCheck.cc,v 1.11 2006-09-11 09:29:51 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4AttCheck.hh"
@@ -67,6 +67,7 @@ G4AttCheck::G4AttCheck
     fCategories.insert("Association");
 
     // Legal units...
+    fUnits.insert("");
     fUnits.insert("G4BestUnit");
     // ...plus any legal unit symbol ("MeV", "km", etc.)...
     G4UnitsTable& units = G4UnitDefinition::GetUnitsTable();
@@ -297,9 +298,9 @@ std::ostream& operator<< (std::ostream& os, const G4AttCheck& ac) {
     if (!error) {
       os << iDef->second.GetDesc() << ": "
 	 << iValue->GetValue();
-      if (iDef->second.GetCategory() == "Physics") {
-	os << " ("
-	   << iDef->second.GetExtra() << ")";
+      if (iDef->second.GetCategory() == "Physics" &&
+	  !iDef->second.GetExtra().empty()) {
+	os << " (" << iDef->second.GetExtra() << ")";
       }
       os << endl;
     }
@@ -329,6 +330,7 @@ G4bool G4AttCheck::Standard
 (std::vector<G4AttValue>* standardValues,
  std::map<G4String,G4AttDef>* standardDefinitions) const {
   // Places standard versions in provided vector and map and returns error.
+  // Assumes valid input.  Use Check to check.
   using namespace std;
   G4bool error = false;
   vector<G4AttValue>::const_iterator iValue;
@@ -352,56 +354,91 @@ G4bool G4AttCheck::Standard
 	  standardValues->push_back(*iValue);
 	  (*standardDefinitions)[valueName] =
 	    fpDefinitions->find(valueName)->second;
-	} else {
-	  G4String valueAndUnit;
-	  G4String unit;
-	  if (extra == "G4BestUnit") {
-	    valueAndUnit = value;
-	    valueAndUnit = valueAndUnit.strip();
-	    unit = valueAndUnit.substr(valueAndUnit.rfind(' ')+1);
-	  } else {
-	    valueAndUnit = value + ' ' + extra;
-	    unit = extra;
-	  }
-	  G4String unitCategory = G4UnitDefinition::GetCategory(unit);
-	  if (fUnitCategories.find(unitCategory) != fUnitCategories.end()) {
-	    G4String standardUnit = fStandardUnits[unitCategory];
-	    G4double valueOfUnit = G4UnitDefinition::GetValueOf(standardUnit);
-	    G4String extra = iDef->second.GetExtra();
-	    if (valueType == "G4ThreeVector") {
+	} else {  // "Physics"...
+	  if (extra.empty()) {  // Dimensionless...
+	    if (valueType == "G4ThreeVector") {  // Split vector into 3...
 	      G4ThreeVector internalValue =
-		G4UIcommand::ConvertToDimensioned3Vector(valueAndUnit);
+		G4UIcommand::ConvertTo3Vector(value);
 	      AddValuesAndDefs
 		(standardValues,standardDefinitions,
 		 valueName,valueName+"-X",
-		 G4UIcommand::ConvertToString(internalValue.x()/valueOfUnit),
-		 standardUnit,
+		 G4UIcommand::ConvertToString(internalValue.x()),"",
 		 fpDefinitions->find(valueName)->second.GetDesc()+"-X");
 	      AddValuesAndDefs
 		(standardValues,standardDefinitions,
 		 valueName,valueName+"-Y",
-		 G4UIcommand::ConvertToString(internalValue.y()/valueOfUnit),
-		 standardUnit,
+		 G4UIcommand::ConvertToString(internalValue.y()),"",
 		 fpDefinitions->find(valueName)->second.GetDesc()+"-Y");
 	      AddValuesAndDefs
 		(standardValues,standardDefinitions,
 		 valueName,valueName+"-Z",
-		 G4UIcommand::ConvertToString(internalValue.z()/valueOfUnit),
-		 standardUnit,
+		 G4UIcommand::ConvertToString(internalValue.z()),"",
 		 fpDefinitions->find(valueName)->second.GetDesc()+"-Z");
+	    } else {  // Simply copy...
+	      standardValues->push_back(*iValue);
+	      (*standardDefinitions)[valueName] =
+		fpDefinitions->find(valueName)->second;
+	    }
+	  } else {  // Dimensioned...
+	    G4String valueAndUnit;
+	    G4String unit;
+	    if (extra == "G4BestUnit") {
+	      valueAndUnit = value;
+	      valueAndUnit = valueAndUnit.strip();
+	      unit = valueAndUnit.substr(valueAndUnit.rfind(' ')+1);
 	    } else {
-	      G4double internalValue =
-		G4UIcommand::ConvertToDimensionedDouble(valueAndUnit);
-	      AddValuesAndDefs
-		(standardValues,standardDefinitions,
-		 valueName,valueName,
-		 G4UIcommand::ConvertToString(internalValue/valueOfUnit),
-		 standardUnit);
+	      valueAndUnit = value + ' ' + extra;
+	      valueAndUnit = valueAndUnit.strip();
+	      unit = extra;
+	    }
+	    G4String unitCategory = G4UnitDefinition::GetCategory(unit);
+	    if (fUnitCategories.find(unitCategory) != fUnitCategories.end()) {
+	      G4String standardUnit = fStandardUnits[unitCategory];
+	      G4double valueOfStandardUnit =
+		G4UnitDefinition::GetValueOf(standardUnit);
+	      G4String extra = iDef->second.GetExtra();
+	      if (valueType == "G4ThreeVector") {  // Split vector into 3...
+		G4ThreeVector internalValue =
+		  G4UIcommand::ConvertToDimensioned3Vector(valueAndUnit);
+		AddValuesAndDefs
+		  (standardValues,standardDefinitions,
+		   valueName,valueName+"-X",
+		   G4UIcommand::ConvertToString
+		   (internalValue.x()/valueOfStandardUnit),
+		   standardUnit,
+		   fpDefinitions->find(valueName)->second.GetDesc()+"-X");
+		AddValuesAndDefs
+		  (standardValues,standardDefinitions,
+		   valueName,valueName+"-Y",
+		   G4UIcommand::ConvertToString
+		   (internalValue.y()/valueOfStandardUnit),
+		   standardUnit,
+		   fpDefinitions->find(valueName)->second.GetDesc()+"-Y");
+		AddValuesAndDefs
+		  (standardValues,standardDefinitions,
+		   valueName,valueName+"-Z",
+		   G4UIcommand::ConvertToString
+		   (internalValue.z()/valueOfStandardUnit),
+		   standardUnit,
+		   fpDefinitions->find(valueName)->second.GetDesc()+"-Z");
+	      } else {
+		G4double internalValue =
+		  G4UIcommand::ConvertToDimensionedDouble(valueAndUnit);
+		AddValuesAndDefs
+		  (standardValues,standardDefinitions,
+		   valueName,valueName,
+		   G4UIcommand::ConvertToString
+		   (internalValue/valueOfStandardUnit),
+		   standardUnit);
+	      }
 	    }
 	  }
 	}
       }
     }
+  }
+  if (error) {
+    G4cerr << "G4AttCheck::Standard: Conversion error." << G4endl;
   }
   return error;
 }
