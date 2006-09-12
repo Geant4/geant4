@@ -18,6 +18,9 @@
 /control/verbose 2
 /vis/verbose confirmations
 
+# Switch off local drawing
+/N03/event/drawTracks none
+
 /vis/open OGLSX
 /vis/drawVolume
 /vis/scene/add/trajectories
@@ -83,8 +86,10 @@
 # Accumulate several events for effect
 # /vis/scene/endOfEventAction accumulate
 /gun/energy 100 MeV
+#/vis/viewer/set/globalLineWidthScale 2
 /run/beamOn
 /control/alias timeRange 1000
+#/vis/oglx/set/printEPS true
 /vis/verbose warnings
 /control/verbose 0
 /control/loop visTutor/exN03Vis12.loop startTime -{timeRange} 3000 5

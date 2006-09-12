@@ -18,6 +18,9 @@
 /control/verbose 2
 /vis/verbose confirmations
 
+# Switch off local drawing
+/N03/event/drawTracks none
+
 /vis/open OGLSX 600x600-0+0
 /vis/drawVolume
 /vis/scene/add/trajectories
