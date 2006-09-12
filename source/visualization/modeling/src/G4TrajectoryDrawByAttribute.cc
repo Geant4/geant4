@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TrajectoryDrawByAttribute.cc,v 1.1 2006-09-11 21:52:18 tinslay Exp $
+// $Id: G4TrajectoryDrawByAttribute.cc,v 1.2 2006-09-12 22:03:53 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Jane Tinslay August 2006
@@ -197,7 +197,7 @@ G4TrajectoryDrawByAttribute::AddIntervalContext(const G4String& name, G4VisTrajC
   
   if (iter != fContextMap.end()) {
     std::ostringstream o;
-    o <<"interval with name "<< name <<" already exists"<<std::endl;
+    o <<"Interval "<< name <<" already exists"<<std::endl;
     G4Exception
       ("G4TrajectoryDrawByAttribute::AddIntervalContext", "InvalidInterval", FatalErrorInArgument, o.str().c_str());
   }
@@ -215,7 +215,7 @@ G4TrajectoryDrawByAttribute::AddValueContext(const G4String& name, G4VisTrajCont
   
   if (iter != fContextMap.end()) {
     std::ostringstream o;
-    o <<"Single value with name "<< name <<" already exists"<<std::endl;
+    o <<"Single value "<< name <<" already exists"<<std::endl;
     G4Exception
       ("G4TrajectoryDrawByAttribute::AddSingleValueContext", "InvalidInterval", FatalErrorInArgument, o.str().c_str());
   }
