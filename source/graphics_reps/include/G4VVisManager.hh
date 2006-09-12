@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VVisManager.hh,v 1.12 2006-06-29 19:06:18 gunter Exp $
+// $Id: G4VVisManager.hh,v 1.13 2006-09-12 18:29:31 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // John Allison 19/Oct/1996.
 // 
@@ -174,6 +174,9 @@ public: // With description
 
   virtual G4bool FilterTrajectory(const G4VTrajectory&) = 0;
   // Trajectory filter
+
+  virtual G4bool FilterHit(const G4VHit&) = 0;
+  // Hit filter
 
 protected:
 

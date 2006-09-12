@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.107 2006-09-11 18:04:57 tinslay Exp $
+cvs log $Id: History,v 1.108 2006-09-12 18:29:31 tinslay Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+12th September 2006 Jane Tinslay
+- Remove trailing white spaces in G4ConversionUtils
+- Add FilterHit method to G4VVisManager
 
 11th September 2006 Jane Tinslay
 - Add templated G4AttDef's and various utilities

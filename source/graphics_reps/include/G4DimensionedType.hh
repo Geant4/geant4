@@ -22,7 +22,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DimensionedType.hh,v 1.1 2006-09-11 18:04:59 tinslay Exp $
+// $Id: G4DimensionedType.hh,v 1.2 2006-09-12 18:29:31 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Generic dimensioned type.
@@ -205,7 +205,7 @@ G4DimensionedType<T, ConversionErrorPolicy>::operator > (const G4DimensionedType
 
 template <typename M>
 std::ostream& operator << (std::ostream& os, const G4DimensionedType<M>& obj) {
-  os << obj.Value()<<" "<<obj.Unit();
+  os << obj.RawValue()<<" "<<obj.Unit();
   return os;
 }
 

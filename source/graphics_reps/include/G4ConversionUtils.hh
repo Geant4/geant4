@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ConversionUtils.hh,v 1.1 2006-09-11 18:04:58 tinslay Exp $
+// $Id: G4ConversionUtils.hh,v 1.2 2006-09-12 18:29:31 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Jane Tinslay September 2006
@@ -44,8 +44,11 @@ namespace G4ConversionUtils
   // Returns false if conversion failed or if extra characters
   // exist in input.
   template <typename Value>
-  G4bool Convert(const G4String& input, Value& output) 
+  G4bool Convert(const G4String& myInput, Value& output) 
   {
+    G4String input(myInput);
+    input = input.strip();
+
     std::istringstream is(input);
     char tester;
     
@@ -54,8 +57,11 @@ namespace G4ConversionUtils
   
   // Conversion specialisations.
   template<>
-  inline G4bool Convert(const G4String& input, G4DimensionedDouble& output) 
+  inline G4bool Convert(const G4String& myInput, G4DimensionedDouble& output) 
   {
+    G4String input(myInput);
+    input = input.strip();
+
     G4double value;
     G4String unit;
     
@@ -69,9 +75,12 @@ namespace G4ConversionUtils
     return true;      
   }
   
-  template<> inline G4bool Convert(const G4String& input, 
+  template<> inline G4bool Convert(const G4String& myInput, 
 				   G4DimensionedThreeVector& output) 
   {
+    G4String input(myInput);
+    input = input.strip();
+
     G4double value1, value2, value3;
     G4String unit;
     
@@ -79,14 +88,17 @@ namespace G4ConversionUtils
     char tester;
     
     if (!(is >> value1 >> value2 >> value3 >>unit) || is.get(tester)) return false;
-    
+
     output = G4DimensionedThreeVector(G4ThreeVector(value1, value2, value3), unit);
     
     return true;      
   }
   
-  template<> inline G4bool Convert(const G4String& input, G4ThreeVector& output) 
+  template<> inline G4bool Convert(const G4String& myInput, G4ThreeVector& output) 
   {
+    G4String input(myInput);
+    input = input.strip();
+
     G4double value1, value2, value3;
     
     std::istringstream is(input);
@@ -101,9 +113,12 @@ namespace G4ConversionUtils
   // Generic double value istringstream conversion.
   // Return false if conversion failed or if extra characters
   // exist in input.
-  template <typename Value> G4bool Convert(const G4String& input, Value& value1, 
+  template <typename Value> G4bool Convert(const G4String& myInput, Value& value1, 
 					   Value& value2) 
   {
+    G4String input(myInput);
+    input = input.strip();
+
     std::istringstream is(input);
     char tester;
     
@@ -111,9 +126,12 @@ namespace G4ConversionUtils
   }
   
   // Conversion specialisations.
-  template<> inline G4bool Convert(const G4String& input, G4DimensionedDouble& min, 
+  template<> inline G4bool Convert(const G4String& myInput, G4DimensionedDouble& min, 
 				   G4DimensionedDouble& max) 
   {
+    G4String input(myInput);
+    input = input.strip();
+
     G4double valueMin, valueMax;  
     G4String unitsMin, unitsMax;
     
@@ -128,9 +146,12 @@ namespace G4ConversionUtils
     return true;      
   }
   
-  template<> inline G4bool Convert(const G4String& input, G4DimensionedThreeVector& min, 
+  template<> inline G4bool Convert(const G4String& myInput, G4DimensionedThreeVector& min, 
 				   G4DimensionedThreeVector& max) 
-  {      
+  {   
+    G4String input(myInput);
+    input = input.strip();
+   
     G4double valueMinX, valueMinY, valueMinZ;
     G4double valueMaxX, valueMaxY, valueMaxZ;
     G4String unitMin, unitMax;
@@ -147,9 +168,12 @@ namespace G4ConversionUtils
       return true;      
   }
   
-  template<> inline G4bool Convert(const G4String& input, G4ThreeVector& min, 
+  template<> inline G4bool Convert(const G4String& myInput, G4ThreeVector& min, 
 				   G4ThreeVector& max) 
   {      
+    G4String input(myInput);
+    input = input.strip();
+
     G4double valueMinX, valueMinY, valueMinZ;
     G4double valueMaxX, valueMaxY, valueMaxZ;
     
