@@ -1,4 +1,4 @@
-$Id: History,v 1.67 2006-09-04 11:52:01 allison Exp $
+$Id: History,v 1.68 2006-09-12 18:55:45 tinslay Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -24,6 +24,9 @@ committal in the CVS repository !
 
 History file for visualization management sub-category
 ------------------------------------------------------
+12th September 2006 Jane Tinslay
+- Add attribute based trajectory drawing & filtering, and attribute based
+  hit filtering
 
 4th September 2006  John Allison  (visman-V08-01-04)
 - G4ViewParameters: Added CutawayMode and ChangeCutawayPlane.

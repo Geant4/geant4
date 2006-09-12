@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VisManager.cc,v 1.100 2006-09-04 11:51:29 allison Exp $
+// $Id: G4VisManager.cc,v 1.101 2006-09-12 18:55:45 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -101,6 +101,7 @@ G4VisManager::G4VisManager ():
 {
   fpTrajDrawModelMgr = new G4VisModelManager<G4VTrajectoryModel>("/vis/modeling/trajectories");
   fpTrajFilterMgr = new G4VisFilterManager<G4VTrajectory>("/vis/filtering/trajectories");
+  fpHitFilterMgr = new G4VisFilterManager<G4VHit>("/vis/filtering/hits");
 
   VerbosityGuidanceStrings.push_back
     ("Simple graded message scheme - digit or string (1st character defines):");
@@ -190,6 +191,7 @@ G4VisManager::~G4VisManager () {
 
   delete fpTrajDrawModelMgr;
   delete fpTrajFilterMgr;
+  delete fpHitFilterMgr;
 }
 
 G4VisManager* G4VisManager::GetInstance () {
@@ -267,6 +269,12 @@ void G4VisManager::Initialise () {
   fDirectoryList.push_back (directory);
   directory = new G4UIdirectory ("/vis/filtering/trajectories/create/");
   directory -> SetGuidance ("Create trajectory filters and messengers.");
+  fDirectoryList.push_back (directory);
+  directory = new G4UIdirectory ("/vis/filtering/hits/");
+  directory -> SetGuidance ("Hit filtering commands.");
+  fDirectoryList.push_back (directory);
+  directory = new G4UIdirectory ("/vis/filtering/hits/create/");
+  directory -> SetGuidance ("Create hit filters and messengers.");
   fDirectoryList.push_back (directory);
 
   RegisterMessengers ();
@@ -403,6 +411,17 @@ void
 G4VisManager::RegisterModelFactory(G4TrajFilterFactory* factory)
 {
   fpTrajFilterMgr->Register(factory);
+}
+
+void G4VisManager::RegisterModel(G4VFilter<G4VHit>* model)
+{
+  fpHitFilterMgr->Register(model);
+}
+
+void
+G4VisManager::RegisterModelFactory(G4HitFilterFactory* factory)
+{
+  fpHitFilterMgr->Register(factory);
 }
 
 void G4VisManager::SelectTrajectoryModel(const G4String& model) 
@@ -711,6 +730,11 @@ G4bool G4VisManager::FilterTrajectory(const G4VTrajectory& trajectory)
   return fpTrajFilterMgr->Accept(trajectory);
 }   
 
+G4bool G4VisManager::FilterHit(const G4VHit& hit)
+{
+  return fpHitFilterMgr->Accept(hit);
+}   
+
 void G4VisManager::DispatchToModel(const G4VTrajectory& trajectory, G4int i_mode)
 {
   G4bool visible(true);
@@ -971,11 +995,17 @@ void G4VisManager::RegisterMessengers () {
   RegisterMessenger(new G4VisCommandListManagerSelect< G4VisModelManager<G4VTrajectoryModel> >
 		    (fpTrajDrawModelMgr, fpTrajDrawModelMgr->Placement()));  
 
-  // Filter manager commands
+  // Trajectory filter manager commands
   RegisterMessenger(new G4VisCommandListManagerList< G4VisFilterManager<G4VTrajectory> >
                     (fpTrajFilterMgr, fpTrajFilterMgr->Placement()));
   RegisterMessenger(new G4VisCommandManagerMode< G4VisFilterManager<G4VTrajectory> >
                     (fpTrajFilterMgr, fpTrajFilterMgr->Placement()));
+
+  // Hit filter manager commands
+  RegisterMessenger(new G4VisCommandListManagerList< G4VisFilterManager<G4VHit> >
+                    (fpHitFilterMgr, fpHitFilterMgr->Placement()));
+  RegisterMessenger(new G4VisCommandManagerMode< G4VisFilterManager<G4VHit> >
+                    (fpHitFilterMgr, fpHitFilterMgr->Placement()));
 }
 
 void G4VisManager::PrintAvailableGraphicsSystems () const {

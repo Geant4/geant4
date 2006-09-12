@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.hh,v 1.61 2006-08-14 12:55:02 allison Exp $
+// $Id: G4VisManager.hh,v 1.62 2006-09-12 18:55:45 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -111,6 +111,7 @@ namespace {
   // Useful typedef's
   typedef G4VModelFactory<G4VTrajectoryModel> G4TrajDrawModelFactory;
   typedef G4VModelFactory< G4VFilter<G4VTrajectory> > G4TrajFilterFactory;
+  typedef G4VModelFactory< G4VFilter<G4VHit> > G4HitFilterFactory;
 }
 
 class G4VisManager: public G4VVisManager {
@@ -207,6 +208,12 @@ public: // With description
   void RegisterModel(G4VFilter<G4VTrajectory>* filter);
   // Register trajectory filter model. Assumes ownership of model.
 
+  void RegisterModelFactory(G4HitFilterFactory* factory);
+  // Register trajectory hit model factory. Assumes ownership of factory.
+
+  void RegisterModel(G4VFilter<G4VHit>* filter);
+  // Register trajectory hit model. Assumes ownership of model.
+
   void SelectTrajectoryModel(const G4String& model);
   // Set default trajectory model. Useful for use in compiled code
 
@@ -278,6 +285,7 @@ public: // With description
   // Draw the trajectory.
 
   G4bool FilterTrajectory(const G4VTrajectory&);
+  G4bool FilterHit(const G4VHit&);
 
   ////////////////////////////////////////////////////////////////////////
   // Administration routines.
@@ -453,6 +461,9 @@ private:
   
   // Trajectory filter model manager
   G4VisFilterManager<G4VTrajectory>* fpTrajFilterMgr;
+
+  // Hit filter model manager
+  G4VisFilterManager<G4VHit>* fpHitFilterMgr;
 
 };
 

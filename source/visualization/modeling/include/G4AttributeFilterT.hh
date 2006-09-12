@@ -22,7 +22,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AttributeFilterT.hh,v 1.1 2006-09-11 21:52:18 tinslay Exp $
+// $Id: G4AttributeFilterT.hh,v 1.2 2006-09-12 18:53:03 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Generic attribute filter.
@@ -171,7 +171,7 @@ void
 G4AttributeFilterT<T>::Clear()
 {
   fConfigVect.clear();
-  filter->Reset();
+  if (0 != filter) filter->Reset();
 }
 
 template <typename T>
@@ -181,7 +181,7 @@ G4AttributeFilterT<T>::Print(std::ostream& ostr) const
   ostr<<"Printing data for G4Attribute filter named: "<<G4VFilter<T>::Name()<<std::endl;
   ostr<<"Filtered attribute name: "<<fAttName<<std::endl;
   ostr<<"Printing sub filter data:"<<std::endl;
-  filter->PrintAll(ostr);
+  if (0 != filter) filter->PrintAll(ostr);
 }
 
 template <typename T>

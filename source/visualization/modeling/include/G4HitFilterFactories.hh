@@ -23,86 +23,37 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// $Id: G4TrajectoryFilterFactories.hh,v 1.4 2006-09-12 18:53:03 tinslay Exp $
+/// $Id: G4HitFilterFactories.hh,v 1.1 2006-09-12 18:53:03 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
-// Trajectory filter model factories creating filters
+// Hit filter model factories creating filters
 // and associated messengers.
 //
 // Jane Tinslay March 2006
 //
-#ifndef G4TRAJECTORYFILTERFACTORIES_HH
-#define G4TRAJECTORYFILTERFACTORIES_HH
+#ifndef G4HITFILTERFACTORIES_HH
+#define G4HITFILTERFACTORIES_HH
 
 #include "G4VFilter.hh"
 #include "G4VModelFactory.hh"
-#include "G4VTrajectory.hh"
+#include "G4VHit.hh"
 
 // Attribute filter
-class G4TrajectoryAttributeFilterFactory : public G4VModelFactory< G4VFilter<G4VTrajectory>  > {
+class G4HitAttributeFilterFactory : public G4VModelFactory< G4VFilter<G4VHit>  > {
 
 public: // With description
 
   typedef std::vector<G4UImessenger*> Messengers;
-  typedef std::pair< G4VFilter<G4VTrajectory> *, Messengers > ModelAndMessengers;
+  typedef std::pair< G4VFilter<G4VHit> *, Messengers > ModelAndMessengers;
 
-  G4TrajectoryAttributeFilterFactory();
+  G4HitAttributeFilterFactory();
 
-  virtual ~G4TrajectoryAttributeFilterFactory();
+  virtual ~G4HitAttributeFilterFactory();
   
   ModelAndMessengers Create(const G4String& placement, const G4String& name);
     
 };
-
-// Charge filter
-class G4TrajectoryChargeFilterFactory : public G4VModelFactory< G4VFilter<G4VTrajectory>  > {
-
-public: // With description
-
-  typedef std::vector<G4UImessenger*> Messengers;
-  typedef std::pair< G4VFilter<G4VTrajectory> *, Messengers > ModelAndMessengers;
-
-  G4TrajectoryChargeFilterFactory();
-
-  virtual ~G4TrajectoryChargeFilterFactory();
-  
-  ModelAndMessengers Create(const G4String& placement, const G4String& name);
-    
-};
-
-// Particle filter
-class G4TrajectoryParticleFilterFactory : public G4VModelFactory< G4VFilter<G4VTrajectory>  > {
-
-public: // With description
-
-  typedef std::vector<G4UImessenger*> Messengers;
-  typedef std::pair< G4VFilter<G4VTrajectory> *, Messengers > ModelAndMessengers;
-
-  G4TrajectoryParticleFilterFactory();
-
-  virtual ~G4TrajectoryParticleFilterFactory();
-  
-  ModelAndMessengers Create(const G4String& placement, const G4String& name);
-    
-};
-
-// Origin volume filter
-class G4TrajectoryOriginVolumeFilterFactory : public G4VModelFactory< G4VFilter<G4VTrajectory>  > {
-
-public: // With description
-
-  typedef std::vector<G4UImessenger*> Messengers;
-  typedef std::pair< G4VFilter<G4VTrajectory> *, Messengers > ModelAndMessengers;
-
-  G4TrajectoryOriginVolumeFilterFactory();
-
-  virtual ~G4TrajectoryOriginVolumeFilterFactory();
-  
-  ModelAndMessengers Create(const G4String& placement, const G4String& name);
-    
-};
-
 
 #endif
 
