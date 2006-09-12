@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QElasticCrossSection.cc,v 1.9 2006-06-29 20:08:34 gunter Exp $
+// $Id: G4QElasticCrossSection.cc,v 1.10 2006-09-12 16:59:12 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -676,39 +676,32 @@ G4double G4QElasticCrossSection::GetQ2max(G4int PDG, G4int tgZ, G4int tgN, G4dou
   //static const G4double mLamb= G4QPDGCode(3122).GetMass()*.001; // MeV to GeV
   //static const G4double mHe3 = G4QPDGCode(2112).GetNuclMass(2,1,0)*.001; // MeV to GeV
   //static const G4double mAlph = G4QPDGCode(2112).GetNuclMass(2,2,0)*.001; // MeV to GeV
-  static const G4double mDeut = G4QPDGCode(2112).GetNuclMass(1,1,0)*.001; // MeV to GeV
+  //static const G4double mDeut = G4QPDGCode(2112).GetNuclMass(1,1,0)*.001; // MeV to GeV
   static const G4double mProt2= mProt*mProt;
   static const G4double mNeut2= mNeut*mNeut;
-  static const G4double mDeut2= mDeut*mDeut;
-  if(PDG==2212 && tgZ==1 && tgN==0)
+  //static const G4double mDeut2= mDeut*mDeut;
+  G4double pP2=pP*pP;
+  if(PDG==2212 && tgZ==1 && tgN==0)                   // ---> pp(identical,symmetric 90deg)
   {
-    G4double tMid=std::sqrt(pP*pP+mProt2)*mProt-mProt2; // CMS 90deg value of -t=Q2 (GeV^2)
+    G4double tMid=std::sqrt(pP2+mProt2)*mProt-mProt2; // CMS 90deg value of -t=Q2 (GeV^2)
     return tMid+tMid;
   }
-  else if(PDG==2112 && tgZ==1&&tgN==0)
+  else if(PDG==2112 && tgZ)                           // ---> nA
   {
-    G4double pP2=pP*pP;
-    G4double sM=(mProt+mProt)*std::sqrt(pP*pP+mNeut2)+mNeut2+mProt2; // Mondelstam s
-    return 4*mProt2*pP2/sM;
+    G4double mt=G4QPDGCode(90000000+tgZ*1000+tgN).GetMass()*.001;
+    G4double tmt=(std::sqrt(pP*pP+mNeut2)-mNeut)*mt;  // T_proj*M_targ
+    return tmt+tmt;
   }
-  else if((PDG==2212 || PDG==2112) && tgZ==1&&tgN==1)                // n/p+He4
+  else if(PDG==2212 && tgZ)                           // ---> pA
   {
-    G4double pP2=pP*pP;
-    G4double sM=(mDeut+mDeut)*std::sqrt(pP*pP+mProt2)+mProt2+mDeut2; // Mondelstam s
-    return 4*mDeut2*pP2/sM;
-  }
-  else if((PDG==2212 || PDG==2112) && tgZ==2&&tgN==2)                // n/p+He4
-  {
-    G4double pP2=pP*pP;
-    G4double mNuc=G4QPDGCode(2112).GetNuclMass(tgZ,tgN,0)*.001;      // MeV to GeV
-    G4double mNuc2=mNuc*mNuc;
-    G4double sM=(mNuc+mNuc)*std::sqrt(pP*pP+mProt2)+mProt2+mNuc2;    // Mondelstam s
-    return 4*mNuc2*pP2/sM;
+    G4double mt=G4QPDGCode(90000000+tgZ*1000+tgN).GetMass()*.001;
+    G4double tmt=(std::sqrt(pP*pP+mProt2)-mProt)*mt;  // T_proj*M_targ
+    return tmt+tmt;
   }
   else
   {
     G4cout<<"*Error*G4QElasticCrossSection::GetQ2max: PDG="<<PDG<<", Z="<<tgZ<<", N="
-          <<tgN<<", while it is defined only for PDG=2212/2112, Z=1, N=0"<<G4endl;
-    throw G4QException("G4QElasticCrossSection::GetQ2max: np,pp,pd,pHe are implemented");
+          <<tgN<<", while it is defined only for p,n projectiles & Z_target>0"<<G4endl;
+    throw G4QException("G4QElasticCrossSection::GetQ2max: only nA & pA are implemented");
   }
 }
