@@ -1,3 +1,4 @@
+# exN03Vis13.loop
 /vis/viewer/pan {dx} 0 mm
 /vis/ogl/set/endTime {endTime} ns {timeRange} ns
 /vis/viewer/update
