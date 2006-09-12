@@ -1,4 +1,4 @@
-$Id: History,v 1.107 2006-08-30 12:44:44 allison Exp $
+$Id: History,v 1.108 2006-09-12 15:23:49 allison Exp $
 --------------------------------------------------
 
      =========================================================
@@ -15,6 +15,14 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
+12-09-06 John Allison (exampleN03-V08-01-02)
+- exN03Vis12.mac and exN03Vis13.mac: Switched off local trajectory
+  drawing (/N03/event/drawTracks none) so as not to interfere with
+  drawing from /vis/scene/add/trajectories.
+
+31-08-06 mma
+- Code tidy.
+
 30-08-06 John Allison (exampleN03-V08-01-01)
 - Improved visTutor/exN03Vis12.mac.
 - Added visTutor/exN03Vis13.mac: Further demonstration of time slicing.
