@@ -76,6 +76,7 @@
 #include "G4HadronElastic.hh"
 //#include "G4LElasticB.hh"
 #include "G4LEnp.hh"
+#include "G4LEpp.hh"
 #include "G4ElasticCascadeInterface.hh"
 #include "G4NeutronHPChannel.hh"       // HP cross-section
 #include "G4NeutronHPElastic.hh"
@@ -436,12 +437,13 @@ int main()
   // ============ GHAD definition of the Hadron Elastic process ====================
   // Define the Elastic Process
   //G4LEnp* theElasticModel = new G4LEnp;// A model for the Elastic Process (only for np!)
+  //G4LEpp* theElasticModel = new G4LEpp;// A model for the Elastic Process (only for pp!)
   ///G4LElastic* theElasticModel = new G4LElastic;// A model for the Elastic Process (Old)
   //G4LElasticB* theElasticModel = new G4LElasticB;// A model for ElasticProcess (cons.E)
   //G4ElasticCascadeInterface* theElasticModel = new G4ElasticCascadeInterface; //(Cascade)
   //G4ElasticHadrNucleusHE* theElasticModel = new G4ElasticHadrNucleusHE; //(Coherent)
-  ///G4HadronElasticProcess* proc = new G4HadronElasticProcess;
-  ///proc->RegisterMe(theElasticModel);
+  //G4HadronElasticProcess* proc = new G4HadronElasticProcess;
+  //proc->RegisterMe(theElasticModel);
   // =========== End of the GHAD definition of the Hadron Elastic process =================
   // -> HP_GHAD definition of the Hadron Elastic Process
   ///G4HadronElasticProcess* proc = new G4HadronElasticProcess;
@@ -449,13 +451,14 @@ int main()
   ///G4NeutronHPElasticData* theElasticData = new G4NeutronHPElasticData;
   ///proc->AddDataSet(theElasticData);
   ///proc->RegisterMe(theElasticModel);
-  //theElasticModel->SetMinEnergy(0.*eV);
-  //theElasticModel->SetMaxEnergy(20.*MeV);
+  //theElasticModel->SetMinEnergy(0.*eV);              // ?
+  //theElasticModel->SetMaxEnergy(20.*MeV);            // ?
+  // =========== End of the HP_GHAD definition of the Hadron Elastic process ==============
   //........... Unified GHAD/CHIPS elastic process of V.Ivanchenko ..............
-  G4HadronElastic* theElasticModel = new G4HadronElastic(0.);// ElasticModel(cons4m,V.I.)
+  //G4ElasticHadrNucleusHE* theElasticModel = new G4ElasticHadrNucleusHE;// (Coherent,N.S.)
+  G4HadronElastic* theElasticModel = new G4HadronElastic(0.);//ElasticModel(cons4m,V.I.)
   G4UHadronElasticProcess* proc = new G4UHadronElasticProcess;
   proc->RegisterMe(theElasticModel);
-  // =========== End of the HP_GHAD definition of the Hadron Elastic process ==============
   // -> Alternative (one step) CHIPS definition of the Hadron Elastic Process
   ///G4QElastic* proc = new G4QElastic;
 #ifdef debug
@@ -509,12 +512,21 @@ int main()
      G4cerr<<"***Test39: "<<pPDG<<" is a PDG code of not supported particle"<<G4endl;
      G4Exception("***Test39: OnFlight Process is called for not supported particle");
    }
+   // Not for CHIP & not for GHAD/G4LElasic: only for G4UHadronElastic of V. Ivanchenko
+   proc->BuildPhysicsTable(*part);//NotNecessary for G4LElastic&CHIPS.Only for NewEl V.I.
+   // ----------------------------
    G4double pMass = part->GetPDGMass();                 // Mass of the projectile in IU
    //
    G4ThreeVector aPosition(nx*mm, ny*mm, nz*mm);
    G4DynamicParticle* dParticle = new G4DynamicParticle(part,aDirection,0.);// Dummy Energy
    // General Track definition
    G4Track* gTrack = new G4Track(dParticle,aTime,aPosition); // Track definition (NoTarg)
+   // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+   //G4DynamicParticle* pPart = new G4DynamicParticle(G4Proton::Proton(),aDirection,0.);
+   //G4DynamicParticle* nPart = new G4DynamicParticle(G4Neutron::Neutron(),aDirection,0.);
+   //G4Track* pTrack = new G4Track(pPart,aTime,aPosition); // Track definition (NoTarg)
+   //G4Track* nTrack = new G4Track(nPart,aTime,aPosition); // Track definition (NoTarg)
+   // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
    G4int    bnp=pQC.GetBaryonNumber();                  // Baryon number of the projectile
    G4LorentzVector proj4Mom(0.,0.,momb,ep);
    // ---------- Define material for the simulation ------------------
@@ -665,21 +677,24 @@ int main()
 #endif
      G4double dTot=0.;
      G4double dEl=0.;
-     G4double tMin=.0001;                          // in GeV^2  (pPb)
-     //G4double tMin=.00001;                         // in GeV^2  (pd)
-     //G4double tMin=.000005;                         // in GeV^2 (pp_le)
-     //G4double tMin=.0005;                         // in GeV^2 (pp_he)
-     G4double tMax=energy*pMass/GeV/GeV;          // 1/2 max -t value in GeV^2 (pp)
-     if(tMax>9.)tMax=9.;
-     ///G4double gev2=GeV*GeV;
-     ///G4double mp2=mp*mp/gev2;                     // M_proj^2 (GeV^2)
-     ///G4double mt2=mt*mt/gev2;                     // M_trag^2 (GeV^2)
-     ///G4double emt=e0*mt/gev2;                     // E_proj*M_targ (GeV^2)
-     ///G4double pl2=pmax*pmax/gev2;                 // P_proj^2 (GeV^2)
-     ///G4double tMax=4*pl2*mt2/(mt2+mp2+emt+emt);   // max -t value in GeV^2 (pd)
-     ///G4double tMaM=3.3;                           // max_max -t value in GeV^2 (pd)
+     //G4double tMin=.0001;                         // in GeV^2  (pPb)
+     //G4double tMin=.00001;                        // in GeV^2  (pd)
+     //G4double tMin=.000005;                       // in GeV^2 (pp_le)
+     //G4double tMin=.0005;                         // in GeV^2 (pp_he4)
+     G4double tMin=.0003;                         // in GeV^2 (pp_he3)
+     ///G4double tMax=energy*pMass/GeV/GeV;          // 1/2 max -t value in GeV^2 (pp)
+     ///if(tMax>9.)tMax=9.;
+     G4double gev2=GeV*GeV;
+     G4double tmt=(e0-mp)*mt/gev2;                  // T_proj*M_targ (GeV^2)
+     //G4double emt=e0*mt/gev2;                     // E_proj*M_targ (GeV^2) - Wrong Calc
+     //G4double mp2=mp*mp/gev2;                     // M_proj^2 (GeV^2)
+     //G4double mt2=mt*mt/gev2;                     // M_trag^2 (GeV^2)
+     //G4double pl2=pmax*pmax/gev2;                 // P_proj^2 (GeV^2)
+     //G4double tMax=4.8*pl2*mt2/(mt2+mp2+emt+emt); // max -t value in GeV^2 (pd?-Wrong)
+     G4double tMax=2.2*tmt;                       // max -t value in GeV^2 (pA)
+     G4double tMaM=3.3;                           // max_max -t value in GeV^2 (pA)
      //G4cout<<"Test39: Mt="<<mt<<", Mp="<<mp<<", P="<<pmax<<", E="<<e0<<G4endl;
-     ///if(tMax>tMaM) tMax=tMaM;
+     if(tMax>tMaM) tMax=tMaM;
      G4int goodE=0;                              // a#of good events
      G4int misTG=0;                               // a#of events with missing recoil
      G4int badTG=0;                               // a#of events with wrong recoil
@@ -712,12 +727,13 @@ int main()
      //while(!HadrCS.Register(theFS));
      //delete theFS;
      // ------> for CHIPS
+     //G4VQCrossSection* HadrCS = G4QElasticCrossSection::GetPointer();// CHIPS ElCS
 #ifdef csdebug
      // --- A temporary LOOP for calculation of total cross section ------------
      //G4double pMin=.02;                            // in GeV --> for protons
-     //G4double pMax=600000000.;                     // in GeV
+     G4double pMax=600000000.;                     // in GeV
      //G4double pMax=10000000.;                      // in GeV --> np
-     G4double pMax=1000.;                           // in GeV --> np->inelastic
+     //G4double pMax=1000.;                           // in GeV --> np->inelastic
      G4double pMin=.03;                            // in GeV --> np->dg
      //G4double pMin=.000004;                        // in GeV --> for neutrons
      //G4double pMax=700.;                           // in GeV
@@ -748,7 +764,7 @@ int main()
   					//	                                                    material->GetTemperature()));
        // ==================== End of GHAD ==============================
        // CHIPS calculation by G4QElasticCrossSection
-       ///G4double CS = HadrCS->GetCrossSection(true, mic*GeV, tgZ, tgN, pPDG); 
+       //G4double CS = HadrCS->GetCrossSection(true, mic*GeV, tgZ, tgN, pPDG); 
        // ------ direct CHIPS approximation of elastic cross section --------
        //G4double sp=std::sqrt(mic);
        //G4double dl=lmic-3.;
@@ -762,14 +778,12 @@ int main()
      dParticle->SetKineticEnergy(energy); // Fill the Kinetic Energy of the projectile (IU)
      // --> For GHAD
      G4double reactCS = HadrCS->GetElasticCrossSection(dParticle,element);
-     // This is not necessary for G4LElastic or CHIPS ! (Only for NewEl V.Ivanchenko)
-     proc->BuildPhysicsTable(*part);
      // --> For HP_GHAD
      ///G4double reactCS = HadrCS.GetXsec(energy);
      // ==================== End of GHAD ==============================
      // --> For CHIPS ("false" of onlyCS to prepare parameters for differential cross-sect)
      // P=pmax is in GeV, but this is not necessary
-     ///G4double reactCS = HadrCS->GetCrossSection(false, pmax, tgZ, tgN, pPDG);
+     //G4double reactCS = HadrCS->GetCrossSection(false, pmax, tgZ, tgN, pPDG);
      // ********************* END OF CROSS-SECTION ***************************************
 #ifdef debug
      G4cout<<"Test39:---->, E="<<energy<<"(IU=MeV), CrossSect="<<reactCS/millibarn<<G4endl;
@@ -780,8 +794,13 @@ int main()
       G4cout<<"Test39: ### "<<iter<< "-th event starts.### energy(IU)="<<energy<<G4endl;
 #endif
 
-      if(!(iter%1000)&&iter)G4cout<<"*=>TEST39: "<<iter<<" events are simulated"<<G4endl;
+      if(!(iter%10000)&&iter)G4cout<<"*=>TEST39: "<<iter<<" events are simulated"<<G4endl;
 
+      // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ RANDOM ENERGY AND RANDOM n/p SEQUENCE
+      //energy=G4UniformRand()*.3*GeV;
+      //gTrack=pTrack;
+      //if(G4UniformRand()>.5) gTrack=nTrack;
+      // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
       gTrack->SetStep(step);            // Now step is included in the Track (see above)
       gTrack->SetKineticEnergy(energy); // Duplication of Kin. Energy for the Track (?!)
 #ifdef debug
@@ -878,10 +897,11 @@ int main()
 #endif
       G4double totCharge = totC;
       //............................ONLY for CHIPS................................
-      ///G4int    curN=proc->GetNumberOfNeutronsInTarget(); // Works only for CHIPS
-      ///G4int    dBN = curN-tgN;
-      ///G4int    totBaryN = totBN+dBN;
-      ///G4int    curPDG=tPDG+dBN;
+      //G4int    curN=proc->GetNumberOfNeutronsInTarget(); // Works only for CHIPS
+      //G4int    dBN = curN-tgN;
+      //G4int    totBaryN = totBN+dBN;
+      //G4int    curPDG=tPDG+dBN;
+      //G4LorentzVector Residual=proc->GetEnegryMomentumConservation(); // Only for CHIPS
 						//............................ONLY FOR GHAD...............................
       G4int    totBaryN = totBN;                   // Substitute for not CHIPS
       G4int    curPDG=tPDG;                        // Substitute for not CHIPS
@@ -889,7 +909,6 @@ int main()
       G4double curM=G4QPDGCode(curPDG).GetMass();  // Update mass of the TargetNucleus
       totSum = G4LorentzVector(0., 0., pmax, et+curM-mt);
       //
-      ///G4LorentzVector Residual=proc->GetEnegryMomentumConservation(); // Only for CHIPS
 #ifdef debug
       G4double de = aChange->GetLocalEnergyDeposit();// Init TotalEnergy by EnergyDeposit
       G4cout<<"Test39: "<<nSec<<" secondary particles are generated, dE="<<de<<G4endl;
@@ -1055,8 +1074,8 @@ int main()
 #ifdef pdebug
       G4cout<<">TEST39:r4M="<<totSum<<ss<<",rCh="<<totCharge<<",rBaryN="<<totBaryN<<G4endl;
 #endif
-	     //if (1>2) // @@ The check is temporary closed LHEP
-						if (ss>.27) // Not CHIPS, but conservs energy
+	     if (1>2) // @@ The check is temporary closed LHEP
+						//if (ss>.27) // Not CHIPS, but conservs energy
 						//if (totCharge ||totBaryN || ss>.27 || alarm || nGamma&&!EGamma) // for CHIPS
       {
         totSum = G4LorentzVector(0., 0., pmax, et);
@@ -1129,7 +1148,7 @@ int main()
      G4cout<<"Test39: g="<<goodE/tS<<" mTG="<<misTG/tS<<" bTG="<<badTG/tS
            <<" 0="<<zeroO/tS<<" 1="<<alonO/tS<<" b="<<badOT/tS<<G4endl;
      // *************** Resulting print for the collected t-histograms ***************
-     G4double csmb=reactCS/millibarn/nEvt/dlt;
+     G4double csmb=reactCS/millibarn/goodE/dlt;
      for(G4int ti=0; ti<ntpt; ti++)
      {
        shist[ti]*=csmb;
