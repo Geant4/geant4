@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TrajectoriesModel.cc,v 1.20 2006-08-16 16:09:38 allison Exp $
+// $Id: G4TrajectoriesModel.cc,v 1.21 2006-09-13 13:03:53 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -36,6 +36,9 @@
 #include "G4VGraphicsScene.hh"
 #include "G4EventManager.hh"
 #include "G4Event.hh"
+#include "G4AttValue.hh"
+#include "G4AttDef.hh"
+#include "G4AttCheck.hh"
 
 G4TrajectoriesModel::~G4TrajectoriesModel () {}
 
@@ -45,6 +48,8 @@ fDrawingMode(drawingMode) {
   fGlobalDescription = fGlobalTag;
 }
 
+void G4TrajectoriesModelDebugG4AttValues(const G4VTrajectory*);
+
 void G4TrajectoriesModel::DescribeYourselfTo (G4VGraphicsScene& sceneHandler) {
   const G4Event* event = 
     G4EventManager::GetEventManager()->GetConstCurrentEvent();
@@ -53,9 +58,49 @@ void G4TrajectoriesModel::DescribeYourselfTo (G4VGraphicsScene& sceneHandler) {
     if (TC) {
       for (G4int iT = 0; iT < TC->entries(); iT++) {
 	G4VTrajectory* pTraj = (*TC) [iT];
-	// Debug: pTraj->ShowTrajectory(); G4cout << G4endl;
+	// Debug trajectory: pTraj->ShowTrajectory(); G4cout << G4endl;
+	// Debug G4AttValues: G4TrajectoriesModelDebugG4AttValues(pTraj);
 	sceneHandler.AddCompound (*pTraj);
       }
     }
   }
+}
+
+// Debug material...
+
+#include "G4VTrajectoryPoint.hh"
+
+void G4TrajectoriesModelDebugG4AttValues(const G4VTrajectory* pTraj)
+{
+  std::vector<G4AttValue>* attValues = pTraj->CreateAttValues();
+  if (attValues) {
+    G4AttCheck attCheck(attValues, pTraj->GetAttDefs());
+    G4cout << "\nProvided G4Atts:\n" << attCheck;
+    if (attCheck.Check()) G4cout << "Error" << G4endl;
+    else {
+      std::vector<G4AttValue> standardValues;
+      std::map<G4String,G4AttDef> standardDefinitions;
+      attCheck.Standard(&standardValues, &standardDefinitions);
+      G4cout << "\nStandard G4Atts:\n"
+	     << G4AttCheck(&standardValues, &standardDefinitions);
+    }
+    delete attValues;
+  }
+  for (G4int i = 0; i < pTraj->GetPointEntries(); i++) {
+    G4VTrajectoryPoint* aPoint = pTraj->GetPoint(i);
+    std::vector<G4AttValue>* attValues = aPoint->CreateAttValues();
+    if (attValues) {
+      G4AttCheck attCheck(attValues, aPoint->GetAttDefs());
+      G4cout << "\nProvided G4Atts:\n" << attCheck;
+      if (attCheck.Check()) G4cout << "Error" << G4endl;
+      else {
+	std::vector<G4AttValue> standardValues;
+	std::map<G4String,G4AttDef> standardDefinitions;
+	attCheck.Standard(&standardValues, &standardDefinitions);
+	G4cout << "\nStandard G4Atts:\n"
+	       << G4AttCheck(&standardValues, &standardDefinitions);
+      }
+      delete attValues;
+    }
+  }	  
 }
