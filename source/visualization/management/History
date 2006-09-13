@@ -1,4 +1,4 @@
-$Id: History,v 1.68 2006-09-12 18:55:45 tinslay Exp $
+$Id: History,v 1.69 2006-09-13 13:24:33 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -24,6 +24,14 @@ committal in the CVS repository !
 
 History file for visualization management sub-category
 ------------------------------------------------------
+
+13th September 2006  John Allison
+- G4ViewParameters: Improved setting and access to explode factor.
+- G4VisCommandsViewer: Added /vis/viewer/clone.
+- G4VisCommandsViewerSet: Added /vis/viewer/set/explodeFactor.
+- G4VisManager.cc: Registered /vis/viewer/clone.
+- G4VSceneHandler.cc: Pass explode factor to modeling parameters.
+
 12th September 2006 Jane Tinslay
 - Add attribute based trajectory drawing & filtering, and attribute based
   hit filtering
