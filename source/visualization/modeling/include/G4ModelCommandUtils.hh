@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ModelCommandUtils.hh,v 1.1 2006-09-11 21:52:18 tinslay Exp $
+// $Id: G4ModelCommandUtils.hh,v 1.2 2006-09-13 12:54:31 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Jane Tinslay September 2006
@@ -61,6 +61,8 @@ namespace G4ModelCommandUtils {
     messengers.push_back(new G4ModelCmdSetAuxPtsSize<G4VisTrajContext>(context, placement));
     messengers.push_back(new G4ModelCmdSetAuxPtsType<G4VisTrajContext>(context, placement));
     messengers.push_back(new G4ModelCmdSetAuxPtsFillStyle<G4VisTrajContext>(context, placement));
+
+    messengers.push_back(new G4ModelCmdSetTimeSliceInterval<G4VisTrajContext>(context, placement));
   }  
 }
 
