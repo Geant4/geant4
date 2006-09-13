@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ViewParameters.hh,v 1.23 2006-09-04 11:45:36 allison Exp $
+// $Id: G4ViewParameters.hh,v 1.24 2006-09-13 13:15:10 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -235,8 +235,7 @@ private:
   G4Plane3D    fSectionPlane;    // Cut plane for section drawing (DCUT).
   CutawayMode  fCutawayMode;     // Cutaway mode.
   G4Planes     fCutawayPlanes;   // Set of planes used for cutaway.
-  G4bool       fExplode;         // Explode flag.
-  G4double     fExplodeFactor;
+  G4double     fExplodeFactor;   // Explode along radius by this factor.
   G4int        fNoOfSides;       // ...if polygon approximates circle.
   G4Vector3D   fViewpointDirection;
   G4Vector3D   fUpVector;        // Up vector.  (Warning: MUST NOT be parallel

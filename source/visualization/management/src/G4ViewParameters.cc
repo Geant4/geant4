@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ViewParameters.cc,v 1.26 2006-09-04 11:45:36 allison Exp $
+// $Id: G4ViewParameters.cc,v 1.27 2006-09-13 13:15:10 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -50,7 +50,6 @@ G4ViewParameters::G4ViewParameters ():
   fSectionPlane (),
   fCutawayMode (cutawayUnion),
   fCutawayPlanes (),
-  fExplode (false),
   fExplodeFactor (1.),
   fNoOfSides (24),
   fViewpointDirection (G4Vector3D (0., 0., 1.)),  // On z-axis.
@@ -254,7 +253,6 @@ void G4ViewParameters::PrintDifferences (const G4ViewParameters& v) const {
       (fVisibleDensity       != v.fVisibleDensity)       ||
       (fCullCovered          != v.fCullCovered)          ||
       (fSection              != v.fSection)              ||
-      (fExplode              != v.fExplode)              ||
       (fNoOfSides            != v.fNoOfSides)            ||
       (fUpVector             != v.fUpVector)             ||
       (fFieldHalfAngle       != v.fFieldHalfAngle)       ||
@@ -294,7 +292,7 @@ void G4ViewParameters::PrintDifferences (const G4ViewParameters& v) const {
     }
   }
 
-  if (fExplode) {
+  if (IsExplode()) {
     if (fExplodeFactor != v.fExplodeFactor)
       G4cout << "Difference in explode factor." << G4endl;
   }
@@ -367,9 +365,7 @@ std::ostream& operator << (std::ostream& os, const G4ViewParameters& v) {
     os << "\n  No cutaway planes";
   }
 
-  os << "\n  Explode flag: ";
-  if (v.fExplode) os << "true, explode factor: " << v.fExplodeFactor;
-  else            os << "false";
+  os << "\n  Explode factor: " << v.fExplodeFactor;
 
   os << "\n  No. of sides used in circle polygon approximation: "
      << v.fNoOfSides;
@@ -460,7 +456,7 @@ G4bool G4ViewParameters::operator != (const G4ViewParameters& v) const {
       (fCullCovered          != v.fCullCovered)          ||
       (fSection              != v.fSection)              ||
       (IsCutaway()           != v.IsCutaway())           ||
-      (fExplode              != v.fExplode)              ||
+      (IsExplode()           != v.IsExplode())           ||
       (fNoOfSides            != v.fNoOfSides)            ||
       (fUpVector             != v.fUpVector)             ||
       (fFieldHalfAngle       != v.fFieldHalfAngle)       ||
@@ -499,7 +495,7 @@ G4bool G4ViewParameters::operator != (const G4ViewParameters& v) const {
     }
   }
 
-  if (fExplode &&
+  if (IsExplode() &&
       (fExplodeFactor != v.fExplodeFactor)) return true;
 
   return false;
