@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VisManager.cc,v 1.101 2006-09-12 18:55:45 tinslay Exp $
+// $Id: G4VisManager.cc,v 1.102 2006-09-13 13:20:05 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -971,6 +971,7 @@ void G4VisManager::RegisterMessengers () {
   RegisterMessenger(new G4VisCommandViewerClear);
   RegisterMessenger(new G4VisCommandViewerClearCutawayPlanes);
   RegisterMessenger(new G4VisCommandViewerClearTransients);
+  RegisterMessenger(new G4VisCommandViewerClone);
   RegisterMessenger(new G4VisCommandViewerCreate);
   RegisterMessenger(new G4VisCommandViewerDolly);
   RegisterMessenger(new G4VisCommandViewerFlush);
