@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewer.hh,v 1.22 2006-09-04 11:48:15 allison Exp $
+// $Id: G4VisCommandsViewer.hh,v 1.23 2006-09-13 13:17:29 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer commands - John Allison  25th October 1998
@@ -113,6 +113,19 @@ private:
   G4VisCommandViewerClearTransients& operator =
   (const G4VisCommandViewerClearTransients&);
   G4UIcmdWithAString* fpCommand;
+};
+
+class G4VisCommandViewerClone: public G4VVisCommandViewer {
+public:
+  G4VisCommandViewerClone ();
+  virtual ~G4VisCommandViewerClone ();
+  G4String GetCurrentValue (G4UIcommand* command);
+  void SetNewValue (G4UIcommand* command, G4String newValue);
+private:
+  G4VisCommandViewerClone (const G4VisCommandViewerClone&);
+  G4VisCommandViewerClone& operator =
+  (const G4VisCommandViewerClone&);
+  G4UIcommand* fpCommand;
 };
 
 class G4VisCommandViewerCreate: public G4VVisCommandViewer {

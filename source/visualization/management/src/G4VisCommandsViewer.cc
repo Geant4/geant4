@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewer.cc,v 1.62 2006-09-04 11:48:15 allison Exp $
+// $Id: G4VisCommandsViewer.cc,v 1.63 2006-09-13 13:17:29 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer commands - John Allison  25th October 1998
@@ -109,7 +109,7 @@ G4VisCommandViewerAddCutawayPlane::~G4VisCommandViewerAddCutawayPlane () {
 }
 
 G4String G4VisCommandViewerAddCutawayPlane::GetCurrentValue (G4UIcommand*) {
-    return "";
+  return "";
 }
 
 void G4VisCommandViewerAddCutawayPlane::SetNewValue (G4UIcommand* command, G4String newValue) {
@@ -191,7 +191,7 @@ G4VisCommandViewerChangeCutawayPlane::~G4VisCommandViewerChangeCutawayPlane () {
 }
 
 G4String G4VisCommandViewerChangeCutawayPlane::GetCurrentValue (G4UIcommand*) {
-    return "";
+  return "";
 }
 
 void G4VisCommandViewerChangeCutawayPlane::SetNewValue (G4UIcommand* command, G4String newValue) {
@@ -250,7 +250,7 @@ G4VisCommandViewerClear::~G4VisCommandViewerClear () {
 
 G4String G4VisCommandViewerClear::GetCurrentValue (G4UIcommand*) {
   G4VViewer* viewer = fpVisManager -> GetCurrentViewer ();
-    return viewer ? viewer -> GetName () : G4String("none");
+  return viewer ? viewer -> GetName () : G4String("none");
 }
 
 void G4VisCommandViewerClear::SetNewValue (G4UIcommand*, G4String newValue) {
@@ -336,7 +336,7 @@ G4VisCommandViewerClearTransients::~G4VisCommandViewerClearTransients () {
 
 G4String G4VisCommandViewerClearTransients::GetCurrentValue (G4UIcommand*) {
   G4VViewer* viewer = fpVisManager -> GetCurrentViewer ();
-    return viewer ? viewer -> GetName () : G4String("none");
+  return viewer ? viewer -> GetName () : G4String("none");
 }
 
 void G4VisCommandViewerClearTransients::SetNewValue (G4UIcommand*, G4String newValue) {
@@ -363,6 +363,126 @@ void G4VisCommandViewerClearTransients::SetNewValue (G4UIcommand*, G4String newV
 	   << G4endl;
   }
 
+}
+
+////////////// /vis/viewer/clone ///////////////////////////////////////
+
+G4VisCommandViewerClone::G4VisCommandViewerClone () {
+  G4bool omitable;
+  fpCommand = new G4UIcommand ("/vis/viewer/clone", this);
+  fpCommand -> SetGuidance ("Clones viewer.");
+  fpCommand -> SetGuidance 
+    ("By default, clones current viewer.  Clone becomes current."
+     "\nClone name, if not provided, is derived from the original name."
+     "\n\"/vis/viewer/list\" to see  possible viewer names.");
+  G4UIparameter* parameter;
+  parameter = new G4UIparameter ("original-viewer-name", 's', omitable = true);
+  parameter -> SetCurrentAsDefault (true);
+  fpCommand -> SetParameter (parameter);
+  parameter = new G4UIparameter ("clone-name", 's', omitable = true);
+  parameter -> SetDefaultValue ("none");
+  fpCommand -> SetParameter (parameter);
+}
+
+G4VisCommandViewerClone::~G4VisCommandViewerClone () {
+  delete fpCommand;
+}
+
+G4String G4VisCommandViewerClone::GetCurrentValue (G4UIcommand*) {
+  G4VViewer* viewer = fpVisManager -> GetCurrentViewer ();
+  G4String originalName = viewer ? viewer -> GetName () : G4String("none");
+  return "\"" + originalName + "\"";
+}
+
+void G4VisCommandViewerClone::SetNewValue (G4UIcommand*, G4String newValue) {
+
+  G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
+
+  G4String originalName, cloneName;
+  std::istringstream is (newValue);
+
+  // Need to handle the possibility that the names contain embedded
+  // blanks within quotation marks...
+  char c;
+  while (is.get(c) && c == ' ');
+  if (c == '"') {
+    while (is.get(c) && c != '"') originalName += c;
+  }
+  else {
+    originalName += c;
+    while (is.get(c) && c != ' ') originalName += c;
+  }
+  originalName = originalName.strip (G4String::both, ' ');
+  originalName = originalName.strip (G4String::both, '"');
+
+  G4VViewer* originalViewer = fpVisManager -> GetViewer (originalName);
+  if (!originalViewer) {
+    if (verbosity >= G4VisManager::errors) {
+      G4cout << "ERROR: Viewer \"" << originalName
+	     << "\" not found - \"/vis/viewer/list\" to see possibilities."
+	     << G4endl;
+    }
+    return;
+  }
+  originalName = originalViewer->GetName();  // Ensures long name.
+
+  while (is.get(c) && c == ' ');
+  if (c == '"') {
+    while (is.get(c) && c != '"') cloneName += c;
+  }
+  else {
+    cloneName += c;
+    while (is.get(c) && c != ' ') cloneName += c;
+  }
+  cloneName = cloneName.strip (G4String::both, ' ');
+  cloneName = cloneName.strip (G4String::both, '"');
+
+  if (cloneName == "none") {
+    G4int subID = 0;
+    do {
+      cloneName = originalName;
+      std::ostringstream oss;
+      oss << '-' << subID++;
+      G4String::size_type lastDashPosition, nextSpacePosition;
+      if ((lastDashPosition = cloneName.rfind('-')) !=  G4String::npos &&
+	  (nextSpacePosition = cloneName.find(" ", lastDashPosition)) !=
+	  G4String::npos) {
+	cloneName.insert(nextSpacePosition, oss.str());
+      } else {
+	cloneName.insert(cloneName.find(' '), oss.str());
+      }
+    } while (fpVisManager -> GetViewer (cloneName));
+  }
+
+  if (fpVisManager -> GetViewer (cloneName)) {
+    if (verbosity >= G4VisManager::errors) {
+      G4cout << "ERROR: Putative clone viewer \"" << cloneName
+	     << "\" already exists."
+	     << G4endl;
+    }
+    return;
+  }
+
+  G4String windowSizeHint =
+    originalViewer->GetViewParameters().GetXGeometryString();
+
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();
+  G4int keepVerbose = UImanager->GetVerboseLevel();
+  G4int newVerbose(0);
+  if (keepVerbose >= 2 ||
+      fpVisManager->GetVerbosity() >= G4VisManager::confirmations)
+    newVerbose = 2;
+  UImanager->SetVerboseLevel(newVerbose);
+  UImanager->ApplyCommand(G4String("/vis/viewer/select " + originalName));
+  UImanager->ApplyCommand
+    (G4String("/vis/viewer/create ! \"" + cloneName + "\" " + windowSizeHint));
+  UImanager->ApplyCommand(G4String("/vis/viewer/set/all " + originalName));
+  UImanager->SetVerboseLevel(keepVerbose);
+
+  if (verbosity >= G4VisManager::confirmations) {
+    G4cout << "Viewer \"" << originalName << "\" cloned." << G4endl;
+    G4cout << "Clone \"" << cloneName << "\" now current." << G4endl;
+  }
 }
 
 ////////////// /vis/viewer/create ///////////////////////////////////////
