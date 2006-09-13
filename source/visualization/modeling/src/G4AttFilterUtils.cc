@@ -22,7 +22,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AttFilterUtils.cc,v 1.1 2006-09-11 21:52:18 tinslay Exp $
+// $Id: G4AttFilterUtils.cc,v 1.2 2006-09-13 15:18:56 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Visualisation attribute filter utility functions.
@@ -40,6 +40,7 @@
 #include "G4ThreeVector.hh"
 #include "G4TypeKey.hh"
 #include "G4TypeKeyT.hh"
+#include <assert.h>
 
 namespace G4AttFilterUtils {
   
