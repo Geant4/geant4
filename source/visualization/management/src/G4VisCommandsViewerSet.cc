@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewerSet.cc,v 1.44 2006-09-04 11:49:44 allison Exp $
+// $Id: G4VisCommandsViewerSet.cc,v 1.45 2006-09-13 13:19:13 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer/set commands - John Allison  16th May 2000
@@ -147,20 +147,28 @@ G4VisCommandsViewerSet::G4VisCommandsViewerSet ():
   fpCommandEdge->SetParameterName("edge",omitable = true);
   fpCommandEdge->SetDefaultValue(true);
 
+  fpCommandExplodeFactor = new G4UIcmdWithADouble
+    ("/vis/viewer/set/explodeFactor", this);
+  fpCommandExplodeFactor->SetGuidance
+    ("Moves top-level drawn volumes along radius by this factor.");
+  fpCommandExplodeFactor ->
+    SetParameterName("explode-factor", omitable=true);
+  fpCommandExplodeFactor->SetDefaultValue(1.);
+
   fpCommandGlobalLineWidthScale = new G4UIcmdWithADouble
     ("/vis/viewer/set/globalLineWidthScale", this);
-  fpCommandGlobalLineWidthScale -> SetGuidance
+  fpCommandGlobalLineWidthScale->SetGuidance
     ("Multiplies line widths by this factor.");
-  fpCommandGlobalLineWidthScale -> SetParameterName("scale-factorr",
-						    omitable=true);
+  fpCommandGlobalLineWidthScale->
+    SetParameterName("scale-factor", omitable=true);
   fpCommandGlobalLineWidthScale->SetDefaultValue(1.);
 
   fpCommandGlobalMarkerScale = new G4UIcmdWithADouble
     ("/vis/viewer/set/globalMarkerScale", this);
-  fpCommandGlobalMarkerScale -> SetGuidance
+  fpCommandGlobalMarkerScale->SetGuidance
     ("Multiplies marker sizes by this factor.");
-  fpCommandGlobalMarkerScale -> SetParameterName("scale-factorr",
-						 omitable=true);
+  fpCommandGlobalMarkerScale->
+    SetParameterName("scale-factor", omitable=true);
   fpCommandGlobalMarkerScale->SetDefaultValue(1.);
 
   fpCommandHiddenEdge =
@@ -353,6 +361,7 @@ G4VisCommandsViewerSet::~G4VisCommandsViewerSet() {
   delete fpCommandCulling;
   delete fpCommandCutawayMode;
   delete fpCommandEdge;
+  delete fpCommandExplodeFactor;
   delete fpCommandGlobalLineWidthScale;
   delete fpCommandGlobalMarkerScale;
   delete fpCommandHiddenEdge;
@@ -587,6 +596,16 @@ void G4VisCommandsViewerSet::SetNewValue
       G4cout << "Drawing style of viewer \"" << currentViewer->GetName()
 	     << "\" set to " << vp.GetDrawingStyle()
 	     << G4endl;
+    }
+  }
+
+  else if (command == fpCommandExplodeFactor) {
+    G4double explodeFactor
+      = fpCommandGlobalLineWidthScale->GetNewDoubleValue(newValue);
+    vp.SetExplodeFactor(explodeFactor);
+    if (verbosity >= G4VisManager::confirmations) {
+      G4cout << "Explode factor changed to "
+	     << vp.GetExplodeFactor() << G4endl;
     }
   }
 
