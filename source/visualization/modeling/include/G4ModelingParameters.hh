@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ModelingParameters.hh,v 1.14 2006-08-30 10:20:22 allison Exp $
+// $Id: G4ModelingParameters.hh,v 1.15 2006-09-13 13:00:51 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -86,6 +86,8 @@ public: // With description
   G4bool           IsDensityCulling              () const;
   G4double         GetVisibleDensity             () const;
   G4bool           IsCullingCovered              () const;
+  G4bool           IsExplode                     () const;
+  G4double         GetExplodeFactor              () const;
   G4int            GetNoOfSides                  () const;
   const G4Polyhedron* GetSectionPolyhedron       () const;
   const G4Polyhedron* GetCutawayPolyhedron       () const;
@@ -99,6 +101,7 @@ public: // With description
   void SetDensityCulling       (G4bool);
   void SetVisibleDensity       (G4double);
   void SetCullingCovered       (G4bool);
+  void SetExplodeFactor        (G4double explodeFactor);
   G4int SetNoOfSides           (G4int);  // Returns actual number set.
   void SetSectionPolyhedron    (const G4Polyhedron* pSectionPolyhedron);
   void SetCutawayPolyhedron    (const G4Polyhedron* pCutawayPolyhedron);
@@ -114,6 +117,7 @@ private:
   G4bool       fDensityCulling;  // Density culling requested.  If so...
   G4double     fVisibleDensity;  // ...density lower than this not drawn.
   G4bool       fCullCovered;     // Cull daughters covered by opaque mothers.
+  G4double     fExplodeFactor;   // Explode along radius by this factor.
   G4int        fNoOfSides;       // ...if polygon approximates circle.
   const G4Polyhedron* fpSectionPolyhedron;  // For generic section (DCUT).
   const G4Polyhedron* fpCutawayPolyhedron;  // For generic cutaways.

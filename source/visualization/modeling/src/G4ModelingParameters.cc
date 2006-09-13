@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ModelingParameters.cc,v 1.12 2006-08-30 10:20:24 allison Exp $
+// $Id: G4ModelingParameters.cc,v 1.13 2006-09-13 13:00:51 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -47,6 +47,7 @@ G4ModelingParameters::G4ModelingParameters ():
   fDensityCulling        (false),
   fVisibleDensity        (0.01 * g / cm3),
   fCullCovered           (false),
+  fExplodeFactor         (1.),
   fNoOfSides             (24),
   fpSectionPolyhedron    (0),
   fpCutawayPolyhedron    (0)
@@ -70,6 +71,7 @@ G4ModelingParameters::G4ModelingParameters
   fDensityCulling (isDensityCulling),
   fVisibleDensity (visibleDensity),
   fCullCovered    (isCullingCovered),
+  fExplodeFactor  (1.),
   fNoOfSides      (noOfSides),
   fpSectionPolyhedron (0),
   fpCutawayPolyhedron (0)
@@ -155,6 +157,8 @@ std::ostream& operator << (std::ostream& os, const G4ModelingParameters& mp)
   if (mp.fCullCovered) os << "on";
   else                os << "off";
 
+  os << "\n  Explode factor: " << mp.fExplodeFactor;
+
   os << "\n  No. of sides used in circle polygon approximation: "
      << mp.fNoOfSides;
 
@@ -179,6 +183,7 @@ G4bool G4ModelingParameters::operator !=
       (fCullInvisible          != mp.fCullInvisible)          ||
       (fDensityCulling         != mp.fDensityCulling)         ||
       (fCullCovered            != mp.fCullCovered)            ||
+      (fExplodeFactor          != mp.fExplodeFactor)          ||
       (fNoOfSides              != mp.fNoOfSides)              ||
       (fpSectionPolyhedron     != mp.fpSectionPolyhedron)     ||
       (fpCutawayPolyhedron     != mp.fpCutawayPolyhedron)
