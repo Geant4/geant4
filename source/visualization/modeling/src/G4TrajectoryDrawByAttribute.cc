@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TrajectoryDrawByAttribute.cc,v 1.2 2006-09-12 22:03:53 tinslay Exp $
+// $Id: G4TrajectoryDrawByAttribute.cc,v 1.3 2006-09-14 15:41:42 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Jane Tinslay August 2006
@@ -37,6 +37,7 @@
 #include "G4VAttValueFilter.hh"
 #include "G4VisTrajContext.hh"
 #include "G4VTrajectory.hh"
+#include <assert.h>
 #include <sstream>
 
 G4TrajectoryDrawByAttribute::G4TrajectoryDrawByAttribute(const G4String& name, G4VisTrajContext* context)

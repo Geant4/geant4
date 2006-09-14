@@ -22,7 +22,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AttValueFilterT.hh,v 1.1 2006-09-11 21:52:18 tinslay Exp $
+// $Id: G4AttValueFilterT.hh,v 1.2 2006-09-14 15:41:42 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Templated class for G4AttValue filters.
@@ -43,7 +43,7 @@ namespace {
   class IsEqual{
   public:
     IsEqual(const T& value): fValue(value) {};
-    bool operator()(const std::pair<G4String, T>& myPair) const
+    bool operator()(const std::pair<const G4String, T>& myPair) const
     {
       return myPair.second == fValue;
     }
@@ -55,7 +55,7 @@ namespace {
   class InInterval{
   public:
     InInterval(const T& value): fValue(value) {};
-    bool operator()(const std::pair<G4String, std::pair<T, T> >& myPair) const
+    bool operator()(const std::pair<const G4String, std::pair<T, T> >& myPair) const
     {
       T min = myPair.second.first;
       T max = myPair.second.second;

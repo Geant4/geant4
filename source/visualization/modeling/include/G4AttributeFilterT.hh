@@ -22,7 +22,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AttributeFilterT.hh,v 1.3 2006-09-12 22:03:53 tinslay Exp $
+// $Id: G4AttributeFilterT.hh,v 1.4 2006-09-14 15:41:42 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Generic attribute filter.
@@ -38,6 +38,7 @@
 #include "G4AttValue.hh"
 #include "G4SmartFilter.hh"
 #include "G4VAttValueFilter.hh"
+#include <assert.h>
 #include <sstream>
 #include <vector>
 

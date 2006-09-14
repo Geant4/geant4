@@ -1,4 +1,4 @@
-$Id: History,v 1.83 2006-09-13 13:05:26 allison Exp $
+$Id: History,v 1.84 2006-09-14 15:41:42 tinslay Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,8 @@ committal in the CVS repository !
 
 History file for visualization/modeling
 ---------------------------------------
+14th September 2006 Jane Tinslay
+- Fixes for sun
 
 13th September 2006  John Allison
 - G4ModelingParameters: Improved setting and access to explode factor.
