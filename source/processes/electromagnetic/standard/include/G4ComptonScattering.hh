@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ComptonScattering.hh,v 1.17 2006-09-11 12:34:09 maire Exp $
+// $Id: G4ComptonScattering.hh,v 1.18 2006-09-14 10:27:19 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //------------------ G4ComptonScattering physics process -----------------------
@@ -46,7 +46,8 @@
 // 09-11-04, Remove Retrieve tables (V.Ivantchenko)
 // 15-03-05, Redesign - use G4VEmProcess interface (V.Ivantchenko)
 // 04-05-05, Make class to be default (V.Ivanchenko)
-// 09-08-06, modify SetModel(G4VEmModel*) (mma)
+// 09-09-06, modify SetModel(G4VEmModel*) (mma)
+// 12-09-06, move SetModel(G4VEmModel*) in G4VEmProcess (mma)
 // -----------------------------------------------------------------------------
 
 // class description
@@ -81,9 +82,6 @@ public:  // with description
 
   // true for Gamma only.  
   G4bool IsApplicable(const G4ParticleDefinition&);
-
-  // select model  
-  void SetModel(G4VEmModel*);
   
   // Print few lines of informations about the process: validity range,
   virtual void PrintInfo();
@@ -101,7 +99,6 @@ protected:
 private:
      
   G4bool       isInitialised;
-  G4VEmModel*  selectedModel;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

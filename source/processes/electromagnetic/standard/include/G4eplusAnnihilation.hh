@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eplusAnnihilation.hh,v 1.20 2006-09-11 12:34:09 maire Exp $
+// $Id: G4eplusAnnihilation.hh,v 1.21 2006-09-14 10:27:19 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -45,6 +45,7 @@
 // 04-05-05 Make class to be default (V.Ivanchenko)
 // 04-12-05 SetProposedKineticEnergy(0.) for annihilated positron (mma)
 // 09-08-06 add SetModel(G4VEmModel*) (mma)
+// 12-09-06, move SetModel(G4VEmModel*) in G4VEmProcess (mma)
 //
 //
 // Class Description:
@@ -73,9 +74,6 @@ public:
 
   G4bool IsApplicable(const G4ParticleDefinition& p);
 
-  // select model  
-  void SetModel(G4VEmModel*);  
-
   virtual G4VParticleChange* AtRestDoIt(
                              const G4Track& track,
                              const G4Step& stepData);
@@ -99,8 +97,7 @@ protected:
 
 private:
   
-  G4bool       isInitialised;
-  G4VEmModel*  selectedModel;
+  G4bool  isInitialised;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

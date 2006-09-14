@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eplusAnnihilation.cc,v 1.25 2006-09-11 12:34:09 maire Exp $
+// $Id: G4eplusAnnihilation.cc,v 1.26 2006-09-14 10:27:19 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -44,6 +44,7 @@
 // 04-05-05 Make class to be default (V.Ivanchenko)
 // 25-01-06 remove cut dependance in AtRestDoIt (mma)
 // 09-08-06 add SetModel(G4VEmModel*) (mma)
+// 12-09-06, move SetModel(G4VEmModel*) in G4VEmProcess (mma)
 //
 
 //
@@ -64,7 +65,7 @@
 using namespace std;
 
 G4eplusAnnihilation::G4eplusAnnihilation(const G4String& name)
-  : G4VEmProcess(name), isInitialised(false), selectedModel(0)
+  : G4VEmProcess(name), isInitialised(false)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -86,10 +87,10 @@ void G4eplusAnnihilation::InitialiseProcess(const G4ParticleDefinition*)
     SetLambdaBinning(120);
     SetMinKinEnergy(emin);
     SetMaxKinEnergy(emax);
-    if(!selectedModel) selectedModel = new G4eeToTwoGammaModel();
-    selectedModel->SetLowEnergyLimit(emin);
-    selectedModel->SetHighEnergyLimit(emax);
-    AddEmModel(1, selectedModel);
+    if(!Model()) SetModel(new G4eeToTwoGammaModel);
+    Model()->SetLowEnergyLimit(emin);
+    Model()->SetHighEnergyLimit(emax);
+    AddEmModel(1, Model());
   }
 }
 
@@ -98,16 +99,9 @@ void G4eplusAnnihilation::InitialiseProcess(const G4ParticleDefinition*)
 void G4eplusAnnihilation::PrintInfo()
 {
   G4cout
-    << "      Sampling according " << selectedModel->GetName() << " model"   
+    << "      Sampling according " << Model()->GetName() << " model"   
     << G4endl;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void G4eplusAnnihilation::SetModel(G4VEmModel* model)
-{
-  selectedModel = model;
-}  
+} 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

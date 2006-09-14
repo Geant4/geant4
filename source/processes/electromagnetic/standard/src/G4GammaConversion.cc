@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GammaConversion.cc,v 1.26 2006-09-11 12:34:09 maire Exp $
+// $Id: G4GammaConversion.cc,v 1.27 2006-09-14 10:27:19 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -63,6 +63,7 @@
 //          from G4VEmProcess (V.Ivanchenko) 
 // 04-05-05, Make class to be default (V.Ivanchenko)
 // 09-08-06, add SetModel(G4VEmModel*) (mma)
+// 12-09-06, move SetModel(G4VEmModel*) in G4VEmProcess (mma)
 // -----------------------------------------------------------------------------
 
 #include "G4GammaConversion.hh"
@@ -75,8 +76,7 @@ using namespace std;
 
 G4GammaConversion::G4GammaConversion(const G4String& processName,
   G4ProcessType type):G4VEmProcess (processName, type),
-    isInitialised(false),
-    selectedModel(0)    
+    isInitialised(false)
 {
   SetLambdaBinning(100);
   SetMinKinEnergy(2.0*electron_mass_c2);
@@ -99,10 +99,10 @@ void G4GammaConversion::InitialiseProcess(const G4ParticleDefinition*)
     G4double emin = max(MinKinEnergy(), 2.0*electron_mass_c2);
     SetMinKinEnergy(emin);
     G4double emax = MaxKinEnergy();
-    if(!selectedModel) selectedModel = new G4BetheHeitlerModel();
-    selectedModel->SetLowEnergyLimit(emin);
-    selectedModel->SetHighEnergyLimit(emax);
-    AddEmModel(1, selectedModel);
+    if(!Model()) SetModel(new G4BetheHeitlerModel);
+    Model()->SetLowEnergyLimit(emin);
+    Model()->SetHighEnergyLimit(emax);
+    AddEmModel(1, Model());
   } 
 }
 
@@ -114,15 +114,8 @@ void G4GammaConversion::PrintInfo()
     << " Total cross sections has a good parametrisation" 
     << " from 1.5 MeV to 100 GeV for all Z;"
     << "\n      sampling secondary e+e- according "
-    << selectedModel->GetName() << " model"
+    << Model()->GetName() << " model"
     << G4endl;
 }         
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void G4GammaConversion::SetModel(G4VEmModel* model)
-{
-  selectedModel = model;
-}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

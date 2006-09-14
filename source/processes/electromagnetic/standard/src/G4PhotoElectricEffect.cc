@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PhotoElectricEffect.cc,v 1.36 2006-09-11 12:34:09 maire Exp $
+// $Id: G4PhotoElectricEffect.cc,v 1.37 2006-09-14 10:27:19 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -65,6 +65,7 @@
 //           from G4VEmProcess (V.Ivanchenko)
 // 04-05-05, Make class to be default (V.Ivanchenko)
 // 09-08-06, add SetModel(G4VEmModel*) (mma)
+// 12-09-06, move SetModel(G4VEmModel*) in G4VEmProcess (mma)
 // -----------------------------------------------------------------------------
 
 #include "G4PhotoElectricEffect.hh"
@@ -77,8 +78,7 @@ using namespace std;
 
 G4PhotoElectricEffect::G4PhotoElectricEffect(const G4String& processName,
   G4ProcessType type):G4VEmProcess (processName, type),
-    isInitialised(false),
-    selectedModel(0)    
+    isInitialised(false)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -92,13 +92,12 @@ void G4PhotoElectricEffect::InitialiseProcess(const G4ParticleDefinition*)
 {
   if(!isInitialised) {
     isInitialised = true;
-    //    SetVerboseLevel(1);
     SetBuildTableFlag(false);
     SetSecondaryParticle(G4Electron::Electron());
-    if(!selectedModel) selectedModel = new G4PEEffectModel();
-    selectedModel->SetLowEnergyLimit(MinKinEnergy());
-    selectedModel->SetHighEnergyLimit(MaxKinEnergy());
-    AddEmModel(1, selectedModel);
+    if(!Model()) SetModel(new G4PEEffectModel);
+    Model()->SetLowEnergyLimit(MinKinEnergy());
+    Model()->SetHighEnergyLimit(MaxKinEnergy());
+    AddEmModel(1, Model());
   }
 }
 
@@ -108,15 +107,8 @@ void G4PhotoElectricEffect::PrintInfo()
 {
   G4cout
     << " Total cross sections from Sandia parametrisation. "
-    << "\n      Sampling according " << selectedModel->GetName() << " model"  
+    << "\n      Sampling according " << Model()->GetName() << " model"  
     << G4endl;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void G4PhotoElectricEffect::SetModel(G4VEmModel* model)
-{
-  selectedModel = model;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
