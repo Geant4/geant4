@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 
-#include "CLHEP/Units/PhysicalConstants.h"
+#include <CLHEP/Units/PhysicalConstants.h>
 
 using CLHEP::pi;
 using CLHEP::twopi;
