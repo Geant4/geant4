@@ -73,8 +73,8 @@ public:
 
   G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack, 
                                               G4Nucleus& theNucleus);
-  virtual G4ReactionProductVector * Propagate(G4KineticTrackVector * secondaries,
-				      G4V3DNucleus * nucleus);
+  virtual G4ReactionProductVector * Propagate(G4KineticTrackVector *,
+					      G4V3DNucleus *);
 
 private:
 
@@ -90,15 +90,15 @@ private:
   }
   void PrintWelcomeMessage();
   void BuildTargetList();
-  void FindCollisions(G4KineticTrackVector * secondaries);
-  void FindDecayCollision(G4KineticTrack * secondary);
-  void FindLateParticleCollision(G4KineticTrack * secondary);
-  G4bool ApplyCollision(G4CollisionInitialState * collision);
+  void FindCollisions(G4KineticTrackVector *);
+  void FindDecayCollision(G4KineticTrack *);
+  void FindLateParticleCollision(G4KineticTrack *);
+  G4bool ApplyCollision(G4CollisionInitialState *);
   G4bool Capture(G4bool verbose=false);
   G4bool Absorb();
-  G4bool CheckPauliPrinciple(G4KineticTrackVector * products);
+  G4bool CheckPauliPrinciple(G4KineticTrackVector *);
   G4double GetExcitationEnergy();
-  G4bool CheckDecay(G4KineticTrackVector * products);
+  G4bool CheckDecay(G4KineticTrackVector *);
   void CorrectFinalPandE();
   void UpdateTracksAndCollisions(G4KineticTrackVector * oldSecondaries,
 				 G4KineticTrackVector * oldTarget,
@@ -110,8 +110,8 @@ private:
   void StepParticlesOut();
   G4LorentzVector GetFinal4Momentum();
   G4LorentzVector GetFinalNucleusMomentum();
-  G4ReactionProductVector * Propagate1H1(G4KineticTrackVector * secondaries,
-				      G4V3DNucleus * nucleus);
+  G4ReactionProductVector * Propagate1H1(G4KineticTrackVector *,
+					 G4V3DNucleus *);
   G4double GetIonMass(G4int Z, G4int A);
   
 // utility methods

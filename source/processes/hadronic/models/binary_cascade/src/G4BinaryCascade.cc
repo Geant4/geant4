@@ -90,8 +90,13 @@ G4BinaryCascade::G4BinaryCascade() : G4VIntraNuclearTransportModel()
   theDecay=new G4BCDecay;
   theLateParticle= new G4BCLateParticle;
   theImR.push_back(theDecay);
-  theImR.push_back(new G4Scatterer);
-  theImR.push_back(new G4MesonAbsorption);
+  G4Scatterer * aSc=new G4Scatterer;
+  theImR.push_back(aSc);
+//  theImR.push_back(new G4Scatterer);
+  G4MesonAbsorption * aAb=new G4MesonAbsorption;
+  theImR.push_back(aAb);
+//  theImR.push_back(new G4MesonAbsorption);
+G4cout << "CTOR: decay ="<< theDecay << ", Scatter=" << aSc <<", MesonAbsorb="<<aAb << G4endl;
   thePropagator = new G4RKPropagation;
   theCurrentTime = 0.;
   theCutOnP = 90*MeV; 
@@ -151,9 +156,6 @@ G4HadFinalState * G4BinaryCascade::ApplyYourself(const G4HadProjectile & aTrack,
   theParticleChange.Clear();
 // initialize the G4V3DNucleus from G4Nucleus
   the3DNucleus = new G4Fancy3DNucleus;
-  the3DNucleus->Init(aNucleus.GetN(), aNucleus.GetZ());
-
-  thePropagator->Init(the3DNucleus);
 
 // Build a KineticTrackVector with the G4Track
   G4KineticTrackVector * secondaries = new G4KineticTrackVector;
@@ -178,42 +180,38 @@ G4HadFinalState * G4BinaryCascade::ApplyYourself(const G4HadProjectile & aTrack,
   thePrimaryType = definition;
   thePrimaryEscape = false;
 
-// try untill an interaction will happen
+// try until an interaction will happen
   G4ReactionProductVector * products = 0;
-  G4double radius = the3DNucleus->GetOuterRadius()+3*fermi;
   G4int interactionCounter = 0;
   do
   {
 // reset status that could be changed in previous loop event
     theCollisionMgr->ClearAndDestroy();
-    ClearAndDestroy(&theTargetList);  // clear and rebuild theTargetList
-    the3DNucleus->Init(aNucleus.GetN(), aNucleus.GetZ());
-    BuildTargetList();
-    G4KineticTrack * kt = new G4KineticTrack(definition, 0., initialPosition,
-					     initial4Momentum);
-// Note: secondaries has been cleared by Propagate() in the previous loop event
-    secondaries->push_back(kt);
 
-    while(theCollisionMgr->Entries() == 0)  // until we FIND a collision...
-    {
-      theCurrentTime=0;
-      initialPosition=GetSpherePoint(1.1*radius, initial4Momentum);  // get random position
-      kt->SetPosition(initialPosition);         // kt is in secondaries!!
-      kt->SetState(G4KineticTrack::outside);
-      FindCollisions(secondaries);
-    }
     if(products != NULL)
     {  // free memory from previous loop event
       ClearAndDestroy(products);
       delete products;
+      products=0;
     }
-    products = Propagate(secondaries, the3DNucleus);
 
-// --------- debug
-// untill Propagate will be able to return some product...
-//  if(1)
-//    return &theParticleChange;
-//  --------- end debug
+    the3DNucleus->Init(aNucleus.GetN(), aNucleus.GetZ());
+    thePropagator->Init(the3DNucleus);
+    //      GF Leak??? but where to delete?
+    G4KineticTrack * kt = new G4KineticTrack(definition, 0., initialPosition,
+					     initial4Momentum);
+    do                  // sample impact parameter until collisions are found 
+    {
+      theCurrentTime=0;
+      G4double radius = the3DNucleus->GetOuterRadius()+3*fermi;
+      initialPosition=GetSpherePoint(1.1*radius, initial4Momentum);  // get random position
+      kt->SetPosition(initialPosition);         
+      kt->SetState(G4KineticTrack::outside);
+//    Note: secondaries has been cleared by Propagate() in the previous loop event
+      secondaries->push_back(kt);
+      products = Propagate(secondaries, the3DNucleus);
+    } while(! products );  // until we FIND a collision...
+
     if(++interactionCounter>99) break;
   } while(products->size() == 0);  // ...untill we find an ALLOWED collision
 
@@ -224,7 +222,7 @@ G4HadFinalState * G4BinaryCascade::ApplyYourself(const G4HadProjectile & aTrack,
     theParticleChange.SetMomentumChange(aTrack.Get4Momentum().vect().unit());
     return &theParticleChange;
   }
-//  G4cout << "HKM Applyyourself: number of products " << products->size() << G4endl;
+//  G4cout << "BIC Applyyourself: number of products " << products->size() << G4endl;
 
 // Fill the G4ParticleChange * with products
   theParticleChange.SetStatusChange(stopAndKill);
@@ -265,6 +263,7 @@ G4HadFinalState * G4BinaryCascade::ApplyYourself(const G4HadProjectile & aTrack,
   delete products;
   delete secondaries;
 
+
   delete the3DNucleus;
   the3DNucleus = NULL;  // protect from wrong usage...
 
@@ -293,7 +292,8 @@ G4ReactionProductVector * G4BinaryCascade::Propagate(
   theCurrentTime=0;
 // build theSecondaryList, theProjectileList and theCapturedList
   ClearAndDestroy(&theCapturedList);
-  ClearAndDestroy(&theSecondaryList);
+//  ClearAndDestroy(&theSecondaryList);
+  theSecondaryList.clear();
   ClearAndDestroy(&theProjectileList);
   ClearAndDestroy(&theFinalState);
   std::vector<G4KineticTrack *>::iterator iter;
@@ -302,8 +302,6 @@ G4ReactionProductVector * G4BinaryCascade::Propagate(
      return Propagate1H1(secondaries,nucleus);
   }
 
-  the3DNucleus = nucleus;
-  ClearAndDestroy(&theTargetList);
   BuildTargetList();
   thePropagator->Init(the3DNucleus);
 
@@ -321,31 +319,23 @@ G4ReactionProductVector * G4BinaryCascade::Propagate(
     } else
     {
        theSecondaryList.push_back(*iter);
-       G4cout << " Adding initial secondary " << *iter << " time" << (*iter)->GetFormationTime()<< G4endl;
+       G4cout << " Adding initial secondary " << *iter 
+                              << " time" << (*iter)->GetFormationTime()
+			      << ", state " << (*iter)->GetState() << G4endl;
     }
     theCollisionMgr->Print();
     theProjectileList.push_back(new G4KineticTrack(*(*iter)));
   }
+  FindCollisions(&theSecondaryList);
   secondaries->clear(); // Don't leave "G4KineticTrack *"s in two vectors
 
 
 // if called stand alone, build theTargetList and find first collisions
 
-  if(theCollisionMgr->Entries() == 0)
+  if(theCollisionMgr->Entries() == 0 )      //late particles ALWAYS create Entries
   {
-    G4cout << " enter code for no initital collisions" << G4endl;
-//    the3DNucleus = nucleus;
-//    ClearAndDestroy(&theTargetList);
-//    BuildTargetList();
-
-    FindCollisions(&theSecondaryList);
-    G4cout << " collisions : " << theCollisionMgr->Entries() << " " ;
-     if ( theCollisionMgr->Entries() > 0 ) 
-     {
-            G4cout << " first " << theCollisionMgr->GetNextCollision()->GetCollisionTime() << " " 
-	    << " currentTime " << theCurrentTime;
-     }
-    G4cout << G4endl;
+      delete products;
+      return 0;
   }
 
 // end of initialization: do the job now
@@ -800,6 +790,8 @@ void G4BinaryCascade::BuildTargetList()
     return;
   }
 
+  ClearAndDestroy(&theTargetList);  // clear theTargetList before rebuilding
+
   G4Nucleon * nucleon;
   G4ParticleDefinition * definition;
   G4ThreeVector pos;
@@ -874,9 +866,10 @@ void  G4BinaryCascade::FindCollisions(G4KineticTrackVector * secondaries)
     {
       G4cout << "G4BinaryCascade::FindCollisions(): negative m2:" << (*i)->GetTrackingMomentum().mag2() << G4endl;
     } 
-for(std::vector<G4BCAction *>::iterator j = theImR.begin();
+    for(std::vector<G4BCAction *>::iterator j = theImR.begin();
         j!=theImR.end(); j++)
     {
+      G4cout << "G4BinaryCascade::FindCollisions: at action " << *j << G4endl; 
       const std::vector<G4CollisionInitialState *> & aCandList
           = (*j)->GetCollisions(*i, theTargetList, theCurrentTime);
       for(size_t count=0; count<aCandList.size(); count++)
@@ -950,11 +943,11 @@ G4bool G4BinaryCascade::ApplyCollision(G4CollisionInitialState * collision)
 #ifdef debug_BIC_ApplyCollision
   G4cerr << "G4BinaryCascade::ApplyCollision start"<<G4endl;
 #endif
-
+  theCollisionMgr->Print();
   G4KineticTrack * primary = collision->GetPrimary();
   G4KineticTrackVector target_collection=collision->GetTargetCollection();
   G4bool haveTarget=target_collection.size()>0;
-  if( haveTarget && (primary->GetState() != G4KineticTrack::inside) )
+//  if( haveTarget && (primary->GetState() != G4KineticTrack::inside) )
   {
 #ifdef debug_G4BinaryCascade
      G4cout << "G4BinaryCasacde::ApplyCollision(): StateError " << primary << G4endl;
@@ -994,7 +987,11 @@ G4bool G4BinaryCascade::ApplyCollision(G4CollisionInitialState * collision)
   std::vector<G4KineticTrack *>::iterator titer;
   for ( titer=target_collection.begin() ; titer!=target_collection.end(); ++titer)
   {
-     initial_Efermi+= RKprop->GetField((*titer)->GetDefinition()->GetPDGEncoding(),(*titer)->GetPosition());
+     G4ParticleDefinition * aDef=(*titer)->GetDefinition();
+     G4int aCode=aDef->GetPDGEncoding();
+     G4ThreeVector aPos=(*titer)->GetPosition();
+     initial_Efermi+= RKprop->GetField(aCode, aPos);
+//     initial_Efermi+= RKprop->GetField((*titer)->GetDefinition()->GetPDGEncoding(),(*titer)->GetPosition());
   }
 //****************************************
   G4KineticTrackVector * products=0;
@@ -1035,7 +1032,7 @@ if ( !products )
      G4cerr << "G4BinaryCascade::ApplyCollision blocked"<<G4endl;
    #endif
      if (products) ClearAndDestroy(products);
-     if ( haveTarget ) FindDecayCollision(primary);  // for decay, sample new decay
+     if ( ! haveTarget ) FindDecayCollision(primary);  // for decay, sample new decay
      delete products;
      return false;
   }
@@ -1082,10 +1079,9 @@ if ( !products )
   G4KineticTrackVector toFinalState;
   for(std::vector<G4KineticTrack *>::iterator i =products->begin(); i != products->end(); i++)
   {
-// secondaries are created inside nucleus
     if ( ! lateParticleCollision ) 
     {
-       (*i)->SetState(G4KineticTrack::inside);
+       (*i)->SetState(G4KineticTrack::inside);  // secondaries are created inside nucleus
        finalBaryon+=(*i)->GetDefinition()->GetBaryonNumber();
        finalCharge+=G4lrint((*i)->GetDefinition()->GetPDGCharge());
     } else {
