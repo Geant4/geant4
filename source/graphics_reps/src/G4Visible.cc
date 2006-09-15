@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Visible.cc,v 1.14 2006-06-29 19:07:30 gunter Exp $
+// $Id: G4Visible.cc,v 1.15 2006-09-15 09:58:43 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -35,16 +35,25 @@
 #include "G4VisAttributes.hh"
 #include "G4ios.hh"
 
-G4Visible::G4Visible (): fpVisAttributes (0) {}
+G4Visible::G4Visible ():
+  fpVisAttributes (0),
+  fAllocatedVisAttributes (false)
+{}
 
-G4Visible::~G4Visible () {}
+G4Visible::~G4Visible () {
+  if (fAllocatedVisAttributes) delete fpVisAttributes;
+}
 
 G4Visible::G4Visible (const G4VisAttributes* pVA):
   fpVisAttributes (pVA)
 {}
 
 void G4Visible::SetVisAttributes (const G4VisAttributes& VA) {
+  // Allocate G4VisAttributes on the heap in case the user specifies a
+  // short-lived VA for a long-lived G4Visible.  Flag so that it can
+  // be deleted in the destructor.
   fpVisAttributes = new G4VisAttributes(VA);
+  fAllocatedVisAttributes = true;
 }
 
 G4bool G4Visible::operator != (const G4Visible& right) const {

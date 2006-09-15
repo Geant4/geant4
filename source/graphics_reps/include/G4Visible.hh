@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Visible.hh,v 1.10 2006-06-29 19:06:26 gunter Exp $
+// $Id: G4Visible.hh,v 1.11 2006-09-15 09:58:43 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -75,6 +75,7 @@ public: // With description
 protected:
 
   const G4VisAttributes* fpVisAttributes;
+  G4bool fAllocatedVisAttributes;
 
 };
 
