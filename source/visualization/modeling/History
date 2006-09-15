@@ -1,4 +1,4 @@
-$Id: History,v 1.84 2006-09-14 15:41:42 tinslay Exp $
+$Id: History,v 1.85 2006-09-15 09:47:59 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,11 @@ committal in the CVS repository !
 
 History file for visualization/modeling
 ---------------------------------------
+
+------------------------------------------------------
+15th September 2006  John Allison  (modeling-V08-01-06)
+- G4PhysicalVolumeModel.ccChanged "Bookkeeping" to "Physics
+
 14th September 2006 Jane Tinslay
 - Fixes for sun
 
@@ -35,6 +40,7 @@ History file for visualization/modeling
 - Add attribute based trajectory drawing & filtering, and attribute based
   hit filtering
 
+---------------------------------------------------
 27th August 2006  John Allison  (modeling-V08-01-05)
 - G4ModelingParameters: Added warning flag and section/cutaway polyhedron.
 - G4PhysicalVolumeModel:
