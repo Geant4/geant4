@@ -93,7 +93,7 @@ G4AtomicTransitionManager::G4AtomicTransitionManager(G4int minZ, G4int maxZ,
 	
 	G4int finalShell = fluoManager->VacancyId(vacancyIndex);
 	size_t numberOfTransitions = fluoManager->NumberOfTransitions(vacancyIndex);
-	for (size_t origShellIndex = 0; origShellIndex <= numberOfTransitions;
+	for (size_t origShellIndex = 0; origShellIndex < numberOfTransitions;
 	     origShellIndex++)
 	    
 	  {

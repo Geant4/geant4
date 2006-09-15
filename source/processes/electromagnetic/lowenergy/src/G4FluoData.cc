@@ -117,9 +117,11 @@ G4int G4FluoData::StartShellId(G4int initIndex, G4int vacancyIndex) const
      G4DataVector dataSet = *((*pos).second);
    
      G4int nData = dataSet.size();
+     //The first Element of idMap's dataSets is the original shell of the vacancy, 
+     //so we must start from the first element of dataSet
  if (initIndex >= 0 && initIndex < nData)
 	    {
-	      n =  (G4int) dataSet[initIndex];
+	      n =  (G4int) dataSet[initIndex+1];
 	    
 	    }
    }
@@ -210,7 +212,7 @@ void G4FluoData::LoadData(G4int Z)
   G4int k = 1;
   G4int s = 0;
   
-  G4int vacId = 0;
+  G4int vacIndex = 0;
   G4DataVector* initIds = new G4DataVector;
   G4DataVector* transEnergies = new G4DataVector;
   G4DataVector* transProbabilities = new G4DataVector;
@@ -223,9 +225,9 @@ void G4FluoData::LoadData(G4int Z)
 	if (s == 0)
 	  {
 	    // End of a shell data set
-	    idMap[vacId] = initIds;
-            energyMap[vacId] = transEnergies;
-	    probabilityMap[vacId] = transProbabilities;
+	    idMap[vacIndex] = initIds;
+            energyMap[vacIndex] = transEnergies;
+	    probabilityMap[vacIndex] = transProbabilities;
 	    //	    G4double size=transProbabilities->size();
             G4int n = initIds->size();
 	    
@@ -235,7 +237,7 @@ void G4FluoData::LoadData(G4int Z)
 	    initIds = new G4DataVector;
             transEnergies = new G4DataVector;
 	    transProbabilities = new G4DataVector;
-            vacId++;	
+            vacIndex++;	
 	  }      
 	s++;
 	if (s == nColumns)
@@ -258,24 +260,33 @@ void G4FluoData::LoadData(G4int Z)
 	  {	 
 	    // 2nd column is transition  probabilities
 
-	    transProbabilities->push_back(a);
+	   if (a != -1) transProbabilities->push_back(a);
 	    
 	    k++;
 	  }
 	else if (k%nColumns == 1)
 	  {
-	  // 1st column is shell id
-	       
-	    initIds->push_back(a);
+	    // 1st column is shell id
+	    // if this is the first data of the shell, all the colums are equal 
+	    // to the shell Id; so we skip the next colums ang go to the next row
+	    if(initIds->size() == 0) {
+	      if (a != -1) initIds->push_back((G4int)a);
+	      file >> a;
+	      file >> a;
+	      k=k+2;
+	    } 
+	    else{ 
+	      if (a != -1) initIds->push_back(a);
+	    }
 	    k++;    
-	   
 	  }
 	else if (k%nColumns == 0)
 
 	  {//third column is transition energies
 
-	    G4double e = a * MeV;
-	    transEnergies->push_back(e);
+	    if (a != -1) 
+	      {G4double e = a * MeV;
+	      transEnergies->push_back(e);}
 	   
 	    k=1;
 	  }
@@ -295,9 +306,11 @@ void G4FluoData::PrintData()
 	     <<" ----- "
 	     <<G4endl;
       
-      for (size_t k = 0; k<=NumberOfTransitions(i); k++)
+      for (size_t k = 0; k<NumberOfTransitions(i); k++)
 	{ 
-	  G4int id = StartShellId(k,i);
+	  G4int id = StartShellId(k+1,i);
+	// let's start from 1 because the first (index = 0) element of the vector
+	// is the id of the intial vacancy
 	  G4double e = StartShellEnergy(k,i) /MeV;
 	  G4double p = StartShellProb(k,i); 
 	  G4cout << k <<") Shell id: " << id <<G4endl;

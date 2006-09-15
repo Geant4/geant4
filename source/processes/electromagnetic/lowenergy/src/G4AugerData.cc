@@ -235,7 +235,6 @@ std::vector<G4AugerTransition> G4AugerData::LoadData(G4int Z)
 { 
   // Build the complete string identifying the file with the data set
 
-  if (!augerTransitionTable) {   
     std::ostringstream ost;
     if(Z != 0){
       ost << "au-tr-pr-"<< Z << ".dat";
@@ -449,11 +448,7 @@ std::vector<G4AugerTransition> G4AugerData::LoadData(G4int Z)
     while (a != -2); // end of file
     file.close();
     return augerTransitionVector;
-  }
-  else {
-    G4cout << "AugerTransitionTable already existing -- Auger Data not Loaded" << G4endl;
-    return 0;
-  }
+
 }
 
 void G4AugerData::BuildAugerTransitionTable()
