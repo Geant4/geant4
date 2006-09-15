@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeModel.cc,v 1.51 2006-09-13 12:58:49 allison Exp $
+// $Id: G4PhysicalVolumeModel.cc,v 1.52 2006-09-15 09:46:02 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -666,25 +666,25 @@ const std::map<G4String,G4AttDef>* G4PhysicalVolumeModel::GetAttDefs() const
       = G4AttDefStore::GetInstance("G4PhysicalVolumeModel", isNew);
     if (isNew) {
       (*store)["PVol"] =
-	G4AttDef("PVol","Physical Volume","Bookkeeping","","G4String");
+	G4AttDef("PVol","Physical Volume","Physics","","G4String");
       (*store)["Copy"] =
-	G4AttDef("Copy","Physical Volume Copy No.","Bookkeeping","","G4int");
+	G4AttDef("Copy","Physical Volume Copy No.","Physics","","G4int");
       (*store)["LVol"] =
-	G4AttDef("LVol","Logical Volume","Bookkeeping","","G4String");
+	G4AttDef("LVol","Logical Volume","Physics","","G4String");
       (*store)["Region"] =
-	G4AttDef("Region","Cuts Region","Bookkeeping","","G4String");
+	G4AttDef("Region","Cuts Region","Physics","","G4String");
       (*store)["RootRegion"] =
-	G4AttDef("RootRegion","Root Region (0/1 = false/true)","Bookkeeping","","G4bool");
+	G4AttDef("RootRegion","Root Region (0/1 = false/true)","Physics","","G4bool");
       (*store)["Solid"] =
-	G4AttDef("Solid","Solid Name","Bookkeeping","","G4String");
+	G4AttDef("Solid","Solid Name","Physics","","G4String");
       (*store)["EType"] =
-	G4AttDef("EType","Entity Type","Bookkeeping","","G4String");
+	G4AttDef("EType","Entity Type","Physics","","G4String");
       (*store)["Material"] =
-	G4AttDef("Material","Material Name","Bookkeeping","","G4String");
+	G4AttDef("Material","Material Name","Physics","","G4String");
       (*store)["Density"] =
 	G4AttDef("Density","Material Density","Physics","G4BestUnit","G4double");
       (*store)["State"] =
-	G4AttDef("State","Material State (enum undefined,solid,liquid,gas)","Bookkeeping","","G4String");
+	G4AttDef("State","Material State (enum undefined,solid,liquid,gas)","Physics","","G4String");
       (*store)["Radlen"] =
 	G4AttDef("Radlen","Material Radiation Length","Physics","G4BestUnit","G4double");
     }
