@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.108 2006-09-12 18:29:31 tinslay Exp $
+cvs log $Id: History,v 1.109 2006-09-15 09:59:11 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+---------------------------------------------------------------------------
+15th September 2006  John Allison  (greps-V08-01-04 - coworks vis-V08-01-06)
+- G4Visible: Added fAllocatedVisAttributes to prevent memory leak.
+
 12th September 2006 Jane Tinslay
 - Remove trailing white spaces in G4ConversionUtils
 - Add FilterHit method to G4VVisManager
@@ -30,6 +35,7 @@ committal in the CVS repository !
 6th September 2006 Jane Tinslay
 - Add G4TypeKey & G4TypeKeyT classes
 
+------------------------------------------------
 26th August 2006  John Allison  (greps-V08-01-03)
 - G4VisAttributes: Added time range.
 
