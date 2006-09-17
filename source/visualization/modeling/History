@@ -1,4 +1,4 @@
-$Id: History,v 1.85 2006-09-15 09:47:59 allison Exp $
+$Id: History,v 1.86 2006-09-17 18:15:09 tinslay Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -21,6 +21,10 @@ History file for visualization/modeling
 ---------------------------------------
 
 ------------------------------------------------------
+17th September 2006 Jane Tinslay
+- Shift an assert from G4AttributeFilterT to G4AttFilterUtils - was
+  causing problems with XCode 2.0
+
 15th September 2006  John Allison  (modeling-V08-01-06)
 - G4PhysicalVolumeModel.ccChanged "Bookkeeping" to "Physics
 

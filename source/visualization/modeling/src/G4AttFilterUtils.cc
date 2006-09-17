@@ -22,7 +22,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AttFilterUtils.cc,v 1.2 2006-09-13 15:18:56 allison Exp $
+// $Id: G4AttFilterUtils.cc,v 1.3 2006-09-17 18:15:09 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Visualisation attribute filter utility functions.
@@ -84,8 +84,11 @@ namespace G4AttFilterUtils {
     assert(myKey.IsValid());
 
     G4AttValueFilterFactory* factory = GetAttValueFilterFactory();
-    
-    return factory->Create(myKey);
+ 
+    G4VAttValueFilter*  filter = factory->Create(myKey);
+    assert (0 != filter);
+
+    return filter;
   }
   
 }

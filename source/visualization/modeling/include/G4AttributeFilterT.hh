@@ -22,7 +22,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AttributeFilterT.hh,v 1.4 2006-09-14 15:41:42 tinslay Exp $
+// $Id: G4AttributeFilterT.hh,v 1.5 2006-09-17 18:15:09 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Generic attribute filter.
@@ -38,7 +38,6 @@
 #include "G4AttValue.hh"
 #include "G4SmartFilter.hh"
 #include "G4VAttValueFilter.hh"
-#include <assert.h>
 #include <sstream>
 #include <vector>
 
@@ -135,7 +134,6 @@ G4AttributeFilterT<T>::Evaluate(const T& object) const
     
     // Get new G4AttValue filter
     filter = G4AttFilterUtils::GetNewFilter(attDef);
-    assert (0 != filter);
 
     // Load both interval and single valued data.
     typename ConfigVect::const_iterator iter = fConfigVect.begin();
