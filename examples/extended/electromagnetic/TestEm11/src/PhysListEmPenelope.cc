@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysListEmPenelope.cc,v 1.2 2006-06-29 16:40:31 gunter Exp $
+// $Id: PhysListEmPenelope.cc,v 1.3 2006-09-18 17:26:20 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
