@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ViewParameters.hh,v 1.24 2006-09-13 13:15:10 allison Exp $
+// $Id: G4ViewParameters.hh,v 1.25 2006-09-19 16:02:31 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -134,6 +134,7 @@ public: // With description
   const G4Planes&        GetCutawayPlanes        () const;
         G4bool           IsExplode               () const;
         G4double         GetExplodeFactor        () const;
+  const G4Point3D&       GetExplodeCentre        () const;
         G4int            GetNoOfSides            () const;
   const G4Vector3D&      GetViewpointDirection   () const;
   const G4Vector3D&      GetUpVector             () const;
@@ -189,6 +190,7 @@ public: // With description
   void ClearCutawayPlanes      ();
   void SetExplodeFactor        (G4double explodeFactor);
   void UnsetExplodeFactor      ();
+  void SetExplodeCentre        (const G4Point3D& explodeCentre);
   G4int SetNoOfSides           (G4int nSides);  // Returns actual number set.
   void SetViewpointDirection   (const G4Vector3D& viewpointDirection);
   // Calls the following to get lightpoint direction right too.
@@ -235,7 +237,8 @@ private:
   G4Plane3D    fSectionPlane;    // Cut plane for section drawing (DCUT).
   CutawayMode  fCutawayMode;     // Cutaway mode.
   G4Planes     fCutawayPlanes;   // Set of planes used for cutaway.
-  G4double     fExplodeFactor;   // Explode along radius by this factor.
+  G4double     fExplodeFactor;   // Explode along radius by this factor...
+  G4Point3D    fExplodeCentre;   // ...about this centre.
   G4int        fNoOfSides;       // ...if polygon approximates circle.
   G4Vector3D   fViewpointDirection;
   G4Vector3D   fUpVector;        // Up vector.  (Warning: MUST NOT be parallel

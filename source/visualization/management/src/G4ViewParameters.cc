@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ViewParameters.cc,v 1.27 2006-09-13 13:15:10 allison Exp $
+// $Id: G4ViewParameters.cc,v 1.28 2006-09-19 16:02:31 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -295,6 +295,8 @@ void G4ViewParameters::PrintDifferences (const G4ViewParameters& v) const {
   if (IsExplode()) {
     if (fExplodeFactor != v.fExplodeFactor)
       G4cout << "Difference in explode factor." << G4endl;
+    if (fExplodeCentre != v.fExplodeCentre)
+      G4cout << "Difference in explode centre." << G4endl;
   }
 }
 
@@ -365,7 +367,8 @@ std::ostream& operator << (std::ostream& os, const G4ViewParameters& v) {
     os << "\n  No cutaway planes";
   }
 
-  os << "\n  Explode factor: " << v.fExplodeFactor;
+  os << "\n  Explode factor: " << v.fExplodeFactor
+     << " about centre: " << v.fExplodeCentre;
 
   os << "\n  No. of sides used in circle polygon approximation: "
      << v.fNoOfSides;
@@ -496,7 +499,8 @@ G4bool G4ViewParameters::operator != (const G4ViewParameters& v) const {
   }
 
   if (IsExplode() &&
-      (fExplodeFactor != v.fExplodeFactor)) return true;
+      (fExplodeFactor != v.fExplodeFactor) ||
+      (fExplodeCentre != v.fExplodeCentre)) return true;
 
   return false;
 }

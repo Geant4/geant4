@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.cc,v 1.72 2006-09-13 13:22:27 allison Exp $
+// $Id: G4VSceneHandler.cc,v 1.73 2006-09-19 16:08:06 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -810,6 +810,7 @@ G4ModelingParameters* G4VSceneHandler::CreateModelingParameters ()
     (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::warnings);
 
   pModelingParams->SetExplodeFactor(vp.GetExplodeFactor());
+  pModelingParams->SetExplodeCentre(vp.GetExplodeCentre());
 
   pModelingParams->SetSectionPolyhedron(CreateSectionPolyhedron());
   pModelingParams->SetCutawayPolyhedron(CreateCutawayPolyhedron());

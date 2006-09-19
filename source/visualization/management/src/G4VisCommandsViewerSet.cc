@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewerSet.cc,v 1.45 2006-09-13 13:19:13 allison Exp $
+// $Id: G4VisCommandsViewerSet.cc,v 1.46 2006-09-19 16:08:06 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer/set commands - John Allison  16th May 2000
@@ -147,13 +147,30 @@ G4VisCommandsViewerSet::G4VisCommandsViewerSet ():
   fpCommandEdge->SetParameterName("edge",omitable = true);
   fpCommandEdge->SetDefaultValue(true);
 
-  fpCommandExplodeFactor = new G4UIcmdWithADouble
+  fpCommandExplodeFactor = new G4UIcommand
     ("/vis/viewer/set/explodeFactor", this);
   fpCommandExplodeFactor->SetGuidance
-    ("Moves top-level drawn volumes along radius by this factor.");
-  fpCommandExplodeFactor ->
-    SetParameterName("explode-factor", omitable=true);
-  fpCommandExplodeFactor->SetDefaultValue(1.);
+    ("Moves top-level drawn volumes by this factor from this centre.");
+  parameter = new G4UIparameter("explodeFactor", 'd', omitable=true);
+  parameter->SetParameterRange("explodeFactor>=1.");
+  parameter->SetDefaultValue(1.);
+  fpCommandExplodeFactor->SetParameter(parameter);
+  parameter = new G4UIparameter("x",'d',omitable = true);
+  parameter->SetDefaultValue  (0);
+  parameter->SetGuidance      ("Coordinate of explode centre.");
+  fpCommandExplodeFactor->SetParameter(parameter);
+  parameter = new G4UIparameter("y",'d',omitable = true);
+  parameter->SetDefaultValue  (0);
+  parameter->SetGuidance      ("Coordinate of explode centre.");
+  fpCommandExplodeFactor->SetParameter(parameter);
+  parameter = new G4UIparameter("z",'d',omitable = true);
+  parameter->SetDefaultValue  (0);
+  parameter->SetGuidance      ("Coordinate of explode centre.");
+  fpCommandExplodeFactor->SetParameter(parameter);
+  parameter = new G4UIparameter("unit",'s',omitable = true);
+  parameter->SetDefaultValue  ("m");
+  parameter->SetGuidance      ("Unit of explode centre.");
+  fpCommandExplodeFactor->SetParameter(parameter);
 
   fpCommandGlobalLineWidthScale = new G4UIcmdWithADouble
     ("/vis/viewer/set/globalLineWidthScale", this);
@@ -600,12 +617,17 @@ void G4VisCommandsViewerSet::SetNewValue
   }
 
   else if (command == fpCommandExplodeFactor) {
-    G4double explodeFactor
-      = fpCommandGlobalLineWidthScale->GetNewDoubleValue(newValue);
+    G4double explodeFactor, x, y, z;
+    G4String unitString;
+    std::istringstream is (newValue);
+    is >> explodeFactor >> x >> y >> z >> unitString;
+    G4double unit = G4UIcommand::ValueOf(unitString);
     vp.SetExplodeFactor(explodeFactor);
+    vp.SetExplodeCentre(G4Point3D(x * unit, y * unit, z * unit));
     if (verbosity >= G4VisManager::confirmations) {
-      G4cout << "Explode factor changed to "
-	     << vp.GetExplodeFactor() << G4endl;
+      G4cout << "Explode factor changed to " << vp.GetExplodeFactor()
+	     << " from centre " << vp.GetExplodeCentre()
+	     << G4endl;
     }
   }
 
