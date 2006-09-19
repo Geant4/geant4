@@ -1,4 +1,4 @@
-$Id: History,v 1.376 2006-09-15 10:00:04 allison Exp $
+$Id: History,v 1.377 2006-09-19 16:19:16 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,16 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+-------------------------------------------------
+19th September 2006  John Allison  (vis-V08-01-07)
+- modeling-V08-01-07:
+  o G4ModelingParameters: Added ExplodeCentre
+  o Fix for Mac XCode 2.0 problem.
+- visman-V08-01-06:
+  o G4ViewParameters: Added ExplodeCentre.
+  o Bug fix in /vis/geometry/set/colour.
+- opengl-V08-01-06: Inproved display by time feature.
 
 ---------------------------------------------------------------------------
 15th September 2006  John Allison  (vis-V08-01-06 - coworks greps-V08-01-04)
