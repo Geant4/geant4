@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewerMessenger.cc,v 1.3 2006-08-30 11:47:27 allison Exp $
+// $Id: G4OpenGLViewerMessenger.cc,v 1.4 2006-09-19 16:14:21 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4OpenGLViewerMessenger.hh"
@@ -98,6 +98,15 @@ G4OpenGLViewerMessenger::G4OpenGLViewerMessenger()
     new G4UIcommand("/vis/ogl/set/displayLightFront", this);
   fpCommandDisplayLightFront->SetGuidance
     ("Display the light front at head time.");
+  fpCommandDisplayLightFront->SetGuidance
+    ("Tip: The trajectories can appear of jump ahead of the light front"
+     "\nbecause their time range overlaps the viewer's time range.  To"
+     "\naverage out this discrete time effect, advance the light front by"
+     "\nhalf the trajectories interval. E.g., if the trajectory time slice"
+     "\ninterval is 0.01 ns:"
+     "\n  /vis/ogl/set/displayLightFront true -90 0 0 mm -0.005 ns"
+     "\nTo prevent them beating the light front at all:"
+     "\n  /vis/ogl/set/displayLightFront true -90 0 0 mm -0.01 ns");
   parameter = new G4UIparameter ("displayLightFront", 'b', omitable = false);
   parameter->SetDefaultValue(false);
   fpCommandDisplayLightFront->SetParameter(parameter);
@@ -110,8 +119,14 @@ G4OpenGLViewerMessenger::G4OpenGLViewerMessenger()
   parameter = new G4UIparameter ("originZ", 'd', omitable = true);
   parameter->SetDefaultValue(0.);
   fpCommandDisplayLightFront->SetParameter(parameter);
-  parameter = new G4UIparameter ("unit", 's', omitable = true);
+  parameter = new G4UIparameter ("space_unit", 's', omitable = true);
   parameter->SetDefaultValue("m");
+  fpCommandDisplayLightFront->SetParameter(parameter);
+  parameter = new G4UIparameter ("originT", 'd', omitable = true);
+  parameter->SetDefaultValue(0.);
+  fpCommandDisplayLightFront->SetParameter(parameter);
+  parameter = new G4UIparameter ("time_unit", 's', omitable = true);
+  parameter->SetDefaultValue("s");
   fpCommandDisplayLightFront->SetParameter(parameter);
   parameter = new G4UIparameter ("red", 'd', omitable = true);
   parameter->SetParameterRange("red >= 0. && red <= 1.");
@@ -164,10 +179,19 @@ G4OpenGLViewerMessenger::G4OpenGLViewerMessenger()
   parameter = new G4UIparameter ("time-range-unit", 's', omitable = true);
   parameter->SetDefaultValue("ns");
   fpCommandStartTime->SetParameter(parameter);
+
+  fpCommandTransparency =
+    new G4UIcmdWithABool("/vis/ogl/set/transparency", this);
+  fpCommandTransparency->SetGuidance
+    ("True/false to enable/disable rendering of transparent objects.");
+  fpCommandTransparency->SetParameterName
+    ("transparency-enabled", omitable = true);
+  fpCommandTransparency->SetDefaultValue(true);
 }
 
 G4OpenGLViewerMessenger::~G4OpenGLViewerMessenger ()
 {
+  delete fpCommandTransparency;
   delete fpCommandStartTime;
   delete fpCommandFade;
   delete fpCommandEndTime;
@@ -232,19 +256,22 @@ void G4OpenGLViewerMessenger::SetNewValue
 
   if (command == fpCommandDisplayLightFront)
     {
-      G4String display, originX, originY, originZ, unit;
+      G4String display, originX, originY, originZ, unitS, originT, unitT;
       G4double red, green, blue;
       std::istringstream iss(newValue);
       iss >> display
-	  >> originX >> originY >> originZ >> unit
+	  >> originX >> originY >> originZ >> unitS
+	  >> originT >> unitT
 	  >> red >> green >> blue;
       pViewer->fDisplayLightFront = command->ConvertToBool(display);
       pViewer->fDisplayLightFrontX =
-	command->ConvertToDimensionedDouble(G4String(originX + ' ' + unit));
+	command->ConvertToDimensionedDouble(G4String(originX + ' ' + unitS));
       pViewer->fDisplayLightFrontY =
-	command->ConvertToDimensionedDouble(G4String(originY + ' ' + unit));
+	command->ConvertToDimensionedDouble(G4String(originY + ' ' + unitS));
       pViewer->fDisplayLightFrontZ =
-	command->ConvertToDimensionedDouble(G4String(originZ + ' ' + unit));
+	command->ConvertToDimensionedDouble(G4String(originZ + ' ' + unitS));
+      pViewer->fDisplayLightFrontT =
+	command->ConvertToDimensionedDouble(G4String(originT + ' ' + unitT));
       pViewer->fDisplayLightFrontRed = red;
       pViewer->fDisplayLightFrontGreen = green;
       pViewer->fDisplayLightFrontBlue = blue;
@@ -289,4 +316,11 @@ void G4OpenGLViewerMessenger::SetNewValue
       }
       G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/refresh");
     }
+
+  if (command == fpCommandTransparency)
+    {
+      pViewer->transparency_enabled = command->ConvertToBool(newValue);
+      G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/refresh");
+    }
+
 }
