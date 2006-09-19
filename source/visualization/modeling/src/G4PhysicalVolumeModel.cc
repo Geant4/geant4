@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeModel.cc,v 1.52 2006-09-15 09:46:02 allison Exp $
+// $Id: G4PhysicalVolumeModel.cc,v 1.53 2006-09-19 15:57:01 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -430,16 +430,18 @@ void G4PhysicalVolumeModel::DescribeAndDescend
 
     if (fpMP->IsExplode() && fDrawnPVPath.size() == 1) {
       // For top-level drawn volumes, explode along radius...
+      G4Transform3D centering = G4Translate3D(fpMP->GetExplodeCentre());
+      G4Transform3D centred = centering.inverse() * theNewAT;
       G4Scale3D scale;
       G4Rotate3D rotation;
       G4Translate3D translation;
-      theNewAT.getDecomposition(scale, rotation, translation);
+      centred.getDecomposition(scale, rotation, translation);
       G4double explodeFactor = fpMP->GetExplodeFactor();
       G4Translate3D newTranslation =
 	G4Translate3D(explodeFactor * translation.dx(),
 		      explodeFactor * translation.dy(),
 		      explodeFactor * translation.dz());
-      theNewAT = newTranslation * rotation * scale;
+      theNewAT = centering * newTranslation * rotation * scale;
     }
 
     DescribeSolid (theNewAT, pSol, pVisAttribs, sceneHandler);
