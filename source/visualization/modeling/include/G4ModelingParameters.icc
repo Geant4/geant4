@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ModelingParameters.icc,v 1.9 2006-09-13 13:00:51 allison Exp $
+// $Id: G4ModelingParameters.icc,v 1.10 2006-09-19 15:56:22 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -73,6 +73,10 @@ inline G4double G4ModelingParameters::GetExplodeFactor () const {
   return fExplodeFactor;
 }
 
+inline const G4Point3D& G4ModelingParameters::GetExplodeCentre () const {
+  return fExplodeCentre;
+}
+
 inline G4int G4ModelingParameters::GetNoOfSides () const {
   return fNoOfSides;
 }
@@ -116,6 +120,11 @@ inline void G4ModelingParameters::SetCullingCovered (G4bool value) {
 
 inline void G4ModelingParameters::SetExplodeFactor (G4double explodeFactor) {
   fExplodeFactor = explodeFactor;
+}
+
+inline void G4ModelingParameters::SetExplodeCentre
+(const G4Point3D& explodeCentre) {
+  fExplodeCentre = explodeCentre;
 }
 
 inline void G4ModelingParameters::SetSectionPolyhedron
