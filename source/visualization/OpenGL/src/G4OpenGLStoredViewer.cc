@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredViewer.cc,v 1.18 2006-09-04 12:07:59 allison Exp $
+// $Id: G4OpenGLStoredViewer.cc,v 1.19 2006-09-19 16:16:07 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -146,7 +146,7 @@ void G4OpenGLStoredViewer::DrawDisplayLists () {
     for (size_t i = 0; i < fG4OpenGLStoredSceneHandler.fTOList.size(); ++i) {
       G4OpenGLStoredSceneHandler::TO& to =
 	fG4OpenGLStoredSceneHandler.fTOList[i];
-      if (to.fEndTime >= fStartTime && to.fEndTime <= fEndTime) {
+      if (to.fEndTime >= fStartTime && to.fStartTime <= fEndTime) {
 	glPushMatrix();
 	G4OpenGLTransform3D oglt (to.fTransform);
 	glMultMatrixd (oglt.GetGLMatrix ());
@@ -192,7 +192,7 @@ void G4OpenGLStoredViewer::DrawDisplayLists () {
   if (fDisplayLightFront && fEndTime < DBL_MAX) {
     G4double radius = 0.;
     if (fEndTime > 0.) {
-      radius = fEndTime * c_light;
+      radius = (fEndTime - fDisplayLightFrontT) * c_light;
     }
     G4Circle lightFront(G4Point3D
 			(fDisplayLightFrontX,
