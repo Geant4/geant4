@@ -1,4 +1,4 @@
-$Id: History,v 1.70 2006-09-15 09:50:49 allison Exp $
+$Id: History,v 1.71 2006-09-19 16:08:39 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -24,6 +24,11 @@ committal in the CVS repository !
 
 History file for visualization management sub-category
 ------------------------------------------------------
+
+----------------------------------------------------
+19th September 2006  John Allison  (visman-V08-01-06)
+- G4ViewParameters: Added ExplodeCentre.
+- G4VisCommandsGeometrySet.cc: Bug fix in /vis/geometry/set/colour.
 
 ----------------------------------------------------
 13th September 2006  John Allison  (visman-V08-01-05)
