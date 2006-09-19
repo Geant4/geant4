@@ -23,8 +23,8 @@
 
 /vis/open OGLSX
 /vis/drawVolume
-/vis/scene/add/trajectories
 /vis/scene/add/eventID
+/vis/scene/add/trajectories
 
 # Set up drawByCharge with time slicing
 /vis/modeling/trajectories/create/drawByCharge

@@ -23,8 +23,8 @@
 
 /vis/open OGLSX 600x600-0+0
 /vis/drawVolume
-/vis/scene/add/trajectories
 /vis/scene/add/eventID
+/vis/scene/add/trajectories
 
 # Set up drawByParticleID with time slicing
 /vis/modeling/trajectories/create/drawByParticleID
@@ -36,7 +36,9 @@
 /vis/modeling/trajectories/drawByParticleID-0/default/setStepPtsSize 5
 #/vis/modeling/trajectories/drawByParticleID-0/default/setDrawAuxPts true
 /vis/modeling/trajectories/drawByParticleID-0/default/setAuxPtsSize 5
-/vis/modeling/trajectories/drawByParticleID-0/default/setTimeSliceInterval 0.01 ns
+/control/alias interval 0.01
+/control/alias halfInterval 0.005
+/vis/modeling/trajectories/drawByParticleID-0/default/setTimeSliceInterval {interval} ns
 /vis/modeling/trajectories/list
 
 # Remove gammas
@@ -52,7 +54,11 @@
 # Run time sequence
 /vis/ogl/set/fade 1
 /vis/ogl/set/displayHeadTime true
-/vis/ogl/set/displayLightFront true -90 0 0 mm
+# The trajectories can appear of jump ahead of the light front because
+# their time range overlaps the viewer's time range.  To mitigate this
+# effect of discrete time intervals, advance the light front by half the
+# trajectories interval...
+/vis/ogl/set/displayLightFront true -90 0 0 mm -{halfInterval} ns
 /vis/viewer/panTo -9 0 cm
 /vis/viewer/zoomTo 2
 /control/alias timeRange 0.1
