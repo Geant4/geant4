@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewer.hh,v 1.17 2006-08-30 11:47:27 allison Exp $
+// $Id: G4OpenGLViewer.hh,v 1.18 2006-09-19 16:13:15 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -74,7 +74,8 @@ protected:
   G4double fDisplayHeadTimeSize;  // Screen size.
   G4double fDisplayHeadTimeRed, fDisplayHeadTimeGreen, fDisplayHeadTimeBlue;
   G4bool fDisplayLightFront;// Display light front at head time originating at
-  G4double fDisplayLightFrontX, fDisplayLightFrontY, fDisplayLightFrontZ;
+  G4double fDisplayLightFrontX, fDisplayLightFrontY, fDisplayLightFrontZ,
+    fDisplayLightFrontT;
   G4double fDisplayLightFrontRed, fDisplayLightFrontGreen, fDisplayLightFrontBlue;
 };
 

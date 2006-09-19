@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewer.cc,v 1.28 2006-09-04 12:07:59 allison Exp $
+// $Id: G4OpenGLViewer.cc,v 1.29 2006-09-19 16:13:15 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -66,6 +66,7 @@ fDisplayLightFront(false),
 fDisplayLightFrontX(0.),
 fDisplayLightFrontY(0.),
 fDisplayLightFrontZ(0.),
+fDisplayLightFrontT(0.),
 fDisplayLightFrontRed(0.),
 fDisplayLightFrontGreen(1.),
 fDisplayLightFrontBlue(0.)
