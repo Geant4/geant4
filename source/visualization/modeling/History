@@ -1,4 +1,4 @@
-$Id: History,v 1.86 2006-09-17 18:15:09 tinslay Exp $
+$Id: History,v 1.87 2006-09-19 15:59:41 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -21,10 +21,15 @@ History file for visualization/modeling
 ---------------------------------------
 
 ------------------------------------------------------
+19th September 2006  John Allison  (modeling-V08-01-07)
+- G4ModelingParameters: Added ExplodeCentre
+- G4PhysicalVolumeModel.cc: Programmed ExplodeCentre.
+
 17th September 2006 Jane Tinslay
 - Shift an assert from G4AttributeFilterT to G4AttFilterUtils - was
   causing problems with XCode 2.0
 
+------------------------------------------------------
 15th September 2006  John Allison  (modeling-V08-01-06)
 - G4PhysicalVolumeModel.ccChanged "Bookkeeping" to "Physics
 
