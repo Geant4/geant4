@@ -1,4 +1,4 @@
-$Id: History,v 1.12 2006-09-18 17:26:20 maire Exp $
+$Id: History,v 1.13 2006-09-20 09:29:37 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+20-09-06 mma (testem11-V08-01-01)
+- correct GNUmakefile :inactivate G4ANALYSIS_USE 
+
      
 18-09-06 mma (testem11-V08-01-00)
 - replace G4_WATER by Water. 
