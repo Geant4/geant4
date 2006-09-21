@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.31 2004-11-30 08:30:14 gcosmo Exp $
+# $Id: GNUmakefile,v 1.32 2006-09-21 21:39:03 vnivanch Exp $
 # ----------------------------------------------------------------------
 # GNUmakefile for processes library, Gabriele Cosmo 27-Jun-1998
 # ----------------------------------------------------------------------
@@ -17,6 +17,7 @@ SUBDIRS += electromagnetic/utils
 SUBDIRS += electromagnetic/xrays
 SUBDIRS += electromagnetic/lowenergy
 SUBDIRS += electromagnetic/highenergy
+SUBDIRS += electromagnetic/polarisation
 
 SUBLIBS  = G4procman 
 SUBLIBS += G4cuts 
@@ -30,6 +31,7 @@ SUBLIBS += G4emutils
 SUBLIBS += G4xrays 
 SUBLIBS += G4emlowenergy
 SUBLIBS += G4emhighenergy
+SUBLIBS += G4empolar
 
 GLOBLIBS  = libG4track.lib libG4particles.lib libG4geometry.lib
 GLOBLIBS += libG4materials.lib libG4graphics_reps.lib
