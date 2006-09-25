@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.cc,v 1.12 2006-08-10 13:16:43 vnivanch Exp $
+// $Id: DetectorConstruction.cc,v 1.13 2006-09-25 17:06:29 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -185,7 +185,7 @@ Havar->AddElement(W , fractionmass=0.0631);
 
 //
 // examples of gas
-//
+//  
 new G4Material("ArgonGas", z=18, a=39.948*g/mole, density= 1.782*mg/cm3,
                            kStateGas, 273.15*kelvin, 1*atmosphere);
 			   
@@ -221,6 +221,11 @@ new G4Material("XenonMethanePropane", density= 4.9196*mg/cm3, ncomponents=3,
 XeCH->AddElement (Xe, natoms=875);
 XeCH->AddElement (C,  natoms=225);
 XeCH->AddElement (H,  natoms=700);
+
+G4Material* steam = 
+new G4Material("WaterSteam", density= 1.0*mg/cm3, ncomponents=1);
+steam->AddMaterial(H2O, fractionmass=1.);
+steam->GetIonisation()->SetMeanExcitationEnergy(71.6*eV);  
 
 //
 // example of vacuum

@@ -1,4 +1,4 @@
-$Id: History,v 1.77 2006-08-10 13:16:43 vnivanch Exp $
+$Id: History,v 1.78 2006-09-25 17:06:28 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+25-09-06 mma (testem5-V08-01-01)
+- StackingAction: more options for killSecondaries
 
 10-08-06 V.Ivant (testem5-V08-01-00)
 - Add NIST materials
