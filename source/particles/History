@@ -1,4 +1,4 @@
-$Id: History,v 1.133 2006-09-05 01:18:37 kurasige Exp $
+$Id: History,v 1.134 2006-09-26 16:44:13 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,8 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+- Sep. 5, 2006    H.Kurashige (particles-V08-01-02)
+- Fix the bug in k2(1770) decay 
+
 - Sep. 5, 2006    H.Kurashige (particles-V08-01-01)
-- Fixx the bug of not filling quark contents without G4VERBOSE   
+- Fix the bug of not filling quark contents without G4VERBOSE   
    in G4ParticleDefinition constructor
 
 - Jun. 27, 2006    M.Asai (particles-V08-01-00)
