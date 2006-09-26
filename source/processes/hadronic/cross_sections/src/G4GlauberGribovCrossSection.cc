@@ -139,7 +139,7 @@ GetCrossSection(const G4DynamicParticle* aParticle, const G4Element* anElement, 
   xsection =  nucleusSquare*std::log( 1. + ratio );
 
   fTotalXsc = xsection;
-   
+  /*   
   fElasticXsc = 0.5*( xsection - nucleusSquare*ratio/(1.+ratio) );
 
   if (fElasticXsc < 0.) fElasticXsc = 0.;
@@ -147,7 +147,12 @@ GetCrossSection(const G4DynamicParticle* aParticle, const G4Element* anElement, 
   fInelasticXsc = fTotalXsc - fElasticXsc;
 
   if (fInelasticXsc < 0.) fInelasticXsc = 0.;
-  
+  */
+  G4double cofInelastic = 2.2;
+  fInelasticXsc = nucleusSquare*std::log( 1. + cofInelastic*ratio )/cofInelastic;
+  fElasticXsc   = fTotalXsc - fInelasticXsc;
+  if (fElasticXsc < 0.) fElasticXsc = 0.;
+
   return xsection; 
 }
 
