@@ -1,4 +1,4 @@
-$Id: History,v 1.31 2006-08-15 14:22:34 vnivanch Exp $
+$Id: History,v 1.32 2006-09-26 13:01:34 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+26.09.2006, V.Ivanchenko - phys-lists-V08-01-06
+- QBBC physics lists - add an option to use Glauber-Gribov cross sections
 
 15.08.2006, V.Ivanchenko - phys-lists-V08-01-05
 - G4NadronElasticPhysics - move includes from .cc to .hh
