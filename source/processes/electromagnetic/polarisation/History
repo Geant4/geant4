@@ -1,4 +1,4 @@
-$Id: History,v 1.1 2006-09-21 21:35:10 vnivanch Exp $
+$Id: History,v 1.2 2006-09-26 09:10:32 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-21 Sept 04: V.Ivant (empolar-V08-01-00)
-- first commit
+29 Sept 06: G.Cosmo (empolar-V08-01-01)
+- Fixed for usage of std namespace and porting on WIN32-VC platform.
+
+21 Sept 06: V.Ivantchenko (empolar-V08-01-00)
+- First commit.
 
 
