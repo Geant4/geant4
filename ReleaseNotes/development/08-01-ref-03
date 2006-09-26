@@ -4,7 +4,9 @@
 
 Some of the development/fixes included since the last reference tag are:
 
-  o New polarisation EM module.
+  o New module including processes and models for simulation of transport
+    of polarized gamma, electrons and positrons in polarized and unpolarized
+    media.
   o Introduced attribute based trajectory drawing & filtering.
 
 ---------- Reference-tag 'Release Notes' -----------
@@ -44,7 +46,10 @@ particles                                        particles-V08-01-01
 
 processes/electromagnetic/polarisation           empolar-V08-01-01
 --------------------------------------
-- New polarisation EM module.
+- New module including processes and models for simulation of transport of
+  polarized gamma, electrons and positrons in polarized and unpolarized media.
+  The library includes a set of processes for the simulation of a circulary
+  polarized gamma beam. Contribution of DESY-Zeuthen group.
 
 processes/electromagnetic/standard               emstand-V08-01-06
 ----------------------------------
@@ -67,7 +72,7 @@ processes/electromagnetic/utils                  emutils-V08-01-03
 processes/hadronic
 ------------------
 - cross_sections (hadr-cross-V08-01-02)
-  o New wrapper cross section classes  G4UInelasticCrossSection and
+  o New wrapper cross section classes G4UInelasticCrossSection and
     G4UElasticCrossSection which combine cross sections from different
     data sets.
   o New G4UPiNuclearCrossSection providing another implementation
