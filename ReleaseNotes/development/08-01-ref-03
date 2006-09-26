@@ -1,0 +1,146 @@
+
+                       geant4-08-01-ref-03
+                       ===================
+
+Some of the development/fixes included since the last reference tag are:
+
+  o New polarisation EM module.
+  o Introduced attribute based trajectory drawing & filtering.
+
+---------- Reference-tag 'Release Notes' -----------
+
+
+Summarised, the list of changes is the following:
+
+config                                           config-V08-01-02
+------
+- binmake.gmk: added electromagnetic/polarisation module.
+
+geometry/management                              geommng-V08-01-01
+-------------------
+- Added empty virtual method CheckOverlaps() to G4VPhysicalVolume to allow
+  for proper overloading from subclasses. Implementation returns always
+  'false', which is the case for replicas.
+
+global                                           global-V08-01-02
+------
+- Corrected inclusion of CLHEP headers in wrapper files
+  G4SystemOfUnits.hh and G4PhysicalConstants.hh
+
+graphics_reps                                    greps-V08-01-04
+-------------
+- G4VisAttributes: added time range.
+- G4Visible: added 'fAllocatedVisAttributes' to prevent memory leak.
+- Added FilterHit method to G4VVisManager.
+- Fixed G4AttCheck for dimensionless "Physics" attributes and added
+  G4TypeKey & G4TypeKeyT classes.
+- Removed trailing white spaces in G4ConversionUtils.
+- Made G4VFilter::Accept() method const.
+
+particles                                        particles-V08-01-01
+---------
+- Fixed bug in G4ParticleDefinition constructor causing not filling quark
+  contents when G4VERBOSE is not set.
+
+processes/electromagnetic/polarisation           empolar-V08-01-01
+--------------------------------------
+- New polarisation EM module.
+
+processes/electromagnetic/standard               emstand-V08-01-06
+----------------------------------
+- Moved function SetModel() to G4VEmProcess class.
+- Added/modified function SetModel() in G4PhotoElectric, G4ComptonScattering,
+  G4GammaConversion and G4eplusAnnihilation.
+- Included necessary changes required for the new processes/models with
+  polarization, in: G4KleinNishinaCompton, G4MollerBhabhaModel and
+  G4eBremsstrahlungModel.
+- Bug fix in PAI model concerning 'Tmax' for electrons and positrons.
+  Tmax is defined  now for each particle independently.
+- Fixed problem of positron zero incident energy in G4eeToTwoGammaModel.
+- Added extra protection inside G4BetheBlochModel.
+
+processes/electromagnetic/utils                  emutils-V08-01-03
+-------------------------------
+- G4VEmProcess: added function SetModel().
+- G4VEmModel: added member 'currentElement' and protected accessors.
+
+processes/hadronic
+------------------
+- cross_sections (hadr-cross-V08-01-02)
+  o New wrapper cross section classes  G4UInelasticCrossSection and
+    G4UElasticCrossSection which combine cross sections from different
+    data sets.
+  o New G4UPiNuclearCrossSection providing another implementation
+    of elastic and inelastic cross sections from Barashenkov.
+- models/chiral_inv_phase_space/interface (hadr-chips-inter-V08-01-06)
+  o Debugged Electro-, muon-, tau-nuclear in G4QCollision.
+  o Small corrections of G4QCollision to fix problems detected on Sun.
+- models/coherent_elastic (hadr-cohe-V08-01-04)
+  o Introduced extra protection: process is not active below lowest
+    Energy (10-6 eV).
+
+track                                            track-V08-01-02
+-----
+- Added methods for setting polarization and modifying weight for
+  G4ParticleChangeForGamma and G4ParticleChangeForLoss.
+
+visualization                                    vis-V08-01-07
+-------------
+- modeling:
+  o Implemented explode factor (radial move) feature for top level drawn
+    volumes.
+  o Added attribute based trajectory drawing & filtering, and attribute
+    based hit filtering.
+  o Implemented code for augmented /vis/scene/add/volume (subtraction
+    and intersection of clipping volume).
+  o Equipped for generic sectioning (DCUT) and cutaways.
+  o Improved robustness of time slicing.
+  o Fixed compilation warning.
+- management:
+  o Implemented cutaways and added commands.
+    Added G4VSceneHandler::CreateSection/CutawayPolyhedron to exploit generic
+    sectioning (DCUT) and cutaways. Currently not activated due to
+    instabilities in BooleanProcessor.
+  o G4ViewParameters: added ExplodeCentre.
+  o Added commands /vis/viewer/clone and /vis/viewer/set/explodeFactor.
+  o Bug fix in command /vis/geometry/set/colour.
+  o Added /vis/viewer/set/globalLineWidthScale.
+  o Augmented /vis/scene/add/volume to include intersection of clipping volume.
+- OpenGL:
+  o Improved display by time feature.
+  o Implemented line width.
+  o Switched off back face culling when clipping so that the inside of
+    volumes can be seen.
+  o Added position and colour to /vis/ogl/set/displayHeadTime.
+  o Added /vis/ogl/set/displayLightFront.
+- OpenInventor:
+  o Kernel visit rationalisation.
+- XXX:
+  o Improved G4Att printing and checking.
+
+physics_lists                                    phys-lists-V08-01-06
+-------------
+- Added possibility to use Glauber-Gribov cross-sections in QBBC.
+
+examples                                         examples-V08-01-03
+--------
+- Updated reference outputs.
+- extended/electromagnetic/TestEm5 (testem5-V08-01-01)
+  o StackingAction: more options for killSecondaries.
+- extended/electromagnetic/TestEm11 (testem11-V08-01-01)
+  o Replaced 'G4_WATER' with 'Water'.
+  o Reinstate 'hLowEnergyIonisation' in Livermore PhysicsList.
+  o Corrected GNUmakefile.
+- extended/electromagnetic/TestEm14 (testem14-V08-01-00)
+  o Compute 'mass_energy_transfer' coefficient.
+- novice/N03 (exampleN03-V08-01-03)
+  o exN03Vis12.mac: switched off local trajectory drawing
+    (/N03/event/drawTracks none) so as not to interfere with drawing from
+    /vis/scene/add/trajectories. Some refinements.
+  o Added visTutor/exN03Vis13.mac: further demonstration of time slicing.
+
+tests                                            tests-V08-01-03
+-----
+- Updated reference outputs.
+- test19 (test19-V08-01-01)
+  o Extended test to include electro-, muon-, and tau-nuclear interactions.
