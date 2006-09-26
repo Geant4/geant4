@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolarizedComptonModel.cc,v 1.1 2006-09-21 21:35:11 vnivanch Exp $
+// $Id: G4PolarizedComptonModel.cc,v 1.2 2006-09-26 09:08:47 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -64,8 +64,6 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-using namespace std;
-
 G4PolarizedComptonModel::G4PolarizedComptonModel(const G4ParticleDefinition*,
                                              const G4String& nam)
   : G4KleinNishinaCompton(0,nam),
@@ -93,8 +91,8 @@ G4double G4PolarizedComptonModel::ComputeAsymmetryPerAtom
  G4double k1 = 1 + 2*k0 ;
 
  asymmetry = k0;
- asymmetry *= (k0 + 1.)*sqr(k1)*log(k1) - 2.*k0*(5.*sqr(k0) + 4.*k0 + 1.);
- asymmetry /= ((k0 - 2.)*k0  -2.)*sqr(k1)*log(k1) + 2.*k0*(k0*(k0 + 1.)*(k0 + 8.) + 2.);		
+ asymmetry *= (k0 + 1.)*sqr(k1)*std::log(k1) - 2.*k0*(5.*sqr(k0) + 4.*k0 + 1.);
+ asymmetry /= ((k0 - 2.)*k0  -2.)*sqr(k1)*std::log(k1) + 2.*k0*(k0*(k0 + 1.)*(k0 + 8.) + 2.);		
 
  // G4cout<<"energy = "<<GammaEnergy<<"  asymmetry = "<<asymmetry<<"\t\t GAM = "<<k0<<G4endl;
  if (asymmetry>1.) G4cout<<"ERROR in G4PolarizedComptonModel::ComputeAsymmetryPerAtom"<<G4endl;
@@ -136,7 +134,8 @@ std::vector<G4DynamicParticle*>* G4PolarizedComptonModel::SampleSecondaries(
   G4LogicalVolume*    aLVolume  = aPVolume->GetLogicalVolume();
 
   if (verboseLevel>=1) 
-    G4cout<<"G4PolarizedComptonModel::SampleSecondaries in "<<  aLVolume->GetName() <<endl;
+    G4cout<<"G4PolarizedComptonModel::SampleSecondaries in "
+          <<  aLVolume->GetName() <<G4endl;
 
   G4PolarizationManager * polarizationManager = G4PolarizationManager::GetInstance();
 
@@ -176,18 +175,18 @@ std::vector<G4DynamicParticle*>* G4PolarizedComptonModel::SampleSecondaries(
 
   G4double epsilon0   = 1./(1. + 2.*E0_m);
   G4double epsilon0sq = epsilon0*epsilon0;
-  G4double alpha1     = - log(epsilon0);
+  G4double alpha1     = - std::log(epsilon0);
   G4double alpha2     = 0.5*(1.- epsilon0sq);
 
   G4double polarization = theBeamPolarization.p3()*theTargetPolarization.p3();
   do {
     if ( alpha1/(alpha1+alpha2) > G4UniformRand() ) {
-      epsilon   = exp(-alpha1*G4UniformRand());   // epsilon0**r
+      epsilon   = std::exp(-alpha1*G4UniformRand());   // epsilon0**r
       epsilonsq = epsilon*epsilon; 
 
     } else {
       epsilonsq = epsilon0sq + (1.- epsilon0sq)*G4UniformRand();
-      epsilon   = sqrt(epsilonsq);
+      epsilon   = std::sqrt(epsilonsq);
     };
 
     onecost = (1.- epsilon)/(epsilon*E0_m);
@@ -210,24 +209,24 @@ std::vector<G4DynamicParticle*>* G4PolarizedComptonModel::SampleSecondaries(
   //
 
   G4double cosTeta = 1. - onecost; 
-  G4double sinTeta = sqrt (sint2);
+  G4double sinTeta = std::sqrt (sint2);
   G4double Phi;
   do {
     Phi     = twopi * G4UniformRand();
      G4double gdiced = 1./epsilon + epsilon - sint2 
-       + abs(theBeamPolarization.p3())*
-       ( abs((1./epsilon-epsilon)*cosTeta*theTargetPolarization.p3())
-	+(1.-epsilon)*sinTeta*(sqrt(sqr(theTargetPolarization.p1()) 
+       + std::abs(theBeamPolarization.p3())*
+       ( std::abs((1./epsilon-epsilon)*cosTeta*theTargetPolarization.p3())
+	+(1.-epsilon)*sinTeta*(std::sqrt(sqr(theTargetPolarization.p1()) 
 				    + sqr(theTargetPolarization.p2()))))
-       +sint2*(sqrt(sqr(theBeamPolarization.p1()) + sqr(theBeamPolarization.p2())));
+       +sint2*(std::sqrt(sqr(theBeamPolarization.p1()) + sqr(theBeamPolarization.p2())));
 
      G4double gdist = 1./epsilon + epsilon - sint2 
        + theBeamPolarization.p3()*
        (-(1./epsilon-epsilon)*cosTeta*theTargetPolarization.p3()
-	+(1.-epsilon)*sinTeta*(cos(Phi)*theTargetPolarization.p1()+
-			       sin(Phi)*theTargetPolarization.p2()))
-       -sint2*(cos(2.*Phi)*theBeamPolarization.p1()
-	       +sin(2.*Phi)*theBeamPolarization.p2());
+	+(1.-epsilon)*sinTeta*(std::cos(Phi)*theTargetPolarization.p1()+
+			       std::sin(Phi)*theTargetPolarization.p2()))
+       -sint2*(std::cos(2.*Phi)*theBeamPolarization.p1()
+	       +std::sin(2.*Phi)*theBeamPolarization.p2());
      greject = gdist/gdiced;
 
     if (greject>1.+1.e-10 || greject<0) G4cout<<"ERROR in PolarizedComptonScattering::PostStepDoIt\n"
@@ -242,7 +241,7 @@ std::vector<G4DynamicParticle*>* G4PolarizedComptonModel::SampleSecondaries(
     }
      
   } while (greject < G4UniformRand());
-  G4double dirx = sinTeta*cos(Phi), diry = sinTeta*sin(Phi), dirz = cosTeta;
+  G4double dirx = sinTeta*std::cos(Phi), diry = sinTeta*std::sin(Phi), dirz = cosTeta;
 
   //
   // update G4VParticleChange for the scattered gamma

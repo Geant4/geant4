@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PolarizedAnnihilationModel.cc,v 1.1 2006-09-21 21:35:11 vnivanch Exp $
+// $Id: G4PolarizedAnnihilationModel.cc,v 1.2 2006-09-26 09:08:46 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -55,8 +55,6 @@
 #include "G4PolarizedAnnihilationCrossSection.hh"
 #include "G4ParticleChangeForGamma.hh"
 #include "G4Gamma.hh"
-
-using namespace std;
 
 G4PolarizedAnnihilationModel::G4PolarizedAnnihilationModel(const G4ParticleDefinition* p, 
 							   const G4String& nam)
@@ -166,7 +164,7 @@ std::vector<G4DynamicParticle*>* G4PolarizedAnnihilationModel::SampleSecondaries
 
   G4double gamam1 = PositKinEnergy/electron_mass_c2;
   G4double gama   = gamam1+1. , gamap1 = gamam1+2.;
-  G4double sqgrate = sqrt(gamam1/gamap1)/2. , sqg2m1 = sqrt(gamam1*gamap1);
+  G4double sqgrate = std::sqrt(gamam1/gamap1)/2. , sqg2m1 = std::sqrt(gamam1*gamap1);
 
   // limits of the energy sampling
   G4double epsilmin = 0.5 - sqgrate , epsilmax = 0.5 + sqgrate;
@@ -178,7 +176,7 @@ std::vector<G4DynamicParticle*>* G4PolarizedAnnihilationModel::SampleSecondaries
   //       will depend on the energy, and the degree of polarization !!
   //
   G4double epsil;
-  G4double gmax=1. + fabs(polarization); // crude estimate
+  G4double gmax=1. + std::fabs(polarization); // crude estimate
 
   G4bool check_range=true;
 
@@ -203,7 +201,7 @@ std::vector<G4DynamicParticle*>* G4PolarizedAnnihilationModel::SampleSecondaries
 
   do {
     // 
-    epsil = epsilmin*pow(epsilqot,G4UniformRand());
+    epsil = epsilmin*std::pow(epsilqot,G4UniformRand());
 
     crossSectionCalculator->Initialize(epsil, gama, 0., theBeamPolarization, theTargetPolarization);
 
@@ -229,10 +227,10 @@ std::vector<G4DynamicParticle*>* G4PolarizedAnnihilationModel::SampleSecondaries
   //
    
   G4double cost = (epsil*gamap1-1.)/(epsil*sqg2m1);
-  G4double sint = sqrt((1.+cost)*(1.-cost));
+  G4double sint = std::sqrt((1.+cost)*(1.-cost));
   G4double phi  = 0.;
-  G4double   beamTrans = sqrt(sqr(theBeamPolarization.p1()) + sqr(theBeamPolarization.p2()));
-  G4double targetTrans = sqrt(sqr(theTargetPolarization.p1()) + sqr(theTargetPolarization.p2()));
+  G4double   beamTrans = std::sqrt(sqr(theBeamPolarization.p1()) + sqr(theBeamPolarization.p2()));
+  G4double targetTrans = std::sqrt(sqr(theTargetPolarization.p1()) + sqr(theTargetPolarization.p2()));
 
   //  G4cout<<"phi dicing START"<<G4endl;
   do{
@@ -241,26 +239,26 @@ std::vector<G4DynamicParticle*>* G4PolarizedAnnihilationModel::SampleSecondaries
 
     G4double gdiced =crossSectionCalculator->getVar(0);
     gdiced += crossSectionCalculator->getVar(3)*theBeamPolarization.p3()*theTargetPolarization.p3();
-    gdiced += 1.*(fabs(crossSectionCalculator->getVar(1)) 
-		  + fabs(crossSectionCalculator->getVar(2)))*beamTrans*targetTrans;
-    gdiced += 1.*fabs(crossSectionCalculator->getVar(4))
-      *(fabs(theBeamPolarization.p3())*targetTrans + fabs(theTargetPolarization.p3())*beamTrans);
+    gdiced += 1.*(std::fabs(crossSectionCalculator->getVar(1)) 
+		  + std::fabs(crossSectionCalculator->getVar(2)))*beamTrans*targetTrans;
+    gdiced += 1.*std::fabs(crossSectionCalculator->getVar(4))
+      *(std::fabs(theBeamPolarization.p3())*targetTrans + std::fabs(theTargetPolarization.p3())*beamTrans);
 
     G4double gdist = crossSectionCalculator->getVar(0);
     gdist += crossSectionCalculator->getVar(3)*theBeamPolarization.p3()*theTargetPolarization.p3();
-    gdist += crossSectionCalculator->getVar(1)*(cos(phi)*theBeamPolarization.p1() 
-						+ sin(phi)*theBeamPolarization.p2())
-                                              *(cos(phi)*theTargetPolarization.p1() 
-						+ sin(phi)*theTargetPolarization.p2());
-    gdist += crossSectionCalculator->getVar(2)*(cos(phi)*theBeamPolarization.p2() 
-						- sin(phi)*theBeamPolarization.p1())
-                                              *(cos(phi)*theTargetPolarization.p2() 
-						- sin(phi)*theTargetPolarization.p1());
+    gdist += crossSectionCalculator->getVar(1)*(std::cos(phi)*theBeamPolarization.p1() 
+						+ std::sin(phi)*theBeamPolarization.p2())
+                                              *(std::cos(phi)*theTargetPolarization.p1() 
+						+ std::sin(phi)*theTargetPolarization.p2());
+    gdist += crossSectionCalculator->getVar(2)*(std::cos(phi)*theBeamPolarization.p2() 
+						- std::sin(phi)*theBeamPolarization.p1())
+                                              *(std::cos(phi)*theTargetPolarization.p2() 
+						- std::sin(phi)*theTargetPolarization.p1());
     gdist += crossSectionCalculator->getVar(4)
-      *(cos(phi)*theBeamPolarization.p3()*theTargetPolarization.p1()
-	+ cos(phi)*theBeamPolarization.p1()*theTargetPolarization.p3() 
-	+ sin(phi)*theBeamPolarization.p3()*theTargetPolarization.p2() 
-	+ sin(phi)*theBeamPolarization.p2()*theTargetPolarization.p3());
+      *(std::cos(phi)*theBeamPolarization.p3()*theTargetPolarization.p1()
+	+ std::cos(phi)*theBeamPolarization.p1()*theTargetPolarization.p3() 
+	+ std::sin(phi)*theBeamPolarization.p3()*theTargetPolarization.p2() 
+	+ std::sin(phi)*theBeamPolarization.p2()*theTargetPolarization.p3());
 
     treject = gdist/gdiced;
     //G4cout<<" treject = "<<treject<<" at phi = "<<phi<<G4endl;
@@ -282,7 +280,7 @@ std::vector<G4DynamicParticle*>* G4PolarizedAnnihilationModel::SampleSecondaries
   } while( treject < G4UniformRand() );
   //  G4cout<<"phi dicing END"<<G4endl;
 
-  G4double dirx = sint*cos(phi) , diry = sint*sin(phi) , dirz = cost;
+  G4double dirx = sint*std::cos(phi) , diry = sint*std::sin(phi) , dirz = cost;
 
   std::vector<G4DynamicParticle*>* fvect = new std::vector<G4DynamicParticle*>;
  
@@ -320,7 +318,7 @@ std::vector<G4DynamicParticle*>* G4PolarizedAnnihilationModel::SampleSecondaries
     G4cout<<"ERROR: PolarizedAnnihilation Polarization Vector at epsil = "
 	  <<epsil<<" is too large!!! \n"
 	  <<"annihi pol1= "<<finalGamma1Polarization<<", ("<<n1<<")\n";
-    finalGamma1Polarization+=1./sqrt(n1);
+    finalGamma1Polarization+=1./std::sqrt(n1);
   }
 
   // define polarization of first final state photon
@@ -336,7 +334,7 @@ std::vector<G4DynamicParticle*>* G4PolarizedAnnihilationModel::SampleSecondaries
   // **********************************************************************
 
   G4double Eratio= Phot1Energy/Phot2Energy;
-  G4double PositP= sqrt(PositKinEnergy*(PositKinEnergy+2.*electron_mass_c2));
+  G4double PositP= std::sqrt(PositKinEnergy*(PositKinEnergy+2.*electron_mass_c2));
   G4ThreeVector Phot2Direction (-dirx*Eratio, -diry*Eratio,
 				(PositP-dirz*Phot1Energy)/Phot2Energy); 
   Phot2Direction.rotateUz(PositDirection); 
@@ -351,7 +349,7 @@ std::vector<G4DynamicParticle*>* G4PolarizedAnnihilationModel::SampleSecondaries
     G4cout<<"ERROR: PolarizedAnnihilation Polarization Vector at epsil = "<<epsil<<" is too large!!! \n";
     G4cout<<"annihi pol2= "<<finalGamma2Polarization<<", ("<<n2<<")\n";
     
-    finalGamma2Polarization+=1./sqrt(n2);
+    finalGamma2Polarization+=1./std::sqrt(n2);
   }
   finalGamma2Polarization.SetPhoton();
   finalGamma2Polarization.RotateAz(nInteractionFrame,Phot2Direction);

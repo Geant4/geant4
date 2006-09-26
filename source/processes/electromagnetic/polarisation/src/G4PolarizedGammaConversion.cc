@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PolarizedGammaConversion.cc,v 1.1 2006-09-21 21:35:11 vnivanch Exp $
+// $Id: G4PolarizedGammaConversion.cc,v 1.2 2006-09-26 09:08:47 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -46,8 +46,6 @@
 #include "G4Electron.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-using namespace std;
 
 G4PolarizedGammaConversion::G4PolarizedGammaConversion(const G4String& processName,
   G4ProcessType type):G4VEmProcess (processName, type),
@@ -72,7 +70,7 @@ void G4PolarizedGammaConversion::InitialiseProcess(const G4ParticleDefinition*)
     //    SetVerboseLevel(1);
     SetBuildTableFlag(true);
     SetSecondaryParticle(G4Electron::Electron());
-    G4double emin = max(MinKinEnergy(), 2.0*electron_mass_c2);
+    G4double emin = std::max(MinKinEnergy(), 2.0*electron_mass_c2);
     SetMinKinEnergy(emin);
     G4double emax = MaxKinEnergy();
     //    G4VEmModel* model = new G4BetheHeitlerModel();

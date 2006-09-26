@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4StokesVector.cc,v 1.1 2006-09-21 21:35:11 vnivanch Exp $
+// $Id: G4StokesVector.cc,v 1.2 2006-09-26 09:08:48 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // GEANT4 Class file
@@ -100,7 +100,7 @@ void G4StokesVector::RotateAz(G4ThreeVector nInteractionFrame, G4ThreeVector par
   // -> is the same, since SYSIN is called with p1, and p2 as first parameter!
   G4double hel=(cross(yParticleFrame*nInteractionFrame)*particleDirection)>0?1.:-1.;
 
-  G4double sinphi=hel*sqrt(1.-cosphi*cosphi);
+  G4double sinphi=hel*std::sqrt(1.-cosphi*cosphi);
   //  G4cout<<" sin2 + cos2 -1 = "<<(sinphi*sinphi+cosphi*cosphi-1)<<"\n";
 
   RotateAz(cosphi,sinphi);
@@ -125,7 +125,7 @@ void G4StokesVector::InvRotateAz(G4ThreeVector nInteractionFrame, G4ThreeVector 
 
   // check sign once more!
   G4double hel=(cross(yParticleFrame*nInteractionFrame)*particleDirection)>0?1.:-1.;
-  G4double sinphi=hel*sqrt(fabs(1.-cosphi*cosphi));
+  G4double sinphi=hel*std::sqrt(std::fabs(1.-cosphi*cosphi));
   RotateAz(cosphi,-sinphi);
 }
 
@@ -159,10 +159,10 @@ double G4StokesVector::GetBeta()
 void G4StokesVector::DiceUniform() 
 {
   G4double costheta=2.*G4UniformRand()-1.;
-  G4double sintheta=sqrt(1.-costheta*costheta);
-  G4double phi     =2.*M_PI*G4UniformRand();
-  setX(sin(phi)*sintheta);
-  setY(cos(phi)*sintheta);
+  G4double sintheta=std::sqrt(1.-costheta*costheta);
+  G4double phi     =2.*pi*G4UniformRand();
+  setX(std::sin(phi)*sintheta);
+  setY(std::cos(phi)*sintheta);
   setZ(costheta);
 }
 

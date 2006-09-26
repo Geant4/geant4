@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PolarizedBremsstrahlungCrossSection.cc,v 1.1 2006-09-21 21:35:11 vnivanch Exp $
+// $Id: G4PolarizedBremsstrahlungCrossSection.cc,v 1.2 2006-09-26 09:08:47 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -114,30 +114,30 @@ void G4PolarizedBremsstrahlungCrossSection::Initialize(G4double aLept0E, G4doubl
 
   // *******  Gamma Transvers Momentum
     
-  G4double TMom = sqrt(Lept0E2 -1.)* sintheta, u    = TMom       , u2 =u * u ;
+  G4double TMom = std::sqrt(Lept0E2 -1.)* sintheta, u    = TMom       , u2 =u * u ;
   G4double Xsi  = 1./(1.+u2)                      , Xsi2 = Xsi * Xsi  ; 
 
   G4double theZ  = theSelectedElement->GetZ();
     
   G4double fCoul = theSelectedElement->GetfCoulomb();
-  G4double delta = 12. * pow(theZ, 1./3.) * Lept0E * Lept1E * Xsi / (121. * GammaE); 
+  G4double delta = 12. * std::pow(theZ, 1./3.) * Lept0E * Lept1E * Xsi / (121. * GammaE); 
   G4double GG=0.;
 
   if(delta < 0.5) {
-    GG = log(2.* Lept0E * Lept1E / GammaE) - 2. - fCoul; 
+    GG = std::log(2.* Lept0E * Lept1E / GammaE) - 2. - fCoul; 
   }
   else if ( delta < 120) {
     for (G4int j=2; j<=19; j++)  {
       if(SCRN[1][j] >= delta)    {
-	GG =log(2 * Lept0E * Lept1E / GammaE) - 2 - fCoul
+	GG =std::log(2 * Lept0E * Lept1E / GammaE) - 2 - fCoul
 	  -(SCRN[2][j-1]+(delta-SCRN[1][j-1])*(SCRN[2][j]-SCRN[2][j-1])/(SCRN[1][j]-SCRN[1][j-1]));
 	break;
       }
     }
   }
   else  {
-    G4double alpha_sc  = (111 * pow(theZ, -1./3.)) / Xsi;
-    GG = log(alpha_sc)- 2 - fCoul;
+    G4double alpha_sc  = (111 * std::pow(theZ, -1./3.)) / Xsi;
+    GG = std::log(alpha_sc)- 2 - fCoul;
   }
 
   if(GG<-1) GG=-1;     // *KL* do we need this ?!

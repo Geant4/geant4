@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PolarizedGammaConversionModel.cc,v 1.1 2006-09-21 21:35:11 vnivanch Exp $
+// $Id: G4PolarizedGammaConversionModel.cc,v 1.2 2006-09-26 09:08:47 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -61,8 +61,6 @@
 #include "G4ParticleChangeForGamma.hh"
 #include "G4PolarizedPairProductionCrossSection.hh"
 #include "G4PolarizationHelper.hh"
-
-using namespace std;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

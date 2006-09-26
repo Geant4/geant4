@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eplusPolarizedAnnihilation.cc,v 1.1 2006-09-21 21:35:11 vnivanch Exp $
+// $Id: G4eplusPolarizedAnnihilation.cc,v 1.2 2006-09-26 09:08:48 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -68,8 +68,6 @@
 #include "G4StokesVector.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-using namespace std;
 
 G4eplusPolarizedAnnihilation::G4eplusPolarizedAnnihilation(const G4String& name)
   : G4VEmProcess(name), isInitialised(false),
@@ -298,9 +296,9 @@ G4VParticleChange* G4eplusPolarizedAnnihilation::AtRestDoIt(const G4Track& aTrac
 
   fParticleChange.SetNumberOfSecondaries(2);
 
-  G4double cosTeta = 2.*G4UniformRand()-1. , sinTeta = sqrt(1.-cosTeta*cosTeta);
+  G4double cosTeta = 2.*G4UniformRand()-1. , sinTeta = std::sqrt(1.-cosTeta*cosTeta);
   G4double phi     = twopi * G4UniformRand();
-  G4ThreeVector direction (sinTeta*cos(phi), sinTeta*sin(phi), cosTeta);
+  G4ThreeVector direction (sinTeta*std::cos(phi), sinTeta*std::sin(phi), cosTeta);
   fParticleChange.AddSecondary( new G4DynamicParticle (G4Gamma::Gamma(),
                                             direction, electron_mass_c2) );
   fParticleChange.AddSecondary( new G4DynamicParticle (G4Gamma::Gamma(),

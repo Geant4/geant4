@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PolarizedMollerBhabhaModel.cc,v 1.1 2006-09-21 21:35:11 vnivanch Exp $
+// $Id: G4PolarizedMollerBhabhaModel.cc,v 1.2 2006-09-26 09:08:47 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // -------------------------------------------------------------------
 //
@@ -169,14 +169,14 @@ std::vector<G4DynamicParticle*>*  G4PolarizedMollerBhabhaModel::SampleSecondarie
   //  if(tmin > tmax) tmin = tmax;
 
   G4double polL = theBeamPolarization.z()*theTargetPolarization.z();
-  		polL=fabs(polL);
+  		polL=std::fabs(polL);
   G4double polT = theBeamPolarization.x()*theTargetPolarization.x() +
   		  theBeamPolarization.y()*theTargetPolarization.y();
-  		polT=fabs(polT);
+  		polT=std::fabs(polT);
 
   G4double kineticEnergy = dp->GetKineticEnergy();
   G4double energy = kineticEnergy + electron_mass_c2;
-  G4double totalMomentum = sqrt(kineticEnergy*(energy + electron_mass_c2));
+  G4double totalMomentum = std::sqrt(kineticEnergy*(energy + electron_mass_c2));
   G4double xmin   = tmin/kineticEnergy;
   G4double xmax   = tmax/kineticEnergy;
   G4double gam    = energy/electron_mass_c2;
@@ -289,14 +289,14 @@ std::vector<G4DynamicParticle*>*  G4PolarizedMollerBhabhaModel::SampleSecondarie
   // fix kinematics of delta electron
   G4double deltaKinEnergy = x * kineticEnergy;
   G4double deltaMomentum =
-           sqrt(deltaKinEnergy * (deltaKinEnergy + 2.0*electron_mass_c2));
+           std::sqrt(deltaKinEnergy * (deltaKinEnergy + 2.0*electron_mass_c2));
   G4double cost = deltaKinEnergy * (energy + electron_mass_c2) /
                                    (deltaMomentum * totalMomentum);
   G4double sint = 1.0 - cost*cost;
-  if(sint > 0.0) sint = sqrt(sint);
+  if(sint > 0.0) sint = std::sqrt(sint);
 
 
-  G4ThreeVector deltaDirection(-sint*cos(phi),-sint*sin(phi), cost) ;
+  G4ThreeVector deltaDirection(-sint*std::cos(phi),-sint*std::sin(phi), cost) ;
   deltaDirection.rotateUz(direction);
 
   // primary change

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4StokesVector.hh,v 1.1 2006-09-21 21:35:10 vnivanch Exp $
+// $Id: G4StokesVector.hh,v 1.2 2006-09-26 09:08:46 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // GEANT4 Class header file
@@ -80,7 +80,7 @@ public:
   inline G4double Transverse() const { return perp(); } 
 
   inline G4ThreeVector PolSqr() const { return G4ThreeVector(x()*x(),y()*y(),z()*z()); }
-  inline G4ThreeVector PolSqrt() const { return G4ThreeVector(sqrt(x()),sqrt(y()),sqrt(z())); }
+  inline G4ThreeVector PolSqrt() const { return G4ThreeVector(std::sqrt(x()),std::sqrt(y()),std::sqrt(z())); }
   G4ThreeVector PolError(const G4StokesVector & sum2, long n);
 
   // Ratio of 3-vectors.

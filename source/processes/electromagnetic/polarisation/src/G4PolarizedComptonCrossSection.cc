@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PolarizedComptonCrossSection.cc,v 1.1 2006-09-21 21:35:11 vnivanch Exp $
+// $Id: G4PolarizedComptonCrossSection.cc,v 1.2 2006-09-26 09:08:47 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // GEANT4 Class file
@@ -81,7 +81,7 @@ void G4PolarizedComptonCrossSection::Initialize(G4double eps, G4double X, G4doub
   G4double sinT2 = 1. - cosT2;
   if(sinT2 > 1. + 1.e-8) sinT2 = 1.;
   if(sinT2 < 0.)     sinT2 = 0.;
-  G4double sinT = sqrt(sinT2);
+  G4double sinT = std::sqrt(sinT2);
   G4double cos2T = 2.*cosT2 - 1.;
   G4double sin2T = 2.*sinT*cosT;
   G4double eps2 = sqr(eps);
@@ -114,7 +114,7 @@ void G4PolarizedComptonCrossSection::Initialize(G4double eps, G4double X, G4doub
   G4double PHI31 = 0., PHI31add = 0., PHI33 = 0., PHI33add = 0.;
 
   if ((1. - eps) > 1.e-12){
-    G4double helpVar = sqrt(eps2 - 2.*cosT*eps + 1.);
+    G4double helpVar = std::sqrt(eps2 - 2.*cosT*eps + 1.);
 
     PHI31 = (1. - eps)*(1. + cosT)*sinT*pol0.z();
     PHI31 += (-eps*cosT3 + eps*cosT2 + (eps - 2.)*cosT + eps)*pol1.x();
@@ -136,10 +136,10 @@ void G4PolarizedComptonCrossSection::Initialize(G4double eps, G4double X, G4doub
     PHI33add += (eps - 1.)*(cosT - eps)*sinT*polyy;
     PHI33add /= 2.*helpVar;
   }else{
-     PHI31 = pol1.z() - (X - 1.)*sqrt(1. - eps)*pol1.x()/sqrt(2.*X);
+     PHI31 = pol1.z() - (X - 1.)*std::sqrt(1. - eps)*pol1.x()/std::sqrt(2.*X);
      PHI31add = -(X*X*pol1.z() - 2.*X*(2.*pol0.z() + pol1.z()) + (4.*pol0.x() + 5.)*pol1.z())*(1. - eps)/(4.*X);
      
-     PHI33 = -pol1.x() - (X - 1.)*sqrt(1. - eps)*pol1.z()/sqrt(2.*X);
+     PHI33 = -pol1.x() - (X - 1.)*std::sqrt(1. - eps)*pol1.z()/std::sqrt(2.*X);
      PHI33add = (X*X - 2.*X + 4.*pol0.x() + 5.)*(1. - eps)*pol1.x()/(4.*X);
   }
   phi3 = G4ThreeVector(PHI31 + PHI31add, PHI32, PHI33 + PHI33add);

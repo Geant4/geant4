@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PolarizationHelper.cc,v 1.1 2006-09-21 21:35:11 vnivanch Exp $
+// $Id: G4PolarizationHelper.cc,v 1.2 2006-09-26 09:08:46 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // GEANT4 Class file
@@ -60,7 +60,7 @@ G4ThreeVector G4PolarizationHelper::GetParticleFrameY(const G4ThreeVector &uZ)
     return G4ThreeVector(0.,1.,0.);
   }
 
-  G4double invPerp = 1./sqrt(sqr(uZ.x())+sqr(uZ.y()));
+  G4double invPerp = 1./std::sqrt(sqr(uZ.x())+sqr(uZ.y()));
   return G4ThreeVector(-uZ.y()*invPerp,uZ.x()*invPerp,0);
 }
 
@@ -73,7 +73,7 @@ G4ThreeVector G4PolarizationHelper::GetParticleFrameX(const G4ThreeVector &uZ)
     return G4ThreeVector(-1.,0.,0.);
   }
 
-  G4double perp    = sqrt(sqr(uZ.x())+sqr(uZ.y()));
+  G4double perp    = std::sqrt(sqr(uZ.x())+sqr(uZ.y()));
   G4double invPerp = uZ.z()/perp;
   return G4ThreeVector(uZ.x()*invPerp,uZ.y()*invPerp,-perp);
 }
@@ -87,7 +87,7 @@ G4ThreeVector G4PolarizationHelper::GetSpinInPRF(const G4ThreeVector &uZ, const 
     return G4ThreeVector(-spin.x(),spin.y(),-spin.z());
   }
 
-  G4double perp    = sqrt(sqr(uZ.x())+sqr(uZ.y()));
+  G4double perp    = std::sqrt(sqr(uZ.x())+sqr(uZ.y()));
   G4double invPerp = uZ.z()/perp;
 
   G4ThreeVector uX(uZ.x()*invPerp,uZ.y()*invPerp,-perp);
@@ -101,8 +101,8 @@ void G4PolarizationHelper::TestPolarizationTransformations()
   G4double theta=0.;
   G4cout<<"========================================\n\n";
   for (int i=0; i<=10; ++i) {
-    theta=M_PI*i/10.;
-    G4ThreeVector zAxis = G4ThreeVector(sin(theta),0.,cos(theta));
+    theta=pi*i/10.;
+    G4ThreeVector zAxis = G4ThreeVector(std::sin(theta),0.,std::cos(theta));
     if (i==5) zAxis = G4ThreeVector(1.,0.,0.);
     if (i==10) zAxis = G4ThreeVector(0.,0.,-1.);
     G4ThreeVector yAxis = GetParticleFrameY(zAxis);
@@ -116,8 +116,8 @@ void G4PolarizationHelper::TestPolarizationTransformations()
   G4cout<<"========================================\n\n";
 
   for (int i=0; i<=10; ++i) {
-    theta=M_PI*i/10.;
-    G4ThreeVector zAxis = G4ThreeVector(0.,sin(theta),cos(theta));
+    theta=pi*i/10.;
+    G4ThreeVector zAxis = G4ThreeVector(0.,std::sin(theta),std::cos(theta));
     if (i==5) zAxis = G4ThreeVector(0.,1.,0.);
     if (i==10) zAxis = G4ThreeVector(0.,0.,-1.);
     G4ThreeVector yAxis = GetParticleFrameY(zAxis);
@@ -143,7 +143,7 @@ void G4PolarizationHelper::TestInteractionFrame()
   G4double theta=0.;
 
   G4ThreeVector dir0=G4ThreeVector(0.,0.,1.);
-  G4ThreeVector dir2=G4ThreeVector(sin(theta),0.,cos(theta));
+  G4ThreeVector dir2=G4ThreeVector(std::sin(theta),0.,std::cos(theta));
   
   G4StokesVector pol0=G4ThreeVector(0.,0.,1.);
   G4StokesVector pol1=G4ThreeVector(0.,0.,1.); 

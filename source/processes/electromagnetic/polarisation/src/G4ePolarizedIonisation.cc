@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ePolarizedIonisation.cc,v 1.1 2006-09-21 21:35:11 vnivanch Exp $
+// $Id: G4ePolarizedIonisation.cc,v 1.2 2006-09-26 09:08:48 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // -------------------------------------------------------------------
 //
@@ -179,8 +179,8 @@ G4double G4ePolarizedIonisation::GetMeanFreePath(const G4Track& track,
     if (mfp <=0.) {
      G4cout <<"PV impact ( "<<polXX<<" , "<<polYY<<" , "<<polZZ<<" )"<<G4endl;
      G4cout << " impact on MFP is "<< impact <<G4endl;
-     G4cout<<" lAsymmetry= "<<lAsymmetry<<" ("<<fabs(lAsymmetry)-1.<<")\n";
-     G4cout<<" tAsymmetry= "<<tAsymmetry<<" ("<<fabs(tAsymmetry)-1.<<")\n";
+     G4cout<<" lAsymmetry= "<<lAsymmetry<<" ("<<std::fabs(lAsymmetry)-1.<<")\n";
+     G4cout<<" tAsymmetry= "<<tAsymmetry<<" ("<<std::fabs(tAsymmetry)-1.<<")\n";
     }
   }
 
@@ -267,16 +267,16 @@ G4double G4ePolarizedIonisation::ComputeAsymmetry(G4double energy,
     lAsymmetry=sigma2/sigma0-1.;
     tAsymmetry=sigma3/sigma0-1.;
   }
-  if (fabs(lAsymmetry)>1.) {
+  if (std::fabs(lAsymmetry)>1.) {
     G4cout<<" energy="<<energy<<"\n";
-    G4cout<<"WARNING lAsymmetry= "<<lAsymmetry<<" ("<<fabs(lAsymmetry)-1.<<")\n";
+    G4cout<<"WARNING lAsymmetry= "<<lAsymmetry<<" ("<<std::fabs(lAsymmetry)-1.<<")\n";
   }
-  if (fabs(tAsymmetry)>1.) {
+  if (std::fabs(tAsymmetry)>1.) {
     G4cout<<" energy="<<energy<<"\n";
-    G4cout<<"WARNING tAsymmetry= "<<tAsymmetry<<" ("<<fabs(tAsymmetry)-1.<<")\n";
+    G4cout<<"WARNING tAsymmetry= "<<tAsymmetry<<" ("<<std::fabs(tAsymmetry)-1.<<")\n";
   }
 //   else {
-//     G4cout<<"        tAsymmetry= "<<tAsymmetry<<" ("<<fabs(tAsymmetry)-1.<<")\n";
+//     G4cout<<"        tAsymmetry= "<<tAsymmetry<<" ("<<std::fabs(tAsymmetry)-1.<<")\n";
 //   }
   return lAsymmetry;
 }

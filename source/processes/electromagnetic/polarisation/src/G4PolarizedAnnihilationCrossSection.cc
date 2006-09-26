@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: G4PolarizedAnnihilationCrossSection.cc,v 1.1 2006-09-21 21:35:11 vnivanch Exp $
+// $Id: G4PolarizedAnnihilationCrossSection.cc,v 1.2 2006-09-26 09:08:46 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // -------------------------------------------------------------------
 //
@@ -46,8 +46,6 @@
 //
 
 #include "G4PolarizedAnnihilationCrossSection.hh"
-
-using namespace std;
 
 G4PolarizedAnnihilationCrossSection::G4PolarizedAnnihilationCrossSection() :
   polxx(0.), polyy(0.), polzz(0.), polxz(0.), polzx(0.), polxy(0.), polyx(0.), polyz(0.), polzy(0.),
@@ -137,7 +135,7 @@ void G4PolarizedAnnihilationCrossSection::Initialize(
   calcVector = G4ThreeVector(-(gam*gam + 1.)*helpVar2,(gam*gam*(gam + 1.) + 7.*gam + 3.)*helpVar2, -(gam + 3.));
   ISPzz = 0.125*helpVar1*(calcVector * sumEpsVector);
 
-  helpVar1 = sqrt(fabs(eps*(1. - eps)*2.*(gam + 1.) - 1.));
+  helpVar1 = std::sqrt(std::fabs(eps*(1. - eps)*2.*(gam + 1.) - 1.));
   calcVector = G4ThreeVector(-1./(gam*gam - 1.), 2./(gam - 1.), 0.);
   ISPnd = 0.125*(calcVector * difEpsVector) * helpVar1;
 
@@ -148,21 +146,21 @@ void G4PolarizedAnnihilationCrossSection::Initialize(
   polXS += ISPnd*(polzx + polxz);
   phi0 = unpXS + polXS;
   dice = symmXS;
-  if(polzz != 0.) dice *= (1. + fabs(polzz*ISPzz/unpXS));
+  if(polzz != 0.) dice *= (1. + std::fabs(polzz*ISPzz/unpXS));
     // prepare final state coefficients
   if (flag==2) {
     //
     // circular polarisation
     //
     G4double circ1 = 0., circ2 = 0., circ3 = 0.;
-    helpVar1 = 8.*sqr(1. - eps)*sqr(eps)*(gam - 1.)*sqr(gam + 1.)/sqrt(gam*gam - 1.);
+    helpVar1 = 8.*sqr(1. - eps)*sqr(eps)*(gam - 1.)*sqr(gam + 1.)/std::sqrt(gam*gam - 1.);
     helpVar2 =  sqr(gam + 1.)*sqr(eps)*(-2.*eps + 3.) - (gam*gam + 3.*gam + 2.)*eps;
     circ1 = helpVar2 + gam;
     circ1 /= helpVar1;
     circ2 = helpVar2 + 1.;
     circ2 /= helpVar1;
-    helpVar1 = sqrt(fabs(eps*(1. - eps)*2.*(gam + 1.) - 1.));
-    helpVar1 /= sqrt(gam*gam - 1.);
+    helpVar1 = std::sqrt(std::fabs(eps*(1. - eps)*2.*(gam + 1.) - 1.));
+    helpVar1 /= std::sqrt(gam*gam - 1.);
     calcVector = G4ThreeVector(1., -2.*gam, 0.);
     circ3 = 0.125*(calcVector * sumEpsVector)/(gam + 1.);
     circ3 *= helpVar1;
@@ -177,7 +175,7 @@ void G4PolarizedAnnihilationCrossSection::Initialize(
     //   
     //        Linear Polarisation #1 
     //
-    helpVar1 = sqrt(fabs(2.*(gam + 1.)*(1. - eps)*eps - 1.))/((gam + 1.)*eps*(1. - eps));
+    helpVar1 = std::sqrt(std::fabs(2.*(gam + 1.)*(1. - eps)*eps - 1.))/((gam + 1.)*eps*(1. - eps));
     helpVar2 = helpVar1*helpVar1;
     //
     // photon 1
@@ -196,9 +194,9 @@ void G4PolarizedAnnihilationCrossSection::Initialize(
    //   
    //        Linear Polarisation #2
    //
-    helpVar1 = sqrt(gam*gam - 1.)*(2.*(gam + 1.)*eps*(1. - eps) - 1.);
+    helpVar1 = std::sqrt(gam*gam - 1.)*(2.*(gam + 1.)*eps*(1. - eps) - 1.);
     helpVar1 /= 8.*sqr(1. - eps)*sqr(eps)*sqr(gam + 1.)*(gam - 1.);
-    helpVar2 = sqrt((gam*gam - 1.)*fabs(2.*(gam + 1.)*eps*(1. - eps) - 1.));
+    helpVar2 = std::sqrt((gam*gam - 1.)*std::fabs(2.*(gam + 1.)*eps*(1. - eps) - 1.));
     helpVar2 /= 8.*sqr(1. - eps)*sqr(eps)*sqr(gam + 1.)*(gam - 1.);
 
     G4double contrib21 = (-polxy + polyx)*helpVar1;
@@ -239,8 +237,8 @@ G4double G4PolarizedAnnihilationCrossSection::TotalXSection(
 
 
   G4double gam2 = gam*gam;
-  G4double sqrtgam1 = sqrt(gam2 - 1.);
-  G4double logMEM  = log(gam+sqrtgam1);
+  G4double sqrtgam1 = std::sqrt(gam2 - 1.);
+  G4double logMEM  = std::log(gam+sqrtgam1);
   G4double unpME = (gam*(gam + 4.) + 1.)*logMEM;
   unpME += -(gam + 3.)*sqrtgam1;
   unpME /= 4.*(gam2 - 1.);

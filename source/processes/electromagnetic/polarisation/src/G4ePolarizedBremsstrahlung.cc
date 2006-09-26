@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ePolarizedBremsstrahlung.cc,v 1.1 2006-09-21 21:35:11 vnivanch Exp $
+// $Id: G4ePolarizedBremsstrahlung.cc,v 1.2 2006-09-26 09:08:48 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -56,8 +56,6 @@
 #include "G4MaterialCutsCouple.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-using namespace std;
  
 G4ePolarizedBremsstrahlung::G4ePolarizedBremsstrahlung(const G4String& name, G4double thresh):
   G4eBremsstrahlung(name,thresh)

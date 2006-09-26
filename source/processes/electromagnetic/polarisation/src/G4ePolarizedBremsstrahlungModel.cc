@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ePolarizedBremsstrahlungModel.cc,v 1.1 2006-09-21 21:35:11 vnivanch Exp $
+// $Id: G4ePolarizedBremsstrahlungModel.cc,v 1.2 2006-09-26 09:08:48 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -53,8 +53,6 @@
 #include "G4PolarizedBremsstrahlungCrossSection.hh"
 #include "G4ParticleChangeForLoss.hh"
 #include "G4PolarizationHelper.hh"
-
-using namespace std;
 
 G4ePolarizedBremsstrahlungModel::G4ePolarizedBremsstrahlungModel(const G4ParticleDefinition* p,
                                                const G4String& nam)
