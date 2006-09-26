@@ -33,7 +33,7 @@ G4HumanPhantomAnalysisManager* G4HumanPhantomAnalysisManager::instance = 0;
 
 G4HumanPhantomAnalysisManager::G4HumanPhantomAnalysisManager() 
   :  aFact(0), treeFact(0),theTree(0), histogramFactory(0),
-     histogramParticlePath(0), projectionXY(0), projectionYZ(0), projectionZX(0), energy(0)
+     histogramParticlePath(0), projectionXY(0), projectionYZ(0), projectionZX(0), energy(0), innerBreast(0)
 { 
   aFact = AIDA_createAnalysisFactory();
   treeFact = aFact -> createTreeFactory();
@@ -41,6 +41,9 @@ G4HumanPhantomAnalysisManager::G4HumanPhantomAnalysisManager()
 
 G4HumanPhantomAnalysisManager::~G4HumanPhantomAnalysisManager() 
 {
+  delete innerBreast;
+  innerBreast =0;
+
   delete energy;
   energy = 0;
 
@@ -103,6 +106,10 @@ void G4HumanPhantomAnalysisManager::book()
   energy = histogramFactory->createHistogram2D
    ("50","Energy Deposit in Body Part", 1000,0.,30.,500,0.,100.);
 
+  innerBreast = histogramFactory->createHistogram2D("100", "Edep(MeV) in innerBreast, x= slice, y= sector",
+						    11, -0.5, 10.5,
+						    11, -0.5, 10.5); 
+
   G4cout<<"booking the histograms"<<G4endl;
 
  }
@@ -130,6 +137,12 @@ void G4HumanPhantomAnalysisManager::particleProjectionZX(G4double zz,G4double xx
 void G4HumanPhantomAnalysisManager::bodypartEnergyDep(G4double bpID, G4double eDep)
 {
   energy -> fill(bpID,eDep);
+}
+
+void G4HumanPhantomAnalysisManager::innerBreastEnergyDep(G4int slice, G4int sector, G4double edep)
+{
+  // G4cout << "analisis " << slice << " "<< sector << " "<< edep << G4endl;
+  innerBreast -> fill(slice,sector, edep);
 }
 
 void G4HumanPhantomAnalysisManager::finish() 

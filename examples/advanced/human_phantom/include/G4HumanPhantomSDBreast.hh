@@ -19,38 +19,31 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-//
-//
-#include"G4FemaleBuilder.hh"
 
-#include "G4VBodyFactory.hh"
-#include "G4MIRDBodyFactory.hh"
-#include "G4ORNLBodyFactory.hh"
+#ifndef G4HumanPhantomSDBreast_h
+#define G4HumanPhantomSDBreast_h 1
 
-G4FemaleBuilder::G4FemaleBuilder()
-{  
-}
+#include "G4VSensitiveDetector.hh"
 
-G4FemaleBuilder::~G4FemaleBuilder()
+
+class G4Step;
+class G4HCofThisEvent;
+
+class G4HumanPhantomSDBreast : public G4VSensitiveDetector
 {
-} 
+  public:
+      G4HumanPhantomSDBreast(G4String);
+     ~G4HumanPhantomSDBreast();
 
-void G4FemaleBuilder::BuildBreast(G4bool sensitivity)
-{
-  G4PhantomBuilder::BuildBreast(sensitivity);
-}
-void G4FemaleBuilder::BuildParameterisedBreast(G4bool sensitivity)
-{
-  G4PhantomBuilder::BuildParameterisedBreast(sensitivity);
-}
+      void Initialize(G4HCofThisEvent*);
+      G4bool ProcessHits(G4Step*, G4TouchableHistory*);
+      void EndOfEvent(G4HCofThisEvent*);
+
+  private:
+  // G4HumanPhantomHitsCollection* trackerBreastCollection;
+
+};
 
 
-void G4FemaleBuilder::BuildOvary(G4bool sensitivity)
-{   
-  G4PhantomBuilder::BuildOvary(sensitivity);
-}
+#endif
 
-void G4FemaleBuilder::BuildUterus(G4bool sensitivity )
-{ 
-  G4PhantomBuilder::BuildUterus(sensitivity);
-}

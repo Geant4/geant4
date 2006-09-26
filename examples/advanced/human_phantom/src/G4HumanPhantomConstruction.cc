@@ -33,23 +33,26 @@
 #include "G4HumanPhantomSD.hh"
 #include "G4SDManager.hh"
 
-#include "G4VBodyFactory.hh"
-#include "G4MIRDBodyFactory.hh"
-#include "G4ORNLBodyFactory.hh"
+//#include "G4VBodyFactory.hh"
+//#include "G4MIRDBodyFactory.hh"
+//#include "G4ORNLBodyFactory.hh"
 
+#include "G4PhantomBuilder.hh"
 #include "G4FemaleBuilder.hh"
 #include "G4MaleBuilder.hh"
 
 #include "G4RunManager.hh"
-
+#include "G4HumanPhantomMaterial.hh"
 
 G4HumanPhantomConstruction::G4HumanPhantomConstruction()
 {
  messenger = new G4HumanPhantomMessenger(this);
+ material = new G4HumanPhantomMaterial();
 }
 
 G4HumanPhantomConstruction::~G4HumanPhantomConstruction()
 {
+ delete material;
  delete messenger;
  delete userPhantomSD;
 }
@@ -57,14 +60,18 @@ G4HumanPhantomConstruction::~G4HumanPhantomConstruction()
 
 G4VPhysicalVolume* G4HumanPhantomConstruction::Construct()
 {
+  material -> DefineMaterials();
+
   G4SDManager* SDman = G4SDManager::GetSDMpointer();
   G4String bodypartSD = "BodyPartSD";
   G4HumanPhantomSD* userPhantomSD = new G4HumanPhantomSD( bodypartSD );
   SDman->AddNewDetector( userPhantomSD );
 
-  // Define sex of phantom
-  G4FemaleBuilder builder; 
-  //G4MaleBuilder builder; 
+  G4String model = "MIRD";
+   // Define sex of phantom
+  G4String sex = "Female";
+
+  G4FemaleBuilder builder ;  
 
   builder.BuildWorld();
 
@@ -72,46 +79,58 @@ G4VPhysicalVolume* G4HumanPhantomConstruction::Construct()
 
   builder.SetSex(sex);
 
-  builder.BuildHead(sensitivities["Head"]);
-  builder.BuildTrunk(sensitivities["Trunk"]);
-  builder.BuildLegs(sensitivities["Legs"]);
+  // the argument indicates the sensitivity of the volume
+  builder.BuildHead(true);
+  builder.BuildTrunk(true);
+  builder.BuildLegs(true);
 
-  builder.BuildBrain(sensitivities["Brain"]);
+  
+  builder.BuildBrain(true);
+  builder.BuildArmBone(true);
+  builder.BuildLegBone(true);
 
-  builder.BuildArmBone(sensitivities["ArmBone"]);
-  builder.BuildLegBone(sensitivities["LegBone"]);
-  builder.BuildSkull(sensitivities["Skull"]);
-  builder.BuildUpperSpine(sensitivities["UpperSpine"]);
-  builder.BuildMiddleLowerSpine(sensitivities["MiddleLowerSpine"]);
-  builder.BuildPelvis(sensitivities["Pelvis"]);
+  
+  builder.BuildSkull(true);
+  
+  builder.BuildUpperSpine(true);
 
-  builder.BuildStomach(sensitivities["Stomach"]);
-  builder.BuildUpperLargeIntestine(sensitivities["UpperLargeIntestine"]);
-  builder.BuildLowerLargeIntestine(sensitivities["LowerLargeIntestine"]);
+  builder.BuildMiddleLowerSpine(true);
 
-  builder.BuildSpleen(sensitivities["Spleen"]);
-  builder.BuildPancreas(sensitivities["Pancreas"]);
-  builder.BuildLiver(sensitivities["Liver"]);
-  builder.BuildKidney(sensitivities["Kidney"]);
-  builder.BuildUrinaryBladder(sensitivities["UrinaryBladder"]);
+  builder.BuildPelvis(true);
+  builder.BuildStomach(true);
+ 
+  
+  builder.BuildUpperLargeIntestine(true);
+  builder.BuildLowerLargeIntestine(true);
+  
+  builder.BuildSpleen(true);
+  builder.BuildPancreas(true); 
 
-  builder.BuildHeart(sensitivities["Heart"]);
+  builder.BuildLiver(true); // da controllare
+  
+  builder.BuildKidney(true); 
+ 
+  builder.BuildUrinaryBladder(true);
 
-  builder.BuildLung(sensitivities["Lung"]);
+  builder.BuildHeart(true); // controllare 
+ 
+  builder.BuildLung(true);
 
-  builder.BuildThyroid(sensitivities["Thyroid"]);
+  builder.BuildThyroid(true); 
 
+  
   if(sex=="Female"){
-    builder.BuildOvary(sensitivities["Ovary"]);
-    builder.BuildUterus(sensitivities["Uterus"]);
-    builder.BuildBreast(sensitivities["Breast"]);
+    builder.BuildOvary(true);
+    builder.BuildUterus(true);
+    builder.BuildBreast(true);
+    builder.BuildParameterisedBreast(true);
   }
-
+  /*
   if(sex=="Male"){
     // builder.BuildMaleGenitalia(sensitivities["MaleGenitalia"]);
     // builder.BuildTestes(sensitivities["Testes"]);
   }
-
+  */
   return builder.GetPhantom(); 
 }
 

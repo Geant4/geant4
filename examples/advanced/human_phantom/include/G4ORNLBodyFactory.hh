@@ -48,6 +48,10 @@ public:
   G4VPhysicalVolume* CreateClavicles(G4VPhysicalVolume*,G4String,G4bool);
 
   G4VPhysicalVolume* CreateBreast(G4VPhysicalVolume*,G4String,G4bool);
+ G4VPhysicalVolume* CreateParameterisedBreast(G4VPhysicalVolume*,G4String,G4bool) { G4cout<< "Parameterised breast is not available for ORNL model"<< G4endl;
+    return 0;};
+
+
   G4VPhysicalVolume* CreateUterus(G4VPhysicalVolume*,G4String,G4bool);
   G4VPhysicalVolume* CreateOvary(G4VPhysicalVolume*,G4String,G4bool);
 

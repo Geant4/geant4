@@ -65,14 +65,7 @@ void G4HumanPhantomEnergyDeposit::TotalEnergyDeposit()
   G4HumanPhantomAnalysisManager* analysis = G4HumanPhantomAnalysisManager::getInstance();
   if (energyDep != 0.)analysis -> bodypartEnergyDep(k,energyDep);
 #endif
-
       i++;
       k++;
     }
-
-#ifdef G4ANALYSIS_USE
-  G4HumanPhantomAnalysisManager* analysis = G4HumanPhantomAnalysisManager::getInstance();
-  analysis->finish();
-#endif
-
 }

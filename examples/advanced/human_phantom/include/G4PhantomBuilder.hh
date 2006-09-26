@@ -57,6 +57,8 @@ public:
   void BuildClavicles(G4bool);
 
   void BuildBreast(G4bool);
+  void BuildParameterisedBreast(G4bool);
+
   void BuildUterus(G4bool);
   void BuildOvary(G4bool);
 

@@ -105,7 +105,7 @@ void G4HumanPhantomMessenger::SetNewValue(G4UIcommand* command,G4String newValue
 
       //myUserPhantom->UpdatePhantom();
 
-      G4RunManager::GetRunManager()->Initialize();
+      //G4RunManager::GetRunManager()->Initialize();
     }
 }
 

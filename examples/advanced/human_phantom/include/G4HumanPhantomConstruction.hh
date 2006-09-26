@@ -34,6 +34,8 @@ class G4VPhysicalVolume;
 class G4LogicalVolume;
 
 class G4HumanPhantomSD;
+class G4HumanPhantomMaterial;
+class G4PhantomBuilder;
 
 class G4HumanPhantomConstruction : public G4VUserDetectorConstruction
 {
@@ -61,6 +63,7 @@ class G4HumanPhantomConstruction : public G4VUserDetectorConstruction
 
   G4String                 model;
   G4String                 sex;
+  G4HumanPhantomMaterial* material;
 };
 
 #endif

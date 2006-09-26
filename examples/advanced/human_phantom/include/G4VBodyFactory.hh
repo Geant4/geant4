@@ -51,6 +51,8 @@ public:
   virtual G4VPhysicalVolume* CreateClavicles(G4VPhysicalVolume*,G4String,G4bool) = 0;
 
   virtual G4VPhysicalVolume* CreateBreast(G4VPhysicalVolume*,G4String,G4bool) = 0;
+  virtual G4VPhysicalVolume* CreateParameterisedBreast(G4VPhysicalVolume*,G4String,G4bool) = 0;
+
   virtual G4VPhysicalVolume* CreateUterus(G4VPhysicalVolume*,G4String,G4bool) = 0;
   virtual G4VPhysicalVolume* CreateOvary(G4VPhysicalVolume*,G4String,G4bool) = 0;
 

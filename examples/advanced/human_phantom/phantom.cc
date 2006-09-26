@@ -42,16 +42,26 @@
 #include "G4HumanPhantomEventAction.hh"
 #include "G4HumanPhantomRunAction.hh"
 #include "G4HumanPhantomEnergyDeposit.hh"
+#include  "G4HumanPhantomAnalysisManager.hh"
 
 int main(int argc,char** argv)
 {
+   G4cout << " starting run " << G4endl;
+
   // Construct the default run manager
   G4RunManager* runManager = new G4RunManager;
   
   // set mandatory initialization classes
   G4HumanPhantomConstruction* userPhantom = new G4HumanPhantomConstruction;
   runManager->SetUserInitialization(userPhantom);
+  G4cout << " useraction geometry " << G4endl;
+
+
   runManager->SetUserInitialization(new G4HumanPhantomPhysicsList);
+  G4cout << " useraction PhysicsList " << G4endl;
+
+  runManager->SetUserAction(new G4HumanPhantomPrimaryGeneratorAction);
+   G4cout << " useraction Primary Generator " << G4endl;
 
   G4UIsession* session=0;
 
@@ -71,8 +81,11 @@ int main(int argc,char** argv)
   visManager->Initialize();
 #endif
 
+  runManager->Initialize();
+  G4cout << "runManager->Initialize();" << G4endl;
+
   // set mandatory user action class
-  runManager->SetUserAction(new G4HumanPhantomPrimaryGeneratorAction);
+  
   runManager->SetUserAction(new G4HumanPhantomRunAction);
 
   G4HumanPhantomEnergyDeposit* energyTotal = new G4HumanPhantomEnergyDeposit();
@@ -82,36 +95,29 @@ int main(int argc,char** argv)
 
   runManager->SetUserAction(new G4HumanPhantomSteppingAction(eventAction)); 
 
-  // initialize G4 kernel
-  //runManager->Initialize();
-  
-  // get the pointer to the UI manager
+
   G4UImanager* UI = G4UImanager::GetUIpointer();
 
-   if(argc==1)
-  // Define (G)UI terminal for interactive mode
-    {
-      // G4UIterminal is a (dumb) terminal.
-#ifdef G4UI_USE_TCSH
-      session = new G4UIterminal(new G4UItcsh);
-#else
-      session = new G4UIterminal();
-#endif
-
-     UI->ApplyCommand("/control/execute adultFemale.mac"); 
-
-     session->SessionStart();
-     delete session;
+  if (session)   // Define UI session for interactive mode.
+    { 
+      G4cout << " UI session starts ..." << G4endl;
+      UI -> ApplyCommand("/control/execute run.mac");    
+      session -> SessionStart();
+      delete session;
     }
-  else
-   //Batch mode
-    {
+  else           // Batch mode
+    { 
       G4String command = "/control/execute ";
       G4String fileName = argv[1];
-      UI->ApplyCommand(command+fileName);
-    }
+      UI -> ApplyCommand(command+fileName);
+    }     
 
    energyTotal->TotalEnergyDeposit();
+
+#ifdef G4ANALYSIS_USE
+  G4HumanPhantomAnalysisManager* analysis = G4HumanPhantomAnalysisManager::getInstance();
+  if (analysis)analysis->finish();
+#endif
 
   // job termination
 #ifdef G4VIS_USE

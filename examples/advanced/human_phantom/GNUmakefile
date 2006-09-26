@@ -18,25 +18,25 @@ endif
 
 ifndef GDML_BASE
 #  GDML_BASE := /afs/cern.ch/sw/lcg/app/releases/GDML/pro
-   GDML_BASE := /home2/gguerrie/devel/GDML_2_1_0
+   GDML_BASE := /local/GDML_2_8_0
 endif
 
 CPPFLAGS    += \
                -I$(GDML_BASE)/include \
-               -I$(GDML_BASE)/geant4/include \
                -I$(XERCESCROOT)/include \
                `aida-config --include`
 
 EXTRALIBS   += \
-               -L$(GDML_BASE)/geant4/$(SCRAM_ARCH)/lib \
-               -llcg_G4Processor \
-               -llcg_G4Subscribers \
-               -llcg_G4Processor \
-               -llcg_G4Writer \
                -L$(GDML_BASE)/$(SCRAM_ARCH)/lib \
-               -llcg_Saxana \
-               -llcg_Processes \
-               -llcg_Writer \
+               -lG4Processor \
+               -lG4Subscribers \
+               -lG4Processor \
+	       -lG4Evaluator\
+               -lG4Writer \
+               -L$(GDML_BASE)/$(SCRAM_ARCH)/lib \
+               -lSaxana \
+               -lProcesses \
+               -lWriter \
                -L$(XERCESCROOT)/lib -lxerces-c \
                `aida-config --lib`
 

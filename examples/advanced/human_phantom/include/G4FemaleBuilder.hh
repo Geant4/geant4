@@ -39,6 +39,7 @@ public:
   ~G4FemaleBuilder();
 
   void BuildBreast(G4bool sensitivity);
+  void BuildParameterisedBreast(G4bool sensitivity);
   void BuildOvary(G4bool sensitivity);
   void BuildUterus(G4bool sensitivity);
 

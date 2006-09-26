@@ -93,8 +93,12 @@ void G4PhantomBuilder::BuildHead(G4bool sensitivity)
 { 
   if (motherVolume == 0)
     G4Exception("The world volume is missing !!!!!");
-
-  headVolume = body -> CreateHead(motherVolume,sex,sensitivity);
+  
+  G4cout <<"MotherVolume: " <<  motherVolume -> GetName()<< G4endl;
+  //  sex = "Female";
+  //G4cout << "sex : " << sex << G4endl;
+  G4cout << "sensitivity : "<< sensitivity << G4endl; 
+  headVolume = body -> CreateHead(motherVolume,sex, sensitivity);
 }
 
 void G4PhantomBuilder::BuildTrunk(G4bool sensitivity)
@@ -207,6 +211,18 @@ void G4PhantomBuilder::BuildBreast(G4bool sensitivity)
    G4Exception("The world volume is missing !!!!!");
 
    body -> CreateBreast(motherVolume,sex,sensitivity);
+}
+
+
+void G4PhantomBuilder::BuildParameterisedBreast(G4bool sensitivity)
+{ 
+  G4cout << "Builder: build parameterised breast!!!!" <<G4endl;
+  
+   if (motherVolume == 0)
+   G4Exception("The world volume is missing !!!!!");
+
+   body -> CreateParameterisedBreast(motherVolume,sex,sensitivity);
+  
 }
 
 void G4PhantomBuilder::BuildUterus(G4bool sensitivity)
