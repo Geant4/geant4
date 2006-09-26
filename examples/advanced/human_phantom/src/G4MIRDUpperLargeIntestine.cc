@@ -22,10 +22,17 @@
 //
 #include "G4MIRDUpperLargeIntestine.hh"
 
-#include "G4Processor/GDMLProcessor.h"
 #include "globals.hh"
 #include "G4SDManager.hh"
 #include "G4VisAttributes.hh"
+#include "G4EllipticalTube.hh"
+#include "G4UnionSolid.hh"
+#include "G4RotationMatrix.hh"
+#include "G4ThreeVector.hh"
+#include "G4VPhysicalVolume.hh"
+#include "G4PVPlacement.hh"
+#include "G4LogicalVolume.hh"
+#include "G4HumanPhantomMaterial.hh"
 
 G4MIRDUpperLargeIntestine::G4MIRDUpperLargeIntestine()
 {
@@ -33,28 +40,45 @@ G4MIRDUpperLargeIntestine::G4MIRDUpperLargeIntestine()
 
 G4MIRDUpperLargeIntestine::~G4MIRDUpperLargeIntestine()
 {
-  sxp.Finalize();
 }
 
 G4VPhysicalVolume* G4MIRDUpperLargeIntestine::ConstructUpperLargeIntestine(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity)
 {
-  // Initialize GDML Processor
-  sxp.Initialize();
-  config.SetURI( "gdmlData/"+sex+"/MIRDUpperLargeIntestine.gdml" );
-  config.SetSetupName( "Default" );
-  sxp.Configure( &config );
-
-  // Run GDML Processor
-  sxp.Run();
+G4cout << "ConstructUpperLargeIntestine for " << sex << G4endl;
  
+ G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
+ G4Material* soft = material -> GetMaterial("soft_tissue");
+ delete material;
 
-  G4LogicalVolume* logicUpperLargeIntestine = (G4LogicalVolume *)GDMLProcessor::GetInstance()->GetLogicalVolume("UpperLargeIntestineVolume");
+  G4double dx = 2.16 * cm;
+  G4double dy = 2.45 * cm;
+  G4double dz = 4.3 * cm;
 
-  G4ThreeVector position = (G4ThreeVector)*GDMLProcessor::GetInstance()->GetPosition("UpperLargeIntestinePos");
-  G4RotationMatrix* rm = (G4RotationMatrix*)GDMLProcessor::GetInstance()->GetRotation("UpperLargeIntestineRot");
-  
-  // Define rotation and position here!
-  G4VPhysicalVolume* physUpperLargeIntestine = new G4PVPlacement(rm,position,
+  G4VSolid* AscendingColonUpperLargeIntestine = new G4EllipticalTube("AscendingColon",dx, dy, dz);
+ 
+  dx = 2.45 * cm;
+  dy = 1.35 *cm;
+  dz = 9.06* cm;
+
+  G4VSolid* TraverseColonUpperLargeIntestine = new G4EllipticalTube("TraverseColon",dx, dy, dz);
+
+  G4RotationMatrix* relative_rm =  new G4RotationMatrix();
+  relative_rm -> rotateX(90. * degree);
+  relative_rm -> rotateZ(0. * degree);
+  relative_rm -> rotateY(90. * degree);
+  G4UnionSolid* upperLargeIntestine = new G4UnionSolid("UpperLargeIntestine",
+						      AscendingColonUpperLargeIntestine,
+						      TraverseColonUpperLargeIntestine,
+						      relative_rm, 
+						      G4ThreeVector(7.2 *cm, 0.0, 5.65 * cm));
+
+
+  G4LogicalVolume* logicUpperLargeIntestine = new G4LogicalVolume(upperLargeIntestine, soft,
+								  "UpperLargeIntestineVolume", 
+								  0, 0, 0);
+ 
+  G4VPhysicalVolume* physUpperLargeIntestine = new G4PVPlacement(0,
+								 G4ThreeVector(-7.33 * cm, -2.31 *cm,-14.22 *cm),
       			       "physicalUpperLargeIntestine",
   			       logicUpperLargeIntestine,
 			       mother,

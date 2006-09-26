@@ -22,10 +22,18 @@
 //
 #include "G4MIRDThyroid.hh"
 
-#include "G4Processor/GDMLProcessor.h"
 #include "globals.hh"
 #include "G4SDManager.hh"
 #include "G4VisAttributes.hh"
+#include "G4HumanPhantomMaterial.hh"
+#include "G4RotationMatrix.hh"
+#include "G4ThreeVector.hh"
+#include "G4VPhysicalVolume.hh"
+#include "G4PVPlacement.hh"
+#include "G4Tubs.hh"
+#include "G4Box.hh"
+#include "G4VSolid.hh"
+#include "G4SubtractionSolid.hh"
 
 G4MIRDThyroid::G4MIRDThyroid()
 {
@@ -33,28 +41,71 @@ G4MIRDThyroid::G4MIRDThyroid()
 
 G4MIRDThyroid::~G4MIRDThyroid()
 {
-  sxp.Finalize();
 }
 
 G4VPhysicalVolume* G4MIRDThyroid::ConstructThyroid(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity)
 {
-  // Initialize GDML Processor
-  sxp.Initialize();
-  config.SetURI( "gdmlData/"+sex+"/MIRDThyroid.gdml" );
-  config.SetSetupName( "Default" );
-  sxp.Configure( &config );
+ G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
+ G4Material* soft = material -> GetMaterial("soft_tissue");
+ delete material;
 
-  // Run GDML Processor
-  sxp.Run();
+  G4double z= 4.20*cm; 
+  G4double rmin= 0. * cm;
+  G4double rmax= 1.85 *cm;
+  G4double startphi = 0. * degree;
+  G4double deltaphi= 180. * degree;
+
+  G4Tubs* LobOfThyroidOut = new G4Tubs("LobOfThyroidOut",
+				       rmin, rmax,z/2., 
+				       startphi, deltaphi);
+
+  z= 4.50*cm; 
+  rmax= 0.83 * cm; 
+  deltaphi= 360. * degree; 
+  G4Tubs* LobOfThyroidIn = new G4Tubs("LobOfThyroidIn",
+				       rmin, rmax,z/2., 
+				      startphi, deltaphi);
+
+  G4double xx = 3.72*cm;
+  G4double yy= 3.72*cm;
+  G4double zz= 20.00*cm;
+  G4Box* SubtrThyroid = new G4Box("SubtrThyroid",
+				  xx/2., yy/2., zz/2.);
+
+  G4SubtractionSolid* FirstThyroid = new G4SubtractionSolid("FirstThyroid",
+							    LobOfThyroidOut,
+							    LobOfThyroidIn);
+
+  G4RotationMatrix* relative_matrix = new G4RotationMatrix();
+  relative_matrix -> rotateX(-50.* degree);
+
+  G4SubtractionSolid* SecondThyroid = new G4SubtractionSolid("SecondThyroid",
+							    FirstThyroid,
+							    SubtrThyroid,
+							    relative_matrix,
+							    G4ThreeVector(0.0 *cm,0.0 *cm, 4.20*cm));
+
+ G4RotationMatrix* relative_matrix_2 = new G4RotationMatrix();
+  relative_matrix_2 -> rotateX(50.* degree);
  
+G4SubtractionSolid* thyroid = new G4SubtractionSolid("SecondThyroid",
+						      SecondThyroid,
+						      SubtrThyroid,
+						      relative_matrix_2,
+						      G4ThreeVector(0.0 *cm,0.0 *cm, -5.40*cm));
 
-  G4LogicalVolume* logicThyroid = (G4LogicalVolume *)GDMLProcessor::GetInstance()->GetLogicalVolume("ThyroidVolume");
 
-  G4ThreeVector position = (G4ThreeVector)*GDMLProcessor::GetInstance()->GetPosition("ThyroidPos");
-  G4RotationMatrix* rm = (G4RotationMatrix*)GDMLProcessor::GetInstance()->GetRotation("ThyroidRot");
+
+ G4LogicalVolume* logicThyroid = new G4LogicalVolume(thyroid, soft,
+						     "ThyroidVolume",
+						     0, 0, 0);
+
+ G4RotationMatrix* rm = new G4RotationMatrix();
   
-  // Define rotation and position here!
-  G4VPhysicalVolume* physThyroid = new G4PVPlacement(rm,position,
+ rm -> rotateZ(180.*degree);
+ 
+  G4VPhysicalVolume* physThyroid = new G4PVPlacement(rm,
+				G4ThreeVector(0.0*cm,-3.91*cm, -5.925*cm),
       			       "physicalThyroid",
   			       logicThyroid,
 			       mother,

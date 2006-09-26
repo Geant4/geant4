@@ -21,11 +21,16 @@
 // ********************************************************************
 //
 #include "G4MIRDUpperSpine.hh"
-
-#include "G4Processor/GDMLProcessor.h"
 #include "globals.hh"
 #include "G4SDManager.hh"
 #include "G4VisAttributes.hh"
+#include "G4VisAttributes.hh"
+#include "G4HumanPhantomMaterial.hh"
+#include "G4EllipticalTube.hh"
+#include "G4RotationMatrix.hh"
+#include "G4ThreeVector.hh"
+#include "G4VPhysicalVolume.hh"
+#include "G4PVPlacement.hh"
 
 G4MIRDUpperSpine::G4MIRDUpperSpine()
 {
@@ -33,28 +38,31 @@ G4MIRDUpperSpine::G4MIRDUpperSpine()
 
 G4MIRDUpperSpine::~G4MIRDUpperSpine()
 {
-  sxp.Finalize();
+ 
 }
 
 G4VPhysicalVolume* G4MIRDUpperSpine::ConstructUpperSpine(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity)
 {
-  // Initialize GDML Processor
-  sxp.Initialize();
-  config.SetURI( "gdmlData/"+sex+"/MIRDUpperSpine.gdml" );
-  config.SetSetupName( "Default" );
-  sxp.Configure( &config );
-
-  // Run GDML Processor
-  sxp.Run();
+  G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
+   
+  G4cout << "ConstructUpperSpine for "<< sex <<G4endl;
+   
+  G4Material* skeleton = material -> GetMaterial("skeleton");
  
+  delete material;
 
-  G4LogicalVolume* logicUpperSpine = (G4LogicalVolume *)GDMLProcessor::GetInstance()->GetLogicalVolume("UpperSpineVolume");
+ G4double dx = 1.73 *cm;
+ G4double dy = 2.45 *cm;
+ G4double dz = 5.*cm;
 
-  G4ThreeVector position = (G4ThreeVector)*GDMLProcessor::GetInstance()->GetPosition("UpperSpinePos");
-  G4RotationMatrix* rm = (G4RotationMatrix*)GDMLProcessor::GetInstance()->GetRotation("UpperSpineRot");
-  
+ G4EllipticalTube* upperSpine = new G4EllipticalTube("UpperSpine",dx, dy, dz);
+
+ G4LogicalVolume* logicUpperSpine = new G4LogicalVolume(upperSpine, skeleton, 
+							"UpperSpineVolume",
+							0, 0, 0);  
   // Define rotation and position here!
-  G4VPhysicalVolume* physUpperSpine = new G4PVPlacement(rm,position,
+  G4VPhysicalVolume* physUpperSpine = new G4PVPlacement(0,
+			        G4ThreeVector(0.0, 5.39 *cm, -3.25 *cm),
       			       "physicalUpperSpine",
   			       logicUpperSpine,
 			       mother,

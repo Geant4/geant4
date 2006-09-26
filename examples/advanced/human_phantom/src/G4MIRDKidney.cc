@@ -22,10 +22,21 @@
 //
 #include "G4MIRDKidney.hh"
 
-#include "G4Processor/GDMLProcessor.h"
 #include "globals.hh"
 #include "G4SDManager.hh"
 #include "G4VisAttributes.hh"
+#include "G4HumanPhantomMaterial.hh"
+#include "G4SDManager.hh"
+#include "G4PVPlacement.hh"
+#include "G4SubtractionSolid.hh"
+#include "G4Ellipsoid.hh"
+#include "G4ThreeVector.hh"
+#include "G4VPhysicalVolume.hh"
+#include "G4RotationMatrix.hh"
+#include "G4Material.hh"
+#include "G4EllipticalTube.hh"
+#include "G4Box.hh"
+#include "G4UnionSolid.hh"
 
 G4MIRDKidney::G4MIRDKidney()
 {
@@ -33,28 +44,52 @@ G4MIRDKidney::G4MIRDKidney()
 
 G4MIRDKidney::~G4MIRDKidney()
 {
-  sxp.Finalize();
 }
 
 G4VPhysicalVolume* G4MIRDKidney::ConstructKidney(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity)
 {
-  // Initialize GDML Processor
-  sxp.Initialize();
-  config.SetURI( "gdmlData/"+sex+"/MIRDKidney.gdml" );
-  config.SetSetupName( "Default" );
-  sxp.Configure( &config );
-
-  // Run GDML Processor
-  sxp.Run();
+ G4cout << "ConstructKidney for " << sex << G4endl;
  
+ G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
+ G4Material* soft = material -> GetMaterial("soft_tissue");
+ delete material;
+ 
+ G4double ax= 4.05 *cm;
+ G4double by= 1.53 *cm;
+ G4double cz= 4.96 *cm;
+ G4double zcut1 =-4.96 *cm;
+ G4double zcut2 = 4.96*cm;
 
-  G4LogicalVolume* logicKidney = (G4LogicalVolume *)GDMLProcessor::GetInstance()->GetLogicalVolume("KidneyVolume");
+ G4VSolid* oneKidney = new G4Ellipsoid("OneKidney",ax, by, cz, 
+					  zcut1,zcut2);
 
-  G4ThreeVector position = (G4ThreeVector)*GDMLProcessor::GetInstance()->GetPosition("KidneyPos");
-  G4RotationMatrix* rm = (G4RotationMatrix*)GDMLProcessor::GetInstance()->GetRotation("KidneyRot");
-  
-  // Define rotation and position here!
-  G4VPhysicalVolume* physKidney = new G4PVPlacement(rm,position,
+ G4double xx = 4.96 * cm;
+ G4double yy = 20.00*cm;
+ G4double zz = 20.00*cm;
+ G4VSolid* subtrKidney = new G4Box("SubtrKidney",xx/2., yy/2., zz/2.);
+ 
+ G4UnionSolid* unionKidney = new G4UnionSolid("UnionKidney",
+					      oneKidney,
+					      oneKidney,0,
+					      G4ThreeVector(10.36 *cm, 
+							    0.0 * cm,
+							    0.0 * cm));
+ G4SubtractionSolid* kidney = new G4SubtractionSolid("Kidneys",
+						     unionKidney,
+						     subtrKidney,
+						     0, 
+						     G4ThreeVector(5.18 *cm,
+								   0.0 *cm,
+								   0.0 * cm));
+
+  G4LogicalVolume* logicKidney = new G4LogicalVolume(kidney,
+						     soft,
+						     "KidneyVolume",
+						     0, 0, 0);
+
+  G4VPhysicalVolume* physKidney = new G4PVPlacement(0 ,G4ThreeVector(-5.18*cm,
+								     5.88 *cm,
+								     -2.25 *cm),
       			       "physicalKidney",
   			       logicKidney,
 			       mother,

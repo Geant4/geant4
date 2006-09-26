@@ -22,10 +22,18 @@
 //
 #include "G4MIRDBrain.hh"
 
-#include "G4Processor/GDMLProcessor.h"
 #include "globals.hh"
 #include "G4SDManager.hh"
 #include "G4VisAttributes.hh"
+#include "G4Ellipsoid.hh"
+#include "G4ThreeVector.hh"
+#include "G4VPhysicalVolume.hh"
+#include "G4RotationMatrix.hh"
+#include "G4Material.hh"
+#include "G4LogicalVolume.hh"
+#include "G4HumanPhantomMaterial.hh"
+#include "G4VPhysicalVolume.hh"
+#include "G4PVPlacement.hh"
 
 G4MIRDBrain::G4MIRDBrain()
 {
@@ -33,33 +41,35 @@ G4MIRDBrain::G4MIRDBrain()
 
 G4MIRDBrain::~G4MIRDBrain()
 {
-  sxp.Finalize();
+
 }
 
 G4VPhysicalVolume* G4MIRDBrain::ConstructBrain(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity)
 {
-  // Initialize GDML Processor
-  sxp.Initialize();
-  config.SetURI( "gdmlData/"+sex+"/MIRDBrain.gdml" );
-  config.SetSetupName( "Default" );
-  sxp.Configure( &config );
 
-  // Run GDML Processor
-  sxp.Run();
+ G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
+ G4Material* soft = material -> GetMaterial("soft_tissue");
+ delete material;
+
+ G4double ax = 6.58 * cm;
+ G4double by= 8.57 * cm;
+ G4double cz = 5.73 * cm;
+
+ G4Ellipsoid* brain = new G4Ellipsoid("Brain", ax, by, cz);
  
 
-  G4LogicalVolume* logicBrain = (G4LogicalVolume *)GDMLProcessor::GetInstance()->GetLogicalVolume("BrainVolume");
-
-  G4ThreeVector position = (G4ThreeVector)*GDMLProcessor::GetInstance()->GetPosition("BrainPos");
-  G4RotationMatrix* rm = (G4RotationMatrix*)GDMLProcessor::GetInstance()->GetRotation("BrainRot");
+  G4LogicalVolume* logicBrain =  new G4LogicalVolume(brain, soft, 
+						     "BrainVolume",
+						     0, 0, 0);
   
   // Define rotation and position here!
-  G4VPhysicalVolume* physBrain = new G4PVPlacement(rm,position,
-      			       "physicalBrain",
-  			       logicBrain,
-			       mother,
-			       false,
-			       0);
+  G4VPhysicalVolume* physBrain = new G4PVPlacement(0,
+						   G4ThreeVector(0.*cm, 0.*cm, 8.25 * cm),
+						   "physicalBrain",
+						   logicBrain,
+						   mother,
+						   false,
+						   0);
   // Sensitive Body Part
   if (sensitivity==true)
   { 

@@ -46,6 +46,9 @@ public:
   G4VPhysicalVolume* CreatePelvis(G4VPhysicalVolume*,G4String,G4bool);
 
   G4VPhysicalVolume* CreateBreast(G4VPhysicalVolume*,G4String,G4bool);
+  G4VPhysicalVolume* CreateParameterisedBreast(G4VPhysicalVolume*,
+  				       G4String,G4bool);
+
   G4VPhysicalVolume* CreateUterus(G4VPhysicalVolume*,G4String,G4bool);
   G4VPhysicalVolume* CreateOvary(G4VPhysicalVolume*,G4String,G4bool);
 

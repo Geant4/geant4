@@ -21,11 +21,18 @@
 // ********************************************************************
 //
 #include "G4MIRDLowerLargeIntestine.hh"
-
-#include "G4Processor/GDMLProcessor.h"
 #include "globals.hh"
 #include "G4SDManager.hh"
 #include "G4VisAttributes.hh"
+#include "G4EllipticalTube.hh"
+#include "G4UnionSolid.hh"
+#include "G4RotationMatrix.hh"
+#include "G4ThreeVector.hh"
+#include "G4VPhysicalVolume.hh"
+#include "G4PVPlacement.hh"
+#include "G4LogicalVolume.hh"
+#include "G4Torus.hh"
+#include "G4HumanPhantomMaterial.hh"
 
 G4MIRDLowerLargeIntestine::G4MIRDLowerLargeIntestine()
 {
@@ -33,34 +40,71 @@ G4MIRDLowerLargeIntestine::G4MIRDLowerLargeIntestine()
 
 G4MIRDLowerLargeIntestine::~G4MIRDLowerLargeIntestine()
 {
-  sxp.Finalize();
+
 }
 
 G4VPhysicalVolume* G4MIRDLowerLargeIntestine::ConstructLowerLargeIntestine(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity)
 {
-  // Initialize GDML Processor
-  sxp.Initialize();
-  config.SetURI( "gdmlData/"+sex+"/MIRDLowerLargeIntestine.gdml" );
-  config.SetSetupName( "Default" );
-  sxp.Configure( &config );
-
-  // Run GDML Processor
-  sxp.Run();
+ G4cout << "ConstructLowerLargeIntestine for " << sex << G4endl;
  
+ G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
+ G4Material* soft = material -> GetMaterial("soft_tissue");
+ delete material;
 
-  G4LogicalVolume* logicLowerLargeIntestine = (G4LogicalVolume *)GDMLProcessor::GetInstance()->GetLogicalVolume("LowerLargeIntestineVolume");
+ G4double dx = 1.62 * cm;
+ G4double dy = 2.09 *cm;
+ G4double dz = 6.885 *cm;
 
-  G4ThreeVector position = (G4ThreeVector)*GDMLProcessor::GetInstance()->GetPosition("LowerLargeIntestinePos");
-  G4RotationMatrix* rm = (G4RotationMatrix*)GDMLProcessor::GetInstance()->GetRotation("LowerLargeIntestineRot");
+ G4EllipticalTube* DescendingColonLowerLargeIntestine = new G4EllipticalTube("DiscendingColon",dx, dy, dz);
+
+
+  G4double rmin= 0.0 *cm;
+  G4double rmax = 1.62 * cm;
+  G4double rtor= 5.16*cm;
+  G4double startphi= 0. * degree;
+  G4double deltaphi= 90. * degree;
+
+  G4Torus* SigmoidColonUpLowerLargeIntestine = new G4Torus("SigmoidColonUpLowerLargeIntestine",
+							    rmin, rmax,rtor,
+							    startphi, deltaphi);
+
+  rtor = 2.70 * cm;
+  G4VSolid* SigmoidColonDownLowerLargeIntestine = new G4Torus("SigmoidColonDownLowerLargeIntestine",
+							      rmin, rmax,
+							      rtor,startphi,deltaphi);
+
+  G4RotationMatrix* relative_rm =  new G4RotationMatrix();
+  relative_rm -> rotateY(180. * degree);
+  relative_rm -> rotateZ(90. * degree);
+
+  G4UnionSolid*  SigmoidColonLowerLargeIntestine = new G4UnionSolid( "SigmoidColonLowerLargeIntestine",
+								      SigmoidColonUpLowerLargeIntestine,
+								      SigmoidColonDownLowerLargeIntestine,
+								      relative_rm,
+								      G4ThreeVector(0.0,7.85*cm,0.0));
+ 
+  G4RotationMatrix* relative_rm_2 =  new G4RotationMatrix();
+  relative_rm_2 -> rotateX(90. * degree);
+
+  G4UnionSolid* LowerLargeIntestine = new G4UnionSolid( "LowerLargeIntestine",
+						       DescendingColonLowerLargeIntestine,
+							SigmoidColonLowerLargeIntestine,
+							relative_rm_2,
+							G4ThreeVector(-5.16*cm,0.0*cm, -6.885*cm)
+							); 
+
+
+  G4LogicalVolume* logicLowerLargeIntestine = new G4LogicalVolume( LowerLargeIntestine, soft,
+								   "LowerLargeIntestineVolume",
+								   0, 0, 0);
   
-  // Define rotation and position here!
-  G4VPhysicalVolume* physLowerLargeIntestine = new G4PVPlacement(rm,position,
-      			       "physicalLowerLargeIntestine",
-  			       logicLowerLargeIntestine,
-			       mother,
-			       false,
-			       0);
-
+  G4VPhysicalVolume* physLowerLargeIntestine = new G4PVPlacement(0,
+								 G4ThreeVector(7.86*cm, -2.31*cm,-16.79 *cm),
+								 "physicalLowerLargeIntestine",
+								 logicLowerLargeIntestine,
+								 mother,
+								 false,
+								 0);
   // Sensitive Body Part
   if (sensitivity==true)
   { 

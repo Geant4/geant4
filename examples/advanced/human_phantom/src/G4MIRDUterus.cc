@@ -21,40 +21,57 @@
 // ********************************************************************
 //
 #include "G4MIRDUterus.hh"
-
-#include "G4Processor/GDMLProcessor.h"
 #include "globals.hh"
 #include "G4SDManager.hh"
 #include "G4VisAttributes.hh"
-
+#include "G4Ellipsoid.hh"
+#include "G4ThreeVector.hh"
+#include "G4VPhysicalVolume.hh"
+#include "G4RotationMatrix.hh"
+#include "G4Material.hh"
+#include "G4LogicalVolume.hh"
+#include "G4HumanPhantomMaterial.hh"
+#include "G4VPhysicalVolume.hh"
+#include "G4PVPlacement.hh"
 G4MIRDUterus::G4MIRDUterus()
 {
 }
 
 G4MIRDUterus::~G4MIRDUterus()
 {
-  sxp.Finalize();
 }
 
 G4VPhysicalVolume* G4MIRDUterus::ConstructUterus(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity)
 {
-  // Initialize GDML Processor
-  sxp.Initialize();
-  config.SetURI( "gdmlData/"+sex+"/MIRDUterus.gdml" );
-  config.SetSetupName( "Default" );
-  sxp.Configure( &config );
-
-  // Run GDML Processor
-  sxp.Run();
  
+ G4cout << "ConstructUterus for " << sex << G4endl;
+ 
+ G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
+ G4Material* soft = material -> GetMaterial("soft_tissue");
+ delete material;
 
-  G4LogicalVolume* logicUterus = (G4LogicalVolume *)GDMLProcessor::GetInstance()->GetLogicalVolume("UterusVolume");
+ G4double ax= 2.47*cm;
+ G4double by= 1.55*cm;
+ G4double cz= 5.61*cm;
+ G4double zcut1= -5.61* cm;
+ G4double zcut2= 2.81*cm;
 
-  G4ThreeVector position = (G4ThreeVector)*GDMLProcessor::GetInstance()->GetPosition("UterusPos");
-  G4RotationMatrix* rm = (G4RotationMatrix*)GDMLProcessor::GetInstance()->GetRotation("UterusRot");
+ G4Ellipsoid* uterus = new G4Ellipsoid("Uterus",
+				       ax, by, cz,
+				       zcut1, zcut2);
+
+  G4LogicalVolume* logicUterus = new G4LogicalVolume(uterus,
+						     soft,
+						     "UterusVolume",
+						     0, 0, 0);
+
+
+  G4RotationMatrix* rm = new G4RotationMatrix();
+  rm -> rotateX(90.* degree); 
   
   // Define rotation and position here!
-  G4VPhysicalVolume* physUterus = new G4PVPlacement(rm,position,
+  G4VPhysicalVolume* physUterus = new G4PVPlacement(rm,
+				G4ThreeVector(0. *cm, 1.96*cm,-18.93 *cm),
       			       "physicalUterus",
   			       logicUterus,
 			       mother,

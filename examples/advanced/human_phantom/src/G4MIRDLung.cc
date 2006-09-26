@@ -21,11 +21,20 @@
 // ********************************************************************
 //
 #include "G4MIRDLung.hh"
-
-#include "G4Processor/GDMLProcessor.h"
 #include "globals.hh"
 #include "G4SDManager.hh"
 #include "G4VisAttributes.hh"
+#include "G4Ellipsoid.hh"
+#include "G4ThreeVector.hh"
+#include "G4VPhysicalVolume.hh"
+#include "G4RotationMatrix.hh"
+#include "G4Material.hh"
+#include "G4LogicalVolume.hh"
+#include "G4HumanPhantomMaterial.hh"
+#include "G4VPhysicalVolume.hh"
+#include "G4PVPlacement.hh"
+#include "G4UnionSolid.hh"
+#include "G4SubtractionSolid.hh"
 
 G4MIRDLung::G4MIRDLung()
 {
@@ -33,28 +42,44 @@ G4MIRDLung::G4MIRDLung()
 
 G4MIRDLung::~G4MIRDLung()
 {
-  sxp.Finalize();
+
 }
 
 G4VPhysicalVolume* G4MIRDLung::ConstructLung(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity)
 {
-  // Initialize GDML Processor
-  sxp.Initialize();
-  config.SetURI( "gdmlData/"+sex+"/MIRDLung.gdml" );
-  config.SetSetupName( "Default" );
-  sxp.Configure( &config );
 
-  // Run GDML Processor
-  sxp.Run();
+ G4cout << "ConstructLungs for " << sex << G4endl;
  
+ G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
+ G4Material* lung_material = material -> GetMaterial("lung_material");
+ delete material;
 
-  G4LogicalVolume* logicLung = (G4LogicalVolume *)GDMLProcessor::GetInstance()->GetLogicalVolume("LungVolume");
+ G4double ax = 4.09 *cm;
+ G4double by = 6.98 *cm; 
+ G4double cz = 20.55*cm;
+ G4double zcut1 = 0.0 *cm; 
+ G4double zcut2=20.55 *cm;
+ 
+ G4Ellipsoid* oneLung = new G4Ellipsoid("OneLung",ax, by, cz, zcut1,zcut2);
+ 
+ ax= 5.0*cm;
+ by= 7.0*cm;
+ cz= 20.55*cm;
 
-  G4ThreeVector position = (G4ThreeVector)*GDMLProcessor::GetInstance()->GetPosition("LungPos");
-  G4RotationMatrix* rm = (G4RotationMatrix*)GDMLProcessor::GetInstance()->GetRotation("LungRot");
+ G4Ellipsoid* subtrLung = new G4Ellipsoid("subtrLung",ax, by, cz);
+
+ G4UnionSolid* lung1 = new G4UnionSolid("Lung1", oneLung, oneLung,0,
+				    G4ThreeVector(14.66*cm, 0.0*cm,0.*cm));
+
+ G4SubtractionSolid* lung =  new G4SubtractionSolid("Lung", lung1,
+					       subtrLung,
+					       0, G4ThreeVector(7.50*cm,-4.0*cm,0.0));
+
+ G4LogicalVolume* logicLung = new G4LogicalVolume(lung,lung_material,
+						  "LungVolume", 0, 0, 0); 
   
-  // Define rotation and position here!
-  G4VPhysicalVolume* physLung = new G4PVPlacement(rm,position,
+
+  G4VPhysicalVolume* physLung = new G4PVPlacement(0,G4ThreeVector(-7.33 *cm, 0.0*cm, 7.66*cm),
       			       "physicalLung",
   			       logicLung,
 			       mother,

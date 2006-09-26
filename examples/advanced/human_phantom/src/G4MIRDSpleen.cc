@@ -26,35 +26,46 @@
 #include "globals.hh"
 #include "G4SDManager.hh"
 #include "G4VisAttributes.hh"
-
+#include "G4ThreeVector.hh"
+#include "G4VPhysicalVolume.hh"
+#include "G4RotationMatrix.hh"
+#include "G4Material.hh"
+#include "G4LogicalVolume.hh"
+#include "G4HumanPhantomMaterial.hh"
+#include "G4VPhysicalVolume.hh"
+#include "G4PVPlacement.hh"
+#include "G4Ellipsoid.hh"
 G4MIRDSpleen::G4MIRDSpleen()
 {
 }
 
 G4MIRDSpleen::~G4MIRDSpleen()
 {
-  sxp.Finalize();
+
 }
 
 G4VPhysicalVolume* G4MIRDSpleen::ConstructSpleen(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity)
 {
-  // Initialize GDML Processor
-  sxp.Initialize();
-  config.SetURI( "gdmlData/"+sex+"/MIRDSpleen.gdml" );
-  config.SetSetupName( "Default" );
-  sxp.Configure( &config );
 
-  // Run GDML Processor
-  sxp.Run();
- 
+ G4cout << "ConstructSpleen for " << sex << G4endl;
+ G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
+ G4Material* soft = material -> GetMaterial("soft_tissue");
+ delete material;
 
-  G4LogicalVolume* logicSpleen = (G4LogicalVolume *)GDMLProcessor::GetInstance()->GetLogicalVolume("SpleenVolume");
+ G4double ax= 2.90 *cm;
+ G4double by= 1.88 *cm;
+ G4double cz= 5.19 * cm; 
 
-  G4ThreeVector position = (G4ThreeVector)*GDMLProcessor::GetInstance()->GetPosition("SpleenPos");
-  G4RotationMatrix* rm = (G4RotationMatrix*)GDMLProcessor::GetInstance()->GetRotation("SpleenRot");
+ G4Ellipsoid* spleen = new G4Ellipsoid("spleen", ax, by, cz);
+
+
+  G4LogicalVolume* logicSpleen = new G4LogicalVolume(spleen, soft,
+						     "SpleenVolume",
+						     0, 0, 0);
   
   // Define rotation and position here!
-  G4VPhysicalVolume* physSpleen = new G4PVPlacement(rm,position,
+  G4VPhysicalVolume* physSpleen = new G4PVPlacement(0,
+			       G4ThreeVector(9.49 *cm, 2.94 *cm, 1.8*cm),
       			       "physicalSpleen",
   			       logicSpleen,
 			       mother,

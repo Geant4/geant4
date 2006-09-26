@@ -22,48 +22,73 @@
 //
 #include "G4MIRDHead.hh"
 
-#include "G4Processor/GDMLProcessor.h"
+//#include "G4Processor/GDMLProcessor.h"
 #include "globals.hh"
-
+#include "G4HumanPhantomMaterial.hh"
 #include "G4SDManager.hh"
-
+#include "G4PVPlacement.hh"
 #include "G4VisAttributes.hh"
+#include "G4UnionSolid.hh"
+#include "G4Ellipsoid.hh"
+#include "G4ThreeVector.hh"
+#include "G4VPhysicalVolume.hh"
+#include "G4RotationMatrix.hh"
+#include "G4Material.hh"
+#include "G4EllipticalTube.hh"
 
 G4MIRDHead::G4MIRDHead()
 {
+  material = new G4HumanPhantomMaterial();
 }
 
 G4MIRDHead::~G4MIRDHead()
 {
-  sxp.Finalize();
+  delete material;
+
 }
 
 G4VPhysicalVolume* G4MIRDHead::ConstructHead(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity)
 {
-  // Initialize GDML Processor
-  sxp.Initialize();
-  config.SetURI( "gdmlData/"+sex+"/MIRDHead.gdml" );
-  config.SetSetupName( "Default" );
-  sxp.Configure( &config );
 
-  // Run GDML Processor
-  sxp.Run();
- 
-
-  G4LogicalVolume* logicHead = (G4LogicalVolume *)GDMLProcessor::GetInstance()->GetLogicalVolume("HeadVolume");
-
-  G4ThreeVector position = (G4ThreeVector)*GDMLProcessor::GetInstance()->GetPosition("HeadPos");
-  G4RotationMatrix* rm = (G4RotationMatrix*)GDMLProcessor::GetInstance()->GetRotation("HeadRot");
+  G4cout << "ConstructHead"<< G4endl;
+  G4Material* soft = material -> GetMaterial("soft_tissue");
   
+  // Ellipsoid
+  G4double ax = 7.77 * cm;
+  G4double by = 9.76 * cm;
+  G4double cz = 6.92 * cm;
+  G4double zcut1 = 0.0 * cm;
+  G4double zcut2 = 6.92 * cm;
+
+  G4Ellipsoid* head1 = new G4Ellipsoid("Head1", ax, by, cz, zcut1, zcut2);
+
+  G4double dx = 7.77 * cm;
+  G4double dy = 9.76 * cm;
+  G4double dz = 8.25 * cm;
+
+  G4EllipticalTube* head2 = new G4EllipticalTube("Head2", dx, dy, dz);
+  // G4Tubs(Name, r_int, r_est, halfz lenght, spanning angles) 
+
+  G4UnionSolid* head = new G4UnionSolid("Head",head2,head1,
+					0, // Rotation 
+					G4ThreeVector(0.* cm, 0.*cm, 8.15 * cm) );
+
+  G4LogicalVolume* logicHead = new G4LogicalVolume(head, soft,"HeadVolume",
+						   0, 0,0);
+  G4RotationMatrix* rm = new G4RotationMatrix();
+  rm -> rotateX(90.* degree);
+
   // Define rotation and position here!
-  G4VPhysicalVolume* physHead = new G4PVPlacement(rm,position,
-      			       "physicalHead",
-  			       logicHead,
-			       mother,
-			       false,
-			       0);
+  G4VPhysicalVolume* physHead = new G4PVPlacement(rm,
+						  G4ThreeVector(0.* cm,71.35*cm, 0.*cm),
+						  "physicalHead",
+						  logicHead,
+						  mother,
+						  false,
+						  0);
 
   // Sensitive Body Part
+ 
   if (sensitivity==true)
   { 
     G4SDManager* SDman = G4SDManager::GetSDMpointer();
@@ -92,8 +117,6 @@ G4VPhysicalVolume* G4MIRDHead::ConstructHead(G4VPhysicalVolume* mother, G4String
   // Testing Mass
   G4double HeadMass = (HeadVol)*HeadDensity;
   G4cout << "Mass of Head = " << HeadMass/gram << " g" << G4endl;
-
-
   
   return physHead;
 }

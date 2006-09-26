@@ -22,10 +22,18 @@
 //
 #include "G4MIRDStomach.hh"
 
-#include "G4Processor/GDMLProcessor.h"
 #include "globals.hh"
 #include "G4SDManager.hh"
 #include "G4VisAttributes.hh"
+#include "G4Ellipsoid.hh"
+#include "G4ThreeVector.hh"
+#include "G4VPhysicalVolume.hh"
+#include "G4RotationMatrix.hh"
+#include "G4Material.hh"
+#include "G4LogicalVolume.hh"
+#include "G4HumanPhantomMaterial.hh"
+#include "G4VPhysicalVolume.hh"
+#include "G4PVPlacement.hh"
 
 G4MIRDStomach::G4MIRDStomach()
 {
@@ -33,28 +41,32 @@ G4MIRDStomach::G4MIRDStomach()
 
 G4MIRDStomach::~G4MIRDStomach()
 {
-  sxp.Finalize();
 }
 
 G4VPhysicalVolume* G4MIRDStomach::ConstructStomach(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity)
 {
-  // Initialize GDML Processor
-  sxp.Initialize();
-  config.SetURI( "gdmlData/"+sex+"/MIRDStomach.gdml" );
-  config.SetSetupName( "Default" );
-  sxp.Configure( &config );
 
-  // Run GDML Processor
-  sxp.Run();
+  G4cout << "ConstructStomach for " << sex << G4endl;
  
+ G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
+ G4Material* soft = material -> GetMaterial("soft_tissue");
+ delete material;
 
-  G4LogicalVolume* logicStomach = (G4LogicalVolume *)GDMLProcessor::GetInstance()->GetLogicalVolume("StomachVolume");
+ G4double ax = 3.43 * cm;
+ G4double by= 2.92 * cm;
+ G4double cz = 7.16 * cm;
+ G4double zcut1 = -7.16 * cm;
+ G4double zcut2 = 7.16 * cm;
 
-  G4ThreeVector position = (G4ThreeVector)*GDMLProcessor::GetInstance()->GetPosition("StomachPos");
-  G4RotationMatrix* rm = (G4RotationMatrix*)GDMLProcessor::GetInstance()->GetRotation("StomachRot");
+  G4Ellipsoid* stomach = new G4Ellipsoid("stomach", 
+					 ax, by, cz,
+					 zcut1, zcut2);
+
+  G4LogicalVolume* logicStomach = new G4LogicalVolume(stomach, soft,
+						      "StomachVolume", 0, 0, 0);
   
   // Define rotation and position here!
-  G4VPhysicalVolume* physStomach = new G4PVPlacement(rm,position,
+  G4VPhysicalVolume* physStomach = new G4PVPlacement(0,G4ThreeVector(6.90 *cm,-3.92 * cm, 0),
       			       "physicalStomach",
   			       logicStomach,
 			       mother,

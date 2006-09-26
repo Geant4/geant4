@@ -49,7 +49,7 @@
 #include "G4MIRDRibCage.hh"
 #include "G4MIRDPelvis.hh"
 #include "G4MIRDTestes.hh"
-
+#include "G4ParameterisedBreast.hh"
 
 G4MIRDBodyFactory::G4MIRDBodyFactory()
 {
@@ -152,6 +152,14 @@ G4VPhysicalVolume* G4MIRDBodyFactory::CreateBreast(G4VPhysicalVolume* motherVolu
   G4MIRDBreast* breast = new G4MIRDBreast();
   return breast -> ConstructBreast(motherVolume,sex,sensitivity);
 }
+
+G4VPhysicalVolume* G4MIRDBodyFactory::CreateParameterisedBreast(G4VPhysicalVolume* motherVolume, G4String sex, G4bool sensitivity)
+{
+  G4cout << "G4MIRDBodyFactory::CreateParameterisedBreast" << G4endl;
+  G4ParameterisedBreast* breast = new G4ParameterisedBreast();
+  return breast -> ConstructBreast(motherVolume,sex,sensitivity);
+}
+
 G4VPhysicalVolume* G4MIRDBodyFactory::CreateOvary(G4VPhysicalVolume* motherVolume, G4String sex, G4bool sensitivity)
 {
   G4MIRDOvary* ovary = new G4MIRDOvary();

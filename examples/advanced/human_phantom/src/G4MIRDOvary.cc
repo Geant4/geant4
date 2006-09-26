@@ -22,10 +22,20 @@
 //
 #include "G4MIRDOvary.hh"
 #include "G4SDManager.hh"
-#include "G4Processor/GDMLProcessor.h"
+
 #include "globals.hh"
 
 #include "G4VisAttributes.hh"
+#include "G4Ellipsoid.hh"
+#include "G4ThreeVector.hh"
+#include "G4VPhysicalVolume.hh"
+#include "G4RotationMatrix.hh"
+#include "G4Material.hh"
+#include "G4LogicalVolume.hh"
+#include "G4HumanPhantomMaterial.hh"
+#include "G4VPhysicalVolume.hh"
+#include "G4PVPlacement.hh"
+#include "G4UnionSolid.hh"
 
 G4MIRDOvary::G4MIRDOvary()
 {
@@ -33,28 +43,42 @@ G4MIRDOvary::G4MIRDOvary()
 
 G4MIRDOvary::~G4MIRDOvary()
 {
-  sxp.Finalize();
+
 }
 
 G4VPhysicalVolume* G4MIRDOvary::ConstructOvary(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity)
-{
-  // Initialize GDML Processor
-  sxp.Initialize();
-  config.SetURI( "gdmlData/"+sex+"/MIRDOvary.gdml" );
-  config.SetSetupName( "Default" );
-  sxp.Configure( &config );
-
-  // Run GDML Processor
-  sxp.Run();
+{ 
+  G4cout << "ConstructOvary for " << sex << G4endl;
  
+ G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
+ G4Material* soft = material -> GetMaterial("soft_tissue");
+ delete material;
+ 
+ G4double ax= 1.17 *cm;
+ G4double by= 0.58*cm;
+ G4double cz= 1.80*cm;
+ G4double zcut1=-1.80*cm;
+ G4double zcut2= 1.80*cm;
 
-  G4LogicalVolume* logicOvary = (G4LogicalVolume *)GDMLProcessor::GetInstance()->GetLogicalVolume("OvaryVolume");
+ G4Ellipsoid* OneOvary = new G4Ellipsoid("OneOvary",
+					 ax, by, cz,
+					 zcut1, zcut2); 
 
-  G4ThreeVector position = (G4ThreeVector)*GDMLProcessor::GetInstance()->GetPosition("OvaryPos");
-  G4RotationMatrix* rm = (G4RotationMatrix*)GDMLProcessor::GetInstance()->GetRotation("OvaryRot");
+ G4UnionSolid* Ovary = new G4UnionSolid("Ovary",  OneOvary,
+					OneOvary,0,
+					G4ThreeVector(10.36*cm, 
+						      0.0*cm,
+						      0.0*cm));
+
+
+  G4LogicalVolume* logicOvary = new G4LogicalVolume(Ovary,
+						    soft,
+						    "OvaryVolume",
+						    0, 0, 0);
   
   // Define rotation and position here!
-  G4VPhysicalVolume* physOvary = new G4PVPlacement(rm,position,
+  G4VPhysicalVolume* physOvary = new G4PVPlacement(0,
+			       G4ThreeVector(-5.18 *cm,0.0*cm, -18.03*cm),
       			       "physicalOvary",
   			       logicOvary,
 			       mother,

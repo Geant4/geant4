@@ -21,11 +21,20 @@
 // ********************************************************************
 //
 #include "G4MIRDHeart.hh"
-
-#include "G4Processor/GDMLProcessor.h"
 #include "globals.hh"
 #include "G4SDManager.hh"
 #include "G4VisAttributes.hh"
+#include "G4Ellipsoid.hh"
+#include "G4ThreeVector.hh"
+#include "G4VPhysicalVolume.hh"
+#include "G4RotationMatrix.hh"
+#include "G4Material.hh"
+#include "G4LogicalVolume.hh"
+#include "G4HumanPhantomMaterial.hh"
+#include "G4VPhysicalVolume.hh"
+#include "G4PVPlacement.hh"
+#include "G4Sphere.hh"
+#include "G4UnionSolid.hh"
 
 G4MIRDHeart::G4MIRDHeart()
 {
@@ -33,28 +42,47 @@ G4MIRDHeart::G4MIRDHeart()
 
 G4MIRDHeart::~G4MIRDHeart()
 {
-  sxp.Finalize();
+
 }
 
 G4VPhysicalVolume* G4MIRDHeart::ConstructHeart(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity)
 {
-  // Initialize GDML Processor
-  sxp.Initialize();
-  config.SetURI( "gdmlData/"+sex+"/MIRDHeart.gdml" );
-  config.SetSetupName( "Default" );
-  sxp.Configure( &config );
-
-  // Run GDML Processor
-  sxp.Run();
+ G4cout << "ConstructHeart for " << sex << G4endl;
  
+ G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
+ G4Material* soft = material -> GetMaterial("soft_tissue");
+ delete material;
 
-  G4LogicalVolume* logicHeart = (G4LogicalVolume *)GDMLProcessor::GetInstance()->GetLogicalVolume("HeartVolume");
+ G4double ax= 4.00* cm;
+ G4double by= 4.00 *cm;
+ G4double cz= 7.00 *cm;
+ G4double zcut1= -7.00 *cm;
+ G4double zcut2= 0.0 *cm;
 
-  G4ThreeVector position = (G4ThreeVector)*GDMLProcessor::GetInstance()->GetPosition("HeartPos");
-  G4RotationMatrix* rm = (G4RotationMatrix*)GDMLProcessor::GetInstance()->GetRotation("HeartRot");
+ G4Ellipsoid* heart1 =  new G4Ellipsoid("Heart1",ax, by, cz, zcut1, zcut2);
+
+ G4double rmin =0.*cm;
+ G4double rmax = 3.99*cm;
+ G4double startphi = 0. * degree;
+ G4double deltaphi = 360. * degree;
+ G4double starttheta = 0. * degree;
+ G4double deltatheta = 90. * degree;
+ 
+ G4Sphere* heart2 = new G4Sphere("Heart2", rmin,rmax,
+                                           startphi,   deltaphi,
+                                           starttheta, deltatheta);
+
+ G4UnionSolid* heart = new G4UnionSolid("Heart", heart1, heart2);
+
+ G4LogicalVolume* logicHeart = new G4LogicalVolume(heart, soft,
+						   "HeartVolume",
+						   0, 0, 0);
+
+  G4RotationMatrix* matrix = new G4RotationMatrix();
+  matrix -> rotateY(25. * degree); 
   
   // Define rotation and position here!
-  G4VPhysicalVolume* physHeart = new G4PVPlacement(rm,position,
+  G4VPhysicalVolume* physHeart = new G4PVPlacement(matrix,G4ThreeVector(0.0,-3.0*cm, 15.32 *cm),
       			       "physicalHeart",
   			       logicHeart,
 			       mother,

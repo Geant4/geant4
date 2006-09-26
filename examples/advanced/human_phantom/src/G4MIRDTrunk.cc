@@ -22,12 +22,17 @@
 //
 #include "G4MIRDTrunk.hh"
 
-#include "G4Processor/GDMLProcessor.h"
 #include "globals.hh"
 
 #include "G4SDManager.hh"
 
 #include "G4VisAttributes.hh"
+#include "G4HumanPhantomMaterial.hh"
+#include "G4EllipticalTube.hh"
+#include "G4RotationMatrix.hh"
+#include "G4ThreeVector.hh"
+#include "G4VPhysicalVolume.hh"
+#include "G4PVPlacement.hh"
 
 G4MIRDTrunk::G4MIRDTrunk()
 {
@@ -35,34 +40,40 @@ G4MIRDTrunk::G4MIRDTrunk()
 
 G4MIRDTrunk::~G4MIRDTrunk()
 {
-  sxp.Finalize();
+
 }
 
 G4VPhysicalVolume* G4MIRDTrunk::ConstructTrunk(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity)
 {
-  // Initialize GDML Processor
-  sxp.Initialize();
-  config.SetURI( "gdmlData/"+sex+"/MIRDTrunk.gdml" );
-  config.SetSetupName( "Default" );
-  sxp.Configure( &config );
 
-  // Run GDML Processor
-  sxp.Run();
+  G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
+   
+  G4cout << "ConstructTrunck for "<< sex <<G4endl;
+   
+  G4Material* soft = material -> GetMaterial("soft_tissue");
  
+  delete material;
 
-  G4LogicalVolume* logicTrunk = (G4LogicalVolume *)GDMLProcessor::GetInstance()->GetLogicalVolume("TrunkVolume");
+  G4double dx = 17.25 * cm;
+  G4double dy = 9.80 * cm;
+  G4double dz = 31.55 * cm;
 
-  G4ThreeVector position = (G4ThreeVector)*GDMLProcessor::GetInstance()->GetPosition("TrunkPos");
-  G4RotationMatrix* rm = (G4RotationMatrix*)GDMLProcessor::GetInstance()->GetRotation("TrunkRot");
-  
+  G4EllipticalTube* trunk = new G4EllipticalTube("Trunk",dx, dy, dz);
+
+  G4LogicalVolume* logicTrunk = new G4LogicalVolume(trunk, soft, 
+						    "TrunkVolume",
+						    0, 0, 0);
+  G4RotationMatrix* rm = new G4RotationMatrix();
+  rm -> rotateX(90.* degree);
+
   // Define rotation and position here!
-  G4VPhysicalVolume* physTrunk = new G4PVPlacement(rm,position,
+  G4VPhysicalVolume* physTrunk = new G4PVPlacement(rm,
+				 G4ThreeVector(0.* cm,31.55*cm, 0.*cm),
       			       "physicalTrunk",
   			       logicTrunk,
 			       mother,
 			       false,
 			       0);
-
 
   // Sensitive Body Part
   if (sensitivity == true)

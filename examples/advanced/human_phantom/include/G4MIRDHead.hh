@@ -26,11 +26,12 @@
 
 #include "G4VPhysicalVolume.hh"
 
-#include "Saxana/SAXProcessor.h"
-#include "Saxana/ProcessingConfigurator.h"
+//##include "Saxana/SAXProcessor.h"
+//#include "Saxana/ProcessingConfigurator.h"
 
 class G4VPhysicalVolume;
 class G4LogicalVolume;
+class G4HumanPhantomMaterial;
 
 class G4MIRDHead
 {
@@ -41,8 +42,8 @@ public:
   G4VPhysicalVolume* ConstructHead(G4VPhysicalVolume*, G4String, G4bool);
  
 private:
-    SAXProcessor sxp;
-    ProcessingConfigurator config;
-
+  //  SAXProcessor sxp;
+  //  ProcessingConfigurator config;
+    G4HumanPhantomMaterial* material;
 };
 #endif

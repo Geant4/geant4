@@ -22,10 +22,17 @@
 //
 #include "G4MIRDMiddleLowerSpine.hh"
 
-#include "G4Processor/GDMLProcessor.h"
+
 #include "globals.hh"
 #include "G4SDManager.hh"
 #include "G4VisAttributes.hh"
+#include "G4HumanPhantomMaterial.hh"
+#include "G4EllipticalTube.hh"
+#include "G4RotationMatrix.hh"
+#include "G4ThreeVector.hh"
+#include "G4VPhysicalVolume.hh"
+#include "G4PVPlacement.hh"
+#include "G4UnionSolid.hh"
 
 G4MIRDMiddleLowerSpine::G4MIRDMiddleLowerSpine()
 {
@@ -33,33 +40,47 @@ G4MIRDMiddleLowerSpine::G4MIRDMiddleLowerSpine()
 
 G4MIRDMiddleLowerSpine::~G4MIRDMiddleLowerSpine()
 {
-  sxp.Finalize();
 }
 
 G4VPhysicalVolume* G4MIRDMiddleLowerSpine::ConstructMiddleLowerSpine(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity)
 {
-  // Initialize GDML Processor
-  sxp.Initialize();
-  config.SetURI( "gdmlData/"+sex+"/MIRDMiddleLowerSpine.gdml" );
-  config.SetSetupName( "Default" );
-  sxp.Configure( &config );
-
-  // Run GDML Processor
-  sxp.Run();
+ G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
+   
+  G4cout << "ConstructMiddleLowerSpine for "<< sex <<G4endl;
+   
+  G4Material* skeleton = material -> GetMaterial("skeleton");
  
+  delete material;
+ 
+  G4double dx = 1.73 *cm;
+  G4double dy = 2.45 *cm;
+  G4double dz = 15.645 *cm;
 
-  G4LogicalVolume* logicMiddleLowerSpine = (G4LogicalVolume *)GDMLProcessor::GetInstance()->GetLogicalVolume("MiddleLowerSpineVolume");
+  G4VSolid* midSpine = new G4EllipticalTube("MiddleSpine",dx, dy, dz);
 
-  G4ThreeVector position = (G4ThreeVector)*GDMLProcessor::GetInstance()->GetPosition("MiddleLowerSpinePos");
-  G4RotationMatrix* rm = (G4RotationMatrix*)GDMLProcessor::GetInstance()->GetRotation("MiddleLowerSpineRot");
-  
+  dx = 1.73 *cm;
+  dy = 2.45 *cm;
+  dz = 5.905 *cm;
+
+  G4VSolid* lowSpine = new G4EllipticalTube("LowSpine",dx, dy, dz);
+
+  G4UnionSolid* middleLowerSpine = new G4UnionSolid("MiddleLowerSpine",
+						    midSpine,
+						    lowSpine,
+						    0,
+						    G4ThreeVector(0.0, 0.0, -21.56 * cm)
+						    );
+
+  G4LogicalVolume* logicMiddleLowerSpine = new G4LogicalVolume( middleLowerSpine, skeleton,
+								"MiddleLowerSpineVolume",
+								0, 0, 0);   
   // Define rotation and position here!
-  G4VPhysicalVolume* physMiddleLowerSpine = new G4PVPlacement(rm,position,
-      			       "physicalMiddleLowerSpine",
-  			       logicMiddleLowerSpine,
-			       mother,
-			       false,
-			       0);
+  G4VPhysicalVolume* physMiddleLowerSpine = new G4PVPlacement(0,G4ThreeVector(0.0 *cm, 5.39 * cm,15.905 * cm),
+							      "physicalMiddleLowerSpine",
+							      logicMiddleLowerSpine,
+							      mother,
+							      false,
+							      0);
 
   // Sensitive Body Part
   if (sensitivity==true)

@@ -26,9 +26,6 @@
 
 #include "G4VPhysicalVolume.hh"
 
-#include "Saxana/SAXProcessor.h"
-#include "Saxana/ProcessingConfigurator.h"
-
 class G4VPhysicalVolume;
 class G4LogicalVolume;
 
@@ -38,11 +35,12 @@ public:
 
   G4MIRDArmBone();
   ~G4MIRDArmBone();
+
   G4VPhysicalVolume* ConstructArmBone(G4VPhysicalVolume*, G4String, G4bool);
  
 private:
-    SAXProcessor sxp;
-    ProcessingConfigurator config;
+  //    SAXProcessor sxp;
+  //  ProcessingConfigurator config;
 
 };
 #endif

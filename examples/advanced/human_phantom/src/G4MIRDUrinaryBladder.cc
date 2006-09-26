@@ -21,40 +21,46 @@
 // ********************************************************************
 //
 #include "G4MIRDUrinaryBladder.hh"
-
-#include "G4Processor/GDMLProcessor.h"
 #include "globals.hh"
 #include "G4SDManager.hh"
 #include "G4VisAttributes.hh"
-
+#include "G4Ellipsoid.hh"
+#include "G4Material.hh"
+#include "G4LogicalVolume.hh"
+#include "G4HumanPhantomMaterial.hh"
+#include "G4VPhysicalVolume.hh"
+#include "G4PVPlacement.hh"
 G4MIRDUrinaryBladder::G4MIRDUrinaryBladder()
 {
 }
 
 G4MIRDUrinaryBladder::~G4MIRDUrinaryBladder()
 {
-  sxp.Finalize();
 }
 
 G4VPhysicalVolume* G4MIRDUrinaryBladder::ConstructUrinaryBladder(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity)
 {
-  // Initialize GDML Processor
-  sxp.Initialize();
-  config.SetURI( "gdmlData/"+sex+"/MIRDUrinaryBladder.gdml" );
-  config.SetSetupName( "Default" );
-  sxp.Configure( &config );
-
-  // Run GDML Processor
-  sxp.Run();
  
+ G4cout << "ConstructUrinaryBladded for " << sex << G4endl;
+ 
+ G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
+ G4Material* soft = material -> GetMaterial("soft_tissue");
+ delete material;
 
-  G4LogicalVolume* logicUrinaryBladder = (G4LogicalVolume *)GDMLProcessor::GetInstance()->GetLogicalVolume("UrinaryBladderVolume");
+ G4double ax = 4.27*cm;
+ G4double by= 3.38 *cm;
+ G4double cz= 3.11 *cm;
+ G4double zcut1= -3.11*cm;
+ G4double zcut2= 3.11*cm;
 
-  G4ThreeVector position = (G4ThreeVector)*GDMLProcessor::GetInstance()->GetPosition("UrinaryBladderPos");
-  G4RotationMatrix* rm = (G4RotationMatrix*)GDMLProcessor::GetInstance()->GetRotation("UrinaryBladderRot");
+ G4Ellipsoid* bladder = new G4Ellipsoid("bladder",ax, by, cz, zcut1, zcut2 );
+ 
+ G4LogicalVolume* logicUrinaryBladder = new G4LogicalVolume(bladder, soft,
+							    "UrinaryBladderVolume",
+							    0, 0, 0);
   
   // Define rotation and position here!
-  G4VPhysicalVolume* physUrinaryBladder = new G4PVPlacement(rm,position,
+  G4VPhysicalVolume* physUrinaryBladder = new G4PVPlacement(0,G4ThreeVector(0 *cm, -4.41 *cm,-24.34 *cm),
       			       "physicalUrinaryBladder",
   			       logicUrinaryBladder,
 			       mother,

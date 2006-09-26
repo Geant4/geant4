@@ -26,9 +26,6 @@
 
 #include "G4VPhysicalVolume.hh"
 
-#include "Saxana/SAXProcessor.h"
-#include "Saxana/ProcessingConfigurator.h"
-
 class G4VPhysicalVolume;
 class G4LogicalVolume;
 
@@ -41,8 +38,5 @@ public:
   G4VPhysicalVolume* ConstructMiddleLowerSpine(G4VPhysicalVolume*, G4String, G4bool);
  
 private:
-    SAXProcessor sxp;
-    ProcessingConfigurator config;
-
 };
 #endif

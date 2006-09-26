@@ -22,12 +22,22 @@
 //
 #include "G4MIRDLiver.hh"
 
-#include "G4Processor/GDMLProcessor.h"
 #include "globals.hh"
 
 #include "G4SDManager.hh"
 
 #include "G4VisAttributes.hh"
+#include "G4HumanPhantomMaterial.hh"
+#include "G4SDManager.hh"
+#include "G4PVPlacement.hh"
+#include "G4SubtractionSolid.hh"
+#include "G4Ellipsoid.hh"
+#include "G4ThreeVector.hh"
+#include "G4VPhysicalVolume.hh"
+#include "G4RotationMatrix.hh"
+#include "G4Material.hh"
+#include "G4EllipticalTube.hh"
+#include "G4Box.hh"
 
 G4MIRDLiver::G4MIRDLiver()
 {
@@ -35,28 +45,53 @@ G4MIRDLiver::G4MIRDLiver()
 
 G4MIRDLiver::~G4MIRDLiver()
 {
-  sxp.Finalize();
+
 }
 
 G4VPhysicalVolume* G4MIRDLiver::ConstructLiver(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity)
 {
-  // Initialize GDML Processor
-  sxp.Initialize();
-  config.SetURI( "gdmlData/"+sex+"/MIRDLiver.gdml" );
-  config.SetSetupName( "Default" );
-  sxp.Configure( &config );
-
-  // Run GDML Processor
-  sxp.Run();
+  G4cout << "ConstructLiver for " << sex << G4endl;
  
+ G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
+ G4Material* soft = material -> GetMaterial("soft_tissue");
+ delete material;
 
-  G4LogicalVolume* logicLiver = (G4LogicalVolume *)GDMLProcessor::GetInstance()->GetLogicalVolume("LiverVolume");
+ G4double dx= 14.19 *cm;
+ G4double dy= 7.84 *cm;
+ G4double dz= 7.21* cm;
 
-  G4ThreeVector position = (G4ThreeVector)*GDMLProcessor::GetInstance()->GetPosition("LiverPos");
-  G4RotationMatrix* rm = (G4RotationMatrix*)GDMLProcessor::GetInstance()->GetRotation("LiverRot");
+ //G4double dx = 16.5 * cm;
+ //G4double dy = 8. *cm;
+ //G4double dz = 8. *cm;
+ G4EllipticalTube* firstLiver = new G4EllipticalTube("FirstLiver",dx, dy, dz);
+
+ G4double xx = 20.00 * cm;
+ G4double yy = 50.00 * cm;
+ G4double zz = 50.00 *cm;
+
+ G4Box* subtrLiver = new G4Box("SubtrLiver", xx/2., yy/2., zz/2.);
+ 
+  G4RotationMatrix* rm_relative = new G4RotationMatrix();
+  rm_relative -> rotateY(32.* degree);
+  rm_relative -> rotateZ(40.9* degree);
+
+
+ G4SubtractionSolid* liver = new G4SubtractionSolid("Liver",
+						     firstLiver,subtrLiver,
+						     rm_relative,
+						     G4ThreeVector(10.0*cm,0.0*cm,0.0 *cm));
+
+ 
+  G4LogicalVolume* logicLiver = new G4LogicalVolume(liver,
+						    soft,
+						    "LiverVolume",
+						    0, 0, 0);
   
+  G4RotationMatrix* rm = new G4RotationMatrix();
+  rm -> rotateX(180.* degree);
+ 
   // Define rotation and position here!
-  G4VPhysicalVolume* physLiver = new G4PVPlacement(rm,position,
+  G4VPhysicalVolume* physLiver = new G4PVPlacement(rm,G4ThreeVector(0. *cm,0. *cm,0.*cm),
       			       "physicalLiver",
   			       logicLiver,
 			       mother,

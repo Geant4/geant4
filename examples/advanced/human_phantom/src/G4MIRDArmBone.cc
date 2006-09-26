@@ -21,11 +21,16 @@
 // ********************************************************************
 //
 #include "G4MIRDArmBone.hh"
-
-#include "G4Processor/GDMLProcessor.h"
 #include "globals.hh"
 #include "G4SDManager.hh"
 #include "G4VisAttributes.hh"
+#include "G4HumanPhantomMaterial.hh"
+#include "G4EllipticalTube.hh"
+#include "G4RotationMatrix.hh"
+#include "G4ThreeVector.hh"
+#include "G4VPhysicalVolume.hh"
+#include "G4PVPlacement.hh"
+#include "G4UnionSolid.hh"
 
 G4MIRDArmBone::G4MIRDArmBone()
 {
@@ -33,28 +38,36 @@ G4MIRDArmBone::G4MIRDArmBone()
 
 G4MIRDArmBone::~G4MIRDArmBone()
 {
-  sxp.Finalize();
 }
 
 G4VPhysicalVolume* G4MIRDArmBone::ConstructArmBone(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity)
 {
-  // Initialize GDML Processor
-  sxp.Initialize();
-  config.SetURI( "gdmlData/"+sex+"/MIRDArmBone.gdml" );
-  config.SetSetupName( "Default" );
-  sxp.Configure( &config );
-
-  // Run GDML Processor
-  sxp.Run();
- 
-
-  G4LogicalVolume* logicArmBone = (G4LogicalVolume *)GDMLProcessor::GetInstance()->GetLogicalVolume("ArmBoneVolume");
-
-  G4ThreeVector position = (G4ThreeVector)*GDMLProcessor::GetInstance()->GetPosition("ArmBonePos");
-  G4RotationMatrix* rm = (G4RotationMatrix*)GDMLProcessor::GetInstance()->GetRotation("ArmBoneRot");
+   
+  G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
+   
+  G4cout << "ConstructArmBone for "<< sex <<G4endl;
+   
+  G4Material* skeleton = material -> GetMaterial("skeleton");
   
-  // Define rotation and position here!
-  G4VPhysicalVolume* physArmBone = new G4PVPlacement(rm,position,
+  delete material;
+
+  G4double dx = 1.21 * cm;
+  G4double dy = 2.65 * cm;
+  G4double dz= 31.10 * cm;
+
+  G4EllipticalTube* arm = new G4EllipticalTube("OneArmBone",dx,dy,dz);
+  
+  G4UnionSolid* arms =  new G4UnionSolid("ArmBone", arm, arm, 
+					 0, 
+					 G4ThreeVector(31.74 * cm, 0.0, 0.0));
+
+  G4LogicalVolume* logicArmBone = new G4LogicalVolume(arms,
+						      skeleton,
+						      "ArmBoneVolume",
+						      0, 0,0);
+
+  G4VPhysicalVolume* physArmBone = new G4PVPlacement(0,
+			       G4ThreeVector(-15.87 * cm, 0.0, 0.0),
       			       "physicalArmBone",
   			       logicArmBone,
 			       mother,

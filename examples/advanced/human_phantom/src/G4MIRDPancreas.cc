@@ -22,10 +22,20 @@
 //
 #include "G4MIRDPancreas.hh"
 
-#include "G4Processor/GDMLProcessor.h"
 #include "globals.hh"
 #include "G4SDManager.hh"
 #include "G4VisAttributes.hh"
+#include "G4Ellipsoid.hh"
+#include "G4ThreeVector.hh"
+#include "G4VPhysicalVolume.hh"
+#include "G4RotationMatrix.hh"
+#include "G4Material.hh"
+#include "G4LogicalVolume.hh"
+#include "G4HumanPhantomMaterial.hh"
+#include "G4VPhysicalVolume.hh"
+#include "G4PVPlacement.hh"
+#include "G4Box.hh"
+#include "G4SubtractionSolid.hh"
 
 G4MIRDPancreas::G4MIRDPancreas()
 {
@@ -33,28 +43,47 @@ G4MIRDPancreas::G4MIRDPancreas()
 
 G4MIRDPancreas::~G4MIRDPancreas()
 {
-  sxp.Finalize();
+
 }
 
 G4VPhysicalVolume* G4MIRDPancreas::ConstructPancreas(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity)
 {
-  // Initialize GDML Processor
-  sxp.Initialize();
-  config.SetURI( "gdmlData/"+sex+"/MIRDPancreas.gdml" );
-  config.SetSetupName( "Default" );
-  sxp.Configure( &config );
 
-  // Run GDML Processor
-  sxp.Run();
+  G4cout << "ConstructPancreas for " << sex << G4endl;
  
+ G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
+ G4Material* soft = material -> GetMaterial("soft_tissue");
+ delete material;
 
-  G4LogicalVolume* logicPancreas = (G4LogicalVolume *)GDMLProcessor::GetInstance()->GetLogicalVolume("PancreasVolume");
+  G4double ax= 2.87*cm;
+  G4double by= 1.14*cm;
+  G4double cz= 13.32*cm;
+  G4double zcut1= -13.32 *cm;
+  G4double zcut2= 0.0 *cm; 
 
-  G4ThreeVector position = (G4ThreeVector)*GDMLProcessor::GetInstance()->GetPosition("PancreasPos");
-  G4RotationMatrix* rm = (G4RotationMatrix*)GDMLProcessor::GetInstance()->GetRotation("PancreasRot");
-  
-  // Define rotation and position here!
-  G4VPhysicalVolume* physPancreas = new G4PVPlacement(rm,position,
+  G4Ellipsoid* pancreasFirst =  new G4Ellipsoid("PancreasFirst",ax, by, cz,
+						zcut1, zcut2);
+
+  G4double xx = 5.74 * cm;
+  G4double yy = 2.30 * cm;
+  G4double zz = 10.71 * cm;
+  G4Box* subtrPancreas = new G4Box("SubtrPancreas",xx/2., yy/2., zz/2.);
+
+  G4SubtractionSolid* pancreas = new G4SubtractionSolid("pancreas",
+							pancreasFirst,
+							subtrPancreas,
+							0, 
+							G4ThreeVector(-2.87 * cm,0.0,-8.685*cm));
+ 
+  G4LogicalVolume* logicPancreas = new G4LogicalVolume(pancreas, soft,
+						       "PancreasVolume",
+						       0, 0, 0);
+  G4RotationMatrix* rotation = new G4RotationMatrix();
+  rotation ->rotateY(90. * degree);
+
+
+  G4VPhysicalVolume* physPancreas = new G4PVPlacement(rotation,
+						      G4ThreeVector(-0.72 *cm, 0.0, 1.8*cm),
       			       "physicalPancreas",
   			       logicPancreas,
 			       mother,

@@ -22,10 +22,17 @@
 //
 #include "G4MIRDLegBone.hh"
 
-#include "G4Processor/GDMLProcessor.h"
 #include "globals.hh"
 #include "G4SDManager.hh"
 #include "G4VisAttributes.hh"
+#include "G4HumanPhantomMaterial.hh"
+#include "G4EllipticalTube.hh"
+#include "G4RotationMatrix.hh"
+#include "G4ThreeVector.hh"
+#include "G4VPhysicalVolume.hh"
+#include "G4PVPlacement.hh"
+#include "G4Cons.hh"
+#include "G4UnionSolid.hh"
 
 G4MIRDLegBone::G4MIRDLegBone()
 {
@@ -33,28 +40,52 @@ G4MIRDLegBone::G4MIRDLegBone()
 
 G4MIRDLegBone::~G4MIRDLegBone()
 {
-  sxp.Finalize();
 }
 
 G4VPhysicalVolume* G4MIRDLegBone::ConstructLegBone(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity)
 {
-  // Initialize GDML Processor
-  sxp.Initialize();
-  config.SetURI( "gdmlData/"+sex+"/MIRDLegBone.gdml" );
-  config.SetSetupName( "Default" );
-  sxp.Configure( &config );
-
-  // Run GDML Processor
-  sxp.Run();
  
-
-  G4LogicalVolume* logicLegBone = (G4LogicalVolume *)GDMLProcessor::GetInstance()->GetLogicalVolume("LegBoneVolume");
-
-  G4ThreeVector position = (G4ThreeVector)*GDMLProcessor::GetInstance()->GetPosition("LegBonePos");
-  G4RotationMatrix* rm = (G4RotationMatrix*)GDMLProcessor::GetInstance()->GetRotation("LegBoneRot");
+  G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
+   
+  G4cout << "ConstructArmBone for "<< sex <<G4endl;
+   
+  G4Material* skeleton = material -> GetMaterial("skeleton");
   
+  delete material;
+ 
+  G4double dz = 76. * cm;
+  G4double rmin1 = 0.0 * cm;
+  G4double rmin2 = 0.0 * cm;
+  G4double rmax1 = 1.0 * cm;
+  G4double rmax2 = 2.0 * cm;
+  G4double startphi = 0 * degree;
+  G4double deltaphi = 360 * degree;
+
+  G4Cons* leg_bone = new G4Cons("OneLegBone",  
+			   rmin1, rmax1, 
+			   rmin2, rmax2, dz/2., 
+			   startphi, deltaphi);
+
+  G4RotationMatrix* rm_relative = new G4RotationMatrix();
+  rm_relative -> rotateY(-12.5 * degree);
+  
+  G4UnionSolid* legs_bones =  new G4UnionSolid("LegBone",
+					       leg_bone, leg_bone,
+					       rm_relative,
+					       G4ThreeVector(10.* cm, 0.0,-0.95 * cm));
+
+
+  G4LogicalVolume* logicLegBone = new G4LogicalVolume(legs_bones, skeleton,"LegBoneVolume",
+						      0, 0, 0);
+
+
+  G4RotationMatrix* rm = new G4RotationMatrix();
+  rm -> rotateY(6.25 * degree);
+
+
   // Define rotation and position here!
-  G4VPhysicalVolume* physLegBone = new G4PVPlacement(rm,position,
+  G4VPhysicalVolume* physLegBone = new G4PVPlacement(rm,
+				G4ThreeVector(-5.0 * cm, 0.0, 0.0),
       			       "physicalLegBone",
   			       logicLegBone,
 			       mother,

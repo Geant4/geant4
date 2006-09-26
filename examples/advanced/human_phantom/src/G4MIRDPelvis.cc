@@ -22,10 +22,19 @@
 //
 #include "G4MIRDPelvis.hh"
 
-#include "G4Processor/GDMLProcessor.h"
 #include "globals.hh"
 #include "G4SDManager.hh"
 #include "G4VisAttributes.hh"
+#include "G4HumanPhantomMaterial.hh"
+#include "G4EllipticalTube.hh"
+#include "G4RotationMatrix.hh"
+#include "G4ThreeVector.hh"
+#include "G4VPhysicalVolume.hh"
+#include "G4PVPlacement.hh"
+#include "G4SubtractionSolid.hh"
+#include "G4Box.hh"
+#include "G4VSolid.hh"
+#include "G4LogicalVolume.hh"
 
 G4MIRDPelvis::G4MIRDPelvis()
 {
@@ -33,28 +42,59 @@ G4MIRDPelvis::G4MIRDPelvis()
 
 G4MIRDPelvis::~G4MIRDPelvis()
 {
-  sxp.Finalize();
+
 }
 
 G4VPhysicalVolume* G4MIRDPelvis::ConstructPelvis(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity)
 {
-  // Initialize GDML Processor
-  sxp.Initialize();
-  config.SetURI( "gdmlData/"+sex+"/MIRDPelvis.gdml" );
-  config.SetSetupName( "Default" );
-  sxp.Configure( &config );
-
-  // Run GDML Processor
-  sxp.Run();
+   G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
+   
+  G4cout << "ConstructMiddleLowerSpine for "<< sex <<G4endl;
+   
+  G4Material* skeleton = material -> GetMaterial("skeleton");
  
+  delete material;
 
-  G4LogicalVolume* logicPelvis = (G4LogicalVolume *)GDMLProcessor::GetInstance()->GetLogicalVolume("PelvisVolume");
+  G4double dx= 10.35 *cm;
+  G4double dy= 11.76 * cm;
+  G4double dz= 9.915 * cm;
 
-  G4ThreeVector position = (G4ThreeVector)*GDMLProcessor::GetInstance()->GetPosition("PelvisPos");
-  G4RotationMatrix* rm = (G4RotationMatrix*)GDMLProcessor::GetInstance()->GetRotation("PelvisRot");
+  G4VSolid* outPelvis = new G4EllipticalTube("OutPelvis",dx, dy, dz);
+
+  dx = 9.75 * cm;
+  dy = 11.07* cm;
+  dz = 10.0 *cm;
+ 
+  G4VSolid* inPelvis = new G4EllipticalTube("InPelvis",dx, dy, dz);
+
+  G4double x = 20.71 * cm;
+  G4double y = 23.52 * cm;
+  G4double z = 19.84 *cm;
+
+  G4VSolid* subPelvis = new G4Box("SubtrPelvis", x/2., y/2., z/2.);
+
+  G4SubtractionSolid* firstPelvis = new G4SubtractionSolid("FirstPelvis",
+							   outPelvis,
+							   inPelvis); 
+							   
+ 
+  G4SubtractionSolid* secondPelvis = new G4SubtractionSolid("SecondPelvis",
+							    firstPelvis,
+							    subPelvis, 0, 
+							    G4ThreeVector(0.0,
+									  14.70 * cm, -8.21 *cm));
+
+  G4SubtractionSolid* pelvis = new G4SubtractionSolid("Pelvis", secondPelvis, subPelvis,
+						      0, 
+						      G4ThreeVector(0.0,
+								    -11.76 * cm, 0.0));
+
+
+  G4LogicalVolume* logicPelvis = new G4LogicalVolume(pelvis, skeleton,
+						       "PelvisVolume", 0, 0, 0);
   
-  // Define rotation and position here!
-  G4VPhysicalVolume* physPelvis = new G4PVPlacement(rm,position,
+ 
+  G4VPhysicalVolume* physPelvis = new G4PVPlacement(0,G4ThreeVector(0.0, -2.94 * cm,-21.635 * cm),
       			       "physicalPelvis",
   			       logicPelvis,
 			       mother,
@@ -70,7 +110,7 @@ G4VPhysicalVolume* G4MIRDPelvis::ConstructPelvis(G4VPhysicalVolume* mother, G4St
 
   // Visualization Attributes
   G4VisAttributes* PelvisVisAtt = new G4VisAttributes(G4Colour(0.46,0.53,0.6));
-  PelvisVisAtt->SetForceSolid(true);
+  PelvisVisAtt->SetForceSolid(false);
   logicPelvis->SetVisAttributes(PelvisVisAtt);
 
   G4cout << "Pelvis created !!!!!!" << G4endl;
