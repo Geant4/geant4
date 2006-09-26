@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UHadronElasticProcess.hh,v 1.7 2006-08-10 15:44:28 vnivanch Exp $
+// $Id: G4UHadronElasticProcess.hh,v 1.8 2006-09-26 11:38:41 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Geant4 Hadron Elastic Scattering Process -- header file
@@ -32,6 +32,7 @@
 // Created 21 April 2006 V.Ivanchenko
 //  
 // Modified:
+// 26.09.06 V.Ivanchenko add lowestEnergy
 //
 
 // Class Description
@@ -89,6 +90,7 @@ private:
   G4double        xsecH[2];
   G4double        cross;
   G4double        thEnergy;
+  G4double        lowestEnergy;
 
   G4int    pPDG;
   G4bool   first;

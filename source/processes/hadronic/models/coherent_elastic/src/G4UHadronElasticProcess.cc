@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UHadronElasticProcess.cc,v 1.23 2006-08-28 08:30:00 vnivanch Exp $
+// $Id: G4UHadronElasticProcess.cc,v 1.24 2006-09-26 11:38:41 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Geant4 Hadron Elastic Scattering Process -- header file
@@ -31,9 +31,10 @@
 // Created 21 April 2006 V.Ivanchenko
 //  
 // Modified:
-// 24-Apr-06 V.Ivanchenko add neutron scattering on hydrogen from CHIPS
-// 07-Jun-06 V.Ivanchenko fix problem of rotation of final state
-// 25-Jul-06 V.Ivanchenko add 19 MeV low energy for CHIPS
+// 24.04.06 V.Ivanchenko add neutron scattering on hydrogen from CHIPS
+// 07.06.06 V.Ivanchenko fix problem of rotation of final state
+// 25.07.06 V.Ivanchenko add 19 MeV low energy for CHIPS
+// 26.09.06 V.Ivanchenko add lowestEnergy
 //
 //
 
@@ -50,13 +51,11 @@
 #include "G4Neutron.hh"
 #include "G4Proton.hh"
 #include "G4HadronElastic.hh"
-#include "G4UElasticCrossSection.hh"
  
 G4UHadronElasticProcess::G4UHadronElasticProcess(const G4String& pName, G4double elow)
-  : G4HadronicProcess(pName), thEnergy(elow), first(true)
+  : G4HadronicProcess(pName), thEnergy(elow), lowestEnergy(1.e-6*eV), first(true)
 {
   AddDataSet(new G4HadronElasticDataSet);
-  // AddDataSet(new G4UElasticCrossSection());
   theProton = G4Proton::Proton();
   theNeutron = G4Neutron::Neutron();
   verboseLevel= 1;
@@ -89,6 +88,7 @@ BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
       G4cout << "G4UHadronElasticProcess for " 
 	     << theParticle->GetParticleName()
 	     << "  Elow(MeV)= " << thEnergy/MeV 
+	     << "  Elowest(eV)= " << lowestEnergy/eV 
 	     << G4endl;
     } 
   }
@@ -148,10 +148,10 @@ G4double G4UHadronElasticProcess::GetMicroscopicCrossSection(
   if(iz <= 2 && dp->GetKineticEnergy() > thEnergy && 
      (theParticle == theProton || theParticle == theNeutron)) {
     G4double momentum = dp->GetTotalMomentum();
+    G4IsotopeVector* isv = elm->GetIsotopeVector(); 
+    G4int ni = 0;
+    if(isv) ni = isv->size();
     if(iz == 1) {
-      G4IsotopeVector* isv = elm->GetIsotopeVector(); 
-      G4int ni = 0;
-      if(isv) ni = isv->size();
       if(ni > 0) {
 	G4double* ab = elm->GetRelativeAbundanceVector();
 	x = 0.0;
@@ -218,10 +218,13 @@ G4VParticleChange* G4UHadronElasticProcess::PostStepDoIt(
 {
   G4ForceCondition   cn;
   aParticleChange.Initialize(track);
-  G4double mfp = GetMeanFreePath(track, 0.0, &cn);
-  if(mfp == DBL_MAX) return G4VDiscreteProcess::PostStepDoIt(track,step);
-
   G4double kineticEnergy = track.GetKineticEnergy();
+  if(kineticEnergy <= lowestEnergy) 
+    return G4VDiscreteProcess::PostStepDoIt(track,step);
+  G4double mfp = GetMeanFreePath(track, 0.0, &cn);
+  if(mfp == DBL_MAX) 
+    return G4VDiscreteProcess::PostStepDoIt(track,step);
+
   G4Material* material = track.GetMaterial();
 
   // Select element
