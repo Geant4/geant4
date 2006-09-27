@@ -39,10 +39,11 @@ graphics_reps                                    greps-V08-01-04
 - Removed trailing white spaces in G4ConversionUtils.
 - Made G4VFilter::Accept() method const.
 
-particles                                        particles-V08-01-01
+particles                                        particles-V08-01-02
 ---------
 - Fixed bug in G4ParticleDefinition constructor causing not filling quark
   contents when G4VERBOSE is not set.
+- Fixed bug in k2(1770) decay. Addresses problem report #894.
 
 processes/electromagnetic/polarisation           empolar-V08-01-01
 --------------------------------------
@@ -138,6 +139,8 @@ examples                                         examples-V08-01-03
   o Corrected GNUmakefile.
 - extended/electromagnetic/TestEm14 (testem14-V08-01-00)
   o Compute 'mass_energy_transfer' coefficient.
+- extended/electromagnetic/TestEm17 (testem17-V08-01-00)
+  o Fix in ConstructParticles(). Addresses problem report #893.
 - novice/N03 (exampleN03-V08-01-03)
   o exN03Vis12.mac: switched off local trajectory drawing
     (/N03/event/drawTracks none) so as not to interfere with drawing from
