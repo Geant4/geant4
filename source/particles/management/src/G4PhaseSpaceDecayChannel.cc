@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhaseSpaceDecayChannel.cc,v 1.10 2006-06-29 19:26:08 gunter Exp $
+// $Id: G4PhaseSpaceDecayChannel.cc,v 1.11 2006-09-27 15:45:39 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -169,6 +169,22 @@ G4DecayProducts *G4PhaseSpaceDecayChannel::TwoBodyDecayIt()
 
   //calculate daughter momentum
   daughtermomentum = Pmx(parentmass,daughtermass[0],daughtermass[1]);
+  if (daughtermomentum <0.0) {
+#ifdef G4VERBOSE
+    if (GetVerboseLevel()>0) {
+      G4cerr << "G4PhaseSpaceDecayChannel::TwoBodyDecayIt " 
+             << "sum of daughter mass is larger than parent mass" << G4endl;
+      G4cerr << "parent :" << parent->GetParticleName() << "  " << parent_mass/GeV << G4endl;
+      G4cerr << "daughter 1 :" << daughters[0]->GetParticleName() << "  " << daughtermass[0]/GeV << G4endl;
+      G4cerr << "daughter 2:" << daughters[1]->GetParticleName() << "  " << daughtermass[1]/GeV << G4endl;
+    }
+#endif
+    G4Exception("G4PhaseSpaceDecayChannel::TwoBodyDecayIt",
+                "can not create decay products", JustWarning,
+                "sum of daughter mass is larger than parent mass");
+    return products;
+  }
+
   G4double costheta = 2.*G4UniformRand()-1.0;
   G4double sintheta = std::sqrt((1.0 - costheta)*(1.0 + costheta));
   G4double phi  = twopi*G4UniformRand()*rad;
@@ -395,6 +411,11 @@ G4DecayProducts *G4PhaseSpaceDecayChannel::ManyBodyDecayIt()
 	delete [] sm;
 	delete [] daughtermass;
 	delete [] daughtermomentum;
+
+	G4Exception("G4PhaseSpaceDecayChannel::ManyBodyDecayIt",
+                "can not create decay products", JustWarning,
+                "sum of daughter mass is larger than parent mass");
+
 	return 0;   // Error detection
 
       } else {
