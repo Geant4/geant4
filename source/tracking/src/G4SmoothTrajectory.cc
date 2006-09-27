@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SmoothTrajectory.cc,v 1.16 2006-06-29 21:15:59 gunter Exp $
+// $Id: G4SmoothTrajectory.cc,v 1.17 2006-09-27 20:42:52 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -131,19 +131,19 @@ const std::map<G4String,G4AttDef>* G4SmoothTrajectory::GetAttDefs() const
   if (isNew) {
 
     G4String ID("ID");
-    (*store)[ID] = G4AttDef(ID,"Track ID","Bookkeeping","","G4int");
+    (*store)[ID] = G4AttDef(ID,"Track ID","Physics","","G4int");
 
     G4String PID("PID");
-    (*store)[PID] = G4AttDef(PID,"Parent ID","Bookkeeping","","G4int");
+    (*store)[PID] = G4AttDef(PID,"Parent ID","Physics","","G4int");
 
     G4String PN("PN");
-    (*store)[PN] = G4AttDef(PN,"Particle Name","Bookkeeping","","G4String");
+    (*store)[PN] = G4AttDef(PN,"Particle Name","Physics","","G4String");
 
     G4String Ch("Ch");
     (*store)[Ch] = G4AttDef(Ch,"Charge","Physics","e+","G4double");
 
     G4String PDG("PDG");
-    (*store)[PDG] = G4AttDef(PDG,"PDG Encoding","Bookkeeping","","G4int");
+    (*store)[PDG] = G4AttDef(PDG,"PDG Encoding","Physics","","G4int");
 
     G4String IMom("IMom");
     (*store)[IMom] = G4AttDef(IMom, "Momentum of track at start of trajectory",
@@ -155,7 +155,7 @@ const std::map<G4String,G4AttDef>* G4SmoothTrajectory::GetAttDefs() const
        "Physics","G4BestUnit","G4double");
 
     G4String NTP("NTP");
-    (*store)[NTP] = G4AttDef(NTP,"No. of points","Bookkeeping","","G4int");
+    (*store)[NTP] = G4AttDef(NTP,"No. of points","Physics","","G4int");
 
   }
   return store;

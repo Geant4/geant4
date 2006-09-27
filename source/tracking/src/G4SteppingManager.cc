@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SteppingManager.cc,v 1.40 2006-08-14 17:35:35 asaim Exp $
+// $Id: G4SteppingManager.cc,v 1.41 2006-09-27 20:42:52 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------
@@ -143,6 +143,9 @@ G4StepStatus G4SteppingManager::Stepping()
 
 //JA Set the volume before it is used (in DefineStepLength() for User Limit) 
    fCurrentVolume = fStep->GetPreStepPoint()->GetPhysicalVolume();
+
+// Reset the step's auxiliary points vector pointer
+   fStep->SetPointerToVectorOfAuxiliaryPoints(0);
 
 //-----------------
 // AtRest Processes

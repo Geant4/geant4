@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RichTrajectory.cc,v 1.4 2006-06-29 21:15:55 gunter Exp $
+// $Id: G4RichTrajectory.cc,v 1.5 2006-09-27 20:42:52 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ---------------------------------------------------------------
@@ -133,25 +133,26 @@ const std::map<G4String,G4AttDef>* G4RichTrajectory::GetAttDefs() const
     = G4AttDefStore::GetInstance("G4RichTrajectory",isNew);
   if (isNew) {
 
+    // Get att defs from base class...
     *store = *(G4Trajectory::GetAttDefs());
 
     G4String ID;
 
     ID = "IVN";
     (*store)[ID] = G4AttDef(ID,"Initial Volume Name",
-			    "Bookkeeping","","G4String");
+			    "Physics","","G4String");
 
     ID = "INVN";
     (*store)[ID] = G4AttDef(ID,"Initial Next Volume Name",
-			    "Bookkeeping","","G4String");
+			    "Physics","","G4String");
 
     ID = "CPN";
     (*store)[ID] = G4AttDef(ID,"Creator Process Name",
-			    "Bookkeeping","","G4String");
+			    "Physics","","G4String");
 
     ID = "CPTN";
     (*store)[ID] = G4AttDef(ID,"Creator Process Type Name",
-			    "Bookkeeping","","G4String");
+			    "Physics","","G4String");
 
   }
 
@@ -160,6 +161,7 @@ const std::map<G4String,G4AttDef>* G4RichTrajectory::GetAttDefs() const
 
 std::vector<G4AttValue>* G4RichTrajectory::CreateAttValues() const
 {
+  // Create base class att values...
   std::vector<G4AttValue>* values = G4Trajectory::CreateAttValues();
 
   values->push_back(G4AttValue("IVN",fpInitialVolume->GetName(),""));
