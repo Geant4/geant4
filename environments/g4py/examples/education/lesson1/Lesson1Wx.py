@@ -6,6 +6,8 @@ import ExN03pl
 import ParticleGun
 from time import *
 import sys
+from subprocess import *
+import os
 
 # ==================================================================
 # intialize
@@ -20,11 +22,10 @@ def Configure():
   # ------------------------------------------------------------------
   # setup for geometry
   # ------------------------------------------------------------------
-  #Qgeom.Construct()
   EZgeom.Construct()  # initialize
 
   # ------------------------------------------------------------------
-  # setup for physics list
+  # setup for physics list of N03
   # ------------------------------------------------------------------
   ExN03pl.Construct()
 
@@ -60,7 +61,6 @@ def ConstructGeom():
 
   water_phantom= G4EzVolume("WaterPhantom")
   water_phantom.CreateBoxVolume(water, 110.*cm, 110.*cm, 10.*cm)
-
   water_phantom_pv = water_phantom.PlaceIt(G4ThreeVector(0.,0.,0.*cm))
 
 # ==================================================================
@@ -69,7 +69,7 @@ def ConstructGeom():
 # ------------------------------------------------------------------
 # randum number
 # ------------------------------------------------------------------
-print "Random numbers..."
+#print "Random numbers..."
 rand_engine= Ranlux64Engine()
 HepRandom.setTheEngine(rand_engine)
 HepRandom.setTheSeed(20050830L)
@@ -84,16 +84,6 @@ ConstructGeom()
 # ------------------------------------------------------------------
 gRunManager.Initialize()
 
-# visualization not here but after "Start a run" button
-gControlExecute("oglx.mac")
-#gControlExecute("vrml.mac")
-
-#      gApplyUICommand("/vis/viewer/select oglsxviewer")
-#      gApplyUICommand("/vis/scene/add/trajectories")
-
-#      gApplyUICommand("/tracking/storeTrajectory 1")
-#      gApplyUICommand("/vis/scene/endOfEventAction accumulate")
-#      gApplyUICommand("/vis/scene/endOfRunAction accumulate")
 
 
 global commandDic, commandList
@@ -123,11 +113,47 @@ def DumpTree(atree):
 root_tree= gUImanager.GetTree()
 DumpTree(root_tree)
 
+# visualization
+# OGLSX, VRML and HEPREP sceneHandlers are all created with names
+gApplyUICommand("/vis/sceneHandler/create OGLSX OGLSX")
+gApplyUICommand("/vis/sceneHandler/create VRML2FILE VRML")
+gApplyUICommand("/vis/sceneHandler/create HepRepFile HEPREP")
 
 
+#  OGLSX is the default so, viewer is created and volume is drawn
+gApplyUICommand("/vis/viewer/create OGLSX oglsxviewer")
+gApplyUICommand("/vis/viewer/select  oglsxviewer")
+gApplyUICommand("/vis/drawVolume")
+gApplyUICommand("/vis/scene/add/trajectories")
 
+gApplyUICommand("/tracking/storeTrajectory 1")
+gApplyUICommand("/vis/scene/endOfEventAction accumulate")
+gApplyUICommand("/vis/scene/endOfRunAction accumulate")
+
+gApplyUICommand("/vis/viewer/set/viewpointThetaPhi 90. 0.")
+gApplyUICommand("/vis/viewer/set/style s")
+
+# viewers VRML and Wired are tested by their envs vars
+# if their envs var are set, then viewers are created and drawVolume
+
+global heprepViewer, heprepDir, heprepName, vrmlViewer
+heprepViewer = os.environ.get("G4HEPREPFILE_VIEWER")
+heprepDir = os.environ.get("G4HEPREPFILE_DIR")
+heprepName = os.environ.get("G4HEPREPFILE_NAME")
+if heprepViewer is not None:
+  gApplyUICommand("/vis/viewer/create HEPREP wired")
+#  gApplyUICommand("/vis/drawVolume")
+
+# VRML viewers name is user defined
+vrmlDir = os.environ.get("G4VRML_DEST_DIR")
+vrmlViewer = os.environ.get("G4VRMLFILE_VIEWER")
+if vrmlViewer is not None:
+  gApplyUICommand("/vis/viewer/create VRML vrmlviewer")
+#  gApplyUICommand("/vis/drawVolume")
+
+###############################
 ######  wxPython GUI ##########
-
+###############################
 
 import wx
 
@@ -139,30 +165,14 @@ class ComPanel(wx.Panel):
 
     self.g4comExec = wx.Button(parent, -1, "Execute", pos=(320,10), size=(60,30))
     self.g4comExec.Bind(wx.EVT_BUTTON, self.ExecuteCommand, self.g4comExec)
-#    self.sizerE = wx.BoxSizer(wx.HORIZONTAL)
-#    self.sizerE.Add((10,-1))    
-#    self.sizerE.Add(self.g4comText)
-#    self.sizerE.Add((10,-1))
-#    self.sizerE.Add(self.g4comExec)
-#    self.sizerE.Add((10,-1))
-    
-#    self.sizerL = wx.BoxSizer(wx.HORIZONTAL)
+
     self.comListBox = wx.ListBox(parent, -1, pos=(10,50), size=(300,200), choices=commandList, style=wx.LB_SINGLE)
     self.comListBox.SetSelection(1)
     self.comListBox.Bind(wx.EVT_LISTBOX, self.ShowGuide, self.comListBox)
-#    self.sizerL.Add((10,30))
-#    self.sizerL.Add(self.comListBox)
-#    self.sizerL.Add((10,30))
     
     self.guide = wx.TextCtrl(parent, -1, "guidance", pos=(320,50), size=(300, 200), style =wx.TE_MULTILINE)
     self.guide.Bind(wx.EVT_LISTBOX, self.ShowGuide, self.guide)
-#    self.sizerL.Add((10,-1))
-#    self.sizerL.Add(self.guide)
-#    self.sizer = wx.BoxSizer(wx.VERTICAL)
-#    self.sizer.Add(self.sizerE)
-#    self.sizer.Add(self.sizerL)
-#    self.SetSizer(self.sizer)
-#    self.sizer.Fit(self)  # don't work
+
 
   def ShowGuide(self, event):
     self.guide.Clear() # how to cleat the whole text before showing the next
@@ -173,27 +183,26 @@ class ComPanel(wx.Panel):
   def ExecuteCommand(self, event):
     gApplyUICommand(str(self.g4comText.GetValue()))
 
+
 class VisPanel(wx.Panel):
   def __init__(self, parent):
     wx.Panel.__init__(self, parent, -1)
 
-    self.visZoomIn = wx.Button(parent, -1, "Zoom In", pos=(10,10), size=(80,30))
-    self.visZoomOut = wx.Button(parent, -1, "Zoom out", pos=(100,10), size=(80,30))
-    self.visUp = wx.Button(parent, -1, "Up", pos=(190,10), size=(80,30))
-    self.visDown = wx.Button(parent, -1, "Down", pos=(280,10), size=(80,30))
-    self.visLeft = wx.Button(parent, -1, "Left", pos=(370,10), size=(80,30))
-    self.visRight = wx.Button(parent, -1, "Right", pos=(460,10), size=(80,30))
+    self.visZoomIn = wx.Button(parent, -1, "Zoom In", pos=(10,100), size=(80,30))
+    self.visZoomOut = wx.Button(parent, -1, "Zoom out", pos=(100,100), size=(80,30))
+    self.visUp = wx.Button(parent, -1, "Up", pos=(190,100), size=(80,30))
+    self.visDown = wx.Button(parent, -1, "Down", pos=(270,100), size=(80,30))
+    self.visLeft = wx.Button(parent, -1, "Left", pos=(360,100), size=(80,30))
+    self.visRight = wx.Button(parent, -1, "Left", pos=(450,100), size=(80,30))
 
-#    self.sizer = wx.BoxSizer(wx.HORIZONTAL)
-#    self.sizer.Add((20,30))
-#    self.sizer.Add(self.visZoomIn)
-#    self.sizer.Add(self.visZoomOut)
-#    self.sizer.Add(self.visUp)
-#    self.sizer.Add(self.visDown)
-#    self.sizer.Add(self.visRight)
-#    self.sizer.Add(self.visLeft)
-    
-
+    viewerList = ["OpenGL", "VRML", "Wired"]
+    self.viewer = wx.RadioBox(self, -1, "Viewer", pos=(10,10),
+                             size=(210,60), choices=viewerList, majorDimension=1, style=wx.RA_SPECIFY_ROWS)
+    self.viewer.Bind(wx.EVT_RADIOBOX, self.ViewerSelected, self.viewer)
+    self.viewer.SetToolTip(wx.ToolTip("Select one"))
+    self.viewer.SetSelection(0)
+    if vrmlViewer == None: self.viewer.EnableItem(1, False)
+    if heprepViewer == None: self.viewer.EnableItem(2, False)
 
     self.visZoomIn.Bind(wx.EVT_BUTTON, self.cmdExpand, self.visZoomIn)
     self.visZoomOut.Bind(wx.EVT_BUTTON, self.cmdShrink, self.visZoomOut)
@@ -203,9 +212,6 @@ class VisPanel(wx.Panel):
     self.visLeft.Bind(wx.EVT_BUTTON, self.cmdLeft, self.visLeft)
 
 
-#    self.SetSizer(self.sizer)
-#    self.sizer.Fit(self)
-    
   def cmdExpand(self, event):
     gApplyUICommand("/vis/viewer/zoom 1.2")
   def cmdShrink(self, event):
@@ -219,6 +225,47 @@ class VisPanel(wx.Panel):
   def cmdLeft(self, event):
     gApplyUICommand("/vis/viewer/pan "   + " 1. 0. mm")
 
+  def ViewerSelected(self, event):
+    self.viewerName = event.GetString()
+
+    if self.viewerName == "OpenGL":
+      gApplyUICommand("/vis/viewer/select oglsxviewer")
+      gApplyUICommand("/vis/drawVolume")
+      gApplyUICommand("/vis/scene/add/trajectories")
+
+      gApplyUICommand("/tracking/storeTrajectory 1")
+      gApplyUICommand("/vis/scene/endOfEventAction accumulate")
+      gApplyUICommand("/vis/scene/endOfRunAction accumulate")
+
+    if self.viewerName == "VRML":
+      gApplyUICommand("/vis/viewer/select vrmlviewer")
+
+      gApplyUICommand("/vis/viewer/set/viewpointThetaPhi 90. 0.")
+      gApplyUICommand("/vis/viewer/set/style s")
+      gApplyUICommand("/vis/drawVolume")      
+      gApplyUICommand("/vis/scene/add/trajectories")
+
+      gApplyUICommand("/tracking/storeTrajectory 1")
+      gApplyUICommand("/vis/scene/endOfEventAction accumulate")
+      gApplyUICommand("/vis/scene/endOfRunAction accumulate")
+
+    if self.viewerName == "Wired":
+
+      gApplyUICommand("/vis/viewer/select wired")
+
+      gApplyUICommand("/vis/viewer/set/viewpointThetaPhi 90. 0.")
+      gApplyUICommand("/vis/viewer/set/style s")
+      gApplyUICommand("/vis/drawVolume")
+      gApplyUICommand("/vis/scene/add/trajectories")
+
+      gApplyUICommand("/tracking/storeTrajectory 1")
+      gApplyUICommand("/vis/scene/endOfEventAction accumulate")
+      gApplyUICommand("/vis/scene/endOfRunAction accumulate")
+
+# everytime wired is chosen, a new instance of wired is created
+# to reuse single wired, g4pipe.poll() must be checked BEFORE the SECOND Popen
+#      if g4pipe.poll() == None:
+      g4pipe=Popen(heprepViewer+ " -file " + heprepDir+"/" +heprepName +".heprep", shell=True)
 
 
 # not used
@@ -358,8 +405,10 @@ class Counter(wx.SpinCtrl):
 ############################
 
 
+############################
+# WxPython Application class
+############################
 
-        
 # main class to instantiate the above classes and pack them using nested sizers
         
 class MyApp(wx.Frame):
@@ -398,13 +447,12 @@ class MyApp(wx.Frame):
 #   nested sizer in the horizontal direction
          bysizer = wx.BoxSizer(wx.HORIZONTAL)
 
-
          self.runStart = wx.Button(panel, -1, "  Run Start", pos=(30,10), size=(80,30))
          self.Bind(wx.EVT_BUTTON, self.RunStart, self.runStart)
          bxsizer.Add(self.runStart, 0, wx.ALL)
 # widgets
          
-#         materialList = ['water', 'air', 'aluminum', 'iron', 'lead', 'gold']
+
          materialList = absorber.keys()
          self.theMaterial = SelectOne(panel, "Materials", materialList)
   
@@ -443,7 +491,6 @@ class MyApp(wx.Frame):
          bxsizer.Add(self.eventNo.sizer, 0, wx.EXPAND)
 
          self.solid = EZgeom.G4EzVolume.GetSold(water_phantom)
-#         gControlExecute("oglx.mac")
          
          panel.SetSizer(bxsizer)
          bxsizer.Fit(self)
@@ -462,7 +509,7 @@ class MyApp(wx.Frame):
         event.Skip()
 
 
-
+###### Run Action
 
 
     def RunStart(self, event):
@@ -483,9 +530,9 @@ class MyApp(wx.Frame):
 
          self.solid.SetZHalfLength(  self.thickSpin.theValue * self.lengthUnit[self.thickSpin.theUnit] / 2.0 )
 
-#         gControlExecute("oglx.mac")
-         gApplyUICommand("/vis/viewer/flush")
+#
          gApplyUICommand("/vis/scene/add/text 0 610 610 mm 20 0 0  " + "Geant4Py in Action")
+         gApplyUICommand("/vis/viewer/flush")
          gApplyUICommand("/gun/particle " +  str ( self.theParticle.GetStringSelection() ) )
          for i in self.processList:
 #             print i, self.theProcesses.processCheck[i].GetValue()
@@ -497,10 +544,11 @@ class MyApp(wx.Frame):
 
          eventNum = self.eventNo.slider.GetValue()
          for i in range(eventNum):
-             gunYZpos = str(i-eventNum/2) + ". -30. cm"
+             gunYZpos = str(i-eventNum/2) + ". -50. cm"
              gApplyUICommand("/gun/position 0. " + gunYZpos)
              gRunManager.BeamOn(1)
-#             sleep(0.01)
+# next line is necessary for vrml to draw trajectories
+         gApplyUICommand("/vis/viewer/update")
 
 app = wx.PySimpleApp(False)
 MyApp().Show()
