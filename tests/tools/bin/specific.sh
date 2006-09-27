@@ -456,7 +456,7 @@ if [ $UNAMEN = pcitapi08 ]; then
 fi
 
 if [ $UNAMEN = pcg4speed.cern.ch ]; then
-  export DEBOPT=${DEBOPT}_slc3_ia32_icc9
+  export DEBOPT=${DEBOPT}_slc3_icc91
   export CVSROOT=/afs/cern.ch/sw/geant4/cvs
   export G4SYSTEM=Linux-icc
   export G4INSTALL=/afs/cern.ch/sw/geant4/stt/$REF/src/geant4
