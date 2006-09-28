@@ -90,6 +90,11 @@ track                                            track-V08-01-02
 - Added methods for setting polarization and modifying weight for
   G4ParticleChangeForGamma and G4ParticleChangeForLoss.
 
+tracking                                         tracking-V08-01-04
+--------
+- Fix in G4SteppingManager for the treatment of trajectory update.
+  Modified trajectory classes accordingly.
+
 visualization                                    vis-V08-01-07
 -------------
 - modeling:
