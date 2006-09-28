@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PrimaryParticle.cc,v 1.2 2006-06-29 19:26:10 gunter Exp $
+// $Id: G4PrimaryParticle.cc,v 1.3 2006-09-28 14:29:43 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -125,6 +125,28 @@ void G4PrimaryParticle::SetG4code(G4ParticleDefinition* Gcode)
   PDGcode = Gcode->GetPDGEncoding();
 }
 
+G4double G4PrimaryParticle::GetMass() const
+{
+  if (mass <0.0 ) {
+    if (G4code != 0) {
+      // return PDG mass if dynamical mass has not be specified 
+      return G4code->GetPDGMass();
+    }
+  }
+  return mass; 
+}
+
+G4double G4PrimaryParticle::GetCharge() const
+{
+  if ( charge <DBL_MAX ) {
+    if (G4code != 0) {
+      // return PDG charge if dynamical mass has not be specified 
+      return G4code->GetPDGCharge();
+    }
+  }
+  return charge; 
+}
+
 const G4PrimaryParticle & 
 G4PrimaryParticle::operator=(const G4PrimaryParticle &)
 { return *this; }
@@ -165,4 +187,7 @@ void G4PrimaryParticle::Print() const
   else
   { G4cout << "<<<< End of link" << G4endl; }
 }
+
+
+
 
