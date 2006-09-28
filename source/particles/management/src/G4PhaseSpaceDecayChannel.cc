@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhaseSpaceDecayChannel.cc,v 1.11 2006-09-27 15:45:39 kurasige Exp $
+// $Id: G4PhaseSpaceDecayChannel.cc,v 1.12 2006-09-28 14:30:33 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -225,9 +225,30 @@ G4DecayProducts *G4PhaseSpaceDecayChannel::ThreeBodyDecayIt()
    //create parent G4DynamicParticle at rest
   G4ThreeVector dummy;
   G4DynamicParticle * parentparticle = new G4DynamicParticle( parent, dummy, 0.0);
+
+
   //create G4Decayproducts
   G4DecayProducts *products = new G4DecayProducts(*parentparticle);
   delete parentparticle;
+
+  if (sumofdaughtermass >parentmass) {
+#ifdef G4VERBOSE
+    if (GetVerboseLevel()>0) {
+      G4cerr << "G4PhaseSpaceDecayChannel::ThreeBodyDecayIt " 
+             << "sum of daughter mass is larger than parent mass" << G4endl;
+      G4cerr << "parent :" << parent->GetParticleName() << "  " << parent_mass/GeV << G4endl;
+      G4cerr << "daughter 1 :" << daughters[0]->GetParticleName() << "  " << daughtermass[0]/GeV << G4endl;
+      G4cerr << "daughter 2:" << daughters[1]->GetParticleName() << "  " << daughtermass[1]/GeV << G4endl;
+      G4cerr << "daughter 3:" << daughters[2]->GetParticleName() << "  " << daughtermass[2]/GeV << G4endl;
+    }
+#endif
+    G4Exception("G4PhaseSpaceDecayChannel::ThreeBodyDecayIt",
+                "can not create decay products", JustWarning,
+                "sum of daughter mass is larger than parent mass");
+    return products;
+  }
+
+
 
   //calculate daughter momentum
   //  Generate two 
@@ -303,7 +324,7 @@ G4DecayProducts *G4PhaseSpaceDecayChannel::ThreeBodyDecayIt()
 	       (direction0*daughtermomentum[0] + direction2*(daughtermomentum[2]/direction2.mag()))*(-1.0)   
 		);
   products->PushProducts(daughterparticle);
-
+  
 #ifdef G4VERBOSE
   if (GetVerboseLevel()>1) {
      G4cout << "G4PhaseSpaceDecayChannel::ThreeBodyDecayIt ";
