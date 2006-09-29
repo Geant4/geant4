@@ -1,4 +1,4 @@
-$Id: History,v 1.257 2006-09-13 10:34:31 maire Exp $
+$Id: History,v 1.258 2006-09-29 10:13:39 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+29 Septenber 06: V.Ivant (emutils-V08-01-04)
+- G4EmCalculator add computation of smoothing factor for dedx of hadrons/ions
      
 13 September 06: mma (emutils-V08-01-03)
 - G4VEmProcess: add function SetModel( G4VEmModel* )
