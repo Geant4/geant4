@@ -37,7 +37,7 @@ The cut in range [1000 (mm)]   is too big   for material  idx=3
 The cut in energy is set1.79769e+305GeV 
 
 conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
-      sampling secondary e+e- according to the Bethe-Heitler model
+      sampling secondary e+e- according Bethe-Heitler model
       tables are built for  gamma
       Lambda tables from 1.022 MeV to 100 GeV in 100 bins.
 
@@ -47,6 +47,7 @@ compt:  Total cross sections has a good parametrisation from 10 KeV to (100/Z) G
       Lambda tables from 100 eV  to 100 GeV in 90 bins.
 
 phot:  Total cross sections from Sandia parametrisation. 
+      Sampling according PhotoElectric model
 
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
@@ -76,7 +77,7 @@ eBrem:   tables are built for  e+
       Total cross sections from a parametrisation based on the EEDL data library. 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
 
-annihil:       Heilter model of formula of annihilation into 2 photons
+annihil:       Sampling according eplus2gg model
       tables are built for  e+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
 
@@ -192,7 +193,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=19s Real=19s Sys=0.26s
+  User=19s Real=20s Sys=0.27s
 #
 # neutron at 10 GeV in U
 #
@@ -224,7 +225,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=18s Real=18s Sys=0.27s
+  User=18s Real=19s Sys=0.17s
 #
 # pi+ at 10 GeV in U
 #
@@ -255,7 +256,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=16s Real=16s Sys=0.1s
+  User=16s Real=17s Sys=0.15s
 #
 # pi- at 10 GeV in U
 #
@@ -290,7 +291,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=18s Real=18s Sys=0.02s
+  User=18s Real=19s Sys=0.09s
 #
 # proton at 10 GeV in Cu
 #
@@ -304,7 +305,7 @@ The cut in range [1e+03 (mm)]   is too big   for material  idx=2
 The cut in energy is set1.8e+305GeV 
 
 conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
-      sampling secondary e+e- according to the Bethe-Heitler model
+      sampling secondary e+e- according Bethe-Heitler model
       tables are built for  gamma
       Lambda tables from 1 MeV to 1e+02 GeV in 100 bins.
 
@@ -314,6 +315,7 @@ compt:  Total cross sections has a good parametrisation from 10 KeV to (100/Z) G
       Lambda tables from 1e+02 eV  to 1e+02 GeV in 90 bins.
 
 phot:  Total cross sections from Sandia parametrisation. 
+      Sampling according PhotoElectric model
 
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
@@ -343,7 +345,7 @@ eBrem:   tables are built for  e+
       Total cross sections from a parametrisation based on the EEDL data library. 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
 
-annihil:       Heilter model of formula of annihilation into 2 photons
+annihil:       Sampling according eplus2gg model
       tables are built for  e+
       Lambda tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
 
@@ -448,7 +450,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=9.6s Real=10s Sys=0.39s
+  User=9.7s Real=11s Sys=0.52s
 #
 # neutron at 10 GeV in Cu
 #
@@ -482,7 +484,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=7.6s Real=8s Sys=0.09s
+  User=7.7s Real=8.3s Sys=0.19s
 #
 # pi+ at 10 GeV in Cu
 #
@@ -516,7 +518,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=6.7s Real=6.9s Sys=0.1s
+  User=6.9s Real=7.2s Sys=0.11s
 #
 # pi- at 10 GeV in Cu
 #
@@ -550,7 +552,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=6.12s Real=6.17s Sys=0.01s
+  User=6.21s Real=6.32s Sys=0.03s
 #
 # proton at 10 GeV in Si
 #
@@ -564,7 +566,7 @@ The cut in range [1000 (mm)]   is too big   for material  idx=1
 The cut in energy is set1.7976931e+305GeV 
 
 conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
-      sampling secondary e+e- according to the Bethe-Heitler model
+      sampling secondary e+e- according Bethe-Heitler model
       tables are built for  gamma
       Lambda tables from 1.0219981 MeV to 100 GeV in 100 bins.
 
@@ -574,6 +576,7 @@ compt:  Total cross sections has a good parametrisation from 10 KeV to (100/Z) G
       Lambda tables from 100 eV  to 100 GeV in 90 bins.
 
 phot:  Total cross sections from Sandia parametrisation. 
+      Sampling according PhotoElectric model
 
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
@@ -603,7 +606,7 @@ eBrem:   tables are built for  e+
       Total cross sections from a parametrisation based on the EEDL data library. 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
 
-annihil:       Heilter model of formula of annihilation into 2 photons
+annihil:       Sampling according eplus2gg model
       tables are built for  e+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
 
@@ -714,7 +717,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=3.88s Real=3.99s Sys=0.05s
+  User=3.87s Real=4.09s Sys=0.1s
 #
 # neutron at 10 GeV in Si
 #
@@ -753,7 +756,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=2.81s Real=2.84s Sys=0.01s
+  User=2.84s Real=2.94s Sys=0.04s
 #
 # pi+ at 10 GeV in Si
 #
@@ -792,7 +795,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=3.81s Real=3.83s Sys=0s
+  User=3.83s Real=3.86s Sys=0.03s
 #
 # pi- at 10 GeV in Si
 #
@@ -831,7 +834,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=3.38s Real=3.41s Sys=0.01s
+  User=3.44s Real=3.69s Sys=0s
 #
 # proton at 10 GeV in H
 #
@@ -842,7 +845,7 @@ SimpleBox is now made of H
 /run/beamOn 20
 
 conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
-      sampling secondary e+e- according to the Bethe-Heitler model
+      sampling secondary e+e- according Bethe-Heitler model
       tables are built for  gamma
       Lambda tables from 1.0219981 MeV to 100 GeV in 100 bins.
 
@@ -852,6 +855,7 @@ compt:  Total cross sections has a good parametrisation from 10 KeV to (100/Z) G
       Lambda tables from 100 eV  to 100 GeV in 90 bins.
 
 phot:  Total cross sections from Sandia parametrisation. 
+      Sampling according PhotoElectric model
 
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
@@ -881,7 +885,7 @@ eBrem:   tables are built for  e+
       Total cross sections from a parametrisation based on the EEDL data library. 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
 
-annihil:       Heilter model of formula of annihilation into 2 photons
+annihil:       Sampling according eplus2gg model
       tables are built for  e+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
 
@@ -1040,7 +1044,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.01s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 #
 # pi+ at 10 GeV in H
 #
@@ -1084,7 +1088,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0s Real=0s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 #
 # pi- at 10 GeV in H
 #

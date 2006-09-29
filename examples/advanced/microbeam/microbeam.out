@@ -29,11 +29,13 @@ Registered model factories:
   drawByCharge
   drawByParticleID
   drawByOriginVolume
+  drawByAttribute
 
 Registered filter factories:
   chargeFilter
   particleFilter
   originVolumeFilter
+  attributeFilter
 
 
 
@@ -164,7 +166,7 @@ eBrem:   tables are built for  e+
       Total cross sections from a parametrisation based on the EEDL data library. 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
 
-annihil:       Heilter model of formula of annihilation into 2 photons
+annihil:       Sampling according eplus2gg model
       tables are built for  e+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
 

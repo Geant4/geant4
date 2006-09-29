@@ -93,7 +93,7 @@ eBrem:   tables are built for  e+
       Total cross sections from a parametrisation based on the EEDL data library. 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
 
-annihil:       Heilter model of formula of annihilation into 2 photons
+annihil:       Sampling according eplus2gg model
       tables are built for  e+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
 
@@ -264,7 +264,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.07s Real=0.08s Sys=0.01s
+  User=0.05s Real=0.08s Sys=0.03s
 /vis/show/view
        1e+03           1           0     Ne24[0.0]
     1.14e+03           1       51.57     e-
@@ -318,7 +318,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.02s Real=0.03s Sys=0.01s
+  User=0.01s Real=0.02s Sys=0.01s
 /vis/show/view
        1e+03           1           0     F24[0.0]
     8.06e+03           1       0.062     e-
@@ -376,7 +376,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.02s Real=0.04s Sys=0.01s
+  User=0.03s Real=0.03s Sys=0s
 /vis/show/view
        1e+03           1           0     Al24[0.0]
     4.35e+03           1      0.6077     e+
@@ -427,7 +427,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0.01s Sys=0.01s
+  User=0.01s Real=0.02s Sys=0.01s
 /vis/show/view
        1e+03           1           0     Na24[472.0]
          472           1     0.02063     gamma
@@ -478,7 +478,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0.03s Sys=0.02s
+  User=0.03s Real=0.03s Sys=0s
 /vis/show/view
        1e+03           1           0     Cr46[0.0]
     5.64e+03           1      0.3928     e+

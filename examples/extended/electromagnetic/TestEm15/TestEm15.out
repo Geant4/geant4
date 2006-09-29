@@ -86,11 +86,13 @@ Registered model factories:
   drawByCharge
   drawByParticleID
   drawByOriginVolume
+  drawByAttribute
 
 Registered filter factories:
   chargeFilter
   particleFilter
   originVolumeFilter
+  attributeFilter
 
 /run/verbose 2
 #
@@ -119,6 +121,7 @@ physicsList->setCut() start.
 /run/beamOn 10000
 
 phot:  Total cross sections from Sandia parametrisation. 
+      Sampling according PhotoElectric model
 
 compt:  Total cross sections has a good parametrisation from 10 KeV to (100/Z) GeV
       Sampling according Klein-Nishina model
@@ -126,7 +129,7 @@ compt:  Total cross sections has a good parametrisation from 10 KeV to (100/Z) G
       Lambda tables from 100 eV  to 100 GeV in 90 bins.
 
 conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
-      sampling secondary e+e- according to the Bethe-Heitler model
+      sampling secondary e+e- according Bethe-Heitler model
       tables are built for  gamma
       Lambda tables from 1.022 MeV to 100 GeV in 100 bins.
 
@@ -158,7 +161,7 @@ eBrem:   tables are built for  e+
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
       Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 0
 
-annihil:       Heilter model of formula of annihilation into 2 photons
+annihil:       Sampling according eplus2gg model
       tables are built for  e+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
 
@@ -286,7 +289,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=3.4s Real=3.4s Sys=0s
+  User=3.5s Real=3.5s Sys=0s
 
  The run consists of 10000 e- of 5 MeV through 100 m   of Water (density: 1 g/cm3 )
 

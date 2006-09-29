@@ -101,7 +101,7 @@ DoIt Vector:
 ================================================
 
 conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
-      sampling secondary e+e- according to the Bethe-Heitler model
+      sampling secondary e+e- according Bethe-Heitler model
       tables are built for  gamma
       Lambda tables from 1.022 MeV to 100 GeV in 100 bins.
 
@@ -111,6 +111,7 @@ compt:  Total cross sections has a good parametrisation from 10 KeV to (100/Z) G
       Lambda tables from 100 eV  to 100 GeV in 90 bins.
 
 phot:  Total cross sections from Sandia parametrisation. 
+      Sampling according PhotoElectric model
 
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
@@ -140,7 +141,7 @@ eBrem:   tables are built for  e+
       Total cross sections from a parametrisation based on the EEDL data library. 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
 
-annihil:       Heilter model of formula of annihilation into 2 photons
+annihil:       Sampling according eplus2gg model
       tables are built for  e+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
 
@@ -221,26 +222,26 @@ hIoni:   tables are built for  pi-
       Bether-Bloch model for Escaled > 0.297504 MeV, ICRU49 parametrisation for protons below.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 Volume name               |   Importance|  Tr.Entering|   Population|   Collisions|     Coll*WGT|    NumWGTedE|   FluxWGTedE|    Av.Tr.WGT|
-cell_01_rep:0............ |           1 |         113 |         133 |         113 |         113 |   8.4732787 |   9.1010333 |           1 |
-cell_02_rep:0............ |           2 |          72 |         163 |         200 |         100 |    4.323174 |    8.705577 |           1 |
-cell_03_rep:0............ |           4 |          85 |         178 |         221 |       55.25 |   5.7181907 |   8.1739911 |           1 |
-cell_04_rep:0............ |           8 |         104 |         214 |         250 |       31.25 |   6.2701176 |   8.0477481 |           1 |
-cell_05_rep:0............ |          16 |         111 |         235 |         288 |          18 |   6.2358927 |   7.7232756 |           1 |
-cell_06_rep:0............ |          32 |         122 |         255 |         283 |     8.84375 |   6.5801742 |   7.7215434 |           1 |
-cell_07_rep:0............ |          64 |         130 |         280 |         375 |    5.859375 |    5.651861 |   7.0303223 |           1 |
-cell_08_rep:0............ |         128 |         130 |         267 |         335 |   2.6171875 |   5.6877812 |   7.0891822 |           1 |
-cell_09_rep:0............ |         256 |         144 |         297 |         475 |   1.8554688 |   4.9052988 |   6.4262423 |           1 |
-cell_10_rep:0............ |         512 |         156 |         327 |         464 |     0.90625 |   4.9657552 |   6.5502973 |           1 |
-cell_11_rep:0............ |        1024 |         189 |         373 |         541 |  0.52832031 | 0.036775942 |   6.4250402 |           1 |
-cell_12_rep:0............ |        2048 |         202 |         443 |         596 |  0.29101562 |   4.9093467 |   6.3738032 |           1 |
-cell_13_rep:0............ |        4096 |         226 |         459 |         636 |  0.15527344 |   3.7290047 |   5.8188979 |           1 |
-cell_14_rep:0............ |        8192 |         269 |         554 |         935 |  0.11413574 |   4.0605216 |   5.6795257 |           1 |
-cell_15_rep:0............ |       16384 |         300 |         614 |        1095 | 0.066833496 | 0.089155765 |   5.1283107 |           1 |
-cell_16_rep:0............ |       32768 |         371 |         749 |        1427 | 0.043548584 | 0.042230138 |    4.713344 |           1 |
-cell_17_rep:0............ |       65536 |         382 |         779 |        1549 | 0.023635864 |   2.7935776 |   4.1630758 |           1 |
-cell_18_rep:0............ |      131072 |         312 |         719 |        1516 | 0.011566162 |  0.14353462 |   4.1215867 |           1 |
-rest_rep:0............... |      131072 |         333 |         333 |           0 |           0 |           0 |           0 |           0 |
-shieldWorld_rep:0........ |           1 |          15 |         114 |           0 |           0 |          10 |          10 |           1 |
+cell_01_rep:0............ |           1 |         115 |         142 |         138 |         138 |   7.8188773 |   8.7038539 |           1 |
+cell_02_rep:0............ |           2 |          76 |         166 |         205 |       102.5 |   4.2991501 |   8.5231767 |           1 |
+cell_03_rep:0............ |           4 |          90 |         182 |         182 |        45.5 |    7.234784 |   8.5922211 |           1 |
+cell_04_rep:0............ |           8 |         111 |         245 |         287 |      35.875 |   7.0282014 |     8.08834 |           1 |
+cell_05_rep:0............ |          16 |         124 |         265 |         313 |     19.5625 |   6.6544373 |   7.7334687 |           1 |
+cell_06_rep:0............ |          32 |         139 |         283 |         320 |          10 |   6.5528664 |   7.6676339 |           1 |
+cell_07_rep:0............ |          64 |         141 |         307 |         374 |     5.84375 |   5.6997357 |   7.1902559 |           1 |
+cell_08_rep:0............ |         128 |         141 |         287 |         378 |    2.953125 |   5.5898447 |   6.8044557 |           1 |
+cell_09_rep:0............ |         256 |         162 |         342 |         507 |   1.9804688 |   4.6463633 |    6.330486 |           1 |
+cell_10_rep:0............ |         512 |         201 |         417 |         583 |   1.1386719 |   5.0975693 |   6.5392822 |           1 |
+cell_11_rep:0............ |        1024 |         239 |         487 |         686 |  0.66992188 | 0.044105947 |   6.2710276 |           1 |
+cell_12_rep:0............ |        2048 |         275 |         586 |         833 |  0.40673828 |   5.1152785 |   6.1522161 |           1 |
+cell_13_rep:0............ |        4096 |         305 |         660 |         912 |  0.22265625 |   4.4777991 |   5.7804516 |           1 |
+cell_14_rep:0............ |        8192 |         365 |         741 |        1199 |   0.1463623 |  0.90208657 |   5.4590136 |           1 |
+cell_15_rep:0............ |       16384 |         430 |         872 |        1446 | 0.088256836 |  0.12223749 |   5.0774578 |           1 |
+cell_16_rep:0............ |       32768 |         517 |        1040 |        1811 | 0.055267334 | 0.058676995 |   4.7533772 |           1 |
+cell_17_rep:0............ |       65536 |         543 |        1104 |        2114 |  0.03225708 |    2.866308 |   4.3290618 |           1 |
+cell_18_rep:0............ |      131072 |         456 |        1076 |        2221 | 0.016944885 |  0.21343717 |   4.2640613 |           1 |
+rest_rep:0............... |      131072 |         484 |         484 |           0 |           0 |           0 |           0 |           0 |
+shieldWorld_rep:0........ |           1 |          16 |         115 |           0 |           0 |          10 |          10 |           1 |
 === G4ProcessPlacer::RemoveProcess: for: neutron
   ProcessName: MassImportanceProcess, will be removed!
   The initial Vectors: 

@@ -517,7 +517,7 @@ PhotInPrimaryGeneratorAction::SetProjectileEnergy: before E=100
 /run/beamOn 1
 
 conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
-      sampling secondary e+e- according to the Bethe-Heitler model
+      sampling secondary e+e- according Bethe-Heitler model
       tables are built for  gamma
       Lambda tables from 1.022 MeV to 100 GeV in 100 bins.
 
@@ -527,6 +527,7 @@ compt:  Total cross sections has a good parametrisation from 10 KeV to (100/Z) G
       Lambda tables from 100 eV  to 100 GeV in 90 bins.
 
 phot:  Total cross sections from Sandia parametrisation. 
+      Sampling according PhotoElectric model
 
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
@@ -556,11 +557,11 @@ eBrem:   tables are built for  e+
       Total cross sections from a parametrisation based on the EEDL data library. 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
 
-annihil:       Heilter model of formula of annihilation into 2 photons
+annihil:       Sampling according eplus2gg model
       tables are built for  e+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
 
-annihil:       Heilter model of formula of annihilation into 2 photons
+annihil:       Sampling according eplus2gg model
       tables are built for  e+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
 
@@ -700,7 +701,7 @@ PhotInPrimaryGeneratorAction::GeneratePrimaries: part&E're redefined
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=28.26s Real=31.62s Sys=2.85s
+  User=27.03s Real=29.98s Sys=2.42s
 ##############################################################
  Run Summary - Number of events : 1
 ##############################################################
@@ -709,57 +710,57 @@ Region Region0
  Production thresholds :
  -----------------------
  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy deposition in Absorber 143.60305 MeV, in Gap 0 eV 
+ Energy deposition in Absorber 493.96669 MeV, in Gap 0 eV 
  Number of secondaries in the event :
  ------------------------------------
- gamma in Absorber 6, in Gap      33
- e-    in Absorber 136, in Gap 244
- e+    in Absorber 1, in Gap 3
+ gamma in Absorber 13, in Gap      61
+ e-    in Absorber 178, in Gap 403
+ e+    in Absorber 0, in Gap 6
  Minimum kinetic energy of generated secondaries :
  -------------------------------------------------
- gamma in Absorber = 7.6878055 keV, in Gap = 8.1581597 keV
- e-    in Absorber = 42.339098 eV , in Gap = 72.829703 eV 
- e+    in Absorber = 1.3931178 MeV    in Gap = 499.9748 keV
- Mean total track length of neutrons in the event : in Absorber = 2.5697433 m  , in Gap = 0 fm 
- Mean number of steps of charged particles in the event : in Absorber =54, in Gap = 0
+ gamma in Absorber = 2.6883754 keV, in Gap = 7.6946193 keV
+ e-    in Absorber = 17.350387 eV , in Gap = 24.292945 eV 
+ e+    in Absorber = 2.8802232e+295 J      in Gap = 3.2235495 MeV
+ Mean total track length of neutrons in the event : in Absorber = 4.4517415 m  , in Gap = 0 fm 
+ Mean number of steps of charged particles in the event : in Absorber =93, in Gap = 0
 ##############################################################
 Region Region1
 ====================
  Production thresholds :
  -----------------------
  gamma 1 cm     e- 1 cm     e+ 1 cm 
- Energy deposition in Absorber 46.913176 GeV, in Gap 0 eV 
+ Energy deposition in Absorber 51.466412 GeV, in Gap 0 eV 
  Number of secondaries in the event :
  ------------------------------------
- gamma in Absorber 1756, in Gap      7600
- e-    in Absorber 18137, in Gap 39505
- e+    in Absorber 102, in Gap 616
+ gamma in Absorber 1604, in Gap      6851
+ e-    in Absorber 16077, in Gap 34683
+ e+    in Absorber 102, in Gap 554
  Minimum kinetic energy of generated secondaries :
  -------------------------------------------------
- gamma in Absorber = 5.7102938 keV, in Gap = 20.497356 keV
- e-    in Absorber = 1.4835055 eV , in Gap = 0.044819116 eV 
- e+    in Absorber = 294.43322 keV    in Gap = 130.04108 keV
- Mean total track length of neutrons in the event : in Absorber = 27.054409 m  , in Gap = 0 fm 
- Mean number of steps of charged particles in the event : in Absorber =661, in Gap = 0
+ gamma in Absorber = 5.7461237 keV, in Gap = 20.495471 keV
+ e-    in Absorber = 0.17326694 eV , in Gap = 0.28071996 eV 
+ e+    in Absorber = 169.64161 keV    in Gap = 126.12337 keV
+ Mean total track length of neutrons in the event : in Absorber = 64.261774 m  , in Gap = 0 fm 
+ Mean number of steps of charged particles in the event : in Absorber =1463, in Gap = 0
 ##############################################################
 Region Region2
 ====================
  Production thresholds :
  -----------------------
  gamma 10 cm     e- 10 cm     e+ 10 cm 
- Energy deposition in Absorber 358.53356 MeV, in Gap 0 eV 
+ Energy deposition in Absorber 316.52042 MeV, in Gap 0 eV 
  Number of secondaries in the event :
  ------------------------------------
- gamma in Absorber 25, in Gap      30
- e-    in Absorber 212, in Gap 383
- e+    in Absorber 2, in Gap 5
+ gamma in Absorber 5, in Gap      37
+ e-    in Absorber 223, in Gap 440
+ e+    in Absorber 0, in Gap 4
  Minimum kinetic energy of generated secondaries :
  -------------------------------------------------
- gamma in Absorber = 22.773926 keV, in Gap = 88.116388 keV
- e-    in Absorber = 8.8360405 eV , in Gap = 48.249497 eV 
- e+    in Absorber = 4.7555301 MeV    in Gap = 3.0423704 MeV
- Mean total track length of neutrons in the event : in Absorber = 3.3401393 m  , in Gap = 0 fm 
- Mean number of steps of charged particles in the event : in Absorber =74, in Gap = 0
+ gamma in Absorber = 33.952255 keV, in Gap = 79.939802 keV
+ e-    in Absorber = 8.3532119 eV , in Gap = 53.75569 eV 
+ e+    in Absorber = 2.8802232e+295 J      in Gap = 211.58024 keV
+ Mean total track length of neutrons in the event : in Absorber = 1.8009082 m  , in Gap = 0 fm 
+ Mean number of steps of charged particles in the event : in Absorber =25, in Gap = 0
 ##############################################################
 /run/dumpCouples
 

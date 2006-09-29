@@ -97,6 +97,7 @@ Set cuts for all particles!
 /run/beamOn 1000
 
 phot:  Total cross sections from Sandia parametrisation. 
+      Sampling according PhotoElectric model
 
 compt:  Total cross sections has a good parametrisation from 10 KeV to (100/Z) GeV
       Sampling according Klein-Nishina model
@@ -104,7 +105,7 @@ compt:  Total cross sections has a good parametrisation from 10 KeV to (100/Z) G
       Lambda tables from 100 eV  to 100 GeV in 90 bins.
 
 conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
-      sampling secondary e+e- according to the Bethe-Heitler model
+      sampling secondary e+e- according Bethe-Heitler model
       tables are built for  gamma
       Lambda tables from 1.022 MeV to 100 GeV in 100 bins.
 
@@ -136,7 +137,7 @@ eBrem:   tables are built for  e+
       Total cross sections from a parametrisation based on the EEDL data library. 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
 
-annihil:       Heilter model of formula of annihilation into 2 photons
+annihil:       Sampling according eplus2gg model
       tables are built for  e+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
 
@@ -264,7 +265,7 @@ EvtNo= 649  length= 0.0095692  xend= 0.00245242
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=2.81s Real=4.84s Sys=2.02s
+  User=3.05s Real=4.87s Sys=1.8s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 999 for proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
@@ -307,7 +308,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=2.87s Real=4.75s Sys=1.86s
+  User=3.07s Real=4.81s Sys=1.73s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for anti_proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
@@ -348,7 +349,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=6.71s Real=9.21s Sys=2.25s
+  User=6.77s Real=9.4s Sys=2.36s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for C12[0.0] with Ekin = 6 MeV p= 366.244 MeV/c
@@ -390,21 +391,21 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=14.29s Real=14.62s Sys=0.28s
+  User=14.11s Real=14.42s Sys=0.24s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 100 for proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
-    Track Length in absorber = 9.19026 +- 0.0174265  microns 
-    CSDA  Range  in absorber = 9.05395 +- 0.0187239  microns 
+    Track Length in absorber = 9.19551 +- 0.0136691  microns 
+    CSDA  Range  in absorber = 9.05724 +- 0.0153367  microns 
 
     Energy deposit in absorber = 0.5  MeV 
 
 ### Comparison with the ICRU49 data: 
-    Track Length (G4 - ICRU49) = 0.131259 +- 0.0174265 microns 
-    CSDA  Range  (G4 - ICRU49) = 0.184948 +- 0.0187239 microns 
+    Track Length (G4 - ICRU49) = 0.136515 +- 0.0136691 microns 
+    CSDA  Range  (G4 - ICRU49) = 0.188241 +- 0.0153367 microns 
 
-Average Number electrons per event = 22.61
-Average Number photons per event   = 22.61
+Average Number electrons per event = 21.93
+Average Number photons per event   = 21.93
 
 #
 /test17/cutAugerEnergy 250 eV
@@ -434,20 +435,20 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=38.32s Real=39.07s Sys=0.39s
+  User=37.13s Real=38.03s Sys=0.42s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 100 for proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
-    Track Length in absorber = 9.15727 +- 0.0154373  microns 
-    CSDA  Range  in absorber = 9.00463 +- 0.0164261  microns 
+    Track Length in absorber = 9.16324 +- 0.0177242  microns 
+    CSDA  Range  in absorber = 9.02529 +- 0.017284  microns 
 
     Energy deposit in absorber = 0.5  MeV 
 
 ### Comparison with the ICRU49 data: 
-    Track Length (G4 - ICRU49) = 0.0982718 +- 0.0154373 microns 
-    CSDA  Range  (G4 - ICRU49) = 0.135634 +- 0.0164261 microns 
+    Track Length (G4 - ICRU49) = 0.104238 +- 0.0177242 microns 
+    CSDA  Range  (G4 - ICRU49) = 0.156294 +- 0.017284 microns 
 
-Average Number electrons per event = 524.2
-Average Number photons per event   = 3.13
+Average Number electrons per event = 523.21
+Average Number photons per event   = 2.69
 
 G4 kernel has come to Quit state.

@@ -35,11 +35,13 @@ Registered model factories:
   drawByCharge
   drawByParticleID
   drawByOriginVolume
+  drawByAttribute
 
 Registered filter factories:
   chargeFilter
   particleFilter
   originVolumeFilter
+  attributeFilter
 
 /run/verbose 1
 #/tracking/verbose 1
@@ -119,6 +121,7 @@ Muon cuts are set
 /run/beamOn 100
 
 phot:  Total cross sections from Sandia parametrisation. 
+      Sampling according PhotoElectric model
 
 compt:  Total cross sections has a good parametrisation from 10 KeV to (100/Z) GeV
       Sampling according Klein-Nishina model
@@ -126,7 +129,7 @@ compt:  Total cross sections has a good parametrisation from 10 KeV to (100/Z) G
       Lambda tables from 100 eV  to 100 GeV in 90 bins.
 
 conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
-      sampling secondary e+e- according to the Bethe-Heitler model
+      sampling secondary e+e- according Bethe-Heitler model
       tables are built for  gamma
       Lambda tables from 1.022 MeV to 100 GeV in 100 bins.
 
@@ -158,7 +161,7 @@ eBrem:   tables are built for  e+
       Total cross sections from a parametrisation based on the EEDL data library. 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
 
-annihil:       Heilter model of formula of annihilation into 2 photons
+annihil:       Sampling according eplus2gg model
       tables are built for  e+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
 
@@ -316,28 +319,28 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=51.02s Real=58.4s Sys=6.73s
+  User=50.12s Real=58.46s Sys=7.7s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started
 ========================================================
 Number of events             100
-Average number of e-         1325
-Average number of gamma      703.1
-Average number of e+         48.11
-Average number of steps      4606
-Edep 1x1 =                   0.8291 +- 0.003254  res=  3.925 %
-Edep 3x3 =                   0.9555 +- 0.001635  res=  1.711 %
-Edep 5x5 =                   0.978 +- 0.00107  res=  1.094 %
+Average number of e-         1321
+Average number of gamma      701.1
+Average number of e+         48.62
+Average number of steps      4642
+Edep 1x1 =                   0.8161 +- 0.003524  res=  4.318 %
+Edep 3x3 =                   0.9531 +- 0.001424  res=  1.494 %
+Edep 5x5 =                   0.978 +- 0.0009537  res=  0.9752 %
 ========================================================
 
 
 <<<<<ACCEPTANCE>>>>> 100 events for Crystal Calorimeter
-Edep1x1: 0.8291  delEdep1x1= 0.00309 nrms= 0.8803
-Erms1x1: 0.03254  delErms1x1= -0.002562 nrms= -0.7298
-Edep3x3: 0.9555  delEdep3x3= -0.0009376 nrms= -0.586
-Erms3x3: 0.01635  delErms3x3= 0.0003471 nrms= 0.2169
-Edep5x5: 0.978  delEdep5x5= -0.0009607 nrms= -0.8073
-Erms5x5: 0.0107  delErms5x5= -0.001201 nrms= -1.009
+Edep1x1: 0.8161  delEdep1x1= -0.009865 nrms= -2.811
+Erms1x1: 0.03524  delErms1x1= 0.0001413 nrms= 0.04025
+Edep3x3: 0.9531  delEdep3x3= -0.003347 nrms= -2.092
+Erms3x3: 0.01424  delErms3x3= -0.001761 nrms= -1.1
+Edep5x5: 0.978  delEdep5x5= -0.001026 nrms= -0.8626
+Erms5x5: 0.009537  delErms5x5= -0.002363 nrms= -1.986
 <<<<<END>>>>>   IS ACCEPTED
 
 /vis/viewer/update

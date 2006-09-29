@@ -70,6 +70,7 @@ PhysicsList::SetCuts:CutLength : 1 mm
 /run/beamOn 100
 
 phot:  Total cross sections from Sandia parametrisation. 
+      Sampling according PhotoElectric model
 
 compt:  Total cross sections has a good parametrisation from 10 KeV to (100/Z) GeV
       Sampling according Klein-Nishina model
@@ -77,7 +78,7 @@ compt:  Total cross sections has a good parametrisation from 10 KeV to (100/Z) G
       Lambda tables from 100 eV  to 100 GeV in 90 bins.
 
 conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
-      sampling secondary e+e- according to the Bethe-Heitler model
+      sampling secondary e+e- according Bethe-Heitler model
       tables are built for  gamma
       Lambda tables from 1.022 MeV to 100 GeV in 100 bins.
 
@@ -109,7 +110,7 @@ eBrem:   tables are built for  e+
       Total cross sections from a parametrisation based on the EEDL data library. 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
 
-annihil:       Heilter model of formula of annihilation into 2 photons
+annihil:       Sampling according eplus2gg model
       tables are built for  e+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
 
@@ -179,7 +180,8 @@ muPairProd:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Parametrised model 
-G4UHadronElasticProcess for neutron  Elow(MeV)= 19
+
+G4UHadronElasticProcess for neutron  Elow(MeV)= 19  Elowest(eV)= 1e-06
 
 hIoni:   tables are built for  pi+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -232,32 +234,32 @@ EventAction: Event # 90 started
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=7.8s Real=11.12s Sys=2.96s
+  User=8.85s Real=12.37s Sys=3.09s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started
 ========================================================
 Beam particle                        proton
 Beam Energy(MeV)                     3000
 Number of events                     100
-Average number of steps              595.9
-Average number of gamma              1.7
-Average number of e-                 3.99
-Average number of e+                 0.01
-Average number of neutrons           0.72
-Average number of protons            0.76
+Average number of steps              613.3
+Average number of gamma              2.02
+Average number of e-                 4.01
+Average number of e+                 0.04
+Average number of neutrons           1.32
+Average number of protons            1.37
 Average number of antiprotons        0
-Average number of pi+ & pi-          0.15
-Average number of pi0                0.1
+Average number of pi+ & pi-          0.36
+Average number of pi0                0.14
 Average number of kaons              0
-Average number of muons              0
-Average number of deuterons+tritons  0.07
-Average number of He3+alpha          0.12
-Average number of ions               0.42
-Average number of forward neutrons   0.15
+Average number of muons              0.02
+Average number of deuterons+tritons  0.15
+Average number of He3+alpha          0.15
+Average number of ions               0.57
+Average number of forward neutrons   0.14
 Average number of reflected neutrons 0.01
-Average number of leaked neutrons    0.51
-Average number of proton leak        1.36
-Average number of pion leak          0.56
+Average number of leaked neutrons    1.1
+Average number of proton leak        2.24
+Average number of pion leak          1.24
 ========================================================
 
 #
