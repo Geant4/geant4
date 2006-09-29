@@ -635,7 +635,7 @@ int main(int argc, char** argv)
 		 << endl; 
 
 	if(p < mompi[nmompi-1] && theta < angpi[nanglpi-1] 
-	   && (pd == pip || pd == pin || pd == pi0)) {
+	   && (pd == pip || pd == pin || pd == pi0 || pd == proton)) {
 
 	  int kang = -1;
 	  int kp   = -1;
