@@ -1,4 +1,4 @@
-$Id: History,v 1.135 2006-09-28 14:30:55 kurasige Exp $
+$Id: History,v 1.136 2006-10-01 02:29:43 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,7 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-- Sep. 28, 2006    H.Kurashige 
+- Oct. 1, 2006    H.Kurashige (particles-V08-01-03)
 - Add  G4Exception of Warning if sum of daughter mass exceeds parent mass in G4PhaseSpaceDecayChannel 
 - Modify GetMass and GetCharge of G4PrimaryParticle to return PDG mass and charge 
   if users do not specify them

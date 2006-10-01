@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PrimaryParticle.cc,v 1.3 2006-09-28 14:29:43 kurasige Exp $
+// $Id: G4PrimaryParticle.cc,v 1.4 2006-10-01 02:29:43 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -139,6 +139,8 @@ G4double G4PrimaryParticle::GetMass() const
 G4double G4PrimaryParticle::GetCharge() const
 {
   if ( charge <DBL_MAX ) {
+    return charge;
+  } else {
     if (G4code != 0) {
       // return PDG charge if dynamical mass has not be specified 
       return G4code->GetPDGCharge();
