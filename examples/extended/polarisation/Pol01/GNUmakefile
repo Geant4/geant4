@@ -1,15 +1,11 @@
-# $Id: GNUmakefile,v 1.1 2006-10-02 13:48:10 vnivanch Exp $
+# $Id: GNUmakefile,v 1.2 2006-10-02 16:25:55 vnivanch Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
 
-name := TestPol2
+name := pol01
 G4TARGET := $(name)
 G4EXLIB := true
-
-# compile with polarization library
-CPPFLAGS += -I../TestPol1/include
-EXTRALIBS += -L$(G4WORKDIR)/tmp/$(G4SYSTEM)/TestPol1 -lTestPol1
 
 ifndef G4INSTALL
   G4INSTALL = ../../../..
@@ -27,7 +23,7 @@ ifdef G4ANALYSIS_USE
 
 plots:	plotResults.class
 	@echo calling JAIDA ...
-	java -cp .:$(CLASSPATH) plotResults testPol2.aida
+	java -cp .:$(CLASSPATH) plotResults pol01.aida
 
 plotResults.class: plotResults.java
 	@echo compiling $<

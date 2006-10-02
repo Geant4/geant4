@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pol01.cc,v 1.1 2006-10-02 13:48:10 vnivanch Exp $
+// $Id: pol01.cc,v 1.2 2006-10-02 16:25:55 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -38,7 +38,6 @@
 #include "DetectorConstruction.hh"
 #include "PhysicsList.hh"
 #include "PrimaryGeneratorAction.hh"
-#include "SteppingVerbose.hh"
 
 #include "RunAction.hh"
 #include "EventAction.hh"
@@ -57,9 +56,6 @@ int main(int argc,char** argv) {
   //  CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
   CLHEP::HepRandom::setTheEngine(new CLHEP::RanluxEngine());
   
-  //my Verbose output class
-  G4VSteppingVerbose::SetInstance(new SteppingVerbose);
-    
   // Construct the default run manager
   G4RunManager * runManager = new G4RunManager;
 
@@ -69,13 +65,9 @@ int main(int argc,char** argv) {
   runManager->SetUserInitialization(det = new DetectorConstruction);
   runManager->SetUserInitialization(new PhysicsList);
   runManager->SetUserAction(prim = new PrimaryGeneratorAction(det));
-  
-  #ifdef G4VIS_USE
-   // visualization manager
-   G4VisManager* visManager = new G4VisExecutive;
-   visManager->Initialize();
-  #endif
-  
+
+  G4VisManager* visManager = 0;
+    
   HistoManager*  histo = new HistoManager();
       
   // set user action classes
@@ -89,27 +81,30 @@ int main(int argc,char** argv) {
 
   if (argc==1)   // Define UI terminal for interactive mode  
     { 
-     G4UIsession * session = 0;
+#ifdef G4VIS_USE
+      // visualization manager
+      visManager = new G4VisExecutive;
+      visManager->Initialize();
+#endif
+
+      G4UIsession * session = 0;
 #ifdef G4UI_USE_TCSH
       session = new G4UIterminal(new G4UItcsh);      
 #else
       session = new G4UIterminal();
 #endif     
-     session->SessionStart();
-     delete session;
+      session->SessionStart();
+      delete session;
     }
   else           // Batch mode
     { 
-     G4String command = "/control/execute ";
-     G4String fileName = argv[1];
-     UI->ApplyCommand(command+fileName);
+      G4String command = "/control/execute ";
+      G4String fileName = argv[1];
+      UI->ApplyCommand(command+fileName);
     }
 
   // job termination     
-#ifdef G4VIS_USE
- delete visManager;
-#endif
-
+  if(visManager) delete visManager;
   delete histo; 
   delete runManager;
 

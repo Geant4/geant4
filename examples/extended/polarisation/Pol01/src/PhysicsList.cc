@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // 
-// $Id: PhysicsList.cc,v 1.1 2006-10-02 13:48:10 vnivanch Exp $
+// $Id: PhysicsList.cc,v 1.2 2006-10-02 16:25:55 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -34,6 +34,7 @@
 #include "PhysicsListMessenger.hh"
  
 #include "PhysListEmStandard.hh"
+#include "PhysListEmPolarized.hh"
 
 #include "G4LossTableManager.hh"
 #include "G4UnitsTable.hh"
@@ -54,9 +55,8 @@ PhysicsList::PhysicsList()
 
   SetVerboseLevel(1);
 
-  // EM physics
-  emName = G4String("standard");
-  emPhysicsList = new PhysListEmStandard(emName);
+  emName = "polarized";
+  emPhysicsList = new PhysListEmPolarized();
 
 }
 
@@ -104,14 +104,7 @@ void PhysicsList::ConstructProcess()
   // Electromagnetic physics list
   //
   emPhysicsList->ConstructProcess();
-  
-  // Em options
-  //
-  G4EmProcessOptions emOptions;
-  emOptions.SetStepFunction(1., 1*mm);  
-  emOptions.SetIntegral(false);
-  emOptions.SetLossFluctuations(false);
-  
+    
   // step limitation (as a full process)
   //  
   AddStepMax();      
@@ -131,14 +124,14 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 
     emName = name;
     delete emPhysicsList;
-    emPhysicsList = new PhysListEmStandard(name);
+    emPhysicsList = new PhysListEmStandard();
             
   } 
   if (name == "polarized") {
 
     emName = name;
     delete emPhysicsList;
-    emPhysicsList = new PhysListEmStandard(name);
+    emPhysicsList = new PhysListEmPolarized();
             
   } 
   else {
@@ -164,9 +157,7 @@ void PhysicsList::AddStepMax()
       G4ProcessManager* pmanager = particle->GetProcessManager();
 
       if (stepMaxProcess->IsApplicable(*particle) && pmanager)
-        {
 	  pmanager ->AddDiscreteProcess(stepMaxProcess);
-        }
   }
 }
 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorMessenger.cc,v 1.1 2006-10-02 13:48:10 vnivanch Exp $
+// $Id: DetectorMessenger.cc,v 1.2 2006-10-02 16:25:55 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -91,7 +91,7 @@ DetectorMessenger::~DetectorMessenger()
 void DetectorMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 { 
   if( command == MaterCmd )
-   { Detector->SetMaterial(newValue);}
+   { Detector->SetTargetMaterial(newValue);}
    
   if( command == SizeXYCmd )
    { Detector->SetSizeXY(SizeXYCmd->GetNewDoubleValue(newValue));}

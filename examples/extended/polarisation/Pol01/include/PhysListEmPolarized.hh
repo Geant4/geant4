@@ -23,35 +23,45 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: SteppingVerbose.hh,v 1.1 2006-10-02 13:48:10 vnivanch Exp $
+//
+// $Id: PhysListEmPolarized.hh,v 1.1 2006-10-02 16:25:55 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//   This class manages the verbose outputs in G4SteppingManager. 
-//   It inherits from G4SteppingVerbose.
-//   It shows how to extract informations during the tracking of a particle.
-//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef SteppingVerbose_h
-#define SteppingVerbose_h 1
+#ifndef PhysListEmPolarized_h
+#define PhysListEmPolarized_h 1
 
-#include "G4SteppingVerbose.hh"
+#include "G4VPhysicsConstructor.hh"
+#include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class SteppingVerbose : public G4SteppingVerbose {
+class PhysListEmPolarized : public G4VPhysicsConstructor
+{
+  public: 
+    PhysListEmPolarized(const G4String& name = "polarized");
+   ~PhysListEmPolarized();
 
-public:   
-
-  SteppingVerbose();
- ~SteppingVerbose();
-
-  void StepInfo();
-  void TrackingStarted();
-
+  public: 
+    // This method is dummy for physics
+    void ConstructParticle() {};
+ 
+    // This method will be invoked in the Construct() method.
+    // each physics process will be instantiated and
+    // registered to the process manager of each particle type 
+    void ConstructProcess();
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
+
+
+
+
+
+
+
+

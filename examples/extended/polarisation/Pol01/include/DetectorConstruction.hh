@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.hh,v 1.1 2006-10-02 13:48:10 vnivanch Exp $
+// $Id: DetectorConstruction.hh,v 1.2 2006-10-02 16:25:55 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -43,52 +43,47 @@ class DetectorMessenger;
 
 class DetectorConstruction : public G4VUserDetectorConstruction
 {
-  public:
+public:
   
-    DetectorConstruction();
-   ~DetectorConstruction();
+  DetectorConstruction();
+  ~DetectorConstruction();
 
-  public:
+public:
   
-     G4VPhysicalVolume* Construct();
+  G4VPhysicalVolume* Construct();
      
-     void SetSizeXY   (G4double);
-     void SetSizeZ    (G4double);              
-     void SetMaterial (G4String);            
+  void SetSizeXY   (G4double);
+  void SetSizeZ    (G4double);              
+  void SetTargetMaterial (G4String);            
+  void SetWorldMaterial (G4String);            
 
-     void UpdateGeometry();
+  void UpdateGeometry();
      
-  public:
+public:
   
-     const
-     G4VPhysicalVolume* GetWorld()      {return pWorld;};
-     const
-     G4VPhysicalVolume* GetBox()        {return pBox;};
+  const G4VPhysicalVolume* GetWorld()      {return pWorld;};
+  const G4VPhysicalVolume* GetBox()        {return pBox;};
                      
-     G4double           GetWorldSize()  {return worldSize;};                          
-     G4double           GetBoxSizeXY()  {return boxSizeXY;};
-     G4double           GetBoxSizeZ()   {return boxSizeZ;};
-     G4Material*        GetMaterial()   {return aMaterial;};
+  G4double           GetWorldSize()  {return worldSize;};                          
+  G4double           GetBoxSizeXY()  {return boxSizeXY;};
+  G4double           GetBoxSizeZ()   {return boxSizeZ;};
+  G4Material*        GetMaterial()   {return aMaterial;};
      
-     void               PrintParameters();
+  void               PrintParameters();
                        
-  private:
+private:
   
-     G4VPhysicalVolume*    pWorld;  
-     G4VPhysicalVolume*    pBox;
+  G4VPhysicalVolume*    pWorld;  
+  G4VPhysicalVolume*    pBox;
      
-     G4double              boxSizeXY;
-     G4double              boxSizeZ;
-     G4double              worldSize;
-     G4Material*           aMaterial;
-     G4Material*           wMaterial;     
+  G4double              boxSizeXY;
+  G4double              boxSizeZ;
+  G4double              worldSize;
+  G4Material*           aMaterial;
+  G4Material*           wMaterial;     
      
-     DetectorMessenger* detectorMessenger;
+  DetectorMessenger* detectorMessenger;
 
-  private:
-    
-     void               DefineMaterials();
-     G4VPhysicalVolume* ConstructVolumes();     
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

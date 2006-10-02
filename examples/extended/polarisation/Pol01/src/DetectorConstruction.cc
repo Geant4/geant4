@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.cc,v 1.1 2006-10-02 13:48:10 vnivanch Exp $
+// $Id: DetectorConstruction.cc,v 1.2 2006-10-02 16:25:55 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -45,6 +45,7 @@
 #include "G4UnitsTable.hh"
 
 #include "G4PolarizationManager.hh"
+#include "G4NistManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -54,113 +55,23 @@ DetectorConstruction::DetectorConstruction()
   boxSizeXY = 50*mm;
   boxSizeZ = 5*mm;
   worldSize = 1.*m;
-  DefineMaterials();
-  SetMaterial("Iron");  
+  aMaterial = 0;
+  wMaterial = 0;
+  SetTargetMaterial("G4_Fe");  
+  SetWorldMaterial("G4_Galactic");  
   detectorMessenger = new DetectorMessenger(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorConstruction::~DetectorConstruction()
-{ delete detectorMessenger;}
+{ 
+  delete detectorMessenger;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4VPhysicalVolume* DetectorConstruction::Construct()
-{
-  return ConstructVolumes();
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void DetectorConstruction::DefineMaterials()
-{
-  //
-  // define Elements
-  //
-  G4double z,a;
-  
-  G4Element* H  = new G4Element("Hydrogen" ,"H" , z= 1., a=   1.01*g/mole);
-  G4Element* N  = new G4Element("Nitrogen" ,"N" , z= 7., a=  14.01*g/mole);
-  G4Element* O  = new G4Element("Oxygen"   ,"O" , z= 8., a=  16.00*g/mole);
-  G4Element* Na = new G4Element("Sodium"   ,"Na", z=11., a=  22.99*g/mole);
-  G4Element* Ge = new G4Element("Germanium","Ge", z=32., a=  72.59*g/mole);
-  G4Element* I  = new G4Element("Iodine"   ,"I" , z=53., a= 126.90*g/mole);
-  G4Element* Bi = new G4Element("Bismuth"  ,"Bi", z=83., a= 208.98*g/mole);
-  
-  //
-  // define materials
-  //
-  G4double density;
-  G4int ncomponents, natoms;
-  G4double fractionmass;  
-  
-  G4Material* Air = 
-  new G4Material("Air", density= 1.290*mg/cm3, ncomponents=2);
-  Air->AddElement(N, fractionmass=70.*perCent);
-  Air->AddElement(O, fractionmass=30.*perCent);
-
-  G4Material* H2l = 
-  new G4Material("H2liquid", density= 70.8*mg/cm3, ncomponents=1);
-  H2l->AddElement(H, fractionmass=1.);
-
-  G4Material* H2O = 
-  new G4Material("Water", density= 1.000*g/cm3, ncomponents=2);
-  H2O->AddElement(H, natoms=2);
-  H2O->AddElement(O, natoms=1);
-  H2O->SetChemicalFormula("H_2O");
-  H2O->GetIonisation()->SetMeanExcitationEnergy(75.0*eV);
-
-  new G4Material("liquidArgon", z=18., a= 39.95*g/mole, density= 1.390*g/cm3);
-  
-  new G4Material("Carbon"     , z=6.,  a= 12.01*g/mole, density= 2.267*g/cm3);
-
-  new G4Material("Aluminium"  , z=13., a= 26.98*g/mole, density= 2.700*g/cm3);
-
-  new G4Material("Silicon"    , z=14., a= 28.09*g/mole, density= 2.330*g/cm3);
-
-  new G4Material("Germanium"  , z=32., a= 72.61*g/mole, density= 5.323*g/cm3);
-  
-  G4Material* NaI = 
-  new G4Material("NaI", density= 3.67*g/cm3, ncomponents=2);
-  NaI->AddElement(Na, natoms=1);
-  NaI->AddElement(I , natoms=1);
-  NaI->GetIonisation()->SetMeanExcitationEnergy(452*eV);
-  
-  G4Material* Iod = 
-  new G4Material("Iodine", density= 4.93*g/cm3, ncomponents=1);
-  Iod->AddElement(I , natoms=1);
-  
-  G4Material* BGO = 
-  new G4Material("BGO", density= 7.10*g/cm3, ncomponents=3);
-  BGO->AddElement(O , natoms=12);
-  BGO->AddElement(Ge, natoms= 3);
-  BGO->AddElement(Bi, natoms= 4);  
-
-  new G4Material("Iron"       , z=26., a= 55.85*g/mole, density= 7.870*g/cm3);
-
-  new G4Material("Tungsten"   , z=74., a=183.85*g/mole, density= 19.30*g/cm3);
-
-  new G4Material("Lead"       , z=82., a=207.19*g/mole, density= 11.35*g/cm3);
-
-  new G4Material("Uranium"    , z=92., a=238.03*g/mole, density= 18.95*g/cm3);
-  
-  density     = universe_mean_density;    //from PhysicalConstants.h
-  G4double pressure    = 3.e-18*pascal;
-  G4double temperature = 2.73*kelvin;
-  G4Material* vacuum = 
-  new G4Material("Galactic",z= 1,a= 1.008*g/mole,density,
-                            kStateGas,temperature,pressure);
-
-  G4cout << *(G4Material::GetMaterialTable()) << G4endl;
-  
- //default material
- wMaterial = vacuum;  
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
 {
   // Cleanup old geometry
   G4GeometryManager::GetInstance()->OpenGeometry();
@@ -231,17 +142,38 @@ void DetectorConstruction::PrintParameters()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void DetectorConstruction::SetMaterial(G4String materialChoice)
+void DetectorConstruction::SetTargetMaterial(G4String materialChoice)
 {
   // search the material by its name
-  G4Material* pttoMaterial = G4Material::GetMaterial(materialChoice);
-  if (pttoMaterial) {
-    aMaterial = pttoMaterial;
-    UpdateGeometry();
-  } else {
-    G4cout << "\n--> warning from DetectorConstruction::SetMaterial : "
-           << materialChoice << " not found" << G4endl;  
-  }     
+  G4Material* mat =
+    G4NistManager::Instance()->FindOrBuildMaterial(materialChoice);
+  if (mat != aMaterial) {
+    if(mat) {
+      aMaterial = mat;
+      UpdateGeometry();
+    } else {
+      G4cout << "### Warning!  Target material: <"
+           << materialChoice << "> not found" << G4endl;  
+    }     
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void DetectorConstruction::SetWorldMaterial(G4String materialChoice)
+{
+  // search the material by its name
+  G4Material* mat =
+    G4NistManager::Instance()->FindOrBuildMaterial(materialChoice);
+  if (mat != wMaterial) {
+    if(mat) {
+      wMaterial = mat;
+      UpdateGeometry();
+    } else {
+      G4cout << "### Warning! World material: <"
+           << materialChoice << "> not found" << G4endl;  
+    }     
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -267,7 +199,7 @@ void DetectorConstruction::SetSizeZ(G4double value)
 void DetectorConstruction::UpdateGeometry()
 {
   if (pWorld) 
-    G4RunManager::GetRunManager()->DefineWorldVolume(ConstructVolumes());
+    G4RunManager::GetRunManager()->DefineWorldVolume(Construct());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

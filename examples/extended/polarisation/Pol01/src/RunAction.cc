@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.1 2006-10-02 13:48:10 vnivanch Exp $
+// $Id: RunAction.cc,v 1.2 2006-10-02 16:25:55 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -64,8 +64,8 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
   
   // save Rndm status
-  G4RunManager::GetRunManager()->SetRandomNumberStore(false);
-  CLHEP::HepRandom::showEngineStatus();
+  //  G4RunManager::GetRunManager()->SetRandomNumberStore(false);
+  //  CLHEP::HepRandom::showEngineStatus();
   
   if (ProcCounter) delete ProcCounter;
   ProcCounter = new ProcessesCount;

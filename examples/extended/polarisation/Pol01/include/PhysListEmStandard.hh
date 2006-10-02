@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: PhysListEmStandard.hh,v 1.1 2006-10-02 13:48:10 vnivanch Exp $
+// $Id: PhysListEmStandard.hh,v 1.2 2006-10-02 16:25:55 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -42,7 +41,7 @@ class PhysListEmStandard : public G4VPhysicsConstructor
 {
   public: 
     PhysListEmStandard(const G4String& name = "standard");
-   ~PhysListEmStandard();
+    ~PhysListEmStandard();
 
   public: 
     // This method is dummy for physics

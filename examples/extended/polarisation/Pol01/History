@@ -1,12 +1,13 @@
-$Id: History,v 1.1 2006-10-02 13:48:10 vnivanch Exp $
+$Id: History,v 1.2 2006-10-02 16:25:55 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
      Geant4 - an Object-Oriented Toolkit for Simulation in HEP
      =========================================================
 
-                    TestPolarization History file
-                    --------------------
+                    Pol01 History file
+                    ------------------
+
 This file should be used by the G4 example coordinator to briefly
 summarize all major modifications introduced in the code and keep
 track of all tags.
@@ -14,6 +15,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+02-10-06 V.Ivanchenko (expol01-V08-01-00)
+- first tag
           
 11-08-06 Andreas Schaelicke
 - created from TestEm15
