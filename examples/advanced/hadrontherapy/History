@@ -9,6 +9,10 @@ $Id: History, v 1.6 2004/02/27  G.A.P. Cirrone
                       Category History file
                       ---------------------
 
+02.10.2006  P. Cirrone and S. Guatelli(hadrontherapy-V08-01-01)
+          - Bug fix in the geometry (hadrontherapy beam line)
+            problem: wrong volume hierarchy
+
 24.07.2006  S. Guatelli (hadrontherapy-V08-01-00)
 	 - Bug fix in the HadrontherapyProtonPrecompound.cc concerning
            neutron fission and capture

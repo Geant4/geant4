@@ -47,8 +47,8 @@ HadrontherapyDetectorMessenger::HadrontherapyDetectorMessenger(
 							       HadrontherapyDetectorConstruction* detector)
   :hadrontherapyDetector(detector)
 { 
-  modulatorDir = new G4UIdirectory("/modulator/");
-  modulatorDir -> SetGuidance("Command to rotate the modulator wheel");
+  //modulatorDir = new G4UIdirectory("/modulator/");
+  //modulatorDir -> SetGuidance("Command to rotate the modulator wheel");
   
   beamLineDir = new G4UIdirectory("/beamLine/");
   beamLineDir -> SetGuidance("set specification of range shifter");  
@@ -68,12 +68,12 @@ HadrontherapyDetectorMessenger::HadrontherapyDetectorMessenger(
   finalCollimatorDir = new G4UIdirectory("/beamLine/FinalCollimator/");
   finalCollimatorDir -> SetGuidance("set specification of final collimator");  
 
-  modulatorAngleCmd = new G4UIcmdWithADoubleAndUnit("/modulator/angle",this);
-  modulatorAngleCmd -> SetGuidance("Set Modulator Angle");
-  modulatorAngleCmd -> SetParameterName("Size",false);
-  modulatorAngleCmd -> SetRange("Size>=0.");
-  modulatorAngleCmd -> SetUnitCategory("Angle");  
-  modulatorAngleCmd -> AvailableForStates(G4State_Idle);
+  //  modulatorAngleCmd = new G4UIcmdWithADoubleAndUnit("/modulator/angle",this);
+  //modulatorAngleCmd -> SetGuidance("Set Modulator Angle");
+  //modulatorAngleCmd -> SetParameterName("Size",false);
+  //modulatorAngleCmd -> SetRange("Size>=0.");
+  //modulatorAngleCmd -> SetUnitCategory("Angle");  
+  //modulatorAngleCmd -> AvailableForStates(G4State_Idle);
   
   rangeShifterMatCmd = new G4UIcmdWithAString("/beamLine/RangeShifter/RSMat",this);
   rangeShifterMatCmd -> SetGuidance("Set material of range shifter");
@@ -132,21 +132,21 @@ HadrontherapyDetectorMessenger::~HadrontherapyDetectorMessenger()
   delete rangeShifterXPositionCmd;
   delete rangeShifterXSizeCmd;
   delete rangeShifterMatCmd;
-  delete modulatorAngleCmd;
+  //delete modulatorAngleCmd;
   delete finalCollimatorDir; 
   delete rangeStopperDir;
   delete secondScatteringFoilDir;
   delete firstScatteringFoilDir; 
   delete rangeShifterDir;  
   delete beamLineDir; 
-  delete modulatorDir;   
+  //delete modulatorDir;   
 }
 
 void HadrontherapyDetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 { 
-  if( command == modulatorAngleCmd )
-    { hadrontherapyDetector -> SetModulatorAngle
-            (modulatorAngleCmd -> GetNewDoubleValue(newValue));}
+  //if( command == modulatorAngleCmd )
+  //  { hadrontherapyDetector -> SetModulatorAngle
+  //         (modulatorAngleCmd -> GetNewDoubleValue(newValue));}
 
   if( command == rangeShifterMatCmd )
     { hadrontherapyDetector -> SetRSMaterial(newValue);}

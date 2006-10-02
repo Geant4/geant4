@@ -79,7 +79,7 @@ void HadrontherapyPrimaryGeneratorAction::SetDefaultPrimaryParticle()
   G4double defaultMeanKineticEnergy = 63.50 *MeV;
   meanKineticEnergy = defaultMeanKineticEnergy;
 
-  G4double defaultsigmaEnergy = 400.0 *keV;
+  G4double defaultsigmaEnergy = 300.0 *keV;
   sigmaEnergy = defaultsigmaEnergy;
 
   // Define the parameters of the initial position: 
