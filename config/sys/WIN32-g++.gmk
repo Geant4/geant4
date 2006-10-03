@@ -1,7 +1,7 @@
 #
-# ------ GNU/WIN32 CYGNUS ------   !!! not supported !!!
+# ------ GNU/WIN32 CYGWIN ------   !!! not supported !!!
 #                             Cygnus CygWin - gcc-3.2 and higher
-#                                     Windows 2000/XP
+#                                       Windows XP
 #
 # Stefano Agostinelli (agos001@pn.itnet.it) - IST Group, Genova
 #
@@ -25,12 +25,18 @@ ifeq ($(G4SYSTEM),WIN32-g++)
     FCFLAGS   += -fPIC
     CCFLAGS   += -fPIC
   endif
+
   G4RUNPATHOPTION := -Wl,-rpath 
+  SHEXT   := so
+  ECHO    := echo -e
+  GREP := /usr/bin/grep
+  SED  := /usr/bin/sed
+  CAT  := /usr/bin/cat
+  CUT  := /usr/bin/cut
+
   FC := g77
   FCFLAGS += -fno-automatic -fno-backslash -fno-second-underscore
   FCLIBS := -lg2c -lnsl
-  ECHO    := echo -e
-  SHEXT   := so
   ifndef X11FLAGS
     X11FLAGS  := -I/usr/include/X11/extensions -I/usr/include/X11
   endif
