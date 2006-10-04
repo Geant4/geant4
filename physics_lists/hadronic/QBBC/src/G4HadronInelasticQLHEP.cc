@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronInelasticQLHEP.cc,v 1.8 2006-07-05 17:17:11 vnivanch Exp $
+// $Id: G4HadronInelasticQLHEP.cc,v 1.9 2006-10-04 19:06:26 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -235,7 +235,7 @@ void G4HadronInelasticQLHEP::ConstructProcess()
       pmanager->AddDiscreteProcess(hp);
 
       if(pname == "proton") {
-	hp->AddDataSet(&theXSecP);
+	//	hp->AddDataSet(&theXSecP);
         if(qgsFlag) Register(particle,hp,theQGSModel,"QGS");
 	else        AddHEP(particle, hp, 25.*GeV, 100.*TeV);
 
@@ -245,7 +245,7 @@ void G4HadronInelasticQLHEP::ConstructProcess()
 	else if(bertFlag) Register(particle,hp,theBERT,"Bertini");
 
       } else if(pname == "neutron") {
-	hp->AddDataSet(&theXSecN);
+	//	hp->AddDataSet(&theXSecN);
         if(qgsFlag) Register(particle,hp,theQGSModel,"QGS");
 	else        AddHEP(particle, hp, 25.*GeV, 100.*TeV);
 	
@@ -294,7 +294,7 @@ void G4HadronInelasticQLHEP::ConstructProcess()
 	}
 
       } else if(pname == "pi-" || pname == "pi+") {
-	hp->AddDataSet(&thePiCross);
+	//	hp->AddDataSet(&thePiCross);
         if(qgsFlag) Register(particle,hp,theQGSModel,"QGS");
 	else        AddHEP(particle, hp, 25.*GeV, 100.*TeV);
 	
