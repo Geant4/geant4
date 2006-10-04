@@ -101,6 +101,8 @@ ADV_EXAMPLES += 02 03 08
 
 HADR_EXAMPLES += 01
 
+POLARISATION_EXAMPLES += 01
+
 MEDICAL += 01
 
 ELECTRO += 01 02
@@ -183,7 +185,12 @@ endif
 	@for nn in $(HADR_EXAMPLES); do \
 	(cd test60$$nn && $(MAKE)); \
 	done;:
-
+	
+# POLARISATION_EXAMPLES += 01	
+	@$(ECHO) Making polarisation examples...
+	@for nn in $(POLARISATION_EXAMPLES); do \
+	(cd test70$$nn && $(MAKE)); \
+	done;:
 
 #ifneq (,$(findstring 7.3_2.95.2,$(DEBOPT)))
 #
@@ -464,7 +471,13 @@ examples_links_source:
 	exdir=$(G4INSTALL)/examples/extended/hadronic/Hadr01; \
          ln -s $$exdir $$testdir; \
          ln -s hadr01.in  $$testdir/test6001.in;  \
-         ln -s hadr01.out $$testdir/test6001.out; :	 	 
+         ln -s hadr01.out $$testdir/test6001.out; :
+	 
+	@testdir=test7001; \
+	exdir=$(G4INSTALL)/examples/extended/polarisation/Pol01; \
+         ln -s $$exdir $$testdir; \
+         ln -s pol01.in  $$testdir/test7001.in;  \
+         ln -s pol01.out $$testdir/test7001.out; :	 	 	 
 ###########################################################################
 examples_links_binaries:
 
@@ -484,7 +497,12 @@ examples_links_binaries:
 # HADR_EXAMPLES
 	@for nn in $(HADR_EXAMPLES); do \
 	  ln -s hadr$$nn $(G4WORKDIR)/bin/$(G4SYSTEM)/test60$$nn; \
-	done;:	
+	done;:
+
+# POLARISATION_EXAMPLES
+	@for nn in $(POLARISATION_EXAMPLES); do \
+	  ln -s pol$$nn $(G4WORKDIR)/bin/$(G4SYSTEM)/test70$$nn; \
+	done;:		
 
 #temp
 # Persistency
@@ -680,7 +698,10 @@ clean_examples_links_binaries:
 	@rm -f $(G4WORKDIR)/bin/$(G4SYSTEM)/test1003;:
 	
 # Hadronic
-	@rm -f $(G4WORKDIR)/bin/$(G4SYSTEM)/test6001;:	
+	@rm -f $(G4WORKDIR)/bin/$(G4SYSTEM)/test6001;:
+	
+# Polarisation
+	@rm -f $(G4WORKDIR)/bin/$(G4SYSTEM)/test7001;:		
 ########################################################################
 
 # Hadronics Tests
