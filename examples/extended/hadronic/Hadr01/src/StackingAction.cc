@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: StackingAction.cc,v 1.4 2006-07-06 09:22:49 vnivanch Exp $
+// $Id: StackingAction.cc,v 1.5 2006-10-04 09:56:03 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /////////////////////////////////////////////////////////////////////////
@@ -80,7 +80,7 @@ StackingAction::ClassifyNewTrack(const G4Track* aTrack)
 	   << aTrack->GetTrackID() << " of " << name
 	   << " E(MeV)= " << aTrack->GetKineticEnergy()/MeV
 	   << " produced by " 
-	   << histoManager->CurrentDefinition()->GetParticleName()
+	   << histoManager->CurrentParticle()->GetParticleName()
 	   << " ID= " << aTrack->GetParentID()
 	   << " with E(MeV)= " << histoManager->CurrentKinEnergy()/MeV
 	   << G4endl;

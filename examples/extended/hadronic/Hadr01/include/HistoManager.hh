@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.hh,v 1.4 2006-08-11 14:38:11 vnivanch Exp $
+// $Id: HistoManager.hh,v 1.5 2006-10-04 09:56:03 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -41,6 +41,7 @@
 //
 // Modified:
 // 04.06.2006 Adoptation of hadr01 (V.Ivanchenko)
+// 03.10.2006 Add csFlag (V.Ivanchenko)
 //
 //----------------------------------------------------------------------------
 //
@@ -49,6 +50,8 @@
 #define HistoManager_h 1
 
 #include "globals.hh"
+#include "G4Material.hh"
+#include "G4Element.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -75,24 +78,31 @@ public:
 
   void BeginOfRun();
   void EndOfRun();
+  void Fill(G4int id, G4double x, G4double w);
 
   void ScoreNewTrack(const G4Track*);
   void AddTargetStep(const G4Step*);
   void AddLeakingParticle(const G4Track*);
 
-  void SetTargetLength(G4double val) {length  = val;};
-  void SetNumberOfSlices(G4int val)  {nSlices = val;};
-  void SetNumberOfBinsE(G4int val)   {nBinsE  = val;};
+  void SetTargetLength(G4double val)            {length  = val;};
+  void SetNumberOfSlices(G4int val)             {nSlices = val;};
+  void SetNumberOfBinsE(G4int val)              {nBinsE  = val;};
 
-  G4double Length()         const    {return length;};
-  G4int    NumberOfSlices() const    {return nSlices;};
+  G4double Length()         const               {return length;};
+  G4int    NumberOfSlices() const               {return nSlices;};
 
   void SetVerbose(G4int val);        
-  G4int GetVerbose() const           {return verbose;};
+  G4int GetVerbose() const                      {return verbose;};
 
-  G4double CurrentKinEnergy()        {return currentKinEnergy;};
-  const G4ParticleDefinition* CurrentDefinition() 
-                                     {return currentDef;};
+  void SetCrossSectionFlag(G4bool f)            {csFlag = f;};        
+  G4bool CrossSectionFlag() const               {return csFlag;};
+
+  void SetTargetMaterial(const G4Material* mat);
+  const G4Material* TargetMaterial() const      {return material;};
+  const G4Element* TargetElement() const        {return elm;};
+
+  G4double CurrentKinEnergy()                   {return currentKinEnergy;};
+  const G4ParticleDefinition* CurrentParticle() {return currentDef;};
 
 private:
 
@@ -101,16 +111,18 @@ private:
   const G4ParticleDefinition* primaryDef;
   const G4ParticleDefinition* currentDef;
   const G4ParticleDefinition* neutron;
-  G4double currentKinEnergy;
- 
-  G4int verbose;
-  G4int nBinsE;
-  G4int nSlices;
+  const G4Material*           material;
+  G4Element*                  elm;
 
   G4double beamEnergy;
   G4double length;
   G4double absZ0;
   G4double primaryKineticEnergy;
+  G4double currentKinEnergy;
+ 
+  G4int verbose;
+  G4int nBinsE;
+  G4int nSlices;
 
   G4int n_evt;
   G4int n_elec;
@@ -133,6 +145,8 @@ private:
   G4int n_neu_back;
   G4int n_step;
   G4int nHisto;
+
+  G4bool csFlag;
 
   Histo* histo;
 };
