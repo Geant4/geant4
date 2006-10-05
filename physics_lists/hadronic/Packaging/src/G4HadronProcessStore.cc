@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronProcessStore.cc,v 1.7 2006-08-10 17:18:29 vnivanch Exp $
+// $Id: G4HadronProcessStore.cc,v 1.8 2006-10-05 16:19:15 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -319,14 +319,16 @@ G4HadronicProcess* G4HadronProcessStore::FindElasticProcess(
     localDP.SetDefinition(const_cast<G4ParticleDefinition*>(part));
   } else if(!currentProcess) {
     isNew = true;
-  } else if(currentProcess->GetProcessName() == "Elastic") {
+  } else if(currentProcess->GetProcessName() == "hElastic") {
     hp = currentProcess;
+  } else {
+    isNew = true;
   }
 
   if(isNew) {
     std::multimap<PD,HP,std::less<PD> >::iterator it;
     for(it=p_map.lower_bound(part); it!=p_map.upper_bound(part); ++it) {
-      if(it->first == part && (it->second)->GetProcessName() == "Elastic") {
+      if(it->first == part && (it->second)->GetProcessName() == "hElastic") {
 	hp = it->second;
 	break;
       }
@@ -351,14 +353,16 @@ G4HadronicProcess* G4HadronProcessStore::FindInelasticProcess(
     localDP.SetDefinition(const_cast<G4ParticleDefinition*>(part));
   } else if(!currentProcess) {
     isNew = true;
-  } else if(currentProcess->GetProcessName() == "Inelastic") {
+  } else if(currentProcess->GetProcessName() == "hInelastic") {
     hp = currentProcess;
+  } else {
+    isNew = true;
   }
 
   if(isNew) {
     std::multimap<PD,HP,std::less<PD> >::iterator it;
     for(it=p_map.lower_bound(part); it!=p_map.upper_bound(part); ++it) {
-      if(it->first == part && (it->second)->GetProcessName() == "Inelastic") {
+      if(it->first == part && (it->second)->GetProcessName() == "hInelastic") {
 	hp = it->second;
 	break;
       }

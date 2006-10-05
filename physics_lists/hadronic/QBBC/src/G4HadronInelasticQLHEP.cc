@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronInelasticQLHEP.cc,v 1.9 2006-10-04 19:06:26 vnivanch Exp $
+// $Id: G4HadronInelasticQLHEP.cc,v 1.10 2006-10-05 16:19:15 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -235,20 +235,24 @@ void G4HadronInelasticQLHEP::ConstructProcess()
       pmanager->AddDiscreteProcess(hp);
 
       if(pname == "proton") {
-	//	hp->AddDataSet(&theXSecP);
-        if(qgsFlag) Register(particle,hp,theQGSModel,"QGS");
-	else        AddHEP(particle, hp, 25.*GeV, 100.*TeV);
-
+        if(qgsFlag) {
+	  Register(particle,hp,theQGSModel,"QGS");
+	  hp->AddDataSet(&theXSecP);
+	} else {
+	  AddHEP(particle, hp, 25.*GeV, 100.*TeV);
+	}
 	AddLEP(particle, hp, minELEP, maxELEP);
        
         if(bicFlag)       Register(particle,hp,theBIC,"Binary");
 	else if(bertFlag) Register(particle,hp,theBERT,"Bertini");
 
       } else if(pname == "neutron") {
-	//	hp->AddDataSet(&theXSecN);
-        if(qgsFlag) Register(particle,hp,theQGSModel,"QGS");
-	else        AddHEP(particle, hp, 25.*GeV, 100.*TeV);
-	
+        if(qgsFlag) {
+	  Register(particle,hp,theQGSModel,"QGS");
+	  hp->AddDataSet(&theXSecN);
+	} else {
+	  AddHEP(particle, hp, 25.*GeV, 100.*TeV);
+	}
 	AddLEP(particle, hp, minELEP, maxELEP);
 
 	G4HadronCaptureProcess* theNeutronCapture = 
@@ -294,10 +298,12 @@ void G4HadronInelasticQLHEP::ConstructProcess()
 	}
 
       } else if(pname == "pi-" || pname == "pi+") {
-	//	hp->AddDataSet(&thePiCross);
-        if(qgsFlag) Register(particle,hp,theQGSModel,"QGS");
-	else        AddHEP(particle, hp, 25.*GeV, 100.*TeV);
-	
+        if(qgsFlag) {
+	  Register(particle,hp,theQGSModel,"QGS");
+	  hp->AddDataSet(&thePiCross);
+	} else {
+	  AddHEP(particle, hp, 25.*GeV, 100.*TeV);
+	}
 	AddLEP(particle, hp, minELEP, maxELEP);
 	if(bertFlag) Register(particle,hp,theBERT,"Bertini");
 

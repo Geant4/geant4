@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronElasticPhysics.cc,v 1.18 2006-08-27 17:03:56 vnivanch Exp $
+// $Id: G4HadronElasticPhysics.cc,v 1.19 2006-10-05 16:19:14 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -152,7 +152,7 @@ void G4HadronElasticPhysics::ConstructProcess()
         hel = h;
         if(glFlag) hel->AddDataSet(new G4UElasticCrossSection());
       } else {                   
-	hel = new G4HadronElasticProcess();
+	hel = new G4HadronElasticProcess("hElastic");
       }
       hel->RegisterMe(model);
       store->Register(hel,particle,model,mname);
@@ -170,7 +170,7 @@ void G4HadronElasticPhysics::ConstructProcess()
         hel = h;
         if(glFlag) hel->AddDataSet(new G4UElasticCrossSection());
       } else {                   
-	hel = new G4HadronElasticProcess();
+	hel = new G4HadronElasticProcess("hElastic");
 	neutronModel = new G4LElastic();
       }
 
