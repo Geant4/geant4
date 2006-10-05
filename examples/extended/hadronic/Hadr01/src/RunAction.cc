@@ -80,7 +80,6 @@ void RunAction::EndOfRunAction(const G4Run*)
 {
   HistoManager* manager = HistoManager::GetPointer(); 
   G4cout << "RunAction: End of run actions are started" << G4endl;
-  manager->EndOfRun();
 
 #ifdef G4VIS_USE
   if (G4VVisManager::GetConcreteInstance())
@@ -99,37 +98,39 @@ void RunAction::EndOfRunAction(const G4Run*)
     part[5] = G4KaonMinus::KaonMinus();
     part[6] = G4AntiProton::AntiProton();
     part[7] = G4AntiNeutron::AntiNeutron();
-    G4double emin = MeV;
-    G4double emax = TeV;
-    G4int nbins   = 60;
-    G4double fac  = std::pow(emax/emin, 1.0/G4double(nbins));
+    G4double emin = std::log10(0.1*MeV);
+    G4double emax = std::log10(10.*TeV);
+    G4int nbins   = 800;
+    G4double del  = (emax - emin)/G4double(nbins);
     G4HadronProcessStore* store = G4HadronProcessStore::Instance();
 
     G4cout << "---------------------------------------------------------" 
 	   << G4endl;
     for(G4int i=0; i<8; i++) {
-      G4double e    = emin;
+      G4double e    = emin - 0.5*del;
       G4cout << "---------------------------------------------------------" 
 	     << G4endl;
-      G4cout << "  N       e(GeV)      XsecInel(mb)     XsecEl(mb)   " 
+      G4cout << "  N     e(GeV)      XsecInel(mb)     XsecEl(mb)   " 
 	     << part[i]->GetParticleName() 
 	     << G4endl;   
       G4cout << "---------------------------------------------------------" 
 	     << G4endl;
       for(G4int j=0; j<nbins; j++) {
-        G4double inel = store->GetInelasticCrossSectionPerAtom(part[i],e,elm)/millibarn; 
-        G4double el = store->GetElasticCrossSectionPerAtom(part[i],e,elm)/millibarn; 
-	G4cout << j << "  " << std::setw(8) << e/GeV << "  " 
-	       << std::setw(8) << inel << "   " << std::setw(12) << el
+        e += del;
+        G4double ekin = std::pow(10.,e);
+        G4double inel = store->GetInelasticCrossSectionPerAtom(part[i],ekin,elm)/millibarn; 
+        G4double el = store->GetElasticCrossSectionPerAtom(part[i],ekin,elm)/millibarn; 
+	G4cout << j << "  " << std::setw(10) << ekin/MeV << "  " 
+	       << std::setw(12) << inel << "   " << std::setw(15) << el
 	       << G4endl;
-        manager->Fill(i*2 + 20, std::log10(e), inel);
-        manager->Fill(i*2 + 21, std::log10(e), el);
-	e *= fac;
+        manager->Fill(i*2 + 21, e, inel);
+        manager->Fill(i*2 + 22, e, el);
       }
     }
     G4cout << "---------------------------------------------------------" 
 	   << G4endl;
   }
+  manager->EndOfRun();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

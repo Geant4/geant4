@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.cc,v 1.14 2006-08-28 13:54:14 vnivanch Exp $
+// $Id: PhysicsList.cc,v 1.15 2006-10-05 16:22:05 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /////////////////////////////////////////////////////////////////////////
@@ -308,6 +308,15 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 						     verboseLevel,false));
     hadronPhys.push_back( new G4HadronInelasticQLHEP("QGSP",verboseLevel,
 						 true,false,false,false));
+    hadronPhys.push_back( new G4QStoppingPhysics("stopping"));
+    hadronPhys.push_back( new G4IonPhysics("ion"));
+
+  } else if (name == "QLHEP") {
+
+    hadronPhys.push_back( new G4EmExtraPhysics("gamma_nuc"));
+    hadronPhys.push_back( new G4HadronElasticPhysics("LElastic",
+						     verboseLevel,false));
+    hadronPhys.push_back( new G4HadronInelasticQLHEP("LHEP",verboseLevel));
     hadronPhys.push_back( new G4QStoppingPhysics("stopping"));
     hadronPhys.push_back( new G4IonPhysics("ion"));
 

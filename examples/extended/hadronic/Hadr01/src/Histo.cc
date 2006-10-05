@@ -222,7 +222,7 @@ void Histo::fill(G4int i, G4double x, G4double w)
 {
   if(verbose > 1) 
     G4cout << "fill histogram: #" << i << " at x= " << x 
-           << "  weight= " << w
+           << "  weight= " << w << " unit= " << unit[i]
            << G4endl;   
 #ifdef G4ANALYSIS_USE  
   if(i>=0 && i<nHisto) {
