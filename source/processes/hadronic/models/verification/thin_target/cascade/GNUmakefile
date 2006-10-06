@@ -1,8 +1,8 @@
-# $Id: GNUmakefile,v 1.5 2006-03-03 14:26:47 vnivanch Exp $
+# $Id: GNUmakefile,v 1.6 2006-10-06 13:10:30 gunter Exp $
 # --------------------------------------------------------------
 
 G4TARGET := cascade_test
-name := G4TARGET
+name := $(G4TARGET)
 G4EXLIB  := true
 
 .PHONY: all tools
