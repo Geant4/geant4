@@ -1,4 +1,4 @@
-# $Id: binmake.gmk,v 1.113 2006-09-21 21:41:00 vnivanch Exp $
+# $Id: binmake.gmk,v 1.114 2006-10-07 01:30:19 asaim Exp $
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
 #    First implementation: Gabriele Cosmo, 25/06/1998.
@@ -62,6 +62,7 @@ ifndef INCFLAGS
               -I$(G4BASE)/particles/shortlived/include \
               -I$(G4BASE)/processes/management/include \
               -I$(G4BASE)/processes/cuts/include \
+              -I$(G4BASE)/processes/scoring/include \
               -I$(G4BASE)/processes/decay/include \
               -I$(G4BASE)/processes/optical/include \
               -I$(G4BASE)/processes/transportation/include \
