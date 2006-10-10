@@ -1,9 +1,9 @@
-# $Id: GNUmakefile,v 1.1 2006-07-06 15:26:48 asaim Exp $
+# $Id: GNUmakefile,v 1.2 2006-10-10 09:59:02 gcosmo Exp $
 # ------------------------------------------------------------
 # GNUmakefile for scoring process library.  
 # ------------------------------------------------------------
 
-name := G4scoringProcess
+name := G4scoring
 
 ifndef G4INSTALL
   G4INSTALL = ../../..
