@@ -106,6 +106,7 @@ G4double   G4SafetyHelper::ComputeSafety( const G4ThreeVector& position )
    fpPathFinder->ReLocate( position );   // Safe in PostStepDoIt only ??
    newsafety= fpPathFinder->ComputeSafety( position ); 
 
+#ifdef CHECK_WITH_ONE_GEOM 
    // Check against mass safety
    fpMassNavigator->LocateGlobalPointWithinVolume(position);
    G4double mass_safety = fpMassNavigator->ComputeSafety(position); 
@@ -120,6 +121,7 @@ G4double   G4SafetyHelper::ComputeSafety( const G4ThreeVector& position )
 		  "Incompatible safeties between navigator and pathfinder" );
       exit(1); 
    }
+#endif
 
    return newsafety;
 }
