@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TransportationManager.icc,v 1.6 2006-06-29 18:36:26 gunter Exp $
+// $Id: G4TransportationManager.icc,v 1.7 2006-10-10 15:24:48 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //  GEANT 4  inlined function members implementation
@@ -96,7 +96,7 @@ G4FieldManager* G4TransportationManager::GetFieldManager() const
 // ----------------------------------------------------------------------------
 // GetNoActiveNavigators()
 //
-// Return an iterator to the list of active navigators.
+// Return the number of active navigators.
 //
 inline
 size_t G4TransportationManager::GetNoActiveNavigators() const
@@ -115,5 +115,30 @@ G4TransportationManager::GetActiveNavigatorsIterator()
 {
    std::vector<G4Navigator*>::iterator iterator
      = std::vector<G4Navigator*>::iterator(fActiveNavigators.begin());
+   return iterator;
+}
+
+// ----------------------------------------------------------------------------
+// GetNoWorlds()
+//
+// Return the number of registerd worlds.
+//
+inline
+size_t G4TransportationManager::GetNoWorlds() const
+{
+   return fWorlds.size();
+}
+
+// ----------------------------------------------------------------------------
+// GetWorldsIterator()
+//
+// Return an iterator to the list of registered worlds.
+//
+inline
+std::vector<G4VPhysicalVolume*>::iterator
+G4TransportationManager::GetWorldsIterator()
+{
+   std::vector<G4VPhysicalVolume*>::iterator iterator
+     = std::vector<G4VPhysicalVolume*>::iterator(fWorlds.begin());
    return iterator;
 }
