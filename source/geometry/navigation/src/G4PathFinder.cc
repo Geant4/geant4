@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PathFinder.cc,v 1.12 2006-06-08 16:51:00 japost Exp $
+// $Id: G4PathFinder.cc,v 1.13 2006-10-10 17:52:44 asaim Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4PathFinder Implementation
@@ -72,6 +72,7 @@ G4PathFinder::G4PathFinder()
 {
    fNoActiveNavigators= 0; 
    fLastLocatedPosition= G4ThreeVector( DBL_MAX, DBL_MAX, DBL_MAX ); 
+   fSafetyLocation= G4ThreeVector( DBL_MAX, DBL_MAX, DBL_MAX ); 
    fMinSafety= -1.0;  // Invalid value
    fMinStep=   -1.0;  // 
    fNewTrack= false; 
@@ -143,6 +144,7 @@ G4PathFinder::ComputeStep( const G4FieldTrack &InitialFieldTrack,
     // Check whether a process shifted the position 
     //  since the last step -- by physics processes
     G4ThreeVector newPosition = InitialFieldTrack.GetPosition();   
+
     G4ThreeVector moveVector= newPosition - fLastLocatedPosition; 
     G4double moveLenSq= moveVector.mag2(); 
     if( moveLenSq > kCarTolerance * kCarTolerance ){ 
@@ -372,8 +374,12 @@ G4PathFinder::ReLocate( const   G4ThreeVector& position )
   G4double      moveLenSq= moveVec.mag2();
   if( (!fNewTrack) && ( moveLenSq > fMinSafety*fMinSafety) ){
      ReportMove( position, lastPositionLocated, "Position" ); 
-     G4cout << " Moved by " << std::sqrt(moveLenSq) 
+     G4cout << " Moved from last located by " << std::sqrt(moveLenSq) 
 	    << " compared to safety " << fMinSafety << G4endl; 
+     G4cout << "  --> last position located was " << fLastLocatedPosition << G4endl;
+     G4cout << "  --> last position for safety " << fSafetyLocation << G4endl;
+     G4cout << "       move from safety location = " << (position-fSafetyLocation).mag() << G4endl;
+     G4cout << "       safety value =  " << fMinSafety << G4endl;
      G4Exception( "G4PathFinder::ReLocate", "RelocatePointTooFar", 
 	 	   FatalException,  
 		  "ReLocation is further than safety from last location."); 
@@ -437,6 +443,9 @@ G4double  G4PathFinder::ComputeSafety( const G4ThreeVector& position )
        if( safety < minSafety ){ minSafety = safety; } 
        // fNewSafety[num]= safety; 
     } 
+
+    fSafetyLocation= position;
+    fMinSafety = minSafety;
 
     // G4cout << " G4PathFinder::ComputeSafety - exits, returning " << minSafety << G4endl;
     return minSafety; 
@@ -566,7 +575,11 @@ G4PathFinder::DoNextLinearStep( const G4FieldTrack &initialState,
        G4cout << "G4PathFinder::DoNextLinearStep : Navigator [" << num << "] -- step size " << step << G4endl;
      }
   } 
+
+  // Save safety value, related position
+  fSafetyLocation= initialPosition; 
   fMinSafety= minSafety;
+
   fMinStep=   minStep; 
 
   if( fMinStep == kInfinity ){

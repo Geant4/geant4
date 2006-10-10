@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PathFinder.hh,v 1.15 2006-09-29 15:13:25 japost Exp $
+// $Id: G4PathFinder.hh,v 1.16 2006-10-10 17:52:44 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // class G4PathFinder 
@@ -183,6 +183,7 @@ class G4PathFinder
    G4double      fCurrentStepSize[fMaxNav]; 
    G4double      fNewSafety[ fMaxNav ];      // Safety for starting point
    G4double      fMinSafety;
+   G4ThreeVector fSafetyLocation;     //  point where Safety is called
    G4double      fMinStep;      // As reported by Navigators -- can be kInfinity
    G4double      fTrueMinStep;  // Corrected in case >= proposed 
    // State after calling 'locate'
