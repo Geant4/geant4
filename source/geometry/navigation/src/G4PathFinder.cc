@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PathFinder.cc,v 1.13 2006-10-10 17:52:44 asaim Exp $
+// $Id: G4PathFinder.cc,v 1.14 2006-10-11 15:56:09 japost Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4PathFinder Implementation
@@ -68,7 +68,7 @@ G4PathFinder::G4PathFinder()
   : fEndState( G4ThreeVector(), G4ThreeVector(), 0., 0., 0., 0., 0.),
        fRelocatedPoint(true),
        fLastStepNo(-1), 
-       fVerboseLevel(0)
+       fVerboseLevel(3)
 {
    fNoActiveNavigators= 0; 
    fLastLocatedPosition= G4ThreeVector( DBL_MAX, DBL_MAX, DBL_MAX ); 
@@ -144,7 +144,6 @@ G4PathFinder::ComputeStep( const G4FieldTrack &InitialFieldTrack,
     // Check whether a process shifted the position 
     //  since the last step -- by physics processes
     G4ThreeVector newPosition = InitialFieldTrack.GetPosition();   
-
     G4ThreeVector moveVector= newPosition - fLastLocatedPosition; 
     G4double moveLenSq= moveVector.mag2(); 
     if( moveLenSq > kCarTolerance * kCarTolerance ){ 
@@ -370,16 +369,18 @@ G4PathFinder::ReLocate( const   G4ThreeVector& position )
   // Check that move since last location or relocation is within safety
   // 
   G4ThreeVector lastPositionLocated= fLastLocatedPosition; 
-  G4ThreeVector moveVec = (position - lastPositionLocated );
+  G4ThreeVector moveVec = (position - fSafetyLocation ) ; //  lastPositionLocated );
   G4double      moveLenSq= moveVec.mag2();
   if( (!fNewTrack) && ( moveLenSq > fMinSafety*fMinSafety) ){
      ReportMove( position, lastPositionLocated, "Position" ); 
      G4cout << " Moved from last located by " << std::sqrt(moveLenSq) 
-	    << " compared to safety " << fMinSafety << G4endl; 
+            << " compared to safety " << fMinSafety << G4endl; 
+
      G4cout << "  --> last position located was " << fLastLocatedPosition << G4endl;
      G4cout << "  --> last position for safety " << fSafetyLocation << G4endl;
      G4cout << "       move from safety location = " << (position-fSafetyLocation).mag() << G4endl;
      G4cout << "       safety value =  " << fMinSafety << G4endl;
+
      G4Exception( "G4PathFinder::ReLocate", "RelocatePointTooFar", 
 	 	   FatalException,  
 		  "ReLocation is further than safety from last location."); 
