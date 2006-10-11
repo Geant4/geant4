@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CoupledTransportation.cc,v 1.6 2006-06-04 06:03:50 asaim Exp $
+// $Id: G4CoupledTransportation.cc,v 1.7 2006-10-11 15:35:36 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //  GEANT 4 class implementation
@@ -124,6 +124,7 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
   // G4double   theTime        = track.GetGlobalTime() ;
 
   if( fStartedNewTrack || track.GetCurrentStepNumber()==1 ) {
+#if 0
     if( fVerboseLevel > 0 ){
       G4cout << " Calling PathFinder::Locate() from " 
 	     << " G4CoupledTransportation::AlongStepGPIL " 
@@ -131,7 +132,8 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
 	     << "  and step number= " << track.GetCurrentStepNumber()
 	     << G4endl;
     }
-    //////////////////fPathFinder->Locate( startPosition, startMomentumDir );   // For now -- out in G480
+    //  fPathFinder->Locate( startPosition, startMomentumDir );   // For now -- out in G480
+#endif
     fCurrentTouchableHandle = track.GetTouchableHandle(); 
     fStartedNewTrack= false; 
   }
