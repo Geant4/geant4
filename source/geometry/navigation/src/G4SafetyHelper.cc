@@ -103,7 +103,7 @@ G4double   G4SafetyHelper::ComputeSafety( const G4ThreeVector& position )
    //   navigator->LocateGlobalPointWithinVolume(position);
    //   newsafety = navigator->ComputeSafety(position); 
 
-   fpPathFinder->ReLocate( position );   // Safe in PostStepDoIt only ??
+   // fpPathFinder->ReLocate( position );   // Safe in PostStepDoIt only ??
    newsafety= fpPathFinder->ComputeSafety( position ); 
 
 #ifdef CHECK_WITH_ONE_GEOM 
