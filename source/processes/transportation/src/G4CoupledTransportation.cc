@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CoupledTransportation.cc,v 1.7 2006-10-11 15:35:36 japost Exp $
+// $Id: G4CoupledTransportation.cc,v 1.8 2006-10-12 18:24:09 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //  GEANT 4 class implementation
@@ -231,28 +231,33 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
       } else {
          geometryStepLength   = currentMinimumStep ;
       }
-  } else {
-    geometryStepLength   = lengthAlongCurve= 0.0 ;
-  }
 
-  // Remember last safety origin & value.
-  fPreviousSftOrigin = startPosition ;
-  fPreviousSafety    = currentSafety ;         
+      // Momentum:  Magnitude and direction can be changed too now ...
+      //
+      fMomentumChanged         = true ; 
+      fTransportEndMomentumDir = endTrackState.GetMomentumDir() ;
+
+      // Remember last safety origin & value.
+      fPreviousSftOrigin = startPosition ;
+      fPreviousSafety    = currentSafety ;         
+
+      // Get the End-Position and End-Momentum (Dir-ection)
+      fTransportEndPosition = endTrackState.GetPosition() ;
+      fTransportEndKineticEnergy  = endTrackState.GetKineticEnergy() ; 
+  } else {
+      geometryStepLength   = lengthAlongCurve= 0.0 ;
+      fMomentumChanged         = false ; 
+      // fGeometryLimitedStep = false ;   //  --- ???
+      fTransportEndMomentumDir = track.GetMomentumDirection();
+      fTransportEndKineticEnergy  = track.GetKineticEnergy();
+  }
 
   // G4FieldTrack aTrackState(endTrackState);  
 
-  // Get the End-Position and End-Momentum (Dir-ection)
-  fTransportEndPosition = endTrackState.GetPosition() ;
-
-  if( fVerboseLevel > 1 ){
-    G4cout << " G4CT::CS End Position = " << fTransportEndPosition << G4endl; 
+  if( 1 ) { // fVerboseLevel > 1 ){
+    G4cout << " G4CT::CS End Position = "  << fTransportEndPosition << G4endl; 
+    G4cout << " G4CT::CS End Direction = " << fTransportEndMomentumDir << G4endl; 
   }
-  // Momentum:  Magnitude and direction can be changed too now ...
-  //
-  fMomentumChanged         = true ; 
-  fTransportEndMomentumDir = endTrackState.GetMomentumDir() ;
-  
-  fTransportEndKineticEnergy  = endTrackState.GetKineticEnergy() ; 
 
 #if 0   
   if( fFieldPropagator->GetCurrentFieldManager()->DoesFieldChangeEnergy() )
@@ -356,6 +361,9 @@ G4VParticleChange* G4CoupledTransportation::AlongStepDoIt( const G4Track& track,
   //  Code specific for Transport
   //
   fParticleChange.ProposePosition(fTransportEndPosition) ;
+  G4cout << " G4CoupledTransportation::AlongStepDoIt" 
+         << " proposes position = " << fTransportEndPosition  
+         << " and end momentum direction  = " << fTransportEndMomentumDir <<  G4endl;
   fParticleChange.ProposeMomentumDirection(fTransportEndMomentumDir) ;
   fParticleChange.ProposeEnergy(fTransportEndKineticEnergy) ;
   fParticleChange.SetMomentumChanged(fMomentumChanged) ;
