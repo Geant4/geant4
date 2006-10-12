@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4KaonZeroLong.cc,v 1.17 2006-06-29 19:19:51 gunter Exp $
+// $Id: G4KaonZeroLong.cc,v 1.18 2006-10-12 10:59:45 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -37,6 +37,8 @@
 // **********************************************************************
 //  New impelemenataion as an utility class  M.Asai, 26 July 2004
 // ----------------------------------------------------------------------
+//      Update width (PDG2006)              Oct. 11 2006 H.Kurashige 
+//
 
 #include "G4KaonZeroLong.hh"
 #include "G4ParticleTable.hh"
@@ -71,7 +73,7 @@ G4KaonZeroLong* G4KaonZeroLong::Definition()
   //             shortlived      subType    anti_encoding
 
    anInstance = new G4ParticleDefinition(
-                 name,    0.497672*GeV,  1.273e-14*MeV,         0.0,
+                 name,    0.497672*GeV,  1.287e-14*MeV,         0.0,
                     0,              -1,             0,
                     1,               0,             0,
               "meson",               0,             0,         130,

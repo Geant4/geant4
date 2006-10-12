@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExcitedLambdaConstructor.cc,v 1.10 2006-06-29 19:27:02 gunter Exp $
+// $Id: G4ExcitedLambdaConstructor.cc,v 1.11 2006-10-12 10:59:45 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
