@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelWorldScoringProcess.cc,v 1.1 2006-07-06 15:28:53 asaim Exp $
+// $Id: G4ParallelWorldScoringProcess.cc,v 1.2 2006-10-12 17:14:33 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -252,7 +252,7 @@ G4VParticleChange* G4ParallelWorldScoringProcess::PostStepDoIt(
 // fGhostNavigator->LocateGlobalPointWithinVolume(track.GetPosition());
 // ?????????????????????????????????????????????????????????????????????????
 
-    fPathFinder->ReLocate(track.GetPosition());
+    // fPathFinder->ReLocate(track.GetPosition());
 
     // reuse the touchable
     fNewGhostTouchable = fOldGhostTouchable;
@@ -294,7 +294,7 @@ G4double G4ParallelWorldScoringProcess::AlongStepGetPhysicalInteractionLength(
   static G4FieldTrack endTrack('0');
   static ELimited eLimited;
   
-  *selection = CandidateForSelection;
+  *selection = NotCandidateForSelection;
   G4double returnedStep = DBL_MAX;
 
   if (previousStepSize > 0.)
@@ -336,6 +336,7 @@ G4double G4ParallelWorldScoringProcess::AlongStepGetPhysicalInteractionLength(
       // proposedSafety = fGhostSafety;
     }
     proposedSafety = fGhostSafety;
+    if(eLimited == kUnique || eLimited == kSharedOther) *selection = CandidateForSelection;
   }
 
   // ----------------------------------------------
