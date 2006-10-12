@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PathFinder.cc,v 1.14 2006-10-11 15:56:09 japost Exp $
+// $Id: G4PathFinder.cc,v 1.15 2006-10-12 17:40:45 japost Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4PathFinder Implementation
@@ -68,7 +68,7 @@ G4PathFinder::G4PathFinder()
   : fEndState( G4ThreeVector(), G4ThreeVector(), 0., 0., 0., 0., 0.),
        fRelocatedPoint(true),
        fLastStepNo(-1), 
-       fVerboseLevel(3)
+       fVerboseLevel(0)
 {
    fNoActiveNavigators= 0; 
    fLastLocatedPosition= G4ThreeVector( DBL_MAX, DBL_MAX, DBL_MAX ); 
