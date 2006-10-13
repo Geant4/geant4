@@ -971,7 +971,8 @@ G4VPhysicalVolume* DMXDetectorConstruction::Construct() {
      vacuum_log->SetUserLimits(theUserLimitsForRoom);
      vessel_log->SetUserLimits(theUserLimitsForRoom);
         GXe_log->SetUserLimits(theUserLimitsForDetector);
-        LXe_log->SetUserLimits(theUserLimitsForXenon);
+	//        LXe_log->SetUserLimits(theUserLimitsForXenon);
+        LXe_log->SetUserLimits(theUserLimitsForDetector);
    CuShield_log->SetUserLimits(theUserLimitsForDetector);
        ring_log->SetUserLimits(theUserLimitsForDetector);
      mirror_log->SetUserLimits(theUserLimitsForDetector);

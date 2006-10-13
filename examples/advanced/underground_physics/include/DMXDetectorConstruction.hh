@@ -80,7 +80,7 @@ private:
 
   G4UserLimits*    theUserLimitsForRoom; 
   G4UserLimits*    theUserLimitsForDetector; 
-  G4UserLimits*    theUserLimitsForXenon; 
+  //  G4UserLimits*    theUserLimitsForXenon; 
 
   G4double         theMaxTimeCuts;
   G4double         theMaxStepSize;
