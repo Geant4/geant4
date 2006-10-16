@@ -34,7 +34,7 @@
 </div>
 
 Report on Errors and Warnings arising from system testing on the
-<blink><b>geant4-08-01-ref-02</b></blink> development tag.
+<blink><b>geant4-08-01-ref-03</b></blink> development tag.
 
 <p>
 NOTE: the complete set of tests has not been run, with Large_N(umbers of events),
@@ -61,8 +61,8 @@ test09     |	     |         |	  |	     |         |	 |	    |	       |	 |	   |
 test10     |	     |         |	  |	     |         |	 |	    |	       |	 |	   |
 -----------+---------+---------+----------+----------+---------+---------+----------+----------+---------+---------+
 test11     |	     |         |	  |	     |         |	 |	    |	       |	 |	   |
-test12     |  WL4    |         |   WL2    |          |         |  WL4    |  WL2WL4  |	       |	 |	   |
-test13     |  WL1    |  WL1    |   WL1WL2 |  WL1     |  WL1WL2 |  WL1    |  WL1	    |	       |   WL1   |  WL1    |
+test12     |  WL4    |         |   WL2    |          |  WL2    |  WL4    |  WL4     |	       |	 |	   |
+test13     |  WL1    |  WL1    |   WL12   |  WL1     |  WL1    |  WL1    |  WL1     |	       |   WL1   |  WL1    |
 test14     |	     |         |	  |	     |         |	 |	    |	       |	 |	   |
 test15     |	     |         |	  |	     |         |	 |	    |	       |	 |	   |
 -----------+---------+---------+----------+----------+---------+---------+----------+----------+---------+---------+
@@ -70,7 +70,7 @@ test16     |	     |         |	  |	     |         |	 |	    |	       |	 |	   |
 test17     |	     |         |	  |	     |         |	 |	    |	       |	 |	   |
 test18     |	     |         |	  |	     |         |	 |	    |	       |	 |	   |
 test20     |	     |         |	  |	     |         |	 |	    |	       |	 |	   |
-test21     |   EL1   |         |   WL1WL2 |   EL4    |         |         |   EL4    |	       |	 | EL2     |
+test21     |   EL1   |         |   WL12   |  EL6     |  EL5    |         |   EL6    |	       |	 | EL2     |
 test22     |	     |         |	  |	     |         |	 |	    |	       |	 |	   |
 test24     |	     |         |	  |	     |         |	 |	    |	       |	 |	   |
 test25     |	     |         |	  |	     |         |	 |	    |	       |	 |	   |
@@ -109,7 +109,6 @@ WL1
     total mass (4.69395) >= total energy (4.51751)    						      	      			  
  			   			      						      	      			  
  			   			      						      	      
-			   			      						      
 WL2			   			      						      
 ---------		   			      						      
 G4HadronicProcess: track in unusable state - 1	      						      
@@ -121,7 +120,6 @@ bailing out
 *** This is just a warning message.		      						      
 			   			      
 			   			      
-			   
 WL3			   
 ------------
 Warning : Region <EM_calo_region> does not have specific production cuts,
@@ -129,11 +127,9 @@ Warning : Region <EM_calo_region> does not have specific production cuts,
           Default cuts are used for this region.
 
 
-	 
 WL4, WN4			   
 ------------
 RandGeneral constructed nothing in bins - will use flat distribution
-
 
 
 WL5			   
@@ -148,13 +144,13 @@ ZMxpvTachyonic:
 ZMxpvTachyonic: boostVector computed for a non-timelike LorentzVector 
 at line 185 in file /scratch/ap/gcc344/2.0.2.2/build/../CLHEP/Vector/src/LorentzVector.cc
 
+
 WN1			   
 ------------		   
 *** G4Exception : Notification
 issued by : G4ImportanceAlgorithm::Warning()
 ~G4ImportanceAlgorithm: ipre_over_ipost ! in [0.25, 4] seen
 *** This is just a warning message.
-
 
 
 WN2			   
@@ -164,7 +160,6 @@ Warning : Region <crystals> does not have specific production cuts,
            Default cuts are used for this region.
 	   
 	   
-
 WN3			   
 ------------	   
 ---Warning---G4QEnv::FSI:Correction error LeaveAsItIs h4m=(0,0,0;4666.98)
@@ -175,7 +170,6 @@ WN3
 
 WN4 = WL4
 ------------
-
 
 EL1
 --------------
@@ -204,8 +198,6 @@ dbx: read of 4 bytes at address ff3eff70 failed -- Error 0
 =>[1] G4QNucleus::GetA(this = <bad address 0xff3efffc>), line 142 in "G4QNucleus.hh"
 dbx: read of 4 bytes at address ff3effd8 failed -- Error 0
 dbx: attempt to read frame failed -- cannot derive frame pointer
-
-
 
  			   										      
 EL2 (crash - hard to get debug out currently...)							      
@@ -249,7 +241,6 @@ Program received signal SIGSEGV, Segmentation fault.
 Cannot access memory at address 0xff3ef184
 
 
-
 EL4
 --------------
 > Event number 5170
@@ -261,6 +252,20 @@ EL4
 > /afs/cern.ch/sw/geant4/stt/dev1/Linux-g++/debug_slc4_i32/clhep/
 > include/CLHEP/Vector/LorentzVector.icc:20
 
+
+EL5
+--------------
+projectile momentum (px, py, pz) = (1.11354e-12, -1.67054e-15, 41232.8)
+Projectile energy = 41233
+GHAD_GHAD_GHAD_GHAD_GHAD_GHAD_GHAD_GHAD_GHAD_GHAD_GHAD_GHAD_GHAD_GHAD
+            
+callback to user-defined or default signal handler
+Command terminated by signal 11
+
+
+EL6
+--------------
+Command terminated by signal 15
 
 </pre>
 
