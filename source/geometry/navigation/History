@@ -1,4 +1,4 @@
-$Id: History,v 1.52 2006-10-12 17:39:51 japost Exp $
+$Id: History,v 1.53 2006-10-16 18:09:53 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+October 16th, 2006 - J.Apostolakis    (geomnav-V08-01-01)
+----------------------------------
+- G4Navigator: moved debug printing behind fVerbose conditions
 
 October 12th, 2006 - J.Apostolakis    (geomnav-V08-01-00)
 ----------------------------------
