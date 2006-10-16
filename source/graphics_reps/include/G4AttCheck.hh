@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AttCheck.hh,v 1.6 2006-06-29 19:05:10 gunter Exp $
+// $Id: G4AttCheck.hh,v 1.7 2006-10-16 13:28:15 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef G4ATTCHECK_HH
@@ -106,5 +106,9 @@ private:
   static std::set<G4String> fUnits;           // Set of legal units.
   static std::set<G4String> fValueTypes;      // Set of legal value types.
 };
+
+// Utility functions...
+std::ostream& operator<<
+  (std::ostream& os, const std::map<G4String,G4AttDef>* definitions);
 
 #endif //G4ATTCHECK_HH
