@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RichTrajectory.cc,v 1.5 2006-09-27 20:42:52 asaim Exp $
+// $Id: G4RichTrajectory.cc,v 1.6 2006-10-16 13:43:43 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ---------------------------------------------------------------
@@ -57,7 +57,12 @@
 
 G4Allocator<G4RichTrajectory> aRichTrajectoryAllocator;
 
-G4RichTrajectory::G4RichTrajectory() {}
+G4RichTrajectory::G4RichTrajectory():
+  fpRichPointsContainer(0),
+  fpInitialVolume(0),
+  fpInitialNextVolume(0),
+  fpCreatorProcess(0)
+{}
 
 G4RichTrajectory::G4RichTrajectory(const G4Track* aTrack):
   G4Trajectory(aTrack)  // Note: this initialises the base class data
@@ -94,14 +99,15 @@ G4RichTrajectory::G4RichTrajectory(G4RichTrajectory & right):
 
 G4RichTrajectory::~G4RichTrajectory()
 {
-  //  fpRichPointsContainer->clearAndDestroy();
-  size_t i;
-  for(i=0;i<fpRichPointsContainer->size();i++){
-    delete  (*fpRichPointsContainer)[i];
+  if (fpRichPointsContainer) {
+    //  fpRichPointsContainer->clearAndDestroy();
+    size_t i;
+    for(i=0;i<fpRichPointsContainer->size();i++){
+      delete  (*fpRichPointsContainer)[i];
+    }
+    fpRichPointsContainer->clear();
+    delete fpRichPointsContainer;
   }
-  fpRichPointsContainer->clear();
-
-  delete fpRichPointsContainer;
 }
 
 void G4RichTrajectory::AppendStep(const G4Step* aStep)
@@ -172,6 +178,9 @@ std::vector<G4AttValue>* G4RichTrajectory::CreateAttValues() const
     values->push_back(G4AttValue("CPN",fpCreatorProcess->GetProcessName(),""));
     G4ProcessType type = fpCreatorProcess->GetProcessType();
     values->push_back(G4AttValue("CPTN",G4VProcess::GetProcessTypeName(type),""));
+  } else {
+    values->push_back(G4AttValue("CPN","User Defined",""));
+    values->push_back(G4AttValue("CPTN","User",""));
   }
 
 #ifdef G4ATTDEBUG
