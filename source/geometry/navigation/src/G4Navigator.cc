@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.cc,v 1.22 2006-10-16 17:49:09 japost Exp $
+// $Id: G4Navigator.cc,v 1.23 2006-10-16 18:07:14 japost Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4Navigator Implementation
@@ -1055,15 +1055,16 @@ G4ThreeVector G4Navigator::GetLocalExitNormal( G4bool* valid )
 G4double G4Navigator::ComputeSafety( const G4ThreeVector &pGlobalpoint,
                                      const G4double pMaxLength)
 {
-  G4cout << " G4Navigator::ComputeSafety called at point " 
-	 << pGlobalpoint 
-         << " for Navigator " << this << G4endl; 
   G4double newSafety = 0.0;
 
 #ifdef G4VERBOSE
   G4int oldcoutPrec = G4cout.precision(8);
-  if( 1 )  //  fVerbose > 0 )
+  if( fVerbose > 0 )
   {
+    G4cout << " G4Navigator::ComputeSafety called at point " 
+	   << pGlobalpoint 
+	   << " for Navigator " << this << G4endl; 
+
     G4VPhysicalVolume  *motherPhysical = fHistory.GetTopVolume();
     G4cout << "*** G4Navigator::ComputeSafety: ***" << G4endl; 
     G4cout << "    Volume = " << motherPhysical->GetName() 
