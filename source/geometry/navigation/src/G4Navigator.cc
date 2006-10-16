@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.cc,v 1.21 2006-06-29 18:36:59 gunter Exp $
+// $Id: G4Navigator.cc,v 1.22 2006-10-16 17:49:09 japost Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4Navigator Implementation
@@ -1055,11 +1055,14 @@ G4ThreeVector G4Navigator::GetLocalExitNormal( G4bool* valid )
 G4double G4Navigator::ComputeSafety( const G4ThreeVector &pGlobalpoint,
                                      const G4double pMaxLength)
 {
+  G4cout << " G4Navigator::ComputeSafety called at point " 
+	 << pGlobalpoint 
+         << " for Navigator " << this << G4endl; 
   G4double newSafety = 0.0;
 
 #ifdef G4VERBOSE
   G4int oldcoutPrec = G4cout.precision(8);
-  if( fVerbose > 0 )
+  if( 1 )  //  fVerbose > 0 )
   {
     G4VPhysicalVolume  *motherPhysical = fHistory.GetTopVolume();
     G4cout << "*** G4Navigator::ComputeSafety: ***" << G4endl; 
@@ -1080,6 +1083,11 @@ G4double G4Navigator::ComputeSafety( const G4ThreeVector &pGlobalpoint,
     // Pseudo-relocate to this point (updates voxel information only)
     //
     LocateGlobalPointWithinVolume( pGlobalpoint );
+
+    if( fVerbose >= 2 ){
+      G4cout << " G4Navigator::ComputeSafety relocates-in-volume to point " 
+	     << pGlobalpoint << G4endl;
+    }
 
     G4VPhysicalVolume *motherPhysical = fHistory.GetTopVolume();
     G4LogicalVolume *motherLogical = motherPhysical->GetLogicalVolume();
@@ -1113,7 +1121,19 @@ G4double G4Navigator::ComputeSafety( const G4ThreeVector &pGlobalpoint,
       newSafety = freplicaNav.ComputeSafety(pGlobalpoint, localPoint,
                                             fHistory, pMaxLength);
     }
-  }
+  }else{
+    if( fVerbose >= 2 ){
+      G4cout << " G4Navigator::ComputeSafety finds point " 
+	     << pGlobalpoint << " is on surface " ; 
+      if( fEnteredDaughter ) {
+	G4cout << " entered new daughter volume "; 
+      }
+      if( fExitedMother ) { 
+	G4cout << " exited previous volume. " ; 
+      }
+      G4cout << G4endl;
+    } 
+ }
 
   // Remember last safety origin & value
   //
