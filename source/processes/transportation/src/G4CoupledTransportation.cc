@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CoupledTransportation.cc,v 1.8 2006-10-12 18:24:09 japost Exp $
+// $Id: G4CoupledTransportation.cc,v 1.9 2006-10-16 17:47:57 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //  GEANT 4 class implementation
@@ -254,7 +254,7 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
 
   // G4FieldTrack aTrackState(endTrackState);  
 
-  if( 1 ) { // fVerboseLevel > 1 ){
+  if( fVerboseLevel > 1 ){
     G4cout << " G4CT::CS End Position = "  << fTransportEndPosition << G4endl; 
     G4cout << " G4CT::CS End Direction = " << fTransportEndMomentumDir << G4endl; 
   }
@@ -361,9 +361,9 @@ G4VParticleChange* G4CoupledTransportation::AlongStepDoIt( const G4Track& track,
   //  Code specific for Transport
   //
   fParticleChange.ProposePosition(fTransportEndPosition) ;
-  G4cout << " G4CoupledTransportation::AlongStepDoIt" 
-         << " proposes position = " << fTransportEndPosition  
-         << " and end momentum direction  = " << fTransportEndMomentumDir <<  G4endl;
+  // G4cout << " G4CoupledTransportation::AlongStepDoIt" 
+  //     << " proposes position = " << fTransportEndPosition  
+  //     << " and end momentum direction  = " << fTransportEndMomentumDir <<  G4endl;
   fParticleChange.ProposeMomentumDirection(fTransportEndMomentumDir) ;
   fParticleChange.ProposeEnergy(fTransportEndKineticEnergy) ;
   fParticleChange.SetMomentumChanged(fMomentumChanged) ;
