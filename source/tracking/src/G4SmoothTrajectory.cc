@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SmoothTrajectory.cc,v 1.17 2006-09-27 20:42:52 asaim Exp $
+// $Id: G4SmoothTrajectory.cc,v 1.18 2006-10-16 13:37:17 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -99,14 +99,15 @@ G4SmoothTrajectory::G4SmoothTrajectory(G4SmoothTrajectory & right):G4VTrajectory
 
 G4SmoothTrajectory::~G4SmoothTrajectory()
 {
-  //  positionRecord->clearAndDestroy();
-  size_t i;
-  for(i=0;i<positionRecord->size();i++){
-    delete  (*positionRecord)[i];
+  if (positionRecord) {
+    //  positionRecord->clearAndDestroy();
+    size_t i;
+    for(i=0;i<positionRecord->size();i++){
+      delete  (*positionRecord)[i];
+    }
+    positionRecord->clear();
+    delete positionRecord;
   }
-  positionRecord->clear();
-
-  delete positionRecord;
 }
 
 void G4SmoothTrajectory::ShowTrajectory(std::ostream& os) const
