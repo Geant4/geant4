@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering.hh,v 1.29 2006-06-29 19:50:32 gunter Exp $
+// $Id: G4MultipleScattering.hh,v 1.30 2006-10-16 13:10:10 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -66,10 +66,13 @@
 // 19-01-07 tlimitmin = facrange*50*micrometer, i.e. it depends on the
 //          value of facrange (L.Urban)
 // 16-02-06 set function for data member factail (L.Urban)
+// 13-10-06 data member factail removed, new data member skin
+//          together with set function, data member tkinlimit
+//          changed to lambdalimit (L.Urban)
 //
 //------------------------------------------------------------------------------
 //
-// $Id: G4MultipleScattering.hh,v 1.29 2006-06-29 19:50:32 gunter Exp $
+// $Id: G4MultipleScattering.hh,v 1.30 2006-10-16 13:10:10 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // class description
@@ -116,8 +119,8 @@ public:    // with description
   // to reduce the energy/step dependence
   void Setdtrl(G4double value) { dtrl = value;};
 
-  // 'soften' step limitation above Tkinlimit
-  void SetTkinlimit(G4double value) { tkinlimit = value;};
+  // 'soften' step limitation above lambdalimit
+  void SetLambdalimit(G4double value) { lambdalimit = value;};
 
   // Steplimit = facrange*max(range,lambda)
   void SetFacrange(G4double val) { facrange=val;};
@@ -125,8 +128,10 @@ public:    // with description
   // connected with step size reduction due to geometry
   void SetFacgeom(G4double val) { facgeom=val;};
 
-  // parameter governs the tail of the angular distribution
-  void SetFactail(G4double val) { factail=val;};
+  // set msc parameter skin
+  // (if distance to boundary < skin*stepmin --> single scattering)
+  // (if skin < 0 --> no single scattering at boundary)
+  void SetSkin(G4double val) { skin=val;};
 
 protected:
 
@@ -141,11 +146,11 @@ private:        // data members
   G4double highKineticEnergy;
   G4int    totBins;
 
-  G4double tkinlimit;
+  G4double lambdalimit;
   G4double facrange;
   G4double facgeom;
+  G4double skin; 
   G4double dtrl;
-  G4double factail;
 
   G4bool   steppingAlgorithm;
   G4bool   samplez;

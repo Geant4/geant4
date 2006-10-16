@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel.hh,v 1.8 2006-06-29 19:51:46 gunter Exp $
+// $Id: G4UrbanMscModel.hh,v 1.9 2006-10-16 13:10:11 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -62,8 +62,12 @@
 // 11-05-06 name of data member safety changed to presafety, some new data
 //          members added (frscaling1,frscaling2,tlimitminfix,nstepmax)
 //         (L.Urban)
+// 13-10-06 data member factail removed, data member tkinlimit changed
+//          to lambdalimit,
+//          new data members tgeom,tnow,skin,skindepth,Zeff,geomlimit
+//          G4double GeomLimit(const G4Track& track) changed to
+//              void GeomLimit(const G4Track& track) (L.Urban)
 //
-
 //
 // Class Description:
 //
@@ -92,8 +96,8 @@ class G4UrbanMscModel : public G4VEmModel
 
 public:
 
-  G4UrbanMscModel(G4double facrange, G4double dtrl, G4double tkinlimit, 
-		  G4double facgeom, G4double factail, 
+  G4UrbanMscModel(G4double facrange, G4double dtrl, G4double lambdalimit, 
+		  G4double facgeom,G4double skin, 
 		  G4bool samplez, G4bool stepAlg, 
 		  const G4String& nam = "UrbanMscUni");
 
@@ -138,7 +142,7 @@ private:
 
   G4double GetLambda(G4double kinEnergy);
 
-  G4double GeomLimit(const G4Track& track);
+  void GeomLimit(const G4Track& track);
 
   void SetParticle(const G4ParticleDefinition* p);
 
@@ -161,19 +165,22 @@ private:
   G4double taulim;
   G4double currentTau;
   G4double dtrl;
-  G4double factail ;
 
-  G4double Tkinlimit;
-  G4double Tlimit;
+  G4double lambdalimit;
+  G4double llimit;
   G4double facrange;
   G4double frscaling1,frscaling2;
   G4double tlimit;
   G4double tlimitmin;
   G4double tlimitminfix;
+  G4double tnow;
   G4double nstepmax;
+  G4double tgeom;
   G4double geombig;
   G4double geommin;
+  G4double geomlimit;
   G4double facgeom;
+  G4double skin,skindepth; 
   G4double presafety;
   G4double facsafety;
 
@@ -189,6 +196,8 @@ private:
   G4double currentKinEnergy;
   G4double currentRange; 
   G4double currentRadLength;
+
+  G4double Zeff;
 
   G4int    currentMaterialIndex;
 
@@ -243,7 +252,7 @@ void G4UrbanMscModel::SetParticle(const G4ParticleDefinition* p)
     particle = p;
     mass = p->GetPDGMass();
     charge = p->GetPDGCharge()/eplus;
-    Tlimit = Tkinlimit*electron_mass_c2/mass;
+    llimit = lambdalimit;
   }
 }
 

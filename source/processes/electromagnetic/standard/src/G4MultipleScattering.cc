@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering.cc,v 1.53 2006-06-29 19:53:10 gunter Exp $
+// $Id: G4MultipleScattering.cc,v 1.54 2006-10-16 13:10:11 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -101,6 +101,9 @@
 // 10-05-06 SetMscStepLimitation at initialisation (V.Ivantchenko)
 // 11-05-06 values of data members tkinlimit, factail have been 
 //          changed (L.Urban) 
+// 13-10-06 data member factail removed, new data member skin
+//          together with set function, data member tkinlimit
+//          changed to lambdalimit (L.Urban)
 //
 // -----------------------------------------------------------------------------
 //
@@ -125,9 +128,12 @@ G4MultipleScattering::G4MultipleScattering(const G4String& processName)
 
   facrange          = 0.02;
   dtrl              = 0.05;
-  tkinlimit         = 1.*MeV;
-  facgeom           = 3.5;
-  factail           = 0.85; 
+  lambdalimit       = 1.*mm;
+  facgeom           = 2.5;
+  // there is no single scattering for this skin value,
+  // to have single scattering at boundary 
+  //  skin should be >= 0 ! 
+  skin              = -1000.;
   
   steppingAlgorithm = true;
   samplez           = true ;  
@@ -175,15 +181,13 @@ void G4MultipleScattering::InitialiseProcess(const G4ParticleDefinition* p)
   }
 
   if (p->GetParticleType() == "nucleus") {
-    //    steppingAlgorithm = false;
     SetLateralDisplasmentFlag(false);
     SetBuildLambdaTable(false);
   } else {
     SetBuildLambdaTable(true);
   }
-  // compute Tlimit for particle
-  mscUrban = new G4UrbanMscModel(facrange,dtrl,tkinlimit,
-                                 facgeom,factail,
+  mscUrban = new G4UrbanMscModel(facrange,dtrl,lambdalimit,
+                                 facgeom,skin,
                                  samplez,steppingAlgorithm);
   mscUrban->SetLateralDisplasmentFlag(LateralDisplasmentFlag());
   mscUrban->SetLowEnergyLimit(lowKineticEnergy);
