@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelWorldScoringProcess.cc,v 1.2 2006-10-12 17:14:33 asaim Exp $
+// $Id: G4ParallelWorldScoringProcess.cc,v 1.3 2006-10-16 18:14:31 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -111,7 +111,7 @@ void G4ParallelWorldScoringProcess::StartTracking(G4Track* trk)
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // Activate navigator and get the navigator ID
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-G4cout << " G4ParallelWorldScoringProcess::StartTracking" << G4endl;
+// G4cout << " G4ParallelWorldScoringProcess::StartTracking" << G4endl;
   if(fGhostNavigator)
   { fNavigatorID = fTransportationManager->ActivateNavigator(fGhostNavigator); }
   else
@@ -122,7 +122,7 @@ G4cout << " G4ParallelWorldScoringProcess::StartTracking" << G4endl;
   }
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-G4cout << "G4ParallelWorldScoringProcess::StartTracking <<<<<<<<<<<<<<<<<< " << G4endl;
+// G4cout << "G4ParallelWorldScoringProcess::StartTracking <<<<<<<<<<<<<<<<<< " << G4endl;
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // Let PathFinder initialize
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -336,7 +336,12 @@ G4double G4ParallelWorldScoringProcess::AlongStepGetPhysicalInteractionLength(
       // proposedSafety = fGhostSafety;
     }
     proposedSafety = fGhostSafety;
-    if(eLimited == kUnique || eLimited == kSharedOther) *selection = CandidateForSelection;
+    if(eLimited == kUnique || eLimited == kSharedOther) {
+       *selection = CandidateForSelection;
+    }else if (eLimited == kSharedTransport) { 
+       returnedStep *= (1.0 + 1.0e-9);  
+         // Expand to disable its selection in Step Manager comparison
+    }
   }
 
   // ----------------------------------------------
