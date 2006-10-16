@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eBremsstrahlung52.cc,v 1.6 2006-06-29 19:53:45 gunter Exp $
+// $Id: G4eBremsstrahlung52.cc,v 1.7 2006-10-16 15:26:50 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -1035,6 +1035,8 @@ void G4eBremsstrahlung52::PrintInfoDefinition()
 	 << G4BestUnit(LowerBoundLambda,"Energy")
          << " to " << G4BestUnit(UpperBoundLambda,"Energy")
          << " in " << NbinLambda << " bins. \n";
+  G4cout << "        WARNING: This process is obsolete and will be soon removed" 
+	 << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

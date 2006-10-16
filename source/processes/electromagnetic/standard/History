@@ -1,4 +1,4 @@
-$Id: History,v 1.251 2006-10-16 15:26:49 vnivanch Exp $
+$Id: History,v 1.252 2006-10-16 15:30:36 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,7 +19,7 @@ committal in the CVS repository !
 
 16 Oct 06: V.Ivanchenko (emstand-V08-01-07)
 - Add extra protection to G4eplusAnnihilation52 
-- Add warning to all processes 51 and 71 type 
+- Add warning to all processes 52 and 71 type 
 
 16 Oct 06: L.Urban 
 - new msc version (G4MultipleScattering, G4UrbanMscModel):

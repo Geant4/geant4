@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhotoElectricEffect52.cc,v 1.2 2006-06-29 19:53:28 gunter Exp $
+// $Id: G4PhotoElectricEffect52.cc,v 1.3 2006-10-16 15:26:49 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -282,6 +282,8 @@ void G4PhotoElectricEffect52::PrintInfoDefinition()
   G4String comments = "Total cross sections from Sandia parametrisation. ";
 	             
   G4cout << G4endl << GetProcessName() << ":  " << comments << G4endl;
+  G4cout << "        WARNING: This process is obsolete and will be soon removed" 
+	 << G4endl;
 }         
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
