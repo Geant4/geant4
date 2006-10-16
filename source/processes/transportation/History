@@ -1,4 +1,4 @@
-$Id: History,v 1.104 2006-06-02 22:19:56 japost Exp $
+$Id: History,v 1.105 2006-10-16 18:22:22 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+October 17th, 2006, J.Apostolakis  transport-V08-01-ref03-02
+---------------------------------
+- Protected printing under 'verbose' conditions
+
 June 2nd, 2006, J.Apostolakis  transport-V08-00-02
 -----------------------------
 - Added new class G4CoupledTransportation, 
