@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.109 2006-09-15 09:59:11 allison Exp $
+cvs log $Id: History,v 1.110 2006-10-16 13:29:20 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+16th October 2006  John Allison  (greps-V08-01-05)
+- Added operator<< for G4AttDefs:
+  std::ostream& operator<<
+    (std::ostream& os, const std::map<G4String,G4AttDef>* definitions)
+- Improved output diagnostics.
 
 ---------------------------------------------------------------------------
 15th September 2006  John Allison  (greps-V08-01-04 - coworks vis-V08-01-06)
