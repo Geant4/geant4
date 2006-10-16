@@ -1,4 +1,4 @@
-$Id: History,v 1.111 2006-10-16 13:46:18 allison Exp $
+$Id: History,v 1.112 2006-10-16 13:50:00 allison Exp $
 $Name: not supported by cvs2svn $ 
 -------------------------------------------------------------------
 
@@ -18,7 +18,7 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-16 September 2006 J.Allison
+16 October 2006 J.Allison
 - All trajectories:
   o Protect positionRecordpoints container pointer in destructor.
   o Make G4AttDef descriptions more concise.
