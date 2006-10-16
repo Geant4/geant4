@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trajectory.cc,v 1.31 2006-09-27 20:42:52 asaim Exp $
+// $Id: G4Trajectory.cc,v 1.32 2006-10-16 13:39:35 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ---------------------------------------------------------------
@@ -94,14 +94,15 @@ G4Trajectory::G4Trajectory(G4Trajectory & right):G4VTrajectory()
 
 G4Trajectory::~G4Trajectory()
 {
-  //  positionRecord->clearAndDestroy();
-  size_t i;
-  for(i=0;i<positionRecord->size();i++){
-    delete  (*positionRecord)[i];
+  if (positionRecord) {
+    //  positionRecord->clearAndDestroy();
+    size_t i;
+    for(i=0;i<positionRecord->size();i++){
+      delete  (*positionRecord)[i];
+    }
+    positionRecord->clear();
+    delete positionRecord;
   }
-  positionRecord->clear();
-
-  delete positionRecord;
 }
 
 void G4Trajectory::ShowTrajectory(std::ostream& os) const
@@ -141,12 +142,12 @@ const std::map<G4String,G4AttDef>* G4Trajectory::GetAttDefs() const
     (*store)[PDG] = G4AttDef(PDG,"PDG Encoding","Physics","","G4int");
 
     G4String IMom("IMom");
-    (*store)[IMom] = G4AttDef(IMom, "Momentum of track at start of trajectory",
+    (*store)[IMom] = G4AttDef(IMom, "Momentum at start of trajectory",
 			      "Physics","G4BestUnit","G4ThreeVector");
 
     G4String IMag("IMag");
     (*store)[IMag] = 
-      G4AttDef(IMag, "Magnitude of momentum of track at start of trajectory",
+      G4AttDef(IMag, "Magnitude of momentum at start of trajectory",
 	       "Physics","G4BestUnit","G4double");
 
     G4String NTP("NTP");
