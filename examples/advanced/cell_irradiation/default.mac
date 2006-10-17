@@ -1,0 +1,31 @@
+/control/verbose 1
+/tracking/verbose 0
+/run/verbose 0
+/event/verbose 0
+### The max step is active ###
+/target/setUserLimits true
+### The value of the cut is fixed for all the particles
+### This value substitutes the default value (0.1 mm)
+/physics/cutE 0.1 m
+/run/initialize
+########
+### Visualisation #######
+/vis/scene/create
+/vis/open OGLIX
+/vis/viewer/flush
+/tracking/storeTrajectory 1
+/vis/scene/endOfEventAction accumulate
+/vis/viewer/update
+/vis/scene/transientsAction none
+/vis/viewer/set/viewpointThetaPhi 90. 180. 
+/vis/viewer/zoom 5
+#########################
+### setting the value of the max step ####
+/target/setMaxStep 100. micrometer
+########
+/gun/energy 10. MeV
+/run/beamOn 1
+
+
+
+
