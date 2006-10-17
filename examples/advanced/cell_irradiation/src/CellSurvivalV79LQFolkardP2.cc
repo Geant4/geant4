@@ -22,40 +22,39 @@
 //
 //    **************************************
 //    *                                    *
-//    *           CellSurvival.cc          *
+//    *   CellSurvivalV79LQFolkardP2.cc    *
 //    *                                    *
 //    **************************************
 //
-// Author: Susanna Guatelli (guatelli@ge.infn.it)
-//	   Barbara Mascialino (Barbara.Mascialino@ge.infn.it)
+// Author: Barbara Mascialino (Barbara.Mascialino@ge.infn.it)
 //
 // History:
 // -----------
-// 20 September 2006 S. Guatelli, B. Mascialino      first implementation
+// 12 October 2006 B. Mascialino      first implementation
 // -------------------------------------------------------------------
 
 
 #include "globals.hh"
-#include "CellSurvival.hh"
+#include "CellSurvivalV79LQFolkardP2.hh"
 #include "CellPrimaryGeneratorAction.hh"
 #include "G4RunManager.hh"
 
  
-CellSurvival::CellSurvival()
+CellSurvivalV79LQFolkardP2::CellSurvivalV79LQFolkardP2()
 {
 
 }
 
-CellSurvival::~CellSurvival()
+CellSurvivalV79LQFolkardP2::~CellSurvivalV79LQFolkardP2()
 {
 
 }
 
-void CellSurvival::SurvivalFormula(G4double dose)
+void CellSurvivalV79LQFolkardP2::SurvivalFormula(G4double dose)
 {
-  G4double alpha = 3.13 * ( gray );
+  G4double alpha = 2.22 * ( gray );
   G4double alpha_gray = alpha * gray; 
-  G4double beta = 25.64 * gray;
+  G4double beta = 33.33 * gray;
 
   // DEBUGGING
   // G4cout << "I WILL SURVIVE !!!!!" << G4endl;
@@ -66,11 +65,11 @@ void CellSurvival::SurvivalFormula(G4double dose)
   // Cell line: V79-379A
   // Monolayer experiment
   // Particle: proton
-  // Energy: 3.66 MeV/u
+  // Energy: 1.83 MeV/u
   // Survival model: Linear-quadratic
   // Parameters:
-  //            alpha = (0.32 +/- 0.06) Gy^-1
-  //            beta  = (0.04 +/- 0.01) Gy^-2
+  //            alpha = (0.45 +/- 0.04) Gy^-1
+  //            beta  = (0.03 +/- 0.01) Gy^-2
   //********************************************************************************
   //
 
@@ -96,8 +95,9 @@ void CellSurvival::SurvivalFormula(G4double dose)
   // Energy of the primary particle
  G4double primaryParticleEnergy = primary -> GetInitialEnergy();
 
- 
- G4cout << "Expected survival probability= " << 0.99999 << G4endl;
+  // TESTING
+  // Expected survival probability 
+  // G4cout << "Expected survival probability= " << 0.99999 << G4endl;
  
 
  G4cout << "Primary particle: " << primaryParticleName << " with energy " <<
@@ -105,7 +105,7 @@ void CellSurvival::SurvivalFormula(G4double dose)
  
 
 }
-G4double CellSurvival::GetSurvival()
+G4double CellSurvivalV79LQFolkardP2::GetSurvival()
 {
   return probability; 
 }

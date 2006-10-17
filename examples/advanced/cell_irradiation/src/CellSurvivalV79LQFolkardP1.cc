@@ -22,7 +22,7 @@
 //
 //    **************************************
 //    *                                    *
-//    *           CellSurvival.cc          *
+//    *   CellSurvivalV79LQFolkardP1.cc    *
 //    *                                    *
 //    **************************************
 //
@@ -36,22 +36,22 @@
 
 
 #include "globals.hh"
-#include "CellSurvival.hh"
+#include "CellSurvivalV79LQFolkardP1.hh"
 #include "CellPrimaryGeneratorAction.hh"
 #include "G4RunManager.hh"
 
  
-CellSurvival::CellSurvival()
+CellSurvivalV79LQFolkardP1::CellSurvivalV79LQFolkardP1()
 {
 
 }
 
-CellSurvival::~CellSurvival()
+CellSurvivalV79LQFolkardP1::~CellSurvivalV79LQFolkardP1()
 {
 
 }
 
-void CellSurvival::SurvivalFormula(G4double dose)
+void CellSurvivalV79LQFolkardP1::SurvivalFormula(G4double dose)
 {
   G4double alpha = 3.13 * ( gray );
   G4double alpha_gray = alpha * gray; 
@@ -96,8 +96,9 @@ void CellSurvival::SurvivalFormula(G4double dose)
   // Energy of the primary particle
  G4double primaryParticleEnergy = primary -> GetInitialEnergy();
 
- 
- G4cout << "Expected survival probability= " << 0.99999 << G4endl;
+  // TESTING
+  // Expected survival probability
+  // G4cout << "Expected survival probability= " << 0.99999 << G4endl;
  
 
  G4cout << "Primary particle: " << primaryParticleName << " with energy " <<
@@ -105,7 +106,7 @@ void CellSurvival::SurvivalFormula(G4double dose)
  
 
 }
-G4double CellSurvival::GetSurvival()
+G4double CellSurvivalV79LQFolkardP1::GetSurvival()
 {
   return probability; 
 }
