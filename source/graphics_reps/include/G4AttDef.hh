@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AttDef.hh,v 1.6 2006-09-11 18:04:58 tinslay Exp $
+// $Id: G4AttDef.hh,v 1.7 2006-10-17 16:14:08 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef G4ATTDEF_HH
@@ -32,6 +32,7 @@
 
 #include "globals.hh"
 #include "G4TypeKey.hh"
+#include <map>
 
 // Class Description:
 //
@@ -109,4 +110,8 @@
     G4TypeKey m_typeKey;
 
   };
+
+std::ostream& operator<<
+  (std::ostream& os, const std::map<G4String,G4AttDef>* definitions);
+
 #endif //G4ATTDEF_H

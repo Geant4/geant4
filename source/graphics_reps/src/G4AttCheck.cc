@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AttCheck.cc,v 1.12 2006-10-16 13:28:16 allison Exp $
+// $Id: G4AttCheck.cc,v 1.13 2006-10-17 16:14:08 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4AttCheck.hh"
@@ -32,7 +32,6 @@
 #include "globals.hh"
 
 #include "G4AttDef.hh"
-#include "G4AttDefStore.hh"
 #include "G4AttValue.hh"
 #include "G4UnitsTable.hh"
 #include "G4UIcommand.hh"
@@ -444,30 +443,4 @@ G4bool G4AttCheck::Standard
     G4cerr << "G4AttCheck::Standard: Conversion error." << G4endl;
   }
   return error;
-}
-
-std::ostream& operator<<
-  (std::ostream& os, const std::map<G4String,G4AttDef>* definitions)
-{
-  using namespace std;
-  if (!definitions) {
-    os << "G4AttCheck: ERROR: zero definitions pointer." << endl;
-    return os;
-  }
-  os << G4AttDefStore::GetName(definitions) << ":";
-  std::map<G4String,G4AttDef>::const_iterator i;
-  for (i = definitions->begin(); i != definitions->end(); ++i) {
-    if (i->second.GetCategory() == "Physics") {
-      os << "\n  " << i->second.GetDesc()
-	     << " (" << i->first << "): ";
-      if (!i->second.GetExtra().empty()) {
-	if (i->second.GetExtra() != "G4BestUnit") os << "unit: ";
-	os << i->second.GetExtra() << " (";
-      }
-      os << i->second.GetValueType();
-      if (!i->second.GetExtra().empty()) os << ")";
-    }
-  }
-  os << endl;
-  return os;
 }
