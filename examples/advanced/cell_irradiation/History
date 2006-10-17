@@ -1,0 +1,42 @@
+$Id: History,v 1.1 2006-10-17 17:58:45 mascial Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+07-12-2005 Susanna Guatelli (tag test50-V07-01-01)
+           Ions fron G4Vions deleted
+
+07-12-2005 Susanna Guatelli (tag test50-V07-01-00)
+           Particles updated
+           Big fix in the main
+
+06-12-2005 Gabriele Cosmo
+           Trivial changes for support of CLHEP-2.0.X series.
+
+21-06-2005 Susanna Guatelli
+	   Step Limiter introduced.
+
+08-12-2004 Gabriele Cosmo
+           Implemented migration to <cmath>.
+
+25-11-2004 Susanna Guatelli
+           SP and CSDA range of alpha added.
+
+12-11-2003 John Allison
+           Reconstructed Vis Manager.
+
+12-03-2003 MGP, tag test50-V05-00-01
+           On top of tag test50-P05-00-27, porting to RH 7.3, gcc 3.2
