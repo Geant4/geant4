@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.111 2006-10-17 16:14:32 allison Exp $
+cvs log $Id: History,v 1.112 2006-10-17 16:15:11 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -18,7 +18,7 @@ committal in the CVS repository !
      ----------------------------------------------------------
 
 17th October 2006  John Allison  (greps-V08-01-06)
-- Moved below operator<< deom G4AttCheck.hh/cc to G4AttDef.hh/cc.
+- Moved below operator<< from G4AttCheck.hh/cc to G4AttDef.hh/cc.
 
 16th October 2006  John Allison  (greps-V08-01-05)
 - Added operator<< for G4AttDefs:
