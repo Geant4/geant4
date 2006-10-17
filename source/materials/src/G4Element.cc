@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Element.cc,v 1.23 2006-06-29 19:12:41 gunter Exp $
+// $Id: G4Element.cc,v 1.24 2006-10-17 15:15:46 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -49,6 +49,7 @@
 // 26-02-02: fIndexInTable renewed
 // 30-03-05: warning in GetElement(elementName)
 // 15-11-05: GetElement(elementName, G4bool warning=true) 
+// 17-10-06: Add fNaturalAbandances (V.Ivanchenko)
  
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -83,6 +84,7 @@ G4Element::G4Element(const G4String& name, const G4String& symbol,
     fAeff   = aeff;
 
     fNumberOfIsotopes = 0;
+    fNaturalAbandances = false;
    
     fNbOfAtomicShells = G4AtomicShells::GetNumberOfShells((G4int)fZeff);
     fAtomicShells     = new G4double[fNbOfAtomicShells];
@@ -118,6 +120,7 @@ G4Element::G4Element(const G4String& name,
     size_t n = size_t(nIsotopes);
 
     fNumberOfIsotopes = 0;
+    fNaturalAbandances = false;
 
     theIsotopeVector         = new G4IsotopeVector(n,0);
     fRelativeAbundanceVector = new G4double[nIsotopes];

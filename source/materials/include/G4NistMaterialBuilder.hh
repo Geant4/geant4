@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistMaterialBuilder.hh,v 1.8 2006-06-29 19:12:00 gunter Exp $
+// $Id: G4NistMaterialBuilder.hh,v 1.9 2006-10-17 15:15:46 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef G4NistMaterialBuilder_h
@@ -102,6 +102,8 @@ public:
   void ListNistCompoundMaterials();
   void ListHepMaterials();
 
+  const std::vector<G4String>& GetMaterialNames() const;
+
 private:
 
   void Initialise();
@@ -160,5 +162,11 @@ private:
   G4bool                 first;
 
 };
+
+inline const std::vector<G4String>& 
+       G4NistMaterialBuilder::GetMaterialNames() const
+{
+  return names;
+}
 
 #endif

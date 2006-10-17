@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistManager.cc,v 1.6 2006-06-29 19:13:00 gunter Exp $
+// $Id: G4NistManager.cc,v 1.7 2006-10-17 15:15:46 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -248,6 +248,13 @@ void G4NistManager::SetVerbose(G4int val)
   verbose = val;
   elmBuilder->SetVerbose(val);
   matBuilder->SetVerbose(val);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+const std::vector<G4String>& G4NistManager::GetNistMaterialNames() const
+{
+  return matBuilder->GetMaterialNames();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
