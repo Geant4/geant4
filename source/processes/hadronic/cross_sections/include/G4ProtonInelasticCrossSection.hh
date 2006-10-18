@@ -24,6 +24,7 @@
 // ********************************************************************
 //
 // by JPW, working, but to be cleaned up. @@@@
+// G.Folger, 29-sept-2006: extend to 1TeV, using a constant above 20GeV
 
 #ifndef G4ProtonInelasticCrossSection_h
 #define G4ProtonInelasticCrossSection_h
@@ -32,8 +33,11 @@
 // Cross-sections for proton nuclear scattering up to 20 GeV, getting the low
 // energy threshold behaviour right.
 // H.P. Wellisch (TRIUMF), D. Axen (British Columbia U.). 1996. 
-// Published in Phys.Rev.C54:1329-1332,1996 
+// Published in Phys.Rev.C54:1329-1332,1996
+// Implements corrected parameterization from  http://laws.lanl.gov/XCI/PEOPLE/rep/pdf/RPS96.pdf
 // Class Description - End
+
+
 #include "globals.hh"
 #include "G4Proton.hh"
 
@@ -48,7 +52,7 @@ class G4ProtonInelasticCrossSection : public G4VCrossSectionDataSet
    {
      G4bool result = false;
      if(( aPart->GetDefinition()==G4Proton::Proton()) &&
-        ( aPart->GetKineticEnergy()<20*GeV) ) result = true;
+        ( aPart->GetKineticEnergy()<1*TeV) ) result = true;
      if(aEle->GetZ()<3) result = false;
      return result;
    }

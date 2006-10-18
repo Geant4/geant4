@@ -24,6 +24,7 @@
 // ********************************************************************
 //
 // By JPW, working, but to be cleaned up. @@@
+// G.Folger, 29-sept-2006: extend to 1TeV, using a constant above 20GeV
 
 #include "G4ProtonInelasticCrossSection.hh"
 #include "globals.hh"
@@ -40,6 +41,11 @@
    G4double G4ProtonInelasticCrossSection::
    GetCrossSection(G4double kineticEnergy, G4double atomicNumber, G4double nOfProtons)
    {
+   
+    if (kineticEnergy > 19.9*GeV ) 
+    { // constant cross section above ~20GeV.
+      return  GetCrossSection(19.8*GeV,atomicNumber,nOfProtons);
+    } 
       G4double nOfNeutrons = atomicNumber-nOfProtons;
       kineticEnergy /=GeV;
       G4double a = atomicNumber;
