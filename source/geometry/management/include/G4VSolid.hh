@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSolid.hh,v 1.23 2006-09-04 08:32:54 mkossov Exp $
+// $Id: G4VSolid.hh,v 1.24 2006-10-18 15:06:12 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -175,17 +175,14 @@ class G4VSolid
       // or anyway to cache the computed value.
       // Note: the computed value is NOT cached.
 
-    virtual G4double GetSurfaceArea();
-      // Returns an estimation of the solid surface in internal units.
+    virtual G4double GetSurfaceArea(G4int n=1000000, G4double ell=-1.);
+      // Return an estimation of the solid surface area in internal units.
+      // The number of generated points 'n' can be specified, as well as
+      // the accuracy 'ell' of the calculation.
       // This method may be overloaded by derived classes to compute the
       // exact geometrical quantity for solids where this is possible,
       // or anyway to cache the computed value.
       // Note: the computed value is NOT cached.
-
-    virtual G4double EstimateSurfaceArea();
-      // Returns rough estimation (10%) of the solid surface in internal units.
-      // This method can be used for the fast estimate (volume estimation speed)
-      // of the surface of the simple solids without big variations of dimentions.
 
     virtual G4GeometryType  GetEntityType() const = 0;
       // Provide identification of the class of an object.
@@ -290,17 +287,10 @@ class G4VSolid
       // Accuracy is limited by the second argument or the statistics
       // expressed by the first argument.
 
-    G4double EstimateHomotheticSurface(G4int nStat) const;
-      // Estimate (15%) surface of simple solids based on Inside() method.
+    G4double EstimateSurfaceArea(G4int nStat, G4double ell) const;
+      // Calculate surface area only based on Inside() method.
       // Accuracy is limited by the second argument or the statistics
       // expressed by the first argument.
-
-    G4double EstimateSkinSurface(G4int nStat, G4double d=0.) const;
-      // Calculate surface based on Inside() and DistanceToIn/Out()
-		    // methods. Accuracy is limited by the statistics (firstst
-      // argument) and skin thickness (secondnd argument). If d=0.,
-      // the thickness is defined automatically as 1% of the
-      // smallest dimention of the Solid. Implemented by M. Kosov.
 
 private:
 
