@@ -1,4 +1,4 @@
-$Id: History,v 1.284 2006-10-05 14:24:32 gcosmo Exp $
+$Id: History,v 1.285 2006-10-18 09:39:50 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+10th October 2006  Gabriele Cosmo (config-V08-01-05)
+- Darwin-g++.gmk: use standard -echo- command.
+  Removed ECHO overloaded variable.
 
 5th October 2006  Gabriele Cosmo (config-V08-01-04)
 - liblist.c: added .dylib search for list of libraries.
