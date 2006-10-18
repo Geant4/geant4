@@ -1,4 +1,4 @@
-$Id: History,v 1.104 2006-10-02 10:10:46 gcosmo Exp $
+$Id: History,v 1.105 2006-10-18 15:08:24 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+October 18, 2006  G.Cosmo                  geommng-V08-01-03
+- Added GetSurfaceArea() method to G4VSolid for approximated computation
+  of the surfare area of a shape.
 
 October 2, 2006  G.Cosmo                   geommng-V08-01-02
 - Removed debug printout in G4IdentityTrajectoryFilter implementation.
