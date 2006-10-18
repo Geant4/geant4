@@ -1,4 +1,4 @@
-$Id: History,v 1.8 2006-07-05 11:06:36 gcosmo Exp $
+$Id: History,v 1.9 2006-10-18 15:02:27 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+October 18th 2006 J.Allison  (exHepMC-V08-01-01)
+- Migrate to new trajectory modeling commands.
 
 July 5th, 2006 G.Cosmo  (exHepMC-V08-01-00)
 - Updated to current version of exampleN04. Now working with release series 8.
