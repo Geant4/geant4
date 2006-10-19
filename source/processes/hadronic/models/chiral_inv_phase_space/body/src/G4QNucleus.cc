@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNucleus.cc,v 1.54 2006-06-29 20:07:05 gunter Exp $
+// $Id: G4QNucleus.cc,v 1.55 2006-10-19 11:52:04 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QNucleus ----------------
@@ -45,6 +45,7 @@ using namespace std;
 
 G4QNucleus::G4QNucleus() : G4QHadron(),Z(0),N(0),S(0),maxClust(0)
 {
+  Tb = new std::vector<G4double>;
   probVect[0]=mediRatio;
 #ifdef pardeb
   G4cout<<"G4QNucleus::Constructor:(1) N="<<freeNuc<<", D="<<freeDib<<", W="<<clustProb
@@ -56,6 +57,7 @@ G4QNucleus::G4QNucleus(G4int z, G4int n, G4int s) :
   G4QHadron(90000000+s*1000000+z*1000+n),Z(z),N(n),S(s),maxClust(0)
   //Z(z),N(n),S(s),maxClust(0)
 {
+  Tb = new std::vector<G4double>;
   probVect[0]=mediRatio;
   for(G4int i=1; i<256; i++) probVect[i] = 0.;
 #ifdef debug
@@ -85,6 +87,7 @@ G4QNucleus::G4QNucleus(G4int z, G4int n, G4int s) :
 
 G4QNucleus::G4QNucleus(G4int nucPDG): G4QHadron(nucPDG), maxClust(0)
 {
+  Tb = new std::vector<G4double>;
   InitByPDG(nucPDG);
 #ifdef pardeb
   G4cout<<"G4QNucleus::Constructor:(3) N="<<freeNuc<<", D="<<freeDib<<", W="<<clustProb
@@ -94,6 +97,7 @@ G4QNucleus::G4QNucleus(G4int nucPDG): G4QHadron(nucPDG), maxClust(0)
 
 G4QNucleus::G4QNucleus(G4LorentzVector p, G4int nucPDG): G4QHadron(nucPDG,p),maxClust(0)
 {
+  Tb = new std::vector<G4double>;
   InitByPDG(nucPDG);
   Set4Momentum(p);
 #ifdef pardeb
@@ -105,6 +109,7 @@ G4QNucleus::G4QNucleus(G4LorentzVector p, G4int nucPDG): G4QHadron(nucPDG,p),max
 G4QNucleus::G4QNucleus(G4int z, G4int n, G4int s, G4LorentzVector p) :
   G4QHadron(90000000+s*1000000+z*1000+n,p),Z(z),N(n),S(s),maxClust(0)
 {
+  Tb = new std::vector<G4double>;
   probVect[0]=mediRatio;
   for(G4int i=1; i<256; i++) probVect[i] = 0.;
   Set4Momentum(p);
@@ -123,6 +128,7 @@ G4QNucleus::G4QNucleus(G4int z, G4int n, G4int s, G4LorentzVector p) :
 G4QNucleus::G4QNucleus(G4QContent nucQC): G4QHadron(nucQC), maxClust(0)
 {
   static const G4double mPi0 = G4QPDGCode(111).GetMass();
+  Tb = new std::vector<G4double>;
 #ifdef debug
   G4cout<<"G4QNucleus::Construction By QC="<<nucQC<<G4endl;
 #endif
@@ -168,6 +174,7 @@ G4QNucleus::G4QNucleus(G4QContent nucQC): G4QHadron(nucQC), maxClust(0)
 
 G4QNucleus::G4QNucleus(G4QContent nucQC, G4LorentzVector p):G4QHadron(nucQC,p), maxClust(0)
 {
+  Tb = new std::vector<G4double>;
 #ifdef debug
   G4cout<<"G4QNucleus::(LV)Construction By QC="<<nucQC<<G4endl;
 #endif
@@ -196,6 +203,9 @@ G4QNucleus::G4QNucleus(G4QContent nucQC, G4LorentzVector p):G4QHadron(nucQC,p), 
 
 G4QNucleus::G4QNucleus(const G4QNucleus& right) : G4QHadron(&right)
 {
+  Tb = new std::vector<G4double>;
+  G4int lTb=right.GetBThickness()->size();
+  if(lTb) for(G4int j=0; j<=lTb; j++) Tb->push_back((*right.GetBThickness())[j]);
   Set4Momentum   (right.Get4Momentum());
   SetQPDG        (right.GetQPDG());
   SetQC          (right.GetQC());
@@ -218,6 +228,9 @@ G4QNucleus::G4QNucleus(const G4QNucleus& right) : G4QHadron(&right)
 
 G4QNucleus::G4QNucleus(G4QNucleus* right)
 {
+  Tb = new std::vector<G4double>;
+  G4int lTb=right->GetBThickness()->size();
+  if(lTb) for(G4int j=0; j<=lTb; j++) Tb->push_back((*right->GetBThickness())[j]);
   Set4Momentum   (right->Get4Momentum());
   SetQPDG        (right->GetQPDG());
   SetQC          (right->GetQC());
@@ -238,7 +251,11 @@ G4QNucleus::G4QNucleus(G4QNucleus* right)
 #endif
 }
 
-G4QNucleus::~G4QNucleus() {}
+G4QNucleus::~G4QNucleus()
+{
+  Tb->clear();
+  delete Tb;
+}
 
 G4double G4QNucleus::freeNuc=0.1;  
 G4double G4QNucleus::freeDib=.05;  
@@ -3105,3 +3122,28 @@ G4double G4QNucleus::CoulBarPenProb(const G4double& CB, const G4double& E,
   if(sR>=1.) return 0.;
   return   1.-sR*sR*sR;
 } // End of "CoulBarPenProb"
+
+//Calculate T(b) with step .1 fm
+void G4QNucleus::ActivateBThickness()
+{ //             ====================
+  static const G4double aT= .0008;          // pred exponent parameter
+  static const G4double sT= .42;            // slope parameter
+  static const G4double pT=-.26;            // power parameter
+  static const G4double db= .1;             // step in b (fm)
+  // @@ make better approximation for light nuclei
+  G4double A = GetA();                      // atomic weight
+  G4double B = aT*A*A;                      // predexponent (no units)
+  G4double D = sT*std::pow(A,pT);           // b^2 slope (fm^-2)
+  G4double C = A*D/pi/std::log(1.+B);       // Norm for plane density (fm^-2)
+  G4double mT= C*B/(1+B);                   // Max (b=0) b-thickness
+  G4double T = mT;                          // Current b-thickness
+		mT/=1000.;                                // Min b-thickness (@@ make 1000 a parameter)
+  G4double b = 0.;
+  while(T>mT)
+  {
+    Tb->push_back(T);                       // Fill the thickness vector starting with b=0
+    b+=db;                                  // increment impact parameter
+    G4double E=B*std::exp(-D*b*b);          // b-dependent factor
+    T=C*E/(1.+E);                           // T(b) in fm^-2
+  }
+} // End of "ActivateBThickness"

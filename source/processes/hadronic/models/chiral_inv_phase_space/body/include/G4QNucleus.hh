@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNucleus.hh,v 1.29 2006-06-29 20:06:21 gunter Exp $
+// $Id: G4QNucleus.hh,v 1.30 2006-10-19 11:52:04 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QNucleus ----------------
@@ -36,6 +36,7 @@
 #define G4QNucleus_h 1
 
 #include "G4QCandidateVector.hh"
+#include <vector>
 
 class G4QNucleus : public G4QHadron
 {
@@ -71,6 +72,7 @@ public:
   G4QContent GetQCZNS()    const;                   // Get ZNS quark content of Nucleus
   G4int      GetNDefMesonC();                       // max#of predefined meson candidates
   G4int      GetNDefBaryonC();                      // max#of predefined baryon candidates
+  std::vector<G4double>* GetBThickness() const;     // T(b) function, step .1 fm
 
   // Specific Modifiers
   G4bool     EvaporateBaryon(G4QHadron* h1,G4QHadron* h2); // Evaporate Baryon from Nucleus
@@ -78,6 +80,7 @@ public:
   G4int      HadrToNucPDG(G4int hPDG);              // Converts hadronic PDGCode to nuclear
   G4int      NucToHadrPDG(G4int nPDG);              // Converts nuclear PDGCode to hadronic
   G4bool     Split2Baryons();                       // Is it possible to split two baryons?
+  void       ActivateBThickness();                  // Calculate T(b) for nucleus (db=.1fm)
   void       InitByPDG(G4int newPDG);               // Init existing nucleus by new PDG
   void       InitByQC(G4QContent newQC);            // Init existing nucleus by new QCont
   void       IncProbability(G4int bn);              // Add one cluster to probability
@@ -130,6 +133,7 @@ private:
   G4int dS;                     // S of the dense region of the nucleus
   G4int maxClust;               // Baryon Number of the last calculated cluster
   G4double probVect[256];       // Cluster probability ("a#of issues" can be real) Vector
+  std::vector<G4double>* Tb;    // T(b) function with step .1 fm (@@ make .1 a parameter)
 };
 
 std::ostream& operator<<(std::ostream& lhs, G4QNucleus& rhs);
@@ -138,6 +142,7 @@ std::ostream& operator<<(std::ostream& lhs, const G4QNucleus& rhs);
 inline G4bool G4QNucleus::operator==(const G4QNucleus &right) const  {return this==&right;}
 inline G4bool G4QNucleus::operator!=(const G4QNucleus &right) const  {return this!=&right;}
 
+inline std::vector<G4double>* G4QNucleus::GetBThickness()const {return Tb;}
 inline G4int    G4QNucleus::GetPDG()const {return 90000000+1000*(1000*S+Z)+N;}
 inline G4int    G4QNucleus::GetZ()  const {return Z;}
 inline G4int    G4QNucleus::GetN()  const {return N;}
