@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trap.cc,v 1.41 2006-06-29 18:45:41 gunter Exp $
+// $Id: G4Trap.cc,v 1.42 2006-10-19 15:33:38 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Trap
@@ -560,6 +560,7 @@ void G4Trap::SetAllParameters ( G4double pDz,
                                 G4double pAlp2 )
 {
   fCubicVolume= 0.;
+  fSurfaceArea= 0.;
   fpPolyhedron = 0;
   if ( pDz>0 && pDy1>0 && pDx1>0 && pDx2>0 && pDy2>0 && pDx3>0 && pDx4>0 )
   {

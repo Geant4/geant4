@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trap.hh,v 1.16 2006-06-29 18:44:49 gunter Exp $
+// $Id: G4Trap.hh,v 1.17 2006-10-19 15:33:37 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -172,7 +172,6 @@ class G4Trap : public G4CSGSolid
 
     inline TrapSidePlane GetSidePlane( G4int n ) const;
     inline G4ThreeVector GetSymAxis() const;
-    inline G4double GetCubicVolume();
 
   // Modifiers
 
@@ -190,6 +189,9 @@ class G4Trap : public G4CSGSolid
                                 
   // Methods for solid
     
+    inline G4double GetCubicVolume();
+    inline G4double GetSurfaceArea();
+
     void ComputeDimensions(       G4VPVParameterisation* p,
                             const G4int n,
                             const G4VPhysicalVolume* pRep );

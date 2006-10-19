@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Box.icc,v 1.5 2006-06-29 18:44:07 gunter Exp $
+// $Id: G4Box.icc,v 1.6 2006-10-19 15:33:37 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -59,4 +59,12 @@ G4double G4Box::GetCubicVolume()
   if(fCubicVolume != 0.) {;}
   else   { fCubicVolume = 8*fDx*fDy*fDz; }
   return fCubicVolume;
+}
+
+inline
+G4double G4Box::GetSurfaceArea()
+{
+  if(fSurfaceArea != 0.) {;}
+  else   { fSurfaceArea = 8*(fDx*fDy+fDx*fDz+fDy*fDz); }
+  return fSurfaceArea;
 }
