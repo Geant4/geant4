@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: EventAction.cc,v 1.4 2006-06-29 16:36:59 gunter Exp $
+// $Id: EventAction.cc,v 1.5 2006-10-19 17:24:13 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 

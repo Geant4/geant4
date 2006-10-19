@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysListEmPenelope.cc,v 1.2 2006-06-29 16:37:13 gunter Exp $
+// $Id: PhysListEmPenelope.cc,v 1.3 2006-10-19 17:24:13 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -104,8 +104,8 @@ void PhysListEmPenelope::ConstructProcess()
       pmanager->AddProcess(new G4MuPairProduction,   -1, 4, 4);       
      
     } else if( particleName == "alpha" || particleName == "GenericIon" ) { 
-      pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
-      pmanager->AddProcess(new G4ionIonisation,      -1, 2,2);
+      pmanager->AddProcess(new G4MultipleScattering, -1, 1, 1);
+      pmanager->AddProcess(new G4ionIonisation,      -1, 2, 2);
      
     } else if ((!particle->IsShortLived()) &&
 	       (particle->GetPDGCharge() != 0.0) && 

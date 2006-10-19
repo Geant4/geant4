@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysListEmLivermore.cc,v 1.3 2006-10-02 13:45:40 vnivanch Exp $
+// $Id: PhysListEmLivermore.cc,v 1.4 2006-10-19 17:24:13 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -52,7 +52,6 @@
 #include "G4MuPairProduction.hh"
 
 #include "G4hLowEnergyIonisation.hh"
-#include "G4CoulombScattering.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -86,10 +85,7 @@ void PhysListEmLivermore::ConstructProcess()
       
     } else if (particleName == "e-") {
       //electron
-      G4CoulombScattering* scat = new G4CoulombScattering("eCoulombScat");
-      scat->SetThetaMin(0.0);
-      pmanager->AddDiscreteProcess(scat);
-      //      pmanager->AddProcess(new G4MultipleScattering, -1, 1, 1);
+      pmanager->AddProcess(new G4MultipleScattering,      -1, 1, 1);
       pmanager->AddProcess(new G4LowEnergyIonisation,     -1, 2, 2);
       pmanager->AddProcess(new G4LowEnergyBremsstrahlung, -1,-1, 3);
 	    
