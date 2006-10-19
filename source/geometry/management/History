@@ -1,4 +1,4 @@
-$Id: History,v 1.105 2006-10-18 15:08:24 gcosmo Exp $
+$Id: History,v 1.106 2006-10-19 15:43:50 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+October 19, 2006  G.Cosmo                  geommng-V08-01-04
+- Modified interface for GetSurfaceArea() to be similar to the one for
+  the computation of the geometrical volume, and allow the caching
+  mechanism.
 
 October 18, 2006  G.Cosmo                  geommng-V08-01-03
 - Added GetSurfaceArea() method to G4VSolid for approximated computation
