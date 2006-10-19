@@ -1,4 +1,4 @@
-$Id: History,v 1.253 2006-10-14 11:12:16 pia Exp $
+$Id: History,v 1.254 2006-10-19 11:19:50 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+19.10.2006   MGP, tag emlowen-V08-01-02
+             Bug fixes in G4FluoData.cc
 
 14.10.2006   MGP, tag emlowen-V08-01-01
              Developments and fixes for atomic deexcitation 
