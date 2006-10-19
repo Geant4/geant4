@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSolid.hh,v 1.24 2006-10-18 15:06:12 gcosmo Exp $
+// $Id: G4VSolid.hh,v 1.25 2006-10-19 15:43:40 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -175,10 +175,8 @@ class G4VSolid
       // or anyway to cache the computed value.
       // Note: the computed value is NOT cached.
 
-    virtual G4double GetSurfaceArea(G4int n=1000000, G4double ell=-1.);
+    virtual G4double GetSurfaceArea();
       // Return an estimation of the solid surface area in internal units.
-      // The number of generated points 'n' can be specified, as well as
-      // the accuracy 'ell' of the calculation.
       // This method may be overloaded by derived classes to compute the
       // exact geometrical quantity for solids where this is possible,
       // or anyway to cache the computed value.

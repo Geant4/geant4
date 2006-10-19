@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSolid.cc,v 1.30 2006-10-18 15:06:12 gcosmo Exp $
+// $Id: G4VSolid.cc,v 1.31 2006-10-19 15:43:40 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4VSolid
@@ -525,9 +525,11 @@ G4double G4VSolid::EstimateCubicVolume(G4int nStat, G4double epsilon) const
 // or anyway to cache the computed value.
 // This implementation does NOT cache the computed value.
 
-G4double G4VSolid::GetSurfaceArea(G4int n, G4double ell)
+G4double G4VSolid::GetSurfaceArea()
 {
-  return EstimateSurfaceArea(n,ell);
+  G4double stat = 1000000;
+  G4double ell = -1.;
+  return EstimateSurfaceArea(stat,ell);
 }
 
 ////////////////////////////////////////////////////////////////
