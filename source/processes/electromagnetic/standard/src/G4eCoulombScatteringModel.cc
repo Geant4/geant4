@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.cc,v 1.8 2006-08-10 11:57:52 vnivanch Exp $
+// $Id: G4eCoulombScatteringModel.cc,v 1.9 2006-10-19 09:44:27 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -41,6 +41,7 @@
 // 01.08.06 V.Ivanchenko extend upper limit of table to TeV and review the
 //          logic of building - only elements from G4ElementTable
 // 08.08.06 V.Ivanchenko build internal table in ekin scale, introduce faclim
+// 19.08.06 V.Ivanchenko add inline function ScreeningParameter 
 //
 // Class Description:
 //
@@ -64,14 +65,14 @@ G4eCoulombScatteringModel::G4eCoulombScatteringModel(
   G4double thetaMin, G4double thetaMax, G4bool build, 
   G4double tlim, const G4String& nam)
   : G4VEmModel(nam),
-    theCrossSectionTable(0),
     cosThetaMin(cos(thetaMin)),
     cosThetaMax(cos(thetaMax)),
+    q2Limit(tlim),
+    theCrossSectionTable(0),
     lowKEnergy(keV),
     highKEnergy(TeV),
-    q2Limit(tlim),
     alpha2(fine_structure_const*fine_structure_const),
-    faclim(10.0),
+    faclim(100.0),
     nbins(12),
     nmax(100),
     buildTable(build),
@@ -146,12 +147,11 @@ G4double G4eCoulombScatteringModel::CalculateCrossSectionPerAtom(
   G4double costm = std::max(cosThetaMax, 1.0 - 0.5*q2Limit/mom2);
   if(costm < cosThetaMin) {
     G4double q        = p->GetPDGCharge()/eplus;
-    G4double Z2       = Z*Z*q*q;
+    G4double q2       = q*q;
     G4double invbeta2 = 1.0 +  m*m/mom2;
-    G4double fac = std::min(faclim, 1.13 + 3.76*invbeta2*Z2*alpha2);
-    G4double A = pow(Z,0.6666667)*a0*fac/mom2;
+    G4double A = ScreeningParameter(Z, q2, mom2, invbeta2);
     G4double a = 2.0*A + 1.0;
-    cross = coeff*Z2*invbeta2*(cosThetaMin - costm)/
+    cross = coeff*Z*(Z + 1.0)*q2*invbeta2*(cosThetaMin - costm)/
       ((a - cosThetaMin)*(a - costm)*mom2);
     /*
     if(Z == 13 || Z == 79) {
@@ -191,30 +191,18 @@ std::vector<G4DynamicParticle*>* G4eCoulombScatteringModel::SampleSecondaries(
   const G4Element* elm = SelectRandomAtom(aMaterial, p, kinEnergy);
   G4double Z  = elm->GetZ();
   G4double q  = p->GetPDGCharge()/eplus;
-  G4double Z2 = Z*Z*q*q;
+  G4double q2 = q*q;
 
   G4double invbeta2  = 1.0 + mass*mass/mom2;
-  G4double fac = std::min(faclim, 1.13 + 3.76*invbeta2*Z2*alpha2);
-  G4double a = 2.*pow(Z,0.666666667)*a0*fac/mom2;
+  G4double a = 2.*ScreeningParameter(Z, q2, mom2, invbeta2);
+
   G4double costm = std::max(cosThetaMax, 1.0 - 0.5*q2Limit/mom2);
-  if(costm > cosThetaMin) return 0; 
-  /*
-  G4double cost = a - (a - costm)/
-    (1.0 + G4UniformRand()*(cosThetaMin - costm)/(a - cosThetaMin));
-  if(std::abs(cost) > 1.) {
-    G4cout << "G4eCoulombScatteringModel::SampleSecondaries WARNING cost= " 
-	   << cost << G4endl;
-    if(cost < -1.) cost = -1.0;
-    else           cost =  1.0;
-  }
-  G4double sint = sqrt((1.0 + cost)*(1.0 - cost));
-  */
-  G4double c1  = 1.0 - costm;
-  G4double c2  = 1.0 - cosThetaMin;
+  if(costm >= cosThetaMin) return 0; 
+
   G4double x   = G4UniformRand();
-  G4double y   = (a + c2)/(c1 - c2);
-  G4double st2 = 0.5*(c1*y - a*x)/(y + x); 
-  if(st2 < 0.0) {
+  G4double y   = (a + 1.0 - cosThetaMin)/(cosThetaMin - costm);
+  G4double st2 = 0.5*(y*(1.0 - costm) - a*x)/(y + x); 
+  if(st2 < 0.0 || st2 > 1.0) {
     G4cout << "G4eCoulombScatteringModel::SampleSecondaries WARNING st2= " 
 	   << st2 << G4endl;
     st2 = 0.0;

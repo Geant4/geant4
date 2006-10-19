@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CoulombScattering.cc,v 1.6 2006-08-10 08:43:56 vnivanch Exp $
+// $Id: G4CoulombScattering.cc,v 1.7 2006-10-19 09:44:27 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -81,6 +81,7 @@ void G4CoulombScattering::InitialiseProcess(const G4ParticleDefinition*)
     //    SetBuildTableFlag(buildTableFlag);
     SetBuildTableFlag(false);
     SetStartFromNullFlag(false);
+    SetIntegral(true);
     SetLambdaFactor(0.8);
     SetSecondaryParticle(0);
     G4double emin = MinKinEnergy();
