@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.6 2006-10-20 14:34:31 vnivanch Exp $
+# $Id: GNUmakefile.root,v 1.1 2006-10-20 14:34:31 vnivanch Exp $
 # ----------------------------------------------------------------
 # Makes test program in environment variable G4TARGET.
 # ----------------------------------------------------------------
@@ -15,5 +15,7 @@ G4EXEC_BUILD = true
 
 include $(G4INSTALL)/config/architecture.gmk
 
+CPPFLAGS += $(shell $(ROOTSYS)/bin/root-config --cflags)
+LDFLAGS  += $(shell $(ROOTSYS)/bin/root-config --glibs)
 
 include $(G4INSTALL)/config/binmake.gmk

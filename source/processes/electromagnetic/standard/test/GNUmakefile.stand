@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.6 2006-10-20 14:34:31 vnivanch Exp $
+# $Id: GNUmakefile.stand,v 1.1 2006-10-20 14:34:31 vnivanch Exp $
 # ----------------------------------------------------------------
 # Makes test program in environment variable G4TARGET.
 # ----------------------------------------------------------------
