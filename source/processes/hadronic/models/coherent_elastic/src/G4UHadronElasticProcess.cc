@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UHadronElasticProcess.cc,v 1.25 2006-10-20 15:22:24 vnivanch Exp $
+// $Id: G4UHadronElasticProcess.cc,v 1.26 2006-10-20 16:43:44 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Geant4 Hadron Elastic Scattering Process -- header file
@@ -91,6 +91,7 @@ BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
       G4cout << G4endl;
       G4cout << "G4UHadronElasticProcess for " 
 	     << theParticle->GetParticleName()
+             << " PDGcode= " << pPDG
 	     << "  Elow(MeV)= " << thEnergy/MeV 
 	     << "  Elowest(eV)= " << lowestEnergy/eV 
 	     << G4endl;
@@ -114,8 +115,6 @@ G4double G4UHadronElasticProcess::GetMeanFreePath(const G4Track& track,
   const G4double* theAtomNumDensityVector = material->GetVecNbOfAtomsPerVolume();
   G4double temp = material->GetTemperature();
   G4int nelm   = material->GetNumberOfElements();
-  xsecH[0] = 0.0;
-  xsecH[1] = 0.0;
   if(verboseLevel>1) 
     G4cout << "G4UHadronElasticProcess get mfp for " 
 	   << theParticle->GetParticleName() 
@@ -179,7 +178,9 @@ G4double G4UHadronElasticProcess::GetMicroscopicCrossSection(
       G4int N = 0;
       if(iz == 2) N = 2;
       if(verboseLevel>1) 
-	G4cout << "G4UHadronElasticProcess compute CHIPS CS for Z= 2, N=2 " 
+	G4cout << "G4UHadronElasticProcess compute CHIPS CS for Z= " << iz
+	       << " N= " << N 
+               << " pdg= " << pPDG
 	       << G4endl; 
       x = qCManager->GetCrossSection(false,momentum,iz,N,pPDG);
     }
@@ -192,7 +193,7 @@ G4double G4UHadronElasticProcess::GetMicroscopicCrossSection(
   }
   // NaN finder
   if(!(x < 0.0 || x >= 0.0)) {
-    if (verboseLevel > -1) {
+    if (verboseLevel > 1) {
       G4cout << "G4UHadronElasticProcess:WARNING: Z= " << iz  
 	     << " pdg= " <<  pPDG
 	     << " mom(GeV)= " << dp->GetTotalMomentum()/GeV 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronElastic.cc,v 1.25 2006-10-20 15:22:24 vnivanch Exp $
+// $Id: G4HadronElastic.cc,v 1.26 2006-10-20 16:43:44 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -204,7 +204,7 @@ G4HadFinalState* G4HadronElastic::ApplyYourself(
 
   // NaN finder
   if(!(t < 0.0 || t >= 0.0)) {
-    if (verboseLevel > -1) {
+    if (verboseLevel > 0) {
       G4cout << "G4HadronElastic:WARNING: Z= " << Z << " N= " 
 	     << N << " pdg= " <<  projPDG
 	     << " mom(GeV)= " << plab/GeV 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElasticHadrNucleusHE.cc,v 1.35 2006-10-20 13:57:18 vnivanch Exp $
+// $Id: G4ElasticHadrNucleusHE.cc,v 1.36 2006-10-20 16:43:44 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //G4ElasticHadrNucleusHE.cc
 //
@@ -154,7 +154,7 @@
 //          iQ2[ii] = ii<Nstep/2 ? iQ2[ii-1]+dQ2 : iQ2[ii-1]+2*dQ2;
 
      return maxQ2;
-   }
+   } 
 //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
    G4double G4ElasticHadrNucleusHE::SampleT(
                           const G4ParticleDefinition * p,
