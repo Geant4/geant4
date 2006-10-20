@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: SurfaceChecker.cc,v 1.2 2006-06-29 18:54:16 gunter Exp $
+// $Id: SurfaceChecker.cc,v 1.3 2006-10-20 14:43:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -54,7 +54,7 @@
 int main(int argc,char** argv) {
 
   // choose the Random engine
-  HepRandom::setTheEngine(new RanecuEngine);
+  CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
 
   //my Verbose output class
   G4VSteppingVerbose::SetInstance(new SCSteppingVerbose);

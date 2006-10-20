@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: SCPrimaryGeneratorAction.cc,v 1.6 2005-12-19 14:00:46 link Exp $
+// $Id: SCPrimaryGeneratorAction.cc,v 1.7 2006-10-20 14:43:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -156,7 +156,7 @@ G4ThreeVector SCPrimaryGeneratorAction::GetRandomPosition()
   return retval;
 }
 
-G4ThreeVector SCPrimaryGeneratorAction::GetSurfacePoint(G4double &u, G4double &v)
+G4ThreeVector SCPrimaryGeneratorAction::GetSurfacePoint(G4double &, G4double &)
 {
 
 

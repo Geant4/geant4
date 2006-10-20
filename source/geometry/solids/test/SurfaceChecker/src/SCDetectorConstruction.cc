@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: SCDetectorConstruction.cc,v 1.6 2005-12-19 14:00:44 link Exp $
+// $Id: SCDetectorConstruction.cc,v 1.7 2006-10-20 14:43:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -577,8 +577,8 @@ else if (val == "Q6Shell")
 
   G4LogicalVolume* aVolume_log = new G4LogicalVolume(aVolume, Air, "aVolume_L", 0,0,0);
 
-  G4VPhysicalVolume * aVolume_phys1
-    = new G4PVPlacement(0,
+  // G4VPhysicalVolume * aVolume_phys1 =
+      new G4PVPlacement(0,
 			G4ThreeVector(0*cm, 0*cm, 0*cm),
                         aVolume_log, 
 			val, 
