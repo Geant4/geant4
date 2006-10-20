@@ -201,7 +201,6 @@ class G4ParticleChange;
             -G4VProcess::theNumberOfInteractionLengthLeft;
     }
     
-    G4double GetDistanceToBoundary(const G4Track & aT);
 
     void FillTotalResult(G4HadFinalState * aR, const G4Track & aT);
     
