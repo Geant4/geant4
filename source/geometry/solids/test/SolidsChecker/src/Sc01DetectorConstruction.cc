@@ -1,26 +1,29 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: Sc01DetectorConstruction.cc,v 1.11 2006-03-24 09:37:33 grichine Exp $
+// $Id: Sc01DetectorConstruction.cc,v 1.12 2006-10-20 14:51:41 gcosmo Exp $
 // 
 //  GEANT 4 class header file 
 //
@@ -144,14 +147,14 @@ Sc01DetectorConstruction::SelectDetector( const G4String& val )
     aVolume = new G4Cons ( "aCone", 2*cm, 6*cm, 8*cm, 14*cm,
                            10*cm, 10*deg, 300*deg ); 
   //  10*cm, 10*deg, 300*deg ); 
-			   //  0., pi); 
+                           //  0., pi); 
   }
   else if (val == "manyCons")
   {        
     aVolume = new G4Cons ( "aCone", 2*cm, 6*cm, 8*cm, 14*cm,
                            10*cm, 10*deg, 300*deg ); 
   //  10*cm, 10*deg, 300*deg ); 
-			   //  0., pi);
+                           //  0., pi);
 
  
   }
@@ -160,7 +163,7 @@ Sc01DetectorConstruction::SelectDetector( const G4String& val )
     //  aVolume = new G4Tubs ( "aTube", 5*cm, 10*cm, 7*cm, 70*deg, 100*deg);
     //    aVolume = new G4Tubs ( "aTube", 5*cm, 10*cm, 7*cm, 10*deg, 300*deg);
     aVolume = new G4Tubs ( "aTube", 0.*mm, 1300*mm, 2700*mm,
-		                    0.*deg, 360*deg );
+                                    0.*deg, 360*deg );
   }
   else if (val == "Hype")
   {
@@ -173,8 +176,8 @@ Sc01DetectorConstruction::SelectDetector( const G4String& val )
     G4LogicalVolume* aVolume_log  = new G4LogicalVolume(aVolume, Water1, "aVolume_L", 0,0,0);
     G4RotationMatrix* rot = new G4RotationMatrix();
     rot->rotateX(-90*degree);
-    G4VPhysicalVolume * aVolume_phys1
-    = new G4PVPlacement(rot,G4ThreeVector(0*cm, 0*cm, 0*cm),val, 
+    // G4VPhysicalVolume * aVolume_phys1 =
+      new G4PVPlacement(rot,G4ThreeVector(0*cm, 0*cm, 0*cm),val, 
                         aVolume_log, PhysicalVolume, false, 0);
   }
   else if (val == "Para")
@@ -239,18 +242,18 @@ Sc01DetectorConstruction::SelectDetector( const G4String& val )
   else if ( val == "TwistedTrap2") 
   {
     aVolume = new G4TwistedTrap("aTwistedTrap2",
-				20*deg,    // twist angle
-				80*cm,         // half z length
-				10*deg,      // direction between end planes
-				40*deg,        // defined by polar and azimutal angles.
-				8*cm,        // half y length at -pDz
-				11*cm,        // half x length at -pDz,-pDy
-				16*cm,        // half x length at -pDz,+pDy
-				8*cm,        // half y length at +pDz
-				11*cm,         // half x length at +pDz,-pDy
-				16*cm,        // half x length at +pDz,+pDy
-				-50*deg        // tilt angle at +pDz
-				) ;
+                                20*deg,    // twist angle
+                                80*cm,         // half z length
+                                10*deg,      // direction between end planes
+                                40*deg,        // defined by polar and azimutal angles.
+                                8*cm,        // half y length at -pDz
+                                11*cm,        // half x length at -pDz,-pDy
+                                16*cm,        // half x length at -pDz,+pDy
+                                8*cm,        // half y length at +pDz
+                                11*cm,         // half x length at +pDz,-pDy
+                                16*cm,        // half x length at +pDz,+pDy
+                                -50*deg        // tilt angle at +pDz
+                                ) ;
   }
 
   else
@@ -271,15 +274,18 @@ Sc01DetectorConstruction::SelectDetector( const G4String& val )
     G4LogicalVolume* lcons2 = new G4LogicalVolume(cons2, Water1,"lcons2",0,0,0);
     G4LogicalVolume* lcons3 = new G4LogicalVolume(cons3, Water1,"lcons3",0,0,0);
 
-    G4VPhysicalVolume * pcons1 = new G4PVPlacement(0,G4ThreeVector(0*cm, 0*cm, 0*cm),
-						   "pcons1",lcons1,PhysicalVolume, false, 0); 
-    G4VPhysicalVolume * pcons2 = new G4PVPlacement(0,G4ThreeVector(0*cm, 0*cm, 0*cm),
-						   "pcons2",lcons2,PhysicalVolume, false, 0); 
-    G4VPhysicalVolume * pcons3 = new G4PVPlacement(0,G4ThreeVector(0*cm, 0*cm, 0*cm),
-						   "pcons3",lcons3,PhysicalVolume, false, 0); 
+    // G4VPhysicalVolume * pcons1 =
+    new G4PVPlacement(0,G4ThreeVector(0*cm, 0*cm, 0*cm),
+                      "pcons1",lcons1,PhysicalVolume, false, 0); 
+    // G4VPhysicalVolume * pcons2 =
+    new G4PVPlacement(0,G4ThreeVector(0*cm, 0*cm, 0*cm),
+                      "pcons2",lcons2,PhysicalVolume, false, 0); 
+    // G4VPhysicalVolume * pcons3 =
+    new G4PVPlacement(0,G4ThreeVector(0*cm, 0*cm, 0*cm),
+                      "pcons3",lcons3,PhysicalVolume, false, 0); 
   }  
   else
-  {    
+  {
     G4Torus* solidFiber =
       new G4Torus("clad",0.,1.*cm,10.*cm,0.*deg,180.*deg);    // external
 
@@ -295,8 +301,8 @@ Sc01DetectorConstruction::SelectDetector( const G4String& val )
   G4VPhysicalVolume * aVolume_phys1 =
   new G4PVPlacement(0,0,logicFiber,"FiberClad",Hall_log,false,0);
 
-  G4VPhysicalVolume * aVolume_phys2 =
-    //  new G4PVPlacement(0,0,logicCore,"FiberCore",logicFiber,false,0);
+  // G4VPhysicalVolume * aVolume_phys2 =
+  // new G4PVPlacement(0,0,logicCore,"FiberCore",logicFiber,false,0);
   new G4PVPlacement(0,0,"FiberCore",logicCore,aVolume_phys1,false,0);
 
   /*
@@ -321,7 +327,7 @@ Sc01DetectorConstruction::SelectDetector( const G4String& val )
   // aVolume_log ->SetVisAttributes(BoxVisAtt);
   // logicTracker->SetVisAttributes(BoxVisAtt);
 
-  G4VisAttributes* ChamberVisAtt = new G4VisAttributes(G4Colour(0.0,1.0,0.0));
+  // G4VisAttributes* ChamberVisAtt = new G4VisAttributes(G4Colour(0.0,1.0,0.0));
   //  aVolume_log->SetVisAttributes(ChamberVisAtt);
 
 //--------- example of User Limits -------------------------------
@@ -447,8 +453,6 @@ G4VPhysicalVolume* Sc01DetectorConstruction::SelectTubeSector()
 
   fHallSize = lab_x;
 
-  G4double dangle = 0.001*degree;
-
   G4cout<<"m = "<<m<<"; degree = "<<degree<<G4endl;
 
   // world volume
@@ -456,7 +460,7 @@ G4VPhysicalVolume* Sc01DetectorConstruction::SelectTubeSector()
   G4Box* lab_S = new G4Box("lab",lab_x,lab_y,lab_z);
 
   G4LogicalVolume*  lab_L = new G4LogicalVolume(lab_S,
-			      Vacuum, "lab", 0, 0, 0);
+                              Vacuum, "lab", 0, 0, 0);
 
   // tube section
 
@@ -467,7 +471,7 @@ G4VPhysicalVolume* Sc01DetectorConstruction::SelectTubeSector()
   G4cout<<"dPhi = "<<dPhi<<G4endl;
 
   G4LogicalVolume* arcSection_L = new G4LogicalVolume(arcSection_S,
-				     Al, "arcSection", 0, 0, 0);
+                                     Al, "arcSection", 0, 0, 0);
 
   for( i = 0; i < sections_; i++)
   {
@@ -485,9 +489,9 @@ G4VPhysicalVolume* Sc01DetectorConstruction::SelectTubeSector()
 
     G4Transform3D transf(rot, G4ThreeVector() );
 
-    G4VPhysicalVolume* arcSection_P = 
+    // G4VPhysicalVolume* arcSection_P = 
     new G4PVPlacement(transf, arcSection_L,
-		      "section", lab_L, false, i, true);
+                      "section", lab_L, false, i, true);
   } 
   G4VPhysicalVolume* lab_P= new G4PVPlacement(0, G4ThreeVector(),
                            lab_L, "lab", 0, false, 0);
