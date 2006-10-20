@@ -155,18 +155,16 @@ G4int SBTVisManager::BuildFakeWorld() const
 	//
 	// These are probably leaks...
 	//
+        G4ModelingParameters::DrawingStyle style = G4ModelingParameters::wf;
 	G4ModelingParameters *model = new G4ModelingParameters
 					    (0,      // No default vis attributes.
-					     G4ModelingParameters::wireframe,
+					     style,  // Wireframe
 					     true,   // Global culling.
 					     true,   // Cull invisible volumes.
 					     false,  // Density culling.
 					     0.,     // Density (not relevant if density culling false).
 					     true,   // Cull daughters of opaque mothers.
-					     24,     // No of sides (not relevant for this operation).
-					     true,   // View geometry.
-					     false,  // View hits - not relevant for physical volume model.
-					     false); // View digis - not relevant for physical volume model.
+					     24);    // No of sides (not relevant for this operation).
 	SBTFakeModel *fakeModel = new SBTFakeModel(model);
 	
 	if (!fpScene) {
