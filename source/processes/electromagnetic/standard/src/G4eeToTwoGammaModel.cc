@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eeToTwoGammaModel.cc,v 1.11 2006-08-29 20:02:04 vnivanch Exp $
+// $Id: G4eeToTwoGammaModel.cc,v 1.12 2006-10-20 08:59:50 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -42,6 +42,7 @@
 // 18-04-05 Compute CrossSectionPerVolume (V.Ivanchenko)
 // 06-02-06 ComputeCrossSectionPerElectron, ComputeCrossSectionPerAtom (mma)
 // 29-06-06 Fix problem for zero energy incident positron (V.Ivanchenko) 
+// 20-10-06 Add theGamma as a member (V.Ivanchenko)
 //
 //
 // Class Description:
@@ -83,6 +84,7 @@ G4eeToTwoGammaModel::G4eeToTwoGammaModel(const G4ParticleDefinition*,
   : G4VEmModel(nam),
   pi_rcl2(pi*classic_electr_radius*classic_electr_radius)
 {
+  theGamma = G4Gamma::Gamma();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -161,9 +163,9 @@ vector<G4DynamicParticle*>* G4eeToTwoGammaModel::SampleSecondaries(
     G4double sint = sqrt((1. - cost)*(1. + cost));
     G4double phi  = twopi * G4UniformRand();
     G4ThreeVector dir (sint*cos(phi), sint*sin(phi), cost);
-    G4DynamicParticle* aGamma1 = new G4DynamicParticle(G4Gamma::Gamma(),
+    G4DynamicParticle* aGamma1 = new G4DynamicParticle(theGamma,
 						       dir, electron_mass_c2);
-    G4DynamicParticle* aGamma2 = new G4DynamicParticle(G4Gamma::Gamma(),
+    G4DynamicParticle* aGamma2 = new G4DynamicParticle(theGamma,
 						       -dir, electron_mass_c2);
     vdp->push_back(aGamma1);
     vdp->push_back(aGamma2);
@@ -220,8 +222,8 @@ vector<G4DynamicParticle*>* G4eeToTwoGammaModel::SampleSecondaries(
 
     G4ThreeVector Phot1Direction (dirx, diry, dirz);
     Phot1Direction.rotateUz(PositDirection);
-    G4DynamicParticle* aGamma1 = new G4DynamicParticle (G4Gamma::Gamma(),
-							Phot1Direction, Phot1Energy);
+    G4DynamicParticle* aGamma1 = 
+      new G4DynamicParticle (theGamma,Phot1Direction, Phot1Energy);
     vdp->push_back(aGamma1);
 
     G4double Phot2Energy =(1.-epsil)*TotalAvailableEnergy;
@@ -230,8 +232,8 @@ vector<G4DynamicParticle*>* G4eeToTwoGammaModel::SampleSecondaries(
     G4ThreeVector Phot2Direction = dir.unit();
 
     // create G4DynamicParticle object for the particle2
-    G4DynamicParticle* aGamma2= new G4DynamicParticle (G4Gamma::Gamma(),
-						       Phot2Direction, Phot2Energy);
+    G4DynamicParticle* aGamma2= 
+      new G4DynamicParticle (theGamma,Phot2Direction, Phot2Energy);
     vdp->push_back(aGamma2);
     /*
       G4cout << "Annihilation in fly: e0= " << PositKinEnergy
