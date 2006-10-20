@@ -27,7 +27,7 @@
 // *                                                                  *
 // ********************************************************************
 //
-// $Id: G4Tet.cc,v 1.9 2006-06-29 18:49:00 gunter Exp $
+// $Id: G4Tet.cc,v 1.10 2006-10-20 13:45:21 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Tet
@@ -55,7 +55,7 @@
 
 #include "G4Tet.hh"
 
-const char G4Tet::CVSVers[]="$Id: G4Tet.cc,v 1.9 2006-06-29 18:49:00 gunter Exp $";
+const char G4Tet::CVSVers[]="$Id: G4Tet.cc,v 1.10 2006-10-20 13:45:21 gcosmo Exp $";
 
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
@@ -90,7 +90,7 @@ G4Tet::G4Tet(const G4String& pName,
                    G4ThreeVector p2,
                    G4ThreeVector p3,
                    G4ThreeVector p4, G4bool *degeneracyFlag)
-  : G4VSolid(pName), fpPolyhedron(0), warningFlag(0)
+  : G4VSolid(pName), fSurfaceArea(0.), fpPolyhedron(0), warningFlag(0)
 {
   // fV<x><y> is vector from vertex <y> to vertex <x>
   //
@@ -171,7 +171,13 @@ G4Tet::G4Tet(const G4String& pName,
 //                            for usage restricted to object persistency.
 //
 G4Tet::G4Tet( __void__& a )
-  : G4VSolid(a), warningFlag(0)
+  : G4VSolid(a), fCubicVolume(0.), fSurfaceArea(0.), fpPolyhedron(0),
+    fAnchor(0,0,0), fP2(0,0,0), fP3(0,0,0), fP4(0,0,0), fMiddle(0,0,0),
+    fNormal123(0,0,0), fNormal142(0,0,0), fNormal134(0,0,0),
+    fNormal234(0,0,0), warningFlag(0),
+    fCdotN123(0.), fCdotN142(0.), fCdotN134(0.), fCdotN234(0.),
+    fXMin(0.), fXMax(0.), fYMin(0.), fYMax(0.), fZMin(0.), fZMax(0.),
+    fDx(0.), fDy(0.), fDz(0.), fTol(0.), fMaxSize(0.)
 {
 }
 
@@ -659,6 +665,26 @@ std::vector<G4ThreeVector> G4Tet::GetVertices() const
   vertices[3] = fP4;
 
   return vertices;
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// GetCubicVolume
+
+G4double G4Tet::GetCubicVolume()
+{
+  return fCubicVolume;
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// GetSurfaceArea
+
+G4double G4Tet::GetSurfaceArea()
+{
+  if(fSurfaceArea != 0.) {;}
+  else   { fSurfaceArea = G4VSolid::GetSurfaceArea(); }
+  return fSurfaceArea;
 }
 
 // Methods for visualisation

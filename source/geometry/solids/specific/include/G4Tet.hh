@@ -28,7 +28,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Tet.hh,v 1.7 2006-06-29 18:47:38 gunter Exp $
+// $Id: G4Tet.hh,v 1.8 2006-10-20 13:45:20 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -90,7 +90,8 @@ class G4Tet : public G4VSolid
 
     G4double DistanceToOut(const G4ThreeVector& p) const;
 
-    G4double GetCubicVolume() {return fCubicVolume;}
+    G4double GetCubicVolume();
+    G4double GetSurfaceArea();
 
     G4GeometryType GetEntityType() const;
 
@@ -114,7 +115,7 @@ class G4Tet : public G4VSolid
       // persistifiable objects.
 
     const char* CVSHeaderVers()
-      { return "$Id: G4Tet.hh,v 1.7 2006-06-29 18:47:38 gunter Exp $"; }
+      { return "$Id: G4Tet.hh,v 1.8 2006-10-20 13:45:20 gcosmo Exp $"; }
     const char* CVSFileVers()
       { return CVSVers; }
     void PrintWarnings(G4bool flag)
@@ -136,6 +137,7 @@ class G4Tet : public G4VSolid
   private:
 
     G4double fCubicVolume;
+    G4double fSurfaceArea;
 
     mutable G4Polyhedron* fpPolyhedron;
 
