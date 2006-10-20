@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BooleanSolid.icc,v 1.3 2006-10-19 15:34:49 gcosmo Exp $
+// $Id: G4BooleanSolid.icc,v 1.4 2006-10-20 14:20:54 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -50,12 +50,14 @@ G4double G4BooleanSolid::GetCubVolEpsilon() const
 inline
 void G4BooleanSolid::SetCubVolStatistics(G4int st)
 {
+  fCubicVolume=0.;
   fStatistics=st;
 }
 
 inline    
 void G4BooleanSolid::SetCubVolEpsilon(G4double ep)
 {
+  fCubicVolume=0.;
   fCubVolEpsilon=ep;
 }
 
@@ -74,12 +76,14 @@ G4double G4BooleanSolid::GetAreaAccuracy() const
 inline
 void G4BooleanSolid::SetAreaStatistics(G4int st)
 {
+  fSurfaceArea=0.;
   fStatistics=st;
 }
 
 inline    
 void G4BooleanSolid::SetAreaAccuracy(G4double ep)
 {
+  fSurfaceArea=0.;
   fAreaAccuracy=ep;
 }
 

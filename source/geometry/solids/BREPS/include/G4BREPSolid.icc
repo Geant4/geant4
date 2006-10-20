@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolid.icc,v 1.8 2006-10-19 15:35:36 gcosmo Exp $
+// $Id: G4BREPSolid.icc,v 1.9 2006-10-20 14:23:19 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -154,11 +154,13 @@ inline G4double G4BREPSolid::GetCubVolEpsilon() const
 
 inline void G4BREPSolid::SetCubVolStatistics(G4int st)
 {
+  fCubicVolume=0.;
   fStatistics=st;
 }
 
 inline void G4BREPSolid::SetCubVolEpsilon(G4double ep)
 {
+  fCubicVolume=0.;
   fCubVolEpsilon=ep;
 }
 
@@ -174,11 +176,13 @@ inline G4double G4BREPSolid::GetAreaAccuracy() const
 
 inline void G4BREPSolid::SetAreaStatistics(G4int st)
 {
+  fSurfaceArea=0.;
   fStatistics=st;
 }
 
 inline void G4BREPSolid::SetAreaAccuracy(G4double ep)
 {
+  fSurfaceArea=0.;
   fAreaAccuracy=ep;
 }
 

@@ -29,7 +29,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VCSGfaceted.cc,v 1.19 2006-10-20 13:45:21 gcosmo Exp $
+// $Id: G4VCSGfaceted.cc,v 1.20 2006-10-20 14:21:36 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -465,6 +465,7 @@ G4double G4VCSGfaceted::GetCubVolEpsilon() const
 //
 void G4VCSGfaceted::SetCubVolStatistics(G4int st)
 {
+  fCubicVolume=0.;
   fStatistics=st;
 }
 
@@ -474,6 +475,7 @@ void G4VCSGfaceted::SetCubVolStatistics(G4int st)
 //
 void G4VCSGfaceted::SetCubVolEpsilon(G4double ep)
 {
+  fCubicVolume=0.;
   fCubVolEpsilon=ep;
 }
 
@@ -501,6 +503,7 @@ G4double G4VCSGfaceted::GetAreaAccuracy() const
 //
 void G4VCSGfaceted::SetAreaStatistics(G4int st)
 {
+  fSurfaceArea=0.;
   fStatistics=st;
 }
 
@@ -510,6 +513,7 @@ void G4VCSGfaceted::SetAreaStatistics(G4int st)
 //
 void G4VCSGfaceted::SetAreaAccuracy(G4double ep)
 {
+  fSurfaceArea=0.;
   fAreaAccuracy=ep;
 }
 
