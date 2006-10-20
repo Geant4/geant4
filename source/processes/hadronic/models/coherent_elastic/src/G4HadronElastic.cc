@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronElastic.cc,v 1.24 2006-08-10 15:59:38 vnivanch Exp $
+// $Id: G4HadronElastic.cc,v 1.25 2006-10-20 15:22:24 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -110,14 +110,19 @@ G4HadFinalState* G4HadronElastic::ApplyYourself(
 		 const G4HadProjectile& aTrack, G4Nucleus& targetNucleus)
 {
   theParticleChange.Clear();
+
   const G4HadProjectile* aParticle = &aTrack;
+  G4double ekin = aParticle->GetKineticEnergy();
+  if(ekin == 0.0) {
+    theParticleChange.SetEnergyChange(ekin);
+    theParticleChange.SetMomentumChange(aTrack.Get4Momentum().vect().unit());
+    return &theParticleChange;
+  }
+
   G4double aTarget = targetNucleus.GetN();
   G4double zTarget = targetNucleus.GetZ();
 
-  // Elastic scattering off Hydrogen
-
   G4double plab = aParticle->GetTotalMomentum();
-  G4double ekin = aParticle->GetKineticEnergy();
   if (verboseLevel >1) 
     G4cout << "G4HadronElastic::DoIt: Incident particle plab=" 
 	   << plab/GeV << " GeV/c " 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UHadronElasticProcess.cc,v 1.24 2006-09-26 11:38:41 vnivanch Exp $
+// $Id: G4UHadronElasticProcess.cc,v 1.25 2006-10-20 15:22:24 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Geant4 Hadron Elastic Scattering Process -- header file
@@ -35,6 +35,7 @@
 // 07.06.06 V.Ivanchenko fix problem of rotation of final state
 // 25.07.06 V.Ivanchenko add 19 MeV low energy for CHIPS
 // 26.09.06 V.Ivanchenko add lowestEnergy
+// 20.10.06 V.Ivanchenko initialise lowestEnergy=0 for neitrals, eV for charged
 //
 //
 
@@ -53,7 +54,7 @@
 #include "G4HadronElastic.hh"
  
 G4UHadronElasticProcess::G4UHadronElasticProcess(const G4String& pName, G4double elow)
-  : G4HadronicProcess(pName), thEnergy(elow), lowestEnergy(1.e-6*eV), first(true)
+  : G4HadronicProcess(pName), thEnergy(elow), lowestEnergy(0.0), first(true)
 {
   AddDataSet(new G4HadronElasticDataSet);
   theProton = G4Proton::Proton();
@@ -81,6 +82,9 @@ BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
     pPDG = theParticle->GetPDGEncoding();
 
     store = G4HadronicProcess::GetCrossSectionDataStore();
+
+    // defined lowest threshold for the projectile
+    if(theParticle->GetPDGCharge() != 0.0) lowestEnergy = eV;
      
     if(verboseLevel>1 || 
        (verboseLevel==1 && theParticle == theNeutron)) {
@@ -151,36 +155,33 @@ G4double G4UHadronElasticProcess::GetMicroscopicCrossSection(
     G4IsotopeVector* isv = elm->GetIsotopeVector(); 
     G4int ni = 0;
     if(isv) ni = isv->size();
-    if(iz == 1) {
-      if(ni > 0) {
-	G4double* ab = elm->GetRelativeAbundanceVector();
-	x = 0.0;
-	for(G4int j=0; j<ni; j++) {
-	  G4int N = elm->GetIsotope(j)->GetN() - 1;
-          if(N > 1) N = 1;
-	  if(verboseLevel>1) 
-	    G4cout << "G4UHadronElasticProcess compute CHIPS CS for Z= 1, N= " 
-		   << N << " pdg= " << pPDG 
-		   << " mom(GeV)= " << momentum/GeV 
-		   << "  " << qCManager << G4endl; 
-	  G4double y = ab[j]*
-	    qCManager->GetCrossSection(false,momentum,1,N,pPDG);
-	  xsecH[N] += y;
-	  x += y;
+    //    if(iz == 1) {
+    if(ni > 0) {
+      G4double* ab = elm->GetRelativeAbundanceVector();
+      x = 0.0;
+      for(G4int j=0; j<ni; j++) {
+	G4int N = elm->GetIsotope(j)->GetN() - iz;
+	if(iz == 1) {
+	  if(N > 1) N = 1;
+	} else {
+	  N = 2;
 	}
-      } else {
 	if(verboseLevel>1) 
-	  G4cout << "G4UHadronElasticProcess compute CHIPS CS for Z= 1, N= 0" 
-		 << " pdg= " << pPDG 
-		 << " mom(GeV)= " << momentum/GeV << "  " << qCManager << G4endl; 
-	x = qCManager->GetCrossSection(false,momentum,1,0,pPDG);
-	xsecH[0] = x;
+	  G4cout << "G4UHadronElasticProcess compute CHIPS CS for Z= " << iz
+		 << " N= "  << N << " pdg= " << pPDG 
+		 << " mom(GeV)= " << momentum/GeV 
+		 << "  " << qCManager << G4endl; 
+	G4double y = ab[j]*qCManager->GetCrossSection(false,momentum,iz,N,pPDG);
+	x += y;
+	xsecH[j] = x;
       }
     } else {
+      G4int N = 0;
+      if(iz == 2) N = 2;
       if(verboseLevel>1) 
 	G4cout << "G4UHadronElasticProcess compute CHIPS CS for Z= 2, N=2 " 
 	       << G4endl; 
-      x = qCManager->GetCrossSection(false,momentum,2,2,pPDG);
+      x = qCManager->GetCrossSection(false,momentum,iz,N,pPDG);
     }
   } else {
     if(verboseLevel>1) 
@@ -245,25 +246,27 @@ G4VParticleChange* G4UHadronElasticProcess::PostStepDoIt(
   G4IsotopeVector* isv = elm->GetIsotopeVector(); 
   G4int ni = 0;
   if(isv) ni = isv->size();
-  if(ni == 1) { 
+  if(ni <= 1) { 
     A = G4double(elm->GetIsotope(0)->GetN());
   } else if(ni > 1) {
 
-    // Special treatment of hydrogen
-    if(iz == 1 && (theParticle == theProton || theParticle == theNeutron)) {
-      A = 1.;
-      if(G4UniformRand()*(xsecH[0] + xsec[1]) > xsec[0]) A = 2.;
+    G4int j = -1;
+    ni--;
+    // Special treatment of hydrogen and helium for CHIPS
+    if(iz <= 2 && (theParticle == theProton || theParticle == theNeutron)) {
+      G4double x = G4UniformRand()*xsecH[ni];
+      do {j++;} while (x > xsecH[j] && j < ni);
+
+      // Abandance vector
     } else {
       G4double* ab = elm->GetRelativeAbundanceVector();
       G4double y = G4UniformRand();
-      G4int j = -1;
-      ni--;
       do {
 	j++;
 	y -= ab[j];
       } while (y > 0.0 && j < ni);
-      A = G4double(elm->GetIsotope(j)->GetN());
     }
+    A = G4double(elm->GetIsotope(j)->GetN());
   }
   G4HadronicInteraction* hadi = 
     ChooseHadronicInteraction( kineticEnergy, material, elm);

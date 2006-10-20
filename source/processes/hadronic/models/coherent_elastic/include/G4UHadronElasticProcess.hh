@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UHadronElasticProcess.hh,v 1.8 2006-09-26 11:38:41 vnivanch Exp $
+// $Id: G4UHadronElasticProcess.hh,v 1.9 2006-10-20 15:22:24 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Geant4 Hadron Elastic Scattering Process -- header file
@@ -87,7 +87,7 @@ private:
   G4Nucleus                targetNucleus;
 
   G4double        xsec[40];
-  G4double        xsecH[2];
+  G4double        xsecH[4];
   G4double        cross;
   G4double        thEnergy;
   G4double        lowestEnergy;
