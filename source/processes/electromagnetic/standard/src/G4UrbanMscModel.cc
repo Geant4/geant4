@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel.cc,v 1.17 2006-10-20 12:01:11 urban Exp $
+// $Id: G4UrbanMscModel.cc,v 1.18 2006-10-20 16:32:28 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -105,6 +105,7 @@
 //          function ComputeTheta0,
 //          single scattering modified allowing not small
 //          angles as well (L.Urban)
+//          PostStep ComputeSafety(pos) method is used
 //
 
 // Class Description:
@@ -802,11 +803,14 @@ std::vector<G4DynamicParticle*>* G4UrbanMscModel::SampleSecondaries(
         {
           //  ******* we do not have track info at this level ***********
           //  ******* so navigator is called at boundary too ************
+	  /*
           navigator->LocateGlobalPointWithinVolume(Position);
           const G4double cstep = safety ;
           G4double newsafety = safety;
           phi = navigator->ComputeStep(Position,latDirection,
                                        cstep,newsafety);
+	  */
+          G4double newsafety = navigator->ComputeSafety(Position);
           if(r < newsafety)
             fac = 1.;
           else

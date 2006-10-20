@@ -1,4 +1,4 @@
-$Id: History,v 1.253 2006-10-20 14:32:57 vnivanch Exp $
+$Id: History,v 1.254 2006-10-20 16:32:28 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -29,6 +29,7 @@ committal in the CVS repository !
   skin <=0, and there are ~skin small steps if skin >0
 - no z sampling in ComputeGeomPathLength by default
 - correction in the single scattering part, allowing not only small angles now
+- PostStep ComputeSafety(pos) is used
 
 16 Oct 06: V.Ivanchenko (emstand-V08-01-07)
 - Add extra protection to G4eplusAnnihilation52 
