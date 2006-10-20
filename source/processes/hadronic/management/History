@@ -14,6 +14,11 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+20 Oct 2006 Dennis Wright (hadr-man-V08-01-00)
+----------------------------------------------
+- G4HadronicProcess.hh, .cc:
+       remove unused method GetDistanceToBoundary()
+
 13 Mar 2006 Dennis Wright (hadr-man-V08-00-03)
 ----------------------------------------------
 - G4HadronicProcess::ChooseAandZ() : throw fatal exception if
