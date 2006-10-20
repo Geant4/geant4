@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel.hh,v 1.9 2006-10-16 13:10:11 urban Exp $
+// $Id: G4UrbanMscModel.hh,v 1.10 2006-10-20 12:01:11 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -67,6 +67,10 @@
 //          new data members tgeom,tnow,skin,skindepth,Zeff,geomlimit
 //          G4double GeomLimit(const G4Track& track) changed to
 //              void GeomLimit(const G4Track& track) (L.Urban)
+// 20-10-06 parameter theta0 now computed in the (public)
+//          function ComputeTheta0,
+//          single scattering modified allowing not small
+//          angles as well (L.Urban)
 //
 //
 // Class Description:
@@ -127,6 +131,9 @@ public:
   virtual G4double ComputeGeomPathLength(G4double truePathLength);
 
   virtual G4double ComputeTrueStepLength(G4double geomStepLength);
+
+  G4double ComputeTheta0(G4double truePathLength,
+                         G4double KineticEnergy);
 
   void SetLateralDisplasmentFlag(G4bool val);
 

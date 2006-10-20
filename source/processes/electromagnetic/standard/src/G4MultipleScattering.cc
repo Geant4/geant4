@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering.cc,v 1.54 2006-10-16 13:10:11 urban Exp $
+// $Id: G4MultipleScattering.cc,v 1.55 2006-10-20 12:01:11 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -104,6 +104,9 @@
 // 13-10-06 data member factail removed, new data member skin
 //          together with set function, data member tkinlimit
 //          changed to lambdalimit (L.Urban)
+// 20-10-06 default value of skin = 0 (no single scattering),
+//          single scattering for skin > 0,
+//          there is no z sampling by default  (L.Urban)
 //
 // -----------------------------------------------------------------------------
 //
@@ -132,11 +135,11 @@ G4MultipleScattering::G4MultipleScattering(const G4String& processName)
   facgeom           = 2.5;
   // there is no single scattering for this skin value,
   // to have single scattering at boundary 
-  //  skin should be >= 0 ! 
-  skin              = -1000.;
+  //  skin should be > 0 ! 
+  skin              = 0.;
   
   steppingAlgorithm = true;
-  samplez           = true ;  
+  samplez           = false ; 
   isInitialized     = false;  
 
   SetBinning(totBins);

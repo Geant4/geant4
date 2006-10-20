@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering.hh,v 1.30 2006-10-16 13:10:10 urban Exp $
+// $Id: G4MultipleScattering.hh,v 1.31 2006-10-20 12:01:11 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -72,7 +72,7 @@
 //
 //------------------------------------------------------------------------------
 //
-// $Id: G4MultipleScattering.hh,v 1.30 2006-10-16 13:10:10 urban Exp $
+// $Id: G4MultipleScattering.hh,v 1.31 2006-10-20 12:01:11 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // class description
@@ -129,8 +129,7 @@ public:    // with description
   void SetFacgeom(G4double val) { facgeom=val;};
 
   // set msc parameter skin
-  // (if distance to boundary < skin*stepmin --> single scattering)
-  // (if skin < 0 --> no single scattering at boundary)
+  // if skin <= 0 --> no single scattering at boundary
   void SetSkin(G4double val) { skin=val;};
 
 protected:

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel.cc,v 1.16 2006-10-16 13:10:11 urban Exp $
+// $Id: G4UrbanMscModel.cc,v 1.17 2006-10-20 12:01:11 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -97,10 +97,14 @@
 //              void GeomLimit(const G4Track& track) 
 //        - important changes in ComputeTruePathLengthLimit: 
 //          possibility to have very small step(s) with single scattering 
-//          before boundary crossing (with skin >= 0)
+//          before boundary crossing (with skin > 0)
 //        - changes in SampleCosineTheta :
 //          single scattering if step <= stepmin, parameter theta0 
 //          slightly modified, tail modified (L.Urban)
+// 20-10-06 parameter theta0 now computed in the (public)
+//          function ComputeTheta0,
+//          single scattering modified allowing not small
+//          angles as well (L.Urban)
 //
 
 // Class Description:
@@ -149,7 +153,7 @@ G4UrbanMscModel::G4UrbanMscModel(G4double m_facrange, G4double m_dtrl,
   taulim        = 1.e-6;
   currentTau    = taulim;
   stepmin       = 1.e-6*mm;
-  skindepth     = skin*stepmin;
+  skindepth     = (skin-1)*stepmin;
   currentRange  = 0. ;
   frscaling2    = 0.25;
   frscaling1    = 1.-frscaling2;
@@ -167,7 +171,6 @@ G4UrbanMscModel::G4UrbanMscModel(G4double m_facrange, G4double m_dtrl,
   Zeff          = 1.;
   particle      = 0;
   theManager    = G4LossTableManager::Instance(); 
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -511,7 +514,7 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
       rat = 1.e-3/(rat*(10.+rat)) ;
       //stepmin ~ lambda_elastic
       stepmin = rat*lambda0;
-      skindepth = skin*stepmin;
+      skindepth = (skin-1)*stepmin;
       if(stepmin > tgeom) stepmin = tgeom;
 
       //define tlimitmin
@@ -548,16 +551,20 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
       tnow  = facsafety*presafety ;
 
     // step reduction near to boundary
-    if(geomlimit > skindepth)
+    if(skindepth >= 0.)
     {
-      if(tnow > geomlimit-skindepth)
-        tnow = geomlimit-skindepth;
+      if(geomlimit > skindepth)
+      {
+        if(tnow > geomlimit-skindepth)
+          tnow = geomlimit-skindepth;
+      }
+      else
+      {
+        if(tnow > stepmin)
+          tnow = stepmin;
+      }
     }
-    else
-    {
-      if(tnow > stepmin)
-        tnow = stepmin;
-    }
+
     if(tnow < stepmin)
       tnow = stepmin;
 
@@ -715,6 +722,32 @@ G4double G4UrbanMscModel::ComputeTrueStepLength(G4double geomStepLength)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+G4double G4UrbanMscModel::ComputeTheta0(G4double trueStepLength,
+                                        G4double KineticEnergy)
+{
+  // for all particles take the width of the central part
+  //  from a  parametrization similar to the Highland formula
+  // ( Highland formula: Particle Physics Booklet, July 2002, eq. 26.10)
+  const G4double c_highland = 13.6*MeV ;
+  G4double betacp = sqrt(currentKinEnergy*(currentKinEnergy+2.*mass)*
+                         KineticEnergy*(KineticEnergy+2.*mass)/
+                      ((currentKinEnergy+mass)*(KineticEnergy+mass)));
+  G4double y = trueStepLength/currentRadLength;
+  G4double theta0 = c_highland*charge*sqrt(y)/betacp;
+           y = log(y);
+           theta0 *= sqrt(1.+y*(0.105+0.0035*y));
+
+  //correction for small Zeff (based on high energy
+  // proton scattering  data)
+  // see G.Shen at al. Phys.Rev.D20(1979) p.1584
+  theta0 *= 1.-0.24/(Zeff*(Zeff+1.));
+
+  return theta0;
+
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 std::vector<G4DynamicParticle*>* G4UrbanMscModel::SampleSecondaries(
                                 const G4MaterialCutsCouple*,
                                 const G4DynamicParticle* dynParticle,
@@ -814,29 +847,33 @@ G4double G4UrbanMscModel::SampleCosineTheta(G4double trueStepLength,
   if(trueStepLength <= stepmin)
   {
     //no scattering, single or plural scattering
-    // (small angle approximation)
     G4double mean = trueStepLength/stepmin ;
     cth = 1.;
     G4int n = G4Poisson(mean);
     if(n > 0)
     {
       G4double tau = KineticEnergy/mass;
-      // factor 0.5 ensures the (approximate) smooth change
-      //  between the 'msc' and 'single scattering' mode
-      G4double ascr = 0.5*exp(log(Zeff)/3.)/(137.*sqrt(tau*(tau+2.)));
-      G4double ascr1 = 1.+ascr*ascr;
+      // ascr - screening parameter, factor 0.025 comes from 
+      // requirement of 'smooth' transition msc -> single scattering
+      G4double ascr = 0.025*exp(log(Zeff)/3.)/(137.*sqrt(tau*(tau+2.)));
+      G4double ascr1 = 1.+0.5*ascr*ascr;
+      G4double bp1=ascr1+1.;
+      G4double bm1=ascr1-1.;
       // single scattering from screened Rutherford x-section
-      G4double sx=0.,sy=0.;
-      G4double th,phi,theta;
+      G4double ct,st,phi;
+      G4double sx=0.,sy=0.,sz=0.;
       for(G4int i=1; i<=n; i++)
       {
-        th = ascr*sqrt(ascr1/(ascr1-G4UniformRand())-1.);
+        ct = ascr1-bp1*bm1/(2.*G4UniformRand()+bm1);
+        if(ct < -1.) ct = -1.;
+        if(ct >  1.) ct =  1.; 
+        st = sqrt(1.-ct*ct);
         phi = twopi*G4UniformRand();
-        sx += th*cos(phi);
-        sy += th*sin(phi);
+        sx += st*cos(phi);
+        sy += st*sin(phi);
+        sz += ct;
       }
-      theta = sqrt(sx*sx+sy*sy);
-      if(theta != 0.) cth = cos(theta);
+        cth = sz/sqrt(sx*sx+sy*sy+sz*sz);
     }
   }
   else
@@ -848,25 +885,9 @@ G4double G4UrbanMscModel::SampleCosineTheta(G4double trueStepLength,
       G4double prob = 0., qprob = 1. ;
       G4double a = 1., ea = 0., eaa = 1.;
       G4double xmean1 = 1., xmean2 = 0.;
+      G4double xsi = 3.;
 
-      // 3 model functions ( normal case)............................
-      // for all particles take the width of the central part
-      //  from a  parametrization similar to the Highland formula
-      // ( Highland formula: Particle Physics Booklet, July 2002, eq. 26.10)
-      const G4double xsi = 3., c_highland = 13.6*MeV ;
-      G4double betacp = sqrt(currentKinEnergy*(currentKinEnergy+2.*mass)*
-                             KineticEnergy*(KineticEnergy+2.*mass)/
-                          ((currentKinEnergy+mass)*(KineticEnergy+mass)));
-      G4double tailpar = c_highland/betacp ;
-      G4double y = trueStepLength/currentRadLength;
-      G4double theta0 = tailpar*charge*sqrt(y);
-               y = log(y);
-               theta0 *= sqrt(1.+y*(0.105+0.0035*y));
-
-      //correction for small Zeff (based on high energy
-      // proton scattering  data)
-      // see G.Shen at al. Phys.Rev.D20(1979) p.1584
-      theta0 *= 1.-0.24/(Zeff*(Zeff+1.));
+      G4double theta0 = ComputeTheta0(trueStepLength,KineticEnergy);
 
       if(theta0 > taulim) a = 0.5/(1.-cos(theta0)) ;
       else                a = 1.0/(theta0*theta0) ;
