@@ -1,4 +1,4 @@
-$Id: History,v 1.252 2006-10-16 15:30:36 vnivanch Exp $
+$Id: History,v 1.253 2006-10-20 14:32:57 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,19 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+20 Oct 06: V.Ivanchenko (emstand-V08-01-08)
+- G4CoulombScatteringModel inherit from G4eCoulombScatteringModel,
+  screening parameter computation is done in inline function 
+- G4eeToTwoGammaModel - introduce member theGamma 
+
+20 Oct 06: L.Urban cleanup of msc
+- theta0 parameter for SampleCosineTheta is computed in a public 
+  function ComputeTheta0;
+- default value of skin = 0 (there is no small step with single scattering if
+  skin <=0, and there are ~skin small steps if skin >0
+- no z sampling in ComputeGeomPathLength by default
+- correction in the single scattering part, allowing not only small angles now
 
 16 Oct 06: V.Ivanchenko (emstand-V08-01-07)
 - Add extra protection to G4eplusAnnihilation52 
