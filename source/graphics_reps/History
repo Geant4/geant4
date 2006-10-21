@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.112 2006-10-17 16:15:11 allison Exp $
+cvs log $Id: History,v 1.113 2006-10-21 10:13:22 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+21st October 2006  John Allison  (greps-V08-01-07)
+- Added G4AttHolder.
+- G4AttDefStore: Changed GetName type from G4String to const G4String&.
 
 17th October 2006  John Allison  (greps-V08-01-06)
 - Moved below operator<< from G4AttCheck.hh/cc to G4AttDef.hh/cc.
