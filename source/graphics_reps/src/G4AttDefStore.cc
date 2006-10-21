@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AttDefStore.cc,v 1.8 2006-10-16 13:28:56 allison Exp $
+// $Id: G4AttDefStore.cc,v 1.9 2006-10-21 10:12:45 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4AttDefStore.hh"
@@ -67,9 +67,11 @@ G4AttDefStore::GetInstance(G4String storeName, G4bool& isNew)
   return store;
 }
 
-G4String G4AttDefStore::GetName (const std::map<G4String,G4AttDef>* store)
+const G4String& G4AttDefStore::GetName
+(const std::map<G4String,G4AttDef>* store)
 {
-  G4String defaultMessage("G4AttDefs not registered in G4AttDefStore");
+  static const G4String defaultMessage
+    ("G4AttDefs not registered in G4AttDefStore");
   if (!theInstance)
     {
       return defaultMessage;

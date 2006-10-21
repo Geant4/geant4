@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AttDefStore.hh,v 1.8 2006-07-03 10:59:38 allison Exp $
+// $Id: G4AttDefStore.hh,v 1.9 2006-10-21 10:12:45 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef G4ATTDEFSTORE_HH
@@ -46,7 +46,7 @@ class G4AttDefStore
       // The store keeps the ownership of the returned
       // pointer to the map.
 
-    static G4String GetName(const std::map<G4String,G4AttDef>* store);
+    static const G4String& GetName(const std::map<G4String,G4AttDef>* store);
       // Returns name of given store.
 
     ~G4AttDefStore();
