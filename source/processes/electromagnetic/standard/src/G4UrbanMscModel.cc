@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel.cc,v 1.18 2006-10-20 16:32:28 vnivanch Exp $
+// $Id: G4UrbanMscModel.cc,v 1.19 2006-10-23 10:40:55 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -105,7 +105,8 @@
 //          function ComputeTheta0,
 //          single scattering modified allowing not small
 //          angles as well (L.Urban)
-//          PostStep ComputeSafety(pos) method is used
+// 23-10-06 correction in SampleSecondaries, now safety update
+//          computed in a simpler/faster way (L.Urban)
 //
 
 // Class Description:
@@ -515,7 +516,7 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
       rat = 1.e-3/(rat*(10.+rat)) ;
       //stepmin ~ lambda_elastic
       stepmin = rat*lambda0;
-      skindepth = (skin-1)*stepmin;
+      skindepth = (skin-1.)*stepmin;
       if(stepmin > tgeom) stepmin = tgeom;
 
       //define tlimitmin
@@ -611,7 +612,6 @@ void G4UrbanMscModel::GeomLimit(const G4Track&  track)
                   cstep,
                   presafety);
 
-   // if(geomlimit < geommin) geomlimit = geommin;
   }
 }
 
@@ -620,7 +620,6 @@ void G4UrbanMscModel::GeomLimit(const G4Track&  track)
 G4double G4UrbanMscModel::ComputeGeomPathLength(G4double)
 {
   //  do the true -> geom transformation
-  const G4double  ztmax = 0.99, onethird = 1./3. ;
 
   lambdaeff = lambda0;
   par1 = -1. ;  
@@ -660,31 +659,37 @@ G4double G4UrbanMscModel::ComputeGeomPathLength(G4double)
     zmean = (1.-exp(par3*log(lambda1/lambda0)))/(par1*par3) ;
   }
 
-  //  sample z
   zPathLength = zmean ;
-  G4double zt = zmean/tPathLength ;
 
-  if (samplez && tPathLength > stepmin && zt < ztmax)              
+  //  sample z
+  if(samplez)
   {
-    G4double u,cz1;
-    if(zt >= onethird)
+    const G4double  ztmax = 0.99, onethird = 1./3. ;
+    G4double zt = zmean/tPathLength ;
+
+    if (tPathLength > stepmin && zt < ztmax)              
     {
-      G4double cz = 0.5*(3.*zt-1.)/(1.-zt) ;
-      cz1 = 1.+cz ;
-      G4double u0 = cz/cz1 ;
-      G4double grej ;
-      do {
-          u = exp(log(G4UniformRand())/cz1) ;
-          grej = exp(cz*log(u/u0))*(1.-u)/(1.-u0) ;
-         } while (grej < G4UniformRand()) ;
+      G4double u,cz1;
+      if(zt >= onethird)
+      {
+        G4double cz = 0.5*(3.*zt-1.)/(1.-zt) ;
+        cz1 = 1.+cz ;
+        G4double u0 = cz/cz1 ;
+        G4double grej ;
+        do {
+            u = exp(log(G4UniformRand())/cz1) ;
+            grej = exp(cz*log(u/u0))*(1.-u)/(1.-u0) ;
+           } while (grej < G4UniformRand()) ;
+      }
+      else
+      {
+        cz1 = 1./zt-1.;
+        u = 1.-exp(log(G4UniformRand())/cz1) ;
+      }
+      zPathLength = tPathLength*u ;
     }
-    else
-    {
-      cz1 = 1./zt-1.;
-      u = 1.-exp(log(G4UniformRand())/cz1) ;
-    }
-    zPathLength = tPathLength*u ;
   }
+
   geomLength = zPathLength;
   if(geomLength > lambda0) geomLength = lambda0;
 
@@ -803,13 +808,6 @@ std::vector<G4DynamicParticle*>* G4UrbanMscModel::SampleSecondaries(
         {
           //  ******* we do not have track info at this level ***********
           //  ******* so navigator is called at boundary too ************
-	  /*
-          navigator->LocateGlobalPointWithinVolume(Position);
-          const G4double cstep = safety ;
-          G4double newsafety = safety;
-          phi = navigator->ComputeStep(Position,latDirection,
-                                       cstep,newsafety);
-	  */
           G4double newsafety = navigator->ComputeSafety(Position);
           if(r < newsafety)
             fac = 1.;

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering.cc,v 1.55 2006-10-20 12:01:11 urban Exp $
+// $Id: G4MultipleScattering.cc,v 1.56 2006-10-23 10:40:55 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -107,6 +107,7 @@
 // 20-10-06 default value of skin = 0 (no single scattering),
 //          single scattering for skin > 0,
 //          there is no z sampling by default  (L.Urban)
+// 23-10-06 skin = 1 by default (L.Urban)
 //
 // -----------------------------------------------------------------------------
 //
@@ -133,10 +134,10 @@ G4MultipleScattering::G4MultipleScattering(const G4String& processName)
   dtrl              = 0.05;
   lambdalimit       = 1.*mm;
   facgeom           = 2.5;
-  // there is no single scattering for this skin value,
+  // there is no single scattering for this skin <= 0  
   // to have single scattering at boundary 
   //  skin should be > 0 ! 
-  skin              = 0.;
+  skin              = 1.;
   
   steppingAlgorithm = true;
   samplez           = false ; 
