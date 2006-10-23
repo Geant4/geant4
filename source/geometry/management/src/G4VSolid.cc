@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSolid.cc,v 1.32 2006-10-19 15:45:46 gcosmo Exp $
+// $Id: G4VSolid.cc,v 1.33 2006-10-23 08:33:40 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4VSolid
@@ -534,73 +534,61 @@ G4double G4VSolid::GetSurfaceArea()
 
 ////////////////////////////////////////////////////////////////
 //
-// Calculate surface area based on Inside() method.
-// Accuracy is limited by the second argument or the statistics
-// expressed by the first argument.
-// Implementation is courtesy of Hans Dierckx, Ghent University, Belgium.
+// Estimate surface area based on Inside(), DistanceToIn(), and
+// DistanceToOut() methods. Accuracy is limited by the statistics
+// defined by the first argument. Implemented by Mikhail Kosov.
 
 G4double G4VSolid::EstimateSurfaceArea(G4int nStat, G4double ell) const
 {
-  G4int nhits=0;
+  G4int inside=0;
   G4double px,py,pz,minX,maxX,minY,maxY,minZ,maxZ,surf;
-  G4double x1,x2,sq;
-  G4double ellx,elly,ellz;
   G4bool yesno;
-  G4ThreeVector p, p1, p2;
-  EInside in1,in2;
+  G4ThreeVector p;
+  EInside in;
 
   // values needed for CalculateExtent signature
-  //
+
   G4VoxelLimits limit;                // Unlimited
   G4AffineTransform origin;
 
   // min max extents of pSolid along X,Y,Z
-  //
+
   yesno = this->CalculateExtent(kXAxis,limit,origin,minX,maxX);
   yesno = this->CalculateExtent(kYAxis,limit,origin,minY,maxY);
   yesno = this->CalculateExtent(kZAxis,limit,origin,minZ,maxZ);
 
-  // Extend the world box over distance ell
-  //
-  G4double gam=1;
-  if (ell<0)
+  // limits
+
+  if(nStat < 1000) { nStat = 100; }
+
+  G4double dX=maxX-minX;
+  G4double dY=maxY-minY;
+  G4double dZ=maxZ-minZ;
+  if(ell<=0.)          // Automatic definition of skin thickness
   {
-    ell = std::pow(gam*(maxX-minX)*(maxY-minY)*(maxZ-minZ)/nStat/8, 1/3);
+    G4double minval=dX;
+    if(dY<dX) { minval=dY; }
+    if(dZ<minval) { minval=dZ; }
+    ell=.01*minval;
   }
 
-  minX=minX-ell;
-  maxX=maxX+ell;
-  minY=minY-ell;
-  maxY=maxY+ell;
-  minZ=minZ-ell;
-  maxZ=maxZ+ell;
+  G4double dd=2*ell;
+  minX-=ell; minY-=ell; minZ-=ell; dX+=dd; dY+=dd; dZ+=dd;
 
   for(G4int i = 0; i < nStat; i++ )
   {
-    px = minX+(maxX-minX)*G4UniformRand();
-    py = minY+(maxY-minY)*G4UniformRand();
-    pz = minZ+(maxZ-minZ)*G4UniformRand();
-
-    // Generate arbitrary oriented unit vector [ellx,elly,ellz]
-    // by means of Marsaglia's method
-
-    do
+    px = minX+dX*G4UniformRand();
+    py = minY+dY*G4UniformRand();
+    pz = minZ+dZ*G4UniformRand();
+    p  = G4ThreeVector(px,py,pz);
+    in = this->Inside(p);
+    if(in != kOutside)
     {
-      x1=2*G4UniformRand()-1;
-      x2=2*G4UniformRand()-1;
-      sq=x1*x1+x2*x2;
-    } while(sq>=1);
-    ellx = ell*(2*x1*std::sqrt(1-sq));
-    elly = ell*(2*x2*std::sqrt(1-sq));
-    ellz = ell*(1-2*sq);
-        
-    p1 = G4ThreeVector(px+ellx, py+elly, pz+ellz);
-    p2 = G4ThreeVector(px-ellx, py-elly, pz-ellz);
-    
-    in1 = this->Inside(p1);
-    in2 = this->Inside(p2);
-    if(in1 != in2) { nhits++; }    
+      if  (DistanceToOut(p)<ell) { inside++; }
+    }
+    else if(DistanceToIn(p)<ell) { inside++; }
   }
-  surf = (maxX-minX)*(maxY-minY)*(maxZ-minZ)*nhits/nStat/ell;
+  // @@ The conformal correction can be upgraded
+  surf = dX*dY*dZ*inside/dd/nStat;
   return surf;
 }
