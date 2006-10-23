@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElasticHadrNucleusHE.cc,v 1.37 2006-10-23 09:12:30 starkov Exp $
+// $Id: G4ElasticHadrNucleusHE.cc,v 1.38 2006-10-23 09:21:39 starkov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //G4ElasticHadrNucleusHE.cc
 //
@@ -180,7 +180,7 @@
     if(Amass>1)
     {    
 
-      G4int  Step;
+      G4int  Step=0;
 //  ..................................
     ElasticData * ElD1 = 0;
 
