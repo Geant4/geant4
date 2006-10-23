@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronValues.hh,v 1.10 2006-06-29 20:09:05 gunter Exp $
+// $Id: G4HadronValues.hh,v 1.11 2006-10-23 09:12:43 starkov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -54,8 +54,8 @@ class G4HadronValues
 {
 public:
       
-  G4HadronValues();
-  ~G4HadronValues(); 
+  G4HadronValues() {;}
+  ~G4HadronValues() {;} 
 
   void GetHadronValues(const G4DynamicParticle * aHadron);
   

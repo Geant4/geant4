@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElasticHadrNucleusHE.hh,v 1.26 2006-10-20 13:57:18 vnivanch Exp $
+// $Id: G4ElasticHadrNucleusHE.hh,v 1.27 2006-10-23 09:12:43 starkov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4ElasticHadrNucleusHe.hh

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronValues.cc,v 1.16 2006-06-29 20:09:29 gunter Exp $
+// $Id: G4HadronValues.cc,v 1.17 2006-10-23 09:12:30 starkov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -42,11 +42,9 @@
 #include "globals.hh"
 #include "G4HadronValues.hh"
 
-G4HadronValues::G4HadronValues()
-{}
+//G4HadronValues::G4HadronValues() {}
 
-G4HadronValues::~G4HadronValues()
-{}
+//G4HadronValues::~G4HadronValues() {}
 
 void 
 G4HadronValues::GetHadronValues(const G4DynamicParticle* aHadron)
@@ -55,6 +53,7 @@ G4HadronValues::GetHadronValues(const G4DynamicParticle* aHadron)
        iHadrCode = aHadron->GetDefinition()->GetPDGEncoding();
 
 //  G4cout<<" Code "<<iHadrCode<<G4endl;
+       iHadrCode = 211;
 
        if(  iHadrCode == 2212 ||
             iHadrCode == 2112 ||
@@ -98,7 +97,7 @@ G4HadronValues::GetHadronValues(const G4DynamicParticle* aHadron)
        G4double Ecm        = (sHadr-mHadr*mHadr+0.938*.938)/2/sqrS;
                 MomentumCM = std::sqrt(Ecm*Ecm-0.938*0.938);
 
-   if(HadrEnergy-mHadr<1.0) 
+   if(HadrEnergy-mHadr<0.90) 
     {
      G4cout<<HadrEnergy<<G4endl;
      G4Exception(" The hadron Energy is very low for this method!");
@@ -234,6 +233,8 @@ G4HadronValues::GetHadronValues(const G4DynamicParticle* aHadron)
               DDSect3   = 1.03;                            //mb*GeV-2
             break;
       }     
+
+
   }
 
 /* end of file */
