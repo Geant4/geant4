@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.hh,v 1.41 2006-06-29 19:54:39 gunter Exp $
+// $Id: G4LossTableManager.hh,v 1.42 2006-10-23 18:57:20 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -209,6 +209,8 @@ public:
   G4double FacRange() const;
 
   G4double BremsstrahlungTh() const;
+
+  G4VEnergyLossProcess* GetEnergyLossProcess(const G4ParticleDefinition *aParticle);
 
   const std::vector<G4VEnergyLossProcess*>& GetEnergyLossProcessVector();
 
@@ -454,6 +456,24 @@ inline  G4double G4LossTableManager::GetDEDXDispersion(
     }
   }
   return currentLoss->GetDEDXDispersion(couple, dp, length);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline G4VEnergyLossProcess* G4LossTableManager::GetEnergyLossProcess(
+          const G4ParticleDefinition *aParticle)
+{
+  if(aParticle != currentParticle) {
+    currentParticle = aParticle;
+    std::map<PD,G4VEnergyLossProcess*,std::less<PD> >::const_iterator pos;
+    if ((pos = loss_map.find(aParticle)) != loss_map.end()) {
+      currentLoss = (*pos).second;
+    } else {
+      currentLoss = 0;
+     // ParticleHaveNoLoss(aParticle);
+    }
+  }
+  return currentLoss;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
