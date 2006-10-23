@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElasticHadrNucleusHE.cc,v 1.38 2006-10-23 09:21:39 starkov Exp $
+// $Id: G4ElasticHadrNucleusHE.cc,v 1.39 2006-10-23 10:40:40 starkov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //G4ElasticHadrNucleusHE.cc
 //
@@ -286,203 +286,12 @@
 
     return  Q2;
   }
-/*
-//  ++++++++++++++++++  ApplayYourself  ++++++++++++++++++++
-    G4HadFinalState *
-    G4ElasticHadrNucleusHE::ApplyYourself(
-                          const  G4HadProjectile  &aHadron,
-                                 G4Nucleus        &aNucleus)
- {
-    G4int    nN, nZ;
-
-    G4IonTable  * MyIonTable = const_cast<G4IonTable *>
-             (G4ParticleTable::GetParticleTable()->GetIonTable());
-
- if(verboselevel == 1)
- {
- G4cout<<G4endl<<"----------- Begin Applay ------------"<<G4endl;
- G4cout<<" Total Energy "<<aHadron.GetTotalEnergy()<<G4endl;
- }
-    G4Nucleus * aNucl      = &aNucleus;
-
-    G4double    hadrMass;
-    G4String    hadrName;
-
-    theParticleChange.Clear();
-
-//  ---------------  Hadron Definition  ---------------
-    G4ParticleDefinition * hadrDef1 =
-        const_cast<G4ParticleDefinition*>(aHadron.GetDefinition());
-
-    G4ThreeVector  hadrMomentum = aHadron.Get4Momentum().vect();
-
-    G4double   inLabMom  = aHadron.GetTotalMomentum()/1000; // GeV/c
-    G4double   inEnHadr  = aHadron.GetTotalEnergy()/1000;   // GeV
-
- if(verboselevel == 1)
- G4cout<<" Hadr: Energy TotMom  "<<inLabMom<<"  "<<inEnHadr<<G4endl;
-//  ---------------  Nucleus Definition  ---------------
-    nN   = (int) aNucl->GetN();
-    nZ   = (int) aNucl->GetZ();
-
-    G4ParticleDefinition * secNuclDef;
-    G4DynamicParticle    * secNuclDyn = new G4DynamicParticle();
-
-    secNuclDef  =   MyIonTable->GetIon(nZ,  nN);
-    secNuclDyn->SetDefinition(secNuclDef);
-//  ----------------------------------------------------
-// ----------------_ Randomization of Q2 as dSig/dt --------------
-
-    G4double ranQ2;
-
-    if(nN>1)  ranQ2 = SampleT(hadrDef1, inLabMom*1000,nN-nZ, nZ);
-
-    else ranQ2 = HadronProtonQ2(aHadron.GetDefinition(), inLabMom*1000);
-
-  if(verboselevel == 1)
-  G4cout<<" Applay: Q2 = "<<ranQ2<<G4endl;
-//  ----------------  Hadron kinematics ----------------
-    G4double   MassHadr  = aHadron.GetDefinition()->GetPDGMass()/1000; // GeV
-    G4double   MassNucl  = aNucleus.GetN()*0.93827;        // GeV
-    G4double   sqrMass   = MassNucl*MassNucl+MassHadr*MassHadr;
-// ---------------    For final state of hadron    ------------------
-    G4double   invS      = sqrMass+2*inEnHadr*MassNucl;   // GeV^2
-    G4double   invU      = 2*sqrMass-invS+ranQ2;          // GeV^2
-    G4double   outEnHadr = (sqrMass-invU)/2/MassNucl;     // GeV
-    G4double   outMomHdr = std::sqrt(outEnHadr*outEnHadr- // GeV
-                                    MassHadr*MassHadr);
-    G4double   cosHadr   = (-ranQ2-2*MassHadr*MassHadr+
-                             2*inEnHadr*outEnHadr)/2
-                             /inLabMom/outMomHdr;        
-//----------------     For final state of nucleus   -----------------
-    G4double   outEnNucl = (2*MassNucl*MassNucl+ranQ2)/2/MassNucl;
-    G4double   outMomNcl = std::sqrt(outEnNucl*outEnNucl-  //  GeV
-                                  MassNucl*MassNucl);
-    G4double   cosNucl   = (invU-sqrMass+2*inEnHadr*outEnNucl)
-                              /2/inLabMom/outMomNcl;   
-    G4double   ranFi     = 6.2832*G4UniformRand();
-
-  if(verboselevel == 1)
-  G4cout<<" Apply:  Nucleus Momentum "<<outMomNcl<<" Cos "<<cosNucl<<G4endl;
-// ------ The transformation from Hadron frame to absolute one -------
-    G4double   RotMatrix[3][3];
-    G4double   NewMomHdrSys[3];
-    G4double   NewMomOldSys[3];
-    G4double   NucMomHdrSys[3];
-    G4double   NucMomOldSys[3];
-//   ------------ The hadron angles in its own system ------------
-    G4double   sinHadr   = std::sqrt(1-cosHadr*cosHadr);
-    G4double   sinFiHadr = std::sin(ranFi);
-    G4double   cosFiHadr = std::cos(ranFi);
-//   ---- The unit vector of a hadron momentum in its own system ---
-    NewMomHdrSys[0]    = sinHadr*cosFiHadr; 
-    NewMomHdrSys[1]    = sinHadr*sinFiHadr;
-    NewMomHdrSys[2]    = cosHadr;          
-    G4double  sinNucl  = std::sqrt(1-cosNucl*cosNucl);
-//   -----------  The unit vector of  a nucleus momentum  -----------
-    NucMomHdrSys[0] = -sinNucl*cosFiHadr;
-    NucMomHdrSys[1] = -sinNucl*sinFiHadr;
-    NucMomHdrSys[2] =  cosNucl;
-//  __________ The angles of unit vector in absolute system ----------
-    G4double    rhoInMom = aHadron.Get4Momentum().vect().mag()/1000;
-    G4double   cosTet  = aHadron.Get4Momentum().vect().z()/1000/rhoInMom;
-    G4double   sinTet;
-    G4double   sinFi;
-    G4double   cosFi;
-    if(cosTet>0.99999 || cosTet<-0.99999) 
-    {
-     sinTet = 0;
-     sinFi  = 0;
-     cosFi  = 1;
-    }
-    else
-    {
-     sinTet  = std::sqrt(1-cosTet*cosTet);
-     sinFi   = aHadron.Get4Momentum().vect().y()/1000/sinTet/rhoInMom;
-     cosFi   = aHadron.Get4Momentum().vect().x()/1000/sinTet/rhoInMom;
-    }
-//  -----------------  The rotation matrix  ---------------
-     RotMatrix[0][0]   =  cosFi*cosTet;
-     RotMatrix[0][1]   =  sinFi;
-     RotMatrix[0][2]   = -cosFi*sinTet;
-     RotMatrix[1][0]   = -sinFi*cosTet;
-     RotMatrix[1][1]   =  cosFi;
-     RotMatrix[1][2]   =  sinFi*sinTet;
-     RotMatrix[2][0]   =  sinTet;
-     RotMatrix[2][1]   =  0;
-     RotMatrix[2][2]   =  cosTet;
-
-  if(verboselevel==1)
-  {
-  G4cout<<" cosTet sinTet cosFi sinFi "<<cosTet<<"  "<<sinTet<<"  "
-        <<cosFi<<"  "<<sinFi<<"  Rho "<<rhoInMom<<G4endl;
-  G4cout<<" Rotation: "<<RotMatrix[0][0]<<"  "<<RotMatrix[0][1]<<"  "
-        <<RotMatrix[0][2]<<G4endl;
-  G4cout<<" Rotation: "<<RotMatrix[1][0]<<"  "<<RotMatrix[1][1]<<"  "
-        <<RotMatrix[1][2]<<G4endl;
-  G4cout<<" Rotation: "<<RotMatrix[2][0]<<"  "<<RotMatrix[2][1]<<"  "
-        <<RotMatrix[2][2]<<G4endl;
-  }
-// --------------  Rotation of momenta  ----------------
-     for(G4int ii=0; ii<3; ii++)
-     {
-       NewMomOldSys[ii] = 0;                        
-       NucMomOldSys[ii] = 0;                        
-       for(G4int ll=0; ll<3; ll++)
-       {
-//  --------------  Rotation of Hadron  ------------------
-         NewMomOldSys[ii] = NewMomOldSys[ii]+
-                  RotMatrix[ii][ll]*NewMomHdrSys[ll];
-//  --------------  Rotation of Nucleus ------------------
-         NucMomOldSys[ii] = NucMomOldSys[ii]+
-                  RotMatrix[ii][ll]*NucMomHdrSys[ll];
-       }
-     }
-//  --------------  The Nucleus Momentum  -------------
-         G4ThreeVector  aNuclMom( NucMomOldSys[0]*outMomNcl*1000,
-                                  NucMomOldSys[1]*outMomNcl*1000,
-                                  NucMomOldSys[2]*outMomNcl*1000);
-
-         secNuclDyn->SetMomentum(aNuclMom);
-
-   if(verboselevel==1)
-   G4cout<<" Hucleus: x y z "<<NucMomOldSys[0]*outMomNcl<<"  "
-                        <<NucMomOldSys[1]*outMomNcl<<"  "
-                        <<NucMomOldSys[2]*outMomNcl<<G4endl;
-//  --------------  The Direction of Hadron Momentum  ---------------
-         G4double pxnew = NewMomOldSys[0];  
-         G4double pynew = NewMomOldSys[1];
-         G4double pznew = NewMomOldSys[2];
-//   ---------------------------------------------
-     G4int NumbPart;
-     NumbPart = theParticleChange.GetNumberOfSecondaries();
-
-   if(verboselevel==1)
-   G4cout<<"  Apply (end1): Q2 "<<ranQ2<<" NumbPart "<<NumbPart <<G4endl;
-
-     theParticleChange.AddSecondary(secNuclDyn);
-
-     theParticleChange.SetEnergyChange(outEnHadr*1000);
-     theParticleChange.SetMomentumChange(pxnew, pynew, pznew);
-
-     NumbPart = theParticleChange.GetNumberOfSecondaries();
-
-   if(verboselevel==1)
-   G4cout<<"  Apply (end2): Q2 "<<ranQ2<<" NumbPart "<<NumbPart <<G4endl;
-
-//  ----------------------------------------------------
-   if(verboselevel==1)
-   G4cout<<G4endl<<"----------- End Applay ------------"<<G4endl;
-
-  return &theParticleChange;
- }
-*/
 //  ########################################################
 G4HadFinalState * G4ElasticHadrNucleusHE::ApplyYourself(
                           const  G4HadProjectile  &aHadron,
                                  G4Nucleus        &aNucleus)
 {
-  if(verboselevel > -1)
+  if(verboselevel == 1)
   {
    G4cout<<G4endl<<"----------- Begin Applay ------------"<<G4endl;
    G4cout<<" Total Energy "<<aHadron.GetTotalEnergy()<<G4endl;
@@ -517,7 +326,7 @@ G4HadFinalState * G4ElasticHadrNucleusHE::ApplyYourself(
   else secNuclDef = G4ParticleTable::
                             GetParticleTable()->FindIon(nZ,nA,0,nZ);
 //  ----------------------------------------------------
- if(verboselevel > -1)
+ if(verboselevel == 1)
  G4cout<<" Hadr: TotMom  "<<aHadron.GetTotalMomentum()
        <<" Energy  "<<aHadron.GetTotalEnergy()
        <<"  A  "<<A<<G4endl;
@@ -534,7 +343,7 @@ G4HadFinalState * G4ElasticHadrNucleusHE::ApplyYourself(
 
     Q2res = ranQ2;
 
-  if(verboselevel > -1)
+  if(verboselevel == 1)
   G4cout<<" Applay: Q2 = "<<ranQ2<<G4endl;
 //  ----------------  Hadron kinematics ----------------
   G4double m1 = hadrDef->GetPDGMass();
@@ -544,7 +353,7 @@ G4HadFinalState * G4ElasticHadrNucleusHE::ApplyYourself(
   G4LorentzVector lv1test = dParticle->Get4Momentum();
   G4LorentzVector lv0test(0.0,0.0,0.0,m2);
 
-  if(verboselevel > -1)
+  if(verboselevel == 1)
   G4cout << "lv0= " << lv0 << "  lv1= " << lv1 << "   m1= "
          << m1 << " ranQ2= " << ranQ2<<G4endl;
 
@@ -555,7 +364,7 @@ G4HadFinalState * G4ElasticHadrNucleusHE::ApplyYourself(
   G4ThreeVector p1 = lv1.vect();
   G4double ptot = p1.mag();
 
-  if (verboselevel > -1)
+  if (verboselevel == 1)
   G4cout<<" p: H, nucl "<<p1<<"  "<<lv0.vect()<<G4endl;  
 
   // Sampling in CM system
@@ -565,7 +374,7 @@ G4HadFinalState * G4ElasticHadrNucleusHE::ApplyYourself(
   if(std::abs(cost) > 1.0) cost = 2.0*G4UniformRand() - 1.0;
   G4double sint = std::sqrt((1.0-cost)*(1.0+cost));
 
-  if (verboselevel > -1)
+  if (verboselevel == 1)
   G4cout << "cos(t)=" << cost << " std::sin(t)=" << sint << G4endl;
 
   G4ThreeVector v1(sint*std::cos(phi),sint*std::sin(phi),cost);
@@ -589,13 +398,13 @@ G4HadFinalState * G4ElasticHadrNucleusHE::ApplyYourself(
 
   G4double eFinal = nlv1.e() - m1;
 
-  if (verboselevel > -1)
+  if (verboselevel == 1)
     G4cout << " P0= "<< nlv0 << "   P1= "
            << nlv1<<" m= " << m1 << " ekin0= " << eFinal
            << " ekin1= " << nlv0.e() - m2
            <<G4endl;
 //  if(eFinal < 0.0) 
-  if(verboselevel > -1)
+  if(verboselevel == 1)
   {
     G4cout << "G4HadronElastic WARNING ekin= " << eFinal
            << " after scattering of "
@@ -606,7 +415,7 @@ G4HadFinalState * G4ElasticHadrNucleusHE::ApplyYourself(
 ///    eFinal = 0.0;
   }
 
-  if(verboselevel > -1)
+  if(verboselevel == 1)
   {
   G4cout<<" nlv0 "<<nlv0<<" eFinal "<<eFinal<<"  m1 "<<m1<<G4endl;
   G4cout<<" nlv1 "<<nlv1<<" eFinal "<<eFinal<<"  m1 "<<m1<<G4endl;
@@ -618,13 +427,13 @@ G4HadFinalState * G4ElasticHadrNucleusHE::ApplyYourself(
   G4DynamicParticle * aSec = new G4DynamicParticle(secNuclDef, nlv0);
   theParticleChange.AddSecondary(aSec);
 
-  if(verboselevel > -1)
+  if(verboselevel == 1)
   {
   G4cout<<" nlv0 "<<nlv0<<" eFinal "<<eFinal<<"  m1 "<<m1<<G4endl;
   G4cout<<" nlv1 "<<nlv1<<" eFinal "<<eFinal<<"  m1 "<<m1<<G4endl;
   }
 
-   if(verboselevel > -1)
+   if(verboselevel == 1)
    G4cout<<G4endl<<"----------- End Applay ------------"<<G4endl;
 
   return &theParticleChange;
