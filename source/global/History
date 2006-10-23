@@ -1,4 +1,4 @@
-$Id: History,v 1.166 2006-09-15 08:16:33 gcosmo Exp $
+$Id: History,v 1.167 2006-10-23 07:46:17 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Oct 23, 2006  G.Cosmo (global-V08-01-03)
+- New class G4SliceTimer with implementation derived from G4Timer for the
+  computation of slice time intervals (by M.Asai).
 
 Sep 15, 2006  G.Cosmo (global-V08-01-02)
 - Corrected inclusion of CLHEP headers in wrapper files
