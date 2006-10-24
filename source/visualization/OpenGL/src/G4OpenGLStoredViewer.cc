@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredViewer.cc,v 1.19 2006-09-19 16:16:07 allison Exp $
+// $Id: G4OpenGLStoredViewer.cc,v 1.20 2006-10-24 06:23:18 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,6 +41,7 @@
 #include "G4Text.hh"
 #include "G4Circle.hh"
 #include "G4UnitsTable.hh"
+#include "G4Scene.hh"
 
 G4OpenGLStoredViewer::G4OpenGLStoredViewer
 (G4OpenGLStoredSceneHandler& sceneHandler):
@@ -190,20 +191,54 @@ void G4OpenGLStoredViewer::DrawDisplayLists () {
 
   // Display light front...
   if (fDisplayLightFront && fEndTime < DBL_MAX) {
-    G4double radius = 0.;
-    if (fEndTime > 0.) {
-      radius = (fEndTime - fDisplayLightFrontT) * c_light;
+    G4double lightFrontRadius = (fEndTime - fDisplayLightFrontT) * c_light;
+    if (lightFrontRadius > 0.) {
+      G4Point3D lightFrontCentre(fDisplayLightFrontX, fDisplayLightFrontY, fDisplayLightFrontZ);
+      G4Point3D circleCentre = lightFrontCentre;
+      G4double circleRadius = lightFrontRadius;
+      if (fVP.GetFieldHalfAngle() > 0.) {
+	// Perspective view.  Find horizon centre and radius...
+	G4Point3D targetPoint = fSceneHandler.GetScene()->GetStandardTargetPoint() +
+	  fVP.GetCurrentTargetPoint();
+	G4double sceneRadius = fSceneHandler.GetScene()->GetExtent().GetExtentRadius();
+	if(sceneRadius <= 0.) sceneRadius = 1.;
+	G4double cameraDistance = fVP.GetCameraDistance(sceneRadius);
+	G4Point3D cameraPosition = targetPoint + cameraDistance * fVP.GetViewpointDirection().unit();
+	G4Vector3D lightFrontToCameraDirection = cameraPosition - lightFrontCentre;
+	G4double lightFrontCentreDistance = lightFrontToCameraDirection.mag();
+	/*
+	G4cout << "cameraPosition: " << cameraPosition
+	       << ", lightFrontCentre: " << lightFrontCentre
+	       << ", lightFrontRadius: " << lightFrontRadius
+	       << ", lightFrontCentreDistance: " << lightFrontCentreDistance
+	       << ", dot: " << lightFrontToCameraDirection * fVP.GetViewpointDirection()
+	       << G4endl;
+	*/
+	if (lightFrontToCameraDirection * fVP.GetViewpointDirection() > 0. && lightFrontRadius < lightFrontCentreDistance) {
+	  // Light front in front of camera...
+	  G4double sineHorizonAngle = lightFrontRadius / lightFrontCentreDistance;
+	  circleCentre = lightFrontCentre + (lightFrontRadius * sineHorizonAngle) * lightFrontToCameraDirection.unit();
+	  circleRadius = lightFrontRadius * std::sqrt(1. - std::pow(sineHorizonAngle, 2));
+	  /*
+	  G4cout << "sineHorizonAngle: " << sineHorizonAngle
+		 << ", circleCentre: " << circleCentre
+		 << ", circleRadius: " << circleRadius
+		 << G4endl;
+	  */
+	} else {
+	  circleRadius = -1.;
+	}
+      }
+      if (circleRadius > 0.) {
+	G4Circle lightFront(circleCentre);
+	lightFront.SetWorldRadius(circleRadius);
+	glColor3d(fDisplayLightFrontRed,
+		  fDisplayLightFrontGreen,
+		  fDisplayLightFrontBlue);
+	static_cast<G4OpenGLSceneHandler&>(fSceneHandler).
+	  G4OpenGLSceneHandler::AddPrimitive(lightFront);
+      }
     }
-    G4Circle lightFront(G4Point3D
-			(fDisplayLightFrontX,
-			 fDisplayLightFrontY,
-			 fDisplayLightFrontZ));
-    lightFront.SetWorldRadius(radius);
-    glColor3d(fDisplayLightFrontRed,
-	      fDisplayLightFrontGreen,
-	      fDisplayLightFrontBlue);
-    static_cast<G4OpenGLSceneHandler&>(fSceneHandler).
-      G4OpenGLSceneHandler::AddPrimitive(lightFront);
   }
 }
 
