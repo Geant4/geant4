@@ -23,10 +23,19 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering.cc,v 1.56 2006-10-23 10:40:55 urban Exp $
+// $Id: G4MultipleScattering.cc,v 1.57 2006-10-24 11:38:12 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
+//
+// GEANT4 Class file
+//
+// File name:     G4MultipleScattering
+//
+// Author:        Laszlo Urban
+//
+// Creation date: March 2001
+// 
 // 16/05/01 value of cparm changed , L.Urban
 // 18/05/01 V.Ivanchenko Clean up against Linux ANSI compilation
 // 07/08/01 new methods Store/Retrieve PhysicsTable (mma)

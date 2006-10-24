@@ -23,12 +23,20 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering.hh,v 1.31 2006-10-20 12:01:11 urban Exp $
+// $Id: G4MultipleScattering.hh,v 1.32 2006-10-24 11:38:12 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+// -----------------------------------------------------------------------------
 //
-//------------- G4MultipleScattering physics process -------------------------
-//               by Laszlo Urban, March 2001
+// GEANT4 Class header file
+//
+// File name:     G4MultipleScattering
+//
+// Author:        Laszlo Urban
+//
+// Creation date: March 2001
+// 
+// Modifications:
 //
 // 07-08-01 new methods Store/Retrieve PhysicsTable
 // 23-08-01 new angle and z distribution,energy dependence reduced,
@@ -72,8 +80,6 @@
 //
 //------------------------------------------------------------------------------
 //
-// $Id: G4MultipleScattering.hh,v 1.31 2006-10-20 12:01:11 urban Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
 
 // class description
 //
