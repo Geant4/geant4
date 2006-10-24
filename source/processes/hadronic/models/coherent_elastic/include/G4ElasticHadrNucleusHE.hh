@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElasticHadrNucleusHE.hh,v 1.27 2006-10-23 09:12:43 starkov Exp $
+// $Id: G4ElasticHadrNucleusHE.hh,v 1.28 2006-10-24 16:59:22 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4ElasticHadrNucleusHe.hh
@@ -110,36 +110,6 @@
        dQ2   = t.dQ2;
      }
 //  ============================================
-/*
-     ElasticData & operator=(const ElasticData &t)
-     {
-       G4int k;
-         if(this!=&t)
-	 {
-          hadrName         = t.hadrName;
-          AtomicWeight = t.AtomicWeight;
-          for(k = 0; k<ONE*AreaNumb; k++)
-          {
-	     TableE[k] = t.TableE[k];
-             dnkE[k]   = t.dnkE[k];
-          }   // for k
-
-          for(k = 0; k<ONQ2; k++) TableQ2[k] = t.TableQ2[k];
-
-          for(k = 0; k< ONQ2XE*AreaNumb; k++)
-                      TableCrossSec[k] = t.TableCrossSec[k];
-
-//          R1    = t.R1;
-//          R2    = t.R2;
-//          Aeff  = t.Aeff;
-//          Pnucl = t.Pnucl;
-          maxQ2 = t.maxQ2;
-          dQ2    = t.dQ2;
-	 }  //  if(this)
-     return *this;
-     }
-*/
-//  =============================================
      G4double GetQ2limit(G4double R1);
      G4int    GetNumberE(G4double E);
    };
@@ -255,11 +225,13 @@
         return;
      }
 
-  public:
+  private:
        void GetHadronValues(const G4ParticleDefinition * aHadron,
                                   G4double TotMom);
        G4double  HadrTot, HadrSlope, HadrReIm,  DDSect2, DDSect3,
                  MomentumCM;
+
+  public:
        G4double  Q2res;
        G4int     verboselevel;
   };     //   The end of the class description

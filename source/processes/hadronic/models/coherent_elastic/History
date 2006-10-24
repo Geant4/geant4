@@ -14,7 +14,7 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
-20 Oct 2006 - V.Ivanchenko (hadr-cohe-V08-01-05)
+24 Oct 2006 - V.Ivanchenko (hadr-cohe-V08-01-05)
 ------------------------------------------------
   Set lowestEnergy=0 for neutral particles, =eV for changed (VI)
   G4HadronElastic - set threshold 1 GeV for G4ElasticHadrNucleusHE model (VI)

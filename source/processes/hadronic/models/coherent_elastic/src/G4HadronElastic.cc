@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronElastic.cc,v 1.26 2006-10-20 16:43:44 vnivanch Exp $
+// $Id: G4HadronElastic.cc,v 1.27 2006-10-24 16:59:22 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -167,14 +167,20 @@ G4HadFinalState* G4HadronElastic::ApplyYourself(
 
   // Choose generator
   G4ElasticGenerator gtype = fLElastic;
+
+  // CHIPS Elastic
   if ((theParticle == theProton || theParticle == theNeutron) && 
       Z <= 2 && ekin > ekinlow) {
     gtype = fQElastic;
   } else {
-    if(ekin >= ekinhigh)     gtype = fHElastic;
+
+    // High energy elastic 
+    if(ekin >= ekinhigh && A != 2 && A != 3 && A < 238) gtype = fHElastic;
+
+    // Simplification - s-wave
     else if((theParticle == thePionPlus || 
 	     theParticle == thePionMinus) && 
-	    (ekin <= ekinpi || plab <= plablow)) 
+	    (ekin <= ekinpi) ) 
       gtype = fSWave;
     else if(plab <= plablow) gtype = fSWave;
   }
