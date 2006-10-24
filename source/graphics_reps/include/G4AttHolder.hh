@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AttHolder.hh,v 1.2 2006-10-24 06:00:29 allison Exp $
+// $Id: G4AttHolder.hh,v 1.3 2006-10-24 06:35:44 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef G4ATTHOLDER_HH
@@ -60,7 +60,7 @@ public:
   {return fValues;}
   const std::vector<const std::map<G4String,G4AttDef>*>& GetAttDefs() const
   {return fDefs;}
-  const G4String& G4AttHolder::GetAttDefsName(size_t i) const;
+  const G4String& GetAttDefsName(size_t i) const;
   /// Add expendable G4AttValues - they will be deleted in destructor...
   void AddAttValues(const std::vector<G4AttValue>* values)
   {fValues.push_back(values);}
