@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4XXXStoredSceneHandler.cc,v 1.7 2006-09-13 12:48:57 allison Exp $
+// $Id: G4XXXStoredSceneHandler.cc,v 1.8 2006-10-24 06:13:09 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -96,7 +96,7 @@ void G4XXXStoredSceneHandler::PreAddSolid
   G4VSceneHandler::PreAddSolid(objectTransformation, visAttribs);
 
   // Get user G4Atts...
-  const std::vector<G4AttValue>* userAttValues = visAttribs.GetAttValues();
+  const std::vector<G4AttValue>* userAttValues = visAttribs.CreateAttValues();
   if (userAttValues) {
 #ifdef G4XXXStoredDEBUG
     const std::map<G4String,G4AttDef>* userAttDefs = visAttribs.GetAttDefs();
@@ -113,6 +113,7 @@ void G4XXXStoredSceneHandler::PreAddSolid
              << G4AttCheck(&standardValues, &standardDefinitions);
     }
     // End of extra checks.
+    delete userAttValues;  // (Must be deleted after use.)
 #endif
   }
 
