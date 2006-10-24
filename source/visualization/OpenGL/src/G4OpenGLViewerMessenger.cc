@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewerMessenger.cc,v 1.4 2006-09-19 16:14:21 allison Exp $
+// $Id: G4OpenGLViewerMessenger.cc,v 1.5 2006-10-24 06:20:42 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4OpenGLViewerMessenger.hh"
@@ -291,13 +291,15 @@ void G4OpenGLViewerMessenger::SetNewValue
       if (timeRange > 0.) {
 	pViewer->fStartTime = pViewer->fEndTime - timeRange;
       }
-      G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/refresh");
+      if (pViewer->fVP.IsAutoRefresh())
+	G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/refresh");
     }
 
   if (command == fpCommandFade)
     {
       pViewer->fFadeFactor = command->ConvertToDouble(newValue);
-      G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/refresh");
+      if (pViewer->fVP.IsAutoRefresh())
+	G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/refresh");
     }
 
   if (command == fpCommandStartTime)
@@ -314,13 +316,15 @@ void G4OpenGLViewerMessenger::SetNewValue
       if (timeRange > 0.) {
 	pViewer->fEndTime = pViewer->fStartTime + timeRange;
       }
-      G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/refresh");
+      if (pViewer->fVP.IsAutoRefresh())
+	G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/refresh");
     }
 
   if (command == fpCommandTransparency)
     {
       pViewer->transparency_enabled = command->ConvertToBool(newValue);
-      G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/refresh");
+      if (pViewer->fVP.IsAutoRefresh())
+	G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/refresh");
     }
 
 }
