@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AttHolder.cc,v 1.1 2006-10-21 10:10:46 allison Exp $
+// $Id: G4AttHolder.cc,v 1.2 2006-10-24 06:00:29 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4AttHolder.hh"
@@ -40,10 +40,4 @@ G4AttHolder::~G4AttHolder()
 const G4String& G4AttHolder::GetAttDefsName(size_t i) const
 {
   return G4AttDefStore::GetName(fDefs[i]);
-}
-
-void G4AttHolder::CopyAndAddAttValues(const std::vector<G4AttValue>* values)
-{
-  std::vector<G4AttValue>* copy = new std::vector<G4AttValue>(*values);
-  fValues.push_back(copy);
 }
