@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElasticHadrNucleusHE.cc,v 1.40 2006-10-24 16:59:22 vnivanch Exp $
+// $Id: G4ElasticHadrNucleusHE.cc,v 1.41 2006-10-24 17:10:06 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //G4ElasticHadrNucleusHE.cc
 //
@@ -154,7 +154,7 @@
       sqMbToGeV =  1.602;
       Fm2ToGeV2 =  25.68;
 
-  G4cout<<"  Consructor of G4ElasticHadrNucleusHE "<<G4endl;
+      //  G4cout<<"  Consructor of G4ElasticHadrNucleusHE "<<G4endl;
 
       Binom();
 

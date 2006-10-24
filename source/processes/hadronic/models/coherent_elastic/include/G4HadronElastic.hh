@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HadronElastic.hh,v 1.16 2006-10-20 15:22:24 vnivanch Exp $
+// $Id: G4HadronElastic.hh,v 1.17 2006-10-24 17:10:06 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -109,10 +109,10 @@ private:
   G4VQCrossSection*           qCManager;
   G4ElasticHadrNucleusHE*     hElastic;
 
-  const G4ParticleDefinition* theProton;
-  const G4ParticleDefinition* theNeutron;
-  const G4ParticleDefinition* theDeuteron;
-  const G4ParticleDefinition* theAlpha;
+  G4ParticleDefinition* theProton;
+  G4ParticleDefinition* theNeutron;
+  G4ParticleDefinition* theDeuteron;
+  G4ParticleDefinition* theAlpha;
   const G4ParticleDefinition* thePionPlus;
   const G4ParticleDefinition* thePionMinus;
 
