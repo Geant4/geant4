@@ -24,28 +24,28 @@
 // ********************************************************************
 //
 //
-// $Id: PhysListEmG4v52.hh,v 1.2 2006-06-29 16:57:40 gunter Exp $
+// $Id: PhysListEmStandardMSC.hh,v 1.1 2006-10-24 11:37:56 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef PhysListEmG4v52_h
-#define PhysListEmG4v52_h 1
+#ifndef PhysListEmStandardMSC_h
+#define PhysListEmStandardMSC_h 1
 
 #include "G4VPhysicsConstructor.hh"
 #include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class PhysListEmG4v52 : public G4VPhysicsConstructor
+class PhysListEmStandardMSC : public G4VPhysicsConstructor
 {
   public: 
-    PhysListEmG4v52(const G4String& name = "g4v52");
-   ~PhysListEmG4v52();
+    PhysListEmStandardMSC(const G4String& name = "standardMSC");
+   ~PhysListEmStandardMSC();
 
   public: 
-    // This method is dummy for physics. 
+    // This method is dummy for physics
     void ConstructParticle() {};
  
     // This method will be invoked in the Construct() method.
