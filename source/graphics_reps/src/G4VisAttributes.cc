@@ -24,13 +24,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisAttributes.cc,v 1.14 2006-08-26 15:10:06 allison Exp $
+// $Id: G4VisAttributes.cc,v 1.15 2006-10-24 05:54:20 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // John Allison  23rd October 1996
 
 #include "G4VisAttributes.hh"
+
+#include "G4AttValue.hh"
 
 G4VisAttributes::G4VisAttributes ():
 fVisible             (true),
@@ -96,6 +98,11 @@ const G4VisAttributes  G4VisAttributes::Invisible = G4VisAttributes (false);
 
 const G4VisAttributes& G4VisAttributes::GetInvisible() {
   return Invisible;
+}
+
+const std::vector<G4AttValue>* G4VisAttributes::CreateAttValues () const {
+  // Create an expendable copy on the heap...
+  return new std::vector<G4AttValue>(*fAttValues);
 }
 
 void G4VisAttributes::SetForceLineSegmentsPerCircle (G4int nSegments) {

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisAttributes.hh,v 1.17 2006-08-26 15:10:06 allison Exp $
+// $Id: G4VisAttributes.hh,v 1.18 2006-10-24 05:54:20 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -121,7 +121,9 @@ public: // With description
   G4int           GetForcedLineSegmentsPerCircle () const;
   G4double        GetStartTime                   () const;
   G4double        GetEndTime                     () const;
-  const std::vector<G4AttValue>*     GetAttValues() const;
+  // Returns an expendable copy of the G4AttValues...
+  const std::vector<G4AttValue>* CreateAttValues () const;
+  // Returns the orginal long life G4AttDefs...
   const std::map<G4String,G4AttDef>* GetAttDefs  () const;
 
 private:
