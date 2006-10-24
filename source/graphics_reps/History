@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.113 2006-10-21 10:13:22 allison Exp $
+cvs log $Id: History,v 1.114 2006-10-24 06:01:06 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+ 
+24th October 2006  John Allison  (greps-V08-01-08; co-works: vis-V08-01-08)
+- G4VisAttributes: Change GetAttValues to CreateAttValues.  It creates
+  an expendable copy on the heap, thus following the behaviour of
+  CreateAttValues in trajectories, hits, etc.  This achieves consistency
+  of behaviour and user expectation; the user must delete after use.
+- G4AttHolder: Remove CopyAndAddAttValues.  No longer needed after
+  above change to G4VisAttributes.
 
 21st October 2006  John Allison  (greps-V08-01-07)
 - Added G4AttHolder.
