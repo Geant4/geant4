@@ -38,10 +38,9 @@
 // * cirrone@lns.infn.it
 // ----------------------------------------------------------------------------
 
-#include "HadrontherapyProtonPrecompound.hh"
+#include "HadrontherapyProtonPrecompoundUElastic.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
-#include "G4LElastic.hh"
 #include "G4PionPlusInelasticProcess.hh"
 #include "G4LEPionPlusInelastic.hh"
 #include "G4LEPionMinusInelastic.hh"
@@ -67,8 +66,13 @@
 #include "G4HadronCaptureProcess.hh"
 #include "G4BinaryLightIonReaction.hh" 
 #include "G4HadronInelasticProcess.hh"
+#include "G4HadronicProcess.hh"
+#include "G4HadronElastic.hh"
+#include "G4VQCrossSection.hh"
+#include "G4UHadronElasticProcess.hh"
 //
-// PRECOMPOUND PHYSICS LIST
+//
+// PRECOMPOUND PHYSICS LIST + U ELASTIC SCATTERING
 //
 // PRECOMPOUND + EVAPORATION(DEFAULT EVAPORATION) FOR PROTONS, NEUTRONS AND PIONS
 // 
@@ -76,11 +80,11 @@
 // 
 // FISSION AND HADRON CAPTURE FOR NEUTRONS BETWEEN 0. MEV AND 100. TEV
 //
-HadrontherapyProtonPrecompound::HadrontherapyProtonPrecompound(const G4String& name): 
+HadrontherapyProtonPrecompoundUElastic::HadrontherapyProtonPrecompoundUElastic(const G4String& name): 
   G4VPhysicsConstructor(name)
 {
 
-  G4cout<<"****** Proton Precompound Physics List is active !!!!!! ******"
+  G4cout<<"****** Proton Precompound-UElastic Physics List is active !!!!!! ******"
 	<<G4endl;
   // Inelastic hadronic process: energy limits 
 
@@ -99,19 +103,31 @@ HadrontherapyProtonPrecompound::HadrontherapyProtonPrecompound(const G4String& n
   LEPHighLimit = 200.*MeV;
 }
 
-HadrontherapyProtonPrecompound::~HadrontherapyProtonPrecompound()
+HadrontherapyProtonPrecompoundUElastic::~HadrontherapyProtonPrecompoundUElastic()
 {}
 
-void HadrontherapyProtonPrecompound::ConstructProcess()
+void HadrontherapyProtonPrecompoundUElastic::ConstructProcess()
 {
  G4ParticleDefinition* particle = 0;
  G4ProcessManager* pmanager = 0;
 
-  //  ELASTIC SCATTERING 
-  // FOR PROTON, NEUTRON, IONS 
-  G4LElastic* elasticScattering_model = new G4LElastic();
-  G4HadronElasticProcess* elastic_scattering = new G4HadronElasticProcess();
-  elastic_scattering -> RegisterMe(elasticScattering_model);
+  // U ELASTIC SCATTERING 
+  // FOR PROTON, NEUTRON, IONS  
+ 
+ G4HadronicProcess* hel = 0;
+
+ G4HadronElastic* he = new G4HadronElastic();
+ 
+ G4VQCrossSection* man = he->GetCS();
+ 
+ G4UHadronElasticProcess* h = new G4UHadronElasticProcess();
+
+ h -> SetQElasticCrossSection(man);
+    
+ hel = h;
+
+ hel-> RegisterMe(he);
+
   
   // TRIPATHI CROSS SECTION
   // Implementation of formulas in analogy to NASA technical paper 3621 by 
@@ -151,7 +167,7 @@ void HadrontherapyProtonPrecompound::ConstructProcess()
   // Activate the proton inelastic scattering using the precompound model
   pmanager -> AddDiscreteProcess(&protonInelasticProcess);
   // Activate the proton elastic scattering 
-  pmanager -> AddDiscreteProcess(elastic_scattering); 
+  pmanager -> AddDiscreteProcess(hel); 
 
   /////////////
   // Neutron //
@@ -168,7 +184,7 @@ void HadrontherapyProtonPrecompound::ConstructProcess()
   // Activate the neutron inelastic process
   pmanager -> AddDiscreteProcess(&neutronInelasticProcess);
   // Activate the neutron elastic scattering
-  pmanager -> AddDiscreteProcess(elastic_scattering); 
+  pmanager -> AddDiscreteProcess(hel); 
   
   ////////////////////
   // HADRON CAPTURE //
@@ -215,7 +231,7 @@ void HadrontherapyProtonPrecompound::ConstructProcess()
  
   // Active the inelastic process for pions plus
   pmanager -> AddDiscreteProcess(pionPlusInelasticProcess);
-  pmanager -> AddDiscreteProcess(elastic_scattering);
+  pmanager -> AddDiscreteProcess(hel);
 
   ////////////////
   // Pion Minus //
@@ -231,7 +247,7 @@ void HadrontherapyProtonPrecompound::ConstructProcess()
 
   // Active the inelastic process for pion minus
   pmanager -> AddDiscreteProcess(pionMinusInelasticProcess); 
-  pmanager -> AddDiscreteProcess(elastic_scattering); 
+  pmanager -> AddDiscreteProcess(hel); 
    
   ///////////////
   // Deuteron //
@@ -255,7 +271,7 @@ void HadrontherapyProtonPrecompound::ConstructProcess()
   // Active the deuteron inelastic scattering using the deuteron inelastic and binary cascade model
   pmanager -> AddDiscreteProcess(&deuteronInelasticProcess);
   // Active the Hadron Elastic Process
-  pmanager -> AddDiscreteProcess(elastic_scattering); 
+  pmanager -> AddDiscreteProcess(hel); 
 
   ////////////
   // Triton //
@@ -278,7 +294,7 @@ void HadrontherapyProtonPrecompound::ConstructProcess()
   // Active the triton inelastic scattering process
   pmanager -> AddDiscreteProcess(&tritonInelasticProcess);
   // Active the triton elastic scattering process
-  pmanager -> AddDiscreteProcess(elastic_scattering);
+  pmanager -> AddDiscreteProcess(hel);
 
   ///////////
   // Alpha //
@@ -301,7 +317,7 @@ void HadrontherapyProtonPrecompound::ConstructProcess()
   // Active the alpha inelastic scattering
   pmanager -> AddDiscreteProcess(&alphaInelasticProcess);
   // Active the alpha elastic scattering
-  pmanager -> AddDiscreteProcess(elastic_scattering); 
+  pmanager -> AddDiscreteProcess(hel); 
 
   // He3
   // particle = G4He3::He3();

@@ -63,6 +63,7 @@
 #include "HadrontherapyProtonPrecompoundGEM.hh"
 #include "HadrontherapyProtonPrecompoundGEMFermi.hh"
 #include "HadrontherapyProtonBertini.hh"
+#include "HadrontherapyProtonBertiniElastic.hh"
 #include "HadrontherapyProtonBinary.hh"
 #include "HadrontherapyMuonStandard.hh"
 #include "HadrontherapyDecay.hh"
@@ -70,6 +71,9 @@
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTypes.hh"
 #include "G4ParticleTable.hh"
+#include "HadrontherapyProtonElastic.hh"
+#include "HadrontherapyProtonUElastic.hh"
+#include "HadrontherapyProtonPrecompoundUElastic.hh"
 HadrontherapyPhysicsList::HadrontherapyPhysicsList(): G4VModularPhysicsList(),
 						      electronIsRegistered(false), 
 						      positronIsRegistered(false), 
@@ -85,7 +89,7 @@ HadrontherapyPhysicsList::HadrontherapyPhysicsList(): G4VModularPhysicsList(),
   // The phantom is defined as a Geant4 Region. Here the cut is fixed to 0.001 * mm.
   //
  
-  defaultCutValue = 10. * mm;
+  defaultCutValue = 1. * mm;
 
   // Messenger: it is possible to activate interactively physics processes and models
   messenger = new HadrontherapyPhysicsListMessenger(this);
@@ -482,9 +486,68 @@ void HadrontherapyPhysicsList::AddPhysicsList(const G4String& name)
 
     }
   
-//-------------------------------------------------------------------------------------------------
+  //Precompound + U elastic scattering
+  if (name == "proton-precompound-uelastic") 
+    {
+      if (protonHadronicIsRegistered) 
+	{
+	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name  
+		 << " cannot be registered ---- decay List already existing" 
+                 << G4endl;
+	} 
+      else 
+	{
+	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name 
+                 << " is registered" << G4endl;
+	  RegisterPhysics( new HadrontherapyProtonPrecompoundUElastic(name) );
+	  protonHadronicIsRegistered = true;
+	}
+      
+    }
+  //-------------------------------------------------------------------------------------------------
 // End Hadronic Precompound models
 //-------------------------------------------------------------------------------------------------
+
+//---------------------------------------------------
+//ELASTIC SCATTERING ONLY
+//--------------------------------------------------
+
+  if (name == "proton-elastic") 
+    {
+      if (protonHadronicIsRegistered) 
+	{
+	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name  
+		 << " cannot be registered ---- decay List already existing" 
+                 << G4endl;
+	} 
+      else 
+	{
+	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name 
+                 << " is registered" << G4endl;
+	  RegisterPhysics( new HadrontherapyProtonElastic(name) );
+	  protonHadronicIsRegistered = true;
+	}
+
+    }
+
+ if (name == "proton-uelastic") 
+    {
+      if (protonHadronicIsRegistered) 
+	{
+	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name  
+		 << " cannot be registered ---- decay List already existing" 
+                 << G4endl;
+	} 
+      else 
+	{
+	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name 
+                 << " is registered" << G4endl;
+	  RegisterPhysics( new HadrontherapyProtonUElastic(name) );
+	  protonHadronicIsRegistered = true;
+	}
+
+    }
+
 
 //--------------------------------------------------------------------------------------------
 //Begin Hadronic Binary models
@@ -535,6 +598,28 @@ if (name == "proton-bertini")
 
     }
 
+
+//  Bertini model for protons, pions and neutrons
+
+if (name == "proton-bertini-elastic") 
+    {
+      if (protonHadronicIsRegistered) 
+	{
+	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name  
+		 << " cannot be registered ---- decay List already existing" 
+                 << G4endl;
+	} 
+      else 
+	{
+	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name 
+                 << " is registered" << G4endl;
+	  RegisterPhysics( new HadrontherapyProtonBertiniElastic(name) );
+	  protonHadronicIsRegistered = true;
+	}
+
+    }
+
+
 //--------------------------------------------------------------------------------------------
 // End Hadronic models
 //--------------------------------------------------------------------------------------------
@@ -558,7 +643,9 @@ void HadrontherapyPhysicsList::SetCuts()
   // Set the threshold of production equal to the defaultCutValue
   // in the experimental set-up
   G4VUserPhysicsList::SetCutsWithDefault();
-    
+     
+  G4double lowlimit=250*eV;
+  G4ProductionCutsTable::GetProductionCutsTable() ->SetEnergyRange(lowlimit, 100.*GeV);
   // Definition of a smaller threshold of production in the phantom region
   // where high accuracy is required in the energy deposit calculation
 

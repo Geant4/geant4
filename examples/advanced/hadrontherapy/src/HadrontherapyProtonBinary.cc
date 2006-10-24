@@ -82,12 +82,12 @@ HadrontherapyProtonBinary::HadrontherapyProtonBinary(const G4String& name):
 
   // Energy limits for protons, neutrons and pions
   precompoundLowLimit = 0.*MeV;
-  precompoundHighLimit = 300.*MeV;
+  precompoundHighLimit = 170.*MeV;
   neutronLowLimit = 0.*TeV;
   neutronHighLimit = 100.*TeV;
   
-  binaryLowLimit = 0.*MeV;
-  binaryHighLimit = 300.*MeV;
+  binaryLowLimit = 165.*MeV;
+  binaryHighLimit = 500.*MeV;
 }
 
 HadrontherapyProtonBinary::~HadrontherapyProtonBinary()
@@ -136,12 +136,12 @@ void HadrontherapyProtonBinary::ConstructProcess()
   pmanager -> AddDiscreteProcess(elastic);
 
   // INELASTIC SCATTERING: BINARY - PRECOMPOUND + DEFAULT EVAPORATION NO FERMI BREAK-UP  
-  pmanager -> AddDiscreteProcess(elastic);
   G4PionPlusInelasticProcess* thePionPlusInelasticProcess = new G4PionPlusInelasticProcess("inelastic");
 
-  G4PreCompoundModel* theLEPionPlusInelasticModel = new G4PreCompoundModel(&theHandler);
-
-  thePionPlusInelasticProcess -> RegisterMe(theLEPionPlusInelasticModel);
+  G4PreCompoundModel* thePreEquilib_pion = new G4PreCompoundModel(&theHandler);
+  thePreEquilib_pion -> SetMinEnergy(precompoundLowLimit);
+  thePreEquilib_pion -> SetMaxEnergy(precompoundHighLimit);
+  thePionPlusInelasticProcess -> RegisterMe(thePreEquilib_pion);
 
   pmanager -> AddDiscreteProcess(thePionPlusInelasticProcess);
 
@@ -156,9 +156,7 @@ void HadrontherapyProtonBinary::ConstructProcess()
   // INELASTIC SCATTERING: BINARY - PRECOMPOUND + DEFAULT EVAPORATION NO FERMI BREAK-UP 
   G4PionMinusInelasticProcess* thePionMinusInelasticProcess = new G4PionMinusInelasticProcess("inelastic");
 
-  G4PreCompoundModel* theLEPionMinusInelasticModel = new G4PreCompoundModel(&theHandler);
-
-  thePionMinusInelasticProcess -> RegisterMe(theLEPionMinusInelasticModel);
+  thePionMinusInelasticProcess -> RegisterMe(thePreEquilib_pion);
 
   pmanager -> AddDiscreteProcess(thePionMinusInelasticProcess);
 

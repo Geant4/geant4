@@ -253,30 +253,6 @@ void HadrontherapyProtonPrecompoundGEMFermi::ConstructProcess()
 		  // Active the Hadron Elastic Process
 		  pmanager -> AddDiscreteProcess(elastic); 
 
-  // Pions plus
-  particle = G4PionPlus::PionPlus(); 
-  pmanager = particle -> GetProcessManager();
-		  // Define the inelastic process for pions plus
-		  G4PionPlusInelasticProcess* thePionPlusInelasticProcess = new G4PionPlusInelasticProcess("inelastic");
-		  // Register the Low Energy Inelastic Model for pions plus
-		  thePionPlusInelasticProcess -> RegisterMe(thePreEquilib);
-		  // Active the inelastic process for pions plus
-		  pmanager->AddDiscreteProcess(thePionPlusInelasticProcess);
-		  pmanager -> AddDiscreteProcess(elastic);
-
-  // Pion Minus
-  particle = G4PionMinus::PionMinus();
-  pmanager = particle -> GetProcessManager();
-		  // Define the inelastic process for pions minus
-		  G4PionMinusInelasticProcess* thePionMinusInelasticProcess = new G4PionMinusInelasticProcess("inelastic");
-		  // Register the inelastic model for pion minus  
-		  thePionMinusInelasticProcess -> RegisterMe(thePreEquilib);
-		  // Active the inelastic process for pion minus
-		  pmanager -> AddDiscreteProcess(thePionMinusInelasticProcess); 
-		  // Active Absorption process for pion minus
-		  pmanager -> AddRestProcess(new G4PiMinusAbsorptionAtRest, ordDefault);
-		  pmanager -> AddDiscreteProcess(elastic); 
-
   //HADRON CAPTURE
   // Process for capture of neutral hadrons
   G4HadronCaptureProcess* neutronCapture = new G4HadronCaptureProcess();
@@ -301,7 +277,33 @@ void HadrontherapyProtonPrecompoundGEMFermi::ConstructProcess()
   // Register the fission model
   fission -> RegisterMe(fission_model); 
   // Active the fission process
-  pmanager -> AddDiscreteProcess(fission);         
+  pmanager -> AddDiscreteProcess(fission);        
+
+
+  // Pions plus
+  particle = G4PionPlus::PionPlus(); 
+  pmanager = particle -> GetProcessManager();
+		  // Define the inelastic process for pions plus
+		  G4PionPlusInelasticProcess* thePionPlusInelasticProcess = new G4PionPlusInelasticProcess("inelastic");
+		  // Register the Low Energy Inelastic Model for pions plus
+		  thePionPlusInelasticProcess -> RegisterMe(thePreEquilib);
+		  // Active the inelastic process for pions plus
+		  pmanager->AddDiscreteProcess(thePionPlusInelasticProcess);
+		  pmanager -> AddDiscreteProcess(elastic);
+
+  // Pion Minus
+  particle = G4PionMinus::PionMinus();
+  pmanager = particle -> GetProcessManager();
+		  // Define the inelastic process for pions minus
+		  G4PionMinusInelasticProcess* thePionMinusInelasticProcess = new G4PionMinusInelasticProcess("inelastic");
+		  // Register the inelastic model for pion minus  
+		  thePionMinusInelasticProcess -> RegisterMe(thePreEquilib);
+		  // Active the inelastic process for pion minus
+		  pmanager -> AddDiscreteProcess(thePionMinusInelasticProcess); 
+		  // Active Absorption process for pion minus
+		  pmanager -> AddRestProcess(new G4PiMinusAbsorptionAtRest, ordDefault);
+		  pmanager -> AddDiscreteProcess(elastic); 
+ 
 }
 
 

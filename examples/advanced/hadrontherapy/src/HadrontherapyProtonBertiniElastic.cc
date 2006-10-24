@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadrontherapyProtonBertini.cc; May 2005
+// $Id: HadrontherapyProtonBertiniElastic.cc; May 2005
 // ----------------------------------------------------------------------------
 //                 GEANT 4 - Hadrontherapy example
 // ----------------------------------------------------------------------------
@@ -38,7 +38,7 @@
 // * cirrone@lns.infn.it
 // ----------------------------------------------------------------------------
 
-#include "HadrontherapyProtonBertini.hh"
+#include "HadrontherapyProtonBertiniElastic.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
 #include "G4ProcessVector.hh"
@@ -60,7 +60,8 @@
 #include "G4LEAntiProtonInelastic.hh"
 #include "G4HEAntiProtonInelastic.hh"
 #include "G4AntiProtonAnnihilationAtRest.hh"
-//
+#include "G4CascadeElasticInterface.hh"
+
 // BERTINI PHYSICS LIST
 //
 // BERTINI FOR PROTONS, NEUTRONS AND PIONS
@@ -70,14 +71,14 @@
 // 
 // FISSION AND HADRON CAPTURE FOR NEUTRONS BETWEEN 0. MEV AND 100. TEV
 //
-HadrontherapyProtonBertini::HadrontherapyProtonBertini(const G4String& name): 
+HadrontherapyProtonBertiniElastic::HadrontherapyProtonBertiniElastic(const G4String& name): 
   G4VPhysicsConstructor(name)
 {
-  G4cout << "The Bertini model is set for protons, neutrons and pions !!!!" << G4endl;
+  G4cout << "The BertiniElastic model is set for protons, neutrons and pions !!!!" << G4endl;
   // Inelastic process, energy limits 
 
   //
-  // The Bertini model is set for protons, neutrons and pions
+  // The BertiniElastic model is set for protons, neutrons and pions
   // This model contains a pre-equilibrium model and a de-excitation model
   // Energy limit of the Bertini model
   bertiniLowLimit = 0.*MeV;
@@ -97,16 +98,26 @@ HadrontherapyProtonBertini::HadrontherapyProtonBertini(const G4String& name):
   binaryLightIonHighLimit = 40.*GeV;
 }
 
-HadrontherapyProtonBertini::~HadrontherapyProtonBertini()
+HadrontherapyProtonBertiniElastic::~HadrontherapyProtonBertiniElastic()
 {}
 
-void HadrontherapyProtonBertini::ConstructProcess()
+void HadrontherapyProtonBertiniElastic::ConstructProcess()
 {
   G4ParticleDefinition* particle = 0;
   G4ProcessManager* pmanager = 0;
 
-  // LOW ENERGY ELASTIC SCATTERING 
-  // FOR PROTON, NEUTRON, IONS 
+  // Bertini ELASTIC SCATTERING 
+  // FOR PROTON, NEUTRON, PIONS
+ 
+  G4CascadeElasticInterface * theBertiniElasticModel = new G4CascadeElasticInterface;
+
+  G4HadronElasticProcess* bertini_elastic = new G4HadronElasticProcess();
+  bertini_elastic -> RegisterMe(theBertiniElasticModel);
+
+
+ // LOW ENERGY ELASTIC SCATTERING 
+  // FOR  IONS
+ 
   G4LElastic* elastic_model = new G4LElastic();
   G4HadronElasticProcess* elastic_scattering = new G4HadronElasticProcess();
   elastic_scattering -> RegisterMe(elastic_model);
@@ -148,7 +159,7 @@ void HadrontherapyProtonBertini::ConstructProcess()
   // Active the proton inelastic scattering 
   pmanager -> AddDiscreteProcess(&theIPProton);
   // Active the Hadron Elastic Process 
-  pmanager -> AddDiscreteProcess(elastic_scattering); 
+  pmanager -> AddDiscreteProcess(bertini_elastic); 
 
   // deuteron 
   particle = G4Deuteron::Deuteron();
@@ -235,7 +246,7 @@ void HadrontherapyProtonBertini::ConstructProcess()
   // Active the neutron inelastic process
   pmanager -> AddDiscreteProcess(&theIPNeutron);
   // Active the Hadron Elastic Process
-  pmanager -> AddDiscreteProcess(elastic_scattering);
+  pmanager -> AddDiscreteProcess(bertini_elastic);
 
    //HADRON CAPTURE
   // Process for capture of neutral hadrons
@@ -272,7 +283,7 @@ void HadrontherapyProtonBertini::ConstructProcess()
   thePionPlusInelasticProcess -> RegisterMe(theBertiniModel);
   // Active the inelastic process for pions plus
   pmanager->AddDiscreteProcess(thePionPlusInelasticProcess);
-  pmanager -> AddDiscreteProcess(elastic_scattering);
+  pmanager -> AddDiscreteProcess(bertini_elastic);
 
   // Pion Minus processes
   particle = G4PionMinus::PionMinus();
@@ -285,7 +296,7 @@ void HadrontherapyProtonBertini::ConstructProcess()
   pmanager -> AddDiscreteProcess(thePionMinusInelasticProcess); 
   // Active Absorption process for pion minus
   pmanager -> AddRestProcess(new G4PiMinusAbsorptionAtRest, ordDefault);
-  pmanager -> AddDiscreteProcess(elastic_scattering); 
+  pmanager -> AddDiscreteProcess(bertini_elastic); 
 
   
 }
