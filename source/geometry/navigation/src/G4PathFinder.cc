@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PathFinder.cc,v 1.15 2006-10-12 17:40:45 japost Exp $
+// $Id: G4PathFinder.cc,v 1.16 2006-10-25 18:05:22 japost Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4PathFinder Implementation
@@ -63,12 +63,13 @@ G4PathFinder::GetInstance()
    return fpInstance;
 }
 
+
 G4PathFinder::G4PathFinder() 
   // : fpActiveNavigators()
   : fEndState( G4ThreeVector(), G4ThreeVector(), 0., 0., 0., 0., 0.),
        fRelocatedPoint(true),
        fLastStepNo(-1), 
-       fVerboseLevel(0)
+       fVerboseLevel(3)
 {
    fNoActiveNavigators= 0; 
    fLastLocatedPosition= G4ThreeVector( DBL_MAX, DBL_MAX, DBL_MAX ); 
@@ -87,6 +88,7 @@ G4PathFinder::G4PathFinder()
    }
    // fpNavigator= new[MaxNav] (G4Navigator*); 
 
+   pTransportManager= G4TransportationManager::GetTransportationManager();
 }
 
 G4PathFinder::~G4PathFinder() 
@@ -191,16 +193,14 @@ G4PathFinder::ComputeStep( const G4FieldTrack &InitialFieldTrack,
   fRelocatedPoint= false;
 
 
-  if( fVerboseLevel > 1 ){ 
+  if( fVerboseLevel > 0 ){ 
     G4cout << " G4PathFinder::ComputeStep returns " << fCurrentStepSize[ navigatorNo ]
-	   << " for Navigator " << navigatorNo << G4endl; 
+	   << " for Navigator " << navigatorNo 
+           << " Limited step = " << limitedStep << G4endl; 
   }
 
   return fCurrentStepSize[ navigatorNo ];
 }
-
-static G4TransportationManager* pTransportManager= 
-       G4TransportationManager::GetTransportationManager();
 
 // ----------------------------------------------------------------------
 
@@ -258,8 +258,9 @@ G4PathFinder::PrepareNewTrack( const G4ThreeVector position,
 
   fRelocatedPoint= false; 
 
-  if( fVerboseLevel > 1 ) 
+  if( fVerboseLevel > 0 ) {
     G4cout << " G4PathFinder::PrepareNewTrack : exiting. " << G4endl;
+  }
 }
 
 static 
@@ -291,7 +292,7 @@ G4PathFinder::Locate( const   G4ThreeVector& position,
   G4double      moveLenSq= moveVec.mag2();
   if( (!fNewTrack) && (!fRelocatedPoint) && ( moveLenSq> 0.0) ){
      ReportMove( position, lastEndPosition, "Position" ); 
-     G4Exception( "G4PathFinder::Locate", "LocateUnexpectedPoint", 
+     G4Exception( "G4PathFinder::Locate", "201-LocateUnexpectedPoint", 
 	 	  JustWarning,   // FatalException,  
 		  "Location is not where last ComputeStep ended."); 
   }
@@ -369,34 +370,47 @@ G4PathFinder::ReLocate( const   G4ThreeVector& position )
   // Check that move since last location or relocation is within safety
   // 
   G4ThreeVector lastPositionLocated= fLastLocatedPosition; 
-  G4ThreeVector moveVec = (position - fSafetyLocation ) ; //  lastPositionLocated );
-  G4double      moveLenSq= moveVec.mag2();
-  if( (!fNewTrack) && ( moveLenSq > fMinSafety*fMinSafety) ){
+  G4ThreeVector moveVecLocated = (position - lastPositionLocated );
+  G4ThreeVector moveVecSafety  = (position - fSafetyLocation ); 
+  G4double      moveLenLocSq=  moveVecLocated.mag2(); 
+  G4double      moveLenSafSq=  moveVecSafety.mag2();
+
+  G4double distCheckLoc_sq= ( moveLenLocSq - fMinSafety*fMinSafety ); 
+  G4double distCheckSaf_sq= ( moveLenSafSq -  fMinSafety_atSafLocation
+			                     *fMinSafety_atSafLocation ); 
+  G4bool longMoveLoc = distCheckLoc_sq > 0.0; 
+  G4bool longMoveSaf = distCheckSaf_sq > 0.0; 
+
+  // if( (!fNewTrack) && ( longMoveLoc && longMoveSaf ) ){
      ReportMove( position, lastPositionLocated, "Position" ); 
-     G4cout << " Moved from last located by " << std::sqrt(moveLenSq) 
+     G4cout << " Moved from last located by " << std::sqrt(moveLenLocSq) 
             << " compared to safety " << fMinSafety << G4endl; 
 
      G4cout << "  --> last position located was " << fLastLocatedPosition << G4endl;
-     G4cout << "  --> last position for safety " << fSafetyLocation << G4endl;
-     G4cout << "       move from safety location = " << (position-fSafetyLocation).mag() << G4endl;
      G4cout << "       safety value =  " << fMinSafety << G4endl;
+     G4cout << "  --> last position for safety " << fSafetyLocation << G4endl;
+     G4cout << "       its safety value =  " << fMinSafety_atSafLocation << G4endl;
+     G4cout << "       move from safety location = " << sqrt(moveLenSafSq) << G4endl;
+                         // moveVecSafety.mag() *** (position-fSafetyLocation).mag() << G4endl;
 
-     G4Exception( "G4PathFinder::ReLocate", "RelocatePointTooFar", 
+  if( (!fNewTrack) && ( longMoveLoc && longMoveSaf ) ){
+     ReportMove( position, lastPositionLocated, "Position" ); 
+     G4Exception( "G4PathFinder::ReLocate", "202-RelocatePointTooFar", 
 	 	   FatalException,  
 		  "ReLocation is further than safety from last location."); 
   }
 
-  if( fVerboseLevel > 2 ){
+  if( 1 ) { // fVerboseLevel > 2 ){
     G4cout << G4endl; 
     G4cout << " G4PathFinder::ReLocate : entered " << G4endl;
     G4cout << " ----------------------   -------" <<  G4endl;
     G4cout << "  *Re*Locating at position " << position  << G4endl; 
       // << "  with direction " << direction 
       // << "  relative= " << relative << G4endl;
-    if ( (fVerboseLevel > -1) || ( moveLenSq > 0.0) ){ 
+    if ( (fVerboseLevel > -1) || ( moveLenLocSq > 0.0) ){ 
        G4cout << "  lastPositionLocated = " << lastPositionLocated
-	      << "  moveVec = " << moveVec
-	      << "  newTr = " << fNewTrack 
+	      << "  moveVec Location = " << moveVecLocated
+	      << "  is new Track = " << fNewTrack 
 	      << "  relocated = " << fRelocatedPoint << G4endl;
     }
   }
@@ -415,13 +429,15 @@ G4PathFinder::ReLocate( const   G4ThreeVector& position )
      G4cout << " ReLocated in world " << num << " at " << position << G4endl;
   }
 
-  if( fVerboseLevel > 2 ){
-    G4cout << " G4PathFinder::ReLocate : exiting. " << G4endl;
+  fLastLocatedPosition= position; 
+  fRelocatedPoint= false;
+
+  if( 1 ) { //  fVerboseLevel > 2 ){
+    G4cout << " G4PathFinder::ReLocate : exiting " 
+	   << "  at position " << fLastLocatedPosition << G4endl;
     G4cout << G4endl;
   }
 
-  fLastLocatedPosition= position; 
-  fRelocatedPoint= false;
 }
 
 // -----------------------------------------------------------------------------
@@ -446,7 +462,7 @@ G4double  G4PathFinder::ComputeSafety( const G4ThreeVector& position )
     } 
 
     fSafetyLocation= position;
-    fMinSafety = minSafety;
+    fMinSafety_atSafLocation = minSafety;
 
     // G4cout << " G4PathFinder::ComputeSafety - exits, returning " << minSafety << G4endl;
     return minSafety; 
@@ -501,7 +517,8 @@ G4PathFinder::ComputeLinearStep(const G4ThreeVector &pGlobalPoint,
 	 << pNewSafety << limitedStep << stepNo << navId << G4endl; 
 
   G4cout << " G4PathFinder::ComputeLinearStep" << G4endl;
-  G4Exception( " G4PathFinder::ComputeLinearStep is Null" );
+  G4Exception( " G4PathFinder::ComputeLinearStep is Null",  "203-No Method",
+	       FatalException,  "G4PathFinder::ComputeLinearStep is Null" );
   return 0.500 * pCurrentProposedStepLength;
 }
 
@@ -653,7 +670,7 @@ G4PathFinder::WhichLimited()       // Flag which processes limited the step
   }
 
 #ifndef G4NO_VERBOSE
-  if( fVerboseLevel > 0 ){
+  if( fVerboseLevel > 1 ){
     this->PrintLimited();   // --> for tracing 
     G4cout << " G4PathFinder::WhichLimited - exiting. " << G4endl;
   }
