@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElasticHadrNucleusHE.hh,v 1.28 2006-10-24 16:59:22 vnivanch Exp $
+// $Id: G4ElasticHadrNucleusHE.hh,v 1.29 2006-10-25 10:43:57 starkov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4ElasticHadrNucleusHe.hh
@@ -117,15 +117,6 @@
    class G4ElasticHadrNucleusHE : public G4HadronicInteraction
    {
  public:
-//         static const G4double MbToGeV2  =  2.568;
-//         static const G4double sqMbToGeV =  1.602;
-//         static const G4double Fm2ToGeV2 =  25.68;
-//         static const G4double FmToGeV   =  5.068;
-//         static const G4double MyPi      =  3.141593;
-         G4double MbToGeV2;
-         G4double sqMbToGeV;
-         G4double Fm2ToGeV2;
-
          G4ElasticHadrNucleusHE(const G4ParticleDefinition * aHadron,
                                       G4Nucleus            * aNucleus);
 
@@ -185,6 +176,10 @@
       G4double MomentumH;
       G4int    HadrCodes[7];
 //  ======================================================
+      G4double MbToGeV2;
+      G4double sqMbToGeV;
+      G4double Fm2ToGeV2;
+
       G4double  Weight;
       G4int     HadrCode;
       G4String  HadronName;
@@ -231,7 +226,6 @@
        G4double  HadrTot, HadrSlope, HadrReIm,  DDSect2, DDSect3,
                  MomentumCM;
 
-  public:
        G4double  Q2res;
        G4int     verboselevel;
   };     //   The end of the class description
