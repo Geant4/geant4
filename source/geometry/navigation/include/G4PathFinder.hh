@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PathFinder.hh,v 1.17 2006-10-25 17:57:59 japost Exp $
+// $Id: G4PathFinder.hh,v 1.18 2006-10-25 18:00:13 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // class G4PathFinder 
@@ -191,8 +191,6 @@ class G4PathFinder
    G4VPhysicalVolume* fLocatedVolume[fMaxNav];
    G4ThreeVector      fLastLocatedPosition; 
    // G4ThreeVector      fLastLocatedDirection; 
-
-   // G4TransportationManager* fpTransportManager; 
 
    G4FieldTrack    fEndState;
      // End point storage
