@@ -1,4 +1,4 @@
-$Id: History,v 1.53 2006-10-16 18:09:53 japost Exp $
+$Id: History,v 1.54 2006-10-25 18:07:22 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+October 25th, 2006 - J.Apostolakis    (geomnav-V08-01-ref03-03)
+----------------------------------
+- G4PathFinder: fixed initialisation of cached value
+                of TransportationManager to cope with singletons
+                  -- thanks Gabriele.
 
 October 16th, 2006 - J.Apostolakis    (geomnav-V08-01-01)
 ----------------------------------
