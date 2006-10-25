@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4mplIonisation.hh,v 1.1 2006-10-25 17:37:44 vnivanch Exp $
+// $Id: G4mplIonisation.hh,v 1.2 2006-10-25 18:27:50 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -41,6 +41,9 @@
 //
 // This class manages the ionisation process for a magnetic monopole
 // it inherites from G4VContinuousDiscreteProcess via G4VEnergyLossProcess.
+// Magnetic charge of the monopole should be defined in the constructor of 
+// the process, unless it is assumed that it is classic Dirac monopole with 
+// the charge 67.5*eplus. The name of the particle should be "monopole".
 //
 
 // -------------------------------------------------------------------
@@ -61,7 +64,7 @@ class G4mplIonisation : public G4VEnergyLossProcess
 
 public:
 
-  G4mplIonisation(const G4String& name = "mplIoni");
+  G4mplIonisation(G4double mCharge = 0.0, const G4String& name = "mplIoni");
 
   virtual ~G4mplIonisation();
 
@@ -87,7 +90,8 @@ private:
   G4mplIonisation & operator=(const G4mplIonisation &right);
   G4mplIonisation(const G4mplIonisation&);
 
-  G4bool                      isInitialised;
+  G4double    magneticCharge;
+  G4bool      isInitialised;
 
 };
 

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4mplIonisation.cc,v 1.1 2006-10-25 17:37:44 vnivanch Exp $
+// $Id: G4mplIonisation.cc,v 1.2 2006-10-25 18:27:50 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -44,7 +44,6 @@
 
 #include "G4mplIonisation.hh"
 #include "G4Electron.hh"
-#include "G4Monopole.hh"
 #include "G4mplIonisationModel.hh"
 #include "G4BohrFluctuations.hh"
 
@@ -52,10 +51,14 @@
 
 using namespace std;
 
-G4mplIonisation::G4mplIonisation(const G4String& name)
+G4mplIonisation::G4mplIonisation(G4double mCharge, const G4String& name)
   : G4VEnergyLossProcess(name),
+    magneticCharge(mCharge),
     isInitialised(false)
 {
+  // By default classical magnetic charge is used
+  if(magneticCharge == 0.0) magneticCharge = eplus*0.5/fine_structure_const;
+
   SetDEDXBinning(120);
   SetLambdaBinning(120);
   SetMinKinEnergy(0.1*keV);
@@ -78,13 +81,12 @@ void G4mplIonisation::InitialiseEnergyLossProcess(const G4ParticleDefinition*,
   SetBaseParticle(0);
   SetSecondaryParticle(G4Electron::Electron());
 
-  G4BohrFluctuations* fluct  = new G4BohrFluctuations();   
-  G4mplIonisationModel* ion  = new G4mplIonisationModel();
+  G4mplIonisationModel* ion  = new G4mplIonisationModel(magneticCharge);
   ion->SetLowEnergyLimit(0.1*keV);
   ion->SetHighEnergyLimit(100.*TeV);
-  AddEmModel(0,ion,fluct);
+  AddEmModel(0,ion,ion);
 
-  SetStepLimits(0.2, 0.1*mm);
+  SetStepFunction(0.2, 1*mm);
 
   isInitialised = true;
 }

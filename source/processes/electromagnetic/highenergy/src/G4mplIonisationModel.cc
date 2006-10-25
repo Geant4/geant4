@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4mplIonisationModel.cc,v 1.1 2006-10-25 17:37:44 vnivanch Exp $
+// $Id: G4mplIonisationModel.cc,v 1.2 2006-10-25 18:27:50 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -46,7 +46,6 @@
 
 #include "G4mplIonisationModel.hh"
 #include "Randomize.hh"
-#include "G4Monopole.hh"
 #include "G4LossTableManager.hh"
 #include "G4ParticleChangeForLoss.hh"
 
@@ -54,16 +53,15 @@
 
 using namespace std;
 
-G4mplIonisationModel::G4mplIonisationModel(const G4ParticleDefinition*, const G4String& nam)
-  : G4VEmModel(nam),
+G4mplIonisationModel::G4mplIonisationModel(G4double mCharge, 
+					   const G4String& nam)
+  : G4VEmModel(nam),G4VEmFluctuationModel(nam),
+  magCharge(mCharge),
   twoln10(2.0*log(10.0)),
   beta2low(0.0001),
   beta2lim(0.01),
   bg2lim(beta2lim*(1.0 + beta2lim))
 {
-  monopole     = G4Monopole::Monopole();
-  mass         = monopole->GetPDGMass();
-  magCharge    = monopole->MagneticCharge()/eplus;
   nmpl         = G4int(abs(magCharge)/68.0);
   if(nmpl > 6)      nmpl = 6;
   else if(nmpl < 1) nmpl = 1;
@@ -79,9 +77,12 @@ G4mplIonisationModel::~G4mplIonisationModel()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4mplIonisationModel::Initialise(const G4ParticleDefinition*,
+void G4mplIonisationModel::Initialise(const G4ParticleDefinition* p,
 				      const G4DataVector&)
 {
+  monopole = p;
+  mass     = monopole->GetPDGMass();
+
   if(pParticleChange) 
     fParticleChange = reinterpret_cast<G4ParticleChangeForLoss*>(pParticleChange);
   else 
@@ -149,6 +150,36 @@ G4double G4mplIonisationModel::ComputeDEDXPerVolume(const G4Material* material,
   }
 
   return dedx0;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4mplIonisationModel::SampleFluctuations(
+				       const G4Material* material,
+				       const G4DynamicParticle* dp,
+				       G4double& tmax,
+				       G4double& length,
+				       G4double& meanLoss)
+{
+  G4double siga = Dispersion(material,dp,tmax,length);
+  G4double loss = meanLoss;
+  siga = sqrt(siga);
+  G4double twomeanLoss = meanLoss + meanLoss;
+
+  if(twomeanLoss < siga) {
+    G4double x;
+    do {
+      loss = twomeanLoss*G4UniformRand();
+      x = (loss - meanLoss)/siga;
+    } while (1.0 - 0.5*x*x < G4UniformRand());
+  } else {
+    do {
+      loss = G4RandGauss::shoot(meanLoss,siga);
+    } while (0.0 > loss || loss > twomeanLoss);
+  }
+  //G4cout << "G4mplIonisationModel::SampleFluctuations:  loss= " << loss 
+  //<< "  siga= " << siga << G4endl;
+  return loss;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4mplIonisationModel.hh,v 1.1 2006-10-25 17:37:44 vnivanch Exp $
+// $Id: G4mplIonisationModel.hh,v 1.2 2006-10-25 18:27:50 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -48,16 +48,16 @@
 #define G4mplIonisationModel_h 1
 
 #include "G4VEmModel.hh"
+#include "G4VEmFluctuationModel.hh"
 
-class G4Monopole;
 class G4ParticleChangeForLoss;
 
-class G4mplIonisationModel : public G4VEmModel
+class G4mplIonisationModel : public G4VEmModel, public G4VEmFluctuationModel
 {
 
 public:
 
-  G4mplIonisationModel(const G4ParticleDefinition* p = 0, const G4String& nam = "mplIonisation");
+  G4mplIonisationModel(G4double mCharge, const G4String& nam = "mplIonisation");
 
   virtual ~G4mplIonisationModel();
 
@@ -75,6 +75,17 @@ public:
                                       G4double maxEnergy);
 
 
+  virtual G4double SampleFluctuations(const G4Material*,
+                                      const G4DynamicParticle*,
+                                      G4double& tmax,
+                                      G4double& length,
+                                      G4double& meanLoss);
+
+  virtual G4double Dispersion(const G4Material*,
+                              const G4DynamicParticle*,
+                              G4double& tmax,
+                              G4double& length);
+
 private:
 
   void SetParticle(const G4ParticleDefinition* p);
@@ -83,7 +94,7 @@ private:
   G4mplIonisationModel & operator=(const  G4mplIonisationModel &right);
   G4mplIonisationModel(const  G4mplIonisationModel&);
 
-  const G4Monopole*           monopole;
+  const G4ParticleDefinition* monopole;
   G4ParticleChangeForLoss*    fParticleChange;
 
   G4double mass;
@@ -109,5 +120,24 @@ inline std::vector<G4DynamicParticle*>* G4mplIonisationModel::SampleSecondaries(
 {
   return 0;
 }
+
+inline G4double G4mplIonisationModel::Dispersion(
+                          const G4Material* material,
+                          const G4DynamicParticle* dp,
+                                G4double& tmax,
+                                G4double& length)
+{
+  G4double siga = 0.0;
+  G4double tau   = dp->GetKineticEnergy()/mass;
+  if(tau > 0.0) { 
+    G4double electronDensity = material->GetElectronDensity();
+    G4double gam   = tau + 1.0;
+    G4double invbeta2 = (gam*gam)/(tau * (tau+2.0));
+    siga  = (invbeta2 - 0.5) * twopi_mc2_rcl2 * tmax * length
+      * electronDensity * chargeSquare;
+  }
+  return siga;
+}
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
