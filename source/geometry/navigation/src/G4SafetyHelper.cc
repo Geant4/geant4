@@ -126,3 +126,14 @@ G4double   G4SafetyHelper::ComputeSafety( const G4ThreeVector& position )
    return newsafety;
 }
 
+
+void  G4SafetyHelper::ReLocateWithinVolume( const G4ThreeVector &newPosition )
+{
+
+   G4int oldPrec= G4cout.precision( 10 ); 
+   G4cout << "  G4SafetyHelper::ReLocateWithinVolume " 
+	  << " calling PathFinder->ReLocate at position " << newPosition << G4endl;
+   fpPathFinder->ReLocate( newPosition ); 
+
+   G4cout.precision( oldPrec ); 
+}
