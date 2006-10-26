@@ -1,4 +1,4 @@
-$Id: History,v 1.109 2006-09-19 15:50:42 allison Exp $
+$Id: History,v 1.110 2006-10-26 14:35:34 allison Exp $
 --------------------------------------------------
 
      =========================================================
@@ -15,6 +15,14 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
+26-10-06 John Allison (exampleN03-V08-01-04)
+- Migrate to new trajectory modeling commands:
+  o vis.mac: Add new trajectory commands and helpful comments.
+  o ExN03EventActionMessenger: Remove /N03/event/drawTracks.
+  o ExN03EventAction: Remove SetDrawFlag and code for drawing
+    trajectories in EndOfEventAction.
+  o exN03Vis12.mac and exN03Vis13.mac: Further refinement.
+
 19-09-06 John Allison (exampleN03-V08-01-03)
 - exN03Vis12.mac and exN03Vis13.mac: Further refinement.
 
