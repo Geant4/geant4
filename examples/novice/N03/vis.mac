@@ -33,10 +33,26 @@
 # Output an empty detector
 /vis/viewer/flush
 #
-# for drawing the tracks
-# (if too many tracks cause core dump => storeTrajectory 0)
+# Draw trajectories at end of event, showing trajectory points as
+# markers of size 2 pixels
+/vis/scene/add/trajectories
+/vis/modeling/trajectories/create/drawByCharge
+/vis/modeling/trajectories/drawByCharge-0/default/setDrawStepPts true
+/vis/modeling/trajectories/drawByCharge-0/default/setStepPtsSize 2
+# (if too many tracks cause core dump => /tracking/storeTrajectory 0)
 #
-/tracking/storeTrajectory 1
+# To draw gammas only
+#/vis/filtering/trajectories/create/particleFilter
+#/vis/filtering/trajectories/particleFilter-0/add gamma
+#
+# To draw charged particles only
+#/vis/filtering/trajectories/particleFilter-0/invert true
+#
+# Many other options available with /vis/modeling and /vis/filtering.
+# For example, select colour by particle ID
+#/vis/modeling/trajectories/create/drawByParticleID
+#/vis/modeling/trajectories/drawByParticleID-0/set e- red
+#
 /vis/scene/endOfEventAction accumulate
 #
 # At end of each run, an automatic flush causes graphical output.
