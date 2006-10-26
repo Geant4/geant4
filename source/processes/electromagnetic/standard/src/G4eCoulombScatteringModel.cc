@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.cc,v 1.9 2006-10-19 09:44:27 vnivanch Exp $
+// $Id: G4eCoulombScatteringModel.cc,v 1.10 2006-10-26 17:36:17 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -143,7 +143,8 @@ G4double G4eCoulombScatteringModel::CalculateCrossSectionPerAtom(
 {
   G4double cross = 0.0;
   G4double m     = p->GetPDGMass();
-  G4double mom2  = kinEnergy*(kinEnergy + 2.0*m);
+  G4double tkin  = std::max(keV, kinEnergy);
+  G4double mom2  = tkin*(tkin + 2.0*m);
   G4double costm = std::max(cosThetaMax, 1.0 - 0.5*q2Limit/mom2);
   if(costm < cosThetaMin) {
     G4double q        = p->GetPDGCharge()/eplus;
