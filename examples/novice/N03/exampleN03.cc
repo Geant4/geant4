@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: exampleN03.cc,v 1.29 2006-08-16 15:55:20 allison Exp $
+// $Id: exampleN03.cc,v 1.30 2006-10-26 14:58:24 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -57,7 +57,6 @@
 #include "ExN03EventAction.hh"
 #include "ExN03SteppingAction.hh"
 #include "ExN03SteppingVerbose.hh"
-#include "ExN03TrackingAction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -122,9 +121,6 @@ int main(int argc,char** argv)
   G4UserSteppingAction* stepping_action =
     new ExN03SteppingAction(detector, event_action);
   runManager->SetUserAction(stepping_action);
-  //
-  G4UserTrackingAction* tracking_action = new ExN03TrackingAction;
-  runManager->SetUserAction(tracking_action);
   
   // Initialize G4 kernel
   //
