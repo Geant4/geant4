@@ -1,4 +1,4 @@
-$Id: History,v 1.87 2006-09-19 15:59:41 allison Exp $
+$Id: History,v 1.88 2006-10-26 11:11:14 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,10 @@ committal in the CVS repository !
 
 History file for visualization/modeling
 ---------------------------------------
+
+26th October 2006  John Allison  (modeling-V08-01-08)
+- G4PhysicalVolumeModel: Changed CreateAttValues to CreateCurrentAttValues.
+- G4TrajectoriesModel: Added GetCurrentTrajectory.
 
 ------------------------------------------------------
 19th September 2006  John Allison  (modeling-V08-01-07)
