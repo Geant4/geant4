@@ -21,8 +21,7 @@
 /vis/open OGLSX
 /vis/drawVolume
 /vis/scene/add/eventID
-/vis/scene/add/trajectories
-/tracking/storeTrajectory 3
+/vis/scene/add/trajectories rich
 
 # Set up drawByCharge with time slicing
 /vis/modeling/trajectories/create/drawByCharge
