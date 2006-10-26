@@ -1,4 +1,4 @@
-$Id: History,v 1.54 2006-10-25 18:07:22 japost Exp $
+$Id: History,v 1.55 2006-10-26 15:11:50 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,63 +16,77 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-October 25th, 2006 - J.Apostolakis    (geomnav-V08-01-ref03-03)
+
+October 26th, 2006 - G.Cosmo (geomnav-V08-01-02)
+----------------------------
+- G4Navigator:
+  o Added inline methods IsEnteredDaughter() and IsExitedMother() to
+    allow for verification of a point entering a daughter volume or
+    exiting the mother volume.
+  o Made LocateGlobalPointAndSetup() method virtual. Moved to non virtual
+    and inline LocateGlobalPointAndUpdateTouchableHandle() method.
+  o Moved 'fHistory' data member to protected to aloow for more complete
+    subclassing.
+  o Minor cosmetics to recently introduced printout diagnostics in
+    ComputeSafety() method.
+- G4TransportationManager:
+  o Added methods to access the list of the registered worlds.
+- NOTE: this tag does NOT include the recent developments introduced for
+  G4PathFinder. It resumes from tag "geomnav-V08-00-01"; anything else
+  introduced after it, except for changes in G4Navigator, is NOT included !
+
+October 25th, 2006 - J.Apostolakis
 ----------------------------------
-- G4PathFinder: fixed initialisation of cached value
-                of TransportationManager to cope with singletons
-                  -- thanks Gabriele.
+- G4PathFinder: fixed initialisation of cached value for the
+  G4TransportationManager to cope with singletons.
 
 October 16th, 2006 - J.Apostolakis    (geomnav-V08-01-01)
 ----------------------------------
 - G4Navigator: moved debug printing behind fVerbose conditions
 
-October 12th, 2006 - J.Apostolakis    (geomnav-V08-01-00)
+October 12th, 2006 - J.Apostolakis (geomnav-V08-01-00)
 ----------------------------------
 - New class G4SafetyHelper to aid multiple scattering inn 
   determining the correct Mass geometry step (via PathFinder)
   and all-geometry safety.
 - Several revisions, fixes to G4PathFinder.
 
-June 8th, 2006 - J.Apostolakis    (geomnav-V08-00-06)
+June 8th, 2006 - J.Apostolakis (geomnav-V08-00-06)
 ------------------------------
-- G4PathFinder
-  * New method 'ComputeSafety' to compute safety at endpoint of last step
+- G4PathFinder:
+  o New method 'ComputeSafety' to compute safety at endpoint of last step.
 
-June 2nd, 2006 - J.Apostolakis    (geomnav-V08-00-05)
+June 2nd, 2006 - J.Apostolakis (geomnav-V08-00-05)
 ------------------------------
-- G4PathFinder
-  * New method 'ReLocate' for non-Transportation classes to call 
-     when moving the endpoint of a particle. 
-     Uses Navigators' LocateGlobalPointWithinVolume method.
-  * Small fixes (thanks to Makoto)
-  * Protection of debug printing with Verbose flag
-  * Default verbose level is now 0
+- G4PathFinder:
+  o New method ReLocate() for non-Transportation classes to call when moving
+    the endpoint of a particle. Uses LocateGlobalPointWithinVolume() method
+    of the navigators.
+  o Small fixes and protection of debug printing with Verbose flag.
+  o Default verbose level is now 0.
 
-May 27/28th, 2006 - J.Apostolakis (geomnav-V08-00-04)
----------------------------------
-- G4PathFinder
-  * Check whether a process shifted the position since the last step
-  * Corrected checking for 'Unique' ie one process limiting step
-  * Revised printing (more information, some protected by verbose flag)
+May 28th, 2006 - J.Apostolakis (geomnav-V08-00-04)
+------------------------------
+- G4PathFinder:
+  o Check whether a process shifted the position since the last step.
+  o Corrected checking for 'Unique', i.e. one process limiting step.
+  o Revised printing (more information, some protected by verbose flag).
 
 May 27th, 2006 - J.Apostolakis (geomnav-V08-00-03)
 ------------------------------
-- G4PathFinder revised significantly
-  * Workaround for problem of CreateHistory() when outside world
-  * Revised for new counting of Navigator Ids (Makoto)
-  * Added MovePoint() method that signals if it moved
-  * Added state to cope with cases where a full step is taken.
-    ie to cope with steps that return kInfinity
-
+- G4PathFinder revised significantly:
+  o Workaround for problem of CreateHistory() when outside world.
+  o Revised for new counting of Navigator IDs (M.Asai).
+  o Added MovePoint() method that signals if it moved.
+  o Added state to cope with cases where a full step is taken,
+    i.e. to cope with steps that return kInfinity:
     New state:
-      RelocatedPoint  to show if it is moved
-      TrueMinStep   (finite whereas reported can be kInfinity)
+      RelocatedPoint - to show if it is moved;
+      TrueMinStep    - finite whereas reported can be kInfinity.
     and to aid in clarifying the state of the (singleton) object:
-      LastStepNo    - already kept in one method (static), now exposed
-      CurrentStepNo - mostly for debugging and printing out
-
-    Small improvements in tests.
-
+      LastStepNo     - already kept in one method (static), now exposed;
+      CurrentStepNo  - mostly for debugging and printing out.
+  o Small improvements in tests.
 
 May 23rd, 2006 - J.Apostolakis (geomnav-V08-00-02)
 ------------------------------
