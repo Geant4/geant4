@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeModel.cc,v 1.53 2006-09-19 15:57:01 allison Exp $
+// $Id: G4PhysicalVolumeModel.cc,v 1.54 2006-10-26 11:05:42 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -693,7 +693,7 @@ const std::map<G4String,G4AttDef>* G4PhysicalVolumeModel::GetAttDefs() const
     return store;
 }
 
-std::vector<G4AttValue>* G4PhysicalVolumeModel::CreateAttValues() const
+std::vector<G4AttValue>* G4PhysicalVolumeModel::CreateCurrentAttValues() const
 {
     std::vector<G4AttValue>* values = new std::vector<G4AttValue>;
     std::ostringstream oss;

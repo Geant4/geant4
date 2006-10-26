@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeModel.hh,v 1.31 2006-08-30 10:26:40 allison Exp $
+// $Id: G4PhysicalVolumeModel.hh,v 1.32 2006-10-26 11:05:42 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -143,7 +143,7 @@ public: // With description
   const std::map<G4String,G4AttDef>* GetAttDefs() const;
   // Attribute definitions for current solid.
 
-  std::vector<G4AttValue>* CreateAttValues() const;
+  std::vector<G4AttValue>* CreateCurrentAttValues() const;
   // Attribute values for current solid.  Each must refer to an
   // attribute definition in the above map; its name is the key.  The
   // user must test the validity of this pointer (it must be non-zero
