@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.cc,v 1.5 2006-09-18 17:26:20 maire Exp $
+// $Id: DetectorConstruction.cc,v 1.6 2006-10-26 10:18:59 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 //
@@ -105,7 +105,8 @@ void DetectorConstruction::DefineMaterials()
   new G4Material("Water", 1.000*g/cm3, 2);
   H2O->AddElement(H, 2);
   H2O->AddElement(O, 1);
-      
+  H2O->GetIonisation()->SetMeanExcitationEnergy(75.0*eV);
+        
  G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 }
 
