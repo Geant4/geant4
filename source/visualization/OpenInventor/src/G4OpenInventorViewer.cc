@@ -46,6 +46,10 @@
 #include "G4VInteractorManager.hh"
 #include "G4Scene.hh"
 #include "Geant4_SoPolyhedron.h"
+#include "G4AttValue.hh"
+#include "G4AttDef.hh"
+#include "G4AttCheck.hh"
+#include "G4AttHolder.hh"
 
 G4OpenInventorViewer::G4OpenInventorViewer(
  G4OpenInventorSceneHandler& sceneHandler
@@ -401,13 +405,23 @@ void G4OpenInventorViewer::SelectionCB(
 {
   G4OpenInventorViewer* This = (G4OpenInventorViewer*)aThis;
   SoNode* node = ((SoFullPath*)aPath)->getTail();
-  G4String name((char*)node->getName().getString());
-  G4String cls((char*)node->getTypeId().getName().getString());
-  G4cout << "SoNode : " << node 
-         << " SoType : " << cls 
-         << " name : " << name 
-         << G4endl;
-/*FIXME : to explore
+  G4AttHolder* attHolder = dynamic_cast<G4AttHolder*>(node);
+  if(attHolder && attHolder->GetAttDefs().size()) {
+    for (size_t i = 0; i < attHolder->GetAttDefs().size(); ++i) {
+      G4cout << attHolder->GetAttDefsName(i) << ":\n"
+	     << G4AttCheck(attHolder->GetAttValues()[i],
+			   attHolder->GetAttDefs()[i]);
+    }
+  } else {
+    G4String name((char*)node->getName().getString());
+    G4String cls((char*)node->getTypeId().getName().getString());
+    G4cout << "SoNode : " << node 
+	   << " SoType : " << cls 
+	   << " name : " << name 
+	   << G4endl;
+    G4cout << "No attributes attached." << G4endl;
+  }
+  /*FIXME : to explore (need different button - this is used for picking.
   if(node->isOfType(Geant4_SoPolyhedron::getClassTypeId())) {
     Geant4_SoPolyhedron* polyhedron = (Geant4_SoPolyhedron*)node;
     if(polyhedron->solid.getValue()==FALSE)
