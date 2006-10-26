@@ -18,13 +18,11 @@
 /control/verbose 2
 /vis/verbose confirmations
 
-# Switch off local drawing
-/N03/event/drawTracks none
-
 /vis/open OGLSX 600x600-0+0
 /vis/drawVolume
 /vis/scene/add/eventID
 /vis/scene/add/trajectories
+/tracking/storeTrajectory 3
 
 # Set up drawByParticleID with time slicing
 /vis/modeling/trajectories/create/drawByParticleID
@@ -63,6 +61,9 @@
 /vis/viewer/zoomTo 2
 /control/alias timeRange 0.1
 /control/alias dx 0.3
+# Switch off auto-refresh to avoid refresh on /vis/viewer/pan in loop.
+# (Then force refresh in loop.)
+/vis/viewer/set/autoRefresh 0
 /vis/verbose warnings
 /control/verbose 0
 /control/loop visTutor/exN03Vis13.loop endTime 0 0.7 0.001

@@ -1,3 +1,4 @@
 # exN03Vis12.loop
 /vis/ogl/set/startTime {startTime} ns {timeRange} ns
-/vis/viewer/update
+# Print eps file
+#/vis/oglx/printEPS

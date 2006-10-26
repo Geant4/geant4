@@ -18,13 +18,11 @@
 /control/verbose 2
 /vis/verbose confirmations
 
-# Switch off local drawing
-/N03/event/drawTracks none
-
 /vis/open OGLSX
 /vis/drawVolume
 /vis/scene/add/eventID
 /vis/scene/add/trajectories
+/tracking/storeTrajectory 3
 
 # Set up drawByCharge with time slicing
 /vis/modeling/trajectories/create/drawByCharge
@@ -47,6 +45,7 @@
 /control/loop visTutor/exN03Vis12.loop startTime -{timeRange} 0.7 0.005
 /control/verbose 2
 /vis/verbose confirmations
+/vis/ogl/set/displayHeadTime false
 
 # Set up drawByParticleID with time slicing
 /vis/modeling/trajectories/create/drawByParticleID
@@ -69,6 +68,7 @@
 /gun/energy 1 GeV
 /run/beamOn
 /control/alias timeRange 0.1
+/vis/ogl/set/displayHeadTime true
 /vis/ogl/set/displayLightFront true -90 0 0 mm
 /vis/verbose warnings
 /control/verbose 0
@@ -76,6 +76,7 @@
 /control/verbose 2
 /vis/verbose confirmations
 /vis/ogl/set/displayLightFront false
+/vis/ogl/set/displayHeadTime false
 
 # To see pi -> mu -> e decay.
 /gun/particle pi+
@@ -89,7 +90,7 @@
 #/vis/viewer/set/globalLineWidthScale 2
 /run/beamOn
 /control/alias timeRange 1000
-#/vis/oglx/set/printEPS true
+/vis/ogl/set/displayHeadTime true
 /vis/verbose warnings
 /control/verbose 0
 /control/loop visTutor/exN03Vis12.loop startTime -{timeRange} 3000 5
