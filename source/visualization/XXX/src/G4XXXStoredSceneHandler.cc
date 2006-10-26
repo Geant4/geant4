@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4XXXStoredSceneHandler.cc,v 1.8 2006-10-24 06:13:09 allison Exp $
+// $Id: G4XXXStoredSceneHandler.cc,v 1.9 2006-10-26 11:30:10 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -96,10 +96,11 @@ void G4XXXStoredSceneHandler::PreAddSolid
   G4VSceneHandler::PreAddSolid(objectTransformation, visAttribs);
 
   // Get user G4Atts...
-  const std::vector<G4AttValue>* userAttValues = visAttribs.CreateAttValues();
-  if (userAttValues) {
+  const std::map<G4String,G4AttDef>* userAttDefs = visAttribs.GetAttDefs();
+  if (userAttDefs) {
 #ifdef G4XXXStoredDEBUG
-    const std::map<G4String,G4AttDef>* userAttDefs = visAttribs.GetAttDefs();
+    const std::vector<G4AttValue>* userAttValues =
+      visAttribs.CreateAttValues();
     G4cout << "\nProvided G4Atts:\n"
 	   << G4AttCheck(userAttValues, userAttDefs);
     // Extra checks...
@@ -121,10 +122,11 @@ void G4XXXStoredSceneHandler::PreAddSolid
   G4PhysicalVolumeModel* pPVModel =
     dynamic_cast<G4PhysicalVolumeModel*>(fpModel);
   if (pPVModel) {
-    std::vector<G4AttValue>* solidAttValues = pPVModel->CreateAttValues();
-    if (solidAttValues) {
+    const std::map<G4String,G4AttDef>* solidAttDefs = pPVModel->GetAttDefs();
+    if (solidAttDefs) {
 #ifdef G4XXXStoredDEBUG
-      const std::map<G4String,G4AttDef>* solidAttDefs = pPVModel->GetAttDefs();
+      std::vector<G4AttValue>* solidAttValues =
+	pPVModel->CreateCurrentAttValues();
       G4cout << "\nProvided G4Atts:\n"
 	     << G4AttCheck(solidAttValues, solidAttDefs);
       // Extra checks...
