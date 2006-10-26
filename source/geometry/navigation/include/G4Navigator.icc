@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.icc,v 1.10 2006-06-29 18:36:03 gunter Exp $
+// $Id: G4Navigator.icc,v 1.11 2006-10-26 15:11:15 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -299,6 +299,33 @@ G4bool  G4Navigator::EnteredDaughterVolume()
 }
 
 // ********************************************************************
+// LocateGlobalPointAndUpdateTouchableHandle
+// ********************************************************************
+//
+inline
+void G4Navigator::LocateGlobalPointAndUpdateTouchableHandle(
+                               const G4ThreeVector&       position,
+                               const G4ThreeVector&       direction,
+                                     G4TouchableHandle&   oldTouchableToUpdate,
+                               const G4bool               RelativeSearch )
+{
+  G4VPhysicalVolume* pPhysVol;
+  pPhysVol = LocateGlobalPointAndSetup( position,&direction,RelativeSearch );
+  if( fEnteredDaughter || fExitedMother )
+  {
+     oldTouchableToUpdate = CreateTouchableHistory();
+     if( pPhysVol == 0 )
+     {
+       // We want to ensure that the touchable is correct in this case.
+       //  The method below should do this and recalculate a lot more ....
+       //
+       oldTouchableToUpdate->UpdateYourself( pPhysVol, &fHistory );
+     }
+  }
+  return;
+}
+
+// ********************************************************************
 // LocateGlobalPointAndUpdateTouchable
 //
 // Use direction
@@ -373,6 +400,26 @@ inline
 void  G4Navigator::Activate(G4bool flag)
 {
   fActive = flag;
+}
+
+// ********************************************************************
+// IsEnteredDaughter
+// ********************************************************************
+//
+inline
+G4bool G4Navigator::IsEnteredDaughter() const
+{
+  return fEnteredDaughter;
+}
+
+// ********************************************************************
+// IsExitedMother
+// ********************************************************************
+//
+inline
+G4bool G4Navigator::IsExitedMother() const
+{
+  return fExitedMother;
 }
 
 // ********************************************************************
