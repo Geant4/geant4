@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4OpenInventorViewer.cc,v 1.56 2006-10-26 10:55:31 allison Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+
 #ifdef G4VIS_BUILD_OI_DRIVER
 
 // this :
