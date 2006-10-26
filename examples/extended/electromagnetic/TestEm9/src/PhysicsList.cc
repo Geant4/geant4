@@ -34,7 +34,6 @@
 #include "PhysListParticles.hh"
 #include "PhysListGeneral.hh"
 #include "PhysListEmStandard.hh"
-#include "PhysListEmG4v52.hh"
 #include "PhysListHadronElastic.hh"
 #include "PhysListBinaryCascade.hh"
 #include "PhysListIonBinaryCascade.hh"
@@ -141,12 +140,6 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     emName = name;
     delete emPhysicsList;
     emPhysicsList = new PhysListEmStandard(name);
-
-  } else if (name == "g4v52") {
-
-    emName = name;
-    delete emPhysicsList;
-    emPhysicsList = new PhysListEmG4v52(name);
 
   } else if (name == "elastic") {
 

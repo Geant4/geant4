@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.7 2004-05-27 13:43:17 vnivanch Exp $
+# $Id: GNUmakefile,v 1.8 2006-10-26 15:50:35 maire Exp $
 # GEANT4 tag $Name: not supported by cvs2svn $
 # --------------------------------------------------------------
 # GNUmakefile for examples module with AIDA interface
@@ -24,7 +24,7 @@ include $(G4INSTALL)/config/architecture.gmk
 # for the aida-config command see the README file
 ifdef G4ANALYSIS_USE
   CPPFLAGS += `aida-config --include`
-  LDFLAGS  += `aida-config --lib`
+  LOADLIBS += `aida-config --lib`
 endif
 
 include $(G4INSTALL)/config/binmake.gmk
