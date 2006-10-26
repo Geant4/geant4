@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4XXXSGSceneHandler.cc,v 1.4 2006-07-03 16:52:49 allison Exp $
+// $Id: G4XXXSGSceneHandler.cc,v 1.5 2006-10-26 11:29:32 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -57,9 +57,9 @@ G4XXXSGSceneHandler::G4XXXSGSceneHandler(G4VGraphicsSystem& system,
 					     const G4String& name):
   G4VSceneHandler(system, fSceneIdCount++, name)
 {
-  fRoot = fSceneGraph.setRoot("root");
-  fPermanentsRoot = fRoot.push_back("permanentsRoot");
-  fTransientsRoot = fRoot.push_back("transientsRoot");
+  fRoot = fSceneGraph.setRoot("\nroot\n");
+  fPermanentsRoot = fRoot.push_back("\npermanentsRoot\n");
+  fTransientsRoot = fRoot.push_back("\ntransientsRoot\n");
 }
 
 G4XXXSGSceneHandler::~G4XXXSGSceneHandler() {}
