@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElasticHadrNucleusHE.cc,v 1.42 2006-10-25 10:43:41 starkov Exp $
+// $Id: G4ElasticHadrNucleusHE.cc,v 1.43 2006-10-26 15:05:57 starkov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //G4ElasticHadrNucleusHE.cc
 //
@@ -1152,10 +1152,19 @@ G4double G4ElasticHadrNucleusHE::InterPol(
 
        else if(  iHadrCode ==  211)     iHadron = 2;
        else if(  iHadrCode == -211)     iHadron = 3;
-       else if(  iHadrCode ==  321)     iHadron = 4;
-       else if(  iHadrCode == -321)     iHadron = 5;
 
-       else   G4Exception(" There is not method for this hadron ");
+       else if(  iHadrCode ==  321 ||
+                 iHadrCode ==  130 ||
+                 iHadrCode ==  310 ||
+                 iHadrCode ==  311)     iHadron = 4;
+                 
+       else if(  iHadrCode == -321 ||
+                 iHadrCode == -130 ||
+                 iHadrCode == -310 ||
+                 iHadrCode == -311)     iHadron = 5;
+
+       else  G4cout<<" ElasticHE: For the hadron<<aHadron->GetParticleName() "
+                   <<" other method must be used."<<G4endl;
 
        G4double mHadr      = aHadron->GetPDGMass()/1000.;         // In GeV
        G4double HadrEnergy = sqrt(mHadr*mHadr+HadrMoment*HadrMoment);
