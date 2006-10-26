@@ -10,8 +10,6 @@
 #
 #  select EM PhysicsList
 #
-#/testem/phys/addPhysics  g4v52
-#
 /testem/phys/addPhysics  pai
 #
 #/testem/phys/addPhysics  pai-photon
