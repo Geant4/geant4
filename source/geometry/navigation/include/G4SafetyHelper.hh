@@ -23,44 +23,63 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-
+//
+// $Id: G4SafetyHelper.hh,v 1.2 2006-10-26 10:07:06 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+//
+// class G4SafetyHelper
+//
+// Class description:
 //
 // This class is a helper for physics processes which require 
-//  knowledge of the safety -- and the step size for the 'mass' geometry
-//
+// knowledge of the safety, and the step size for the 'mass' geometry
+
 // First version:  J. Apostolakis,  July 5th, 2006
+// --------------------------------------------------------------------
 
 #ifndef G4SAFETYHELPER_HH
 #define G4SAFETYHELPER_HH 1
 
-#include "G4Types.hh"
 #include <vector>
+#include "G4Types.hh"
 #include "G4ThreeVector.hh"
 
-// class G4TransportationManager; 
 class G4Navigator;
 class G4PathFinder;
 
 class G4SafetyHelper
 {
-public: // with description 
+  public: // with description
+
    G4SafetyHelper(); 
-   ~G4SafetyHelper(); 
+   ~G4SafetyHelper();
+     //
+     // Constructor and destructor
 
-   void       InitialiseNavigator(); 
-   // Check for new Navigator for tracking, and reinitialise pointer
+   void InitialiseNavigator();
+     //
+     // Check for new navigator for tracking, and reinitialise pointer
 
-   G4double   ComputeMassStep( const G4ThreeVector &position, 
-			       const G4ThreeVector &direction,
-			       G4double  &newSafety );
-   // Step for mass geometry
+   G4double ComputeMassStep( const G4ThreeVector &position, 
+                             const G4ThreeVector &direction,
+                                   G4double  &newSafety );
+     //
+     // Return step for mass geometry
 
-   G4double   ComputeSafety( const G4ThreeVector& pGlobalPoint ); 
-   // Safety for all geometries
+   G4double ComputeSafety( const G4ThreeVector& pGlobalPoint ); 
+     //
+     // Return safety for all geometries
+
+   void ReLocateWithinVolume(const G4ThreeVector& pGlobalPoint );
+     //
+     // Relocate the point in the volume of interest
 
 private:
+
    G4PathFinder* fpPathFinder;
    G4Navigator*  fpMassNavigator;
    G4int         fMassNavigatorId;
 };
+
 #endif
