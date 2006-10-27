@@ -1,4 +1,4 @@
-$Id: History,v 1.55 2006-10-26 15:11:50 gcosmo Exp $
+$Id: History,v 1.56 2006-10-27 09:14:28 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -20,9 +20,9 @@ committal in the CVS repository !
 October 26th, 2006 - G.Cosmo (geomnav-V08-01-02)
 ----------------------------
 - G4Navigator:
-  o Added inline methods IsEnteredDaughter() and IsExitedMother() to
-    allow for verification of a point entering a daughter volume or
-    exiting the mother volume.
+  o Added inline methods EnteredDaughterVolume() and ExitedMotherVolume() to
+    allow for verification of a point entering a daughter volume or exiting
+    the mother volume.
   o Made LocateGlobalPointAndSetup() method virtual. Moved to non virtual
     and inline LocateGlobalPointAndUpdateTouchableHandle() method.
   o Moved 'fHistory' data member to protected to aloow for more complete
