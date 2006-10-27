@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PathFinder.cc,v 1.16 2006-10-25 18:05:22 japost Exp $
+// $Id: G4PathFinder.cc,v 1.17 2006-10-27 08:53:41 gcosmo Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4PathFinder Implementation
@@ -69,7 +69,7 @@ G4PathFinder::G4PathFinder()
   : fEndState( G4ThreeVector(), G4ThreeVector(), 0., 0., 0., 0., 0.),
        fRelocatedPoint(true),
        fLastStepNo(-1), 
-       fVerboseLevel(3)
+       fVerboseLevel(-1)
 {
    fNoActiveNavigators= 0; 
    fLastLocatedPosition= G4ThreeVector( DBL_MAX, DBL_MAX, DBL_MAX ); 
@@ -381,7 +381,7 @@ G4PathFinder::ReLocate( const   G4ThreeVector& position )
   G4bool longMoveLoc = distCheckLoc_sq > 0.0; 
   G4bool longMoveSaf = distCheckSaf_sq > 0.0; 
 
-  // if( (!fNewTrack) && ( longMoveLoc && longMoveSaf ) ){
+  if( (!fNewTrack) && ( longMoveLoc && longMoveSaf ) ){
      ReportMove( position, lastPositionLocated, "Position" ); 
      G4cout << " Moved from last located by " << std::sqrt(moveLenLocSq) 
             << " compared to safety " << fMinSafety << G4endl; 
@@ -392,7 +392,7 @@ G4PathFinder::ReLocate( const   G4ThreeVector& position )
      G4cout << "       its safety value =  " << fMinSafety_atSafLocation << G4endl;
      G4cout << "       move from safety location = " << sqrt(moveLenSafSq) << G4endl;
                          // moveVecSafety.mag() *** (position-fSafetyLocation).mag() << G4endl;
-
+  }
   if( (!fNewTrack) && ( longMoveLoc && longMoveSaf ) ){
      ReportMove( position, lastPositionLocated, "Position" ); 
      G4Exception( "G4PathFinder::ReLocate", "202-RelocatePointTooFar", 
@@ -400,7 +400,7 @@ G4PathFinder::ReLocate( const   G4ThreeVector& position )
 		  "ReLocation is further than safety from last location."); 
   }
 
-  if( 1 ) { // fVerboseLevel > 2 ){
+  if( fVerboseLevel > 2 ){
     G4cout << G4endl; 
     G4cout << " G4PathFinder::ReLocate : entered " << G4endl;
     G4cout << " ----------------------   -------" <<  G4endl;
@@ -426,13 +426,13 @@ G4PathFinder::ReLocate( const   G4ThreeVector& position )
      fLimitedStep[num]   = kDoNot; 
      fCurrentStepSize[num] = 0.0;      
     
-     G4cout << " ReLocated in world " << num << " at " << position << G4endl;
+     // G4cout << " ReLocated in world " << num << " at " << position << G4endl;
   }
 
   fLastLocatedPosition= position; 
   fRelocatedPoint= false;
 
-  if( 1 ) { //  fVerboseLevel > 2 ){
+  if( fVerboseLevel > 2 ){
     G4cout << " G4PathFinder::ReLocate : exiting " 
 	   << "  at position " << fLastLocatedPosition << G4endl;
     G4cout << G4endl;
