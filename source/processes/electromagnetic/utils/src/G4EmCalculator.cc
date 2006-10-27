@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCalculator.cc,v 1.34 2006-09-29 10:13:48 vnivanch Exp $
+// $Id: G4EmCalculator.cc,v 1.35 2006-10-27 14:07:00 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -51,6 +51,8 @@
 // 22.03.2006 Add ComputeElectronicDEDX and ComputeTotalDEDX (V.Ivanchenko)
 // 13.05.2006 Add Corrections for ion stopping (V.Ivanchenko)
 // 29.09.2006 Uncomment computation of smoothing factor (V.Ivanchenko)
+// 27.10.2006 Change test energy to access lowEnergy model from 
+//            10 keV to 1 keV (V. Ivanchenko)
 //
 // Class Description:
 //
@@ -398,7 +400,6 @@ G4double G4EmCalculator::ComputeDEDX(G4double kinEnergy,
   }
   if(UpdateParticle(p, kinEnergy)) {
     if(FindEmModel(p, processName, kinEnergy)) {
-    //    G4cout << "currentModel= " << currentModel << G4endl;
       G4double escaled = kinEnergy*massRatio;
       if(baseParticle) {
         res = currentModel->ComputeDEDXPerVolume(
@@ -430,6 +431,7 @@ G4double G4EmCalculator::ComputeDEDX(G4double kinEnergy,
       
       // emulate boundary region for different parameterisations
       G4double eth = currentModel->LowEnergyLimit();
+      //      G4cout << "massRatio= " << massRatio << " eth= " << eth << G4endl;
       if(eth > 0.05*MeV && eth < 10.*MeV && escaled > eth && 
 	 loweModel != currentModel && loweModel) {
         G4double res0 = 0.0;
@@ -922,14 +924,14 @@ G4bool G4EmCalculator::FindEmModel(const G4ParticleDefinition* p,
       //      G4cout << "i= " << i << " bp= " << bp << G4endl;
       if(!bp) {
         currentModel = (vel[i])->SelectModelForMaterial(scaledEnergy, idx);
-        loweModel = (vel[i])->SelectModelForMaterial(10.*keV, idx);
+        loweModel = (vel[i])->SelectModelForMaterial(keV, idx);
 	isApplicable    = true;
         break;
       } else {
         for(G4int j=0; j<n; j++) {
           if((vel[j])->Particle() == bp) {
             currentModel = (vel[j])->SelectModelForMaterial(scaledEnergy, idx);
-            loweModel = (vel[j])->SelectModelForMaterial(10.*keV, idx);
+            loweModel = (vel[j])->SelectModelForMaterial(keV, idx);
 	    isApplicable    = true;
             break;
 	  }
@@ -945,7 +947,7 @@ G4bool G4EmCalculator::FindEmModel(const G4ParticleDefinition* p,
 	 (vem[i])->Particle() == part) 
       {
         currentModel = (vem[i])->SelectModelForMaterial(kinEnergy, idx);
-        loweModel = (vem[i])->SelectModelForMaterial(10.*keV, idx);
+        loweModel = (vem[i])->SelectModelForMaterial(keV, idx);
 	isApplicable    = true;
         break;
       }
@@ -960,7 +962,7 @@ G4bool G4EmCalculator::FindEmModel(const G4ParticleDefinition* p,
 	 (vmsc[i])->Particle() == part) 
       {
         currentModel = (vmsc[i])->SelectModelForMaterial(kinEnergy, idx);
-        loweModel = (vmsc[i])->SelectModelForMaterial(10.*keV, idx);
+        loweModel = (vmsc[i])->SelectModelForMaterial(keV, idx);
 	isApplicable    = true;
         break;
       }
