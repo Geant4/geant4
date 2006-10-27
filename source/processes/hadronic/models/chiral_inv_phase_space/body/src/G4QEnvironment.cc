@@ -27,7 +27,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4QEnvironment.cc,v 1.113 2006-07-05 08:24:16 mkossov Exp $
+// $Id: G4QEnvironment.cc,v 1.114 2006-10-27 16:47:34 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QEnvironment ----------------
@@ -300,10 +300,11 @@ G4QEnvironment::G4QEnvironment(const G4QHadronVector& projHadrons, const G4int t
         if(envPDG==90000000||(theEnvironment.Get4Momentum().m2())<1.) // ==>"Vacuum"
         {
           G4int hPDG  = curHadr->GetPDGCode();// A PDG Code of the projQHadron
-          if(!hPDG||hPDG==10)          // Check for the validity of the QHadron (@@ 10 OK?)
+          //if(!hPDG||hPDG==10)        // Check for the validity of the QHadron (@@ 10 OK?)
+          if(!hPDG)          // Check for the validity of the QHadron
           {
-            G4cerr<<"---Warning---G4QEnvironment::Constructor: wrong PDG("<<ih<<")="<<hPDG
-                  <<", HQC="<<curHadr->GetQC()<<", HM="<<curHadr->GetMass()<<G4endl;
+            //G4cerr<<"--Warning--G4QEnvironment::Constructor: wrong PDG("<<ih<<")="<<hPDG
+            //    <<", HQC="<<curHadr->GetQC()<<", HM="<<curHadr->GetMass()<<G4endl;
             //throw G4QException("***G4QEnvironment::Constructor: theInputHadron is Chip");
           }
           else
@@ -311,7 +312,7 @@ G4QEnvironment::G4QEnvironment(const G4QHadronVector& projHadrons, const G4int t
             G4int hQ = curHadr->GetQCode();  // One more check for valid of the QHadron
             if(hQ<0)
 	           {
-              G4cerr<<"---Warning---G4QEnv::Constructor:Q<0, PDG=("<<ih<<")"<<hPDG<<G4endl;
+              //G4cerr<<"--Warning--G4QEnv::Constructor:Q<0, PDG=("<<ih<<")"<<hPDG<<G4endl;
               //throw G4QException("***G4QEnvironment::Constructor:theInputHadron is bad");
 	           }
             else
@@ -4557,24 +4558,24 @@ void G4QEnvironment::EvaporateResidual(G4QHadron* qH, G4bool corFlag)
       if(rB>2) EvaporateResidual(rHadron);    // Continue evaporation (@@ Self-call)
       else if(rB==2)                   // => "Dibaryon" case needs decay @@ DecayDibaryon
 	     {
-        G4double rGSM = rHadron->GetQPDG().GetMass();// Ground State mass of the dibaryon
+        G4double rGSM = rHadron->GetQPDG().GetMass(); // Ground State mass of the dibaryon
 #ifdef debug
 		      G4cout<<"G4QE::EvaRes:ResidDibM="<<rM<<",GSM="<<rGSM<<",M-GSM="<<rM-rGSM<<G4endl;
 #endif
-        if(rM<=rGSM-0.001)
+        if(rM<=rGSM-0.01)
 		      {
           delete rHadron;
           G4cerr<<"***G4QEnv::EvaRes: <residual> M="<<rM<<" < GSM="<<rGSM<<G4endl;
           throw G4QException("G4QEnvironment::EvaporateResidual:Evapor below MassShell");
 		      }
-        else if(fabs(rM-rGSM)<0.001&&rPDG==90001001)theQHadrons.push_back(rHadron);//(DE)
+        else if(fabs(rM-rGSM)<0.01&&rPDG==90001001) theQHadrons.push_back(rHadron); // (DE)
         else DecayDibaryon(rHadron);         // => "Dibaryon Decay" case (del.equivalent)
 	     }
       else if(rB==5) DecayAlphaBar(rHadron); // "Alpha+Baryon Decay" case (del.equival.)
       else if(rPDG==90004002) DecayAlphaDiN(rHadron);//Decay alph+2p (alph+2n is stable)
       else if(rPDG==90004004) DecayAlphaAlpha(rHadron);// "Alpha+Alpha Decay" case(delEq)
-      else theQHadrons.push_back(rHadron); // Fill ResidNucl=Baryon to OutputHadronVector
-      if(2>3)                              // @@ This can be skipped @@ ! @@
+      else theQHadrons.push_back(rHadron);   // Fill ResidNucl=Baryon to OutputHadronVector
+      if(2>3)                                // @@ This can be skipped @@ ! @@
       {
         G4Quasmon* quasH = new G4Quasmon(qH->GetQC(),qH->Get4Momentum());
         theEnvironment=G4QNucleus(90000000,G4LorentzVector(0.,0.,0.,0.));
@@ -4967,7 +4968,7 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
   static const G4double mK0mP = mK0+mProt;
   static const G4double mK0mN = mK0+mNeut;
   static const G4QNucleus vacuum(90000000);
-  static const G4double eps=0.003;
+  static const G4double eps=0.005;
   ///////////////static const G4double third=1./3.;
   ///////////////static const G4double nPDG=90000001;
   G4int envA=theEnvironment.GetBaryonNumber();
@@ -7572,7 +7573,7 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
       G4LorentzVector r4M=curHadr->Get4Momentum(); // Real 4-momentum of the hypernucleus
       G4double reM=r4M.m();                    // Real mass of the hypernucleus
       G4int rlPDG = hPDG-nL*1000000-nSP*1000999-nSM*999001;// Subtract Lamb/Sig from Nucl
-      G4int    sPDG=3122;                      // Prototype for the Hyperon PDG
+      G4int    sPDG=3122;                      // Prototype for the Hyperon PDG (Lambda)
       G4double MLa=mLamb;                      // Prototype for one Hyperon decay
 #ifdef pdebug
       G4cerr<<"G4QEnvironment::FSI:*G4* nS+="<<nSP<<", nS-="<<nSM<<", nL="<<nL<<G4endl;
@@ -7582,7 +7583,10 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
         if(nL)
         {
           G4cerr<<"***G4QE::FSI: HypNPDG="<<hPDG<<": both Sigm&Lamb -> Improve it"<<G4endl;
-          throw G4QException("***G4QEnvironment::FSInter: Both Lambda&Sigma in Hypernucl");
+          //throw G4QException("*G4QEnvironment::FSInter: Both Lambda&Sigma in Hypernucl");
+          // @@ Correction, which does not conserv the charge !! (-> add decay in 3)
+          if(nSP) nL+=nSP;
+          else    nL+=nSM;
         }
         if(nSP)
 		      {

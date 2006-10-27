@@ -27,7 +27,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4Quasmon.cc,v 1.88 2006-07-05 08:24:17 mkossov Exp $
+// $Id: G4Quasmon.cc,v 1.89 2006-10-27 16:47:34 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4Quasmon ----------------
@@ -5433,23 +5433,24 @@ G4QHadronVector* G4Quasmon::DecayQHadron(G4QHadron* qH) // Don't fill Internal Q
           fHadr->MakeAntiHadron();
           sHadr->MakeAntiHadron();
         }
-        G4LorentzVector f4Mom = fHadr->Get4Momentum();   // Get First Hadron 4Mom (mass) 
-        G4LorentzVector s4Mom = sHadr->Get4Momentum();   // Get Second Hadron 4Mom (mass) 
-        if(!qH->DecayIn2(f4Mom,s4Mom))                   // Error in DecayIn2
+        G4LorentzVector f4Mom = fHadr->Get4Momentum();    // Get First Hadron 4Mom (mass) 
+        G4LorentzVector s4Mom = sHadr->Get4Momentum();    // Get Second Hadron 4Mom (mass) 
+        if(!qH->DecayIn2(f4Mom,s4Mom))                    // Error in DecayIn2
         {
-          delete fHadr;                                  // Delete "new fHadr"
-          delete sHadr;                                  // Delete "new sHadr"
-          G4cerr<<"---Warning---G4Q::DecayQHadron:in2,PDGC="<<thePDG<<", ch#"<<i<<G4endl;
+          delete fHadr;                                   // Delete "new fHadr"
+          delete sHadr;                                   // Delete "new sHadr"
+          G4cerr<<"---Warning---G4Q::DecayQHadron:in2,PDGC="<<thePDG<<", ch#"<<i<<": 4M="
+												    <<qH->Get4Momentum()<<"("<<qH->GetMass()<<")->"<<f4Mom<<"+"<<s4Mom<<G4endl;
           //throw G4QException("***Exception***G4Q::DecayQHadron: Failed to decay in 2");
-          theFragments->push_back(qH);                   // Fill as it is (del.equiv.)
+          theFragments->push_back(qH);                    // Fill as it is (del.equiv.)
           return theFragments;
 	       }
         else
         {
           //qH->SetNFragments(2);
-          //theFragments.push_back(qH);               // Fill with NFr=2 (del.equiv.)
+          //theFragments.push_back(qH);                   // Fill with NFr=2 (del.equiv.)
           // Instead
-          delete qH;                                  // Delete it (without History)
+          delete qH;                                      // Delete it (without History)
           //
           fHadr->Set4Momentum(f4Mom);             // Put the randomized 4Mom to 1-st Hadron
           G4QHadronVector* theTmpQHV=DecayQHadron(fHadr); // Try to decay
