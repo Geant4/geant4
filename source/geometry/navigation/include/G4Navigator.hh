@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.hh,v 1.16 2006-10-27 09:13:46 gcosmo Exp $
+// $Id: G4Navigator.hh,v 1.17 2006-10-27 22:10:41 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -294,6 +294,16 @@ class G4Navigator
     // Transformation and history of the current path
     // through the geometrical hierarchy.
 
+  G4bool fEnteredDaughter;
+    // A memory of whether in this Step a daughter volume is entered 
+    // (set in Compute & Locate).
+    //  After Compute: it expects to enter a daughter
+    //  After Locate:  it has entered a daughter
+
+  G4bool fExitedMother;
+    // A similar memory whether the Step exited current "mother" volume
+    // completely, not entering daughter.
+
  private:
 
   //
@@ -323,14 +333,6 @@ class G4Navigator
   G4VPhysicalVolume *fCandidatePhysicalVolume;
   G4int fCandidateReplicaNo;
 
-  G4bool fEnteredDaughter;    // A memory of whether in this Step a daughter
-                              //  volume is entered (set in Compute & Locate)
-                              //  After Compute: it expects to enter a daughter
-                              //  After Locate:  it has entered a daughter
-  G4bool fExitedMother;       // A similar memory whether the Step exited 
-                              //  current "mother" volume completely, 
-                              //  not entering daughter.
-  
   G4bool fValidExitNormal;    // Set true if have leaving volume normal
   G4ThreeVector fExitNormal;  // Leaving volume normal, in the
                               // volume containing the exited
