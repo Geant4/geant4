@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.icc,v 1.11 2006-10-26 15:11:15 gcosmo Exp $
+// $Id: G4Navigator.icc,v 1.12 2006-10-27 09:13:46 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -287,18 +287,6 @@ G4TouchableHistory* G4Navigator::CreateTouchableHistory() const
 }
 
 // ********************************************************************
-// EnteredDaughterVolume
-//
-// To inform the caller if the track is entering a daughter volume
-// ********************************************************************
-//
-inline
-G4bool  G4Navigator::EnteredDaughterVolume()
-{
-  return fEnteredDaughter;
-}
-
-// ********************************************************************
 // LocateGlobalPointAndUpdateTouchableHandle
 // ********************************************************************
 //
@@ -373,7 +361,7 @@ G4int G4Navigator::GetVerboseLevel() const
 // ********************************************************************
 //
 inline
-void  G4Navigator::SetVerboseLevel(G4int level)
+void G4Navigator::SetVerboseLevel(G4int level)
 {
   fVerbose = level;
   fnormalNav.SetVerboseLevel(level);
@@ -397,27 +385,29 @@ G4bool G4Navigator::IsActive() const
 // ********************************************************************
 //
 inline
-void  G4Navigator::Activate(G4bool flag)
+void G4Navigator::Activate(G4bool flag)
 {
   fActive = flag;
 }
 
 // ********************************************************************
-// IsEnteredDaughter
+// EnteredDaughterVolume
+//
+// To inform the caller if the track is entering a daughter volume
 // ********************************************************************
 //
 inline
-G4bool G4Navigator::IsEnteredDaughter() const
+G4bool G4Navigator::EnteredDaughterVolume() const
 {
   return fEnteredDaughter;
 }
 
 // ********************************************************************
-// IsExitedMother
+// ExitedMotherVolume
 // ********************************************************************
 //
 inline
-G4bool G4Navigator::IsExitedMother() const
+G4bool G4Navigator::ExitedMotherVolume() const
 {
   return fExitedMother;
 }

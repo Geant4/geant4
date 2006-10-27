@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.hh,v 1.15 2006-10-26 15:11:15 gcosmo Exp $
+// $Id: G4Navigator.hh,v 1.16 2006-10-27 09:13:46 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -216,9 +216,16 @@ class G4Navigator
   inline void  Activate(G4bool flag);
     // Activate/inactivate the navigator.
 
-  inline G4bool IsEnteredDaughter() const;
-    // Verify if the step has entered a daughter volume.
-  inline G4bool IsExitedMother() const;
+  inline G4bool EnteredDaughterVolume() const;
+    // The purpose of this function is to inform the caller if the track is
+    // entering a daughter volume while exiting from the current volume.
+    // This method returns 
+    // - True only in case 1) above, that is when the Step has caused
+    //   the track to arrive at a boundary of a daughter.
+    // - False in cases 2), 3) and 4), i.e. in all other cases.
+    // This function is not guaranteed to work if SetGeometricallyLimitedStep()
+    // was not called when it should have been called.
+  inline G4bool ExitedMotherVolume() const;
     // Verify if the step has exited the mother volume.
 
   inline void  CheckMode(G4bool mode);
@@ -265,16 +272,6 @@ class G4Navigator
   inline G4ThreeVector NetTranslation() const;
   inline G4RotationMatrix NetRotation() const;
     // Compute+return the local->global translation/rotation of current volume.
-
-  inline G4bool EnteredDaughterVolume();
-    // The purpose of this function is to inform the caller if the track is
-    // entering a daughter volume while exiting from the current volume.
-    // This method returns 
-    // - True only in case 1) above, that is when the Step has caused
-    //   the track to arrive at a boundary of a daughter.
-    // - False in cases 2), 3) and 4), i.e. in all other cases.
-    // This function is not guaranteed to work if SetGeometricallyLimitedStep()
-    // was not called when it should have been called.
 
   virtual void ResetState();
     // Utility method to reset the navigator state machine.
