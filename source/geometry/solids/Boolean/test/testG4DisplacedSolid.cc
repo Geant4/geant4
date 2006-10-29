@@ -262,6 +262,9 @@ int main()
     dist=actiRotT3.DistanceToIn(pbigmx,vxy);
     assert(ApproxEqual(dist,kInfinity));
 
+    dist=passRotB2.DistanceToIn(ponb2x,vmx);
+    assert(ApproxEqual(dist,10.));
+
 
     // Point on surface
     G4cout<<G4endl;
@@ -269,7 +272,7 @@ int main()
     for(i=0;i<10;i++)
     {
       p = passRotB2.GetPointOnSurface();
-      G4cout<<p.x()<<"\t"<<p.y()<<"\t"<<p.z()<<G4endl;
+      G4cout<<p.x()<<"\t\t"<<p.y()<<"\t\t"<<p.z()<<G4endl;
     }
     G4cout<<G4endl;
 

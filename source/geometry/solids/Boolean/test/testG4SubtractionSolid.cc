@@ -65,71 +65,74 @@ const G4String OutputInside(const EInside a)
 
 int main()
 {
-    G4ThreeVector pzero(0,0,0);
+  G4int i;
+  G4ThreeVector pzero(0,0,0), p;
 
-    G4ThreeVector ponxside(20,0,0),ponyside(0,30,0),ponzside(0,0,40),
+  G4ThreeVector ponxside(20,0,0),ponyside(0,30,0),ponzside(0,0,40),
 
                     ponb2x(10,0,0),  ponb2y(0,10,0),  ponb2z(0,0,10),
 
                    ponb2mx(-10,0,0),ponb2my(0,-10,0),ponb2mz(0,0,-10);
 
-    G4ThreeVector ponmxside(-20,0,0),ponmyside(0,-30,0),ponmzside(0,0,-40);
+  G4ThreeVector ponmxside(-20,0,0),ponmyside(0,-30,0),ponmzside(0,0,-40);
 
-    G4ThreeVector ponzsidey(0,25,40),ponmzsidey(0,25,-40),
+  G4ThreeVector ponzsidey(0,25,40),ponmzsidey(0,25,-40),
 
                   ponb2zy(0,5,10),ponb2mzy(0,5,-10) ;
 
-    G4ThreeVector pbigx(100,0,0),pbigy(0,100,0),pbigz(0,0,100);
+  G4ThreeVector pbigx(100,0,0),pbigy(0,100,0),pbigz(0,0,100);
 
-    G4ThreeVector pbigmx(-100,0,0),pbigmy(0,-100,0),pbigmz(0,0,-100);
+  G4ThreeVector pbigmx(-100,0,0),pbigmy(0,-100,0),pbigmz(0,0,-100);
 
-    G4ThreeVector vx(1,0,0),vy(0,1,0),vz(0,0,1);
+  G4ThreeVector vx(1,0,0),vy(0,1,0),vz(0,0,1);
 
-    G4ThreeVector vmx(-1,0,0),vmy(0,-1,0),vmz(0,0,-1);
+  G4ThreeVector vmx(-1,0,0),vmy(0,-1,0),vmz(0,0,-1);
 
-    G4ThreeVector vxy(1/std::sqrt(2.0),1/std::sqrt(2.0),0);
+  G4ThreeVector vxy(1/std::sqrt(2.0),1/std::sqrt(2.0),0);
 
-    G4ThreeVector vmxy(-1/std::sqrt(2.0),1/std::sqrt(2.0),0);
+  G4ThreeVector vmxy(-1/std::sqrt(2.0),1/std::sqrt(2.0),0);
 
-    G4ThreeVector vmxmy(-1/std::sqrt(2.0),-1/std::sqrt(2.0),0);
+  G4ThreeVector vmxmy(-1/std::sqrt(2.0),-1/std::sqrt(2.0),0);
 
-    G4ThreeVector vxmy(1/std::sqrt(2.0),-1/std::sqrt(2.0),0);
+  G4ThreeVector vxmy(1/std::sqrt(2.0),-1/std::sqrt(2.0),0);
 
-    G4ThreeVector vxmz(1/std::sqrt(2.0),0,-1/std::sqrt(2.0));
+  G4ThreeVector vxmz(1/std::sqrt(2.0),0,-1/std::sqrt(2.0));
 
-    G4double dist;
-    G4ThreeVector *pNorm,norm;
-    G4bool *pgoodNorm,goodNorm,calcNorm=true;
+  G4double dist;
+  G4ThreeVector *pNorm,norm;
+  G4bool *pgoodNorm,goodNorm,calcNorm=true;
 
-    pNorm=&norm;
-    pgoodNorm=&goodNorm;
+  pNorm=&norm;
+  pgoodNorm=&goodNorm;
 
-    G4RotationMatrix identity, xRot ;
+  G4RotationMatrix identity, xRot ;
     
 // NOTE: xRot = rotation such that x axis->-x axis & y axis->-y axis
 
-    xRot.rotateZ(-pi) ;
+  xRot.rotateZ(-pi);
 
-    G4Transform3D transform(xRot,G4ThreeVector(0,30,0)) ;
+  G4Transform3D transform(xRot,G4ThreeVector(0,30,0)) ;
+  G4Transform3D transform2(xRot,G4ThreeVector(50,0,0)) ;
 
-    G4Box b1("Test Box #1",20.,30.,40.);
-    G4Box b2("Test Box #2",10.,10.,10.);
-    G4Box b3("Test Box #3",10.,20.,50.);
-    G4Box b4("Test Box #4",20.,20.,40.);
+  G4Box b1("Test Box #1",20.,30.,40.);
+  G4Box b2("Test Box #2",10.,10.,10.);
+  G4Box b3("Test Box #3",10.,20.,50.);
+  G4Box b4("Test Box #4",20.,20.,40.);
+  G4Box b5("Test Box #4",50.,50.,50.);
 
-    G4Tubs t1("Solid Tube #1",0,50.,50.,0.,360.*degree);
+  G4Tubs t1("Solid Tube #1",0,50.,50.,0.,360.*degree);
     
     // t2\t3 for DistanceToIn
 
-    G4Tubs t2("Hole Tube #2",50.,60.,50.,0.,2.*pi); 
+  G4Tubs t2("Hole Tube #2",50.,60.,50.,0.,2.*pi); 
  
-    G4Tubs t3("Hole Tube #3",45.,55.,50.,pi/4.,pi*3./2.);
+  G4Tubs t3("Hole Tube #3",45.,55.,50.,pi/4.,pi*3./2.);
 
-    G4Cons c1("Hollow Full Tube",50.,100.,50.,100.,50.,0,2*pi),
+  G4Cons c1("Hollow Full Tube",50.,100.,50.,100.,50.,0,2*pi),
 
 	   c2("Full Cone",0,50.,0,100.,50.,0,2*pi) ;
 
-    G4SubtractionSolid b1Sb2("b1Sb2",&b1,&b2),
+  G4SubtractionSolid b1Sb2("b1Sb2",&b1,&b2),
 
                        t1Sb2("t1Sb2",&t1,&b2),
 
@@ -139,28 +142,33 @@ int main()
 
     // Tube t1 \ box t3, which was rotated by -pi and translated +30y
 
-    G4SubtractionSolid   t1Sb3("t1Subtractionb3",&t1,&b3,transform) ;
-    G4SubtractionSolid   b1Sb4("t1Subtractionb3",&b1,&b4,transform) ;
+  G4SubtractionSolid   t1Sb3("t1Subtractionb3",&t1,&b3,transform) ;
+  G4SubtractionSolid   b1Sb4("t1Subtractionb3",&b1,&b4,transform) ;
+  G4SubtractionSolid   b5St1("b4St1",&b5,&t1,transform2) ;
 
-    G4SubtractionSolid   b1Sb2touch("b1Sb4touch",&b1,&b2,&identity,G4ThreeVector(10.,0,0)) ;
+  G4SubtractionSolid   b1Sb2touch("b1Sb4touch",&b1,&b2,&identity,G4ThreeVector(10.,0,0)) ;
 
-    G4Tubs* tube4 = new G4Tubs( "OuterFrame",
+
+
+
+
+  G4Tubs* tube4 = new G4Tubs( "OuterFrame",
                       1.0*m,            // inner radius
                       1.1*m,            // outer radius
                       0.01*m,           // half-thickness in z
                       -15*deg,          // start angle
                       30*deg );         // total angle
 
-   G4Box* tube5 = new G4Box( "Cutout",    // name
+  G4Box* tube5 = new G4Box( "Cutout",    // name
                    0.02*m,      // half-width (x)
                    0.25*m,      // half-height (y)
                    0.01001*m ); // half-thickness (z)
 
-   G4Transform3D tran2 = G4Translate3D( 1.03*m, 0.0, 0.0 );
+  G4Transform3D tran2 = G4Translate3D( 1.03*m, 0.0, 0.0 );
 
-   G4VSolid* solid = new G4SubtractionSolid( "drcExample",tube4,tube5, tran2 );
+  G4VSolid* solid = new G4SubtractionSolid( "drcExample",tube4,tube5, tran2 );
 
-    G4Cons* cone3 = new G4Cons( "OuterFrame",
+  G4Cons* cone3 = new G4Cons( "OuterFrame",
                               0.6*m, // pRmin1
                               1.0*m, // pRmax1
                               0.2*m, // pRmin2
@@ -169,7 +177,7 @@ int main()
                               0*deg,
                               180*deg );
 
-    G4Cons* cone4 = new G4Cons( "OuterFrame",
+  G4Cons* cone4 = new G4Cons( "OuterFrame",
                               0.6*m, // pRmin1
                               1.0*m, // pRmax1
                               0.2*m, // pRmin2
@@ -177,11 +185,11 @@ int main()
                               0.2*m,
                               0*deg,
                               180*deg );
-    G4RotationMatrix rotmat3;
-    rotmat3.rotateY(pi/4.0);
-    G4Transform3D tran3 = G4Transform3D(rotmat3,G4ThreeVector(0.0,0.0,0.0));
+  G4RotationMatrix rotmat3;
+  rotmat3.rotateY(pi/4.0);
+  G4Transform3D tran3 = G4Transform3D(rotmat3,G4ThreeVector(0.0,0.0,0.0));
 
-    G4VSolid* c3Ic4 = new G4SubtractionSolid( "Example", cone3, cone4, tran3 );
+  G4VSolid* c3Ic4 = new G4SubtractionSolid( "Example", cone3, cone4, tran3 );
 
 
   //G4Torus* insp    = new G4Torus("Isp", 7.5*cm, 8.1*cm, 15.6*cm,  0, 2*pi);
@@ -336,6 +344,7 @@ int main()
     assert(ApproxEqual(dist,0)&&ApproxEqual(*pNorm,vmx)); // &&*pgoodNorm);
 
     dist=b1.DistanceToOut(ponxside,vy,calcNorm,pgoodNorm,pNorm);
+
 //  G4cout<<"b1.DistanceToOut(ponxside,vy) = "<<dist<<G4endl;
 //  assert(ApproxEqual(dist,0)&&ApproxEqual(*pNorm,vy)&&*pgoodNorm);
 
@@ -476,6 +485,22 @@ int main()
     G4cout<<"lhcbSub->DistanceToIn(lhcbP,lhcbV) = "<<dist<<G4endl ;
 
     G4cout<<"Tracking functions are OK"<<G4endl ;
+
+
+// Point on surface
+
+  G4cout<<G4endl;
+  //  G4cout<<"Point on surface of t1Sb3"<<G4endl<<G4endl;
+  G4cout<<"Point on surface of b5St1"<<G4endl<<G4endl;
+  for(i=0;i<30;i++)
+  {
+    // p = t1Sb3.GetPointOnSurface();
+      p = b5St1.GetPointOnSurface();
+      G4cout<<p.x()<<"\t\t"<<p.y()<<"\t\t"<<p.z()<<G4endl;
+  }
+  G4cout<<G4endl;
+
+
 
 // CalculateExtent
 
