@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Step.hh,v 1.15 2006-07-17 13:48:28 asaim Exp $
+// $Id: G4Step.hh,v 1.16 2006-10-30 09:50:13 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -123,6 +123,15 @@ class G4Step
    void ResetTotalEnergyDeposit();
 
 
+  // Get/Set/Clear flag for initial/last step
+   G4bool IsFirstStepInVolume() const;
+   G4bool IsLastStepInVolume() const;
+
+   void SetFirstStepFlag();
+   void ClearFirstStepFlag();
+   void SetLastStepFlag();
+   void ClearLastStepFlag();
+
 // Other member functions
    void InitializeStep( G4Track* aValue );
    // initiaize contents of G4Step
@@ -158,6 +167,11 @@ class G4Step
      //
    G4SteppingControl fpSteppingControlFlag;     
     // A flag to control SteppingManager behavier from process
+
+  // flag for initial/last step
+   G4bool fFirstStepInVolume;
+   G4bool fLastStepInVolume;
+
 // Secondary buckets
 public:
    G4TrackVector* GetSecondary() const;

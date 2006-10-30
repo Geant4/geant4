@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Step.icc,v 1.14 2006-07-17 13:48:28 asaim Exp $
+// $Id: G4Step.icc,v 1.15 2006-10-30 09:50:13 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -244,3 +244,35 @@ inline G4TrackVector* G4Step::NewSecondaryVector()  {
 inline void G4Step::DeleteSecondaryVector()  {
    delete fSecondary;
     }
+
+inline G4bool G4Step::IsFirstStepInVolume() const
+{
+   return fFirstStepInVolume;
+}
+
+inline G4bool G4Step::IsLastStepInVolume() const
+{
+   return fLastStepInVolume;
+}
+
+
+ inline  void G4Step::SetFirstStepFlag()
+{
+   fFirstStepInVolume = true;
+}
+  
+ inline  void G4Step::ClearFirstStepFlag()
+{
+   fFirstStepInVolume = false;
+}
+
+ inline  void G4Step::SetLastStepFlag()
+{
+   fLastStepInVolume = true;
+}
+  
+ inline  void G4Step::ClearLastStepFlag()
+{
+   fLastStepInVolume = false;
+}
+

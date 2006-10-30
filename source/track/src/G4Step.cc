@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Step.cc,v 1.6 2006-06-29 21:15:13 gunter Exp $
+// $Id: G4Step.cc,v 1.7 2006-10-30 09:50:13 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -56,6 +56,9 @@ G4Step::G4Step()
 {
   fpPreStepPoint  = new G4StepPoint();
   fpPostStepPoint = new G4StepPoint();
+
+  fFirstStepInVolume =false;
+  fLastStepInVolume = false;
 }
 
 /////////////////
