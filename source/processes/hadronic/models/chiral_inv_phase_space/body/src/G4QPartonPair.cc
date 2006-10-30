@@ -23,33 +23,21 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+#include "G4QPartonPair.hh"
 //
-// $Id: G4QHadronVector.hh,v 1.21 2006-10-30 10:40:34 mkossov Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-//      ---------------- G4QCandidateVector ----------------
-//             by Mikhail Kossov, Sept 1999.
-// Type defenition for a Vector of Hadrons - output of CHIPS model
-// ---------------------------------------------------------------
-
-#ifndef G4QHadronVector_h
-#define G4QHadronVector_h 1
-//
-// $Id: G4QHadronVector.hh,v 1.21 2006-10-30 10:40:34 mkossov Exp $
+// $Id: G4QPartonPair.cc,v 1.1 2006-10-30 10:40:36 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
 //
 //      ---------------- G4QParton ----------------
-//             by Mikhail Kossov, Oct 1999.
-// class for QHadronVector (string) used by CHIPS Models
+//             by Mikhail Kossov, Oct 2006.
+// class for PartonPair (hadron) used by Parton String Models
 // ------------------------------------------------------------
 
-#include "G4QHadron.hh"
-#include <vector>
+G4QPartonPair::G4QPartonPair(G4QParton* P1, G4QParton* P2, G4int Type, G4int aDirection)
+		: Parton1(P1), Parton2(P2), CollisionType(Type), Direction(aDirection) {}
 
-typedef std::vector<G4QHadron *> G4QHadronVector;
-struct DeleteQHadron { void operator()(G4QHadron* aQH){delete aQH;}};
-
-#endif
+G4QPartonPair::~G4QPartonPair() {}
+ 

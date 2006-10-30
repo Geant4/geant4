@@ -24,32 +24,21 @@
 // ********************************************************************
 //
 //
-// $Id: G4QHadronVector.hh,v 1.21 2006-10-30 10:40:34 mkossov Exp $
+// $Id: G4QStringVector.hh,v 1.1 2006-10-30 10:40:35 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//      ---------------- G4QCandidateVector ----------------
-//             by Mikhail Kossov, Sept 1999.
-// Type defenition for a Vector of Hadrons - output of CHIPS model
-// ---------------------------------------------------------------
+//      ---------------- G4QStringVector ----------------
+//             by Mikhail Kossov, October 2006.
+// Type definition for a Vector of QStrings - output of CHIPS model
+// ----------------------------------------------------------------
 
-#ifndef G4QHadronVector_h
-#define G4QHadronVector_h 1
-//
-// $Id: G4QHadronVector.hh,v 1.21 2006-10-30 10:40:34 mkossov Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-// ------------------------------------------------------------
-//      GEANT 4 class implementation file
-//
-//      ---------------- G4QParton ----------------
-//             by Mikhail Kossov, Oct 1999.
-// class for QHadronVector (string) used by CHIPS Models
-// ------------------------------------------------------------
+#ifndef G4QStringVector_h
+#define G4QStringVector_h 1
 
-#include "G4QHadron.hh"
+#include "G4QString.hh"
 #include <vector>
 
-typedef std::vector<G4QHadron *> G4QHadronVector;
-struct DeleteQHadron { void operator()(G4QHadron* aQH){delete aQH;}};
+typedef std::vector<G4QString *> G4QStringVector;
+struct DeleteQString{ void operator()(G4QString *aQS){delete aQS;} };
 
 #endif

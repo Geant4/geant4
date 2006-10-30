@@ -23,33 +23,58 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+#ifndef G4QPartonPair_h
+#define G4QPartonPair_h 1
 //
-// $Id: G4QHadronVector.hh,v 1.21 2006-10-30 10:40:34 mkossov Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-//      ---------------- G4QCandidateVector ----------------
-//             by Mikhail Kossov, Sept 1999.
-// Type defenition for a Vector of Hadrons - output of CHIPS model
-// ---------------------------------------------------------------
-
-#ifndef G4QHadronVector_h
-#define G4QHadronVector_h 1
-//
-// $Id: G4QHadronVector.hh,v 1.21 2006-10-30 10:40:34 mkossov Exp $
+// $Id: G4QPartonPair.hh,v 1.1 2006-10-30 10:40:34 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
 //
 //      ---------------- G4QParton ----------------
-//             by Mikhail Kossov, Oct 1999.
-// class for QHadronVector (string) used by CHIPS Models
+//             by Mikhail Kossov, Oct 2006.
+// class for PartonPair (hadron) used by Parton String Models
 // ------------------------------------------------------------
+//
+#include "globals.hh"
+#include "G4ThreeVector.hh"
+#include "G4LorentzVector.hh"
+#include "G4QParton.hh"
 
-#include "G4QHadron.hh"
-#include <vector>
-
-typedef std::vector<G4QHadron *> G4QHadronVector;
-struct DeleteQHadron { void operator()(G4QHadron* aQH){delete aQH;}};
+class G4QPartonPair 
+{
+ public:
+  enum { DIFFRACTIVE = 1, SOFT = 2, HARD  = 3};
+  enum { PROJECTILE = 1, TARGET = -1};
+ public:
+  G4QPartonPair(G4QParton* P1, G4QParton* P2, G4int Type=0, G4int Direction=0);
+  ~G4QPartonPair();
+  G4int operator==(const G4QPartonPair &right) const
+  {
+    return (CollisionType == right.CollisionType && *Parton1 == *right.Parton1 &&
+                                                    *Parton2 == *right.Parton2) ? 1: 0;
+  }
+  G4int operator!=(const G4QPartonPair &right) const
+  {
+    return (CollisionType == right.CollisionType && *Parton1 == *right.Parton1 &&
+                                                    *Parton2 == *right.Parton2) ? 0: 1;
+  }
+  // Modifiers
+  void  SetPartons(G4QParton* P1, G4QParton* P2) {Parton1=P1; Parton2=P2;}
+  void  SetCollisionType(G4int Type)             {CollisionType = Type;}
+  // Selectors
+  G4int GetCollisionType()                       {return CollisionType;}
+  G4QParton* GetParton1()                        {return Parton1;}
+  G4QParton* GetParton2()                        {return Parton2;}
+  G4int      GetDirection()                      {return Direction;}
+      
+ private:
+  // Body
+  G4QParton* Parton1;  
+  G4QParton* Parton2;  
+  G4int     CollisionType;
+  G4int     Direction;
+};
 
 #endif

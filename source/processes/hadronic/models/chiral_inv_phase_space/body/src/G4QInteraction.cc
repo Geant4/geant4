@@ -24,32 +24,29 @@
 // ********************************************************************
 //
 //
-// $Id: G4QHadronVector.hh,v 1.21 2006-10-30 10:40:34 mkossov Exp $
+// $Id: G4QInteraction.cc,v 1.1 2006-10-30 10:40:36 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//      ---------------- G4QCandidateVector ----------------
-//             by Mikhail Kossov, Sept 1999.
-// Type defenition for a Vector of Hadrons - output of CHIPS model
-// ---------------------------------------------------------------
-
-#ifndef G4QHadronVector_h
-#define G4QHadronVector_h 1
-//
-// $Id: G4QHadronVector.hh,v 1.21 2006-10-30 10:40:34 mkossov Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-// ------------------------------------------------------------
+// ------------------------------------------------------------------
 //      GEANT 4 class implementation file
 //
-//      ---------------- G4QParton ----------------
-//             by Mikhail Kossov, Oct 1999.
-// class for QHadronVector (string) used by CHIPS Models
-// ------------------------------------------------------------
+//      ---------------- G4QInteraction----------------
+//            Created by Mikhail Kossov Oct, 2006
+//   class for a storing colliding particles in PartonString Models
+// -------------------------------------------------------------------
 
-#include "G4QHadron.hh"
-#include <vector>
+#include "G4QInteraction.hh"
 
-typedef std::vector<G4QHadron *> G4QHadronVector;
-struct DeleteQHadron { void operator()(G4QHadron* aQH){delete aQH;}};
+G4QInteraction::G4QInteraction(G4QHadron* aProjectile) : theProjectile(aProjectile),
+  theTarget(0),theNumberOfHard(0),theNumberOfSoft(0),theNumberOfDiffractive(0)
+{}
 
-#endif
+G4QInteraction::G4QInteraction(const G4QInteraction &right) :
+  theProjectile(right.GetProjectile()), theTarget(right.GetTarget()),
+  theNumberOfHard(0), theNumberOfSoft(0), theNumberOfDiffractive(0)
+{}
+
+G4QInteraction::~G4QInteraction()
+{}
+
+
