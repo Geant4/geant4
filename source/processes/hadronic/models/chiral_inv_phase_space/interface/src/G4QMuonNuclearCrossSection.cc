@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QMuonNuclearCrossSection.cc,v 1.8 2006-09-05 16:22:40 mkossov Exp $
+// $Id: G4QMuonNuclearCrossSection.cc,v 1.9 2006-10-30 10:33:38 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -39,8 +39,8 @@
 //=========================================================================================
 
 //#define debug
-#define edebug
 //#define pdebug
+#define edebug
 //#define ppdebug
 //#define tdebug
 //#define sdebug
@@ -2447,7 +2447,7 @@ G4double G4QMuonNuclearCrossSection::GetExchangeEnergy()
 #endif
   if(ris<Y[lastL])                      // Search in the table
   {
-	G4int j=lastF;
+	   G4int j=lastF;
     G4double Yj=Y[j];                   // It mast be 0 (some times just very small)
     while (ris>Yj && j<lastL)           // Associative search
 	   {

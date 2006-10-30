@@ -31,9 +31,10 @@
 // G4 Physics class: G4QProtonNuclearCrossSection for gamma+A cross sections
 // Created: M.V. Kossov, CERN/ITEP(Moscow), 20-Dec-03
 // The last update: M.V. Kossov, CERN/ITEP (Moscow) 15-Feb-04
-// ***************************************************************************************
-// ********** This CLASS is temporary moved from the photolepton_hadron directory *********
-// ******* DO NOT MAKE ANY CHANGE! With time it'll move back to photolepton...(M.K.) ******
+// --------------------------------------------------------------------------------
+// ****************************************************************************************
+// ***** This HEADER is a property of the CHIPS hadronic package in Geant4 (M. Kosov) *****
+// *********** DO NOT MAKE ANY CHANGE without approval of Mikhail.Kossov@cern.ch **********
 // ****************************************************************************************
 //
 //#define debug

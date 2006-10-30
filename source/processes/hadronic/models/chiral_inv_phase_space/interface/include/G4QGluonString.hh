@@ -23,52 +23,29 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QCollision.hh,v 1.7 2006-10-30 10:33:36 mkossov Exp $
+// $Id: G4QGluonString.hh,v 1.1 2006-10-30 10:33:38 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//      ---------------- G4QCollision header ----------------
-//                 by Mikhail Kossov, December 2003.
-//  Header of G4QCollision class (mu-,pi-,K-) of the CHIPS Simulation Branch in GEANT4
+//      ---------------- G4QGluonString header ----------------
+//                 by Mikhail Kossov, October 2006.
+// Header of G4QGluonString (N,pi,K,aN,Hyperons,aHyp) of CHIPS Simulation Branch
 // -------------------------------------------------------------------------------
-// This is a unique CHIPS class for the Hadron-Nuclear Inelastic Interaction Prosesses.
+// -->> At present (17.10.2006) started only with proton-nuclear reactions <<--
 // -------------------------------------------------------------------------------
-// At present (Dec.04) only pi+/-, K+/- proton, neutron, antiproton and antineutron
-// collisions with protons are implemented, which are fundamental for the in matter
-// simulation of hadronic reactions. The interactions of the same particles with
-// nuclei are planned only. The collisions of nuclei with nuclei are possible...
-// The simulation is based on the G4QuasmonString class, which extends the CHIPS model
-// to the highest energyes, implementing the Quasmon string with the
-// String->Quasmons->Hadrons scenario of the quark-gluon string fragmentation
-// --> CHIPS is a SU(3) event generator, so it does not include reactions with the
-// heavy (c,b,t), which can be simulated only by the SU(6) QUIPS (QUark Invariant
-// Phase Space) model which is an expantion of the CHIPS.-December 2003.M.Kossov.-
+// This is a QGS CHIPS class for the Hadron-Nuclear Inelastic Interaction Prosesses
 // -------------------------------------------------------------------------------
-// Algorithms: the interactions in CHIPS are described by the quark exchange (QE) process.
-// The first step is the low energy quark exchange. If as a result of the QE one or
-// both secondary hadrons are below the pi0 threshold (roughly) they are pushed to the
-// Ground State (GS) value(s). The excited (above the pi0 production threshold) hadronic
-// state is considered as a Quasmon, which is filled in the G4QuasmonVector of the
-// G4QuasmonString class. On the second step all G4Quasmons are decayed by the
-// G4Quasmon class and fiill the G4QHadronVector output. If the exchange quark is too far
-// in the rapidity space (a parameter of the G4QuasmonString class) from any of the quarks
-// of the other hadron it creates a string with the nearest in the rapidity space quark.
-// This string is converted into a Quasmon. This forces the coalescence of the residuals
-// in the another Quasmon, while the possibility exist to create more residual Quasmons
-// instead of one - one per each target-quark+projectile-antiquark(diquark) pair. This
-// possibility is tuned by the Drell-Yan pair production process. If the target (or
-// pojectile) are nuclei, then the Quasmons are created not only in vacuum, where they
-// can be fragmented by the G4Quasmon class, but in nuclear matter of the residual target
-// (or projectile). If the Quasmons are crated in nuclear matter, they are fragmented by
-// the G4QEnvironment class with the subsequent Quark Exchange nuclear fragmentation.
-// This is the planned scenario.- December 2004.Mikhail Kossov.-
+// This class follows the structure of the G4QCollision class and its content can be
+// eventually moved to G4QCollision class. At present the alternative realisation of
+// the hadronic inelastic process (G4QGluonString) is kept for comparison with other
+// G4QCollision algorithms. It can be attached as an inelastic process to all hadrons
 // --------------------------------------------------------------------------------
 // ****************************************************************************************
-// ********* This HEADER is temporary moved from the photolepton_hadron directory *********
-// ******* DO NOT MAKE ANY CHANGE! With time it'll move back to photolepton...(M.K.) ******
+// ***** This HEADER is a property of the CHIPS hadronic package in Geant4 (M. Kosov) *****
+// *********** DO NOT MAKE ANY CHANGE without approval of Mikhail.Kossov@cern.ch **********
 // ****************************************************************************************
 
-#ifndef G4QCollision_hh
-#define G4QCollision_hh
+#ifndef G4QGluonString_hh
+#define G4QGluonString_hh
 
 // GEANT4 Headers
 #include "globals.hh"
@@ -90,25 +67,18 @@
 #include "G4VQCrossSection.hh"
 #include "G4QIsotope.hh"
 #include "G4QProtonNuclearCrossSection.hh"
-#include "G4QPhotonNuclearCrossSection.hh"
-#include "G4QElectronNuclearCrossSection.hh"
-#include "G4QMuonNuclearCrossSection.hh"
-#include "G4QTauNuclearCrossSection.hh"
-#include "G4QNuMuNuclearCrossSection.hh"
-#include "G4QANuMuNuclearCrossSection.hh"
-//#include "G4QuasmonString.hh"
 #include "G4QPDGToG4Particle.hh"
 #include <vector>
 
-class G4QCollision : public G4VDiscreteProcess
+class G4QGluonString : public G4VDiscreteProcess
 {
 public:
 
   // Constructor
-  G4QCollision(const G4String& processName ="CHIPSNuclearCollision");
+  G4QGluonString(const G4String& processName ="CHIPS_QGS_Inelastic");
 
   // Destructor
-  ~G4QCollision();
+  ~G4QGluonString();
 
   G4bool IsApplicable(const G4ParticleDefinition& particle);
 
@@ -120,7 +90,6 @@ public:
   // This function overloads a virtual function of the base class.		      
   // It is invoked by the ProcessManager of the Particle.
  
-
   G4VParticleChange* PostStepDoIt(const G4Track& aTrack, const G4Step& aStep); 
   // It computes the final state of the process (at end of step),
   // returned as a ParticleChange object.			    
@@ -145,20 +114,15 @@ public:
                             G4double fN=0., G4double fD=0., G4double cP=1., G4double mR=1.,
                             G4int npCHIPSWorld=234, G4double solAn=.5, G4bool efFlag=false,
                             G4double piTh=141.4,G4double mpi2=20000.,G4double dinum=1880.);
-  static void SetPhotNucBias(G4double phnB=1.);
-  static void SetWeakNucBias(G4double ccnB=1.);
   //--- End of static member functions ----------------------------------------------------
-
-  G4double GetPhotNucBias(){return photNucBias;}
-  G4double GetWeakNucBias(){return weakNucBias;}
 
 private:
 
   // Hide assignment operator as private 
-  G4QCollision& operator=(const G4QCollision &right);
+  G4QGluonString& operator=(const G4QGluonString &right);
 
   // Copy constructor
-  G4QCollision(const G4QCollision&);
+  G4QGluonString(const G4QGluonString&);
 
 		// BODY
   // Static Parameters --------------------------------------------------------------------
@@ -179,9 +143,6 @@ private:
   static G4double PiPrThresh;  // Pion Production Threshold for gammas
   static G4double M2ShiftVir;  // Shift for M2=-Q2=m_pi^2 of the virtual gamma
   static G4double DiNuclMass;  // Double Nucleon Mass for virtual normalization
-  // -> Biasing parameters:
-  static G4double photNucBias; // Biasing parameter for photo-($e,mu,tau)Nuclear reactions
-  static G4double weakNucBias; // Biasing parameter for Charged Currents (nu,mu) reactions
   //--------------------------------- End of static parameters ---------------------------
   // Working parameters
   G4VQCrossSection* theCS;
