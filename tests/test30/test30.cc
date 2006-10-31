@@ -606,7 +606,7 @@ int main(int argc, char** argv)
     G4VCrossSectionDataSet* cs = 0;
     G4double cross_sec = 0.0;
 
-    if(nameGen == "LElastic" || nameGen == "Elastic" || 
+    if(nameGen == "LElastic" || nameGen == "elastic" || 
        nameGen == "HElastic" || nameGen == "BertiniElastic") {
       cs = new G4HadronElasticDataSet();
     } else if(part == proton && Z > 1 && nameGen != "lepar") {
