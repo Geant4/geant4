@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronElastic.cc,v 1.29 2006-10-31 11:47:54 vnivanch Exp $
+// $Id: G4HadronElastic.cc,v 1.30 2006-10-31 18:36:04 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -53,7 +53,7 @@
 // 02-Aug-06 V.Ivanchenko introduce energy cut on the aria of S-wave for pions
 // 24-Aug-06 V.Ivanchenko switch on G4ElasticHadrNucleusHE
 // 31-Aug-06 V.Ivanchenko do not sample sacttering for particles with kinetic 
-//                        energy below ekinIon (100 keV by default)
+//                        energy below 10 keV
 //
 
 #include "G4HadronElastic.hh"
@@ -116,7 +116,7 @@ G4HadFinalState* G4HadronElastic::ApplyYourself(
 
   const G4HadProjectile* aParticle = &aTrack;
   G4double ekin = aParticle->GetKineticEnergy();
-  if(ekin <= ekinIon) {
+  if(ekin <= 10.0*keV) {
     theParticleChange.SetEnergyChange(ekin);
     theParticleChange.SetMomentumChange(aTrack.Get4Momentum().vect().unit());
     return &theParticleChange;
@@ -148,11 +148,11 @@ G4HadFinalState* G4HadronElastic::ApplyYourself(
 
   G4ParticleDefinition * theDef = 0;
 
-  if(Z == 1 && A == 1)       theDef = theProton;
-  else if (Z == 1 && A == 2) theDef = theDeuteron;
+  if(Z == 1 && A == 1)       theDef = G4Proton::Proton();
+  else if (Z == 1 && A == 2) theDef = G4Deuteron::Deuteron();
   else if (Z == 1 && A == 3) theDef = G4Triton::Triton();
   else if (Z == 2 && A == 3) theDef = G4He3::He3();
-  else if (Z == 2 && A == 4) theDef = theAlpha;
+  else if (Z == 2 && A == 4) theDef = G4Alpha::Alpha();
   else theDef = G4ParticleTable::GetParticleTable()->FindIon(Z,A,0,Z);
  
   G4double m2 = theDef->GetPDGMass();
