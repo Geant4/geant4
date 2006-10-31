@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.81 2006-10-31 11:35:21 gunter Exp $
+# $Id: GNUmakefile,v 1.82 2006-10-31 14:59:27 vnivanch Exp $
 # -----------------------------------------------------------------
 # "gmake" makes default libraries for each subdomain.
 # "gmake global" makes global libraries for each subdomain.
@@ -17,7 +17,7 @@ SUBDIR1 =  global intercoms graphics_reps materials
 SUBDIR2 =  geometry particles track digits_hits processes
 SUBDIR2 += parameterisations tracking event run readout
 SUBDIR3 =  persistency interfaces visualization
-ifdef ($(G4LIB_BUILD_LISTS),1)
+ifndef ($(G4LIB_BUILD_LISTS),1)
 SUBDIR3 += physics_lists
 endif
 
