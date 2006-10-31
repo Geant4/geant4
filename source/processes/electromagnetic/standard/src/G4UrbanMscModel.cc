@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel.cc,v 1.19 2006-10-23 10:40:55 urban Exp $
+// $Id: G4UrbanMscModel.cc,v 1.20 2006-10-31 19:21:33 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -178,7 +178,9 @@ G4UrbanMscModel::G4UrbanMscModel(G4double m_facrange, G4double m_dtrl,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4UrbanMscModel::~G4UrbanMscModel()
-{}
+{
+  delete safetyHelper; 
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -196,6 +198,8 @@ void G4UrbanMscModel::Initialise(const G4ParticleDefinition* p,
 
   navigator = G4TransportationManager::GetTransportationManager()
     ->GetNavigatorForTracking();
+
+  safetyHelper= new G4SafetyHelper(); 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -574,7 +578,7 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
       tPathLength = tnow ; 
 
   }
-  
+
   // version similar to 7.1 (needed for some experiments)
   else
   {
@@ -808,19 +812,24 @@ std::vector<G4DynamicParticle*>* G4UrbanMscModel::SampleSecondaries(
         {
           //  ******* we do not have track info at this level ***********
           //  ******* so navigator is called at boundary too ************
-          G4double newsafety = navigator->ComputeSafety(Position);
+	  // navigator->LocateGlobalPointWithinVolume(Position);
+          G4double newsafety= -100.; // = safety;
+          // newsafety= navigator->ComputeSafety(Position);
+          newsafety= safetyHelper->ComputeSafety(Position);
+          safety= newsafety; 
           if(r < newsafety)
             fac = 1.;
           else
             fac = newsafety/r ;
         }  
-        
+
         if(fac > 0.)
         {
           // compute new endpoint of the Step
           G4ThreeVector newPosition = Position+fac*r*latDirection;
 
-          navigator->LocateGlobalPointWithinVolume(newPosition);
+          // navigator->LocateGlobalPointWithinVolume(newPosition);
+          safetyHelper->ReLocateWithinVolume(newPosition);
 
           fParticleChange->ProposePosition(newPosition);
         } 
@@ -934,7 +943,7 @@ G4double G4UrbanMscModel::SampleCosineTheta(G4double trueStepLength,
 
         G4double f1x0 = a*ea/eaa ;
         G4double f2x0 = c1*eb1*ebx/(eb1-ebx)/exp(c*log(bx)) ;
-               
+
         // from continuity at x=x0
         prob = f2x0/(f1x0+f2x0) ;
 
@@ -1017,8 +1026,3 @@ G4double G4UrbanMscModel::LatCorrelation()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-
-
-
-
