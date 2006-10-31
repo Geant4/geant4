@@ -1,4 +1,4 @@
-$Id: History,v 1.57 2006-10-31 17:00:41 japost Exp $
+$Id: History,v 1.58 2006-10-31 17:02:48 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+October 31st, 2006 - J.Apostolakis (geomnav-V08-01-ref03-06)
+----------------------------------
+Changed default value of fUseParallelGeometries to false
+  --> this should be the default, and when PathFinder is activated,
+      it should be changed to 'true'
 
 October 31st, 2006 - J.Apostolakis (geomnav-V08-01-ref03-05)
 ----------------------------------
