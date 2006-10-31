@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StepPoint.cc,v 1.11 2006-06-29 21:15:15 gunter Exp $
+// $Id: G4StepPoint.cc,v 1.12 2006-10-31 10:01:43 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -76,31 +76,3 @@ G4StepPoint::G4StepPoint(const G4StepPoint &right):
   fCharge(right.fCharge),
   fWeight(right.fWeight)
 {}
-
-
-//////////////////////////
-G4StepPoint & G4StepPoint::operator=(const G4StepPoint &right)
-//////////////////////////
-{
-  if (this != &right) {
-    fPosition = right.fPosition;
-    fGlobalTime = right.fGlobalTime;
-    fLocalTime = right.fLocalTime;
-    fProperTime = right.fProperTime;
-    fMomentumDirection = right.fMomentumDirection;
-    fKineticEnergy = right.fKineticEnergy;
-    fpTouchable = right.fpTouchable;
-    fpMaterial = right.fpMaterial;
-    fpMaterialCutsCouple = right.fpMaterialCutsCouple;
-    fpSensitiveDetector = right.fpSensitiveDetector;
-    fSafety = right.fSafety;
-    fPolarization = right.fPolarization;
-    fStepStatus = right.fStepStatus;
-    fpProcessDefinedStep = right.fpProcessDefinedStep;
-    fMass = right.fMass;
-    fCharge = right.fCharge;
-    fWeight = right.fWeight;
-    fVelocity = right.fVelocity;
-  }
-  return *this;
-}
