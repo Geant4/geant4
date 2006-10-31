@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.cc,v 1.17 2006-06-29 16:52:23 gunter Exp $
+// $Id: DetectorConstruction.cc,v 1.18 2006-10-31 12:53:48 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -171,10 +171,6 @@ void DetectorConstruction::DefineMaterials()
   new G4Material("quartz", density= 2.200*g/cm3, ncomponents=2);
   SiO2->AddElement(Si, natoms=1);
   SiO2->AddElement(O , natoms=2);
-
-  //
-  // define a material from elements.   case 2: compounds
-  //
 
   G4Material* G10 = 
   new G4Material("NemaG10", density= 1.700*g/cm3, ncomponents=4);
