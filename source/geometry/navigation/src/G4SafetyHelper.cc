@@ -32,7 +32,7 @@
 // #include "G4Exception.hh"
 #include "globals.hh"
 
-G4bool G4SafetyHelper::fUseParallelGeometries= true;  
+G4bool G4SafetyHelper::fUseParallelGeometries= false;  
                                             // By default, one geometry only
 
 G4SafetyHelper::G4SafetyHelper()
