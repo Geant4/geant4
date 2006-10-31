@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PathFinder.hh,v 1.18 2006-10-25 18:00:13 japost Exp $
+// $Id: G4PathFinder.hh,v 1.19 2006-10-31 16:56:29 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // class G4PathFinder 
@@ -183,8 +183,7 @@ class G4PathFinder
    G4double      fCurrentStepSize[fMaxNav]; 
    G4double      fNewSafety[ fMaxNav ];      // Safety for starting point
    G4double      fMinSafety;
-   G4ThreeVector fSafetyLocation;          //  point where ComputeSafety is called
-   G4double      fMinSafety_atSafLocation; //  /\ corresponidng value of safety 
+
    G4double      fMinStep;      // As reported by Navigators -- can be kInfinity
    G4double      fTrueMinStep;  // Corrected in case >= proposed 
    // State after calling 'locate'
@@ -198,6 +197,11 @@ class G4PathFinder
                              //  from the position of the last location
                              //   or the endpoint resulting from ComputeStep 
                              //   -- invalidates fEndState
+
+   G4ThreeVector fSafetyLocation;       //  point where ComputeSafety is called
+   G4double      fMinSafety_atSafLocation; // /\ corresponding value of safety
+   G4ThreeVector fPreStepLocation;      //  point where last ComputeStep called
+   G4double      fMinSafety_PreStepPt;  //   /\ corresponding value of safety
 
    G4int           fLastStepNo, fCurrentStepNo; 
    G4bool      fParticleIsLooping;
