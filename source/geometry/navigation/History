@@ -1,4 +1,4 @@
-$Id: History,v 1.56 2006-10-27 09:14:28 gcosmo Exp $
+$Id: History,v 1.57 2006-10-31 17:00:41 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,18 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+October 31st, 2006 - J.Apostolakis (geomnav-V08-01-ref03-05)
+----------------------------------
+- G4SafetyHelper
+  o Added new class variable fUseParallelGeometries, to enable
+    it to work call G4Navigator of Mass geometry directly, in
+    the case of single geometry  ( when G4PathFinder is disabled. )
+  o Default value is 'true' --> for parallel navigation development
+
+- G4PathFinder
+  o Improved the code that checks within relocation whether position
+    is proposed to be moved outside safety sphere from endpoint. 
 
 October 26th, 2006 - G.Cosmo (geomnav-V08-01-02)
 ----------------------------
