@@ -1,4 +1,4 @@
-$Id: History,v 1.259 2006-10-26 17:37:57 vnivanch Exp $
+$Id: History,v 1.260 2006-10-31 19:57:55 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+31 Oct 06: V.Ivanchenko (emstand-V08-01-11)
+- G4UrbanMscModel is changed to work with new approach of parallel
+                  navigation (j.Apostolakis)
 
 26 Oct 06: V.Ivanchenko (emstand-V08-01-10)
 - G4hMultipleScattering - new class configured for hadrons
