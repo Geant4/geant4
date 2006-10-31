@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronElastic.cc,v 1.28 2006-10-24 17:10:06 vnivanch Exp $
+// $Id: G4HadronElastic.cc,v 1.29 2006-10-31 11:47:54 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -52,6 +52,8 @@
 // 25-Jul-06 V.Ivanchenko add 19 MeV low energy, below which S-wave is sampled
 // 02-Aug-06 V.Ivanchenko introduce energy cut on the aria of S-wave for pions
 // 24-Aug-06 V.Ivanchenko switch on G4ElasticHadrNucleusHE
+// 31-Aug-06 V.Ivanchenko do not sample sacttering for particles with kinetic 
+//                        energy below ekinIon (100 keV by default)
 //
 
 #include "G4HadronElastic.hh"
@@ -114,7 +116,7 @@ G4HadFinalState* G4HadronElastic::ApplyYourself(
 
   const G4HadProjectile* aParticle = &aTrack;
   G4double ekin = aParticle->GetKineticEnergy();
-  if(ekin == 0.0) {
+  if(ekin <= ekinIon) {
     theParticleChange.SetEnergyChange(ekin);
     theParticleChange.SetMomentumChange(aTrack.Get4Momentum().vect().unit());
     return &theParticleChange;
