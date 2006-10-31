@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel.hh,v 1.10 2006-10-20 12:01:11 urban Exp $
+// $Id: G4UrbanMscModel.hh,v 1.11 2006-10-31 19:19:57 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -88,6 +88,8 @@
 
 #include "G4VEmModel.hh"
 #include "G4PhysicsTable.hh"
+
+#include "G4SafetyHelper.hh"
 
 class G4ParticleChangeForMSC;
 class G4Navigator;
@@ -160,6 +162,7 @@ private:
   const G4ParticleDefinition* particle;
   G4ParticleChangeForMSC*     fParticleChange;
   G4Navigator*                navigator;
+  G4SafetyHelper*             safetyHelper;
   G4PhysicsTable*             theLambdaTable;
   const G4MaterialCutsCouple* couple;
   G4LossTableManager*         theManager;
