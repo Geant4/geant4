@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SafetyHelper.hh,v 1.2 2006-10-26 10:07:06 gcosmo Exp $
+// $Id: G4SafetyHelper.hh,v 1.3 2006-10-31 16:53:06 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -57,10 +57,6 @@ class G4SafetyHelper
      //
      // Constructor and destructor
 
-   void InitialiseNavigator();
-     //
-     // Check for new navigator for tracking, and reinitialise pointer
-
    G4double ComputeMassStep( const G4ThreeVector &position, 
                              const G4ThreeVector &direction,
                                    G4double  &newSafety );
@@ -75,11 +71,26 @@ class G4SafetyHelper
      //
      // Relocate the point in the volume of interest
 
+public: // with description
+   static void EnableParallelNavigation(G4bool parallel) 
+     { fUseParallelGeometries= parallel; } 
+     // 
+     //  To have parallel worlds considered, must be true.
+     //  Alternative is to use single (mass) Navigator directly
+
+   void InitialiseNavigator();
+     //
+     // Check for new navigator for tracking, and reinitialise pointer
+
 private:
 
    G4PathFinder* fpPathFinder;
    G4Navigator*  fpMassNavigator;
    G4int         fMassNavigatorId;
+
+   static G4bool        fUseParallelGeometries; 
+   // Flag whether to use PathFinder or single (mass) Navigator directly
+
 };
 
 #endif
