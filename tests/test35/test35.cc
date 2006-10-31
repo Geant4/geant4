@@ -58,6 +58,7 @@
 #include "G4NeutronInelasticCrossSection.hh"
 #include "G4HadronInelasticDataSet.hh"
 #include "G4PiNuclearCrossSection.hh"
+#include "G4HadronElasticDataSet.hh"
 
 #include "G4ParticleTable.hh"
 #include "G4ParticleChange.hh"
@@ -458,7 +459,9 @@ int main(int argc, char** argv)
     G4VCrossSectionDataSet* cs = 0;
     G4double cross_sec = 0.0;
 
-    if(part == proton && Z > 1 && nameGen != "lepar") 
+    if(nameGen == "LElastic" || nameGen == "elastic")
+      cs = new G4HadronElasticDataSet();
+    else if(part == proton && Z > 1 && nameGen != "lepar") 
       cs = new G4ProtonInelasticCrossSection();
     else if(part == neutron && Z > 1 && nameGen != "lepar") 
       cs = new G4NeutronInelasticCrossSection();

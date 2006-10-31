@@ -88,6 +88,9 @@
 #include "HsQGSPInterface.hh"
 #include "HsQGSCInterface.hh"
 
+#include "G4LElastic.hh"
+#include "G4HadronElastic.hh"
+
 #include "G4TheoFSGenerator.hh"
 #include "G4FTFModel.hh"
 #include "G4ExcitedStringDecay.hh"
@@ -196,10 +199,14 @@ G4VProcess* Test30Physics::GetProcess(const G4String& gen_name,
   // Choose generator
 
   if(gen_name == "lepar") {
-    if(part_name == "proton")   sg = new Test30VSecondaryGenerator(new G4LEProtonInelastic(),mat);
-    else if(part_name == "pi+") sg = new Test30VSecondaryGenerator(new G4LEPionPlusInelastic(),mat);
-    else if(part_name == "pi-") sg = new Test30VSecondaryGenerator(new G4LEPionMinusInelastic(),mat);
-    else if(part_name == "neutron") sg = new Test30VSecondaryGenerator(new G4LENeutronInelastic(),mat);
+    if(part_name == "proton")   
+      sg = new Test30VSecondaryGenerator(new G4LEProtonInelastic(),mat);
+    else if(part_name == "pi+") 
+      sg = new Test30VSecondaryGenerator(new G4LEPionPlusInelastic(),mat);
+    else if(part_name == "pi-") 
+      sg = new Test30VSecondaryGenerator(new G4LEPionMinusInelastic(),mat);
+    else if(part_name == "neutron") 
+      sg = new Test30VSecondaryGenerator(new G4LENeutronInelastic(),mat);
     theProcess->SetSecondaryGenerator(sg);
     man->AddDiscreteProcess(theProcess);
 
@@ -253,6 +260,18 @@ G4VProcess* Test30Physics::GetProcess(const G4String& gen_name,
     HsQGSCInterface* qgsc = new HsQGSCInterface();
     qgsc->SetMinEnergy(4.*GeV);
     sg = new Test30VSecondaryGenerator(qgsc, mat);
+    theProcess->SetSecondaryGenerator(sg);
+    man->AddDiscreteProcess(theProcess);
+
+  } else if(gen_name == "LElastic") {
+    G4LElastic* els = new G4LElastic();
+    sg = new Test30VSecondaryGenerator(els, mat);
+    theProcess->SetSecondaryGenerator(sg);
+    man->AddDiscreteProcess(theProcess);
+
+  } else if(gen_name == "Elastic") {
+    G4HadronElastic* els = new G4HadronElastic();
+    sg = new Test30VSecondaryGenerator(els, mat);
     theProcess->SetSecondaryGenerator(sg);
     man->AddDiscreteProcess(theProcess);
 
