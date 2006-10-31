@@ -32,11 +32,14 @@
 // #include "G4Exception.hh"
 #include "globals.hh"
 
+G4bool G4SafetyHelper::fUseParallelGeometries= true;  
+                                            // By default, one geometry only
+
 G4SafetyHelper::G4SafetyHelper()
 {
    fpPathFinder= G4PathFinder::GetInstance();
    
-   InitialiseNavigator(); 
+   InitialiseNavigator();    
 }
 
 void G4SafetyHelper::InitialiseNavigator()
@@ -98,31 +101,33 @@ G4double   G4SafetyHelper::ComputeSafety( const G4ThreeVector& position )
 {
    // Safety for all geometries
    G4double newsafety= 0.0; 
- 
-   // Old code: safety for mass geometry
-   //   navigator->LocateGlobalPointWithinVolume(position);
-   //   newsafety = navigator->ComputeSafety(position); 
 
-   // fpPathFinder->ReLocate( position );   // Safe in PostStepDoIt only ??
-   newsafety= fpPathFinder->ComputeSafety( position ); 
+   if( !fUseParallelGeometries) {
+      // Old code: safety for mass geometry
+      fpMassNavigator->LocateGlobalPointWithinVolume(position);
+      newsafety = fpMassNavigator->ComputeSafety(position); 
+   }else{
+
+      // fpPathFinder->ReLocate( position );   // Safe in PostStepDoIt only ??
+      newsafety= fpPathFinder->ComputeSafety( position ); 
 
 #ifdef CHECK_WITH_ONE_GEOM 
-   // Check against mass safety
-   fpMassNavigator->LocateGlobalPointWithinVolume(position);
-   G4double mass_safety = fpMassNavigator->ComputeSafety(position); 
+      // Check against mass safety
+      fpMassNavigator->LocateGlobalPointWithinVolume(position);
+      G4double mass_safety = fpMassNavigator->ComputeSafety(position); 
 
-   // For initial tests check assume that mass is only geometry
-   if( (mass_safety - newsafety) > 1e-4 * newsafety ){
-      G4cerr << " ERROR in G4SafetyHelper " << G4endl
+      // For initial tests check assume that mass is only geometry
+      if( (mass_safety - newsafety) > 1e-4 * newsafety ){
+         G4cerr << " ERROR in G4SafetyHelper " << G4endl
 	     << "   Safety from PathFinder is " << newsafety << " "
 	     << "    not equal to " <<  mass_safety << "  " << G4endl;
-      G4Exception("G4SafetyHelper::ComputeSafety", "SafetyError",
+	 G4Exception("G4SafetyHelper::ComputeSafety", "SafetyError",
                    FatalException, 
 		  "Incompatible safeties between navigator and pathfinder" );
-      exit(1); 
-   }
+	 exit(1); 
+      }
 #endif
-
+   }
    return newsafety;
 }
 
@@ -130,10 +135,16 @@ G4double   G4SafetyHelper::ComputeSafety( const G4ThreeVector& position )
 void  G4SafetyHelper::ReLocateWithinVolume( const G4ThreeVector &newPosition )
 {
 
+#ifdef G4VERBOSE_HELPER
    G4int oldPrec= G4cout.precision( 10 ); 
    G4cout << "  G4SafetyHelper::ReLocateWithinVolume " 
-	  << " calling PathFinder->ReLocate at position " << newPosition << G4endl;
-   fpPathFinder->ReLocate( newPosition ); 
-
+	  << " calling PathFinder->ReLocating at position " << newPosition << G4endl;
    G4cout.precision( oldPrec ); 
+#endif
+
+   if( !fUseParallelGeometries) {
+      fpMassNavigator->LocateGlobalPointWithinVolume( newPosition ); 
+   }else{
+      fpPathFinder->ReLocate( newPosition ); 
+   }
 }
