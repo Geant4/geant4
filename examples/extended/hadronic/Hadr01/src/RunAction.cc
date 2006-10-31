@@ -78,7 +78,6 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
 
 void RunAction::EndOfRunAction(const G4Run*)
 {
-  HistoManager* manager = HistoManager::GetPointer(); 
   G4cout << "RunAction: End of run actions are started" << G4endl;
 
 #ifdef G4VIS_USE
@@ -86,51 +85,7 @@ void RunAction::EndOfRunAction(const G4Run*)
     G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
 #endif
 
-  if(manager->CrossSectionFlag()) {
-    const G4Element* elm = manager->TargetElement();
-
-    const G4ParticleDefinition* part[10];
-    part[0] = G4Proton::Proton();
-    part[1] = G4Neutron::Neutron();
-    part[2] = G4PionPlus::PionPlus();
-    part[3] = G4PionMinus::PionMinus();
-    part[4] = G4KaonPlus::KaonPlus();
-    part[5] = G4KaonMinus::KaonMinus();
-    part[6] = G4AntiProton::AntiProton();
-    part[7] = G4AntiNeutron::AntiNeutron();
-    G4double emin = std::log10(0.1*MeV);
-    G4double emax = std::log10(10.*TeV);
-    G4int nbins   = 800;
-    G4double del  = (emax - emin)/G4double(nbins);
-    G4HadronProcessStore* store = G4HadronProcessStore::Instance();
-
-    G4cout << "---------------------------------------------------------" 
-	   << G4endl;
-    for(G4int i=0; i<8; i++) {
-      G4double e    = emin - 0.5*del;
-      G4cout << "---------------------------------------------------------" 
-	     << G4endl;
-      G4cout << "  N     e(GeV)      XsecInel(mb)     XsecEl(mb)   " 
-	     << part[i]->GetParticleName() 
-	     << G4endl;   
-      G4cout << "---------------------------------------------------------" 
-	     << G4endl;
-      for(G4int j=0; j<nbins; j++) {
-        e += del;
-        G4double ekin = std::pow(10.,e);
-        G4double inel = store->GetInelasticCrossSectionPerAtom(part[i],ekin,elm)/millibarn; 
-        G4double el = store->GetElasticCrossSectionPerAtom(part[i],ekin,elm)/millibarn; 
-	G4cout << j << "  " << std::setw(10) << ekin/MeV << "  " 
-	       << std::setw(12) << inel << "   " << std::setw(15) << el
-	       << G4endl;
-        manager->Fill(i*2 + 21, e, inel);
-        manager->Fill(i*2 + 22, e, el);
-      }
-    }
-    G4cout << "---------------------------------------------------------" 
-	   << G4endl;
-  }
-  manager->EndOfRun();
+  HistoManager::GetPointer()->EndOfRun();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

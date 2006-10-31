@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.hh,v 1.5 2006-10-04 09:56:03 vnivanch Exp $
+// $Id: HistoManager.hh,v 1.6 2006-10-31 15:05:33 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -94,9 +94,6 @@ public:
   void SetVerbose(G4int val);        
   G4int GetVerbose() const                      {return verbose;};
 
-  void SetCrossSectionFlag(G4bool f)            {csFlag = f;};        
-  G4bool CrossSectionFlag() const               {return csFlag;};
-
   void SetTargetMaterial(const G4Material* mat);
   const G4Material* TargetMaterial() const      {return material;};
   const G4Element* TargetElement() const        {return elm;};
@@ -145,8 +142,6 @@ private:
   G4int n_neu_back;
   G4int n_step;
   G4int nHisto;
-
-  G4bool csFlag;
 
   Histo* histo;
 };

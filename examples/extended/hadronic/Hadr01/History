@@ -1,4 +1,4 @@
-$Id: History,v 1.10 2006-08-14 10:50:39 vnivanch Exp $
+$Id: History,v 1.11 2006-10-31 15:05:33 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+31-10-06 V.Ivant (exhadr01-V08-01-01)
+- Use physics_list subdirectory from source tree
 
 11-08-06 V.Ivant (exhadr01-V08-01-00)
 - Add PhysList and directory for histograms definition via environment

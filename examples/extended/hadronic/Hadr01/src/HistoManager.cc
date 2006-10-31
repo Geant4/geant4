@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.9 2006-10-05 16:22:05 vnivanch Exp $
+// $Id: HistoManager.cc,v 1.10 2006-10-31 15:05:33 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -90,7 +90,6 @@ HistoManager::HistoManager()
   nBinsE    = 100;
   nHisto    = 19;
   length    = 300.*mm;
-  csFlag    = false;
   material  = 0;
   elm       = 0;
   histo     = new Histo(verbose);
@@ -130,24 +129,6 @@ void HistoManager::bookHisto()
   histo->add1D("19","log10 Energy (MeV) of leaking charged pions",nBinsE,-4.,6.,1.0);
   histo->add1D("20","Log10 Energy (MeV) of pi+",nBinsE,-4.,6.,1.0);
   histo->add1D("21","Log10 Energy (MeV) of pi-",nBinsE,-4.,6.,1.0);
-  if(csFlag) {
-    histo->add1D("30","Inelastic croos section of proton (mb)",800,-1.,7.,1.0);
-    histo->add1D("31","Elastic croos section of proton (mb)",800,-1.,7.,1.0);
-    histo->add1D("32","Inelastic croos section of neutron (mb)",800,-1.,7.,1.0);
-    histo->add1D("33","Elastic croos section of neutron (mb)",800,-1.,7.,1.0);
-    histo->add1D("34","Inelastic croos section of pi+ (mb)",800,-1.,7.,1.0);
-    histo->add1D("35","Elastic croos section of pi+ (mb)",800,-1.,7.,1.0);
-    histo->add1D("36","Inelastic croos section of pi- (mb)",800,-1.,7.,1.0);
-    histo->add1D("37","Elastic croos section of pi- (mb)",800,-1.,7.,1.0);
-    histo->add1D("38","Inelastic croos section of K+ (mb)",800,-1.,7.,1.0);
-    histo->add1D("39","Elastic croos section of K+ (mb)",800,-1.,7.,1.0);
-    histo->add1D("40","Inelastic croos section of K- (mb)",800,-1.,7.,1.0);
-    histo->add1D("41","Elastic croos section of K- (mb)",800,-1.,7.,1.0);
-    histo->add1D("42","Inelastic croos section of anti-proton (mb)",800,-1.,7.,1.0);
-    histo->add1D("43","Elastic croos section of anti-proton (mb)",800,-1.,7.,1.0);
-    histo->add1D("44","Inelastic croos section of anti-neutron (mb)",800,-1.,7.,1.0);
-    histo->add1D("45","Elastic croos section of anti-neutron (mb)",800,-1.,7.,1.0);
-  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

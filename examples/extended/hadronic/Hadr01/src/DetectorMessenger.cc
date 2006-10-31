@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: DetectorMessenger.cc,v 1.4 2006-10-04 09:56:03 vnivanch Exp $
+// $Id: DetectorMessenger.cc,v 1.5 2006-10-31 15:05:33 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -100,9 +100,6 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
   updateCmd->SetGuidance("if you changed geometrical value(s)");
   updateCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  csCmd = new G4UIcmdWithABool("/testhadr/CrossSection",this);
-  csCmd->SetGuidance("show inelastic and elastic cross sections");
-
   verbCmd = new G4UIcmdWithAnInteger("/testhadr/Verbose",this);
   verbCmd->SetGuidance("Set verbose for ");
   verbCmd->SetParameterName("verb",false);
@@ -120,7 +117,6 @@ DetectorMessenger::~DetectorMessenger()
   delete nOfAbsCmd;
   delete updateCmd;
   delete testDir;
-  delete csCmd;
   delete verbCmd;
 }
 
@@ -149,9 +145,6 @@ void DetectorMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 
   if( command == verbCmd )
     HistoManager::GetPointer()->SetVerbose(verbCmd->GetNewIntValue(newValue));
-
-  if (command == csCmd)
-    HistoManager::GetPointer()->SetCrossSectionFlag(csCmd->GetNewBoolValue(newValue));
 
   if( command == updateCmd )
     Detector->UpdateGeometry();
