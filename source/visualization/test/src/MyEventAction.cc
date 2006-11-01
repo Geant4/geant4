@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: MyEventAction.cc,v 1.15 2006-07-03 16:56:11 allison Exp $
+// $Id: MyEventAction.cc,v 1.16 2006-11-01 11:14:05 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -49,6 +49,8 @@
 #include "G4Trajectory.hh"
 #include "G4VVisManager.hh"
 #include "G4VisAttributes.hh"
+#include "G4AttValue.hh"
+#include "G4AttDef.hh"
 #include "G4Scale.hh"
 #include "G4Text.hh"
 #include "G4Box.hh"
@@ -60,7 +62,11 @@
 #include <sstream>
 
 MyEventAction::MyEventAction()
-{;}
+{
+  // G4AttDefs have to be long life...
+  fTransientBoxDefs["TrBox"] =
+      G4AttDef("TrBox","Transient Box","Physics","","G4String");
+}
 
 MyEventAction::~MyEventAction()
 {;}
@@ -120,21 +126,6 @@ void MyEventAction::EndOfEventAction(const G4Event* anEvent)
 
   if(pVVisManager)
   {
-
-#ifdef DRAWTRAJHIT
-
-    for(G4int i=0; i<n_trajectories; i++)
-    { (*(evt->GetTrajectoryContainer()))[i]->DrawTrajectory(50); }
-
-    MyTrackerHitsCollection* THC 
-      = (MyTrackerHitsCollection*)(HCE->GetHC(trackerCollID));
-    if(THC) THC->DrawAllHits();
-    MyCalorimeterHitsCollection* CHC
-      = (MyCalorimeterHitsCollection*)(HCE->GetHC(calorimeterCollID));
-    if(CHC) CHC->DrawAllHits();
-
-#endif
-
     G4Scale scale(1. * m, "Test Scale");
     G4VisAttributes va (G4Colour(1.,0.,0.));
     scale.SetVisAttributes(va);
@@ -153,9 +144,17 @@ void MyEventAction::EndOfEventAction(const G4Event* anEvent)
     pVVisManager->Draw2D(text);
 
     G4Box transientBox("transientBox",100*cm,100*cm,100*cm);
-    G4VisAttributes transientBoxAtts(G4Colour(1.,0.,1));
-    transientBoxAtts.SetForceWireframe(true);
-    pVVisManager->Draw(transientBox, transientBoxAtts,
+    G4VisAttributes transientBoxVisAtts(G4Colour(1.,0.,1));
+    transientBoxVisAtts.SetForceWireframe(true);
+    // Create G4AttsValues...
+    std::vector<G4AttValue> transientBoxAtts;
+    std::ostringstream attoss;
+    attoss << "A magenta box of event " << anEvent->GetEventID();
+    transientBoxAtts.push_back(G4AttValue("TrBox",attoss.str(),""));
+    transientBoxVisAtts.SetAttValues(&transientBoxAtts);
+    // G4AttDefs have to be long life (see constructor)...
+    transientBoxVisAtts.SetAttDefs(&fTransientBoxDefs);
+    pVVisManager->Draw(transientBox, transientBoxVisAtts,
 		       G4Translate3D(500.*cm, 500.*cm, -500.*cm));
 
     G4Tubs transientTube("transientTube",0.,100*cm,100*cm,0.,360.*deg);
