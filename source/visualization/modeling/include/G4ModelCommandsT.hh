@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ModelCommandsT.hh,v 1.11 2006-09-13 12:54:31 allison Exp $
+// $Id: G4ModelCommandsT.hh,v 1.12 2006-11-01 10:34:03 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Generic model messenges. 
@@ -383,7 +383,7 @@ public:
 			      const G4String& cmdName="setStepPtsVisible")
     :G4ModelCmdApplyBool<M>(model, placement, cmdName)
   {
-    G4ModelCmdApplyBool<M>::Command()->SetGuidance("Set step points colour command");
+    G4ModelCmdApplyBool<M>::Command()->SetGuidance("Set step points visible command");
   }
   
 protected:
@@ -427,7 +427,7 @@ public:
 			   const G4String& cmdName="setStepPtsSize")
     :G4ModelCmdApplyDouble<M>(model, placement, cmdName)
   {
-    G4ModelCmdApplyDouble<M>::Command()->SetGuidance("Set step points colour command");
+    G4ModelCmdApplyDouble<M>::Command()->SetGuidance("Set step points size command");
   }
   
 protected:
