@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AttDefStore.hh,v 1.9 2006-10-21 10:12:45 allison Exp $
+// $Id: G4AttDefStore.hh,v 1.10 2006-11-01 10:08:41 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef G4ATTDEFSTORE_HH
@@ -40,14 +40,17 @@ class G4AttDefStore
   public:
 
     static std::map<G4String,G4AttDef>*
-    GetInstance(G4String storeName, G4bool& isNew);
-      // Returns a pointer to the named store
-      // and isNew is true if store is new.
-      // The store keeps the ownership of the returned
-      // pointer to the map.
+    GetInstance(G4String storeKey, G4bool& isNew);
+      // Returns a pointer to the definitions accessed by the given
+      // key.  "isNew" is true if definitions pointer is new and
+      // therefore the needs filling.  The store keeps the ownership
+      // of the returned pointer.  See G4Trajectory::GetAttDefs for an
+      // example of the use of this class.
 
-    static const G4String& GetName(const std::map<G4String,G4AttDef>* store);
-      // Returns name of given store.
+    static G4bool GetStoreKey
+    (const std::map<G4String,G4AttDef>* definitions, G4String& key);
+      // Returns true and assigns key if definitions are amongst those
+      // maintained in the store.
 
     ~G4AttDefStore();
       // Destructor.
@@ -61,7 +64,7 @@ class G4AttDefStore
     G4AttDefStore(const G4AttDefStore&);
     G4AttDefStore& operator=(const G4AttDefStore&);
 
-    static std::map<G4String,std::map<G4String,G4AttDef>*> m_stores;
+    static std::map<G4String,std::map<G4String,G4AttDef>*> m_defsmaps;
     static G4AttDefStore* theInstance;
 };
 

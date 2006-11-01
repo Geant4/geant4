@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AttDefStore.cc,v 1.9 2006-10-21 10:12:45 allison Exp $
+// $Id: G4AttDefStore.cc,v 1.10 2006-11-01 10:08:41 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4AttDefStore.hh"
@@ -32,13 +32,13 @@
 #include "G4AttDef.hh"
 
 G4AttDefStore* G4AttDefStore::theInstance = 0;
-std::map<G4String,std::map<G4String,G4AttDef>*> G4AttDefStore::m_stores;
+std::map<G4String,std::map<G4String,G4AttDef>*> G4AttDefStore::m_defsmaps;
 
 std::map<G4String,G4AttDef>*
-G4AttDefStore::GetInstance(G4String storeName, G4bool& isNew)
+G4AttDefStore::GetInstance(G4String storeKey, G4bool& isNew)
 {
   // Create the private static instance first to allow for
-  // the deletion of the allocated attributes in the map store
+  // the deletion of the definitions in the store
   //
   static G4AttDefStore theStore;
   if (!theInstance)
@@ -49,41 +49,43 @@ G4AttDefStore::GetInstance(G4String storeName, G4bool& isNew)
   // Allocate the new map if not existing already
   // and return it to the caller
   //
-  std::map<G4String,G4AttDef>* store;
-  std::map<G4String,std::map<G4String,G4AttDef>*>::iterator iStore =
-    m_stores.find(storeName);
+  std::map<G4String,G4AttDef>* definitions;
+  std::map<G4String,std::map<G4String,G4AttDef>*>::iterator iDefinitions =
+    m_defsmaps.find(storeKey);
 
-  if (iStore == m_stores.end())
+  if (iDefinitions == m_defsmaps.end())
   {
     isNew = true;
-    store = new std::map<G4String,G4AttDef>;
-    m_stores[storeName] = store;
+    definitions = new std::map<G4String,G4AttDef>;
+    m_defsmaps[storeKey] = definitions;
   }
   else
   {
     isNew = false;
-    store = iStore->second;
+    definitions = iDefinitions->second;
   }
-  return store;
+  return definitions;
 }
 
-const G4String& G4AttDefStore::GetName
-(const std::map<G4String,G4AttDef>* store)
+G4bool G4AttDefStore::GetStoreKey
+(const std::map<G4String,G4AttDef>* definitions, G4String& key)
 {
-  static const G4String defaultMessage
-    ("G4AttDefs not registered in G4AttDefStore");
   if (!theInstance)
     {
-      return defaultMessage;
+      return false;
     }
 
   std::map<G4String,std::map<G4String,G4AttDef>*>::const_iterator i;
-  for (i = m_stores.begin(); i != m_stores.end(); ++i)
+  for (i = m_defsmaps.begin(); i != m_defsmaps.end(); ++i)
     {
-      if (i->second == store) return i->first;
+      if (i->second == definitions)
+	{
+	  key = i->first;
+	  return true;
+	}
     }
 
-  return defaultMessage;
+  return false;
 }
 
 G4AttDefStore::G4AttDefStore()
@@ -93,13 +95,13 @@ G4AttDefStore::G4AttDefStore()
 G4AttDefStore::~G4AttDefStore()
 {
   std::map<G4String,std::map<G4String,G4AttDef>*>::iterator iStore, iStore_tmp;
-  for ( iStore = m_stores.begin(); iStore != m_stores.end(); )
+  for ( iStore = m_defsmaps.begin(); iStore != m_defsmaps.end(); )
   {
     if (iStore->second)
     {
       delete iStore->second;
       iStore_tmp = iStore++;
-      m_stores.erase(iStore_tmp);
+      m_defsmaps.erase(iStore_tmp);
     }
     else
     {
