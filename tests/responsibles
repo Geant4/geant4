@@ -145,6 +145,8 @@ examples/extended/parameterisations:
   gflash                     Joanna.Weng@cern.ch             Joanna Weng
 examples/extended/persistency:
   P01                        Witold.Pokorski@cern.ch         Witold Pokorski
+examples/extended/polarisation:
+  Pol01                      Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
 examples/extended/radioactivedecay:
   exrdm                      flei@space.qinetiq.com          Fan Lei
 examples/extended/runAndEvent:
