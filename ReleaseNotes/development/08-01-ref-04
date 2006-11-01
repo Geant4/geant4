@@ -1,0 +1,241 @@
+
+                       geant4-08-01-ref-04
+                       ===================
+
+Some of the development/fixes included since the last reference tag are:
+
+  o Implemented specific computation of surface area for CSG solids and
+    included caching mechanism for the computed value. For all other solids
+    computation is approximated using MC method.
+  o Added methods to access vector of names of NIST elements and materials.
+  o Updated mass, width, and particles encoding to match with PDG2006.
+    Introduced PDG encoding for nuclei.
+  o Developments and fixes for atomic deexcitation in low-energy EM models.
+  o New revision for G4MultipleScattering and G4UrbanMscModel: modified
+    stepping, angular distribution and implemented more effective safety
+    update.
+  o Deprecated old EM standard processes '52' and '71' types.
+  o Extended range of validity to 1TeV for G4ProtonInelasticCrossSection,
+    using constant cross section above 20GeV.
+  o Review and update of the class G4ElasticHadrNucleusHE: data tables are
+    computed on-flight, G4ELASTICDATA data set is no longer used.
+    Model now applicable for all nuclei, except deuteron, triton, He3, and
+    A>238.
+
+---------- Reference-tag 'Release Notes' -----------
+
+
+Summarised, the list of changes is the following:
+
+config                                           config-V08-01-05
+------
+- architecture.gmk: added variables for commands: echo, cat, cut, sed;
+  to be eventually overloaded in system dependent configurations.
+- WIN32-VC.gmk: overload commands [echo, grep, cat, cut, sed], to force
+  usage of the original CygWin built-in commands.
+- Darwin-g++.gmk: use standard -echo- command.
+  Removed ECHO overloaded variable.
+- liblist.c: added .dylib search for list of libraries.
+  Addressing problem report #885.
+- source/GNUmakefile (source-gmk-V08-01-00): replaced system commands
+  with variables defined at architecture level.
+
+geometry/management                              geommng-V08-01-05
+-------------------
+- Added GetSurfaceArea() method to G4VSolid for approximated computation
+  of the surfare area of a shape.
+
+geometry/navigation                              geomnav-V08-01-02
+-------------------
+- G4Navigator:
+  o Added inline methods EnteredDaughterVolume() and ExitedMotherVolume() to
+    allow for verification of a point entering a daughter volume or exiting
+    the mother volume. Moved related data members to protected.
+  o Made LocateGlobalPointAndSetup() method virtual. Moved to non virtual
+    and inline LocateGlobalPointAndUpdateTouchableHandle() method.
+  o Moved 'fHistory' data member to protected to allow for more complete
+    subclassing.
+  o Minor cosmetics to recently introduced printout diagnostics in
+    ComputeSafety() method.
+- G4TransportationManager:
+  o Added methods to access the list of the registered worlds.
+
+geometry/solids                                  geomsolids-V08-01-00
+---------------
+- Implemented specific computation of surface area for CSG solids and
+  included caching mechanism for the computed value.
+
+global                                           global-V08-01-03
+------
+- New class G4SliceTimer with implementation derived from G4Timer for the
+  computation of slice time intervals.
+
+graphics_reps                                    greps-V08-01-08
+-------------
+- G4VisAttributes: changed GetAttValues() to CreateAttValues().
+  It creates an expendable copy on the heap, thus following the behaviour
+  of CreateAttValues() in trajectories, hits, etc. This achieves consistency
+  of behaviour and user expectation; the user is responsible for deletion
+  after use.
+- New utility class G4AttHolder to hold G4AttValues and their corresponding
+  G4AttDef map.
+- G4AttDefStore: changed GetName() type from 'G4String' to 'const G4String&'.
+- Added operator<<() for G4AttDefs.
+- Improved output diagnostics.
+
+intercoms                                        intercoms-V08-01-00
+---------
+- Extended G4UImanager::Loop() to handle negative increments.
+
+materials                                        materials-V08-01-01
+---------
+- Added methods to access vector of names of NIST elements and materials.
+- Added methods GetAtomicMass(), AddIsotopeMass(), returning atom mass and
+  nuclear mass in Geant4 units.
+- Added GetTotalBindingEnergy() method to G4AtomicShells.
+- Added Get/SetNaturalAbundancesFlag().
+
+particles                                        particles-V08-01-04
+---------
+- Updated mass/width/encoding to match with PDG2006
+- Introduced PDG encoding for nuclei.
+- Added G4Exception warning if sum of daughter mass exceeds parent mass
+  in G4PhaseSpaceDecayChannel.
+- Modified GetMass() and GetCharge() of G4PrimaryParticle to return PDG
+  mass and charge if users do not specify them.
+
+processes/electromagnetic/highenergy             emhighenergy-V08-01-00
+------------------------------------
+- Added G4mplIonisation and G4mplIonisationModel classes implementing
+  ionisation for classic magnetic monopole.
+- G4hhIonisation: added 'maxKinEnergy' class member (100 TeV).
+
+processes/electromagnetic/lowenergy              emlowen-V08-01-02
+-----------------------------------
+- Bug fixes in G4FluoData class.
+- Developments and fixes for atomic deexcitation.
+- Cosmetics on code formatting for DNA processes.
+
+processes/electromagnetic/muon                   emmuons-V08-01-01
+------------------------------
+- Added deprecation warning to all processes '52' type.
+
+processes/electromagnetic/standard               emstand-V08-01-10
+----------------------------------
+- New revision for G4MultipleScattering and G4UrbanMscModel:
+  o Modified stepping:
+    + min. steplimit in 8.1: tlimitmin = max(lambda/25, 5 nanometer)
+                  now      : tlimitmin = max(lambda/25, 1.01*stepmin)
+           where stepmin ~ lambda elastic
+    + Introduced possibility to have extreme small step(s) before boundary
+      crossing (feature not active by default); it can be activated by setting
+      the data member 'skin' to a non-negative value, steplimit = stepmin, if
+      the distance to the boundary (in the original direction) is smaller than
+      skin*stepmin. Parameter 'skin' set to 1 by default.
+    + The step restriction is weaker for particles with higher energy, i.e.,
+      bigger effective 'facrange' value is used in this case; in 8.0/8.1 this
+      'scaling' depends on 'Tkin', in the new version the 'scaling' depends on
+      'lambda', giving smaller material dependence.
+  o Angular distribution has been changed:
+    + Single/plural scattering for 'step <= stepmin' (in this case
+      t = z + no lateral displacement).
+    + Parameter 'theta0' has been (sligtly) modified.
+    + The tail of the distribution has been modified, now the parameter
+      describing the tail is material (i.e. Z) dependent.
+  o Implemented more effective safety update in G4UrbanMscModel for
+    SampleSecondaries(), and come cosmetics.
+- G4hMultipleScattering: new class configured for hadrons.
+- G4eCoulombScatteringModel:
+  o Set cross section constant for energies below 1 keV.
+  o Make G4CoulombScatteringModel inherit from it; screening parameter
+    computation is done in inline function.
+- G4BraggIonModel: reduced lowest energy for parameterisation to 0.25 keV
+- G4eeToTwoGammaModel: introduced new member 'theGamma'.
+- Added extra protection to G4eplusAnnihilation52, and deprecation warning
+  to all processes '52' and '71' type.
+
+processes/electromagnetic/utils                  emutils-V08-01-05
+-------------------------------
+- G4LossTableManger: added method GetEnergyLossProcess().
+- G4EmCalculator:
+  o 10 keV - 1 keV energy to access lowEnergy ionisation.
+  o Added computation of smoothing factor for dedx of hadrons/ions.
+
+processes/hadronic
+------------------
+- cross_sections (hadr-cross-V08-01-05)
+  o G4ProtonInelasticCrossSection: extended range of validity to 1TeV,
+    using constant cross section above 20GeV.
+  o G4GlauberGribovCrossSection::GetCrossSection(): fixed bug in inelastic
+    cross section. Bug was discovered in the paper from which the cross
+    was derived.
+- management (hadr-man-V08-01-00)
+  o G4HadronicProcess: removed unused method GetDistanceToBoundary().
+- models/coherent_elastic (hadr-cohe-V08-01-05)
+  o Set 'lowestEnergy' to zero for neutral particles.
+  o G4ElasticHadrNucleusHE:
+    + Set threshold to 1 GeV for the model.
+    + Completed review and update of the class: data tables are computed
+      on-flight, G4ELASTICDATA data set is no longer used.
+      The model is applicable for all nuclei, except deuteron, triton,
+      He3, and A>238.
+- models/util (hadr-mod-util-V08-01-01)
+  o Reduced warning output from G4Fragment on negative excitation energy;
+    a maximum of 10 warnings is printed now.
+  o G4Fancy3DNucleus:ChoosePositions(): correctly use std::vector.
+    Correction addressing problem report #887 on WIN32/VC8.
+
+track                                            track-V08-01-03
+-----
+- Made G4StepPoint::operator=() inline.
+
+visualization                                    vis-V08-01-08
+-------------
+- OpenGL:
+  o Calculate light front horizon properly.
+  o Improved refresh behaviour for /vis/opengl commands.
+- XXX:
+  o Following changes to G4VisAttributes in 'graphics_reps'.
+
+examples                                         examples-V08-01-04
+--------
+- Updated reference outputs.
+- advanced/underground_physics (DMX-V08-01-00)
+  o Fixed bug: removed uninitialized 'UserLimitsForXenon'.
+- extended/electromagnetic/TestEm1 (testem1-V08-01-00)
+- extended/electromagnetic/TestEm2 (testem2-V08-01-00)
+- extended/electromagnetic/TestEm3 (testem3-V08-01-00)
+- extended/electromagnetic/TestEm4 (testem4-V08-01-00)
+- extended/electromagnetic/TestEm6 (testem6-V08-01-00)
+- extended/electromagnetic/TestEm7 (testem7-V08-01-00)
+- extended/electromagnetic/TestEm8 (testem8-V08-01-00)
+- extended/electromagnetic/TestEm9 (testem9-V08-01-00)
+- extended/electromagnetic/TestEm11 (testem11-V08-01-02)
+- extended/electromagnetic/TestEm12 (testem12-V08-01-00)
+- extended/electromagnetic/TestEm13 (testem13-V08-01-00)
+- extended/electromagnetic/TestEm14 (testem14-V08-01-01)
+- extended/electromagnetic/TestEm15 (testem15-V08-01-00)
+- extended/electromagnetic/TestEm16 (testem16-V08-01-00)
+- extended/electromagnetic/TestEm17 (testem17-V08-01-00)
+  o Use LOADLIBS for analysis setup in GNUmakefile.
+  o Removed old PhysicsLists '52' and '71'.
+- extended/eventgenerator/HepMC (exHepMC-V08-01-01)
+  o Migrated to use new trajectory modeling commands in vis macros.
+- extended/polarisation/Pol01 (expol01-V08-01-00)
+  o New example for polarised EM processes provided by DESY group.
+- novice/N03 (exampleN03-V08-01-04)
+  o Migrated to use new trajectory modeling commands:
+    + vis.mac: added new trajectory commands and helpful comments.
+    + ExN03EventActionMessenger: removed /N03/event/drawTracks.
+    + ExN03EventAction: removed SetDrawFlag() and code for drawing
+      trajectories in EndOfEventAction().
+    + Removed ExN03TrackingAction class. Trajectory choice now available
+      by vis commands (see exN03Vis12.mac and exN03Vis13.mac).
+    + exN03Vis12.mac and exN03Vis13.mac: further refinements.
+- novice/N04 (exampleN04-V08-01-00)
+- novice/N06 (exampleN06-V08-01-00)
+  o Migrated to use new trajectory modeling commands in vis macros.
+
+tests                                            tests-V08-01-04
+-----
+- Updated reference outputs.
