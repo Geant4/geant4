@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXViewerMessenger.cc,v 1.3 2006-11-01 11:22:26 allison Exp $
+// $Id: G4OpenGLXViewerMessenger.cc,v 1.4 2006-11-01 12:18:03 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifdef G4VIS_BUILD_OPENGLX_DRIVER
@@ -38,8 +38,8 @@
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithoutParameter.hh"
 #include "G4UIcmdWithABool.hh"
-
 #include "G4VisManager.hh"
+#include <sstream>
 
 G4OpenGLXViewerMessenger* G4OpenGLXViewerMessenger::fpInstance = 0;
 
