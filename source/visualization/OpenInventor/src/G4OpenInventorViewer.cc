@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4OpenInventorViewer.cc,v 1.56 2006-10-26 10:55:31 allison Exp $
+// $Id: G4OpenInventorViewer.cc,v 1.57 2006-11-01 11:06:07 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifdef G4VIS_BUILD_OI_DRIVER
@@ -411,8 +411,7 @@ void G4OpenInventorViewer::SelectionCB(
   G4AttHolder* attHolder = dynamic_cast<G4AttHolder*>(node);
   if(attHolder && attHolder->GetAttDefs().size()) {
     for (size_t i = 0; i < attHolder->GetAttDefs().size(); ++i) {
-      G4cout << attHolder->GetAttDefsName(i) << ":\n"
-	     << G4AttCheck(attHolder->GetAttValues()[i],
+      G4cout << G4AttCheck(attHolder->GetAttValues()[i],
 			   attHolder->GetAttDefs()[i]);
     }
   } else {

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorSceneHandler.cc,v 1.47 2006-10-26 10:52:55 allison Exp $
+// $Id: G4OpenInventorSceneHandler.cc,v 1.48 2006-11-01 11:06:12 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -231,8 +231,7 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Polyline& line) {
   const std::map<G4String,G4AttDef>* vaDefs =
     line.GetVisAttributes()->GetAttDefs();
   if (vaDefs) {
-    pLine->AddAttValues(line.GetVisAttributes()->CreateAttValues());
-    pLine->AddAttDefs(vaDefs);
+    pLine->AddAtts(line.GetVisAttributes()->CreateAttValues(), vaDefs);
   }
 
   G4TrajectoriesModel* trajModel = dynamic_cast<G4TrajectoriesModel*>(fpModel);
@@ -241,16 +240,14 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Polyline& line) {
     const G4VTrajectory* traj = trajModel->GetCurrentTrajectory();
     const std::map<G4String,G4AttDef>* defs = traj->GetAttDefs();
     if (defs) {
-      pLine->AddAttValues(traj->CreateAttValues());
-      pLine->AddAttDefs(defs);
+      pLine->AddAtts(traj->CreateAttValues(), defs);
     }
     G4int nPoints = traj->GetPointEntries();
     for (G4int i = 0; i < nPoints; ++i) {
       G4VTrajectoryPoint* trajPoint = traj->GetPoint(i);
       const std::map<G4String,G4AttDef>* defs = trajPoint->GetAttDefs();
       if (defs) {
-	pLine->AddAttValues(trajPoint->CreateAttValues());
-	pLine->AddAttDefs(defs);
+	pLine->AddAtts(trajPoint->CreateAttValues(), defs);
       }
     }
   }
@@ -311,8 +308,8 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Polymarker& polymarker) {
   const std::map<G4String,G4AttDef>* vaDefs =
     polymarker.GetVisAttributes()->GetAttDefs();
   if (vaDefs) {
-    markerSet->AddAttValues(polymarker.GetVisAttributes()->CreateAttValues());
-    markerSet->AddAttDefs(vaDefs);
+    markerSet->AddAtts
+      (polymarker.GetVisAttributes()->CreateAttValues(), vaDefs);
   }
 
   G4TrajectoriesModel* trajModel = dynamic_cast<G4TrajectoriesModel*>(fpModel);
@@ -321,16 +318,14 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Polymarker& polymarker) {
     const G4VTrajectory* traj = trajModel->GetCurrentTrajectory();
     const std::map<G4String,G4AttDef>* defs = traj->GetAttDefs();
     if (defs) {
-      markerSet->AddAttValues(traj->CreateAttValues());
-      markerSet->AddAttDefs(defs);
+      markerSet->AddAtts(traj->CreateAttValues(), defs);
     }
     G4int nPoints = traj->GetPointEntries();
     for (G4int i = 0; i < nPoints; ++i) {
       G4VTrajectoryPoint* trajPoint = traj->GetPoint(i);
       const std::map<G4String,G4AttDef>* defs = trajPoint->GetAttDefs();
       if (defs) {
-	markerSet->AddAttValues(trajPoint->CreateAttValues());
-	markerSet->AddAttDefs(defs);
+	markerSet->AddAtts(trajPoint->CreateAttValues(), defs);
       }
     }
   }
@@ -519,8 +514,7 @@ void G4OpenInventorSceneHandler::AddCircleSquare
   const std::map<G4String,G4AttDef>* vaDefs =
     marker.GetVisAttributes()->GetAttDefs();
   if (vaDefs) {
-    markerSet->AddAttValues(marker.GetVisAttributes()->CreateAttValues());
-    markerSet->AddAttDefs(vaDefs);
+    markerSet->AddAtts(marker.GetVisAttributes()->CreateAttValues(), vaDefs);
   }
 
   G4TrajectoriesModel* trajModel = dynamic_cast<G4TrajectoriesModel*>(fpModel);
@@ -529,16 +523,14 @@ void G4OpenInventorSceneHandler::AddCircleSquare
     const G4VTrajectory* traj = trajModel->GetCurrentTrajectory();
     const std::map<G4String,G4AttDef>* defs = traj->GetAttDefs();
     if (defs) {
-      markerSet->AddAttValues(traj->CreateAttValues());
-      markerSet->AddAttDefs(defs);
+      markerSet->AddAtts(traj->CreateAttValues(), defs);
     }
     G4int nPoints = traj->GetPointEntries();
     for (G4int i = 0; i < nPoints; ++i) {
       G4VTrajectoryPoint* trajPoint = traj->GetPoint(i);
       const std::map<G4String,G4AttDef>* defs = trajPoint->GetAttDefs();
       if (defs) {
-	markerSet->AddAttValues(trajPoint->CreateAttValues());
-	markerSet->AddAttDefs(defs);
+	markerSet->AddAtts(trajPoint->CreateAttValues(), defs);
       }
     }
   }
@@ -605,9 +597,8 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
   const std::map<G4String,G4AttDef>* vaDefs =
     polyhedron.GetVisAttributes()->GetAttDefs();
   if (vaDefs) {
-    soPolyhedron->AddAttValues
-      (polyhedron.GetVisAttributes()->CreateAttValues());
-    soPolyhedron->AddAttDefs(vaDefs);
+    soPolyhedron->AddAtts
+      (polyhedron.GetVisAttributes()->CreateAttValues(), vaDefs);
   }
 
   SbString name = "Non-geometry";
@@ -618,8 +609,7 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
     // Load G4Atts from G4PhysicalVolumeModel...
     const std::map<G4String,G4AttDef>* defs = pPVModel->GetAttDefs();
     if (defs) {
-      soPolyhedron->AddAttValues(pPVModel->CreateCurrentAttValues());
-      soPolyhedron->AddAttDefs(defs);
+      soPolyhedron->AddAtts(pPVModel->CreateCurrentAttValues(), defs);
     }
   }
   SbName sbName(name);
