@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AttCheck.cc,v 1.13 2006-10-17 16:14:08 allison Exp $
+// $Id: G4AttCheck.cc,v 1.14 2006-11-01 10:13:23 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4AttCheck.hh"
@@ -32,6 +32,7 @@
 #include "globals.hh"
 
 #include "G4AttDef.hh"
+#include "G4AttDefStore.hh"
 #include "G4AttValue.hh"
 #include "G4UnitsTable.hh"
 #include "G4UIcommand.hh"
@@ -238,6 +239,10 @@ std::ostream& operator<< (std::ostream& os, const G4AttCheck& ac)
   if (!ac.fpDefinitions) {
     os << "G4AttCheck: ERROR: zero definitions pointer." << endl;
     return os;
+  }
+  G4String storeKey;
+  if (G4AttDefStore::GetStoreKey(ac.fpDefinitions, storeKey)) {
+    os << storeKey << ":\n";
   }
   if (!ac.fpValues) {
     // A null values vector is a valid situation.
