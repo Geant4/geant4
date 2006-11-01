@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: MyDetectorConstruction.cc,v 1.37 2006-07-10 16:18:05 allison Exp $
+// $Id: MyDetectorConstruction.cc,v 1.38 2006-11-01 11:15:27 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -48,6 +48,7 @@
 #include "G4Trap.hh"
 #include "G4EllipticalTube.hh"
 #include "G4Polyhedra.hh"
+#include "G4Polycone.hh"
 #include "G4Tet.hh"
 #include "G4TwistedTubs.hh"
 #include "G4TwistedBox.hh"
@@ -445,20 +446,15 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct()
 
   G4RotationMatrix rm;
 
-  new G4PVPlacement(G4Transform3D(rm,G4ThreeVector(200.*cm,200.*cm,0)),
+  new G4PVPlacement(G4Transform3D(rm,G4ThreeVector(200.*cm,300.*cm,0)),
 		    "PD_physical", PD_log_crystal,
 		    experimentalHall_phys,false,0);
 
-//-------------------------------------------- Polyhedra(!)
+//-------------------------------------------- Polyhedra and Polycone
 
   const G4int numRZ = 10;
-  G4double polyhedra_r[numRZ] = {1,5,3,4,7,9,3,3,2,1};
-  G4double polyhedra_z[numRZ] = {0,1,2,3,4,5,4,3,2,1};
-  /*
-  const G4int numRZ = 8;
-  G4double polyhedra_r[numRZ] = {1,2,2,3,3,4,4,1};
-  G4double polyhedra_z[numRZ] = {1,1,2,2,1,1,3,3};
-  */
+  G4double polyhedra_r[] = {0,5,3,4,9,9,3,3,2,0};
+  G4double polyhedra_z[] = {0,1,2,3,0,5,4,3,2,1};
   for (int i = 0; i < numRZ; ++i) {
     polyhedra_r[i] *= 10*cm;
     polyhedra_z[i] *= 10.*cm;
@@ -467,6 +463,7 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct()
   G4Polyhedra* polyhedra_solid
       = new G4Polyhedra("Polyhedra_Test",
 			0.,270.*deg,6,numRZ,polyhedra_r,polyhedra_z);
+                        //0.,twopi,6,numRZ,polyhedra_r,polyhedra_z);
   G4cout << polyhedra_solid->StreamInfo(G4cout) << G4endl;
 
   G4LogicalVolume* polyhedra_log
@@ -478,6 +475,31 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct()
 
   new G4PVPlacement(G4Transform3D(rm,G4ThreeVector(200.*cm,100.*cm,0)),
 		    "Polyhedra_Test", polyhedra_log,
+		    experimentalHall_phys,false,0);
+
+  const G4int numRZ1 = 10;
+  G4double polycone_r[] = {1,5,3,4,9,9,3,3,2,1};
+  G4double polycone_z[] = {0,1,2,3,0,5,4,3,2,1};
+  for (int i = 0; i < numRZ1; ++i) {
+    polycone_r[i] *= 10*cm;
+    polycone_z[i] *= 10.*cm;
+  }
+
+  G4Polycone* polycone_solid
+      = new G4Polycone("Polycone_Test",
+		       0.*deg,270.*deg,numRZ1,polycone_r,polycone_z);
+                       //0.,twopi,numRZ,polycone_r,polycone_z);
+  G4cout << polycone_solid->StreamInfo(G4cout) << G4endl;
+
+  G4LogicalVolume* polycone_log
+    = new G4LogicalVolume(polycone_solid,Ar,"Polycone_Test");
+
+  G4VisAttributes * polycone_atts
+    = new G4VisAttributes(G4Colour(1.,0.5,0.5));
+  polycone_log->SetVisAttributes(polycone_atts);
+
+  new G4PVPlacement(G4Transform3D(rm,G4ThreeVector(400.*cm,120.*cm,0)),
+		    "Polycone_Test", polycone_log,
 		    experimentalHall_phys,false,0);
 
   //-------------------------------------------- Orb
