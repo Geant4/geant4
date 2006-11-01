@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: MyEventAction.hh,v 1.5 2006-06-29 21:33:52 gunter Exp $
+// $Id: MyEventAction.hh,v 1.6 2006-11-01 11:16:23 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -32,6 +32,8 @@
 #define MyEventAction_h 1
 
 #include "G4UserEventAction.hh"
+#include "G4AttDef.hh"
+#include <map>
 
 class G4Event;
 
@@ -44,6 +46,10 @@ class MyEventAction : public G4UserEventAction
   public:
     void BeginOfEventAction(const G4Event* anEvent);
     void EndOfEventAction(const G4Event* anEvent);
+
+  private:
+    std::map<G4String,G4AttDef> fTransientBoxDefs;
+
 };
 
 #endif
