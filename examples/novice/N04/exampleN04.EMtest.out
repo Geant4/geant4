@@ -154,7 +154,7 @@ muPairProd:   tables are built for  mu-
       Lambda tables from threshold to 100 TeV in 120 bins.
       Parametrised model 
 
-G4UHadronElasticProcess for neutron  Elow(MeV)= 19  Elowest(eV)= 1e-06
+G4UHadronElasticProcess for neutron PDGcode= 2112  Elow(MeV)= 19  Elowest(eV)= 0
 
 hIoni:   tables are built for  pi+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -178,26 +178,26 @@ Stage 0->1 : 1 hits found in the muon chamber.
 Stage 1->2 : 0 isolated muon found.
 ++++++++ event aborted
 >>> Event 0
-     21 hits are stored in ExN04TrackerHitsCollection.
-     2 hits are stored in ExN04CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 0.17989462 (GeV)
+     23 hits are stored in ExN04TrackerHitsCollection.
+     1 hits are stored in ExN04CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 0.17797136 (GeV)
      1 hits are stored in ExN04MuonHitsCollection.
 ### Run 1 start.
 Stage 0->1 : 1 hits found in the muon chamber.
 Stage 1->2 : 0 isolated muon found.
 ++++++++ event aborted
 >>> Event 0
-     20 hits are stored in ExN04TrackerHitsCollection.
+     14 hits are stored in ExN04TrackerHitsCollection.
      2 hits are stored in ExN04CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 0.18099089 (GeV)
+     Total energy deposition in calorimeter : 0.18150726 (GeV)
      1 hits are stored in ExN04MuonHitsCollection.
 Stage 0->1 : 1 hits found in the muon chamber.
 Stage 1->2 : 0 isolated muon found.
 ++++++++ event aborted
 >>> Event 1
-     20 hits are stored in ExN04TrackerHitsCollection.
+     18 hits are stored in ExN04TrackerHitsCollection.
      1 hits are stored in ExN04CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 0.17939312 (GeV)
+     Total energy deposition in calorimeter : 0.18011951 (GeV)
      1 hits are stored in ExN04MuonHitsCollection.
 Graphics systems deleted.
 Visualization Manager deleting...

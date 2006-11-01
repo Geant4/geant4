@@ -219,7 +219,7 @@ G4SynchrotronRadiation::GetRandomEnergySR :
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=4.98s Real=5.3s Sys=0.09s
+  User=4.88s Real=5.27s Sys=0.18s
 Summary for synchrotron radiation :
   Number of photons = 27201
   Emean             = 2.016 +/- 0.02196 keV

@@ -137,7 +137,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=73.44s Real=104.63s Sys=12.98s
+  User=72.82s Real=103.68s Sys=12.33s
 
  The run consists of 10000 mu+ of 10 TeV through 1 m   of Iron (density: 7.9 g/cm3 )
 

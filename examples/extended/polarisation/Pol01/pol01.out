@@ -130,39 +130,39 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=1.08s Real=1.07s Sys=0s
+  User=6.52s Real=6.8s Sys=0.17s
 
  The run consists of 10000 gamma of 10 MeV through 1.75 mm  of G4_Fe (density: 7.874 g/cm3 )
 
 --------- Ranlux engine status ---------
  Initial seed = 9876
- float_seed_table[] = 0.284838 0.915447 0.0747043 0.244727 0.0465029 0.638796 0.95522 0.0910791 0.418361 0.451763 0.342546 0.752113 0.567897 0.84027 0.0221013 0.130658 0.768488 0.547489 0.710702 0.185591 0.0430483 0.889584 0.794241 0.674862 
- i_lag = 5, j_lag = 15
- carry = 5.96046e-08, count24 = 8
+ float_seed_table[] = 0.70431 0.0936913 0.194122 0.970758 0.737919 0.778963 0.140168 0.920724 0.838331 0.67233 0.646198 0.399318 0.000521302 0.00574505 0.785417 0.549573 0.154709 0.937112 0.979991 0.177782 0.436979 0.355955 0.0875884 0.0776355 
+ i_lag = 20, j_lag = 6
+ carry = 0, count24 = 18
  luxury = 3 nskip = 199
 ----------------------------------------
 
  Process calls frequency --->
-	Transportation = 31204
-	pol-compt = 273
-	msc = 5443
-	pol-eBrem = 376
-	phot = 172
-	pol-eIoni = 643
-	pol-conv = 218
-	pol-annihil = 81
+	Transportation = 31094
+	pol-compt = 238
+	msc = 4671
+	pol-eBrem = 351
+	pol-conv = 211
+	phot = 157
+	pol-eIoni = 579
+	pol-annihil = 59
  Gamma: 
-Mean Number per Event :1.0123
-Mean Energy :9.5472 MeV +- 1.9761 MeV
-Mean Polarization :-0.95788 +- 0.20435
+Mean Number per Event :1.0078
+Mean Energy :9.6082 MeV +- 1.8423 MeV
+Mean Polarization :-0.96348 +- 0.19004
  Electron: 
-Mean Number per Event :0.0342
-Mean Energy :5.2456 MeV +- 2.5146 MeV
-Mean Polarization :0.16129 +- 0.69042
+Mean Number per Event :0.0317
+Mean Energy :5.1284 MeV +- 2.618 MeV
+Mean Polarization :0.15596 +- 0.6748
  Positron: 
-Mean Number per Event :0.0137
-Mean Energy :4.279 MeV +- 1.8314 MeV
-Mean Polarization :-0.60374 +- 0.23921
+Mean Number per Event :0.0152
+Mean Energy :3.8289 MeV +- 1.9581 MeV
+Mean Polarization :-0.55726 +- 0.25101
 #
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.

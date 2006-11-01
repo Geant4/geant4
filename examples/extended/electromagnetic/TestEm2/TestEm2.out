@@ -7,7 +7,7 @@
 *************************************************************
 
 
-***** Table : Nb of materials = 8 *****
+***** Table : Nb of materials = 10 *****
 
  Material:      Air     density:  1.290 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 285.161 m  
    --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
@@ -26,8 +26,14 @@
  Material:     Iron     density:  7.870 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.759 cm 
    --->  Element: Iron ( )   Z = 26.0   N =  55.9   A =  55.85 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
+ Material:   Copper     density:  8.960 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.436 cm 
+   --->  Element: Copper ( )   Z = 29.0   N =  63.5   A =  63.55 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+
  Material:     Lead     density: 11.350 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   5.612 mm 
    --->  Element: Lead ( )   Z = 82.0   N = 207.2   A = 207.19 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+
+ Material:  Uranium     density: 18.950 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   3.166 mm 
+   --->  Element: Uranium ( )   Z = 92.0   N = 238.0   A = 238.03 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
  Material:      BGO     density:  7.100 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.123 cm 
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  15.41 %  ElmAbundance  63.16 %
@@ -82,7 +88,6 @@ Registered filter factories:
 #
 /testem/phys/addPhysics  standard
 PhysicsList::AddPhysicsList: <standard>
-#### /testem/phys/addPhysics  g4v52
 #
 /testem/phys/setCuts 1.0 mm
 #
@@ -276,24 +281,24 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=165.93s Real=215.75s Sys=47.52s
+  User=168.34s Real=217.76s Sys=46.9s
 
  SUMMARY 
 
- energy deposit :   94.48 % E0 +-    1.01 % E0
- charged traklen:  485.44 radl +-    5.42 radl
- neutral traklen: 4458.25 radl +-  116.51 radl
+ energy deposit :   94.66 % E0 +-    0.96 % E0
+ charged traklen:  486.07 radl +-    5.12 radl
+ neutral traklen: 4458.46 radl +-  129.47 radl
 
- 90.00 % confinement: radius = 3.16 radl  (2.82 cm )
+ 90.00 % confinement: radius = 3.10 radl  (2.76 cm )
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1291259971, 1788300764
+ Current couple of seeds = 1731534456, 43911982
 ----------------------------------------
 
 <<<<ACCEPTANCE>>>> 100 events for Total Energy in Absorber
-Edep: 0.94476666  delEdep= -0.00023333939 nrms= -0.24306187
-Erms: 0.010092725  delErms= 0.00049272452 nrms= 0.51325471
+Edep: 0.94662024  delEdep= 0.0016202405 nrms= 1.6877505
+Erms: 0.0095551788  delErms= -4.4821243e-05 nrms= -0.046688795
 <<<<END>>>>   IS ACCEPTED
 
 Graphics systems deleted.

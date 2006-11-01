@@ -273,7 +273,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=21.21s Real=21.53s Sys=0s
+  User=21.79s Real=22.09s Sys=0.01s
 
  The run consists of 100000 gamma of 100 keV through 1 cm  of Water (density: 1 g/cm3 )
 
@@ -340,7 +340,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=22.49s Real=22.75s Sys=0s
+  User=22.59s Real=22.89s Sys=0s
 
  The run consists of 100000 e- of 100 MeV through 1 cm  of Water (density: 1 g/cm3 )
 

@@ -47,7 +47,7 @@ Registered filter factories:
 #/tracking/verbose 1
 #
 #  select EM PhysicsList
-#/testem/phys/addPhysics  g4v52
+#
 /testem/phys/addPhysics  standard
 PhysicsList::AddPhysicsList: <standard>
 #
@@ -319,28 +319,28 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=50.12s Real=58.46s Sys=7.7s
+  User=52.76s Real=59.97s Sys=6.6s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started
 ========================================================
 Number of events             100
-Average number of e-         1321
-Average number of gamma      701.1
-Average number of e+         48.62
-Average number of steps      4642
-Edep 1x1 =                   0.8161 +- 0.003524  res=  4.318 %
-Edep 3x3 =                   0.9531 +- 0.001424  res=  1.494 %
-Edep 5x5 =                   0.978 +- 0.0009537  res=  0.9752 %
+Average number of e-         1326
+Average number of gamma      700.1
+Average number of e+         48.24
+Average number of steps      4474
+Edep 1x1 =                   0.8248 +- 0.003276  res=  3.972 %
+Edep 3x3 =                   0.9537 +- 0.001614  res=  1.692 %
+Edep 5x5 =                   0.9762 +- 0.00136  res=  1.393 %
 ========================================================
 
 
 <<<<<ACCEPTANCE>>>>> 100 events for Crystal Calorimeter
-Edep1x1: 0.8161  delEdep1x1= -0.009865 nrms= -2.811
-Erms1x1: 0.03524  delErms1x1= 0.0001413 nrms= 0.04025
-Edep3x3: 0.9531  delEdep3x3= -0.003347 nrms= -2.092
-Erms3x3: 0.01424  delErms3x3= -0.001761 nrms= -1.1
-Edep5x5: 0.978  delEdep5x5= -0.001026 nrms= -0.8626
-Erms5x5: 0.009537  delErms5x5= -0.002363 nrms= -1.986
+Edep1x1: 0.8248  delEdep1x1= -0.001217 nrms= -0.3467
+Erms1x1: 0.03276  delErms1x1= -0.002338 nrms= -0.666
+Edep3x3: 0.9537  delEdep3x3= -0.002659 nrms= -1.662
+Erms3x3: 0.01614  delErms3x3= 0.0001352 nrms= 0.08451
+Edep5x5: 0.9762  delEdep5x5= -0.002845 nrms= -2.39
+Erms5x5: 0.0136  delErms5x5= 0.001699 nrms= 1.427
 <<<<<END>>>>>   IS ACCEPTED
 
 /vis/viewer/update

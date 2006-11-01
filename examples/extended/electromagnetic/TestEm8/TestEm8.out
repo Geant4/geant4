@@ -42,10 +42,10 @@ Registered filter factories:
 #
 #  select EM PhysicsList
 #
-#/testem/phys/addPhysics  g4v52
 #/testem/phys/addPhysics  standard
 /testem/phys/addPhysics  pai
 PhysicsList::AddPhysicsList: <pai>
+PhysListEmModelPai is called
 #/testem/phys/addPhysics  pai_photon
 #
 /testem/phys/setCuts    1 mm
@@ -65,8 +65,8 @@ PhysicsList::AddPhysicsList: <pai>
 /run/initialize
 userDetector->Construct() start.
 
- The  WORLD   is made of 23.1022mm of Mylar, the transverse size (R) of the world is 100 mm. 
- The ABSORBER is made of 23mm of XeCH4C3H8, the transverse size (R) is 100 mm. 
+ The  WORLD   is made of 0.4022mm of Air, the transverse size (R) of the world is 100 mm. 
+ The ABSORBER is made of 0.3mm of Silicon, the transverse size (R) is 100 mm. 
  Z position of the (middle of the) absorber 0  mm.
 
 World is registered to the default region.
@@ -222,26 +222,26 @@ hIoni:   tables are built for  pi-
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 Region <DefaultRegionForTheWorld> -- appears in <World> world volume
- Materials : Mylar 
+ Materials : Air 
  Production cuts :  gamma 1 mm     e- 1 mm     e+ 1 mm 
 
 Region <VertexDetector> -- appears in <World> world volume
- Materials : XeCH4C3H8 
+ Materials : Silicon 
  Production cuts :  gamma 2.3 cm     e- 2.3 cm     e+ 2.3 cm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : Mylar
+ Material : Air
  Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 2.97898 keV    e- 417.539 keV    e+ 402.4 keV
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
- Material : XeCH4C3H8
+ Material : Silicon
  Range cuts        :  gamma 2.3 cm     e- 2.3 cm     e+ 2.3 cm 
- Energy thresholds :  gamma 3.83995 keV    e- 63.4899 keV    e+ 61.9458 keV
+ Energy thresholds :  gamma 30.4426 keV    e- 9.63871 MeV    e+ 8.95243 MeV
  Region(s) which use this couple : 
     VertexDetector
 
@@ -285,56 +285,56 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.82s Real=1.93s Sys=0.11s
+  User=3.93s Real=4.13s Sys=0.18s
  ================== run summary =====================
  end of Run TotNbofEvents = 1000
-    mean charged track length   in absorber=23.6036 +- 0.221755  mm  
+    mean charged track length   in absorber=0.300041 +- 4.09522e-05  mm  
 
-            mean energy deposit in absorber=0.0158001 +- 0.000280482  MeV 
+            mean energy deposit in absorber=0.151518 +- 0.0162377  MeV 
 
- mean number of steps in absorber (charged) =0.272 +- 0.129174      
- mean number of steps in absorber (neutral) =0.001 +- 0.0009995      
+ mean number of steps in absorber (charged) =0.003 +- 0.0029985      
+ mean number of steps in absorber (neutral) =0 +- 0      
 
-   mean number of charged secondaries = 0.012 +- 0.00344325
+   mean number of charged secondaries = 0.001 +- 0.0009995
 
-   mean number of neutral secondaries = 0.001 +- 0.0009995
+   mean number of neutral secondaries = 0 +- 0
 
-   mean number of e-s =0.012  and e+s =0
+   mean number of e-s =0.001  and e+s =0
 
-(number) transmission coeff=0.503  reflection coeff=0
+(number) transmission coeff=0.517  reflection coeff=0
 
  energy deposit distribution 
-#entries=1000    #underflows=0    #overflows=7
+#entries=1000    #underflows=0    #overflows=1000
  bin nb      Elow      entries     normalized 
     0         0           0           0
-    1         3           3       0.003
-    2         6          99       0.099
-    3         9         257       0.257
-    4        12         264       0.264
-    5        15         150        0.15
-    6        18          72       0.072
-    7        21          47       0.047
-    8        24          32       0.032
-    9        27          18       0.018
-   10        30          15       0.015
-   11        33          12       0.012
-   12        36           7       0.007
-   13        39           5       0.005
-   14        42           4       0.004
-   15        45           1       0.001
-   16        48           1       0.001
-   17        51           2       0.002
-   18        54           1       0.001
-   19        57           3       0.003
+    1         3           0           0
+    2         6           0           0
+    3         9           0           0
+    4        12           0           0
+    5        15           0           0
+    6        18           0           0
+    7        21           0           0
+    8        24           0           0
+    9        27           0           0
+   10        30           0           0
+   11        33           0           0
+   12        36           0           0
+   13        39           0           0
+   14        42           0           0
+   15        45           0           0
+   16        48           0           0
+   17        51           0           0
+   18        54           0           0
+   19        57           0           0
 
- Emp =           0.012   width=          0.006  MeV 
+ Emp =        -999.999   width=          0.057  MeV 
 
 /vis/viewer/update
 ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1356166741, 1119662032
+ Current couple of seeds = 2087884124, 855517194
 ----------------------------------------
 #
 Graphics systems deleted.

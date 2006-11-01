@@ -27,7 +27,7 @@ Test19:CalculationTimePerEvent= 5.000000e-05 s
 Test19: Material=Cobalt, Element[0]=Cobalt,A[0]=59 is selected.
 Test19:NewRun: Targ=90027032, Proj=11, E=2.700000e+01 MeV, Run #4 of 60
 ***=>TEST19: 100 events are simulated
-Test19:CalculationTimePerEvent= 0.000000e+00 s
+Test19:CalculationTimePerEvent= 5.000000e-05 s
 Test19: Material=Uranium, Element[0]=Uranium,A[0]=238 is selected.
 Test19:NewRun: Targ=90092146, Proj=11, E=2.700000e+01 MeV, Run #5 of 60
 ***=>TEST19: 100 events are simulated
@@ -39,39 +39,39 @@ Test19:CalculationTimePerEvent= 8.500000e-04 s
 Test19: Material=Helium, Element[0]=Helium,A[0]=4 is selected.
 Test19:NewRun: Targ=90002002, Proj=11, E=2.270000e+02 MeV, Run #7 of 60
 ***=>TEST19: 100 events are simulated
-Test19:CalculationTimePerEvent= 2.125000e-02 s
+Test19:CalculationTimePerEvent= 2.110000e-02 s
 Test19: Material=Nitrogen, Element[0]=Nitrogen,A[0]=14 is selected.
 Test19:NewRun: Targ=90007007, Proj=11, E=2.270000e+02 MeV, Run #8 of 60
 ***=>TEST19: 100 events are simulated
-Test19:CalculationTimePerEvent= 3.770000e-02 s
+Test19:CalculationTimePerEvent= 3.715000e-02 s
 Test19: Material=Cobalt, Element[0]=Cobalt,A[0]=59 is selected.
 Test19:NewRun: Targ=90027032, Proj=11, E=2.270000e+02 MeV, Run #9 of 60
 ***=>TEST19: 100 events are simulated
-Test19:CalculationTimePerEvent= 3.875000e-02 s
+Test19:CalculationTimePerEvent= 3.850000e-02 s
 Test19: Material=Uranium, Element[0]=Uranium,A[0]=238 is selected.
 Test19:NewRun: Targ=90092146, Proj=11, E=2.270000e+02 MeV, Run #10 of 60
 ***=>TEST19: 100 events are simulated
-Test19:CalculationTimePerEvent= 4.350000e-02 s
+Test19:CalculationTimePerEvent= 4.320000e-02 s
 Test19: Material=Hydrogen, Element[0]=Hydrogen,A[0]=1 is selected.
 Test19:NewRun: Targ=90001000, Proj=11, E=9.990000e+02 MeV, Run #11 of 60
 ***=>TEST19: 100 events are simulated
-Test19:CalculationTimePerEvent= 8.000000e-04 s
+Test19:CalculationTimePerEvent= 8.500000e-04 s
 Test19: Material=Helium, Element[0]=Helium,A[0]=4 is selected.
 Test19:NewRun: Targ=90002002, Proj=11, E=9.990000e+02 MeV, Run #12 of 60
 ***=>TEST19: 100 events are simulated
-Test19:CalculationTimePerEvent= 2.145000e-02 s
+Test19:CalculationTimePerEvent= 2.125000e-02 s
 Test19: Material=Nitrogen, Element[0]=Nitrogen,A[0]=14 is selected.
 Test19:NewRun: Targ=90007007, Proj=11, E=9.990000e+02 MeV, Run #13 of 60
 ***=>TEST19: 100 events are simulated
-Test19:CalculationTimePerEvent= 5.750000e-02 s
+Test19:CalculationTimePerEvent= 5.695000e-02 s
 Test19: Material=Cobalt, Element[0]=Cobalt,A[0]=59 is selected.
 Test19:NewRun: Targ=90027032, Proj=11, E=9.990000e+02 MeV, Run #14 of 60
 ***=>TEST19: 100 events are simulated
-Test19:CalculationTimePerEvent= 7.165000e-02 s
+Test19:CalculationTimePerEvent= 7.120000e-02 s
 Test19: Material=Uranium, Element[0]=Uranium,A[0]=238 is selected.
 Test19:NewRun: Targ=90092146, Proj=11, E=9.990000e+02 MeV, Run #15 of 60
 ***=>TEST19: 100 events are simulated
-Test19:CalculationTimePerEvent= 6.855000e-02 s
+Test19:CalculationTimePerEvent= 6.825000e-02 s
 Test19: Material=Hydrogen, Element[0]=Hydrogen,A[0]=1 is selected.
 Test19:NewRun: Targ=90001000, Proj=13, E=2.700000e+01 MeV, Run #16 of 60
 ***=>TEST19: 100 events are simulated
@@ -83,7 +83,7 @@ Test19:CalculationTimePerEvent= 5.000000e-05 s
 Test19: Material=Nitrogen, Element[0]=Nitrogen,A[0]=14 is selected.
 Test19:NewRun: Targ=90007007, Proj=13, E=2.700000e+01 MeV, Run #18 of 60
 ***=>TEST19: 100 events are simulated
-Test19:CalculationTimePerEvent= 5.000000e-05 s
+Test19:CalculationTimePerEvent= 0.000000e+00 s
 Test19: Material=Cobalt, Element[0]=Cobalt,A[0]=59 is selected.
 Test19:NewRun: Targ=90027032, Proj=13, E=2.700000e+01 MeV, Run #19 of 60
 ***=>TEST19: 100 events are simulated
@@ -99,19 +99,19 @@ Test19:CalculationTimePerEvent= 8.000000e-04 s
 Test19: Material=Helium, Element[0]=Helium,A[0]=4 is selected.
 Test19:NewRun: Targ=90002002, Proj=13, E=2.270000e+02 MeV, Run #22 of 60
 ***=>TEST19: 100 events are simulated
-Test19:CalculationTimePerEvent= 1.505000e-02 s
+Test19:CalculationTimePerEvent= 1.495000e-02 s
 Test19: Material=Nitrogen, Element[0]=Nitrogen,A[0]=14 is selected.
 Test19:NewRun: Targ=90007007, Proj=13, E=2.270000e+02 MeV, Run #23 of 60
 ***=>TEST19: 100 events are simulated
-Test19:CalculationTimePerEvent= 2.685000e-02 s
+Test19:CalculationTimePerEvent= 2.655000e-02 s
 Test19: Material=Cobalt, Element[0]=Cobalt,A[0]=59 is selected.
 Test19:NewRun: Targ=90027032, Proj=13, E=2.270000e+02 MeV, Run #24 of 60
 ***=>TEST19: 100 events are simulated
-Test19:CalculationTimePerEvent= 3.060000e-02 s
+Test19:CalculationTimePerEvent= 3.040000e-02 s
 Test19: Material=Uranium, Element[0]=Uranium,A[0]=238 is selected.
 Test19:NewRun: Targ=90092146, Proj=13, E=2.270000e+02 MeV, Run #25 of 60
 ***=>TEST19: 100 events are simulated
-Test19:CalculationTimePerEvent= 3.460000e-02 s
+Test19:CalculationTimePerEvent= 3.455000e-02 s
 Test19: Material=Hydrogen, Element[0]=Hydrogen,A[0]=1 is selected.
 Test19:NewRun: Targ=90001000, Proj=13, E=9.990000e+02 MeV, Run #26 of 60
 ***=>TEST19: 100 events are simulated
@@ -119,23 +119,23 @@ Test19:CalculationTimePerEvent= 8.000000e-04 s
 Test19: Material=Helium, Element[0]=Helium,A[0]=4 is selected.
 Test19:NewRun: Targ=90002002, Proj=13, E=9.990000e+02 MeV, Run #27 of 60
 ***=>TEST19: 100 events are simulated
-Test19:CalculationTimePerEvent= 2.100000e-02 s
+Test19:CalculationTimePerEvent= 2.095000e-02 s
 Test19: Material=Nitrogen, Element[0]=Nitrogen,A[0]=14 is selected.
 Test19:NewRun: Targ=90007007, Proj=13, E=9.990000e+02 MeV, Run #28 of 60
 ***=>TEST19: 100 events are simulated
-Test19:CalculationTimePerEvent= 5.520000e-02 s
+Test19:CalculationTimePerEvent= 5.470000e-02 s
 Test19: Material=Cobalt, Element[0]=Cobalt,A[0]=59 is selected.
 Test19:NewRun: Targ=90027032, Proj=13, E=9.990000e+02 MeV, Run #29 of 60
 ***=>TEST19: 100 events are simulated
-Test19:CalculationTimePerEvent= 6.575000e-02 s
+Test19:CalculationTimePerEvent= 6.535000e-02 s
 Test19: Material=Uranium, Element[0]=Uranium,A[0]=238 is selected.
 Test19:NewRun: Targ=90092146, Proj=13, E=9.990000e+02 MeV, Run #30 of 60
 ***=>TEST19: 100 events are simulated
-Test19:CalculationTimePerEvent= 6.930000e-02 s
+Test19:CalculationTimePerEvent= 6.900000e-02 s
 Test19: Material=Hydrogen, Element[0]=Hydrogen,A[0]=1 is selected.
 Test19:NewRun: Targ=90001000, Proj=15, E=2.700000e+01 MeV, Run #31 of 60
 ***=>TEST19: 100 events are simulated
-Test19:CalculationTimePerEvent= 5.000000e-05 s
+Test19:CalculationTimePerEvent= 1.000000e-04 s
 Test19: Material=Helium, Element[0]=Helium,A[0]=4 is selected.
 Test19:NewRun: Targ=90002002, Proj=15, E=2.700000e+01 MeV, Run #32 of 60
 ***=>TEST19: 100 events are simulated
@@ -175,7 +175,7 @@ Test19:CalculationTimePerEvent= 5.000000e-05 s
 Test19: Material=Hydrogen, Element[0]=Hydrogen,A[0]=1 is selected.
 Test19:NewRun: Targ=90001000, Proj=15, E=9.990000e+02 MeV, Run #41 of 60
 ***=>TEST19: 100 events are simulated
-Test19:CalculationTimePerEvent= 5.000000e-05 s
+Test19:CalculationTimePerEvent= 1.000000e-04 s
 Test19: Material=Helium, Element[0]=Helium,A[0]=4 is selected.
 Test19:NewRun: Targ=90002002, Proj=15, E=9.990000e+02 MeV, Run #42 of 60
 ***=>TEST19: 100 events are simulated
@@ -195,60 +195,60 @@ Test19:CalculationTimePerEvent= 5.000000e-05 s
 Test19: Material=Hydrogen, Element[0]=Hydrogen,A[0]=1 is selected.
 Test19:NewRun: Targ=90001000, Proj=22, E=2.700000e+01 MeV, Run #46 of 60
 ***=>TEST19: 100 events are simulated
-Test19:CalculationTimePerEvent= 8.000000e-04 s
+Test19:CalculationTimePerEvent= 7.500000e-04 s
 Test19: Material=Helium, Element[0]=Helium,A[0]=4 is selected.
 Test19:NewRun: Targ=90002002, Proj=22, E=2.700000e+01 MeV, Run #47 of 60
 ***=>TEST19: 100 events are simulated
-Test19:CalculationTimePerEvent= 2.595000e-02 s
+Test19:CalculationTimePerEvent= 2.570000e-02 s
 Test19: Material=Nitrogen, Element[0]=Nitrogen,A[0]=14 is selected.
 Test19:NewRun: Targ=90007007, Proj=22, E=2.700000e+01 MeV, Run #48 of 60
 ***=>TEST19: 100 events are simulated
-Test19:CalculationTimePerEvent= 3.420000e-02 s
+Test19:CalculationTimePerEvent= 3.370000e-02 s
 Test19: Material=Cobalt, Element[0]=Cobalt,A[0]=59 is selected.
 Test19:NewRun: Targ=90027032, Proj=22, E=2.700000e+01 MeV, Run #49 of 60
 ***=>TEST19: 100 events are simulated
-Test19:CalculationTimePerEvent= 4.050000e-02 s
+Test19:CalculationTimePerEvent= 3.995000e-02 s
 Test19: Material=Uranium, Element[0]=Uranium,A[0]=238 is selected.
 Test19:NewRun: Targ=90092146, Proj=22, E=2.700000e+01 MeV, Run #50 of 60
 ***=>TEST19: 100 events are simulated
-Test19:CalculationTimePerEvent= 5.045000e-02 s
+Test19:CalculationTimePerEvent= 5.010000e-02 s
 Test19: Material=Hydrogen, Element[0]=Hydrogen,A[0]=1 is selected.
 Test19:NewRun: Targ=90001000, Proj=22, E=2.270000e+02 MeV, Run #51 of 60
 ***=>TEST19: 100 events are simulated
-Test19:CalculationTimePerEvent= 2.400000e-03 s
+Test19:CalculationTimePerEvent= 2.300000e-03 s
 Test19: Material=Helium, Element[0]=Helium,A[0]=4 is selected.
 Test19:NewRun: Targ=90002002, Proj=22, E=2.270000e+02 MeV, Run #52 of 60
 ***=>TEST19: 100 events are simulated
-Test19:CalculationTimePerEvent= 1.855000e-02 s
+Test19:CalculationTimePerEvent= 1.835000e-02 s
 Test19: Material=Nitrogen, Element[0]=Nitrogen,A[0]=14 is selected.
 Test19:NewRun: Targ=90007007, Proj=22, E=2.270000e+02 MeV, Run #53 of 60
 ***=>TEST19: 100 events are simulated
-Test19:CalculationTimePerEvent= 7.885000e-02 s
+Test19:CalculationTimePerEvent= 7.760000e-02 s
 Test19: Material=Cobalt, Element[0]=Cobalt,A[0]=59 is selected.
 Test19:NewRun: Targ=90027032, Proj=22, E=2.270000e+02 MeV, Run #54 of 60
 ***=>TEST19: 100 events are simulated
-Test19:CalculationTimePerEvent= 1.044000e-01 s
+Test19:CalculationTimePerEvent= 1.036000e-01 s
 Test19: Material=Uranium, Element[0]=Uranium,A[0]=238 is selected.
 Test19:NewRun: Targ=90092146, Proj=22, E=2.270000e+02 MeV, Run #55 of 60
 ***=>TEST19: 100 events are simulated
-Test19:CalculationTimePerEvent= 1.228000e-01 s
+Test19:CalculationTimePerEvent= 1.224000e-01 s
 Test19: Material=Hydrogen, Element[0]=Hydrogen,A[0]=1 is selected.
 Test19:NewRun: Targ=90001000, Proj=22, E=9.990000e+02 MeV, Run #56 of 60
 ***=>TEST19: 100 events are simulated
-Test19:CalculationTimePerEvent= 2.950000e-03 s
+Test19:CalculationTimePerEvent= 3.000000e-03 s
 Test19: Material=Helium, Element[0]=Helium,A[0]=4 is selected.
 Test19:NewRun: Targ=90002002, Proj=22, E=9.990000e+02 MeV, Run #57 of 60
 ***=>TEST19: 100 events are simulated
-Test19:CalculationTimePerEvent= 1.980000e-02 s
+Test19:CalculationTimePerEvent= 1.965000e-02 s
 Test19: Material=Nitrogen, Element[0]=Nitrogen,A[0]=14 is selected.
 Test19:NewRun: Targ=90007007, Proj=22, E=9.990000e+02 MeV, Run #58 of 60
 ***=>TEST19: 100 events are simulated
-Test19:CalculationTimePerEvent= 1.819000e-01 s
+Test19:CalculationTimePerEvent= 1.802000e-01 s
 Test19: Material=Cobalt, Element[0]=Cobalt,A[0]=59 is selected.
 Test19:NewRun: Targ=90027032, Proj=22, E=9.990000e+02 MeV, Run #59 of 60
 ***=>TEST19: 100 events are simulated
-Test19:CalculationTimePerEvent= 3.159500e-01 s
+Test19:CalculationTimePerEvent= 3.146500e-01 s
 Test19: Material=Uranium, Element[0]=Uranium,A[0]=238 is selected.
 Test19:NewRun: Targ=90092146, Proj=22, E=9.990000e+02 MeV, Run #60 of 60
 ***=>TEST19: 100 events are simulated
-Test19:CalculationTimePerEvent= 2.433000e-01 s
+Test19:CalculationTimePerEvent= 2.431000e-01 s

@@ -286,7 +286,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=91s Real=125.27s Sys=29.07s
+  User=86.67s Real=120.77s Sys=28.78s
 
  ======================== run summary ======================
 
@@ -294,29 +294,29 @@ Run Summary
 
  ============================================================
 
- total energy deposit: 99.783 MeV
+ total energy deposit: 99.79 MeV
 
- nb tracks/event   neutral:     27.951   charged:     148.47
- nb  steps/event   neutral:     141.41   charged:     363.77
+ nb tracks/event   neutral:     28.021   charged:      148.4
+ nb  steps/event   neutral:     141.31   charged:     360.42
 
  nb of process calls per event: 
           eBrem       eIoni       compt        phot         mscTransportation        conv     annihil
-         26.174      188.17      113.46      25.501      147.96      0.9905      1.4625       1.463
+         26.298      187.99      113.29      25.636       144.7       0.962      1.4255      1.4255
 
 ---------------------------------------------------------
  Primary particle : 
- true Range = 11.121 cm    rms = 3.8093 cm 
- proj Range = 9.5817 cm    rms = 3.5013 cm 
- proj/true  = 0.86158
- transverse dispersion at end = 1.8005 cm 
-      mass true Range from simulation = 30.027 g/cm2 
+ true Range = 11.176 cm    rms = 3.7142 cm 
+ proj Range = 9.6596 cm    rms = 3.4421 cm 
+ proj/true  = 0.8643
+ transverse dispersion at end = 1.6963 cm 
+      mass true Range from simulation = 30.176 g/cm2 
        from PhysicsTable (csda range) = 31.791 g/cm2 
 ---------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 486808439, 1322415313
+ Current couple of seeds = 1988666443, 1427430660
 ----------------------------------------
 #
 /process/eLoss/verbose 0
@@ -344,7 +344,7 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 486808439, 1322415313
+ Current couple of seeds = 1988666443, 1427430660
 ----------------------------------------
 Start Run processing.
 
@@ -352,7 +352,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=178.02s Real=234.42s Sys=50.15s
+  User=173.32s Real=230.19s Sys=50.44s
 
  ======================== run summary ======================
 
@@ -362,27 +362,27 @@ Run Summary
 
  total energy deposit: 99.793 MeV
 
- nb tracks/event   neutral:     36.393   charged:      290.7
- nb  steps/event   neutral:     146.05   charged:     775.79
+ nb tracks/event   neutral:     36.447   charged:     290.23
+ nb  steps/event   neutral:     145.78   charged:     770.17
 
  nb of process calls per event: 
-          eIoni       eBrem         msc        phot       compt        conv     annihilTransportation
-         449.81      34.605      289.96      34.055      109.65       1.397      1.3975       0.949
+          eBrem       eIoni         msc       compt        phot        conv     annihilTransportation
+         34.636      448.94      285.18      109.33      34.116      1.4075       1.408        0.93
 
 ---------------------------------------------------------
  Primary particle : 
- true Range = 11.149 cm    rms = 3.8924 cm 
- proj Range = 9.5626 cm    rms = 3.5687 cm 
- proj/true  = 0.85772
- transverse dispersion at end = 1.9027 cm 
-      mass true Range from simulation = 30.102 g/cm2 
+ true Range = 11.114 cm    rms = 3.9518 cm 
+ proj Range = 9.6108 cm    rms = 3.6834 cm 
+ proj/true  = 0.86476
+ transverse dispersion at end = 1.7391 cm 
+      mass true Range from simulation = 30.007 g/cm2 
        from PhysicsTable (csda range) = 31.791 g/cm2 
 ---------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 763249003, 2053971629
+ Current couple of seeds = 1570026181, 1562329690
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

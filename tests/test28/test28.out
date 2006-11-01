@@ -194,15 +194,11 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     Total CPU time elapsed for geometry optimisation: 0 seconds
 Start Run processing.
  G4NuclearLevelManager: nuclide (91,237) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (91,238) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (93,236) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (91,227) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (91,232) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (91,225) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (89,229) does not have a gamma levels file
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=8.9s Real=9.1s Sys=0.13s
+  User=9.2s Real=9.5s Sys=0.14s
 #
 # deuteron at 1 GeV/nucleon on H 
 #
@@ -532,7 +528,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=3.89s Real=3.96s Sys=0.05s
+  User=3.66s Real=3.98s Sys=0.12s
 #
 #
 # deuteron at 200 MeV in U
@@ -574,11 +570,10 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     Total memory consumed for geometry optimisation:   0 kByte
     Total CPU time elapsed for geometry optimisation: 0 seconds
 Start Run processing.
- G4NuclearLevelManager: nuclide (89,222) does not have a gamma levels file
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.11s Real=0.12s Sys=0.01s
+  User=0.58s Real=0.61s Sys=0.03s
 #
 # deuteron at 200 MeV/nucleon on H 
 #
@@ -666,7 +661,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.12s Real=0.12s Sys=0s
+  User=0.11s Real=0.11s Sys=0s
 #
 #  .....end deuteron.............
 #
@@ -710,10 +705,11 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     Total CPU time elapsed for geometry optimisation: 0 seconds
 Start Run processing.
  G4NuclearLevelManager: nuclide (91,230) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (91,227) does not have a gamma levels file
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=2.1s Real=2.2s Sys=0.04s
+  User=4.4s Real=4.6s Sys=0.05s
 #
 # alpha at 1 GeV/nucleon on H 
 #
@@ -757,7 +753,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0s Real=0s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 #
 # alpha at 1 GeV/nucleon on Silicon 
 #
@@ -801,7 +797,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=1.56s Real=1.78s Sys=0.02s
+  User=1.4s Real=1.6s Sys=0.13s
 #
 # deuteron at 200 MeV/nucleon in U
 #
@@ -820,19 +816,19 @@ Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Uranium
  Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.8802232e+295 J      e- 2.8802232e+295 J      e+ 2.8802232e+295 J  
+ Energy thresholds :  gamma 2.9e+295 J      e- 2.9e+295 J      e+ 2.9e+295 J  
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : H
  Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 990 eV     e- 708.90956 keV    e+ 683.20614 keV
+ Energy thresholds :  gamma 9.9e+02 eV     e- 7.1e+02 keV    e+ 6.8e+02 keV
 
 Index : 2     used in the geometry : No      recalculation needed : No 
  Material : Silicon
  Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.8802232e+295 J      e- 1.0114457 GeV    e+ 962.84668 MeV
+ Energy thresholds :  gamma 2.9e+295 J      e- 1 GeV    e+ 9.6e+02 MeV
 
 ====================================================================
 
@@ -845,7 +841,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.01s Real=0.01s Sys=0s
+  User=0s Real=0.01s Sys=0.01s
 #
 # alpha at 200 MeV/nucleon on H 
 #
@@ -933,7 +929,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.01s Real=0.03s Sys=0.02s
+  User=0.02s Real=0.03s Sys=0.01s
 #
 #  .....end alpha............
 #
@@ -977,17 +973,25 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     Total memory consumed for geometry optimisation:   0 kByte
     Total CPU time elapsed for geometry optimisation: 0 seconds
 Start Run processing.
- G4NuclearLevelManager: nuclide (89,221) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (15,38) does not have a gamma levels file
  G4NuclearLevelManager: nuclide (87,218) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (85,218) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (90,236) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (29,71) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (18,49) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (89,221) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (91,232) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (93,236) does not have a gamma levels file
  G4NuclearLevelManager: nuclide (88,233) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (86,229) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (21,56) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (14,35) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (12,33) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (87,228) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (11,27) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (19,50) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (89,222) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (91,225) does not have a gamma levels file
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=28s Real=29s Sys=0.39s
+  User=26s Real=27s Sys=0.29s
 #
 # C(12,6)++ at 1 GeV/nucleon on H 
 #
@@ -1032,7 +1036,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.14s Real=0.4s Sys=0.06s
+  User=0.01s Real=0.01s Sys=0s
 #
 # C(12,6)++ at 1 GeV/nucleon on Silicon 
 #
@@ -1077,7 +1081,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=7.13s Real=7.71s Sys=0.55s
+  User=8.86s Real=10.14s Sys=1.06s
 #
 # C(12,6)++ at 1 GeV/nucleon on Water 
 #
@@ -1249,7 +1253,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=4.85s Real=5.68s Sys=0.78s
+  User=5.31s Real=6.19s Sys=0.82s
 #
 #
 # C(12,6)++ at 200 MeV in U
@@ -1297,11 +1301,11 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     Total memory consumed for geometry optimisation:   0 kByte
     Total CPU time elapsed for geometry optimisation: 0 seconds
 Start Run processing.
- G4NuclearLevelManager: nuclide (90,235) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (17,45) does not have a gamma levels file
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=2s Real=2.1s Sys=0.01s
+  User=7.3s Real=7.7s Sys=0.1s
 #
 # C(12,6)++ at 200 MeV/nucleon on H 
 #
@@ -1351,7 +1355,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.01s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 #
 # C(12,6)++ at 200 MeV/nucleon on Silicon 
 #
@@ -1401,7 +1405,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=3.62s Real=4.19s Sys=0.54s
+  User=4.11s Real=4.57s Sys=0.43s
 #
 #  .....end C(12,6)++............
 #
@@ -1590,7 +1594,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=9.8s Real=10s Sys=0.25s
+  User=4.1s Real=4.3s Sys=0.12s
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
 UserRunAction deleted.

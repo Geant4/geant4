@@ -301,9 +301,7 @@ Index : 12     used in the geometry : Yes     recalculation needed : No
 ====================================================================
 
 -> Event # 1 generated 
-   ===> The incident alpha particle has reached the targeted cell :
-   -----> total absorbed dose within Nucleus   is (Gy) = 0.289307
-   -----> total absorbed dose within Cytoplasm is (Gy) = 0.075806
+   ===> Sorry, the incident alpha particle has missed the targeted cell !
 
 G4VisManager: Using G4TrajectoryDrawByCharge as default trajectory model.
 See commands in /vis/modeling/trajectories/ for other options.
@@ -315,9 +313,7 @@ WARNING: G4VisManager::IsValidView(): Attempt to draw when no graphics system
   drawing code is executed only if G4VVisManager::GetConcreteInstance()
   is non-zero.
 -> Event # 2 generated 
-   ===> The incident alpha particle has reached the targeted cell :
-   -----> total absorbed dose within Nucleus   is (Gy) = 0.290869
-   -----> total absorbed dose within Cytoplasm is (Gy) = 0.0873862
+   ===> Sorry, the incident alpha particle has missed the targeted cell !
 
 -> Event # 3 generated 
    ===> Sorry, the incident alpha particle has missed the targeted cell !
@@ -329,30 +325,22 @@ WARNING: G4VisManager::IsValidView(): Attempt to draw when no graphics system
    ===> Sorry, the incident alpha particle has missed the targeted cell !
 
 -> Event # 6 generated 
-   ===> The incident alpha particle has reached the targeted cell :
-   -----> total absorbed dose within Nucleus   is (Gy) = 0.572692
-   -----> total absorbed dose within Cytoplasm is (Gy) = 0.0552643
+   ===> Sorry, the incident alpha particle has missed the targeted cell !
 
 -> Event # 7 generated 
-   ===> The incident alpha particle has reached the targeted cell :
-   -----> total absorbed dose within Nucleus   is (Gy) = 0.25181
-   -----> total absorbed dose within Cytoplasm is (Gy) = 0.0830187
+   ===> Sorry, the incident alpha particle has missed the targeted cell !
 
 -> Event # 8 generated 
    ===> Sorry, the incident alpha particle has missed the targeted cell !
 
 -> Event # 9 generated 
-   ===> The incident alpha particle has reached the targeted cell :
-   -----> total absorbed dose within Nucleus   is (Gy) = 0.324588
-   -----> total absorbed dose within Cytoplasm is (Gy) = 0.104895
+   ===> Sorry, the incident alpha particle has missed the targeted cell !
 
 -> Event # 10 generated 
-   ===> The incident alpha particle has reached the targeted cell :
-   -----> total absorbed dose within Nucleus   is (Gy) = 0.363696
-   -----> total absorbed dose within Cytoplasm is (Gy) = 0.0764332
+   ===> Sorry, the incident alpha particle has missed the targeted cell !
 
 ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
--> Total number of particles detected by the gas detector : 6
+-> Total number of particles detected by the gas detector : 0
 
 Graphics systems deleted.
 Visualization Manager deleting...

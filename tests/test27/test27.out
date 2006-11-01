@@ -181,11 +181,12 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     Total memory consumed for geometry optimisation:   0 kByte
     Total CPU time elapsed for geometry optimisation: 0 seconds
 Start Run processing.
- G4NuclearLevelManager: nuclide (91,230) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (91,237) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (91,232) does not have a gamma levels file
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=7.9s Real=8.2s Sys=0.19s
+  User=7.9s Real=8.1s Sys=0.05s
 #
 # deuteron at 1 GeV/nucleon on H 
 #
@@ -341,7 +342,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0s Real=0s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 #
 # deuteron at 1 GeV/nucleon on Silicon 
 #
@@ -505,7 +506,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=3.36s Real=3.45s Sys=0.05s
+  User=3.8s Real=3.88s Sys=0.08s
 #
 #
 # deuteron at 200 MeV in U
@@ -545,7 +546,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.03s Real=0.03s Sys=0s
+  User=0.52s Real=0.6s Sys=0.04s
 #
 # deuteron at 200 MeV/nucleon on H 
 #
@@ -584,7 +585,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.03s Real=0.03s Sys=0s
+  User=0s Real=0s Sys=0s
 #
 # deuteron at 200 MeV/nucleon on Silicon 
 #
@@ -623,7 +624,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.31s Real=0.36s Sys=0.02s
+  User=0.09s Real=0.1s Sys=0.01s
 #
 #  .....end deuteron.............
 #
@@ -661,10 +662,12 @@ Index : 2     used in the geometry : No      recalculation needed : No
 ====================================================================
 
 Start Run processing.
+ G4NuclearLevelManager: nuclide (91,225) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (91,227) does not have a gamma levels file
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=2.14s Real=2.18s Sys=0.03s
+  User=3.62s Real=3.7s Sys=0.06s
 #
 # alpha at 1 GeV/nucleon on H 
 #
@@ -703,7 +706,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.01s Real=0.01s Sys=0s
+  User=0.03s Real=0.03s Sys=0s
 #
 # alpha at 1 GeV/nucleon on Silicon 
 #
@@ -742,7 +745,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.8s Real=0.82s Sys=0.02s
+  User=1.73s Real=1.79s Sys=0.04s
 #
 # deuteron at 200 MeV/nucleon in U
 #
@@ -781,7 +784,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.04s Real=0.04s Sys=0s
+  User=0.01s Real=0.02s Sys=0.01s
 #
 # alpha at 200 MeV/nucleon on H 
 #
@@ -898,14 +901,10 @@ Index : 2     used in the geometry : No      recalculation needed : No
 ====================================================================
 
 Start Run processing.
- G4NuclearLevelManager: nuclide (93,231) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (91,232) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (88,232) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (91,225) does not have a gamma levels file
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=12.13s Real=12.65s Sys=0.12s
+  User=13.28s Real=13.85s Sys=0.1s
 #
 # C(12,6)++ at 1 GeV/nucleon on H 
 #
@@ -982,10 +981,11 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
 ====================================================================
 
 Start Run processing.
+ G4NuclearLevelManager: nuclide (14,25) does not have a gamma levels file
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=3.7s Real=3.79s Sys=0.02s
+  User=4.34s Real=4.48s Sys=0.08s
 #
 # C(12,6)++ at 1 GeV/nucleon on Water 
 #
@@ -1152,7 +1152,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=2.47s Real=2.52s Sys=0.01s
+  User=2.23s Real=2.32s Sys=0.04s
 #
 #
 # C(12,6)++ at 200 MeV in U
@@ -1196,11 +1196,10 @@ Index : 3     used in the geometry : No      recalculation needed : No
 
 Start Run processing.
  G4NuclearLevelManager: nuclide (96,240) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (98,243) does not have a gamma levels file
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.19s Real=0.23s Sys=0.02s
+  User=0.09s Real=0.1s Sys=0s
 #
 # C(12,6)++ at 200 MeV/nucleon on H 
 #
@@ -1245,7 +1244,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0s Real=0s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 #
 # C(12,6)++ at 200 MeV/nucleon on Silicon 
 #
@@ -1290,7 +1289,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.43s Real=0.51s Sys=0.04s
+  User=0.35s Real=0.37s Sys=0s
 #
 #  .....end C(12,6)++............
 #
@@ -1474,7 +1473,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.06s Real=0.06s Sys=0s
+  User=0.11s Real=0.13s Sys=0.02s
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
 UserRunAction deleted.

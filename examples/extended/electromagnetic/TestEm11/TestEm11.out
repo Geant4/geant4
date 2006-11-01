@@ -80,7 +80,7 @@ Registered filter factories:
 #
 /testem/phys/addPhysics  standard	# em physics
 PhysicsList::AddPhysicsList: <standard>
-###/testem/phys/addPhysics  g4v52  	# em physics 
+###/testem/phys/addPhysics  penelope  	# em physics 
 #
 /run/initialize
 userDetector->Construct() start.
@@ -289,7 +289,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20000
-  User=153.81s Real=327.62s Sys=139.46s
+  User=153.44s Real=330.32s Sys=142.33s
 
  ======================== run summary ======================
 
@@ -297,20 +297,20 @@ Run Summary
 
  ============================================================
 
- Total Energy deposited        = 451.259 keV +- 99.216 keV
+ Total Energy deposited        = 451.597 keV +- 101.912 keV
 
- Track length of primary track = 867.103 um  +- 178.865 um 
+ Track length of primary track = 867.911 um  +- 184.591 um 
  Range from EmCalculator       = 937.365 um  (from full dE/dx)
 
- Projected range               = 312.554 um  +- 200.604 um 
+ Projected range               = 337.459 um  +- 205.213 um 
 
- Nb of steps of primary track  = 87.23 +- 17.87	 Step size= 9.935 um  +- 59.364 nm 
+ Nb of steps of primary track  = 87.31 +- 18.45	 Step size= 9.932 um  +- 92.830 nm 
 
- absorbed = 78.59 %   transmit = 4.82 %   reflected = 16.59 %
+ absorbed = 79.38 %   transmit = 5.07 %   reflected = 15.55 %
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 431591907, 1496536939
+ Current couple of seeds = 2023425118, 1319228558
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...
