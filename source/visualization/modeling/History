@@ -1,4 +1,4 @@
-$Id: History,v 1.88 2006-10-26 11:11:14 allison Exp $
+$Id: History,v 1.89 2006-11-01 10:34:36 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,17 @@ committal in the CVS repository !
 
 History file for visualization/modeling
 ---------------------------------------
+
+1st November 2006  John Allison  (modeling-V08-01-09)
+- G4VModel: Removed warning messages from the virtual functions
+  GetCurrentDescription and GetCurrentTag so that there is no longer
+  a message if the concrete class does not implement.  The implementation
+  in G4VModel, which is used by default, is simply to return the global
+  description and tag.
+- Removed GetCurrentDescription and GetCurrentTag from models for which the
+  concept of "current" makes no sense or is not used:
+    G4AxesModel, G4HitsModel, G4LogicalVolumeModel, G4ScaleModel, G4TextModel.
+- G4ModelCommandsT: Minor corrections to guidance.
 
 26th October 2006  John Allison  (modeling-V08-01-08)
 - G4PhysicalVolumeModel: Changed CreateAttValues to CreateCurrentAttValues.
