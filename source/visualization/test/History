@@ -1,9 +1,12 @@
-$Id: History,v 1.105 2006-11-01 11:15:27 allison Exp $
+$Id: History,v 1.106 2006-11-01 11:17:04 allison Exp $
 
 History file for visualization/test subdirectory
 ------------------------------------------------
 
 $Log: not supported by cvs2svn $
+Revision 1.105  2006/11/01 11:15:27  allison
+Added a G4Polycone.
+
 Revision 1.104  2006/11/01 11:14:05  allison
 Added some G4Atts to magenta box.
 
