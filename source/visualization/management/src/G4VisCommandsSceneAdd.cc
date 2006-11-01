@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneAdd.cc,v 1.67 2006-08-30 11:09:01 allison Exp $
+// $Id: G4VisCommandsSceneAdd.cc,v 1.68 2006-11-01 10:50:28 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // /vis/scene commands - John Allison  9th August 1998
 
@@ -54,12 +54,16 @@
 #include "G4UImanager.hh"
 #include "G4UIcommand.hh"
 #include "G4UIcmdWithAString.hh"
-#include "G4UIcmdWithAnInteger.hh"
 #include "G4UIcmdWithoutParameter.hh"
 #include "G4Tokenizer.hh"
 #include "G4RunManager.hh"
 #include "G4Run.hh"
 #include "G4Event.hh"
+#include "G4IdentityTrajectoryFilter.hh"
+#include "G4TransportationManager.hh"
+#include "G4PropagatorInField.hh"
+#include "G4RichTrajectory.hh"
+#include "G4AttDef.hh"
 #include "G4ios.hh"
 #include <sstream>
 
@@ -1218,23 +1222,39 @@ void G4VisCommandSceneAddText::SetNewValue (G4UIcommand*, G4String newValue) {
 
 G4VisCommandSceneAddTrajectories::G4VisCommandSceneAddTrajectories () {
   G4bool omitable;
-  fpCommand = new G4UIcmdWithAnInteger
+  fpCommand = new G4UIcmdWithAString
     ("/vis/scene/add/trajectories", this);
   fpCommand -> SetGuidance
     ("Adds trajectories to current scene.");
   fpCommand -> SetGuidance
-    ("Causes trajectories, if any, to be drawn at the end of processiing an"
-     "\nevent. The drawing mode is an integer that is passed to the"
-     "\nDrawTrajectory method.  The default implementation in G4VTrajectory,"
-     "\nif drawing-mode >= 0, draws the trajectory as a polyline (blue for"
-     "\npositive, red for negative, green for neutral) and, if"
-     "\ndrawing-mode != 0, draws markers of screen size"
-     "\nstd::abs(drawing-mode)/1000 pixels at each step and auxiliary point,"
-     "\nif any.  So drawing-mode = 5000 is a good choice."
-     "\nEnable storing with \"/tracking/storeTrajectory 1\"."
+    ("Causes trajectories, if any, to be drawn at the end of processing an"
+     /*********
+     "\nevent.  Switches on trajectory storing and event keeping and sets the"
+     *********/
+     "\nevent.  Switches on trajectory storing and sets the"
+     "\ndefault trajectory type.");
+  fpCommand -> SetGuidance
+    ("The command line parameter list determines the default trajectory type."
+     "\nIf it contains the string \"smooth\", auxiliary inter-step points will"
+     "\nbe inserted to improve the smoothness of the drawing of a curved"
+     "\ntrajectory."
+     "\nIf it contains the string \"rich\", significant extra information will"
+     "\nbe stored in the trajectory (G4RichTrajectory) amenable to modeling"
+     "\nand filtering with \"/vis/modeling/trajectories/create/drawByAttribute\""
+     "\nand \"/vis/filtering/trajectories/create/attributeFilter\" commands."
+     "\nIt may contain both strings in any order.");
+  fpCommand -> SetGuidance
+    ("\nTo switch off trajectory storing: \"/tracking/storeTrajectory 0\"."
+     /*************
+     "\nTo switch off event keeping: \"/vis/keepEvents false\"."
+     *************/
      "\nSee also \"/vis/scene/endOfEventAction\".");
-  fpCommand -> SetParameterName ("drawing-mode", omitable = true);
-  fpCommand -> SetDefaultValue (0);
+  fpCommand -> SetGuidance
+    ("Note:  This only sets the default.  Independently of the result of this"
+     "\ncommand, a user may instantiate a trajectory that overrides this default"
+     "\nin PreUserTrackingAction.");
+  fpCommand -> SetParameterName ("default-trajectory-type", omitable = true);
+  fpCommand -> SetDefaultValue ("");
 }
 
 G4VisCommandSceneAddTrajectories::~G4VisCommandSceneAddTrajectories () {
@@ -1259,12 +1279,24 @@ void G4VisCommandSceneAddTrajectories::SetNewValue (G4UIcommand*,
     return;
   }
 
-  G4int drawingMode;
-  std::istringstream is (newValue);
-  is >> drawingMode;
-  G4TrajectoriesModel* model = new G4TrajectoriesModel(drawingMode);
-  const G4String& currentSceneName = pScene -> GetName ();
-  pScene -> AddEndOfEventModel (model, warn);
+  /**********************
+  for (size_t i = 0; i < newValue.size(); ++i) {
+    if (std::isdigit(newValue[i])) {
+      if (verbosity >= G4VisManager::errors) {
+	G4cout <<
+	  "ERROR: Digit found in \"" << newValue << "\". May be old-style integer argument."
+	  "\n  No longer supported.  Please use \"/vis/modeling/trajectories\""
+	  "\n  and \"/vis/filtering/trajectories\" commands.  Consult guidance."
+	       << G4endl;
+	return;
+      }
+    }
+  }
+  ***********************/
+
+  G4bool smooth = false, rich = false;
+  if (newValue.find("smooth") != std::string::npos) smooth = true;
+  if (newValue.find("rich") != std::string::npos) rich = true;
 
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
   G4int keepVerbose = UImanager->GetVerboseLevel();
@@ -1273,18 +1305,109 @@ void G4VisCommandSceneAddTrajectories::SetNewValue (G4UIcommand*,
       fpVisManager->GetVerbosity() >= G4VisManager::confirmations)
     newVerbose = 2;
   UImanager->SetVerboseLevel(newVerbose);
-  UImanager->ApplyCommand("/tracking/storeTrajectory 1");
+  G4PropagatorInField* propagatorInField =
+    G4TransportationManager::GetTransportationManager()->
+    GetPropagatorInField();
+  propagatorInField->SetTrajectoryFilter(0); // Switch off smooth trajectories.
+  static G4IdentityTrajectoryFilter auxiliaryPointsFilter;
+  G4String defaultTrajectoryType;
+  G4int i_mode = 0;
+  if (smooth && rich) {
+    /**************
+    UImanager->ApplyCommand("/tracking/storeTrajectory 3");
+    propagatorInField->SetTrajectoryFilter(&auxiliaryPointsFilter);
+    defaultTrajectoryType = "G4RichTrajectory configured for smooth steps";
+    ***************/
+    if (verbosity >= G4VisManager::warnings) {
+      G4cout << "WARNING: \"" << newValue << "\" not yet implemented."
+	     << G4endl;
+    }
+    UImanager->ApplyCommand("/tracking/storeTrajectory 1");
+    defaultTrajectoryType = "G4Trajectory";
+    smooth = rich = false;
+  } else if (smooth) {
+    /***************
+    UImanager->ApplyCommand("/tracking/storeTrajectory 2");
+    propagatorInField->SetTrajectoryFilter(&auxiliaryPointsFilter);
+    defaultTrajectoryType = "G4SmoothTrajectory";
+    ****************/
+    if (verbosity >= G4VisManager::warnings) {
+      G4cout << "WARNING: \"" << newValue << "\" not yet implemented."
+	     << G4endl;
+    }
+    UImanager->ApplyCommand("/tracking/storeTrajectory 1");
+    defaultTrajectoryType = "G4Trajectory";
+    smooth = false;
+  } else if (rich) {
+    /***************
+    UImanager->ApplyCommand("/tracking/storeTrajectory 3");
+    defaultTrajectoryType = "G4RichTrajectory";
+    ****************/
+    if (verbosity >= G4VisManager::warnings) {
+      G4cout << "WARNING: \"" << newValue << "\" not yet implemented."
+	     << G4endl;
+    }
+    UImanager->ApplyCommand("/tracking/storeTrajectory 1");
+    defaultTrajectoryType = "G4Trajectory";
+    rich = false;
+  } else {
+    if (!newValue.empty()) {
+      std::istringstream iss(newValue);
+      iss >> i_mode;
+      if (iss) {
+	if (verbosity >= G4VisManager::warnings) {
+	  G4cout << "WARNING: Integer parameter " << i_mode << " found."
+	    "\n  DEPRECATED - will be removed at next major release."
+	    "\n  Use \"/vis/modeling/trajectories\" commands."
+		 << G4endl;
+	}
+      } else {
+	if (verbosity >= G4VisManager::errors) {
+	  G4cout << "ERROR: Unrecognised parameter \"" << newValue << "\""
+	    "\n  No action taken."
+		 << G4endl;
+	}
+	return;
+      }
+    }
+    UImanager->ApplyCommand("/tracking/storeTrajectory 1");
+    defaultTrajectoryType = "G4Trajectory";
+  }
+  /***************
+  UImanager->ApplyCommand("/vis/keepEvents");
+  ****************/
   UImanager->SetVerboseLevel(keepVerbose);
 
+  if (rich) {
+    if (verbosity >= G4VisManager::confirmations) {
+      G4cout <<
+	"Attributes available for modeling and filtering with"
+	"\n\"/vis/modeling/trajectories/create/drawByAttribute\" and"
+	"\n\"/vis/filtering/trajectories/create/attributeFilter\" commands:\n"
+	     << G4RichTrajectory().GetAttDefs();
+    }
+  }
+
+  G4TrajectoriesModel* model = new G4TrajectoriesModel(i_mode);
+  const G4String& currentSceneName = pScene -> GetName ();
+  pScene -> AddEndOfEventModel (model, warn);
+
   if (verbosity >= G4VisManager::confirmations) {
-    G4cout << "Trajectories will be drawn with mode "
-	   << drawingMode
-	   << " in scene \""
+    G4cout << "Default trajectory type " << defaultTrajectoryType
+	   << "\n  will be used to store trajectories for scene \""
 	   << currentSceneName << "\"."
 	   << G4endl;
   }
+
   if (verbosity >= G4VisManager::warnings) {
-    G4cout << "WARNING: \"/tracking/storeTrajectory 1\" has been executed."
+    G4cout <<
+      /****************
+      "WARNING: Trajectory storing and event keeping have been requested.  These"
+      "\n  actions may be reversed with \"/tracking/storeTrajectory 0\" and"
+      "\n  \"/vis/keepEvents false\"."
+      **************/
+      "WARNING: Trajectory storing has been requested.  This action may be"
+      "\n  reversed with \"/tracking/storeTrajectory 0\"."
 	   << G4endl;
   }
 }

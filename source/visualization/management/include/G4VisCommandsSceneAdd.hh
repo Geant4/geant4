@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneAdd.hh,v 1.16 2006-06-29 21:28:42 gunter Exp $
+// $Id: G4VisCommandsSceneAdd.hh,v 1.17 2006-11-01 10:50:28 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/scene commands - John Allison  9th August 1998
@@ -35,7 +35,7 @@
 #include "G4VisCommandsScene.hh"
 
 class G4UIcmdWithoutParameter;
-class G4UIcmdWithAnInteger;
+class G4UIcmdWithAString;
 
 #include "G4Transform3D.hh"
 #include "G4VisAttributes.hh"
@@ -166,7 +166,7 @@ private:
   G4VisCommandSceneAddTrajectories (const G4VisCommandSceneAddTrajectories&);
   G4VisCommandSceneAddTrajectories& operator =
   (const G4VisCommandSceneAddTrajectories&);
-  G4UIcmdWithAnInteger* fpCommand;
+  G4UIcmdWithAString* fpCommand;
 };
 
 class G4VisCommandSceneAddUserAction: public G4VVisCommandScene {
