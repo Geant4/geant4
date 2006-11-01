@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXViewer.hh,v 1.25 2006-07-17 15:04:22 allison Exp $
+// $Id: G4OpenGLXViewer.hh,v 1.26 2006-11-01 11:22:27 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -51,12 +51,13 @@ class G4OpenGLSceneHandler;
 
 class G4OpenGLXViewer: virtual public G4OpenGLViewer {
 
+  friend class G4OpenGLXViewerMessenger;
+
 public:
   G4OpenGLXViewer (G4OpenGLSceneHandler& scene);
   virtual ~G4OpenGLXViewer ();
   void SetView ();
   void ShowView ();
-  void SetPrintOnShow (G4bool doit) {print_on_show = doit;}
   void print();
 
 protected:
@@ -70,8 +71,7 @@ protected:
 
   char                              print_string[50];
   G4bool                            print_colour,
-                                    vectored_ps,
-                                    print_on_show;
+                                    vectored_ps;
 
 //////////////////////////////Vectored PostScript production functions//////////////////////////////
   void printBuffer(GLint, GLfloat*);

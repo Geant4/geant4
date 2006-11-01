@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXViewer.cc,v 1.33 2006-08-14 12:03:36 allison Exp $
+// $Id: G4OpenGLXViewer.cc,v 1.34 2006-11-01 11:22:26 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -124,21 +124,6 @@ void G4OpenGLXViewer::ShowView () {
   glXWaitGL (); //Wait for effects of all previous OpenGL commands to
                 //be propagated before progressing.
   glFlush ();
-  if (print_on_show) {
-    // Keep copy of print_string to preserve Xm behaviour...
-    char* tmp_string = new char[50];
-    strcpy (tmp_string, print_string);
-    // Make new print string...
-    static G4int file_count = 0;
-    std::ostringstream oss;
-    oss << "G4OpenGL_" << file_count++ << ".eps";
-    strcpy (print_string, oss.str().c_str());
-    // Print eps file...
-    print();
-    // Restore print_string for Xm...
-    strcpy (print_string, tmp_string);
-    delete tmp_string;
-  }
 }
 
 void G4OpenGLXViewer::GetXConnection () {
@@ -358,7 +343,6 @@ G4VViewer (scene, -1),
 G4OpenGLViewer (scene),
 print_colour (true),
 vectored_ps (true),
-print_on_show (false),
 vi_immediate (0),
 vi_stored (0)
 {
