@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.114 2006-10-24 06:01:06 allison Exp $
+cvs log $Id: History,v 1.115 2006-11-01 10:15:51 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,15 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
  
+1st November 2006  John Allison  (greps-V08-01-09; co-works: vis-V08-01-09)
+- Tidied G4Att checking and storing:
+  o G4AttCheck: Added store key to printing in operator<<.
+  o G4AttDef: Improved printing of store key in operator<<.
+  o G4AttDefStore: Removed GetName, introduced GetStoreKey.
+  o G4AttHolder:
+    ~ Removed GetAttDefsName.
+    ~ Replaced AddAttValues and AddAttDefs by a combined AddAtts.
+
 24th October 2006  John Allison  (greps-V08-01-08; co-works: vis-V08-01-08)
 - G4VisAttributes: Change GetAttValues to CreateAttValues.  It creates
   an expendable copy on the heap, thus following the behaviour of
