@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AttDef.cc,v 1.1 2006-10-17 16:14:08 allison Exp $
+// $Id: G4AttDef.cc,v 1.2 2006-11-01 10:15:05 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4AttDef.hh"
@@ -39,7 +39,10 @@ std::ostream& operator<<
     os << "G4AttCheck: ERROR: zero definitions pointer." << endl;
     return os;
   }
-  os << G4AttDefStore::GetName(definitions) << ":";
+  G4String storeKey;
+  if (G4AttDefStore::GetStoreKey(definitions, storeKey)) {
+    os << storeKey << ":";
+  }
   std::map<G4String,G4AttDef>::const_iterator i;
   for (i = definitions->begin(); i != definitions->end(); ++i) {
     if (i->second.GetCategory() == "Physics") {
