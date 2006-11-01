@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VisManager.cc,v 1.102 2006-09-13 13:20:05 allison Exp $
+// $Id: G4VisManager.cc,v 1.103 2006-11-01 10:52:10 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -73,7 +73,6 @@
 #include "G4RunManager.hh"
 #include "G4Run.hh"
 #include "G4Event.hh"
-
 #include <sstream>
 
 G4VisManager* G4VisManager::fpInstance = 0;
@@ -1030,9 +1029,6 @@ void G4VisManager::PrintAvailableGraphicsSystems () const {
 void G4VisManager::PrintAvailableModels (Verbosity verbosity) const
 {
   {
-
-    // Mark current models!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
     //fpTrajDrawModelMgr->Print(G4cout);
     G4cout << "Registered model factories:" << G4endl;
     const std::vector<G4VModelFactory<G4VTrajectoryModel>*>& factoryList =
