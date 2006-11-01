@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalVolumeModel.hh,v 1.8 2006-06-29 21:30:18 gunter Exp $
+// $Id: G4LogicalVolumeModel.hh,v 1.9 2006-11-01 10:28:42 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -65,9 +65,6 @@ public: // With description
   virtual ~G4LogicalVolumeModel ();
 
   void DescribeYourselfTo (G4VGraphicsScene&);
-
-  G4String GetCurrentDescription () const;
-  // A description which depends on the current state of the model.
 
 protected:
 
