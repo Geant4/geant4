@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HepRepFileSceneHandler.cc,v 1.56 2006-06-29 21:17:24 gunter Exp $
+// $Id: G4HepRepFileSceneHandler.cc,v 1.57 2006-11-01 11:10:50 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -1224,20 +1224,7 @@ void G4HepRepFileSceneHandler::AddHepRepInstance(const char* primName,
 			G4int drawnMotherDepth = 0;
 			if (ri != drawnPVPath.rend()) {
 				// This volume has a mother.
-				G4VPhysicalVolume* drawnMotherPV = ri->GetPhysicalVolume();
-				// Find this mother's depth by examining prevTypeNames.
-				if (currentDepth>1) {
-					drawnMotherDepth = currentDepth-1;
-					while (strcmp(hepRepXMLWriter->prevTypeName[drawnMotherDepth],drawnMotherPV->GetName())!=0) {
-						//G4cout << "Didn't find mother at depth:" << drawnMotherDepth << ", that depth had:" <<
-						//hepRepXMLWriter->prevTypeName[drawnMotherDepth] << G4endl;
-						drawnMotherDepth--;
-						if (drawnMotherDepth==0) {
-							//G4cout << "Got to drawnMotherDepth of zero.  Giving up." << G4endl;
-							break;
-						}
-					}
-				}
+				drawnMotherDepth = ri->GetNonCulledDepth();
 			} else {
 				// This volume has no mother.  Must be a top level volume.
 				//G4cout << "Mother must be very top" << G4endl;
