@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ASCIITreeSceneHandler.cc,v 1.30 2006-07-03 16:46:45 allison Exp $
+// $Id: G4ASCIITreeSceneHandler.cc,v 1.31 2006-11-01 11:02:05 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -306,7 +306,8 @@ void G4ASCIITreeSceneHandler::RequestPrimitives(const G4VSolid& solid) {
       *fpOutFile << ", "
 		 << G4BestUnit(((G4VSolid&)solid).GetCubicVolume(),"Volume")
 		 << ", "
-		 << G4BestUnit(pCurrentMaterial->GetDensity(), "Volumic Mass");
+		 << G4BestUnit(pCurrentMaterial->GetDensity(), "Volumic Mass")
+		 << " (" << pCurrentMaterial->GetName() << ")";
     }
 
     if (detail >= 5) {
