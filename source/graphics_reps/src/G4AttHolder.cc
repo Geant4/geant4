@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AttHolder.cc,v 1.2 2006-10-24 06:00:29 allison Exp $
+// $Id: G4AttHolder.cc,v 1.3 2006-11-01 10:11:44 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4AttHolder.hh"
@@ -35,9 +35,4 @@
 G4AttHolder::~G4AttHolder()
 {
   for (size_t i = 0; i < fValues.size(); ++i) delete fValues[i];
-}
-
-const G4String& G4AttHolder::GetAttDefsName(size_t i) const
-{
-  return G4AttDefStore::GetName(fDefs[i]);
 }

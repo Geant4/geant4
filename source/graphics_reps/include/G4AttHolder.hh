@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AttHolder.hh,v 1.3 2006-10-24 06:35:44 allison Exp $
+// $Id: G4AttHolder.hh,v 1.4 2006-11-01 10:11:44 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef G4ATTHOLDER_HH
@@ -52,21 +52,24 @@ class G4AttValue;
 class G4AttDef;
 
 class G4AttHolder {
+
 public:
+
   G4AttHolder() {}
-  /// Note: G4AttValues are deleted here...
-  ~G4AttHolder();
+  ~G4AttHolder();  // Note: G4AttValues are deleted here.
+
   const std::vector<const std::vector<G4AttValue>*>& GetAttValues() const
   {return fValues;}
   const std::vector<const std::map<G4String,G4AttDef>*>& GetAttDefs() const
   {return fDefs;}
-  const G4String& GetAttDefsName(size_t i) const;
-  /// Add expendable G4AttValues - they will be deleted in destructor...
-  void AddAttValues(const std::vector<G4AttValue>* values)
-  {fValues.push_back(values);}
-  /// G4AttDefs are assumed to have long life...
-  void AddAttDefs(const std::map<G4String,G4AttDef>* defs)
-  {fDefs.push_back(defs);}
+
+  void AddAtts(const std::vector<G4AttValue>* values,
+	       const std::map<G4String,G4AttDef>* defs)
+  {fValues.push_back(values); fDefs.push_back(defs);}
+  // Note: G4AttValues are assumed to be expendable - they will be
+  // deleted in the destructor.  G4AttDefs are assumed to have long
+  // life.
+
 private:
   std::vector<const std::vector<G4AttValue>*> fValues;
   std::vector<const std::map<G4String,G4AttDef>*> fDefs;
