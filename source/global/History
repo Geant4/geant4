@@ -1,4 +1,4 @@
-$Id: History,v 1.167 2006-10-23 07:46:17 gcosmo Exp $
+$Id: History,v 1.168 2006-11-02 15:04:13 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov 02, 2006  G.Cosmo
+- Changed date for release 8.1.p02.
 
 Oct 23, 2006  G.Cosmo (global-V08-01-03)
 - New class G4SliceTimer with implementation derived from G4Timer for the
