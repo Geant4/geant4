@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.7 2006-10-26 10:56:13 allison Exp $
+# $Id: GNUmakefile,v 1.8 2006-11-02 12:02:23 allison Exp $
 
 name := G4OpenInventor
 
@@ -30,6 +30,7 @@ CPPFLAGS += -I$(G4BASE)/intercoms/include
 CPPFLAGS += -I$(G4BASE)/materials/include
 CPPFLAGS += -I$(G4BASE)/global/HEPRandom/include
 CPPFLAGS += -I$(G4BASE)/tracking/include
+CPPFLAGS += -I$(G4BASE)/digits_hits/hits/include
 
 include $(G4INSTALL)/config/common.gmk
 
