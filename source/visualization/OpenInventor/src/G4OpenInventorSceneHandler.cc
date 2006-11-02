@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorSceneHandler.cc,v 1.48 2006-11-01 11:06:12 allison Exp $
+// $Id: G4OpenInventorSceneHandler.cc,v 1.49 2006-11-02 12:01:19 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -99,6 +99,8 @@ typedef HEPVis_SoMarkerSet SoMarkerSet;
 #include "G4TrajectoriesModel.hh"
 #include "G4VTrajectory.hh"
 #include "G4VTrajectoryPoint.hh"
+#include "G4HitsModel.hh"
+#include "G4VHit.hh"
 #include "G4ModelingParameters.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
@@ -186,6 +188,56 @@ void G4OpenInventorSceneHandler::BeginPrimitives
   }
 }
 
+void G4OpenInventorSceneHandler::LoadAtts
+(const G4Visible& visible,
+ G4AttHolder* holder)
+{
+  // Load G4Atts from G4VisAttributes, if any...
+  const std::map<G4String,G4AttDef>* vaDefs =
+    visible.GetVisAttributes()->GetAttDefs();
+  if (vaDefs) {
+    holder->AddAtts(visible.GetVisAttributes()->CreateAttValues(), vaDefs);
+  }
+
+  G4PhysicalVolumeModel* pPVModel =
+    dynamic_cast<G4PhysicalVolumeModel*>(fpModel);
+  if (pPVModel) {
+    // Load G4Atts from G4PhysicalVolumeModel...
+    const std::map<G4String,G4AttDef>* defs = pPVModel->GetAttDefs();
+    if (defs) {
+      holder->AddAtts(pPVModel->CreateCurrentAttValues(), defs);
+    }
+  }
+
+  G4TrajectoriesModel* trajModel = dynamic_cast<G4TrajectoriesModel*>(fpModel);
+  if (trajModel) {
+    // Load G4Atts from trajectory...
+    const G4VTrajectory* traj = trajModel->GetCurrentTrajectory();
+    const std::map<G4String,G4AttDef>* defs = traj->GetAttDefs();
+    if (defs) {
+      holder->AddAtts(traj->CreateAttValues(), defs);
+    }
+    G4int nPoints = traj->GetPointEntries();
+    for (G4int i = 0; i < nPoints; ++i) {
+      G4VTrajectoryPoint* trajPoint = traj->GetPoint(i);
+      const std::map<G4String,G4AttDef>* defs = trajPoint->GetAttDefs();
+      if (defs) {
+	holder->AddAtts(trajPoint->CreateAttValues(), defs);
+      }
+    }
+  }
+
+  G4HitsModel* hitsModel = dynamic_cast<G4HitsModel*>(fpModel);
+  if (hitsModel) {
+    // Load G4Atts from hit...
+    const G4VHit* hit = hitsModel->GetCurrentHit();
+    const std::map<G4String,G4AttDef>* defs = hit->GetAttDefs();
+    if (defs) {
+      holder->AddAtts(hit->CreateAttValues(), defs);
+    }
+  }
+}
+
 //
 // Method for handling G4Polyline objects (from tracking).
 //
@@ -227,30 +279,8 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Polyline& line) {
 
   SoG4LineSet *pLine = new SoG4LineSet;
 
-  // Load G4Atts from G4VisAttributes, if any...
-  const std::map<G4String,G4AttDef>* vaDefs =
-    line.GetVisAttributes()->GetAttDefs();
-  if (vaDefs) {
-    pLine->AddAtts(line.GetVisAttributes()->CreateAttValues(), vaDefs);
-  }
-
-  G4TrajectoriesModel* trajModel = dynamic_cast<G4TrajectoriesModel*>(fpModel);
-  if (trajModel) {
-    // Load G4Atts from trajectory...
-    const G4VTrajectory* traj = trajModel->GetCurrentTrajectory();
-    const std::map<G4String,G4AttDef>* defs = traj->GetAttDefs();
-    if (defs) {
-      pLine->AddAtts(traj->CreateAttValues(), defs);
-    }
-    G4int nPoints = traj->GetPointEntries();
-    for (G4int i = 0; i < nPoints; ++i) {
-      G4VTrajectoryPoint* trajPoint = traj->GetPoint(i);
-      const std::map<G4String,G4AttDef>* defs = trajPoint->GetAttDefs();
-      if (defs) {
-	pLine->AddAtts(trajPoint->CreateAttValues(), defs);
-      }
-    }
-  }
+  // Loads G4Atts for picking...
+  LoadAtts(line, pLine);
 
 #ifdef INVENTOR2_0
   pLine->numVertices.setValues(0,1,(const long *)&nPoints);
@@ -304,31 +334,8 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Polymarker& polymarker) {
   SoG4MarkerSet* markerSet = new SoG4MarkerSet;
   markerSet->numPoints = pointn;
 
-  // Load G4Atts from G4VisAttributes, if any...
-  const std::map<G4String,G4AttDef>* vaDefs =
-    polymarker.GetVisAttributes()->GetAttDefs();
-  if (vaDefs) {
-    markerSet->AddAtts
-      (polymarker.GetVisAttributes()->CreateAttValues(), vaDefs);
-  }
-
-  G4TrajectoriesModel* trajModel = dynamic_cast<G4TrajectoriesModel*>(fpModel);
-  if (trajModel) {
-    // Load G4Atts from trajectory...
-    const G4VTrajectory* traj = trajModel->GetCurrentTrajectory();
-    const std::map<G4String,G4AttDef>* defs = traj->GetAttDefs();
-    if (defs) {
-      markerSet->AddAtts(traj->CreateAttValues(), defs);
-    }
-    G4int nPoints = traj->GetPointEntries();
-    for (G4int i = 0; i < nPoints; ++i) {
-      G4VTrajectoryPoint* trajPoint = traj->GetPoint(i);
-      const std::map<G4String,G4AttDef>* defs = trajPoint->GetAttDefs();
-      if (defs) {
-	markerSet->AddAtts(trajPoint->CreateAttValues(), defs);
-      }
-    }
-  }
+  // Loads G4Atts for picking...
+  LoadAtts(polymarker, markerSet);
 
   G4VMarker::FillStyle style = polymarker.GetFillStyle();
   switch (polymarker.GetMarkerType()) {
@@ -510,30 +517,8 @@ void G4OpenInventorSceneHandler::AddCircleSquare
   SoG4MarkerSet* markerSet = new SoG4MarkerSet;
   markerSet->numPoints = 1;
 
-  // Load G4Atts from G4VisAttributes, if any...
-  const std::map<G4String,G4AttDef>* vaDefs =
-    marker.GetVisAttributes()->GetAttDefs();
-  if (vaDefs) {
-    markerSet->AddAtts(marker.GetVisAttributes()->CreateAttValues(), vaDefs);
-  }
-
-  G4TrajectoriesModel* trajModel = dynamic_cast<G4TrajectoriesModel*>(fpModel);
-  if (trajModel) {
-    // Load G4Atts from trajectory...
-    const G4VTrajectory* traj = trajModel->GetCurrentTrajectory();
-    const std::map<G4String,G4AttDef>* defs = traj->GetAttDefs();
-    if (defs) {
-      markerSet->AddAtts(traj->CreateAttValues(), defs);
-    }
-    G4int nPoints = traj->GetPointEntries();
-    for (G4int i = 0; i < nPoints; ++i) {
-      G4VTrajectoryPoint* trajPoint = traj->GetPoint(i);
-      const std::map<G4String,G4AttDef>* defs = trajPoint->GetAttDefs();
-      if (defs) {
-	markerSet->AddAtts(trajPoint->CreateAttValues(), defs);
-      }
-    }
-  }
+  // Loads G4Atts for picking...
+  LoadAtts(marker, markerSet);
 
   G4VMarker::FillStyle style = marker.GetFillStyle();
   switch (markerType) {
@@ -593,24 +578,14 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
 
   SoG4Polyhedron* soPolyhedron = new SoG4Polyhedron(polyhedron);
 
-  // Load G4Atts from G4VisAttributes, if any...
-  const std::map<G4String,G4AttDef>* vaDefs =
-    polyhedron.GetVisAttributes()->GetAttDefs();
-  if (vaDefs) {
-    soPolyhedron->AddAtts
-      (polyhedron.GetVisAttributes()->CreateAttValues(), vaDefs);
-  }
+  // Loads G4Atts for picking...
+  LoadAtts(polyhedron, soPolyhedron);
 
   SbString name = "Non-geometry";
   G4PhysicalVolumeModel* pPVModel =
     dynamic_cast<G4PhysicalVolumeModel*>(fpModel);
   if (pPVModel) {
     name = pPVModel->GetCurrentLV()->GetName().c_str();
-    // Load G4Atts from G4PhysicalVolumeModel...
-    const std::map<G4String,G4AttDef>* defs = pPVModel->GetAttDefs();
-    if (defs) {
-      soPolyhedron->AddAtts(pPVModel->CreateCurrentAttValues(), defs);
-    }
   }
   SbName sbName(name);
   soPolyhedron->setName(sbName);

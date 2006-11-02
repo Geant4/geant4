@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorSceneHandler.hh,v 1.30 2006-06-29 21:20:24 gunter Exp $
+// $Id: G4OpenInventorSceneHandler.hh,v 1.31 2006-11-02 12:01:20 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -47,6 +47,7 @@
 class G4OpenInventor;
 class SoSeparator;
 class Geant4_SoStyleCache;
+class G4AttHolder;
 
 // Base class for various OpenInventorScene classes.
 class G4OpenInventorSceneHandler: public G4VSceneHandler {
@@ -84,6 +85,7 @@ public:
 
 private:
 
+  void LoadAtts(const G4Visible&, G4AttHolder*);
   static G4int fSceneIdCount;   // static counter for OpenInventor scenes.
   enum G4OIMarker {G4OICircle, G4OISquare};
   void AddCircleSquare (G4OIMarker markerType, const G4VMarker&);
