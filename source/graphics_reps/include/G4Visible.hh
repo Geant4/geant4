@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Visible.hh,v 1.11 2006-09-15 09:58:43 allison Exp $
+// $Id: G4Visible.hh,v 1.12 2006-11-02 11:39:22 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -53,9 +53,12 @@ class G4Visible {
 public: // With description
 
   G4Visible ();
+  G4Visible (const G4Visible&);
   G4Visible (const G4VisAttributes* pVA);
 
   virtual ~G4Visible ();
+
+  G4Visible& operator= (const G4Visible&);
 
   const G4VisAttributes* GetVisAttributes () const;
 
@@ -76,7 +79,6 @@ protected:
 
   const G4VisAttributes* fpVisAttributes;
   G4bool fAllocatedVisAttributes;
-
 };
 
 #include "G4Visible.icc"

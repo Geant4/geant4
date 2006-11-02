@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Visible.cc,v 1.15 2006-09-15 09:58:43 allison Exp $
+// $Id: G4Visible.cc,v 1.16 2006-11-02 11:39:22 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -40,13 +40,29 @@ G4Visible::G4Visible ():
   fAllocatedVisAttributes (false)
 {}
 
+G4Visible::G4Visible (const G4Visible& visible){
+  fAllocatedVisAttributes = visible.fAllocatedVisAttributes;
+  if (fAllocatedVisAttributes)
+    fpVisAttributes = new G4VisAttributes(visible.fpVisAttributes);
+  else fpVisAttributes = visible.fpVisAttributes;
+}
+
+G4Visible::G4Visible (const G4VisAttributes* pVA):
+  fpVisAttributes (pVA),
+  fAllocatedVisAttributes (false)
+{}
+
 G4Visible::~G4Visible () {
   if (fAllocatedVisAttributes) delete fpVisAttributes;
 }
 
-G4Visible::G4Visible (const G4VisAttributes* pVA):
-  fpVisAttributes (pVA)
-{}
+G4Visible& G4Visible::operator= (const G4Visible& rhs) {
+  fAllocatedVisAttributes = rhs.fAllocatedVisAttributes;
+  if (fAllocatedVisAttributes)
+    fpVisAttributes = new G4VisAttributes(rhs.fpVisAttributes);
+  else fpVisAttributes = rhs.fpVisAttributes;
+  return *this;
+}
 
 void G4Visible::SetVisAttributes (const G4VisAttributes& VA) {
   // Allocate G4VisAttributes on the heap in case the user specifies a
