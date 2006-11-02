@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HitsModel.hh,v 1.9 2006-11-01 10:28:42 allison Exp $
+// $Id: G4HitsModel.hh,v 1.10 2006-11-02 11:57:31 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -43,6 +43,8 @@
 
 #include "G4VModel.hh"
 
+class G4VHit;
+
 class G4HitsModel: public G4VModel {
 
 public: // With description
@@ -54,6 +56,12 @@ public: // With description
   virtual void DescribeYourselfTo (G4VGraphicsScene&);
   // The main task of a model is to describe itself to the graphics scene.
 
+  const G4VHit* GetCurrentHit() const
+  {return fpCurrentHit;}
+
+private:
+
+  const G4VHit* fpCurrentHit;
 };
 
 #endif

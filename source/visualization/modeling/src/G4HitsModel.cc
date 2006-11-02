@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HitsModel.cc,v 1.15 2006-06-29 21:32:44 gunter Exp $
+// $Id: G4HitsModel.cc,v 1.16 2006-11-02 11:57:30 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -39,12 +39,15 @@
 
 G4HitsModel::~G4HitsModel () {}
 
-G4HitsModel::G4HitsModel () {
+G4HitsModel::G4HitsModel ():
+  fpCurrentHit(0)
+{
   fGlobalTag = "G4HitsModel for all hits.";
   fGlobalDescription = fGlobalTag;
 }
 
-void G4HitsModel::DescribeYourselfTo (G4VGraphicsScene& sceneHandler) {
+void G4HitsModel::DescribeYourselfTo (G4VGraphicsScene& sceneHandler)
+{
   const G4Event* event =
     G4EventManager::GetEventManager()->GetConstCurrentEvent();
   if (event) {
@@ -55,8 +58,8 @@ void G4HitsModel::DescribeYourselfTo (G4VGraphicsScene& sceneHandler) {
 	G4VHitsCollection* HC = HCE -> GetHC (iHC);
 	if (HC) {
 	  for(size_t iHit = 0; iHit < HC->GetSize(); ++iHit) {
-	    G4VHit* hit = HC -> GetHit (iHit);
-	    sceneHandler.AddCompound (*hit);
+	    fpCurrentHit = HC -> GetHit (iHit);
+	    sceneHandler.AddCompound (*fpCurrentHit);
 	  }
 	}
       }
