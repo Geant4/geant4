@@ -1,0 +1,8 @@
+/control/verbose 2
+/vis/verbose confirmations 
+/vis/open OGLSX 600x600-0+0
+/vis/viewer/set/viewpointThetaPhi 30 30
+/vis/drawVolume
+/vis/scene/add/trajectories
+/vis/scene/add/hits
+/run/beamOn
