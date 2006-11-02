@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: ParaTest.cc,v 1.1 2006-07-14 14:42:38 asaim Exp $
+// $Id: ParaTest.cc,v 1.2 2006-11-02 17:30:29 allison Exp $
 // --------------------------------------------------------------
 //
 // --------------------------------------------------------------
@@ -44,7 +44,7 @@
 #include "A01EventAction.hh"
 
 #ifdef G4VIS_USE
-#include "A01VisManager.hh"
+#include "G4VisExecutive.hh"
 #endif
 
 
@@ -86,7 +86,7 @@ int main(int argc,char** argv)
 
 #ifdef G4VIS_USE
   // Visualization manager construction
-  G4VisManager* visManager = new A01VisManager();
+  G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
 #endif
 
@@ -105,6 +105,7 @@ int main(int argc,char** argv)
   // optional user action classes
   runManager->SetUserAction(new A01EventAction(ifPara));
 
+  G4UImanager* UI = G4UImanager::GetUIpointer();  
   if(argc>3)
   // execute an argument macro file if exist
   {
@@ -116,6 +117,7 @@ int main(int argc,char** argv)
   else
   // start interactive session
   {
+    UI->ApplyCommand("/control/execute vis.mac");    
     G4UIsession* session = new G4UIterminal(new G4UItcsh);
     session->SessionStart();
     delete session;
