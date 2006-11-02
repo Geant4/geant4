@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SliceTimer.cc,v 1.1 2006-10-23 07:43:31 gcosmo Exp $
+// $Id: G4SliceTimer.cc,v 1.2 2006-11-02 15:39:39 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -47,38 +47,6 @@ void G4Exception(const char* s=0);
 #    define __vfork vfork
 #  endif
 #endif
-
-#ifdef WIN32
-#  include <sys/types.h>
-#  include <windows.h>
-
-   // extract milliseconds time unit
-   int sysconf(int a){
-     if( a == _SC_CLK_TCK ) return 1000;
-     else return 0;
-   }
-
-   static clock_t filetime2msec( FILETIME* t ){
-   
-      return (clock_t)((((float)t->dwHighDateTime)*429496.7296)+
-              (((float)t->dwLowDateTime)*.0001) );
-   }
-
-
-   clock_t times(struct tms * t){
-           FILETIME      ct = {0,0}, et = {0,0}, st = {0,0}, ut = {0,0}, rt = {0,0};
-           SYSTEMTIME realtime;
-
-           GetSystemTime( &realtime );
-           SystemTimeToFileTime( &realtime, &rt ); // get real time in 10^-9 sec
-           if( t != 0 ){
-                   GetProcessTimes( GetCurrentProcess(), &ct, &et, &st, &ut);// get process time in 10^-9 sec
-                   t->tms_utime = t->tms_cutime = filetime2msec(&ut);
-                   t->tms_stime = t->tms_cstime = filetime2msec(&st);
-           }
-           return filetime2msec(&rt);
-   }
-#endif /* WIN32 */
 
 // Print timer status n std::ostream
 std::ostream& operator << (std::ostream& os, const G4SliceTimer& t)
@@ -117,4 +85,3 @@ G4double G4SliceTimer::GetUserElapsed() const
 {
     return fUserElapsed/sysconf(_SC_CLK_TCK);
 }
-
