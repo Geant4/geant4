@@ -1,4 +1,4 @@
-$Id: History,v 1.170 2006-11-02 15:46:29 gcosmo Exp $
+$Id: History,v 1.171 2006-11-02 15:47:48 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -18,7 +18,7 @@ committal in the CVS repository !
      ----------------------------------------------------------
 
 Nov 02, 2006  G.Cosmo (global-V08-01-04)
-- Removed definitions of 'sysconf()', filetime2msec() and times() for
+- Removed definitions of 'sysconf()', 'filetime2msec()' and 'times()' for
   WIN32 in G4SliceTimer. Symbols are already defined in G4Timer and
   included in the library. Fixes archiving warning on Windows.
 
