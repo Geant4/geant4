@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.115 2006-11-01 10:15:51 allison Exp $
+cvs log $Id: History,v 1.116 2006-11-02 11:39:46 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
  
+2nd November 2006  John Allison  (greps-V08-01-10)
+- G4Visible: Fixed copy constructor and assignment operator for deep copies.
+
 1st November 2006  John Allison  (greps-V08-01-09; co-works: vis-V08-01-09)
 - Tidied G4Att checking and storing:
   o G4AttCheck: Added store key to printing in operator<<.
