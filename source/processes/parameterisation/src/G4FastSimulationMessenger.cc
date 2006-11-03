@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FastSimulationMessenger.cc,v 1.6 2006-06-29 21:09:30 gunter Exp $
+// $Id: G4FastSimulationMessenger.cc,v 1.7 2006-11-03 17:26:04 mverderi Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -41,6 +41,11 @@ G4FastSimulationMessenger(G4GlobalFastSimulationManager* theGFSM)
 {
   fFSDirectory = new G4UIdirectory("/param/");
   fFSDirectory->SetGuidance("Fast Simulation print/control commands.");
+
+  fShowSetupCmd =
+    new G4UIcmdWithoutParameter("/param/showSetup", this);
+  fShowSetupCmd->SetGuidance("Show fast simulation setup");
+  fShowSetupCmd->AvailableForStates(G4State_GeomClosed);
 
   fListEnvelopesCmd = 
     new G4UIcmdWithAString("/param/listEnvelopes", this);
@@ -78,6 +83,8 @@ G4FastSimulationMessenger(G4GlobalFastSimulationManager* theGFSM)
 
 G4FastSimulationMessenger::~G4FastSimulationMessenger()
 {
+  delete fShowSetupCmd;
+  fShowSetupCmd = 0;
   delete fListIsApplicableCmd;
   fListIsApplicableCmd = 0;
   delete fActivateModel;
@@ -94,6 +101,8 @@ G4FastSimulationMessenger::~G4FastSimulationMessenger()
 
 void G4FastSimulationMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
 {
+  if (command == fShowSetupCmd)
+    fGlobalFastSimulationManager->ShowSetup();
   if( command == fListEnvelopesCmd)
     if(newValue == "all") 
       fGlobalFastSimulationManager->ListEnvelopes();

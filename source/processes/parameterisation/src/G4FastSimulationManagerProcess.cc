@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FastSimulationManagerProcess.cc,v 1.13 2006-06-29 21:09:28 gunter Exp $
+// $Id: G4FastSimulationManagerProcess.cc,v 1.14 2006-11-03 17:26:04 mverderi Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -148,6 +148,7 @@ G4FastSimulationManagerProcess::PostStepGetPhysicalInteractionLength(
 	  fOutOfGhostWorld      = true;
 	}
     }
+  if (fGhostWorld == 0) fStartTracking = false; // -- case ghost world below
 
   // -------------------------------------------------------
   //
