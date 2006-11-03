@@ -24,37 +24,21 @@
 // ********************************************************************
 //
 //
-// $Id: ExN05DetectorConstruction.hh,v 1.6 2006-11-03 17:58:49 mverderi Exp $
+// $Id: ExN05ParallelWorldForPion.hh,v 1.1 2006-11-03 17:58:49 mverderi Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-#ifndef ExN05DetectorConstruction_h
-#define ExN05DetectorConstruction_h 1
+#ifndef ExN05ParallelWorldForPion_hh
+#define ExN05ParallelWorldForPion_hh
 
-#include "G4LogicalVolume.hh"
-#include "G4VUserDetectorConstruction.hh"
-#include "globals.hh"
+#include "G4VUserParallelWorld.hh"
 
-class ExN05DetectorMessenger;
-
-class ExN05DetectorConstruction : public G4VUserDetectorConstruction
-{
+class ExN05ParallelWorldForPion : public G4VUserParallelWorld {
 public:
-  ExN05DetectorConstruction();
-  ~ExN05DetectorConstruction();
+  ExN05ParallelWorldForPion(G4String worldName);
+  ~ExN05ParallelWorldForPion();
   
-public:
-  G4VPhysicalVolume* Construct();
-
 private:
-  G4LogicalVolume* theCrystalLog;
-  G4LogicalVolume* theTowerLog;
-
-  // messeneger
-  ExN05DetectorMessenger* theMessenger;
-  
+  void Construct();
 };
 
-
 #endif
-
-
