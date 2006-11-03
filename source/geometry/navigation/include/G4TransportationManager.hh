@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TransportationManager.hh,v 1.9 2006-10-10 15:24:48 gcosmo Exp $
+// $Id: G4TransportationManager.hh,v 1.10 2006-11-03 20:03:26 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4TransportationManager
@@ -70,6 +70,10 @@ class G4TransportationManager
      inline G4Navigator* GetNavigatorForTracking() const;
      inline void SetNavigatorForTracking( G4Navigator* newNavigator );
        // Accessors for the navigator for tracking
+
+     inline void SetWorldForTracking(G4VPhysicalVolume* theWorld);
+       // Set the world volume for tracking
+       // This method is to be invoked by G4RunManagerKernel.
 
      inline size_t GetNoActiveNavigators() const;
      inline std::vector<G4Navigator*>::iterator GetActiveNavigatorsIterator();

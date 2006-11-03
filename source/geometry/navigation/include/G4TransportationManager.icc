@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TransportationManager.icc,v 1.7 2006-10-10 15:24:48 gcosmo Exp $
+// $Id: G4TransportationManager.icc,v 1.8 2006-11-03 20:03:42 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //  GEANT 4  inlined function members implementation
@@ -45,6 +45,18 @@ inline
 G4Navigator* G4TransportationManager::GetNavigatorForTracking() const
 {
    return fNavigators[0];
+}
+
+// ----------------------------------------------------------------------------
+// SetWorldForTracking()
+//
+// Set the tracking world volume. This method is to be invoked by G4RunManagerKernel.
+//
+inline 
+void G4TransportationManager::SetWorldForTracking(G4VPhysicalVolume* theWorld)
+{
+   fWorld[0] = theWorld;
+   fNavigators[0]->SetWorldVolume(theWorld);
 }
 
 // ----------------------------------------------------------------------------
