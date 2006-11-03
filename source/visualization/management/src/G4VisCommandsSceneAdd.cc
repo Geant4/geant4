@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneAdd.cc,v 1.68 2006-11-01 10:50:28 allison Exp $
+// $Id: G4VisCommandsSceneAdd.cc,v 1.69 2006-11-03 14:06:43 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // /vis/scene commands - John Allison  9th August 1998
 
@@ -1279,31 +1279,13 @@ void G4VisCommandSceneAddTrajectories::SetNewValue (G4UIcommand*,
     return;
   }
 
-  /**********************
-  for (size_t i = 0; i < newValue.size(); ++i) {
-    if (std::isdigit(newValue[i])) {
-      if (verbosity >= G4VisManager::errors) {
-	G4cout <<
-	  "ERROR: Digit found in \"" << newValue << "\". May be old-style integer argument."
-	  "\n  No longer supported.  Please use \"/vis/modeling/trajectories\""
-	  "\n  and \"/vis/filtering/trajectories\" commands.  Consult guidance."
-	       << G4endl;
-	return;
-      }
-    }
-  }
-  ***********************/
-
   G4bool smooth = false, rich = false;
   if (newValue.find("smooth") != std::string::npos) smooth = true;
   if (newValue.find("rich") != std::string::npos) rich = true;
 
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
   G4int keepVerbose = UImanager->GetVerboseLevel();
-  G4int newVerbose = 0;
-  if (keepVerbose >= 2 ||
-      fpVisManager->GetVerbosity() >= G4VisManager::confirmations)
-    newVerbose = 2;
+  G4int newVerbose = 2;
   UImanager->SetVerboseLevel(newVerbose);
   G4PropagatorInField* propagatorInField =
     G4TransportationManager::GetTransportationManager()->
@@ -1313,43 +1295,16 @@ void G4VisCommandSceneAddTrajectories::SetNewValue (G4UIcommand*,
   G4String defaultTrajectoryType;
   G4int i_mode = 0;
   if (smooth && rich) {
-    /**************
     UImanager->ApplyCommand("/tracking/storeTrajectory 3");
     propagatorInField->SetTrajectoryFilter(&auxiliaryPointsFilter);
     defaultTrajectoryType = "G4RichTrajectory configured for smooth steps";
-    ***************/
-    if (verbosity >= G4VisManager::warnings) {
-      G4cout << "WARNING: \"" << newValue << "\" not yet implemented."
-	     << G4endl;
-    }
-    UImanager->ApplyCommand("/tracking/storeTrajectory 1");
-    defaultTrajectoryType = "G4Trajectory";
-    smooth = rich = false;
   } else if (smooth) {
-    /***************
     UImanager->ApplyCommand("/tracking/storeTrajectory 2");
     propagatorInField->SetTrajectoryFilter(&auxiliaryPointsFilter);
     defaultTrajectoryType = "G4SmoothTrajectory";
-    ****************/
-    if (verbosity >= G4VisManager::warnings) {
-      G4cout << "WARNING: \"" << newValue << "\" not yet implemented."
-	     << G4endl;
-    }
-    UImanager->ApplyCommand("/tracking/storeTrajectory 1");
-    defaultTrajectoryType = "G4Trajectory";
-    smooth = false;
   } else if (rich) {
-    /***************
     UImanager->ApplyCommand("/tracking/storeTrajectory 3");
     defaultTrajectoryType = "G4RichTrajectory";
-    ****************/
-    if (verbosity >= G4VisManager::warnings) {
-      G4cout << "WARNING: \"" << newValue << "\" not yet implemented."
-	     << G4endl;
-    }
-    UImanager->ApplyCommand("/tracking/storeTrajectory 1");
-    defaultTrajectoryType = "G4Trajectory";
-    rich = false;
   } else {
     if (!newValue.empty()) {
       std::istringstream iss(newValue);
@@ -1630,9 +1585,29 @@ void G4VisCommandSceneAddVolume::SetNewValue (G4UIcommand*,
   param1 *= unit; param2 *= unit; param3 *= unit;
   param4 *= unit; param5 *= unit; param6 *= unit;
 
-  G4VPhysicalVolume* world =
-    G4TransportationManager::GetTransportationManager ()
-    -> GetNavigatorForTracking () -> GetWorldVolume ();
+  G4TransportationManager* transportationManager =
+    G4TransportationManager::GetTransportationManager ();
+
+  /* New...
+  size_t nWorlds = transportationManager->GetNoWorlds();
+  std::vector<G4VPhysicalVolume*>::iterator iterWorld =
+    transportationManager->GetWorldsIterator();
+  for (size_t i = 0; i < nWorlds; ++i, ++iterWorld) {
+    G4cout << "World " << i << ": " << (*iterWorld)->GetName() << G4endl;
+  }
+  */
+
+  // Old...
+  G4Navigator* navigatorForTracking =
+    transportationManager -> GetNavigatorForTracking ();
+  G4VPhysicalVolume* world = navigatorForTracking-> GetWorldVolume ();
+
+  /* New...
+  G4VPhysicalVolume* world1 =
+    *(transportationManager->GetWorldsIterator());
+  assert(world == world1);
+  */
+
   G4PhysicalVolumeModel* model = 0;
   G4VPhysicalVolume* foundVolume = 0;
   G4int foundDepth = 0;
