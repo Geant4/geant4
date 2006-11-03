@@ -1,4 +1,4 @@
-$Id: History,v 1.90 2006-11-02 11:58:11 allison Exp $
+$Id: History,v 1.91 2006-11-03 14:15:12 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,10 @@ committal in the CVS repository !
 
 History file for visualization/modeling
 ---------------------------------------
+
+3rd November 2006  John Allison  (modeling-V08-01-11)
+- G4Trajectories/HitsModel.cc: Protected against zero pointers from
+  collections.
 
 2nd November 2006  John Allison  (modeling-V08-01-10)
 - G4HitsModel: Added GetCurrentHit.
