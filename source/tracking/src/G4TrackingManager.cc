@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TrackingManager.cc,v 1.19 2006-06-29 21:16:09 gunter Exp $
+// $Id: G4TrackingManager.cc,v 1.20 2006-11-03 11:13:38 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------
@@ -40,13 +40,15 @@
 
 #include "G4TrackingManager.hh"
 #include "G4Trajectory.hh"
+#include "G4SmoothTrajectory.hh"
+#include "G4RichTrajectory.hh"
 #include "G4ios.hh"
 
 //////////////////////////////////////
 G4TrackingManager::G4TrackingManager()
 //////////////////////////////////////
   : fpUserTrackingAction(NULL), fpTrajectory(NULL),
-    StoreTrajectory(false), verboseLevel(0), EventIsAborted(false)
+    StoreTrajectory(0), verboseLevel(0), EventIsAborted(false)
 {
   fpSteppingManager = new G4SteppingManager();
   messenger = new G4TrackingMessenger(this);
@@ -97,7 +99,13 @@ void G4TrackingManager::ProcessOneTrack(G4Track* apValueG4Track)
 #ifdef G4_STORE_TRAJECTORY
   // Construct a trajectory if it is requested
   if(StoreTrajectory&&(!fpTrajectory)) { 
-     fpTrajectory = new G4Trajectory(fpTrack); // default trajectory concrete class object
+    // default trajectory concrete class object
+    switch (StoreTrajectory) {
+    default:
+    case 1: fpTrajectory = new G4Trajectory(fpTrack); break;
+    case 2: fpTrajectory = new G4SmoothTrajectory(fpTrack); break;
+    case 3: fpTrajectory = new G4RichTrajectory(fpTrack); break;
+    }
   }
 #endif
 

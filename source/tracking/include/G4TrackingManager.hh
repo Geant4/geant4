@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TrackingManager.hh,v 1.18 2006-06-29 21:15:37 gunter Exp $
+// $Id: G4TrackingManager.hh,v 1.19 2006-11-03 11:13:38 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------
@@ -90,8 +90,8 @@ public: // without description
 
    G4Track* GetTrack() const;
 
-   G4bool GetStoreTrajectory() const;
-   void SetStoreTrajectory(G4bool value);
+   G4int GetStoreTrajectory() const;
+   void SetStoreTrajectory(G4int value);
 
    G4SteppingManager* GetSteppingManager() const;
 
@@ -145,7 +145,7 @@ public: // without description
    G4SteppingManager* fpSteppingManager;
    G4UserTrackingAction* fpUserTrackingAction;
    G4VTrajectory* fpTrajectory;
-   G4bool StoreTrajectory;
+   G4int StoreTrajectory;
    G4int verboseLevel;
    G4TrackingMessenger* messenger;
    G4bool EventIsAborted;
@@ -162,11 +162,11 @@ public: // without description
      return fpTrack;
    }
 
-   inline G4bool G4TrackingManager::GetStoreTrajectory() const { 
+   inline G4int G4TrackingManager::GetStoreTrajectory() const { 
      return StoreTrajectory;
    }
 
-   inline void G4TrackingManager::SetStoreTrajectory(G4bool value){ 
+   inline void G4TrackingManager::SetStoreTrajectory(G4int value){ 
      StoreTrajectory = value;
    }
 
