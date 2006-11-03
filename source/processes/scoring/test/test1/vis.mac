@@ -1,6 +1,6 @@
-# $Id: vis.mac,v 1.2 2006-11-03 17:27:27 allison Exp $
+# $Id: vis.mac,v 1.3 2006-11-03 17:29:35 allison Exp $
 
-# Control versbosity
+# Control verbosity
 /control/verbose 2
 /vis/verbose confirmations 
 
