@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeModel.cc,v 1.54 2006-10-26 11:05:42 allison Exp $
+// $Id: G4PhysicalVolumeModel.cc,v 1.55 2006-11-03 17:31:49 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -404,7 +404,7 @@ void G4PhysicalVolumeModel::DescribeAndDescend
   G4bool cullingInvisible = fpMP->IsCullingInvisible();
   G4bool markedVisible = pVisAttribs->IsVisible();
   G4bool cullingLowDensity = fpMP->IsDensityCulling();
-  G4double density = pMaterial->GetDensity();
+  G4double density = pMaterial? pMaterial->GetDensity(): 0;
   G4double densityCut = fpMP -> GetVisibleDensity ();
 
   // 1) Global culling is on....
