@@ -310,7 +310,7 @@ private:
   // We use doubles instead of integers to avoid overflow problems.
   G4double numStep;
   G4double numStepPositive, numStepNeutral, numStepNegative;
-  G4double numStepPDGCodeZero, numStepPDGCodeUnrecognized;
+  G4double numStepNucleus, numStepPDGCodeUnrecognized;
   G4double numStepEM;             // e- , e+ , gamma
   G4double numStepEWK;            // mu- , mu+ , tau+, tau-, neutrinos
   G4double numStepHAD;            // mesons + baryons
@@ -331,7 +331,7 @@ private:
 
   G4double numStep2;
   G4double numStepPositive2, numStepNeutral2, numStepNegative2;
-  G4double numStepPDGCodeZero2, numStepPDGCodeUnrecognized2;
+  G4double numStepNucleus2, numStepPDGCodeUnrecognized2;
   G4double numStepEM2;             
   G4double numStepEWK2;            
   G4double numStepHAD2;            
@@ -352,7 +352,7 @@ private:
 
   G4double numTrack;
   G4double numTrackPositive, numTrackNeutral, numTrackNegative;
-  G4double numTrackPDGCodeZero, numTrackPDGCodeUnrecognized;
+  G4double numTrackNucleus, numTrackPDGCodeUnrecognized;
   G4double numTrackEM;             // e- , e+ , gamma
   G4double numTrackEWK;            // mu- , mu+ , tau+, tau-, neutrinos
   G4double numTrackHAD;            // mesons + baryons
@@ -373,7 +373,7 @@ private:
 
   G4double numTrack2;
   G4double numTrackPositive2, numTrackNeutral2, numTrackNegative2;
-  G4double numTrackPDGCodeZero2, numTrackPDGCodeUnrecognized2;
+  G4double numTrackNucleus2, numTrackPDGCodeUnrecognized2;
   G4double numTrackEM2;
   G4double numTrackEWK2;
   G4double numTrackHAD2;

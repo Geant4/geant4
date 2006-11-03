@@ -17,8 +17,8 @@
 //***LOOKHERE***
 bool StatAccepTestAnalysis::isHistogramOn = true;
 bool StatAccepTestAnalysis::is2DHistogramStepLvsEOn = false;
-bool StatAccepTestAnalysis::isHistogramSpectrumUnweightedOn = false;
-bool StatAccepTestAnalysis::isHistogramSpectrumWeightedOn = true;  
+bool StatAccepTestAnalysis::isHistogramSpectrumUnweightedOn = true;
+bool StatAccepTestAnalysis::isHistogramSpectrumWeightedOn = false;  
 bool StatAccepTestAnalysis::isCountingProcessesOn = false;  
 bool StatAccepTestAnalysis::isMapParticleNamesOn = false;  
 
@@ -267,7 +267,7 @@ void StatAccepTestAnalysis::init() {
 
   numStep = 0.0;
   numStepPositive = numStepNeutral = numStepNegative = 0.0;
-  numStepPDGCodeZero = numStepPDGCodeUnrecognized = 0.0;
+  numStepNucleus = numStepPDGCodeUnrecognized = 0.0;
   numStepEM = 0.0;
   numStepEWK = 0.0;
   numStepHAD = 0.0; 
@@ -286,7 +286,7 @@ void StatAccepTestAnalysis::init() {
 
   numStep2 = 0.0;
   numStepPositive2 = numStepNeutral2 = numStepNegative2 = 0.0;
-  numStepPDGCodeZero2 = numStepPDGCodeUnrecognized2 = 0.0;
+  numStepNucleus2 = numStepPDGCodeUnrecognized2 = 0.0;
   numStepEM2 = 0.0;
   numStepEWK2 = 0.0;
   numStepHAD2 = 0.0; 
@@ -305,7 +305,7 @@ void StatAccepTestAnalysis::init() {
 
   numTrack = 0.0;
   numTrackPositive = numTrackNeutral = numTrackNegative = 0.0;
-  numTrackPDGCodeZero = numTrackPDGCodeUnrecognized = 0.0;
+  numTrackNucleus = numTrackPDGCodeUnrecognized = 0.0;
   numTrackEM = 0.0;
   numTrackEWK = 0.0;
   numTrackHAD = 0.0; 
@@ -324,7 +324,7 @@ void StatAccepTestAnalysis::init() {
 
   numTrack2 = 0.0;
   numTrackPositive2 = numTrackNeutral2 = numTrackNegative2 = 0.0;
-  numTrackPDGCodeZero2 = numTrackPDGCodeUnrecognized2 = 0.0;
+  numTrackNucleus2 = numTrackPDGCodeUnrecognized2 = 0.0;
   numTrackEM2 = 0.0;
   numTrackEWK2 = 0.0;
   numTrackHAD2 = 0.0; 
@@ -1314,7 +1314,15 @@ fillShowerProfile( G4int replica, const G4double radius,
     longitudinalProfile_proton[ readoutLayer ] += edep;
     transverseProfile_proton[ iBinRadius ] += edep;
   } else if ( particlePDG == 0  || 
+	      particlePDG / 1000000000 >= 1  ||
 	      particlePDG == G4Neutron::NeutronDefinition()->GetPDGEncoding() ) {
+    // Before 8.1.ref04, the PDG code for nuclei was 0; 
+    // from 8.1.ref04, the new PDG code convention for nuclei has been
+    // supported: in this schema, the PDG code of nuclei is characterized
+    // by 10 digits (all other particles have lower codes).
+    // Starting with 8.1, neutrons can also deposit energy, as an 
+    // effective way to take into account the recoil of nuclei 
+    // below a certain threshold.
     sumEdepAct_nuclei += edep;
     sumEdepTot_nuclei += edep;
     longitudinalProfile_nuclei[ readoutLayer ] += edep;
@@ -1515,7 +1523,11 @@ void StatAccepTestAnalysis::infoStep( const G4Step* aStep ) {
   //    -  pions    (pi- and  pi+   together)
   //    -  kaons    (k-  and  k+    together)
   //    -  protons  (p   and  pbar  together)
-  //    -  nuclei   (all particles with PDG code = 0 and neutrons together)
+  //    -  nuclei   (all particles with PDG code = 0 , or with
+  //                 the new PDG code with 10-digits; also
+  //                 neutrons are included, as an effective way
+  //                 to take into account the recoil of nuclei
+  //                 below a certain threshold)
   if ( aStep->GetTrack()->GetVolume()->GetName() == "physiAbsorber" ) {
     G4double edep = aStep->GetTotalEnergyDeposit() * aStep->GetTrack()->GetWeight();
     if ( aStep->GetTrack()->GetDefinition() == 
@@ -1544,8 +1556,17 @@ void StatAccepTestAnalysis::infoStep( const G4Step* aStep ) {
 		G4AntiProton::AntiProtonDefinition() ) {
       sumEdepTot_proton += edep;
     } else if ( aStep->GetTrack()->GetDefinition()->GetPDGEncoding() == 0   ||
+	        aStep->GetTrack()->GetDefinition()->GetPDGEncoding() 
+		/ 1000000000 >= 1   ||
 		aStep->GetTrack()->GetDefinition() == 
 		G4Neutron::NeutronDefinition() ) {
+      // Before 8.1.ref04, the PDG code for nuclei was 0; 
+      // from 8.1.ref04, the new PDG code convention for nuclei has been
+      // supported: in this schema, the PDG code of nuclei is characterized
+      // by 10 digits (all other particles have lower codes).
+      // Starting with 8.1, neutrons can also deposit energy, as an 
+      // effective way to take into account the recoil of nuclei 
+      // below a certain threshold.
       sumEdepTot_nuclei += edep;
     }
   }
@@ -1675,11 +1696,15 @@ classifyParticle( const bool isTrack, const G4ParticleDefinition* particleDef ) 
   }
   G4int id = particleDef->GetPDGEncoding();
   G4int aid = std::abs( id );
-  if ( id == 0 ) {      // Currently, nuclear fragments have zero PDG code.
+  if ( id == 0  ||  id / 1000000000 >= 1 ) {
+    // Before 8.1.ref04, the PDG code for nuclei was 0; 
+    // from 8.1.ref04, the new PDG code convention for nuclei has been
+    // supported: in this schema, the PDG code of nuclei is characterized
+    // by 10 digits (all other particles have lower codes).
     if ( isTrack ) {
-      numTrackPDGCodeZero++;
+      numTrackNucleus++;
     } else {
-      numStepPDGCodeZero++;
+      numStepNucleus++;
     }
   } else if ( particleDef == G4Gamma::GammaDefinition() ) {
     if ( isTrack ) {
@@ -2336,7 +2361,7 @@ void StatAccepTestAnalysis::endOfEvent() {
   static G4double numStepPositive_previous = 0.0;
   static G4double numStepNeutral_previous = 0.0;
   static G4double numStepNegative_previous = 0.0;
-  static G4double numStepPDGCodeZero_previous = 0.0;
+  static G4double numStepNucleus_previous = 0.0;
   static G4double numStepPDGCodeUnrecognized_previous = 0.0;
   static G4double numStepEM_previous = 0.0;
   static G4double numStepEWK_previous = 0.0;
@@ -2380,9 +2405,9 @@ void StatAccepTestAnalysis::endOfEvent() {
   numStepNegative2 +=
     ( numStepNegative - numStepNegative_previous ) *
     ( numStepNegative - numStepNegative_previous );
-  numStepPDGCodeZero2 +=
-    ( numStepPDGCodeZero - numStepPDGCodeZero_previous ) *
-    ( numStepPDGCodeZero - numStepPDGCodeZero_previous );
+  numStepNucleus2 +=
+    ( numStepNucleus - numStepNucleus_previous ) *
+    ( numStepNucleus - numStepNucleus_previous );
   numStepPDGCodeUnrecognized2 +=
     ( numStepPDGCodeUnrecognized - numStepPDGCodeUnrecognized_previous ) *
     ( numStepPDGCodeUnrecognized - numStepPDGCodeUnrecognized_previous );
@@ -2478,7 +2503,7 @@ void StatAccepTestAnalysis::endOfEvent() {
   numStepPositive_previous = numStepPositive;
   numStepNeutral_previous = numStepNeutral;
   numStepNegative_previous = numStepNegative;
-  numStepPDGCodeZero_previous = numStepPDGCodeZero;
+  numStepNucleus_previous = numStepNucleus;
   numStepPDGCodeUnrecognized_previous = numStepPDGCodeUnrecognized;
   numStepEM_previous = numStepEM;
   numStepEWK_previous = numStepEWK;
@@ -2514,7 +2539,7 @@ void StatAccepTestAnalysis::endOfEvent() {
   static G4double numTrackPositive_previous = 0.0;
   static G4double numTrackNeutral_previous = 0.0;
   static G4double numTrackNegative_previous = 0.0;
-  static G4double numTrackPDGCodeZero_previous = 0.0;
+  static G4double numTrackNucleus_previous = 0.0;
   static G4double numTrackPDGCodeUnrecognized_previous = 0.0;
   static G4double numTrackEM_previous = 0.0;
   static G4double numTrackEWK_previous = 0.0;
@@ -2558,9 +2583,9 @@ void StatAccepTestAnalysis::endOfEvent() {
   numTrackNegative2 +=
     ( numTrackNegative - numTrackNegative_previous ) *
     ( numTrackNegative - numTrackNegative_previous );
-  numTrackPDGCodeZero2 +=
-    ( numTrackPDGCodeZero - numTrackPDGCodeZero_previous ) *
-    ( numTrackPDGCodeZero - numTrackPDGCodeZero_previous );
+  numTrackNucleus2 +=
+    ( numTrackNucleus - numTrackNucleus_previous ) *
+    ( numTrackNucleus - numTrackNucleus_previous );
   numTrackPDGCodeUnrecognized2 +=
     ( numTrackPDGCodeUnrecognized - numTrackPDGCodeUnrecognized_previous ) *
     ( numTrackPDGCodeUnrecognized - numTrackPDGCodeUnrecognized_previous );
@@ -2656,7 +2681,7 @@ void StatAccepTestAnalysis::endOfEvent() {
   numTrackPositive_previous = numTrackPositive;
   numTrackNeutral_previous = numTrackNeutral;
   numTrackNegative_previous = numTrackNegative;
-  numTrackPDGCodeZero_previous = numTrackPDGCodeZero;
+  numTrackNucleus_previous = numTrackNucleus;
   numTrackPDGCodeUnrecognized_previous = numTrackPDGCodeUnrecognized;
   numTrackEM_previous = numTrackEM;
   numTrackEWK_previous = numTrackEWK;
@@ -3591,13 +3616,13 @@ void StatAccepTestAnalysis::finish() {
 	break;
       }
       case 4 : {
-	caseName += "# particles with 0 PDG code";
+	caseName += "# nuclei";
 	if ( i == 0 ) {
-	  sum = numStepPDGCodeZero;
-	  sum2 = numStepPDGCodeZero2;
+	  sum = numStepNucleus;
+	  sum2 = numStepNucleus2;
 	} else {
-	  sum = numTrackPDGCodeZero;
-	  sum2 = numTrackPDGCodeZero2;
+	  sum = numTrackNucleus;
+	  sum2 = numTrackNucleus2;
 	}
 	break;
       }
