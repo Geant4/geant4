@@ -1,4 +1,4 @@
-$Id: History,v 1.384 2006-11-03 14:22:11 allison Exp $
+$Id: History,v 1.385 2006-11-03 17:33:58 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,9 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+3rd November 2006  John Allison
+- modeling-V08-01-12: Protected against zero material pointer.
 
 3rd November 2006  John Allison  (vis-V08-01-10)
 - Needs greps-V08-01-10 for bug fix in G4Visible.
