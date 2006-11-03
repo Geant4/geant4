@@ -1,4 +1,4 @@
-$Id: History,v 1.383 2006-11-03 11:55:48 allison Exp $
+$Id: History,v 1.384 2006-11-03 14:22:11 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -24,7 +24,9 @@ committal in the CVS repository !
 History file for visualization category
 ---------------------------------------
 
-3rd November 2006  John Allison
+3rd November 2006  John Allison  (vis-V08-01-10)
+- Needs greps-V08-01-10 for bug fix in G4Visible.
+- Needs tracking-V08-01-05 for new storeTrajectory command.
 - Committed tracking-V08-01-05.  Now required by vis. 
   o Augmented /tracking/storeTrajectory.  Now takes integer parameter:
     0 : Don't Store trajectories.
@@ -38,6 +40,10 @@ History file for visualization category
   o G4RichTrajectory:
     ~ Bug fix: Create G4AttValues for user-defined creator process.
   o G4VTrajectory: Improved ShowTrajectory.
+- visman-V08-01-08: Activated /vis/scene/add/trajectories with "rich" and
+  "smooth".  Needs tracking-V08-01-05.
+- modeling-V08-01-11: Improved protections.
+- vistest-V08-01-04: Removed MyTrackingAction (use storeTrajectory instead.)
 
 2nd November 2006  John Allison
 - modeling-V08-01-10: G4HitsModel: Added GetCurrentHit.
