@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VFlavoredParallelWorld.hh,v 1.4 2006-06-29 19:08:29 gunter Exp $
+// $Id: G4VFlavoredParallelWorld.hh,v 1.5 2006-11-03 17:44:40 mverderi Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -34,6 +34,8 @@
 
 #ifndef G4VFLAVOREDPARALLELWORLD_HH
 #define G4VFLAVOREDPARALLELWORLD_HH
+
+class G4VPhysicalVolume;
 
 class G4VFlavoredParallelWorld {
 
