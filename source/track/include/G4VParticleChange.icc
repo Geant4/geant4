@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VParticleChange.icc,v 1.14 2006-10-30 09:50:13 kurasige Exp $
+// $Id: G4VParticleChange.icc,v 1.15 2006-11-03 17:46:08 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //   remove obsolete methods of SetXXX  19  Sep, 04 H.Kurashige  
@@ -238,6 +238,7 @@ inline void G4VParticleChange::InitializeTrueStepLength(const G4Track& track)
 
 //----------------------------------------------------------------
 // methods for initialize
+inline
 void G4VParticleChange::InitializeStepInVolumeFlags(const G4Track& track)
 {
    const G4Step* aStep = track.GetStep();
