@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TrajectoriesModel.cc,v 1.22 2006-10-26 11:10:23 allison Exp $
+// $Id: G4TrajectoriesModel.cc,v 1.23 2006-11-03 14:14:04 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -62,7 +62,8 @@ void G4TrajectoriesModel::DescribeYourselfTo (G4VGraphicsScene& sceneHandler) {
 	// fpCurrentTrajectory->ShowTrajectory(); G4cout << G4endl;
 	// Debug G4AttValues:
 	// G4TrajectoriesModelDebugG4AttValues(fpCurrentTrajectory);
-	sceneHandler.AddCompound (*fpCurrentTrajectory);
+	if (fpCurrentTrajectory)
+	  sceneHandler.AddCompound (*fpCurrentTrajectory);
       }
     }
   }

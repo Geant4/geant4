@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HitsModel.cc,v 1.16 2006-11-02 11:57:30 allison Exp $
+// $Id: G4HitsModel.cc,v 1.17 2006-11-03 14:14:24 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -59,7 +59,7 @@ void G4HitsModel::DescribeYourselfTo (G4VGraphicsScene& sceneHandler)
 	if (HC) {
 	  for(size_t iHit = 0; iHit < HC->GetSize(); ++iHit) {
 	    fpCurrentHit = HC -> GetHit (iHit);
-	    sceneHandler.AddCompound (*fpCurrentHit);
+	    if (fpCurrentHit) sceneHandler.AddCompound (*fpCurrentHit);
 	  }
 	}
       }
