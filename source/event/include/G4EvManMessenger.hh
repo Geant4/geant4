@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EvManMessenger.hh,v 1.5 2006-06-29 18:08:25 gunter Exp $
+// $Id: G4EvManMessenger.hh,v 1.6 2006-11-03 03:11:13 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -58,6 +58,7 @@ class G4EvManMessenger: public G4UImessenger
     G4UIdirectory* eventDirectory;
     G4UIcmdWithoutParameter* abortCmd;
     G4UIcmdWithAnInteger* verboseCmd;
+    G4UIcmdWithoutParameter* storeEvtCmd;
 };
 
 #endif
