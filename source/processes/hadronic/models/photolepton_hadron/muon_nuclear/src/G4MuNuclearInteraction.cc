@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuNuclearInteraction.cc,v 1.6 2006-06-29 20:57:34 gunter Exp $
+// $Id: G4MuNuclearInteraction.cc,v 1.7 2006-11-04 02:15:05 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -215,6 +215,7 @@ G4double G4MuNuclearInteraction::ComputeMicroscopicCrossSection(
 
   epmin = CutFixed ;
   epmax = KineticEnergy + Mass - 0.5*proton_mass_c2 ;
+  if (epmax <= epmin ) return CrossSection; // NaN bug correction
 
   aaa = std::log(epmin) ;
   bbb = std::log(epmax) ;
