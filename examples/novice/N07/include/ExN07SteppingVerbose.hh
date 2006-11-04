@@ -24,29 +24,58 @@
 // ********************************************************************
 //
 //
-// $Id: ExN07RunAction.hh,v 1.4 2006-11-04 19:23:07 asaim Exp $
+// $Id: ExN07SteppingVerbose.hh,v 1.1 2006-11-04 19:23:07 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+//
 
-#ifndef ExN07RunAction_h
-#define ExN07RunAction_h 1
+class ExN07SteppingVerbose;
 
-#include "G4UserRunAction.hh"
-#include "globals.hh"
+#ifndef ExN07SteppingVerbose_h
+#define ExN07SteppingVerbose_h 1
 
-class G4Run;
+#include <vector>
+#include "G4VSteppingVerbose.hh"
+#include "G4SliceTimer.hh"
 
-class ExN07RunAction : public G4UserRunAction
+class G4Region;
+
+class ExN07SteppingVerbose : public G4VSteppingVerbose
 {
-  public:
-    ExN07RunAction();
-   ~ExN07RunAction();
+ public:   
 
-  public:
-    G4Run* GenerateRun();
-    virtual void BeginOfRunAction(const G4Run*);
-    virtual void EndOfRunAction(const G4Run*);
+   ExN07SteppingVerbose();
+  ~ExN07SteppingVerbose();
+
+  void InitializeTimers();
+  void Report();
+
+  virtual void NewStep();
+  virtual void StepInfo();
+
+  // Following methods are not used
+  virtual void TrackBanner();
+  virtual void AtRestDoItInvoked();
+  virtual void AlongStepDoItAllDone();
+  virtual void PostStepDoItAllDone();
+  virtual void AlongStepDoItOneByOne();
+  virtual void PostStepDoItOneByOne();
+  virtual void TrackingStarted();
+  virtual void DPSLStarted();
+  virtual void DPSLUserLimit();
+  virtual void DPSLPostStep();
+  virtual void DPSLAlongStep();
+  virtual void VerboseTrack();
+  virtual void VerboseParticleChange();
+
+ private:
+  G4int FindRegion(G4Region*);
+
+ private:
+  std::vector<G4SliceTimer*> fTimers;
+  G4int nRegions,nTimers,regIdx;
+  G4bool ep;
 };
 
-#endif
 
+#endif
