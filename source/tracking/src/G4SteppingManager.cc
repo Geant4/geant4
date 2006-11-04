@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SteppingManager.cc,v 1.41 2006-09-27 20:42:52 asaim Exp $
+// $Id: G4SteppingManager.cc,v 1.42 2006-11-04 19:08:32 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------
@@ -340,6 +340,7 @@ void G4SteppingManager::SetInitialStep(G4Track* valueTrack)
    }
 #ifdef G4VERBOSE
                          // !!!!! Verbose
+           if(verboseLevel>0) fVerbose->TrackBanner();
            if(verboseLevel>0) fVerbose->TrackingStarted();
 #endif
 }

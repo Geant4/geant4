@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TrackingManager.cc,v 1.20 2006-11-03 11:13:38 allison Exp $
+// $Id: G4TrackingManager.cc,v 1.21 2006-11-04 19:08:32 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------
@@ -83,11 +83,6 @@ void G4TrackingManager::ProcessOneTrack(G4Track* apValueG4Track)
   }
   GimmeSecondaries()->clear();  
   
-#ifdef G4VERBOSE
-                         // !!!!! Verbose
-                         if(verboseLevel>0) Verbose("ProcessOneTrack");
-#endif
-
   // Give SteppingManger the pointer to the track which will be tracked 
   fpSteppingManager->SetInitialStep(fpTrack);
 
@@ -166,43 +161,6 @@ void G4TrackingManager::EventAborted()
 {
   fpTrack->SetTrackStatus( fKillTrackAndSecondaries );
   EventIsAborted = true;
-}
-
-//************************************************************************
-//
-//  Private Member Functions
-//
-//************************************************************************
-
-
-////////////////////////////////////////////////
-void G4TrackingManager::Verbose(G4String select)
-////////////////////////////////////////////////
-{
-
-  // !!!!! Verbose
-  if( select == "ProcessOneTrack" ){
-#ifdef G4VERBOSE
-     if(verboseLevel >= 1) { 
-       G4cout << G4endl;
-       G4cout << "*******************************************************"
-            << "**************************************************"
-            << G4endl;
-       G4cout << "* G4Track Information: " 
-            << "  Particle = " << fpTrack->GetDefinition()->GetParticleName() 
-            << "," 
-	    << "   Track ID = " << fpTrack->GetTrackID() 
-            << "," 
-	    << "   Parent ID = " << fpTrack->GetParentID() 
-            << G4endl;
-       G4cout << "*******************************************************"
-            << "**************************************************"
-            << G4endl;
-       G4cout << G4endl;
-      
-     }
-#endif
-  }
 }
 
 

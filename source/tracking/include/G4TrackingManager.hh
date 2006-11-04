@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TrackingManager.hh,v 1.19 2006-11-03 11:13:38 allison Exp $
+// $Id: G4TrackingManager.hh,v 1.20 2006-11-04 19:08:32 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------
@@ -132,12 +132,6 @@ public: // without description
 //---------
    private:
 //---------
-
-// Member functions
-
-   void Verbose(G4String select);
-      // Output messages according to the current value of the 
-      // Verbose level.
 
 // Member data
 

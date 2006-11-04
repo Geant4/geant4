@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSteppingVerbose.hh,v 1.22 2006-06-29 21:15:49 gunter Exp $
+// $Id: G4VSteppingVerbose.hh,v 1.23 2006-11-04 19:08:32 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------
@@ -92,6 +92,7 @@ public:   // with description
   virtual void NewStep() = 0;
   void CopyState();
   void SetManager(G4SteppingManager* const);
+  virtual void TrackBanner();
   virtual void AtRestDoItInvoked() = 0;
   virtual void AlongStepDoItAllDone() = 0;
   virtual void PostStepDoItAllDone() = 0;
