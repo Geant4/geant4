@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeModel.cc,v 1.55 2006-11-03 17:31:49 allison Exp $
+// $Id: G4PhysicalVolumeModel.cc,v 1.56 2006-11-05 20:38:08 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -707,10 +707,14 @@ std::vector<G4AttValue>* G4PhysicalVolumeModel::CreateCurrentAttValues() const
     G4VSolid* pSol = fpCurrentLV->GetSolid();
     values->push_back(G4AttValue("Solid", pSol->GetName(),""));
     values->push_back(G4AttValue("EType", pSol->GetEntityType(),""));
-    values->push_back(G4AttValue("Material", fpCurrentMaterial->GetName(),""));
-    values->push_back(G4AttValue("Density", G4BestUnit(fpCurrentMaterial->GetDensity(),"Volumic Mass"),""));
-    oss.str(""); oss << fpCurrentMaterial->GetState();
+    G4String matName = fpCurrentMaterial? fpCurrentMaterial->GetName(): G4String("No material");
+    values->push_back(G4AttValue("Material", matName,""));
+    G4double matDensity = fpCurrentMaterial? fpCurrentMaterial->GetDensity(): 0.;
+    values->push_back(G4AttValue("Density", G4BestUnit(matDensity,"Volumic Mass"),""));
+    G4State matState = fpCurrentMaterial? fpCurrentMaterial->GetState(): kStateUndefined;
+    oss.str(""); oss << matState;
     values->push_back(G4AttValue("State", oss.str(),""));
-    values->push_back(G4AttValue("Radlen", G4BestUnit(fpCurrentMaterial->GetRadlen(),"Length"),""));
+    G4double matRadlen = fpCurrentMaterial? fpCurrentMaterial->GetRadlen(): 0.;
+    values->push_back(G4AttValue("Radlen", G4BestUnit(matRadlen,"Length"),""));
     return values;
 }

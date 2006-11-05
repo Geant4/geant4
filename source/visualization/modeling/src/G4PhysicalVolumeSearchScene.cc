@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeSearchScene.cc,v 1.12 2006-06-29 21:32:56 gunter Exp $
+// $Id: G4PhysicalVolumeSearchScene.cc,v 1.13 2006-11-05 20:38:08 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -59,6 +59,7 @@ void G4PhysicalVolumeSearchScene::FindVolume (const G4VSolid&) {
   G4VPhysicalVolume* pCurrentPV = fpPVModel->GetCurrentPV();
   G4LogicalVolume* pCurrentLV = fpPVModel->GetCurrentLV();
   //G4Material* pCurrentMaterial = fpPVModel->GetCurrentMaterial();
+  // Note: pCurrentMaterial may be zero (parallel world).
 
   /**************************************************
   G4cout << "Required volume: \"" << fRequiredPhysicalVolumeName
