@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorSceneHandler.cc,v 1.49 2006-11-02 12:01:19 allison Exp $
+// $Id: G4OpenInventorSceneHandler.cc,v 1.50 2006-11-05 20:48:57 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -733,6 +733,7 @@ void G4OpenInventorSceneHandler::GeneratePrerequisites()
     G4VPhysicalVolume* pCurrentPV = pPVModel->GetCurrentPV();
     G4LogicalVolume* pCurrentLV = pPVModel->GetCurrentLV();
     //G4Material* pCurrentMaterial = pPVModel->GetCurrentMaterial();
+    // Note: pCurrentMaterial may be zero (parallel world).
 
     // The simplest algorithm, used by the Open Inventor Driver
     // developers, is to rely on the fact the G4PhysicalVolumeModel

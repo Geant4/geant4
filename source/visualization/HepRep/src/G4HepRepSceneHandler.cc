@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HepRepSceneHandler.cc,v 1.97 2006-06-29 21:17:32 gunter Exp $
+// $Id: G4HepRepSceneHandler.cc,v 1.98 2006-11-05 20:51:02 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -1433,11 +1433,16 @@ HepRepInstance* G4HepRepSceneHandler::getGeometryInstance(G4LogicalVolume* volum
     setAttribute(instance, "RootRegion", volume->IsRootRegion());
     setAttribute(instance, "Solid",      volume->GetSolid()->GetName());
     setAttribute(instance, "EType",      volume->GetSolid()->GetEntityType());
-    setAttribute(instance, "Material",   volume->GetMaterial()->GetName());
-    setAttribute(instance, "Density",    volume->GetMaterial()->GetDensity());
-    setAttribute(instance, "Radlen",     volume->GetMaterial()->GetRadlen());
+    G4Material * material = volume->GetMaterial();
+    G4String matName = material? material->GetName(): G4String("No material");
+    setAttribute(instance, "Material",   matName );
+    G4double matDensity = material? material->GetDensity(): 0.;
+    setAttribute(instance, "Density",    matDensity);
+    G4double matRadlen = material? material->GetRadlen(): 0.;
+    setAttribute(instance, "Radlen",     matRadlen);
     
-    G4String state = materialState[volume->GetMaterial()->GetState()];
+    G4State matState = material? material->GetState(): kStateUndefined;
+    G4String state = materialState[matState];
     setAttribute(instance, "State", state);
     
     return instance;

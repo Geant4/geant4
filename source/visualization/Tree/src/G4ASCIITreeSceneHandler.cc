@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ASCIITreeSceneHandler.cc,v 1.31 2006-11-01 11:02:05 allison Exp $
+// $Id: G4ASCIITreeSceneHandler.cc,v 1.32 2006-11-05 20:44:28 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -49,6 +49,7 @@
 #include "G4PhysicalVolumeMassScene.hh"
 #include "G4VSensitiveDetector.hh"
 #include "G4VReadOutGeometry.hh"
+#include "G4TransportationManager.hh"
 
 G4ASCIITreeSceneHandler::G4ASCIITreeSceneHandler
 (G4VGraphicsSystem& system,
@@ -123,33 +124,38 @@ void G4ASCIITreeSceneHandler::EndModeling () {
       G4PhysicalVolumeModel* pvModel =
 	dynamic_cast<G4PhysicalVolumeModel*>(*i);
       if (pvModel) {
-	const G4ModelingParameters* tempMP = pvModel->GetModelingParameters();
-	G4ModelingParameters mp;  // Default - no culling.
-	pvModel->SetModelingParameters (&mp);
-	G4PhysicalVolumeMassScene massScene(pvModel);
-	pvModel->DescribeYourselfTo (massScene);
-	G4double volume = massScene.GetVolume();
-	G4double mass = massScene.GetMass();
+	if (pvModel->GetTopPhysicalVolume() ==
+	    G4TransportationManager::GetTransportationManager()
+	    ->GetNavigatorForTracking()->GetWorldVolume()) {
+	  const G4ModelingParameters* tempMP =
+	    pvModel->GetModelingParameters();
+	  G4ModelingParameters mp;  // Default - no culling.
+	  pvModel->SetModelingParameters (&mp);
+	  G4PhysicalVolumeMassScene massScene(pvModel);
+	  pvModel->DescribeYourselfTo (massScene);
+	  G4double volume = massScene.GetVolume();
+	  G4double mass = massScene.GetMass();
 
-	G4cout << "Overall volume of \""
-	       << pvModel->GetTopPhysicalVolume()->GetName()
-	       << "\":"
-	       << pvModel->GetTopPhysicalVolume()->GetCopyNo()
-	       << ", is "
-	       << G4BestUnit (volume, "Volume")
-	       << " and the daughter-included mass";
-	G4int requestedDepth = pvModel->GetRequestedDepth();
-	if (requestedDepth == G4PhysicalVolumeModel::UNLIMITED) {
-	  G4cout << " to unlimited depth";
-	} else {
-	  G4cout << ", ignoring daughters at depth "
-		 << requestedDepth
-		 << " and below,";
+	  G4cout << "Overall volume of \""
+		 << pvModel->GetTopPhysicalVolume()->GetName()
+		 << "\":"
+		 << pvModel->GetTopPhysicalVolume()->GetCopyNo()
+		 << ", is "
+		 << G4BestUnit (volume, "Volume")
+		 << " and the daughter-included mass";
+	  G4int requestedDepth = pvModel->GetRequestedDepth();
+	  if (requestedDepth == G4PhysicalVolumeModel::UNLIMITED) {
+	    G4cout << " to unlimited depth";
+	  } else {
+	    G4cout << ", ignoring daughters at depth "
+		   << requestedDepth
+		   << " and below,";
+	  }
+	  G4cout << " is " << G4BestUnit (mass, "Mass")
+		 << G4endl;
+
+	  pvModel->SetModelingParameters (tempMP);
 	}
-	G4cout << " is " << G4BestUnit (mass, "Mass")
-	       << G4endl;
-
-	pvModel->SetModelingParameters (tempMP);
       }
     }
   }
@@ -305,25 +311,32 @@ void G4ASCIITreeSceneHandler::RequestPrimitives(const G4VSolid& solid) {
     if (detail >= 3) {
       *fpOutFile << ", "
 		 << G4BestUnit(((G4VSolid&)solid).GetCubicVolume(),"Volume")
-		 << ", "
-		 << G4BestUnit(pCurrentMaterial->GetDensity(), "Volumic Mass")
-		 << " (" << pCurrentMaterial->GetName() << ")";
+		 << ", ";
+      if (pCurrentMaterial) {
+	*fpOutFile
+	  << G4BestUnit(pCurrentMaterial->GetDensity(), "Volumic Mass")
+		   << " (" << pCurrentMaterial->GetName() << ")";
+      } else {
+	*fpOutFile << "(No material)";
+      }
     }
 
     if (detail >= 5) {
-      G4Material* pMaterial = const_cast<G4Material*>(pCurrentMaterial);
-      // ...and find daughter-subtracted mass...
-      G4double daughter_subtracted_mass = pCurrentLV->GetMass
-	(pCurrentPV->IsParameterised(),  // Force if parametrised.
-	 false,  // Do not propagate - calculate for this volume minus
-        	 // volume of daughters.
-	 pMaterial);
-      G4double daughter_subtracted_volume =
-	daughter_subtracted_mass / pCurrentMaterial->GetDensity();
-      *fpOutFile << ", "
-		 << G4BestUnit(daughter_subtracted_volume,"Volume")
-		 << ", "
-		 << G4BestUnit(daughter_subtracted_mass,"Mass");
+      if (pCurrentMaterial) {
+	G4Material* pMaterial = const_cast<G4Material*>(pCurrentMaterial);
+	// ...and find daughter-subtracted mass...
+	G4double daughter_subtracted_mass = pCurrentLV->GetMass
+	  (pCurrentPV->IsParameterised(),  // Force if parametrised.
+	   false,  // Do not propagate - calculate for this volume minus
+	           // volume of daughters.
+	   pMaterial);
+	G4double daughter_subtracted_volume =
+	  daughter_subtracted_mass / pCurrentMaterial->GetDensity();
+	*fpOutFile << ", "
+		   << G4BestUnit(daughter_subtracted_volume,"Volume")
+		   << ", "
+		   << G4BestUnit(daughter_subtracted_mass,"Mass");
+      }
     }
 
     if (fLVSet.find(pCurrentLV) == fLVSet.end()) {

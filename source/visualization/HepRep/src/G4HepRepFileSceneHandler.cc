@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HepRepFileSceneHandler.cc,v 1.57 2006-11-01 11:10:50 allison Exp $
+// $Id: G4HepRepFileSceneHandler.cc,v 1.58 2006-11-05 20:51:02 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -1255,10 +1255,15 @@ void G4HepRepFileSceneHandler::AddHepRepInstance(const char* primName,
 		hepRepXMLWriter->addAttValue("RootRegion", pCurrentLV->IsRootRegion());
 		hepRepXMLWriter->addAttValue("Solid", pCurrentLV->GetSolid()->GetName());
 		hepRepXMLWriter->addAttValue("EType", pCurrentLV->GetSolid()->GetEntityType());
-		hepRepXMLWriter->addAttValue("Material", pCurrentLV->GetMaterial()->GetName());
-		hepRepXMLWriter->addAttValue("Density", pCurrentLV->GetMaterial()->GetDensity()*m3/kg);
-		hepRepXMLWriter->addAttValue("State", pCurrentLV->GetMaterial()->GetState());
-		hepRepXMLWriter->addAttValue("Radlen", pCurrentLV->GetMaterial()->GetRadlen()/m);
+		G4Material * material = pCurrentLV->GetMaterial();
+		G4String matName = material? material->GetName(): G4String("No material");
+		hepRepXMLWriter->addAttValue("Material", matName);
+		G4double matDensity = material? material->GetDensity(): 0.;
+		hepRepXMLWriter->addAttValue("Density", matDensity*m3/kg);
+		G4State matState = material? material->GetState(): kStateUndefined;
+		hepRepXMLWriter->addAttValue("State", matState);
+		G4double matRadlen = material? material->GetRadlen(): 0.;
+		hepRepXMLWriter->addAttValue("Radlen", matRadlen/m);
 	}
 	
 	hepRepXMLWriter->addAttValue("DrawAs",primName);
