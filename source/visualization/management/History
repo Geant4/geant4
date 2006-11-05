@@ -1,4 +1,4 @@
-$Id: History,v 1.77 2006-11-03 17:57:22 allison Exp $
+$Id: History,v 1.78 2006-11-05 20:32:10 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -24,13 +24,6 @@ committal in the CVS repository !
 
 History file for visualization management sub-category
 ------------------------------------------------------
-
-3rd November 2006  John Allison  (visman-V08-01-08-00)
-- On visman-V08-01-08-branch.
-- G4VisCommandsSceneAdd.cc: First implementation of parallel worlds
-  visualisation: /vis/scene/add/volume worlds
-- G4VisCommandsCompound.cc: Minor re-ordering of commands in /vis/drawVolume
-  to avoid warning messages about empty scene.
 
 3rd November 2006  John Allison  (visman-V08-01-08 with tracking-V08-01-05)
 - Activated /vis/scene/add/trajectories with "rich" and "smooth" - see below.
