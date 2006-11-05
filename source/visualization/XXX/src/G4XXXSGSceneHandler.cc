@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4XXXSGSceneHandler.cc,v 1.5 2006-10-26 11:29:32 allison Exp $
+// $Id: G4XXXSGSceneHandler.cc,v 1.6 2006-11-05 20:41:36 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -113,6 +113,7 @@ void G4XXXSGSceneHandler::CreateCurrentItem(const G4String& header) {
     //G4VPhysicalVolume* pCurrentPV = pPVModel->GetCurrentPV();
     G4LogicalVolume* pCurrentLV = pPVModel->GetCurrentLV();
     //G4Material* pCurrentMaterial = pPVModel->GetCurrentMaterial();
+    // Note: pCurrentMaterial may be zero (parallel world).
 
     // The simplest algorithm, used by the Open Inventor Driver
     // developers, is to rely on the fact the G4PhysicalVolumeModel
