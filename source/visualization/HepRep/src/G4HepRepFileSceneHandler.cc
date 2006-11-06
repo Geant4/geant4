@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HepRepFileSceneHandler.cc,v 1.58 2006-11-05 20:51:02 allison Exp $
+// $Id: G4HepRepFileSceneHandler.cc,v 1.59 2006-11-06 09:21:46 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -1111,8 +1111,7 @@ void G4HepRepFileSceneHandler::AddHepRepInstance(const char* primName,
 	G4VPhysicalVolume* pCurrentPV = 0;
 	G4LogicalVolume* pCurrentLV = 0;
 	G4int currentDepth = 0;
-	G4PhysicalVolumeModel* pPVModel =
-		dynamic_cast<G4PhysicalVolumeModel*>(fpModel);
+	G4PhysicalVolumeModel* pPVModel = dynamic_cast<G4PhysicalVolumeModel*>(fpModel);
 	if (pPVModel) {
 		pCurrentPV = pPVModel->GetCurrentPV();
 		pCurrentLV = pPVModel->GetCurrentLV();
@@ -1255,7 +1254,7 @@ void G4HepRepFileSceneHandler::AddHepRepInstance(const char* primName,
 		hepRepXMLWriter->addAttValue("RootRegion", pCurrentLV->IsRootRegion());
 		hepRepXMLWriter->addAttValue("Solid", pCurrentLV->GetSolid()->GetName());
 		hepRepXMLWriter->addAttValue("EType", pCurrentLV->GetSolid()->GetEntityType());
-		G4Material * material = pCurrentLV->GetMaterial();
+		G4Material * material = pPVModel->GetCurrentMaterial();
 		G4String matName = material? material->GetName(): G4String("No material");
 		hepRepXMLWriter->addAttValue("Material", matName);
 		G4double matDensity = material? material->GetDensity(): 0.;

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HepRepSceneHandler.cc,v 1.98 2006-11-05 20:51:02 allison Exp $
+// $Id: G4HepRepSceneHandler.cc,v 1.99 2006-11-06 09:21:46 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -561,6 +561,7 @@ void G4HepRepSceneHandler::AddSolid(const G4Cons& cons) {
 
     G4LogicalVolume* pCurrentLV = pPVModel->GetCurrentLV();
     G4int currentDepth = pPVModel->GetCurrentDepth();
+    G4Material* pCurrentMaterial = pPVModel->GetCurrentMaterial();
 
     G4Point3D vertex1(G4Point3D( 0., 0., cons.GetZHalfLength()));
     G4Point3D vertex2(G4Point3D( 0., 0.,-cons.GetZHalfLength()));
@@ -568,7 +569,7 @@ void G4HepRepSceneHandler::AddSolid(const G4Cons& cons) {
     vertex1 = (transform) * vertex1;
     vertex2 = (transform) * vertex2;
 
-    HepRepInstance* instance = getGeometryInstance(pCurrentLV, currentDepth);
+    HepRepInstance* instance = getGeometryInstance(pCurrentLV, pCurrentMaterial, currentDepth);
     setAttribute(instance, "DrawAs", G4String("Cylinder"));
         
     setVisibility(instance, cons);
@@ -622,6 +623,7 @@ void G4HepRepSceneHandler::AddSolid(const G4Tubs& tubs) {
 
     G4LogicalVolume* pCurrentLV = pPVModel->GetCurrentLV();
     G4int currentDepth = pPVModel->GetCurrentDepth();
+    G4Material* pCurrentMaterial = pPVModel->GetCurrentMaterial();
 
     G4Point3D vertex1(G4Point3D( 0., 0., tubs.GetZHalfLength()));
     G4Point3D vertex2(G4Point3D( 0., 0.,-tubs.GetZHalfLength()));
@@ -629,7 +631,7 @@ void G4HepRepSceneHandler::AddSolid(const G4Tubs& tubs) {
     vertex1 = (transform) * vertex1;
     vertex2 = (transform) * vertex2;
 
-    HepRepInstance* instance = getGeometryInstance(pCurrentLV, currentDepth);
+    HepRepInstance* instance = getGeometryInstance(pCurrentLV, pCurrentMaterial, currentDepth);
     setAttribute(instance, "DrawAs", G4String("Cylinder"));
         
     setVisibility(instance, tubs);
@@ -1384,7 +1386,8 @@ HepRepInstance* G4HepRepSceneHandler::getGeometryOrEventInstance(HepRepType* typ
 	dynamic_cast<G4PhysicalVolumeModel*>(fpModel);
       G4LogicalVolume* pCurrentLV = pPVModel->GetCurrentLV();
       G4int currentDepth = pPVModel->GetCurrentDepth();
-      return getGeometryInstance(pCurrentLV, currentDepth);
+      G4Material* pCurrentMaterial = pPVModel->GetCurrentMaterial();
+      return getGeometryInstance(pCurrentLV, pCurrentMaterial, currentDepth);
     }
 }
 
@@ -1425,7 +1428,7 @@ HepRepInstance* G4HepRepSceneHandler::getGeometryRootInstance() {
     return _geometryRootInstance;
 }
 
-HepRepInstance* G4HepRepSceneHandler::getGeometryInstance(G4LogicalVolume* volume, int depth) {
+HepRepInstance* G4HepRepSceneHandler::getGeometryInstance(G4LogicalVolume* volume, G4Material* material, int depth) {
     HepRepInstance* instance = getGeometryInstance(volume->GetName(), depth);
 
     setAttribute(instance, "LVol",       volume->GetName());
@@ -1433,7 +1436,6 @@ HepRepInstance* G4HepRepSceneHandler::getGeometryInstance(G4LogicalVolume* volum
     setAttribute(instance, "RootRegion", volume->IsRootRegion());
     setAttribute(instance, "Solid",      volume->GetSolid()->GetName());
     setAttribute(instance, "EType",      volume->GetSolid()->GetEntityType());
-    G4Material * material = volume->GetMaterial();
     G4String matName = material? material->GetName(): G4String("No material");
     setAttribute(instance, "Material",   matName );
     G4double matDensity = material? material->GetDensity(): 0.;
