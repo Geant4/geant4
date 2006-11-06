@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: A01ParallelWorld.cc,v 1.1 2006-07-14 14:43:27 asaim Exp $
+// $Id: A01ParallelWorld.cc,v 1.2 2006-11-06 11:57:26 allison Exp $
 // --------------------------------------------------------------
 //
 
@@ -39,6 +39,8 @@
 #include "G4PSNofSecondary.hh"
 #include "G4PSEnergyDeposit.hh"
 
+#include "G4VisAttributes.hh"
+
 A01ParallelWorld::A01ParallelWorld(G4String worldName)
 :G4VUserParallelWorld(worldName)
 {;}
@@ -50,7 +52,8 @@ void A01ParallelWorld::Construct()
 {
   G4VPhysicalVolume* ghostWorld = GetWorld();
   G4LogicalVolume* worldLogical = ghostWorld->GetLogicalVolume();
- 
+  worldLogical->SetVisAttributes(G4VisAttributes::GetInvisible());
+
   G4Box * ghostSolid = new G4Box("GhostdBox", 60.*cm, 60.*cm, 60.*cm);
   G4LogicalVolume * ghostLogical
         = new G4LogicalVolume(ghostSolid, 0, "GhostLogical", 0, 0, 0);

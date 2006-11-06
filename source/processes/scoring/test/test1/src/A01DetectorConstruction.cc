@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: A01DetectorConstruction.cc,v 1.1 2006-07-14 14:43:12 asaim Exp $
+// $Id: A01DetectorConstruction.cc,v 1.2 2006-11-06 11:57:25 allison Exp $
 // --------------------------------------------------------------
 //
 
@@ -93,8 +93,7 @@ G4VPhysicalVolume* A01DetectorConstruction::Construct()
     aSD->RegisterPrimitive(new G4PSNofSecondary("NofSecondary"));
     aSD->RegisterPrimitive(new G4PSEnergyDeposit("EnergyDeposit"));
 
-    worldVisAtt = new G4VisAttributes(G4Colour(1.0,1.0,1.0));
-    worldLogical->SetVisAttributes(worldVisAtt);
+    worldLogical->SetVisAttributes(G4VisAttributes::GetInvisible());
 
     phantomVisAtt = new G4VisAttributes(G4Colour(0.6,0.8,1.0));
     phantomLogical->SetVisAttributes(phantomVisAtt);
