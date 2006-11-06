@@ -1,5 +1,5 @@
 
-$Id: History,v 1.57 2006-10-19 15:35:05 gcosmo Exp $
+$Id: History,v 1.58 2006-11-06 20:36:18 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+ Nov 06, 2006  J.Allison
+  - G4IntersectionSolid, G4SubtractionSolid, G4UnionSolid:
+    Fix CreatePolyhedron for case of component that does
+    not have a G4Polyhedron representation.
 
  Oct 19, 2006  G.Cosmo                    geom-bool-V08-01-00
   - Added GetSurfaceArea() method, accessors and modifiers to base class
