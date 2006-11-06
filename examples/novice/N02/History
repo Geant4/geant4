@@ -1,4 +1,4 @@
-$Id: History,v 1.47 2006-06-16 10:19:30 gcosmo Exp $
+$Id: History,v 1.48 2006-11-06 20:21:52 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
+06-11-06 J.Allison (exampleN02-V08-01-00)
+- Improved vis.mac to vis best practice.
+
 16-06-06 G.Cosmo (exampleN02-V08-00-03)
 - Use coherent allocation scheme for user-classes and
   initialisation in main().
