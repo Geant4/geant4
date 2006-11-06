@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.cc,v 1.73 2006-09-19 16:08:06 allison Exp $
+// $Id: G4VSceneHandler.cc,v 1.74 2006-11-06 11:40:08 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -530,15 +530,6 @@ void G4VSceneHandler::ProcessScene (G4VViewer&) {
     delete pMP;
     EndModeling ();
 
-  } else {
-    G4VisManager::Verbosity verbosity =
-      G4VisManager::GetInstance()->GetVerbosity();
-    if (verbosity >= G4VisManager::warnings) {
-      G4cout <<
-	"WARNING: G4VSceneHandler::ProcessScene: No run-duration models in"
-	"\n  scene.  \"World\" will be added if you attempt to draw a view"
-	     << G4endl;
-    }
   }
 
   fpViewer->FinishView();  // Flush streams and/or swap buffers.
