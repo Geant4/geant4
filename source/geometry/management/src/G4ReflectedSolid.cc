@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReflectedSolid.cc,v 1.8 2006-06-29 18:33:36 gunter Exp $
+// $Id: G4ReflectedSolid.cc,v 1.9 2006-11-06 20:28:42 allison Exp $
 //
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -552,9 +552,17 @@ G4Polyhedron*
 G4ReflectedSolid::CreatePolyhedron () const 
 {
   G4Polyhedron* polyhedron = fPtrSolid->CreatePolyhedron();
-  polyhedron->Transform(*fDirectTransform3D);
-
-  return polyhedron;
+  if (polyhedron) {
+    polyhedron->Transform(*fDirectTransform3D);
+    return polyhedron;
+  } else {
+    std::ostringstream oss;
+    oss << GetName() <<
+      ": original solid has no corresponding polyhedron.";
+    G4Exception("G4ReflectedSolid::CreatePolyhedron",
+		"", JustWarning, oss.str().c_str());
+    return 0;
+  }
 }
 
 /////////////////////////////////////////////////////////
