@@ -15,6 +15,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+30 October, 06  W.Pokorski (persistency-V08-02-00)
+- Put 'ifdef USE_HEPMC' in all the places which explicitly use HepMC
+  classes to allow compilation with CLHEP 2.0.3.0.
+
 22 August, 06  G.Cosmo (persistency-V08-01-00)
 - Get Rid of useless forward declarations in G4MCTEvent and G4MCTGenParticle
   header files. Clearing compilation warnings on icc-9.X compilers.
