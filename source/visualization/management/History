@@ -1,4 +1,4 @@
-$Id: History,v 1.78 2006-11-05 20:32:10 allison Exp $
+$Id: History,v 1.79 2006-11-06 11:40:24 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -24,6 +24,12 @@ committal in the CVS repository !
 
 History file for visualization management sub-category
 ------------------------------------------------------
+
+6th November 2006  John Allison  (visman-V08-01-09)
+- /vis/drawVolume and /vis/specify: Suppress all but first warning about
+  needing to refresh for viewers that are not auto refresh.
+- G4VScenehandler.cc: Remove warning about emepty scene.  (Subsequent action
+  is to add a world, if empty - reasonable behaviour.)
 
 3rd November 2006  John Allison  (visman-V08-01-08 with tracking-V08-01-05)
 - Activated /vis/scene/add/trajectories with "rich" and "smooth" - see below.
