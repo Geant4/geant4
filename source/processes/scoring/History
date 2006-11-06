@@ -1,4 +1,4 @@
-$Id: History,v 1.4 2006-11-06 11:59:14 allison Exp $
+$Id: History,v 1.5 2006-11-06 12:00:58 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -28,8 +28,9 @@ November 3rd  J.Allison  (procscore-V08-01-ref04-02)
     ParaTest para disp
 
 November 2nd  J.Allison  (procscore-V08-01-ref04-01)
-- Replaced A01VisManager by G4VisExecutive.
-- Introduced vis.mac.
+- test1:
+  o Replaced A01VisManager by G4VisExecutive.
+  o Introduced vis.mac.
 
 July 6th, 2006  M.Asai
 - Directory processes/scoring created
