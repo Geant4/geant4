@@ -1,4 +1,4 @@
-$Id: History,v 1.48 2006-10-19 12:34:06 allison Exp $
+$Id: History,v 1.49 2006-11-06 17:12:29 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,12 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+06-11-06 John Allison (exampleN04-V08-01-01)
+- Add hits attributes for picking.
+- Make material world and readout world top volumes invisible.
+- Remove forcedWireframe from tracker and caloLayer.
+- Set readout geometry name.
 
 19-10-06 John Allison (exampleN04-V08-01-00)
 - Migrate to new trajectory modeling commands.
