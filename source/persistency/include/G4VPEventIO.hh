@@ -34,7 +34,7 @@
 #include "G4Event.hh"
 
 #ifndef WIN32
-#ifdef USE_HEPMC
+#ifdef G4LIB_USE_HEPMC
   #include "CLHEP/HepMC/GenEvent.h"
   // not yet // #include "G4MCTEvent.hh"
 #include "G4Pevent.hh"
@@ -63,7 +63,7 @@ class G4VPEventIO
       virtual G4bool Store( const G4Event* anEvent ) =0;
       // Store a Geant4 event.
 #ifndef WIN32
-#ifdef USE_HEPMC
+#ifdef G4LIB_USE_HEPMC
       // virtual G4bool Store( HepMC::GenEvent* hepevt, G4MCTEvent* mctevt, const G4Event* anEvent ) =0;
       virtual G4bool Store( HepMC::GenEvent* hepevt, const G4Event* anEvent ) =0;
       // Store a Geant4 event.

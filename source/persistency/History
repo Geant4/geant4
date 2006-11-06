@@ -15,8 +15,8 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-30 October, 06  W.Pokorski (persistency-V08-02-00)
-- Put 'ifdef USE_HEPMC' in all the places which explicitly use HepMC
+30 October, 06  W.Pokorski (persistency-V08-01-01)
+- Put 'ifdef G4LIB_USE_HEPMC' in all the places which explicitly use HepMC
   classes to allow compilation with CLHEP 2.0.3.0.
 
 22 August, 06  G.Cosmo (persistency-V08-01-00)

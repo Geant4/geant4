@@ -29,7 +29,7 @@
 //   '01.11.18  Youhei Morita  Initial creation
 
 #ifndef WIN32
-#ifdef USE_HEPMC
+#ifdef G4LIB_USE_HEPMC
 
 #include "G4Pevent.hh"
 

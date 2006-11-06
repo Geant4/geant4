@@ -68,7 +68,7 @@ void G4PersistencyManager::SetVerboseLevel(int v)
   }
   if (   EventIO() != 0 )   EventIO()->SetVerboseLevel(m_verbose);
 #ifndef WIN32
-#ifdef USE_HEPMC
+#ifdef G4LIB_USE_HEPMC
   if (   HepMCIO() != 0 )   HepMCIO()->SetVerboseLevel(m_verbose);
   if ( MCTruthIO() != 0 ) MCTruthIO()->SetVerboseLevel(m_verbose);
 #endif
@@ -143,7 +143,7 @@ G4bool G4PersistencyManager::Store(const G4Event* evt)
   std::string obj;
 
 #ifndef WIN32
-#ifdef USE_HEPMC
+#ifdef G4LIB_USE_HEPMC
   // Store HepMC event
   //
   obj = "HepMC";
@@ -237,7 +237,7 @@ G4bool G4PersistencyManager::Store(const G4Event* evt)
   }
 
 #ifndef WIN32
-#ifdef USE_HEPMC
+#ifdef G4LIB_USE_HEPMC
 
   // Store this G4EVENT
   //
@@ -358,7 +358,7 @@ G4bool G4PersistencyManager::Retrieve(G4Event*& evt)
 }
 
 #ifndef WIN32
-#ifdef USE_HEPMC
+#ifdef G4LIB_USE_HEPMC
 
 // Implementation of Retrieve
 G4bool G4PersistencyManager::Retrieve(HepMC::GenEvent*& evt, int id)

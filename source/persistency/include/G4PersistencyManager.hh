@@ -34,7 +34,7 @@
 #include "G4Event.hh"
 
 #ifndef WIN32
-#ifdef USE_HEPMC
+#ifdef G4LIB_USE_HEPMC
   #include "CLHEP/HepMC/GenEvent.h"
   #include "G4VHepMCIO.hh"
   #include "G4VMCTruthIO.hh"
@@ -153,7 +153,7 @@ class G4PersistencyManager
       // Returns the current digit I/O handling manager
       // Each derived class should return the pointer of actual manager.
 #ifndef WIN32
-#ifdef USE_HEPMC
+#ifdef G4LIB_USE_HEPMC
       virtual G4VHepMCIO* HepMCIO() { return 0; };
       // Returns the current HepMC I/O handling manager
       // Each derived class should return the pointer of actual manager.
@@ -180,7 +180,7 @@ class G4PersistencyManager
       G4bool Retrieve(G4Event*& evt);
       // Retrieve the G4Event and its associated objects
 #ifndef WIN32
-#ifdef USE_HEPMC
+#ifdef G4LIB_USE_HEPMC
       G4bool Retrieve(HepMC::GenEvent*& evt, int id=-1);
       // retrieves HepMC GenEvent and its associated object.
       // To be used by generator/HepMCObjyReader.

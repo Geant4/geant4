@@ -28,7 +28,7 @@
 // ====================================================================
 
 #ifndef WIN32
-#ifdef USE_HEPMC
+#ifdef G4LIB_USE_HEPMC
 
 #include "G4ios.hh"
 #include "G4MCTEvent.hh"
