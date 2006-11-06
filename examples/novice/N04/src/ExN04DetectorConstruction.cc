@@ -125,10 +125,7 @@ G4VPhysicalVolume* ExN04DetectorConstruction::Construct()
   G4VPhysicalVolume * experimentalHall_phys
     = new G4PVPlacement(0,G4ThreeVector(),experimentalHall_log,"expHall_P",
                         0,false,0);
-  G4VisAttributes* experimentalHallVisAtt
-    = new G4VisAttributes(G4Colour(1.0,1.0,1.0));
-  experimentalHallVisAtt->SetForceWireframe(true);
-  experimentalHall_log->SetVisAttributes(experimentalHallVisAtt);
+  experimentalHall_log->SetVisAttributes(G4VisAttributes::GetInvisible());
 
   //------------------------------ tracker
   G4VSolid * tracker_tubs
@@ -141,7 +138,6 @@ G4VPhysicalVolume* ExN04DetectorConstruction::Construct()
 			experimentalHall_log,false,0);
   G4VisAttributes* tracker_logVisAtt
     = new G4VisAttributes(G4Colour(1.0,0.0,1.0));
-  tracker_logVisAtt->SetForceWireframe(true);
   tracker_log->SetVisAttributes(tracker_logVisAtt);
 
   //------------------------------ tracker layers
@@ -193,7 +189,6 @@ G4VPhysicalVolume* ExN04DetectorConstruction::Construct()
 			   kXAxis, nocaloLayers, calorimeterParam);
   G4VisAttributes* caloLayer_logVisAtt
     = new G4VisAttributes(G4Colour(0.7,1.0,0.0));
-  caloLayer_logVisAtt->SetForceWireframe(true);
   caloLayer_log->SetVisAttributes(caloLayer_logVisAtt);
 
   //------------------------------ muon counters
@@ -239,6 +234,7 @@ G4VPhysicalVolume* ExN04DetectorConstruction::Construct()
   G4String ROgeometryName = "CalorimeterROGeom";
   G4VReadOutGeometry* calRO = new ExN04CalorimeterROGeometry(ROgeometryName);
   calRO->BuildROGeometry();
+  calRO->SetName(ROgeometryName);
   calorimeterSD->SetROgeometry(calRO);
   SDman->AddNewDetector(calorimeterSD);
   calorimeter_log->SetSensitiveDetector(calorimeterSD);
