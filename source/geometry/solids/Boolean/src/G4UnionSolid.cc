@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UnionSolid.cc,v 1.31 2006-06-29 18:43:48 gunter Exp $
+// $Id: G4UnionSolid.cc,v 1.32 2006-11-06 20:35:47 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Implementation of methods for the class G4IntersectionSolid
@@ -447,8 +447,17 @@ G4UnionSolid::CreatePolyhedron () const
 {
   G4Polyhedron* pA = fPtrSolidA->GetPolyhedron();
   G4Polyhedron* pB = fPtrSolidB->GetPolyhedron();
-  G4Polyhedron* resultant = new G4Polyhedron (pA->add(*pB));
-  return resultant;
+  if (pA && pB) {
+    G4Polyhedron* resultant = new G4Polyhedron (pA->add(*pB));
+    return resultant;
+  } else {
+    std::ostringstream oss;
+    oss << GetName() <<
+      ": one of the Boolean components has no corresponding polyhedron.";
+    G4Exception("G4UnionSolid::CreatePolyhedron",
+		"", JustWarning, oss.str().c_str());
+    return 0;
+  }
 }
 
 /////////////////////////////////////////////////////////

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IntersectionSolid.cc,v 1.27 2006-06-29 18:43:43 gunter Exp $
+// $Id: G4IntersectionSolid.cc,v 1.28 2006-11-06 20:35:46 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Implementation of methods for the class G4IntersectionSolid
@@ -501,8 +501,17 @@ G4IntersectionSolid::CreatePolyhedron () const
 {
   G4Polyhedron* pA = fPtrSolidA->GetPolyhedron();
   G4Polyhedron* pB = fPtrSolidB->GetPolyhedron();
-  G4Polyhedron* resultant = new G4Polyhedron (pA->intersect(*pB));
-  return resultant;
+  if (pA && pB) {
+    G4Polyhedron* resultant = new G4Polyhedron (pA->intersect(*pB));
+    return resultant;
+  } else {
+    std::ostringstream oss;
+    oss << GetName() <<
+      ": one of the Boolean components has no corresponding polyhedron.";
+    G4Exception("G4IntersectionSolid::CreatePolyhedron",
+		"", JustWarning, oss.str().c_str());
+    return 0;
+  }
 }
 
 /////////////////////////////////////////////////////////
