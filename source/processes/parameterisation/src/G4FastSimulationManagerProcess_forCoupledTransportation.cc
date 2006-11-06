@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FastSimulationManagerProcess_forCoupledTransportation.cc,v 1.1 2006-11-03 17:26:04 mverderi Exp $
+// $Id: G4FastSimulationManagerProcess_forCoupledTransportation.cc,v 1.2 2006-11-06 19:53:04 mverderi Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -196,23 +196,32 @@ PostStepGetPhysicalInteractionLength(const G4Track&               track,
 				     G4ForceCondition*        condition)
 {
 #ifdef PARANOIA
-  if (fNavigator->GetWorldVolume() != fWorldVolume) G4cout << "!!! ??? INCONSISTENT NAVIGATORS/WORLD VOLUMES ??? !!!" << G4endl;
+  if ( fNavigator->GetWorldVolume() != fWorldVolume ) G4Exception("!!! ??? INCONSISTENT NAVIGATORS/WORLD VOLUMES ??? !!!");
 #endif
   // -- Get current volume, and check for presence of fast simulation manager.
-  const G4VPhysicalVolume* currentVolume = G4PathFinder::GetInstance()->GetLocatedVolume(fNavigatorIndex);
-  if (currentVolume)
-    if( fFastSimulationManager = currentVolume->GetLogicalVolume()->GetFastSimulationManager() )
-      {
-	// Ask for trigger:
-	if( fFastSimulationTrigger = fFastSimulationManager->PostStepGetFastSimulationManagerTrigger(track, fNavigator) )
-	  {
-	    // Take control over stepping:
-	    *condition = ExclusivelyForced;
-	    return 0.0;
-	  }
-      }
-
-
+  // -- For the case of the navigator for tracking (fNavigatorIndex == 0)
+  // -- we use the track volume. This allows the code to be valid for both
+  // -- cases where the PathFinder is used (G4CoupledTranportation) or not
+  // -- (G4Transportation).
+  const G4VPhysicalVolume* currentVolume(0);
+  if (fNavigatorIndex == 0) currentVolume = track.GetVolume();
+  else                      currentVolume = G4PathFinder::GetInstance()->GetLocatedVolume(fNavigatorIndex);
+  if ( currentVolume )
+    {
+      fFastSimulationManager = currentVolume->GetLogicalVolume()->GetFastSimulationManager();
+      if( fFastSimulationManager )
+	{
+	  // Ask for trigger:
+	  fFastSimulationTrigger = fFastSimulationManager->PostStepGetFastSimulationManagerTrigger(track, fNavigator);
+	  if( fFastSimulationTrigger )
+	    {
+	      // Take control over stepping:
+	      *condition = ExclusivelyForced;
+	      return 0.0;
+	    }
+	}     
+    }
+  
   // -- no fast simulation occuring there:
   *condition = NotForced;
   return DBL_MAX;
@@ -245,11 +254,15 @@ G4FastSimulationManagerProcess_forCoupledTransportation::
 AtRestGetPhysicalInteractionLength(const G4Track&    track, 
 				   G4ForceCondition* condition)
 {
-  const G4VPhysicalVolume* currentVolume = G4PathFinder::GetInstance()->GetLocatedVolume(fNavigatorIndex);
-  if( fFastSimulationManager = currentVolume->GetLogicalVolume()->GetFastSimulationManager() )
+  const G4VPhysicalVolume* currentVolume(0);
+  if (fNavigatorIndex == 0) currentVolume = track.GetVolume();
+  else                      currentVolume = G4PathFinder::GetInstance()->GetLocatedVolume(fNavigatorIndex);
+  fFastSimulationManager = currentVolume->GetLogicalVolume()->GetFastSimulationManager();
+  if( fFastSimulationManager )
     {
       // Ask for trigger:
-      if( fFastSimulationTrigger = fFastSimulationManager->AtRestGetFastSimulationManagerTrigger(track, fNavigator) )
+      fFastSimulationTrigger = fFastSimulationManager->AtRestGetFastSimulationManagerTrigger(track, fNavigator);
+      if( fFastSimulationTrigger )
 	{
 	  // Dirty trick to take control over stepping. Does anyone will ever use that ?
 	  *condition = NotForced;
@@ -260,7 +273,7 @@ AtRestGetPhysicalInteractionLength(const G4Track&    track,
   // -- no fast simulation occuring there:
   *condition = NotForced;
   return DBL_MAX;
-
+  
 }
 
 //-----------------------------------------------
