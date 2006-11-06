@@ -35,7 +35,7 @@
 #include "G4Tubs.hh"
 #include "G4ThreeVector.hh"
 #include "G4Material.hh"
- 
+#include "G4VisAttributes.hh"
 
 ExN04CalorimeterROGeometry::ExN04CalorimeterROGeometry()
   : G4VReadOutGeometry()
@@ -65,6 +65,7 @@ G4VPhysicalVolume* ExN04CalorimeterROGeometry::Build()
   G4Box *ROWorldBox = new G4Box("ROWorldBox", expHall_x, expHall_y, expHall_z);
   G4LogicalVolume *ROWorldLog = new G4LogicalVolume(ROWorldBox, dummyMat,
 						    "ROWorldLogical", 0, 0, 0);
+  ROWorldLog->SetVisAttributes(G4VisAttributes::Invisible);
   G4PVPlacement *ROWorldPhys = new G4PVPlacement(0,G4ThreeVector(),
 						 "ROWorldPhysical",
 						 ROWorldLog,
