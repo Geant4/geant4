@@ -1,5 +1,5 @@
 
-$Id: History,v 1.58 2006-11-06 20:36:18 allison Exp $
+$Id: History,v 1.59 2006-11-07 14:06:02 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -20,10 +20,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
- Nov 06, 2006  J.Allison
+ Nov 06, 2006  J.Allison                  geom-bool-V08-01-01
   - G4IntersectionSolid, G4SubtractionSolid, G4UnionSolid:
-    Fix CreatePolyhedron for case of component that does
+    fixed CreatePolyhedron() for case of component that does
     not have a G4Polyhedron representation.
+  - Added checks for point on boolean surface to unit tests
+    testG4DisplacedSolid and testG4SubtractionSolid (V.Grichine).
 
  Oct 19, 2006  G.Cosmo                    geom-bool-V08-01-00
   - Added GetSurfaceArea() method, accessors and modifiers to base class
