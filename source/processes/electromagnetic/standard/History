@@ -1,4 +1,4 @@
-$Id: History,v 1.260 2006-10-31 19:57:55 vnivanch Exp $
+$Id: History,v 1.261 2006-11-07 07:45:27 urban Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+07 Nov 06:
+- G4UrbanMscModel - some optimization in ComputeTruePathLengthLimit,
+  fixes in ComputeGeomPathLength, SampleCosineTheta
+  "safetyHelper" lines have been commented out (to make possible
+  the testing of the corrections/fixes) (L.Urban)
 
 31 Oct 06: V.Ivanchenko (emstand-V08-01-11)
 - G4UrbanMscModel is changed to work with new approach of parallel
