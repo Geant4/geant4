@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PomeronCrossSection.cc,v 1.5 2006-11-07 12:48:29 gunter Exp $
+// $Id: G4PomeronCrossSection.cc,v 1.6 2006-11-07 12:51:39 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -140,7 +140,7 @@ G4double G4PomeronCrossSection::GetDiffractiveProbability(const G4double s,
 G4double G4PomeronCrossSection::GetNondiffractiveProbability(const G4double s, 
 				  const G4double impactsquare)
 {
-	return (1-std::exp(-1*Eikonal(s,impactsquare)))/pomeron_C;	
+	return (1-std::exp(-2*Eikonal(s,impactsquare)))/pomeron_C;	
 }
 
 G4double G4PomeronCrossSection::GetElasticProbability(const G4double s, 
