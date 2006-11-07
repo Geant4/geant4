@@ -5,6 +5,7 @@
 #include "G4LogicalVolume.hh"
 #include "G4Track.hh"
 #include "G4Step.hh"
+#include "G4StepPoint.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4VProcess.hh"
 #include "G4VTouchable.hh"
@@ -180,8 +181,8 @@ ProcessHits( G4Step* aStep, G4TouchableHistory* ) {
       //	       << "\t Ekin=" << aStep->GetTrack()->GetKineticEnergy() 
       //	       << " MeV ; edep=" << aStep->GetTotalEnergyDeposit() 
       //	       << " MeV ; process=";
-      //	if ( aStep->GetTrack()->GetCreatorProcess() ) {
-      //	  G4cout << aStep->GetTrack()->GetCreatorProcess()->GetProcessName();
+      //	if ( aStep->GetPostStepPoint()->GetProcessDefinedStep() ) {
+      //	  G4cout << aStep->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName();
       //	}
       //  G4cout << G4endl; 
       //}
