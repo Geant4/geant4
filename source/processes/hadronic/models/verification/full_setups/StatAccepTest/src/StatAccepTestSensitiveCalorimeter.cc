@@ -6,6 +6,7 @@
 #include "G4Track.hh"
 #include "G4Step.hh"
 #include "G4ParticleDefinition.hh"
+#include "G4VProcess.hh"
 #include "G4VTouchable.hh"
 #include "G4TouchableHistory.hh"
 #include "G4ios.hh"
@@ -127,6 +128,10 @@ ProcessHits( G4Step* aStep, G4TouchableHistory* ) {
   //              and with the following density:
   //                    rho_lAr = 1.396  g/cm^3
   //
+  //              Update (24-Oct-2006) : the coefficient C1 used 
+  //              originally by P.Sala in ATLAS:  
+  //                    C1 = 0.005  gr/(MeV*cm^2) 
+  //
   //--------------------------------------------------------------------
   bool isBirksOn = false;         //***LOOKHERE***
   bool isScintillator = true;     //              true = Quenching in Scintillator 
@@ -144,7 +149,8 @@ ProcessHits( G4Step* aStep, G4TouchableHistory* ) {
     double rho_scintillator = 1.032;                     // [g/cm^3]
 
     // --- Recombination in LiquidArgon --
-    double C1_lAr = 0.022;                               // [g*cm^-2*MeV^-1]  
+    double C1_lAr = 0.022;                // my estimation  [g*cm^-2*MeV^-1]   
+    //double C1_lAr = 0.005;                // Fluka value    [g*cm^-2*MeV^-1]  
     double C2_lAr = 0.0;
     double rho_lAr = 1.396;                              // [g/cm^3]
 
@@ -165,6 +171,20 @@ ProcessHits( G4Step* aStep, G4TouchableHistory* ) {
       double birksFactor = 1.0 / ( 1.0 + C1*dedx + C2*dedx*dedx );
       //G4cout << " birksFactor=" << birksFactor << G4endl; //***DEBUG***
       edep = edep * birksFactor;
+
+      //if ( birksFactor > 0.0  &&  1.0/birksFactor > 100.0 ) {  //***DEBUG***
+      //	G4cout << "Birks quenching = " << 1.0/birksFactor << "\t"
+      //	       << aStep->GetTrack()->GetDefinition()->GetParticleName() 
+      //	       << "\t stepLength=" << aStep->GetStepLength() << " mm" 
+      //	       << G4endl
+      //	       << "\t Ekin=" << aStep->GetTrack()->GetKineticEnergy() 
+      //	       << " MeV ; edep=" << aStep->GetTotalEnergyDeposit() 
+      //	       << " MeV ; process=";
+      //	if ( aStep->GetTrack()->GetCreatorProcess() ) {
+      //	  G4cout << aStep->GetTrack()->GetCreatorProcess()->GetProcessName();
+      //	}
+      //  G4cout << G4endl; 
+      //}
     }
 
     static bool isFirstCall = true;
