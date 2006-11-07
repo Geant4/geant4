@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Visible.cc,v 1.16 2006-11-02 11:39:22 allison Exp $
+// $Id: G4Visible.cc,v 1.17 2006-11-07 11:53:16 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -68,13 +68,22 @@ void G4Visible::SetVisAttributes (const G4VisAttributes& VA) {
   // Allocate G4VisAttributes on the heap in case the user specifies a
   // short-lived VA for a long-lived G4Visible.  Flag so that it can
   // be deleted in the destructor.
+  // First delete any G4VisAttributes already on the heap...
+  if (fAllocatedVisAttributes) delete fpVisAttributes;
   fpVisAttributes = new G4VisAttributes(VA);
   fAllocatedVisAttributes = true;
 }
 
+
+void G4Visible::SetVisAttributes (const G4VisAttributes* pVA) {
+  // First delete any G4VisAttributes already on the heap...
+  if (fAllocatedVisAttributes) delete fpVisAttributes;
+  fpVisAttributes = pVA;
+  fAllocatedVisAttributes = false;
+}
+
 G4bool G4Visible::operator != (const G4Visible& right) const {
-  // Simple test on non-equality of address...
-  return fpVisAttributes != right.fpVisAttributes;
+  return *fpVisAttributes != *right.fpVisAttributes;
 }
 
 std::ostream& operator << (std::ostream& os, const G4Visible& v) {

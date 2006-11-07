@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Visible.hh,v 1.12 2006-11-02 11:39:22 allison Exp $
+// $Id: G4Visible.hh,v 1.13 2006-11-07 11:53:16 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -60,6 +60,8 @@ public: // With description
 
   G4Visible& operator= (const G4Visible&);
 
+  G4bool operator != (const G4Visible& right) const;
+
   const G4VisAttributes* GetVisAttributes () const;
 
   void SetVisAttributes (const G4VisAttributes* pVA);
@@ -71,9 +73,6 @@ public: // With description
   // G4Visible object is created on the heap (using `new') then the
   // associated G4VisAttributes object would normally also be created
   // on the heap and managed in the same way.
-
-  G4bool operator != (const G4Visible& right) const;
-  // Simple test on non-equality of address of vis attributes.
 
 protected:
 
