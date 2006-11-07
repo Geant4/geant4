@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AttCheck.cc,v 1.14 2006-11-01 10:13:23 allison Exp $
+// $Id: G4AttCheck.cc,v 1.15 2006-11-07 11:50:22 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4AttCheck.hh"
@@ -242,7 +242,7 @@ std::ostream& operator<< (std::ostream& os, const G4AttCheck& ac)
   }
   G4String storeKey;
   if (G4AttDefStore::GetStoreKey(ac.fpDefinitions, storeKey)) {
-    os << storeKey << ":\n";
+    os << storeKey << ':' << endl;
   }
   if (!ac.fpValues) {
     // A null values vector is a valid situation.
