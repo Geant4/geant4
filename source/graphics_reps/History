@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.116 2006-11-02 11:39:46 allison Exp $
+cvs log $Id: History,v 1.117 2006-11-07 11:53:53 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
  
+7th November 2006  John Allison  (greps-V08-01-11)
+- HepPolyhedronEllipticalCone: Bug fix.
+- G4Visible: Fixed possible minor (subsidiary) memory leak in SetVisAttributes.
+- G4AttCheck: Cosmetic.
+
 2nd November 2006  John Allison  (greps-V08-01-10)
 - G4Visible: Fixed copy constructor and assignment operator for deep copies.
 
