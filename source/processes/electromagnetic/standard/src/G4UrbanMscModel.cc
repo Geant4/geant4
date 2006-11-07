@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel.cc,v 1.21 2006-11-07 07:12:24 urban Exp $
+// $Id: G4UrbanMscModel.cc,v 1.22 2006-11-07 17:08:50 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -183,7 +183,7 @@ G4UrbanMscModel::G4UrbanMscModel(G4double m_facrange, G4double m_dtrl,
 
 G4UrbanMscModel::~G4UrbanMscModel()
 {
- // delete safetyHelper; 
+  delete safetyHelper; 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -203,7 +203,7 @@ void G4UrbanMscModel::Initialise(const G4ParticleDefinition* p,
   navigator = G4TransportationManager::GetTransportationManager()
     ->GetNavigatorForTracking();
 
- // safetyHelper= new G4SafetyHelper(); 
+  safetyHelper= new G4SafetyHelper(); 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -821,9 +821,9 @@ std::vector<G4DynamicParticle*>* G4UrbanMscModel::SampleSecondaries(
           //  ******* we do not have track info at this level ***********
           //  ******* so navigator is called at boundary too ************
           G4double newsafety= -100.; // = safety;
-          newsafety= navigator->ComputeSafety(Position);
-  //        newsafety= safetyHelper->ComputeSafety(Position);
-  //        safety= newsafety; 
+  //        newsafety= navigator->ComputeSafety(Position);
+          newsafety= safetyHelper->ComputeSafety(Position);
+          safety= newsafety; 
           if(r < newsafety)
             fac = 1.;
           else
@@ -835,8 +835,8 @@ std::vector<G4DynamicParticle*>* G4UrbanMscModel::SampleSecondaries(
           // compute new endpoint of the Step
           G4ThreeVector newPosition = Position+fac*r*latDirection;
 
-           navigator->LocateGlobalPointWithinVolume(newPosition);
-  //        safetyHelper->ReLocateWithinVolume(newPosition);
+  //         navigator->LocateGlobalPointWithinVolume(newPosition);
+          safetyHelper->ReLocateWithinVolume(newPosition);
 
           fParticleChange->ProposePosition(newPosition);
         } 
