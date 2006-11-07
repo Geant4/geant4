@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel.cc,v 1.20 2006-10-31 19:21:33 japost Exp $
+// $Id: G4UrbanMscModel.cc,v 1.21 2006-11-07 07:12:24 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -107,6 +107,9 @@
 //          angles as well (L.Urban)
 // 23-10-06 correction in SampleSecondaries, now safety update
 //          computed in a simpler/faster way (L.Urban)
+// 06-11-06 corrections in ComputeTruePathLengthLimit, results are
+//          more stable in calorimeters (L.Urban)
+// 07-11-06 fix in GeomPathLength and SampleCosineTheta (L.Urban)
 //
 
 // Class Description:
@@ -173,13 +176,14 @@ G4UrbanMscModel::G4UrbanMscModel(G4double m_facrange, G4double m_dtrl,
   Zeff          = 1.;
   particle      = 0;
   theManager    = G4LossTableManager::Instance(); 
+  inside        = false;  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4UrbanMscModel::~G4UrbanMscModel()
 {
-  delete safetyHelper; 
+ // delete safetyHelper; 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -199,7 +203,7 @@ void G4UrbanMscModel::Initialise(const G4ParticleDefinition* p,
   navigator = G4TransportationManager::GetTransportationManager()
     ->GetNavigatorForTracking();
 
-  safetyHelper= new G4SafetyHelper(); 
+ // safetyHelper= new G4SafetyHelper(); 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -463,33 +467,37 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
   currentKinEnergy = dp->GetKineticEnergy();
   currentRange = 
     theManager->GetRangeFromRestricteDEDX(particle,currentKinEnergy,couple);
-  currentRadLength = couple->GetMaterial()->GetRadlen();
   lambda0 = GetLambda(currentKinEnergy);
 
   tPathLength = currentMinimalStep;
+  if(tPathLength > currentRange)
+    tPathLength = currentRange;
+
   G4StepPoint* sp = track.GetStep()->GetPreStepPoint();
   presafety = sp->GetSafety();
   G4StepStatus stepStatus = sp->GetStepStatus();
   G4int stepNumber = track.GetCurrentStepNumber();
 
-  Zeff = couple->GetMaterial()->GetTotNbOfElectPerVolume()/
-         couple->GetMaterial()->GetTotNbOfAtomsPerVolume() ;
-
   // standard  version
   //
   if (steppingAlgorithm)
   {
+    if((stepNumber > 1) && inside)
+      return tPathLength;            
+
     //compute geomlimit and presafety 
     GeomLimit(track);
 
-    // final step for low energy particles
-    // (if endpoint is inside the current volume)
-    if((currentRange <= currentMinimalStep) &&
-       (currentRange <= presafety))
-          return currentMinimalStep;
-
     if((stepStatus == fGeomBoundary) || (stepNumber == 1))
     {
+      if((stepNumber == 1) && (currentRange < presafety))
+      {
+        inside = true;
+        return tPathLength;  
+      }
+      else
+       inside = false;
+
       // facrange scaling in lambda 
       // not so strong step restriction above llimit
       G4double facr = facrange;
@@ -504,14 +512,10 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
       tgeom = geombig; 
       if(geomlimit > geommin)
       {
-        if(stepStatus == fGeomBoundary) 
-        {
+        if(stepStatus == fGeomBoundary)  
           tgeom = geomlimit/facgeom;
-        }
         else
-        {
           tgeom = 2.*geomlimit/facgeom;
-        }
       }
 
       //define stepmin here (it depends on lambda!)
@@ -542,14 +546,16 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
       tlimit *= 0.5+G4UniformRand();
     }
 
-    // range <= presafety ---> particle is not able to leave volume
-    if(currentRange <= presafety)
-      return currentMinimalStep;
+    if(currentRange < presafety)
+    {
+      inside = true;
+      return tPathLength;   
+    }
 
-    // shortcut 
-    if((currentMinimalStep < tlimit) &&
-       (currentMinimalStep < presafety))
-      return currentMinimalStep;
+    // shortcut
+    if((tPathLength < tlimit) &&
+       (tPathLength < presafety))
+      return tPathLength;   
 
     //if track far from boundaries increase tPathLength
     tnow = tlimit;
@@ -557,7 +563,7 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
       tnow  = facsafety*presafety ;
 
     // step reduction near to boundary
-    if(skindepth >= 0.)
+    if(skindepth >= 0.)  
     {
       if(geomlimit > skindepth)
       {
@@ -615,7 +621,6 @@ void G4UrbanMscModel::GeomLimit(const G4Track&  track)
                   track.GetMomentumDirection(),
                   cstep,
                   presafety);
-
   }
 }
 
@@ -647,12 +652,15 @@ G4double G4UrbanMscModel::ComputeGeomPathLength(G4double)
   G4double zmean = tPathLength;
   if (tPathLength < currentRange*dtrl) {
     zmean = lambda0*(1.-exp(-tau));
-    if(tau < taulim) zmean = tPathLength*(1.-0.5*tPathLength/lambda0) ;
+    if(tau < taulim) zmean = tPathLength*(1.-0.5*tau) ;
   } else if(currentKinEnergy < mass) {
     par1 = 1./currentRange ;
     par2 = 1./(par1*lambda0) ;
     par3 = 1.+par2 ;
-    zmean = (1.-exp(par3*log(1.-tPathLength/currentRange)))/(par1*par3) ;
+    if(tPathLength < currentRange)
+      zmean = (1.-exp(par3*log(1.-tPathLength/currentRange)))/(par1*par3) ;
+    else
+      zmean = 1./(par1*par3) ;
   } else {
     G4double T1 = theManager->GetEnergy(particle,currentRange-tPathLength,couple);
     G4double lambda1 = GetLambda(T1);
@@ -765,7 +773,7 @@ std::vector<G4DynamicParticle*>* G4UrbanMscModel::SampleSecondaries(
                                       G4double safety)
 {
   G4double kineticEnergy = dynParticle->GetKineticEnergy();
-  if(kineticEnergy <= 0.0) return 0;
+  if((kineticEnergy <= 0.0) || (truestep <= 0.)) return 0;
 
   G4double cth  = SampleCosineTheta(truestep,kineticEnergy);
   G4double sth  = sqrt((1.0 - cth)*(1.0 + cth));
@@ -812,11 +820,10 @@ std::vector<G4DynamicParticle*>* G4UrbanMscModel::SampleSecondaries(
         {
           //  ******* we do not have track info at this level ***********
           //  ******* so navigator is called at boundary too ************
-	  // navigator->LocateGlobalPointWithinVolume(Position);
           G4double newsafety= -100.; // = safety;
-          // newsafety= navigator->ComputeSafety(Position);
-          newsafety= safetyHelper->ComputeSafety(Position);
-          safety= newsafety; 
+          newsafety= navigator->ComputeSafety(Position);
+  //        newsafety= safetyHelper->ComputeSafety(Position);
+  //        safety= newsafety; 
           if(r < newsafety)
             fac = 1.;
           else
@@ -828,8 +835,8 @@ std::vector<G4DynamicParticle*>* G4UrbanMscModel::SampleSecondaries(
           // compute new endpoint of the Step
           G4ThreeVector newPosition = Position+fac*r*latDirection;
 
-          // navigator->LocateGlobalPointWithinVolume(newPosition);
-          safetyHelper->ReLocateWithinVolume(newPosition);
+           navigator->LocateGlobalPointWithinVolume(newPosition);
+  //        safetyHelper->ReLocateWithinVolume(newPosition);
 
           fParticleChange->ProposePosition(newPosition);
         } 
@@ -854,6 +861,9 @@ G4double G4UrbanMscModel::SampleCosineTheta(G4double trueStepLength,
 
   currentTau = tau ;
   lambdaeff = trueStepLength/currentTau;
+  currentRadLength = couple->GetMaterial()->GetRadlen();
+  Zeff = couple->GetMaterial()->GetTotNbOfElectPerVolume()/
+         couple->GetMaterial()->GetTotNbOfAtomsPerVolume() ;
 
   if(trueStepLength <= stepmin)
   {
