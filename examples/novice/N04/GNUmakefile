@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.9 2004-12-16 09:15:19 gcosmo Exp $
+# $Id: GNUmakefile,v 1.10 2006-11-08 16:43:57 gunter Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -11,16 +11,11 @@ ifndef G4INSTALL
   G4INSTALL = ../../..
 endif
 
-include hadronic_lists.gmk
-
 .PHONY: all
 all:  had_list lib bin
 
 had_list:
 	@echo "This example uses the QGSP 'educated guess physics list'"
-	@echo "(see $(G4INSTALL)/physics_lists/hadronic)."
-	@echo "The hadronic physics lists should be compiled before"
-	@echo "compiling this example."
 
 include $(G4INSTALL)/config/binmake.gmk
 
