@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IntersectionSolid.cc,v 1.29 2006-11-07 14:05:46 gcosmo Exp $
+// $Id: G4IntersectionSolid.cc,v 1.30 2006-11-08 09:37:41 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Implementation of methods for the class G4IntersectionSolid
@@ -41,6 +41,8 @@
 // --------------------------------------------------------------------
 
 #include "G4IntersectionSolid.hh"
+
+#include <sstream>
 
 #include "G4VoxelLimits.hh"
 #include "G4VPVParameterisation.hh"

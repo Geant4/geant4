@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UnionSolid.cc,v 1.32 2006-11-06 20:35:47 allison Exp $
+// $Id: G4UnionSolid.cc,v 1.33 2006-11-08 09:37:41 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Implementation of methods for the class G4IntersectionSolid
@@ -39,6 +39,8 @@
 // --------------------------------------------------------------------
 
 #include "G4UnionSolid.hh"
+
+#include <sstream>
 
 #include "G4VoxelLimits.hh"
 #include "G4VPVParameterisation.hh"
