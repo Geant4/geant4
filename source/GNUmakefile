@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.82 2006-10-31 14:59:27 vnivanch Exp $
+# $Id: GNUmakefile,v 1.83 2006-11-08 16:50:21 gunter Exp $
 # -----------------------------------------------------------------
 # "gmake" makes default libraries for each subdomain.
 # "gmake global" makes global libraries for each subdomain.
@@ -13,21 +13,22 @@
 #
 # (The .o files(s) are made by implicit rules.)
 
-SUBDIR1 =  global intercoms graphics_reps materials
-SUBDIR2 =  geometry particles track digits_hits processes
-SUBDIR2 += parameterisations tracking event run readout
-SUBDIR3 =  persistency interfaces visualization
-ifndef ($(G4LIB_BUILD_LISTS),1)
-SUBDIR3 += physics_lists
-endif
-
-SUBDIR4 =  g3tog4
-
 ifndef G4INSTALL
   G4INSTALL = ..
 endif
 
 include $(G4INSTALL)/config/architecture.gmk
+
+SUBDIR1 =  global intercoms graphics_reps materials
+SUBDIR2 =  geometry particles track digits_hits processes
+SUBDIR2 += parameterisations tracking event run readout
+SUBDIR3 =  persistency interfaces visualization
+ifeq ($(G4LIB_BUILD_LISTS),1)
+SUBDIR3 += physics_lists
+endif
+
+SUBDIR4 =  g3tog4
+
 G4BINDIR := $(G4BIN)/$(G4SYSTEM)
 G4LIBDIR := $(G4LIB)/$(G4SYSTEM)
 G4TMPDIR := $(G4TMP)/$(G4SYSTEM)
@@ -153,27 +154,10 @@ clean::
 	@rm -rf $(G4LIBDIR)
 	@rm -rf $(G4BINDIR)
 	@rm -rf $(G4INSTALL)/.config/bin/$(G4SYSTEM)
-	@$(ECHO) Removing physics-lists installation ...
-ifndef G4LISTS_BASE
-	@rm -rf $(G4LIB)/plists/$(G4SYSTEM)
-	@rm -rf $(G4TMP)/plists/$(G4SYSTEM)
-else
-	@rm -rf $(G4LISTS_BASE)/hadronic/plists/lib/$(G4SYSTEM)
-	@rm -rf $(G4LISTS_BASE)/hadronic/plists/tmp/$(G4SYSTEM)
-endif
 ifdef CFRONT
 	@rm -rf $(G4TREP)
 endif
 
-clean_lists::
-	@$(ECHO) Removing physics-lists installation ...
-ifndef G4LISTS_BASE
-	@rm -rf $(G4LIB)/plists/$(G4SYSTEM)
-	@rm -rf $(G4TMP)/plists/$(G4SYSTEM)
-else
-	@rm -rf $(G4LISTS_BASE)/hadronic/plists/lib/$(G4SYSTEM)
-	@rm -rf $(G4LISTS_BASE)/hadronic/plists/tmp/$(G4SYSTEM)
-endif
 
 # Pay _extremely_ attention before executing the following target !!
 #
@@ -187,9 +171,5 @@ clean_all::
 	@rm -rf $(G4BIN)
 	@$(ECHO) Removing $(G4INCLUDE) ...
 	@rm -rf $(G4INCLUDE)
-ifdef G4LISTS_BASE
-	@$(ECHO) Removing physics-lists installation ...
-	@rm -rf $(G4LISTS_BASE)/hadronic/plists
-endif
 	@$(ECHO) Removing installation configurations ...
 	@rm -rf $(G4INSTALL)/.config
