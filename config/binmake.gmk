@@ -1,4 +1,4 @@
-# $Id: binmake.gmk,v 1.115 2006-10-31 14:10:57 gunter Exp $
+# $Id: binmake.gmk,v 1.116 2006-11-08 16:52:19 gunter Exp $
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
 #    First implementation: Gabriele Cosmo, 25/06/1998.
@@ -206,8 +206,13 @@ ifdef GLOBALLIBS
     LDLIBS2 += -lG3toG4
   endif
 
-  LDLIBS2 += -lG4readout \
-             -lG4run \
+  LDLIBS2 += -lG4readout
+
+  ifeq ($(G4LIB_BUILD_LISTS),1)
+    LDLIBS2 += -lG4physicslists
+  endif
+    
+  LDLIBS2 += -lG4run \
              -lG4event \
              -lG4tracking \
 	     -lG4parmodels \
