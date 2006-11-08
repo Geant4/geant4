@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polyhedra.cc,v 1.31 2006-11-07 15:16:47 gcosmo Exp $
+// $Id: G4Polyhedra.cc,v 1.32 2006-11-08 09:49:51 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -902,7 +902,7 @@ G4Polyhedron* G4Polyhedra::CreatePolyhedron() const
     // The following code prepares for:
     // HepPolyhedron::createPolyhedron(int Nnodes, int Nfaces,
     //                                 const double xyz[][3],
-    //                                 const int faces[][4])
+    //                                 const int faces_vec[][4])
     // Here is an extract from the header file HepPolyhedron.h:
     /**
      * Creates user defined polyhedron.
@@ -918,7 +918,7 @@ G4Polyhedron* G4Polyhedra::CreatePolyhedron() const
      * @param  Nnodes number of nodes
      * @param  Nfaces number of faces
      * @param  xyz    nodes
-     * @param  faces  faces (quadrilaterals or triangles)
+     * @param  faces_vec  faces (quadrilaterals or triangles)
      * @return status of the operation - is non-zero in case of problem
      */
     G4int nNodes;
@@ -926,7 +926,7 @@ G4Polyhedron* G4Polyhedra::CreatePolyhedron() const
     typedef G4double double3[3];
     double3* xyz;
     typedef G4int int4[4];
-    int4* faces;
+    int4* faces_vec;
     if (phiIsOpen)
     {
       // Triangulate open ends.  Simple ear-chopping algorithm...
@@ -986,7 +986,7 @@ G4Polyhedron* G4Polyhedra::CreatePolyhedron() const
 
       nNodes = (numSide + 1) * numCorner;
       nFaces = numSide * numCorner + 2 * triQuads.size();
-      faces = new int4[nFaces];
+      faces_vec = new int4[nFaces];
       G4int iface = 0;
       G4int addition = numCorner * numSide;
       G4int d = numCorner - 1;
@@ -1012,10 +1012,10 @@ G4Polyhedron* G4Polyhedra::CreatePolyhedron() const
           G4int ab = std::abs(b - a);
           G4int bc = std::abs(c - b);
           G4int ca = std::abs(a - c);
-          faces[iface][0] = (ab == 1 || ab == d)? a: -a;
-          faces[iface][1] = (bc == 1 || bc == d)? b: -b;
-          faces[iface][2] = (ca == 1 || ca == d)? c: -c;
-          faces[iface][3] = 0;
+          faces_vec[iface][0] = (ab == 1 || ab == d)? a: -a;
+          faces_vec[iface][1] = (bc == 1 || bc == d)? b: -b;
+          faces_vec[iface][2] = (ca == 1 || ca == d)? c: -c;
+          faces_vec[iface][3] = 0;
           ++iface;
         }
       }
@@ -1035,17 +1035,17 @@ G4Polyhedron* G4Polyhedra::CreatePolyhedron() const
           xyz[ixyz][2] = corners[iCorner].z;
           if (iCorner < numCorner - 1)
           {
-            faces[iface][0] = ixyz + 1;
-            faces[iface][1] = ixyz + numCorner + 1;
-            faces[iface][2] = ixyz + numCorner + 2;
-            faces[iface][3] = ixyz + 2;
+            faces_vec[iface][0] = ixyz + 1;
+            faces_vec[iface][1] = ixyz + numCorner + 1;
+            faces_vec[iface][2] = ixyz + numCorner + 2;
+            faces_vec[iface][3] = ixyz + 2;
           }
           else
           {
-            faces[iface][0] = ixyz + 1;
-            faces[iface][1] = ixyz + numCorner + 1;
-            faces[iface][2] = ixyz + 2;
-            faces[iface][3] = ixyz - numCorner + 2;
+            faces_vec[iface][0] = ixyz + 1;
+            faces_vec[iface][1] = ixyz + numCorner + 1;
+            faces_vec[iface][2] = ixyz + 2;
+            faces_vec[iface][3] = ixyz - numCorner + 2;
           }
           ++iface;
           ++ixyz;
@@ -1068,7 +1068,7 @@ G4Polyhedron* G4Polyhedra::CreatePolyhedron() const
       nNodes = numSide * numCorner;
       nFaces = numSide * numCorner;;
       xyz = new double3[nNodes];
-      faces = new int4[nFaces];
+      faces_vec = new int4[nFaces];
       const G4double dPhi = (endPhi - startPhi) / numSide;
       G4double phi = startPhi;
       G4int ixyz = 0, iface = 0;
@@ -1083,34 +1083,34 @@ G4Polyhedron* G4Polyhedra::CreatePolyhedron() const
           {
             if (iCorner < numCorner - 1)
             {
-              faces[iface][0] = ixyz + 1;
-              faces[iface][1] = ixyz + numCorner + 1;
-              faces[iface][2] = ixyz + numCorner + 2;
-              faces[iface][3] = ixyz + 2;
+              faces_vec[iface][0] = ixyz + 1;
+              faces_vec[iface][1] = ixyz + numCorner + 1;
+              faces_vec[iface][2] = ixyz + numCorner + 2;
+              faces_vec[iface][3] = ixyz + 2;
             }
             else
             {
-              faces[iface][0] = ixyz + 1;
-              faces[iface][1] = ixyz + numCorner + 1;
-              faces[iface][2] = ixyz + 2;
-              faces[iface][3] = ixyz - numCorner + 2;
+              faces_vec[iface][0] = ixyz + 1;
+              faces_vec[iface][1] = ixyz + numCorner + 1;
+              faces_vec[iface][2] = ixyz + 2;
+              faces_vec[iface][3] = ixyz - numCorner + 2;
             }
           }
           else   // Last side joins ends...
           {
             if (iCorner < numCorner - 1)
             {
-              faces[iface][0] = ixyz + 1;
-              faces[iface][1] = ixyz + numCorner - nFaces + 1;
-              faces[iface][2] = ixyz + numCorner - nFaces + 2;
-              faces[iface][3] = ixyz + 2;
+              faces_vec[iface][0] = ixyz + 1;
+              faces_vec[iface][1] = ixyz + numCorner - nFaces + 1;
+              faces_vec[iface][2] = ixyz + numCorner - nFaces + 2;
+              faces_vec[iface][3] = ixyz + 2;
             }
             else
             {
-              faces[iface][0] = ixyz + 1;
-              faces[iface][1] = ixyz - nFaces + numCorner + 1;
-              faces[iface][2] = ixyz - nFaces + 2;
-              faces[iface][3] = ixyz - numCorner + 2;
+              faces_vec[iface][0] = ixyz + 1;
+              faces_vec[iface][1] = ixyz - nFaces + numCorner + 1;
+              faces_vec[iface][2] = ixyz - nFaces + 2;
+              faces_vec[iface][3] = ixyz - numCorner + 2;
             }
           }
           ++ixyz;
@@ -1120,8 +1120,8 @@ G4Polyhedron* G4Polyhedra::CreatePolyhedron() const
       }
     }
     G4Polyhedron* polyhedron = new G4Polyhedron;
-    G4int problem = polyhedron->createPolyhedron(nNodes, nFaces, xyz, faces);
-    delete faces;
+    G4int problem = polyhedron->createPolyhedron(nNodes, nFaces, xyz, faces_vec);
+    delete faces_vec;
     delete xyz;
     if (problem)
     {
