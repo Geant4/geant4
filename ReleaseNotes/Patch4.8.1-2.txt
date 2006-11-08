@@ -11,7 +11,7 @@ List of fixes included in this public patch since the public release 8.1.p01:
     + management
       o Added empty virtual method CheckOverlaps() to G4VPhysicalVolume to
         allow for proper overloading from subclasses. Implementation returns
-        always 'false', which the case for replicas.
+        always 'false', which is the case for replicas.
 
   o Global:
     ------
@@ -43,7 +43,7 @@ List of fixes included in this public patch since the public release 8.1.p01:
         lists); added low energy threshold of 20 MeV in G4HadronElastic for
         QElastic. For any particle with kinetic energy below 10 KeV, the
         primary particle is returned unchanged and no scattering is sampled.
-        This prevents situations of loe-energy neutrons scattering forever,
+        This prevents situations of low-energy neutrons scattering forever,
         and reduces precision in computing scattering for low-energy hadrons.
     + models/utils:
       o Reduced warning output from G4Fragment on negative excitation energy;
@@ -52,7 +52,6 @@ List of fixes included in this public patch since the public release 8.1.p01:
         Correction addressing problem report #887 on WIN32/VC8.
       o Removed meaningless 'const' qualifier from return type of method
         G4Fancy3DNucleusHelper().
-
 
   o Particles:
     ---------
