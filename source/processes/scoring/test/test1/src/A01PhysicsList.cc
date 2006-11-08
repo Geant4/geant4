@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: A01PhysicsList.cc,v 1.1 2006-07-14 14:43:29 asaim Exp $
+// $Id: A01PhysicsList.cc,v 1.2 2006-11-08 19:16:27 asaim Exp $
 // --------------------------------------------------------------
 //
 // 28-Jan-04 Add QGSP_BERT and QGSP_BIC for hadronic lists. T. Koi
@@ -43,7 +43,7 @@
 #include "G4ios.hh"
 #include <iomanip>
 
-#include "A01Transport.hh"
+////////////////////////////////////////////////#include "A01Transport.hh"
 #include "A01ParaPhysics.hh"
 #include "A01GeneralPhysics.hh"
 #include "A01EMPhysics.hh"
@@ -59,10 +59,10 @@ A01PhysicsList::A01PhysicsList(G4bool ifPara,G4bool ifDisp):  G4VModularPhysicsL
   SetVerboseLevel(1);
 
   // Transportation
-  RegisterPhysics( new A01Transport("Transport") );
+////////////////////////////////////////////////  RegisterPhysics( new A01Transport("Transport") );
 
   // Parallel worl navigation process
-  if(ifPara) RegisterPhysics( new A01ParaPhysics("parallel navi"));
+  if(ifPara) RegisterPhysics( new A01ParaPhysics("parallelScoring"));
 
   // General Physics ( Create ALL Particle and apply Decay )
   RegisterPhysics( new A01GeneralPhysics("general") );
@@ -87,6 +87,7 @@ A01PhysicsList::~A01PhysicsList()
 
 void A01PhysicsList::ConstructProcess()
 {
+  AddTransportation();
   G4PhysConstVector::iterator itr;
   for (itr = physicsVector->begin(); itr!= physicsVector->end(); ++itr) {
     (*itr)->ConstructProcess();
