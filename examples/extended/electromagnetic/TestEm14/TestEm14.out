@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-08-01-patch-01-ref    (27-July-2006)
+ Geant4 version Name: geant4-08-01-patch-02-ref    (10-November-2006)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -83,13 +83,17 @@ Registered model factories:
   drawByCharge
   drawByParticleID
   drawByOriginVolume
-  drawByAttribute
+
+Registered models: 
+  None
 
 Registered filter factories:
   chargeFilter
   particleFilter
   originVolumeFilter
-  attributeFilter
+
+Registered filters:
+  None
 
 /run/verbose 2
 #
@@ -114,7 +118,6 @@ physicsList->setCut() start.
 /run/beamOn 100000
 
 phot:  Total cross sections from Sandia parametrisation. 
-      Sampling according PhotoElectric model
 
 compt:  Total cross sections has a good parametrisation from 10 KeV to (100/Z) GeV
       Sampling according Klein-Nishina model
@@ -122,7 +125,7 @@ compt:  Total cross sections has a good parametrisation from 10 KeV to (100/Z) G
       Lambda tables from 100 eV  to 100 GeV in 90 bins.
 
 conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
-      sampling secondary e+e- according Bethe-Heitler model
+      sampling secondary e+e- according to the Bethe-Heitler model
       tables are built for  gamma
       Lambda tables from 1.022 MeV to 100 GeV in 100 bins.
 
@@ -150,7 +153,7 @@ eBrem:   tables are built for  e+
       Total cross sections from a parametrisation based on the EEDL data library. 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
 
-annihil:       Sampling according eplus2gg model
+annihil:       Heilter model of formula of annihilation into 2 photons
       tables are built for  e+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
 
@@ -274,7 +277,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=23s Real=24s Sys=0s
+  User=24s Real=55s Sys=0s
 
  The run consists of 100000 gamma of 100 keV through 100 m   of Water (density: 1 g/cm3 )
 
@@ -283,9 +286,7 @@ Run Summary
  MeanFreePath:	6.0724 cm  +- 6.0579 cm 	massic: 6.0724 g/cm2 
  CrossSection:	0.16468 cm^-1 			massic: 0.16468 cm2/g
 
- mean energy of charged secondaries: 15.125 keV	mass_energy_transfer coef: 0.024907 cm2/g
-
- Verification : crossSections from G4EmCalculator 
+ Verification : crossSections from G4EmCalculator. 
 	compt= 0.1623 cm2/g	phot= 0.0026853 cm2/g	total= 0.16498 cm2/g
 
 --------- Ranecu engine status ---------
@@ -343,23 +344,21 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=25s Real=25s Sys=0s
+  User=24s Real=57s Sys=0s
 
  The run consists of 100000 e- of 100 MeV through 100 m   of Water (density: 1 g/cm3 )
 
- Process calls frequency --->	eBrem = 61689	eIoni = 38311
+ Process calls frequency --->	eBrem = 61704	eIoni = 38296
 
- MeanFreePath:	1.5667 cm  +- 1.5656 cm 	massic: 1.5667 g/cm2 
- CrossSection:	0.63828 cm^-1 			massic: 0.63828 cm2/g
+ MeanFreePath:	1.5662 cm  +- 1.5652 cm 	massic: 1.5662 g/cm2 
+ CrossSection:	0.6385 cm^-1 			massic: 0.6385 cm2/g
 
- mean energy of charged secondaries: 704.14 keV	mass_energy_transfer coef: 0.0044944 cm2/g
-
- Verification : crossSections from G4EmCalculator 
+ Verification : crossSections from G4EmCalculator. 
 	eBrem= 0.39397 cm2/g	eIoni= 0.24497 cm2/g	total= 0.63894 cm2/g
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1057715345, 1956988917
+ Current couple of seeds = 1508433973, 1464590570
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-08-01-patch-01-ref    (27-July-2006)
+ Geant4 version Name: geant4-08-01-patch-02-ref    (10-November-2006)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -29,13 +29,17 @@ Registered model factories:
   drawByCharge
   drawByParticleID
   drawByOriginVolume
-  drawByAttribute
+
+Registered models: 
+  None
 
 Registered filter factories:
   chargeFilter
   particleFilter
   originVolumeFilter
-  attributeFilter
+
+Registered filters:
+  None
 
  hist file = g4.p11
  Nb of bins in Edep plot = 65
@@ -75,7 +79,6 @@ Detector positron cut = 1 mm
 Detector cuts are set
 
 phot:  Total cross sections from Sandia parametrisation. 
-      Sampling according PhotoElectric model
 
 compt:  Total cross sections has a good parametrisation from 10 KeV to (100/Z) GeV
       Sampling according Klein-Nishina model
@@ -83,7 +86,7 @@ compt:  Total cross sections has a good parametrisation from 10 KeV to (100/Z) G
       Lambda tables from 100 eV  to 100 GeV in 90 bins.
 
 conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
-      sampling secondary e+e- according Bethe-Heitler model
+      sampling secondary e+e- according to the Bethe-Heitler model
       tables are built for  gamma
       Lambda tables from 1.022 MeV to 100 GeV in 100 bins.
 
@@ -156,7 +159,7 @@ Lorentz Factor	XTR photon number
 8.085e+04	3.149
 9.283e+04	3.149
 
-total time for build X-ray TR energy loss tables = 0.58 s
+total time for build X-ray TR energy loss tables = 0.61 s
 
 SynRad:  Incoherent Synchrotron Radiation
       good description for long magnets at all energies
@@ -173,7 +176,7 @@ eBrem:   tables are built for  e+
       Total cross sections from a parametrisation based on the EEDL data library. 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
 
-annihil:       Sampling according eplus2gg model
+annihil:       Heilter model of formula of annihilation into 2 photons
       tables are built for  e+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
 
@@ -230,7 +233,7 @@ Lorentz Factor	XTR photon number
 8.085e+04	3.149
 9.283e+04	3.149
 
-total time for build X-ray TR energy loss tables = 0.6 s
+total time for build X-ray TR energy loss tables = 0.61 s
 
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
@@ -338,26 +341,26 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=24.59s Real=34.84s Sys=9.9s
+  User=26.44s Real=81.81s Sys=11.64s
  ================== run summary =====================
  end of Run TotNbofEvents = 1000
-    mean charged track length   in absorber=113.297 +- 1.98882  mm  
+    mean charged track length   in absorber=112.506 +- 1.71978  mm  
 
-            mean energy deposit in absorber=0.0508598 +- 0.00080949  MeV 
+            mean energy deposit in absorber=0.0511574 +- 0.00074976  MeV 
 
- mean number of steps in absorber (charged) =58.65 +- 1.42109      
- mean number of steps in absorber (neutral) =2.906 +- 0.0572814      
+ mean number of steps in absorber (charged) =65.861 +- 1.50358      
+ mean number of steps in absorber (neutral) =2.829 +- 0.0533457      
 
-   mean number of charged secondaries = 5.084 +- 0.0947467
+   mean number of charged secondaries = 4.993 +- 0.0890671
 
-   mean number of neutral secondaries = 0.14 +- 0.012182
+   mean number of neutral secondaries = 0.118 +- 0.0109579
 
-   mean number of e-s =5.084  and e+s =0
+   mean number of e-s =4.993  and e+s =0
 
-(number) transmission coeff=0.531  reflection coeff=0.054
+(number) transmission coeff=0.514  reflection coeff=0.075
 
  energy deposit distribution 
-#entries=1000    #underflows=0    #overflows=53
+#entries=1000    #underflows=0    #overflows=45
  bin nb      Elow      entries     normalized 
     0         0           0           0
     1   1.53846           0           0
@@ -367,71 +370,71 @@ Run Summary
     5   7.69231           0           0
     6   9.23077           0           0
     7   10.7692           0           0
-    8   12.3077           4       0.004
-    9   13.8462           7       0.007
-   10   15.3846           3       0.003
-   11   16.9231          13       0.013
-   12   18.4615          13       0.013
-   13        20          17       0.017
+    8   12.3077           3       0.003
+    9   13.8462           5       0.005
+   10   15.3846           9       0.009
+   11   16.9231          15       0.015
+   12   18.4615          21       0.021
+   13        20          23       0.023
    14   21.5385          15       0.015
-   15   23.0769          24       0.024
-   16   24.6154          27       0.027
-   17   26.1538          21       0.021
-   18   27.6923          35       0.035
-   19   29.2308          19       0.019
-   20   30.7692          40        0.04
-   21   32.3077          42       0.042
-   22   33.8462          33       0.033
-   23   35.3846          37       0.037
-   24   36.9231          33       0.033
-   25   38.4615          35       0.035
-   26        40          27       0.027
-   27   41.5385          26       0.026
-   28   43.0769          23       0.023
-   29   44.6154          30        0.03
-   30   46.1538          21       0.021
-   31   47.6923          22       0.022
-   32   49.2308          25       0.025
+   15   23.0769          16       0.016
+   16   24.6154          15       0.015
+   17   26.1538          20        0.02
+   18   27.6923          29       0.029
+   19   29.2308          16       0.016
+   20   30.7692          22       0.022
+   21   32.3077          27       0.027
+   22   33.8462          37       0.037
+   23   35.3846          25       0.025
+   24   36.9231          29       0.029
+   25   38.4615          47       0.047
+   26        40          28       0.028
+   27   41.5385          27       0.027
+   28   43.0769          35       0.035
+   29   44.6154          25       0.025
+   30   46.1538          24       0.024
+   31   47.6923          31       0.031
+   32   49.2308          23       0.023
    33   50.7692          21       0.021
-   34   52.3077          28       0.028
-   35   53.8462          23       0.023
-   36   55.3846          17       0.017
-   37   56.9231          19       0.019
-   38   58.4615          19       0.019
-   39        60          13       0.013
-   40   61.5385          15       0.015
-   41   63.0769          12       0.012
-   42   64.6154          15       0.015
-   43   66.1538          15       0.015
-   44   67.6923          14       0.014
-   45   69.2308          15       0.015
+   34   52.3077          19       0.019
+   35   53.8462          26       0.026
+   36   55.3846          24       0.024
+   37   56.9231          25       0.025
+   38   58.4615          25       0.025
+   39        60          17       0.017
+   40   61.5385          23       0.023
+   41   63.0769          22       0.022
+   42   64.6154          16       0.016
+   43   66.1538          18       0.018
+   44   67.6923          16       0.016
+   45   69.2308          13       0.013
    46   70.7692          12       0.012
-   47   72.3077           8       0.008
-   48   73.8462          16       0.016
+   47   72.3077           9       0.009
+   48   73.8462           6       0.006
    49   75.3846           5       0.005
-   50   76.9231          10        0.01
-   51   78.4615           9       0.009
-   52        80           6       0.006
-   53   81.5385           9       0.009
-   54   83.0769          11       0.011
-   55   84.6154           3       0.003
-   56   86.1538          11       0.011
-   57   87.6923           4       0.004
-   58   89.2308           4       0.004
-   59   90.7692           1       0.001
-   60   92.3077           4       0.004
-   61   93.8462           2       0.002
-   62   95.3846           4       0.004
-   63   96.9231           5       0.005
-   64   98.4615           5       0.005
+   50   76.9231           6       0.006
+   51   78.4615          12       0.012
+   52        80           9       0.009
+   53   81.5385           3       0.003
+   54   83.0769           5       0.005
+   55   84.6154          12       0.012
+   56   86.1538           7       0.007
+   57   87.6923           5       0.005
+   58   89.2308           2       0.002
+   59   90.7692           4       0.004
+   60   92.3077           5       0.005
+   61   93.8462           4       0.004
+   62   95.3846           6       0.006
+   63   96.9231           7       0.007
+   64   98.4615           4       0.004
 
- Emp =       0.0323077   width=      0.0307692  MeV 
+ Emp =       0.0384615   width=      0.0307692  MeV 
 
 ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 2067530200, 894182452
+ Current couple of seeds = 2133173338, 1099224346
 ----------------------------------------
 
 ========= Table of registered couples ==============================

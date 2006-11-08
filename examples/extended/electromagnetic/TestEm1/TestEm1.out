@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-08-01-patch-01-ref    (27-July-2006)
+ Geant4 version Name: geant4-08-01-patch-02-ref    (10-November-2006)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -73,13 +73,17 @@ Registered model factories:
   drawByCharge
   drawByParticleID
   drawByOriginVolume
-  drawByAttribute
+
+Registered models: 
+  None
 
 Registered filter factories:
   chargeFilter
   particleFilter
   originVolumeFilter
-  attributeFilter
+
+Registered filters:
+  None
 
 /run/verbose 2
 #
@@ -116,7 +120,6 @@ PhysicsList::SetCuts:CutLength : 1 mm
 /run/beamOn 2000
 
 phot:  Total cross sections from Sandia parametrisation. 
-      Sampling according PhotoElectric model
 
 compt:  Total cross sections has a good parametrisation from 10 KeV to (100/Z) GeV
       Sampling according Klein-Nishina model
@@ -124,7 +127,7 @@ compt:  Total cross sections has a good parametrisation from 10 KeV to (100/Z) G
       Lambda tables from 100 eV  to 100 GeV in 90 bins.
 
 conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
-      sampling secondary e+e- according Bethe-Heitler model
+      sampling secondary e+e- according to the Bethe-Heitler model
       tables are built for  gamma
       Lambda tables from 1.022 MeV to 100 GeV in 100 bins.
 
@@ -158,7 +161,7 @@ eBrem:   tables are built for  e+
       Total cross sections from a parametrisation based on the EEDL data library. 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
 
-annihil:       Sampling according eplus2gg model
+annihil:       Heilter model of formula of annihilation into 2 photons
       tables are built for  e+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
 
@@ -286,7 +289,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=86.67s Real=120.77s Sys=28.78s
+  User=93.46s Real=276.55s Sys=28.48s
 
  ======================== run summary ======================
 
@@ -294,29 +297,29 @@ Run Summary
 
  ============================================================
 
- total energy deposit: 99.79 MeV
+ total energy deposit: 99.783 MeV
 
- nb tracks/event   neutral:     28.021   charged:      148.4
- nb  steps/event   neutral:     141.31   charged:     360.42
+ nb tracks/event   neutral:     27.951   charged:     148.47
+ nb  steps/event   neutral:     141.41   charged:     363.77
 
  nb of process calls per event: 
           eBrem       eIoni       compt        phot         mscTransportation        conv     annihil
-         26.298      187.99      113.29      25.636       144.7       0.962      1.4255      1.4255
+         26.174      188.17      113.46      25.501      147.96      0.9905      1.4625       1.463
 
 ---------------------------------------------------------
  Primary particle : 
- true Range = 11.176 cm    rms = 3.7142 cm 
- proj Range = 9.6596 cm    rms = 3.4421 cm 
- proj/true  = 0.8643
- transverse dispersion at end = 1.6963 cm 
-      mass true Range from simulation = 30.176 g/cm2 
+ true Range = 11.121 cm    rms = 3.8093 cm 
+ proj Range = 9.5817 cm    rms = 3.5013 cm 
+ proj/true  = 0.86158
+ transverse dispersion at end = 1.8005 cm 
+      mass true Range from simulation = 30.027 g/cm2 
        from PhysicsTable (csda range) = 31.791 g/cm2 
 ---------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1988666443, 1427430660
+ Current couple of seeds = 486808439, 1322415313
 ----------------------------------------
 #
 /process/eLoss/verbose 0
@@ -344,7 +347,7 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1988666443, 1427430660
+ Current couple of seeds = 486808439, 1322415313
 ----------------------------------------
 Start Run processing.
 
@@ -352,7 +355,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=173.32s Real=230.19s Sys=50.44s
+  User=184.6s Real=520s Sys=51.54s
 
  ======================== run summary ======================
 
@@ -362,27 +365,27 @@ Run Summary
 
  total energy deposit: 99.793 MeV
 
- nb tracks/event   neutral:     36.447   charged:     290.23
- nb  steps/event   neutral:     145.78   charged:     770.17
+ nb tracks/event   neutral:     36.393   charged:      290.7
+ nb  steps/event   neutral:     146.05   charged:     775.79
 
  nb of process calls per event: 
-          eBrem       eIoni         msc       compt        phot        conv     annihilTransportation
-         34.636      448.94      285.18      109.33      34.116      1.4075       1.408        0.93
+          eIoni       eBrem         msc        phot       compt        conv     annihilTransportation
+         449.81      34.605      289.96      34.055      109.65       1.397      1.3975       0.949
 
 ---------------------------------------------------------
  Primary particle : 
- true Range = 11.114 cm    rms = 3.9518 cm 
- proj Range = 9.6108 cm    rms = 3.6834 cm 
- proj/true  = 0.86476
- transverse dispersion at end = 1.7391 cm 
-      mass true Range from simulation = 30.007 g/cm2 
+ true Range = 11.149 cm    rms = 3.8924 cm 
+ proj Range = 9.5626 cm    rms = 3.5687 cm 
+ proj/true  = 0.85772
+ transverse dispersion at end = 1.9027 cm 
+      mass true Range from simulation = 30.102 g/cm2 
        from PhysicsTable (csda range) = 31.791 g/cm2 
 ---------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1570026181, 1562329690
+ Current couple of seeds = 763249003, 2053971629
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

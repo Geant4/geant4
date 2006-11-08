@@ -1,13 +1,13 @@
 
 *************************************************************
- Geant4 version Name: geant4-08-01-patch-01-ref    (27-July-2006)
+ Geant4 version Name: geant4-08-01-patch-02-ref    (10-November-2006)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
 
 
-***** Table : Nb of materials = 10 *****
+***** Table : Nb of materials = 8 *****
 
  Material:      Air     density:  1.290 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 285.161 m  
    --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
@@ -26,14 +26,8 @@
  Material:     Iron     density:  7.870 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.759 cm 
    --->  Element: Iron ( )   Z = 26.0   N =  55.9   A =  55.85 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material:   Copper     density:  8.960 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.436 cm 
-   --->  Element: Copper ( )   Z = 29.0   N =  63.5   A =  63.55 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
-
  Material:     Lead     density: 11.350 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   5.612 mm 
    --->  Element: Lead ( )   Z = 82.0   N = 207.2   A = 207.19 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
-
- Material:  Uranium     density: 18.950 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   3.166 mm 
-   --->  Element: Uranium ( )   Z = 92.0   N = 238.0   A = 238.03 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
  Material:      BGO     density:  7.100 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.123 cm 
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  15.41 %  ElmAbundance  63.16 %
@@ -69,13 +63,17 @@ Registered model factories:
   drawByCharge
   drawByParticleID
   drawByOriginVolume
-  drawByAttribute
+
+Registered models: 
+  None
 
 Registered filter factories:
   chargeFilter
   particleFilter
   originVolumeFilter
-  attributeFilter
+
+Registered filters:
+  None
 
 /run/verbose 2
 #
@@ -88,6 +86,7 @@ Registered filter factories:
 #
 /testem/phys/addPhysics  standard
 PhysicsList::AddPhysicsList: <standard>
+#### /testem/phys/addPhysics  g4v52
 #
 /testem/phys/setCuts 1.0 mm
 #
@@ -112,7 +111,6 @@ PhysicsList::SetCuts:CutLength : 1 mm
 /run/beamOn 100
 
 phot:  Total cross sections from Sandia parametrisation. 
-      Sampling according PhotoElectric model
 
 compt:  Total cross sections has a good parametrisation from 10 KeV to (100/Z) GeV
       Sampling according Klein-Nishina model
@@ -120,7 +118,7 @@ compt:  Total cross sections has a good parametrisation from 10 KeV to (100/Z) G
       Lambda tables from 100 eV  to 100 GeV in 90 bins.
 
 conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
-      sampling secondary e+e- according Bethe-Heitler model
+      sampling secondary e+e- according to the Bethe-Heitler model
       tables are built for  gamma
       Lambda tables from 1.022 MeV to 100 GeV in 100 bins.
 
@@ -152,7 +150,7 @@ eBrem:   tables are built for  e+
       Total cross sections from a parametrisation based on the EEDL data library. 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
 
-annihil:       Sampling according eplus2gg model
+annihil:       Heilter model of formula of annihilation into 2 photons
       tables are built for  e+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
 
@@ -281,24 +279,24 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=168.34s Real=217.76s Sys=46.9s
+  User=168.89s Real=473.25s Sys=48.33s
 
  SUMMARY 
 
- energy deposit :   94.66 % E0 +-    0.96 % E0
- charged traklen:  486.07 radl +-    5.12 radl
- neutral traklen: 4458.46 radl +-  129.47 radl
+ energy deposit :   94.73 % E0 +-    1.01 % E0
+ charged traklen:  481.00 radl +-    5.31 radl
+ neutral traklen: 4480.68 radl +-  124.78 radl
 
- 90.00 % confinement: radius = 3.10 radl  (2.76 cm )
+ 90.00 % confinement: radius = 3.11 radl  (2.78 cm )
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1731534456, 43911982
+ Current couple of seeds = 883291145, 1147291742
 ----------------------------------------
 
 <<<<ACCEPTANCE>>>> 100 events for Total Energy in Absorber
-Edep: 0.94662024  delEdep= 0.0016202405 nrms= 1.6877505
-Erms: 0.0095551788  delErms= -4.4821243e-05 nrms= -0.046688795
+Edep: 0.94734711  delEdep= 0.0023471143 nrms= 2.4449107
+Erms: 0.010138023  delErms= 0.00053802299 nrms= 0.56044062
 <<<<END>>>>   IS ACCEPTED
 
 Graphics systems deleted.

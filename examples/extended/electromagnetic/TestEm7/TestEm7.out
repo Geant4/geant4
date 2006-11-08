@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-08-01-patch-01-ref    (27-July-2006)
+ Geant4 version Name: geant4-08-01-patch-02-ref    (10-November-2006)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -44,13 +44,17 @@ Registered model factories:
   drawByCharge
   drawByParticleID
   drawByOriginVolume
-  drawByAttribute
+
+Registered models: 
+  None
 
 Registered filter factories:
   chargeFilter
   particleFilter
   originVolumeFilter
-  attributeFilter
+
+Registered filters:
+  None
 
 /run/verbose 2
 #
@@ -100,7 +104,6 @@ PhysicsList::SetCuts:CutLength : 1 mm
 /run/beamOn 10000
 
 phot:  Total cross sections from Sandia parametrisation. 
-      Sampling according PhotoElectric model
 
 compt:  Total cross sections has a good parametrisation from 10 KeV to (100/Z) GeV
       Sampling according Klein-Nishina model
@@ -108,7 +111,7 @@ compt:  Total cross sections has a good parametrisation from 10 KeV to (100/Z) G
       Lambda tables from 100 eV  to 100 GeV in 90 bins.
 
 conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
-      sampling secondary e+e- according Bethe-Heitler model
+      sampling secondary e+e- according to the Bethe-Heitler model
       tables are built for  gamma
       Lambda tables from 1.022 MeV to 100 GeV in 100 bins.
 
@@ -140,13 +143,13 @@ eBrem:   tables are built for  e+
       Total cross sections from a parametrisation based on the EEDL data library. 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
 
-annihil:       Sampling according eplus2gg model
+annihil:       Heilter model of formula of annihilation into 2 photons
       tables are built for  e+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
 
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary/stepping algorithm is active with facrange= 0.2  Step limitation 0
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -156,7 +159,7 @@ hIoni:   tables are built for  proton
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 msc:  Model variant of multiple scattering for GenericIon
-      Boundary/stepping algorithm is active with facrange= 0.2  Step limitation 0
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 ionIoni:   tables are built for  GenericIon
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -175,7 +178,7 @@ hIoni:   tables are built for  anti_proton
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary/stepping algorithm is active with facrange= 0.2  Step limitation 0
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 muIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -220,7 +223,7 @@ hIoni:   tables are built for  pi+
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary/stepping algorithm is active with facrange= 0.2  Step limitation 0
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 hIoni:   tables are built for  pi-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -296,25 +299,25 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=190.23s Real=270.73s Sys=60.81s
+  User=187.48s Real=584.61s Sys=62.72s
 
  The run consists of 10000 proton of 160 MeV through 20 cm  of Water (density: 1 g/cm3 )
 
- projected Range= 17.6843 cm    rms= 3.45574 mm 
+ projected Range= 17.6818 cm    rms= 1.88663 mm 
 
 ---------------------------------------------------------
  Cumulated Doses : 	Edep      	Edep/Ebeam 	Dose
- tally 0: 	 	4.67543 GeV	0.292215 % 	9.36359e-05 Gy
- tally 1: 	 	4.99933 GeV	0.312458 % 	0.000100123 Gy
- tally 2: 	 	3.28005 GeV	0.205003 % 	6.56903e-05 Gy
- tally 3: 	 	1.9964 GeV	0.124775 % 	3.99822e-05 Gy
+ tally 0: 	 	4.58124 GeV	0.286327 % 	9.17494e-05 Gy
+ tally 1: 	 	4.69123 GeV	0.293202 % 	9.39523e-05 Gy
+ tally 2: 	 	2.64732 GeV	0.165457 % 	5.30184e-05 Gy
+ tally 3: 	 	1.46715 GeV	0.091697 % 	2.9383e-05 Gy
 
 ---------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1151056927, 875380378
+ Current couple of seeds = 2096667914, 1375986834
 ----------------------------------------
 #
 /gun/particle ion
@@ -349,7 +352,7 @@ Index : 1     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1151056927, 875380378
+ Current couple of seeds = 2096667914, 1375986834
 ----------------------------------------
 Start Run processing.
 
@@ -357,25 +360,25 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=71.54s Real=93.33s Sys=18.79s
+  User=74.01s Real=209.62s Sys=22.44s
 
  The run consists of 1000 C12[0.0] of 3.5 GeV through 20 cm  of Water (density: 1 g/cm3 )
 
- projected Range= 16.3815 cm    rms= 465.38 um 
+ projected Range= 16.379 cm    rms= 461.733 um 
 
 ---------------------------------------------------------
  Cumulated Doses : 	Edep      	Edep/Ebeam 	Dose
- tally 0: 	 	11.0665 GeV	0.316185 % 	0.000221631 Gy
- tally 1: 	 	12.5255 GeV	0.357871 % 	0.00025085 Gy
- tally 2: 	 	15.9518 GeV	0.455765 % 	0.00031947 Gy
- tally 3: 	 	24.1446 GeV	0.689845 % 	0.000483548 Gy
+ tally 0: 	 	11.1463 GeV	0.318467 % 	0.00022323 Gy
+ tally 1: 	 	13.0655 GeV	0.373299 % 	0.000261665 Gy
+ tally 2: 	 	15.8046 GeV	0.451561 % 	0.000316523 Gy
+ tally 3: 	 	22.9671 GeV	0.656203 % 	0.000459967 Gy
 
 ---------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 689856671, 145181269
+ Current couple of seeds = 877080592, 1634085242
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

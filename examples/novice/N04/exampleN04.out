@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-08-01-patch-01-ref    (27-July-2006)
+ Geant4 version Name: geant4-08-01-patch-02-ref    (10-November-2006)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -33,20 +33,23 @@ Registered model factories:
   drawByCharge
   drawByParticleID
   drawByOriginVolume
-  drawByAttribute
+
+Registered models: 
+  None
 
 Registered filter factories:
   chargeFilter
   particleFilter
   originVolumeFilter
-  attributeFilter
+
+Registered filters:
+  None
 
 /run/verbose      1
 /tracking/verbose 0
 /run/beamOn 3
 
 phot:  Total cross sections from Sandia parametrisation. 
-      Sampling according PhotoElectric model
 
 compt:  Total cross sections has a good parametrisation from 10 KeV to (100/Z) GeV
       Sampling according Klein-Nishina model
@@ -54,7 +57,7 @@ compt:  Total cross sections has a good parametrisation from 10 KeV to (100/Z) G
       Lambda tables from 100 eV  to 100 GeV in 90 bins.
 
 conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
-      sampling secondary e+e- according Bethe-Heitler model
+      sampling secondary e+e- according to the Bethe-Heitler model
       tables are built for  gamma
       Lambda tables from 1.022 MeV to 100 GeV in 100 bins.
 
@@ -86,7 +89,7 @@ eBrem:   tables are built for  e+
       Total cross sections from a parametrisation based on the EEDL data library. 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
 
-annihil:       Sampling according eplus2gg model
+annihil:       Heilter model of formula of annihilation into 2 photons
       tables are built for  e+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
 
@@ -157,7 +160,7 @@ muPairProd:   tables are built for  mu-
       Lambda tables from threshold to 100 TeV in 120 bins.
       Parametrised model 
 
-G4UHadronElasticProcess for neutron PDGcode= 2112  Elow(MeV)= 19  Elowest(eV)= 0
+G4UHadronElasticProcess for neutron PDGcode= 2112  Elow(MeV)= 0  Elowest(eV)= 0
 
 hIoni:   tables are built for  pi+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -222,9 +225,9 @@ Stage 0->1 : 1 hits found in the muon chamber.
 Stage 1->2 : 0 isolated muon found.
 ++++++++ event aborted
 >>> Event 0
-     204 hits are stored in ExN04TrackerHitsCollection.
+     226 hits are stored in ExN04TrackerHitsCollection.
      8 hits are stored in ExN04CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 0.22291493 (GeV)
+     Total energy deposition in calorimeter : 0.22006457 (GeV)
      1 hits are stored in ExN04MuonHitsCollection.
 Stage 0->1 : 0 hits found in the muon chamber.
 ++++++++ event aborted
@@ -237,14 +240,14 @@ Stage 0->1 : 1 hits found in the muon chamber.
 Stage 1->2 : 0 isolated muon found.
 ++++++++ event aborted
 >>> Event 2
-     124 hits are stored in ExN04TrackerHitsCollection.
+     123 hits are stored in ExN04TrackerHitsCollection.
      13 hits are stored in ExN04CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 0.34635118 (GeV)
+     Total energy deposition in calorimeter : 0.34038849 (GeV)
      1 hits are stored in ExN04MuonHitsCollection.
 Run terminated.
 Run Summary
   Number of events processed : 3
-  User=1.21s Real=1.37s Sys=0.09s
+  User=1.2s Real=2.44s Sys=0.05s
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.

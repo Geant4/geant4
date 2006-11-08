@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-08-01-patch-01-ref    (27-July-2006)
+ Geant4 version Name: geant4-08-01-patch-02-ref    (10-November-2006)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -29,16 +29,21 @@ Registered model factories:
   drawByCharge
   drawByParticleID
   drawByOriginVolume
-  drawByAttribute
+
+Registered models: 
+  None
 
 Registered filter factories:
   chargeFilter
   particleFilter
   originVolumeFilter
-  attributeFilter
+
+Registered filters:
+  None
 
 /run/verbose 2
 #
+#### /testem/phys/addPhysics  g4v71
 /testem/phys/addPhysics  standard
 #
 /run/initialize
@@ -96,7 +101,6 @@ PhysicsList::SetCuts:CutLength : 1 mm
 /run/beamOn 100
 
 phot:  Total cross sections from Sandia parametrisation. 
-      Sampling according PhotoElectric model
 
 compt:  Total cross sections has a good parametrisation from 10 KeV to (100/Z) GeV
       Sampling according Klein-Nishina model
@@ -104,7 +108,7 @@ compt:  Total cross sections has a good parametrisation from 10 KeV to (100/Z) G
       Lambda tables from 100 eV  to 100 GeV in 90 bins.
 
 conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
-      sampling secondary e+e- according Bethe-Heitler model
+      sampling secondary e+e- according to the Bethe-Heitler model
       tables are built for  gamma
       Lambda tables from 1.022 MeV to 100 GeV in 100 bins.
 
@@ -136,7 +140,7 @@ eBrem:   tables are built for  e+
       Total cross sections from a parametrisation based on the EEDL data library. 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
 
-annihil:       Sampling according eplus2gg model
+annihil:       Heilter model of formula of annihilation into 2 photons
       tables are built for  e+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
 
@@ -285,28 +289,28 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=91.23s Real=121.73s Sys=28.91s
+  User=110.64s Real=323.31s Sys=41.14s
 
 ------------------------------------------------------------
 material             Total Edep   sqrt(E0(GeV))*rmsE/Emean     total tracklen 
  
-      Lead: 783.33 MeV +- 14.91 MeV     1.903 +- 0.1903 %      53.9 cm  +- 1.17 cm 
-liquidArgon: 207.36 MeV +- 13.86 MeV     6.683 +- 0.6683 %      1.03 m   +- 7.13 cm 
+      Lead: 786.04 MeV +- 16.12 MeV     2.051 +- 0.2051 %      54.1 cm  +- 1.23 cm 
+liquidArgon:  203.1 MeV +- 15.33 MeV     7.546 +- 0.7546 %         1 m   +-  7.9 cm 
 
 ------------------------------------------------------------
 
  Energy deposition from Energy flow balance : 
   material 	 Total Edep 
  
-      Lead:	 783.335 MeV
-liquidArgon:	 207.359 MeV
+      Lead:	 786.028 MeV
+liquidArgon:	 203.108 MeV
 
 ------------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 990827300, 1000210201
+ Current couple of seeds = 188592221, 473382051
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...
