@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReflectedSolid.cc,v 1.10 2006-11-07 14:17:37 gcosmo Exp $
+// $Id: G4ReflectedSolid.cc,v 1.11 2006-11-08 09:56:33 gcosmo Exp $
 //
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -36,6 +36,9 @@
 // --------------------------------------------------------------------
 
 #include "G4ReflectedSolid.hh"
+
+#include <sstream>
+
 #include "G4Point3D.hh"
 #include "G4Normal3D.hh"
 
