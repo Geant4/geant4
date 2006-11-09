@@ -128,7 +128,11 @@ GetCrossSection(const G4DynamicParticle* aParticle, const G4Element* anElement, 
 {
   G4double xsection;
   G4double R             = GetNucleusRadius(aParticle, anElement); 
+
   G4double nucleusSquare = 2.*pi*R*R; 
+
+
+  const G4ParticleDefinition* theParticle = aParticle->GetDefinition();
 
 
   // G4double sigma     = GetHadronNucleaonXsc(aParticle, anElement);
@@ -139,6 +143,7 @@ GetCrossSection(const G4DynamicParticle* aParticle, const G4Element* anElement, 
   xsection =  nucleusSquare*std::log( 1. + ratio );
 
   fTotalXsc = xsection;
+
   /*   
   fElasticXsc = 0.5*( xsection - nucleusSquare*ratio/(1.+ratio) );
 
@@ -148,7 +153,9 @@ GetCrossSection(const G4DynamicParticle* aParticle, const G4Element* anElement, 
 
   if (fInelasticXsc < 0.) fInelasticXsc = 0.;
   */
-  G4double cofInelastic = 2.2;
+
+  // G4double cofInelastic = 2.2;
+  G4double cofInelastic = 2.4;
   fInelasticXsc = nucleusSquare*std::log( 1. + cofInelastic*ratio )/cofInelastic;
   fElasticXsc   = fTotalXsc - fInelasticXsc;
   if (fElasticXsc < 0.) fElasticXsc = 0.;
@@ -180,6 +187,7 @@ G4GlauberGribovCrossSection::GetHadronNucleaonXsc(const G4DynamicParticle* aPart
   G4double sMand = CalcMandelstamS ( proj_mass , targ_mass , proj_momentum );
 
   sMand /= GeV*GeV;  // in GeV for parametrisation
+  proj_momentum /= GeV;
 
   const G4ParticleDefinition* theParticle = aParticle->GetDefinition();
   
@@ -257,7 +265,7 @@ G4double
 G4GlauberGribovCrossSection::GetHadronNucleaonXscPDG(const G4DynamicParticle* aParticle, 
                                                      G4double At,  G4double Zt )
 {
-  G4double xsection;
+  G4double xsection, xsectionPP, xsectionPN, Delta, A0, B0;
 
   G4double Nt = At-Zt;              // number of neutrons
   if (Nt < 0.) Nt = 0.;  
@@ -269,10 +277,15 @@ G4GlauberGribovCrossSection::GetHadronNucleaonXscPDG(const G4DynamicParticle* aP
   targ_mass = 0.939*GeV;  // ~mean neutron and proton ???
 
   G4double proj_mass     = aParticle->GetMass();
+  G4double proj_energy   = aParticle->GetTotalEnergy(); 
   G4double proj_momentum = aParticle->GetMomentum().mag();
 
   G4double sMand = CalcMandelstamS ( proj_mass , targ_mass , proj_momentum );
+
   sMand         /= GeV*GeV;  // in GeV for parametrisation
+  proj_momentum /= GeV;
+  proj_energy   /= GeV;
+  proj_mass     /= GeV;
 
   // General PDG fit constants
 
@@ -294,11 +307,72 @@ G4GlauberGribovCrossSection::GetHadronNucleaonXscPDG(const G4DynamicParticle* aP
   } 
   else if(theParticle == theProton) 
   {
-    xsection  = Zt*( 35.45 + B*std::pow(std::log(sMand/s0),2.) 
+    if( proj_momentum >= 10.)
+    // if( proj_momentum >= 2.)
+    {
+      /*
+      xsection  = Zt*( 35.45 + B*std::pow(std::log(sMand/s0),2.) 
                           + 42.53*std::pow(sMand,-eta1) - 33.34*std::pow(sMand,-eta2));
 
-    xsection += Nt*( 35.80 + B*std::pow(std::log(sMand/s0),2.) 
+      xsection += Nt*( 35.80 + B*std::pow(std::log(sMand/s0),2.) 
                           + 40.15*std::pow(sMand,-eta1) - 30.*std::pow(sMand,-eta2));
+      */
+      Delta = 1.;
+
+      if( proj_energy < 40. ) Delta = 0.916+0.0021*proj_energy;
+
+      if(proj_momentum >= 10.)
+      {
+        B0 = 7.5;
+        A0 = 100. - B0*std::log(3.0e7);
+
+        xsection = A0 + B0*std::log(proj_energy) - 11
+                  + 103*std::pow(2*0.93827*proj_energy + proj_mass*proj_mass+
+                     0.93827*0.93827,-0.165);        //  mb
+      }
+      xsection *= Zt + Nt;
+    }
+    else
+    {
+      // pp
+
+      if( proj_momentum < 10.  )
+      {
+         xsectionPP = 39.0+
+              75*(proj_momentum - 1.2)/(std::pow(proj_momentum,3.0) + 0.15);
+      }
+      if( proj_momentum < 1.05  )
+      {
+       xsectionPP = 23 + 40*(std::log(proj_momentum/0.73))*
+                         (std::log(proj_momentum/0.73));
+      }
+      if( proj_momentum < 0.73 )
+      {
+        xsectionPP = 23 + 50*( std::pow( std::log(0.73/proj_momentum), 3.5 ) );
+      }
+      // np
+
+      if( proj_momentum < 10.  )
+      {
+        xsectionPN = 33.3+
+              20.8*(std::pow(proj_momentum,2.0)-1.35)/
+                 (std::pow(proj_momentum,2.50)+0.95);
+      }
+
+      if( proj_momentum < 1.4 )
+      {
+        xsectionPN = 33+30*std::pow(std::log(proj_momentum/0.95),2.0);
+      }
+
+      if( proj_momentum < 0.8 )
+      {
+        xsectionPN = 33+30*std::pow(std::log(proj_momentum/1.3),4.0);
+      }      
+      xsection = xsectionPP*Zt + xsectionPN*Nt;
+      // xsection = xsectionPP*(Zt + Nt);
+      // xsection = xsectionPN*(Zt + Nt);
+    }    
+    // xsection *= 0.95;
   } 
   else if(theParticle == theAProton) 
   {
