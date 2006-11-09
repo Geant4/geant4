@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CrossSectionDataTest.cc,v 1.9 2006-08-04 14:05:33 grichine Exp $
+// $Id: G4CrossSectionDataTest.cc,v 1.10 2006-11-09 10:16:49 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -72,9 +72,16 @@
 #include "G4HadronCaptureDataSet.hh"
 #include "G4HadronInelasticDataSet.hh"
 
-#include "G4HadronCrossSectionPlugin.hh"
+// #include "G4HadronCrossSectionPlugin.hh"
 
 #include "G4GlauberGribovCrossSection.hh"
+#include "G4ProtonInelasticCrossSection.hh"
+#include "G4PiNuclearCrossSection.hh"
+#include "G4PhotoNuclearCrossSection.hh"
+#include "G4TripathiCrossSection.hh"
+
+
+
 
 #ifdef G4_SOLVE_TEMPLATES
 #include "g4templates.hh"
@@ -101,7 +108,7 @@ int main()
   G4cout << "14 aluminium" << G4endl;
   G4int choice;
   // G4cin >> choice;
-  choice = 4;
+  choice = 1;
 
 
 
@@ -210,7 +217,7 @@ int main()
   G4cout << " 5 kaon0short" << G4endl;
   G4cout << " 6 pion-" << G4endl;
   //  G4cin >> choice;
-  choice = 3;
+  choice = 1;
 
   G4ParticleDefinition* theParticleDefinition;
   G4VProcess* theProcess;
@@ -250,6 +257,7 @@ int main()
     case 6:
 
       theParticleDefinition = G4PionMinus::PionMinusDefinition();
+      theProcess = new G4PionMinusInelasticProcess("Inelastic");
       break;
   }
    //   G4cout << "Dumping particle info:" << G4endl;
@@ -288,7 +296,7 @@ int main()
   G4HadronFissionDataSet   theFissionDataSet;
   theFissionDataSet.SetVerboseLevel(2);
 
-  G4HadronCrossSectionPlugin theCrossSectionPlugin;
+  //  G4HadronCrossSectionPlugin theCrossSectionPlugin;
 
   // theCrossSectionPlugin.SetVerboseLevel(2);
 
@@ -305,7 +313,7 @@ int main()
 
         theCrossSectionDataStore.AddDataSet(&theElasticDataSet);
 
-        theCrossSectionDataStore.AddDataSet(&theCrossSectionPlugin);
+        // theCrossSectionDataStore.AddDataSet(&theCrossSectionPlugin);
 
       // mfp = ((G4HadronElasticProcess*)theProcess)->
       //         GetMeanFreePathBasic(theDynamicParticle, theMaterial);
@@ -336,7 +344,7 @@ int main()
 
         theCrossSectionDataStore.AddDataSet(&theCaptureDataSet);
 
-        theCrossSectionDataStore.AddDataSet(&theCrossSectionPlugin);
+        // theCrossSectionDataStore.AddDataSet(&theCrossSectionPlugin);
 
       //mfp = ((G4HadronCaptureProcess*)theProcess)->
       //       GetMeanFreePathBasic(theDynamicParticle, theMaterial);
@@ -351,7 +359,7 @@ int main()
 
         theCrossSectionDataStore.AddDataSet(&theInelasticDataSet);
 
-        theCrossSectionDataStore.AddDataSet(&theCrossSectionPlugin);
+        // theCrossSectionDataStore.AddDataSet(&theCrossSectionPlugin);
 
       //      mfp = ((G4HadronInelasticProcess*)theProcess)->
       //               GetMeanFreePathBasic(theDynamicParticle, theMaterial);
@@ -361,33 +369,34 @@ int main()
      //   sig = theCrossSectionDataStore.GetCrossSection(theDynamicParticle,
      //                                                  theElement);
 
-  std::ofstream writef("txs.dat", std::ios::out ) ;
+  std::ofstream writef("g4txs.dat", std::ios::out ) ;
   writef.setf( std::ios::scientific, std::ios::floatfield );
 
-  kinEnergy = 1.*GeV; //1.
-
-  /*
-  // for(i = 0; i < iMax; i++)
+  G4ProtonInelasticCrossSection hpwIn;
+    
+  kinEnergy = 0.1*GeV;    
+  for(i = 0; i < iMax; i++)
   {
    
-     theDynamicParticle = new G4DynamicParticle(theParticleDefinition,
+    theDynamicParticle = new G4DynamicParticle(theParticleDefinition,
                                               G4ParticleMomentum(1.,0.,0.), 
                                               kinEnergy);
-     sig = theCrossSectionDataStore.GetCrossSection(theDynamicParticle,
-                                                    theElement, 273*kelvin);
+   sig = theCrossSectionDataStore.GetCrossSection(theDynamicParticle,theElement, 273*kelvin);
+   // sig = hpwIn.GetCrossSection(theDynamicParticle,theElement, 273*kelvin);
 
-     // G4cout << theProcess->GetProcessName() << " cross section for " << 
-     //       theParticleDefinition->GetParticleName() <<
-     //      " on " << theElement->GetName() << G4endl;
+     G4cout << theProcess->GetProcessName() << " cross section for " << 
+           theParticleDefinition->GetParticleName() <<
+          " on " << theElement->GetName() << G4endl;
      G4cout << kinEnergy/GeV <<" GeV, \t"<< sig/millibarn << " mb" << G4endl;
-     // G4cout << "Mean free path = " << mfp << " mm" << G4endl;
+     //  G4cout << "Mean free path = " << mfp << " mm" << G4endl;
 
-     // writef << kinEnergy/GeV <<"\t"<< sig/millibarn << G4endl;
+      writef << kinEnergy/GeV <<"\t"<< sig/millibarn << G4endl;
 
-     // kinEnergy *= 1.1;
+      kinEnergy *= 1.13;
      delete theDynamicParticle;
   }
-  */
+      
+   
   // Check Glauber-Gribov model
   G4cout<<"Check Glauber-Gribov model"<<G4endl;
 
@@ -397,7 +406,8 @@ int main()
   G4GlauberGribovCrossSection ggXsc;
   G4double ggTotXsc, ggElaXsc, ggIneXsc;
 
-
+  /*    
+  kinEnergy = 0.1*GeV; 
   for(i = 0; i < iMax; i++)
   {
    
@@ -407,21 +417,27 @@ int main()
      ggTotXsc = ggXsc.GetCrossSection(theDynamicParticle,
                                  theElement, 273*kelvin);
 
-     ggElaXsc = ggXsc.GetElasticGlauberGribovXsc();
+     // ggElaXsc = ggXsc.GetElasticGlauberGribovXsc();
+     ggElaXsc = ggXsc.GetHadronNucleaonXscPDG(theDynamicParticle, theElement);
+
+     ggIneXsc = ggXsc.GetInelasticGlauberGribovXsc();
 
      // G4cout << theProcess->GetProcessName() << " cross section for " << 
      //       theParticleDefinition->GetParticleName() <<
      //      " on " << theElement->GetName() << G4endl;
      G4cout << kinEnergy/GeV <<" GeV, total Xsc = "<<  ggTotXsc/millibarn << " mb; elastic Xsc = "
-            <<  ggElaXsc/millibarn << " mb" << G4endl;
+            <<  ggElaXsc/millibarn << " mb; inelastic Xsc =" <<  ggIneXsc/millibarn << G4endl;
      // G4cout << "Mean free path = " << mfp << " mm" << G4endl;
 
-     writegg << kinEnergy/GeV <<"\t"<< ggTotXsc/millibarn <<"\t"<< ggElaXsc/millibarn << G4endl;
+     writegg << kinEnergy/GeV <<"\t"<< ggTotXsc/millibarn <<"\t"<< ggIneXsc/millibarn << G4endl;
 
-     kinEnergy *= 1.1;
+     kinEnergy *= 1.13;
      delete theDynamicParticle;
   }
+  */  
 
+
+ 
   /*
   G4double At = 1.;
 
