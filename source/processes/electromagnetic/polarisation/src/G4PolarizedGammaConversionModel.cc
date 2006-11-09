@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PolarizedGammaConversionModel.cc,v 1.2 2006-09-26 09:08:47 gcosmo Exp $
+// $Id: G4PolarizedGammaConversionModel.cc,v 1.3 2006-11-09 18:00:49 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -127,7 +127,9 @@ std::vector<G4DynamicParticle*>* G4PolarizedGammaConversionModel::SampleSecondar
 			       lep1Pol.p2(),
 			       lep1Pol.p3());
 
-    for (size_t i =1; i<vdp->size(); ++i) {
+    size_t num = vdp->size();
+    if (num!=2) G4cout<<" WARNING "<<num<<" secondaries in polarized pairproduction not supported!\n"; 
+    for (size_t i =1; i<num; ++i) {
       G4StokesVector lep2Pol = crossSectionCalculator->GetPol3();
       lep2Pol.RotateAz(nInteractionFrame,(*vdp)[i]->GetMomentumDirection());
       (*vdp)[i]->SetPolarization(lep2Pol.p1(),

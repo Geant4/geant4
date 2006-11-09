@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PolarizedAnnihilationModel.cc,v 1.2 2006-09-26 09:08:46 gcosmo Exp $
+// $Id: G4PolarizedAnnihilationModel.cc,v 1.3 2006-11-09 18:00:49 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -203,7 +203,7 @@ std::vector<G4DynamicParticle*>* G4PolarizedAnnihilationModel::SampleSecondaries
     // 
     epsil = epsilmin*std::pow(epsilqot,G4UniformRand());
 
-    crossSectionCalculator->Initialize(epsil, gama, 0., theBeamPolarization, theTargetPolarization);
+    crossSectionCalculator->Initialize(epsil, gama, 0., theBeamPolarization, theTargetPolarization,1);
 
     treject = crossSectionCalculator->DiceEpsilon(); 
     treject*=epsil;
@@ -359,5 +359,5 @@ std::vector<G4DynamicParticle*>* G4PolarizedAnnihilationModel::SampleSecondaries
 
   fvect->push_back(aParticle2);
 
-  return 0;
+  return fvect;
 }

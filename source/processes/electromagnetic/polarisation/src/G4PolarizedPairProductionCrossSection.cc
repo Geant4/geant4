@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PolarizedPairProductionCrossSection.cc,v 1.2 2006-09-26 09:08:47 gcosmo Exp $
+// $Id: G4PolarizedPairProductionCrossSection.cc,v 1.3 2006-11-09 18:00:49 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -94,7 +94,7 @@ void G4PolarizedPairProductionCrossSection::Initialize(G4double aGammaE, G4doubl
   G4double m0_c2  = electron_mass_c2; 
   G4double Lept0E = aLept0E/m0_c2+1.,   Lept0E2 = Lept0E * Lept0E ;
   G4double GammaE = aGammaE/m0_c2;
-  G4double Lept1E = aLept1E/m0_c2+1.,   Lept1E2 = Lept1E * Lept1E ;
+  G4double Lept1E = aLept1E/m0_c2-1.,   Lept1E2 = Lept1E * Lept1E ;
     
   if (theModel==0) {
     G4cout<<" theSelectedElement is not available!!"<<G4endl;
@@ -132,7 +132,7 @@ void G4PolarizedPairProductionCrossSection::Initialize(G4double aGammaE, G4doubl
     GG = std::log(alpha_sc)- 2 - fCoul;
   }
 
-  if(GG<0) GG=0;     // *KL* do we need this ?!
+  if(GG<-1) GG=-1;     // *KL* do we need this ?!
 
 
   G4double I_Lepton = (Lept0E2 + Lept1E2)*(3+2*GG) + 2 * Lept0E * Lept1E * (1 + 4 * u2 * Xsi2 * GG);
@@ -154,7 +154,7 @@ void G4PolarizedPairProductionCrossSection::Initialize(G4double aGammaE, G4doubl
   theFinalElectronPolarization.setZ(Stokes_S3);
 
   if(theFinalElectronPolarization.mag2()>1) { 
-    G4cout<<" WARNING in pol-brem theFinalElectronPolarization \n";
+    G4cout<<" WARNING in pol-conv theFinalElectronPolarization \n";
     G4cout
       <<"\t"<<theFinalElectronPolarization
       <<"\t GG\t"<<GG
@@ -182,7 +182,7 @@ void G4PolarizedPairProductionCrossSection::Initialize(G4double aGammaE, G4doubl
   theFinalPositronPolarization.setZ(Stokes_SS3);
     
   if(theFinalPositronPolarization.mag2()>1) {
-    G4cout<<" WARNING in pol-brem theFinalPositronPolarization \n";
+    G4cout<<" WARNING in pol-conv theFinalPositronPolarization \n";
     G4cout
       <<"\t"<<theFinalPositronPolarization
       <<"\t GG\t"<<GG

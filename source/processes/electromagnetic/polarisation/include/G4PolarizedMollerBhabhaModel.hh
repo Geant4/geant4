@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PolarizedMollerBhabhaModel.hh,v 1.1 2006-09-21 21:35:10 vnivanch Exp $
+// $Id: G4PolarizedMollerBhabhaModel.hh,v 1.2 2006-11-09 18:00:48 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // -------------------------------------------------------------------
 //
@@ -53,6 +53,7 @@
 
 #include "G4VEmModel.hh"
 #include "G4MollerBhabhaModel.hh"
+#include "G4StokesVector.hh"
 
 class G4VPolarizedCrossSection;
 
@@ -89,30 +90,30 @@ public:
   {
     theBeamPolarization = pBeam;
   }
-  const G4ThreeVector & GetTargetPolarization()
+  const G4StokesVector & GetTargetPolarization()
   {
     return theTargetPolarization;
   }
-  const G4ThreeVector & GetBeamPolarization()
+  const G4StokesVector & GetBeamPolarization()
   {
     return theBeamPolarization;
   }
-  const G4ThreeVector & GetFinalElectronPolarization()
+  const G4StokesVector & GetFinalElectronPolarization()
   {
     return fElectronPolarization;
   }
-  const G4ThreeVector &  GetFinalPositronPolarization()
+  const G4StokesVector &  GetFinalPositronPolarization()
   {
     return fPositronPolarization;
   }
 private:
-  G4ThreeVector theBeamPolarization;
-  G4ThreeVector theTargetPolarization;
+  G4StokesVector theBeamPolarization;
+  G4StokesVector theTargetPolarization;
 
   G4VPolarizedCrossSection * crossSectionCalculator;
 
-  G4ThreeVector fPositronPolarization;
-  G4ThreeVector fElectronPolarization;
+  G4StokesVector fPositronPolarization;
+  G4StokesVector fElectronPolarization;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

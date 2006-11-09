@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: G4PolarizedAnnihilationCrossSection.cc,v 1.2 2006-09-26 09:08:46 gcosmo Exp $
+// $Id: G4PolarizedAnnihilationCrossSection.cc,v 1.3 2006-11-09 18:00:48 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // -------------------------------------------------------------------
 //
@@ -146,7 +146,11 @@ void G4PolarizedAnnihilationCrossSection::Initialize(
   polXS += ISPnd*(polzx + polxz);
   phi0 = unpXS + polXS;
   dice = symmXS;
-  if(polzz != 0.) dice *= (1. + std::fabs(polzz*ISPzz/unpXS));
+  //  if(polzz != 0.) dice *= (1. + std::fabs(polzz*ISPzz/unpXS));
+  if(polzz != 0.) {
+    dice *= (1. + (polzz*ISPzz/unpXS));
+    if (dice<0.) dice=0.;
+  }
     // prepare final state coefficients
   if (flag==2) {
     //
@@ -242,8 +246,8 @@ G4double G4PolarizedAnnihilationCrossSection::TotalXSection(
   G4double unpME = (gam*(gam + 4.) + 1.)*logMEM;
   unpME += -(gam + 3.)*sqrtgam1;
   unpME /= 4.*(gam2 - 1.);
-  G4double longPart = 2.*(gam*(gam + 4.) + 1.)*logMEM; 
-  longPart += -(gam*(gam + 4.) + 7.)*sqrtgam1;
+  G4double longPart = - 2.*(gam*(gam + 4.) + 1.)*logMEM; 
+  longPart += (gam*(gam + 4.) + 7.)*sqrtgam1;
   longPart /= 4.*sqr(gam - 1.)*(gam + 1.);
   G4double tranPart = -(gam*(gam + 2.) + 3.)*logMEM;
   tranPart += 2.*(2.*gam + 1.)*sqrtgam1;

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolarizedComptonModel.cc,v 1.2 2006-09-26 09:08:47 gcosmo Exp $
+// $Id: G4PolarizedComptonModel.cc,v 1.3 2006-11-09 18:00:49 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -90,7 +90,7 @@ G4double G4PolarizedComptonModel::ComputeAsymmetryPerAtom
  G4double k0 = gammaEnergy / electron_mass_c2 ;
  G4double k1 = 1 + 2*k0 ;
 
- asymmetry = k0;
+ asymmetry = -k0;
  asymmetry *= (k0 + 1.)*sqr(k1)*std::log(k1) - 2.*k0*(5.*sqr(k0) + 4.*k0 + 1.);
  asymmetry /= ((k0 - 2.)*k0  -2.)*sqr(k1)*std::log(k1) + 2.*k0*(k0*(k0 + 1.)*(k0 + 8.) + 2.);		
 
@@ -195,7 +195,7 @@ std::vector<G4DynamicParticle*>* G4PolarizedComptonModel::SampleSecondaries(
 
     G4double gdiced = 2.*(1./epsilon+epsilon);
     G4double gdist  = 1./epsilon + epsilon - sint2 
-      + polarization*(1./epsilon-epsilon)*(1.-onecost);
+      - polarization*(1./epsilon-epsilon)*(1.-onecost);
 
     greject = gdist/gdiced;
 
@@ -222,7 +222,7 @@ std::vector<G4DynamicParticle*>* G4PolarizedComptonModel::SampleSecondaries(
 
      G4double gdist = 1./epsilon + epsilon - sint2 
        + theBeamPolarization.p3()*
-       (-(1./epsilon-epsilon)*cosTeta*theTargetPolarization.p3()
+       ((1./epsilon-epsilon)*cosTeta*theTargetPolarization.p3()
 	+(1.-epsilon)*sinTeta*(std::cos(Phi)*theTargetPolarization.p1()+
 			       std::sin(Phi)*theTargetPolarization.p2()))
        -sint2*(std::cos(2.*Phi)*theBeamPolarization.p1()

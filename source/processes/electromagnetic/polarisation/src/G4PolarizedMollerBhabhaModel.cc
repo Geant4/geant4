@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PolarizedMollerBhabhaModel.cc,v 1.2 2006-09-26 09:08:47 gcosmo Exp $
+// $Id: G4PolarizedMollerBhabhaModel.cc,v 1.3 2006-11-09 18:00:49 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // -------------------------------------------------------------------
 //
@@ -209,10 +209,14 @@ std::vector<G4DynamicParticle*>*  G4PolarizedMollerBhabhaModel::SampleSecondarie
       x = xmin*xmax/(xmin*(1.0 - q) + xmax*q);
       if (crossSectionCalculator) {
 	crossSectionCalculator->Initialize(x,gam,phi,theBeamPolarization,
-					             theTargetPolarization);
+					   theTargetPolarization,1);
 	xs=crossSectionCalculator->XSection(G4StokesVector::ZERO,
 						     G4StokesVector::ZERO);
 	z=xs*sqr(x)*4.;
+	if (grej < z) {
+	  G4cout<<"WARNING : error in Moller rejection routine! \n"
+		<<" z = "<<z<<" grej="<<grej<<"\n";
+	}
       } else {
 	G4cout<<"No calculator in Moller scattering"<<G4endl;
       }
@@ -236,7 +240,7 @@ std::vector<G4DynamicParticle*>*  G4PolarizedMollerBhabhaModel::SampleSecondarie
       x  = xmin*xmax/(xmin*(1.0 - q) + xmax*q);
       if (crossSectionCalculator) {
 	crossSectionCalculator->Initialize(x,gam,phi,theBeamPolarization,
-					             theTargetPolarization);
+					   theTargetPolarization,1);
 	xs=crossSectionCalculator->XSection(G4StokesVector::ZERO,
 						     G4StokesVector::ZERO);
 	z=xs*sqr(x)*4.;
@@ -313,32 +317,28 @@ std::vector<G4DynamicParticle*>*  G4PolarizedMollerBhabhaModel::SampleSecondarie
   std::vector<G4DynamicParticle*>* vdp = new std::vector<G4DynamicParticle*>;
   G4DynamicParticle* delta = new G4DynamicParticle(theElectron,deltaDirection,deltaKinEnergy);
   vdp->push_back(delta);
-  // polarization transfer preparation, done in PolarizedIonisation::SecondariesPostStep
+
+  // get interaction frame
+  G4ThreeVector  nInteractionFrame = 
+    G4PolarizationHelper::GetFrame(direction,deltaDirection);
+
   if (crossSectionCalculator) {
     // calculate mean final state polarizations
+
+    theBeamPolarization.InvRotateAz(nInteractionFrame,direction);
+    theTargetPolarization.InvRotateAz(nInteractionFrame,direction);
     crossSectionCalculator->Initialize(x,gam,phi,theBeamPolarization,
 				       theTargetPolarization,2);
 
     // electron/positron
     fPositronPolarization=crossSectionCalculator->GetPol2();
-    /*
-      // new version (not yet working)
-    fPositronPolarization.rotateUz(direction);
-    */
-    fPositronPolarization=
-    G4PolarizationHelper::GetSpinInPRF(direction,
-				       fPositronPolarization);
+    fPositronPolarization.RotateAz(nInteractionFrame,direction);
+
     fParticleChange->ProposePolarization(fPositronPolarization);
 
     // electron
     fElectronPolarization=crossSectionCalculator->GetPol3();
-    /* 
-       // new version (not yet working)
-    fElectronPolarization.rotateUz(deltaDirection);
-    */
-    // old version
-    fElectronPolarization=G4PolarizationHelper::GetSpinInPRF(deltaDirection,
-							     fElectronPolarization);
+    fElectronPolarization.RotateAz(nInteractionFrame,deltaDirection);
     delta->SetPolarization(fElectronPolarization.x(),
 			   fElectronPolarization.y(),
 			   fElectronPolarization.z());

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PolarizedComptonCrossSection.cc,v 1.2 2006-09-26 09:08:47 gcosmo Exp $
+// $Id: G4PolarizedComptonCrossSection.cc,v 1.3 2006-11-09 18:00:49 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // GEANT4 Class file
@@ -91,7 +91,7 @@ void G4PolarizedComptonCrossSection::Initialize(G4double eps, G4double X, G4doub
   // unpolarized Cross Section
   unpXS = (eps2 + 1. - eps*sinT2)/(2.*eps);
   // initial polarization dependence
-  polXS = -sinT2*pol0.x() + (1. - eps)*sinT*polzx - ((eps2 - 1.)/eps)*cosT*polzz;
+  polXS = -sinT2*pol0.x() + (1. - eps)*sinT*polzx + ((eps2 - 1.)/eps)*cosT*polzz;
   polXS *= 0.5;
 
   phi0 = unpXS + polXS;
@@ -101,14 +101,14 @@ void G4PolarizedComptonCrossSection::Initialize(G4double eps, G4double X, G4doub
   G4double PHI21 = -sinT2 + 0.5*(cos2T + 3.)*pol0.x() - ((1. - eps)/eps)*sinT*polzx;
   PHI21 *= 0.5;
   G4double PHI22 = cosT*pol0.y() + ((1. - eps)/(2.*eps))*sinT*polzy;
-  G4double PHI23 = ((eps2 + 1.)/eps)*cosT*pol0.z() + ((1. - eps)/eps)*(eps*cosT2 + 1.)*pol1.z();
+  G4double PHI23 = ((eps2 + 1.)/eps)*cosT*pol0.z() - ((1. - eps)/eps)*(eps*cosT2 + 1.)*pol1.z();
   PHI23 += 0.5*(1. - eps)*sin2T*pol1.x();
-  PHI23 += (eps - 1.)*(sinT2*polxz + sinT*polyy - 0.5*sin2T*polxx);
+  PHI23 += (eps - 1.)*(-sinT2*polxz + sinT*polyy - 0.5*sin2T*polxx);
   PHI23 *= 0.5;
   phi2 = G4ThreeVector(PHI21, PHI22, PHI23);
 
   // polarization of outgoing electron
-  G4double PHI32 = -sinT2*polxy - ((1. - eps)/eps)*sinT*polyz + 0.5*(cos2T + 3.)*pol1.y();
+  G4double PHI32 = -sinT2*polxy + ((1. - eps)/eps)*sinT*polyz + 0.5*(cos2T + 3.)*pol1.y();
   PHI32 *= 0.5;
 
   G4double PHI31 = 0., PHI31add = 0., PHI33 = 0., PHI33add = 0.;
@@ -118,29 +118,29 @@ void G4PolarizedComptonCrossSection::Initialize(G4double eps, G4double X, G4doub
 
     PHI31 = (1. - eps)*(1. + cosT)*sinT*pol0.z();
     PHI31 += (-eps*cosT3 + eps*cosT2 + (eps - 2.)*cosT + eps)*pol1.x();
-    PHI31 += (eps*cosT2 - eps*cosT + cosT + 1.)*sinT*pol1.z();
+    PHI31 += -(eps*cosT2 - eps*cosT + cosT + 1.)*sinT*pol1.z();
     PHI31 /= 2.*helpVar;
 
     PHI31add = -eps*sqr(1. - cosT)*(1. + cosT)*polxx;
     PHI31add += (1. - eps)*sinT2*polyy;
-    PHI31add += (-eps2 + cosT*(cosT*eps - eps + 1.)*eps + eps - 1.)*sinT*polxz/eps;
+    PHI31add += -(-eps2 + cosT*(cosT*eps - eps + 1.)*eps + eps - 1.)*sinT*polxz/eps;
     PHI31add /= 2.*helpVar;
     
     PHI33 = ((1. - eps)/eps)*(-eps*cosT2 + eps*(eps + 1.)*cosT - 1.)*pol0.z();
     PHI33 += -(eps*cosT2 + (1. - eps)*eps*cosT + 1.)*sinT*pol1.x();
-    PHI33 += (-eps2*cosT3 + eps*(eps2 - eps + 1.)*cosT2 - cosT + eps2)*pol1.z()/eps;
-    PHI33 /= 2.*helpVar;
+    PHI33 += -(-eps2*cosT3 + eps*(eps2 - eps + 1.)*cosT2 - cosT + eps2)*pol1.z()/eps;
+    PHI33 /= -2.*helpVar;
 
     PHI33add = (eps*(eps - cosT - 1.)*cosT + 1.)*sinT*polxx;
-    PHI33add += (-eps2 + cosT*eps + eps - 1.)*sinT2*polxz;
+    PHI33add += -(-eps2 + cosT*eps + eps - 1.)*sinT2*polxz;
     PHI33add += (eps - 1.)*(cosT - eps)*sinT*polyy;
-    PHI33add /= 2.*helpVar;
+    PHI33add /= -2.*helpVar;
   }else{
-     PHI31 = pol1.z() - (X - 1.)*std::sqrt(1. - eps)*pol1.x()/std::sqrt(2.*X);
-     PHI31add = -(X*X*pol1.z() - 2.*X*(2.*pol0.z() + pol1.z()) + (4.*pol0.x() + 5.)*pol1.z())*(1. - eps)/(4.*X);
+     PHI31 = -pol1.z() - (X - 1.)*std::sqrt(1. - eps)*pol1.x()/std::sqrt(2.*X);
+     PHI31add = -(-X*X*pol1.z() - 2.*X*(2.*pol0.z() - pol1.z()) - (4.*pol0.x() + 5.)*pol1.z())*(1. - eps)/(4.*X);
      
-     PHI33 = -pol1.x() - (X - 1.)*std::sqrt(1. - eps)*pol1.z()/std::sqrt(2.*X);
-     PHI33add = (X*X - 2.*X + 4.*pol0.x() + 5.)*(1. - eps)*pol1.x()/(4.*X);
+     PHI33 = pol1.x() - (X - 1.)*std::sqrt(1. - eps)*pol1.z()/std::sqrt(2.*X);
+     PHI33add = -(X*X - 2.*X + 4.*pol0.x() + 5.)*(1. - eps)*pol1.x()/(4.*X);
   }
   phi3 = G4ThreeVector(PHI31 + PHI31add, PHI32, PHI33 + PHI33add);
     
