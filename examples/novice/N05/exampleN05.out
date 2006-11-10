@@ -318,8 +318,6 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
      Total energy deposition in EM calorimeter crytals : 0.9999019399041149 (GeV)
      0 hits are stored in HAD ExN05CalorimeterHitsCollection.
      Total energy deposition in HAD calorimeter towers : 0 (GeV)
-G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
-G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
@@ -379,8 +377,6 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
      Total energy deposition in EM calorimeter crytals : 0.9999197844579409 (GeV)
      0 hits are stored in HAD ExN05CalorimeterHitsCollection.
      Total energy deposition in HAD calorimeter towers : 0 (GeV)
-G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
-G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
@@ -431,8 +427,6 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
      Total energy deposition in EM calorimeter crytals : 0.9999121270953818 (GeV)
      0 hits are stored in HAD ExN05CalorimeterHitsCollection.
      Total energy deposition in HAD calorimeter towers : 0 (GeV)
-G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
-G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
@@ -491,12 +485,8 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
      Total energy deposition in EM calorimeter crytals : 0.999921235720773 (GeV)
      0 hits are stored in HAD ExN05CalorimeterHitsCollection.
      Total energy deposition in HAD calorimeter towers : 0 (GeV)
-G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
 number of event = 5
-G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
-G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
 ### Run 1 start.
-G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
@@ -556,8 +546,6 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
      Total energy deposition in EM calorimeter crytals : 0.9999185987304754 (GeV)
      0 hits are stored in HAD ExN05CalorimeterHitsCollection.
      Total energy deposition in HAD calorimeter towers : 0 (GeV)
-G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
-G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
@@ -627,8 +615,6 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
      Total energy deposition in EM calorimeter crytals : 0.9999120374628412 (GeV)
      0 hits are stored in HAD ExN05CalorimeterHitsCollection.
      Total energy deposition in HAD calorimeter towers : 0 (GeV)
-G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
-G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
@@ -726,8 +712,6 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
      Total energy deposition in EM calorimeter crytals : 0.9998885739452571 (GeV)
      0 hits are stored in HAD ExN05CalorimeterHitsCollection.
      Total energy deposition in HAD calorimeter towers : 0 (GeV)
-G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
-G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
@@ -805,8 +789,6 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
      Total energy deposition in EM calorimeter crytals : 0.9998695035512418 (GeV)
      0 hits are stored in HAD ExN05CalorimeterHitsCollection.
      Total energy deposition in HAD calorimeter towers : 0 (GeV)
-G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
-G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
@@ -849,12 +831,8 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
      Total energy deposition in EM calorimeter crytals : 0.9999360745983602 (GeV)
      0 hits are stored in HAD ExN05CalorimeterHitsCollection.
      Total energy deposition in HAD calorimeter towers : 0 (GeV)
-G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
 number of event = 5
-G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
-G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
 ### Run 2 start.
-G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
@@ -885,8 +863,6 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
      Total energy deposition in EM calorimeter crytals : 0.999933622486929 (GeV)
      0 hits are stored in HAD ExN05CalorimeterHitsCollection.
      Total energy deposition in HAD calorimeter towers : 0 (GeV)
-G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
-G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
@@ -956,8 +932,6 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
      Total energy deposition in EM calorimeter crytals : 0.9999208781295561 (GeV)
      0 hits are stored in HAD ExN05CalorimeterHitsCollection.
      Total energy deposition in HAD calorimeter towers : 0 (GeV)
-G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
-G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
@@ -998,8 +972,6 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
      Total energy deposition in EM calorimeter crytals : 0.9999184680005289 (GeV)
      0 hits are stored in HAD ExN05CalorimeterHitsCollection.
      Total energy deposition in HAD calorimeter towers : 0 (GeV)
-G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
-G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
@@ -1057,8 +1029,6 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
      Total energy deposition in EM calorimeter crytals : 0.9999256137626426 (GeV)
      0 hits are stored in HAD ExN05CalorimeterHitsCollection.
      Total energy deposition in HAD calorimeter towers : 0 (GeV)
-G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
-G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
@@ -1080,12 +1050,8 @@ ExN05EMShowerModel::DoIt
      Total energy deposition in EM calorimeter crytals : 0.9999335253167507 (GeV)
      0 hits are stored in HAD ExN05CalorimeterHitsCollection.
      Total energy deposition in HAD calorimeter towers : 0 (GeV)
-G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
 number of event = 5
-G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
-G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
 ### Run 3 start.
-G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
@@ -1190,8 +1156,6 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
      Total energy deposition in EM calorimeter crytals : 0.9998411427148993 (GeV)
      0 hits are stored in HAD ExN05CalorimeterHitsCollection.
      Total energy deposition in HAD calorimeter towers : 0 (GeV)
-G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
-G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
@@ -1233,8 +1197,6 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
      Total energy deposition in EM calorimeter crytals : 0.9999195000009049 (GeV)
      0 hits are stored in HAD ExN05CalorimeterHitsCollection.
      Total energy deposition in HAD calorimeter towers : 0 (GeV)
-G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
-G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
@@ -1274,8 +1236,6 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
      Total energy deposition in EM calorimeter crytals : 0.9999146208673264 (GeV)
      0 hits are stored in HAD ExN05CalorimeterHitsCollection.
      Total energy deposition in HAD calorimeter towers : 0 (GeV)
-G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
-G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
@@ -1365,8 +1325,6 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
      Total energy deposition in EM calorimeter crytals : 0.9999101764989253 (GeV)
      0 hits are stored in HAD ExN05CalorimeterHitsCollection.
      Total energy deposition in HAD calorimeter towers : 0 (GeV)
-G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
-G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
@@ -1405,12 +1363,8 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
      Total energy deposition in EM calorimeter crytals : 0.999920612800005 (GeV)
      0 hits are stored in HAD ExN05CalorimeterHitsCollection.
      Total energy deposition in HAD calorimeter towers : 0 (GeV)
-G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
 number of event = 5
-G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
-G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
 ### Run 4 start.
-G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
 
 *********************************************************************************************************
 * G4Track Information:   Particle = pi-,   Track ID = 1,   Parent ID = 0
@@ -2619,8 +2573,6 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
      Total energy deposition in EM calorimeter crytals : 0.2859032474123683 (GeV)
      5 hits are stored in HAD ExN05CalorimeterHitsCollection.
      Total energy deposition in HAD calorimeter towers : 0.4516856814673026 (GeV)
-G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
-G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
 
 *********************************************************************************************************
 * G4Track Information:   Particle = pi-,   Track ID = 1,   Parent ID = 0
@@ -2660,8 +2612,6 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
      Total energy deposition in EM calorimeter crytals : 0.1799889571770242 (GeV)
      10 hits are stored in HAD ExN05CalorimeterHitsCollection.
      Total energy deposition in HAD calorimeter towers : 0.7599533747474356 (GeV)
-G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
-G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
 
 *********************************************************************************************************
 * G4Track Information:   Particle = pi-,   Track ID = 1,   Parent ID = 0
@@ -2739,8 +2689,6 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
      Total energy deposition in EM calorimeter crytals : 0.1999865549926007 (GeV)
      9 hits are stored in HAD ExN05CalorimeterHitsCollection.
      Total energy deposition in HAD calorimeter towers : 0.7399502534726227 (GeV)
-G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
-G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
 
 *********************************************************************************************************
 * G4Track Information:   Particle = pi-,   Track ID = 1,   Parent ID = 0
@@ -2819,8 +2767,6 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
      Total energy deposition in EM calorimeter crytals : 0.2199883545806955 (GeV)
      8 hits are stored in HAD ExN05CalorimeterHitsCollection.
      Total energy deposition in HAD calorimeter towers : 0.699962946393122 (GeV)
-G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
-G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
 
 *********************************************************************************************************
 * G4Track Information:   Particle = pi-,   Track ID = 1,   Parent ID = 0
@@ -2869,12 +2815,8 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
      Total energy deposition in EM calorimeter crytals : 0.1599915617642198 (GeV)
      8 hits are stored in HAD ExN05CalorimeterHitsCollection.
      Total energy deposition in HAD calorimeter towers : 0.6599651922774067 (GeV)
-G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
 number of event = 5
-G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
-G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
 ### Run 5 start.
-G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
 
 *********************************************************************************************************
 * G4Track Information:   Particle = pi-,   Track ID = 1,   Parent ID = 0
@@ -2943,8 +2885,6 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
      Total energy deposition in EM calorimeter crytals : 0.03999738065830225 (GeV)
      10 hits are stored in HAD ExN05CalorimeterHitsCollection.
      Total energy deposition in HAD calorimeter towers : 0.9399384454701031 (GeV)
-G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
-G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
 
 *********************************************************************************************************
 * G4Track Information:   Particle = pi-,   Track ID = 1,   Parent ID = 0
@@ -2973,8 +2913,6 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
      Total energy deposition in EM calorimeter crytals : 0.01999902203591371 (GeV)
      13 hits are stored in HAD ExN05CalorimeterHitsCollection.
      Total energy deposition in HAD calorimeter towers : 0.9799520797597718 (GeV)
-G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
-G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
 
 *********************************************************************************************************
 * G4Track Information:   Particle = pi-,   Track ID = 1,   Parent ID = 0
@@ -3005,8 +2943,6 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
      Total energy deposition in EM calorimeter crytals : 0.03999816602826003 (GeV)
      12 hits are stored in HAD ExN05CalorimeterHitsCollection.
      Total energy deposition in HAD calorimeter towers : 0.9199578186499806 (GeV)
-G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
-G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
 
 *********************************************************************************************************
 * G4Track Information:   Particle = pi-,   Track ID = 1,   Parent ID = 0
@@ -3063,8 +2999,6 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
      Total energy deposition in EM calorimeter crytals : 0.0799954005405548 (GeV)
      12 hits are stored in HAD ExN05CalorimeterHitsCollection.
      Total energy deposition in HAD calorimeter towers : 0.9199471062163801 (GeV)
-G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
-G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
 
 *********************************************************************************************************
 * G4Track Information:   Particle = pi-,   Track ID = 1,   Parent ID = 0
@@ -3101,12 +3035,8 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
      Total energy deposition in EM calorimeter crytals : 0 (GeV)
      14 hits are stored in HAD ExN05CalorimeterHitsCollection.
      Total energy deposition in HAD calorimeter towers : 0.9799469920946878 (GeV)
-G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
 number of event = 5
-G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
-G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
 ### Run 6 start.
-G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
 
 *********************************************************************************************************
 * G4Track Information:   Particle = pi-,   Track ID = 1,   Parent ID = 0
@@ -3164,8 +3094,6 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
      Total energy deposition in EM calorimeter crytals : 0.03999828564004301 (GeV)
      12 hits are stored in HAD ExN05CalorimeterHitsCollection.
      Total energy deposition in HAD calorimeter towers : 0.939959712541011 (GeV)
-G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
-G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
 
 *********************************************************************************************************
 * G4Track Information:   Particle = pi-,   Track ID = 1,   Parent ID = 0
@@ -3255,8 +3183,6 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
      Total energy deposition in EM calorimeter crytals : 0.01999867346009724 (GeV)
      11 hits are stored in HAD ExN05CalorimeterHitsCollection.
      Total energy deposition in HAD calorimeter towers : 0.9799349995447645 (GeV)
-G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
-G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
 
 *********************************************************************************************************
 * G4Track Information:   Particle = pi-,   Track ID = 1,   Parent ID = 0
@@ -3354,8 +3280,6 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
      Total energy deposition in EM calorimeter crytals : 0.01999814727255484 (GeV)
      13 hits are stored in HAD ExN05CalorimeterHitsCollection.
      Total energy deposition in HAD calorimeter towers : 0.9799092163551872 (GeV)
-G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
-G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
 
 *********************************************************************************************************
 * G4Track Information:   Particle = pi-,   Track ID = 1,   Parent ID = 0
@@ -3394,8 +3318,6 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
      Total energy deposition in EM calorimeter crytals : 0.03999807442480476 (GeV)
      13 hits are stored in HAD ExN05CalorimeterHitsCollection.
      Total energy deposition in HAD calorimeter towers : 0.9599537861953142 (GeV)
-G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
-G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
 
 *********************************************************************************************************
 * G4Track Information:   Particle = pi-,   Track ID = 1,   Parent ID = 0
@@ -3441,12 +3363,8 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
      Total energy deposition in EM calorimeter crytals : 0.01999909988077925 (GeV)
      12 hits are stored in HAD ExN05CalorimeterHitsCollection.
      Total energy deposition in HAD calorimeter towers : 0.9799558941581833 (GeV)
-G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
 number of event = 5
-G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
-G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
 ### Run 7 start.
-G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
 
 *********************************************************************************************************
 * G4Track Information:   Particle = pi-,   Track ID = 1,   Parent ID = 0
@@ -3522,8 +3440,6 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
      Total energy deposition in EM calorimeter crytals : 0.2999772597690104 (GeV)
      10 hits are stored in HAD ExN05CalorimeterHitsCollection.
      Total energy deposition in HAD calorimeter towers : 0.6599499714918229 (GeV)
-G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
-G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
 
 *********************************************************************************************************
 * G4Track Information:   Particle = pi-,   Track ID = 1,   Parent ID = 0
@@ -3600,8 +3516,6 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
      Total energy deposition in EM calorimeter crytals : 0.2199861406887927 (GeV)
      10 hits are stored in HAD ExN05CalorimeterHitsCollection.
      Total energy deposition in HAD calorimeter towers : 0.7399533823168482 (GeV)
-G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
-G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
 
 *********************************************************************************************************
 * G4Track Information:   Particle = pi-,   Track ID = 1,   Parent ID = 0
@@ -3785,8 +3699,6 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
      Total energy deposition in EM calorimeter crytals : 0.1799717882574142 (GeV)
      14 hits are stored in HAD ExN05CalorimeterHitsCollection.
      Total energy deposition in HAD calorimeter towers : 0.7998746144773964 (GeV)
-G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
-G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
 
 *********************************************************************************************************
 * G4Track Information:   Particle = pi-,   Track ID = 1,   Parent ID = 0
@@ -3852,8 +3764,6 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
      Total energy deposition in EM calorimeter crytals : 0.219985952128846 (GeV)
      10 hits are stored in HAD ExN05CalorimeterHitsCollection.
      Total energy deposition in HAD calorimeter towers : 0.6199604105449296 (GeV)
-G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
-G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
 
 *********************************************************************************************************
 * G4Track Information:   Particle = pi-,   Track ID = 1,   Parent ID = 0
@@ -3910,7 +3820,4 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
      Total energy deposition in EM calorimeter crytals : 0.2199889608949011 (GeV)
      8 hits are stored in HAD ExN05CalorimeterHitsCollection.
      Total energy deposition in HAD calorimeter towers : 0.7399628684646672 (GeV)
-G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
 number of event = 5
-G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
-G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
