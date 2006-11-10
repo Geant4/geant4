@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN05PhysicsList.cc,v 1.11 2006-11-03 17:58:49 mverderi Exp $
+// $Id: ExN05PhysicsList.cc,v 1.12 2006-11-10 13:11:00 mverderi Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -42,7 +42,7 @@
 #include "G4ios.hh"
 #include <iomanip>   
 
-#include "G4FastSimulationManagerProcess_forCoupledTransportation.hh"
+#include "G4FastSimulationManagerProcess81.hh"
 
 
 ExN05PhysicsList::ExN05PhysicsList():  G4VUserPhysicsList()
@@ -286,10 +286,10 @@ void ExN05PhysicsList::ConstructGeneral()
 
 void ExN05PhysicsList::AddParameterisation()
 {
-  G4FastSimulationManagerProcess_forCoupledTransportation* 
-    fastSimProcess_parallelGeom = new G4FastSimulationManagerProcess_forCoupledTransportation("G4FSMP_parallelGeom", "pionGhostWorld");
-  G4FastSimulationManagerProcess_forCoupledTransportation* 
-    fastSimProcess_massGeom     = new G4FastSimulationManagerProcess_forCoupledTransportation("G4FSMP_massGeom");
+  G4FastSimulationManagerProcess81* 
+    fastSimProcess_parallelGeom = new G4FastSimulationManagerProcess81("G4FSMP_parallelGeom", "pionGhostWorld");
+  G4FastSimulationManagerProcess81* 
+    fastSimProcess_massGeom     = new G4FastSimulationManagerProcess81("G4FSMP_massGeom");
   theParticleIterator->reset();
   while( (*theParticleIterator)() )
     {
