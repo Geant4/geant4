@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GlobalFastSimulationManager.hh,v 1.11 2006-11-03 17:26:04 mverderi Exp $
+// $Id: G4GlobalFastSimulationManager.hh,v 1.12 2006-11-10 13:23:07 mverderi Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -53,7 +53,7 @@
 
 #include "G4VGlobalFastSimulationManager.hh"
 #include "G4FastSimulationManager.hh"
-#include "G4FastSimulationManagerProcess_forCoupledTransportation.hh"
+#include "G4FastSimulationManagerProcess81.hh"
 #include "G4StateManager.hh"
 #include "G4VStateDependent.hh"
 #include "G4FlavoredParallelWorld.hh"
@@ -86,15 +86,15 @@ enum  listType {
 //
 
 // -- *** to be dropped @ next major release: >>>
-class G4GlobalFastSimulationManager_deprecating;
+#include "G4GFSManager81.hh"
 // -- <<<.
 
 class G4GlobalFastSimulationManager : public G4VStateDependent, 
 				      public G4VGlobalFastSimulationManager
 {
   // -- *** to be dropped @ next major release: >>>
-  friend class G4GlobalFastSimulationManager_deprecating;
-  // -- <<<<
+  friend class G4GFSManager81;
+  // -- <<<.
 
 public: // With  description 
 
@@ -143,8 +143,8 @@ public: // Without description
   //
   // G4FastSimulationManagerProcess bookeeping:
   //
-  void    AddFSMP(G4FastSimulationManagerProcess_forCoupledTransportation*);
-  void RemoveFSMP(G4FastSimulationManagerProcess_forCoupledTransportation*);
+  void    AddFSMP(G4FastSimulationManagerProcess81*);
+  void RemoveFSMP(G4FastSimulationManagerProcess81*);
 
 
   // Flag that the Parameterisation must be closed.
@@ -191,11 +191,11 @@ private:
   G4FastSimulationVector <G4FastSimulationManager> ManagedManagers;
 
   // Instantiated fast simulation processes:
-  G4FastSimulationVector <G4FastSimulationManagerProcess_forCoupledTransportation> fFSMPVector;
+  G4FastSimulationVector <G4FastSimulationManagerProcess81> fFSMPVector;
 
-  // -- *** to be dropped @ next major release ***:
-  G4GlobalFastSimulationManager_deprecating* _deprecated;
 
+  // -- *** to be dropped @ next major release: >>>
+  G4GFSManager81* _deprecated;
 };
 
 #endif 

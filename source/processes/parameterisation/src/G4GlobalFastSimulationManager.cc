@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GlobalFastSimulationManager.cc,v 1.17 2006-11-03 17:26:04 mverderi Exp $
+// $Id: G4GlobalFastSimulationManager.cc,v 1.18 2006-11-10 13:23:07 mverderi Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -60,7 +60,7 @@
 #include "G4PhysicalVolumeStore.hh"
 
 // -- *** to be dropped @ next major release: >>>>
-#include "G4GlobalFastSimulationManager_deprecating.hh"
+#include "G4GFSManager81.hh"
 // -- <<<<<<<<
 
 G4GlobalFastSimulationManager* 
@@ -86,7 +86,7 @@ G4GlobalFastSimulationManager::G4GlobalFastSimulationManager()
   fTheFastSimulationMessenger=new G4FastSimulationMessenger(this);
 
   // -- *** to be dropped @ next major release ***:
-  _deprecated = new G4GlobalFastSimulationManager_deprecating(this);
+  _deprecated = new G4GFSManager81();
 }
 
 G4GlobalFastSimulationManager::~G4GlobalFastSimulationManager()
@@ -113,13 +113,13 @@ RemoveFastSimulationManager(G4FastSimulationManager* fsmanager)
 }
 
 void G4GlobalFastSimulationManager::
-AddFSMP(G4FastSimulationManagerProcess_forCoupledTransportation* fp)
+AddFSMP(G4FastSimulationManagerProcess81* fp)
 {
   fFSMPVector.push_back(fp);
 }
 
 void G4GlobalFastSimulationManager::
-RemoveFSMP(G4FastSimulationManagerProcess_forCoupledTransportation* fp)
+RemoveFSMP(G4FastSimulationManagerProcess81* fp)
 {
   fFSMPVector.remove(fp);
 }
