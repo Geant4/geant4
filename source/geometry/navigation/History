@@ -1,4 +1,4 @@
-$Id: History,v 1.60 2006-11-10 14:41:12 japost Exp $
+$Id: History,v 1.61 2006-11-10 14:57:19 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,11 +16,18 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+November 10th, 2006 - J.Apostolakis (geomnav-V08-01-ref04-04)
+-----------------------------------
+G4PropagatorInField: -- fixes by Tatiana Nikitina
+   Refined fix in LocateIntersectionPoint, to subdivide
+   in case it cannot find intersection point quickly 
+   - Second version, with several levels of cutting
 
 November 10th, 2006 - J.Apostolakis (geomnav-V08-01-ref04-03)
 -----------------------------------
-G4PropagatorInField: fix in LocateIntersectionPoint, to subdivide
-   in case it cannot find intersection point quickly (Tatiana)
+G4PropagatorInField: -- fixes by Tatiana Nikitina
+   Fix in LocateIntersectionPoint, to subdivide
+   in case it cannot find intersection point quickly 
    - First version, only one level of cutting
 
 November  9th, 2006 - J.Apostolakis (geomnav-V08-01-ref04-02)
@@ -57,6 +64,18 @@ October 31st, 2006 - J.Apostolakis (geomnav-V08-01-ref03-05)
 - G4PathFinder
   o Improved the code that checks within relocation whether position
     is proposed to be moved outside safety sphere from endpoint. 
+
+**********************************************************************
+November 10th, 2006 - J.Apostolakis (geomnav-V08-01-03)
+-----------------------------------
+G4PropagatorInField: fix in LocateIntersectionPoint, to subdivide
+   in case it cannot find intersection point quickly (Tatiana)
+   - First version, only one level of cutting
+**********************************************************************
+***  Special tag made (later) not including the Developments in  *****
+***    G4TransportationManager, G4PathFinder, G4SafetyHelper     *****
+***  Changes also included from geomnav-V08-01-ref04-03          *****
+**********************************************************************
 
 October 26th, 2006 - G.Cosmo (geomnav-V08-01-02)
 ----------------------------
