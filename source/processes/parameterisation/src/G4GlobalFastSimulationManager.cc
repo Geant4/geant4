@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GlobalFastSimulationManager.cc,v 1.18 2006-11-10 13:23:07 mverderi Exp $
+// $Id: G4GlobalFastSimulationManager.cc,v 1.19 2006-11-10 15:27:17 mverderi Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -126,7 +126,9 @@ RemoveFSMP(G4FastSimulationManagerProcess81* fp)
 
 void G4GlobalFastSimulationManager::CloseFastSimulation()
 {
-  G4cout << "G4GlobalFastSimulationManager::CloseFastSimulation() : DEPRECATING, will be dropped @ next major release" << G4endl;
+  static int count(0);
+  if (count++ < 5)
+    G4cout << "G4GlobalFastSimulationManager::CloseFastSimulation() : DEPRECATING, will be dropped @ next major release" << G4endl;
   _deprecated->CloseFastSimulation();
 }
 
@@ -134,7 +136,9 @@ G4VFlavoredParallelWorld*
 G4GlobalFastSimulationManager::
 GetFlavoredWorldForThis(G4ParticleDefinition* definition)
 {
-  G4cout << "G4GlobalFastSimulationManager::GetFlavoredWorldForThis(...): DEPRECATING, will be dropped @ next major release" << G4endl;
+  static int count(0);
+  if (count++ < 5)
+    G4cout << "G4GlobalFastSimulationManager::GetFlavoredWorldForThis(...): DEPRECATING, will be dropped @ next major release" << G4endl;
   return _deprecated->GetFlavoredWorldForThis(definition);
 }
 
@@ -317,7 +321,9 @@ G4GlobalFastSimulationManager::ListEnvelopes(const G4ParticleDefinition* aPD)
 G4bool 
 G4GlobalFastSimulationManager::Notify(G4ApplicationState requestedState)
 { 
-  G4cout << "G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release"  << G4endl;
+  static int count(0);
+  if (count++ < 5)
+    G4cout << "G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release"  << G4endl;
   return _deprecated->Notify(requestedState);
 }
 
