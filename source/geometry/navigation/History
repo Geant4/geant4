@@ -1,4 +1,4 @@
-$Id: History,v 1.61 2006-11-10 14:57:19 japost Exp $
+$Id: History,v 1.62 2006-11-10 15:03:32 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -66,13 +66,20 @@ October 31st, 2006 - J.Apostolakis (geomnav-V08-01-ref03-05)
     is proposed to be moved outside safety sphere from endpoint. 
 
 **********************************************************************
+November 10th, 2006 - J.Apostolakis (geomnav-V08-01-04)
+-----------------------------------
+G4PropagatorInField: -- fixes by Tatiana Nikitina
+   Refined fix in LocateIntersectionPoint, to subdivide
+   in case it cannot find intersection point quickly 
+   - Second version, with several levels of cutting
+**********************************************************************
 November 10th, 2006 - J.Apostolakis (geomnav-V08-01-03)
 -----------------------------------
 G4PropagatorInField: fix in LocateIntersectionPoint, to subdivide
    in case it cannot find intersection point quickly (Tatiana)
    - First version, only one level of cutting
 **********************************************************************
-***  Special tag made (later) not including the Developments in  *****
+***  Special tags made (later) not including the Developments in *****
 ***    G4TransportationManager, G4PathFinder, G4SafetyHelper     *****
 ***  Changes also included from geomnav-V08-01-ref04-03          *****
 **********************************************************************
