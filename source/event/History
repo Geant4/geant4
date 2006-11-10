@@ -1,4 +1,4 @@
-$Id: History,v 1.103 2006-11-03 03:11:13 asaim Exp $
+$Id: History,v 1.104 2006-11-10 15:23:54 flei Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,8 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+November 10, 2006, F.Lei (event-V08-01-01)
+- Added line 468 to for initialization to G4PSEneDistribution.cc
 
 November 02, 2006, M.Asai (event-V08-01-00)
 - Add a flag in G4Event to keep the particular event object until the end of current run.
