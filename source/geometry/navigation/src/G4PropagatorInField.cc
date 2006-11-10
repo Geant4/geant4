@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.cc,v 1.26 2006-11-10 11:08:52 tnikitin Exp $
+// $Id: G4PropagatorInField.cc,v 1.27 2006-11-10 13:15:41 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // 
@@ -487,11 +487,14 @@ G4PropagatorInField::LocateIntersectionPoint(
   //  the loop is restarted for each half.  
   //  If progress is still to slow,the division in two halfs continue until max_depth
   //----------------------------------------------------------------------------
-  const G4int param_substeps=5;// Test value for the maximum number of substeps
-  const G4double fraction_done=0.5;
+  const G4int param_substeps=10;// Test value for the maximum number of substeps
+  const G4double fraction_done=0.3;
   G4bool Second_half=false;// First half or second half of divided step
   //  We need to know this for the final_section:
-  //  real final_section or first half final_section  
+  //  real final_section or first half final_section
+  //  In algorithm it is consider that the Second_half is true
+  //  and it becomes false only if we are in the first-half of level depthness or
+  //  if we are in the first section   
   G4int depth=0; // Depth counts how many subdivisions of initial step was made
   const G4int max_depth=4; // Max allowed depth, test parameter
   //  Intermediates Points on the Track = Subdivided Points must be stored.
@@ -511,7 +514,7 @@ G4PropagatorInField::LocateIntersectionPoint(
     for (G4int idepth=1;idepth<max_depth+1;idepth++ ){
         *ptrInterMedFT[idepth ]=CurveStartPointVelocity;
         }
-   // SubStartPoint is needed to calculate the remander length of divided step
+   // SubStartPoint is needed to calculate the did_ length of divided step
    G4FieldTrack SubStart_PointVelocity=CurveStartPointVelocity;
    
 
@@ -530,9 +533,9 @@ G4PropagatorInField::LocateIntersectionPoint(
                                            CurrentE_Point,
                                            fEpsilonStep );
     //  The above method is the key & most intuitive part ...
- G4cout<<"N="<<substep_no<<"  A= "<<Point_A
-       <<"  ApprCurveV= "<< ApproxIntersecPointV.GetPosition()
-       <<"  E= "<<CurrentE_Point<<"  B=  "<<Point_B<<G4endl;
+    //  G4cout<<"N="<<substep_no<<"  A= "<<Point_A
+    //   <<"  ApprCurveV= "<< ApproxIntersecPointV.GetPosition()
+    //   <<"  E= "<<CurrentE_Point<<"  B=  "<<Point_B<<G4endl;
 #ifdef G4DEBUG_FIELD
 ``    if( ApproxIntersecPointV.GetCurveLength() > 
         CurrentB_PointVelocity.GetCurveLength() * (1.0 + kAngTolerance) ) {
@@ -554,7 +557,8 @@ G4PropagatorInField::LocateIntersectionPoint(
     if ( ChordEF_Vector.mag2() <= sqr(GetDeltaIntersection()) )
     {
       found_approximate_intersection = true;
-      G4cout<<"Found Intersection"<<G4endl;
+      // G4cout<<"Found Intersection"<<G4endl;
+      //
       // Create the "point" return value
       //
       IntersectedOrRecalculatedFT = ApproxIntersecPointV;
@@ -639,7 +643,7 @@ G4PropagatorInField::LocateIntersectionPoint(
          {
            // There is NO intersection of FB with a volume boundary
 	   if( final_section  ){
-	      G4cout<<"in final-section : Secondhalf="<<Second_half<<"  depth="<<depth <<G4endl;
+	     // G4cout<<"in final-section : Secondhalf="<<Second_half<<"  depth="<<depth <<G4endl;
 	     // If B is the original endpoint, this means that whatever volume(s)
 	     // intersected the original chord, none touch the smaller chords 
 	     // we have used.
@@ -753,22 +757,22 @@ G4PropagatorInField::LocateIntersectionPoint(
 
       G4double did_len=std::abs( CurrentA_PointVelocity.GetCurveLength()-SubStart_PointVelocity.GetCurveLength()); 
      G4double all_len=std::abs( CurrentB_PointVelocity.GetCurveLength()-SubStart_PointVelocity.GetCurveLength());
-     G4cout << " G4PropagatorInField::LocateIntersectionPoint(): " << G4endl
-    	   << " Undertaken only length " << did_len
-    	    << "  out of " << all_len << " required. Remainder in % ="<<did_len/all_len << G4endl;
-     G4cout<<"CurA="<<CurrentA_PointVelocity.GetPosition()
-           <<" SuStart="<<SubStart_PointVelocity.GetPosition()
-           <<" CurtB="<< CurrentB_PointVelocity.GetPosition()<<G4endl;
+     //  G4cout << " G4PropagatorInField::LocateIntersectionPoint(): " << G4endl
+     //	   << " Undertaken only length " << did_len
+     //    << "  out of " << all_len << " required. Remainder did/all ="<<did_len/all_len << G4endl;
+     //  G4cout<<"CurA="<<CurrentA_PointVelocity.GetPosition()
+     //    <<" SubStart="<<SubStart_PointVelocity.GetPosition()
+     //    <<" CurB="<< CurrentB_PointVelocity.GetPosition()<<G4endl;
    
     G4double stepLengthAB;
     G4ThreeVector PointGe;
       // check if progress is too slow and if it possible to go deeper,
       // then halve the step if so
     if((( did_len )<fraction_done*all_len)&&(depth<max_depth)&&(!sub_final_section)){
-      G4cout<<"Enter in first half with depth="<<depth<<" next depth="<<depth+1<<G4endl;
+      //G4cout<<"Enter in first half with depth="<<depth<<" next depth="<<depth+1<<G4endl;
       Second_half=false;
       depth++;
-      //G4double Sub_len=(all_len-did_len)/(2.*depth);
+     
         G4double Sub_len=(all_len-did_len)/(2.);
         G4FieldTrack start=CurrentA_PointVelocity;
         G4MagInt_Driver* integrDriver= GetChordFinder()->GetIntegrationDriver(); 
@@ -797,13 +801,13 @@ G4PropagatorInField::LocateIntersectionPoint(
         // first part of curve (CurrentA,InterMedPoint[depth])
         // Go to the second part
 	Second_half=true;
-         G4cout<<"Goto the second with "<<Second_half<<" and "<<depth<<G4endl;
+        // G4cout<<"Goto the second with "<<Second_half<<" and "<<depth<<G4endl;
         }
       
   
     }//if did_len
     if((Second_half)&&(depth!=0)){
-         G4cout<<"Enter in Second half with depth="<<depth<<G4endl;
+        // G4cout<<"Enter in Second half with depth="<<depth<<" next depth="<<depth-1<<G4endl;
         // Second part of curve (InterMed[depth],Intermed[depth-1])                       ) 
         // On the depth-1 level normaly we are on the second_half
         Second_half=true;
@@ -823,7 +827,7 @@ G4PropagatorInField::LocateIntersectionPoint(
         else{
         
 	  final_section=true;
-          G4cout<<" Second with Second_half"<<Second_half<<" and depth "<<depth<<G4endl;
+          //G4cout<<" Second with Second_half"<<Second_half<<" and depth "<<depth<<G4endl;
          
         }
 
