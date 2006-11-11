@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.hh,v 1.9 2006-06-29 18:36:15 gunter Exp $
+// $Id: G4PropagatorInField.hh,v 1.10 2006-11-11 01:25:29 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // class G4PropagatorInField 
@@ -143,6 +143,8 @@ class G4PropagatorInField
  public:  // without description
 
    inline G4FieldManager*  GetCurrentFieldManager();
+   inline void             SetNavigatorForPropagating( G4Navigator *SimpleOrMultiNavigator ); 
+   inline G4Navigator*     GetNavigatorForPropagating(); 
 
  public:  // no description
 
