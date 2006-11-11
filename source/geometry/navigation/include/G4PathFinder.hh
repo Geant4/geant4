@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PathFinder.hh,v 1.19 2006-10-31 16:56:29 japost Exp $
+// $Id: G4PathFinder.hh,v 1.20 2006-11-11 01:23:35 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // class G4PathFinder 
@@ -59,7 +59,12 @@ class G4Navigator;
 #include "G4TouchableHandle.hh"
 #include "G4FieldTrack.hh"
 
-enum   ELimited { kDoNot, kUnique, kSharedTransport, kSharedOther, kUndefLimited } ; 
+// enum ELimited { kDoNot, kUnique, kSharedTransport, kSharedOther, kUndefLimited };
+// #include "G4Elimited.hh"
+
+// class G4MultiNavigator;  // --> Moved Elimited to G4MultiNavigator
+#include "G4MultiNavigator.hh"
+class G4PropagatorInField;
 
 class G4PathFinder
 {
@@ -78,7 +83,9 @@ class G4PathFinder
 			       G4int              stepNo,     // See next step / check 
                                G4double          &pNewSafety,   // for this geom 
 			       ELimited          &limitedStep, 
-			       G4FieldTrack      &EndState );
+ 			       G4FieldTrack      &EndState, 
+			       G4VPhysicalVolume* currentVolume
+			 );
      // Compute the next geometric Step  -- Curved or linear
 
    void Locate( const G4ThreeVector& position, 
@@ -110,18 +117,16 @@ class G4PathFinder
    G4double       ComputeSafety( const G4ThreeVector& pGlobalPoint ); 
      // Recompute safety for the relevant point - the endpoint of the last step!!
 
+   void EnableParallelNavigation(G4bool enableChoice= true); 
+     // Must call it to ensure that PathFinder is prepared,  
+     //   especially for curved tracks
+     //  --> if true it switches PropagatorInField to use MultiNavigator.
+     //      Must call it with false to undo (=PiF use Navigator for tracking!)
+
    inline G4int  SetVerboseLevel(G4int lev=-1);
   // inline G4int  GetVerboseLevel() const;
 
  public:  // with description
-   G4double ComputeLinearStep(const G4ThreeVector &pGlobalPoint,
-                              const G4ThreeVector &pDirection,
-                              G4double pCurrentProposedStepLength,
-                              G4double  &pNewSafety,
-                              G4bool    &limitedStep, 
-                              G4int     stepNo,       // See next step / check 
-                              G4int     navId );      // return relevant step
-     //  When no field exists or the particle has no charge or EM moment
 
    inline G4int   GetMaxLoopCount() const;
    inline void    SetMaxLoopCount( G4int new_max );
@@ -132,11 +137,12 @@ class G4PathFinder
        // Signal that location will be moved -- internal use primarily
 
  protected:  // without description
-  G4double  DoNextCurvedStep(  const G4FieldTrack  &FieldTrack,
-			       G4double            proposedStepLength); 
-
   G4double  DoNextLinearStep(  const G4FieldTrack  &FieldTrack,
 			       G4double            proposedStepLength); 
+
+  G4double  DoNextCurvedStep(  const G4FieldTrack  &FieldTrack,
+			       G4double            proposedStepLength,
+			       G4VPhysicalVolume*  pCurrentPhysVolume); 
 
   void WhichLimited();
   void PrintLimited();   // Print key details out - for debugging
@@ -168,6 +174,9 @@ class G4PathFinder
   // ----------------------------------------------------------------------
    // std::vector<G4Navigator*> fActiveNavigators; 
      // 
+   G4MultiNavigator *fpMultiNavigator; 
+     //  Object that enables G4PropagatorInField to see many geometries
+
    G4int   fNoActiveNavigators; 
    // G4int   fNoNavigators; 
    G4bool  fNewTrack;               // Flag a new track (ensure first step)
@@ -210,7 +219,8 @@ class G4PathFinder
    G4int  fMax_loop_count;
     // Limit for the number of sub-steps taken in one call to ComputeStep
 
-   G4TransportationManager* pTransportManager; // Cache for frequent use
+   G4TransportationManager* fpTransportManager; // Cache for frequent use
+   G4PropagatorInField* fpFieldPropagator; 
 };
 
 // ********************************************************************
