@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MultiNavigator.hh,v 1.1 2006-11-09 13:55:29 japost Exp $
+// $Id: G4MultiNavigator.hh,v 1.2 2006-11-11 01:14:20 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -55,7 +55,9 @@
 
 #include "G4NavigationHistory.hh"
 
-#include "G4Elimited.hh"
+// Used to be in #include "G4Elimited.hh"
+enum   ELimited { kDoNot, kUnique, kSharedTransport, kSharedOther, kUndefLimited } ; 
+
 class G4TransportationManager; 
 
 #include <iostream>
@@ -83,7 +85,7 @@ class G4MultiNavigator : public G4Navigator
 
   G4double ObtainFinalStep( G4int        navigatorId, 
 			    G4double     &pNewSafety,     // for this geom 
-			    G4double     &minStep,
+			    G4double     &minStepLast,
 			    ELimited     &limitedStep); 
     // Get values for a single geometry
 
