@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MultiNavigator.cc,v 1.1 2006-11-09 13:55:29 japost Exp $
+// $Id: G4MultiNavigator.cc,v 1.2 2006-11-11 01:12:19 japost Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4PathFinder Implementation
@@ -141,6 +141,7 @@ G4double G4MultiNavigator::ComputeStep(const G4ThreeVector &pGlobalPoint,
      // if( step == kInfinity ) { step = proposedStepLength; }
      fCurrentStepSize[num] = step; 
      fNewSafety[num]= safety; 
+      // This is currently the safety from the last sub-step
 
      if( fVerboseLevel > 2 ){
        G4cout << "G4MultiNavigator::ComputeStep : Navigator [" << num << "] -- step size " << step << " safety= " << safety << G4endl;
@@ -159,14 +160,15 @@ G4double G4MultiNavigator::ComputeStep(const G4ThreeVector &pGlobalPoint,
 
   fMinStep=  minStep; 
 
+  G4double trueMinStep= minStep; 
   if( fMinStep == kInfinity ){
-     minStep = proposedStepLength;   //  Use this below for endpoint !!
+     trueMinStep = proposedStepLength;   //  Use this below for endpoint !!
   }
-  fTrueMinStep = minStep;
+  fTrueMinStep = trueMinStep;
 
   if( fVerboseLevel > 1 ){
     G4ThreeVector endPosition;
-    endPosition= initialPosition + minStep * initialDirection ; 
+    endPosition= initialPosition + trueMinStep * initialDirection ; 
 
     int oldPrec= G4cout.precision(8); 
     G4cout << "G4MultiNavigator::ComputeStep : "
@@ -188,19 +190,15 @@ G4double G4MultiNavigator::ComputeStep(const G4ThreeVector &pGlobalPoint,
     G4cout << " G4MultiNavigator::ComputeStep : exits returning " << minStep << G4endl;
   }
 
-  return minStep;
+  return minStep;  // must return kInfinity if do not limit step
 }
 
 G4double 
-G4MultiNavigator::ObtainFinalStep( // G4double     proposedStepLength,
-				     G4int        navigatorId, 
-				     // G4int        stepNo,       // find next step 
-				     G4double     &pNewSafety,     // for this geom 
-				     G4double     &minStep,
-				     ELimited     &limitedStep) 
-                                     // G4FieldTrack &EndState )
+G4MultiNavigator::ObtainFinalStep( G4int        navigatorId, 
+				   G4double     &pNewSafety,     // for this geom 
+				   G4double     &minStep,
+				   ELimited     &limitedStep) 
 {
-  // ---
   G4int navigatorNo=-1; 
 
   if( navigatorId <= fNoActiveNavigators ){
@@ -210,18 +208,14 @@ G4MultiNavigator::ObtainFinalStep( // G4double     proposedStepLength,
             << " No Active = " << fNoActiveNavigators << " . " << G4endl;
      G4Exception( "G4MultiNavigator::ObtainFinalStep : Bad Navigator Id" ); 
   }
-#if 0 
-  if( ! ) 
-     G4Exception( "G4MultiNavigator::ObtainFinalStep Called without call to ComputeStep"); 
-  } 
-#endif
-  // fNewTrack= false; 
+  // if( ! ){ G4Exception( "G4MultiNavigator::ObtainFinalStep Called without call to ComputeStep"); }
 
   // Prepare the information to return
   pNewSafety  = fNewSafety[ navigatorNo ]; 
   limitedStep = fLimitedStep[ navigatorNo ];
   minStep= fMinStep; 
 
+  // if( (minStep==kInfinity) || (fVerboseLevel > 1) ){ 
   if( fVerboseLevel > 1 ){ 
      G4cout << " G4MultiNavigator::ComputeStep returns " << fCurrentStepSize[ navigatorNo ]
 	    << " for Navigator " << navigatorNo << " Limited step = " << limitedStep 
@@ -537,8 +531,10 @@ G4MultiNavigator::WhichLimited()       // Flag which processes limited the step
   if( fVerboseLevel > 2 )
     G4cout << " G4MultiNavigator::WhichLimited - entered " << G4endl;
 
-  // Assume that [0] is Mass / Transport
-  G4bool transportLimited = (fCurrentStepSize[IdTransport] == fMinStep); 
+  // Assume that [IdTransport] is Mass / Transport
+  // G4bool transportLimited = (fCurrentStepSize[IdTransport] == fMinStep); 
+  G4bool transportLimited = (fCurrentStepSize[IdTransport] == fMinStep)
+                           && ( fMinStep!= kInfinity) ; 
   if( transportLimited ){ 
      shared= kSharedTransport;
   }
@@ -548,7 +544,7 @@ G4MultiNavigator::WhichLimited()       // Flag which processes limited the step
 
     G4double step= fCurrentStepSize[num]; 
 
-    limitedStep = ( step == fMinStep ); 
+    limitedStep = ( step == fMinStep ) && ( step != kInfinity); 
     // if( step == kInfinity ) { fCurrentStepSize[num] = proposedStepLength; }
    
     fLimitTruth[ num ] = limitedStep; 
