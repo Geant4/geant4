@@ -1,4 +1,4 @@
-$Id: History,v 1.63 2006-11-11 01:37:19 japost Exp $
+$Id: History,v 1.64 2006-11-11 01:46:42 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,10 +16,17 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+November 11th, 2006 - J.Apostolakis (geomnav-V08-01-05)
+-----------------------------------
+G4PropagatorInField: -- fixes by Tatiana Nikitina
+  Refined fix in LocateIntersectionPoint, subdividing repeatedly.
+  (as seen in ref04-04)
+
 November 11th, 2006 - J.Apostolakis (geomnav-V08-01-ref04-05)
 -----------------------------------
 Created G4MultiNavigator and utilised it from G4PathFinder
    to implement curved trajectory parallel navigation.
+  **** Old LocateIntersectionPoint, with-out fixes 
 
 November 10th, 2006 - J.Apostolakis (geomnav-V08-01-ref04-04)
 -----------------------------------
