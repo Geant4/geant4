@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.icc,v 1.8 2006-06-29 18:36:17 gunter Exp $
+// $Id: G4PropagatorInField.icc,v 1.9 2006-11-11 01:26:05 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -255,4 +255,9 @@ G4bool G4PropagatorInField::GetUseSafetyForOptimization()
    return fUseSafetyForOptimisation; 
 }
 
+inline 
+void G4PropagatorInField::SetNavigatorForPropagating( G4Navigator *SimpleOrMultiNavigator )
+{ if(SimpleOrMultiNavigator) fNavigator= SimpleOrMultiNavigator; }
 
+inline G4Navigator* G4PropagatorInField::GetNavigatorForPropagating()
+{ return fNavigator; } 
