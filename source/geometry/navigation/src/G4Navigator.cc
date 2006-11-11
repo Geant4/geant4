@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.cc,v 1.24 2006-10-26 15:11:15 gcosmo Exp $
+// $Id: G4Navigator.cc,v 1.25 2006-11-11 01:28:23 japost Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4Navigator Implementation
@@ -44,9 +44,10 @@
 // ********************************************************************
 //
 G4Navigator::G4Navigator()
-  : fActive(false), fWasLimitedByGeometry(false), fTopPhysical(0),
+  : fWasLimitedByGeometry(false), fTopPhysical(0),
     fCheck(false), fPushed(false), fVerbose(0)
 {
+  fActive= false; 
   ResetStackAndState();
 
   fActionThreshold_NoZeroSteps  = 10; 
