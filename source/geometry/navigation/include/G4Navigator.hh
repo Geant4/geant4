@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.hh,v 1.17 2006-10-27 22:10:41 gcosmo Exp $
+// $Id: G4Navigator.hh,v 1.18 2006-11-11 01:17:49 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -253,13 +253,18 @@ class G4Navigator
     // Values: 1 (small problem),  5 (correcting), 
     //         9 (ready to abandon), 10 (abandoned)
 
- protected:  // with description
+ public:  // with description
 
   inline G4ThreeVector GetCurrentLocalCoordinate() const;
     // Return the local coordinate of the point in the reference system
     // of its containing volume that was found by LocalGlobalPointAndSetup.
     // The local coordinate of the last located track.
 
+  inline G4ThreeVector NetTranslation() const;
+  inline G4RotationMatrix NetRotation() const;
+    // Compute+return the local->global translation/rotation of current volume.
+
+ protected:  // with description
   inline G4ThreeVector ComputeLocalPoint(const G4ThreeVector& rGlobPoint) const;
     // Return position vector in local coordinate system, given a position
     // vector in world coordinate system.
@@ -268,10 +273,6 @@ class G4Navigator
     // Return the local direction of the specified vector in the reference
     // system of the volume that was found by LocalGlobalPointAndSetup.
     // The Local Coordinates of point in world coordinate system.
-
-  inline G4ThreeVector NetTranslation() const;
-  inline G4RotationMatrix NetRotation() const;
-    // Compute+return the local->global translation/rotation of current volume.
 
   virtual void ResetState();
     // Utility method to reset the navigator state machine.
@@ -290,6 +291,10 @@ class G4Navigator
 
  protected:  // without description
 
+  //
+  // BEGIN State information
+  //
+
   G4NavigationHistory fHistory;
     // Transformation and history of the current path
     // through the geometrical hierarchy.
@@ -304,20 +309,16 @@ class G4Navigator
     // A similar memory whether the Step exited current "mother" volume
     // completely, not entering daughter.
 
- private:
+  G4bool fWasLimitedByGeometry;
+    // Set true if last Step was limited by geometry.
 
-  //
-  // BEGIN State information
-  //
+ private:
 
   G4bool fActive;
     // States if the navigator is activated or not.
 
   G4ThreeVector fLastLocatedPointLocal;
     // Position of the last located point relative to its containing volume.
-
-  G4bool fWasLimitedByGeometry;
-    // Set true if last Step was limited by geometry.
   G4bool fEntering,fExiting;
     // Entering/Exiting volumes blocking/setup
     // o If exiting
