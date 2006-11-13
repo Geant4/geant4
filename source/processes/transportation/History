@@ -1,4 +1,4 @@
-$Id: History,v 1.105 2006-10-16 18:22:22 japost Exp $
+$Id: History,v 1.106 2006-11-13 16:21:48 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 13th, 2006, J.Apostolakis  transport-V08-01-01
+---------------------------------
+- Updated G4CoupledTransportation to use new signature of
+  G4PathFinder::ComputeStep that added  new argument 
+  at the end: currentVolume.
 
 October 17th, 2006, J.Apostolakis  transport-V08-01-ref03-02
 ---------------------------------
