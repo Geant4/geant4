@@ -1,4 +1,4 @@
-$Id: History,v 1.39 2006-11-10 15:26:06 mverderi Exp $
+$Id: History,v 1.40 2006-11-13 10:25:01 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,29 +15,18 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-Nov. 10, 2006, Marc Verderi
-   Change exampleN05.out to reflect the change in the
-   number of warning messages printed by the
-   G4GlobalFastSimulationManager.
-   tag as exampleN05-V08-01-ref04-03
+13th November 2006 Gabriele Cosmo (exampleN05-V08-01-ref04-04)
+- Removed debug printout in ExN05PionShowerModel::DoIt().
 
-November 10, 2006
-  Changed in physics list G4FastSimulationManagerProcess_forCoupledTransportation to
-   G4FastSimulationManagerProcess81.
-   tag as exampleN05-V08-01-ref04-02   
+10th November 2006 Marc Verderi (exampleN05-V08-01-ref04-03)
+- Changed in physics list to use G4FastSimulationManagerProcess81.
 
-November 6, 2006:
-  tag as exampleN05-V08-01-ref04-01
-
-November 6, 2006:
-  tag as exampleN05-V08-01-ref04-00
-
-November 3, 2006 (HEAD)
-- moved to new parallel geometry scheme, with
-  addition of ExN05ParallelWorldForPion and
-  removal of ghosts in the ExN05DetectorConstruction.
-- Clean up of the XXXCuts classes, as they are not
-  of primary need for the example.
+3rd November 2006 Marc Verderi (exampleN05-V08-01-ref04-01)
+- Moved to new parallel geometry scheme, with addition of
+  ExN05ParallelWorldForPion and removal of ghosts in the
+  ExN05DetectorConstruction.
+- Clean up of the XXXCuts classes, as they are not of primary need for the
+  example.
 
 28th June 2006 Makoto Asai (exampleN05-V08-00-01)
 - Fix a memory leak in ExN05PionShowerModel.cc
