@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmStandardPhysics72.cc,v 1.1 2006-10-31 11:35:02 gunter Exp $
+// $Id: G4EmStandardPhysics72.cc,v 1.2 2006-11-13 16:26:30 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -35,6 +35,7 @@
 // Modified:
 // 19.12.2005 V.Ivanchenko rename 71 -> 72
 // 15.06.2006 V.Ivanchenko use this class as a constructor of fast EM physics
+// 13.11.2006 V.Ivanchenko use G4hMultipleScattering
 //
 //----------------------------------------------------------------------------
 //
@@ -50,6 +51,7 @@
 
 #include "G4MultipleScattering71.hh"
 #include "G4MultipleScattering.hh"
+#include "G4hMultipleScattering.hh"
 #include "G4UrbanMscModel.hh"
 
 #include "G4eIonisation.hh"
@@ -162,23 +164,25 @@ void G4EmStandardPhysics72::ConstructProcess()
 
       msc = new G4MultipleScattering();
       msc->MscStepLimitation(true,0.1);
+      G4eIonisation* eion = new G4eIonisation;
+      eion->ActivateSubCutoff(true);
+      G4eBremsstrahlung* brem = new G4eBremsstrahlung();
+      brem->ActivateSubCutoff(true);
       if(verbose > 1)
         G4cout << "### EmStandard72 instantiates eIoni and msc71 for " 
                << particleName << G4endl;
       pmanager->AddProcess(msc, -1, 1, 1);
-      pmanager->AddProcess(new G4eIonisation,          -1, 2, 2);
-      pmanager->AddProcess(new G4eBremsstrahlung,      -1,-3, 3);
+      pmanager->AddProcess(eion,-1, 2, 2);
+      pmanager->AddProcess(brem,-1,-3, 3);
       pmanager->AddProcess(new G4eplusAnnihilation,     0,-1, 4);
 
     } else if (particleName == "mu+" ||
                particleName == "mu-"    ) {
 
-      msc = new G4MultipleScattering();
-      msc->MscStepLimitation(false,0.2);
       if(verbose > 1)
         G4cout << "### EmStandard72 instantiates muIoni and msc71 for " 
                << particleName << G4endl;
-      pmanager->AddProcess(msc,-1, 1, 1);
+      pmanager->AddProcess(new G4hMultipleScattering, -1, 1, 1);
       pmanager->AddProcess(new G4MuIonisation,        -1, 2, 2);
       pmanager->AddProcess(new G4MuBremsstrahlung,    -1,-3, 3);
       pmanager->AddProcess(new G4MuPairProduction,    -1,-4, 4);
@@ -187,13 +191,11 @@ void G4EmStandardPhysics72::ConstructProcess()
                particleName == "He3" ||
                particleName == "GenericIon") {
 
-      msc = new G4MultipleScattering();
-      msc->MscStepLimitation(false,0.2);
       if(verbose > 1)
         G4cout << "### EmStandard72 instantiates ionIoni and msc71 for " 
                << particleName << G4endl;
-      pmanager->AddProcess(msc, -1, 1, 1);
-      pmanager->AddProcess(new G4ionIonisation,        -1, 2, 2);
+      pmanager->AddProcess(new G4hMultipleScattering, -1, 1, 1);
+      pmanager->AddProcess(new G4ionIonisation,       -1, 2, 2);
 
     } else if (particleName == "anti_omega-" ||
                particleName == "anti_proton" ||
@@ -216,15 +218,14 @@ void G4EmStandardPhysics72::ConstructProcess()
       if(verbose > 1)
         G4cout << "### EmStandard72 instantiates hIoni and msc71 for " 
                << particleName << G4endl;
-      msc = new G4MultipleScattering();
-      msc->MscStepLimitation(false,0.2);
-      pmanager->AddProcess(msc, -1, 1, 1);
-      pmanager->AddProcess(new G4hIonisation,          -1, 2, 2);
+
+      pmanager->AddProcess(new G4hMultipleScattering, -1, 1, 1);
+      pmanager->AddProcess(new G4hIonisation,         -1, 2, 2);
     }
   }
   G4EmProcessOptions opt;
   opt.SetVerbose(verbose);
-  //  opt.SetMscStepLimitation(false, 0.2);
+  if(!mscStepLimit) opt.SetMscStepLimitation(false);
   //  opt.SetSubCutoff(true);
 }
 

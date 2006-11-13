@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EmStandardPhysics71.hh,v 1.1 2006-10-31 11:35:01 gunter Exp $
+// $Id: G4EmStandardPhysics71.hh,v 1.2 2006-11-13 16:26:30 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -35,6 +35,7 @@
 //
 // Modified:
 // 05.12.2005 V.Ivanchenko add controlled verbosity
+// 13.11.2006 V.Ivanchenko set default msc step limit false
 //
 //----------------------------------------------------------------------------
 //
@@ -57,7 +58,7 @@ class G4EmStandardPhysics71 : public G4VPhysicsConstructor
 {
 public:
   G4EmStandardPhysics71(const G4String& name = "EMstandard71", G4int ver = 1,
-			G4bool msc=true);
+			G4bool msc=false);
   virtual ~G4EmStandardPhysics71();
 
 public:

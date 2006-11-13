@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmStandardPhysics.cc,v 1.1 2006-10-31 11:35:02 gunter Exp $
+// $Id: G4EmStandardPhysics.cc,v 1.2 2006-11-13 16:26:30 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -34,6 +34,7 @@
 //
 // Modified:
 // 05.12.2005 V.Ivanchenko add controlled verbosity
+// 13.11.2006 V.Ivanchenko use G4hMultipleScattering
 //
 //----------------------------------------------------------------------------
 //
@@ -48,6 +49,7 @@
 #include "G4PhotoElectricEffect.hh"
 
 #include "G4MultipleScattering.hh"
+#include "G4hMultipleScattering.hh"
 
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
@@ -176,8 +178,8 @@ void G4EmStandardPhysics::ConstructProcess()
       if(verbose > 1)
         G4cout << "### EmStandard instantiates ionIoni and msc80 for " 
                << particleName << G4endl;
-      pmanager->AddProcess(new G4MultipleScattering, -1, 1, 1);
-      pmanager->AddProcess(new G4ionIonisation,      -1, 2, 2);
+      pmanager->AddProcess(new G4hMultipleScattering, -1, 1, 1);
+      pmanager->AddProcess(new G4ionIonisation,       -1, 2, 2);
 
     } else if (particleName == "anti_omega-" ||
                particleName == "anti_proton" ||
@@ -201,14 +203,13 @@ void G4EmStandardPhysics::ConstructProcess()
       if(verbose > 1)
         G4cout << "### EmStandard instantiates hIoni and msc80 for " 
                << particleName << G4endl;
-      pmanager->AddProcess(new G4MultipleScattering,-1, 1, 1);
-      pmanager->AddProcess(new G4hIonisation,       -1, 2, 2);
+      pmanager->AddProcess(new G4hMultipleScattering, -1, 1, 1);
+      pmanager->AddProcess(new G4hIonisation,         -1, 2, 2);
     }
   }
   G4EmProcessOptions opt;
   opt.SetVerbose(verbose);
-  if(!mscStepLimit) 
-    opt.SetMscStepLimitation(false);
+  if(!mscStepLimit) opt.SetMscStepLimitation(false);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
