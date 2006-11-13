@@ -1,4 +1,4 @@
-$Id: History,v 1.65 2006-11-13 16:30:18 japost Exp $
+$Id: History,v 1.66 2006-11-13 16:31:50 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -18,9 +18,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
 November 11th, 2006 - J.Apostolakis (geomnav-V08-01-05)
 -----------------------------------
-G4PathFinder: 
+G4PathFinder improvements for parallel Navigation
   - ComputeStep method signature extended to add volume
   - Use G4MultiNavigator for tracking in field.
+G4MultiNavigator: several fixes, primarily for 
+    taking care of condition of geometry limited step.
 
 November 11th, 2006 - J.Apostolakis (geomnav-V08-01-04)
 -----------------------------------
