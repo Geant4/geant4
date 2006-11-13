@@ -28,7 +28,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Tet.hh,v 1.8 2006-10-20 13:45:20 gcosmo Exp $
+// $Id: G4Tet.hh,v 1.9 2006-11-13 08:58:03 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -46,6 +46,7 @@
 // -------
 // 03.09.2004 - M.H.Mendenhall & R.A.Weller (Vanderbilt University, USA)
 // 10.02.2005 - D.Anninos (CERN) - Added GetPointOnSurface() method.
+// 12.11.2006 - M.H.Mendenhall - Added GetSurfaceArea() concrete implementation.
 // --------------------------------------------------------------------
 #ifndef G4TET_HH
 #define G4TET_HH
@@ -115,7 +116,7 @@ class G4Tet : public G4VSolid
       // persistifiable objects.
 
     const char* CVSHeaderVers()
-      { return "$Id: G4Tet.hh,v 1.8 2006-10-20 13:45:20 gcosmo Exp $"; }
+      { return "$Id: G4Tet.hh,v 1.9 2006-11-13 08:58:03 gcosmo Exp $"; }
     const char* CVSFileVers()
       { return CVSVers; }
     void PrintWarnings(G4bool flag)
@@ -136,8 +137,7 @@ class G4Tet : public G4VSolid
 
   private:
 
-    G4double fCubicVolume;
-    G4double fSurfaceArea;
+    G4double fCubicVolume, fSurfaceArea;
 
     mutable G4Polyhedron* fpPolyhedron;
 

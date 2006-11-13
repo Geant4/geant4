@@ -27,7 +27,7 @@
 // *                                                                  *
 // ********************************************************************
 //
-// $Id: G4Tet.cc,v 1.10 2006-10-20 13:45:21 gcosmo Exp $
+// $Id: G4Tet.cc,v 1.11 2006-11-13 08:58:03 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Tet
@@ -50,12 +50,13 @@
 //             G4Exception
 //  20041103 - MHM removed many unused variables from class
 //  20040803 - Dionysios Anninos, added GetPointOnSurface() method
+//  20061112 - MHM added code for G4VSolid GetSurfaceArea()
 //
 // --------------------------------------------------------------------
 
 #include "G4Tet.hh"
 
-const char G4Tet::CVSVers[]="$Id: G4Tet.cc,v 1.10 2006-10-20 13:45:21 gcosmo Exp $";
+const char G4Tet::CVSVers[]="$Id: G4Tet.cc,v 1.11 2006-11-13 08:58:03 gcosmo Exp $";
 
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
@@ -90,7 +91,7 @@ G4Tet::G4Tet(const G4String& pName,
                    G4ThreeVector p2,
                    G4ThreeVector p3,
                    G4ThreeVector p4, G4bool *degeneracyFlag)
-  : G4VSolid(pName), fSurfaceArea(0.), fpPolyhedron(0), warningFlag(0)
+  : G4VSolid(pName), fpPolyhedron(0), warningFlag(0)
 {
   // fV<x><y> is vector from vertex <y> to vertex <x>
   //
@@ -154,10 +155,25 @@ G4Tet::G4Tet(const G4String& pName,
   G4ThreeVector fCenter142=(anchor+p4+p2)*(1.0/3.0);
   G4ThreeVector fCenter234=(p2+p3+p4)*(1.0/3.0);
 
-  fNormal123=fV31.cross(fV21).unit();
-  fNormal134=fV41.cross(fV31).unit();
-  fNormal142=fV21.cross(fV41).unit();
-  fNormal234=fV32.cross(fV43).unit();
+  // compute area of each triangular face by cross product
+  // and sum for total surface area
+
+  G4ThreeVector normal123=fV31.cross(fV21);
+  G4ThreeVector normal134=fV41.cross(fV31);
+  G4ThreeVector normal142=fV21.cross(fV41);
+  G4ThreeVector normal234=fV32.cross(fV43);
+
+  fSurfaceArea=(
+      normal123.mag()+
+      normal134.mag()+
+      normal142.mag()+
+      normal234.mag()
+  )/2.0;
+
+  fNormal123=normal123.unit();
+  fNormal134=normal134.unit();
+  fNormal142=normal142.unit();
+  fNormal234=normal234.unit();
 
   fCdotN123=fCenter123.dot(fNormal123);
   fCdotN134=fCenter134.dot(fNormal134);
@@ -682,8 +698,6 @@ G4double G4Tet::GetCubicVolume()
 
 G4double G4Tet::GetSurfaceArea()
 {
-  if(fSurfaceArea != 0.) {;}
-  else   { fSurfaceArea = G4VSolid::GetSurfaceArea(); }
   return fSurfaceArea;
 }
 
