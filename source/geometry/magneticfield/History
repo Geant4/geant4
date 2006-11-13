@@ -1,4 +1,4 @@
-$Id: History,v 1.112 2006-06-22 15:25:40 japost Exp $
+$Id: History,v 1.113 2006-11-13 18:23:55 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,12 +17,17 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-June 21st, 2006  J.Apostolakis - field-V08-01-01
------------------------------
-- G4MagIntegratorStepper (change reinstated)
-Added SetEquationOfMotion method - needed for Geant4e
---- The field-V08-01-0y tags include the SetEquationOfMotion 
-     method in G4MagIntegratorStepper
+November 13th, 2006  G.Cosmo - field-V08-01-01
+----------------------------
+- G4FieldTrack:
+  o Implemented missing definition for GetCharge().
+  o Corrected 'const' qualifier for accessors in the subclass.
+  o Cleanup ...
+- NOTE: this tag is NOT including the change below in G4MagIntegratorStepper.
+
+June 21st, 2006  J.Apostolakis - field-V08-01-00
+------------------------------
+- Including the SetEquationOfMotion() method in G4MagIntegratorStepper
 
 June 22nd, 2006  J.Apostolakis - field-V08-00-07
 -----------------------------
