@@ -57,6 +57,7 @@ void G4MiscLHEPBuilder::Build()
   aProcMan = G4AntiProton::AntiProton()->GetProcessManager();
   theLEAntiProtonModel = new G4LEAntiProtonInelastic();
   theHEAntiProtonModel = new G4HEAntiProtonInelastic();
+  theHEAntiProtonModel->SetMaxEnergy(100*TeV);
   theAntiProtonInelastic.RegisterMe(theLEAntiProtonModel);
   theAntiProtonInelastic.RegisterMe(theHEAntiProtonModel);
   aProcMan->AddDiscreteProcess(&theAntiProtonInelastic);
@@ -65,6 +66,7 @@ void G4MiscLHEPBuilder::Build()
   aProcMan = G4AntiNeutron::AntiNeutron()->GetProcessManager();
   theLEAntiNeutronModel = new G4LEAntiNeutronInelastic();
   theHEAntiNeutronModel = new G4HEAntiNeutronInelastic();
+  theHEAntiNeutronModel->SetMaxEnergy(100*TeV);
   theAntiNeutronInelastic.RegisterMe(theLEAntiNeutronModel);
   theAntiNeutronInelastic.RegisterMe(theHEAntiNeutronModel);
   aProcMan->AddDiscreteProcess(&theAntiNeutronInelastic);
@@ -73,6 +75,7 @@ void G4MiscLHEPBuilder::Build()
   aProcMan = G4Lambda::Lambda()->GetProcessManager();
   theLELambdaModel = new G4LELambdaInelastic();
   theHELambdaModel = new G4HELambdaInelastic();
+  theHELambdaModel->SetMaxEnergy(100*TeV);
   theLambdaInelastic.RegisterMe(theLELambdaModel);
   theLambdaInelastic.RegisterMe(theHELambdaModel);
   aProcMan->AddDiscreteProcess(&theLambdaInelastic);
@@ -81,6 +84,7 @@ void G4MiscLHEPBuilder::Build()
   aProcMan = G4AntiLambda::AntiLambda()->GetProcessManager();
   theLEAntiLambdaModel = new G4LEAntiLambdaInelastic();
   theHEAntiLambdaModel = new G4HEAntiLambdaInelastic();
+  theHEAntiLambdaModel->SetMaxEnergy(100*TeV);
   theAntiLambdaInelastic.RegisterMe(theLEAntiLambdaModel);
   theAntiLambdaInelastic.RegisterMe(theHEAntiLambdaModel);
   aProcMan->AddDiscreteProcess(&theAntiLambdaInelastic);
@@ -89,6 +93,7 @@ void G4MiscLHEPBuilder::Build()
   aProcMan = G4SigmaMinus::SigmaMinus()->GetProcessManager();
   theLESigmaMinusModel = new G4LESigmaMinusInelastic();
   theHESigmaMinusModel = new G4HESigmaMinusInelastic();
+  theHESigmaMinusModel->SetMaxEnergy(100*TeV);
   theSigmaMinusInelastic.RegisterMe(theLESigmaMinusModel);
   theSigmaMinusInelastic.RegisterMe(theHESigmaMinusModel);
   aProcMan->AddDiscreteProcess(&theSigmaMinusInelastic);
@@ -97,6 +102,7 @@ void G4MiscLHEPBuilder::Build()
   aProcMan = G4AntiSigmaMinus::AntiSigmaMinus()->GetProcessManager();
   theLEAntiSigmaMinusModel = new G4LEAntiSigmaMinusInelastic();
   theHEAntiSigmaMinusModel = new G4HEAntiSigmaMinusInelastic();
+  theHEAntiSigmaMinusModel->SetMaxEnergy(100*TeV);
   theAntiSigmaMinusInelastic.RegisterMe(theLEAntiSigmaMinusModel);
   theAntiSigmaMinusInelastic.RegisterMe(theHEAntiSigmaMinusModel);
   aProcMan->AddDiscreteProcess(&theAntiSigmaMinusInelastic);
@@ -105,6 +111,7 @@ void G4MiscLHEPBuilder::Build()
   aProcMan = G4SigmaPlus::SigmaPlus()->GetProcessManager();
   theLESigmaPlusModel = new G4LESigmaPlusInelastic();
   theHESigmaPlusModel = new G4HESigmaPlusInelastic();
+  theHESigmaPlusModel->SetMaxEnergy(100*TeV);
   theSigmaPlusInelastic.RegisterMe(theLESigmaPlusModel);
   theSigmaPlusInelastic.RegisterMe(theHESigmaPlusModel);
   aProcMan->AddDiscreteProcess(&theSigmaPlusInelastic);
@@ -113,6 +120,7 @@ void G4MiscLHEPBuilder::Build()
   aProcMan = G4AntiSigmaPlus::AntiSigmaPlus()->GetProcessManager();
   theLEAntiSigmaPlusModel = new G4LEAntiSigmaPlusInelastic();
   theHEAntiSigmaPlusModel = new G4HEAntiSigmaPlusInelastic();
+  theHEAntiSigmaPlusModel->SetMaxEnergy(100*TeV);
   theAntiSigmaPlusInelastic.RegisterMe(theLEAntiSigmaPlusModel);
   theAntiSigmaPlusInelastic.RegisterMe(theHEAntiSigmaPlusModel);
   aProcMan->AddDiscreteProcess(&theAntiSigmaPlusInelastic);
@@ -121,6 +129,7 @@ void G4MiscLHEPBuilder::Build()
   aProcMan = G4XiMinus::XiMinus()->GetProcessManager();
   theLEXiMinusModel = new G4LEXiMinusInelastic();
   theHEXiMinusModel = new G4HEXiMinusInelastic();
+  theHEXiMinusModel->SetMaxEnergy(100*TeV);
   theXiMinusInelastic.RegisterMe(theLEXiMinusModel);
   theXiMinusInelastic.RegisterMe(theHEXiMinusModel);
   aProcMan->AddDiscreteProcess(&theXiMinusInelastic);
@@ -129,6 +138,7 @@ void G4MiscLHEPBuilder::Build()
   aProcMan = G4AntiXiMinus::AntiXiMinus()->GetProcessManager();
   theLEAntiXiMinusModel = new G4LEAntiXiMinusInelastic();
   theHEAntiXiMinusModel = new G4HEAntiXiMinusInelastic();
+  theHEAntiXiMinusModel->SetMaxEnergy(100*TeV);
   theAntiXiMinusInelastic.RegisterMe(theLEAntiXiMinusModel);
   theAntiXiMinusInelastic.RegisterMe(theHEAntiXiMinusModel);
   aProcMan->AddDiscreteProcess(&theAntiXiMinusInelastic);
@@ -137,6 +147,7 @@ void G4MiscLHEPBuilder::Build()
   aProcMan = G4XiZero::XiZero()->GetProcessManager();
   theLEXiZeroModel = new G4LEXiZeroInelastic();
   theHEXiZeroModel = new G4HEXiZeroInelastic();
+  theHEXiZeroModel->SetMaxEnergy(100*TeV);
   theXiZeroInelastic.RegisterMe(theLEXiZeroModel);
   theXiZeroInelastic.RegisterMe(theHEXiZeroModel);
   aProcMan->AddDiscreteProcess(&theXiZeroInelastic);
@@ -145,6 +156,7 @@ void G4MiscLHEPBuilder::Build()
   aProcMan = G4AntiXiZero::AntiXiZero()->GetProcessManager();
   theLEAntiXiZeroModel = new G4LEAntiXiZeroInelastic();
   theHEAntiXiZeroModel = new G4HEAntiXiZeroInelastic();
+  theHEAntiXiZeroModel->SetMaxEnergy(100*TeV);
   theAntiXiZeroInelastic.RegisterMe(theLEAntiXiZeroModel);
   theAntiXiZeroInelastic.RegisterMe(theHEAntiXiZeroModel);
   aProcMan->AddDiscreteProcess(&theAntiXiZeroInelastic);
@@ -153,6 +165,7 @@ void G4MiscLHEPBuilder::Build()
   aProcMan = G4OmegaMinus::OmegaMinus()->GetProcessManager();
   theLEOmegaMinusModel = new G4LEOmegaMinusInelastic();
   theHEOmegaMinusModel = new G4HEOmegaMinusInelastic();
+  theHEOmegaMinusModel->SetMaxEnergy(100*TeV);
   theOmegaMinusInelastic.RegisterMe(theLEOmegaMinusModel);
   theOmegaMinusInelastic.RegisterMe(theHEOmegaMinusModel);
   aProcMan->AddDiscreteProcess(&theOmegaMinusInelastic);
@@ -161,6 +174,7 @@ void G4MiscLHEPBuilder::Build()
   aProcMan = G4AntiOmegaMinus::AntiOmegaMinus()->GetProcessManager();
   theLEAntiOmegaMinusModel = new G4LEAntiOmegaMinusInelastic();
   theHEAntiOmegaMinusModel = new G4HEAntiOmegaMinusInelastic();
+  theHEAntiOmegaMinusModel->SetMaxEnergy(100*TeV);
   theAntiOmegaMinusInelastic.RegisterMe(theLEAntiOmegaMinusModel);
   theAntiOmegaMinusInelastic.RegisterMe(theHEAntiOmegaMinusModel);
   aProcMan->AddDiscreteProcess(&theAntiOmegaMinusInelastic);
