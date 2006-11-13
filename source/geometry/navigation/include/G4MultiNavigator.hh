@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MultiNavigator.hh,v 1.2 2006-11-11 01:14:20 japost Exp $
+// $Id: G4MultiNavigator.hh,v 1.3 2006-11-13 17:34:08 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -32,36 +32,29 @@
 //
 // Class description:
 //
-// Polls the navigators of several geometries to identify the next 
-// boundary. 
-//
+// Utility class for polling the navigators of several geometries to
+// identify the next  boundary. 
+
 // History:
-// - Created.                                John Apostolakis  Nov 2006
+// - Created. John Apostolakis, November 2006
 // *********************************************************************
 
 #ifndef G4MULTINAVIGATOR_HH
 #define G4MULTINAVIGATOR_HH
 
+#include <iostream>
+
 #include "geomdefs.hh"
 #include "G4ThreeVector.hh"
-// #include "G4Types.hh"
-
 #include "G4Navigator.hh"
-
-// #include "G4AffineTransform.hh"
-// #include "G4RotationMatrix.hh"
 
 #include "G4TouchableHistoryHandle.hh"
 
 #include "G4NavigationHistory.hh"
 
-// Used to be in #include "G4Elimited.hh"
-enum   ELimited { kDoNot, kUnique, kSharedTransport, kSharedOther, kUndefLimited } ; 
+enum  ELimited { kDoNot,kUnique,kSharedTransport,kSharedOther,kUndefLimited };
 
-class G4TransportationManager; 
-
-#include <iostream>
-
+class G4TransportationManager;
 class G4VPhysicalVolume;
 
 class G4MultiNavigator : public G4Navigator
@@ -76,92 +69,70 @@ class G4MultiNavigator : public G4Navigator
   ~G4MultiNavigator();
     // Destructor. No actions.
 
-  // virtual 
   G4double ComputeStep(const G4ThreeVector &pGlobalPoint,
-		       const G4ThreeVector &pDirection,
-		       const G4double      pCurrentProposedStepLength,
-		             G4double      &pNewSafety);
-    // Returns the distance to the next boundary of any geometry
+                       const G4ThreeVector &pDirection,
+                       const G4double      pCurrentProposedStepLength,
+                             G4double      &pNewSafety);
+    // Return the distance to the next boundary of any geometry
 
   G4double ObtainFinalStep( G4int        navigatorId, 
-			    G4double     &pNewSafety,     // for this geom 
-			    G4double     &minStepLast,
-			    ELimited     &limitedStep); 
+                            G4double     &pNewSafety,     // for this geom 
+                            G4double     &minStepLast,
+                            ELimited     &limitedStep); 
     // Get values for a single geometry
 
   void PrepareNavigators(); 
-    //  Find which geometries are registered for this particles - and keep info
+    // Find which geometries are registered for this particles - and keep info
   void PrepareNewTrack( const G4ThreeVector position, 
-			const G4ThreeVector direction ); 
-    //  Prepare Navigators and locate 
+                        const G4ThreeVector direction ); 
+    // Prepare Navigators and locate 
 
-  // virtual
   G4VPhysicalVolume* ResetHierarchyAndLocate(const G4ThreeVector &point,
                                              const G4ThreeVector &direction,
                                              const G4TouchableHistory &h);
-
-    // Resets the geometrical hierarchy for all geometries.
-    //  Use the touchable history for the first (mass) geometry.
-    //  Return the volume in the first (mass) geometry.
+    // Reset the geometrical hierarchy for all geometries.
+    // Use the touchable history for the first (mass) geometry.
+    // Return the volume in the first (mass) geometry.
     // 
     // Important Note: In order to call this the geometries MUST be closed.
 
-  // virtual
   G4VPhysicalVolume* LocateGlobalPointAndSetup(const G4ThreeVector& point,
-                                             const G4ThreeVector* direction=0,
-                                             const G4bool pRelativeSearch=true,
-                                             const G4bool ignoreDirection=true);
+                                               const G4ThreeVector* direction=0,
+                                               const G4bool pRelativeSearch=true,
+                                               const G4bool ignoreDirection=true);
     // Locate in all geometries.
     // Return the volume in the first (mass) geometry
     //  Maintain vector of other volumes,  to be returned separately
     // 
     // Important Note: In order to call this the geometry MUST be closed.
 
-  // virtual
   void LocateGlobalPointWithinVolume(const G4ThreeVector& position);
     // Relocate in all geometries for point that has not changed volume
     // (ie is within safety  in all geometries or is distance less that 
     // along the direction of a computed step.
 
-  // void SetGeometricallyLimitedStep();
-    // Inform the navigator that the previous Step calculated
-    // by the geometry was taken in its entirety.
-
-  // virtual 
   G4double ComputeSafety(const G4ThreeVector &globalpoint,
-                                 const G4double pProposedMaxLength = DBL_MAX);
+                         const G4double pProposedMaxLength = DBL_MAX);
     // Calculate the isotropic distance to the nearest boundary 
     // in any geometry from the specified point in the global coordinate system. 
-        // The geometry must be closed.
+    // The geometry must be closed.
 
-  // virtual 
   G4TouchableHistoryHandle CreateTouchableHistoryHandle() const;
     // Returns a reference counted handle to a touchable history.
 
-  // virtual 
-  //   G4ThreeVector GetLocalExitNormal(G4bool* valid);
-  //  ---> Not overloading currently   TODO: check if relevant
+ public:  // without description
 
-  // Check relevance, use
-  // G4bool EnteredDaughterVolume() const;
-  // G4bool ExitedMotherVolume() const;
-  // void  CheckMode(G4bool mode);
-
-  // void ResetStackAndState();
-  // G4int SeverityOfZeroStepping( G4int* noZeroSteps ) const; 
-
-  G4Navigator* GetNavigator(G4int n) const { 
+  G4Navigator* GetNavigator(G4int n) const
+  { 
      if( (n>fNoActiveNavigators)||(n<0)){ n=0; }
      return fpNavigator[n]; 
   }
 
  protected:  // with description
 
-  // virtual 
   void ResetState();
     // Utility method to reset the navigator state machine.
 
-  // virtual 
   void SetupHierarchy();
     // Renavigate & reset hierarchy described by current history
     // o Reset volumes
@@ -209,7 +180,4 @@ class G4MultiNavigator : public G4Navigator
    G4TransportationManager* pTransportManager; // Cache for frequent use
 };
 
-// #include "G4MultiNavigator.icc"
-
 #endif
-
