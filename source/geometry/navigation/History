@@ -1,4 +1,4 @@
-$Id: History,v 1.66 2006-11-13 16:31:50 japost Exp $
+$Id: History,v 1.67 2006-11-13 17:47:32 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 13th, 2006 - G.Cosmo (geomnav-V08-01-06)
+-----------------------------
+- Fixed compilation warnings and some cleanup ...
+
 November 11th, 2006 - J.Apostolakis (geomnav-V08-01-05)
 -----------------------------------
 G4PathFinder improvements for parallel Navigation
@@ -26,77 +31,52 @@ G4MultiNavigator: several fixes, primarily for
 
 November 11th, 2006 - J.Apostolakis (geomnav-V08-01-04)
 -----------------------------------
-G4PropagatorInField: -- fixes by Tatiana Nikitina
-  Refined fix in LocateIntersectionPoint, subdividing repeatedly.
-  (as seen in ref04-04)
+- G4PropagatorInField:
+  o Refined fix in LocateIntersectionPoint(), to subdivide
+    in case it cannot find intersection point quickly (T.Nikitina).
+    Second version, with several levels of cutting.
+  o NOTE: Special tags made (later) not including the Developments in
+    G4TransportationManager, G4PathFinder, G4SafetyHelper for parallel
+    navigation. i.e. - based on tag "geomnav-V08-01-03".
 
-November 11th, 2006 - J.Apostolakis (geomnav-V08-01-ref04-05)
+November 11th, 2006 - J.Apostolakis
 -----------------------------------
-Created G4MultiNavigator and utilised it from G4PathFinder
-   to implement curved trajectory parallel navigation.
-  **** Old LocateIntersectionPoint, with-out fixes 
+- Created G4MultiNavigator class and utilised it from G4PathFinder
+  to implement curved trajectory parallel navigation.
 
-November 10th, 2006 - J.Apostolakis (geomnav-V08-01-ref04-0x, x=3,4)
+November 10th, 2006 - J.Apostolakis (geomnav-V08-01-03)
 -----------------------------------
-G4PropagatorInField: -- fixes by Tatiana Nikitina
-   Refined fix in LocateIntersectionPoint, to subdivide
-   in case it cannot find intersection point quickly 
-   - Second version, with several levels of cutting (geomnav-V08-01-ref04-04)
-   - First version, only one level of cutting (geomnav-V08-01-ref04-03)
+- G4PropagatorInField:
+  o Fix in LocateIntersectionPoint(), to subdivide in case it cannot find
+    intersection point quickly (T.Nikitina).
+    First version, only one level of cutting
+  o NOTE: Special tags made (later) not including the Developments in
+    G4TransportationManager, G4PathFinder, G4SafetyHelper for parallel
+    navigation. i.e. - based on tag "geomnav-V08-01-02".
 
-November  9th, 2006 - J.Apostolakis (geomnav-V08-01-ref04-02)
+November  9th, 2006 - J.Apostolakis
 -----------------------------------
-G4SafetyHelper: Changed default value of fUseParallelGeometries to false
-      This should be default -- except for development of parallel 
-      geometries.
+- G4SafetyHelper:
+  o Changed default value of 'fUseParallelGeometries' to 'false'.
+    This is the default, except when using parallel geometries.
+    Value 'true' will become the default.
 
-November 4th, 2006 - G.Cosmo (geomnav-V08-01-ref04-01)
-----------------------------
-G4TransportationManager: added new method SetWorldForTracking
-to enable change of world from RunManager.
-???
+November 4th, 2006 - M.Asai
+---------------------------
+- G4TransportationManager:
+  o added new method SetWorldForTracking() to enable change of world from
+    the RunManager.
 
-
-November 1st, 2006 - G.Cosmo (geomnav-V08-01-ref04-00)
-----------------------------
-???
-
-October 31st, 2006 - J.Apostolakis (geomnav-V08-01-ref03-06)
-----------------------------------
-Changed default value of fUseParallelGeometries to false
-  --> this should be the default, and when PathFinder is activated,
-      it should be changed to 'true'
-
-October 31st, 2006 - J.Apostolakis (geomnav-V08-01-ref03-05)
+October 31st, 2006 - J.Apostolakis
 ----------------------------------
 - G4SafetyHelper
-  o Added new class variable fUseParallelGeometries, to enable
+  o Added new class variable 'fUseParallelGeometries', to enable
     it to work call G4Navigator of Mass geometry directly, in
-    the case of single geometry  ( when G4PathFinder is disabled. )
-  o Default value is 'true' --> for parallel navigation development
-
+    the case of single geometry (when G4PathFinder is disabled).
+  o Default value is currently 'true' --> for parallel navigation development.
 - G4PathFinder
   o Improved the code that checks within relocation whether position
     is proposed to be moved outside safety sphere from endpoint. 
-
-**********************************************************************
-November 10th, 2006 - J.Apostolakis (geomnav-V08-01-04)
------------------------------------
-G4PropagatorInField: -- fixes by Tatiana Nikitina
-   Refined fix in LocateIntersectionPoint, to subdivide
-   in case it cannot find intersection point quickly 
-   - Second version, with several levels of cutting
-**********************************************************************
-November 10th, 2006 - J.Apostolakis (geomnav-V08-01-03)
------------------------------------
-G4PropagatorInField: fix in LocateIntersectionPoint, to subdivide
-   in case it cannot find intersection point quickly (Tatiana)
-   - First version, only one level of cutting
-**********************************************************************
-***  Special tags made (later) not including the Developments in *****
-***    G4TransportationManager, G4PathFinder, G4SafetyHelper     *****
-***  Changes also included from geomnav-V08-01-ref04-03          *****
-**********************************************************************
 
 October 26th, 2006 - G.Cosmo (geomnav-V08-01-02)
 ----------------------------
