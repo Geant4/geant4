@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN05PionShowerModel.cc,v 1.16 2006-06-29 17:53:37 gunter Exp $
+// $Id: ExN05PionShowerModel.cc,v 1.17 2006-11-13 10:19:16 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "ExN05PionShowerModel.hh"
@@ -85,9 +85,7 @@ G4bool ExN05PionShowerModel::ModelTrigger(const G4FastTrack&)
 void ExN05PionShowerModel::DoIt(const G4FastTrack& fastTrack, 
 		     G4FastStep& fastStep)
 {
-  G4cout << "ExN05PionShowerModel::DoIt" << G4endl;
-
-  // Kill the parawmeterised particle:
+  // Kill the parameterised particle:
   fastStep.KillPrimaryTrack();
   fastStep.ProposePrimaryTrackPathLength(0.0);
   fastStep.ProposeTotalEnergyDeposited(fastTrack.GetPrimaryTrack()->GetKineticEnergy());
@@ -97,7 +95,6 @@ void ExN05PionShowerModel::DoIt(const G4FastTrack& fastTrack,
   
   // and put those energy spots into the crystals:
   BuildDetectorResponse();
-  
 }
 
 void ExN05PionShowerModel::Explode(const G4FastTrack& fastTrack)
