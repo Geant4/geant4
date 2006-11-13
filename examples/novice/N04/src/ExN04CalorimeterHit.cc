@@ -97,8 +97,8 @@ const std::map<G4String,G4AttDef>* ExN04CalorimeterHit::GetAttDefs() const
 {
   // G4AttDefs have to have long life.  Use static member...
   if (fAttDefs.empty()) {
-    fAttDefs["Type"] =
-      G4AttDef("Type","Type of hit","Physics","","G4String");
+    fAttDefs["HitType"] =
+      G4AttDef("HitType","Type of hit","Physics","","G4String");
     fAttDefs["ZID"] = G4AttDef("ZID","Z Cell ID","Physics","","G4int");
     fAttDefs["PhiID"] = G4AttDef("PhiID","Phi Cell ID","Physics","","G4int");
     fAttDefs["EDep"] =
@@ -112,7 +112,7 @@ std::vector<G4AttValue>* ExN04CalorimeterHit::CreateAttValues() const
   // Create expendable G4AttsValues for picking...
   std::vector<G4AttValue>* attValues = new std::vector<G4AttValue>;
   attValues->push_back
-    (G4AttValue("Type","ExN04CalorimeterHit",""));
+    (G4AttValue("HitType","ExN04CalorimeterHit",""));
   attValues->push_back
     (G4AttValue("ZID",G4UIcommand::ConvertToString(ZCellID),""));
   attValues->push_back

@@ -29,7 +29,10 @@
 #include "G4Circle.hh"
 #include "G4Colour.hh"
 #include "G4VisAttributes.hh"
-
+#include "G4UnitsTable.hh"
+#include "G4AttValue.hh"
+#include "G4AttDef.hh"
+#include "G4AttCheck.hh"
 
 G4Allocator<ExN04TrackerHit> ExN04TrackerHitAllocator;
 
@@ -58,6 +61,8 @@ G4int ExN04TrackerHit::operator==(const ExN04TrackerHit &right) const
   return (this==&right) ? 1 : 0;
 }
 
+std::map<G4String,G4AttDef> ExN04TrackerHit::fAttDefs;
+
 void ExN04TrackerHit::Draw()
 {
   G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
@@ -71,6 +76,26 @@ void ExN04TrackerHit::Draw()
     circle.SetVisAttributes(attribs);
     pVVisManager->Draw(circle);
   }
+}
+
+const std::map<G4String,G4AttDef>* ExN04TrackerHit::GetAttDefs() const
+{
+  // G4AttDefs have to have long life.  Use static member...
+  if (fAttDefs.empty()) {
+    fAttDefs["HitType"] =
+      G4AttDef("HitType","Type of hit","Physics","","G4String");
+  }
+  return &fAttDefs;
+}
+
+std::vector<G4AttValue>* ExN04TrackerHit::CreateAttValues() const
+{
+  // Create expendable G4AttsValues for picking...
+  std::vector<G4AttValue>* attValues = new std::vector<G4AttValue>;
+  attValues->push_back
+    (G4AttValue("HitType","ExN04TrackerHit",""));
+  //G4cout << "Checking...\n" << G4AttCheck(attValues, GetAttDefs());
+  return attValues;
 }
 
 void ExN04TrackerHit::Print()

@@ -32,6 +32,8 @@
 #include "G4Allocator.hh"
 #include "G4ThreeVector.hh"
 
+class G4AttDef;
+
 class ExN04MuonHit : public G4VHit
 {
   public:
@@ -47,11 +49,14 @@ class ExN04MuonHit : public G4VHit
       inline void operator delete(void *aHit);
 
       void Draw();
+      const std::map<G4String,G4AttDef>* GetAttDefs() const;
+      std::vector<G4AttValue>* CreateAttValues() const;
       void Print();
 
   private:
       G4double edep;
       G4ThreeVector pos;
+      static std::map<G4String,G4AttDef> fAttDefs;
 
   public:
       inline void SetEdep(G4double de)
