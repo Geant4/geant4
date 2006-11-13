@@ -1,4 +1,4 @@
-$Id: History,v 1.64 2006-11-11 01:46:42 japost Exp $
+$Id: History,v 1.65 2006-11-13 16:30:18 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -18,6 +18,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
 November 11th, 2006 - J.Apostolakis (geomnav-V08-01-05)
 -----------------------------------
+G4PathFinder: 
+  - ComputeStep method signature extended to add volume
+  - Use G4MultiNavigator for tracking in field.
+
+November 11th, 2006 - J.Apostolakis (geomnav-V08-01-04)
+-----------------------------------
 G4PropagatorInField: -- fixes by Tatiana Nikitina
   Refined fix in LocateIntersectionPoint, subdividing repeatedly.
   (as seen in ref04-04)
@@ -28,19 +34,13 @@ Created G4MultiNavigator and utilised it from G4PathFinder
    to implement curved trajectory parallel navigation.
   **** Old LocateIntersectionPoint, with-out fixes 
 
-November 10th, 2006 - J.Apostolakis (geomnav-V08-01-ref04-04)
+November 10th, 2006 - J.Apostolakis (geomnav-V08-01-ref04-0x, x=3,4)
 -----------------------------------
 G4PropagatorInField: -- fixes by Tatiana Nikitina
    Refined fix in LocateIntersectionPoint, to subdivide
    in case it cannot find intersection point quickly 
-   - Second version, with several levels of cutting
-
-November 10th, 2006 - J.Apostolakis (geomnav-V08-01-ref04-03)
------------------------------------
-G4PropagatorInField: -- fixes by Tatiana Nikitina
-   Fix in LocateIntersectionPoint, to subdivide
-   in case it cannot find intersection point quickly 
-   - First version, only one level of cutting
+   - Second version, with several levels of cutting (geomnav-V08-01-ref04-04)
+   - First version, only one level of cutting (geomnav-V08-01-ref04-03)
 
 November  9th, 2006 - J.Apostolakis (geomnav-V08-01-ref04-02)
 -----------------------------------
