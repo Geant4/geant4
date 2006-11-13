@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CoupledTransportation.cc,v 1.9 2006-10-16 17:47:57 japost Exp $
+// $Id: G4CoupledTransportation.cc,v 1.10 2006-11-13 16:09:02 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //  GEANT 4 class implementation
@@ -46,13 +46,15 @@ G4CoupledTransportation::G4CoupledTransportation( G4int verboseLevel )
     fParticleIsLooping( false ),
     fPreviousSftOrigin (0.,0.,0.),
     fPreviousSafety    ( 0.0 ),
-    // fThreshold_Warning_Energy( 100 * MeV ),  
-    // fThreshold_Important_Energy( 250 * MeV ), 
-    // fThresholdTrials( 10 ), 
-    // fUnimportant_Energy( 1 * MeV ), 
-    // fNoLooperTrials(0),
-    // fSumEnergyKilled( 0.0 ), fMaxEnergyKilled( 0.0 ), 
-    fVerboseLevel( verboseLevel )
+#ifdef LOOPERS
+    fThreshold_Warning_Energy( 100 * MeV ),  
+    fThreshold_Important_Energy( 250 * MeV ), 
+    fThresholdTrials( 10 ), 
+    fUnimportant_Energy( 1 * MeV ), 
+    fNoLooperTrials(0),
+    fSumEnergyKilled( 0.0 ), fMaxEnergyKilled( 0.0 ), 
+#endif
+    fVerboseLevel(verboseLevel)     //  ( verboseLevel ? verboseLevel : 2 ) 
 {
   G4TransportationManager* transportMgr ; 
 
@@ -120,23 +122,19 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
   const G4ParticleDefinition* pParticleDef   = pParticle->GetDefinition() ;
   G4ThreeVector startMomentumDir       = pParticle->GetMomentumDirection() ;
   G4ThreeVector startPosition          = track.GetPosition() ;
+  G4VPhysicalVolume* currentVolume= track.GetVolume(); 
 
+  if( fVerboseLevel > 1 ) {
+    G4cout << "G4CoupledTransportation::AlongStepGPIL> called in volume " 
+	   << currentVolume->GetName() << G4endl; 
+  }
   // G4double   theTime        = track.GetGlobalTime() ;
 
   if( fStartedNewTrack || track.GetCurrentStepNumber()==1 ) {
-#if 0
-    if( fVerboseLevel > 0 ){
-      G4cout << " Calling PathFinder::Locate() from " 
-	     << " G4CoupledTransportation::AlongStepGPIL " 
-	     << " with startedNewTrack= " << fStartedNewTrack
-	     << "  and step number= " << track.GetCurrentStepNumber()
-	     << G4endl;
-    }
-    //  fPathFinder->Locate( startPosition, startMomentumDir );   // For now -- out in G480
-#endif
-    fCurrentTouchableHandle = track.GetTouchableHandle(); 
-    fStartedNewTrack= false; 
+    // fPathFinder->Locate( startPosition, startMomentumDir );  // -- out from G480
+    fCurrentTouchableHandle = track.GetTouchableHandle();  //  out G480 ??
   }
+  fStartedNewTrack= false;                              
 
   // The Step Point safety can be limited by other geometries and/or the 
   // assumptions of any process - it's not always the geometrical safety.
@@ -162,14 +160,13 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
   // There is no need to locate the current volume. It is Done elsewhere:
   //   On track construction 
   //   By the tracking, after all AlongStepDoIts, in "Relocation"
-
   // Check whether the particle have an (EM) field force exerting upon it
   //
   G4FieldManager* fieldMgr=0;
   G4bool          fieldExertsForce = false ;
   if( (particleCharge != 0.0) ) // ||  (magneticMoment != 0.0 ) )
   {
-     fieldMgr= fFieldPropagator->FindAndSetFieldManager( track.GetVolume() ); 
+     fieldMgr= fFieldPropagator->FindAndSetFieldManager( currentVolume ); 
      if (fieldMgr != 0) {
         // If the field manager has no field, there is no field !
         fieldExertsForce = (fieldMgr->GetDetectorField() != 0);
@@ -219,7 +216,8 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
 						   stepNo,
 						   currentSafety,
 						   limitedStep,
-						   endTrackState ) ;
+						   endTrackState,
+						   currentVolume ) ;
       // G4cout << " PathFinder ComputeStep returns " << lengthAlongCurve << G4endl; 
 
       if( limitedStep == kUnique || limitedStep == kSharedTransport ) {
@@ -329,15 +327,27 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
       //
       currentSafety = endSafety + endpointDistance ;
 
+#undef G4DEBUG_TRANSPORT 
+
 #ifdef G4DEBUG_TRANSPORT 
-      G4cout.precision(16) ;
+      int prec= G4cout.precision(12) ;
       G4cout << "***CoupledTransportation::AlongStepGPIL ** " << G4endl  ;
       G4cout << "  Revised Safety at endpoint "  << fTransportEndPosition
              << "   give safety value= " << endSafety << G4endl ; 
       G4cout << "  Adding endpoint distance " << endpointDistance 
              << "   to obtain pseudo-safety= " << currentSafety << G4endl ; 
+      G4cout.precision(prec); 
+  }  
+  else{
+      int prec= G4cout.precision(12) ;
+      G4cout << "***CoupledTransportation::AlongStepGPIL ** " << G4endl  ;
+      G4cout << "  Quick Safety at endpoint "  << fTransportEndPosition
+	     << "   gives estimated value = " << currentSafety - endpointDistance
+	     << "  from start-point value " << currentSafety 
+	     << "  and endpointDistance " << endpointDistance << G4endl; 
+      G4cout.precision(prec); 
 #endif
-  }            
+  }          
 
   fParticleChange.ProposeTrueStepLength(geometryStepLength) ;
 
@@ -530,7 +540,7 @@ G4VParticleChange* G4CoupledTransportation::PostStepDoIt( const G4Track& track,
   fParticleChange.ProposeTrackStatus(track.GetTrackStatus()) ;
 
   // Check that the end position and direction are preserved 
-  //  between 
+  //   since call to AlongStepDoIt
   if( (fTransportEndPosition  - track.GetPosition()).mag2() >= 1.0e-16 ){
      static G4String EndLabelString("End of Step Position");  
      ReportMove( track.GetPosition(), fTransportEndPosition, EndLabelString ); 
@@ -564,8 +574,10 @@ G4VParticleChange* G4CoupledTransportation::PostStepDoIt( const G4Track& track,
     // If so it has exited and must be killed.
     //
     if( fVerboseLevel > 1 ){
-       G4cout << "CHECK !!!!!!!!!!! fCurrentTouchableHandle->GetVolume() = " 
-	      << fCurrentTouchableHandle->GetVolume() << G4endl;
+       G4VPhysicalVolume* vol= fCurrentTouchableHandle->GetVolume(); 
+       G4cout << "CHECK !!!!!!!!!!! fCurrentTouchableHandle->GetVolume() = " << vol;
+       if( vol ) { G4cout << "Name=" << vol->GetName(); }
+       G4cout << G4endl;
     }
     if( fCurrentTouchableHandle->GetVolume() == 0 )
     {
@@ -634,11 +646,13 @@ G4VParticleChange* G4CoupledTransportation::PostStepDoIt( const G4Track& track,
   return &fParticleChange ;
 }
 
-// New method takes over the responsibility to reset the state of G4CoupledTransportation
-//   object at the start of a new track or the resumption of a suspended track. 
+// New method takes over the responsibility to reset the state of 
+//   G4CoupledTransportation object:
+//      - at the start of a new track,  and
+//      - on the resumption of a suspended track. 
 
 void 
-G4CoupledTransportation::StartTracking(G4Track* aTrack) // G48
+G4CoupledTransportation::StartTracking(G4Track* aTrack)
 {
 
   static G4TransportationManager* transportMgr=  
@@ -646,7 +660,7 @@ G4CoupledTransportation::StartTracking(G4Track* aTrack) // G48
 
   // G4VProcess::StartTracking(aTrack);
 
-  //  Here are the 'initialising' actions
+  //  The 'initialising' actions
   //     once taken in AlongStepGPIL -- if ( track.GetCurrentStepNumber()==1 )
 
   fStartedNewTrack= true; 
@@ -660,27 +674,24 @@ G4CoupledTransportation::StartTracking(G4Track* aTrack) // G48
   G4ThreeVector position = aTrack->GetPosition(); 
   G4ThreeVector direction = aTrack->GetMomentumDirection(); // G48
 
-  if( fVerboseLevel > 1 ){
-    G4cout << " Calling PathFinder::PrepareNewTrack from    " 
-	   << " G4CoupledTransportation::StartTracking -- which calls Locate()" << G4endl;
-  }
+  // if( fVerboseLevel > 1 ){
+  //   G4cout << " Calling PathFinder::PrepareNewTrack from    " 
+  //   << " G4CoupledTransportation::StartTracking -- which calls Locate()" << G4endl;
+  // }
   fPathFinder->PrepareNewTrack( position, direction); 
-                // track.GetPosition(), track.GetMomentumDirection() );  //G48
-  // This implies a call to 
-  //  fPathFinder->Locate( position, direction ); 
+  // This implies a call to fPathFinder->Locate( position, direction ); 
 
   // reset safety value and center
   //
   fPreviousSafety    = 0.0 ; 
   fPreviousSftOrigin = G4ThreeVector(0.,0.,0.) ;
   
-#if 0
-  // Put back in for 8.0   -- G480
-  // reset looping counter -- for motion in field
+#if LOOPERS   // For now dont check loopers
+  // reset looping counter -- for motion in field  // Needed in 8.x - G480
   if( aTrack->GetCurrentStepNumber()==1 ) {
      fNoLooperTrials= 0; 
   }
-#endif
+#endif 
 
   // ChordFinder reset internal state
   //
@@ -688,7 +699,11 @@ G4CoupledTransportation::StartTracking(G4Track* aTrack) // G48
      G4ChordFinder* chordF= fFieldPropagator->GetChordFinder();
      if( chordF ) chordF->ResetStepEstimate();
   }
-  
+
+  if( fVerboseLevel > 1 ){
+    G4cout << " Returning touchable handle " << fCurrentTouchableHandle << G4endl;
+  }
+
   // Update the current touchable handle  (from the track's)
   //
   fCurrentTouchableHandle = aTrack->GetTouchableHandle();  // G480
