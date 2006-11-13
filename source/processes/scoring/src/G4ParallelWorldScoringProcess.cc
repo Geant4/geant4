@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelWorldScoringProcess.cc,v 1.4 2006-11-13 18:36:02 gcosmo Exp $
+// $Id: G4ParallelWorldScoringProcess.cc,v 1.5 2006-11-13 20:16:53 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -324,7 +324,8 @@ G4double G4ParallelWorldScoringProcess::AlongStepGetPhysicalInteractionLength(
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     returnedStep
       = fPathFinder->ComputeStep(fFieldTrack,currentMinimumStep,fNavigatorID,
-                     track.GetCurrentStepNumber(),fGhostSafety,eLimited,endTrack);
+                     track.GetCurrentStepNumber(),fGhostSafety,eLimited,
+                     endTrack,track.GetVolume());
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     if(eLimited == kDoNot)
     {
