@@ -1,13 +1,8 @@
                 Examples for HepMC-Geant4 interface
                 -----------------------------------
 
-  This directory contains examples for using HepMC as an interface with 
+This directory contains examples for using HepMC as an interface with 
 various Monte Carlo event generators, such as PYTHIA. 
-
-  HepMC is also currently part of CLHEP, but there are differences between
-the original HepMC package and the one included in CLHEP in terms of the I/O.
-Two examples are shown here: one for original HepMC and the other for the
-CLHEP version (tagged with "-clhep").
 
 Requirements for external software packages
 -------------------------------------------
@@ -25,7 +20,6 @@ PYTHIA
 
 What is provided
 ----------------
-a) For the original HepMC
 
 class HepMCG4Interface
   This class is derived from G4VPrimaryGenerator, and is a base class 
@@ -60,25 +54,6 @@ class HepMCG4PythiaInterface / HepMCG4AsciiReaderMessenger
   This derived class is for directly calling PYTHIA functions. 
   Users can set parameters, initialize, generate, and terminate
   by command line operation.
-
-
-b) For the CLHEP version of HepMC
-
-  G4HepMCInterface, G4HepMCAsciiReader and G4HepMCAsciiReaderMessenger,
-which have the same functionality as the above respective ones, are located
-in the Geant4 "event/" source tree. As an example of interface with PYTHIA, 
-the classes of HxxPythiaInterface/HxxPythiaMessenger are provided in each 
-example.
-
-Examples
---------
-HepMCEx01/HepMCEx01-clhep
-  This example is based on ExampleN04. Only part of the primary generator 
-  action is replaced with new one.
-
-HepMCEx02/HepMCEx02-clhep
-  This is another example having the same generator action as HepMCEx01, 
-  but much simpler user control.
 
 
 Macros in examples
