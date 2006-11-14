@@ -123,8 +123,7 @@ G4bool G4PersistencyManager::Store(const G4Event* evt)
     Initialize();
   }
 
-  G4bool sthep = true, stmct = true;
-  G4bool st1 = true, st2 = true, st3 = true;
+  G4bool st1 = true, st2 = true;
 
   // Start event IO transaction
   //
@@ -144,6 +143,9 @@ G4bool G4PersistencyManager::Store(const G4Event* evt)
 
 #ifndef WIN32
 #ifdef G4LIB_USE_HEPMC
+
+  G4bool sthep = true, stmct = true, st3 = true;
+
   // Store HepMC event
   //
   obj = "HepMC";
