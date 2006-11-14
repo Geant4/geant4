@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Transportation.cc,v 1.58 2006-11-14 09:11:18 gcosmo Exp $
+// $Id: G4Transportation.cc,v 1.59 2006-11-14 16:24:31 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // ------------------------------------------------------------
@@ -205,6 +205,9 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
         fieldExertsForce = (fieldMgr->GetDetectorField() != 0);
      } 
   }
+
+  // G4cout << " G4Transport:  field exerts force= " << fieldExertsForce
+  // 	 << "  fieldMgr= " << fieldMgr << G4endl;
 
   // Choose the calculation of the transportation: Field or not 
   //
@@ -638,88 +641,6 @@ G4VParticleChange* G4Transportation::PostStepDoIt( const G4Track& track,
   }
   else                 // fGeometryLimitedStep  is false
   {                    
-#ifdef G4DEBUG_POSTSTEP_TRANSPORT
-
-    // Although the location is changed, we know that the physical 
-    // volume remains constant. 
-    // In order to help in checking the user geometry
-    // we perform a full-relocation and check its result 
-    // *except* if we have made a very small step from a boundary
-    // (i.e. remaining inside the tolerance)
-
-    G4bool  startAtSurface_And_MoveEpsilon ;
-    startAtSurface_And_MoveEpsilon =
-             (stepData.GetPreStepPoint()->GetSafety() == 0.0) && 
-             (stepData.GetStepLength() < kCarTolerance ) ;
-
-    if( startAtSurface_And_MoveEpsilon ) 
-    {
-       fLinearNavigator->
-       LocateGlobalPointAndUpdateTouchableHandle( track.GetPosition(),
-                                                  track.GetMomentumDirection(),
-                                                  fCurrentTouchableHandle,
-                                                  true                     );
-       if( fCurrentTouchableHandle->GetVolume() != track.GetVolume() )
-       {
-         G4cerr << " ERROR: A relocation within safety has"
-                << " caused a volume change! " << G4endl  ; 
-         G4cerr << "   The old volume is called " 
-                << track.GetVolume()->GetName() << G4endl ; 
-         G4cerr << "   The new volume is called " ;
-
-         if ( fCurrentTouchableHandle->GetVolume() != 0 )
-         {
-            G4cerr << fCurrentTouchableHandle->GetVolume()->GetName()
-                   << G4endl ; 
-         }
-         else
-         {
-            G4cerr << "Out of World" << G4endl ; 
-         }
-         G4cerr.precision(7) ;
-         G4cerr << "   The position is " << track.GetPosition() <<  G4endl ;
-
-         // Let us relocate again, for debuging
-         //
-         fLinearNavigator->
-         LocateGlobalPointAndUpdateTouchableHandle(track.GetPosition(),
-                                                   track.GetMomentumDirection(),
-                                                   fCurrentTouchableHandle,
-                                                   true                     ) ;
-         G4cerr << "   The newer volume is called "  ;
-
-         if ( fCurrentTouchableHandle->GetVolume() != 0 )
-         {
-            G4cerr << fCurrentTouchableHandle->GetVolume()->GetName()
-                   << G4endl ;
-         } 
-         else
-         {
-            G4cerr << "Out of World" << G4endl ; 
-         }
-       }
-
-       assert( fCurrentTouchableHandle->GetVolume()->GetName() ==
-               track.GetVolume()->GetName() ) ;
-
-       retCurrentTouchable = fCurrentTouchableHandle ; 
-       fParticleChange.SetTouchableHandle( fCurrentTouchableHandle ) ;
-       
-    }
-    else
-    {
-       retCurrentTouchable = track.GetTouchableHandle() ;
-       fParticleChange.SetTouchableHandle( track.GetTouchableHandle() ) ;
-    }
-
-    //  This must be done in the above if ( AtSur ) fails
-    //  We also do it for if (true) in order to get debug/opt to  
-    //  behave as exactly the same way as possible.
-    //
-    fLinearNavigator->LocateGlobalPointWithinVolume( track.GetPosition() ) ;
-
-#else    // ie #ifndef G4DEBUG_POSTSTEP_TRANSPORT does a quick relocation
-
     // This serves only to move the Navigator's location
     //
     fLinearNavigator->LocateGlobalPointWithinVolume( track.GetPosition() ) ;
@@ -727,8 +648,7 @@ G4VParticleChange* G4Transportation::PostStepDoIt( const G4Track& track,
     // The value of the track's current Touchable is retained. 
     // (and it must be correct because we must use it below to
     // overwrite the (unset) one in particle change)
-    // Although in general this is fCurrentTouchable, at the start of
-    // a step it could be different ... ??
+    //  It must be fCurrentTouchable too ??
     //
     fParticleChange.SetTouchableHandle( track.GetTouchableHandle() ) ;
     retCurrentTouchable = track.GetTouchableHandle() ;
