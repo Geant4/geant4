@@ -3,7 +3,7 @@
 # A simple script to run all the tests in this directory and check
 # their results against the expected (previous) results
 #
-# $Id: test.sh,v 1.8 2006-05-11 11:18:33 japost Exp $
+# $Id: test.sh,v 1.9 2006-11-14 15:11:28 japost Exp $
 # $Name: not supported by cvs2svn $
 #
 
@@ -14,7 +14,7 @@ target=testPropagateMagField
 echo  "Compiling $target ... "
 gmake G4TARGET=$target   || exit
 echo  "Executing $target ..."
-for n in 1 2 3 4 5 6 7 8
+for n in 1 2 3 4 5 6 7 8 9
 do
   echo "Executing with stepper choice $n .. \c"
   $G4WORKDIR/bin/$G4SYSTEM/$target $n > $target.newout$n \
