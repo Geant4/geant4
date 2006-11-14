@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HepRepFileSceneHandler.cc,v 1.59 2006-11-06 09:21:46 allison Exp $
+// $Id: G4HepRepFileSceneHandler.cc,v 1.60 2006-11-14 00:24:17 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -170,6 +170,14 @@ void G4HepRepFileSceneHandler::AddSolid(const G4Box& box) {
 	PrintThings();
 #endif
 	
+	if (drawingTraj) {
+		drawTrajPts = true;
+		return;
+	}
+	
+	if (drawingHit)
+		InitHit();
+	
 	haveVisible = false;
 	AddHepRepInstance("Prism", NULL);
 	
@@ -309,6 +317,14 @@ void G4HepRepFileSceneHandler::AddSolid(const G4Trd& trd) {
 	<< G4endl;
 	PrintThings();
 #endif
+	
+	if (drawingTraj) {
+		drawTrajPts = true;
+		return;
+	}
+	
+	if (drawingHit)
+		InitHit();
 	
 	haveVisible = false;
 	AddHepRepInstance("Prism", NULL);
