@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSteppingVerbose.cc,v 1.17 2006-11-04 19:08:32 asaim Exp $
+// $Id: G4VSteppingVerbose.cc,v 1.18 2006-11-14 10:58:47 tsasaki Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------
@@ -163,27 +163,5 @@ G4int G4VSteppingVerbose::GetSilentStepInfo()
 void G4VSteppingVerbose::SetSilentStepInfo(G4int fSilent)
 {
   SilentStepInfo=fSilent;
-}
-
-void G4VSteppingVerbose::TrackBanner()
-{
-     if(verboseLevel >= 1) {
-       G4cout << G4endl;
-       G4cout << "*******************************************************"
-            << "**************************************************"
-            << G4endl;
-       G4cout << "* G4Track Information: "
-            << "  Particle = " << fTrack->GetDefinition()->GetParticleName()
-            << ","
-            << "   Track ID = " << fTrack->GetTrackID()
-            << ","
-            << "   Parent ID = " << fTrack->GetParentID()
-            << G4endl;
-       G4cout << "*******************************************************"
-            << "**************************************************"
-            << G4endl;
-       G4cout << G4endl;
-
-     }
 }
 

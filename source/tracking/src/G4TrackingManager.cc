@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TrackingManager.cc,v 1.21 2006-11-04 19:08:32 asaim Exp $
+// $Id: G4TrackingManager.cc,v 1.22 2006-11-14 10:58:47 tsasaki Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------
@@ -43,6 +43,7 @@
 #include "G4SmoothTrajectory.hh"
 #include "G4RichTrajectory.hh"
 #include "G4ios.hh"
+class G4VSteppingVerbose;
 
 //////////////////////////////////////
 G4TrackingManager::G4TrackingManager()
@@ -82,6 +83,8 @@ void G4TrackingManager::ProcessOneTrack(G4Track* apValueG4Track)
      delete (*GimmeSecondaries())[itr];
   }
   GimmeSecondaries()->clear();  
+   
+  if(verboseLevel>0 && (G4VSteppingVerbose::GetSilent()!=1) ) TrackBanner();
   
   // Give SteppingManger the pointer to the track which will be tracked 
   fpSteppingManager->SetInitialStep(fpTrack);
@@ -164,6 +167,24 @@ void G4TrackingManager::EventAborted()
 }
 
 
+void G4TrackingManager::TrackBanner()
+{
+       G4cout << G4endl;
+       G4cout << "*******************************************************"
+            << "**************************************************"
+            << G4endl;
+       G4cout << "* G4Track Information: "
+            << "  Particle = " << fpTrack->GetDefinition()->GetParticleName()
+            << ","
+            << "   Track ID = " << fpTrack->GetTrackID()
+            << ","
+            << "   Parent ID = " << fpTrack->GetParentID()
+            << G4endl;
+       G4cout << "*******************************************************"
+            << "**************************************************"
+            << G4endl;
+       G4cout << G4endl;
+}
 
 
 

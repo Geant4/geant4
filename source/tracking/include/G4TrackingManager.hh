@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TrackingManager.hh,v 1.20 2006-11-04 19:08:32 asaim Exp $
+// $Id: G4TrackingManager.hh,v 1.21 2006-11-14 10:58:47 tsasaki Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------
@@ -143,6 +143,9 @@ public: // without description
    G4int verboseLevel;
    G4TrackingMessenger* messenger;
    G4bool EventIsAborted;
+// verbose
+   void TrackBanner();
+
 };
 
 

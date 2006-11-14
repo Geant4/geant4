@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SteppingManager.cc,v 1.42 2006-11-04 19:08:32 asaim Exp $
+// $Id: G4SteppingManager.cc,v 1.43 2006-11-14 10:58:47 tsasaki Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------
@@ -219,6 +219,7 @@ G4StepStatus G4SteppingManager::Stepping()
    fPreviousStepSize = fStep->GetStepLength();
 #ifdef G4VERBOSE
                          // !!!!! Verbose
+
            if(verboseLevel>0) fVerbose->StepInfo();
 #endif
 // Send G4Step information to Hit/Dig if the volume is sensitive
@@ -340,7 +341,6 @@ void G4SteppingManager::SetInitialStep(G4Track* valueTrack)
    }
 #ifdef G4VERBOSE
                          // !!!!! Verbose
-           if(verboseLevel>0) fVerbose->TrackBanner();
            if(verboseLevel>0) fVerbose->TrackingStarted();
 #endif
 }
