@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HitsModel.cc,v 1.17 2006-11-03 14:14:24 allison Exp $
+// $Id: G4HitsModel.cc,v 1.18 2006-11-14 14:42:08 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -33,8 +33,8 @@
 
 #include "G4HitsModel.hh"
 
+#include "G4ModelingParameters.hh"
 #include "G4VGraphicsScene.hh"
-#include "G4EventManager.hh"
 #include "G4Event.hh"
 
 G4HitsModel::~G4HitsModel () {}
@@ -48,8 +48,7 @@ G4HitsModel::G4HitsModel ():
 
 void G4HitsModel::DescribeYourselfTo (G4VGraphicsScene& sceneHandler)
 {
-  const G4Event* event =
-    G4EventManager::GetEventManager()->GetConstCurrentEvent();
+  const G4Event* event = fpMP->GetEvent();
   if (event) {
     G4HCofThisEvent* HCE = event -> GetHCofThisEvent ();
     if (HCE) {

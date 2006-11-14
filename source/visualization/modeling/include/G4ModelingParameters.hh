@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ModelingParameters.hh,v 1.16 2006-09-19 15:56:22 allison Exp $
+// $Id: G4ModelingParameters.hh,v 1.17 2006-11-14 14:42:08 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,6 +44,7 @@ class G4LogicalVolume;
 class G4VPhysicalVolume;
 class G4VisAttributes;
 class G4Polyhedron;
+class G4Event;
 
 class G4ModelingParameters {
 
@@ -92,6 +93,7 @@ public: // With description
   G4int            GetNoOfSides                  () const;
   const G4Polyhedron* GetSectionPolyhedron       () const;
   const G4Polyhedron* GetCutawayPolyhedron       () const;
+  const G4Event*   GetEvent                      () const;
 
   // Set functions...
   void SetWarning              (G4bool);
@@ -107,6 +109,7 @@ public: // With description
   G4int SetNoOfSides           (G4int);  // Returns actual number set.
   void SetSectionPolyhedron    (const G4Polyhedron* pSectionPolyhedron);
   void SetCutawayPolyhedron    (const G4Polyhedron* pCutawayPolyhedron);
+  void SetEvent                (const G4Event* pEvent);
 
 private:
 
@@ -124,6 +127,7 @@ private:
   G4int        fNoOfSides;       // ...if polygon approximates circle.
   const G4Polyhedron* fpSectionPolyhedron;  // For generic section (DCUT).
   const G4Polyhedron* fpCutawayPolyhedron;  // For generic cutaways.
+  const G4Event* fpEvent;        // Event being processed.
 };
 
 #include "G4ModelingParameters.icc"

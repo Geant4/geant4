@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ModelingParameters.icc,v 1.10 2006-09-19 15:56:22 allison Exp $
+// $Id: G4ModelingParameters.icc,v 1.11 2006-11-14 14:42:08 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -87,6 +87,9 @@ inline const G4Polyhedron* G4ModelingParameters::GetSectionPolyhedron () const
 inline const G4Polyhedron* G4ModelingParameters::GetCutawayPolyhedron () const
 {return fpCutawayPolyhedron;}
 
+inline const G4Event* G4ModelingParameters::GetEvent () const
+{return fpEvent;}
+
 inline void G4ModelingParameters::SetWarning (G4bool value) {
   fWarning = value;
 }
@@ -135,4 +138,8 @@ inline void G4ModelingParameters::SetSectionPolyhedron
 inline void G4ModelingParameters::SetCutawayPolyhedron
 (const G4Polyhedron* pCutawayPolyhedron) {
   fpCutawayPolyhedron = pCutawayPolyhedron;
+}
+
+inline void G4ModelingParameters::SetEvent(const G4Event* pEvent) {
+  fpEvent = pEvent;
 }

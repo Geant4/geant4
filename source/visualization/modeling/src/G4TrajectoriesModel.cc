@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TrajectoriesModel.cc,v 1.23 2006-11-03 14:14:04 allison Exp $
+// $Id: G4TrajectoriesModel.cc,v 1.24 2006-11-14 14:42:08 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -33,8 +33,8 @@
 
 #include "G4TrajectoriesModel.hh"
 
+#include "G4ModelingParameters.hh"
 #include "G4VGraphicsScene.hh"
-#include "G4EventManager.hh"
 #include "G4Event.hh"
 #include "G4AttValue.hh"
 #include "G4AttDef.hh"
@@ -51,8 +51,7 @@ G4TrajectoriesModel::~G4TrajectoriesModel () {}
 void G4TrajectoriesModelDebugG4AttValues(const G4VTrajectory*);
 
 void G4TrajectoriesModel::DescribeYourselfTo (G4VGraphicsScene& sceneHandler) {
-  const G4Event* event = 
-    G4EventManager::GetEventManager()->GetConstCurrentEvent();
+  const G4Event* event = fpMP->GetEvent();
   if (event) {
     G4TrajectoryContainer* TC = event -> GetTrajectoryContainer ();
     if (TC) {

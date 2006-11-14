@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ModelingParameters.cc,v 1.14 2006-09-19 15:56:22 allison Exp $
+// $Id: G4ModelingParameters.cc,v 1.15 2006-11-14 14:42:08 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -50,7 +50,8 @@ G4ModelingParameters::G4ModelingParameters ():
   fExplodeFactor         (1.),
   fNoOfSides             (24),
   fpSectionPolyhedron    (0),
-  fpCutawayPolyhedron    (0)
+  fpCutawayPolyhedron    (0),
+  fpEvent                (0)
 {}
 
 G4ModelingParameters::G4ModelingParameters
@@ -74,7 +75,8 @@ G4ModelingParameters::G4ModelingParameters
   fExplodeFactor  (1.),
   fNoOfSides      (noOfSides),
   fpSectionPolyhedron (0),
-  fpCutawayPolyhedron (0)
+  fpCutawayPolyhedron (0),
+  fpEvent             (0)
 {}
 
 G4ModelingParameters::~G4ModelingParameters ()
@@ -171,6 +173,8 @@ std::ostream& operator << (std::ostream& os, const G4ModelingParameters& mp)
   if (!mp.fpCutawayPolyhedron) os << "non-";
   os << "null";
 
+  os << "\n  Event pointer: " << mp.fpEvent;
+
   return os;
 }
 
@@ -188,7 +192,8 @@ G4bool G4ModelingParameters::operator !=
       (fExplodeCentre          != mp.fExplodeCentre)          ||
       (fNoOfSides              != mp.fNoOfSides)              ||
       (fpSectionPolyhedron     != mp.fpSectionPolyhedron)     ||
-      (fpCutawayPolyhedron     != mp.fpCutawayPolyhedron)
+      (fpCutawayPolyhedron     != mp.fpCutawayPolyhedron)     ||
+      (fpEvent                 != mp.fpEvent)
       )
     return true;
 
