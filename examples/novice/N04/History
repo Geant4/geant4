@@ -1,4 +1,4 @@
-$Id: History,v 1.50 2006-11-13 23:44:34 perl Exp $
+$Id: History,v 1.51 2006-11-14 08:56:09 perl Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,9 +15,11 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-13-11-06 Joseph Perl (exampleN04-V08-01-02)
+13-11-06 Joseph Perl (exampleN04-V08-01-03)
 - Change attribute name Type to HitType.
 - Add HitType attribute to all hit classes.
+- Skipped tag exampleN04-V08-02 since that tag seems to have been
+- accidentally applied many months ago.
 
 06-11-06 John Allison (exampleN04-V08-01-01)
 - Add hits attributes for picking.
