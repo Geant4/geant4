@@ -1,4 +1,4 @@
-$Id: History,v 1.113 2006-11-13 18:23:55 gcosmo Exp $
+$Id: History,v 1.114 2006-11-14 15:16:33 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+November 14th, 2006  J.Apostolakis - field-V08-01-02
+----------------------------------
+- G4MagIntegratorDriver
+  * Made first argument of GetDerivatives a reference - avoid copy
+- G4MagIntegratorStepper
+  * Include the SetEquationOfMotion() method in G4MagIntegratorStepper 
+    (for Geant4e, as in field-V08-01-00)
+  * Update of disclaimers.
 
 November 13th, 2006  G.Cosmo - field-V08-01-01
 ----------------------------
