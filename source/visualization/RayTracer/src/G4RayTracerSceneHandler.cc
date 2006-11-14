@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RayTracerSceneHandler.cc,v 1.9 2006-08-14 13:12:16 allison Exp $
+// $Id: G4RayTracerSceneHandler.cc,v 1.10 2006-11-14 14:46:37 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4RayTracerSceneHandler.hh"
@@ -50,8 +50,6 @@ G4RayTracerSceneHandler::G4RayTracerSceneHandler(G4VGraphicsSystem& system,
       fpScene->AddWorldIfEmpty();
       // Avoid code triggered at end of events...
       fpScene->SetRefreshAtEndOfEvent(false);
-      // Avoid re-computing transients.
-      fpScene->SetRecomputeTransients(false);
       // Add to vis manager list; ownership thereby passes to vis manager...
       visManager->SetSceneList().push_back(fpScene);
       // ...and make current...
