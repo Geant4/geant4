@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HepRepFileSceneHandler.cc,v 1.60 2006-11-14 00:24:17 perl Exp $
+// $Id: G4HepRepFileSceneHandler.cc,v 1.61 2006-11-14 00:38:28 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -234,6 +234,15 @@ void G4HepRepFileSceneHandler::AddSolid(const G4Cons& cons) {
 	if (cons.GetDeltaPhiAngle() < twopi) {
 		G4VSceneHandler::AddSolid(cons);  // Invoke default action.
 	} else {
+	
+		if (drawingTraj) {
+			drawTrajPts = true;
+			return;
+		}
+		
+		if (drawingHit)
+			InitHit();
+
 		haveVisible = false;
 		AddHepRepInstance("Cylinder", NULL);
 		
@@ -278,6 +287,15 @@ void G4HepRepFileSceneHandler::AddSolid(const G4Tubs& tubs) {
 	if (tubs.GetDeltaPhiAngle() < twopi) {
 		G4VSceneHandler::AddSolid(tubs);  // Invoke default action.
 	} else {
+	
+		if (drawingTraj) {
+			drawTrajPts = true;
+			return;
+		}
+		
+		if (drawingHit)
+			InitHit();
+
 		haveVisible = false;
 		AddHepRepInstance("Cylinder", NULL);
 		
