@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN05EMShowerModel.cc,v 1.14 2006-06-29 17:53:10 gunter Exp $
+// $Id: ExN05EMShowerModel.cc,v 1.15 2006-11-14 09:21:44 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "ExN05EMShowerModel.hh"
@@ -84,8 +84,6 @@ G4bool ExN05EMShowerModel::ModelTrigger(const G4FastTrack& fastTrack)
 void ExN05EMShowerModel::DoIt(const G4FastTrack& fastTrack, 
 		     G4FastStep& fastStep)
 {
-  G4cout << "ExN05EMShowerModel::DoIt" << G4endl;
-
   // Kill the parameterised particle:
   fastStep.KillPrimaryTrack();
   fastStep.ProposePrimaryTrackPathLength(0.0);
