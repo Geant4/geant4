@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: MyDetectorConstruction.cc,v 1.38 2006-11-01 11:15:27 allison Exp $
+// $Id: MyDetectorConstruction.cc,v 1.39 2006-11-14 16:03:55 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -47,6 +47,7 @@
 #include "G4Orb.hh"
 #include "G4Trap.hh"
 #include "G4EllipticalTube.hh"
+#include "G4EllipticalCone.hh"
 #include "G4Polyhedra.hh"
 #include "G4Polycone.hh"
 #include "G4Tet.hh"
@@ -574,6 +575,14 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct()
   G4LogicalVolume* eTubeLog = new G4LogicalVolume(eTube,Ar,"e-tube-log");
   new G4PVPlacement(G4Translate3D(G4ThreeVector(-400.*cm,0.,0)),
 		    "e-tube-phys", eTubeLog,
+		    experimentalHall_phys,false,0);
+
+  //-------------------------------------------- Elliptical Cone
+  G4VSolid* eCone = new G4EllipticalCone("e-cone",50.*cm,100.*cm,100.*cm,50.*cm);
+  //G4VSolid* eCone = new G4EllipticalCone("e-cone",1.*mm,0.5*mm,40.*mm,20.*mm);
+  G4LogicalVolume* eConeLog = new G4LogicalVolume(eCone,Ar,"e-cone-log");
+  new G4PVPlacement(G4Translate3D(G4ThreeVector(-500.*cm,400.*cm,0)),
+		    "e-cone-phys", eConeLog,
 		    experimentalHall_phys,false,0);
 
   //-------------------------------------------- G4Cons
