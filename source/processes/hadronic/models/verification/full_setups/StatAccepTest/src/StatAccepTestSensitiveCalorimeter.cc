@@ -7,6 +7,7 @@
 #include "G4Step.hh"
 #include "G4StepPoint.hh"
 #include "G4ParticleDefinition.hh"
+#include "G4ParticleTypes.hh"
 #include "G4VProcess.hh"
 #include "G4VTouchable.hh"
 #include "G4TouchableHistory.hh"
@@ -133,6 +134,32 @@ ProcessHits( G4Step* aStep, G4TouchableHistory* ) {
   //              originally by P.Sala in ATLAS:  
   //                    C1 = 0.005  gr/(MeV*cm^2) 
   //
+  // 14-Nov-2006: Birks should not be applied in the case of gamma
+  //              energy depositions (which happens only for the 
+  //              photoelectric process), because in this case the
+  //              step length is related to the photoelectric cross
+  //              section, and not to the distance in which the
+  //              energy is actually deposited, that is what is
+  //              needed in order to determine dE/dx which enters
+  //              in the Birks' law.
+  //              Similarly, for neutron energy depositions (which
+  //              have been introduced in Geant4 8.1 as an effective
+  //              way to describe the elastic nuclei recoils below
+  //              a certain kinetic threshold, set by default to 
+  //              100 keV), the step length is related to the neutron
+  //              elastic cross-section, and not to the real ionization
+  //              range of the recoiled nuclei, which should instead
+  //              be considered for the dE/dx in the Birks' law.
+  //              In the case of neutron energy depositions, the 
+  //              most correct way to apply the Birks quench would
+  //              be to eliminate them by setting the kinetic 
+  //              threshold to 0.0 (variable  "edepLimit"  in the 
+  //              file  "G4HadronElasticPhysics.cc"  in 
+  //               "geant4/physics_lists/hadronic/Packaging/src/" ),
+  //              so that the recoiled nuclei tracks are always 
+  //              generated explicitly. This, of course, costs in
+  //              term of CPU performance.
+  //
   //--------------------------------------------------------------------
   bool isBirksOn = false;         //***LOOKHERE***
   bool isScintillator = true;     //              true = Quenching in Scintillator 
@@ -166,12 +193,43 @@ ProcessHits( G4Step* aStep, G4TouchableHistory* ) {
       rho = rho_lAr;
     }
 
+    static bool isFirstCall = true;
+    if ( isFirstCall ) {
+      G4cout << "\t *** StatAccepTestSensitiveCalorimeter::ProcessHits *** " << G4endl
+	     << "\t isBirksOn = " << isBirksOn << G4endl
+	     << "\t isScintillator = " << isScintillator << G4endl
+	     << "\t C1 = " << C1 << G4endl
+             << "\t C2 = " << C2 << G4endl
+	     << "\t rho = " << rho << G4endl
+             << "\t ******************* " << G4endl; 
+      isFirstCall = false;
+    }
+
     double stepLength_cm = aStep->GetStepLength() / cm ;  // [cm] 
-    if ( stepLength_cm > 1.0e-8 ) {
+
+    // Do not apply Birks for gamma deposits (corresponding to 
+    // the photoelectric process). 
+    if ( stepLength_cm > 1.0e-8 ) { 
       double dedx = edep / ( rho * stepLength_cm );       // [MeV*cm^2/g]
       double birksFactor = 1.0 / ( 1.0 + C1*dedx + C2*dedx*dedx );
       //G4cout << " birksFactor=" << birksFactor << G4endl; //***DEBUG***
-      edep = edep * birksFactor;
+
+      if ( aStep->GetTrack()->GetDefinition() == G4Gamma::GammaDefinition() ) { 
+	birksFactor = 1.0;
+	static bool isFirstWarningGamma = true;
+	if ( isFirstWarningGamma ) {
+	  G4cout << " ***BIRKS WARNING*** : BIRKS NOT APPLIED TO GAMMA ENERGY DEPOSITIONS!" << G4endl;
+	  isFirstWarningGamma = false;	  
+        }
+      } 
+
+      static bool isFirstWarningNeutron = true;
+      if ( isFirstWarningNeutron &&
+           aStep->GetTrack()->GetDefinition() != G4Neutron::NeutronDefinition() ) {
+	G4cout << " ***BIRKS WARNING*** : BIRKS INCORRECTLY APPLIED TO NEUTRON ENERGY DEPOSITIONS!" << G4endl
+	       << "                       BETTER TO SET edepLimit = 0.0 " << G4endl;
+	isFirstWarningNeutron = false;	  
+      }
 
       //if ( birksFactor > 0.0  &&  1.0/birksFactor > 100.0 ) {  //***DEBUG***
       //	G4cout << "Birks quenching = " << 1.0/birksFactor << "\t"
@@ -186,19 +244,11 @@ ProcessHits( G4Step* aStep, G4TouchableHistory* ) {
       //	}
       //  G4cout << G4endl; 
       //}
+
+      edep = edep * birksFactor;
+
     }
 
-    static bool isFirstCall = true;
-    if ( isFirstCall ) {
-      G4cout << "\t *** StatAccepTestSensitiveCalorimeter::ProcessHits *** " << G4endl
-	     << "\t isBirksOn = " << isBirksOn << G4endl
-	     << "\t isScintillator = " << isScintillator << G4endl
-	     << "\t C1 = " << C1 << G4endl
-             << "\t C2 = " << C2 << G4endl
-	     << "\t rho = " << rho << G4endl
-             << "\t ******************* " << G4endl; 
-      isFirstCall = false;
-    }
   }
   // -----------------------------------------------------------------
 
