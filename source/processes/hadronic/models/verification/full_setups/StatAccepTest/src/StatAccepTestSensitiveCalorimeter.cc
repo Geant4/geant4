@@ -225,7 +225,7 @@ ProcessHits( G4Step* aStep, G4TouchableHistory* ) {
 
       static bool isFirstWarningNeutron = true;
       if ( isFirstWarningNeutron &&
-           aStep->GetTrack()->GetDefinition() != G4Neutron::NeutronDefinition() ) {
+           aStep->GetTrack()->GetDefinition() == G4Neutron::NeutronDefinition() ) {
 	G4cout << " ***BIRKS WARNING*** : BIRKS INCORRECTLY APPLIED TO NEUTRON ENERGY DEPOSITIONS!" << G4endl
 	       << "                       BETTER TO SET edepLimit = 0.0 " << G4endl;
 	isFirstWarningNeutron = false;	  
