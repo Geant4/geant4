@@ -50,7 +50,6 @@
 /tracking/storeTrajectory 1
 /vis/scene/endOfEventAction accumulate
 /vis/viewer/update
-/vis/scene/transientsAction none
 /run/beamOn 100
 
 

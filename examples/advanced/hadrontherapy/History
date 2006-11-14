@@ -9,6 +9,9 @@ $Id: History, v 1.6 2004/02/27  G.A.P. Cirrone
                       Category History file
                       ---------------------
 
+14.11.2006  J. Allison
+- Removed /vis/scene/transientsAction none (no longer available).
+
 02.10.2006  P. Cirrone and S. Guatelli(hadrontherapy-V08-01-03)
           - Bug fix in the geometry (hadrontherapy beam line)
             problem: wrong volume hierarchy
