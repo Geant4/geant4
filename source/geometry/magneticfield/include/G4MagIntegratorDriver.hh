@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagIntegratorDriver.hh,v 1.17 2006-06-29 18:22:58 gunter Exp $
+// $Id: G4MagIntegratorDriver.hh,v 1.18 2006-11-14 15:08:02 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -91,7 +91,7 @@ class G4MagInt_Driver
      inline G4double GetPshrnk() const;
      inline G4double GetPgrow() const;
      inline G4double GetErrcon() const;
-     inline void GetDerivatives( const G4FieldTrack y_curr,     // const, INput
+     inline void GetDerivatives( const G4FieldTrack &y_curr,     // const, INput
                                        G4double    dydx[]   );  //       OUTput
         // Accessors.
 
