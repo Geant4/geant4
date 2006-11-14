@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4SafetyHelper.cc,v 1.7 2006-11-14 10:22:12 japost Exp $
+// GEANT4 tag $ Name:  $
+
 
 #include "G4SafetyHelper.hh"
 #include "G4PathFinder.hh"
