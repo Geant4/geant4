@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MultiNavigator.cc,v 1.3 2006-11-13 17:34:08 gcosmo Exp $
+// $Id: G4MultiNavigator.cc,v 1.4 2006-11-14 15:41:56 japost Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4PathFinder Implementation
@@ -631,20 +631,18 @@ G4MultiNavigator::PrintLimited()
 void 
 G4MultiNavigator::ResetState()
 {
+   G4int num; 
    fWasLimitedByGeometry= false; 
 
    G4Exception( "G4MultiNavigator::ResetState", 
                "217-CannotImplement",  
                FatalException,  
                "Cannot call ResetState for active navigators of G4MultiNavigator.");   
-#if 0
-   G4int num; 
    std::vector<G4Navigator*>::iterator pNavigatorIter;
    pNavigatorIter= pTransportManager-> GetActiveNavigatorsIterator();
    for( num=0; num< fNoActiveNavigators; ++pNavigatorIter,++num ) {
-      (*pNavigatorIter)->ResetState(); 
+       //  (*pNavigatorIter)->ResetState();  // KEEP THIS comment !!!
    } 
-#endif
 }
 
 void 
@@ -655,15 +653,6 @@ G4MultiNavigator::SetupHierarchy()
                "217-CannotImplement",  
                FatalException,  
                "Cannot call SetupHierarchy for active navigators of G4MultiNavigator."); 
-#if 0
-   G4int num; 
-   std::vector<G4Navigator*>::iterator pNavigatorIter;
-   pNavigatorIter= pTransportManager-> GetActiveNavigatorsIterator();
-
-   for( num=0; num< fNoActiveNavigators; ++pNavigatorIter,++num ) {
-      (*pNavigatorIter)->SetupHierarchy(); 
-   } 
-#endif
 }
 
 void 
@@ -709,22 +698,3 @@ G4VPhysicalVolume* G4MultiNavigator::ResetHierarchyAndLocate(const G4ThreeVector
    }
    return massVolume; 
 }
-
-
-//=====================================================================================
-#if 0 
-static 
-void ReportMove( G4ThreeVector OldVector, G4ThreeVector NewVector, G4String Quantity )
-{
-    G4ThreeVector moveVec = ( NewVector - OldVector );
-
-    G4cerr << G4endl
-           << "**************************************************************" << G4endl;
-    G4cerr << "Endpoint has moved between value returned by ComputeStep"
-           << " and call to Locate. " << G4endl
-           << "Change of " << Quantity << " is " << moveVec.mag() / mm << " mm long, "
-           << " and its vector is " << (1.0/mm) * moveVec << " mm " << G4endl
-           << "Endpoint of ComputeStep was " << OldVector
-           << " and current position to locate is " << NewVector << G4endl;
-}
-#endif
