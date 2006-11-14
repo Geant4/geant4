@@ -132,7 +132,8 @@ GetCrossSection(const G4DynamicParticle* aParticle, const G4Element* anElement, 
   G4double nucleusSquare = 2.*pi*R*R; 
 
 
-  const G4ParticleDefinition* theParticle = aParticle->GetDefinition();
+  // Compiler says this is not used
+  //  const G4ParticleDefinition* theParticle = aParticle->GetDefinition();
 
 
   // G4double sigma     = GetHadronNucleaonXsc(aParticle, anElement);
@@ -265,7 +266,9 @@ G4double
 G4GlauberGribovCrossSection::GetHadronNucleaonXscPDG(const G4DynamicParticle* aParticle, 
                                                      G4double At,  G4double Zt )
 {
-  G4double xsection, xsectionPP, xsectionPN, Delta, A0, B0;
+  G4double xsection, Delta, A0, B0;
+  G4double xsectionPP(0);
+  G4double xsectionPN(0);
 
   G4double Nt = At-Zt;              // number of neutrons
   if (Nt < 0.) Nt = 0.;  
