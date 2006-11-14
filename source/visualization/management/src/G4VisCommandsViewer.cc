@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewer.cc,v 1.63 2006-09-13 13:17:29 allison Exp $
+// $Id: G4VisCommandsViewer.cc,v 1.64 2006-11-14 14:59:55 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer commands - John Allison  25th October 1998
@@ -1350,6 +1350,7 @@ void G4VisCommandViewerSelect::SetNewValue (G4UIcommand*, G4String newValue) {
 
   fpVisManager -> SetCurrentViewer (viewer);  // Prints confirmation.
 
+  SetViewParameters(viewer, viewer->GetViewParameters());
 }
 
 ////////////// /vis/viewer/update ///////////////////////////////////////

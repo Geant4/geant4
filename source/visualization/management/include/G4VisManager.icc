@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.icc,v 1.18 2006-07-03 20:10:40 allison Exp $
+// $Id: G4VisManager.icc,v 1.19 2006-11-14 14:59:55 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -81,48 +81,12 @@ inline const G4String& G4VisManager::GetXGeometryString () const {
   return fXGeometryString;
 }
 
-inline G4int G4VisManager::GetEventCount() const {
-  return fEventCount;
-}
-
-inline const G4String& G4VisManager::GetBeginOfLastRunRandomStatus() const {
-  return fBeginOfLastRunRandomStatus;
-}
-
-inline const G4String& G4VisManager::GetBeginOfLastEventRandomStatus() const {
-  return fBeginOfLastEventRandomStatus;
-}
-
-inline G4int G4VisManager::GetLastRunID() const {
-  return fLastRunID;
-}
-
 inline G4bool G4VisManager::GetTransientsDrawnThisEvent() const {
   return fTransientsDrawnThisEvent;
 }
 
 inline G4bool G4VisManager::GetTransientsDrawnThisRun() const {
   return fTransientsDrawnThisRun;
-}
-
-inline const G4String& G4VisManager::GetLastEventRandomStatus() const
-{
-  return fLastEventRandomStatus;
-}
-
-inline G4Event* G4VisManager::GetLastEvent() const
-{
-  return fpLastEvent;
-}
-
-inline const std::vector<G4String>& G4VisManager::GetEventsRandomStatus() const
-{
-  return fEventsRandomStatus;
-}
-
-inline const std::vector<G4Event*>&  G4VisManager::GetEvents() const
-{
-  return fEvents;
 }
 
 inline void G4VisManager::SetUserActionExtent (const G4VisExtent& extent) {
@@ -149,17 +113,8 @@ inline void G4VisManager::SetXGeometryString (const G4String& geomString) {
   fXGeometryString = geomString;
 }
 
-inline void G4VisManager::SetReprocessing (G4bool reprocessing) {
-  fReprocessing = reprocessing;
-}
-
-inline void G4VisManager::SetReprocessingLastEvent (G4bool reprocessing) {
-  fReprocessingLastEvent = reprocessing;
-}
-
-inline void G4VisManager::SetMaxNumberOfEventsForReprocessing(G4int n)
-{
-  fMaxNumberOfEventsForReprocessing = n;
+inline void G4VisManager::SetEventRefreshing (G4bool eventRefreshing) {
+  fEventRefreshing = eventRefreshing;
 }
 
 inline void G4VisManager::RegisterMessenger(G4UImessenger* msgr)

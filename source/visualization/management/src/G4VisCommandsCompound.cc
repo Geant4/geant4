@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsCompound.cc,v 1.33 2006-11-06 11:39:40 allison Exp $
+// $Id: G4VisCommandsCompound.cc,v 1.34 2006-11-14 14:59:55 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // Compound /vis/ commands - John Allison  15th May 2000
@@ -173,9 +173,17 @@ G4VisCommandDrawVolume::G4VisCommandDrawVolume() {
   G4bool omitable;
   fpCommand = new G4UIcmdWithAString("/vis/drawVolume", this);
   fpCommand->SetGuidance
-    ("Creates a scene consisting of this physical volume and asks the"
-     "\n  current viewer to draw it.");
-  fpCommand->SetGuidance("The scene becomes current.");
+    ("Creates a scene containing this physical volume and asks the"
+     "\ncurrent viewer to draw it.  The scene becomes current.");
+  fpCommand -> SetGuidance 
+    ("If physical-volume-name is \"world\" (the default), the main geometry"
+     "\ntree (material world) is drawn.  If \"worlds\", all worlds - material"
+     "\nworld and parallel worlds, if any - are drawn.  Otherwise a search of"
+     "\nall worlds is made, taking the first matching occurence only.  To see"
+     "\na representation of the geometry hierarchy of the worlds, try"
+     "\n\"/vis/drawTree [worlds]\" or one of the driver/browser combinations"
+     "\nthat have the required functionality, e.g., HepRepFile/XML with the"
+     "\nWIRED3/4 browser.");
   fpCommand->SetParameterName("physical-volume-name", omitable = true);
   fpCommand->SetDefaultValue("world");
 }
@@ -193,8 +201,9 @@ void G4VisCommandDrawVolume::SetNewValue(G4UIcommand*, G4String newValue) {
     newVerbose = 2;
   UImanager->SetVerboseLevel(newVerbose);
   UImanager->ApplyCommand("/vis/scene/create");
-  UImanager->ApplyCommand("/vis/sceneHandler/attach");
+  UImanager->ApplyCommand("/vis/scene/add/eventID");
   UImanager->ApplyCommand(G4String("/vis/scene/add/volume " + newValue));
+  UImanager->ApplyCommand("/vis/sceneHandler/attach");
   UImanager->SetVerboseLevel(keepVerbose);
   static G4bool warned = false;
   if (verbosity >= G4VisManager::warnings && !warned) {

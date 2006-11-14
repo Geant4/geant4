@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsScene.cc,v 1.57 2006-07-10 15:52:46 allison Exp $
+// $Id: G4VisCommandsScene.cc,v 1.58 2006-11-14 14:59:55 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/scene commands - John Allison  9th August 1998
@@ -118,7 +118,7 @@ void G4VisCommandSceneCreate::SetNewValue (G4UIcommand*, G4String newValue) {
 
 G4VisCommandSceneEndOfEventAction::G4VisCommandSceneEndOfEventAction () {
   G4bool omitable;
-  fpCommand = new G4UIcmdWithAString ("/vis/scene/endOfEventAction", this);
+  fpCommand = new G4UIcommand ("/vis/scene/endOfEventAction", this);
   fpCommand -> SetGuidance
     ("Accumulate or refresh the viewer for each new event.");
   fpCommand -> SetGuidance
@@ -126,10 +126,16 @@ G4VisCommandSceneEndOfEventAction::G4VisCommandSceneEndOfEventAction () {
   fpCommand -> SetGuidance
     ("\"refresh\": viewer shows them at end of event or, for direct-screen"
      "\n  viewers, refreshes the screen just before drawing the next event.");
-  fpCommand -> SetGuidance ("The detector remains or is redrawn.");
-  fpCommand -> SetParameterName ("action", omitable = true);
-  fpCommand -> SetCandidates ("accumulate refresh");
-  fpCommand -> SetDefaultValue ("refresh");
+  G4UIparameter* parameter;
+  parameter = new G4UIparameter ("action", 's', omitable = true);
+  parameter -> SetParameterCandidates ("accumulate refresh");
+  parameter -> SetDefaultValue ("refresh");
+  fpCommand -> SetParameter (parameter);
+  parameter = new G4UIparameter ("maxNumber", 'i', omitable = true);
+  parameter -> SetDefaultValue (100);
+  parameter -> SetGuidance
+  ("Maximum number of events kept.  Unlimited if negative.");
+  fpCommand -> SetParameter (parameter);
 }
 
 G4VisCommandSceneEndOfEventAction::~G4VisCommandSceneEndOfEventAction () {
@@ -146,8 +152,9 @@ void G4VisCommandSceneEndOfEventAction::SetNewValue (G4UIcommand*,
   G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
 
   G4String action;
+  G4int maxNumberOfKeptEvents;
   std::istringstream is (newValue);
-  is >> action;
+  is >> action >> maxNumberOfKeptEvents;
 
   G4Scene* pScene = fpVisManager->GetCurrentScene();
   if (!pScene) {
@@ -169,8 +176,17 @@ void G4VisCommandSceneEndOfEventAction::SetNewValue (G4UIcommand*,
     pScene->SetRefreshAtEndOfEvent(false);
   }
   else if (action == "refresh") {
-    pScene->SetRefreshAtEndOfEvent(true);
-    pSceneHandler->SetMarkForClearingTransientStore(true);
+    if (!pScene->GetRefreshAtEndOfRun()) {
+      if (verbosity >= G4VisManager::errors) {
+	G4cout <<
+	  "ERROR: Cannot refresh events unless runs refresh too."
+	  "\n  Use \"/vis/scene/endOfRun refresh\"."
+	       << G4endl;
+      }
+    } else {
+      pScene->SetRefreshAtEndOfEvent(true);
+      pSceneHandler->SetMarkForClearingTransientStore(true);
+    }
   }
   else {
     if (verbosity >= G4VisManager::errors) {
@@ -180,6 +196,7 @@ void G4VisCommandSceneEndOfEventAction::SetNewValue (G4UIcommand*,
     }
     return;
   }
+  pScene->SetMaxNumberOfKeptEvents(maxNumberOfKeptEvents);
 
   // Change of transients behaviour, so...
   fpVisManager->ResetTransientsDrawnFlags();
@@ -188,8 +205,12 @@ void G4VisCommandSceneEndOfEventAction::SetNewValue (G4UIcommand*,
     G4cout << "End of event action set to \"";
     if (pScene->GetRefreshAtEndOfEvent()) G4cout << "refresh";
     else G4cout << "accumulate";
-    G4cout << "\"" << G4endl;
+    G4cout << "\"\n  Maximum number of events kept: "
+	   << maxNumberOfKeptEvents
+	   << " (unlimited if negative)."
+	   << G4endl;
   }
+  UpdateVisManagerScene (pScene->GetName());
 }
 
 ////////////// /vis/scene/endOfRunAction ////////////////////////////
@@ -279,6 +300,7 @@ void G4VisCommandSceneEndOfRunAction::SetNewValue (G4UIcommand*,
     else G4cout << "accumulate";
     G4cout << "\"" << G4endl;
   }
+  UpdateVisManagerScene (pScene->GetName());
 }
 
 ////////////// /vis/scene/list ///////////////////////////////////////
@@ -566,92 +588,4 @@ void G4VisCommandSceneSelect::SetNewValue (G4UIcommand*, G4String newValue) {
 	   << "\" selected." << G4endl;
   }
   UpdateVisManagerScene (selectName);
-
-}
-
-////////////// /vis/scene/transientsAction ////////////////////////////
-
-G4VisCommandSceneTransientsAction::G4VisCommandSceneTransientsAction () {
-  G4bool omitable;
-  fpCommand = new G4UIcommand ("/vis/scene/transientsAction", this);
-  fpCommand -> SetGuidance
-    ("Rerun events to get transients (trajectories, etc.), when needed.");
-  fpCommand -> SetGuidance
-    ("Note: ineffective in absence of instantiated run manager.");
-  G4UIparameter* parameter;
-  parameter = new G4UIparameter ("action", 's', omitable = true);
-  parameter -> SetDefaultValue ("rerun");
-  parameter -> SetParameterCandidates ("rerun none");
-  fpCommand -> SetParameter (parameter);
-  parameter = new G4UIparameter ("maxNumber", 'i', omitable = true);
-  parameter -> SetDefaultValue (100);
-  parameter -> SetGuidance
-  ("Maximum number of events stored for reprocessing. Unlimited if negative.");
-  fpCommand -> SetParameter (parameter);
-}
-
-G4VisCommandSceneTransientsAction::~G4VisCommandSceneTransientsAction () {
-  delete fpCommand;
-}
-
-G4String G4VisCommandSceneTransientsAction::GetCurrentValue(G4UIcommand*) {
-  return "";
-}
-
-void G4VisCommandSceneTransientsAction::SetNewValue (G4UIcommand*,
-						     G4String newValue) {
-
-  G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
-
-  G4String action;
-  G4int maxNumberOfEventsForReprocessing;
-  std::istringstream is (newValue);
-  is >> action >> maxNumberOfEventsForReprocessing;
-
-  G4Scene* pScene = fpVisManager->GetCurrentScene();
-  if (!pScene) {
-    if (verbosity >= G4VisManager::errors) {
-      G4cout <<	"ERROR: No current scene.  Please create one." << G4endl;
-    }
-    return;
-  }
-
-  G4VSceneHandler* pSceneHandler = fpVisManager->GetCurrentSceneHandler();
-  if (!pSceneHandler) {
-    if (verbosity >= G4VisManager::errors) {
-      G4cout <<	"ERROR: No current sceneHandler.  Please create one." << G4endl;
-    }
-    return;
-  }
-
-  if (action == "rerun") {
-    pScene->SetRecomputeTransients(true);
-  }
-  else if (action == "none") {
-    pScene->SetRecomputeTransients(false);
-  }
-  else {
-    if (verbosity >= G4VisManager::errors) {
-      G4cout <<
-	"ERROR: unrecognised parameter \"" << action << "\"."
-             << G4endl;
-    }
-    return;
-  }
-
-  fpVisManager->SetMaxNumberOfEventsForReprocessing
-    (maxNumberOfEventsForReprocessing);
-
-  // Change of transients behaviour, so...
-  fpVisManager->ResetTransientsDrawnFlags();
-
-  if (verbosity >= G4VisManager::confirmations) {
-    G4cout << "Transients action set to \"";
-    if (pScene->GetRecomputeTransients()) G4cout << "rerun";
-    else G4cout << "none";
-    G4cout << "\"\n  Maximum number of events stored for reprocessing: "
-	   << maxNumberOfEventsForReprocessing
-	   << " (unlimited if negative)."
-	   << G4endl;
-  }
 }

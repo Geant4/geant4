@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommands.cc,v 1.15 2006-07-03 19:34:28 allison Exp $
+// $Id: G4VisCommands.cc,v 1.16 2006-11-14 14:59:55 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/ top level commands - John Allison  5th February 2001
@@ -36,6 +36,8 @@
 #include "G4UIcmdWithABool.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithoutParameter.hh"
+#include "G4RunManager.hh"
+#include "G4Run.hh"
 
 ////////////// /vis/enable ///////////////////////////////////////
 
@@ -112,6 +114,125 @@ void G4VisCommandList::SetNewValue (G4UIcommand*, G4String newValue)
   "\n    /vis/modeling/trajectories/list"
   "\n    /vis/filtering/trajectories/list"
 	   << G4endl;
+}
+
+////////////// /vis/reviewKeptEvents ///////////////////////////////////////
+
+G4VisCommandReviewKeptEvents::G4VisCommandReviewKeptEvents ()
+{
+  G4bool omitable;
+
+  fpCommand = new G4UIcmdWithAString("/vis/reviewKeptEvents", this);
+  fpCommand -> SetGuidance("Review kept events.");
+  fpCommand -> SetGuidance
+    ("If a macro file is specified, it is executed for each event.");
+  fpCommand -> SetGuidance
+    ("If a macro file is not specified, each event is drawn to the current"
+     "\nviewer.  After each event, the session is paused.  The user may issue"
+     "\nany allowed command.  Then enter \"continue\" to continue to the next"
+     "\nevent.");
+  fpCommand -> SetGuidance
+    ("However, if the current scene requests event accumulation, this"
+     "\ncommand simply notifies handlers.");
+  fpCommand -> SetParameterName("macro-file-name", omitable=true);
+  fpCommand -> SetDefaultValue("");
+}
+
+G4VisCommandReviewKeptEvents::~G4VisCommandReviewKeptEvents ()
+{
+  delete fpCommand;
+}
+
+G4String G4VisCommandReviewKeptEvents::GetCurrentValue (G4UIcommand*)
+{
+  return "";
+}
+
+void G4VisCommandReviewKeptEvents::SetNewValue (G4UIcommand*, G4String newValue)
+{
+  G4String& macroFileName = newValue;
+  G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
+
+  G4RunManager* runManager = G4RunManager::GetRunManager();
+  const G4Run* run = runManager? runManager->GetCurrentRun(): 0;
+  const std::vector<const G4Event*>* events = run? run->GetEventVector(): 0;
+  size_t nKeptEvents = events? events->size(): 0;
+
+  if (!nKeptEvents) {
+    if (verbosity >= G4VisManager::errors) {
+      G4cout <<
+	"ERROR: G4VisCommandReviewKeptEvents::SetNewValue: No kept events,"
+	"\n  or kept events not accessible."
+	     << G4endl;
+    }
+    return;
+  }
+
+  const G4VViewer* viewer = fpVisManager->GetCurrentViewer();
+  if (!viewer) {
+    if (verbosity >= G4VisManager::errors) {
+      G4cout <<
+  "ERROR: No current viewer - \"/vis/viewer/list\" to see possibilities."
+             << G4endl;
+    }
+    return;
+  }
+
+  const G4Scene* scene = fpVisManager->GetCurrentScene();
+  if (!scene) {
+    if (verbosity >= G4VisManager::errors) {
+      G4cout <<
+  "ERROR: No current scene - create or use \"/vis/drawVolume\"."
+             << G4endl;
+    }
+    return;
+  }
+
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();
+  G4int keepVerbose = UImanager->GetVerboseLevel();
+  G4int newVerbose(0);
+  if (keepVerbose >= 2 || verbosity >= G4VisManager::confirmations)
+    newVerbose = 2;
+  UImanager->SetVerboseLevel(newVerbose);
+
+  if (scene->GetRefreshAtEndOfEvent()) {
+
+    // Event by event refreshing...
+    if (macroFileName.empty()) {
+
+      // Draw to viewer and pause session...
+      for (size_t i = 0; i < nKeptEvents; ++i) {
+	G4cout << "Draw event : " << i << " (" << (*events)[i]
+	       << ") and pause - awaiting implementation." << G4endl;
+      }
+
+    } else {
+
+      // Execute macro file...
+      for (size_t i = 0; i < nKeptEvents; ++i) {
+	G4cout << "Draw event : " << i << " (" << (*events)[i]
+	       << ") with macro file \"" << macroFileName
+	       << " - awaiting implementation." << G4endl;
+	/*
+	fpVisManager->DrawEvent((*events)[i]);
+	UImanager->ApplyCommand("/control/execute " + macroFileName);
+	*/
+      }
+    }
+
+  } else {
+
+    // Accumulating events...
+    UImanager->ApplyCommand("/vis/scene/notifyHandlers");
+    if (verbosity >= G4VisManager::warnings) {
+      G4cout <<
+    "WARNING: Viewers of this scene refreshed with accumulated events."
+    "\n  To see individual events, \"/vis/scene/endOfEventAction refresh\"."
+	     << G4endl;
+    }
+  }
+
+  UImanager->SetVerboseLevel(keepVerbose);
 }
 
 ////////////// /vis/verbose ///////////////////////////////////////

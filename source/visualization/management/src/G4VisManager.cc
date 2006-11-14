@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VisManager.cc,v 1.103 2006-11-01 10:52:10 allison Exp $
+// $Id: G4VisManager.cc,v 1.104 2006-11-14 14:59:55 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -87,15 +87,10 @@ G4VisManager::G4VisManager ():
   fVerbosity       (warnings),
   fVerbose         (1),
   fpStateDependent (0),
-  fEventCount      (0),
-  fReprocessing (false),
-  fReprocessingLastEvent (false),
-  fLastRunID       (0),
-  fLastEventID     (0),
+  fEventRefreshing          (false),
   fTransientsDrawnThisRun   (false),
   fTransientsDrawnThisEvent (false),
-  fpLastEvent      (0),
-  fMaxNumberOfEventsForReprocessing (100)
+  fEventKeepingSuspended    (false)
   // All other objects use default constructors.
 {
   fpTrajDrawModelMgr = new G4VisModelManager<G4VTrajectoryModel>("/vis/modeling/trajectories");
@@ -184,9 +179,6 @@ G4VisManager::~G4VisManager () {
   for (i = 0; i < fDirectoryList.size (); ++i) {
     delete fDirectoryList[i];
   }
-
-  delete fpLastEvent;
-  for (size_t i = 0; i < fEvents.size(); ++i) delete fEvents[i];
 
   delete fpTrajDrawModelMgr;
   delete fpTrajFilterMgr;
@@ -898,10 +890,13 @@ void G4VisManager::RegisterMessengers () {
 
   G4UIcommand* directory;
 
-  // Top level commands...
+  // Top level basic commands...
   RegisterMessenger(new G4VisCommandEnable);
   RegisterMessenger(new G4VisCommandList);
   RegisterMessenger(new G4VisCommandVerbose);
+
+  // Other top level commands...
+  RegisterMessenger(new G4VisCommandReviewKeptEvents);
 
   // Compound commands...
   RegisterMessenger(new G4VisCommandDrawTree);
@@ -937,7 +932,6 @@ void G4VisManager::RegisterMessengers () {
   RegisterMessenger(new G4VisCommandSceneList);
   RegisterMessenger(new G4VisCommandSceneNotifyHandlers);
   RegisterMessenger(new G4VisCommandSceneSelect);
-  RegisterMessenger(new G4VisCommandSceneTransientsAction);
 
   directory = new G4UIdirectory ("/vis/scene/add/");
   directory -> SetGuidance ("Add model to current scene.");
@@ -1109,77 +1103,14 @@ void G4VisManager::PrintInvalidPointers () const {
 void G4VisManager::BeginOfRun ()
 {
   //G4cout << "G4VisManager::BeginOfRun" << G4endl;
-  fEventCount = 0;
+  fEventKeepingSuspended = false;
   fTransientsDrawnThisRun = false;
   if (fpSceneHandler) fpSceneHandler->SetTransientsDrawnThisRun(false);
-  if (!fReprocessing) {
-    delete fpLastEvent; fpLastEvent = 0;
-    fEventsRandomStatus.clear();
-    for (size_t i = 0; i < fEvents.size(); ++i) delete fEvents[i];
-    fEvents.clear();
-  }
 }
 
 void G4VisManager::BeginOfEvent ()
 {
   //G4cout << "G4VisManager::BeginOfEvent" << G4endl;
-  G4RunManager* runManager = G4RunManager::GetRunManager();
-  if (runManager) {
-    if (!fEventCount) {  // First event.  Do run stuff here because,
-			 // curiously, currentRun is still zero in
-			 // BeginOfRun.
-      fBeginOfLastRunRandomStatus =
-        runManager->GetRandomNumberStatusForThisRun();
-      const G4Run* currentRun = runManager->GetCurrentRun();
-      if (currentRun) fLastRunID = currentRun->GetRunID();
-      else fLastRunID++;
-    }
-    fBeginOfLastEventRandomStatus =
-      runManager->GetRandomNumberStatusForThisEvent();
-    G4Event* currentEvent =
-      G4EventManager::GetEventManager()->GetNonconstCurrentEvent();
-    if (currentEvent) {
-      if (fReprocessingLastEvent) currentEvent->SetEventID(fLastEventID);
-      else fLastEventID = currentEvent->GetEventID();
-    }
-
-    /* Record event in case required for transient re-computation...
-    // If not triggered by transient re-computation in
-    // G4VSceneHandler::ProcessScene (and re-computation requested)...
-    if (!fReprocessing && fpScene && fpScene->GetRecomputeTransients()) {
-      const G4Event* event =
-	G4EventManager::GetEventManager()->GetConstCurrentEvent();
-      std::ostringstream oss;
-      CLHEP::HepRandom::saveFullState(oss);
-      if (fpScene->GetRefreshAtEndOfEvent()) {
-	fLastEventRandomStatus = oss.str();
-	delete fpLastEvent;
-	fpLastEvent = event->CreateCopyWithIDAndPrimaries();
-      } else {
-	G4int currentSize = fEvents.size();
-	if (fMaxNumberOfEventsForReprocessing > 0 &&
-	    currentSize >= fMaxNumberOfEventsForReprocessing) {
-	  G4cout << "G4VisManager::BeginOfEvent: Requesting more than "
-		 << fMaxNumberOfEventsForReprocessing
-		 << " events for transients reprocessing."
-	    "\n  Transients reprocessing suspended."
-	    "\n  Re-activate with \"/vis/scene/transientsAction rerun <N>\","
-	    "\n  where N is the maximum number you wish to allow."
-	    "\n  N < 0 means \"unlimited\"."
-		 << G4endl;
-	  fpScene->SetRecomputeTransients(false);
-	  fEventsRandomStatus.clear();
-	  for (size_t i = 0; i < fEvents.size(); ++i) delete fEvents[i];
-	  fEvents.clear();
-	} else {
-	  fEventsRandomStatus.push_back(oss.str());
-	  fEvents.push_back(event->CreateCopyWithIDAndPrimaries());
-	}
-      }
-    }
-    */
-
-  }
   fTransientsDrawnThisEvent = false;
   if (fpSceneHandler) fpSceneHandler->SetTransientsDrawnThisEvent(false);
 }
@@ -1187,41 +1118,61 @@ void G4VisManager::BeginOfEvent ()
 void G4VisManager::EndOfEvent ()
 {
   //G4cout << "G4VisManager::EndOfEvent" << G4endl;
-  ++fEventCount;
 
   // Don't call IsValidView unless there is a scene handler.  This
   // avoids WARNING message at end of event and run when the user has
   // not instantiated a scene handler, e.g., in batch mode.
-  if (GetConcreteInstance() && fpSceneHandler && IsValidView()) {
-    const std::vector<G4VModel*>& EOEModelList =
-      fpScene -> GetEndOfEventModelList ();
-    size_t nModels = EOEModelList.size();
-    if (nModels) {
-      ClearTransientStoreIfMarked();
-      for (size_t i = 0; i < nModels; i++) {
-	G4VModel* pModel = EOEModelList [i];
-	fpSceneHandler -> SetModel (pModel);
-	pModel -> DescribeYourselfTo (*fpSceneHandler);
-      }
-      fpSceneHandler -> SetModel (0);
+  G4bool valid = GetConcreteInstance() && fpSceneHandler && IsValidView();
+  if (!valid) return;
+
+  G4RunManager* runManager = G4RunManager::GetRunManager();
+  const G4Run* currentRun = runManager->GetCurrentRun();
+
+  const G4Event* currentEvent =
+    G4EventManager::GetEventManager()->GetConstCurrentEvent();
+  if (!currentEvent) return;
+
+  DrawEvent(currentEvent);
+
+  G4int nEventsToBeProcessed = 0;
+  G4int nKeptEvents = 0;
+  G4int eventID = -2;  // (If no run manager, triggers ShowView as normal.)
+  if (currentRun) {
+    nEventsToBeProcessed = currentRun->GetNumberOfEventToBeProcessed();
+    eventID = currentEvent->GetEventID();
+    const std::vector<const G4Event*>* events =
+      currentRun->GetEventVector();
+    if (events) nKeptEvents = events->size();
+  }
+
+  if (fpScene->GetRefreshAtEndOfEvent()) {
+
+    // Unless last event (in which case wait end of run)...
+    if (eventID < nEventsToBeProcessed - 1) {
+      fpViewer->ShowView();
+      fpSceneHandler->SetMarkForClearingTransientStore(true);
+    } else {  // Last event...
+      G4EventManager::GetEventManager()->KeepTheCurrentEvent();
     }
-    if (fpScene->GetRefreshAtEndOfEvent()) {
-      G4int nEvents = 0;
-      G4int eventID = -2;  // (If no run manager, triggers ShowView as normal.)
-      G4RunManager* runManager = G4RunManager::GetRunManager();
-      if (runManager) {
-	const G4Run* currentRun = runManager->GetCurrentRun();
-	const G4Event* currentEvent = runManager->GetCurrentEvent();
-	if (currentRun && currentEvent) {
-	  nEvents = currentRun->GetNumberOfEventToBeProcessed();
-	  eventID = currentEvent->GetEventID();
+
+  } else {  //  Accumulating events...
+
+    if (fpScene->GetMaxNumberOfKeptEvents() > 0 &&
+	nKeptEvents == fpScene->GetMaxNumberOfKeptEvents()) {
+      fEventKeepingSuspended = true;
+      static G4bool warned = false;
+      if (!warned) {
+	if (fVerbosity >= warnings) {
+	  G4cout <<
+	    "WARNING: G4VisManager::EndOfEvent: Event keeping suspended."
+	    "\n  The number of events exceeds the maximum that may be kept, "
+		 << fpScene->GetMaxNumberOfKeptEvents() << '.'
+		 << G4endl;
 	}
+	warned = true;
       }
-      // Unless last event (in which case wait end of run)...
-      if (eventID < nEvents - 1) {
-	fpViewer->ShowView();
-	fpSceneHandler->SetMarkForClearingTransientStore(true);
-      }
+    } else {
+      G4EventManager::GetEventManager()->KeepTheCurrentEvent();
     }
   }
 }
@@ -1229,19 +1180,84 @@ void G4VisManager::EndOfEvent ()
 void G4VisManager::EndOfRun ()
 {
   //G4cout << "G4VisManager::EndOfRun" << G4endl;
+
   // Don't call IsValidView unless there is a scene handler.  This
   // avoids WARNING message at end of event and run when the user has
   // not instantiated a scene handler, e.g., in batch mode.
-  if (GetConcreteInstance() && fpSceneHandler && IsValidView()) {
+  G4bool valid = GetConcreteInstance() && fpSceneHandler && IsValidView();
+  if (valid) {
     if (!fpSceneHandler->GetMarkForClearingTransientStore()) {
       if (fpScene->GetRefreshAtEndOfRun()) {
 	fpViewer->ShowView();
 	fpSceneHandler->SetMarkForClearingTransientStore(true);
       }
     }
+
+    if (fEventKeepingSuspended &&
+	fVerbosity >= warnings) {
+      G4cout <<
+	"WARNING: G4VisManager::EndOfRun: Event keeping was suspended."
+	"\n  The number of events in the run exceeded the maximum to be kept, "
+	     << fpScene->GetMaxNumberOfKeptEvents() << '.' <<
+	"\n  The number of events to be kept can be changed with"
+	"\n  \"/vis/scene/endOfEventAction accumulate <N>\", where N is the"
+	"\n  maximum number you wish to allow.  N < 0 means \"unlimited\"."
+	     << G4endl;
+    }
   }
-  fReprocessing = false;
-  fReprocessingLastEvent = false;
+  fEventRefreshing = false;
+
+  G4RunManager* runManager = G4RunManager::GetRunManager();
+  const G4Run* currentRun = runManager->GetCurrentRun();
+  
+  G4int nKeptEvents = 0;
+  const std::vector<const G4Event*>* events =
+    currentRun? currentRun->GetEventVector(): 0;
+  if (events) nKeptEvents = events->size();
+
+  if (nKeptEvents) {
+    if (!valid && fVerbosity >= warnings) G4cout << "WARNING: ";
+    if (fVerbosity >= warnings) {
+      G4cout << nKeptEvents;
+      if (nKeptEvents == 1) G4cout << " event has";
+      else G4cout << " events have";
+      G4cout << " been kept for refreshing and/or reviewing." << G4endl;
+    }
+    if (!valid && fVerbosity >= warnings) {
+      G4cout <<
+	"  Only useful if before starting the run:"
+	"\n    a) trajectories are stored (\"/tracking/storeTrajectory N\"), or"
+	"\n    b) the Draw method of any hits is implemented."
+	"\n  To view trajectories and hits:"
+	"\n    open a viewer, draw a volume, \"/vis/scene/add/trajectories\""
+	"\n    \"/vis/scene/add/hits\" and, possibly, \"/vis/viewer/flush\"."
+	"\n  To see all events: \"vis/scene/endOfEventAction accumulate\"."
+	"\n  To see events individually: \"/vis/reviewKeptEvents\"."
+	     << G4endl;
+    }
+  }
+}
+
+void G4VisManager::DrawEvent(const G4Event* event)
+{
+  // Assumes valid view.
+  const std::vector<G4VModel*>& EOEModelList =
+    fpScene -> GetEndOfEventModelList ();
+  size_t nModels = EOEModelList.size();
+  if (nModels) {
+    ClearTransientStoreIfMarked();
+    G4ModelingParameters* pMP = fpSceneHandler->CreateModelingParameters();
+    pMP->SetEvent(event);
+    for (size_t i = 0; i < nModels; i++) {
+      G4VModel* pModel = EOEModelList [i];
+      pModel -> SetModelingParameters(pMP);
+      fpSceneHandler -> SetModel (pModel);
+      pModel -> DescribeYourselfTo (*fpSceneHandler);
+      pModel -> SetModelingParameters(0);
+    }
+    delete pMP;
+    fpSceneHandler -> SetModel (0);
+  }
 }
 
 void G4VisManager::ClearTransientStoreIfMarked(){
@@ -1253,7 +1269,7 @@ void G4VisManager::ClearTransientStoreIfMarked(){
   // Record if transients drawn.  These local flags are only set
   // *after* ClearTransientStore.  In the code in G4VSceneHandler
   // triggered by ClearTransientStore, use these flags so that
-  // transient reprocessing is not done too early.
+  // event refreshing is not done too early.
   fTransientsDrawnThisEvent = fpSceneHandler->GetTransientsDrawnThisEvent();
   fTransientsDrawnThisRun = fpSceneHandler->GetTransientsDrawnThisRun();
 }

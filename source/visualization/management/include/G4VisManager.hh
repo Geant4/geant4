@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.hh,v 1.62 2006-09-12 18:55:45 tinslay Exp $
+// $Id: G4VisManager.hh,v 1.63 2006-11-14 14:59:55 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -343,16 +343,11 @@ public: // With description
   // it contains more information.  (The size information in
   // GetXGeometryString and GetWindowSizeHint is guaranteed to be
   // identical.)
-  G4int                        GetEventCount                   () const;
   const G4String&              GetBeginOfLastRunRandomStatus   () const;
   const G4String&              GetBeginOfLastEventRandomStatus () const;
   G4int                        GetLastRunID                    () const;
   G4bool                       GetTransientsDrawnThisRun       () const;
   G4bool                       GetTransientsDrawnThisEvent     () const;
-  const G4String&              GetLastEventRandomStatus        () const;
-  G4Event*                     GetLastEvent                    () const;
-  const std::vector<G4String>& GetEventsRandomStatus           () const;
-  const std::vector<G4Event*>& GetEvents                       () const;
 
   void SetUserAction (G4VUserVisAction* pVisAction,
 		      const G4VisExtent& = G4VisExtent::NullExtent);
@@ -368,10 +363,8 @@ public: // With description
   void              SetVerboseLevel             (Verbosity);
   void              SetWindowSizeHint           (G4int xHint, G4int yHint);
   void              SetXGeometryString          (const G4String&);
-  void              SetReprocessing             (G4bool);
-  void              SetReprocessingLastEvent    (G4bool);
+  void              SetEventRefreshing          (G4bool);
   void              ResetTransientsDrawnFlags   ();
-  void              SetMaxNumberOfEventsForReprocessing(G4int);
 
   /////////////////////////////////////////////////////////////////////
   // Utility functions.
@@ -407,6 +400,9 @@ protected:
   // Sub-class must register desired models
 
   void RegisterMessengers              ();   // Command messengers.
+
+private:
+
   void PrintAvailableGraphicsSystems   () const;
   void PrintAvailableModels            (Verbosity) const;
   void PrintInvalidPointers            () const;
@@ -415,9 +411,12 @@ protected:
   void ClearTransientStoreIfMarked();
   // Clears transient store of current scene handler if it is marked
   // for clearing.  Assumes view is valid.
+  void DrawEvent(const G4Event*);
+  // Checks scene's end-of-event model list and draws trajectories,
+  // hits, etc.  Assumes valid view.
 
-  static G4VisManager*  fpInstance;         // Pointer to single instance.
-  G4bool                fInitialised;
+  static G4VisManager*  fpInstance;         // Pointer to single instance. 
+ G4bool                fInitialised;
   G4VUserVisAction*     fpUserVisAction;    // User vis action callback.
   G4VisExtent           fUserVisActionExtent;
   G4VGraphicsSystem*    fpGraphicsSystem;   // Current graphics system.
@@ -439,22 +438,10 @@ protected:
   G4int fWindowSizeHintX, fWindowSizeHintY; // For viewer...
   G4String fXGeometryString;                // ...construction.
   G4TrajectoriesModel dummyTrajectoriesModel;  // For passing drawing mode.
-  G4int fEventCount;
-  G4String fBeginOfLastRunRandomStatus;
-  G4String fBeginOfLastEventRandomStatus;
-  G4bool fReprocessing;
-  G4bool fReprocessingLastEvent;
-  G4int fLastRunID;
-  G4int fLastEventID;
+  G4bool fEventRefreshing;
   G4bool fTransientsDrawnThisRun;
   G4bool fTransientsDrawnThisEvent;
-  G4String fLastEventRandomStatus;
-  G4Event* fpLastEvent;
-  std::vector<G4String> fEventsRandomStatus;
-  std::vector<G4Event*> fEvents;
-  G4int fMaxNumberOfEventsForReprocessing;
-
-private:
+  G4bool fEventKeepingSuspended;
 
   // Trajectory draw model manager
   G4VisModelManager<G4VTrajectoryModel>* fpTrajDrawModelMgr;

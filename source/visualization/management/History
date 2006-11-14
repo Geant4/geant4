@@ -1,4 +1,5 @@
-$Id: History,v 1.79 2006-11-06 11:40:24 allison Exp $
+$Id: History,v 1.80 2006-11-14 14:59:54 allison Exp $
+
 -------------------------------------------------------------------
 
      =========================================================
@@ -25,11 +26,69 @@ committal in the CVS repository !
 History file for visualization management sub-category
 ------------------------------------------------------
 
+14th November 2006  John Allison  (visman-V08-01-10)
+- Merged visman-V08-01-08-branch onto main branch.
+
+14th November 2006  John Allison  (visman-V08-01-08-08)
+- Partial implementation of /vis/reviewKeptEvents.
+
+14th November 2006  John Allison  (visman-V08-01-08-07)
+- Minor improvements:
+  o G4VisManager: Removed event count (not used).
+  o G4VSceneHandler: Inhibited drawing when vis disabled.
+  o Various /vis/scene commands: Added update statement so that
+    handlers are notified after change of scene.  Forces rebuild and
+    refresh of all viewers using current scene.
+
+12th November 2006  John Allison  (visman-V08-01-08-06)
+- Further iteration of event refreshing:
+  o G4VisManager:
+    ~ Introduced DrawEvent private method for vis manager and G4VSceneHandler.
+    ~ Removed unused methods from previous attempts.
+  o G4VSceneHandler: Used vis manager DrawEvent.
+  o /vis/scene/add/eventID: improved so it picks up event ids of refreshed
+    events.
+
+11th November 2006  John Allison  (visman-V08-01-08-05)
+- Removed /vis/scene/transientsAction.  Now event keeping by the vis
+  manager is automatic if there is a valid scene.  If the user issues
+  "/vis/scene/endOfEventAction accumulate [<N>]", events are kept up
+  to a maximum N in number (N<0 means unlimited, the default value is
+  100).  Otherwise just the last event is kept.
+- Tidied up.
+
+9th November 2006  John Allison  (visman-V08-01-08-04)
+- G4VisManager: Removed data memebers associated with previous attempts
+  at event refreshing.
+- G4VSceneHandler.cc: Removed previous attempts at event refreshing.
+- /vis/drawVolume and /vis/scene/add/volume: Improved guidance for parallel
+  worlds.
+- /vis/viewer/select: Ensure refresh for auto-refreshing viewers.
+- /vis/viewer/set/autoRefresh: Inhibit refresh for auto-refreshing viewers.
+
+8th November 2006  John Allison  (visman-V08-01-08-03)
+- First attempt at using event keeping to refresh views.
+
+6th November 2006  John Allison  (visman-V08-01-08-02)
+- Merged visman-V08-01-09.
+
 6th November 2006  John Allison  (visman-V08-01-09)
 - /vis/drawVolume and /vis/specify: Suppress all but first warning about
   needing to refresh for viewers that are not auto refresh.
 - G4VScenehandler.cc: Remove warning about emepty scene.  (Subsequent action
   is to add a world, if empty - reasonable behaviour.)
+
+5th November 2006  John Allison  (visman-V08-01-08-01)
+- G4VisCommandsSceneAdd.cc: Improved implementation of parallel worlds.  Gets
+  material world = *(transportationManager->GetWorldsIterator()) in all cases
+  following fixes run-V08-01-ref04-01 and geomnav-V08-01-ref04-01.
+
+3rd November 2006  John Allison  (visman-V08-01-08-00)
+- On visman-V08-01-08-branch.
+- G4VisCommandsSceneAdd.cc: First implementation of parallel worlds
+  visualisation: /vis/scene/add/volume worlds
+- G4VisCommandsCompound.cc: Minor re-ordering of commands in /vis/drawVolume
+  to avoid warning messages about empty scene.
 
 3rd November 2006  John Allison  (visman-V08-01-08 with tracking-V08-01-05)
 - Activated /vis/scene/add/trajectories with "rich" and "smooth" - see below.

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.hh,v 1.35 2006-08-30 10:57:56 allison Exp $
+// $Id: G4VSceneHandler.hh,v 1.36 2006-11-14 14:59:54 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -257,6 +257,12 @@ public: // With description
   G4double GetMarkerRadius (const G4VMarker&, MarkerSizeType&);
   // GetMarkerSize / 2.
 
+  G4ModelingParameters* CreateModelingParameters ();
+  // Only the scene handler and view know what the Modeling Parameters should
+  // be.  For historical reasons, the GEANT4 Visualization Environment
+  // maintains its own Scene Data and View Parameters, which must be
+  // converted, when needed, to Modeling Parameters.
+
   //////////////////////////////////////////////////////////////
   // Administration functions.
 
@@ -292,12 +298,6 @@ protected:
 
   //////////////////////////////////////////////////////////////
   // Other internal routines...
-
-  G4ModelingParameters* CreateModelingParameters ();
-  // Only the scene handler and view know what the Modeling Parameters should
-  // be.  For historical reasons, the GEANT4 Visualization Environment
-  // maintains its own Scene Data and View Parameters, which must be
-  // converted, when needed, to Modeling Parameters.
 
   virtual const G4Polyhedron* CreateSectionPolyhedron ();
   virtual const G4Polyhedron* CreateCutawayPolyhedron ();

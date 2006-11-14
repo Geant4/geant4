@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scene.icc,v 1.13 2006-06-29 21:27:58 gunter Exp $
+// $Id: G4Scene.icc,v 1.14 2006-11-14 14:59:54 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -64,12 +64,12 @@ inline G4bool G4Scene::GetRefreshAtEndOfEvent () const {
   return fRefreshAtEndOfEvent;
 }
 
-inline G4bool G4Scene::GetRefreshAtEndOfRun () const {
-  return fRefreshAtEndOfRun;
+inline G4int G4Scene::GetMaxNumberOfKeptEvents() const {
+  return fMaxNumberOfKeptEvents;
 }
 
-inline G4bool G4Scene::GetRecomputeTransients () const {
-  return fRecomputeTransients;
+inline G4bool G4Scene::GetRefreshAtEndOfRun () const {
+  return fRefreshAtEndOfRun;
 }
 
 inline std::vector<G4VModel*>& G4Scene::SetRunDurationModelList ()
@@ -86,10 +86,10 @@ inline void G4Scene::SetRefreshAtEndOfEvent(G4bool refresh) {
   fRefreshAtEndOfEvent = refresh;
 }
 
-inline void G4Scene::SetRefreshAtEndOfRun(G4bool refresh) {
-  fRefreshAtEndOfRun = refresh;
+inline void G4Scene::SetMaxNumberOfKeptEvents(G4int max) {
+  fMaxNumberOfKeptEvents = max;
 }
 
-inline void G4Scene::SetRecomputeTransients(G4bool recompute) {
-  fRecomputeTransients = recompute;
+inline void G4Scene::SetRefreshAtEndOfRun(G4bool refresh) {
+  fRefreshAtEndOfRun = refresh;
 }

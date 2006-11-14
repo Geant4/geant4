@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewerSet.cc,v 1.46 2006-09-19 16:08:06 allison Exp $
+// $Id: G4VisCommandsViewerSet.cc,v 1.47 2006-11-14 14:59:55 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer/set commands - John Allison  16th May 2000
@@ -459,6 +459,8 @@ void G4VisCommandsViewerSet::SetNewValue
       G4cout << "be automatically refreshed after a change of view parameters."
 	     << G4endl;
     }
+    currentViewer->SetViewParameters(vp);
+    return;  // I.e., avoid a refresh for this command.
   }
 
   else if (command == fpCommandAuxEdge) {
