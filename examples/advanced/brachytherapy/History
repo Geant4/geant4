@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.18 2006-05-30 12:32:16 guatelli Exp $
+$Id: History,v 1.19 2006-11-14 15:24:21 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,9 @@ $Id: History,v 1.18 2006-05-30 12:32:16 guatelli Exp $
 
                       Category History file
                       ---------------------
+
+14th November 2006  John Allison  (brachy-V08-01-00)
+- Removed /vis/scene/transientsAction none (no longer available).
 
 30th May 2006 Susanna Guatelli (brachy-V08-00-02)
 - Deleted a warning during compilation
