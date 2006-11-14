@@ -1,4 +1,4 @@
-$Id: History,v 1.13 2006-07-05 12:17:31 gcosmo Exp $
+$Id: History,v 1.14 2006-11-14 16:29:18 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov 14, 2006  G.Cosmo (exHepMC-V08-01-01)
+- Archived examples copies using CLHEP/HepMC.
 
 Jul 05, 2006  G.Cosmo (exHepMC-V08-01-00)
 - Updated to current version of exampleN04/N02.
