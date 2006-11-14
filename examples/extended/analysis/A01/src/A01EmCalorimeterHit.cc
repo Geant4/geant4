@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: A01EmCalorimeterHit.cc,v 1.11 2006-11-06 17:44:09 allison Exp $
+// $Id: A01EmCalorimeterHit.cc,v 1.12 2006-11-14 07:11:19 perl Exp $
 // --------------------------------------------------------------
 //
 
@@ -114,15 +114,6 @@ const std::map<G4String,G4AttDef>* A01EmCalorimeterHit::GetAttDefs() const
     G4String ID("ID");
     (*store)[ID] = G4AttDef(ID,"ID","Physics","","G4int");
 
-    G4String Column("Column");
-    (*store)[Column] = G4AttDef(Column,"Column ID","Physics","","G4int");
-
-    G4String Row("Row");
-    (*store)[Row] = G4AttDef(Row,"Row ID","Physics","","G4int");
-
-    G4String Time("Time");
-    (*store)[Time] = G4AttDef(Time,"Time","Physics","G4BestUnit","G4double");
-
     G4String Energy("Energy");
     (*store)[Energy] = G4AttDef(Energy,"Energy Deposited","Physics","G4BestUnit","G4double");
 
@@ -144,16 +135,6 @@ std::vector<G4AttValue>* A01EmCalorimeterHit::CreateAttValues() const
 
   values->push_back
     (G4AttValue("ID",G4UIcommand::ConvertToString(cellID),""));
-
-  values->push_back
-    (G4AttValue("Column"," ",""));
-
-  values->push_back
-    (G4AttValue("Row"," ",""));
-
-  G4double noTime = 0.*s;
-  values->push_back
-    (G4AttValue("Time",G4BestUnit(noTime,"Time"),""));
 
   values->push_back
     (G4AttValue("Energy",G4BestUnit(edep,"Energy"),""));
