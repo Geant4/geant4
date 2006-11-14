@@ -1,4 +1,4 @@
-$Id: History,v 1.14 2006-11-14 16:29:18 gcosmo Exp $
+$Id: History,v 1.15 2006-11-14 16:32:29 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,8 +15,11 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-Nov 14, 2006  G.Cosmo (exHepMC-V08-01-01)
+Nov 14, 2006  G.Cosmo (exHepMC-V08-01-02)
 - Archived examples copies using CLHEP/HepMC.
+
+Oct 18, 2006  J.Allison (exHepMC-V08-01-01)
+- Migrated to new trajectory modeling commands.
 
 Jul 05, 2006  G.Cosmo (exHepMC-V08-01-00)
 - Updated to current version of exampleN04/N02.
