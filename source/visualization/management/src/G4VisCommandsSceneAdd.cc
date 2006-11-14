@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneAdd.cc,v 1.70 2006-11-14 14:59:55 allison Exp $
+// $Id: G4VisCommandsSceneAdd.cc,v 1.71 2006-11-14 16:02:01 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // /vis/scene commands - John Allison  9th August 1998
 
@@ -1340,7 +1340,7 @@ void G4VisCommandSceneAddTrajectories::SetNewValue (G4UIcommand*,
   UImanager->SetVerboseLevel(keepVerbose);
 
   if (rich) {
-    if (verbosity >= G4VisManager::confirmations) {
+    if (verbosity >= G4VisManager::warnings) {
       G4cout <<
 	"Attributes available for modeling and filtering with"
 	"\n\"/vis/modeling/trajectories/create/drawByAttribute\" and"
