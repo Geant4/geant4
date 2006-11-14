@@ -15,6 +15,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+14 November, 06  G.Cosmo (persistency-V08-01-02)
+- Cleared trivial compilation warnings in G4PersistencyManager implementation.
+- Added setup for retrieving HepMC in case G4LIB_USE_HEPMC is set and the
+  HEPMC_DIR path defined in the environment.
+
 30 October, 06  W.Pokorski (persistency-V08-01-01)
 - Put 'ifdef G4LIB_USE_HEPMC' in all the places which explicitly use HepMC
   classes to allow compilation with CLHEP 2.0.3.0.
