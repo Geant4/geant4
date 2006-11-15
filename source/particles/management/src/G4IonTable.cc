@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonTable.cc,v 1.42 2006-10-12 10:59:45 kurasige Exp $
+// $Id: G4IonTable.cc,v 1.43 2006-11-15 09:57:52 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -371,20 +371,15 @@ G4bool G4IonTable::IsIon(G4ParticleDefinition* particle)
 }
 
 /////////////////
+#include <algorithm>
+
 G4bool G4IonTable::IsLightIon(G4ParticleDefinition* particle) const
 {
-   // return true if the particle is pre-defined ion
-   G4String name = particle->GetParticleName();
+  static const std::string names[] = { "proton", "neutron", "alpha", "deuteron",
+                           "triton", "He3", "GenericIon"};
 
-   G4bool value  =  (name == "proton");
-   value = value || (name == "neutron");
-   value = value || (name == "alpha");
-   value = value || (name == "deuteron");
-   value = value || (name == "triton") ;
-   value = value || (name == "He3");
-   value = value || (name == "GenericIon") ;
-   
-   return value;
+   // return true if the particle is pre-defined ion
+  return std::find(names, names+7, particle->GetParticleName())!=names+7;
 } 
 
 /////////////////
