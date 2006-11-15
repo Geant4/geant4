@@ -8,22 +8,16 @@ $Id: History, v 1.6 2004/02/27  G.A.P. Cirrone
 
                       Category History file
                       ---------------------
-
-<<<<<<< History
-
 15.11.2006  G.A.P. Cirrone (hadrontherapy-V08-01-04)
 	 - Changed cut and cut per region default values. Improved Max Step function
 	   along the beam line.
 
-02.10.2006  G.A.P. Cirrone and S. Guatelli(hadrontherapy-V08-01-03)
-         - Bug fix in the geometry (hadrontherapy beam line)
-=======
 14.11.2006  J. Allison
 - Removed /vis/scene/transientsAction none (no longer available).
 
-02.10.2006  P. Cirrone and S. Guatelli(hadrontherapy-V08-01-03)
-          - Bug fix in the geometry (hadrontherapy beam line)
->>>>>>> 1.31
+
+02.10.2006  G.A.P. Cirrone and S. Guatelli(hadrontherapy-V08-01-03)
+         - Bug fix in the geometry (hadrontherapy beam line)
             problem: wrong volume hierarchy
 
 24.07.2006  S. Guatelli (hadrontherapy-V08-01-00)
