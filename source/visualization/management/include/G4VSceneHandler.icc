@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.icc,v 1.17 2006-06-29 21:28:10 gunter Exp $
+// $Id: G4VSceneHandler.icc,v 1.18 2006-11-15 19:25:31 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -123,6 +123,9 @@ inline void G4VSceneHandler::SetTransientsDrawnThisRun (G4bool drawn) {
   fTransientsDrawnThisRun = drawn;
 }
 
+inline void G4VSceneHandler::SetEvent (const G4Event* event) {
+  fRequestedEvent = event;
+}
 inline const G4Colour& G4VSceneHandler::GetColor (const G4Visible& visible) {
   return GetColour (visible);
 }

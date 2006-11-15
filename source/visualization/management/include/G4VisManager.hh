@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.hh,v 1.63 2006-11-14 14:59:55 allison Exp $
+// $Id: G4VisManager.hh,v 1.64 2006-11-15 19:25:31 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -411,9 +411,6 @@ private:
   void ClearTransientStoreIfMarked();
   // Clears transient store of current scene handler if it is marked
   // for clearing.  Assumes view is valid.
-  void DrawEvent(const G4Event*);
-  // Checks scene's end-of-event model list and draws trajectories,
-  // hits, etc.  Assumes valid view.
 
   static G4VisManager*  fpInstance;         // Pointer to single instance. 
  G4bool                fInitialised;

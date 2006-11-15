@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.cc,v 1.75 2006-11-14 14:59:55 allison Exp $
+// $Id: G4VSceneHandler.cc,v 1.76 2006-11-15 19:25:31 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -94,7 +94,8 @@ G4VSceneHandler::G4VSceneHandler (G4VGraphicsSystem& system, G4int id, const G4S
   fpModel                (0),
   fpObjectTransformation (0),
   fNestingDepth          (0),
-  fpVisAttribs           (0)
+  fpVisAttribs           (0),
+  fRequestedEvent        (0)
 {
   G4VisManager* pVMan = G4VisManager::GetInstance ();
   fpScene = pVMan -> GetCurrentScene ();
@@ -542,55 +543,60 @@ void G4VSceneHandler::ProcessScene (G4VViewer&) {
 
   visManager->SetEventRefreshing(true);
 
-  G4StateManager* stateManager = G4StateManager::GetStateManager();
-  G4ApplicationState state = stateManager->GetCurrentState();
-  G4RunManager* runManager = G4RunManager::GetRunManager();
-  const G4Run* run = runManager->GetCurrentRun();
-  const std::vector<const G4Event*>* events =
-    run? run->GetEventVector(): 0;
-  size_t nKeptEvents = 0;
-  if (events) nKeptEvents = events->size();
-  if (runManager) {
-    if (fpScene->GetRefreshAtEndOfEvent()) {
+  if (fRequestedEvent) DrawEvent(fRequestedEvent);
 
-      if (verbosity >= G4VisManager::confirmations) {
-	G4cout << "Refreshing event..." << G4endl;
-      }
-      const G4Event* event = 0;
-      if (state == G4State_Idle) {
-	if (events && events->size()) event = events->back();
-      } else if (state == G4State_GeomClosed) {
-	// Could be break at end of event.
-	event =
-	  G4EventManager::GetEventManager()->GetConstCurrentEvent();
-      }
-      visManager->DrawEvent(event);
+  else {
 
-    } else {  // Accumulating events.
+    G4StateManager* stateManager = G4StateManager::GetStateManager();
+    G4ApplicationState state = stateManager->GetCurrentState();
+    G4RunManager* runManager = G4RunManager::GetRunManager();
+    const G4Run* run = runManager->GetCurrentRun();
+    const std::vector<const G4Event*>* events =
+      run? run->GetEventVector(): 0;
+    size_t nKeptEvents = 0;
+    if (events) nKeptEvents = events->size();
+    if (runManager) {
+      if (fpScene->GetRefreshAtEndOfEvent()) {
 
-      if (verbosity >= G4VisManager::confirmations) {
-	G4cout << "Refreshing events in run..." << G4endl;
-      }
-      for (size_t i = 0; i < nKeptEvents; ++i) {
-	const G4Event* event = (*events)[i];
-	if (event) {
-	  visManager->DrawEvent(event);
+	if (verbosity >= G4VisManager::confirmations) {
+	  G4cout << "Refreshing event..." << G4endl;
 	}
-      }
-      if (state == G4State_GeomClosed) {
-	// Could be break at end of event.  Add current event
-	// to those already accumulated...
-	const G4Event* event =
-	  G4EventManager::GetEventManager()->GetConstCurrentEvent();
-	visManager->DrawEvent(event);
-      }
+	const G4Event* event = 0;
+	if (state == G4State_Idle) {
+	  if (events && events->size()) event = events->back();
+	} else if (state == G4State_GeomClosed) {
+	  // Could be break at end of event.
+	  event =
+	    G4EventManager::GetEventManager()->GetConstCurrentEvent();
+	}
+	DrawEvent(event);
 
-      if (!fpScene->GetRefreshAtEndOfRun()) {
-	if (verbosity >= G4VisManager::warnings) {
-	  G4cout <<
-	    "WARNING: Cannot refresh events accumulated over more"
-	    "\n  than one runs.  Refreshed just the last run..."
-		 << G4endl;
+      } else {  // Accumulating events.
+
+	if (verbosity >= G4VisManager::confirmations) {
+	  G4cout << "Refreshing events in run..." << G4endl;
+	}
+	for (size_t i = 0; i < nKeptEvents; ++i) {
+	  const G4Event* event = (*events)[i];
+	  if (event) {
+	    DrawEvent(event);
+	  }
+	}
+	if (state == G4State_GeomClosed) {
+	  // Could be break at end of event.  Add current event
+	  // to those already accumulated...
+	  const G4Event* event =
+	    G4EventManager::GetEventManager()->GetConstCurrentEvent();
+	  DrawEvent(event);
+	}
+
+	if (!fpScene->GetRefreshAtEndOfRun()) {
+	  if (verbosity >= G4VisManager::warnings) {
+	    G4cout <<
+	      "WARNING: Cannot refresh events accumulated over more"
+	      "\n  than one runs.  Refreshed just the last run..."
+		   << G4endl;
+	  }
 	}
       }
     }
@@ -599,6 +605,28 @@ void G4VSceneHandler::ProcessScene (G4VViewer&) {
   visManager->SetEventRefreshing(false);
 
   fMarkForClearingTransientStore = tmpMarkForClearingTransientStore;
+}
+
+void G4VSceneHandler::DrawEvent(const G4Event* event)
+{
+  G4VisManager* visManager = G4VisManager::GetInstance();
+  const std::vector<G4VModel*>& EOEModelList =
+    fpScene -> GetEndOfEventModelList ();
+  size_t nModels = EOEModelList.size();
+  if (nModels) {
+    visManager->ClearTransientStoreIfMarked();
+    G4ModelingParameters* pMP = CreateModelingParameters();
+    pMP->SetEvent(event);
+    for (size_t i = 0; i < nModels; i++) {
+      G4VModel* pModel = EOEModelList [i];
+      pModel -> SetModelingParameters(pMP);
+      SetModel (pModel);
+      pModel -> DescribeYourselfTo (*this);
+      pModel -> SetModelingParameters(0);
+    }
+    delete pMP;
+    SetModel (0);
+  }
 }
 
 G4ModelingParameters* G4VSceneHandler::CreateModelingParameters ()

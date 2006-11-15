@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.hh,v 1.36 2006-11-14 14:59:54 allison Exp $
+// $Id: G4VSceneHandler.hh,v 1.37 2006-11-15 19:25:31 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -57,6 +57,7 @@ class G4VGraphicsSystem;
 class G4LogicalVolume;
 class G4VPhysicalVolume;
 class G4Material;
+class G4Event;
 
 class G4VSceneHandler: public G4VGraphicsScene {
 
@@ -215,6 +216,10 @@ public: // With description
   void          SetTransientsDrawnThisEvent      (G4bool);
   void          SetTransientsDrawnThisRun        (G4bool);
   // Maintained by vis manager.
+  void          SetEvent         (const G4Event*);
+  // If non-zero, this event is used in ProcessScene.  Otherwise, the
+  // current event, or last event(s) are used.  The user must
+  // SetEvent(0) when finished.
 
   //////////////////////////////////////////////////////////////
   // Public utility functions.
@@ -262,6 +267,10 @@ public: // With description
   // be.  For historical reasons, the GEANT4 Visualization Environment
   // maintains its own Scene Data and View Parameters, which must be
   // converted, when needed, to Modeling Parameters.
+
+  void DrawEvent(const G4Event*);
+  // Checks scene's end-of-event model list and draws trajectories,
+  // hits, etc.
 
   //////////////////////////////////////////////////////////////
   // Administration functions.
@@ -328,6 +337,7 @@ protected:
 					       // object transformation.
   G4int              fNestingDepth; // For Begin/EndPrimitives.
   const G4VisAttributes* fpVisAttribs;  // Working vis attributes.
+  const G4Event* fRequestedEvent;   // If non-zero, use this event.
   const G4Transform3D fIdentityTransformation;
 
 private:

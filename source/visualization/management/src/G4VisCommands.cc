@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommands.cc,v 1.16 2006-11-14 14:59:55 allison Exp $
+// $Id: G4VisCommands.cc,v 1.17 2006-11-15 19:25:31 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/ top level commands - John Allison  5th February 2001
@@ -38,6 +38,7 @@
 #include "G4UIcmdWithoutParameter.hh"
 #include "G4RunManager.hh"
 #include "G4Run.hh"
+#include "G4UIsession.hh"
 
 ////////////// /vis/enable ///////////////////////////////////////
 
@@ -178,15 +179,7 @@ void G4VisCommandReviewKeptEvents::SetNewValue (G4UIcommand*, G4String newValue)
     return;
   }
 
-  const G4Scene* scene = fpVisManager->GetCurrentScene();
-  if (!scene) {
-    if (verbosity >= G4VisManager::errors) {
-      G4cout <<
-  "ERROR: No current scene - create or use \"/vis/drawVolume\"."
-             << G4endl;
-    }
-    return;
-  }
+  G4VSceneHandler* sceneHandler = fpVisManager->GetCurrentSceneHandler();
 
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
   G4int keepVerbose = UImanager->GetVerboseLevel();
@@ -195,40 +188,36 @@ void G4VisCommandReviewKeptEvents::SetNewValue (G4UIcommand*, G4String newValue)
     newVerbose = 2;
   UImanager->SetVerboseLevel(newVerbose);
 
-  if (scene->GetRefreshAtEndOfEvent()) {
+  // Event by event refreshing...
+  if (macroFileName.empty()) {
 
-    // Event by event refreshing...
-    if (macroFileName.empty()) {
-
-      // Draw to viewer and pause session...
-      for (size_t i = 0; i < nKeptEvents; ++i) {
-	G4cout << "Draw event : " << i << " (" << (*events)[i]
-	       << ") and pause - awaiting implementation." << G4endl;
+    // Draw to viewer and pause session...
+    for (size_t i = 0; i < nKeptEvents; ++i) {
+      const G4Event* event = (*events)[i];
+      if (verbosity >= G4VisManager::warnings) {
+	G4cout << "Drawing event : " << event->GetEventID() <<
+	  ".  Enter any command, then at EndOfEvent, type \"continue\"..."
+	       << G4endl;
       }
-
-    } else {
-
-      // Execute macro file...
-      for (size_t i = 0; i < nKeptEvents; ++i) {
-	G4cout << "Draw event : " << i << " (" << (*events)[i]
-	       << ") with macro file \"" << macroFileName
-	       << " - awaiting implementation." << G4endl;
-	/*
-	fpVisManager->DrawEvent((*events)[i]);
-	UImanager->ApplyCommand("/control/execute " + macroFileName);
-	*/
-      }
+      sceneHandler->SetEvent(event);
+      UImanager->ApplyCommand("/vis/viewer/refresh");
+      G4UIsession* session = UImanager->GetSession();
+      session->PauseSessionStart("EndOfEvent");
+      sceneHandler->SetEvent(0);
     }
 
   } else {
 
-    // Accumulating events...
-    UImanager->ApplyCommand("/vis/scene/notifyHandlers");
-    if (verbosity >= G4VisManager::warnings) {
-      G4cout <<
-    "WARNING: Viewers of this scene refreshed with accumulated events."
-    "\n  To see individual events, \"/vis/scene/endOfEventAction refresh\"."
-	     << G4endl;
+    // Execute macro file...
+    for (size_t i = 0; i < nKeptEvents; ++i) {
+      const G4Event* event = (*events)[i];
+      if (verbosity >= G4VisManager::warnings) {
+	G4cout << "Drawing event : " << event->GetEventID()
+	       << " with macro file \"" << macroFileName << G4endl;
+      }
+      sceneHandler->SetEvent(event);
+      UImanager->ApplyCommand("/control/execute " + macroFileName);
+      sceneHandler->SetEvent(0);
     }
   }
 

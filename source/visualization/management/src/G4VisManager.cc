@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VisManager.cc,v 1.104 2006-11-14 14:59:55 allison Exp $
+// $Id: G4VisManager.cc,v 1.105 2006-11-15 19:25:31 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -1132,7 +1132,7 @@ void G4VisManager::EndOfEvent ()
     G4EventManager::GetEventManager()->GetConstCurrentEvent();
   if (!currentEvent) return;
 
-  DrawEvent(currentEvent);
+  fpSceneHandler->DrawEvent(currentEvent);
 
   G4int nEventsToBeProcessed = 0;
   G4int nKeptEvents = 0;
@@ -1235,28 +1235,6 @@ void G4VisManager::EndOfRun ()
 	"\n  To see events individually: \"/vis/reviewKeptEvents\"."
 	     << G4endl;
     }
-  }
-}
-
-void G4VisManager::DrawEvent(const G4Event* event)
-{
-  // Assumes valid view.
-  const std::vector<G4VModel*>& EOEModelList =
-    fpScene -> GetEndOfEventModelList ();
-  size_t nModels = EOEModelList.size();
-  if (nModels) {
-    ClearTransientStoreIfMarked();
-    G4ModelingParameters* pMP = fpSceneHandler->CreateModelingParameters();
-    pMP->SetEvent(event);
-    for (size_t i = 0; i < nModels; i++) {
-      G4VModel* pModel = EOEModelList [i];
-      pModel -> SetModelingParameters(pMP);
-      fpSceneHandler -> SetModel (pModel);
-      pModel -> DescribeYourselfTo (*fpSceneHandler);
-      pModel -> SetModelingParameters(0);
-    }
-    delete pMP;
-    fpSceneHandler -> SetModel (0);
   }
 }
 
