@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.cc,v 1.15 2006-10-05 16:22:05 vnivanch Exp $
+// $Id: PhysicsList.cc,v 1.16 2006-11-15 14:58:10 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /////////////////////////////////////////////////////////////////////////
@@ -215,6 +215,24 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     hadronPhys.push_back( new G4QStoppingPhysics("stopping"));
     hadronPhys.push_back( new G4IonPhysics("ion"));
     dump = true;
+
+  } else if (name == "QGSP_EL") {
+
+    hadronPhys.push_back( new G4EmExtraPhysics("gamma_nuc"));
+    hadronPhys.push_back( new G4HadronElasticPhysics("LElastic",
+						     verboseLevel,false));
+    hadronPhys.push_back( new HadronPhysicsQGSP());
+    hadronPhys.push_back( new G4QStoppingPhysics("stopping"));
+    hadronPhys.push_back( new G4IonPhysics("ion"));
+
+  } else if (name == "QGSP_EL_ST") {
+
+    hadronPhys.push_back( new G4EmExtraPhysics("gamma_nuc"));
+    hadronPhys.push_back( new G4HadronElasticPhysics("LElastic",
+						     verboseLevel,false));
+    hadronPhys.push_back( new HadronPhysicsQGSP());
+    hadronPhys.push_back( new G4LHEPStoppingPhysics("stopping"));
+    hadronPhys.push_back( new G4IonPhysics("ion"));
 
   } else if (name == "LHEP_EMV") {
 

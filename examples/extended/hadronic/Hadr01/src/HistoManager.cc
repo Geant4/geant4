@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.10 2006-10-31 15:05:33 vnivanch Exp $
+// $Id: HistoManager.cc,v 1.11 2006-11-15 14:58:10 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -35,6 +35,7 @@
 //
 // Modified:
 // 04.06.2006 Adoptation of hadr01 (V.Ivanchenko)
+// 16.11.2006 Add beamFlag (V.Ivanchenko)
 //
 //----------------------------------------------------------------------------
 //
@@ -90,6 +91,7 @@ HistoManager::HistoManager()
   nBinsE    = 100;
   nHisto    = 19;
   length    = 300.*mm;
+  beamFlag  = true;
   material  = 0;
   elm       = 0;
   histo     = new Histo(verbose);

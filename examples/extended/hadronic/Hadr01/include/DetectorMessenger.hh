@@ -23,10 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: DetectorMessenger.hh,v 1.5 2006-10-31 15:05:33 vnivanch Exp $
+// $Id: DetectorMessenger.hh,v 1.6 2006-11-15 14:58:09 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-//
 //
 /////////////////////////////////////////////////////////////////////////
 //
@@ -36,6 +34,7 @@
 //
 // Modified:
 // 04.06.2006 Adoptation of hadr01 (V.Ivanchenko)
+// 16.11.2006 Add beamCmd (V.Ivanchenko)
 //
 ////////////////////////////////////////////////////////////////////////
 //
@@ -77,6 +76,7 @@ private:
   G4UIcmdWithAnInteger*      binCmd;
   G4UIcmdWithAnInteger*      nOfAbsCmd;
   G4UIcmdWithAnInteger*      verbCmd;
+  G4UIcmdWithABool*          beamCmd;
   G4UIcmdWithoutParameter*   updateCmd;
 
 };

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.hh,v 1.6 2006-10-31 15:05:33 vnivanch Exp $
+// $Id: HistoManager.hh,v 1.7 2006-11-15 14:58:09 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -42,6 +42,7 @@
 // Modified:
 // 04.06.2006 Adoptation of hadr01 (V.Ivanchenko)
 // 03.10.2006 Add csFlag (V.Ivanchenko)
+// 16.11.2006 Add beamFlag (V.Ivanchenko)
 //
 //----------------------------------------------------------------------------
 //
@@ -94,6 +95,9 @@ public:
   void SetVerbose(G4int val);        
   G4int GetVerbose() const                      {return verbose;};
 
+  void SetDefaultBeamPositionFlag(G4bool f)     {beamFlag = f;};        
+  G4bool DefaultBeamPosition() const            {return beamFlag;};
+
   void SetTargetMaterial(const G4Material* mat);
   const G4Material* TargetMaterial() const      {return material;};
   const G4Element* TargetElement() const        {return elm;};
@@ -142,6 +146,8 @@ private:
   G4int n_neu_back;
   G4int n_step;
   G4int nHisto;
+
+  G4bool beamFlag;
 
   Histo* histo;
 };

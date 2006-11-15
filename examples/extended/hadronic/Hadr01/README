@@ -49,6 +49,16 @@ defined via standard UI commands
 
 /gun/energy   15 GeV
 /gun/particle proton
+
+Default beam position is -(targetHalfLength + 5*mm) and direction along Z axis.
+Beam position and direction can be changed by gun UI commands:
+
+/gun/position  1 10 3 mm
+/gun/direction 1 0 0
+
+however, position command is active only if before it the flag is set
+
+/testhadr/DefaultBeamPosition false   
  
                            SCORING
 
