@@ -278,6 +278,7 @@ class VisPanel(wx.Panel):
       gApplyUICommand("/vis/scene/endOfRunAction accumulate")
 
     if self.viewerName == "Wired":
+      
       gApplyUICommand("/vis/viewer/select wired")
       gApplyUICommand("/vis/scene/add/trajectories")
 
@@ -285,9 +286,11 @@ class VisPanel(wx.Panel):
       gApplyUICommand("/vis/scene/endOfEventAction accumulate")
       gApplyUICommand("/vis/scene/endOfRunAction accumulate")
 
-#    if g4pipe == 0:
-#    Popen(heprepViewer +  " -file " + heprepDir + "/" + heprepName +".heprep", shell=True)
-#        g4pipe = 1
+# everytime wired is chosen, a new instance of wired is created
+# to reuse single wired, g4pipe.poll() must be checked BEFORE the SECOND Popen
+#      if g4pipe.poll() == None:
+      g4pipe=Popen(heprepViewer+ " -file " + heprepDir+"/" +heprepName +".heprep", shell=True)
+
 
 
 # not used
