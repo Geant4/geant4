@@ -37,6 +37,8 @@
 // 12-Nov-2003 Set upper limit at 10 GeV/n
 // 12-Nov-2003 Insted of the lower limit,
 //             0 is returned to a partilce with energy lowae than 10 MeV/n
+// 15-Nov-2006 Change upper limit to 1 TeV/n
+//             However above 10GeV/n XS become constant.
 
 #include "globals.hh"
 #include "G4Proton.hh"
@@ -47,7 +49,7 @@ class G4IonsShenCrossSection : public G4VCrossSectionDataSet
 {
    public:
       G4IonsShenCrossSection ():
-         upperLimit ( 10 * GeV ),
+         upperLimit ( 1 * TeV ),
          lowerLimit ( 10 * MeV ),
          r0 ( 1.1 )
       {

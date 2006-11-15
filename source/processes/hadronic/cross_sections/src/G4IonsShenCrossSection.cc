@@ -25,6 +25,7 @@
 //
 // 18-Sep-2003 First version is written by T. Koi
 // 12-Nov-2003 Add energy check at lower side T. Koi
+// 15-Nov-2006 Above 10GeV/n Cross Section become constant T. Koi (SLAC/SCCS)
 
 #include "G4IonsShenCrossSection.hh"
 #include "G4ParticleTable.hh"
@@ -39,6 +40,7 @@ GetCrossSection(const G4DynamicParticle* aParticle, const G4Element* anElement, 
    G4int Ap = aParticle->GetDefinition()->GetBaryonNumber();
    G4int Zp = int ( aParticle->GetDefinition()->GetPDGCharge() / eplus + 0.5 ); 
    G4double ke_per_N = aParticle->GetKineticEnergy() / Ap; 
+   if ( ke_per_N > 10*GeV ) ke_per_N = 10*GeV;
 
 // Apply energy check, if less than lower limit then 0 value is returned
    if (  ke_per_N < lowerLimit )
