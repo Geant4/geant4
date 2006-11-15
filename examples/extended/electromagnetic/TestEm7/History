@@ -1,4 +1,4 @@
-$Id: History,v 1.40 2006-10-26 17:52:42 vnivanch Exp $
+$Id: History,v 1.41 2006-11-15 18:49:25 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+15-11-06: V.Ivant (testem7-V08-01-01)
+- Add NIST materials
 
 26-10-06 mma (testem7-V08-01-00)
 - Add "standardSS" and "standardMSC" options to Physics List

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.17 2006-10-24 11:37:56 vnivanch Exp $
+// $Id: PhysicsList.cc,v 1.18 2006-11-15 18:48:17 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -38,6 +38,8 @@
 #include "PhysListHadronElastic.hh"
 #include "PhysListBinaryCascade.hh"
 #include "PhysListIonBinaryCascade.hh"
+
+#include "G4EmProcessOptions.hh"
 
 #include "G4LossTableManager.hh"
 #include "G4UnitsTable.hh"
@@ -175,6 +177,9 @@ void PhysicsList::ConstructProcess()
   // step limitation (as a full process)
   //  
   AddStepMax();
+  
+  G4EmProcessOptions opt;
+  opt.SetDEDXBinning(480);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
