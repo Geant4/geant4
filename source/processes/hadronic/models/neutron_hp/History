@@ -14,6 +14,26 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+15 November 2006 Tatsumi Koi (hadr-hpn-V08-00-04)
+---------------------------------------------------------------
+- G4NeutronHPElasticFS.hh , cc : add new type final state generator
+- G4NeutronHPFission.cc : Bug Report[857]
+- 4NeutronHPElasticFS.cc : buf fix
+- new cross secton data set and models below 4eV based on 
+  Thermal neutron scattering files from the evaluated nuclear data files 
+  ENDF/B-VI, Release2
+   New files 
+      G4NeutronHPThermalScatteringNames.hh , cc 
+      G4NeutronHPThermalScattering.hh , cc 
+      G4NeutronHPThermalScatteringData.hh , cc 
+- new cross secton data set based on JENDL HE files 20MeV - 3GeV
+   New files 
+      G4NeutronHPJENDLHEData.hh , .cc 
+      G4NeutronHPJENDLHEElasticData.hh , .cc 
+      G4NeutronHPJENDLHEInelasticData.hh , .cc 
+
+
+
 02 June 2006 Dennis Wright for Tatsumi Koi (hadr-hpn-V08-00-03)
 ---------------------------------------------------------------
 - retag of hard-hpn-v08-00-03 with History info added
