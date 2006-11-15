@@ -115,10 +115,13 @@ binary cascade approach for the modeling of proton hadronic physics.
 
 3. PRIMARY PARTICLES
 
-Primary particles are generated according spectra derived from the differential flux (CREME 96).
+Primary particles are generated according spectra derived from the
+differential flux (CREME 96).
 gcr_min_z=1.txt and gcr_min_z=2.txt contain the differential flux 
-of galactic cosmic protons and alpha particles with respect to the energy (MeV/nucl). 
-These files are read by the primary particle component of the application and the spectra are derived.
+of galactic cosmic protons and alpha particles with respect to the 
+energy (MeV/nucl). 
+These files are read by the primary particle component of the application
+and the spectra are derived.
 Primary particles are generated from a point set in 
 the position (0., 0., -25. m), with a direction (0., 0., 1.) by default.
 The user can change these parameters interactively.
