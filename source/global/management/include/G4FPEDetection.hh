@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FPEDetection.hh,v 1.1 2006-11-15 12:09:56 gcosmo Exp $
+// $Id: G4FPEDetection.hh,v 1.2 2006-11-15 16:00:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,6 +41,7 @@
 #ifndef G4FPEDetection_h
 #define G4FPEDetection_h 1
 
+#ifdef __linux__
 #ifdef __GNUC__
   #include <features.h>
   #include <fenv.h>
@@ -52,7 +53,40 @@
 
   void TerminationSignalHandler(int sig)
   {
-    std::cerr << "ERROR: " << sig << std::endl;
+    std::cerr << "ERROR: " << sig;
+    std::string message;
+    switch (SIGFPE)
+    {
+      case FPE_INTDIV:
+        message = "Integer divide by zero.";
+        break;
+      case FPE_INTOVF:
+        message = "Integer overflow.";
+        break;
+      case FPE_FLTDIV:
+        message = "Floating point divide by zero.";
+        break;
+      case FPE_FLTOVF:
+        message = "Floating point overflow.";
+        break;
+      case FPE_FLTUND:
+        message = "Floating point underflow.";
+        break;
+      case FPE_FLTRES:
+        message = "Floating point inexact result.";
+        break;
+      case FPE_FLTINV:
+        message = "Floating point invalid operation.";
+        break;
+      case FPE_FLTSUB:
+        message = "Subscript out of range.";
+        break;
+      default:
+        message = "Unknown error.";
+        break;
+    }
+    std::cerr << " - " << message << std::endl;
+
     ::abort();
   }
 
@@ -79,6 +113,7 @@
     termaction.sa_flags=0;
     sigaction(SIGFPE, &termaction,&oldaction);
   }
+#endif
 #else
   void InvalidOperationDetection() {;}
 #endif
