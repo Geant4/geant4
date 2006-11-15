@@ -24,12 +24,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManagerKernel.cc,v 1.34 2006-06-29 21:13:52 gunter Exp $
+// $Id: G4RunManagerKernel.cc,v 1.35 2006-11-15 12:19:26 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 
 #include "G4RunManagerKernel.hh"
+
+#include <vector>
 
 #include "G4StateManager.hh"
 #include "G4ApplicationState.hh"
@@ -51,7 +53,10 @@
 #include "G4UnitsTable.hh"
 #include "G4Version.hh"
 #include "G4ios.hh"
-#include <vector>
+
+#ifdef G4FPE_DEBUG
+  #include "G4FPEDetection.hh"
+#endif
 
 G4RunManagerKernel* G4RunManagerKernel::fRunManagerKernel = 0;
 
@@ -64,6 +69,10 @@ G4RunManagerKernel::G4RunManagerKernel()
  geometryNeedsToBeClosed(true),geometryToBeOptimized(true),
  physicsNeedsToBeReBuilt(true),verboseLevel(0)
 {
+#ifdef G4FPE_DEBUG
+  InvalidOperationDetection();
+#endif
+
   defaultExceptionHandler = new G4ExceptionHandler();
   if(fRunManagerKernel)
   {
@@ -191,8 +200,7 @@ void G4RunManagerKernel::DefineWorldVolume(G4VPhysicalVolume* worldVol,
 
   // Set the world volume, notify the Navigator and reset its state
   G4TransportationManager::GetTransportationManager()
-      ->GetNavigatorForTracking()
-      ->SetWorldVolume(currentWorld); 
+      ->SetWorldForTracking(currentWorld);
   if(topologyIsChanged) geometryNeedsToBeClosed = true;
   
   // Notify the VisManager as well
