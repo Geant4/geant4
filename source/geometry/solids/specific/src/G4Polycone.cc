@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polycone.cc,v 1.33 2006-11-15 09:11:40 allison Exp $
+// $Id: G4Polycone.cc,v 1.34 2006-11-15 10:40:38 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -980,24 +980,24 @@ G4Polyhedron* G4Polycone::CreatePolyhedron() const
           }
           else if (iSide == numSide - 1)   // endPhi
           {
-	    if (iCorner < numCorner - 1)
+            if (iCorner < numCorner - 1)
               {
                 faces_vec[iface][0] = ixyz + 1;
                 faces_vec[iface][1] = ixyz + numCorner + 1;
                 faces_vec[iface][2] = ixyz + numCorner + 2;
                 faces_vec[iface][3] = -(ixyz + 2);
               }
-	    else
+            else
               {
                 faces_vec[iface][0] = ixyz + 1;
                 faces_vec[iface][1] = ixyz + numCorner + 1;
                 faces_vec[iface][2] = ixyz + 2;
                 faces_vec[iface][3] = -(ixyz - numCorner + 2);
               }
-	  }
-	  else
+          }
+          else
           {
-	    if (iCorner < numCorner - 1)
+            if (iCorner < numCorner - 1)
               {
                 faces_vec[iface][0] = ixyz + 1;
                 faces_vec[iface][1] = -(ixyz + numCorner + 1);
@@ -1014,8 +1014,8 @@ G4Polyhedron* G4Polycone::CreatePolyhedron() const
             }
             ++iface;
             ++ixyz;
-	}
-	phi += dPhi;
+        }
+        phi += dPhi;
       }
 
       // Last corners...
