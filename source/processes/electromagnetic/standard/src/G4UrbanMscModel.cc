@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel.cc,v 1.22 2006-11-07 17:08:50 urban Exp $
+// $Id: G4UrbanMscModel.cc,v 1.23 2006-11-15 16:04:51 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -110,6 +110,7 @@
 // 06-11-06 corrections in ComputeTruePathLengthLimit, results are
 //          more stable in calorimeters (L.Urban)
 // 07-11-06 fix in GeomPathLength and SampleCosineTheta (L.Urban)
+// 15-11-06 bugfix in SampleCosineTheta (L.Urban)
 //
 
 // Class Description:
@@ -853,15 +854,6 @@ G4double G4UrbanMscModel::SampleCosineTheta(G4double trueStepLength,
   G4double cth = 1. ;
   G4double tau = trueStepLength/lambda0 ;
 
-  if(trueStepLength >= currentRange*dtrl)
-    if(par1*trueStepLength < 1.)
-      tau = -par2*log(1.-par1*trueStepLength) ;
-    else
-      tau = taubig ;
-
-  currentTau = tau ;
-  lambdaeff = trueStepLength/currentTau;
-  currentRadLength = couple->GetMaterial()->GetRadlen();
   Zeff = couple->GetMaterial()->GetTotNbOfElectPerVolume()/
          couple->GetMaterial()->GetTotNbOfAtomsPerVolume() ;
 
@@ -873,10 +865,10 @@ G4double G4UrbanMscModel::SampleCosineTheta(G4double trueStepLength,
     G4int n = G4Poisson(mean);
     if(n > 0)
     {
-      G4double tau = KineticEnergy/mass;
+      G4double tm = KineticEnergy/mass;
       // ascr - screening parameter, factor 0.025 comes from 
       // requirement of 'smooth' transition msc -> single scattering
-      G4double ascr = 0.025*exp(log(Zeff)/3.)/(137.*sqrt(tau*(tau+2.)));
+      G4double ascr = 0.025*exp(log(Zeff)/3.)/(137.*sqrt(tm*(tm+2.)));
       G4double ascr1 = 1.+0.5*ascr*ascr;
       G4double bp1=ascr1+1.;
       G4double bm1=ascr1-1.;
@@ -899,6 +891,16 @@ G4double G4UrbanMscModel::SampleCosineTheta(G4double trueStepLength,
   }
   else
   {
+    if(trueStepLength >= currentRange*dtrl)
+      if(par1*trueStepLength < 1.)
+        tau = -par2*log(1.-par1*trueStepLength) ;
+      else
+        tau = taubig ;
+
+    currentTau = tau ;
+    lambdaeff = trueStepLength/currentTau;
+    currentRadLength = couple->GetMaterial()->GetRadlen();
+
     if (tau >= taubig) cth = -1.+2.*G4UniformRand();
     else if (tau >= tausmall)
     {
