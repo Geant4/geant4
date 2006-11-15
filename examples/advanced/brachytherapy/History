@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.19 2006-11-14 15:24:21 allison Exp $
+$Id: History,v 1.20 2006-11-15 10:02:16 guatelli Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,9 @@ $Id: History,v 1.19 2006-11-14 15:24:21 allison Exp $
 
                       Category History file
                       ---------------------
+15th November 2006 Susanna Guatelli (brachy-V08-01-00)
+- Physics list cleaned. The cut is fixed to a value lower than the 
+  1 keV limit. 
 
 14th November 2006  John Allison  (brachy-V08-01-00)
 - Removed /vis/scene/transientsAction none (no longer available).
