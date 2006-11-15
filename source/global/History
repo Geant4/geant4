@@ -1,4 +1,4 @@
-$Id: History,v 1.171 2006-11-02 15:47:48 gcosmo Exp $
+$Id: History,v 1.172 2006-11-15 12:13:43 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov 15, 2006  G.Cosmo (global-V08-01-05)
+- Added signal handler for debugging FPE signals and catching NaNs in
+  applications. Works only on Linux with gcc compiler.
+  Activated through the run-manager if "run" module is compiled with
+  the flag G4FPE_DEBUG set in the environment.
+- Changed date for release 8.2.
 
 Nov 02, 2006  G.Cosmo (global-V08-01-04)
 - Removed definitions of 'sysconf()', 'filetime2msec()' and 'times()' for
