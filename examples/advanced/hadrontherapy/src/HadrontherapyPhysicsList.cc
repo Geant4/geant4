@@ -84,12 +84,16 @@ HadrontherapyPhysicsList::HadrontherapyPhysicsList(): G4VModularPhysicsList(),
 						      decayIsRegistered(false)
 {
   //
-  // The threshold of production of secondaries is fixed to 10. mm
+  // The threshold of production of secondaries is fixed to 0.01 mm
   // for all the particles, in all the experimental set-up
-  // The phantom is defined as a Geant4 Region. Here the cut is fixed to 0.001 * mm.
+  // The phantom is defined as a Geant4 Region. Here the cut is fixed to 0.01 * mm.
   //
  
-  defaultCutValue = 1. * mm;
+
+  defaultCutValue = 0.01 * mm;
+
+
+
 
   // Messenger: it is possible to activate interactively physics processes and models
   messenger = new HadrontherapyPhysicsListMessenger(this);
@@ -652,7 +656,7 @@ void HadrontherapyPhysicsList::SetCuts()
   G4String regionName = "PhantomLog";
   G4Region* region = G4RegionStore::GetInstance()->GetRegion(regionName);
   G4ProductionCuts* cuts = new G4ProductionCuts ;
-  G4double regionCut = 0.001*mm;
+  G4double regionCut = 0.01*mm;
   cuts -> SetProductionCut(regionCut,G4ProductionCuts::GetIndex("gamma"));
   cuts -> SetProductionCut(regionCut,G4ProductionCuts::GetIndex("e-"));
   cuts -> SetProductionCut(regionCut,G4ProductionCuts::GetIndex("e+"));

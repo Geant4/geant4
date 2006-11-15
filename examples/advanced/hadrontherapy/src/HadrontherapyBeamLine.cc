@@ -140,59 +140,7 @@ void HadrontherapyBeamLine::HadrontherapyBeamLineSupport()
   gray-> SetForceSolid(true);
   logicBeamLineSupport -> SetVisAttributes(gray);
 
-  /*
-  //---------------------------------//
-  //  Beam line cover 1 (left panel) //
-  //---------------------------------//
-
-  const G4double beamLineCoverXSize = 1.5*m;
-  const G4double beamLineCoverYSize = 750.*mm;
-  const G4double beamLineCoverZSize = 10.*mm;                               
-
-  const G4double beamLineCoverXPosition = -1948.59 *mm;
-  const G4double beamLineCoverYPosition = -980.*mm; 
-  const G4double beamLineCoverZPosition = 600.*mm;
-
-  G4Box* beamLineCover = new G4Box("BeamLineCover",
-				   beamLineCoverXSize, 
-				   beamLineCoverYSize, 
-				   beamLineCoverZSize);
-
-  G4LogicalVolume* logicBeamLineCover = new G4LogicalVolume(beamLineCover, 
-							    Al, 
-							    "BeamLineCover");
-
-  physiBeamLineCover = new G4PVPlacement(0, G4ThreeVector(beamLineCoverXPosition,
-							  beamLineCoverYPosition,
-							  beamLineCoverZPosition),
-					 "BeamLineCover", 
-					 logicBeamLineCover, 
-					 mother,
-					 false, 
-					 0);
-  */
-
-  // ---------------------------------//
-  //  Beam line cover 2 (rigth panel) //
-  // ---------------------------------//
-  /*
-  // It has the same characteristic of beam line cover 1 but set in a different position
-  physiBeamLineCover2 = new G4PVPlacement(0, G4ThreeVector(beamLineCoverXPosition,
-							   beamLineCoverYPosition,
-							   - beamLineCoverZPosition),
-					  "BeamLineCover2", 
-					  logicBeamLineCover, 
-					  mother, 
-					  false, 
-					  0);
-
-  // Visualisation attributes of the beam line covers
-  G4VisAttributes* blue = new G4VisAttributes(G4Colour(0. ,0. ,1.));
-  blue -> SetVisibility(true);
-  blue -> SetForceSolid(true);
-  logicBeamLineCover -> SetVisAttributes(blue);
-  */
-
+  
 }
 
 void HadrontherapyBeamLine::HadrontherapyBeamScatteringFoils()
@@ -590,7 +538,6 @@ void HadrontherapyBeamLine::HadrontherapyBeamCollimators()
   const G4double secondCollimatorModulatorYPosition = 0.*mm;
   const G4double secondCollimatorModulatorZPosition = 0.*mm;
 
-  // G4Material* Al = material -> GetMat("MatAluminum"); 
 
   G4Box* solidSecondCollimatorModulatorBox = new G4Box("SecondCollimatorModulatorBox", 
 						      secondCollimatorModulatorXSize,
@@ -806,7 +753,7 @@ void HadrontherapyBeamLine::HadrontherapyBeamNozzle()
 
   G4Material* PMMA = material -> GetMat("PMMA");
   G4Material* Brass = material -> GetMat("Brass") ;
-  G4Material* Air = material -> GetMat("Air") ;
+  //  G4Material* Air = material -> GetMat("Air") ;
 
   G4double phi = 90. *deg;     
 

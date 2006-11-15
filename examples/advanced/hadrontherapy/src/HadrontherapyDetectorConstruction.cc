@@ -124,12 +124,16 @@ void HadrontherapyDetectorConstruction::ConstructBeamLine()
                                                             "logicTreatmentRoom", 
 							    0,0,0);
 
+
+
   physicalTreatmentRoom = new G4PVPlacement(0,
 					    G4ThreeVector(),
 					    "physicalTreatmentRoom", 
 					    logicTreatmentRoom, 
 					    0,false,0);
 
+  G4double maxStepTreatmentRoom = 0.1 *mm;
+  logicTreatmentRoom -> SetUserLimits(new G4UserLimits(maxStepTreatmentRoom));
 
   // The treatment room is invisible in the Visualisation
   logicTreatmentRoom -> SetVisAttributes (G4VisAttributes::Invisible);
@@ -184,7 +188,7 @@ void HadrontherapyDetectorConstruction::ConstructPhantom()
 					     0,0,0);
 
   // Fixing the max step allowed in the phantom
-  G4double maxStep = 0.02*cm;
+  G4double maxStep = 0.01 *mm;
   phantomLogicalVolume -> SetUserLimits(new G4UserLimits(maxStep));
 
   G4double phantomXtranslation = -180.*mm;
