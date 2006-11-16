@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<gdml xmlns:gdml="http://cern.ch/2001/Schemas/GDML" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="/home2/gguerrie/devel/GDML_2_1_0/GDMLSchema/gdml.xsd" >
+<gdml xmlns:gdml="http://cern.ch/2001/Schemas/GDML" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="/local/GDML_2_8_0/src/GDMLSchema/gdml.xsd" >
  <define> 
   <constant name="PI" value="1.*pi" />
   <constant name="TWOPI" value="2.*pi"/>
@@ -57,7 +57,9 @@
  <solids>
  
   <eltube aunit="cm" lunit="cm" name="DescendingColonLowerLargeIntestine" dx="1.62" dy="2.09" dz="6.885" />
+
   <torus aunit="radian" lunit="cm" name="SigmoidColonUpLowerLargeIntestine" rmin="0.0" rmax="1.62" rtor="5.16" startphi="0" deltaphi="HALFPI" />
+
   <torus aunit="radian" lunit="cm" name="SigmoidColonDownLowerLargeIntestine" rmin="0.0" rmax="1.62" rtor="2.70" startphi="0" deltaphi="HALFPI" />
 
   <union name="SigmoidColonLowerLargeIntestine">
