@@ -220,7 +220,7 @@ g4file.close()
 
 setupFile = open( "setup.sh", "w" )
 
-###setupFile.write( "export VO_GEANT4_SW_DIR=/data/dirGrid/dirJun06 \n" )   #***LOOKHERE***
+###setupFile.write( "export VO_GEANT4_SW_DIR=/data/dirGrid/dirDec06 \n" )   #***LOOKHERE***
 
 setupFile.write( "export DIR_INSTALLATIONS=$VO_GEANT4_SW_DIR/dirInstallations \n" )
 
@@ -248,10 +248,10 @@ else :
     setupFile.write( "export G4INSTALL=$DIR_INSTALLATIONS/$G4_RELEASE \n" )
     setupFile.write( "export G4LIB=$DIR_INSTALLATIONS/$G4_RELEASE/lib \n" )
     
-setupFile.write( "export G4LEVELGAMMADATA=$DIR_INSTALLATIONS/dirG4DATA/PhotonEvaporation \n" )
-setupFile.write( "export G4RADIOACTIVEDATA=$DIR_INSTALLATIONS/dirG4DATA/RadiativeDecay \n" )
-setupFile.write( "export G4LEDATA=$DIR_INSTALLATIONS/dirG4DATA/G4EMLOW \n" )
-setupFile.write( "export NeutronHPCrossSections=$DIR_INSTALLATIONS/dirG4DATA/G4NDL \n")
+setupFile.write( "export G4LEVELGAMMADATA=$G4INSTALL/data/PhotonEvaporation \n" )
+setupFile.write( "export G4RADIOACTIVEDATA=$G4INSTALL/data/RadioactiveDecay \n" )
+setupFile.write( "export G4LEDATA=$G4INSTALL/data/G4EMLOW \n" )
+setupFile.write( "export NeutronHPCrossSections=$G4INSTALL/data/G4NDL \n")
 
 setupFile.write( "export CLHEP_BASE_DIR=$DIR_INSTALLATIONS/dirCLHEP \n" )
 setupFile.write( "export CLHEP_INCLUDE_DIR=$CLHEP_BASE_DIR/include \n" )
