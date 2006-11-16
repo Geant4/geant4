@@ -247,7 +247,7 @@ void HadrontherapyProtonBertini::ConstructProcess()
   G4LEDeuteronInelastic* theDeuteronLEInelasticModel = new G4LEDeuteronInelastic;
   // Set the maximum energy for LEP model
   theDeuteronLEInelasticModel->SetMaxEnergy(LEPHighEnergyLimit);
-  G4DeuteronInelasticProcess theDeuteronInelasticProcess;
+ // G4DeuteronInelasticProcess theDeuteronInelasticProcess;
  
   // Activate the Tripathi and Shen Cross Section
   theDeuteronInelasticProcess.AddDataSet(tripathiCrossSection);
@@ -273,7 +273,7 @@ void HadrontherapyProtonBertini::ConstructProcess()
   theTritonLEInelasticModel->SetMaxEnergy(LEPHighEnergyLimit);
 
   // Activate the Tripathi and Shen Cross Section
-  G4TritonInelasticProcess theTritonInelasticProcess;
+  //G4TritonInelasticProcess theTritonInelasticProcess;
   theTritonInelasticProcess.AddDataSet(tripathiCrossSection);
   theTritonInelasticProcess.AddDataSet(aShen);
 
@@ -296,7 +296,7 @@ void HadrontherapyProtonBertini::ConstructProcess()
   // Set the maximum energy for LEP model
   theAlphaLEInelasticModel->SetMaxEnergy(LEPHighEnergyLimit);
 
-  G4AlphaInelasticProcess theAlphaInelasticProcess;
+  //G4AlphaInelasticProcess theAlphaInelasticProcess;
 
   //  Activate the Tripathi and Shen Cross Section
   theAlphaInelasticProcess.AddDataSet(tripathiCrossSection);

@@ -8,6 +8,9 @@ $Id: History, v 1.6 2004/02/27  G.A.P. Cirrone
 
                       Category History file
                       ---------------------
+16.11.2006 S. Guatelli (hadrontherapy-V08-01-05)
+         - Physics lists cleaned
+
 15.11.2006  G.A.P. Cirrone (hadrontherapy-V08-01-04)
 	 - Changed cut and cut per region default values. Improved Max Step function
 	   along the beam line.
