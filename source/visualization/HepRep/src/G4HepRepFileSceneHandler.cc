@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HepRepFileSceneHandler.cc,v 1.63 2006-11-16 12:17:54 allison Exp $
+// $Id: G4HepRepFileSceneHandler.cc,v 1.64 2006-11-16 21:06:11 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -583,8 +583,18 @@ void G4HepRepFileSceneHandler::AddCompound (const G4VTrajectory& traj) {
 								strcmp(category,"Association")!=0 &&
 								strcmp(category,"PickAction")!=0)
 								category = "Physics";
-							hepRepXMLWriter->addAttDef(iAttVal->GetName(), iAttDef->second.GetDesc(),
-													   category, iAttDef->second.GetExtra());
+							// Do not write out the Aux or Pos attribute.  Aux does not conform to the HepRep rule
+							// that each object can have only one instance of a given AttValue.
+							// Both of these attributes are redundant to actual position information of the point.
+							// New Wired can just tell the user the point position itself.
+							if (strcmp(iAttVal->GetName(),"Aux-X")!=0 &&
+								strcmp(iAttVal->GetName(),"Aux-Y")!=0 &&
+								strcmp(iAttVal->GetName(),"Aux-Z")!=0 &&
+								strcmp(iAttVal->GetName(),"Pos-X")!=0 &&
+								strcmp(iAttVal->GetName(),"Pos-Y")!=0 &&
+								strcmp(iAttVal->GetName(),"Pos-Z")!=0)
+								hepRepXMLWriter->addAttDef(iAttVal->GetName(), iAttDef->second.GetDesc(),
+														category, iAttDef->second.GetExtra());
 						}
 					}
 				}
@@ -695,7 +705,17 @@ void G4HepRepFileSceneHandler::AddCompound (const G4VTrajectory& traj) {
 					std::vector<G4AttValue>::iterator iAttVal;
 					for (iAttVal = pointAttValues->begin();
 						 iAttVal != pointAttValues->end(); ++iAttVal)
-						hepRepXMLWriter->addAttValue(iAttVal->GetName(), iAttVal->GetValue());
+						// Do not write out the Aux or Pos attribute.  Aux does not conform to the HepRep rule
+						// that each object can have only one instance of a given AttValue.
+						// Both of these attributes are redundant to actual position information of the point.
+						// New Wired can just tell the user the point position itself.
+						if (strcmp(iAttVal->GetName(),"Aux-X")!=0 &&
+							strcmp(iAttVal->GetName(),"Aux-Y")!=0 &&
+							strcmp(iAttVal->GetName(),"Aux-Z")!=0 &&
+							strcmp(iAttVal->GetName(),"Pos-X")!=0 &&
+							strcmp(iAttVal->GetName(),"Pos-Y")!=0 &&
+							strcmp(iAttVal->GetName(),"Pos-Z")!=0)
+							hepRepXMLWriter->addAttValue(iAttVal->GetName(), iAttVal->GetValue());
 					delete pointAttValues;
 				}
 				delete rawPointAttValues;
@@ -795,7 +815,17 @@ void G4HepRepFileSceneHandler::AddCompound (const G4VTrajectory& traj) {
 					std::vector<G4AttValue>::iterator iAttVal;
 					for (iAttVal = pointAttValues->begin();
 						 iAttVal != pointAttValues->end(); ++iAttVal)
-						hepRepXMLWriter->addAttValue(iAttVal->GetName(), iAttVal->GetValue());
+						// Do not write out the Aux or Pos attribute.  Aux does not conform to the HepRep rule
+						// that each object can have only one instance of a given AttValue.
+						// Both of these attributes are redundant to actual position information of the point.
+						// New Wired can just tell the user the point position itself.
+						if (strcmp(iAttVal->GetName(),"Aux-X")!=0 &&
+							strcmp(iAttVal->GetName(),"Aux-Y")!=0 &&
+							strcmp(iAttVal->GetName(),"Aux-Z")!=0 &&
+							strcmp(iAttVal->GetName(),"Pos-X")!=0 &&
+							strcmp(iAttVal->GetName(),"Pos-Y")!=0 &&
+							strcmp(iAttVal->GetName(),"Pos-Z")!=0)
+							hepRepXMLWriter->addAttValue(iAttVal->GetName(), iAttVal->GetValue());
 					delete pointAttValues;
 				}
 				delete rawPointAttValues;
