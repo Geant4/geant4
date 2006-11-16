@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HepRepSceneHandler.cc,v 1.99 2006-11-06 09:21:46 allison Exp $
+// $Id: G4HepRepSceneHandler.cc,v 1.100 2006-11-16 12:17:54 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -1432,7 +1432,9 @@ HepRepInstance* G4HepRepSceneHandler::getGeometryInstance(G4LogicalVolume* volum
     HepRepInstance* instance = getGeometryInstance(volume->GetName(), depth);
 
     setAttribute(instance, "LVol",       volume->GetName());
-    setAttribute(instance, "Region",     volume->GetRegion()->GetName());
+    G4Region* region = volume->GetRegion();
+    G4String regionName = region? region->GetName(): G4String("No region");
+    setAttribute(instance, "Region",     regionName);
     setAttribute(instance, "RootRegion", volume->IsRootRegion());
     setAttribute(instance, "Solid",      volume->GetSolid()->GetName());
     setAttribute(instance, "EType",      volume->GetSolid()->GetEntityType());

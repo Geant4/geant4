@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HepRepFileSceneHandler.cc,v 1.62 2006-11-15 18:10:18 perl Exp $
+// $Id: G4HepRepFileSceneHandler.cc,v 1.63 2006-11-16 12:17:54 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -1404,7 +1404,9 @@ void G4HepRepFileSceneHandler::AddHepRepInstance(const char* primName,
 		// Additional attributes.
 		hepRepXMLWriter->addAttValue("Layer",hepRepXMLWriter->typeDepth);
 		hepRepXMLWriter->addAttValue("LVol", pCurrentLV->GetName());
-		hepRepXMLWriter->addAttValue("Region", pCurrentLV->GetRegion()->GetName());
+		G4Region* region = pCurrentLV->GetRegion();
+		G4String regionName = region? region->GetName(): G4String("No region");
+		hepRepXMLWriter->addAttValue("Region", regionName);
 		hepRepXMLWriter->addAttValue("RootRegion", pCurrentLV->IsRootRegion());
 		hepRepXMLWriter->addAttValue("Solid", pCurrentLV->GetSolid()->GetName());
 		hepRepXMLWriter->addAttValue("EType", pCurrentLV->GetSolid()->GetEntityType());
