@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronElastic.cc,v 1.31 2006-11-16 16:45:22 vnivanch Exp $
+// $Id: G4HadronElastic.cc,v 1.32 2006-11-16 20:09:13 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -54,6 +54,7 @@
 // 24-Aug-06 V.Ivanchenko switch on G4ElasticHadrNucleusHE
 // 31-Aug-06 V.Ivanchenko do not sample sacttering for particles with kinetic 
 //                        energy below 10 keV
+// 16-Nov-06 V.Ivanchenko Simplify logic of choosing of the model for sampling
 //
 
 #include "G4HadronElastic.hh"
@@ -71,17 +72,16 @@
 #include "G4PionPlus.hh"
 #include "G4PionMinus.hh"
 
-G4HadronElastic::G4HadronElastic(G4double plow, G4double elim, G4double ehigh) 
+G4HadronElastic::G4HadronElastic(G4double, G4double, G4double) 
   : G4HadronicInteraction()
 {
   SetMinEnergy( 0.0*GeV );
   SetMaxEnergy( 100.*TeV );
   verboseLevel= 0;
-  ekinIon     = elim;
-  ekinhigh    = ehigh;
-  ekinlow     = 19.*MeV;
-  ekinpi      = MeV;
-  plablow     = plow;
+  lowEnergyRecoilLimit = 100.*keV;  
+  lowEnergyLimitHE = 0.4*GeV;  
+  lowestEnergyLimit= 10.0*keV;  
+  plabLowLimit     = 20.0*MeV;
 
   qCManager   = G4QElasticCrossSection::GetPointer();
   hElastic    = new G4ElasticHadrNucleusHE();
@@ -116,7 +116,7 @@ G4HadFinalState* G4HadronElastic::ApplyYourself(
 
   const G4HadProjectile* aParticle = &aTrack;
   G4double ekin = aParticle->GetKineticEnergy();
-  if(ekin <= 10.0*keV) {
+  if(ekin <= lowestEnergyLimit) {
     theParticleChange.SetEnergyChange(ekin);
     theParticleChange.SetMomentumChange(aTrack.Get4Momentum().vect().unit());
     return &theParticleChange;
@@ -171,24 +171,21 @@ G4HadFinalState* G4HadronElastic::ApplyYourself(
   // Choose generator
   G4ElasticGenerator gtype = fLElastic;
 
-  // CHIPS Elastic
-  if ((theParticle == theProton || theParticle == theNeutron) && 
-      Z <= 2 && ekin > ekinlow) {
+  // S-wave for very low energy
+  if(plab < plabLowLimit) gtype = fSWave;
+
+  // Q-elastic for p,n scattering on H and He
+  else if ((theParticle == theProton || 
+	    theParticle == theNeutron) && Z <= 2) 
     gtype = fQElastic;
-  } else {
 
-    // High energy elastic 
-    if(ekin >= ekinhigh && A != 2 && A != 3 && A < 238) gtype = fHElastic;
+  // HE-elastic for energetic projectiles
+  else if(ekin >= lowEnergyLimitHE && A != 2 && A != 3 && A < 238) 
+    gtype = fHElastic;
 
-    // Simplification - s-wave
-    else if((theParticle == thePionPlus || 
-	     theParticle == thePionMinus) && 
-	    (ekin <= ekinpi) ) 
-      gtype = fSWave;
-    else if(plab <= plablow) gtype = fSWave;
-  }
-
+  //
   // Sample t
+  //
   if(gtype == fQElastic) {
     if (verboseLevel >1) 
       G4cout << "G4HadronElastic: Z= " << Z << " N= " 
@@ -275,7 +272,7 @@ G4HadFinalState* G4HadronElastic::ApplyYourself(
 	   << nlv0<<" m= " << m2 << " ekin(MeV)= " << erec 
 	   <<G4endl;
 
-  if(erec > ekinIon) {
+  if(erec > lowEnergyRecoilLimit) {
     G4DynamicParticle * aSec = new G4DynamicParticle(theDef, nlv0);
     theParticleChange.AddSecondary(aSec);
   } else {

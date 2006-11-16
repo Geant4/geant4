@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UHadronElasticProcess.cc,v 1.27 2006-10-26 08:44:25 vnivanch Exp $
+// $Id: G4UHadronElasticProcess.cc,v 1.28 2006-11-16 20:09:13 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Geant4 Hadron Elastic Scattering Process -- header file
@@ -53,14 +53,15 @@
 #include "G4Proton.hh"
 #include "G4HadronElastic.hh"
  
-G4UHadronElasticProcess::G4UHadronElasticProcess(const G4String& pName, G4double elow)
-  : G4HadronicProcess(pName), thEnergy(elow), lowestEnergy(0.0), first(true)
+G4UHadronElasticProcess::G4UHadronElasticProcess(const G4String& pName, G4double)
+  : G4HadronicProcess(pName), lowestEnergy(0.0), first(true)
 {
   AddDataSet(new G4HadronElasticDataSet);
-  theProton = G4Proton::Proton();
-  theNeutron = G4Neutron::Neutron();
+  theProton   = G4Proton::Proton();
+  theNeutron  = G4Neutron::Neutron();
+  thEnergy    = 19.0*MeV;
   verboseLevel= 1;
-  qCManager = 0;
+  qCManager   = 0;
 }
 
 G4UHadronElasticProcess::~G4UHadronElasticProcess()
@@ -106,15 +107,16 @@ G4double G4UHadronElasticProcess::GetMeanFreePath(const G4Track& track,
 {
   *cond = NotForced;
   const G4DynamicParticle* dp = track.GetDynamicParticle();
-  const G4Material* material = track.GetMaterial();
   cross = 0.0;
   G4double x = DBL_MAX;
 
   // Compute cross sesctions
+  const G4Material* material = track.GetMaterial();
   const G4ElementVector* theElementVector = material->GetElementVector();
   const G4double* theAtomNumDensityVector = material->GetVecNbOfAtomsPerVolume();
   G4double temp = material->GetTemperature();
-  G4int nelm   = material->GetNumberOfElements();
+  G4int nelm    = material->GetNumberOfElements();
+
   if(verboseLevel>1) 
     G4cout << "G4UHadronElasticProcess get mfp for " 
 	   << theParticle->GetParticleName() 
@@ -147,14 +149,15 @@ G4double G4UHadronElasticProcess::GetMicroscopicCrossSection(
   // gives the microscopic cross section in GEANT4 internal units
   G4int iz = G4int(elm->GetZ());
   G4double x = 0.0;
+
   // CHIPS cross sections
   if(iz <= 2 && dp->GetKineticEnergy() > thEnergy && 
      (theParticle == theProton || theParticle == theNeutron)) {
+
     G4double momentum = dp->GetTotalMomentum();
     G4IsotopeVector* isv = elm->GetIsotopeVector(); 
     G4int ni = 0;
     if(isv) ni = isv->size();
-    //    if(iz == 1) {
     if(ni > 0) {
       G4double* ab = elm->GetRelativeAbundanceVector();
       x = 0.0;
@@ -184,6 +187,7 @@ G4double G4UHadronElasticProcess::GetMicroscopicCrossSection(
 	       << G4endl; 
       x = qCManager->GetCrossSection(false,momentum,iz,N,pPDG);
     }
+    // GHAD cross section
   } else {
     if(verboseLevel>1) 
       G4cout << "G4UHadronElasticProcess compute GHAD CS for element " 
@@ -223,6 +227,7 @@ G4VParticleChange* G4UHadronElasticProcess::PostStepDoIt(
   G4double kineticEnergy = track.GetKineticEnergy();
   if(kineticEnergy <= lowestEnergy) 
     return G4VDiscreteProcess::PostStepDoIt(track,step);
+
   G4double mfp = GetMeanFreePath(track, 0.0, &cn);
   if(mfp == DBL_MAX) 
     return G4VDiscreteProcess::PostStepDoIt(track,step);
@@ -353,3 +358,4 @@ DumpPhysicsTable(const G4ParticleDefinition& aParticleType)
 {
   store->DumpPhysicsTable(aParticleType);
 }
+

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UHadronElasticProcess.hh,v 1.9 2006-10-20 15:22:24 vnivanch Exp $
+// $Id: G4UHadronElasticProcess.hh,v 1.10 2006-11-16 20:09:13 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Geant4 Hadron Elastic Scattering Process -- header file
@@ -55,7 +55,8 @@ class G4UHadronElasticProcess : public G4HadronicProcess
 {
 public:
 
-  G4UHadronElasticProcess(const G4String& procName = "hElastic", G4double elow = 19.*MeV);
+  G4UHadronElasticProcess(const G4String& procName = "hElastic", 
+			  G4double elow = 19.*MeV);
 
   virtual ~G4UHadronElasticProcess();
  
@@ -68,10 +69,11 @@ public:
 
   virtual void DumpPhysicsTable(const G4ParticleDefinition& aParticleType);
 
-  virtual G4double GetMeanFreePath(const G4Track&, G4double, G4ForceCondition*);
+  virtual G4double GetMeanFreePath(const G4Track&, G4double, 
+				   G4ForceCondition*);
 
-  virtual G4double GetMicroscopicCrossSection(const G4DynamicParticle* aParticle,
-					      const G4Element* anElement,
+  virtual G4double GetMicroscopicCrossSection(const G4DynamicParticle*,
+					      const G4Element*,
 					      G4double aTemp);
 
   void SetQElasticCrossSection(G4VQCrossSection*);
