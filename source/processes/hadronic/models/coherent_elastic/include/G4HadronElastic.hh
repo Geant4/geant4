@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HadronElastic.hh,v 1.18 2006-11-16 13:02:07 starkov Exp $
+// $Id: G4HadronElastic.hh,v 1.19 2006-11-16 16:45:22 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -37,6 +37,7 @@
 // 13-Apr-06 V.Ivanchenko move to coherent_elastic 
 // 25-Jul-06 V.Ivanchenko add 19 MeV low energy, below which S-wave is sampled
 // 20-Oct-06 V.Ivanchenko default ekinhigh = GeV (use HE model)
+// 16-Nov-06 V.Ivanchenko default ekinhigh = 0.4*GeV 
 //
 //
 // Class Description
@@ -70,7 +71,7 @@ public:
 
   G4HadronElastic(G4double plow = 20.0*MeV,
                   G4double elim = 100.*keV, 
-		  G4double ehigh= 1.0*GeV);
+		  G4double ehigh= 0.4*GeV);
 
   virtual ~G4HadronElastic();
  
