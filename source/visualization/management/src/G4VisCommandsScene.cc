@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsScene.cc,v 1.59 2006-11-15 19:25:31 allison Exp $
+// $Id: G4VisCommandsScene.cc,v 1.60 2006-11-16 12:55:19 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/scene commands - John Allison  9th August 1998
@@ -494,25 +494,41 @@ void G4VisCommandSceneNotifyHandlers::SetNewValue (G4UIcommand*,
 	const G4int nViewers = viewerList.size ();
 	for (G4int iV = 0; iV < nViewers; iV++) {
 	  G4VViewer* aViewer = viewerList [iV];
-	  aSceneHandler -> SetCurrentViewer (aViewer);
-	  // Ensure consistency of vis manager...
-	  fpVisManager -> SetCurrentViewer(aViewer);
-	  fpVisManager -> SetCurrentSceneHandler(aSceneHandler);
-	  fpVisManager -> SetCurrentScene(aScene);
-	  // Re-draw, forcing rebuild of graphics database, if any...
-	  aViewer -> NeedKernelVisit();
-	  aViewer -> SetView ();
-	  aViewer -> ClearView ();
-	  aViewer -> DrawView ();
-	  if (flush) aViewer -> ShowView ();
-	  if (verbosity >= G4VisManager::confirmations) {
-	    G4cout << "Viewer \"" << aViewer -> GetName ()
-		   << "\" of scene handler \"" << aSceneHandler -> GetName ()
-		   << "\"\n  ";
-	    if (flush) G4cout << "flushed";
-	    else G4cout << "refreshed";
-	    G4cout << " at request of scene \"" << sceneName
-		   << "\"." << G4endl;
+	  if (aViewer->GetViewParameters().IsAutoRefresh()) {
+	    aSceneHandler -> SetCurrentViewer (aViewer);
+	    // Ensure consistency of vis manager...
+	    fpVisManager -> SetCurrentViewer(aViewer);
+	    fpVisManager -> SetCurrentSceneHandler(aSceneHandler);
+	    fpVisManager -> SetCurrentScene(aScene);
+	    // Re-draw, forcing rebuild of graphics database, if any...
+	    aViewer -> NeedKernelVisit();
+	    aViewer -> SetView ();
+	    aViewer -> ClearView ();
+	    aViewer -> DrawView ();
+	    if (flush) aViewer -> ShowView ();
+	    if (verbosity >= G4VisManager::confirmations) {
+	      G4cout << "Viewer \"" << aViewer -> GetName ()
+		     << "\" of scene handler \"" << aSceneHandler -> GetName ()
+		     << "\"\n  ";
+	      if (flush) G4cout << "flushed";
+	      else G4cout << "refreshed";
+	      G4cout << " at request of scene \"" << sceneName
+		     << "\"." << G4endl;
+	    }
+	  } else {
+	    if (verbosity >= G4VisManager::warnings) {
+	      G4cout << "WARNING: The scene, \""
+		     << sceneName
+		     << "\", of viewer \""
+		     << aViewer -> GetName ()
+		     << "\"\n  of scene handler \""
+		     << aSceneHandler -> GetName ()
+		     << "\"  has changed.  To see effect,"
+		     << "\n  \"/vis/viewer/select "
+		     << aViewer -> GetShortName ()
+		     << "\" and \"/vis/viewer/rebuild\"."
+		     << G4endl;
+	    }
 	  }
 	}
       }
