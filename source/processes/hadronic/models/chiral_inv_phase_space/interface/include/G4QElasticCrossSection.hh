@@ -29,7 +29,7 @@
 //
 // GEANT4 physics class: G4QElasticCrossSection -- header file
 // M.V. Kossov, ITEP(Moscow), 24-OCT-01
-// The last update: M.V. Kossov, CERN/ITEP (Moscow) 25-Sept-03
+// The last update: M.V. Kossov, CERN/ITEP (Moscow) 15-Oct-2006
 //
 
 #ifndef G4QElasticCrossSection_h
@@ -84,13 +84,15 @@ private:
   static G4double  lastSIG;  // Last calculated cross section
   static G4double  lastLP;   // Last log(mom_of_the_incident_hadron)
   static G4double  lastTM;   // Last t_maximum                       
-  static G4double  theSS;    // The Last squared slope of first difruction 
-  static G4double  theS1;    // The Last mantissa of first difruction 
-  static G4double  theB1;    // The Last slope of first difruction    
-  static G4double  theS2;    // The Last mantissa of second difruction
-  static G4double  theB2;    // The Last slope of second difruction   
-  static G4double  theS3;    // The Last mantissa of third difruction 
-  static G4double  theB3;    // The Last slope of third difruction    
+  static G4double  theSS;    // The Last squared slope of first diffruction 
+  static G4double  theS1;    // The Last mantissa of first diffruction 
+  static G4double  theB1;    // The Last slope of first diffruction    
+  static G4double  theS2;    // The Last mantissa of second diffruction
+  static G4double  theB2;    // The Last slope of second diffruction   
+  static G4double  theS3;    // The Last mantissa of third diffruction 
+  static G4double  theB3;    // The Last slope of third diffruction    
+  static G4double  theS4;    // The Last mantissa of 4-th diffruction 
+  static G4double  theB4;    // The Last slope of 4-th diffruction    
   // ---- Global (AMBD of P-dependent tables for pPDG,tZ,tN) -----
   static G4int     lastPDG;  // Last PDG code of the projectile
   static G4int     lastTZ;   // Last atomic number of the target
@@ -105,5 +107,7 @@ private:
   static G4double* lastB2T;  // E-dep of the slope of theSecond difruction
   static G4double* lastS3T;  // E-dep of mantissa of the third difruction	
   static G4double* lastB3T;  // E-dep of the slope of the third difruction
+  static G4double* lastS4T;  // E-dep of mantissa of the 4-th difruction	
+  static G4double* lastB4T;  // E-dep of the slope of the 4-th difruction
  }; 					
 #endif

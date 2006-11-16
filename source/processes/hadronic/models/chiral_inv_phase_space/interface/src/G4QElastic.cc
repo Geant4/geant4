@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QElastic.cc,v 1.7 2006-08-09 10:19:22 mkossov Exp $
+// $Id: G4QElastic.cc,v 1.8 2006-11-16 11:33:25 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QElastic class -----------------
@@ -37,7 +37,7 @@
 //#define debug
 //#define pdebug
 //#define tdebug
-#define nandebug
+//#define nandebug
 
 #include "G4QElastic.hh"
 
@@ -86,19 +86,12 @@ G4double G4QElastic::GetMeanFreePath(const G4Track& aTrack,G4double Q,G4ForceCon
 #ifdef debug
   G4cout<<"G4QElastic::GetMeanFreePath:"<<nE<<" Elem's in theMaterial"<<G4endl;
 #endif
-  G4VQCrossSection* CSmanager=0;
+  G4VQCrossSection* CSmanager=G4QElasticCrossSection::GetPointer();
   G4int pPDG=0;
-  if(incidentParticleDefinition == G4Proton::Proton())
-  {
-    CSmanager=G4QElasticCrossSection::GetPointer();
-    pPDG=2212;
-  }
-  else if(incidentParticleDefinition == G4Neutron::Neutron())
-  {
-    CSmanager=G4QElasticCrossSection::GetPointer();
-    pPDG=2112;
-  }
-  else G4cout<<"G4QElastic::GetMeanFreePath: np,pp,pd,pHe implemented in CHIPS"<<G4endl;
+
+  if     (incidentParticleDefinition == G4Proton::Proton()  ) pPDG=2212;
+  else if(incidentParticleDefinition == G4Neutron::Neutron()) pPDG=2112;
+  else G4cout<<"G4QElastic::GetMeanFreePath:only nA & pA are implemented in CHIPS"<<G4endl;
   
   G4QIsotope* Isotopes = G4QIsotope::Get(); // Pointer to the G4QIsotopes singleton
   G4double sigma=0.;                        // Sums over elements for the material
@@ -367,9 +360,18 @@ G4VParticleChange* G4QElastic::PostStepDoIt(const G4Track& track, const G4Step& 
     return 0;
   }
   aParticleChange.Initialize(track);
+#ifdef debug
+  G4cout<<"G4QElastic::PostStepDoIt: track is initialized"<<G4endl;
+#endif
   G4double localtime = track.GetGlobalTime();
   G4ThreeVector position = track.GetPosition();
+#ifdef debug
+  G4cout<<"G4QElastic::PostStepDoIt: before Touchable extraction"<<G4endl;
+#endif
   G4TouchableHandle trTouchable = track.GetTouchableHandle();
+#ifdef debug
+  G4cout<<"G4QElastic::PostStepDoIt: Touchable is extracted"<<G4endl;
+#endif
   //
   G4int targPDG=90000000+Z*1000+N;         // CHIPS PDG Code of the target nucleus
   G4QPDGCode targQPDG(targPDG);
