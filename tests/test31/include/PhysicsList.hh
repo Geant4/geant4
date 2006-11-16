@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.hh,v 1.5 2006-06-29 21:56:49 gunter Exp $
+// $Id: PhysicsList.hh,v 1.6 2006-11-16 11:33:40 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Modified:
@@ -45,7 +45,7 @@ class PhysicsList: public G4VModularPhysicsList
 {
 public:
   PhysicsList();
-  ~PhysicsList();
+  virtual ~PhysicsList();
 
   void ConstructParticle();
   void ConstructProcess();
@@ -70,8 +70,10 @@ private:
   G4bool   bicIsRegisted;
   G4bool   ionIsRegisted;
   G4bool   gnucIsRegisted;
+  G4bool   stopIsRegisted;
 
   PhysicsListMessenger* pMessenger;
+  G4String emName;
 
 };
 
