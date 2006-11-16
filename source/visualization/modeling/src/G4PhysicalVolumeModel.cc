@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeModel.cc,v 1.56 2006-11-05 20:38:08 allison Exp $
+// $Id: G4PhysicalVolumeModel.cc,v 1.57 2006-11-16 12:11:30 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -701,7 +701,9 @@ std::vector<G4AttValue>* G4PhysicalVolumeModel::CreateCurrentAttValues() const
     oss << fpCurrentPV->GetCopyNo();
     values->push_back(G4AttValue("Copy", oss.str(),""));
     values->push_back(G4AttValue("LVol", fpCurrentLV->GetName(),""));
-    values->push_back(G4AttValue("Region", fpCurrentLV->GetRegion()->GetName(),""));
+    G4Region* region = fpCurrentLV->GetRegion();
+    G4String regionName = region? region->GetName(): G4String("No region");
+    values->push_back(G4AttValue("Region", regionName,""));
     oss.str(""); oss << fpCurrentLV->IsRootRegion();
     values->push_back(G4AttValue("RootRegion", oss.str(),""));
     G4VSolid* pSol = fpCurrentLV->GetSolid();
