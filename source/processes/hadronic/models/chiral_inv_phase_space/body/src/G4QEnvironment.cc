@@ -27,7 +27,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4QEnvironment.cc,v 1.114 2006-10-27 16:47:34 mkossov Exp $
+// $Id: G4QEnvironment.cc,v 1.115 2006-11-16 11:36:09 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QEnvironment ----------------
@@ -768,6 +768,7 @@ void G4QEnvironment::CreateQuasmon(const G4QContent& projQC, const G4LorentzVect
 #ifdef pdebug
 	     G4cout<<"G4QE::CrQ:AnihN="<<tNH<<", tC="<<totCharge<<",tB="<<totBaryoN<<G4endl;// ^ ^
 #endif
+      G4double ra=std::pow(totBaryoN,.333333);
       for (G4int ind=0; ind<tNH; ind++)        // Loop over annihilation  QHadrons      ^ ^
       {
         //G4QHadron* curHadr = output->operator[](ind); // Pointer to theCurrentHadron  ^ ^
@@ -782,15 +783,24 @@ void G4QEnvironment::CreateQuasmon(const G4QContent& projQC, const G4LorentzVect
 		      G4cout<<"G4QE::CrQ:"<<ind<<","<<shDFL<<",PDG="<<curHadr->GetPDGCode() //        ^ ^
               <<",4M="<<curHadr->Get4Momentum()<<G4endl;//                              ^ ^
 #endif
-        G4double solAnCut=SolidAngle+250*shCHG/shMOM;   // ChargeDepSolAngle            ^ ^
+        G4double solAnCut=SolidAngle+1000*shCHG/shMOM/ra;// ChargeDepSolAngle           ^ ^
         //G4double solAnCut=SolidAngle+20*shCHG*sqrt(1.*envZ)/shMOM;//ChargeDepSolAngle ^ ^
+#ifdef pdebug
+		      G4cout<<"G4QE::CrQ: PDG="<<curHadr->GetPDGCode()<<", p="<<shMOM<<", r="<<ra //  ^ ^
+              <<",d="<<1500*shCHG/shMOM/ra<<G4endl;     //                              ^ ^
+#endif
         if(!shDFL)                                      // Final(notDecayed) hadrons    ^ ^
 		      {
 #ifdef pdebug
 		        G4cout<<"G4QE::CQ:>H="<<shPDG<<":"<<dir.dot(shDIR)<<">"<<solAnCut<<G4endl; // ^ ^
 #endif
-		        if((dir.dot(shDIR)>solAnCut || shMOM<120.) && abs(shPDG)>99) // Absorb mesons ^ ^
+		        //if((dir.dot(shDIR)>solAnCut||shMOM<120.) && abs(shPDG)>99) // Absorb mesons ^ ^
+		        if(dir.dot(shDIR)>solAnCut && abs(shPDG)>99) // Absorb mesons                 ^ ^
 		        {
+#ifdef pdebug
+												G4cout<<"G4QE::CQ:>H="<<shPDG<<":"<<dir.dot(shDIR)<<">"<<solAnCut<<", P="// ^ ^
+																		<<shMOM<<" < 120"<<G4endl;                           //               ^ ^
+#endif
             if(efFlag)                           // => Case of "Energy Flux approach"   ^ ^
 		          {
               G4QContent shQC = curHadr->GetQC();// QuarkContent of the Current Hadron  ^ ^
@@ -3789,18 +3799,43 @@ void G4QEnvironment::EvaporateResidual(G4QHadron* qH, G4bool corFlag)
       theQHadrons.push_back(qH); // (delete equivalent)
       return;
     }
-    else if(thePDG==90000001&&totMass<gsM)
+    else if(totMass<gsM)
 	   {
        G4cerr<<"***G4QE::EvaRes:Baryon "<<thePDG<<" is belowMassShell M="<<totMass<<G4endl;
        throw G4QException("G4QEnvironment::EvaporateResidual: Baryon is below Mass Shell");
     }
-    else
+    else                                 // Decay in gamma or charged pion (@@ neutral)
     {
+      G4double d=totMass-gsM;
 #ifdef debug
-	     G4cout<<"G4QE::ER:DB="<<thePDG<<",M="<<totMass<<">"<<gsM<<",d="<<totMass-gsM<<G4endl;
+	     G4cout<<"G4QE::EvaporResid:PDG="<<thePDG<<",M="<<totMass<<">"<<gsM<<",d="<<d<<G4endl;
 #endif
+      G4int decPDG=22;
+      G4double decM=0.;
+      if(d>142.)                           // @@ to avoid more precise calculations
+						{
+        if(thePDG==90001000)               // D+ -> n + pi+
+								{
+          gsM=mNeut;
+          thePDG=90000001;
+          decPDG=211;
+          decM=mPi;
+        }
+        else if(thePDG==90000001)          // D+ -> n + pi+
+								{
+          gsM=mProt;
+          thePDG=90001000;
+          decPDG=-211;
+          decM=mPi;
+        }
+        else
+								{
+          decPDG=111;
+          decM=mPi0;
+        }
+      }
       G4LorentzVector h4Mom(0.,0.,0.,gsM); // GSMass must be updated in previous while-LOOP
-      G4LorentzVector g4Mom(0.,0.,0.,0.);
+      G4LorentzVector g4Mom(0.,0.,0.,decM);
       if(!G4QHadron(q4M).DecayIn2(h4Mom, g4Mom))
       {
         G4cerr<<"***G4QEnv::EvaRes:h="<<thePDG<<"(GSM="<<gsM<<")+gam>tM="<<totMass<<G4endl;
@@ -3814,12 +3849,68 @@ void G4QEnvironment::EvaporateResidual(G4QHadron* qH, G4bool corFlag)
 #ifdef pdebug
       G4cout<<"G4QE::EvaporateR:Hadr="<<thePDG<<h4Mom<<G4endl;
 #endif
-      theQHadrons.push_back(curH);         // Fill the TotalResidualNucleus (delete equiv.)
-      G4QHadron* curG = new G4QHadron(22,g4Mom);
+      theQHadrons.push_back(curH);         // Fill Baryon (delete equiv.)
+      G4QHadron* curG = new G4QHadron(decPDG,g4Mom);
 #ifdef pdebug
-      G4cout<<"G4QE::EvaporateR:Gamma="<<g4Mom<<G4endl;
+      G4cout<<"G4QE::EvaporateResidual: Gamma(pion)4M="<<g4Mom<<G4endl;
 #endif
-      theQHadrons.push_back(curG);         // Fill the gamma (delete equivalent)
+      theQHadrons.push_back(curG);         // Fill gamma/pion (delete equivalent)
+      delete qH;
+    }
+  }
+  else if((thePDG==90001999||thePDG==89999002) && totMass>1080.) // @@ to avoid threshold
+  //else if(2>3)// One can easily close this decay as it will be done later (time of calc?)
+  {
+    G4double gsM=mNeut;
+    G4int barPDG=2112;
+    G4int mesPDG=-211;
+    if(thePDG==90001999)
+    {
+      gsM=mProt;
+      barPDG=2212;
+      mesPDG=211;
+    }
+    if(fabs(totMass-gsM-mPi)<.001)
+    {
+#ifdef pdebug
+	     G4cout<<"G4QE::EvaporateR:(D)GSM="<<gsM<<", H="<<thePDG<<qH->Get4Momentum()<<G4endl;
+#endif
+      G4LorentzVector h4Mom=q4M*(gsM/totMass);           // At rest in CM
+      G4QHadron* curB = new G4QHadron(barPDG,h4Mom);
+      theQHadrons.push_back(curB); // (delete equivalent)
+      G4LorentzVector g4Mom=q4M*(mPi/totMass);
+      G4QHadron* curM = new G4QHadron(mesPDG,g4Mom);
+      theQHadrons.push_back(curM); // (delete equivalent)
+      return;
+    }
+    else if(totMass<gsM+mPi)
+	   {
+       G4cerr<<"***G4QE::EvaRes:Delta "<<thePDG<<" is belowMassShell M="<<totMass<<G4endl;
+       throw G4QException("G4QEnvironment::EvaporateResidual: Delta is below Mass Shell");
+    }
+    else                                 // Decay in gamma or charged pion (@@ neutral)
+    {
+      G4LorentzVector h4Mom(0.,0.,0.,gsM); // GSMass must be updated in previous while-LOOP
+      G4LorentzVector g4Mom(0.,0.,0.,mPi);
+      if(!G4QHadron(q4M).DecayIn2(h4Mom, g4Mom))
+      {
+        G4cerr<<"***G4QEnv::EvaRes:Dh="<<thePDG<<"N+pi="<<gsM+mPi<<">tM="<<totMass<<G4endl;
+        throw G4QException("G4QEnvironment::EvaporateResidual: DeltaDecInBaryon+Pi Error");
+      }
+#ifdef debug
+	     G4cout<<"G4QE::EvaRes:"<<totMass<<q4M<<"->"<<thePDG<<h4Mom<<"+pi="<<g4Mom<<", nH="
+            <<theQHadrons.size()<<G4endl;
+#endif
+      G4QHadron* curH = new G4QHadron(barPDG,h4Mom);
+#ifdef pdebug
+      G4cout<<"G4QE::EvaporateR: Nucleon="<<thePDG<<h4Mom<<G4endl;
+#endif
+      theQHadrons.push_back(curH);         // Fill the nucleon (delete equiv.)
+      G4QHadron* curG = new G4QHadron(mesPDG,g4Mom);
+#ifdef pdebug
+      G4cout<<"G4QE::EvaporateR: Pion="<<g4Mom<<G4endl;
+#endif
+      theQHadrons.push_back(curG);         // Fill the pion (delete equivalent)
       delete qH;
     }
   }
@@ -3872,6 +3963,67 @@ void G4QEnvironment::EvaporateResidual(G4QHadron* qH, G4bool corFlag)
       G4cerr<<"***G4QEnv::EvaRes: IdPDG="<<thePDG<<", q4M="<<q4M<<", M="<<totMass
             <<" < M_2N+Pi, d="<<totMass-2*nucM-mPi<<G4endl;
       throw G4QException("G4QEnvironment::EvaporateResidual:ISO-DiBar is under MassShell");
+	   }
+  }
+  else if((thePDG==90000002||thePDG==90001001||thePDG==90002000)&&totMass>2020.) //=> IsoDB
+  {
+    // @@ Pi0 can be taken into account !
+    G4int  n1PDG = 2212;
+    G4int  n2PDG = 2112;
+    G4int  piPDG = -211;
+    G4double n1M = mProt;
+    G4double n2M = mNeut;
+    if     (thePDG==90002000) piPDG  =  211;      // pp -> np + pi-
+    else if(thePDG==90000002) piPDG  = -211;      // nn -> np + pi-
+    else                                          // np -> 50%(nnpi+) 50%(pppi-)
+    {
+      if(G4UniformRand()>.5)
+						{
+        n1PDG=2112;
+        n1M=mNeut;
+        piPDG  =  211;
+      }
+      else
+						{
+        n2PDG=2212;
+        n2M=mProt;
+        piPDG  = -211;
+      }
+    }
+    if(totMass>mPi+n1M+n2M)
+	   {
+      G4LorentzVector n14M(0.,0.,0.,n1M);
+      G4LorentzVector n24M(0.,0.,0.,n2M);
+      G4LorentzVector pi4M(0.,0.,0.,mPi);
+      if(!G4QHadron(q4M).DecayIn3(n14M,n24M,pi4M))
+	     {
+        G4cerr<<"***G4QEnv::HadQEnv:IsoDN, tM="<<totMass<<"-> N1="<<n1PDG<<"(M="<<n1M
+              <<") + N2="<<n2PDG<<"(M="<<n2M<<") + pi="<<piPDG<<"(M="<<mPi<<")"<<G4endl;
+		      throw G4QException("G4QEnv::EvaporateResidual:ISO-dibaryon excit. DecayIn3 error");
+	     }
+      delete qH;
+      G4QHadron* h1H = new G4QHadron(n1PDG,n14M);
+#ifdef pdebug
+      G4cout<<"G4QE::EvaporateRes: Bar1="<<n1PDG<<n14M<<G4endl;
+#endif
+      theQHadrons.push_back(h1H);                // (delete equivalent)
+      G4QHadron* h2H = new G4QHadron(n2PDG,n24M);
+#ifdef pdebug
+      G4cout<<"G4QE::EvaporateRes: Bar2="<<n2PDG<<n24M<<G4endl;
+#endif
+      theQHadrons.push_back(h2H);                // (delete equivalent)
+      G4QHadron* piH = new G4QHadron(piPDG,pi4M);
+#ifdef pdebug
+      G4cout<<"G4QE::EvaporateR: Pi="<<piPDG<<pi4M<<G4endl;
+#endif
+      theQHadrons.push_back(piH);                // (delete equivalent)
+	   }
+	   else
+	   {
+      delete qH;
+      G4cerr<<"***G4QEnv::EvaRes: IdPDG="<<thePDG<<", q4M="<<q4M<<", M="<<totMass
+            <<" < M1+M2+Pi, d="<<totMass-n1M-n2M-mPi<<G4endl;
+      throw G4QException("G4QEnvironment::EvaporateResidual:ISODiBarEx's under MassShell");
 	   }
   }
   else if(fabs(totMass-totGSM)<.001)  // Fill as it is or decay Be8, He5, Li5 (@@ add more)

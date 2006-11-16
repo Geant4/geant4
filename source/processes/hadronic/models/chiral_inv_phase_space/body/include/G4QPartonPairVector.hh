@@ -24,32 +24,21 @@
 // ********************************************************************
 //
 //
-// $Id: G4QHadronVector.hh,v 1.22 2006-11-16 11:36:09 mkossov Exp $
+// $Id: G4QPartonPairVector.hh,v 1.1 2006-11-16 11:36:09 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCandidateVector ----------------
-//             by Mikhail Kossov, Sept 1999.
-// Type defenition for a Vector of Hadrons - output of CHIPS model
+//             by Mikhail Kossov, October 2006.
+// Type defenition for a Vector of PartonPairs of CHIPS model
 // ---------------------------------------------------------------
 
-#ifndef G4QHadronVector_h
-#define G4QHadronVector_h 1
-//
-// $Id: G4QHadronVector.hh,v 1.22 2006-11-16 11:36:09 mkossov Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-// ------------------------------------------------------------
-//      GEANT 4 class implementation file
-//
-//      ---------------- G4QParton ----------------
-//             by Mikhail Kossov, Oct 1999.
-// class for QHadronVector (string) used by CHIPS Models
-// ------------------------------------------------------------
+#ifndef G4QPartonPairVector_h
+#define G4QPartonPairVector_h 1
 
-#include "G4QHadron.hh"
+#include "G4QPartonPair.hh"
 #include <vector>
 
-typedef std::vector<G4QHadron *> G4QHadronVector;
-struct DeleteQHadron { void operator()(G4QHadron* aQH){delete aQH;}};
+typedef std::vector<G4QPartonPair *> G4QPartonPairVector;
+struct DeleteQPartonPair { void operator()(G4QPartonPair* aQPP){delete aQPP;}};
 
 #endif

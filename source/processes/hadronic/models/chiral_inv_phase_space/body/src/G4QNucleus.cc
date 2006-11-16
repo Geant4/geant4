@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNucleus.cc,v 1.56 2006-10-27 16:47:34 mkossov Exp $
+// $Id: G4QNucleus.cc,v 1.57 2006-11-16 11:36:10 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QNucleus ----------------
@@ -3002,8 +3002,9 @@ G4double G4QNucleus::CoulombBarrier(const G4double& cZ, const G4double& cA, G4do
   G4double rZ=Z-cZ;
   if(delZ) rZ-=delZ;
   G4double zz=rZ*cZ;
-  // Naitive CHIPS radius: CB={1.44=200(MeV)/137}*z*Z/{R=1.13}*(a**1/3+A**1/3) (?)
-  G4double cb=1.27*zz/(pow(rA,third)+pow(cA,third));
+  // Naitive CHIPS radius: CB={1.46=200(MeV)/137}*z*Z/{R=1.13}*((a*z)**1/3+A**1/3) (?)
+  //G4double cb=1.29*zz/(pow(rA,third)+pow(cA,third));
+  G4double cb=1.2*zz/(pow(rA,third)+pow((cA*cZ),third)); // Negative hadronic potential
   // Geant4 solution for protons is practically the same:
   // G4double cb=1.263*Z/(1.0 + pow(rA,third));
   // @@ --- Temporary "Lambda/Delta barrier for mesons"
