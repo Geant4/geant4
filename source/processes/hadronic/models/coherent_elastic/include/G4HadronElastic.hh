@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HadronElastic.hh,v 1.17 2006-10-24 17:10:06 vnivanch Exp $
+// $Id: G4HadronElastic.hh,v 1.18 2006-11-16 13:02:07 starkov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -70,7 +70,7 @@ public:
 
   G4HadronElastic(G4double plow = 20.0*MeV,
                   G4double elim = 100.*keV, 
-		  G4double ehigh= GeV);
+		  G4double ehigh= 1.0*GeV);
 
   virtual ~G4HadronElastic();
  
