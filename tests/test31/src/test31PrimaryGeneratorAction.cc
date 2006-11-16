@@ -60,7 +60,10 @@ void test31PrimaryGeneratorAction::InitializeMe()
 {
   theMessenger = new test31PrimaryGeneratorMessenger(this);
   particleGun = new G4ParticleGun();
+
   counter = 0;
+  verbose = 0;
+
   x0 = 0.0; 
   y0 = 0.0;
   z0 = 0.0;
@@ -68,11 +71,17 @@ void test31PrimaryGeneratorAction::InitializeMe()
   sigmaY = 0.0;
   sigmaZ = 0.0;
   sigmaE = 0.0;
+
   minCosTheta = 1.0;
-  SetBeamEnergy(10.0*MeV);
+  energy      = 10.0*MeV;
+  minE        = energy;
+  maxE        = energy;
+  minBeta     = 0.0;
+  maxBeta     = 1.0;
+
   position  = G4ThreeVector(x0,y0,z0);
   direction = G4ThreeVector(0.0,0.0,1.0);
-  verbose = 0;
+
   m_gauss = true;
 }
 
@@ -226,14 +235,14 @@ void test31PrimaryGeneratorAction::SetBeamEnergy(G4double val)
   G4ParticleDefinition* particle = particleGun->GetParticleDefinition();
   G4double mass = particle->GetPDGMass();
   energy = val;
-  minE = energy - sigmaE;
+  minE = std::max(0.0,energy - sigmaE);
   G4double gamma = minE/mass + 1.;
-  minBeta = std::sqrt(1. - 1./(gamma*gamma));
+  minBeta = std::sqrt(minE*(minE + 2.0*mass))/(minE + mass);
   maxE = energy + sigmaE;
   gamma = maxE/mass + 1.;
-  maxBeta = std::sqrt(1. - 1./(gamma*gamma));
-  if(energy < (test31Histo::GetPointer())->GetMaxEnergy())
-              (test31Histo::GetPointer())->SetMaxEnergy(energy);
+  maxBeta = std::sqrt(maxE*(maxE + 2.0*mass))/(maxE + mass);
+  if(maxE < (test31Histo::GetPointer())->GetMaxEnergy())
+    (test31Histo::GetPointer())->SetMaxEnergy(energy);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
