@@ -14,8 +14,11 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-test30-V08-01-00  07 Oct 2002 V.Ivanchenko
-- for the release 8.2
+test30-V08-01-01  16 Nov 2006 V.Ivanchenko
+- LDFLAGS -> LOADLIBS
+
+test30-V08-01-00  09 May 2006 V.Ivanchenko
+- murging test30 and cascade_test
 
 test30-V04-01-00  07 Oct 2002 V.Ivanchenko
 - first tag to define test30 status 
