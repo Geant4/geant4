@@ -269,7 +269,7 @@ G4VProcess* Test30Physics::GetProcess(const G4String& gen_name,
     theProcess->SetSecondaryGenerator(sg);
     man->AddDiscreteProcess(theProcess);
 
-  } else if(gen_name == "Elastic") {
+  } else if(gen_name == "elastic") {
     G4HadronElastic* els = new G4HadronElastic();
     sg = new Test30VSecondaryGenerator(els, mat);
     theProcess->SetSecondaryGenerator(sg);

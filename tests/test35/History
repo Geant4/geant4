@@ -1,0 +1,24 @@
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    Test35 History file
+                    --------------------
+This file should be used by the test developer to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+test35-V08-01-01  16 Nov 2006 V.Ivanchenko
+- LDFLAGS -> LOADLIBS
+- Add elastic 
+
+test35-V08-01-00  09 May 2006 V.Ivanchenko
+- move harp_test to test35
+
+
