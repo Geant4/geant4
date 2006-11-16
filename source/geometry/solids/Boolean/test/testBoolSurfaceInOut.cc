@@ -565,7 +565,7 @@ G4ThreeVector GetVectorOnTorus(G4Torus& torus)
 
 int main(void)
 {
-  G4int i, j, iMax=100000, jMax=1000;
+  G4int i, j, iMax=1000, jMax=1000;
   G4int iCheck = iMax/10;
   G4double distIn, distIn1, distIn2, distOut;
   EInside surfaceP, surfaceP1, surfaceP2;
@@ -593,7 +593,7 @@ int main(void)
 
   G4Orb  o1("Solid G4Orb",50);
   G4Orb  o10("s10",0.018*mm);
-  G4Orb* solidO1= new G4Orb("O1", 2.7*cm);
+  // G4Orb* solidO1= new G4Orb("O1", 2.7*cm);
 
 
   // spheres for test
