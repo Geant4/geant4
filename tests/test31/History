@@ -1,4 +1,4 @@
-$Id: History,v 1.13 2006-03-21 15:46:21 vnivanch Exp $
+$Id: History,v 1.14 2006-11-16 11:49:25 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+16 Nov 06: V.Ivant (test31-V08-01-00)
+- Use PhysList components from physics_list directory
 
 21 March 06: V.Ivant (test31-V08-00-01)
 - Add test of the extrapolator
