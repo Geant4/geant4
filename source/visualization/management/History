@@ -1,4 +1,4 @@
-$Id: History,v 1.82 2006-11-15 19:25:51 allison Exp $
+$Id: History,v 1.83 2006-11-16 12:55:55 allison Exp $
 
 -------------------------------------------------------------------
 
@@ -25,6 +25,10 @@ committal in the CVS repository !
 
 History file for visualization management sub-category
 ------------------------------------------------------
+
+16th November 2006  John Allison  (visman-V08-01-12)
+- /vis/scene/notifyHandlers: Refreshes only auto-refresh viewers.
+  Warning of scene change issued for other viewers.
 
 15th November 2006  John Allison  (visman-V08-01-11)
 - First implementation of /vis/reviewKeptEvents.
