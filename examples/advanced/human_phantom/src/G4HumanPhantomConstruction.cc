@@ -57,7 +57,6 @@ G4HumanPhantomConstruction::~G4HumanPhantomConstruction()
  delete userPhantomSD;
 }
 
-
 G4VPhysicalVolume* G4HumanPhantomConstruction::Construct()
 {
   material -> DefineMaterials();
@@ -67,71 +66,59 @@ G4VPhysicalVolume* G4HumanPhantomConstruction::Construct()
   G4HumanPhantomSD* userPhantomSD = new G4HumanPhantomSD( bodypartSD );
   SDman->AddNewDetector( userPhantomSD );
 
-  G4String model = "MIRD";
-   // Define sex of phantom
-  G4String sex = "Female";
+  G4PhantomBuilder* builder = 0;
+ if(sex=="Female") builder = new G4FemaleBuilder;
+  else builder = new G4MaleBuilder ;  
 
-  G4FemaleBuilder builder ;  
+  builder->BuildWorld();
 
-  builder.BuildWorld();
+  builder->SetModel(model);
 
-  builder.SetModel(model);
-
-  builder.SetSex(sex);
+  builder->SetSex(sex);
 
   // the argument indicates the sensitivity of the volume
-  builder.BuildHead(true);
-  builder.BuildTrunk(true);
-  builder.BuildLegs(true);
+  builder->BuildHead(sensitivities["Head"]);
 
-  
-  builder.BuildBrain(true);
-  builder.BuildArmBone(true);
-  builder.BuildLegBone(true);
+  builder->BuildTrunk(sensitivities["Trunk"]);
+  builder->BuildLegs(sensitivities["Legs"]);
+  builder->BuildBrain(sensitivities["Brain"]);
 
-  
-  builder.BuildSkull(true);
-  
-  builder.BuildUpperSpine(true);
+  builder->BuildArmBone(sensitivities["ArmBone"]);
+  builder->BuildLegBone(sensitivities["LegBone"]);
+  builder->BuildSkull(sensitivities["Skull"]);
+  builder->BuildUpperSpine(sensitivities["UpperSpine"]);
+  builder->BuildMiddleLowerSpine(sensitivities["MiddleLowerSpine"]);
 
-  builder.BuildMiddleLowerSpine(true);
+  builder->BuildPelvis(sensitivities["Pelvis"]);
+  builder->BuildStomach(sensitivities["Stomach"]);
+  builder->BuildUpperLargeIntestine(sensitivities["UpperLargeIntestine"]);
+  builder->BuildLowerLargeIntestine(sensitivities["LowerLargeIntestine"]);
 
-  builder.BuildPelvis(true);
-  builder.BuildStomach(true);
- 
-  
-  builder.BuildUpperLargeIntestine(true);
-  builder.BuildLowerLargeIntestine(true);
-  
-  builder.BuildSpleen(true);
-  builder.BuildPancreas(true); 
+  builder->BuildSpleen(sensitivities["Spleen"]);
+  builder->BuildPancreas(sensitivities["Pancreas"]); 
+  builder->BuildLiver(sensitivities["Liver"]);  
 
-  builder.BuildLiver(true); // da controllare
-  
-  builder.BuildKidney(true); 
- 
-  builder.BuildUrinaryBladder(true);
+  builder->BuildKidney(sensitivities["Kidney"]); 
+  builder->BuildUrinaryBladder(sensitivities["UrinaryBladder"]);
 
-  builder.BuildHeart(true); // controllare 
- 
-  builder.BuildLung(true);
+  builder->BuildHeart(sensitivities["Hearth"]);
+  builder->BuildLung(sensitivities["Lung"]);
+  builder->BuildThyroid(sensitivities["Thyroid"]); 
 
-  builder.BuildThyroid(true); 
-
-  
   if(sex=="Female"){
-    builder.BuildOvary(true);
-    builder.BuildUterus(true);
-    builder.BuildBreast(true);
-    builder.BuildParameterisedBreast(true);
+    builder->BuildOvary(true);
+    builder->BuildUterus(true);
+    builder->BuildBreast(true);
+    builder->BuildParameterisedBreast(true);
   }
-  /*
+ 
   if(sex=="Male"){
-    // builder.BuildMaleGenitalia(sensitivities["MaleGenitalia"]);
-    // builder.BuildTestes(sensitivities["Testes"]);
+     builder->BuildMaleGenitalia(sensitivities["MaleGenitalia"]);
+     builder->BuildTestes(sensitivities["Testes"]);
   }
-  */
-  return builder.GetPhantom(); 
+  
+  return builder->GetPhantom(); 
+
 }
 
 void  G4HumanPhantomConstruction::SetBodyPartSensitivity(G4String bodyPartName, G4bool bodyPartSensitivity)

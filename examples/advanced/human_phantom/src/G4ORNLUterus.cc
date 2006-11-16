@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 #include "G4ORNLUterus.hh"
-
+#include "G4PhysicalVolumeStore.hh"
 #include "G4Processor/GDMLProcessor.h"
 #include "globals.hh"
 #include "G4SDManager.hh"
@@ -54,6 +54,8 @@ G4VPhysicalVolume* G4ORNLUterus::ConstructUterus(G4VPhysicalVolume* mother, G4St
   G4ThreeVector position = (G4ThreeVector)*GDMLProcessor::GetInstance()->GetPosition("UterusPos");
   G4RotationMatrix* rm = (G4RotationMatrix*)GDMLProcessor::GetInstance()->GetRotation("UterusRot");
   
+G4PhysicalVolumeStore::DeRegister((G4VPhysicalVolume*)GDMLProcessor::GetInstance()->GetWorldVolume());
+
   // Define rotation and position here!
   G4VPhysicalVolume* physUterus = new G4PVPlacement(rm,position,
       			       "physicalUterus",

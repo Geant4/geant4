@@ -42,10 +42,8 @@ public:
   void BuildParameterisedBreast(G4bool sensitivity);
   void BuildOvary(G4bool sensitivity);
   void BuildUterus(G4bool sensitivity);
-
-private:
- 
-  G4VBodyFactory* body;
+  void BuildTestes(G4bool sensitivity){;};
+  void BuildMaleGenitalia(G4bool sensitivity){;};
 
 };
 #endif

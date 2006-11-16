@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 #include "G4ORNLPelvis.hh"
-
+#include "G4PhysicalVolumeStore.hh"
 #include "G4Processor/GDMLProcessor.h"
 #include "globals.hh"
 #include "G4SDManager.hh"
@@ -50,6 +50,8 @@ G4VPhysicalVolume* G4ORNLPelvis::ConstructPelvis(G4VPhysicalVolume* mother, G4St
  
 
   G4LogicalVolume* logicPelvis = (G4LogicalVolume *)GDMLProcessor::GetInstance()->GetLogicalVolume("PelvisVolume");
+
+  G4PhysicalVolumeStore::DeRegister((G4VPhysicalVolume*)GDMLProcessor::GetInstance()->GetWorldVolume());
 
   G4ThreeVector position = (G4ThreeVector)*GDMLProcessor::GetInstance()->GetPosition("PelvisPos");
   G4RotationMatrix* rm = (G4RotationMatrix*)GDMLProcessor::GetInstance()->GetRotation("PelvisRot");

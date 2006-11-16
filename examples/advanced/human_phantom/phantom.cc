@@ -81,8 +81,8 @@ int main(int argc,char** argv)
   visManager->Initialize();
 #endif
 
-  runManager->Initialize();
-  G4cout << "runManager->Initialize();" << G4endl;
+//  runManager->Initialize();
+ // G4cout << "runManager->Initialize();" << G4endl;
 
   // set mandatory user action class
   

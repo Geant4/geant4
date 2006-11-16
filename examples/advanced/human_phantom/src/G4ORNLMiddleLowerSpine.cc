@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 #include "G4ORNLMiddleLowerSpine.hh"
-
+#include "G4PhysicalVolumeStore.hh"
 #include "G4Processor/GDMLProcessor.h"
 #include "globals.hh"
 #include "G4SDManager.hh"
@@ -54,6 +54,8 @@ G4VPhysicalVolume* G4ORNLMiddleLowerSpine::ConstructMiddleLowerSpine(G4VPhysical
   G4ThreeVector position = (G4ThreeVector)*GDMLProcessor::GetInstance()->GetPosition("MiddleLowerSpinePos");
   G4RotationMatrix* rm = (G4RotationMatrix*)GDMLProcessor::GetInstance()->GetRotation("MiddleLowerSpineRot");
   
+  G4PhysicalVolumeStore::DeRegister((G4VPhysicalVolume*)GDMLProcessor::GetInstance()->GetWorldVolume());
+
   // Define rotation and position here!
   G4VPhysicalVolume* physMiddleLowerSpine = new G4PVPlacement(rm,position,
       			       "physicalMiddleLowerSpine",

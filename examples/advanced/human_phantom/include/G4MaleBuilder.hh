@@ -36,12 +36,11 @@ class G4MaleBuilder: public G4PhantomBuilder
 public:
   G4MaleBuilder();
   ~G4MaleBuilder();
+  void BuildBreast(G4bool sensitivity){;};
+  void BuildParameterisedBreast(G4bool sensitivity){;};
+  void BuildOvary(G4bool sensitivity){;};
+  void BuildUterus(G4bool sensitivity){;};
   void BuildMaleGenitalia(G4bool);
   void BuildTestes(G4bool);
-
-private:
- 
-  G4VBodyFactory* body;
-
 };
 #endif

@@ -47,10 +47,10 @@ public:
   virtual void BuildLegBone(G4bool) = 0;
   virtual void BuildArmBone(G4bool) = 0;
   virtual void BuildSkull(G4bool) = 0;
-  virtual void BuildRibCage(G4bool) = 0;
+  //virtual void BuildRibCage(G4bool) = 0;
   virtual void BuildPelvis(G4bool) = 0;
-  virtual void BuildScapulae(G4bool) = 0;
-  virtual void BuildClavicles(G4bool) = 0;
+  //virtual void BuildScapulae(G4bool) = 0;
+  //virtual void BuildClavicles(G4bool) = 0;
 
   virtual void BuildBrain(G4bool) = 0;
 
@@ -61,10 +61,10 @@ public:
   virtual void BuildStomach(G4bool) = 0;
   virtual void BuildUpperLargeIntestine(G4bool) = 0;
   virtual void BuildLowerLargeIntestine(G4bool) = 0;
-  virtual void BuildEsophagus(G4bool) = 0;
+  //virtual void BuildEsophagus(G4bool) = 0;
 
   virtual void BuildKidney(G4bool) = 0;
-  virtual void BuildAdrenal(G4bool) = 0;
+//  virtual void BuildAdrenal(G4bool) = 0;
   virtual void BuildLiver(G4bool) = 0;
   virtual void BuildPancreas(G4bool) = 0;
   virtual void BuildSpleen(G4bool) = 0;

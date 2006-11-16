@@ -37,20 +37,34 @@ G4FemaleBuilder::~G4FemaleBuilder()
 
 void G4FemaleBuilder::BuildBreast(G4bool sensitivity)
 {
-  G4PhantomBuilder::BuildBreast(sensitivity);
-}
-void G4FemaleBuilder::BuildParameterisedBreast(G4bool sensitivity)
-{
-  G4PhantomBuilder::BuildParameterisedBreast(sensitivity);
+ if (motherVolume == 0)
+   G4Exception("The world volume is missing !!!!!");
+
+ body -> CreateBreast(motherVolume,sex,sensitivity);
 }
 
+void G4FemaleBuilder::BuildParameterisedBreast(G4bool sensitivity)
+{
+G4cout << "Builder: build parameterised breast!!!!" <<G4endl;
+
+   if (motherVolume == 0)
+   G4Exception("The world volume is missing !!!!!");
+   
+   body -> CreateParameterisedBreast(motherVolume,sex,sensitivity);
+}
 
 void G4FemaleBuilder::BuildOvary(G4bool sensitivity)
 {   
-  G4PhantomBuilder::BuildOvary(sensitivity);
+if (trunkVolume == 0)
+   G4Exception("The trunk volume is missing !!!!!");
+   
+   body -> CreateOvary(trunkVolume,sex,sensitivity);  
 }
 
 void G4FemaleBuilder::BuildUterus(G4bool sensitivity )
-{ 
-  G4PhantomBuilder::BuildUterus(sensitivity);
+{
+if (trunkVolume == 0)
+   G4Exception("The trunk volume is missing !!!!!");
+
+   body -> CreateUterus(trunkVolume,sex,sensitivity); 
 }

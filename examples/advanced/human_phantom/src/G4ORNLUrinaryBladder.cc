@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 #include "G4ORNLUrinaryBladder.hh"
-
+#include "G4PhysicalVolumeStore.hh"
 #include "G4Processor/GDMLProcessor.h"
 #include "globals.hh"
 #include "G4SDManager.hh"
@@ -53,7 +53,8 @@ G4VPhysicalVolume* G4ORNLUrinaryBladder::ConstructUrinaryBladder(G4VPhysicalVolu
 
   G4ThreeVector position = (G4ThreeVector)*GDMLProcessor::GetInstance()->GetPosition("UrinaryBladderPos");
   G4RotationMatrix* rm = (G4RotationMatrix*)GDMLProcessor::GetInstance()->GetRotation("UrinaryBladderRot");
-  
+
+G4PhysicalVolumeStore::DeRegister((G4VPhysicalVolume*)GDMLProcessor::GetInstance()->GetWorldVolume());  
   // Define rotation and position here!
   G4VPhysicalVolume* physUrinaryBladder = new G4PVPlacement(rm,position,
       			       "physicalUrinaryBladder",

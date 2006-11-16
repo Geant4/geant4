@@ -33,7 +33,7 @@
 //    *                                  *
 //    ************************************
 //
-// $Id: G4HumanPhantomROGeometry.cc,v 1.1 2006-09-26 17:29:00 guatelli Exp $
+// $Id: G4HumanPhantomROGeometry.cc,v 1.2 2006-11-16 16:50:16 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4HumanPhantomROGeometry.hh"

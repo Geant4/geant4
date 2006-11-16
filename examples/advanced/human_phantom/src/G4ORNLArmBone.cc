@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 #include "G4ORNLArmBone.hh"
-
+#include "G4PhysicalVolumeStore.hh"
 #include "G4Processor/GDMLProcessor.h"
 #include "globals.hh"
 #include "G4SDManager.hh"
@@ -52,6 +52,8 @@ G4VPhysicalVolume* G4ORNLArmBone::ConstructArmBone(G4VPhysicalVolume* mother, G4
 
   G4ThreeVector position = (G4ThreeVector)*GDMLProcessor::GetInstance()->GetPosition("ArmBonePos");
   G4RotationMatrix* rm = (G4RotationMatrix*)GDMLProcessor::GetInstance()->GetRotation("ArmBoneRot");
+
+  G4PhysicalVolumeStore::DeRegister((G4VPhysicalVolume*)GDMLProcessor::GetInstance()->GetWorldVolume());
   
   // Define rotation and position here!
   G4VPhysicalVolume* physArmBone = new G4PVPlacement(rm,position,

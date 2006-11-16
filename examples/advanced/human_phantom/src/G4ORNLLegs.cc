@@ -25,7 +25,7 @@
 #include "G4Processor/GDMLProcessor.h"
 #include "globals.hh"
 #include "G4SDManager.hh"
-
+#include "G4PhysicalVolumeStore.hh"
 #include "G4VisAttributes.hh"
 
 G4ORNLLegs::G4ORNLLegs()
@@ -54,6 +54,8 @@ G4VPhysicalVolume* G4ORNLLegs::ConstructLegs(G4VPhysicalVolume* mother, G4String
   G4ThreeVector position = (G4ThreeVector)*GDMLProcessor::GetInstance()->GetPosition("LegsPos");
   G4RotationMatrix* rm = (G4RotationMatrix*)GDMLProcessor::GetInstance()->GetRotation("LegsRot");
   
+  G4PhysicalVolumeStore::DeRegister((G4VPhysicalVolume*)GDMLProcessor::GetInstance()->GetWorldVolume());
+
   // Define rotation and position here!
   G4VPhysicalVolume* physLegs = new G4PVPlacement(rm,position,
       			       "physicalLegs",

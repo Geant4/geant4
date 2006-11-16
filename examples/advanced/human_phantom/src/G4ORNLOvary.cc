@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 #include "G4ORNLOvary.hh"
-
+#include "G4PhysicalVolumeStore.hh"
 #include "G4Processor/GDMLProcessor.h"
 #include "globals.hh"
 #include "G4SDManager.hh"
@@ -48,11 +48,12 @@ G4VPhysicalVolume* G4ORNLOvary::ConstructOvary(G4VPhysicalVolume* mother, G4Stri
   // Run GDML Processor
   sxp.Run();
  
-
   G4LogicalVolume* logicOvary = (G4LogicalVolume *)GDMLProcessor::GetInstance()->GetLogicalVolume("OvaryVolume");
 
   G4ThreeVector position = (G4ThreeVector)*GDMLProcessor::GetInstance()->GetPosition("OvaryPos");
   G4RotationMatrix* rm = (G4RotationMatrix*)GDMLProcessor::GetInstance()->GetRotation("OvaryRot");
+
+  G4PhysicalVolumeStore::DeRegister((G4VPhysicalVolume*)GDMLProcessor::GetInstance()->GetWorldVolume());
   
   // Define rotation and position here!
   G4VPhysicalVolume* physOvary = new G4PVPlacement(rm,position,

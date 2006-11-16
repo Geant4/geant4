@@ -27,6 +27,7 @@
 #include "G4SDManager.hh"
 
 #include "G4VisAttributes.hh"
+#include "G4PhysicalVolumeStore.hh"
 
 G4ORNLHead::G4ORNLHead()
 {
@@ -53,6 +54,9 @@ G4VPhysicalVolume* G4ORNLHead::ConstructHead(G4VPhysicalVolume* mother, G4String
 
   G4ThreeVector position = (G4ThreeVector)*GDMLProcessor::GetInstance()->GetPosition("HeadPos");
   G4RotationMatrix* rm = (G4RotationMatrix*)GDMLProcessor::GetInstance()->GetRotation("HeadRot");
+
+G4PhysicalVolumeStore::DeRegister((G4VPhysicalVolume*)GDMLProcessor::GetInstance()->GetWorldVolume());
+
   
   // Define rotation and position here!
   G4VPhysicalVolume* physHead = new G4PVPlacement(rm,position,

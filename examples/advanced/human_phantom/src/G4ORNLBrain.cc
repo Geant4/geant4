@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 #include "G4ORNLBrain.hh"
-
+#include "G4PhysicalVolumeStore.hh"
 #include "G4Processor/GDMLProcessor.h"
 #include "globals.hh"
 #include "G4SDManager.hh"
@@ -52,7 +52,8 @@ G4VPhysicalVolume* G4ORNLBrain::ConstructBrain(G4VPhysicalVolume* mother, G4Stri
 
   G4ThreeVector position = (G4ThreeVector)*GDMLProcessor::GetInstance()->GetPosition("BrainPos");
   G4RotationMatrix* rm = (G4RotationMatrix*)GDMLProcessor::GetInstance()->GetRotation("BrainRot");
-  
+ 
+  G4PhysicalVolumeStore::DeRegister((G4VPhysicalVolume*)GDMLProcessor::GetInstance()->GetWorldVolume());
   // Define rotation and position here!
   G4VPhysicalVolume* physBrain = new G4PVPlacement(rm,position,
       			       "physicalBrain",

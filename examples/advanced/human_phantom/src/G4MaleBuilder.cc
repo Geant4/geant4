@@ -36,10 +36,10 @@ G4MaleBuilder::~G4MaleBuilder()
 
 void G4MaleBuilder::BuildMaleGenitalia(G4bool /*sensitivity*/)
 {
-  //  G4PhantomBuilder::BuildMaleGenitalia(sensitivity);
+ G4cout<< "Male Genitalia not available !!! "<< G4endl;
 }
 
 void G4MaleBuilder::BuildTestes(G4bool /*sensitivity*/)
 { 
-  //  G4PhantomBuilder::BuildTestes(sensitivity);
+G4cout << "Male testes are not available !!!" << G4endl;
 }

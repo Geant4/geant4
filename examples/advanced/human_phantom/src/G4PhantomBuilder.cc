@@ -46,6 +46,7 @@ G4PhantomBuilder::G4PhantomBuilder(): sex("Female"), model("MIRD")
 
 G4PhantomBuilder::~G4PhantomBuilder()
 {
+
   delete body;
 } 
 
@@ -95,8 +96,6 @@ void G4PhantomBuilder::BuildHead(G4bool sensitivity)
     G4Exception("The world volume is missing !!!!!");
   
   G4cout <<"MotherVolume: " <<  motherVolume -> GetName()<< G4endl;
-  //  sex = "Female";
-  //G4cout << "sex : " << sex << G4endl;
   G4cout << "sensitivity : "<< sensitivity << G4endl; 
   headVolume = body -> CreateHead(motherVolume,sex, sensitivity);
 }
@@ -172,7 +171,7 @@ void G4PhantomBuilder::BuildSkull(G4bool sensitivity)
 
    body -> CreateSkull(headVolume,sex,sensitivity);
 }
-
+/*
 void G4PhantomBuilder::BuildRibCage(G4bool sensitivity)
 { 
    if (trunkVolume == 0)
@@ -180,7 +179,7 @@ void G4PhantomBuilder::BuildRibCage(G4bool sensitivity)
 
    body -> CreateRibCage(trunkVolume,sex,sensitivity);
 }
-
+*/
 void G4PhantomBuilder::BuildPelvis(G4bool sensitivity)
 { 
    if (trunkVolume == 0)
@@ -188,7 +187,7 @@ void G4PhantomBuilder::BuildPelvis(G4bool sensitivity)
 
    body -> CreatePelvis(trunkVolume,sex,sensitivity);
 }
-
+/*
 void G4PhantomBuilder::BuildScapulae(G4bool sensitivity)
 { 
    if (trunkVolume == 0)
@@ -204,7 +203,8 @@ void G4PhantomBuilder::BuildClavicles(G4bool sensitivity)
 
    body -> CreateClavicles(trunkVolume,sex,sensitivity);
 }
-
+*/
+/*
 void G4PhantomBuilder::BuildBreast(G4bool sensitivity)
 { 
    if (motherVolume == 0)
@@ -255,7 +255,7 @@ void G4PhantomBuilder::BuildTestes(G4bool sensitivity)
 
    body -> CreateTestes(maleGenitaliaVolume,sex,sensitivity);
 }
-
+*/
 void G4PhantomBuilder::BuildBrain(G4bool sensitivity)
 { 
    if (headVolume == 0)
@@ -303,7 +303,7 @@ void G4PhantomBuilder::BuildLowerLargeIntestine(G4bool sensitivity)
 
    body -> CreateLowerLargeIntestine(trunkVolume,sex,sensitivity);
 }
-
+/*
 void G4PhantomBuilder::BuildEsophagus(G4bool sensitivity)
 { 
    if (trunkVolume == 0)
@@ -311,7 +311,7 @@ void G4PhantomBuilder::BuildEsophagus(G4bool sensitivity)
 
    body -> CreateEsophagus(trunkVolume,sex,sensitivity);
 }
-
+*/
 void G4PhantomBuilder::BuildKidney(G4bool sensitivity)
 { 
    if (trunkVolume == 0)
@@ -319,7 +319,7 @@ void G4PhantomBuilder::BuildKidney(G4bool sensitivity)
 
    body -> CreateKidney(trunkVolume,sex,sensitivity);
 }
-
+/*
 void G4PhantomBuilder::BuildAdrenal(G4bool sensitivity)
 { 
    if (trunkVolume == 0)
@@ -327,7 +327,7 @@ void G4PhantomBuilder::BuildAdrenal(G4bool sensitivity)
 
    body -> CreateAdrenal(trunkVolume,sex,sensitivity);
 }
-
+*/
 void G4PhantomBuilder::BuildLiver(G4bool sensitivity)
 { 
    if (trunkVolume == 0)

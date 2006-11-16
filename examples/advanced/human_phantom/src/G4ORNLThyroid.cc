@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 #include "G4ORNLThyroid.hh"
-
+#include "G4PhysicalVolumeStore.hh"
 #include "G4Processor/GDMLProcessor.h"
 #include "globals.hh"
 #include "G4SDManager.hh"
@@ -53,6 +53,8 @@ G4VPhysicalVolume* G4ORNLThyroid::ConstructThyroid(G4VPhysicalVolume* mother, G4
 
   G4ThreeVector position = (G4ThreeVector)*GDMLProcessor::GetInstance()->GetPosition("ThyroidPos");
   G4RotationMatrix* rm = (G4RotationMatrix*)GDMLProcessor::GetInstance()->GetRotation("ThyroidRot");
+
+  G4PhysicalVolumeStore::DeRegister((G4VPhysicalVolume*)GDMLProcessor::GetInstance()->GetWorldVolume());
   
   // Define rotation and position here!
   G4VPhysicalVolume* physThyroid = new G4PVPlacement(rm,position,

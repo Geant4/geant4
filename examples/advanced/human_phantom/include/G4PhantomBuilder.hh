@@ -51,19 +51,19 @@ public:
   void BuildLegBone(G4bool);
   void BuildArmBone(G4bool);
   void BuildSkull(G4bool);
-  void BuildRibCage(G4bool);
+//  void BuildRibCage(G4bool);
   void BuildPelvis(G4bool);
-  void BuildScapulae(G4bool);
-  void BuildClavicles(G4bool);
+//  void BuildScapulae(G4bool);
+//  void BuildClavicles(G4bool);
 
-  void BuildBreast(G4bool);
-  void BuildParameterisedBreast(G4bool);
+virtual void BuildBreast(G4bool)= 0;
+virtual void BuildParameterisedBreast(G4bool) = 0;
 
-  void BuildUterus(G4bool);
-  void BuildOvary(G4bool);
+virtual void BuildUterus(G4bool)=0;
+virtual void BuildOvary(G4bool)=0;
 
-  void BuildTestes(G4bool);
-  void BuildMaleGenitalia(G4bool);
+virtual void BuildTestes(G4bool) =0;
+virtual void BuildMaleGenitalia(G4bool)=0;
 
   void BuildBrain(G4bool);
 
@@ -74,10 +74,10 @@ public:
   void BuildStomach(G4bool);
   void BuildUpperLargeIntestine(G4bool);
   void BuildLowerLargeIntestine(G4bool);
-  void BuildEsophagus(G4bool);
+ // void BuildEsophagus(G4bool);
 
   void BuildKidney(G4bool);
-  void BuildAdrenal(G4bool);
+ // void BuildAdrenal(G4bool);
   void BuildLiver(G4bool);
   void BuildPancreas(G4bool);
   void BuildSpleen(G4bool);
@@ -90,7 +90,7 @@ public:
 
   G4VPhysicalVolume* GetPhantom();
 
-private:
+protected:
   G4String sex; 
   G4String model;
   G4bool sensitivity;
@@ -100,9 +100,6 @@ private:
   G4VPhysicalVolume* legsVolume;
   G4VPhysicalVolume* neckVolume;
   G4VPhysicalVolume* maleGenitaliaVolume;
-
   G4VBodyFactory* body;
-
-
 };
 #endif

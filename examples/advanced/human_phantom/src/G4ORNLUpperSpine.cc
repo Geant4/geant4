@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 #include "G4ORNLUpperSpine.hh"
-
+#include "G4PhysicalVolumeStore.hh"
 #include "G4Processor/GDMLProcessor.h"
 #include "globals.hh"
 #include "G4SDManager.hh"
@@ -53,6 +53,8 @@ G4VPhysicalVolume* G4ORNLUpperSpine::ConstructUpperSpine(G4VPhysicalVolume* moth
 
   G4ThreeVector position = (G4ThreeVector)*GDMLProcessor::GetInstance()->GetPosition("UpperSpinePos");
   G4RotationMatrix* rm = (G4RotationMatrix*)GDMLProcessor::GetInstance()->GetRotation("UpperSpineRot");
+
+  G4PhysicalVolumeStore::DeRegister((G4VPhysicalVolume*)GDMLProcessor::GetInstance()->GetWorldVolume());
   
   // Define rotation and position here!
   G4VPhysicalVolume* physUpperSpine = new G4PVPlacement(rm,position,

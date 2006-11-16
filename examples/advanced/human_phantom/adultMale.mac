@@ -9,8 +9,6 @@
 #
 # Initialize New Phantom
 #
-/phantom/startNewPhantom
-#
 # Choose model: ORNL, MIRD, MIX
 #
 /phantom/setPhantomModel MIRD
@@ -21,36 +19,35 @@
 #
 # Insert Body Part and their Sensitivity
 #
-# Name Body Part and yes/no for the sensitivity
-#
 /bodypart/addBodyPart Head yes
+#########
 /bodypart/addBodyPart Trunk yes
 /bodypart/addBodyPart Legs yes
+##############
 #
 # Skeleton System
 #
-/bodypart/addBodyPart LegBones no
-/bodypart/addBodyPart ArmBones no
-/bodypart/addBodyPart UpperSpine no
-/bodypart/addBodyPart MiddleLowerSpine no
-/bodypart/addBodyPart Skull no
-/bodypart/addBodyPart Pelvis no
+/bodypart/addBodyPart LegBones yes
+/bodypart/addBodyPart ArmBones yes
+/bodypart/addBodyPart UpperSpine yes
+/bodypart/addBodyPart MiddleLowerSpine yes
+/bodypart/addBodyPart Skull yes
+/bodypart/addBodyPart Pelvis yes
 #
 # Organs
 #
 /bodypart/addBodyPart Breast yes
-/bodypart/addBodyPart Lungs no
+/bodypart/addBodyPart Lungs yes
 /bodypart/addBodyPart Brain yes
-/bodypart/addBodyPart Heart no
-/bodypart/addBodyPart Kidneys no
-/bodypart/addBodyPart UrinaryBladder no
+/bodypart/addBodyPart Heart yes
+/bodypart/addBodyPart Kidneys yes
+/bodypart/addBodyPart UrinaryBladder yes
 /bodypart/addBodyPart Spleen yes
-/bodypart/addBodyPart Pancreas no
+/bodypart/addBodyPart Pancreas yes
 /bodypart/addBodyPart Thyroid yes
 #
 # Gastrointestinal System
 #
-/bodypart/addBodyPart ThoracicEsophagus no
 /bodypart/addBodyPart Stomach yes
 /bodypart/addBodyPart UpperLargeIntestine yes
 /bodypart/addBodyPart LowerLargeIntestine yes
@@ -58,19 +55,20 @@
 #
 # Genitalia
 #
-#/bodypart/addBodyPart MaleGenitalia yes
-#/bodypart/addBodyPart Testes yes
+#/bodypart/addBodyPart Ovaries yes
+#/bodypart/addBodyPart Uterus yes
 #
 #
 # Construct your Phantom
 #
 /phantom/buildNewPhantom
+/run/initialize
 #
 #
 # Visualization Config
 #
 # Visualize Phantom with VRML
-/control/execute vrmlVis.mac
+#/control/execute vrmlVis.mac
 #
 # Visualize Phantom with OPENGL
 #/control/execute openGLVis.mac
@@ -80,4 +78,4 @@
 #
 # Run Particles
 #
-#/control/execute run.mac
+/control/execute run.mac

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 #include "G4ORNLLowerLargeIntestine.hh"
-
+#include "G4PhysicalVolumeStore.hh"
 #include "G4Processor/GDMLProcessor.h"
 #include "globals.hh"
 #include "G4SDManager.hh"
@@ -53,6 +53,8 @@ G4VPhysicalVolume* G4ORNLLowerLargeIntestine::ConstructLowerLargeIntestine(G4VPh
 
   G4ThreeVector position = (G4ThreeVector)*GDMLProcessor::GetInstance()->GetPosition("LowerLargeIntestinePos");
   G4RotationMatrix* rm = (G4RotationMatrix*)GDMLProcessor::GetInstance()->GetRotation("LowerLargeIntestineRot");
+
+  G4PhysicalVolumeStore::DeRegister((G4VPhysicalVolume*)GDMLProcessor::GetInstance()->GetWorldVolume());
   
   // Define rotation and position here!
   G4VPhysicalVolume* physLowerLargeIntestine = new G4PVPlacement(rm,position,

@@ -7,11 +7,15 @@
 /run/verbose 0
 /event/verbose 0
 /tracking/verbose 0
+#/control/execute openGLVis.mac
+# Visualize Phantom with DAWN
+#/control/execute dawnVis.mac
 #
 # Create Scene and SceneHandler
 #
 # Run Particles
 #
+
 # for drawing the tracks
 # (if too many tracks cause core dump => storeTrajectory 0)
 /tracking/storeTrajectory 1
@@ -30,4 +34,9 @@
 /gun/setBeam beamAlongZ
 #/gun/setBeam isotropicFlux
 #
-/run/beamOn 1000
+/run/beamOn 200
+
+
+
+
+

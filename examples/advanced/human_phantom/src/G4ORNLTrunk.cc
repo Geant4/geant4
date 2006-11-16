@@ -25,7 +25,7 @@
 #include "G4Processor/GDMLProcessor.h"
 #include "globals.hh"
 #include "G4SDManager.hh"
-
+#include "G4PhysicalVolumeStore.hh"
 #include "G4VisAttributes.hh"
 
 G4ORNLTrunk::G4ORNLTrunk()
@@ -55,6 +55,9 @@ G4VPhysicalVolume* G4ORNLTrunk::ConstructTrunk(G4VPhysicalVolume* mother, G4Stri
   G4RotationMatrix* rm = (G4RotationMatrix*)GDMLProcessor::GetInstance()->GetRotation("TrunkRot");
   
   // Define rotation and position here!
+G4PhysicalVolumeStore::DeRegister((G4VPhysicalVolume*)GDMLProcessor::GetInstance()->GetWorldVolume());
+
+
   G4VPhysicalVolume* physTrunk = new G4PVPlacement(rm,position,
       			       "physicalTrunk",
   			       logicTrunk,
