@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PolarizedAnnihilationModel.cc,v 1.3 2006-11-09 18:00:49 vnivanch Exp $
+// $Id: G4PolarizedAnnihilationModel.cc,v 1.4 2006-11-17 14:14:20 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -39,7 +39,8 @@
 //
 // Modifications:
 // 18-07-06 use newly calculated cross sections (P. Starovoitov)
-// 21-08-05 update interface (A. Schaelicke)
+// 21-08-06 update interface (A. Schaelicke)
+// 17-11-06 add protection agaist e+ zero energy PostStep (V.Ivanchenko)
 //
 //
 // Class Description:
@@ -139,6 +140,21 @@ std::vector<G4DynamicParticle*>* G4PolarizedAnnihilationModel::SampleSecondaries
     = dynamic_cast<G4ParticleChangeForGamma*>(pParticleChange);
   const G4Track * aTrack = fParticleChange->GetCurrentTrack();
 
+  // V.Ivanchenko add protection against zero kin energy
+  std::vector<G4DynamicParticle*>* fvect = new std::vector<G4DynamicParticle*>;
+  G4double PositKinEnergy = dp->GetKineticEnergy();
+
+  if(PositKinEnergy < DBL_MIN) {
+
+    G4double cosTeta = 2.*G4UniformRand()-1.;
+    G4double sinTeta = std::sqrt((1.0 - cosTeta)*(1.0 + cosTeta));
+    G4double phi     = twopi * G4UniformRand();
+    G4ThreeVector dir(sinTeta*std::cos(phi), sinTeta*std::sin(phi), cosTeta);
+    fvect->push_back( new G4DynamicParticle(G4Gamma::Gamma(), dir, electron_mass_c2));
+    fvect->push_back( new G4DynamicParticle(G4Gamma::Gamma(),-dir, electron_mass_c2));
+    return fvect;
+  }
+
   // *** obtain and save target and beam polarization ***
   G4PolarizationManager * polarizationManager = G4PolarizationManager::GetInstance();
 
@@ -154,9 +170,7 @@ std::vector<G4DynamicParticle*>* G4PolarizedAnnihilationModel::SampleSecondaries
   // transfer target electron polarization in frame of positron
   if (targetIsPolarized)
       theTargetPolarization.rotateUz(dp->GetMomentumDirection());
-
   
-  G4double PositKinEnergy = dp->GetKineticEnergy();
   G4ParticleMomentum PositDirection = dp->GetMomentumDirection();
 
   // polar asymmetry:
@@ -282,8 +296,6 @@ std::vector<G4DynamicParticle*>* G4PolarizedAnnihilationModel::SampleSecondaries
 
   G4double dirx = sint*std::cos(phi) , diry = sint*std::sin(phi) , dirz = cost;
 
-  std::vector<G4DynamicParticle*>* fvect = new std::vector<G4DynamicParticle*>;
- 
   //
   // kinematic of the created pair
   //

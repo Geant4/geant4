@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PolarizedPairProductionCrossSection.hh,v 1.1 2006-09-21 21:35:10 vnivanch Exp $
+// $Id: G4PolarizedPairProductionCrossSection.hh,v 1.2 2006-11-17 14:14:19 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // GEANT4 Class file
@@ -58,8 +58,9 @@ class G4PolarizedPairProductionCrossSection : public G4VPolarizedCrossSection
   virtual void Initialize(G4double eps, G4double X, G4double phi,
 			  const G4StokesVector & p0,
 			  const G4StokesVector & p1,
-			  int flag=0); 
-  virtual G4double XSection(const G4StokesVector & pol2,const G4StokesVector & pol3); 
+			  G4int flag=0); 
+  virtual G4double XSection(const G4StokesVector & pol2,
+			    const G4StokesVector & pol3); 
 
   // return expected mean polarisation
   G4StokesVector GetPol2();  // electron/positron
@@ -71,10 +72,10 @@ class G4PolarizedPairProductionCrossSection : public G4VPolarizedCrossSection
   G4StokesVector  theFinalElectronPolarization;
   G4StokesVector  theFinalPositronPolarization;
 
+  void InitializeMe();
 
-  static bool scrnInitialized;
-  static double SCRN [3][20];  // screening function lookup table;
-  static void Initialize();
+  static G4bool scrnInitialized;
+  static G4double SCRN [3][20];  // screening function lookup table;
 };
 
 #endif

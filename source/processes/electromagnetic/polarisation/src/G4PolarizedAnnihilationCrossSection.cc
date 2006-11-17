@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: G4PolarizedAnnihilationCrossSection.cc,v 1.3 2006-11-09 18:00:48 vnivanch Exp $
+// $Id: G4PolarizedAnnihilationCrossSection.cc,v 1.4 2006-11-17 14:14:19 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // -------------------------------------------------------------------
 //
@@ -48,7 +48,8 @@
 #include "G4PolarizedAnnihilationCrossSection.hh"
 
 G4PolarizedAnnihilationCrossSection::G4PolarizedAnnihilationCrossSection() :
-  polxx(0.), polyy(0.), polzz(0.), polxz(0.), polzx(0.), polxy(0.), polyx(0.), polyz(0.), polzy(0.),
+  polxx(0.), polyy(0.), polzz(0.), polxz(0.), polzx(0.), polxy(0.), 
+  polyx(0.), polyz(0.), polzy(0.),
   re2(1.), diffXSFactor(1.), totalXSFactor(1.),
   phi0(0.)
 {
@@ -90,7 +91,7 @@ void G4PolarizedAnnihilationCrossSection::Initialize(
 			  G4double , // phi
 		    const G4StokesVector & pol0, // positron polarization
 		    const G4StokesVector & pol1, // electron polarization
-			  int flag)
+			  G4int flag)
 {
 
   diffXSFactor=re2/(gam - 1.);
@@ -99,7 +100,8 @@ void G4PolarizedAnnihilationCrossSection::Initialize(
   // prepare dicing
   //
   dice = 0.;
-  G4double symmXS = 0.125*((-1./sqr(gam + 1.))/sqr(eps) + ((sqr(gam) + 4.*gam - 1.)/sqr(gam + 1.))/eps - 1.);
+  G4double symmXS = 0.125*((-1./sqr(gam + 1.))/sqr(eps) + 
+			   ((sqr(gam) + 4.*gam - 1.)/sqr(gam + 1.))/eps - 1.);
   //
   //
   //
@@ -222,7 +224,8 @@ void G4PolarizedAnnihilationCrossSection::Initialize(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double G4PolarizedAnnihilationCrossSection::XSection(const G4StokesVector & pol2,const G4StokesVector & pol3)
+G4double G4PolarizedAnnihilationCrossSection::XSection(const G4StokesVector & pol2,
+						       const G4StokesVector & pol3)
 {
   G4double xs=phi0+pol2*phi2+pol3*phi3;
   return xs;
@@ -294,11 +297,13 @@ void G4PolarizedAnnihilationCrossSection::DefineCoefficients(const G4StokesVecto
   polyx=pol0.y()*pol1.x();
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-G4double G4PolarizedAnnihilationCrossSection::DiceEpsilon(){
+G4double G4PolarizedAnnihilationCrossSection::DiceEpsilon()
+{
   return dice;
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-G4double G4PolarizedAnnihilationCrossSection::getVar(int choice){
+G4double G4PolarizedAnnihilationCrossSection::getVar(G4int choice)
+{
   if (choice == -1) return polXS/unpXS;
   if (choice == 0) return unpXS;
   if (choice == 1) return ISPxx;

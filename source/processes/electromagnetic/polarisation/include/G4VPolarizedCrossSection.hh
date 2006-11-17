@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VPolarizedCrossSection.hh,v 1.1 2006-09-21 21:35:10 vnivanch Exp $
+// $Id: G4VPolarizedCrossSection.hh,v 1.2 2006-11-17 14:14:19 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // File name:     G4VPolarizedCrossSection
@@ -56,10 +56,11 @@ public:
 public:
   virtual void Initialize(G4double, G4double, G4double,
 			  const G4StokesVector & p0,const G4StokesVector & p1,
- 			  int flag=0); 
+ 			  G4int flag=0); 
   virtual G4double XSection(const G4StokesVector & pol2,const G4StokesVector & pol3) = 0; 
-  virtual G4double TotalXSection(const G4double xmin, const G4double xmax, const G4double y,
-				 const G4StokesVector & pol0,const G4StokesVector & pol1);
+  virtual G4double TotalXSection(G4double xmin, G4double xmax, G4double y,
+				 const G4StokesVector & pol0,
+				 const G4StokesVector & pol1);
   
   // return expected mean polarisation
   virtual G4StokesVector GetPol2();

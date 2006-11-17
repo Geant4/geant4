@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: G4PolarizedAnnihilationCrossSection.hh,v 1.1 2006-09-21 21:35:10 vnivanch Exp $
+// $Id: G4PolarizedAnnihilationCrossSection.hh,v 1.2 2006-11-17 14:14:16 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // -------------------------------------------------------------------
 //
@@ -40,8 +40,9 @@
 // Modifications:
 //
 // Class Description:
-//   * calculates the differential cross section (ME squared, without phase space) 
-//     incomming positron (along positive z direction) annihilations with an electron at rest 
+//   * calculates the differential cross section (ME squared, 
+//     without phase space) incomming positron (along positive z direction) 
+//     annihilations with an electron at rest 
 //   * phi denotes the angle between the scattering plane and 
 //     X axis of incomint partice reference frame (PRF) 
 //
@@ -55,22 +56,25 @@ class G4PolarizedAnnihilationCrossSection : public G4VPolarizedCrossSection
 {
 public:
   G4PolarizedAnnihilationCrossSection();
-  ~G4PolarizedAnnihilationCrossSection();
+  virtual ~G4PolarizedAnnihilationCrossSection();
 public:
   virtual void Initialize(G4double eps, G4double gamma, G4double phi, 
 		  const G4StokesVector & p0,const G4StokesVector & p1,
-		  int flag=0); 
+		  G4int flag=0); 
 
   G4double DiceEpsilon(); 
-  virtual G4double XSection(const G4StokesVector & pol2,const G4StokesVector & pol3); 
-  virtual G4double TotalXSection(const G4double xmin, const G4double xmax, const G4double y,
-			 const G4StokesVector & pol0,const G4StokesVector & pol1); 
+  virtual G4double XSection(const G4StokesVector & pol2,
+			    const G4StokesVector & pol3); 
+  virtual G4double TotalXSection(const G4double xmin, const G4double xmax, 
+				 const G4double y,
+				 const G4StokesVector & pol0,
+				 const G4StokesVector & pol1); 
 
   // return expected mean polarisation
   G4StokesVector GetPol2();
   G4StokesVector GetPol3();
 
-  G4double getVar(int );
+  G4double getVar(G4int );
   // test routine
   void getCoeff();
 private:

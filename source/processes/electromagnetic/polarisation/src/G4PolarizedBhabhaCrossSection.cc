@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PolarizedBhabhaCrossSection.cc,v 1.3 2006-11-09 18:00:49 vnivanch Exp $
+// $Id: G4PolarizedBhabhaCrossSection.cc,v 1.4 2006-11-17 14:14:20 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // -------------------------------------------------------------------
 //
@@ -39,11 +39,13 @@
 // Modifications:
 //   16-01-06 included cross section as calculated by P.Starovoitov
 //   24-08-06 bugfix in total cross section (A. Schaelicke)
-//   07-11-06 modify reference system for polarisation vectors (A. Schaelicke & P.Starovoitov)
+//   07-11-06 modify reference system for polarisation vectors 
+//            (A. Schaelicke & P.Starovoitov)
 //
 // Class Description:
 //   * calculates the differential cross section
-//     incomming positron Kpl(along positive z direction) scatters at an electron Kmn at rest
+//     incomming positron Kpl(along positive z direction) scatters at 
+//     an electron Kmn at rest
 //   * phi denotes the angle between the scattering plane (defined by the
 //     outgoing electron) and X-axis
 //   * all stokes vectors refer to spins in the Global System (X,Y,Z)
@@ -63,7 +65,7 @@ void G4PolarizedBhabhaCrossSection::Initialize(
 			  G4double /*phi*/,
 		    const G4StokesVector & pol0,
                     const G4StokesVector & pol1,
-			  int flag)
+			  G4int flag)
 {
   G4double re2 = classic_electr_radius * classic_electr_radius;
   G4double gamma2 = gamma*gamma;
@@ -204,7 +206,9 @@ void G4PolarizedBhabhaCrossSection::Initialize(
       G4double xxPmnKmn = -((2 + e*gmo)*(-1 + e*gmo - gamma)*(e*gmo - gamma)*
 		   (-2 + gamma))/(4*gmo*egmp32);
       G4double xyPmnKmn = 0;
-      G4double xzPmnKmn = ((e*gmo - gamma)*std::sqrt((-1 + e + gamma - e*gamma)/(2 + e*gmo))*(e + gamma - e*gamma + gamma2))/
+      G4double xzPmnKmn = ((e*gmo - gamma)*
+			   std::sqrt((-1 + e + gamma - e*gamma)/(2 + e*gmo))*
+			   (e + gamma - e*gamma + gamma2))/
 	(2*sqrttwo*e2*gmo32*gpo2);
       G4double yxPmnKmn = 0;
       G4double yyPmnKmn = (gamma2*gpo + e2*gmo2*(3 + gamma) - 
@@ -227,7 +231,8 @@ void G4PolarizedBhabhaCrossSection::Initialize(
 
 }
 
-G4double G4PolarizedBhabhaCrossSection::XSection(const G4StokesVector & pol2,const G4StokesVector & pol3)
+G4double G4PolarizedBhabhaCrossSection::XSection(const G4StokesVector & pol2,
+						 const G4StokesVector & pol3)
 {
   G4double xs=0.;
   xs+=phi0;
@@ -240,7 +245,7 @@ G4double G4PolarizedBhabhaCrossSection::XSection(const G4StokesVector & pol2,con
 }
 
 G4double G4PolarizedBhabhaCrossSection::TotalXSection(
-  const G4double xmin, const G4double xmax, const G4double gamma,
+  G4double xmin, G4double xmax, G4double gamma,
   const G4StokesVector & pol0,const G4StokesVector & pol1)
 {
   G4double xs=0.;

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eplusPolarizedAnnihilation.cc,v 1.2 2006-09-26 09:08:48 gcosmo Exp $
+// $Id: G4eplusPolarizedAnnihilation.cc,v 1.3 2006-11-17 14:14:22 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -216,7 +216,7 @@ void G4eplusPolarizedAnnihilation::BuildAsymmetryTable(const G4ParticleDefinitio
       G4PhysicsVector* aVector = LambdaPhysicsVector(couple);
       G4PhysicsVector* tVector = LambdaPhysicsVector(couple);
 
-      for (int j = 0 ; j < LambdaBinning() ; ++j ) {
+      for (G4int j = 0 ; j < LambdaBinning() ; ++j ) {
 	G4double lowEdgeEnergy = aVector->GetLowEdgeEnergy(j);
 	G4double tasm=0.;
 	G4double asym = ComputeAsymmetry(lowEdgeEnergy, couple, part, 0., tasm);

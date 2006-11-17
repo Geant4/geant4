@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PolarizedMollerCrossSection.cc,v 1.3 2006-11-09 18:00:49 vnivanch Exp $
+// $Id: G4PolarizedMollerCrossSection.cc,v 1.4 2006-11-17 14:14:20 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // -------------------------------------------------------------------
 //
@@ -59,7 +59,7 @@ void G4PolarizedMollerCrossSection::Initialize(
 					       G4double /*phi*/,
 					       const G4StokesVector & pol0,
 					       const G4StokesVector & pol1,
-					       int flag)
+					       G4int flag)
 {
   G4double re2 = classic_electr_radius * classic_electr_radius;
   G4double gamma2=gamma*gamma;
@@ -210,7 +210,8 @@ void G4PolarizedMollerCrossSection::Initialize(
   phi3 *= pref;
 }
 
-G4double G4PolarizedMollerCrossSection::XSection(const G4StokesVector & pol2,const G4StokesVector & pol3)
+G4double G4PolarizedMollerCrossSection::XSection(const G4StokesVector & pol2,
+						 const G4StokesVector & pol3)
 {
   G4double xs=0.;
   xs+=phi0;
@@ -223,7 +224,7 @@ G4double G4PolarizedMollerCrossSection::XSection(const G4StokesVector & pol2,con
 }
 
 G4double G4PolarizedMollerCrossSection::TotalXSection(
-  const G4double xmin, const G4double xmax, const G4double gamma,
+  G4double xmin, G4double xmax, G4double gamma,
   const G4StokesVector & pol0,const G4StokesVector & pol1)
 {
   G4double xs=0.;

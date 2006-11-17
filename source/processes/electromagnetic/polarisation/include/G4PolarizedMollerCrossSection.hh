@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4PolarizedMollerCrossSection.hh,v 1.1 2006-09-21 21:35:10 vnivanch Exp $
+// $Id: G4PolarizedMollerCrossSection.hh,v 1.2 2006-11-17 14:14:19 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // GEANT4 Class file
@@ -51,15 +51,15 @@
 class G4PolarizedMollerCrossSection : public G4VPolarizedCrossSection
 {
 public:
-   G4PolarizedMollerCrossSection();
-  ~G4PolarizedMollerCrossSection();
+  G4PolarizedMollerCrossSection();
+  virtual ~G4PolarizedMollerCrossSection();
 public:
   void Initialize(G4double x, G4double y, G4double phi,
 		  const G4StokesVector & p0,const G4StokesVector & p1,
-		  int flag=0);
+		  G4int flag=0);
 
   G4double XSection(const G4StokesVector & pol2,const G4StokesVector & pol3);
-  G4double TotalXSection(const G4double xmin, const G4double xmax, const G4double y,
+  G4double TotalXSection(G4double xmin, G4double xmax, G4double y,
 			 const G4StokesVector & pol0,const G4StokesVector & pol1);
   // return expected mean polarisation
   G4StokesVector GetPol2();

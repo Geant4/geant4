@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PolarizationHelper.cc,v 1.2 2006-09-26 09:08:46 gcosmo Exp $
+// $Id: G4PolarizationHelper.cc,v 1.3 2006-11-17 14:14:19 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // GEANT4 Class file
@@ -100,7 +100,7 @@ void G4PolarizationHelper::TestPolarizationTransformations()
 {
   G4double theta=0.;
   G4cout<<"========================================\n\n";
-  for (int i=0; i<=10; ++i) {
+  for (G4int i=0; i<=10; ++i) {
     theta=pi*i/10.;
     G4ThreeVector zAxis = G4ThreeVector(std::sin(theta),0.,std::cos(theta));
     if (i==5) zAxis = G4ThreeVector(1.,0.,0.);
@@ -115,7 +115,7 @@ void G4PolarizationHelper::TestPolarizationTransformations()
 
   G4cout<<"========================================\n\n";
 
-  for (int i=0; i<=10; ++i) {
+  for (G4int i=0; i<=10; ++i) {
     theta=pi*i/10.;
     G4ThreeVector zAxis = G4ThreeVector(0.,std::sin(theta),std::cos(theta));
     if (i==5) zAxis = G4ThreeVector(0.,1.,0.);

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PolarizedComptonCrossSection.hh,v 1.1 2006-09-21 21:35:10 vnivanch Exp $
+// $Id: G4PolarizedComptonCrossSection.hh,v 1.2 2006-11-17 14:14:19 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // GEANT4 Class file
@@ -69,7 +69,7 @@ public:
   virtual void Initialize(G4double eps, G4double X, G4double phi,
 			  const G4StokesVector & p0,
 			  const G4StokesVector & p1,
-			  int flag=0); 
+			  G4int flag=0); 
 
   // returns the differential cross section for a given polarisation state
   // of the final state particles to be used in the calculation of the

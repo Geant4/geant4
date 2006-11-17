@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolarizedCompton.cc,v 1.2 2006-09-26 09:08:47 gcosmo Exp $
+// $Id: G4PolarizedCompton.cc,v 1.3 2006-11-17 14:14:20 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //
@@ -249,7 +249,7 @@ void G4PolarizedCompton::BuildAsymmetryTable(const G4ParticleDefinition& part)
       G4PhysicsVector* aVector = LambdaPhysicsVector(couple);
       //      modelManager->FillLambdaVector(aVector, couple, startFromNull);
 
-      for (int j = 0 ; j < LambdaBinning() ; ++j ) {
+      for (G4int j = 0 ; j < LambdaBinning() ; ++j ) {
 	G4double lowEdgeEnergy = aVector->GetLowEdgeEnergy(j);
 	G4double tasm=0.;
 	G4double asym = ComputeAsymmetry(lowEdgeEnergy, couple, part, 0., tasm);

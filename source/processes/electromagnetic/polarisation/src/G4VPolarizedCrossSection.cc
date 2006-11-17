@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VPolarizedCrossSection.cc,v 1.1 2006-09-21 21:35:11 vnivanch Exp $
+// $Id: G4VPolarizedCrossSection.cc,v 1.2 2006-11-17 14:14:20 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // File name:     G4VPolarizedCrossSection
 //
@@ -53,9 +53,9 @@ G4VPolarizedCrossSection::~G4VPolarizedCrossSection()
 }
 
 void G4VPolarizedCrossSection::Initialize(G4double, G4double, G4double,
-						  const G4StokesVector &,
-						  const G4StokesVector &,
-						  int ) 
+					  const G4StokesVector &,
+					  const G4StokesVector &,
+					  G4int ) 
 {
 } 
  
@@ -95,7 +95,7 @@ void G4VPolarizedCrossSection::DicePolarization()
 
   G4double sigma_max = 4. * XSection(G4StokesVector::ZERO,G4StokesVector::ZERO);
 
-  for (int i=0;i<4;++i) {
+  for (G4int i=0;i<4;++i) {
     G4cout<<"sigma="<<sigma[i]<<" vs."<<(.25*sigma_max)<<G4endl;
     if (sigma[i]<0 || sigma[i]>sigma_max) {
       G4cout<<"ERROR G4VPolarizedCrossSection::DicePolarization(["<<i<<"]):  "
@@ -104,7 +104,7 @@ void G4VPolarizedCrossSection::DicePolarization()
     if (i>0) sigma[i]+=sigma[i-1];
   }
 
-  int k = 0;
+  G4int k = 0;
   G4double disc = sigma[3]*G4UniformRand();
   while (sigma[k]<disc && k<4) {
     ++k;
@@ -138,7 +138,7 @@ G4StokesVector G4VPolarizedCrossSection::DicedPol3()
 }
 
 G4double G4VPolarizedCrossSection::TotalXSection(const G4double, const G4double, const G4double,
-					      const G4StokesVector &,const G4StokesVector &)
+						 const G4StokesVector &,const G4StokesVector &)
 {
   G4cout << "WARNING virtual function G4VPolarizedCrossSection::TotalXSection() called" << G4endl;
   return 0.;

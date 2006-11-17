@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PolarizedPairProductionCrossSection.cc,v 1.3 2006-11-09 18:00:49 vnivanch Exp $
+// $Id: G4PolarizedPairProductionCrossSection.cc,v 1.4 2006-11-17 14:14:20 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -42,11 +42,11 @@
 #include "G4PolarizedGammaConversionModel.hh"
 #include "G4Element.hh"
 
-bool G4PolarizedPairProductionCrossSection::scrnInitialized=false;
-double G4PolarizedPairProductionCrossSection::SCRN [3][20];  // screening function lookup table;
+G4bool G4PolarizedPairProductionCrossSection::scrnInitialized=false;
+G4double G4PolarizedPairProductionCrossSection::SCRN [3][20];  
+// screening function lookup table;
 
-
-void G4PolarizedPairProductionCrossSection::Initialize()
+void G4PolarizedPairProductionCrossSection::InitializeMe()
 {
   if (!scrnInitialized) {
     SCRN [1][1]=  0.5   ; SCRN [2][1] = 0.0145;
@@ -73,18 +73,20 @@ void G4PolarizedPairProductionCrossSection::Initialize()
   }
 }
 
-G4PolarizedPairProductionCrossSection::G4PolarizedPairProductionCrossSection(G4PolarizedGammaConversionModel * model)
+G4PolarizedPairProductionCrossSection::G4PolarizedPairProductionCrossSection(
+                                       G4PolarizedGammaConversionModel * model)
   : theModel(model)
 {
-  
-  Initialize();
+  InitializeMe();
 }
 
 
-void G4PolarizedPairProductionCrossSection::Initialize(G4double aGammaE, G4double aLept0E, G4double sintheta,
+void G4PolarizedPairProductionCrossSection::Initialize(G4double aGammaE, 
+						       G4double aLept0E, 
+						       G4double sintheta,
 						       const G4StokesVector & beamPol,
 						       const G4StokesVector & /*p1*/,
-						       int /*flag*/)
+						       G4int /*flag*/)
 {
   G4double aLept1E = aGammaE - aLept0E;
 

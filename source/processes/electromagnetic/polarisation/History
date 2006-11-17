@@ -1,4 +1,4 @@
-$Id: History,v 1.4 2006-11-10 18:00:11 vnivanch Exp $
+$Id: History,v 1.5 2006-11-17 14:14:16 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+17 November 06: V.Ivanchenko (empolar-V08-01-03)
+- Add protection against zero kin energy in G4PolarizedAnnihilationModel
+- substitue double -> G4double, int -> G4int, bool ->G4bool
 
 10 November 06: V.Ivanchenko (empolar-V08-01-02)
 9. November 06: A.Schaelicke
