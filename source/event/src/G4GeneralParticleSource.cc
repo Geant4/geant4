@@ -62,7 +62,7 @@
 #include "G4GeneralParticleSource.hh"
 
 G4GeneralParticleSource::G4GeneralParticleSource()
-  : multiple_vertex(false)
+  : multiple_vertex(false), flat_sampling(true), weight_change(1.)
 {
   sourceVector.clear();
   sourceIntensity.clear();
@@ -99,9 +99,12 @@ void G4GeneralParticleSource::IntensityNormalization()
     total += sourceIntensity[i] ;
   //
   sourceProbability.clear();
-  sourceProbability.push_back(sourceIntensity[0]/total);
-  for ( i = 1 ;  i < sourceIntensity.size(); i++) 
-    sourceProbability.push_back(sourceIntensity[i]/total + sourceProbability[i-1]); 
+  sourceIntensity[0] =  sourceIntensity[0]/total;
+  sourceProbability.push_back(sourceIntensity[0]);
+  for ( i = 1 ;  i < sourceIntensity.size(); i++) {
+    sourceIntensity[i] = sourceIntensity[i]/total;
+    sourceProbability.push_back(sourceIntensity[i] + sourceProbability[i-1]);
+  } 
   normalised = true;
 } 
 
@@ -170,10 +173,21 @@ void G4GeneralParticleSource::GeneratePrimaryVertex(G4Event* evt)
       if (!normalised) IntensityNormalization();
       G4double rndm = G4UniformRand();
       size_t i = 0 ;
-      while ( rndm > sourceProbability[i] ) i++;
-      (currentSource = sourceVector[i]);
+      if (!flat_sampling) {
+	while ( rndm > sourceProbability[i] ) i++;
+	(currentSource = sourceVector[i]);
+      } else {
+	i = size_t (sourceIntensity.size()*rndm);
+	currentSource = sourceVector[i];
+	weight_change =  sourceIntensity[i]*sourceIntensity.size();
+      }
     }
-  currentSource-> GeneratePrimaryVertex(evt);
+    currentSource-> GeneratePrimaryVertex(evt);
+    if (flat_sampling) {
+      G4double weight = weight_change;
+      weight *= evt->GetPrimaryVertex()->GetPrimary()->GetWeight();
+      evt->GetPrimaryVertex()->GetPrimary()->SetWeight(weight);
+    }
   } 
   else {
     for (size_t i = 0; i <  sourceIntensity.size(); i++) {

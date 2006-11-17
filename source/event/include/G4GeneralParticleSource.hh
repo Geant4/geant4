@@ -204,6 +204,8 @@ private:
 
 private:
   G4bool multiple_vertex;
+  G4bool flat_sampling;
+  G4double weight_change;
   G4bool normalised;
   G4int currentSourceIdx;
   G4SingleParticleSource* currentSource;
