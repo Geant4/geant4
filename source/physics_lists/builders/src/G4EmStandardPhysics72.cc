@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmStandardPhysics72.cc,v 1.3 2006-11-14 18:00:07 vnivanch Exp $
+// $Id: G4EmStandardPhysics72.cc,v 1.4 2006-11-17 09:37:54 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -149,7 +149,7 @@ void G4EmStandardPhysics72::ConstructProcess()
     } else if (particleName == "e-") {
 
       msc = new G4MultipleScattering();
-      msc->MscStepLimitation(true,0.1);
+      //      msc->MscStepLimitation(true,0.1);
       if(verbose > 1)
         G4cout << "### EmStandard72 instantiates eIoni and msc71 for " 
                << particleName << G4endl;
@@ -160,7 +160,7 @@ void G4EmStandardPhysics72::ConstructProcess()
     } else if (particleName == "e+") {
 
       msc = new G4MultipleScattering();
-      msc->MscStepLimitation(true,0.1);
+      //msc->MscStepLimitation(true,0.1);
       if(verbose > 1)
         G4cout << "### EmStandard72 instantiates eIoni and msc71 for " 
                << particleName << G4endl;
