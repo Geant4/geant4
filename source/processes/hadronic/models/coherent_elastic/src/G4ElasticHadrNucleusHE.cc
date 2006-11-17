@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElasticHadrNucleusHE.cc,v 1.45 2006-11-17 13:47:31 starkov Exp $
+// $Id: G4ElasticHadrNucleusHE.cc,v 1.46 2006-11-17 14:40:47 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //G4ElasticHadrNucleusHE.cc
 //
@@ -1176,8 +1176,8 @@ G4double G4ElasticHadrNucleusHE::InterPol(
 
        else
            {  
-             G4cout<<" ElasticHE: For the hadron
-                   <<aHadron->GetParticleName() "
+             G4cout<<" ElasticHE: For the hadron "
+                   << aHadron->GetParticleName() 
                    <<" other method must be used."<<G4endl;
              HadrTot   = 20;
              HadrSlope = 7;
