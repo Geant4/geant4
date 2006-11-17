@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PathFinder.cc,v 1.20 2006-11-17 17:11:41 japost Exp $
+// $Id: G4PathFinder.cc,v 1.21 2006-11-17 17:52:01 japost Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4PathFinder Implementation
@@ -472,26 +472,7 @@ G4PathFinder::ReLocate( const   G4ThreeVector& position )
 
      G4double  moveMinusSafety= 0.0; 
      G4double  moveLenEndPosition= std::sqrt( moveLenEndPosSq );
-     // moveMinusSafety = moveLenEndPosition - revisedSafety; 
-     moveMinusSafety = distCheckRevisedEnd
-                       / (moveLenEndPosition + revisedSafety); 
-
-#if 0
-     // Temporary code to check above
-     G4double moveMinus_old= ( moveLenEndPosition - revisedSafety ) ; 
-     G4cout << " G4PF: New moveMinusSafety calculation " << G4endl
-	    << "  new value= " << moveMinusSafety << G4endl
-	    << "  old value= " << moveLenEndPosition - revisedSafety << G4endl
-	    << "  difference= " << moveMinusSafety - moveMinus_old
-	    << "   relative = " << (moveMinusSafety - moveMinus_old)/moveMinusSafety
-	    << G4endl;
-     if( fabs( moveMinusSafety - ( moveLenEndPosition - revisedSafety ) ) 
-	 >  cErrorTolerance  * (moveLenEndPosition + revisedSafety) ) { 
-       G4Exception( "G4PathFinder::Relocate >>> Error in move-safety calculation", 
-		    "204-PathFinderMoveSafetyError", FatalException, 
-		    "New method using a-b= (a^2-b^2)/(a+b) failed. ") ; 
-     } 
-#endif
+     moveMinusSafety = moveLenEndPosition - revisedSafety; 
 
      if( (moveMinusSafety > 0.0 ) && (revisedSafety > 0.0) ){
         // Take into account possibility of roundoff error causing
@@ -776,7 +757,7 @@ G4PathFinder::WhichLimited()       // Flag which processes limited the step
   G4int noLimited=0; 
   ELimited shared= kSharedOther; 
 
-  if( fVerboseLevel > 2 )
+  if( fVerboseLevel > 4 )
     G4cout << " G4PathFinder::WhichLimited - entered " << G4endl;
 
   // Assume that [IdTransport] is Mass / Transport
@@ -808,10 +789,11 @@ G4PathFinder::WhichLimited()       // Flag which processes limited the step
     fLimitedStep[ last ] = kUnique; 
   }
 
-#ifndef G4NO_VERBOSE
+#ifdef G4VERBOSE
   if( fVerboseLevel > 1 ){
     this->PrintLimited();   // --> for tracing 
-    G4cout << " G4PathFinder::WhichLimited - exiting. " << G4endl;
+    if( fVerboseLevel > 4 )
+      G4cout << " G4PathFinder::WhichLimited - exiting. " << G4endl;
   }
 #endif
 
@@ -820,8 +802,8 @@ G4PathFinder::WhichLimited()       // Flag which processes limited the step
 void
 G4PathFinder::PrintLimited()
 {
-  static G4String StrDoNot("DoNot"), StrUnique("Unique"), StrUndefined("Undefined"),
-    StrSharedTransport("SharedTransport"),  StrSharedOther("SharedOther");
+  G4String& LimitedString( ELimited lim ); 
+
   // Report results -- for checking   
   G4cout << "G4PathFinder::PrintLimited reports: " ; 
   G4cout << "  Minimum step (true)= " << fTrueMinStep 
@@ -852,14 +834,7 @@ G4PathFinder::PrintLimited()
 	   << std::setw(12) << rawStep << " "
 	   << std::setw(12) << fNewSafety[num] << " "
 	   << std::setw(5) << (fLimitTruth[num] ? "YES" : " NO") << " ";
-    G4String limitedStr;
-    switch ( fLimitedStep[num] ) {
-      case kDoNot:  limitedStr= StrDoNot; break;
-      case kUnique: limitedStr = StrUnique; break; 
-      case kSharedTransport:  limitedStr= StrSharedTransport; break; 
-      case kSharedOther: limitedStr = StrSharedOther; break;
-      default: limitedStr = StrUndefined; break;
-    }
+    G4String limitedStr= LimitedString(fLimitedStep[num]); 
     G4cout << " " << std::setw(15) << limitedStr << " ";  
     G4cout.precision(oldPrec); 
 
@@ -875,7 +850,7 @@ G4PathFinder::PrintLimited()
     G4cout << G4endl;
   }
 
-  if( fVerboseLevel > 2 )
+  if( fVerboseLevel > 4 )
     G4cout << " G4PathFinder::PrintLimited - exiting. " << G4endl;
 }
 
