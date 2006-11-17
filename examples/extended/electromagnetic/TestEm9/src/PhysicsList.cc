@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.12 2006-11-17 17:03:28 vnivanch Exp $
+// $Id: PhysicsList.cc,v 1.13 2006-11-17 17:45:05 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -101,7 +101,7 @@ PhysicsList::PhysicsList() : G4VModularPhysicsList()
   stopIsRegisted = false;
 
   // Decay Physics is always defined
-  generalPhysicsList = new G4DeacyPhysics();
+  generalPhysicsList = new G4DecayPhysics();
 
   // EM physics
   emName = G4String("standard_q");
@@ -139,10 +139,9 @@ void PhysicsList::ConstructProcess()
     hadronPhys[i]->ConstructProcess();
   }
   AddStepMax();
-  if(!mscStepLimit) {
-    G4EmProcessOptions opt;
-    opt.SetMscStepLimitation(false);
-  }
+  G4EmProcessOptions opt;
+  if(!mscStepLimit) opt.SetMscStepLimitation(false);
+  if(emName == "standard_q") opt.SetDEDXBinning(480);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -155,7 +154,6 @@ void PhysicsList::AddPhysicsList(const G4String& name)
   if (name == emName) return;
 
   if (name == "standard") {
-
     emName = name;
     delete emPhysicsList;
     emPhysicsList = new G4EmStandardPhysics();
@@ -163,7 +161,6 @@ void PhysicsList::AddPhysicsList(const G4String& name)
       G4cout << "PhysicsList::Set " << name << " EM physics" << G4endl;
 
   } else if (name == "standard_emv") {
-
     emName = name;
     delete emPhysicsList;
     emPhysicsList = new G4EmStandardPhysics71();
@@ -171,15 +168,20 @@ void PhysicsList::AddPhysicsList(const G4String& name)
       G4cout << "PhysicsList::Set " << name << " EM physics" << G4endl;
 
   } else if (name == "standard_emx") {
-
     emName = name;
     delete emPhysicsList;
     emPhysicsList = new G4EmStandardPhysics72();
     if (verboseLevel > 0) 
       G4cout << "PhysicsList::Set " << name << " EM physics" << G4endl;
 
-  } else if (name == "lowenergy") {
+  } else if (name == "standard_q") {
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new PhysListEmStandard();
+    if (verboseLevel > 0) 
+      G4cout << "PhysicsList::Set " << name << " EM physics" << G4endl;
 
+  } else if (name == "lowenergy") {
     emName = name;
     delete emPhysicsList;
     emPhysicsList = new PhysListEmLivermore();
@@ -187,7 +189,6 @@ void PhysicsList::AddPhysicsList(const G4String& name)
       G4cout << "PhysicsList::Set Livermore EM physics" << G4endl;
 
   } else if (name == "penelope") {
-
     emName = name;
     delete emPhysicsList;
     emPhysicsList = new PhysListEmPenelope();
@@ -195,14 +196,12 @@ void PhysicsList::AddPhysicsList(const G4String& name)
       G4cout << "PhysicsList::Set Penelope EM physics" << G4endl;
 
   } else if (name == "elastic" && !helIsRegisted) {
-
     hadronPhys.push_back( new G4HadronElasticPhysics(name));
     helIsRegisted = true;
     if (verboseLevel > 0) 
       G4cout << "PhysicsList::Add hadron elastic physics" << G4endl;
 
   } else if (name == "binary" && !bicIsRegisted) {
-  
     hadronPhys.push_back(new G4HadronInelasticQBBC());
     hadronPhys.push_back(new G4IonBinaryCascadePhysics());
     bicIsRegisted = true;
@@ -222,7 +221,6 @@ void PhysicsList::AddPhysicsList(const G4String& name)
       G4cout << "PhysicsList::Add stopping physics" << G4endl;
 
   } else {
-
     G4cout << "PhysicsList::AddPhysicsList: <" << name << ">"
            << " is not defined"
            << G4endl;
