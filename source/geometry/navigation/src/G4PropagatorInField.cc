@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.cc,v 1.28 2006-11-13 16:59:21 gcosmo Exp $
+// $Id: G4PropagatorInField.cc,v 1.29 2006-11-17 16:53:45 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // 
@@ -371,18 +371,6 @@ G4PropagatorInField::ComputeStep(
   }
 #endif
 
-#ifdef G4DEBUG_FIELD
-  // static G4std::vector<G4int>  ZeroStepNumberHist(fAbandonThreshold+1);
-  if( fNoZeroStep ){
-     // ZeroStepNumberHist[fNoZeroStep]++; 
-     if( fNoZeroStep > fActionThreshold_NoZeroSteps ){
-        G4cout << " PiF: Step returning=" << StepTaken << G4endl;
-        G4cout << " ------------------------------------------------------- "
-               << G4endl;
-     }
-  }
-#endif
-
   // In particular anomalous cases, we can get repeated zero steps
   // In order to correct this efficiently, we identify these cases
   // and only take corrective action when they occur.
@@ -397,19 +385,11 @@ G4PropagatorInField::ComputeStep(
      G4cout << " WARNING - G4PropagatorInField::ComputeStep():" << G4endl
             << " Zero progress for "  << fNoZeroStep << " attempted steps." 
             << G4endl;
-#ifdef G4VERBOSE
      if ( fVerboseLevel > 2 )
        G4cout << " Particle that is stuck will be killed." << G4endl;
-#endif
      fNoZeroStep = 0; 
   }
-
-#ifdef G4VERBOSE
-  if ( fVerboseLevel > 3 ){
-     G4cout << "G4PropagatorInField returns " << TruePathLength << G4endl;
-  }
-#endif
-
+  //  G4cout << "G4PropagatorInField returns " << TruePathLength << G4endl;
   return TruePathLength;
 }
 
@@ -1166,14 +1146,17 @@ G4PropagatorInField::IntersectChord( G4ThreeVector  StartPointA,
     // printIntersection( 
     // StartPointA, EndPointB, LinearStepLength, IntersectionPoint, NewSafety
 
-    G4cout << "Start="  << std::setw(12) << StartPointA       << " "
+    G4cout << " G4PropagatorInField::IntersectChord reports " << G4endl;
+    G4cout << " PiF-IC> "
+	   << "Start="  << std::setw(12) << StartPointA       << " "
            << "End= "   << std::setw(8) << EndPointB         << " "
            << "StepIn=" << std::setw(8) << LinearStepLength  << " "
-           << "NewSft=" << std::setw(8) << NewSafety
-           << "NavCall" << doCallNav      << "  "
-           << "In T/F " << intersects     << "  " 
-           << "IntrPt=" << std::setw(8) << IntersectionPoint << " " 
-           << G4endl;
+           << "NewSft=" << std::setw(8) << NewSafety << " " 
+           << "CallNav=" << doCallNav      << "  "
+           << "Intersects " << intersects     << "  "; 
+    if( intersects ) 
+      G4cout << "IntrPt=" << std::setw(8) << IntersectionPoint << " " ; 
+    G4cout << G4endl;
 #endif
 
     return intersects;
