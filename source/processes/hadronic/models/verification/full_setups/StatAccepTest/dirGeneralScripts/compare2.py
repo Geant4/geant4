@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 #-------------------------------------------------------------------
-# Last update: 13-Jun-2006
+# Last update: 17-Nov-2006
 #
 # This script has 2 input arguments, and should be run as:
 #
@@ -104,15 +104,15 @@ def funExtract( theFile ) :
     pionfR1 = (0.0, 0.0)
     pionfR2 = (0.0, 0.0)
     pionfR3 = (0.0, 0.0)
-    pdg0Evis = (0.0, 0.0)
-    pdg0Etot = (0.0, 0.0)
-    pdg0fL1 = (0.0, 0.0)
-    pdg0fL2 = (0.0, 0.0)
-    pdg0fL3 = (0.0, 0.0)
-    pdg0fL4 = (0.0, 0.0)
-    pdg0fR1 = (0.0, 0.0)
-    pdg0fR2 = (0.0, 0.0)
-    pdg0fR3 = (0.0, 0.0)
+    nucleusEvis = (0.0, 0.0)
+    nucleusEtot = (0.0, 0.0)
+    nucleusfL1 = (0.0, 0.0)
+    nucleusfL2 = (0.0, 0.0)
+    nucleusfL3 = (0.0, 0.0)
+    nucleusfL4 = (0.0, 0.0)
+    nucleusfR1 = (0.0, 0.0)
+    nucleusfR2 = (0.0, 0.0)
+    nucleusfR3 = (0.0, 0.0)
     muonEvis = (0.0, 0.0)
     muonEtot = (0.0, 0.0)
     kaonEvis = (0,0, 0.0)
@@ -145,7 +145,7 @@ def funExtract( theFile ) :
         statusShowerElectron = 0
         statusShowerProton = 0
         statusShowerPion = 0
-        statusShowerPdg0 = 0
+        statusShowerNucleus = 0
         statusShowerMuon = 0
         statusShowerKaon = 0
         statusSteps = 0
@@ -250,8 +250,10 @@ def funExtract( theFile ) :
                         elif ( line.find( "proton" ) > -1 ) :
                             statusShowerProton = 1
                             statusShowerKaon = 0
-                        elif ( line.find( "pdg0" ) > -1 ) :
-                            statusShowerPdg0 = 1
+                        elif ( line.find( "pdg0" ) > -1  or     # Before G4 8.2 nuclei 
+                               line.find( "nuclei" ) > -1       # have PDG code = 0 .
+                               ) :
+                            statusShowerNucleus = 1
                             statusShowerProton = 0
 
                     if ( statusShowerElectron ) :
@@ -377,46 +379,46 @@ def funExtract( theFile ) :
                                             float( line.split( "=" )[1].split( "+/-" )[1].split( "%" )[0] ) )
                                 #print "***DEBUG***  pionfR3 = ", pionfR3
                                 
-                    elif ( statusShowerPdg0 ) :
+                    elif ( statusShowerNucleus ) :
                         if ( line.find( "<E_vis> =" ) > -1 ) :
-                            pdg0Evis = ( float( line.split( "=" )[1].split( "+/-" )[0] ) ,
+                            nucleusEvis = ( float( line.split( "=" )[1].split( "+/-" )[0] ) ,
                                          float( line.split( "=" )[1].split( "+/-" )[1].split( " " )[1] ) )
-                            #print "***DEBUG***  pdg0Evis = ", pdg0Evis
+                            #print "***DEBUG***  nucleusEvis = ", nucleusEvis
                         elif ( line.find( "<E_tot> =" ) > -1 ) :
-                            pdg0Etot = ( float( line.split( "=" )[1].split( "+/-" )[0] ) ,
+                            nucleusEtot = ( float( line.split( "=" )[1].split( "+/-" )[0] ) ,
                                          float( line.split( "=" )[1].split( "+/-" )[1].split( " " )[1] ) )
-                            #print "***DEBUG***  pdg0Etot = ", pdg0Etot
+                            #print "***DEBUG***  nucleusEtot = ", nucleusEtot
 
                         if ( statusLfractions  and  not statusRfractions ) :
                             if ( line.find( "1st" ) > -1 ) :
-                                pdg0fL1 = ( float( line.split( "=" )[1].split( "+/-" )[0] ), 
+                                nucleusfL1 = ( float( line.split( "=" )[1].split( "+/-" )[0] ), 
                                             float( line.split( "=" )[1].split( "+/-" )[1].split( "%" )[0] ) )
-                                #print "***DEBUG***  pdg0fL1 = ", pdg0fL1
+                                #print "***DEBUG***  nucleusfL1 = ", nucleusfL1
                             elif ( line.find( "2nd" ) > -1 ) :
-                                pdg0fL2 = ( float( line.split( "=" )[1].split( "+/-" )[0] ), 
+                                nucleusfL2 = ( float( line.split( "=" )[1].split( "+/-" )[0] ), 
                                             float( line.split( "=" )[1].split( "+/-" )[1].split( "%" )[0] ) )
-                                #print "***DEBUG***  pdg0fL2 = ", pdg0fL2
+                                #print "***DEBUG***  nucleusfL2 = ", nucleusfL2
                             elif ( line.find( "3rd" ) > -1 ) :
-                                pdg0fL3 = ( float( line.split( "=" )[1].split( "+/-" )[0] ), 
+                                nucleusfL3 = ( float( line.split( "=" )[1].split( "+/-" )[0] ), 
                                             float( line.split( "=" )[1].split( "+/-" )[1].split( "%" )[0] ) )
-                                #print "***DEBUG***  pdg0fL3 = ", pdg0fL3
+                                #print "***DEBUG***  nucleusfL3 = ", nucleusfL3
                             elif ( line.find( "4th" ) > -1 ) :
-                                pdg0fL4 = ( float( line.split( "=" )[1].split( "+/-" )[0] ), 
+                                nucleusfL4 = ( float( line.split( "=" )[1].split( "+/-" )[0] ), 
                                             float( line.split( "=" )[1].split( "+/-" )[1].split( "%" )[0] ) )
-                                #print "***DEBUG***  pdg0fL4 = ", pdg0fL4
+                                #print "***DEBUG***  nucleusfL4 = ", nucleusfL4
                         elif ( not statusLfractions  and statusRfractions ) :
                             if ( line.find( "1st" ) > -1 ) :
-                                pdg0fR1 = ( float( line.split( "=" )[1].split( "+/-" )[0] ), 
+                                nucleusfR1 = ( float( line.split( "=" )[1].split( "+/-" )[0] ), 
                                             float( line.split( "=" )[1].split( "+/-" )[1].split( "%" )[0] ) )
-                                #print "***DEBUG***  pdg0fR1 = ", pdg0fR1
+                                #print "***DEBUG***  nucleusfR1 = ", nucleusfR1
                             elif ( line.find( "2nd" ) > -1 ) :
-                                pdg0fR2 = ( float( line.split( "=" )[1].split( "+/-" )[0] ), 
+                                nucleusfR2 = ( float( line.split( "=" )[1].split( "+/-" )[0] ), 
                                             float( line.split( "=" )[1].split( "+/-" )[1].split( "%" )[0] ) )
-                                #print "***DEBUG***  pdg0fR2 = ", pdg0fR2
+                                #print "***DEBUG***  nucleusfR2 = ", nucleusfR2
                             elif ( line.find( "3rd" ) > -1 ) :
-                                pdg0fR3 = ( float( line.split( "=" )[1].split( "+/-" )[0] ), 
+                                nucleusfR3 = ( float( line.split( "=" )[1].split( "+/-" )[0] ), 
                                             float( line.split( "=" )[1].split( "+/-" )[1].split( "%" )[0] ) )
-                                #print "***DEBUG***  pdg0fR3 = ", pdg0fR3
+                                #print "***DEBUG***  nucleusfR3 = ", nucleusfR3
 
                     elif ( statusShowerMuon ) :
                         if ( line.find( "<E_vis> =" ) > -1 ) :
@@ -538,9 +540,9 @@ def funExtract( theFile ) :
              pionEvis, pionEtot,
              pionfL1, pionfL2, pionfL3, pionfL4, 
              pionfR1, pionfR2, pionfR3,
-             pdg0Evis, pdg0Etot,
-             pdg0fL1, pdg0fL2, pdg0fL3, pdg0fL4, 
-             pdg0fR1, pdg0fR2, pdg0fR3,
+             nucleusEvis, nucleusEtot,
+             nucleusfL1, nucleusfL2, nucleusfL3, nucleusfL4, 
+             nucleusfR1, nucleusfR2, nucleusfR3,
              muonEvis, muonEtot,
              kaonEvis, kaonEtot,
              listSteps, listTracks,
@@ -576,9 +578,9 @@ def doStatisticalComparison( valuesA, valuesB ) :
       pionEvisA, pionEtotA,
       pionfL1A, pionfL2A, pionfL3A, pionfL4A, 
       pionfR1A, pionfR2A, pionfR3A,
-      pdg0EvisA, pdg0EtotA,
-      pdg0fL1A, pdg0fL2A, pdg0fL3A, pdg0fL4A, 
-      pdg0fR1A, pdg0fR2A, pdg0fR3A,
+      nucleusEvisA, nucleusEtotA,
+      nucleusfL1A, nucleusfL2A, nucleusfL3A, nucleusfL4A, 
+      nucleusfR1A, nucleusfR2A, nucleusfR3A,
       muonEvisA, muonEtotA,
       kaonEvisA, kaonEtotA,
       listStepsA, listTracksA,
@@ -600,9 +602,9 @@ def doStatisticalComparison( valuesA, valuesB ) :
       pionEvisB, pionEtotB,
       pionfL1B, pionfL2B, pionfL3B, pionfL4B, 
       pionfR1B, pionfR2B, pionfR3B,
-      pdg0EvisB, pdg0EtotB,
-      pdg0fL1B, pdg0fL2B, pdg0fL3B, pdg0fL4B, 
-      pdg0fR1B, pdg0fR2B, pdg0fR3B,
+      nucleusEvisB, nucleusEtotB,
+      nucleusfL1B, nucleusfL2B, nucleusfL3B, nucleusfL4B, 
+      nucleusfR1B, nucleusfR2B, nucleusfR3B,
       muonEvisB, muonEtotB,
       kaonEvisB, kaonEtotB,
       listStepsB, listTracksB,
@@ -875,67 +877,67 @@ def doStatisticalComparison( valuesA, valuesB ) :
                 listResults.append( ( name, pionfR3A[0], pionfR3B[0],
                                       resultComparison ) )
         elif ( i == 39 ) :
-            name = " Evis pdg0 [MeV]"
-            resultComparison = compareTwo( pdg0EvisA[0], pdg0EvisA[1],
-                                           pdg0EvisB[0], pdg0EvisB[1] )
+            name = " Evis nucleus [MeV]"
+            resultComparison = compareTwo( nucleusEvisA[0], nucleusEvisA[1],
+                                           nucleusEvisB[0], nucleusEvisB[1] )
             if ( isShowerPerParticleInformationOn ) :
-                listResults.append( ( name, pdg0EvisA[0], pdg0EvisB[0],
+                listResults.append( ( name, nucleusEvisA[0], nucleusEvisB[0],
                                       resultComparison ) )
         elif ( i == 40 ) :
-            name = " Etot pdg0 [MeV]"
-            resultComparison = compareTwo( pdg0EtotA[0], pdg0EtotA[1],
-                                           pdg0EtotB[0], pdg0EtotB[1] )
+            name = " Etot nucleus [MeV]"
+            resultComparison = compareTwo( nucleusEtotA[0], nucleusEtotA[1],
+                                           nucleusEtotB[0], nucleusEtotB[1] )
             if ( isShowerPerParticleInformationOn ) :
-                listResults.append( ( name, pdg0EtotA[0], pdg0EtotB[0],
+                listResults.append( ( name, nucleusEtotA[0], nucleusEtotB[0],
                                       resultComparison ) )
         elif ( i == 41 ) :
-            name = " fL1 pdg0"
-            resultComparison = compareTwo( pdg0fL1A[0], pdg0fL1A[1],
-                                           pdg0fL1B[0], pdg0fL1B[1] )
+            name = " fL1 nucleus"
+            resultComparison = compareTwo( nucleusfL1A[0], nucleusfL1A[1],
+                                           nucleusfL1B[0], nucleusfL1B[1] )
             if ( isShowerPerParticleInformationOn ) :
-                listResults.append( ( name, pdg0fL1A[0], pdg0fL1B[0],
+                listResults.append( ( name, nucleusfL1A[0], nucleusfL1B[0],
                                       resultComparison ) )
         elif ( i == 42 ) :
-            name = " fL2 pdg0"
-            resultComparison = compareTwo( pdg0fL2A[0], pdg0fL2A[1],
-                                           pdg0fL2B[0], pdg0fL2B[1] )
+            name = " fL2 nucleus"
+            resultComparison = compareTwo( nucleusfL2A[0], nucleusfL2A[1],
+                                           nucleusfL2B[0], nucleusfL2B[1] )
             if ( isShowerPerParticleInformationOn ) :
-                listResults.append( ( name, pdg0fL2A[0], pdg0fL2B[0],
+                listResults.append( ( name, nucleusfL2A[0], nucleusfL2B[0],
                                       resultComparison ) )
         elif ( i == 43 ) :
-            name = " fL3 pdg0"
-            resultComparison = compareTwo( pdg0fL3A[0], pdg0fL3A[1],
-                                           pdg0fL3B[0], pdg0fL3B[1] )
+            name = " fL3 nucleus"
+            resultComparison = compareTwo( nucleusfL3A[0], nucleusfL3A[1],
+                                           nucleusfL3B[0], nucleusfL3B[1] )
             if ( isShowerPerParticleInformationOn ) :
-                listResults.append( ( name, pdg0fL3A[0], pdg0fL3B[0],
+                listResults.append( ( name, nucleusfL3A[0], nucleusfL3B[0],
                                       resultComparison ) )
         elif ( i == 44 ) :
-            name = " fL4 pdg0"
-            resultComparison = compareTwo( pdg0fL4A[0], pdg0fL4A[1],
-                                           pdg0fL4B[0], pdg0fL4B[1] )
+            name = " fL4 nucleus"
+            resultComparison = compareTwo( nucleusfL4A[0], nucleusfL4A[1],
+                                           nucleusfL4B[0], nucleusfL4B[1] )
             if ( isShowerPerParticleInformationOn ) :
-                listResults.append( ( name, pdg0fL4A[0], pdg0fL4B[0],
+                listResults.append( ( name, nucleusfL4A[0], nucleusfL4B[0],
                                       resultComparison ) )
         elif ( i == 45 ) :
-            name = " fR1 pdg0"
-            resultComparison = compareTwo( pdg0fR1A[0], pdg0fR1A[1],
-                                           pdg0fR1B[0], pdg0fR1B[1] )
+            name = " fR1 nucleus"
+            resultComparison = compareTwo( nucleusfR1A[0], nucleusfR1A[1],
+                                           nucleusfR1B[0], nucleusfR1B[1] )
             if ( isShowerPerParticleInformationOn ) :
-                listResults.append( ( name, pdg0fR1A[0], pdg0fR1B[0],
+                listResults.append( ( name, nucleusfR1A[0], nucleusfR1B[0],
                                       resultComparison ) )
         elif ( i == 46 ) :
-            name = " fR2 pdg0"
-            resultComparison = compareTwo( pdg0fR2A[0], pdg0fR2A[1],
-                                           pdg0fR2B[0], pdg0fR2B[1] )
+            name = " fR2 nucleus"
+            resultComparison = compareTwo( nucleusfR2A[0], nucleusfR2A[1],
+                                           nucleusfR2B[0], nucleusfR2B[1] )
             if ( isShowerPerParticleInformationOn ) :
-                listResults.append( ( name, pdg0fR2A[0], pdg0fR2B[0],
+                listResults.append( ( name, nucleusfR2A[0], nucleusfR2B[0],
                                       resultComparison ) )
         elif ( i == 47 ) :
-            name = " fR3 pdg0"
-            resultComparison = compareTwo( pdg0fR3A[0], pdg0fR3A[1],
-                                           pdg0fR3B[0], pdg0fR3B[1] )
+            name = " fR3 nucleus"
+            resultComparison = compareTwo( nucleusfR3A[0], nucleusfR3A[1],
+                                           nucleusfR3B[0], nucleusfR3B[1] )
             if ( isShowerPerParticleInformationOn ) :
-                listResults.append( ( name, pdg0fR3A[0], pdg0fR3B[0],
+                listResults.append( ( name, nucleusfR3A[0], nucleusfR3B[0],
                                       resultComparison ) )
         elif ( i == 48 ) :
             name = " Evis mu-/+ [MeV]"
@@ -1284,9 +1286,9 @@ else :
                 pionEvisA, pionEtotA,
                 pionfL1A, pionfL2A, pionfL3A, pionfL4A, 
                 pionfR1A, pionfR2A, pionfR3A,
-                pdg0EvisA, pdg0EtotA,
-                pdg0fL1A, pdg0fL2A, pdg0fL3A, pdg0fL4A, 
-                pdg0fR1A, pdg0fR2A, pdg0fR3A,
+                nucleusEvisA, nucleusEtotA,
+                nucleusfL1A, nucleusfL2A, nucleusfL3A, nucleusfL4A, 
+                nucleusfR1A, nucleusfR2A, nucleusfR3A,
                 muonEvisA, muonEtotA,
                 kaonEvisA, kaonEtotA,
                 listStepsA, listTracksA,
@@ -1310,9 +1312,9 @@ else :
                 pionEvisB, pionEtotB,
                 pionfL1B, pionfL2B, pionfL3B, pionfL4B, 
                 pionfR1B, pionfR2B, pionfR3B,
-                pdg0EvisB, pdg0EtotB,
-                pdg0fL1B, pdg0fL2B, pdg0fL3B, pdg0fL4B, 
-                pdg0fR1B, pdg0fR2B, pdg0fR3B,
+                nucleusEvisB, nucleusEtotB,
+                nucleusfL1B, nucleusfL2B, nucleusfL3B, nucleusfL4B, 
+                nucleusfR1B, nucleusfR2B, nucleusfR3B,
                 muonEvisB, muonEtotB,
                 kaonEvisB, kaonEtotB,
                 listStepsB, listTracksB,
