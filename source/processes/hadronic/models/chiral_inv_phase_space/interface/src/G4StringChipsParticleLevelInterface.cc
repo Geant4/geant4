@@ -852,12 +852,14 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
 #endif
       theResult->push_back(theSec);
     }
+#ifdef pdebug
     else
     {
-      G4cerr << G4endl<<"WARNING: "<<G4endl;
+      G4cerr <<"G4StringChipsParticleLevelInterface::Propagate: WARNING"<<G4endl;
       G4cerr << "Getting unknown pdgCode from chips in ParticleLevelInterface"<<G4endl;
       G4cerr << "skipping particle with pdgCode = "<<pdgCode<<G4endl<<G4endl;
     }
+#endif
     
 #ifdef CHIPSdebug
     G4cout <<"CHIPS particles "<<theDefinition->GetPDGCharge()<<" "

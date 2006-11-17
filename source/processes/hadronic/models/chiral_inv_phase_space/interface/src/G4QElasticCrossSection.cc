@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QElasticCrossSection.cc,v 1.11 2006-11-16 11:33:25 mkossov Exp $
+// $Id: G4QElasticCrossSection.cc,v 1.12 2006-11-17 15:37:25 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -44,10 +44,10 @@
 #include "G4QElasticCrossSection.hh"
 
 // Initialization of the static parameters
-const G4int G4QElasticCrossSection::nPoints=51;// #of points in the AMDB tables(>anyPar)(D)
+const G4int G4QElasticCrossSection::nPoints=100;//#of points in the AMDB tables(>anyPar)(D)
 const G4int G4QElasticCrossSection::nLast=nPoints-1; // the Last element in the table   (D)
-G4double  G4QElasticCrossSection::lPMin=-3.;  // Min tabulated logarithmic Momentum     (D)
-G4double  G4QElasticCrossSection::lPMax= 9.;  // Max tabulated logarithmic Momentum     (D)
+G4double  G4QElasticCrossSection::lPMin=-4.;  // Min tabulated logarithmic Momentum     (D)
+G4double  G4QElasticCrossSection::lPMax= 8.;  // Max tabulated logarithmic Momentum     (D)
 G4double  G4QElasticCrossSection::dlnP=(lPMax-lPMin)/nLast;// Log step in the table     (D)
 G4bool    G4QElasticCrossSection::onlyCS=true;// Flag to calculate only CS (not Si/Bi)		(L)
 G4double  G4QElasticCrossSection::lastSIG=0.; // Last calculated cross section								  (L)
@@ -103,8 +103,8 @@ G4double G4QElasticCrossSection::CalculateCrossSection(G4bool CS,G4int F,G4int I
   static std::vector <G4double*> B2T;   // Vector of the second slope
   static std::vector <G4double*> S3T;   // Vector of the third mantissa
   static std::vector <G4double*> B3T;   // Vector of the third slope
-  static std::vector <G4double*> S4T;   // Vector of the 4-th mantissa
-  static std::vector <G4double*> B4T;   // Vector of the 4-th slope
+  static std::vector <G4double*> S4T;   // Vector of the 4-th mantissa (gloria)
+  static std::vector <G4double*> B4T;   // Vector of the 4-th slope    (gloria)
   // *** End of Static Definitions (Associative Memory Data Base) ***
   G4double pMom=pIU/GeV;                // All calculations are in GeV
   onlyCS=CS;                            // Flag to calculate only CS (not Si/Bi)
@@ -413,6 +413,10 @@ G4double G4QElasticCrossSection::GetPTables(G4double LP,G4double ILP, G4int PDG,
           // The gloria slope           (pel_ub)
           lastPAR[43]=920.+.03*a8*a3;                        // p1
           lastPAR[44]=93.+.0023*a12;                         // p2
+#ifdef pdebug
+         G4cout<<"G4QElCS::CalcCS:la "<<lastPAR[38]<<", "<<lastPAR[39]<<", "<<lastPAR[40]
+               <<", "<<lastPAR[42]<<", "<<lastPAR[43]<<", "<<lastPAR[44]<<G4endl;
+#endif
         }
         else
 								{
@@ -471,7 +475,11 @@ G4double G4QElasticCrossSection::GetPTables(G4double LP,G4double ILP, G4int PDG,
           lastPAR[47]=24.;                                   // p1
           lastPAR[48]=20./sa;                                // p2
           lastPAR[49]=7.e3*a/(sa+1.);                        // p3
-          lastPAR[50]=900.*sa/(1.+90./a2);                   // p4
+          lastPAR[50]=900.*sa/(1.+500./a3);                  // p4
+#ifdef pdebug
+         G4cout<<"G4QElCS::CalcCS:ha "<<lastPAR[41]<<", "<<lastPAR[42]<<", "<<lastPAR[43]
+               <<", "<<lastPAR[44]<<", "<<lastPAR[45]<<", "<<lastPAR[46]<<G4endl;
+#endif
         }
       }
       lastPAR[nLast]=pwd;
@@ -641,8 +649,9 @@ G4double G4QElasticCrossSection::GetExchangeT(G4int tgZ, G4int tgN, G4int PDG)
   {
     G4double a=tgZ+tgN;
 #ifdef tdebug
-    G4cout<<"G4QElasticCS::GetExchangeT: TM="<<lastTM<<",S1="<<theS1<<",B1="<<theB1<<",S2="
-          <<theS2<<",B2="<<theB2<<",S3="<<theS3<<",B3="<<theB3<<",GeV2="<<GeVSQ<<G4endl;
+    G4cout<<"G4QElCS::GetExT: a="<<a<<",t="<<lastTM<<",S1="<<theS1<<",B1="<<theB1<<",SS="
+          <<theSS<<",S2="<<theS2<<",B2="<<theB2<<",S3="<<theS3<<",B3="<<theB3<<",S4="
+          <<theS4<<",B4="<<theB4<<G4endl;
 #endif
     G4double E1=lastTM*(theB1+lastTM*theSS);
   		G4double R1=(1.-std::exp(-E1));
@@ -654,7 +663,7 @@ G4double G4QElasticCrossSection::GetExchangeT(G4int tgZ, G4int tgN, G4int PDG)
     if(ds1>.0001)G4cout<<"*Warn*G4QElCS::GetExT:1a "<<ts1<<"#"<<lastTM<<",d="<<ds1<<G4endl;
 #endif
     G4double tm2=lastTM*lastTM;
-    G4double E2=lastTM*tm2*theB2;
+    G4double E2=lastTM*tm2*theB2;                   // power 3 for lowA, 5 for HighA (1st)
     if(a>6.5)E2*=tm2;                               // for heavy nuclei
   		G4double R2=(1.-std::exp(-E2));
 #ifdef tdebug
@@ -665,7 +674,7 @@ G4double G4QElasticCrossSection::GetExchangeT(G4int tgZ, G4int tgN, G4int PDG)
     if(ds2>.0001)G4cout<<"*Warn*G4QElCS::GetExT:2a "<<ts2<<"#"<<lastTM<<",d="<<ds2<<G4endl;
 #endif
     G4double E3=lastTM*theB3;
-    if(a>6.5)E3*=tm2*tm2*tm2;
+    if(a>6.5)E3*=tm2*tm2*tm2;                       // power 1 for lowA, 7 (2nd) for HighA
   		G4double R3=(1.-std::exp(-E3));
 #ifdef tdebug
     G4double ts3=-std::log(1.-R3)/theB3;
@@ -688,7 +697,7 @@ G4double G4QElasticCrossSection::GetExchangeT(G4int tgZ, G4int tgN, G4int PDG)
     G4double I13=I12+I3;
     G4double rand=(I13+I4)*G4UniformRand();
 #ifdef tdebug
-    G4cout<<"G4QElCS::GtExT:1="<<I1<<",2="<<I2<<",3="<<I3<<",R3="<<R3<<",r="<<rand<<G4endl;
+    G4cout<<"G4QElCS::GtExT:1="<<I1<<",2="<<I2<<",3="<<I3<<",4="<<I4<<",r="<<rand<<G4endl;
 #endif
     if(rand<I1)
     {
@@ -718,7 +727,7 @@ G4double G4QElasticCrossSection::GetExchangeT(G4int tgZ, G4int tgN, G4int PDG)
     else
     {
       q2=-std::log(1.-R4*G4UniformRand())/theB4;
-      if(a>6.5) q2=lastTM-q2;                    // u reduced (starts from 0)
+      if(a<6.5) q2=lastTM-q2;                    // u reduced for lightA (starts from 0)
 #ifdef tdebug
       G4cout<<"G4QElCS::GetExT:Q2="<<q2<<",m="<<lastTM<<",b4="<<theB3<<",t4="<<ts3<<G4endl;
 #endif
@@ -816,12 +825,12 @@ G4double G4QElasticCrossSection::GetTabValues(G4double lp, G4int PDG, G4int tgZ,
 				  theS3=lastPAR[31]/(pa*p+lastPAR[32]/pa)+lastPAR[33];
 				  theB3=lastPAR[34]/(p3+lastPAR[35]/p6)+lastPAR[36]/(1.+lastPAR[37]/p2);
 				  theS4=p2*(pah*lastPAR[38]*std::exp(-pah*lastPAR[39])+
-                lastPAR[41]*std::pow(p,lastPAR[42]));
+                lastPAR[40]/(1.+lastPAR[41]*std::pow(p,lastPAR[42])));
 				  theB4=lastPAR[43]*pa/p2/(1.+pa*lastPAR[44]);
 #ifdef tdebug
-      G4cout<<"G4QElasticCS::GetTableValues: lA, TM="<<lastTM<<",S1="<<theS1<<",B1="<<theB1
-            <<",SS="<<theSS<<",S2="<<theS2<<",B2="<<theB2<<",S3="<<theS3<<",B3="<<theB3
-            <<G4endl;
+      G4cout<<"G4QElCS::GetTabV: lA, p="<<p<<",S1="<<theS1<<",B1="<<theB1<<",SS="<<theSS
+            <<",S2="<<theS2<<",B2="<<theB2<<",S3="<<theS3<<",B3="<<theB3<<",S4="<<theS4
+            <<",B4="<<theB4<<G4endl;
 #endif
     }
     else
@@ -830,7 +839,7 @@ G4double G4QElasticCrossSection::GetTabValues(G4double lp, G4int PDG, G4int tgZ,
             lastPAR[13]/(p5+lastPAR[14]/p16);
       theB1=(lastPAR[15]/p8+lastPAR[19])/(p+lastPAR[16]/std::pow(p,lastPAR[20]))+
             lastPAR[17]/(1.+lastPAR[18]/p4);
-      theSS=lastPAR[21]/(p4/std::pow(p,lastPAR[23])+lastPAR[22]);
+      theSS=lastPAR[21]/(p4/std::pow(p,lastPAR[23])+lastPAR[22]/p4);
       theS2=lastPAR[24]/p4/(std::pow(p,lastPAR[25])+lastPAR[26]/p12)+lastPAR[27];
 				  theB2=lastPAR[28]/std::pow(p,lastPAR[29])+lastPAR[30]/std::pow(p,lastPAR[31]);
 				  theS3=lastPAR[32]/std::pow(p,lastPAR[35])/(1.+lastPAR[36]/p12)+
@@ -840,9 +849,9 @@ G4double G4QElasticCrossSection::GetTabValues(G4double lp, G4int PDG, G4int tgZ,
             (lastPAR[43]+lastPAR[44]*dl*dl)/(1.+lastPAR[45]/p12);
 				  theB4=lastPAR[47]/(1.+lastPAR[48]/p)+lastPAR[49]*p4/(1.+lastPAR[50]*p5);
 #ifdef tdebug
-      G4cout<<"G4QElasticCS::GetTableValues: hA, TM="<<lastTM<<",S1="<<theS1<<",B1="<<theB1
-            <<",SS="<<theSS<<",S2="<<theS2<<",B2="<<theB2<<",S3="<<theS3<<",B3="<<theB3
-            <<G4endl;
+      G4cout<<"G4QElCS::GetTabV: hA, p="<<p<<",S1="<<theS1<<",B1="<<theB1<<",SS="<<theSS
+            <<",S2="<<theS2<<",B2="<<theB2<<",S3="<<theS3<<",B3="<<theB3<<",S4="<<theS4
+            <<",B4="<<theB4<<G4endl;
 #endif
     }
     G4double rp16=lastPAR[6]/p16;
