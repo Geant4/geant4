@@ -23,6 +23,19 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: PhysicsList.cc,v 1.12 2006-11-17 17:03:28 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+//---------------------------------------------------------------------------
+//
+// ClassName:   PhysicsList
+//
+// Author:      V.Ivanchenko 14.10.2002
+//
+// Modified:
+// 17.11.06 Use components from physics_lists subdirectory (V.Ivanchenko)
+//
+//----------------------------------------------------------------------------
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -31,12 +44,19 @@
 #include "PhysicsList.hh"
 #include "PhysicsListMessenger.hh"
 
-#include "PhysListParticles.hh"
-#include "PhysListGeneral.hh"
 #include "PhysListEmStandard.hh"
-#include "PhysListHadronElastic.hh"
-#include "PhysListBinaryCascade.hh"
-#include "PhysListIonBinaryCascade.hh"
+#include "G4EmStandardPhysics.hh"
+#include "G4EmStandardPhysics71.hh"
+#include "G4EmStandardPhysics72.hh"
+#include "PhysListEmLivermore.hh"
+#include "PhysListEmPenelope.hh"
+#include "G4DecayPhysics.hh"
+#include "G4HadronElasticPhysics.hh"
+#include "G4HadronInelasticQBBC.hh"
+#include "G4IonBinaryCascadePhysics.hh"
+#include "G4EmExtraPhysics.hh"
+#include "G4QStoppingPhysics.hh"
+
 #include "G4RegionStore.hh"
 #include "G4Region.hh"
 #include "G4ProductionCuts.hh"
@@ -67,25 +87,25 @@ PhysicsList::PhysicsList() : G4VModularPhysicsList()
   vertexDetectorCuts = 0;
   muonDetectorCuts   = 0;
 
-  stepMaxProcess  = 0;
-
-  mscStepLimit = true;
-
   pMessenger = new PhysicsListMessenger(this);
   stepMaxProcess = new StepMax();
 
+  // Initilise flags
+
   SetVerboseLevel(1);
 
-   // Particles
-  particleList = new PhysListParticles("particles");
+  mscStepLimit   = true;
+  helIsRegisted  = false;
+  bicIsRegisted  = false;
+  gnucIsRegisted = false;
+  stopIsRegisted = false;
 
-  // General Physics
-  generalPhysicsList = new PhysListGeneral("general");
+  // Decay Physics is always defined
+  generalPhysicsList = new G4DeacyPhysics();
 
   // EM physics
-  emName = G4String("standard");
+  emName = G4String("standard_q");
   emPhysicsList = new PhysListEmStandard(emName);
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -105,7 +125,7 @@ PhysicsList::~PhysicsList()
 
 void PhysicsList::ConstructParticle()
 {
-  particleList->ConstructParticle();
+  generalPhysicsList->ConstructParticle();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -113,8 +133,8 @@ void PhysicsList::ConstructParticle()
 void PhysicsList::ConstructProcess()
 {
   AddTransportation();
-  generalPhysicsList->ConstructProcess();
   emPhysicsList->ConstructProcess();
+  generalPhysicsList->ConstructProcess();
   for(size_t i=0; i<hadronPhys.size(); i++) {
     hadronPhys[i]->ConstructProcess();
   }
@@ -129,9 +149,8 @@ void PhysicsList::ConstructProcess()
 
 void PhysicsList::AddPhysicsList(const G4String& name)
 {
-  if (verboseLevel>-1) {
+  if (verboseLevel > 1) 
     G4cout << "PhysicsList::AddPhysicsList: <" << name << ">" << G4endl;
-  }
 
   if (name == emName) return;
 
@@ -139,19 +158,68 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 
     emName = name;
     delete emPhysicsList;
-    emPhysicsList = new PhysListEmStandard(name);
+    emPhysicsList = new G4EmStandardPhysics();
+    if (verboseLevel > 0) 
+      G4cout << "PhysicsList::Set " << name << " EM physics" << G4endl;
 
-  } else if (name == "elastic") {
+  } else if (name == "standard_emv") {
 
-    hadronPhys.push_back( new PhysListHadronElastic(name));
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new G4EmStandardPhysics71();
+    if (verboseLevel > 0) 
+      G4cout << "PhysicsList::Set " << name << " EM physics" << G4endl;
 
-  } else if (name == "binary") {
+  } else if (name == "standard_emx") {
 
-    hadronPhys.push_back( new PhysListBinaryCascade(name));
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new G4EmStandardPhysics72();
+    if (verboseLevel > 0) 
+      G4cout << "PhysicsList::Set " << name << " EM physics" << G4endl;
 
-  } else if (name == "binary_ion") {
+  } else if (name == "lowenergy") {
 
-    hadronPhys.push_back( new PhysListIonBinaryCascade(name));
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new PhysListEmLivermore();
+    if (verboseLevel > 0) 
+      G4cout << "PhysicsList::Set Livermore EM physics" << G4endl;
+
+  } else if (name == "penelope") {
+
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new PhysListEmPenelope();
+    if (verboseLevel > 0) 
+      G4cout << "PhysicsList::Set Penelope EM physics" << G4endl;
+
+  } else if (name == "elastic" && !helIsRegisted) {
+
+    hadronPhys.push_back( new G4HadronElasticPhysics(name));
+    helIsRegisted = true;
+    if (verboseLevel > 0) 
+      G4cout << "PhysicsList::Add hadron elastic physics" << G4endl;
+
+  } else if (name == "binary" && !bicIsRegisted) {
+  
+    hadronPhys.push_back(new G4HadronInelasticQBBC());
+    hadronPhys.push_back(new G4IonBinaryCascadePhysics());
+    bicIsRegisted = true;
+    if (verboseLevel > 0) 
+      G4cout << "PhysicsList::Add hadron inelastic physics from <QBBC>" << G4endl;
+
+  } else if (name == "gamma_nuc" && !gnucIsRegisted) {
+    hadronPhys.push_back(new G4EmExtraPhysics());
+    gnucIsRegisted = true;
+    if (verboseLevel > 0) 
+      G4cout << "PhysicsList::Add gamma- and electro-nuclear physics" << G4endl;
+
+  } else if (name == "stopping" && !stopIsRegisted) {
+    hadronPhys.push_back(new G4QStoppingPhysics());
+    gnucIsRegisted = true;
+    if (verboseLevel > 0) 
+      G4cout << "PhysicsList::Add stopping physics" << G4endl;
 
   } else {
 
