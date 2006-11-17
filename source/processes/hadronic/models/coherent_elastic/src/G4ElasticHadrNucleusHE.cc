@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElasticHadrNucleusHE.cc,v 1.46 2006-11-17 14:40:47 vnivanch Exp $
+// $Id: G4ElasticHadrNucleusHE.cc,v 1.47 2006-11-17 16:02:29 starkov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //G4ElasticHadrNucleusHE.cc
 //
@@ -337,6 +337,8 @@ G4HadFinalState * G4ElasticHadrNucleusHE::ApplyYourself(
 
     Nstep = pElD->ONQ2;
 
+    RandMax = 0;
+
     iContr = 2;
 
     G4String  hadrName = aHadron->GetParticleName();
@@ -381,7 +383,7 @@ G4HadFinalState * G4ElasticHadrNucleusHE::ApplyYourself(
     }  //  if Step
 //  ......................................
     ii = 0;
-    while(pElD->TableCrossSec[NumbOnE*pElD->ONQ2+ii]>0.0001) 
+    while(pElD->TableCrossSec[NumbOnE*pElD->ONQ2+ii] > 0.0001) 
     {
        RandMax  = pElD->TableCrossSec[NumbOnE*pElD->ONQ2+ii];
        CurrentN = ii;
@@ -393,7 +395,7 @@ G4HadFinalState * G4ElasticHadrNucleusHE::ApplyYourself(
     if(RandMax > Rand)
     {
       kk = 0;
-      while(Rand>pElD->TableCrossSec[NumbOnE*pElD->ONQ2+kk])
+      while(Rand > pElD->TableCrossSec[NumbOnE*pElD->ONQ2+kk])
         kk++;
 
       iNumbQ2 = kk;
@@ -408,20 +410,20 @@ G4HadFinalState * G4ElasticHadrNucleusHE::ApplyYourself(
       for(ii=CurrentN; ii<Nstep; ii++)
       { 
 
-        Q2  = pElD->TableQ2[ii];  //(ii-0)*dQ2;
-	Buf = GetLightFq2(nucN, Q2, Step)/Weight;
-        pElD->TableCrossSec[NumbOnE*pElD->ONQ2+ii] = Buf;
+         Q2  = pElD->TableQ2[ii];  //(ii-0)*dQ2;
+         Buf = GetLightFq2(nucN, Q2, Step)/Weight;
+         pElD->TableCrossSec[NumbOnE*pElD->ONQ2+ii] = Buf;
 
-        if(Buf>Rand) 
-	{
-          iNumbQ2 = ii;
+         if(Buf > Rand) 
+         {
+           iNumbQ2 = ii;
 
-          Q2 = GetQ2_2(iNumbQ2, dNumbQ2, dNumbFQ2, Rand);
-          CurrentN = ii;
-          RandMax  = Buf;
+           Q2 = GetQ2_2(iNumbQ2, dNumbQ2, dNumbFQ2, Rand);
+           CurrentN = ii;
+           RandMax  = Buf;
 
-          break;
-	}  //  if Rand
+           break;
+         }  //  if Rand
       }    //  for ii
     }      //  else
 
