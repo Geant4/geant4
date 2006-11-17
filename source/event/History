@@ -1,4 +1,4 @@
-$Id: History,v 1.104 2006-11-10 15:23:54 flei Exp $
+$Id: History,v 1.105 2006-11-17 15:27:46 flei Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+November 17, 2006, F.Lei (event-V08-01-02)
+- First implementation of flat_sampling (biasing) for multiple sources. 
+
 November 10, 2006, F.Lei (event-V08-01-01)
 - Added line 468 to for initialization to G4PSEneDistribution.cc
 
