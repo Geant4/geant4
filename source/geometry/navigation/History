@@ -1,4 +1,4 @@
-$Id: History,v 1.67 2006-11-13 17:47:32 gcosmo Exp $
+$Id: History,v 1.68 2006-11-17 17:20:59 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,18 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 18th, 2006 - J.Apostolakis (geomnav-V08-01-07)
+-----------------------------------
+- G4PathFinder: 
+  o Fix for problem when step is fully taken 
+    -- Note: this occurs due to optimisation in PiF that avoids calling G4(Multi)Navigator!!
+  o Function LimitedString( ELimited lim ) enables printing this enum
+
+Small/cosmetic
+- G4PathFinder:
+  o Improved printing in IntersectChord.  Deleted/simplified few prints in ComputeStep
+- G4MultiNavigator - cleanup, cosmetics
 
 November 13th, 2006 - G.Cosmo (geomnav-V08-01-06)
 -----------------------------
