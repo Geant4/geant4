@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PolarizedBremsstrahlungCrossSection.cc,v 1.2 2006-09-26 09:08:47 gcosmo Exp $
+// $Id: G4PolarizedBremsstrahlungCrossSection.cc,v 1.3 2006-11-17 12:12:02 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -42,11 +42,12 @@
 #include "G4ePolarizedBremsstrahlungModel.hh"
 #include "G4Element.hh"
 
-bool G4PolarizedBremsstrahlungCrossSection::scrnInitialized=false;
-double G4PolarizedBremsstrahlungCrossSection::SCRN [3][20];  // screening function lookup table;
+G4bool G4PolarizedBremsstrahlungCrossSection::scrnInitialized=false;
+G4double G4PolarizedBremsstrahlungCrossSection::SCRN [3][20];  
+// screening function lookup table;
 
 
-void G4PolarizedBremsstrahlungCrossSection::Initialize()
+void G4PolarizedBremsstrahlungCrossSection::InitializeMe()
 {
   if (!scrnInitialized) {
     SCRN [1][1]=  0.5   ; SCRN [2][1] = 0.0145;
@@ -73,18 +74,19 @@ void G4PolarizedBremsstrahlungCrossSection::Initialize()
   }
 }
 
-G4PolarizedBremsstrahlungCrossSection::G4PolarizedBremsstrahlungCrossSection(G4ePolarizedBremsstrahlungModel * model)
+G4PolarizedBremsstrahlungCrossSection::G4PolarizedBremsstrahlungCrossSection(
+                                       G4ePolarizedBremsstrahlungModel * model)
   : theModel(model)
 {
-  
-  Initialize();
+  InitializeMe();
 }
 
 
-void G4PolarizedBremsstrahlungCrossSection::Initialize(G4double aLept0E, G4double aGammaE, G4double sintheta,
-						       const G4StokesVector & beamPol,
-						       const G4StokesVector & /*p1*/,
-						       int /*flag*/)
+void G4PolarizedBremsstrahlungCrossSection::Initialize(
+     G4double aLept0E, G4double aGammaE, G4double sintheta,
+     const G4StokesVector & beamPol,
+     const G4StokesVector & /*p1*/,
+     G4int /*flag*/)
 {
 //   G4cout<<"G4PolarizedBremsstrahlungCrossSection::Initialize \n"
 // 	<<"lepE = "<<aLept0E
@@ -114,13 +116,15 @@ void G4PolarizedBremsstrahlungCrossSection::Initialize(G4double aLept0E, G4doubl
 
   // *******  Gamma Transvers Momentum
     
-  G4double TMom = std::sqrt(Lept0E2 -1.)* sintheta, u    = TMom       , u2 =u * u ;
+  G4double TMom = std::sqrt(Lept0E2 -1.)* sintheta;
+  G4double u    = TMom       , u2 =u * u ;
   G4double Xsi  = 1./(1.+u2)                      , Xsi2 = Xsi * Xsi  ; 
 
   G4double theZ  = theSelectedElement->GetZ();
     
   G4double fCoul = theSelectedElement->GetfCoulomb();
-  G4double delta = 12. * std::pow(theZ, 1./3.) * Lept0E * Lept1E * Xsi / (121. * GammaE); 
+  G4double delta = 12. * std::pow(theZ, 1./3.) * 
+    Lept0E * Lept1E * Xsi / (121. * GammaE); 
   G4double GG=0.;
 
   if(delta < 0.5) {
@@ -130,7 +134,8 @@ void G4PolarizedBremsstrahlungCrossSection::Initialize(G4double aLept0E, G4doubl
     for (G4int j=2; j<=19; j++)  {
       if(SCRN[1][j] >= delta)    {
 	GG =std::log(2 * Lept0E * Lept1E / GammaE) - 2 - fCoul
-	  -(SCRN[2][j-1]+(delta-SCRN[1][j-1])*(SCRN[2][j]-SCRN[2][j-1])/(SCRN[1][j]-SCRN[1][j-1]));
+	  -(SCRN[2][j-1]+(delta-SCRN[1][j-1])*(SCRN[2][j]-SCRN[2][j-1])
+	    /(SCRN[1][j]-SCRN[1][j-1]));
 	break;
       }
     }
