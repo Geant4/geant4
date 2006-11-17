@@ -8,8 +8,7 @@
 
 /run/verbose 2
 #
-/testem/det/setMat Iron
-### Warning!  Target material: <Iron> not found
+/testem/det/setMat G4_Fe
 /testem/det/setSizeZ 1.75 mm
 /testem/phys/addPhysics polarized
 PhysicsList::AddPhysicsList: <polarized>
@@ -43,7 +42,6 @@ theBox : (0,0,0.08)
  buildBhabha cross section 0
 
 phot:  Total cross sections from Sandia parametrisation. 
-      Sampling according PhotoElectric model
 
 pol-compt:  Total cross sections has a good parametrisation from 10 KeV to (100/Z) GeV
       Sampling according Polarized-Compton model
@@ -130,39 +128,39 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=6.52s Real=6.8s Sys=0.17s
+  User=0.99s Real=1.02s Sys=0s
 
  The run consists of 10000 gamma of 10 MeV through 1.75 mm  of G4_Fe (density: 7.874 g/cm3 )
 
 --------- Ranlux engine status ---------
  Initial seed = 9876
- float_seed_table[] = 0.70431 0.0936913 0.194122 0.970758 0.737919 0.778963 0.140168 0.920724 0.838331 0.67233 0.646198 0.399318 0.000521302 0.00574505 0.785417 0.549573 0.154709 0.937112 0.979991 0.177782 0.436979 0.355955 0.0875884 0.0776355 
- i_lag = 20, j_lag = 6
- carry = 0, count24 = 18
+ float_seed_table[] = 0.241912 0.961525 0.778978 0.831297 0.379289 0.572294 0.0816283 0.0615972 0.76887 0.0221753 0.648315 0.595419 0.696509 0.117728 0.405132 0.204746 0.0714992 0.863735 0.546397 0.480336 0.633327 0.968502 0.201064 0.0610945 
+ i_lag = 2, j_lag = 12
+ carry = 5.96046e-08, count24 = 2
  luxury = 3 nskip = 199
 ----------------------------------------
 
  Process calls frequency --->
-	Transportation = 31094
-	pol-compt = 238
-	msc = 4671
-	pol-eBrem = 351
-	pol-conv = 211
-	phot = 157
-	pol-eIoni = 579
-	pol-annihil = 59
+	Transportation = 31170
+	pol-compt = 288
+	msc = 5292
+	pol-eBrem = 399
+	phot = 197
+	pol-eIoni = 704
+	pol-conv = 229
+	pol-annihil = 74
  Gamma: 
-Mean Number per Event :1.0078
-Mean Energy :9.6082 MeV +- 1.8423 MeV
-Mean Polarization :-0.96348 +- 0.19004
+Mean Number per Event :1.0101
+Mean Energy :9.5685 MeV +- 1.9204 MeV
+Mean Polarization :-0.96383 +- 0.18228
  Electron: 
-Mean Number per Event :0.0317
-Mean Energy :5.1284 MeV +- 2.618 MeV
-Mean Polarization :0.15596 +- 0.6748
+Mean Number per Event :0.0329
+Mean Energy :5.0525 MeV +- 2.422 MeV
+Mean Polarization :-0.71072 +- 0.29489
  Positron: 
-Mean Number per Event :0.0152
-Mean Energy :3.8289 MeV +- 1.9581 MeV
-Mean Polarization :-0.55726 +- 0.25101
+Mean Number per Event :0.0155
+Mean Energy :4.4931 MeV +- 2.0026 MeV
+Mean Polarization :-0.64665 +- 0.30277
 #
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.1 2006-10-02 13:48:10 vnivanch Exp $
+// $Id: HistoManager.cc,v 1.2 2006-11-17 09:49:41 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -52,7 +52,7 @@ HistoManager::HistoManager()
   }  
 #endif
  
-  fileName[0] = "testpol2.aida";
+  fileName[0] = "pol01.aida";
   fileType    = "xml";
   fileOption  = "compress=yes";  
   // histograms

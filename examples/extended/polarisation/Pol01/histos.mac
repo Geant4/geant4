@@ -1,0 +1,49 @@
+# $Id: histos.mac,v 1.1 2006-11-17 09:49:41 vnivanch Exp $
+#
+# Macro file for "pol01.cc"
+# (can be run in batch, without graphic)
+#
+/control/verbose 2
+/run/verbose 2
+#
+/testem/det/setMat G4_Fe
+/testem/det/setSizeZ 1.75 mm
+/testem/phys/addPhysics polarized
+#/testem/phys/addPhysics standard
+/testem/event/printModulo 5000
+#
+/run/initialize
+#
+/polarization/manager/verbose 1
+/polarization/volume/set theBox 0. 0. 0.08
+/polarization/volume/list
+#
+#/process/inactivate pol-eIoni
+#/process/inactivate pol-eBrem
+#/process/inactivate pol-compt
+#
+/gun/polarization 0. 0. -1.
+/gun/particle gamma
+#
+/gun/energy 10 MeV
+#
+##/tracking/verbose 1
+##/run/beamOn 1
+#
+/testem/histo/setFileName pol01.aida
+/testem/histo/setFileType xml
+/testem/histo/setHisto 1  110  0     11 MeV	#gamma energy
+/testem/histo/setHisto 2  100  -1.01   1.01 none	#gamma cos(theta)
+/testem/histo/setHisto 3  100  -180. 180. deg	#gamma phi
+/testem/histo/setHisto 4  100  -1.5  1.5 none   #gamma polarization
+/testem/histo/setHisto 5  110  0     11 MeV	#electron energy
+/testem/histo/setHisto 6  100  -1.   1. none	#electron cos(theta)
+/testem/histo/setHisto 7  100  -180. 180. deg	#electron phi
+/testem/histo/setHisto 8  100  -1.5  1.5 none   #electron polarization
+/testem/histo/setHisto 9  110  0     11 MeV	#positron energy
+/testem/histo/setHisto 10 100  -1.   1. none	#positron cos(theta)
+/testem/histo/setHisto 11 100  -180. 180. deg	#positron phi
+/testem/histo/setHisto 12 100   -1.5  1.5 none  #positron polarization
+#
+/run/beamOn 10000
+#

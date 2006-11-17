@@ -1,6 +1,6 @@
-# $Id: vis.mac,v 1.1 2006-10-02 13:48:10 vnivanch Exp $#
+# $Id: vis.mac,v 1.2 2006-11-17 09:49:41 vnivanch Exp $#
 #
-# Macro file for the initialization phase of "TestPol2.cc"
+# Macro file for the initialization phase of "pol01.cc"
 # including OpenGL visualization
 #
 # Sets some default verbose

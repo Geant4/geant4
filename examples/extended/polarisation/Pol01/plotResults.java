@@ -1,4 +1,4 @@
-// $Id: plotResults.java,v 1.1 2006-10-02 13:48:10 vnivanch Exp $
+// $Id: plotResults.java,v 1.2 2006-11-17 09:49:41 vnivanch Exp $
 import hep.aida.*;
 import java.util.Random;
 import java.io.IOException;
@@ -16,7 +16,7 @@ public class plotResults
 {
    public static void main(String[] argv) throws IOException
       {
-	  String fileName="TestPol2.aida";
+	  String fileName="pol01.aida";
 	  if (argv.length>0) {
 	      fileName=argv[0];
 	      System.out.println("using file name "+fileName);
