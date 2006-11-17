@@ -71,10 +71,12 @@ public:
 
   G4double GetHadronNucleaonXsc(const G4DynamicParticle*, const G4Element*);
   G4double GetHadronNucleaonXsc(const G4DynamicParticle*, G4double At, G4double Zt);
-  G4double GetHadronNucleaonXscNS(const G4DynamicParticle*, const G4Element*);
-  G4double GetHadronNucleaonXscNS(const G4DynamicParticle*, G4double At, G4double Zt);
+
   G4double GetHadronNucleaonXscPDG(const G4DynamicParticle*, const G4Element*);
   G4double GetHadronNucleaonXscPDG(const G4DynamicParticle*, G4double At, G4double Zt);
+
+  G4double GetHadronNucleaonXscNS(const G4DynamicParticle*, const G4Element*);
+  G4double GetHadronNucleaonXscNS(const G4DynamicParticle*,G4double At, G4double Zt);
 
   G4double CalculateEcmValue ( const G4double , const G4double , const G4double ); 
 
