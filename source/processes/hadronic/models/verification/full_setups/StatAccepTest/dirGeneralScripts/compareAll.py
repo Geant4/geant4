@@ -1179,7 +1179,7 @@ def findWhichCase( i ) :
     elif ( i == 3 ) :
         caseName = "negatives" 
     elif ( i == 4 ) :
-        caseName = "particles with 0 PDG code" 
+        caseName = "nuclei" 
     elif ( i == 5 ) :
         caseName = "particles with Unrecognized PDG code" 
     elif ( i == 6 ) :
