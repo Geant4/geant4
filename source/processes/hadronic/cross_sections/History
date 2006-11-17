@@ -14,14 +14,28 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+16 Nov 2006 D.W. for Vladimir Grichine (hadr-cross-V08-01-08)
+-------------------------------------------------------------
+- G4GlauberGribovCrossSection: extend applicability down to 0.3 GeV for 
+  protons and neutrons (not 100 MeV as in hadr-cross-V08-01-06)
+
+- Dennis Wright: add missing methods
+   G4double 
+   GetHadronNucleaonXsc(const G4DynamicParticle*,G4double At,G4double Zt);
+   G4double 
+   GetHadronNucleaonXscNS(const G4DynamicParticle*,const G4Element*);
+   G4double 
+   GetHadronNucleaonXscNS(const G4DynamicParticle*,G4double At,G4double Zt);
+  to get code to compile
+
+- initialize hpXsc, hnXsc to 0
+
 15 Nov 2006 Tatsumi Koi (hadr-cross-V08-01-07)
 ----------------------------------------------------------------------
 - include/G4IonsShenCrossSection.hh
 - src/G4IonsShenCrossSection.cc
 : extend range of validity to 1TeV/n, using
   constant cross section above 10GeV/n.
-
-  down to 100 MeV
 
 13 Nov 2006 Dennis Wright for Vladimir Grichine (hadr-cross-V08-01-06)
 ----------------------------------------------------------------------
