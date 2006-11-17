@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.2 2006-11-17 09:49:41 vnivanch Exp $
+// $Id: HistoManager.cc,v 1.3 2006-11-17 11:44:46 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -146,10 +146,11 @@ void HistoManager::save()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void HistoManager::FillHistos(const G4String & particleName,
-		  double kinEnergy, double costheta, double phi,
-		double longitudinalPolarization)
+			      G4double kinEnergy, G4double costheta, 
+			      G4double phi,
+			      G4double longitudinalPolarization)
 {
-  int id=1;
+  G4int id=1;
   if (particleName=="gamma") id=1;
   else if (particleName=="e-") id=5;
   else if (particleName=="e+") id=9;
@@ -177,8 +178,8 @@ void HistoManager::FillHisto(G4int ih, G4double e, G4double weight)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void HistoManager::SetHisto(G4int ih,
-                 G4int nbins, G4double valmin, G4double valmax, const G4String& unit)
+void HistoManager::SetHisto(G4int ih, G4int nbins, G4double valmin, 
+			    G4double valmax, const G4String& unit)
 {
   if (ih > MaxHisto) {
     G4cout << "---> warning from HistoManager::SetHisto() : histo " << ih
@@ -186,7 +187,8 @@ void HistoManager::SetHisto(G4int ih,
     return;
   }
   
-  const G4String id[] = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"};
+  const G4String id[] = { "0", "1", "2", "3", "4", "5", 
+			  "6", "7", "8", "9", "10", "11", "12"};
   const G4String title[] = 
                 { "dummy",						//0
                   "Gamma Energy distribution",		                //1

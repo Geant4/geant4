@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.hh,v 1.1 2006-10-02 13:48:10 vnivanch Exp $
+// $Id: RunAction.hh,v 1.2 2006-11-17 11:44:46 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -50,10 +50,11 @@ class RunAction : public G4UserRunAction
   class ParticleStatistics {
   public:
     ParticleStatistics();
+    ~ParticleStatistics();
     void EventFinished();
-    void FillData(double kinEnergy, double costheta,
-		  double longitudinalPolarization);
-    void PrintResults(int totalNumberOfEvents);
+    void FillData(G4double kinEnergy, G4double costheta,
+		  G4double longitudinalPolarization);
+    void PrintResults(G4int totalNumberOfEvents);
     void Clear();
   private:
     G4int currentNumber;
@@ -63,28 +64,28 @@ class RunAction : public G4UserRunAction
     G4double sumCosTheta, sumCosTheta2;
   };
 
-  public:
-    RunAction(DetectorConstruction*, PrimaryGeneratorAction*, HistoManager*);
-   ~RunAction();
+public:
+  RunAction(DetectorConstruction*, PrimaryGeneratorAction*, HistoManager*);
+  virtual ~RunAction();
 
-  public:
-    void BeginOfRunAction(const G4Run*);
-    void   EndOfRunAction(const G4Run*);
+public:
+  void BeginOfRunAction(const G4Run*);
+  void   EndOfRunAction(const G4Run*);
 
-    void CountProcesses(G4String);
+  void CountProcesses(G4String);
 
-    void FillData(const G4String & particleName,
-		  double kinEnergy, double costheta, double phi,
-		double longitudinalPolarization);
-    void EventFinished();
+  void FillData(const G4String & particleName,
+		G4double kinEnergy, G4double costheta, G4double phi,
+		G4double longitudinalPolarization);
+  void EventFinished();
 	 	 	           
-  private:
-    DetectorConstruction*   detector;
-    PrimaryGeneratorAction* primary;
-    ProcessesCount*         ProcCounter;
-    HistoManager*           histoManager;
-        
-    G4int totalEventCount;
+private:
+  DetectorConstruction*   detector;
+  PrimaryGeneratorAction* primary;
+  ProcessesCount*         ProcCounter;
+  HistoManager*           histoManager;
+  
+  G4int totalEventCount;
 
   ParticleStatistics photonStats;
   ParticleStatistics electronStats;

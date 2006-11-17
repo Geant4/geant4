@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.2 2006-10-02 16:25:55 vnivanch Exp $
+// $Id: RunAction.cc,v 1.3 2006-11-17 11:44:46 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -79,8 +79,9 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void RunAction::FillData(const G4String & particleName,
-			 double kinEnergy, double costheta, double /* phi*/,
-		double longitudinalPolarization)
+			 G4double kinEnergy, G4double costheta, 
+			 G4double /* phi*/,
+			 G4double longitudinalPolarization)
 {
   if (particleName=="gamma") 
     photonStats.FillData(kinEnergy, costheta, longitudinalPolarization);
@@ -177,6 +178,11 @@ RunAction::ParticleStatistics::ParticleStatistics()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+RunAction::ParticleStatistics::~ParticleStatistics()
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void RunAction::ParticleStatistics::EventFinished()
 {
   totalNumber+=currentNumber;
@@ -185,8 +191,9 @@ void RunAction::ParticleStatistics::EventFinished()
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void RunAction::ParticleStatistics:: FillData(double kinEnergy, double costheta,
-		  double longitudinalPolarization)
+void RunAction::ParticleStatistics:: FillData(G4double kinEnergy, 
+					      G4double costheta,
+					      G4double longitudinalPolarization)
 {
   ++currentNumber;
   sumEnergy+=kinEnergy;
@@ -199,17 +206,20 @@ void RunAction::ParticleStatistics:: FillData(double kinEnergy, double costheta,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void RunAction::ParticleStatistics::PrintResults(int totalNumberOfEvents)
+void RunAction::ParticleStatistics::PrintResults(G4int totalNumberOfEvents)
 {
-  G4cout<<"Mean Number per Event :"<<double(totalNumber)/double(totalNumberOfEvents)<<"\n";
+  G4cout<<"Mean Number per Event :"
+	<<G4double(totalNumber)/G4double(totalNumberOfEvents)<<"\n";
   if (totalNumber==0) totalNumber=1;
   G4double energyMean=sumEnergy/totalNumber;
   G4double energyRms=std::sqrt(sumEnergy2/totalNumber-energyMean*energyMean);
   G4cout<<"Mean Energy :"<< G4BestUnit(energyMean,"Energy")
 	<<" +- "<<G4BestUnit(energyRms,"Energy")<<"\n";
   G4double polarizationMean=sumPolarization/totalNumber;
-  G4double polarizationRms=std::sqrt(sumPolarization2/totalNumber-polarizationMean*polarizationMean);
-  G4cout<<"Mean Polarization :"<< polarizationMean<<" +- "<<polarizationRms<<"\n";
+  G4double polarizationRms=
+    std::sqrt(sumPolarization2/totalNumber-polarizationMean*polarizationMean);
+  G4cout<<"Mean Polarization :"<< polarizationMean
+	<<" +- "<<polarizationRms<<"\n";
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.hh,v 1.1 2006-10-02 13:48:10 vnivanch Exp $
+// $Id: HistoManager.hh,v 1.2 2006-11-17 11:44:46 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -35,7 +35,6 @@
 #include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 
 namespace AIDA {
  class IAnalysisFactory;
@@ -64,8 +63,8 @@ public:
   void FillHisto(G4int id, G4double e, G4double weight = 1.0);
 
   void FillHistos(const G4String & particleName,
-		  double kinEnergy, double costheta, double phi,
-		  double longitudinalPolarization);
+		  G4double kinEnergy, G4double costheta, G4double phi,
+		  G4double longitudinalPolarization);
 
   void RemoveHisto (G4int);
 
