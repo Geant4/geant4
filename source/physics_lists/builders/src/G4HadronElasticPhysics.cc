@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronElasticPhysics.cc,v 1.1 2006-10-31 11:35:02 gunter Exp $
+// $Id: G4HadronElasticPhysics.cc,v 1.2 2006-11-17 09:38:15 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -37,6 +37,7 @@
 //                         fix problem of initialisation of HP
 // 24.07.2006 V.Ivanchenko add G4NeutronHPElasticData 
 // 10.08.2006 V.Ivanchenko separate neutrons from other particles
+// 17.11.2006 V.Ivanchenko do not redefine G4HadronElastic default parameters
 //
 //----------------------------------------------------------------------------
 //
@@ -109,7 +110,7 @@ void G4HadronElasticPhysics::ConstructProcess()
   G4VQCrossSection* man = 0; 
 
   if(mname == "elastic") {
-    G4HadronElastic* he = new G4HadronElastic(pLimit,edepLimit);
+    G4HadronElastic* he = new G4HadronElastic();
     model = he;
     man = he->GetCS();
   } else {
@@ -164,7 +165,7 @@ void G4HadronElasticPhysics::ConstructProcess()
       G4ProcessManager* pmanager = particle->GetProcessManager();
       if(mname == "elastic") {
 	G4UHadronElasticProcess* h = new G4UHadronElasticProcess("hElastic");
-	G4HadronElastic* nhe = new G4HadronElastic(pLimit,edepLimit);
+	G4HadronElastic* nhe = new G4HadronElastic();
 	neutronModel = nhe;
 	h->SetQElasticCrossSection(nhe->GetCS());
         hel = h;
