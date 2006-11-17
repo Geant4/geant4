@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4StokesVector.cc,v 1.2 2006-09-26 09:08:48 gcosmo Exp $
+// $Id: G4StokesVector.cc,v 1.3 2006-11-17 11:59:03 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // GEANT4 Class file
@@ -68,7 +68,9 @@ G4StokesVector::~G4StokesVector()
 {
 }
 
-void G4StokesVector::RotateAz(G4ThreeVector nInteractionFrame, G4ThreeVector particleDirection) {
+void G4StokesVector::RotateAz(G4ThreeVector nInteractionFrame, 
+			      G4ThreeVector particleDirection) 
+{
   G4ThreeVector  yParticleFrame = 
     G4PolarizationHelper::GetParticleFrameY(particleDirection);
 
@@ -82,12 +84,8 @@ void G4StokesVector::RotateAz(G4ThreeVector nInteractionFrame, G4ThreeVector par
 	  <<" nAxis="<<nInteractionFrame<<" ("
 	  <<nInteractionFrame.mag()<<")"<<G4endl;
   }
-  if (cosphi>1.) {
-    cosphi=1.;
-  }
-  if (cosphi<-1.) {
-    cosphi=-1.;
-  }
+  if (cosphi>1.) cosphi=1.;
+  else if (cosphi<-1.) cosphi=-1.;
 
 //     G4cout<<" cosphi="<<cosphi<<"\n"
 // 	  <<" zAxis="<<particleDirection<<" ("<<particleDirection.mag()<<")\n"
@@ -107,9 +105,11 @@ void G4StokesVector::RotateAz(G4ThreeVector nInteractionFrame, G4ThreeVector par
 }
 
 
-void G4StokesVector::InvRotateAz(G4ThreeVector nInteractionFrame, G4ThreeVector particleDirection)
+void G4StokesVector::InvRotateAz(G4ThreeVector nInteractionFrame, 
+				 G4ThreeVector particleDirection)
 {
-  // note if incomming particle is on z-axis, we might encounter some nummerical problems, since
+  // note if incomming particle is on z-axis, 
+  // we might encounter some nummerical problems, since
   // nInteratonFrame and yParticleFrame are actually (almost) the same momentum
   // and the normalization is only good to 10^-12 !
 
@@ -121,7 +121,7 @@ void G4StokesVector::InvRotateAz(G4ThreeVector nInteractionFrame, G4ThreeVector 
         G4cout<<" warning G4StokesVector::RotateAz  cosphi>1 or cosphi<-1\n";
   }
   if (cosphi>1) cosphi=1.;
-  if (cosphi<-1)cosphi=-1.;
+  else if (cosphi<-1)cosphi=-1.;
 
   // check sign once more!
   G4double hel=(cross(yParticleFrame*nInteractionFrame)*particleDirection)>0?1.:-1.;
@@ -148,7 +148,7 @@ void G4StokesVector::RotateAz(G4double cosphi, G4double sinphi)
   setY(xsi2);
 }
 
-double G4StokesVector::GetBeta() 
+G4double G4StokesVector::GetBeta() 
 {
   G4double beta=getPhi();
   if (isPhoton)
