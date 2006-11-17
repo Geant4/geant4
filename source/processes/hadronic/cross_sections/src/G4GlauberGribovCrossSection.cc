@@ -424,7 +424,9 @@ G4double
 G4GlauberGribovCrossSection::GetHadronNucleaonXscNS(const G4DynamicParticle* aParticle, 
                                                      G4double At,  G4double Zt )
 {
-  G4double xsection, hpXsc, hnXsc, Delta, A0, B0;
+  G4double xsection, Delta, A0, B0;
+  G4double hpXsc(0);
+  G4double hnXsc(0);
 
   G4double Nt = At-Zt;              // number of neutrons
   if (Nt < 0.) Nt = 0.;  
