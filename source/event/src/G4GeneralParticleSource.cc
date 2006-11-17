@@ -105,6 +105,16 @@ void G4GeneralParticleSource::IntensityNormalization()
     sourceIntensity[i] = sourceIntensity[i]/total;
     sourceProbability.push_back(sourceIntensity[i] + sourceProbability[i-1]);
   } 
+
+  // set source weights here based on sampling scheme (analog/flat) and intensities
+  for ( i = 0 ;  i < sourceIntensity.size(); i++) {
+    if (!flat_sampling) {
+      sourceVector[i]->GetBiasRndm()->SetIntensityWeight(1.);
+    } else {
+      sourceVector[i]->GetBiasRndm()->SetIntensityWeight(sourceIntensity[i]*sourceIntensity.size());
+    }
+  }
+
   normalised = true;
 } 
 
@@ -179,15 +189,9 @@ void G4GeneralParticleSource::GeneratePrimaryVertex(G4Event* evt)
       } else {
 	i = size_t (sourceIntensity.size()*rndm);
 	currentSource = sourceVector[i];
-	weight_change =  sourceIntensity[i]*sourceIntensity.size();
       }
     }
     currentSource-> GeneratePrimaryVertex(evt);
-    if (flat_sampling) {
-      G4double weight = weight_change;
-      weight *= evt->GetPrimaryVertex()->GetPrimary()->GetWeight();
-      evt->GetPrimaryVertex()->GetPrimary()->SetWeight(weight);
-    }
   } 
   else {
     for (size_t i = 0; i <  sourceIntensity.size(); i++) {

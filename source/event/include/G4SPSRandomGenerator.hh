@@ -161,8 +161,10 @@ public:
   G4double GenRandPosTheta();
   G4double GenRandPosPhi();
 
+  inline void SetIntensityWeight(G4double weight) {bweights[8]=weight;};
+
   inline G4double GetBiasWeight() 
-  { return bweights[0]*bweights[1]*bweights[2]*bweights[3]*bweights[4]*bweights[5]*bweights[6]*bweights[7];};
+  { return bweights[0]*bweights[1]*bweights[2]*bweights[3]*bweights[4]*bweights[5]*bweights[6]*bweights[7]*bweights[8];};
  
  // method to re-set the histograms
   void ReSetHist(G4String);
@@ -199,7 +201,7 @@ private:
   G4PhysicsOrderedFreeVector PosPhiBiasH;
   G4PhysicsOrderedFreeVector IPDFPosPhiBiasH;
 
-  G4double bweights[8]; //record x,y,z,theta,phi,energy,posThet, posPhi weights
+  G4double bweights[9]; //record x,y,z,theta,phi,energy,posThet,posPhi,intensity weights
 
   // Verbosity
   G4int verbosityLevel;

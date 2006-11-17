@@ -177,7 +177,7 @@ public:
 
   // set if flat_sampling is applied in multiple source case
 
-  void SetFlatSampling(G4bool av) {flat_sampling = av;} ;
+  void SetFlatSampling(G4bool av) {flat_sampling = av; normalised = false;} ;
 
   // Set the particle species
   void SetParticleDefinition (G4ParticleDefinition * aParticleDefinition) 

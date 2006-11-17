@@ -83,7 +83,7 @@ G4SPSRandomGenerator::G4SPSRandomGenerator()
   IPDFPosThetaBias = false;
   PosPhiBias = false;
   IPDFPosPhiBias = false;
-  bweights[0] = bweights[1] = bweights[2] = bweights[3] = bweights[4] = bweights[5] = bweights[6] = bweights[7]= 1. ;
+  bweights[0] = bweights[1] = bweights[2] = bweights[3] = bweights[4] = bweights[5] = bweights[6] = bweights[7]= bweights[8]= 1. ;
   verbosityLevel = 0 ;
 }
 
