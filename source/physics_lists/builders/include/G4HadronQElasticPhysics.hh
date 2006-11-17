@@ -23,38 +23,35 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronElasticPhysics.hh,v 1.2 2006-11-17 19:19:40 vnivanch Exp $
+// $Id: G4HadronQElasticPhysics.hh,v 1.1 2006-11-17 19:19:40 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
-// ClassName:   G4HadronElasticPhysics
+// ClassName:   G4HadronQElasticPhysics
 //
-// Author: 11 April 2006 V. Ivanchenko
+// Author: 17 Nov 2006 V. Ivanchenko
 //
 // Modified:
-// 05.07.2006 V.Ivanchenko fix problem of initialisation of HP
 //
 //----------------------------------------------------------------------------
 //
 
-#ifndef G4HadronElasticPhysics_h
-#define G4HadronElasticPhysics_h 1
+#ifndef G4HadronQElasticPhysics_h
+#define G4HadronQElasticPhysics_h 1
 
 #include "globals.hh"
 #include "G4VPhysicsConstructor.hh"
-#include "G4UHadronElasticProcess.hh"
-#include "G4HadronElastic.hh"
-#include "G4NeutronHPElastic.hh"
-#include "G4NeutronHPElasticData.hh"
 
-class G4HadronElasticPhysics : public G4VPhysicsConstructor
+class G4HadronElastic;
+class G4QElastic;
+
+class G4HadronQElasticPhysics : public G4VPhysicsConstructor
 {
 public: 
-  G4HadronElasticPhysics(const G4String& name = "elastic",
-			 G4int ver = 1, G4bool hp = false,
-                         G4bool glauber = false);
-  virtual ~G4HadronElasticPhysics();
+  G4HadronQElasticPhysics(const G4String& name = "elastic",
+			  G4int ver = 1);
+  virtual ~G4HadronQElasticPhysics();
 
 public: 
   // This method will be invoked in the Construct() method. 
@@ -66,37 +63,16 @@ public:
   // registered to the process manager of each particle type 
   virtual void ConstructProcess();
 
-  void SetLimitSWave(G4double);
-
-  void SetLimitIonKineticEnergy(G4double);
-
 private:
 
-  G4HadronicInteraction* model;
-  G4HadronicInteraction* neutronModel;
-  G4HadronicInteraction* neutronHPModel;
+  G4HadronElastic* model;
+  G4QElastic*      process;
 
   G4String mname;
 
-  G4double pLimit;
-  G4double edepLimit;
-
   G4int    verbose;
-  G4bool   hpFlag;
-  G4bool   glFlag;
   G4bool   wasActivated;
 };
-
-inline void G4HadronElasticPhysics::SetLimitSWave(G4double val)
-{
-  pLimit = val;
-}
-
-inline void G4HadronElasticPhysics::SetLimitIonKineticEnergy(G4double val)
-{
-  edepLimit = val;
-}
-
 
 #endif
 
