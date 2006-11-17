@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PathFinder.cc,v 1.19 2006-11-11 01:07:42 japost Exp $
+// $Id: G4PathFinder.cc,v 1.20 2006-11-17 17:11:41 japost Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4PathFinder Implementation
@@ -542,6 +542,7 @@ G4PathFinder::ReLocate( const   G4ThreeVector& position )
 #endif
 
      if( longMoveSaf && longMoveRevisedEnd ){  
+        G4int oldPrec= G4cout.precision(9); 
         G4cout << " Problem in G4PathFinder::Relocate() " << G4endl;
         G4cout << " Moved from last endpoint by " << moveLenEndPosition 
 	  // << " Moved from last located by " << std::sqrt(moveLenStartSq) 
@@ -566,6 +567,7 @@ G4PathFinder::ReLocate( const   G4ThreeVector& position )
 	G4Exception( "G4PathFinder::ReLocate", "205-RelocatePointTooFar", 
 	 	   FatalException,  
 		  "ReLocation is further than end-safety value from step-end point (and the other-safety-value around the last-called safety 'check' point.)"); 
+	G4cout.precision(oldPrec); 
     }
   }
 
@@ -883,6 +885,7 @@ G4PathFinder::DoNextCurvedStep( const G4FieldTrack &initialState,
 				G4double      proposedStepLength,
 				G4VPhysicalVolume* pCurrentPhysicalVolume )
 {
+  const G4double toleratedRelativeError= 1.0e-10; 
   if( fVerboseLevel > 2 )
     G4cout << " G4PathFinder::DoNextCurvedStep ****** " << G4endl;
   G4double minStep= DBL_MAX, newSafety=0.0;
@@ -907,23 +910,36 @@ G4PathFinder::DoNextCurvedStep( const G4FieldTrack &initialState,
     G4cout << "G4PathFinder::DoNextCurvedStep : " << G4endl
 	   << " initialState = " << initialState << G4endl
 	   << " and endState = " << fEndState << G4endl;
-  
-  // Recover the remaining information from MultiNavigator
-  //   especially regarding which Navigator limited the step
-  for( numNav=0; numNav < fNoActiveNavigators; ++numNav ) {
-    G4double finalStep, lastPreSafety=0.0, minStepLast;
-    ELimited didLimit; 
 
-    finalStep=  fpMultiNavigator->ObtainFinalStep( numNav, lastPreSafety, 
-						    minStepLast, didLimit );
-    G4double currentStepSize = fTrueMinStep;  
-    G4double diffStep= (finalStep-minStepLast);
-    if( (minStepLast != kInfinity) && ( std::abs(diffStep)>1.0e-10*finalStep ) ){ 
-       currentStepSize += (finalStep-minStepLast); 
-    }
-    fCurrentStepSize[numNav] = currentStepSize;  
-    // fNewSafety[numNav]= preSafety;
-    fNewSafety[numNav]= 0.0;  
+  G4double currentStepSize = 0;  
+  G4cout << "G4PathFinder::DoNextCurvedStep : " 
+	 << " minStep = " << minStep 
+	 << " proposedStepLength " << proposedStepLength 
+	 << " safety = " << newSafety << G4endl;
+  if( minStep < proposedStepLength ) {   // if == , then a boundary found at end ??
+
+    // Recover the remaining information from MultiNavigator
+    //   especially regarding which Navigator limited the step
+    for( numNav=0; numNav < fNoActiveNavigators; ++numNav ) {
+      G4double finalStep, lastPreSafety=0.0, minStepLast;
+      ELimited didLimit; 
+
+      finalStep=  fpMultiNavigator->ObtainFinalStep( numNav, lastPreSafety, 
+						     minStepLast, didLimit );
+      currentStepSize = fTrueMinStep;  
+      G4double diffStep= 0.0; 
+      if( (minStepLast != kInfinity) ){ 
+	diffStep = (finalStep-minStepLast);
+	if ( std::abs(diffStep) <= toleratedRelativeError * finalStep ) 
+	  { diffStep = 0.0; } 
+	currentStepSize += diffStep; 
+      }
+      fCurrentStepSize[numNav] = currentStepSize;  
+      
+      // if( (currentStepSize < 0) || (diffStep < 0) ) {  }
+      
+      // fNewSafety[numNav]= preSafety;
+      fNewSafety[numNav]= 0.0;  
     // TODO: improve this safety !!
       // Currently would need to call ComputeSafety at start or endpoint
       //     endSafety= fpNavigator[numNav]->ComputeSafety( endPoint ); 
@@ -935,30 +951,65 @@ G4PathFinder::DoNextCurvedStep( const G4FieldTrack &initialState,
       //        instead of lastPreSafety (or as well?)
       //     - for final step start (available)
       //        get final Step start from MultiNavigator
-    fLimitedStep[numNav] = didLimit; 
-    fLimitTruth[numNav] = (didLimit != kDoNot ); 
+      fLimitedStep[numNav] = didLimit; 
+      fLimitTruth[numNav] = (didLimit != kDoNot ); 
+      
+      G4bool StepError= (currentStepSize < 0) 
+                   || ( (minStepLast != kInfinity) && (diffStep < 0) ) ; 
+      if( StepError || (fVerboseLevel > 2) ){
+	
+	G4String& LimitedString( ELimited lim ); 
+	G4String  limitedString=  LimitedString( fLimitedStep[numNav] ); 
+	
+	G4cout << " G4PathFinder::ComputeStep. Geometry " << numNav << "  step= " << fCurrentStepSize[numNav] 
+	       << " from final-step= " << finalStep 
+	       << " fTrueMinStep= " << fTrueMinStep 
+	       << " minStepLast= "  << minStepLast 
+	       << "  limited = " << (fLimitTruth[numNav] ? "YES" : " NO") << " ";
+	G4cout << "  status = " << limitedString << " #= " << didLimit << G4endl;
+	
+	if( StepError ) { 
+          G4cerr << " currentStepSize = " << currentStepSize 
+                 << " diffStep= " << diffStep << G4endl;
+ 	  G4cerr << "ERROR in computing step size for this navigator." << G4endl;
+	  G4Exception( "G4PathFinder::DoNextCurvedStep", "207-StepGoingBackwards", 
+		       FatalException,  
+		       "Incorrect calculation of step size for one navigator" ); 
+	} 
+      }
 
-    G4String limitedStr;
-    static G4String StrDoNot("DoNot"), StrUnique("Unique"), 
-      StrUndefined("Undefined"), StrSharedTransport("SharedTransport"),  
-      StrSharedOther("SharedOther");
+    } // for num Navigators
 
-    switch ( fLimitedStep[numNav] ) {
-      case kDoNot:  limitedStr= StrDoNot; break;
-      case kUnique: limitedStr = StrUnique; break; 
-      case kSharedTransport:  limitedStr= StrSharedTransport; break; 
-      case kSharedOther: limitedStr = StrSharedOther; break;
-      default: limitedStr = StrUndefined; break;
+  } 
+  // else if ( minStep > proposedStepLength ) { // ie minStep == kInfinity
+  else if ( (minStep == proposedStepLength)  
+	    || (minStep == kInfinity)  
+	    || ( std::abs(minStep-proposedStepLength) < toleratedRelativeError * proposedStepLength )
+	  ) { 
+    // In case the step was not limited, use default responses
+    //  --> all Navigators 
+    // Also avoid problems in case of PathFinder using safety to optimise
+    //  - it is possible that the Navigators were not called
+    //    if the safety was already satisfactory.
+    //    (In that case calling ObtainFinalStep gives invalid results.)
+    currentStepSize= minStep;  
+    for( numNav=0; numNav < fNoActiveNavigators; ++numNav ) {
+      fCurrentStepSize[numNav] = minStep; 
+      fNewSafety[numNav]= 0.0;  
+      // Improve it -- see TODO above
+      fLimitedStep[numNav] = kDoNot; 
+      fLimitTruth[numNav] = false; 
     }
-
-    if( fVerboseLevel > 2 ){
-      G4cout << " Geometry " << numNav << "  step= " << fCurrentStepSize[numNav] 
-	     << " from final-step= " << finalStep 
-             << " fTrueMinStep= " << fTrueMinStep 
-	     << " minStepLast= "  << minStepLast 
-	     << "  limited = " << (fLimitTruth[numNav] ? "YES" : " NO") << " "
-	     << "  status = " << limitedStr << " #= " << didLimit << G4endl;
-    }
+  } 
+  else{   //  (minStep > proposedStepLength) and not (minStep == kInfinity)
+    G4cerr << G4endl;
+    G4cerr << "ERROR in G4PathFinder::DoNextCurvedStep "
+ 	   << " currentStepSize = " << minStep << " is larger than "
+	   << " proposed StepSize = " << proposedStepLength 
+	   << G4endl;
+    G4Exception( "G4PathFinder::DoNextCurvedStep", "208-StepLongerThanRequested", 
+		 FatalException,  
+		 "Incorrect calculation of step size for one navigator" ); 
   }
 
   if( fVerboseLevel > 2 ){
@@ -969,6 +1020,23 @@ G4PathFinder::DoNextCurvedStep( const G4FieldTrack &initialState,
   return minStep; 
 }
 
+static G4String StrDoNot("DoNot"), StrUnique("Unique"), 
+  StrUndefined("Undefined"), StrSharedTransport("SharedTransport"),  
+  StrSharedOther("SharedOther");
+
+G4String& LimitedString( ELimited lim )
+{
+  G4String* limitedStr;
+  switch ( lim ) {
+     case kDoNot:  limitedStr= &StrDoNot; break;
+     case kUnique: limitedStr = &StrUnique; break; 
+     case kSharedTransport:  limitedStr= &StrSharedTransport; break; 
+     case kSharedOther: limitedStr = &StrSharedOther; break;
+     default: limitedStr = &StrUndefined; break;
+  }
+
+  return *limitedStr;
+}
 
 
 #if 0 
