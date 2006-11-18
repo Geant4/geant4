@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN05CalorimeterSD.cc,v 1.6 2006-06-29 17:53:02 gunter Exp $
+// $Id: ExN05CalorimeterSD.cc,v 1.7 2006-11-18 03:41:13 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -78,11 +78,11 @@ G4bool ExN05CalorimeterSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
   {
     ExN05CalorimeterHit* calHit =
       new ExN05CalorimeterHit(physVol->GetLogicalVolume());
-    G4RotationMatrix rotM;
-    if(physVol->GetObjectRotation()) rotM = *(physVol->GetObjectRotation());
     calHit->SetEdep( edep );
-    calHit->SetPos( physVol->GetTranslation() );
-    calHit->SetRot( rotM );
+    G4AffineTransform aTrans = ROhist->GetHistory()->GetTopTransform();
+    aTrans.Invert();
+    calHit->SetPos(aTrans.NetTranslation());
+    calHit->SetRot(aTrans.NetRotation());
     G4int icell = CalCollection->insert( calHit );
     CellID[copyID] = icell - 1;
     if(verboseLevel>0)
