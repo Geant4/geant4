@@ -76,11 +76,11 @@ G4bool ExN04CalorimeterSD::ProcessHits(G4Step*aStep,G4TouchableHistory*ROhist)
     ExN04CalorimeterHit* calHit
       = new ExN04CalorimeterHit
             (physVol->GetLogicalVolume(),copyIDinZ,copyIDinPhi);
-    G4RotationMatrix rotM;
-    if(physVol->GetObjectRotation()) rotM = *(physVol->GetObjectRotation());
     calHit->SetEdep( edep );
-    calHit->SetPos( physVol->GetTranslation() );
-    calHit->SetRot( rotM );
+    G4AffineTransform aTrans = ROhist->GetHistory()->GetTopTransform();
+    aTrans.Invert();
+    calHit->SetPos(aTrans.NetTranslation());
+    calHit->SetRot(aTrans.NetRotation());
     G4int icell = CalCollection->insert( calHit );
     CellID[copyIDinZ][copyIDinPhi] = icell - 1;
     if(verboseLevel>0)

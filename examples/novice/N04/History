@@ -1,4 +1,4 @@
-$Id: History,v 1.52 2006-11-15 18:32:56 perl Exp $
+$Id: History,v 1.53 2006-11-18 02:27:00 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,11 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+17-11-06 Makoto Asai (exampleN04-V08-01-05)
+- Fix a bug in ExN04CalorimeterSD::ProcessHits() concerning about the
+  transformation vector and rotation materix of the calorimater cell
+  in the readoout geometry.
 
 15-11-06 Joseph Perl (exampleN04-V08-01-04)
 - Remove troublesome #include <map> statement from ExNo4CalorimeterHit.hh
