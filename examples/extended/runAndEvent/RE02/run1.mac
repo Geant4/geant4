@@ -9,7 +9,7 @@
 #
 # create empty scene
 #
-/vis/scene/create
+#/vis/scene/create
 #
 # Create a scene handler for a specific graphics system
 # (Edit the next line(s) to choose another graphic system)
@@ -26,10 +26,10 @@
 #
 # for drawing the tracks
 # (if too many tracks cause core dump => storeTrajectory 0)
-/tracking/storeTrajectory 1
-/vis/scene/add/trajectories
+#/tracking/storeTrajectory 1
+#/vis/scene/add/trajectories
 # (if you prefer refreshing each event, comment out next line)
-/vis/scene/endOfEventAction accumulate
+#/vis/scene/endOfEventAction accumulate
 #
 /gun/particle proton
 /gun/energy 150. MeV

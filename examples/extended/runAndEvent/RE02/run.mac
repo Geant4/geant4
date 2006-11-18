@@ -1,4 +1,4 @@
-# $Id: run3.mac,v 1.2 2006-11-18 01:37:23 asaim Exp $
+# $Id: run.mac,v 1.1 2006-11-18 01:37:23 asaim Exp $
 #
 # Macro file for "exampleRE02.cc"
 # 
@@ -8,7 +8,7 @@
 /control/verbose 2
 /run/verbose 2
 #/event/verbose 0
-#/tracking/verbose 1
+/tracking/verbose 1
 # 
 # 
 #/vis/scene/create
@@ -33,13 +33,15 @@
 #  for electron
 #   UIcommands from G4ParticleGun.
 # 
-/gun/particle e-
+/gun/particle gamma
 #
 # Kinetic Energy.
-/gun/energy 30. MeV
+#/gun/energy 35. keV
+#/gun/energy  60. keV
+/gun/energy  356. keV
 #
-/gun/position 0 0 -100 cm
+/gun/position  0 0 -100. cm
 /gun/direction 0 0 1
 #  
-/run/beamOn 10000
+/run/beamOn 10
 #

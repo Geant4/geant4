@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: RE02Run.cc,v 1.2 2006-06-29 17:45:35 gunter Exp $
+// $Id: RE02Run.cc,v 1.3 2006-11-18 01:37:24 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
