@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElasticHadrNucleusHE.cc,v 1.49 2006-11-20 13:50:58 vnivanch Exp $
+// $Id: G4ElasticHadrNucleusHE.cc,v 1.50 2006-11-20 16:27:38 starkov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //G4ElasticHadrNucleusHE.cc
 //
@@ -355,6 +355,8 @@ G4HadFinalState * G4ElasticHadrNucleusHE::ApplyYourself(
     if(pElD->TableCrossSec[NumbOnE*pElD->ONQ2+2]<0.00001) Step=0;
 
 //  .............................................
+    RandMax = 0;
+
     if(Step==0)
     {
      GetHadronValues(aHadron, LabMom);
