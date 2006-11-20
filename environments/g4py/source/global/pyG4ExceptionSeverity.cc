@@ -23,57 +23,31 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pymodG4global.cc,v 1.6 2006-11-20 05:57:16 kmura Exp $
+// $Id: pyG4ExceptionSeverity.cc,v 1.1 2006-11-20 05:57:16 kmura Exp $
 // $Name: not supported by cvs2svn $
 // ====================================================================
-//   pymodG4global.cc [Geant4Py module]
+//   pyG4ExceptionSeverity.cc
 //
 //                                         2005 Q
 // ====================================================================
 #include <boost/python.hpp>
+#include "G4ExceptionSeverity.hh"
 
 using namespace boost::python;
 
 // ====================================================================
-// module definition
+//
+// class description
+//
 // ====================================================================
-
-void export_globals();
-void export_geomdefs();
-void export_G4StateManager();
-void export_G4ApplicationState();
-void export_G4String();
-void export_G4ThreeVector();
-void export_G4RotationMatrix();
-void export_G4Transform3D();
-void export_G4UnitsTable();
-void export_Randomize();
-void export_RandomEngines();
-void export_G4RandomDirection();
-void export_G4UserLimits();
-void export_G4Timer();
-void export_G4Version();
-void export_G4Exception();
-void export_G4ExceptionSeverity();
-
-BOOST_PYTHON_MODULE(G4global) 
+void export_G4ExceptionSeverity()
 {
-  export_globals();
-  export_geomdefs();
-  export_G4StateManager();
-  export_G4ApplicationState();
-  export_G4String();
-  export_G4ThreeVector();
-  export_G4RotationMatrix();
-  export_G4Transform3D();
-  export_G4UnitsTable();
-  export_Randomize();
-  export_RandomEngines();
-  export_G4RandomDirection();
-  export_G4UserLimits();
-  export_G4Timer();
-  export_G4Version();
-  export_G4Exception();
-  export_G4ExceptionSeverity();
-}
+  enum_<G4ExceptionSeverity>("G4ExceptionSeverity")
+    .value("FatalException",       FatalException)
+    .value("FatalErrorInArgument", FatalErrorInArgument)
+    .value("RunMustBeAborted",     RunMustBeAborted)
+    .value("EventMustBeAborted",   EventMustBeAborted)
+    .value("JustWarning",          JustWarning) 
+    ;
 
+}
