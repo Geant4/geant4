@@ -1,4 +1,4 @@
-$Id: History,v 1.10 2006-11-20 10:45:15 kmura Exp $
+$Id: History,v 1.11 2006-11-20 10:45:40 kmura Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,7 +15,7 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-November 20th 2006 J.Allison  (exHepMC-V08-01-04)
+November 20th 2006 K.Murakami  (exHepMC-V08-01-04)
 - GNUmakefile was modified for new place for physics list package
 
 October 18th 2006 J.Allison  (exHepMC-V08-01-01)
