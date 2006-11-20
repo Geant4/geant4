@@ -1,5 +1,5 @@
 #! /bin/sh -
-#$Id: configure,v 1.4 2006-08-08 05:14:06 kmura Exp $
+#$Id: configure,v 1.5 2006-11-20 08:01:17 kmura Exp $
 # ======================================================================
 #  A configure script for Geant4Py
 # ======================================================================
@@ -91,6 +91,8 @@ enable_openglxm=${G4VIS_USE_OPENGLXM:+1}
 enable_openglxm=${enable_openglxm:-0}
 enable_raytracerx=${G4VIS_USE_RAYTRACERX:+1}
 enable_raytracerx=${enable_raytracerx:-0}
+
+enable_physicslist=0
 
 # checking system
 case $1 in
@@ -330,6 +332,18 @@ else
 fi
 
 # ---
+echo -n "Checking for physics list support ..."
+if [ -f "$g4_incdir"/QGSP.hh ]; then
+  enable_physicslist=1
+fi
+if [ $enable_physicslist == 0 ]; then
+  echo "no"
+else
+  echo "yes"
+fi
+
+
+# ---
 echo -n "Writing config.gmk ... "
 
 make_config=config/config.gmk
@@ -375,6 +389,8 @@ Q_ENABLE_OPENGLX      := $enable_openglx
 Q_ENABLE_OPENGLXM     := $enable_openglxm
 Q_ENABLE_RAYTRACERX   := $enable_raytracerx
 
+Q_ENABLE_PHYSICSLIST  := $enable_physicslist
+
 EOF
 echo "done"
 echo -n "Writing config.status ... "
@@ -396,6 +412,10 @@ if [ $enable_raytracerx = 1 ]; then
   echo -n " raytracerx"
 fi
 
+if [ $enable_physicslist = 1 ]; then
+  echo -n " physicslist"
+fi
+
 echo "."
 
 # ---
@@ -407,6 +427,4 @@ echo "  make install"
 echo ""
 
 exit 0
-
-
 
