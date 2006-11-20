@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.83 2006-11-08 16:50:21 gunter Exp $
+# $Id: GNUmakefile,v 1.84 2006-11-20 15:04:51 gcosmo Exp $
 # -----------------------------------------------------------------
 # "gmake" makes default libraries for each subdomain.
 # "gmake global" makes global libraries for each subdomain.
@@ -45,6 +45,18 @@ endif
 glob global: banner kernel_global
 ifdef G4LIB_USE_G3TOG4
 	@for dir in $(SUBDIR4); do (cd $$dir && $(MAKE)); done;:
+endif
+
+fpe_debug: banner kernel
+	@$(ECHO) Activating FPE debug build ...
+ifneq (,$(findstring Linux-g++,$(G4SYSTEM)))
+	@rm -f $(G4TMPDIR)/G4RunManagerKernel.*
+	@cd $(G4INSTALL)/source/run; $(MAKE) G4FPE_DEBUG=1;
+	@cd $(G4INSTALL)/source; $(MAKE) libmap;
+else
+	@$(ECHO) "Build of FPE check is only supported on Linux platforms with gcc !"
+	@$(ECHO) "The system you have currently selected is $(G4SYSTEM)."
+	@$(ECHO) "No actions taken !"
 endif
 
 kernel_global:
@@ -121,6 +133,7 @@ ifneq (,$(findstring WIN32-VC,$(G4SYSTEM)))
 else
 	@$(ECHO) "Build of DLLs is only supported on Windows platforms !"
 	@$(ECHO) "The system you have currently selected is $(G4SYSTEM)."
+	@$(ECHO) "No actions taken !"
 endif
 
 includes:
@@ -135,7 +148,7 @@ endif
 banner:
 	@$(ECHO) "*************************************************************"
 	@$(ECHO) " Installation Geant4 version $$Name: not supported by cvs2svn $ "
-	@$(ECHO) " Copyright (C) 1994-2006 Geant4 Collaboration                            "
+	@$(ECHO) " Copyright (C) 1994-2007 Geant4 Collaboration                            "
 	@$(ECHO) "*************************************************************"
 
 clean_libs::
