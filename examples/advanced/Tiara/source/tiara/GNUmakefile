@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.9 2006-06-23 14:33:48 ahoward Exp $
+# $Id: GNUmakefile,v 1.10 2006-11-20 12:43:02 ahoward Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -18,7 +18,7 @@ endif
 
 include $(G4INSTALL)/config/architecture.gmk
 
-include hadronic_lists.gmk
+##include hadronic_lists.gmk
 
 ifdef G4ANALYSIS_USE
   CPPFLAGS += `aida-config --include`
