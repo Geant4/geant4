@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel.cc,v 1.23 2006-11-15 16:04:51 urban Exp $
+// $Id: G4UrbanMscModel.cc,v 1.24 2006-11-20 06:57:57 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -111,6 +111,8 @@
 //          more stable in calorimeters (L.Urban)
 // 07-11-06 fix in GeomPathLength and SampleCosineTheta (L.Urban)
 // 15-11-06 bugfix in SampleCosineTheta (L.Urban)
+// 20-11-06 bugfix in single scattering part of SampleCosineTheta,
+//          single scattering just before boundary crossing now (L.Urban)
 //
 
 // Class Description:
@@ -160,6 +162,7 @@ G4UrbanMscModel::G4UrbanMscModel(G4double m_facrange, G4double m_dtrl,
   currentTau    = taulim;
   stepmin       = 1.e-6*mm;
   skindepth     = (skin-1)*stepmin;
+  skindepth1    = skindepth+stepmin;
   currentRange  = 0. ;
   frscaling2    = 0.25;
   frscaling1    = 1.-frscaling2;
@@ -526,6 +529,7 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
       //stepmin ~ lambda_elastic
       stepmin = rat*lambda0;
       skindepth = (skin-1.)*stepmin;
+      skindepth1 = skindepth+stepmin;
       if(stepmin > tgeom) stepmin = tgeom;
 
       //define tlimitmin
@@ -857,9 +861,11 @@ G4double G4UrbanMscModel::SampleCosineTheta(G4double trueStepLength,
   Zeff = couple->GetMaterial()->GetTotNbOfElectPerVolume()/
          couple->GetMaterial()->GetTotNbOfAtomsPerVolume() ;
 
-  if(trueStepLength <= stepmin)
+  if((trueStepLength <= stepmin) && (skin > 0.) &&
+     (geomlimit <= skindepth1))
   {
     //no scattering, single or plural scattering
+    // just before boundary crossing only (for skin > 0)
     G4double mean = trueStepLength/stepmin ;
     cth = 1.;
     G4int n = G4Poisson(mean);
