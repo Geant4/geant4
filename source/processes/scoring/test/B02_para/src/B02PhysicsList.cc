@@ -24,14 +24,14 @@
 // ********************************************************************
 //
 //
-// $Id: B01PhysicsList.cc,v 1.7 2006-11-20 10:04:20 ahoward Exp $
+// $Id: B02PhysicsList.cc,v 1.1 2006-11-20 10:08:20 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "globals.hh"
 #include <iomanip>                
 
-#include "B01PhysicsList.hh"
+#include "B02PhysicsList.hh"
 
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleWithCuts.hh"
@@ -48,17 +48,16 @@
 #include "G4Material.hh"
 #include "G4MaterialTable.hh"
 
-B01PhysicsList::B01PhysicsList(G4bool Coupled):  G4VUserPhysicsList(), ifCoupled(Coupled)
+B02PhysicsList::B02PhysicsList():  G4VUserPhysicsList()
 {
   SetVerboseLevel(1);
-  
 }
 
-B01PhysicsList::~B01PhysicsList()
+B02PhysicsList::~B02PhysicsList()
 {
 }
 
-void B01PhysicsList::ConstructParticle()
+void B02PhysicsList::ConstructParticle()
 {
   // In this method, static member functions should be called
   // for all particles which you want to use.
@@ -73,51 +72,51 @@ void B01PhysicsList::ConstructParticle()
   ConstructAllShortLiveds();
 }
 
-void B01PhysicsList::ConstructAllBosons()
+void B02PhysicsList::ConstructAllBosons()
 {
   // Construct all bosons
   G4BosonConstructor pConstructor;
   pConstructor.ConstructParticle();
 }
 
-void B01PhysicsList::ConstructAllLeptons()
+void B02PhysicsList::ConstructAllLeptons()
 {
   // Construct all leptons
   G4LeptonConstructor pConstructor;
   pConstructor.ConstructParticle();
 }
 
-void B01PhysicsList::ConstructAllMesons()
+void B02PhysicsList::ConstructAllMesons()
 {
   //  Construct all mesons
   G4MesonConstructor pConstructor;
   pConstructor.ConstructParticle();
 }
 
-void B01PhysicsList::ConstructAllBaryons()
+void B02PhysicsList::ConstructAllBaryons()
 {
   //  Construct all barions
   G4BaryonConstructor pConstructor;
   pConstructor.ConstructParticle();
 }
 
-void B01PhysicsList::ConstructAllIons()
+void B02PhysicsList::ConstructAllIons()
 {
   //  Construct light ions
   G4IonConstructor pConstructor;
   pConstructor.ConstructParticle();  
 }
 
-void B01PhysicsList::ConstructAllShortLiveds()
+void B02PhysicsList::ConstructAllShortLiveds()
 {
   //  Construct  resonaces and quarks
   G4ShortLivedConstructor pConstructor;
   pConstructor.ConstructParticle();  
 }
 
-void B01PhysicsList::ConstructProcess()
+void B02PhysicsList::ConstructProcess()
 {
-  if(ifCoupled) UseCoupledTransportation(true);
+  //  UseCoupledTransportation(true);
   AddTransportation();
   ConstructEM();
   ConstructLeptHad();
@@ -141,7 +140,7 @@ void B01PhysicsList::ConstructProcess()
 
 #include "G4hIonisation.hh"
 
-void B01PhysicsList::ConstructEM()
+void B02PhysicsList::ConstructEM()
 {
   theParticleIterator->reset();
   while( (*theParticleIterator)() ){
@@ -159,14 +158,14 @@ void B01PhysicsList::ConstructEM()
     } else if (particleName == "e-") {
     //electron
       // Construct processes for electron
-      pmanager->AddProcess(new G4MultipleScattering(),-1,1,1);
+      //xxx      pmanager->AddProcess(new G4MultipleScattering(),-1,1,1);
       pmanager->AddProcess(new G4eIonisation(),-1,2,2);
       pmanager->AddProcess(new G4eBremsstrahlung(),-1,-1,3);
   
     } else if (particleName == "e+") {
     //positron
       // Construct processes for positron
-     pmanager->AddProcess(new G4MultipleScattering(),-1,1,1);
+      //xxx     pmanager->AddProcess(new G4MultipleScattering(),-1,1,1);
      
      pmanager->AddProcess(new G4eIonisation(),-1,2,2);
      pmanager->AddProcess(new G4eBremsstrahlung(),-1,-1,3);      
@@ -287,7 +286,7 @@ void B01PhysicsList::ConstructEM()
 // F.W.Jones  06-JUL-1998
 //
 
-void B01PhysicsList::ConstructHad()
+void B02PhysicsList::ConstructHad()
 {
     // this will be the model class for high energies
     G4TheoFSGenerator * theTheoModel = new G4TheoFSGenerator;
@@ -606,11 +605,11 @@ void B01PhysicsList::ConstructHad()
    }
 }
 
-void B01PhysicsList::ConstructLeptHad()
+void B02PhysicsList::ConstructLeptHad()
 {;}
 
 #include "G4Decay.hh"
-void B01PhysicsList::ConstructGeneral()
+void B02PhysicsList::ConstructGeneral()
 {
   G4Decay* theDecayProcess = new G4Decay();
   theParticleIterator->reset();
@@ -625,11 +624,11 @@ void B01PhysicsList::ConstructGeneral()
   }
 }
 
-void B01PhysicsList::SetCuts()
+void B02PhysicsList::SetCuts()
 {
   if (verboseLevel >0)
   {
-    G4cout << "B01PhysicsList::SetCuts:";
+    G4cout << "B02PhysicsList::SetCuts:";
     G4cout << "CutLength : " << defaultCutValue/mm << " (mm)" << G4endl;
   }  
   //   "G4VUserPhysicsList::SetCutsWithDefault" method sets 

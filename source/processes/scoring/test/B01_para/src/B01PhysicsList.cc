@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: B01PhysicsList.cc,v 1.7 2006-11-20 10:04:20 ahoward Exp $
+// $Id: B01PhysicsList.cc,v 1.1 2006-11-20 10:08:16 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
