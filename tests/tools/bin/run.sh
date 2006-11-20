@@ -418,6 +418,10 @@ if [ $1 = "all" ] ; then
   $G4STTDIR/bin/run.sh test7001
   ${G4STTDIR}/bin/geant4-unix.pl --end-test test7001 68
   
+  ${G4STTDIR}/bin/geant4-unix.pl --start-test test39 69
+    $G4STTDIR/bin/run.sh test39
+  ${G4STTDIR}/bin/geant4-unix.pl --end-test test39 69
+  
 #  ${G4STTDIR}/bin/geant4-unix.pl --start-test test803 61
 #    $G4STTDIR/bin/run.sh test803
 #  ${G4STTDIR}/bin/geant4-unix.pl --end-test test803 61
