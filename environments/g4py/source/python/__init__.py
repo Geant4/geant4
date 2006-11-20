@@ -1,4 +1,4 @@
-# $Id: __init__.py,v 1.9 2006-08-23 04:50:17 kmura Exp $
+# $Id: __init__.py,v 1.10 2006-11-20 08:58:46 kmura Exp $
 """
 # ==================================================================
 #  [Geant4] module package
@@ -13,8 +13,8 @@
 # ==================================================================
 # docs
 # ==================================================================
-__version__ = '1.0.2'
-__date__    = '13/Aug/2006'
+__version__ = '1.1.0'
+__date__    = '20/Nov/2006'
 __author__  = 'K.Murakami (Koichi.Murakami@kek.jp)'
 __url__     = 'http://www-geant4.kek.jp/projects/Geant4Py/'
 
@@ -44,6 +44,7 @@ from G4particles      import *
 from G4processes      import *
 from G4geometry       import *
 from G4materials      import *
+from G4physicslists   import *
 from G4digits_hits    import *
 from G4visualization  import *
 from G4graphics_reps  import *
