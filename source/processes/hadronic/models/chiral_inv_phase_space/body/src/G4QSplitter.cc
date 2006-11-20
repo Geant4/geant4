@@ -27,7 +27,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4QSplitter.cc,v 1.3 2006-06-29 20:07:15 gunter Exp $
+// $Id: G4QSplitter.cc,v 1.4 2006-11-20 14:04:04 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QSplitter ----------------
@@ -134,7 +134,7 @@ G4QSplitter::G4QSplitter(G4QHadron projHadron, const G4bool projEnvFlag,
   G4LorentzVector pq4Mom(0.,0.,0.,0.);       // Prototype of LV of quark of progectile  
   G4double rPMass=0.;                        // Prototype of the residProjMass (Meson case)
   G4bool FreeFraF=false;                     // Prototype of the free exchange Flag
-  if(G4UniformRand()<FreeFraF) FreeFraF=true;// Confirm the free exchange
+  if(G4UniformRand()<0.) FreeFraF=true;      // Confirm the free exchange
   if(nQProj<2) G4cout<<"***G4QSpl::Constr: nQProj="<<nQProj<<"<2 ***FatalError***"<<G4endl;
 		else if(nQProj>2)                          // ---> Baryon case (clusters are not implem.)
 		{
