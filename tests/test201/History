@@ -1,8 +1,11 @@
-$Id: History,v 1.10 2005-12-06 16:41:00 gcosmo Exp $
+$Id: History,v 1.11 2006-11-20 23:08:54 asaim Exp $
 -----------------------------------------------------------------------------
 
 History file for visualization/test subdirectory
 ------------------------------------------------
+
+20th November 2006  Makoto Asai (test201-V08-01-00)
+- Fix obsolete GetObjectRotation() method used in MyCaloriemterSD.cc.
 
 6th December 2005  Gabriele Cosmo
 - Trivial changes for support of CLHEP-2.0.X series.

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: MyCalorimeterSD.cc,v 1.5 2006-06-29 21:47:39 gunter Exp $
+// $Id: MyCalorimeterSD.cc,v 1.6 2006-11-20 23:06:19 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -59,19 +59,19 @@ G4bool MyCalorimeterSD::ProcessHits(G4Step*aStep,G4TouchableHistory*ROhist)
 {
   G4double edep = 1.;
 
-  const G4VPhysicalVolume* physVol 
-    = aStep->GetPreStepPoint()->GetPhysicalVolume();
-  int copyID = physVol->GetCopyNo();
+  G4TouchableHistory* hist = (G4TouchableHistory*)(aStep->GetPreStepPoint()->GetTouchable());
+  const G4VPhysicalVolume* physVol = hist->GetVolume();
+  G4int copyID = hist->GetReplicaNumber();
 
   if(CellID[copyID]==-1)
   {
     MyCalorimeterHit* calHit =
       new MyCalorimeterHit((G4VPhysicalVolume*)physVol);
-    G4RotationMatrix rotM;
-    if(physVol->GetObjectRotation()) rotM = *(physVol->GetObjectRotation());
     calHit->SetEdep( edep );
-    calHit->SetPos( physVol->GetTranslation() );
-    calHit->SetRot( rotM );
+    G4AffineTransform aTrans = hist->GetHistory()->GetTopTransform();
+    aTrans.Invert();
+    calHit->SetPos(aTrans.NetTranslation());
+    calHit->SetRot(aTrans.NetRotation());
     int icell = CalCollection->insert(calHit);
     CellID[copyID] = icell;
     if(verboseLevel>0)
