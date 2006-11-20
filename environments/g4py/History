@@ -1,4 +1,4 @@
-$Id: History,v 1.20 2006-11-15 13:28:01 hajime Exp $
+$Id: History,v 1.21 2006-11-20 09:00:45 kmura Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,7 +14,13 @@ Geant4Py is a Geant4-Python bridge.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-15 Vovember 2006 H. Yoshida
+20 November 2006 K.Murakami (1.1.0)
+ - modification for G4.8.2
+ - add G4Exception and G4ExceptionSeverity
+ - modify configure for supporting physics lists
+ - add physics list modules
+
+15 November 2006 H. Yoshida
  - add 00README_MACOSX
 
 23 August 2006 K.Murakami
