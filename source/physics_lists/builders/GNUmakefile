@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.1 2006-10-31 11:34:03 gunter Exp $
+# $Id: GNUmakefile,v 1.2 2006-11-20 17:54:51 gunter Exp $
 # ---------------------------------------------------------------------------
 # GNUmakefile for physics_lists/builders library.  Gunter Folger 25-Oct-2006.
 # ---------------------------------------------------------------------------
@@ -29,6 +29,7 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/particles/hadrons/ions/include \
             -I$(G4BASE)/run/include \
             -I$(G4BASE)/processes/management/include \
+            -I$(G4BASE)/processes/transportation/include \
             -I$(G4BASE)/processes/decay/include \
             -I$(G4BASE)/processes/cuts/include \
             -I$(G4BASE)/processes/optical/include \
