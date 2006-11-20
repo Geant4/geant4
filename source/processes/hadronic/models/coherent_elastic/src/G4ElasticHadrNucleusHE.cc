@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElasticHadrNucleusHE.cc,v 1.51 2006-11-20 18:28:55 starkov Exp $
+// $Id: G4ElasticHadrNucleusHE.cc,v 1.52 2006-11-20 18:50:45 starkov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //G4ElasticHadrNucleusHE.cc
 //
@@ -334,7 +334,7 @@ G4HadFinalState * G4ElasticHadrNucleusHE::ApplyYourself(
   {
     G4int        nucN, Step1=0, ii;
 
-   RandMax = 1;
+    RandMax = 1;
 
     G4int      kk=0, NumbOnE, iNumbQ2;
     G4double * dNumbQ2, * dNumbFQ2;
@@ -389,7 +389,7 @@ G4HadFinalState * G4ElasticHadrNucleusHE::ApplyYourself(
 //  ......................................
     ii = 0;
     while(pElD->TableCrossSec[NumbOnE*pElD->ONQ2+ii]>0.0001
-       || ii <150) 
+       || ii <149) 
     {
        RandMax  = pElD->TableCrossSec[NumbOnE*pElD->ONQ2+ii];
        CurrentN = ii;
