@@ -86,6 +86,7 @@ SUBDIRS += test29
 SUBDIRS += test32
 SUBDIRS += test33
 SUBDIRS += test34
+SUBDIRS += test39
 SUBDIRS += test40
 
 SUBDIRS_AIDA += test50
