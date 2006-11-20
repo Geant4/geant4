@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: test18.cc,v 1.10 2006-06-29 21:44:10 gunter Exp $
+// $Id: test18.cc,v 1.11 2006-11-20 11:17:06 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -67,7 +67,7 @@ std::vector<G4double> Weights;
 std::vector<G4double> Times;
 
 #ifdef G4VIS_USE
-#include "Tst18VisManager.hh"
+#include "G4VisExecutive.hh"
 #endif
 
 int main(int argc,char** argv)
@@ -84,7 +84,7 @@ int main(int argc,char** argv)
 
 #ifdef G4VIS_USE
   // visualization manager
-  G4VisManager* visManager = new Tst18VisManager;
+  G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
 #endif
 
