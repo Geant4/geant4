@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElasticHadrNucleusHE.cc,v 1.50 2006-11-20 16:27:38 starkov Exp $
+// $Id: G4ElasticHadrNucleusHE.cc,v 1.51 2006-11-20 18:28:55 starkov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //G4ElasticHadrNucleusHE.cc
 //
@@ -334,6 +334,8 @@ G4HadFinalState * G4ElasticHadrNucleusHE::ApplyYourself(
   {
     G4int        nucN, Step1=0, ii;
 
+   RandMax = 1;
+
     G4int      kk=0, NumbOnE, iNumbQ2;
     G4double * dNumbQ2, * dNumbFQ2;
     G4double   Q2=0.0, Buf=0.0, Energy;
@@ -369,7 +371,7 @@ G4HadFinalState * G4ElasticHadrNucleusHE::ApplyYourself(
 
      pElD->TableCrossSec[NumbOnE*pElD->ONQ2] = 0;
 
-     for(ii=1; ii< /*Nstep*/3; ii++)
+     for(ii=1; ii< Nstep /*3*/; ii++)
         {
           Q2      = pElD->TableQ2[ii];
 
@@ -378,7 +380,7 @@ G4HadFinalState * G4ElasticHadrNucleusHE::ApplyYourself(
 
   if(verboselevel == 1)
   G4cout<<" HadrNucleusQ2_2: Q2  Buf "<<Q2<<"  "
-        <<Buf*Weight<<G4endl;
+        <<Buf<<" B*W "<<Buf*Weight<<G4endl;
         }   // for ii
 
       RandMax  = Buf;
@@ -386,14 +388,24 @@ G4HadFinalState * G4ElasticHadrNucleusHE::ApplyYourself(
     }  //  if Step
 //  ......................................
     ii = 0;
-    while(pElD->TableCrossSec[NumbOnE*pElD->ONQ2+ii]>0.0001) 
+    while(pElD->TableCrossSec[NumbOnE*pElD->ONQ2+ii]>0.0001
+       || ii <150) 
     {
        RandMax  = pElD->TableCrossSec[NumbOnE*pElD->ONQ2+ii];
        CurrentN = ii;
        ii++;
+   
+//  if(verboselevel == 1)
+//  G4cout<<" HadrNucleusQ2_2(2): RandMax Rand "<<RandMax<<" ii "
+//        <<ii<<"  "<<Rand<<G4endl;
+
     }
 
     dNumbFQ2 = &pElD->TableCrossSec[NumbOnE*pElD->ONQ2];
+
+  if(verboselevel == 1)
+  G4cout<<" HadrNucleusQ2_2(2): RandMax Rand "<<RandMax<<"  "
+        <<Rand<<G4endl;
 
     if(RandMax > Rand)
     {
@@ -433,6 +445,8 @@ G4HadFinalState * G4ElasticHadrNucleusHE::ApplyYourself(
 	}  //  if Rand
       }    //  for ii
     }      //  else
+
+  if(RandMax == 0.0 ) G4cout<<" RandMax = 0 "<<RandMax<<G4endl;
 
    return  Q2;
   }        //  function
