@@ -54,7 +54,7 @@ SUBDIRS += test02
                     ## longer maintained.
 # SUBDIRS += test04 ## Persistency.  Retired.
 SUBDIRS += test05
-SUBDIRS += test06
+# SUBDIRS += test06 ## Duplicated in em tests. 
 SUBDIRS += test07
 # SUBDIRS += test08 ## Old em test.  Archived (cvs rm) for now.
                     ## (Action? Replace with transition radiation
@@ -77,7 +77,7 @@ SUBDIRS += test22
 SUBDIRS += test23 ## Old test on 'cuts per material', now obsolete 
 SUBDIRS += test24
 SUBDIRS += test25
-SUBDIRS += test26
+# SUBDIRS += test26 ## Duplicated in em tests.
 SUBDIRS += test27
 SUBDIRS += test28
 SUBDIRS += test29
