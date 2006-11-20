@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.84 2006-11-20 15:04:51 gcosmo Exp $
+# $Id: GNUmakefile,v 1.85 2006-11-20 16:29:38 gcosmo Exp $
 # -----------------------------------------------------------------
 # "gmake" makes default libraries for each subdomain.
 # "gmake global" makes global libraries for each subdomain.
@@ -50,7 +50,7 @@ endif
 fpe_debug: banner kernel
 	@$(ECHO) Activating FPE debug build ...
 ifneq (,$(findstring Linux-g++,$(G4SYSTEM)))
-	@rm -f $(G4TMPDIR)/G4RunManagerKernel.*
+	@rm -f $(G4TMPDIR)/G4run/G4RunManagerKernel.*
 	@cd $(G4INSTALL)/source/run; $(MAKE) G4FPE_DEBUG=1;
 	@cd $(G4INSTALL)/source; $(MAKE) libmap;
 else
