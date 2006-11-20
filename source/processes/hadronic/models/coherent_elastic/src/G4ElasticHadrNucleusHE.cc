@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElasticHadrNucleusHE.cc,v 1.47 2006-11-17 16:02:29 starkov Exp $
+// $Id: G4ElasticHadrNucleusHE.cc,v 1.48 2006-11-20 13:39:39 starkov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //G4ElasticHadrNucleusHE.cc
 //
@@ -37,8 +37,6 @@
 //  N. Starkov
 //  16.11.06: The low energy boundary is shifted to T = 400 MeV
 //  N. Starkov
-//  17.11.06: The code optimization was performed.  N. Starkov
-
 
 //#include  <strstream>
 #include  <sstream>
@@ -169,6 +167,8 @@
 
       G4int NumberOfRecord = -1;
 
+  if(verboselevel == 1)
+  G4cout<<" SampleT: SizeData "<<SizeData<<G4endl;
 //  .........................................
       if( SizeData != 0)
       {
@@ -196,6 +196,9 @@
          NumberOfRecord = SizeData-1;
          ElD1 = &SetOfElasticData[NumberOfRecord-0];
          Step = 0;
+  if(verboselevel == 1)
+    G4cout<<" SampleT: SizeData "<<SizeData<<" NumbRec "
+          <<NumberOfRecord<<G4endl;
      }   //  else if 
 
 //  ...............................................
@@ -337,8 +340,6 @@ G4HadFinalState * G4ElasticHadrNucleusHE::ApplyYourself(
 
     Nstep = pElD->ONQ2;
 
-    RandMax = 0;
-
     iContr = 2;
 
     G4String  hadrName = aHadron->GetParticleName();
@@ -366,7 +367,7 @@ G4HadFinalState * G4ElasticHadrNucleusHE::ApplyYourself(
 
      pElD->TableCrossSec[NumbOnE*pElD->ONQ2] = 0;
 
-        for(ii=1; ii< /*Nstep*/ 3; ii++)
+     for(ii=1; ii< /*Nstep*/3; ii++)
         {
           Q2      = pElD->TableQ2[ii];
 
@@ -375,7 +376,7 @@ G4HadFinalState * G4ElasticHadrNucleusHE::ApplyYourself(
 
   if(verboselevel == 1)
   G4cout<<" HadrNucleusQ2_2: Q2  Buf "<<Q2<<"  "
-                                 <<Buf*Weight<<G4endl;
+        <<Buf*Weight<<G4endl;
         }   // for ii
 
       RandMax  = Buf;
@@ -383,7 +384,7 @@ G4HadFinalState * G4ElasticHadrNucleusHE::ApplyYourself(
     }  //  if Step
 //  ......................................
     ii = 0;
-    while(pElD->TableCrossSec[NumbOnE*pElD->ONQ2+ii] > 0.0001) 
+    while(pElD->TableCrossSec[NumbOnE*pElD->ONQ2+ii]>0.0001) 
     {
        RandMax  = pElD->TableCrossSec[NumbOnE*pElD->ONQ2+ii];
        CurrentN = ii;
@@ -395,7 +396,7 @@ G4HadFinalState * G4ElasticHadrNucleusHE::ApplyYourself(
     if(RandMax > Rand)
     {
       kk = 0;
-      while(Rand > pElD->TableCrossSec[NumbOnE*pElD->ONQ2+kk])
+      while(Rand>pElD->TableCrossSec[NumbOnE*pElD->ONQ2+kk])
         kk++;
 
       iNumbQ2 = kk;
@@ -410,20 +411,24 @@ G4HadFinalState * G4ElasticHadrNucleusHE::ApplyYourself(
       for(ii=CurrentN; ii<Nstep; ii++)
       { 
 
-         Q2  = pElD->TableQ2[ii];  //(ii-0)*dQ2;
-         Buf = GetLightFq2(nucN, Q2, Step)/Weight;
-         pElD->TableCrossSec[NumbOnE*pElD->ONQ2+ii] = Buf;
+        Q2  = pElD->TableQ2[ii];  //(ii-0)*dQ2;
+	Buf = GetLightFq2(nucN, Q2, Step)/Weight;
+        pElD->TableCrossSec[NumbOnE*pElD->ONQ2+ii] = Buf;
 
-         if(Buf > Rand) 
-         {
-           iNumbQ2 = ii;
+  if(verboselevel == 1)
+  G4cout<<" HadrNucleusQ2_2(2): Q2  Buf "<<Q2<<"  "
+        <<Buf*Weight<<G4endl;
 
-           Q2 = GetQ2_2(iNumbQ2, dNumbQ2, dNumbFQ2, Rand);
-           CurrentN = ii;
-           RandMax  = Buf;
+        if(Buf>Rand) 
+	{
+          iNumbQ2 = ii;
 
-           break;
-         }  //  if Rand
+          Q2 = GetQ2_2(iNumbQ2, dNumbQ2, dNumbFQ2, Rand);
+          CurrentN = ii;
+          RandMax  = Buf;
+
+          break;
+	}  //  if Rand
       }    //  for ii
     }      //  else
 
@@ -1178,8 +1183,8 @@ G4double G4ElasticHadrNucleusHE::InterPol(
 
        else
            {  
-             G4cout<<" ElasticHE: For the hadron "
-                   << aHadron->GetParticleName() 
+             G4cout<<" ElasticHE: For the hadron
+                   <<aHadron->GetParticleName() "
                    <<" other method must be used."<<G4endl;
              HadrTot   = 20;
              HadrSlope = 7;
