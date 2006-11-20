@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.4 2006-07-05 11:53:02 gcosmo Exp $
+# $Id: GNUmakefile,v 1.5 2006-11-20 10:41:50 kmura Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -6,16 +6,8 @@ name := hepmcEx01
 G4TARGET := $(name)
 G4EXLIB := true
 
-include hadronic_lists.gmk
-
 .PHONY: all
-all : had_list lib bin
-
-had_list:
-	@echo "This example uses the QGSP 'educated guess physics list'"
-	@echo "(see $(G4INSTALL)/physics_lists/hadronic)."
-	@echo "The hadronic physics lists should be compiled before"
-	@echo "compiling this example."
+all : lib bin
 
 include $(G4INSTALL)/config/binmake.gmk
 
