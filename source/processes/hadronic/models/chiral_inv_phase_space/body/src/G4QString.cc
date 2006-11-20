@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QString.cc,v 1.1 2006-10-30 10:40:37 mkossov Exp $
+// $Id: G4QString.cc,v 1.2 2006-11-20 16:29:11 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -67,6 +67,9 @@ G4QString::G4QString(G4QParton* QCol,G4QParton* Gluon,G4QParton* QAntiCol,G4int 
   thePartons.push_back(Gluon);
   thePartons.push_back(QAntiCol);
 }
+
+G4QString::G4QString(const G4QString &right) : theDirection(right.GetDirection()),
+thePosition(right.GetPosition()), hadronizer(new G4QHadronBuilder){}
 
 G4QString::~G4QString()
  {if(thePartons.size())std::for_each(thePartons.begin(),thePartons.end(),DeleteQParton());}

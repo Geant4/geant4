@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNucleus.cc,v 1.58 2006-11-20 14:04:04 gcosmo Exp $
+// $Id: G4QNucleus.cc,v 1.59 2006-11-20 16:29:11 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QNucleus ----------------
@@ -3303,7 +3303,7 @@ G4double G4QNucleus::GetRelativeDensity(const G4ThreeVector& aPosition)
 G4double G4QNucleus::GetFermiMomentum(G4double density)
 {
   static const G4double third=1./3.;
-  static const G4double constofpmax=hbarc*pow(3.*pi2,1/3);
+  static const G4double constofpmax=hbarc*pow(3.*pi2,third);
   return constofpmax * pow(density*GetA(),third);
 } // End of GetFermiMomentum
 

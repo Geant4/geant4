@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QHadron.hh,v 1.33 2006-10-27 16:47:34 mkossov Exp $
+// $Id: G4QHadron.hh,v 1.34 2006-11-20 16:29:11 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QHadron ----------------
@@ -181,5 +181,21 @@ inline void   G4QHadron::SetCollisionCount(G4int aCount)       {theCollisionCoun
 
 inline void   G4QHadron::NegPDGCode()                  {theQPDG.NegPDGCode(); valQ.Anti();}
 inline G4bool G4QHadron::TestRealNeutral()             { return theQPDG.TestRealNeutral();}
+
+inline G4QParton* G4QHadron::GetNextParton()
+{
+   if(Color.size()==0) return 0;
+   G4QParton* result = Color.back();
+   Color.pop_back();
+   return result;
+}
+
+inline G4QParton* G4QHadron::GetNextAntiParton()
+{
+   if(AntiColor.size() == 0) return 0;
+   G4QParton* result = AntiColor.front();
+   AntiColor.pop_front();
+   return result;
+}
 #endif
 

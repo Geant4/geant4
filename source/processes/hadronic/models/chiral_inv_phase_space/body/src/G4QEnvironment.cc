@@ -27,7 +27,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4QEnvironment.cc,v 1.116 2006-11-20 14:04:03 gcosmo Exp $
+// $Id: G4QEnvironment.cc,v 1.117 2006-11-20 16:29:11 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QEnvironment ----------------
@@ -614,6 +614,7 @@ const G4QEnvironment& G4QEnvironment::operator=(const G4QEnvironment &right)
 // Member function for Quasmon Creation & Environment nucleus modification
 void G4QEnvironment::CreateQuasmon(const G4QContent& projQC, const G4LorentzVector& proj4M)
 {//========================================================================================
+  static const G4double third=1./3.;
   //static const G4double mNeut= G4QPDGCode(2112).GetMass();
   //static const G4double mProt= G4QPDGCode(2212).GetMass();
   //static const G4double mLamb= G4QPDGCode(3122).GetMass();
@@ -768,7 +769,7 @@ void G4QEnvironment::CreateQuasmon(const G4QContent& projQC, const G4LorentzVect
 #ifdef pdebug
 	     G4cout<<"G4QE::CrQ:AnihN="<<tNH<<", tC="<<totCharge<<",tB="<<totBaryoN<<G4endl;// ^ ^
 #endif
-      G4double ra=std::pow(G4double(totBaryoN),1/3);
+      G4double ra=std::pow(G4double(totBaryoN),third);  //                              ^ ^
       for (G4int ind=0; ind<tNH; ind++)        // Loop over annihilation  QHadrons      ^ ^
       {
         //G4QHadron* curHadr = output->operator[](ind); // Pointer to theCurrentHadron  ^ ^
