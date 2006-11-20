@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: G4PolarizedAnnihilationCrossSection.cc,v 1.4 2006-11-17 14:14:19 vnivanch Exp $
+// $Id: G4PolarizedAnnihilationCrossSection.cc,v 1.5 2006-11-20 12:21:25 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // -------------------------------------------------------------------
 //
@@ -234,7 +234,7 @@ G4double G4PolarizedAnnihilationCrossSection::XSection(const G4StokesVector & po
 // calculate total cross section
 //
 G4double G4PolarizedAnnihilationCrossSection::TotalXSection(
-  const G4double , const G4double , const G4double gam,
+  G4double ,G4double ,G4double gam,
   const G4StokesVector & pol0,const G4StokesVector & pol1)
 {
   totalXSFactor =pi*re2/(gam + 1.);  // atomic number ignored  

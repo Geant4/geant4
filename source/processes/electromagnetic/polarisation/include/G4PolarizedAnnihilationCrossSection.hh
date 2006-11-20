@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: G4PolarizedAnnihilationCrossSection.hh,v 1.2 2006-11-17 14:14:16 vnivanch Exp $
+// $Id: G4PolarizedAnnihilationCrossSection.hh,v 1.3 2006-11-20 12:21:25 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // -------------------------------------------------------------------
 //
@@ -65,8 +65,8 @@ public:
   G4double DiceEpsilon(); 
   virtual G4double XSection(const G4StokesVector & pol2,
 			    const G4StokesVector & pol3); 
-  virtual G4double TotalXSection(const G4double xmin, const G4double xmax, 
-				 const G4double y,
+  virtual G4double TotalXSection(G4double xmin, G4double xmax, 
+				 G4double y,
 				 const G4StokesVector & pol0,
 				 const G4StokesVector & pol1); 
 
