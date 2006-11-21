@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.hh,v 1.64 2006-11-15 19:25:31 allison Exp $
+// $Id: G4VisManager.hh,v 1.65 2006-11-21 14:23:20 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -401,9 +401,16 @@ protected:
 
   void RegisterMessengers              ();   // Command messengers.
 
-private:
+  const G4int           fVerbose;
+  // fVerbose is kept for backwards compatibility for some user
+  // examples.  (It is used in the derived user vis managers to print
+  // available graphics systems.)  It is initialised to 1 in the
+  // constructor and cannot be changed.
 
   void PrintAvailableGraphicsSystems   () const;
+
+private:
+
   void PrintAvailableModels            (Verbosity) const;
   void PrintInvalidPointers            () const;
   G4bool IsValidView ();
@@ -413,7 +420,7 @@ private:
   // for clearing.  Assumes view is valid.
 
   static G4VisManager*  fpInstance;         // Pointer to single instance. 
- G4bool                fInitialised;
+  G4bool                fInitialised;
   G4VUserVisAction*     fpUserVisAction;    // User vis action callback.
   G4VisExtent           fUserVisActionExtent;
   G4VGraphicsSystem*    fpGraphicsSystem;   // Current graphics system.
@@ -424,11 +431,6 @@ private:
   G4SceneList           fSceneList;
   G4SceneHandlerList    fAvailableSceneHandlers;
   Verbosity             fVerbosity;
-  const G4int           fVerbose;
-  // fVerbose is kept for backwards compatibility for some user
-  // examples.  (It is used in the derived user vis managers to print
-  // available graphics systems.)  It is initialised to 1 in the
-  // constructor and cannot be changed.
   std::vector<G4UImessenger*> fMessengerList;
   std::vector<G4UIcommand*>   fDirectoryList;
   G4VisStateDependent*  fpStateDependent;   // Friend state dependent class.
@@ -439,6 +441,7 @@ private:
   G4bool fTransientsDrawnThisRun;
   G4bool fTransientsDrawnThisEvent;
   G4bool fEventKeepingSuspended;
+  G4bool fKeptLastEvent;
 
   // Trajectory draw model manager
   G4VisModelManager<G4VTrajectoryModel>* fpTrajDrawModelMgr;

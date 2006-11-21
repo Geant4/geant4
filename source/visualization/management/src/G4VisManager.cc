@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VisManager.cc,v 1.105 2006-11-15 19:25:31 allison Exp $
+// $Id: G4VisManager.cc,v 1.106 2006-11-21 14:23:20 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -78,6 +78,7 @@
 G4VisManager* G4VisManager::fpInstance = 0;
 
 G4VisManager::G4VisManager ():
+  fVerbose         (1),
   fInitialised     (false),
   fpUserVisAction  (0),
   fpGraphicsSystem (0),
@@ -85,12 +86,12 @@ G4VisManager::G4VisManager ():
   fpSceneHandler   (0),
   fpViewer         (0),
   fVerbosity       (warnings),
-  fVerbose         (1),
   fpStateDependent (0),
   fEventRefreshing          (false),
   fTransientsDrawnThisRun   (false),
   fTransientsDrawnThisEvent (false),
-  fEventKeepingSuspended    (false)
+  fEventKeepingSuspended    (false),
+  fKeptLastEvent            (false)
   // All other objects use default constructors.
 {
   fpTrajDrawModelMgr = new G4VisModelManager<G4VTrajectoryModel>("/vis/modeling/trajectories");
@@ -1103,6 +1104,7 @@ void G4VisManager::PrintInvalidPointers () const {
 void G4VisManager::BeginOfRun ()
 {
   //G4cout << "G4VisManager::BeginOfRun" << G4endl;
+  fKeptLastEvent = false;
   fEventKeepingSuspended = false;
   fTransientsDrawnThisRun = false;
   if (fpSceneHandler) fpSceneHandler->SetTransientsDrawnThisRun(false);
@@ -1132,6 +1134,7 @@ void G4VisManager::EndOfEvent ()
     G4EventManager::GetEventManager()->GetConstCurrentEvent();
   if (!currentEvent) return;
 
+  ClearTransientStoreIfMarked();
   fpSceneHandler->DrawEvent(currentEvent);
 
   G4int nEventsToBeProcessed = 0;
@@ -1152,7 +1155,11 @@ void G4VisManager::EndOfEvent ()
       fpViewer->ShowView();
       fpSceneHandler->SetMarkForClearingTransientStore(true);
     } else {  // Last event...
-      G4EventManager::GetEventManager()->KeepTheCurrentEvent();
+      // Keep, but only if user has not kept any...
+      if (!nKeptEvents) {
+	G4EventManager::GetEventManager()->KeepTheCurrentEvent();
+	fKeptLastEvent = true;
+      }
     }
 
   } else {  //  Accumulating events...
@@ -1215,7 +1222,7 @@ void G4VisManager::EndOfRun ()
     currentRun? currentRun->GetEventVector(): 0;
   if (events) nKeptEvents = events->size();
 
-  if (nKeptEvents) {
+  if (nKeptEvents && !fKeptLastEvent) {
     if (!valid && fVerbosity >= warnings) G4cout << "WARNING: ";
     if (fVerbosity >= warnings) {
       G4cout << nKeptEvents;
