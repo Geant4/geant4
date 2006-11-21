@@ -1,4 +1,4 @@
-$Id: History,v 1.21 2006-11-20 09:00:45 kmura Exp $
+$Id: History,v 1.22 2006-11-21 06:07:32 kmura Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,7 +14,11 @@ Geant4Py is a Geant4-Python bridge.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-20 November 2006 K.Murakami (1.1.0)
+21 November 2006 K.Murakami (1.1.0)
+ - implement G4ExceptionHandler as translation to Python exceptions
+ - remove obsolete method; G4VPhysicalVolume::GetObjectRotation()
+
+20 November 2006 K.Murakami
  - modification for G4.8.2
  - add G4Exception and G4ExceptionSeverity
  - modify configure for supporting physics lists
