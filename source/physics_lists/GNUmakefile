@@ -1,6 +1,6 @@
-# $Id: GNUmakefile,v 1.1 2006-10-31 11:34:03 gunter Exp $
+# $Id: GNUmakefile,v 1.2 2006-11-21 07:34:18 gunter Exp $
 # ----------------------------------------------------------------------
-# GNUmakefile for physicslists library, Gjunter Folger 25-October 2006
+# GNUmakefile for physicslists library, Gunter Folger 25-October 2006
 # ----------------------------------------------------------------------
 
 name := G4physicslists
