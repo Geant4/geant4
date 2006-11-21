@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewer.cc,v 1.64 2006-11-14 14:59:55 allison Exp $
+// $Id: G4VisCommandsViewer.cc,v 1.65 2006-11-21 16:22:58 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer commands - John Allison  25th October 1998
@@ -112,7 +112,7 @@ G4String G4VisCommandViewerAddCutawayPlane::GetCurrentValue (G4UIcommand*) {
   return "";
 }
 
-void G4VisCommandViewerAddCutawayPlane::SetNewValue (G4UIcommand* command, G4String newValue) {
+void G4VisCommandViewerAddCutawayPlane::SetNewValue (G4UIcommand*, G4String newValue) {
 
   G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
 
@@ -194,7 +194,7 @@ G4String G4VisCommandViewerChangeCutawayPlane::GetCurrentValue (G4UIcommand*) {
   return "";
 }
 
-void G4VisCommandViewerChangeCutawayPlane::SetNewValue (G4UIcommand* command, G4String newValue) {
+void G4VisCommandViewerChangeCutawayPlane::SetNewValue (G4UIcommand*, G4String newValue) {
 
   G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
 

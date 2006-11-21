@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXViewerMessenger.cc,v 1.4 2006-11-01 12:18:03 allison Exp $
+// $Id: G4OpenGLXViewerMessenger.cc,v 1.5 2006-11-21 16:24:00 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifdef G4VIS_BUILD_OPENGLX_DRIVER
@@ -69,7 +69,7 @@ G4OpenGLXViewerMessenger::~G4OpenGLXViewerMessenger ()
 }
 
 void G4OpenGLXViewerMessenger::SetNewValue
-(G4UIcommand* command, G4String newValue)
+(G4UIcommand* command, G4String)
 {
   G4VisManager* pVisManager = G4VisManager::GetInstance();
 
