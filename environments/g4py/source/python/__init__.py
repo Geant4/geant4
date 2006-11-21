@@ -1,4 +1,4 @@
-# $Id: __init__.py,v 1.10 2006-11-20 08:58:46 kmura Exp $
+# $Id: __init__.py,v 1.11 2006-11-21 05:59:29 kmura Exp $
 """
 # ==================================================================
 #  [Geant4] module package
@@ -87,6 +87,7 @@ gTrackingManager= gEventManager.GetTrackingManager()
 # gStateManager
 # ------------------------------------------------------------------
 gStateManager= G4StateManager.GetStateManager()
+gExceptionHandler= G4ExceptionHandler() # automatically registered
 
 # ------------------------------------------------------------------
 # gTransportationManager

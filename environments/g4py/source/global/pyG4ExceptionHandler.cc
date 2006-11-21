@@ -23,59 +23,83 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pymodG4global.cc,v 1.7 2006-11-21 05:58:33 kmura Exp $
+// $Id: pyG4ExceptionHandler.cc,v 1.1 2006-11-21 05:58:33 kmura Exp $
 // $Name: not supported by cvs2svn $
 // ====================================================================
-//   pymodG4global.cc [Geant4Py module]
+//   pyG4ExceptionHandler.cc
 //
 //                                         2005 Q
 // ====================================================================
 #include <boost/python.hpp>
+#include "G4VExceptionHandler.hh"
+#include "G4StateManager.hh"
 
 using namespace boost::python;
 
 // ====================================================================
+// Python Exception Handler
+// ====================================================================
+class PyG4ExceptionHandler : public G4VExceptionHandler {
+public:
+  PyG4ExceptionHandler():G4VExceptionHandler() {
+    G4StateManager* sm= G4StateManager::GetStateManager();
+    sm-> SetExceptionHandler(this);
+  }
+  ~PyG4ExceptionHandler() { }
+
+  G4bool Notify(const char* originOfException,
+                const char* exceptionCode,
+                G4ExceptionSeverity severity,
+                const char* description) {
+
+    G4cerr << "*** G4Exception : " << exceptionCode << G4endl;
+    G4cerr << "      issued by : " << originOfException << G4endl;
+    G4cerr << description << G4endl;
+    G4cerr << G4endl << "Severity : ";
+
+    switch(severity) {
+    case FatalException:
+      PyErr_SetString(PyExc_AssertionError,
+                      "*** Fatal Exception ***");
+      PyErr_Print();
+      break;
+
+    case FatalErrorInArgument:
+      PyErr_SetString(PyExc_ValueError,
+                      "*** Fatal Error In Argument ***");
+      PyErr_Print();
+
+    case RunMustBeAborted:
+      PyErr_SetString(PyExc_RuntimeError,
+                      "*** Run Must Be Aborted ***");
+      PyErr_Print();
+      break;
+
+    case EventMustBeAborted:
+      PyErr_SetString(PyExc_RuntimeError,
+                      "*** Event Must Be Aborted ***");
+      PyErr_Print();
+      break;
+
+    default:
+      PyErr_Warn(PyExc_RuntimeWarning,
+                 "*** This is just a warning message. ***");
+      break;
+    }
+
+    G4cerr << G4endl;
+
+    // anyway, no abort.
+    return false;
+  }
+};
+
+// ====================================================================
 // module definition
 // ====================================================================
-
-void export_globals();
-void export_geomdefs();
-void export_G4StateManager();
-void export_G4ApplicationState();
-void export_G4String();
-void export_G4ThreeVector();
-void export_G4RotationMatrix();
-void export_G4Transform3D();
-void export_G4UnitsTable();
-void export_Randomize();
-void export_RandomEngines();
-void export_G4RandomDirection();
-void export_G4UserLimits();
-void export_G4Timer();
-void export_G4Version();
-void export_G4Exception();
-void export_G4ExceptionHandler();
-void export_G4ExceptionSeverity();
-
-BOOST_PYTHON_MODULE(G4global) 
+void export_G4ExceptionHandler()
 {
-  export_globals();
-  export_geomdefs();
-  export_G4StateManager();
-  export_G4ApplicationState();
-  export_G4String();
-  export_G4ThreeVector();
-  export_G4RotationMatrix();
-  export_G4Transform3D();
-  export_G4UnitsTable();
-  export_Randomize();
-  export_RandomEngines();
-  export_G4RandomDirection();
-  export_G4UserLimits();
-  export_G4Timer();
-  export_G4Version();
-  export_G4Exception();
-  export_G4ExceptionHandler();
-  export_G4ExceptionSeverity();
+  class_<PyG4ExceptionHandler, boost::noncopyable>
+    ("G4ExceptionHandler", "exception handler")
+    ;
 }
-
