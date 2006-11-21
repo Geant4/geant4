@@ -20,7 +20,15 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-
+//
+// Authors: S. Guatelli and M. G. Pia, INFN Genova, Italy
+// 
+// Based on code developed by the undergraduate student G. Guerrieri 
+// Note: this is a preliminary beta-version of the code; an improved 
+// version will be distributed in the next Geant4 public release, compliant
+// with the design in a forthcoming publication, and subject to a 
+// design and code review.
+//
 #include "globals.hh"
 #include "G4HumanPhantomPhysicsList.hh"
 
@@ -31,7 +39,7 @@
 G4HumanPhantomPhysicsList::G4HumanPhantomPhysicsList():  G4VUserPhysicsList()
 {
   defaultCutValue = 1.0*cm;
-   SetVerboseLevel(1);
+  SetVerboseLevel(1);
 }
 
 
@@ -116,7 +124,6 @@ void G4HumanPhantomPhysicsList::ConstructProcess()
 {
   AddTransportation();
   ConstructEM();
-  ConstructGeneral();
 }
 
 
@@ -184,26 +191,6 @@ void G4HumanPhantomPhysicsList::ConstructEM()
     }
   }
 }
-
-
-#include "G4Decay.hh"
-void G4HumanPhantomPhysicsList::ConstructGeneral()
-{
-  // Add Decay Process
-  G4Decay* theDecayProcess = new G4Decay();
-  theParticleIterator->reset();
-  while( (*theParticleIterator)() ){
-    G4ParticleDefinition* particle = theParticleIterator->value();
-    G4ProcessManager* pmanager = particle->GetProcessManager();
-    if (theDecayProcess->IsApplicable(*particle)) { 
-      pmanager ->AddProcess(theDecayProcess);
-      // set ordering for PostStepDoIt and AtRestDoIt
-      pmanager ->SetProcessOrdering(theDecayProcess, idxPostStep);
-      pmanager ->SetProcessOrdering(theDecayProcess, idxAtRest);
-    }
-  }
-}
-
 
 void G4HumanPhantomPhysicsList::SetCuts()
 {

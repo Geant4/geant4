@@ -20,11 +20,15 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// This is the Director of the Builder: 
-//  define sex at line 62!
-//  default is Female.
+// Authors: S. Guatelli and M. G. Pia, INFN Genova, Italy
+// 
+// Based on code developed by the undergraduate student G. Guerrieri 
+// Note: this is a preliminary beta-version of the code; an improved 
+// version will be distributed in the next Geant4 public release, compliant
+// with the design in a forthcoming publication, and subject to a 
+// design and code review.
 //
-//*********************************************************************
+
 #include "globals.hh"
 #include <map>
 
@@ -54,7 +58,7 @@ G4HumanPhantomConstruction::~G4HumanPhantomConstruction()
 {
  delete material;
  delete messenger;
- delete userPhantomSD;
+ //delete userPhantomSD;
 }
 
 G4VPhysicalVolume* G4HumanPhantomConstruction::Construct()
@@ -67,7 +71,8 @@ G4VPhysicalVolume* G4HumanPhantomConstruction::Construct()
   SDman->AddNewDetector( userPhantomSD );
 
   G4PhantomBuilder* builder = 0;
- if(sex=="Female") builder = new G4FemaleBuilder;
+
+  if(sex=="Female") builder = new G4FemaleBuilder;
   else builder = new G4MaleBuilder ;  
 
   builder->BuildWorld();
@@ -118,7 +123,7 @@ G4VPhysicalVolume* G4HumanPhantomConstruction::Construct()
   }
   
   return builder->GetPhantom(); 
-
+  delete builder;
 }
 
 void  G4HumanPhantomConstruction::SetBodyPartSensitivity(G4String bodyPartName, G4bool bodyPartSensitivity)
@@ -130,7 +135,7 @@ void  G4HumanPhantomConstruction::SetBodyPartSensitivity(G4String bodyPartName, 
 
 void G4HumanPhantomConstruction::CleanPhantom()
 {
- delete mother;
+  //delete mother;
 }
 
 void G4HumanPhantomConstruction::UpdatePhantom()

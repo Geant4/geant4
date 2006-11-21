@@ -20,9 +20,15 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// this is the abstract class which manages the body realisation
-// in terms of geometry
+// Authors: S. Guatelli and M. G. Pia, INFN Genova, Italy
+// 
+// Based on code developed by the undergraduate student G. Guerrieri 
+// Note: this is a preliminary beta-version of the code; an improved 
+// version will be distributed in the next Geant4 public release, compliant
+// with the design in a forthcoming publication, and subject to a 
+// design and code review.
 //
+
 #ifndef G4VPhantomBuilder_h
 #define G4VPhantomBuilder_h 1
 

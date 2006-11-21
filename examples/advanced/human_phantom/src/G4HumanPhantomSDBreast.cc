@@ -20,7 +20,14 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-
+// Authors: S. Guatelli and M. G. Pia, INFN Genova, Italy
+// 
+// Based on code developed by the undergraduate student G. Guerrieri 
+// Note: this is a preliminary beta-version of the code; an improved 
+// version will be distributed in the next Geant4 public release, compliant
+// with the design in a forthcoming publication, and subject to a 
+// design and code review.
+//
 #include "G4HumanPhantomSDBreast.hh"
 #include "G4HCofThisEvent.hh"
 #include "G4Step.hh"
@@ -34,26 +41,13 @@
 G4HumanPhantomSDBreast::G4HumanPhantomSDBreast(G4String name)
 :G4VSensitiveDetector(name)
 {
-  //G4String HCname;
-  //collectionName.insert(HCname="G4HumanPhantomBreastHitsCollection");
 }
 
-
-G4HumanPhantomSDBreast::~G4HumanPhantomSDBreast(){ }
-
+G4HumanPhantomSDBreast::~G4HumanPhantomSDBreast()
+{;}
 
 void G4HumanPhantomSDBreast::Initialize(G4HCofThisEvent* HCE)
-{
-  /*
-  trackerCollection = new G4HumanPhantomHitsCollection
-                          (SensitiveDetectorName,collectionName[0]); 
-  static G4int HCID = -1;
-  if(HCID<0)
-  { HCID = G4SDManager::GetSDMpointer()->GetCollectionID(collectionName[0]); }
-  HCE->AddHitsCollection( HCID, trackerCollection ); 
-  */
-}
-
+{}
 
 G4bool G4HumanPhantomSDBreast::ProcessHits(G4Step* aStep,G4TouchableHistory* ROhist)
 {
@@ -69,16 +63,8 @@ G4bool G4HumanPhantomSDBreast::ProcessHits(G4Step* aStep,G4TouchableHistory* ROh
 
  if(edep != 0)                       
 	    { 
-	      // G4double xx = aStep -> GetPreStepPoint() -> GetPosition().x();
-              //G4double yy = aStep -> GetPreStepPoint() -> GetPosition().y();
-              //G4double zz = aStep -> GetPreStepPoint() -> GetPosition().z();                 
-	    
-	      //G4cout <<  "xx (cm): "<< xx/cm << " yy (cm): "<< yy/cm << " zz (cm): "<< zz/cm <<G4endl;
-	    
               G4int sector = ROhist -> GetReplicaNumber();
 	      G4int slice = ROhist -> GetReplicaNumber(1);
-	      //	      G4cout << "edep(MeV):" << edep/MeV << " slice, sector: "<<
-	      // 	slice << " "<< sector<< G4endl;  
 #ifdef G4ANALYSIS_USE	
     G4HumanPhantomAnalysisManager* analysis = 
 		G4HumanPhantomAnalysisManager::getInstance();   
@@ -89,15 +75,5 @@ G4bool G4HumanPhantomSDBreast::ProcessHits(G4Step* aStep,G4TouchableHistory* ROh
   return true;
 }
 
-
 void G4HumanPhantomSDBreast::EndOfEvent(G4HCofThisEvent*)
-{
-  /*
-  if (verboseLevel>0) { 
-     G4int NbHits = trackerCollection->entries();
-     G4cout << "\n-------->Hits Collection: in this event they are " << NbHits 
-            << " hits in the: " << G4endl;
-     for (G4int i=0;i<NbHits;i++) (*trackerCollection)[i]->Print();
-    }
-  */ 
-}
+{}

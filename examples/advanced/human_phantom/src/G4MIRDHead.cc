@@ -20,8 +20,15 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// Authors: S. Guatelli and M. G. Pia, INFN Genova, Italy
+// 
+// Based on code developed by the undergraduate student G. Guerrieri 
+// Note: this is a preliminary beta-version of the code; an improved 
+// version will be distributed in the next Geant4 public release, compliant
+// with the design in a forthcoming publication, and subject to a 
+// design and code review.
+//
 #include "G4MIRDHead.hh"
-
 //#include "G4Processor/GDMLProcessor.h"
 #include "globals.hh"
 #include "G4HumanPhantomMaterial.hh"
@@ -44,7 +51,6 @@ G4MIRDHead::G4MIRDHead()
 G4MIRDHead::~G4MIRDHead()
 {
   delete material;
-
 }
 
 G4VPhysicalVolume* G4MIRDHead::ConstructHead(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity)
@@ -86,6 +92,7 @@ G4VPhysicalVolume* G4MIRDHead::ConstructHead(G4VPhysicalVolume* mother, G4String
 						  mother,
 						  false,
 						  0);
+  // delete rm;
 
   // Sensitive Body Part
  

@@ -23,18 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// Code developed by:
-// S. Agostinelli, F. Foppiano, S. Garelli , M. Tropeano, S.Guatelli
-//
-//    ************************************
-//    *                                  *
-//    *   G4HumanPhantomROGeometry.cc    *
-//    *                                  *
-//    ************************************
-//
-// $Id: G4HumanPhantomROGeometry.cc,v 1.2 2006-11-16 16:50:16 guatelli Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// Authors: S. Guatelli and M. G. Pia, INFN Genova, Italy
+// 
+// Based on code developed by the undergraduate student G. Guerrieri 
+// Note: this is a preliminary beta-version of the code; an improved 
+// version will be distributed in the next Geant4 public release, compliant
+// with the design in a forthcoming publication, and subject to a 
+// design and code review.
 //
 #include "G4HumanPhantomROGeometry.hh"
 #include "G4HumanDummySD.hh"
@@ -50,7 +45,7 @@
 
 G4HumanPhantomROGeometry::G4HumanPhantomROGeometry(G4String aString):
                                                
-  G4VReadOutGeometry(aString)
+  G4VReadOutGeometry(aString), ROvoxel_phys(0)
 {
 }
 
@@ -147,10 +142,12 @@ G4VPhysicalVolume* G4HumanPhantomROGeometry::Build()
 			     
   G4LogicalVolume* ROvoxel_log = new G4LogicalVolume(ROvoxel, dummyMat, "voxel_log", 0,0,0);
 
-  G4VPhysicalVolume* ROvoxel_phys = new G4PVReplica("RZPhiSlices",
- 						    ROvoxel_log,
- 						    ROvoxelz_phys,
-						    kPhi, n_voxels, voxel_phi,- (voxel_phi/2.)); 
+  ROvoxel_phys = new G4PVReplica("RZPhiSlices",
+ 				  ROvoxel_log,
+ 				 ROvoxelz_phys,
+				 kPhi, n_voxels, voxel_phi,- (voxel_phi/2.)); 
+
+  //delete matrix;
 						  
   G4HumanDummySD *dummySD = new G4HumanDummySD;
   ROvoxel_log -> SetSensitiveDetector(dummySD);

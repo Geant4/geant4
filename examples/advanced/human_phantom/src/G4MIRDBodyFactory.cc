@@ -1,4 +1,3 @@
-
 //
 // ********************************************************************
 // * DISCLAIMER                                                       *
@@ -20,6 +19,14 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
+// Authors: S. Guatelli and M. G. Pia, INFN Genova, Italy
+// 
+// Based on code developed by the undergraduate student G. Guerrieri 
+// Note: this is a preliminary beta-version of the code; an improved 
+// version will be distributed in the next Geant4 public release, compliant
+// with the design in a forthcoming publication, and subject to a 
+// design and code review.
 //
 #include "G4MIRDBodyFactory.hh"
 #include "G4MIRDStomach.hh"
@@ -63,43 +70,51 @@ G4VPhysicalVolume* G4MIRDBodyFactory::CreateStomach(G4VPhysicalVolume* motherVol
 {
   G4MIRDStomach* stomach = new G4MIRDStomach();
   return stomach -> ConstructStomach(motherVolume,sex,sensitivity);
+  delete stomach;
 }
 
 G4VPhysicalVolume* G4MIRDBodyFactory::CreateUpperLargeIntestine(G4VPhysicalVolume* motherVolume, G4String sex, G4bool sensitivity)
 {
   G4MIRDUpperLargeIntestine* upperLargeIntestine = new G4MIRDUpperLargeIntestine();
   return upperLargeIntestine -> ConstructUpperLargeIntestine(motherVolume,sex,sensitivity);
+  delete upperLargeIntestine;
 }
 G4VPhysicalVolume* G4MIRDBodyFactory::CreateLowerLargeIntestine(G4VPhysicalVolume* motherVolume, G4String sex, G4bool sensitivity)
 {
   G4MIRDLowerLargeIntestine* lowerLargeIntestine = new G4MIRDLowerLargeIntestine();
   return lowerLargeIntestine -> ConstructLowerLargeIntestine(motherVolume,sex,sensitivity);
+  delete lowerLargeIntestine;
 }
 
 G4VPhysicalVolume* G4MIRDBodyFactory::CreateKidney(G4VPhysicalVolume* motherVolume, G4String sex, G4bool sensitivity)
 {
   G4MIRDKidney* kidney = new G4MIRDKidney();
   return kidney -> ConstructKidney(motherVolume,sex,sensitivity);
+  delete kidney;
 }
 G4VPhysicalVolume* G4MIRDBodyFactory::CreateAdrenal(G4VPhysicalVolume* motherVolume, G4String sex, G4bool sensitivity)
 {
   G4MIRDAdrenal* adrenal = new G4MIRDAdrenal();
   return adrenal -> ConstructAdrenal(motherVolume,sex,sensitivity);
+  delete adrenal;
 }
 G4VPhysicalVolume* G4MIRDBodyFactory::CreateLiver(G4VPhysicalVolume* motherVolume, G4String sex, G4bool sensitivity)
 {
   G4MIRDLiver* liver = new G4MIRDLiver();
   return liver -> ConstructLiver(motherVolume,sex,sensitivity);
+  delete liver;
 }
 G4VPhysicalVolume* G4MIRDBodyFactory::CreatePancreas(G4VPhysicalVolume* motherVolume, G4String sex, G4bool sensitivity)
 {
   G4MIRDPancreas* pancreas = new G4MIRDPancreas();
   return pancreas -> ConstructPancreas(motherVolume,sex,sensitivity);
+  delete pancreas;
 }
 G4VPhysicalVolume* G4MIRDBodyFactory::CreateSpleen(G4VPhysicalVolume* motherVolume, G4String sex, G4bool sensitivity)
 {
   G4MIRDSpleen* spleen = new G4MIRDSpleen();
   return spleen -> ConstructSpleen(motherVolume,sex,sensitivity);
+  delete spleen;
 }
 G4VPhysicalVolume* G4MIRDBodyFactory::CreateUrinaryBladder(G4VPhysicalVolume* motherVolume, G4String sex, G4bool sensitivity)
 {
@@ -110,47 +125,56 @@ G4VPhysicalVolume* G4MIRDBodyFactory::CreateLung(G4VPhysicalVolume* motherVolume
 {
   G4MIRDLung* lung = new G4MIRDLung();
   return lung -> ConstructLung(motherVolume,sex,sensitivity);
+  delete lung;
 }
 G4VPhysicalVolume* G4MIRDBodyFactory::CreateHeart(G4VPhysicalVolume* motherVolume, G4String sex, G4bool sensitivity)
 {
   G4MIRDHeart* heart = new G4MIRDHeart();
   return heart -> ConstructHeart(motherVolume,sex,sensitivity);
+  delete heart;
 }
 G4VPhysicalVolume* G4MIRDBodyFactory::CreateBrain(G4VPhysicalVolume* motherVolume, G4String sex, G4bool sensitivity)
 {
   G4MIRDBrain* brain = new G4MIRDBrain();
   return brain -> ConstructBrain(motherVolume,sex,sensitivity);
+  delete brain;
 }
 
 G4VPhysicalVolume* G4MIRDBodyFactory::CreateHead(G4VPhysicalVolume* motherVolume, G4String sex, G4bool sensitivity)
 {
   G4MIRDHead* head = new G4MIRDHead();
   return head -> ConstructHead(motherVolume, sex, sensitivity);
+  delete head;
 }
 G4VPhysicalVolume* G4MIRDBodyFactory::CreateTrunk(G4VPhysicalVolume* motherVolume, G4String sex, G4bool sensitivity)
 {
   G4MIRDTrunk* trunk = new G4MIRDTrunk();
   return trunk -> ConstructTrunk(motherVolume,sex,sensitivity);
+  delete trunk;
 }
 G4VPhysicalVolume* G4MIRDBodyFactory::CreateLegs(G4VPhysicalVolume* motherVolume, G4String sex, G4bool sensitivity)
 {
   G4MIRDLegs* legs = new G4MIRDLegs();
   return legs -> ConstructLegs(motherVolume,sex,sensitivity);
+  delete legs;
 }
 G4VPhysicalVolume* G4MIRDBodyFactory::CreateThyroid(G4VPhysicalVolume* motherVolume, G4String sex, G4bool sensitivity)
 {
   G4MIRDThyroid* thyroid = new G4MIRDThyroid();
   return thyroid -> ConstructThyroid(motherVolume,sex,sensitivity);
+  delete thyroid;
 }
 G4VPhysicalVolume* G4MIRDBodyFactory::CreateUterus(G4VPhysicalVolume* motherVolume, G4String sex, G4bool sensitivity)
 {
   G4MIRDUterus* uterus = new G4MIRDUterus();
   return uterus -> ConstructUterus(motherVolume,sex,sensitivity);
+  delete uterus;
 }
 G4VPhysicalVolume* G4MIRDBodyFactory::CreateBreast(G4VPhysicalVolume* motherVolume, G4String sex, G4bool sensitivity)
 {
   G4MIRDBreast* breast = new G4MIRDBreast();
   return breast -> ConstructBreast(motherVolume,sex,sensitivity);
+  delete breast;
 }
 
 G4VPhysicalVolume* G4MIRDBodyFactory::CreateParameterisedBreast(G4VPhysicalVolume* motherVolume, G4String sex, G4bool sensitivity)
@@ -158,52 +182,62 @@ G4VPhysicalVolume* G4MIRDBodyFactory::CreateParameterisedBreast(G4VPhysicalVolum
   G4cout << "G4MIRDBodyFactory::CreateParameterisedBreast" << G4endl;
   G4ParameterisedBreast* breast = new G4ParameterisedBreast();
   return breast -> ConstructBreast(motherVolume,sex,sensitivity);
+  delete breast;
 }
 
 G4VPhysicalVolume* G4MIRDBodyFactory::CreateOvary(G4VPhysicalVolume* motherVolume, G4String sex, G4bool sensitivity)
 {
   G4MIRDOvary* ovary = new G4MIRDOvary();
   return ovary -> ConstructOvary(motherVolume,sex,sensitivity);
+  delete ovary;
 }
 G4VPhysicalVolume* G4MIRDBodyFactory::CreateUpperSpine(G4VPhysicalVolume* motherVolume, G4String sex, G4bool sensitivity)
 {
   G4MIRDUpperSpine* upperSpine = new G4MIRDUpperSpine();
   return upperSpine -> ConstructUpperSpine(motherVolume,sex,sensitivity);
+  delete upperSpine;
 }
 G4VPhysicalVolume* G4MIRDBodyFactory::CreateMiddleLowerSpine(G4VPhysicalVolume* motherVolume, G4String sex, G4bool sensitivity)
 {
   G4MIRDMiddleLowerSpine* middleLowerSpine = new G4MIRDMiddleLowerSpine();
   return middleLowerSpine -> ConstructMiddleLowerSpine(motherVolume,sex,sensitivity);
+  delete middleLowerSpine;
 }
 G4VPhysicalVolume* G4MIRDBodyFactory::CreateLegBone(G4VPhysicalVolume* motherVolume, G4String sex, G4bool sensitivity)
 {
   G4MIRDLegBone* legBone = new G4MIRDLegBone();
   return legBone -> ConstructLegBone(motherVolume,sex,sensitivity);
+  delete legBone;
 }
 G4VPhysicalVolume* G4MIRDBodyFactory::CreateArmBone(G4VPhysicalVolume* motherVolume, G4String sex, G4bool sensitivity)
 {
   G4MIRDArmBone* armBone = new G4MIRDArmBone();
   return armBone -> ConstructArmBone(motherVolume,sex,sensitivity);
+  delete armBone;
 }
 G4VPhysicalVolume* G4MIRDBodyFactory::CreateSkull(G4VPhysicalVolume* motherVolume, G4String sex, G4bool sensitivity)
 {
   G4MIRDSkull* skull = new G4MIRDSkull();
   return skull -> ConstructSkull(motherVolume,sex,sensitivity);
+  delete skull;
 }
 G4VPhysicalVolume* G4MIRDBodyFactory::CreateRibCage(G4VPhysicalVolume* motherVolume, G4String sex, G4bool sensitivity)
 {
   G4MIRDRibCage* ribCage = new G4MIRDRibCage();
   return ribCage -> ConstructRibCage(motherVolume,sex,sensitivity);
+  delete ribCage;
 }
 G4VPhysicalVolume* G4MIRDBodyFactory::CreatePelvis(G4VPhysicalVolume* motherVolume, G4String sex, G4bool sensitivity)
 {
   G4MIRDPelvis* pelvis = new G4MIRDPelvis();
   return pelvis -> ConstructPelvis(motherVolume,sex,sensitivity);
+  delete pelvis;
 }
 G4VPhysicalVolume* G4MIRDBodyFactory::CreateTestes(G4VPhysicalVolume* motherVolume, G4String sex, G4bool sensitivity)
 {
   G4MIRDTestes* testes = new G4MIRDTestes();
   return testes -> ConstructTestes(motherVolume,sex,sensitivity);
+  delete testes;
 }
 G4VPhysicalVolume* G4MIRDBodyFactory::CreateEsophagus(G4VPhysicalVolume* motherVolume, G4String sex, G4bool sensitivity)
 {

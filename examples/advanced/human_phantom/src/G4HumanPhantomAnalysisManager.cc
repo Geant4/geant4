@@ -20,11 +20,18 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
- 
+//
+// Authors: S. Guatelli and M. G. Pia, INFN Genova, Italy
+// 
+// Based on code developed by the undergraduate student G. Guerrieri 
+// Note: this is a preliminary beta-version of the code; an improved 
+// version will be distributed in the next Geant4 public release, compliant
+// with the design in a forthcoming publication, and subject to a 
+// design and code review.
+// 
 #include <stdlib.h>
 #include <fstream>
 #include "G4HumanPhantomAnalysisManager.hh"
-#include "G4HumanPhantomConstruction.hh"
 #include "G4ios.hh"
 #include <AIDA/AIDA.h>
 #include "G4RunManager.hh"
@@ -33,7 +40,8 @@ G4HumanPhantomAnalysisManager* G4HumanPhantomAnalysisManager::instance = 0;
 
 G4HumanPhantomAnalysisManager::G4HumanPhantomAnalysisManager() 
   :  aFact(0), treeFact(0),theTree(0), histogramFactory(0),
-     histogramParticlePath(0), projectionXY(0), projectionYZ(0), projectionZX(0), energy(0), innerBreast(0)
+     histogramParticlePath(0), projectionXY(0), projectionYZ(0), 
+     projectionZX(0), energy(0), innerBreast(0)
 { 
   aFact = AIDA_createAnalysisFactory();
   treeFact = aFact -> createTreeFactory();
@@ -42,7 +50,7 @@ G4HumanPhantomAnalysisManager::G4HumanPhantomAnalysisManager()
 G4HumanPhantomAnalysisManager::~G4HumanPhantomAnalysisManager() 
 {
   delete innerBreast;
-  innerBreast =0;
+  innerBreast = 0;
 
   delete energy;
   energy = 0;
@@ -110,7 +118,7 @@ void G4HumanPhantomAnalysisManager::book()
 						    11, -0.5, 10.5,
 						    11, -0.5, 10.5); 
 
-  G4cout<<"booking the histograms"<<G4endl;
+  G4cout<<"Booking the histograms"<<G4endl;
 
  }
 

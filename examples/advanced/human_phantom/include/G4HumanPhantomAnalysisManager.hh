@@ -20,9 +20,19 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+//
+// Authors: S. Guatelli and M. G. Pia, INFN Genova, Italy
+// 
+// Based on code developed by the undergraduate student G. Guerrieri 
+// Note: this is a preliminary beta-version of the code; an improved 
+// version will be distributed in the next Geant4 public release, compliant
+// with the design in a forthcoming publication, and subject to a 
+// design and code review.
+//
+
 #ifdef  G4ANALYSIS_USE
-#ifndef G4PROCESSTESTANALYSIS_HH
-#define G4PROCESSTESTANALYSIS_HH
+#ifndef G4HUMANPHANTOMANALYSISMANAGER_HH
+#define G4HUMANPHANTOMANALYSISMANAGER_HH 1
 
 #include "globals.hh"
 #include <vector>
@@ -54,7 +64,6 @@ public:
   void finish();
 
 private:
-
   static G4HumanPhantomAnalysisManager* instance;
   G4HumanPhantomAnalysisManager();
 

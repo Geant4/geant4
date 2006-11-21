@@ -20,14 +20,20 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-
+// Authors: S. Guatelli and M. G. Pia, INFN Genova, Italy
+// 
+// Based on code developed by the undergraduate student G. Guerrieri 
+// Note: this is a preliminary beta-version of the code; an improved 
+// version will be distributed in the next Geant4 public release, compliant
+// with the design in a forthcoming publication, and subject to a 
+// design and code review.
+//
 #include "G4HumanPhantomSD.hh"
 #include "G4HCofThisEvent.hh"
 #include "G4Step.hh"
 #include "G4ThreeVector.hh"
 #include "G4SDManager.hh"
 #include "G4ios.hh"
-
 
 G4HumanPhantomSD::G4HumanPhantomSD(G4String name)
 :G4VSensitiveDetector(name)
@@ -36,9 +42,7 @@ G4HumanPhantomSD::G4HumanPhantomSD(G4String name)
   collectionName.insert(HCname="G4HumanPhantomHitsCollection");
 }
 
-
 G4HumanPhantomSD::~G4HumanPhantomSD(){ }
-
 
 void G4HumanPhantomSD::Initialize(G4HCofThisEvent* HCE)
 {
@@ -49,7 +53,6 @@ void G4HumanPhantomSD::Initialize(G4HCofThisEvent* HCE)
   { HCID = G4SDManager::GetSDMpointer()->GetCollectionID(collectionName[0]); }
   HCE->AddHitsCollection( HCID, trackerCollection ); 
 }
-
 
 G4bool G4HumanPhantomSD::ProcessHits(G4Step* aStep,G4TouchableHistory*)
 {
@@ -74,7 +77,6 @@ G4bool G4HumanPhantomSD::ProcessHits(G4Step* aStep,G4TouchableHistory*)
 
   return true;
 }
-
 
 void G4HumanPhantomSD::EndOfEvent(G4HCofThisEvent*)
 {

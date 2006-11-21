@@ -20,12 +20,21 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// Authors: S. Guatelli and M. G. Pia, INFN Genova, Italy
+// 
+// Based on code developed by the undergraduate student G. Guerrieri 
+// Note: this is a preliminary beta-version of the code; an improved 
+// version will be distributed in the next Geant4 public release, compliant
+// with the design in a forthcoming publication, and subject to a 
+// design and code review.
+//
 #include "G4MIRDAdrenal.hh"
 
 #include "G4Processor/GDMLProcessor.h"
 #include "globals.hh"
 #include "G4SDManager.hh"
 #include "G4VisAttributes.hh"
+#include "G4PhysicalVolumeStore.hh"
 
 G4MIRDAdrenal::G4MIRDAdrenal()
 {
@@ -38,6 +47,7 @@ G4MIRDAdrenal::~G4MIRDAdrenal()
 
 G4VPhysicalVolume* G4MIRDAdrenal::ConstructAdrenal(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity)
 {
+
   // Initialize GDML Processor
   sxp.Initialize();
   config.SetURI( "gdmlData/"+sex+"/MIRDAdrenal.gdml" );
@@ -45,14 +55,15 @@ G4VPhysicalVolume* G4MIRDAdrenal::ConstructAdrenal(G4VPhysicalVolume* mother, G4
   sxp.Configure( &config );
 
   // Run GDML Processor
-  sxp.Run();
- 
+  sxp.Run(); 
 
   G4LogicalVolume* logicAdrenal = (G4LogicalVolume *)GDMLProcessor::GetInstance()->GetLogicalVolume("AdrenalVolume");
 
   G4ThreeVector position = (G4ThreeVector)*GDMLProcessor::GetInstance()->GetPosition("AdrenalPos");
   G4RotationMatrix* rm = (G4RotationMatrix*)GDMLProcessor::GetInstance()->GetRotation("AdrenalRot");
   
+  G4PhysicalVolumeStore::DeRegister((G4VPhysicalVolume*)GDMLProcessor::GetInstance()->GetWorldVolume());
+ 
   // Define rotation and position here!
   G4VPhysicalVolume* physAdrenal = new G4PVPlacement(rm,position,
       			       "physicalAdrenal",

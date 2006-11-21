@@ -20,6 +20,13 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// Authors: S. Guatelli and M. G. Pia, INFN Genova, Italy
+// 
+// Based on code developed by the undergraduate student G. Guerrieri 
+// Note: this is a preliminary beta-version of the code; an improved 
+// version will be distributed in the next Geant4 public release, compliant
+// with the design in a forthcoming publication, and subject to a 
+// design and code review.
 //
 
 #ifndef G4HumanPhantomRunAction_h
@@ -27,10 +34,6 @@
 
 #include "G4UserRunAction.hh"
 #include "globals.hh"
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-class G4Run;
 
 class G4HumanPhantomRunAction : public G4UserRunAction
 {
@@ -42,9 +45,6 @@ class G4HumanPhantomRunAction : public G4UserRunAction
     void BeginOfRunAction(const G4Run*);
     void EndOfRunAction(const G4Run*);
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 #endif
 
 

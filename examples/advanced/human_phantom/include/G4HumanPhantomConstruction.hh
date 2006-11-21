@@ -20,6 +20,13 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// Authors: S. Guatelli and M. G. Pia, INFN Genova, Italy
+// 
+// Based on code developed by the undergraduate student G. Guerrieri 
+// Note: this is a preliminary beta-version of the code; an improved 
+// version will be distributed in the next Geant4 public release, compliant
+// with the design in a forthcoming publication, and subject to a 
+// design and code review.
 //
 #ifndef G4HumanPhantomConstruction_H
 #define G4HumanPhantomConstruction_H 1
@@ -31,11 +38,10 @@
 #include <map>
 
 class G4VPhysicalVolume;
-class G4LogicalVolume;
-
-class G4HumanPhantomSD;
+//class G4LogicalVolume;
+//class G4HumanPhantomSD;
 class G4HumanPhantomMaterial;
-class G4PhantomBuilder;
+//class G4PhantomBuilder;
 
 class G4HumanPhantomConstruction : public G4VUserDetectorConstruction
 {
@@ -43,8 +49,6 @@ class G4HumanPhantomConstruction : public G4VUserDetectorConstruction
      G4HumanPhantomConstruction();
     ~G4HumanPhantomConstruction();
      G4VPhysicalVolume* Construct();
-
-  std::map<std::string,G4bool> sensitivities;
 
   void SetBodyPartSensitivity(G4String, G4bool);
   void CleanPhantom();
@@ -58,12 +62,13 @@ class G4HumanPhantomConstruction : public G4VUserDetectorConstruction
   
   G4HumanPhantomMessenger* messenger;
 
-  G4HumanPhantomSD*        userPhantomSD; 
+  //G4HumanPhantomSD*        userPhantomSD; 
   G4VPhysicalVolume*       mother;
 
   G4String                 model;
   G4String                 sex;
   G4HumanPhantomMaterial* material;
+  std::map<std::string,G4bool> sensitivities;
 };
 
 #endif

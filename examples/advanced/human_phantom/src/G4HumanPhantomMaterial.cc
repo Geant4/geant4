@@ -23,17 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// Code developed by:
-//  S.Guatelli
-//
-//    *******************************
-//    *                             *
-//    *    G4HumanPhantomMaterial.cc        *
-//    *                             *
-//    *******************************
-//
-// $Id: G4HumanPhantomMaterial.cc,v 1.2 2006-11-16 16:50:16 guatelli Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// Authors: S. Guatelli and M. G. Pia, INFN Genova, Italy
+// 
+// Based on code developed by the undergraduate student G. Guerrieri 
+// Note: this is a preliminary beta-version of the code; an improved 
+// version will be distributed in the next Geant4 public release, compliant
+// with the design in a forthcoming publication, and subject to a 
+// design and code review.
 //
 
 #include "G4MaterialPropertiesTable.hh"

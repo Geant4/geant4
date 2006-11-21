@@ -20,7 +20,15 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-
+//
+// Authors: S. Guatelli and M. G. Pia, INFN Genova, Italy
+// 
+// Based on code developed by the undergraduate student G. Guerrieri 
+// Note: this is a preliminary beta-version of the code; an improved 
+// version will be distributed in the next Geant4 public release, compliant
+// with the design in a forthcoming publication, and subject to a 
+// design and code review.
+//
 #ifndef G4HumanPhantomPhysicsList_h
 #define G4HumanPhantomPhysicsList_h 1
 
@@ -51,7 +59,6 @@ class G4HumanPhantomPhysicsList: public G4VUserPhysicsList
 
   protected:
   // these methods Construct physics processes and register them
-    void ConstructGeneral();
     void ConstructEM();
 };
 

@@ -19,7 +19,15 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-// ----------------------------------------------------------------------------
+//
+// Authors: S. Guatelli and M. G. Pia, INFN Genova, Italy
+// 
+// Based on code developed by the undergraduate student G. Guerrieri 
+// Note: this is a preliminary beta-version of the code; an improved 
+// version will be distributed in the next Geant4 public release, compliant
+// with the design in a forthcoming publication, and subject to a 
+// design and code review.
+//
 
 #ifndef G4HumanPhantomEnergyDeposit_H
 #define G4HumanPhantomEnergyDeposit_H 1
@@ -32,13 +40,11 @@ class G4HumanPhantomEnergyDeposit
 public:
   G4HumanPhantomEnergyDeposit();
   ~G4HumanPhantomEnergyDeposit();
- 
-  std::map<std::string,G4double> energyTotal;
-
   void Fill(G4String bodypartName, G4double energyDeposit);
   void TotalEnergyDeposit();
 
 private:
+  std::map<std::string,G4double> energyTotal;
   G4String bodypartName;
   G4double totalBody;
 };

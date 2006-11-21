@@ -20,14 +20,21 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-
+// Authors: S. Guatelli and M. G. Pia, INFN Genova, Italy
+// 
+// Based on code developed by the undergraduate student G. Guerrieri 
+// Note: this is a preliminary beta-version of the code; an improved 
+// version will be distributed in the next Geant4 public release, compliant
+// with the design in a forthcoming publication, and subject to a 
+// design and code review.
+//
 #ifndef G4MIRDPancreas_h
 #define G4MIRDPancreas_h 1
 
 #include "G4VPhysicalVolume.hh"
 
-#include "Saxana/SAXProcessor.h"
-#include "Saxana/ProcessingConfigurator.h"
+//#include "Saxana/SAXProcessor.h"
+//#include "Saxana/ProcessingConfigurator.h"
 
 class G4VPhysicalVolume;
 class G4LogicalVolume;
@@ -41,8 +48,8 @@ public:
   G4VPhysicalVolume* ConstructPancreas(G4VPhysicalVolume*, G4String, G4bool);
  
 private:
-    SAXProcessor sxp;
-    ProcessingConfigurator config;
+  //    SAXProcessor sxp;
+  //   ProcessingConfigurator config;
 
 };
 #endif
