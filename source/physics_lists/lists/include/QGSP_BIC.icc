@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: QGSP_BIC.icc,v 1.1 2006-10-31 11:35:09 gunter Exp $
+// $Id: QGSP_BIC.icc,v 1.2 2006-11-21 07:33:26 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -39,6 +39,7 @@
 // 08.06.2006 V.Ivanchenko: migration to CHIPS stopping
 // 15.06.2006 G.Folger: Migrate to HadronElasticPhysics using improved elastic
 // 20.06.2006 V.Ivanchenko: add ion Binary Cascade
+// 20.11.2006 G.Folger: add Tracking Cut for neutrons
 //
 //----------------------------------------------------------------------------
 //
@@ -61,6 +62,7 @@
 #include "G4IonBinaryCascadePhysics.hh"
 #include "G4QStoppingPhysics.hh"
 #include "G4HadronElasticPhysics.hh"
+#include "G4NeutronTrackingCut.hh"
 
 #include "G4DataQuestionaire.hh"
 #include "HadronPhysicsQGSP_BIC.hh"
@@ -97,6 +99,9 @@ template<class T> TQGSP_BIC<T>::TQGSP_BIC(G4int ver):  T()
 
   // Ion Physics
   this->RegisterPhysics( new G4IonBinaryCascadePhysics("ionBIC"));
+  
+  // Neutron tracking cut
+  this->RegisterPhysics( new G4NeutronTrackingCut("Neutron tracking cut", ver));
 
 }
 

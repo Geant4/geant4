@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: QGSP_EMX.icc,v 1.1 2006-10-31 11:35:09 gunter Exp $
+// $Id: QGSP_EMX.icc,v 1.2 2006-11-21 07:33:26 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -33,6 +33,7 @@
 // Author: 2006  V.Ivanchenko
 //
 // Modified:
+// 20.11.2006 G.Folger: add Tracking Cut for neutrons
 // 21.06.2006 V.Ivanchenko crerate from QGSP_EMV
 //
 //----------------------------------------------------------------------------
@@ -57,6 +58,7 @@
 #include "G4IonPhysics.hh"
 #include "G4QStoppingPhysics.hh"
 #include "G4HadronElasticPhysics.hh"
+#include "G4NeutronTrackingCut.hh"
 
 #include "G4DataQuestionaire.hh"
 #include "HadronPhysicsQGSP_EMX.hh"
@@ -89,6 +91,9 @@ template<class T> TQGSP_EMX<T>::TQGSP_EMX(G4int ver):  T()
 
   // Ion Physics
   this->RegisterPhysics( new G4IonPhysics("ion"));
+  
+  // Neutron tracking cut
+  this->RegisterPhysics( new G4NeutronTrackingCut("Neutron tracking cut", ver));
 
 }
 

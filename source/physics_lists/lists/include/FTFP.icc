@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: FTFP.icc,v 1.1 2006-10-31 11:35:03 gunter Exp $
+// $Id: FTFP.icc,v 1.2 2006-11-21 07:33:26 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -38,6 +38,7 @@
 // 02.12.2005 V.Ivanchenko: rename components
 // 08.06.2006 V.Ivanchenko: migration to CHIPS stopping
 // 15.06.2006 G.Folger: Migrate to HadronElasticPhysics using improved elastic
+// 20.11.2006 G.Folger: add Tracking Cut for neutrons
 //
 //----------------------------------------------------------------------------
 //
@@ -61,6 +62,7 @@
 #include "G4IonPhysics.hh"
 #include "G4QStoppingPhysics.hh"
 #include "G4HadronElasticPhysics.hh"
+#include "G4NeutronTrackingCut.hh"
 
 #include "G4DataQuestionaire.hh"
 #include "HadronPhysicsFTFP.hh"
@@ -95,6 +97,10 @@ template<class T> TFTFP<T>::TFTFP(G4int ver):  T()
 
   // Ion Physics
   this->RegisterPhysics( new G4IonPhysics("ion"));
+  
+  // Neutron tracking cut
+  this->RegisterPhysics( new G4NeutronTrackingCut("Neutron tracking cut", ver));
+
 }
 
 template<class T> TFTFP<T>::~TFTFP()
