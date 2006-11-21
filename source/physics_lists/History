@@ -1,4 +1,4 @@
-$Id: History,v 1.1 2006-11-03 10:08:32 gunter Exp $
+$Id: History,v 1.2 2006-11-21 07:38:55 gunter Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,10 +15,14 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+21.11.2006, G.folger  -    phys-lists-V08-01-09
+ - add warning to obsolete physics lists 
+   (LHEP: _HP, _BIC, BIC_HP, _PRECO, QGSP_HP)
+ - add neutron tracking cut to QGSP and FTF lists without _HP extension
 03.11.2006, G.Folger  -    phys-lists-V08-01-08
 - Move physics lists into source tree
 - Simplify directory/library structure
-- delete 2 _GN lists - added for G4 8.1 by mistake
+- delete 2 _GN lists - added for G4 8.1 by mistake, 
 
 05.10.2006, V.Ivanchenko - phys-lists-V08-01-07
 - QBBC - use LHEP cross section if LHEP option is configured
