@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HadronElastic.hh,v 1.20 2006-11-16 20:09:13 vnivanch Exp $
+// $Id: G4HadronElastic.hh,v 1.21 2006-11-21 19:38:53 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -86,6 +86,8 @@ public:
 
   void SetHEModelLowLimit(G4double value);
 
+  void SetQModelLowLimit(G4double value);
+
   void SetLowestEnergyLimit(G4double value);
 
   void SetRecoilKinEnergyLimit(G4double value);
@@ -119,6 +121,7 @@ private:
 
   G4double lowEnergyRecoilLimit;  
   G4double lowEnergyLimitHE;  
+  G4double lowEnergyLimitQ;  
   G4double lowestEnergyLimit;  
   G4double plabLowLimit;
 };
@@ -136,6 +139,11 @@ inline void G4HadronElastic::SetPlabLowLimit(G4double value)
 inline void G4HadronElastic::SetHEModelLowLimit(G4double value)
 {
   lowEnergyLimitHE = value;
+}
+
+inline void G4HadronElastic::SetQModelLowLimit(G4double value)
+{
+  lowEnergyLimitQ = value;
 }
 
 inline void G4HadronElastic::SetLowestEnergyLimit(G4double value)

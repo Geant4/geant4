@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronElastic.cc,v 1.35 2006-11-20 16:39:51 vnivanch Exp $
+// $Id: G4HadronElastic.cc,v 1.36 2006-11-21 19:38:53 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -79,9 +79,9 @@ G4HadronElastic::G4HadronElastic(G4double, G4double, G4double)
   SetMaxEnergy( 100.*TeV );
   verboseLevel= 0;
   lowEnergyRecoilLimit = 100.*keV;  
+  lowEnergyLimitQ = 19.0*MeV;  
   lowEnergyLimitHE = 0.4*GeV;  
-  //lowEnergyLimitHE = 1.0*GeV;  
-  //lowEnergyLimitHE = DBL_MAX; 
+  //lowEnergyLimitHE = DBL_MAX;  
   lowestEnergyLimit= 10.0*keV;  
   plabLowLimit     = 20.0*MeV;
 
@@ -173,17 +173,16 @@ G4HadFinalState* G4HadronElastic::ApplyYourself(
   // Choose generator
   G4ElasticGenerator gtype = fLElastic;
 
-  // S-wave for very low energy
-  if(plab < plabLowLimit) gtype = fSWave;
-
   // Q-elastic for p,n scattering on H and He
-  else if ((theParticle == theProton || 
-	    theParticle == theNeutron) && Z <= 2) 
+  if ((theParticle == theProton || theParticle == theNeutron) 
+      && Z <= 2 && ekin >= lowEnergyLimitQ) 
     gtype = fQElastic;
 
   // HE-elastic for energetic projectiles
-  else if(ekin >= lowEnergyLimitHE && A != 2 && A != 3 && A < 238) 
+  else if(ekin >= lowEnergyLimitHE && A < 238) 
     gtype = fHElastic;
+  // S-wave for very low energy
+  else if(plab < plabLowLimit) gtype = fSWave;
 
   //
   // Sample t
