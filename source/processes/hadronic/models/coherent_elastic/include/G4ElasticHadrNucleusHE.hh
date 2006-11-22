@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElasticHadrNucleusHE.hh,v 1.30 2006-11-21 19:38:53 vnivanch Exp $
+// $Id: G4ElasticHadrNucleusHE.hh,v 1.31 2006-11-22 18:10:32 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4ElasticHadrNucleusHe.hh
@@ -61,8 +61,7 @@ class ElasticData
 public:
 
   ElasticData(const G4ParticleDefinition* h, 
-	      G4int AtomWeight,
-	      G4double* en);
+	      G4int AtomWeight);
 
   ~ElasticData(){;}
 
@@ -71,17 +70,15 @@ public:
 
   //  ============================================
   void   fillQ2limit();
-  G4int  GetNumberE(G4double E);
 
   const G4ParticleDefinition*  hadr;
   G4int     AtomicWeight;
   G4int     dnkE[NENERGY];
-  G4double  TableE[NENERGY];
   G4double  TableQ2[ONQ2];
   G4double  TableCrossSec[NQTABLE];
   G4double  maxQ2, dQ2;
   G4double  R1, R2, Pnucl, Aeff;
-
+  G4double  massGeV;
 };
 
 //  ############################################################
@@ -152,7 +149,7 @@ private:
   G4double emin, emax, deltae;
 
   G4int     HadrCode;
-  G4String  HadronName;
+  //  G4String  HadronName;
   G4double  R1, R2, Pnucl, Aeff;
   G4double  Energy[NENERGY];
 // +++++++++++++++++++++++++++++++++++++++++++++++++++
