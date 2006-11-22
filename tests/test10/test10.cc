@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: test10.cc,v 1.7 2006-06-29 21:38:10 gunter Exp $
+// $Id: test10.cc,v 1.8 2006-11-22 09:57:17 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,7 +41,7 @@
 #include "Tst10EventAction.hh"
 #include "Tst10PrimaryGeneratorAction.hh"
 #include "Tst10PhysicsList.hh"
-#include "Tst10VisManager.hh"
+#include "G4VisExecutive.hh"
 
 #include "G4UImanager.hh"
 #include "G4UIterminal.hh"
@@ -49,8 +49,8 @@
 
 #include "G4ios.hh"
 
-int main(int argc,char** argv) {
-
+int main(int argc,char** argv)
+{
   // Set the default random engine to RanecuEngine
   CLHEP::RanecuEngine defaultEngine;
   CLHEP::HepRandom::setTheEngine(&defaultEngine);
@@ -70,7 +70,7 @@ int main(int argc,char** argv) {
 
 #ifdef G4VIS_USE
   G4cout << "Visualization init\n";
-  G4VisManager* visManager = new Tst10VisManager();
+  G4VisManager* visManager = new G4VisExecutive;
   visManager -> Initialize ();
 #endif
 
