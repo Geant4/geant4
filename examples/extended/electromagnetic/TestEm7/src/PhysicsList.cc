@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.19 2006-11-22 17:58:11 vnivanch Exp $
+// $Id: PhysicsList.cc,v 1.20 2006-11-22 18:56:21 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -34,11 +34,14 @@
 
 #include "PhysListEmStandard.hh"
 #include "PhysListEmStandardSS.hh"
+#include "PhysListEmLivermore.hh"
+#include "PhysListEmPenelope.hh"
 #include "G4EmStandardPhysics.hh"
 #include "G4EmStandardPhysics71.hh"
-#include "PhysListHadronElastic.hh"
-#include "PhysListBinaryCascade.hh"
-#include "PhysListIonBinaryCascade.hh"
+
+#include "G4HadronElasticPhysics.hh"
+#include "G4HadronInelasticQBBC.hh"
+#include "G4IonBinaryCascadePhysics.hh"
 
 #include "G4EmProcessOptions.hh"
 
@@ -57,6 +60,10 @@ PhysicsList::PhysicsList() : G4VModularPhysicsList()
   cutForGamma     = defaultCutValue;
   cutForElectron  = defaultCutValue;
   cutForPositron  = defaultCutValue;
+
+  helIsRegisted  = false;
+  bicIsRegisted  = false;
+  biciIsRegisted = false;
 
   stepMaxProcess  = 0;
 
@@ -212,17 +219,27 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     delete emPhysicsList;
     emPhysicsList = new PhysListEmStandardSS(name);
 
-  } else if (name == "elastic") {
+  } else if (name == "Livermore") {
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new PhysListEmLivermore();
 
-    hadronPhys.push_back( new PhysListHadronElastic(name));
+  } else if (name == "Penelope") {
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new PhysListEmPenelope();
 
-  } else if (name == "binary") {
+  } else if (name == "elastic" && !helIsRegisted) {
+    hadronPhys.push_back( new G4HadronElasticPhysics(name));
+    helIsRegisted = true;
 
-    hadronPhys.push_back( new PhysListBinaryCascade(name));
+  } else if (name == "binary" && !bicIsRegisted) {
+    hadronPhys.push_back(new G4HadronInelasticQBBC());
+    bicIsRegisted = true;
 
-  } else if (name == "binary_ion") {
-
-    hadronPhys.push_back( new PhysListIonBinaryCascade(name));
+  } else if (name == "binary_ion" && !biciIsRegisted) {
+    hadronPhys.push_back(new G4IonBinaryCascadePhysics());
+    biciIsRegisted = true;
 
   } else {
 
