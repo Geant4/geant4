@@ -6,7 +6,7 @@
 #/vis/viewer/zoom 2000000
 #/vis/viewer/set/viewpointVector 400 0 105.79
 
-/tracking/storeTrajectory 1
+#/tracking/storeTrajectory 1
 #/vis/scene/endOfEventAction accumulate
 
 /tracking/verbose 0
