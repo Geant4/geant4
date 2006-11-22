@@ -1,4 +1,4 @@
-$Id: History,v 1.84 2006-11-21 14:24:05 allison Exp $
+$Id: History,v 1.85 2006-11-22 12:24:36 allison Exp $
 
 -------------------------------------------------------------------
 
@@ -25,6 +25,9 @@ committal in the CVS repository !
 
 History file for visualization management sub-category
 ------------------------------------------------------
+
+22nd November 2006  John Allison  (visman-V08-01-14)
+- Fixed /vis/reviewKeptEvents for "stored" viewers.
 
 21st November 2006  John Allison  (visman-V08-01-13)
 - Fixed double drawing of event.
