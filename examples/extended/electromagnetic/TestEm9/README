@@ -1,4 +1,4 @@
-$Id: README,v 1.9 2006-11-22 18:30:29 vnivanch Exp $
+$Id: README,v 1.10 2006-11-22 18:58:25 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -49,8 +49,8 @@ $Id: README,v 1.9 2006-11-22 18:30:29 vnivanch Exp $
     - "G4standard"      recommended standard EM physics for LHC
     - "G4standard_fast" the best CPU performance standard physics for LHC
     - "G4standard_exp"  experimental standard physics for LHC
-    - "livermore"       low-energy EM physics using Livermore data
-    - "penelope"        low-energy EM physics implementing Penelope models
+    - "Livermore"       low-energy EM physics using Livermore data
+    - "Penelope"        low-energy EM physics implementing Penelope models
 
     Optional components can be added:
     - "elastic"       elastic scattering of hadrons
