@@ -92,6 +92,7 @@ echo ' BFIELD      =' $BFIELD
 #
     echo '  '; echo ' G4INSTALL = ' $G4INSTALL; echo ' running REF = ' $REF ; echo '  ' ;
     rm -rf tmp/ ;
+    ln -sfn GNUmakefile-1 GNUmakefile  ; #***LOOKHERE*** Temporary for 8.1 / 8.2
     gmake ;
     mv bin/$G4SYSTEM/mainStatAccepTest bin/$G4SYSTEM/mainStatAccepTest-$REF-$PHYSICS ;
     mainStatAccepTest-$REF-$PHYSICS run.g4-$LABEL > output.log-$LABEL 2>&1 ;
@@ -129,6 +130,7 @@ echo ' BFIELD      =' $BFIELD
     . setup.sh-$LABEL ;
     echo '  '; echo ' G4INSTALL = ' $G4INSTALL; echo ' running REF = ' $REF ; echo '  ' ;
     rm -rf tmp/ ;
+    ln -sfn GNUmakefile-2 GNUmakefile  ; #***LOOKHERE*** Temporary for 8.1 / 8.2
     gmake ;
     mv bin/$G4SYSTEM/mainStatAccepTest bin/$G4SYSTEM/mainStatAccepTest-$REF-$PHYSICS ;
     mainStatAccepTest-$REF-$PHYSICS run.g4-$LABEL > output.log-$LABEL 2>&1 ;

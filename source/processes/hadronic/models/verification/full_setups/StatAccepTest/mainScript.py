@@ -30,9 +30,9 @@ print '========== START mainScript.py =========='
 #               -  the Bfield:
 #                  e.g. : "0", "4tesla", etc.
 #
-REF1        = "8.0.p01"
+REF1        = "8.1.p02a"
 SIM_REF1    = "Yes"
-REF2        = "8.1.cand01"
+REF2        = "8.2.cand01"
 SIM_REF2    = "Yes"
 RUN_STAT    = "Yes"
 PHYSICS     = "QGSP"

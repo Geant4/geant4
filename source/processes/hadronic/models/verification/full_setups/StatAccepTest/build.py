@@ -247,12 +247,26 @@ if isLocalGeant4 :
 else :
     setupFile.write( "export G4INSTALL=$DIR_INSTALLATIONS/$G4_RELEASE \n" )
     setupFile.write( "export G4LIB=$DIR_INSTALLATIONS/$G4_RELEASE/lib \n" )
-    
-setupFile.write( "export G4LEVELGAMMADATA=$G4INSTALL/data/PhotonEvaporation \n" )
-setupFile.write( "export G4RADIOACTIVEDATA=$G4INSTALL/data/RadioactiveDecay \n" )
-setupFile.write( "export G4LEDATA=$G4INSTALL/data/G4EMLOW \n" )
-setupFile.write( "export NeutronHPCrossSections=$G4INSTALL/data/G4NDL \n")
 
+setupFile.write( "if [ -d $DIR_INSTALLATIONS/$G4_RELEASE/data ] ; then \n" )
+setupFile.write( "  export G4LEVELGAMMADATA=$G4INSTALL/data/PhotonEvaporation \n" )
+setupFile.write( "  export G4RADIOACTIVEDATA=$G4INSTALL/data/RadioactiveDecay \n" )
+setupFile.write( "  export G4LEDATA=$G4INSTALL/data/G4EMLOW \n" )
+setupFile.write( "  export NeutronHPCrossSections=$G4INSTALL/data/G4NDL \n")
+setupFile.write( "else \n")
+setupFile.write( "  export G4LEVELGAMMADATA=$DIR_INSTALLATIONS/dirG4DATA/PhotonEvaporation2.0 \n" )
+setupFile.write( "  export G4RADIOACTIVEDATA=$DIR_INSTALLATIONS/dirG4DATA/RadiativeDecay3.1 \n" )
+setupFile.write( "  export G4LEDATA=$DIR_INSTALLATIONS/dirG4DATA/G4EMLOW4.1 \n" )
+setupFile.write( "  export NeutronHPCrossSections=$DIR_INSTALLATIONS/dirG4DATA/G4NDL3.10 \n")
+setupFile.write( "fi \n")
+#
+setupFile.write( "echo --- Data libraries --- \n")
+setupFile.write( "echo G4LEVELGAMMADATA=$G4LEVELGAMMADATA \n")
+setupFile.write( "echo G4RADIOACTIVEDATA=$G4RADIOACTIVEDATA \n")
+setupFile.write( "echo G4LEDATA=$G4LEDATA \n")
+setupFile.write( "echo NeutronHPCrossSections=$NeutronHPCrossSections \n")
+setupFile.write( "echo ---------------------- \n")
+#
 setupFile.write( "export CLHEP_BASE_DIR=$DIR_INSTALLATIONS/dirCLHEP \n" )
 setupFile.write( "export CLHEP_INCLUDE_DIR=$CLHEP_BASE_DIR/include \n" )
 setupFile.write( "export CLHEP_LIB_DIR=$CLHEP_BASE_DIR/lib \n" )
