@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.18 2006-11-15 18:48:17 vnivanch Exp $
+// $Id: PhysicsList.cc,v 1.19 2006-11-22 17:58:11 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -34,7 +34,8 @@
 
 #include "PhysListEmStandard.hh"
 #include "PhysListEmStandardSS.hh"
-#include "PhysListEmStandardMSC.hh"
+#include "G4EmStandardPhysics.hh"
+#include "G4EmStandardPhysics71.hh"
 #include "PhysListHadronElastic.hh"
 #include "PhysListBinaryCascade.hh"
 #include "PhysListIonBinaryCascade.hh"
@@ -43,6 +44,9 @@
 
 #include "G4LossTableManager.hh"
 #include "G4UnitsTable.hh"
+
+#include "G4ProcessManager.hh"
+#include "G4Decay.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -80,7 +84,6 @@ PhysicsList::~PhysicsList()
 #include "G4ChargedGeantino.hh"
 #include "G4Geantino.hh"
 #include "G4Gamma.hh"
-#include "G4OpticalPhoton.hh"
 
 // leptons
 #include "G4MuonPlus.hh"
@@ -109,9 +112,6 @@ void PhysicsList::ConstructParticle()
 // gamma
   G4Gamma::GammaDefinition();
   
-// optical photon
-  G4OpticalPhoton::OpticalPhotonDefinition();
-
 // leptons
   G4Electron::ElectronDefinition();
   G4Positron::PositronDefinition();
@@ -137,10 +137,6 @@ void PhysicsList::ConstructParticle()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#include "G4ProcessManager.hh"
-#include "G4Decay.hh"
-
 void PhysicsList::ConstructProcess()
 {
   // transportation
@@ -198,11 +194,17 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     delete emPhysicsList;
     emPhysicsList = new PhysListEmStandard(name);
 
-  } else if (name == "standardMSC") {
+  } else if (name == "G4standard") {
 
     emName = name;
     delete emPhysicsList;
-    emPhysicsList = new PhysListEmStandardMSC(name);
+    emPhysicsList = new G4EmStandardPhysics(name);
+
+  } else if (name == "G4standard_fast") {
+
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new G4EmStandardPhysics71(name);
 
   } else if (name == "standardSS") {
 
@@ -252,10 +254,6 @@ void PhysicsList::AddStepMax()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#include "G4Gamma.hh"
-#include "G4Electron.hh"
-#include "G4Positron.hh"
 
 void PhysicsList::SetCuts()
 {
