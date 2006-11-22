@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommands.cc,v 1.17 2006-11-15 19:25:31 allison Exp $
+// $Id: G4VisCommands.cc,v 1.18 2006-11-22 12:24:15 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/ top level commands - John Allison  5th February 2001
@@ -169,7 +169,7 @@ void G4VisCommandReviewKeptEvents::SetNewValue (G4UIcommand*, G4String newValue)
     return;
   }
 
-  const G4VViewer* viewer = fpVisManager->GetCurrentViewer();
+  G4VViewer* viewer = fpVisManager->GetCurrentViewer();
   if (!viewer) {
     if (verbosity >= G4VisManager::errors) {
       G4cout <<
@@ -200,7 +200,24 @@ void G4VisCommandReviewKeptEvents::SetNewValue (G4UIcommand*, G4String newValue)
 	       << G4endl;
       }
       sceneHandler->SetEvent(event);
-      UImanager->ApplyCommand("/vis/viewer/refresh");
+      UImanager->ApplyCommand("/vis/viewer/rebuild");
+      /* The above command forces a rebuild of the scene, including
+	 the detector.  This is fine for "immediate" viewers - a
+	 refresh requires a rebuild anyway.  But for "stored mode"
+	 viewers, you could, in principle, avoid a rebuild of the
+	 detector with something like the following:
+      sceneHandler->ClearTransientStore();
+      viewer->DrawView();
+      sceneHandler->DrawEvent(event);
+         but this causes mayhem for "immediate" viewers because
+         ClearTransientStore issues a DrawView and some curious sort
+         of recursion takes place.  For "stored" viewers, the event
+         gets drawn but not the eventID, so something odd is happening
+         there too.  This needs further investigation - enhanced
+         features or a complete re-think.
+      */
+      if (!viewer->GetViewParameters().IsAutoRefresh())
+	UImanager->ApplyCommand("/vis/viewer/flush");
       G4UIsession* session = UImanager->GetSession();
       session->PauseSessionStart("EndOfEvent");
       sceneHandler->SetEvent(0);

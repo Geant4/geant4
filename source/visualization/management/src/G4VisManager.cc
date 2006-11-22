@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VisManager.cc,v 1.106 2006-11-21 14:23:20 allison Exp $
+// $Id: G4VisManager.cc,v 1.107 2006-11-22 12:24:15 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -1230,7 +1230,8 @@ void G4VisManager::EndOfRun ()
       else G4cout << " events have";
       G4cout << " been kept for refreshing and/or reviewing." << G4endl;
     }
-    if (!valid && fVerbosity >= warnings) {
+    static G4bool warned = false;
+    if (!valid && fVerbosity >= warnings && !warned) {
       G4cout <<
 	"  Only useful if before starting the run:"
 	"\n    a) trajectories are stored (\"/tracking/storeTrajectory N\"), or"
@@ -1241,6 +1242,7 @@ void G4VisManager::EndOfRun ()
 	"\n  To see all events: \"vis/scene/endOfEventAction accumulate\"."
 	"\n  To see events individually: \"/vis/reviewKeptEvents\"."
 	     << G4endl;
+      warned = true;
     }
   }
 }
