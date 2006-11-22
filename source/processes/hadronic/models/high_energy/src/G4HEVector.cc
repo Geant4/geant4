@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HEVector.cc,v 1.19 2006-06-29 20:30:46 gunter Exp $
+// $Id: G4HEVector.cc,v 1.20 2006-11-22 23:52:32 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -58,7 +58,7 @@ G4HEVector::G4HEVector(const G4HadProjectile * aParticle)
      baryon           = aParticle->GetDefinition()->GetBaryonNumber();
      particleName     = getParticleName(code, baryon);
      particleType     = aParticle->GetDefinition()->GetParticleType();
-     strangeness       = aParticle->GetDefinition()->GetQuarkContent(2);
+     strangeness       = aParticle->GetDefinition()->GetQuarkContent(3);
   }
   
 G4double G4HEVector::Amax(G4double a, G4double b)
