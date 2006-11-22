@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: test07.cc,v 1.6 2006-06-29 21:36:46 gunter Exp $
+// $Id: test07.cc,v 1.7 2006-11-22 09:51:14 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,7 +41,7 @@
 #include "G4UIterminal.hh"
 
 #ifdef G4VIS_USE
-#include "T07VisManager.hh"
+#include "G4VisExecutive.hh"
 #endif
 
 #include "T07DetectorConstruction.hh"
@@ -67,7 +67,7 @@ int main(int argc,char** argv)
   
 #if defined(G4VIS_USE)
   // visualization manager
-  G4VisManager* visManager = new T07VisManager;
+  G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
 #endif
     
