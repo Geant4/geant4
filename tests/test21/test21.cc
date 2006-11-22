@@ -41,7 +41,8 @@
 
 #include "G4ios.hh"
 
-int main(int argc,char** argv) {
+int main(int argc,char** argv)
+{
 
   // Set the default random engine to RanecuEngine
   CLHEP::RanecuEngine defaultEngine;

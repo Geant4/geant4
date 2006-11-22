@@ -41,7 +41,8 @@ class Tst21EventAction : public G4UserEventAction
   public:
     virtual void BeginOfEventAction(const G4Event*)
     {
-      G4cout <<"Event number "<<evnum++<<G4endl;
+      evnum++;
+      if(!(evnum%100)) G4cout<<"Event number "<<evnum<<G4endl;
     }
     virtual void EndOfEventAction(const G4Event*){ }
  
