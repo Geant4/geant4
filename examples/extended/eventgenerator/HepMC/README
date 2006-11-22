@@ -1,8 +1,10 @@
+
                 Examples for HepMC-Geant4 interface
                 -----------------------------------
 
 This directory contains examples for using HepMC as an interface with 
-various Monte Carlo event generators, such as PYTHIA. 
+various Monte Carlo event generators, such as PYTHIA.
+It also include an example for demonstrating MC truth handling with HepMC.
 
 Requirements for external software packages
 -------------------------------------------
@@ -18,8 +20,8 @@ PYTHIA
   URL: http://www.thep.lu.se/~torbjorn/Pythia.html
 
 
-What is provided
-----------------
+Examples HepMCEx01 and HepMCEx02
+================================
 
 class HepMCG4Interface
   This class is derived from G4VPrimaryGenerator, and is a base class 
@@ -55,24 +57,28 @@ class HepMCG4PythiaInterface / HepMCG4AsciiReaderMessenger
   Users can set parameters, initialize, generate, and terminate
   by command line operation.
 
+  Macros in examples
+  -----------------
+  hepmc_pygen.in
+    process PYTHIA events(H->4mu) generated at every event.
 
-Macros in examples
------------------
-hepmc_pygen.in
-  process PYTHIA events(H->4mu) generated at every event.
+  hepmc_ascii.in
+    read pregenerated events from HepMC Ascii file (data/example_MyPhyia.dat).
 
-hepmc_ascii.in
-  read pregenerated events from HepMC Ascii file (data/example_MyPhyia.dat).
+  How to compile
+  --------------
+  To build HepMCEx01 and HepMCEx02 examples, the directory path where the
+  HepMC package is installed must be provided through the variable HEPMC_DIR.
+  PYTHIA 6.205 must be installed through CERNLIB 2005 and the bin path
+  correctly added in PATH.
 
-How to compile
---------------
-To build HepMCEx01 and HepMCEx02 examples, the directory path where the
-HepMC package is installed must be provided through the variable HEPMC_DIR.
-PYTHIA 6.205 must be installed through CERNLIB 2005 and the bin path correctly
-added in PATH.
+  Notes
+  -----
+  We attached a sample HepMC Ascii data file, "data/example_MyPhyia.dat",
+  which contains 10 PYTHIA events created by "data/example_MyPythia.cxx(cc)".
 
-Notes
------
-We attached a sample HepMC Ascii data file, "data/example_MyPhyia.dat",
-which contains 10 PYTHIA events created by "data/example_MyPythia.cxx(cc)".
+Example MCTruth
+===============
 
+Application demonstrating handling of Monte-Carlo truth information through
+the HepMC package.
