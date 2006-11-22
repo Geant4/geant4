@@ -1,4 +1,4 @@
-$Id: History,v 1.109 2006-11-22 18:50:32 japost Exp $
+$Id: History,v 1.110 2006-11-22 18:52:01 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 22nd, 2006, J.Apostolakis  transport-V08-01-04
+---------------------------------
+- Add new classes G4NeutronKiller and G4NeutronKillerMessenger
+  (created by V. Ivantchenko)
 
 November 22nd, 2006, J.Apostolakis  transport-V08-01-03
 ---------------------------------
