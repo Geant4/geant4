@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Transportation.cc,v 1.59 2006-11-14 16:24:31 japost Exp $
+// $Id: G4Transportation.cc,v 1.60 2006-11-22 18:47:02 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // ------------------------------------------------------------
@@ -652,8 +652,6 @@ G4VParticleChange* G4Transportation::PostStepDoIt( const G4Track& track,
     //
     fParticleChange.SetTouchableHandle( track.GetTouchableHandle() ) ;
     retCurrentTouchable = track.GetTouchableHandle() ;
-
-#endif
   }         // endif ( fGeometryLimitedStep ) 
 
   const G4VPhysicalVolume* pNewVol = retCurrentTouchable->GetVolume() ;
