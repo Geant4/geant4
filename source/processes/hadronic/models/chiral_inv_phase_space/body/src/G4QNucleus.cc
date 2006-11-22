@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNucleus.cc,v 1.59 2006-11-20 16:29:11 mkossov Exp $
+// $Id: G4QNucleus.cc,v 1.60 2006-11-22 16:13:21 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QNucleus ----------------
@@ -262,26 +262,12 @@ G4QNucleus::G4QNucleus(G4QNucleus* right) : currentNucleon(-1)
 #endif
 }
 
-G4QNucleus::~G4QNucleus()
-{
-  if(theNucleons.size()) for_each(theNucleons.begin(),theNucleons.end(),DeleteQHadron());
-  Tb->clear();
-  delete Tb;
-}
-
-// Fill the private parameters
-void G4QNucleus::SetParameters(G4double a,G4double b, G4double c, G4double d, G4double e)
-{//  ====================================================================================
-  freeNuc=a; 
-  freeDib=b; 
-  clustProb=c;
-  mediRatio=d;
-		nucleonDistance=e;
-}
-
 // Assignment operator
 const G4QNucleus& G4QNucleus::operator=(const G4QNucleus& right)
 {//               ==============================================
+  Tb = new std::vector<G4double>;
+  G4int lTb=right.GetBThickness()->size();
+  if(lTb) for(G4int j=0; j<=lTb; j++) Tb->push_back((*right.GetBThickness())[j]);
   Set4Momentum   (right.Get4Momentum());
   SetQPDG        (right.GetQPDG());
   SetQC          (right.GetQC());
@@ -298,6 +284,23 @@ const G4QNucleus& G4QNucleus::operator=(const G4QNucleus& right)
   probVect[255] = right.probVect[255];
 
   return *this;
+}
+
+G4QNucleus::~G4QNucleus()
+{
+  if(theNucleons.size()) for_each(theNucleons.begin(),theNucleons.end(),DeleteQHadron());
+  Tb->clear();
+  delete Tb;
+}
+
+// Fill the private parameters
+void G4QNucleus::SetParameters(G4double a,G4double b, G4double c, G4double d, G4double e)
+{//  ====================================================================================
+  freeNuc=a; 
+  freeDib=b; 
+  clustProb=c;
+  mediRatio=d;
+		nucleonDistance=e;
 }
 
 // Standard output for QNucleus {Z - a#of protons, N - a#of neutrons, S - a#of lambdas}
