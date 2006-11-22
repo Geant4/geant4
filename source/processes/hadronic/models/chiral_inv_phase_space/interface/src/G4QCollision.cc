@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QCollision.cc,v 1.15 2006-10-30 10:33:38 mkossov Exp $
+// $Id: G4QCollision.cc,v 1.16 2006-11-22 13:49:06 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCollision class -----------------
@@ -232,7 +232,7 @@ G4double G4QCollision::GetMeanFreePath(const G4Track& aTrack,G4double,G4ForceCon
 #endif
     if(isoSize)                             // The Element has non-trivial abumdance set
     {
-      indEl=pElement->GetIndex();           // Index of the non-trivial element
+      indEl=pElement->GetIndex()+1;         // Index of the non-trivial element
       if(!Isotopes->IsDefined(Z,indEl))     // This index is not defined for this Z: define
       {
         std::vector<std::pair<G4int,G4double>*>* newAbund =

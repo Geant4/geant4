@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QElastic.cc,v 1.8 2006-11-16 11:33:25 mkossov Exp $
+// $Id: G4QElastic.cc,v 1.9 2006-11-22 13:49:06 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QElastic class -----------------
@@ -115,15 +115,18 @@ G4double G4QElastic::GetMeanFreePath(const G4Track& aTrack,G4double Q,G4ForceCon
     G4int Z = static_cast<G4int>(pElement->GetZ()); // Z of the Element
     ElementZ.push_back(Z);                  // Remember Z of the Element
     G4int isoSize=0;                        // The default for the isoVectorLength is 0
-    G4int indEl=0;                          // Index of non-trivial element or 0(default)
+    G4int indEl=0;                          // Index of non-natural element or 0(default)
     G4IsotopeVector* isoVector=pElement->GetIsotopeVector(); // Get the predefined IsoVect
     if(isoVector) isoSize=isoVector->size();// Get size of the existing isotopeVector
 #ifdef debug
     G4cout<<"G4QElastic::GetMeanFreePath: isovectorLength="<<isoSize<<G4endl; // Result
 #endif
-    if(isoSize)                             // The Element has non-trivial abumdance set
+    if(isoSize)                             // The Element has non-trivial abundance set
     {
-      indEl=pElement->GetIndex();           // Index of the non-trivial element
+      indEl=pElement->GetIndex()+1;         // Index of the non-trivial element is an order
+#ifdef debug
+      G4cout<<"G4QEl::GetMFP: iE="<<indEl<<", def="<<Isotopes->IsDefined(Z,indEl)<<G4endl;
+#endif
       if(!Isotopes->IsDefined(Z,indEl))     // This index is not defined for this Z: define
       {
         std::vector<std::pair<G4int,G4double>*>* newAbund =
@@ -155,6 +158,9 @@ G4double G4QElastic::GetMeanFreePath(const G4Track& aTrack,G4double Q,G4ForceCon
     std::vector<G4int>* IsN = new std::vector<G4int>; // Pointer to the N vector
     ElIsoN.push_back(IsN);
     G4int nIs=cs->size();                   // A#Of Isotopes in the Element
+#ifdef debug
+      G4cout<<"G4QEl::GMFP:=***=>,#isot="<<nIs<<", Z="<<Z<<", indEl="<<indEl<<G4endl;
+#endif
     G4double susi=0.;                       // sum of CS over isotopes
     if(nIs) for(G4int j=0; j<nIs; j++)      // Calculate CS for eachIsotope of El
     {
@@ -162,7 +168,7 @@ G4double G4QElastic::GetMeanFreePath(const G4Track& aTrack,G4double Q,G4ForceCon
       G4int N=curIs->first;                 // #of Neuterons in the isotope j of El i
       IsN->push_back(N);                    // Remember Min N for the Element
 #ifdef debug
-  G4cout<<"G4QElast::GMFP:*true*, P="<<Momentum<<",Z="<<Z<<",N="<<N<<",PDG="<<pPDG<<G4endl;
+      G4cout<<"G4QEl::GMFP:*true*,P="<<Momentum<<",Z="<<Z<<",N="<<N<<",PDG="<<pPDG<<G4endl;
 #endif
 		    G4bool ccsf=true;
       if(Q==-27.) ccsf=false;
@@ -466,7 +472,7 @@ G4VParticleChange* G4QElastic::PostStepDoIt(const G4Track& track, const G4Step& 
                                                                        ->FindIon(Z,aA,0,Z);
   if(!theDefinition)G4cout<<"*Warning*G4QElastic::PostStepDoIt:drop PDG="<<targPDG<<G4endl;
 #ifdef pdebug
-  G4cout<<"G4QElastic::PostStepDoIt:Name="<<theDefinition->GetParticleName()<<G4endl;
+  G4cout<<"G4QElastic::PostStepDoIt:RecoilName="<<theDefinition->GetParticleName()<<G4endl;
 #endif
   theSec->SetDefinition(theDefinition);
 
@@ -481,6 +487,7 @@ G4VParticleChange* G4QElastic::PostStepDoIt(const G4Track& track, const G4Step& 
   G4double curE=theSec->GetKineticEnergy()+curM;
   G4cout<<"G4QElastic::PSDoIt:p="<<curD<<curD.mag()<<",e="<<curE<<",m="<<curM<<G4endl;
 #endif
+  // Make a recoil nucleus
   G4Track* aNewTrack = new G4Track(theSec, localtime, position );
   aNewTrack->SetTouchableHandle(trTouchable);
   aParticleChange.AddSecondary( aNewTrack );

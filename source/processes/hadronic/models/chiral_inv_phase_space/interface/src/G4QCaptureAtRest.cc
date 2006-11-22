@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QCaptureAtRest.cc,v 1.6 2006-08-17 15:58:05 mkossov Exp $
+// $Id: G4QCaptureAtRest.cc,v 1.7 2006-11-22 13:49:06 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCaptureAtRest class -----------------
@@ -214,18 +214,22 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
     G4cerr<<"---Worning---G4QCaptureAtRest::AtRestDoIt:Element with Z="<<Z<< G4endl;
     if(Z<0) return 0;
   }
+  G4QIsotope* Isotopes = G4QIsotope::Get(); // Pointer to the G4QIsotopes singleton
   G4int N = Z;
   G4int isoSize=0;                         // The default for the isoVectorLength is 0
+  G4int indEl=0;                           // Index of non-natural element or 0 (default)
   G4IsotopeVector* isoVector=pElement->GetIsotopeVector();
   if(isoVector) isoSize=isoVector->size(); // Get real size of the isotopeVector if exists
 #ifdef debug
   G4cout<<"G4QCaptureAtRest::AtRestDoIt: isovectorLength="<<isoSize<<G4endl;
 #endif
-  if(isoSize)                         // The Element has not trivial abumdance set
+  if(isoSize)                              // The Element has not trivial abumdance set
   {
-    // @@ the following solution is temporary till G4Element can contain the QIsotopIndex
-    G4int curInd=G4QIsotope::Get()->GetLastIndex(Z);
-    if(!curInd)                       // The new artificial element must be defined 
+    indEl=pElement->GetIndex()+1;          // Index of the non-trivial element is an order
+#ifdef debug
+    G4cout<<"G4QCapAR::GetMFP: iE="<<indEl<<", def="<<Isotopes->IsDefined(Z,indEl)<<G4endl;
+#endif
+    if(!Isotopes->IsDefined(Z,indEl))      // This index is not defined for this Z: define
 				{
       std::vector<std::pair<G4int,G4double>*>* newAbund =
                                                new std::vector<std::pair<G4int,G4double>*>;
@@ -245,14 +249,14 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
 #ifdef debug
       G4cout<<"G4QCaptureAtRest::AtRestDoIt: pairVectorLength="<<newAbund->size()<<G4endl;
 #endif
-      curInd=G4QIsotope::Get()->InitElement(Z,1,newAbund);
+      indEl=Isotopes->InitElement(Z,indEl,newAbund); // redefinie newInd (if exists)
       for(G4int k=0; k<isoSize; k++) delete (*newAbund)[k];
       delete newAbund;
     }
     // @@ ^^^^^^^^^^ End of the temporary solution ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    N = G4QIsotope::Get()->GetNeutrons(Z,curInd);
+    N = Isotopes->GetNeutrons(Z,indEl);
   }
-  else  N = G4QIsotope::Get()->GetNeutrons(Z);
+  else  N = Isotopes->GetNeutrons(Z);
   nOfNeutrons=N;                                       // Remember it for energy-mom. check
   G4double dd=0.025;
   G4double am=Z+N;
