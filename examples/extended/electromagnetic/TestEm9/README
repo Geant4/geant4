@@ -1,4 +1,4 @@
-$Id: README,v 1.8 2006-11-17 17:45:04 vnivanch Exp $
+$Id: README,v 1.9 2006-11-22 18:30:29 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -45,12 +45,12 @@ $Id: README,v 1.8 2006-11-17 17:45:04 vnivanch Exp $
     4. StepMax - for steplimitation
 
     The following options for EM physics are available:	 
-    - "standard_q"    the best standard EM physics (default)
-    - "standard"      recommended standard EM physics for LHC
-    - "standard_emv"  the best CPU performance standard physics for LHC
-    - "standard_emx"  experimental standard physics for LHC
-    - "livermore"     low-energy EM physics using Livermore data
-    - "penelope"      low-energy EM physics implementing Penelope parameterizations
+    - "standard"        the best standard EM physics (default)
+    - "G4standard"      recommended standard EM physics for LHC
+    - "G4standard_fast" the best CPU performance standard physics for LHC
+    - "G4standard_exp"  experimental standard physics for LHC
+    - "livermore"       low-energy EM physics using Livermore data
+    - "penelope"        low-energy EM physics implementing Penelope models
 
     Optional components can be added:
     - "elastic"       elastic scattering of hadrons

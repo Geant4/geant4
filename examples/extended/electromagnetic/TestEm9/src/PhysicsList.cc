@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.13 2006-11-17 17:45:05 vnivanch Exp $
+// $Id: PhysicsList.cc,v 1.14 2006-11-22 18:28:54 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -141,7 +141,7 @@ void PhysicsList::ConstructProcess()
   AddStepMax();
   G4EmProcessOptions opt;
   if(!mscStepLimit) opt.SetMscStepLimitation(false);
-  if(emName == "standard_q") opt.SetDEDXBinning(480);
+  if(emName == "standard") opt.SetDEDXBinning(480);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -153,21 +153,21 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 
   if (name == emName) return;
 
-  if (name == "standard") {
+  if (name == "G4standard") {
     emName = name;
     delete emPhysicsList;
     emPhysicsList = new G4EmStandardPhysics();
     if (verboseLevel > 0) 
       G4cout << "PhysicsList::Set " << name << " EM physics" << G4endl;
 
-  } else if (name == "standard_emv") {
+  } else if (name == "G4standard_fast") {
     emName = name;
     delete emPhysicsList;
     emPhysicsList = new G4EmStandardPhysics71();
     if (verboseLevel > 0) 
       G4cout << "PhysicsList::Set " << name << " EM physics" << G4endl;
 
-  } else if (name == "standard_emx") {
+  } else if (name == "G4standard_exp") {
     emName = name;
     delete emPhysicsList;
     emPhysicsList = new G4EmStandardPhysics72();
