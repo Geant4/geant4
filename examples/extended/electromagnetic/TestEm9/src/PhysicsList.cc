@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.15 2006-11-22 18:58:28 vnivanch Exp $
+// $Id: PhysicsList.cc,v 1.16 2006-11-22 19:09:12 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -104,7 +104,7 @@ PhysicsList::PhysicsList() : G4VModularPhysicsList()
   generalPhysicsList = new G4DecayPhysics();
 
   // EM physics
-  emName = G4String("standard_q");
+  emName = G4String("standard");
   emPhysicsList = new PhysListEmStandard(emName);
 }
 
@@ -139,9 +139,6 @@ void PhysicsList::ConstructProcess()
     hadronPhys[i]->ConstructProcess();
   }
   AddStepMax();
-  G4EmProcessOptions opt;
-  if(!mscStepLimit) opt.SetMscStepLimitation(false);
-  if(emName == "standard") opt.SetDEDXBinning(480);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

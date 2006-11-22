@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysListEmStandard.cc,v 1.7 2006-11-17 17:45:05 vnivanch Exp $
+// $Id: PhysListEmStandard.cc,v 1.8 2006-11-22 19:09:12 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -82,18 +82,14 @@ void PhysListEmStandard::ConstructProcess()
       
     } else if (particleName == "e-") {
   
-      G4eIonisation* eioni = new G4eIonisation();
-      eioni->SetStepFunction(0.2, 0.1*mm);
       pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
-      pmanager->AddProcess(eioni,                    -1, 2,2);
+      pmanager->AddProcess(new G4eIonisation(),      -1, 2,2);
       pmanager->AddProcess(new G4eBremsstrahlung,    -1, 3,3);
 	    
     } else if (particleName == "e+") {
 
-      G4eIonisation* eioni = new G4eIonisation();
-      eioni->SetStepFunction(0.2, 0.1*mm);
       pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
-      pmanager->AddProcess(eioni,                    -1, 2,2);
+      pmanager->AddProcess(new G4eIonisation(),      -1, 2,2);
       pmanager->AddProcess(new G4eBremsstrahlung,    -1, 3,3);
       pmanager->AddProcess(new G4eplusAnnihilation,   0,-1,4);
       
