@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33VisApplication.hh,v 1.4 2006-06-29 22:00:07 gunter Exp $
+// $Id: Tst33VisApplication.hh,v 1.5 2006-11-22 10:35:39 gcosmo Exp $
 // GEANT4 tag 
 //
 // ----------------------------------------------------------------------
@@ -41,22 +41,22 @@
 #define Tst33VisApplication_hh Tst33VisApplication_hh
 
 #include "Tst33VApplication.hh"
-#include "Tst33VisManager.hh"
 
+class G4VisExecutive;
 
+class Tst33VisApplication : public Tst33VApplication
+{
+  public:
 
+    Tst33VisApplication();
+    virtual ~Tst33VisApplication();
 
-class Tst33VisApplication : public Tst33VApplication {
-public:
-  Tst33VisApplication();
-  virtual ~Tst33VisApplication();
+    virtual G4UserRunAction *CreateRunAction();
+    virtual Tst33VEventAction *CreateEventAction();
 
-  virtual G4UserRunAction *CreateRunAction();
-  virtual Tst33VEventAction *CreateEventAction();
-  
+  private:
 
-private:
-  Tst33VisManager fVisManager;
+    G4VisExecutive* fVisManager;
 };
 
 #endif

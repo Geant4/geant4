@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33VisApplication.cc,v 1.3 2006-06-29 22:01:38 gunter Exp $
+// $Id: Tst33VisApplication.cc,v 1.4 2006-11-22 10:35:39 gcosmo Exp $
 // GEANT4 tag 
 //
 // ----------------------------------------------------------------------
@@ -35,32 +35,30 @@
 // ----------------------------------------------------------------------
 
 #include "Tst33VisApplication.hh"
-#include "G4VisManager.hh"
-#include "Tst33VisManager.hh"
 #include "Tst33VisEventAction.hh"
 #include "Tst33VisRunAction.hh"
 
+#include "G4VisExecutive.hh"
 #include "G4RunManager.hh"
-
 #include "G4UImanager.hh"
 
-
-Tst33VisApplication::  Tst33VisApplication() 
+Tst33VisApplication::Tst33VisApplication()
 {
-  fVisManager.Initialize();
+  fVisManager = new G4VisExecutive;
+  fVisManager->Initialize();
 }
 
-Tst33VisApplication::~Tst33VisApplication(){
+Tst33VisApplication::~Tst33VisApplication()
+{
+  delete fVisManager;
 }
 
-Tst33VEventAction *Tst33VisApplication::CreateEventAction() {
+Tst33VEventAction *Tst33VisApplication::CreateEventAction()
+{
   return new Tst33VisEventAction;
 }
 
-
-
-G4UserRunAction *Tst33VisApplication::CreateRunAction(){
+G4UserRunAction *Tst33VisApplication::CreateRunAction()
+{
   return new Tst33VisRunAction;
 }
-
-
