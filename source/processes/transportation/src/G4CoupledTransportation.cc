@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CoupledTransportation.cc,v 1.11 2006-11-14 09:12:09 gcosmo Exp $
+// $Id: G4CoupledTransportation.cc,v 1.12 2006-11-22 18:41:44 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //  GEANT 4 class implementation
@@ -102,10 +102,17 @@ G4double G4CoupledTransportation::
 AlongStepGetPhysicalInteractionLength( const G4Track&  track,
                                              G4double, //  previousStepSize
                                              G4double  currentMinimumStep,
-                                             G4double& currentSafety,
+                                             G4double& proposedSafetyForStart,
                                              G4GPILSelection* selection )
 {
   G4double geometryStepLength; 
+  G4double startMassSafety= 0.0;   //  estimated safety for start point (mass geometry)
+  G4double startFullSafety= 0.0;   //  estimated safety for start point (all geometries)
+  G4double safetyProposal= -1.0;   //  local copy of proposal 
+
+  G4ThreeVector  EndUnitMomentum ;
+  G4double       lengthAlongCurve=0.0 ;
+ 
   fParticleIsLooping = false ;
 
   // Initial actions moved to  StartTrack()   
@@ -145,13 +152,13 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
   //
   G4ThreeVector OriginShift = startPosition - fPreviousSftOrigin ;
   G4double      MagSqShift  = OriginShift.mag2() ;
-  if( MagSqShift >= sqr(fPreviousSafety) )
-  {
-     currentSafety = 0.0 ;
-  }
-  else
-  {
-     currentSafety = fPreviousSafety - std::sqrt(MagSqShift) ;
+  startMassSafety = 0.0; 
+  startFullSafety= 0.0; 
+  if( MagSqShift < sqr(fPreviousSafety) ) {
+     startMassSafety = fPreviousSafety - std::sqrt(MagSqShift) ;
+
+     // Only compute full safety if massSafety > 0.  Else it remains 0
+     startFullSafety = fPathFinder->ComputeSafety( startPosition ); 
   }
 
   // Is the particle charged ?
@@ -166,31 +173,22 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
   // Check whether the particle have an (EM) field force exerting upon it
   //
   G4FieldManager* fieldMgr=0;
-  G4bool          fieldExertsForce = false ;
   if( (particleCharge != 0.0) ) // ||  (magneticMoment != 0.0 ) )
   {
      fieldMgr= fFieldPropagator->FindAndSetFieldManager( currentVolume ); 
      if (fieldMgr != 0) {
-        // If the field manager has no field, there is no field !
-        fieldExertsForce = (fieldMgr->GetDetectorField() != 0);
+	// Message the field Manager, to configure it for this track
+	fieldMgr->ConfigureForTrack( &track );
      } 
+     // the PathFinder will recognise whether the field exerts force
   }
-  
-  //  A field could be exerting force  --  the PathFinder will take care!
-  
   G4double       momentumMagnitude = pParticle->GetTotalMomentum() ;
-  G4ThreeVector  EndUnitMomentum ;
-  G4double       lengthAlongCurve ;
   G4double       restMass = pParticleDef->GetPDGMass() ;
  
   fFieldPropagator->SetChargeMomentumMass( particleCharge,    // in e+ units
 					   momentumMagnitude, // in Mev/c 
 					   restMass           ) ;  
   
-  // Message the field Manager, to configure it for this track
-  if (fieldMgr != 0) {
-     fieldMgr->ConfigureForTrack( &track );
-  }
 
   G4ThreeVector spin        = track.GetPolarization() ;
   G4FieldTrack  theFieldTrack = G4FieldTrack( startPosition, 
@@ -211,13 +209,15 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
 
   fGeometryLimitedStep = false ;    //  default 
   if( currentMinimumStep > 0 )  {
+      G4double newMassSafety= 0.0;     //  temp. for recalculation
+
       // Do the Transport in the field (non recti-linear)
       //
       lengthAlongCurve = fPathFinder->ComputeStep( theFieldTrack,
 						   currentMinimumStep, 
 						   fNavigatorId,
 						   stepNo,
-						   currentSafety,
+						   newMassSafety,
 						   limitedStep,
 						   endTrackState,
 						   currentVolume ) ;
@@ -240,7 +240,18 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
 
       // Remember last safety origin & value.
       fPreviousSftOrigin = startPosition ;
-      fPreviousSafety    = currentSafety ;         
+      fPreviousSafety    = newMassSafety ;         
+
+      if( fVerboseLevel > 1 ){
+	G4cout << "G4CoupledTransport:CompStep> " 
+	       << " called the pathfinder for a new step at " << startPosition
+	       << " and obtained step = " << lengthAlongCurve << G4endl;
+	G4cout << "  New safety (preStep) = " << newMassSafety 
+	       << " versus precalculated = "  << startMassSafety << G4endl; 
+      }
+
+      // Store as best estimate value
+      startMassSafety    = newMassSafety ; 
 
       // Get the End-Position and End-Momentum (Dir-ection)
       fTransportEndPosition = endTrackState.GetPosition() ;
@@ -251,8 +262,12 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
       // fGeometryLimitedStep = false ;   //  --- ???
       fTransportEndMomentumDir = track.GetMomentumDirection();
       fTransportEndKineticEnergy  = track.GetKineticEnergy();
-  }
 
+      // If the step length requested is 0, and we are on a boundary
+      //   then a boundary will also limit the step.
+      if( startMassSafety == 0.0 )  fGeometryLimitedStep = true ;
+      //   TODO:  Add explicit logical status for being at a boundary
+  }
   // G4FieldTrack aTrackState(endTrackState);  
 
   if( fVerboseLevel > 1 ){
@@ -308,50 +323,55 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
 
   fTransportEndSpin = endTrackState.GetSpin();
 
-  // If we are asked to go a step length of 0, and we are on a boundary
-  //   then a boundary will also limit the step -> we must flag this.
-  //
-  if( currentMinimumStep == 0.0 ) {
-     //   TODO:  Add explicit logical status for being at a boundary
-     if( currentSafety == 0.0 )  fGeometryLimitedStep = true ;
-  }
+  // Calculate the safety 
+  safetyProposal= startFullSafety;   // used to be startMassSafety
+     // Changed to accomodate processes that cannot update the safety -- JA 22 Nov 06
 
   // Update safety for the end-point, if becomes negative at the end-point.
-  //   TODO:  No safety update if at a boundary
-  // 
-  if( currentSafety < endpointDistance ) 
+  //                                       To-Try:  No safety update if at a boundary
+  if( startFullSafety < endpointDistance ) // && !fGeometryLimitedStep ) 
   {
-      G4double endSafety =
-               fMassNavigator->ComputeSafety( fTransportEndPosition) ;
+      G4double endFullSafety =
+	fPathFinder->ComputeSafety( fTransportEndPosition); 
+        // Expected mission -- only mass geometry's safety
+        //   fMassNavigator->ComputeSafety( fTransportEndPosition) ;
+        // Yet discrete processes only have poststep -- and this cannot 
+        //   currently revise the safety  
+        //   ==> so we use the all-geometry safety as a precaution
+
+      G4double endMassSafety= fMassNavigator->ComputeSafety( fTransportEndPosition) ;
+      fPreviousSafety    = endMassSafety ; 
       fPreviousSftOrigin = fTransportEndPosition ;
-      fPreviousSafety    = endSafety ; 
 
-      // The convention (Stepping Manager's)  is safety from the start point, 
+      // The convention (Stepping Manager's) is safety from the start point
       //
-      currentSafety = endSafety + endpointDistance ;
-
-#undef G4DEBUG_TRANSPORT 
+      safetyProposal = endFullSafety + endpointDistance;
+          //  --> was endMassSafety
+      // #undef G4DEBUG_TRANSPORT 
+      // #define G4DEBUG_TRANSPORT 1
 
 #ifdef G4DEBUG_TRANSPORT 
       int prec= G4cout.precision(12) ;
       G4cout << "***CoupledTransportation::AlongStepGPIL ** " << G4endl  ;
       G4cout << "  Revised Safety at endpoint "  << fTransportEndPosition
-             << "   give safety value= " << endSafety << G4endl ; 
+             << "   give safety values: Mass= " << endMassSafety 
+	     << "  All= " << endFullSafety << G4endl ; 
       G4cout << "  Adding endpoint distance " << endpointDistance 
-             << "   to obtain pseudo-safety= " << currentSafety << G4endl ; 
+             << "   to obtain pseudo-safety= " << safetyProposal << G4endl ; 
       G4cout.precision(prec); 
   }  
   else{
       int prec= G4cout.precision(12) ;
       G4cout << "***CoupledTransportation::AlongStepGPIL ** " << G4endl  ;
-      G4cout << "  Quick Safety at endpoint "  << fTransportEndPosition
-	     << "   gives estimated value = " << currentSafety - endpointDistance
-	     << "  from start-point value " << currentSafety 
+      G4cout << "  Quick Safety estimate at endpoint "  << fTransportEndPosition
+	     << "   gives safety endpoint value = " << startFullSafety - endpointDistance
+	     << "  using start-point value " << startFullSafety 
 	     << "  and endpointDistance " << endpointDistance << G4endl; 
       G4cout.precision(prec); 
 #endif
   }          
 
+  proposedSafetyForStart= safetyProposal; 
   fParticleChange.ProposeTrueStepLength(geometryStepLength) ;
 
   return geometryStepLength ;
