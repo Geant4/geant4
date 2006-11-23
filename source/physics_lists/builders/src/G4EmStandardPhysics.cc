@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmStandardPhysics.cc,v 1.2 2006-11-13 16:26:30 vnivanch Exp $
+// $Id: G4EmStandardPhysics.cc,v 1.3 2006-11-23 15:30:19 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -35,6 +35,7 @@
 // Modified:
 // 05.12.2005 V.Ivanchenko add controlled verbosity
 // 13.11.2006 V.Ivanchenko use G4hMultipleScattering
+// 23.11.2006 V.Ivanchenko remove mscStepLimit option and improve cout
 //
 //----------------------------------------------------------------------------
 //
@@ -81,8 +82,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4EmStandardPhysics::G4EmStandardPhysics(const G4String& name, G4int ver,
-   G4bool msc): G4VPhysicsConstructor(name), verbose(ver), mscStepLimit(msc)
+G4EmStandardPhysics::G4EmStandardPhysics(const G4String& name, G4int ver)
+  : G4VPhysicsConstructor(name), verbose(ver)
 {
   G4LossTableManager::Instance();
 }
@@ -143,18 +144,12 @@ void G4EmStandardPhysics::ConstructProcess()
 
     } else if (particleName == "e-") {
 
-      if(verbose > 1)
-        G4cout << "### EmStandard instantiates eIoni and msc80 for " 
-               << particleName << G4endl;
       pmanager->AddProcess(new G4MultipleScattering, -1, 1, 1);
       pmanager->AddProcess(new G4eIonisation,        -1, 2, 2);
       pmanager->AddProcess(new G4eBremsstrahlung(),  -1, 3, 3);
 
     } else if (particleName == "e+") {
 
-      if(verbose > 1)
-        G4cout << "### EmStandard instantiates eIoni and msc80 for " 
-               << particleName << G4endl;
       pmanager->AddProcess(new G4MultipleScattering, -1, 1, 1);
       pmanager->AddProcess(new G4eIonisation,        -1, 2, 2);
       pmanager->AddProcess(new G4eBremsstrahlung,    -1, 3, 3);
@@ -163,9 +158,6 @@ void G4EmStandardPhysics::ConstructProcess()
     } else if (particleName == "mu+" ||
                particleName == "mu-"    ) {
 
-      if(verbose > 1)
-        G4cout << "### EmStandard instantiates muIoni and msc80 for " 
-               << particleName << G4endl;
       pmanager->AddProcess(new G4MultipleScattering,-1, 1, 1);
       pmanager->AddProcess(new G4MuIonisation,      -1, 2, 2);
       pmanager->AddProcess(new G4MuBremsstrahlung,  -1, 3, 3);
@@ -175,8 +167,7 @@ void G4EmStandardPhysics::ConstructProcess()
                particleName == "He3" ||
                particleName == "GenericIon") {
 
-      if(verbose > 1)
-        G4cout << "### EmStandard instantiates ionIoni and msc80 for " 
+        G4cout << "### G4standard instantiates ionIoni for " 
                << particleName << G4endl;
       pmanager->AddProcess(new G4hMultipleScattering, -1, 1, 1);
       pmanager->AddProcess(new G4ionIonisation,       -1, 2, 2);
@@ -201,7 +192,7 @@ void G4EmStandardPhysics::ConstructProcess()
                particleName == "xi-" ) {
 
       if(verbose > 1)
-        G4cout << "### EmStandard instantiates hIoni and msc80 for " 
+        G4cout << "### G4standard instantiates hIoni for " 
                << particleName << G4endl;
       pmanager->AddProcess(new G4hMultipleScattering, -1, 1, 1);
       pmanager->AddProcess(new G4hIonisation,         -1, 2, 2);
@@ -209,7 +200,6 @@ void G4EmStandardPhysics::ConstructProcess()
   }
   G4EmProcessOptions opt;
   opt.SetVerbose(verbose);
-  if(!mscStepLimit) opt.SetMscStepLimitation(false);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

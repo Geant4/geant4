@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronElasticPhysics.hh,v 1.2 2006-11-17 19:19:40 vnivanch Exp $
+// $Id: G4HadronElasticPhysics.hh,v 1.3 2006-11-23 15:30:19 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -34,6 +34,7 @@
 //
 // Modified:
 // 05.07.2006 V.Ivanchenko fix problem of initialisation of HP
+// 23.11.2006 V.Ivanchenko remove variables
 //
 //----------------------------------------------------------------------------
 //
@@ -66,10 +67,6 @@ public:
   // registered to the process manager of each particle type 
   virtual void ConstructProcess();
 
-  void SetLimitSWave(G4double);
-
-  void SetLimitIonKineticEnergy(G4double);
-
 private:
 
   G4HadronicInteraction* model;
@@ -78,24 +75,11 @@ private:
 
   G4String mname;
 
-  G4double pLimit;
-  G4double edepLimit;
-
   G4int    verbose;
   G4bool   hpFlag;
   G4bool   glFlag;
   G4bool   wasActivated;
 };
-
-inline void G4HadronElasticPhysics::SetLimitSWave(G4double val)
-{
-  pLimit = val;
-}
-
-inline void G4HadronElasticPhysics::SetLimitIonKineticEnergy(G4double val)
-{
-  edepLimit = val;
-}
 
 
 #endif

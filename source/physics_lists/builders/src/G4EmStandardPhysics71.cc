@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmStandardPhysics71.cc,v 1.2 2006-11-13 16:26:30 vnivanch Exp $
+// $Id: G4EmStandardPhysics71.cc,v 1.3 2006-11-23 15:30:19 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -37,6 +37,7 @@
 // 21.06.2006 V.Ivanchenko use recent msc with step limitation off
 // 23.06.2006 V.Ivanchenko set dRoverRange = 0.8 for e- and e+
 // 13.11.2006 V.Ivanchenko use G4hMultipleScattering
+// 23.11.2006 V.Ivanchenko remove mscStepLimit option and improve cout
 //
 //----------------------------------------------------------------------------
 //
@@ -83,8 +84,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4EmStandardPhysics71::G4EmStandardPhysics71(const G4String& name, G4int ver,
-   G4bool msc): G4VPhysicsConstructor(name), verbose(ver), mscStepLimit(msc)
+G4EmStandardPhysics71::G4EmStandardPhysics71(const G4String& name, G4int ver)
+  : G4VPhysicsConstructor(name), verbose(ver)
 {
   G4LossTableManager::Instance();
 }
@@ -146,7 +147,7 @@ void G4EmStandardPhysics71::ConstructProcess()
     } else if (particleName == "e-") {
 
       if(verbose > 1)
-        G4cout << "### EmStandard71 instantiates eIoni and msc71 for " 
+        G4cout << "### G4standard_fast instantiates eIoni " 
                << particleName << G4endl;
       G4eIonisation* eioni = new G4eIonisation();
       eioni->SetStepFunction(0.8, 1.0*mm);
@@ -158,7 +159,7 @@ void G4EmStandardPhysics71::ConstructProcess()
     } else if (particleName == "e+") {
 
       if(verbose > 1)
-        G4cout << "### EmStandard71 instantiates eIoni and msc71 for " 
+        G4cout << "### G4standard_fast instantiates eIoni " 
                << particleName << G4endl;
       G4eIonisation* eioni = new G4eIonisation();
       eioni->SetStepFunction(0.8, 1.0*mm);
@@ -172,7 +173,7 @@ void G4EmStandardPhysics71::ConstructProcess()
                particleName == "mu-"    ) {
 
       if(verbose > 1)
-        G4cout << "### EmStandard71 instantiates muIoni and msc71 for " 
+        G4cout << "### G4standard_fast instantiates muIoni " 
                << particleName << G4endl;
       pmanager->AddProcess(new G4hMultipleScattering, -1, 1, 1);
       pmanager->AddProcess(new G4MuIonisation,        -1, 2, 2);
@@ -184,7 +185,7 @@ void G4EmStandardPhysics71::ConstructProcess()
                particleName == "GenericIon") {
 
       if(verbose > 1)
-        G4cout << "### EmStandard71 instantiates ionIoni and msc71 for " 
+        G4cout << "### G4standard_fast instantiates ionIoni " 
                << particleName << G4endl;
       pmanager->AddProcess(new G4hMultipleScattering, -1, 1, 1);
       pmanager->AddProcess(new G4ionIonisation,       -1, 2, 2);
@@ -208,7 +209,7 @@ void G4EmStandardPhysics71::ConstructProcess()
                particleName == "triton" ||
                particleName == "xi-" ) {
       if(verbose > 1)
-        G4cout << "### EmStandard71 instantiates hIoni and msc71 for " 
+        G4cout << "### G4Standard_fast instantiates hIoni " 
                << particleName << G4endl;
       pmanager->AddProcess(new G4hMultipleScattering, -1, 1, 1);
       pmanager->AddProcess(new G4hIonisation,         -1, 2, 2);
@@ -216,7 +217,7 @@ void G4EmStandardPhysics71::ConstructProcess()
   }
   G4EmProcessOptions opt;
   opt.SetVerbose(verbose);
-  if(!mscStepLimit) opt.SetMscStepLimitation(false);
+  opt.SetMscStepLimitation(false);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

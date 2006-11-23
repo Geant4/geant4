@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EmStandardPhysics71.hh,v 1.2 2006-11-13 16:26:30 vnivanch Exp $
+// $Id: G4EmStandardPhysics71.hh,v 1.3 2006-11-23 15:30:19 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -57,8 +57,7 @@
 class G4EmStandardPhysics71 : public G4VPhysicsConstructor
 {
 public:
-  G4EmStandardPhysics71(const G4String& name = "EMstandard71", G4int ver = 1,
-			G4bool msc=false);
+  G4EmStandardPhysics71(const G4String& name = "G4standard_fast", G4int ver = 1);
   virtual ~G4EmStandardPhysics71();
 
 public:
@@ -67,7 +66,6 @@ public:
 
 private:
   G4int  verbose;
-  G4bool mscStepLimit;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
