@@ -20,6 +20,15 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// Authors: S. Guatelli and M. G. Pia, INFN Genova, Italy
+// 
+// Based on code developed by the undergraduate student G. Guerrieri 
+// Note: this is a preliminary beta-version of the code; an improved 
+// version will be distributed in the next Geant4 public release, compliant
+// with the design in a forthcoming publication, and subject to a 
+// design and code review.
+//
+
 #include <stdexcept>
 
 #include "globals.hh"
@@ -46,55 +55,46 @@
 
 int main(int argc,char** argv)
 {
-   G4cout << " starting run " << G4endl;
+  G4cout << "Starting run " << G4endl;
 
-  // Construct the default run manager
   G4RunManager* runManager = new G4RunManager;
-  
-  // set mandatory initialization classes
-  G4HumanPhantomConstruction* userPhantom = new G4HumanPhantomConstruction;
-  runManager->SetUserInitialization(userPhantom);
-  G4cout << " useraction geometry " << G4endl;
 
+  G4HumanPhantomEnergyDeposit* energyTotal = new G4HumanPhantomEnergyDeposit();
+
+  // Set mandatory initialization classes
+  G4HumanPhantomConstruction* userPhantom = new G4HumanPhantomConstruction(energyTotal);
+  runManager->SetUserInitialization(userPhantom);
 
   runManager->SetUserInitialization(new G4HumanPhantomPhysicsList);
-  G4cout << " useraction PhysicsList " << G4endl;
 
   runManager->SetUserAction(new G4HumanPhantomPrimaryGeneratorAction);
-   G4cout << " useraction Primary Generator " << G4endl;
 
   G4UIsession* session=0;
 
   if (argc==1)   
-  // Define UI session for interactive mode. 
+    // Define UI session for interactive mode. 
     { 
-     // G4UIterminal is a (dumb) terminal
+      // G4UIterminal is a (dumb) terminal
 #ifdef G4UI_USE_TCSH
-     session = new G4UIterminal(new G4UItcsh);
+      session = new G4UIterminal(new G4UItcsh);
 #else
-     session = new G4UIterminal();
+      session = new G4UIterminal();
 #endif
-     }
+    }
 
 #ifdef G4VIS_USE
   G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
 #endif
-
-//  runManager->Initialize();
- // G4cout << "runManager->Initialize();" << G4endl;
-
-  // set mandatory user action class
   
   runManager->SetUserAction(new G4HumanPhantomRunAction);
 
-  G4HumanPhantomEnergyDeposit* energyTotal = new G4HumanPhantomEnergyDeposit();
+  
 
-  G4HumanPhantomEventAction *eventAction = new G4HumanPhantomEventAction(energyTotal);
+  G4HumanPhantomEventAction* eventAction = new G4HumanPhantomEventAction();
   runManager->SetUserAction(eventAction);
 
-  runManager->SetUserAction(new G4HumanPhantomSteppingAction(eventAction)); 
-
+  runManager->SetUserAction(new G4HumanPhantomSteppingAction()); 
 
   G4UImanager* UI = G4UImanager::GetUIpointer();
 
@@ -112,7 +112,7 @@ int main(int argc,char** argv)
       UI -> ApplyCommand(command+fileName);
     }     
 
-   energyTotal->TotalEnergyDeposit();
+  energyTotal->TotalEnergyDeposit();
 
 #ifdef G4ANALYSIS_USE
   G4HumanPhantomAnalysisManager* analysis = G4HumanPhantomAnalysisManager::getInstance();
