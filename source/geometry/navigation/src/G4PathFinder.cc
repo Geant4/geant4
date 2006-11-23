@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PathFinder.cc,v 1.22 2006-11-23 15:03:49 japost Exp $
+// $Id: G4PathFinder.cc,v 1.23 2006-11-23 15:50:45 japost Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4PathFinder Implementation
@@ -477,6 +477,7 @@ G4PathFinder::ReLocate( const   G4ThreeVector& position )
      G4double  moveMinusSafety= 0.0; 
      G4double  moveLenEndPosition= std::sqrt( moveLenEndPosSq );
      moveMinusSafety = moveLenEndPosition - revisedSafety; 
+     // moveMinusSafety = distCheckRevisedEnd / (moveLenEndPosition + revisedSafety); 
 
      if( longMoveRevisedEnd && (moveMinusSafety > 0.0 ) && (revisedSafety > 0.0) ){
         // Take into account possibility of roundoff error causing
@@ -493,9 +494,14 @@ G4PathFinder::ReLocate( const   G4ThreeVector& position )
 						std::fabs(position.y())), 
 				      std::fabs(position.z()) );
 	G4bool smallValue= absMoveMinusSafety < cErrorTolerance * maxCoordPos;
-        if( smallRatio || smallValue ) { 
+        if( ! (smallRatio || smallValue) ) { 
+	  G4cout << " G4PF:Relocate> Ratio to revised safety is " 
+ 	         << fabs(moveMinusSafety)/revisedSafety << G4endl;
+	  G4cout << " Difference of move and safety is not very small." << G4endl;
+	}else{
 	  moveMinusSafety = 0.0; 
 	  longMoveRevisedEnd = false;   // Numerical issue -- not too long!
+#ifdef G4DEBUG_PATHFINDER
 	  G4cout << " Difference of move and safety is very small in magnitude, " 
 		 << absMoveMinusSafety << G4endl;
 	  if( smallRatio ) {
@@ -508,24 +514,10 @@ G4PathFinder::ReLocate( const   G4ThreeVector& position )
 		   << " smaller than " << cErrorTolerance ;
 	  }
           G4cout << " -- reset moveMinusSafety to " << moveMinusSafety << G4endl;
-	}else{
-	  G4cout << " G4PF:Relocate> Ratio to revised safety is " 
- 	         << fabs(moveMinusSafety)/revisedSafety << G4endl;
-	  G4cout << " Difference of move and safety is not very small." << G4endl;
+#endif
 	}
      }
 
-#if 1
-     G4cout << " Needed to recalculate safety at endpoint - was potentially a problem" 
-	    << G4endl;
-     ReportMove( lastEndPosition, position, "Position" ); 
-     G4cout << "  The endpoint finally had safety = " << revisedSafety
-	    << "  vs move= "  << moveLenEndPosition << G4endl
-	    << "  difference = " << moveMinusSafety << G4endl
-	    << "  Squared:  safety= " << revisedSafety * revisedSafety
-	    << "    move= " << moveLenEndPosSq << G4endl;
-#endif
-     // if ( longMoveEnd && longMoveSaf && longMoveRevisedEnd ) { 
      if ( longMoveEnd && longMoveSaf && longMoveRevisedEnd && (moveMinusSafety>0.0)) { 
         // if( (moveMinusSafety>0.0) ){   // Eventually ? 
         G4int oldPrec= G4cout.precision(9); 
@@ -559,6 +551,7 @@ G4PathFinder::ReLocate( const   G4ThreeVector& position )
     }
   }
 
+#ifdef G4VERBOSE
   if( fVerboseLevel > 2 ){
     G4cout << G4endl; 
     G4cout << " G4PathFinder::ReLocate : entered " << G4endl;
@@ -573,6 +566,7 @@ G4PathFinder::ReLocate( const   G4ThreeVector& position )
 	      << "  relocated = " << fRelocatedPoint << G4endl;
     }
   }
+#endif
 
   for ( num=0; num< fNoActiveNavigators ; ++pNavIter,++num ) {
 
