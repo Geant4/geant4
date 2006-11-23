@@ -1,4 +1,4 @@
-$Id: History,v 1.172 2006-11-15 12:13:43 gcosmo Exp $
+$Id: History,v 1.173 2006-11-23 00:41:55 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov 22, 2006  M.Asai (global-V08-01-06)
+- Fixed the incorrect behavior of G4StateManager, so that now it changes the
+  state AFTER it asks to all the G4VStateDependent classes.
 
 Nov 15, 2006  G.Cosmo (global-V08-01-05)
 - Added signal handler for debugging FPE signals and catching NaNs in

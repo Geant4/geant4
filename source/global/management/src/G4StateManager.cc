@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StateManager.cc,v 1.12 2006-06-29 19:04:27 gunter Exp $
+// $Id: G4StateManager.cc,v 1.13 2006-11-23 00:41:56 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -192,7 +192,6 @@ G4StateManager::SetNewState(G4ApplicationState requestedState, const char* msg)
    G4bool ack = true;
    G4ApplicationState savedState = thePreviousState;
    thePreviousState = theCurrentState;
-   theCurrentState = requestedState;
    while ((ack) && (i<theDependentsList.size()))
    {
      ack = theDependentsList[i]->Notify(requestedState);
@@ -204,10 +203,9 @@ G4StateManager::SetNewState(G4ApplicationState requestedState, const char* msg)
    }
 
    if(!ack)
-   {
-     theCurrentState = thePreviousState;
-     thePreviousState = savedState;
-   }
+   { thePreviousState = savedState; }
+   else
+   { theCurrentState = requestedState; }
    msgptr = 0;
    return ack;
 }
