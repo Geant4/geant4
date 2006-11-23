@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EmStandardPhysics.hh,v 1.2 2006-11-23 15:30:18 vnivanch Exp $
+// $Id: G4EmStandardPhysics.hh,v 1.3 2006-11-23 15:53:10 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -57,7 +57,7 @@
 class G4EmStandardPhysics : public G4VPhysicsConstructor
 {
 public:
-  G4EmStandardPhysics(const G4String& name = "G4standard", G4int ver = 1);
+  G4EmStandardPhysics(const G4String& name = "G4standard", G4int ver = 0);
   virtual ~G4EmStandardPhysics();
 
 public:
