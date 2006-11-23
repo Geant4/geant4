@@ -21,22 +21,19 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElasticHadrNucleusHE.cc,v 1.54 2006-11-22 18:10:33 vnivanch Exp $
+// $Id: G4ElasticHadrNucleusHE.cc,v 1.55 2006-11-23 14:15:10 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-//G4ElasticHadrNucleusHE.cc
 //
 //
-
 //  The generator of high energy hadron-nucleus elastic scattering
 //  The hadron kinetic energy T > 1 GeV
 //  N.  Starkov 2003.
-
+//
 //  19.05.04 Variant for G4 6.1: The 'ApplyYourself' was changed
-
-//  November 2005 - The HE elastic scattering on proton is added
-//  N. Starkov
-//  16.11.06: The low energy boundary is shifted to T = 400 MeV
-//  N. Starkov
+//  19.11.05 The HE elastic scattering on proton is added (N.Starkov)
+//  16.11.06 The low energy boundary is shifted to T = 400 MeV (N.Starkov)
+//  23.11.06 General cleanup, ONQ0=3, use pointer instead of particle name (VI)
+//
 
 #include  "G4ElasticHadrNucleusHE.hh"
 #include  "Randomize.hh"
@@ -80,10 +77,11 @@ G4ElasticHadrNucleusHE::G4ElasticHadrNucleusHE()
   MbToGeV2  =  2.568;
   sqMbToGeV =  1.602;
   Fm2ToGeV2 =  25.68;
+  GeV2      =  GeV*GeV;
 
   Binom();
   emin = 0.4;
-  emax = 250000;
+  emax = 250000.;
   deltae = log(emax/emin)/(NENERGY - 1.0);
   G4double e = emin;
   G4double f = exp(deltae);
@@ -113,9 +111,7 @@ G4double G4ElasticHadrNucleusHE::SampleT(
                           G4double inLabMom, 
                           G4int,  G4int N)
 {
-  //  G4String      hName = p->GetParticleName(); 
-
-  G4double pTotLabMomentum = inLabMom/1000; // (GeV/c)
+  G4double pTotLabMomentum = inLabMom/GeV; // (GeV/c)
   G4double Q2;
 
   G4int         Amass=N;
@@ -180,7 +176,7 @@ G4double G4ElasticHadrNucleusHE::SampleT(
   if(verboselevel == 1)
     G4cout<<" SampleT: Q2 "<<Q2<<G4endl;
 
-  return  Q2*1000000.;
+  return  Q2*GeV2;
 }
 
 //  ########################################################
@@ -1169,7 +1165,7 @@ void  G4ElasticHadrNucleusHE::
              return;
            }
 
-       G4double mHadr      = aHadron->GetPDGMass()/1000.;  // In GeV
+       G4double mHadr      = aHadron->GetPDGMass()/GeV;  // In GeV
        G4double mHadr2     = mHadr*mHadr;
 
        G4double HadrEnergy = sqrt(mHadr2+HadrMoment*HadrMoment);
@@ -1181,16 +1177,16 @@ void  G4ElasticHadrNucleusHE::
 
    if(HadrEnergy-mHadr<0.4)
    {
-   G4cout<<"ElasticHE(GetHadronValues): The energy T = "
-   <<(HadrEnergy-mHadr)*1000
-   <<" MeV is very low for this method! T = 400 MeV is put."
-   <<G4endl;
+     G4cout<<"ElasticHE(GetHadronValues): The energy T = "
+	   <<(HadrEnergy-mHadr)
+	   <<" GeV is very low for this method! T = 0.400 GeV is set."
+	   <<G4endl;
    }
 
-      G4double TotP=0.0, TotN=0.0;
-      G4double logE = std::log(HadrEnergy);
+   G4double TotP=0.0, TotN=0.0;
+   G4double logE = std::log(HadrEnergy);
 
-    switch (iHadron)
+   switch (iHadron)
     {
 // &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
      case 0:                  //  proton, neutron

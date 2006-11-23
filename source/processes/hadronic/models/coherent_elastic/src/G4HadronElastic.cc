@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronElastic.cc,v 1.37 2006-11-22 18:10:34 vnivanch Exp $
+// $Id: G4HadronElastic.cc,v 1.38 2006-11-23 14:15:11 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -81,7 +81,7 @@ G4HadronElastic::G4HadronElastic(G4double, G4double, G4double)
   lowEnergyRecoilLimit = 100.*keV;  
   lowEnergyLimitQ = 19.0*MeV;  
   lowEnergyLimitHE = 0.4*GeV;  
-  lowEnergyLimitHE = DBL_MAX;  
+  //  lowEnergyLimitHE = DBL_MAX;  
   lowestEnergyLimit= 10.0*keV;  
   plabLowLimit     = 20.0*MeV;
 

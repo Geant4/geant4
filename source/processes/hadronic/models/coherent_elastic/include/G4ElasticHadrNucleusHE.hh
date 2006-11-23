@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElasticHadrNucleusHE.hh,v 1.31 2006-11-22 18:10:32 vnivanch Exp $
+// $Id: G4ElasticHadrNucleusHE.hh,v 1.32 2006-11-23 14:15:10 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4ElasticHadrNucleusHe.hh
@@ -29,11 +29,12 @@
 //  The generator of high energy hadron-nucleus elastic scattering
 //  The hadron kinetic energy T > 1 GeV
 //  N.  Starkov 2003.
-
+//
 //  19.05.04 Variant for G4 6.1: The 'ApplyYourself' was changed
-
-//  November 2005 - The HE elastic scattering on proton is added
-//  N. Starkov
+//  19.11.05 The HE elastic scattering on proton is added (N.Starkov)
+//  16.11.06 General redesign (N.Starkov)
+//  23.11.06 General cleanup, ONQ0=3 (V.Ivanchenko)
+//
 
 #ifndef G4ElasticHadrNucleusHE_h
 #define G4ElasticHadrNucleusHE_h 1
@@ -47,12 +48,8 @@
 
 #include "G4HadronicInteraction.hh"
 
-static const G4int  ONQ0     = 5;   //  The initial number of steps on Q2
+static const G4int  ONQ0     = 3;   //  The initial number of steps on Q2
 static const G4int  ONQ2     = 150; //  The total number of steps on Q2
-static const G4int  ONE      = 5;   //  The number of steps on E
-static const G4int  AreaNumb = 6;   //  The number of order steps on E
-static const G4int  ONQ2XE   = ONQ2*ONE; //  The dimension of a distr. func. array
-static const G4int  MaxN     = 10;  
 static const G4int  NENERGY  = 30;  
 static const G4int  NQTABLE  = NENERGY*ONQ2;  
 
@@ -146,6 +143,7 @@ private:
   G4double MbToGeV2;
   G4double sqMbToGeV;
   G4double Fm2ToGeV2;
+  G4double GeV2;
   G4double emin, emax, deltae;
 
   G4int     HadrCode;
