@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: QGSC.icc,v 1.3 2006-11-23 16:01:37 gunter Exp $
+// $Id: QGSC.icc,v 1.4 2006-11-23 17:28:52 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -60,7 +60,7 @@
 #include "G4EmExtraPhysics.hh"
 #include "G4IonPhysics.hh"
 #include "G4QStoppingPhysics.hh"
-#include "G4HadronElasticPhysics.hh"
+#include "G4HadronQElasticPhysics.hh"
 #include "G4NeutronTrackingCut.hh"
 
 #include "G4DataQuestionaire.hh"
@@ -85,7 +85,7 @@ template<class T> TQGSC<T>::TQGSC(G4int ver):  T()
   // Decays
   this->RegisterPhysics( new G4DecayPhysics("decay",ver) );
 
-   // Hadron Elastic scattering
+   // Hadron Elastic scattering, "CHIPS" version
   this-> RegisterPhysics( new G4HadronQElasticPhysics("elastic",ver));
 
    // Hadron Physics
