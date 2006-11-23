@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PathFinder.cc,v 1.23 2006-11-23 15:50:45 japost Exp $
+// $Id: G4PathFinder.cc,v 1.24 2006-11-23 16:42:30 japost Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4PathFinder Implementation
@@ -461,9 +461,7 @@ G4PathFinder::ReLocate( const   G4ThreeVector& position )
 
   G4double revisedSafety= 0.0; 
   if( (!fNewTrack) && ( longMoveEnd && longMoveSaf ) ){  
-    //  expected good condition is one above!!!
- // ( (!fNewTrack) && ( longMoveEnd || longMoveSaf ) ){  
-          // Revision for debugging- let's see when one or the other is long
+       // Used to use ( longMoveEnd || longMoveSaf ) for extra checking
 
      // Recompute ComputeSafety for end position
      revisedSafety= ComputeSafety(lastEndPosition); 
@@ -471,8 +469,6 @@ G4PathFinder::ReLocate( const   G4ThreeVector& position )
      G4double  distCheckRevisedEnd= 
          ( moveLenEndPosSq - revisedSafety * revisedSafety ); 
      G4bool  longMoveRevisedEnd=  ( distCheckRevisedEnd > 0. ) ; 
-       // TRY ( distCheckRevisedEnd > 1.e-10 * moveLenEndPosSq ) ; 
-     // was ( distCheckRevisedEnd > 0. ) ; 
 
      G4double  moveMinusSafety= 0.0; 
      G4double  moveLenEndPosition= std::sqrt( moveLenEndPosSq );
