@@ -23,24 +23,22 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronElasticPhysics.hh,v 1.4 2006-11-23 15:46:04 vnivanch Exp $
+// $Id: G4HadronHElasticPhysics.hh,v 1.1 2006-11-23 15:46:04 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
-// ClassName:   G4HadronElasticPhysics
+// ClassName:   G4HadronHElasticPhysics
 //
-// Author: 11 April 2006 V. Ivanchenko
+// Author: 23 November 2006 V. Ivanchenko
 //
 // Modified:
-// 05.07.2006 V.Ivanchenko fix problem of initialisation of HP
-// 23.11.2006 V.Ivanchenko remove variables
 //
 //----------------------------------------------------------------------------
 //
 
-#ifndef G4HadronElasticPhysics_h
-#define G4HadronElasticPhysics_h 1
+#ifndef G4HadronHElasticPhysics_h
+#define G4HadronHElasticPhysics_h 1
 
 #include "globals.hh"
 #include "G4VPhysicsConstructor.hh"
@@ -49,13 +47,13 @@
 #include "G4NeutronHPElastic.hh"
 #include "G4NeutronHPElasticData.hh"
 
-class G4HadronElasticPhysics : public G4VPhysicsConstructor
+class G4HadronHElasticPhysics : public G4VPhysicsConstructor
 {
 public: 
-  G4HadronElasticPhysics(const G4String& name = "elastic",
-			 G4int ver = 0, G4bool hp = false,
-                         G4bool glauber = false);
-  virtual ~G4HadronElasticPhysics();
+  G4HadronHElasticPhysics(const G4String& name = "HElastic",
+			  G4int ver = 0, G4bool hp = false,
+			  G4bool glauber = false);
+  virtual ~G4HadronHElasticPhysics();
 
 public: 
   // This method will be invoked in the Construct() method. 
