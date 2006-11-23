@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel.cc,v 1.24 2006-11-20 06:57:57 urban Exp $
+// $Id: G4UrbanMscModel.cc,v 1.25 2006-11-23 09:01:05 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -113,6 +113,8 @@
 // 15-11-06 bugfix in SampleCosineTheta (L.Urban)
 // 20-11-06 bugfix in single scattering part of SampleCosineTheta,
 //          single scattering just before boundary crossing now (L.Urban)
+// 23-11-06 fix: corr. in ComputeTruePathLengthLimit and
+//          in SampleCosineTheta (L.Urban)   
 //
 
 // Class Description:
@@ -530,7 +532,6 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
       stepmin = rat*lambda0;
       skindepth = (skin-1.)*stepmin;
       skindepth1 = skindepth+stepmin;
-      if(stepmin > tgeom) stepmin = tgeom;
 
       //define tlimitmin
       tlimitmin = lambda0/nstepmax;
@@ -872,9 +873,8 @@ G4double G4UrbanMscModel::SampleCosineTheta(G4double trueStepLength,
     if(n > 0)
     {
       G4double tm = KineticEnergy/mass;
-      // ascr - screening parameter, factor 0.025 comes from 
-      // requirement of 'smooth' transition msc -> single scattering
-      G4double ascr = 0.025*exp(log(Zeff)/3.)/(137.*sqrt(tm*(tm+2.)));
+      // ascr - screening parameter 
+      G4double ascr = exp(log(Zeff)/3.)/(137.*sqrt(tm*(tm+2.)));
       G4double ascr1 = 1.+0.5*ascr*ascr;
       G4double bp1=ascr1+1.;
       G4double bm1=ascr1-1.;
