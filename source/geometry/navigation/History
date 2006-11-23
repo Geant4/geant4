@@ -1,4 +1,4 @@
-$Id: History,v 1.68 2006-11-17 17:20:59 japost Exp $
+$Id: History,v 1.69 2006-11-23 18:54:27 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 23rd, 2006 - J.Apostolakis (geomnav-V08-01-08)
+-----------------------------------
+- G4PathFinder: 
+  o Fix when report a problem - only if move > safety (additional check) *Key change*
+  o Revised condition for extra checking against safety
+  o Many small and cosmetic changes in debug printing.
 
 November 18th, 2006 - J.Apostolakis (geomnav-V08-01-07)
 -----------------------------------
