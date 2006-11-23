@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering.cc,v 1.57 2006-10-24 11:38:12 vnivanch Exp $
+// $Id: G4MultipleScattering.cc,v 1.58 2006-11-23 10:07:42 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -106,7 +106,7 @@
 // 19-01-07 tlimitmin = facrange*50*micrometer, i.e. it depends on the
 //          value of facrange (L.Urban) 
 // 16-02-06 value of factail changed, samplez = true (L.Urban)
-// 07-03-06 Create G4UrbanMscModel and move there step limit calculation (V.Ivanchenko)
+// 07-03-06 Create G4UrbanMscModel and move there step limit calculation (VI)
 // 10-05-06 SetMscStepLimitation at initialisation (V.Ivantchenko)
 // 11-05-06 values of data members tkinlimit, factail have been 
 //          changed (L.Urban) 
@@ -117,6 +117,7 @@
 //          single scattering for skin > 0,
 //          there is no z sampling by default  (L.Urban)
 // 23-10-06 skin = 1 by default (L.Urban)
+// 23-11-06 skin = 1 by default for e+-, 0 for other particles (VI)
 //
 // -----------------------------------------------------------------------------
 //
@@ -146,7 +147,7 @@ G4MultipleScattering::G4MultipleScattering(const G4String& processName)
   // there is no single scattering for this skin <= 0  
   // to have single scattering at boundary 
   //  skin should be > 0 ! 
-  skin              = 1.;
+  skin              = 0.0;
   
   steppingAlgorithm = true;
   samplez           = false ; 
@@ -192,6 +193,9 @@ void G4MultipleScattering::InitialiseProcess(const G4ParticleDefinition* p)
     mscUrban->SetMscStepLimitation(steppingAlgorithm, facrange);
     return;
   }
+
+  G4String part_name = p->GetParticleName();
+  if(part_name == "e-" || part_name == "e+") skin = 1.0; 
 
   if (p->GetParticleType() == "nucleus") {
     SetLateralDisplasmentFlag(false);
