@@ -30,8 +30,9 @@
 //
 
 #include "G4HumanPhantomEnergyDeposit.hh"
+#ifdef G4ANALYSIS_USE
 #include "G4HumanPhantomAnalysisManager.hh"
-
+#endif
 #include "globals.hh"
 #include "G4UnitsTable.hh"
 
@@ -46,12 +47,13 @@ G4HumanPhantomEnergyDeposit::~G4HumanPhantomEnergyDeposit()
 void G4HumanPhantomEnergyDeposit::Fill(G4String bodypartName, 
 			G4double energyDeposit)
 {
-  energyTotal[bodypartName] += energyDeposit;
+  //energyTotal[bodypartName] += energyDeposit;
 }
 
 void G4HumanPhantomEnergyDeposit::TotalEnergyDeposit()
 {
-  totalBody = energyTotal["HeadVolume"]+energyTotal["TrunkVolume"]+energyTotal["LegsVolume"];
+  /*
+  G4double totalBody = energyTotal["HeadVolume"]+energyTotal["TrunkVolume"]+energyTotal["LegsVolume"];
   G4cout << "Energy in total body = " << G4BestUnit(totalBody,"Energy") << G4endl;
 
   std::map<std::string,G4double>::iterator i = energyTotal.begin();
@@ -76,4 +78,5 @@ void G4HumanPhantomEnergyDeposit::TotalEnergyDeposit()
       i++;
       k++;
     }
+  */
 }

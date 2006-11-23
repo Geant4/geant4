@@ -113,7 +113,6 @@ G4VPhysicalVolume* G4MIRDArmBone::ConstructArmBone(G4VPhysicalVolume* mother, G4
   // Testing Mass
   G4double ArmBoneMass = (ArmBoneVol)*ArmBoneDensity;
   G4cout << "Mass of ArmBone = " << ArmBoneMass/gram << " g" << G4endl;
-
   
   return physArmBone;
 }

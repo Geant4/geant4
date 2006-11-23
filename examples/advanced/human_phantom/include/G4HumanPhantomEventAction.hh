@@ -35,25 +35,15 @@
 #include "globals.hh"
 
 class G4Event;
-
-class G4HumanPhantomEnergyDeposit;
-
 class G4HumanPhantomEventAction : public G4UserEventAction
 {
   public:
-    G4HumanPhantomEventAction(G4HumanPhantomEnergyDeposit*);
+    G4HumanPhantomEventAction();
    ~G4HumanPhantomEventAction();
 
   public:
     void BeginOfEventAction(const G4Event*);
     void EndOfEventAction(const G4Event*);
-    G4int GetEvent() const {return eventNumber;};
-    void SetPath(G4double);
-
-  private:
-    G4int eventNumber;
-    G4double path;
-    G4HumanPhantomEnergyDeposit* energyTotal;
 };
 #endif
 

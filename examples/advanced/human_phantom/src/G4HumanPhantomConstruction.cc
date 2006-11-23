@@ -47,8 +47,10 @@
 
 #include "G4RunManager.hh"
 #include "G4HumanPhantomMaterial.hh"
+#include "G4HumanPhantomEnergyDeposit.hh"
 
-G4HumanPhantomConstruction::G4HumanPhantomConstruction()
+G4HumanPhantomConstruction::G4HumanPhantomConstruction(G4HumanPhantomEnergyDeposit* energyDep):
+  edepTot(energyDep)
 {
  messenger = new G4HumanPhantomMessenger(this);
  material = new G4HumanPhantomMaterial();
@@ -58,18 +60,17 @@ G4HumanPhantomConstruction::~G4HumanPhantomConstruction()
 {
  delete material;
  delete messenger;
- //delete userPhantomSD;
 }
 
 G4VPhysicalVolume* G4HumanPhantomConstruction::Construct()
 {
   material -> DefineMaterials();
-
+  
   G4SDManager* SDman = G4SDManager::GetSDMpointer();
   G4String bodypartSD = "BodyPartSD";
-  G4HumanPhantomSD* userPhantomSD = new G4HumanPhantomSD( bodypartSD );
+  G4HumanPhantomSD* userPhantomSD = new G4HumanPhantomSD( bodypartSD, edepTot);
   SDman->AddNewDetector( userPhantomSD );
-
+ 
   G4PhantomBuilder* builder = 0;
 
   if(sex=="Female") builder = new G4FemaleBuilder;
@@ -128,7 +129,7 @@ G4VPhysicalVolume* G4HumanPhantomConstruction::Construct()
 
 void  G4HumanPhantomConstruction::SetBodyPartSensitivity(G4String bodyPartName, G4bool bodyPartSensitivity)
 {
-  sensitivities[bodyPartName] = bodyPartSensitivity;
+   sensitivities[bodyPartName] = bodyPartSensitivity;
   if(bodyPartSensitivity==true) 
   G4cout << " >>> " << bodyPartName << " added as sensitive volume." << G4endl;
 }

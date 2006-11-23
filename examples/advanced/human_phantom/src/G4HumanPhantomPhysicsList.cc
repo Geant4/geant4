@@ -33,99 +33,46 @@
 #include "G4HumanPhantomPhysicsList.hh"
 
 #include "G4ProcessManager.hh"
+#include "G4ParticleDefinition.hh"
 #include "G4ParticleTypes.hh"
-
+#include "G4LeptonConstructor.hh"
+#include "G4BosonConstructor.hh"
+#include "G4MesonConstructor.hh"
+#include "G4BaryonConstructor.hh"
+#include "G4ShortLivedConstructor.hh"
 
 G4HumanPhantomPhysicsList::G4HumanPhantomPhysicsList():  G4VUserPhysicsList()
 {
-  defaultCutValue = 1.0*cm;
+  defaultCutValue = 1.0*mm;
   SetVerboseLevel(1);
 }
-
 
 G4HumanPhantomPhysicsList::~G4HumanPhantomPhysicsList()
 {}
 
-
 void G4HumanPhantomPhysicsList::ConstructParticle()
 {
-  // In this method, static member functions should be called
-  // for all particles which you want to use.
-  // This ensures that objects of these particle types will be
-  // created in the program. 
+  G4LeptonConstructor lepton;
+  lepton.ConstructParticle();
+ 
+  G4BosonConstructor boson;
+  boson.ConstructParticle();
 
-  ConstructBosons();
-  ConstructLeptons();
-  ConstructMesons();
-  ConstructBaryons();
+  G4MesonConstructor meson;
+  meson.ConstructParticle();
+
+  G4BaryonConstructor baryon;
+  baryon.ConstructParticle();
+
+  G4ShortLivedConstructor shortLived;
+  shortLived.ConstructParticle();
 }
-
-
-void G4HumanPhantomPhysicsList::ConstructBosons()
-{
-  // pseudo-particles
-  G4Geantino::GeantinoDefinition();
-  G4ChargedGeantino::ChargedGeantinoDefinition();
-
-  // gamma
-  G4Gamma::GammaDefinition();
-}
-
-
-void G4HumanPhantomPhysicsList::ConstructLeptons()
-{
-  // leptons
-  //  e+/-
-  G4Electron::ElectronDefinition();
-  G4Positron::PositronDefinition();
-  // mu+/-
-  G4MuonPlus::MuonPlusDefinition();
-  G4MuonMinus::MuonMinusDefinition();
-  // nu_e
-  G4NeutrinoE::NeutrinoEDefinition();
-  G4AntiNeutrinoE::AntiNeutrinoEDefinition();
-  // nu_mu
-  G4NeutrinoMu::NeutrinoMuDefinition();
-  G4AntiNeutrinoMu::AntiNeutrinoMuDefinition();
-}
-
-
-void G4HumanPhantomPhysicsList::ConstructMesons()
-{
-  //  mesons
-  //    light mesons
-  G4PionPlus::PionPlusDefinition();
-  G4PionMinus::PionMinusDefinition();
-  G4PionZero::PionZeroDefinition();
-  G4Eta::EtaDefinition();
-  G4EtaPrime::EtaPrimeDefinition();
-  G4KaonPlus::KaonPlusDefinition();
-  G4KaonMinus::KaonMinusDefinition();
-  G4KaonZero::KaonZeroDefinition();
-  G4AntiKaonZero::AntiKaonZeroDefinition();
-  G4KaonZeroLong::KaonZeroLongDefinition();
-  G4KaonZeroShort::KaonZeroShortDefinition();
-}
-
-
-
-void G4HumanPhantomPhysicsList::ConstructBaryons()
-{
-  //  barions
-  G4Proton::ProtonDefinition();
-  G4AntiProton::AntiProtonDefinition();
-
-  G4Neutron::NeutronDefinition();
-  G4AntiNeutron::AntiNeutronDefinition();
-}
-
 
 void G4HumanPhantomPhysicsList::ConstructProcess()
 {
   AddTransportation();
   ConstructEM();
 }
-
 
 #include "G4ComptonScattering.hh"
 #include "G4GammaConversion.hh"
@@ -143,12 +90,11 @@ void G4HumanPhantomPhysicsList::ConstructProcess()
 
 #include "G4hIonisation.hh"
 
-#include "G4UserSpecialCuts.hh"
-
 
 void G4HumanPhantomPhysicsList::ConstructEM()
 {
   theParticleIterator->reset();
+
   while( (*theParticleIterator)() ){
     G4ParticleDefinition* particle = theParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
@@ -164,30 +110,15 @@ void G4HumanPhantomPhysicsList::ConstructEM()
       //electron
       pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
       pmanager->AddProcess(new G4eIonisation,       -1, 2,2);
-      pmanager->AddProcess(new G4eBremsstrahlung,   -1, 3,3);      
+      pmanager->AddProcess(new G4eBremsstrahlung,   -1, -1,3);      
 
     } else if (particleName == "e+") {
       //positron
       pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
       pmanager->AddProcess(new G4eIonisation,       -1, 2,2);
-      pmanager->AddProcess(new G4eBremsstrahlung,   -1, 3,3);
+      pmanager->AddProcess(new G4eBremsstrahlung,   -1, -1,3);
       pmanager->AddProcess(new G4eplusAnnihilation,  0,-1,4);
 
-    } else if( particleName == "mu+" || 
-               particleName == "mu-"    ) {
-      //muon  
-      pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
-      pmanager->AddProcess(new G4MuIonisation,      -1, 2,2);
-      pmanager->AddProcess(new G4MuBremsstrahlung,  -1, 3,3);
-      pmanager->AddProcess(new G4MuPairProduction,  -1, 4,4);       
-     
-    } else if ((!particle->IsShortLived()) &&
-	       (particle->GetPDGCharge() != 0.0) && 
-	       (particle->GetParticleName() != "chargedgeantino")) {
-      //all others charged particles except geantino
-      pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
-      pmanager->AddProcess(new G4hIonisation,       -1, 2,2);
-      ///pmanager->AddProcess(new G4UserSpecialCuts,   -1,-1,3);      
     }
   }
 }

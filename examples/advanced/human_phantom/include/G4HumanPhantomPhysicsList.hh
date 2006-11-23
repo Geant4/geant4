@@ -35,34 +35,21 @@
 #include "G4VUserPhysicsList.hh"
 #include "globals.hh"
 
-
 class G4HumanPhantomPhysicsList: public G4VUserPhysicsList
 {
-  public:
-    G4HumanPhantomPhysicsList();
-   ~G4HumanPhantomPhysicsList();
+public:
+  G4HumanPhantomPhysicsList();
+  ~G4HumanPhantomPhysicsList();
 
-  protected:
-    // Construct particle and physics
-    void ConstructParticle();
-    void ConstructProcess();
- 
-    void SetCuts();
+protected:
+  // Construct particle and physics
+  void ConstructParticle();
+  void ConstructProcess();
+  void SetCuts();
 
-   
-  protected:
-    // these methods Construct particles 
-    void ConstructBosons();
-    void ConstructLeptons();
-    void ConstructMesons();
-    void ConstructBaryons();
-
-  protected:
-  // these methods Construct physics processes and register them
-    void ConstructEM();
+private:
+  void ConstructEM();
 };
-
-
 #endif
 
  

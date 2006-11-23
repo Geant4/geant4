@@ -1,4 +1,4 @@
-//
+  //
 // ********************************************************************
 // * DISCLAIMER                                                       *
 // *                                                                  *
@@ -35,8 +35,8 @@
 #ifdef G4ANALYSIS_USE
 #include "G4HumanPhantomAnalysisManager.hh"
 #endif
-
-G4HumanPhantomSteppingAction::G4HumanPhantomSteppingAction(G4HumanPhantomEventAction* eventAction):event(eventAction)
+          
+G4HumanPhantomSteppingAction::G4HumanPhantomSteppingAction()
 { }
 
 G4HumanPhantomSteppingAction::~G4HumanPhantomSteppingAction()
@@ -44,11 +44,8 @@ G4HumanPhantomSteppingAction::~G4HumanPhantomSteppingAction()
 
 void G4HumanPhantomSteppingAction::UserSteppingAction(const G4Step* aStep)
 { 
-
+  
   G4String name = aStep->GetPreStepPoint()->GetPhysicalVolume()->GetName();
-
-  G4double stepLength = aStep -> GetTrack() -> GetStepLength(); 
-  event -> SetPath(stepLength);
 
   G4ThreeVector particlePosition = aStep -> GetTrack() -> GetPosition();
 
@@ -73,5 +70,6 @@ void G4HumanPhantomSteppingAction::UserSteppingAction(const G4Step* aStep)
       analysis -> particleProjectionZX(particlePosition[2]/cm,particlePosition[0]/cm);
     }
 
-#endif  
+#endif
+  
 }

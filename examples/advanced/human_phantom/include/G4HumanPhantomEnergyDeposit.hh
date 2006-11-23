@@ -43,9 +43,8 @@ public:
   void Fill(G4String bodypartName, G4double energyDeposit);
   void TotalEnergyDeposit();
 
-private:
-  std::map<std::string,G4double> energyTotal;
+private:  
+  // std::map<std::string,G4double> energyTotal;
   G4String bodypartName;
-  G4double totalBody;
 };
 #endif

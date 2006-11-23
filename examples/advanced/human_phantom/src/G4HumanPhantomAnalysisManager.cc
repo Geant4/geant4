@@ -29,6 +29,7 @@
 // with the design in a forthcoming publication, and subject to a 
 // design and code review.
 // 
+#ifdef  G4ANALYSIS_USE
 #include <stdlib.h>
 #include <fstream>
 #include "G4HumanPhantomAnalysisManager.hh"
@@ -159,3 +160,4 @@ void G4HumanPhantomAnalysisManager::finish()
   theTree -> close();
   G4cout<<"closing the hbk file"<<G4endl;
 }
+#endif

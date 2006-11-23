@@ -35,17 +35,12 @@
 #include "G4UserSteppingAction.hh"
 #include "globals.hh"
 
-class G4HumanPhantomEventAction;
-
 class G4HumanPhantomSteppingAction : public G4UserSteppingAction
 {
   public:
-    G4HumanPhantomSteppingAction(G4HumanPhantomEventAction*);
+    G4HumanPhantomSteppingAction();
    ~G4HumanPhantomSteppingAction();
 
     void UserSteppingAction(const G4Step*);
-
-  private:
-  G4HumanPhantomEventAction* event;
 };
 #endif
