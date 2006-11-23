@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.cc,v 1.91 2006-05-06 03:58:34 asaim Exp $
+// $Id: G4RunManager.cc,v 1.92 2006-11-23 00:06:49 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -68,7 +68,8 @@ G4RunManager::G4RunManager()
  runAborted(false),initializedAtLeastOnce(false),
  geometryToBeOptimized(true),runIDCounter(0),verboseLevel(0),DCtable(0),
  currentRun(0),currentEvent(0),n_perviousEventsToBeStored(0),
- numberOfEventToBeProcessed(0),storeRandomNumberStatus(false),currentWorld(0)
+ numberOfEventToBeProcessed(0),storeRandomNumberStatus(false),currentWorld(0),
+ nParallelWorlds(0)
 {
   if(fRunManager)
   { G4Exception("G4RunManager constructed twice."); }
@@ -91,6 +92,7 @@ G4RunManager::G4RunManager()
 
 G4RunManager::~G4RunManager()
 {
+  if(currentRun) delete currentRun;
   delete timer;
   delete runMessenger;
   G4ParticleTable::GetParticleTable()->DeleteMessenger();
@@ -170,8 +172,9 @@ G4bool G4RunManager::ConfirmBeamOnCondition()
 void G4RunManager::RunInitialization()
 {
   if(!(kernel->RunInitialization())) return;
-
+  if(currentRun) delete currentRun;
   currentRun = 0;
+
   if(userRunAction) currentRun = userRunAction->GenerateRun();
   if(!currentRun) currentRun = new G4Run();
 
@@ -193,12 +196,6 @@ void G4RunManager::RunInitialization()
     HepRandom::saveEngineStatus(fileN);
   }
   
-  for(size_t itr=0;itr<previousEvents->size();itr++)
-  { delete (*previousEvents)[itr]; }
-  previousEvents->clear();
-  for(G4int i_prev=0;i_prev<n_perviousEventsToBeStored;i_prev++)
-  { previousEvents->push_back((G4Event*)0); }
-
   if(userRunAction) userRunAction->BeginOfRunAction(currentRun);
 
   runAborted = false;
@@ -281,15 +278,18 @@ void G4RunManager::AnalyzeEvent(G4Event* anEvent)
 void G4RunManager::RunTermination()
 {
   for(size_t itr=0;itr<previousEvents->size();itr++)
-  { delete (*previousEvents)[itr]; }
+  {
+    G4Event* prevEv =  (*previousEvents)[itr];
+    if((prevEv) && !(prevEv->ToBeKept())) delete prevEv;
+  }
   previousEvents->clear();
+  for(G4int i_prev=0;i_prev<n_perviousEventsToBeStored;i_prev++)
+  { previousEvents->push_back((G4Event*)0); }
 
   if(userRunAction) userRunAction->EndOfRunAction(currentRun);
 
   G4VPersistencyManager* fPersM = G4VPersistencyManager::GetPersistencyManager();
   if(fPersM) fPersM->Store(currentRun);
-  delete currentRun;
-  currentRun = 0;
   runIDCounter++;
 
   kernel->RunTermination();
@@ -297,6 +297,7 @@ void G4RunManager::RunTermination()
 
 void G4RunManager::StackPreviousEvent(G4Event* anEvent)
 {
+  if(anEvent->ToBeKept()) currentRun->StoreEvent(anEvent);
   G4Event* evt;
   if(n_perviousEventsToBeStored==0)
   { evt = anEvent; }
@@ -306,7 +307,7 @@ void G4RunManager::StackPreviousEvent(G4Event* anEvent)
     evt = previousEvents->back();
     previousEvents->pop_back();
   }
-  delete evt;
+  if(!(evt->ToBeKept())) delete evt;
 }
 
 void G4RunManager::Initialize()
@@ -335,7 +336,7 @@ void G4RunManager::InitializeGeometry()
 
   if(verboseLevel>1) G4cout << "userDetector->Construct() start." << G4endl;
   kernel->DefineWorldVolume(userDetector->Construct(),false);
-  userDetector->ConstructParallelGeometries();
+  nParallelWorlds = userDetector->ConstructParallelGeometries();
   geometryInitialized = true;
 }
 
@@ -344,6 +345,7 @@ void G4RunManager::InitializePhysics()
   if(physicsList)
   {
     if(verboseLevel>1) G4cout << "physicsList->Construct() start." << G4endl;
+    if(nParallelWorlds>0) physicsList->UseCoupledTransportation();
     kernel->InitializePhysics();
   }
   else
@@ -398,7 +400,7 @@ void G4RunManager::DefineWorldVolume(G4VPhysicalVolume* worldVol,
 void G4RunManager::rndmSaveThisRun()
 {
   G4int runNumber = runIDCounter;
-  if(currentRun == 0) runNumber--;        //state Idle; decrease runNumber
+  /////////////if(currentRun == 0) runNumber--;        //state Idle; decrease runNumber
   if(!storeRandomNumberStatus || runNumber < 0) {
      G4cerr << "Warning from G4RunManager::rndmSaveThisRun():"
           << " there is no currentRun or its RandomEngineStatus is not available." 

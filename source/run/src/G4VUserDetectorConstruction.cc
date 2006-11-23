@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserDetectorConstruction.cc,v 1.5 2006-04-26 15:32:06 asaim Exp $
+// $Id: G4VUserDetectorConstruction.cc,v 1.6 2006-11-23 00:06:49 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -52,12 +52,15 @@ void G4VUserDetectorConstruction::RegisterParallelWorld(G4VUserParallelWorld* aP
   parallelWorld.push_back(aPW);
 }
 
-void G4VUserDetectorConstruction::ConstructParallelGeometries()
+G4int G4VUserDetectorConstruction::ConstructParallelGeometries()
 {
+  G4int nP = 0;
   std::vector<G4VUserParallelWorld*>::iterator pwItr;
   for(pwItr=parallelWorld.begin();pwItr!=parallelWorld.end();pwItr++)
   {
     (*pwItr)->Construct();
+    nP++;
   }
+  return nP;
 }
 

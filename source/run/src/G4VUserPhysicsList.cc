@@ -1,30 +1,27 @@
 //
 // ********************************************************************
-// * License and Disclaimer                                           *
+// * DISCLAIMER                                                       *
 // *                                                                  *
-// * The  Geant4 software  is  copyright of the Copyright Holders  of *
-// * the Geant4 Collaboration.  It is provided  under  the terms  and *
-// * conditions of the Geant4 Software License,  included in the file *
-// * LICENSE and available at  http://cern.ch/geant4/license .  These *
-// * include a list of copyright holders.                             *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.  Please see the license in the file  LICENSE  and URL above *
-// * for the full disclaimer and the limitation of liability.         *
+// * use.                                                             *
 // *                                                                  *
-// * This  code  implementation is the result of  the  scientific and *
-// * technical work of the GEANT4 collaboration.                      *
-// * By using,  copying,  modifying or  distributing the software (or *
-// * any work based  on the software)  you  agree  to acknowledge its *
-// * use  in  resulting  scientific  publications,  and indicate your *
-// * acceptance of all terms of the Geant4 Software license.          *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4VUserPhysicsList.cc,v 1.53 2006-06-29 21:14:07 gunter Exp $
+// $Id: G4VUserPhysicsList.cc,v 1.54 2006-11-23 00:06:49 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -72,7 +69,8 @@ G4VUserPhysicsList::G4VUserPhysicsList()
 		    fIsCheckedForRetrievePhysicsTable(false),
 		    fIsRestoredCutValues(false),
                     directoryPhysicsTable("."),
-                    fDisplayThreshold(0)
+                    fDisplayThreshold(0),
+                    useCoupledTransportation(false)
 {
   // default cut value  (1.0mm)
   defaultCutValue = 1.0*mm;
@@ -218,9 +216,25 @@ void G4VUserPhysicsList::RemoveProcessManager()
 
 ////////////////////////////////////////////////////////
 #include "G4Transportation.hh"
+#include "G4CoupledTransportation.hh"
+
 void G4VUserPhysicsList::AddTransportation()
 {
-  G4Transportation* theTransportationProcess= new G4Transportation();
+  G4VProcess* theTransportationProcess;
+
+  if(!useCoupledTransportation)
+  { theTransportationProcess= new G4Transportation(); }
+  else
+  {
+    G4int verboseLevelTransport = 0;
+    theTransportationProcess= new G4CoupledTransportation(verboseLevelTransport);
+    G4cout << G4endl; 
+    G4cout << " ********************************************************************* " << G4endl; 
+    G4cout << " **  Now using G4CoupledTransportation in place of G4Transportation ** " << G4endl;
+    G4cout << " ********************************************************************* " 
+	   << G4endl; 
+    G4cout << G4endl; 
+  }
 
 #ifdef G4VERBOSE
     if (verboseLevel >2){
@@ -541,7 +555,7 @@ G4bool G4VUserPhysicsList::StorePhysicsTable(const G4String& directory)
   G4String dir   = directory;
   if (dir.isNull()) dir = directoryPhysicsTable; 
   else directoryPhysicsTable = dir; 
-  
+
   // store CutsTable info
   if (!fCutsTable->StoreCutsTable(dir, ascii)) {
     G4Exception("G4VUserPhysicsList::StorePhysicsTable","Faile to store ",
@@ -677,5 +691,3 @@ void G4VUserPhysicsList::DumpCutValues(G4ParticleDefinition* )
   G4cerr << " This dummy method implementation will be removed soon." << G4endl;
   DumpCutValuesTable();
 }
-
-
