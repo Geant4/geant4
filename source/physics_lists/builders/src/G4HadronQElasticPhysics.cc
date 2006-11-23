@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronQElasticPhysics.cc,v 1.2 2006-11-23 15:46:04 vnivanch Exp $
+// $Id: G4HadronQElasticPhysics.cc,v 1.3 2006-11-23 15:47:49 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -97,7 +97,7 @@ void G4HadronQElasticPhysics::ConstructProcess()
   process = new G4QElastic();
 
   model = new G4HadronElastic();
-  he->SetHEModelLowLimit(elimit);
+  model->SetHEModelLowLimit(elimit);
   G4VQCrossSection* man  = model->GetCS();
 
   theParticleIterator->reset();
