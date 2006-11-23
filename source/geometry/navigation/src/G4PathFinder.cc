@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PathFinder.cc,v 1.21 2006-11-17 17:52:01 japost Exp $
+// $Id: G4PathFinder.cc,v 1.22 2006-11-23 15:03:49 japost Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4PathFinder Implementation
@@ -375,6 +375,11 @@ G4PathFinder::Locate( const   G4ThreeVector& position,
     }
   }
 
+  if( fVerboseLevel > 2 ) { 
+    G4cout << " Located at " << position ; 
+    if( fNoActiveNavigators > 1 )  G4cout << G4endl;
+  }
+
   for ( num=0; num< fNoActiveNavigators ; ++pNavIter,++num ) {
      //  ... who limited the step ....
 
@@ -395,16 +400,13 @@ G4PathFinder::Locate( const   G4ThreeVector& position,
      fCurrentStepSize[num] = 0.0;      
     
      if( fVerboseLevel > 2 ){
-       G4cout << " Located in world " << num << " at " << position
-	      << "  used geomLimStp " << fLimitTruth[num]
-	      << "  - found in volume " << pLocated ; 
-       G4cout << "  name = '" ;       
+       G4cout << " - In world " << num 
+	      << "  geomLimStp= " << fLimitTruth[num]
+	      << "  gives volume= " << pLocated ; 
        if( pLocated ){ 
-	 G4cout << pLocated->GetName() << "'"; 
+	 G4cout << "  name = '" << pLocated->GetName() << "'"; 
 	 G4cout << " - CopyNo= " << pLocated->GetCopyNo(); 
-       } else { 
-	 G4cout <<  "Null'   Id: Not-Set "; 
-       }
+       } 
        G4cout  << G4endl; 
      }
   } // ending for (num= ....
@@ -458,23 +460,25 @@ G4PathFinder::ReLocate( const   G4ThreeVector& position )
   G4bool longMoveSaf = distCheckSaf_sq > 0.0; 
 
   G4double revisedSafety= 0.0; 
-  if( (!fNewTrack) && ( longMoveEnd || longMoveSaf ) ){  
-                      // For debugging, let's see when one or the other is long
-    //  expected good condition is one below!!!
- // ( (!fNewTrack) && ( longMoveEnd && longMoveSaf ) ){  
+  if( (!fNewTrack) && ( longMoveEnd && longMoveSaf ) ){  
+    //  expected good condition is one above!!!
+ // ( (!fNewTrack) && ( longMoveEnd || longMoveSaf ) ){  
+          // Revision for debugging- let's see when one or the other is long
 
      // Recompute ComputeSafety for end position
      revisedSafety= ComputeSafety(lastEndPosition); 
 
      G4double  distCheckRevisedEnd= 
          ( moveLenEndPosSq - revisedSafety * revisedSafety ); 
-     G4bool  longMoveRevisedEnd= ( distCheckRevisedEnd > 0. ) ; 
+     G4bool  longMoveRevisedEnd=  ( distCheckRevisedEnd > 0. ) ; 
+       // TRY ( distCheckRevisedEnd > 1.e-10 * moveLenEndPosSq ) ; 
+     // was ( distCheckRevisedEnd > 0. ) ; 
 
      G4double  moveMinusSafety= 0.0; 
      G4double  moveLenEndPosition= std::sqrt( moveLenEndPosSq );
      moveMinusSafety = moveLenEndPosition - revisedSafety; 
 
-     if( (moveMinusSafety > 0.0 ) && (revisedSafety > 0.0) ){
+     if( longMoveRevisedEnd && (moveMinusSafety > 0.0 ) && (revisedSafety > 0.0) ){
         // Take into account possibility of roundoff error causing
         //   this apparent move further than safety
 
@@ -511,7 +515,7 @@ G4PathFinder::ReLocate( const   G4ThreeVector& position )
 	}
      }
 
-#if 0
+#if 1
      G4cout << " Needed to recalculate safety at endpoint - was potentially a problem" 
 	    << G4endl;
      ReportMove( lastEndPosition, position, "Position" ); 
@@ -521,8 +525,9 @@ G4PathFinder::ReLocate( const   G4ThreeVector& position )
 	    << "  Squared:  safety= " << revisedSafety * revisedSafety
 	    << "    move= " << moveLenEndPosSq << G4endl;
 #endif
-
-     if( longMoveSaf && longMoveRevisedEnd ){  
+     // if ( longMoveEnd && longMoveSaf && longMoveRevisedEnd ) { 
+     if ( longMoveEnd && longMoveSaf && longMoveRevisedEnd && (moveMinusSafety>0.0)) { 
+        // if( (moveMinusSafety>0.0) ){   // Eventually ? 
         G4int oldPrec= G4cout.precision(9); 
         G4cout << " Problem in G4PathFinder::Relocate() " << G4endl;
         G4cout << " Moved from last endpoint by " << moveLenEndPosition 
@@ -542,8 +547,10 @@ G4PathFinder::ReLocate( const   G4ThreeVector& position )
 	G4cout << "       move from safety location = " << sqrt(moveLenSafSq) << G4endl;
 	// moveVecSafety.mag() *** (position-fSafetyLocation).mag() << G4endl;
 	G4cout << "       safety - Move-from-end= " 
-	       << revisedSafety - moveLenEndPosition << G4endl;
-	
+	       << revisedSafety - moveLenEndPosition << " (negative is Bad.)" << G4endl;
+
+	G4cout << " Debub:  distCheckRevisedEnd = " << distCheckRevisedEnd << G4endl;
+
 	ReportMove( lastEndPosition, position, "Position" ); 
 	G4Exception( "G4PathFinder::ReLocate", "205-RelocatePointTooFar", 
 	 	   FatalException,  
@@ -611,7 +618,9 @@ G4double  G4PathFinder::ComputeSafety( const G4ThreeVector& position )
   
        if( safety < minSafety ){ minSafety = safety; } 
        // fNewSafety[num]= safety; 
-    } 
+  
+       // G4cout << " Navigator # " << num << " gives safety = " << safety << G4endl;
+  } 
 
     fSafetyLocation= position;
     fMinSafety_atSafLocation = minSafety;
