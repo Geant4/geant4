@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Transportation.cc,v 1.60 2006-11-22 18:47:02 japost Exp $
+// $Id: G4Transportation.cc,v 1.61 2006-11-23 11:46:49 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // ------------------------------------------------------------
@@ -638,6 +638,12 @@ G4VParticleChange* G4Transportation::PostStepDoIt( const G4Track& track,
     }
     retCurrentTouchable = fCurrentTouchableHandle ;
     fParticleChange.SetTouchableHandle( fCurrentTouchableHandle ) ;
+
+    // Notify particle change that this is last step in volume
+    fParticleChange.ProposeLastStepInVolume(true);
+    // Double check that a boundary limited the step, and 
+    // if( fLinearNavigator->Get
+
   }
   else                 // fGeometryLimitedStep  is false
   {                    
@@ -652,6 +658,9 @@ G4VParticleChange* G4Transportation::PostStepDoIt( const G4Track& track,
     //
     fParticleChange.SetTouchableHandle( track.GetTouchableHandle() ) ;
     retCurrentTouchable = track.GetTouchableHandle() ;
+
+    // Have not reached a boundary
+    fParticleChange.ProposeLastStepInVolume(false);
   }         // endif ( fGeometryLimitedStep ) 
 
   const G4VPhysicalVolume* pNewVol = retCurrentTouchable->GetVolume() ;
