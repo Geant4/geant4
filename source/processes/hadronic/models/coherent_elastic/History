@@ -16,7 +16,6 @@ code and to keep track of all tags.
 
 23 Nov 2006 - V.Ivanchenko (hadr-cohe-V08-01-12)
 ------------------------------------------------
-  G4HadronElastic: set 0.4 GeV low limit for the HE model 
   G4ElasticHadrNucleusHE - remove unused variables;
                          - set ONQ0=3 (instead of 5) as it was in the
                            tag 05 in order to have better CPU performance
