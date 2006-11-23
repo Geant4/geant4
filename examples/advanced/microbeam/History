@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.9 2006-11-22 09:15:21 gcosmo Exp $
+$Id: History,v 1.10 2006-11-23 12:24:20 sincerti Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,10 @@ $Id: History,v 1.9 2006-11-22 09:15:21 gcosmo Exp $
 
                        Package History file
                        --------------------
+
+23 Nov 2006 - S. Incerti (microbeam-V08-01-01)
+- Replaced G4MultipleScattering process for alphas by 
+G4hMultipleScattering process in src/MicrobeamPhysicsList.cc. 
 
 22 Nov 2006 - G. Cosmo (microbeam-V08-01-00)
 - Removed obsolete vis-manager classes. Now using G4VisExecutive.
