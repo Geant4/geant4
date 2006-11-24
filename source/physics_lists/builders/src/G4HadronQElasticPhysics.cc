@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronQElasticPhysics.cc,v 1.3 2006-11-23 15:47:49 vnivanch Exp $
+// $Id: G4HadronQElasticPhysics.cc,v 1.4 2006-11-24 15:27:57 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -65,7 +65,6 @@ G4HadronQElasticPhysics::G4HadronQElasticPhysics(
 G4HadronQElasticPhysics::~G4HadronQElasticPhysics()
 {
   delete model;
-  delete process;
 }
 
 void G4HadronQElasticPhysics::ConstructParticle()
