@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronQElasticPhysics.cc,v 1.4 2006-11-24 15:27:57 ahoward Exp $
+// $Id: G4HadronQElasticPhysics.cc,v 1.5 2006-11-24 15:31:52 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -87,7 +87,7 @@ void G4HadronQElasticPhysics::ConstructProcess()
 
   G4HadronProcessStore* store = G4HadronProcessStore::Instance();
 
-  G4double elimit = 0.4*GeV;
+  G4double elimit = DBL_MAX;
 
   if(verbose > 1) 
     G4cout << "### HadronQElasticPhysics: use HE limit " << elimit << " MeV" 
