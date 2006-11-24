@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: QBBC.icc,v 1.2 2006-11-24 15:38:30 vnivanch Exp $
+// $Id: QBBC.icc,v 1.3 2006-11-24 17:10:23 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -59,7 +59,7 @@
 template<class T> TQBBC<T>::TQBBC( G4int ver, const G4String& type, G4bool gl): T()
 {
   G4DataQuestionaire it(photon, neutron);
-  G4cout << "<<< Geant4 Physics List simulation engine: QBBC 3.0  with type <"
+  G4cout << "<<< Geant4 Physics List simulation engine: QBBC 3.1  with type <"
 	<< type <<">" <<G4endl;
   G4cout <<G4endl;
   this->defaultCutValue = 0.7*mm;  

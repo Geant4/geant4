@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: QGSC.icc,v 1.4 2006-11-23 17:28:52 gunter Exp $
+// $Id: QGSC.icc,v 1.5 2006-11-24 17:10:23 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -71,7 +71,7 @@ template<class T> TQGSC<T>::TQGSC(G4int ver):  T()
   // default cut value  (1.0mm) 
   // defaultCutValue = 1.0*mm;
   G4DataQuestionaire it(photon);
-  G4cout << "<<< Geant4 Physics List simulation engine: QGSC 4.1"<<G4endl;
+  G4cout << "<<< Geant4 Physics List simulation engine: QGSC 4.2"<<G4endl;
   G4cout <<G4endl<<G4endl;
   this->defaultCutValue = 0.7*mm;  
   this->SetVerboseLevel(ver);
