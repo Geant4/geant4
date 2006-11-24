@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: hadr01.cc,v 1.8 2006-08-28 13:54:13 vnivanch Exp $
+// $Id: hadr01.cc,v 1.9 2006-11-24 16:48:57 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------
@@ -53,7 +53,6 @@
 #include "PhysicsList.hh"
 #include "QBBC.hh"
 #include "QGSP.hh"
-#include "LHEP_BIC_HP.hh"
 #include "PrimaryGeneratorAction.hh"
 
 #include "RunAction.hh"
@@ -77,7 +76,6 @@ int main(int argc,char** argv) {
 
   runManager->SetUserInitialization(new PhysicsList);
   //runManager->SetUserInitialization(new QBBC(1,"QBEC_HP"));
-  // runManager->SetUserInitialization(new LHEP_BIC_HP);
   //runManager->SetUserInitialization(new QGSP);
 
   runManager->SetUserAction(new PrimaryGeneratorAction());
