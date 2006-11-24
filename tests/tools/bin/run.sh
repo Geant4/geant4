@@ -97,9 +97,9 @@ if [ $1 = "all" ] ; then
 ###
 ###    $G4STTDIR/bin/run.sh test05
 
-  ${G4STTDIR}/bin/geant4-unix.pl --start-test test06 4
-    $G4STTDIR/bin/run.sh test06
-  ${G4STTDIR}/bin/geant4-unix.pl --end-test test06 4
+#  ${G4STTDIR}/bin/geant4-unix.pl --start-test test06 4
+#    $G4STTDIR/bin/run.sh test06
+#  ${G4STTDIR}/bin/geant4-unix.pl --end-test test06 4
 
   ${G4STTDIR}/bin/geant4-unix.pl --start-test test07 5
   $G4STTDIR/bin/run.sh test07
@@ -341,9 +341,9 @@ if [ $1 = "all" ] ; then
     $G4STTDIR/bin/run.sh test25
   ${G4STTDIR}/bin/geant4-unix.pl --end-test test25 51
 
-  ${G4STTDIR}/bin/geant4-unix.pl --start-test test26 52
-    $G4STTDIR/bin/run.sh test26
-  ${G4STTDIR}/bin/geant4-unix.pl --end-test test26 52
+#  ${G4STTDIR}/bin/geant4-unix.pl --start-test test26 52
+#    $G4STTDIR/bin/run.sh test26
+#  ${G4STTDIR}/bin/geant4-unix.pl --end-test test26 52
 
 
 ### Advanced examples
