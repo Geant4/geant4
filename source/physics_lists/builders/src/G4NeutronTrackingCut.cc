@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NeutronTrackingCut.cc,v 1.3 2006-11-24 16:20:36 vnivanch Exp $
+// $Id: G4NeutronTrackingCut.cc,v 1.4 2006-11-24 16:30:13 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -72,13 +72,14 @@ void G4NeutronTrackingCut::ConstructProcess()
   wasActivated = true;
 
   // Add Decay Process
-  pNeutronKiller = new G4NeutronKiller(verbose);
+  pNeutronKiller = new G4NeutronKiller();
   G4ParticleDefinition * particle = G4Neutron::Neutron();
   G4ProcessManager * pmanager = particle->GetProcessManager();
-      if(verbose > 1)
-        G4cout << "### Adding Neutron killing process for " << particle->GetParticleName() << G4endl;
+//      if(verbose > 1)
+        G4cout << "### Adding Neutron tracking cut for " << particle->GetParticleName() << G4endl;
+	G4cout << "###  cut value is " << timeLimit/microsecond << " microseconds" <<  G4endl;
       pmanager -> AddDiscreteProcess(pNeutronKiller);
-      pNeutronKiller->SetKinEnergyLimit(kineticEnergylimit);
+//      pNeutronKiller->SetKinEnergyLimit(kineticEnergylimit);
       pNeutronKiller->SetTimeLimit(timeLimit);
 }
 
