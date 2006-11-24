@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadronPhysicsQGSP_BERT_HP.hh,v 1.1 2006-10-31 11:35:03 gunter Exp $
+// $Id: HadronPhysicsQGSP_BERT_HP.hh,v 1.2 2006-11-24 16:35:38 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -92,7 +92,6 @@ class HadronPhysicsQGSP_BERT_HP : public G4VPhysicsConstructor
     G4BertiniProtonBuilder * theBertiniPro;
     
     G4MiscLHEPBuilder * theMiscLHEP;
-    G4StoppingHadronBuilder * theStoppingHadron;
 };
 
 // 2002 by J.P. Wellisch
