@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadronPhysicsQGSP_BIC_HP.cc,v 1.1 2006-11-24 16:31:35 gunter Exp $
+// $Id: HadronPhysicsQGSP_BIC_HP.cc,v 1.2 2006-11-24 16:33:23 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -93,7 +93,7 @@ HadronPhysicsQGSP_BIC_HP::~HadronPhysicsQGSP_BIC_HP()
    delete theQGSPNeutron;
    delete theLEPNeutron;
    delete theBinaryNeutron;
-   delete theHPNeutron
+   delete theHPNeutron;
    delete theQGSPPro;
    delete theLEPPro;
    delete thePro;
