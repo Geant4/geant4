@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VisManager.cc,v 1.107 2006-11-22 12:24:15 allison Exp $
+// $Id: G4VisManager.cc,v 1.108 2006-11-25 22:52:20 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -1164,11 +1164,11 @@ void G4VisManager::EndOfEvent ()
 
   } else {  //  Accumulating events...
 
-    if (fpScene->GetMaxNumberOfKeptEvents() > 0 &&
+    if (fpScene->GetMaxNumberOfKeptEvents() >= 0 &&
 	nKeptEvents == fpScene->GetMaxNumberOfKeptEvents()) {
       fEventKeepingSuspended = true;
       static G4bool warned = false;
-      if (!warned) {
+      if (!warned && fpScene->GetMaxNumberOfKeptEvents() > 0 ) {
 	if (fVerbosity >= warnings) {
 	  G4cout <<
 	    "WARNING: G4VisManager::EndOfEvent: Event keeping suspended."
@@ -1201,6 +1201,7 @@ void G4VisManager::EndOfRun ()
     }
 
     if (fEventKeepingSuspended &&
+	fpScene->GetMaxNumberOfKeptEvents() > 0 &&
 	fVerbosity >= warnings) {
       G4cout <<
 	"WARNING: G4VisManager::EndOfRun: Event keeping was suspended."

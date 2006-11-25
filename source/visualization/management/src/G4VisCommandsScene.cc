@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsScene.cc,v 1.61 2006-11-25 15:36:22 allison Exp $
+// $Id: G4VisCommandsScene.cc,v 1.62 2006-11-25 22:51:55 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/scene commands - John Allison  9th August 1998
@@ -211,11 +211,15 @@ void G4VisCommandSceneEndOfEventAction::SetNewValue (G4UIcommand*,
 	   << G4endl;
   }
   if (!pScene->GetRefreshAtEndOfEvent() &&
+      maxNumberOfKeptEvents != 0 &&
       verbosity >= G4VisManager::warnings) {
     G4cout << "WARNING: The vis manager will keep ";
     if (maxNumberOfKeptEvents < 0) G4cout << "an unlimited number of";
     else G4cout << "up to " << maxNumberOfKeptEvents;
-    G4cout << " events.\n  This may use a lot of memory." << G4endl;
+    G4cout << " events.";
+    if (maxNumberOfKeptEvents > 1 || maxNumberOfKeptEvents < 0)
+      G4cout << "\n  This may use a lot of memory.";
+    G4cout << G4endl;
   }
   UpdateVisManagerScene (pScene->GetName());
 }
