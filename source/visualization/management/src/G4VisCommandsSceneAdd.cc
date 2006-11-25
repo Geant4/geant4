@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneAdd.cc,v 1.71 2006-11-14 16:02:01 allison Exp $
+// $Id: G4VisCommandsSceneAdd.cc,v 1.72 2006-11-25 15:37:31 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // /vis/scene commands - John Allison  9th August 1998
 
@@ -244,7 +244,7 @@ void G4VisCommandSceneAddEventID::EventID::operator()
       G4int nEvents = 0;
       G4StateManager* stateManager = G4StateManager::GetStateManager();
       G4ApplicationState state = stateManager->GetCurrentState();
-      if (state == G4State_GeomClosed) {
+      if (state == G4State_EventProc) {
 	nEvents = currentRun->GetNumberOfEventToBeProcessed();
       } else {
 	const std::vector<const G4Event*>* events =
