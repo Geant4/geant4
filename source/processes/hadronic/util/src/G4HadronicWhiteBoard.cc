@@ -25,6 +25,7 @@
 //
 #include "G4HadronicWhiteBoard.hh"
 
+
 G4HadronicWhiteBoard & G4HadronicWhiteBoard::Instance()
 {
   static G4HadronicWhiteBoard theInstance;
@@ -41,7 +42,6 @@ G4HadronicWhiteBoard & G4HadronicWhiteBoard::Instance()
   G4double G4HadronicWhiteBoard::GetPz(){return thePz;}
   G4double G4HadronicWhiteBoard::GetA(){return theA;}
   G4double G4HadronicWhiteBoard::GetZ(){return theZ;}
-  
   
   void G4HadronicWhiteBoard::SetProjectile(const G4HadProjectile & aProjectile)
   {
@@ -61,15 +61,21 @@ G4HadronicWhiteBoard & G4HadronicWhiteBoard::Instance()
     theZ = theTarget.GetZ();
   }
 
+
   void G4HadronicWhiteBoard::Dump()
   {
     std::cerr << std::endl;
-    std::cerr << "GHAD_GHAD_GHAD_GHAD_GHAD_GHAD_GHAD_GHAD_GHAD_GHAD_GHAD_GHAD_GHAD_GHAD"<<std::endl;
-    std::cerr << "Dumping the registered hadronic state information "<<std::endl;
-    std::cerr << "Nucleus A, Z = "<<theA<<" "<<theZ<<std::endl;
-    std::cerr << "Projectile was a "<<theName<<std::endl;
-    std::cerr << "projectile momentum (px, py, pz) = ("<<thePx<<", "<<thePy<<", "<<thePz<<")"<<std::endl;
-    std::cerr << "Projectile energy = "<< theE<<std::endl;
-    std::cerr << "GHAD_GHAD_GHAD_GHAD_GHAD_GHAD_GHAD_GHAD_GHAD_GHAD_GHAD_GHAD_GHAD_GHAD"<<std::endl;
-    std::cerr << std::endl;
+    std::cerr << "*** Geant4 Hadronic Reaction Information ***" 
+              << std::endl;
+    std::cerr << "    Nucleus A, Z = " << theA << " " << theZ 
+              << std::endl;
+    std::cerr << "    Projectile was a " << theName 
+              << std::endl;
+    std::cerr << "    projectile momentum (px, py, pz) = (" << thePx << ", " 
+              << thePy << ", " << thePz << ")" << std::endl;
+    std::cerr << "    Projectile energy = "<< theE 
+              << std::endl;
+    std::cerr << "*** End of Geant4 Hadronic Reaction Information ***"
+              << std::endl;
+    G4Exception("G4HadronicProcess", "001", FatalException, "segmentation fault");
   }
