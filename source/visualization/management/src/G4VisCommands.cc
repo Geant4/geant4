@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommands.cc,v 1.18 2006-11-22 12:24:15 allison Exp $
+// $Id: G4VisCommands.cc,v 1.19 2006-11-25 15:35:11 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/ top level commands - John Allison  5th February 2001
@@ -196,7 +196,7 @@ void G4VisCommandReviewKeptEvents::SetNewValue (G4UIcommand*, G4String newValue)
       const G4Event* event = (*events)[i];
       if (verbosity >= G4VisManager::warnings) {
 	G4cout << "Drawing event : " << event->GetEventID() <<
-	  ".  Enter any command, then at EndOfEvent, type \"continue\"..."
+	  ".  At EndOfEvent, enter any command, then \"continue\"..."
 	       << G4endl;
       }
       sceneHandler->SetEvent(event);
