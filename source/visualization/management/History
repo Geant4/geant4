@@ -1,4 +1,4 @@
-$Id: History,v 1.87 2006-11-25 22:52:40 allison Exp $
+$Id: History,v 1.88 2006-11-26 15:52:33 allison Exp $
 
 -------------------------------------------------------------------
 
@@ -27,17 +27,18 @@ History file for visualization management sub-category
 ------------------------------------------------------
 
 25th November 2006  John Allison  (visman-V08-01-15)
-- G4VisCommandsSceneAdd.cc: Follow change of behaviour or
-  G4StateManager.  Supresses text message to viewer for
-  /vis/scene/add/eventID when state == G4State_EventProc unless last
-  event.
-- G4VisCommands.cc: An improvement in the information printed for
-  /vis/reviewKeptEvents.
-- G4VisCommandsScene.cc: Restriction of warning message for
-  /vis/scene/endOfEventAction so that the warning about the number of
-  kept events only happens for "accumulate".
+- G4VisCommandsSceneAdd.cc: Follow change of behaviour of G4StateManager.
+  Supresses eventID message when state == G4State_EventProc unless last event.
+- G4VisCommands.cc: /vis/reviewKeptEvents:
+  o An improvement in the information printed.
+  o Temporarily set endOfEventAction refresh so that eventID for each event.
+- G4VisCommandsScene.cc: /vis/scene/endOfEventAction:
+  o Restrict warning message so that the warning about the number of
+    kept events only happens for "accumulate".  Improve printing.
+  o Default no. of kept events is 0.
 - G4VisCommandsViewer.cc: Spelling correction in warning message.
 - G4VisManager.cc: Correct for 0 requested kept events.
+- G4Scene.cc: Default no. of kept events is 0.
 
 22nd November 2006  John Allison  (visman-V08-01-14)
 - Fixed /vis/reviewKeptEvents for "stored" viewers.
