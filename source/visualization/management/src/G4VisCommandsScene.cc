@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsScene.cc,v 1.64 2006-11-26 15:51:12 allison Exp $
+// $Id: G4VisCommandsScene.cc,v 1.65 2006-11-26 19:37:54 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/scene commands - John Allison  9th August 1998
@@ -132,7 +132,7 @@ G4VisCommandSceneEndOfEventAction::G4VisCommandSceneEndOfEventAction () {
   parameter -> SetDefaultValue ("refresh");
   fpCommand -> SetParameter (parameter);
   parameter = new G4UIparameter ("maxNumber", 'i', omitable = true);
-  parameter -> SetDefaultValue (0);
+  parameter -> SetDefaultValue (100);
   parameter -> SetGuidance
   ("Maximum number of events kept.  Unlimited if negative.");
   fpCommand -> SetParameter (parameter);
