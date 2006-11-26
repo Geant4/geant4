@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommands.cc,v 1.19 2006-11-25 15:35:11 allison Exp $
+// $Id: G4VisCommands.cc,v 1.20 2006-11-26 15:49:10 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/ top level commands - John Allison  5th February 2001
@@ -132,9 +132,6 @@ G4VisCommandReviewKeptEvents::G4VisCommandReviewKeptEvents ()
      "\nviewer.  After each event, the session is paused.  The user may issue"
      "\nany allowed command.  Then enter \"continue\" to continue to the next"
      "\nevent.");
-  fpCommand -> SetGuidance
-    ("However, if the current scene requests event accumulation, this"
-     "\ncommand simply notifies handlers.");
   fpCommand -> SetParameterName("macro-file-name", omitable=true);
   fpCommand -> SetDefaultValue("");
 }
@@ -179,6 +176,14 @@ void G4VisCommandReviewKeptEvents::SetNewValue (G4UIcommand*, G4String newValue)
     return;
   }
 
+  G4Scene* pScene = fpVisManager->GetCurrentScene();
+  if (!pScene) {
+    if (verbosity >= G4VisManager::errors) {
+      G4cout << "ERROR: No current scene.  Please create one." << G4endl;
+    }
+    return;
+  }
+
   G4VSceneHandler* sceneHandler = fpVisManager->GetCurrentSceneHandler();
 
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
@@ -189,6 +194,8 @@ void G4VisCommandReviewKeptEvents::SetNewValue (G4UIcommand*, G4String newValue)
   UImanager->SetVerboseLevel(newVerbose);
 
   // Event by event refreshing...
+  G4bool currentRefreshAtEndOfEvent = pScene->GetRefreshAtEndOfEvent();
+  pScene->SetRefreshAtEndOfEvent(true);
   if (macroFileName.empty()) {
 
     // Draw to viewer and pause session...
@@ -237,6 +244,7 @@ void G4VisCommandReviewKeptEvents::SetNewValue (G4UIcommand*, G4String newValue)
       sceneHandler->SetEvent(0);
     }
   }
+  pScene->SetRefreshAtEndOfEvent(currentRefreshAtEndOfEvent);
 
   UImanager->SetVerboseLevel(keepVerbose);
 }
