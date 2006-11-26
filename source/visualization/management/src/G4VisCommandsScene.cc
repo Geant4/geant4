@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsScene.cc,v 1.62 2006-11-25 22:51:55 allison Exp $
+// $Id: G4VisCommandsScene.cc,v 1.63 2006-11-26 15:45:09 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/scene commands - John Allison  9th August 1998
@@ -132,7 +132,7 @@ G4VisCommandSceneEndOfEventAction::G4VisCommandSceneEndOfEventAction () {
   parameter -> SetDefaultValue ("refresh");
   fpCommand -> SetParameter (parameter);
   parameter = new G4UIparameter ("maxNumber", 'i', omitable = true);
-  parameter -> SetDefaultValue (100);
+  parameter -> SetDefaultValue (0);
   parameter -> SetGuidance
   ("Maximum number of events kept.  Unlimited if negative.");
   fpCommand -> SetParameter (parameter);
@@ -174,6 +174,7 @@ void G4VisCommandSceneEndOfEventAction::SetNewValue (G4UIcommand*,
 
   if (action == "accumulate") {
     pScene->SetRefreshAtEndOfEvent(false);
+    pScene->SetMaxNumberOfKeptEvents(maxNumberOfKeptEvents);
   }
   else if (action == "refresh") {
     if (!pScene->GetRefreshAtEndOfRun()) {
@@ -196,19 +197,22 @@ void G4VisCommandSceneEndOfEventAction::SetNewValue (G4UIcommand*,
     }
     return;
   }
-  pScene->SetMaxNumberOfKeptEvents(maxNumberOfKeptEvents);
 
   // Change of transients behaviour, so...
   fpVisManager->ResetTransientsDrawnFlags();
 
   if (verbosity >= G4VisManager::confirmations) {
-    G4cout << "End of event action set to \"";
-    if (pScene->GetRefreshAtEndOfEvent()) G4cout << "refresh";
-    else G4cout << "accumulate";
-    G4cout << "\"\n  Maximum number of events kept: "
-	   << maxNumberOfKeptEvents
-	   << " (unlimited if negative)."
-	   << G4endl;
+    G4cout << "End of event action set to ";
+    if (pScene->GetRefreshAtEndOfEvent()) G4cout << "\"refresh\".";
+    else {
+      G4cout << "\"accumulate\"."
+	"\n  Maximum number of events to be kept: "
+	     << maxNumberOfKeptEvents
+	     << " (unlimited if negative)."
+	"\n  This may be changed with, e.g., "
+	"\"/vis/scene/endOfEventAction accumulate 100\"."
+	     << G4endl;
+    }
   }
   if (!pScene->GetRefreshAtEndOfEvent() &&
       maxNumberOfKeptEvents != 0 &&
