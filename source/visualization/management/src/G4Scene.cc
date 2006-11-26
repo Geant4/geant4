@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scene.cc,v 1.22 2006-11-14 14:59:55 allison Exp $
+// $Id: G4Scene.cc,v 1.23 2006-11-26 15:51:12 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -42,7 +42,7 @@ G4Scene::G4Scene (const G4String& name):
   fName (name),
   fRefreshAtEndOfEvent(true),
   fRefreshAtEndOfRun(true),
-  fMaxNumberOfKeptEvents(100)
+  fMaxNumberOfKeptEvents(0)
 {} // Note all other data members have default initial values.
 
 G4Scene::~G4Scene () {}
