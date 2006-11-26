@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VisManager.cc,v 1.108 2006-11-25 22:52:20 allison Exp $
+// $Id: G4VisManager.cc,v 1.109 2006-11-26 15:43:51 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -1164,21 +1164,21 @@ void G4VisManager::EndOfEvent ()
 
   } else {  //  Accumulating events...
 
-    if (fpScene->GetMaxNumberOfKeptEvents() >= 0 &&
-	nKeptEvents == fpScene->GetMaxNumberOfKeptEvents()) {
+    G4int maxNumberOfKeptEvents = fpScene->GetMaxNumberOfKeptEvents();
+    if (maxNumberOfKeptEvents > 0 && nKeptEvents >= maxNumberOfKeptEvents) {
       fEventKeepingSuspended = true;
       static G4bool warned = false;
-      if (!warned && fpScene->GetMaxNumberOfKeptEvents() > 0 ) {
+      if (!warned) {
 	if (fVerbosity >= warnings) {
 	  G4cout <<
 	    "WARNING: G4VisManager::EndOfEvent: Event keeping suspended."
 	    "\n  The number of events exceeds the maximum that may be kept, "
-		 << fpScene->GetMaxNumberOfKeptEvents() << '.'
+		 << maxNumberOfKeptEvents << '.'
 		 << G4endl;
 	}
 	warned = true;
       }
-    } else {
+    } else if (maxNumberOfKeptEvents != 0) {
       G4EventManager::GetEventManager()->KeepTheCurrentEvent();
     }
   }
@@ -1200,9 +1200,7 @@ void G4VisManager::EndOfRun ()
       }
     }
 
-    if (fEventKeepingSuspended &&
-	fpScene->GetMaxNumberOfKeptEvents() > 0 &&
-	fVerbosity >= warnings) {
+    if (fEventKeepingSuspended && fVerbosity >= warnings) {
       G4cout <<
 	"WARNING: G4VisManager::EndOfRun: Event keeping was suspended."
 	"\n  The number of events in the run exceeded the maximum to be kept, "
