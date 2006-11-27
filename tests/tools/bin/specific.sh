@@ -597,6 +597,36 @@ if [ $UNAMEN = pcgeant3.cern.ch ]; then
 #  export G4VIS_BUILD_OIX_DRIVER=1
 fi
 
+if [ $UNAMEN = pcgeant6.cern.ch ]; then
+  export DEBOPT=${DEBOPT}_slc3_323
+  export CVSROOT=/afs/cern.ch/sw/geant4/cvs
+  export G4SYSTEM=Linux-g++
+  export G4INSTALL=/afs/cern.ch/sw/geant4/stt/$REF/src/geant4
+  export G4STTDIR=/afs/cern.ch/sw/geant4/stt/$REF/testtools/geant4/tests/tools
+  export G4WORKDIR=/afs/cern.ch/sw/geant4/stt/$REF/Linux-g++/$DEBOPT
+  export G4LIB=$G4WORKDIR/lib
+# Take CLHEP with links to lcg area
+  export CLHEP_BASE_DIR=$G4WORKDIR/clhep 
+
+#  export G4_NO_CBRT=1
+
+## Compiler
+############
+
+  # Shareable library
+  #####################
+#  export G4LIB_BUILD_SHARED=1
+  export LD_LIBRARY_PATH=$G4LIB/$G4SYSTEM:${CLHEP_BASE_DIR}/lib:${LD_LIBRARY_PATH}
+#  export LD_LIBRARY_PATH=$G4LIB/$G4SYSTEM:${LD_LIBRARY_PATH}
+
+  # G4 build flags :
+  ######export G4UI_BUILD_XM_SESSION=1
+#  export G4VIS_BUILD_OPENGLXM_DRIVER=1
+  export G4VIS_BUILD_OPENGLX_DRIVER=1
+  export G4VIS_USE_OPENGLX=1
+#  export G4VIS_BUILD_OIX_DRIVER=1
+fi
+
 if [ $UNAMEN = lxcert-i386 ]; then
   export DEBOPT=${DEBOPT}_slc4_i32
   export CVSROOT=/afs/cern.ch/sw/geant4/cvs
