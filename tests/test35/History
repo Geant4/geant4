@@ -14,6 +14,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+test35-V08-01-02  27 Nov 2006 V.Ivanchenko
+- Use 0.0 low limit for HEelastic 
+
 test35-V08-01-01  16 Nov 2006 V.Ivanchenko
 - LDFLAGS -> LOADLIBS
 - Add elastic 
