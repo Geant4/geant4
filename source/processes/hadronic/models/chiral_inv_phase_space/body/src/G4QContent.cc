@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QContent.cc,v 1.42 2006-06-29 20:06:53 gunter Exp $
+// $Id: G4QContent.cc,v 1.43 2006-11-27 10:44:53 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QContent ----------------
@@ -84,13 +84,15 @@ G4QContent::G4QContent(G4QContent* right)
 // Assignment operator (copy stile for possible Vector extention)
 const G4QContent& G4QContent::operator=(const G4QContent &right)
 {//               ==============================================
-  nU  = right.nU;
-  nD  = right.nD;
-  nS  = right.nS;
-  nAU = right.nAU;
-  nAD = right.nAD;
-  nAS = right.nAS;
-		
+  if(this != &right)                          // Beware of self assignment
+  {
+    nU  = right.nU;
+    nD  = right.nD;
+    nS  = right.nS;
+    nAU = right.nAU;
+    nAD = right.nAD;
+    nAS = right.nAS;
+		}
   return *this;
 }
 

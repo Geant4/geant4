@@ -27,7 +27,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4QSplitter.cc,v 1.5 2006-11-20 16:29:11 mkossov Exp $
+// $Id: G4QSplitter.cc,v 1.6 2006-11-27 10:44:55 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QSplitter ----------------
@@ -569,29 +569,34 @@ G4QSplitter::G4QSplitter(const G4QSplitter &right)
 
 const G4QSplitter& G4QSplitter::operator=(const G4QSplitter &right)
 {// ========================================================================
-  // theQuasmons (Vector)
-  G4int nQ             = right.theQuasmons.size();
-  if(nQ) for(G4int iq=0; iq<nQ; iq++)
+  if(this != &right)                          // Beware of self assignment
   {
-    G4Quasmon* curQ    = new G4Quasmon(right.theQuasmons[iq]);
+    // theQuasmons (Vector)
+    G4int iQ             = theQuasmons.size();
+    if(iQ) for(G4int jq=0; jq<iQ; jq++) delete theQuasmons[jq];
+    theQuasmons.clear();
+    G4int nQ             = right.theQuasmons.size();
+    if(nQ) for(G4int iq=0; iq<nQ; iq++)
+    {
+      G4Quasmon* curQ    = new G4Quasmon(right.theQuasmons[iq]);
 #ifdef fdebug
-    G4cout<<"G4QS::CopyByVal:Q#"<<iq<<","<<curQ->GetQC()<<curQ->Get4Momentum()<<G4endl;
+      G4cout<<"G4QS::CopyByVal:Q#"<<iq<<","<<curQ->GetQC()<<curQ->Get4Momentum()<<G4endl;
 #endif
-    theQuasmons.push_back(curQ);             // (delete equivalent)
-  }
-  theProjEnvFlag  = right.theProjEnvFlag;
-  theTargEnvFlag  = right.theTargEnvFlag;
-  theWeight       = right.theWeight;
-  theProjQC       = right.theProjQC;
-  theTargQC       = right.theTargQC;
-  theProj4Mom     = right.theProj4Mom;
-  theTarg4Mom     = right.theTarg4Mom;
+      theQuasmons.push_back(curQ);             // (delete equivalent)
+    }
+    theProjEnvFlag  = right.theProjEnvFlag;
+    theTargEnvFlag  = right.theTargEnvFlag;
+    theWeight       = right.theWeight;
+    theProjQC       = right.theProjQC;
+    theTargQC       = right.theTargQC;
+    theProj4Mom     = right.theProj4Mom;
+    theTarg4Mom     = right.theTarg4Mom;
   
-  theWorld        =  right.theWorld; 
-		tot4Mom         =	 right.tot4Mom;
-		totCharge       =	 right.totCharge;
-		totBaryNum      =	 right.totBaryNum;
-
+    theWorld        =  right.theWorld; 
+		  tot4Mom         =	 right.tot4Mom;
+		  totCharge       =	 right.totCharge;
+		  totBaryNum      =	 right.totBaryNum;
+  }
   return *this;
 }
 

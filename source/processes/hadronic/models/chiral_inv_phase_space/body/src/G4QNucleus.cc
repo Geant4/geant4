@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNucleus.cc,v 1.60 2006-11-22 16:13:21 mkossov Exp $
+// $Id: G4QNucleus.cc,v 1.61 2006-11-27 10:44:54 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QNucleus ----------------
@@ -265,24 +265,26 @@ G4QNucleus::G4QNucleus(G4QNucleus* right) : currentNucleon(-1)
 // Assignment operator
 const G4QNucleus& G4QNucleus::operator=(const G4QNucleus& right)
 {//               ==============================================
-  Tb = new std::vector<G4double>;
-  G4int lTb=right.GetBThickness()->size();
-  if(lTb) for(G4int j=0; j<=lTb; j++) Tb->push_back((*right.GetBThickness())[j]);
-  Set4Momentum   (right.Get4Momentum());
-  SetQPDG        (right.GetQPDG());
-  SetQC          (right.GetQC());
-  SetNFragments  (right.GetNFragments());
-  Z             = right.Z;
-  N             = right.N;
-  S             = right.S;
-  dZ            = right.dZ;
-  dN            = right.dN;
-  dS            = right.dS;
-  maxClust      = right.maxClust;
-  for(G4int i=0; i<=maxClust; i++) probVect[i] = right.probVect[i];
-  probVect[254] = right.probVect[254];
-  probVect[255] = right.probVect[255];
-
+  if(this != &right)                          // Beware of self assignment
+  {
+    Tb->clear();
+    G4int lTb=right.GetBThickness()->size();
+    if(lTb) for(G4int j=0; j<=lTb; j++) Tb->push_back((*right.GetBThickness())[j]);
+    Set4Momentum   (right.Get4Momentum());
+    SetQPDG        (right.GetQPDG());
+    SetQC          (right.GetQC());
+    SetNFragments  (right.GetNFragments());
+    Z             = right.Z;
+    N             = right.N;
+    S             = right.S;
+    dZ            = right.dZ;
+    dN            = right.dN;
+    dS            = right.dS;
+    maxClust      = right.maxClust;
+    for(G4int i=0; i<=maxClust; i++) probVect[i] = right.probVect[i];
+    probVect[254] = right.probVect[254];
+    probVect[255] = right.probVect[255];
+  }
   return *this;
 }
 

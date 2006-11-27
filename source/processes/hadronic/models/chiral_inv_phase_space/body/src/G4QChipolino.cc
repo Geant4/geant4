@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QChipolino.cc,v 1.31 2006-06-29 20:06:51 gunter Exp $
+// $Id: G4QChipolino.cc,v 1.32 2006-11-27 10:44:53 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QChipolino ----------------
@@ -491,12 +491,14 @@ G4QChipolino::G4QChipolino(G4QChipolino* right)
 
 const G4QChipolino& G4QChipolino::operator=(const G4QChipolino &right)
 {
-  theQPDG1  = right.theQPDG1;
-  theQPDG2  = right.theQPDG2;
-  theQCont  = right.theQCont;
-  theQCont1 = right.theQCont1;
-  minM      = right.minM;
-
+  if(this != &right)                          // Beware of self assignment
+  {
+    theQPDG1  = right.theQPDG1;
+    theQPDG2  = right.theQPDG2;
+    theQCont  = right.theQCont;
+    theQCont1 = right.theQCont1;
+    minM      = right.minM;
+  }
   return *this;
 }
 

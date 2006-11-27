@@ -27,7 +27,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4Quasmon.cc,v 1.89 2006-10-27 16:47:34 mkossov Exp $
+// $Id: G4Quasmon.cc,v 1.90 2006-11-27 10:44:55 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4Quasmon ----------------
@@ -178,32 +178,40 @@ void G4Quasmon::SetEtaSup(G4double etaetap)     {EtaEtaprime=etaetap;}
 
 const G4Quasmon& G4Quasmon::operator=(const G4Quasmon& right)
 { //=========================================================
-  q4Mom                 = right.q4Mom;
-  valQ                  = right.valQ;
-  //theEnvironment        = right.theEnvironment;
-  status                = right.status;
-  //theQHadrons (Vector)
-  G4int nQH             = right.theQHadrons.size();
-  if(nQH) for(G4int ih=0; ih<nQH; ih++)
+  if(this != &right)                          // Beware of self assignment
   {
-    G4QHadron* curQH    = new G4QHadron(right.theQHadrons[ih]);
-    theQHadrons.push_back(curQH);
+    q4Mom                 = right.q4Mom;
+    valQ                  = right.valQ;
+    //theEnvironment        = right.theEnvironment;
+    status                = right.status;
+    //theQHadrons (Vector)
+    G4int iQH             = theQHadrons.size();
+    if(iQH) for(G4int jh=0; jh<iQH; jh++) delete theQHadrons[jh];
+    theQHadrons.clear();
+    G4int nQH             = right.theQHadrons.size();
+    if(nQH) for(G4int ih=0; ih<nQH; ih++)
+    {
+      G4QHadron* curQH    = new G4QHadron(right.theQHadrons[ih]);
+      theQHadrons.push_back(curQH);
+    }
+    theWorld              = right.theWorld;
+    phot4M                = right.phot4M;
+    nBarClust             = right.nBarClust;
+    nOfQ                  = right.nOfQ;
+    //theQCandidates (Vector)
+    G4int iQC             = theQCandidates.size();
+    if(iQC) for(G4int jq=0; jq<iQC; jq++) delete theQCandidates[jq];
+    theQCandidates.clear();
+    G4int nQC             = right.theQCandidates.size();
+    if(nQC) for(G4int iq=0; iq<nQC; iq++)
+    {
+      G4QCandidate* curQC = new G4QCandidate(right.theQCandidates[iq]);
+      theQCandidates.push_back(curQC);
+    }
+    f2all                 = right.f2all;
+    rEP                   = right.rEP;
+    rMo                   = right.rMo;
   }
-  theWorld              = right.theWorld;
-  phot4M                = right.phot4M;
-  nBarClust             = right.nBarClust;
-  nOfQ                  = right.nOfQ;
-  //theQCandidates (Vector)
-  G4int nQC             = right.theQCandidates.size();
-  if(nQC) for(G4int iq=0; iq<nQC; iq++)
-  {
-    G4QCandidate* curQC = new G4QCandidate(right.theQCandidates[iq]);
-    theQCandidates.push_back(curQC);
-  }
-  f2all                 = right.f2all;
-  rEP                   = right.rEP;
-  rMo                   = right.rMo;
-
   return *this;
 } // End of "="
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QHadron.cc,v 1.44 2006-10-27 16:47:34 mkossov Exp $
+// $Id: G4QHadron.cc,v 1.45 2006-11-27 10:44:54 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QHadron ----------------
@@ -182,16 +182,18 @@ G4QHadron::G4QHadron(const G4QHadron* right, G4int C, G4ThreeVector P, G4Lorentz
 
 const G4QHadron& G4QHadron::operator=(const G4QHadron &right)
 {
-  theMomentum         = right.theMomentum;
-  theQPDG             = right.theQPDG;
-  valQ                = right.valQ;
-  nFragm              = right.nFragm;
-  thePosition         = right.thePosition;      
-  theCollisionCount   = 0;
-  isSplit             = false;
-  Direction           = right.Direction;
-  bindE               = right.bindE;
-
+  if(this != &right)                          // Beware of self assignment
+  {
+    theMomentum         = right.theMomentum;
+    theQPDG             = right.theQPDG;
+    valQ                = right.valQ;
+    nFragm              = right.nFragm;
+    thePosition         = right.thePosition;      
+    theCollisionCount   = 0;
+    isSplit             = false;
+    Direction           = right.Direction;
+    bindE               = right.bindE;
+  }
   return *this;
 }
 

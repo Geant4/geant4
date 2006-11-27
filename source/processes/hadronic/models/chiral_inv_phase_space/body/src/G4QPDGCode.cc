@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QPDGCode.cc,v 1.52 2006-06-29 20:07:07 gunter Exp $
+// $Id: G4QPDGCode.cc,v 1.53 2006-11-27 10:44:55 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QPDGCode ----------------
@@ -89,9 +89,11 @@ G4QPDGCode::G4QPDGCode(G4QPDGCode* rhs)
 
 const G4QPDGCode& G4QPDGCode::operator=(const G4QPDGCode& rhs)
 {
-  thePDGCode =rhs.thePDGCode;
-  theQCode   =rhs.theQCode;
-
+  if(this != &rhs)                          // Beware of self assignment
+  {
+    thePDGCode =rhs.thePDGCode;
+    theQCode   =rhs.theQCode;
+  }
   return *this;
 }
 

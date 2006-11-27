@@ -27,7 +27,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4QEnvironment.cc,v 1.117 2006-11-20 16:29:11 mkossov Exp $
+// $Id: G4QEnvironment.cc,v 1.118 2006-11-27 10:44:54 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QEnvironment ----------------
@@ -576,38 +576,50 @@ void G4QEnvironment::SetParameters(G4double solAn, G4bool efFlag, G4double piThr
 
 const G4QEnvironment& G4QEnvironment::operator=(const G4QEnvironment &right)
 {// ========================================================================
-  // theQHadrons (Vector)
-  G4int nQH             = right.theQHadrons.size();
-  if(nQH) for(G4int ih=0; ih<nQH; ih++)
+  if(this != &right)                          // Beware of self assignment
   {
-    G4QHadron* curQH    = new G4QHadron(right.theQHadrons[ih]);
+    // theQHadrons (Vector)
+    G4int iQH             = theQHadrons.size();
+    if(iQH) for(G4int ii=0; ii<iQH; ii++) delete theQHadrons[ii];
+    theQHadrons.clear();
+    G4int nQH             = right.theQHadrons.size();
+    if(nQH) for(G4int ih=0; ih<nQH; ih++)
+    {
+      G4QHadron* curQH    = new G4QHadron(right.theQHadrons[ih]);
 #ifdef pdebug
-    G4cout<<"G4QE::CopyOper=:cH#"<<ih<<","<<curQH->GetQC()<<curQH->Get4Momentum()<<G4endl;
+      G4cout<<"G4QE::Operator=:c#"<<ih<<","<<curQH->GetQC()<<curQH->Get4Momentum()<<G4endl;
 #endif
-    theQHadrons.push_back(curQH);            // (delete equivalent)
+      theQHadrons.push_back(curQH);            // (delete equivalent)
+    }
+
+    theWorld              = right.theWorld;
+    nBarClust             = right.nBarClust;
+    f2all                 = right.f2all;
+
+    // theQuasmons (Vector)
+    G4int iQ              = theQuasmons.size();
+    if(iQ) for(G4int jq=0; jq<iQ; jq++) delete theQuasmons[jq];
+    theQuasmons.clear();
+    G4int nQ              = right.theQuasmons.size();
+    if(nQ) for(G4int iq=0; iq<nQ; iq++)
+    {
+      G4Quasmon* curQ     = new G4Quasmon(right.theQuasmons[iq]);
+      theQuasmons.push_back(curQ);             // (delete equivalent)
+    }
+
+    // theQCandidates (Vector)
+    G4int iQC             = theQCandidates.size();
+    if(iQC) for(G4int jc=0; jc<iQC; jc++) delete theQCandidates[jc];
+    theQCandidates.clear();
+    G4int nQC             = right.theQCandidates.size();
+    if(nQC) for(G4int ic=0; ic<nQC; ic++)
+    {
+      G4QCandidate* curQC = new G4QCandidate(right.theQCandidates[ic]);
+      theQCandidates.push_back(curQC);        // (delete equivalent)
+    }
+
+    theEnvironment        = right.theEnvironment;
   }
-
-  theWorld              = right.theWorld;
-  nBarClust             = right.nBarClust;
-  f2all                 = right.f2all;
-
-  // theQuasmons (Vector)
-  G4int nQ              = right.theQuasmons.size();
-  if(nQ) for(G4int iq=0; iq<nQ; iq++)
-  {
-    G4Quasmon* curQ     = new G4Quasmon(right.theQuasmons[iq]);
-    theQuasmons.push_back(curQ);             // (delete equivalent)
-  }
-
-  // theQCandidates (Vector)
-  G4int nQC             = right.theQCandidates.size();
-  if(nQC) for(G4int ic=0; ic<nQC; ic++)
-  {
-    G4QCandidate* curQC = new G4QCandidate(right.theQCandidates[ic]);
-    theQCandidates.push_back(curQC);        // (delete equivalent)
-  }
-
-  theEnvironment        = right.theEnvironment;
   return *this;
 }
 

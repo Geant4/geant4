@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QDecayChan.cc,v 1.26 2006-06-29 20:06:55 gunter Exp $
+// $Id: G4QDecayChan.cc,v 1.27 2006-11-27 10:44:54 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QDecayChan ----------------
@@ -100,16 +100,21 @@ G4QDecayChan::~G4QDecayChan()
 // Assignment operator
 const G4QDecayChan& G4QDecayChan::operator=(const G4QDecayChan& right)
 {
-  aDecayChanLimit     = right.aDecayChanLimit;
-  theMinMass          = right.theMinMass;
-  //aVecOfSecHadrons (Vector)
-  G4int nSH           = right.aVecOfSecHadrons.size();
-  if(nSH) for(G4int ih=0; ih<nSH; ih++)
+  if(this != &right)                          // Beware of self assignment
   {
-    G4QPDGCode* curPC = new G4QPDGCode(right.aVecOfSecHadrons[ih]);
-    aVecOfSecHadrons.push_back(curPC);
+    aDecayChanLimit     = right.aDecayChanLimit;
+    theMinMass          = right.theMinMass;
+    //aVecOfSecHadrons (Vector)
+    G4int iSH           = aVecOfSecHadrons.size();
+    if(iSH) for(G4int ii=0; ii<iSH; ii++) delete aVecOfSecHadrons[ii];
+    aVecOfSecHadrons.clear();
+    G4int nSH           = right.aVecOfSecHadrons.size();
+    if(nSH) for(G4int ih=0; ih<nSH; ih++)
+    {
+      G4QPDGCode* curPC = new G4QPDGCode(right.aVecOfSecHadrons[ih]);
+      aVecOfSecHadrons.push_back(curPC);
+    }
   }
-
   return *this;
 }
 

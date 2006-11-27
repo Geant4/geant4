@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QParton.cc,v 1.1 2006-10-30 10:40:36 mkossov Exp $
+// $Id: G4QParton.cc,v 1.2 2006-11-27 10:44:55 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -118,16 +118,19 @@ G4QParton::G4QParton(const G4QParton* right)
   theSpinZ      = right->theSpinZ;
 }
 
-const G4QParton & G4QParton::operator=(const G4QParton &right)
+const G4QParton& G4QParton::operator=(const G4QParton &right)
 {
-  PDGencoding=right.GetPDGCode();
-  theMomentum=right.Get4Momentum();
-  thePosition=right.GetPosition();
-  theX = right.theX;
-  theDefinition = right.theDefinition;
-  theColour = right.theColour;
-  theIsoSpinZ = right.theIsoSpinZ;
-  theSpinZ = right.theSpinZ;	
+  if(this != &right)                          // Beware of self assignment
+  {
+    PDGencoding=right.GetPDGCode();
+    theMomentum=right.Get4Momentum();
+    thePosition=right.GetPosition();
+    theX = right.theX;
+    theDefinition = right.theDefinition;
+    theColour = right.theColour;
+    theIsoSpinZ = right.theIsoSpinZ;
+    theSpinZ = right.theSpinZ;	
+  }
   return *this;
 }
 
