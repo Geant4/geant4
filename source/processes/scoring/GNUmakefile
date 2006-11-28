@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.2 2006-10-10 09:59:02 gcosmo Exp $
+# $Id: GNUmakefile,v 1.3 2006-11-28 16:47:59 ahoward Exp $
 # ------------------------------------------------------------
 # GNUmakefile for scoring process library.  
 # ------------------------------------------------------------
@@ -28,6 +28,7 @@ CPPFLAGS += \
 	    -I$(G4BASE)/materials/include \
 	    -I$(G4BASE)/intercoms/include \
 	    -I$(G4BASE)/digits_hits/detector/include \
-	    -I$(G4BASE)/digits_hits/hits/include
+	    -I$(G4BASE)/digits_hits/hits/include \
+	    -I$(G4BASE)/processes/transportation/include
 
 include $(G4INSTALL)/config/common.gmk
