@@ -1,4 +1,4 @@
-$Id: History,v 1.9 2006-11-20 10:13:48 ahoward Exp $
+$Id: History,v 1.10 2006-11-28 17:36:21 ahoward Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,15 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 28th A.Howard (procscore-V08-01-04)
+- updated history file
+
+November 28th A.Howard (procscore-V08-01-03)
+- removed duplicated base classes which can be found in processes/transportation
+
+November 20th A.Howard (procscore-V08-01-02)
+- updated history file
 
 November 20th A.Howard (procscore-V08-01-01)
 - added biasing and related scoring classes, 1st implementation to new parallel
