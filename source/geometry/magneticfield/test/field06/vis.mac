@@ -1,0 +1,57 @@
+#
+# Macro file for the initialization phase of "exampleN03.cc"
+# when running in interactive mode
+#
+# Sets some default verbose
+#
+#/control/verbose 2
+/control/saveHistory
+#/run/verbose 2
+#/run/verbose 1
+#
+# create empty scene
+#
+/vis/scene/create
+#
+# Create a scene handler for a specific graphics system
+# (Edit the next line(s) to choose another graphic system)
+#
+# Use this open statement to get an .eps and .prim files
+# suitable for viewing in DAWN.
+#/vis/open DAWNFILE
+#
+# Use this open statement instead for OpenGL in immediate mode.
+/vis/open OGLIX
+#
+# Use this open statement instead to get a HepRep version 1 file
+# suitable for viewing in WIRED.
+#/vis/open HepRepFile
+#
+# Use this open statement instead to get a HepRep version 2 file
+# suitable for viewing in WIRED.
+#/vis/open HepRepXML
+#
+# Output an empty detector
+/vis/viewer/flush
+#
+# for drawing the tracks
+# (if too many tracks cause core dump => storeTrajectory 0)
+#
+/vis/scene/add/trajectories
+/tracking/storeTrajectory 1
+/vis/scene/endOfEventAction accumulate
+#/tracking/verbose 1
+#
+# At end of each run, an automatic flush causes graphical output.
+#/run/beamOn 1
+# When you exit Geant4, you will find a file called scene-0.heprep.zip.
+# Unzipping this will give you three separate HepRep files suitable for
+# viewing in WIRED.
+# The first file will contain just detector geometry.
+# The second file will contain the detector plus one event.
+# The third file will contain the detector plus ten events.
+#/gun/particle chargedgeantino
+#/gun/particle proton
+#/run/beamOn 1
+/vis/viewer/set/viewpointThetaPhi 45 45
+
