@@ -1,4 +1,4 @@
-$Id: History,v 1.3 2006-11-24 17:29:32 gunter Exp $
+$Id: History,v 1.4 2006-11-28 15:42:41 gunter Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+28.11.2006, G.Folger  -    phys-lists-V08-01-11
+ - add QGSP_QEL, i.e QGSP with chips elastic
 
 24.11.2006, G.Folger  -    phys-lists-V08-01-10
  - add QGSC_EMV and QGSP_BIC_HP
