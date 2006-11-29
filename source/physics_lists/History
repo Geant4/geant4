@@ -1,4 +1,4 @@
-$Id: History,v 1.4 2006-11-28 15:42:41 gunter Exp $
+$Id: History,v 1.5 2006-11-29 14:33:43 gunter Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+29.11.2006, G.Folger  -    phys-lists-V08-01-12
+ - in G4HadronQElasticPhysics initialize wasActivated in ctor
 
 28.11.2006, G.Folger  -    phys-lists-V08-01-11
  - add QGSP_QEL, i.e QGSP with chips elastic
