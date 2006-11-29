@@ -35,7 +35,7 @@
 //    *                                *
 //    **********************************
 //
-// $Id: G4HumanPhantomPhysicsList.cc,v 1.4 2006-11-29 14:24:59 guatelli Exp $
+// $Id: G4HumanPhantomPhysicsList.cc,v 1.5 2006-11-29 17:36:57 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4HumanPhantomPhysicsList.hh"
@@ -76,6 +76,7 @@ void G4HumanPhantomPhysicsList::ConstructParticle()
   // for all particles which you want to use.
   // This ensures that objects of these particle types will be
   // created in the program. 
+  G4Geantino::GeantinoDefinition();
 
   ConstructBosons();
   ConstructLeptons();

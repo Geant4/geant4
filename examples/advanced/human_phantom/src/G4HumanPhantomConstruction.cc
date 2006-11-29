@@ -172,8 +172,4 @@ void G4HumanPhantomConstruction::SetPhantomModel(G4String newModel)
     {
       G4cout<<" >> Phantom " << model << " will be built."<<G4endl;
     }
-  if (model == "MIX")
-    {
-      G4cout<<" >> Phantom with mixed body parts will be built."<<G4endl;
-    }
 }

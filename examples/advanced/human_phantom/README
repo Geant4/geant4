@@ -1,25 +1,55 @@
-$Id: README,v 1.4 2006-02-11 09:22:07 gguerrie Exp $
+$Id: README,v 1.5 2006-11-29 17:36:57 guatelli Exp $
 -------------------------------------------------------------------
 
      =========================================================
-     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+                        Geant4 - human_phantom example 
      =========================================================
 
-                          Anthropomorphic Phantom
+                                 README
                           -----------------------
 
-Anthropomorphic Phantom body parts are built through use of GDML file. 
-The format (GDML, Geometry Description Markup Language) can be then used 
-to interchange geometries between different applications and users.
+------> Introduction
 
-The phantom construction, through specification
-about sex of phantom, which body part build and in which model (MIRD, ORNL, MIX),
-consist of a call to GDMLProcessor which parses the
-GDML file (i.e. MIRDStomach.gdml) and returns the pointer to the world volume. 
-The user can write his own GDML file to describe single body part.
+The human_phantom example models anthropomorphic phantoms for Geant4 simulations.
+Two models are available: MIRD [1]and ORNL [2] (Male and Female).
+
+[1] W.S. Snyder, et al, "MIRD Pamphlet No. 5 Revised, Estimates of absorbed fractions
+for monoenergetic photon sources uniformly distributed in various organs of a heterogeneous phantom",
+J. Nucl. Med. Suppl., no. 3, pp. 5-52, 1969.
+
+[2] M. Cristy and K. F. Eckerman, "Specific absorbed fractions of energy at various ages from internal
+ photon sources", ORNL/TM-8381/VI, Apr. 1987.
+ 
+Authors: S. Guatelli (guatelli@ge.infn.it) and M. G. Pia (pia@ge.infn.it), INFN Genova, Italy
+ 
+The example is based on code developed by the undergraduate student G. Guerrieri 
+Note: this is a preliminary beta-version of the code; an improved 
+version will be distributed in the next Geant4 public release, compliant
+with the design in a forthcoming publication, and subject to a 
+design and code review.
+
+-----> Geometry 
+
+The process of building a phantom is handled through the Builder design pattern.
+The creation of coherent models of the human phantom is handled through an Abstract Factory design pattern.
+
+The organs of the MIRD phantom are implemented in hard-code; the organs of the ORNL phantom 
+are handled through GDML (Geometry Description Markup Language, www.cern.ch/gdml).
+
+// Parameterized breast
+
+-----> Physics
+Particles: e-, e+, photon, geantino
+Physics list: electromagnetic processes are active for photons, e- and e+
+The threshold of production of secondary particles is set to 0.1 * mm.
+
+-----> Primary particles
 
 
-HOW TO BUILD THE PHANTOM ?
+-----> Energy deposit
+
+
+-----> Setup
 
 - Install the GDML package with Geant4 extensions and Xerces.
   See: http://cern.ch/gdml.

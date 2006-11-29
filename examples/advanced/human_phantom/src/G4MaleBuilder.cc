@@ -44,5 +44,5 @@ void G4MaleBuilder::BuildMaleGenitalia(G4bool /*sensitivity*/)
 
 void G4MaleBuilder::BuildTestes(G4bool /*sensitivity*/)
 { 
-G4cout << "Male testes are not available !!!" << G4endl;
+ G4cout << "Male testes are not available !!!" << G4endl;
 }
