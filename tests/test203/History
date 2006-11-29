@@ -1,0 +1,9 @@
+$Id: History,v 1.1 2006-11-29 18:04:27 allison Exp $
+-----------------------------------------------------------------------------
+
+History file for test/test203 subdirectory
+------------------------------------------------
+
+29th November 2006  John Allison
+- First version based on GAMOS, by Pedro Arce.
+- Geometry file cmsgeom.txt hard-coded GmGeometryFromText.cc.
