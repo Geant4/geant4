@@ -46,7 +46,7 @@ G4HumanPhantomSDBreast::G4HumanPhantomSDBreast(G4String name)
 G4HumanPhantomSDBreast::~G4HumanPhantomSDBreast()
 {;}
 
-void G4HumanPhantomSDBreast::Initialize(G4HCofThisEvent* HCE)
+void G4HumanPhantomSDBreast::Initialize(G4HCofThisEvent*)
 {}
 
 G4bool G4HumanPhantomSDBreast::ProcessHits(G4Step* aStep,G4TouchableHistory* ROhist)
@@ -63,9 +63,10 @@ G4bool G4HumanPhantomSDBreast::ProcessHits(G4Step* aStep,G4TouchableHistory* ROh
 
  if(edep != 0)                       
 	    { 
-              G4int sector = ROhist -> GetReplicaNumber();
-	      G4int slice = ROhist -> GetReplicaNumber(1);
-#ifdef G4ANALYSIS_USE	
+             
+#ifdef G4ANALYSIS_USE
+    G4int sector = ROhist -> GetReplicaNumber();
+    G4int slice = ROhist -> GetReplicaNumber(1);	
     G4HumanPhantomAnalysisManager* analysis = 
 		G4HumanPhantomAnalysisManager::getInstance();   
              

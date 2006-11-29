@@ -132,7 +132,7 @@ G4SubtractionSolid* thyroid = new G4SubtractionSolid("SecondThyroid",
   ThyroidVisAtt->SetForceSolid(true);
   logicThyroid->SetVisAttributes(ThyroidVisAtt);
 
-  G4cout << "Thyroid created !!!!!!" << G4endl;
+  G4cout << "Thyroid created for "<<sex << " !!!!!!" << G4endl;
 
   // Testing Thyroid Volume
   G4double ThyroidVol = logicThyroid->GetSolid()->GetCubicVolume();

@@ -90,7 +90,7 @@ G4VPhysicalVolume* G4MIRDBrain::ConstructBrain(G4VPhysicalVolume* mother, G4Stri
   BrainVisAtt->SetForceSolid(true);
   logicBrain->SetVisAttributes(BrainVisAtt);
 
-  G4cout << "Brain created !!!!!!" << G4endl;
+  G4cout << "Brain created for " << sex << "!!!! "<<G4endl;
 
   // Testing Brain Volume
   G4double BrainVol = logicBrain->GetSolid()->GetCubicVolume();

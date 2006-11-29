@@ -51,8 +51,9 @@
 #include "G4HumanPhantomEventAction.hh"
 #include "G4HumanPhantomRunAction.hh"
 #include "G4HumanPhantomEnergyDeposit.hh"
+#ifdef G4ANALYSIS_USE 
 #include  "G4HumanPhantomAnalysisManager.hh"
-
+#endif
 int main(int argc,char** argv)
 {
   G4cout << "Starting run " << G4endl;

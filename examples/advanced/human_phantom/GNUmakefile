@@ -23,8 +23,12 @@ endif
 
 CPPFLAGS    += \
                -I$(GDML_BASE)/include \
-               -I$(XERCESCROOT)/include \
-               `aida-config --include`
+               -I$(XERCESCROOT)/include 
+
+ifdef G4ANALYSIS_USE  
+CPPFLAGS    += \
+	         `aida-config --include`
+endif
 
 EXTRALIBS   += \
                -L$(GDML_BASE)/$(SCRAM_ARCH)/lib \
@@ -37,8 +41,12 @@ EXTRALIBS   += \
                -lSaxana \
                -lProcesses \
                -lWriter \
-               -L$(XERCESCROOT)/lib -lxerces-c \
-               `aida-config --lib`
+               -L$(XERCESCROOT)/lib -lxerces-c 
+           
+ifdef G4ANALYSIS_USE  
+EXTRALIBS    += \
+	         `aida-config --lib`
+endif
 
 .PHONY: all
 all: lib bin

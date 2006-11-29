@@ -55,8 +55,7 @@ G4MIRDHead::~G4MIRDHead()
 
 G4VPhysicalVolume* G4MIRDHead::ConstructHead(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity)
 {
-
-  G4cout << "ConstructHead"<< G4endl;
+  //  G4cout << "ConstructHead"<< G4endl;
   G4Material* soft = material -> GetMaterial("soft_tissue");
   
   // Ellipsoid
@@ -107,7 +106,7 @@ G4VPhysicalVolume* G4MIRDHead::ConstructHead(G4VPhysicalVolume* mother, G4String
   HeadVisAtt->SetForceSolid(false);
   logicHead->SetVisAttributes(HeadVisAtt);
 
-  G4cout << "Head created !!!!!!" << G4endl;
+  G4cout << "Head created for " << sex << "!!!!!!" << G4endl;
 
   // Testing Head Volume
   G4double HeadVol = logicHead->GetSolid()->GetCubicVolume();
