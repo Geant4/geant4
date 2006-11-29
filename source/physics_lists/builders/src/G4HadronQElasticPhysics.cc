@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronQElasticPhysics.cc,v 1.5 2006-11-24 15:31:52 vnivanch Exp $
+// $Id: G4HadronQElasticPhysics.cc,v 1.6 2006-11-29 14:33:30 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -56,7 +56,7 @@
 
 G4HadronQElasticPhysics::G4HadronQElasticPhysics(
     const G4String& name,  G4int ver)
-  : G4VPhysicsConstructor(name), verbose(ver)
+  : G4VPhysicsConstructor(name), verbose(ver), wasActivated(false)
 {
   if(verbose > 1) G4cout << "### HadronQElasticPhysics" << G4endl;
   model = 0;
