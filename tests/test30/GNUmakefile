@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.6 2006-11-16 14:54:37 vnivanch Exp $
+# $Id: GNUmakefile,v 1.7 2006-11-29 19:48:45 vnivanch Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -11,11 +11,9 @@ ifndef G4INSTALL
   G4INSTALL = ../../
 endif
 
-.PHONY: all tools
- 
+.PHONY: all 
 
 all: lib bin
-
 
 ifdef G4ANALYSIS_USE
   CPPFLAGS += -DG4ANALYSIS_USE

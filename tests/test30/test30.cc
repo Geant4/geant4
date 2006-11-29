@@ -112,7 +112,7 @@ int main(int argc, char** argv)
   G4bool    Shen = false;
   G4int     ionZ(0), ionA(0);
   G4String  nameMat  = "G4_Al";
-  G4String  nameGen  = "Binary";
+  G4String  nameGen  = "binary";
   G4bool    logx     = false;
   G4bool    usepaw   = false;
   G4bool    inclusive= true;
@@ -456,7 +456,8 @@ int main(int argc, char** argv)
     std::auto_ptr< AIDA::ITreeFactory > tf( af->createTreeFactory() );
 
     // Creating a tree mapped to a new hbook file.
-    std::auto_ptr< AIDA::ITree > tree( tf->create( hFile,"hbook", false,true));
+    std::auto_ptr< AIDA::ITree > tree( tf->create( hFile,"hbook", 
+						   false,true,"--noErrors uncompress"));
     std::cout << "Tree store : " << tree->storeName() << std::endl;
 
     const G4int nhisto = 63;
@@ -795,14 +796,15 @@ int main(int argc, char** argv)
 
 	if(usepaw) {
 	  if(i==0)  {
-	    h[56]->fill(e/MeV,1.0);
-	    h[58]->fill(cost,factora);
-	    h[60]->fill(costcm,factora);
-	  } else if(i==1) {
 	    h[57]->fill(e/MeV,1.0);
 	    h[59]->fill(cost,factora);
 	    h[61]->fill(costcm,factora);
+	  } else if(i==1) {
+	    h[58]->fill(e/MeV,1.0);
+	    h[60]->fill(cost,factora);
+	    h[62]->fill(costcm,factora);
 	  }
+
           h[2]->fill(mom.phi()/degree,1.0);
           if(pd == neutron) h[23]->fill(mom.phi()/degree,1.0);
 	}
@@ -931,7 +933,7 @@ int main(int argc, char** argv)
       pt = std::sqrt(px*px +py*py);
 
       if(usepaw) {
-        h[0]->fill((float)n,1.0);
+        h[0]->fill((double)n,1.0);
 	h[15]->fill(labv.e()/MeV, 1.0);
 	h[16]->fill(pz/GeV, 1.0);
 	h[17]->fill(pt/GeV, 1.0);
