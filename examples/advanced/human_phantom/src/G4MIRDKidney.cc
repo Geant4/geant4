@@ -99,11 +99,10 @@ G4VPhysicalVolume* G4MIRDKidney::ConstructKidney(G4VPhysicalVolume* mother, G4St
   G4VPhysicalVolume* physKidney = new G4PVPlacement(0 ,G4ThreeVector(-5.18*cm,
 								     5.88 *cm,
 								     -2.25 *cm),
-      			       "physicalKidney",
-  			       logicKidney,
+  			       "physicalKidney", logicKidney,
 			       mother,
 			       false,
-			       0);
+			       0, true);
 
   // Sensitive Body Part
   if (sensitivity==true)

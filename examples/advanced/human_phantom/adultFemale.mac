@@ -21,7 +21,7 @@
 #
 /bodypart/addBodyPart Head yes
 #########
-/bodypart/addBodyPart Trunk yes
+/bodypart/addBodyPart Trunk no
 /bodypart/addBodyPart Legs yes
 ##############
 #
@@ -43,7 +43,7 @@
 /bodypart/addBodyPart Kidneys yes
 /bodypart/addBodyPart UrinaryBladder yes
 /bodypart/addBodyPart Spleen yes
-/bodypart/addBodyPart Pancreas yes
+/bodypart/addBodyPart Pancreas no
 /bodypart/addBodyPart Thyroid yes
 #
 # Gastrointestinal System

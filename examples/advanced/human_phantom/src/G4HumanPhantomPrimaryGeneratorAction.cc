@@ -63,7 +63,8 @@ G4HumanPhantomPrimaryGeneratorAction::G4HumanPhantomPrimaryGeneratorAction()
 
   // Default Particle
   G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
-  particleGun->SetParticleDefinition(particleTable->FindParticle("proton"));
+  
+particleGun->SetParticleDefinition(particleTable->FindParticle("geantino"));
   particleGun->SetParticleEnergy(100.*MeV);
 }
 

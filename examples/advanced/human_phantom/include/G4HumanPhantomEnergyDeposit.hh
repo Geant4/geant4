@@ -44,7 +44,7 @@ public:
   void TotalEnergyDeposit();
 
 private:  
-  // std::map<std::string,G4double> energyTotal;
+  std::map<std::string,G4double> energyTotal;
   G4String bodypartName;
 };
 #endif

@@ -47,12 +47,12 @@ G4HumanPhantomEnergyDeposit::~G4HumanPhantomEnergyDeposit()
 void G4HumanPhantomEnergyDeposit::Fill(G4String bodypartName, 
 			G4double energyDeposit)
 {
-  //energyTotal[bodypartName] += energyDeposit;
+  energyTotal[bodypartName] += energyDeposit;
 }
 
 void G4HumanPhantomEnergyDeposit::TotalEnergyDeposit()
 {
-  /*
+  
   G4double totalBody = energyTotal["HeadVolume"]+energyTotal["TrunkVolume"]+energyTotal["LegsVolume"];
   G4cout << "Energy in total body = " << G4BestUnit(totalBody,"Energy") << G4endl;
 
@@ -78,5 +78,5 @@ void G4HumanPhantomEnergyDeposit::TotalEnergyDeposit()
       i++;
       k++;
     }
-  */
+  
 }
