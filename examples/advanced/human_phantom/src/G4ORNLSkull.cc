@@ -81,8 +81,8 @@ G4VPhysicalVolume* G4ORNLSkull::ConstructSkull(G4VPhysicalVolume* mother, G4Stri
 
 
   // Visualization Attributes
-  G4VisAttributes* SkullVisAtt = new G4VisAttributes(G4Colour(1.0,1.0,0.0));
-  SkullVisAtt->SetForceSolid(true);
+  G4VisAttributes* SkullVisAtt = new G4VisAttributes(G4Colour(0.46,0.53,0.6));
+  SkullVisAtt->SetForceSolid(false);
   logicSkull->SetVisAttributes(SkullVisAtt);
 
   G4cout << "Skull created !!!!!!" << G4endl;

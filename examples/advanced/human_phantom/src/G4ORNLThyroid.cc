@@ -81,7 +81,7 @@ G4VPhysicalVolume* G4ORNLThyroid::ConstructThyroid(G4VPhysicalVolume* mother, G4
   }
 
   // Visualization Attributes
-  G4VisAttributes* ThyroidVisAtt = new G4VisAttributes(G4Colour(1.0,1.0,0.0));
+  G4VisAttributes* ThyroidVisAtt = new G4VisAttributes(G4Colour(0.0,1.0,1.0));
   ThyroidVisAtt->SetForceSolid(true);
   logicThyroid->SetVisAttributes(ThyroidVisAtt);
 

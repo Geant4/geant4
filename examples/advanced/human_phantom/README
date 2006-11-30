@@ -1,4 +1,4 @@
-$Id: README,v 1.5 2006-11-29 17:36:57 guatelli Exp $
+$Id: README,v 1.6 2006-11-30 09:36:41 guatelli Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -25,8 +25,7 @@ Authors: S. Guatelli (guatelli@ge.infn.it) and M. G. Pia (pia@ge.infn.it), INFN 
 The example is based on code developed by the undergraduate student G. Guerrieri 
 Note: this is a preliminary beta-version of the code; an improved 
 version will be distributed in the next Geant4 public release, compliant
-with the design in a forthcoming publication, and subject to a 
-design and code review.
+with the design in a forthcoming publication, and subject to a design and code review.
 
 -----> Geometry 
 
@@ -38,15 +37,29 @@ are handled through GDML (Geometry Description Markup Language, www.cern.ch/gdml
 
 // Parameterized breast
 
+Bug report: #914
+
 -----> Physics
+
 Particles: e-, e+, photon, geantino
 Physics list: electromagnetic processes are active for photons, e- and e+
 The threshold of production of secondary particles is set to 0.1 * mm.
 
+
 -----> Primary particles
+
+The primary particles are geantino.
 
 
 -----> Energy deposit
+
+The energy deposit is calculated in the organs of the phantom.
+At the end of the execution of the simulation  the summary of the total energy deposit in each organ is print out.
+The user can set the sensitivity of each organ interactively with the UI command:
+/bodypart/addBodyPart organName yes
+(see adultFemale.mac as example)
+
+-----> Analysis
 
 
 -----> Setup
@@ -69,10 +82,11 @@ The threshold of production of secondary particles is set to 0.1 * mm.
  		
 - Execute the application:
  	      % phantom
-	(Default choice: adultFemale.mac 
-	 Other: adultMale.mac
-	 Visualizators: vrmlVis.mac, dawnVis.mac, openGLVis.mac, noVis.mac
-	 Run Particle: run.mac)
+	 
+- Default macro: adultFemale.mac (MIRD, Female model) 
+- Other macros:  adultMale.mac (MIRD, Male model)
+                 adultORNLFemale.mac (ORNL, Female model)
+                 adultORNLMale.mac (ORNL, Male model)
+- Visualization macros: vrmlVis.mac, dawnVis.mac, openGLVis.mac, noVis.mac
+- Run particles: run.mac
 
-- For the Adult Male phantom: modify G4HumanPhantomBuilder.cc at lines 60/61 (for the sex definition) 
-  and lines 69 and ss. for the Body part construction.

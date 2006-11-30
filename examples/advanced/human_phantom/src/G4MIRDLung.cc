@@ -93,13 +93,6 @@ G4VPhysicalVolume* G4MIRDLung::ConstructLung(G4VPhysicalVolume* mother, G4String
 			       mother,
 			       false,
 			       0, true);
- G4cout<< "INSIDE FUNCTION: "<< G4endl;
-  EInside inside = lung -> Inside(G4ThreeVector(69.09119864,481.0332292,-62.57019964));
-
-    if (inside == kOutside) G4cout <<"Outside" << G4endl;
-   if (inside == kSurface) G4cout <<"Surface" << G4endl;
-    if (inside == kInside) G4cout <<"Inside" << G4endl;
-
 
   // Sensitive Body Part
   if (sensitivity==true)

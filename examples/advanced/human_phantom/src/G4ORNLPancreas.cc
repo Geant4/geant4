@@ -79,7 +79,7 @@ G4VPhysicalVolume* G4ORNLPancreas::ConstructPancreas(G4VPhysicalVolume* mother, 
   }
 
   // Visualization Attributes
-  G4VisAttributes* PancreasVisAtt = new G4VisAttributes(G4Colour(1.0,1.0,0.0));
+  G4VisAttributes* PancreasVisAtt = new G4VisAttributes(G4Colour(0.28,0.82,0.81));
   PancreasVisAtt->SetForceSolid(true);
   logicPancreas->SetVisAttributes(PancreasVisAtt);
 

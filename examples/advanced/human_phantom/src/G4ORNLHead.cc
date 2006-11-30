@@ -82,8 +82,8 @@ G4PhysicalVolumeStore::DeRegister((G4VPhysicalVolume*)GDMLProcessor::GetInstance
   }
 
   // Visualization Attributes
-  G4VisAttributes* HeadVisAtt = new G4VisAttributes(G4Colour(1.0,1.0,0.0));
-  HeadVisAtt->SetForceSolid(true);
+  G4VisAttributes* HeadVisAtt = new G4VisAttributes(G4Colour(0.94,0.5,0.5));
+  HeadVisAtt->SetForceSolid(false);
   logicHead->SetVisAttributes(HeadVisAtt);
 
   G4cout << "Head created !!!!!!" << G4endl;

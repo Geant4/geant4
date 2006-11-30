@@ -81,7 +81,7 @@ G4VPhysicalVolume* G4ORNLPelvis::ConstructPelvis(G4VPhysicalVolume* mother, G4St
   }
 
   // Visualization Attributes
-  G4VisAttributes* PelvisVisAtt = new G4VisAttributes(G4Colour(1.0,1.0,0.0));
+  G4VisAttributes* PelvisVisAtt = new G4VisAttributes(G4Colour(0.46,0.53,0.6));
   PelvisVisAtt->SetForceSolid(true);
   logicPelvis->SetVisAttributes(PelvisVisAtt);
 

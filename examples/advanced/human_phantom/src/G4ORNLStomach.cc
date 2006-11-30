@@ -81,7 +81,7 @@ G4VPhysicalVolume* G4ORNLStomach::ConstructStomach(G4VPhysicalVolume* mother, G4
   }
 
   // Visualization Attributes
-  G4VisAttributes* StomachVisAtt = new G4VisAttributes(G4Colour(1.0,1.0,0.0));
+  G4VisAttributes* StomachVisAtt = new G4VisAttributes(G4Colour(0.63,0.32,0.17));
   StomachVisAtt->SetForceSolid(true);
   logicStomach->SetVisAttributes(StomachVisAtt);
 

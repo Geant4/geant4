@@ -1,7 +1,4 @@
 #
-# Macro file for the initialization phase of "phantom.cc"
-# when runing in interactive mode   
-#
 # Sets some default verbose
 /control/verbose 2
 #
@@ -36,7 +33,6 @@
 #
 # Organs
 #
-/bodypart/addBodyPart Breast yes
 /bodypart/addBodyPart Lungs yes
 /bodypart/addBodyPart Brain yes
 /bodypart/addBodyPart Heart yes
@@ -52,12 +48,6 @@
 /bodypart/addBodyPart UpperLargeIntestine yes
 /bodypart/addBodyPart LowerLargeIntestine yes
 /bodypart/addBodyPart Liver yes
-#
-# Genitalia
-#
-#/bodypart/addBodyPart Ovaries yes
-#/bodypart/addBodyPart Uterus yes
-#
 #
 # Construct your Phantom
 #

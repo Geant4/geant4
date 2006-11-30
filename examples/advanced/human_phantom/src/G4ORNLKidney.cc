@@ -80,7 +80,7 @@ G4PhysicalVolumeStore::DeRegister((G4VPhysicalVolume*)GDMLProcessor::GetInstance
   }
 
   // Visualization Attributes
-  G4VisAttributes* KidneyVisAtt = new G4VisAttributes(G4Colour(1.0,1.0,0.0));
+  G4VisAttributes* KidneyVisAtt = new G4VisAttributes(G4Colour(0.72,0.52,0.04));
   KidneyVisAtt->SetForceSolid(true);
   logicKidney->SetVisAttributes(KidneyVisAtt);
 

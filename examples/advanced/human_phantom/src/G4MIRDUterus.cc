@@ -85,24 +85,6 @@ G4VPhysicalVolume* G4MIRDUterus::ConstructUterus(G4VPhysicalVolume* mother, G4St
 			       mother,
 			       false,
 			       0, true);
-  
-  G4cout<< "INSIDE FUNCTION FOR G4ThreeVector(11.06125885,121.3272523,-47.81772028): "<< G4endl;
-  EInside inside = uterus -> Inside(G4ThreeVector(11.06125885,121.3272523,-47.81772028));
-    if (inside == kOutside) G4cout <<"Outside" << G4endl;
-   if (inside == kSurface) G4cout <<"Surface" << G4endl;
-    if (inside == kInside) G4cout <<"Inside" << G4endl;
-
-  G4cout<< "INSIDE FUNCTION FOR G4ThreeVector(-1.665718574,120.1334986,-54.53883488): "<< G4endl;
-  inside = uterus -> Inside(G4ThreeVector(-1.665718574,120.1334986,-54.53883488));
-    if (inside == kOutside) G4cout <<"Outside" << G4endl;
-   if (inside == kSurface) G4cout <<"Surface" << G4endl;
-    if (inside == kInside) G4cout <<"Inside" << G4endl;
-
-  G4cout<< "INSIDE FUNCTION FOR G4ThreeVector(19.90604135,125.3049229,-47.75104833): "<< G4endl;
-  inside = uterus -> Inside(G4ThreeVector(19.90604135,125.3049229,-47.75104833));
-    if (inside == kOutside) G4cout <<"Outside" << G4endl;
-   if (inside == kSurface) G4cout <<"Surface" << G4endl;
-    if (inside == kInside) G4cout <<"Inside" << G4endl;
 
   // Sensitive Body Part
   if (sensitivity==true)

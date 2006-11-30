@@ -1,7 +1,4 @@
 #
-# Macro file for the initialization phase of "phantom.cc"
-# when runing in interactive mode   
-#
 # Sets some default verbose
 /control/verbose 2
 #
@@ -15,7 +12,7 @@
 #
 # Choose Sex of Phantom: Male or Female
 #
-/phantom/setPhantomSex Female
+/phantom/setPhantomSex Male
 #
 # Insert Body Part and their Sensitivity
 #
@@ -71,7 +68,7 @@
 #/control/execute vrmlVis.mac
 #
 # Visualize Phantom with OPENGL
-#/control/execute openGLVis.mac
+/control/execute openGLVis.mac
 #
 # Visualize Phantom with DAWN
 #/control/execute dawnVis.mac

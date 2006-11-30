@@ -15,7 +15,6 @@
 #
 # Run Particles
 #
-
 # for drawing the tracks
 # (if too many tracks cause core dump => storeTrajectory 0)
 /tracking/storeTrajectory 1
@@ -24,7 +23,6 @@
 /vis/scene/endOfEventAction accumulate
 #
 # Set Particle
-#/gun/particle e-
 /gun/energy 100. MeV
 #
 # Set Direction of Beam
@@ -34,7 +32,8 @@
 /gun/setBeam beamAlongZ
 #/gun/setBeam isotropicFlux
 #
-/run/beamOn 500000
+/run/beamOn 500
+
 
 
 

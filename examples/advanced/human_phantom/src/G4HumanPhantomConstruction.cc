@@ -115,7 +115,7 @@ G4VPhysicalVolume* G4HumanPhantomConstruction::Construct()
     builder->BuildOvary(true);
     builder->BuildUterus(true);
     builder->BuildBreast(true);
-    builder->BuildParameterisedBreast(true);
+    if(model == "MIRD") builder->BuildParameterisedBreast(true);
   }
  
   if(sex=="Male"){

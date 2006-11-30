@@ -82,8 +82,8 @@ G4PhysicalVolumeStore::DeRegister((G4VPhysicalVolume*)GDMLProcessor::GetInstance
   }
 
   // Visualization Attributes
-  G4VisAttributes* TrunkVisAtt = new G4VisAttributes(G4Colour(1.0,1.0,0.0));
-  TrunkVisAtt->SetForceSolid(true);
+  G4VisAttributes* TrunkVisAtt = new G4VisAttributes(G4Colour(0.94,0.5,0.5));
+  TrunkVisAtt->SetForceSolid(false);
   logicTrunk->SetVisAttributes(TrunkVisAtt);
 
   G4cout << "Trunk created !!!!!!" << G4endl;

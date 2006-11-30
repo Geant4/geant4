@@ -81,7 +81,7 @@ G4VPhysicalVolume* G4ORNLLegBone::ConstructLegBone(G4VPhysicalVolume* mother, G4
   }
 
   // Visualization Attributes
-  G4VisAttributes* LegBoneVisAtt = new G4VisAttributes(G4Colour(1.0,1.0,0.0));
+  G4VisAttributes* LegBoneVisAtt = new G4VisAttributes(G4Colour(0.46,0.53,0.6));
   LegBoneVisAtt->SetForceSolid(true);
   logicLegBone->SetVisAttributes(LegBoneVisAtt);
 

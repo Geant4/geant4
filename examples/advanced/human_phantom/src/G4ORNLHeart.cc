@@ -80,7 +80,7 @@ G4PhysicalVolumeStore::DeRegister((G4VPhysicalVolume*)GDMLProcessor::GetInstance
   }
 
   // Visualization Attributes
-  G4VisAttributes* HeartVisAtt = new G4VisAttributes(G4Colour(1.0,1.0,0.0));
+  G4VisAttributes* HeartVisAtt = new G4VisAttributes(G4Colour(1.0,0.0,0.0));
   HeartVisAtt->SetForceSolid(true);
   logicHeart->SetVisAttributes(HeartVisAtt);
 

@@ -80,7 +80,7 @@ G4PhysicalVolumeStore::DeRegister((G4VPhysicalVolume*)GDMLProcessor::GetInstance
 
 
   // Visualization Attributes
-  G4VisAttributes* UrinaryBladderVisAtt = new G4VisAttributes(G4Colour(1.0,1.0,0.0));
+  G4VisAttributes* UrinaryBladderVisAtt = new G4VisAttributes(G4Colour(0.85,0.65,0.125));
   UrinaryBladderVisAtt->SetForceSolid(true);
   logicUrinaryBladder->SetVisAttributes(UrinaryBladderVisAtt);
 

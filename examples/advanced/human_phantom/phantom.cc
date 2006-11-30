@@ -102,7 +102,7 @@ int main(int argc,char** argv)
   if (session)   // Define UI session for interactive mode.
     { 
       G4cout << " UI session starts ..." << G4endl;
-      UI -> ApplyCommand("/control/execute run.mac");    
+      UI -> ApplyCommand("/control/execute adultFemale.mac");    
       session -> SessionStart();
       delete session;
     }

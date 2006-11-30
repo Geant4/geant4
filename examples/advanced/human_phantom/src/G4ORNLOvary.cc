@@ -79,7 +79,7 @@ G4VPhysicalVolume* G4ORNLOvary::ConstructOvary(G4VPhysicalVolume* mother, G4Stri
   }
 
   // Visualization Attributes
-  G4VisAttributes* OvaryVisAtt = new G4VisAttributes(G4Colour(1.0,1.0,0.0));
+  G4VisAttributes* OvaryVisAtt = new G4VisAttributes(G4Colour(0.85,0.44,0.84));
   OvaryVisAtt->SetForceSolid(true);
   logicOvary->SetVisAttributes(OvaryVisAtt);
 

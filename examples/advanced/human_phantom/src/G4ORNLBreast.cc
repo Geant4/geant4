@@ -78,7 +78,7 @@ G4VPhysicalVolume* G4ORNLBreast::ConstructBreast(G4VPhysicalVolume* mother, G4St
   }
 
   // Visualization Attributes
-  G4VisAttributes* BreastVisAtt = new G4VisAttributes(G4Colour(1.0,1.0,0.0));
+  G4VisAttributes* BreastVisAtt = new G4VisAttributes(G4Colour(1.0,0.41,0.71));
   BreastVisAtt->SetForceSolid(true);
   logicBreast->SetVisAttributes(BreastVisAtt);
 

@@ -81,7 +81,7 @@ G4PhysicalVolumeStore::DeRegister((G4VPhysicalVolume*)GDMLProcessor::GetInstance
   }
 
   // Visualization Attributes
-  G4VisAttributes* LungVisAtt = new G4VisAttributes(G4Colour(1.0,1.0,0.0));
+  G4VisAttributes* LungVisAtt = new G4VisAttributes(G4Colour(0.25,0.41,0.88));
   LungVisAtt->SetForceSolid(true);
   logicLung->SetVisAttributes(LungVisAtt);
 

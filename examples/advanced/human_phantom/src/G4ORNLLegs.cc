@@ -80,8 +80,8 @@ G4VPhysicalVolume* G4ORNLLegs::ConstructLegs(G4VPhysicalVolume* mother, G4String
   }
 
   // Visualization Attributes
-  G4VisAttributes* LegsVisAtt = new G4VisAttributes(G4Colour(1.0,1.0,0.0));
-  LegsVisAtt->SetForceSolid(true);
+  G4VisAttributes* LegsVisAtt = new G4VisAttributes(G4Colour(0.94,0.5,0.5));
+  LegsVisAtt->SetForceSolid(false);
   logicLegs->SetVisAttributes(LegsVisAtt);
 
   G4cout << "Legs created !!!!!!" << G4endl;
