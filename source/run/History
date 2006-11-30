@@ -1,4 +1,4 @@
-$Id: History,v 1.151 2006-11-30 10:42:04 gcosmo Exp $
+$Id: History,v 1.152 2006-11-30 10:49:01 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -20,6 +20,7 @@ committal in the CVS repository !
 November 30th, 2006, Gabriele Cosmo (run-V08-01-05)
 - In destructor of G4RunManagerKernel, allow for proper deletion of
   default region and deallocation of units from the G4UnitsTable.
+- Synchronised files with HEAD.
 - Coworks with tags: "global-V08-01-07" and "geommng-V08-01-08".
 
 November 20th, 2006, Makoto Asai (run-V08-01-04)
