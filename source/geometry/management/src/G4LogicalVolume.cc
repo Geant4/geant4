@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalVolume.cc,v 1.31 2006-06-29 18:33:27 gunter Exp $
+// $Id: G4LogicalVolume.cc,v 1.32 2006-11-30 10:39:28 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -99,7 +99,11 @@ G4LogicalVolume::G4LogicalVolume( __void__& )
 //
 G4LogicalVolume::~G4LogicalVolume()
 {
-  if(fRootRegion) fRegion->RemoveRootLogicalVolume(this);
+  // Avoid de-registration of root region if treating the first world volume
+  //
+  if( (fRootRegion) && (this != (*G4LogicalVolumeStore::GetInstance())[0]) )
+    { fRegion->RemoveRootLogicalVolume(this); }
+
   G4LogicalVolumeStore::DeRegister(this);
 }
 
