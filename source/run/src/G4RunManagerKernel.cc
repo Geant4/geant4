@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManagerKernel.cc,v 1.35 2006-11-15 12:19:26 gcosmo Exp $
+// $Id: G4RunManagerKernel.cc,v 1.36 2006-11-30 10:41:46 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -128,11 +128,15 @@ G4RunManagerKernel::~G4RunManagerKernel()
   }
   delete eventManager;
   if(verboseLevel>1) G4cout << "EventManager deleted." << G4endl;
+  delete defaultRegion;
+  if(verboseLevel>1) G4cout << "Default detector region deleted." << G4endl;
   G4UImanager* pUImanager = G4UImanager::GetUIpointer();
   {
     if(pUImanager) delete pUImanager;
     if(verboseLevel>1) G4cout << "UImanager deleted." << G4endl;
   }
+  G4UnitDefinition::ClearUnitsTable();
+  if(verboseLevel>1) G4cout << "Units table cleared." << G4endl;
   delete pStateManager; 
   if(verboseLevel>1) G4cout << "StateManager deleted." << G4endl;
   delete defaultExceptionHandler;
