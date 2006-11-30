@@ -8,11 +8,11 @@
 #
 # Choose model: ORNL, MIRD, MIX
 #
-/phantom/setPhantomModel MIRD
+/phantom/setPhantomModel ORNL
 #
 # Choose Sex of Phantom: Male or Female
 #
-/phantom/setPhantomSex Female
+/phantom/setPhantomSex Male
 #
 # Insert Body Part and their Sensitivity
 #

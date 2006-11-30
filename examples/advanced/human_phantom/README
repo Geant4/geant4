@@ -1,4 +1,4 @@
-$Id: README,v 1.6 2006-11-30 09:36:41 guatelli Exp $
+$Id: README,v 1.7 2006-11-30 09:39:03 guatelli Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -10,17 +10,20 @@ $Id: README,v 1.6 2006-11-30 09:36:41 guatelli Exp $
 
 ------> Introduction
 
-The human_phantom example models anthropomorphic phantoms for Geant4 simulations.
+The human_phantom example models anthropomorphic phantoms for
+ Geant4 simulations.
 Two models are available: MIRD [1]and ORNL [2] (Male and Female).
 
-[1] W.S. Snyder, et al, "MIRD Pamphlet No. 5 Revised, Estimates of absorbed fractions
-for monoenergetic photon sources uniformly distributed in various organs of a heterogeneous phantom",
+[1] W.S. Snyder, et al, "MIRD Pamphlet No. 5 Revised, Estimates of 
+absorbed fractions for monoenergetic photon sources uniformly distributed 
+in various organs of a heterogeneous phantom",
 J. Nucl. Med. Suppl., no. 3, pp. 5-52, 1969.
 
-[2] M. Cristy and K. F. Eckerman, "Specific absorbed fractions of energy at various ages from internal
- photon sources", ORNL/TM-8381/VI, Apr. 1987.
+[2] M. Cristy and K. F. Eckerman, "Specific absorbed fractions of energy 
+at various ages from internal photon sources", ORNL/TM-8381/VI, Apr. 1987.
  
-Authors: S. Guatelli (guatelli@ge.infn.it) and M. G. Pia (pia@ge.infn.it), INFN Genova, Italy
+Authors: S. Guatelli (guatelli@ge.infn.it) and M. G. Pia (pia@ge.infn.it),
+ INFN Genova, Italy
  
 The example is based on code developed by the undergraduate student G. Guerrieri 
 Note: this is a preliminary beta-version of the code; an improved 
