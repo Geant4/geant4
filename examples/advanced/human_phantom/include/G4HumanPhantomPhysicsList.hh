@@ -23,18 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// Authors: S. Guatelli and M. G. Pia, INFN Genova, Italy
+// 
+// Based on code developed by the undergraduate student G. Guerrieri 
+// Note: this is a preliminary beta-version of the code; an improved 
+// version will be distributed in the next Geant4 public release, compliant
+// with the design in a forthcoming publication, and subject to a 
+// design and code review.
 //
-// $Id: G4HumanPhantomPhysicsList.hh,v 1.4 2006-11-29 14:24:58 guatelli Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-// Code review: MGP, 5 November 2006 (still to be completed)
-//
-//    **********************************
-//    *                                *
-//    *      G4HumanPhantomPhysicsList.hh      *
-//    *                                *
-//    **********************************
-
 #ifndef G4HumanPhantomPhysicsList_h
 #define G4HumanPhantomPhysicsList_h 1
 

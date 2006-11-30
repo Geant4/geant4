@@ -1,4 +1,4 @@
-$Id: History,v 1.6 2006-11-30 10:50:54 guatelli Exp $
+$Id: History,v 1.7 2006-11-30 11:03:18 guatelli Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,7 @@ committal in the CVS repository !
      ----------------------------------------------------------
 
 November 30, 2006, S. Guatelli tag: human_phantom-V08-01-01
+				    human_phantom-V08-01-02
 - Geantino introduced as primary particles
 - MIRD model is hard-coded
 - ORNL model is defined through GDML files  
