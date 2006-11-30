@@ -1,4 +1,4 @@
-$Id: History,v 1.5 2006-11-21 13:39:34 guatelli Exp $
+$Id: History,v 1.6 2006-11-30 10:50:54 guatelli Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -18,8 +18,18 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 30, 2006, S. Guatelli tag: human_phantom-V08-01-01
+- Geantino introduced as primary particles
+- MIRD model is hard-coded
+- ORNL model is defined through GDML files  
+- No overlapping volumes
+- Translation for the legs is set to:x="-7.01" y="-39.1" z="0"
+  instead of x="-7." y="-39." z="0", to avoid volume overlaps
+- Review of the code
+- Design iteration
+
 February 11, 2006, G. Guerrieri
-- Energy deposit in thenphantom added.
+- Energy deposit in the phantom added.
 
 November 23, 2005, G. Guerrieri
 - Adult Male phantom GDML file added.
