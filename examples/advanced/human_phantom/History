@@ -1,4 +1,4 @@
-$Id: History,v 1.7 2006-11-30 11:03:18 guatelli Exp $
+$Id: History,v 1.8 2006-11-30 16:06:38 guatelli Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 30, 2006, S. Guatelli tag: human_phantom-V08-01-03
+- Corrected bug in the definition of materials for MIRD phantom model. 
 
 November 30, 2006, S. Guatelli tag: human_phantom-V08-01-01
 				    human_phantom-V08-01-02

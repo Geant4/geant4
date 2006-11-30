@@ -1,4 +1,4 @@
-$Id: README,v 1.9 2006-11-30 10:50:54 guatelli Exp $
+$Id: README,v 1.10 2006-11-30 16:06:38 guatelli Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -46,7 +46,9 @@ The creation of coherent models of the human phantom is handled through
 an Abstract Factory design pattern.
 
 The organs of the MIRD phantom are implemented in hard-code; the organs of 
-the ORNL phantom are handled through GDML (Geometry Description Markup Language, www.cern.ch/gdml).
+the ORNL phantom are handled through GDML (Geometry Description Markup Language, www.cern.ch/gdml). The materials of the MIRD model are defined in the
+class G4HumanPhantomMaterial. The materials of the ORNL model are defined in 
+the GDML files.
 
 *** Parameterized breast ***
 MIRD Female model: a breast is analytical and derives from the MIRD 
