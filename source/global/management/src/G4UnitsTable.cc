@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UnitsTable.cc,v 1.35 2006-08-18 10:57:55 maire Exp $
+// $Id: G4UnitsTable.cc,v 1.36 2006-11-30 10:37:57 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -81,11 +81,6 @@ G4UnitDefinition::G4UnitDefinition(const G4String& name,
  
 G4UnitDefinition::~G4UnitDefinition()
 {
-  for (size_t i=0;i<theUnitsTable.size();i++)
-  {
-    delete theUnitsTable[i];
-  }
-  theUnitsTable.clear();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -334,6 +329,17 @@ void G4UnitDefinition::PrintUnitsTable()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void G4UnitDefinition::ClearUnitsTable()
+{
+  for (size_t i=0;i<theUnitsTable.size();i++)
+  {
+    delete theUnitsTable[i];
+  }
+  theUnitsTable.clear();
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
    
 G4UnitsCategory::G4UnitsCategory(const G4String& name)
   : Name(name),UnitsList(),NameMxLen(0),SymbMxLen(0)
@@ -344,6 +350,11 @@ G4UnitsCategory::G4UnitsCategory(const G4String& name)
  
 G4UnitsCategory::~G4UnitsCategory()
 {
+  for(size_t i=0;i<UnitsList.size();i++)
+  {
+    delete UnitsList[i];
+  }
+  UnitsList.clear();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
