@@ -14,6 +14,8 @@
 # a log-files produced by running one of the StatAccepTest
 # simulations. The remain arguments,  file2 ... fileN  are optionals,
 # and they are also meant to be log-files of StatAccepTest simulations.
+# The table and files must be in the same directory as the script
+# (use symbolic link if they are located in other directories).
 #
 # This script produces in output a new table, with the same name
 # as the one given in input (whereas the original one is backup
@@ -408,7 +410,9 @@ def updateLine( infoList, tableLine ) :
 
                         if ( longName.find( "cpuTime" ) > -1 or
                              longName.find( "tracks" ) > -1  or
-                             longName.find( "steps" ) > -1 ) :
+                             longName.find( "steps" ) > -1   or
+                             longName.find( "exit" ) > -1    or
+                             longName.find( "neutronLength" ) > -1 ) :
                             valueStringFormatted = "%.0f" % value
                             newTableLine += "   " + valueStringFormatted
                         else :
