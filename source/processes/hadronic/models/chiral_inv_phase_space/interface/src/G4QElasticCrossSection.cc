@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QElasticCrossSection.cc,v 1.13 2006-12-01 10:57:46 mkossov Exp $
+// $Id: G4QElasticCrossSection.cc,v 1.14 2006-12-01 12:13:48 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -105,6 +105,7 @@ G4double G4QElasticCrossSection::GetCrossSection(G4bool fCS, G4double pMom, G4in
   static std::vector <G4double> colCS; // Vector of last cross sections for the reaction
   // ***---*** End of the mandatory Static Definitions of the Associative Memory ***---***
   G4double pEn=pMom;
+  onlyCS=fCS;
 #ifdef pdebug
   G4cout<<"G4QElCS::GetCS:>>> f="<<fCS<<", p="<<pMom<<", Z="<<tgZ<<"("<<lastZ<<") ,N="<<tgN
         <<"("<<lastN<<"),PDG="<<pPDG<<"("<<lastPDG<<"), T="<<pEn<<"("<<lastTH<<")"<<",Sz="
@@ -243,6 +244,7 @@ G4double G4QElasticCrossSection::GetCrossSection(G4bool fCS, G4double pMom, G4in
 #ifdef pdebug
     G4cout<<"G4QElCS::GetCS:OldCur P="<<pMom<<"="<<pMom<<", CS="<<lastCS*millibarn<<G4endl;
     //CalculateCrossSection(fCS,-27,j,lastPDG,lastZ,lastN,pMom); // DUMMY TEST
+    G4cout<<"G4QElCS::GetCrSec:***SAME***, onlyCS="<<onlyCS<<G4endl;
 #endif
     return lastCS*millibarn;     // Use theLastCS
   }
@@ -257,6 +259,7 @@ G4double G4QElasticCrossSection::GetCrossSection(G4bool fCS, G4double pMom, G4in
 #ifdef pdebug
   G4cout<<"G4QElCS::GetCrSec:End,P="<<pMom<<"(MeV),CS="<<lastCS*millibarn<<"(mb)"<<G4endl;
   //CalculateCrossSection(fCS,-27,j,lastPDG,lastZ,lastN,pMom); // DUMMY TEST
+  G4cout<<"G4QElCS::GetCrSec:***End***, onlyCS="<<onlyCS<<G4endl;
 #endif
   return lastCS*millibarn;
 }
@@ -283,6 +286,9 @@ G4double G4QElasticCrossSection::CalculateCrossSection(G4bool CS,G4int F,G4int I
   // *** End of Static Definitions (Associative Memory Data Base) ***
   G4double pMom=pIU/GeV;                // All calculations are in GeV
   onlyCS=CS;                            // Flag to calculate only CS (not Si/Bi)
+#ifdef pdebug
+  G4cout<<"G4QElasticCrossSection::CalcCS: called onlyCS="<<onlyCS<<",p="<<pIU<<G4endl;
+#endif
   lastLP=std::log(pMom);                // Make a logarithm of the momentum for calculation
   if(F)                                 // This isotope was found in AMDB =>RETRIEVE/UPDATE
 		{
@@ -438,6 +444,9 @@ G4double G4QElasticCrossSection::CalculateCrossSection(G4bool CS,G4int F,G4int I
   }
   else lastSIG=GetTabValues(lastLP, PDG, tgZ, tgN); // Direct calculation beyond the table
   if(lastSIG<0.) lastSIG = 0.;                   // @@ a Warning print can be added
+#ifdef pdebug
+  G4cout<<"G4QElasticCrossSection::CalculateCS: END, onlyCS="<<onlyCS<<G4endl;
+#endif
   return lastSIG;
 }
 
@@ -663,7 +672,7 @@ G4double G4QElasticCrossSection::GetPTables(G4double LP,G4double ILP, G4int PDG,
       // and initialize the zero element of the table
       G4double lp=lPMin;                                      // ln(momentum)
       G4bool memCS=onlyCS;                                    // ??
-      onlyCS=true;
+      onlyCS=false;
       lastCST[0]=GetTabValues(lp, PDG, tgZ, tgN); // Calculate AMDB tables
       onlyCS=memCS;
       lastSST[0]=theSS;
@@ -696,7 +705,7 @@ G4double G4QElasticCrossSection::GetPTables(G4double LP,G4double ILP, G4int PDG,
 										{
             lp=lPMin+ip*dlnP;                     // ln(momentum)
             G4bool memCS=onlyCS;
-            onlyCS=true;
+            onlyCS=false;
             lastCST[ip]=GetTabValues(lp, PDG, tgZ, tgN); // Calculate AMDB tables (ret CS)
             onlyCS=memCS;
             lastSST[ip]=theSS;

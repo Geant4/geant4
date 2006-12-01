@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QElastic.cc,v 1.10 2006-12-01 10:57:46 mkossov Exp $
+// $Id: G4QElastic.cc,v 1.11 2006-12-01 12:13:48 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QElastic class -----------------
@@ -176,6 +176,9 @@ G4double G4QElastic::GetMeanFreePath(const G4Track& aTrack,G4double Q,G4ForceCon
 #endif
 		    G4bool ccsf=true;
       if(Q==-27.) ccsf=false;
+#ifdef debug
+      G4cout<<"G4QEl::GMFP: GetCS #1 j="<<j<<G4endl;
+#endif
       G4double CSI=CSmanager->GetCrossSection(ccsf,Momentum,Z,N,pPDG);//CS(j,i) for isotope
 
 #ifdef debug
@@ -422,11 +425,13 @@ G4VParticleChange* G4QElastic::PostStepDoIt(const G4Track& track, const G4Step& 
     return G4VDiscreteProcess::PostStepDoIt(track,step);
   }
   G4double mint=CSmanager->GetExchangeT(Z,N,projPDG); // fanctional randomized -t in MeV^2
+#ifdef pdebug
+  G4cout<<"G4QElast::PSDI:pPDG="<<projPDG<<",tPDG="<<targPDG<<",P="<<Momentum<<",CS="
+        <<xSec<<",-t="<<mint<<G4endl;
+#endif
 #ifdef nandebug
   if(mint>-.0000001);
   else  G4cout<<"******G4QElast::PSDI:-t="<<mint<<G4endl;
-  G4cout<<"G4QElast::PSDI:pPDG="<<projPDG<<",tPDG="<<targPDG<<",P="<<Momentum<<",CS="
-        <<xSec<<",-t="<<mint<<G4endl;
 #endif
   // @@ only for pp: M_1=M_2=M_p, (1-cost)=(-t)/T/M
   // G4double cost=1.-mint/kinEnergy/tM;      // cos(theta) in CMS
