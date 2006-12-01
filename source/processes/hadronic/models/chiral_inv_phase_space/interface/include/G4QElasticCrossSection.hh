@@ -61,6 +61,10 @@ public:
 
   static G4VQCrossSection* GetPointer(); // Gives a pointer to this singletone
 
+  // At present momentum (pMom) must be in GeV (@@ Units)
+  virtual G4double GetCrossSection(G4bool fCS, G4double pMom, G4int tgZ, G4int tgN,
+                                                                             G4int pPDG=0);
+
   G4double CalculateCrossSection(G4bool CS, G4int F, G4int I, G4int pPDG, G4int Z, G4int N,
                                                                               G4double pP);
 
@@ -82,8 +86,14 @@ private:
   // ---- Local (for particular pP, pPDG, tZ, tN) -----
   static G4bool    onlyCS;   // flag to calculate only CS (not S1/B1,S2/B2,S3/B3)
   static G4double  lastSIG;  // Last calculated cross section
-  static G4double  lastLP;   // Last log(mom_of_the_incident_hadron)
+  static G4double  lastLP;   // Last log(mom_of_the_incident_hadron in GeV)
   static G4double  lastTM;   // Last t_maximum                       
+  static G4int     lastN;    // The last N of calculated nucleus
+  static G4int     lastZ;    // The last Z of calculated nucleus
+  static G4double  lastP;    // Last used in the cross section Momentum
+  static G4double  lastTH;   // Last value of the Momentum Threshold
+  static G4double  lastCS;   // Last value of the Cross Section
+  static G4int     lastI;    // The last position in the DAMDB
   static G4double  theSS;    // The Last squared slope of first diffruction 
   static G4double  theS1;    // The Last mantissa of first diffruction 
   static G4double  theB1;    // The Last slope of first diffruction    

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QElasticCrossSection.cc,v 1.12 2006-11-17 15:37:25 mkossov Exp $
+// $Id: G4QElasticCrossSection.cc,v 1.13 2006-12-01 10:57:46 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -62,7 +62,6 @@ G4double  G4QElasticCrossSection::theS3=0.;   // The Last mantissa of third difr
 G4double  G4QElasticCrossSection::theB3=0.;   // The Last slope of third difruction     (L)
 G4double  G4QElasticCrossSection::theS4=0.;   // The Last mantissa of 4-th difruction   (L)
 G4double  G4QElasticCrossSection::theB4=0.;   // The Last slope of 4-th difruction      (L)
-G4int     G4QElasticCrossSection::lastPDG=0;  // Last PDG code of the projectile					
 G4int     G4QElasticCrossSection::lastTZ=0;   // Last atomic number of the target				
 G4int     G4QElasticCrossSection::lastTN=0;   // Last number of neutrons of the target
 G4double  G4QElasticCrossSection::lastPIN=0.; // Last initialized max momentum
@@ -77,6 +76,13 @@ G4double* G4QElasticCrossSection::lastS3T=0;  // E-dep of mantissa of the third 
 G4double* G4QElasticCrossSection::lastB3T=0;  // E-dep of the slope of the third difruction
 G4double* G4QElasticCrossSection::lastS4T=0;  // E-dep of mantissa of the 4-th difruction	
 G4double* G4QElasticCrossSection::lastB4T=0;  // E-dep of the slope of the 4-th difruction
+G4int     G4QElasticCrossSection::lastPDG=0;  // The last PDG code of the projectile
+G4int     G4QElasticCrossSection::lastN=0;    // The last N of calculated nucleus
+G4int     G4QElasticCrossSection::lastZ=0;    // The last Z of calculated nucleus
+G4double  G4QElasticCrossSection::lastP=0.;   // Last used in cross section Momentum
+G4double  G4QElasticCrossSection::lastTH=0.;  // Last threshold momentum
+G4double  G4QElasticCrossSection::lastCS=0.;  // Last value of the Cross Section
+G4int     G4QElasticCrossSection::lastI=0;    // The last position in the DAMDB
 
 // Returns Pointer to the G4VQCrossSection class
 G4VQCrossSection* G4QElasticCrossSection::GetPointer()
@@ -85,6 +91,175 @@ G4VQCrossSection* G4QElasticCrossSection::GetPointer()
   return &theCrossSection;
 }
 
+// The main member function giving the collision cross section (P is in IU, CS is in mb)
+// Make pMom in independent units ! (Now it is MeV)
+G4double G4QElasticCrossSection::GetCrossSection(G4bool fCS, G4double pMom, G4int tgZ,
+                                                 G4int tgN, G4int pPDG)
+{
+  static G4int j;                      // A#0f records found in DB for this projectile
+  static std::vector <G4int>    colPDG;// Vector of the projectile PDG code
+  static std::vector <G4int>    colN;  // Vector of N for calculated nuclei (isotops)
+  static std::vector <G4int>    colZ;  // Vector of Z for calculated nuclei (isotops)
+  static std::vector <G4double> colP;  // Vector of last momenta for the reaction
+  static std::vector <G4double> colTH; // Vector of energy thresholds for the reaction
+  static std::vector <G4double> colCS; // Vector of last cross sections for the reaction
+  // ***---*** End of the mandatory Static Definitions of the Associative Memory ***---***
+  G4double pEn=pMom;
+#ifdef pdebug
+  G4cout<<"G4QElCS::GetCS:>>> f="<<fCS<<", p="<<pMom<<", Z="<<tgZ<<"("<<lastZ<<") ,N="<<tgN
+        <<"("<<lastN<<"),PDG="<<pPDG<<"("<<lastPDG<<"), T="<<pEn<<"("<<lastTH<<")"<<",Sz="
+        <<colN.size()<<G4endl;
+		//CalculateCrossSection(fCS,-27,j,lastPDG,lastZ,lastN,pMom); // DUMMY TEST
+#endif
+  if(!pPDG)
+  {
+#ifdef pdebug
+    G4cout<<"G4QElCS::GetCS: *** Found pPDG="<<pPDG<<" ====> CS=0"<<G4endl;
+    //CalculateCrossSection(fCS,-27,j,lastPDG,lastZ,lastN,pMom); // DUMMY TEST
+#endif
+    return 0.;                         // projectile PDG=0 is a mistake (?!) @@
+  }
+  G4bool in=false;                     // By default the isotope must be found in the AMDB
+  if(tgN!=lastN || tgZ!=lastZ || pPDG!=lastPDG)// The nucleus was not the last used isotope
+  {
+    in = false;                        // By default the isotope haven't be found in AMDB  
+    lastP   = 0.;                      // New momentum history (nothing to compare with)
+    lastPDG = pPDG;                    // The last PDG of the projectile
+    lastN   = tgN;                     // The last N of the calculated nucleus
+    lastZ   = tgZ;                     // The last Z of the calculated nucleus
+    lastI   = colN.size();             // Size of the Associative Memory DB in the heap
+    j  = 0;                            // A#0f records found in DB for this projectile
+    if(lastI) for(G4int i=0; i<lastI; i++) if(colPDG[i]==pPDG) // The partType is found
+	   {                                  // The nucleus with projPDG is found in AMDB
+      if(colN[i]==tgN && colZ[i]==tgZ)
+						{
+        lastI=i;
+        lastTH =colTH[i];                // Last THreshold (A-dependent)
+#ifdef pdebug
+        G4cout<<"G4QElCS::GetCS:*Found* P="<<pMom<<",Threshold="<<lastTH<<",j="<<j<<G4endl;
+        //CalculateCrossSection(fCS,-27,j,lastPDG,lastZ,lastN,pMom); // DUMMY TEST
+#endif
+        if(pEn<=lastTH)
+        {
+#ifdef pdebug
+          G4cout<<"G4QElCS::GetCS:Found T="<<pEn<<" < Threshold="<<lastTH<<",CS=0"<<G4endl;
+          //CalculateCrossSection(fCS,-27,j,lastPDG,lastZ,lastN,pMom); // DUMMY TEST
+#endif
+          return 0.;                     // Energy is below the Threshold value
+        }
+        lastP  =colP [i];                // Last Momentum  (A-dependent)
+        lastCS =colCS[i];                // Last CrossSect (A-dependent)
+        if(std::fabs(lastP/pMom-1.)<tolerance)
+        {
+#ifdef pdebug
+          G4cout<<"G4QElCS::GetCS:P="<<pMom<<",CS="<<lastCS*millibarn<<G4endl;
+          //CalculateCrossSection(fCS,-27,j,lastPDG,lastZ,lastN,pMom); // DUMMY TEST
+#endif
+          return lastCS*millibarn;     // Use theLastCS
+        }
+        in = true;                       // This is the case when the isotop is found in DB
+        // Momentum pMom is in IU ! @@ Units
+#ifdef pdebug
+        G4cout<<"G4QElCS::G:UpdateDB P="<<pMom<<",f="<<fCS<<",I="<<lastI<<",j="<<j<<G4endl;
+#endif
+        lastCS=CalculateCrossSection(fCS,-1,j,lastPDG,lastZ,lastN,pMom); // read & update
+#ifdef pdebug
+        G4cout<<"G4QElCS::GetCrosSec: *****> New (inDB) Calculated CS="<<lastCS<<G4endl;
+        //CalculateCrossSection(fCS,-27,j,lastPDG,lastZ,lastN,pMom); // DUMMY TEST
+#endif
+        if(lastCS<=0. && pEn>lastTH)    // Correct the threshold
+        {
+#ifdef pdebug
+          G4cout<<"G4QElCS::GetCS: New T="<<pEn<<"(CS=0) > Threshold="<<lastTH<<G4endl;
+#endif
+          lastTH=pEn;
+        }
+        break;                           // Go out of the LOOP
+      }
+#ifdef pdebug
+      G4cout<<"---G4QElCrossSec::GetCrosSec:pPDG="<<pPDG<<",j="<<j<<",N="<<colN[i]
+            <<",Z["<<i<<"]="<<colZ[i]<<",cPDG="<<colPDG[i]<<G4endl;
+      //CalculateCrossSection(fCS,-27,j,lastPDG,lastZ,lastN,pMom); // DUMMY TEST
+#endif
+      j++;                             // Increment a#0f records found in DB for this pPDG
+	   }
+	   if(!in)                            // This nucleus has not been calculated previously
+	   {
+#ifdef pdebug
+      G4cout<<"G4QElCS::GetCrosSec:CalcNew P="<<pMom<<",f="<<fCS<<",lastI="<<lastI<<G4endl;
+#endif
+      //!!The slave functions must provide cross-sections in millibarns (mb) !! (not in IU)
+      lastCS=CalculateCrossSection(fCS,0,j,lastPDG,lastZ,lastN,pMom); //calculate & create
+      if(lastCS<=0.)
+						{
+        lastTH = ThresholdEnergy(tgZ, tgN); // The Threshold Energy which is now the last
+#ifdef pdebug
+        G4cout<<"G4QElCrossSection::GetCrossSect: NewThresh="<<lastTH<<",T="<<pEn<<G4endl;
+#endif
+        if(pEn>lastTH)
+        {
+#ifdef pdebug
+          G4cout<<"G4QElCS::GetCS: First T="<<pEn<<"(CS=0) > Threshold="<<lastTH<<G4endl;
+#endif
+          lastTH=pEn;
+        }
+						}
+#ifdef pdebug
+      G4cout<<"G4QElCS::GetCrosSec: New CS="<<lastCS<<",lZ="<<lastN<<",lN="<<lastZ<<G4endl;
+      //CalculateCrossSection(fCS,-27,j,lastPDG,lastZ,lastN,pMom); // DUMMY TEST
+#endif
+      colN.push_back(tgN);
+      colZ.push_back(tgZ);
+      colPDG.push_back(pPDG);
+      colP.push_back(pMom);
+      colTH.push_back(lastTH);
+      colCS.push_back(lastCS);
+#ifdef pdebug
+      G4cout<<"G4QElCS::GetCS:1st,P="<<pMom<<"(MeV),CS="<<lastCS*millibarn<<"(mb)"<<G4endl;
+      //CalculateCrossSection(fCS,-27,j,lastPDG,lastZ,lastN,pMom); // DUMMY TEST
+#endif
+      return lastCS*millibarn;
+	   } // End of creation of the new set of parameters
+    else
+				{
+#ifdef pdebug
+      G4cout<<"G4QElCS::GetCS: Update lastI="<<lastI<<",j="<<j<<G4endl;
+#endif
+      colP[lastI]=pMom;
+      colPDG[lastI]=pPDG;
+      colCS[lastI]=lastCS;
+    }
+  } // End of parameters udate
+  else if(pEn<=lastTH)
+  {
+#ifdef pdebug
+    G4cout<<"G4QElCS::GetCS: Current T="<<pEn<<" < Threshold="<<lastTH<<", CS=0"<<G4endl;
+    //CalculateCrossSection(fCS,-27,j,lastPDG,lastZ,lastN,pMom); // DUMMY TEST
+#endif
+    return 0.;                         // Momentum is below the Threshold Value -> CS=0
+  }
+  else if(std::fabs(lastP/pMom-1.)<tolerance)
+  {
+#ifdef pdebug
+    G4cout<<"G4QElCS::GetCS:OldCur P="<<pMom<<"="<<pMom<<", CS="<<lastCS*millibarn<<G4endl;
+    //CalculateCrossSection(fCS,-27,j,lastPDG,lastZ,lastN,pMom); // DUMMY TEST
+#endif
+    return lastCS*millibarn;     // Use theLastCS
+  }
+  else
+  {
+#ifdef pdebug
+    G4cout<<"G4QElCS::GetCS:UpdatCur P="<<pMom<<",f="<<fCS<<",I="<<lastI<<",j="<<j<<G4endl;
+#endif
+    lastCS=CalculateCrossSection(fCS,1,j,lastPDG,lastZ,lastN,pMom); // Only UpdateDB
+    lastP=pMom;
+  }
+#ifdef pdebug
+  G4cout<<"G4QElCS::GetCrSec:End,P="<<pMom<<"(MeV),CS="<<lastCS*millibarn<<"(mb)"<<G4endl;
+  //CalculateCrossSection(fCS,-27,j,lastPDG,lastZ,lastN,pMom); // DUMMY TEST
+#endif
+  return lastCS*millibarn;
+}
 
 // Calculation of total elastic cross section (p in IU, CS in mb) @@ Units (?)
 // F=0 - create AMDB, F=-1 - read&update AMDB, F=1 - update AMDB (sinchro with higher AMDB)
@@ -481,6 +656,8 @@ G4double G4QElasticCrossSection::GetPTables(G4double LP,G4double ILP, G4int PDG,
                <<", "<<lastPAR[44]<<", "<<lastPAR[45]<<", "<<lastPAR[46]<<G4endl;
 #endif
         }
+        // Parameter for lowEnergyNeutrons
+        lastPAR[51]=1.e15+2.e27/a4/(1.+2.e-18*a16);
       }
       lastPAR[nLast]=pwd;
       // and initialize the zero element of the table
@@ -520,7 +697,7 @@ G4double G4QElasticCrossSection::GetPTables(G4double LP,G4double ILP, G4int PDG,
             lp=lPMin+ip*dlnP;                     // ln(momentum)
             G4bool memCS=onlyCS;
             onlyCS=true;
-            lastCST[ip]=GetTabValues(lp, PDG, tgZ, tgN); // Calculate AMDB tables
+            lastCST[ip]=GetTabValues(lp, PDG, tgZ, tgN); // Calculate AMDB tables (ret CS)
             onlyCS=memCS;
             lastSST[ip]=theSS;
             lastS1T[ip]=theS1;
@@ -561,7 +738,7 @@ G4double G4QElasticCrossSection::GetPTables(G4double LP,G4double ILP, G4int PDG,
   return ILP;
 }
 
-// Returns Q2=-t in independent units (all internal calculations are in GeV)
+// Returns Q2=-t in independent units (MeV) (all internal calculations are in GeV)
 G4double G4QElasticCrossSection::GetExchangeT(G4int tgZ, G4int tgN, G4int PDG)
 {
   static const G4double GeVSQ=gigaelectronvolt*gigaelectronvolt;
@@ -572,6 +749,7 @@ G4double G4QElasticCrossSection::GetExchangeT(G4int tgZ, G4int tgN, G4int PDG)
   G4cout<<"G4QElasticCS::GetExchangeT:F="<<onlyCS<<",Z="<<tgZ<<",N="<<tgN<<",PDG="<<PDG<<G4endl;
 #endif
   if(onlyCS) G4cout<<"*Warning*G4QElasticCrossSection::GetExchangeQ2: onlyCS=true"<<G4endl;
+  if(lastLP<-4.3) return lastTM*G4UniformRand(); //@@ S-wave for p<13.7 MeV/c (kinE<.1 MeV)
   G4double q2=0.;
   if(PDG==2112 && tgZ==1 && tgN==0)                // ===> n+p=n+p
   {
@@ -746,6 +924,412 @@ G4double G4QElasticCrossSection::GetExchangeT(G4int tgZ, G4int tgN, G4int PDG)
 // lastLP is used, so calculating tables, one need to remember and then recover lastLP
 G4double G4QElasticCrossSection::GetTabValues(G4double lp, G4int PDG, G4int tgZ,G4int tgN)
 {
+  static const G4double GeVSQ=gigaelectronvolt*gigaelectronvolt;
+  static const G4double mNeut= G4QPDGCode(2112).GetMass(); // Neutron mass in MeV
+  static const G4double dNM= (mNeut+mNeut)/GeVSQ;// Doubled neutron mass in ...
+  static const G4int    nZ=92;                   // #0f covered elements
+  static const G4int    n01=2;                   // Z= 1 H
+  static const G4int    N01[n01]={0,1};          // #of neutrons in the isotope
+  static const G4double T01[n01]={0.,0.};        // Threshold in MeV
+  static const G4double X01[n01]={20000.,3395.}; // XS level in mb
+  static const G4int    n02=2;                   // Z= 2 He
+  static const G4int    N02[n02]={1,2};
+  static const G4double T02[n02]={0.,0.};
+  static const G4double X02[n02]={1000.,759.};
+  static const G4int    n03=2;                   // Z= 3 Li
+  static const G4int    N03[n03]={3,4};
+  static const G4double T03[n03]={0.,0.};
+  static const G4double X03[n03]={710.,1050.};
+  static const G4int    n04=1;                   // Z= 4 Be
+  static const G4int    N04[n04]={5};
+  static const G4double T04[n04]={0.};
+  static const G4double X04[n04]={6000.};
+  static const G4int    n05=2;                   // Z= 5 B
+  static const G4int    N05[n05]={5,6};
+  static const G4double T05[n05]={0.,0.};
+  static const G4double X05[n05]={2140.,4840.};
+  static const G4int    n06=1;                   // Z= 6 C
+  static const G4int    N06[n06]={6};
+  static const G4double T06[n06]={0.};
+  static const G4double X06[n06]={4730.};
+  static const G4int    n07=2;                   // Z= 7 N
+  static const G4int    N07[n07]={7,8};
+  static const G4double T07[n07]={0.,0.};
+  static const G4double X07[n07]={9957.,1018.};
+  static const G4int    n08=3;                   // Z= 8 O
+  static const G4int    N08[n08]={8,9,10};
+  static const G4double T08[n08]={0.,0.,0.};
+  static const G4double X08[n08]={3880.,3740.,4000.};
+  static const G4int    n09=1;                   // Z= 9 F
+  static const G4int    N09[n09]={10};
+  static const G4double T09[n09]={0.};
+  static const G4double X09[n09]={3997.};
+  static const G4int    n10=3;                   // Z=10 Ne
+  static const G4int    N10[n10]={10,11,12};
+  static const G4double T10[n10]={0.,0.,0.};
+  static const G4double X10[n10]={1000.,1000.,1000.};
+  static const G4int    n11=1;                   // Z=11 Na
+  static const G4int    N11[n11]={12};
+  static const G4double T11[n11]={0.};
+  static const G4double X11[n11]={728.};
+  static const G4int    n12=3;                   // Z=12 Mg
+  static const G4int    N12[n12]={10,11,12};
+  static const G4double T12[n12]={.52,.22,.45};
+  static const G4double X12[n12]={3500.,4000.,4000.};
+  static const G4int    n13=1;                   // Z=13 Al
+  static const G4int    N13[n13]={14};
+  static const G4double T13[n13]={0.};
+  static const G4double X13[n13]={1400.};
+  static const G4int    n14=3;                   // Z=14 Si
+  static const G4int    N14[n14]={14,15,16};
+  static const G4double T14[n14]={1.75,.1,.5};
+  static const G4double X14[n14]={1770.,4700.,5000.};
+  static const G4int    n15=1;                   // Z=15 P
+  static const G4int    N15[n15]={16};
+  static const G4double T15[n15]={0.};
+  static const G4double X15[n15]={703.};
+  static const G4int    n16=4;                   // Z=16 S
+  static const G4int    N16[n16]={16,17,18,20};
+  static const G4double T16[n16]={1.57,.26,.48,1.};
+  static const G4double X16[n16]={4230.,6090.,6750.,5000.};
+  static const G4int    n17=2;                   // Z=17 Cl
+  static const G4int    N17[n17]={18,20};
+  static const G4double T17[n17]={.226,.202};
+  static const G4double X17[n17]={2000.,2000.};
+  static const G4int    n18=3;                   // Z=18 Ar
+  static const G4int    N18[n18]={18,20,22};
+  static const G4double T18[n18]={.00001,.3,.66};
+  static const G4double X18[n18]={50.,1000.,2500.};
+  static const G4int    n19=3;                   // Z=19 K
+  static const G4int    N19[n19]={20,21,22};
+  static const G4double T19[n19]={.2,0.,.125};
+  static const G4double X19[n19]={2200.,2200.,3000.};
+  static const G4int    n20=6;                   // Z=20 Ca
+  static const G4int    N20[n20]={20,22,23,24,26,28};
+  static const G4double T20[n20]={.5,.3,.04,.5,0.,.5};
+  static const G4double X20[n20]={700.,3500.,8000.,3000.,3900.,3700.};
+  static const G4int    n21=1;                   // Z=21 Sc
+  static const G4int    N21[n21]={24};
+  static const G4double T21[n21]={.0969};
+  static const G4double X21[n21]={4600.};
+  static const G4int    n22=5;                   // Z=22 Ti
+  static const G4int    N22[n22]={24,25,26,27,28};
+  static const G4double T22[n22]={.1,.1,.1,0.,.1};
+  static const G4double X22[n22]={4700.,5000.,5500.,1000.,6000.};
+  static const G4int    n23=2;                   // Z=23 V
+  static const G4int    N23[n23]={27,28};
+  static const G4double T23[n23]={.1,.1};
+  static const G4double X23[n23]={5000.,7000.};
+  static const G4int    n24=4;                   // Z=24 Cr
+  static const G4int    N24[n24]={26,28,29,30};
+  static const G4double T24[n24]={.595,.637,.248,.4};
+  static const G4double X24[n24]={4000.,3900.,5600.,2260.};
+  static const G4int    n25=1;                   // Z=25 Mn
+  static const G4int    N25[n25]={30};
+  static const G4double T25[n25]={.08};
+  static const G4double X25[n25]={1070.};
+  static const G4int    n26=4;                   // Z=26 Fe
+  static const G4int    N26[n26]={28,30,31,32};
+  static const G4double T26[n26]={.5,.862,0.,.37};
+  static const G4double X26[n26]={4540.,2500.,600.,5500.};
+  static const G4int    n27=1;                   // Z=27 Co
+  static const G4int    N27[n27]={30};
+  static const G4double T27[n27]={.08};
+  static const G4double X27[n27]={1070.};
+  static const G4int    n28=5;                   // Z=28 Ni
+  static const G4int    N28[n28]={30,32,33,34,36};
+  static const G4double T28[n28]={.812,.45,.07,.6,.6};
+  static const G4double X28[n28]={3000.,6000.,20000.,1200.,1200.};
+  static const G4int    n29=2;                   // Z=29 Cu
+  static const G4int    N29[n29]={34,36};
+  static const G4double T29[n29]={.0995,.0995};
+  static const G4double X29[n29]={3500.,10000.};
+  static const G4int    n30=5;                   // Z=30 Zn
+  static const G4int    N30[n30]={34,36,37,38,40};
+  static const G4double T30[n30]={.1,.1,.1,.1,.1};
+  static const G4double X30[n30]={7000.,7000.,7000.,7000.,7000.};
+  static const G4int    n31=2;                   // Z=31 Ga
+  static const G4int    N31[n31]={38,40};
+  static const G4double T31[n31]={.0059,.0056};
+  static const G4double X31[n31]={11000.,10000.};
+  static const G4int    n32=5;                   // Z=32 Ge
+  static const G4int    N32[n32]={38,40,41,42,44};
+  static const G4double T32[n32]={.015,.00553,.00059,.00627,.0175};
+  static const G4double X32[n32]={10000.,1470.,10000.,13000.,10000.};
+  static const G4int    n33=1;                   // Z=33 As
+  static const G4int    N33[n33]={42};
+  static const G4double T33[n33]={.00241};
+  static const G4double X33[n33]={15000.};
+  static const G4int    n34=6;                   // Z=34 Se
+  static const G4int    N34[n34]={40,42,43,44,46,48};
+  static const G4double T34[n34]={.0024,.00749,.00272,.0121,.00671,.0311};
+  static const G4double X34[n34]={14000.,11900.,14000.,10000.,11000.,8400.};
+  static const G4int    n35=2;                   // Z=35 Br
+  static const G4int    N35[n35]={44,46};
+  static const G4double T35[n35]={.000412,.00363};
+  static const G4double X35[n35]={17000.,11200.};
+  static const G4int    n36=6;                   // Z=36 Kr
+  static const G4int    N36[n36]={42,44,46,47,48,50};
+  static const G4double T36[n36]={.000865,.001,.0001,.000521,.002,.013};
+  static const G4double X36[n36]={9000.,20000.,9000.,7200.,11180.,11000.};
+  static const G4int    n37=2;                   // Z=37 Rb
+  static const G4int    N37[n37]={48,50};
+  static const G4double T37[n37]={.00923,.03};
+  static const G4double X37[n37]={9300.,9000.};
+  static const G4int    n38=4;                   // Z=38 Sr
+  static const G4int    N38[n38]={46,48,49,50};
+  static const G4double T38[n38]={.0035,.0199,.00289,.1655};
+  static const G4double X38[n38]={18000.,8500.,10600.,8000.};
+  static const G4int    n39=1;                   // Z=39 Y
+  static const G4int    N39[n39]={50};
+  static const G4double T39[n39]={0.0};
+  static const G4double X39[n39]={583.};
+  static const G4int    n40=5;                   // Z=40 Zr
+  static const G4int    N40[n40]={50,51,52,54,56};
+  static const G4double T40[n40]={.131,.1,.039,.0677,.1};
+  static const G4double X40[n40]={8650.,11300.,8700.,9000.,8600.};
+  static const G4int    n41=1;                   // Z=41 Y
+  static const G4int    N41[n41]={52};
+  static const G4double T41[n41]={.1};
+  static const G4double X41[n41]={9200.};
+  static const G4int    n42=7;                   // Z=42 Mo
+  static const G4int    N42[n42]={50,52,53,54,55,56,58};
+  static const G4double T42[n42]={.000032,.00808,.00216,.00816,.00196,.05,.1};
+  static const G4double X42[n42]={7870,8000.,8100.,7800.,7700.,8000.,8500.};
+  static const G4int    n43=1;                   // Z=43 Te - No stable isotopes
+  static const G4int    N43[n43]={-1};
+  static const G4double T43[n43]={0.};
+  static const G4double X43[n43]={0.};
+  static const G4int    n44=7;                   // Z=44 Mo
+  static const G4int    N44[n44]={52,54,55,56,57,58,60};
+  static const G4double T44[n44]={0.,0.,.00101,.0005,.025,.00161,.00151};
+  static const G4double X44[n44]={8000,20000.,7000.,8000.,8000.,8000.,7200.};
+  static const G4int    n45=1;                   // Z=45 Rh
+  static const G4int    N45[n45]={58};
+  static const G4double T45[n45]={.039};
+  static const G4double X45[n45]={8000.};
+  static const G4int    n46=6;                   // Z=46 Pd
+  static const G4int    N46[n46]={56,58,59,60,62,64};
+  static const G4double T46[n46]={.0004,.1,.02,.1,.1,.1};
+  static const G4double X46[n46]={12000.,8000.,7400.,7500.,7400.,7300.};
+  static const G4int    n47=2;                   // Z=47 Ag
+  static const G4int    N47[n47]={60,62};
+  static const G4double T47[n47]={.00106,.000984};
+  static const G4double X47[n47]={12000.,670.};
+  static const G4int    n48=8;                   // Z=48 Cd
+  static const G4int    N48[n48]={58,60,62,63,64,65,66,68};
+  static const G4double T48[n48]={.00069,.1,.00718,.01,.00662,.001,.00341,.00289};
+  static const G4double X48[n48]={8000.,7500,6000.,7000.,6000.,6500.,6500.,6500.};
+  static const G4int    n49=2;                   // Z=49 In
+  static const G4int    N49[n49]={64,66};
+  static const G4double T49[n49]={.00033,.00112};
+  static const G4double X49[n49]={5700.,5700.};
+  static const G4int    n50=10;                  // Z=50 Sn
+  static const G4int    N50[n50]={62,64,65,66,67,68,69,70,72,74};
+  static const G4double T50[n50]={.15,.002,.000693,.00215,.000611,.00189,.000547,.014,
+                                  .0086,.00651};
+  static const G4double X50[n50]={6600.,6700,6700.,6700.,6700.,6500.,6500.,6300.,6300.,
+                                  6200.};
+  static const G4int    n51=2;                   // Z=51 Sb
+  static const G4int    N51[n51]={70,72};
+  static const G4double T51[n51]={.000922,.00151};
+  static const G4double X51[n51]={6000.,7000.};
+  static const G4int    n52=8;                   // Z=52 Te
+  static const G4int    N52[n52]={68,70,71,72,73,74,76,78};
+  static const G4double T52[n52]={0.,.00379,.000633,.0057,.00134,.00635,.0004,.034};
+  static const G4double X52[n52]={8000.,6000,6000.,6000.,7000.,6200.,300.,6000.};
+  static const G4int    n53=1;                   // Z=53 I
+  static const G4int    N53[n53]={74};
+  static const G4double T53[n53]={.06};
+  static const G4double X53[n53]={5400.};
+  static const G4int    n54=9;                   // Z=54 Xe
+  static const G4int    N54[n54]={70,72,74,75,76,77,78,80,82};
+  static const G4double T54[n54]={0.,.00065,.004,.0042,.004,.00219,.00426,.002,0.};
+  static const G4double X54[n54]={4200.,2350,14000.,12000.,14000.,16000.,15000.,20000.,
+                                  4300.};
+  static const G4int    n55=1;                   // Z=55 Cs
+  static const G4int    N55[n55]={78};
+  static const G4double T55[n55]={.00351};
+  static const G4double X55[n55]={3000.};
+  static const G4int    n56=7;                   // Z=56 Ba
+  static const G4int    N56[n56]={74,76,78,79,80,81,82};
+  static const G4double T56[n56]={.1,.1,.00207,.00486,.00318,.00195,.00303};
+  static const G4double X56[n56]={4000,5000.,13000.,20000.,13000.,16000.,300.};
+  static const G4int    n57=2;                   // Z=57 La
+  static const G4int    N57[n57]={81,82};
+  static const G4double T57[n57]={.1,.25};
+  static const G4double X57[n57]={5000.,5600.};
+  static const G4int    n58=4;                   // Z=58 Ce
+  static const G4int    N58[n58]={78,80,82,84};
+  static const G4double T58[n58]={.1,.1,.02,.01};
+  static const G4double X58[n58]={6000.,6000.,9000.,5290.};
+  static const G4int    n59=1;                   // Z=59 Pr
+  static const G4int    N59[n59]={82};
+  static const G4double T59[n59]={.00577};
+  static const G4double X59[n59]={600.};
+  static const G4int    n60=7;                   // Z=60 Nd
+  static const G4int    N60[n60]={82,83,84,85,86,88,90};
+  static const G4double T60[n60]={.011,.01,.05,.05,.05,.05,.00512};
+  static const G4double X60[n60]={12000,19000.,6000.,8000.,6000.,7000.,3400.};
+  static const G4int    n61=1;                   // Z=61 Pm - No stable isotopes
+  static const G4int    N61[n61]={-1};
+  static const G4double T61[n61]={0.};
+  static const G4double X61[n61]={0.};
+  static const G4int    n62=7;                   // Z=62 Nd
+  static const G4int    N62[n62]={82,85,86,87,88,90,92};
+  static const G4double T62[n62]={0.,.07,0.,.00015,.000593,.00369,.0031};
+  static const G4double X62[n62]={8000,9000.,5300.,5300.,30000.,3000.,2000.};
+  static const G4int    n63=2;                   // Z=63 Eu
+  static const G4int    N63[n63]={88,90};
+  static const G4double T63[n63]={.01,.01};
+  static const G4double X63[n63]={15000.,14000.};
+  static const G4int    n64=7;                   // Z=64 Gd
+  static const G4int    N64[n64]={88,90,91,92,93,94,96};
+  static const G4double T64[n64]={.1,.000276,.1,.01,.000215,.00604,.00288};
+  static const G4double X64[n64]={7400,30000.,6200.,11000.,20000.,20000.,40000.};
+  static const G4int    n65=1;                   // Z=65 Tb
+  static const G4int    N65[n65]={94};
+  static const G4double T65[n65]={.01};
+  static const G4double X65[n65]={13000.};
+  static const G4int    n66=7;                   // Z=66 Dy
+  static const G4int    N66[n66]={90,92,94,95,96,97,98};
+  static const G4double T66[n66]={.1,.1,.0000024,.0000068,.000043,.000049,0.};
+  static const G4double X66[n66]={7000,7000.,50000.,50000.,7000.,50000.,300000.};
+  static const G4int    n67=1;                   // Z=67 Ho
+  static const G4int    N67[n67]={94};
+  static const G4double T67[n67]={.01};
+  static const G4double X67[n67]={13000.};
+  static const G4int    n68=6;                   // Z=68 Er
+  static const G4int    N68[n68]={94,96,98,99,100,102};
+  static const G4double T68[n68]={0.,0.,.00201,.000134,0.,0.};
+  static const G4double X68[n68]={50000.,50000.,40000.,50000.,50000.,50000.};
+  static const G4int    n69=1;                   // Z=69 Tm
+  static const G4int    N69[n69]={100};
+  static const G4double T69[n69]={0.};
+  static const G4double X69[n69]={10000.};
+  static const G4int    n70=7;                   // Z=70 Yb
+  static const G4int    N70[n70]={98,100,101,102,103,104,106};
+  static const G4double T70[n70]={0.,0.,0.,0.,0.,0.,0.};
+  static const G4double X70[n70]={7000,7000.,7000.,7000.,7000.,7000.,7000.};
+  static const G4int    n71=2;                   // Z=71 Lu
+  static const G4int    N71[n71]={104,105};
+  static const G4double T71[n71]={0.,0.};
+  static const G4double X71[n71]={5280.,3160.};
+  static const G4int    n72=6;                   // Z=72 Hf
+  static const G4int    N72[n72]={102,104,105,106,107,108};
+  static const G4double T72[n72]={.0003,.00128,.001,.0024,.001,.011};
+  static const G4double X72[n72]={40000.,20000.,13000.,20000.,20000.,12000.};
+  static const G4int    n73=2;                   // Z=73 Ta
+  static const G4int    N73[n73]={107,108};
+  static const G4double T73[n73]={.1,.005};
+  static const G4double X73[n73]={10000.,10000.};
+  static const G4int    n74=5;                   // Z=74 W
+  static const G4int    N74[n74]={106,108,109,110,112};
+  static const G4double T74[n74]={.1,.1,.045,.1,.1};
+  static const G4double X74[n74]={8000.,8600.,10000.,8800.,8800.};
+  static const G4int    n75=2;                   // Z=75 Re
+  static const G4int    N75[n75]={110,112};
+  static const G4double T75[n75]={.1,.1};
+  static const G4double X75[n75]={8500.,8500.};
+  static const G4int    n76=7;                   // Z=76 Os
+  static const G4int    N76[n76]={108,110,111,112,113,114,116};
+  static const G4double T76[n76]={.000008,.000008,.000008,.000008,.000008,.000008,.000008};
+  static const G4double X76[n76]={25000,25000.,25000.,25000.,25000.,25000.,25000.};
+  static const G4int    n77=2;                   // Z=77 Ir
+  static const G4int    N77[n77]={114,116};
+  static const G4double T77[n77]={.1,.01};
+  static const G4double X77[n77]={14000.,15000.};
+  static const G4int    n78=6;                   // Z=78 Pt
+  static const G4int    N78[n78]={112,114,116,117,118,120};
+  static const G4double T78[n78]={0.,0.,0.,0.,0.,0.};
+  static const G4double X78[n78]={12000.,12000.,12000.,12000.,12000.,12000.};
+  static const G4int    n79=1;                   // Z=79 Tm
+  static const G4int    N79[n79]={118};
+  static const G4double T79[n79]={.005};
+  static const G4double X79[n79]={14000.};
+  static const G4int    n80=7;                   // Z=80 Hg
+  static const G4int    N80[n80]={116,118,119,120,121,122,124};
+  static const G4double T80[n80]={0.,0.,0.,0.,0.,0.,0.};
+  static const G4double X80[n80]={30000,30000.,30000.,30000.,30000.,30000.,30000.};
+  static const G4int    n81=2;                   // Z=81 Tl
+  static const G4int    N81[n81]={122,124};
+  static const G4double T81[n81]={0.,0.};
+  static const G4double X81[n81]={10000.,10000.};
+  static const G4int    n82=4;                   // Z=82 Pb
+  static const G4int    N82[n82]={122,124,125,126};
+  static const G4double T82[n82]={.1,.1,.475,1.};
+  static const G4double X82[n82]={12000.,5000.,6000.,4700.};
+  static const G4int    n83=1;                   // Z=79 Tm
+  static const G4int    N83[n83]={126};
+  static const G4double T83[n83]={0.};
+  static const G4double X83[n83]={9000.};
+  static const G4int    n84=1;                   // Z=84 Po - No stable isotopes
+  static const G4int    N84[n84]={-1};
+  static const G4double T84[n84]={0.};
+  static const G4double X84[n84]={0.};
+  static const G4int    n85=1;                   // Z=85 At - No stable isotopes
+  static const G4int    N85[n85]={-1};
+  static const G4double T85[n85]={0.};
+  static const G4double X85[n85]={0.};
+  static const G4int    n86=1;                   // Z=86 Rn - No stable isotopes
+  static const G4int    N86[n86]={-1};
+  static const G4double T86[n86]={0.};
+  static const G4double X86[n86]={0.};
+  static const G4int    n87=1;                   // Z=87 Fr - No stable isotopes
+  static const G4int    N87[n87]={-1};
+  static const G4double T87[n87]={0.};
+  static const G4double X87[n87]={0.};
+  static const G4int    n88=1;                   // Z=88 Ra - No stable isotopes
+  static const G4int    N88[n88]={-1};
+  static const G4double T88[n88]={0.};
+  static const G4double X88[n88]={0.};
+  static const G4int    n89=1;                   // Z=89 Ac - No stable isotopes
+  static const G4int    N89[n89]={-1};
+  static const G4double T89[n89]={0.};
+  static const G4double X89[n89]={0.};
+  static const G4int    n90=1;                   // Z=90 Th
+  static const G4int    N90[n90]={142};
+  static const G4double T90[n90]={0.};
+  static const G4double X90[n90]={11800.};
+  static const G4int    n91=1;                   // Z=91 Pa - No stable isotopes
+  static const G4int    N91[n91]={-1};
+  static const G4double T91[n91]={0.};
+  static const G4double X91[n91]={0.};
+  static const G4int    n92=3;                   // Z=92 U
+  static const G4int    N92[n92]={142,143,146};
+  static const G4double T92[n92]={.1,0.,1.};
+  static const G4double X92[n92]={10400.,15100.,14700.};
+  static const G4int nn[nZ]={n01,n02,n03,n04,n05,n06,n07,n08,n09,n10,n11,n12,n13,n14,n15,
+   n16,n17,n18,n19,n20,n21,n22,n23,n24,n25,n26,n27,n28,n29,n30,n31,n32,n33,n34,n35,n36,n37,
+   n38,n39,n40,n41,n42,n43,n44,n45,n46,n47,n48,n49,n50,n51,n52,n53,n54,n55,n56,n57,n58,n59,
+   n60,n61,n62,n63,n64,n65,n66,n67,n68,n69,n70,n71,n72,n73,n74,n75,n76,n77,n78,n79,n80,n81,
+			n82,n83,n84,n85,n86,n87,n88,n89,n90,n91,n92};
+  static const G4int* nN[nZ]={N01,N02,N03,N04,N05,N06,N07,N08,N09,N10,N11,N12,N13,N14,N15,
+   N16,N17,N18,N19,N20,N21,N22,N23,N24,N25,N26,N27,N28,N29,N30,N31,N32,N33,N34,N35,N36,N37,
+   N38,N39,N40,N41,N42,N43,N44,N45,N46,N47,N48,N49,N50,N51,N52,N53,N54,N55,N56,N57,N58,N59,
+   N60,N61,N62,N63,N64,N65,N66,N67,N68,N69,N70,N71,N72,N73,N74,N75,N76,N77,N78,N79,N80,N81,
+   N82,N83,N84,N85,N86,N87,N88,N89,N90,N91,N92};
+  static const G4double* nT[nZ]={T01,T02,T03,T04,T05,T06,T07,T08,T09,T10,T11,T12,T13,T14,
+   T15,T16,T17,T18,T19,T20,T21,T22,T23,T24,T25,T26,T27,T28,T29,T30,T31,T32,T33,T34,T35,T36,
+   T37,T38,T39,T40,T41,T42,T43,T44,T45,T46,T47,T48,T49,T50,T51,T52,T53,T54,T55,T56,T57,T58,
+   T59,T60,T61,T62,T63,T64,T65,T66,T67,T68,T69,T70,T71,T72,T73,T74,T75,T76,T77,T78,T79,T80,
+   T81,T82,T83,T84,T85,T86,T87,T88,T89,T90,T91,T92};
+  static const G4double* nX[nZ]={X01,X02,X03,X04,X05,X06,X07,X08,X09,X10,X11,X12,X13,X14,
+   X15,X16,X17,X18,X19,X20,X21,X22,X23,X24,X25,X26,X27,X28,X29,X30,X31,X32,X33,X34,X35,X36,
+   X37,X38,X39,X40,X41,X42,X43,X44,X45,X46,X47,X48,X49,X50,X51,X52,X53,X54,X55,X56,X57,X58,
+   X59,X60,X61,X62,X63,X64,X65,X66,X67,X68,X69,X70,X71,X72,X73,X74,X75,X76,X77,X78,X79,X80,
+   X81,X82,X83,X84,X85,X86,X87,X88,X89,X90,X91,X92};
+  if(tgZ<1 || tgZ>92)
+  {
+    G4cout<<"*Warning*G4QElasticCS::GetTabValue: (1-92) No isotopes for Z="<<tgZ<<G4endl;
+    return 0.;
+  }
+  G4int iZ=tgZ-1; // Z index
+  if(nN[iZ][0] < 0)
+  {
+    G4cout<<"*Warning*G4QElasticCS::GetTabValue: No isotopes for Z="<<tgZ<<G4endl;
+    return 0.;
+  }
 #ifdef pdebug
   G4cout<<"G4QElasticCS::GetTabVal: lp="<<lp<<",Z="<<tgZ<<",N="<<tgN<<",PDG="<<PDG<<G4endl;
 #endif
@@ -856,8 +1440,27 @@ G4double G4QElasticCrossSection::GetTabValues(G4double lp, G4int PDG, G4int tgZ,
     }
     G4double rp16=lastPAR[6]/p16;
     // Returns the total elastic (n/p)A cross-section (to avoid spoiling lastSIG)
-    return (lastPAR[0]*dl*dl+lastPAR[1])/(1.+lastPAR[2]/p2)+lastPAR[3]/(p4+lastPAR[4]/p2)+
-           lastPAR[5]/(p5+rp16*rp16)+lastPAR[7]/(p4+lastPAR[8]/p4);
+#ifdef tdebug
+    G4cout<<"G4QElCS::GetTabV: PDG="<<PDG<<",P="<<p<<",N="<<tgN<<",Z="<<tgZ<<G4endl;
+#endif
+    if(PDG!=2112 || !tgN || p>.1)      // No Low Energy neutron addition
+     return (lastPAR[0]*dl*dl+lastPAR[1])/(1.+lastPAR[2]/p2)+lastPAR[3]/(p4+lastPAR[4]/p2)+
+            lastPAR[5]/(p5+rp16*rp16)+lastPAR[7]/(p4+lastPAR[8]/p4);
+    else
+    {
+      G4int nI=nn[iZ];
+      for(G4int i=0; i<nI; i++) if(tgN==nN[iZ][i])
+      {
+        G4double kE=p2/dNM;
+#ifdef tdebug
+        G4cout<<"G4QECS::GV:P="<<p<<",E="<<kE<<",X="<< nX[iZ][i]<<",T="<<nT[iZ][i]<<G4endl;
+#endif
+        if(kE<nT[iZ][i]) return 0.;    // 0 below the threshold (in MeV)
+        if(p<2.) return nX[iZ][i];     // At very low momentum(<2MeV/c) -> only LECS
+    				return lastPAR[3]/(p4+lastPAR[4]/p2)+lastPAR[5]/(p5+rp16*rp16)+
+               lastPAR[7]/(p4+lastPAR[8]/p4)+nX[iZ][i]/(1.+lastPAR[51]*p16);
+      }
+    }
   }
   else
   {
@@ -891,7 +1494,7 @@ G4double G4QElasticCrossSection::GetQ2max(G4int PDG, G4int tgZ, G4int tgN, G4dou
     G4double mt=mProt;                                // Target mass in GeV
     if(tgN||tgZ>1) mt=G4QPDGCode(90000000+tgZ*1000+tgN).GetMass()*.001; // Target mass GeV
     G4double dmt=mt+mt;
-    G4double s=dmt*std::sqrt(pP2+mNeut2)+mNeut2+mt*mt; // Mondelstam s
+    G4double s=dmt*std::sqrt(pP2+mNeut2)+mNeut2+mt*mt; // Mondelstam s (in GeV^2)
     return dmt*dmt*pP2/s;
   }
   else if(PDG==2212 && tgZ)                           // ---> pA

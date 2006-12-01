@@ -51,6 +51,13 @@ G4double* G4QPhotonNuclearCrossSection::lastGDR=0; // Pointer to the lastArray o
 G4double* G4QPhotonNuclearCrossSection::lastHEN=0; // Pointer to the last array of HEn CS
 G4double  G4QPhotonNuclearCrossSection::lastE=0.;  // LastUsed in CrossSections TheEnergy
 G4double  G4QPhotonNuclearCrossSection::lastSP=0.; // Last value of ShadowingPomeron(A-dep)
+G4int     G4QPhotonNuclearCrossSection::lastPDG=0; // The last PDG code of the projectile
+G4int     G4QPhotonNuclearCrossSection::lastN=0;   // The last N of calculated nucleus
+G4int     G4QPhotonNuclearCrossSection::lastZ=0;   // The last Z of calculated nucleus
+G4double  G4QPhotonNuclearCrossSection::lastP=0.;  // Last used in cross section Momentum
+G4double  G4QPhotonNuclearCrossSection::lastTH=0.; // Last threshold momentum
+G4double  G4QPhotonNuclearCrossSection::lastCS=0.; // Last value of the Cross Section
+G4int     G4QPhotonNuclearCrossSection::lastI=0;   // The last position in the DAMDB
 
 // Returns Pointer to the G4VQCrossSection class
 G4VQCrossSection* G4QPhotonNuclearCrossSection::GetPointer()

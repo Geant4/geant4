@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QElastic.cc,v 1.9 2006-11-22 13:49:06 mkossov Exp $
+// $Id: G4QElastic.cc,v 1.10 2006-12-01 10:57:46 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QElastic class -----------------
@@ -79,6 +79,10 @@ G4double G4QElastic::GetMeanFreePath(const G4Track& aTrack,G4double Q,G4ForceCon
     G4cout<<"*W*G4QElastic::GetMeanFreePath: is called for notImplementedParticle"<<G4endl;
   // Calculate the mean Cross Section for the set of Elements(*Isotopes) in the Material
   G4double Momentum = incidentParticle->GetTotalMomentum(); // 3-momentum of the Particle
+#ifdef debug
+  G4double KinEn = incidentParticle->GetKineticEnergy();
+  G4cout<<"G4QElastic::GetMeanFreePath: kinE="<<KinEn<<",Mom="<<Momentum<<G4endl; // Result
+#endif
   const G4Material* material = aTrack.GetMaterial();        // Get the current material
   const G4double* NOfNucPerVolume = material->GetVecNbOfAtomsPerVolume();
   const G4ElementVector* theElementVector = material->GetElementVector();
@@ -159,7 +163,7 @@ G4double G4QElastic::GetMeanFreePath(const G4Track& aTrack,G4double Q,G4ForceCon
     ElIsoN.push_back(IsN);
     G4int nIs=cs->size();                   // A#Of Isotopes in the Element
 #ifdef debug
-      G4cout<<"G4QEl::GMFP:=***=>,#isot="<<nIs<<", Z="<<Z<<", indEl="<<indEl<<G4endl;
+    G4cout<<"G4QEl::GMFP:=***=>,#isot="<<nIs<<", Z="<<Z<<", indEl="<<indEl<<G4endl;
 #endif
     G4double susi=0.;                       // sum of CS over isotopes
     if(nIs) for(G4int j=0; j<nIs; j++)      // Calculate CS for eachIsotope of El
@@ -173,6 +177,11 @@ G4double G4QElastic::GetMeanFreePath(const G4Track& aTrack,G4double Q,G4ForceCon
 		    G4bool ccsf=true;
       if(Q==-27.) ccsf=false;
       G4double CSI=CSmanager->GetCrossSection(ccsf,Momentum,Z,N,pPDG);//CS(j,i) for isotope
+
+#ifdef debug
+      G4cout<<"G4QEl::GMFP: jI="<<j<<", Zt="<<Z<<", Nt="<<N<<", Mom="<<Momentum<<", XSec="
+            <<CSI/millibarn<<G4endl;
+#endif
       curIs->second = CSI;
       susi+=CSI;                            // Make a sum per isotopes
       SPI->push_back(susi);                 // Remember summed cross-section
@@ -240,7 +249,7 @@ G4VParticleChange* G4QElastic::PostStepDoIt(const G4Track& track, const G4Step& 
   G4LorentzVector proj4M=(projHadron->Get4Momentum())*MeV; // Convert to MeV!
   G4LorentzVector scat4M=proj4M;                      // @@ Must be filled (?)
   G4double momentum = projHadron->GetTotalMomentum()*MeV; // 3-momentum of the Proj in MeV
-  G4double Momentum = proj4M.rho();                   // Just for the test purposes
+  G4double Momentum = proj4M.rho();                   // @@ Just for the test purposes
   if(std::fabs(Momentum-momentum)>.000001)
            G4cerr<<"*War*G4QElastic::PostStepDoIt:P(IU)="<<Momentum<<"="<<momentum<<G4endl;
   G4double pM2=proj4M.m2();        // in MeV^2
@@ -412,7 +421,7 @@ G4VParticleChange* G4QElastic::PostStepDoIt(const G4Track& track, const G4Step& 
     aParticleChange.ProposeMomentumDirection(dir) ;
     return G4VDiscreteProcess::PostStepDoIt(track,step);
   }
-  G4double mint=CSmanager->GetExchangeT(Z,N,projPDG); // -t in MeV^2
+  G4double mint=CSmanager->GetExchangeT(Z,N,projPDG); // fanctional randomized -t in MeV^2
 #ifdef nandebug
   if(mint>-.0000001);
   else  G4cout<<"******G4QElast::PSDI:-t="<<mint<<G4endl;
