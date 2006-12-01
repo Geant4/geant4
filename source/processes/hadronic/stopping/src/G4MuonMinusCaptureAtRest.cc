@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuonMinusCaptureAtRest.cc,v 1.38 2006-11-15 12:17:15 vnivanch Exp $
+// $Id: G4MuonMinusCaptureAtRest.cc,v 1.39 2006-12-01 14:18:26 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -98,8 +98,9 @@ G4VParticleChange* G4MuonMinusCaptureAtRest::AtRestDoIt(const G4Track& track,
 
   // select element and get Z,A.
   G4Element* aEle = pSelector->GetElement(track.GetMaterial());
-  targetZ = aEle->GetZ();
-  targetA = aEle->GetN();
+  targetZ = G4lrint(aEle->GetZ())+perCent;     // protect against effective numbers, esp. A.  
+  targetA = G4lrint(aEle->GetN())+perCent;     //  perCent protects for G4int getting targetA-1.
+  
 
   G4IsotopeVector* isv = aEle->GetIsotopeVector();
   G4int ni = 0;
@@ -323,7 +324,11 @@ G4ReactionProductVector* G4MuonMinusCaptureAtRest::DoMuCapture()
 	       <<G4endl;
     }
   } while(eEx <= residualMass);
-  
+
+//  G4cout << "muonCapture : " << eEx << " " << residualMass 
+//         << " A,Z= " << targetA << ", "<< targetZ 
+//	 << "  " << G4int(targetA) << ", " << G4int(targetZ) << G4endl;
+
   //
   // Start Deexcitation
   //
