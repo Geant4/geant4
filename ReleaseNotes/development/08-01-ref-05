@@ -421,6 +421,11 @@ environments                                     envs-V08-01-02
   o Replaced SetVerbosity() method with SetVerboseLevel() in pyG4VisManager.
   o Added messenger for ExN03geom.
 
+data
+----
+- New data set for neutron cross-sections: G4NDL-3.10.
+- New data set for radioactive-decay: RadioactiveDecay-3.1.
+
 examples                                         examples-V08-01-05
 --------
 - Updated reference outputs.
