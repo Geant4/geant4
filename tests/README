@@ -1,4 +1,4 @@
-$Id: README,v 1.14 2006-06-15 13:56:57 gcosmo Exp $
+$Id: README,v 1.15 2006-12-01 14:22:04 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -28,8 +28,6 @@ test02 ## Standard e.m. processes. Low energy and high energy
        ## (Action? Split into (a) em, (b) had with higher em cuts)
 test05 ## Geometry - Tessellated solids and General Particle Source.
        ## (Action? Eventually add CAD input setup.)
-test06 ## Integral approach electromagnetic processes.  Simple box.
-       ## (Action? Add muon test script)
 test07 ## Statistical evaluation prototype.  (Derived originally from ExN03)
 test09 ## Basic e.m. processes, Polarised Compton, new photelectric
        ## effect, synchrotron radiation, simple box.
@@ -50,7 +48,6 @@ test22 ## Gamma and electro-nuclear physics.
 test23 ## Muon capture for CHIPS, stopping.
 test24 ## Binary cascade hadronic model.
 test25 ## Classical cascade hadronic model.
-test26 ## Cuts by region modeling.
 test27 ## Binary cascade for light ions (G4BinaryLightIonReaction).
 test28 ## Hadronic abrasion/ablation and em-dissociation.
 test29 ## Electroweak interface (G4QCaptureAtRest).
@@ -58,6 +55,8 @@ test31 ## General acceptance test for EM physics.
 test32 ## Leading_particle biasing model of G4Mars5Ge on MARS13.
 test33 ## Importance biasing and scoring.
 test34 ## Shower parameterisation with 'gflash'.
+test35 ## Internal test exercising HARP physics
+test39 ## CHIPS elastic & lA scattering at process level
 test40 ## Benchmark test for e.m. shower development from single primary
 test50 ## Statistical test suite for e.m. processes:
        ## 1) CSDA range and Stopping Power test for e-,p;

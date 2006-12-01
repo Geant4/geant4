@@ -74,6 +74,7 @@ processes                    John Apostolakis                John Apostolakis
 "/"/"/util                   Gunter.Folger@cern.ch           Gunter Folger
 "/optical                    gum@triumf.ca                   Peter Gumplinger
 "/parameterisation           Marc.Verderi@in2p3.fr           Marc Verderi
+"/scoring                    asai@slac.stanford.edu          Makoto Asai
 "/transportation             John.Apostolakis@cern.ch        John Apostolakis
 readout                      asai@slac.stanford.edu          Makoto Asai
 run                          asai@slac.stanford.edu          Makoto Asai
@@ -91,7 +92,8 @@ visualization/Tree           stanaka@cs.ritsumei.ac.jp       Satoshi Tanaka
 visualization/VRML           stanaka@cs.ritsumei.ac.jp       Satoshi Tanaka
 visualization/XXX            John.Allison@man.ac.uk          John Allison
 environments                 yoshidah@naruto-u.ac.jp         Hajime Yoshida
-environments/MOMO            yoshidah@naruto-u.ac.jp         Hajime Yoshida
+  g4py                       Koichi.Murakami@kek.jp          Koichi Murakami
+  MOMO                       yoshidah@naruto-u.ac.jp         Hajime Yoshida
 examples                     asai@slac.stanford.edu          Makoto Asai
 examples/novice/N01          asai@slac.stanford.edu          Makoto Asai
 examples/novice/N02          John.Apostolakis@cern.ch        John Apostolakis
@@ -106,6 +108,7 @@ examples/advanced            asai@slac.stanford.edu          Makoto Asai
   cosmicray_charging         h.araujo@ic.ac.uk               Henrique Araujo
   gammaray_telescope         longof@ts.infn.it               Francesco Longo
   hadrontherapy              Susanna.Guatelli@ge.infn.it     Susanna Guatelli
+  human_phantom              Susanna.Guatelli@ge.infn.it     Susanna Guatelli
   lAr_calorimeter            Alberto.Ribon@cern.ch           Alberto Ribon
   medical_linac              Michela.Piergentili@ge.infn.it  Michela Piergentili
   purging_magnet             John.Apostolakis@cern.ch        John Apostolakis
@@ -126,6 +129,7 @@ examples/extended/electromagnetic:
 examples/extended/eventgenerator:
   exgps                      flei@space.qinetiq.com          Fan Lei
   HepMCEx01,02               Koichi.Murakami@kek.jp          Koichi Murakami
+  MCTruth                    Witold.Pokorski@cern.ch         Witold Pokorski
 examples/extended/field      John.Apostolakis@cern.ch        John Apostolakis
 examples/extended/g3tog4     Gabriele.Cosmo@cern.ch          Gabriele Cosmo
 examples/extended/gdml       Witold.Pokorski@cern.ch         Witold Pokorski
@@ -163,7 +167,7 @@ tests                        Serguei.Sadilov@cern.ch         Serguei Sadilov
       test03                 (not currently used - see tests/GNUmakefile)
       test04                 (not currently used - see tests/GNUmakefile)
       test05                 Gabriele.Cosmo@cern.ch          Gabriele Cosmo
-      test06                 Michel.Maire@lapp.in2p3.fr      Michel Maire
+      test06                 (not currently used - see tests/GNUmakefile)
       test07                 Serguei.Sadilov@cern.ch         Serguei Sadilov
       test08                 (not currently used - see tests/GNUmakefile)
       test09                 Michel.Maire@lapp.in2p3.fr      Michel Maire
@@ -183,7 +187,7 @@ tests                        Serguei.Sadilov@cern.ch         Serguei Sadilov
       test23                 Mikhail.Kossov@cern.ch          Mikhail Kossov
       test24                 Gunter.Folger@cern.ch           Gunter Folger
       test25                 Gunter.Folger@cern.ch           Gunter Folger
-      test26                 Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
+      test26                 (not currently used - see tests/GNUmakefile)
       test27                 Gunter.Folger@cern.ch           Gunter Folger
       test28                 flei@space.qinetiq.com          Fan Lei
       test29                 Mikhail.Kossov@cern.ch          Mikhail Kossov
@@ -192,6 +196,8 @@ tests                        Serguei.Sadilov@cern.ch         Serguei Sadilov
       test32                 asai@slac.stanford.edu          Makoto Asai
       test33                 Michael.Dressel@cern.ch         Michael Dressel
       test34                 Joanna.Weng@cern.ch             Joanna Weng
+      test35                 Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
+      test39                 Mikhail.Kossov@cern.ch          Mikhail Kossov
       test40                 Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
       test50                 Susanna.Guatelli@ge.infn.it     Susanna Guatelli
       test201                barrand@lal.in2p3.fr            Guy Barrand
