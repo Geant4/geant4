@@ -5,7 +5,7 @@
 +-------------------------------------------------------+
 
 *************************************************************
- Geant4 version Name: geant4-08-01-patch-01-ref    (27-July-2006)
+ Geant4 version Name: global-V08-01-05    (15-December-2006)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -37,6 +37,7 @@ FastSimulationManagerProcess
 AddParameterisation
 Physics List constructor
 ConstructEM
+G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
 
 conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
       sampling secondary e+e- according Bethe-Heitler model
@@ -178,20 +179,29 @@ Index : 1     used in the geometry : Yes     recalculation needed : No
 
 ====================================================================
 
+G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
 ### Run 0 start.
+G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
 ::Initializing the sensitive detector
  ------ Start Tst34EventAction ----- 
  Start generating event Nr 0
 
+G4GlobalFastSimulationManager::GetFlavoredWorldForThis(...): DEPRECATING, will be dropped @ next major release
+G4GlobalFastSimulationManager::GetFlavoredWorldForThis(...): DEPRECATING, will be dropped @ next major release
+G4GlobalFastSimulationManager::GetFlavoredWorldForThis(...): DEPRECATING, will be dropped @ next major release
+G4GlobalFastSimulationManager::GetFlavoredWorldForThis(...): DEPRECATING, will be dropped @ next major release
+G4GlobalFastSimulationManager::GetFlavoredWorldForThis(...): DEPRECATING, will be dropped @ next major release
 
 ******************************************
-Internal Real Elapsed Time is: 0.08
+Internal Real Elapsed Time is: 0.1
 Internal System Elapsed Time: 0
 Internal GetUserElapsed Time: 0.08
 ******************************************
  ------ Tst34EventAction::End of event nr. 0  -----
   5335 hits are stored in Tst34HitsCollection 
  #### Tst34EventAction::Test: Total energy deposited in the calorimeter: 19.9484 (GeV)
+G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
+G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
 ::Initializing the sensitive detector
  ------ Start Tst34EventAction ----- 
  Start generating event Nr 1
@@ -203,8 +213,8 @@ Internal System Elapsed Time: 0
 Internal GetUserElapsed Time: 0.07
 ******************************************
  ------ Tst34EventAction::End of event nr. 1  -----
-  5322 hits are stored in Tst34HitsCollection 
- #### Tst34EventAction::Test: Total energy deposited in the calorimeter: 19.9618 (GeV)
+  5331 hits are stored in Tst34HitsCollection 
+ #### Tst34EventAction::Test: Total energy deposited in the calorimeter: 19.9757 (GeV)
 ::Initializing the sensitive detector
  ------ Start Tst34EventAction ----- 
  Start generating event Nr 2
@@ -216,21 +226,21 @@ Internal System Elapsed Time: 0
 Internal GetUserElapsed Time: 0.07
 ******************************************
  ------ Tst34EventAction::End of event nr. 2  -----
-  5306 hits are stored in Tst34HitsCollection 
- #### Tst34EventAction::Test: Total energy deposited in the calorimeter: 19.9315 (GeV)
+  5322 hits are stored in Tst34HitsCollection 
+ #### Tst34EventAction::Test: Total energy deposited in the calorimeter: 19.9399 (GeV)
 ::Initializing the sensitive detector
  ------ Start Tst34EventAction ----- 
  Start generating event Nr 3
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.06
+Internal Real Elapsed Time is: 0.07
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.06
+Internal GetUserElapsed Time: 0.07
 ******************************************
  ------ Tst34EventAction::End of event nr. 3  -----
-  5229 hits are stored in Tst34HitsCollection 
- #### Tst34EventAction::Test: Total energy deposited in the calorimeter: 19.7317 (GeV)
+  5325 hits are stored in Tst34HitsCollection 
+ #### Tst34EventAction::Test: Total energy deposited in the calorimeter: 19.967 (GeV)
 ::Initializing the sensitive detector
  ------ Start Tst34EventAction ----- 
  Start generating event Nr 4
@@ -242,8 +252,8 @@ Internal System Elapsed Time: 0
 Internal GetUserElapsed Time: 0.07
 ******************************************
  ------ Tst34EventAction::End of event nr. 4  -----
-  5335 hits are stored in Tst34HitsCollection 
- #### Tst34EventAction::Test: Total energy deposited in the calorimeter: 19.9836 (GeV)
+  5311 hits are stored in Tst34HitsCollection 
+ #### Tst34EventAction::Test: Total energy deposited in the calorimeter: 19.9779 (GeV)
 ::Initializing the sensitive detector
  ------ Start Tst34EventAction ----- 
  Start generating event Nr 5
@@ -251,12 +261,12 @@ Internal GetUserElapsed Time: 0.07
 
 ******************************************
 Internal Real Elapsed Time is: 0.07
-Internal System Elapsed Time: 0.01
-Internal GetUserElapsed Time: 0.06
+Internal System Elapsed Time: 0
+Internal GetUserElapsed Time: 0.07
 ******************************************
  ------ Tst34EventAction::End of event nr. 5  -----
-  5313 hits are stored in Tst34HitsCollection 
- #### Tst34EventAction::Test: Total energy deposited in the calorimeter: 19.9661 (GeV)
+  5326 hits are stored in Tst34HitsCollection 
+ #### Tst34EventAction::Test: Total energy deposited in the calorimeter: 19.9757 (GeV)
 ::Initializing the sensitive detector
  ------ Start Tst34EventAction ----- 
  Start generating event Nr 6
@@ -268,8 +278,8 @@ Internal System Elapsed Time: 0
 Internal GetUserElapsed Time: 0.07
 ******************************************
  ------ Tst34EventAction::End of event nr. 6  -----
-  5285 hits are stored in Tst34HitsCollection 
- #### Tst34EventAction::Test: Total energy deposited in the calorimeter: 19.9167 (GeV)
+  5296 hits are stored in Tst34HitsCollection 
+ #### Tst34EventAction::Test: Total energy deposited in the calorimeter: 19.9205 (GeV)
 ::Initializing the sensitive detector
  ------ Start Tst34EventAction ----- 
  Start generating event Nr 7
@@ -281,21 +291,21 @@ Internal System Elapsed Time: 0
 Internal GetUserElapsed Time: 0.07
 ******************************************
  ------ Tst34EventAction::End of event nr. 7  -----
-  5325 hits are stored in Tst34HitsCollection 
- #### Tst34EventAction::Test: Total energy deposited in the calorimeter: 19.9842 (GeV)
+  5317 hits are stored in Tst34HitsCollection 
+ #### Tst34EventAction::Test: Total energy deposited in the calorimeter: 19.947 (GeV)
 ::Initializing the sensitive detector
  ------ Start Tst34EventAction ----- 
  Start generating event Nr 8
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.08
+Internal Real Elapsed Time is: 0.07
 Internal System Elapsed Time: 0
 Internal GetUserElapsed Time: 0.07
 ******************************************
  ------ Tst34EventAction::End of event nr. 8  -----
-  5272 hits are stored in Tst34HitsCollection 
- #### Tst34EventAction::Test: Total energy deposited in the calorimeter: 19.8303 (GeV)
+  5313 hits are stored in Tst34HitsCollection 
+ #### Tst34EventAction::Test: Total energy deposited in the calorimeter: 19.9421 (GeV)
 ::Initializing the sensitive detector
  ------ Start Tst34EventAction ----- 
  Start generating event Nr 9
@@ -303,16 +313,16 @@ Internal GetUserElapsed Time: 0.07
 
 ******************************************
 Internal Real Elapsed Time is: 0.07
-Internal System Elapsed Time: 0.01
-Internal GetUserElapsed Time: 0.06
+Internal System Elapsed Time: 0
+Internal GetUserElapsed Time: 0.07
 ******************************************
  ------ Tst34EventAction::End of event nr. 9  -----
-  5324 hits are stored in Tst34HitsCollection 
- #### Tst34EventAction::Test: Total energy deposited in the calorimeter: 19.9594 (GeV)
+  5313 hits are stored in Tst34HitsCollection 
+ #### Tst34EventAction::Test: Total energy deposited in the calorimeter: 19.9789 (GeV)
 number of events = 10
 
 ******************************************
-Total Real Elapsed Time is: 5.64
-Total System Elapsed Time: 0.17
-Total GetUserElapsed Time: 5.39
+Total Real Elapsed Time is: 3.87
+Total System Elapsed Time: 0.05
+Total GetUserElapsed Time: 3.47
 ******************************************

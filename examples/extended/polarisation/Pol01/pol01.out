@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-08-01-patch-01-ref    (27-July-2006)
+ Geant4 version Name: global-V08-01-05    (15-December-2006)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -42,6 +42,7 @@ theBox : (0,0,0.08)
  buildBhabha cross section 0
 
 phot:  Total cross sections from Sandia parametrisation. 
+      Sampling according PhotoElectric model
 
 pol-compt:  Total cross sections has a good parametrisation from 10 KeV to (100/Z) GeV
       Sampling according Polarized-Compton model
@@ -128,39 +129,39 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.99s Real=1.02s Sys=0s
+  User=6.25s Real=6.4s Sys=0.13s
 
  The run consists of 10000 gamma of 10 MeV through 1.75 mm  of G4_Fe (density: 7.874 g/cm3 )
 
 --------- Ranlux engine status ---------
  Initial seed = 9876
- float_seed_table[] = 0.241912 0.961525 0.778978 0.831297 0.379289 0.572294 0.0816283 0.0615972 0.76887 0.0221753 0.648315 0.595419 0.696509 0.117728 0.405132 0.204746 0.0714992 0.863735 0.546397 0.480336 0.633327 0.968502 0.201064 0.0610945 
+ float_seed_table[] = 0.943677 0.627389 0.386383 0.142922 0.862092 0.267254 0.291091 0.630625 0.276717 0.0137799 0.814528 0.0688981 0.850223 0.562046 0.531162 0.543865 0.237133 0.0673283 0.172081 0.739343 0.941148 0.540548 0.737632 0.444263 
  i_lag = 2, j_lag = 12
- carry = 5.96046e-08, count24 = 2
+ carry = 0, count24 = 15
  luxury = 3 nskip = 199
 ----------------------------------------
 
  Process calls frequency --->
-	Transportation = 31170
-	pol-compt = 288
-	msc = 5292
-	pol-eBrem = 399
-	phot = 197
-	pol-eIoni = 704
-	pol-conv = 229
-	pol-annihil = 74
+	Transportation = 31200
+	pol-compt = 268
+	msc = 4631
+	pol-eBrem = 371
+	pol-conv = 224
+	pol-eIoni = 611
+	pol-annihil = 63
+	phot = 166
  Gamma: 
-Mean Number per Event :1.0101
-Mean Energy :9.5685 MeV +- 1.9204 MeV
-Mean Polarization :-0.96383 +- 0.18228
+Mean Number per Event :1.0093
+Mean Energy :9.5637 MeV +- 1.9395 MeV
+Mean Polarization :-0.96254 +- 0.18778
  Electron: 
-Mean Number per Event :0.0329
-Mean Energy :5.0525 MeV +- 2.422 MeV
-Mean Polarization :-0.71072 +- 0.29489
+Mean Number per Event :0.0346
+Mean Energy :5.246 MeV +- 2.5576 MeV
+Mean Polarization :-0.71499 +- 0.29655
  Positron: 
-Mean Number per Event :0.0155
-Mean Energy :4.4931 MeV +- 2.0026 MeV
-Mean Polarization :-0.64665 +- 0.30277
+Mean Number per Event :0.0161
+Mean Energy :4.0964 MeV +- 2.0744 MeV
+Mean Polarization :-0.59996 +- 0.31136
 #
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
@@ -168,7 +169,9 @@ UserRunAction deleted.
 UserPrimaryGenerator deleted.
 G4 kernel has come to Quit state.
 EventManager deleted.
+Default detector region deleted.
 UImanager deleted.
+Units table cleared.
 StateManager deleted.
 RunManagerKernel is deleted.
 RunManager is deleting.

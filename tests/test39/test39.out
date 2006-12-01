@@ -1,0 +1,3698 @@
+
+*************************************************************
+ Geant4 version Name: global-V08-01-05    (15-December-2006)
+                      Copyright : Geant4 Collaboration
+                      Reference : NIM A 506 (2003), 250-303
+                            WWW : http://cern.ch/geant4
+*************************************************************
+
+Test39: (6,6) ion is OK, Run State=Init
+Test39:Par's: T=1.800000e+02,S=3.000000e-01,Eta=3.000000e-01,nop=123,p=0.000000e+00,e=0.000000e+00,pPDG=0,tPDG=0,nEv=200000,fN=7.500000e-01,fD=5.000000e-02,cP=5.000000e+00,rM=9.990000e+00,sA=8.000000e-01
+Test39:-->Material(1,0):Hydrogen,H; index=0
+Test39:-->Material(2,2):Helium,He; index=1
+Test39:-->Material(3,4):Lithium,Li; index=2
+Test39:-->Material(6,6):Carbon,C; index=3
+Test39:-->Material(13,14):Aluminum,Al; index=4
+Test39:-->Material(29,34):Copper,Cu; index=5
+Test39:-->Material(50,69):Tin,Sn; index=6
+Test39:-->Material(82,126):Lead,Pb; index=7
+Test39: Material=Hydrogen, Element[0]=Hydrogen,A[0]=1 is selected.
+Test39:*NewRun* Targ=90001000,Proj=2212,P=3.000000e+01 MeV/c, =>> 1 of 80
+Test39: Mt=9.382723e+02, Mp=9.382723e+02, tmt=4.498850e-04, E=9.387518e+02
+*=>TEST39: 100000 events are simulated
+Test39:CalculationTimePerEvent=8.120000e-05 s
+Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
+Test39: t=3.045098e-04 ,dsig/dt=2.702081e+06
+Test39: t=3.137338e-04 ,dsig/dt=2.635563e+06
+Test39: t=3.232373e-04 ,dsig/dt=2.707974e+06
+Test39: t=3.330286e-04 ,dsig/dt=2.735059e+06
+Test39: t=3.431165e-04 ,dsig/dt=2.661028e+06
+Test39: t=3.535100e-04 ,dsig/dt=2.663433e+06
+Test39: t=3.642183e-04 ,dsig/dt=2.619505e+06
+Test39: t=3.752510e-04 ,dsig/dt=2.748428e+06
+Test39: t=3.866178e-04 ,dsig/dt=2.702699e+06
+Test39: t=3.983290e-04 ,dsig/dt=2.624133e+06
+Test39: t=4.103950e-04 ,dsig/dt=2.699040e+06
+Test39: t=4.228264e-04 ,dsig/dt=2.696099e+06
+Test39: t=4.356344e-04 ,dsig/dt=2.753942e+06
+Test39: t=4.488304e-04 ,dsig/dt=2.674081e+06
+Test39: t=4.624261e-04 ,dsig/dt=2.756854e+06
+Test39: t=4.764336e-04 ,dsig/dt=2.696061e+06
+Test39: t=4.908655e-04 ,dsig/dt=2.709072e+06
+Test39: t=5.057345e-04 ,dsig/dt=2.639039e+06
+Test39: t=5.210539e-04 ,dsig/dt=2.726335e+06
+Test39: t=5.368373e-04 ,dsig/dt=2.649606e+06
+Test39: t=5.530989e-04 ,dsig/dt=2.656952e+06
+Test39: t=5.698530e-04 ,dsig/dt=2.722848e+06
+Test39: t=5.871147e-04 ,dsig/dt=2.660679e+06
+Test39: t=6.048992e-04 ,dsig/dt=2.691048e+06
+Test39: t=6.232224e-04 ,dsig/dt=2.689446e+06
+Test39: t=6.421007e-04 ,dsig/dt=2.709642e+06
+Test39: t=6.615509e-04 ,dsig/dt=2.735866e+06
+Test39: t=6.815902e-04 ,dsig/dt=2.709335e+06
+Test39: t=7.022365e-04 ,dsig/dt=2.687741e+06
+Test39: t=7.235082e-04 ,dsig/dt=2.700318e+06
+Test39: t=7.454243e-04 ,dsig/dt=2.708104e+06
+Test39: t=7.680042e-04 ,dsig/dt=2.690858e+06
+Test39: t=7.912681e-04 ,dsig/dt=2.732311e+06
+Test39: t=8.152368e-04 ,dsig/dt=2.731425e+06
+Test39: t=8.399314e-04 ,dsig/dt=2.715235e+06
+Test39: t=8.653741e-04 ,dsig/dt=2.699326e+06
+Test39: t=8.915875e-04 ,dsig/dt=2.196865e+06
+Test39: t=9.185950e-04 ,dsig/dt=0.000000e+00
+Test39: t=9.464205e-04 ,dsig/dt=0.000000e+00
+Test39: t=9.750889e-04 ,dsig/dt=0.000000e+00
+Test39: Material=Helium, Element[0]=Helium,A[0]=4 is selected.
+Test39:*NewRun* Targ=90002002,Proj=2212,P=3.000000e+01 MeV/c, =>> 2 of 80
+Test39: Mt=3.727417e+03, Mp=9.382723e+02, tmt=1.787231e-03, E=9.387518e+02
+*=>TEST39: 100000 events are simulated
+Test39:CalculationTimePerEvent=8.150000e-05 s
+Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
+Test39: t=3.098060e-04 ,dsig/dt=5.978312e+05
+Test39: t=3.303900e-04 ,dsig/dt=5.715279e+05
+Test39: t=3.523416e-04 ,dsig/dt=5.440572e+05
+Test39: t=3.757517e-04 ,dsig/dt=5.703304e+05
+Test39: t=4.007172e-04 ,dsig/dt=5.475875e+05
+Test39: t=4.273415e-04 ,dsig/dt=5.809869e+05
+Test39: t=4.557347e-04 ,dsig/dt=5.652699e+05
+Test39: t=4.860144e-04 ,dsig/dt=5.532846e+05
+Test39: t=5.183060e-04 ,dsig/dt=5.692207e+05
+Test39: t=5.527430e-04 ,dsig/dt=5.696575e+05
+Test39: t=5.894681e-04 ,dsig/dt=5.647481e+05
+Test39: t=6.286333e-04 ,dsig/dt=5.790845e+05
+Test39: t=6.704006e-04 ,dsig/dt=5.427401e+05
+Test39: t=7.149431e-04 ,dsig/dt=5.515406e+05
+Test39: t=7.624450e-04 ,dsig/dt=5.519275e+05
+Test39: t=8.131030e-04 ,dsig/dt=5.366256e+05
+Test39: t=8.671268e-04 ,dsig/dt=5.323699e+05
+Test39: t=9.247400e-04 ,dsig/dt=5.327147e+05
+Test39: t=9.861812e-04 ,dsig/dt=5.344372e+05
+Test39: t=1.051705e-03 ,dsig/dt=5.335923e+05
+Test39: t=1.121581e-03 ,dsig/dt=5.318709e+05
+Test39: t=1.196101e-03 ,dsig/dt=5.156497e+05
+Test39: t=1.275572e-03 ,dsig/dt=5.096303e+05
+Test39: t=1.360323e-03 ,dsig/dt=4.978204e+05
+Test39: t=1.450705e-03 ,dsig/dt=5.039751e+05
+Test39: t=1.547092e-03 ,dsig/dt=4.863671e+05
+Test39: t=1.649883e-03 ,dsig/dt=4.939399e+05
+Test39: t=1.759504e-03 ,dsig/dt=4.835627e+05
+Test39: t=1.876408e-03 ,dsig/dt=4.745615e+05
+Test39: t=2.001079e-03 ,dsig/dt=4.688190e+05
+Test39: t=2.134034e-03 ,dsig/dt=4.584575e+05
+Test39: t=2.275823e-03 ,dsig/dt=2.965201e+05
+Test39: t=2.427032e-03 ,dsig/dt=0.000000e+00
+Test39: t=2.588287e-03 ,dsig/dt=0.000000e+00
+Test39: t=2.760257e-03 ,dsig/dt=0.000000e+00
+Test39: t=2.943653e-03 ,dsig/dt=0.000000e+00
+Test39: t=3.139234e-03 ,dsig/dt=0.000000e+00
+Test39: t=3.347809e-03 ,dsig/dt=0.000000e+00
+Test39: t=3.570243e-03 ,dsig/dt=0.000000e+00
+Test39: t=3.807455e-03 ,dsig/dt=0.000000e+00
+Test39: Material=Lithium, Element[0]=Lithium,A[0]=7 is selected.
+Test39:*NewRun* Targ=90003004,Proj=2212,P=3.000000e+01 MeV/c, =>> 3 of 80
+Test39: Mt=6.533835e+03, Mp=9.382723e+02, tmt=3.132859e-03, E=9.387518e+02
+*=>TEST39: 100000 events are simulated
+Test39:CalculationTimePerEvent=8.275000e-05 s
+Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
+Test39: t=3.119872e-04 ,dsig/dt=1.894103e+05
+Test39: t=3.374177e-04 ,dsig/dt=1.907252e+05
+Test39: t=3.649210e-04 ,dsig/dt=1.989749e+05
+Test39: t=3.946662e-04 ,dsig/dt=1.987959e+05
+Test39: t=4.268360e-04 ,dsig/dt=1.983791e+05
+Test39: t=4.616279e-04 ,dsig/dt=1.863507e+05
+Test39: t=4.992558e-04 ,dsig/dt=1.893197e+05
+Test39: t=5.399508e-04 ,dsig/dt=1.691295e+05
+Test39: t=5.839629e-04 ,dsig/dt=1.614535e+05
+Test39: t=6.315624e-04 ,dsig/dt=1.587929e+05
+Test39: t=6.830419e-04 ,dsig/dt=1.556578e+05
+Test39: t=7.387175e-04 ,dsig/dt=1.596746e+05
+Test39: t=7.989313e-04 ,dsig/dt=1.594745e+05
+Test39: t=8.640533e-04 ,dsig/dt=1.559979e+05
+Test39: t=9.344834e-04 ,dsig/dt=1.597884e+05
+Test39: t=1.010654e-03 ,dsig/dt=1.534243e+05
+Test39: t=1.093034e-03 ,dsig/dt=1.550927e+05
+Test39: t=1.182129e-03 ,dsig/dt=1.525349e+05
+Test39: t=1.278485e-03 ,dsig/dt=1.530905e+05
+Test39: t=1.382696e-03 ,dsig/dt=1.506037e+05
+Test39: t=1.495402e-03 ,dsig/dt=1.531238e+05
+Test39: t=1.617294e-03 ,dsig/dt=1.462160e+05
+Test39: t=1.749122e-03 ,dsig/dt=1.465828e+05
+Test39: t=1.891695e-03 ,dsig/dt=1.479628e+05
+Test39: t=2.045889e-03 ,dsig/dt=1.401091e+05
+Test39: t=2.212652e-03 ,dsig/dt=1.426024e+05
+Test39: t=2.393009e-03 ,dsig/dt=1.379409e+05
+Test39: t=2.588066e-03 ,dsig/dt=1.342303e+05
+Test39: t=2.799022e-03 ,dsig/dt=3.868026e+04
+Test39: t=3.027174e-03 ,dsig/dt=0.000000e+00
+Test39: t=3.273923e-03 ,dsig/dt=0.000000e+00
+Test39: t=3.540785e-03 ,dsig/dt=0.000000e+00
+Test39: t=3.829399e-03 ,dsig/dt=0.000000e+00
+Test39: t=4.141538e-03 ,dsig/dt=0.000000e+00
+Test39: t=4.479120e-03 ,dsig/dt=0.000000e+00
+Test39: t=4.844219e-03 ,dsig/dt=0.000000e+00
+Test39: t=5.239077e-03 ,dsig/dt=0.000000e+00
+Test39: t=5.666121e-03 ,dsig/dt=0.000000e+00
+Test39: t=6.127974e-03 ,dsig/dt=0.000000e+00
+Test39: t=6.627473e-03 ,dsig/dt=0.000000e+00
+Test39: Material=Carbon, Element[0]=Carbon,A[0]=12 is selected.
+Test39:*NewRun* Targ=90006006,Proj=2212,P=3.000000e+01 MeV/c, =>> 4 of 80
+Test39: Mt=1.117487e+04, Mp=9.382723e+02, tmt=5.358152e-03, E=9.387518e+02
+*=>TEST39: 100000 events are simulated
+Test39:CalculationTimePerEvent=8.180000e-05 s
+Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
+Test39: t=3.140872e-04 ,dsig/dt=2.140570e+04
+Test39: t=3.442771e-04 ,dsig/dt=2.187337e+04
+Test39: t=3.773688e-04 ,dsig/dt=2.203505e+04
+Test39: t=4.136413e-04 ,dsig/dt=2.224009e+04
+Test39: t=4.534004e-04 ,dsig/dt=2.113441e+04
+Test39: t=4.969810e-04 ,dsig/dt=2.115688e+04
+Test39: t=5.447506e-04 ,dsig/dt=2.169430e+04
+Test39: t=5.971117e-04 ,dsig/dt=2.101777e+04
+Test39: t=6.545058e-04 ,dsig/dt=2.117860e+04
+Test39: t=7.174166e-04 ,dsig/dt=2.125088e+04
+Test39: t=7.863743e-04 ,dsig/dt=2.074444e+04
+Test39: t=8.619602e-04 ,dsig/dt=2.009369e+04
+Test39: t=9.448114e-04 ,dsig/dt=2.042800e+04
+Test39: t=1.035626e-03 ,dsig/dt=2.020312e+04
+Test39: t=1.135170e-03 ,dsig/dt=2.009918e+04
+Test39: t=1.244282e-03 ,dsig/dt=1.971424e+04
+Test39: t=1.363882e-03 ,dsig/dt=1.925789e+04
+Test39: t=1.494978e-03 ,dsig/dt=1.939021e+04
+Test39: t=1.638674e-03 ,dsig/dt=1.934443e+04
+Test39: t=1.796183e-03 ,dsig/dt=1.876657e+04
+Test39: t=1.968831e-03 ,dsig/dt=1.889836e+04
+Test39: t=2.158074e-03 ,dsig/dt=1.878833e+04
+Test39: t=2.365507e-03 ,dsig/dt=1.889148e+04
+Test39: t=2.592879e-03 ,dsig/dt=1.894947e+04
+Test39: t=2.842105e-03 ,dsig/dt=1.966726e+04
+Test39: t=3.115286e-03 ,dsig/dt=6.396079e+03
+Test39: t=3.414726e-03 ,dsig/dt=0.000000e+00
+Test39: t=3.742948e-03 ,dsig/dt=0.000000e+00
+Test39: t=4.102719e-03 ,dsig/dt=0.000000e+00
+Test39: t=4.497070e-03 ,dsig/dt=0.000000e+00
+Test39: t=4.929326e-03 ,dsig/dt=0.000000e+00
+Test39: t=5.403131e-03 ,dsig/dt=0.000000e+00
+Test39: t=5.922477e-03 ,dsig/dt=0.000000e+00
+Test39: t=6.491742e-03 ,dsig/dt=0.000000e+00
+Test39: t=7.115726e-03 ,dsig/dt=0.000000e+00
+Test39: t=7.799686e-03 ,dsig/dt=0.000000e+00
+Test39: t=8.549388e-03 ,dsig/dt=0.000000e+00
+Test39: t=9.371151e-03 ,dsig/dt=0.000000e+00
+Test39: t=1.027190e-02 ,dsig/dt=0.000000e+00
+Test39: t=1.125923e-02 ,dsig/dt=0.000000e+00
+Test39: Material=Aluminum, Element[0]=Aluminum,A[0]=27 is selected.
+Test39:*NewRun* Targ=90013014,Proj=2212,P=3.000000e+01 MeV/c, =>> 5 of 80
+Test39: Mt=2.512651e+04, Mp=9.382723e+02, tmt=1.204772e-02, E=9.387518e+02
+*=>TEST39: 100000 events are simulated
+Test39:CalculationTimePerEvent=8.280000e-05 s
+Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
+Test39: t=3.172845e-04 ,dsig/dt=2.162248e+03
+Test39: t=3.548984e-04 ,dsig/dt=2.260021e+03
+Test39: t=3.969713e-04 ,dsig/dt=2.156999e+03
+Test39: t=4.440320e-04 ,dsig/dt=2.276874e+03
+Test39: t=4.966718e-04 ,dsig/dt=2.198622e+03
+Test39: t=5.555519e-04 ,dsig/dt=2.193277e+03
+Test39: t=6.214122e-04 ,dsig/dt=2.162472e+03
+Test39: t=6.950802e-04 ,dsig/dt=2.203394e+03
+Test39: t=7.774816e-04 ,dsig/dt=2.238338e+03
+Test39: t=8.696515e-04 ,dsig/dt=2.205951e+03
+Test39: t=9.727482e-04 ,dsig/dt=2.158594e+03
+Test39: t=1.088067e-03 ,dsig/dt=2.181483e+03
+Test39: t=1.217056e-03 ,dsig/dt=2.172619e+03
+Test39: t=1.361338e-03 ,dsig/dt=2.219853e+03
+Test39: t=1.522723e-03 ,dsig/dt=2.134400e+03
+Test39: t=1.703241e-03 ,dsig/dt=2.164095e+03
+Test39: t=1.905160e-03 ,dsig/dt=2.178183e+03
+Test39: t=2.131015e-03 ,dsig/dt=2.232759e+03
+Test39: t=2.383646e-03 ,dsig/dt=2.276208e+03
+Test39: t=2.666225e-03 ,dsig/dt=2.318106e+03
+Test39: t=2.982305e-03 ,dsig/dt=2.462576e+03
+Test39: t=3.335855e-03 ,dsig/dt=1.393045e+03
+Test39: t=3.731318e-03 ,dsig/dt=0.000000e+00
+Test39: t=4.173664e-03 ,dsig/dt=0.000000e+00
+Test39: t=4.668449e-03 ,dsig/dt=0.000000e+00
+Test39: t=5.221891e-03 ,dsig/dt=0.000000e+00
+Test39: t=5.840943e-03 ,dsig/dt=0.000000e+00
+Test39: t=6.533383e-03 ,dsig/dt=0.000000e+00
+Test39: t=7.307911e-03 ,dsig/dt=0.000000e+00
+Test39: t=8.174259e-03 ,dsig/dt=0.000000e+00
+Test39: t=9.143313e-03 ,dsig/dt=0.000000e+00
+Test39: t=1.022725e-02 ,dsig/dt=0.000000e+00
+Test39: t=1.143968e-02 ,dsig/dt=0.000000e+00
+Test39: t=1.279585e-02 ,dsig/dt=0.000000e+00
+Test39: t=1.431279e-02 ,dsig/dt=0.000000e+00
+Test39: t=1.600956e-02 ,dsig/dt=0.000000e+00
+Test39: t=1.790748e-02 ,dsig/dt=0.000000e+00
+Test39: t=2.003040e-02 ,dsig/dt=0.000000e+00
+Test39: t=2.240499e-02 ,dsig/dt=0.000000e+00
+Test39: t=2.506109e-02 ,dsig/dt=0.000000e+00
+Test39: Material=Copper, Element[0]=Copper,A[0]=63 is selected.
+Test39:*NewRun* Targ=90029034,Proj=2212,P=3.000000e+01 MeV/c, =>> 6 of 80
+Test39: Mt=5.860379e+04, Mp=9.382723e+02, tmt=2.809949e-02, E=9.387518e+02
+*=>TEST39: 100000 events are simulated
+Test39:CalculationTimePerEvent=8.435000e-05 s
+Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
+Test39: t=3.206611e-04 ,dsig/dt=1.353201e+03
+Test39: t=3.663500e-04 ,dsig/dt=1.349463e+03
+Test39: t=4.185489e-04 ,dsig/dt=1.343320e+03
+Test39: t=4.781853e-04 ,dsig/dt=1.446892e+03
+Test39: t=5.463189e-04 ,dsig/dt=1.334843e+03
+Test39: t=6.241604e-04 ,dsig/dt=1.380799e+03
+Test39: t=7.130931e-04 ,dsig/dt=1.421962e+03
+Test39: t=8.146972e-04 ,dsig/dt=1.414672e+03
+Test39: t=9.307782e-04 ,dsig/dt=1.448509e+03
+Test39: t=1.063399e-03 ,dsig/dt=1.526626e+03
+Test39: t=1.214916e-03 ,dsig/dt=1.611764e+03
+Test39: t=1.388022e-03 ,dsig/dt=1.873664e+03
+Test39: t=1.585792e-03 ,dsig/dt=2.126346e+03
+Test39: t=1.811741e-03 ,dsig/dt=2.625067e+03
+Test39: t=2.069885e-03 ,dsig/dt=3.689311e+03
+Test39: t=2.364810e-03 ,dsig/dt=5.162575e+03
+Test39: t=2.701756e-03 ,dsig/dt=7.822433e+03
+Test39: t=3.086712e-03 ,dsig/dt=1.205933e+04
+Test39: t=3.526518e-03 ,dsig/dt=6.665380e+03
+Test39: t=4.028990e-03 ,dsig/dt=0.000000e+00
+Test39: t=4.603055e-03 ,dsig/dt=0.000000e+00
+Test39: t=5.258915e-03 ,dsig/dt=0.000000e+00
+Test39: t=6.008224e-03 ,dsig/dt=0.000000e+00
+Test39: t=6.864298e-03 ,dsig/dt=0.000000e+00
+Test39: t=7.842348e-03 ,dsig/dt=0.000000e+00
+Test39: t=8.959755e-03 ,dsig/dt=0.000000e+00
+Test39: t=1.023637e-02 ,dsig/dt=0.000000e+00
+Test39: t=1.169489e-02 ,dsig/dt=0.000000e+00
+Test39: t=1.336122e-02 ,dsig/dt=0.000000e+00
+Test39: t=1.526498e-02 ,dsig/dt=0.000000e+00
+Test39: t=1.743999e-02 ,dsig/dt=0.000000e+00
+Test39: t=1.992490e-02 ,dsig/dt=0.000000e+00
+Test39: t=2.276387e-02 ,dsig/dt=0.000000e+00
+Test39: t=2.600735e-02 ,dsig/dt=0.000000e+00
+Test39: t=2.971297e-02 ,dsig/dt=0.000000e+00
+Test39: t=3.394658e-02 ,dsig/dt=0.000000e+00
+Test39: t=3.878342e-02 ,dsig/dt=0.000000e+00
+Test39: t=4.430942e-02 ,dsig/dt=0.000000e+00
+Test39: t=5.062279e-02 ,dsig/dt=0.000000e+00
+Test39: t=5.783571e-02 ,dsig/dt=0.000000e+00
+Test39: Material=Tin, Element[0]=Tin,A[0]=119 is selected.
+Test39:*NewRun* Targ=90050069,Proj=2212,P=3.000000e+01 MeV/c, =>> 7 of 80
+Test39: Mt=1.107324e+05, Mp=9.382723e+02, tmt=5.309422e-02, E=9.387518e+02
+*=>TEST39: 100000 events are simulated
+Test39:CalculationTimePerEvent=8.495000e-05 s
+Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
+Test39: t=3.232218e-04 ,dsig/dt=5.148005e+03
+Test39: t=3.751970e-04 ,dsig/dt=4.776946e+03
+Test39: t=4.355300e-04 ,dsig/dt=4.906150e+03
+Test39: t=5.055647e-04 ,dsig/dt=4.969613e+03
+Test39: t=5.868613e-04 ,dsig/dt=4.956879e+03
+Test39: t=6.812307e-04 ,dsig/dt=5.066086e+03
+Test39: t=7.907750e-04 ,dsig/dt=4.844532e+03
+Test39: t=9.179344e-04 ,dsig/dt=5.412523e+03
+Test39: t=1.065541e-03 ,dsig/dt=5.611260e+03
+Test39: t=1.236884e-03 ,dsig/dt=6.430344e+03
+Test39: t=1.435780e-03 ,dsig/dt=7.948203e+03
+Test39: t=1.666658e-03 ,dsig/dt=1.029433e+04
+Test39: t=1.934663e-03 ,dsig/dt=1.491027e+04
+Test39: t=2.245763e-03 ,dsig/dt=2.241008e+04
+Test39: t=2.606890e-03 ,dsig/dt=3.429371e+04
+Test39: t=3.026087e-03 ,dsig/dt=4.990815e+04
+Test39: t=3.512692e-03 ,dsig/dt=3.349967e+04
+Test39: t=4.077545e-03 ,dsig/dt=0.000000e+00
+Test39: t=4.733229e-03 ,dsig/dt=0.000000e+00
+Test39: t=5.494349e-03 ,dsig/dt=0.000000e+00
+Test39: t=6.377860e-03 ,dsig/dt=0.000000e+00
+Test39: t=7.403442e-03 ,dsig/dt=0.000000e+00
+Test39: t=8.593942e-03 ,dsig/dt=0.000000e+00
+Test39: t=9.975878e-03 ,dsig/dt=0.000000e+00
+Test39: t=1.158003e-02 ,dsig/dt=0.000000e+00
+Test39: t=1.344214e-02 ,dsig/dt=0.000000e+00
+Test39: t=1.560369e-02 ,dsig/dt=0.000000e+00
+Test39: t=1.811282e-02 ,dsig/dt=0.000000e+00
+Test39: t=2.102542e-02 ,dsig/dt=0.000000e+00
+Test39: t=2.440638e-02 ,dsig/dt=0.000000e+00
+Test39: t=2.833101e-02 ,dsig/dt=0.000000e+00
+Test39: t=3.288674e-02 ,dsig/dt=0.000000e+00
+Test39: t=3.817505e-02 ,dsig/dt=0.000000e+00
+Test39: t=4.431373e-02 ,dsig/dt=0.000000e+00
+Test39: t=5.143953e-02 ,dsig/dt=0.000000e+00
+Test39: t=5.971119e-02 ,dsig/dt=0.000000e+00
+Test39: t=6.931296e-02 ,dsig/dt=0.000000e+00
+Test39: t=8.045873e-02 ,dsig/dt=0.000000e+00
+Test39: t=9.339677e-02 ,dsig/dt=0.000000e+00
+Test39: t=1.084153e-01 ,dsig/dt=0.000000e+00
+Test39: Material=Lead, Element[0]=Lead,A[0]=208 is selected.
+Test39:*NewRun* Targ=90082126,Proj=2212,P=3.000000e+01 MeV/c, =>> 8 of 80
+Test39: Mt=1.936877e+05, Mp=9.382723e+02, tmt=9.286984e-02, E=9.387518e+02
+*=>TEST39: 100000 events are simulated
+Test39:CalculationTimePerEvent=8.570000e-05 s
+Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
+Test39: t=3.254887e-04 ,dsig/dt=1.156030e+04
+Test39: t=3.831469e-04 ,dsig/dt=1.116955e+04
+Test39: t=4.510189e-04 ,dsig/dt=1.119044e+04
+Test39: t=5.309140e-04 ,dsig/dt=1.249679e+04
+Test39: t=6.249619e-04 ,dsig/dt=1.186333e+04
+Test39: t=7.356699e-04 ,dsig/dt=1.389149e+04
+Test39: t=8.659890e-04 ,dsig/dt=1.602910e+04
+Test39: t=1.019393e-03 ,dsig/dt=1.968038e+04
+Test39: t=1.199972e-03 ,dsig/dt=2.673654e+04
+Test39: t=1.412539e-03 ,dsig/dt=3.995633e+04
+Test39: t=1.662762e-03 ,dsig/dt=6.622244e+04
+Test39: t=1.957309e-03 ,dsig/dt=1.063021e+05
+Test39: t=2.304034e-03 ,dsig/dt=1.647245e+05
+Test39: t=2.712178e-03 ,dsig/dt=2.094723e+05
+Test39: t=3.192623e-03 ,dsig/dt=1.689207e+05
+Test39: t=3.758175e-03 ,dsig/dt=1.837716e+04
+Test39: t=4.423911e-03 ,dsig/dt=0.000000e+00
+Test39: t=5.207578e-03 ,dsig/dt=0.000000e+00
+Test39: t=6.130067e-03 ,dsig/dt=0.000000e+00
+Test39: t=7.215968e-03 ,dsig/dt=0.000000e+00
+Test39: t=8.494230e-03 ,dsig/dt=0.000000e+00
+Test39: t=9.998927e-03 ,dsig/dt=0.000000e+00
+Test39: t=1.177017e-02 ,dsig/dt=0.000000e+00
+Test39: t=1.385518e-02 ,dsig/dt=0.000000e+00
+Test39: t=1.630954e-02 ,dsig/dt=0.000000e+00
+Test39: t=1.919866e-02 ,dsig/dt=0.000000e+00
+Test39: t=2.259958e-02 ,dsig/dt=0.000000e+00
+Test39: t=2.660295e-02 ,dsig/dt=0.000000e+00
+Test39: t=3.131549e-02 ,dsig/dt=0.000000e+00
+Test39: t=3.686283e-02 ,dsig/dt=0.000000e+00
+Test39: t=4.339284e-02 ,dsig/dt=0.000000e+00
+Test39: t=5.107959e-02 ,dsig/dt=0.000000e+00
+Test39: t=6.012801e-02 ,dsig/dt=0.000000e+00
+Test39: t=7.077930e-02 ,dsig/dt=0.000000e+00
+Test39: t=8.331739e-02 ,dsig/dt=0.000000e+00
+Test39: t=9.807652e-02 ,dsig/dt=0.000000e+00
+Test39: t=1.154501e-01 ,dsig/dt=0.000000e+00
+Test39: t=1.359014e-01 ,dsig/dt=0.000000e+00
+Test39: t=1.599754e-01 ,dsig/dt=0.000000e+00
+Test39: t=1.883140e-01 ,dsig/dt=0.000000e+00
+Test39: Material=Hydrogen, Element[0]=Hydrogen,A[0]=1 is selected.
+Test39:*NewRun* Targ=90001000,Proj=2212,P=2.000000e+02 MeV/c, =>> 9 of 80
+Test39: Mt=9.382723e+02, Mp=9.382723e+02, tmt=1.977784e-02, E=9.593513e+02
+*=>TEST39: 100000 events are simulated
+Test39:CalculationTimePerEvent=8.155000e-05 s
+Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
+Test39: t=3.192565e-04 ,dsig/dt=7.015269e+03
+Test39: t=3.615570e-04 ,dsig/dt=6.612894e+03
+Test39: t=4.094622e-04 ,dsig/dt=7.181307e+03
+Test39: t=4.637146e-04 ,dsig/dt=7.608893e+03
+Test39: t=5.251553e-04 ,dsig/dt=6.961679e+03
+Test39: t=5.947368e-04 ,dsig/dt=7.134670e+03
+Test39: t=6.735375e-04 ,dsig/dt=6.899387e+03
+Test39: t=7.627791e-04 ,dsig/dt=7.145113e+03
+Test39: t=8.638450e-04 ,dsig/dt=7.679535e+03
+Test39: t=9.783017e-04 ,dsig/dt=7.609645e+03
+Test39: t=1.107924e-03 ,dsig/dt=7.308236e+03
+Test39: t=1.254720e-03 ,dsig/dt=7.411298e+03
+Test39: t=1.420966e-03 ,dsig/dt=7.526102e+03
+Test39: t=1.609240e-03 ,dsig/dt=7.316862e+03
+Test39: t=1.822459e-03 ,dsig/dt=7.189992e+03
+Test39: t=2.063929e-03 ,dsig/dt=7.559145e+03
+Test39: t=2.337394e-03 ,dsig/dt=7.256508e+03
+Test39: t=2.647091e-03 ,dsig/dt=7.052498e+03
+Test39: t=2.997822e-03 ,dsig/dt=7.193078e+03
+Test39: t=3.395024e-03 ,dsig/dt=7.245489e+03
+Test39: t=3.844854e-03 ,dsig/dt=7.311662e+03
+Test39: t=4.354285e-03 ,dsig/dt=7.303705e+03
+Test39: t=4.931214e-03 ,dsig/dt=7.385712e+03
+Test39: t=5.584585e-03 ,dsig/dt=7.354504e+03
+Test39: t=6.324525e-03 ,dsig/dt=7.204822e+03
+Test39: t=7.162505e-03 ,dsig/dt=7.326520e+03
+Test39: t=8.111514e-03 ,dsig/dt=7.452967e+03
+Test39: t=9.186264e-03 ,dsig/dt=7.229626e+03
+Test39: t=1.040342e-02 ,dsig/dt=7.237009e+03
+Test39: t=1.178183e-02 ,dsig/dt=7.428507e+03
+Test39: t=1.334289e-02 ,dsig/dt=7.368034e+03
+Test39: t=1.511078e-02 ,dsig/dt=7.223814e+03
+Test39: t=1.711291e-02 ,dsig/dt=7.260299e+03
+Test39: t=1.938032e-02 ,dsig/dt=7.323704e+03
+Test39: t=2.194815e-02 ,dsig/dt=7.294601e+03
+Test39: t=2.485621e-02 ,dsig/dt=7.279908e+03
+Test39: t=2.814958e-02 ,dsig/dt=7.332806e+03
+Test39: t=3.187931e-02 ,dsig/dt=7.314549e+03
+Test39: t=3.610322e-02 ,dsig/dt=7.303068e+03
+Test39: t=4.088679e-02 ,dsig/dt=1.707861e+03
+Test39: Material=Helium, Element[0]=Helium,A[0]=4 is selected.
+Test39:*NewRun* Targ=90002002,Proj=2212,P=2.000000e+02 MeV/c, =>> 10 of 80
+Test39: Mt=3.727417e+03, Mp=9.382723e+02, tmt=7.857021e-02, E=9.593513e+02
+*=>TEST39: 100000 events are simulated
+Test39:CalculationTimePerEvent=8.150000e-05 s
+Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
+Test39: t=3.248091e-04 ,dsig/dt=2.270610e+04
+Test39: t=3.807520e-04 ,dsig/dt=2.400630e+04
+Test39: t=4.463301e-04 ,dsig/dt=2.156277e+04
+Test39: t=5.232030e-04 ,dsig/dt=2.355810e+04
+Test39: t=6.133158e-04 ,dsig/dt=2.166461e+04
+Test39: t=7.189491e-04 ,dsig/dt=2.149077e+04
+Test39: t=8.427760e-04 ,dsig/dt=2.477545e+04
+Test39: t=9.879299e-04 ,dsig/dt=2.384280e+04
+Test39: t=1.158084e-03 ,dsig/dt=2.347532e+04
+Test39: t=1.357545e-03 ,dsig/dt=2.374943e+04
+Test39: t=1.591359e-03 ,dsig/dt=2.322930e+04
+Test39: t=1.865443e-03 ,dsig/dt=2.263097e+04
+Test39: t=2.186734e-03 ,dsig/dt=2.183988e+04
+Test39: t=2.563363e-03 ,dsig/dt=2.301660e+04
+Test39: t=3.004858e-03 ,dsig/dt=2.168271e+04
+Test39: t=3.522394e-03 ,dsig/dt=2.172807e+04
+Test39: t=4.129067e-03 ,dsig/dt=2.133370e+04
+Test39: t=4.840230e-03 ,dsig/dt=2.109905e+04
+Test39: t=5.673877e-03 ,dsig/dt=2.081056e+04
+Test39: t=6.651107e-03 ,dsig/dt=2.032442e+04
+Test39: t=7.796648e-03 ,dsig/dt=1.938531e+04
+Test39: t=9.139489e-03 ,dsig/dt=1.818857e+04
+Test39: t=1.071361e-02 ,dsig/dt=1.723222e+04
+Test39: t=1.255885e-02 ,dsig/dt=1.612374e+04
+Test39: t=1.472190e-02 ,dsig/dt=1.462941e+04
+Test39: t=1.725750e-02 ,dsig/dt=1.259296e+04
+Test39: t=2.022981e-02 ,dsig/dt=1.056149e+04
+Test39: t=2.371405e-02 ,dsig/dt=8.496561e+03
+Test39: t=2.779840e-02 ,dsig/dt=6.489200e+03
+Test39: t=3.258620e-02 ,dsig/dt=4.560602e+03
+Test39: t=3.819863e-02 ,dsig/dt=2.893262e+03
+Test39: t=4.477769e-02 ,dsig/dt=1.691402e+03
+Test39: t=5.248990e-02 ,dsig/dt=9.520223e+02
+Test39: t=6.153039e-02 ,dsig/dt=6.643107e+02
+Test39: t=7.212796e-02 ,dsig/dt=7.775285e+02
+Test39: t=8.455079e-02 ,dsig/dt=1.604181e+03
+Test39: t=9.911323e-02 ,dsig/dt=2.349132e+03
+Test39: t=1.161838e-01 ,dsig/dt=0.000000e+00
+Test39: t=1.361945e-01 ,dsig/dt=0.000000e+00
+Test39: t=1.596517e-01 ,dsig/dt=0.000000e+00
+Test39: Material=Lithium, Element[0]=Lithium,A[0]=7 is selected.
+Test39:*NewRun* Targ=90003004,Proj=2212,P=2.000000e+02 MeV/c, =>> 11 of 80
+Test39: Mt=6.533835e+03, Mp=9.382723e+02, tmt=1.377267e-01, E=9.593513e+02
+*=>TEST39: 100000 events are simulated
+Test39:CalculationTimePerEvent=8.195000e-05 s
+Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
+Test39: t=3.270960e-04 ,dsig/dt=1.744322e+03
+Test39: t=3.888510e-04 ,dsig/dt=1.901505e+03
+Test39: t=4.622652e-04 ,dsig/dt=1.757941e+03
+Test39: t=5.495399e-04 ,dsig/dt=1.794345e+03
+Test39: t=6.532918e-04 ,dsig/dt=1.747780e+03
+Test39: t=7.766318e-04 ,dsig/dt=1.774993e+03
+Test39: t=9.232582e-04 ,dsig/dt=1.696268e+03
+Test39: t=1.097567e-03 ,dsig/dt=1.726224e+03
+Test39: t=1.304786e-03 ,dsig/dt=1.768227e+03
+Test39: t=1.551126e-03 ,dsig/dt=1.776098e+03
+Test39: t=1.843975e-03 ,dsig/dt=1.753236e+03
+Test39: t=2.192114e-03 ,dsig/dt=1.698164e+03
+Test39: t=2.605980e-03 ,dsig/dt=1.688185e+03
+Test39: t=3.097983e-03 ,dsig/dt=1.701782e+03
+Test39: t=3.682876e-03 ,dsig/dt=1.693472e+03
+Test39: t=4.378195e-03 ,dsig/dt=1.682468e+03
+Test39: t=5.204788e-03 ,dsig/dt=1.673012e+03
+Test39: t=6.187441e-03 ,dsig/dt=1.648528e+03
+Test39: t=7.355616e-03 ,dsig/dt=1.636527e+03
+Test39: t=8.744340e-03 ,dsig/dt=1.568542e+03
+Test39: t=1.039525e-02 ,dsig/dt=1.539277e+03
+Test39: t=1.235785e-02 ,dsig/dt=1.471238e+03
+Test39: t=1.469099e-02 ,dsig/dt=1.392431e+03
+Test39: t=1.746461e-02 ,dsig/dt=1.333866e+03
+Test39: t=2.076189e-02 ,dsig/dt=1.196261e+03
+Test39: t=2.468169e-02 ,dsig/dt=1.090702e+03
+Test39: t=2.934154e-02 ,dsig/dt=9.561589e+02
+Test39: t=3.488116e-02 ,dsig/dt=8.010464e+02
+Test39: t=4.146665e-02 ,dsig/dt=6.445234e+02
+Test39: t=4.929546e-02 ,dsig/dt=4.992917e+02
+Test39: t=5.860233e-02 ,dsig/dt=3.667513e+02
+Test39: t=6.966632e-02 ,dsig/dt=2.690772e+02
+Test39: t=8.281917e-02 ,dsig/dt=2.042027e+02
+Test39: t=9.845524e-02 ,dsig/dt=1.727678e+02
+Test39: t=1.170434e-01 ,dsig/dt=1.273938e+02
+Test39: t=1.391409e-01 ,dsig/dt=0.000000e+00
+Test39: t=1.654104e-01 ,dsig/dt=0.000000e+00
+Test39: t=1.966395e-01 ,dsig/dt=0.000000e+00
+Test39: t=2.337646e-01 ,dsig/dt=0.000000e+00
+Test39: t=2.778989e-01 ,dsig/dt=0.000000e+00
+Test39: Material=Carbon, Element[0]=Carbon,A[0]=12 is selected.
+Test39:*NewRun* Targ=90006006,Proj=2212,P=2.000000e+02 MeV/c, =>> 12 of 80
+Test39: Mt=1.117487e+04, Mp=9.382723e+02, tmt=2.355550e-01, E=9.593513e+02
+*=>TEST39: 100000 events are simulated
+Test39:CalculationTimePerEvent=8.195000e-05 s
+Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
+Test39: t=3.292977e-04 ,dsig/dt=6.048211e+04
+Test39: t=3.967560e-04 ,dsig/dt=6.260916e+04
+Test39: t=4.780335e-04 ,dsig/dt=5.963344e+04
+Test39: t=5.759612e-04 ,dsig/dt=5.981159e+04
+Test39: t=6.939498e-04 ,dsig/dt=6.142422e+04
+Test39: t=8.361090e-04 ,dsig/dt=5.748205e+04
+Test39: t=1.007390e-03 ,dsig/dt=6.098224e+04
+Test39: t=1.213759e-03 ,dsig/dt=5.851757e+04
+Test39: t=1.462404e-03 ,dsig/dt=6.019201e+04
+Test39: t=1.761985e-03 ,dsig/dt=5.878516e+04
+Test39: t=2.122937e-03 ,dsig/dt=5.868237e+04
+Test39: t=2.557832e-03 ,dsig/dt=5.859168e+04
+Test39: t=3.081817e-03 ,dsig/dt=5.875895e+04
+Test39: t=3.713143e-03 ,dsig/dt=5.673855e+04
+Test39: t=4.473799e-03 ,dsig/dt=5.456745e+04
+Test39: t=5.390280e-03 ,dsig/dt=5.285064e+04
+Test39: t=6.494507e-03 ,dsig/dt=4.843430e+04
+Test39: t=7.824940e-03 ,dsig/dt=4.431307e+04
+Test39: t=9.427919e-03 ,dsig/dt=3.785626e+04
+Test39: t=1.135928e-02 ,dsig/dt=2.954646e+04
+Test39: t=1.368628e-02 ,dsig/dt=2.137817e+04
+Test39: t=1.648999e-02 ,dsig/dt=1.359743e+04
+Test39: t=1.986805e-02 ,dsig/dt=7.481467e+03
+Test39: t=2.393812e-02 ,dsig/dt=3.292124e+03
+Test39: t=2.884197e-02 ,dsig/dt=1.452654e+03
+Test39: t=3.475039e-02 ,dsig/dt=9.980965e+02
+Test39: t=4.186919e-02 ,dsig/dt=1.092122e+03
+Test39: t=5.044631e-02 ,dsig/dt=1.349471e+03
+Test39: t=6.078050e-02 ,dsig/dt=1.152812e+03
+Test39: t=7.323170e-02 ,dsig/dt=7.211521e+02
+Test39: t=8.823359e-02 ,dsig/dt=7.313575e+02
+Test39: t=1.063087e-01 ,dsig/dt=8.601816e+02
+Test39: t=1.280866e-01 ,dsig/dt=2.516845e+02
+Test39: t=1.543258e-01 ,dsig/dt=0.000000e+00
+Test39: t=1.859402e-01 ,dsig/dt=0.000000e+00
+Test39: t=2.240310e-01 ,dsig/dt=0.000000e+00
+Test39: t=2.699249e-01 ,dsig/dt=0.000000e+00
+Test39: t=3.252205e-01 ,dsig/dt=0.000000e+00
+Test39: t=3.918435e-01 ,dsig/dt=0.000000e+00
+Test39: t=4.721147e-01 ,dsig/dt=0.000000e+00
+Test39: Material=Aluminum, Element[0]=Aluminum,A[0]=27 is selected.
+Test39:*NewRun* Targ=90013014,Proj=2212,P=2.000000e+02 MeV/c, =>> 13 of 80
+Test39: Mt=2.512651e+04, Mp=9.382723e+02, tmt=5.296417e-01, E=9.593513e+02
+*=>TEST39: 100000 events are simulated
+Test39:CalculationTimePerEvent=8.305000e-05 s
+Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
+Test39: t=3.326498e-04 ,dsig/dt=1.726486e+04
+Test39: t=4.089963e-04 ,dsig/dt=1.572065e+04
+Test39: t=5.028651e-04 ,dsig/dt=2.041387e+04
+Test39: t=6.182777e-04 ,dsig/dt=2.126996e+04
+Test39: t=7.601786e-04 ,dsig/dt=2.069024e+04
+Test39: t=9.346473e-04 ,dsig/dt=2.329361e+04
+Test39: t=1.149158e-03 ,dsig/dt=2.514084e+04
+Test39: t=1.412902e-03 ,dsig/dt=2.682148e+04
+Test39: t=1.737177e-03 ,dsig/dt=3.006885e+04
+Test39: t=2.135876e-03 ,dsig/dt=3.179169e+04
+Test39: t=2.626081e-03 ,dsig/dt=3.493626e+04
+Test39: t=3.228794e-03 ,dsig/dt=3.670170e+04
+Test39: t=3.969834e-03 ,dsig/dt=3.684774e+04
+Test39: t=4.880951e-03 ,dsig/dt=3.610809e+04
+Test39: t=6.001179e-03 ,dsig/dt=3.228951e+04
+Test39: t=7.378509e-03 ,dsig/dt=2.560320e+04
+Test39: t=9.071952e-03 ,dsig/dt=1.702982e+04
+Test39: t=1.115406e-02 ,dsig/dt=9.293634e+03
+Test39: t=1.371402e-02 ,dsig/dt=4.081688e+03
+Test39: t=1.686153e-02 ,dsig/dt=2.118878e+03
+Test39: t=2.073142e-02 ,dsig/dt=1.824785e+03
+Test39: t=2.548949e-02 ,dsig/dt=2.099809e+03
+Test39: t=3.133959e-02 ,dsig/dt=2.970658e+03
+Test39: t=3.853234e-02 ,dsig/dt=4.257936e+03
+Test39: t=4.737590e-02 ,dsig/dt=4.718246e+03
+Test39: t=5.824914e-02 ,dsig/dt=2.316690e+03
+Test39: t=7.161791e-02 ,dsig/dt=9.957845e+02
+Test39: t=8.805494e-02 ,dsig/dt=9.952778e+02
+Test39: t=1.082644e-01 ,dsig/dt=3.703206e+02
+Test39: t=1.331122e-01 ,dsig/dt=1.357041e+02
+Test39: t=1.636628e-01 ,dsig/dt=2.499630e+00
+Test39: t=2.012251e-01 ,dsig/dt=0.000000e+00
+Test39: t=2.474082e-01 ,dsig/dt=0.000000e+00
+Test39: t=3.041909e-01 ,dsig/dt=0.000000e+00
+Test39: t=3.740058e-01 ,dsig/dt=0.000000e+00
+Test39: t=4.598439e-01 ,dsig/dt=0.000000e+00
+Test39: t=5.653827e-01 ,dsig/dt=0.000000e+00
+Test39: t=6.951437e-01 ,dsig/dt=0.000000e+00
+Test39: t=8.546862e-01 ,dsig/dt=0.000000e+00
+Test39: t=1.050845e+00 ,dsig/dt=0.000000e+00
+Test39: Material=Copper, Element[0]=Copper,A[0]=63 is selected.
+Test39:*NewRun* Targ=90029034,Proj=2212,P=2.000000e+02 MeV/c, =>> 14 of 80
+Test39: Mt=5.860379e+04, Mp=9.382723e+02, tmt=1.235309e+00, E=9.593513e+02
+*=>TEST39: 100000 events are simulated
+Test39:CalculationTimePerEvent=8.445000e-05 s
+Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
+Test39: t=3.361899e-04 ,dsig/dt=5.522089e+04
+Test39: t=4.221936e-04 ,dsig/dt=5.734761e+04
+Test39: t=5.301986e-04 ,dsig/dt=5.788234e+04
+Test39: t=6.658333e-04 ,dsig/dt=6.137363e+04
+Test39: t=8.361658e-04 ,dsig/dt=6.282717e+04
+Test39: t=1.050073e-03 ,dsig/dt=6.390308e+04
+Test39: t=1.318701e-03 ,dsig/dt=6.665398e+04
+Test39: t=1.656049e-03 ,dsig/dt=7.152325e+04
+Test39: t=2.079697e-03 ,dsig/dt=7.640373e+04
+Test39: t=2.611723e-03 ,dsig/dt=8.140578e+04
+Test39: t=3.279850e-03 ,dsig/dt=8.347783e+04
+Test39: t=4.118897e-03 ,dsig/dt=8.474769e+04
+Test39: t=5.172587e-03 ,dsig/dt=8.060787e+04
+Test39: t=6.495832e-03 ,dsig/dt=7.232742e+04
+Test39: t=8.157587e-03 ,dsig/dt=5.568235e+04
+Test39: t=1.024445e-02 ,dsig/dt=3.652957e+04
+Test39: t=1.286517e-02 ,dsig/dt=1.851245e+04
+Test39: t=1.615632e-02 ,dsig/dt=7.934700e+03
+Test39: t=2.028941e-02 ,dsig/dt=4.858980e+03
+Test39: t=2.547982e-02 ,dsig/dt=4.791248e+03
+Test39: t=3.199803e-02 ,dsig/dt=3.713537e+03
+Test39: t=4.018372e-02 ,dsig/dt=2.118182e+03
+Test39: t=5.046347e-02 ,dsig/dt=2.133632e+03
+Test39: t=6.337297e-02 ,dsig/dt=2.365122e+03
+Test39: t=7.958495e-02 ,dsig/dt=1.060748e+03
+Test39: t=9.994427e-02 ,dsig/dt=3.821219e+02
+Test39: t=1.255119e-01 ,dsig/dt=1.989430e+02
+Test39: t=1.576201e-01 ,dsig/dt=4.551496e+01
+Test39: t=1.979423e-01 ,dsig/dt=0.000000e+00
+Test39: t=2.485797e-01 ,dsig/dt=0.000000e+00
+Test39: t=3.121710e-01 ,dsig/dt=0.000000e+00
+Test39: t=3.920301e-01 ,dsig/dt=0.000000e+00
+Test39: t=4.923187e-01 ,dsig/dt=0.000000e+00
+Test39: t=6.182631e-01 ,dsig/dt=0.000000e+00
+Test39: t=7.764263e-01 ,dsig/dt=0.000000e+00
+Test39: t=9.750506e-01 ,dsig/dt=0.000000e+00
+Test39: t=1.224487e+00 ,dsig/dt=0.000000e+00
+Test39: t=1.537733e+00 ,dsig/dt=0.000000e+00
+Test39: t=1.931114e+00 ,dsig/dt=0.000000e+00
+Test39: t=2.425129e+00 ,dsig/dt=0.000000e+00
+Test39: Material=Tin, Element[0]=Tin,A[0]=119 is selected.
+Test39:*NewRun* Targ=90050069,Proj=2212,P=2.000000e+02 MeV/c, =>> 15 of 80
+Test39: Mt=1.107324e+05, Mp=9.382723e+02, tmt=2.334127e+00, E=9.593513e+02
+*=>TEST39: 100000 events are simulated
+Test39:CalculationTimePerEvent=8.505000e-05 s
+Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
+Test39: t=3.370068e-04 ,dsig/dt=2.065534e+06
+Test39: t=4.252786e-04 ,dsig/dt=1.995591e+06
+Test39: t=5.366712e-04 ,dsig/dt=1.907763e+06
+Test39: t=6.772408e-04 ,dsig/dt=1.741239e+06
+Test39: t=8.546296e-04 ,dsig/dt=1.596070e+06
+Test39: t=1.078482e-03 ,dsig/dt=1.475884e+06
+Test39: t=1.360967e-03 ,dsig/dt=1.284138e+06
+Test39: t=1.717443e-03 ,dsig/dt=1.072418e+06
+Test39: t=2.167291e-03 ,dsig/dt=8.663155e+05
+Test39: t=2.734967e-03 ,dsig/dt=6.524824e+05
+Test39: t=3.451333e-03 ,dsig/dt=4.633851e+05
+Test39: t=4.355336e-03 ,dsig/dt=2.997009e+05
+Test39: t=5.496123e-03 ,dsig/dt=1.725765e+05
+Test39: t=6.935716e-03 ,dsig/dt=9.020582e+04
+Test39: t=8.752379e-03 ,dsig/dt=4.045684e+04
+Test39: t=1.104488e-02 ,dsig/dt=1.960628e+04
+Test39: t=1.393785e-02 ,dsig/dt=1.361544e+04
+Test39: t=1.758857e-02 ,dsig/dt=1.224004e+04
+Test39: t=2.219552e-02 ,dsig/dt=9.368912e+03
+Test39: t=2.800917e-02 ,dsig/dt=6.709365e+03
+Test39: t=3.534557e-02 ,dsig/dt=9.078719e+03
+Test39: t=4.460359e-02 ,dsig/dt=8.536487e+03
+Test39: t=5.628655e-02 ,dsig/dt=2.644313e+03
+Test39: t=7.102961e-02 ,dsig/dt=1.592226e+03
+Test39: t=8.963431e-02 ,dsig/dt=8.951633e+02
+Test39: t=1.131121e-01 ,dsig/dt=4.861785e+02
+Test39: t=1.427394e-01 ,dsig/dt=1.964350e+02
+Test39: t=1.801270e-01 ,dsig/dt=0.000000e+00
+Test39: t=2.273074e-01 ,dsig/dt=0.000000e+00
+Test39: t=2.868457e-01 ,dsig/dt=0.000000e+00
+Test39: t=3.619788e-01 ,dsig/dt=0.000000e+00
+Test39: t=4.567915e-01 ,dsig/dt=0.000000e+00
+Test39: t=5.764383e-01 ,dsig/dt=0.000000e+00
+Test39: t=7.274240e-01 ,dsig/dt=0.000000e+00
+Test39: t=9.179572e-01 ,dsig/dt=0.000000e+00
+Test39: t=1.158397e+00 ,dsig/dt=0.000000e+00
+Test39: t=1.461814e+00 ,dsig/dt=0.000000e+00
+Test39: t=1.844705e+00 ,dsig/dt=0.000000e+00
+Test39: t=2.327886e+00 ,dsig/dt=0.000000e+00
+Test39: t=2.937626e+00 ,dsig/dt=0.000000e+00
+Test39: Material=Lead, Element[0]=Lead,A[0]=208 is selected.
+Test39:*NewRun* Targ=90082126,Proj=2212,P=2.000000e+02 MeV/c, =>> 16 of 80
+Test39: Mt=1.936877e+05, Mp=9.382723e+02, tmt=4.082742e+00, E=9.593513e+02
+*=>TEST39: 100000 events are simulated
+Test39:CalculationTimePerEvent=8.570000e-05 s
+Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
+Test39: t=3.370068e-04 ,dsig/dt=1.850856e+06
+Test39: t=4.252786e-04 ,dsig/dt=1.770264e+06
+Test39: t=5.366712e-04 ,dsig/dt=1.739078e+06
+Test39: t=6.772408e-04 ,dsig/dt=1.697886e+06
+Test39: t=8.546296e-04 ,dsig/dt=1.625214e+06
+Test39: t=1.078482e-03 ,dsig/dt=1.568521e+06
+Test39: t=1.360967e-03 ,dsig/dt=1.453235e+06
+Test39: t=1.717443e-03 ,dsig/dt=1.377036e+06
+Test39: t=2.167291e-03 ,dsig/dt=1.254554e+06
+Test39: t=2.734967e-03 ,dsig/dt=1.121627e+06
+Test39: t=3.451333e-03 ,dsig/dt=9.630929e+05
+Test39: t=4.355336e-03 ,dsig/dt=8.107500e+05
+Test39: t=5.496123e-03 ,dsig/dt=6.412947e+05
+Test39: t=6.935716e-03 ,dsig/dt=4.827149e+05
+Test39: t=8.752379e-03 ,dsig/dt=3.372526e+05
+Test39: t=1.104488e-02 ,dsig/dt=2.211235e+05
+Test39: t=1.393785e-02 ,dsig/dt=1.276022e+05
+Test39: t=1.758857e-02 ,dsig/dt=6.636017e+04
+Test39: t=2.219552e-02 ,dsig/dt=4.586049e+04
+Test39: t=2.800917e-02 ,dsig/dt=3.546280e+04
+Test39: t=3.534557e-02 ,dsig/dt=9.356103e+03
+Test39: t=4.460359e-02 ,dsig/dt=5.437477e+03
+Test39: t=5.628655e-02 ,dsig/dt=3.551842e+03
+Test39: t=7.102961e-02 ,dsig/dt=2.356214e+03
+Test39: t=8.963431e-02 ,dsig/dt=1.307350e+03
+Test39: t=1.131121e-01 ,dsig/dt=6.312890e+02
+Test39: t=1.427394e-01 ,dsig/dt=2.093280e+02
+Test39: t=1.801270e-01 ,dsig/dt=0.000000e+00
+Test39: t=2.273074e-01 ,dsig/dt=0.000000e+00
+Test39: t=2.868457e-01 ,dsig/dt=0.000000e+00
+Test39: t=3.619788e-01 ,dsig/dt=0.000000e+00
+Test39: t=4.567915e-01 ,dsig/dt=0.000000e+00
+Test39: t=5.764383e-01 ,dsig/dt=0.000000e+00
+Test39: t=7.274240e-01 ,dsig/dt=0.000000e+00
+Test39: t=9.179572e-01 ,dsig/dt=0.000000e+00
+Test39: t=1.158397e+00 ,dsig/dt=0.000000e+00
+Test39: t=1.461814e+00 ,dsig/dt=0.000000e+00
+Test39: t=1.844705e+00 ,dsig/dt=0.000000e+00
+Test39: t=2.327886e+00 ,dsig/dt=0.000000e+00
+Test39: t=2.937626e+00 ,dsig/dt=0.000000e+00
+Test39: Material=Hydrogen, Element[0]=Hydrogen,A[0]=1 is selected.
+Test39:*NewRun* Targ=90001000,Proj=2212,P=1.500000e+03 MeV/c, =>> 17 of 80
+Test39: Mt=9.382723e+02, Mp=9.382723e+02, tmt=7.797124e-01, E=1.769281e+03
+*=>TEST39: 100000 events are simulated
+Test39:CalculationTimePerEvent=8.160000e-05 s
+Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
+Test39: t=3.342618e-04 ,dsig/dt=1.084725e+02
+Test39: t=4.149709e-04 ,dsig/dt=7.895101e+01
+Test39: t=5.151675e-04 ,dsig/dt=1.005927e+02
+Test39: t=6.395572e-04 ,dsig/dt=8.066662e+01
+Test39: t=7.939813e-04 ,dsig/dt=8.051077e+01
+Test39: t=9.856919e-04 ,dsig/dt=8.075002e+01
+Test39: t=1.223692e-03 ,dsig/dt=8.596965e+01
+Test39: t=1.519158e-03 ,dsig/dt=9.443751e+01
+Test39: t=1.885966e-03 ,dsig/dt=9.636749e+01
+Test39: t=2.341342e-03 ,dsig/dt=8.561504e+01
+Test39: t=2.906670e-03 ,dsig/dt=8.407959e+01
+Test39: t=3.608499e-03 ,dsig/dt=9.245956e+01
+Test39: t=4.479788e-03 ,dsig/dt=9.192383e+01
+Test39: t=5.561454e-03 ,dsig/dt=8.860648e+01
+Test39: t=6.904294e-03 ,dsig/dt=8.411780e+01
+Test39: t=8.571368e-03 ,dsig/dt=8.446961e+01
+Test39: t=1.064097e-02 ,dsig/dt=8.306328e+01
+Test39: t=1.321028e-02 ,dsig/dt=8.470281e+01
+Test39: t=1.639996e-02 ,dsig/dt=8.442102e+01
+Test39: t=2.035981e-02 ,dsig/dt=8.222487e+01
+Test39: t=2.527578e-02 ,dsig/dt=7.948727e+01
+Test39: t=3.137874e-02 ,dsig/dt=7.684156e+01
+Test39: t=3.895529e-02 ,dsig/dt=7.639207e+01
+Test39: t=4.836123e-02 ,dsig/dt=7.280365e+01
+Test39: t=6.003828e-02 ,dsig/dt=6.959705e+01
+Test39: t=7.453480e-02 ,dsig/dt=6.583337e+01
+Test39: t=9.253158e-02 ,dsig/dt=6.140683e+01
+Test39: t=1.148738e-01 ,dsig/dt=5.654906e+01
+Test39: t=1.426106e-01 ,dsig/dt=5.165278e+01
+Test39: t=1.770446e-01 ,dsig/dt=4.512366e+01
+Test39: t=2.197929e-01 ,dsig/dt=3.972506e+01
+Test39: t=2.728629e-01 ,dsig/dt=3.271966e+01
+Test39: t=3.387469e-01 ,dsig/dt=2.587686e+01
+Test39: t=4.205390e-01 ,dsig/dt=2.047196e+01
+Test39: t=5.220801e-01 ,dsig/dt=1.580103e+01
+Test39: t=6.481389e-01 ,dsig/dt=1.284326e+01
+Test39: t=8.046351e-01 ,dsig/dt=1.180899e+01
+Test39: t=9.989180e-01 ,dsig/dt=1.497796e+01
+Test39: t=1.240112e+00 ,dsig/dt=2.930840e+01
+Test39: t=1.539542e+00 ,dsig/dt=3.555400e+01
+Test39: Material=Helium, Element[0]=Helium,A[0]=4 is selected.
+Test39:*NewRun* Targ=90002002,Proj=2212,P=1.500000e+03 MeV/c, =>> 18 of 80
+Test39: Mt=3.727417e+03, Mp=9.382723e+02, tmt=3.097516e+00, E=1.769281e+03
+*=>TEST39: 100000 events are simulated
+Test39:CalculationTimePerEvent=8.620000e-05 s
+Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
+Test39: t=3.370068e-04 ,dsig/dt=8.864879e+02
+Test39: t=4.252786e-04 ,dsig/dt=8.541528e+02
+Test39: t=5.366712e-04 ,dsig/dt=8.840138e+02
+Test39: t=6.772408e-04 ,dsig/dt=9.047257e+02
+Test39: t=8.546296e-04 ,dsig/dt=8.740215e+02
+Test39: t=1.078482e-03 ,dsig/dt=8.436419e+02
+Test39: t=1.360967e-03 ,dsig/dt=8.463919e+02
+Test39: t=1.717443e-03 ,dsig/dt=8.756422e+02
+Test39: t=2.167291e-03 ,dsig/dt=8.821492e+02
+Test39: t=2.734967e-03 ,dsig/dt=8.374572e+02
+Test39: t=3.451333e-03 ,dsig/dt=8.255597e+02
+Test39: t=4.355336e-03 ,dsig/dt=8.249691e+02
+Test39: t=5.496123e-03 ,dsig/dt=7.978504e+02
+Test39: t=6.935716e-03 ,dsig/dt=7.505043e+02
+Test39: t=8.752379e-03 ,dsig/dt=7.330504e+02
+Test39: t=1.104488e-02 ,dsig/dt=6.690680e+02
+Test39: t=1.393785e-02 ,dsig/dt=6.278833e+02
+Test39: t=1.758857e-02 ,dsig/dt=5.751028e+02
+Test39: t=2.219552e-02 ,dsig/dt=5.094898e+02
+Test39: t=2.800917e-02 ,dsig/dt=4.283462e+02
+Test39: t=3.534557e-02 ,dsig/dt=3.534485e+02
+Test39: t=4.460359e-02 ,dsig/dt=2.774017e+02
+Test39: t=5.628655e-02 ,dsig/dt=1.976297e+02
+Test39: t=7.102961e-02 ,dsig/dt=1.285067e+02
+Test39: t=8.963431e-02 ,dsig/dt=7.515038e+01
+Test39: t=1.131121e-01 ,dsig/dt=3.687810e+01
+Test39: t=1.427394e-01 ,dsig/dt=1.446763e+01
+Test39: t=1.801270e-01 ,dsig/dt=4.704076e+00
+Test39: t=2.273074e-01 ,dsig/dt=1.661286e+00
+Test39: t=2.868457e-01 ,dsig/dt=1.322547e+00
+Test39: t=3.619788e-01 ,dsig/dt=1.506795e+00
+Test39: t=4.567915e-01 ,dsig/dt=1.161691e+00
+Test39: t=5.764383e-01 ,dsig/dt=5.026723e-01
+Test39: t=7.274240e-01 ,dsig/dt=1.021759e-01
+Test39: t=9.179572e-01 ,dsig/dt=5.648444e-03
+Test39: t=1.158397e+00 ,dsig/dt=4.983520e-03
+Test39: t=1.461814e+00 ,dsig/dt=9.528245e-04
+Test39: t=1.844705e+00 ,dsig/dt=4.276835e-04
+Test39: t=2.327886e+00 ,dsig/dt=0.000000e+00
+Test39: t=2.937626e+00 ,dsig/dt=0.000000e+00
+Test39: Material=Lithium, Element[0]=Lithium,A[0]=7 is selected.
+Test39:*NewRun* Targ=90003004,Proj=2212,P=1.500000e+03 MeV/c, =>> 19 of 80
+Test39: Mt=6.533835e+03, Mp=9.382723e+02, tmt=5.429673e+00, E=1.769281e+03
+*=>TEST39: 100000 events are simulated
+Test39:CalculationTimePerEvent=8.325000e-05 s
+Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
+Test39: t=3.370068e-04 ,dsig/dt=3.869205e+03
+Test39: t=4.252786e-04 ,dsig/dt=3.864687e+03
+Test39: t=5.366712e-04 ,dsig/dt=3.711480e+03
+Test39: t=6.772408e-04 ,dsig/dt=3.734400e+03
+Test39: t=8.546296e-04 ,dsig/dt=3.636658e+03
+Test39: t=1.078482e-03 ,dsig/dt=3.579012e+03
+Test39: t=1.360967e-03 ,dsig/dt=3.551631e+03
+Test39: t=1.717443e-03 ,dsig/dt=3.499870e+03
+Test39: t=2.167291e-03 ,dsig/dt=3.405438e+03
+Test39: t=2.734967e-03 ,dsig/dt=3.283322e+03
+Test39: t=3.451333e-03 ,dsig/dt=3.162216e+03
+Test39: t=4.355336e-03 ,dsig/dt=3.016415e+03
+Test39: t=5.496123e-03 ,dsig/dt=2.834408e+03
+Test39: t=6.935716e-03 ,dsig/dt=2.571948e+03
+Test39: t=8.752379e-03 ,dsig/dt=2.323960e+03
+Test39: t=1.104488e-02 ,dsig/dt=2.025677e+03
+Test39: t=1.393785e-02 ,dsig/dt=1.705823e+03
+Test39: t=1.758857e-02 ,dsig/dt=1.354624e+03
+Test39: t=2.219552e-02 ,dsig/dt=1.016447e+03
+Test39: t=2.800917e-02 ,dsig/dt=6.824469e+02
+Test39: t=3.534557e-02 ,dsig/dt=4.134980e+02
+Test39: t=4.460359e-02 ,dsig/dt=2.198137e+02
+Test39: t=5.628655e-02 ,dsig/dt=9.742215e+01
+Test39: t=7.102961e-02 ,dsig/dt=3.621442e+01
+Test39: t=8.963431e-02 ,dsig/dt=1.627328e+01
+Test39: t=1.131121e-01 ,dsig/dt=9.566103e+00
+Test39: t=1.427394e-01 ,dsig/dt=5.929939e+00
+Test39: t=1.801270e-01 ,dsig/dt=3.539670e+00
+Test39: t=2.273074e-01 ,dsig/dt=1.872626e+00
+Test39: t=2.868457e-01 ,dsig/dt=8.902784e-01
+Test39: t=3.619788e-01 ,dsig/dt=3.428773e-01
+Test39: t=4.567915e-01 ,dsig/dt=7.094919e-02
+Test39: t=5.764383e-01 ,dsig/dt=3.288975e-02
+Test39: t=7.274240e-01 ,dsig/dt=5.979211e-03
+Test39: t=9.179572e-01 ,dsig/dt=0.000000e+00
+Test39: t=1.158397e+00 ,dsig/dt=1.091582e-03
+Test39: t=1.461814e+00 ,dsig/dt=0.000000e+00
+Test39: t=1.844705e+00 ,dsig/dt=0.000000e+00
+Test39: t=2.327886e+00 ,dsig/dt=0.000000e+00
+Test39: t=2.937626e+00 ,dsig/dt=0.000000e+00
+Test39: Material=Carbon, Element[0]=Carbon,A[0]=12 is selected.
+Test39:*NewRun* Targ=90006006,Proj=2212,P=1.500000e+03 MeV/c, =>> 20 of 80
+Test39: Mt=1.117487e+04, Mp=9.382723e+02, tmt=9.286411e+00, E=1.769281e+03
+*=>TEST39: 100000 events are simulated
+Test39:CalculationTimePerEvent=8.300000e-05 s
+Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
+Test39: t=3.370068e-04 ,dsig/dt=6.364955e+03
+Test39: t=4.252786e-04 ,dsig/dt=6.314257e+03
+Test39: t=5.366712e-04 ,dsig/dt=6.339656e+03
+Test39: t=6.772408e-04 ,dsig/dt=6.264062e+03
+Test39: t=8.546296e-04 ,dsig/dt=6.103333e+03
+Test39: t=1.078482e-03 ,dsig/dt=6.250988e+03
+Test39: t=1.360967e-03 ,dsig/dt=6.017273e+03
+Test39: t=1.717443e-03 ,dsig/dt=5.636664e+03
+Test39: t=2.167291e-03 ,dsig/dt=5.678358e+03
+Test39: t=2.734967e-03 ,dsig/dt=5.334712e+03
+Test39: t=3.451333e-03 ,dsig/dt=5.061626e+03
+Test39: t=4.355336e-03 ,dsig/dt=4.693940e+03
+Test39: t=5.496123e-03 ,dsig/dt=4.378053e+03
+Test39: t=6.935716e-03 ,dsig/dt=3.889453e+03
+Test39: t=8.752379e-03 ,dsig/dt=3.399919e+03
+Test39: t=1.104488e-02 ,dsig/dt=2.888466e+03
+Test39: t=1.393785e-02 ,dsig/dt=2.310484e+03
+Test39: t=1.758857e-02 ,dsig/dt=1.748468e+03
+Test39: t=2.219552e-02 ,dsig/dt=1.227001e+03
+Test39: t=2.800917e-02 ,dsig/dt=8.171055e+02
+Test39: t=3.534557e-02 ,dsig/dt=4.673695e+02
+Test39: t=4.460359e-02 ,dsig/dt=2.304490e+02
+Test39: t=5.628655e-02 ,dsig/dt=1.004982e+02
+Test39: t=7.102961e-02 ,dsig/dt=3.524188e+01
+Test39: t=8.963431e-02 ,dsig/dt=1.014485e+01
+Test39: t=1.131121e-01 ,dsig/dt=5.047454e+00
+Test39: t=1.427394e-01 ,dsig/dt=6.923989e+00
+Test39: t=1.801270e-01 ,dsig/dt=5.343766e+00
+Test39: t=2.273074e-01 ,dsig/dt=1.013628e+00
+Test39: t=2.868457e-01 ,dsig/dt=6.018522e-03
+Test39: t=3.619788e-01 ,dsig/dt=8.123382e-02
+Test39: t=4.567915e-01 ,dsig/dt=1.015693e-01
+Test39: t=5.764383e-01 ,dsig/dt=6.788547e-03
+Test39: t=7.274240e-01 ,dsig/dt=0.000000e+00
+Test39: t=9.179572e-01 ,dsig/dt=0.000000e+00
+Test39: t=1.158397e+00 ,dsig/dt=0.000000e+00
+Test39: t=1.461814e+00 ,dsig/dt=0.000000e+00
+Test39: t=1.844705e+00 ,dsig/dt=0.000000e+00
+Test39: t=2.327886e+00 ,dsig/dt=0.000000e+00
+Test39: t=2.937626e+00 ,dsig/dt=0.000000e+00
+Test39: Material=Aluminum, Element[0]=Aluminum,A[0]=27 is selected.
+Test39:*NewRun* Targ=90013014,Proj=2212,P=1.500000e+03 MeV/c, =>> 21 of 80
+Test39: Mt=2.512651e+04, Mp=9.382723e+02, tmt=2.088035e+01, E=1.769281e+03
+*=>TEST39: 100000 events are simulated
+Test39:CalculationTimePerEvent=8.415000e-05 s
+Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
+Test39: t=3.370068e-04 ,dsig/dt=2.140408e+04
+Test39: t=4.252786e-04 ,dsig/dt=2.232747e+04
+Test39: t=5.366712e-04 ,dsig/dt=2.247880e+04
+Test39: t=6.772408e-04 ,dsig/dt=2.178863e+04
+Test39: t=8.546296e-04 ,dsig/dt=2.037753e+04
+Test39: t=1.078482e-03 ,dsig/dt=2.030393e+04
+Test39: t=1.360967e-03 ,dsig/dt=2.003311e+04
+Test39: t=1.717443e-03 ,dsig/dt=1.891369e+04
+Test39: t=2.167291e-03 ,dsig/dt=1.802949e+04
+Test39: t=2.734967e-03 ,dsig/dt=1.660932e+04
+Test39: t=3.451333e-03 ,dsig/dt=1.536180e+04
+Test39: t=4.355336e-03 ,dsig/dt=1.367596e+04
+Test39: t=5.496123e-03 ,dsig/dt=1.192298e+04
+Test39: t=6.935716e-03 ,dsig/dt=1.014579e+04
+Test39: t=8.752379e-03 ,dsig/dt=8.420378e+03
+Test39: t=1.104488e-02 ,dsig/dt=6.359927e+03
+Test39: t=1.393785e-02 ,dsig/dt=4.394954e+03
+Test39: t=1.758857e-02 ,dsig/dt=2.939231e+03
+Test39: t=2.219552e-02 ,dsig/dt=1.729451e+03
+Test39: t=2.800917e-02 ,dsig/dt=8.699431e+02
+Test39: t=3.534557e-02 ,dsig/dt=3.777227e+02
+Test39: t=4.460359e-02 ,dsig/dt=1.349896e+02
+Test39: t=5.628655e-02 ,dsig/dt=5.013315e+01
+Test39: t=7.102961e-02 ,dsig/dt=4.530449e+01
+Test39: t=8.963431e-02 ,dsig/dt=4.688317e+01
+Test39: t=1.131121e-01 ,dsig/dt=1.807187e+01
+Test39: t=1.427394e-01 ,dsig/dt=1.445104e+00
+Test39: t=1.801270e-01 ,dsig/dt=1.558858e+00
+Test39: t=2.273074e-01 ,dsig/dt=2.680708e+00
+Test39: t=2.868457e-01 ,dsig/dt=9.972226e-01
+Test39: t=3.619788e-01 ,dsig/dt=6.279053e-02
+Test39: t=4.567915e-01 ,dsig/dt=8.970894e-03
+Test39: t=5.764383e-01 ,dsig/dt=0.000000e+00
+Test39: t=7.274240e-01 ,dsig/dt=5.885005e-03
+Test39: t=9.179572e-01 ,dsig/dt=0.000000e+00
+Test39: t=1.158397e+00 ,dsig/dt=3.876260e-03
+Test39: t=1.461814e+00 ,dsig/dt=0.000000e+00
+Test39: t=1.844705e+00 ,dsig/dt=0.000000e+00
+Test39: t=2.327886e+00 ,dsig/dt=0.000000e+00
+Test39: t=2.937626e+00 ,dsig/dt=0.000000e+00
+Test39: Material=Copper, Element[0]=Copper,A[0]=63 is selected.
+Test39:*NewRun* Targ=90029034,Proj=2212,P=1.500000e+03 MeV/c, =>> 22 of 80
+Test39: Mt=5.860379e+04, Mp=9.382723e+02, tmt=4.870026e+01, E=1.769281e+03
+*=>TEST39: 100000 events are simulated
+Test39:CalculationTimePerEvent=8.500000e-05 s
+Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
+Test39: t=3.370068e-04 ,dsig/dt=8.819469e+04
+Test39: t=4.252786e-04 ,dsig/dt=8.669988e+04
+Test39: t=5.366712e-04 ,dsig/dt=8.604964e+04
+Test39: t=6.772408e-04 ,dsig/dt=8.406073e+04
+Test39: t=8.546296e-04 ,dsig/dt=7.945261e+04
+Test39: t=1.078482e-03 ,dsig/dt=7.548851e+04
+Test39: t=1.360967e-03 ,dsig/dt=7.035361e+04
+Test39: t=1.717443e-03 ,dsig/dt=6.721770e+04
+Test39: t=2.167291e-03 ,dsig/dt=6.015395e+04
+Test39: t=2.734967e-03 ,dsig/dt=5.352285e+04
+Test39: t=3.451333e-03 ,dsig/dt=4.547768e+04
+Test39: t=4.355336e-03 ,dsig/dt=3.811572e+04
+Test39: t=5.496123e-03 ,dsig/dt=2.972075e+04
+Test39: t=6.935716e-03 ,dsig/dt=2.161744e+04
+Test39: t=8.752379e-03 ,dsig/dt=1.458968e+04
+Test39: t=1.104488e-02 ,dsig/dt=9.307216e+03
+Test39: t=1.393785e-02 ,dsig/dt=4.897521e+03
+Test39: t=1.758857e-02 ,dsig/dt=2.228350e+03
+Test39: t=2.219552e-02 ,dsig/dt=9.007095e+02
+Test39: t=2.800917e-02 ,dsig/dt=3.441468e+02
+Test39: t=3.534557e-02 ,dsig/dt=2.009398e+02
+Test39: t=4.460359e-02 ,dsig/dt=2.618037e+02
+Test39: t=5.628655e-02 ,dsig/dt=2.389611e+02
+Test39: t=7.102961e-02 ,dsig/dt=5.077715e+01
+Test39: t=8.963431e-02 ,dsig/dt=1.872967e+01
+Test39: t=1.131121e-01 ,dsig/dt=2.629429e+01
+Test39: t=1.427394e-01 ,dsig/dt=1.894145e+01
+Test39: t=1.801270e-01 ,dsig/dt=4.404577e+00
+Test39: t=2.273074e-01 ,dsig/dt=1.397823e+00
+Test39: t=2.868457e-01 ,dsig/dt=6.958147e-01
+Test39: t=3.619788e-01 ,dsig/dt=1.163474e-01
+Test39: t=4.567915e-01 ,dsig/dt=8.940414e-02
+Test39: t=5.764383e-01 ,dsig/dt=1.766620e-02
+Test39: t=7.274240e-01 ,dsig/dt=0.000000e+00
+Test39: t=9.179572e-01 ,dsig/dt=0.000000e+00
+Test39: t=1.158397e+00 ,dsig/dt=0.000000e+00
+Test39: t=1.461814e+00 ,dsig/dt=0.000000e+00
+Test39: t=1.844705e+00 ,dsig/dt=0.000000e+00
+Test39: t=2.327886e+00 ,dsig/dt=0.000000e+00
+Test39: t=2.937626e+00 ,dsig/dt=0.000000e+00
+Test39: Material=Tin, Element[0]=Tin,A[0]=119 is selected.
+Test39:*NewRun* Targ=90050069,Proj=2212,P=1.500000e+03 MeV/c, =>> 23 of 80
+Test39: Mt=1.107324e+05, Mp=9.382723e+02, tmt=9.201955e+01, E=1.769281e+03
+*=>TEST39: 100000 events are simulated
+Test39:CalculationTimePerEvent=8.535000e-05 s
+Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
+Test39: t=3.370068e-04 ,dsig/dt=2.352233e+05
+Test39: t=4.252786e-04 ,dsig/dt=2.253084e+05
+Test39: t=5.366712e-04 ,dsig/dt=2.248233e+05
+Test39: t=6.772408e-04 ,dsig/dt=2.147479e+05
+Test39: t=8.546296e-04 ,dsig/dt=1.996451e+05
+Test39: t=1.078482e-03 ,dsig/dt=1.863113e+05
+Test39: t=1.360967e-03 ,dsig/dt=1.686448e+05
+Test39: t=1.717443e-03 ,dsig/dt=1.527468e+05
+Test39: t=2.167291e-03 ,dsig/dt=1.323125e+05
+Test39: t=2.734967e-03 ,dsig/dt=1.087722e+05
+Test39: t=3.451333e-03 ,dsig/dt=8.756457e+04
+Test39: t=4.355336e-03 ,dsig/dt=6.624066e+04
+Test39: t=5.496123e-03 ,dsig/dt=4.506032e+04
+Test39: t=6.935716e-03 ,dsig/dt=2.788408e+04
+Test39: t=8.752379e-03 ,dsig/dt=1.571306e+04
+Test39: t=1.104488e-02 ,dsig/dt=7.527033e+03
+Test39: t=1.393785e-02 ,dsig/dt=2.829687e+03
+Test39: t=1.758857e-02 ,dsig/dt=1.073651e+03
+Test39: t=2.219552e-02 ,dsig/dt=6.250851e+02
+Test39: t=2.800917e-02 ,dsig/dt=8.114191e+02
+Test39: t=3.534557e-02 ,dsig/dt=9.673399e+02
+Test39: t=4.460359e-02 ,dsig/dt=3.759667e+02
+Test39: t=5.628655e-02 ,dsig/dt=9.374005e+01
+Test39: t=7.102961e-02 ,dsig/dt=1.449087e+02
+Test39: t=8.963431e-02 ,dsig/dt=1.186359e+02
+Test39: t=1.131121e-01 ,dsig/dt=2.409044e+01
+Test39: t=1.427394e-01 ,dsig/dt=1.375644e+01
+Test39: t=1.801270e-01 ,dsig/dt=9.418677e+00
+Test39: t=2.273074e-01 ,dsig/dt=4.022366e+00
+Test39: t=2.868457e-01 ,dsig/dt=1.492763e+00
+Test39: t=3.619788e-01 ,dsig/dt=7.053755e-01
+Test39: t=4.567915e-01 ,dsig/dt=3.886193e-02
+Test39: t=5.764383e-01 ,dsig/dt=3.278135e-02
+Test39: t=7.274240e-01 ,dsig/dt=0.000000e+00
+Test39: t=9.179572e-01 ,dsig/dt=0.000000e+00
+Test39: t=1.158397e+00 ,dsig/dt=0.000000e+00
+Test39: t=1.461814e+00 ,dsig/dt=0.000000e+00
+Test39: t=1.844705e+00 ,dsig/dt=0.000000e+00
+Test39: t=2.327886e+00 ,dsig/dt=0.000000e+00
+Test39: t=2.937626e+00 ,dsig/dt=0.000000e+00
+Test39: Material=Lead, Element[0]=Lead,A[0]=208 is selected.
+Test39:*NewRun* Targ=90082126,Proj=2212,P=1.500000e+03 MeV/c, =>> 24 of 80
+Test39: Mt=1.936877e+05, Mp=9.382723e+02, tmt=1.609561e+02, E=1.769281e+03
+*=>TEST39: 100000 events are simulated
+Test39:CalculationTimePerEvent=8.605000e-05 s
+Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
+Test39: t=3.370068e-04 ,dsig/dt=4.946488e+05
+Test39: t=4.252786e-04 ,dsig/dt=4.767376e+05
+Test39: t=5.366712e-04 ,dsig/dt=4.481246e+05
+Test39: t=6.772408e-04 ,dsig/dt=4.279504e+05
+Test39: t=8.546296e-04 ,dsig/dt=4.016111e+05
+Test39: t=1.078482e-03 ,dsig/dt=3.592345e+05
+Test39: t=1.360967e-03 ,dsig/dt=3.228089e+05
+Test39: t=1.717443e-03 ,dsig/dt=2.842754e+05
+Test39: t=2.167291e-03 ,dsig/dt=2.386676e+05
+Test39: t=2.734967e-03 ,dsig/dt=1.894227e+05
+Test39: t=3.451333e-03 ,dsig/dt=1.403991e+05
+Test39: t=4.355336e-03 ,dsig/dt=9.687367e+04
+Test39: t=5.496123e-03 ,dsig/dt=6.044935e+04
+Test39: t=6.935716e-03 ,dsig/dt=3.192192e+04
+Test39: t=8.752379e-03 ,dsig/dt=1.490259e+04
+Test39: t=1.104488e-02 ,dsig/dt=5.677123e+03
+Test39: t=1.393785e-02 ,dsig/dt=2.198149e+03
+Test39: t=1.758857e-02 ,dsig/dt=1.945952e+03
+Test39: t=2.219552e-02 ,dsig/dt=3.005529e+03
+Test39: t=2.800917e-02 ,dsig/dt=2.298891e+03
+Test39: t=3.534557e-02 ,dsig/dt=4.791755e+02
+Test39: t=4.460359e-02 ,dsig/dt=4.741625e+02
+Test39: t=5.628655e-02 ,dsig/dt=5.627031e+02
+Test39: t=7.102961e-02 ,dsig/dt=1.206302e+02
+Test39: t=8.963431e-02 ,dsig/dt=5.290344e+01
+Test39: t=1.131121e-01 ,dsig/dt=2.990573e+01
+Test39: t=1.427394e-01 ,dsig/dt=1.829024e+01
+Test39: t=1.801270e-01 ,dsig/dt=1.155766e+01
+Test39: t=2.273074e-01 ,dsig/dt=4.640573e+00
+Test39: t=2.868457e-01 ,dsig/dt=1.628983e+00
+Test39: t=3.619788e-01 ,dsig/dt=6.190297e-01
+Test39: t=4.567915e-01 ,dsig/dt=1.267925e-01
+Test39: t=5.764383e-01 ,dsig/dt=0.000000e+00
+Test39: t=7.274240e-01 ,dsig/dt=0.000000e+00
+Test39: t=9.179572e-01 ,dsig/dt=0.000000e+00
+Test39: t=1.158397e+00 ,dsig/dt=0.000000e+00
+Test39: t=1.461814e+00 ,dsig/dt=0.000000e+00
+Test39: t=1.844705e+00 ,dsig/dt=0.000000e+00
+Test39: t=2.327886e+00 ,dsig/dt=0.000000e+00
+Test39: t=2.937626e+00 ,dsig/dt=0.000000e+00
+Test39: Material=Hydrogen, Element[0]=Hydrogen,A[0]=1 is selected.
+Test39:*NewRun* Targ=90001000,Proj=2212,P=1.000000e+04 MeV/c, =>> 25 of 80
+Test39: Mt=9.382723e+02, Mp=9.382723e+02, tmt=8.543578e+00, E=1.004392e+04
+*=>TEST39: 100000 events are simulated
+Test39:CalculationTimePerEvent=8.205000e-05 s
+Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
+Test39: t=3.370068e-04 ,dsig/dt=9.266142e+01
+Test39: t=4.252786e-04 ,dsig/dt=8.194122e+01
+Test39: t=5.366712e-04 ,dsig/dt=7.814982e+01
+Test39: t=6.772408e-04 ,dsig/dt=9.201732e+01
+Test39: t=8.546296e-04 ,dsig/dt=8.625462e+01
+Test39: t=1.078482e-03 ,dsig/dt=8.946393e+01
+Test39: t=1.360967e-03 ,dsig/dt=9.128015e+01
+Test39: t=1.717443e-03 ,dsig/dt=8.988866e+01
+Test39: t=2.167291e-03 ,dsig/dt=8.615085e+01
+Test39: t=2.734967e-03 ,dsig/dt=8.799172e+01
+Test39: t=3.451333e-03 ,dsig/dt=8.565462e+01
+Test39: t=4.355336e-03 ,dsig/dt=8.651964e+01
+Test39: t=5.496123e-03 ,dsig/dt=8.724103e+01
+Test39: t=6.935716e-03 ,dsig/dt=8.357531e+01
+Test39: t=8.752379e-03 ,dsig/dt=8.313265e+01
+Test39: t=1.104488e-02 ,dsig/dt=7.948189e+01
+Test39: t=1.393785e-02 ,dsig/dt=8.063116e+01
+Test39: t=1.758857e-02 ,dsig/dt=7.493438e+01
+Test39: t=2.219552e-02 ,dsig/dt=7.426159e+01
+Test39: t=2.800917e-02 ,dsig/dt=6.905278e+01
+Test39: t=3.534557e-02 ,dsig/dt=6.592048e+01
+Test39: t=4.460359e-02 ,dsig/dt=6.044363e+01
+Test39: t=5.628655e-02 ,dsig/dt=5.339990e+01
+Test39: t=7.102961e-02 ,dsig/dt=4.737599e+01
+Test39: t=8.963431e-02 ,dsig/dt=3.963401e+01
+Test39: t=1.131121e-01 ,dsig/dt=3.270677e+01
+Test39: t=1.427394e-01 ,dsig/dt=2.473759e+01
+Test39: t=1.801270e-01 ,dsig/dt=1.795476e+01
+Test39: t=2.273074e-01 ,dsig/dt=1.179128e+01
+Test39: t=2.868457e-01 ,dsig/dt=6.935721e+00
+Test39: t=3.619788e-01 ,dsig/dt=3.746238e+00
+Test39: t=4.567915e-01 ,dsig/dt=1.831105e+00
+Test39: t=5.764383e-01 ,dsig/dt=8.522668e-01
+Test39: t=7.274240e-01 ,dsig/dt=3.991481e-01
+Test39: t=9.179572e-01 ,dsig/dt=1.507431e-01
+Test39: t=1.158397e+00 ,dsig/dt=4.436736e-02
+Test39: t=1.461814e+00 ,dsig/dt=1.622362e-02
+Test39: t=1.844705e+00 ,dsig/dt=8.167387e-03
+Test39: t=2.327886e+00 ,dsig/dt=4.643078e-03
+Test39: t=2.937626e+00 ,dsig/dt=1.772394e-03
+Test39: Material=Helium, Element[0]=Helium,A[0]=4 is selected.
+Test39:*NewRun* Targ=90002002,Proj=2212,P=1.000000e+04 MeV/c, =>> 26 of 80
+Test39: Mt=3.727417e+03, Mp=9.382723e+02, tmt=3.394055e+01, E=1.004392e+04
+*=>TEST39: 100000 events are simulated
+Test39:CalculationTimePerEvent=8.250000e-05 s
+Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
+Test39: t=3.370068e-04 ,dsig/dt=8.226417e+02
+Test39: t=4.252786e-04 ,dsig/dt=7.956874e+02
+Test39: t=5.366712e-04 ,dsig/dt=8.142894e+02
+Test39: t=6.772408e-04 ,dsig/dt=8.222958e+02
+Test39: t=8.546296e-04 ,dsig/dt=7.686113e+02
+Test39: t=1.078482e-03 ,dsig/dt=8.494363e+02
+Test39: t=1.360967e-03 ,dsig/dt=7.806787e+02
+Test39: t=1.717443e-03 ,dsig/dt=7.871873e+02
+Test39: t=2.167291e-03 ,dsig/dt=8.034810e+02
+Test39: t=2.734967e-03 ,dsig/dt=7.513590e+02
+Test39: t=3.451333e-03 ,dsig/dt=7.466645e+02
+Test39: t=4.355336e-03 ,dsig/dt=7.394846e+02
+Test39: t=5.496123e-03 ,dsig/dt=7.342948e+02
+Test39: t=6.935716e-03 ,dsig/dt=7.117511e+02
+Test39: t=8.752379e-03 ,dsig/dt=6.828667e+02
+Test39: t=1.104488e-02 ,dsig/dt=6.595164e+02
+Test39: t=1.393785e-02 ,dsig/dt=6.065428e+02
+Test39: t=1.758857e-02 ,dsig/dt=5.607278e+02
+Test39: t=2.219552e-02 ,dsig/dt=5.007761e+02
+Test39: t=2.800917e-02 ,dsig/dt=4.279453e+02
+Test39: t=3.534557e-02 ,dsig/dt=3.475490e+02
+Test39: t=4.460359e-02 ,dsig/dt=2.679053e+02
+Test39: t=5.628655e-02 ,dsig/dt=1.778217e+02
+Test39: t=7.102961e-02 ,dsig/dt=1.059656e+02
+Test39: t=8.963431e-02 ,dsig/dt=5.037205e+01
+Test39: t=1.131121e-01 ,dsig/dt=1.703340e+01
+Test39: t=1.427394e-01 ,dsig/dt=3.954501e+00
+Test39: t=1.801270e-01 ,dsig/dt=6.010415e-01
+Test39: t=2.273074e-01 ,dsig/dt=2.206538e-01
+Test39: t=2.868457e-01 ,dsig/dt=2.411611e-01
+Test39: t=3.619788e-01 ,dsig/dt=2.666834e-01
+Test39: t=4.567915e-01 ,dsig/dt=1.982552e-01
+Test39: t=5.764383e-01 ,dsig/dt=6.854179e-02
+Test39: t=7.274240e-01 ,dsig/dt=8.380780e-03
+Test39: t=9.179572e-01 ,dsig/dt=4.932174e-03
+Test39: t=1.158397e+00 ,dsig/dt=6.153162e-04
+Test39: t=1.461814e+00 ,dsig/dt=4.370017e-04
+Test39: t=1.844705e+00 ,dsig/dt=3.741923e-04
+Test39: t=2.327886e+00 ,dsig/dt=0.000000e+00
+Test39: t=2.937626e+00 ,dsig/dt=0.000000e+00
+Test39: Material=Lithium, Element[0]=Lithium,A[0]=7 is selected.
+Test39:*NewRun* Targ=90003004,Proj=2212,P=1.000000e+04 MeV/c, =>> 27 of 80
+Test39: Mt=6.533835e+03, Mp=9.382723e+02, tmt=5.949481e+01, E=1.004392e+04
+*=>TEST39: 100000 events are simulated
+Test39:CalculationTimePerEvent=8.350000e-05 s
+Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
+Test39: t=3.370068e-04 ,dsig/dt=3.401208e+03
+Test39: t=4.252786e-04 ,dsig/dt=3.409730e+03
+Test39: t=5.366712e-04 ,dsig/dt=3.269512e+03
+Test39: t=6.772408e-04 ,dsig/dt=3.230902e+03
+Test39: t=8.546296e-04 ,dsig/dt=3.305879e+03
+Test39: t=1.078482e-03 ,dsig/dt=3.168766e+03
+Test39: t=1.360967e-03 ,dsig/dt=3.097336e+03
+Test39: t=1.717443e-03 ,dsig/dt=3.067352e+03
+Test39: t=2.167291e-03 ,dsig/dt=3.038330e+03
+Test39: t=2.734967e-03 ,dsig/dt=2.801010e+03
+Test39: t=3.451333e-03 ,dsig/dt=2.793942e+03
+Test39: t=4.355336e-03 ,dsig/dt=2.652361e+03
+Test39: t=5.496123e-03 ,dsig/dt=2.421609e+03
+Test39: t=6.935716e-03 ,dsig/dt=2.284299e+03
+Test39: t=8.752379e-03 ,dsig/dt=2.028157e+03
+Test39: t=1.104488e-02 ,dsig/dt=1.781057e+03
+Test39: t=1.393785e-02 ,dsig/dt=1.516020e+03
+Test39: t=1.758857e-02 ,dsig/dt=1.196523e+03
+Test39: t=2.219552e-02 ,dsig/dt=9.060780e+02
+Test39: t=2.800917e-02 ,dsig/dt=6.369328e+02
+Test39: t=3.534557e-02 ,dsig/dt=3.995596e+02
+Test39: t=4.460359e-02 ,dsig/dt=2.263339e+02
+Test39: t=5.628655e-02 ,dsig/dt=1.085355e+02
+Test39: t=7.102961e-02 ,dsig/dt=4.759170e+01
+Test39: t=8.963431e-02 ,dsig/dt=1.994725e+01
+Test39: t=1.131121e-01 ,dsig/dt=1.032673e+01
+Test39: t=1.427394e-01 ,dsig/dt=6.257213e+00
+Test39: t=1.801270e-01 ,dsig/dt=3.660828e+00
+Test39: t=2.273074e-01 ,dsig/dt=1.748458e+00
+Test39: t=2.868457e-01 ,dsig/dt=8.230780e-01
+Test39: t=3.619788e-01 ,dsig/dt=2.163723e-01
+Test39: t=4.567915e-01 ,dsig/dt=4.791956e-02
+Test39: t=5.764383e-01 ,dsig/dt=2.251040e-02
+Test39: t=7.274240e-01 ,dsig/dt=3.639027e-03
+Test39: t=9.179572e-01 ,dsig/dt=0.000000e+00
+Test39: t=1.158397e+00 ,dsig/dt=0.000000e+00
+Test39: t=1.461814e+00 ,dsig/dt=0.000000e+00
+Test39: t=1.844705e+00 ,dsig/dt=0.000000e+00
+Test39: t=2.327886e+00 ,dsig/dt=0.000000e+00
+Test39: t=2.937626e+00 ,dsig/dt=0.000000e+00
+Test39: Material=Carbon, Element[0]=Carbon,A[0]=12 is selected.
+Test39:*NewRun* Targ=90006006,Proj=2212,P=1.000000e+04 MeV/c, =>> 28 of 80
+Test39: Mt=1.117487e+04, Mp=9.382723e+02, tmt=1.017544e+02, E=1.004392e+04
+*=>TEST39: 100000 events are simulated
+Test39:CalculationTimePerEvent=8.360000e-05 s
+Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
+Test39: t=3.370068e-04 ,dsig/dt=6.564350e+03
+Test39: t=4.252786e-04 ,dsig/dt=6.961601e+03
+Test39: t=5.366712e-04 ,dsig/dt=6.875165e+03
+Test39: t=6.772408e-04 ,dsig/dt=6.612128e+03
+Test39: t=8.546296e-04 ,dsig/dt=6.408699e+03
+Test39: t=1.078482e-03 ,dsig/dt=6.497785e+03
+Test39: t=1.360967e-03 ,dsig/dt=6.461678e+03
+Test39: t=1.717443e-03 ,dsig/dt=6.257304e+03
+Test39: t=2.167291e-03 ,dsig/dt=6.085878e+03
+Test39: t=2.734967e-03 ,dsig/dt=5.760881e+03
+Test39: t=3.451333e-03 ,dsig/dt=5.456336e+03
+Test39: t=4.355336e-03 ,dsig/dt=5.142573e+03
+Test39: t=5.496123e-03 ,dsig/dt=4.745279e+03
+Test39: t=6.935716e-03 ,dsig/dt=4.283189e+03
+Test39: t=8.752379e-03 ,dsig/dt=3.804871e+03
+Test39: t=1.104488e-02 ,dsig/dt=3.232074e+03
+Test39: t=1.393785e-02 ,dsig/dt=2.694782e+03
+Test39: t=1.758857e-02 ,dsig/dt=2.085791e+03
+Test39: t=2.219552e-02 ,dsig/dt=1.505788e+03
+Test39: t=2.800917e-02 ,dsig/dt=1.039487e+03
+Test39: t=3.534557e-02 ,dsig/dt=6.292683e+02
+Test39: t=4.460359e-02 ,dsig/dt=3.475669e+02
+Test39: t=5.628655e-02 ,dsig/dt=1.698186e+02
+Test39: t=7.102961e-02 ,dsig/dt=7.446146e+01
+Test39: t=8.963431e-02 ,dsig/dt=3.055030e+01
+Test39: t=1.131121e-01 ,dsig/dt=1.524315e+01
+Test39: t=1.427394e-01 ,dsig/dt=6.977662e+00
+Test39: t=1.801270e-01 ,dsig/dt=4.090169e+00
+Test39: t=2.273074e-01 ,dsig/dt=2.361668e+00
+Test39: t=2.868457e-01 ,dsig/dt=2.266628e+00
+Test39: t=3.619788e-01 ,dsig/dt=3.194244e+00
+Test39: t=4.567915e-01 ,dsig/dt=2.530890e+00
+Test39: t=5.764383e-01 ,dsig/dt=3.952328e-01
+Test39: t=7.274240e-01 ,dsig/dt=0.000000e+00
+Test39: t=9.179572e-01 ,dsig/dt=0.000000e+00
+Test39: t=1.158397e+00 ,dsig/dt=0.000000e+00
+Test39: t=1.461814e+00 ,dsig/dt=0.000000e+00
+Test39: t=1.844705e+00 ,dsig/dt=0.000000e+00
+Test39: t=2.327886e+00 ,dsig/dt=0.000000e+00
+Test39: t=2.937626e+00 ,dsig/dt=0.000000e+00
+Test39: Material=Aluminum, Element[0]=Aluminum,A[0]=27 is selected.
+Test39:*NewRun* Targ=90013014,Proj=2212,P=1.000000e+04 MeV/c, =>> 29 of 80
+Test39: Mt=2.512651e+04, Mp=9.382723e+02, tmt=2.287932e+02, E=1.004392e+04
+*=>TEST39: 100000 events are simulated
+Test39:CalculationTimePerEvent=8.445000e-05 s
+Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
+Test39: t=3.370068e-04 ,dsig/dt=2.680440e+04
+Test39: t=4.252786e-04 ,dsig/dt=2.687964e+04
+Test39: t=5.366712e-04 ,dsig/dt=2.737623e+04
+Test39: t=6.772408e-04 ,dsig/dt=2.598865e+04
+Test39: t=8.546296e-04 ,dsig/dt=2.629389e+04
+Test39: t=1.078482e-03 ,dsig/dt=2.505283e+04
+Test39: t=1.360967e-03 ,dsig/dt=2.428040e+04
+Test39: t=1.717443e-03 ,dsig/dt=2.352648e+04
+Test39: t=2.167291e-03 ,dsig/dt=2.236927e+04
+Test39: t=2.734967e-03 ,dsig/dt=2.045208e+04
+Test39: t=3.451333e-03 ,dsig/dt=1.903212e+04
+Test39: t=4.355336e-03 ,dsig/dt=1.721654e+04
+Test39: t=5.496123e-03 ,dsig/dt=1.508831e+04
+Test39: t=6.935716e-03 ,dsig/dt=1.296253e+04
+Test39: t=8.752379e-03 ,dsig/dt=1.034270e+04
+Test39: t=1.104488e-02 ,dsig/dt=8.038947e+03
+Test39: t=1.393785e-02 ,dsig/dt=5.783732e+03
+Test39: t=1.758857e-02 ,dsig/dt=3.891676e+03
+Test39: t=2.219552e-02 ,dsig/dt=2.304382e+03
+Test39: t=2.800917e-02 ,dsig/dt=1.241494e+03
+Test39: t=3.534557e-02 ,dsig/dt=5.583059e+02
+Test39: t=4.460359e-02 ,dsig/dt=2.246501e+02
+Test39: t=5.628655e-02 ,dsig/dt=9.065177e+01
+Test39: t=7.102961e-02 ,dsig/dt=6.011418e+01
+Test39: t=8.963431e-02 ,dsig/dt=5.081168e+01
+Test39: t=1.131121e-01 ,dsig/dt=5.786323e+01
+Test39: t=1.427394e-01 ,dsig/dt=3.024253e+01
+Test39: t=1.801270e-01 ,dsig/dt=6.866900e+00
+Test39: t=2.273074e-01 ,dsig/dt=4.744186e+00
+Test39: t=2.868457e-01 ,dsig/dt=1.183462e+00
+Test39: t=3.619788e-01 ,dsig/dt=1.252388e-01
+Test39: t=4.567915e-01 ,dsig/dt=3.821383e-02
+Test39: t=5.764383e-01 ,dsig/dt=9.947992e-03
+Test39: t=7.274240e-01 ,dsig/dt=0.000000e+00
+Test39: t=9.179572e-01 ,dsig/dt=0.000000e+00
+Test39: t=1.158397e+00 ,dsig/dt=0.000000e+00
+Test39: t=1.461814e+00 ,dsig/dt=0.000000e+00
+Test39: t=1.844705e+00 ,dsig/dt=0.000000e+00
+Test39: t=2.327886e+00 ,dsig/dt=0.000000e+00
+Test39: t=2.937626e+00 ,dsig/dt=0.000000e+00
+Test39: Material=Copper, Element[0]=Copper,A[0]=63 is selected.
+Test39:*NewRun* Targ=90029034,Proj=2212,P=1.000000e+04 MeV/c, =>> 30 of 80
+Test39: Mt=5.860379e+04, Mp=9.382723e+02, tmt=5.336256e+02, E=1.004392e+04
+*=>TEST39: 100000 events are simulated
+Test39:CalculationTimePerEvent=8.515000e-05 s
+Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
+Test39: t=3.370068e-04 ,dsig/dt=1.263035e+05
+Test39: t=4.252786e-04 ,dsig/dt=1.276145e+05
+Test39: t=5.366712e-04 ,dsig/dt=1.177277e+05
+Test39: t=6.772408e-04 ,dsig/dt=1.158621e+05
+Test39: t=8.546296e-04 ,dsig/dt=1.123379e+05
+Test39: t=1.078482e-03 ,dsig/dt=1.073849e+05
+Test39: t=1.360967e-03 ,dsig/dt=1.005762e+05
+Test39: t=1.717443e-03 ,dsig/dt=9.444392e+04
+Test39: t=2.167291e-03 ,dsig/dt=8.603366e+04
+Test39: t=2.734967e-03 ,dsig/dt=7.557705e+04
+Test39: t=3.451333e-03 ,dsig/dt=6.527067e+04
+Test39: t=4.355336e-03 ,dsig/dt=5.314976e+04
+Test39: t=5.496123e-03 ,dsig/dt=4.142946e+04
+Test39: t=6.935716e-03 ,dsig/dt=3.087839e+04
+Test39: t=8.752379e-03 ,dsig/dt=2.102603e+04
+Test39: t=1.104488e-02 ,dsig/dt=1.304080e+04
+Test39: t=1.393785e-02 ,dsig/dt=7.152424e+03
+Test39: t=1.758857e-02 ,dsig/dt=3.358368e+03
+Test39: t=2.219552e-02 ,dsig/dt=1.471438e+03
+Test39: t=2.800917e-02 ,dsig/dt=5.214222e+02
+Test39: t=3.534557e-02 ,dsig/dt=2.908890e+02
+Test39: t=4.460359e-02 ,dsig/dt=3.199164e+02
+Test39: t=5.628655e-02 ,dsig/dt=3.393661e+02
+Test39: t=7.102961e-02 ,dsig/dt=1.498303e+02
+Test39: t=8.963431e-02 ,dsig/dt=4.449792e+01
+Test39: t=1.131121e-01 ,dsig/dt=5.001025e+01
+Test39: t=1.427394e-01 ,dsig/dt=2.768369e+01
+Test39: t=1.801270e-01 ,dsig/dt=5.476389e+00
+Test39: t=2.273074e-01 ,dsig/dt=2.461602e+00
+Test39: t=2.868457e-01 ,dsig/dt=7.127029e-01
+Test39: t=3.619788e-01 ,dsig/dt=2.000757e-01
+Test39: t=4.567915e-01 ,dsig/dt=3.135109e-02
+Test39: t=5.764383e-01 ,dsig/dt=2.493795e-02
+Test39: t=7.274240e-01 ,dsig/dt=0.000000e+00
+Test39: t=9.179572e-01 ,dsig/dt=0.000000e+00
+Test39: t=1.158397e+00 ,dsig/dt=0.000000e+00
+Test39: t=1.461814e+00 ,dsig/dt=0.000000e+00
+Test39: t=1.844705e+00 ,dsig/dt=0.000000e+00
+Test39: t=2.327886e+00 ,dsig/dt=0.000000e+00
+Test39: t=2.937626e+00 ,dsig/dt=0.000000e+00
+Test39: Material=Tin, Element[0]=Tin,A[0]=119 is selected.
+Test39:*NewRun* Targ=90050069,Proj=2212,P=1.000000e+04 MeV/c, =>> 31 of 80
+Test39: Mt=1.107324e+05, Mp=9.382723e+02, tmt=1.008290e+03, E=1.004392e+04
+*=>TEST39: 100000 events are simulated
+Test39:CalculationTimePerEvent=8.565000e-05 s
+Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
+Test39: t=3.370068e-04 ,dsig/dt=4.023210e+05
+Test39: t=4.252786e-04 ,dsig/dt=3.888307e+05
+Test39: t=5.366712e-04 ,dsig/dt=3.697971e+05
+Test39: t=6.772408e-04 ,dsig/dt=3.565432e+05
+Test39: t=8.546296e-04 ,dsig/dt=3.211603e+05
+Test39: t=1.078482e-03 ,dsig/dt=3.014190e+05
+Test39: t=1.360967e-03 ,dsig/dt=2.749094e+05
+Test39: t=1.717443e-03 ,dsig/dt=2.418374e+05
+Test39: t=2.167291e-03 ,dsig/dt=2.114325e+05
+Test39: t=2.734967e-03 ,dsig/dt=1.744839e+05
+Test39: t=3.451333e-03 ,dsig/dt=1.336257e+05
+Test39: t=4.355336e-03 ,dsig/dt=9.922533e+04
+Test39: t=5.496123e-03 ,dsig/dt=6.665851e+04
+Test39: t=6.935716e-03 ,dsig/dt=4.041899e+04
+Test39: t=8.752379e-03 ,dsig/dt=2.207956e+04
+Test39: t=1.104488e-02 ,dsig/dt=1.033051e+04
+Test39: t=1.393785e-02 ,dsig/dt=4.028374e+03
+Test39: t=1.758857e-02 ,dsig/dt=1.345454e+03
+Test39: t=2.219552e-02 ,dsig/dt=8.268630e+02
+Test39: t=2.800917e-02 ,dsig/dt=1.068172e+03
+Test39: t=3.534557e-02 ,dsig/dt=1.283582e+03
+Test39: t=4.460359e-02 ,dsig/dt=6.283217e+02
+Test39: t=5.628655e-02 ,dsig/dt=1.469492e+02
+Test39: t=7.102961e-02 ,dsig/dt=2.195992e+02
+Test39: t=8.963431e-02 ,dsig/dt=1.524391e+02
+Test39: t=1.131121e-01 ,dsig/dt=2.537930e+01
+Test39: t=1.427394e-01 ,dsig/dt=1.349179e+01
+Test39: t=1.801270e-01 ,dsig/dt=4.882616e+00
+Test39: t=2.273074e-01 ,dsig/dt=2.036077e+00
+Test39: t=2.868457e-01 ,dsig/dt=4.865845e-01
+Test39: t=3.619788e-01 ,dsig/dt=7.716220e-02
+Test39: t=4.567915e-01 ,dsig/dt=0.000000e+00
+Test39: t=5.764383e-01 ,dsig/dt=0.000000e+00
+Test39: t=7.274240e-01 ,dsig/dt=0.000000e+00
+Test39: t=9.179572e-01 ,dsig/dt=0.000000e+00
+Test39: t=1.158397e+00 ,dsig/dt=0.000000e+00
+Test39: t=1.461814e+00 ,dsig/dt=0.000000e+00
+Test39: t=1.844705e+00 ,dsig/dt=0.000000e+00
+Test39: t=2.327886e+00 ,dsig/dt=0.000000e+00
+Test39: t=2.937626e+00 ,dsig/dt=0.000000e+00
+Test39: Material=Lead, Element[0]=Lead,A[0]=208 is selected.
+Test39:*NewRun* Targ=90082126,Proj=2212,P=1.000000e+04 MeV/c, =>> 32 of 80
+Test39: Mt=1.936877e+05, Mp=9.382723e+02, tmt=1.763652e+03, E=1.004392e+04
+*=>TEST39: 100000 events are simulated
+Test39:CalculationTimePerEvent=8.610000e-05 s
+Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
+Test39: t=3.370068e-04 ,dsig/dt=1.056930e+06
+Test39: t=4.252786e-04 ,dsig/dt=1.010726e+06
+Test39: t=5.366712e-04 ,dsig/dt=9.486758e+05
+Test39: t=6.772408e-04 ,dsig/dt=8.760039e+05
+Test39: t=8.546296e-04 ,dsig/dt=7.960341e+05
+Test39: t=1.078482e-03 ,dsig/dt=7.039544e+05
+Test39: t=1.360967e-03 ,dsig/dt=6.134784e+05
+Test39: t=1.717443e-03 ,dsig/dt=5.066853e+05
+Test39: t=2.167291e-03 ,dsig/dt=3.969718e+05
+Test39: t=2.734967e-03 ,dsig/dt=2.948761e+05
+Test39: t=3.451333e-03 ,dsig/dt=1.993980e+05
+Test39: t=4.355336e-03 ,dsig/dt=1.265622e+05
+Test39: t=5.496123e-03 ,dsig/dt=6.914545e+04
+Test39: t=6.935716e-03 ,dsig/dt=3.361594e+04
+Test39: t=8.752379e-03 ,dsig/dt=1.299426e+04
+Test39: t=1.104488e-02 ,dsig/dt=4.661584e+03
+Test39: t=1.393785e-02 ,dsig/dt=1.994291e+03
+Test39: t=1.758857e-02 ,dsig/dt=2.448740e+03
+Test39: t=2.219552e-02 ,dsig/dt=3.978565e+03
+Test39: t=2.800917e-02 ,dsig/dt=3.314534e+03
+Test39: t=3.534557e-02 ,dsig/dt=7.402213e+02
+Test39: t=4.460359e-02 ,dsig/dt=7.334710e+02
+Test39: t=5.628655e-02 ,dsig/dt=7.211779e+02
+Test39: t=7.102961e-02 ,dsig/dt=1.177966e+02
+Test39: t=8.963431e-02 ,dsig/dt=4.147841e+01
+Test39: t=1.131121e-01 ,dsig/dt=2.825312e+01
+Test39: t=1.427394e-01 ,dsig/dt=1.452274e+01
+Test39: t=1.801270e-01 ,dsig/dt=6.979550e+00
+Test39: t=2.273074e-01 ,dsig/dt=2.401268e+00
+Test39: t=2.868457e-01 ,dsig/dt=3.884962e-01
+Test39: t=3.619788e-01 ,dsig/dt=0.000000e+00
+Test39: t=4.567915e-01 ,dsig/dt=0.000000e+00
+Test39: t=5.764383e-01 ,dsig/dt=0.000000e+00
+Test39: t=7.274240e-01 ,dsig/dt=0.000000e+00
+Test39: t=9.179572e-01 ,dsig/dt=0.000000e+00
+Test39: t=1.158397e+00 ,dsig/dt=0.000000e+00
+Test39: t=1.461814e+00 ,dsig/dt=0.000000e+00
+Test39: t=1.844705e+00 ,dsig/dt=0.000000e+00
+Test39: t=2.327886e+00 ,dsig/dt=0.000000e+00
+Test39: t=2.937626e+00 ,dsig/dt=0.000000e+00
+Test39: Material=Hydrogen, Element[0]=Hydrogen,A[0]=1 is selected.
+Test39:*NewRun* Targ=90001000,Proj=2212,P=1.000000e+05 MeV/c, =>> 33 of 80
+Test39: Mt=9.382723e+02, Mp=9.382723e+02, tmt=9.295101e+01, E=1.000044e+05
+*=>TEST39: 100000 events are simulated
+Test39:CalculationTimePerEvent=8.235000e-05 s
+Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
+Test39: t=3.370068e-04 ,dsig/dt=7.216671e+01
+Test39: t=4.252786e-04 ,dsig/dt=7.099477e+01
+Test39: t=5.366712e-04 ,dsig/dt=6.793038e+01
+Test39: t=6.772408e-04 ,dsig/dt=7.077055e+01
+Test39: t=8.546296e-04 ,dsig/dt=8.220330e+01
+Test39: t=1.078482e-03 ,dsig/dt=6.662490e+01
+Test39: t=1.360967e-03 ,dsig/dt=7.529864e+01
+Test39: t=1.717443e-03 ,dsig/dt=6.974298e+01
+Test39: t=2.167291e-03 ,dsig/dt=6.960578e+01
+Test39: t=2.734967e-03 ,dsig/dt=7.102328e+01
+Test39: t=3.451333e-03 ,dsig/dt=7.001255e+01
+Test39: t=4.355336e-03 ,dsig/dt=7.010496e+01
+Test39: t=5.496123e-03 ,dsig/dt=6.971341e+01
+Test39: t=6.935716e-03 ,dsig/dt=6.666713e+01
+Test39: t=8.752379e-03 ,dsig/dt=6.438363e+01
+Test39: t=1.104488e-02 ,dsig/dt=6.383165e+01
+Test39: t=1.393785e-02 ,dsig/dt=6.271968e+01
+Test39: t=1.758857e-02 ,dsig/dt=6.037052e+01
+Test39: t=2.219552e-02 ,dsig/dt=5.559071e+01
+Test39: t=2.800917e-02 ,dsig/dt=5.323332e+01
+Test39: t=3.534557e-02 ,dsig/dt=4.989109e+01
+Test39: t=4.460359e-02 ,dsig/dt=4.544467e+01
+Test39: t=5.628655e-02 ,dsig/dt=4.054204e+01
+Test39: t=7.102961e-02 ,dsig/dt=3.439325e+01
+Test39: t=8.963431e-02 ,dsig/dt=2.859333e+01
+Test39: t=1.131121e-01 ,dsig/dt=2.249206e+01
+Test39: t=1.427394e-01 ,dsig/dt=1.651324e+01
+Test39: t=1.801270e-01 ,dsig/dt=1.128850e+01
+Test39: t=2.273074e-01 ,dsig/dt=7.034591e+00
+Test39: t=2.868457e-01 ,dsig/dt=3.790932e+00
+Test39: t=3.619788e-01 ,dsig/dt=1.791015e+00
+Test39: t=4.567915e-01 ,dsig/dt=6.818150e-01
+Test39: t=5.764383e-01 ,dsig/dt=2.092067e-01
+Test39: t=7.274240e-01 ,dsig/dt=4.564947e-02
+Test39: t=9.179572e-01 ,dsig/dt=8.618631e-03
+Test39: t=1.158397e+00 ,dsig/dt=7.883344e-04
+Test39: t=1.461814e+00 ,dsig/dt=0.000000e+00
+Test39: t=1.844705e+00 ,dsig/dt=0.000000e+00
+Test39: t=2.327886e+00 ,dsig/dt=1.307134e-04
+Test39: t=2.937626e+00 ,dsig/dt=0.000000e+00
+Test39: Material=Helium, Element[0]=Helium,A[0]=4 is selected.
+Test39:*NewRun* Targ=90002002,Proj=2212,P=1.000000e+05 MeV/c, =>> 34 of 80
+Test39: Mt=3.727417e+03, Mp=9.382723e+02, tmt=3.692608e+02, E=1.000044e+05
+*=>TEST39: 100000 events are simulated
+Test39:CalculationTimePerEvent=8.285000e-05 s
+Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
+Test39: t=3.370068e-04 ,dsig/dt=6.090581e+02
+Test39: t=4.252786e-04 ,dsig/dt=5.806455e+02
+Test39: t=5.366712e-04 ,dsig/dt=6.363637e+02
+Test39: t=6.772408e-04 ,dsig/dt=6.282432e+02
+Test39: t=8.546296e-04 ,dsig/dt=5.888191e+02
+Test39: t=1.078482e-03 ,dsig/dt=5.937350e+02
+Test39: t=1.360967e-03 ,dsig/dt=5.747621e+02
+Test39: t=1.717443e-03 ,dsig/dt=5.858027e+02
+Test39: t=2.167291e-03 ,dsig/dt=5.642373e+02
+Test39: t=2.734967e-03 ,dsig/dt=5.776316e+02
+Test39: t=3.451333e-03 ,dsig/dt=5.625611e+02
+Test39: t=4.355336e-03 ,dsig/dt=5.470099e+02
+Test39: t=5.496123e-03 ,dsig/dt=5.352016e+02
+Test39: t=6.935716e-03 ,dsig/dt=5.345427e+02
+Test39: t=8.752379e-03 ,dsig/dt=5.097603e+02
+Test39: t=1.104488e-02 ,dsig/dt=4.814880e+02
+Test39: t=1.393785e-02 ,dsig/dt=4.608471e+02
+Test39: t=1.758857e-02 ,dsig/dt=4.225217e+02
+Test39: t=2.219552e-02 ,dsig/dt=3.744157e+02
+Test39: t=2.800917e-02 ,dsig/dt=3.296157e+02
+Test39: t=3.534557e-02 ,dsig/dt=2.658618e+02
+Test39: t=4.460359e-02 ,dsig/dt=1.988914e+02
+Test39: t=5.628655e-02 ,dsig/dt=1.328349e+02
+Test39: t=7.102961e-02 ,dsig/dt=7.485556e+01
+Test39: t=8.963431e-02 ,dsig/dt=3.319526e+01
+Test39: t=1.131121e-01 ,dsig/dt=1.074967e+01
+Test39: t=1.427394e-01 ,dsig/dt=2.143215e+00
+Test39: t=1.801270e-01 ,dsig/dt=4.281673e-01
+Test39: t=2.273074e-01 ,dsig/dt=2.157496e-01
+Test39: t=2.868457e-01 ,dsig/dt=2.757872e-01
+Test39: t=3.619788e-01 ,dsig/dt=2.413680e-01
+Test39: t=4.567915e-01 ,dsig/dt=1.471870e-01
+Test39: t=5.764383e-01 ,dsig/dt=4.077867e-02
+Test39: t=7.274240e-01 ,dsig/dt=1.130080e-02
+Test39: t=9.179572e-01 ,dsig/dt=2.558534e-03
+Test39: t=1.158397e+00 ,dsig/dt=1.367615e-03
+Test39: t=1.461814e+00 ,dsig/dt=3.478387e-04
+Test39: t=1.844705e+00 ,dsig/dt=0.000000e+00
+Test39: t=2.327886e+00 ,dsig/dt=0.000000e+00
+Test39: t=2.937626e+00 ,dsig/dt=0.000000e+00
+Test39: Material=Lithium, Element[0]=Lithium,A[0]=7 is selected.
+Test39:*NewRun* Targ=90003004,Proj=2212,P=1.000000e+05 MeV/c, =>> 35 of 80
+Test39: Mt=6.533835e+03, Mp=9.382723e+02, tmt=6.472818e+02, E=1.000044e+05
+*=>TEST39: 100000 events are simulated
+Test39:CalculationTimePerEvent=8.355000e-05 s
+Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
+Test39: t=3.370068e-04 ,dsig/dt=2.666008e+03
+Test39: t=4.252786e-04 ,dsig/dt=2.497614e+03
+Test39: t=5.366712e-04 ,dsig/dt=2.470050e+03
+Test39: t=6.772408e-04 ,dsig/dt=2.444135e+03
+Test39: t=8.546296e-04 ,dsig/dt=2.391766e+03
+Test39: t=1.078482e-03 ,dsig/dt=2.458752e+03
+Test39: t=1.360967e-03 ,dsig/dt=2.405258e+03
+Test39: t=1.717443e-03 ,dsig/dt=2.385727e+03
+Test39: t=2.167291e-03 ,dsig/dt=2.351616e+03
+Test39: t=2.734967e-03 ,dsig/dt=2.257196e+03
+Test39: t=3.451333e-03 ,dsig/dt=2.165745e+03
+Test39: t=4.355336e-03 ,dsig/dt=1.987550e+03
+Test39: t=5.496123e-03 ,dsig/dt=1.898084e+03
+Test39: t=6.935716e-03 ,dsig/dt=1.748729e+03
+Test39: t=8.752379e-03 ,dsig/dt=1.555117e+03
+Test39: t=1.104488e-02 ,dsig/dt=1.369371e+03
+Test39: t=1.393785e-02 ,dsig/dt=1.152594e+03
+Test39: t=1.758857e-02 ,dsig/dt=9.146014e+02
+Test39: t=2.219552e-02 ,dsig/dt=6.988240e+02
+Test39: t=2.800917e-02 ,dsig/dt=4.942188e+02
+Test39: t=3.534557e-02 ,dsig/dt=3.103933e+02
+Test39: t=4.460359e-02 ,dsig/dt=1.792589e+02
+Test39: t=5.628655e-02 ,dsig/dt=8.789859e+01
+Test39: t=7.102961e-02 ,dsig/dt=3.614465e+01
+Test39: t=8.963431e-02 ,dsig/dt=1.366504e+01
+Test39: t=1.131121e-01 ,dsig/dt=5.032499e+00
+Test39: t=1.427394e-01 ,dsig/dt=2.252082e+00
+Test39: t=1.801270e-01 ,dsig/dt=7.922450e-01
+Test39: t=2.273074e-01 ,dsig/dt=3.563358e-01
+Test39: t=2.868457e-01 ,dsig/dt=9.268838e-02
+Test39: t=3.619788e-01 ,dsig/dt=1.016626e-02
+Test39: t=4.567915e-01 ,dsig/dt=4.134983e-03
+Test39: t=5.764383e-01 ,dsig/dt=3.366084e-03
+Test39: t=7.274240e-01 ,dsig/dt=0.000000e+00
+Test39: t=9.179572e-01 ,dsig/dt=0.000000e+00
+Test39: t=1.158397e+00 ,dsig/dt=0.000000e+00
+Test39: t=1.461814e+00 ,dsig/dt=0.000000e+00
+Test39: t=1.844705e+00 ,dsig/dt=0.000000e+00
+Test39: t=2.327886e+00 ,dsig/dt=0.000000e+00
+Test39: t=2.937626e+00 ,dsig/dt=0.000000e+00
+Test39: Material=Carbon, Element[0]=Carbon,A[0]=12 is selected.
+Test39:*NewRun* Targ=90006006,Proj=2212,P=1.000000e+05 MeV/c, =>> 36 of 80
+Test39: Mt=1.117487e+04, Mp=9.382723e+02, tmt=1.107051e+03, E=1.000044e+05
+*=>TEST39: 100000 events are simulated
+Test39:CalculationTimePerEvent=8.350000e-05 s
+Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
+Test39: t=3.370068e-04 ,dsig/dt=5.144124e+03
+Test39: t=4.252786e-04 ,dsig/dt=5.185143e+03
+Test39: t=5.366712e-04 ,dsig/dt=5.135714e+03
+Test39: t=6.772408e-04 ,dsig/dt=5.298843e+03
+Test39: t=8.546296e-04 ,dsig/dt=5.151744e+03
+Test39: t=1.078482e-03 ,dsig/dt=5.022649e+03
+Test39: t=1.360967e-03 ,dsig/dt=4.836260e+03
+Test39: t=1.717443e-03 ,dsig/dt=4.741858e+03
+Test39: t=2.167291e-03 ,dsig/dt=4.547823e+03
+Test39: t=2.734967e-03 ,dsig/dt=4.586046e+03
+Test39: t=3.451333e-03 ,dsig/dt=4.303129e+03
+Test39: t=4.355336e-03 ,dsig/dt=4.033248e+03
+Test39: t=5.496123e-03 ,dsig/dt=3.773630e+03
+Test39: t=6.935716e-03 ,dsig/dt=3.416506e+03
+Test39: t=8.752379e-03 ,dsig/dt=2.986854e+03
+Test39: t=1.104488e-02 ,dsig/dt=2.582257e+03
+Test39: t=1.393785e-02 ,dsig/dt=2.128609e+03
+Test39: t=1.758857e-02 ,dsig/dt=1.680621e+03
+Test39: t=2.219552e-02 ,dsig/dt=1.209751e+03
+Test39: t=2.800917e-02 ,dsig/dt=8.232278e+02
+Test39: t=3.534557e-02 ,dsig/dt=5.078112e+02
+Test39: t=4.460359e-02 ,dsig/dt=2.863430e+02
+Test39: t=5.628655e-02 ,dsig/dt=1.365299e+02
+Test39: t=7.102961e-02 ,dsig/dt=5.711905e+01
+Test39: t=8.963431e-02 ,dsig/dt=2.040394e+01
+Test39: t=1.131121e-01 ,dsig/dt=7.149286e+00
+Test39: t=1.427394e-01 ,dsig/dt=2.655721e+00
+Test39: t=1.801270e-01 ,dsig/dt=1.276096e+00
+Test39: t=2.273074e-01 ,dsig/dt=4.093798e-01
+Test39: t=2.868457e-01 ,dsig/dt=2.477834e-01
+Test39: t=3.619788e-01 ,dsig/dt=2.565087e-01
+Test39: t=4.567915e-01 ,dsig/dt=2.048143e-01
+Test39: t=5.764383e-01 ,dsig/dt=8.085364e-02
+Test39: t=7.274240e-01 ,dsig/dt=2.274697e-01
+Test39: t=9.179572e-01 ,dsig/dt=4.908901e-01
+Test39: t=1.158397e+00 ,dsig/dt=7.366912e-01
+Test39: t=1.461814e+00 ,dsig/dt=4.768280e-01
+Test39: t=1.844705e+00 ,dsig/dt=3.798407e-02
+Test39: t=2.327886e+00 ,dsig/dt=0.000000e+00
+Test39: t=2.937626e+00 ,dsig/dt=0.000000e+00
+Test39: Material=Aluminum, Element[0]=Aluminum,A[0]=27 is selected.
+Test39:*NewRun* Targ=90013014,Proj=2212,P=1.000000e+05 MeV/c, =>> 37 of 80
+Test39: Mt=2.512651e+04, Mp=9.382723e+02, tmt=2.489186e+03, E=1.000044e+05
+*=>TEST39: 100000 events are simulated
+Test39:CalculationTimePerEvent=8.445000e-05 s
+Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
+Test39: t=3.370068e-04 ,dsig/dt=2.224334e+04
+Test39: t=4.252786e-04 ,dsig/dt=2.159235e+04
+Test39: t=5.366712e-04 ,dsig/dt=2.130178e+04
+Test39: t=6.772408e-04 ,dsig/dt=2.134467e+04
+Test39: t=8.546296e-04 ,dsig/dt=2.107332e+04
+Test39: t=1.078482e-03 ,dsig/dt=2.030944e+04
+Test39: t=1.360967e-03 ,dsig/dt=1.920838e+04
+Test39: t=1.717443e-03 ,dsig/dt=1.880466e+04
+Test39: t=2.167291e-03 ,dsig/dt=1.825443e+04
+Test39: t=2.734967e-03 ,dsig/dt=1.658955e+04
+Test39: t=3.451333e-03 ,dsig/dt=1.548589e+04
+Test39: t=4.355336e-03 ,dsig/dt=1.401665e+04
+Test39: t=5.496123e-03 ,dsig/dt=1.223845e+04
+Test39: t=6.935716e-03 ,dsig/dt=1.035275e+04
+Test39: t=8.752379e-03 ,dsig/dt=8.474585e+03
+Test39: t=1.104488e-02 ,dsig/dt=6.590510e+03
+Test39: t=1.393785e-02 ,dsig/dt=4.716797e+03
+Test39: t=1.758857e-02 ,dsig/dt=3.153479e+03
+Test39: t=2.219552e-02 ,dsig/dt=1.859854e+03
+Test39: t=2.800917e-02 ,dsig/dt=1.012854e+03
+Test39: t=3.534557e-02 ,dsig/dt=4.504900e+02
+Test39: t=4.460359e-02 ,dsig/dt=1.861408e+02
+Test39: t=5.628655e-02 ,dsig/dt=6.755402e+01
+Test39: t=7.102961e-02 ,dsig/dt=2.852103e+01
+Test39: t=8.963431e-02 ,dsig/dt=1.783492e+01
+Test39: t=1.131121e-01 ,dsig/dt=2.058515e+01
+Test39: t=1.427394e-01 ,dsig/dt=2.664961e+01
+Test39: t=1.801270e-01 ,dsig/dt=2.255791e+01
+Test39: t=2.273074e-01 ,dsig/dt=5.668549e+00
+Test39: t=2.868457e-01 ,dsig/dt=9.821470e-01
+Test39: t=3.619788e-01 ,dsig/dt=6.336527e-02
+Test39: t=4.567915e-01 ,dsig/dt=0.000000e+00
+Test39: t=5.764383e-01 ,dsig/dt=0.000000e+00
+Test39: t=7.274240e-01 ,dsig/dt=0.000000e+00
+Test39: t=9.179572e-01 ,dsig/dt=0.000000e+00
+Test39: t=1.158397e+00 ,dsig/dt=0.000000e+00
+Test39: t=1.461814e+00 ,dsig/dt=0.000000e+00
+Test39: t=1.844705e+00 ,dsig/dt=0.000000e+00
+Test39: t=2.327886e+00 ,dsig/dt=0.000000e+00
+Test39: t=2.937626e+00 ,dsig/dt=0.000000e+00
+Test39: Material=Copper, Element[0]=Copper,A[0]=63 is selected.
+Test39:*NewRun* Targ=90029034,Proj=2212,P=1.000000e+05 MeV/c, =>> 38 of 80
+Test39: Mt=5.860379e+04, Mp=9.382723e+02, tmt=5.805651e+03, E=1.000044e+05
+*=>TEST39: 100000 events are simulated
+Test39:CalculationTimePerEvent=8.515000e-05 s
+Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
+Test39: t=3.370068e-04 ,dsig/dt=1.074553e+05
+Test39: t=4.252786e-04 ,dsig/dt=1.016352e+05
+Test39: t=5.366712e-04 ,dsig/dt=1.020396e+05
+Test39: t=6.772408e-04 ,dsig/dt=9.723846e+04
+Test39: t=8.546296e-04 ,dsig/dt=9.587542e+04
+Test39: t=1.078482e-03 ,dsig/dt=8.954484e+04
+Test39: t=1.360967e-03 ,dsig/dt=8.283427e+04
+Test39: t=1.717443e-03 ,dsig/dt=7.724045e+04
+Test39: t=2.167291e-03 ,dsig/dt=7.006451e+04
+Test39: t=2.734967e-03 ,dsig/dt=6.362331e+04
+Test39: t=3.451333e-03 ,dsig/dt=5.425491e+04
+Test39: t=4.355336e-03 ,dsig/dt=4.462552e+04
+Test39: t=5.496123e-03 ,dsig/dt=3.487068e+04
+Test39: t=6.935716e-03 ,dsig/dt=2.561988e+04
+Test39: t=8.752379e-03 ,dsig/dt=1.747895e+04
+Test39: t=1.104488e-02 ,dsig/dt=1.096732e+04
+Test39: t=1.393785e-02 ,dsig/dt=5.920675e+03
+Test39: t=1.758857e-02 ,dsig/dt=2.825964e+03
+Test39: t=2.219552e-02 ,dsig/dt=1.162739e+03
+Test39: t=2.800917e-02 ,dsig/dt=4.298181e+02
+Test39: t=3.534557e-02 ,dsig/dt=2.024116e+02
+Test39: t=4.460359e-02 ,dsig/dt=2.026265e+02
+Test39: t=5.628655e-02 ,dsig/dt=2.615354e+02
+Test39: t=7.102961e-02 ,dsig/dt=1.798627e+02
+Test39: t=8.963431e-02 ,dsig/dt=3.921238e+01
+Test39: t=1.131121e-01 ,dsig/dt=3.574668e+01
+Test39: t=1.427394e-01 ,dsig/dt=2.114093e+01
+Test39: t=1.801270e-01 ,dsig/dt=2.956188e+00
+Test39: t=2.273074e-01 ,dsig/dt=5.622274e-01
+Test39: t=2.868457e-01 ,dsig/dt=4.143484e-02
+Test39: t=3.619788e-01 ,dsig/dt=6.869432e-02
+Test39: t=4.567915e-01 ,dsig/dt=0.000000e+00
+Test39: t=5.764383e-01 ,dsig/dt=0.000000e+00
+Test39: t=7.274240e-01 ,dsig/dt=0.000000e+00
+Test39: t=9.179572e-01 ,dsig/dt=0.000000e+00
+Test39: t=1.158397e+00 ,dsig/dt=0.000000e+00
+Test39: t=1.461814e+00 ,dsig/dt=0.000000e+00
+Test39: t=1.844705e+00 ,dsig/dt=0.000000e+00
+Test39: t=2.327886e+00 ,dsig/dt=0.000000e+00
+Test39: t=2.937626e+00 ,dsig/dt=0.000000e+00
+Test39: Material=Tin, Element[0]=Tin,A[0]=119 is selected.
+Test39:*NewRun* Targ=90050069,Proj=2212,P=1.000000e+05 MeV/c, =>> 39 of 80
+Test39: Mt=1.107324e+05, Mp=9.382723e+02, tmt=1.096983e+04, E=1.000044e+05
+*=>TEST39: 100000 events are simulated
+Test39:CalculationTimePerEvent=8.560000e-05 s
+Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
+Test39: t=3.370068e-04 ,dsig/dt=3.310979e+05
+Test39: t=4.252786e-04 ,dsig/dt=3.175494e+05
+Test39: t=5.366712e-04 ,dsig/dt=3.154342e+05
+Test39: t=6.772408e-04 ,dsig/dt=2.962678e+05
+Test39: t=8.546296e-04 ,dsig/dt=2.797402e+05
+Test39: t=1.078482e-03 ,dsig/dt=2.582877e+05
+Test39: t=1.360967e-03 ,dsig/dt=2.351857e+05
+Test39: t=1.717443e-03 ,dsig/dt=2.070037e+05
+Test39: t=2.167291e-03 ,dsig/dt=1.775852e+05
+Test39: t=2.734967e-03 ,dsig/dt=1.462126e+05
+Test39: t=3.451333e-03 ,dsig/dt=1.136343e+05
+Test39: t=4.355336e-03 ,dsig/dt=8.258105e+04
+Test39: t=5.496123e-03 ,dsig/dt=5.654430e+04
+Test39: t=6.935716e-03 ,dsig/dt=3.530442e+04
+Test39: t=8.752379e-03 ,dsig/dt=1.871974e+04
+Test39: t=1.104488e-02 ,dsig/dt=8.860042e+03
+Test39: t=1.393785e-02 ,dsig/dt=3.474326e+03
+Test39: t=1.758857e-02 ,dsig/dt=1.157230e+03
+Test39: t=2.219552e-02 ,dsig/dt=5.987393e+02
+Test39: t=2.800917e-02 ,dsig/dt=8.058617e+02
+Test39: t=3.534557e-02 ,dsig/dt=1.078609e+03
+Test39: t=4.460359e-02 ,dsig/dt=5.934051e+02
+Test39: t=5.628655e-02 ,dsig/dt=1.118691e+02
+Test39: t=7.102961e-02 ,dsig/dt=1.676505e+02
+Test39: t=8.963431e-02 ,dsig/dt=1.130009e+02
+Test39: t=1.131121e-01 ,dsig/dt=1.942102e+01
+Test39: t=1.427394e-01 ,dsig/dt=7.174669e+00
+Test39: t=1.801270e-01 ,dsig/dt=4.291189e+00
+Test39: t=2.273074e-01 ,dsig/dt=1.503396e+00
+Test39: t=2.868457e-01 ,dsig/dt=4.395911e-01
+Test39: t=3.619788e-01 ,dsig/dt=7.093232e-02
+Test39: t=4.567915e-01 ,dsig/dt=0.000000e+00
+Test39: t=5.764383e-01 ,dsig/dt=0.000000e+00
+Test39: t=7.274240e-01 ,dsig/dt=0.000000e+00
+Test39: t=9.179572e-01 ,dsig/dt=0.000000e+00
+Test39: t=1.158397e+00 ,dsig/dt=0.000000e+00
+Test39: t=1.461814e+00 ,dsig/dt=0.000000e+00
+Test39: t=1.844705e+00 ,dsig/dt=0.000000e+00
+Test39: t=2.327886e+00 ,dsig/dt=0.000000e+00
+Test39: t=2.937626e+00 ,dsig/dt=0.000000e+00
+Test39: Material=Lead, Element[0]=Lead,A[0]=208 is selected.
+Test39:*NewRun* Targ=90082126,Proj=2212,P=1.000000e+05 MeV/c, =>> 40 of 80
+Test39: Mt=1.936877e+05, Mp=9.382723e+02, tmt=1.918789e+04, E=1.000044e+05
+*=>TEST39: 100000 events are simulated
+Test39:CalculationTimePerEvent=8.625000e-05 s
+Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
+Test39: t=3.370068e-04 ,dsig/dt=8.845848e+05
+Test39: t=4.252786e-04 ,dsig/dt=8.474848e+05
+Test39: t=5.366712e-04 ,dsig/dt=7.983046e+05
+Test39: t=6.772408e-04 ,dsig/dt=7.499212e+05
+Test39: t=8.546296e-04 ,dsig/dt=6.841925e+05
+Test39: t=1.078482e-03 ,dsig/dt=6.197950e+05
+Test39: t=1.360967e-03 ,dsig/dt=5.203343e+05
+Test39: t=1.717443e-03 ,dsig/dt=4.362467e+05
+Test39: t=2.167291e-03 ,dsig/dt=3.456738e+05
+Test39: t=2.734967e-03 ,dsig/dt=2.535077e+05
+Test39: t=3.451333e-03 ,dsig/dt=1.745419e+05
+Test39: t=4.355336e-03 ,dsig/dt=1.099444e+05
+Test39: t=5.496123e-03 ,dsig/dt=6.222584e+04
+Test39: t=6.935716e-03 ,dsig/dt=2.996232e+04
+Test39: t=8.752379e-03 ,dsig/dt=1.215951e+04
+Test39: t=1.104488e-02 ,dsig/dt=3.923199e+03
+Test39: t=1.393785e-02 ,dsig/dt=1.654776e+03
+Test39: t=1.758857e-02 ,dsig/dt=1.993675e+03
+Test39: t=2.219552e-02 ,dsig/dt=3.179609e+03
+Test39: t=2.800917e-02 ,dsig/dt=2.879966e+03
+Test39: t=3.534557e-02 ,dsig/dt=7.177358e+02
+Test39: t=4.460359e-02 ,dsig/dt=5.873775e+02
+Test39: t=5.628655e-02 ,dsig/dt=6.301686e+02
+Test39: t=7.102961e-02 ,dsig/dt=8.710396e+01
+Test39: t=8.963431e-02 ,dsig/dt=3.529033e+01
+Test39: t=1.131121e-01 ,dsig/dt=1.988631e+01
+Test39: t=1.427394e-01 ,dsig/dt=9.506628e+00
+Test39: t=1.801270e-01 ,dsig/dt=4.412075e+00
+Test39: t=2.273074e-01 ,dsig/dt=2.472807e+00
+Test39: t=2.868457e-01 ,dsig/dt=1.762268e-01
+Test39: t=3.619788e-01 ,dsig/dt=0.000000e+00
+Test39: t=4.567915e-01 ,dsig/dt=0.000000e+00
+Test39: t=5.764383e-01 ,dsig/dt=0.000000e+00
+Test39: t=7.274240e-01 ,dsig/dt=0.000000e+00
+Test39: t=9.179572e-01 ,dsig/dt=0.000000e+00
+Test39: t=1.158397e+00 ,dsig/dt=0.000000e+00
+Test39: t=1.461814e+00 ,dsig/dt=0.000000e+00
+Test39: t=1.844705e+00 ,dsig/dt=0.000000e+00
+Test39: t=2.327886e+00 ,dsig/dt=0.000000e+00
+Test39: t=2.937626e+00 ,dsig/dt=0.000000e+00
+Test39: Material=Hydrogen, Element[0]=Hydrogen,A[0]=1 is selected.
+Test39:*NewRun* Targ=90001000,Proj=2112,P=3.000000e+01 MeV/c, =>> 41 of 80
+Test39: Mt=9.382723e+02, Mp=9.395656e+02, tmt=4.492661e-04, E=9.400445e+02
+*=>TEST39: 100000 events are simulated
+Test39:CalculationTimePerEvent=8.190000e-05 s
+Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
+Test39: t=3.045046e-04 ,dsig/dt=7.301671e+06
+Test39: t=3.137176e-04 ,dsig/dt=7.043142e+06
+Test39: t=3.232095e-04 ,dsig/dt=6.792230e+06
+Test39: t=3.329885e-04 ,dsig/dt=7.127638e+06
+Test39: t=3.430634e-04 ,dsig/dt=7.002086e+06
+Test39: t=3.534431e-04 ,dsig/dt=7.199550e+06
+Test39: t=3.641368e-04 ,dsig/dt=6.959000e+06
+Test39: t=3.751541e-04 ,dsig/dt=6.864511e+06
+Test39: t=3.865047e-04 ,dsig/dt=7.217525e+06
+Test39: t=3.981988e-04 ,dsig/dt=7.032680e+06
+Test39: t=4.102467e-04 ,dsig/dt=7.024519e+06
+Test39: t=4.226591e-04 ,dsig/dt=7.290952e+06
+Test39: t=4.354470e-04 ,dsig/dt=7.301745e+06
+Test39: t=4.486219e-04 ,dsig/dt=7.100918e+06
+Test39: t=4.621954e-04 ,dsig/dt=7.271369e+06
+Test39: t=4.761795e-04 ,dsig/dt=7.033311e+06
+Test39: t=4.905868e-04 ,dsig/dt=7.115120e+06
+Test39: t=5.054299e-04 ,dsig/dt=7.131258e+06
+Test39: t=5.207222e-04 ,dsig/dt=7.111190e+06
+Test39: t=5.364771e-04 ,dsig/dt=7.097043e+06
+Test39: t=5.527088e-04 ,dsig/dt=6.930172e+06
+Test39: t=5.694315e-04 ,dsig/dt=7.209421e+06
+Test39: t=5.866602e-04 ,dsig/dt=7.216445e+06
+Test39: t=6.044101e-04 ,dsig/dt=7.049102e+06
+Test39: t=6.226971e-04 ,dsig/dt=7.123787e+06
+Test39: t=6.415374e-04 ,dsig/dt=7.014419e+06
+Test39: t=6.609477e-04 ,dsig/dt=7.239113e+06
+Test39: t=6.809453e-04 ,dsig/dt=7.144378e+06
+Test39: t=7.015480e-04 ,dsig/dt=7.128826e+06
+Test39: t=7.227739e-04 ,dsig/dt=7.204707e+06
+Test39: t=7.446422e-04 ,dsig/dt=7.097626e+06
+Test39: t=7.671720e-04 ,dsig/dt=7.147611e+06
+Test39: t=7.903835e-04 ,dsig/dt=7.047488e+06
+Test39: t=8.142973e-04 ,dsig/dt=6.942553e+06
+Test39: t=8.389346e-04 ,dsig/dt=7.098638e+06
+Test39: t=8.643174e-04 ,dsig/dt=7.030440e+06
+Test39: t=8.904681e-04 ,dsig/dt=5.687318e+06
+Test39: t=9.174101e-04 ,dsig/dt=0.000000e+00
+Test39: t=9.451672e-04 ,dsig/dt=0.000000e+00
+Test39: t=9.737641e-04 ,dsig/dt=0.000000e+00
+Test39: Material=Helium, Element[0]=Helium,A[0]=4 is selected.
+Test39:*NewRun* Targ=90002002,Proj=2112,P=3.000000e+01 MeV/c, =>> 42 of 80
+Test39: Mt=3.727417e+03, Mp=9.395656e+02, tmt=1.784772e-03, E=9.400445e+02
+*=>TEST39: 100000 events are simulated
+Test39:CalculationTimePerEvent=8.290000e-05 s
+Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
+Test39: t=3.098006e-04 ,dsig/dt=6.012848e+05
+Test39: t=3.303729e-04 ,dsig/dt=5.797011e+05
+Test39: t=3.523113e-04 ,dsig/dt=5.750208e+05
+Test39: t=3.757064e-04 ,dsig/dt=5.668647e+05
+Test39: t=4.006551e-04 ,dsig/dt=5.752842e+05
+Test39: t=4.272606e-04 ,dsig/dt=5.649146e+05
+Test39: t=4.556327e-04 ,dsig/dt=5.549137e+05
+Test39: t=4.858890e-04 ,dsig/dt=5.500166e+05
+Test39: t=5.181543e-04 ,dsig/dt=5.617215e+05
+Test39: t=5.525623e-04 ,dsig/dt=5.489468e+05
+Test39: t=5.892551e-04 ,dsig/dt=5.575252e+05
+Test39: t=6.283845e-04 ,dsig/dt=5.404020e+05
+Test39: t=6.701122e-04 ,dsig/dt=5.452922e+05
+Test39: t=7.146109e-04 ,dsig/dt=5.439926e+05
+Test39: t=7.620646e-04 ,dsig/dt=5.493656e+05
+Test39: t=8.126693e-04 ,dsig/dt=5.410271e+05
+Test39: t=8.666345e-04 ,dsig/dt=5.393264e+05
+Test39: t=9.241832e-04 ,dsig/dt=5.358809e+05
+Test39: t=9.855534e-04 ,dsig/dt=5.233141e+05
+Test39: t=1.050999e-03 ,dsig/dt=5.317607e+05
+Test39: t=1.120790e-03 ,dsig/dt=5.105805e+05
+Test39: t=1.195216e-03 ,dsig/dt=5.151506e+05
+Test39: t=1.274584e-03 ,dsig/dt=5.184622e+05
+Test39: t=1.359223e-03 ,dsig/dt=5.146744e+05
+Test39: t=1.449482e-03 ,dsig/dt=4.994159e+05
+Test39: t=1.545735e-03 ,dsig/dt=4.981595e+05
+Test39: t=1.648379e-03 ,dsig/dt=4.841027e+05
+Test39: t=1.757839e-03 ,dsig/dt=4.868571e+05
+Test39: t=1.874568e-03 ,dsig/dt=4.747949e+05
+Test39: t=1.999048e-03 ,dsig/dt=4.728698e+05
+Test39: t=2.131795e-03 ,dsig/dt=4.613054e+05
+Test39: t=2.273356e-03 ,dsig/dt=3.002976e+05
+Test39: t=2.424318e-03 ,dsig/dt=0.000000e+00
+Test39: t=2.585305e-03 ,dsig/dt=0.000000e+00
+Test39: t=2.756981e-03 ,dsig/dt=0.000000e+00
+Test39: t=2.940058e-03 ,dsig/dt=0.000000e+00
+Test39: t=3.135292e-03 ,dsig/dt=0.000000e+00
+Test39: t=3.343491e-03 ,dsig/dt=0.000000e+00
+Test39: t=3.565515e-03 ,dsig/dt=0.000000e+00
+Test39: t=3.802282e-03 ,dsig/dt=0.000000e+00
+Test39: Material=Lithium, Element[0]=Lithium,A[0]=7 is selected.
+Test39:*NewRun* Targ=90003004,Proj=2112,P=3.000000e+01 MeV/c, =>> 43 of 80
+Test39: Mt=6.533835e+03, Mp=9.395656e+02, tmt=3.128549e-03, E=9.400445e+02
+*=>TEST39: 100000 events are simulated
+Test39:CalculationTimePerEvent=8.420000e-05 s
+Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
+Test39: t=3.119818e-04 ,dsig/dt=1.819393e+05
+Test39: t=3.374003e-04 ,dsig/dt=1.915982e+05
+Test39: t=3.648896e-04 ,dsig/dt=1.966488e+05
+Test39: t=3.946187e-04 ,dsig/dt=2.023620e+05
+Test39: t=4.267699e-04 ,dsig/dt=2.003186e+05
+Test39: t=4.615405e-04 ,dsig/dt=1.906064e+05
+Test39: t=4.991441e-04 ,dsig/dt=1.816578e+05
+Test39: t=5.398114e-04 ,dsig/dt=1.682181e+05
+Test39: t=5.837921e-04 ,dsig/dt=1.627877e+05
+Test39: t=6.313560e-04 ,dsig/dt=1.657654e+05
+Test39: t=6.827951e-04 ,dsig/dt=1.616195e+05
+Test39: t=7.384252e-04 ,dsig/dt=1.599474e+05
+Test39: t=7.985877e-04 ,dsig/dt=1.605442e+05
+Test39: t=8.636519e-04 ,dsig/dt=1.512804e+05
+Test39: t=9.340171e-04 ,dsig/dt=1.554559e+05
+Test39: t=1.010115e-03 ,dsig/dt=1.575122e+05
+Test39: t=1.092413e-03 ,dsig/dt=1.535520e+05
+Test39: t=1.181417e-03 ,dsig/dt=1.557342e+05
+Test39: t=1.277672e-03 ,dsig/dt=1.526419e+05
+Test39: t=1.381769e-03 ,dsig/dt=1.559496e+05
+Test39: t=1.494347e-03 ,dsig/dt=1.490994e+05
+Test39: t=1.616098e-03 ,dsig/dt=1.488549e+05
+Test39: t=1.747768e-03 ,dsig/dt=1.481220e+05
+Test39: t=1.890165e-03 ,dsig/dt=1.441059e+05
+Test39: t=2.044165e-03 ,dsig/dt=1.425094e+05
+Test39: t=2.210711e-03 ,dsig/dt=1.407283e+05
+Test39: t=2.390827e-03 ,dsig/dt=1.386482e+05
+Test39: t=2.585617e-03 ,dsig/dt=1.346702e+05
+Test39: t=2.796278e-03 ,dsig/dt=3.898723e+04
+Test39: t=3.024102e-03 ,dsig/dt=0.000000e+00
+Test39: t=3.270488e-03 ,dsig/dt=0.000000e+00
+Test39: t=3.536948e-03 ,dsig/dt=0.000000e+00
+Test39: t=3.825118e-03 ,dsig/dt=0.000000e+00
+Test39: t=4.136765e-03 ,dsig/dt=0.000000e+00
+Test39: t=4.473804e-03 ,dsig/dt=0.000000e+00
+Test39: t=4.838303e-03 ,dsig/dt=0.000000e+00
+Test39: t=5.232500e-03 ,dsig/dt=0.000000e+00
+Test39: t=5.658813e-03 ,dsig/dt=0.000000e+00
+Test39: t=6.119859e-03 ,dsig/dt=0.000000e+00
+Test39: t=6.618469e-03 ,dsig/dt=0.000000e+00
+Test39: Material=Carbon, Element[0]=Carbon,A[0]=12 is selected.
+Test39:*NewRun* Targ=90006006,Proj=2112,P=3.000000e+01 MeV/c, =>> 44 of 80
+Test39: Mt=1.117487e+04, Mp=9.395656e+02, tmt=5.350780e-03, E=9.400445e+02
+*=>TEST39: 100000 events are simulated
+Test39:CalculationTimePerEvent=8.325000e-05 s
+Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
+Test39: t=3.140818e-04 ,dsig/dt=2.238958e+04
+Test39: t=3.442593e-04 ,dsig/dt=2.137182e+04
+Test39: t=3.773364e-04 ,dsig/dt=2.194394e+04
+Test39: t=4.135915e-04 ,dsig/dt=2.194365e+04
+Test39: t=4.533301e-04 ,dsig/dt=2.184844e+04
+Test39: t=4.968869e-04 ,dsig/dt=2.174723e+04
+Test39: t=5.446287e-04 ,dsig/dt=2.134338e+04
+Test39: t=5.969576e-04 ,dsig/dt=2.051896e+04
+Test39: t=6.543143e-04 ,dsig/dt=2.097748e+04
+Test39: t=7.171820e-04 ,dsig/dt=2.077592e+04
+Test39: t=7.860902e-04 ,dsig/dt=2.071432e+04
+Test39: t=8.616191e-04 ,dsig/dt=2.051771e+04
+Test39: t=9.444050e-04 ,dsig/dt=2.024014e+04
+Test39: t=1.035145e-03 ,dsig/dt=2.076230e+04
+Test39: t=1.134604e-03 ,dsig/dt=2.006763e+04
+Test39: t=1.243619e-03 ,dsig/dt=1.982643e+04
+Test39: t=1.363108e-03 ,dsig/dt=1.900412e+04
+Test39: t=1.494077e-03 ,dsig/dt=1.924180e+04
+Test39: t=1.637631e-03 ,dsig/dt=1.935133e+04
+Test39: t=1.794978e-03 ,dsig/dt=1.916356e+04
+Test39: t=1.967442e-03 ,dsig/dt=1.874368e+04
+Test39: t=2.156478e-03 ,dsig/dt=1.895984e+04
+Test39: t=2.363676e-03 ,dsig/dt=1.888561e+04
+Test39: t=2.590782e-03 ,dsig/dt=1.894373e+04
+Test39: t=2.839709e-03 ,dsig/dt=1.952670e+04
+Test39: t=3.112553e-03 ,dsig/dt=6.514139e+03
+Test39: t=3.411613e-03 ,dsig/dt=0.000000e+00
+Test39: t=3.739407e-03 ,dsig/dt=0.000000e+00
+Test39: t=4.098696e-03 ,dsig/dt=0.000000e+00
+Test39: t=4.492506e-03 ,dsig/dt=0.000000e+00
+Test39: t=4.924154e-03 ,dsig/dt=0.000000e+00
+Test39: t=5.397276e-03 ,dsig/dt=0.000000e+00
+Test39: t=5.915856e-03 ,dsig/dt=0.000000e+00
+Test39: t=6.484262e-03 ,dsig/dt=0.000000e+00
+Test39: t=7.107281e-03 ,dsig/dt=0.000000e+00
+Test39: t=7.790161e-03 ,dsig/dt=0.000000e+00
+Test39: t=8.538654e-03 ,dsig/dt=0.000000e+00
+Test39: t=9.359063e-03 ,dsig/dt=0.000000e+00
+Test39: t=1.025830e-02 ,dsig/dt=0.000000e+00
+Test39: t=1.124393e-02 ,dsig/dt=0.000000e+00
+Test39: Material=Aluminum, Element[0]=Aluminum,A[0]=27 is selected.
+Test39:*NewRun* Targ=90013014,Proj=2112,P=3.000000e+01 MeV/c, =>> 45 of 80
+Test39: Mt=2.512651e+04, Mp=9.395656e+02, tmt=1.203115e-02, E=9.400445e+02
+*=>TEST39: 100000 events are simulated
+Test39:CalculationTimePerEvent=8.410000e-05 s
+Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
+Test39: t=3.172790e-04 ,dsig/dt=2.217678e+03
+Test39: t=3.548800e-04 ,dsig/dt=2.207072e+03
+Test39: t=3.969372e-04 ,dsig/dt=2.174346e+03
+Test39: t=4.439786e-04 ,dsig/dt=2.214174e+03
+Test39: t=4.965948e-04 ,dsig/dt=2.221085e+03
+Test39: t=5.554467e-04 ,dsig/dt=2.199622e+03
+Test39: t=6.212732e-04 ,dsig/dt=2.130189e+03
+Test39: t=6.949008e-04 ,dsig/dt=2.160618e+03
+Test39: t=7.772541e-04 ,dsig/dt=2.220157e+03
+Test39: t=8.693672e-04 ,dsig/dt=2.091061e+03
+Test39: t=9.723967e-04 ,dsig/dt=2.142793e+03
+Test39: t=1.087636e-03 ,dsig/dt=2.117599e+03
+Test39: t=1.216533e-03 ,dsig/dt=2.188889e+03
+Test39: t=1.360705e-03 ,dsig/dt=2.123597e+03
+Test39: t=1.521964e-03 ,dsig/dt=2.198891e+03
+Test39: t=1.702333e-03 ,dsig/dt=2.189837e+03
+Test39: t=1.904078e-03 ,dsig/dt=2.210848e+03
+Test39: t=2.129732e-03 ,dsig/dt=2.243451e+03
+Test39: t=2.382128e-03 ,dsig/dt=2.268940e+03
+Test39: t=2.664436e-03 ,dsig/dt=2.360821e+03
+Test39: t=2.980201e-03 ,dsig/dt=2.489277e+03
+Test39: t=3.333387e-03 ,dsig/dt=1.399835e+03
+Test39: t=3.728430e-03 ,dsig/dt=0.000000e+00
+Test39: t=4.170289e-03 ,dsig/dt=0.000000e+00
+Test39: t=4.664514e-03 ,dsig/dt=0.000000e+00
+Test39: t=5.217310e-03 ,dsig/dt=0.000000e+00
+Test39: t=5.835618e-03 ,dsig/dt=0.000000e+00
+Test39: t=6.527202e-03 ,dsig/dt=0.000000e+00
+Test39: t=7.300746e-03 ,dsig/dt=0.000000e+00
+Test39: t=8.165964e-03 ,dsig/dt=0.000000e+00
+Test39: t=9.133719e-03 ,dsig/dt=0.000000e+00
+Test39: t=1.021616e-02 ,dsig/dt=0.000000e+00
+Test39: t=1.142689e-02 ,dsig/dt=0.000000e+00
+Test39: t=1.278110e-02 ,dsig/dt=0.000000e+00
+Test39: t=1.429580e-02 ,dsig/dt=0.000000e+00
+Test39: t=1.599001e-02 ,dsig/dt=0.000000e+00
+Test39: t=1.788500e-02 ,dsig/dt=0.000000e+00
+Test39: t=2.000457e-02 ,dsig/dt=0.000000e+00
+Test39: t=2.237532e-02 ,dsig/dt=0.000000e+00
+Test39: t=2.502704e-02 ,dsig/dt=0.000000e+00
+Test39: Material=Copper, Element[0]=Copper,A[0]=63 is selected.
+Test39:*NewRun* Targ=90029034,Proj=2112,P=3.000000e+01 MeV/c, =>> 46 of 80
+Test39: Mt=5.860379e+04, Mp=9.395656e+02, tmt=2.806083e-02, E=9.400445e+02
+*=>TEST39: 100000 events are simulated
+Test39:CalculationTimePerEvent=8.565000e-05 s
+Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
+Test39: t=3.206556e-04 ,dsig/dt=1.526424e+03
+Test39: t=3.663311e-04 ,dsig/dt=1.347985e+03
+Test39: t=4.185129e-04 ,dsig/dt=1.366574e+03
+Test39: t=4.781277e-04 ,dsig/dt=1.386997e+03
+Test39: t=5.462343e-04 ,dsig/dt=1.381771e+03
+Test39: t=6.240423e-04 ,dsig/dt=1.329349e+03
+Test39: t=7.129336e-04 ,dsig/dt=1.418176e+03
+Test39: t=8.144869e-04 ,dsig/dt=1.476165e+03
+Test39: t=9.305060e-04 ,dsig/dt=1.481377e+03
+Test39: t=1.063051e-03 ,dsig/dt=1.553671e+03
+Test39: t=1.214477e-03 ,dsig/dt=1.596473e+03
+Test39: t=1.387472e-03 ,dsig/dt=1.798689e+03
+Test39: t=1.585110e-03 ,dsig/dt=2.141420e+03
+Test39: t=1.810900e-03 ,dsig/dt=2.743445e+03
+Test39: t=2.068852e-03 ,dsig/dt=3.731917e+03
+Test39: t=2.363548e-03 ,dsig/dt=5.251460e+03
+Test39: t=2.700222e-03 ,dsig/dt=7.735442e+03
+Test39: t=3.084854e-03 ,dsig/dt=1.197035e+04
+Test39: t=3.524274e-03 ,dsig/dt=6.666941e+03
+Test39: t=4.026286e-03 ,dsig/dt=0.000000e+00
+Test39: t=4.599808e-03 ,dsig/dt=0.000000e+00
+Test39: t=5.255025e-03 ,dsig/dt=0.000000e+00
+Test39: t=6.003573e-03 ,dsig/dt=0.000000e+00
+Test39: t=6.858748e-03 ,dsig/dt=0.000000e+00
+Test39: t=7.835738e-03 ,dsig/dt=0.000000e+00
+Test39: t=8.951895e-03 ,dsig/dt=0.000000e+00
+Test39: t=1.022704e-02 ,dsig/dt=0.000000e+00
+Test39: t=1.168383e-02 ,dsig/dt=0.000000e+00
+Test39: t=1.334812e-02 ,dsig/dt=0.000000e+00
+Test39: t=1.524948e-02 ,dsig/dt=0.000000e+00
+Test39: t=1.742169e-02 ,dsig/dt=0.000000e+00
+Test39: t=1.990331e-02 ,dsig/dt=0.000000e+00
+Test39: t=2.273842e-02 ,dsig/dt=0.000000e+00
+Test39: t=2.597738e-02 ,dsig/dt=0.000000e+00
+Test39: t=2.967771e-02 ,dsig/dt=0.000000e+00
+Test39: t=3.390513e-02 ,dsig/dt=0.000000e+00
+Test39: t=3.873472e-02 ,dsig/dt=0.000000e+00
+Test39: t=4.425227e-02 ,dsig/dt=0.000000e+00
+Test39: t=5.055575e-02 ,dsig/dt=0.000000e+00
+Test39: t=5.775713e-02 ,dsig/dt=0.000000e+00
+Test39: Material=Tin, Element[0]=Tin,A[0]=119 is selected.
+Test39:*NewRun* Targ=90050069,Proj=2112,P=3.000000e+01 MeV/c, =>> 47 of 80
+Test39: Mt=1.107324e+05, Mp=9.395656e+02, tmt=5.302117e-02, E=9.400445e+02
+*=>TEST39: 100000 events are simulated
+Test39:CalculationTimePerEvent=8.625000e-05 s
+Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
+Test39: t=3.232162e-04 ,dsig/dt=4.706863e+03
+Test39: t=3.751776e-04 ,dsig/dt=4.782425e+03
+Test39: t=4.354925e-04 ,dsig/dt=5.168894e+03
+Test39: t=5.055038e-04 ,dsig/dt=5.013062e+03
+Test39: t=5.867704e-04 ,dsig/dt=4.630916e+03
+Test39: t=6.811017e-04 ,dsig/dt=5.094653e+03
+Test39: t=7.905981e-04 ,dsig/dt=5.122818e+03
+Test39: t=9.176974e-04 ,dsig/dt=5.088254e+03
+Test39: t=1.065230e-03 ,dsig/dt=5.863618e+03
+Test39: t=1.236480e-03 ,dsig/dt=6.306244e+03
+Test39: t=1.435261e-03 ,dsig/dt=7.867741e+03
+Test39: t=1.665998e-03 ,dsig/dt=1.049442e+04
+Test39: t=1.933830e-03 ,dsig/dt=1.497274e+04
+Test39: t=2.244720e-03 ,dsig/dt=2.224121e+04
+Test39: t=2.605589e-03 ,dsig/dt=3.413996e+04
+Test39: t=3.024473e-03 ,dsig/dt=4.977103e+04
+Test39: t=3.510698e-03 ,dsig/dt=3.391727e+04
+Test39: t=4.075090e-03 ,dsig/dt=0.000000e+00
+Test39: t=4.730216e-03 ,dsig/dt=0.000000e+00
+Test39: t=5.490663e-03 ,dsig/dt=0.000000e+00
+Test39: t=6.373361e-03 ,dsig/dt=0.000000e+00
+Test39: t=7.397965e-03 ,dsig/dt=0.000000e+00
+Test39: t=8.587289e-03 ,dsig/dt=0.000000e+00
+Test39: t=9.967812e-03 ,dsig/dt=0.000000e+00
+Test39: t=1.157027e-02 ,dsig/dt=0.000000e+00
+Test39: t=1.343035e-02 ,dsig/dt=0.000000e+00
+Test39: t=1.558946e-02 ,dsig/dt=0.000000e+00
+Test39: t=1.809568e-02 ,dsig/dt=0.000000e+00
+Test39: t=2.100481e-02 ,dsig/dt=0.000000e+00
+Test39: t=2.438161e-02 ,dsig/dt=0.000000e+00
+Test39: t=2.830129e-02 ,dsig/dt=0.000000e+00
+Test39: t=3.285111e-02 ,dsig/dt=0.000000e+00
+Test39: t=3.813237e-02 ,dsig/dt=0.000000e+00
+Test39: t=4.426266e-02 ,dsig/dt=0.000000e+00
+Test39: t=5.137849e-02 ,dsig/dt=0.000000e+00
+Test39: t=5.963827e-02 ,dsig/dt=0.000000e+00
+Test39: t=6.922594e-02 ,dsig/dt=0.000000e+00
+Test39: t=8.035494e-02 ,dsig/dt=0.000000e+00
+Test39: t=9.327309e-02 ,dsig/dt=0.000000e+00
+Test39: t=1.082680e-01 ,dsig/dt=0.000000e+00
+Test39: Material=Lead, Element[0]=Lead,A[0]=208 is selected.
+Test39:*NewRun* Targ=90082126,Proj=2112,P=3.000000e+01 MeV/c, =>> 48 of 80
+Test39: Mt=1.936877e+05, Mp=9.395656e+02, tmt=9.274207e-02, E=9.400445e+02
+*=>TEST39: 100000 events are simulated
+Test39:CalculationTimePerEvent=8.695000e-05 s
+Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
+Test39: t=3.254831e-04 ,dsig/dt=1.141255e+04
+Test39: t=3.831272e-04 ,dsig/dt=1.177986e+04
+Test39: t=4.509801e-04 ,dsig/dt=1.140677e+04
+Test39: t=5.308500e-04 ,dsig/dt=1.203230e+04
+Test39: t=6.248651e-04 ,dsig/dt=1.237812e+04
+Test39: t=7.355306e-04 ,dsig/dt=1.331775e+04
+Test39: t=8.657953e-04 ,dsig/dt=1.524153e+04
+Test39: t=1.019130e-03 ,dsig/dt=1.967120e+04
+Test39: t=1.199621e-03 ,dsig/dt=2.662706e+04
+Test39: t=1.412078e-03 ,dsig/dt=4.082223e+04
+Test39: t=1.662161e-03 ,dsig/dt=6.434705e+04
+Test39: t=1.956534e-03 ,dsig/dt=1.066104e+05
+Test39: t=2.303042e-03 ,dsig/dt=1.651175e+05
+Test39: t=2.710918e-03 ,dsig/dt=2.106467e+05
+Test39: t=3.191030e-03 ,dsig/dt=1.689916e+05
+Test39: t=3.756171e-03 ,dsig/dt=1.831533e+04
+Test39: t=4.421400e-03 ,dsig/dt=0.000000e+00
+Test39: t=5.204442e-03 ,dsig/dt=0.000000e+00
+Test39: t=6.126165e-03 ,dsig/dt=0.000000e+00
+Test39: t=7.211127e-03 ,dsig/dt=0.000000e+00
+Test39: t=8.488239e-03 ,dsig/dt=0.000000e+00
+Test39: t=9.991531e-03 ,dsig/dt=0.000000e+00
+Test39: t=1.176106e-02 ,dsig/dt=0.000000e+00
+Test39: t=1.384398e-02 ,dsig/dt=0.000000e+00
+Test39: t=1.629579e-02 ,dsig/dt=0.000000e+00
+Test39: t=1.918182e-02 ,dsig/dt=0.000000e+00
+Test39: t=2.257898e-02 ,dsig/dt=0.000000e+00
+Test39: t=2.657778e-02 ,dsig/dt=0.000000e+00
+Test39: t=3.128479e-02 ,dsig/dt=0.000000e+00
+Test39: t=3.682542e-02 ,dsig/dt=0.000000e+00
+Test39: t=4.334731e-02 ,dsig/dt=0.000000e+00
+Test39: t=5.102424e-02 ,dsig/dt=0.000000e+00
+Test39: t=6.006079e-02 ,dsig/dt=0.000000e+00
+Test39: t=7.069773e-02 ,dsig/dt=0.000000e+00
+Test39: t=8.321851e-02 ,dsig/dt=0.000000e+00
+Test39: t=9.795676e-02 ,dsig/dt=0.000000e+00
+Test39: t=1.153052e-01 ,dsig/dt=0.000000e+00
+Test39: t=1.357261e-01 ,dsig/dt=0.000000e+00
+Test39: t=1.597636e-01 ,dsig/dt=0.000000e+00
+Test39: t=1.880582e-01 ,dsig/dt=0.000000e+00
+Test39: Material=Hydrogen, Element[0]=Hydrogen,A[0]=1 is selected.
+Test39:*NewRun* Targ=90001000,Proj=2112,P=2.000000e+02 MeV/c, =>> 49 of 80
+Test39: Mt=9.382723e+02, Mp=9.395656e+02, tmt=1.975121e-02, E=9.606162e+02
+*=>TEST39: 100000 events are simulated
+Test39:CalculationTimePerEvent=8.230000e-05 s
+Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
+Test39: t=3.192511e-04 ,dsig/dt=3.246699e+03
+Test39: t=3.615387e-04 ,dsig/dt=3.636834e+03
+Test39: t=4.094277e-04 ,dsig/dt=3.580876e+03
+Test39: t=4.636599e-04 ,dsig/dt=3.726883e+03
+Test39: t=5.250757e-04 ,dsig/dt=3.408635e+03
+Test39: t=5.946266e-04 ,dsig/dt=3.547113e+03
+Test39: t=6.733901e-04 ,dsig/dt=3.449749e+03
+Test39: t=7.625865e-04 ,dsig/dt=3.693657e+03
+Test39: t=8.635977e-04 ,dsig/dt=3.555135e+03
+Test39: t=9.779887e-04 ,dsig/dt=3.684479e+03
+Test39: t=1.107532e-03 ,dsig/dt=3.598955e+03
+Test39: t=1.254234e-03 ,dsig/dt=3.656760e+03
+Test39: t=1.420368e-03 ,dsig/dt=3.555394e+03
+Test39: t=1.608509e-03 ,dsig/dt=3.630645e+03
+Test39: t=1.821569e-03 ,dsig/dt=3.832231e+03
+Test39: t=2.062852e-03 ,dsig/dt=3.697969e+03
+Test39: t=2.336095e-03 ,dsig/dt=3.575092e+03
+Test39: t=2.645531e-03 ,dsig/dt=3.610022e+03
+Test39: t=2.995955e-03 ,dsig/dt=3.757122e+03
+Test39: t=3.392795e-03 ,dsig/dt=3.745732e+03
+Test39: t=3.842200e-03 ,dsig/dt=3.668975e+03
+Test39: t=4.351133e-03 ,dsig/dt=3.677120e+03
+Test39: t=4.927479e-03 ,dsig/dt=3.636239e+03
+Test39: t=5.580166e-03 ,dsig/dt=3.639596e+03
+Test39: t=6.319308e-03 ,dsig/dt=3.711711e+03
+Test39: t=7.156356e-03 ,dsig/dt=3.626777e+03
+Test39: t=8.104277e-03 ,dsig/dt=3.628737e+03
+Test39: t=9.177759e-03 ,dsig/dt=3.685571e+03
+Test39: t=1.039343e-02 ,dsig/dt=3.575697e+03
+Test39: t=1.177013e-02 ,dsig/dt=3.604094e+03
+Test39: t=1.332919e-02 ,dsig/dt=3.672941e+03
+Test39: t=1.509476e-02 ,dsig/dt=3.607298e+03
+Test39: t=1.709419e-02 ,dsig/dt=3.625398e+03
+Test39: t=1.935847e-02 ,dsig/dt=3.672123e+03
+Test39: t=2.192266e-02 ,dsig/dt=3.672182e+03
+Test39: t=2.482651e-02 ,dsig/dt=3.696267e+03
+Test39: t=2.811500e-02 ,dsig/dt=3.665988e+03
+Test39: t=3.183908e-02 ,dsig/dt=3.631488e+03
+Test39: t=3.605644e-02 ,dsig/dt=3.682078e+03
+Test39: t=4.083243e-02 ,dsig/dt=8.762959e+02
+Test39: Material=Helium, Element[0]=Helium,A[0]=4 is selected.
+Test39:*NewRun* Targ=90002002,Proj=2112,P=2.000000e+02 MeV/c, =>> 50 of 80
+Test39: Mt=3.727417e+03, Mp=9.395656e+02, tmt=7.846443e-02, E=9.606162e+02
+*=>TEST39: 100000 events are simulated
+Test39:CalculationTimePerEvent=8.280000e-05 s
+Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
+Test39: t=3.248037e-04 ,dsig/dt=2.260976e+04
+Test39: t=3.807328e-04 ,dsig/dt=2.509931e+04
+Test39: t=4.462926e-04 ,dsig/dt=2.310836e+04
+Test39: t=5.231413e-04 ,dsig/dt=2.324212e+04
+Test39: t=6.132229e-04 ,dsig/dt=2.423571e+04
+Test39: t=7.188160e-04 ,dsig/dt=2.391650e+04
+Test39: t=8.425915e-04 ,dsig/dt=2.405082e+04
+Test39: t=9.876804e-04 ,dsig/dt=2.272893e+04
+Test39: t=1.157753e-03 ,dsig/dt=2.276188e+04
+Test39: t=1.357110e-03 ,dsig/dt=2.355858e+04
+Test39: t=1.590796e-03 ,dsig/dt=2.287378e+04
+Test39: t=1.864721e-03 ,dsig/dt=2.267112e+04
+Test39: t=2.185814e-03 ,dsig/dt=2.287581e+04
+Test39: t=2.562197e-03 ,dsig/dt=2.244702e+04
+Test39: t=3.003391e-03 ,dsig/dt=2.235367e+04
+Test39: t=3.520556e-03 ,dsig/dt=2.204812e+04
+Test39: t=4.126773e-03 ,dsig/dt=2.152357e+04
+Test39: t=4.837377e-03 ,dsig/dt=2.141980e+04
+Test39: t=5.670343e-03 ,dsig/dt=2.065210e+04
+Test39: t=6.646740e-03 ,dsig/dt=1.996281e+04
+Test39: t=7.791266e-03 ,dsig/dt=1.935945e+04
+Test39: t=9.132873e-03 ,dsig/dt=1.807961e+04
+Test39: t=1.070550e-02 ,dsig/dt=1.753840e+04
+Test39: t=1.254891e-02 ,dsig/dt=1.580540e+04
+Test39: t=1.470976e-02 ,dsig/dt=1.469077e+04
+Test39: t=1.724268e-02 ,dsig/dt=1.274736e+04
+Test39: t=2.021176e-02 ,dsig/dt=1.074551e+04
+Test39: t=2.369210e-02 ,dsig/dt=8.606423e+03
+Test39: t=2.777173e-02 ,dsig/dt=6.522409e+03
+Test39: t=3.255384e-02 ,dsig/dt=4.602898e+03
+Test39: t=3.815941e-02 ,dsig/dt=2.927792e+03
+Test39: t=4.473021e-02 ,dsig/dt=1.697413e+03
+Test39: t=5.243247e-02 ,dsig/dt=9.282005e+02
+Test39: t=6.146101e-02 ,dsig/dt=6.559886e+02
+Test39: t=7.204420e-02 ,dsig/dt=7.603756e+02
+Test39: t=8.444975e-02 ,dsig/dt=1.530317e+03
+Test39: t=9.899146e-02 ,dsig/dt=2.318788e+03
+Test39: t=1.160372e-01 ,dsig/dt=0.000000e+00
+Test39: t=1.360180e-01 ,dsig/dt=0.000000e+00
+Test39: t=1.594395e-01 ,dsig/dt=0.000000e+00
+Test39: Material=Lithium, Element[0]=Lithium,A[0]=7 is selected.
+Test39:*NewRun* Targ=90003004,Proj=2112,P=2.000000e+02 MeV/c, =>> 51 of 80
+Test39: Mt=6.533835e+03, Mp=9.395656e+02, tmt=1.375413e-01, E=9.606162e+02
+*=>TEST39: 100000 events are simulated
+Test39:CalculationTimePerEvent=8.315000e-05 s
+Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
+Test39: t=3.270905e-04 ,dsig/dt=1.895222e+03
+Test39: t=3.888314e-04 ,dsig/dt=1.789319e+03
+Test39: t=4.622263e-04 ,dsig/dt=1.824819e+03
+Test39: t=5.494751e-04 ,dsig/dt=1.719251e+03
+Test39: t=6.531928e-04 ,dsig/dt=1.627877e+03
+Test39: t=7.764880e-04 ,dsig/dt=1.758584e+03
+Test39: t=9.230561e-04 ,dsig/dt=1.666151e+03
+Test39: t=1.097290e-03 ,dsig/dt=1.698662e+03
+Test39: t=1.304412e-03 ,dsig/dt=1.790793e+03
+Test39: t=1.550630e-03 ,dsig/dt=1.784243e+03
+Test39: t=1.843323e-03 ,dsig/dt=1.820283e+03
+Test39: t=2.191265e-03 ,dsig/dt=1.746427e+03
+Test39: t=2.604883e-03 ,dsig/dt=1.758559e+03
+Test39: t=3.096575e-03 ,dsig/dt=1.708696e+03
+Test39: t=3.681078e-03 ,dsig/dt=1.731517e+03
+Test39: t=4.375910e-03 ,dsig/dt=1.677679e+03
+Test39: t=5.201896e-03 ,dsig/dt=1.665386e+03
+Test39: t=6.183795e-03 ,dsig/dt=1.669802e+03
+Test39: t=7.351034e-03 ,dsig/dt=1.612049e+03
+Test39: t=8.738598e-03 ,dsig/dt=1.597218e+03
+Test39: t=1.038808e-02 ,dsig/dt=1.512624e+03
+Test39: t=1.234891e-02 ,dsig/dt=1.477932e+03
+Test39: t=1.467986e-02 ,dsig/dt=1.423961e+03
+Test39: t=1.745080e-02 ,dsig/dt=1.295109e+03
+Test39: t=2.074477e-02 ,dsig/dt=1.215009e+03
+Test39: t=2.466050e-02 ,dsig/dt=1.088349e+03
+Test39: t=2.931536e-02 ,dsig/dt=9.552918e+02
+Test39: t=3.484887e-02 ,dsig/dt=7.909390e+02
+Test39: t=4.142686e-02 ,dsig/dt=6.433602e+02
+Test39: t=4.924650e-02 ,dsig/dt=4.891807e+02
+Test39: t=5.854216e-02 ,dsig/dt=3.718176e+02
+Test39: t=6.959245e-02 ,dsig/dt=2.689264e+02
+Test39: t=8.272856e-02 ,dsig/dt=2.042702e+02
+Test39: t=9.834422e-02 ,dsig/dt=1.772563e+02
+Test39: t=1.169075e-01 ,dsig/dt=1.280687e+02
+Test39: t=1.389746e-01 ,dsig/dt=0.000000e+00
+Test39: t=1.652072e-01 ,dsig/dt=0.000000e+00
+Test39: t=1.963913e-01 ,dsig/dt=0.000000e+00
+Test39: t=2.334617e-01 ,dsig/dt=0.000000e+00
+Test39: t=2.775294e-01 ,dsig/dt=0.000000e+00
+Test39: Material=Carbon, Element[0]=Carbon,A[0]=12 is selected.
+Test39:*NewRun* Targ=90006006,Proj=2112,P=2.000000e+02 MeV/c, =>> 52 of 80
+Test39: Mt=1.117487e+04, Mp=9.395656e+02, tmt=2.352378e-01, E=9.606162e+02
+*=>TEST39: 100000 events are simulated
+Test39:CalculationTimePerEvent=8.325000e-05 s
+Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
+Test39: t=3.292921e-04 ,dsig/dt=6.093043e+04
+Test39: t=3.967360e-04 ,dsig/dt=5.760907e+04
+Test39: t=4.779933e-04 ,dsig/dt=6.221087e+04
+Test39: t=5.758933e-04 ,dsig/dt=6.248762e+04
+Test39: t=6.938446e-04 ,dsig/dt=5.952162e+04
+Test39: t=8.359541e-04 ,dsig/dt=5.993889e+04
+Test39: t=1.007170e-03 ,dsig/dt=5.949082e+04
+Test39: t=1.213453e-03 ,dsig/dt=6.036757e+04
+Test39: t=1.461986e-03 ,dsig/dt=6.206410e+04
+Test39: t=1.761422e-03 ,dsig/dt=6.001805e+04
+Test39: t=2.122186e-03 ,dsig/dt=5.829832e+04
+Test39: t=2.556841e-03 ,dsig/dt=5.892924e+04
+Test39: t=3.080519e-03 ,dsig/dt=5.908874e+04
+Test39: t=3.711455e-03 ,dsig/dt=5.794140e+04
+Test39: t=4.471615e-03 ,dsig/dt=5.543936e+04
+Test39: t=5.387467e-03 ,dsig/dt=5.268919e+04
+Test39: t=6.490898e-03 ,dsig/dt=4.846326e+04
+Test39: t=7.820329e-03 ,dsig/dt=4.399638e+04
+Test39: t=9.422046e-03 ,dsig/dt=3.692021e+04
+Test39: t=1.135182e-02 ,dsig/dt=2.950951e+04
+Test39: t=1.367684e-02 ,dsig/dt=2.141556e+04
+Test39: t=1.647805e-02 ,dsig/dt=1.370991e+04
+Test39: t=1.985300e-02 ,dsig/dt=7.275283e+03
+Test39: t=2.391918e-02 ,dsig/dt=3.210481e+03
+Test39: t=2.881818e-02 ,dsig/dt=1.463312e+03
+Test39: t=3.472056e-02 ,dsig/dt=1.004429e+03
+Test39: t=4.183184e-02 ,dsig/dt=1.124423e+03
+Test39: t=5.039961e-02 ,dsig/dt=1.322764e+03
+Test39: t=6.072218e-02 ,dsig/dt=1.179713e+03
+Test39: t=7.315897e-02 ,dsig/dt=7.047723e+02
+Test39: t=8.814300e-02 ,dsig/dt=7.544852e+02
+Test39: t=1.061960e-01 ,dsig/dt=8.549125e+02
+Test39: t=1.279465e-01 ,dsig/dt=2.404149e+02
+Test39: t=1.541518e-01 ,dsig/dt=0.000000e+00
+Test39: t=1.857243e-01 ,dsig/dt=0.000000e+00
+Test39: t=2.237633e-01 ,dsig/dt=0.000000e+00
+Test39: t=2.695933e-01 ,dsig/dt=0.000000e+00
+Test39: t=3.248099e-01 ,dsig/dt=0.000000e+00
+Test39: t=3.913358e-01 ,dsig/dt=0.000000e+00
+Test39: t=4.714870e-01 ,dsig/dt=0.000000e+00
+Test39: Material=Aluminum, Element[0]=Aluminum,A[0]=27 is selected.
+Test39:*NewRun* Targ=90013014,Proj=2112,P=2.000000e+02 MeV/c, =>> 53 of 80
+Test39: Mt=2.512651e+04, Mp=9.395656e+02, tmt=5.289286e-01, E=9.606162e+02
+*=>TEST39: 100000 events are simulated
+Test39:CalculationTimePerEvent=8.435000e-05 s
+Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
+Test39: t=3.326442e-04 ,dsig/dt=1.576802e+04
+Test39: t=4.089756e-04 ,dsig/dt=1.739036e+04
+Test39: t=5.028227e-04 ,dsig/dt=1.803552e+04
+Test39: t=6.182048e-04 ,dsig/dt=2.060946e+04
+Test39: t=7.600634e-04 ,dsig/dt=2.208503e+04
+Test39: t=9.344742e-04 ,dsig/dt=2.264825e+04
+Test39: t=1.148907e-03 ,dsig/dt=2.511802e+04
+Test39: t=1.412545e-03 ,dsig/dt=2.733950e+04
+Test39: t=1.736680e-03 ,dsig/dt=3.001761e+04
+Test39: t=2.135193e-03 ,dsig/dt=3.210211e+04
+Test39: t=2.625153e-03 ,dsig/dt=3.383316e+04
+Test39: t=3.227543e-03 ,dsig/dt=3.658925e+04
+Test39: t=3.968163e-03 ,dsig/dt=3.711611e+04
+Test39: t=4.878732e-03 ,dsig/dt=3.563666e+04
+Test39: t=5.998248e-03 ,dsig/dt=3.240914e+04
+Test39: t=7.374658e-03 ,dsig/dt=2.541052e+04
+Test39: t=9.066911e-03 ,dsig/dt=1.722804e+04
+Test39: t=1.114748e-02 ,dsig/dt=9.151461e+03
+Test39: t=1.370548e-02 ,dsig/dt=4.172170e+03
+Test39: t=1.685046e-02 ,dsig/dt=2.069003e+03
+Test39: t=2.071711e-02 ,dsig/dt=1.825623e+03
+Test39: t=2.547104e-02 ,dsig/dt=2.194052e+03
+Test39: t=3.131585e-02 ,dsig/dt=3.019681e+03
+Test39: t=3.850185e-02 ,dsig/dt=4.307959e+03
+Test39: t=4.733682e-02 ,dsig/dt=4.713656e+03
+Test39: t=5.819914e-02 ,dsig/dt=2.315437e+03
+Test39: t=7.155401e-02 ,dsig/dt=1.005737e+03
+Test39: t=8.797342e-02 ,dsig/dt=1.007229e+03
+Test39: t=1.081606e-01 ,dsig/dt=3.635540e+02
+Test39: t=1.329800e-01 ,dsig/dt=1.342157e+02
+Test39: t=1.634948e-01 ,dsig/dt=4.088757e+00
+Test39: t=2.010117e-01 ,dsig/dt=0.000000e+00
+Test39: t=2.471376e-01 ,dsig/dt=0.000000e+00
+Test39: t=3.038479e-01 ,dsig/dt=0.000000e+00
+Test39: t=3.735715e-01 ,dsig/dt=0.000000e+00
+Test39: t=4.592944e-01 ,dsig/dt=0.000000e+00
+Test39: t=5.646881e-01 ,dsig/dt=0.000000e+00
+Test39: t=6.942663e-01 ,dsig/dt=0.000000e+00
+Test39: t=8.535786e-01 ,dsig/dt=0.000000e+00
+Test39: t=1.049448e+00 ,dsig/dt=0.000000e+00
+Test39: Material=Copper, Element[0]=Copper,A[0]=63 is selected.
+Test39:*NewRun* Targ=90029034,Proj=2112,P=2.000000e+02 MeV/c, =>> 54 of 80
+Test39: Mt=5.860379e+04, Mp=9.395656e+02, tmt=1.233646e+00, E=9.606162e+02
+*=>TEST39: 100000 events are simulated
+Test39:CalculationTimePerEvent=8.570000e-05 s
+Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
+Test39: t=3.361843e-04 ,dsig/dt=5.179366e+04
+Test39: t=4.221723e-04 ,dsig/dt=5.402123e+04
+Test39: t=5.301540e-04 ,dsig/dt=5.912695e+04
+Test39: t=6.657548e-04 ,dsig/dt=5.976561e+04
+Test39: t=8.360391e-04 ,dsig/dt=6.337958e+04
+Test39: t=1.049878e-03 ,dsig/dt=6.498583e+04
+Test39: t=1.318412e-03 ,dsig/dt=6.899224e+04
+Test39: t=1.655631e-03 ,dsig/dt=7.253543e+04
+Test39: t=2.079102e-03 ,dsig/dt=7.547959e+04
+Test39: t=2.610887e-03 ,dsig/dt=8.105979e+04
+Test39: t=3.278690e-03 ,dsig/dt=8.488555e+04
+Test39: t=4.117302e-03 ,dsig/dt=8.505550e+04
+Test39: t=5.170410e-03 ,dsig/dt=8.052025e+04
+Test39: t=6.492879e-03 ,dsig/dt=7.095239e+04
+Test39: t=8.153604e-03 ,dsig/dt=5.566032e+04
+Test39: t=1.023910e-02 ,dsig/dt=3.639293e+04
+Test39: t=1.285802e-02 ,dsig/dt=1.853248e+04
+Test39: t=1.614680e-02 ,dsig/dt=7.958080e+03
+Test39: t=2.027677e-02 ,dsig/dt=4.974600e+03
+Test39: t=2.546309e-02 ,dsig/dt=4.674049e+03
+Test39: t=3.197594e-02 ,dsig/dt=3.807600e+03
+Test39: t=4.015464e-02 ,dsig/dt=2.077305e+03
+Test39: t=5.042524e-02 ,dsig/dt=2.094034e+03
+Test39: t=6.332283e-02 ,dsig/dt=2.400728e+03
+Test39: t=7.951931e-02 ,dsig/dt=1.091294e+03
+Test39: t=9.985846e-02 ,dsig/dt=3.755187e+02
+Test39: t=1.253999e-01 ,dsig/dt=2.036857e+02
+Test39: t=1.574742e-01 ,dsig/dt=5.122005e+01
+Test39: t=1.977524e-01 ,dsig/dt=0.000000e+00
+Test39: t=2.483328e-01 ,dsig/dt=0.000000e+00
+Test39: t=3.118505e-01 ,dsig/dt=0.000000e+00
+Test39: t=3.916144e-01 ,dsig/dt=0.000000e+00
+Test39: t=4.917801e-01 ,dsig/dt=0.000000e+00
+Test39: t=6.175659e-01 ,dsig/dt=0.000000e+00
+Test39: t=7.755246e-01 ,dsig/dt=0.000000e+00
+Test39: t=9.738854e-01 ,dsig/dt=0.000000e+00
+Test39: t=1.222982e+00 ,dsig/dt=0.000000e+00
+Test39: t=1.535792e+00 ,dsig/dt=0.000000e+00
+Test39: t=1.928612e+00 ,dsig/dt=0.000000e+00
+Test39: t=2.421905e+00 ,dsig/dt=0.000000e+00
+Test39: Material=Tin, Element[0]=Tin,A[0]=119 is selected.
+Test39:*NewRun* Targ=90050069,Proj=2112,P=2.000000e+02 MeV/c, =>> 55 of 80
+Test39: Mt=1.107324e+05, Mp=9.395656e+02, tmt=2.330985e+00, E=9.606162e+02
+*=>TEST39: 100000 events are simulated
+Test39:CalculationTimePerEvent=8.635000e-05 s
+Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
+Test39: t=3.370068e-04 ,dsig/dt=2.053597e+06
+Test39: t=4.252786e-04 ,dsig/dt=2.002676e+06
+Test39: t=5.366712e-04 ,dsig/dt=1.881063e+06
+Test39: t=6.772408e-04 ,dsig/dt=1.758309e+06
+Test39: t=8.546296e-04 ,dsig/dt=1.627387e+06
+Test39: t=1.078482e-03 ,dsig/dt=1.460957e+06
+Test39: t=1.360967e-03 ,dsig/dt=1.256962e+06
+Test39: t=1.717443e-03 ,dsig/dt=1.071742e+06
+Test39: t=2.167291e-03 ,dsig/dt=8.662322e+05
+Test39: t=2.734967e-03 ,dsig/dt=6.552745e+05
+Test39: t=3.451333e-03 ,dsig/dt=4.710952e+05
+Test39: t=4.355336e-03 ,dsig/dt=2.993611e+05
+Test39: t=5.496123e-03 ,dsig/dt=1.748968e+05
+Test39: t=6.935716e-03 ,dsig/dt=8.924645e+04
+Test39: t=8.752379e-03 ,dsig/dt=4.026317e+04
+Test39: t=1.104488e-02 ,dsig/dt=1.965878e+04
+Test39: t=1.393785e-02 ,dsig/dt=1.286027e+04
+Test39: t=1.758857e-02 ,dsig/dt=1.175519e+04
+Test39: t=2.219552e-02 ,dsig/dt=9.327309e+03
+Test39: t=2.800917e-02 ,dsig/dt=6.945376e+03
+Test39: t=3.534557e-02 ,dsig/dt=9.061732e+03
+Test39: t=4.460359e-02 ,dsig/dt=8.353189e+03
+Test39: t=5.628655e-02 ,dsig/dt=2.636394e+03
+Test39: t=7.102961e-02 ,dsig/dt=1.617153e+03
+Test39: t=8.963431e-02 ,dsig/dt=8.910571e+02
+Test39: t=1.131121e-01 ,dsig/dt=4.665604e+02
+Test39: t=1.427394e-01 ,dsig/dt=1.943835e+02
+Test39: t=1.801270e-01 ,dsig/dt=0.000000e+00
+Test39: t=2.273074e-01 ,dsig/dt=0.000000e+00
+Test39: t=2.868457e-01 ,dsig/dt=0.000000e+00
+Test39: t=3.619788e-01 ,dsig/dt=0.000000e+00
+Test39: t=4.567915e-01 ,dsig/dt=0.000000e+00
+Test39: t=5.764383e-01 ,dsig/dt=0.000000e+00
+Test39: t=7.274240e-01 ,dsig/dt=0.000000e+00
+Test39: t=9.179572e-01 ,dsig/dt=0.000000e+00
+Test39: t=1.158397e+00 ,dsig/dt=0.000000e+00
+Test39: t=1.461814e+00 ,dsig/dt=0.000000e+00
+Test39: t=1.844705e+00 ,dsig/dt=0.000000e+00
+Test39: t=2.327886e+00 ,dsig/dt=0.000000e+00
+Test39: t=2.937626e+00 ,dsig/dt=0.000000e+00
+Test39: Material=Lead, Element[0]=Lead,A[0]=208 is selected.
+Test39:*NewRun* Targ=90082126,Proj=2112,P=2.000000e+02 MeV/c, =>> 56 of 80
+Test39: Mt=1.936877e+05, Mp=9.395656e+02, tmt=4.077245e+00, E=9.606162e+02
+*=>TEST39: 100000 events are simulated
+Test39:CalculationTimePerEvent=8.705000e-05 s
+Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
+Test39: t=3.370068e-04 ,dsig/dt=1.774483e+06
+Test39: t=4.252786e-04 ,dsig/dt=1.810818e+06
+Test39: t=5.366712e-04 ,dsig/dt=1.714193e+06
+Test39: t=6.772408e-04 ,dsig/dt=1.708877e+06
+Test39: t=8.546296e-04 ,dsig/dt=1.631104e+06
+Test39: t=1.078482e-03 ,dsig/dt=1.538508e+06
+Test39: t=1.360967e-03 ,dsig/dt=1.492366e+06
+Test39: t=1.717443e-03 ,dsig/dt=1.363555e+06
+Test39: t=2.167291e-03 ,dsig/dt=1.262862e+06
+Test39: t=2.734967e-03 ,dsig/dt=1.113524e+06
+Test39: t=3.451333e-03 ,dsig/dt=9.731522e+05
+Test39: t=4.355336e-03 ,dsig/dt=8.033296e+05
+Test39: t=5.496123e-03 ,dsig/dt=6.457455e+05
+Test39: t=6.935716e-03 ,dsig/dt=4.892745e+05
+Test39: t=8.752379e-03 ,dsig/dt=3.337977e+05
+Test39: t=1.104488e-02 ,dsig/dt=2.186513e+05
+Test39: t=1.393785e-02 ,dsig/dt=1.291666e+05
+Test39: t=1.758857e-02 ,dsig/dt=6.711683e+04
+Test39: t=2.219552e-02 ,dsig/dt=4.685476e+04
+Test39: t=2.800917e-02 ,dsig/dt=3.447582e+04
+Test39: t=3.534557e-02 ,dsig/dt=9.244955e+03
+Test39: t=4.460359e-02 ,dsig/dt=5.431977e+03
+Test39: t=5.628655e-02 ,dsig/dt=3.730764e+03
+Test39: t=7.102961e-02 ,dsig/dt=2.305470e+03
+Test39: t=8.963431e-02 ,dsig/dt=1.276582e+03
+Test39: t=1.131121e-01 ,dsig/dt=6.347139e+02
+Test39: t=1.427394e-01 ,dsig/dt=2.322039e+02
+Test39: t=1.801270e-01 ,dsig/dt=0.000000e+00
+Test39: t=2.273074e-01 ,dsig/dt=0.000000e+00
+Test39: t=2.868457e-01 ,dsig/dt=0.000000e+00
+Test39: t=3.619788e-01 ,dsig/dt=0.000000e+00
+Test39: t=4.567915e-01 ,dsig/dt=0.000000e+00
+Test39: t=5.764383e-01 ,dsig/dt=0.000000e+00
+Test39: t=7.274240e-01 ,dsig/dt=0.000000e+00
+Test39: t=9.179572e-01 ,dsig/dt=0.000000e+00
+Test39: t=1.158397e+00 ,dsig/dt=0.000000e+00
+Test39: t=1.461814e+00 ,dsig/dt=0.000000e+00
+Test39: t=1.844705e+00 ,dsig/dt=0.000000e+00
+Test39: t=2.327886e+00 ,dsig/dt=0.000000e+00
+Test39: t=2.937626e+00 ,dsig/dt=0.000000e+00
+Test39: Material=Hydrogen, Element[0]=Hydrogen,A[0]=1 is selected.
+Test39:*NewRun* Targ=90001000,Proj=2112,P=1.500000e+03 MeV/c, =>> 57 of 80
+Test39: Mt=9.382723e+02, Mp=9.395656e+02, tmt=7.791427e-01, E=1.769967e+03
+*=>TEST39: 100000 events are simulated
+Test39:CalculationTimePerEvent=8.215000e-05 s
+Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
+Test39: t=3.342587e-04 ,dsig/dt=1.066859e+02
+Test39: t=4.149595e-04 ,dsig/dt=9.733628e+01
+Test39: t=5.151440e-04 ,dsig/dt=8.815531e+01
+Test39: t=6.395163e-04 ,dsig/dt=1.097593e+02
+Test39: t=7.939160e-04 ,dsig/dt=9.745355e+01
+Test39: t=9.855928e-04 ,dsig/dt=8.744027e+01
+Test39: t=1.223547e-03 ,dsig/dt=8.962107e+01
+Test39: t=1.518950e-03 ,dsig/dt=1.023609e+02
+Test39: t=1.885673e-03 ,dsig/dt=9.122576e+01
+Test39: t=2.340935e-03 ,dsig/dt=9.723529e+01
+Test39: t=2.906112e-03 ,dsig/dt=1.019825e+02
+Test39: t=3.607741e-03 ,dsig/dt=8.984764e+01
+Test39: t=4.478765e-03 ,dsig/dt=9.224121e+01
+Test39: t=5.560082e-03 ,dsig/dt=8.932685e+01
+Test39: t=6.902465e-03 ,dsig/dt=9.178875e+01
+Test39: t=8.568941e-03 ,dsig/dt=9.272304e+01
+Test39: t=1.063776e-02 ,dsig/dt=9.210377e+01
+Test39: t=1.320605e-02 ,dsig/dt=8.902849e+01
+Test39: t=1.639442e-02 ,dsig/dt=8.734892e+01
+Test39: t=2.035256e-02 ,dsig/dt=8.574329e+01
+Test39: t=2.526632e-02 ,dsig/dt=8.180783e+01
+Test39: t=3.136642e-02 ,dsig/dt=8.290546e+01
+Test39: t=3.893928e-02 ,dsig/dt=7.974711e+01
+Test39: t=4.834047e-02 ,dsig/dt=7.550923e+01
+Test39: t=6.001141e-02 ,dsig/dt=7.225823e+01
+Test39: t=7.450008e-02 ,dsig/dt=6.975836e+01
+Test39: t=9.248679e-02 ,dsig/dt=6.468435e+01
+Test39: t=1.148161e-01 ,dsig/dt=6.052224e+01
+Test39: t=1.425364e-01 ,dsig/dt=5.345413e+01
+Test39: t=1.769492e-01 ,dsig/dt=4.697792e+01
+Test39: t=2.196704e-01 ,dsig/dt=3.946854e+01
+Test39: t=2.727059e-01 ,dsig/dt=3.229866e+01
+Test39: t=3.385458e-01 ,dsig/dt=2.471017e+01
+Test39: t=4.202817e-01 ,dsig/dt=1.805062e+01
+Test39: t=5.217511e-01 ,dsig/dt=1.217796e+01
+Test39: t=6.477186e-01 ,dsig/dt=7.595007e+00
+Test39: t=8.040986e-01 ,dsig/dt=4.131900e+00
+Test39: t=9.982338e-01 ,dsig/dt=2.182125e+00
+Test39: t=1.239240e+00 ,dsig/dt=1.055646e+00
+Test39: t=1.538432e+00 ,dsig/dt=3.716539e-01
+Test39: Material=Helium, Element[0]=Helium,A[0]=4 is selected.
+Test39:*NewRun* Targ=90002002,Proj=2112,P=1.500000e+03 MeV/c, =>> 58 of 80
+Test39: Mt=3.727417e+03, Mp=9.395656e+02, tmt=3.095253e+00, E=1.769967e+03
+*=>TEST39: 100000 events are simulated
+Test39:CalculationTimePerEvent=8.785000e-05 s
+Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
+Test39: t=3.370068e-04 ,dsig/dt=8.335905e+02
+Test39: t=4.252786e-04 ,dsig/dt=8.157165e+02
+Test39: t=5.366712e-04 ,dsig/dt=9.000975e+02
+Test39: t=6.772408e-04 ,dsig/dt=8.736981e+02
+Test39: t=8.546296e-04 ,dsig/dt=9.346845e+02
+Test39: t=1.078482e-03 ,dsig/dt=8.705026e+02
+Test39: t=1.360967e-03 ,dsig/dt=9.102097e+02
+Test39: t=1.717443e-03 ,dsig/dt=8.779295e+02
+Test39: t=2.167291e-03 ,dsig/dt=8.569012e+02
+Test39: t=2.734967e-03 ,dsig/dt=8.313592e+02
+Test39: t=3.451333e-03 ,dsig/dt=8.279101e+02
+Test39: t=4.355336e-03 ,dsig/dt=8.083244e+02
+Test39: t=5.496123e-03 ,dsig/dt=7.728226e+02
+Test39: t=6.935716e-03 ,dsig/dt=7.627190e+02
+Test39: t=8.752379e-03 ,dsig/dt=7.226656e+02
+Test39: t=1.104488e-02 ,dsig/dt=6.695040e+02
+Test39: t=1.393785e-02 ,dsig/dt=6.364877e+02
+Test39: t=1.758857e-02 ,dsig/dt=5.805485e+02
+Test39: t=2.219552e-02 ,dsig/dt=5.065673e+02
+Test39: t=2.800917e-02 ,dsig/dt=4.369878e+02
+Test39: t=3.534557e-02 ,dsig/dt=3.536765e+02
+Test39: t=4.460359e-02 ,dsig/dt=2.774932e+02
+Test39: t=5.628655e-02 ,dsig/dt=1.995408e+02
+Test39: t=7.102961e-02 ,dsig/dt=1.275696e+02
+Test39: t=8.963431e-02 ,dsig/dt=7.486943e+01
+Test39: t=1.131121e-01 ,dsig/dt=3.541230e+01
+Test39: t=1.427394e-01 ,dsig/dt=1.416428e+01
+Test39: t=1.801270e-01 ,dsig/dt=4.639410e+00
+Test39: t=2.273074e-01 ,dsig/dt=1.578352e+00
+Test39: t=2.868457e-01 ,dsig/dt=1.291766e+00
+Test39: t=3.619788e-01 ,dsig/dt=1.372266e+00
+Test39: t=4.567915e-01 ,dsig/dt=1.165563e+00
+Test39: t=5.764383e-01 ,dsig/dt=5.108676e-01
+Test39: t=7.274240e-01 ,dsig/dt=1.018726e-01
+Test39: t=9.179572e-01 ,dsig/dt=4.968477e-03
+Test39: t=1.158397e+00 ,dsig/dt=4.374861e-03
+Test39: t=1.461814e+00 ,dsig/dt=4.686425e-04
+Test39: t=1.844705e+00 ,dsig/dt=0.000000e+00
+Test39: t=2.327886e+00 ,dsig/dt=0.000000e+00
+Test39: t=2.937626e+00 ,dsig/dt=0.000000e+00
+Test39: Material=Lithium, Element[0]=Lithium,A[0]=7 is selected.
+Test39:*NewRun* Targ=90003004,Proj=2112,P=1.500000e+03 MeV/c, =>> 59 of 80
+Test39: Mt=6.533835e+03, Mp=9.395656e+02, tmt=5.425706e+00, E=1.769967e+03
+*=>TEST39: 100000 events are simulated
+Test39:CalculationTimePerEvent=8.460000e-05 s
+Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
+Test39: t=3.370068e-04 ,dsig/dt=3.787930e+03
+Test39: t=4.252786e-04 ,dsig/dt=3.830562e+03
+Test39: t=5.366712e-04 ,dsig/dt=3.472049e+03
+Test39: t=6.772408e-04 ,dsig/dt=3.711456e+03
+Test39: t=8.546296e-04 ,dsig/dt=3.669270e+03
+Test39: t=1.078482e-03 ,dsig/dt=3.546140e+03
+Test39: t=1.360967e-03 ,dsig/dt=3.597863e+03
+Test39: t=1.717443e-03 ,dsig/dt=3.507124e+03
+Test39: t=2.167291e-03 ,dsig/dt=3.411506e+03
+Test39: t=2.734967e-03 ,dsig/dt=3.335008e+03
+Test39: t=3.451333e-03 ,dsig/dt=3.135382e+03
+Test39: t=4.355336e-03 ,dsig/dt=3.031696e+03
+Test39: t=5.496123e-03 ,dsig/dt=2.838655e+03
+Test39: t=6.935716e-03 ,dsig/dt=2.566943e+03
+Test39: t=8.752379e-03 ,dsig/dt=2.321845e+03
+Test39: t=1.104488e-02 ,dsig/dt=2.053976e+03
+Test39: t=1.393785e-02 ,dsig/dt=1.691781e+03
+Test39: t=1.758857e-02 ,dsig/dt=1.357951e+03
+Test39: t=2.219552e-02 ,dsig/dt=1.005679e+03
+Test39: t=2.800917e-02 ,dsig/dt=6.806742e+02
+Test39: t=3.534557e-02 ,dsig/dt=4.235727e+02
+Test39: t=4.460359e-02 ,dsig/dt=2.138633e+02
+Test39: t=5.628655e-02 ,dsig/dt=9.574534e+01
+Test39: t=7.102961e-02 ,dsig/dt=3.750825e+01
+Test39: t=8.963431e-02 ,dsig/dt=1.611116e+01
+Test39: t=1.131121e-01 ,dsig/dt=9.565771e+00
+Test39: t=1.427394e-01 ,dsig/dt=6.311683e+00
+Test39: t=1.801270e-01 ,dsig/dt=3.526556e+00
+Test39: t=2.273074e-01 ,dsig/dt=2.093525e+00
+Test39: t=2.868457e-01 ,dsig/dt=9.410393e-01
+Test39: t=3.619788e-01 ,dsig/dt=3.698006e-01
+Test39: t=4.567915e-01 ,dsig/dt=8.554644e-02
+Test39: t=5.764383e-01 ,dsig/dt=2.684896e-02
+Test39: t=7.274240e-01 ,dsig/dt=3.874793e-03
+Test39: t=9.179572e-01 ,dsig/dt=0.000000e+00
+Test39: t=1.158397e+00 ,dsig/dt=0.000000e+00
+Test39: t=1.461814e+00 ,dsig/dt=0.000000e+00
+Test39: t=1.844705e+00 ,dsig/dt=0.000000e+00
+Test39: t=2.327886e+00 ,dsig/dt=0.000000e+00
+Test39: t=2.937626e+00 ,dsig/dt=0.000000e+00
+Test39: Material=Carbon, Element[0]=Carbon,A[0]=12 is selected.
+Test39:*NewRun* Targ=90006006,Proj=2112,P=1.500000e+03 MeV/c, =>> 60 of 80
+Test39: Mt=1.117487e+04, Mp=9.395656e+02, tmt=9.279626e+00, E=1.769967e+03
+*=>TEST39: 100000 events are simulated
+Test39:CalculationTimePerEvent=8.435000e-05 s
+Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
+Test39: t=3.370068e-04 ,dsig/dt=6.148064e+03
+Test39: t=4.252786e-04 ,dsig/dt=6.358461e+03
+Test39: t=5.366712e-04 ,dsig/dt=5.809033e+03
+Test39: t=6.772408e-04 ,dsig/dt=6.112740e+03
+Test39: t=8.546296e-04 ,dsig/dt=6.137534e+03
+Test39: t=1.078482e-03 ,dsig/dt=6.032281e+03
+Test39: t=1.360967e-03 ,dsig/dt=6.121239e+03
+Test39: t=1.717443e-03 ,dsig/dt=5.784172e+03
+Test39: t=2.167291e-03 ,dsig/dt=5.507796e+03
+Test39: t=2.734967e-03 ,dsig/dt=5.380127e+03
+Test39: t=3.451333e-03 ,dsig/dt=5.113363e+03
+Test39: t=4.355336e-03 ,dsig/dt=4.749035e+03
+Test39: t=5.496123e-03 ,dsig/dt=4.339627e+03
+Test39: t=6.935716e-03 ,dsig/dt=3.945509e+03
+Test39: t=8.752379e-03 ,dsig/dt=3.403094e+03
+Test39: t=1.104488e-02 ,dsig/dt=2.875945e+03
+Test39: t=1.393785e-02 ,dsig/dt=2.269725e+03
+Test39: t=1.758857e-02 ,dsig/dt=1.745243e+03
+Test39: t=2.219552e-02 ,dsig/dt=1.255354e+03
+Test39: t=2.800917e-02 ,dsig/dt=8.119506e+02
+Test39: t=3.534557e-02 ,dsig/dt=4.638045e+02
+Test39: t=4.460359e-02 ,dsig/dt=2.369934e+02
+Test39: t=5.628655e-02 ,dsig/dt=1.004870e+02
+Test39: t=7.102961e-02 ,dsig/dt=3.462315e+01
+Test39: t=8.963431e-02 ,dsig/dt=1.029219e+01
+Test39: t=1.131121e-01 ,dsig/dt=4.723261e+00
+Test39: t=1.427394e-01 ,dsig/dt=6.151683e+00
+Test39: t=1.801270e-01 ,dsig/dt=5.391553e+00
+Test39: t=2.273074e-01 ,dsig/dt=1.184298e+00
+Test39: t=2.868457e-01 ,dsig/dt=6.016278e-02
+Test39: t=3.619788e-01 ,dsig/dt=8.785795e-02
+Test39: t=4.567915e-01 ,dsig/dt=8.433238e-02
+Test39: t=5.764383e-01 ,dsig/dt=7.028540e-03
+Test39: t=7.274240e-01 ,dsig/dt=0.000000e+00
+Test39: t=9.179572e-01 ,dsig/dt=0.000000e+00
+Test39: t=1.158397e+00 ,dsig/dt=0.000000e+00
+Test39: t=1.461814e+00 ,dsig/dt=0.000000e+00
+Test39: t=1.844705e+00 ,dsig/dt=0.000000e+00
+Test39: t=2.327886e+00 ,dsig/dt=0.000000e+00
+Test39: t=2.937626e+00 ,dsig/dt=0.000000e+00
+Test39: Material=Aluminum, Element[0]=Aluminum,A[0]=27 is selected.
+Test39:*NewRun* Targ=90013014,Proj=2112,P=1.500000e+03 MeV/c, =>> 61 of 80
+Test39: Mt=2.512651e+04, Mp=9.395656e+02, tmt=2.086509e+01, E=1.769967e+03
+*=>TEST39: 100000 events are simulated
+Test39:CalculationTimePerEvent=8.555000e-05 s
+Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
+Test39: t=3.370068e-04 ,dsig/dt=2.248885e+04
+Test39: t=4.252786e-04 ,dsig/dt=2.180199e+04
+Test39: t=5.366712e-04 ,dsig/dt=2.226525e+04
+Test39: t=6.772408e-04 ,dsig/dt=2.150051e+04
+Test39: t=8.546296e-04 ,dsig/dt=2.139389e+04
+Test39: t=1.078482e-03 ,dsig/dt=1.976238e+04
+Test39: t=1.360967e-03 ,dsig/dt=1.952359e+04
+Test39: t=1.717443e-03 ,dsig/dt=1.855021e+04
+Test39: t=2.167291e-03 ,dsig/dt=1.809531e+04
+Test39: t=2.734967e-03 ,dsig/dt=1.674766e+04
+Test39: t=3.451333e-03 ,dsig/dt=1.526863e+04
+Test39: t=4.355336e-03 ,dsig/dt=1.386984e+04
+Test39: t=5.496123e-03 ,dsig/dt=1.219049e+04
+Test39: t=6.935716e-03 ,dsig/dt=1.015718e+04
+Test39: t=8.752379e-03 ,dsig/dt=8.173120e+03
+Test39: t=1.104488e-02 ,dsig/dt=6.234912e+03
+Test39: t=1.393785e-02 ,dsig/dt=4.471856e+03
+Test39: t=1.758857e-02 ,dsig/dt=2.986974e+03
+Test39: t=2.219552e-02 ,dsig/dt=1.707843e+03
+Test39: t=2.800917e-02 ,dsig/dt=8.799750e+02
+Test39: t=3.534557e-02 ,dsig/dt=3.779376e+02
+Test39: t=4.460359e-02 ,dsig/dt=1.397788e+02
+Test39: t=5.628655e-02 ,dsig/dt=5.436136e+01
+Test39: t=7.102961e-02 ,dsig/dt=4.431841e+01
+Test39: t=8.963431e-02 ,dsig/dt=4.849468e+01
+Test39: t=1.131121e-01 ,dsig/dt=1.743488e+01
+Test39: t=1.427394e-01 ,dsig/dt=1.148017e+00
+Test39: t=1.801270e-01 ,dsig/dt=1.482266e+00
+Test39: t=2.273074e-01 ,dsig/dt=2.457548e+00
+Test39: t=2.868457e-01 ,dsig/dt=1.079809e+00
+Test39: t=3.619788e-01 ,dsig/dt=5.164277e-02
+Test39: t=4.567915e-01 ,dsig/dt=8.414134e-03
+Test39: t=5.764383e-01 ,dsig/dt=7.314369e-03
+Test39: t=7.274240e-01 ,dsig/dt=0.000000e+00
+Test39: t=9.179572e-01 ,dsig/dt=0.000000e+00
+Test39: t=1.158397e+00 ,dsig/dt=0.000000e+00
+Test39: t=1.461814e+00 ,dsig/dt=0.000000e+00
+Test39: t=1.844705e+00 ,dsig/dt=0.000000e+00
+Test39: t=2.327886e+00 ,dsig/dt=0.000000e+00
+Test39: t=2.937626e+00 ,dsig/dt=0.000000e+00
+Test39: Material=Copper, Element[0]=Copper,A[0]=63 is selected.
+Test39:*NewRun* Targ=90029034,Proj=2112,P=1.500000e+03 MeV/c, =>> 62 of 80
+Test39: Mt=5.860379e+04, Mp=9.395656e+02, tmt=4.866468e+01, E=1.769967e+03
+*=>TEST39: 100000 events are simulated
+Test39:CalculationTimePerEvent=8.625000e-05 s
+Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
+Test39: t=3.370068e-04 ,dsig/dt=9.042125e+04
+Test39: t=4.252786e-04 ,dsig/dt=8.660576e+04
+Test39: t=5.366712e-04 ,dsig/dt=8.526487e+04
+Test39: t=6.772408e-04 ,dsig/dt=8.202556e+04
+Test39: t=8.546296e-04 ,dsig/dt=7.986219e+04
+Test39: t=1.078482e-03 ,dsig/dt=7.629271e+04
+Test39: t=1.360967e-03 ,dsig/dt=7.193809e+04
+Test39: t=1.717443e-03 ,dsig/dt=6.731899e+04
+Test39: t=2.167291e-03 ,dsig/dt=5.928434e+04
+Test39: t=2.734967e-03 ,dsig/dt=5.308950e+04
+Test39: t=3.451333e-03 ,dsig/dt=4.619403e+04
+Test39: t=4.355336e-03 ,dsig/dt=3.771620e+04
+Test39: t=5.496123e-03 ,dsig/dt=2.982707e+04
+Test39: t=6.935716e-03 ,dsig/dt=2.164397e+04
+Test39: t=8.752379e-03 ,dsig/dt=1.476240e+04
+Test39: t=1.104488e-02 ,dsig/dt=8.983697e+03
+Test39: t=1.393785e-02 ,dsig/dt=4.811540e+03
+Test39: t=1.758857e-02 ,dsig/dt=2.269082e+03
+Test39: t=2.219552e-02 ,dsig/dt=8.980930e+02
+Test39: t=2.800917e-02 ,dsig/dt=3.139789e+02
+Test39: t=3.534557e-02 ,dsig/dt=2.112372e+02
+Test39: t=4.460359e-02 ,dsig/dt=2.775755e+02
+Test39: t=5.628655e-02 ,dsig/dt=2.328379e+02
+Test39: t=7.102961e-02 ,dsig/dt=5.036377e+01
+Test39: t=8.963431e-02 ,dsig/dt=1.668014e+01
+Test39: t=1.131121e-01 ,dsig/dt=2.588387e+01
+Test39: t=1.427394e-01 ,dsig/dt=2.072677e+01
+Test39: t=1.801270e-01 ,dsig/dt=3.364883e+00
+Test39: t=2.273074e-01 ,dsig/dt=1.542291e+00
+Test39: t=2.868457e-01 ,dsig/dt=7.829617e-01
+Test39: t=3.619788e-01 ,dsig/dt=8.302013e-02
+Test39: t=4.567915e-01 ,dsig/dt=2.417826e-02
+Test39: t=5.764383e-01 ,dsig/dt=0.000000e+00
+Test39: t=7.274240e-01 ,dsig/dt=0.000000e+00
+Test39: t=9.179572e-01 ,dsig/dt=0.000000e+00
+Test39: t=1.158397e+00 ,dsig/dt=0.000000e+00
+Test39: t=1.461814e+00 ,dsig/dt=0.000000e+00
+Test39: t=1.844705e+00 ,dsig/dt=0.000000e+00
+Test39: t=2.327886e+00 ,dsig/dt=0.000000e+00
+Test39: t=2.937626e+00 ,dsig/dt=0.000000e+00
+Test39: Material=Tin, Element[0]=Tin,A[0]=119 is selected.
+Test39:*NewRun* Targ=90050069,Proj=2112,P=1.500000e+03 MeV/c, =>> 63 of 80
+Test39: Mt=1.107324e+05, Mp=9.395656e+02, tmt=9.195233e+01, E=1.769967e+03
+*=>TEST39: 100000 events are simulated
+Test39:CalculationTimePerEvent=8.670000e-05 s
+Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
+Test39: t=3.370068e-04 ,dsig/dt=2.406279e+05
+Test39: t=4.252786e-04 ,dsig/dt=2.300489e+05
+Test39: t=5.366712e-04 ,dsig/dt=2.257792e+05
+Test39: t=6.772408e-04 ,dsig/dt=2.115192e+05
+Test39: t=8.546296e-04 ,dsig/dt=1.995751e+05
+Test39: t=1.078482e-03 ,dsig/dt=1.861239e+05
+Test39: t=1.360967e-03 ,dsig/dt=1.722384e+05
+Test39: t=1.717443e-03 ,dsig/dt=1.512055e+05
+Test39: t=2.167291e-03 ,dsig/dt=1.322720e+05
+Test39: t=2.734967e-03 ,dsig/dt=1.091885e+05
+Test39: t=3.451333e-03 ,dsig/dt=8.584021e+04
+Test39: t=4.355336e-03 ,dsig/dt=6.504731e+04
+Test39: t=5.496123e-03 ,dsig/dt=4.465221e+04
+Test39: t=6.935716e-03 ,dsig/dt=2.839861e+04
+Test39: t=8.752379e-03 ,dsig/dt=1.543202e+04
+Test39: t=1.104488e-02 ,dsig/dt=7.484142e+03
+Test39: t=1.393785e-02 ,dsig/dt=2.886826e+03
+Test39: t=1.758857e-02 ,dsig/dt=1.043224e+03
+Test39: t=2.219552e-02 ,dsig/dt=6.290225e+02
+Test39: t=2.800917e-02 ,dsig/dt=8.829117e+02
+Test39: t=3.534557e-02 ,dsig/dt=9.702638e+02
+Test39: t=4.460359e-02 ,dsig/dt=3.624360e+02
+Test39: t=5.628655e-02 ,dsig/dt=1.005357e+02
+Test39: t=7.102961e-02 ,dsig/dt=1.619373e+02
+Test39: t=8.963431e-02 ,dsig/dt=1.120578e+02
+Test39: t=1.131121e-01 ,dsig/dt=2.319716e+01
+Test39: t=1.427394e-01 ,dsig/dt=1.218936e+01
+Test39: t=1.801270e-01 ,dsig/dt=8.714739e+00
+Test39: t=2.273074e-01 ,dsig/dt=3.889165e+00
+Test39: t=2.868457e-01 ,dsig/dt=1.361938e+00
+Test39: t=3.619788e-01 ,dsig/dt=3.064157e-01
+Test39: t=4.567915e-01 ,dsig/dt=7.795923e-02
+Test39: t=5.764383e-01 ,dsig/dt=6.377575e-02
+Test39: t=7.274240e-01 ,dsig/dt=0.000000e+00
+Test39: t=9.179572e-01 ,dsig/dt=0.000000e+00
+Test39: t=1.158397e+00 ,dsig/dt=0.000000e+00
+Test39: t=1.461814e+00 ,dsig/dt=0.000000e+00
+Test39: t=1.844705e+00 ,dsig/dt=0.000000e+00
+Test39: t=2.327886e+00 ,dsig/dt=0.000000e+00
+Test39: t=2.937626e+00 ,dsig/dt=0.000000e+00
+Test39: Material=Lead, Element[0]=Lead,A[0]=208 is selected.
+Test39:*NewRun* Targ=90082126,Proj=2112,P=1.500000e+03 MeV/c, =>> 64 of 80
+Test39: Mt=1.936877e+05, Mp=9.395656e+02, tmt=1.608385e+02, E=1.769967e+03
+*=>TEST39: 100000 events are simulated
+Test39:CalculationTimePerEvent=8.725000e-05 s
+Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
+Test39: t=3.370068e-04 ,dsig/dt=4.956944e+05
+Test39: t=4.252786e-04 ,dsig/dt=4.747977e+05
+Test39: t=5.366712e-04 ,dsig/dt=4.483533e+05
+Test39: t=6.772408e-04 ,dsig/dt=4.324808e+05
+Test39: t=8.546296e-04 ,dsig/dt=3.986933e+05
+Test39: t=1.078482e-03 ,dsig/dt=3.654488e+05
+Test39: t=1.360967e-03 ,dsig/dt=3.273959e+05
+Test39: t=1.717443e-03 ,dsig/dt=2.829134e+05
+Test39: t=2.167291e-03 ,dsig/dt=2.357469e+05
+Test39: t=2.734967e-03 ,dsig/dt=1.898151e+05
+Test39: t=3.451333e-03 ,dsig/dt=1.404861e+05
+Test39: t=4.355336e-03 ,dsig/dt=9.559593e+04
+Test39: t=5.496123e-03 ,dsig/dt=5.908415e+04
+Test39: t=6.935716e-03 ,dsig/dt=3.189474e+04
+Test39: t=8.752379e-03 ,dsig/dt=1.473804e+04
+Test39: t=1.104488e-02 ,dsig/dt=5.601620e+03
+Test39: t=1.393785e-02 ,dsig/dt=2.233312e+03
+Test39: t=1.758857e-02 ,dsig/dt=2.053001e+03
+Test39: t=2.219552e-02 ,dsig/dt=3.021053e+03
+Test39: t=2.800917e-02 ,dsig/dt=2.334961e+03
+Test39: t=3.534557e-02 ,dsig/dt=4.827064e+02
+Test39: t=4.460359e-02 ,dsig/dt=4.890088e+02
+Test39: t=5.628655e-02 ,dsig/dt=5.746325e+02
+Test39: t=7.102961e-02 ,dsig/dt=1.200728e+02
+Test39: t=8.963431e-02 ,dsig/dt=4.972375e+01
+Test39: t=1.131121e-01 ,dsig/dt=2.972512e+01
+Test39: t=1.427394e-01 ,dsig/dt=2.128885e+01
+Test39: t=1.801270e-01 ,dsig/dt=9.221493e+00
+Test39: t=2.273074e-01 ,dsig/dt=4.846686e+00
+Test39: t=2.868457e-01 ,dsig/dt=1.343970e+00
+Test39: t=3.619788e-01 ,dsig/dt=6.290116e-01
+Test39: t=4.567915e-01 ,dsig/dt=2.126493e-01
+Test39: t=5.764383e-01 ,dsig/dt=0.000000e+00
+Test39: t=7.274240e-01 ,dsig/dt=0.000000e+00
+Test39: t=9.179572e-01 ,dsig/dt=0.000000e+00
+Test39: t=1.158397e+00 ,dsig/dt=0.000000e+00
+Test39: t=1.461814e+00 ,dsig/dt=0.000000e+00
+Test39: t=1.844705e+00 ,dsig/dt=0.000000e+00
+Test39: t=2.327886e+00 ,dsig/dt=0.000000e+00
+Test39: t=2.937626e+00 ,dsig/dt=0.000000e+00
+Test39: Material=Hydrogen, Element[0]=Hydrogen,A[0]=1 is selected.
+Test39:*NewRun* Targ=90001000,Proj=2112,P=1.000000e+04 MeV/c, =>> 65 of 80
+Test39: Mt=9.382723e+02, Mp=9.395656e+02, tmt=8.542478e+00, E=1.004404e+04
+*=>TEST39: 100000 events are simulated
+Test39:CalculationTimePerEvent=8.215000e-05 s
+Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
+Test39: t=3.370068e-04 ,dsig/dt=7.954821e+01
+Test39: t=4.252786e-04 ,dsig/dt=9.657984e+01
+Test39: t=5.366712e-04 ,dsig/dt=8.714012e+01
+Test39: t=6.772408e-04 ,dsig/dt=8.947727e+01
+Test39: t=8.546296e-04 ,dsig/dt=9.099339e+01
+Test39: t=1.078482e-03 ,dsig/dt=9.291241e+01
+Test39: t=1.360967e-03 ,dsig/dt=9.123949e+01
+Test39: t=1.717443e-03 ,dsig/dt=8.740454e+01
+Test39: t=2.167291e-03 ,dsig/dt=9.190675e+01
+Test39: t=2.734967e-03 ,dsig/dt=8.820127e+01
+Test39: t=3.451333e-03 ,dsig/dt=8.869729e+01
+Test39: t=4.355336e-03 ,dsig/dt=9.015118e+01
+Test39: t=5.496123e-03 ,dsig/dt=8.641324e+01
+Test39: t=6.935716e-03 ,dsig/dt=8.650256e+01
+Test39: t=8.752379e-03 ,dsig/dt=8.499391e+01
+Test39: t=1.104488e-02 ,dsig/dt=8.274289e+01
+Test39: t=1.393785e-02 ,dsig/dt=8.060132e+01
+Test39: t=1.758857e-02 ,dsig/dt=8.004589e+01
+Test39: t=2.219552e-02 ,dsig/dt=7.558620e+01
+Test39: t=2.800917e-02 ,dsig/dt=7.159312e+01
+Test39: t=3.534557e-02 ,dsig/dt=6.664697e+01
+Test39: t=4.460359e-02 ,dsig/dt=6.169876e+01
+Test39: t=5.628655e-02 ,dsig/dt=5.458113e+01
+Test39: t=7.102961e-02 ,dsig/dt=4.856528e+01
+Test39: t=8.963431e-02 ,dsig/dt=4.078765e+01
+Test39: t=1.131121e-01 ,dsig/dt=3.309043e+01
+Test39: t=1.427394e-01 ,dsig/dt=2.524350e+01
+Test39: t=1.801270e-01 ,dsig/dt=1.802285e+01
+Test39: t=2.273074e-01 ,dsig/dt=1.180144e+01
+Test39: t=2.868457e-01 ,dsig/dt=6.984411e+00
+Test39: t=3.619788e-01 ,dsig/dt=3.513199e+00
+Test39: t=4.567915e-01 ,dsig/dt=1.500716e+00
+Test39: t=5.764383e-01 ,dsig/dt=5.394715e-01
+Test39: t=7.274240e-01 ,dsig/dt=1.330376e-01
+Test39: t=9.179572e-01 ,dsig/dt=2.756610e-02
+Test39: t=1.158397e+00 ,dsig/dt=2.392209e-03
+Test39: t=1.461814e+00 ,dsig/dt=1.663829e-04
+Test39: t=1.844705e+00 ,dsig/dt=0.000000e+00
+Test39: t=2.327886e+00 ,dsig/dt=0.000000e+00
+Test39: t=2.937626e+00 ,dsig/dt=0.000000e+00
+Test39: Material=Helium, Element[0]=Helium,A[0]=4 is selected.
+Test39:*NewRun* Targ=90002002,Proj=2112,P=1.000000e+04 MeV/c, =>> 66 of 80
+Test39: Mt=3.727417e+03, Mp=9.395656e+02, tmt=3.393618e+01, E=1.004404e+04
+*=>TEST39: 100000 events are simulated
+Test39:CalculationTimePerEvent=8.395000e-05 s
+Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
+Test39: t=3.370068e-04 ,dsig/dt=7.975252e+02
+Test39: t=4.252786e-04 ,dsig/dt=7.756206e+02
+Test39: t=5.366712e-04 ,dsig/dt=7.898627e+02
+Test39: t=6.772408e-04 ,dsig/dt=7.876840e+02
+Test39: t=8.546296e-04 ,dsig/dt=8.128830e+02
+Test39: t=1.078482e-03 ,dsig/dt=7.764082e+02
+Test39: t=1.360967e-03 ,dsig/dt=7.702678e+02
+Test39: t=1.717443e-03 ,dsig/dt=7.899529e+02
+Test39: t=2.167291e-03 ,dsig/dt=7.792918e+02
+Test39: t=2.734967e-03 ,dsig/dt=7.818882e+02
+Test39: t=3.451333e-03 ,dsig/dt=7.510454e+02
+Test39: t=4.355336e-03 ,dsig/dt=7.416692e+02
+Test39: t=5.496123e-03 ,dsig/dt=7.330118e+02
+Test39: t=6.935716e-03 ,dsig/dt=6.999103e+02
+Test39: t=8.752379e-03 ,dsig/dt=6.716180e+02
+Test39: t=1.104488e-02 ,dsig/dt=6.575123e+02
+Test39: t=1.393785e-02 ,dsig/dt=6.092375e+02
+Test39: t=1.758857e-02 ,dsig/dt=5.589344e+02
+Test39: t=2.219552e-02 ,dsig/dt=5.032933e+02
+Test39: t=2.800917e-02 ,dsig/dt=4.252874e+02
+Test39: t=3.534557e-02 ,dsig/dt=3.512823e+02
+Test39: t=4.460359e-02 ,dsig/dt=2.693895e+02
+Test39: t=5.628655e-02 ,dsig/dt=1.832995e+02
+Test39: t=7.102961e-02 ,dsig/dt=1.041180e+02
+Test39: t=8.963431e-02 ,dsig/dt=4.933207e+01
+Test39: t=1.131121e-01 ,dsig/dt=1.673721e+01
+Test39: t=1.427394e-01 ,dsig/dt=3.855037e+00
+Test39: t=1.801270e-01 ,dsig/dt=5.912504e-01
+Test39: t=2.273074e-01 ,dsig/dt=2.414683e-01
+Test39: t=2.868457e-01 ,dsig/dt=2.428489e-01
+Test39: t=3.619788e-01 ,dsig/dt=2.683462e-01
+Test39: t=4.567915e-01 ,dsig/dt=1.959656e-01
+Test39: t=5.764383e-01 ,dsig/dt=6.475623e-02
+Test39: t=7.274240e-01 ,dsig/dt=1.366970e-02
+Test39: t=9.179572e-01 ,dsig/dt=1.307166e-03
+Test39: t=1.158397e+00 ,dsig/dt=2.355309e-03
+Test39: t=1.461814e+00 ,dsig/dt=4.390123e-04
+Test39: t=1.844705e+00 ,dsig/dt=3.897493e-04
+Test39: t=2.327886e+00 ,dsig/dt=0.000000e+00
+Test39: t=2.937626e+00 ,dsig/dt=0.000000e+00
+Test39: Material=Lithium, Element[0]=Lithium,A[0]=7 is selected.
+Test39:*NewRun* Targ=90003004,Proj=2112,P=1.000000e+04 MeV/c, =>> 67 of 80
+Test39: Mt=6.533835e+03, Mp=9.395656e+02, tmt=5.948715e+01, E=1.004404e+04
+*=>TEST39: 100000 events are simulated
+Test39:CalculationTimePerEvent=8.485000e-05 s
+Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
+Test39: t=3.370068e-04 ,dsig/dt=3.172122e+03
+Test39: t=4.252786e-04 ,dsig/dt=3.261730e+03
+Test39: t=5.366712e-04 ,dsig/dt=3.126385e+03
+Test39: t=6.772408e-04 ,dsig/dt=3.401795e+03
+Test39: t=8.546296e-04 ,dsig/dt=3.338281e+03
+Test39: t=1.078482e-03 ,dsig/dt=3.164272e+03
+Test39: t=1.360967e-03 ,dsig/dt=3.105060e+03
+Test39: t=1.717443e-03 ,dsig/dt=3.095998e+03
+Test39: t=2.167291e-03 ,dsig/dt=3.045321e+03
+Test39: t=2.734967e-03 ,dsig/dt=2.912184e+03
+Test39: t=3.451333e-03 ,dsig/dt=2.749583e+03
+Test39: t=4.355336e-03 ,dsig/dt=2.614297e+03
+Test39: t=5.496123e-03 ,dsig/dt=2.464528e+03
+Test39: t=6.935716e-03 ,dsig/dt=2.231578e+03
+Test39: t=8.752379e-03 ,dsig/dt=2.009592e+03
+Test39: t=1.104488e-02 ,dsig/dt=1.809993e+03
+Test39: t=1.393785e-02 ,dsig/dt=1.493918e+03
+Test39: t=1.758857e-02 ,dsig/dt=1.207738e+03
+Test39: t=2.219552e-02 ,dsig/dt=9.152700e+02
+Test39: t=2.800917e-02 ,dsig/dt=6.339591e+02
+Test39: t=3.534557e-02 ,dsig/dt=3.978930e+02
+Test39: t=4.460359e-02 ,dsig/dt=2.223353e+02
+Test39: t=5.628655e-02 ,dsig/dt=1.108029e+02
+Test39: t=7.102961e-02 ,dsig/dt=4.817917e+01
+Test39: t=8.963431e-02 ,dsig/dt=2.040504e+01
+Test39: t=1.131121e-01 ,dsig/dt=1.039432e+01
+Test39: t=1.427394e-01 ,dsig/dt=6.342349e+00
+Test39: t=1.801270e-01 ,dsig/dt=3.548271e+00
+Test39: t=2.273074e-01 ,dsig/dt=1.766593e+00
+Test39: t=2.868457e-01 ,dsig/dt=7.544754e-01
+Test39: t=3.619788e-01 ,dsig/dt=1.855936e-01
+Test39: t=4.567915e-01 ,dsig/dt=5.261014e-02
+Test39: t=5.764383e-01 ,dsig/dt=2.402053e-02
+Test39: t=7.274240e-01 ,dsig/dt=1.882015e-03
+Test39: t=9.179572e-01 ,dsig/dt=0.000000e+00
+Test39: t=1.158397e+00 ,dsig/dt=0.000000e+00
+Test39: t=1.461814e+00 ,dsig/dt=0.000000e+00
+Test39: t=1.844705e+00 ,dsig/dt=0.000000e+00
+Test39: t=2.327886e+00 ,dsig/dt=0.000000e+00
+Test39: t=2.937626e+00 ,dsig/dt=0.000000e+00
+Test39: Material=Carbon, Element[0]=Carbon,A[0]=12 is selected.
+Test39:*NewRun* Targ=90006006,Proj=2112,P=1.000000e+04 MeV/c, =>> 68 of 80
+Test39: Mt=1.117487e+04, Mp=9.395656e+02, tmt=1.017413e+02, E=1.004404e+04
+*=>TEST39: 100000 events are simulated
+Test39:CalculationTimePerEvent=8.485000e-05 s
+Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
+Test39: t=3.370068e-04 ,dsig/dt=6.384450e+03
+Test39: t=4.252786e-04 ,dsig/dt=6.575502e+03
+Test39: t=5.366712e-04 ,dsig/dt=6.721482e+03
+Test39: t=6.772408e-04 ,dsig/dt=6.566878e+03
+Test39: t=8.546296e-04 ,dsig/dt=6.336242e+03
+Test39: t=1.078482e-03 ,dsig/dt=6.286030e+03
+Test39: t=1.360967e-03 ,dsig/dt=6.388895e+03
+Test39: t=1.717443e-03 ,dsig/dt=6.152666e+03
+Test39: t=2.167291e-03 ,dsig/dt=5.947025e+03
+Test39: t=2.734967e-03 ,dsig/dt=5.757542e+03
+Test39: t=3.451333e-03 ,dsig/dt=5.486544e+03
+Test39: t=4.355336e-03 ,dsig/dt=5.203515e+03
+Test39: t=5.496123e-03 ,dsig/dt=4.805547e+03
+Test39: t=6.935716e-03 ,dsig/dt=4.311022e+03
+Test39: t=8.752379e-03 ,dsig/dt=3.838233e+03
+Test39: t=1.104488e-02 ,dsig/dt=3.220135e+03
+Test39: t=1.393785e-02 ,dsig/dt=2.656296e+03
+Test39: t=1.758857e-02 ,dsig/dt=2.087289e+03
+Test39: t=2.219552e-02 ,dsig/dt=1.519131e+03
+Test39: t=2.800917e-02 ,dsig/dt=1.041183e+03
+Test39: t=3.534557e-02 ,dsig/dt=6.285812e+02
+Test39: t=4.460359e-02 ,dsig/dt=3.528447e+02
+Test39: t=5.628655e-02 ,dsig/dt=1.714642e+02
+Test39: t=7.102961e-02 ,dsig/dt=7.621284e+01
+Test39: t=8.963431e-02 ,dsig/dt=3.194424e+01
+Test39: t=1.131121e-01 ,dsig/dt=1.403676e+01
+Test39: t=1.427394e-01 ,dsig/dt=7.036335e+00
+Test39: t=1.801270e-01 ,dsig/dt=4.033651e+00
+Test39: t=2.273074e-01 ,dsig/dt=2.412287e+00
+Test39: t=2.868457e-01 ,dsig/dt=2.339747e+00
+Test39: t=3.619788e-01 ,dsig/dt=3.110966e+00
+Test39: t=4.567915e-01 ,dsig/dt=2.374627e+00
+Test39: t=5.764383e-01 ,dsig/dt=3.505743e-01
+Test39: t=7.274240e-01 ,dsig/dt=0.000000e+00
+Test39: t=9.179572e-01 ,dsig/dt=0.000000e+00
+Test39: t=1.158397e+00 ,dsig/dt=0.000000e+00
+Test39: t=1.461814e+00 ,dsig/dt=0.000000e+00
+Test39: t=1.844705e+00 ,dsig/dt=0.000000e+00
+Test39: t=2.327886e+00 ,dsig/dt=0.000000e+00
+Test39: t=2.937626e+00 ,dsig/dt=0.000000e+00
+Test39: Material=Aluminum, Element[0]=Aluminum,A[0]=27 is selected.
+Test39:*NewRun* Targ=90013014,Proj=2112,P=1.000000e+04 MeV/c, =>> 69 of 80
+Test39: Mt=2.512651e+04, Mp=9.395656e+02, tmt=2.287638e+02, E=1.004404e+04
+*=>TEST39: 100000 events are simulated
+Test39:CalculationTimePerEvent=8.570000e-05 s
+Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
+Test39: t=3.370068e-04 ,dsig/dt=2.796722e+04
+Test39: t=4.252786e-04 ,dsig/dt=2.693937e+04
+Test39: t=5.366712e-04 ,dsig/dt=2.640712e+04
+Test39: t=6.772408e-04 ,dsig/dt=2.571968e+04
+Test39: t=8.546296e-04 ,dsig/dt=2.554780e+04
+Test39: t=1.078482e-03 ,dsig/dt=2.490269e+04
+Test39: t=1.360967e-03 ,dsig/dt=2.436052e+04
+Test39: t=1.717443e-03 ,dsig/dt=2.277248e+04
+Test39: t=2.167291e-03 ,dsig/dt=2.218789e+04
+Test39: t=2.734967e-03 ,dsig/dt=2.088399e+04
+Test39: t=3.451333e-03 ,dsig/dt=1.908657e+04
+Test39: t=4.355336e-03 ,dsig/dt=1.729267e+04
+Test39: t=5.496123e-03 ,dsig/dt=1.508650e+04
+Test39: t=6.935716e-03 ,dsig/dt=1.288221e+04
+Test39: t=8.752379e-03 ,dsig/dt=1.036215e+04
+Test39: t=1.104488e-02 ,dsig/dt=8.228015e+03
+Test39: t=1.393785e-02 ,dsig/dt=5.821483e+03
+Test39: t=1.758857e-02 ,dsig/dt=3.860457e+03
+Test39: t=2.219552e-02 ,dsig/dt=2.331701e+03
+Test39: t=2.800917e-02 ,dsig/dt=1.204217e+03
+Test39: t=3.534557e-02 ,dsig/dt=5.705180e+02
+Test39: t=4.460359e-02 ,dsig/dt=2.253756e+02
+Test39: t=5.628655e-02 ,dsig/dt=9.187080e+01
+Test39: t=7.102961e-02 ,dsig/dt=5.408759e+01
+Test39: t=8.963431e-02 ,dsig/dt=5.419751e+01
+Test39: t=1.131121e-01 ,dsig/dt=5.567377e+01
+Test39: t=1.427394e-01 ,dsig/dt=2.797967e+01
+Test39: t=1.801270e-01 ,dsig/dt=6.666801e+00
+Test39: t=2.273074e-01 ,dsig/dt=4.724559e+00
+Test39: t=2.868457e-01 ,dsig/dt=1.178892e+00
+Test39: t=3.619788e-01 ,dsig/dt=1.464295e-01
+Test39: t=4.567915e-01 ,dsig/dt=3.908463e-02
+Test39: t=5.764383e-01 ,dsig/dt=1.021270e-02
+Test39: t=7.274240e-01 ,dsig/dt=0.000000e+00
+Test39: t=9.179572e-01 ,dsig/dt=0.000000e+00
+Test39: t=1.158397e+00 ,dsig/dt=0.000000e+00
+Test39: t=1.461814e+00 ,dsig/dt=0.000000e+00
+Test39: t=1.844705e+00 ,dsig/dt=0.000000e+00
+Test39: t=2.327886e+00 ,dsig/dt=0.000000e+00
+Test39: t=2.937626e+00 ,dsig/dt=0.000000e+00
+Test39: Material=Copper, Element[0]=Copper,A[0]=63 is selected.
+Test39:*NewRun* Targ=90029034,Proj=2112,P=1.000000e+04 MeV/c, =>> 70 of 80
+Test39: Mt=5.860379e+04, Mp=9.395656e+02, tmt=5.335568e+02, E=1.004404e+04
+*=>TEST39: 100000 events are simulated
+Test39:CalculationTimePerEvent=8.635000e-05 s
+Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
+Test39: t=3.370068e-04 ,dsig/dt=1.244261e+05
+Test39: t=4.252786e-04 ,dsig/dt=1.231037e+05
+Test39: t=5.366712e-04 ,dsig/dt=1.178260e+05
+Test39: t=6.772408e-04 ,dsig/dt=1.160886e+05
+Test39: t=8.546296e-04 ,dsig/dt=1.133770e+05
+Test39: t=1.078482e-03 ,dsig/dt=1.082139e+05
+Test39: t=1.360967e-03 ,dsig/dt=1.005188e+05
+Test39: t=1.717443e-03 ,dsig/dt=9.375955e+04
+Test39: t=2.167291e-03 ,dsig/dt=8.555491e+04
+Test39: t=2.734967e-03 ,dsig/dt=7.489731e+04
+Test39: t=3.451333e-03 ,dsig/dt=6.438982e+04
+Test39: t=4.355336e-03 ,dsig/dt=5.332620e+04
+Test39: t=5.496123e-03 ,dsig/dt=4.253431e+04
+Test39: t=6.935716e-03 ,dsig/dt=3.092596e+04
+Test39: t=8.752379e-03 ,dsig/dt=2.119349e+04
+Test39: t=1.104488e-02 ,dsig/dt=1.310573e+04
+Test39: t=1.393785e-02 ,dsig/dt=7.078171e+03
+Test39: t=1.758857e-02 ,dsig/dt=3.379377e+03
+Test39: t=2.219552e-02 ,dsig/dt=1.382712e+03
+Test39: t=2.800917e-02 ,dsig/dt=5.255413e+02
+Test39: t=3.534557e-02 ,dsig/dt=2.704146e+02
+Test39: t=4.460359e-02 ,dsig/dt=3.388813e+02
+Test39: t=5.628655e-02 ,dsig/dt=3.647744e+02
+Test39: t=7.102961e-02 ,dsig/dt=1.482250e+02
+Test39: t=8.963431e-02 ,dsig/dt=4.725431e+01
+Test39: t=1.131121e-01 ,dsig/dt=4.627038e+01
+Test39: t=1.427394e-01 ,dsig/dt=2.741238e+01
+Test39: t=1.801270e-01 ,dsig/dt=4.503114e+00
+Test39: t=2.273074e-01 ,dsig/dt=1.838175e+00
+Test39: t=2.868457e-01 ,dsig/dt=7.354836e-01
+Test39: t=3.619788e-01 ,dsig/dt=1.629180e-01
+Test39: t=4.567915e-01 ,dsig/dt=3.162657e-02
+Test39: t=5.764383e-01 ,dsig/dt=0.000000e+00
+Test39: t=7.274240e-01 ,dsig/dt=0.000000e+00
+Test39: t=9.179572e-01 ,dsig/dt=0.000000e+00
+Test39: t=1.158397e+00 ,dsig/dt=0.000000e+00
+Test39: t=1.461814e+00 ,dsig/dt=0.000000e+00
+Test39: t=1.844705e+00 ,dsig/dt=0.000000e+00
+Test39: t=2.327886e+00 ,dsig/dt=0.000000e+00
+Test39: t=2.937626e+00 ,dsig/dt=0.000000e+00
+Test39: Material=Tin, Element[0]=Tin,A[0]=119 is selected.
+Test39:*NewRun* Targ=90050069,Proj=2112,P=1.000000e+04 MeV/c, =>> 71 of 80
+Test39: Mt=1.107324e+05, Mp=9.395656e+02, tmt=1.008160e+03, E=1.004404e+04
+*=>TEST39: 100000 events are simulated
+Test39:CalculationTimePerEvent=8.690000e-05 s
+Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
+Test39: t=3.370068e-04 ,dsig/dt=3.959670e+05
+Test39: t=4.252786e-04 ,dsig/dt=3.766008e+05
+Test39: t=5.366712e-04 ,dsig/dt=3.715600e+05
+Test39: t=6.772408e-04 ,dsig/dt=3.495788e+05
+Test39: t=8.546296e-04 ,dsig/dt=3.285419e+05
+Test39: t=1.078482e-03 ,dsig/dt=3.033941e+05
+Test39: t=1.360967e-03 ,dsig/dt=2.754387e+05
+Test39: t=1.717443e-03 ,dsig/dt=2.433272e+05
+Test39: t=2.167291e-03 ,dsig/dt=2.116133e+05
+Test39: t=2.734967e-03 ,dsig/dt=1.707588e+05
+Test39: t=3.451333e-03 ,dsig/dt=1.354048e+05
+Test39: t=4.355336e-03 ,dsig/dt=9.881621e+04
+Test39: t=5.496123e-03 ,dsig/dt=6.729600e+04
+Test39: t=6.935716e-03 ,dsig/dt=4.075616e+04
+Test39: t=8.752379e-03 ,dsig/dt=2.212849e+04
+Test39: t=1.104488e-02 ,dsig/dt=1.021674e+04
+Test39: t=1.393785e-02 ,dsig/dt=4.020722e+03
+Test39: t=1.758857e-02 ,dsig/dt=1.370055e+03
+Test39: t=2.219552e-02 ,dsig/dt=8.052780e+02
+Test39: t=2.800917e-02 ,dsig/dt=1.029951e+03
+Test39: t=3.534557e-02 ,dsig/dt=1.237873e+03
+Test39: t=4.460359e-02 ,dsig/dt=6.081789e+02
+Test39: t=5.628655e-02 ,dsig/dt=1.559524e+02
+Test39: t=7.102961e-02 ,dsig/dt=2.175030e+02
+Test39: t=8.963431e-02 ,dsig/dt=1.471322e+02
+Test39: t=1.131121e-01 ,dsig/dt=2.683509e+01
+Test39: t=1.427394e-01 ,dsig/dt=9.544074e+00
+Test39: t=1.801270e-01 ,dsig/dt=7.647626e+00
+Test39: t=2.273074e-01 ,dsig/dt=2.024324e+00
+Test39: t=2.868457e-01 ,dsig/dt=9.388420e-01
+Test39: t=3.619788e-01 ,dsig/dt=1.708875e-01
+Test39: t=4.567915e-01 ,dsig/dt=6.692488e-02
+Test39: t=5.764383e-01 ,dsig/dt=0.000000e+00
+Test39: t=7.274240e-01 ,dsig/dt=0.000000e+00
+Test39: t=9.179572e-01 ,dsig/dt=0.000000e+00
+Test39: t=1.158397e+00 ,dsig/dt=0.000000e+00
+Test39: t=1.461814e+00 ,dsig/dt=0.000000e+00
+Test39: t=1.844705e+00 ,dsig/dt=0.000000e+00
+Test39: t=2.327886e+00 ,dsig/dt=0.000000e+00
+Test39: t=2.937626e+00 ,dsig/dt=0.000000e+00
+Test39: Material=Lead, Element[0]=Lead,A[0]=208 is selected.
+Test39:*NewRun* Targ=90082126,Proj=2112,P=1.000000e+04 MeV/c, =>> 72 of 80
+Test39: Mt=1.936877e+05, Mp=9.395656e+02, tmt=1.763425e+03, E=1.004404e+04
+*=>TEST39: 100000 events are simulated
+Test39:CalculationTimePerEvent=8.755000e-05 s
+Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
+Test39: t=3.370068e-04 ,dsig/dt=1.060291e+06
+Test39: t=4.252786e-04 ,dsig/dt=9.950682e+05
+Test39: t=5.366712e-04 ,dsig/dt=9.464196e+05
+Test39: t=6.772408e-04 ,dsig/dt=8.830530e+05
+Test39: t=8.546296e-04 ,dsig/dt=7.942370e+05
+Test39: t=1.078482e-03 ,dsig/dt=7.023627e+05
+Test39: t=1.360967e-03 ,dsig/dt=6.032788e+05
+Test39: t=1.717443e-03 ,dsig/dt=5.014163e+05
+Test39: t=2.167291e-03 ,dsig/dt=3.979391e+05
+Test39: t=2.734967e-03 ,dsig/dt=2.943431e+05
+Test39: t=3.451333e-03 ,dsig/dt=2.055202e+05
+Test39: t=4.355336e-03 ,dsig/dt=1.269657e+05
+Test39: t=5.496123e-03 ,dsig/dt=7.057313e+04
+Test39: t=6.935716e-03 ,dsig/dt=3.274148e+04
+Test39: t=8.752379e-03 ,dsig/dt=1.315101e+04
+Test39: t=1.104488e-02 ,dsig/dt=4.401926e+03
+Test39: t=1.393785e-02 ,dsig/dt=2.074667e+03
+Test39: t=1.758857e-02 ,dsig/dt=2.286256e+03
+Test39: t=2.219552e-02 ,dsig/dt=4.045629e+03
+Test39: t=2.800917e-02 ,dsig/dt=3.320506e+03
+Test39: t=3.534557e-02 ,dsig/dt=7.472669e+02
+Test39: t=4.460359e-02 ,dsig/dt=7.144586e+02
+Test39: t=5.628655e-02 ,dsig/dt=7.312759e+02
+Test39: t=7.102961e-02 ,dsig/dt=1.071204e+02
+Test39: t=8.963431e-02 ,dsig/dt=4.688709e+01
+Test39: t=1.131121e-01 ,dsig/dt=3.021382e+01
+Test39: t=1.427394e-01 ,dsig/dt=1.217426e+01
+Test39: t=1.801270e-01 ,dsig/dt=6.303306e+00
+Test39: t=2.273074e-01 ,dsig/dt=2.853285e+00
+Test39: t=2.868457e-01 ,dsig/dt=9.771678e-01
+Test39: t=3.619788e-01 ,dsig/dt=4.374881e-01
+Test39: t=4.567915e-01 ,dsig/dt=0.000000e+00
+Test39: t=5.764383e-01 ,dsig/dt=0.000000e+00
+Test39: t=7.274240e-01 ,dsig/dt=0.000000e+00
+Test39: t=9.179572e-01 ,dsig/dt=0.000000e+00
+Test39: t=1.158397e+00 ,dsig/dt=0.000000e+00
+Test39: t=1.461814e+00 ,dsig/dt=0.000000e+00
+Test39: t=1.844705e+00 ,dsig/dt=0.000000e+00
+Test39: t=2.327886e+00 ,dsig/dt=0.000000e+00
+Test39: t=2.937626e+00 ,dsig/dt=0.000000e+00
+Test39: Material=Hydrogen, Element[0]=Hydrogen,A[0]=1 is selected.
+Test39:*NewRun* Targ=90001000,Proj=2112,P=1.000000e+05 MeV/c, =>> 73 of 80
+Test39: Mt=9.382723e+02, Mp=9.395656e+02, tmt=9.294980e+01, E=1.000044e+05
+*=>TEST39: 100000 events are simulated
+Test39:CalculationTimePerEvent=8.315000e-05 s
+Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
+Test39: t=3.370068e-04 ,dsig/dt=6.788888e+01
+Test39: t=4.252786e-04 ,dsig/dt=6.917737e+01
+Test39: t=5.366712e-04 ,dsig/dt=7.377359e+01
+Test39: t=6.772408e-04 ,dsig/dt=7.153841e+01
+Test39: t=8.546296e-04 ,dsig/dt=6.720841e+01
+Test39: t=1.078482e-03 ,dsig/dt=7.482703e+01
+Test39: t=1.360967e-03 ,dsig/dt=7.063315e+01
+Test39: t=1.717443e-03 ,dsig/dt=7.005886e+01
+Test39: t=2.167291e-03 ,dsig/dt=7.426952e+01
+Test39: t=2.734967e-03 ,dsig/dt=6.733194e+01
+Test39: t=3.451333e-03 ,dsig/dt=7.015974e+01
+Test39: t=4.355336e-03 ,dsig/dt=7.020142e+01
+Test39: t=5.496123e-03 ,dsig/dt=6.697515e+01
+Test39: t=6.935716e-03 ,dsig/dt=6.906683e+01
+Test39: t=8.752379e-03 ,dsig/dt=6.482129e+01
+Test39: t=1.104488e-02 ,dsig/dt=6.386311e+01
+Test39: t=1.393785e-02 ,dsig/dt=6.201849e+01
+Test39: t=1.758857e-02 ,dsig/dt=5.982897e+01
+Test39: t=2.219552e-02 ,dsig/dt=5.702435e+01
+Test39: t=2.800917e-02 ,dsig/dt=5.348753e+01
+Test39: t=3.534557e-02 ,dsig/dt=4.956144e+01
+Test39: t=4.460359e-02 ,dsig/dt=4.516871e+01
+Test39: t=5.628655e-02 ,dsig/dt=4.013912e+01
+Test39: t=7.102961e-02 ,dsig/dt=3.509667e+01
+Test39: t=8.963431e-02 ,dsig/dt=2.820086e+01
+Test39: t=1.131121e-01 ,dsig/dt=2.267740e+01
+Test39: t=1.427394e-01 ,dsig/dt=1.653917e+01
+Test39: t=1.801270e-01 ,dsig/dt=1.127710e+01
+Test39: t=2.273074e-01 ,dsig/dt=6.989040e+00
+Test39: t=2.868457e-01 ,dsig/dt=3.860191e+00
+Test39: t=3.619788e-01 ,dsig/dt=1.747815e+00
+Test39: t=4.567915e-01 ,dsig/dt=6.985264e-01
+Test39: t=5.764383e-01 ,dsig/dt=2.042333e-01
+Test39: t=7.274240e-01 ,dsig/dt=4.284971e-02
+Test39: t=9.179572e-01 ,dsig/dt=7.404091e-03
+Test39: t=1.158397e+00 ,dsig/dt=1.288105e-04
+Test39: t=1.461814e+00 ,dsig/dt=0.000000e+00
+Test39: t=1.844705e+00 ,dsig/dt=0.000000e+00
+Test39: t=2.327886e+00 ,dsig/dt=0.000000e+00
+Test39: t=2.937626e+00 ,dsig/dt=0.000000e+00
+Test39: Material=Helium, Element[0]=Helium,A[0]=4 is selected.
+Test39:*NewRun* Targ=90002002,Proj=2112,P=1.000000e+05 MeV/c, =>> 74 of 80
+Test39: Mt=3.727417e+03, Mp=9.395656e+02, tmt=3.692560e+02, E=1.000044e+05
+*=>TEST39: 100000 events are simulated
+Test39:CalculationTimePerEvent=8.420000e-05 s
+Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
+Test39: t=3.370068e-04 ,dsig/dt=5.976738e+02
+Test39: t=4.252786e-04 ,dsig/dt=5.845339e+02
+Test39: t=5.366712e-04 ,dsig/dt=6.027732e+02
+Test39: t=6.772408e-04 ,dsig/dt=6.212120e+02
+Test39: t=8.546296e-04 ,dsig/dt=6.055005e+02
+Test39: t=1.078482e-03 ,dsig/dt=5.929358e+02
+Test39: t=1.360967e-03 ,dsig/dt=5.811383e+02
+Test39: t=1.717443e-03 ,dsig/dt=5.859578e+02
+Test39: t=2.167291e-03 ,dsig/dt=5.666716e+02
+Test39: t=2.734967e-03 ,dsig/dt=5.623841e+02
+Test39: t=3.451333e-03 ,dsig/dt=5.579235e+02
+Test39: t=4.355336e-03 ,dsig/dt=5.551211e+02
+Test39: t=5.496123e-03 ,dsig/dt=5.496201e+02
+Test39: t=6.935716e-03 ,dsig/dt=5.394506e+02
+Test39: t=8.752379e-03 ,dsig/dt=5.050410e+02
+Test39: t=1.104488e-02 ,dsig/dt=4.890313e+02
+Test39: t=1.393785e-02 ,dsig/dt=4.602018e+02
+Test39: t=1.758857e-02 ,dsig/dt=4.203839e+02
+Test39: t=2.219552e-02 ,dsig/dt=3.770931e+02
+Test39: t=2.800917e-02 ,dsig/dt=3.196478e+02
+Test39: t=3.534557e-02 ,dsig/dt=2.667445e+02
+Test39: t=4.460359e-02 ,dsig/dt=1.983331e+02
+Test39: t=5.628655e-02 ,dsig/dt=1.337239e+02
+Test39: t=7.102961e-02 ,dsig/dt=7.609164e+01
+Test39: t=8.963431e-02 ,dsig/dt=3.381029e+01
+Test39: t=1.131121e-01 ,dsig/dt=1.050660e+01
+Test39: t=1.427394e-01 ,dsig/dt=2.076665e+00
+Test39: t=1.801270e-01 ,dsig/dt=3.618131e-01
+Test39: t=2.273074e-01 ,dsig/dt=2.569680e-01
+Test39: t=2.868457e-01 ,dsig/dt=2.595893e-01
+Test39: t=3.619788e-01 ,dsig/dt=2.475236e-01
+Test39: t=4.567915e-01 ,dsig/dt=1.322348e-01
+Test39: t=5.764383e-01 ,dsig/dt=4.342066e-02
+Test39: t=7.274240e-01 ,dsig/dt=7.555691e-03
+Test39: t=9.179572e-01 ,dsig/dt=3.610936e-03
+Test39: t=1.158397e+00 ,dsig/dt=8.188879e-04
+Test39: t=1.461814e+00 ,dsig/dt=0.000000e+00
+Test39: t=1.844705e+00 ,dsig/dt=0.000000e+00
+Test39: t=2.327886e+00 ,dsig/dt=0.000000e+00
+Test39: t=2.937626e+00 ,dsig/dt=0.000000e+00
+Test39: Material=Lithium, Element[0]=Lithium,A[0]=7 is selected.
+Test39:*NewRun* Targ=90003004,Proj=2112,P=1.000000e+05 MeV/c, =>> 75 of 80
+Test39: Mt=6.533835e+03, Mp=9.395656e+02, tmt=6.472734e+02, E=1.000044e+05
+*=>TEST39: 100000 events are simulated
+Test39:CalculationTimePerEvent=8.485000e-05 s
+Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
+Test39: t=3.370068e-04 ,dsig/dt=2.773217e+03
+Test39: t=4.252786e-04 ,dsig/dt=2.655383e+03
+Test39: t=5.366712e-04 ,dsig/dt=2.623111e+03
+Test39: t=6.772408e-04 ,dsig/dt=2.477556e+03
+Test39: t=8.546296e-04 ,dsig/dt=2.446435e+03
+Test39: t=1.078482e-03 ,dsig/dt=2.450964e+03
+Test39: t=1.360967e-03 ,dsig/dt=2.491766e+03
+Test39: t=1.717443e-03 ,dsig/dt=2.410656e+03
+Test39: t=2.167291e-03 ,dsig/dt=2.310385e+03
+Test39: t=2.734967e-03 ,dsig/dt=2.235582e+03
+Test39: t=3.451333e-03 ,dsig/dt=2.088769e+03
+Test39: t=4.355336e-03 ,dsig/dt=2.053329e+03
+Test39: t=5.496123e-03 ,dsig/dt=1.869685e+03
+Test39: t=6.935716e-03 ,dsig/dt=1.739565e+03
+Test39: t=8.752379e-03 ,dsig/dt=1.537284e+03
+Test39: t=1.104488e-02 ,dsig/dt=1.378073e+03
+Test39: t=1.393785e-02 ,dsig/dt=1.154313e+03
+Test39: t=1.758857e-02 ,dsig/dt=9.193734e+02
+Test39: t=2.219552e-02 ,dsig/dt=6.962303e+02
+Test39: t=2.800917e-02 ,dsig/dt=4.941710e+02
+Test39: t=3.534557e-02 ,dsig/dt=3.117007e+02
+Test39: t=4.460359e-02 ,dsig/dt=1.768494e+02
+Test39: t=5.628655e-02 ,dsig/dt=8.650956e+01
+Test39: t=7.102961e-02 ,dsig/dt=3.685040e+01
+Test39: t=8.963431e-02 ,dsig/dt=1.404659e+01
+Test39: t=1.131121e-01 ,dsig/dt=5.250655e+00
+Test39: t=1.427394e-01 ,dsig/dt=2.062398e+00
+Test39: t=1.801270e-01 ,dsig/dt=9.130533e-01
+Test39: t=2.273074e-01 ,dsig/dt=2.815411e-01
+Test39: t=2.868457e-01 ,dsig/dt=6.403603e-02
+Test39: t=3.619788e-01 ,dsig/dt=1.889340e-02
+Test39: t=4.567915e-01 ,dsig/dt=0.000000e+00
+Test39: t=5.764383e-01 ,dsig/dt=7.927846e-03
+Test39: t=7.274240e-01 ,dsig/dt=1.452122e-03
+Test39: t=9.179572e-01 ,dsig/dt=0.000000e+00
+Test39: t=1.158397e+00 ,dsig/dt=0.000000e+00
+Test39: t=1.461814e+00 ,dsig/dt=0.000000e+00
+Test39: t=1.844705e+00 ,dsig/dt=0.000000e+00
+Test39: t=2.327886e+00 ,dsig/dt=0.000000e+00
+Test39: t=2.937626e+00 ,dsig/dt=0.000000e+00
+Test39: Material=Carbon, Element[0]=Carbon,A[0]=12 is selected.
+Test39:*NewRun* Targ=90006006,Proj=2112,P=1.000000e+05 MeV/c, =>> 76 of 80
+Test39: Mt=1.117487e+04, Mp=9.395656e+02, tmt=1.107036e+03, E=1.000044e+05
+*=>TEST39: 100000 events are simulated
+Test39:CalculationTimePerEvent=8.485000e-05 s
+Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
+Test39: t=3.370068e-04 ,dsig/dt=5.089803e+03
+Test39: t=4.252786e-04 ,dsig/dt=5.253613e+03
+Test39: t=5.366712e-04 ,dsig/dt=5.185659e+03
+Test39: t=6.772408e-04 ,dsig/dt=5.298960e+03
+Test39: t=8.546296e-04 ,dsig/dt=5.082127e+03
+Test39: t=1.078482e-03 ,dsig/dt=5.114316e+03
+Test39: t=1.360967e-03 ,dsig/dt=4.949672e+03
+Test39: t=1.717443e-03 ,dsig/dt=4.801891e+03
+Test39: t=2.167291e-03 ,dsig/dt=4.634720e+03
+Test39: t=2.734967e-03 ,dsig/dt=4.390305e+03
+Test39: t=3.451333e-03 ,dsig/dt=4.291878e+03
+Test39: t=4.355336e-03 ,dsig/dt=4.077376e+03
+Test39: t=5.496123e-03 ,dsig/dt=3.787920e+03
+Test39: t=6.935716e-03 ,dsig/dt=3.344158e+03
+Test39: t=8.752379e-03 ,dsig/dt=3.040500e+03
+Test39: t=1.104488e-02 ,dsig/dt=2.584784e+03
+Test39: t=1.393785e-02 ,dsig/dt=2.125702e+03
+Test39: t=1.758857e-02 ,dsig/dt=1.642315e+03
+Test39: t=2.219552e-02 ,dsig/dt=1.223160e+03
+Test39: t=2.800917e-02 ,dsig/dt=8.324455e+02
+Test39: t=3.534557e-02 ,dsig/dt=5.194176e+02
+Test39: t=4.460359e-02 ,dsig/dt=2.799639e+02
+Test39: t=5.628655e-02 ,dsig/dt=1.345055e+02
+Test39: t=7.102961e-02 ,dsig/dt=5.527876e+01
+Test39: t=8.963431e-02 ,dsig/dt=1.935043e+01
+Test39: t=1.131121e-01 ,dsig/dt=6.962658e+00
+Test39: t=1.427394e-01 ,dsig/dt=2.828421e+00
+Test39: t=1.801270e-01 ,dsig/dt=9.648282e-01
+Test39: t=2.273074e-01 ,dsig/dt=4.655602e-01
+Test39: t=2.868457e-01 ,dsig/dt=1.670021e-01
+Test39: t=3.619788e-01 ,dsig/dt=2.970199e-01
+Test39: t=4.567915e-01 ,dsig/dt=1.902352e-01
+Test39: t=5.764383e-01 ,dsig/dt=8.477697e-02
+Test39: t=7.274240e-01 ,dsig/dt=1.920737e-01
+Test39: t=9.179572e-01 ,dsig/dt=4.354990e-01
+Test39: t=1.158397e+00 ,dsig/dt=7.008385e-01
+Test39: t=1.461814e+00 ,dsig/dt=4.460784e-01
+Test39: t=1.844705e+00 ,dsig/dt=4.390876e-02
+Test39: t=2.327886e+00 ,dsig/dt=0.000000e+00
+Test39: t=2.937626e+00 ,dsig/dt=0.000000e+00
+Test39: Material=Aluminum, Element[0]=Aluminum,A[0]=27 is selected.
+Test39:*NewRun* Targ=90013014,Proj=2112,P=1.000000e+05 MeV/c, =>> 77 of 80
+Test39: Mt=2.512651e+04, Mp=9.395656e+02, tmt=2.489154e+03, E=1.000044e+05
+*=>TEST39: 100000 events are simulated
+Test39:CalculationTimePerEvent=8.570000e-05 s
+Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
+Test39: t=3.370068e-04 ,dsig/dt=2.204355e+04
+Test39: t=4.252786e-04 ,dsig/dt=2.176076e+04
+Test39: t=5.366712e-04 ,dsig/dt=2.149912e+04
+Test39: t=6.772408e-04 ,dsig/dt=2.081323e+04
+Test39: t=8.546296e-04 ,dsig/dt=2.104955e+04
+Test39: t=1.078482e-03 ,dsig/dt=2.003697e+04
+Test39: t=1.360967e-03 ,dsig/dt=1.955313e+04
+Test39: t=1.717443e-03 ,dsig/dt=1.908103e+04
+Test39: t=2.167291e-03 ,dsig/dt=1.820847e+04
+Test39: t=2.734967e-03 ,dsig/dt=1.685592e+04
+Test39: t=3.451333e-03 ,dsig/dt=1.522910e+04
+Test39: t=4.355336e-03 ,dsig/dt=1.378158e+04
+Test39: t=5.496123e-03 ,dsig/dt=1.213584e+04
+Test39: t=6.935716e-03 ,dsig/dt=1.052061e+04
+Test39: t=8.752379e-03 ,dsig/dt=8.549596e+03
+Test39: t=1.104488e-02 ,dsig/dt=6.542596e+03
+Test39: t=1.393785e-02 ,dsig/dt=4.750889e+03
+Test39: t=1.758857e-02 ,dsig/dt=3.146540e+03
+Test39: t=2.219552e-02 ,dsig/dt=1.890500e+03
+Test39: t=2.800917e-02 ,dsig/dt=1.019582e+03
+Test39: t=3.534557e-02 ,dsig/dt=4.492989e+02
+Test39: t=4.460359e-02 ,dsig/dt=1.748575e+02
+Test39: t=5.628655e-02 ,dsig/dt=6.591907e+01
+Test39: t=7.102961e-02 ,dsig/dt=2.759793e+01
+Test39: t=8.963431e-02 ,dsig/dt=1.779449e+01
+Test39: t=1.131121e-01 ,dsig/dt=2.072540e+01
+Test39: t=1.427394e-01 ,dsig/dt=2.723791e+01
+Test39: t=1.801270e-01 ,dsig/dt=2.373384e+01
+Test39: t=2.273074e-01 ,dsig/dt=6.105940e+00
+Test39: t=2.868457e-01 ,dsig/dt=8.699932e-01
+Test39: t=3.619788e-01 ,dsig/dt=2.579074e-02
+Test39: t=4.567915e-01 ,dsig/dt=0.000000e+00
+Test39: t=5.764383e-01 ,dsig/dt=0.000000e+00
+Test39: t=7.274240e-01 ,dsig/dt=0.000000e+00
+Test39: t=9.179572e-01 ,dsig/dt=0.000000e+00
+Test39: t=1.158397e+00 ,dsig/dt=0.000000e+00
+Test39: t=1.461814e+00 ,dsig/dt=0.000000e+00
+Test39: t=1.844705e+00 ,dsig/dt=0.000000e+00
+Test39: t=2.327886e+00 ,dsig/dt=0.000000e+00
+Test39: t=2.937626e+00 ,dsig/dt=0.000000e+00
+Test39: Material=Copper, Element[0]=Copper,A[0]=63 is selected.
+Test39:*NewRun* Targ=90029034,Proj=2112,P=1.000000e+05 MeV/c, =>> 78 of 80
+Test39: Mt=5.860379e+04, Mp=9.395656e+02, tmt=5.805576e+03, E=1.000044e+05
+*=>TEST39: 100000 events are simulated
+Test39:CalculationTimePerEvent=8.645000e-05 s
+Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
+Test39: t=3.370068e-04 ,dsig/dt=1.046451e+05
+Test39: t=4.252786e-04 ,dsig/dt=1.016880e+05
+Test39: t=5.366712e-04 ,dsig/dt=1.013324e+05
+Test39: t=6.772408e-04 ,dsig/dt=9.842960e+04
+Test39: t=8.546296e-04 ,dsig/dt=9.311941e+04
+Test39: t=1.078482e-03 ,dsig/dt=8.962078e+04
+Test39: t=1.360967e-03 ,dsig/dt=8.368999e+04
+Test39: t=1.717443e-03 ,dsig/dt=7.930078e+04
+Test39: t=2.167291e-03 ,dsig/dt=7.088212e+04
+Test39: t=2.734967e-03 ,dsig/dt=6.247631e+04
+Test39: t=3.451333e-03 ,dsig/dt=5.412806e+04
+Test39: t=4.355336e-03 ,dsig/dt=4.453121e+04
+Test39: t=5.496123e-03 ,dsig/dt=3.495589e+04
+Test39: t=6.935716e-03 ,dsig/dt=2.558183e+04
+Test39: t=8.752379e-03 ,dsig/dt=1.761659e+04
+Test39: t=1.104488e-02 ,dsig/dt=1.083300e+04
+Test39: t=1.393785e-02 ,dsig/dt=5.937635e+03
+Test39: t=1.758857e-02 ,dsig/dt=2.831296e+03
+Test39: t=2.219552e-02 ,dsig/dt=1.180031e+03
+Test39: t=2.800917e-02 ,dsig/dt=4.255219e+02
+Test39: t=3.534557e-02 ,dsig/dt=2.097429e+02
+Test39: t=4.460359e-02 ,dsig/dt=2.028372e+02
+Test39: t=5.628655e-02 ,dsig/dt=2.676401e+02
+Test39: t=7.102961e-02 ,dsig/dt=1.796343e+02
+Test39: t=8.963431e-02 ,dsig/dt=3.946367e+01
+Test39: t=1.131121e-01 ,dsig/dt=3.679219e+01
+Test39: t=1.427394e-01 ,dsig/dt=1.772690e+01
+Test39: t=1.801270e-01 ,dsig/dt=2.455799e+00
+Test39: t=2.273074e-01 ,dsig/dt=8.277757e-01
+Test39: t=2.868457e-01 ,dsig/dt=2.112719e-01
+Test39: t=3.619788e-01 ,dsig/dt=3.446723e-02
+Test39: t=4.567915e-01 ,dsig/dt=0.000000e+00
+Test39: t=5.764383e-01 ,dsig/dt=0.000000e+00
+Test39: t=7.274240e-01 ,dsig/dt=0.000000e+00
+Test39: t=9.179572e-01 ,dsig/dt=0.000000e+00
+Test39: t=1.158397e+00 ,dsig/dt=0.000000e+00
+Test39: t=1.461814e+00 ,dsig/dt=0.000000e+00
+Test39: t=1.844705e+00 ,dsig/dt=0.000000e+00
+Test39: t=2.327886e+00 ,dsig/dt=0.000000e+00
+Test39: t=2.937626e+00 ,dsig/dt=0.000000e+00
+Test39: Material=Tin, Element[0]=Tin,A[0]=119 is selected.
+Test39:*NewRun* Targ=90050069,Proj=2112,P=1.000000e+05 MeV/c, =>> 79 of 80
+Test39: Mt=1.107324e+05, Mp=9.395656e+02, tmt=1.096969e+04, E=1.000044e+05
+*=>TEST39: 100000 events are simulated
+Test39:CalculationTimePerEvent=8.695000e-05 s
+Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
+Test39: t=3.370068e-04 ,dsig/dt=3.302794e+05
+Test39: t=4.252786e-04 ,dsig/dt=3.245772e+05
+Test39: t=5.366712e-04 ,dsig/dt=3.083902e+05
+Test39: t=6.772408e-04 ,dsig/dt=2.873011e+05
+Test39: t=8.546296e-04 ,dsig/dt=2.771680e+05
+Test39: t=1.078482e-03 ,dsig/dt=2.586780e+05
+Test39: t=1.360967e-03 ,dsig/dt=2.363220e+05
+Test39: t=1.717443e-03 ,dsig/dt=2.045815e+05
+Test39: t=2.167291e-03 ,dsig/dt=1.761100e+05
+Test39: t=2.734967e-03 ,dsig/dt=1.463303e+05
+Test39: t=3.451333e-03 ,dsig/dt=1.146549e+05
+Test39: t=4.355336e-03 ,dsig/dt=8.362324e+04
+Test39: t=5.496123e-03 ,dsig/dt=5.704207e+04
+Test39: t=6.935716e-03 ,dsig/dt=3.524953e+04
+Test39: t=8.752379e-03 ,dsig/dt=1.924571e+04
+Test39: t=1.104488e-02 ,dsig/dt=8.816746e+03
+Test39: t=1.393785e-02 ,dsig/dt=3.572972e+03
+Test39: t=1.758857e-02 ,dsig/dt=1.255168e+03
+Test39: t=2.219552e-02 ,dsig/dt=6.676838e+02
+Test39: t=2.800917e-02 ,dsig/dt=7.933533e+02
+Test39: t=3.534557e-02 ,dsig/dt=1.079423e+03
+Test39: t=4.460359e-02 ,dsig/dt=6.064929e+02
+Test39: t=5.628655e-02 ,dsig/dt=1.461554e+02
+Test39: t=7.102961e-02 ,dsig/dt=1.692377e+02
+Test39: t=8.963431e-02 ,dsig/dt=1.098144e+02
+Test39: t=1.131121e-01 ,dsig/dt=1.598214e+01
+Test39: t=1.427394e-01 ,dsig/dt=5.213951e+00
+Test39: t=1.801270e-01 ,dsig/dt=3.615622e+00
+Test39: t=2.273074e-01 ,dsig/dt=1.466173e+00
+Test39: t=2.868457e-01 ,dsig/dt=1.799697e-01
+Test39: t=3.619788e-01 ,dsig/dt=0.000000e+00
+Test39: t=4.567915e-01 ,dsig/dt=0.000000e+00
+Test39: t=5.764383e-01 ,dsig/dt=0.000000e+00
+Test39: t=7.274240e-01 ,dsig/dt=0.000000e+00
+Test39: t=9.179572e-01 ,dsig/dt=0.000000e+00
+Test39: t=1.158397e+00 ,dsig/dt=0.000000e+00
+Test39: t=1.461814e+00 ,dsig/dt=0.000000e+00
+Test39: t=1.844705e+00 ,dsig/dt=0.000000e+00
+Test39: t=2.327886e+00 ,dsig/dt=0.000000e+00
+Test39: t=2.937626e+00 ,dsig/dt=0.000000e+00
+Test39: Material=Lead, Element[0]=Lead,A[0]=208 is selected.
+Test39:*NewRun* Targ=90082126,Proj=2112,P=1.000000e+05 MeV/c, =>> 80 of 80
+Test39: Mt=1.936877e+05, Mp=9.395656e+02, tmt=1.918764e+04, E=1.000044e+05
+*=>TEST39: 100000 events are simulated
+Test39:CalculationTimePerEvent=8.755000e-05 s
+Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
+Test39: t=3.370068e-04 ,dsig/dt=8.843239e+05
+Test39: t=4.252786e-04 ,dsig/dt=8.602425e+05
+Test39: t=5.366712e-04 ,dsig/dt=8.028745e+05
+Test39: t=6.772408e-04 ,dsig/dt=7.437070e+05
+Test39: t=8.546296e-04 ,dsig/dt=6.805208e+05
+Test39: t=1.078482e-03 ,dsig/dt=5.999381e+05
+Test39: t=1.360967e-03 ,dsig/dt=5.285094e+05
+Test39: t=1.717443e-03 ,dsig/dt=4.321977e+05
+Test39: t=2.167291e-03 ,dsig/dt=3.443085e+05
+Test39: t=2.734967e-03 ,dsig/dt=2.558740e+05
+Test39: t=3.451333e-03 ,dsig/dt=1.751683e+05
+Test39: t=4.355336e-03 ,dsig/dt=1.121075e+05
+Test39: t=5.496123e-03 ,dsig/dt=6.165981e+04
+Test39: t=6.935716e-03 ,dsig/dt=2.984306e+04
+Test39: t=8.752379e-03 ,dsig/dt=1.199790e+04
+Test39: t=1.104488e-02 ,dsig/dt=4.190560e+03
+Test39: t=1.393785e-02 ,dsig/dt=1.926499e+03
+Test39: t=1.758857e-02 ,dsig/dt=2.122566e+03
+Test39: t=2.219552e-02 ,dsig/dt=3.143504e+03
+Test39: t=2.800917e-02 ,dsig/dt=2.890441e+03
+Test39: t=3.534557e-02 ,dsig/dt=7.262461e+02
+Test39: t=4.460359e-02 ,dsig/dt=6.053963e+02
+Test39: t=5.628655e-02 ,dsig/dt=6.733057e+02
+Test39: t=7.102961e-02 ,dsig/dt=8.694550e+01
+Test39: t=8.963431e-02 ,dsig/dt=2.713826e+01
+Test39: t=1.131121e-01 ,dsig/dt=1.983251e+01
+Test39: t=1.427394e-01 ,dsig/dt=9.669133e+00
+Test39: t=1.801270e-01 ,dsig/dt=3.250592e+00
+Test39: t=2.273074e-01 ,dsig/dt=1.924195e+00
+Test39: t=2.868457e-01 ,dsig/dt=3.317699e-01
+Test39: t=3.619788e-01 ,dsig/dt=1.387632e-01
+Test39: t=4.567915e-01 ,dsig/dt=0.000000e+00
+Test39: t=5.764383e-01 ,dsig/dt=0.000000e+00
+Test39: t=7.274240e-01 ,dsig/dt=0.000000e+00
+Test39: t=9.179572e-01 ,dsig/dt=0.000000e+00
+Test39: t=1.158397e+00 ,dsig/dt=0.000000e+00
+Test39: t=1.461814e+00 ,dsig/dt=0.000000e+00
+Test39: t=1.844705e+00 ,dsig/dt=0.000000e+00
+Test39: t=2.327886e+00 ,dsig/dt=0.000000e+00
+Test39: t=2.937626e+00 ,dsig/dt=0.000000e+00

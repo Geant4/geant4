@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-08-01-patch-01-ref    (27-July-2006)
+ Geant4 version Name: global-V08-01-05    (15-December-2006)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -150,6 +150,16 @@ hIoni:   tables are built for  pi-
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+G4GlobalFastSimulationManager::GetFlavoredWorldForThis(...): DEPRECATING, will be dropped @ next major release
+G4GlobalFastSimulationManager::GetFlavoredWorldForThis(...): DEPRECATING, will be dropped @ next major release
+G4GlobalFastSimulationManager::GetFlavoredWorldForThis(...): DEPRECATING, will be dropped @ next major release
+G4GlobalFastSimulationManager::GetFlavoredWorldForThis(...): DEPRECATING, will be dropped @ next major release
+G4GlobalFastSimulationManager::GetFlavoredWorldForThis(...): DEPRECATING, will be dropped @ next major release
+G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
+G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
+G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
+G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
+G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
 #
 # proton at 10 GeV in Al
 #
@@ -552,5 +562,4 @@ hIoni:   tables are built for  pi-
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
- G4NuclearLevelManager: nuclide (92,228) does not have a gamma levels file
  G4NuclearLevelManager: nuclide (91,227) does not have a gamma levels file

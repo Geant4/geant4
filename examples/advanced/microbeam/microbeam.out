@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-08-01-patch-02-ref    (10-November-2006)
+ Geant4 version Name: global-V08-01-05    (15-December-2006)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -29,17 +29,13 @@ Registered model factories:
   drawByCharge
   drawByParticleID
   drawByOriginVolume
-
-Registered models: 
-  None
+  drawByAttribute
 
 Registered filter factories:
   chargeFilter
   particleFilter
   originVolumeFilter
-
-Registered filters:
-  None
+  attributeFilter
 
 
 
@@ -170,13 +166,13 @@ eBrem:   tables are built for  e+
       Total cross sections from a parametrisation based on the EEDL data library. 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
 
-annihil:       Heilter model of formula of annihilation into 2 photons
+annihil:       Sampling according eplus2gg model
       tables are built for  e+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
 
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+      Boundary/stepping algorithm is active with facrange= 0.2  Step limitation 0
 
 hLowEIoni:    Knock-on electron cross sections . 
         Good description above the mean excitation energy.
@@ -191,7 +187,7 @@ hLowEIoni:    Knock-on electron cross sections .
         Nuclear stopping power model is ICRU_R49
 
 msc:  Model variant of multiple scattering for GenericIon
-      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+      Boundary/stepping algorithm is active with facrange= 0.2  Step limitation 0
 
 hLowEIoni:    Knock-on electron cross sections . 
         Good description above the mean excitation energy.
@@ -207,7 +203,7 @@ hLowEIoni:    Knock-on electron cross sections .
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+      Boundary/stepping algorithm is active with facrange= 0.2  Step limitation 0
 
 ========= Table of registered couples ==============================
 
@@ -306,54 +302,45 @@ Index : 12     used in the geometry : Yes     recalculation needed : No
 
 -> Event # 1 generated 
    ===> The incident alpha particle has reached the targeted cell :
-   -----> total absorbed dose within Nucleus   is (Gy) = 0.289307
-   -----> total absorbed dose within Cytoplasm is (Gy) = 0.075806
+   -----> total absorbed dose within Nucleus   is (Gy) = 0.38476
+   -----> total absorbed dose within Cytoplasm is (Gy) = 0.0474129
 
-G4VisManager: Using G4TrajectoryDrawByCharge as default trajectory model.
-See commands in /vis/modeling/trajectories/ for other options.
-Trajectory drawing configuration will be based on imode value of 50
-WARNING: G4VisManager::IsValidView(): Attempt to draw when no graphics system
-  has been instantiated.  Use "/vis/open" or "/vis/sceneHandler/create".
-  Alternatively, to avoid this message, suppress instantiation of vis
-  manager (G4VisExecutive), possibly by setting G4VIS_NONE, and ensure
-  drawing code is executed only if G4VVisManager::GetConcreteInstance()
-  is non-zero.
 -> Event # 2 generated 
-   ===> The incident alpha particle has reached the targeted cell :
-   -----> total absorbed dose within Nucleus   is (Gy) = 0.290869
-   -----> total absorbed dose within Cytoplasm is (Gy) = 0.0873862
+   ===> Sorry, the incident alpha particle has missed the targeted cell !
 
 -> Event # 3 generated 
-   ===> Sorry, the incident alpha particle has missed the targeted cell !
+   ===> The incident alpha particle has reached the targeted cell :
+   -----> total absorbed dose within Nucleus   is (Gy) = 0.629625
+   -----> total absorbed dose within Cytoplasm is (Gy) = 0.0207051
 
 -> Event # 4 generated 
    ===> Sorry, the incident alpha particle has missed the targeted cell !
 
 -> Event # 5 generated 
-   ===> Sorry, the incident alpha particle has missed the targeted cell !
+   ===> The incident alpha particle has reached the targeted cell :
+   -----> total absorbed dose within Nucleus   is (Gy) = 0.310002
+   -----> total absorbed dose within Cytoplasm is (Gy) = 0.0442774
 
 -> Event # 6 generated 
    ===> The incident alpha particle has reached the targeted cell :
-   -----> total absorbed dose within Nucleus   is (Gy) = 0.572692
-   -----> total absorbed dose within Cytoplasm is (Gy) = 0.0552643
+   -----> total absorbed dose within Nucleus   is (Gy) = 0.319927
+   -----> total absorbed dose within Cytoplasm is (Gy) = 0.0237016
 
 -> Event # 7 generated 
-   ===> The incident alpha particle has reached the targeted cell :
-   -----> total absorbed dose within Nucleus   is (Gy) = 0.25181
-   -----> total absorbed dose within Cytoplasm is (Gy) = 0.0830187
+   ===> Sorry, the incident alpha particle has missed the targeted cell !
 
 -> Event # 8 generated 
-   ===> Sorry, the incident alpha particle has missed the targeted cell !
+   ===> The incident alpha particle has reached the targeted cell :
+   -----> total absorbed dose within Nucleus   is (Gy) = 0.663194
+   -----> total absorbed dose within Cytoplasm is (Gy) = 0.00608321
 
 -> Event # 9 generated 
    ===> The incident alpha particle has reached the targeted cell :
-   -----> total absorbed dose within Nucleus   is (Gy) = 0.324588
-   -----> total absorbed dose within Cytoplasm is (Gy) = 0.104895
+   -----> total absorbed dose within Nucleus   is (Gy) = 0.348951
+   -----> total absorbed dose within Cytoplasm is (Gy) = 0.00786652
 
 -> Event # 10 generated 
-   ===> The incident alpha particle has reached the targeted cell :
-   -----> total absorbed dose within Nucleus   is (Gy) = 0.363696
-   -----> total absorbed dose within Cytoplasm is (Gy) = 0.0764332
+   ===> Sorry, the incident alpha particle has missed the targeted cell !
 
 ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
 -> Total number of particles detected by the gas detector : 6

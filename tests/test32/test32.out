@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-08-01-patch-01-ref    (27-July-2006)
+ Geant4 version Name: global-V08-01-05    (15-December-2006)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -229,20 +229,20 @@ Index : 1     used in the geometry : Yes     recalculation needed : No
 
 ### Run 0 start.
 number of event = 1000
- User=30.93s Real=37.89s Sys=6.42s
+ User=31.07s Real=33.06s Sys=1.91s
 #
 /gun/particle proton
 /run/beamOn 1000
 ### Run 1 start.
 number of event = 1000
- User=23.18s Real=28.61s Sys=4.96s
+ User=23.61s Real=25.01s Sys=1.4s
 /gun/particle pi-
 /run/beamOn 1000
 ### Run 2 start.
 number of event = 1000
- User=27.51s Real=33.54s Sys=5.38s
+ User=27.98s Real=29.71s Sys=1.7s
 /gun/particle pi+
 /run/beamOn 1000
 ### Run 3 start.
 number of event = 1000
- User=28.2s Real=34.61s Sys=5.89s
+ User=25.96s Real=27.81s Sys=1.83s

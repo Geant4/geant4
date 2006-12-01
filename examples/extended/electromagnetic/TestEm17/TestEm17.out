@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-08-01-patch-02-ref    (10-November-2006)
+ Geant4 version Name: global-V08-01-05    (15-December-2006)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -54,17 +54,13 @@ Registered model factories:
   drawByCharge
   drawByParticleID
   drawByOriginVolume
-
-Registered models: 
-  None
+  drawByAttribute
 
 Registered filter factories:
   chargeFilter
   particleFilter
   originVolumeFilter
-
-Registered filters:
-  None
+  attributeFilter
 
 /run/verbose 2
 #
@@ -141,7 +137,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=73.95s Real=235.01s Sys=14.32s
+  User=68.27s Real=89.96s Sys=3.3s
 
  The run consists of 10000 mu+ of 10 TeV through 1 m   of Iron (density: 7.9 g/cm3 )
 
@@ -162,7 +158,9 @@ UserRunAction deleted.
 UserPrimaryGenerator deleted.
 G4 kernel has come to Quit state.
 EventManager deleted.
+Default detector region deleted.
 UImanager deleted.
+Units table cleared.
 StateManager deleted.
 RunManagerKernel is deleted.
 RunManager is deleting.
