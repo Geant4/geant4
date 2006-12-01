@@ -71,7 +71,7 @@ export G4TMP=$G4WORKDIR/tmp
 #export NeutronHPCrossSections=$G4INSTALL/../G4NDL0.2
 #export NeutronHPCrossSections=$G4INSTALL/../G4NDL3.1
 #export NeutronHPCrossSections=/afs/cern.ch/sw/geant4/dev/data/G4NDL3.5
-export NeutronHPCrossSections=/afs/cern.ch/sw/geant4/dev/data/G4NDL3.9
+export NeutronHPCrossSections=/afs/cern.ch/sw/geant4/dev/data/G4NDL
 #export NeutronHPCrossSections=/afs/cern.ch/sw/geant4/dev/data/G4NDL0.2
 
 # set only in dev1! (to save space)
@@ -85,7 +85,7 @@ export G4LEVELGAMMADATA=/afs/cern.ch/sw/geant4/dev/data/PhotonEvaporation
 export G4ELASTICDATA=/afs/cern.ch/sw/geant4/dev/data/G4ELASTIC
 
 # Yes!
-export G4RADIOACTIVEDATA=/afs/cern.ch/sw/geant4/dev/data/RadiativeDecay
+export G4RADIOACTIVEDATA=/afs/cern.ch/sw/geant4/dev/data/RadioactiveDecay
 
 
 # STEP
@@ -97,7 +97,7 @@ export G4LIB_USE_STEP=1
 # New data for emlowen-V03-02-45: affected tests 14,17,20!
 #export G4LEDATA=$G4INSTALL/../G4EMLOW0.4
 
-export G4LEDATA=/afs/cern.ch/sw/geant4/dev/data/G4EMLOW4.1
+export G4LEDATA=/afs/cern.ch/sw/geant4/dev/data/G4EMLOW
 #export G4LEDATA=$G4INSTALL/../G4EMLOW3.0
 
 #export G4ANALYSIS_USE=1
