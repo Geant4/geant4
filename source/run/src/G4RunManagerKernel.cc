@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManagerKernel.cc,v 1.36 2006-11-30 10:41:46 gcosmo Exp $
+// $Id: G4RunManagerKernel.cc,v 1.37 2006-12-01 01:23:35 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -363,12 +363,26 @@ void G4RunManagerKernel::BuildPhysicsTables()
 
 void G4RunManagerKernel::CheckRegions()
 {
-  G4RegionStore::GetInstance()->SetWorldVolume();
-
+  G4TransportationManager* transM = G4TransportationManager::GetTransportationManager();
+  size_t nWorlds = transM->GetNoWorlds();
+  std::vector<G4VPhysicalVolume*>::iterator wItr;
   for(size_t i=0;i<G4RegionStore::GetInstance()->size();i++)
   { 
     G4Region* region = (*(G4RegionStore::GetInstance()))[i];
+
+    //Let each region have a pointer to the world volume where it belongs to.
+    //G4Region::SetWorld() checks if the region belongs to the given world and set it
+    //only if it does. Thus, here we go through all the registered world volumes.
+    wItr = transM->GetWorldsIterator();
+    for(size_t iw=0;iw<nWorlds;iw++)
+    {
+      region->SetWorld(*wItr);
+      wItr++;
+    }
+
+    //Now check for the regions which belongs to the tracking world
     if(region->GetWorldPhysical()!=currentWorld) continue;
+
     G4ProductionCuts* cuts = region->GetProductionCuts();
     if(!cuts)
     {
