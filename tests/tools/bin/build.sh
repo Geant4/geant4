@@ -106,7 +106,7 @@ else
     else
     #
 	if [ "$1" = "all" ] ; then 
-	    (date;cd $G4INSTALL/physics_lists/hadronic;time $MAKECMD; \
+	    (date; \
 		cd $G4INSTALL/source;time $MAKECMD;\
 		cd $G4INSTALL/tests;$MAKECMD clean_bin;time $MAKECMD;date) \
 		> $dir/gmake.log 2>&1
