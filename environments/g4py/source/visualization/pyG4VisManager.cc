@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4VisManager.cc,v 1.4 2006-06-29 15:36:56 gunter Exp $
+// $Id: pyG4VisManager.cc,v 1.5 2006-12-01 02:14:20 kmura Exp $
 // $Name: not supported by cvs2svn $
 // ====================================================================
 //   pyG4VisManager.cc
@@ -47,8 +47,6 @@ public:
   PyG4VisManager() { SetVerboseLevel(quiet); }
   ~PyG4VisManager() { }
 
-  void SetVerbosity(Verbosity verb) { fVerbosity= verb; }
-
   virtual void RegisterGraphicsSystems() { }
 
 #if G4VERSION_NUMBER >= 800
@@ -59,6 +57,22 @@ public:
 #endif
 
 };
+
+// ====================================================================
+// thin wrappers
+// ====================================================================
+namespace pyG4VisManager {
+
+void (PyG4VisManager::*f1_SetVerboseLevel)(G4int)
+  = &PyG4VisManager::SetVerboseLevel;
+void (PyG4VisManager::*f2_SetVerboseLevel)(const G4String&)
+  = &PyG4VisManager::SetVerboseLevel;
+  void (PyG4VisManager::*f3_SetVerboseLevel)(G4VisManager::Verbosity)
+  = &PyG4VisManager::SetVerboseLevel;
+
+}
+
+using namespace pyG4VisManager;
 
 // ====================================================================
 // module definition
@@ -74,7 +88,9 @@ void export_G4VisManager()
          return_value_policy<reference_existing_object>())
     .staticmethod("GetConcreteInstance")
     // ---
-    .def("SetVerbosity", &PyG4VisManager::SetVerbosity)
+    .def("SetVerbosity", f1_SetVerboseLevel)
+    .def("SetVerbosity", f2_SetVerboseLevel)
+    .def("SetVerbosity", f3_SetVerboseLevel)
     .def("GetVerbosity", &PyG4VisManager::GetVerbosity)
     .def("Initialize", &PyG4VisManager::Initialize)
     .def("RegisterGraphicsSystem", &PyG4VisManager::RegisterGraphicsSystem)
