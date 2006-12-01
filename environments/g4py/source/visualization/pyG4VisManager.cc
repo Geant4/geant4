@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4VisManager.cc,v 1.5 2006-12-01 02:14:20 kmura Exp $
+// $Id: pyG4VisManager.cc,v 1.6 2006-12-01 02:17:54 kmura Exp $
 // $Name: not supported by cvs2svn $
 // ====================================================================
 //   pyG4VisManager.cc
@@ -88,9 +88,9 @@ void export_G4VisManager()
          return_value_policy<reference_existing_object>())
     .staticmethod("GetConcreteInstance")
     // ---
-    .def("SetVerbosity", f1_SetVerboseLevel)
-    .def("SetVerbosity", f2_SetVerboseLevel)
-    .def("SetVerbosity", f3_SetVerboseLevel)
+    .def("SetVerboseLevel", f1_SetVerboseLevel)
+    .def("SetVerboseLevel", f2_SetVerboseLevel)
+    .def("SetVerboseLevel", f3_SetVerboseLevel)
     .def("GetVerbosity", &PyG4VisManager::GetVerbosity)
     .def("Initialize", &PyG4VisManager::Initialize)
     .def("RegisterGraphicsSystem", &PyG4VisManager::RegisterGraphicsSystem)
