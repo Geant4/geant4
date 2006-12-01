@@ -529,7 +529,7 @@ examples                                         examples-V08-01-05
     and removed ghosts in DetectorConstruction.
   o Archived XXXCuts classes, as they are not of primary need.
   o Fixed bug in ExN05CalorimeterSD which was originated from N04.
-- novice/N07 (exampleN05-V08-01-00)
+- novice/N07 (exampleN07-V08-01-00)
   o Added timing measurement for each region and for e+/e-.
 
 tests                                            tests-V08-01-05
