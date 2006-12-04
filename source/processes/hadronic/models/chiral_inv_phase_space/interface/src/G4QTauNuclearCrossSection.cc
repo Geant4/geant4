@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QTauNuclearCrossSection.cc,v 1.9 2006-12-01 10:57:47 mkossov Exp $
+// $Id: G4QTauNuclearCrossSection.cc,v 1.10 2006-12-04 10:44:22 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -137,8 +137,8 @@ G4double G4QTauNuclearCrossSection::GetCrossSection(G4bool fCS, G4double pMom,
         {
 #ifdef pdebug
           G4cout<<"G4QTNCS::GetCS:P="<<pMom<<",CS="<<lastCS*millibarn<<G4endl;
-          //CalculateCrossSection(fCS,-27,j,lastPDG,lastZ,lastN,pMom); // DUMMY TEST
 #endif
+          CalculateCrossSection(fCS,-1,j,lastPDG,lastZ,lastN,pMom); // Update param's only
           return lastCS*millibarn;     // Use theLastCS
         }
         in = true;                       // This is the case when the isotop is found in DB

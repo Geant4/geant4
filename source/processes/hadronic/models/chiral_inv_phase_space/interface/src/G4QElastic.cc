@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QElastic.cc,v 1.11 2006-12-01 12:13:48 mkossov Exp $
+// $Id: G4QElastic.cc,v 1.12 2006-12-04 10:44:22 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QElastic class -----------------
@@ -417,7 +417,8 @@ G4VParticleChange* G4QElastic::PostStepDoIt(const G4Track& track, const G4Step& 
   // @@ check a possibility to separate p, n, or alpha (!)
   if(xSec <= 0.) // The cross-section iz 0 -> Do Nothing
   {
-    G4cerr<<"*Warning*G4QElastic::PSDoIt: Zero cross-section"<<G4endl;
+    G4cerr<<"*Warning*G4QElastic::PSDoIt:*Zero cross-sectionp* PDG="<<projPDG<<",tPDG="
+          <<targPDG<<",P="<<Momentum<<G4endl;
     //Do Nothing Action insead of the reaction
     aParticleChange.ProposeEnergy(kinEnergy);
     aParticleChange.ProposeLocalEnergyDeposit(0.);
@@ -447,8 +448,9 @@ G4VParticleChange* G4QElastic::PostStepDoIt(const G4Track& track, const G4Step& 
 #endif
   if(cost>1. || cost<-1.)
   {
-    if(cost>1.000001 || cost<-1.000001) G4cout<<"*Warning*G4QElastic::PostStepDoIt: cos="
-        <<cost<<", t="<<mint<<",T="<<kinEnergy<<", M="<<tM<<",tm="<<2*kinEnergy*tM<<G4endl;
+    if(cost>1.000001 || cost<-1.000001) 
+      G4cout<<"*Warning*G4QElastic::PostStepDoIt:cos="<<cost<<",t="<<mint<<",T="<<kinEnergy
+            <<",tgM="<<tM<<",tmax="<<2*kinEnergy*tM<<",pPDG="<<projPDG<<",tPDG="<<G4endl;
     if     (cost>1.)  cost=1.;
     else if(cost<-1.) cost=-1.;
   }
