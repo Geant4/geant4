@@ -221,7 +221,7 @@ for iAbsorber in listAbsorbers :
                 else :
                     isOKforAllCases = 1
                     print '  *** REPRODUCIBILITY ?  NO  *** '
-                    print '  ****************************** \n'
+                print '  ****************************** \n'
 
 print '   '
 print '   '
