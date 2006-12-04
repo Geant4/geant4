@@ -1,5 +1,5 @@
 
- Last update: 01-Dec-2006
+ Last update: 04-Dec-2006
  ========================
 
  This directory contains a configurable calorimeter setup to be used
@@ -153,6 +153,8 @@
    o  compareAll.py
    o  addInfoInTable.py
    o  printInfoLogfile.py
+   o  reproducibility.py
+   o  reproducibilityAll.py
  The first three are useful immediately after you get the results 
  from the Grid jobs.
  compare2.py is useful to have detailed information  on the 
@@ -162,6 +164,11 @@
  type, by beam particle, and by beam energy).
  addInfoInTable.py, which uses printInfoLogFile.py, is useful
  to summarize the main results in a table. 
+ reproducibility.py is useful to test the reproducibility for
+ a single case (beam particle, beam energy, calorimeter type).
+ reproducibilityAll.py is useful to test the reproducibility
+ for several combinations of (beam particle, beam energy,
+ calorimeter type): only the Physics List is fixed.
  Please read the comments at the top of these files for more
  information.
 
