@@ -23,43 +23,51 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
- #include "G4QGSCNeutronBuilder.hh"
- #include "G4ParticleDefinition.hh"
- #include "G4ParticleTable.hh"
- #include "G4ProcessManager.hh"
+#ifndef G4QGSCEflowNeutronBuilder_h
+#define G4QGSCEflowNeutronBuilder_h 1
 
- G4QGSCNeutronBuilder::
- G4QGSCNeutronBuilder() 
- {
-   theMin = 8*GeV;
-   theModel = new G4TheoFSGenerator;
+#include "globals.hh"
 
-   theStringModel= new G4QGSModel< G4QGSParticipants >;
-   theStringDecay = new G4ExcitedStringDecay(new G4QGSMFragmentation);
-   theStringModel->SetFragmentationModel(theStringDecay);
+#include "G4HadronElasticProcess.hh"
+#include "G4HadronFissionProcess.hh"
+#include "G4HadronCaptureProcess.hh"
+#include "G4NeutronInelasticProcess.hh"
+#include "G4VNeutronBuilder.hh"
 
-   theCascade = new G4QStringChipsParticleLevelInterface;
+#include "G4NeutronInelasticCrossSection.hh"
+#include "G4TheoFSGenerator.hh"
+#include "G4StringChipsParticleLevelInterface.hh"
+#include "G4QGSModel.hh"
+#include "G4QGSParticipants.hh"
+#include "G4QGSMFragmentation.hh"
+#include "G4ExcitedStringDecay.hh"
 
-   theModel->SetTransport(theCascade);
-   theModel->SetHighEnergyGenerator(theStringModel);
- }
+class G4QGSCEflowNeutronBuilder : public G4VNeutronBuilder
+{
+  public: 
+    G4QGSCEflowNeutronBuilder();
+    virtual ~G4QGSCEflowNeutronBuilder();
 
- G4QGSCNeutronBuilder::
- ~G4QGSCNeutronBuilder() 
- {
-   delete theStringDecay;
-   delete theStringModel;
-   delete theCascade;
-   delete theModel;
- }
+  public: 
+    virtual void Build(G4HadronElasticProcess * ){}
+    virtual void Build(G4HadronFissionProcess * ){}
+    virtual void Build(G4HadronCaptureProcess * ){}
+    virtual void Build(G4NeutronInelasticProcess * aP);
+    
+    void SetMinEnergy(G4double aM) {theMin = aM;}
 
- void G4QGSCNeutronBuilder::
- Build(G4NeutronInelasticProcess * aP)
- {
-   theModel->SetMinEnergy(theMin);
-   theModel->SetMaxEnergy(100*TeV);
-   aP->RegisterMe(theModel);
-   aP->AddDataSet(&theXSec);  
- }
+  private:
+    G4QGSModel< G4QGSParticipants > * theStringModel;
+    G4StringChipsParticleLevelInterface * theCascade;
+    G4TheoFSGenerator * theModel;
+    G4ExcitedStringDecay * theStringDecay;
 
- // 2002 by J.P. Wellisch
+    G4NeutronInelasticCrossSection theXSec;
+    G4double theMin;
+
+};
+
+// 2006 G.Folger
+
+#endif
+

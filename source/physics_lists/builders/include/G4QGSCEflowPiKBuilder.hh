@@ -23,43 +23,56 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
- #include "G4QGSCNeutronBuilder.hh"
- #include "G4ParticleDefinition.hh"
- #include "G4ParticleTable.hh"
- #include "G4ProcessManager.hh"
+#ifndef G4QGSCEflowPiKBuilder_h
+#define G4QGSCEflowPiKBuilder_h 1
 
- G4QGSCNeutronBuilder::
- G4QGSCNeutronBuilder() 
- {
-   theMin = 8*GeV;
-   theModel = new G4TheoFSGenerator;
+#include "globals.hh"
 
-   theStringModel= new G4QGSModel< G4QGSParticipants >;
-   theStringDecay = new G4ExcitedStringDecay(new G4QGSMFragmentation);
-   theStringModel->SetFragmentationModel(theStringDecay);
+#include "G4HadronElasticProcess.hh"
+#include "G4HadronFissionProcess.hh"
+#include "G4HadronCaptureProcess.hh"
+#include "G4NeutronInelasticProcess.hh"
+#include "G4VPiKBuilder.hh"
 
-   theCascade = new G4QStringChipsParticleLevelInterface;
+#include "G4PiNuclearCrossSection.hh"
 
-   theModel->SetTransport(theCascade);
-   theModel->SetHighEnergyGenerator(theStringModel);
- }
+#include "G4TheoFSGenerator.hh"
+#include "G4StringChipsParticleLevelInterface.hh"
+#include "G4QGSModel.hh"
+#include "G4QGSParticipants.hh"
+#include "G4QGSMFragmentation.hh"
+#include "G4ExcitedStringDecay.hh"
 
- G4QGSCNeutronBuilder::
- ~G4QGSCNeutronBuilder() 
- {
-   delete theStringDecay;
-   delete theStringModel;
-   delete theCascade;
-   delete theModel;
- }
+class G4QGSCEflowPiKBuilder : public G4VPiKBuilder
+{
+  public: 
+    G4QGSCEflowPiKBuilder();
+    virtual ~G4QGSCEflowPiKBuilder();
 
- void G4QGSCNeutronBuilder::
- Build(G4NeutronInelasticProcess * aP)
- {
-   theModel->SetMinEnergy(theMin);
-   theModel->SetMaxEnergy(100*TeV);
-   aP->RegisterMe(theModel);
-   aP->AddDataSet(&theXSec);  
- }
+  public: 
+    virtual void Build(G4HadronElasticProcess * aP);
+    virtual void Build(G4PionPlusInelasticProcess * aP);
+    virtual void Build(G4PionMinusInelasticProcess * aP);
+    virtual void Build(G4KaonPlusInelasticProcess * aP);
+    virtual void Build(G4KaonMinusInelasticProcess * aP);
+    virtual void Build(G4KaonZeroLInelasticProcess * aP);
+    virtual void Build(G4KaonZeroSInelasticProcess * aP);
+    
+    void SetMinEnergy(G4double aM) {theMin = aM;}
 
- // 2002 by J.P. Wellisch
+  private:
+    G4PiNuclearCrossSection thePiCross; 
+    
+    G4TheoFSGenerator * theModel;
+    G4StringChipsParticleLevelInterface * theCascade;
+    G4QGSModel< G4QGSParticipants > * theStringModel;
+    G4QGSMFragmentation theFragmentation;
+    G4ExcitedStringDecay * theStringDecay;
+    G4double theMin;
+
+};
+
+// 2006 G.Folger
+
+#endif
+

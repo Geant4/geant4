@@ -23,13 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-#include "G4QGSCPiKBuilder.hh"
+#include "G4QGSCEflowPiKBuilder.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
 
-G4QGSCPiKBuilder::
-G4QGSCPiKBuilder() 
+G4QGSCEflowPiKBuilder::
+G4QGSCEflowPiKBuilder() 
 {
   theMin = 8*GeV;
   theModel = new G4TheoFSGenerator;
@@ -38,14 +38,14 @@ G4QGSCPiKBuilder()
   theStringDecay = new G4ExcitedStringDecay(new G4QGSMFragmentation);
   theStringModel->SetFragmentationModel(theStringDecay);
 
-  theCascade = new G4QStringChipsParticleLevelInterface;
+  theCascade = new G4StringChipsParticleLevelInterface;
 
   theModel->SetTransport(theCascade);
   theModel->SetHighEnergyGenerator(theStringModel);
 }
 
-G4QGSCPiKBuilder::
-~G4QGSCPiKBuilder() 
+G4QGSCEflowPiKBuilder::
+~G4QGSCEflowPiKBuilder() 
 {
   delete theCascade;
   delete theStringDecay;
@@ -53,10 +53,10 @@ G4QGSCPiKBuilder::
   delete theModel;
 }
 
-void G4QGSCPiKBuilder::
+void G4QGSCEflowPiKBuilder::
 Build(G4HadronElasticProcess * ) {}
 
-void G4QGSCPiKBuilder::
+void G4QGSCEflowPiKBuilder::
 Build(G4PionPlusInelasticProcess * aP)
 {
   theModel->SetMinEnergy(theMin);
@@ -65,7 +65,7 @@ Build(G4PionPlusInelasticProcess * aP)
   aP->RegisterMe(theModel);
 }
 
-void G4QGSCPiKBuilder::
+void G4QGSCEflowPiKBuilder::
 Build(G4PionMinusInelasticProcess * aP)
 {
   theModel->SetMinEnergy(theMin);
@@ -74,7 +74,7 @@ Build(G4PionMinusInelasticProcess * aP)
   aP->RegisterMe(theModel);
 }
 
-void G4QGSCPiKBuilder::
+void G4QGSCEflowPiKBuilder::
 Build(G4KaonPlusInelasticProcess * aP)
 {
   theModel->SetMinEnergy(theMin);
@@ -82,7 +82,7 @@ Build(G4KaonPlusInelasticProcess * aP)
   aP->RegisterMe(theModel);
 }
 
-void G4QGSCPiKBuilder::
+void G4QGSCEflowPiKBuilder::
 Build(G4KaonMinusInelasticProcess * aP)
 {
   theModel->SetMinEnergy(theMin);
@@ -90,7 +90,7 @@ Build(G4KaonMinusInelasticProcess * aP)
   aP->RegisterMe(theModel);
 }
 
-void G4QGSCPiKBuilder::
+void G4QGSCEflowPiKBuilder::
 Build(G4KaonZeroLInelasticProcess * aP)
 {
   theModel->SetMinEnergy(theMin);
@@ -98,7 +98,7 @@ Build(G4KaonZeroLInelasticProcess * aP)
   aP->RegisterMe(theModel);
 }
 
-void G4QGSCPiKBuilder::
+void G4QGSCEflowPiKBuilder::
 Build(G4KaonZeroSInelasticProcess * aP)
 {
   theModel->SetMinEnergy(theMin);
@@ -106,4 +106,4 @@ Build(G4KaonZeroSInelasticProcess * aP)
   aP->RegisterMe(theModel);
 }
 
-// 2002 by J.P. Wellisch
+// 2006 G.Folger

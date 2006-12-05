@@ -23,43 +23,48 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
- #include "G4QGSCNeutronBuilder.hh"
- #include "G4ParticleDefinition.hh"
- #include "G4ParticleTable.hh"
- #include "G4ProcessManager.hh"
+#include "G4QGSCEflowProtonBuilder.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4ParticleTable.hh"
+#include "G4ProcessManager.hh"
 
- G4QGSCNeutronBuilder::
- G4QGSCNeutronBuilder() 
- {
-   theMin = 8*GeV;
-   theModel = new G4TheoFSGenerator;
+G4QGSCEflowProtonBuilder::
+G4QGSCEflowProtonBuilder() 
+{
+  theMin = 8*GeV;
+  theModel = new G4TheoFSGenerator;
 
-   theStringModel= new G4QGSModel< G4QGSParticipants >;
-   theStringDecay = new G4ExcitedStringDecay(new G4QGSMFragmentation);
-   theStringModel->SetFragmentationModel(theStringDecay);
+  theStringModel = new G4QGSModel< G4QGSParticipants >;
+  theStringDecay = new G4ExcitedStringDecay(new G4QGSMFragmentation);
+  theStringModel->SetFragmentationModel(theStringDecay);
+  
+  theCascade = new G4StringChipsParticleLevelInterface;
 
-   theCascade = new G4QStringChipsParticleLevelInterface;
+  theModel->SetHighEnergyGenerator(theStringModel);
+  theModel->SetTransport(theCascade);
+}
 
-   theModel->SetTransport(theCascade);
-   theModel->SetHighEnergyGenerator(theStringModel);
- }
+G4QGSCEflowProtonBuilder::
+~G4QGSCEflowProtonBuilder() 
+{
+  delete theCascade;
+  delete theStringDecay;
+  delete theStringModel; 
+  delete theModel;
+}
 
- G4QGSCNeutronBuilder::
- ~G4QGSCNeutronBuilder() 
- {
-   delete theStringDecay;
-   delete theStringModel;
-   delete theCascade;
-   delete theModel;
- }
+void G4QGSCEflowProtonBuilder::
+Build(G4HadronElasticProcess * )
+{
+}
 
- void G4QGSCNeutronBuilder::
- Build(G4NeutronInelasticProcess * aP)
- {
-   theModel->SetMinEnergy(theMin);
-   theModel->SetMaxEnergy(100*TeV);
-   aP->RegisterMe(theModel);
-   aP->AddDataSet(&theXSec);  
- }
+void G4QGSCEflowProtonBuilder::
+Build(G4ProtonInelasticProcess * aP)
+{
+  theModel->SetMinEnergy(theMin);
+  theModel->SetMaxEnergy(100*TeV);
+  aP->RegisterMe(theModel);
+  aP->AddDataSet(&theXSec);  
+}
 
- // 2002 by J.P. Wellisch
+// 2006 G.Folger

@@ -38,7 +38,7 @@ G4QGSCProtonBuilder()
   theStringDecay = new G4ExcitedStringDecay(new G4QGSMFragmentation);
   theStringModel->SetFragmentationModel(theStringDecay);
   
-  theCascade = new G4StringChipsParticleLevelInterface;
+  theCascade = new G4QStringChipsParticleLevelInterface;
 
   theModel->SetHighEnergyGenerator(theStringModel);
   theModel->SetTransport(theCascade);

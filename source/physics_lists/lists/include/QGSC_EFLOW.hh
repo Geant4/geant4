@@ -23,43 +23,33 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
- #include "G4QGSCNeutronBuilder.hh"
- #include "G4ParticleDefinition.hh"
- #include "G4ParticleTable.hh"
- #include "G4ProcessManager.hh"
+#ifndef TQGSC_EFLOW_h
+#define TQGSC_EFLOW_h 1
 
- G4QGSCNeutronBuilder::
- G4QGSCNeutronBuilder() 
- {
-   theMin = 8*GeV;
-   theModel = new G4TheoFSGenerator;
+#include "G4VModularPhysicsList.hh"
+#include "globals.hh"
+#include "CompileTimeConstraints.hh"
 
-   theStringModel= new G4QGSModel< G4QGSParticipants >;
-   theStringDecay = new G4ExcitedStringDecay(new G4QGSMFragmentation);
-   theStringModel->SetFragmentationModel(theStringDecay);
+template<class T>
+class TQGSC_EFLOW: public T
+{
+public:
+  TQGSC_EFLOW(G4int ver = 1);
+  virtual ~TQGSC_EFLOW();
+  
+public:
+  // SetCuts() 
+  virtual void SetCuts();
 
-   theCascade = new G4QStringChipsParticleLevelInterface;
+private:
+  enum {ok = CompileTimeConstraints::IsA<T, G4VModularPhysicsList>::ok };
+};
+#include "QGSC_EFLOW.icc"
+typedef TQGSC_EFLOW<G4VModularPhysicsList> QGSC_EFLOW;
 
-   theModel->SetTransport(theCascade);
-   theModel->SetHighEnergyGenerator(theStringModel);
- }
+// 2002 by J.P. Wellisch
 
- G4QGSCNeutronBuilder::
- ~G4QGSCNeutronBuilder() 
- {
-   delete theStringDecay;
-   delete theStringModel;
-   delete theCascade;
-   delete theModel;
- }
+#endif
 
- void G4QGSCNeutronBuilder::
- Build(G4NeutronInelasticProcess * aP)
- {
-   theModel->SetMinEnergy(theMin);
-   theModel->SetMaxEnergy(100*TeV);
-   aP->RegisterMe(theModel);
-   aP->AddDataSet(&theXSec);  
- }
 
- // 2002 by J.P. Wellisch
+

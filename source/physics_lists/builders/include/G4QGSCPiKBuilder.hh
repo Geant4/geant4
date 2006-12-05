@@ -37,7 +37,7 @@
 #include "G4PiNuclearCrossSection.hh"
 
 #include "G4TheoFSGenerator.hh"
-#include "G4StringChipsParticleLevelInterface.hh"
+#include "G4QStringChipsParticleLevelInterface.hh"
 #include "G4QGSModel.hh"
 #include "G4QGSParticipants.hh"
 #include "G4QGSMFragmentation.hh"
@@ -64,7 +64,7 @@ class G4QGSCPiKBuilder : public G4VPiKBuilder
     G4PiNuclearCrossSection thePiCross; 
     
     G4TheoFSGenerator * theModel;
-    G4StringChipsParticleLevelInterface * theCascade;
+    G4QStringChipsParticleLevelInterface * theCascade;
     G4QGSModel< G4QGSParticipants > * theStringModel;
     G4QGSMFragmentation theFragmentation;
     G4ExcitedStringDecay * theStringDecay;

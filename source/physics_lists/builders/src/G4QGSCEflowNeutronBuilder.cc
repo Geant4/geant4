@@ -23,13 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
- #include "G4QGSCNeutronBuilder.hh"
+ #include "G4QGSCEflowNeutronBuilder.hh"
  #include "G4ParticleDefinition.hh"
  #include "G4ParticleTable.hh"
  #include "G4ProcessManager.hh"
 
- G4QGSCNeutronBuilder::
- G4QGSCNeutronBuilder() 
+ G4QGSCEflowNeutronBuilder::
+ G4QGSCEflowNeutronBuilder() 
  {
    theMin = 8*GeV;
    theModel = new G4TheoFSGenerator;
@@ -38,14 +38,14 @@
    theStringDecay = new G4ExcitedStringDecay(new G4QGSMFragmentation);
    theStringModel->SetFragmentationModel(theStringDecay);
 
-   theCascade = new G4QStringChipsParticleLevelInterface;
+   theCascade = new G4StringChipsParticleLevelInterface;
 
    theModel->SetTransport(theCascade);
    theModel->SetHighEnergyGenerator(theStringModel);
  }
 
- G4QGSCNeutronBuilder::
- ~G4QGSCNeutronBuilder() 
+ G4QGSCEflowNeutronBuilder::
+ ~G4QGSCEflowNeutronBuilder() 
  {
    delete theStringDecay;
    delete theStringModel;
@@ -53,7 +53,7 @@
    delete theModel;
  }
 
- void G4QGSCNeutronBuilder::
+ void G4QGSCEflowNeutronBuilder::
  Build(G4NeutronInelasticProcess * aP)
  {
    theModel->SetMinEnergy(theMin);
@@ -62,4 +62,4 @@
    aP->AddDataSet(&theXSec);  
  }
 
- // 2002 by J.P. Wellisch
+// 2006 G.Folger

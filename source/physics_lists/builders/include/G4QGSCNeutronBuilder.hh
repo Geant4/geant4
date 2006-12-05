@@ -36,7 +36,7 @@
 
 #include "G4NeutronInelasticCrossSection.hh"
 #include "G4TheoFSGenerator.hh"
-#include "G4StringChipsParticleLevelInterface.hh"
+#include "G4QStringChipsParticleLevelInterface.hh"
 #include "G4QGSModel.hh"
 #include "G4QGSParticipants.hh"
 #include "G4QGSMFragmentation.hh"
@@ -58,7 +58,7 @@ class G4QGSCNeutronBuilder : public G4VNeutronBuilder
 
   private:
     G4QGSModel< G4QGSParticipants > * theStringModel;
-    G4StringChipsParticleLevelInterface * theCascade;
+    G4QStringChipsParticleLevelInterface * theCascade;
     G4TheoFSGenerator * theModel;
     G4ExcitedStringDecay * theStringDecay;
 

@@ -23,43 +23,67 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
- #include "G4QGSCNeutronBuilder.hh"
- #include "G4ParticleDefinition.hh"
- #include "G4ParticleTable.hh"
- #include "G4ProcessManager.hh"
+// $Id: HadronPhysicsQGSC_EFLOW.hh,v 1.1 2006-12-05 17:03:31 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+//---------------------------------------------------------------------------
+//
+// ClassName:   HadronPhysicsQGSC_EFLOW
+//
+// Author: 2006 Gunter Folger
+//
+// Created from HadronPhysicsQGSC
+// Modified:
+//
+//----------------------------------------------------------------------------
 
- G4QGSCNeutronBuilder::
- G4QGSCNeutronBuilder() 
- {
-   theMin = 8*GeV;
-   theModel = new G4TheoFSGenerator;
+#ifndef HadronPhysicsQGSC_EFLOW_h
+#define HadronPhysicsQGSC_EFLOW_h 1
 
-   theStringModel= new G4QGSModel< G4QGSParticipants >;
-   theStringDecay = new G4ExcitedStringDecay(new G4QGSMFragmentation);
-   theStringModel->SetFragmentationModel(theStringDecay);
+#include "globals.hh"
+#include "G4ios.hh"
 
-   theCascade = new G4QStringChipsParticleLevelInterface;
+#include "G4VPhysicsConstructor.hh"
+#include "G4MiscLHEPBuilder.hh"
 
-   theModel->SetTransport(theCascade);
-   theModel->SetHighEnergyGenerator(theStringModel);
- }
+#include "G4PiKBuilder.hh"
+#include "G4LEPPiKBuilder.hh"
+#include "G4QGSCEflowPiKBuilder.hh"
 
- G4QGSCNeutronBuilder::
- ~G4QGSCNeutronBuilder() 
- {
-   delete theStringDecay;
-   delete theStringModel;
-   delete theCascade;
-   delete theModel;
- }
+#include "G4ProtonBuilder.hh"
+#include "G4LEPProtonBuilder.hh"
+#include "G4QGSCEflowProtonBuilder.hh"
 
- void G4QGSCNeutronBuilder::
- Build(G4NeutronInelasticProcess * aP)
- {
-   theModel->SetMinEnergy(theMin);
-   theModel->SetMaxEnergy(100*TeV);
-   aP->RegisterMe(theModel);
-   aP->AddDataSet(&theXSec);  
- }
+#include "G4NeutronBuilder.hh"
+#include "G4LEPNeutronBuilder.hh"
+#include "G4QGSCEflowNeutronBuilder.hh"
 
- // 2002 by J.P. Wellisch
+class HadronPhysicsQGSC_EFLOW : public G4VPhysicsConstructor
+{
+  public: 
+    HadronPhysicsQGSC_EFLOW(const G4String& name ="hadron");
+    virtual ~HadronPhysicsQGSC_EFLOW();
+
+  public: 
+    virtual void ConstructParticle();
+    virtual void ConstructProcess();
+
+  private:
+    void CreateModels();
+    G4NeutronBuilder * theNeutrons;
+    G4LEPNeutronBuilder * theLEPNeutron;
+    G4QGSCEflowNeutronBuilder * theQGSCEflowNeutron;
+    
+    G4PiKBuilder * thePiK;
+    G4LEPPiKBuilder * theLEPPiK;
+    G4QGSCEflowPiKBuilder * theQGSCEflowPiK;
+    
+    G4ProtonBuilder * thePro;
+    G4LEPProtonBuilder * theLEPPro;
+    G4QGSCEflowProtonBuilder * theQGSCEflowPro;    
+    
+    G4MiscLHEPBuilder * theMiscLHEP;
+};
+
+#endif
+
