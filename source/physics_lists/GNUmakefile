@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.2 2006-11-21 07:34:18 gunter Exp $
+# $Id: GNUmakefile,v 1.3 2006-12-05 15:32:04 gcosmo Exp $
 # ----------------------------------------------------------------------
 # GNUmakefile for physicslists library, Gunter Folger 25-October 2006
 # ----------------------------------------------------------------------
@@ -7,6 +7,11 @@ name := G4physicslists
 
 SUBDIRS  = lists 
 SUBDIRS += builders
+
+GLOBLIBS  = libG4digits_hits libG4processes.lib libG4track.lib
+GLOBLIBS += libG4particles.lib libG4geometry.lib
+GLOBLIBS += libG4materials.lib libG4graphics_reps.lib
+GLOBLIBS += libG4intercoms.lib libG4global.lib
 
 SUBLIBS  = G4phys_lists 
 SUBLIBS += G4phys_builders 
