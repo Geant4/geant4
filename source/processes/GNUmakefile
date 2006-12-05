@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.33 2006-10-10 10:04:53 gcosmo Exp $
+# $Id: GNUmakefile,v 1.34 2006-12-05 15:54:43 gcosmo Exp $
 # ----------------------------------------------------------------------
 # GNUmakefile for processes library, Gabriele Cosmo 27-Jun-1998
 # ----------------------------------------------------------------------
@@ -35,7 +35,7 @@ SUBLIBS += G4emlowenergy
 SUBLIBS += G4emhighenergy
 SUBLIBS += G4empolar
 
-GLOBLIBS  = libG4digits_hits libG4track.lib libG4particles.lib libG4geometry.lib
+GLOBLIBS  = libG4digits_hits.lib libG4track.lib libG4particles.lib libG4geometry.lib
 GLOBLIBS += libG4materials.lib libG4graphics_reps.lib
 GLOBLIBS += libG4intercoms.lib libG4global.lib
 
