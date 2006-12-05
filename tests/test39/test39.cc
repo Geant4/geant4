@@ -46,6 +46,7 @@
 //#define tdebug
 //#define csdebug
 #define tdisthist
+//#define pverb
 //#define debug
 //#define pdebug
 //#define fdebug
@@ -440,12 +441,12 @@ int main()
   // Define the Elastic Process
   //G4LEnp* theElasticModel = new G4LEnp;// A model for the Elastic Process (only for np!)
   //G4LEpp* theElasticModel = new G4LEpp;// A model for the Elastic Process (only for pp!)
-  ///G4LElastic* theElasticModel = new G4LElastic;// A model for the Elastic Process (Old)
+  //G4LElastic* theElasticModel = new G4LElastic;// A model for the Elastic Process (Old)
   //G4LElasticB* theElasticModel = new G4LElasticB;// A model for ElasticProcess (cons.E)
   //G4ElasticCascadeInterface* theElasticModel = new G4ElasticCascadeInterface; //(Cascade)
   //G4ElasticHadrNucleusHE* theElasticModel = new G4ElasticHadrNucleusHE; //(Coherent)
-  ///G4HadronElasticProcess* proc = new G4HadronElasticProcess;
-  ///proc->RegisterMe(theElasticModel);
+  //G4HadronElasticProcess* proc = new G4HadronElasticProcess;
+  //proc->RegisterMe(theElasticModel);
   // =========== End of the GHAD definition of the Hadron Elastic process =================
   // -> HP_GHAD definition of the Hadron Elastic Process
   ///G4HadronElasticProcess* proc = new G4HadronElasticProcess;
@@ -515,7 +516,7 @@ int main()
      G4Exception("***Test39: OnFlight Process is called for not supported particle");
    }
    // Not for CHIPS & not for GHAD/G4LElasic: only for G4UHadronElastic of V. Ivanchenko
-   //proc->BuildPhysicsTable(*part);//NotNecessary for G4LElastic&CHIPS.Only for NewEl V.I.
+   ///proc->BuildPhysicsTable(*part);//NotNecessary forG4LElastic&CHIPS. Only forNewEl V.I.
    // ----------------------------
    G4double pMass = part->GetPDGMass();                 // Mass of the projectile in IU
    //
@@ -764,15 +765,15 @@ int main()
      //G4double pMax=600000000.;                     // in GeV
      //G4double pMax=10000000.;                      // in GeV --> np
      //G4double pMax=1000.;                           // in GeV --> np->inelastic
-     G4double pMin=.03;                            // in GeV --> np->dg
-     //G4double pMin=.000004;                        // in GeV --> for neutrons
+     ////G4double pMin=.03;                            // in GeV --> np->dg
+     G4double pMin=.000004;                        // in GeV --> for neutrons
      //G4double pMax=700.;                           // in GeV
      G4int nic=50;
      G4double lpMin=std::log(pMin);
      G4double lpMax=std::log(pMax);
      G4double dlp=(lpMax-lpMin)/nic;
      G4double lmic=lpMin-dlp/2;
-     G4double hMa=.938272;                         // Mass of a proton in GeV
+     G4double hMa=pMass/GeV;                       //Mass of a projectile in GeV
      G4double hMa2=hMa*hMa;
      G4cout<<"Test39: mi="<<lmic+dlp<<",ma="<<lmic+dlp*nic<<",d="<<dlp<<",n="<<nic<<", Z="
            <<tgZ<<", N="<<tgN<<", Element="<<*element<<G4endl;
@@ -781,10 +782,10 @@ int main()
        lmic+=dlp;
        G4double mic=std::exp(lmic);                // current Momentum in GeV
        G4double p2=mic*mic;
-       G4double ken=std::sqrt(p2+hMa2)-hMa;
-       dParticle->SetKineticEnergy(ken*GeV);       // Fill Kinetic Energy of the projectile
+       G4double ken=(std::sqrt(p2+hMa2)-hMa)*GeV;
+       dParticle->SetKineticEnergy(ken);           // Fill Kinetic Energy of the projectile
        // GHAD Cross-section
-       //G4double CS = HadrCS->GetElasticCrossSection(dParticle,element);
+       ///G4double CS = HadrCS->GetElasticCrossSection(dParticle,element);
        //HadrCS->SetCorrectInelasticNearZero(true);
        //G4double CS = HadrCS->GetInelasticCrossSection(dParticle,element);
        // HP_GHAD Cross-section
@@ -801,7 +802,11 @@ int main()
 							//G4double CS=2.648/p2/sp+(18.73+.6351*dl*dl+9./mic)/(1+.4186*lmic)/(1+.3953/p2/p2);
        //CS*=millibarn;
        // ------ end of direct CHIPS approximation (temporary, not necessary)--------
-       G4cout<<"Test39: P="<<mic<<" (GeV/c), CrossSection="<<CS/millibarn<<G4endl;
+       gTrack->SetStep(step);            // Now step is included in the Track (see above)
+       gTrack->SetKineticEnergy(ken);    // Duplication of Kin. Energy for the Track
+       gTrack->SetTouchableHandle(touch);// Set Box touchable history
+					  G4double mfp=proc->GetMeanFreePath(*gTrack,0.1,cond); // Calculate the meanFreePath
+       G4cout<<"Test39: P="<<mic<<" (GeV/c), CrosSec="<<CS/millibarn<<",MFP="<<mfp<<G4endl;
      }
      // --- End of the temporary LOOP for calculation of total cross section ------------
 #endif
@@ -810,18 +815,23 @@ int main()
      // --> For GHAD
      ///G4double reactCS = HadrCS->GetElasticCrossSection(dParticle,element);
      // --> For HP_GHAD
-     ///G4double reactCS = HadrCS.GetXsec(energy);
+     //G4double reactCS = HadrCS.GetXsec(energy);
      // ==================== End of GHAD ==============================
      // --> For CHIPS ("false" of onlyCS to prepare parameters for differential cross-sect)
      // P=pmax is in GeV, but this is not necessary
      G4double reactCS = HadrCS->GetCrossSection(false, pmax, tgZ, tgN, pPDG);
+     // --- End
      for(G4int is=0; is<ntpt; is++) shist[is]=0.; // Reset Collected values
 #endif
      // ********************* END OF CROSS-SECTION ***************************************
 #ifdef debug
      G4cout<<"Test39:---->, E="<<energy<<"(IU=MeV), CrossSect="<<reactCS/millibarn<<G4endl;
 #endif
-     for (G4int iter=0; iter<nEvt; iter++)
+     gTrack->SetStep(step);            // Now step is included in the Track (see above)
+     gTrack->SetKineticEnergy(energy); // Duplication of Kin. Energy for the Track (?!)
+     gTrack->SetTouchableHandle(touch);// Set Box touchable history
+					G4double mfp=proc->GetMeanFreePath(*gTrack,0.1,cond);
+     if(mfp<1.e12) for (G4int iter=0; iter<nEvt; iter++)
      {
 #ifdef debug
       G4cout<<"Test39: ### "<<iter<< "-th event starts.### energy(IU)="<<energy<<G4endl;
@@ -850,7 +860,7 @@ int main()
         G4cout<<"Test39: Before the fake proc->GetMeanFreePath call"<<G4endl;
 #endif
         // CHIPS does not need it: keep only for GHAD
-						  ///proc->GetMeanFreePath(*gTrack,0.1,cond); // Fake call to avoid complains of GHAD
+						  proc->GetMeanFreePath(*gTrack,0.1,cond); // Fake call to avoid complains of GHAD
 #ifdef debug
         G4cout<<"Test39: After the fake proc->GetMeanFreePath call"<<G4endl;
 #endif
@@ -939,8 +949,8 @@ int main()
       G4int    curPDG=tPDG+dBN;
       G4LorentzVector Residual=proc->GetEnegryMomentumConservation(); // Only for CHIPS
 						//............................ONLY FOR GHAD...............................
-      //G4int    totBaryN = totBN;                   // Substitute for not CHIPS
-      //G4int    curPDG=tPDG;                        // Substitute for not CHIPS
+      ///G4int    totBaryN = totBN;                   // Substitute for not CHIPS
+      ///G4int    curPDG=tPDG;                        // Substitute for not CHIPS
       //........................................................................
       G4double curM=G4QPDGCode(curPDG).GetMass();  // Update mass of the TargetNucleus
       totSum = G4LorentzVector(0., 0., pmax, et+curM-mt);
@@ -1115,13 +1125,13 @@ int main()
 #ifdef pdebug
       G4cout<<">TEST39:r4M="<<totSum<<ss<<",rCh="<<totCharge<<",rBaryN="<<totBaryN<<G4endl;
 #endif
-	     //if (1>2) // @@ The check is temporary closed LHEP
+	     ///if (1>2) // @@ The check is temporary closed LHEP
 						//if (ss>.27) // Not CHIPS, but conservs energy
 						if (totCharge ||totBaryN || ss>.27 || alarm || nGamma&&!EGamma) // for CHIPS
       {
         totSum = G4LorentzVector(0., 0., pmax, et);
         G4cerr<<"**Test39:#"<<iter<<": n="<<nSec<<", 4M="<<totSum<<", Charge="<<totCharge
-								//      <<", BaryN="<<totBaryN<<",D2="<<ss<<G4endl; // Not CHIPS
+							 ///      <<", BaryN="<<totBaryN<<",D2="<<ss<<G4endl; // Not CHIPS
               <<",BaryN="<<totBaryN<<", R="<<Residual<<",D2="<<ss<<",nN="<<curN<<G4endl;
         if(nGamma&&!EGamma)G4cerr<<"***Test39: Egamma=0"<<G4endl;
         G4int indi=0;
@@ -1181,6 +1191,11 @@ int main()
       G4cout<<"Test39:--->>> After ntp.FillEvt, ntpt="<<ntpt<<G4endl;
 #endif
      } // End of the LOOP over events
+     else
+     {
+       G4cout<<"Test39: Simulation is skipped because of big MeanFreePath="<<mfp<<G4endl;
+       goodE=1;
+     }
      // Stop the timer to estimate the speed of the generation
      timer->Stop();
      G4cout<<"Test39:CalculationTimePerEvent="<<timer->GetUserElapsed()/nEvt<<" s"<<G4endl;
