@@ -24,6 +24,61 @@ esac
 $spitshell >env.csh <<!GROK!THIS!
 ######################################
 #
+# Clean all G4 envs
+unsetenv  CLHEP_BASE_DIR
+unsetenv  CLHEP_INCLUDE_DIR
+unsetenv  CLHEP_LIB
+unsetenv  CLHEP_LIB_DIR
+
+unsetenv  G4ANALYSIS_USE
+unsetenv  G4DEBUG
+unsetenv  G4INCLUDE
+unsetenv  G4INSTALL
+
+unsetenv  G4LEDATA
+unsetenv  G4LEVELGAMMADATA
+unsetenv  NeutronHPCrossSections
+unsetenv  G4RADIOACTIVEDATA
+
+unsetenv  G4LIB
+unsetenv  G4LIB_BUILD_G3TOG4
+unsetenv  G4LIB_BUILD_SHARED
+unsetenv  G4LIB_BUILD_STATIC
+unsetenv  G4LIB_BUILD_ZLIB
+unsetenv  G4LIB_USE_G3TOG4
+unsetenv  G4LIB_USE_GRANULAR
+unsetenv  G4LIB_USE_ZLIB
+
+unsetenv  G4SYSTEM
+
+unsetenv  G4UI_BUILD_WIN32_SESSION
+unsetenv  G4UI_BUILD_XAW_SESSION
+unsetenv  G4UI_BUILD_XM_SESSION
+unsetenv  G4UI_USE_TCSH
+unsetenv  G4UI_USE_WIN32
+unsetenv  G4UI_USE_XAW
+unsetenv  G4UI_USE_XM
+
+unsetenv  G4VIS_BUILD_DAWN_DRIVER
+unsetenv  G4VIS_BUILD_OIWIN32_DRIVER
+unsetenv  G4VIS_BUILD_OIX_DRIVER
+unsetenv  G4VIS_BUILD_OPENGLWIN32_DRIVER
+unsetenv  G4VIS_BUILD_OPENGLXM_DRIVER
+unsetenv  G4VIS_BUILD_OPENGLX_DRIVER
+unsetenv  G4VIS_BUILD_RAYTRACERX_DRIVER
+unsetenv  G4VIS_BUILD_VRML_DRIVER
+
+unsetenv  G4VIS_USE_DAWN
+unsetenv  G4VIS_USE_OIWIN32
+unsetenv  G4VIS_USE_OIX
+unsetenv  G4VIS_USE_OPENGLWIN32
+unsetenv  G4VIS_USE_OPENGLX
+unsetenv  G4VIS_USE_OPENGLXM
+unsetenv  G4VIS_USE_RAYTRACERX
+unsetenv  G4VIS_USE_VRML
+
+######################################
+#
 # g4system.U
 #
 #+
