@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.89 2006-12-06 16:23:04 stesting Exp $
+# $Id: Configure,v 1.90 2006-12-06 16:59:36 stesting Exp $
 #
-# Generated on Wed Dec  6 17:22:18 CET 2006 [metaconfig 3.0 PL70]
+# Generated on Wed Dec  6 17:59:06 CET 2006 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -3886,11 +3886,11 @@ fi
 
 ##########################################################################
 
-if test "X$g4ui_xawhome" != "X" ; then
-xaw_dirs=$g4ui_xawhome
-fi
+#if test "X$g4ui_xawhome" != "X" ; then
+#xaw_dirs=$g4ui_xawhome
+#fi
 
-if test "X$xaw_dirs" != "X" ; then
+if test "X$g4ui_xawhome" != "X" ; then
 
 g4message=`cat << EOM
 
@@ -4108,11 +4108,11 @@ fi
 
 ##########################################################################
 
-if test "X$g4vis_xmhome" != "X" ; then
-xm_dirs=$g4vis_xmhome
-fi
+#if test "X$g4vis_xmhome" != "X" ; then
+#xm_dirs=$g4vis_xmhome
+#fi
 
-if test "X$xm_dirs" != "X" ; then
+if test "X$g4vis_xmhome" != "X" ; then
 
 g4message=`cat << EOM
 
@@ -4596,7 +4596,7 @@ if test "X$g4vis_build_openglxm_driver" = "Xy" ; then
 #echo PASS2
 
 if test "X$g4vis_xmhome" = "X" ; then
-xm_dirs=`find $g4vis_xmhome /usr/X11R6/include /usr/local/include /usr/include -type d -name Xm 2>/dev/null |xargs echo`
+xm_dirs=`find $g4vis_xmhome /usr/X11R6/include /usr/local/include /usr/include /sw/include -type d -name Xm 2>/dev/null |xargs echo`
 #echo ogl_dirs=$ogl_dirs
 
 if test "X$xm_dirs" != "X" ; then
@@ -4620,11 +4620,11 @@ fi
 
 ##########################################################################
 
-if test "X$g4vis_xmhome" != "X" ; then
-xm_dirs=$g4vis_xmhome
-fi
+#if test "X$g4vis_xmhome" != "X" ; then
+#xm_dirs=$g4vis_xmhome
+#fi
 
-if test "X$xm_dirs" != "X" ; then
+if test "X$g4vis_xmhome" != "X" ; then
 
 g4message=`cat << EOM
 
@@ -4905,11 +4905,11 @@ fi
 
 ##########################################################################
 
-if test "X$g4vis_oivhome" != "X" ; then
-oiv_dirs=$g4vis_oivhome
-fi
+#if test "X$g4vis_oivhome" != "X" ; then
+#oiv_dirs=$g4vis_oivhome
+#fi
 
-if test "X$oiv_dirs" != "X" ; then
+if test "X$g4vis_oivhome" != "X" ; then
 
 g4message=`cat << EOM
 
@@ -5119,11 +5119,11 @@ fi
 
 ##########################################################################
 
-if test "X$g4vis_oivhome" != "X" ; then
-oiv_dirs=$g4vis_oivhome
-fi
+#if test "X$g4vis_oivhome" != "X" ; then
+#oiv_dirs=$g4vis_oivhome
+#fi
 
-if test "X$oiv_dirs" != "X" ; then
+if test "X$g4vis_oivhome" != "X" ; then
 
 g4message=`cat << EOM
 
