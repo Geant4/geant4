@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.88 2006-12-06 12:54:46 stesting Exp $
+# $Id: Configure,v 1.89 2006-12-06 16:23:04 stesting Exp $
 #
-# Generated on Wed Dec  6 13:31:20 CET 2006 [metaconfig 3.0 PL70]
+# Generated on Wed Dec  6 17:22:18 CET 2006 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -172,7 +172,6 @@ g4ledata=''
 g4levelgammadata=''
 g4neutronhpcrosssections=''
 g4radioactivedata=''
-clhep_dirs=''
 g4clhep_base_dir=''
 g4clhep_include_dir=''
 g4clhep_lib=''
@@ -2901,11 +2900,12 @@ fi
 
 #while test 1 = 1  ; do
 
-if test "X$g4clhep_base_dir" != "X" ; then
-clhep_dirs=$g4clhep_base_dir
-fi
+#if test "X$g4clhep_base_dir" != "X" ; then
+#clhep_dirs=$g4clhep_base_dir
+#echo 1 g4clhep_base_dir=$g4clhep_base_dir
+#fi
 
-if test "X$clhep_dirs" != "X" ; then
+if test "X$g4clhep_base_dir" != "X" ; then
 
 g4message=`cat << EOM
 
@@ -3861,7 +3861,7 @@ gans=$ans
 if test "X$g4ui_build_xaw_session" = "Xy" ; then
 
 if test "X$g4ui_xawhome" = "X" ; then
-xaw_dirs=`find $g4ui_xawhome /usr/X11R6/include /usr/local/include /usr/include -type d -name Xaw 2>/dev/null |xargs echo`
+xaw_dirs=`find $g4ui_xawhome /usr/X11R6/include /usr/local/include /usr/include /sw/include -type d -name Xaw 2>/dev/null |xargs echo`
 #echo ogl_dirs=$ogl_dirs
 
 if test "X$xaw_dirs" != "X" ; then
@@ -4084,7 +4084,7 @@ gans=$ans
 if test "X$g4ui_build_xm_session" = "Xy" ; then
 
 if test "X$g4vis_xmhome" = "X" ; then
-xm_dirs=`find $g4vis_xmhome /usr/X11R6/include /usr/local/include /usr/include -type d -name Xm 2>/dev/null |xargs echo`
+xm_dirs=`find $g4vis_xmhome /usr/X11R6/include /usr/local/include /usr/include /sw/include -type d -name Xm 2>/dev/null |xargs echo`
 #echo ogl_dirs=$ogl_dirs
 
 if test "X$xm_dirs" != "X" ; then
@@ -5797,7 +5797,6 @@ State='$State'
 c='$c'
 cf_by='$cf_by'
 cf_time='$cf_time'
-clhep_dirs='$clhep_dirs'
 contains='$contains'
 d_portable='$d_portable'
 eunicefix='$eunicefix'
