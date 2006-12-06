@@ -116,13 +116,13 @@ fi
 fi
 
 #+
-if [ X$g4elasticdata != X ] ; then 
-G4ELASTICDATA="$g4elasticdata"
-export G4ELASTICDATA
-if [ X\$g4non_display = X ] ; then
-echo "On this machine the G4ELASTICDATA=\$G4ELASTICDATA"
-fi
-fi
+#if [ X$g4elasticdata != X ] ; then 
+#G4ELASTICDATA="$g4elasticdata"
+#export G4ELASTICDATA
+#if [ X\$g4non_display = X ] ; then
+#echo "On this machine the G4ELASTICDATA=\$G4ELASTICDATA"
+#fi
+#fi
 
 #
 # g4clhep.U
@@ -590,11 +590,32 @@ fi
 if [ $G4LIB_BUILD_SHARED ] ; then
 if [ $LD_LIBRARY_PATH ] ; then
 LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${G4LIB}/${G4SYSTEM}
+LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${CLHEP_BASE_DIR}/lib
 export LD_LIBRARY_PATH
 else
 LD_LIBRARY_PATH=${G4LIB}/${G4SYSTEM}
+LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${CLHEP_BASE_DIR}/lib
 export LD_LIBRARY_PATH
 fi
+fi
+
+#
+# Shared libraries for Mac
+#
+if test "X$G4SYSTEM" = "XDarwin-g++" ; then
+
+if [ $G4LIB_BUILD_SHARED ] ; then
+if [ $DYLD_LIBRARY_PATH ] ; then
+DYLD_LIBRARY_PATH=${DYLD_LIBRARY_PATH}:${G4LIB}/${G4SYSTEM}
+DYLD_LIBRARY_PATH=${DYLD_LIBRARY_PATH}:${CLHEP_BASE_DIR}/lib
+export DYLD_LIBRARY_PATH
+else
+DYLD_LIBRARY_PATH=${G4LIB}/${G4SYSTEM}
+DYLD_LIBRARY_PATH=${DYLD_LIBRARY_PATH}:${CLHEP_BASE_DIR}/lib
+export DYLD_LIBRARY_PATH
+fi
+fi
+
 fi
 
 #

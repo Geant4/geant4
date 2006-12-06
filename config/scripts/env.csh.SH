@@ -90,10 +90,10 @@ echo "On this machine the NeutronHPCrossSections=\$NeutronHPCrossSections"
 endif
 
 #+
-if ( X$g4elasticdata != X ) then
-setenv G4ELASTICDATA "$g4elasticdata"
-echo "On this machine the G4ELASTICDATA=\$G4ELASTICDATA"
-endif
+#if ( X$g4elasticdata != X ) then
+#setenv G4ELASTICDATA "$g4elasticdata"
+#echo "On this machine the G4ELASTICDATA=\$G4ELASTICDATA"
+#endif
 
 #
 # g4clhep.U
@@ -418,9 +418,28 @@ endif
 if ( ${?G4LIB_BUILD_SHARED} ) then
 if ( ${?LD_LIBRARY_PATH} )  then
 setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${G4LIB}/${G4SYSTEM}
+setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${CLHEP_BASE_DIR}/lib
 else
 setenv LD_LIBRARY_PATH ${G4LIB}/${G4SYSTEM}
+setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${CLHEP_BASE_DIR}/lib
 endif
+endif
+
+#
+# Shared libraries for Mac
+#
+if ( "X$G4SYSTEM" == "XDarwin-g++" ) then
+
+if ( ${?G4LIB_BUILD_SHARED} ) then
+if ( ${?DYLD_LIBRARY_PATH} )  then
+setenv DYLD_LIBRARY_PATH ${DYLD_LIBRARY_PATH}:${G4LIB}/${G4SYSTEM}
+setenv DYLD_LIBRARY_PATH ${DYLD_LIBRARY_PATH}:${CLHEP_BASE_DIR}/lib
+else
+setenv DYLD_LIBRARY_PATH ${G4LIB}/${G4SYSTEM}
+setenv DYLD_LIBRARY_PATH ${DYLD_LIBRARY_PATH}:${CLHEP_BASE_DIR}/lib
+endif
+endif
+
 endif
 
 #
