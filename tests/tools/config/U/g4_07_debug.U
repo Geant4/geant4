@@ -10,7 +10,7 @@
 echo " "
 case "$g4debug" in
 '')
-	g4debug=""
+	g4debug=n
 	;;
 esac
 
@@ -26,7 +26,7 @@ g4message=`cat << EOM
 Do you want to compile libraries in DEBUG mode (-g)?
 EOM`
 
-dflt="n"
+dflt=$g4debug
 rp=$g4message
 . ./myread
 gans=$ans
@@ -37,7 +37,7 @@ gans=$ans
 		break
 		;;
 	y*|Y*) 
-		g4debug=1
+		g4debug=y
 		break
 		;;
 #	[eE]) 
