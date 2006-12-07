@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QIsotope.cc,v 1.8 2006-12-07 19:16:49 mkossov Exp $
+// $Id: G4QIsotope.cc,v 1.9 2006-12-07 19:25:49 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QIsotope class ----------------
@@ -42,7 +42,7 @@
 //#define debug
 //#define cdebug
 //#define pdebug
-#define ppdebug
+//#define ppdebug
 //#define sdebug
 
 #include "G4QIsotope.hh"
