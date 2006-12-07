@@ -1,5 +1,5 @@
 ?RCS:
-?MAKE:g4clhep_base_dir g4clhep_include_dir g4clhep_lib_dir g4clhep_lib clhep_dirs: \
+?MAKE:g4clhep_base_dir g4clhep_include_dir g4clhep_lib_dir g4clhep_lib: \
 	g4data Myread Getfile cat rm
 ?MAKE:	-pick add $@ %<
 ?S:g4osname:
@@ -7,9 +7,9 @@
 ?S:	used for building G4SYSTEM.
 ?S:.
 
-if test "X$g4system" != "XWIN32-VC" -a "X$g4system" != "XWIN32-VC7"; then
+if test "X$g4clhep_base_dir" = "X" ; then
 
-clhep_dirs=`find /usr/local/lib /usr/lib -name \*CLHEP\*|xargs echo`
+clhep_dirs=`find $g4clhep_base_dir /usr/local/include /usr/include -type d -name CLHEP 2>/dev/null |xargs echo`
 #echo clhep_dirs=$clhep_dirs
 
 fi
@@ -27,39 +27,27 @@ g4clhep_base_dir_found=`dirname $g4clhep_base_dir_found`
 
 	g4clhep_base_dir=$g4clhep_base_dir_found
 
-else
-case "$g4clhep_base_dir" in
-'')
-	if test "X$g4system" = "XWIN32-VC" -o "X$g4system" = "XWIN32-VC7"; then
-	g4clhep_base_dir="c:/usr/local"
-	else
-	g4clhep_base_dir=/usr/local
-	fi
-	;;
-esac
+#else
+#case "$g4clhep_base_dir" in
+#'')
+#	if test "X$g4system" = "XWIN32-VC" -o "X$g4system" = "XWIN32-VC7"; then
+#	g4clhep_base_dir="c:/usr/local"
+#	else
+#	g4clhep_base_dir=/usr/local
+#	fi
+#	;;
+#esac
 fi
 
-case "$g4clhep_include_dir" in
-'')
-	g4clhep_include_dir=$g4clhep_base_dir/include
-	;;
-esac
-
-case "$g4clhep_lib_dir" in
-'')
-	g4clhep_lib_dir=$g4clhep_base_dir/lib
-	;;
-esac
-
-case "$g4clhep_lib" in
-'')
-	g4clhep_lib=CLHEP
-	;;
-esac
 
 #while test 1 = 1  ; do
 
-if test "X$clhep_dirs" != "X" ; then
+#if test "X$g4clhep_base_dir" != "X" ; then
+#clhep_dirs=$g4clhep_base_dir
+#echo 1 g4clhep_base_dir=$g4clhep_base_dir
+#fi
+
+if test "X$g4clhep_base_dir" != "X" ; then
 
 g4message=`cat << EOM
 
@@ -67,49 +55,98 @@ Please, specify where CLHEP is installed. It was found in:
 
 CLHEP_BASE_DIR:			$g4clhep_base_dir
 
-According to it will be set:
-
-CLHEP_INCLUDE_DIR		
-CLHEP_LIB_DIR			
-
-You can customise these settings next.
 EOM`
+
+dflt=$g4clhep_base_dir
+fn='d~'
+rp=$g4message
+. ./getfile
+
+cend="no"
+while test "$cend" = "no" ; do
+if test -e "$ans/include/CLHEP" ; then
+cend="yes"
+
+g4clhep_base_dir=$ans
+
+else
+
+g4message=`cat << EOM
+
+Could not find CLHEP installed in $ans!
+Please, specify where CLHEP is installed:
+
+CLHEP_BASE_DIR:			
+
+EOM`
+
+dflt=""
+fn='d~'
+rp=$g4message
+. ./getfile
+fi
+done
 
 else
 
 g4message=`cat << EOM
 
 Could not find CLHEP installed on this system!
-Please, specify where CLHEP is installed (set by default):
+Please, specify where CLHEP is installed:
 
-CLHEP_BASE_DIR:			$g4clhep_base_dir
+CLHEP_BASE_DIR:			
 
-According to it will be set:
-
-CLHEP_INCLUDE_DIR		
-CLHEP_LIB_DIR			
-
-You will be asked about customizing these next.
 EOM`
+
+dflt=""
+fn='d~'
+rp=$g4message
+. ./getfile
+
+cend="no"
+while test "$cend" = "no" ; do
+if test -e "$ans/include/CLHEP" ; then
+cend="yes"
+
+g4clhep_base_dir=$ans
+
+else
+
+g4message=`cat << EOM
+
+Could not find CLHEP installed in $ans!
+Please, specify where CLHEP is installed:
+
+CLHEP_BASE_DIR:			
+
+EOM`
+
+dflt=""
+fn='d~'
+rp=$g4message
+. ./getfile
+fi
+done
 
 fi
 
 #dflt="Press [Enter] for default settings"
 #fn='d~'
-rp=$g4message
+#####rp=$g4message
 #. ./myread
 #gans=$ans
 
 #	case $gans in
 
 #	1) 
-		dflt=$g4clhep_base_dir
-		fn='d~'
+##		dflt=""
+##		fn='d~'
 #		rp="Where is CLHEP installed?"
-		. ./getfile
-		g4clhep_base_dir=$ans
-		g4clhep_include_dir=$ans/include
-		g4clhep_lib_dir=$ans/lib
+##		. ./getfile
+##		g4clhep_base_dir=$ans
+
+#####		g4clhep_include_dir=$ans/include
+#####		g4clhep_lib_dir=$ans/lib
 #		;;
 #	2) 
 #		dflt=$g4clhep_include_dir
@@ -140,6 +177,28 @@ rp=$g4message
 #		;;
 #	esac
 #done
+
+case "$g4clhep_include_dir" in
+'')
+	g4clhep_include_dir=$g4clhep_base_dir/include
+	;;
+esac
+
+case "$g4clhep_lib_dir" in
+'')
+	g4clhep_lib_dir=$g4clhep_base_dir/lib
+	;;
+esac
+
+case "$g4clhep_lib" in
+'')
+	if test "X$g4system" = "XWIN32-VC" -o "X$g4system" = "XWIN32-VC7"; then
+	g4clhep_lib="CLHEP.lib"
+	else
+	g4clhep_lib=CLHEP
+	fi
+	;;
+esac
 
 while test 1 = 1  ; do
 
