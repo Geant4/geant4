@@ -184,8 +184,8 @@ const G4tgrVolume* G4tgrVolumeMgr::GetTopVolume()
   //-  G4String vol1stParent = *(vol->placements().begin())->parentName();
   while( vol->GetPlacements().size() != 0 ) {
     //---------- get parent of first placement (there could be a pathological case and you will
-    //---------- never get to the top, but it wll not be the case for HARP
-    vol = FindVolume( (* (vol->GetPlacements()).begin() )->GetParentName() );
+    //---------- never get to the top
+    vol = FindVolume( (* (vol->GetPlacements()).begin() )->GetParentName(), 1 );
 #ifdef G4VERBOSE
   if( G4tgrMessenger::GetVerboseLevel() >= 2 )
     G4cout << " G4tgrVolumeMgr::GetTopVolume: vol " << vol->GetName()<< " no place = " <<  vol->GetPlacements().size() << G4endl;

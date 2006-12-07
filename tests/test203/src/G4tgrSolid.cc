@@ -42,7 +42,7 @@ void G4tgrSolid::FillSolidParams( const std::vector<G4String>& wl )
   angleParams["TRAP"] = apar;
   apar.clear(); apar.insert(2);apar.insert(3);apar.insert(4);apar.insert(5);
   angleParams["SPHERE"] = apar;
-  apar.clear(); apar.insert(3);apar.insert(4);
+  apar.clear(); apar.insert(2);apar.insert(3);apar.insert(4);apar.insert(5);
   angleParams["TORUS"] = apar;
   apar.clear(); apar.insert(0);apar.insert(1);
   angleParams["POLYCONE"] = apar;

@@ -30,6 +30,7 @@ public:
   void DumpSolid( G4VSolid* solid );
   void DumpBooleanVolume( const G4String& solidType, G4VSolid* so );
   void DumpSolidParams(G4VSolid * so);
+  std::vector<G4double> GetSolidParams( const G4VSolid * so);
   void DumpPolySections(G4int zPlanes, G4double* z, G4double *rmin, G4double *rmax);
   G4String DumpRotationMatrix( G4RotationMatrix* rotm );
 
@@ -49,6 +50,8 @@ private:
   G4String LookForExistingRotation( const G4RotationMatrix* rotm );
   G4String SupressRefl( G4String name );
   G4String SubstituteRefl( G4String name );
+  G4bool Same2G4Elements( G4Element* ele1, G4Element* ele2 );
+  G4bool Same2G4Materials( G4Material* mat1, G4Material* mat2 );
 
 private:
   static G4tgbGeometryDumper* theInstance;

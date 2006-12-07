@@ -41,12 +41,10 @@ G4tgrRotationMatrix* G4tgrRotationMatrixFactory::AddRotMatrix( const vector<G4St
 #endif
   //---------- Look if rotation matrix exists
   if( FindRotMatrix( G4tgrUtils::SubQuotes(wl[1]) ) != 0 ) {
-#ifdef G4VERBOSE
-    if( G4tgrMessenger::GetVerboseLevel() >= 2 ) 
-      G4tgrUtils::DumpVS( wl, "! WARNING: rotation matrix repeated ", cerr );
+    G4Exception("!! G4tgrRotationMatrixFactory::AddRotMatrix: rotation matrix repeated " + wl[1] );
+    //      G4tgrUtils::DumpVS( wl, "!! WARNING: rotation matrix repeated ", cerr );
     /*    G4tgrUtils::DumpVS( wl, "!!!! EXITING: rotation matrix repeated ", cerr );
 	  exit(1); */
-#endif
   } 
  
   G4tgrRotationMatrix* rotm = new G4tgrRotationMatrix( wl );

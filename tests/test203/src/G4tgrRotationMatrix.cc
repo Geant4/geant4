@@ -4,6 +4,8 @@
 #include "G4tgrMessenger.hh"
 #include "CLHEP/Units/SystemOfUnits.h"
 
+using namespace CLHEP;
+
 //-------------------------------------------------------------
 G4tgrRotationMatrix::G4tgrRotationMatrix( const vector<G4String>& wl ) 
 {
@@ -43,8 +45,14 @@ G4tgrRotationMatrix::G4tgrRotationMatrix( const vector<G4String>& wl )
   phiZ = G4tgrUtils::GetFloat( wl[7] );
   */
 #ifdef G4VERBOSE
-  if( G4tgrMessenger::GetVerboseLevel() >= 2 ) 
+  if( G4tgrMessenger::GetVerboseLevel() >= 2 ) {
     G4cout << " G4tgrRotationMatrix created " << theName << G4endl;
+    for( uint ii = 0; ii < siz; ii++) {
+      G4cout << " " << theValues[ii];
+    }
+    G4cout << G4endl;
+
+  }
 #endif
 
 }

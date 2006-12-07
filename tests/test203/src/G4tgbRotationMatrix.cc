@@ -4,7 +4,6 @@
 
 using namespace CLHEP;
 
-
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 G4tgbRotationMatrix::G4tgbRotationMatrix( G4tgrRotationMatrix* tgr )
 {
@@ -96,6 +95,7 @@ G4RotationMatrix* G4tgbRotationMatrix::BuildG4RotMatrixFrom9( std::vector<double
   Hep3Vector coly(values[3],values[4],values[5]);
   Hep3Vector colz(values[6],values[7],values[8]);
 
+  G4cout << " BuildG4RotMatrixFrom9 colx " << colx << " y " << coly << " z " << colz << G4endl;
   // Now create a G4RotationMatrix (HepRotation), which can be left handed. 
   // This is not forseen in CLHEP, but can be achieved using the
   // constructor which does not check its input arguments!   
@@ -109,7 +109,7 @@ G4RotationMatrix* G4tgbRotationMatrix::BuildG4RotMatrixFrom9( std::vector<double
 
 #ifdef G4VERBOSE
   if( G4tgrMessenger::GetVerboseLevel() >= 2 ) 
-     cout << "  G4tgbRotationMatrix::buildG4RotMatrix(). " 
+     cout << "  G4tgbRotationMatrix::buildG4RotMatrixFrom9. " 
        << " colx " << colx << " = " << rotMat->colX() 
        << " coly " << coly << " = " << rotMat->colY() 
        << " colz " << colz << " = " << rotMat->colZ() 

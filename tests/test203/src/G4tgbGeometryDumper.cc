@@ -13,6 +13,8 @@
 #include "G4Polycone.hh"
 #include "G4Polyhedra.hh"
 #include "G4Orb.hh"
+#include "G4Sphere.hh"
+#include "G4Ellipsoid.hh"
 #include "G4PVPlacement.hh"
 #include "G4BooleanSolid.hh"
 #include "G4ReflectionFactory.hh"
@@ -30,7 +32,6 @@ G4tgbGeometryDumper* G4tgbGeometryDumper::theInstance = 0;
 //------------------------------------------------------------------------
 G4tgbGeometryDumper::G4tgbGeometryDumper()
 {
-
   theRotationNumber = 0;
 }
 
@@ -137,7 +138,6 @@ void G4tgbGeometryDumper::DumpPhysVol( G4VPhysicalVolume* pv )
       if( G4tgrMessenger::GetVerboseLevel() >= 2 ) 
 	G4cout << " DumpPhysVol: reflected volume " << pv->GetName() << G4endl;
 #endif
-      size_t irefl = lv->GetName().find("_refl");
       Hep3Vector colx = rotMat->colX();
       Hep3Vector coly = rotMat->colY();
       Hep3Vector colz = rotMat->colZ();
@@ -147,6 +147,7 @@ void G4tgbGeometryDumper::DumpPhysVol( G4VPhysicalVolume* pv )
                   colx.y(),coly.y(),colz.y(),
 		  colx.z(),coly.z(),colz.z()); //matrix representation (inverted)
       *rotMat = G4RotationMatrix(rottemp);
+      *rotMat = (*rotMat).inverse();
       pvName += "_refl";
     }
 #ifdef G4VERBOSE
@@ -323,8 +324,10 @@ void G4tgbGeometryDumper::DumpBooleanVolume( const G4String& solidType, G4VSolid
   G4String rotName;
   G4ThreeVector pos;
   if( displaced ) {
-    rotName = DumpRotationMatrix( &(solid1Disp->GetTransform().NetRotation()) );// rotation is of mother frame, no need of invert
-    pos = -solid1Disp->GetTransform().NetTranslation(); // translation is of mother frame
+    //- rotName = DumpRotationMatrix( new G4RotationMatrix( solid1Disp->GetObjectRotation() ) );
+    pos = solid1Disp->GetObjectTranslation(); // translation is of mother frame
+    rotName = DumpRotationMatrix( new G4RotationMatrix( (solid1Disp->GetTransform().NetRotation()).inverse() ) );
+				  //    pos = -solid1Disp->GetTransform().NetTranslation(); // translation is of mother frame
   } else { // no displacement
     rotName = DumpRotationMatrix( new G4RotationMatrix );
     pos = G4ThreeVector();
@@ -386,11 +389,145 @@ void G4tgbGeometryDumper::DumpSolidParams( G4VSolid * so)
     (*theFile) << angphi << " "
 	       << pc->GetOriginalParameters()->Opening_angle/deg << " " << ncor << G4endl;
   
-    for( size_t ii = 0; ii < ncor; ii++ ){
+    for( G4int ii = 0; ii < ncor; ii++ ){
       (*theFile) << pc->GetCorner(ii).r << " " << pc->GetCorner(ii).z << G4endl;
     }
+/*
+    //transform rz points into z,rmin,rmax
+    std::map<G4double,std::vector<G4double> > rzs;
+    std::map<G4double,std::vector<G4double> >::iterator mite,mite2,miteR;
+    std::map<G4double,std::vector<G4double> >::reverse_iterator miteL; 
+    for( G4int ii = 0; ii < ncor; ii++ ){
+      G4double cz = pc->GetCorner(ii).z;
+      G4double cr = pc->GetCorner(ii).r;
 
+      mite = rzs.find(cz);
+      if( mite == rzs.end() ) {
+	std::vector<G4double> val; 
+	val.push_back(cr);
+	rzs[cz] = val;
+      }else {
+	std::vector<G4double> val = (*mite).second;
+	val.push_back(cr);
+	rzs[cz] = val;
+      }
+    }
+
+    //transform 3 R's into 2 (get min and max)
+    for( mite = rzs.begin(); mite != rzs.end(); mite++ ){
+      std::vector<G4double> val = (*mite).second; 
+      G4cout << " PG z " << (*mite).first << " N R's " << val.size() << G4endl;
+      if( val.size() > 2 ) {
+	//take min and max values only
+	G4double vmin = DBL_MAX;
+	G4double vmax = -DBL_MAX; 
+	std::vector<G4double> valnew;
+	for( size_t ii = 0; ii < val.size(); ii++ ){
+	  if( val[ii] < vmin ) vmin = val[ii]; 
+	  if( val[ii] > vmax ) vmax = val[ii]; 
+	  G4cout << " PG min R " << vmin << " max R " << vmax << G4endl;
+	}
+	valnew.push_back( vmin );
+	valnew.push_back( vmax );
+	(*mite).second = valnew;
+      }
+    }
+    
+    ///order them, Rmin first, Rmax second
+    for( mite = rzs.begin(); mite != rzs.end(); mite++ ){
+      std::vector<G4double> val = (*mite).second; 
+      if( val.size() == 2 ) {
+	if( val[0] > val[1] ) {
+	  std::vector<G4double> valnew;
+	  valnew.push_back( val[1] );
+	  valnew.push_back( val[0] );
+	  (*mite).second = valnew;
+	}
+      }
+    }
+
+    mite2 = rzs.end(); mite2--;
+    // transform 1 R into 2. First do end points (easier logic later): min=max
+    for( mite = rzs.begin(); mite != rzs.end(); mite++) {
+      if( mite == rzs.begin() || mite == mite2 ){
+	std::vector<G4double> val = (*mite).second; 
+	G4cout << " PG 2nd: z " << (*mite).first << " N R's " << val.size() << G4endl;
+	if( val.size() == 1 ) {
+	  std::vector<G4double> valnew;
+	  valnew.push_back( val[0] );
+	  valnew.push_back( val[0] );
+	  (*mite).second = valnew;
+	}
+      }
+    }
+
+    // transform 1 R into 2. No end points: interpolate between two neighbours 
+    for( mite = rzs.begin(); mite != mite2; mite++ ){
+      if( mite == rzs.begin() ) continue;
+      std::vector<G4double> val = (*mite).second; 
+      G4cout << " PG 2nd: z " << (*mite).first << " N R's " << val.size() << G4endl;
+      if( val.size() == 1 ) {
+	// Check that neighbours do not also 1
+	for( miteL = rzs.rbegin(); miteL != rzs.rend(); miteL++ ){
+	  if( *miteL == *mite ) break;
+	}
+	miteL++;
+	if( miteL == rzs.rend() ){
+	  G4cerr << "POLYCONE " << *pc << G4endl;
+	  G4Exception(" RZ polycone with edge Z (first or last) that has only 1 R ");
+	}
+	std::vector<G4double> valleft = (*(miteL)).second;
+	while( miteL != rzs.rend() ){
+	  valleft = (*(miteL)).second;
+	  if( valleft.size() != 1 ) break;
+	  miteL++;
+	}
+	
+       	miteR = mite; 
+	miteR++;
+	if( miteR == rzs.end() ){
+	  G4cerr << "POLYCONE " << *pc << G4endl;
+	  G4Exception(" RZ polycone with edge Z (first or last) that has only 1 R ");
+	}
+	std::vector<G4double> valright= (*(miteR)).second;
+	while( miteR != rzs.end() ){
+	  valright = (*(miteR)).second;
+	  if( valright.size() != 1 ) break;
+	  miteR++;
+	}
+
+	if( miteL == rzs.rend() || miteR == rzs.end() ){
+	  G4cerr << "POLYCONE " << *pc << G4endl;
+	  G4Exception(" RZ polycone with edge Z (first or last) that has only 1 R ");
+	}
+	
+	G4double zleft = (*(miteL)).first;
+	G4double zright = (*(miteR)).first;
+	
+	// Interpolate min and max and then determine if val[0] is Rmin or Rmax
+	G4double rmin = valleft[0]+(valright[0]- valleft[0])/(zright-zleft)*((*mite).first-zleft);
+	G4double rmax = valleft[1]+(valright[1]- valleft[1])/(zright-zleft)*((*mite).first-zleft);
+	if( val[0] < rmin ) {
+	  val.push_back(rmax);
+	} else if ( val[0] > rmax ) {
+	  val.push_back(rmin);
+	} else {
+	  G4cerr << "POLYCONE " << *pc << G4endl;
+	  G4cerr << " val0 " << valleft[0] << " " << valright[0] << " " 
+		 << " val1 " << valleft[1] << " " << valright[1] << " " 
+		 << " val " << val[0] << " " << rmin << " " << rmax << G4endl;
+	  G4Exception(" RZ polycone with only 1 R cannot be determined if it is Rmin or Rmax ");
+	}
+	(*mite).second = val;
+      } 
+   }
+    //print result
+    for( mite = rzs.begin(); mite != rzs.end(); mite++ ){
+      std::vector<G4double> val = (*mite).second; 
+      G4cout << " POLYCONE z " << (*mite).first << " rmin " << val[0] << " rmax  " << val[1] << G4endl;
+    }
     //    G4cout << " POLYCONE " << pc->GetName() << *pc << G4endl;
+*/
 
   }else if (solidType == "POLYHEDRA") {
     //--- Dump RZ corners, as original parameters will not be present if it was build from RZ corners
@@ -406,7 +543,7 @@ void G4tgbGeometryDumper::DumpSolidParams( G4VSolid * so)
 	    << ph->GetOriginalParameters()->Opening_angle/deg << " " 
 	       << ph->GetNumSide() << " " << ncor << G4endl;
 
-    for( size_t ii = 0; ii < ncor; ii++ ){
+    for( G4int ii = 0; ii < ncor; ii++ ){
       (*theFile) << ph->GetCorner(ii).r << " " << ph->GetCorner(ii).z <<G4endl;
     }
 
@@ -440,6 +577,22 @@ void G4tgbGeometryDumper::DumpSolidParams( G4VSolid * so)
     G4Orb * orb = dynamic_cast < G4Orb * > (so);
     (*theFile) << orb->GetRadius()  << G4endl;
 
+  } else if (solidType == "SPHERE") {
+    G4Sphere * sphe = dynamic_cast < G4Sphere * > (so);
+    (*theFile) << sphe->GetInsideRadius()
+	       << sphe->GetOuterRadius()
+	       << sphe->GetStartPhiAngle()/deg
+	       << sphe->GetDeltaPhiAngle()/deg
+	       << sphe->GetStartThetaAngle()/deg
+	       << sphe->GetDeltaThetaAngle()/deg << G4endl;
+
+  } else if (solidType == "ELLIPSOID" ){
+    G4Ellipsoid* dso = dynamic_cast < G4Ellipsoid * > (so);
+    (*theFile) << dso->GetSemiAxisMax(0)  << " "
+	       << dso->GetSemiAxisMax(1)  << " "
+	       << dso->GetSemiAxisMax(2)  << " "
+	       << dso->GetZBottomCut()   << " "
+	       << dso->GetZTopCut() << G4endl;
   }else {
     G4Exception("G4tgbGeometryDumpe::DumpSolidParams   solid type not supported " + solidType );
   }
@@ -448,8 +601,226 @@ void G4tgbGeometryDumper::DumpSolidParams( G4VSolid * so)
 
 
 //------------------------------------------------------------------------
+std::vector<G4double> G4tgbGeometryDumper::GetSolidParams( const G4VSolid * so) 
+{
+  std::vector<G4double> params;
+
+  G4String solidType = so->GetEntityType();
+  solidType = GetTGSolidType( solidType );
+
+  if (solidType == "BOX")  {
+    const G4Box * sb = dynamic_cast < const G4Box*>(so);
+    params.push_back( sb->GetXHalfLength() ); 
+    params.push_back( sb->GetYHalfLength() ); 
+    params.push_back( sb->GetZHalfLength() ); 
+
+  } else if (solidType == "TUBS") {
+    const G4Tubs * tu = dynamic_cast < const G4Tubs * > (so);
+    params.push_back( tu->GetInnerRadius()   );
+    params.push_back( tu->GetOuterRadius()   );
+    params.push_back( tu->GetZHalfLength()   );
+    params.push_back( tu->GetStartPhiAngle()/deg );
+    params.push_back( tu->GetDeltaPhiAngle()/deg );
+    
+  } else if (solidType == "CONS") {
+    const G4Cons * cn = dynamic_cast < const G4Cons * > (so);
+    params.push_back( cn->GetInnerRadiusMinusZ() ); 
+    params.push_back( cn->GetOuterRadiusMinusZ() );
+    params.push_back( cn->GetInnerRadiusPlusZ()  );	    
+    params.push_back( cn->GetOuterRadiusPlusZ()  );
+    params.push_back( cn->GetZHalfLength() );
+    params.push_back( cn->GetStartPhiAngle()/deg  );
+    params.push_back( cn->GetDeltaPhiAngle()/deg  );
+  } else if (solidType == "POLYCONE") {
+    //--- Dump RZ corners, as original parameters will not be present if it was build from RZ corners
+    const G4Polycone * pc = dynamic_cast < const G4Polycone * > (so);
+    
+    double angphi = pc->GetStartPhi()/deg;
+    if( angphi > 180*deg ) angphi -= 360*deg;
+    G4int ncor = pc->GetNumRZCorner();
+    params.push_back( angphi );
+    params.push_back( pc->GetOriginalParameters()->Opening_angle/deg ); 
+    params.push_back( ncor );
+    
+    for( G4int ii = 0; ii < ncor; ii++ ){
+      params.push_back( pc->GetCorner(ii).r ); 
+      params.push_back( pc->GetCorner(ii).z );
+    }
+    
+    //transform rz points into z,rmin,rmax
+    std::map<G4double,std::vector<G4double> > rzs;
+    std::map<G4double,std::vector<G4double> >::iterator mite,mite2,mite3; 
+    for( G4int ii = 0; ii < ncor; ii++ ){
+      mite = rzs.find( pc->GetCorner(ii).z );
+      if( mite == rzs.end() ) {
+	std::vector<G4double> val; 
+	val.push_back( pc->GetCorner(ii).r );
+	rzs[pc->GetCorner(ii).z] = val;
+      }else {
+	std::vector<G4double> val = (*mite).second;
+	val.push_back( pc->GetCorner(ii).r );
+	rzs[pc->GetCorner(ii).z] = val;
+      }
+    }
+    
+    //transform 3 R's into 2 (get min and max)
+    for( mite = rzs.begin(); mite != rzs.end(); mite++ ){
+      std::vector<G4double> val = (*mite).second; 
+      G4cout << " PG z " << (*mite).first << " N R's " << val.size() << G4endl;
+      if( val.size() > 2 ) {
+	//take min and max values only
+	G4double vmin = DBL_MAX;
+	G4double vmax = -DBL_MAX; 
+	std::vector<G4double> valnew;
+	for( size_t ii = 0; ii < val.size(); ii++ ){
+	  if( val[ii] < vmin ) vmin = val[ii]; 
+	  if( val[ii] > vmax ) vmax = val[ii]; 
+	  G4cout << " PG min R " << vmin << " max R " << vmax << G4endl;
+	}
+	valnew.push_back( vmin );
+	valnew.push_back( vmax );
+	(*mite).second = valnew;
+      }
+    }
+
+    
+    mite2 = rzs.end(); mite2--;
+    // transform 1 R into 2. First do end points (easier logic later): min=max
+    for( mite = rzs.begin(); mite != rzs.end(); mite++) {
+      if( mite == rzs.begin() || mite == mite2 ){
+	std::vector<G4double> val = (*mite).second; 
+	G4cout << " PG 2nd: z " << (*mite).first << " N R's " << val.size() << G4endl;
+	if( val.size() == 1 ) {
+	  std::vector<G4double> valnew;
+	  valnew.push_back( val[0] );
+	  valnew.push_back( val[0] );
+	  (*mite).second = valnew;
+	}
+      }
+    }
+    
+    // transform 1 R into 2. No end points: interpolate between two neighbours
+    for( mite = rzs.begin(); mite != mite2; mite++ ){
+      if( mite == rzs.begin() ) continue;
+      std::vector<G4double> val = (*mite).second; 
+      G4cout << " PG 2nd: z " << (*mite).first << " N R's " << val.size() << G4endl;
+      if( val.size() == 1 ) {
+	// Check that neighbours do not also 1
+	mite3 = mite; mite3--;
+	std::vector<G4double> valleft = (*(mite3)).second;
+	G4double zleft = (*(mite3)).first;
+	mite3++; mite3++;
+	std::vector<G4double> valright = (*(mite3)).second;
+	G4double zright = (*(mite3)).first;
+	if( valleft.size() == 1 || valright.size() == 1 ){
+	  G4cerr << "POLYCONE " << *pc << G4endl;
+	  G4Exception(" RZ polycone with only two neighbours Z's that have only 1 R ");
+	}
+	// Interpolate min and max and then determine if val[0] ir Rmin or Rmax
+	G4double rmin = valleft[0]+(valright[0]- valleft[0])/(zright-zleft)*((*mite).first-zleft);
+	G4double rmax = valleft[1]+(valright[1]- valleft[1])/(zright-zleft)*((*mite).first-zleft);
+	if( val[0] < rmin ) {
+	  val.push_back(rmax);
+	} else if ( val[0] > rmax ) {
+	  val.push_back(rmin);
+	} else {
+	  G4cerr << "POLYCONE " << *pc << G4endl;
+	  G4Exception(" RZ polycone with only 1 R cannot be determined if it is Rmin or Rmax ");
+	}
+	(*mite).second = val;
+      }
+    }
+    //print result
+    for( mite = rzs.begin(); mite != rzs.end(); mite++ ){
+      std::vector<G4double> val = (*mite).second; 
+      G4cout << " POLYCONE z " << (*mite).first << " rmin " << val[0] << " rmax  " << val[1] << G4endl;
+    }
+    //    G4cout << " POLYCONE " << pc->GetName() << *pc );
+    
+  }else if (solidType == "POLYHEDRA") {
+    //--- Dump RZ corners, as original parameters will not be present if it was build from RZ corners
+    //      bool isOpen = (dynamic_cast < const G4Polyhedra * > (so))->IsOpen();
+    const G4Polyhedra * ph = (dynamic_cast < const G4Polyhedra * > (so));
+    
+    double angphi = ph->GetStartPhi()/deg;
+    if( angphi > 180*deg ) angphi -= 360*deg;
+
+    G4int ncor = ph->GetNumRZCorner();
+    
+    params.push_back( angphi );
+    params.push_back( ph->GetOriginalParameters()->Opening_angle/deg ); 
+    params.push_back( ph->GetNumSide() ); 
+    params.push_back( ncor );
+
+    for( G4int ii = 0; ii < ncor; ii++ ){
+       params.push_back( ph->GetCorner(ii).r ); 
+       params.push_back( ph->GetCorner(ii).z );
+    }
+
+  } else if (solidType == "TRAP") {
+    const G4Trap * trp = dynamic_cast < const G4Trap * > (so);
+    G4ThreeVector symAxis(trp->GetSymAxis());
+    double theta, phi;
+    theta = symAxis.theta()/deg;
+    phi = symAxis.phi()/deg;
+    params.push_back( trp->GetZHalfLength() );
+    params.push_back( theta ); 
+    params.push_back( phi);
+    params.push_back( trp->GetYHalfLength1() );
+    params.push_back( trp->GetXHalfLength1() );
+    params.push_back( trp->GetXHalfLength2() );	    
+    params.push_back( atan(trp->GetTanAlpha1())/deg ); 
+    params.push_back( trp->GetYHalfLength2()    );
+    params.push_back( trp->GetXHalfLength3()    );
+    params.push_back( trp->GetXHalfLength4()    );	    
+    params.push_back( atan(trp->GetTanAlpha2())/deg );
+  } else if (solidType == "TRD") {
+    const G4Trd * tr = dynamic_cast < const G4Trd * > (so);
+    params.push_back( tr->GetZHalfLength());
+    params.push_back( tr->GetYHalfLength1() );
+    params.push_back( tr->GetYHalfLength2() ); 
+    params.push_back( tr->GetXHalfLength1() );
+    params.push_back( tr->GetXHalfLength2() );
+    
+  } else if (solidType == "ORB") {
+    const G4Orb * orb = dynamic_cast < const G4Orb * > (so);
+     params.push_back( orb->GetRadius()  );
+     
+  } else if (solidType == "SPHERE") {
+    const G4Sphere * sphe = dynamic_cast < const G4Sphere * > (so);
+    params.push_back( sphe->GetInsideRadius() );
+    params.push_back( sphe->GetOuterRadius() );
+    params.push_back( sphe->GetStartPhiAngle() );
+    params.push_back( sphe->GetDeltaPhiAngle() );
+    params.push_back( sphe->GetStartThetaAngle() );
+    params.push_back( sphe->GetDeltaThetaAngle() );
+
+  } else if (solidType == "ELLIPSOID" ){
+    const G4Ellipsoid* dso = dynamic_cast < const G4Ellipsoid * > (so);
+     params.push_back( dso->GetSemiAxisMax(0)  );
+     params.push_back( dso->GetSemiAxisMax(1)  );
+     params.push_back( dso->GetSemiAxisMax(2)  );
+     params.push_back( dso->GetZBottomCut()   );
+     params.push_back( dso->GetZTopCut() );
+  }else {
+    G4Exception("G4tgbGeometryDumpe::DumpSolidParams   solid type not supported " + solidType );
+  }
+   
+  return params;
+}   
+
+
+//------------------------------------------------------------------------
 G4String G4tgbGeometryDumper::DumpRotationMatrix( G4RotationMatrix* rotm )
 {
+  double de = MatDeterminant(rotm);
+  /*G4RotationMatrix* rotminv;
+  if (de < -0.9 ) { // do not invert reflections ....
+    rotminv = new G4RotationMatrix( (*rotm) );
+  } else {
+    rotminv = new G4RotationMatrix( (*rotm).inverse() );
+    }*/
+ 
   G4String rotName = LookForExistingRotation( rotm );
   if( rotName != "" ) return rotName;
 
@@ -457,8 +828,8 @@ G4String G4tgbGeometryDumper::DumpRotationMatrix( G4RotationMatrix* rotm )
     rotm = new G4RotationMatrix();
   } 
 
+
   G4ThreeVector v(1.,1.,1.);
-  double de = MatDeterminant(rotm);
   if (de < -0.9 ) { // a reflection ....
     (*theFile) << ":ROTM ";
     rotName = "RRM";
@@ -466,37 +837,37 @@ G4String G4tgbGeometryDumper::DumpRotationMatrix( G4RotationMatrix* rotm )
  
     (*theFile) << AddQuotes(rotName) << std::setprecision(9) << " " 
 	       << approxTo0(rotm->xx())  << " "
-	       << approxTo0(rotm->xy())  << " "
-	       << approxTo0(rotm->xz())  << " "
 	       << approxTo0(rotm->yx())  << " "
-	       << approxTo0(rotm->yy())  << " "
-	       << approxTo0(rotm->yz())  << " "
 	       << approxTo0(rotm->zx())  << " "
+	       << approxTo0(rotm->xy())  << " "
+	       << approxTo0(rotm->yy())  << " "
 	       << approxTo0(rotm->zy())  << " "
+	       << approxTo0(rotm->xz())  << " "
+	       << approxTo0(rotm->yz())  << " "
 	       << approxTo0(rotm->zz())  << G4endl;
   } else if(de > 0.9 ) { // a rotation
     (*theFile) << ":ROTM ";
     rotName = "RM";
     rotName += itoa(theRotationNumber++);
     
-    (*theFile) << AddQuotes(rotName) << std::setprecision(9) << " " 
+    /*    (*theFile) << AddQuotes(rotName) << std::setprecision(9) << " " 
 	       << approxTo0(rotm->xx())  << " "
-	       << approxTo0(rotm->xy())  << " "
-	       << approxTo0(rotm->xz())  << " "
 	       << approxTo0(rotm->yx())  << " "
-	       << approxTo0(rotm->yy())  << " "
-	       << approxTo0(rotm->yz())  << " "
 	       << approxTo0(rotm->zx())  << " "
+	       << approxTo0(rotm->xy())  << " "
+	       << approxTo0(rotm->yy())  << " "
 	       << approxTo0(rotm->zy())  << " "
+	       << approxTo0(rotm->xz())  << " "
+	       << approxTo0(rotm->yz())  << " "
 	       << approxTo0(rotm->zz())  << G4endl;
-    /*t    (*theFile) << AddQuotes(rotName) << " " 
+    */
+    (*theFile) << AddQuotes(rotName) << " " 
 	       << approxTo0(rotm->thetaX()/deg)  << " "
 	       << approxTo0(rotm->phiX()/deg)    << " "
 	       << approxTo0(rotm->thetaY()/deg)  << " "
 	       << approxTo0(rotm->phiY()/deg)    << " "
 	       << approxTo0(rotm->thetaZ()/deg)  << " "
 	       << approxTo0(rotm->phiZ()/deg)    << G4endl;
-    */
   }
   
   
@@ -593,7 +964,7 @@ G4String G4tgbGeometryDumper::AddQuotes( const G4String& str )
 //------------------------------------------------------------------------
 G4String G4tgbGeometryDumper::SupressRefl( G4String name )
 {
-  size_t irefl = name.rfind("_refl");
+  G4int irefl = name.rfind("_refl");
   if( irefl != -1 ) {
     name = name.substr( 0, irefl );
   }
@@ -603,7 +974,7 @@ G4String G4tgbGeometryDumper::SupressRefl( G4String name )
 //------------------------------------------------------------------------
 G4String G4tgbGeometryDumper::SubstituteRefl( G4String name )
 {
-  size_t irefl = name.rfind("_refl");
+  G4int irefl = name.rfind("_refl");
   if( irefl != -1 ) {
     name = name.substr( 0, irefl ) + "_REFL";
   }
@@ -614,8 +985,11 @@ G4String G4tgbGeometryDumper::SubstituteRefl( G4String name )
 G4bool G4tgbGeometryDumper::CheckIfElementExists( const G4String& name, G4Element* pt )
 {
   if( theElements.find( name ) != theElements.end() ){
-    if( (*(theElements.find(name))).second != pt ){
-      G4Exception("G4tgbGeometryDumper::CheckIfElementExists. Element found but not same as before : " + name );
+    if( pt != (*(theElements.find(name))).second ){
+      G4cerr << "G4tgbGeometryDumper::CheckIfElementExists. Element found but not same as before : " << name << G4endl;
+      if( !Same2G4Elements(pt, (*(theElements.find(name))).second)){ 
+	G4Exception("G4tgbGeometryDumper::CheckIfElementExists. Element found but with different A or Z as as before : " + name);
+      }
     }
     return 1;
   } else {
@@ -623,13 +997,14 @@ G4bool G4tgbGeometryDumper::CheckIfElementExists( const G4String& name, G4Elemen
   }
 }
 
+
 //------------------------------------------------------------------------
 G4bool G4tgbGeometryDumper::CheckIfMaterialExists( const G4String& name, G4Material* pt )
 {
   if( theMaterials.find( name ) != theMaterials.end() ){
     if( (*(theMaterials.find(name))).second != pt ){
-      //t TEMPORARY: DUMMY material created for boolean solids, until :SOLID exists
-      if( name != "DUMMY" ) {
+      G4cerr << "G4tgbGeometryDumper::CheckIfMaterialExists. Material found but not same as before : " << name << G4endl;
+      if(Same2G4Materials(pt, (*(theMaterials.find(name))).second )){
 	G4Exception("G4tgbGeometryDumper::CheckIfMaterialExists. Material found but not same as before : " + name );
       }
     }
@@ -638,6 +1013,7 @@ G4bool G4tgbGeometryDumper::CheckIfMaterialExists( const G4String& name, G4Mater
     return 0;
   } 
 }
+
 
 //------------------------------------------------------------------------
 G4bool G4tgbGeometryDumper::CheckIfLogVolExists( const G4String& name, G4LogicalVolume* pt )
@@ -723,5 +1099,32 @@ G4String G4tgbGeometryDumper::LookForExistingRotation( const G4RotationMatrix* r
     }
   }
   return rmName;
+}
+
+
+//------------------------------------------------------------------------
+G4bool G4tgbGeometryDumper::Same2G4Elements( G4Element* ele1, G4Element* ele2 )
+{
+  if( ele1->GetZ() != ele2->GetZ() || ele1->GetA() != ele2->GetA() ){
+    return 0;
+  } else {
+    return 1;
+  }
+}
+
+
+//------------------------------------------------------------------------
+G4bool G4tgbGeometryDumper::Same2G4Materials( G4Material* mat1, G4Material* mat2 )
+{
+  G4bool bSame = 1;
+  if( mat1->GetDensity() != mat2->GetDensity() ) bSame = 0;
+  if( mat1->GetNumberOfElements() != mat2->GetNumberOfElements() ) bSame = 0; 
+  G4int nele = mat1->GetNumberOfElements();
+  for( int ii=0; ii<nele; ii++){
+    if( mat1->GetFractionVector()[ii] != mat2->GetFractionVector()[ii] ) bSame = 0; 
+    if( mat1->GetElement(ii) != mat2->GetElement(ii) ) bSame = 0;
+  }
+
+  return bSame;
 }
 

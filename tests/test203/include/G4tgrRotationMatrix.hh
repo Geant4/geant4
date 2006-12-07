@@ -28,7 +28,7 @@ class G4tgrRotationMatrix {
   G4tgrRotationMatrix( const vector<G4String>& wl );
 
   G4String GetName() {return theName;}
-  std::vector<double> GetValues() {return theValues;}
+  std::vector<double>& GetValues() {return theValues;}
 
  private:
   G4String theName;

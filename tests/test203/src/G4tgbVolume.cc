@@ -436,7 +436,7 @@ G4VPhysicalVolume* G4tgbVolume::ConstructG4PhysVol( const G4tgrPlace* place, con
 
 	G4RotationMatrix* rotmat = G4tgbRotationMatrixMgr::GetInstance()
 	  ->FindOrBuildG4RotMatrix( rmName );
-
+	//-	*rotmat = (*rotmat).inverse();
 	//----- place volume in mother
 	double check = (rotmat->colX().cross(rotmat->colY()))*rotmat->colZ();
 	double tol = 1.0e-3;
@@ -454,6 +454,14 @@ G4VPhysicalVolume* G4tgbVolume::ConstructG4PhysVol( const G4tgrPlace* place, con
 	    ->Place(trfrm, GetName(), const_cast<G4LogicalVolume*>(currentLV), const_cast<G4LogicalVolume*>(parentLV), false, copyNo, false )).first;
 	  //	  G4cout << " building reflected pv " << physvol << G4endl;
 	} else {
+#ifdef G4VERBOSE
+	  if( G4tgrMessenger::GetVerboseLevel() >= 2 ) {
+	    G4cout << "PLACE " << GetName() << " # " << copyNo 
+		   << " ROT " << rotmat->colX() 
+		   << " " << rotmat->colY() 
+		   << " " << rotmat->colZ() << G4endl;
+	  }
+#endif
 	  physvol = new G4PVPlacement( rotmat, place->GetPlacement(),
 				     const_cast<G4LogicalVolume*>(currentLV), GetName(), const_cast<G4LogicalVolume*>(parentLV), false, copyNo);
 	}

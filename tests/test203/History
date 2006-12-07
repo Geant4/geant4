@@ -1,8 +1,12 @@
-$Id: History,v 1.1 2006-11-29 18:04:27 allison Exp $
+$Id: History,v 1.2 2006-12-07 15:25:40 allison Exp $
 -----------------------------------------------------------------------------
 
 History file for test/test203 subdirectory
 ------------------------------------------------
+
+7th December 2006  John Allison
+- Pedro's changes of 6th December.
+- Introduced cms.mac with colour and colour.
 
 29th November 2006  John Allison
 - First version based on GAMOS, by Pedro Arce.

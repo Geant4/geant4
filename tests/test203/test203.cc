@@ -25,23 +25,21 @@
 //
 
 //
-// $Id: test203.cc,v 1.1 2006-11-29 18:04:30 allison Exp $
+// $Id: test203.cc,v 1.2 2006-12-07 15:25:40 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
-// Usage: test202 [dumb|tcsh|Xm|Xaw|GAG] [vis-verbosity]
-// Typically: test202 tcsh 4
+// Usage: test203 [dumb|tcsh|Xm|Xaw|GAG] [vis-verbosity] [macro-file]
+// Typically: test203
+//        or: test203 tcsh 3 cms.mac
 // See help /vis/verbose.
 
 #include "globals.hh"
 
 #include "GmGeometryFromText.hh"
 #include "QGSP.hh"
-//#include "ExN04RunAction.hh"
 #include "ExN04PrimaryGeneratorAction.hh"
-//#include "ExN04EventAction.hh"
-//#include "ExN04SteppingAction.hh"
 #include "G4UIsession.hh"
 #include "G4UImanager.hh"
 #include "G4UIterminal.hh"
@@ -74,7 +72,7 @@ HINSTANCE hInstance,HINSTANCE hPrevInstance,LPSTR lpszCmdLine,int nCmdShow) {
 int main (int argc, char** argv) {
 #endif
 
-  G4int Verbose = 0;
+  G4int Verbose = 3;
 #ifndef G4UI_USE_WIN32
   if ((argc >= 3)) Verbose = atoi (argv[2]);
 #endif
@@ -85,28 +83,35 @@ int main (int argc, char** argv) {
   session = new G4UIWin32 (hInstance,hPrevInstance,lpszCmdLine,nCmdShow);
 #else
   if (argc >= 2) {
-    if (strcmp (argv[1], "dumb")==0)     session = new G4UIterminal;
+    if (strcmp (argv[1], "dumb")==0)
+      session = new G4UIterminal;
     else if (strcmp (argv[1], "tcsh")==0)
-                            session = new G4UIterminal(new G4UItcsh);
+      session = new G4UIterminal(new G4UItcsh);
 #ifdef G4UI_USE_XM
-    else if (strcmp (argv[1], "Xm")==0)  session = new G4UIXm (argc, argv);
+    else if (strcmp (argv[1], "Xm")==0)
+      session = new G4UIXm (argc, argv);
 #endif
 #ifdef G4UI_USE_XAW
-    else if (strcmp (argv[1], "Xaw")==0) session = new G4UIXaw (argc, argv);
+    else if (strcmp (argv[1], "Xaw")==0)
+      session = new G4UIXaw (argc, argv);
 #endif
 #ifdef G4UI_USE_GAG
-    else if (strcmp (argv[1], "gag")==0) session = new G4UIGAG ;
+    else if (strcmp (argv[1], "gag")==0)
+      session = new G4UIGAG ;
 #endif
 #ifdef G4UI_USE_GAG
-    else                                 session = new G4UIGAG;
-#else
-    else                                 session = new G4UIterminal;
+    else
+      session = new G4UIGAG;
 #endif
-  } else {
+  } else {  // argc < 2
 #ifdef G4UI_USE_GAG
     session = new G4UIGAG;
 #else
-    session = new G4UIterminal;
+#ifdef G4UI_USE_TCSH
+    session = new G4UIterminal(new G4UItcsh);
+#else
+    session = new G4UIterminal();
+#endif
 #endif
   }
 #endif
@@ -138,24 +143,14 @@ int main (int argc, char** argv) {
   visManager -> Initialize ();
 #endif
 
-  if(argc>1)
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();
+  G4String controlExecute = "/control/execute ";
   // execute an argument macro file if exist
-  {
-    G4UImanager* UImanager = G4UImanager::GetUIpointer();
-    G4String command = "/control/execute ";
-    G4String fileName = argv[1];
-    UImanager->ApplyCommand(command+fileName);
-  }
-  else
-  // start interactive session
-  {
-#ifdef G4UI_USE_TCSH
-    G4UIsession* session = new G4UIterminal(new G4UItcsh);
-#else
-    G4UIsession* session = new G4UIterminal();
-#endif
+  if(argc>3){
+    G4String fileName = argv[3];
+    UImanager->ApplyCommand(controlExecute + fileName);
+  } else {  // start interactive session
     session->SessionStart();
-    delete session;
   }
 
 #ifdef G4VIS_USE
