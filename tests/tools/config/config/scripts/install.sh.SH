@@ -24,6 +24,61 @@ esac
 $spitshell >install.sh <<!GROK!THIS!
 ######################################
 #
+# Clean all G4 envs
+unset  CLHEP_BASE_DIR
+unset  CLHEP_INCLUDE_DIR
+unset  CLHEP_LIB
+unset  CLHEP_LIB_DIR
+
+unset  G4ANALYSIS_USE
+unset  G4DEBUG
+unset  G4INCLUDE
+unset  G4INSTALL
+
+unset  G4LEDATA
+unset  G4LEVELGAMMADATA
+unset  NeutronHPCrossSections
+unset  G4RADIOACTIVEDATA
+
+unset  G4LIB
+unset  G4LIB_BUILD_G3TOG4
+unset  G4LIB_BUILD_SHARED
+unset  G4LIB_BUILD_STATIC
+unset  G4LIB_BUILD_ZLIB
+unset  G4LIB_USE_G3TOG4
+unset  G4LIB_USE_GRANULAR
+unset  G4LIB_USE_ZLIB
+
+unset  G4SYSTEM
+
+unset  G4UI_BUILD_WIN32_SESSION
+unset  G4UI_BUILD_XAW_SESSION
+unset  G4UI_BUILD_XM_SESSION
+unset  G4UI_USE_TCSH
+unset  G4UI_USE_WIN32
+unset  G4UI_USE_XAW
+unset  G4UI_USE_XM
+
+unset  G4VIS_BUILD_DAWN_DRIVER
+unset  G4VIS_BUILD_OIWIN32_DRIVER
+unset  G4VIS_BUILD_OIX_DRIVER
+unset  G4VIS_BUILD_OPENGLWIN32_DRIVER
+unset  G4VIS_BUILD_OPENGLXM_DRIVER
+unset  G4VIS_BUILD_OPENGLX_DRIVER
+unset  G4VIS_BUILD_RAYTRACERX_DRIVER
+unset  G4VIS_BUILD_VRML_DRIVER
+
+unset  G4VIS_USE_DAWN
+unset  G4VIS_USE_OIWIN32
+unset  G4VIS_USE_OIX
+unset  G4VIS_USE_OPENGLWIN32
+unset  G4VIS_USE_OPENGLX
+unset  G4VIS_USE_OPENGLXM
+unset  G4VIS_USE_RAYTRACERX
+unset  G4VIS_USE_VRML
+
+######################################
+#
 # g4system.U
 #
 #+
@@ -40,7 +95,7 @@ export G4INSTALL
 echo "On this machine the G4INSTALL=\$G4INSTALL"
 
 #+
-if [ X$g4include != X ] ; then
+if [ X$g4include != X -a X$g4include != Xn ] ; then
 G4INCLUDE="$g4include"
 export G4INCLUDE
 echo "On this machine the G4INCLUDE=\$G4INCLUDE"
@@ -95,11 +150,11 @@ echo "On this machine the NeutronHPCrossSections=\$NeutronHPCrossSections"
 fi
 
 #+
-if [ X$g4elasticdata != X ] ; then 
-G4ELASTICDATA="$g4elasticdata"
-export G4ELASTICDATA
-echo "On this machine the G4ELASTICDATA=\$g4elasticdata"
-fi
+#if [ X$g4elasticdata != X ] ; then 
+#G4ELASTICDATA="$g4elasticdata"
+#export G4ELASTICDATA
+#echo "On this machine the G4ELASTICDATA=\$g4elasticdata"
+#fi
 
 #
 # g4clhep.U
@@ -110,11 +165,11 @@ export CLHEP_BASE_DIR
 echo "On this machine the CLHEP_BASE_DIR=\$CLHEP_BASE_DIR"
 fi
 
-if [ X$g4clhep_base_dir != X/usr -o X$g4clhep_base_dir != X/usr/local ] ; then 
-CLHEP_BASE_DIR="$g4clhep_base_dir"
-export CLHEP_BASE_DIR
-echo "On this machine the CLHEP_BASE_DIR=\$CLHEP_BASE_DIR"
-fi
+#if [ X$g4clhep_base_dir != X/usr -o X$g4clhep_base_dir != X/usr/local ] ; then 
+#CLHEP_BASE_DIR="$g4clhep_base_dir"
+#export CLHEP_BASE_DIR
+#echo "On this machine the CLHEP_BASE_DIR=\$CLHEP_BASE_DIR"
+#fi
 
 #+
 if [ X$g4clhep_include_dir != X ] ; then 
@@ -141,8 +196,8 @@ fi
 #
 # g4debug
 #
-if [ X$g4debug != X ] ; then 
-G4DEBUG="$g4debug"
+if [ X$g4debug = Xy ] ; then 
+G4DEBUG=1
 export G4DEBUG
 echo "On this machine the G4DEBUG=\$G4DEBUG"
 fi
@@ -241,6 +296,13 @@ echo "On this machine the G4VIS_BUILD_OIX_DRIVER=\$G4VIS_BUILD_OIX_DRIVER"
 fi 
 
 #+
+if [ X$g4vis_build_raytracerx_driver = Xy ] ; then
+G4VIS_BUILD_RAYTRACERX_DRIVER=1
+export G4VIS_BUILD_RAYTRACERX_DRIVER
+echo "On this machine the G4VIS_BUILD_RAYTRACERX_DRIVER=\$G4VIS_BUILD_RAYTRACERX_DRIVER"
+fi 
+
+#+
 if [ X$g4vis_build_oiwin32_driver = Xy ] ; then
 G4VIS_BUILD_OIWIN32_DRIVER=1
 export G4VIS_BUILD_OIWIN32_DRIVER
@@ -290,6 +352,13 @@ echo "On this machine the G4VIS_USE_OIX=\$G4VIS_USE_OIX"
 fi 
 
 #+
+if [ X$g4vis_use_raytracerx = Xy ] ; then
+G4VIS_USE_RAYTRACERX=1
+export G4VIS_USE_RAYTRACERX
+echo "On this machine the G4VIS_USE_RAYTRACERX=\$G4VIS_USE_RAYTRACERX"
+fi 
+
+#+
 if [ X$g4vis_use_oiwin32 = Xy ] ; then
 G4VIS_USE_OIWIN32=1
 export G4VIS_USE_OIWIN32
@@ -310,6 +379,69 @@ export OGLHOME
 echo "On this machine the OGLHOME=\$OGLHOME"
 fi 
 
+#+
+if [ X$g4vis_oivhome != X ] ; then
+OIVHOME="$g4vis_oivhome"
+export OIVHOME
+if [ X\$g4non_display = X ] ; then
+echo "On this machine the OIVHOME=\$OIVHOME"
+fi
+fi 
+
+#+
+if [ X$g4vis_build_openglxm_driver != X ] ; then
+XMFLAGS="$g4vis_xmflags"
+export XMFLAGS
+if [ X\$g4non_display = X ] ; then
+echo "On this machine the XMFLAGS=\$XMFLAGS"
+fi
+fi 
+
+#+
+if [ X$g4vis_build_openglxm_driver != X ] ; then
+XMLIBS="$g4vis_xmlibs"
+export XMLIBS
+if [ X\$g4non_display = X ] ; then
+echo "On this machine the XMLIBS=\$XMLIBS"
+fi
+fi 
+
+#+
+if [ X$g4ui_build_xm_session != X ] ; then
+XMFLAGS="$g4vis_xmflags"
+export XMFLAGS
+if [ X\$g4non_display = X ] ; then
+echo "On this machine the XMFLAGS=\$XMFLAGS"
+fi
+fi 
+
+#+
+if [ X$g4vis_build_xm_session != X ] ; then
+XMLIBS="$g4vis_xmlibs"
+export XMLIBS
+if [ X\$g4non_display = X ] ; then
+echo "On this machine the XMLIBS=\$XMLIBS"
+fi
+fi 
+
+#+
+if [ X$g4ui_build_xaw_session != X ] ; then
+XAWFLAGS="$g4ui_xawflags"
+export XAWFLAGS
+if [ X\$g4non_display = X ] ; then
+echo "On this machine the XAWFLAGS=\$XAWFLAGS"
+fi
+fi 
+
+#+
+if [ X$g4ui_build_xaw_session != X ] ; then
+XAWLIBS="$g4ui_xawlibs"
+export XAWLIBS
+if [ X\$g4non_display = X ] ; then
+echo "On this machine the XAWLIBS=\$XAWLIBS"
+fi
+fi 
+
 #
 # Use G3TOG4 module
 #
@@ -321,9 +453,25 @@ echo "On this machine the G4LIB_BUILD_G3TOG4=\$G4LIB_BUILD_G3TOG4"
 fi 
 
 if [ X$g4w_use_g3tog4 = Xy ] ; then
-G4USE_G3TOG4=1
-export G4USE_G3TOG4
-echo "On this machine the G4USE_G3TOG4=\$G4USE_G3TOG4"
+G4LIB_USE_G3TOG4=1
+export G4LIB_USE_G3TOG4
+echo "On this machine the G4LIB_USE_G3TOG4=\$G4LIB_USE_G3TOG4"
+fi 
+
+#
+# Use ZLIB module
+#
+#+
+if [ X$g4wlib_build_zlib = Xy ] ; then
+G4LIB_BUILD_ZLIB=1
+export G4LIB_BUILD_ZLIB
+echo "On this machine the G4LIB_BUILD_ZLIB=\$G4LIB_BUILD_ZLIB"
+fi 
+
+if [ X$g4w_use_zlib = Xy ] ; then
+G4LIB_USE_ZLIB=1
+export G4LIB_USE_ZLIB
+echo "On this machine the G4LIB_USE_ZLIB=\$G4LIB_USE_ZLIB"
 fi 
 
 #+
@@ -407,11 +555,13 @@ if test -f \$g4conf/g4make.log ; then
 # different arithmetic expansion...So we are doing it by 'text'
 # in two steps...
  
-err=\`grep Error $g4conf/g4make.log | wc -w\` 
-int=\`grep Stop\. $g4conf/g4make.log | wc -w\` 
+err=\`grep " Error " $g4conf/g4make.log | wc -w\` 
+int=\`grep " Interrupt " $g4conf/g4make.log | wc -w\` 
+stp=\`grep Stop\. $g4conf/g4make.log | wc -w\` 
 
 err2=\`echo \$err\`
 int2=\`echo \$int\`
+stp2=\`echo \$stp\`
 
 if [ X\$err2 = X0 -a X\$int2 = X0 ] ; then
 echo ""

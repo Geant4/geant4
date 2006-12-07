@@ -24,6 +24,61 @@ esac
 $spitshell >env.sh <<!GROK!THIS!
 ######################################
 #
+# Clean all G4 envs
+unset  CLHEP_BASE_DIR
+unset  CLHEP_INCLUDE_DIR
+unset  CLHEP_LIB
+unset  CLHEP_LIB_DIR
+
+unset  G4ANALYSIS_USE
+unset  G4DEBUG
+unset  G4INCLUDE
+unset  G4INSTALL
+
+unset  G4LEDATA
+unset  G4LEVELGAMMADATA
+unset  NeutronHPCrossSections
+unset  G4RADIOACTIVEDATA
+
+unset  G4LIB
+unset  G4LIB_BUILD_G3TOG4
+unset  G4LIB_BUILD_SHARED
+unset  G4LIB_BUILD_STATIC
+unset  G4LIB_BUILD_ZLIB
+unset  G4LIB_USE_G3TOG4
+unset  G4LIB_USE_GRANULAR
+unset  G4LIB_USE_ZLIB
+
+unset  G4SYSTEM
+
+unset  G4UI_BUILD_WIN32_SESSION
+unset  G4UI_BUILD_XAW_SESSION
+unset  G4UI_BUILD_XM_SESSION
+unset  G4UI_USE_TCSH
+unset  G4UI_USE_WIN32
+unset  G4UI_USE_XAW
+unset  G4UI_USE_XM
+
+unset  G4VIS_BUILD_DAWN_DRIVER
+unset  G4VIS_BUILD_OIWIN32_DRIVER
+unset  G4VIS_BUILD_OIX_DRIVER
+unset  G4VIS_BUILD_OPENGLWIN32_DRIVER
+unset  G4VIS_BUILD_OPENGLXM_DRIVER
+unset  G4VIS_BUILD_OPENGLX_DRIVER
+unset  G4VIS_BUILD_RAYTRACERX_DRIVER
+unset  G4VIS_BUILD_VRML_DRIVER
+
+unset  G4VIS_USE_DAWN
+unset  G4VIS_USE_OIWIN32
+unset  G4VIS_USE_OIX
+unset  G4VIS_USE_OPENGLWIN32
+unset  G4VIS_USE_OPENGLX
+unset  G4VIS_USE_OPENGLXM
+unset  G4VIS_USE_RAYTRACERX
+unset  G4VIS_USE_VRML
+
+
+#
 # g4system.U
 #
 #+
@@ -37,24 +92,42 @@ fi
 # g4dirs.U
 #
 #+
+if [ X$g4install != X$g4final_install ] ; then
+G4INSTALL="$g4final_install/src/geant4"
+else
 G4INSTALL="$g4install"
+fi
 export G4INSTALL
 if [ X\$g4non_display = X ] ; then
 echo "On this machine the G4INSTALL=\$G4INSTALL"
 fi
 
 #+
-if [ X$g4include != X ] ; then 
-G4INCLUDE="$g4include"
+if [ X$g4includes_flag != Xn ] ; then 
+if [ X$g4install != X$g4final_install ] ; then
+G4INCLUDE="$g4final_install/include/geant4"
+else
+G4INCLUDE="$g4install/include/"
+fi
 export G4INCLUDE
 if [ X\$g4non_display = X ] ; then
 echo "On this machine the G4INCLUDE=\$G4INCLUDE"
 fi
+#else
+#G4BASE="$g4final_install/include/geant4/source"
+#export G4BASE
+#if [ X\$g4non_display = X ] ; then
+#echo "On this machine the G4BASE=\$G4BASE"
+#fi
 fi
 
 #+
 if [ X$g4lib != X ] ; then 
-G4LIB="$g4lib"
+if [ X$g4install != X$g4final_install ] ; then
+G4LIB="$g4final_install/lib/geant4"
+else
+G4LIB="$g4install/lib"
+fi
 export G4LIB
 if [ X\$g4non_display = X ] ; then
 echo "On this machine the G4LIB=\$G4LIB"
@@ -98,13 +171,13 @@ fi
 fi
 
 #+
-if [ X$g4elasticdata != X ] ; then 
-G4ELASTICDATA="$g4elasticdata"
-export G4ELASTICDATA
-if [ X\$g4non_display = X ] ; then
-echo "On this machine the G4ELASTICDATA=\$G4ELASTICDATA"
-fi
-fi
+#if [ X$g4elasticdata != X ] ; then 
+#G4ELASTICDATA="$g4elasticdata"
+#export G4ELASTICDATA
+#if [ X\$g4non_display = X ] ; then
+#echo "On this machine the G4ELASTICDATA=\$G4ELASTICDATA"
+#fi
+#fi
 
 #
 # g4clhep.U
@@ -148,8 +221,8 @@ fi
 #
 # g4debug
 #
-if [ X$g4debug != X ] ; then 
-G4DEBUG="$g4debug"
+if [ X$g4debug = Xy ] ; then 
+G4DEBUG=1
 export G4DEBUG
 if [ X\$g4non_display = X ] ; then
 echo "On this machine the G4DEBUG=\$G4DEBUG"
@@ -274,6 +347,15 @@ fi
 fi 
 
 #+
+if [ X$g4vis_build_raytracerx_driver = Xy ] ; then
+G4VIS_BUILD_RAYTRACERX_DRIVER=1
+export G4VIS_BUILD_RAYTRACERX_DRIVER
+if [ X\$g4non_display = X ] ; then
+echo "On this machine the G4VIS_BUILD_RAYTRACERX_DRIVER=\$G4VIS_BUILD_RAYTRACERX_DRIVER"
+fi
+fi 
+
+#+
 if [ X$g4vis_build_oiwin32_driver = Xy ] ; then
 G4VIS_BUILD_OIWIN32_DRIVER=1
 export G4VIS_BUILD_OIWIN32_DRIVER
@@ -337,6 +419,15 @@ fi
 fi 
 
 #+
+if [ X$g4vis_use_raytracerx = Xy ] ; then
+G4VIS_USE_RAYTRACERX=1
+export G4VIS_USE_RAYTRACERX
+if [ X\$g4non_display = X ] ; then
+echo "On this machine the G4VIS_USE_RAYTRACERX=\$G4VIS_USE_RAYTRACERX"
+fi
+fi 
+
+#+
 if [ X$g4vis_use_oiwin32 = Xy ] ; then
 G4VIS_USE_OIWIN32=1
 export G4VIS_USE_OIWIN32
@@ -363,6 +454,69 @@ echo "On this machine the OGLHOME=\$OGLHOME"
 fi
 fi 
 
+#+
+if [ X$g4vis_oivhome != X ] ; then
+OIVHOME="$g4vis_oivhome"
+export OIVHOME
+if [ X\$g4non_display = X ] ; then
+echo "On this machine the OIVHOME=\$OIVHOME"
+fi
+fi 
+
+#+
+if [ X$g4vis_build_openglxm_driver != X ] ; then
+XMFLAGS="$g4vis_xmflags"
+export XMFLAGS
+if [ X\$g4non_display = X ] ; then
+echo "On this machine the XMFLAGS=\$XMFLAGS"
+fi
+fi 
+
+#+
+if [ X$g4vis_build_openglxm_driver != X ] ; then
+XMLIBS="$g4vis_xmlibs"
+export XMLIBS
+if [ X\$g4non_display = X ] ; then
+echo "On this machine the XMLIBS=\$XMLIBS"
+fi
+fi 
+
+#+
+if [ X$g4ui_build_xm_session != X ] ; then
+XMFLAGS="$g4vis_xmflags"
+export XMFLAGS
+if [ X\$g4non_display = X ] ; then
+echo "On this machine the XMFLAGS=\$XMFLAGS"
+fi
+fi 
+
+#+
+if [ X$g4vis_build_xm_session != X ] ; then
+XMLIBS="$g4vis_xmlibs"
+export XMLIBS
+if [ X\$g4non_display = X ] ; then
+echo "On this machine the XMLIBS=\$XMLIBS"
+fi
+fi 
+
+#+
+if [ X$g4ui_build_xaw_session != X ] ; then
+XAWFLAGS="$g4ui_xawflags"
+export XAWFLAGS
+if [ X\$g4non_display = X ] ; then
+echo "On this machine the XAWFLAGS=\$XAWFLAGS"
+fi
+fi 
+
+#+
+if [ X$g4ui_build_xaw_session != X ] ; then
+XAWLIBS="$g4ui_xawlibs"
+export XAWLIBS
+if [ X\$g4non_display = X ] ; then
+echo "On this machine the XAWLIBS=\$XAWLIBS"
+fi
+fi 
+
 #
 # Use G3TOG4 module
 #
@@ -376,12 +530,29 @@ fi
 fi 
 
 if [ X$g4w_use_g3tog4 = Xy ] ; then
-G4USE_G3TOG4=1
-export G4USE_G3TOG4
+G4LIB_USE_G3TOG4=1
+export G4LIB_USE_G3TOG4
 if [ X\$g4non_display = X ] ; then
-echo "On this machine the G4USE_G3TOG4=\$G4USE_G3TOG4"
+echo "On this machine the G4LIB_USE_G3TOG4=\$G4LIB_USE_G3TOG4"
 fi
 fi 
+
+#
+# Use ZLIB module
+#
+#+
+if [ X$g4wlib_build_zlib = Xy ] ; then
+G4LIB_BUILD_ZLIB=1
+export G4LIB_BUILD_ZLIB
+echo "On this machine the G4LIB_BUILD_ZLIB=\$G4LIB_BUILD_ZLIB"
+fi 
+
+if [ X$g4w_use_zlib = Xy ] ; then
+G4LIB_USE_ZLIB=1
+export G4LIB_USE_ZLIB
+echo "On this machine the G4LIB_USE_ZLIB=\$G4LIB_USE_ZLIB"
+fi 
+
 
 #+
 #
@@ -415,12 +586,26 @@ echo "On this machine the G4LIB_USE_GRANULAR=\$G4LIB_USE_GRANULAR"
 fi
 fi 
 
+# Check for Windows!
+if test "X\$G4SYSTEM" != "XWIN32-VC" -a "X\$G4SYSTEM" != "XWIN32-VC7"; then
+#+
+#
+# UI_USE_TCSH for Unix
+#
+G4UI_USE_TCSH=1
+export G4UI_USE_TCSH
+if [ X\$g4non_display = X ] ; then
+echo "On this machine the G4UI_USE_TCSH=\$G4UI_USE_TCSH"
+fi 
+fi
+
 #####################################################################
 
 !GROK!THIS!
 
 : In the following dollars and backticks do not need the extra backslash.
 $spitshell >>env.sh <<'!NO!SUBS!'
+
 
 #+
 #
@@ -453,6 +638,62 @@ fi # if platforms
 fi
 
 fi
+
+
+
+
+#
+# Shared libraries
+#
+if [ $G4LIB_BUILD_SHARED ] ; then
+#
+# Warning about LD_LIBRARY_PATH
+#
+echo
+echo "LD_LIBRARY_PATH is set to include CLHEP and Geant4 libraries. "
+echo
+echo  "NOTE : verify that the correct path for the CLHEP library"
+echo  "- \$CLHEP_BASE_DIR/lib - is included in the \$LD_LIBRARY_PATH"
+echo  "variable in your environment, and no other outdated installations"
+echo  "of CLHEP are by chance referenced through \$LD_LIBRARY_PATH and"
+echo  "present in your system !"
+echo
+
+if [ $LD_LIBRARY_PATH ] ; then
+LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${G4LIB}/${G4SYSTEM}
+LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${CLHEP_BASE_DIR}/lib
+export LD_LIBRARY_PATH
+else
+LD_LIBRARY_PATH=${G4LIB}/${G4SYSTEM}
+LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${CLHEP_BASE_DIR}/lib
+export LD_LIBRARY_PATH
+fi
+fi
+
+#
+# Shared libraries for Mac
+#
+if test "X$G4SYSTEM" = "XDarwin-g++" ; then
+
+if [ $G4LIB_BUILD_SHARED ] ; then
+if [ $DYLD_LIBRARY_PATH ] ; then
+DYLD_LIBRARY_PATH=${DYLD_LIBRARY_PATH}:${G4LIB}/${G4SYSTEM}
+DYLD_LIBRARY_PATH=${DYLD_LIBRARY_PATH}:${CLHEP_BASE_DIR}/lib
+export DYLD_LIBRARY_PATH
+else
+DYLD_LIBRARY_PATH=${G4LIB}/${G4SYSTEM}
+DYLD_LIBRARY_PATH=${DYLD_LIBRARY_PATH}:${CLHEP_BASE_DIR}/lib
+export DYLD_LIBRARY_PATH
+fi
+fi
+
+fi
+
+#
+# For BIN
+#
+PATH=${PATH}:${G4WORKDIR}/bin/${G4SYSTEM}
+export PATH
 
 !NO!SUBS!
 chmod 755 env.sh

@@ -40,7 +40,7 @@ export G4INSTALL
 echo "On this machine the G4INSTALL=\$G4INSTALL"
 
 #+
-if [ X$g4include != X ] ; then
+if [ X$g4include != X -a X$g4include != Xn ] ; then
 G4INCLUDE="$g4include"
 export G4INCLUDE
 echo "On this machine the G4INCLUDE=\$G4INCLUDE"
@@ -95,21 +95,15 @@ echo "On this machine the NeutronHPCrossSections=\$NeutronHPCrossSections"
 fi
 
 #+
-if [ X$g4elasticdata != X ] ; then 
-G4ELASTICDATA="$g4elasticdata"
-export G4ELASTICDATA
-echo "On this machine the G4ELASTICDATA=\$g4elasticdata"
-fi
+#if [ X$g4elasticdata != X ] ; then 
+#G4ELASTICDATA="$g4elasticdata"
+#export G4ELASTICDATA
+#echo "On this machine the G4ELASTICDATA=\$G4ELASTICDATA"
+#fi
 
 #
 # g4clhep.U
 #
-if [ X$g4clhep_base_dir != X ] ; then 
-CLHEP_BASE_DIR="$g4clhep_base_dir"
-export CLHEP_BASE_DIR
-echo "On this machine the CLHEP_BASE_DIR=\$CLHEP_BASE_DIR"
-fi
-
 if [ X$g4clhep_base_dir != X/usr -o X$g4clhep_base_dir != X/usr/local ] ; then 
 CLHEP_BASE_DIR="$g4clhep_base_dir"
 export CLHEP_BASE_DIR
@@ -141,8 +135,8 @@ fi
 #
 # g4debug
 #
-if [ X$g4debug != X ] ; then 
-G4DEBUG="$g4debug"
+if [ X$g4debug = Xy ] ; then 
+G4DEBUG=1
 export G4DEBUG
 echo "On this machine the G4DEBUG=\$G4DEBUG"
 fi
@@ -321,10 +315,27 @@ echo "On this machine the G4LIB_BUILD_G3TOG4=\$G4LIB_BUILD_G3TOG4"
 fi 
 
 if [ X$g4w_use_g3tog4 = Xy ] ; then
-G4USE_G3TOG4=1
-export G4USE_G3TOG4
-echo "On this machine the G4USE_G3TOG4=\$G4USE_G3TOG4"
+G4LIB_USE_G3TOG4=1
+export G4LIB_USE_G3TOG4
+echo "On this machine the G4LIB_USE_G3TOG4=\$G4LIB_USE_G3TOG4"
 fi 
+
+#
+# Use ZLIB module
+#
+#+
+if [ X$g4wlib_build_zlib = Xy ] ; then
+G4LIB_BUILD_ZLIB=1
+export G4LIB_BUILD_ZLIB
+echo "On this machine the G4LIB_BUILD_ZLIB=\$G4LIB_BUILD_ZLIB"
+fi 
+
+if [ X$g4w_use_zlib = Xy ] ; then
+G4LIB_USE_ZLIB=1
+export G4LIB_USE_ZLIB
+echo "On this machine the G4LIB_USE_ZLIB=\$G4LIB_USE_ZLIB"
+fi 
+
 
 #+
 #
@@ -360,20 +371,58 @@ echo ""
 echo "Starting installation..."
 echo ""
 
-cd $g4install/
-cd ..
+cd $g4install
 #echo `pwd`
 
+
+# Remove 'verbosity' in 'tar' command
+# If not INCLUDE then install full tree in 'src' directory!
+#
 if [ X$g4includes_flag = Xn ] ; then
-mkdir -p $g4final_install
-tar cvf - geant4 |(cd $g4final_install; tar xf -)
+if [ X$g4install != X$g4final_install ] ; then
+echo ""
+echo "Installing sources and headers..."
+echo ""
+mkdir -p $g4final_install/src/geant4/
+tar cf - Configure config/ source/ environments/ physics_lists/ examples/ |(cd $g4final_install/src/geant4/; tar xf -)
+fi
 fi
 
 ########################################
 # There is no env!
 if [ X$g4includes_flag = Xy ] ; then
-$g4make includes
+
+if [ X$g4install != X$g4final_install ] ; then
+echo ""
+echo "Installing sources..."
+echo ""
+
+mkdir -p $g4final_install/src/geant4/
+tar cf - Configure config/ source/ environments/ physics_lists/ examples/ |(cd $g4final_install/src/geant4/; tar xf -)
 fi
+
+echo ""
+echo "Installing headers..."
+echo ""
+cd $g4install/source
+$g4make includes dependencies=""
+fi
+
+# Move libraries
+if [ X$g4install != X$g4final_install ] ; then
+echo ""
+echo "Installing libraries..."
+echo ""
+mkdir -p $g4final_install/lib/geant4
+cd $g4install/lib
+tar cf - $g4system |(cd $g4final_install/lib/geant4; tar xf -)
+fi
+
+# For the reason of strange behaivior for DOTted directory...
+mkdir -p $g4final_install/src/geant4/.config
+cd $g4install/.config
+tar cf - . |(cd $g4final_install/src/geant4/.config; tar xf -)
+
 
 !GROK!THIS!
 
