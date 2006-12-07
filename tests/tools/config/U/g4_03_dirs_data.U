@@ -22,27 +22,27 @@ esac
 
 case "$g4radioactivedata" in
 '')
-	g4radioactivedata=$g4data/RadiativeDecay3.0
+	g4radioactivedata=$g4data/RadioactiveDecay3.1
 	;;
 esac
 
 case "$g4ledata" in
 '')
-	g4ledata=$g4data/G4EMLOW3.0
+	g4ledata=$g4data/G4EMLOW4.1
 	;;
 esac
 
 case "$g4neutronhpcrosssections" in
 '')
-	g4neutronhpcrosssections=$g4data/G4NDL3.7
+	g4neutronhpcrosssections=$g4data/G4NDL3.10
 	;;
 esac
 
-case "$g4elasticdata" in
-'')
-	g4elasticdata=$g4data/G4ELASTIC1.1
-	;;
-esac
+#case "$g4elasticdata" in
+#'')
+#	g4elasticdata=$g4data/G4ELASTIC1.1
+#	;;
+#esac
 
 #########################################################################
 
@@ -59,8 +59,6 @@ Please, specify default directory where ALL the Geant4 data is installed:
  G4LEDATA:			$g4ledata
 
  NeutronHPCrossSections:	$g4neutronhpcrosssections
-
- G4ELASTICDATA:			$g4elasticdata
 
 You will be asked about customizing these next.
 
@@ -80,11 +78,11 @@ gans=$ans
 		if [ X$g4data != X$ans ] ; then
 		g4data=$ans
 
-		g4levelgammadata=$g4data/PhotonEvaporation
-		g4radioactivedata=$g4data/RadiativeDecay
-		g4ledata=$g4data/G4EMLOW3.0
-		g4neutronhpcrosssections=$g4data/G4NDL3.7
-		g4elasticdata=$g4data/G4ELASTIC1.1
+		g4levelgammadata=$g4data/PhotonEvaporation2.0
+		g4radioactivedata=$g4data/RadioactiveDecay3.1
+		g4ledata=$g4data/G4EMLOW4.1
+		g4neutronhpcrosssections=$g4data/G4NDL3.10
+#		g4elasticdata=$g4data/G4ELASTIC1.1
 		fi
 # done
 
@@ -104,8 +102,6 @@ Please, specify default directory where the Geant4 data is installed:
 
 4) NeutronHPCrossSections:	$g4neutronhpcrosssections
 
-5) G4ELASTICDATA:		$g4elasticdata
-
 To modify default settings, select number above (e.g. 2) 
 EOM`
 
@@ -121,40 +117,40 @@ gans=$ans
 
 	1) 
 		dflt=$g4levelgammadata
-		fn='f~'
-		rp="Where is Geant4 PhotonEvaporation data installed?"
+		fn='d~'
+		rp="Where is Geant4 PhotonEvaporation2.0 data installed?"
 		. ./getfile
 		g4levelgammadata=$ans
 		;;
 	2) 
 		dflt=$g4radioactivedata
-		fn='f~'
-		rp="Where is Geant4 RadiativeDecay data installed?"
+		fn='d~'
+		rp="Where is Geant4 RadioactiveDecay3.1 data installed?"
 		. ./getfile
 		g4radioactivedata=$ans
 		;;
 	3) 
 		dflt=$g4ledata
-		fn='f~'
-		rp="Where is G4EMLOW3.0 data installed ?"
+		fn='d~'
+		rp="Where is G4EMLOW4.1 data installed ?"
 		. ./getfile
 		g4ledata=$ans
 		;;
 	4) 
 		dflt=$g4neutronhpcrosssections
-		fn='f~'
-		rp="Where is G4NDL3.7 installed?"
+		fn='d~'
+		rp="Where is G4NDL3.10 data installed?"
 		. ./getfile
 		g4neutronhpcrosssections=$ans
 		;;
 
-	5) 
-		dflt=$g4elasticdata
-		fn='f~'
-		rp="Where is G4ELASTICDATA installed?"
-		. ./getfile
-		g4elasticdata=$ans
-		;;
+#	5) 
+#		dflt=$g4elasticdata
+#		fn='d~'
+#		rp="Where is G4ELASTIC1.1 data installed?"
+#		. ./getfile
+#		g4elasticdata=$ans
+#		;;
 
 #	[eE]) 
 #		break
