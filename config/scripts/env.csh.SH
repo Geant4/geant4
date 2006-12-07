@@ -180,8 +180,8 @@ endif
 #
 # g4debug
 #
-if ( X$g4debug != X ) then
-setenv G4DEBUG "$g4debug"
+if ( X$g4debug == Xy ) then
+setenv G4DEBUG 1
 echo "On this machine the G4DEBUG=\$G4DEBUG"
 endif
 
@@ -471,6 +471,20 @@ endif
 # Shared libraries
 #
 if ( ${?G4LIB_BUILD_SHARED} ) then
+
+#
+# Warning about LD_LIBRARY_PATH
+#
+echo
+echo "LD_LIBRARY_PATH is set to include CLHEP and Geant4 libraries. "
+echo
+echo  "NOTE : verify that the correct path for the CLHEP library"
+echo  "- \$CLHEP_BASE_DIR/lib - is included in the \$LD_LIBRARY_PATH"
+echo  "variable in your environment, and no other outdated installations"
+echo  "of CLHEP are by chance referenced through \$LD_LIBRARY_PATH and"
+echo  "present in your system !"
+echo
+
 if ( ${?LD_LIBRARY_PATH} )  then
 setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${G4LIB}/${G4SYSTEM}
 setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${CLHEP_BASE_DIR}/lib

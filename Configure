@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.90 2006-12-06 16:59:36 stesting Exp $
+# $Id: Configure,v 1.91 2006-12-07 13:34:48 stesting Exp $
 #
-# Generated on Wed Dec  6 17:59:06 CET 2006 [metaconfig 3.0 PL70]
+# Generated on Thu Dec  7 14:32:56 CET 2006 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -2724,7 +2724,7 @@ esac
 
 case "$g4radioactivedata" in
 '')
-	g4radioactivedata=$g4data/RadiactiveDecay3.1
+	g4radioactivedata=$g4data/RadioactiveDecay3.1
 	;;
 esac
 
@@ -2781,7 +2781,7 @@ gans=$ans
 		g4data=$ans
 
 		g4levelgammadata=$g4data/PhotonEvaporation2.0
-		g4radioactivedata=$g4data/RadiactiveDecay3.1
+		g4radioactivedata=$g4data/RadioactiveDecay3.1
 		g4ledata=$g4data/G4EMLOW4.1
 		g4neutronhpcrosssections=$g4data/G4NDL3.10
 #		g4elasticdata=$g4data/G4ELASTIC1.1
@@ -2819,28 +2819,28 @@ gans=$ans
 
 	1) 
 		dflt=$g4levelgammadata
-		fn='f~'
+		fn='d~'
 		rp="Where is Geant4 PhotonEvaporation2.0 data installed?"
 		. ./getfile
 		g4levelgammadata=$ans
 		;;
 	2) 
 		dflt=$g4radioactivedata
-		fn='f~'
-		rp="Where is Geant4 RadiactiveDecay3.1 data installed?"
+		fn='d~'
+		rp="Where is Geant4 RadioactiveDecay3.1 data installed?"
 		. ./getfile
 		g4radioactivedata=$ans
 		;;
 	3) 
 		dflt=$g4ledata
-		fn='f~'
+		fn='d~'
 		rp="Where is G4EMLOW4.1 data installed ?"
 		. ./getfile
 		g4ledata=$ans
 		;;
 	4) 
 		dflt=$g4neutronhpcrosssections
-		fn='f~'
+		fn='d~'
 		rp="Where is G4NDL3.10 data installed?"
 		. ./getfile
 		g4neutronhpcrosssections=$ans
@@ -2848,7 +2848,7 @@ gans=$ans
 
 #	5) 
 #		dflt=$g4elasticdata
-#		fn='f~'
+#		fn='d~'
 #		rp="Where is G4ELASTIC1.1 data installed?"
 #		. ./getfile
 #		g4elasticdata=$ans
@@ -3523,7 +3523,7 @@ fi # !Win
 echo " "
 case "$g4debug" in
 '')
-	g4debug=""
+	g4debug=n
 	;;
 esac
 

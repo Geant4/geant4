@@ -135,8 +135,8 @@ fi
 #
 # g4debug
 #
-if [ X$g4debug != X ] ; then 
-G4DEBUG="$g4debug"
+if [ X$g4debug = Xy ] ; then 
+G4DEBUG=1
 export G4DEBUG
 echo "On this machine the G4DEBUG=\$G4DEBUG"
 fi
