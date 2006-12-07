@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QElastic.cc,v 1.12 2006-12-04 10:44:22 mkossov Exp $
+// $Id: G4QElastic.cc,v 1.13 2006-12-07 19:24:23 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QElastic class -----------------
@@ -190,10 +190,16 @@ G4double G4QElastic::GetMeanFreePath(const G4Track& aTrack,G4double Q,G4ForceCon
       SPI->push_back(susi);                 // Remember summed cross-section
     } // End of temporary initialization of the cross sections in the G4QIsotope singeltone
     sigma+=Isotopes->GetMeanCrossSection(Z,indEl)*NOfNucPerVolume[i];//SUM(MeanCS*NOfNperV)
+#ifdef debug
+    G4cout<<"G4QEl::GMFP: <S>="<<Isotopes->GetMeanCrossSection(Z,indEl)<<", AddToSigma="
+          <<Isotopes->GetMeanCrossSection(Z,indEl)*NOfNucPerVolume[i]<<G4endl;
+#endif
     ElProbInMat.push_back(sigma);
   } // End of LOOP over Elements
-
   // Check that cross section is not zero and return the mean free path
+#ifdef debug
+  G4cout<<"G4QEl::GMFP: MeanFreePath="<<1./sigma<<G4endl;
+#endif
   if(sigma > 0.) return 1./sigma;                 // Mean path [distance] 
   return DBL_MAX;
 }
@@ -469,7 +475,8 @@ G4VParticleChange* G4QElastic::PostStepDoIt(const G4Track& track, const G4Step& 
   if(finE>0) aParticleChange.ProposeEnergy(finE);
   else
   {
-    G4cerr<<"*Warning*G4QElastic::PostStDoIt: Zero or negative scattered E="<<finE<<G4endl;
+    G4cerr<<"*Warning*G4QElastic::PostStDoIt: Zero or negative scattered E="<<finE<<",pM="
+          <<pM<<",s4M="<<scat4M<<",cost="<<cost<<G4endl;
     aParticleChange.ProposeEnergy(0.) ;
     aParticleChange.ProposeTrackStatus(fStopAndKill);
   }

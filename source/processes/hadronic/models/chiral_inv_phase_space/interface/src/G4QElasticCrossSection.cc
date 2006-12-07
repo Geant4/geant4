@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QElasticCrossSection.cc,v 1.16 2006-12-04 10:44:22 mkossov Exp $
+// $Id: G4QElasticCrossSection.cc,v 1.17 2006-12-07 19:24:23 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -35,6 +35,7 @@
 //================================================================================
 
 //#define debug
+//#define isodebug
 #define edebug
 //#define pdebug
 //#define ppdebug
@@ -957,10 +958,10 @@ G4double G4QElasticCrossSection::GetTabValues(G4double lp, G4int PDG, G4int tgZ,
   static const G4int    N05[n05]={5,6};
   static const G4double T05[n05]={0.,0.};
   static const G4double X05[n05]={2140.,4840.};
-  static const G4int    n06=1;                   // Z= 6 C
-  static const G4int    N06[n06]={6};
-  static const G4double T06[n06]={0.};
-  static const G4double X06[n06]={4730.};
+  static const G4int    n06=2;                   // Z= 6 C
+  static const G4int    N06[n06]={6,7};
+  static const G4double T06[n06]={0.,0.};
+  static const G4double X06[n06]={4730.,4730.};
   static const G4int    n07=2;                   // Z= 7 N
   static const G4int    N07[n07]={7,8};
   static const G4double T07[n07]={0.,0.};
@@ -982,7 +983,7 @@ G4double G4QElasticCrossSection::GetTabValues(G4double lp, G4int PDG, G4int tgZ,
   static const G4double T11[n11]={0.};
   static const G4double X11[n11]={728.};
   static const G4int    n12=3;                   // Z=12 Mg
-  static const G4int    N12[n12]={10,11,12};
+  static const G4int    N12[n12]={12,13,14};
   static const G4double T12[n12]={.52,.22,.45};
   static const G4double X12[n12]={3500.,4000.,4000.};
   static const G4int    n13=1;                   // Z=13 Al
@@ -1042,7 +1043,7 @@ G4double G4QElasticCrossSection::GetTabValues(G4double lp, G4int PDG, G4int tgZ,
   static const G4double T26[n26]={.5,.862,0.,.37};
   static const G4double X26[n26]={4540.,2500.,600.,5500.};
   static const G4int    n27=1;                   // Z=27 Co
-  static const G4int    N27[n27]={30};
+  static const G4int    N27[n27]={32};
   static const G4double T27[n27]={.08};
   static const G4double X27[n27]={1070.};
   static const G4int    n28=5;                   // Z=28 Ni
@@ -1097,7 +1098,7 @@ G4double G4QElasticCrossSection::GetTabValues(G4double lp, G4int PDG, G4int tgZ,
   static const G4int    N40[n40]={50,51,52,54,56};
   static const G4double T40[n40]={.131,.1,.039,.0677,.1};
   static const G4double X40[n40]={8650.,11300.,8700.,9000.,8600.};
-  static const G4int    n41=1;                   // Z=41 Y
+  static const G4int    n41=1;                   // Z=41 Nb
   static const G4int    N41[n41]={52};
   static const G4double T41[n41]={.1};
   static const G4double X41[n41]={9200.};
@@ -1205,7 +1206,7 @@ G4double G4QElasticCrossSection::GetTabValues(G4double lp, G4int PDG, G4int tgZ,
   static const G4double T66[n66]={.1,.1,.0000024,.0000068,.000043,.000049,0.};
   static const G4double X66[n66]={7000,7000.,50000.,50000.,7000.,50000.,300000.};
   static const G4int    n67=1;                   // Z=67 Ho
-  static const G4int    N67[n67]={94};
+  static const G4int    N67[n67]={98};
   static const G4double T67[n67]={.01};
   static const G4double X67[n67]={13000.};
   static const G4int    n68=6;                   // Z=68 Er
@@ -1252,7 +1253,7 @@ G4double G4QElasticCrossSection::GetTabValues(G4double lp, G4int PDG, G4int tgZ,
   static const G4int    N78[n78]={112,114,116,117,118,120};
   static const G4double T78[n78]={0.,0.,0.,0.,0.,0.};
   static const G4double X78[n78]={12000.,12000.,12000.,12000.,12000.,12000.};
-  static const G4int    n79=1;                   // Z=79 Tm
+  static const G4int    n79=1;                   // Z=79 Au
   static const G4int    N79[n79]={118};
   static const G4double T79[n79]={.005};
   static const G4double X79[n79]={14000.};
@@ -1336,7 +1337,9 @@ G4double G4QElasticCrossSection::GetTabValues(G4double lp, G4int PDG, G4int tgZ,
   G4int iZ=tgZ-1; // Z index
   if(nN[iZ][0] < 0)
   {
+#ifdef isodebug
     G4cout<<"*Warning*G4QElasticCS::GetTabValue: No isotopes for Z="<<tgZ<<G4endl;
+#endif
     return 0.;
   }
 #ifdef pdebug
@@ -1462,13 +1465,14 @@ G4double G4QElasticCrossSection::GetTabValues(G4double lp, G4int PDG, G4int tgZ,
       {
         G4double kE=p2/dNM;
 #ifdef tdebug
-        G4cout<<"G4QECS::GV:P="<<p<<",E="<<kE<<",X="<< nX[iZ][i]<<",T="<<nT[iZ][i]<<G4endl;
+        G4cout<<"G4QECS::GTV:P="<<p<<",E="<<kE<<",X="<<nX[iZ][i]<<",T="<<nT[iZ][i]<<G4endl;
 #endif
         if(kE<nT[iZ][i]) return 0.;    // 0 below the threshold (in MeV)
         if(p<2.) return nX[iZ][i];     // At very low momentum(<2MeV/c) -> only LECS
     				return lastPAR[3]/(p4+lastPAR[4]/p2)+lastPAR[5]/(p5+rp16*rp16)+
                lastPAR[7]/(p4+lastPAR[8]/p4)+nX[iZ][i]/(1.+lastPAR[51]*p16);
       }
+      G4cerr<<"*G4QElCS::GTV:PDG="<<PDG<<",Z="<<tgZ<<",N="<<tgN<<": Sig not found"<<G4endl;
     }
   }
   else
@@ -1478,7 +1482,7 @@ G4double G4QElasticCrossSection::GetTabValues(G4double lp, G4int PDG, G4int tgZ,
     throw G4QException("G4QElasticCrossSection::GetTabValues: only pp is implemented");
   }
   return 0.;
-}
+} // End of GetTableValues
 
 // Returns max -t=Q2 (GeV^2) for the momentum pP(GeV) and the target nucleus (tgN,tgZ)
 G4double G4QElasticCrossSection::GetQ2max(G4int PDG, G4int tgZ, G4int tgN, G4double pP)
