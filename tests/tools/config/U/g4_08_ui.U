@@ -1,5 +1,5 @@
 ?RCS:
-?MAKE:g4ui_build_terminal_session g4ui_use_terminal g4ui_build_gag_session g4ui_use_gag g4ui_build_xm_session g4ui_use_xm g4ui_build_xaw_session g4ui_use_xaw g4ui_build_win32_session g4ui_use_win32 g4ui_use_tcsh:\
+?MAKE:g4ui_build_terminal_session g4ui_use_terminal g4ui_build_gag_session g4ui_use_gag g4ui_build_xm_session g4ui_use_xm g4ui_build_xaw_session g4ui_use_xaw g4ui_build_win32_session g4ui_use_win32 g4ui_use_tcsh g4vis_xmhome g4vis_xmflags g4vis_xmlibs g4ui_xawhome g4ui_xawflags g4ui_xawlibs:\
 	g4lib_build_shared Myread Getfile cat rm test
 ?MAKE:	-pick add $@ %<
 ?S:g4osname:
@@ -206,6 +206,200 @@ gans=$ans
 		;;
 	esac
 
+############################################################
+############################################################
+
+if test "X$g4ui_build_xaw_session" = "Xy" ; then
+
+if test "X$g4ui_xawhome" = "X" ; then
+xaw_dirs=`find $g4ui_xawhome /usr/X11R6/include /usr/local/include /usr/include /sw/include -type d -name Xaw 2>/dev/null |xargs echo`
+#echo ogl_dirs=$ogl_dirs
+
+if test "X$xaw_dirs" != "X" ; then
+
+g4xaw_base_dir_found=`echo $xaw_dirs|cut -d" " -f1`
+#echo g4ogl_base_dir_found=$g4ogl_base_dir_found
+
+# That's right: should be 3 times! (e.g./usr/local/lib/libGLU.so -> /usr/local)
+g4xaw_base_dir_found=`dirname $g4xaw_base_dir_found`
+g4xaw_base_dir_found=`dirname $g4xaw_base_dir_found`
+g4xaw_base_dir_found=`dirname $g4xaw_base_dir_found`
+
+	g4ui_xawhome=$g4xaw_base_dir_found
+#else
+#case "$g4ui_xawhome" in
+#'')
+#	g4ui_xawhome=/usr/X11R6/
+#	;;
+#esac
+fi
+fi
+
+##########################################################################
+
+#if test "X$g4ui_xawhome" != "X" ; then
+#xaw_dirs=$g4ui_xawhome
+#fi
+
+if test "X$g4ui_xawhome" != "X" ; then
+
+g4message=`cat << EOM
+
+You have selected to use the XAW based user interfaces.
+Specify the correct path where XAW is installed in your system.
+It was found in $g4ui_xawhome. Press [Enter] to set this path or type the correct one.
+
+You can set '-' (without quotation) to CANCEL the XAW flag at all:
+
+EOM`
+
+dflt=$g4ui_xawhome
+fn='d~(-)'
+rp=$g4message
+. ./getfile
+
+cend="no"
+while test "$cend" = "no" ; do
+if test -e "$ans/include/X11/Xaw" || [ "X$ans" = "X-"  ]; then
+cend="yes"
+if test "X$ans" != "X-" ; then
+
+g4ui_xawhome=$ans
+
+else
+
+g4ui_build_xaw_session=n
+g4ui_use_xaw=n
+
+fi
+else
+
+g4message=`cat << EOM
+
+You have selected to use XAW based user interfaces.
+But XAW was not found in $ans.
+Please specify the correct path where XAW is installed in your system.
+
+You can set '-' (without quotation) to CANCEL the XAW flag at all:
+
+EOM`
+
+dflt=""
+fn='d~(-)'
+rp=$g4message
+. ./getfile
+fi
+done
+
+else
+
+g4message=`cat << EOM
+
+You have selected to use XAW based user interfaces.
+But XAW was not found in expected place.
+Please specify the correct path where XAW is installed in your system.
+
+You can set '-' (without quotation) to CANCEL the XAW flag at all:
+
+EOM`
+
+dflt=""
+fn='d~(-)'
+rp=$g4message
+. ./getfile
+
+cend="no"
+while test "$cend" = "no" ; do
+if test -e "$ans/include/X11/Xaw" || [ "X$ans" = "X-"  ]; then
+cend="yes"
+if test "X$ans" != "X-" ; then
+
+g4ui_xawhome=$ans
+
+else
+
+g4ui_build_xaw_session=n
+g4ui_use_xaw=n
+
+fi
+else
+
+g4message=`cat << EOM
+
+You have selected to use XAW based user interfaces.
+But XAW was not found in $ans.
+Please specify the correct path where XAW is installed in your system.
+
+You can set '-' (without quotation) to CANCEL the XAW flag at all:
+
+EOM`
+
+dflt=""
+fn='d~(-)'
+rp=$g4message
+. ./getfile
+fi
+done
+fi
+
+if test "X$g4osname" = "XLinux"; then 
+
+if test "X$g4ui_xawhome" = "X/usr" -o "X$g4ui_xawhome" = "X/usr/local" ; then
+g4ui_xawhome=""
+fi
+fi
+fi # g4vis_build_opheglxm_driver
+
+###############################################
+# Set XMFLAGS and XMLIBS
+#
+
+if test "X$g4ui_build_xaw_session" = "Xy" ; then
+
+if test "X$g4osname" = "XAIX" ; then
+g4ui_xawflags=" -I$g4ui_xawhome/include "
+g4ui_xawlibs=" -L$g4ui_xawhome/lib -lXaw -lXmu -lXt -lX11 -lXext "
+fi
+
+if test "X$g4osname" = "XLinux" ; then
+g4ui_xawflags=" -I$g4ui_xawhome/include "
+	if test "X$g4ui_xawhome" = "X/usr/X11R6" ; then
+		g4ui_xawlibs=" -lXaw "
+	else
+		g4ui_xawlibs=" -L$g4ui_xawhome/lib -lXaw "
+	fi
+fi
+
+if test "X$g4osname" = "XDarwin" ; then
+g4ui_xawflags=" -I$g4ui_xawhome/include "
+g4ui_xawlibs=" -L$g4ui_xawhome/lib -lXaw "
+fi
+
+if test "X$g4osname" = "XDEC" ; then
+g4ui_xawflags=" -I$g4ui_xawhome/include "
+g4ui_xawlibs=" -L$g4ui_xawhome/lib -lXaw "
+fi
+
+if test "X$g4osname" = "XHP" ; then
+g4ui_xawflags=" -I$g4ui_xawhome/include "
+g4ui_xawlibs=" -L$g4ui_xawhome/lib -lXaw "
+fi
+
+if test "X$g4osname" = "XSGI" ; then
+g4ui_xawflags=" -I$g4ui_xawhome/include "
+g4ui_xawlibs=" -L$g4ui_xawhome/lib -lXaw "
+fi
+
+if test "X$g4osname" = "XSUN" ; then
+g4ui_xawflags=" -I$g4ui_xawhome/include "
+g4ui_xawlibs=" -L$g4ui_xawhome/lib -L/usr/openwin/lib -L/usr/dt/lib -L/usr/ucblib -R/usr/openwin/lib -lXaw -lXmu -lXt -lX11 -lXext "
+fi
+
+fi # end of XM build 
+
+###############################################
+###############################################
+
 g4message=`cat << EOM
 
   G4UI_BUILD_XM_SESSION
@@ -233,6 +427,200 @@ gans=$ans
 		g4ui_use_xm=y
 		;;
 	esac
+
+
+############################################################
+############################################################
+
+if test "X$g4ui_build_xm_session" = "Xy" ; then
+
+if test "X$g4vis_xmhome" = "X" ; then
+xm_dirs=`find $g4vis_xmhome /usr/X11R6/include /usr/local/include /usr/include /sw/include -type d -name Xm 2>/dev/null |xargs echo`
+#echo ogl_dirs=$ogl_dirs
+
+if test "X$xm_dirs" != "X" ; then
+
+g4xm_base_dir_found=`echo $xm_dirs|cut -d" " -f1`
+#echo g4ogl_base_dir_found=$g4ogl_base_dir_found
+
+# That's right: should be twice! (e.g./usr/local/lib/libGLU.so -> /usr/local)
+g4xm_base_dir_found=`dirname $g4xm_base_dir_found`
+g4xm_base_dir_found=`dirname $g4xm_base_dir_found`
+
+	g4vis_xmhome=$g4xm_base_dir_found
+#else
+#case "$g4vis_xmhome" in
+#'')
+#	g4vis_xmhome=/usr/X11R6/
+#	;;
+#esac
+fi
+fi
+
+##########################################################################
+
+#if test "X$g4vis_xmhome" != "X" ; then
+#xm_dirs=$g4vis_xmhome
+#fi
+
+if test "X$g4vis_xmhome" != "X" ; then
+
+g4message=`cat << EOM
+
+You have selected to use the XM Motif based user interfaces.
+Specify the correct path where Xm is installed in your system.
+It was found in $g4vis_xmhome. Press [Enter] to set this path or type the correct one.
+
+You can set '-' (without quotation) to CANCEL the XM flag at all:
+
+EOM`
+
+dflt=$g4vis_xmhome
+fn='d~(-)'
+rp=$g4message
+. ./getfile
+
+cend="no"
+while test "$cend" = "no" ; do
+if test -e "$ans/include/Xm" || [ "X$ans" = "X-"  ]; then
+cend="yes"
+if test "X$ans" != "X-" ; then
+
+g4vis_xmhome=$ans
+
+else
+
+g4ui_build_xm_session=n
+g4ui_use_xm=n
+
+fi
+else
+
+g4message=`cat << EOM
+
+You have selected to use XM Motif based user interfaces.
+But XM Motif was not found in $ans.
+Please specify the correct path where Xm is installed in your system.
+
+You can set '-' (without quotation) to CANCEL the XM flag at all:
+
+EOM`
+
+dflt=""
+fn='d~(-)'
+rp=$g4message
+. ./getfile
+fi
+done
+
+else
+
+g4message=`cat << EOM
+
+You have selected to use XM Motif based user interfaces.
+But XM Motif was not found in expected place.
+Please specify the correct path where Xm is installed in your system.
+
+You can set '-' (without quotation) to CANCEL the XM flag at all:
+
+EOM`
+
+dflt=""
+fn='d~(-)'
+rp=$g4message
+. ./getfile
+
+cend="no"
+while test "$cend" = "no" ; do
+if test -e "$ans/include/Xm" || [ "X$ans" = "X-"  ]; then
+cend="yes"
+if test "X$ans" != "X-" ; then
+
+g4vis_xmhome=$ans
+
+else
+
+g4ui_build_xm_session=n
+g4ui_use_xm=n
+
+fi
+else
+
+g4message=`cat << EOM
+
+You have selected to use XM Motif based user interfaces.
+But XM Motif was not found in $ans.
+Please specify the correct path where Xm is installed in your system.
+
+You can set '-' (without quotation) to CANCEL the XM flag at all:
+
+EOM`
+
+dflt=""
+fn='d~(-)'
+rp=$g4message
+. ./getfile
+fi
+done
+fi
+
+if test "X$g4osname" = "XLinux"; then 
+
+if test "X$g4vis_xmhome" = "X/usr" -o "X$g4vis_xmhome" = "X/usr/local" ; then
+g4vis_xmhome=""
+fi
+fi
+fi # g4vis_build_opheglxm_driver
+
+###############################################
+# Set XMFLAGS and XMLIBS
+#
+
+if test "X$g4ui_build_xm_session" = "Xy" ; then
+
+if test "X$g4osname" = "XAIX" ; then
+g4vis_xmflags=" -I$g4vis_xmhome/include "
+g4vis_xmlibs=" -L$g4vis_xmhome/lib -lXm -lXt -lX11 "
+fi
+
+if test "X$g4osname" = "XLinux" ; then
+g4vis_xmflags=" -I$g4vis_xmhome/include "
+	if test "X$g4vis_xmhome" = "X/usr/X11R6" ; then
+		g4vis_xmlibs=" -lXm -lXpm "
+	else
+		g4vis_xmlibs=" -L$g4vis_xmhome/lib -lXm -lXpm "
+	fi
+fi
+
+if test "X$g4osname" = "XDarwin" ; then
+g4vis_xmflags=" -I$g4vis_xmhome/include "
+g4vis_xmlibs=" -L$g4vis_xmhome/lib -lXm -lXpm "
+fi
+
+if test "X$g4osname" = "XDEC" ; then
+g4vis_xmflags=" -I$g4vis_xmhome/include "
+g4vis_xmlibs=" -L$g4vis_xmhome/lib -lXm "
+fi
+
+if test "X$g4osname" = "XHP" ; then
+g4vis_xmflags=" -I$g4vis_xmhome/include/Motif1.2 "
+g4vis_xmlibs=" -L$g4vis_xmhome/lib/Motif1.2 -lXm "
+fi
+
+if test "X$g4osname" = "XSGI" ; then
+g4vis_xmflags=" -I$g4vis_xmhome/include "
+g4vis_xmlibs=" -L$g4vis_xmhome/lib -lXm "
+fi
+
+if test "X$g4osname" = "XSUN" ; then
+g4vis_xmflags=" -I$g4vis_xmhome/include "
+g4vis_xmlibs=" -L$g4vis_xmhome/lib -L/usr/openwin/lib -L/usr/dt/lib -L/usr/ucblib -R/usr/openwin/lib -lXt -lXm -lX11 "
+fi
+
+fi # end of XM build 
+
+###############################################
+###############################################
 
 fi # if !WIN
 
