@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.cc,v 1.25 2006-11-11 01:28:23 japost Exp $
+// $Id: G4Navigator.cc,v 1.26 2006-12-07 15:21:52 japost Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4Navigator Implementation
@@ -155,6 +155,7 @@ G4Navigator::LocateGlobalPointAndSetup( const G4ThreeVector& globalPoint,
         else
         {
           fLastLocatedPointLocal = localPoint;
+	  fLocatedOutsideWorld= true;
           return 0;           // Have exited world volume
         }
         // A fix for the case where a volume is "entered" at an edge
@@ -276,6 +277,7 @@ G4Navigator::LocateGlobalPointAndSetup( const G4ThreeVector& globalPoint,
       else
       {
         fLastLocatedPointLocal = localPoint;
+	fLocatedOutsideWorld= true;
         return 0;         // Have exited world volume
       }
     }
@@ -313,6 +315,7 @@ G4Navigator::LocateGlobalPointAndSetup( const G4ThreeVector& globalPoint,
           else
           {
             fLastLocatedPointLocal = localPoint;
+	    fLocatedOutsideWorld= true;
             return 0;          // Have exited world volume
           }
         }
@@ -437,6 +440,8 @@ G4Navigator::LocateGlobalPointAndSetup( const G4ThreeVector& globalPoint,
   }
   G4cout.precision(oldcoutPrec);
 #endif
+
+  fLocatedOutsideWorld= false;
 
   return targetPhysical;
 }
@@ -928,6 +933,9 @@ void G4Navigator::ResetState()
     
   fBlockedPhysicalVolume = 0;
   fBlockedReplicaNo      = -1;
+
+  fLastLocatedPointLocal = G4ThreeVector( DBL_MAX, -DBL_MAX, 0.0 ); 
+  fLocatedOutsideWorld   = false;
 }
 
 // ********************************************************************
