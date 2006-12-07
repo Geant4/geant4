@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.icc,v 1.12 2006-10-27 09:13:46 gcosmo Exp $
+// $Id: G4Navigator.icc,v 1.13 2006-12-07 15:12:25 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -283,7 +283,14 @@ G4GRSSolid* G4Navigator::CreateGRSSolid() const
 inline
 G4TouchableHistory* G4Navigator::CreateTouchableHistory() const
 {
-  return new G4TouchableHistory(fHistory);
+  // return new G4TouchableHistory(fHistory);
+  G4TouchableHistory* touchHist;
+  if( !fLocatedOutsideWorld ) { 
+     touchHist =  new G4TouchableHistory(fHistory); 
+  } else { 
+     touchHist =  new G4TouchableHistory();  // Null history (outside world)
+  } 
+  return touchHist;
 }
 
 // ********************************************************************
