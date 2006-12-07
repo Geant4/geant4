@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.icc,v 1.13 2006-12-07 15:12:25 japost Exp $
+// $Id: G4Navigator.icc,v 1.14 2006-12-07 15:19:41 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -309,13 +309,15 @@ void G4Navigator::LocateGlobalPointAndUpdateTouchableHandle(
   if( fEnteredDaughter || fExitedMother )
   {
      oldTouchableToUpdate = CreateTouchableHistory();
+#if 0
      if( pPhysVol == 0 )
      {
-       // We want to ensure that the touchable is correct in this case.
-       //  The method below should do this and recalculate a lot more ....
-       //
+       // Extra work to ensure that the touchable is correct
        oldTouchableToUpdate->UpdateYourself( pPhysVol, &fHistory );
      }
+#else
+     // An updated  CreateTouchableHistory() should now take care of this !?
+#endif
   }
   return;
 }
