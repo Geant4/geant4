@@ -1,0 +1,36 @@
+#!/bin/awk -f
+# 
+# Process log output from do-runs jobs, and create table with key quantities.
+#  Initial version :  J. Apostolakis,  8 Dec 2006, 12:50 CET
+#  Version  0.2.0, JA, 8 Dec 2006, 13:00 CET
+#
+ BEGIN { dbg= 0; } 
+ /Running/ { inp=$4;
+             nevents=1000; if( /2x/ ){ nevents = 100;} 
+             if( dbg ) { print "Events= ", nevents;  } 
+             events = 1.0 * nevents;
+           }
+ /real/ { realtm= $6; erealtm= $8; } 
+ /^ *No trials/ { trials = $3;  ncalls= $6; maxtr= $8; }
+ /field/ { nfield=$6; }
+ /^Killed/ { nkilled=$2; }
+ /^Total energy/ { ekilled= $4; } 
+ /Iterations/ { printf "%5s %7d  %7.3f +- %6.3f  %9.2f  %9.2f  %6d    %7.4g \n", inp,  events, realtm, erealtm, trials/events, ncalls/events,  maxtr,  nfield/events,  nkilled, ekilled; }  
+
+  BEGIN { printf "%5s %8s %9s  %6s  %10s  %9s  %9s   %6s   %7s \n", 
+             "Run", "#Events", "Real time", "error", "trials/ev", "calls/ev", "maxTrials", "#FieldCAlls/ev", "killed", "E_killed" ; } 
+
+
+#  10:44:47  up 4 days, 43 min,  2 users,  load average: 0.95, 0.47, 0.23
+# Running with input 2xc 
+# 196.260u 0.080s 3:16.43 99.9%   0+0k 0+0io 3826pf+0w
+# ### Event real time =   1.93 +- 0.0973 (sec) 
+# ### Event user time =   1.93 +- 0.0973 (sec) 
+# No trials: 14980308  No Calls: 14354838  Max-trial: 16
+# Number calls to field = 216125054
+# Parameters:   fFirstFraction 0.999  fFractionLast 1  fFractionNextEstimate 0.98
+# /vis~/show/view
+# Killed 0 number of tracks
+# Total energy killed=    MeV
+# Iterations of trials: no statistics collected
+
