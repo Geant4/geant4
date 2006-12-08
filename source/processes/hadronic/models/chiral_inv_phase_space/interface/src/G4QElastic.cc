@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QElastic.cc,v 1.14 2006-12-08 09:37:24 mkossov Exp $
+// $Id: G4QElastic.cc,v 1.15 2006-12-08 14:53:26 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QElastic class -----------------
@@ -38,6 +38,7 @@
 //#define pdebug
 //#define tdebug
 //#define nandebug
+//#define ppdebug
 
 #include "G4QElastic.hh"
 
@@ -248,7 +249,9 @@ G4VParticleChange* G4QElastic::PostStepDoIt(const G4Track& track, const G4Step& 
   const G4DynamicParticle* projHadron = track.GetDynamicParticle();
   const G4ParticleDefinition* particle=projHadron->GetDefinition();
 #ifdef debug
-  G4cout<<"G4QElastic::PostStepDoIt: Before the GetMeanFreePath is called"<<G4endl;
+  G4cout<<"G4QElastic::PostStepDoIt: Before the GetMeanFreePath is called In4M="
+        <<projHadron->Get4Momentum()<<" of PDG="<<particle->GetPDGEncoding()<<", Type="
+        <<particle->GetParticleType()<<", Subtp="<<particle->GetParticleSubType()<<G4endl;
 #endif
   G4ForceCondition cond=NotForced;
   GetMeanFreePath(track, -27., &cond);                  // @@ ?? jus to update parameters?
@@ -263,8 +266,9 @@ G4VParticleChange* G4QElastic::PostStepDoIt(const G4Track& track, const G4Step& 
            G4cerr<<"*War*G4QElastic::PostStepDoIt:P(IU)="<<Momentum<<"="<<momentum<<G4endl;
   G4double pM2=proj4M.m2();        // in MeV^2
   G4double pM=std::sqrt(pM2);      // in MeV
-#ifdef debug
-  G4cout<<"G4QElastic::PostStepDoIt: pP(IU)="<<Momentum<<"="<<momentum<<",pM="<<pM<<G4endl;
+#ifdef pdebug
+  G4cout<<"G4QElastic::PostStepDoIt: pP(IU)="<<Momentum<<"="<<momentum<<",pM="<<pM
+        <<",scat4M="<<scat4M<<scat4M.m()<<G4endl;
 #endif
   if (!IsApplicable(*particle))  // Check applicability
   {
@@ -423,8 +427,10 @@ G4VParticleChange* G4QElastic::PostStepDoIt(const G4Track& track, const G4Step& 
   // @@ check a possibility to separate p, n, or alpha (!)
   if(xSec <= 0.) // The cross-section iz 0 -> Do Nothing
   {
+#ifdef pdebug
     G4cerr<<"*Warning*G4QElastic::PSDoIt:*Zero cross-sectionp* PDG="<<projPDG<<",tPDG="
           <<targPDG<<",P="<<Momentum<<G4endl;
+#endif
     //Do Nothing Action insead of the reaction
     aParticleChange.ProposeEnergy(kinEnergy);
     aParticleChange.ProposeLocalEnergyDeposit(0.);
@@ -446,17 +452,18 @@ G4VParticleChange* G4QElastic::PostStepDoIt(const G4Track& track, const G4Step& 
   G4double tM2=tM*tM;                         // Squared target mass
   G4double pEn=pM+kinEnergy;                  // tot projectile Energy in MeV
   G4double sM=(tM+tM)*pEn+tM2+pM2;            // Mondelstam s
-  G4double twop2cm=(tM2+tM2)*(pEn*pEn-pM2)/sM;// Doubled squared momentum in CM system
+  G4double dtM2=tM2+tM2;                      // doubled squared target mass
+  G4double twop2cm=(dtM2+dtM2)*(pEn*pEn-pM2)/sM;// Max t
   G4double cost=1.-mint/twop2cm;              // cos(theta) in CMS
   // 
-#ifdef tdebug
+#ifdef ppdebug
   G4cout<<"G4QElastic::PoStDoI:t="<<mint<<",T="<<kinEnergy<<",M="<<tM<<",c="<<cost<<G4endl;
 #endif
   if(cost>1. || cost<-1.)
   {
-    if(cost>1.000001 || cost<-1.000001) 
-      G4cout<<"*Warning*G4QElastic::PostStepDoIt:cos="<<cost<<",t="<<mint<<",T="<<kinEnergy
-            <<",tgM="<<tM<<",tmax="<<2*kinEnergy*tM<<",pPDG="<<projPDG<<",tPDG="<<G4endl;
+    if(cost>1.000001 || cost<-1.000001) G4cout<<"*Warning*G4QElastic::PostStepDoIt:cos="
+                            <<cost<<",t="<<mint<<",T="<<kinEnergy<<",tgM="<<tM<<",tmax="
+                            <<2*kinEnergy*tM<<",pPDG="<<projPDG<<",tPDG="<<targPDG<<G4endl;
     if     (cost>1.)  cost=1.;
     else if(cost<-1.) cost=-1.;
   }
@@ -467,8 +474,10 @@ G4VParticleChange* G4QElastic::PostStepDoIt(const G4Track& track, const G4Step& 
     G4cerr<<"G4QElastic::PSD:t4M="<<tot4M<<",pM="<<pM<<",tM="<<tM<<",cost="<<cost<<G4endl;
     throw G4QException("G4QElastic::PostStepDoIt: Can't decay Elastic Compound");
   }
-#ifdef tdebug
+#ifdef debug
   G4cout<<"G4QElastic::PoStDoIt:s4M="<<scat4M<<"+r4M="<<reco4M<<"="<<scat4M+reco4M<<G4endl;
+  G4cout<<"G4QElastic::PoStDoIt: scatE="<<scat4M.e()-pM<<", recoE="<<reco4M.e()-tM<<",d4M="
+        <<tot4M-scat4M-reco4M<<G4endl;
 #endif
   // Update G4VParticleChange for the scattered muon
   G4double finE=scat4M.e()-pM;             // Final kinetic energy of the scattered proton
@@ -477,6 +486,7 @@ G4VParticleChange* G4QElastic::PostStepDoIt(const G4Track& track, const G4Step& 
   {
     G4cerr<<"*Warning*G4QElastic::PostStDoIt: Zero or negative scattered E="<<finE<<",pM="
           <<pM<<",s4M="<<scat4M<<",cost="<<cost<<G4endl;
+    throw G4QException("G4QElastic::PostStDoIt: 0, negative, or nan energy");
     aParticleChange.ProposeEnergy(0.) ;
     aParticleChange.ProposeTrackStatus(fStopAndKill);
   }
