@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QHadron.cc,v 1.45 2006-11-27 10:44:54 mkossov Exp $
+// $Id: G4QHadron.cc,v 1.46 2006-12-08 14:54:48 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QHadron ----------------
@@ -35,6 +35,7 @@
 //#define debug
 //#define pdebug
 //#define sdebug
+//#define ppdebug
 
 #include "G4QHadron.hh"
 #include <cmath>
@@ -296,13 +297,13 @@ G4bool G4QHadron::RelDecayIn2(G4LorentzVector& f4Mom, G4LorentzVector& s4Mom,
   G4ThreeVector ltb = theMomentum.boostVector();// Boost vector for backward Lorentz Trans.
   G4ThreeVector ltf = -ltb;              // Boost vector for forward Lorentz Trans.
   G4LorentzVector cdir = dir;            // A copy to make a transformation to CMS
-#ifdef debug
+#ifdef ppdebug
   if(cdir.e()+.001<cdir.rho()) G4cerr<<"*G4QH::RDIn2:*Boost* cd4M="<<cdir<<",e-p="
                                      <<cdir.e()-cdir.rho()<<G4endl;
 #endif
   cdir.boost(ltf);                       // Direction transpormed to CMS of the Momentum
   G4ThreeVector vdir = cdir.vect();      // 3-Vector of the direction-particle
-#ifdef debug
+#ifdef ppdebug
   G4cout<<"G4QHad::RelDI2:dir="<<dir<<",ltf="<<ltf<<",cdir="<<cdir<<",vdir="<<vdir<<G4endl;
 #endif
   G4ThreeVector vx(0.,0.,1.);            // Ort in the direction of the reference particle
@@ -315,14 +316,14 @@ G4bool G4QHadron::RelDecayIn2(G4LorentzVector& f4Mom, G4LorentzVector& s4Mom,
     vy = vv.unit();                      // First ort orthogonal to the direction
     vz = vx.cross(vy);                   // Second ort orthoganal to the direction
   }
-#ifdef debug
+#ifdef ppdebug
   G4cout<<"G4QHad::RelDecIn2:iM="<<iM<<"=>fM="<<fM<<"+sM="<<sM<<",ob="<<vx<<vy<<vz<<G4endl;
 #endif
   if(maxCost> 1.) maxCost= 1.;
   if(minCost<-1.) minCost=-1.;
   if(maxCost<-1.) maxCost=-1.;
   if(minCost> 1.) minCost= 1.;
-  if (fabs(iM-fM-sM)<.001)
+  if(iM-fM-sM<.00000001)
   {
     G4double fR=fM/iM;
     G4double sR=sM/iM;
@@ -339,7 +340,7 @@ G4bool G4QHadron::RelDecayIn2(G4LorentzVector& f4Mom, G4LorentzVector& s4Mom,
   G4double p2 = (d2*d2/4.-fM2*sM2)/iM2;    // Decay momentum(^2) in CMS of Quasmon
   if(p2<0.)
   {
-#ifdef debug
+#ifdef ppdebug
     G4cout<<"**G4QH:RDIn2:p2="<<p2<<"<0,d2^2="<<d2*d2/4.<<"<4*fM2*sM2="<<4*fM2*sM2<<G4endl;
 #endif
     p2=0.;
@@ -352,9 +353,19 @@ G4bool G4QHadron::RelDecayIn2(G4LorentzVector& f4Mom, G4LorentzVector& s4Mom,
     ct = minCost+dcost*G4UniformRand();
   }
   G4double phi= 360.*deg*G4UniformRand();  // @@ Change 360.*deg to M_TWOPI (?)
-  G4double ps = p * sqrt(1.-ct*ct);
+  G4double ps=0.;
+  if(fabs(ct)<1.) ps = p * sqrt(1.-ct*ct);
+  else
+  {
+#ifdef ppdebug
+    G4cout<<"**G4QH::RDIn2:ct="<<ct<<",mac="<<maxCost<<",mic="<<minCost<<G4endl;
+    //throw G4QException("***G4QHadron::RDIn2: bad cos(theta)");
+#endif
+    if(ct>1.) ct=1.;
+    if(ct<-1.) ct=-1.;
+  }
   G4ThreeVector pVect=(ps*sin(phi))*vz+(ps*cos(phi))*vy+p*ct*vx;
-#ifdef debug
+#ifdef ppdebug
   G4cout<<"G4QH::RelDIn2:ct="<<ct<<",p="<<p<<",ps="<<ps<<",ph="<<phi<<",v="<<pVect<<G4endl;
 #endif
 
@@ -363,8 +374,9 @@ G4bool G4QHadron::RelDecayIn2(G4LorentzVector& f4Mom, G4LorentzVector& s4Mom,
   s4Mom.setVect((-1)*pVect);
   s4Mom.setE(sqrt(sM2+p2));
   
-#ifdef debug
-  G4cout<<"G4QHadr::RelDecIn2:p2="<<p2<<",v="<<ltb<<",f4M="<<f4Mom<<",s4M="<<s4Mom<<G4endl;
+#ifdef ppdebug
+  G4cout<<"G4QHadr::RelDecIn2:p2="<<p2<<",v="<<ltb<<",f4M="<<f4Mom<<" + s4M="<<s4Mom<<" = "
+        <<f4Mom+s4Mom<<", M="<<iM<<G4endl;
 #endif
   if(f4Mom.e()+.001<f4Mom.rho())G4cerr<<"*G4QH::RDIn2:*Boost* f4M="<<f4Mom<<",e-p="
                                       <<f4Mom.e()-f4Mom.rho()<<G4endl;
@@ -372,8 +384,9 @@ G4bool G4QHadron::RelDecayIn2(G4LorentzVector& f4Mom, G4LorentzVector& s4Mom,
   if(s4Mom.e()+.001<s4Mom.rho())G4cerr<<"*G4QH::RDIn2:*Boost* s4M="<<s4Mom<<",e-p="
                                       <<s4Mom.e()-s4Mom.rho()<<G4endl;
   s4Mom.boost(ltb);                        // Lor.Trans. of 2nd hadron back to LS
-#ifdef debug
-  G4cout<<"G4QHadron::RelDecayIn2: ROOT OUTPUT f4Mom="<<f4Mom<<", s4Mom="<<s4Mom<<G4endl;
+#ifdef ppdebug
+  G4cout<<"G4QHadron::RelDecayIn2:Output, f4Mom="<<f4Mom<<" + s4Mom="<<s4Mom<<" = "
+        <<f4Mom+s4Mom<<", d4M="<<theMomentum-f4Mom-s4Mom<<G4endl;
 #endif
   return true;
 } // End of "RelDecayIn2"
