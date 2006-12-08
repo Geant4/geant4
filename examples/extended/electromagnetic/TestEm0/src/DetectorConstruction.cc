@@ -25,7 +25,7 @@
 //
 
 //
-// $Id: DetectorConstruction.cc,v 1.8 2006-08-17 16:06:02 maire Exp $
+// $Id: DetectorConstruction.cc,v 1.9 2006-12-08 16:38:38 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -110,6 +110,11 @@ void DetectorConstruction::DefineMaterials()
   ///H2O->SetChemicalFormula("H_2O");
   H2O->GetIonisation()->SetMeanExcitationEnergy(75.0*eV);
   
+  G4Material* steam = 
+  new G4Material("WaterSteam", density= 1.0*mg/cm3, ncomponents=1);
+  steam->AddMaterial(H2O, fractionmass=1.);
+  steam->GetIonisation()->SetMeanExcitationEnergy(71.6*eV);  
+    
   G4Material* BGO = 
   new G4Material("BGO", density= 7.10*g/cm3, ncomponents=3);
   BGO->AddElement(O , natoms=12);
