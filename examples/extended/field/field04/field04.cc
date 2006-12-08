@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: testNTST.cc,v 1.1 2006-12-08 09:35:22 japost Exp $
+// $Id: field04.cc,v 1.1 2006-12-08 10:06:56 japost Exp $
 // 
 // ----------------------------------------------------------------
 //      GEANT 4 - exampleNTST : BaBar SVT standalone simulation

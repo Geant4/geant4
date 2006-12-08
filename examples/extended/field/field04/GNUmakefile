@@ -1,9 +1,9 @@
-# $Id: GNUmakefile,v 1.1 2006-12-08 09:35:22 japost Exp $
+# $Id: GNUmakefile,v 1.2 2006-12-08 10:06:56 japost Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
 
-name := testNTST
+name := field04
 G4TARGET := $(name)
 G4EXLIB := true
 
