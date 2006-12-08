@@ -70,6 +70,9 @@ echo ' BFIELD      =' $BFIELD
     fi
     ###echo " 1) LABEL=" $LABEL
     python build.py $REF $PHYSICS $CALORIMETER $PARTICLE $ENERGY $EVENTS $BFIELD ;
+    if [ $? != 0 ] ; then
+	echo " ***ERROR*** from: python build.py ... !"  
+    fi
     mv run.g4 run.g4-$LABEL ;
     mv setup.sh setup.sh-$LABEL ;
     . setup.sh-$LABEL ;
@@ -97,6 +100,9 @@ echo ' BFIELD      =' $BFIELD
     mv bin/$G4SYSTEM/mainStatAccepTest bin/$G4SYSTEM/mainStatAccepTest-$REF-$PHYSICS ;
     mainStatAccepTest-$REF-$PHYSICS run.g4-$LABEL > output.log-$LABEL 2>&1 ;
 ###    mainStatAccepTest-$REF-$PHYSICS run.g4-$LABEL ;
+    if [ $? != 0 ] ; then
+	echo " ***ERROR*** from: mainStatAccepTest-... run.g4-... !"  
+    fi
     mv ntuple.hbook ntuple.hbook-$LABEL ;
 #
     echo ' '
@@ -125,6 +131,9 @@ echo ' BFIELD      =' $BFIELD
     fi
     ###echo " 2) LABEL=" $LABEL
     python build.py $REF $PHYSICS $CALORIMETER $PARTICLE $ENERGY $EVENTS $BFIELD;
+    if [ $? != 0 ] ; then
+	echo " ***ERROR*** from: python build.py ... !"  
+    fi
     mv run.g4 run.g4-$LABEL ;
     mv setup.sh setup.sh-$LABEL ;
     . setup.sh-$LABEL ;
@@ -135,6 +144,9 @@ echo ' BFIELD      =' $BFIELD
     mv bin/$G4SYSTEM/mainStatAccepTest bin/$G4SYSTEM/mainStatAccepTest-$REF-$PHYSICS ;
     mainStatAccepTest-$REF-$PHYSICS run.g4-$LABEL > output.log-$LABEL 2>&1 ;
 ###    mainStatAccepTest-$REF-$PHYSICS run.g4-$LABEL ;
+    if [ $? != 0 ] ; then
+	echo " ***ERROR*** from: mainStatAccepTest-... run.g4-... !"  
+    fi
     mv ntuple.hbook ntuple.hbook-$LABEL ;
 #
     echo ' '
@@ -166,6 +178,9 @@ echo ' BFIELD      =' $BFIELD
     rm -f pvalue.o pvalue ;
     gmake ;
     python driver.py $REF1 $REF2 $LABEL ; 
+    if [ $? != 0 ] ; then
+	echo " ***ERROR*** from: python driver.py ... !"  
+    fi
 #
     echo ' '
     echo '--- Check results after running statistical test ---' 

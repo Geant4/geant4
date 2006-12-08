@@ -32,7 +32,7 @@ print '========== START mainScript.py =========='
 #
 REF1        = "8.1.p02a"
 SIM_REF1    = "Yes"
-REF2        = "8.2.cand01"
+REF2        = "8.2.cand05"
 SIM_REF2    = "Yes"
 RUN_STAT    = "Yes"
 PHYSICS     = "QGSP"
@@ -48,14 +48,17 @@ PARTICLE    = "pi+"
 ENERGY      = "9GeV"
 #***endLOOKHERE***
 
-os.system( "./simuDriver.sh " +
-           REF1 + " " + SIM_REF1 + " " +
-           REF2 + " " + SIM_REF2 + " " +
-           RUN_STAT + " " +
-           PHYSICS + " " +
-           CALORIMETER + " " +
-           PARTICLE + " " + ENERGY + " " +
-           EVENTS + " " + BFIELD )
+resultCode = os.system( "./simuDriver.sh " +
+                        REF1 + " " + SIM_REF1 + " " +
+                        REF2 + " " + SIM_REF2 + " " +
+                        RUN_STAT + " " +
+                        PHYSICS + " " +
+                        CALORIMETER + " " +
+                        PARTICLE + " " + ENERGY + " " +
+                        EVENTS + " " + BFIELD )
+
+if ( resultCode != 0 ) :
+    print ' ***ERROR*** from: os.system( ./simuDriver.sh ... ) ! code=', resultCode
     
 # ---------------------------------------------
 

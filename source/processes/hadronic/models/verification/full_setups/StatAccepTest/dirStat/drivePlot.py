@@ -38,18 +38,22 @@ if ( not os.path.exists( file2 ) ) :
     print '    ***ERROR*** in drivePlot.py : file2=', file2, '  NOT found!'
     sys.exit(0)
 
-os.system( "ln -s " + file1 + " ntuple_a.hbook" )
-os.system( "ln -s " + file2 + " ntuple_b.hbook" )
+os.system( "ln -sfn " + file1 + " ntuple_a.hbook" )
+os.system( "ln -sfn " + file2 + " ntuple_b.hbook" )
 
 fileLog = "outputPvalues.log" + "-" + generalCase   # Log file for pvalues.
 print "    fileLog = ", fileLog
 
 # Execute the  pvalue  executable that does the Statistical tests.
-os.system( "./pvalue > " + fileLog + " 2>&1 " )
+resultCode = os.system( "./pvalue > " + fileLog + " 2>&1 " )
+if ( resultCode != 0 ) :
+    print ' ***ERROR*** from: os.system( ./pvalue ... ) ! code=', resultCode
 
-# Execute the Python scrip  plot.py  which uses the log file
+# Execute the Python script  plot.py  which uses the log file
 # of the previous executable.
-os.system( "python plot.py " + fileLog )
+resultCode = os.system( "python plot.py " + fileLog )
+if ( resultCode != 0 ) :
+    print ' ***ERROR*** from: os.system( python plot.py ... ) ! code=', resultCode
 
 # Delete the symbolic links, and renamed the output files
 os.remove( "ntuple_a.hbook" )

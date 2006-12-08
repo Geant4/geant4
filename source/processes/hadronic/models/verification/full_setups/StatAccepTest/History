@@ -1,6 +1,11 @@
                  History file
                  ------------
 
+08-Dec-2006 - A.Ribon (statAccepTest-V08-01-01)
+- Added checks of the code returned by shell commands,
+  to help debugging Ganga/Diane problems.
+
+
 22-Nov-2006 - A.Ribon (statAccepTest-V08-01-00)
 - Ready for the December 2006 release.
 
