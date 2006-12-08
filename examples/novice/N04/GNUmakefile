@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.10 2006-11-08 16:43:57 gunter Exp $
+# $Id: GNUmakefile,v 1.11 2006-12-08 09:30:24 vnivanch Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -12,10 +12,7 @@ ifndef G4INSTALL
 endif
 
 .PHONY: all
-all:  had_list lib bin
-
-had_list:
-	@echo "This example uses the QGSP 'educated guess physics list'"
+all:  lib bin
 
 include $(G4INSTALL)/config/binmake.gmk
 

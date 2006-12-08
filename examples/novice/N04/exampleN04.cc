@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: exampleN04.cc,v 1.12 2006-06-29 17:49:19 gunter Exp $
+// $Id: exampleN04.cc,v 1.13 2006-12-08 09:30:24 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -67,7 +67,7 @@ int main(int argc,char** argv)
   G4VUserDetectorConstruction* detector = new ExN04DetectorConstruction;
   runManager->SetUserInitialization(detector);
   //
-  G4VUserPhysicsList* physics = new QGSP;
+  G4VUserPhysicsList* physics = new QGSP(1);
   runManager->SetUserInitialization(physics);
   
 #ifdef G4VIS_USE
