@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QElastic.cc,v 1.13 2006-12-07 19:24:23 mkossov Exp $
+// $Id: G4QElastic.cc,v 1.14 2006-12-08 09:37:24 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QElastic class -----------------
@@ -443,7 +443,7 @@ G4VParticleChange* G4QElastic::PostStepDoIt(const G4Track& track, const G4Step& 
   // @@ only for pp: M_1=M_2=M_p, (1-cost)=(-t)/T/M
   // G4double cost=1.-mint/kinEnergy/tM;      // cos(theta) in CMS
   // In general
-  G4double tM2=tM*tM;
+  G4double tM2=tM*tM;                         // Squared target mass
   G4double pEn=pM+kinEnergy;                  // tot projectile Energy in MeV
   G4double sM=(tM+tM)*pEn+tM2+pM2;            // Mondelstam s
   G4double twop2cm=(tM2+tM2)*(pEn*pEn-pM2)/sM;// Doubled squared momentum in CM system

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QElasticCrossSection.cc,v 1.17 2006-12-07 19:24:23 mkossov Exp $
+// $Id: G4QElasticCrossSection.cc,v 1.18 2006-12-08 09:37:24 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -759,7 +759,7 @@ G4double G4QElasticCrossSection::GetExchangeT(G4int tgZ, G4int tgN, G4int PDG)
   G4cout<<"G4QElasticCS::GetExchangeT:F="<<onlyCS<<",Z="<<tgZ<<",N="<<tgN<<",PDG="<<PDG<<G4endl;
 #endif
   if(onlyCS) G4cout<<"*Warning*G4QElasticCrossSection::GetExchangeQ2: onlyCS=true"<<G4endl;
-  if(lastLP<-4.3) return lastTM*G4UniformRand(); //@@ S-wave for p<13.7 MeV/c (kinE<.1 MeV)
+  if(lastLP<-4.3) return lastTM*GeVSQ*G4UniformRand();// S-wave for p<14 MeV/c (kinE<.1MeV)
   G4double q2=0.;
   if(PDG==2112 && tgZ==1 && tgN==0)                // ===> n+p=n+p
   {
