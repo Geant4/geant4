@@ -7,8 +7,11 @@ set runid=$1; shift
 set n=$1; shift
 
 echo "$0 : Script parameter: runid= $runid,  runno=$n"
-# w | grep -v days
-uptime
+
+echo "Machine name, load and users"
+hostname
+w | grep -v days
+# uptime
 
 foreach inp ( 2xa 2xb 2xc 2a 2b 2c )
    uptime
