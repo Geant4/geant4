@@ -1,11 +1,29 @@
-// This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
 //
-// $Id: NTSTPhysicsList.cc,v 1.1 2003-11-24 09:45:10 japost Exp $
+// $Id: NTSTPhysicsList.cc,v 1.2 2006-12-08 09:34:34 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -25,25 +43,25 @@
 #include "G4Material.hh"
 #include "G4ios.hh"
 #include "NTSTLooperDeath.hh"
-#include <iomanip.h>                
+#include <iomanip>                
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 NTSTPhysicsList::NTSTPhysicsList()
   : G4VUserPhysicsList(),
+    useBgsTran(false),                       // use G4Transportation by default
+    MinimumEnergyCut(1*MeV),                 // ParticleWithCuts min E cut 
+    MaximumEnergyCut(100*TeV),               // ParticleWithCuts max E cut 
+    Cut(2.*mm),                              // Range cut
+    LooperCut(0*MeV),                        // Kill loopers below this energy
+    theLooperDeath(0),                       // pointer to looperdeath process
     thePhotoElectricEffect(NULL),theComptonScattering(NULL),
     theGammaConversion(NULL),
     theeminusMultipleScattering(NULL),theeminusIonisation(NULL),
     theeminusBremsstrahlung(NULL),
     theeplusMultipleScattering(NULL),theeplusIonisation(NULL),
     theeplusBremsstrahlung(NULL),
-    theeplusAnnihilation(NULL),
-    useBgsTran(true),                        // use BgsG4Extension by default
-    MinimumEnergyCut(1*MeV),                 // ParticleWithCuts min E cut 
-    MaximumEnergyCut(100*TeV),               // ParticleWithCuts max E cut 
-    Cut(2.*mm),                              // Range cut
-    theLooperDeath(0),                       // pointer to looperdeath process
-    LooperCut(0*MeV)                         // Kill loopers below this energy
+    theeplusAnnihilation(NULL)
 {
   SetVerboseLevel(2);
   physicsListMessenger = new NTSTPhysicsListMessenger(this);
@@ -358,8 +376,8 @@ void NTSTPhysicsList::SetStatusEmProcess()
 	   << "   " << lstate7 << G4endl;
 
     // update the status of the processes
-    G4cout << "  enter -> a process name, on/off or: ok on : " << flush;
-    cin >> process >> newstate ;
+    G4cout << "  enter -> a process name, on/off or: ok on : " << G4endl;
+    G4cin >> process >> newstate ;
     if (newstate=="on") active = true;
     else active = false;
 
@@ -416,7 +434,12 @@ NTSTPhysicsList::ConstructHad()
 void 
 NTSTPhysicsList::SetMinimumEnergyCut(const G4double e) { 
   MinimumEnergyCut = e; 
-  G4ParticleWithCuts::SetEnergyRange(MinimumEnergyCut, MaximumEnergyCut);
+  // -- G4cerr << " SetMinimumEnergyCut  is not currently implemented." << G4endl;
+  // -- G4Exception("SetMinimumEnergyCut missing"); 
+  // G4ParticleWithCuts::SetEnergyRange(MinimumEnergyCut, MaximumEnergyCut);
+  G4cerr << " SetMinimumEnergyCut  is newly re-implemented." << G4endl;
+  G4ProductionCutsTable::GetProductionCutsTable()
+       ->SetEnergyRange(MinimumEnergyCut, MaximumEnergyCut);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -424,7 +447,14 @@ NTSTPhysicsList::SetMinimumEnergyCut(const G4double e) {
 void 
 NTSTPhysicsList::SetMaximumEnergyCut(const G4double e) { 
   MaximumEnergyCut = e; 
-  G4ParticleWithCuts::SetEnergyRange(MinimumEnergyCut, MaximumEnergyCut);
+  // -- G4cerr << " SetMaximumEnergyCut  is not currently implemented." << G4endl;
+  // -- G4Exception("SetMaximumEnergyCut missing"); 
+  // G4ParticleWithCuts::SetEnergyRange(MinimumEnergyCut, MaximumEnergyCut);
+
+  G4cerr << " SetMaximumEnergyCut  is newly re-implemented." << G4endl;
+  G4ProductionCutsTable::GetProductionCutsTable()
+       ->SetEnergyRange(MinimumEnergyCut, MaximumEnergyCut);
+   
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -434,9 +464,3 @@ void
 NTSTPhysicsList::SetLooperCut(const G4double e) { 
   LooperCut = e; 
 }
-
-
-
-
-
-
