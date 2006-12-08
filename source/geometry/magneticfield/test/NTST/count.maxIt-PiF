@@ -1,4 +1,10 @@
 #
+#  Script to count number of iterations within verbose testing
+#
+#  Original: J. Apostolakis,  Nov 2003
+#   Comments:  Dec 2006 (partial)
+#
+#
 grep G4Propa $*  |  \
  awk 'BEGIN { over1c=0; over1k=0; n=0; maxit=0; } \
       { it=$6; n++; sumit+=it; if(it>maxit){maxit=it;} }  \
