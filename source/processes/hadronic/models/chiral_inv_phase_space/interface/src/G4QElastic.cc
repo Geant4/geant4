@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QElastic.cc,v 1.15 2006-12-08 14:53:26 mkossov Exp $
+// $Id: G4QElastic.cc,v 1.16 2006-12-09 14:33:35 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QElastic class -----------------
@@ -446,24 +446,25 @@ G4VParticleChange* G4QElastic::PostStepDoIt(const G4Track& track, const G4Step& 
   if(mint>-.0000001);
   else  G4cout<<"******G4QElast::PSDI:-t="<<mint<<G4endl;
 #endif
-  // @@ only for pp: M_1=M_2=M_p, (1-cost)=(-t)/T/M
-  // G4double cost=1.-mint/kinEnergy/tM;      // cos(theta) in CMS
-  // In general
-  G4double tM2=tM*tM;                         // Squared target mass
-  G4double pEn=pM+kinEnergy;                  // tot projectile Energy in MeV
-  G4double sM=(tM+tM)*pEn+tM2+pM2;            // Mondelstam s
-  G4double dtM2=tM2+tM2;                      // doubled squared target mass
-  G4double twop2cm=(dtM2+dtM2)*(pEn*pEn-pM2)/sM;// Max t
-  G4double cost=1.-mint/twop2cm;              // cos(theta) in CMS
+  //G4double cost=1.-mint/twop2cm;              // cos(theta) in CMS
+  G4double cost=1.-mint/CSmanager->GetHMaxT();// cos(theta) in CMS
   // 
 #ifdef ppdebug
-  G4cout<<"G4QElastic::PoStDoI:t="<<mint<<",T="<<kinEnergy<<",M="<<tM<<",c="<<cost<<G4endl;
+  G4cout<<"G4QElastic::PoStDoI:t="<<mint<<",dpcm2="<<twop2cm<<"="<<CSmanager->GetHMaxT()
+        <<",Ek="<<kinEnergy<<",tM="<<tM<<",pM="<<pM<<",s="<<sM<<",cost="<<cost<<G4endl;
 #endif
-  if(cost>1. || cost<-1.)
+  if(cost>1. || cost<-1. || !(cost>-1. || cost<1.))
   {
-    if(cost>1.000001 || cost<-1.000001) G4cout<<"*Warning*G4QElastic::PostStepDoIt:cos="
-                            <<cost<<",t="<<mint<<",T="<<kinEnergy<<",tgM="<<tM<<",tmax="
-                            <<2*kinEnergy*tM<<",pPDG="<<projPDG<<",tPDG="<<targPDG<<G4endl;
+    if(cost>1.000001 || cost<-1.000001 || !(cost>-1. || cost<1.))
+    {
+      G4double tM2=tM*tM;                         // Squared target mass
+      G4double pEn=pM+kinEnergy;                  // tot projectile Energy in MeV
+      G4double sM=(tM+tM)*pEn+tM2+pM2;            // Mondelstam s
+      G4double twop2cm=(tM2+tM2)*(pEn*pEn-pM2)/sM;// Max_t/2 (2*p^2_cm)
+      G4cout<<"*Warning*G4QElastic::PostStepDoIt:cos="<<cost<<",t="<<mint<<",T="<<kinEnergy
+            <<",tM="<<tM<<",tmax="<<2*kinEnergy*tM<<",p="<<projPDG<<",t="<<targPDG<<G4endl;
+      G4cout<<"..G4QElastic::PoStDoI: dpcm2="<<twop2cm<<"="<<CSmanager->GetHMaxT()<<G4endl;
+    }
     if     (cost>1.)  cost=1.;
     else if(cost<-1.) cost=-1.;
   }
@@ -472,7 +473,7 @@ G4VParticleChange* G4QElastic::PostStepDoIt(const G4Track& track, const G4Step& 
   if(!G4QHadron(tot4M).RelDecayIn2(scat4M, reco4M, dir4M, cost, cost))
   {
     G4cerr<<"G4QElastic::PSD:t4M="<<tot4M<<",pM="<<pM<<",tM="<<tM<<",cost="<<cost<<G4endl;
-    throw G4QException("G4QElastic::PostStepDoIt: Can't decay Elastic Compound");
+    //throw G4QException("G4QElastic::PostStepDoIt: Can't decay Elastic Compound");
   }
 #ifdef debug
   G4cout<<"G4QElastic::PoStDoIt:s4M="<<scat4M<<"+r4M="<<reco4M<<"="<<scat4M+reco4M<<G4endl;
@@ -484,9 +485,10 @@ G4VParticleChange* G4QElastic::PostStepDoIt(const G4Track& track, const G4Step& 
   if(finE>0) aParticleChange.ProposeEnergy(finE);
   else
   {
-    G4cerr<<"*Warning*G4QElastic::PostStDoIt: Zero or negative scattered E="<<finE<<",pM="
-          <<pM<<",s4M="<<scat4M<<",cost="<<cost<<G4endl;
-    throw G4QException("G4QElastic::PostStDoIt: 0, negative, or nan energy");
+    if(finE<-1.e-8 || !(finE>-1.||finE<1.))
+      G4cerr<<"*Warning*G4QElastic::PostStDoIt: Zero or negative scattered E="<<finE
+            <<", s4M="<<scat4M<<", r4M="<<reco4M<<", d4M="<<tot4M-scat4M-reco4M<<G4endl;
+    //throw G4QException("G4QElastic::PostStDoIt: 0, negative, or nan energy");
     aParticleChange.ProposeEnergy(0.) ;
     aParticleChange.ProposeTrackStatus(fStopAndKill);
   }

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QElasticCrossSection.cc,v 1.18 2006-12-08 09:37:24 mkossov Exp $
+// $Id: G4QElasticCrossSection.cc,v 1.19 2006-12-09 14:33:35 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -748,7 +748,7 @@ G4double G4QElasticCrossSection::GetPTables(G4double LP,G4double ILP, G4int PDG,
   return ILP;
 }
 
-// Returns Q2=-t in independent units (MeV) (all internal calculations are in GeV)
+// Returns Q2=-t in independent units (MeV^2) (all internal calculations are in GeV)
 G4double G4QElasticCrossSection::GetExchangeT(G4int tgZ, G4int tgN, G4int PDG)
 {
   static const G4double GeVSQ=gigaelectronvolt*gigaelectronvolt;
@@ -794,8 +794,18 @@ G4double G4QElasticCrossSection::GetExchangeT(G4int tgZ, G4int tgN, G4int PDG)
     G4double I12=I1+I2;
     //G4double rand=(I12+I3)*G4UniformRand();
     G4double rand=I12*G4UniformRand();
-    if     (rand<I1 ) q2=-std::log(1.-R1*G4UniformRand())/theB1;       // t-chan
-				else              q2=lastTM+std::log(1.-R2*G4UniformRand())/theB2; // u-chan (ChEx)
+    if     (rand<I1 )
+    {
+      G4double ran=R1*G4UniformRand();
+      if(ran>1.) ran=1.;
+      q2=-std::log(1.-ran)/theB1;       // t-chan
+    }
+				else
+    {
+      G4double ran=R2*G4UniformRand();
+      if(ran>1.) ran=1.;
+      q2=lastTM+std::log(1.-ran)/theB2; // u-chan (ChEx)
+    }
   }
   else if(PDG==2212 && tgZ==1 && tgN==0)                // ===> p+p=p+p
   {
@@ -829,9 +839,26 @@ G4double G4QElasticCrossSection::GetExchangeT(G4int tgZ, G4int tgN, G4int PDG)
 				G4double I3=R3*theS3;
     G4double I12=I1+I2;
     G4double rand=(I12+I3)*G4UniformRand();
-    if     (rand<I1 ) q2=-std::log(1.-R1*G4UniformRand())/theB1;
-				else if(rand<I12) q2=std::pow(-std::log(1.-R2*G4UniformRand()),.33333333333)/theB2;
-    else              q2=-std::log(1.-R3*G4UniformRand())/theB3;
+    if     (rand<I1 )
+    {
+      G4double ran=R1*G4UniformRand();
+      if(ran>1.) ran=1.;
+      q2=-std::log(1.-ran)/theB1;
+    }
+				else if(rand<I12)
+    {
+      G4double ran=R2*G4UniformRand();
+      if(ran>1.) ran=1.;
+      q2=-std::log(1.-ran);
+      if(q2<0.) q2=0.;
+      q2=std::pow(q2,third)/theB2;
+    }
+    else
+    {
+      G4double ran=R3*G4UniformRand();
+      if(ran>1.) ran=1.;
+      q2=-std::log(1.-ran)/theB3;
+    }
   }
   else if(PDG==2212 || PDG==2112)
   {
@@ -889,7 +916,9 @@ G4double G4QElasticCrossSection::GetExchangeT(G4int tgZ, G4int tgN, G4int PDG)
 #endif
     if(rand<I1)
     {
-      q2=-std::log(1.-R1*G4UniformRand())/theB1;
+      G4double ran=R1*G4UniformRand();
+      if(ran>1.) ran=1.;
+      q2=-std::log(1.-ran)/theB1;
       if(std::fabs(tss)>1.e-7) q2=(std::sqrt(theB1*(theB1+(tss+tss)*q2))-theB1)/tss;
 #ifdef tdebug
       G4cout<<"G4QElCS::GetExT:Q2="<<q2<<",ss="<<tss/2<<",b1="<<theB1<<",t1="<<ts1<<G4endl;
@@ -897,7 +926,10 @@ G4double G4QElasticCrossSection::GetExchangeT(G4int tgZ, G4int tgN, G4int PDG)
     }
 				else if(rand<I12)
     {
-      q2=-std::log(1.-R2*G4UniformRand())/theB2;
+      G4double ran=R2*G4UniformRand();
+      if(ran>1.) ran=1.;
+      q2=-std::log(1.-ran)/theB2;
+      if(q2<0.) q2=0.;
       if(a<6.5) q2=std::pow(q2,third);
       else      q2=std::pow(q2,fifth);
 #ifdef tdebug
@@ -906,7 +938,10 @@ G4double G4QElasticCrossSection::GetExchangeT(G4int tgZ, G4int tgN, G4int PDG)
     }
     else if(rand<I13)
     {
-      q2=-std::log(1.-R3*G4UniformRand())/theB3;
+      G4double ran=R3*G4UniformRand();
+      if(ran>1.) ran=1.;
+      q2=-std::log(1.-ran)/theB3;
+      if(q2<0.) q2=0.;
       if(a>6.5) q2=std::pow(q2,sevth);
 #ifdef tdebug
       G4cout<<"G4QElCS::GetExT:Q2="<<q2<<", r3="<<R2<<", b3="<<theB2<<",t3="<<ts2<<G4endl;
@@ -914,7 +949,9 @@ G4double G4QElasticCrossSection::GetExchangeT(G4int tgZ, G4int tgN, G4int PDG)
     }
     else
     {
-      q2=-std::log(1.-R4*G4UniformRand())/theB4;
+      G4double ran=R4*G4UniformRand();
+      if(ran>1.) ran=1.;
+      q2=-std::log(1.-ran)/theB4;
       if(a<6.5) q2=lastTM-q2;                    // u reduced for lightA (starts from 0)
 #ifdef tdebug
       G4cout<<"G4QElCS::GetExT:Q2="<<q2<<",m="<<lastTM<<",b4="<<theB3<<",t4="<<ts3<<G4endl;
@@ -927,8 +964,17 @@ G4double G4QElasticCrossSection::GetExchangeT(G4int tgZ, G4int tgN, G4int PDG)
           <<tgN<<", while it is defined only for PDG=2212, Z=1,N=(0,1) & Z=2,N=2"<<G4endl;
     throw G4QException("G4QElasticCrossSection::GetExchangeT: n-p,p-H/He are implemented");
   }
+  if(q2<0.) q2=0.;
+  if(!(q2>-1.||q2<1.)) G4cout<<"*NAN*G4QElasticCrossSect::GetExT: -t="<<q2<<G4endl;
   if(q2>lastTM)G4cout<<"*Warning*G4QElasticCrossSect::GetExT:-t="<<q2<<">"<<lastTM<<G4endl;
   return q2*GeVSQ;
+}
+
+// Returns half max(Q2=-t) in independent units (MeV^2)
+G4double G4QElasticCrossSection::GetHMaxT()
+{
+  static const G4double HGeVSQ=gigaelectronvolt*gigaelectronvolt/2.;
+  return lastTM*HGeVSQ;
 }
 
 // lastLP is used, so calculating tables, one need to remember and then recover lastLP

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VQCrossSection.cc,v 1.12 2006-12-01 10:57:47 mkossov Exp $
+// $Id: G4VQCrossSection.cc,v 1.13 2006-12-09 14:33:35 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -66,6 +66,8 @@ G4double G4VQCrossSection::GetExchangeEnergy() {return 0.;}
 G4double G4VQCrossSection::GetExchangeQ2(G4double) {return 0.;}
 
 G4double G4VQCrossSection::GetExchangeT(G4int,G4int,G4int) {return 0.;}
+
+G4double G4VQCrossSection::GetHMaxT() {return 0.;}
 
 G4double G4VQCrossSection::GetQEL_ExchangeQ2() {return 0.;}
 

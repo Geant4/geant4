@@ -68,7 +68,8 @@ public:
   G4double CalculateCrossSection(G4bool CS, G4int F, G4int I, G4int pPDG, G4int Z, G4int N,
                                                                               G4double pP);
 
-  G4double GetExchangeT(G4int tZ, G4int tN, G4int pPDG); // Randomizes -t=Q2
+  G4double GetExchangeT(G4int tZ, G4int tN, G4int pPDG); // Randomizes -t=Q2 (in IU=MeV^2)
+  G4double GetHMaxT();                   // Currrent Max(-t=Q2)/2. (in IU=MeV^2)
 
 private:
   G4double GetPTables(G4double lpP, G4double lPm, G4int PDG, G4int tZ, G4int tN); // newLP
