@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.20 2006-11-22 18:56:21 vnivanch Exp $
+// $Id: PhysicsList.cc,v 1.21 2006-12-11 20:13:53 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -40,6 +40,8 @@
 #include "G4EmStandardPhysics71.hh"
 
 #include "G4HadronElasticPhysics.hh"
+#include "G4HadronHElasticPhysics.hh"
+#include "G4HadronQElasticPhysics.hh"
 #include "G4HadronInelasticQBBC.hh"
 #include "G4IonBinaryCascadePhysics.hh"
 
@@ -230,6 +232,14 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     emPhysicsList = new PhysListEmPenelope();
 
   } else if (name == "elastic" && !helIsRegisted) {
+    hadronPhys.push_back( new G4HadronElasticPhysics(name));
+    helIsRegisted = true;
+
+  } else if (name == "HElastic" && !helIsRegisted) {
+    hadronPhys.push_back( new G4HadronElasticPhysics(name));
+    helIsRegisted = true;
+
+  } else if (name == "QElastic" && !helIsRegisted) {
     hadronPhys.push_back( new G4HadronElasticPhysics(name));
     helIsRegisted = true;
 
