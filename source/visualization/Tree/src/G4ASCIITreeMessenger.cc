@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ASCIITreeMessenger.cc,v 1.16 2006-06-29 21:24:55 gunter Exp $
+// $Id: G4ASCIITreeMessenger.cc,v 1.17 2006-12-11 21:14:45 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -102,7 +102,7 @@ G4ASCIITreeMessenger::G4ASCIITreeMessenger
     fpCommandVerbose -> SetGuidance(fVerbosityGuidance[i]);
   }
   fpCommandVerbose -> SetParameterName ("verbosity",omitable = true);
-  fpCommandVerbose -> SetDefaultValue(0);
+  fpCommandVerbose -> SetDefaultValue(2);
 
   fpCommandSetOutFile = new G4UIcmdWithAString ("/vis/ASCIITree/set/outFile", this
 );
