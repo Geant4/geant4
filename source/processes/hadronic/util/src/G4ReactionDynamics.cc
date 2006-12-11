@@ -3125,7 +3125,7 @@
       for( i=0; i<npnb; ++i ) if( G4UniformRand() < sprob ) local_npnb--;
       G4double local_epnb = epnb;
       if (ndta == 0) local_epnb += edta;   // Retrieve unused kinetic energy
-      G4double ekin = local_epnb/local_npnb;
+      G4double ekin = local_epnb/std::max(1,local_npnb);
       
       for( i=0; i<local_npnb; ++i )
       {
@@ -3222,7 +3222,7 @@
       for( i=0; i<ndta; ++i )if( G4UniformRand() < sprob )local_ndta--;
       G4double local_edta = edta;
       if (npnb == 0) local_edta += epnb;  // Retrieve unused kinetic energy
-      G4double ekin = local_edta/local_ndta;
+      G4double ekin = local_edta/std::max(1,local_ndta);
 
       for( i=0; i<local_ndta; ++i )
       {
