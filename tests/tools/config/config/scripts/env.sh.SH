@@ -613,13 +613,9 @@ $spitshell >>env.sh <<'!NO!SUBS!'
 #
 if [ $G4WORKDIR ] ; then
 
-if [ X$g4non_display = X ] ; then
 echo "In your environment you have the G4WORKDIR=$G4WORKDIR"
-fi # if non_display
 
 else
-
-if [ X$g4non_display = X ] ; then
 
 # Check for Windows!
 if test "X$G4SYSTEM" = "XWIN32-VC" -o "X$G4SYSTEM" = "XWIN32-VC7"; then
@@ -634,8 +630,6 @@ echo "G4WORKDIR will be set to HOME/geant4=$HOME/geant4"
 export G4WORKDIR=$HOME/geant4
 
 fi # if platforms
-
-fi
 
 fi
 
