@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsCompound.cc,v 1.34 2006-11-14 14:59:55 allison Exp $
+// $Id: G4VisCommandsCompound.cc,v 1.35 2006-12-12 11:48:13 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // Compound /vis/ commands - John Allison  15th May 2000
@@ -201,7 +201,7 @@ void G4VisCommandDrawVolume::SetNewValue(G4UIcommand*, G4String newValue) {
     newVerbose = 2;
   UImanager->SetVerboseLevel(newVerbose);
   UImanager->ApplyCommand("/vis/scene/create");
-  UImanager->ApplyCommand("/vis/scene/add/eventID");
+//  UImanager->ApplyCommand("/vis/scene/add/eventID");
   UImanager->ApplyCommand(G4String("/vis/scene/add/volume " + newValue));
   UImanager->ApplyCommand("/vis/sceneHandler/attach");
   UImanager->SetVerboseLevel(keepVerbose);
