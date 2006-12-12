@@ -71,45 +71,56 @@ echo ' BFIELD      =' $BFIELD
     ###echo " 1) LABEL=" $LABEL
     python build.py $REF $PHYSICS $CALORIMETER $PARTICLE $ENERGY $EVENTS $BFIELD ;
     if [ $? != 0 ] ; then
-	echo " ***ERROR*** from: python build.py ... !"  
+	echo " ***ERROR*** from: python build.py ... !" ; 
+	exit 11 ;
     fi
     mv run.g4 run.g4-$LABEL ;
     mv setup.sh setup.sh-$LABEL ;
     . setup.sh-$LABEL ;
+    if [ $? != 0 ] ; then
+	echo " ***ERROR*** from: . setup.sh-... !" ; 
+	exit 12 ;	
+    fi
 #
-    echo '  '
-    echo '--- Check platform / environment --- '
-    echo '*** g++ -v ***' ;                    g++ -v                    ; echo ' '
-    echo '*** which g++ ***' ;                 which g++                 ; echo ' '
-    echo '*** uname -a ***' ;                  uname -a                  ; echo ' '
-    echo '*** cat /etc/issue ***' ;            cat /etc/issue         
-    echo '*** cat /etc/cpuinfo ***' ;          cat /proc/cpuinfo
-    echo '*** DIR_INSTALLATIONS = '            $DIR_INSTALLATIONS        ; echo ' '
-    echo '*** ls -lh $DIR_INSTALLATIONS ***' ; ls -lh $DIR_INSTALLATIONS ; echo ' '
-    echo '*** G4INSTALL = '                    $G4INSTALL                ; echo ' '
-    echo '*** ls -lh $G4INSTALL ***' ;         ls -lh $G4INSTALL         ; echo ' '
-    echo '*** PWD = '                          $PWD                      ; echo ' '
-    echo '*** ls -lh $PWD *** ' ;              ls -lh $PWD
-    echo '------------------------------------ '    
+    echo '  ' ;
+    echo '--- Check platform / environment --- ' ;
+    echo '*** g++ -v ***' ;                    g++ -v                    ; echo ' ' ;
+    echo '*** which g++ ***' ;                 which g++                 ; echo ' ' ;
+    echo '*** uname -a ***' ;                  uname -a                  ; echo ' ' ;
+    echo '*** cat /etc/issue ***' ;            cat /etc/issue ;        
+    echo '*** cat /etc/cpuinfo ***' ;          cat /proc/cpuinfo ;
+    echo '*** DIR_INSTALLATIONS = '            $DIR_INSTALLATIONS        ; echo ' ' ;
+    echo '*** ls -lh $DIR_INSTALLATIONS ***' ; ls -lh $DIR_INSTALLATIONS ; echo ' ' ;
+    echo '*** G4INSTALL = '                    $G4INSTALL                ; echo ' ' ;
+    echo '*** ls -lh $G4INSTALL ***' ;         ls -lh $G4INSTALL         ; echo ' ' ;
+    echo '*** PWD = '                          $PWD                      ; echo ' ' ;
+    echo '*** ls -lh $PWD *** ' ;              ls -lh $PWD ;
+    echo '------------------------------------ ' ;    
     echo '  ' ;
 #
     echo '  '; echo ' G4INSTALL = ' $G4INSTALL; echo ' running REF = ' $REF ; echo '  ' ;
     rm -rf tmp/ ;
-    ln -sfn GNUmakefile-1 GNUmakefile  ; #***LOOKHERE*** Temporary for 8.1 / 8.2
+    ln -sfn GNUmakefile-1 GNUmakefile  ; #***LOOKHERE*** Temporary for 8.1 / 8.2 ;
     gmake ;
+    if [ $? != 0 ] ; then
+	echo " ***ERROR*** from: gmake !" ; 
+	exit 13 ;	
+    fi    
     mv bin/$G4SYSTEM/mainStatAccepTest bin/$G4SYSTEM/mainStatAccepTest-$REF-$PHYSICS ;
     mainStatAccepTest-$REF-$PHYSICS run.g4-$LABEL > output.log-$LABEL 2>&1 ;
 ###    mainStatAccepTest-$REF-$PHYSICS run.g4-$LABEL ;
     if [ $? != 0 ] ; then
-	echo " ***ERROR*** from: mainStatAccepTest-... run.g4-... !"  
+	echo " ***ERROR*** from: mainStatAccepTest-... run.g4-... !" ;  
+	rm -rf tmp/ ;
+	exit 14 ;
     fi
     mv ntuple.hbook ntuple.hbook-$LABEL ;
 #
-    echo ' '
-    echo '--- Check results after running 1st reference ---' 
-    echo '*** ls -lth ***' ;  ls -lth
-    echo '-------------------------------------------------'
-    echo ' '
+    echo ' ' ;
+    echo '--- Check results after running 1st reference ---' ; 
+    echo '*** ls -lth ***' ;  ls -lth ;
+    echo '-------------------------------------------------' ;
+    echo ' ' ;
 #
   fi )
 #
@@ -129,31 +140,42 @@ echo ' BFIELD      =' $BFIELD
         fi
       fi
     fi
-    ###echo " 2) LABEL=" $LABEL
-    python build.py $REF $PHYSICS $CALORIMETER $PARTICLE $ENERGY $EVENTS $BFIELD;
+    ###echo " 2) LABEL=" $LABEL ;
+    python build.py $REF $PHYSICS $CALORIMETER $PARTICLE $ENERGY $EVENTS $BFIELD ;
     if [ $? != 0 ] ; then
-	echo " ***ERROR*** from: python build.py ... !"  
+	echo " ***ERROR*** from: python build.py ... !" ;
+	exit 21	;
     fi
     mv run.g4 run.g4-$LABEL ;
     mv setup.sh setup.sh-$LABEL ;
     . setup.sh-$LABEL ;
+    if [ $? != 0 ] ; then
+	echo " ***ERROR*** from: . setup.sh-... !" ; 
+	exit 22 ;	
+    fi
     echo '  '; echo ' G4INSTALL = ' $G4INSTALL; echo ' running REF = ' $REF ; echo '  ' ;
     rm -rf tmp/ ;
     ln -sfn GNUmakefile-2 GNUmakefile  ; #***LOOKHERE*** Temporary for 8.1 / 8.2
     gmake ;
+    if [ $? != 0 ] ; then
+	echo " ***ERROR*** from: gmake !" ; 
+	exit 23 ;	
+    fi    
     mv bin/$G4SYSTEM/mainStatAccepTest bin/$G4SYSTEM/mainStatAccepTest-$REF-$PHYSICS ;
     mainStatAccepTest-$REF-$PHYSICS run.g4-$LABEL > output.log-$LABEL 2>&1 ;
 ###    mainStatAccepTest-$REF-$PHYSICS run.g4-$LABEL ;
     if [ $? != 0 ] ; then
-	echo " ***ERROR*** from: mainStatAccepTest-... run.g4-... !"  
+	echo " ***ERROR*** from: mainStatAccepTest-... run.g4-... !" ;  
+	rm -rf tmp/ ;
+	exit 24 ;
     fi
     mv ntuple.hbook ntuple.hbook-$LABEL ;
 #
-    echo ' '
-    echo '--- Check results after running 2nd reference ---' 
-    echo '*** ls -lth ***' ;  ls -lth
-    echo '-------------------------------------------------'
-    echo ' '
+    echo ' ' ;
+    echo '--- Check results after running 2nd reference ---' ; 
+    echo '*** ls -lth ***' ;  ls -lth ;
+    echo '-------------------------------------------------' ;
+    echo ' ' ;
 #
   fi )
 #
@@ -172,21 +194,31 @@ echo ' BFIELD      =' $BFIELD
         fi
       fi
     fi
-    ###echo " 3) LABEL=" $LABEL
+    ###echo " 3) LABEL=" $LABEL ;
     . setup.sh-$REF1-$LABEL ;
+    if [ $? != 0 ] ; then
+	echo " ***ERROR*** from: . setup.sh-... !" ; 
+	exit 31 ;	
+    fi
     cd dirStat/ ;
     rm -f pvalue.o pvalue ;
     gmake ;
+    if [ $? != 0 ] ; then
+	echo " ***ERROR*** from: gmake !" ; 
+	exit 32 ;	
+    fi    
     python driver.py $REF1 $REF2 $LABEL ; 
     if [ $? != 0 ] ; then
-	echo " ***ERROR*** from: python driver.py ... !"  
+	echo " ***ERROR*** from: python driver.py ... !" ;  
+	rm -f pvalue.o pvalue ;
+	exit 33 ;
     fi
 #
-    echo ' '
-    echo '--- Check results after running statistical test ---' 
-    echo '*** ls -lth ***' ;  ls -lth
-    echo '-------------------------------------------------'
-    echo ' '
+    echo ' ' ;
+    echo '--- Check results after running statistical test ---' ;
+    echo '*** ls -lth ***' ;  ls -lth ;
+    echo '-------------------------------------------------' ;
+    echo ' ' ;
 #
   fi )
 #

@@ -30,13 +30,13 @@ file1 = "../ntuple.hbook" + "-" + caseA + "-" + generalCase
 print "    file1 = ", file1
 if ( not os.path.exists( file1 ) ) :
     print '    ***ERROR*** in drivePlot.py : file1=', file1, '  NOT found!'
-    sys.exit(0)
+    sys.exit( 51 )
 
 file2 = "../ntuple.hbook" + "-" + caseB + "-" + generalCase
 print "    file2 = ", file2
 if ( not os.path.exists( file2 ) ) :
     print '    ***ERROR*** in drivePlot.py : file2=', file2, '  NOT found!'
-    sys.exit(0)
+    sys.exit( 52 )
 
 os.system( "ln -sfn " + file1 + " ntuple_a.hbook" )
 os.system( "ln -sfn " + file2 + " ntuple_b.hbook" )
@@ -48,12 +48,14 @@ print "    fileLog = ", fileLog
 resultCode = os.system( "./pvalue > " + fileLog + " 2>&1 " )
 if ( resultCode != 0 ) :
     print ' ***ERROR*** from: os.system( ./pvalue ... ) ! code=', resultCode
+    sys.exit( 53 )
 
 # Execute the Python script  plot.py  which uses the log file
 # of the previous executable.
 resultCode = os.system( "python plot.py " + fileLog )
 if ( resultCode != 0 ) :
     print ' ***ERROR*** from: os.system( python plot.py ... ) ! code=', resultCode
+    sys.exit( 54 )
 
 # Delete the symbolic links, and renamed the output files
 os.remove( "ntuple_a.hbook" )

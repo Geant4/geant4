@@ -26,7 +26,7 @@ resultCode = os.system( "python drivePlot.py " +
                         caseA + " " + caseB + " " + generalCase )
 
 if ( resultCode != 0 ) :
-    print ' ***ERROR*** from: os.system( python drivePlot.py ... ) ! code=', \
-          resultCode    
+    print ' ***ERROR*** from: os.system( python drivePlot.py ... ) ! code=', resultCode
+    sys.exit( 41 )
 
 print '   ========== END driver.py ========== '

@@ -76,7 +76,7 @@ if ( PHYSICS != "LHEP"          and
      PHYSICS != "QGSP_EMV" 
    ) :
     print '  ***ERROR*** in build.py : WRONG PHYSICS LIST = ', PHYSICS
-    sys.exit(0)        
+    sys.exit( 1 )        
 
 # ---------------- Particle type ---------------
 ParticleType = ""
@@ -91,7 +91,7 @@ if ( dictParticle.has_key( PARTICLE ) ) :
     ParticleType = dictParticle[ PARTICLE ]
 else :
     print '  ***ERROR*** in build.py : WRONG PARTICLE = ', PARTICLE
-    sys.exit(0)        
+    sys.exit( 2 )        
 print '  ParticleType = ', ParticleType                 
                  
 # ---------------- Beam energy -----------------
@@ -109,7 +109,7 @@ for character in ENERGY :
             EnergyValue = EnergyValue + character
         elif ( character.isdigit() ) :
             print '  ***ERROR*** in build.py : WRONG BEAM ENERGY = ', ENERGY
-            sys.exit(0)        
+            sys.exit( 3 )        
 print '  EnergyValue = ', EnergyValue
 
 # ---------------- Calorimeter type ------------
@@ -135,12 +135,12 @@ if ( CALORIMETER != "PbWO4" ) :
         Absorber = dictAbsorber[ firstPart ]
     else :
         print '  ***ERROR*** in build.py : WRONG ABSORBER = ', firstPart, '  ', CALORIMETER
-        sys.exit(0)        
+        sys.exit( 4 )        
     if ( dictActive.has_key( secondPart ) ) :
         Active = dictActive[ secondPart ]
     else :
         print '  ***ERROR*** in build.py : WRONG ACTIVE = ', secondPart, '  ', CALORIMETER
-        sys.exit(0)        
+        sys.exit( 5 )        
 print '  Absorber = ', Absorber
 print '  Active   = ', Active
 
@@ -153,7 +153,7 @@ for character in EVENTS :
         NumEvents = NumEvents + "000"
     else :
         print '  ***ERROR*** in build.py : WRONG NUMBER OF EVENTS = ', EVENTS
-        sys.exit(0)        
+        sys.exit( 6 )        
 print '  NumEvents = ', NumEvents
 
 # ---------------- B field -----------------
@@ -171,7 +171,7 @@ for character in BFIELD :
             BfieldValue = BfieldValue + character
         elif ( character.isdigit() ) :
             print '  ***ERROR*** in build.py : WRONG BFIELD = ', BFIELD
-            sys.exit(0)
+            sys.exit( 7 )
 if ( isNumericPart ) :   # If the unit is not specified, Tesla is assumed.
     BfieldValue =  BfieldValue + " tesla" 
 print '  BfieldValue = ', BfieldValue
