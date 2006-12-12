@@ -23,10 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// author: Vladimir.Grichine@cern.ch
+//
 // Implements data from: Barashenkov V.S., Nucleon-Nucleus Cross Section,
 // Preprint JINR P2-89-770, p. 12, Dubna 1989 (scanned version from KEK)
 // Based on G. Folger version of G4PiNuclearCrossSection class
-// author: Vladimir.Grichine@cern.ch
 
 
 #ifndef G4NucleonNuclearCrossSection_h
@@ -35,8 +36,8 @@
 #include "G4VCrossSectionDataSet.hh"
 
 #include "globals.hh"
-#include "G4PionMinus.hh"
-#include "G4PionPlus.hh"
+#include "G4Neutron.hh"
+#include "G4Proton.hh"
 #include "G4PiData.hh"
 #include "G4HadTmpUtil.hh"
 
@@ -46,11 +47,12 @@ class G4NucleonNuclearCrossSection : public G4VCrossSectionDataSet
   
   G4NucleonNuclearCrossSection();
   virtual ~G4NucleonNuclearCrossSection();
+
   G4bool IsApplicable(const G4DynamicParticle* aParticle, const G4Element* anElement)
   {
     G4bool result = false;
-    if(aParticle->GetDefinition() == G4PionMinus::PionMinus()) result=true;
-    if(aParticle->GetDefinition() == G4PionPlus::PionPlus())   result=true;
+    if(aParticle->GetDefinition() == G4Neutron::Neutron() ) result = true;
+    if(aParticle->GetDefinition() == G4Proton::Proton())    result = true;
     if(G4lrint(anElement->GetZ()) == 1) result = false;
     if(aParticle->GetKineticEnergy() > 999.9*GeV) result=false;
     return result;
@@ -66,32 +68,39 @@ class G4NucleonNuclearCrossSection : public G4VCrossSectionDataSet
 
 // add Hydrogen from PDG group.
 
-static const G4double e1[38];
-static const G4double he_t[38];
-static const G4double he_in[38];
-static const G4double be_m_t[38];
-static const G4double be_m_in[38];
-static const G4double be_p_t[24];
-static const G4double be_p_in[24];
-static const G4double e2[39];
-static const G4double c_m_t[39];
-static const G4double c_m_in[39];
-static const G4double c_p_t[24];
-static const G4double c_p_in[24];
-static const G4double n_m_t[39];
-static const G4double n_m_in[39];
-static const G4double n_p_t[27];
-static const G4double n_p_in[27];
+static const G4double e1[44];
+
+static const G4double he_m_t[44];
+static const G4double he_m_in[44];
+static const G4double he_t_in[44];
+
+static const G4double be_m_t[44];
+static const G4double be_m_in[44];
+static const G4double be_p_in[44];
+
+static const G4double c_m_t[44];
+static const G4double c_m_in[44];
+static const G4double c_p_in[44];
+
+
+static const G4double e2[44];
+
+static const G4double n_m_t[44];
+static const G4double n_m_in[44];
+static const G4double n_p_in[44];
+
+static const G4double o_m_t[44];
+static const G4double o_m_in[44];
+static const G4double o_p_in[44];
+
+static const G4double na_m_t[44];
+static const G4double na_m_in[44];
+static const G4double na_p_in[44];
+
+
 static const G4double e3[31];
-static const G4double o_m_t[31];
-static const G4double o_m_in[31];
-static const G4double o_p_t[20];
-static const G4double o_p_in[20];
-static const G4double na_m_t[31];
-static const G4double na_m_in[31];
-static const G4double na_p_t[22];
-static const G4double na_p_in[22];
-static const G4double e3_1[31];
+  // static const G4double e3_1[31];
+
 static const G4double al_m_t[31];
 static const G4double al_m_in[31];
 static const G4double al_p_t[21];
@@ -119,6 +128,7 @@ static const G4double cd_m_t[34];
 static const G4double cd_m_in[34];
 static const G4double cd_p_t[28];
 static const G4double cd_p_in[28];
+
 static const G4double e6[35];
 static const G4double sn_m_t[35];
 static const G4double sn_m_in[35];
