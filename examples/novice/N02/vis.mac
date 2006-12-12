@@ -24,8 +24,8 @@
 # for drawing the tracks
 /vis/scene/add/trajectories
 # (if too many tracks cause core dump => /tracking/storeTrajectory 0)
-# for drawing the hits
-/vis/scene/add/hits
+# for drawing the hits, uncomment next line
+# /vis/scene/add/hits
 # (if you prefer refreshing each event, comment out next line)
 /vis/scene/endOfEventAction accumulate
 #
