@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: NTSTGunGenerator.hh,v 1.3 2006-06-29 18:25:36 gunter Exp $
+// $Id: NTSTGunGenerator.hh,v 1.4 2006-12-12 10:21:16 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -84,7 +84,7 @@ public:
 
 protected:
   inline  G4double Gauss(){
-    return RandGauss::shoot();
+    return CLHEP::RandGauss::shoot();
   }
 
 private:
