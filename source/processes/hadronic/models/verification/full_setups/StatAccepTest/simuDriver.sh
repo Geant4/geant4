@@ -56,7 +56,7 @@ echo ' BFIELD      =' $BFIELD
 #
 ( if [ X$SIM_REF1 == XYes ] ; then
 #
-    ###echo " I AM HERE 1 " ;
+    ###echo ' I AM HERE 1 ' ;
     export REF=$REF1 ;
     export LABEL=$REF-$PHYSICS-$CALORIMETER-$PARTICLE-$ENERGY-$EVENTS ;
     if [ X$BFIELD != X ] ; then
@@ -68,17 +68,17 @@ echo ' BFIELD      =' $BFIELD
         fi
       fi
     fi
-    ###echo " 1) LABEL=" $LABEL
+    ###echo ' 1) LABEL=' $LABEL
     python build.py $REF $PHYSICS $CALORIMETER $PARTICLE $ENERGY $EVENTS $BFIELD ;
     if [ $? != 0 ] ; then
-	echo " ***ERROR*** from: python build.py ... !" ; 
+	echo ' ***ERROR*** from: python build.py ... ! exitCode = 11' ;
 	exit 11 ;
     fi
     mv run.g4 run.g4-$LABEL ;
     mv setup.sh setup.sh-$LABEL ;
     . setup.sh-$LABEL ;
     if [ $? != 0 ] ; then
-	echo " ***ERROR*** from: . setup.sh-... !" ; 
+	echo ' ***ERROR*** from: . setup.sh-... ! exitCode = 12' ; 
 	exit 12 ;	
     fi
 #
@@ -103,14 +103,14 @@ echo ' BFIELD      =' $BFIELD
     ln -sfn GNUmakefile-1 GNUmakefile  ; #***LOOKHERE*** Temporary for 8.1 / 8.2 ;
     gmake ;
     if [ $? != 0 ] ; then
-	echo " ***ERROR*** from: gmake !" ; 
+	echo ' ***ERROR*** from: gmake ! exitCode = 13' ;  
 	exit 13 ;	
     fi    
     mv bin/$G4SYSTEM/mainStatAccepTest bin/$G4SYSTEM/mainStatAccepTest-$REF-$PHYSICS ;
     mainStatAccepTest-$REF-$PHYSICS run.g4-$LABEL > output.log-$LABEL 2>&1 ;
 ###    mainStatAccepTest-$REF-$PHYSICS run.g4-$LABEL ;
     if [ $? != 0 ] ; then
-	echo " ***ERROR*** from: mainStatAccepTest-... run.g4-... !" ;  
+	echo ' ***ERROR*** from: mainStatAccepTest-... run.g4-... ! exitCode = 14' ;  
 	rm -rf tmp/ ;
 	exit 14 ;
     fi
@@ -124,11 +124,16 @@ echo ' BFIELD      =' $BFIELD
 #
   fi )
 #
+if [ $? != 0 ] ; then
+    isFirstBad=Yes ;
+    ###echo ' isFirstBad = ' $isFirstBad ;
+fi
+#
 #--- Run the second reference ---
 #
 ( if [ X$SIM_REF2 == XYes ] ; then
 #
-    ###echo " I AM HERE 2 " ;
+    ###echo ' I AM HERE 2 ' ;
     export REF=$REF2 ; 
     export LABEL=$REF-$PHYSICS-$CALORIMETER-$PARTICLE-$ENERGY-$EVENTS ;
     if [ X$BFIELD != X ] ; then
@@ -140,17 +145,17 @@ echo ' BFIELD      =' $BFIELD
         fi
       fi
     fi
-    ###echo " 2) LABEL=" $LABEL ;
+    ###echo ' 2) LABEL=' $LABEL ;
     python build.py $REF $PHYSICS $CALORIMETER $PARTICLE $ENERGY $EVENTS $BFIELD ;
     if [ $? != 0 ] ; then
-	echo " ***ERROR*** from: python build.py ... !" ;
+	echo ' ***ERROR*** from: python build.py ... ! exitCode = 21' ;
 	exit 21	;
     fi
     mv run.g4 run.g4-$LABEL ;
     mv setup.sh setup.sh-$LABEL ;
     . setup.sh-$LABEL ;
     if [ $? != 0 ] ; then
-	echo " ***ERROR*** from: . setup.sh-... !" ; 
+	echo ' ***ERROR*** from: . setup.sh-... ! exitCode = 22' ; 
 	exit 22 ;	
     fi
     echo '  '; echo ' G4INSTALL = ' $G4INSTALL; echo ' running REF = ' $REF ; echo '  ' ;
@@ -158,14 +163,14 @@ echo ' BFIELD      =' $BFIELD
     ln -sfn GNUmakefile-2 GNUmakefile  ; #***LOOKHERE*** Temporary for 8.1 / 8.2
     gmake ;
     if [ $? != 0 ] ; then
-	echo " ***ERROR*** from: gmake !" ; 
+	echo ' ***ERROR*** from: gmake ! exitCode = 23' ; 
 	exit 23 ;	
     fi    
     mv bin/$G4SYSTEM/mainStatAccepTest bin/$G4SYSTEM/mainStatAccepTest-$REF-$PHYSICS ;
     mainStatAccepTest-$REF-$PHYSICS run.g4-$LABEL > output.log-$LABEL 2>&1 ;
 ###    mainStatAccepTest-$REF-$PHYSICS run.g4-$LABEL ;
     if [ $? != 0 ] ; then
-	echo " ***ERROR*** from: mainStatAccepTest-... run.g4-... !" ;  
+	echo ' ***ERROR*** from: mainStatAccepTest-... run.g4-... ! exitCode = 24' ;   
 	rm -rf tmp/ ;
 	exit 24 ;
     fi
@@ -179,48 +184,75 @@ echo ' BFIELD      =' $BFIELD
 #
   fi )
 #
+if [ $? != 0 ] ; then
+    isSecondBad=Yes ;
+    ###echo ' isSecondBad = ' $isSecondBad ;
+fi
+#
 #--- Run the statistical tests ---
 #
 ( if [ X$RUN_STAT == XYes ] ; then
 #
-    ###echo " I AM HERE 3 " ;
-    export LABEL=$PHYSICS-$CALORIMETER-$PARTICLE-$ENERGY-$EVENTS ;
-    if [ X$BFIELD != X ] ; then
-      if [ X$BFIELD != X0 ] ; then
-        if [ X$BFIELD != X0. ] ; then
-          if [ X$BFIELD != X0.0 ]; then
-	      export LABEL=$LABEL-B$BFIELD ;
-          fi
-        fi
-      fi
-    fi
-    ###echo " 3) LABEL=" $LABEL ;
-    . setup.sh-$REF1-$LABEL ;
-    if [ $? != 0 ] ; then
-	echo " ***ERROR*** from: . setup.sh-... !" ; 
-	exit 31 ;	
-    fi
-    cd dirStat/ ;
-    rm -f pvalue.o pvalue ;
-    gmake ;
-    if [ $? != 0 ] ; then
-	echo " ***ERROR*** from: gmake !" ; 
-	exit 32 ;	
-    fi    
-    python driver.py $REF1 $REF2 $LABEL ; 
-    if [ $? != 0 ] ; then
-	echo " ***ERROR*** from: python driver.py ... !" ;  
+    if [[ X$isFirstBad != XYes && X$isSecondBad != XYes ]] ; then 
+
+        ###echo ' I AM HERE 3 ' ;
+	export LABEL=$PHYSICS-$CALORIMETER-$PARTICLE-$ENERGY-$EVENTS ;
+	if [ X$BFIELD != X ] ; then
+	    if [ X$BFIELD != X0 ] ; then
+		if [ X$BFIELD != X0. ] ; then
+		    if [ X$BFIELD != X0.0 ]; then
+			export LABEL=$LABEL-B$BFIELD ;
+		    fi
+		fi
+	    fi
+	fi
+        ###echo ' 3) LABEL=' $LABEL ;
+	. setup.sh-$REF1-$LABEL ;
+	if [ $? != 0 ] ; then
+	    echo ' ***ERROR*** from: . setup.sh-... ! exitCode = 31' ;
+	    exit 31 ;	
+	fi
+	cd dirStat/ ;
 	rm -f pvalue.o pvalue ;
-	exit 33 ;
+	gmake ;
+	if [ $? != 0 ] ; then
+	    echo ' ***ERROR*** from: gmake ! exitCode = 32' ; 
+	    exit 32 ;	
+	fi    
+	python driver.py $REF1 $REF2 $LABEL ; 
+	if [ $? != 0 ] ; then
+	    echo ' ***ERROR*** from: python driver.py ... ! exitCode = 33' ;   
+	    rm -f pvalue.o pvalue ;
+	    exit 33 ;
+	fi
+#
+	echo ' ' ;
+	echo '--- Check results after running statistical test ---' ;
+	echo '*** ls -lth ***' ;  ls -lth ;
+	echo '-------------------------------------------------' ;
+	echo ' ' ;
+#
     fi
-#
-    echo ' ' ;
-    echo '--- Check results after running statistical test ---' ;
-    echo '*** ls -lth ***' ;  ls -lth ;
-    echo '-------------------------------------------------' ;
-    echo ' ' ;
-#
+
   fi )
+#
+if [ $? != 0 ] ; then
+    isThirdBad=Yes ;
+    ###echo ' isThirdBad = ' $isThirdBad ;
+fi
 #
 echo ' ========== END simuDriver.sh ========== '
 #
+if [[ X$isFirstBad == XYes || X$isSecondBad == XYes || X$isThirdBad == XYes ]] ; then 
+    echo ' ************************************************** ' ;
+    echo ' ******       simuDriver.sh  FAILED!         ****** ' ;
+    echo ' isFirstBad  = ' $isFirstBad ;
+    echo ' isSecondBad = ' $isSecondBad ;
+    echo ' isThirdBad  = ' $isThirdBad ;
+    echo ' ************************************************** ' ;
+    exit 69 ;
+else
+    echo ' ************************************************** ' ;
+    echo ' ******       simuDriver.sh  OK!             ****** ' ;
+    echo ' ************************************************** ' ;
+fi
