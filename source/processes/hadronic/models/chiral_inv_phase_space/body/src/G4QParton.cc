@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QParton.cc,v 1.2 2006-11-27 10:44:55 mkossov Exp $
+// $Id: G4QParton.cc,v 1.3 2006-12-12 11:02:22 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -32,7 +32,9 @@
 //
 //      ---------------- G4QParton ----------------
 //             by Mikhail Kossov, Oct 2006.
-// class for Parton (inside a string) used by Parton String Models
+//   class for Parton (inside a string) used by Parton String Models
+//   For comparison mirror member functions are taken from G4 class:
+//   G4Parton
 // ------------------------------------------------------------
 
 #include "G4QParton.hh"

@@ -27,7 +27,7 @@
 #ifndef G4QParton_h
 #define G4QParton_h 1
 
-// $Id: G4QParton.hh,v 1.1 2006-10-30 10:40:34 mkossov Exp $
+// $Id: G4QParton.hh,v 1.2 2006-12-12 11:02:22 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -36,7 +36,9 @@
 //      ---------------- G4QParton ----------------
 //      by Mikhail Kosov, October 2006
 //      class for Quark-Parton for quark-level models
-// ------------------------------------------------------------
+//   For comparison mirror member functions are taken from G4 class:
+//   G4Parton
+// -----------------------------------------------------------------
 
 #include "globals.hh"
 #include "G4ThreeVector.hh"

@@ -25,7 +25,7 @@
 //
 //
 //
-// $Id: G4QString.hh,v 1.1 2006-10-30 10:40:34 mkossov Exp $
+// $Id: G4QString.hh,v 1.2 2006-12-12 11:02:22 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef G4QString_h
@@ -37,6 +37,10 @@
 //      ---------------- G4QString ----------------
 //       by Mikhail Kosov, October 2006.
 //       class for an excited string used by Parton String Models
+//   For comparison mirror member functions are taken from G4 classes:
+//   G4FragmentingString
+//   G4ExcitedStringDecay
+//
 // ------------------------------------------------------------
 
 #include "G4ios.hh"

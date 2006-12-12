@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QHadronBuilder.hh,v 1.1 2006-10-30 10:40:33 mkossov Exp $
+// $Id: G4QHadronBuilder.hh,v 1.2 2006-12-12 11:02:22 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -32,7 +32,9 @@
 //
 //                 History: 
 //     Created by Mikhail Kossov, October 2006
-//     Class building hadron out of two partons; 
+//     Simple service class building hadron out of two partons; 
+//     For comparison mirror member functions are taken from G4 class:
+//     G4HadronBuilder
 // -----------------------------------------------------------------------------
 //
 

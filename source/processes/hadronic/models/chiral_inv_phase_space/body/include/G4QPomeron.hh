@@ -26,7 +26,7 @@
 #ifndef G4QPomeron_h
 #define G4QPomeron_h 1
 //
-// $Id: G4QPomeron.hh,v 1.1 2006-10-30 10:40:34 mkossov Exp $
+// $Id: G4QPomeron.hh,v 1.2 2006-12-12 11:02:22 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -35,6 +35,8 @@
 //      ---------------- G4QPomeron ----------------
 //      by Mikhail Kossov Oct, 2006
 //      class for a Pomeron used by Parton String Models
+//   For comparison mirror member functions are taken from G4 class:
+//   G4PomeronCrossSection
 // ------------------------------------------------------------
 
 #include "globals.hh"

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QInteraction.hh,v 1.1 2006-10-30 10:40:34 mkossov Exp $
+// $Id: G4QInteraction.hh,v 1.2 2006-12-12 11:02:22 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -37,6 +37,8 @@
 //      ---------------- G4QInteraction----------------
 //                 Created by Mikhail Kossov Oct,2006
 //   class for a storing colliding particles in PartonString Models
+//   For comparison mirror member functions are taken from G4 class:
+//   G4InteractionContent
 // -------------------------------------------------------------------
 
 #include "globals.hh"

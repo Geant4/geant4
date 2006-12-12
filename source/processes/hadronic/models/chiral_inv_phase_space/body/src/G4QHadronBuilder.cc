@@ -24,14 +24,16 @@
 // ********************************************************************
 //
 //
-// $Id: G4QHadronBuilder.cc,v 1.1 2006-10-30 10:40:36 mkossov Exp $
+// $Id: G4QHadronBuilder.cc,v 1.2 2006-12-12 11:02:22 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
 //      GEANT4 class implementation file
 //
 //      Created by Mikhail Kosov, October 2006 
-//   algorithm making a hadron out of two partons
+//      Simple algorithm making a hadron out of two partons
+//      For comparison mirror member functions are taken from G4 class:
+//      G4HadronBuilder
 // -----------------------------------------------------------------------------
 
 //#define debug
