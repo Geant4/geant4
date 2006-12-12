@@ -167,7 +167,7 @@ NTSTDetectorConstruction::PrintCorners(const G4Transform3D& theT,
   G4cout << std::setw(9) << u1.z() << std::setw(9) << u2.z() << std::setw(9) << u3.z()
 	 << std::setw(9) << u4.z() << std::setw(9) << u5.z() << std::setw(9) << u6.z()
 	 << std::setw(9) << u7.z() << std::setw(9) << u8.z() << G4endl;
-};
+}
 
 
 G4VPhysicalVolume*
