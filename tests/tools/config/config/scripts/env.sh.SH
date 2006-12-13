@@ -544,13 +544,17 @@ fi
 if [ X$g4wlib_build_zlib = Xy ] ; then
 G4LIB_BUILD_ZLIB=1
 export G4LIB_BUILD_ZLIB
+if [ X\$g4non_display = X ] ; then
 echo "On this machine the G4LIB_BUILD_ZLIB=\$G4LIB_BUILD_ZLIB"
+fi
 fi 
 
 if [ X$g4w_use_zlib = Xy ] ; then
 G4LIB_USE_ZLIB=1
 export G4LIB_USE_ZLIB
+if [ X\$g4non_display = X ] ; then
 echo "On this machine the G4LIB_USE_ZLIB=\$G4LIB_USE_ZLIB"
+fi
 fi 
 
 
