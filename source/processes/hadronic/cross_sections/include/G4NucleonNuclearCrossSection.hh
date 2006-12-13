@@ -99,7 +99,8 @@ static const G4double na_p_in[44];
 
 
 static const G4double e3[45];
-  // static const G4double e3_1[31];
+
+// static const G4double e3_1[31];
 
 static const G4double al_m_t[45];
 static const G4double al_m_in[45];
@@ -146,20 +147,20 @@ static const G4double w_p_in[48];
 
 
 
-static const G4double e6[35];
+static const G4double e6[46];
 
 
-  // static const G4double e7[35];
+// static const G4double e7[46];
 
-static const G4double pb_m_t[35];
-static const G4double pb_m_in[35];
-static const G4double pb_p_in[30];
+static const G4double pb_m_t[46];
+static const G4double pb_m_in[46];
+static const G4double pb_p_in[46];
 
-static const G4double u_m_t[35];
-static const G4double u_m_in[35];
-static const G4double u_p_in[30];
+static const G4double u_m_t[46];
+static const G4double u_m_in[46];
+static const G4double u_p_in[46];
 
-  // vectors for treatment
+// vectors for treatment
 
 std::vector<G4int> theZ;
 std::vector<G4PiData *> thePipData;
