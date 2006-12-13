@@ -1,3 +1,4 @@
+//
 // ********************************************************************
 // * License and Disclaimer                                           *
 // *                                                                  *
@@ -22,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: SoG4LineSet.h,v 1.1 2006-10-26 10:51:48 allison Exp $
+// $Id: SoG4LineSet.h,v 1.2 2006-12-13 15:49:51 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // John Allison  26th October 2006

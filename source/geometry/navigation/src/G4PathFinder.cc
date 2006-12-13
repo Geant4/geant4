@@ -1,27 +1,30 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
 //
-// $Id: G4PathFinder.cc,v 1.24 2006-11-23 16:42:30 japost Exp $
+// $Id: G4PathFinder.cc,v 1.25 2006-12-13 15:43:32 gunter Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4PathFinder Implementation
@@ -481,7 +484,7 @@ G4PathFinder::ReLocate( const   G4ThreeVector& position )
 
         if( fVerboseLevel > 0 ) 
 	   G4cout << " G4PF:Relocate> Ratio to revised safety is " 
-		  << fabs(moveMinusSafety)/revisedSafety << G4endl;
+		  << std::fabs(moveMinusSafety)/revisedSafety << G4endl;
         // 
         G4double  absMoveMinusSafety= std::fabs(moveMinusSafety);
 	G4bool smallRatio= absMoveMinusSafety < kRadTolerance * revisedSafety ; 
@@ -492,7 +495,7 @@ G4PathFinder::ReLocate( const   G4ThreeVector& position )
 	G4bool smallValue= absMoveMinusSafety < cErrorTolerance * maxCoordPos;
         if( ! (smallRatio || smallValue) ) { 
 	  G4cout << " G4PF:Relocate> Ratio to revised safety is " 
- 	         << fabs(moveMinusSafety)/revisedSafety << G4endl;
+ 	         << std::fabs(moveMinusSafety)/revisedSafety << G4endl;
 	  G4cout << " Difference of move and safety is not very small." << G4endl;
 	}else{
 	  moveMinusSafety = 0.0; 
@@ -532,7 +535,7 @@ G4PathFinder::ReLocate( const   G4ThreeVector& position )
 	       <<  revisedSafety << " as safety value."  << G4endl;
 	G4cout << "  --> last position for safety " << fSafetyLocation << G4endl;
 	G4cout << "       its safety value =  " << fMinSafety_atSafLocation << G4endl;
-	G4cout << "       move from safety location = " << sqrt(moveLenSafSq) << G4endl;
+	G4cout << "       move from safety location = " << std::sqrt(moveLenSafSq) << G4endl;
 	// moveVecSafety.mag() *** (position-fSafetyLocation).mag() << G4endl;
 	G4cout << "       safety - Move-from-end= " 
 	       << revisedSafety - moveLenEndPosition << " (negative is Bad.)" << G4endl;

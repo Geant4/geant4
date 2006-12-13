@@ -1,3 +1,4 @@
+//
 // ********************************************************************
 // * License and Disclaimer                                           *
 // *                                                                  *
@@ -23,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: SoG4Polyhedron.h,v 1.1 2006-10-26 10:51:48 allison Exp $
+// $Id: SoG4Polyhedron.h,v 1.2 2006-12-13 15:49:56 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // John Allison  26th October 2006

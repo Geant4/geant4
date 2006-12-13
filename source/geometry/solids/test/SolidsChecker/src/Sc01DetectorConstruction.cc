@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: Sc01DetectorConstruction.cc,v 1.12 2006-10-20 14:51:41 gcosmo Exp $
+// $Id: Sc01DetectorConstruction.cc,v 1.13 2006-12-13 15:43:42 gunter Exp $
 // 
 //  GEANT 4 class header file 
 //
@@ -481,7 +481,7 @@ G4VPhysicalVolume* Sc01DetectorConstruction::SelectTubeSector()
     G4cout<<"i = "<<i<<";  i*sPhi = "<<i*sPhi<<G4endl;
 
     G4cout<<"cos(i*sPhi)= "<<std::cos(i*sPhi)
-          <<";  sin(i*sPhi) = "<<std::sin(i*sPhi)<<G4endl<<G4endl;
+          <<";  std::sin(i*sPhi) = "<<std::sin(i*sPhi)<<G4endl<<G4endl;
 
     G4cout<<rot.xx()<<"\t\t"<<rot.xy()<<"\t\t"<<rot.xz()<<G4endl;
     G4cout<<rot.yx()<<"\t\t"<<rot.yy()<<"\t\t"<<rot.yz()<<G4endl;

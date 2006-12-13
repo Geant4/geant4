@@ -1,3 +1,4 @@
+//
 // ********************************************************************
 // * License and Disclaimer                                           *
 // *                                                                  *
@@ -22,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AttFilterUtils.hh,v 1.1 2006-09-11 21:52:18 tinslay Exp $
+// $Id: G4AttFilterUtils.hh,v 1.2 2006-12-13 15:49:58 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Visualisation attribute filter utility functions.

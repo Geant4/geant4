@@ -1,23 +1,26 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * authors in the GEANT4 collaboration.                             *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
 #define debug
@@ -66,8 +69,8 @@ int main()
   G4double sig=0.;
   for(G4int n=0; n<nN; n++)                 // >>>> LOOP over Elements
   {
-	G4double lekin = log(low[n]);
-	G4double dlekin= exp((log(log(high[n]))-log(lekin))/(nC-1));
+	G4double lekin = std::log(low[n]);
+	G4double dlekin= std::exp((std::log(std::log(high[n]))-std::log(lekin))/(nC-1));
 	lekin /= dlekin;
 #ifdef debug
 	G4cout<<"G4ElNucCSTest:>>>>n="<<n<<",l="<<low[n]<<",h="<<high[n]<<",n="<<nC<<",d="<<dlekin<<G4endl;
@@ -75,7 +78,7 @@ int main()
 	for(G4int ll=0; ll<nC; ll++)            // >>>> LOOP over electron energies with the log-step
 	{
 	  lekin*=dlekin;
-      G4double ekin=exp(lekin);
+      G4double ekin=std::exp(lekin);
 	  theDynamicParticle = new G4DynamicParticle(theParticleDefinition,
 												 G4ParticleMomentum(1.,0.,0.), ekin*MeV);
 	  sig = eACrossSection.GetCrossSection(theDynamicParticle,theElement[n])/millibarn;
