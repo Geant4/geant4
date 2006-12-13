@@ -57,7 +57,7 @@
 # 
 # NB) This script has been obtained, after few simple changes,
 #     from the similar script  reproducibility.py , which
-#     considers a single case instead of looping over all 
+#     considers a single case instead of looping over all
 #     possible cases.
 #
 #----------------------------------------------------------------
@@ -100,10 +100,10 @@ listAbsorbers = [
 listActiveLayer = [
     "Scintillator" ,
     "LiquidArgon"  ,
-    "PbWO4"
+#    "PbWO4"
     ]
 #
-BfieldValue = "0 tesla"
+BfieldValue = "4 tesla"
 #
 NumEvents = "10"
 
