@@ -198,7 +198,7 @@ processes/electromagnetic/polarisation           empolar-V08-01-04
   polarized processes
 - Substituted basic types with G4 types according to Geant4 coding style.
 
-processes/electromagnetic/standard               emstand-V08-01-10
+processes/electromagnetic/standard               emstand-V08-01-15
 ----------------------------------
 - G4UrbanMscModel:
   o Fix in the single scattering part of SampleCosineTheta(), now there is
