@@ -544,13 +544,17 @@ fi
 if [ X$g4wlib_build_zlib = Xy ] ; then
 G4LIB_BUILD_ZLIB=1
 export G4LIB_BUILD_ZLIB
+if [ X\$g4non_display = X ] ; then
 echo "On this machine the G4LIB_BUILD_ZLIB=\$G4LIB_BUILD_ZLIB"
+fi
 fi 
 
 if [ X$g4w_use_zlib = Xy ] ; then
 G4LIB_USE_ZLIB=1
 export G4LIB_USE_ZLIB
+if [ X\$g4non_display = X ] ; then
 echo "On this machine the G4LIB_USE_ZLIB=\$G4LIB_USE_ZLIB"
+fi
 fi 
 
 
@@ -613,21 +617,30 @@ $spitshell >>env.sh <<'!NO!SUBS!'
 #
 if [ $G4WORKDIR ] ; then
 
+if [ X\$g4non_display = X ] ; then
 echo "In your environment you have the G4WORKDIR=$G4WORKDIR"
+fi
 
 else
 
 # Check for Windows!
 if test "X$G4SYSTEM" = "XWIN32-VC" -o "X$G4SYSTEM" = "XWIN32-VC7"; then
 
+if [ X\$g4non_display = X ] ; then
 echo "G4WORKDIR will be set to c:/geant4 (in "native" Windows syntax)"
+fi
+
 G4WORKDIR="c:/geant4"
 export G4WORKDIR
 
 else # if Unix
 
+if [ X\$g4non_display = X ] ; then
 echo "G4WORKDIR will be set to HOME/geant4=$HOME/geant4"
-export G4WORKDIR=$HOME/geant4
+fi
+
+G4WORKDIR=$HOME/geant4
+export G4WORKDIR
 
 fi # if platforms
 

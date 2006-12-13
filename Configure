@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.93 2006-12-11 16:35:05 stesting Exp $
+# $Id: Configure,v 1.94 2006-12-13 18:06:58 stesting Exp $
 #
-# Generated on Mon Dec 11 17:26:24 CET 2006 [metaconfig 3.0 PL70]
+# Generated on Wed Dec 13 18:53:33 CET 2006 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -1714,6 +1714,7 @@ case  "$g4compiler" in
 esac
 
 ###if [ X$g4build = Xyes ] ; then
+if [ X$g4system = X ] ; then
 while test 1 = 1  ; do
 
 g4message=`cat << EOM
@@ -1844,13 +1845,14 @@ EOM
 		;;
 	esac
 done
-
 ###fi
 
 #
 # Ask about compiler used. 
 #
 g4system=$g4osname-$g4compiler
+
+fi
 
 #cat << EOM
 #
