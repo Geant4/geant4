@@ -1,0 +1,94 @@
+
+                       geant4-08-02-ref-00
+                       ===================
+
+Some of the development/fixes included since the last reference tag are:
+
+  o Changed QGSC default physics list to follow 8.1 modeling.
+  o Important bug fix in CHIPS model in G4QIsotope for observed cases
+    of negative abundance.
+  o Allow build of DLL libraries on Windows for physics lists.
+
+---------- Reference-tag 'Release Notes' -----------
+
+
+Summarised, the list of changes is the following:
+
+physics_lists                                    phys-lists-V08-01-13
+-------------
+- Added QGSC_EFLOW, using new energy flow method for CHIPS; consequently,
+  HadronPhysicsQGSC_EFLOW and builders G4QGSCEflow{Proton,Neutron,PiK}Builder
+  added as well.
+- Changed QGSC to use G4QStringChipsParticleLevelInterface via the builders
+  G4QGS{Proton,Neutron,PiK}Builder; this emulates 8.1 modeling.
+- GNUmakefile: added definition of GLOBLIBS with correct library
+  dependencies to allow for generation of DLLs on Windows.
+
+processes/electromagnetic/standard               emstand-V08-01-16
+----------------------------------
+- G4UrbanMscModel: fix in ComputeTruePathLengthLimit(); setting
+  stepmin=1.e-6*mm.
+
+processes/hadronic
+------------------
+- models/chiral_inv_phase_space/body (hadr-chips-body-V08-01-07)
+  o Important bug fix in G4QIsotope: fixed double subtraction of abundance
+    in 'MeanCrossSection' calculation, which caused negative abundance...
+  o Fixed some cases of generation of NaN in computation of cos(theta).
+- models/chiral_inv_phase_space/interface (hadr-chips-inter-V08-01-18)
+  o Low energy neutrons are added to G4QElastic (+ minor bugs fixes).
+  o Global multi-projectile tag fix for cross-sections.
+  o Added G4QStringChipsParticleLevelInterface, 8.1 version of the
+    G4StringChipsParticleLevelInterface. To be used for "cascade" in the QGSC
+    physics list. G4StringChipsParticleLevelInterface to be used in the new
+    QGSC2 physics lists.
+  o Minor corrections in the low energy neutron elastic (did not cover all
+    stable isotopes and some typos).
+  o Fixed some cases of generation of NaN in computation of cos(theta).
+- stopping (hadr-stopping-V08-01-01)
+  o Corrected inconsistent use of 'targetA'; for effective 'targetA'
+    transforming to integer gives values different by 1.
+- util (hadr-util-V08-01-01)
+  o Added protection in variables 'local_npnb' and 'local_ndta' from division
+    by zero in G4ReactionDynamics::AddBlackTrackParticles().
+
+processes/GNUmakefile                            processes-gmk-V08-01-02
+---------------------
+- Added missing extension to 'digits_hits' library name for GLOBLIBS
+  definition. Required to allow for build of DLLs on Windows. 
+
+run                                              run-V08-01-06
+---
+- Fixed memory leak at initialisation in G4MatScanMessenger.
+- Modified CheckRegions() method not to use inefficient and obsolete
+  SetWorld() method in G4RegionStore. Set world volumes to regions directly
+  and more efficiently by retrieving the list of worlds from
+  G4TransportationManager.
+
+visualization/management                         visman-V08-01-16
+-------------
+- Commented command "vis/scene/add/eventID" forcing event ID to scene
+  in G4VisCommandsCompound implementation.
+
+examples                                         examples-V08-02-00
+--------
+- Updated reference outputs.
+- extended/electromagnetic/TestEm0 (testem0-V08-01-02)
+  o Corrected printout in BeginOfRun().
+- extended/electromagnetic/TestEm7 (testem7-V08-01-03)
+  o Fix in Livermore physics list constructor.
+  o Fixed use of elastic constructor.
+- extended/gdml (exgdml-V08-01-00)
+  o Set schema location to LCG release area in test.gdml.
+  o Updated README and GNUmakefile.
+- novice/N02 (exampleN02-V08-01-01)
+  o Commented out drawing of hits in vis.mac.
+- novice/N04 (exampleN04-V08-01-08)
+  o Commented out drawing of hits in vis.mac.
+  o Removed obsolete printout in GNUmakefile.
+
+tests                                            tests-V08-02-00
+-----
+- Updated reference outputs.
+- test39 (test39-V08-01-03)
+  o Zero cross-section projectiles are skipped in main().
