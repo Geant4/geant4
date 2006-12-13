@@ -1,6 +1,13 @@
                  History file
                  ------------
 
+13-Dec-2006 - A.Ribon (statAccepTest-V08-01-02)
+- Improvements the diagnostic to help debugging 
+  Ganga/Diane problems. 
+  This tag is the final one used for the full
+  production for the December 2006 release (G4 8.2).
+
+
 08-Dec-2006 - A.Ribon (statAccepTest-V08-01-01)
 - Added checks of the code returned by shell commands,
   to help debugging Ganga/Diane problems.

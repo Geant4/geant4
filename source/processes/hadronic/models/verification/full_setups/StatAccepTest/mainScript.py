@@ -32,7 +32,7 @@ print '========== START mainScript.py =========='
 #
 REF1        = "8.1.p02a"
 SIM_REF1    = "Yes"
-REF2        = "8.2.cand05"
+REF2        = "8.2.cand06"
 SIM_REF2    = "Yes"
 RUN_STAT    = "Yes"
 PHYSICS     = "QGSP"
