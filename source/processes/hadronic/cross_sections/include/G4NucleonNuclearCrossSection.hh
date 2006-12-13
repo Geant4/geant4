@@ -98,55 +98,68 @@ static const G4double na_m_in[44];
 static const G4double na_p_in[44];
 
 
-static const G4double e3[31];
+static const G4double e3[45];
   // static const G4double e3_1[31];
 
-static const G4double al_m_t[31];
-static const G4double al_m_in[31];
-static const G4double al_p_t[21];
-static const G4double al_p_in[21];
-static const G4double ca_m_t[31];
-static const G4double ca_m_in[31];
-static const G4double ca_p_t[23];
-static const G4double ca_p_in[23];
+static const G4double al_m_t[45];
+static const G4double al_m_in[45];
+static const G4double al_p_in[45];
 
-static const G4double e4[32];
-static const G4double fe_m_t[32];
-static const G4double fe_m_in[32];
-static const G4double fe_p_t[25];
-static const G4double fe_p_in[25];
-static const G4double cu_m_t[32];
-static const G4double cu_m_in[32];
-static const G4double cu_p_t[25];
-static const G4double cu_p_in[25];
-static const G4double e5[34];
-static const G4double mo_m_t[34];
-static const G4double mo_m_in[34];
-static const G4double mo_p_t[27];
-static const G4double mo_p_in[27];
-static const G4double cd_m_t[34];
-static const G4double cd_m_in[34];
-static const G4double cd_p_t[28];
-static const G4double cd_p_in[28];
+static const G4double si_m_t[45];
+static const G4double si_m_in[45];
+static const G4double si_p_in[45];
+
+static const G4double ca_m_t[45];
+static const G4double ca_m_in[45];
+static const G4double ca_p_in[45];
+
+
+static const G4double e4[47];
+
+static const G4double fe_m_t[47];
+static const G4double fe_m_in[47];
+static const G4double fe_p_in[47];
+
+static const G4double cu_m_t[47];
+static const G4double cu_m_in[47];
+static const G4double cu_p_in[47];
+
+static const G4double mo_m_t[47];
+static const G4double mo_m_in[47];
+static const G4double mo_p_in[47];
+
+
+static const G4double e5[48];
+
+static const G4double cd_m_t[48];
+static const G4double cd_m_in[48];
+static const G4double cd_p_in[48];
+
+static const G4double sn_m_t[48];
+static const G4double sn_m_in[48];
+static const G4double sn_p_in[48];
+
+static const G4double w_m_t[48];
+static const G4double w_m_in[48];
+static const G4double w_p_in[48];
+
+
+
 
 static const G4double e6[35];
-static const G4double sn_m_t[35];
-static const G4double sn_m_in[35];
-static const G4double sn_p_t[29];
-static const G4double sn_p_in[29];
-static const G4double w_m_t[35];
-static const G4double w_m_in[35];
-static const G4double w_p_t[30];
-static const G4double w_p_in[30];
-static const G4double e7[35];
+
+
+  // static const G4double e7[35];
+
 static const G4double pb_m_t[35];
 static const G4double pb_m_in[35];
-static const G4double pb_p_t[30];
 static const G4double pb_p_in[30];
+
 static const G4double u_m_t[35];
 static const G4double u_m_in[35];
-static const G4double u_p_t[30];
 static const G4double u_p_in[30];
+
+  // vectors for treatment
 
 std::vector<G4int> theZ;
 std::vector<G4PiData *> thePipData;
