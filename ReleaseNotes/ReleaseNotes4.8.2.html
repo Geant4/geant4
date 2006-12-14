@@ -121,15 +121,16 @@ a recompilation of user applications is anyhow required.
 <P> </P>
 <B>Standard Electromagnetic physics</B>
 <P> </P>
-Some important improvements were introduced to multiple scattering, which 
-provide improved results for large angle scattering, better particle 
-transport around interfaces and less cut dependence for sampling 
-calorimeters. The new class <tt>G4hMultipleScattering</tt> has been
-created; this class uses the same MSC model but adopts a different
-initialisation aimed to provide more fast simulation of hadron transport.<BR>
-A prototype version of a process for single elastic scattering is released.<BR>
-A new module <tt>polarisation</tt> is introduced for simulation of
-circular polarized beams of <tt>e+-</tt> and <tt>gamma</tt>.
+Some improvements were introduced to multiple scattering, which provide
+improved results for large angle scattering; better particle transport near
+geometry boundaries and less cut dependence for sampling calorimeters
+(see details in Physics Reference Manual). The expected change of response
+for calorimeters is less than 1%. A new class <TT>G4hMultipleScattering</TT>
+has been created; this class uses the same multiple scattering model but
+adopts a different initialization aimed to provide faster simulation of
+hadron transport.<BR>
+A new module polarization is introduced for simulation of circular polarized
+beams of <TT>e+-</TT> and <TT>gamma</TT>.
 
 <P> </P>
 <B>Hadronic physics</B>
