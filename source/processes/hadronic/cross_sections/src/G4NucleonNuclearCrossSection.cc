@@ -57,7 +57,7 @@ const G4double G4NucleonNuclearCrossSection::he_m_in[44] =
   79, 78, 80, 84, 88, 94, 100, 105, 108, 108, 108, 112, 114, 114, 112, 110, 108, 106, 104, 
   101, 102, 102
 };
-const G4double G4NucleonNuclearCrossSection::he_t_in[44] =  
+const G4double G4NucleonNuclearCrossSection::he_p_in[44] =  
 { 
   0, 2, 3, 13, 30, 50, 65, 77, 90, 105, 115, 115, 100, 90, 86, 84, 84, 82, 80, 80, 80, 80, 
   79, 78, 80, 84, 88, 94, 100, 105, 108, 108, 108, 112, 114, 114, 112, 110, 108, 106, 104, 
@@ -394,27 +394,47 @@ const G4double G4NucleonNuclearCrossSection::e6[46] =
 
 const G4double G4NucleonNuclearCrossSection::pb_m_t[46] =  
 {
- 
+  5300, 5440, 5720, 5880, 5765, 5745, 5480, 5280, 4970, 4550, 4390, 4300, 4265, 4325, 
+  4450, 4540, 4740, 4710, 4600, 4100, 3660, 3480, 3300, 3000, 2890, 2865, 2855, 2850, 
+  2865, 2920, 2955, 3000, 3030, 3060, 3105, 3240, 3290, 3270, 3240, 3180, 3090, 3060, 
+  2970, 2970, 2970, 2970  
+
 };
 const G4double G4NucleonNuclearCrossSection::pb_m_in[46] = 
 {
+  2580, 2550, 2505, 2462, 2460, 2435, 2380, 2355, 2280, 2180, 2170, 2130, 2080, 2035, 
+  1980, 1940, 1900, 1870, 1840, 1800, 1800, 1800, 1780, 1760, 1760, 1740, 1730, 1725, 
+  1740, 1785, 1815, 1835, 1860, 1890, 1895, 1920, 1920, 1890, 1850, 1835, 1830, 1830, 
+  1830, 1830, 1830, 1830 
 };
-const G4double G4NucleonNuclearCrossSection::pb_p_in[30] = 
+const G4double G4NucleonNuclearCrossSection::pb_p_in[46] = 
 { 
-  
+  900,  1060, 1200, 1420, 1515, 1620, 1750, 1800, 1915, 2030, 1960, 1940, 1910, 1860, 
+  1840, 1780, 1770, 1760, 1740, 1720, 1725, 1740, 1740, 1730, 1720, 1700, 1710, 1720, 
+  1730, 1740, 1815, 1835, 1860, 1890, 1895, 1920, 1920, 1890, 1850, 1835, 1830, 1830, 
+  1830, 1830, 1830, 1830
 };
 
 const G4double G4NucleonNuclearCrossSection::u_m_t[46] =   
 {
-  
+  5800, 5940, 6160, 6345, 6360, 6350, 6170, 6020, 5760, 5350, 4990, 4800, 4710, 4690, 
+  4760, 5040, 5190, 5200, 5080, 4600, 4120, 3920, 3720, 3420, 3240, 3150, 3160, 3180, 
+  3210, 3240, 3280, 3350, 3390, 3435, 3480, 3560, 3585, 3580, 3540, 3500, 3470, 3410, 
+  3335, 3335, 3335, 3335   
 };
 const G4double G4NucleonNuclearCrossSection::u_m_in[46] =  
 {
-  
+  2820, 2770, 2700, 2660, 2645, 2620, 2580, 2550, 2515, 2450, 2390, 2320, 2260, 2225, 
+  2200, 2140, 2080, 2060, 2040, 2000, 1980, 1965, 1960, 1930, 1920, 1890, 1905, 1920, 
+  1945, 1970, 1985, 2010, 2040, 2070, 2080, 2090, 2095, 2080, 2063, 2060, 2050, 2040, 
+  2005, 2005, 2005, 2005 
 };
-const G4double G4NucleonNuclearCrossSection::u_p_in[30] =  
+const G4double G4NucleonNuclearCrossSection::u_p_in[46] =  
 { 
-  
+  800,  900,  1100, 1300, 1410, 1510, 1680, 1800, 2000, 2200, 2080, 2060, 2035, 2100, 
+  2030, 2030, 2000, 1960, 1960, 1960, 1940, 1925, 1920, 1905, 1890, 1860, 1880, 1910, 
+  1930, 1945, 1985, 2010, 2040, 2070, 2080, 2090, 2095, 2080, 2063, 2060, 2050, 2040, 
+  2005, 2005, 2005, 2005
 };
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -423,38 +443,58 @@ const G4double G4NucleonNuclearCrossSection::u_p_in[30] =
 
 G4NucleonNuclearCrossSection::G4NucleonNuclearCrossSection()
 {
-   thePimData.push_back(new G4PiData(he_t,   he_in,  e1, 38));
-   thePipData.push_back(new G4PiData(he_t,   he_in,  e1, 38));
-   thePimData.push_back(new G4PiData(be_m_t, be_m_in, e1, 38));
-   thePipData.push_back(new G4PiData(be_p_t, be_p_in, e1, 24));
-   thePimData.push_back(new G4PiData(c_m_t,  c_m_in,  e2, 39));
-   thePipData.push_back(new G4PiData(c_p_t,  c_p_in,  e2, 24));
-   thePimData.push_back(new G4PiData(n_m_t,  n_m_in,  e2, 39));
-   thePipData.push_back(new G4PiData(n_p_t,  n_p_in,  e2, 27));
-   thePimData.push_back(new G4PiData(o_m_t,  o_m_in,  e3, 31));
-   thePipData.push_back(new G4PiData(o_p_t,  o_p_in,  e3, 20));
-   thePimData.push_back(new G4PiData(na_m_t, na_m_in, e3, 31));
-   thePipData.push_back(new G4PiData(na_p_t, na_p_in, e3, 22));
-   thePimData.push_back(new G4PiData(al_m_t, al_m_in, e3_1, 31));
-   thePipData.push_back(new G4PiData(al_p_t, al_p_in, e3_1, 21));
-   thePimData.push_back(new G4PiData(ca_m_t, ca_m_in, e3_1, 31));
-   thePipData.push_back(new G4PiData(ca_p_t, ca_p_in, e3_1, 23));
-   thePimData.push_back(new G4PiData(fe_m_t, fe_m_in, e4, 32));
-   thePipData.push_back(new G4PiData(fe_p_t, fe_p_in, e4, 25));
-   thePimData.push_back(new G4PiData(cu_m_t, cu_m_in, e4, 32));
-   thePipData.push_back(new G4PiData(cu_p_t, cu_p_in, e4, 25));
-   thePimData.push_back(new G4PiData(mo_m_t, mo_m_in, e5, 34));
-   thePipData.push_back(new G4PiData(mo_p_t, mo_p_in, e5, 27));
-   thePimData.push_back(new G4PiData(cd_m_t, cd_m_in, e5, 34));
-   thePipData.push_back(new G4PiData(cd_p_t, cd_p_in, e5, 28));
-   thePimData.push_back(new G4PiData(sn_m_t, sn_m_in, e6, 35));
-   thePipData.push_back(new G4PiData(sn_p_t, sn_p_in, e6, 29));
-   thePimData.push_back(new G4PiData(w_m_t,  w_m_in,  e6, 35));
-   thePipData.push_back(new G4PiData(w_p_t,  w_p_in,  e6, 30));
-   thePimData.push_back(new G4PiData(pb_m_t, pb_m_in, e7, 35));
-   thePipData.push_back(new G4PiData(pb_p_t, pb_p_in, e7, 30));
-   thePimData.push_back(new G4PiData(u_m_t,  u_m_in,  e7, 35));
-   thePipData.push_back(new G4PiData(u_p_t,  u_p_in,  e7, 30));
+  // He, Be, C
+
+   thePimData.push_back(new G4PiData(he_m_t,   he_m_in,  e1, 44));
+   thePipData.push_back(new G4PiData(he_m_t,   he_p_in,  e1, 44));
+   thePimData.push_back(new G4PiData(be_m_t, be_m_in, e1, 44));
+   thePipData.push_back(new G4PiData(be_m_t, be_p_in, e1, 44));
+   thePimData.push_back(new G4PiData(c_m_t,  c_m_in,  e1, 44));
+   thePipData.push_back(new G4PiData(c_m_t,  c_p_in,  e1, 44));
+
+   // N, O, Na
+
+   thePimData.push_back(new G4PiData(n_m_t,  n_m_in,  e2, 44));
+   thePipData.push_back(new G4PiData(n_m_t,  n_p_in,  e2, 44));
+
+   thePimData.push_back(new G4PiData(o_m_t,  o_m_in,  e2, 44));
+   thePipData.push_back(new G4PiData(o_m_t,  o_p_in,  e2, 44));
+   thePimData.push_back(new G4PiData(na_m_t, na_m_in, e2, 44));
+   thePipData.push_back(new G4PiData(na_m_t, na_p_in, e2, 44));
+
+   // Al, Si, Ca
+
+   thePimData.push_back(new G4PiData(al_m_t, al_m_in, e3, 45));
+   thePipData.push_back(new G4PiData(al_m_t, al_p_in, e3, 45));
+   thePimData.push_back(new G4PiData(si_m_t, si_m_in, e3, 45));
+   thePipData.push_back(new G4PiData(si_m_t, si_p_in, e3, 45));
+   thePimData.push_back(new G4PiData(ca_m_t, ca_m_in, e3, 45));
+   thePipData.push_back(new G4PiData(ca_m_t, ca_p_in, e3, 45));
+
+   // Fe, Cu, Mo
+
+   thePimData.push_back(new G4PiData(fe_m_t, fe_m_in, e4, 47));
+   thePipData.push_back(new G4PiData(fe_m_t, fe_p_in, e4, 47));
+   thePimData.push_back(new G4PiData(cu_m_t, cu_m_in, e4, 47));
+   thePipData.push_back(new G4PiData(cu_m_t, cu_p_in, e4, 47));
+   thePimData.push_back(new G4PiData(mo_m_t, mo_m_in, e4, 47));
+   thePipData.push_back(new G4PiData(mo_m_t, mo_p_in, e4, 47));
+
+   // Cd, Sn, W
+
+   thePimData.push_back(new G4PiData(cd_m_t, cd_m_in, e5, 48));
+   thePipData.push_back(new G4PiData(cd_m_t, cd_p_in, e5, 48));
+   thePimData.push_back(new G4PiData(sn_m_t, sn_m_in, e5, 48));
+   thePipData.push_back(new G4PiData(sn_m_t, sn_p_in, e5, 48));
+   thePimData.push_back(new G4PiData(w_m_t,  w_m_in,  e5, 48));
+   thePipData.push_back(new G4PiData(w_m_t,  w_p_in,  e5, 48));
+
+   // Pb, U
+
+   thePimData.push_back(new G4PiData(pb_m_t, pb_m_in, e6, 46));
+   thePipData.push_back(new G4PiData(pb_m_t, pb_p_in, e6, 46));
+   thePimData.push_back(new G4PiData(u_m_t,  u_m_in,  e6, 46));
+   thePipData.push_back(new G4PiData(u_m_t,  u_p_in,  e6, 46));
 
    theZ.push_back(2); // He
    theZ.push_back(4); // Be
@@ -463,6 +503,7 @@ G4NucleonNuclearCrossSection::G4NucleonNuclearCrossSection()
    theZ.push_back(8); // O
    theZ.push_back(11); // Na
    theZ.push_back(13); // Al
+   theZ.push_back(14); // Si
    theZ.push_back(20); // Ca
    theZ.push_back(26); // Fe
    theZ.push_back(29); // Cu
@@ -499,8 +540,8 @@ GetCrossSection( const G4DynamicParticle* aParticle,
 	 G4double tuning = 1.;
    using namespace std;
    G4bool ok = false;
-   if(aParticle->GetDefinition() == G4PionMinus::PionMinus()) ok=true;
-   if(aParticle->GetDefinition() == G4PionPlus::PionPlus())   ok=true;
+   if(aParticle->GetDefinition() == G4Proton::Proton()) ok=true;
+   if(aParticle->GetDefinition() == G4Neutron::Neutron())   ok=true;
    if(!ok) 
    {
      throw G4HadronicException(__FILE__, __LINE__,
@@ -525,7 +566,8 @@ GetCrossSection( const G4DynamicParticle* aParticle,
    }
    G4int Z1, Z2;
    G4double x1, x2;
-   if(charge<0)
+
+   if( charge < 0 )
    {
      if(theZ[it]==Z)
      {
@@ -539,7 +581,9 @@ GetCrossSection( const G4DynamicParticle* aParticle,
        Z1 = theZ[it-1];
        x2 = thePimData[it]->ReactionXSection(kineticEnergy);
        Z2 = theZ[it];
+
        result = Interpolate(Z1, Z2, Z, x1, x2);
+
        debug.push_back("D2 ");
        debug.push_back(x1);
        debug.push_back(x2);
@@ -550,10 +594,11 @@ GetCrossSection( const G4DynamicParticle* aParticle,
    }
    else
    {
-     if(theZ[it]==Z)
+     if( theZ[it] == Z )
      {
                               // at high energies, when no data for pi+, use pi- 
        std::vector<G4PiData *> * theData = &thePimData;
+
        if(thePipData[it]->AppliesTo(kineticEnergy))
        {
          theData = &thePipData;
@@ -564,7 +609,8 @@ GetCrossSection( const G4DynamicParticle* aParticle,
      }
      else
      {
-       std::vector<G4PiData *> * theLData = &thePimData;
+       std::vector<G4PiData*>* theLData = &thePimData;
+
        if(thePipData[it-1]->AppliesTo(kineticEnergy))
        {
          theLData = &thePipData;

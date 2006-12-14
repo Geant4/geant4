@@ -72,7 +72,7 @@ static const G4double e1[44];
 
 static const G4double he_m_t[44];
 static const G4double he_m_in[44];
-static const G4double he_t_in[44];
+static const G4double he_p_in[44];
 
 static const G4double be_m_t[44];
 static const G4double be_m_in[44];
@@ -162,9 +162,9 @@ static const G4double u_p_in[46];
 
 // vectors for treatment
 
-std::vector<G4int> theZ;
-std::vector<G4PiData *> thePipData;
-std::vector<G4PiData *> thePimData;
+std::vector< G4int >     theZ;
+std::vector< G4PiData* > thePipData;
+std::vector< G4PiData* > thePimData;
 
 };
 
