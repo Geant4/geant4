@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.85 2006-11-20 16:29:38 gcosmo Exp $
+# $Id: GNUmakefile,v 1.86 2006-12-14 10:39:45 gcosmo Exp $
 # -----------------------------------------------------------------
 # "gmake" makes default libraries for each subdomain.
 # "gmake global" makes global libraries for each subdomain.
@@ -34,18 +34,21 @@ G4LIBDIR := $(G4LIB)/$(G4SYSTEM)
 G4TMPDIR := $(G4TMP)/$(G4SYSTEM)
 unique := $(shell echo $$$$)
 
-.PHONY: all glob global kernel_global kernel libmap dll win32def includes clean_libs clean clean_lists clean_all
+.PHONY: all glob global kernel_global kernel liblist libmap dll win32def includes clean_libs clean clean_lists clean_all
 
 all: banner kernel
 ifdef G4LIB_USE_G3TOG4
 	@for dir in $(SUBDIR4); do (cd $$dir && $(MAKE)); done;:
 endif
 	@$(MAKE) libmap
+	@$(ECHO) "Libraries installation completed !"
 
 glob global: banner kernel_global
 ifdef G4LIB_USE_G3TOG4
 	@for dir in $(SUBDIR4); do (cd $$dir && $(MAKE)); done;:
 endif
+	@$(MAKE) liblist
+	@$(ECHO) "Libraries installation completed !"
 
 fpe_debug: banner kernel
 	@$(ECHO) Activating FPE debug build ...
@@ -53,6 +56,7 @@ ifneq (,$(findstring Linux-g++,$(G4SYSTEM)))
 	@rm -f $(G4TMPDIR)/G4run/G4RunManagerKernel.*
 	@cd $(G4INSTALL)/source/run; $(MAKE) G4FPE_DEBUG=1;
 	@cd $(G4INSTALL)/source; $(MAKE) libmap;
+	@$(ECHO) "Libraries installation completed !"
 else
 	@$(ECHO) "Build of FPE check is only supported on Linux platforms with gcc !"
 	@$(ECHO) "The system you have currently selected is $(G4SYSTEM)."
@@ -69,9 +73,8 @@ kernel:
 	@for dir in $(SUBDIR2); do (cd $$dir && $(MAKE)); done;:
 	@for dir in $(SUBDIR3); do (cd $$dir && $(MAKE)); done;:
 
-libmap: $(G4LIBDIR)/liblist
-	@$(ECHO) "libmap stage:"
-	@$(ECHO) "Searching for GNUmakefiles and sorting ..."
+libmap: liblist
+	@$(ECHO) "Libmap stage. Searching for GNUmakefiles and sorting ..."
 	@find . \
 	  -name GNUmakefile -exec $(GREP) -l '^ *name *:=' {} \; \
 	  | sort \
@@ -101,6 +104,8 @@ libmap: $(G4LIBDIR)/liblist
 	@rm -f /tmp/G4_all_lib_makefiles.$(unique);
 	@rm -f /tmp/G4_granlib_makefiles.$(unique);
 	@rm -f /tmp/G4libname.map.starter.$(unique);
+
+liblist: $(G4LIBDIR)/liblist
 
 $(G4LIBDIR)/liblist: $(G4INSTALL)/config/liblist.c
 	@$(ECHO) "Building library management utility liblist ..."
