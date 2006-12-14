@@ -31,7 +31,7 @@ processes/electromagnetic/standard               emstand-V08-01-16
 
 processes/hadronic
 ------------------
-- models/chiral_inv_phase_space/body (hadr-chips-body-V08-01-07)
+- models/chiral_inv_phase_space/body (hadr-chips-body-V08-01-08)
   o Important bug fix in G4QIsotope: fixed double subtraction of abundance
     in 'MeanCrossSection' calculation, which caused negative abundance...
   o Fixed some cases of generation of NaN in computation of cos(theta).
@@ -56,6 +56,12 @@ processes/GNUmakefile                            processes-gmk-V08-01-02
 ---------------------
 - Added missing extension to 'digits_hits' library name for GLOBLIBS
   definition. Required to allow for build of DLLs on Windows. 
+
+source/GNUmakefile                               source-gmk-V08-01-04
+------------------
+- Forced creation of 'liblist' application also when installing global
+  libraries. Required to address problem report #897.
+- Improved printout.
 
 run                                              run-V08-01-06
 ---
