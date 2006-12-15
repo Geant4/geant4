@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.94 2006-12-13 18:06:58 stesting Exp $
+# $Id: Configure,v 1.95 2006-12-15 15:19:44 stesting Exp $
 #
-# Generated on Wed Dec 13 18:53:33 CET 2006 [metaconfig 3.0 PL70]
+# Generated on Fri Dec 15 16:15:48 CET 2006 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -1713,8 +1713,9 @@ case  "$g4compiler" in
 	esac
 esac
 
-###if [ X$g4build = Xyes ] ; then
 if [ X$g4system = X ] ; then
+
+if [ X$g4build = Xyes ] ; then
 while test 1 = 1  ; do
 
 g4message=`cat << EOM
@@ -1845,7 +1846,7 @@ EOM
 		;;
 	esac
 done
-###fi
+fi
 
 #
 # Ask about compiler used. 
@@ -2015,10 +2016,18 @@ fi
 	
 # Global libs
 
-	LDLIBS_1=`grep 'LDLIBS_FINAL :=' $G4LIB/$G4SYSTEM/GNUmakefile.db | $sed  -e 's/^\(.*\):=//'`
-	LDLIBS_2=`echo $LDLIBS_1 | $sed  -e 's/^\(.*\)-lMarker//'`
+###	LDLIBS_1=`grep 'LDLIBS_FINAL :=' $G4LIB/$G4SYSTEM/GNUmakefile.db | $sed  -e 's/^\(.*\):=//'`
+###	LDLIBS_2=`echo $LDLIBS_1 | $sed  -e 's/^\(.*\)-lMarker//'`
+###	echo "$LDLIBS_2 $c"
 
-	echo "$LDLIBS_2 $c"
+	LIBLIST_LIST=`$G4LIB/$G4SYSTEM/liblist -m $G4LIB/$G4SYSTEM < $G4LIB/$G4SYSTEM/libname.map`
+
+	LDLIBS3=`grep 'LDLIBS3 :=' $G4LIB/$G4SYSTEM/GNUmakefile.db | $sed  -e 's/^\(.*\):=//'`
+	LDLIBS4=`grep 'LDLIBS4 :=' $G4LIB/$G4SYSTEM/GNUmakefile.db | $sed  -e 's/^\(.*\):=//'`
+
+	LDLIBS=$LIBLIST_LIST $LDLIBS3 $LDLIBS4	
+
+	echo $LDLIBS	
 
 #	echo "-L$G4WORKDIR/lib/$G4SYSTEM -lG4persistency -lG4readout -lG4run -lG4event -lG4tracking -lG4parmodels -lG4processes -lG4digits+hits -lG4track -lG4particles -lG4geometry -lG4materials -lG4graphics_reps -lG4intercoms -lG4global $c"
 
