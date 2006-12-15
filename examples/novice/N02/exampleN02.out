@@ -2430,7 +2430,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
     1   1.76 mm    642 um  -1.67 m      14 keV  2.96 keV   2.6 mm    2.6 mm      Tracker       eIoni
     2   3.39 mm    -66 um  -1.67 m    7.36 keV   6.6 keV  2.22 mm   4.82 mm      Tracker       eIoni
     3   4.17 mm    298 um  -1.67 m    1.17 keV  6.19 keV  1.27 mm   6.09 mm      Tracker       eIoni
-    4   4.15 mm    321 um  -1.67 m       0 eV   1.17 keV  71.8 um   6.16 mm      Tracker       eIoni
+    4   4.16 mm    312 um  -1.67 m       0 eV   1.17 keV  71.8 um   6.16 mm      Tracker       eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 3,   Parent ID = 1

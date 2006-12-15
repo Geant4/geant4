@@ -194,8 +194,8 @@ G4GlobalFastSimulationManager::GetFlavoredWorldForThis(...): DEPRECATING, will b
 
 ******************************************
 Internal Real Elapsed Time is: 0.1
-Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.08
+Internal System Elapsed Time: 0.01
+Internal GetUserElapsed Time: 0.06
 ******************************************
  ------ Tst34EventAction::End of event nr. 0  -----
   5335 hits are stored in Tst34HitsCollection 
@@ -208,9 +208,9 @@ G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next ma
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.07
+Internal Real Elapsed Time is: 0.08
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.07
+Internal GetUserElapsed Time: 0.08
 ******************************************
  ------ Tst34EventAction::End of event nr. 1  -----
   5331 hits are stored in Tst34HitsCollection 
@@ -322,7 +322,7 @@ Internal GetUserElapsed Time: 0.07
 number of events = 10
 
 ******************************************
-Total Real Elapsed Time is: 3.87
+Total Real Elapsed Time is: 3.82
 Total System Elapsed Time: 0.05
-Total GetUserElapsed Time: 3.47
+Total GetUserElapsed Time: 3.49
 ******************************************

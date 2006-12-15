@@ -208,7 +208,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.05s Real=0.09s Sys=0s
+  User=0.02s Real=0.1s Sys=0.01s
 /vis/show/view
     1000.000           1           0     Na24[0.0]
          259           1   6.089e+04     e-
@@ -257,7 +257,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.02s Real=0.03s Sys=0.01s
+  User=0.03s Real=0.03s Sys=0s
 /vis/show/view
        1e+03           1           0     Ne24[0.0]
     1.17e+03           1       27.87     e-
@@ -369,7 +369,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.03s Real=0.03s Sys=0s
+  User=0.01s Real=0.02s Sys=0.01s
 /vis/show/view
        1e+03           1           0     Al24[0.0]
     1.22e+03           1       2.185     e+
@@ -471,7 +471,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.04s Sys=0.01s
+  User=0.02s Real=0.02s Sys=0s
 /vis/show/view
        1e+03           1           0     Cr46[0.0]
      4.2e+03           1      0.5104     e+
@@ -525,7 +525,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.02s Real=0.07s Sys=0.01s
+  User=0s Real=0.01s Sys=0s
 /vis/show/view
        1e+03           1           0     Po215[0.0]
     7.39e+03           1   0.0004343     alpha

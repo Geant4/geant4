@@ -240,7 +240,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=20.19s Real=21.48s Sys=1.25s
+  User=20.27s Real=21.37s Sys=1.04s
 ############################################################
  Run Summary - Number of events : 10
 ############################################################
@@ -248,19 +248,19 @@ Region : Calor-A
  Production thresholds :
     gamma 1 mm     e- 1 mm     e+ 1 mm 
  Energy deposition in an event :
-    Absorber 3.8363811 GeV      Gap 448.65506 MeV
+    Absorber 3.8384542 GeV      Gap 446.58195 MeV
  Number of secondaries in an event :
-    gamma in Absorber 1483.4    in Gap 86.9
-    e-    in Absorber 2420.5    in Gap 236.6
-    e+    in Absorber 140.6    in Gap 4.2
+    gamma in Absorber 1484.8    in Gap 86.2
+    e-    in Absorber 2420.3    in Gap 235.7
+    e+    in Absorber 141.3    in Gap 4
  Minimum kinetic energy of generated secondaries :
     gamma in Absorber 100.54989 keV    in Gap 6.1865176 keV
     e-    in Absorber 33.740565 eV     in Gap 47.12953 eV 
     e+    in Absorber 3.1474981 keV    in Gap 39.105383 keV
  Total track length of e+/e- in an event :
-    Absorber 1.6951192 m        Gap 1.1977673 m  
+    Absorber 1.6964143 m        Gap 1.1868795 m  
  Total number of steps of e+/e- in an event :
-    Absorber 5268.9      Gap 955.1
+    Absorber 5268.2      Gap 946.4
 ############################################################
 Region : Calor-B
  Production thresholds :
@@ -300,20 +300,20 @@ Region : Calor-C
 ############################################################
 
 Region <DefaultRegionForTheWorld>
- All particles : User=0.01  Real=0.02  Sys=0
+ All particles : User=0  Real=0  Sys=0
  e+ / e-       : User=0  Real=0  Sys=0
 
 Region <Calor-A>
- All particles : User=9.19  Real=9.94  Sys=0.7
- e+ / e-       : User=6.03  Real=6.65  Sys=0.6
+ All particles : User=9.25  Real=9.87  Sys=0.6
+ e+ / e-       : User=6.06  Real=6.6  Sys=0.52
 
 Region <Calor-B>
- All particles : User=3.85  Real=4.19  Sys=0.34
- e+ / e-       : User=2.3  Real=2.59  Sys=0.29
+ All particles : User=3.55  Real=3.82  Sys=0.27
+ e+ / e-       : User=2.22  Real=2.45  Sys=0.24
 
 Region <Calor-C>
- All particles : User=1.17  Real=1.29  Sys=0.1
- e+ / e-       : User=0.68  Real=0.76  Sys=0.08
+ All particles : User=1.18  Real=1.29  Sys=0.1
+ e+ / e-       : User=0.69  Real=0.79  Sys=0.1
 
 /run/dumpCouples
 
@@ -571,7 +571,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=28.76s Real=30.24s Sys=1.48s
+  User=18.41s Real=19.44s Sys=1.02s
 ############################################################
  Run Summary - Number of events : 10
 ############################################################
@@ -579,72 +579,72 @@ Region : Calor-A
  Production thresholds :
     gamma 200 um     e- 200 um     e+ 200 um 
  Energy deposition in an event :
-    Absorber 2.928473 GeV      Gap 361.03421 MeV
+    Absorber 2.4047704 GeV      Gap 314.04883 MeV
  Number of secondaries in an event :
-    gamma in Absorber 1192.6    in Gap 58.2
-    e-    in Absorber 1998.6    in Gap 241.6
-    e+    in Absorber 89.1    in Gap 2.6
+    gamma in Absorber 782.1    in Gap 43.7
+    e-    in Absorber 1355.9    in Gap 186.4
+    e+    in Absorber 50.4    in Gap 2
  Minimum kinetic energy of generated secondaries :
-    gamma in Absorber 47.193327 keV    in Gap 2.8006811 keV
-    e-    in Absorber 8.3530708 eV     in Gap 18.277754 eV 
-    e+    in Absorber 11.80229 keV    in Gap 380.16877 keV
+    gamma in Absorber 47.204127 keV    in Gap 2.8058691 keV
+    e-    in Absorber 2.7244269 eV     in Gap 22.9818 eV 
+    e+    in Absorber 21.151548 keV    in Gap 294.80954 keV
  Total track length of e+/e- in an event :
-    Absorber 1.1523269 m        Gap 80.642283 cm 
+    Absorber 77.67535 cm       Gap 57.327784 cm 
  Total number of steps of e+/e- in an event :
-    Absorber 4213.5      Gap 831.9
+    Absorber 2854.5      Gap 626.8
 ############################################################
 Region : Calor-B
  Production thresholds :
     gamma 2 mm     e- 2 mm     e+ 2 mm 
  Energy deposition in an event :
-    Absorber 2.8137441 GeV      Gap 345.84236 MeV
+    Absorber 2.1206417 GeV      Gap 282.55165 MeV
  Number of secondaries in an event :
-    gamma in Absorber 781.2    in Gap 45
-    e-    in Absorber 1304.2    in Gap 127.2
-    e+    in Absorber 74.3    in Gap 2.2
+    gamma in Absorber 376.5    in Gap 23.1
+    e-    in Absorber 637.9    in Gap 70.2
+    e+    in Absorber 32.8    in Gap 1.1
  Minimum kinetic energy of generated secondaries :
-    gamma in Absorber 120.63112 keV    in Gap 8.6932955 keV
-    e-    in Absorber 4.355142 eV     in Gap 15.574002 eV 
-    e+    in Absorber 16.877218 keV    in Gap 694.77 keV
+    gamma in Absorber 120.60059 keV    in Gap 9.1372702 keV
+    e-    in Absorber 86.401329 eV     in Gap 60.571056 eV 
+    e+    in Absorber 7.1749592 keV    in Gap 858.26597 keV
  Total track length of e+/e- in an event :
-    Absorber 93.885885 cm       Gap 66.952018 cm 
+    Absorber 46.282422 cm       Gap 36.587042 cm 
  Total number of steps of e+/e- in an event :
-    Absorber 2816.7      Gap 546.9
+    Absorber 1387.2      Gap 308.4
 ############################################################
 Region : Calor-C
  Production thresholds :
     gamma 2 cm     e- 2 cm     e+ 2 cm 
  Energy deposition in an event :
-    Absorber 4.0583765 GeV      Gap 497.68017 MeV
+    Absorber 3.3453316 GeV      Gap 375.99704 MeV
  Number of secondaries in an event :
-    gamma in Absorber 958.8    in Gap 78
-    e-    in Absorber 1739.3    in Gap 175.4
-    e+    in Absorber 149.5    in Gap 5.9
+    gamma in Absorber 677    in Gap 40.6
+    e-    in Absorber 1187.3    in Gap 110.9
+    e+    in Absorber 103.8    in Gap 2.5
  Minimum kinetic energy of generated secondaries :
-    gamma in Absorber 280.18079 keV    in Gap 27.158336 keV
-    e-    in Absorber 16.751409 eV     in Gap 92.79394 eV 
-    e+    in Absorber 4.0599321 keV    in Gap 134.48798 keV
+    gamma in Absorber 287.46674 keV    in Gap 27.899283 keV
+    e-    in Absorber 71.332315 eV     in Gap 163.93948 eV 
+    e+    in Absorber 37.080121 keV    in Gap 58.260605 keV
  Total track length of e+/e- in an event :
-    Absorber 1.5918062 m        Gap 1.257956 m  
+    Absorber 1.1168628 m        Gap 67.9228 cm 
  Total number of steps of e+/e- in an event :
-    Absorber 4052.7      Gap 834.2
+    Absorber 2709.3      Gap 513.2
 ############################################################
 
 Region <DefaultRegionForTheWorld>
- All particles : User=0.02  Real=0.02  Sys=0
+ All particles : User=0  Real=0  Sys=0
  e+ / e-       : User=0  Real=0  Sys=0
 
 Region <Calor-A>
- All particles : User=7.56  Real=7.95  Sys=0.4
- e+ / e-       : User=4.99  Real=5.35  Sys=0.36
+ All particles : User=5.39  Real=5.69  Sys=0.3
+ e+ / e-       : User=3.47  Real=3.72  Sys=0.25
 
 Region <Calor-B>
- All particles : User=5.17  Real=5.52  Sys=0.36
- e+ / e-       : User=3.4  Real=3.76  Sys=0.35
+ All particles : User=2.89  Real=3.09  Sys=0.19
+ e+ / e-       : User=1.66  Real=1.84  Sys=0.18
 
 Region <Calor-C>
- All particles : User=7.32  Real=7.93  Sys=0.61
- e+ / e-       : User=4.28  Real=4.79  Sys=0.51
+ All particles : User=5.22  Real=5.7  Sys=0.48
+ e+ / e-       : User=3.24  Real=3.63  Sys=0.37
 
 /run/dumpCouples
 
@@ -931,7 +931,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=8.38s Real=8.81s Sys=0.43s
+  User=5.82s Real=6.05s Sys=0.22s
 ############################################################
  Run Summary - Number of events : 10
 ############################################################
@@ -939,55 +939,55 @@ Region : Calor-A
  Production thresholds :
     gamma 200 um     e- 200 um     e+ 200 um 
  Energy deposition in an event :
-    Absorber 729.16311 MeV      Gap 308.21789 MeV
+    Absorber 617.08743 MeV      Gap 272.69443 MeV
  Number of secondaries in an event :
-    gamma in Absorber 92.8    in Gap 24.3
-    e-    in Absorber 533.7    in Gap 240.2
-    e+    in Absorber 4.3    in Gap 1
+    gamma in Absorber 56.8    in Gap 17.5
+    e-    in Absorber 357.7    in Gap 177.4
+    e+    in Absorber 1.6    in Gap 0.3
  Minimum kinetic energy of generated secondaries :
-    gamma in Absorber 3.2151191 keV    in Gap 1.5125019 keV
-    e-    in Absorber 5.6009811 eV     in Gap 0.80368433 eV 
-    e+    in Absorber 508.59436 keV    in Gap 798.86003 keV
+    gamma in Absorber 3.3237433 keV    in Gap 1.5991662 keV
+    e-    in Absorber 7.5677569 eV     in Gap 44.426358 eV 
+    e+    in Absorber 709.83974 keV    in Gap 2.0602411 MeV
  Total track length of e+/e- in an event :
-    Absorber 79.251595 cm       Gap 69.32994 cm 
+    Absorber 51.656934 cm       Gap 50.829306 cm 
  Total number of steps of e+/e- in an event :
-    Absorber 1097.1      Gap 565
+    Absorber 771.4      Gap 435.7
 ############################################################
 Region : Calor-B
  Production thresholds :
     gamma 2 mm     e- 2 mm     e+ 2 mm 
  Energy deposition in an event :
-    Absorber 596.47684 MeV      Gap 262.67314 MeV
+    Absorber 588.06477 MeV      Gap 258.33325 MeV
  Number of secondaries in an event :
-    gamma in Absorber 40.2    in Gap 10.8
-    e-    in Absorber 222.3    in Gap 104.4
-    e+    in Absorber 2    in Gap 0.3
+    gamma in Absorber 38.2    in Gap 11.2
+    e-    in Absorber 208.9    in Gap 90.6
+    e+    in Absorber 1.5    in Gap 0.8
  Minimum kinetic energy of generated secondaries :
-    gamma in Absorber 9.7562445 keV    in Gap 4.0660373 keV
-    e-    in Absorber 17.756642 eV     in Gap 42.220556 eV 
-    e+    in Absorber 73.604657 keV    in Gap 273.15793 keV
+    gamma in Absorber 9.7055776 keV    in Gap 3.9134847 keV
+    e-    in Absorber 14.957893 eV     in Gap 2.5652342 eV 
+    e+    in Absorber 475.28653 keV    in Gap 1.6926927 MeV
  Total track length of e+/e- in an event :
-    Absorber 39.957289 cm       Gap 40.348138 cm 
+    Absorber 38.000474 cm       Gap 37.948451 cm 
  Total number of steps of e+/e- in an event :
-    Absorber 472.5      Gap 279
+    Absorber 448.7      Gap 247.7
 ############################################################
 Region : Calor-C
  Production thresholds :
     gamma 2 cm     e- 2 cm     e+ 2 cm 
  Energy deposition in an event :
-    Absorber 717.23699 MeV      Gap 305.38601 MeV
+    Absorber 549.48066 MeV      Gap 244.81139 MeV
  Number of secondaries in an event :
-    gamma in Absorber 56.4    in Gap 15.5
-    e-    in Absorber 319.3    in Gap 123.6
-    e+    in Absorber 3.7    in Gap 0.5
+    gamma in Absorber 16.7    in Gap 5.5
+    e-    in Absorber 100.9    in Gap 42.4
+    e+    in Absorber 1.4    in Gap 0.1
  Minimum kinetic energy of generated secondaries :
-    gamma in Absorber 28.395803 keV    in Gap 10.352552 keV
-    e-    in Absorber 4.509271 eV     in Gap 6.593571 eV 
-    e+    in Absorber 346.80049 keV    in Gap 1.6003888 MeV
+    gamma in Absorber 29.162722 keV    in Gap 10.353238 keV
+    e-    in Absorber 24.563989 eV     in Gap 109.69884 eV 
+    e+    in Absorber 264.76828 keV    in Gap 5.6290779 MeV
  Total track length of e+/e- in an event :
-    Absorber 53.647413 cm       Gap 51.481497 cm 
+    Absorber 18.066616 cm       Gap 20.632062 cm 
  Total number of steps of e+/e- in an event :
-    Absorber 570.3      Gap 275.1
+    Absorber 206.8      Gap 113.2
 ############################################################
 
 Region <DefaultRegionForTheWorld>
@@ -995,16 +995,16 @@ Region <DefaultRegionForTheWorld>
  e+ / e-       : User=0  Real=0  Sys=0
 
 Region <Calor-A>
- All particles : User=2.71  Real=2.92  Sys=0.21
- e+ / e-       : User=1.6  Real=1.78  Sys=0.18
+ All particles : User=2.01  Real=2.11  Sys=0.1
+ e+ / e-       : User=1.01  Real=1.07  Sys=0.06
 
 Region <Calor-B>
- All particles : User=1.42  Real=1.48  Sys=0.06
- e+ / e-       : User=0.59  Real=0.66  Sys=0.06
+ All particles : User=1.38  Real=1.46  Sys=0.07
+ e+ / e-       : User=0.69  Real=0.75  Sys=0.04
 
 Region <Calor-C>
- All particles : User=1.91  Real=2.02  Sys=0.1
- e+ / e-       : User=0.8  Real=0.85  Sys=0.05
+ All particles : User=0.83  Real=0.86  Sys=0.03
+ e+ / e-       : User=0.31  Real=0.32  Sys=0.01
 
 /run/dumpCouples
 
@@ -1322,7 +1322,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=66.83s Real=69.86s Sys=3.01s
+  User=14.2s Real=14.9s Sys=0.7s
 ############################################################
  Run Summary - Number of events : 10
 ############################################################
@@ -1330,72 +1330,72 @@ Region : Calor-A
  Production thresholds :
     gamma 10 um     e- 10 um     e+ 10 um 
  Energy deposition in an event :
-    Absorber 2.6170003 GeV      Gap 1.1512377 GeV
+    Absorber 520.59218 MeV      Gap 228.88808 MeV
  Number of secondaries in an event :
-    gamma in Absorber 826.3    in Gap 216.8
-    e-    in Absorber 6861    in Gap 10454.4
-    e+    in Absorber 40.2    in Gap 10
+    gamma in Absorber 39.7    in Gap 8.9
+    e-    in Absorber 874.3    in Gap 1857.1
+    e+    in Absorber 0.6    in Gap 0.4
  Minimum kinetic energy of generated secondaries :
-    gamma in Absorber 1.0005485 keV    in Gap 1.0030637 keV
-    e-    in Absorber 0.3304735 eV     in Gap 0.18639407 eV 
-    e+    in Absorber 249.62481 keV    in Gap 136.72873 keV
+    gamma in Absorber 1.0053994 keV    in Gap 1.0508429 keV
+    e-    in Absorber 27.406968 eV     in Gap 100.63758 eV 
+    e+    in Absorber 432.56627 keV    in Gap 382.58113 keV
  Total track length of e+/e- in an event :
-    Absorber 5.5560442 m        Gap 5.3904579 m  
+    Absorber 30.380916 cm       Gap 28.461402 cm 
  Total number of steps of e+/e- in an event :
-    Absorber 12819.5      Gap 19802.8
+    Absorber 1267.2      Gap 2503.8
 ############################################################
 Region : Calor-B
  Production thresholds :
     gamma 100 um     e- 100 um     e+ 100 um 
  Energy deposition in an event :
-    Absorber 590.86786 MeV      Gap 266.52857 MeV
+    Absorber 629.39306 MeV      Gap 272.17226 MeV
  Number of secondaries in an event :
-    gamma in Absorber 54.8    in Gap 17.2
-    e-    in Absorber 425.3    in Gap 223.5
-    e+    in Absorber 2.1    in Gap 0.2
+    gamma in Absorber 70.8    in Gap 17
+    e-    in Absorber 479.1    in Gap 239.6
+    e+    in Absorber 2.7    in Gap 0.3
  Minimum kinetic energy of generated secondaries :
-    gamma in Absorber 2.3249644 keV    in Gap 1.136411 keV
-    e-    in Absorber 26.575853 eV     in Gap 32.649175 eV 
-    e+    in Absorber 848.67036 keV    in Gap 944.47807 keV
+    gamma in Absorber 2.3519112 keV    in Gap 1.1864175 keV
+    e-    in Absorber 1.6197728 eV     in Gap 34.151089 eV 
+    e+    in Absorber 282.77669 keV    in Gap 1.2252106 MeV
  Total track length of e+/e- in an event :
-    Absorber 46.162631 cm       Gap 47.62222 cm 
+    Absorber 55.906563 cm       Gap 50.581095 cm 
  Total number of steps of e+/e- in an event :
-    Absorber 818.6      Gap 489.5
+    Absorber 940.3      Gap 521
 ############################################################
 Region : Calor-C
  Production thresholds :
     gamma 1 mm     e- 1 mm     e+ 1 mm 
  Energy deposition in an event :
-    Absorber 860.20385 MeV      Gap 370.85417 MeV
+    Absorber 613.58757 MeV      Gap 262.44784 MeV
  Number of secondaries in an event :
-    gamma in Absorber 126    in Gap 32.8
-    e-    in Absorber 585.9    in Gap 245.8
-    e+    in Absorber 6.1    in Gap 1.5
+    gamma in Absorber 46.5    in Gap 12.6
+    e-    in Absorber 257.7    in Gap 112.7
+    e+    in Absorber 1.8    in Gap 0.5
  Minimum kinetic energy of generated secondaries :
-    gamma in Absorber 6.8899156 keV    in Gap 2.9563732 keV
-    e-    in Absorber 1.9922654 eV     in Gap 4.3684396 eV 
-    e+    in Absorber 263.51856 keV    in Gap 132.71227 keV
+    gamma in Absorber 6.9598143 keV    in Gap 2.9306652 keV
+    e-    in Absorber 2.2401748 eV     in Gap 1.2716564 eV 
+    e+    in Absorber 934.95702 keV    in Gap 1.7239285 MeV
  Total track length of e+/e- in an event :
-    Absorber 1.054803 m        Gap 1.0083477 m  
+    Absorber 46.646914 cm       Gap 42.116864 cm 
  Total number of steps of e+/e- in an event :
-    Absorber 1210.5      Gap 633.9
+    Absorber 610.3      Gap 305.9
 ############################################################
 
 Region <DefaultRegionForTheWorld>
- All particles : User=0.01  Real=0.01  Sys=0
+ All particles : User=0  Real=0  Sys=0
  e+ / e-       : User=0  Real=0  Sys=0
 
 Region <Calor-A>
- All particles : User=42.13  Real=44.73  Sys=2.5
- e+ / e-       : User=32.39  Real=34.54  Sys=2.16
+ All particles : User=5.97  Real=6.42  Sys=0.42
+ e+ / e-       : User=3.1  Real=3.24  Sys=0.13
 
 Region <Calor-B>
- All particles : User=2.34  Real=2.45  Sys=0.09
- e+ / e-       : User=1.27  Real=1.33  Sys=0.06
+ All particles : User=2.59  Real=2.69  Sys=0.1
+ e+ / e-       : User=1.46  Real=1.53  Sys=0.07
 
 Region <Calor-C>
- All particles : User=3.44  Real=3.56  Sys=0.1
- e+ / e-       : User=1.73  Real=1.83  Sys=0.09
+ All particles : User=1.67  Real=1.8  Sys=0.12
+ e+ / e-       : User=0.88  Real=0.98  Sys=0.1
 
 /run/dumpCouples
 

@@ -236,7 +236,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=97.05s Real=1092.94s Sys=146.55s
+  User=96.49s Real=352.43s Sys=41.25s
 
  ======================== run summary ======================
 
@@ -266,7 +266,7 @@ Run Summary
  MultipleScattering:
   rms proj angle of transmit primary particle = 0.02437 mrad (central part only)
   computed theta0 (Highland formula)          = 0.02627 mrad
-  central part defined as +- 0.0788 mrad;   Tail ratio = 1.296 %
+  central part defined as +- 0.0788 mrad;   Tail ratio = 1.297 %
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0

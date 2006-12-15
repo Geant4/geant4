@@ -926,7 +926,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.21s Real=0.29s Sys=0.06s
+  User=0.2s Real=0.33s Sys=0.11s
 #
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.

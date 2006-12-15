@@ -156,7 +156,7 @@ Lorentz Factor	XTR photon number
 8.085e+04	3.149
 9.283e+04	3.149
 
-total time for build X-ray TR energy loss tables = 0.45 s
+total time for build X-ray TR energy loss tables = 0.44 s
 
 SynRad:  Incoherent Synchrotron Radiation
       good description for long magnets at all energies
@@ -230,7 +230,7 @@ Lorentz Factor	XTR photon number
 8.085e+04	3.149
 9.283e+04	3.149
 
-total time for build X-ray TR energy loss tables = 0.45 s
+total time for build X-ray TR energy loss tables = 0.44 s
 
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
@@ -338,7 +338,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=28.62s Real=32.04s Sys=3.36s
+  User=28.68s Real=32.3s Sys=3.34s
  ================== run summary =====================
  end of Run TotNbofEvents = 1000
     mean charged track length   in absorber=114.629 +- 2.11901  mm  

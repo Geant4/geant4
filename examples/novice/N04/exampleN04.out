@@ -249,7 +249,7 @@ Stage 1->2 : 0 isolated muon found.
 Run terminated.
 Run Summary
   Number of events processed : 3
-  User=1.01s Real=1.17s Sys=0.04s
+  User=1.04s Real=1.23s Sys=0.02s
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.

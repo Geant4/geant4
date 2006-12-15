@@ -284,28 +284,28 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=49.44s Real=51.58s Sys=2.1s
+  User=49.14s Real=51.92s Sys=2.39s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started
 ========================================================
 Number of events             100
-Average number of e-         1324
-Average number of gamma      701.1
-Average number of e+         48.65
-Average number of steps      4463
-Edep 1x1 =                   0.8225 +- 0.003225  res=  3.92 %
-Edep 3x3 =                   0.955 +- 0.001467  res=  1.536 %
-Edep 5x5 =                   0.98 +- 0.0009535  res=  0.9729 %
+Average number of e-         1326
+Average number of gamma      702.8
+Average number of e+         48.58
+Average number of steps      4459
+Edep 1x1 =                   0.8217 +- 0.003201  res=  3.896 %
+Edep 3x3 =                   0.9541 +- 0.001265  res=  1.326 %
+Edep 5x5 =                   0.979 +- 0.0008846  res=  0.9036 %
 ========================================================
 
 
 <<<<<ACCEPTANCE>>>>> 100 events for Crystal Calorimeter
-Edep1x1: 0.8225  delEdep1x1= -0.003495 nrms= -0.9958
-Erms1x1: 0.03225  delErms1x1= -0.002854 nrms= -0.8132
-Edep3x3: 0.955  delEdep3x3= -0.001363 nrms= -0.8519
-Erms3x3: 0.01467  delErms3x3= -0.00133 nrms= -0.831
-Edep5x5: 0.98  delEdep5x5= 0.001008 nrms= 0.847
-Erms5x5: 0.009535  delErms5x5= -0.002365 nrms= -1.988
+Edep1x1: 0.8217  delEdep1x1= -0.004331 nrms= -1.234
+Erms1x1: 0.03201  delErms1x1= -0.003085 nrms= -0.879
+Edep3x3: 0.9541  delEdep3x3= -0.002289 nrms= -1.431
+Erms3x3: 0.01265  delErms3x3= -0.003348 nrms= -2.093
+Edep5x5: 0.979  delEdep5x5= -3.317e-06 nrms= -0.002788
+Erms5x5: 0.008846  delErms5x5= -0.003054 nrms= -2.566
 <<<<<END>>>>>   IS ACCEPTED
 
 #

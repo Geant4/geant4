@@ -296,7 +296,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=181.25s Real=245.21s Sys=25.36s
+  User=185.08s Real=285.56s Sys=25.33s
 
  The run consists of 10000 proton of 160 MeV through 20 cm  of Water (density: 1 g/cm3 )
 
@@ -357,25 +357,25 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=61.23s Real=74.74s Sys=7.64s
+  User=63.73s Real=91.39s Sys=6.83s
 
  The run consists of 1000 C12[0.0] of 3.5 GeV through 20 cm  of Water (density: 1 g/cm3 )
 
- projected Range= 16.4689 cm    rms= 472.029 um 
+ projected Range= 16.4657 cm    rms= 464.552 um 
 
 ---------------------------------------------------------
  Cumulated Doses : 	Edep      	Edep/Ebeam 	Dose
- tally 0: 	 	11.085 GeV	0.316715 % 	0.000222003 Gy
- tally 1: 	 	12.5636 GeV	0.35896 % 	0.000251614 Gy
- tally 2: 	 	14.7713 GeV	0.422037 % 	0.000295828 Gy
- tally 3: 	 	20.618 GeV	0.589085 % 	0.00041292 Gy
+ tally 0: 	 	11.0529 GeV	0.315798 % 	0.00022136 Gy
+ tally 1: 	 	13.0458 GeV	0.372738 % 	0.000261272 Gy
+ tally 2: 	 	15.891 GeV	0.454029 % 	0.000318253 Gy
+ tally 3: 	 	24.2011 GeV	0.69146 % 	0.000484681 Gy
 
 ---------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 211989056, 1865325430
+ Current couple of seeds = 30782651, 380120556
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

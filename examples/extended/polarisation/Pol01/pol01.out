@@ -129,39 +129,39 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=6.25s Real=6.4s Sys=0.13s
+  User=6.42s Real=6.53s Sys=0.07s
 
  The run consists of 10000 gamma of 10 MeV through 1.75 mm  of G4_Fe (density: 7.874 g/cm3 )
 
 --------- Ranlux engine status ---------
  Initial seed = 9876
- float_seed_table[] = 0.943677 0.627389 0.386383 0.142922 0.862092 0.267254 0.291091 0.630625 0.276717 0.0137799 0.814528 0.0688981 0.850223 0.562046 0.531162 0.543865 0.237133 0.0673283 0.172081 0.739343 0.941148 0.540548 0.737632 0.444263 
- i_lag = 2, j_lag = 12
- carry = 0, count24 = 15
+ float_seed_table[] = 0.549714 0.410043 0.780886 0.64282 0.79192 0.70901 0.00266129 0.35078 0.438628 0.375464 0.131737 0.577583 0.387019 0.128477 0.154341 0.67122 0.634085 0.685582 0.89742 0.59932 0.397649 0.493329 0.724233 0.802348 
+ i_lag = 15, j_lag = 1
+ carry = 0, count24 = 7
  luxury = 3 nskip = 199
 ----------------------------------------
 
  Process calls frequency --->
-	Transportation = 31200
-	pol-compt = 268
-	msc = 4631
-	pol-eBrem = 371
-	pol-conv = 224
-	pol-eIoni = 611
-	pol-annihil = 63
-	phot = 166
+	Transportation = 31246
+	pol-compt = 301
+	msc = 4961
+	pol-eBrem = 395
+	pol-conv = 225
+	pol-eIoni = 688
+	pol-annihil = 71
+	phot = 184
  Gamma: 
-Mean Number per Event :1.0093
-Mean Energy :9.5637 MeV +- 1.9395 MeV
-Mean Polarization :-0.96254 +- 0.18778
+Mean Number per Event :1.0112
+Mean Energy :9.5321 MeV +- 2.0004 MeV
+Mean Polarization :-0.9602 +- 0.19308
  Electron: 
-Mean Number per Event :0.0346
-Mean Energy :5.246 MeV +- 2.5576 MeV
-Mean Polarization :-0.71499 +- 0.29655
+Mean Number per Event :0.0357
+Mean Energy :5.3112 MeV +- 2.5499 MeV
+Mean Polarization :-0.72312 +- 0.29742
  Positron: 
-Mean Number per Event :0.0161
-Mean Energy :4.0964 MeV +- 2.0744 MeV
-Mean Polarization :-0.59996 +- 0.31136
+Mean Number per Event :0.0154
+Mean Energy :4.3802 MeV +- 2.1362 MeV
+Mean Polarization :-0.63213 +- 0.30361
 #
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.

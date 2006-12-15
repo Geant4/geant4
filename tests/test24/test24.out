@@ -190,7 +190,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=27s Real=32s Sys=0.17s
+  User=27s Real=29s Sys=0.15s
 #
 # neutron at 10 GeV in U
 #
@@ -222,7 +222,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=20s Real=24s Sys=0.15s
+  User=20s Real=20s Sys=0.18s
 #
 # pi+ at 10 GeV in U
 #
@@ -255,7 +255,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=19s Real=21s Sys=0.07s
+  User=19s Real=20s Sys=0.02s
 #
 # pi- at 10 GeV in U
 #
@@ -296,7 +296,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=23s Real=25s Sys=0.06s
+  User=23s Real=23s Sys=0.01s
 #
 # proton at 10 GeV in Cu
 #
@@ -455,7 +455,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=7.8s Real=12s Sys=0.21s
+  User=7.8s Real=8.3s Sys=0.1s
 #
 # neutron at 10 GeV in Cu
 #
@@ -490,7 +490,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=7.3s Real=8.2s Sys=0.06s
+  User=7.4s Real=7.5s Sys=0.03s
 #
 # pi+ at 10 GeV in Cu
 #
@@ -525,7 +525,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=8.2s Real=8.2s Sys=0.03s
+  User=8.1s Real=8.5s Sys=0.03s
 #
 # pi- at 10 GeV in Cu
 #
@@ -560,7 +560,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=7.9s Real=10s Sys=0.01s
+  User=7.8s Real=8s Sys=0.05s
 #
 # proton at 10 GeV in Si
 #
@@ -724,7 +724,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=2.75s Real=7.54s Sys=0.04s
+  User=2.71s Real=2.89s Sys=0.04s
 #
 # neutron at 10 GeV in Si
 #
@@ -763,7 +763,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=3.41s Real=4.22s Sys=0s
+  User=3.4s Real=3.46s Sys=0s
 #
 # pi+ at 10 GeV in Si
 #
@@ -802,7 +802,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=3.07s Real=5.5s Sys=0.01s
+  User=3.04s Real=3.12s Sys=0.02s
 #
 # pi- at 10 GeV in Si
 #
@@ -841,7 +841,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=4.24s Real=4.3s Sys=0s
+  User=4.22s Real=4.24s Sys=0s
 #
 # proton at 10 GeV in H
 #
