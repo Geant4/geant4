@@ -124,13 +124,18 @@ a recompilation of user applications is anyhow required.
 Some improvements were introduced to multiple scattering, which provide
 improved results for large angle scattering; better particle transport near
 geometry boundaries and less cut dependence for sampling calorimeters
-(see details in Physics Reference Manual). The expected change of response
-for calorimeters is less than 1%. A new class <TT>G4hMultipleScattering</TT>
-has been created; this class uses the same multiple scattering model but
-adopts a different initialization aimed to provide faster simulation of
-hadron transport.<BR>
+(see details in Physics Reference Manual).<BR>
+A new class <TT>G4hMultipleScattering</TT> has been created to provide faster
+simulation of hadron transport. This class uses the same multiple scattering
+model configured to reduce step limitation. It is used for hadrons and ions
+in most physics lists.<BR>
 A new module polarization is introduced for simulation of circular polarized
-beams of <TT>e+-</TT> and <TT>gamma</TT>.
+beams of <TT>e+-</TT> and <TT>gamma</TT>.<BR>
+The change in response of calorimeters, due to the revision of the
+multiple scattering process (in its default configuration) is expected
+to be less than 1%. Larger differences are seen in the revised
+configuration, which does not apply most step limitations for electons and
+that is used in the QGSP_EMV physics list.
 
 <P> </P>
 <B>Hadronic physics</B>
