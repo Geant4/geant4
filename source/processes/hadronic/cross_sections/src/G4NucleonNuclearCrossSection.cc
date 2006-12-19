@@ -445,10 +445,12 @@ G4NucleonNuclearCrossSection::G4NucleonNuclearCrossSection()
 {
   // He, Be, C
 
-   thePimData.push_back(new G4PiData(he_m_t,   he_m_in,  e1, 44));
-   thePipData.push_back(new G4PiData(he_m_t,   he_p_in,  e1, 44));
+   thePimData.push_back(new G4PiData(he_m_t, he_m_in, e1, 44));
+   thePipData.push_back(new G4PiData(he_m_t, he_p_in, e1, 44));
+
    thePimData.push_back(new G4PiData(be_m_t, be_m_in, e1, 44));
    thePipData.push_back(new G4PiData(be_m_t, be_p_in, e1, 44));
+
    thePimData.push_back(new G4PiData(c_m_t,  c_m_in,  e1, 44));
    thePipData.push_back(new G4PiData(c_m_t,  c_p_in,  e1, 44));
 
@@ -459,6 +461,7 @@ G4NucleonNuclearCrossSection::G4NucleonNuclearCrossSection()
 
    thePimData.push_back(new G4PiData(o_m_t,  o_m_in,  e2, 44));
    thePipData.push_back(new G4PiData(o_m_t,  o_p_in,  e2, 44));
+
    thePimData.push_back(new G4PiData(na_m_t, na_m_in, e2, 44));
    thePipData.push_back(new G4PiData(na_m_t, na_p_in, e2, 44));
 
@@ -466,8 +469,10 @@ G4NucleonNuclearCrossSection::G4NucleonNuclearCrossSection()
 
    thePimData.push_back(new G4PiData(al_m_t, al_m_in, e3, 45));
    thePipData.push_back(new G4PiData(al_m_t, al_p_in, e3, 45));
+
    thePimData.push_back(new G4PiData(si_m_t, si_m_in, e3, 45));
    thePipData.push_back(new G4PiData(si_m_t, si_p_in, e3, 45));
+
    thePimData.push_back(new G4PiData(ca_m_t, ca_m_in, e3, 45));
    thePipData.push_back(new G4PiData(ca_m_t, ca_p_in, e3, 45));
 
@@ -475,8 +480,10 @@ G4NucleonNuclearCrossSection::G4NucleonNuclearCrossSection()
 
    thePimData.push_back(new G4PiData(fe_m_t, fe_m_in, e4, 47));
    thePipData.push_back(new G4PiData(fe_m_t, fe_p_in, e4, 47));
+
    thePimData.push_back(new G4PiData(cu_m_t, cu_m_in, e4, 47));
    thePipData.push_back(new G4PiData(cu_m_t, cu_p_in, e4, 47));
+
    thePimData.push_back(new G4PiData(mo_m_t, mo_m_in, e4, 47));
    thePipData.push_back(new G4PiData(mo_m_t, mo_p_in, e4, 47));
 
@@ -484,8 +491,10 @@ G4NucleonNuclearCrossSection::G4NucleonNuclearCrossSection()
 
    thePimData.push_back(new G4PiData(cd_m_t, cd_m_in, e5, 48));
    thePipData.push_back(new G4PiData(cd_m_t, cd_p_in, e5, 48));
+
    thePimData.push_back(new G4PiData(sn_m_t, sn_m_in, e5, 48));
    thePipData.push_back(new G4PiData(sn_m_t, sn_p_in, e5, 48));
+
    thePimData.push_back(new G4PiData(w_m_t,  w_m_in,  e5, 48));
    thePipData.push_back(new G4PiData(w_m_t,  w_p_in,  e5, 48));
 
@@ -493,6 +502,7 @@ G4NucleonNuclearCrossSection::G4NucleonNuclearCrossSection()
 
    thePimData.push_back(new G4PiData(pb_m_t, pb_m_in, e6, 46));
    thePipData.push_back(new G4PiData(pb_m_t, pb_p_in, e6, 46));
+
    thePimData.push_back(new G4PiData(u_m_t,  u_m_in,  e6, 46));
    thePipData.push_back(new G4PiData(u_m_t,  u_p_in,  e6, 46));
 
@@ -537,11 +547,13 @@ GetCrossSection( const G4DynamicParticle* aParticle,
 {
    // precondition
    G4ping debug("debug_NucleonNuclearCrossSection");
-	 G4double tuning = 1.;
+
+   // G4double tuning = 1.;
    using namespace std;
    G4bool ok = false;
-   if(aParticle->GetDefinition() == G4Proton::Proton()) ok=true;
-   if(aParticle->GetDefinition() == G4Neutron::Neutron())   ok=true;
+
+   if(aParticle->GetDefinition() == G4Proton::Proton())     ok = true;
+   if(aParticle->GetDefinition() == G4Neutron::Neutron())   ok = true;
    if(!ok) 
    {
      throw G4HadronicException(__FILE__, __LINE__,
@@ -550,16 +562,21 @@ GetCrossSection( const G4DynamicParticle* aParticle,
    G4double charge = aParticle->GetDefinition()->GetPDGCharge();
    G4double kineticEnergy = aParticle->GetKineticEnergy();
 
-   // body
+  
    G4double result = 0;
-   G4int Z=G4lrint(anElement->GetZ());
+   G4int Z = G4lrint(anElement->GetZ());
+   G4cout<<"Z = "<<Z<<G4endl;
    debug.push_back(Z);
-   size_t it=0;
-   while(it<theZ.size() && Z>theZ[it]) it++;
+   size_t it = 0;
+
+   while( it < theZ.size() && Z > theZ[it] ) it++;
+
    debug.push_back(theZ[it]);
    debug.push_back(kineticEnergy);
-	 if(Z==29) tuning=.96;
-   if(Z > theZ[it]) 
+
+   // if( Z == 29 ) tuning=.96;
+
+   if( Z > theZ[it] ) 
    {
      throw G4HadronicException(__FILE__, __LINE__,
        "Called G4NucleonNuclearCrossSection outside parametrization");
@@ -567,9 +584,9 @@ GetCrossSection( const G4DynamicParticle* aParticle,
    G4int Z1, Z2;
    G4double x1, x2;
 
-   if( charge < 0 )
+   if( charge <= 0 )
    {
-     if(theZ[it]==Z)
+     if( theZ[it] == Z )
      {
        result = thePimData[it]->ReactionXSection(kineticEnergy);
        debug.push_back("D1 ");
@@ -596,14 +613,16 @@ GetCrossSection( const G4DynamicParticle* aParticle,
    {
      if( theZ[it] == Z )
      {
-                              // at high energies, when no data for pi+, use pi- 
+       // at high energies, when no data for proton, use neutron 
+
        std::vector<G4PiData *> * theData = &thePimData;
 
-       if(thePipData[it]->AppliesTo(kineticEnergy))
+       if( thePipData[it]->AppliesTo(kineticEnergy) )
        {
          theData = &thePipData;
        }
        result = theData->operator[](it)->ReactionXSection(kineticEnergy);
+
        debug.push_back("D3 ");
        debug.push_back(result);
      }
@@ -616,7 +635,8 @@ GetCrossSection( const G4DynamicParticle* aParticle,
          theLData = &thePipData;
        }
        std::vector<G4PiData *> * theHData = &thePimData;
-       if(thePipData[it]->AppliesTo(kineticEnergy))
+
+       if( thePipData[it]->AppliesTo(kineticEnergy) )
        {
          theHData = &thePipData;
        }
@@ -624,7 +644,9 @@ GetCrossSection( const G4DynamicParticle* aParticle,
        Z1 = theZ[it-1];
        x2 = theHData->operator[](it)->ReactionXSection(kineticEnergy);
        Z2 = theZ[it];
+
        result = Interpolate(Z1, Z2, Z, x1, x2);
+
        debug.push_back("D4 ");
        debug.push_back(x1);
        debug.push_back(x2);
@@ -633,9 +655,9 @@ GetCrossSection( const G4DynamicParticle* aParticle,
        debug.push_back(result);
      }
    }
-
    debug.dump();
-   return tuning*result;
+   // return tuning*result;
+   return result;
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -643,31 +665,34 @@ GetCrossSection( const G4DynamicParticle* aParticle,
 //
 
 G4double G4NucleonNuclearCrossSection::
- Interpolate(G4int Z1, G4int Z2, G4int Z, G4double x1, G4double x2)
+Interpolate(G4int Z1, G4int Z2, G4int Z, G4double x1, G4double x2)
 { 
 //   Nucleon numbers obtained from G4NistManager G4 8.0
- static const G4double A[92] = 
-{
-  1.0001, 4.0000, 6.9241, 9.0000, 10.801, 12.011, 14.004, 16.004, 19.000, 20.188,
-  23.000, 24.320, 27.000, 28.109, 31.000, 32.094, 35.484, 39.985, 39.135, 40.116,
-  45.000, 47.918, 50.998, 52.055, 55.000, 55.910, 59.000, 58.760, 63.617, 65.468,
-  69.798, 72.691, 75.000, 79.042, 79.986, 83.887, 85.557, 87.710, 89.000, 91.318,
-  93.000, 96.025, 98.000, 101.16, 103.00, 106.51, 107.96, 112.51, 114.91, 118.81,
-  121.86, 127.70, 127.00, 131.39, 133.00, 137.42, 139.00, 140.21, 141.00, 144.32,
-  145.00, 150.45, 152.04, 157.33, 159.00, 162.57, 165.00, 167.32, 169.00, 173.10,
-  175.03, 178.54, 181.00, 183.89, 186.25, 190.27, 192.25, 195.11, 197.00, 200.63,
-  204.41, 207.24, 209.00, 209.00, 210.00, 222.00, 223.00, 226.00, 227.00, 232.00,
-  231.00, 237.98
-};
-			 
-  static G4bool NeedInit=true;		     
+
+  static G4double alpha = 2./3.;
+
+  static const G4double A[92] = 
+  {
+    1.0001, 4.0000, 6.9241, 9.0000, 10.801, 12.011, 14.004, 16.004, 19.000, 20.188,
+    23.000, 24.320, 27.000, 28.109, 31.000, 32.094, 35.484, 39.985, 39.135, 40.116,
+    45.000, 47.918, 50.998, 52.055, 55.000, 55.910, 59.000, 58.760, 63.617, 65.468,
+    69.798, 72.691, 75.000, 79.042, 79.986, 83.887, 85.557, 87.710, 89.000, 91.318,
+    93.000, 96.025, 98.000, 101.16, 103.00, 106.51, 107.96, 112.51, 114.91, 118.81,
+    121.86, 127.70, 127.00, 131.39, 133.00, 137.42, 139.00, 140.21, 141.00, 144.32,
+    145.00, 150.45, 152.04, 157.33, 159.00, 162.57, 165.00, 167.32, 169.00, 173.10,
+    175.03, 178.54, 181.00, 183.89, 186.25, 190.27, 192.25, 195.11, 197.00, 200.63,
+    204.41, 207.24, 209.00, 209.00, 210.00, 222.00, 223.00, 226.00, 227.00, 232.00,
+    231.00, 237.98
+  };			 
+  static G4bool NeedInit = true;
+		     
   static G4double A75[92];
 
   if ( NeedInit )
   {
     for (G4int i=0; i<92; ++i)
     {
-       A75[i]=std::pow(A[i],0.75);
+      A75[i] = std::pow(A[i], alpha); // interpolate by square ~ A^(2/3)
     }
     NeedInit=false;
   }
