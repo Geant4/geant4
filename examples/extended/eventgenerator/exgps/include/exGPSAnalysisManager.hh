@@ -30,13 +30,22 @@
 
 #include "globals.hh"
 
-using namespace AIDA;
+#ifdef G4ANALYSIS_USE_AIDA
+namespace AIDA{
+class IAnalysisFactory;
+class ITree;
+class IHistogramFactory;
+class ITupleFactory;
+class IPlotter;
+}
+#endif
 
-class AIDA::IAnalysisFactory;
-class AIDA::ITree;
-class AIDA::IHistogramFactory;
-class AIDA::ITupleFactory;
-class AIDA::IPlotter;
+#ifdef G4ANALYSIS_USE_ROOT
+class TFile;
+class TH1D;
+class TH2D;
+class TNtuple;
+#endif
 
 class exGPSAnalysisMessenger;
 
@@ -52,11 +61,12 @@ public:
   virtual ~exGPSAnalysisManager ();
   static exGPSAnalysisManager* getInstance ();
   static void dispose();
-
-  IHistogramFactory* getHistogramFactory();
-  ITupleFactory* getTupleFactory();
-  IPlotter* createPlotter();
-
+  
+#ifdef G4ANALYSIS_USE_AIDA
+  AIDA::IHistogramFactory* getHistogramFactory();
+  AIDA::ITupleFactory* getTupleFactory();
+  AIDA::IPlotter* createPlotter();
+#endif
 
 public:
   void BeginOfRun();
@@ -70,7 +80,7 @@ public:
   void SetEngMax(G4double emax) {maxeng = emax;};
   void SetEngMin(G4double emin) {mineng = emin;};
   
-  void Fill(G4String, G4double, G4double, G4double, G4double, G4double, G4double, G4double);
+  void Fill(G4double, G4double, G4double, G4double, G4double, G4double, G4double, G4double);
 
 private:
 
@@ -79,14 +89,14 @@ private:
   G4String fileName;
   G4String fileType;
 
+  G4double minpos, maxpos;
+  G4double mineng, maxeng;
+  
+ #ifdef G4ANALYSIS_USE_AIDA 
   IAnalysisFactory* analysisFactory;
   IHistogramFactory* hFactory;
   ITupleFactory* tFactory;
   ITree* tree;
-
-  G4double minpos, maxpos;
-  G4double mineng, maxeng;
-
   IHistogram1D* enerHisto;
   IHistogram2D* posiXY;
   IHistogram2D* posiXZ;
@@ -96,6 +106,18 @@ private:
   ITuple* tuple;
 
   IPlotter* plotter;
+#endif
+
+#ifdef G4ANALYSIS_USE_ROOT
+  TFile* hfileroot; // the file for histograms, tree ...
+  TH1D* enerHistoroot;
+  TH2D* posiXYroot;
+  TH2D* posiXZroot;
+  TH2D* posiYZroot;
+  TH2D* anglCTProot;
+  TH2D* anglTProot;
+  TNtuple* tupleroot; 	
+#endif
 
   exGPSAnalysisMessenger* analysisMessenger;
 

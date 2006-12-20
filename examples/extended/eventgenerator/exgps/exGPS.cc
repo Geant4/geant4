@@ -33,7 +33,6 @@
 #endif
 
 #ifdef G4ANALYSIS_USE
-#include <AIDA/AIDA.h>
 #include "exGPSAnalysisManager.hh"
 #endif
 
