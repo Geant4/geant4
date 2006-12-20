@@ -143,45 +143,38 @@ template<class T> TLBE<T>::~TLBE()
   G4AntiNeutrinoMu::AntiNeutrinoMuDefinition();
 }
 
+#include "G4MesonConstructor.hh"
+#include "G4BaryonConstructor.hh"
+#include "G4IonConstructor.hh"
+
 
 // construct Mesons://///////////////////////////////////////////////////
  template<class T> void TLBE<T>::ConstructMyMesons()
 {
  //  mesons
-  G4PionPlus::PionPlusDefinition();
-  G4PionMinus::PionMinusDefinition();
-  G4PionZero::PionZeroDefinition();
-  G4KaonPlus::KaonPlusDefinition();
-  G4KaonMinus::KaonMinusDefinition();
-  G4Eta::EtaDefinition();
-  G4EtaPrime::EtaPrimeDefinition();
-  G4KaonZero::KaonZeroDefinition();
-  G4AntiKaonZero::AntiKaonZeroDefinition();
-  G4KaonZeroLong::KaonZeroLongDefinition();
-  G4KaonZeroShort::KaonZeroShortDefinition();
+  G4MesonConstructor mConstructor;
+  mConstructor.ConstructParticle();
+
 }
 
 
 // construct Baryons://///////////////////////////////////////////////////
  template<class T> void TLBE<T>::ConstructMyBaryons()
 {
-//  barions
-  G4Proton::ProtonDefinition();
-  G4AntiProton::AntiProtonDefinition();
-  G4Neutron::NeutronDefinition();
-  G4AntiNeutron::AntiNeutronDefinition();
+ //  baryons
+  G4BaryonConstructor bConstructor;
+  bConstructor.ConstructParticle();
+
 }
 
 
 // construct Ions://///////////////////////////////////////////////////
  template<class T> void TLBE<T>::ConstructMyIons()
 {
-//  Ions
-  G4Deuteron::DeuteronDefinition();
-  G4Triton::TritonDefinition();
-  G4He3::He3Definition();
-  G4Alpha::AlphaDefinition();
-  G4GenericIon::GenericIonDefinition();
+ //  ions
+  G4IonConstructor iConstructor;
+  iConstructor.ConstructParticle();
+
 }
 
 // construct Shortliveds://///////////////////////////////////////////////////
@@ -763,7 +756,7 @@ template<class T> TLBE<T>::~TLBE()
       G4ParticleDefinition* particle = this->theParticleIterator->value();
       G4ProcessManager* pmanager = particle->GetProcessManager();
       
-      if (theDecayProcess->IsApplicable(*particle)) 
+      if (theDecayProcess->IsApplicable(*particle) && !particle->IsShortLived()) 
 	{ 
 	  pmanager ->AddProcess(theDecayProcess);
 	  // set ordering for PostStepDoIt and AtRestDoIt
