@@ -14,7 +14,7 @@
 /grdm/selectVolume Target
 #
 # first simulate 1GeV proton beam on the NaI target
-#/histo/fileName exrdm-proton.aida
+#/histo/fileName exrdm-proton
 #/gps/particle proton
 #/gps/energy 1 GeV
 /tracking/verbose 0
@@ -27,7 +27,7 @@
 /gps/position 0 0 0
 /gps/energy 0 keV
 #/histo/fileType 
-/histo/fileName test.aida
+/histo/fileName test
 /run/beamOn 10
 /particle/select proton
 /particle/process/dump 

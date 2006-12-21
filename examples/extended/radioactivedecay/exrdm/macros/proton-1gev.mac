@@ -9,7 +9,7 @@
 /exrdm/phys/SelectPhysics Hadron
 # material definitions has to be done before /run/initilalize
 /exrdm/det/setTargetMate Lead
-/histo/fileName proton-1gev.aida
+/histo/fileName proton-1gev
 /run/initialize
 /run/setCutForRegion Target 10 cm
 /run/setCutForRegion Detector 50 cm

@@ -74,16 +74,12 @@ public: // Without description
   void BeginOfEvent();
   void EndOfEvent();
 
-  //  void AddParticle(G4double particleName, G4double energy, G4double weight, G4double time );
-  // void AddIsotope(G4double particleName, G4double weight, G4double time );
-  void AddParticle(G4String particleName, G4double energy, G4double weight, G4double time );
-  void AddIsotope(G4String particleName, G4double weight, G4double time );
-  void AddEnergy(G4double edep, G4double weight, G4double time);
+  void AddParticle(G4double, G4double, G4double, G4double);
+  void AddIsotope(G4double, G4double, G4double);
+  void AddEnergy(G4double, G4double, G4double);
 
   void SetVerbose(G4int val) {verbose = val;};
   G4int GetVerbose() const {return verbose;};
-  //  void SetHistoNumber(G4int val) {nHisto = val;};
-  // void SetNtuple(G4bool val) {nTuple = val;};
 
   void SetFirstEventToDebug(G4int val) {nEvt1 = val;};
   G4int FirstEventToDebug() const {return nEvt1;};

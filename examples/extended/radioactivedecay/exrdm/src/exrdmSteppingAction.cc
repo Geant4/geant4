@@ -53,8 +53,8 @@ void exrdmSteppingAction::UserSteppingAction(const G4Step* fStep)
     if ( (fTrack->GetDefinition()->GetParticleType() == "nucleus") && 
 	 !( fTrack->GetDefinition()->GetPDGStable()) && 
 	 fStep->GetPreStepPoint()->GetPhysicalVolume()->GetName() == "Target" ) {
-      G4String particleName = fTrack->GetDefinition()->GetParticleName();
-      //G4double particleName = G4double(fTrack->GetDefinition()->GetPDGEncoding());
+ //     G4String particleName = fTrack->GetDefinition()->GetParticleName();
+      G4double particleName = G4double(fTrack->GetDefinition()->GetPDGEncoding());
       G4double time = fStep->GetPreStepPoint()->GetGlobalTime() ;
 	// - fStep->GetPreStepPoint()->GetLocalTime(); // do we have to take out the local time?
       G4double weight =  fStep->GetPreStepPoint()->GetWeight() ;
@@ -67,8 +67,8 @@ void exrdmSteppingAction::UserSteppingAction(const G4Step* fStep)
       if (fTrack->GetCreatorProcess()->GetProcessName() == "RadioactiveDecay") {
 	// emitted particles
 	if (fTrack->GetDefinition()->GetParticleType() != "nucleus") {
-	  G4String particleName = fTrack->GetDefinition()->GetParticleName();
-	  //G4double particleName = G4double (fTrack->GetDefinition()->GetPDGEncoding());
+	//  G4String particleName = fTrack->GetDefinition()->GetParticleName();
+	  G4double particleName = G4double (fTrack->GetDefinition()->GetPDGEncoding());
 	  G4double time = fStep->GetPreStepPoint()->GetGlobalTime() ; 
 	  //- fStep->GetPreStepPoint()->GetLocalTime();
 	  G4double weight = fStep->GetPreStepPoint()->GetWeight() ;   

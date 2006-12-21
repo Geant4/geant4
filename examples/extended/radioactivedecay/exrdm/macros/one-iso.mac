@@ -16,7 +16,7 @@
 /grdm/verbose 5
 /grdm/analogueMC 1
 #
-/histo/fileName one-iso.aida
+/histo/fileName one-iso
 #
 /gps/position 0 0 0
 /gps/energy 2. eV

@@ -2,7 +2,7 @@
 /exrdm/det/setTargetRadius 10 mm
 /exrdm/det/setTargetLength 10 mm
 /run/initialize
-/histo/fileName multiple-source.aida
+/histo/fileName multiple-source
 /run/setCut 1000 cm
 /run/setCutForRegion Target 10 cm
 /run/setCutForRegion Detector 50 cm

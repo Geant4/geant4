@@ -39,11 +39,20 @@
 
 class exrdmHistoMessenger;
 
+#ifdef G4ANALYSIS_USE_AIDA
 namespace AIDA {
  class ITree;
  class ITuple;
  class IHistogram1D;
 }
+#endif
+
+#ifdef G4ANALYSIS_USE_ROOT
+class TFile;
+class TH1D;
+class TNtuple;
+#endif
+
 
 class exrdmHisto
 {
@@ -77,10 +86,9 @@ public:
   void fillTuple(G4int, const G4String&, G4double);
   // Fill nTuple parameter with a double
 
-  void fillTuple(G4int, const G4String&, G4int);
-  // Fill nTuple parameter with an integer
-
-  void fillTuple(G4int, const G4String&, const G4String&);
+  void fillTuple(G4int, G4int, G4double);
+  // Fill nTuple at a given col with a double
+  void fillTuple(G4int, const G4String&, G4String);
   // Fill nTuple parameter with a string
 
   void fillTuple(G4int, const G4String&, G4bool);
@@ -104,9 +112,20 @@ private:
   G4int    verbose;
   G4int    defaultAct;
 
+#ifdef G4ANALYSIS_USE_AIDA
   std::vector<AIDA::IHistogram1D*> histo;
   std::vector<AIDA::ITuple*>   ntup;
   AIDA::ITree*    tree;
+#endif
+
+#ifdef G4ANALYSIS_USE_ROOT
+  TFile* hfileROOT; 
+  std::vector<TH1D*> ROOThisto;
+  std::vector<TNtuple*>   ROOTntup;
+  std::vector< std::vector<float> > Rarray;
+  std::vector<G4int> Rcol;
+#endif
+
   exrdmHistoMessenger* messenger;
 
   std::vector<G4int>     active;
@@ -119,7 +138,7 @@ private:
   std::vector<G4String>  tupleName;
   std::vector<G4String>  tupleId;
   std::vector<G4String>  tupleList;
-
+  std::vector<G4String>  tupleListROOT; 
 };
 
 #endif

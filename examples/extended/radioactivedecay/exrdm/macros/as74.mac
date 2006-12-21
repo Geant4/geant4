@@ -40,11 +40,11 @@
 /gps/ion 33 74 0 0
 # 
 #  Analogue MC
-/histo/fileName as74.aida
+/histo/fileName as74
 /run/beamOn 10000
 
 #  VR MC
-/histo/fileName as74-b.aida
+/histo/fileName as74-b
 /grdm/analogueMC 0
 /run/beamOn 10000
 

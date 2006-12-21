@@ -11,7 +11,7 @@
 #/geometry/material/add NaI Na-I 3.67
 # material definitions has to be done before /run/initilalize
 /exrdm/det/setTargetMate Lead
-/histo/fileName proton-b.aida
+/histo/fileName proton-b
 /run/initialize
 /run/setCutForRegion Target 10 cm
 /run/setCutForRegion Detector 50 cm
