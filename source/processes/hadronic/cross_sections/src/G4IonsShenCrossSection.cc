@@ -26,6 +26,8 @@
 // 18-Sep-2003 First version is written by T. Koi
 // 12-Nov-2003 Add energy check at lower side T. Koi
 // 15-Nov-2006 Above 10GeV/n Cross Section become constant T. Koi (SLAC/SCCS)
+// 23-Dec-2006 Isotope dependence adde by D. Wright
+//
 
 #include "G4IonsShenCrossSection.hh"
 #include "G4ParticleTable.hh"
@@ -33,7 +35,8 @@
 
 
 G4double G4IonsShenCrossSection::
-GetCrossSection(const G4DynamicParticle* aParticle, const G4Element* anElement, G4double )
+GetIsoZACrossSection(const G4DynamicParticle* aParticle, G4double ZZ, 
+                G4double AA, G4double /*temperature*/)
 {
    G4double xsection = 0.0;
 
@@ -46,9 +49,8 @@ GetCrossSection(const G4DynamicParticle* aParticle, const G4Element* anElement, 
    if (  ke_per_N < lowerLimit )
       return xsection;
 
-   G4int At = int ( anElement->GetN() + 0.5 );
-   G4int Zt = int ( anElement->GetZ() + 0.5 );  
-
+   G4int At = G4int(AA);
+   G4int Zt = G4int(ZZ);
  
    G4double one_third = 1.0 / 3.0;
 
@@ -87,6 +89,36 @@ GetCrossSection(const G4DynamicParticle* aParticle, const G4Element* anElement, 
    return xsection; 
 }
 
+
+G4double G4IonsShenCrossSection::
+GetCrossSection(const G4DynamicParticle* aParticle, const G4Element* anElement,
+                G4double temperature)
+{
+  G4int nIso = anElement->GetNumberOfIsotopes();
+  G4double xsection = 0;
+   
+  if (nIso) {
+    G4double sig;
+    G4IsotopeVector* isoVector = anElement->GetIsotopeVector();
+    G4double* abundVector = anElement->GetRelativeAbundanceVector();
+    G4double ZZ;
+    G4double AA;
+   
+    for (G4int i = 0; i < nIso; i++) {
+      ZZ = G4double( (*isoVector)[i]->GetZ() );
+      AA = G4double( (*isoVector)[i]->GetN() );
+      sig = GetIsoZACrossSection(aParticle, ZZ, AA, temperature);
+      xsection += sig*abundVector[i];
+    }
+ 
+  } else {
+    xsection =
+      GetIsoZACrossSection(aParticle, anElement->GetZ(), anElement->GetN(), 
+                           temperature);
+  }
+  
+  return xsection;
+}
 
 
 G4double G4IonsShenCrossSection::calEcmValue( const G4double mp , const G4double mt , const G4double Plab )

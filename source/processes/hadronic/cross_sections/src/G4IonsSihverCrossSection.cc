@@ -24,19 +24,21 @@
 // ********************************************************************
 //
 // 18-Sep-2003 First version is written by T. Koi
+// 23-Dec-2006 Isotope dependence added by D. Wright
+//
 
 #include "G4IonsSihverCrossSection.hh"
 #include "G4ParticleTable.hh"
 #include "G4IonTable.hh"
 
 G4double G4IonsSihverCrossSection::
-GetCrossSection(const G4DynamicParticle* aParticle, 
-                const G4Element* anElement, G4double )
+GetIsoZACrossSection(const G4DynamicParticle* aParticle, G4double /*ZZ*/, 
+                G4double AA, G4double /*aTemperature*/)
 {
    G4double xsection = 0.0;
 
-   G4int At = int ( anElement->GetN() + 0.5 );
-   //Zt = int ( anElement->GetZ() + 0.5 );  // not used 
+   G4int At = G4int(AA);
+   //G4int Zt = G4int(ZZ);  // not used 
 
    G4int Ap = aParticle->GetDefinition()->GetBaryonNumber();
    //Zp = aParticle->GetDefinition()->GetPDGCharge();   // not used  
@@ -52,4 +54,35 @@ GetCrossSection(const G4DynamicParticle* aParticle,
             * std::pow ( G4double(cubicrAp + cubicrAt - b0 * (  1.0 / cubicrAp + 1.0 / cubicrAt ) ), G4double(2) );
   
    return xsection; 
+}
+
+
+G4double G4IonsSihverCrossSection::
+GetCrossSection(const G4DynamicParticle* aParticle, 
+                const G4Element* anElement, G4double temperature)
+{
+  G4int nIso = anElement->GetNumberOfIsotopes();
+  G4double xsection = 0;
+    
+  if (nIso) {
+    G4double sig;
+    G4IsotopeVector* isoVector = anElement->GetIsotopeVector();
+    G4double* abundVector = anElement->GetRelativeAbundanceVector();
+    G4double ZZ;
+    G4double AA;
+    
+    for (G4int i = 0; i < nIso; i++) {
+      ZZ = G4double( (*isoVector)[i]->GetZ() );
+      AA = G4double( (*isoVector)[i]->GetN() );
+      sig = GetIsoZACrossSection(aParticle, ZZ, AA, temperature);
+      xsection += sig*abundVector[i];
+    }
+  
+  } else {
+    xsection =
+      GetIsoZACrossSection(aParticle, anElement->GetZ(), anElement->GetN(),
+                           temperature);
+  }
+   
+  return xsection;
 }

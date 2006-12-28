@@ -26,14 +26,15 @@
 // 18-Sep-2003 First version is written by T. Koi
 // 10-Nov-2003 Bug fix at Cal. ke_per_n and D T. Koi
 // 12-Nov-2003 Add energy check at lower side T. Koi
+// 26-Dec-2006 Add isotope dependence D. Wright
 
 #include "G4IonsKoxCrossSection.hh"
 #include "G4ParticleTable.hh"
 #include "G4IonTable.hh"
 
 G4double G4IonsKoxCrossSection::
-GetCrossSection(const G4DynamicParticle* aParticle, 
-                const G4Element* anElement, G4double )
+GetIsoZACrossSection(const G4DynamicParticle* aParticle, G4double ZZ, 
+                     G4double AA, G4double /*temperature*/)
 {
    G4double xsection = 0.0;
 
@@ -45,8 +46,8 @@ GetCrossSection(const G4DynamicParticle* aParticle,
    if (  ke_per_N < lowerLimit )
       return xsection;
 
-   G4int At = int ( anElement->GetN() + 0.5 );
-   G4int Zt = int ( anElement->GetZ() + 0.5 );  
+   G4int At = int (AA + 0.5);
+   G4int Zt = int (ZZ + 0.5 );  
 
    G4double one_third = 1.0 / 3.0;
 
@@ -79,6 +80,37 @@ GetCrossSection(const G4DynamicParticle* aParticle,
    return xsection; 
 }
 
+G4double G4IonsKoxCrossSection::
+GetCrossSection(const G4DynamicParticle* aParticle, 
+                const G4Element* anElement, G4double temperature)
+{
+  G4int nIso = anElement->GetNumberOfIsotopes();
+  G4double xsection = 0;
+
+  if (nIso) {
+    G4double sig;
+    G4IsotopeVector* isoVector = anElement->GetIsotopeVector();
+    G4double* abundVector = anElement->GetRelativeAbundanceVector();
+    G4double ZZ;
+    G4double AA;
+     
+    for (G4int i = 0; i < nIso; i++) {
+      ZZ = G4double( (*isoVector)[i]->GetZ() );
+      AA = G4double( (*isoVector)[i]->GetN() );
+      sig = GetIsoZACrossSection(aParticle, ZZ, AA, temperature);
+      xsection += sig*abundVector[i];
+    }
+   
+  } else {
+    xsection =
+      GetIsoZACrossSection(aParticle, anElement->GetZ(), anElement->GetN(),
+                           temperature);
+  }
+    
+  return xsection;
+}
+
+
 G4double G4IonsKoxCrossSection::calEcm ( G4double mp , G4double mt , G4double Plab )
 {
    G4double Elab = std::sqrt ( mp * mp + Plab * Plab );
@@ -87,6 +119,7 @@ G4double G4IonsKoxCrossSection::calEcm ( G4double mp , G4double mt , G4double Pl
    G4double KEcm = std::sqrt ( Pcm * Pcm + mp * mp ) - mp;
    return KEcm;
 }
+
 
 G4double G4IonsKoxCrossSection::calCeValue( const G4double ke )
 {

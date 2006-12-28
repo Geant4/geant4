@@ -34,6 +34,8 @@
 //    Valid for 100>MeV/nucleon 
 // Class Description - End
 //
+// 23-Dec-2006 Isotope dependence added by D. Wright
+//
 
 #include "globals.hh"
 #include "G4Proton.hh"
@@ -51,6 +53,13 @@ class G4IonsSihverCrossSection : public G4VCrossSectionDataSet
    virtual
    G4bool IsApplicable(const G4DynamicParticle* aDP, const G4Element*)
    {
+     return IsZAApplicable(aDP, 0., 0.);
+   }
+
+   virtual 
+   G4bool IsZAApplicable(const G4DynamicParticle* aDP, G4double /*ZZ*/, 
+                         G4double /*AA*/)
+   {
       G4int BaryonNumber = aDP->GetDefinition()->GetBaryonNumber();
       G4double KineticEnergy = aDP->GetKineticEnergy(); 
       if ( KineticEnergy / BaryonNumber >= 100*MeV && BaryonNumber > 1 ) 
@@ -61,6 +70,10 @@ class G4IonsSihverCrossSection : public G4VCrossSectionDataSet
    virtual
    G4double GetCrossSection(const G4DynamicParticle*, 
                             const G4Element*, G4double aTemperature);
+
+   virtual
+   G4double GetIsoZACrossSection(const G4DynamicParticle*, G4double ZZ, 
+                                 G4double AA, G4double aTemperature);
 
    virtual
    void BuildPhysicsTable(const G4ParticleDefinition&)
