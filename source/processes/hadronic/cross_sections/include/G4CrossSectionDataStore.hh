@@ -23,15 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// GEANT4 physics class: G4CrossSectionDataStore -- header file
-// F.W. Jones, TRIUMF, 19-NOV-97
-//
 // Class Description
-// This is the class to which to register data-sets. You can get the instance
-// from energy hadronic process, and use its 'AddDataSet(...)' method to tailor
-// the cross-sectinos for your application.
+// This is the class to which cross section data sets may be registered. 
+// An instance of it is contained in each hadronic process, allowing
+// the use of the AddDataSet() method to tailor the cross sections to
+// your application.
 // Class Description - End
 
 #ifndef G4CrossSectionDataStore_h
@@ -39,7 +35,9 @@
 
 #include "G4ParticleDefinition.hh"
 #include "G4DynamicParticle.hh"
+#include "G4Isotope.hh"
 #include "G4Element.hh"
+#include "G4Material.hh"
 #include "G4VCrossSectionDataSet.hh"
 
 
@@ -49,15 +47,25 @@ public:
 
    G4CrossSectionDataStore() :
       NDataSetList(0), verboseLevel(0)
-   {
-   }
+   {}
 
    ~G4CrossSectionDataStore()
-   {
-   }
+   {}
 
    G4double GetCrossSection(const G4DynamicParticle*, 
                             const G4Element*, G4double aTemperature);
+
+   G4double GetCrossSection(const G4DynamicParticle*, 
+                            const G4Isotope*, G4double aTemperature);
+
+   G4double GetCrossSection(const G4DynamicParticle*, 
+                            G4double Z, G4double A, G4double aTemperature);
+
+   // to replace GetMicroscopicCrossSection
+   G4double GetCrossSection(const G4DynamicParticle*, const G4Material*);
+
+   std::pair<G4double/*Z*/, G4double/*A*/> 
+   SelectRandomIsotope(const G4DynamicParticle*, const G4Material*);
 
    void AddDataSet(G4VCrossSectionDataSet*);
 
