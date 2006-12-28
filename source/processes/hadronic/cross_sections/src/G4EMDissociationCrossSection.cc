@@ -91,12 +91,11 @@ G4EMDissociationCrossSection::~G4EMDissociationCrossSection()
 {
   delete thePhotonSpectrum;
 }
-////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 //
-G4bool G4EMDissociationCrossSection::IsApplicable
-  (const G4DynamicParticle *theDynamicParticle, const G4Element* theElement)
+G4bool G4EMDissociationCrossSection::IsZAApplicable
+(const G4DynamicParticle* theDynamicParticle, G4double /*ZZ*/, G4double AA)
 {
-//
 //
 // The condition for the applicability of this class is that the projectile
 // must be an ion and the target must have more than one nucleon.  In reality
@@ -105,16 +104,54 @@ G4bool G4EMDissociationCrossSection::IsApplicable
 // Z, the probability of the EMD process is, I think, VERY small.
 //
   if (G4ParticleTable::GetParticleTable()->GetIonTable()->
-    IsIon(theDynamicParticle->GetDefinition()) && theElement->GetN() > 1.0)
+    IsIon(theDynamicParticle->GetDefinition()) && AA > 1.0)
     return true;
   else
     return false;
 }
-////////////////////////////////////////////////////////////////////////////////
+
+G4bool G4EMDissociationCrossSection::IsApplicable
+  (const G4DynamicParticle* theDynamicParticle, const G4Element* theElement)
+{
+  return IsZAApplicable(theDynamicParticle, 0., theElement->GetN());
+}
+
+//////////////////////////////////////////////////////////////////////////////
 //
 G4double G4EMDissociationCrossSection::GetCrossSection
-  (const G4DynamicParticle *theDynamicParticle, const G4Element* theElement,
-  G4double )
+  (const G4DynamicParticle* theDynamicParticle, const G4Element* theElement,
+   G4double temperature)
+{
+  G4int nIso = theElement->GetNumberOfIsotopes();
+  G4double crossSection = 0;
+     
+  if (nIso) {
+    G4double sig;
+    G4IsotopeVector* isoVector = theElement->GetIsotopeVector();
+    G4double* abundVector = theElement->GetRelativeAbundanceVector();
+    G4double ZZ;
+    G4double AA;
+     
+    for (G4int i = 0; i < nIso; i++) {
+      ZZ = G4double( (*isoVector)[i]->GetZ() );
+      AA = G4double( (*isoVector)[i]->GetN() );
+      sig = GetIsoZACrossSection(theDynamicParticle, ZZ, AA, temperature);
+      crossSection += sig*abundVector[i];
+    }
+   
+  } else {
+    crossSection =
+      GetIsoZACrossSection(theDynamicParticle, theElement->GetZ(), 
+                           theElement->GetN(), temperature);
+  }
+    
+  return crossSection;
+}
+
+
+G4double G4EMDissociationCrossSection::GetIsoZACrossSection
+  (const G4DynamicParticle *theDynamicParticle, G4double ZZ, G4double AA,
+   G4double /*temperature*/)
 {
 //
 //
@@ -127,8 +164,8 @@ G4double G4EMDissociationCrossSection::GetCrossSection
   G4double b    = theDynamicParticle->Get4Momentum().beta();
 //  G4double bsq  = b * b;
   
-  G4double AT   = theElement->GetN();
-  G4double ZT   = theElement->GetZ();
+  G4double AT   = AA;
+  G4double ZT   = ZZ;
   G4double bmin = thePhotonSpectrum->GetClosestApproach(AP, ZP, AT, ZT, b);
 //
 //
