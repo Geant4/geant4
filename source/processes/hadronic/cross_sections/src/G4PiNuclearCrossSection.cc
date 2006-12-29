@@ -29,18 +29,46 @@
  #include "G4ping.hh"
 
  // by J.P Wellisch, Sun Sep 15 2002.
- // corrected G.Folger 17-8-2006: inel. Ca pim was missing two number, + formatting
- // updated   G.Folger 21-8-2006: Change scaling of cross section for elements not tabulated from scaling in Z^(2/3) to A^0.75
- 
+ // corrected G.Folger 17-8-2006: inel. Ca pim was missing two number, 
+ // + formatting
+ //
+ // updated   G.Folger 21-8-2006: Change scaling of cross section for 
+ // elements not tabulated from scaling in Z^(2/3) to A^0.75
  // Implements P2-90-158;
+ //
+ // 22 Dec 2006 - D.H. Wright added isotope dependence
+ //
+     
+ const G4double G4PiNuclearCrossSection::e1[38] = {
+  .02, .04, .06, .08,  .1, .12, .13, .14, .15, .16, .17, .18, .19, .20, 
+  .22, .24, .26, .28, .30, .35, .40, .45,  0.5, 0.55, 0.6, 0.7,  0.8,  0.9,
+   1,   2,   3,   5,  10,   20,   50,  100,  500, 1000};
 
-	const G4double G4PiNuclearCrossSection::e1[38] =     {.02, .04, .06, .08,  .1, .12, .13, .14, .15, .16, .17, .18, .19, .20, .22, .24, .26, .28, .30, .35, .40, .45,  0.5, 0.55,   0.6, 0.7,  0.8,  0.9,   1,   2,   3,   5,  10,   20,   50,  100,  500, 1000};
-	const G4double G4PiNuclearCrossSection::he_t[38] =   { 40,  70, 108, 152, 208, 276, 300, 320, 329, 333, 332, 328, 322, 310, 288, 260, 240, 216, 196, 144, 125, 112,108.5,  109, 110.5, 117,  123,128.5, 135, 110,  96,  87,  85, 83.5, 83.5, 83.5, 83.5, 83.5};
-	const G4double G4PiNuclearCrossSection::he_in[38] =  { 18,  38,  62,  98, 136, 176, 190, 200, 209, 212, 212, 208, 204, 196, 176, 164, 150, 134, 124,97.5,  90,  85, 82.5, 83.5,  86.5,  93, 97.5,  100, 102,  83,  77,  75,  74, 72.5, 72.5, 72.5, 72.5, 72.5};
-	const G4double G4PiNuclearCrossSection::be_m_t[38] = {150, 210, 294, 396, 520, 600, 623, 635, 642, 640, 630, 615, 600, 576, 540, 504, 470, 435, 400, 340, 294, 258,  236,  230,   233, 244,  257,  270, 276, 250, 230, 215, 205,  194,  188,  186,  186,  186};
-	const G4double G4PiNuclearCrossSection::be_m_in[38] ={ 90, 126, 177, 240, 320, 380, 400, 410, 414, 410, 400, 387, 371, 360, 333, 312, 285, 260, 237, 216, 198, 187,  182,  180,   182, 187,  193,  203, 207, 179, 172, 165, 159,  155,  144,  144,  144,  144};
-	const G4double G4PiNuclearCrossSection::be_p_t[24] = { 96, 150, 222, 320, 430, 514, 545, 565, 574, 574, 564, 552, 535, 522, 490, 462, 432, 398, 367, 314, 276, 248,  232,  230};
-	const G4double G4PiNuclearCrossSection::be_p_in[24] ={ 60,  95, 142, 194, 262, 319, 345, 361, 364, 364, 354, 350, 330, 319, 298, 280, 258, 237, 216, 200, 189, 183,  182,  180};
+ const G4double G4PiNuclearCrossSection::he_t[38] = { 
+   40,  70, 108, 152, 208, 276, 300, 320, 329, 333, 332, 328, 322, 310, 288, 
+  260, 240, 216, 196, 144, 125, 112,108.5,  109, 110.5, 117,  123,128.5, 135, 
+  110,  96,  87,  85, 83.5, 83.5, 83.5, 83.5, 83.5};
+
+ const G4double G4PiNuclearCrossSection::he_in[38] =  { 
+   18,  38,  62,  98, 136, 176, 190, 200, 209,  212,  212, 208,  204, 196, 
+  176, 164, 150, 134, 124,97.5,  90,  85, 82.5, 83.5, 86.5, 93, 97.5,  100, 
+  102,  83,  77,  75,  74, 72.5, 72.5, 72.5, 72.5, 72.5};
+
+ const G4double G4PiNuclearCrossSection::be_m_t[38] = {
+  150, 210, 294, 396, 520, 600, 623, 635, 642, 640, 630, 615, 600, 576, 540, 
+  504, 470, 435, 400, 340, 294, 258, 236, 230, 233, 244, 257, 270, 276, 250, 
+  230, 215, 205,  194,  188,  186,  186,  186};
+
+ const G4double G4PiNuclearCrossSection::be_m_in[38] ={ 
+   90, 126, 177, 240, 320, 380, 400, 410, 414, 410, 400, 387, 371, 360, 333, 
+  312, 285, 260, 237, 216, 198, 187, 182, 180, 182, 187, 193, 203, 207, 179, 
+  172, 165, 159, 155, 144, 144, 144, 144};
+
+ const G4double G4PiNuclearCrossSection::be_p_t[24] = { 
+   96, 150, 222, 320, 430, 514, 545, 565, 574, 574, 564, 552, 535, 522, 490, 
+  462, 432, 398, 367, 314, 276, 248, 232, 230};
+
+ const G4double G4PiNuclearCrossSection::be_p_in[24] ={ 60,  95, 142, 194, 262, 319, 345, 361, 364, 364, 354, 350, 330, 319, 298, 280, 258, 237, 216, 200, 189, 183,  182,  180};
 
 	const G4double G4PiNuclearCrossSection::e2[39] =    {.02, .04, .06, .08, 0.1, .11, .12, .13, .14, .15, .16, .17, .18, 0.2, .22, .24, .26, .28, 0.3, .35, 0.4, .45, 0.5, .55, .575, 0.6, 0.7, 0.8, 0.9,   1,   2,   3,   5,  10,  20,  50, 100, 500, 1000};
 	const G4double G4PiNuclearCrossSection::c_m_t[39] = {204, 260, 366, 517, 630, 673, 694, 704, 710, 711, 706, 694, 676, 648, 616, 584, 548, 518, 489, 426, 376, 342, 323, 310,  312, 313, 319, 333, 342, 348, 310, 290, 268, 250, 245, 237, 234, 234,  234};
@@ -107,10 +135,26 @@
 	const G4double G4PiNuclearCrossSection::pb_m_in[35] = {1575, 2025, 2300, 2575, 2850, 3000, 3115, 3180, 3080, 2940, 2800, 2670, 2550, 2450, 2370, 2220, 2110, 2000, 1920, 1880, 1850, 1800, 1805, 1810, 1820, 1840, 1800, 1720, 1640, 1620, 1570, 1530, 1530, 1530, 1530};
 	const G4double G4PiNuclearCrossSection::pb_p_t[30] =  { 515,  940, 1500, 2400, 3270, 3750, 4050, 4140, 4260, 4200, 4080, 3990, 3990, 3810, 3730, 3520, 3370, 3186, 3110, 3010, 2990, 2985, 3005, 3020, 3040, 3080, 3020, 2905, 2790, 2750};
 	const G4double G4PiNuclearCrossSection::pb_p_in[30] = { 348,  707, 1040, 1650, 2100, 2400, 2580, 2640, 2650, 2520, 2410, 2300, 2250, 2190, 2130, 2000, 1930, 1870, 1830, 1790, 1770, 1765, 1775, 1780, 1790, 1800, 1775, 1710, 1620, 1620};
-	const G4double G4PiNuclearCrossSection::u_m_t[35] =   {7080, 6830, 6650, 6530, 6400, 6280, 6100, 5840, 5660, 5520, 5330, 5160, 4990, 4810, 4630, 4323, 4130, 3870, 3700, 3550, 3490, 3465, 3467, 3475, 3495, 3515, 3440, 3360, 3150, 3040, 2985, 2955, 2940, 2940, 2940};
-	const G4double G4PiNuclearCrossSection::u_m_in[35] =  {1740, 2220, 2500, 2820, 3080, 3300, 3420, 3500, 3420, 3330, 3200, 3060, 2940, 2850, 2710, 2470, 2380, 2250, 2160, 2080, 2040, 2045, 2047, 2050, 2055, 2060, 2010, 1980, 1830, 1780, 1735, 1710, 1700, 1700, 1700};
-	const G4double G4PiNuclearCrossSection::u_p_t[30] =   { 485,  960, 1580, 2700, 3550, 4050, 4320, 4420, 4620, 4660, 4580, 4470, 4350, 4295, 4187, 3938, 3755, 3573, 3450, 3342, 3310, 3295, 3310, 3330, 3375, 3405, 3350, 3338, 3135, 3040};
-	const G4double G4PiNuclearCrossSection::u_p_in[30] =  { 334,  720, 1020, 1560, 2100, 2300, 2550, 2700, 2880, 2880, 2760, 2660, 2550, 2510, 2430, 2270, 2130, 2060, 2000, 1970, 1950, 1950, 1960, 1960, 1970, 1980, 1950, 1978, 1830, 1780};
+
+ const G4double G4PiNuclearCrossSection::u_m_t[35] =   {
+ 7080, 6830, 6650, 6530, 6400, 6280, 6100, 5840, 5660, 5520, 5330, 5160, 
+ 4990, 4810, 4630, 4323, 4130, 3870, 3700, 3550, 3490, 3465, 3467, 3475, 
+ 3495, 3515, 3440, 3360, 3150, 3040, 2985, 2955, 2940, 2940, 2940};
+
+ const G4double G4PiNuclearCrossSection::u_m_in[35] =  {
+ 1740, 2220, 2500, 2820, 3080, 3300, 3420, 3500, 3420, 3330, 3200, 3060, 
+ 2940, 2850, 2710, 2470, 2380, 2250, 2160, 2080, 2040, 2045, 2047, 2050, 
+ 2055, 2060, 2010, 1980, 1830, 1780, 1735, 1710, 1700, 1700, 1700};
+
+ const G4double G4PiNuclearCrossSection::u_p_t[30] =   { 
+  485,  960, 1580, 2700, 3550, 4050, 4320, 4420, 4620, 4660, 4580, 4470, 
+ 4350, 4295, 4187, 3938, 3755, 3573, 3450, 3342, 3310, 3295, 3310, 3330, 
+ 3375, 3405, 3350, 3338, 3135, 3040};
+
+ const G4double G4PiNuclearCrossSection::u_p_in[30] =  { 
+  334,  720, 1020, 1560, 2100, 2300, 2550, 2700, 2880, 2880, 2760, 2660, 
+ 2550, 2510, 2430, 2270, 2130, 2060, 2000, 1970, 1950, 1950, 1960, 1960, 
+ 1970, 1980, 1950, 1978, 1830, 1780};
 
  G4PiNuclearCrossSection::
  G4PiNuclearCrossSection()
@@ -167,114 +211,117 @@
 
  }
 
- G4PiNuclearCrossSection::
- ~G4PiNuclearCrossSection()
- {
-   std::for_each(thePimData.begin(), thePimData.end(), G4PiData::Delete());
-   std::for_each(thePipData.begin(), thePipData.end(), G4PiData::Delete());
- }
+G4PiNuclearCrossSection::
+~G4PiNuclearCrossSection()
+{
+  std::for_each(thePimData.begin(), thePimData.end(), G4PiData::Delete());
+  std::for_each(thePipData.begin(), thePipData.end(), G4PiData::Delete());
+}
 
- G4double G4PiNuclearCrossSection::
- GetCrossSection(const G4DynamicParticle* aParticle, 
-                 const G4Element* anElement,
-                 G4double )
- {
-   // precondition
-   G4ping debug("debug_PiNuclearCrossSection");
-	 G4double tuning = 1.;
-   using namespace std;
-   G4bool ok = false;
-   if(aParticle->GetDefinition() == G4PionMinus::PionMinus()) ok=true;
-   if(aParticle->GetDefinition() == G4PionPlus::PionPlus())   ok=true;
-   if(!ok) 
-   {
-     throw G4HadronicException(__FILE__, __LINE__,
-                          	"Call to G4PiNuclearCrossSection failed.");
-   }
-   G4double charge = aParticle->GetDefinition()->GetPDGCharge();
-   G4double kineticEnergy = aParticle->GetKineticEnergy();
 
-   // body
-   G4double result = 0;
-   G4int Z=G4lrint(anElement->GetZ());
-   debug.push_back(Z);
-   size_t it=0;
-   while(it<theZ.size() && Z>theZ[it]) it++;
-   debug.push_back(theZ[it]);
-   debug.push_back(kineticEnergy);
-	 if(Z==29) tuning=.96;
-   if(Z > theZ[it]) 
-   {
-     throw G4HadronicException(__FILE__, __LINE__,
-       "Called G4PiNuclearCrossSection outside parametrization");
-   }
-   G4int Z1, Z2;
-   G4double x1, x2;
-   if(charge<0)
-   {
-     if(theZ[it]==Z)
-     {
-       result = thePimData[it]->ReactionXSection(kineticEnergy);
-       debug.push_back("D1 ");
-       debug.push_back(result);
-     }
-     else
-     {
-       x1 = thePimData[it-1]->ReactionXSection(kineticEnergy);
-       Z1 = theZ[it-1];
-       x2 = thePimData[it]->ReactionXSection(kineticEnergy);
-       Z2 = theZ[it];
-       result = Interpolate(Z1, Z2, Z, x1, x2);
-       debug.push_back("D2 ");
-       debug.push_back(x1);
-       debug.push_back(x2);
-       debug.push_back(Z1);
-       debug.push_back(Z2);
-       debug.push_back(result);
-     }
-   }
-   else
-   {
-     if(theZ[it]==Z)
-     {
-                              // at high energies, when no data for pi+, use pi- 
-       std::vector<G4PiData *> * theData = &thePimData;
-       if(thePipData[it]->AppliesTo(kineticEnergy))
-       {
-         theData = &thePipData;
-       }
-       result = theData->operator[](it)->ReactionXSection(kineticEnergy);
-       debug.push_back("D3 ");
-       debug.push_back(result);
-     }
-     else
-     {
-       std::vector<G4PiData *> * theLData = &thePimData;
-       if(thePipData[it-1]->AppliesTo(kineticEnergy))
-       {
-         theLData = &thePipData;
-       }
-       std::vector<G4PiData *> * theHData = &thePimData;
-       if(thePipData[it]->AppliesTo(kineticEnergy))
-       {
-         theHData = &thePipData;
-       }
-       x1 = theLData->operator[](it-1)->ReactionXSection(kineticEnergy);
-       Z1 = theZ[it-1];
-       x2 = theHData->operator[](it)->ReactionXSection(kineticEnergy);
-       Z2 = theZ[it];
-       result = Interpolate(Z1, Z2, Z, x1, x2);
-       debug.push_back("D4 ");
-       debug.push_back(x1);
-       debug.push_back(x2);
-       debug.push_back(Z1);
-       debug.push_back(Z2);
-       debug.push_back(result);
-     }
-   }
+G4double G4PiNuclearCrossSection::
+GetIsoZACrossSection(const G4DynamicParticle* particle, G4double ZZ, 
+                     G4double /*AA*/, G4double /*temperature*/)
+{
+  // precondition
+  G4ping debug("debug_PiNuclearCrossSection");
+  G4double tuning = 1.;
+  using namespace std;
+  G4bool ok = false;
+  if(particle->GetDefinition() == G4PionMinus::PionMinus()) ok=true;
+  if(particle->GetDefinition() == G4PionPlus::PionPlus())   ok=true;
+  if(!ok) 
+  {
+    throw G4HadronicException(__FILE__, __LINE__,
+                       	"Call to G4PiNuclearCrossSection failed.");
+  }
 
-   debug.dump();
-   return tuning*result;
+  G4double charge = particle->GetDefinition()->GetPDGCharge();
+  G4double kineticEnergy = particle->GetKineticEnergy();
+
+  // body
+
+  G4double result = 0;
+  G4int Z=G4lrint(ZZ);
+  debug.push_back(Z);
+  size_t it=0;
+  while(it<theZ.size() && Z>theZ[it]) it++;
+  debug.push_back(theZ[it]);
+  debug.push_back(kineticEnergy);
+  if(Z==29) tuning=.96;
+
+  if(Z > theZ[it]) 
+  {
+    throw G4HadronicException(__FILE__, __LINE__,
+      "Called G4PiNuclearCrossSection outside parametrization");
+  }
+  G4int Z1, Z2;
+  G4double x1, x2;
+  if(charge<0)
+  {
+    if(theZ[it]==Z)
+    {
+      result = thePimData[it]->ReactionXSection(kineticEnergy);
+      debug.push_back("D1 ");
+      debug.push_back(result);
+    }
+    else
+    {
+      x1 = thePimData[it-1]->ReactionXSection(kineticEnergy);
+      Z1 = theZ[it-1];
+      x2 = thePimData[it]->ReactionXSection(kineticEnergy);
+      Z2 = theZ[it];
+      result = Interpolate(Z1, Z2, Z, x1, x2);
+      debug.push_back("D2 ");
+      debug.push_back(x1);
+      debug.push_back(x2);
+      debug.push_back(Z1);
+      debug.push_back(Z2);
+      debug.push_back(result);
+    }
+  }
+  else
+  {
+    if(theZ[it]==Z)
+    {
+      // at high energies, when no data for pi+, use pi- 
+      std::vector<G4PiData *> * theData = &thePimData;
+      if(thePipData[it]->AppliesTo(kineticEnergy))
+      {
+        theData = &thePipData;
+      }
+      result = theData->operator[](it)->ReactionXSection(kineticEnergy);
+      debug.push_back("D3 ");
+      debug.push_back(result);
+    }
+    else
+    {
+      std::vector<G4PiData *> * theLData = &thePimData;
+      if(thePipData[it-1]->AppliesTo(kineticEnergy))
+      {
+        theLData = &thePipData;
+      }
+      std::vector<G4PiData *> * theHData = &thePimData;
+      if(thePipData[it]->AppliesTo(kineticEnergy))
+      {
+        theHData = &thePipData;
+      }
+      x1 = theLData->operator[](it-1)->ReactionXSection(kineticEnergy);
+      Z1 = theZ[it-1];
+      x2 = theHData->operator[](it)->ReactionXSection(kineticEnergy);
+      Z2 = theZ[it];
+      result = Interpolate(Z1, Z2, Z, x1, x2);
+      debug.push_back("D4 ");
+      debug.push_back(x1);
+      debug.push_back(x2);
+      debug.push_back(Z1);
+      debug.push_back(Z2);
+      debug.push_back(result);
+    }
+  }
+
+  debug.dump();
+  return tuning*result;
  }
 
  G4double G4PiNuclearCrossSection::
