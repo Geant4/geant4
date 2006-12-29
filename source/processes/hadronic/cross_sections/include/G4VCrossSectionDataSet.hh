@@ -24,15 +24,13 @@
 // ********************************************************************
 //
 //
-//
-//
 // GEANT4 physics abstract class: G4VCrossSectionData -- header file
 // F.W. Jones, TRIUMF, 20-JAN-97
 //
 // Class Description
-// This class serves as base class for cross-section data sets in geant4
-// hadronic physics. Users can derive their specialized classes, and register with
-// the system, or use provided data sets.
+// This is a base class for hadronic cross section data sets.  Users may 
+// derive specialized cross section classes and register them with the
+// appropriate process, or use provided data sets.
 // Class Description - End
 
 #ifndef G4VCrossSectionDataSet_h
@@ -48,23 +46,32 @@ public:
 
    G4VCrossSectionDataSet() :
       verboseLevel(0)
-   {
-   }
+   {}
 
    virtual ~G4VCrossSectionDataSet()
-   {
-   }
+   {}
 
 public: //with description
 
-   // the following methods need to be implemented for a new data-set.
+   // The following methods need to be implemented for each new data set.
    virtual
    G4bool IsApplicable(const G4DynamicParticle*, const G4Element*) = 0;
+
+   virtual
+   G4bool IsZAApplicable(const G4DynamicParticle*, G4double /*Z*/, G4double /*A*/);
 
    virtual
    G4double GetCrossSection(const G4DynamicParticle*, 
                             const G4Element*, 
 			    G4double aTemperature = 0.) = 0;
+
+   virtual
+   G4double GetIsoCrossSection(const G4DynamicParticle*, const G4Isotope*, 
+	         	       G4double aTemperature = 0.);
+
+   virtual
+   G4double GetIsoZACrossSection(const G4DynamicParticle*, G4double /*Z*/,
+                                 G4double /*A*/, G4double aTemperature = 0.);
 
    virtual
    void BuildPhysicsTable(const G4ParticleDefinition&) = 0;

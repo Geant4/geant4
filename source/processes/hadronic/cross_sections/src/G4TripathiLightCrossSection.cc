@@ -100,9 +100,16 @@ G4TripathiLightCrossSection::~G4TripathiLightCrossSection ()
 G4bool G4TripathiLightCrossSection::IsApplicable
   (const G4DynamicParticle* theProjectile, const G4Element* theTarget)
 {
+  return IsZAApplicable(theProjectile, theTarget->GetZ(), theTarget->GetA());
+}
+
+
+G4bool G4TripathiLightCrossSection::IsZAApplicable
+  (const G4DynamicParticle* theProjectile, G4double ZZ, G4double AA)
+{
   G4bool result = false;
-  const G4double AT = theTarget->GetN();
-  const G4double ZT = theTarget->GetZ();
+  const G4double AT = AA;
+  const G4double ZT = ZZ;
   const G4double ZP = theProjectile->GetDefinition()->GetPDGCharge();
   const G4double AP = theProjectile->GetDefinition()->GetBaryonNumber();
   if (theProjectile->GetKineticEnergy()/
@@ -116,11 +123,10 @@ G4bool G4TripathiLightCrossSection::IsApplicable
 }
 ///////////////////////////////////////////////////////////////////////////////
 //
-G4double G4TripathiLightCrossSection::GetCrossSection
-  (const G4DynamicParticle* theProjectile, const G4Element* theTarget,
-  G4double /* theTemperature*/)
+G4double G4TripathiLightCrossSection::GetIsoZACrossSection
+  (const G4DynamicParticle* theProjectile, G4double ZZ, G4double AA,
+   G4double /*theTemperature*/)
 {
-//
 //
 // Initialise the result.
   G4double result = 0.0;
@@ -129,8 +135,8 @@ G4double G4TripathiLightCrossSection::GetCrossSection
 // Get details of the projectile and target (nucleon number, atomic number,
 // kinetic enery and energy/nucleon.
 //
-  const G4double AT = theTarget->GetN();
-  const G4double ZT = theTarget->GetZ();
+  const G4double AT = AA;
+  const G4double ZT = ZZ;
   const G4double EA = theProjectile->GetKineticEnergy()/MeV;
   const G4double AP = theProjectile->GetDefinition()->GetBaryonNumber();
   const G4double ZP = theProjectile->GetDefinition()->GetPDGCharge();
@@ -292,14 +298,47 @@ G4double G4TripathiLightCrossSection::GetCrossSection
       G4TripathiLightCrossSection theTripathiLightCrossSection;
       theTripathiLightCrossSection.SetLowEnergyCheck(true);
       G4double resultp =
-        theTripathiLightCrossSection.GetCrossSection
-        (&slowerProjectile, theTarget, 0.0);
+        theTripathiLightCrossSection.GetIsoZACrossSection
+        (&slowerProjectile, ZZ, AA, 0.0);
       if (resultp >result) result = 0.0;
     }
   }
 
   return result;
 }
+
+
+G4double G4TripathiLightCrossSection::GetCrossSection
+  (const G4DynamicParticle* theProjectile, const G4Element* theTarget,
+  G4double theTemperature)
+{
+  G4int nIso = theTarget->GetNumberOfIsotopes();
+  G4double xsection = 0;
+     
+  if (nIso) {
+    G4double sig;
+    G4IsotopeVector* isoVector = theTarget->GetIsotopeVector();
+    G4double* abundVector = theTarget->GetRelativeAbundanceVector();
+    G4double ZZ;
+    G4double AA;
+     
+    for (G4int i = 0; i < nIso; i++) {
+      ZZ = G4double( (*isoVector)[i]->GetZ() );
+      AA = G4double( (*isoVector)[i]->GetN() );
+      sig = GetIsoZACrossSection(theProjectile, ZZ, AA, theTemperature);
+      xsection += sig*abundVector[i];
+    }
+   
+  } else {
+    xsection =
+      GetIsoZACrossSection(theProjectile, theTarget->GetZ(), theTarget->GetN(),
+                           theTemperature);
+  }
+    
+  return xsection;
+}
+
+
 ///////////////////////////////////////////////////////////////////////////////
 //
 void G4TripathiLightCrossSection::SetLowEnergyCheck (G4bool aLowEnergyCheck)
