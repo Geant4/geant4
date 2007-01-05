@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VisManager.cc,v 1.109 2006-11-26 15:43:51 allison Exp $
+// $Id: G4VisManager.cc,v 1.110 2007-01-05 16:32:10 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -920,6 +920,7 @@ void G4VisManager::RegisterMessengers () {
   RegisterMessenger(new G4VisCommandGeometrySetLineStyle);
   RegisterMessenger(new G4VisCommandGeometrySetLineWidth);
   RegisterMessenger(new G4VisCommandGeometrySetForceAuxEdgeVisible);
+  RegisterMessenger(new G4VisCommandGeometrySetForceLineSegmentsPerCircle);
   RegisterMessenger(new G4VisCommandGeometrySetForceSolid);
   RegisterMessenger(new G4VisCommandGeometrySetForceWireframe);
   RegisterMessenger(new G4VisCommandGeometrySetVisibility);
