@@ -1,9 +1,16 @@
-$Id: History,v 1.111 2007-01-05 16:00:48 allison Exp $
+$Id: History,v 1.112 2007-01-05 16:01:43 allison Exp $
 
 History file for visualization/test subdirectory
 ------------------------------------------------
 
 $Log: not supported by cvs2svn $
+Revision 1.111  2007/01/05 16:00:48  allison
+Refines usage:
+// Usage: test19 [<session>] [<verbosity>]
+// Without verbosity, verbosity=warnings.
+// Without session, session=new G4UIterminal(), or if G4UI_USE_TCSH is set
+//                  session=new G4UIterminal(new G4UItcsh),
+
 Revision 1.110  2006/11/14 16:04:33  allison
 vistest-V08-01-05
 
