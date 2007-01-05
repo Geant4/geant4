@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ASCIITreeSceneHandler.cc,v 1.33 2006-12-11 21:14:45 allison Exp $
+// $Id: G4ASCIITreeSceneHandler.cc,v 1.34 2007-01-05 17:00:27 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -117,6 +117,20 @@ void G4ASCIITreeSceneHandler::EndModeling () {
   const G4int detail = verbosity % 10;
   const G4String& outFileName = pSystem -> GetOutFileName();
 
+  // Output left over copy number, if any...
+  if (fLastCopyNo != fLastNonSequentialCopyNo) {
+    if (fLastCopyNo == fLastNonSequentialCopyNo + 1) *fpOutFile << ',';
+    else *fpOutFile << '-';
+    *fpOutFile << fLastCopyNo;
+  }
+  // Output outstanding rest of line, if any...
+  if (!fRestOfLine.str().empty()) *fpOutFile << fRestOfLine.str();
+  fRestOfLine.str("");
+  fpLastPV = 0;
+  fLastPVName.clear();
+  fLastCopyNo = -99;
+  fLastNonSequentialCopyNo = -99;
+
   // This detail to G4cout regardless of outFileName...
   if (detail >= 4) {
     G4cout << "Calculating mass(es)..." << G4endl;
@@ -161,20 +175,6 @@ void G4ASCIITreeSceneHandler::EndModeling () {
       }
     }
   }
-
-  // Output left over copy number, if any...
-  if (fLastCopyNo != fLastNonSequentialCopyNo) {
-    if (fLastCopyNo == fLastNonSequentialCopyNo + 1) *fpOutFile << ',';
-    else *fpOutFile << '-';
-    *fpOutFile << fLastCopyNo;
-  }
-  // Output outstanding rest of line, if any...
-  if (!fRestOfLine.str().empty()) *fpOutFile << fRestOfLine.str();
-  fRestOfLine.str("");
-  fpLastPV = 0;
-  fLastPVName.clear();
-  fLastCopyNo = -99;
-  fLastNonSequentialCopyNo = -99;
 
   if (outFileName != "G4cout") {
     fOutFile.close();
