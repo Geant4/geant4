@@ -24,13 +24,15 @@
 // ********************************************************************
 //
 //
-// $Id: test19.cc,v 1.28 2006-11-03 14:17:48 allison Exp $
+// $Id: test19.cc,v 1.29 2007-01-05 16:00:48 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
-// Usage: test19 <session> <verbosity>
-//   Arguments have defaults: tcsh warnings
+// Usage: test19 [<session>] [<verbosity>]
+// Without verbosity, verbosity=warnings.
+// Without session, session=new G4UIterminal(), or if G4UI_USE_TCSH is set
+//                  session=new G4UIterminal(new G4UItcsh),
 
 #include <stdio.h>
 #include <ctype.h>
@@ -46,7 +48,9 @@
 #include "MySteppingAction.hh"
 
 #include "G4UIterminal.hh"
+#ifdef G4UI_USE_TCSH
 #include "G4UItcsh.hh"
+#endif
 #include "G4UIGAG.hh"
 #ifdef G4UI_USE_WO
   #include "G4UIWo.hh"
@@ -95,8 +99,10 @@ int main (int argc, char** argv) {
   session = new G4UIWin32 (hInstance,hPrevInstance,lpszCmdLine,nCmdShow);
 #else
   if (argc >= 2) {
+#ifdef G4UI_USE_TCSH
     if (strcmp (argv[1], "tcsh")==0)     session =
 					   new G4UIterminal(new G4UItcsh);
+#endif
 #ifdef G4UI_USE_WO
     else if (strcmp (argv[1], "Wo")==0)  session = new G4UIWo (argc, argv);
 #endif
@@ -111,7 +117,11 @@ int main (int argc, char** argv) {
 					   new G4UIterminal();
   }
   else                                   session =
+#ifdef G4UI_USE_TCSH
+					   new G4UIterminal(new G4UItcsh);
+#else
 					   new G4UIterminal();
+#endif
 #endif
   G4UImanager::GetUIpointer()->SetSession(session);  //So that Pause works..
 
