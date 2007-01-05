@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RayTracerViewer.cc,v 1.16 2006-06-29 21:24:15 gunter Exp $
+// $Id: G4RayTracerViewer.cc,v 1.17 2007-01-05 17:05:11 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4RayTracerViewer.hh"
@@ -79,6 +79,8 @@ void G4RayTracerViewer::SetView()
     actualLightpointDirection(-fVP.GetActualLightpointDirection());
   theTracer->SetLightDirection(actualLightpointDirection);
   theTracer->SetBackgroundColour(fVP.GetBackgroundColour());
+  theTracer->SetNColumn(fVP.GetWindowSizeHintX());
+  theTracer->SetNRow(fVP.GetWindowSizeHintY());
 }
 
 
