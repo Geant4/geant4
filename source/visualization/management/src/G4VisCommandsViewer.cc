@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewer.cc,v 1.66 2006-11-25 15:38:03 allison Exp $
+// $Id: G4VisCommandsViewer.cc,v 1.67 2007-01-05 16:30:59 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer commands - John Allison  25th October 1998
@@ -72,7 +72,7 @@ G4VisCommandViewerAddCutawayPlane::G4VisCommandViewerAddCutawayPlane () {
   G4bool omitable;
   fpCommand = new G4UIcommand ("/vis/viewer/addCutawayPlane", this);
   fpCommand -> SetGuidance
-    ("Add cutaway plane A*x + B*y + C*z + D = 0 to current viewer.");
+    ("Add cutaway plane to current viewer.");
   G4UIparameter* parameter;
   parameter  =  new G4UIparameter("x",'d',omitable = true);
   parameter  -> SetDefaultValue  (0);
