@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLSceneHandler.cc,v 1.45 2006-08-30 11:37:34 allison Exp $
+// $Id: G4OpenGLSceneHandler.cc,v 1.46 2007-01-05 16:43:01 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -127,7 +127,11 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyline& line)
 
   glDisable (GL_LIGHTING);
 
-  G4double lineWidth = GetLineWidth(line);
+  // Get vis attributes - pick up defaults if none.
+  const G4VisAttributes* pVA =
+    fpViewer -> GetApplicableVisAttributes (line.GetVisAttributes ());
+
+  G4double lineWidth = GetLineWidth(pVA);
   glLineWidth(lineWidth);
 
   glBegin (GL_LINE_STRIP);
@@ -204,7 +208,11 @@ void G4OpenGLSceneHandler::AddCircleSquare
   
   glDisable (GL_LIGHTING);
   
-  G4double lineWidth = GetLineWidth(marker);
+  // Get vis attributes - pick up defaults if none.
+  const G4VisAttributes* pVA =
+    fpViewer -> GetApplicableVisAttributes (marker.GetVisAttributes ());
+
+  G4double lineWidth = GetLineWidth(pVA);
   glLineWidth(lineWidth);
 
   G4VMarker::FillStyle style = marker.GetFillStyle();
@@ -409,7 +417,7 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
   G4bool transparency_enabled = true;
   G4OpenGLViewer* pViewer = dynamic_cast<G4OpenGLViewer*>(fpViewer);
   if (pViewer) transparency_enabled = pViewer->transparency_enabled;
-  const G4Colour& c = GetColour (polyhedron);
+  const G4Colour& c = pVA->GetColour();
   GLfloat materialColour [4];
   materialColour [0] = c.GetRed ();
   materialColour [1] = c.GetGreen ();
@@ -420,7 +428,7 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
     materialColour [3] = 1.;
   }
 
-  G4double lineWidth = GetLineWidth(polyhedron);
+  G4double lineWidth = GetLineWidth(pVA);
   glLineWidth(lineWidth);
 
   GLfloat clear_colour[4];
