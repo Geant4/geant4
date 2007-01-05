@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisAttributes.hh,v 1.18 2006-10-24 05:54:20 allison Exp $
+// $Id: G4VisAttributes.hh,v 1.19 2007-01-05 14:12:13 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -118,6 +118,7 @@ public: // With description
   G4bool          IsForceDrawingStyle            () const;
   ForcedDrawingStyle GetForcedDrawingStyle       () const;
   G4bool          IsForceAuxEdgeVisible          () const;
+  G4bool          IsForceLineSegmentsPerCircle   () const;
   G4int           GetForcedLineSegmentsPerCircle () const;
   G4double        GetStartTime                   () const;
   G4double        GetEndTime                     () const;
