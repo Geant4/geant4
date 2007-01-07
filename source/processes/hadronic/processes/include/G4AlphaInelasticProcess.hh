@@ -23,8 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
  // Hadronic Process: Alpha Inelastic Process
  // J.L. Chuma, TRIUMF, 21-Feb-1997
  // Last modified: 03-Apr-1997
@@ -32,7 +30,6 @@
 #ifndef G4AlphaInelasticProcess_h
 #define G4AlphaInelasticProcess_h 1
  
-//#include "G4HadronicInelasticProcess.hh"
 #include "G4HadronInelasticProcess.hh"
  
 // Class Description
@@ -40,14 +37,13 @@
 // to be used in your physics list in case you need this physics.
 // Class Description - End
 
-// class G4AlphaInelasticProcess : public G4HadronicInelasticProcess
+
  class G4AlphaInelasticProcess : public G4HadronInelasticProcess
  {
  public:
     
     G4AlphaInelasticProcess(
      const G4String& processName = "AlphaInelastic" ) :
-      //      G4HadronicInelasticProcess( processName, G4Alpha::Alpha() )
       G4HadronInelasticProcess( processName, G4Alpha::Alpha() )
     { }
         

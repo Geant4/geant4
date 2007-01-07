@@ -23,8 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
  // Hadronic Process: AntiOmegaMinus Inelastic Process
  // J.L. Chuma, TRIUMF, 18-Feb-1997
  // Last modified: 03-Apr-1997
@@ -39,17 +37,15 @@
 // to be used in your physics list in case you need this physics.
 // Class Description - End
 
-//#include "G4HadronicInelasticProcess.hh"
 #include "G4HadronInelasticProcess.hh"
  
-// class G4AntiOmegaMinusInelasticProcess : public G4HadronicInelasticProcess
+
  class G4AntiOmegaMinusInelasticProcess : public G4HadronInelasticProcess
  {
  public:
     
     G4AntiOmegaMinusInelasticProcess(
      const G4String& processName = "AntiOmegaMinusInelastic" ) :
-      //      G4HadronicInelasticProcess( processName, G4AntiOmegaMinus::AntiOmegaMinus() )
       G4HadronInelasticProcess( processName, G4AntiOmegaMinus::AntiOmegaMinus() )
     { }
     

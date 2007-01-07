@@ -23,8 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
 // G4 Fission Process -- header file
 // F.W. Jones, TRIUMF, 03-DEC-96
 //  
@@ -47,17 +45,10 @@
 #ifndef G4HadronFissionProcess_h
 #define G4HadronFissionProcess_h 1
  
-//#include <rw/tphdict.h>
 #include "globals.hh"
-//#include "Randomize.hh"
 #include "G4Element.hh"
 #include "G4ElementVector.hh"
-//#include "G4ElementTable.hh"
 #include "G4VDiscreteProcess.hh"
-//#include "G4PhysicsTable.hh"
-//#include "G4PhysicsVector.hh"
-//#include "G4LPhysicsFreeVector.hh"
-//#include "G4HadronCrossSections.hh"
 #include "G4Proton.hh"
 #include "G4Neutron.hh"
 #include "G4Electron.hh"
@@ -73,7 +64,7 @@ class G4HadronFissionProcess : public G4HadronicProcess
 {
 public:
 
-   G4HadronFissionProcess(const G4String& processName ="LFission");
+   G4HadronFissionProcess(const G4String& processName ="HadronFission");
 
    ~G4HadronFissionProcess();
  

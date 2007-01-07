@@ -23,8 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
  // Hadronic Process: KaonMinus Inelastic Process
  // J.L. Chuma, TRIUMF, 12-Feb-1997
  // Last modified: 03-Apr-1997
@@ -37,17 +35,15 @@
 // to be used in your physics list in case you need this physics.
 // Class Description - End
 
-//#include "G4HadronicInelasticProcess.hh"
 #include "G4HadronInelasticProcess.hh"
  
-// class G4KaonMinusInelasticProcess : public G4HadronicInelasticProcess
+
  class G4KaonMinusInelasticProcess : public G4HadronInelasticProcess
  {
  public:
     
     G4KaonMinusInelasticProcess(
      const G4String& processName = "KaonMinusInelastic" ) :
-      //      G4HadronicInelasticProcess( processName, G4KaonMinus::KaonMinus() )
       G4HadronInelasticProcess( processName, G4KaonMinus::KaonMinus() )
     { }
     

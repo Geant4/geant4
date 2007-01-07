@@ -64,7 +64,7 @@ class G4HadronCaptureProcess : public G4HadronicProcess
 {
 public:
 
-   G4HadronCaptureProcess(const G4String& processName ="LCapture");
+   G4HadronCaptureProcess(const G4String& processName ="HadronCapture");
 
    ~G4HadronCaptureProcess();
  
