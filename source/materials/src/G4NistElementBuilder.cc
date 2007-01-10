@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistElementBuilder.cc,v 1.12 2007-01-10 18:53:45 vnivanch Exp $
+// $Id: G4NistElementBuilder.cc,v 1.13 2007-01-10 18:58:52 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -116,11 +116,12 @@ G4Element* G4NistElementBuilder::FindOrBuildElement(G4int Z,
   return anElement;
 }
 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4Element* G4NistElementBuilder::BuildElement(G4int Z, G4bool buildIsotopes)
 {
+  G4Element* theElement = 0;
+  if(Z<1 || Z>limitNumElements) return theElement;
   G4double Zeff = (G4double)Z;
   G4double Aeff = atomicMass[Z];
   if (verbose > 1) {
@@ -130,7 +131,6 @@ G4Element* G4NistElementBuilder::BuildElement(G4int Z, G4bool buildIsotopes)
     if(buildIsotopes) G4cout << "  with natural isotope composition" << G4endl; 
     else              G4cout << "  isotopes are not built" << G4endl;
   }
-  G4Element* theElement = 0;
   
   //build Element with its Isotopes
   //
