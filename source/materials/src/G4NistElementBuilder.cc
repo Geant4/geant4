@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistElementBuilder.cc,v 1.11 2006-10-17 15:15:46 vnivanch Exp $
+// $Id: G4NistElementBuilder.cc,v 1.12 2007-01-10 18:53:45 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -41,6 +41,7 @@
 // 11.05.2006 Do not subtract mass of atomic electrons from NIST mass (VI) 
 // 17.10.2006 Add natiral abandances flag to element and 
 //            use G4 units for isotope mass vector (VI) 
+// 10.01.2006 Add protection agains Z>101 (VI)
 //
 // -------------------------------------------------------------------
 //
@@ -61,6 +62,8 @@ G4NistElementBuilder::G4NistElementBuilder(G4int vb):
   verbose(vb), first(true)
 {
   Initialise();
+  // Atomic shells are defined only for 101 elements
+  limitNumElements = 101;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -81,7 +84,7 @@ G4Element* G4NistElementBuilder::FindOrBuildElement(const G4String& symb,
   }
   G4int Z = 0;
   G4Element* elm = 0;
-  do {Z++;} while (Z<maxNumElements && !(symb == elmSymbol[Z]));
+  do {Z++;} while (Z<limitNumElements && !(symb == elmSymbol[Z]));
   if(Z<maxNumElements) elm = FindOrBuildElement(Z, buildIsotopes);
   return elm;
 }
