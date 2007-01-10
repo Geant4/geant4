@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 
-// $Id: testG4Orb.cc,v 1.5 2006-06-29 18:45:59 gunter Exp $
+// $Id: testG4Orb.cc,v 1.6 2007-01-10 16:57:33 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4Orb Test File
@@ -144,6 +144,18 @@ int main(void)
                              -0.052042885743481759,
                               0.43233575477931813);
 
+  G4Orb G650("G650",5.0e-05*mm);
+
+  G4ThreeVector positionG650(-2.61756492392351e-06*mm, 
+                             -4.992317579421979e-05*mm, 
+                             -9.474848146062698e-07*mm);
+  G4ThreeVector directionG650(0.6967354558785861, 
+                              0.716168068935222, 
+                              0.0407799161261308);
+
+
+
+
 
   G4cout.precision(16);
 
@@ -172,6 +184,9 @@ int main(void)
     G4cout<<"p radius = "
           <<s10p.mag()<<G4endl ;
     
+    inside = G650.Inside(positionG650);
+    G4cout<<"G650.Inside(positionG650) = "
+          <<OutputInside(inside)<<G4endl ;
 
     assert(s1.Inside(pzero)==kInside);
     // assert(s1.Inside(pz)==kInside);
