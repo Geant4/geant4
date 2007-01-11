@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.cc,v 1.76 2007-01-11 15:33:24 vnivanch Exp $
+// $Id: G4LossTableManager.cc,v 1.77 2007-01-11 19:00:45 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -318,7 +318,7 @@ void G4LossTableManager::EnergyLossProcessIsInitialised(
         part_vector[i] = 0;
       }
     }
-    if (run == 0) firstParticle = particle;
+    if (0 == run) firstParticle = particle;
     run++;
     /*
     if(first_entry = false) {
@@ -480,7 +480,7 @@ G4VEnergyLossProcess* G4LossTableManager::BuildTables(
   for (i=0; i<n_loss; i++) {
     p = loss_vector[i];
     if (p && aParticle == part_vector[i] && 
-	!tables_are_built[i] || (run>1 && p->IsIonisationProcess()) ) {
+	(!tables_are_built[i] || (run>1 && p->IsIonisationProcess())) ) {
       if (p->IsIonisationProcess() && isActive[i] || !em || em && !isActive[iem] ) {
         em = p;
         iem= i;
