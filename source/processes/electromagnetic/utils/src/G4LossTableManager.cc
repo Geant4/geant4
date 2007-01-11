@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.cc,v 1.75 2006-12-13 15:44:42 gunter Exp $
+// $Id: G4LossTableManager.cc,v 1.76 2007-01-11 15:33:24 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -127,7 +127,8 @@ G4LossTableManager::~G4LossTableManager()
 G4LossTableManager::G4LossTableManager()
 {
   n_loss = 0;
-  first_entry = true;
+  run = 0;
+  //  first_entry = true;
   all_tables_are_built = false;
   all_tables_are_stored = false;
   currentLoss = 0;
@@ -289,7 +290,8 @@ void G4LossTableManager::EnergyLossProcessIsInitialised(
                    const G4ParticleDefinition* particle, 
 		   G4VEnergyLossProcess* p)
 {
-  if (first_entry || (particle == firstParticle && all_tables_are_built) ) {
+  //  if (first_entry || (particle == firstParticle && all_tables_are_built) ) {
+  if (run == 0 || (particle == firstParticle && all_tables_are_built) ) {
     all_tables_are_built = true;
 
     if(1 < verbose) 
@@ -316,10 +318,14 @@ void G4LossTableManager::EnergyLossProcessIsInitialised(
         part_vector[i] = 0;
       }
     }
-    if (first_entry) {
+    if (run == 0) firstParticle = particle;
+    run++;
+    /*
+    if(first_entry = false) {
       first_entry = false;
       firstParticle = particle;
     }
+    */
   }
 
   //  if(!all_tables_are_built) loss_map.clear();
@@ -473,7 +479,8 @@ G4VEnergyLossProcess* G4LossTableManager::BuildTables(
 
   for (i=0; i<n_loss; i++) {
     p = loss_vector[i];
-    if (p && aParticle == part_vector[i] && !tables_are_built[i]) {
+    if (p && aParticle == part_vector[i] && 
+	!tables_are_built[i] || (run>1 && p->IsIonisationProcess()) ) {
       if (p->IsIonisationProcess() && isActive[i] || !em || em && !isActive[iem] ) {
         em = p;
         iem= i;
