@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsCompound.cc,v 1.36 2007-01-05 16:27:40 allison Exp $
+// $Id: G4VisCommandsCompound.cc,v 1.37 2007-01-11 16:43:15 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // Compound /vis/ commands - John Allison  15th May 2000
@@ -206,9 +206,9 @@ void G4VisCommandDrawVolume::SetNewValue(G4UIcommand*, G4String newValue) {
   UImanager->ApplyCommand("/vis/sceneHandler/attach");
   UImanager->SetVerboseLevel(keepVerbose);
   static G4bool warned = false;
-  if (verbosity >= G4VisManager::warnings && !warned) {
+  if (verbosity >= G4VisManager::confirmations && !warned) {
     G4cout <<
-      "WARNING: For systems which are not \"auto-refresh\" you will need to"
+      "NOTE: For systems which are not \"auto-refresh\" you will need to"
       "\n  issue \"/vis/viewer/refresh\" or \"/vis/viewer/flush\"."
 	   << G4endl;
     warned = true;
@@ -321,9 +321,9 @@ void G4VisCommandSpecify::SetNewValue(G4UIcommand*, G4String newValue) {
   UImanager->ApplyCommand("/vis/sceneHandler/attach");
   UImanager->SetVerboseLevel(keepVerbose);
   static G4bool warned = false;
-  if (verbosity >= G4VisManager::warnings && !warned) {
+  if (verbosity >= G4VisManager::confirmations && !warned) {
     G4cout <<
-      "WARNING: For systems which are not \"auto-refresh\" you will need to"
+      "NOTE: For systems which are not \"auto-refresh\" you will need to"
       "\n  issue \"/vis/viewer/refresh\" or \"/vis/viewer/flush\"."
 	   << G4endl;
     warned = true;

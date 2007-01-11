@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewer.cc,v 1.67 2007-01-05 16:30:59 allison Exp $
+// $Id: G4VisCommandsViewer.cc,v 1.68 2007-01-11 16:41:30 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer commands - John Allison  25th October 1998
@@ -1138,8 +1138,8 @@ void G4VisCommandViewerRefresh::SetNewValue (G4UIcommand*, G4String newValue) {
 
   G4Scene* scene = sceneHandler->GetScene();
   if (!scene) {
-    if (verbosity >= G4VisManager::warnings) {
-      G4cout << "WARNING: SceneHandler \"" << sceneHandler->GetName()
+    if (verbosity >= G4VisManager::confirmations) {
+      G4cout << "NOTE: SceneHandler \"" << sceneHandler->GetName()
 	     << "\", to which viewer \"" << refreshName << "\"" <<
 	"\n  is attached, has no scene - \"/vis/scene/create\" and"
 	" \"/vis/sceneHandler/attach\""
@@ -1412,8 +1412,8 @@ void G4VisCommandViewerUpdate::SetNewValue (G4UIcommand*, G4String newValue) {
 
   G4Scene* scene = sceneHandler->GetScene();
   if (!scene) {
-    if (verbosity >= G4VisManager::warnings) {
-      G4cout << "WARNING: SceneHandler \"" << sceneHandler->GetName()
+    if (verbosity >= G4VisManager::confirmations) {
+      G4cout << "NOTE: SceneHandler \"" << sceneHandler->GetName()
 	     << "\", to which viewer \"" << updateName << "\"" <<
 	"\n  is attached, has no scene - \"/vis/scene/create\" and"
 	" \"/vis/sceneHandler/attach\""
