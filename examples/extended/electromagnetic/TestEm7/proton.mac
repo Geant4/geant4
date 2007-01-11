@@ -1,4 +1,4 @@
-# $Id: proton.mac,v 1.4 2006-10-26 17:52:42 vnivanch Exp $
+# $Id: proton.mac,v 1.5 2007-01-11 15:41:46 vnivanch Exp $
 #
 # Macro file for "TestEm7.cc"
 # (can be run in batch, without graphic)
@@ -6,12 +6,17 @@
 #
 /control/verbose 2
 /run/verbose 2
+/tracking/verbose 0
 #
+#/testem/det/setMat G4_WATER
 /testem/det/setMat Water
+#/testem/det/setMat G4_Ta
 /testem/det/setSizeX  30 cm
 /testem/det/setSizeYZ 30 cm
 #
+/process/eLoss/binsDEDX 480
 /testem/phys/addPhysics  standard		#defult em physics
+#/testem/phys/addPhysics  Livermore		#defult em physics
 #/testem/phys/addPhysics  standardMSC		#precise msc
 #/testem/phys/addPhysics  standardSS		#msc replaced by single scattering
 #
@@ -19,14 +24,16 @@
 ####/testem/phys/addPhysics  binary_ion		#hadronic physics
 ####/testem/phys/addPhysics  elastic		#hadronic physics
 #
+#/testem/phys/setCuts 0.0005 mm
 /run/initialize
 #
 /gun/particle proton
 /gun/energy 200 MeV
+#/gun/energy 2 MeV
 #
 # step limit
-/testem/stepMax 0.5 mm
+/testem/stepMax 1 mm
 #
 /testem/event/printModulo 1000
 #
-/run/beamOn 10000
+/run/beamOn 1000
