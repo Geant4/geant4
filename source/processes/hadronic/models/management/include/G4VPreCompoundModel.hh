@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPreCompoundModel.hh,v 1.4 2006-06-29 20:45:51 gunter Exp $
+// $Id: G4VPreCompoundModel.hh,v 1.5 2007-01-11 05:29:34 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -51,7 +51,8 @@ class G4VPreCompoundModel : public G4HadronicInteraction
 {
 public:
 
-  G4VPreCompoundModel(G4ExcitationHandler *const value);
+  G4VPreCompoundModel(G4ExcitationHandler* const value, 
+                      const G4String& modelName = "PrecompoundModel");
   virtual ~G4VPreCompoundModel() {};
   
 protected:
