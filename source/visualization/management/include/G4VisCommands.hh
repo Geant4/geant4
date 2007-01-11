@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommands.hh,v 1.6 2006-11-14 14:59:54 allison Exp $
+// $Id: G4VisCommands.hh,v 1.7 2007-01-11 16:39:33 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/ top level commands - John Allison  5th February 2001
@@ -37,6 +37,18 @@
 class G4UIcmdWithABool;
 class G4UIcmdWithAString;
 class G4UIcmdWithoutParameter;
+
+class G4VisCommandAbortReviewKeptEvents: public G4VVisCommand {
+public:
+  G4VisCommandAbortReviewKeptEvents ();
+  virtual ~G4VisCommandAbortReviewKeptEvents ();
+  G4String GetCurrentValue (G4UIcommand* command);
+  void SetNewValue (G4UIcommand* command, G4String newValue);
+private:
+  G4VisCommandAbortReviewKeptEvents (const G4VisCommandAbortReviewKeptEvents&);
+  G4VisCommandAbortReviewKeptEvents& operator = (const G4VisCommandAbortReviewKeptEvents&);
+  G4UIcmdWithABool* fpCommand;
+};
 
 class G4VisCommandEnable: public G4VVisCommand {
 public:
