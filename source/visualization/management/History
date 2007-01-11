@@ -1,4 +1,4 @@
-$Id: History,v 1.91 2007-01-05 16:32:57 allison Exp $
+$Id: History,v 1.92 2007-01-11 16:43:49 allison Exp $
 
 -------------------------------------------------------------------
 
@@ -25,6 +25,13 @@ committal in the CVS repository !
 
 History file for visualization management sub-category
 ------------------------------------------------------
+
+11th January 2007  John Allison  (visman-V08-02-01)
+- Added /vis/abortReviewKeptEvents.
+- /vis/reviewKeptEvents: Improved guidance.
+- Bug fix: /vis/open in /vis/reviewKeptEvents loop.
+  o Moved fpRequestedEvent from G4VSceneHandler to G4VisManager.
+- Reduced WARNING noise.
 
 5th January 2007  John Allison  (visman-V08-02-00)
 - G4VSceneHandler:
