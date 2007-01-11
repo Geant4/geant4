@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.hh,v 1.38 2007-01-05 16:20:11 allison Exp $
+// $Id: G4VSceneHandler.hh,v 1.39 2007-01-11 16:38:14 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -217,10 +217,6 @@ public: // With description
   void          SetTransientsDrawnThisEvent      (G4bool);
   void          SetTransientsDrawnThisRun        (G4bool);
   // Maintained by vis manager.
-  void          SetEvent         (const G4Event*);
-  // If non-zero, this event is used in ProcessScene.  Otherwise, the
-  // current event, or last event(s) are used.  The user must
-  // SetEvent(0) when finished.
 
   //////////////////////////////////////////////////////////////
   // Public utility functions.
@@ -346,7 +342,6 @@ protected:
 					       // object transformation.
   G4int              fNestingDepth; // For Begin/EndPrimitives.
   const G4VisAttributes* fpVisAttribs;  // Working vis attributes.
-  const G4Event* fRequestedEvent;   // If non-zero, use this event.
   const G4Transform3D fIdentityTransformation;
 
 private:

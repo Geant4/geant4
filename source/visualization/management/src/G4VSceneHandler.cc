@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.cc,v 1.78 2007-01-05 16:20:11 allison Exp $
+// $Id: G4VSceneHandler.cc,v 1.79 2007-01-11 16:38:14 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -97,8 +97,7 @@ G4VSceneHandler::G4VSceneHandler (G4VGraphicsSystem& system, G4int id, const G4S
   fpModel                (0),
   fpObjectTransformation (0),
   fNestingDepth          (0),
-  fpVisAttribs           (0),
-  fRequestedEvent        (0)
+  fpVisAttribs           (0)
 {
   G4VisManager* pVMan = G4VisManager::GetInstance ();
   fpScene = pVMan -> GetCurrentScene ();
@@ -548,8 +547,8 @@ void G4VSceneHandler::ProcessScene (G4VViewer&) {
 
     visManager->SetEventRefreshing(true);
 
-    if (fRequestedEvent) {
-      DrawEvent(fRequestedEvent);
+    if (visManager->GetRequestedEvent()) {
+      DrawEvent(visManager->GetRequestedEvent());
 
     } else {
 
