@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.90 2006-06-29 19:55:23 gunter Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.91 2007-01-11 15:33:43 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------

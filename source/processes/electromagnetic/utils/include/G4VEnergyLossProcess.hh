@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.hh,v 1.57 2006-08-15 16:21:39 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.hh,v 1.58 2007-01-11 15:33:43 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -112,7 +112,7 @@ class G4VEnergyLossProcess : public G4VContinuousDiscreteProcess
 public:
 
   G4VEnergyLossProcess(const G4String& name = "EnergyLoss",
-                         G4ProcessType type = fElectromagnetic);
+		       G4ProcessType type = fElectromagnetic);
 
   virtual ~G4VEnergyLossProcess();
 
@@ -876,6 +876,7 @@ inline void G4VEnergyLossProcess::AddCollaborativeProcess(
             G4VEnergyLossProcess* p)
 {
   scProcesses.push_back(p);
+  nProcesses++;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
