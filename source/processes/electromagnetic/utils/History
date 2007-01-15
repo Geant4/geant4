@@ -1,4 +1,4 @@
-$Id: History,v 1.262 2007-01-11 19:03:10 vnivanch Exp $
+$Id: History,v 1.263 2007-01-15 10:39:24 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+15 January 07: mma (emutils-V08-02-01)
+- G4VEmEnergyLossProcess - add SetEmModel(index) add SetFluctModel()
 
 11 January 07: V.Ivant (emutils-V08-02-00)
 - G4LossTableManger - fix problen of reinitialisation for the next run

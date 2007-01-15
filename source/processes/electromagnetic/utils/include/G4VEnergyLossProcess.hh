@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.hh,v 1.58 2007-01-11 15:33:43 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id: G4VEnergyLossProcess.hh,v 1.59 2007-01-15 10:39:24 maire Exp $
+// GEANT4 tag $Name:
 //
 // -------------------------------------------------------------------
 //
@@ -70,6 +70,7 @@
 // 22-03-06 Add SetDynamicMassCharge (V.Ivanchenko)
 // 23-03-06 Use isIonisation flag (V.Ivanchenko)
 // 13-05-06 Add method to access model by index (V.Ivanchenko)
+// 14-01-07 add SetEmModel(index) and SetFluctModel() (mma)
 //
 // Class Description:
 //
@@ -218,6 +219,18 @@ public:
                               const G4String& directory,
                                     G4bool ascii);
 
+  // Assign a model to a process
+  void SetEmModel(G4VEmModel*, G4int index=1);
+  
+  // return the assigned model
+  G4VEmModel* EmModel(G4int index=1);
+  
+  // Assign a fluctuation model to a process
+  void SetFluctModel(G4VEmFluctuationModel*);
+  
+  // return the assigned fluctuation model
+  G4VEmFluctuationModel* FluctModel();
+    
   // Add EM model coupled with fluctuation model for the region
   void AddEmModel(G4int, G4VEmModel*, G4VEmFluctuationModel* fluc = 0,
                                 const G4Region* region = 0);
@@ -335,7 +348,8 @@ protected:
 
   G4double GetCurrentRange() const;
 
-  G4PhysicsVector* LambdaPhysicsVector(const G4MaterialCutsCouple*, G4double cut);
+  G4PhysicsVector* LambdaPhysicsVector(const G4MaterialCutsCouple*, 
+                                             G4double cut);
 
 private:
 
@@ -368,6 +382,8 @@ protected:
 private:
 
   G4EmModelManager*                     modelManager;
+  G4VEmModel*                           emModel[5];
+  G4VEmFluctuationModel*                fluctModel;
   std::vector<const G4Region*>          scoffRegions;
   G4int                                 nSCoffRegions;
   G4int*                                idxSCoffRegions;
@@ -556,7 +572,8 @@ inline G4double G4VEnergyLossProcess::GetRangeForLoss(
   G4double x = DBL_MAX;
   if(theRangeTableForLoss) 
     x = GetScaledRangeForScaledEnergy(kineticEnergy*massRatio)*reduceFactor;
-  //  G4cout << "Range from " << GetProcessName() << "  e= " << kineticEnergy << " r= " << x << G4endl;
+  //  G4cout << "Range from " << GetProcessName() 
+  //         << "  e= " << kineticEnergy << " r= " << x << G4endl;
   return x;
 }
 

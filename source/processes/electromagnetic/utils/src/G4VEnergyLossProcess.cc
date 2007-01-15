@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.91 2007-01-11 15:33:43 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.92 2007-01-15 10:39:24 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -98,6 +98,7 @@
 // 22-03-06 Add control on warning printout AlongStep (VI)
 // 23-03-06 Use isIonisation flag (V.Ivanchenko)
 // 07-06-06 Do not reflect AlongStep in subcutoff regime (V.Ivanchenko)
+// 14-01-07 add SetEmModel(index) and SetFluctModel() (mma)
 //
 // Class Description:
 //
@@ -190,6 +191,8 @@ G4VEnergyLossProcess::G4VEnergyLossProcess(const G4String& name,
 
   modelManager = new G4EmModelManager();
   (G4LossTableManager::Instance())->Register(this);
+  emModel[0]=emModel[1]=emModel[2]=emModel[3]=emModel[4]=0;
+  fluctModel = 0;
   scoffRegions.clear();
   scProcesses.clear();
 
@@ -398,6 +401,34 @@ void G4VEnergyLossProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
     if(isIonisation) G4cout << "  isIonisation  flag = 1";
     G4cout << G4endl;
   }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4VEnergyLossProcess::SetEmModel(G4VEmModel* p, G4int index)
+{
+  emModel[index] = p;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4VEmModel* G4VEnergyLossProcess::EmModel(G4int index)
+{
+  return emModel[index];
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4VEnergyLossProcess::SetFluctModel(G4VEmFluctuationModel* p)
+{
+  fluctModel = p;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4VEmFluctuationModel* G4VEnergyLossProcess::FluctModel()
+{
+  return fluctModel;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -926,23 +957,27 @@ void G4VEnergyLossProcess::PrintInfoDefinition()
       if(theDEDXTable && isIonisation) G4cout << (*theDEDXTable) << G4endl;
       G4cout << "non restricted DEDXTable address= " 
 	     << theDEDXunRestrictedTable << G4endl;
-      if(theDEDXunRestrictedTable && isIonisation) G4cout << (*theDEDXunRestrictedTable) 
-							  << G4endl;
+      if(theDEDXunRestrictedTable && isIonisation) 
+           G4cout << (*theDEDXunRestrictedTable) << G4endl;
       if(theDEDXSubTable && isIonisation) G4cout << (*theDEDXSubTable) 
 						 << G4endl;
       G4cout << "CSDARangeTable address= " << theCSDARangeTable 
 	     << G4endl;
-      if(theCSDARangeTable && isIonisation) G4cout << (*theCSDARangeTable) << G4endl;
+      if(theCSDARangeTable && isIonisation) G4cout << (*theCSDARangeTable) 
+            << G4endl;
       G4cout << "RangeTableForLoss address= " << theRangeTableForLoss 
 	     << G4endl;
-      if(theRangeTableForLoss && isIonisation) G4cout << (*theRangeTableForLoss) << G4endl;
+      if(theRangeTableForLoss && isIonisation) 
+             G4cout << (*theRangeTableForLoss) << G4endl;
       G4cout << "InverseRangeTable address= " << theInverseRangeTable 
 	     << G4endl;
-      if(theInverseRangeTable && isIonisation) G4cout << (*theInverseRangeTable) << G4endl;
+      if(theInverseRangeTable && isIonisation) 
+             G4cout << (*theInverseRangeTable) << G4endl;
       G4cout << "LambdaTable address= " << theLambdaTable << G4endl;
       if(theLambdaTable && isIonisation) G4cout << (*theLambdaTable) << G4endl;
       G4cout << "SubLambdaTable address= " << theSubLambdaTable << G4endl;
-      if(theSubLambdaTable && isIonisation) G4cout << (*theSubLambdaTable) << G4endl;
+      if(theSubLambdaTable && isIonisation) G4cout << (*theSubLambdaTable) 
+             << G4endl;
     }
   }
 }
