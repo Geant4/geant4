@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.hh,v 1.59 2007-01-15 10:39:24 maire Exp $
+// $Id: G4VEnergyLossProcess.hh,v 1.60 2007-01-15 17:27:40 vnivanch Exp $
 // GEANT4 tag $Name:
 //
 // -------------------------------------------------------------------
@@ -71,6 +71,8 @@
 // 23-03-06 Use isIonisation flag (V.Ivanchenko)
 // 13-05-06 Add method to access model by index (V.Ivanchenko)
 // 14-01-07 add SetEmModel(index) and SetFluctModel() (mma)
+// 15-01-07 Add separate ionisation tables and reorganise get/set methods for
+//          dedx tables (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -244,14 +246,12 @@ public:
   // Activate deexcitation code
   virtual void ActivateDeexcitation(G4bool, const G4Region* region = 0);
 
-  void SetDEDXTable(G4PhysicsTable* p);
+  void SetDEDXTable(G4PhysicsTable* p, G4EmTableType tType);
   G4PhysicsTable* DEDXTable() const;
-
-  void SetDEDXTableForSubsec(G4PhysicsTable* p);
   G4PhysicsTable* DEDXTableForSubsec() const;
-
-  void SetDEDXunRestrictedTable(G4PhysicsTable* p);
   G4PhysicsTable* DEDXunRestrictedTable() const;
+  G4PhysicsTable* IonisationTable() const;
+  G4PhysicsTable* IonisationTableForSubsec() const;
 
   void SetCSDARangeTable(G4PhysicsTable* pRange);
   G4PhysicsTable* CSDARangeTable() const;
@@ -362,6 +362,8 @@ private:
   //
   G4double GetDEDXForScaledEnergy(G4double scaledKinEnergy);
   G4double GetSubDEDXForScaledEnergy(G4double scaledKinEnergy);
+  G4double GetIonisationForScaledEnergy(G4double scaledKinEnergy);
+  G4double GetSubIonisationForScaledEnergy(G4double scaledKinEnergy);
   G4double GetScaledRangeForScaledEnergy(G4double scaledKinEnergy);
   G4double GetLimitScaledRangeForScaledEnergy(G4double scaledKinEnergy);
   G4double GetLambdaForScaledEnergy(G4double scaledKinEnergy);
@@ -395,6 +397,8 @@ private:
   G4PhysicsTable*             theDEDXTable;
   G4PhysicsTable*             theDEDXSubTable;
   G4PhysicsTable*             theDEDXunRestrictedTable;
+  G4PhysicsTable*             theIonisationTable;
+  G4PhysicsTable*             theIonisationSubTable;
   G4PhysicsTable*             theRangeTableForLoss;
   G4PhysicsTable*             theCSDARangeTable;
   G4PhysicsTable*             theSecondaryRangeTable;
@@ -511,6 +515,32 @@ inline G4double G4VEnergyLossProcess::GetSubDEDXForScaledEnergy(G4double e)
   G4double x = 
     ((*theDEDXSubTable)[currentMaterialIndex]->GetValue(e, b))*chargeSqRatio;
   if(e < minKinEnergy) x *= std::sqrt(e/minKinEnergy);
+  return x;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4double G4VEnergyLossProcess::GetIonisationForScaledEnergy(G4double e)
+{
+  G4bool b;
+  G4double x = 0.0;
+  if(theIonisationTable) {
+    x = ((*theIonisationTable)[currentMaterialIndex]->GetValue(e, b))*chargeSqRatio;
+    if(e < minKinEnergy) x *= std::sqrt(e/minKinEnergy);
+  }
+  return x;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4double G4VEnergyLossProcess::GetSubIonisationForScaledEnergy(G4double e)
+{
+  G4bool b;
+  G4double x = 0.0;
+  if(theIonisationSubTable) {
+    x = ((*theIonisationSubTable)[currentMaterialIndex]->GetValue(e, b))*chargeSqRatio;
+    if(e < minKinEnergy) x *= std::sqrt(e/minKinEnergy);
+  }
   return x;
 }
 
@@ -822,6 +852,24 @@ inline G4PhysicsTable* G4VEnergyLossProcess::DEDXunRestrictedTable() const
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+inline G4PhysicsTable* G4VEnergyLossProcess::IonisationTable() const
+{
+  G4PhysicsTable* t = theDEDXTable;
+  if(theIonisationTable) t = theIonisationTable; 
+  return t;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4PhysicsTable* G4VEnergyLossProcess::IonisationTableForSubsec() const
+{
+  G4PhysicsTable* t = theDEDXSubTable;
+  if(theIonisationSubTable) t = theIonisationSubTable; 
+  return t;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 inline G4PhysicsTable* G4VEnergyLossProcess::CSDARangeTable() const
 {
   return theCSDARangeTable;
@@ -885,15 +933,6 @@ inline void G4VEnergyLossProcess::SetDynamicMassCharge(G4double massratio,
 inline G4double G4VEnergyLossProcess::GetCurrentRange() const
 {
   return fRange;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-  
-inline void G4VEnergyLossProcess::AddCollaborativeProcess(
-            G4VEnergyLossProcess* p)
-{
-  scProcesses.push_back(p);
-  nProcesses++;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

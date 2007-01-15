@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EmTableType.hh,v 1.2 2006-06-29 19:54:31 gunter Exp $
+// $Id: G4EmTableType.hh,v 1.3 2007-01-15 17:27:40 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------
@@ -37,6 +37,8 @@
 // Author:        Vladimir Ivanchenko
 //
 // Creation date: 19.01.2006
+// Modifications:
+// 15.01.07 Add two types (V.Ivanchenko)
 //
 //---------------------------------------------------------------
 
@@ -47,7 +49,9 @@ enum G4EmTableType
 {
   fTotal = 0,
   fRestricted,
-  fSubRestricted
+  fSubRestricted,
+  fIonisation,
+  fSubIonisation
 };
 #endif
 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LossTableBuilder.cc,v 1.20 2006-06-29 19:55:11 gunter Exp $
+// $Id: G4LossTableBuilder.cc,v 1.21 2007-01-15 17:27:40 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -80,10 +80,14 @@ void G4LossTableBuilder::BuildDEDXTable(G4PhysicsTable* dedxTable,
 
   G4bool b;
 
+  G4PhysicsVector* pv = (*(list[0]))[0];
+  size_t nbins = pv->GetVectorLength();
+  G4double elow = pv->GetLowEdgeEnergy(0);
+  G4double ehigh = pv->GetLowEdgeEnergy(nbins);
+
   for (size_t i=0; i<n_vectors; i++) {
 
-    G4PhysicsVector* pv = (*dedxTable)[i];
-    size_t nbins = pv->GetVectorLength();
+    pv = new G4PhysicsLogVector(elow, ehigh, nbins);
 
     for (size_t j=0; j<nbins; j++) {
       G4double dedx = 0.0;
@@ -94,6 +98,7 @@ void G4LossTableBuilder::BuildDEDXTable(G4PhysicsTable* dedxTable,
       }
       pv->PutValue(j, dedx);
     }
+    G4PhysicsTableHelper::SetPhysicsVector(dedxTable, i, pv);
   }
 }
 
