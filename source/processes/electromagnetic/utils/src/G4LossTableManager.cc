@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.cc,v 1.78 2007-01-15 17:27:40 vnivanch Exp $
+// $Id: G4LossTableManager.cc,v 1.79 2007-01-16 14:30:59 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -65,6 +65,8 @@
 // 10-05-06 Add methods  SetMscStepLimitation, FacRange and MscFlag (VI)
 // 22-05-06 Add methods  Set/Get bremsTh (VI)
 // 05-06-06 Do not clear loss_table map between runs (VI)
+// 16-01-07 Create new energy loss table for e+,e-,mu+,mu- and 
+//          left ionisation table for further usage (VI)
 //
 // Class Description:
 //
@@ -290,7 +292,6 @@ void G4LossTableManager::EnergyLossProcessIsInitialised(
                    const G4ParticleDefinition* particle, 
 		   G4VEnergyLossProcess* p)
 {
-  //  if (first_entry || (particle == firstParticle && all_tables_are_built) ) {
   if (run == 0 || (particle == firstParticle && all_tables_are_built) ) {
     all_tables_are_built = true;
 
@@ -322,15 +323,8 @@ void G4LossTableManager::EnergyLossProcessIsInitialised(
     }
     if (0 == run) firstParticle = particle;
     run++;
-    /*
-    if(first_entry = false) {
-      first_entry = false;
-      firstParticle = particle;
-    }
-    */
   }
 
-  //  if(!all_tables_are_built) loss_map.clear();
   currentParticle = 0;
 
   SetParameters(p);
@@ -481,15 +475,14 @@ G4VEnergyLossProcess* G4LossTableManager::BuildTables(
 
   for (i=0; i<n_loss; i++) {
     p = loss_vector[i];
-    if (p && aParticle == part_vector[i] && 
-	(!tables_are_built[i])) {
-      if (p->IsIonisationProcess() && isActive[i] || !em || em && !isActive[iem] ) {
+    if (p && aParticle == part_vector[i] && !tables_are_built[i]) {
+      if (p->IsIonisationProcess() && isActive[i] || !em || (em && !isActive[iem]) ) {
         em = p;
         iem= i;
       }
       dedx = p->BuildDEDXTable(fRestricted);
-      //G4cout << "Build DEDX table for " << aParticle->GetParticleName()
-      //	     << "  " << dedx << G4endl;
+      //      G4cout << "Build DEDX table for " << aParticle->GetParticleName()
+      //	     << "  " << dedx << " " << dedx->length() << G4endl;
       p->SetDEDXTable(dedx,fRestricted); 
       t_list.push_back(dedx);
       loss_list.push_back(p);
@@ -541,7 +534,7 @@ G4VEnergyLossProcess* G4LossTableManager::BuildTables(
   em->SetRangeTableForLoss(range);
   em->SetInverseRangeTable(invrange);
 
-  if(1<verbose) G4cout << *range << G4endl;
+  //  if(1<verbose) G4cout << *range << G4endl;
 
   std::vector<G4PhysicsTable*> listSub;
   std::vector<G4PhysicsTable*> listCSDA;
@@ -550,7 +543,7 @@ G4VEnergyLossProcess* G4LossTableManager::BuildTables(
     p = loss_list[i];
     p->SetIonisation(false);
     p->SetLambdaTable(p->BuildLambdaTable(fRestricted));
-    if (0 < p->NumberOfSubCutoffRegions()) {
+    if (0 < nSubRegions) {
       dedx = p->BuildDEDXTable(fSubRestricted);
       p->SetDEDXTable(dedx,fSubRestricted);
       listSub.push_back(dedx);
@@ -570,16 +563,19 @@ G4VEnergyLossProcess* G4LossTableManager::BuildTables(
       dedxSub = 0;
       dedxSub = G4PhysicsTableHelper::PreparePhysicsTable(dedxSub);
       tableBuilder->BuildDEDXTable(dedxSub, listSub);
-      em->SetDEDXTable(dedxSub, fRestricted);
+      em->SetDEDXTable(dedxSub, fSubRestricted);
     }
-    em->SetDEDXTable(dedxSub,fSubRestricted);
   }
   if(buildCSDARange) {
     G4PhysicsTable* dedxCSDA = em->DEDXunRestrictedTable();
-    if (1 < n_dedx) tableBuilder->BuildDEDXTable(dedxCSDA, listCSDA);
-    em->SetDEDXTable(dedxCSDA,fTotal);
+    if (1 < n_dedx) {
+      dedxCSDA = 0;
+      dedxCSDA  = G4PhysicsTableHelper::PreparePhysicsTable(dedxCSDA);
+      tableBuilder->BuildDEDXTable(dedxCSDA, listCSDA);
+      em->SetDEDXTable(dedxCSDA,fTotal);
+    }
     G4PhysicsTable* rCSDA = em->CSDARangeTable();
-    if(!rCSDA) range  = G4PhysicsTableHelper::PreparePhysicsTable(rCSDA);
+    if(!rCSDA) rCSDA = G4PhysicsTableHelper::PreparePhysicsTable(rCSDA);
     tableBuilder->BuildRangeTable(dedxCSDA, rCSDA, flag);
     em->SetCSDARangeTable(rCSDA);
   }

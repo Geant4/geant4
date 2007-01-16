@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.93 2007-01-15 17:27:40 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.94 2007-01-16 14:30:59 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -99,6 +99,7 @@
 // 23-03-06 Use isIonisation flag (V.Ivanchenko)
 // 07-06-06 Do not reflect AlongStep in subcutoff regime (V.Ivanchenko)
 // 14-01-07 add SetEmModel(index) and SetFluctModel() (mma)
+// 16-01-07 add IonisationTable and IonisationSubTable (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -498,10 +499,12 @@ G4PhysicsTable* G4VEnergyLossProcess::BuildDEDXTable(G4EmTableType tType)
     table = theDEDXunRestrictedTable;
   } else if(fRestricted == tType) {
     table = theDEDXTable;
-    if(theIonisationTable) table = theIonisationTable; 
+    if(theIonisationTable) 
+      table = G4PhysicsTableHelper::PreparePhysicsTable(theIonisationTable); 
   } else if(fSubRestricted == tType) {    
     table = theDEDXSubTable;
-    if(theIonisationSubTable) table = theIonisationSubTable; 
+    if(theIonisationSubTable) 
+      table = G4PhysicsTableHelper::PreparePhysicsTable(theIonisationSubTable); 
   } else {
     G4cout << "G4VEnergyLossProcess::BuildDEDXTable WARNING: wrong type "
 	   << tType << G4endl;
@@ -524,7 +527,7 @@ G4PhysicsTable* G4VEnergyLossProcess::BuildDEDXTable(G4EmTableType tType)
 
   for(size_t i=0; i<numOfCouples; i++) {
 
-    if(2 < verboseLevel) 
+    if(1 < verboseLevel) 
       G4cout << "G4VEnergyLossProcess::BuildDEDXVector flag=  " 
 	     << table->GetFlag(i) << G4endl;
 
@@ -544,6 +547,7 @@ G4PhysicsTable* G4VEnergyLossProcess::BuildDEDXTable(G4EmTableType tType)
   if(1 < verboseLevel) {
     G4cout << "G4VEnergyLossProcess::BuildDEDXTable(): table is built for "
            << particle->GetParticleName()
+           << " and process " << GetProcessName()
            << G4endl;
     //    if(2 < verboseLevel) G4cout << (*table) << G4endl;
   }
@@ -998,7 +1002,8 @@ void G4VEnergyLossProcess::PrintInfoDefinition()
 
 void G4VEnergyLossProcess::SetDEDXTable(G4PhysicsTable* p, G4EmTableType tType)
 {
-  if(fTotal == tType) {
+  if(fTotal == tType && theDEDXunRestrictedTable != p) {
+    if(theDEDXunRestrictedTable) theDEDXunRestrictedTable->clearAndDestroy();
     theDEDXunRestrictedTable = p;
     if(p) {
       size_t n = p->length();
@@ -1020,9 +1025,11 @@ void G4VEnergyLossProcess::SetDEDXTable(G4PhysicsTable* p, G4EmTableType tType)
     theDEDXTable = p;
   } else if(fSubRestricted == tType) {    
     theDEDXSubTable = p;
-  } else if(fIonisation == tType) {    
+  } else if(fIonisation == tType && theIonisationTable != p) {    
+    if(theIonisationTable) theIonisationTable->clearAndDestroy();
     theIonisationTable = p;
-  } else if(fSubIonisation == tType) {    
+  } else if(fSubIonisation == tType && theIonisationSubTable != p) {    
+    if(theIonisationSubTable) theIonisationSubTable->clearAndDestroy();
     theIonisationSubTable = p;
   }
 }
@@ -1252,6 +1259,18 @@ G4bool G4VEnergyLossProcess::StorePhysicsTable(
     if( !theDEDXSubTable->StorePhysicsTable(name,ascii)) res = false;
   }
 
+  if ( theIonisationTable ) {
+    const G4String name = 
+      GetPhysicsTableFileName(part,directory,"Ionisation",ascii);
+    if( !theIonisationTable->StorePhysicsTable(name,ascii)) res = false;
+  }
+
+  if ( theIonisationSubTable ) {
+    const G4String name = 
+      GetPhysicsTableFileName(part,directory,"SubIonisation",ascii);
+    if( !theIonisationSubTable->StorePhysicsTable(name,ascii)) res = false;
+  }
+
   if ( theCSDARangeTable && isIonisation ) {
     const G4String name = 
       GetPhysicsTableFileName(part,directory,"CSDARange",ascii);
@@ -1479,6 +1498,33 @@ G4bool G4VEnergyLossProcess::RetrievePhysicsTable(
                  << G4endl;
 	}
       }
+
+      filename = GetPhysicsTableFileName(part,directory,"Ionisation",ascii);
+      yes = theIonisationTable->ExistPhysicsTable(filename);
+      if(yes) yes = G4PhysicsTableHelper::RetrievePhysicsTable(
+                    theIonisationTable,filename,ascii);
+      if(yes) {
+        if (0 < verboseLevel) {
+          G4cout << "Ionisation table for " << particleName 
+		 << " is Retrieved from <"
+                 << filename << ">"
+                 << G4endl;
+        }
+      } 
+
+      filename = GetPhysicsTableFileName(part,directory,"SubIonisation",ascii);
+      yes = theIonisationSubTable->ExistPhysicsTable(filename);
+      if(yes) yes = G4PhysicsTableHelper::RetrievePhysicsTable(
+                    theIonisationSubTable,filename,ascii);
+      if(yes) {
+        if (0 < verboseLevel) {
+          G4cout << "SubIonisation table for " << particleName 
+		 << " is Retrieved from <"
+                 << filename << ">"
+                 << G4endl;
+        }
+      } 
+
     }
   }
 
