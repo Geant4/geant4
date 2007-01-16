@@ -1,26 +1,23 @@
 //
 // ********************************************************************
-// * License and Disclaimer                                           *
+// * DISCLAIMER                                                       *
 // *                                                                  *
-// * The  Geant4 software  is  copyright of the Copyright Holders  of *
-// * the Geant4 Collaboration.  It is provided  under  the terms  and *
-// * conditions of the Geant4 Software License,  included in the file *
-// * LICENSE and available at  http://cern.ch/geant4/license .  These *
-// * include a list of copyright holders.                             *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.  Please see the license in the file  LICENSE  and URL above *
-// * for the full disclaimer and the limitation of liability.         *
+// * use.                                                             *
 // *                                                                  *
-// * This  code  implementation is the result of  the  scientific and *
-// * technical work of the GEANT4 collaboration.                      *
-// * By using,  copying,  modifying or  distributing the software (or *
-// * any work based  on the software)  you  agree  to acknowledge its *
-// * use  in  resulting  scientific  publications,  and indicate your *
-// * acceptance of all terms of the Geant4 Software license.          *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
 // ********************************************************************
 //
 // Authors: S. Guatelli and M. G. Pia, INFN Genova, Italy
@@ -66,26 +63,26 @@ G4VPhysicalVolume* G4MIRDPancreas::ConstructPancreas(G4VPhysicalVolume* mother, 
  G4Material* soft = material -> GetMaterial("soft_tissue");
  delete material;
 
-  G4double ax= 2.87*cm;
-  G4double by= 1.14*cm;
-  G4double cz= 13.32*cm;
-  G4double zcut1= -13.32 *cm;
+  G4double ax= 3.*cm; //c
+  G4double by= 1.*cm;//b
+  G4double cz= 15.*cm;//a
+  G4double zcut1= -15. *cm;// -a
   G4double zcut2= 0.0 *cm; 
 
   G4Ellipsoid* pancreasFirst =  new G4Ellipsoid("PancreasFirst",ax, by, cz,
 						zcut1, zcut2);
 
-  G4double xx = 5.74 * cm;
-  G4double yy = 2.30 * cm;
-  G4double zz = 10.71 * cm;
+  G4double xx = 6. * cm;// 2*c
+  G4double yy = 2. * cm;// 2*b
+  G4double zz = 12. * cm; // cz - x1 = 3 cm
   G4Box* subtrPancreas = new G4Box("SubtrPancreas",xx/2., yy/2., zz/2.);
 
   G4SubtractionSolid* pancreas = new G4SubtractionSolid("pancreas",
 							pancreasFirst,
 							subtrPancreas,
 							0, 
-							G4ThreeVector(-2.87 * cm,0.0,-8.685*cm));
- 
+							G4ThreeVector(-3 * cm,0.0,-9.*cm));
+  // c
   G4LogicalVolume* logicPancreas = new G4LogicalVolume(pancreas, soft,
 						       "PancreasVolume",
 						       0, 0, 0);
@@ -94,12 +91,12 @@ G4VPhysicalVolume* G4MIRDPancreas::ConstructPancreas(G4VPhysicalVolume* mother, 
 
 
   G4VPhysicalVolume* physPancreas = new G4PVPlacement(rotation,
-						      G4ThreeVector(-0.72 *cm, 0.0, 1.8*cm),
+						      G4ThreeVector(-0. *cm, 0.0, 2*cm),//x0, 0, 2 cm
       			       "physicalPancreas",
   			       logicPancreas,
 			       mother,
 			       false,
-			       0);
+			       0, true);
   // Sensitive Body Part
   if (sensitivity==true)
   { 

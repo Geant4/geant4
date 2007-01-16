@@ -1,26 +1,23 @@
 //
 // ********************************************************************
-// * License and Disclaimer                                           *
+// * DISCLAIMER                                                       *
 // *                                                                  *
-// * The  Geant4 software  is  copyright of the Copyright Holders  of *
-// * the Geant4 Collaboration.  It is provided  under  the terms  and *
-// * conditions of the Geant4 Software License,  included in the file *
-// * LICENSE and available at  http://cern.ch/geant4/license .  These *
-// * include a list of copyright holders.                             *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.  Please see the license in the file  LICENSE  and URL above *
-// * for the full disclaimer and the limitation of liability.         *
+// * use.                                                             *
 // *                                                                  *
-// * This  code  implementation is the result of  the  scientific and *
-// * technical work of the GEANT4 collaboration.                      *
-// * By using,  copying,  modifying or  distributing the software (or *
-// * any work based  on the software)  you  agree  to acknowledge its *
-// * use  in  resulting  scientific  publications,  and indicate your *
-// * acceptance of all terms of the Geant4 Software license.          *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
 // ********************************************************************
 //
 // Authors: S. Guatelli and M. G. Pia, INFN Genova, Italy
@@ -63,20 +60,20 @@ G4VPhysicalVolume* G4MIRDSpleen::ConstructSpleen(G4VPhysicalVolume* mother, G4St
  G4Material* soft = material -> GetMaterial("soft_tissue");
  delete material;
 
- G4double ax= 2.90 *cm;
- G4double by= 1.88 *cm;
- G4double cz= 5.19 * cm; 
+ G4double ax= 3.5 *cm;
+ G4double by= 2. *cm;
+ G4double cz= 6. * cm; 
 
  G4Ellipsoid* spleen = new G4Ellipsoid("spleen", ax, by, cz);
 
 
   G4LogicalVolume* logicSpleen = new G4LogicalVolume(spleen, soft,
 						     "SpleenVolume",
-						     0, 0, 0);
+						      0, 0, 0);
   
   // Define rotation and position here!
   G4VPhysicalVolume* physSpleen = new G4PVPlacement(0,
-			       G4ThreeVector(9.49 *cm, 2.94 *cm, 1.8*cm),
+						    G4ThreeVector(11. *cm, 3. *cm, 2.*cm), // ztrans = half trunk lenght - z0
       			       "physicalSpleen",
   			       logicSpleen,
 			       mother,

@@ -23,8 +23,8 @@
 /vis/scene/endOfEventAction accumulate
 #
 # Set Particle
-#/gun/particle e-
-/gun/energy 100. MeV
+/gun/particle e-
+/gun/energy 10. MeV
 #
 # Set Direction of Beam
 #
@@ -33,7 +33,11 @@
 /gun/setBeam beamAlongZ
 #/gun/setBeam isotropicFlux
 #
-/run/beamOn 500
+/run/beamOn 20000
+
+
+
+
 
 
 

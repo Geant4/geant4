@@ -1,26 +1,23 @@
 //
 // ********************************************************************
-// * License and Disclaimer                                           *
+// * DISCLAIMER                                                       *
 // *                                                                  *
-// * The  Geant4 software  is  copyright of the Copyright Holders  of *
-// * the Geant4 Collaboration.  It is provided  under  the terms  and *
-// * conditions of the Geant4 Software License,  included in the file *
-// * LICENSE and available at  http://cern.ch/geant4/license .  These *
-// * include a list of copyright holders.                             *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.  Please see the license in the file  LICENSE  and URL above *
-// * for the full disclaimer and the limitation of liability.         *
+// * use.                                                             *
 // *                                                                  *
-// * This  code  implementation is the result of  the  scientific and *
-// * technical work of the GEANT4 collaboration.                      *
-// * By using,  copying,  modifying or  distributing the software (or *
-// * any work based  on the software)  you  agree  to acknowledge its *
-// * use  in  resulting  scientific  publications,  and indicate your *
-// * acceptance of all terms of the Geant4 Software license.          *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
 // ********************************************************************
 //
 // Authors: S. Guatelli and M. G. Pia, INFN Genova, Italy
@@ -42,6 +39,8 @@
 #include "G4ThreeVector.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4PVPlacement.hh"
+#include "G4Box.hh"
+#include "G4SubtractionSolid.hh"
 
 G4MIRDUpperSpine::G4MIRDUpperSpine()
 {
@@ -62,23 +61,35 @@ G4VPhysicalVolume* G4MIRDUpperSpine::ConstructUpperSpine(G4VPhysicalVolume* moth
  
   delete material;
 
- G4double dx = 1.73 *cm;
- G4double dy = 2.45 *cm;
- G4double dz = 5.*cm;
+  G4double dx = 2. *cm;
+  G4double dy = 2.5 *cm;
+  G4double dz = 4.25*cm;
 
  G4EllipticalTube* upperSpine = new G4EllipticalTube("UpperSpine",dx, dy, dz);
 
- G4LogicalVolume* logicUpperSpine = new G4LogicalVolume(upperSpine, skeleton, 
+ G4double xx = 20. * cm;
+ G4double yy = 10. * cm;
+ G4double zz = 5. * cm;
+
+ G4Box* subtraction = new G4Box("box", xx/2., yy/2., zz/2.);
+
+ G4RotationMatrix* matrix = new G4RotationMatrix();
+ matrix -> rotateX(-25.* deg); 
+
+ G4SubtractionSolid* upper_spine = new G4SubtractionSolid("upperspine",upperSpine, subtraction,
+							  matrix, G4ThreeVector(0., -2.5 * cm, 5.5* cm));
+
+ G4LogicalVolume* logicUpperSpine = new G4LogicalVolume(upper_spine, skeleton, 
 							"UpperSpineVolume",
 							0, 0, 0);  
   // Define rotation and position here!
   G4VPhysicalVolume* physUpperSpine = new G4PVPlacement(0,
-			        G4ThreeVector(0.0, 5.39 *cm, -3.25 *cm),
+			        G4ThreeVector(0.0, 5.5 *cm, -3.5 *cm),
       			       "physicalUpperSpine",
   			       logicUpperSpine,
 			       mother,
 			       false,
-			       0);
+			       0, true);
 
   // Sensitive Body Part
   if (sensitivity==true)

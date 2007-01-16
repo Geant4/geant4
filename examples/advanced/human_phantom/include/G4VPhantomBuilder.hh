@@ -1,26 +1,23 @@
 //
 // ********************************************************************
-// * License and Disclaimer                                           *
+// * DISCLAIMER                                                       *
 // *                                                                  *
-// * The  Geant4 software  is  copyright of the Copyright Holders  of *
-// * the Geant4 Collaboration.  It is provided  under  the terms  and *
-// * conditions of the Geant4 Software License,  included in the file *
-// * LICENSE and available at  http://cern.ch/geant4/license .  These *
-// * include a list of copyright holders.                             *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.  Please see the license in the file  LICENSE  and URL above *
-// * for the full disclaimer and the limitation of liability.         *
+// * use.                                                             *
 // *                                                                  *
-// * This  code  implementation is the result of  the  scientific and *
-// * technical work of the GEANT4 collaboration.                      *
-// * By using,  copying,  modifying or  distributing the software (or *
-// * any work based  on the software)  you  agree  to acknowledge its *
-// * use  in  resulting  scientific  publications,  and indicate your *
-// * acceptance of all terms of the Geant4 Software license.          *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
 // ********************************************************************
 //
 // Authors: S. Guatelli and M. G. Pia, INFN Genova, Italy
@@ -42,47 +39,42 @@ class G4VPhantomBuilder
 public:
 
   G4VPhantomBuilder();
-  virtual ~G4VPhantomBuilder();
+  ~G4VPhantomBuilder();
 
-  virtual void BuildWorld() = 0;
+  void BuildHead(G4bool) {return ;};
+  void BuildTrunk(G4bool) {return ;};
+  void BuildLegs(G4bool) {return ;};
+  void BuildNeck(G4bool) {return ;};
 
-  virtual void BuildHead(G4bool) = 0;
-  virtual void BuildTrunk(G4bool) = 0;
-  virtual void BuildLegs(G4bool) = 0;
-  virtual void BuildNeck(G4bool) = 0;
-
-  virtual void BuildUpperSpine(G4bool) = 0;
-  virtual void BuildMiddleLowerSpine(G4bool) = 0;
-  virtual void BuildLegBone(G4bool) = 0;
-  virtual void BuildArmBone(G4bool) = 0;
-  virtual void BuildSkull(G4bool) = 0;
-  //virtual void BuildRibCage(G4bool) = 0;
-  virtual void BuildPelvis(G4bool) = 0;
+  void BuildUpperSpine(G4bool) {return ;}
+  void BuildMiddleLowerSpine(G4bool) {return ;};
+  void BuildLegBone(G4bool) {return ;};
+  void BuildLeftArmBone(G4bool) {return ;}
+  void BuildRightArmBone(G4bool) {return ;}
+  void BuildSkull(G4bool) {return ;};
+  void BuildRibCage(G4bool) {return ;};
+  void BuildPelvis(G4bool) {return ;};
   //virtual void BuildScapulae(G4bool) = 0;
   //virtual void BuildClavicles(G4bool) = 0;
 
-  virtual void BuildBrain(G4bool) = 0;
-
-  virtual void BuildHeart(G4bool) = 0;
-
-  virtual void BuildLung(G4bool) = 0;
-
-  virtual void BuildStomach(G4bool) = 0;
-  virtual void BuildUpperLargeIntestine(G4bool) = 0;
-  virtual void BuildLowerLargeIntestine(G4bool) = 0;
+  void BuildBrain(G4bool) {return ;};
+  void BuildHeart(G4bool) {return ;};
+  void BuildLung(G4bool) {return ;};
+  void BuildStomach(G4bool) {return ;};
+  void BuildUpperLargeIntestine(G4bool) {return ;};
+  void BuildLowerLargeIntestine(G4bool) {return ;};
   //virtual void BuildEsophagus(G4bool) = 0;
 
-  virtual void BuildKidney(G4bool) = 0;
+  void BuildKidney(G4bool) {return ;};
 //  virtual void BuildAdrenal(G4bool) = 0;
-  virtual void BuildLiver(G4bool) = 0;
-  virtual void BuildPancreas(G4bool) = 0;
-  virtual void BuildSpleen(G4bool) = 0;
-  virtual void BuildUrinaryBladder(G4bool) = 0;
+  void BuildLiver(G4bool) {return ;};
+  void BuildPancreas(G4bool) {return ;};
+  void BuildSpleen(G4bool) {return ;};
+  void BuildUrinaryBladder(G4bool) {return ;};
+  void BuildThyroid(G4bool) {return ;};
 
-  virtual void BuildThyroid(G4bool) = 0;
-
-  virtual void SetSex(G4String) = 0;
-  virtual void SetModel(G4String) = 0;
-
+  void SetSex(G4String) {return ;};
+  void SetModel(G4String) {return ;};
+  void SetMotherVolume(G4VPhysicalVolume*) {return;};
 };
 #endif

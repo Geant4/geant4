@@ -8,7 +8,7 @@
 #
 # Choose model: ORNL, MIRD, MIX
 #
-/phantom/setPhantomModel MIRD
+/phantom/setPhantomModel ORNL
 #
 # Choose Sex of Phantom: Male or Female
 #
@@ -18,14 +18,15 @@
 #
 /bodypart/addBodyPart Head yes
 #########
-/bodypart/addBodyPart Trunk no
+/bodypart/addBodyPart Trunk yes
 /bodypart/addBodyPart Legs yes
 ##############
 #
 # Skeleton System
 #
 /bodypart/addBodyPart LegBones yes
-/bodypart/addBodyPart ArmBones yes
+/bodypart/addBodyPart LeftArmBone yes
+/bodypart/addBodyPart RightArmBone yes
 /bodypart/addBodyPart UpperSpine yes
 /bodypart/addBodyPart MiddleLowerSpine yes
 /bodypart/addBodyPart Skull yes
@@ -40,7 +41,7 @@
 /bodypart/addBodyPart Kidneys yes
 /bodypart/addBodyPart UrinaryBladder yes
 /bodypart/addBodyPart Spleen yes
-/bodypart/addBodyPart Pancreas no
+/bodypart/addBodyPart Pancreas yes
 /bodypart/addBodyPart Thyroid yes
 #
 # Gastrointestinal System
@@ -49,11 +50,12 @@
 /bodypart/addBodyPart UpperLargeIntestine yes
 /bodypart/addBodyPart LowerLargeIntestine yes
 /bodypart/addBodyPart Liver yes
+/bodypart/addBodyPart RibCage yes
 #
 # Genitalia
 #
-#/bodypart/addBodyPart Ovaries yes
-#/bodypart/addBodyPart Uterus yes
+/bodypart/addBodyPart Ovaries yes
+/bodypart/addBodyPart Uterus yes
 #
 #
 # Construct your Phantom
@@ -68,7 +70,7 @@
 #/control/execute vrmlVis.mac
 #
 # Visualize Phantom with OPENGL
-/control/execute openGLVis.mac
+#/control/execute openGLVis.mac
 #
 # Visualize Phantom with DAWN
 #/control/execute dawnVis.mac
@@ -76,3 +78,4 @@
 # Run Particles
 #
 /control/execute run.mac
+#/geometry/test/grid_test

@@ -1,26 +1,23 @@
 //
 // ********************************************************************
-// * License and Disclaimer                                           *
+// * DISCLAIMER                                                       *
 // *                                                                  *
-// * The  Geant4 software  is  copyright of the Copyright Holders  of *
-// * the Geant4 Collaboration.  It is provided  under  the terms  and *
-// * conditions of the Geant4 Software License,  included in the file *
-// * LICENSE and available at  http://cern.ch/geant4/license .  These *
-// * include a list of copyright holders.                             *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.  Please see the license in the file  LICENSE  and URL above *
-// * for the full disclaimer and the limitation of liability.         *
+// * use.                                                             *
 // *                                                                  *
-// * This  code  implementation is the result of  the  scientific and *
-// * technical work of the GEANT4 collaboration.                      *
-// * By using,  copying,  modifying or  distributing the software (or *
-// * any work based  on the software)  you  agree  to acknowledge its *
-// * use  in  resulting  scientific  publications,  and indicate your *
-// * acceptance of all terms of the Geant4 Software license.          *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
 // ********************************************************************
 //
 // Authors: S. Guatelli and M. G. Pia, INFN Genova, Italy
@@ -61,40 +58,40 @@ G4VPhysicalVolume* G4MIRDHead::ConstructHead(G4VPhysicalVolume* mother, G4String
   //  G4cout << "ConstructHead"<< G4endl;
   G4Material* soft = material -> GetMaterial("soft_tissue");
   
+  // MIRD male model
   // Ellipsoid
-  G4double ax = 7.77 * cm;
-  G4double by = 9.76 * cm;
-  G4double cz = 6.92 * cm;
+  G4double ax = 7.0 * cm;
+  G4double by = 10.0 * cm;
+  G4double cz = 8.50 * cm;
   G4double zcut1 = 0.0 * cm;
-  G4double zcut2 = 6.92 * cm;
+  G4double zcut2 = 8.5 * cm;
 
   G4Ellipsoid* head1 = new G4Ellipsoid("Head1", ax, by, cz, zcut1, zcut2);
 
-  G4double dx = 7.77 * cm;
-  G4double dy = 9.76 * cm;
-  G4double dz = 8.25 * cm;
+   G4double dx = 7.0 * cm;
+   G4double dy = 10.0 * cm;
+   G4double dz = 7.75 * cm;
+ 
 
   G4EllipticalTube* head2 = new G4EllipticalTube("Head2", dx, dy, dz);
-  // G4Tubs(Name, r_int, r_est, halfz lenght, spanning angles) 
 
   G4UnionSolid* head = new G4UnionSolid("Head",head2,head1,
-					0, // Rotation 
-					G4ThreeVector(0.* cm, 0.*cm, 8.15 * cm) );
+  				0, // Rotation 
+  				G4ThreeVector(0.* cm, 0.*cm, 7.7500 * cm) );
 
   G4LogicalVolume* logicHead = new G4LogicalVolume(head, soft,"HeadVolume",
 						   0, 0,0);
   G4RotationMatrix* rm = new G4RotationMatrix();
   rm -> rotateX(90.* degree);
-
+  
   // Define rotation and position here!
   G4VPhysicalVolume* physHead = new G4PVPlacement(rm,
-						  G4ThreeVector(0.* cm,71.35*cm, 0.*cm),
+						  G4ThreeVector(0.* cm,77.75 *cm, 0.*cm),
 						  "physicalHead",
 						  logicHead,
 						  mother,
 						  false,
-						  0);
-  // delete rm;
+						  0, true);
 
   // Sensitive Body Part
  

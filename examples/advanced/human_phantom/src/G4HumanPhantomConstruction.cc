@@ -1,26 +1,23 @@
 //
 // ********************************************************************
-// * License and Disclaimer                                           *
+// * DISCLAIMER                                                       *
 // *                                                                  *
-// * The  Geant4 software  is  copyright of the Copyright Holders  of *
-// * the Geant4 Collaboration.  It is provided  under  the terms  and *
-// * conditions of the Geant4 Software License,  included in the file *
-// * LICENSE and available at  http://cern.ch/geant4/license .  These *
-// * include a list of copyright holders.                             *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.  Please see the license in the file  LICENSE  and URL above *
-// * for the full disclaimer and the limitation of liability.         *
+// * use.                                                             *
 // *                                                                  *
-// * This  code  implementation is the result of  the  scientific and *
-// * technical work of the GEANT4 collaboration.                      *
-// * By using,  copying,  modifying or  distributing the software (or *
-// * any work based  on the software)  you  agree  to acknowledge its *
-// * use  in  resulting  scientific  publications,  and indicate your *
-// * acceptance of all terms of the Geant4 Software license.          *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
 // ********************************************************************
 //
 // Authors: S. Guatelli and M. G. Pia, INFN Genova, Italy
@@ -51,6 +48,12 @@
 #include "G4RunManager.hh"
 #include "G4HumanPhantomMaterial.hh"
 #include "G4HumanPhantomEnergyDeposit.hh"
+#include "G4Box.hh"
+#include "G4LogicalVolume.hh"
+#include "G4VPhysicalVolume.hh"
+#include "G4VisAttributes.hh"
+#include "G4Colour.hh"
+#include "G4PVPlacement.hh"
 
 G4HumanPhantomConstruction::G4HumanPhantomConstruction(G4HumanPhantomEnergyDeposit* energyDep):
   edepTot(energyDep)
@@ -67,7 +70,7 @@ G4HumanPhantomConstruction::~G4HumanPhantomConstruction()
 
 G4VPhysicalVolume* G4HumanPhantomConstruction::Construct()
 {
-  material -> DefineMaterials();
+   material -> DefineMaterials();
   
   G4SDManager* SDman = G4SDManager::GetSDMpointer();
   G4String bodypartSD = "BodyPartSD";
@@ -79,7 +82,7 @@ G4VPhysicalVolume* G4HumanPhantomConstruction::Construct()
   if(sex=="Female") builder = new G4FemaleBuilder;
   else builder = new G4MaleBuilder ;  
 
-  builder->BuildWorld();
+  builder->SetMotherVolume(ConstructWorld());
 
   builder->SetModel(model);
 
@@ -90,35 +93,38 @@ G4VPhysicalVolume* G4HumanPhantomConstruction::Construct()
 
   builder->BuildTrunk(sensitivities["Trunk"]);
   builder->BuildLegs(sensitivities["Legs"]);
-  builder->BuildBrain(sensitivities["Brain"]);
+  builder->BuildBrain(sensitivities["Brain"]); 
 
-  builder->BuildArmBone(sensitivities["ArmBone"]);
+  // Remind! the elliptical cone gives problems! Intersections of volumes, 
+  // wrong calculation of the volume!
+  builder->BuildLeftArmBone(sensitivities["LeftArmBone"]);
+  builder->BuildRightArmBone(sensitivities["RightArmBone"]);  
   builder->BuildLegBone(sensitivities["LegBone"]);
-  builder->BuildSkull(sensitivities["Skull"]);
+  builder->BuildSkull(sensitivities["Skull"]); 
   builder->BuildUpperSpine(sensitivities["UpperSpine"]);
   builder->BuildMiddleLowerSpine(sensitivities["MiddleLowerSpine"]);
 
-  builder->BuildPelvis(sensitivities["Pelvis"]);
-  builder->BuildStomach(sensitivities["Stomach"]);
+  builder->BuildPelvis(sensitivities["Pelvis"]); 
+  builder->BuildStomach(sensitivities["Stomach"]); 
   builder->BuildUpperLargeIntestine(sensitivities["UpperLargeIntestine"]);
   builder->BuildLowerLargeIntestine(sensitivities["LowerLargeIntestine"]);
-
+  builder->BuildRibCage(sensitivities["RibCage"]); 
   builder->BuildSpleen(sensitivities["Spleen"]);
   builder->BuildPancreas(sensitivities["Pancreas"]); 
-  builder->BuildLiver(sensitivities["Liver"]);  
+  //builder->BuildLiver(sensitivities["Liver"]);  da fare
 
   builder->BuildKidney(sensitivities["Kidney"]); 
   builder->BuildUrinaryBladder(sensitivities["UrinaryBladder"]);
 
-  builder->BuildHeart(sensitivities["Hearth"]);
+  //builder->BuildHeart(sensitivities["Hearth"]);
   builder->BuildLung(sensitivities["Lung"]);
-  builder->BuildThyroid(sensitivities["Thyroid"]); 
+  //builder->BuildThyroid(sensitivities["Thyroid"]); 
 
   if(sex=="Female"){
     builder->BuildOvary(true);
     builder->BuildUterus(true);
-    builder->BuildBreast(true);
-    if(model == "MIRD") builder->BuildParameterisedBreast(true);
+    builder->BuildBreast(true); // da fare
+    //if(model == "MIRD") builder->BuildParameterisedBreast(true);
   }
  
   if(sex=="Male"){
@@ -135,6 +141,35 @@ void  G4HumanPhantomConstruction::SetBodyPartSensitivity(G4String bodyPartName, 
    sensitivities[bodyPartName] = bodyPartSensitivity;
   if(bodyPartSensitivity==true) 
   G4cout << " >>> " << bodyPartName << " added as sensitive volume." << G4endl;
+}
+
+G4VPhysicalVolume* G4HumanPhantomConstruction::ConstructWorld()
+{
+  G4Material* air = material -> GetMaterial("Air");
+
+// World Volume
+  G4double worldSize = 1.*m ;
+
+  G4Box* world = new G4Box("world", worldSize, worldSize, worldSize);
+
+  G4LogicalVolume* logicWorld = new G4LogicalVolume(world, 
+						    air, 
+						    "logicalWorld", 0, 0,0);
+
+  G4VPhysicalVolume* motherVolume = new G4PVPlacement(0,G4ThreeVector(),
+						"physicalWorld",
+						logicWorld,
+						0,
+						false,
+						0);
+
+  // Visualization Attributes
+ G4VisAttributes* WorldVisAtt = new G4VisAttributes(G4Colour(0.94,0.5,0.5));
+  
+  WorldVisAtt->SetForceSolid(false);
+  logicWorld->SetVisAttributes(WorldVisAtt);
+ 
+ return motherVolume;
 }
 
 void G4HumanPhantomConstruction::CleanPhantom()

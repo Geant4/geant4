@@ -10,5 +10,6 @@
 /tracking/verbose 0
 /vis/scene/create
 /vis/open DAWNFILE
+/vis/drawVolume
 /vis/viewer/flush
 #

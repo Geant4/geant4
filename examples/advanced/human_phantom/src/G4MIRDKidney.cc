@@ -1,26 +1,23 @@
 //
 // ********************************************************************
-// * License and Disclaimer                                           *
+// * DISCLAIMER                                                       *
 // *                                                                  *
-// * The  Geant4 software  is  copyright of the Copyright Holders  of *
-// * the Geant4 Collaboration.  It is provided  under  the terms  and *
-// * conditions of the Geant4 Software License,  included in the file *
-// * LICENSE and available at  http://cern.ch/geant4/license .  These *
-// * include a list of copyright holders.                             *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.  Please see the license in the file  LICENSE  and URL above *
-// * for the full disclaimer and the limitation of liability.         *
+// * use.                                                             *
 // *                                                                  *
-// * This  code  implementation is the result of  the  scientific and *
-// * technical work of the GEANT4 collaboration.                      *
-// * By using,  copying,  modifying or  distributing the software (or *
-// * any work based  on the software)  you  agree  to acknowledge its *
-// * use  in  resulting  scientific  publications,  and indicate your *
-// * acceptance of all terms of the Geant4 Software license.          *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
 // ********************************************************************
 //
 // Authors: S. Guatelli and M. G. Pia, INFN Genova, Italy
@@ -66,31 +63,28 @@ G4VPhysicalVolume* G4MIRDKidney::ConstructKidney(G4VPhysicalVolume* mother, G4St
  G4Material* soft = material -> GetMaterial("soft_tissue");
  delete material;
  
- G4double ax= 4.05 *cm;
- G4double by= 1.53 *cm;
- G4double cz= 4.96 *cm;
- G4double zcut1 =-4.96 *cm;
- G4double zcut2 = 4.96*cm;
-
- G4VSolid* oneKidney = new G4Ellipsoid("OneKidney",ax, by, cz, 
-					  zcut1,zcut2);
-
- G4double xx = 4.96 * cm;
- G4double yy = 20.00*cm;
- G4double zz = 20.00*cm;
+ G4double ax= 4.5 *cm; //a
+ G4double by= 1.5 *cm; //b
+ G4double cz= 5.5 *cm; //c
+ 
+ G4VSolid* oneKidney = new G4Ellipsoid("OneKidney",ax, by, cz); 
+ 
+ G4double xx = 6. * cm; 
+ G4double yy = 12.00*cm; 
+ G4double zz = 12.00*cm;
  G4VSolid* subtrKidney = new G4Box("SubtrKidney",xx/2., yy/2., zz/2.);
  
  G4UnionSolid* unionKidney = new G4UnionSolid("UnionKidney",
 					      oneKidney,
 					      oneKidney,0,
-					      G4ThreeVector(10.36 *cm, 
+					      G4ThreeVector(12. *cm, // 2* x0
 							    0.0 * cm,
 							    0.0 * cm));
  G4SubtractionSolid* kidney = new G4SubtractionSolid("Kidneys",
 						     unionKidney,
 						     subtrKidney,
 						     0, 
-						     G4ThreeVector(5.18 *cm,
+						     G4ThreeVector(6. *cm, // x0
 								   0.0 *cm,
 								   0.0 * cm));
 
@@ -99,9 +93,9 @@ G4VPhysicalVolume* G4MIRDKidney::ConstructKidney(G4VPhysicalVolume* mother, G4St
 						     "KidneyVolume",
 						     0, 0, 0);
 
-  G4VPhysicalVolume* physKidney = new G4PVPlacement(0 ,G4ThreeVector(-5.18*cm,
-								     5.88 *cm,
-								     -2.25 *cm),
+  G4VPhysicalVolume* physKidney = new G4PVPlacement(0 ,G4ThreeVector(-6.*cm,  // xo
+								     6. *cm, //yo
+								     -2.50 *cm),//zo
   			       "physicalKidney", logicKidney,
 			       mother,
 			       false,

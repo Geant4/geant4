@@ -1,26 +1,23 @@
 //
 // ********************************************************************
-// * License and Disclaimer                                           *
+// * DISCLAIMER                                                       *
 // *                                                                  *
-// * The  Geant4 software  is  copyright of the Copyright Holders  of *
-// * the Geant4 Collaboration.  It is provided  under  the terms  and *
-// * conditions of the Geant4 Software License,  included in the file *
-// * LICENSE and available at  http://cern.ch/geant4/license .  These *
-// * include a list of copyright holders.                             *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.  Please see the license in the file  LICENSE  and URL above *
-// * for the full disclaimer and the limitation of liability.         *
+// * use.                                                             *
 // *                                                                  *
-// * This  code  implementation is the result of  the  scientific and *
-// * technical work of the GEANT4 collaboration.                      *
-// * By using,  copying,  modifying or  distributing the software (or *
-// * any work based  on the software)  you  agree  to acknowledge its *
-// * use  in  resulting  scientific  publications,  and indicate your *
-// * acceptance of all terms of the Geant4 Software license.          *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
 // ********************************************************************
 //
 // Authors: S. Guatelli and M. G. Pia, INFN Genova, Italy
@@ -54,7 +51,8 @@
 #include "G4MIRDUpperSpine.hh"
 #include "G4MIRDMiddleLowerSpine.hh"
 #include "G4MIRDLegBone.hh"
-#include "G4MIRDArmBone.hh"
+#include "G4MIRDLeftArmBone.hh"
+#include "G4MIRDRightArmBone.hh"
 #include "G4MIRDSkull.hh"
 #include "G4MIRDRibCage.hh"
 #include "G4MIRDPelvis.hh"
@@ -212,10 +210,16 @@ G4VPhysicalVolume* G4MIRDBodyFactory::CreateLegBone(G4VPhysicalVolume* motherVol
   return legBone -> ConstructLegBone(motherVolume,sex,sensitivity);
   delete legBone;
 }
-G4VPhysicalVolume* G4MIRDBodyFactory::CreateArmBone(G4VPhysicalVolume* motherVolume, G4String sex, G4bool sensitivity)
+G4VPhysicalVolume* G4MIRDBodyFactory::CreateLeftArmBone(G4VPhysicalVolume* motherVolume, G4String sex, G4bool sensitivity)
 {
-  G4MIRDArmBone* armBone = new G4MIRDArmBone();
-  return armBone -> ConstructArmBone(motherVolume,sex,sensitivity);
+  G4MIRDLeftArmBone* armBone = new G4MIRDLeftArmBone();
+  return armBone -> ConstructLeftArmBone(motherVolume,sex,sensitivity);
+  delete armBone;
+}
+G4VPhysicalVolume* G4MIRDBodyFactory::CreateRightArmBone(G4VPhysicalVolume* motherVolume, G4String sex, G4bool sensitivity)
+{
+  G4MIRDRightArmBone* armBone = new G4MIRDRightArmBone();
+  return armBone -> ConstructRightArmBone(motherVolume,sex,sensitivity);
   delete armBone;
 }
 G4VPhysicalVolume* G4MIRDBodyFactory::CreateSkull(G4VPhysicalVolume* motherVolume, G4String sex, G4bool sensitivity)

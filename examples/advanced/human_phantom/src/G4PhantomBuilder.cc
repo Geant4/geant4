@@ -1,26 +1,23 @@
 //
 // ********************************************************************
-// * License and Disclaimer                                           *
+// * DISCLAIMER                                                       *
 // *                                                                  *
-// * The  Geant4 software  is  copyright of the Copyright Holders  of *
-// * the Geant4 Collaboration.  It is provided  under  the terms  and *
-// * conditions of the Geant4 Software License,  included in the file *
-// * LICENSE and available at  http://cern.ch/geant4/license .  These *
-// * include a list of copyright holders.                             *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.  Please see the license in the file  LICENSE  and URL above *
-// * for the full disclaimer and the limitation of liability.         *
+// * use.                                                             *
 // *                                                                  *
-// * This  code  implementation is the result of  the  scientific and *
-// * technical work of the GEANT4 collaboration.                      *
-// * By using,  copying,  modifying or  distributing the software (or *
-// * any work based  on the software)  you  agree  to acknowledge its *
-// * use  in  resulting  scientific  publications,  and indicate your *
-// * acceptance of all terms of the Geant4 Software license.          *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
 // ********************************************************************
 //
 // Authors: S. Guatelli and M. G. Pia, INFN Genova, Italy
@@ -41,7 +38,7 @@
 #include "G4Box.hh"
 #include "G4LogicalVolume.hh"
 #include "G4PVPlacement.hh"
-
+#include "G4Colour.hh"
 #include "G4VisAttributes.hh"
 
 G4PhantomBuilder::G4PhantomBuilder(): sex("Female"), model("MIRD")
@@ -59,43 +56,6 @@ G4PhantomBuilder::~G4PhantomBuilder()
   delete body;
 } 
 
-void G4PhantomBuilder::BuildWorld()
-{
-  // Elements
-  G4double A;
-  G4double Z;
-  A = 16.00*g/mole;
-  G4Element* elO = new G4Element("Oxygen","O",Z = 8.,A);
-  A = 14.01*g/mole;
-  G4Element* elN = new G4Element("Nitrogen","N",Z = 7.,A);
-
-  // Air Material
-  G4double  d = 1.290*mg/cm3;
-  G4Material* matAir = new G4Material("Air",d,2);
-  matAir->AddElement(elN,0.7);
-  matAir->AddElement(elO,0.3);
-
-  // World Volume
-  G4double worldSize = 1.*m ;
-
-  G4Box* world = new G4Box("world", worldSize, worldSize, worldSize);
-
-  G4LogicalVolume* logicWorld = new G4LogicalVolume(world, 
-						    matAir, 
-						    "logicalWorld", 0, 0,0);
-
-  motherVolume = new G4PVPlacement(0,G4ThreeVector(),
-						"physicalWorld",
-						logicWorld,
-						0,
-						false,
-						0);
-
-  // Visualization Attributes
-  G4VisAttributes* WorldVisAtt = new G4VisAttributes(G4VisAttributes::Invisible);
-  WorldVisAtt->SetForceSolid(false);
-  logicWorld->SetVisAttributes(WorldVisAtt);
-}
 
 void G4PhantomBuilder::BuildHead(G4bool sensitivity)
 { 
@@ -163,12 +123,20 @@ void G4PhantomBuilder::BuildLegBone(G4bool sensitivity)
    body -> CreateLegBone(legsVolume,sex,sensitivity);
 }
 
-void G4PhantomBuilder::BuildArmBone(G4bool sensitivity)
+void G4PhantomBuilder::BuildLeftArmBone(G4bool sensitivity)
 { 
    if (trunkVolume == 0)
    G4Exception("The trunk volume is missing !!!!!");
 
-   body -> CreateArmBone(trunkVolume,sex,sensitivity);
+   body -> CreateLeftArmBone(trunkVolume,sex,sensitivity);
+}
+
+void G4PhantomBuilder::BuildRightArmBone(G4bool sensitivity)
+{ 
+   if (trunkVolume == 0)
+   G4Exception("The trunk volume is missing !!!!!");
+
+   body -> CreateRightArmBone(trunkVolume,sex,sensitivity);
 }
 
 void G4PhantomBuilder::BuildSkull(G4bool sensitivity)
@@ -178,7 +146,7 @@ void G4PhantomBuilder::BuildSkull(G4bool sensitivity)
 
    body -> CreateSkull(headVolume,sex,sensitivity);
 }
-/*
+
 void G4PhantomBuilder::BuildRibCage(G4bool sensitivity)
 { 
    if (trunkVolume == 0)
@@ -186,7 +154,7 @@ void G4PhantomBuilder::BuildRibCage(G4bool sensitivity)
 
    body -> CreateRibCage(trunkVolume,sex,sensitivity);
 }
-*/
+
 void G4PhantomBuilder::BuildPelvis(G4bool sensitivity)
 { 
    if (trunkVolume == 0)
@@ -319,6 +287,11 @@ void G4PhantomBuilder::BuildThyroid(G4bool sensitivity)
 G4VPhysicalVolume* G4PhantomBuilder::GetPhantom()
 {
   return motherVolume;
+}
+
+void G4PhantomBuilder::SetMotherVolume(G4VPhysicalVolume* mother)
+{
+  motherVolume = mother;
 }
 
 void G4PhantomBuilder::SetSex(G4String sexFlag)

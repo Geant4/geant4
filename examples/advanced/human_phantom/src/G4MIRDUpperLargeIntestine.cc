@@ -1,26 +1,23 @@
 //
 // ********************************************************************
-// * License and Disclaimer                                           *
+// * DISCLAIMER                                                       *
 // *                                                                  *
-// * The  Geant4 software  is  copyright of the Copyright Holders  of *
-// * the Geant4 Collaboration.  It is provided  under  the terms  and *
-// * conditions of the Geant4 Software License,  included in the file *
-// * LICENSE and available at  http://cern.ch/geant4/license .  These *
-// * include a list of copyright holders.                             *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.  Please see the license in the file  LICENSE  and URL above *
-// * for the full disclaimer and the limitation of liability.         *
+// * use.                                                             *
 // *                                                                  *
-// * This  code  implementation is the result of  the  scientific and *
-// * technical work of the GEANT4 collaboration.                      *
-// * By using,  copying,  modifying or  distributing the software (or *
-// * any work based  on the software)  you  agree  to acknowledge its *
-// * use  in  resulting  scientific  publications,  and indicate your *
-// * acceptance of all terms of the Geant4 Software license.          *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
 // ********************************************************************
 //
 // Authors: S. Guatelli and M. G. Pia, INFN Genova, Italy
@@ -61,15 +58,15 @@ G4cout << "ConstructUpperLargeIntestine for " << sex << G4endl;
  G4Material* soft = material -> GetMaterial("soft_tissue");
  delete material;
 
-  G4double dx = 2.16 * cm;
-  G4double dy = 2.45 * cm;
-  G4double dz = 4.3 * cm;
+ G4double dx = 2.5 * cm; // aU
+ G4double dy = 2.5* cm; //bU
+ G4double dz = 4.775 * cm; //dzU
 
   G4VSolid* AscendingColonUpperLargeIntestine = new G4EllipticalTube("AscendingColon",dx, dy, dz);
  
-  dx = 2.45 * cm;
-  dy = 1.35 *cm;
-  dz = 9.06* cm;
+  dx = 2.5 * cm;//bt
+  dy = 1.5 *cm;//ct
+  dz = 10.5* cm;//x1t
 
   G4VSolid* TraverseColonUpperLargeIntestine = new G4EllipticalTube("TraverseColon",dx, dy, dz);
 
@@ -81,20 +78,20 @@ G4cout << "ConstructUpperLargeIntestine for " << sex << G4endl;
 						      AscendingColonUpperLargeIntestine,
 						      TraverseColonUpperLargeIntestine,
 						      relative_rm, 
-						      G4ThreeVector(7.2 *cm, 0.0, 5.65 * cm));
-
+						       G4ThreeVector(8.50 *cm, 0.0,6.275 * cm)); //,0,dzU + ct transverse
+  
 
   G4LogicalVolume* logicUpperLargeIntestine = new G4LogicalVolume(upperLargeIntestine, soft,
 								  "UpperLargeIntestineVolume", 
 								  0, 0, 0);
  
   G4VPhysicalVolume* physUpperLargeIntestine = new G4PVPlacement(0,
-								 G4ThreeVector(-7.33 * cm, -2.31 *cm,-14.22 *cm),
-      			       "physicalUpperLargeIntestine",
+								 G4ThreeVector(-8.50 * cm, -2.36 *cm,-15.775 *cm),
+								 "physicalUpperLargeIntestine",                 //xo, yo, zo ascending colon
   			       logicUpperLargeIntestine,
 			       mother,
 			       false,
-			       0);
+			       0, true);
 
   // Sensitive Body Part
   if (sensitivity==true)

@@ -1,26 +1,23 @@
 //
 // ********************************************************************
-// * License and Disclaimer                                           *
+// * DISCLAIMER                                                       *
 // *                                                                  *
-// * The  Geant4 software  is  copyright of the Copyright Holders  of *
-// * the Geant4 Collaboration.  It is provided  under  the terms  and *
-// * conditions of the Geant4 Software License,  included in the file *
-// * LICENSE and available at  http://cern.ch/geant4/license .  These *
-// * include a list of copyright holders.                             *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.  Please see the license in the file  LICENSE  and URL above *
-// * for the full disclaimer and the limitation of liability.         *
+// * use.                                                             *
 // *                                                                  *
-// * This  code  implementation is the result of  the  scientific and *
-// * technical work of the GEANT4 collaboration.                      *
-// * By using,  copying,  modifying or  distributing the software (or *
-// * any work based  on the software)  you  agree  to acknowledge its *
-// * use  in  resulting  scientific  publications,  and indicate your *
-// * acceptance of all terms of the Geant4 Software license.          *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
 // ********************************************************************
 //
 // Authors: S. Guatelli and M. G. Pia, INFN Genova, Italy
@@ -36,9 +33,6 @@
 
 #include "G4VPhysicalVolume.hh"
 
-#include "Saxana/SAXProcessor.h"
-#include "Saxana/ProcessingConfigurator.h"
-
 class G4VPhysicalVolume;
 class G4LogicalVolume;
 
@@ -49,10 +43,19 @@ public:
   G4MIRDRibCage();
   ~G4MIRDRibCage();
   G4VPhysicalVolume* ConstructRibCage(G4VPhysicalVolume*, G4String, G4bool);
- 
-private:
-    SAXProcessor sxp;
-    ProcessingConfigurator config;
 
+private:
+G4VPhysicalVolume* physRib1;
+G4VPhysicalVolume* physRib2;
+G4VPhysicalVolume* physRib3;
+G4VPhysicalVolume* physRib4;
+G4VPhysicalVolume* physRib5;
+G4VPhysicalVolume* physRib6;
+G4VPhysicalVolume* physRib7;
+G4VPhysicalVolume* physRib8;
+G4VPhysicalVolume* physRib9;
+G4VPhysicalVolume* physRib10;
+G4VPhysicalVolume* physRib11;
+G4VPhysicalVolume* physRib12;
 };
 #endif

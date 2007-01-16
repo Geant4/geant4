@@ -1,26 +1,23 @@
 //
 // ********************************************************************
-// * License and Disclaimer                                           *
+// * DISCLAIMER                                                       *
 // *                                                                  *
-// * The  Geant4 software  is  copyright of the Copyright Holders  of *
-// * the Geant4 Collaboration.  It is provided  under  the terms  and *
-// * conditions of the Geant4 Software License,  included in the file *
-// * LICENSE and available at  http://cern.ch/geant4/license .  These *
-// * include a list of copyright holders.                             *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.  Please see the license in the file  LICENSE  and URL above *
-// * for the full disclaimer and the limitation of liability.         *
+// * use.                                                             *
 // *                                                                  *
-// * This  code  implementation is the result of  the  scientific and *
-// * technical work of the GEANT4 collaboration.                      *
-// * By using,  copying,  modifying or  distributing the software (or *
-// * any work based  on the software)  you  agree  to acknowledge its *
-// * use  in  resulting  scientific  publications,  and indicate your *
-// * acceptance of all terms of the Geant4 Software license.          *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
 // ********************************************************************
 //
 // Authors: S. Guatelli and M. G. Pia, INFN Genova, Italy
@@ -65,44 +62,40 @@ G4VPhysicalVolume* G4MIRDLegBone::ConstructLegBone(G4VPhysicalVolume* mother, G4
   
   delete material;
  
-  G4double dz = 76. * cm;
+  G4double dz = 79.8 * cm;
   G4double rmin1 = 0.0 * cm;
   G4double rmin2 = 0.0 * cm;
-  G4double rmax1 = 1.0 * cm;
-  G4double rmax2 = 2.0 * cm;
-  G4double startphi = 0 * degree;
-  G4double deltaphi = 360 * degree;
+  G4double rmax1 = 1. * cm;
+  G4double rmax2 = 3.5 * cm;
+  G4double startphi = 0. * degree;
+  G4double deltaphi = 360. * degree;
 
   G4Cons* leg_bone = new G4Cons("OneLegBone",  
 			   rmin1, rmax1, 
 			   rmin2, rmax2, dz/2., 
 			   startphi, deltaphi);
 
-  G4RotationMatrix* rm_relative = new G4RotationMatrix();
-  rm_relative -> rotateY(-12.5 * degree);
+  //G4RotationMatrix* rm_relative = new G4RotationMatrix();
+  //rm_relative -> rotateY(-12.5 * degree);
   
   G4UnionSolid* legs_bones =  new G4UnionSolid("LegBone",
 					       leg_bone, leg_bone,
-					       rm_relative,
-					       G4ThreeVector(10.* cm, 0.0,-0.95 * cm));
+					       0,
+					       G4ThreeVector(20.* cm, 0.0,0. * cm));
 
 
   G4LogicalVolume* logicLegBone = new G4LogicalVolume(legs_bones, skeleton,"LegBoneVolume",
 						      0, 0, 0);
 
 
-  G4RotationMatrix* rm = new G4RotationMatrix();
-  rm -> rotateY(6.25 * degree);
-
-
   // Define rotation and position here!
-  G4VPhysicalVolume* physLegBone = new G4PVPlacement(rm,
-				G4ThreeVector(-5.0 * cm, 0.0, 0.0),
+  G4VPhysicalVolume* physLegBone = new G4PVPlacement(0,
+				G4ThreeVector(0.0 * cm, 0.0, 0.1*cm),
       			       "physicalLegBone",
   			       logicLegBone,
 			       mother,
 			       false,
-			       0);
+			       0, true);
 
   // Sensitive Body Part
   if (sensitivity==true)
