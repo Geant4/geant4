@@ -34,7 +34,8 @@
 #include "G4ORNLUpperLargeIntestine.hh"
 #include "G4ORNLLowerLargeIntestine.hh"
 #include "G4ORNLEsophagus.hh"
-#include "G4ORNLKidney.hh"
+#include "G4ORNLLeftKidney.hh"
+#include "G4ORNLRightKidney.hh"
 #include "G4ORNLAdrenal.hh"
 #include "G4ORNLLiver.hh"
 #include "G4ORNLPancreas.hh"
@@ -89,11 +90,17 @@ G4VPhysicalVolume* G4ORNLBodyFactory::CreateEsophagus(G4VPhysicalVolume* motherV
   G4ORNLEsophagus* esophagus = new G4ORNLEsophagus();
   return esophagus -> ConstructEsophagus(motherVolume, sex, sensitivity);
 }
-G4VPhysicalVolume* G4ORNLBodyFactory::CreateKidney(G4VPhysicalVolume* motherVolume, G4String sex, G4bool sensitivity)
+G4VPhysicalVolume* G4ORNLBodyFactory::CreateLeftKidney(G4VPhysicalVolume* motherVolume, G4String sex, G4bool sensitivity)
 {
-  G4ORNLKidney* kidney = new G4ORNLKidney();
-  return kidney -> ConstructKidney(motherVolume, sex, sensitivity);
+  G4ORNLLeftKidney* kidney = new G4ORNLLeftKidney();
+  return kidney -> ConstructLeftKidney(motherVolume, sex, sensitivity);
 }
+G4VPhysicalVolume* G4ORNLBodyFactory::CreateRightKidney(G4VPhysicalVolume* motherVolume, G4String sex, G4bool sensitivity)
+{
+  G4ORNLRightKidney* kidney = new G4ORNLRightKidney();
+  return kidney -> ConstructRightKidney(motherVolume, sex, sensitivity);
+}
+
 G4VPhysicalVolume* G4ORNLBodyFactory::CreateAdrenal(G4VPhysicalVolume* motherVolume, G4String sex, G4bool sensitivity)
 {
   G4ORNLAdrenal* adrenal = new G4ORNLAdrenal();

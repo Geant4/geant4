@@ -79,7 +79,7 @@ G4VPhysicalVolume* G4MIRDRightArmBone::ConstructRightArmBone(G4VPhysicalVolume* 
   matrix -> rotateX(180. * degree);
 
   G4VPhysicalVolume* physRightArmBone = new G4PVPlacement(matrix,
-			       G4ThreeVector(18.4 * cm, 0.0, -0.5*cm),
+			       G4ThreeVector(-18.4 * cm, 0.0, -0.5*cm),
 						     //-x0
       			       "physicalRightArmBone",
   			       logicRightArmBone,

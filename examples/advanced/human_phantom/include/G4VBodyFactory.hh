@@ -77,7 +77,8 @@ public:
   virtual G4VPhysicalVolume* CreateLowerLargeIntestine(G4VPhysicalVolume*,G4String,G4bool) = 0;
   virtual G4VPhysicalVolume* CreateEsophagus(G4VPhysicalVolume*,G4String,G4bool) = 0;
 
-  virtual G4VPhysicalVolume* CreateKidney(G4VPhysicalVolume*,G4String,G4bool) = 0;
+  virtual G4VPhysicalVolume* CreateLeftKidney(G4VPhysicalVolume*,G4String,G4bool) = 0;
+  virtual G4VPhysicalVolume* CreateRightKidney(G4VPhysicalVolume*,G4String,G4bool) = 0;
   virtual G4VPhysicalVolume* CreateAdrenal(G4VPhysicalVolume*,G4String,G4bool) = 0;
   virtual G4VPhysicalVolume* CreateLiver(G4VPhysicalVolume*,G4String,G4bool) = 0;
   virtual G4VPhysicalVolume* CreatePancreas(G4VPhysicalVolume*,G4String,G4bool) = 0;

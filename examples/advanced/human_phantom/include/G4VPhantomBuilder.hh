@@ -63,10 +63,11 @@ public:
   void BuildStomach(G4bool) {return ;};
   void BuildUpperLargeIntestine(G4bool) {return ;};
   void BuildLowerLargeIntestine(G4bool) {return ;};
-  //virtual void BuildEsophagus(G4bool) = 0;
+  // virtual void BuildEsophagus(G4bool) = 0;
 
-  void BuildKidney(G4bool) {return ;};
-//  virtual void BuildAdrenal(G4bool) = 0;
+  void BuildLeftKidney(G4bool) {return ;};
+  void BuildRightKidney(G4bool) {return ;};
+  // virtual void BuildAdrenal(G4bool) = 0;
   void BuildLiver(G4bool) {return ;};
   void BuildPancreas(G4bool) {return ;};
   void BuildSpleen(G4bool) {return ;};

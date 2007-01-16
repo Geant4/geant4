@@ -236,13 +236,21 @@ void G4PhantomBuilder::BuildEsophagus(G4bool sensitivity)
    body -> CreateEsophagus(trunkVolume,sex,sensitivity);
 }
 */
-void G4PhantomBuilder::BuildKidney(G4bool sensitivity)
+void G4PhantomBuilder::BuildLeftKidney(G4bool sensitivity)
 { 
    if (trunkVolume == 0)
    G4Exception("The trunk volume is missing !!!!!");
 
-   body -> CreateKidney(trunkVolume,sex,sensitivity);
+   body -> CreateLeftKidney(trunkVolume,sex,sensitivity);
 }
+void G4PhantomBuilder::BuildRightKidney(G4bool sensitivity)
+{ 
+   if (trunkVolume == 0)
+   G4Exception("The trunk volume is missing !!!!!");
+
+   body -> CreateRightKidney(trunkVolume,sex,sensitivity);
+}
+
 /*
 void G4PhantomBuilder::BuildAdrenal(G4bool sensitivity)
 { 

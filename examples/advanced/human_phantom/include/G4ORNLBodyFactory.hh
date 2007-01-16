@@ -39,6 +39,8 @@ class G4ORNLBodyFactory: public G4VBodyFactory
 public:
   G4ORNLBodyFactory();
  ~G4ORNLBodyFactory();
+  
+  // G4VPhysicalVolume* CreateOrgan(G4VPhysicalVolume*,G4String,G4bool, G4String);
 
   G4VPhysicalVolume* CreateHead(G4VPhysicalVolume*,G4String,G4bool);
   G4VPhysicalVolume* CreateTrunk(G4VPhysicalVolume*,G4String,G4bool);
@@ -78,7 +80,8 @@ public:
   G4VPhysicalVolume* CreateLowerLargeIntestine(G4VPhysicalVolume*,G4String,G4bool);
   G4VPhysicalVolume* CreateEsophagus(G4VPhysicalVolume*,G4String,G4bool);
 
-  G4VPhysicalVolume* CreateKidney(G4VPhysicalVolume*,G4String,G4bool);
+  G4VPhysicalVolume* CreateLeftKidney(G4VPhysicalVolume*,G4String,G4bool);
+  G4VPhysicalVolume* CreateRightKidney(G4VPhysicalVolume*,G4String,G4bool);
   G4VPhysicalVolume* CreateAdrenal(G4VPhysicalVolume*,G4String,G4bool);
   G4VPhysicalVolume* CreateLiver(G4VPhysicalVolume*,G4String,G4bool);
   G4VPhysicalVolume* CreatePancreas(G4VPhysicalVolume*,G4String,G4bool);

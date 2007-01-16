@@ -74,7 +74,8 @@ public:
   G4VPhysicalVolume* CreateUpperLargeIntestine(G4VPhysicalVolume*,G4String,G4bool);
   G4VPhysicalVolume* CreateLowerLargeIntestine(G4VPhysicalVolume*,G4String,G4bool);
 
-  G4VPhysicalVolume* CreateKidney(G4VPhysicalVolume*,G4String,G4bool);
+  G4VPhysicalVolume* CreateLeftKidney(G4VPhysicalVolume*,G4String,G4bool);
+  G4VPhysicalVolume* CreateRightKidney(G4VPhysicalVolume*,G4String,G4bool);
   G4VPhysicalVolume* CreateAdrenal(G4VPhysicalVolume*,G4String,G4bool);
   G4VPhysicalVolume* CreateLiver(G4VPhysicalVolume*,G4String,G4bool);
   G4VPhysicalVolume* CreatePancreas(G4VPhysicalVolume*,G4String,G4bool);

@@ -113,7 +113,8 @@ G4VPhysicalVolume* G4HumanPhantomConstruction::Construct()
   builder->BuildPancreas(sensitivities["Pancreas"]); 
   //builder->BuildLiver(sensitivities["Liver"]);  da fare
 
-  builder->BuildKidney(sensitivities["Kidney"]); 
+  builder->BuildLeftKidney(sensitivities["LeftKidney"]);
+  builder->BuildRightKidney(sensitivities["RightKidney"]);
   builder->BuildUrinaryBladder(sensitivities["UrinaryBladder"]);
 
   //builder->BuildHeart(sensitivities["Hearth"]);

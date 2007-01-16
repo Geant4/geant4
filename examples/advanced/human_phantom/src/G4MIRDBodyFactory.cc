@@ -32,7 +32,8 @@
 #include "G4MIRDStomach.hh"
 #include "G4MIRDUpperLargeIntestine.hh"
 #include "G4MIRDLowerLargeIntestine.hh"
-#include "G4MIRDKidney.hh"
+#include "G4MIRDLeftKidney.hh"
+#include "G4MIRDRightKidney.hh"
 #include "G4MIRDAdrenal.hh"
 #include "G4MIRDLiver.hh"
 #include "G4MIRDPancreas.hh"
@@ -87,12 +88,19 @@ G4VPhysicalVolume* G4MIRDBodyFactory::CreateLowerLargeIntestine(G4VPhysicalVolum
   delete lowerLargeIntestine;
 }
 
-G4VPhysicalVolume* G4MIRDBodyFactory::CreateKidney(G4VPhysicalVolume* motherVolume, G4String sex, G4bool sensitivity)
+G4VPhysicalVolume* G4MIRDBodyFactory::CreateLeftKidney(G4VPhysicalVolume* motherVolume, G4String sex, G4bool sensitivity)
 {
-  G4MIRDKidney* kidney = new G4MIRDKidney();
-  return kidney -> ConstructKidney(motherVolume,sex,sensitivity);
+  G4MIRDLeftKidney* kidney = new G4MIRDLeftKidney();
+  return kidney -> ConstructLeftKidney(motherVolume,sex,sensitivity);
   delete kidney;
 }
+G4VPhysicalVolume* G4MIRDBodyFactory::CreateRightKidney(G4VPhysicalVolume* motherVolume, G4String sex, G4bool sensitivity)
+{
+  G4MIRDRightKidney* kidney = new G4MIRDRightKidney();
+  return kidney -> ConstructRightKidney(motherVolume,sex,sensitivity);
+  delete kidney;
+}
+
 G4VPhysicalVolume* G4MIRDBodyFactory::CreateAdrenal(G4VPhysicalVolume* motherVolume, G4String sex, G4bool sensitivity)
 {
   G4MIRDAdrenal* adrenal = new G4MIRDAdrenal();

@@ -81,7 +81,8 @@ virtual void BuildMaleGenitalia(G4bool)=0;
   void BuildLowerLargeIntestine(G4bool);
  // void BuildEsophagus(G4bool);
 
-  void BuildKidney(G4bool);
+  void BuildLeftKidney(G4bool);
+  void BuildRightKidney(G4bool);
  // void BuildAdrenal(G4bool);
   void BuildLiver(G4bool);
   void BuildPancreas(G4bool);
