@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.94 2007-01-16 14:30:59 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.95 2007-01-16 18:07:55 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -1406,13 +1406,13 @@ G4bool G4VEnergyLossProcess::RetrievePhysicsTable(
                     theCSDARangeTable,filename,ascii);
       if(yes) {
         if (0 < verboseLevel) {
-          G4cout << "Precise Range table for " << particleName 
+          G4cout << "CSDA Range table for " << particleName 
 		 << " is Retrieved from <"
                  << filename << ">"
                  << G4endl;
         }
       } else {
-	G4cout << "Precise Range table for loss for " << particleName 
+	G4cout << "CSDA Range table for loss for " << particleName 
 	       << " does not exist"
 	       << G4endl;
       }
@@ -1501,8 +1501,13 @@ G4bool G4VEnergyLossProcess::RetrievePhysicsTable(
 
       filename = GetPhysicsTableFileName(part,directory,"Ionisation",ascii);
       yes = theIonisationTable->ExistPhysicsTable(filename);
-      if(yes) yes = G4PhysicsTableHelper::RetrievePhysicsTable(
+      if(yes) {
+	theIonisationTable = 
+	  G4PhysicsTableHelper::PreparePhysicsTable(theIonisationTable);
+        
+	yes = G4PhysicsTableHelper::RetrievePhysicsTable(
                     theIonisationTable,filename,ascii);
+      }
       if(yes) {
         if (0 < verboseLevel) {
           G4cout << "Ionisation table for " << particleName 
@@ -1514,8 +1519,12 @@ G4bool G4VEnergyLossProcess::RetrievePhysicsTable(
 
       filename = GetPhysicsTableFileName(part,directory,"SubIonisation",ascii);
       yes = theIonisationSubTable->ExistPhysicsTable(filename);
-      if(yes) yes = G4PhysicsTableHelper::RetrievePhysicsTable(
+      if(yes) {
+	theIonisationSubTable = 
+	  G4PhysicsTableHelper::PreparePhysicsTable(theIonisationSubTable);
+        yes = G4PhysicsTableHelper::RetrievePhysicsTable(
                     theIonisationSubTable,filename,ascii);
+      }
       if(yes) {
         if (0 < verboseLevel) {
           G4cout << "SubIonisation table for " << particleName 
@@ -1524,7 +1533,6 @@ G4bool G4VEnergyLossProcess::RetrievePhysicsTable(
                  << G4endl;
         }
       } 
-
     }
   }
 
