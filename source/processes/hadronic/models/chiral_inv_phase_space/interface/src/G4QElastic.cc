@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QElastic.cc,v 1.16 2006-12-09 14:33:35 mkossov Exp $
+// $Id: G4QElastic.cc,v 1.17 2007-01-16 14:41:40 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QElastic class -----------------
@@ -450,8 +450,8 @@ G4VParticleChange* G4QElastic::PostStepDoIt(const G4Track& track, const G4Step& 
   G4double cost=1.-mint/CSmanager->GetHMaxT();// cos(theta) in CMS
   // 
 #ifdef ppdebug
-  G4cout<<"G4QElastic::PoStDoI:t="<<mint<<",dpcm2="<<twop2cm<<"="<<CSmanager->GetHMaxT()
-        <<",Ek="<<kinEnergy<<",tM="<<tM<<",pM="<<pM<<",s="<<sM<<",cost="<<cost<<G4endl;
+  G4cout<<"G4QElastic::PoStDoI:t="<<mint<<",dpcm2="<<CSmanager->GetHMaxT()<<",Ek="
+        <<kinEnergy<<",tM="<<tM<<",pM="<<pM<<",cost="<<cost<<G4endl;
 #endif
   if(cost>1. || cost<-1. || !(cost>-1. || cost<1.))
   {
@@ -488,7 +488,7 @@ G4VParticleChange* G4QElastic::PostStepDoIt(const G4Track& track, const G4Step& 
     if(finE<-1.e-8 || !(finE>-1.||finE<1.))
       G4cerr<<"*Warning*G4QElastic::PostStDoIt: Zero or negative scattered E="<<finE
             <<", s4M="<<scat4M<<", r4M="<<reco4M<<", d4M="<<tot4M-scat4M-reco4M<<G4endl;
-    //throw G4QException("G4QElastic::PostStDoIt: 0, negative, or nan energy");
+    throw G4QException("G4QElastic::PostStDoIt: 0, negative, or nan energy");
     aParticleChange.ProposeEnergy(0.) ;
     aParticleChange.ProposeTrackStatus(fStopAndKill);
   }
