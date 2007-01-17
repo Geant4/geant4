@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel.cc,v 1.26 2006-12-04 05:53:24 urban Exp $
+// $Id: G4UrbanMscModel.cc,v 1.27 2007-01-17 15:59:52 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -114,6 +114,7 @@
 // 20-11-06 bugfix in single scattering part of SampleCosineTheta,
 //          single scattering just before boundary crossing now (L.Urban)
 // 04-12-06 fix in ComputeTruePathLengthLimit (L.Urban)
+// 17-01-07 remove LocatePoint from GeomLimit method (V.Ivanchenko)
 //
 
 // Class Description:
@@ -621,8 +622,6 @@ void G4UrbanMscModel::GeomLimit(const G4Track&  track)
      (track.GetVolume() != navigator->GetWorldVolume()))  
   {
     const G4double cstep = geombig;
-    navigator->LocateGlobalPointWithinVolume(
-                  track.GetStep()->GetPreStepPoint()->GetPosition());
     geomlimit = navigator->ComputeStep(
                   track.GetStep()->GetPreStepPoint()->GetPosition(),
                   track.GetMomentumDirection(),
@@ -827,9 +826,7 @@ std::vector<G4DynamicParticle*>* G4UrbanMscModel::SampleSecondaries(
         {
           //  ******* we do not have track info at this level ***********
           //  ******* so navigator is called at boundary too ************
-          G4double newsafety= -100.; // = safety;
-  //        newsafety= navigator->ComputeSafety(Position);
-          newsafety= safetyHelper->ComputeSafety(Position);
+          G4double newsafety = safetyHelper->ComputeSafety(Position);
           safety= newsafety; 
           if(r < newsafety)
             fac = 1.;
@@ -842,7 +839,6 @@ std::vector<G4DynamicParticle*>* G4UrbanMscModel::SampleSecondaries(
           // compute new endpoint of the Step
           G4ThreeVector newPosition = Position+fac*r*latDirection;
 
-  //         navigator->LocateGlobalPointWithinVolume(newPosition);
           safetyHelper->ReLocateWithinVolume(newPosition);
 
           fParticleChange->ProposePosition(newPosition);
