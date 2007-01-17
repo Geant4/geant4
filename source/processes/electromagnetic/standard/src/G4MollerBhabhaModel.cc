@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MollerBhabhaModel.cc,v 1.28 2006-08-28 17:44:36 vnivanch Exp $
+// $Id: G4MollerBhabhaModel.cc,v 1.29 2007-01-17 09:17:56 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4hIonisation.hh,v 1.34 2006-06-29 19:52:28 gunter Exp $
+// $Id: G4hIonisation.hh,v 1.35 2007-01-17 09:17:56 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -83,7 +83,6 @@
 #include "G4EmCorrections.hh"
 
 class G4Material;
-class G4VEmFluctuationModel;
 
 class G4hIonisation : public G4VEnergyLossProcess
 {
@@ -130,7 +129,6 @@ private:
 
   const G4ParticleDefinition* theParticle;
   const G4ParticleDefinition* theBaseParticle;
-  G4VEmFluctuationModel*      flucModel;
   G4EmCorrections*            corr;
 
   G4bool                      isInitialised;
