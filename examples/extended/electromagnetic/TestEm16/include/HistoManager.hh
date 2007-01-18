@@ -23,41 +23,67 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.hh,v 1.5 2007-01-18 09:07:20 hbu Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef RunAction_h
-#define RunAction_h 1
+#ifndef HistoManager_h
+#define HistoManager_h 1
 
-#include "G4UserRunAction.hh"
 #include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class G4Run;
-class HistoManager;
+namespace AIDA {
+ class IAnalysisFactory;
+ class ITree;
+ class IHistogram1D;
+}
+
+class HistoMessenger;
+
+const G4int MaxHisto = 4;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class RunAction : public G4UserRunAction
+class HistoManager
 {
   public:
-    RunAction(HistoManager*);
-   ~RunAction();
 
-  public:
-    void BeginOfRunAction(const G4Run*);
-    void   EndOfRunAction(const G4Run*);
+    HistoManager();
+   ~HistoManager();
 
-    G4int n_gam_sync; // number of synchrotron radiation photons generated
-    G4double e_gam_sync, e_gam_sync2, e_gam_sync_max; // energy of synchrotron radiation photons generated
-    G4double lam_gam_sync; // step length between synchrotron radiation photons
+    void SetFileName   (const G4String& name) { fileName[0] = name;};
+    void SetFileType   (const G4String& name) { fileType    = name;};
+    void SetFileOption (const G4String& name) { fileOption  = name;};    
+    void book();
+    void save();
+    void SetHisto (G4int,G4int,G4double,G4double,const G4String& unit="none");  
+    void FillHisto(G4int id, G4double e, G4double weight = 1.0);
+    void RemoveHisto (G4int);
+
+    G4bool    HistoExist  (G4int id) {return exist[id];}
+    G4double  GetHistoUnit(G4int id) {return Unit[id];}
+    G4double  GetBinWidth (G4int id) {return Width[id];}
 
   private:
-    HistoManager*   histoManager;
+
+    G4String                 fileName[2];
+    G4String                 fileType;
+    G4String                 fileOption;    
+    AIDA::IAnalysisFactory*  af;
+    AIDA::ITree*             tree;
+    AIDA::IHistogram1D*      histo[MaxHisto];
+    G4bool                   exist[MaxHisto];
+    G4String                 Label[MaxHisto];
+    G4String                 Title[MaxHisto];
+    G4int                    Nbins[MaxHisto];
+    G4double                 Vmin [MaxHisto];
+    G4double                 Vmax [MaxHisto];
+    G4double                 Unit [MaxHisto];
+    G4double                 Width[MaxHisto];
+    G4bool                   factoryOn;
+    HistoMessenger*          histoMessenger;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

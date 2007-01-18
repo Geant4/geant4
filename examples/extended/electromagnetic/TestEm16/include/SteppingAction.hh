@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: SteppingAction.hh,v 1.2 2006-06-29 16:47:44 gunter Exp $
+// $Id: SteppingAction.hh,v 1.3 2007-01-18 09:07:20 hbu Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -36,20 +36,21 @@
 #include "globals.hh"
 
 class RunAction;
+class HistoManager;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class SteppingAction : public G4UserSteppingAction
 {
 public:
-  SteppingAction(RunAction*);
+  SteppingAction(RunAction*, HistoManager*);
   ~SteppingAction();
 
   void UserSteppingAction(const G4Step*);
 
 private:
   RunAction* runAction;
-  G4double   muonMass;
+  HistoManager* histoManager;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

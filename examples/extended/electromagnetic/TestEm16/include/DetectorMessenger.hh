@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorMessenger.hh,v 1.3 2006-06-29 16:47:28 gunter Exp $
+// $Id: DetectorMessenger.hh,v 1.4 2007-01-18 09:07:20 hbu Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -58,14 +58,15 @@ private:
 
   G4UIdirectory*             testemDir;
   G4UIdirectory*             detDir;
+  G4UIdirectory*             trackdir;
   G4UIcmdWithAString*        MaterCmd;
   G4UIcmdWithADoubleAndUnit* SizeCmd;
   G4UIcmdWithADoubleAndUnit* MagFieldCmd;
   G4UIcmdWithADoubleAndUnit* MaxStepCmd;
+  G4UIcmdWithADoubleAndUnit* MaxStepLength;
   G4UIcmdWithoutParameter*   UpdateCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

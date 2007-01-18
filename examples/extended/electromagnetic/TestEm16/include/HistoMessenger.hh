@@ -23,41 +23,46 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.hh,v 1.5 2007-01-18 09:07:20 hbu Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef RunAction_h
-#define RunAction_h 1
+#ifndef HistoMessenger_h
+#define HistoMessenger_h 1
 
-#include "G4UserRunAction.hh"
+#include "G4UImessenger.hh"
 #include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class G4Run;
 class HistoManager;
+class G4UIdirectory;
+class G4UIcommand;
+class G4UIcmdWithAString;
+class G4UIcmdWithAnInteger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class RunAction : public G4UserRunAction
+class HistoMessenger: public G4UImessenger
 {
   public:
-    RunAction(HistoManager*);
-   ~RunAction();
 
-  public:
-    void BeginOfRunAction(const G4Run*);
-    void   EndOfRunAction(const G4Run*);
+   HistoMessenger(HistoManager* );
+  ~HistoMessenger();
 
-    G4int n_gam_sync; // number of synchrotron radiation photons generated
-    G4double e_gam_sync, e_gam_sync2, e_gam_sync_max; // energy of synchrotron radiation photons generated
-    G4double lam_gam_sync; // step length between synchrotron radiation photons
+   void SetNewValue(G4UIcommand* ,G4String );
 
   private:
-    HistoManager*   histoManager;
+
+   HistoManager*           histoManager;
+   
+   G4UIdirectory*          histoDir;   
+   G4UIcmdWithAString*     factoryCmd;
+   G4UIcmdWithAString*     typeCmd;
+   G4UIcmdWithAString*     optionCmd;   
+   G4UIcommand*            histoCmd;
+   G4UIcmdWithAnInteger*   rmhistoCmd;
+
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
