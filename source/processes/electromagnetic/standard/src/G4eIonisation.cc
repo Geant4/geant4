@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eIonisation.cc,v 1.51 2007-01-17 09:17:56 maire Exp $
+// $Id: G4eIonisation.cc,v 1.52 2007-01-18 12:17:04 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -126,10 +126,11 @@ void G4eIonisation::InitialiseEnergyLossProcess(
 
 void G4eIonisation::PrintInfo()
 {
-  G4cout << "      Delta cross sections and sampling from " 
-         << EmModel()->GetName() << " model"
-         << "\n      Good description from 1 KeV to 100 GeV."
-         << G4endl;
+  if(EmModel())
+    G4cout << "      Delta cross sections and sampling from " 
+	   << EmModel()->GetName() << " model"
+	   << "\n      Good description from 1 KeV to 100 GeV."
+	   << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

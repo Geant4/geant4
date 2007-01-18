@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlung.cc,v 1.45 2007-01-17 09:17:56 maire Exp $
+// $Id: G4eBremsstrahlung.cc,v 1.46 2007-01-18 12:17:04 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -130,12 +130,13 @@ void G4eBremsstrahlung::InitialiseEnergyLossProcess(
 
 void G4eBremsstrahlung::PrintInfo()
 {
-  G4cout << "      Total cross sections and sampling from "
-         << EmModel()->GetName() << " model"  
-         << " (based on the EEDL data library) " 
-         << "\n      Good description from 1 KeV to 100 GeV, "
-	 << "log scale extrapolation above 100 GeV."
-         << G4endl;
+  if(EmModel())
+    G4cout << "      Total cross sections and sampling from "
+	   << EmModel()->GetName() << " model"  
+	   << " (based on the EEDL data library) " 
+	   << "\n      Good description from 1 KeV to 100 GeV, "
+	   << "log scale extrapolation above 100 GeV."
+	   << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ionIonisation.cc,v 1.38 2007-01-17 09:17:56 maire Exp $
+// $Id: G4ionIonisation.cc,v 1.39 2007-01-18 12:17:04 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -140,13 +140,14 @@ void G4ionIonisation::InitialiseEnergyLossProcess(
 
 void G4ionIonisation::PrintInfo()
 {
-  G4cout << "      Scaling relation is used from proton dE/dx and range."
-         << "\n      Delta cross sections and sampling from " 
-         << EmModel(2)->GetName() << " model for scaled energy > "
-         << eth/MeV << " MeV"
-         << "\n      Parametrisation from "
-	 << EmModel(1)->GetName() << " for protons below."
-         << G4endl;	 
+  if(EmModel(1) && EmModel(2))
+    G4cout << "      Scaling relation is used from proton dE/dx and range."
+	   << "\n      Delta cross sections and sampling from " 
+	   << EmModel(2)->GetName() << " model for scaled energy > "
+	   << eth/MeV << " MeV"
+	   << "\n      Parametrisation from "
+	   << EmModel(1)->GetName() << " for protons below."
+	   << G4endl;	 
   if (stopDataActive)
     G4cout << "\n      Stopping Power data for " 
            << corr->GetNumberOfStoppingVectors()
