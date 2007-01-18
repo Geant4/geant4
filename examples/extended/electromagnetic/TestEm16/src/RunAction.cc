@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.7 2007-01-18 09:07:20 hbu Exp $
+// $Id: RunAction.cc,v 1.8 2007-01-18 10:24:35 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -48,11 +48,6 @@ RunAction::RunAction(HistoManager* histo)
   e_gam_sync2 = 0;
   e_gam_sync_max =0;
   lam_gam_sync = 0;
-#ifdef G4ANALYSIS_USE
-  G4cout << "G4ANALYSIS_USE was     set, there will be    AIDA histos" << '\n';
-#else
-  G4cout << "G4ANALYSIS_USE was not set, there will be no AIDA histos" << '\n';
-#endif
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

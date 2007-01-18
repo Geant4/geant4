@@ -80,7 +80,12 @@ HistoManager::~HistoManager()
 void HistoManager::book()
 {
 #ifdef G4ANALYSIS_USE
-  if(!af) return;
+  if(!af) {
+    G4cout << "HistoManager::book: WARNING AnalysisFactory is not created,"
+	   << " there will be no AIDA histos" << G4endl;
+    return;
+  }
+  G4cout << "\n----> Book AIDA histograms "<< G4endl;
 
   // Creating a tree mapped to an hbook file.
   fileName[1] = fileName[0] + "." + fileType;
@@ -115,6 +120,9 @@ void HistoManager::book()
   delete hf;
   if (factoryOn) 
      G4cout << "\n----> Histogram Tree is opened in " << fileName[1] << G4endl;
+#else
+  G4cout << "G4ANALYSIS_USE was not set, there will be no AIDA histos" 
+	 << G4endl;
 #endif
 }
 
