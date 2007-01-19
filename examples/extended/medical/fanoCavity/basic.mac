@@ -1,0 +1,16 @@
+# $Id: basic.mac,v 1.1 2007-01-19 17:20:26 maire Exp $
+#
+/control/verbose 2
+/run/verbose 2
+#
+/run/initialize
+#
+/process/inactivate msc
+/process/eLoss/fluct    false
+/process/eLoss/integral false
+#
+/testem/stepMax 1 mm
+#
+/testem/event/printModulo 50000
+#
+/run/beamOn 500000
