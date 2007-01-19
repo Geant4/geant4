@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel.cc,v 1.27 2007-01-17 15:59:52 vnivanch Exp $
+// $Id: G4UrbanMscModel.cc,v 1.28 2007-01-19 11:17:32 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -115,6 +115,7 @@
 //          single scattering just before boundary crossing now (L.Urban)
 // 04-12-06 fix in ComputeTruePathLengthLimit (L.Urban)
 // 17-01-07 remove LocatePoint from GeomLimit method (V.Ivanchenko)
+// 19-01-07 fix of true < geom problem (L.Urban)
 //
 
 // Class Description:
@@ -183,6 +184,7 @@ G4UrbanMscModel::G4UrbanMscModel(G4double m_facrange, G4double m_dtrl,
   particle      = 0;
   theManager    = G4LossTableManager::Instance(); 
   inside        = false;  
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -480,6 +482,10 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
     tPathLength = currentRange;
 
   G4StepPoint* sp = track.GetStep()->GetPreStepPoint();
+  prex = sp->GetPosition().x();
+  prey = sp->GetPosition().y();
+  prez = sp->GetPosition().z();
+
   presafety = sp->GetSafety();
   G4StepStatus stepStatus = sp->GetStepStatus();
   G4int stepNumber = track.GetCurrentStepNumber();
@@ -825,7 +831,7 @@ std::vector<G4DynamicParticle*>* G4UrbanMscModel::SampleSecondaries(
         else
         {
           //  ******* we do not have track info at this level ***********
-          //  ******* so navigator is called at boundary too ************
+          //  ******* so safety is computed at boundary too ************
           G4double newsafety = safetyHelper->ComputeSafety(Position);
           safety= newsafety; 
           if(r < newsafety)
@@ -836,6 +842,16 @@ std::vector<G4DynamicParticle*>* G4UrbanMscModel::SampleSecondaries(
 
         if(fac > 0.)
         {
+          // protection against geom > true
+          G4double a = (prex-Position.x())*(prex-Position.x())+
+                       (prey-Position.y())*(prey-Position.y())+
+                       (prez-Position.z())*(prez-Position.z());
+          G4double b = (prex-Position.x())*latDirection.x()+
+                       (prey-Position.y())*latDirection.y()+
+                       (prez-Position.z())*latDirection.z();
+          G4double facprot = (b+sqrt(tPathLength*tPathLength-a+b*b))/r;
+          if(facprot < fac) fac = facprot;
+ 
           // compute new endpoint of the Step
           G4ThreeVector newPosition = Position+fac*r*latDirection;
 
@@ -1006,11 +1022,8 @@ G4double G4UrbanMscModel::SampleDisplacement()
     }
     if (rmean>0.) rmean = 2.*lambdaeff*sqrt(rmean/3.0);
     else          rmean = 0.;
-
-    // check: z*z+r*r <= t*t should be satisfied
-    if(rmean*rmean > (tPathLength-zPathLength)*(tPathLength+zPathLength))
-      rmean = sqrt((tPathLength-zPathLength)*(tPathLength+zPathLength));
   }
+
   return rmean;
 }
 
