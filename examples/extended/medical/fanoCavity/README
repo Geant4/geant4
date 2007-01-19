@@ -1,4 +1,4 @@
-$Id: README,v 1.1 2007-01-19 17:20:26 maire Exp $
+$Id: README,v 1.2 2007-01-19 18:12:17 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -63,8 +63,8 @@ $Id: README,v 1.1 2007-01-19 17:20:26 maire Exp $
     reset to its initial state, energy and direction. Consequently, interaction
     points are uniformly distribued within the wall material.
     
-    This modification must done in the ParticleChange of the final state of the
-    Compton scattering interaction. Therefore, a specific model
+    This modification must be done in the ParticleChange of the final state 
+    of the Compton scattering interaction. Therefore, a specific model
     (MyKleinNishinaCompton) is assigned to the ComptonScattering process in
     PhysicsList. MyKleinNishinaCompton inherites from G4KleinNishinaCompton;
     only the function SampleSecondaries() is overwritten.
