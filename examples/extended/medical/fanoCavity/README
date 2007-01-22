@@ -1,4 +1,4 @@
-$Id: README,v 1.2 2007-01-19 18:12:17 maire Exp $
+$Id: README,v 1.3 2007-01-22 13:03:57 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -11,9 +11,9 @@ $Id: README,v 1.2 2007-01-19 18:12:17 maire Exp $
     This program computes the dose deposited in an ionization chamber by a
     monoenergetic photon beam.
     The geometry of the chamber satisfies the conditions of charged particle
-    equilibrium. Hence, under Fano conditions, the ratio of the dose deposited 
-    over the beam energy fluence must be equal to the mass energy transfer 
-    coefficient of the wall material.
+    equilibrium. Hence, under idealized conditions, the ratio of the dose 
+    deposited over the beam energy fluence must be equal to the 
+    mass_energy_transfer coefficient of the wall material.
     
     E.Poon and al, Phys. Med. Biol. 50 (2005) 681
     I.Kawrakow, Med. Phys. 27-3 (2000) 499
@@ -24,7 +24,7 @@ $Id: README,v 1.2 2007-01-19 18:12:17 maire Exp $
      	
     6 parameters define the geometry :
       - the material of the wall of the chamber
-      - the radius of chamber and the thickness of the wall
+      - the radius of the chamber and the thickness of the wall
       - the material of the cavity
       - the radius and the thickness of the cavity
 
@@ -61,7 +61,7 @@ $Id: README,v 1.2 2007-01-19 18:12:17 maire Exp $
     
     Beam regeneration : after each Compton interaction, the scattered photon is
     reset to its initial state, energy and direction. Consequently, interaction
-    points are uniformly distribued within the wall material.
+    sites are uniformly distribued within the wall material.
     
     This modification must be done in the ParticleChange of the final state 
     of the Compton scattering interaction. Therefore, a specific model
@@ -73,7 +73,7 @@ $Id: README,v 1.2 2007-01-19 18:12:17 maire Exp $
     
     The program computes the dose deposited in the cavity and the ratio
     Dose/Beam_energy_fluence. This ratio is compared to the mass_energy_transfer
-    coefficient in wall material.
+    coefficient of the wall material.
     
     The mass_energy_transfer coefficient needs :
     	- the photon total cross section, which is read from the PhysicsTables
