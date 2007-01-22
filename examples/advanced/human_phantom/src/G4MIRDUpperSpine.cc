@@ -41,6 +41,7 @@
 #include "G4PVPlacement.hh"
 #include "G4Box.hh"
 #include "G4SubtractionSolid.hh"
+#include "G4HumanPhantomColour.hh"
 
 G4MIRDUpperSpine::G4MIRDUpperSpine()
 {
@@ -51,11 +52,13 @@ G4MIRDUpperSpine::~G4MIRDUpperSpine()
  
 }
 
-G4VPhysicalVolume* G4MIRDUpperSpine::ConstructUpperSpine(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity)
+G4VPhysicalVolume* G4MIRDUpperSpine::ConstructOrgan(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity,
+						    G4String volumeName, G4String logicalVolumeName, G4String colourName
+						    , G4bool wireFrame )
 {
   G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
    
-  G4cout << "ConstructUpperSpine for "<< sex <<G4endl;
+  G4cout << "Construct " <<volumeName <<" for "<< sex <<G4endl;
    
   G4Material* skeleton = material -> GetMaterial("skeleton");
  
@@ -80,7 +83,7 @@ G4VPhysicalVolume* G4MIRDUpperSpine::ConstructUpperSpine(G4VPhysicalVolume* moth
 							  matrix, G4ThreeVector(0., -2.5 * cm, 5.5* cm));
 
  G4LogicalVolume* logicUpperSpine = new G4LogicalVolume(upper_spine, skeleton, 
-							"UpperSpineVolume",
+							logicalVolumeName,
 							0, 0, 0);  
   // Define rotation and position here!
   G4VPhysicalVolume* physUpperSpine = new G4PVPlacement(0,
@@ -99,8 +102,12 @@ G4VPhysicalVolume* G4MIRDUpperSpine::ConstructUpperSpine(G4VPhysicalVolume* moth
   }
 
   // Visualization Attributes
-  G4VisAttributes* UpperSpineVisAtt = new G4VisAttributes(G4Colour(0.46,0.53,0.6));
-  UpperSpineVisAtt->SetForceSolid(true);
+  //G4VisAttributes* UpperSpineVisAtt = new G4VisAttributes(G4Colour(0.46,0.53,0.6));
+  G4HumanPhantomColour* colourPointer = new G4HumanPhantomColour();
+  G4Colour colour = colourPointer -> GetColour(colourName);
+  G4VisAttributes* UpperSpineVisAtt = new G4VisAttributes(colour);
+ 
+  UpperSpineVisAtt->SetForceSolid(wireFrame);
   logicUpperSpine->SetVisAttributes(UpperSpineVisAtt);
 
   G4cout << "UpperSpine created !!!!!!" << G4endl;

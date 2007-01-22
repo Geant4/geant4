@@ -60,7 +60,7 @@
 #include "G4ORNLRibCage.hh"
 #include "G4ORNLPelvis.hh"
 #include "G4ORNLTestes.hh"
-
+#include "G4ORNLOrgan.hh"
 
 G4ORNLBodyFactory::G4ORNLBodyFactory()
 {
@@ -70,11 +70,16 @@ G4ORNLBodyFactory::~G4ORNLBodyFactory()
 {
 }
 
-G4VPhysicalVolume* G4ORNLBodyFactory::CreateStomach(G4VPhysicalVolume* motherVolume, G4String sex, G4bool sensitivity)
+G4VPhysicalVolume* G4ORNLBodyFactory::CreateOrgan(G4VPhysicalVolume* motherVolume, G4String sex, 
+G4bool sensitivity, G4String gdmlFile, G4String logicalVolumeName, G4String colour, G4bool solidFrame)
 {
-  G4ORNLStomach* stomach = new G4ORNLStomach();
-  return stomach -> ConstructStomach(motherVolume, sex, sensitivity);
+
+  G4ORNLOrgan* organ = new G4ORNLOrgan();
+  return organ -> ConstructOrgan(motherVolume,sex, sensitivity, "gdmlData/"+sex+"/ORNL"+ gdmlFile +".gdml", logicalVolumeName, colour, solidFrame);
 }
+
+/*
+
 G4VPhysicalVolume* G4ORNLBodyFactory::CreateUpperLargeIntestine(G4VPhysicalVolume* motherVolume, G4String sex, G4bool sensitivity)
 {
   G4ORNLUpperLargeIntestine* upperLargeIntestine = new G4ORNLUpperLargeIntestine();
@@ -251,3 +256,4 @@ G4VPhysicalVolume* G4ORNLBodyFactory::CreateMaleGenitalia(G4VPhysicalVolume* mot
 	 << ": not yet implemented!" << G4endl;
    return 0;
 }
+*/

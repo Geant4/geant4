@@ -32,16 +32,16 @@
 #define G4MIRDLowerLargeIntestine_h 1
 
 #include "G4VPhysicalVolume.hh"
-
+#include "G4VOrgan.hh"
 class G4VPhysicalVolume;
 class G4LogicalVolume;
 
-class G4MIRDLowerLargeIntestine
+class G4MIRDLowerLargeIntestine: public G4VOrgan
 {
 public:
 
   G4MIRDLowerLargeIntestine();
   ~G4MIRDLowerLargeIntestine();
-  G4VPhysicalVolume* ConstructLowerLargeIntestine(G4VPhysicalVolume*, G4String, G4bool);
+  G4VPhysicalVolume* ConstructOrgan(G4VPhysicalVolume*, G4String, G4bool, G4String, G4String, G4String, G4bool);
  };
 #endif

@@ -39,7 +39,10 @@ public:
 
   G4VBodyFactory();
   virtual ~G4VBodyFactory();
-
+  virtual G4VPhysicalVolume* CreateOrgan(G4VPhysicalVolume* motherVolume, G4String sex, 
+	                                  G4bool sensitivity, G4String gdmlFile, G4String logicalVolumeName, 
+					 G4String colour, G4bool solidFrame)=0;
+  /*
   virtual G4VPhysicalVolume* CreateHead(G4VPhysicalVolume*,G4String,G4bool) = 0;
   virtual G4VPhysicalVolume* CreateTrunk(G4VPhysicalVolume*,G4String,G4bool) = 0;
   virtual G4VPhysicalVolume* CreateLegs(G4VPhysicalVolume*,G4String,G4bool) = 0;
@@ -86,7 +89,7 @@ public:
   virtual G4VPhysicalVolume* CreateUrinaryBladder(G4VPhysicalVolume*,G4String,G4bool) = 0;
 
   virtual G4VPhysicalVolume* CreateThyroid(G4VPhysicalVolume*,G4String,G4bool) = 0;
-
+  */
 
 };
 #endif

@@ -32,16 +32,16 @@
 #define G4MIRDPelvis_h 1
 
 #include "G4VPhysicalVolume.hh"
-
+#include "G4VOrgan.hh"
 class G4VPhysicalVolume;
 class G4LogicalVolume;
 
-class G4MIRDPelvis
+class G4MIRDPelvis: public G4VOrgan
 {
 public:
 
   G4MIRDPelvis();
   ~G4MIRDPelvis();
-  G4VPhysicalVolume* ConstructPelvis(G4VPhysicalVolume*, G4String, G4bool);
+  G4VPhysicalVolume* ConstructOrgan(G4VPhysicalVolume*, G4String, G4bool, G4String, G4String, G4String, G4bool);
 };
 #endif

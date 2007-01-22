@@ -41,6 +41,7 @@
 #include "G4HumanPhantomMaterial.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4PVPlacement.hh"
+#include "G4HumanPhantomColour.hh"
 G4MIRDUterus::G4MIRDUterus()
 {
 }
@@ -49,10 +50,11 @@ G4MIRDUterus::~G4MIRDUterus()
 {
 }
 
-G4VPhysicalVolume* G4MIRDUterus::ConstructUterus(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity)
+G4VPhysicalVolume* G4MIRDUterus::ConstructOrgan(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity,G4String volumeName, 
+G4String logicalVolumeName, G4String colourName, G4bool wireFrame )
 {
  
- G4cout << "ConstructUterus for " << sex << G4endl;
+  G4cout << "Construct " << volumeName << " for " << sex << G4endl;
  
  G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
  G4Material* soft = material -> GetMaterial("soft_tissue");
@@ -70,7 +72,7 @@ G4VPhysicalVolume* G4MIRDUterus::ConstructUterus(G4VPhysicalVolume* mother, G4St
 
   G4LogicalVolume* logicUterus = new G4LogicalVolume(uterus,
 						     soft,
-						     "UterusVolume",
+						     logicalVolumeName,
 						     0, 0, 0);
 
 
@@ -94,8 +96,12 @@ G4VPhysicalVolume* G4MIRDUterus::ConstructUterus(G4VPhysicalVolume* mother, G4St
   }
 
   // Visualization Attributes
-  G4VisAttributes* UterusVisAtt = new G4VisAttributes(G4Colour(0.85,0.44,0.84));
-  UterusVisAtt->SetForceSolid(true);
+  //  G4VisAttributes* UterusVisAtt = new G4VisAttributes(G4Colour(0.85,0.44,0.84));
+
+  G4HumanPhantomColour* colourPointer = new G4HumanPhantomColour();
+  G4Colour colour = colourPointer -> GetColour(colourName);
+  G4VisAttributes* UterusVisAtt = new G4VisAttributes(colour);  
+  UterusVisAtt->SetForceSolid(wireFrame);
   logicUterus->SetVisAttributes(UterusVisAtt);
 
   G4cout << "Uterus created !!!!!!" << G4endl;

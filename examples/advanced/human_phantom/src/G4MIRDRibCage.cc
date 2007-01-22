@@ -39,6 +39,8 @@
 #include "G4PVReplica.hh"
 #include "G4Box.hh"
 #include "G4PVPlacement.hh"
+#include "G4HumanPhantomColour.hh"
+
 G4MIRDRibCage::G4MIRDRibCage()
 {
 }
@@ -47,12 +49,13 @@ G4MIRDRibCage::~G4MIRDRibCage()
 {
   }
 
-G4VPhysicalVolume* G4MIRDRibCage::ConstructRibCage(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity)
+G4VPhysicalVolume* G4MIRDRibCage::ConstructOrgan(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity,
+						 G4String volumeName, G4String logicalVolumeName, G4String colourName
+						 , G4bool wireFrame)
 {
- 
   G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
    
-  G4cout << "ConstructRibCage "<< sex <<G4endl;
+  G4cout << "Construct "<< volumeName <<" for"<< sex <<G4endl;
    
   G4Material* skeleton = material -> GetMaterial("skeleton");
   G4Material* soft = material -> GetMaterial("soft_tissue");
@@ -98,7 +101,7 @@ G4VPhysicalVolume* G4MIRDRibCage::ConstructRibCage(G4VPhysicalVolume* mother, G4
   G4EllipticalTube* rib_in = new G4EllipticalTube("rib_in",xx, yy, zz/2.);
   G4SubtractionSolid* rib = new G4SubtractionSolid("rib",rib_out, rib_in);
 
-  G4LogicalVolume* logicRib= new G4LogicalVolume(rib, skeleton, "RibVolume", 0, 0, 0);
+  G4LogicalVolume* logicRib= new G4LogicalVolume(rib, skeleton, logicalVolumeName, 0, 0, 0);
 
   physRib1 = new G4PVPlacement(0,G4ThreeVector(0.0, 0.0, (- 32.2*cm/2. + 0.8 *cm)),
 						      // with respect to the trunk
@@ -207,8 +210,12 @@ G4VPhysicalVolume* G4MIRDRibCage::ConstructRibCage(G4VPhysicalVolume* mother, G4
   // Visualization Attributes
   logicRibCage -> SetVisAttributes(G4VisAttributes::Invisible);
 
-  G4VisAttributes* RibCageVisAtt = new G4VisAttributes(G4Colour(0.46,0.53,0.6));
-  RibCageVisAtt->SetForceSolid(true);
+  //G4VisAttributes* RibCageVisAtt = new G4VisAttributes(G4Colour(0.46,0.53,0.6));
+
+  G4HumanPhantomColour* colourPointer = new G4HumanPhantomColour();
+  G4Colour colour = colourPointer -> GetColour(colourName);
+  G4VisAttributes* RibCageVisAtt = new G4VisAttributes(colour); 
+  RibCageVisAtt->SetForceSolid(wireFrame);
   logicRib->SetVisAttributes(RibCageVisAtt);
 
   G4cout << "RibCage created !!!!!!" << G4endl;

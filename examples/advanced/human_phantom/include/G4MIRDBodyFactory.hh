@@ -33,15 +33,20 @@
 #define G4MIRDBodyFactory_h 1
 
 #include "G4VBodyFactory.hh"
-
+#include "G4VOrgan.hh"
+#include <map>
 class G4VBodyFactory;
 class G4VPhysicalVolume;
+class G4VOrgan;
+
 class G4MIRDBodyFactory: public G4VBodyFactory
 {
 public:
   G4MIRDBodyFactory();
  ~G4MIRDBodyFactory();
-
+  G4VPhysicalVolume* CreateOrgan(G4VPhysicalVolume*,G4String,G4bool, G4String,G4String, 
+				 G4String, G4bool);
+  /*
   G4VPhysicalVolume* CreateHead(G4VPhysicalVolume*,G4String,G4bool);
   G4VPhysicalVolume* CreateTrunk(G4VPhysicalVolume*,G4String,G4bool);
   G4VPhysicalVolume* CreateLegs(G4VPhysicalVolume*,G4String,G4bool);
@@ -89,8 +94,9 @@ public:
   G4VPhysicalVolume* CreateScapulae(G4VPhysicalVolume*,G4String,G4bool);
   G4VPhysicalVolume* CreateClavicles(G4VPhysicalVolume*,G4String,G4bool);
   G4VPhysicalVolume* CreateMaleGenitalia(G4VPhysicalVolume*,G4String,G4bool);
-
+  */
 private:
-  
+  std::map<std::string,G4VOrgan*> organ; 
+  G4VOrgan* organ_pointer;
 };
 #endif

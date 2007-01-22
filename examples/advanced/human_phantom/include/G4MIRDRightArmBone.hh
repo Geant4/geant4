@@ -33,18 +33,18 @@
 #define G4MIRDRightArmBone_h 1
 
 #include "G4VPhysicalVolume.hh"
-
+#include "G4VOrgan.hh"
 class G4VPhysicalVolume;
 class G4LogicalVolume;
 
-class G4MIRDRightArmBone
+class G4MIRDRightArmBone: public G4VOrgan
 {
 public:
 
   G4MIRDRightArmBone();
   ~G4MIRDRightArmBone();
 
-  G4VPhysicalVolume* ConstructRightArmBone(G4VPhysicalVolume*, G4String, G4bool);
+  G4VPhysicalVolume* ConstructOrgan(G4VPhysicalVolume*, G4String, G4bool, G4String, G4String, G4String, G4bool);
  
 private:
   //    SAXProcessor sxp;

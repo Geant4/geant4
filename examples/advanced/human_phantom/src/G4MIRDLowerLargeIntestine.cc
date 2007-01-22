@@ -41,7 +41,7 @@
 #include "G4LogicalVolume.hh"
 #include "G4Torus.hh"
 #include "G4HumanPhantomMaterial.hh"
-
+#include "G4HumanPhantomColour.hh"
 G4MIRDLowerLargeIntestine::G4MIRDLowerLargeIntestine()
 {
 }
@@ -51,9 +51,11 @@ G4MIRDLowerLargeIntestine::~G4MIRDLowerLargeIntestine()
 
 }
 
-G4VPhysicalVolume* G4MIRDLowerLargeIntestine::ConstructLowerLargeIntestine(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity)
+G4VPhysicalVolume* G4MIRDLowerLargeIntestine::ConstructOrgan(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity,
+							     G4String volumeName, G4String logicalVolumeName, G4String colourName
+							     , G4bool wireFrame)
 {
- G4cout << "ConstructLowerLargeIntestine for " << sex << G4endl;
+  G4cout << "Construct "<< volumeName << " for " << sex << G4endl;
  
  G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
  G4Material* soft = material -> GetMaterial("soft_tissue");
@@ -104,7 +106,7 @@ G4VPhysicalVolume* G4MIRDLowerLargeIntestine::ConstructLowerLargeIntestine(G4VPh
 
 
   G4LogicalVolume* logicLowerLargeIntestine = new G4LogicalVolume( LowerLargeIntestine, soft,
-								   "LowerLargeIntestineVolume",
+								   logicalVolumeName,
 								   0, 0, 0);
   
   G4VPhysicalVolume* physLowerLargeIntestine = new G4PVPlacement(0,           // R1+ R2, -2.36 (y0), z0 
@@ -122,8 +124,11 @@ G4VPhysicalVolume* G4MIRDLowerLargeIntestine::ConstructLowerLargeIntestine(G4VPh
   }
 
   // Visualization Attributes
-  G4VisAttributes* LowerLargeIntestineVisAtt = new G4VisAttributes(G4Colour(1.0,1.0,0.0));
-  LowerLargeIntestineVisAtt->SetForceSolid(true);
+  //G4VisAttributes* LowerLargeIntestineVisAtt = new G4VisAttributes(G4Colour(1.0,1.0,0.0));
+  G4HumanPhantomColour* colourPointer = new G4HumanPhantomColour();
+  G4Colour colour = colourPointer -> GetColour(colourName);
+  G4VisAttributes* LowerLargeIntestineVisAtt = new G4VisAttributes(colour);
+  LowerLargeIntestineVisAtt->SetForceSolid(wireFrame);
   logicLowerLargeIntestine->SetVisAttributes(LowerLargeIntestineVisAtt);
 
   G4cout << "LowerLargeIntestine created !!!!!!" << G4endl;

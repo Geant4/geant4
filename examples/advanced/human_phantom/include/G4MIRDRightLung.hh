@@ -28,8 +28,8 @@
 // with the design in a forthcoming publication, and subject to a 
 // design and code review.
 //
-#ifndef G4MIRDMiddleLowerSpine_h
-#define G4MIRDMiddleLowerSpine_h 1
+#ifndef G4MIRDRightLung_h
+#define G4MIRDRightLung_h 1
 
 #include "G4VPhysicalVolume.hh"
 #include "G4VOrgan.hh"
@@ -37,14 +37,13 @@
 class G4VPhysicalVolume;
 class G4LogicalVolume;
 
-class G4MIRDMiddleLowerSpine: public G4VOrgan
+class G4MIRDRightLung: public G4VOrgan
 {
 public:
 
-  G4MIRDMiddleLowerSpine();
-  ~G4MIRDMiddleLowerSpine();
+  G4MIRDRightLung();
+  ~G4MIRDRightLung();
   G4VPhysicalVolume* ConstructOrgan(G4VPhysicalVolume*, G4String, G4bool, G4String, G4String, G4String, G4bool);
- 
-private:
+
 };
 #endif

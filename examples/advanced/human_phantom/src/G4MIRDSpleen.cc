@@ -43,6 +43,7 @@
 #include "G4VPhysicalVolume.hh"
 #include "G4PVPlacement.hh"
 #include "G4Ellipsoid.hh"
+#include "G4HumanPhantomColour.hh"
 G4MIRDSpleen::G4MIRDSpleen()
 {
 }
@@ -52,10 +53,11 @@ G4MIRDSpleen::~G4MIRDSpleen()
 
 }
 
-G4VPhysicalVolume* G4MIRDSpleen::ConstructSpleen(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity)
+G4VPhysicalVolume* G4MIRDSpleen::ConstructOrgan(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity,G4String volumeName, 
+G4String logicalVolumeName, G4String colourName, G4bool wireFrame)
 {
 
- G4cout << "ConstructSpleen for " << sex << G4endl;
+  G4cout << "Construct "<< volumeName <<" for " << sex << G4endl;
  G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
  G4Material* soft = material -> GetMaterial("soft_tissue");
  delete material;
@@ -68,7 +70,7 @@ G4VPhysicalVolume* G4MIRDSpleen::ConstructSpleen(G4VPhysicalVolume* mother, G4St
 
 
   G4LogicalVolume* logicSpleen = new G4LogicalVolume(spleen, soft,
-						     "SpleenVolume",
+						     logicalVolumeName,
 						      0, 0, 0);
   
   // Define rotation and position here!
@@ -88,8 +90,11 @@ G4VPhysicalVolume* G4MIRDSpleen::ConstructSpleen(G4VPhysicalVolume* mother, G4St
   }
 
   // Visualization Attributes
-  G4VisAttributes* SpleenVisAtt = new G4VisAttributes(G4Colour(0.41,0.41,0.41));
-  SpleenVisAtt->SetForceSolid(true);
+  // G4VisAttributes* SpleenVisAtt = new G4VisAttributes(G4Colour(0.41,0.41,0.41));
+  G4HumanPhantomColour* colourPointer = new G4HumanPhantomColour();
+  G4Colour colour = colourPointer -> GetColour(colourName);
+  G4VisAttributes* SpleenVisAtt = new G4VisAttributes(colour);
+  SpleenVisAtt->SetForceSolid(wireFrame);
   logicSpleen->SetVisAttributes(SpleenVisAtt);
 
   G4cout << "Spleen created !!!!!!" << G4endl;

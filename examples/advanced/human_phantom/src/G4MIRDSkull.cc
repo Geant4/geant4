@@ -43,6 +43,7 @@
 #include "G4Box.hh"
 #include "G4UnionSolid.hh"
 #include "G4VSolid.hh"
+#include "G4HumanPhantomColour.hh"
 
 G4MIRDSkull::G4MIRDSkull()
 {
@@ -53,12 +54,14 @@ G4MIRDSkull::~G4MIRDSkull()
 
 }
 
-G4VPhysicalVolume* G4MIRDSkull::ConstructSkull(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity)
+G4VPhysicalVolume* G4MIRDSkull::ConstructOrgan(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity,
+					       G4String volumeName, G4String logicalVolumeName, G4String colourName
+					       , G4bool wireFrame)
 {
   
   G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
    
-  G4cout << "ConstructSkull for "<< sex <<G4endl;
+  G4cout << "Construct "<<volumeName <<" for "<< sex <<G4endl;
    
   G4Material* skeleton = material -> GetMaterial("skeleton");
  
@@ -84,7 +87,7 @@ G4VPhysicalVolume* G4MIRDSkull::ConstructSkull(G4VPhysicalVolume* mother, G4Stri
 						      G4ThreeVector(0.0, 0.0,1. * cm));
 
   G4LogicalVolume* logicSkull = new G4LogicalVolume(cranium, skeleton, 
-						    "SkullVolume",
+						    logicalVolumeName,
 						    0, 0, 0);
   
   // Define rotation and position here!
@@ -104,8 +107,11 @@ G4VPhysicalVolume* G4MIRDSkull::ConstructSkull(G4VPhysicalVolume* mother, G4Stri
   }
 
   // Visualization Attributes
-  G4VisAttributes* SkullVisAtt = new G4VisAttributes(G4Colour(0.46,0.53,0.6));
-  SkullVisAtt->SetForceSolid(false);
+  //G4VisAttributes* SkullVisAtt = new G4VisAttributes(G4Colour(0.46,0.53,0.6));
+ G4HumanPhantomColour* colourPointer = new G4HumanPhantomColour();
+  G4Colour colour = colourPointer -> GetColour(colourName);
+  G4VisAttributes* SkullVisAtt = new G4VisAttributes(colour);
+  SkullVisAtt->SetForceSolid(wireFrame);
   logicSkull->SetVisAttributes(SkullVisAtt);
 
   G4cout << "Skull created !!!!!!" << G4endl;

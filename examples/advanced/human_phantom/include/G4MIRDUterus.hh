@@ -32,16 +32,17 @@
 #define G4MIRDUterus_h 1
 
 #include "G4VPhysicalVolume.hh"
+#include "G4VOrgan.hh"
 
 class G4VPhysicalVolume;
 class G4LogicalVolume;
 
-class G4MIRDUterus
+class G4MIRDUterus: public G4VOrgan
 {
 public:
 
   G4MIRDUterus();
   ~G4MIRDUterus();
-  G4VPhysicalVolume* ConstructUterus(G4VPhysicalVolume*, G4String, G4bool);
+  G4VPhysicalVolume* ConstructOrgan(G4VPhysicalVolume*, G4String, G4bool, G4String, G4String, G4String, G4bool);
 };
 #endif

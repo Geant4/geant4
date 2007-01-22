@@ -41,6 +41,7 @@
 #include "G4HumanPhantomMaterial.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4PVPlacement.hh"
+#include "G4HumanPhantomColour.hh"
 
 G4MIRDBrain::G4MIRDBrain()
 {
@@ -51,9 +52,10 @@ G4MIRDBrain::~G4MIRDBrain()
 
 }
 
-G4VPhysicalVolume* G4MIRDBrain::ConstructBrain(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity)
+G4VPhysicalVolume* G4MIRDBrain::ConstructOrgan(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity, G4String volumeName, G4String logicalVolumeName, 
+					       G4String colourName, G4bool wireFrame)
 {
-
+  G4cout << "Construct " << volumeName << " for " << sex << G4endl;
  G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
  G4Material* soft = material -> GetMaterial("soft_tissue");
  delete material;
@@ -66,7 +68,7 @@ G4VPhysicalVolume* G4MIRDBrain::ConstructBrain(G4VPhysicalVolume* mother, G4Stri
  
 
   G4LogicalVolume* logicBrain =  new G4LogicalVolume(brain, soft, 
-						     "BrainVolume",
+						     logicalVolumeName,
 						     0, 0, 0);
   
   // Define rotation and position here!
@@ -86,8 +88,12 @@ G4VPhysicalVolume* G4MIRDBrain::ConstructBrain(G4VPhysicalVolume* mother, G4Stri
 
 
   // Visualization Attributes
-  G4VisAttributes* BrainVisAtt = new G4VisAttributes(G4Colour(0.41,0.41,0.41));
-  BrainVisAtt->SetForceSolid(true);
+  // G4VisAttributes* BrainVisAtt = new G4VisAttributes(G4Colour(0.41,0.41,0.41));
+  G4HumanPhantomColour* colourPointer = new G4HumanPhantomColour();
+  G4Colour colour = colourPointer -> GetColour(colourName);
+  
+  G4VisAttributes* BrainVisAtt = new G4VisAttributes(colour);
+  BrainVisAtt->SetForceSolid(wireFrame);
   logicBrain->SetVisAttributes(BrainVisAtt);
 
   G4cout << "Brain created for " << sex << "!!!! "<<G4endl;

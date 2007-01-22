@@ -41,6 +41,7 @@
 #include "G4PVPlacement.hh"
 #include "G4LogicalVolume.hh"
 #include "G4HumanPhantomMaterial.hh"
+#include "G4HumanPhantomColour.hh"
 
 G4MIRDUpperLargeIntestine::G4MIRDUpperLargeIntestine()
 {
@@ -50,9 +51,11 @@ G4MIRDUpperLargeIntestine::~G4MIRDUpperLargeIntestine()
 {
 }
 
-G4VPhysicalVolume* G4MIRDUpperLargeIntestine::ConstructUpperLargeIntestine(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity)
+G4VPhysicalVolume* G4MIRDUpperLargeIntestine::ConstructOrgan(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity,
+							     G4String volumeName, G4String logicalVolumeName, G4String colourName
+							     , G4bool wireFrame)
 {
-G4cout << "ConstructUpperLargeIntestine for " << sex << G4endl;
+  G4cout << "Construct " << volumeName<< " for " << sex << G4endl;
  
  G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
  G4Material* soft = material -> GetMaterial("soft_tissue");
@@ -82,7 +85,7 @@ G4cout << "ConstructUpperLargeIntestine for " << sex << G4endl;
   
 
   G4LogicalVolume* logicUpperLargeIntestine = new G4LogicalVolume(upperLargeIntestine, soft,
-								  "UpperLargeIntestineVolume", 
+								  logicalVolumeName, 
 								  0, 0, 0);
  
   G4VPhysicalVolume* physUpperLargeIntestine = new G4PVPlacement(0,
@@ -101,8 +104,11 @@ G4cout << "ConstructUpperLargeIntestine for " << sex << G4endl;
   }
 
   // Visualization Attributes
-  G4VisAttributes* UpperLargeIntestineVisAtt = new G4VisAttributes(G4Colour(1.0,1.0,0.0));
-  UpperLargeIntestineVisAtt->SetForceSolid(true);
+  //  G4VisAttributes* UpperLargeIntestineVisAtt = new G4VisAttributes(G4Colour(1.0,1.0,0.0));
+  G4HumanPhantomColour* colourPointer = new G4HumanPhantomColour();
+  G4Colour colour = colourPointer -> GetColour(colourName);
+  G4VisAttributes* UpperLargeIntestineVisAtt = new G4VisAttributes(colour);
+  UpperLargeIntestineVisAtt->SetForceSolid(wireFrame);
   logicUpperLargeIntestine->SetVisAttributes(UpperLargeIntestineVisAtt);
 
   G4cout << "UpperLargeIntestine created !!!!!!" << G4endl;

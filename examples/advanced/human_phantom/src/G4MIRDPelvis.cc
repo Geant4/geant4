@@ -43,7 +43,7 @@
 #include "G4Box.hh"
 #include "G4VSolid.hh"
 #include "G4LogicalVolume.hh"
-
+#include "G4HumanPhantomColour.hh"
 G4MIRDPelvis::G4MIRDPelvis()
 {
 }
@@ -53,11 +53,12 @@ G4MIRDPelvis::~G4MIRDPelvis()
 
 }
 
-G4VPhysicalVolume* G4MIRDPelvis::ConstructPelvis(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity)
+G4VPhysicalVolume* G4MIRDPelvis::ConstructOrgan(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity, G4String volumeName, 
+G4String logicalVolumeName, G4String colourName, G4bool wireFrame )
 {
    G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
    
-  G4cout << "ConstructMiddleLowerSpine for "<< sex <<G4endl;
+   G4cout << "Construct "<<volumeName<<" for "<< sex <<G4endl;
    
   G4Material* skeleton = material -> GetMaterial("skeleton");
  
@@ -114,7 +115,7 @@ G4VPhysicalVolume* G4MIRDPelvis::ConstructPelvis(G4VPhysicalVolume* mother, G4St
 
  
   G4LogicalVolume* logicPelvis = new G4LogicalVolume(pelvis, skeleton,
-						       "PelvisVolume", 0, 0, 0);
+						     logicalVolumeName, 0, 0, 0);
   
  
   G4VPhysicalVolume* physPelvis = new G4PVPlacement(0,G4ThreeVector(0.0, -3. * cm,-24. * cm),// 0, y02, z position
@@ -133,8 +134,12 @@ G4VPhysicalVolume* G4MIRDPelvis::ConstructPelvis(G4VPhysicalVolume* mother, G4St
   }
 
   // Visualization Attributes
-  G4VisAttributes* PelvisVisAtt = new G4VisAttributes(G4Colour(0.46,0.53,0.6));
-  PelvisVisAtt->SetForceSolid(true);
+  //  G4VisAttributes* PelvisVisAtt = new G4VisAttributes(G4Colour(0.46,0.53,0.6));
+ 
+  G4HumanPhantomColour* colourPointer = new G4HumanPhantomColour();
+  G4Colour colour = colourPointer -> GetColour(colourName);
+  G4VisAttributes* PelvisVisAtt = new G4VisAttributes(colour);
+  PelvisVisAtt->SetForceSolid(wireFrame);
   logicPelvis->SetVisAttributes(PelvisVisAtt);
 
   G4cout << "Pelvis created !!!!!!" << G4endl;

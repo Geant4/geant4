@@ -42,6 +42,8 @@
 #include "G4VPhysicalVolume.hh"
 #include "G4PVPlacement.hh"
 #include "G4SubtractionSolid.hh"
+#include "G4HumanPhantomColour.hh"
+
 G4MIRDStomach::G4MIRDStomach()
 {
 }
@@ -50,10 +52,11 @@ G4MIRDStomach::~G4MIRDStomach()
 {
 }
 
-G4VPhysicalVolume* G4MIRDStomach::ConstructStomach(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity)
+G4VPhysicalVolume* G4MIRDStomach::ConstructOrgan(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity,G4String volumeName, G4String logicalVolumeName, 
+					       G4String colourName, G4bool wireFrame)
 {
 
-  G4cout << "ConstructStomach for " << sex << G4endl;
+  G4cout << "Construct "<< volumeName << " for " << sex << G4endl;
  
  G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
  G4Material* soft = material -> GetMaterial("soft_tissue");
@@ -80,7 +83,7 @@ G4VPhysicalVolume* G4MIRDStomach::ConstructStomach(G4VPhysicalVolume* mother, G4
   G4SubtractionSolid* stomach = new G4SubtractionSolid("stomach",stomach_out, cavity);
   */
   G4LogicalVolume* logicStomach = new G4LogicalVolume(stomach_out, soft,
-						      "StomachVolume", 0, 0, 0);
+						      logicalVolumeName, 0, 0, 0);
   
   // Define rotation and position here!
   G4VPhysicalVolume* physStomach = new G4PVPlacement(0,G4ThreeVector(8. *cm,-4. * cm, 0),
@@ -98,8 +101,11 @@ G4VPhysicalVolume* G4MIRDStomach::ConstructStomach(G4VPhysicalVolume* mother, G4
   }
 
   // Visualization Attributes
-  G4VisAttributes* StomachVisAtt = new G4VisAttributes(G4Colour(0.63,0.32,0.17));
-  StomachVisAtt->SetForceSolid(true);
+  G4HumanPhantomColour* colourPointer = new G4HumanPhantomColour();
+  G4Colour colour = colourPointer -> GetColour(colourName);
+
+   G4VisAttributes* StomachVisAtt = new G4VisAttributes(colour);
+  StomachVisAtt->SetForceSolid(wireFrame);
   logicStomach->SetVisAttributes(StomachVisAtt);
 
   G4cout << "Stomach created !!!!!!" << G4endl;

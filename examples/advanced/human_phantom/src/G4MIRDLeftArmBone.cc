@@ -1,3 +1,4 @@
+
 //
 // ********************************************************************
 // * DISCLAIMER                                                       *
@@ -41,6 +42,7 @@
 #include "G4PVPlacement.hh"
 #include "G4UnionSolid.hh"
 #include "G4EllipticalCone.hh"
+#include "G4HumanPhantomColour.hh"
 
 G4MIRDLeftArmBone::G4MIRDLeftArmBone()
 {
@@ -50,14 +52,16 @@ G4MIRDLeftArmBone::~G4MIRDLeftArmBone()
 {
 }
 
-G4VPhysicalVolume* G4MIRDLeftArmBone::ConstructLeftArmBone(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity)
+G4VPhysicalVolume* G4MIRDLeftArmBone::ConstructOrgan(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity, G4String volumeName, 
+						     G4String logicalVolumeName, 
+						     G4String colourName, G4bool wireFrame)
 {
   // Remind! the elliptical cone gives problems! Intersections of volumes, 
   // wrong calculation of the volume!
    
   G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
    
-  G4cout << "ConstructLeftArmBone for "<< sex <<G4endl;
+  G4cout << "Construct " << volumeName <<" for "<< sex <<G4endl;
    
   G4Material* skeleton = material -> GetMaterial("skeleton");
   
@@ -72,7 +76,7 @@ G4VPhysicalVolume* G4MIRDLeftArmBone::ConstructLeftArmBone(G4VPhysicalVolume* mo
 
   G4LogicalVolume* logicLeftArmBone = new G4LogicalVolume(leftArm,
 						      skeleton,
-						      "LeftArmBoneVolume",
+						      logicalVolumeName,
 						      0, 0,0);
 
   G4RotationMatrix* matrix = new G4RotationMatrix();
@@ -96,8 +100,12 @@ G4VPhysicalVolume* G4MIRDLeftArmBone::ConstructLeftArmBone(G4VPhysicalVolume* mo
 
 
   // Visualization Attributes
-  G4VisAttributes* LeftArmBoneVisAtt = new G4VisAttributes(G4Colour(0.46,0.53,0.6));
-  LeftArmBoneVisAtt->SetForceSolid(true);
+
+  //G4VisAttributes* LeftArmBoneVisAtt = new G4VisAttributes(G4Colour(0.46,0.53,0.6));
+  G4HumanPhantomColour* colourPointer = new G4HumanPhantomColour();
+  G4Colour colour = colourPointer -> GetColour(colourName);
+  G4VisAttributes* LeftArmBoneVisAtt = new G4VisAttributes(colour);
+  LeftArmBoneVisAtt->SetForceSolid(wireFrame);
   logicLeftArmBone->SetVisAttributes(LeftArmBoneVisAtt);
 
   G4cout << "LeftArmBone created !!!!!!" << G4endl;

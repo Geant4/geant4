@@ -42,6 +42,7 @@
 #include "G4RotationMatrix.hh"
 #include "G4Material.hh"
 #include "G4EllipticalTube.hh"
+#include "G4HumanPhantomColour.hh"
 
 G4MIRDHead::G4MIRDHead()
 {
@@ -53,9 +54,10 @@ G4MIRDHead::~G4MIRDHead()
   delete material;
 }
 
-G4VPhysicalVolume* G4MIRDHead::ConstructHead(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity)
+G4VPhysicalVolume* G4MIRDHead::ConstructOrgan(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity,G4String volumeName,G4String logicalVolumeName, 
+					       G4String colourName, G4bool wireFrame)
 {
-  //  G4cout << "ConstructHead"<< G4endl;
+  G4cout << "Construct " << volumeName << " for "<< sex<<G4endl;
   G4Material* soft = material -> GetMaterial("soft_tissue");
   
   // MIRD male model
@@ -79,7 +81,7 @@ G4VPhysicalVolume* G4MIRDHead::ConstructHead(G4VPhysicalVolume* mother, G4String
   				0, // Rotation 
   				G4ThreeVector(0.* cm, 0.*cm, 7.7500 * cm) );
 
-  G4LogicalVolume* logicHead = new G4LogicalVolume(head, soft,"HeadVolume",
+  G4LogicalVolume* logicHead = new G4LogicalVolume(head, soft,logicalVolumeName,
 						   0, 0,0);
   G4RotationMatrix* rm = new G4RotationMatrix();
   rm -> rotateX(90.* degree);
@@ -102,8 +104,12 @@ G4VPhysicalVolume* G4MIRDHead::ConstructHead(G4VPhysicalVolume* mother, G4String
   }
 
   // Visualization Attributes
-  G4VisAttributes* HeadVisAtt = new G4VisAttributes(G4Colour(0.94,0.5,0.5));
-  HeadVisAtt->SetForceSolid(false);
+  //  G4VisAttributes* HeadVisAtt = new G4VisAttributes(G4Colour(0.94,0.5,0.5));
+  G4HumanPhantomColour* colourPointer = new G4HumanPhantomColour();
+  G4Colour colour = colourPointer -> GetColour(colourName);
+  G4VisAttributes* HeadVisAtt = new G4VisAttributes(colour);
+
+  HeadVisAtt->SetForceSolid(wireFrame);
   logicHead->SetVisAttributes(HeadVisAtt);
 
   G4cout << "Head created for " << sex << "!!!!!!" << G4endl;

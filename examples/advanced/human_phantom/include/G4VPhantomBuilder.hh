@@ -42,7 +42,7 @@ public:
   ~G4VPhantomBuilder();
 
   void BuildHead(G4bool) {return ;};
-  void BuildTrunk(G4bool) {return ;};
+  void BuildTrunk(G4bool, G4String, G4String, G4String, G4bool) {return ;};
   void BuildLegs(G4bool) {return ;};
   void BuildNeck(G4bool) {return ;};
 
@@ -73,7 +73,17 @@ public:
   void BuildSpleen(G4bool) {return ;};
   void BuildUrinaryBladder(G4bool) {return ;};
   void BuildThyroid(G4bool) {return ;};
+  //  void BuildLeftOvary(G4bool) {return ;};
+  // virtual void BuildRightOvary(G4bool) =0;
+  //virtual void BuildUterus(G4bool) =0;;
+  //void BuildBreast(G4bool){return;};
+  //void BuildParameterisedBreast(G4bool) {return;};
+  //void BuildTestes(G4bool) {return;};
+  //void BuildMaleGenitalia(G4bool) {return;};
 
+  //void BuildUterus(G4bool){ G4cout<< "G4VPhantomBuilder: Uterus"<< G4endl; return;};
+  // void BuildLeftOvary(G4bool){;};
+  // void BuildRightOvary(G4bool){G4cout<< "G4VPhantomBuilder: Right Ovary"<< G4endl; return;};
   void SetSex(G4String) {return ;};
   void SetModel(G4String) {return ;};
   void SetMotherVolume(G4VPhysicalVolume*) {return;};

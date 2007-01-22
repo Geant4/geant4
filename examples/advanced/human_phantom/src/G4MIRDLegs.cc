@@ -44,6 +44,7 @@
 #include "G4LogicalVolume.hh"
 #include "G4PVPlacement.hh"
 #include "G4UnionSolid.hh"
+#include "G4HumanPhantomColour.hh"
 
 G4MIRDLegs::G4MIRDLegs()
 {
@@ -53,10 +54,11 @@ G4MIRDLegs::~G4MIRDLegs()
 {
 }
 
-G4VPhysicalVolume* G4MIRDLegs::ConstructLegs(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity)
+G4VPhysicalVolume* G4MIRDLegs::ConstructOrgan(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity, 
+					      G4String volumeName, G4String logicalVolumeName, G4String colourName, G4bool wireFrame)
 {
  
-  G4cout << "ConstructLegs for "<<sex << G4endl;
+  G4cout << "Construct"<< volumeName <<" for "<<sex << G4endl;
 
   G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
   G4Material* soft = material -> GetMaterial("soft_tissue");
@@ -79,7 +81,7 @@ G4VPhysicalVolume* G4MIRDLegs::ConstructLegs(G4VPhysicalVolume* mother, G4String
 
   G4LogicalVolume* logicLegs = new G4LogicalVolume(legs,
 						   soft,
-						   "LegsVolume",
+						   logicalVolumeName,
 						    0, 0, 0);
 						   
   G4RotationMatrix* rm = new G4RotationMatrix();
@@ -102,8 +104,11 @@ G4VPhysicalVolume* G4MIRDLegs::ConstructLegs(G4VPhysicalVolume* mother, G4String
   }
 
   // Visualization Attributes
-  G4VisAttributes* LegsVisAtt = new G4VisAttributes(G4Colour(0.94,0.5,0.5));
-  LegsVisAtt->SetForceSolid(false);
+  //G4VisAttributes* LegsVisAtt = new G4VisAttributes(G4Colour(0.94,0.5,0.5));
+  G4HumanPhantomColour* colourPointer = new G4HumanPhantomColour();
+  G4Colour colour = colourPointer -> GetColour(colourName);
+  G4VisAttributes* LegsVisAtt = new G4VisAttributes(colour);
+  LegsVisAtt->SetForceSolid(wireFrame);
   logicLegs->SetVisAttributes(LegsVisAtt);
 
   G4cout << "Legs created !!!!!!" << G4endl;

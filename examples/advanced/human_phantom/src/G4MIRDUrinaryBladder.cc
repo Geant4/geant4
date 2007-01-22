@@ -39,6 +39,7 @@
 #include "G4VPhysicalVolume.hh"
 #include "G4PVPlacement.hh"
 #include "G4SubtractionSolid.hh"
+#include "G4HumanPhantomColour.hh"
 
 G4MIRDUrinaryBladder::G4MIRDUrinaryBladder()
 {
@@ -48,10 +49,11 @@ G4MIRDUrinaryBladder::~G4MIRDUrinaryBladder()
 {
 }
 
-G4VPhysicalVolume* G4MIRDUrinaryBladder::ConstructUrinaryBladder(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity)
+G4VPhysicalVolume* G4MIRDUrinaryBladder::ConstructOrgan(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity,
+G4String volumeName, G4String logicalVolumeName, G4String colourName, G4bool wireFrame)
 {
  
- G4cout << "ConstructUrinaryBladded for " << sex << G4endl;
+  G4cout << "Construct " << volumeName <<" for " << sex << G4endl;
  
  G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
  G4Material* soft = material -> GetMaterial("soft_tissue");
@@ -71,7 +73,7 @@ G4VPhysicalVolume* G4MIRDUrinaryBladder::ConstructUrinaryBladder(G4VPhysicalVolu
  G4SubtractionSolid* totalBladder = new G4SubtractionSolid("bladder", bladder, inner);
 
  G4LogicalVolume* logicUrinaryBladder = new G4LogicalVolume(totalBladder, soft,
-							    "UrinaryBladderVolume",
+							    logicalVolumeName,
 							    0, 0, 0);
   
   // Define rotation and position here!
@@ -90,8 +92,12 @@ G4VPhysicalVolume* G4MIRDUrinaryBladder::ConstructUrinaryBladder(G4VPhysicalVolu
   }
 
   // Visualization Attributes
-  G4VisAttributes* UrinaryBladderVisAtt = new G4VisAttributes(G4Colour(0.85,0.65,0.125));
-  UrinaryBladderVisAtt->SetForceSolid(true);
+  G4HumanPhantomColour* colourPointer = new G4HumanPhantomColour();
+  G4Colour colour = colourPointer -> GetColour(colourName);
+  G4VisAttributes* UrinaryBladderVisAtt = new G4VisAttributes(colour);
+  //G4VisAttributes* UrinaryBladderVisAtt = new G4VisAttributes(G4Colour(0.85,0.65,0.125));
+
+  UrinaryBladderVisAtt->SetForceSolid(wireFrame);
   logicUrinaryBladder->SetVisAttributes(UrinaryBladderVisAtt);
 
   G4cout << "UrinaryBladder created !!!!!!" << G4endl;

@@ -44,14 +44,6 @@ void G4HumanPhantomRunAction::BeginOfRunAction(const G4Run* aRun)
 {
   G4int run_number = aRun->GetRunID();
   G4cout << "### Run " << run_number << " start." << G4endl;
-
-#ifdef G4ANALYSIS_USE
-  if (run_number == 0)
-    {
-  G4HumanPhantomAnalysisManager* analysis = G4HumanPhantomAnalysisManager::getInstance();
-  analysis->book();
-    }
-#endif
 }
 
 void G4HumanPhantomRunAction::EndOfRunAction(const G4Run* aRun)

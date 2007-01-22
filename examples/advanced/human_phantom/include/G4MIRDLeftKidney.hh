@@ -32,16 +32,16 @@
 #define G4MIRDLeftKidney_h 1
 
 #include "G4VPhysicalVolume.hh"
-
+#include "G4VOrgan.hh"
 class G4VPhysicalVolume;
 class G4LogicalVolume;
 
-class G4MIRDLeftKidney
+class G4MIRDLeftKidney: public G4VOrgan
 {
 public:
 
   G4MIRDLeftKidney();
   ~G4MIRDLeftKidney();
-  G4VPhysicalVolume* ConstructLeftKidney(G4VPhysicalVolume*, G4String, G4bool);
+  G4VPhysicalVolume* ConstructOrgan(G4VPhysicalVolume*, G4String, G4bool, G4String, G4String, G4String, G4bool);
 };
 #endif

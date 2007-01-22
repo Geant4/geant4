@@ -40,8 +40,9 @@ public:
   G4ORNLBodyFactory();
  ~G4ORNLBodyFactory();
   
-  // G4VPhysicalVolume* CreateOrgan(G4VPhysicalVolume*,G4String,G4bool, G4String);
-
+  G4VPhysicalVolume* CreateOrgan(G4VPhysicalVolume*,G4String,G4bool, G4String,
+				 G4String, G4String, G4bool);
+  /*
   G4VPhysicalVolume* CreateHead(G4VPhysicalVolume*,G4String,G4bool);
   G4VPhysicalVolume* CreateTrunk(G4VPhysicalVolume*,G4String,G4bool);
   G4VPhysicalVolume* CreateLegs(G4VPhysicalVolume*,G4String,G4bool);
@@ -90,8 +91,8 @@ public:
 
   G4VPhysicalVolume* CreateThyroid(G4VPhysicalVolume*,G4String,G4bool);
 
+  */
 
-private:
   
 };
 #endif

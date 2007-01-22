@@ -32,16 +32,17 @@
 #define G4MIRDLegs_h 1
 
 #include "G4VPhysicalVolume.hh"
-
+#include "G4VOrgan.hh"
 class G4VPhysicalVolume;
 class G4LogicalVolume;
 
-class G4MIRDLegs
+class G4MIRDLegs:public G4VOrgan
 {
 public:
 
   G4MIRDLegs();
   ~G4MIRDLegs();
-  G4VPhysicalVolume* ConstructLegs(G4VPhysicalVolume*, G4String, G4bool);
+  G4VPhysicalVolume* ConstructOrgan(G4VPhysicalVolume*, G4String, G4bool,
+				    G4String, G4String, G4String, G4bool);
 };
 #endif

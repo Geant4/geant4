@@ -38,6 +38,7 @@
 #include "G4ThreeVector.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4PVPlacement.hh"
+#include "G4HumanPhantomColour.hh"
 
 G4MIRDTrunk::G4MIRDTrunk()
 {
@@ -48,21 +49,20 @@ G4MIRDTrunk::~G4MIRDTrunk()
 
 }
 
-G4VPhysicalVolume* G4MIRDTrunk::ConstructTrunk(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity)
+G4VPhysicalVolume* G4MIRDTrunk::ConstructOrgan(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity,G4String volumeName, 
+					       G4String logicalVolumeName, 
+					       G4String colourName, G4bool wireFrame)
 {
 
   G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
    
-  G4cout << "ConstructTrunck for "<< sex <<G4endl;
+  G4cout << "Construct " << volumeName <<" for "<< sex <<G4endl;
    
   G4Material* soft = material -> GetMaterial("soft_tissue");
  
   delete material;
 
   // MIRD Male trunk
-  //  G4double dx = 0.2 * m;
-  //G4double dy = 0.1 * m;
-  //G4double dz = 0.35 * m;
 
   G4double dx = 20. * cm;
   G4double dy = 10. * cm;
@@ -71,7 +71,7 @@ G4VPhysicalVolume* G4MIRDTrunk::ConstructTrunk(G4VPhysicalVolume* mother, G4Stri
   G4EllipticalTube* trunk = new G4EllipticalTube("Trunk",dx, dy, dz);
 
   G4LogicalVolume* logicTrunk = new G4LogicalVolume(trunk, soft, 
-	 					    "TrunkVolume",
+	 					    logicalVolumeName,
 						    0, 0, 0);
   G4RotationMatrix* rm = new G4RotationMatrix();
   rm -> rotateX(90.* degree);
@@ -93,8 +93,10 @@ G4VPhysicalVolume* G4MIRDTrunk::ConstructTrunk(G4VPhysicalVolume* mother, G4Stri
   }
 
   // Visualization Attributes
-  G4VisAttributes* TrunkVisAtt = new G4VisAttributes(G4Colour(0.94,0.5,0.5));
-  TrunkVisAtt->SetForceSolid(false);
+  G4HumanPhantomColour* colourPointer = new G4HumanPhantomColour();
+  G4Colour colour = colourPointer -> GetColour(colourName);
+  G4VisAttributes* TrunkVisAtt = new G4VisAttributes(colour);
+  TrunkVisAtt->SetForceSolid(wireFrame);
   logicTrunk->SetVisAttributes(TrunkVisAtt);
 
   G4cout << "Trunk created !!!!!!" << G4endl;

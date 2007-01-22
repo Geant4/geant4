@@ -44,7 +44,7 @@
 #include "G4PVPlacement.hh"
 #include "G4Box.hh"
 #include "G4SubtractionSolid.hh"
-
+#include "G4HumanPhantomColour.hh"
 G4MIRDPancreas::G4MIRDPancreas()
 {
 }
@@ -54,10 +54,12 @@ G4MIRDPancreas::~G4MIRDPancreas()
 
 }
 
-G4VPhysicalVolume* G4MIRDPancreas::ConstructPancreas(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity)
+G4VPhysicalVolume* G4MIRDPancreas::ConstructOrgan(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity,
+						  G4String volumeName, G4String logicalVolumeName, G4String colourName
+						  , G4bool wireFrame)
 {
 
-  G4cout << "ConstructPancreas for " << sex << G4endl;
+  G4cout << "Construct "<< volumeName << " for " << sex << G4endl;
  
  G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
  G4Material* soft = material -> GetMaterial("soft_tissue");
@@ -82,9 +84,9 @@ G4VPhysicalVolume* G4MIRDPancreas::ConstructPancreas(G4VPhysicalVolume* mother, 
 							subtrPancreas,
 							0, 
 							G4ThreeVector(-3 * cm,0.0,-9.*cm));
-  // c
+  // 
   G4LogicalVolume* logicPancreas = new G4LogicalVolume(pancreas, soft,
-						       "PancreasVolume",
+						       logicalVolumeName,
 						       0, 0, 0);
   G4RotationMatrix* rotation = new G4RotationMatrix();
   rotation ->rotateY(90. * degree);
@@ -105,8 +107,11 @@ G4VPhysicalVolume* G4MIRDPancreas::ConstructPancreas(G4VPhysicalVolume* mother, 
   }
 
   // Visualization Attributes
-  G4VisAttributes* PancreasVisAtt = new G4VisAttributes(G4Colour(0.28,0.82,0.8));
-  PancreasVisAtt->SetForceSolid(true);
+  //G4VisAttributes* PancreasVisAtt = new G4VisAttributes(G4Colour(0.28,0.82,0.8));
+  G4HumanPhantomColour* colourPointer = new G4HumanPhantomColour();
+  G4Colour colour = colourPointer -> GetColour(colourName);
+  G4VisAttributes* PancreasVisAtt = new G4VisAttributes(colour);
+  PancreasVisAtt->SetForceSolid(wireFrame);
   logicPancreas->SetVisAttributes(PancreasVisAtt);
 
   G4cout << "Pancreas created !!!!!!" << G4endl;

@@ -46,6 +46,7 @@
 #include "G4EllipticalTube.hh"
 #include "G4Box.hh"
 #include "G4UnionSolid.hh"
+#include "G4HumanPhantomColour.hh"
 
 G4MIRDRightKidney::G4MIRDRightKidney()
 {
@@ -55,9 +56,11 @@ G4MIRDRightKidney::~G4MIRDRightKidney()
 {
 }
 
-G4VPhysicalVolume* G4MIRDRightKidney::ConstructRightKidney(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity)
+G4VPhysicalVolume* G4MIRDRightKidney::ConstructOrgan(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity,
+						     G4String volumeName, G4String logicalVolumeName, G4String colourName
+						     , G4bool wireFrame)
 {
- G4cout << "ConstructRightKidney for " << sex << G4endl;
+  G4cout << "Construct " << volumeName<< " for " << sex << G4endl;
  
  G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
  G4Material* soft = material -> GetMaterial("soft_tissue");
@@ -84,7 +87,7 @@ G4VPhysicalVolume* G4MIRDRightKidney::ConstructRightKidney(G4VPhysicalVolume* mo
 
   G4LogicalVolume* logicRightKidney = new G4LogicalVolume(kidney,
 						     soft,
-						     "RightKidneyVolume",
+						     logicalVolumeName,
 						     0, 0, 0);
 
   G4VPhysicalVolume* physRightKidney = new G4PVPlacement(0 ,G4ThreeVector(-6.*cm,  // xo
@@ -103,8 +106,11 @@ G4VPhysicalVolume* G4MIRDRightKidney::ConstructRightKidney(G4VPhysicalVolume* mo
   }
 
   // Visualization Attributes
-  G4VisAttributes* RightKidneyVisAtt = new G4VisAttributes(G4Colour(0.72,0.52,0.04));
-  RightKidneyVisAtt->SetForceSolid(true);
+  //G4VisAttributes* RightKidneyVisAtt = new G4VisAttributes(G4Colour(0.72,0.52,0.04));
+  G4HumanPhantomColour* colourPointer = new G4HumanPhantomColour();
+  G4Colour colour = colourPointer -> GetColour(colourName);
+  G4VisAttributes* RightKidneyVisAtt = new G4VisAttributes(colour);
+  RightKidneyVisAtt->SetForceSolid(wireFrame);
   logicRightKidney->SetVisAttributes(RightKidneyVisAtt);
 
   G4cout << "RightKidney created !!!!!!" << G4endl;
