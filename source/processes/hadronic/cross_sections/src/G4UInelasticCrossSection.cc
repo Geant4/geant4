@@ -25,6 +25,7 @@
 //
 //
 // 12.08.06 V.Ivanchenko - first implementation
+// 22.01.07 V.Ivanchenko - add GetIsoZACrossSection
 //
 //
 
@@ -129,6 +130,32 @@ G4double G4UInelasticCrossSection::GetCrossSection(const G4DynamicParticle* dp,
   return cross;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double G4UInelasticCrossSection::GetIsoZACrossSection(const G4DynamicParticle* dp, 
+							G4double Z,
+							G4double A, 
+							G4double temp)
+{
+  G4double cross = 0.0;
+  if(idx == 1) {
+    cross = fGlauber->GetCrossSection(dp,A,Z);
+    cross = fGlauber->GetInelasticGlauberGribovXsc();
+  }
+  else if(idx == 2) cross = fGhadProton->GetIsoZACrossSection(dp,Z,A,temp);
+  else if(idx == 3) cross = fGhadNeutron->GetIsoZACrossSection(dp,Z,A,temp);
+  else if(idx == 4) cross = fUPi->GetInelasticCrossSection(dp,Z,A);
+  else if(idx == 5) cross = fGheisha->GetInelasticCrossSection(dp,Z,A);
+
+  if(verboseLevel > 1) 
+    G4cout << "G4UInelasticCrossSection::GetCrossSection: idx= " << idx << "  for "
+	   << dp->GetDefinition()->GetParticleName()
+	   << "  Ekin(GeV)= " << dp->GetKineticEnergy()
+	   << " for Z= " << Z << "  A= " << A
+	   << G4endl;
+
+  return cross;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

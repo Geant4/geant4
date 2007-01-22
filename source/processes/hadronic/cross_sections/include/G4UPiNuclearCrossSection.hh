@@ -27,6 +27,7 @@
 // based on Barashenkov parametrisations of pion data
 //
 // 16.08.06 V.Ivanchenko - first implementation
+// 22.01.07 V.Ivanchenko - add cross section interfaces with Z and A
 //
 
 
@@ -58,8 +59,14 @@ public:
   G4double GetElasticCrossSection(const G4DynamicParticle* aParticle, 
 				  const G4Element* anElement);
 
+  G4double GetElasticCrossSection(const G4DynamicParticle* aParticle, 
+				  G4double Z, G4double A);
+
   G4double GetInelasticCrossSection(const G4DynamicParticle* aParticle, 
 				    const G4Element* anElement);
+
+  G4double GetInelasticCrossSection(const G4DynamicParticle* aParticle, 
+				    G4double Z, G4double A);
 
   void BuildPhysicsTable(const G4ParticleDefinition&);
 

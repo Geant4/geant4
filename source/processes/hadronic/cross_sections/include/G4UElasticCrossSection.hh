@@ -27,6 +27,7 @@
 // original componetns
 //
 // 12.08.06 V.Ivanchenko - first implementation
+// 22.01.07 V.Ivanchenko - add GetIsoZACrossSection
 //
 //
 
@@ -57,6 +58,10 @@ public:
   virtual
   G4double GetCrossSection(const G4DynamicParticle*, 
 			   const G4Element*, G4double aTemperature);
+
+  virtual
+  G4double GetIsoZACrossSection(const G4DynamicParticle*, G4double /*Z*/,
+				G4double /*A*/, G4double aTemperature = 0.);
 
   virtual
   void BuildPhysicsTable(const G4ParticleDefinition&);

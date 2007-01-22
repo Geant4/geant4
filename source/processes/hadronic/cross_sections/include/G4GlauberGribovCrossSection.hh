@@ -33,6 +33,7 @@
 //
 //
 // 17.07.06 V. Grichine - first implementation
+// 22.01.07 V.Ivanchenko - add interface with Z and A
 //
 //
 
@@ -60,6 +61,10 @@ public:
   virtual
   G4double GetCrossSection(const G4DynamicParticle*, 
                             const G4Element*, G4double aTemperature);
+
+  virtual
+  G4double GetCrossSection(const G4DynamicParticle*, 
+			   G4double Z, G4double A);
 
   virtual
   void BuildPhysicsTable(const G4ParticleDefinition&)

@@ -25,6 +25,7 @@
 //
 //
 // 12.08.06 V.Ivanchenko - first implementation
+// 22.01.07 V.Ivanchenko - add GetIsoZACrossSection
 //
 //
 
@@ -93,6 +94,22 @@ G4double G4UElasticCrossSection::GetCrossSection(const G4DynamicParticle* dp,
   return cross;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double G4UElasticCrossSection::GetIsoZACrossSection(const G4DynamicParticle* dp, 
+						      G4double Z,
+				                      G4double A, G4double)
+{
+  G4double cross = 0.0;
+  if(idx == 1) {
+    cross = fGlauber->GetCrossSection(dp,A,Z);
+    cross = fGlauber->GetElasticGlauberGribovXsc();
+  } 
+  else if(idx == 2) cross = fUPi->GetElasticCrossSection(dp,Z,A);
+  else if(idx == 3) cross = fGheisha->GetElasticCrossSection(dp,Z,A);
+
+  return cross;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

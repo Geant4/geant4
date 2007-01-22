@@ -25,8 +25,8 @@
 //
 //
 // 17.07.06 V. Grichine - first implementation
-
-
+// 22.01.07 V.Ivanchenko - add interface with Z and A
+//
 
 #include "G4GlauberGribovCrossSection.hh"
 
@@ -117,7 +117,6 @@ G4GlauberGribovCrossSection::IsApplicable(const G4DynamicParticle* aDP, const G4
   return applicable;
 }
 
-
 ////////////////////////////////////////////////////////////////////////////////////////
 //
 // Calculates total and inelastic Xsc, derives elastic as total - inelastic accordong to
@@ -130,8 +129,23 @@ G4GlauberGribovCrossSection::IsApplicable(const G4DynamicParticle* aDP, const G4
 G4double G4GlauberGribovCrossSection::
 GetCrossSection(const G4DynamicParticle* aParticle, const G4Element* anElement, G4double )
 {
+  return GetCrossSection(aParticle, anElement->GetZ(), anElement->GetN());
+}
+
+////////////////////////////////////////////////////////////////////////////////////////
+//
+// Calculates total and inelastic Xsc, derives elastic as total - inelastic accordong to
+// Glauber model with Gribov correction calculated in the dipole approximation on
+// light cone. Gaussian density helps to calculate rest integrals of the model.
+// [1] B.Z. Kopeliovich, nucl-th/0306044 
+
+
+
+G4double G4GlauberGribovCrossSection::
+GetCrossSection(const G4DynamicParticle* aParticle, G4double Z, G4double A)
+{
   G4double xsection, sigma, cofInelastic, cofTotal, nucleusSquare, ratio;
-  G4double R             = GetNucleusRadius(aParticle, anElement); 
+  G4double R             = GetNucleusRadius(A); 
 
 
 
@@ -142,13 +156,13 @@ GetCrossSection(const G4DynamicParticle* aParticle, const G4Element* anElement, 
       theParticle == thePiPlus  || 
       theParticle == thePiMinus      )
   {
-    sigma        = GetHadronNucleaonXscNS(aParticle, anElement);
+    sigma        = GetHadronNucleaonXscNS(aParticle, A, Z);
     cofInelastic = 2.4;
     cofTotal     = 2.0;
   }
   else
   {
-    sigma        = GetHadronNucleaonXscPDG(aParticle, anElement);
+    sigma        = GetHadronNucleaonXscPDG(aParticle, A, Z);
     cofInelastic = 2.2;
     cofTotal     = 2.0;
   }
