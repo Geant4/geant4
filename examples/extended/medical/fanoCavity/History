@@ -1,4 +1,4 @@
-$Id: History,v 1.1 2007-01-19 17:20:26 maire Exp $
+$Id: History,v 1.2 2007-01-22 16:35:40 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+22-01-07 michel maire (fano-V08-02-00)
+- use fpTrackingManager to get non const Track
     
 20-01-07 michel maire
 - created, from TestEm11
