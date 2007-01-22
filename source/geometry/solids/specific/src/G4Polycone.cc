@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polycone.cc,v 1.34 2006-11-15 10:40:38 gcosmo Exp $
+// $Id: G4Polycone.cc,v 1.35 2007-01-22 12:59:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -411,7 +411,7 @@ G4bool G4Polycone::Reset()
   if (genericPcon)
   {
     G4cerr << "Solid " << GetName() << " built using generic construct."
-           << G4endl << "Specify original parameters first !" << G4endl;
+           << G4endl << "Not applicable to the generic construct !" << G4endl;
     G4Exception("G4Polycone::Reset()", "NotApplicableConstruct",
                 JustWarning, "Parameters NOT resetted.");
     return 1;
