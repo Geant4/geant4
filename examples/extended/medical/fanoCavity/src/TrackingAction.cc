@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: TrackingAction.cc,v 1.1 2007-01-19 17:20:27 maire Exp $
+// $Id: TrackingAction.cc,v 1.2 2007-01-22 15:49:31 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -38,7 +38,7 @@
 #include "HistoManager.hh"
 
 #include "G4EmCalculator.hh"
-#include "G4Track.hh"
+#include "G4TrackingManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -97,7 +97,7 @@ void TrackingAction::PreUserTrackingAction(const G4Track* track)
  G4double safe = std::abs(position) - Zcav;
  G4double range = emCal->GetRangeFromRestricteDEDX(energy,particle,matWall);
  if (killTrack) {
-   G4Track* aTrack = track; 
+   G4Track* aTrack = fpTrackingManager->GetTrack();   
    if (range < safe) aTrack->SetTrackStatus(fStopAndKill);
  }
    
