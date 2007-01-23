@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNucleus.cc,v 1.61 2006-11-27 10:44:54 mkossov Exp $
+// $Id: G4QNucleus.cc,v 1.62 2007-01-23 08:27:19 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QNucleus ----------------
@@ -2871,9 +2871,10 @@ void G4QNucleus::PrepareCandidates(G4QCandidateVector& theQCandidates, G4bool pi
         G4int nc = ac-zc-sc;                     // "N" of the cluster
         G4double cM=tnM-G4QNucleus(Z-zc,N-nc,S-sc).GetGSMass(); // BoundMass of the cluster
         G4LorentzVector intLV=pLV+G4LorentzVector(0.,0.,0.,cM); // 4-mom of the proj+clust
-        if(ac<=maxClust&&(pLV==zeroLV||intLV.m()>.00001+cM))
+        pos      = probVect[ac];                 // Cluster Probability NormalizationFactor
+        if(ac<=maxClust&&pos>0.&&(pLV==zeroLV||intLV.m()>.00001+cM))
 	       {
-          pos      = probVect[ac];        // Get a cluster probability normalization factor
+
 #ifdef cldebug
           G4cout<<"G4QNucleus::PrepareCand: ac="<<ac<<", pV="<<pos<<G4endl;
 #endif
