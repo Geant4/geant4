@@ -36,6 +36,7 @@
 //
 // 25-JUN-98 FWJ: replaced missing Initialize for ParticleChange.
 // 14-DEC-05 V.Ivanchenko: restore 1.19 version (7.0)
+// 23-JAN-07 V.Ivanchenko: add protection inside sqrt
 //
 
 #include "globals.hh"
@@ -194,7 +195,7 @@ G4LElastic::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& targetNucleu
    G4double a=1+m2/m1;
    G4double b=-2.*p*cost;
    G4double c=p*p*(1-m2/m1);
-   G4double p1 = (-b+std::sqrt(b*b-4.*a*c))/(2.*a);
+   G4double p1 = (-b+std::sqrt(std::max(0.0,b*b-4.*a*c)))/(2.*a);
    G4double px = p1*sint*std::sin(phi);
    G4double py = p1*sint*std::cos(phi);
    G4double pz = p1*cost;
