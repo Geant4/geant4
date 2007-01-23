@@ -23,90 +23,34 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: TrackingAction.cc,v 1.2 2007-01-22 15:49:31 maire Exp $
+// $Id: TrackingAction.cc,v 1.3 2007-01-23 13:34:19 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "TrackingAction.hh"
-
-#include "TrackingMessenger.hh"
-#include "DetectorConstruction.hh"
-#include "RunAction.hh"
 #include "SteppingAction.hh"
-#include "HistoManager.hh"
-
-#include "G4EmCalculator.hh"
-#include "G4TrackingManager.hh"
+#include "G4Track.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-TrackingAction::TrackingAction(DetectorConstruction* det, RunAction* run,
-                               SteppingAction* step, HistoManager* histo)
-:detector(det),runAction(run),stepAction(step),histoManager(histo)
-{
-  matWall = 0;
-  Zcav = 0.; 
-  emCal = 0;
-  first = true;
-  killTrack = true;
-  
-  //create a messenger for this class
-  trackMessenger = new TrackingMessenger(this);
-}
+TrackingAction::TrackingAction(SteppingAction* step)
+:stepAction(step)
+{ }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 TrackingAction::~TrackingAction()
-{
-  delete emCal;
-  delete trackMessenger;
-}
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void TrackingAction::SetKillTrack(G4bool flag)
-{
-  killTrack = flag;
-}
+{ }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void TrackingAction::PreUserTrackingAction(const G4Track* track)
-{
- //get detector informations
- if (first) {
-   matWall = detector->GetWallMaterial();
-   Zcav    = 0.5*(detector->GetCavityThickness());
-   emCal   = new G4EmCalculator();
-   first   = false;
- }
-  
+{  
  G4ParticleDefinition* particle = track->GetDefinition();
  G4bool charged = (particle->GetPDGCharge() != 0.);
  stepAction->TrackCharge(charged);
- G4int trackID = track->GetTrackID(); 
- if (trackID == 1 || !charged) return;
- 
- //below, we have only charged secondaries
- //
- G4double energy = track->GetKineticEnergy(); 
- runAction->sumEsecond(energy);
- G4double position = (track->GetPosition()).z();
- // kill e- which cannot reach Cavity
- G4double safe = std::abs(position) - Zcav;
- G4double range = emCal->GetRangeFromRestricteDEDX(energy,particle,matWall);
- if (killTrack) {
-   G4Track* aTrack = fpTrackingManager->GetTrack();   
-   if (range < safe) aTrack->SetTrackStatus(fStopAndKill);
- }
-   
- //histograms
- //
- histoManager->FillHisto(1,position);
- histoManager->FillHisto(2,energy);
- G4ThreeVector direction = track->GetMomentumDirection();
- histoManager->FillHisto(3,std::acos(direction.z()));      
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

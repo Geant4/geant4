@@ -23,41 +23,51 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: TrackingMessenger.cc,v 1.1 2007-01-19 17:20:27 maire Exp $
+// $Id: StackingAction.hh,v 1.1 2007-01-23 13:34:19 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "TrackingMessenger.hh"
+#ifndef StackingAction_h
+#define StackingAction_h 1
 
-#include "TrackingAction.hh"
-#include "G4UIcmdWithABool.hh"
+#include "G4UserStackingAction.hh"
+#include "globals.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-TrackingMessenger::TrackingMessenger(TrackingAction* trAc)
-:tracking(trAc)
-{ 
-  KillCmd = new G4UIcmdWithABool("/testem/killTracks",this);
-  KillCmd->SetGuidance("kill selected secondaries");
-  KillCmd->SetParameterName("kill",true);
-  KillCmd->SetDefaultValue(true);
-}
+class DetectorConstruction;
+class RunAction;
+class HistoManager;
+class StackingMessenger;
+class G4Material;
+class G4EmCalculator;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-TrackingMessenger::~TrackingMessenger()
+class StackingAction : public G4UserStackingAction
 {
-  delete KillCmd;
-}
+  public:
+    StackingAction(DetectorConstruction*,RunAction*,HistoManager* );
+   ~StackingAction();
+   
+    void SetKillStatus(G4bool value) {killTrack = value;};
+     
+    G4ClassificationOfNewTrack ClassifyNewTrack(const G4Track*);
+    
+  private:
+    DetectorConstruction* detector;  
+    RunAction*            runAction;
+    HistoManager*         histoManager;
+    StackingMessenger*    stackMessenger;
+
+    G4Material*           matWall;
+    G4double              Zcav;
+    G4EmCalculator*       emCal;
+    G4bool                first;
+    G4bool                killTrack;               
+};
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void TrackingMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
-{ 
-  if (command == KillCmd)
-    { tracking->SetKillTrack(KillCmd->GetNewBoolValue(newValue));}
-}
+#endif
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

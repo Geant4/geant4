@@ -23,35 +23,89 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: TrackingAction.hh,v 1.2 2007-01-23 13:34:19 maire Exp $
+// $Id: StackingAction.cc,v 1.1 2007-01-23 13:34:19 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef TrackingAction_h
-#define TrackingAction_h 1
+#include "StackingAction.hh"
 
-#include "G4UserTrackingAction.hh"
-#include "globals.hh"
+#include "DetectorConstruction.hh"
+#include "RunAction.hh"
+#include "HistoManager.hh"
+#include "StackingMessenger.hh"
 
-class SteppingAction;
+#include "G4Track.hh"
+#include "G4EmCalculator.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class TrackingAction : public G4UserTrackingAction {
+StackingAction::StackingAction(DetectorConstruction* det, RunAction* run,
+                               HistoManager* histo)
+:detector(det),runAction(run),histoManager(histo)
+{
+  matWall = 0;
+  Zcav = 0.; 
+  emCal = 0;
+  first = true;
+  killTrack  = true;
+  
+  //create a messenger for this class  
+  stackMessenger = new StackingMessenger(this);
+}
 
-  public:  
-    TrackingAction(SteppingAction*);
-   ~TrackingAction();
-   
-    void  PreUserTrackingAction(const G4Track*);
-    void PostUserTrackingAction(const G4Track*);
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+StackingAction::~StackingAction()
+{
+  delete emCal;
+  delete stackMessenger;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4ClassificationOfNewTrack
+StackingAction::ClassifyNewTrack(const G4Track* track)
+{
+ //get detector informations
+ if (first) {
+   matWall = detector->GetWallMaterial();
+   Zcav    = 0.5*(detector->GetCavityThickness());
+   emCal   = new G4EmCalculator();
+   first   = false;
+ }
+ 
+ G4ClassificationOfNewTrack status = fUrgent;  
+
+ //keep primary particle or neutral
+ //
+ G4ParticleDefinition* particle = track->GetDefinition();
+ G4bool neutral = (particle->GetPDGCharge() == 0.);
+ if ((track->GetParentID() == 0) || neutral) return status;
+
+ //energy spectrum of charged secondaries
+ //
+  G4double energy = track->GetKineticEnergy();  
+  runAction->sumEsecond(energy);
+  
+ // kill e- which cannot reach Cavity
+ //
+ G4double position = (track->GetPosition()).z();
+ G4double safe = std::abs(position) - Zcav;
+ G4double range = emCal->GetRangeFromRestricteDEDX(energy,particle,matWall);
+ if (killTrack) {
+   if (range < safe) status = fKill;
+ }
+
+ //histograms
+ //
+ histoManager->FillHisto(1,position);
+ histoManager->FillHisto(2,energy);
+ G4ThreeVector direction = track->GetMomentumDirection();
+ histoManager->FillHisto(3,std::acos(direction.z()));      
     
-  private:
-    SteppingAction*       stepAction;
-};
+ return status;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#endif

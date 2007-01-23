@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: fanoCavity.cc,v 1.1 2007-01-19 17:20:26 maire Exp $
+// $Id: fanoCavity.cc,v 1.2 2007-01-23 13:34:19 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -44,6 +44,7 @@
 #include "TrackingAction.hh"
 #include "SteppingAction.hh"
 #include "SteppingVerbose.hh"
+#include "StackingAction.hh"
 #include "HistoManager.hh"
 
 #ifdef G4VIS_USE
@@ -82,12 +83,14 @@ int main(int argc,char** argv) {
   RunAction* run        = new RunAction(det,kin,histo);
   EventAction* event    = new EventAction(run,histo);
   SteppingAction* step  = new SteppingAction(det,run,histo);
-  TrackingAction* track = new TrackingAction(det,run,step,histo);    
+  StackingAction* stack = new StackingAction(det,run,histo);  
+  TrackingAction* track = new TrackingAction(step);    
   
   runManager->SetUserAction(run); 
   runManager->SetUserAction(event);
   runManager->SetUserAction(track);      
   runManager->SetUserAction(step);
+  runManager->SetUserAction(stack);  
 
   //get the pointer to the User Interface manager 
   G4UImanager* UI = G4UImanager::GetUIpointer();  

@@ -23,34 +23,34 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: TrackingMessenger.hh,v 1.1 2007-01-19 17:20:27 maire Exp $
+// $Id: StackingMessenger.hh,v 1.1 2007-01-23 13:34:19 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef TrackingMessenger_h
-#define TrackingMessenger_h 1
+#ifndef StackingMessenger_h
+#define StackingMessenger_h 1
 
 #include "globals.hh"
 #include "G4UImessenger.hh"
 
-class TrackingAction;
+class StackingAction;
 class G4UIcmdWithABool;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class TrackingMessenger: public G4UImessenger
+class StackingMessenger: public G4UImessenger
 {
   public:
-    TrackingMessenger(TrackingAction*);
-   ~TrackingMessenger();
+    StackingMessenger(StackingAction*);
+   ~StackingMessenger();
     
     void SetNewValue(G4UIcommand*, G4String);
     
   private:
-    TrackingAction* tracking;
-    G4UIcmdWithABool* KillCmd;
+    StackingAction*    stacking;
+    G4UIcmdWithABool*  killCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -23,35 +23,41 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: TrackingAction.hh,v 1.2 2007-01-23 13:34:19 maire Exp $
+// $Id: StackingMessenger.cc,v 1.1 2007-01-23 13:34:19 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef TrackingAction_h
-#define TrackingAction_h 1
+#include "StackingMessenger.hh"
 
-#include "G4UserTrackingAction.hh"
-#include "globals.hh"
-
-class SteppingAction;
+#include "StackingAction.hh"
+#include "G4UIcmdWithABool.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class TrackingAction : public G4UserTrackingAction {
-
-  public:  
-    TrackingAction(SteppingAction*);
-   ~TrackingAction();
-   
-    void  PreUserTrackingAction(const G4Track*);
-    void PostUserTrackingAction(const G4Track*);
-    
-  private:
-    SteppingAction*       stepAction;
-};
+StackingMessenger::StackingMessenger(StackingAction* stack)
+:stacking(stack)
+{   
+  killCmd = new G4UIcmdWithABool("/testem/killTracks",this);
+  killCmd->SetGuidance("kill selected secondaries");  
+  killCmd->SetParameterName("kill",true);
+  killCmd->SetDefaultValue(true);
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#endif
+StackingMessenger::~StackingMessenger()
+{
+  delete killCmd;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void StackingMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
+{     
+  if (command == killCmd)
+    { stacking->SetKillStatus(killCmd->GetNewBoolValue(newValue));}               
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

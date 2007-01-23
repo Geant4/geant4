@@ -1,4 +1,4 @@
-$Id: README,v 1.3 2007-01-22 13:03:57 maire Exp $
+$Id: README,v 1.4 2007-01-23 13:34:19 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -87,8 +87,8 @@ $Id: README,v 1.3 2007-01-22 13:03:57 maire Exp $
     
     In addition, to increase the program efficiency, the secondary particles
     which have no chance to reach the cavity are immediately killed (see
-    TrackingAction). This feature can be switched off by an UI command (see
-    TrackingMessenger).
+    StackinAction). This feature can be switched off by an UI command (see
+    StackingMessenger).
     
     The simplest way to study the effect of e- tracking on dose deposition is
     to use the command /testem/stepMax.
