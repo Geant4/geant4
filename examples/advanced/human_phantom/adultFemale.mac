@@ -19,12 +19,14 @@
 /bodypart/addBodyPart Head yes
 #########
 /bodypart/addBodyPart Trunk yes
-/bodypart/addBodyPart Legs yes
+/bodypart/addBodyPart LeftLeg yes
+/bodypart/addBodyPart RightLeg yes
 ##############
 #
 # Skeleton System
 #
-/bodypart/addBodyPart LegBones yes
+/bodypart/addBodyPart LeftLegBone yes
+/bodypart/addBodyPart RightLegBone yes
 /bodypart/addBodyPart LeftArmBone yes
 /bodypart/addBodyPart RightArmBone yes
 /bodypart/addBodyPart UpperSpine yes
@@ -34,11 +36,14 @@
 #
 # Organs
 #
-/bodypart/addBodyPart Breast yes
-/bodypart/addBodyPart Lungs yes
+/bodypart/addBodyPart LeftBreast yes
+/bodypart/addBodyPart RightBreast yes
+/bodypart/addBodyPart LeftLung yes
+/bodypart/addBodyPart RightLung yes
 /bodypart/addBodyPart Brain yes
 /bodypart/addBodyPart Heart yes
-/bodypart/addBodyPart Kidneys yes
+/bodypart/addBodyPart LeftKidney yes
+/bodypart/addBodyPart RightKidney yes
 /bodypart/addBodyPart UrinaryBladder yes
 /bodypart/addBodyPart Spleen yes
 /bodypart/addBodyPart Pancreas yes
@@ -54,7 +59,8 @@
 #
 # Genitalia
 #
-/bodypart/addBodyPart Ovaries yes
+/bodypart/addBodyPart LeftOvary yes
+/bodypart/addBodyPart RightOvary yes
 /bodypart/addBodyPart Uterus yes
 #
 #
@@ -77,5 +83,5 @@
 #
 # Run Particles
 #
-/control/execute run.mac
+#/control/execute run.mac
 #/geometry/test/grid_test

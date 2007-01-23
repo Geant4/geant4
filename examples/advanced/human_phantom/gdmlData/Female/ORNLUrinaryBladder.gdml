@@ -5,8 +5,8 @@
   <constant name="TWOPI" value="2.*pi"/>
   <constant name="HALFPI" value="0.5*pi"/>
 
-  <position name="UrinaryBladderPos" unit="cm" x="0" y="-4.41" z="-24.34" />
-  <rotation name="UrinaryBladderRot" unit="degree" x="0" y="0" z="0" />
+  <position name="OrganPos" unit="cm" x="0" y="-4.41" z="-24.34" />
+  <rotation name="OrganRot" unit="degree" x="0" y="0" z="0" />
  </define> 
 
  <materials>

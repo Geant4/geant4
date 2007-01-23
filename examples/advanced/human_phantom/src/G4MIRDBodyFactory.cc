@@ -45,15 +45,18 @@
 #include "G4MIRDBrain.hh"
 #include "G4MIRDHead.hh"
 #include "G4MIRDTrunk.hh"
-#include "G4MIRDLegs.hh"
+#include "G4MIRDLeftLeg.hh"
+#include "G4MIRDRightLeg.hh"
 #include "G4MIRDThyroid.hh"
 #include "G4MIRDUterus.hh"
-#include "G4MIRDBreast.hh"
+#include "G4MIRDLeftBreast.hh"
+#include "G4MIRDRightBreast.hh"
 #include "G4MIRDRightOvary.hh"
 #include "G4MIRDLeftOvary.hh"
 #include "G4MIRDUpperSpine.hh"
 #include "G4MIRDMiddleLowerSpine.hh"
-#include "G4MIRDLegBone.hh"
+#include "G4MIRDLeftLegBone.hh"
+#include "G4MIRDRightLegBone.hh"
 #include "G4MIRDLeftArmBone.hh"
 #include "G4MIRDRightArmBone.hh"
 #include "G4MIRDSkull.hh"
@@ -67,7 +70,8 @@ G4MIRDBodyFactory::G4MIRDBodyFactory()
   // Map with name of the organ and pointer to the MIRDOrgan class
   organ["Head"] = new G4MIRDHead();
   organ["Trunk"] = new G4MIRDTrunk(); 
-  organ["Legs"] = new G4MIRDLegs(); 
+  organ["LeftLeg"] = new G4MIRDLeftLeg();
+  organ["RightLeg"] = new G4MIRDRightLeg();
   organ["Brain"] = new G4MIRDBrain(); 
   organ["LeftArmBone"] = new G4MIRDLeftArmBone();
   organ["RightArmBone"] = new G4MIRDRightArmBone();
@@ -89,10 +93,18 @@ G4MIRDBodyFactory::G4MIRDBodyFactory()
   organ["RightLung"] = new G4MIRDRightLung();
   organ["LeftOvary"] = new G4MIRDLeftOvary();
   organ["RightOvary"] = new G4MIRDRightOvary();
+  organ["LeftLegBone"] = new G4MIRDLeftLegBone();
+  organ["RightLegBone"] = new G4MIRDRightLegBone();
+  organ["RightBreast"] = new G4MIRDRightBreast();
+  organ["LeftBreast"] = new G4MIRDLeftBreast();
 }
 
 G4MIRDBodyFactory::~G4MIRDBodyFactory()
 { 
+  delete organ["LeftBreast"]; organ["LeftBreast"]=0;
+  delete organ["RightBreast"]; organ["RightBreast"]=0;
+  delete organ["RightLegBone"]; organ["RightLegBone"]=0;
+  delete organ["LeftLegBone"]; organ["LeftLegBone"]=0;
   delete organ["RightOvary"]; organ["RightOvary"]=0;
   delete organ["LeftOvary"]; organ["LeftOvary"]=0;
   delete organ["RightLung"]; organ["RightLung"] =0;
@@ -116,7 +128,8 @@ G4MIRDBodyFactory::~G4MIRDBodyFactory()
   delete organ["Brain"]; organ["Brain"]=0;
   delete organ["Head"]; organ["Head"]=0;
   delete organ["Trunk"]; organ["Trunk"]=0;
-  delete organ["Legs"]; organ["Legs"]=0;
+  delete organ["RightLeg"]; organ["RightLeg"]=0;
+  delete organ["LeftLeg"]; organ["LeftLeg"]=0;
 }
 
 G4VPhysicalVolume* G4MIRDBodyFactory::CreateOrgan(G4VPhysicalVolume* motherVolume, G4String sex, G4bool sensitivity, G4String organ_name,

@@ -79,7 +79,7 @@ G4VPhysicalVolume* G4MIRDLeftArmBone::ConstructOrgan(G4VPhysicalVolume* mother, 
 						      logicalVolumeName,
 						      0, 0,0);
 
-  G4RotationMatrix* matrix = new G4RotationMatrix();
+    G4RotationMatrix* matrix = new G4RotationMatrix();
   matrix -> rotateX(180. * degree);
 
   G4VPhysicalVolume* physLeftArmBone = new G4PVPlacement(matrix,
@@ -101,7 +101,6 @@ G4VPhysicalVolume* G4MIRDLeftArmBone::ConstructOrgan(G4VPhysicalVolume* mother, 
 
   // Visualization Attributes
 
-  //G4VisAttributes* LeftArmBoneVisAtt = new G4VisAttributes(G4Colour(0.46,0.53,0.6));
   G4HumanPhantomColour* colourPointer = new G4HumanPhantomColour();
   G4Colour colour = colourPointer -> GetColour(colourName);
   G4VisAttributes* LeftArmBoneVisAtt = new G4VisAttributes(colour);

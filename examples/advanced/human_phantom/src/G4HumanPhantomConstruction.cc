@@ -89,51 +89,57 @@ G4VPhysicalVolume* G4HumanPhantomConstruction::Construct()
   builder->SetSex(sex);
 
   // the argument indicates the sensitivity of the volume
-  //builder->BuildHead(sensitivities["Head"], "Head", "HeadVolume", "pink", false);
-
+  builder->BuildHead(sensitivities["Head"], "Head", "HeadVolume", "pink", false);
+  
   builder->BuildTrunk(sensitivities["Trunk"], "Trunk", "TrunkVolume", "pink", false);
-
- /* 
- builder->BuildLegs(sensitivities["Legs"], "Legs", "LegsVolume", "pink", false);
-  
+   builder->BuildLeftLeg(sensitivities["LeftLeg"], "LeftLeg", "LeftLegVolume", "pink", false);
+  builder->BuildRightLeg(sensitivities["RightLeg"], "RightLeg", "RightLegVolume", "pink", false);
+ 
   builder->BuildBrain(sensitivities["Brain"], "Brain", "BrainVolume", "pink", true); 
-  // Remind! the elliptical cone gives problems! Intersections of volumes, 
+ 
+   // Remind! the elliptical cone gives problems! Intersections of volumes, 
   // wrong calculation of the volume!
-  builder->BuildLeftArmBone(sensitivities["LeftArmBone"], "LeftArmBone", "LeftArmBoneVolume", "pink", true);
-  builder->BuildRightArmBone(sensitivities["RightArmBone"], "RightArmBone", "RightArmBoneVolume", "pink", true);  
- 
-  // builder->BuildLegBone(sensitivities["LegBone"]);
-  builder->BuildSkull(sensitivities["Skull"], "Skull", "SkullVolume", "pink", false); 
- 
-  builder->BuildUpperSpine(sensitivities["UpperSpine"], "UpperSpine", "UpperSpineVolume", "pink", true);
-  builder->BuildMiddleLowerSpine(sensitivities["MiddleLowerSpine"], "MiddleLowerSpine", "pink", true);
+  builder->BuildLeftArmBone(sensitivities["LeftArmBone"], "LeftArmBone", "LeftArmBoneVolume", "grey", true);
+  builder->BuildRightArmBone(sensitivities["RightArmBone"], "RightArmBone", "RightArmBoneVolume", "grey", true);  
+    
+
+  builder->BuildLeftLegBone(sensitivities["LeftLegBone"], "LeftLegBone", "LeftLegBoneVolume", "grey", true);
+  builder ->BuildRightLegBone(sensitivities["RightLegBone"], "RightLegBone", "RightLegBoneVolume", "grey", true);
   
-  builder->BuildPelvis(sensitivities["Pelvis"], "Pelvis", "PelvisVolume", "pink", true); 
-  builder->BuildStomach(sensitivities["Stomach"],"Stomach", "StomachVolume", "pink", true ); 
-  builder->BuildUpperLargeIntestine(sensitivities["UpperLargeIntestine"],"UpperLargeIntestine", "UpperLargeIntestineVolume", "pink", true);
-  builder->BuildLowerLargeIntestine(sensitivities["LowerLargeIntestine"], "LowerLargeIntestine", "LowerLargeIntestineVolume", "pink", true);
-  builder->BuildRibCage(sensitivities["RibCage"], "RibCage", "RibCageVolume", "pink", true); 
-  builder->BuildSpleen(sensitivities["Spleen"], "Spleen", "SpleenVolume", "pink", true);
-  builder->BuildPancreas(sensitivities["Pancreas"], "Pancreas", "PancreasVolume", "pink", true); 
+  builder->BuildSkull(sensitivities["Skull"], "Skull", "SkullVolume", "grey", false); 
+ 
+  builder->BuildUpperSpine(sensitivities["UpperSpine"], "UpperSpine", "UpperSpineVolume", "grey", true);
+  
+  builder->BuildMiddleLowerSpine(sensitivities["MiddleLowerSpine"], "MiddleLowerSpine", "MiddleLowerSpineVolume", "grey", true);
+  
+  builder->BuildPelvis(sensitivities["Pelvis"], "Pelvis", "PelvisVolume", "grey", true); 
+  
+  builder->BuildStomach(sensitivities["Stomach"],"Stomach", "StomachVolume", "yellow", true ); 
+  builder->BuildUpperLargeIntestine(sensitivities["UpperLargeIntestine"],"UpperLargeIntestine", "UpperLargeIntestineVolume", "yellow", true);
+  builder->BuildLowerLargeIntestine(sensitivities["LowerLargeIntestine"], "LowerLargeIntestine", "LowerLargeIntestineVolume", "yellow", true);
+  if (model == "MIRD") builder->BuildRibCage(sensitivities["RibCage"], "RibCage", "RibCageVolume", "grey", true); 
+  builder->BuildSpleen(sensitivities["Spleen"], "Spleen", "SpleenVolume", "brown", true);
+  builder->BuildPancreas(sensitivities["Pancreas"], "Pancreas", "PancreasVolume", "lightBlue", true); 
   //builder->BuildLiver(sensitivities["Liver"]);  da fare
 
-  builder->BuildLeftKidney(sensitivities["LeftKidney"], "LeftKidney", "LeftKidneyVolume", "pink", true);
-  builder->BuildRightKidney(sensitivities["RightKidney"], "RightKidney", "RightKidneyVolume", "pink", true);
-  builder->BuildUrinaryBladder(sensitivities["UrinaryBladder"], "UrinaryBladder", "UrinaryBladderVolume", "pink", true);
+  builder->BuildLeftKidney(sensitivities["LeftKidney"], "LeftKidney", "LeftKidneyVolume", "green", true);
+  builder->BuildRightKidney(sensitivities["RightKidney"], "RightKidney", "RightKidneyVolume", "green", true);
+  builder->BuildUrinaryBladder(sensitivities["UrinaryBladder"], "UrinaryBladder", "UrinaryBladderVolume", "yellow", true);
  
   //builder->BuildHeart(sensitivities["Hearth"]);
-  builder->BuildLeftLung(sensitivities["LeftLung"], "LeftLung", "LeftLungVolume", "pink", true);
-  builder->BuildRightLung(sensitivities["RightLung"], "RightLung", "RightLungVolume", "pink", true);
+  builder->BuildLeftLung(sensitivities["LeftLung"], "LeftLung", "LeftLungVolume", "blue", true);
+  builder->BuildRightLung(sensitivities["RightLung"], "RightLung", "RightLungVolume", "blue", true);
   //builder->BuildThyroid(sensitivities["Thyroid"]); 
   
   if(sex=="Female"){
-    builder->BuildLeftOvary(sensitivities["LeftOvary"], "LeftOvary", "LeftOvaryVolume", "pink", true);
-    builder->BuildRightOvary(sensitivities["RightOvary"], "RightOvary", "RightOvaryVolume", "pink", true);
-    builder->BuildUterus(sensitivities["Uterus"], "Uterus", "UterusVolume", "pink", true);
-    //builder->BuildLeftBreast(sensitivities); // da fare
-    //if(model == "MIRD") builder->BuildParameterisedBreast(true);
+    builder->BuildLeftOvary(sensitivities["LeftOvary"], "LeftOvary", "LeftOvaryVolume", "purple", true);
+    builder->BuildRightOvary(sensitivities["RightOvary"], "RightOvary", "RightOvaryVolume", "purple", true);
+    builder->BuildUterus(sensitivities["Uterus"], "Uterus", "UterusVolume", "purple", true);
+    builder->BuildLeftBreast(sensitivities["LeftBreast"], "LeftBreast", "LeftBreastVolume", "purple", true); 
+    builder->BuildRightBreast(sensitivities["RightBreast"], "RightBreast", "RightBreastVolume", "purple", true);
+   //if(model == "MIRD") builder->BuildParameterisedBreast(true);
   }
- 
+  /*
   if(sex=="Male"){
     //    builder->BuildMaleGenitalia(sensitivities["MaleGenitalia"]);
     // builder->BuildTestes(sensitivities["Testes"]);

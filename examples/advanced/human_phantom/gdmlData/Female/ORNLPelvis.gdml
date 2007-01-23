@@ -8,8 +8,8 @@
   <position name="PelvisRelativePos" unit="cm" x="0.0" y="0.0" z="0.0" />
   <position name="FirstSubtrPelvisRelativePos" unit="cm" x="0.0" y="14.70" z="-8.21" />
   <position name="SecondSubtrPelvisRelativePos" unit="cm" x="0.0" y="-11.76" z="0.0" />
-  <position name="PelvisPos" unit="cm" x="0.0" y="-2.94" z="-21.635" />
-  <rotation name="PelvisRot" unit="degree" x="0" y="0" z="0" />
+  <position name="OrganPos" unit="cm" x="0.0" y="-2.94" z="-21.635" />
+  <rotation name="OrganRot" unit="degree" x="0" y="0" z="0" />
  </define> 
 
  <materials>

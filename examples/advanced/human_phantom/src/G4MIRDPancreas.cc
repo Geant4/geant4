@@ -107,7 +107,7 @@ G4VPhysicalVolume* G4MIRDPancreas::ConstructOrgan(G4VPhysicalVolume* mother, G4S
   }
 
   // Visualization Attributes
-  //G4VisAttributes* PancreasVisAtt = new G4VisAttributes(G4Colour(0.28,0.82,0.8));
+  // G4VisAttributes* PancreasVisAtt = new G4VisAttributes(G4Colour(0.28,0.82,0.8));
   G4HumanPhantomColour* colourPointer = new G4HumanPhantomColour();
   G4Colour colour = colourPointer -> GetColour(colourName);
   G4VisAttributes* PancreasVisAtt = new G4VisAttributes(colour);

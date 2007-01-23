@@ -53,8 +53,22 @@ G4Colour G4HumanPhantomColour::GetColour(G4String colourName)
 {
   G4Colour white (1.0, 1.0, 1.0);
   G4Colour pink (0.94, 0.5, 0.5);
-  // Returns a material 
+  G4Colour grey (0.46, 0.53, 0.6);
+  G4Colour yellow (1.0, 1.0, 0.);
+  G4Colour blue (0.25,0.41, 0.88 );
+  G4Colour lightBlue (0.28, 0.82, 0.8);
+  G4Colour green (0., 1., 0.);
+  G4Colour brown (0.5, 0.5, 0.);
+  G4Colour purple (0.85,0.44,0.84);
+ // Returns the colour
   if (colourName == "pink") return pink;
-  else if(colourName = "white") return white;
-  else {G4cout<< colourName << "does not exist !!!"<< G4endl;}
+  else if(colourName == "white") return white;
+  else if (colourName == "grey") return grey;
+  else if (colourName == "yellow") return yellow;
+  else if (colourName == "blue") return blue;
+  else if (colourName == "lightBlue") return lightBlue;
+  else if (colourName == "green") return green;
+  else if (colourName == "brown") return brown;
+  else if (colourName == "purple") return purple;
+  else {G4cout<< colourName << "does not exist !!!"<< G4endl; return white;}
 }

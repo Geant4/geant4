@@ -70,6 +70,11 @@ int main(int argc,char** argv)
 
   runManager->SetUserAction(new G4HumanPhantomPrimaryGeneratorAction);
 
+#ifdef G4ANALYSIS_USE
+  G4HumanPhantomAnalysisManager* analysis = G4HumanPhantomAnalysisManager::getInstance();
+  analysis->book();
+#endif
+
   G4UIsession* session=0;
 
   if (argc==1)   
@@ -116,7 +121,6 @@ int main(int argc,char** argv)
   energyTotal->TotalEnergyDeposit();
 
 #ifdef G4ANALYSIS_USE
-  G4HumanPhantomAnalysisManager* analysis = G4HumanPhantomAnalysisManager::getInstance();
   if (analysis)analysis->finish();
 #endif
 

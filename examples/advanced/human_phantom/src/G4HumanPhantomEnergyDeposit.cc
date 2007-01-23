@@ -53,7 +53,9 @@ void G4HumanPhantomEnergyDeposit::Fill(G4String bodypartName,
 void G4HumanPhantomEnergyDeposit::TotalEnergyDeposit()
 {
   
-  G4double totalBody = energyTotal["HeadVolume"]+energyTotal["TrunkVolume"]+energyTotal["LegsVolume"];
+  G4double totalBody = energyTotal["HeadVolume"]+energyTotal["TrunkVolume"]+energyTotal["LeftLegVolume"]+
+    energyTotal["RightLegVolume"];
+
   G4cout << "Energy in total body = " << G4BestUnit(totalBody,"Energy") << G4endl;
 
   std::map<std::string,G4double>::iterator i = energyTotal.begin();
