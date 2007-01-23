@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel.cc,v 1.28 2007-01-19 11:17:32 urban Exp $
+// $Id: G4UrbanMscModel.cc,v 1.29 2007-01-23 16:05:08 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -798,7 +798,7 @@ std::vector<G4DynamicParticle*>* G4UrbanMscModel::SampleSecondaries(
   newDirection.rotateUz(oldDirection);
   fParticleChange->ProposeMomentumDirection(newDirection);
 
-  if (latDisplasment) {
+  if (latDisplasment && sth > 0.0) {
 
     G4double r = SampleDisplacement();
       if(r > 0.)
@@ -849,7 +849,12 @@ std::vector<G4DynamicParticle*>* G4UrbanMscModel::SampleSecondaries(
           G4double b = (prex-Position.x())*latDirection.x()+
                        (prey-Position.y())*latDirection.y()+
                        (prez-Position.z())*latDirection.z();
-          G4double facprot = (b+sqrt(tPathLength*tPathLength-a+b*b))/r;
+          G4double facprot = 0.0;
+          G4double ab = tPathLength*tPathLength-a+b*b;
+          if(ab > 0.0) {
+	    facprot = (b+sqrt(ab))/r;
+            if(facprot < 0.0) facprot = 0.0;
+	  }
           if(facprot < fac) fac = facprot;
  
           // compute new endpoint of the Step
@@ -870,6 +875,8 @@ G4double G4UrbanMscModel::SampleCosineTheta(G4double trueStepLength,
 					    G4double KineticEnergy)
 {
   G4double cth = 1. ;
+  if(trueStepLength < tlimitminfix) return cth;
+
   G4double tau = trueStepLength/lambda0 ;
 
   Zeff = couple->GetMaterial()->GetTotNbOfElectPerVolume()/
@@ -918,6 +925,8 @@ G4double G4UrbanMscModel::SampleCosineTheta(G4double trueStepLength,
         tau = taubig ;
 
     currentTau = tau ;
+    if(tau < tausmall) currentTau = tausmall;
+
     lambdaeff = trueStepLength/currentTau;
     currentRadLength = couple->GetMaterial()->GetRadlen();
 
