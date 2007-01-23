@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNucleus.cc,v 1.62 2007-01-23 08:27:19 mkossov Exp $
+// $Id: G4QNucleus.cc,v 1.63 2007-01-23 13:46:57 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QNucleus ----------------
@@ -2879,8 +2879,11 @@ void G4QNucleus::PrepareCandidates(G4QCandidateVector& theQCandidates, G4bool pi
           G4cout<<"G4QNucleus::PrepareCand: ac="<<ac<<", pV="<<pos<<G4endl;
 #endif
           G4int dac=ac+ac;
-          if     (piF&&!gaF) pos*=(zc+ac)/ac; // For piF 1st interaction act (#of u-quarks)
-          else if(gaF&&!piF) pos*=(zc+dac)/ac;// For gaF 1st interaction act (sum of Q_q^2)
+          if(ac && (piF || gaF))                 // zc>=0
+										{
+            if     (piF&&!gaF) pos*=(zc+ac)/ac;  // piF interaction act (#of u-quarks)
+            else if(gaF&&!piF) pos*=(zc+dac)/ac; // gaF interaction act (sum of Q_q^2)
+          }
           G4double dense=1.;
           if     (ac==1)dense=probVect[254]/pos;
           else if(ac==2)dense=probVect[255]/pos;
@@ -2889,7 +2892,7 @@ void G4QNucleus::PrepareCandidates(G4QCandidateVector& theQCandidates, G4bool pi
                 <<",sc="<<sc<<",ac="<<ac<<",ze1="<<ze1<<",ne1="<<ne1<<",se1="<<se1<<G4endl;
           G4double mp=pos;
 #endif
-          if     (ac==1)
+          if     (ac==1 && ae)                   // ae=0 protection (since here no /pos)
 	         {
             if     (zc) pos*=ze/ae;
             else if(nc) pos*=ne/ae;
@@ -2909,7 +2912,7 @@ void G4QNucleus::PrepareCandidates(G4QCandidateVector& theQCandidates, G4bool pi
           else if(ac==2)
 	         {
             if(ze<zc||ne<nc||se<sc) pos=0.;
-            else
+            else if(aea)                         // Protection against aea=0.
 		          {
               if     (zc==2) pos*=ze*(ze-1)/aea;
               else if(nc==2) pos*=ne*(ne-1)/aea;
