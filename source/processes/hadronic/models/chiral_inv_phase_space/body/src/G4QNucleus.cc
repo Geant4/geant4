@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNucleus.cc,v 1.64 2007-01-23 16:53:37 mkossov Exp $
+// $Id: G4QNucleus.cc,v 1.65 2007-01-23 17:14:21 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QNucleus ----------------
@@ -2885,8 +2885,8 @@ void G4QNucleus::PrepareCandidates(G4QCandidateVector& theQCandidates, G4bool pi
             else if(gaF&&!piF&&zc+dac) pos*=(zc+dac)/ac; // gaF interaction (sum of Q_q^2)
           }
           G4double dense=1.;
-          if     (ac==1)dense=probVect[254]/pos;
-          else if(ac==2)dense=probVect[255]/pos;
+          if     (ac==1&&pos>0.)dense=probVect[254]/pos;
+          else if(ac==2&&pos>0.)dense=probVect[255]/pos;
 #ifdef cldebug
 	         G4cout<<"G4QNucleus::PrepC: cPDG="<<cPDG<<",norm="<<pos<<",zc="<<zc<<",nc="<<nc
                 <<",sc="<<sc<<",ac="<<ac<<",ze1="<<ze1<<",ne1="<<ne1<<",se1="<<se1<<G4endl;
