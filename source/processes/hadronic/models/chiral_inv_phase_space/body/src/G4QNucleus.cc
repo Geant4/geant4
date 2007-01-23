@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNucleus.cc,v 1.63 2007-01-23 13:46:57 mkossov Exp $
+// $Id: G4QNucleus.cc,v 1.64 2007-01-23 16:53:37 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QNucleus ----------------
@@ -2881,8 +2881,8 @@ void G4QNucleus::PrepareCandidates(G4QCandidateVector& theQCandidates, G4bool pi
           G4int dac=ac+ac;
           if(ac && (piF || gaF))                 // zc>=0
 										{
-            if     (piF&&!gaF) pos*=(zc+ac)/ac;  // piF interaction act (#of u-quarks)
-            else if(gaF&&!piF) pos*=(zc+dac)/ac; // gaF interaction act (sum of Q_q^2)
+            if     (piF&&!gaF&&zc+ac) pos*=(zc+ac)/ac;  // piF interaction (#of u-quarks)
+            else if(gaF&&!piF&&zc+dac) pos*=(zc+dac)/ac; // gaF interaction (sum of Q_q^2)
           }
           G4double dense=1.;
           if     (ac==1)dense=probVect[254]/pos;
