@@ -56,11 +56,11 @@ G4MIRDRightKidney::~G4MIRDRightKidney()
 {
 }
 
-G4VPhysicalVolume* G4MIRDRightKidney::ConstructOrgan(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity,
-						     G4String volumeName, G4String logicalVolumeName, G4String colourName
+G4VPhysicalVolume* G4MIRDRightKidney::ConstructOrgan(G4VPhysicalVolume* mother, G4bool sensitivity,
+						     G4String volumeName,G4String colourName
 						     , G4bool wireFrame)
 {
-  G4cout << "Construct " << volumeName<< " for " << sex << G4endl;
+  G4cout << "Construct " << volumeName << G4endl;
  
  G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
  G4Material* soft = material -> GetMaterial("soft_tissue");
@@ -87,7 +87,7 @@ G4VPhysicalVolume* G4MIRDRightKidney::ConstructOrgan(G4VPhysicalVolume* mother, 
 
   G4LogicalVolume* logicRightKidney = new G4LogicalVolume(kidney,
 						     soft,
-						     logicalVolumeName,
+						     "logical" + volumeName,
 						     0, 0, 0);
 
   G4VPhysicalVolume* physRightKidney = new G4PVPlacement(0 ,G4ThreeVector(-6.*cm,  // xo

@@ -28,22 +28,19 @@
 // with the design in a forthcoming publication, and subject to a 
 // design and code review.
 //
-#ifndef G4MIRDSpleen_h
-#define G4MIRDSpleen_h 1
+#ifndef G4ORNLMaleBodyFactory_h
+#define G4ORNLMaleBodyFactory_h 1
 
-#include "G4VPhysicalVolume.hh"
-#include "G4VOrgan.hh"
+#include "G4VBodyFactory.hh"
 
-class G4VPhysicalVolume;
-class G4LogicalVolume;
-
-class G4MIRDSpleen: public G4VOrgan
+class G4VBodyFactory;
+class G4ORNLMaleBodyFactory: public G4VBodyFactory
 {
 public:
-
-  G4MIRDSpleen();
-  ~G4MIRDSpleen();
-  G4VPhysicalVolume* ConstructOrgan(G4VPhysicalVolume*, G4bool, G4String, G4String, G4bool);
- 
+  G4ORNLMaleBodyFactory();
+ ~G4ORNLMaleBodyFactory();
+  
+  G4VPhysicalVolume* CreateOrgan(G4VPhysicalVolume*, G4bool,
+				 G4String, G4String, G4bool);
 };
 #endif

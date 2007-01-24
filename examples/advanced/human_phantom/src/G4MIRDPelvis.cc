@@ -53,12 +53,12 @@ G4MIRDPelvis::~G4MIRDPelvis()
 
 }
 
-G4VPhysicalVolume* G4MIRDPelvis::ConstructOrgan(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity, G4String volumeName, 
-G4String logicalVolumeName, G4String colourName, G4bool wireFrame )
+G4VPhysicalVolume* G4MIRDPelvis::ConstructOrgan(G4VPhysicalVolume* mother,G4bool sensitivity, G4String volumeName, 
+						G4String colourName, G4bool wireFrame )
 {
    G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
    
-   G4cout << "Construct "<<volumeName<<" for "<< sex <<G4endl;
+   G4cout << "Construct " << volumeName <<G4endl;
    
   G4Material* skeleton = material -> GetMaterial("skeleton");
  
@@ -115,7 +115,7 @@ G4String logicalVolumeName, G4String colourName, G4bool wireFrame )
 
  
   G4LogicalVolume* logicPelvis = new G4LogicalVolume(pelvis, skeleton,
-						     logicalVolumeName, 0, 0, 0);
+						     "logical" + volumeName, 0, 0, 0);
   
  
   G4VPhysicalVolume* physPelvis = new G4PVPlacement(0,G4ThreeVector(0.0, -3. * cm,-24. * cm),// 0, y02, z position

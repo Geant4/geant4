@@ -52,10 +52,11 @@ G4MIRDBrain::~G4MIRDBrain()
 
 }
 
-G4VPhysicalVolume* G4MIRDBrain::ConstructOrgan(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity, G4String volumeName, G4String logicalVolumeName, 
+G4VPhysicalVolume* G4MIRDBrain::ConstructOrgan(G4VPhysicalVolume* mother, G4bool sensitivity, 
+					       G4String volumeName, 
 					       G4String colourName, G4bool wireFrame)
 {
-  G4cout << "Construct " << volumeName << " for " << sex << G4endl;
+  G4cout << "Construct " << volumeName << G4endl;
  G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
  G4Material* soft = material -> GetMaterial("soft_tissue");
  delete material;
@@ -68,7 +69,7 @@ G4VPhysicalVolume* G4MIRDBrain::ConstructOrgan(G4VPhysicalVolume* mother, G4Stri
  
 
   G4LogicalVolume* logicBrain =  new G4LogicalVolume(brain, soft, 
-						     logicalVolumeName,
+						     "logical" + volumeName,
 						     0, 0, 0);
   
   // Define rotation and position here!
@@ -95,8 +96,6 @@ G4VPhysicalVolume* G4MIRDBrain::ConstructOrgan(G4VPhysicalVolume* mother, G4Stri
   G4VisAttributes* BrainVisAtt = new G4VisAttributes(colour);
   BrainVisAtt->SetForceSolid(wireFrame);
   logicBrain->SetVisAttributes(BrainVisAtt);
-
-  G4cout << "Brain created for " << sex << "!!!! "<<G4endl;
 
   // Testing Brain Volume
   G4double BrainVol = logicBrain->GetSolid()->GetCubicVolume();

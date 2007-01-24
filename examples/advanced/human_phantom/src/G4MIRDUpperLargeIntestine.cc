@@ -51,11 +51,11 @@ G4MIRDUpperLargeIntestine::~G4MIRDUpperLargeIntestine()
 {
 }
 
-G4VPhysicalVolume* G4MIRDUpperLargeIntestine::ConstructOrgan(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity,
-							     G4String volumeName, G4String logicalVolumeName, G4String colourName
+G4VPhysicalVolume* G4MIRDUpperLargeIntestine::ConstructOrgan(G4VPhysicalVolume* mother, G4bool sensitivity,
+							     G4String volumeName, G4String colourName
 							     , G4bool wireFrame)
 {
-  G4cout << "Construct " << volumeName<< " for " << sex << G4endl;
+  G4cout << "Construct " << volumeName<< G4endl;
  
  G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
  G4Material* soft = material -> GetMaterial("soft_tissue");
@@ -85,7 +85,7 @@ G4VPhysicalVolume* G4MIRDUpperLargeIntestine::ConstructOrgan(G4VPhysicalVolume* 
   
 
   G4LogicalVolume* logicUpperLargeIntestine = new G4LogicalVolume(upperLargeIntestine, soft,
-								  logicalVolumeName, 
+								  "logical" + volumeName, 
 								  0, 0, 0);
  
   G4VPhysicalVolume* physUpperLargeIntestine = new G4PVPlacement(0,

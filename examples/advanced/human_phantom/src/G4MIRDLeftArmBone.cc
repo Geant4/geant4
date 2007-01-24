@@ -52,8 +52,7 @@ G4MIRDLeftArmBone::~G4MIRDLeftArmBone()
 {
 }
 
-G4VPhysicalVolume* G4MIRDLeftArmBone::ConstructOrgan(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity, G4String volumeName, 
-						     G4String logicalVolumeName, 
+G4VPhysicalVolume* G4MIRDLeftArmBone::ConstructOrgan(G4VPhysicalVolume* mother, G4bool sensitivity, G4String volumeName,  
 						     G4String colourName, G4bool wireFrame)
 {
   // Remind! the elliptical cone gives problems! Intersections of volumes, 
@@ -61,7 +60,7 @@ G4VPhysicalVolume* G4MIRDLeftArmBone::ConstructOrgan(G4VPhysicalVolume* mother, 
    
   G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
    
-  G4cout << "Construct " << volumeName <<" for "<< sex <<G4endl;
+  G4cout << "Construct " << volumeName <<G4endl;
    
   G4Material* skeleton = material -> GetMaterial("skeleton");
   
@@ -76,7 +75,7 @@ G4VPhysicalVolume* G4MIRDLeftArmBone::ConstructOrgan(G4VPhysicalVolume* mother, 
 
   G4LogicalVolume* logicLeftArmBone = new G4LogicalVolume(leftArm,
 						      skeleton,
-						      logicalVolumeName,
+						      "logical" + volumeName,
 						      0, 0,0);
 
     G4RotationMatrix* matrix = new G4RotationMatrix();

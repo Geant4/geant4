@@ -46,7 +46,7 @@ public:
 
   G4MIRDHead();
   ~G4MIRDHead();
-  G4VPhysicalVolume* ConstructOrgan(G4VPhysicalVolume*, G4String, G4bool, G4String, G4String, G4String, G4bool);
+  G4VPhysicalVolume* ConstructOrgan(G4VPhysicalVolume*, G4bool, G4String,G4String, G4bool);
  
 private:
   //  SAXProcessor sxp;

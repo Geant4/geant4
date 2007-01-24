@@ -54,10 +54,10 @@ G4MIRDHead::~G4MIRDHead()
   delete material;
 }
 
-G4VPhysicalVolume* G4MIRDHead::ConstructOrgan(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity,G4String volumeName,G4String logicalVolumeName, 
+G4VPhysicalVolume* G4MIRDHead::ConstructOrgan(G4VPhysicalVolume* mother, G4bool sensitivity,G4String volumeName,
 					       G4String colourName, G4bool wireFrame)
 {
-  G4cout << "Construct " << volumeName << " for "<< sex<<G4endl;
+  G4cout << "Construct " << volumeName <<G4endl;
   G4Material* soft = material -> GetMaterial("soft_tissue");
   
   // MIRD male model
@@ -81,7 +81,7 @@ G4VPhysicalVolume* G4MIRDHead::ConstructOrgan(G4VPhysicalVolume* mother, G4Strin
   				0, // Rotation 
   				G4ThreeVector(0.* cm, 0.*cm, 7.7500 * cm) );
 
-  G4LogicalVolume* logicHead = new G4LogicalVolume(head, soft,logicalVolumeName,
+  G4LogicalVolume* logicHead = new G4LogicalVolume(head, soft,"logical" + volumeName,
 						   0, 0,0);
   G4RotationMatrix* rm = new G4RotationMatrix();
   rm -> rotateX(90.* degree);
@@ -111,8 +111,6 @@ G4VPhysicalVolume* G4MIRDHead::ConstructOrgan(G4VPhysicalVolume* mother, G4Strin
 
   HeadVisAtt->SetForceSolid(wireFrame);
   logicHead->SetVisAttributes(HeadVisAtt);
-
-  G4cout << "Head created for " << sex << "!!!!!!" << G4endl;
 
   // Testing Head Volume
   G4double HeadVol = logicHead->GetSolid()->GetCubicVolume();

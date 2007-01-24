@@ -44,6 +44,6 @@ public:
 
   G4MIRDUrinaryBladder();
   ~G4MIRDUrinaryBladder();
-  G4VPhysicalVolume* ConstructOrgan(G4VPhysicalVolume*, G4String, G4bool, G4String, G4String, G4String, G4bool);
+  G4VPhysicalVolume* ConstructOrgan(G4VPhysicalVolume*, G4bool, G4String, G4String, G4bool);
 };
 #endif

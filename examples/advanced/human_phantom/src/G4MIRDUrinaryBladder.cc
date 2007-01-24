@@ -49,11 +49,11 @@ G4MIRDUrinaryBladder::~G4MIRDUrinaryBladder()
 {
 }
 
-G4VPhysicalVolume* G4MIRDUrinaryBladder::ConstructOrgan(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity,
-G4String volumeName, G4String logicalVolumeName, G4String colourName, G4bool wireFrame)
+G4VPhysicalVolume* G4MIRDUrinaryBladder::ConstructOrgan(G4VPhysicalVolume* mother, G4bool sensitivity,
+G4String volumeName, G4String colourName, G4bool wireFrame)
 {
  
-  G4cout << "Construct " << volumeName <<" for " << sex << G4endl;
+  G4cout << "Construct " << volumeName << G4endl;
  
  G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
  G4Material* soft = material -> GetMaterial("soft_tissue");
@@ -73,7 +73,7 @@ G4String volumeName, G4String logicalVolumeName, G4String colourName, G4bool wir
  G4SubtractionSolid* totalBladder = new G4SubtractionSolid("bladder", bladder, inner);
 
  G4LogicalVolume* logicUrinaryBladder = new G4LogicalVolume(totalBladder, soft,
-							    logicalVolumeName,
+							    "logical" + volumeName,
 							    0, 0, 0);
   
   // Define rotation and position here!

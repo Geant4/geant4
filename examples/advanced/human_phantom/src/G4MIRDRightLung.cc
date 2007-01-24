@@ -55,11 +55,11 @@ G4MIRDRightLung::~G4MIRDRightLung()
 
 }
 
-G4VPhysicalVolume* G4MIRDRightLung::ConstructOrgan(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity, G4String volumeName, 
-G4String logicalVolumeName, G4String colourName, G4bool wireFrame)
+G4VPhysicalVolume* G4MIRDRightLung::ConstructOrgan(G4VPhysicalVolume* mother, G4bool sensitivity, G4String volumeName, 
+						   G4String colourName, G4bool wireFrame)
 {
 
-  G4cout << "Construct " << volumeName <<" for " << sex << G4endl;
+  G4cout << "Construct " << volumeName <<G4endl;
  
  G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
  G4Material* lung_material = material -> GetMaterial("lung_material");
@@ -98,7 +98,7 @@ G4String logicalVolumeName, G4String colourName, G4bool wireFrame)
 
 
  G4LogicalVolume* logicRightLung = new G4LogicalVolume(lung1,lung_material,
-						  logicalVolumeName, 0, 0, 0); 
+						  "logical" + volumeName, 0, 0, 0); 
   
  G4RotationMatrix* matrix = new G4RotationMatrix();
  matrix -> rotateZ(-180. * deg);

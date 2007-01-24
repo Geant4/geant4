@@ -54,11 +54,11 @@ G4MIRDLeftLeg::~G4MIRDLeftLeg()
 {
 }
 
-G4VPhysicalVolume* G4MIRDLeftLeg::ConstructOrgan(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity, 
-					      G4String volumeName, G4String logicalVolumeName, G4String colourName, G4bool wireFrame)
+G4VPhysicalVolume* G4MIRDLeftLeg::ConstructOrgan(G4VPhysicalVolume* mother, G4bool sensitivity, 
+					      G4String volumeName, G4String colourName, G4bool wireFrame)
 {
  
-  G4cout << "Construct"<< volumeName <<" for "<<sex << G4endl;
+  G4cout << "Construct"<< volumeName << G4endl;
 
   G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
   G4Material* soft = material -> GetMaterial("soft_tissue");
@@ -78,7 +78,7 @@ G4VPhysicalVolume* G4MIRDLeftLeg::ConstructOrgan(G4VPhysicalVolume* mother, G4St
   
   G4LogicalVolume* logicLeftLeg = new G4LogicalVolume(leg1,
 						   soft,
-						   logicalVolumeName,
+						   "logical" + volumeName,
 						    0, 0, 0);
 						   
   G4RotationMatrix* rm = new G4RotationMatrix();

@@ -52,11 +52,11 @@ G4MIRDStomach::~G4MIRDStomach()
 {
 }
 
-G4VPhysicalVolume* G4MIRDStomach::ConstructOrgan(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity,G4String volumeName, G4String logicalVolumeName, 
+G4VPhysicalVolume* G4MIRDStomach::ConstructOrgan(G4VPhysicalVolume* mother, G4bool sensitivity,G4String volumeName,
 					       G4String colourName, G4bool wireFrame)
 {
 
-  G4cout << "Construct "<< volumeName << " for " << sex << G4endl;
+  G4cout << "Construct "<< volumeName << G4endl;
  
  G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
  G4Material* soft = material -> GetMaterial("soft_tissue");
@@ -83,7 +83,7 @@ G4VPhysicalVolume* G4MIRDStomach::ConstructOrgan(G4VPhysicalVolume* mother, G4St
   G4SubtractionSolid* stomach = new G4SubtractionSolid("stomach",stomach_out, cavity);
   */
   G4LogicalVolume* logicStomach = new G4LogicalVolume(stomach_out, soft,
-						      logicalVolumeName, 0, 0, 0);
+						      "logical" + volumeName, 0, 0, 0);
   
   // Define rotation and position here!
   G4VPhysicalVolume* physStomach = new G4PVPlacement(0,G4ThreeVector(8. *cm,-4. * cm, 0),

@@ -53,10 +53,10 @@ G4HumanPhantomMessenger::G4HumanPhantomMessenger(G4HumanPhantomConstruction* myU
   cleanCmd->AvailableForStates(G4State_PreInit,G4State_Idle); 
 
   modelCmd = new G4UIcmdWithAString("/phantom/setPhantomModel",this);
-  modelCmd->SetGuidance("Set sex of Phantom: MIRD, ORNL or MIX.");
+  modelCmd->SetGuidance("Set sex of Phantom: MIRD, ORNLFemale, ORNLMale, or MIX.");
   modelCmd->SetParameterName("phantomModel",true);
   modelCmd->SetDefaultValue("MIRD");
-  modelCmd->SetCandidates("MIRD ORNL MIX");
+  modelCmd->SetCandidates("MIRD ORNLFemale ORNLMale MIX");
   modelCmd->AvailableForStates(G4State_PreInit,G4State_Idle); 
 
   sexCmd = new G4UIcmdWithAString("/phantom/setPhantomSex",this);

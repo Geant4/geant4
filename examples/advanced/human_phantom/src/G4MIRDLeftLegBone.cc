@@ -52,14 +52,14 @@ G4MIRDLeftLegBone::~G4MIRDLeftLegBone()
 {
 }
 
-G4VPhysicalVolume* G4MIRDLeftLegBone::ConstructOrgan(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity,
-						     G4String volumeName,G4String logicalVolumeName, 
+G4VPhysicalVolume* G4MIRDLeftLegBone::ConstructOrgan(G4VPhysicalVolume* mother, G4bool sensitivity,
+						     G4String volumeName, 
 						     G4String colourName, G4bool wireFrame)
 {
  
   G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
    
-  G4cout << "Construct "<< volumeName<< "for "<< sex <<G4endl;
+  G4cout << "Construct "<< volumeName<< G4endl;
    
   G4Material* skeleton = material -> GetMaterial("skeleton");
   
@@ -78,16 +78,7 @@ G4VPhysicalVolume* G4MIRDLeftLegBone::ConstructOrgan(G4VPhysicalVolume* mother, 
 			   rmin2, rmax2, dz/2., 
 			   startphi, deltaphi);
 
-  //G4RotationMatrix* rm_relative = new G4RotationMatrix();
-  //rm_relative -> rotateY(-12.5 * degree);
-  /*
-  G4UnionSolid* legs_bones =  new G4UnionSolid("LeftLegBone",
-					       leg_bone, leg_bone,
-					       0,
-					       G4ThreeVector(20.* cm, 0.0,0. * cm));
-  */
-
-  G4LogicalVolume* logicLeftLegBone = new G4LogicalVolume(leg_bone, skeleton,logicalVolumeName,
+    G4LogicalVolume* logicLeftLegBone = new G4LogicalVolume(leg_bone, skeleton,"logical" + volumeName,
 						      0, 0, 0);
 
 

@@ -45,18 +45,33 @@ G4ORNLOrgan::~G4ORNLOrgan()
   sxp.Finalize();
 }
 
-G4VPhysicalVolume* G4ORNLOrgan::ConstructOrgan(G4VPhysicalVolume* mother,G4String sex, G4bool sensitivity, G4String gdmlFile, 
-G4String logicalVolumeName, G4String colourName, G4bool wireFrame)
+G4VPhysicalVolume* G4ORNLOrgan::ConstructOrgan(G4VPhysicalVolume* mother, G4bool sensitivity, G4String gdmlFile, 
+G4String colourName, G4bool wireFrame)
 {
+  G4cout <<"G4ORNLOrgan::ConstructOrgan" << G4endl;
   // Initialize GDML Processor
   sxp.Initialize();
-  config.SetURI(gdmlFile);
+  config.SetURI("gdmlData/" + gdmlFile + ".gdml");
   config.SetSetupName( "Default" );
   sxp.Configure( &config );
 
   // Run GDML Processor
   sxp.Run(); 
+  
+  G4int stringLenght = gdmlFile.size();
+  G4int i = gdmlFile.find("Female",0);
+  //G4cout <<"i: "<< i << G4endl;
 
+  G4int j = gdmlFile.find("Male",0);
+  //G4cout <<"j: "<< j << G4endl;
+
+  G4int stringPosition=0;
+
+  if (j == -1) stringPosition = 11;
+  else if (i == -1) stringPosition = 9;
+  G4String name = gdmlFile.substr(stringPosition, stringLenght - stringPosition);
+  //G4cout << name<< G4endl;
+  G4String logicalVolumeName = name + "Volume"; 
   G4LogicalVolume* logicOrgan = (G4LogicalVolume *)GDMLProcessor::GetInstance()->GetLogicalVolume(logicalVolumeName);
 
   G4ThreeVector position = (G4ThreeVector)*GDMLProcessor::GetInstance()->GetPosition("OrganPos");

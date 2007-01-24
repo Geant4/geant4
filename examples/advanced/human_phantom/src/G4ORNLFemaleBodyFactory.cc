@@ -28,22 +28,26 @@
 // with the design in a forthcoming publication, and subject to a 
 // design and code review.
 //
-#ifndef G4MIRDSpleen_h
-#define G4MIRDSpleen_h 1
+//
+#include "G4ORNLFemaleBodyFactory.hh"
+#include "G4ORNLOrgan.hh"
 
-#include "G4VPhysicalVolume.hh"
-#include "G4VOrgan.hh"
-
-class G4VPhysicalVolume;
-class G4LogicalVolume;
-
-class G4MIRDSpleen: public G4VOrgan
+G4ORNLFemaleBodyFactory::G4ORNLFemaleBodyFactory()
 {
-public:
+}
 
-  G4MIRDSpleen();
-  ~G4MIRDSpleen();
-  G4VPhysicalVolume* ConstructOrgan(G4VPhysicalVolume*, G4bool, G4String, G4String, G4bool);
- 
-};
-#endif
+G4ORNLFemaleBodyFactory::~G4ORNLFemaleBodyFactory()
+{
+}
+
+G4VPhysicalVolume* G4ORNLFemaleBodyFactory::CreateOrgan(G4VPhysicalVolume* motherVolume,
+G4bool sensitivity, G4String gdmlFile, G4String colour, G4bool solidFrame)
+{
+  G4cout<< "ORNLBodyFactory: "<< "gdmlData/Female/ORNL"<< gdmlFile <<".gdml" << G4endl;
+
+  G4ORNLOrgan* organ = new G4ORNLOrgan();
+  return organ -> ConstructOrgan(motherVolume,sensitivity, "Female/ORNL"+ gdmlFile, 
+				 colour, solidFrame);
+}
+
+
