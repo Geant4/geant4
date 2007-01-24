@@ -416,7 +416,7 @@ SampleX(G4double anXmin, G4int nSea, G4int totalSea, G4double aBeta)
   G4double result;
   G4double x1, x2;
   G4double ymax = 0;
-  for(G4int ii=0; ii<100; ii++)
+  for(G4int ii=1; ii<100; ii++)
   {
     G4double y = std::pow(1./G4double(ii), alpha);
     y *= std::pow( std::pow(1-anXmin-totalSea*anXmin, alpha+1) - std::pow(anXmin, alpha+1), nSea);
