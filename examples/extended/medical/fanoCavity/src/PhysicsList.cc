@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.cc,v 1.1 2007-01-19 17:20:27 maire Exp $
+// $Id: PhysicsList.cc,v 1.2 2007-01-24 16:23:09 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -113,7 +113,7 @@ void PhysicsList::ConstructEM()
     
       G4ComptonScattering* compton = new G4ComptonScattering();
       compton->SetModel(comptonModel = new MyKleinNishinaCompton);
-      comptonModel->SetCSFactor(100.); 
+      comptonModel->SetCSFactor(1000.); 
       pmanager->AddDiscreteProcess(compton);
                 
       pmanager->AddDiscreteProcess(new G4PhotoElectricEffect);

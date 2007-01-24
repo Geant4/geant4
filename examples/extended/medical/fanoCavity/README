@@ -1,4 +1,4 @@
-$Id: README,v 1.4 2007-01-23 13:34:19 maire Exp $
+$Id: README,v 1.5 2007-01-24 16:23:09 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -103,7 +103,7 @@ $Id: README,v 1.4 2007-01-23 13:34:19 maire Exp $
     
     In order to make the program more efficient, one can increase the Compton
     cross section via the function SetCSFactor(factor) and its associated UI
-    command. Default is factor=100.
+    command. Default is factor=1000.
     
     - Bremsstrahlung : Fano conditions imply no energy transfer via
     bremsstrahlung radiation. Therefore this process is not registered in the

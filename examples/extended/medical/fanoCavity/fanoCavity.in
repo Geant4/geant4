@@ -1,10 +1,10 @@
-# $Id: fanoCavity.in,v 1.1 2007-01-19 17:20:26 maire Exp $
+# $Id: fanoCavity.in,v 1.2 2007-01-24 16:23:09 maire Exp $
 #
 /control/verbose 2
 /run/verbose 2
 #
 /run/initialize
 #
-/testem/event/printModulo 10000
+/testem/event/printModulo 1000
 #
-/run/beamOn 100000
+/run/beamOn 10000
