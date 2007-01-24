@@ -8,6 +8,11 @@ $Id: History, v 1.6 2004/02/27  G.A.P. Cirrone
 
                       Category History file
                       ---------------------
+
+24.1.2007 S. Guatelli (hadrontherapy-V08-02-00)
+         - Design iteration
+         - Physics lists added
+              
 16.11.2006 S. Guatelli (hadrontherapy-V08-01-05)
          - Physics lists cleaned
 
