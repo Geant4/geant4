@@ -1,0 +1,75 @@
+#----------------------------------------------------------------------------
+# PHYSICS LIST:
+# 
+#  - LOW ENERGY ELECTROMAGNETIC PHYSICS
+#  - ELASTIC SCATTERING FOR ALL THE HADRONS AND IONS
+#  - INELASTIC SCATTERING --->
+# 	PRECOMPOUND PHYSICS LIST with THE DEFAULT EVAPORATION MODEL AND WITHOUT THE FERMI BREAK-UP
+#
+# 	* PRECOMPOUND + EVAPORATION (DEFAULT MODEL) NO FERMI BREAK-UP FOR PROTONS,
+# 	  NEUTRONS AND PIONS
+# 
+# 	* LEP MODEL UP TO 100 MEV AND BINARY ION MODEL BETWEEN 80 MEV AND 40. GEV 
+#	  FOR  DEUTERON, TRITON, HE3, ALPHA
+# 
+#	* FISSION AND HADRON CAPTURE FOR NEUTRONS BETWEEN 0. MEV AND 100. TEV
+#
+#
+#-------------------------------------------------------------------------------
+
+
+/control/verbose 1
+/tracking/verbose 0
+/run/verbose 0
+/event/verbose 0
+
+# SETTING FOR THE PHYSICS MODELS
+/physics/addPhysics photon-epdl
+/physics/addPhysics electron-eedl
+/physics/addPhysics positron-standard
+/physics/addPhysics ion-LowE
+/physics/addPhysics muon-standard
+/physics/addPhysics decay
+
+
+# -------------- HADRON ELASTIC -------------------------------
+# SETTING FOR THE PARTICULAR ELASTIC HADRONIC MODEL
+
+# GROUP I Process: G4HadronElasticProcess
+
+/physics/addPhysics hadron-LElastic
+#/physics/addPhysics hadron-hadronElastic
+#/physics/addPhysics hadron-bertiniElastic
+
+# GROUP 2, Process: G4UHadronElasticProcess
+#/physics/addPhysics hadron-UHadronElastic
+
+# GROUP 3, Process: G4QElastic
+#/physics/addPhysics hadron-CHIPSElastic
+#--------------------------------------------------------------
+
+
+# ------------- HADRON INELASTIC ------------------------------
+#
+# -->  LEP Model
+/physics/addPhysics proton-LEP
+
+# ------------------------------------------------------------
+
+/run/initialize
+
+# IF YOU WANT A RANGE SHIFTER PLEASE CHANGE
+# THE FOLLOWIG PARAMETERS
+# SETTING FOR THE RANGE SHIFTER
+#/beamLine/RangeShifter/thickness 4 cm
+#/beamLine/RangeShifter/RSMat Water
+/run/beamOn 500
+
+
+
+
+
+
+
+
+
