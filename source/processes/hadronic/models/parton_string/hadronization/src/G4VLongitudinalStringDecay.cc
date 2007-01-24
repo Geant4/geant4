@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VLongitudinalStringDecay.cc,v 1.6 2006-12-06 16:17:30 gunter Exp $
+// $Id: G4VLongitudinalStringDecay.cc,v 1.7 2007-01-24 10:00:11 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -54,7 +54,7 @@
 #include "G4Gluons.hh"
 
 //------------------------debug switches
-#define DEBUG_LightFragmentationTest 1
+//#define DEBUG_LightFragmentationTest 1
 
 
 //********************************************************************************
@@ -279,8 +279,9 @@ G4ParticleDefinition *G4VLongitudinalStringDecay::DiQuarkSplitup(
       G4int NewDecayEncoding = -1*IsParticle*(i10 * 1000 + i20 * 100 + spin);
       created = FindParticle(NewDecayEncoding);
       G4ParticleDefinition * decayQuark=FindParticle(decayQuarkEncoding);
-      
-      return hadronizer->Build(QuarkPair.first, decayQuark);
+      G4ParticleDefinition * had=hadronizer->Build(QuarkPair.first, decayQuark);
+      return had;
+//      return hadronizer->Build(QuarkPair.first, decayQuark);
    
    } else {
    //... Diquark does not break
@@ -290,7 +291,9 @@ G4ParticleDefinition *G4VLongitudinalStringDecay::DiQuarkSplitup(
       pDefPair QuarkPair = CreatePartonPair(IsParticle,false);  // no diquarks wanted
       created = QuarkPair.second;
 
-      return hadronizer->Build(QuarkPair.first, decay);
+      G4ParticleDefinition * had=hadronizer->Build(QuarkPair.first, decay);
+      return had;
+//      return G4ParticleDefinition * had=hadronizer->Build(QuarkPair.first, decay);
    }
 }
 
@@ -563,8 +566,8 @@ G4double G4VLongitudinalStringDecay::FragmentationMass(
 	   NeedInit = false;
 	   nomix.resize(6);
 	   for ( G4int i=0; i<6 ; i++ ) nomix[i]=0;
-	   minMassHadronizer=new G4HadronBuilder(pspin_meson,pspin_barion,nomix,nomix);
-//	   minMassHadronizer=hadronizer;
+//	   minMassHadronizer=new G4HadronBuilder(pspin_meson,pspin_barion,nomix,nomix);
+	   minMassHadronizer=hadronizer;
 	}
 
 	if ( build==0 ) build=&G4HadronBuilder::BuildLowSpin;
