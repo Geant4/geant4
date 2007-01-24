@@ -45,7 +45,7 @@
 #include "G4eBremsstrahlung.hh"
 #include "G4eplusAnnihilation.hh"
 #include "G4StepLimiter.hh"
-
+#include "G4EmProcessOptions.hh"
 HadrontherapyPositronStandard::HadrontherapyPositronStandard(const G4String& name): G4VPhysicsConstructor(name)
 { }
 
@@ -54,6 +54,10 @@ HadrontherapyPositronStandard::~HadrontherapyPositronStandard()
 
 void HadrontherapyPositronStandard::ConstructProcess()
 {
+
+  G4EmProcessOptions emProcessOptions;
+  emProcessOptions.SetDEDXBinning(480);
+
   // Add standard processes for positrons
   
   theParticleIterator -> reset();

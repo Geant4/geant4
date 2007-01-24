@@ -63,7 +63,7 @@ private:
   G4bool chargedParticleIsRegistered;
   G4bool muonIsRegistered;
   G4bool decayIsRegistered;
-
+  G4bool hadronicElasticScatteringIsRegistered;
   HadrontherapyPhysicsListMessenger* messenger;
 };
 

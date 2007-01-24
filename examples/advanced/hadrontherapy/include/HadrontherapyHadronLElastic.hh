@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadrontherapyPhotonStandard.cc; May 2005
+// $Id: HadrontherapyHadronLElastic.hh; May 2005
 // ----------------------------------------------------------------------------
 //                 GEANT 4 - Hadrontherapy example
 // ----------------------------------------------------------------------------
@@ -37,42 +37,29 @@
 // 
 // * cirrone@lns.infn.it
 // ----------------------------------------------------------------------------
-#include "HadrontherapyPhotonStandard.hh"
-#include "G4ProcessManager.hh"
-#include "G4ParticleDefinition.hh"
-#include "G4ComptonScattering.hh"
-#include "G4GammaConversion.hh"
-#include "G4PhotoElectricEffect.hh"
-#include "G4StepLimiter.hh"
-#include "G4EmProcessOptions.hh"
+#ifndef HadrontherapyHadronLElastic_h
+#define HadrontherapyHadronLElastic_h 1
 
-HadrontherapyPhotonStandard::HadrontherapyPhotonStandard(const G4String& name): G4VPhysicsConstructor(name)
-{ }
+#include "G4VPhysicsConstructor.hh"
+#include "globals.hh"
 
-HadrontherapyPhotonStandard::~HadrontherapyPhotonStandard()
-{ }
-
-void HadrontherapyPhotonStandard::ConstructProcess()
+class HadrontherapyHadronLElastic: public G4VPhysicsConstructor 
 {
+ public:
+   HadrontherapyHadronLElastic(const G4String& name = "hadron-LElastic");
+   virtual ~HadrontherapyHadronLElastic();
 
-  G4EmProcessOptions emProcessOptions;
-  emProcessOptions.SetDEDXBinning(480);
-  // Add standard processes for photons
-  
-  theParticleIterator -> reset();
+ protected:
+   // Construct particle and physics
+   void ConstructParticle(){};
+   void ConstructProcess();
+};
+#endif
 
-  while( (*theParticleIterator)() )
-    {
-      G4ParticleDefinition* particle = theParticleIterator -> value();
-      G4ProcessManager* manager = particle -> GetProcessManager();
-      G4String particleName = particle -> GetParticleName();
 
-      if (particleName == "gamma") 
-	{
-	  manager -> AddDiscreteProcess(new G4PhotoElectricEffect);
-	  manager -> AddDiscreteProcess(new G4ComptonScattering);
-	  manager -> AddDiscreteProcess(new G4GammaConversion); 
-          manager -> AddProcess(new G4StepLimiter(),-1,-1, 3);
-	}   
-    }
-}
+
+
+
+
+
+

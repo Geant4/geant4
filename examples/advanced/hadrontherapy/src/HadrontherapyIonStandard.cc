@@ -46,6 +46,7 @@
 #include "G4ionIonisation.hh"
 #include "G4MultipleScattering.hh"
 #include "G4StepLimiter.hh"
+#include "G4EmProcessOptions.hh"
 
 HadrontherapyIonStandard::HadrontherapyIonStandard(const G4String& name): G4VPhysicsConstructor(name)
 { }
@@ -55,6 +56,10 @@ HadrontherapyIonStandard::~HadrontherapyIonStandard()
 
 void HadrontherapyIonStandard::ConstructProcess()
 {
+
+  G4EmProcessOptions emProcessOptions;
+  emProcessOptions.SetDEDXBinning(480);
+
   theParticleIterator -> reset();
 
   while( (*theParticleIterator)() )

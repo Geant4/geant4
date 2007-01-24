@@ -218,6 +218,8 @@ void HadrontherapyMaterial::DefineMaterials()
   matH2O -> AddElement(elH,2);
   matH2O -> AddElement(elO,1);
   matH2O -> GetIonisation()->SetMeanExcitationEnergy(75.0*eV);
+  matH2O -> SetChemicalFormula("H_2O");
+  G4cout << "-----------> CHEMICAL FORMULA FOR WATER FIXED <----------"<< G4endl;
 
   //soft tissue(http://www.nist.gov)
   d = 1.0*g/cm3;

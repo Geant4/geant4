@@ -49,7 +49,7 @@
 #include "G4MuPairProduction.hh"
 #include "G4MuonMinusCaptureAtRest.hh" 
 #include "G4StepLimiter.hh"
-
+#include "G4EmProcessOptions.hh"
 HadrontherapyMuonStandard::HadrontherapyMuonStandard(const G4String& name): G4VPhysicsConstructor(name)
 { }
 
@@ -58,6 +58,9 @@ HadrontherapyMuonStandard::~HadrontherapyMuonStandard()
 
 void HadrontherapyMuonStandard::ConstructProcess()
 {
+  G4EmProcessOptions emProcessOptions;
+  emProcessOptions.SetDEDXBinning(480);
+
   // Add standard processes for muons
   
   theParticleIterator -> reset();

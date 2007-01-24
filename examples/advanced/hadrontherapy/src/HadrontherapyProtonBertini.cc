@@ -103,10 +103,6 @@ void HadrontherapyProtonBertini::ConstructProcess()
 
   // Physics for proton, neutron, pion+ and pion-
 
-  // Elastic scattering: Low Energy Parameterised model 
-  G4LElastic* elasticModel = new G4LElastic();
-  G4HadronElasticProcess* elasticScattering = new G4HadronElasticProcess();
-  elasticScattering->RegisterMe(elasticModel);
 
   // Inelastic scattering: Bertini Inelastic model
   G4CascadeInterface* theBertiniModel = new G4CascadeInterface;
@@ -132,8 +128,6 @@ void HadrontherapyProtonBertini::ConstructProcess()
  
   // Activate the proton inelastic scattering 
   processManager->AddDiscreteProcess(theProtonInelasticProcess);
-  // Activate the elastic scattering 
-  processManager->AddDiscreteProcess(elasticScattering); 
 
   //--------------------------------------------------------------------------------------
   // Pions plus processes
@@ -146,8 +140,6 @@ void HadrontherapyProtonBertini::ConstructProcess()
   thePionPlusInelasticProcess->RegisterMe(theBertiniModel);
   // Activate the inelastic process for pions plus
   processManager->AddDiscreteProcess(thePionPlusInelasticProcess);
-  // Activate the elastic process for pions plus
-  processManager->AddDiscreteProcess(elasticScattering);
 
   //--------------------------------------------------------------------------------------
   // Pion Minus processes
@@ -160,8 +152,6 @@ void HadrontherapyProtonBertini::ConstructProcess()
   thePionMinusInelasticProcess->RegisterMe(theBertiniModel);
   // Activate the inelastic process for pion minus
   processManager->AddDiscreteProcess(thePionMinusInelasticProcess); 
-  // Activate the elastic process for pion minus
-  processManager->AddDiscreteProcess(elasticScattering);   
 
   //--------------------------------------------------------------------------------------
   // Neutron processes
@@ -176,8 +166,6 @@ void HadrontherapyProtonBertini::ConstructProcess()
   theNeutronInelasticProcess->AddDataSet(&theNeutronCrossSection);
   // Activate the neutron inelastic process
   processManager->AddDiscreteProcess(theNeutronInelasticProcess);
-  // Activate the Hadron Elastic Process
-  processManager->AddDiscreteProcess(elasticScattering);
 
   // Neutron capture process
  
@@ -259,8 +247,6 @@ void HadrontherapyProtonBertini::ConstructProcess()
 
   // Activate the deuteron elastic and inelastic scattering 
   processManager->AddDiscreteProcess(&theDeuteronInelasticProcess);
-  // Activate the Hadron Elastic Process
-  processManager->AddDiscreteProcess(elasticScattering); 
 
   //--------------------------------------------------------------------------------------
   // Triton
@@ -283,8 +269,6 @@ void HadrontherapyProtonBertini::ConstructProcess()
 
   // Activate the triton inelastic scattering using the parameterised Triton Inelastic and Binary Cascade models
   processManager->AddDiscreteProcess(&theTritonInelasticProcess);
-  // Activate the Hadron Elastic Process
-  processManager->AddDiscreteProcess(elasticScattering);
 
   //--------------------------------------------------------------------------------------
   // Alpha
@@ -308,6 +292,5 @@ void HadrontherapyProtonBertini::ConstructProcess()
 
   // Activate the alpha inelastic scattering using the parameterised Alpha Inelastic and Binary Cascade models
   processManager->AddDiscreteProcess(&theAlphaInelasticProcess);
-  // Activate the Hadron Elastic Process
-  processManager->AddDiscreteProcess(elasticScattering); 
+
 }

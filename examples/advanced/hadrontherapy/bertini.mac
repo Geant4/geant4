@@ -32,8 +32,9 @@
 /physics/addPhysics decay
 
 # SETTING FOR THE PARTICULAR HADRONIC MODEL
+# /physics/addPhysics hadron-LElastic
+/physics/addPhysics hadron-bertiniElastic
 /physics/addPhysics proton-bertini
-
 /run/initialize
 
 # IF YOU WANT A RANGE SHIFTER PLEASE CHANGE
@@ -41,7 +42,6 @@
 # SETTING FOR THE RANGE SHIFTER
 #/beamLine/RangeShifter/thickness 4 cm
 #/beamLine/RangeShifter/RSMat Water
-
 /run/beamOn 500
 
 

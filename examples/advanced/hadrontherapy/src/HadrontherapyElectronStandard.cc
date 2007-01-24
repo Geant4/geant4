@@ -44,7 +44,7 @@
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
 #include "G4StepLimiter.hh"
-
+#include "G4EmProcessOptions.hh"
 HadrontherapyElectronStandard::HadrontherapyElectronStandard(const G4String& name): G4VPhysicsConstructor(name)
 { }
 
@@ -53,6 +53,9 @@ HadrontherapyElectronStandard::~HadrontherapyElectronStandard()
 
 void HadrontherapyElectronStandard::ConstructProcess()
 {
+  G4EmProcessOptions emProcessOptions;
+  emProcessOptions.SetDEDXBinning(480);
+
   // Add standard processes for electrons
   
   theParticleIterator -> reset();
