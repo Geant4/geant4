@@ -213,7 +213,8 @@ G4double G4Fragment::CalculateExcitationEnergy(const G4LorentzVector value) cons
 			if ( errCount < 10 ) 
 			{
 			    G4cerr << "G4Fragment::CalculateExcitationEnergy(): Excitation Energy ="
-			       <<U << " for A = "<<theA<<" and Z= "<<theZ<<G4endl;
+			       <<U << " for A = "<<theA<<" and Z= "<<theZ<<G4endl
+			       << ", mass= " << GetGroundStateMass() << " maxMass= "<<theMaxGroundStateMass<<G4endl; ;
 			    errCount++;
 			    if (errCount == 10 ) G4cerr << "G4Fragment::CalculateExcitationEnergy():" 
 			    			<< " further warnings on negative excitation will be supressed" << G4endl;
