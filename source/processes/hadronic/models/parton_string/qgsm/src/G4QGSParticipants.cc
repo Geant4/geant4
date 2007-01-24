@@ -85,6 +85,8 @@ G4VSplitableHadron* G4QGSParticipants::SelectInteractions(const G4ReactionProduc
   theNucleus->StartLoop();
   G4Nucleon * pNucleon = theNucleus->GetNextNucleon();
   G4LorentzVector aPrimaryMomentum(thePrimary.GetMomentum(), thePrimary.GetTotalEnergy());
+//--DEBUG--G4cout << " qgspart- " << aPrimaryMomentum << " # " << aPrimaryMomentum.mag() 
+//--DEBUG--      << pNucleon->Get4Momentum() << " # " << (pNucleon->Get4Momentum()).mag()<< G4endl;
   G4double s = (aPrimaryMomentum + pNucleon->Get4Momentum()).mag2();
   G4double ThresholdMass = thePrimary.GetMass() + pNucleon->GetDefinition()->GetPDGMass(); 
   ModelMode = SOFT;
@@ -106,7 +108,9 @@ G4VSplitableHadron* G4QGSParticipants::SelectInteractions(const G4ReactionProduc
   #ifdef debug_QGS
   G4double eK = thePrimary.GetKineticEnergy()/GeV;
   #endif
-
+#ifdef debug_G4QGSParticipants
+  G4LorentzVector intNuclMom;
+#endif
   while(theInteractions.size() == 0)
   {
     // choose random impact parameter HPW
@@ -119,6 +123,9 @@ G4VSplitableHadron* G4QGSParticipants::SelectInteractions(const G4ReactionProduc
     theNucleus->StartLoop();
     G4int nucleonCount = 0; // debug
     G4QGSParticipants_NPart = 0;
+#ifdef debug_G4QGSParticipants
+    intNuclMom=aPrimaryMomentum;
+#endif
     while( (pNucleon = theNucleus->GetNextNucleon()) )
     {
       if(totalCuts>1.5*thePrimary.GetKineticEnergy()/GeV) 
@@ -137,7 +144,13 @@ G4VSplitableHadron* G4QGSParticipants::SelectInteractions(const G4ReactionProduc
       if (Probability > rndNumber)
       {
 //--DEBUG--        cout << "DEBUG p="<< Probability<<" r="<<rndNumber<<" d="<<std::sqrt(Distance2)<<G4endl;
-        G4QGSMSplitableHadron* aTarget = new G4QGSMSplitableHadron(*pNucleon);
+//--DEBUG--         G4cout << " qgspart+  " << aPrimaryMomentum << " # " << aPrimaryMomentum.mag() 
+//--DEBUG--              << pNucleon->Get4Momentum() << " # " << (pNucleon->Get4Momentum()).mag()<< G4endl;
+
+#ifdef debug_G4QGSParticipants
+       intNuclMom += pNucleon->Get4Momentum();
+#endif
+       G4QGSMSplitableHadron* aTarget = new G4QGSMSplitableHadron(*pNucleon);
         G4QGSParticipants_NPart ++;
 	theTargets.push_back(aTarget);
  	pNucleon->Hit(aTarget);
@@ -189,7 +202,8 @@ G4VSplitableHadron* G4QGSParticipants::SelectInteractions(const G4ReactionProduc
        }
       }
     }
-//--DEBUG--  cout << G4endl<<"NUCLEONCOUNT "<<nucleonCount<<G4endl;
+//--DEBUG--  g4cout << G4endl<<"NUCLEONCOUNT "<<nucleonCount<<G4endl;
+//--DEBUG--  G4cout << " Interact 4-Vect " << intNuclMom << G4endl; 
   }
 //--DEBUG--  cout << G4endl<<"CUTDEBUG "<< totalCuts <<G4endl;
 //--DEBUG--  cout << "Impact Parameter used = "<<impactUsed<<G4endl;
@@ -212,6 +226,14 @@ void G4QGSParticipants::PerformDiffractiveCollisions()
       aPartonPair = new G4PartonPair(aParton, aProjectile->GetNextAntiParton(), 
                                      G4PartonPair::DIFFRACTIVE, 
                                      G4PartonPair::PROJECTILE);
+#ifdef debug_G4QGSPart_PDiffColl
+	G4cout << "DiffPair Pro " << aPartonPair->GetParton1()->GetPDGcode() << " " 
+			      << aPartonPair->GetParton1()->Get4Momentum() << " "
+			      << aPartonPair->GetParton1()->GetX() << " " << G4endl;
+	G4cout << "         " << aPartonPair->GetParton2()->GetPDGcode() << " " 
+			      << aPartonPair->GetParton2()->Get4Momentum() << " "
+			      << aPartonPair->GetParton2()->GetX() << " " << G4endl;
+#endif
       thePartonPairs.push_back(aPartonPair);
     }
     // then target HPW
@@ -222,6 +244,14 @@ void G4QGSParticipants::PerformDiffractiveCollisions()
       aPartonPair = new G4PartonPair(aParton, aTarget->GetNextAntiParton(), 
                                      G4PartonPair::DIFFRACTIVE, 
                                      G4PartonPair::TARGET);
+#ifdef debug_G4QGSPart_PDiffColl
+	G4cout << "DiffPair Tgt " << aPartonPair->GetParton1()->GetPDGcode() << " " 
+			      << aPartonPair->GetParton1()->Get4Momentum() << " "
+			      << aPartonPair->GetParton1()->GetX() << " " << G4endl;
+	G4cout << "         " << aPartonPair->GetParton2()->GetPDGcode() << " " 
+			      << aPartonPair->GetParton2()->Get4Momentum() << " "
+			      << aPartonPair->GetParton2()->GetX() << " " << G4endl;
+#endif
       thePartonPairs.push_back(aPartonPair);
     }
   }
@@ -230,6 +260,7 @@ void G4QGSParticipants::PerformDiffractiveCollisions()
 void G4QGSParticipants::PerformSoftCollisions()
 {
   std::vector<G4InteractionContent*>::iterator i;
+  G4LorentzVector str4Mom;
   for(i = theInteractions.begin(); i != theInteractions.end(); i++)   
   {
     G4InteractionContent* anIniteraction = *i;
@@ -242,9 +273,33 @@ void G4QGSParticipants::PerformSoftCollisions()
       {
         aPair = new G4PartonPair(pTarget->GetNextParton(), pProjectile->GetNextAntiParton(), 
                                  G4PartonPair::SOFT, G4PartonPair::TARGET);
+#ifdef debug_G4QGSPart_PSoftColl
+	G4cout << "SoftPair " << aPair->GetParton1()->GetPDGcode() << " " 
+			      << aPair->GetParton1()->Get4Momentum() << " "
+			      << aPair->GetParton1()->GetX() << " " << G4endl;
+	G4cout << "         " << aPair->GetParton2()->GetPDGcode() << " " 
+			      << aPair->GetParton2()->Get4Momentum() << " "
+			      << aPair->GetParton2()->GetX() << " " << G4endl;
+#endif
+#ifdef debug_G4QGSParticipants
+        str4Mom += aPair->GetParton1()->Get4Momentum();
+	str4Mom += aPair->GetParton2()->Get4Momentum();
+#endif
         thePartonPairs.push_back(aPair);
         aPair = new G4PartonPair(pProjectile->GetNextParton(), pTarget->GetNextAntiParton(), 
                                  G4PartonPair::SOFT, G4PartonPair::PROJECTILE);
+#ifdef debug_G4QGSPart_PSoftColl
+	G4cout << "SoftPair " << aPair->GetParton1()->GetPDGcode() << " " 
+			      << aPair->GetParton1()->Get4Momentum() << " "
+			      << aPair->GetParton1()->GetX() << " " << G4endl;
+	G4cout << "         " << aPair->GetParton2()->GetPDGcode() << " " 
+			      << aPair->GetParton2()->Get4Momentum() << " "
+			      << aPair->GetParton2()->GetX() << " " << G4endl;
+#endif
+#ifdef debug_G4QGSParticipants
+        str4Mom += aPair->GetParton1()->Get4Momentum();
+	str4Mom += aPair->GetParton2()->Get4Momentum();
+#endif
         thePartonPairs.push_back(aPair);
       }  
       delete *i;
@@ -252,4 +307,7 @@ void G4QGSParticipants::PerformSoftCollisions()
       i--;
     }
   }
+#ifdef debug_G4QGSPart_PSoftColl
+  G4cout << " string 4 mom " << str4Mom << G4endl;
+#endif
 }
