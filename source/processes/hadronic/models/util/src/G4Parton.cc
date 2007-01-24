@@ -146,3 +146,15 @@ void G4Parton::DefineMomentumInZ(G4double aLightConeMomentum, G4bool aDirection)
 	a4Momentum.setE( 0.5*(aLightConeMomentum + TransverseMass2/aLightConeMomentum));
 	Set4Momentum(a4Momentum);
 }  
+
+void G4Parton::DefineMomentumInZ(G4double aLightConeMomentum,G4double aLightConeE, G4bool aDirection)
+{
+	G4double Mass = GetMass();
+	G4LorentzVector a4Momentum = Get4Momentum();
+	aLightConeMomentum*=theX;
+	aLightConeE*=theX;
+	G4double TransverseMass2 = sqr(a4Momentum.px()) + sqr(a4Momentum.py()) + sqr(Mass);
+	a4Momentum.setPz(0.5*(aLightConeMomentum - aLightConeE - TransverseMass2/aLightConeMomentum)*(aDirection? 1: -1)); 
+	a4Momentum.setE( 0.5*(aLightConeMomentum + aLightConeE + TransverseMass2/aLightConeMomentum));
+	Set4Momentum(a4Momentum);
+}  
