@@ -1,5 +1,5 @@
 
- Last update: 04-Dec-2006
+ Last update: 24-Jan-2007
  ========================
 
  This directory contains a configurable calorimeter setup to be used
@@ -63,11 +63,18 @@
  more details, look at the string "***LOOKHERE***" in the file: 
  StatAccepTestSensitiveCalorimeter.cc .
 
- The output of the program is an HBOOK ntuple  * ntuple.hbook *
- which contains some physics variables, like the total energy 
- deposit in the active layers, the total deposit in the whole 
- calorimeter, the energy deposit in each active layer, and the 
- transverse energy deposition sum over all the active layers, 
+ In the case you want to run the simulation only to get the 
+ information printed out (in the screen) at the end of execution,
+ without the ntuple and the histograms, then it is enough to
+ not define the environmental variable  G4ANALYSIS_USE . 
+ In this case, you do not need any AIDA/PI software.
+
+ If the environmental variable G4ANALYSIS_USE is defined (and
+ also AIDA/PI), then the output of the program is an HBOOK ntuple
+  * ntuple.hbook *  which contains some physics variables, like 
+ the total energy deposit in the active layers, the total deposit
+ in the whole calorimeter, the energy deposit in each active layer,
+ and the transverse energy deposition sum over all the active layers, 
  in a certain number of radial bins.
 
  In the same HBOOK file, also a number of histograms can be

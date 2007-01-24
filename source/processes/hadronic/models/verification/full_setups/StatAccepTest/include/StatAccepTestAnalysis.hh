@@ -6,6 +6,7 @@
 #include <map>
 #include "G4ThreeVector.hh"
 
+#ifdef G4ANALYSIS_USE
 namespace AIDA {
   class IAnalysisFactory;
   class IHistogramFactory;
@@ -15,6 +16,7 @@ namespace AIDA {
   class ITuple;
   class IPlotter;
 }
+#endif
 
 class G4Step;
 class G4Track;
@@ -100,11 +102,6 @@ private:
   
   static StatAccepTestAnalysis* instance;
   
-  AIDA::IAnalysisFactory* analysisFactory;
-  AIDA::ITree* tree;
-  AIDA::ITuple* tuple;
-  AIDA::IHistogramFactory* histoFactory;
-
   G4int numberOfEvents;
 
   G4int numberOfReplicas;
@@ -203,103 +200,6 @@ private:
   // "normalized deviation". To calculate it, we need to keep all
   // the values of EdepAct in a vector.
   std::vector< G4double > vecEvis;
-
-  // Summary histograms for the longitudinal and transverse shower profiles. 
-  AIDA::IHistogram1D* longitudinalProfileHisto;
-  AIDA::IHistogram1D* transverseProfileHisto;
-
-  // Step Energy vs. Step Length information.
-  AIDA::IHistogram2D* h2stepEvsL_active;
-  AIDA::IHistogram2D* h2stepEvsL_electron_active;
-  AIDA::IHistogram2D* h2stepEvsL_muon_active;
-  AIDA::IHistogram2D* h2stepEvsL_pionCharged_active;
-  AIDA::IHistogram2D* h2stepEvsL_proton_active;
-  AIDA::IHistogram2D* h2stepEvsL_gamma_active;
-  AIDA::IHistogram2D* h2stepEvsL_neutron_active;
-  AIDA::IHistogram2D* h2stepEvsL_absorber;
-  AIDA::IHistogram2D* h2stepEvsL_electron_absorber;
-  AIDA::IHistogram2D* h2stepEvsL_muon_absorber;
-  AIDA::IHistogram2D* h2stepEvsL_pionCharged_absorber;
-  AIDA::IHistogram2D* h2stepEvsL_proton_absorber;
-  AIDA::IHistogram2D* h2stepEvsL_gamma_absorber;
-  AIDA::IHistogram2D* h2stepEvsL_neutron_absorber;
-
-  // Kinetic spectra of some particles when entering an active layer.
-  AIDA::IHistogram1D* emSpectrum1[10];
-  AIDA::IHistogram1D* emSpectrum2[10];
-  AIDA::IHistogram1D* emSpectrum3[10];
-  AIDA::IHistogram1D* emSpectrum4[10];
-  AIDA::IHistogram1D* emSpectrum5[10];
-  AIDA::IHistogram1D* pionSpectrum1[10];
-  AIDA::IHistogram1D* pionSpectrum2[10];
-  AIDA::IHistogram1D* pionSpectrum3[10];
-  AIDA::IHistogram1D* pionSpectrum4[10];
-  AIDA::IHistogram1D* pionSpectrum5[10];
-  AIDA::IHistogram1D* protonSpectrum1[10];
-  AIDA::IHistogram1D* protonSpectrum2[10];
-  AIDA::IHistogram1D* protonSpectrum3[10];
-  AIDA::IHistogram1D* protonSpectrum4[10];
-  AIDA::IHistogram1D* protonSpectrum5[10];
-  AIDA::IHistogram1D* neutronSpectrum1[10];
-  AIDA::IHistogram1D* neutronSpectrum2[10];
-  AIDA::IHistogram1D* neutronSpectrum3[10];
-  AIDA::IHistogram1D* neutronSpectrum4[10];
-  AIDA::IHistogram1D* neutronSpectrum5[10];
-  AIDA::IHistogram1D* gammaSpectrum1[10];
-  AIDA::IHistogram1D* gammaSpectrum2[10];
-  AIDA::IHistogram1D* gammaSpectrum3[10];
-  AIDA::IHistogram1D* gammaSpectrum4[10];
-  AIDA::IHistogram1D* gammaSpectrum5[10];
-  AIDA::IHistogram1D* pionPlusSpectrum1[10];
-  AIDA::IHistogram1D* pionPlusSpectrum2[10];
-  AIDA::IHistogram1D* pionPlusSpectrum3[10];
-  AIDA::IHistogram1D* pionPlusSpectrum4[10];
-  AIDA::IHistogram1D* pionPlusSpectrum5[10];
-  AIDA::IHistogram1D* pionMinusSpectrum1[10];
-  AIDA::IHistogram1D* pionMinusSpectrum2[10];
-  AIDA::IHistogram1D* pionMinusSpectrum3[10];
-  AIDA::IHistogram1D* pionMinusSpectrum4[10];
-  AIDA::IHistogram1D* pionMinusSpectrum5[10];
-
-  // Now the same histograms, but weighted with 1/momentum
-  // (for the plots in logarithmic scale, i.e. where the
-  //  x-axis is  log_10( Ekin/MeV ), the weight is 
-  // 1/(Ekin*momentum) .
-  AIDA::IHistogram1D* emSpectrumWeighted1[10];
-  AIDA::IHistogram1D* emSpectrumWeighted2[10];
-  AIDA::IHistogram1D* emSpectrumWeighted3[10];
-  AIDA::IHistogram1D* emSpectrumWeighted4[10];
-  AIDA::IHistogram1D* emSpectrumWeighted5[10];
-  AIDA::IHistogram1D* pionSpectrumWeighted1[10];
-  AIDA::IHistogram1D* pionSpectrumWeighted2[10];
-  AIDA::IHistogram1D* pionSpectrumWeighted3[10];
-  AIDA::IHistogram1D* pionSpectrumWeighted4[10];
-  AIDA::IHistogram1D* pionSpectrumWeighted5[10];
-  AIDA::IHistogram1D* protonSpectrumWeighted1[10];
-  AIDA::IHistogram1D* protonSpectrumWeighted2[10];
-  AIDA::IHistogram1D* protonSpectrumWeighted3[10];
-  AIDA::IHistogram1D* protonSpectrumWeighted4[10];
-  AIDA::IHistogram1D* protonSpectrumWeighted5[10];
-  AIDA::IHistogram1D* neutronSpectrumWeighted1[10];
-  AIDA::IHistogram1D* neutronSpectrumWeighted2[10];
-  AIDA::IHistogram1D* neutronSpectrumWeighted3[10];
-  AIDA::IHistogram1D* neutronSpectrumWeighted4[10];
-  AIDA::IHistogram1D* neutronSpectrumWeighted5[10];
-  AIDA::IHistogram1D* gammaSpectrumWeighted1[10];
-  AIDA::IHistogram1D* gammaSpectrumWeighted2[10];
-  AIDA::IHistogram1D* gammaSpectrumWeighted3[10];
-  AIDA::IHistogram1D* gammaSpectrumWeighted4[10];
-  AIDA::IHistogram1D* gammaSpectrumWeighted5[10];
-  AIDA::IHistogram1D* pionPlusSpectrumWeighted1[10];
-  AIDA::IHistogram1D* pionPlusSpectrumWeighted2[10];
-  AIDA::IHistogram1D* pionPlusSpectrumWeighted3[10];
-  AIDA::IHistogram1D* pionPlusSpectrumWeighted4[10];
-  AIDA::IHistogram1D* pionPlusSpectrumWeighted5[10];
-  AIDA::IHistogram1D* pionMinusSpectrumWeighted1[10];
-  AIDA::IHistogram1D* pionMinusSpectrumWeighted2[10];
-  AIDA::IHistogram1D* pionMinusSpectrumWeighted3[10];
-  AIDA::IHistogram1D* pionMinusSpectrumWeighted4[10];
-  AIDA::IHistogram1D* pionMinusSpectrumWeighted5[10];
 
   // Keep the count of the total number of steps and tracks,
   // for all events (so at the end it is necessary to divide
@@ -485,6 +385,111 @@ private:
   // List of particles names and total count of the number of
   // tracks of such particle type (excluding e-, e+, gamma).
   std::map< std::string, int > mapParticleNames;
+
+#ifdef G4ANALYSIS_USE
+  // AIDA stuff from now on.
+  AIDA::IAnalysisFactory* analysisFactory;
+  AIDA::ITree* tree;
+  AIDA::ITuple* tuple;
+  AIDA::IHistogramFactory* histoFactory;
+
+  // Summary histograms for the longitudinal and transverse shower profiles. 
+  AIDA::IHistogram1D* longitudinalProfileHisto;
+  AIDA::IHistogram1D* transverseProfileHisto;
+
+  // Step Energy vs. Step Length information.
+  AIDA::IHistogram2D* h2stepEvsL_active;
+  AIDA::IHistogram2D* h2stepEvsL_electron_active;
+  AIDA::IHistogram2D* h2stepEvsL_muon_active;
+  AIDA::IHistogram2D* h2stepEvsL_pionCharged_active;
+  AIDA::IHistogram2D* h2stepEvsL_proton_active;
+  AIDA::IHistogram2D* h2stepEvsL_gamma_active;
+  AIDA::IHistogram2D* h2stepEvsL_neutron_active;
+  AIDA::IHistogram2D* h2stepEvsL_absorber;
+  AIDA::IHistogram2D* h2stepEvsL_electron_absorber;
+  AIDA::IHistogram2D* h2stepEvsL_muon_absorber;
+  AIDA::IHistogram2D* h2stepEvsL_pionCharged_absorber;
+  AIDA::IHistogram2D* h2stepEvsL_proton_absorber;
+  AIDA::IHistogram2D* h2stepEvsL_gamma_absorber;
+  AIDA::IHistogram2D* h2stepEvsL_neutron_absorber;
+
+  // Kinetic spectra of some particles when entering an active layer.
+  AIDA::IHistogram1D* emSpectrum1[10];
+  AIDA::IHistogram1D* emSpectrum2[10];
+  AIDA::IHistogram1D* emSpectrum3[10];
+  AIDA::IHistogram1D* emSpectrum4[10];
+  AIDA::IHistogram1D* emSpectrum5[10];
+  AIDA::IHistogram1D* pionSpectrum1[10];
+  AIDA::IHistogram1D* pionSpectrum2[10];
+  AIDA::IHistogram1D* pionSpectrum3[10];
+  AIDA::IHistogram1D* pionSpectrum4[10];
+  AIDA::IHistogram1D* pionSpectrum5[10];
+  AIDA::IHistogram1D* protonSpectrum1[10];
+  AIDA::IHistogram1D* protonSpectrum2[10];
+  AIDA::IHistogram1D* protonSpectrum3[10];
+  AIDA::IHistogram1D* protonSpectrum4[10];
+  AIDA::IHistogram1D* protonSpectrum5[10];
+  AIDA::IHistogram1D* neutronSpectrum1[10];
+  AIDA::IHistogram1D* neutronSpectrum2[10];
+  AIDA::IHistogram1D* neutronSpectrum3[10];
+  AIDA::IHistogram1D* neutronSpectrum4[10];
+  AIDA::IHistogram1D* neutronSpectrum5[10];
+  AIDA::IHistogram1D* gammaSpectrum1[10];
+  AIDA::IHistogram1D* gammaSpectrum2[10];
+  AIDA::IHistogram1D* gammaSpectrum3[10];
+  AIDA::IHistogram1D* gammaSpectrum4[10];
+  AIDA::IHistogram1D* gammaSpectrum5[10];
+  AIDA::IHistogram1D* pionPlusSpectrum1[10];
+  AIDA::IHistogram1D* pionPlusSpectrum2[10];
+  AIDA::IHistogram1D* pionPlusSpectrum3[10];
+  AIDA::IHistogram1D* pionPlusSpectrum4[10];
+  AIDA::IHistogram1D* pionPlusSpectrum5[10];
+  AIDA::IHistogram1D* pionMinusSpectrum1[10];
+  AIDA::IHistogram1D* pionMinusSpectrum2[10];
+  AIDA::IHistogram1D* pionMinusSpectrum3[10];
+  AIDA::IHistogram1D* pionMinusSpectrum4[10];
+  AIDA::IHistogram1D* pionMinusSpectrum5[10];
+
+  // Now the same histograms, but weighted with 1/momentum
+  // (for the plots in logarithmic scale, i.e. where the
+  //  x-axis is  log_10( Ekin/MeV ), the weight is 
+  // 1/(Ekin*momentum) .
+  AIDA::IHistogram1D* emSpectrumWeighted1[10];
+  AIDA::IHistogram1D* emSpectrumWeighted2[10];
+  AIDA::IHistogram1D* emSpectrumWeighted3[10];
+  AIDA::IHistogram1D* emSpectrumWeighted4[10];
+  AIDA::IHistogram1D* emSpectrumWeighted5[10];
+  AIDA::IHistogram1D* pionSpectrumWeighted1[10];
+  AIDA::IHistogram1D* pionSpectrumWeighted2[10];
+  AIDA::IHistogram1D* pionSpectrumWeighted3[10];
+  AIDA::IHistogram1D* pionSpectrumWeighted4[10];
+  AIDA::IHistogram1D* pionSpectrumWeighted5[10];
+  AIDA::IHistogram1D* protonSpectrumWeighted1[10];
+  AIDA::IHistogram1D* protonSpectrumWeighted2[10];
+  AIDA::IHistogram1D* protonSpectrumWeighted3[10];
+  AIDA::IHistogram1D* protonSpectrumWeighted4[10];
+  AIDA::IHistogram1D* protonSpectrumWeighted5[10];
+  AIDA::IHistogram1D* neutronSpectrumWeighted1[10];
+  AIDA::IHistogram1D* neutronSpectrumWeighted2[10];
+  AIDA::IHistogram1D* neutronSpectrumWeighted3[10];
+  AIDA::IHistogram1D* neutronSpectrumWeighted4[10];
+  AIDA::IHistogram1D* neutronSpectrumWeighted5[10];
+  AIDA::IHistogram1D* gammaSpectrumWeighted1[10];
+  AIDA::IHistogram1D* gammaSpectrumWeighted2[10];
+  AIDA::IHistogram1D* gammaSpectrumWeighted3[10];
+  AIDA::IHistogram1D* gammaSpectrumWeighted4[10];
+  AIDA::IHistogram1D* gammaSpectrumWeighted5[10];
+  AIDA::IHistogram1D* pionPlusSpectrumWeighted1[10];
+  AIDA::IHistogram1D* pionPlusSpectrumWeighted2[10];
+  AIDA::IHistogram1D* pionPlusSpectrumWeighted3[10];
+  AIDA::IHistogram1D* pionPlusSpectrumWeighted4[10];
+  AIDA::IHistogram1D* pionPlusSpectrumWeighted5[10];
+  AIDA::IHistogram1D* pionMinusSpectrumWeighted1[10];
+  AIDA::IHistogram1D* pionMinusSpectrumWeighted2[10];
+  AIDA::IHistogram1D* pionMinusSpectrumWeighted3[10];
+  AIDA::IHistogram1D* pionMinusSpectrumWeighted4[10];
+  AIDA::IHistogram1D* pionMinusSpectrumWeighted5[10];
+#endif
 
 };
 

@@ -6,13 +6,14 @@
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTypes.hh"
 
+#ifdef G4ANALYSIS_USE
 #include <AIDA/AIDA.h>
 
 //***TEMPORARY WORK-AROUND*** : need  AIDA_Dev/  subdirectory at the
 //                              same level as  AIDA/  in PI/PI_1_3_0/include .
 //                              But it does not work! 
 // // //#include <AIDA_Dev/IDevHistogram1D.h>
-
+#endif
 
 //***LOOKHERE***
 bool StatAccepTestAnalysis::isHistogramOn = true;
@@ -27,12 +28,15 @@ StatAccepTestAnalysis* StatAccepTestAnalysis::instance = 0;
 
 
 StatAccepTestAnalysis::StatAccepTestAnalysis() : 
-  analysisFactory( 0 ), tree( 0 ), tuple( 0 ), histoFactory( 0 ), 
   numberOfEvents( 0 ), numberOfReplicas( 0 ), 
   numberOfReadoutLayers( 0 ), numberOfActiveLayersPerReadoutLayer( 1 ), 
-  numberOfRadiusBins( 0 ), radiusBin( 0.0 ), 
-  longitudinalProfileHisto( 0 ), transverseProfileHisto( 0 ) {
-
+  numberOfRadiusBins( 0 ), radiusBin( 0.0 )
+#ifdef G4ANALYSIS_USE
+  , analysisFactory( 0 ), tree( 0 ), tuple( 0 ), histoFactory( 0 )
+  , longitudinalProfileHisto( 0 ), transverseProfileHisto( 0 )
+#endif
+{
+#ifdef G4ANALYSIS_USE
   analysisFactory = AIDA_createAnalysisFactory();
   if ( analysisFactory ) {    
     AIDA::ITreeFactory* treeFactory = analysisFactory->createTreeFactory();
@@ -63,7 +67,7 @@ StatAccepTestAnalysis::StatAccepTestAnalysis() :
       delete treeFactory; // It will not delete the ITree.
     }
   }
-
+#endif
 }
 
 
@@ -71,6 +75,7 @@ StatAccepTestAnalysis::~StatAccepTestAnalysis() {}
 
 
 void StatAccepTestAnalysis::close() {
+#ifdef G4ANALYSIS_USE
   if ( tree ) {
     tree->commit();
     tree->close();
@@ -87,6 +92,7 @@ void StatAccepTestAnalysis::close() {
     delete histoFactory;
     histoFactory = 0;
   }
+#endif
 }
 
 
@@ -111,7 +117,10 @@ void StatAccepTestAnalysis::init() {
   // the result of the simulation, i.e. the content of the
   // ntuple in the file ntuple.hbook.
 
+#ifdef G4ANALYSIS_USE  
   if ( tuple ) tuple->reset();
+#endif
+
   longitudinalProfile.clear();
   primaryParticleId = 0;
   beamEnergy  = 0.0;
@@ -451,6 +460,7 @@ void StatAccepTestAnalysis::init( const G4int numberOfReplicasIn,
   //       << "\t radiusBin             = " << radiusBin/mm << " mm" 
   //       << G4endl;  //***DEBUG***
 
+#ifdef G4ANALYSIS_USE
   // Create two histograms: one for the longitudinal shower profile,
   // and one for the transverse shower profile.
   assert( histoFactory );
@@ -964,6 +974,7 @@ void StatAccepTestAnalysis::init( const G4int numberOfReplicasIn,
 	}
       }
   }
+#endif
 }                       
 
 
@@ -980,6 +991,7 @@ void StatAccepTestAnalysis::fillSpectrum( const G4ParticleDefinition* particleDe
   // (i.e. log_10(kinEnergy/MeV) ), where the weight must be
   //  1/(|momentum*Ekin|) .
 
+#ifdef G4ANALYSIS_USE
   if ( ! isHistogramOn ) return;
 
   if ( numberOfReplicas < 10  ||
@@ -1143,6 +1155,7 @@ void StatAccepTestAnalysis::fillSpectrum( const G4ParticleDefinition* particleDe
       }
     }
   }
+#endif
 }
 
 
@@ -1160,6 +1173,8 @@ void StatAccepTestAnalysis::fillNtuple( float incidentParticleId,
   if ( totalEnergyDepositedInCalorimeter > maxEdepTot ) {
     maxEdepTot = totalEnergyDepositedInCalorimeter;
   }
+
+#ifdef G4ANALYSIS_USE
   if (tuple) {
     //G4cout << " StatAccepTestAnalysis::fillNtuple : DEBUG Info " << G4endl
     //       << "\t incidentParticleId = " << incidentParticleId << G4endl
@@ -1197,6 +1212,7 @@ void StatAccepTestAnalysis::fillNtuple( float incidentParticleId,
     }
     tuple->addRow();
   }
+#endif
 
   // Reset the longitudinal and transverse profiles, for the next event.
   for ( int layer = 0; layer < numberOfReadoutLayers; layer++ ) {
@@ -1214,6 +1230,7 @@ void StatAccepTestAnalysis::fillNtuple( float incidentParticleId,
     transverseProfile[ ir ] = 0.0;
   }
 
+#ifdef G4ANALYSIS_USE
   // This method is called at each event, so it is useful to commit
   // the tree from time to time, for instance every 10 events, in
   // such a way that it is possible to see the ntuple  ntuple.hbook
@@ -1230,6 +1247,7 @@ void StatAccepTestAnalysis::fillNtuple( float incidentParticleId,
       //      << G4endl; //***DEBUG***
     }
   }
+#endif
 
   // Store information of the visible energy, for later computing
   // of the energy resolution.
@@ -1447,6 +1465,7 @@ void StatAccepTestAnalysis::infoStep( const G4Step* aStep ) {
     }  
   }
 
+#ifdef G4ANALYSIS_USE
   // 2D plots on Step Energy vs. Step Length.
   if ( isHistogramOn && is2DHistogramStepLvsEOn ) {
     if ( aStep->GetTrack()->GetVolume()->GetName() == "physiActive" ) {
@@ -1513,6 +1532,7 @@ void StatAccepTestAnalysis::infoStep( const G4Step* aStep ) {
       }    
     }
   }
+#endif
 
   // Update the information on the energy deposition in the absorber
   // for the following particles (in the case of the energy deposition
@@ -3020,10 +3040,14 @@ void StatAccepTestAnalysis::finish() {
     G4cout << "\t layer = " << iLayer << "\t <E> = " 
 	   << mu << " +/- " << mu_sigma << G4endl;
     //}
+
+#ifdef G4ANALYSIS_USE
     if ( longitudinalProfileHisto ) {
       //***LOOKHERE*** :  mu_sigma  should be set as error.
       longitudinalProfileHisto->fill( 1.0*iLayer, mu );
     }
+#endif
+
     if ( iLayer < numberOfReadoutLayers/4 ) {
       fractionLongitudinal1stQuarter += mu;
       fractionLongitudinal1stQuarter_sigma += mu_sigma * mu_sigma;
@@ -3114,10 +3138,14 @@ void StatAccepTestAnalysis::finish() {
     G4cout << "\t iBinR = " << iBinR << "\t <E> = " 
 	   << mu << " +/- " << mu_sigma << G4endl;
     //}
+
+#ifdef G4ANALYSIS_USE
     if ( transverseProfileHisto ) {
       //***LOOKHERE*** :  mu_sigma  should be set as error.
       transverseProfileHisto->fill( 1.0*iBinR, mu );
     }
+#endif
+
     // // // rmsTransverseProfile.push_back( mu_sigma );   //***TEMPORARY WORK-AROUND***
     if ( iBinR < numberOfRadiusBins/3 ) {
       fractionTransverse1stThird += mu;
@@ -3234,7 +3262,9 @@ void StatAccepTestAnalysis::finish() {
          << "\t sampling fraction = " << samplingFraction << " +/- " 
 	 << samplingFraction_sigma << G4endl;
 
+#ifdef G4ANALYSIS_USE
   if ( tree ) tree->commit();
+#endif
 
   // Print information on the different particle contributions to
   // the visible energy, the total energy, and the shower shapes.
