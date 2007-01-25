@@ -544,6 +544,20 @@ G4double G4NucleonNuclearCrossSection::
 GetCrossSection( const G4DynamicParticle* aParticle, 
                  const G4Element* anElement,
                        G4double                )
+
+{
+  return GetCrossSection(aParticle, anElement->GetZ(), anElement->GetN());
+}
+
+
+////////////////////////////////////////////////////////////////////////////
+//
+//
+
+G4double G4NucleonNuclearCrossSection::
+GetCrossSection( const G4DynamicParticle* aParticle, 
+                       G4double  zElement,
+                       G4double                )
 {
    // precondition
    G4ping debug("debug_NucleonNuclearCrossSection");
@@ -564,8 +578,9 @@ GetCrossSection( const G4DynamicParticle* aParticle,
 
   
    G4double result = 0;
-   G4int Z = G4lrint(anElement->GetZ());
-   G4cout<<"Z = "<<Z<<G4endl;
+   G4int Z = G4lrint(zElement);
+   // G4int Z = G4lrint(anElement->GetZ());
+   // G4cout<<"Z = "<<Z<<G4endl;
    debug.push_back(Z);
    size_t it = 0;
 
@@ -583,7 +598,7 @@ GetCrossSection( const G4DynamicParticle* aParticle,
    }
    G4int Z1, Z2;
    G4double x1, x2;
-
+ 
    if( charge <= 0 )
    {
      if( theZ[it] == Z )

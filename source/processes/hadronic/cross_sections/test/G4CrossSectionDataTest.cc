@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CrossSectionDataTest.cc,v 1.12 2006-12-19 15:13:30 grichine Exp $
+// $Id: G4CrossSectionDataTest.cc,v 1.13 2007-01-25 16:38:26 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -113,7 +113,7 @@ int main()
   G4cout << "14 aluminium" << G4endl;
   G4int choice;
   // G4cin >> choice;
-  choice = 1;
+  choice = 6;
 
 
 
@@ -381,7 +381,9 @@ int main()
   G4NeutronInelasticCrossSection hpwNeIn;
   G4PiNuclearCrossSection barIn;
   G4NucleonNuclearCrossSection barNucIn;
-            
+
+
+  /*            
   kinEnergy = 0.01*GeV;
   iMax = 90;
     
@@ -392,8 +394,8 @@ int main()
     theDynamicParticle = new G4DynamicParticle(theParticleDefinition,
                                               G4ParticleMomentum(1.,0.,0.), 
                                               kinEnergy);
-    // sig = theCrossSectionDataStore.GetCrossSection(theDynamicParticle,theElement, 273*kelvin);
-    // sig = hpwPrIn.GetCrossSection(theDynamicParticle,theElement, 273*kelvin);
+// sig = theCrossSectionDataStore.GetCrossSection(theDynamicParticle,theElement, 273*kelvin);
+    // sig = hpwPrIn.GetCrossSection(theDynamicParticle, theElement, 273*kelvin);
     // sig = hpwNeIn.GetCrossSection(theDynamicParticle,theElement, 273*kelvin);
     sig = barNucIn.GetCrossSection(theDynamicParticle,theElement, 273*kelvin);
 
@@ -405,10 +407,10 @@ int main()
 
     writef << kinEnergy/GeV <<"\t"<< sig/millibarn << G4endl;
 
-    kinEnergy *= 1.13;
+    kinEnergy *= 1.138;
     delete theDynamicParticle;
   }
-             
+  */             
    
   // Check Glauber-Gribov model
   G4cout<<"Check Glauber-Gribov model"<<G4endl;
@@ -419,9 +421,9 @@ int main()
   G4GlauberGribovCrossSection ggXsc;
   G4double ggTotXsc, ggElaXsc, ggIneXsc;
 
-  /*          
+            
   kinEnergy = 0.1*GeV;
-  iMax = 70;
+  iMax = 80;
   writegg <<iMax<< G4endl; 
   for(i = 0; i < iMax; i++)
   {
@@ -446,10 +448,10 @@ int main()
 
      writegg << kinEnergy/GeV <<"\t"<< ggTotXsc/millibarn <<"\t"<< ggIneXsc/millibarn << G4endl;
 
-     kinEnergy *= 1.13;
+     kinEnergy *= 1.145;
      delete theDynamicParticle;
   }
-  */         
+           
 
 
  

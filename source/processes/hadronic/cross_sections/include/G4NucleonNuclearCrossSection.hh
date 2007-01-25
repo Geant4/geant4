@@ -48,7 +48,7 @@ class G4NucleonNuclearCrossSection : public G4VCrossSectionDataSet
   G4NucleonNuclearCrossSection();
   virtual ~G4NucleonNuclearCrossSection();
 
-  G4bool IsApplicable(const G4DynamicParticle* aParticle, const G4Element* anElement)
+  virtual G4bool IsApplicable(const G4DynamicParticle* aParticle, const G4Element* anElement)
   {
     G4bool result = false;
     if(aParticle->GetDefinition() == G4Neutron::Neutron() ) result = true;
@@ -57,11 +57,15 @@ class G4NucleonNuclearCrossSection : public G4VCrossSectionDataSet
     if(aParticle->GetKineticEnergy() > 999.9*GeV) result=false;
     return result;
   }
-  G4double GetCrossSection(const G4DynamicParticle* aParticle, 
+  virtual G4double GetCrossSection(const G4DynamicParticle* aParticle, 
                            const G4Element* anElement,
                            G4double T=0.);
-  void BuildPhysicsTable(const G4ParticleDefinition&) {}
-  void DumpPhysicsTable(const G4ParticleDefinition&) {}
+
+  virtual G4double GetCrossSection(const G4DynamicParticle*,
+                           G4double Z, G4double A);
+
+  virtual void BuildPhysicsTable(const G4ParticleDefinition&) {}
+  virtual void DumpPhysicsTable(const G4ParticleDefinition&) {}
   
   private:
   G4double Interpolate(G4int Z1, G4int Z2, G4int Z, G4double x1, G4double x2);
