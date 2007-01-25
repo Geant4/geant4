@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuonMinusCaptureAtRest.cc,v 1.40 2007-01-24 18:03:24 vnivanch Exp $
+// $Id: G4MuonMinusCaptureAtRest.cc,v 1.41 2007-01-25 17:08:04 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -100,8 +100,8 @@ G4VParticleChange* G4MuonMinusCaptureAtRest::AtRestDoIt(const G4Track& track,
 
   // select element and get Z,A.
   G4Element* aEle = pSelector->GetElement(track.GetMaterial());
-  targetZ = aEle->GetZ();
-  targetA = aEle->GetN(); 
+  targetZ = G4lrint(aEle->GetZ());
+  targetA = G4lrint(aEle->GetN()); 
 
   G4IsotopeVector* isv = aEle->GetIsotopeVector();
   if(!isv) {
