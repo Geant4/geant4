@@ -15,7 +15,7 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
 
 24-Jan-2007 Vladimir Ivantchenko (hadr-stopping-V08-02-00)
--  G4MuonMinusCaptureAtRest - force to use integer targetA, do not use G4lrint
+-  G4MuonMinusCaptureAtRest - force to use round targetA and fix bug #926
 
 1-Dec-2006 Gunter Folger   (hadr-stopping-V08-01-01)
 -  correct inconsistent use of targetA; for effective targetA transforming

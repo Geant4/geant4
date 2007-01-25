@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuonMinusCaptureAtRest.cc,v 1.41 2007-01-25 17:08:04 dennis Exp $
+// $Id: G4MuonMinusCaptureAtRest.cc,v 1.42 2007-01-25 17:41:00 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -100,12 +100,12 @@ G4VParticleChange* G4MuonMinusCaptureAtRest::AtRestDoIt(const G4Track& track,
 
   // select element and get Z,A.
   G4Element* aEle = pSelector->GetElement(track.GetMaterial());
-  targetZ = G4lrint(aEle->GetZ());
-  targetA = G4lrint(aEle->GetN()); 
+  targetZ = aEle->GetZ();
+  targetA = aEle->GetN(); 
 
   G4IsotopeVector* isv = aEle->GetIsotopeVector();
   if(!isv) {
-    G4Element* elm1 = G4NistManager::Instance()->FindOrBuildElement(G4int(targetZ));
+    G4Element* elm1 = G4NistManager::Instance()->FindOrBuildElement(G4lrint(targetZ));
     isv = elm1->GetIsotopeVector();
   }
   G4int ni = isv->size();
@@ -227,8 +227,8 @@ G4ReactionProductVector* G4MuonMinusCaptureAtRest::DoMuCapture()
   G4ReactionProduct* aNu = new G4ReactionProduct();
   aNu->SetDefinition( G4NeutrinoMu::NeutrinoMu() );
 
-  G4int iz = G4int(targetZ);
-  G4int ia = G4int(targetA);
+  G4int iz = G4lrint(targetZ);
+  G4int ia = G4lrint(targetA);
 
   // proton as a target
   if(iz <= 2) {
