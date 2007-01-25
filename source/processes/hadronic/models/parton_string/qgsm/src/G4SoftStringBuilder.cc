@@ -43,7 +43,7 @@ G4SoftStringBuilder::~G4SoftStringBuilder()
        
 G4ExcitedString* G4SoftStringBuilder::BuildString(G4PartonPair * aPair)       
     {
-#ifdef debug_ G4SoftStringBuilder
+#ifdef debug_G4SoftStringBuilder
    	G4cout << "BuildSoft " << aPair->GetParton1()->GetPDGcode() << " " 
 			      << aPair->GetParton1()->Get4Momentum() << " "
 			      << aPair->GetParton1()->GetX() << " " << G4endl;
