@@ -1,0 +1,177 @@
+
+                       geant4-08-02-ref-01
+                       ===================
+
+Some of the development/fixes included since the last reference tag are:
+
+  o Fix in QGSP_BIC_HP: activate missing HP elastic physics.
+  o Fixes in G4UrbanMscModel for NaN and unecessary call to geometry location.
+  o Fixed cases of division by 0 in CHIPS and QGSM models.
+  o Added handling of user-defined isotope abundances for elements and
+    proper cross section and abundance weighted choice of isotopes in
+    reactions.
+  o For error reporting, added model name arguments and default names to
+    constructors for sevelar hadronic processes.
+
+---------- Reference-tag 'Release Notes' -----------
+
+
+Summarised, the list of changes is the following:
+
+geometry/solids/specific                         geom-specific-V08-02-00
+------------------------
+- Do not scale reducible-polygon in G4Polyhedra::Reset() method.
+  The 'original_parameters' structure offered as input through the accessors
+  are always assumed to be already scaled by the 'cos(0.5*phiTotal/theNumSide)'
+  factor. Addresses problem report #873.
+- Fixed warning printout in G4Polycone::Reset().
+
+graphics_reps                                    greps-V08-02-00
+-------------
+- G4VisAttributes:
+  o Bug fix in SetForceLineSegmentsPerCircle(); now correctly implementing
+    the reset.
+  o Minor refinement: introduced IsForceLineSegmentsPerCircle() method.
+- G4Colour: replaced static data members by static functions that
+  create and copy out the relevant colours.
+
+materials                                        materials-V08-02-00
+---------
+- G4Material: fill 'fAtomVector' in the case, when material
+  is built from element mass fractions.
+- G4NistMaterialBuilder: added liquids O2 and N2.
+- G4NistElementBuilder: added protection Z<=101.
+
+physics_lists                                    phys-lists-V08-02-00
+-------------
+- Fix in QGSP_BIC_HP: activate missing HP elastic physics.
+
+processes/electromagnetic/standard               emstand-V08-02-02
+----------------------------------
+- Use SetEmModel(index) and added SetFluctModel() from G4VEnergyLossProcess
+  in eIonisation, hIonisation, ionIonisation, eBremstrahlung.
+- G4UrbanMscModel:
+  o Removed un-necessary Locate call to geometry navigator.
+  o Added protection against case of 'TrueStepLength' less than
+    'GeomStepLength'.
+- Fixed crash in PrintInfo() methods.
+
+processes/electromagnetic/utils                  emutils-V08-02-02
+-------------------------------
+- G4LossTableBuilder:
+  o Fill new vector for dedx (do not reuse old).
+- G4LossTableManager:
+  o Fixed problen of re-initialisation for the next run after
+    activate/desactivate energy loss process.
+- G4VEmEnergyLossProcess:
+  o added members 'theIonisationTable' and 'theSubIonisationTables' in order
+    to save separately total energy loss and energy loss due to ionisation.
+  o Added SetEmModel(index) add SetFluctModel() methods.
+  o Fixed 'subcutoff' option for Bremsstrahlung.
+
+processes/hadronic
+------------------
+- cross_sections (hadr-cross-V08-02-00)
+  o Added handling of user-defined isotope abundances for elements and
+    proper cross section and abundance weighted choice of isotopes in
+    reactions. New virtual methods for IsApplicable() and GetCrossSections()
+    added to classes G4VCrossSectionDataSet and G4CrossSectionDataStore.
+  o Added new class G4NucleonNuclearCrossSection which contains Barashenkov
+    cross sections for nucleon-nucleus scattering; modified the G4PiData and
+    G4GlauberGribovCrossSection classes.
+- management (hadr-man-V08-02-00)
+  o G4HadronicProcess:
+    + Added handling of user-defined isotopes: re-implemented methods
+      GetMeanFreePath() and ChooseAandZ() to use new methods in
+      G4CrossSectionDataStore.
+    + No longer use dispatch pointer to call data store methods.
+    + Data members currentZ, currentN and methods GetCurrentZ(),
+      GetCurrentN() removed as no longer needed.
+- models/chiral_inv_phase_space/body (hadr-chips-body-V08-02-03)
+  o Fixed cases of division by 0 in G4Quasmon and G4QNucleus.
+    and other cases of generation of NaN.
+- models/chiral_inv_phase_space/interface (hadr-chips-inter-V08-02-01)
+  o Fixed bug of generation of NaN in G4QElastic observed in complicated
+    event for the multi-projectile case.
+- models/de_excitation (hadr-deex-V08-02-00)
+  o Fission: fixed several memory leaks in G4ParaFissionModel.
+- models/management (hadr-modman-V08-02-00)
+  o For error reporting, added model name arguments and default names to
+    constructors for classes G4HadronicInteraction, G4InelasticInteraction,
+    G4VIntraNuclearTransportModel and G4VPreCompoundModel.
+- models/parton_string/hadronization (had-hadronization-V08-02-00)
+  o G4ExcitedStringDecay::EnergyAndMomentumCorrector(): fixed bug which did
+    stop correction even if not yet converged; check on convergence must
+    check that scale-1 is close to 0, and not less than 0.
+- models/parton_string/management (had-partonstring-mgt-V08-02-00)
+  o Debugged method Dump() added in G4InteractionContent to print object.
+  o Debugged output in G4VPartonStringModel checking E-p conservation of
+    string model.
+- models/parton_string/qgsm (hadr-qgsm-V08-02-01)
+  o Corrected E-p non-conservation in QGS. In 4QGSMSplitableHadron,
+    the smaller of the lightcone momenta Q+/Q- was ignored.
+  o Fixed division by 0 in G4QGSMSplitableHadron::SampleX().
+  o Added debugging output to several classes.
+- models/util (hadr-mod-util-V08-02-00)
+  o Added method to G4Parton for setting momentum using both + and -
+    momentum component
+  o G4Fragment: more info on warning output of negative excitation energy.
+- processes (hadr-proc-V08-02-00)
+  o Added process names to G4HadronElasticProcess, G4HadronCaptureProcess,
+    G4HadronFissionProcess.
+  o Cleaned up commented-out code.
+
+run                                              run-V08-02-00
+---
+- Fix to make G4RunManager::NumberOfEventToBeStored() work properly.
+  Addressing problem report #925.
+- Added protection against missing particle types before BuildPhysicsTable()
+  is invoked. Addressing problem report #923.
+
+visualization                                    vis-V08-02-01
+-------------
+- management:
+  o Added command /vis/abortReviewKeptEvents and improved guidance of
+    command /vis/reviewKeptEvents.
+  o Introduced command /vis/geometry/set/forceLineSegmentsPerCircle.
+  o Fixed bug concerning call to /vis/open in /vis/reviewKeptEvents loop.
+  o G4VSceneHandler:
+    + Introduced utility LoadAtts() for G4AttValues and G4AttDefs.
+    + Improved other utilities (changed signature of GetLineWidth()).
+  o Re-introduced /vis/scene/add/eventID into /vis/drawVolume.
+  o Reduced WARNING noise and other minor improvements.
+- modeling:
+  o Bug fix: corrected treatment of 'ForcedLineSegmentsPerCircle'
+    when clipping.
+- OpenGL:
+  o Implemented bitmap markers (for MarkerSizeType == screen).
+  o Bug fix: added missing break in X colormap lookup routine.
+  o Adapted to change of signature of GetLineWidth().
+- OpenInventor:
+  o Moved LoadAtts() to vis management.
+- RayTracer:
+  o Bug fix: use of window size hints.
+- Tree:
+  o Bug fix: format of total mass.
+
+examples                                         examples-V08-02-01
+--------
+- Updated reference outputs.
+- advanced/underground_physics (underground_physics-V08-02-00)
+  o Removed uninitialized 'UserLimitsForXenon'.
+- extended/electromagnetic/TestEm2 (testem2-V08-02-00)
+  o Uncommented hadron ionisation in Livermore builder.
+- extended/electromagnetic/TestEm7 (testem7-V08-02-00)
+  o Cleanup of macros.
+- extended/electromagnetic/TestEm9 (testem9-V08-02-00)
+  o Uncommented hadron ionisation in Livermore builder.
+- extended/electromagnetic/TestEm12 (testem12-V08-02-00)
+  o Uncommented hadron ionisation in Livermore builder.
+- extended/electromagnetic/TestEm16 (testem16-V08-02-00)
+  o Added HistoManager and HistoMessenger.
+  o Added command to modify upper step limit.
+  o Minor fix to GNUmakefile.
+
+tests                                            tests-V08-02-01
+-----
+- Updated reference outputs.
