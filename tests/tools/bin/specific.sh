@@ -173,33 +173,24 @@ if [ `uname -n | grep refsol9` ]; then
 fi
 
 if [ `uname -n | grep tersk08` ]; then
-#  export CVSROOT=/afs/cern.ch/sw/geant4/cvs
-  export G4INSTALL=/afs/slac.stanford.edu/u/ec/wilko/glast/g4test/stt/dev2/geant4
-  export G4STTDIR=/afs/cern.ch/sw/geant4/stt/$REF/testtools/geant4/tests/tools
+  export CVSROOT=:ext:stesting@Geant4.cvs.cern.ch:/cvs/Geant4
+  export CVS_RSH=ssh
+  export G4INSTALL=/afs/slac.stanford.edu/u/sf/stesting/stt/$REF/src/geant4
+  export G4STTDIR=/afs/slac.stanford.edu/u/sf/stesting/stt/$REF/testtools/geant4/tests/tools
     export G4SYSTEM=SUN-CC
     export DEBOPT=${DEBOPT}_59_54
 
     unset G4USE_OSPACE
 
-#    export PATH=/afs/cern.ch/project/sun/solaris/opt/SUNWspro8/bin:${PATH}
-#   export PATH=/usr/local/gcc-alt-3.2.3/bin:${PATH}
-#    export PATH=`echo $PATH | sed s/SUNWspro50/SUNWspro/`
-#   export LD_LIBRARY_PATH=/afs/cern.ch/project/sun/solaris/opt/SUNWspro8/lib:${LD_LIBRARY_PATH}
-#    export LD_LIBRARY_PATH=/usr/local/gcc-alt-3.2.3/lib:${LD_LIBRARY_PATH}
     # No Persistency tonight ...
     unset G4USE_HEPODBMS
 #    export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/SUN-CC/$CLHEP_VERSION
 
-# Test new (1.9.2.2) CLHEP
-    export CLHEP_BASE_DIR=/usr/work/wilko/g4test/clhep
-#    export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/new/SUN-CC
-#    export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/new/sunos58_CC54
-
-#    export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/1.9.1.2/sunos58_CC54
-
-  export G4WORKDIR=/usr/work/wilko/g4test/stt/$REF/$G4SYSTEM/$DEBOPT
+  export G4WORKDIR=/afs/slac.stanford.edu/u/sf/stesting/stt/$REF/$G4SYSTEM/$DEBOPT
   export G4LIB=$G4WORKDIR/lib
-
+# Take CLHEP with links to lcg area
+  export CLHEP_BASE_DIR=$G4WORKDIR/clhep
+  
   # G4 build flags :
   #######export G4UI_BUILD_XM_SESSION=1
   #######export G4VIS_BUILD_OPENGLXM_DRIVER=1
@@ -209,6 +200,13 @@ if [ `uname -n | grep tersk08` ]; then
   export OGLFLAGS="-I$OGLHOME/include"
   export OGLLIBS="-L$OGLHOME/lib -lMesaGLU -lMesaGL"
   #######export G4VIS_BUILD_OIX_DRIVER=1
+  
+  export G4LEDATA=$G4WORKDIR/data/G4EMLOW
+  export NeutronHPCrossSections=$G4WORKDIR/data/G4NDL
+  export G4LEVELGAMMADATA=$G4WORKDIR/data/PhotonEvaporation
+  export G4ELASTICDATA=$G4WORKDIR/data/G4ELASTIC
+  export G4RADIOACTIVEDATA=$G4WORKDIR/data/RadioactiveDecay
+  
 fi
 
 
@@ -680,6 +678,33 @@ if [ $UNAMEN = lxplus072.cern.ch ]; then
 #  export G4VIS_BUILD_OIX_DRIVER=1
 fi
 
+if [ $UNAMEN = lxplus071.cern.ch ]; then
+  export DEBOPT=${DEBOPT}_slc4_i32
+  export CVSROOT=/afs/cern.ch/sw/geant4/cvs
+  export G4SYSTEM=Linux-g++
+  export G4INSTALL=/afs/cern.ch/sw/geant4/stt/$REF/src/geant4
+  export G4STTDIR=/afs/cern.ch/sw/geant4/stt/$REF/testtools/geant4/tests/tools
+  export G4WORKDIR=/afs/cern.ch/sw/geant4/stt/$REF/Linux-g++/$DEBOPT
+  export G4LIB=$G4WORKDIR/lib
+
+# Take CLHEP with links to lcg area
+  export CLHEP_BASE_DIR=$G4WORKDIR/clhep
+
+  # Shareable library
+  #####################
+#  export G4LIB_BUILD_SHARED=1
+  export LD_LIBRARY_PATH=$G4LIB/$G4SYSTEM:${CLHEP_BASE_DIR}/lib:${LD_LIBRARY_PATH}
+#  export LD_LIBRARY_PATH=$G4LIB/$G4SYSTEM:${LD_LIBRARY_PATH}
+
+  # G4 build flags :
+  ######export G4UI_BUILD_XM_SESSION=1
+#  export G4VIS_BUILD_OPENGLXM_DRIVER=1
+  export G4VIS_BUILD_OPENGLX_DRIVER=1
+  export G4VIS_USE_OPENGLX=1
+#  export G4VIS_BUILD_OIX_DRIVER=1
+fi
+
+
 if [ $UNAMEN = lxcert-amd64 ]; then
   export DEBOPT=${DEBOPT}_slc4_amd64
   export CVSROOT=/afs/cern.ch/sw/geant4/cvs
@@ -709,6 +734,34 @@ if [ $UNAMEN = lxcert-amd64 ]; then
 fi
 
 if [ $UNAMEN = lxplus098.cern.ch ]; then
+  export DEBOPT=${DEBOPT}_slc4_amd64
+  export CVSROOT=/afs/cern.ch/sw/geant4/cvs
+  export G4SYSTEM=Linux-g++
+  export G4INSTALL=/afs/cern.ch/sw/geant4/stt/$REF/src/geant4
+  export G4STTDIR=/afs/cern.ch/sw/geant4/stt/$REF/testtools/geant4/tests/tools
+  export G4WORKDIR=/afs/cern.ch/sw/geant4/stt/$REF/Linux-g++/$DEBOPT
+  export G4LIB=$G4WORKDIR/lib
+
+# Take CLHEP with links to lcg area
+  export CLHEP_BASE_DIR=$G4WORKDIR/clhep
+  
+  export EXTRALIBS=" -L/usr/X11R6/lib64/ "
+
+  # Shareable library
+  #####################
+#  export G4LIB_BUILD_SHARED=1
+  export LD_LIBRARY_PATH=$G4LIB/$G4SYSTEM:${CLHEP_BASE_DIR}/lib:${LD_LIBRARY_PATH}
+#  export LD_LIBRARY_PATH=$G4LIB/$G4SYSTEM:${LD_LIBRARY_PATH}
+
+  # G4 build flags :
+  ######export G4UI_BUILD_XM_SESSION=1
+#  export G4VIS_BUILD_OPENGLXM_DRIVER=1
+  export G4VIS_BUILD_OPENGLX_DRIVER=1
+  export G4VIS_USE_OPENGLX=1
+#  export G4VIS_BUILD_OIX_DRIVER=1
+fi
+
+if [ $UNAMEN = lxplus099.cern.ch ]; then
   export DEBOPT=${DEBOPT}_slc4_amd64
   export CVSROOT=/afs/cern.ch/sw/geant4/cvs
   export G4SYSTEM=Linux-g++
