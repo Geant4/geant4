@@ -11,7 +11,9 @@
   The purpose of this test is to test hadronic generators. Test is 
 organised as a set of subdirectories, each corresponded to one energy 
 of the incident beam for concrete target. The subdirectory includes data
-itself, data analyser, macro, kumacs, and latex files.
+itself, data analyser, macro, kumacs, and latex files. Subdirectories 
+with the data and kumac files are stored in a separate cvs module:
+verification/hadronic/test30
 
 
 
