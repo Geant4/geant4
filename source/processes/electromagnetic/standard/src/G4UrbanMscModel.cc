@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel.cc,v 1.29 2007-01-23 16:05:08 vnivanch Exp $
+// $Id: G4UrbanMscModel.cc,v 1.30 2007-01-26 10:10:11 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -116,6 +116,7 @@
 // 04-12-06 fix in ComputeTruePathLengthLimit (L.Urban)
 // 17-01-07 remove LocatePoint from GeomLimit method (V.Ivanchenko)
 // 19-01-07 fix of true < geom problem (L.Urban)
+// 25-01-07 add protections from NaN vaues and for zero geometry step (V.Ivanchenko)
 //
 
 // Class Description:
@@ -727,6 +728,9 @@ G4double G4UrbanMscModel::ComputeTrueStepLength(G4double geomStepLength)
   // step defined other than transportation 
   if(geomStepLength == geomLength && tPathLength <= currentRange)
     return tPathLength;
+
+  // no computations for zero step length
+  if(geomStepLength <= tlimitmin) return geomStepLength;
 
   // recalculation
   G4double trueLength = geomStepLength;
