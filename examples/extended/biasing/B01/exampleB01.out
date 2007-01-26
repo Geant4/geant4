@@ -30,34 +30,34 @@ Going to assign importance: 131072, to volume: cell_18
 The initial Vectors: 
 GPIL Vector: 
    Decay
-   LCapture
-   LFission
+   HadronCapture
+   HadronFission
    inelastic
-   LElastic
+   HadronElastic
    Transportation
 DoIt Vector: 
    Transportation
-   LElastic
+   HadronElastic
    inelastic
-   LFission
-   LCapture
+   HadronFission
+   HadronCapture
    Decay
 The final Vectors: 
 GPIL Vector: 
    Decay
-   LCapture
-   LFission
+   HadronCapture
+   HadronFission
    inelastic
-   LElastic
+   HadronElastic
    MScoreProcess
    Transportation
 DoIt Vector: 
    Transportation
    MScoreProcess
-   LElastic
+   HadronElastic
    inelastic
-   LFission
-   LCapture
+   HadronFission
+   HadronCapture
    Decay
 ================================================
 === G4ProcessPlacer::AddProcessAsSecondDoIt: for: neutron
@@ -65,27 +65,27 @@ DoIt Vector:
 The initial Vectors: 
 GPIL Vector: 
    Decay
-   LCapture
-   LFission
+   HadronCapture
+   HadronFission
    inelastic
-   LElastic
+   HadronElastic
    MScoreProcess
    Transportation
 DoIt Vector: 
    Transportation
    MScoreProcess
-   LElastic
+   HadronElastic
    inelastic
-   LFission
-   LCapture
+   HadronFission
+   HadronCapture
    Decay
 The final Vectors: 
 GPIL Vector: 
    Decay
-   LCapture
-   LFission
+   HadronCapture
+   HadronFission
    inelastic
-   LElastic
+   HadronElastic
    MScoreProcess
    MassImportanceProcess
    Transportation
@@ -93,10 +93,10 @@ DoIt Vector:
    Transportation
    MassImportanceProcess
    MScoreProcess
-   LElastic
+   HadronElastic
    inelastic
-   LFission
-   LCapture
+   HadronFission
+   HadronCapture
    Decay
 ================================================
 
@@ -120,25 +120,27 @@ msc:  Model variant of multiple scattering for e-
 eIoni:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+      Delta cross sections and sampling from MollerBhabha model
+      Good description from 1 KeV to 100 GeV.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 eBrem:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Total cross sections from a parametrisation based on the EEDL data library. 
+      Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
 
 eIoni:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+      Delta cross sections and sampling from MollerBhabha model
+      Good description from 1 KeV to 100 GeV.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Total cross sections from a parametrisation based on the EEDL data library. 
+      Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
 
 annihil:       Sampling according eplus2gg model
@@ -152,8 +154,9 @@ msc:  Model variant of multiple scattering for proton
 hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Scaling relation is used to proton dE/dx and range
-      Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for protons below.
+      Scaling relation is used from proton dE/dx and range.
+      Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
+      Parametrisation from Bragg for protons below.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 msc:  Model variant of multiple scattering for GenericIon
@@ -162,8 +165,9 @@ msc:  Model variant of multiple scattering for GenericIon
 hIoni:   tables are built for  anti_proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Scaling relation is used to proton dE/dx and range
-      Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for protons below.
+      Scaling relation is used from proton dE/dx and range.
+      Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
+      Parametrisation from Bragg for protons below.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 msc:  Model variant of multiple scattering for mu+
@@ -207,8 +211,9 @@ muPairProd:   tables are built for  mu-
 hIoni:   tables are built for  pi+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Scaling relation is used to proton dE/dx and range
-      Bether-Bloch model for Escaled > 0.297504 MeV, ICRU49 parametrisation for protons below.
+      Scaling relation is used from proton dE/dx and range.
+      Delta cross sections and sampling from BetheBloch model for scaled energy > 0.297504 MeV
+      Parametrisation from Bragg for protons below.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 msc:  Model variant of multiple scattering for pi-
@@ -218,39 +223,40 @@ msc:  Model variant of multiple scattering for pi-
 hIoni:   tables are built for  pi-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Scaling relation is used to proton dE/dx and range
-      Bether-Bloch model for Escaled > 0.297504 MeV, ICRU49 parametrisation for protons below.
+      Scaling relation is used from proton dE/dx and range.
+      Delta cross sections and sampling from BetheBloch model for scaled energy > 0.297504 MeV
+      Parametrisation from Bragg for protons below.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 Volume name               |   Importance|  Tr.Entering|   Population|   Collisions|     Coll*WGT|    NumWGTedE|   FluxWGTedE|    Av.Tr.WGT|
-cell_01_rep:0............ |           1 |         106 |         127 |         165 |         165 |   4.7833307 |   8.4257685 |           1 |
-cell_02_rep:0............ |           2 |          79 |         170 |         150 |          75 |   8.3770212 |   8.9611837 |           1 |
-cell_03_rep:0............ |           4 |         120 |         257 |         292 |          73 | 0.030422242 |   8.1225467 |           1 |
-cell_04_rep:0............ |           8 |         118 |         267 |         325 |      40.625 |   6.2788095 |   7.9670281 |           1 |
-cell_05_rep:0............ |          16 |         112 |         236 |         298 |      18.625 | 0.066754216 |   7.5980323 |           1 |
-cell_06_rep:0............ |          32 |         124 |         264 |         342 |     10.6875 |   5.2637216 |   7.6806894 |           1 |
-cell_07_rep:0............ |          64 |         161 |         322 |         438 |     6.84375 |   4.9595564 |   7.2063026 |           1 |
-cell_08_rep:0............ |         128 |         205 |         412 |         532 |     4.15625 |   4.0919226 |   6.9949884 |           1 |
-cell_09_rep:0............ |         256 |         236 |         482 |         650 |   2.5390625 |  0.11583494 |   6.6067148 |           1 |
-cell_10_rep:0............ |         512 |         267 |         549 |         748 |   1.4609375 |   4.0989275 |   6.2777243 |           1 |
-cell_11_rep:0............ |        1024 |         325 |         648 |         993 |  0.96972656 |  0.64376933 |   5.8542585 |           1 |
-cell_12_rep:0............ |        2048 |         374 |         733 |        1233 |  0.60205078 |  0.13579459 |   5.5076248 |           1 |
-cell_13_rep:0............ |        4096 |         412 |         832 |        1361 |  0.33227539 |   3.5686894 |   5.4720131 |           1 |
-cell_14_rep:0............ |        8192 |         438 |         897 |        1402 |  0.17114258 |  0.22945117 |    5.496985 |           1 |
-cell_15_rep:0............ |       16384 |         476 |         990 |        1656 |  0.10107422 |  0.80759575 |   5.4423419 |           1 |
-cell_16_rep:0............ |       32768 |         539 |        1059 |        1738 | 0.053039551 |   3.8380076 |   5.1041349 |           1 |
-cell_17_rep:0............ |       65536 |         579 |        1201 |        1995 | 0.030441284 |   0.1904835 |   4.9379711 |           1 |
-cell_18_rep:0............ |      131072 |         501 |        1179 |        2198 | 0.016769409 |  0.54009342 |   4.7248222 |           1 |
-rest_rep:0............... |      131072 |         548 |         548 |           0 |           0 |           0 |           0 |           0 |
-shieldWorld_rep:0........ |           1 |          11 |         110 |           0 |           0 |          10 |          10 |           1 |
+cell_01_rep:0............ |           1 |         122 |         148 |         128 |         128 |   8.4298588 |   9.1835452 |           1 |
+cell_02_rep:0............ |           2 |          97 |         197 |         172 |          86 |   7.0418446 |   8.9110285 |           1 |
+cell_03_rep:0............ |           4 |         121 |         263 |         258 |        64.5 |   7.8317105 |    8.664261 |           1 |
+cell_04_rep:0............ |           8 |         138 |         296 |         337 |      42.125 |   6.6192672 |   7.9994067 |           1 |
+cell_05_rep:0............ |          16 |         173 |         356 |         403 |     25.1875 |   6.3104194 |   7.9527484 |           1 |
+cell_06_rep:0............ |          32 |         196 |         429 |         544 |          17 |  0.25886505 |   7.2450907 |           1 |
+cell_07_rep:0............ |          64 |         218 |         476 |         612 |      9.5625 | 0.056842163 |   7.2055955 |           1 |
+cell_08_rep:0............ |         128 |         238 |         494 |         726 |    5.671875 |   4.9833621 |   6.6258781 |           1 |
+cell_09_rep:0............ |         256 |         256 |         505 |         735 |   2.8710938 |   4.7325415 |   6.1713038 |           1 |
+cell_10_rep:0............ |         512 |         269 |         546 |         774 |   1.5117188 |   4.4247888 |   6.1678346 |           1 |
+cell_11_rep:0............ |        1024 |         296 |         619 |         951 |  0.92871094 | 0.042821529 |   5.8749581 |           1 |
+cell_12_rep:0............ |        2048 |         335 |         678 |        1056 |    0.515625 |   3.6987525 |   5.6850065 |           1 |
+cell_13_rep:0............ |        4096 |         402 |         786 |        1297 |  0.31665039 |   3.4877456 |   5.3194559 |           1 |
+cell_14_rep:0............ |        8192 |         437 |         881 |        1536 |      0.1875 |   3.4463925 |   5.0888031 |           1 |
+cell_15_rep:0............ |       16384 |         471 |         934 |        1738 |   0.1060791 |   2.8690944 |    4.846114 |           1 |
+cell_16_rep:0............ |       32768 |         515 |        1040 |        1944 | 0.059326172 |  0.49105412 |   4.6844231 |           1 |
+cell_17_rep:0............ |       65536 |         518 |        1044 |        1949 |  0.02973938 |  0.37676608 |   4.3986546 |           1 |
+cell_18_rep:0............ |      131072 |         468 |        1117 |        2237 | 0.017066956 |   2.9731744 |   4.4012673 |           1 |
+rest_rep:0............... |      131072 |         502 |         502 |           0 |           0 |           0 |           0 |           0 |
+shieldWorld_rep:0........ |           1 |          14 |         113 |           0 |           0 |          10 |          10 |           1 |
 === G4ProcessPlacer::RemoveProcess: for: neutron
   ProcessName: MassImportanceProcess, will be removed!
   The initial Vectors: 
 GPIL Vector: 
    Decay
-   LCapture
-   LFission
+   HadronCapture
+   HadronFission
    inelastic
-   LElastic
+   HadronElastic
    MScoreProcess
    MassImportanceProcess
    Transportation
@@ -258,27 +264,27 @@ DoIt Vector:
    Transportation
    MassImportanceProcess
    MScoreProcess
-   LElastic
+   HadronElastic
    inelastic
-   LFission
-   LCapture
+   HadronFission
+   HadronCapture
    Decay
   The final Vectors: 
 GPIL Vector: 
    Decay
-   LCapture
-   LFission
+   HadronCapture
+   HadronFission
    inelastic
-   LElastic
+   HadronElastic
    MScoreProcess
    Transportation
 DoIt Vector: 
    Transportation
    MScoreProcess
-   LElastic
+   HadronElastic
    inelastic
-   LFission
-   LCapture
+   HadronFission
+   HadronCapture
    Decay
 ================================================
 === G4ProcessPlacer::RemoveProcess: for: neutron
@@ -286,33 +292,33 @@ DoIt Vector:
   The initial Vectors: 
 GPIL Vector: 
    Decay
-   LCapture
-   LFission
+   HadronCapture
+   HadronFission
    inelastic
-   LElastic
+   HadronElastic
    MScoreProcess
    Transportation
 DoIt Vector: 
    Transportation
    MScoreProcess
-   LElastic
+   HadronElastic
    inelastic
-   LFission
-   LCapture
+   HadronFission
+   HadronCapture
    Decay
   The final Vectors: 
 GPIL Vector: 
    Decay
-   LCapture
-   LFission
+   HadronCapture
+   HadronFission
    inelastic
-   LElastic
+   HadronElastic
    Transportation
 DoIt Vector: 
    Transportation
-   LElastic
+   HadronElastic
    inelastic
-   LFission
-   LCapture
+   HadronFission
+   HadronCapture
    Decay
 ================================================

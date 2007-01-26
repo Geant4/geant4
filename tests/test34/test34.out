@@ -59,25 +59,27 @@ msc:  Model variant of multiple scattering for e-
 eIoni:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+      Delta cross sections and sampling from MollerBhabha model
+      Good description from 1 KeV to 100 GeV.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 eBrem:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Total cross sections from a parametrisation based on the EEDL data library. 
+      Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
 
 eIoni:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+      Delta cross sections and sampling from MollerBhabha model
+      Good description from 1 KeV to 100 GeV.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Total cross sections from a parametrisation based on the EEDL data library. 
+      Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
 
 annihil:       Sampling according eplus2gg model
@@ -87,8 +89,9 @@ annihil:       Sampling according eplus2gg model
 hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Scaling relation is used to proton dE/dx and range
-      Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for protons below.
+      Scaling relation is used from proton dE/dx and range.
+      Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
+      Parametrisation from Bragg for protons below.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 msc:  Model variant of multiple scattering for proton
@@ -101,8 +104,9 @@ msc:  Model variant of multiple scattering for GenericIon
 hIoni:   tables are built for  anti_proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Scaling relation is used to proton dE/dx and range
-      Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for protons below.
+      Scaling relation is used from proton dE/dx and range.
+      Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
+      Parametrisation from Bragg for protons below.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 muIoni:   tables are built for  mu+
@@ -146,15 +150,17 @@ muPairProd:   tables are built for  mu-
 hIoni:   tables are built for  pi+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Scaling relation is used to proton dE/dx and range
-      Bether-Bloch model for Escaled > 0.297504 MeV, ICRU49 parametrisation for protons below.
+      Scaling relation is used from proton dE/dx and range.
+      Delta cross sections and sampling from BetheBloch model for scaled energy > 0.297504 MeV
+      Parametrisation from Bragg for protons below.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 hIoni:   tables are built for  pi-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Scaling relation is used to proton dE/dx and range
-      Bether-Bloch model for Escaled > 0.297504 MeV, ICRU49 parametrisation for protons below.
+      Scaling relation is used from proton dE/dx and range.
+      Delta cross sections and sampling from BetheBloch model for scaled energy > 0.297504 MeV
+      Parametrisation from Bragg for protons below.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 msc:  Model variant of multiple scattering for pi-
@@ -193,9 +199,9 @@ G4GlobalFastSimulationManager::GetFlavoredWorldForThis(...): DEPRECATING, will b
 G4GlobalFastSimulationManager::GetFlavoredWorldForThis(...): DEPRECATING, will be dropped @ next major release
 
 ******************************************
-Internal Real Elapsed Time is: 0.1
-Internal System Elapsed Time: 0.01
-Internal GetUserElapsed Time: 0.06
+Internal Real Elapsed Time is: 0.23
+Internal System Elapsed Time: 0.02
+Internal GetUserElapsed Time: 0.18
 ******************************************
  ------ Tst34EventAction::End of event nr. 0  -----
   5335 hits are stored in Tst34HitsCollection 
@@ -208,9 +214,9 @@ G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next ma
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.08
+Internal Real Elapsed Time is: 0.19
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.08
+Internal GetUserElapsed Time: 0.19
 ******************************************
  ------ Tst34EventAction::End of event nr. 1  -----
   5331 hits are stored in Tst34HitsCollection 
@@ -221,9 +227,9 @@ Internal GetUserElapsed Time: 0.08
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.07
+Internal Real Elapsed Time is: 0.18
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.07
+Internal GetUserElapsed Time: 0.18
 ******************************************
  ------ Tst34EventAction::End of event nr. 2  -----
   5322 hits are stored in Tst34HitsCollection 
@@ -234,9 +240,9 @@ Internal GetUserElapsed Time: 0.07
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.07
+Internal Real Elapsed Time is: 0.18
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.07
+Internal GetUserElapsed Time: 0.18
 ******************************************
  ------ Tst34EventAction::End of event nr. 3  -----
   5325 hits are stored in Tst34HitsCollection 
@@ -247,9 +253,9 @@ Internal GetUserElapsed Time: 0.07
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.07
+Internal Real Elapsed Time is: 0.18
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.07
+Internal GetUserElapsed Time: 0.18
 ******************************************
  ------ Tst34EventAction::End of event nr. 4  -----
   5311 hits are stored in Tst34HitsCollection 
@@ -260,69 +266,69 @@ Internal GetUserElapsed Time: 0.07
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.07
+Internal Real Elapsed Time is: 0.18
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.07
+Internal GetUserElapsed Time: 0.18
 ******************************************
  ------ Tst34EventAction::End of event nr. 5  -----
-  5326 hits are stored in Tst34HitsCollection 
- #### Tst34EventAction::Test: Total energy deposited in the calorimeter: 19.9757 (GeV)
+  5322 hits are stored in Tst34HitsCollection 
+ #### Tst34EventAction::Test: Total energy deposited in the calorimeter: 19.9571 (GeV)
 ::Initializing the sensitive detector
  ------ Start Tst34EventAction ----- 
  Start generating event Nr 6
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.07
+Internal Real Elapsed Time is: 0.18
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.07
+Internal GetUserElapsed Time: 0.18
 ******************************************
  ------ Tst34EventAction::End of event nr. 6  -----
-  5296 hits are stored in Tst34HitsCollection 
- #### Tst34EventAction::Test: Total energy deposited in the calorimeter: 19.9205 (GeV)
+  5319 hits are stored in Tst34HitsCollection 
+ #### Tst34EventAction::Test: Total energy deposited in the calorimeter: 19.9666 (GeV)
 ::Initializing the sensitive detector
  ------ Start Tst34EventAction ----- 
  Start generating event Nr 7
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.07
-Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.07
+Internal Real Elapsed Time is: 0.18
+Internal System Elapsed Time: 0.01
+Internal GetUserElapsed Time: 0.17
 ******************************************
  ------ Tst34EventAction::End of event nr. 7  -----
-  5317 hits are stored in Tst34HitsCollection 
- #### Tst34EventAction::Test: Total energy deposited in the calorimeter: 19.947 (GeV)
+  5340 hits are stored in Tst34HitsCollection 
+ #### Tst34EventAction::Test: Total energy deposited in the calorimeter: 19.9674 (GeV)
 ::Initializing the sensitive detector
  ------ Start Tst34EventAction ----- 
  Start generating event Nr 8
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.07
+Internal Real Elapsed Time is: 0.18
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.07
+Internal GetUserElapsed Time: 0.18
 ******************************************
  ------ Tst34EventAction::End of event nr. 8  -----
-  5313 hits are stored in Tst34HitsCollection 
- #### Tst34EventAction::Test: Total energy deposited in the calorimeter: 19.9421 (GeV)
+  5318 hits are stored in Tst34HitsCollection 
+ #### Tst34EventAction::Test: Total energy deposited in the calorimeter: 19.951 (GeV)
 ::Initializing the sensitive detector
  ------ Start Tst34EventAction ----- 
  Start generating event Nr 9
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.07
+Internal Real Elapsed Time is: 0.18
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.07
+Internal GetUserElapsed Time: 0.18
 ******************************************
  ------ Tst34EventAction::End of event nr. 9  -----
-  5313 hits are stored in Tst34HitsCollection 
+  5318 hits are stored in Tst34HitsCollection 
  #### Tst34EventAction::Test: Total energy deposited in the calorimeter: 19.9789 (GeV)
 number of events = 10
 
 ******************************************
-Total Real Elapsed Time is: 3.82
-Total System Elapsed Time: 0.05
-Total GetUserElapsed Time: 3.49
+Total Real Elapsed Time is: 8.9
+Total System Elapsed Time: 0.15
+Total GetUserElapsed Time: 8.29
 ******************************************
