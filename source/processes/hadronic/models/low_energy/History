@@ -14,7 +14,9 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
-  G4LElastic - add protection against sqrt of negative value (V.Ivanchenko)
+29 January 2007 - V. Ivanchenko (hadr-lep-V08-02-00)
+----------------------------------------------------
+  G4LElastic.cc - add protection against sqrt of negative value
 
 19 June 2006 - Dennis Wright (hadr-lep-V08-00-02)
 -------------------------------------------------
