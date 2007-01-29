@@ -102,7 +102,7 @@ G4double G4UElasticCrossSection::GetIsoZACrossSection(const G4DynamicParticle* d
 {
   G4double cross = 0.0;
   if(idx == 1) {
-    cross = fGlauber->GetCrossSection(dp,A,Z);
+    cross = fGlauber->GetCrossSection(dp,Z,A);
     cross = fGlauber->GetElasticGlauberGribovXsc();
   } 
   else if(idx == 2) cross = fUPi->GetElasticCrossSection(dp,Z,A);
