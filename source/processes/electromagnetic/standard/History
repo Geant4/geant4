@@ -1,4 +1,4 @@
-$Id: History,v 1.273 2007-01-23 16:05:07 vnivanch Exp $
+$Id: History,v 1.274 2007-01-29 09:37:45 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+29 January 07: V.Ivanchenko (emstand-V08-02-03)
 - G4UrbanMscModel - V.Ivanchenko add protections agains NaN values
+                    in two places: protection of lateral displacement,
+                    sampling of theta when tau = 0;
+                    add protection inside ComputeTrueStepLength for
+                    the case very small (zero) geometry length 
+                    true length set equal to geometry length  
 
 19 January 07: V.Ivanchenko (emstand-V08-02-02)
 - G4UrbanMscModel - L.Urban add protection inside lateral displacement
