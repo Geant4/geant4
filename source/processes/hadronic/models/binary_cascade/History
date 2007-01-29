@@ -1,4 +1,6 @@
-
+29-jan-2007 Gunter Folger		tag had-binary-V08-02-00
+----------------------------------------------------------------
+-  G4BinaryCascade::Capture(): add protection agaist divide by 0
 
 13-june-03: Gunter 
    Tag: binary_cascade_ion_baseline_01
