@@ -139,7 +139,7 @@ G4double G4UInelasticCrossSection::GetIsoZACrossSection(const G4DynamicParticle*
 {
   G4double cross = 0.0;
   if(idx == 1) {
-    cross = fGlauber->GetCrossSection(dp,A,Z);
+    cross = fGlauber->GetCrossSection(dp,Z,A);
     cross = fGlauber->GetInelasticGlauberGribovXsc();
   }
   else if(idx == 2) cross = fGhadProton->GetIsoZACrossSection(dp,Z,A,temp);
