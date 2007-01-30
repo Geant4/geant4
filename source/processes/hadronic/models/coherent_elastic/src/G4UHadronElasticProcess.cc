@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UHadronElasticProcess.cc,v 1.30 2007-01-30 10:23:26 vnivanch Exp $
+// $Id: G4UHadronElasticProcess.cc,v 1.31 2007-01-30 10:41:52 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Geant4 Hadron Elastic Scattering Process -- header file
@@ -276,7 +276,6 @@ G4VParticleChange* G4UHadronElasticProcess::PostStepDoIt(
 	y -= ab[j];
       } while (y > 0.0 && j < ni);
     }
-    G4cout << " j= " << j << G4endl;
     A = G4double((*isv)[j]->GetN());
   } 
 
