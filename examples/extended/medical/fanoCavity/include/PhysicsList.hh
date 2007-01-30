@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.hh,v 1.1 2007-01-19 17:20:26 maire Exp $
+// $Id: PhysicsList.hh,v 1.2 2007-01-30 16:02:10 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -38,6 +38,7 @@
 #include "G4VUserPhysicsList.hh"
 #include "globals.hh"
 
+class DetectorConstruction;
 class MyKleinNishinaCompton;
 class PhysicsListMessenger;
 
@@ -46,7 +47,7 @@ class PhysicsListMessenger;
 class PhysicsList: public G4VUserPhysicsList
 {
   public:
-    PhysicsList();
+    PhysicsList(DetectorConstruction*);
    ~PhysicsList();
 
     // Construct particle and physics
@@ -63,6 +64,7 @@ class PhysicsList: public G4VUserPhysicsList
     void RegisterBrem (G4bool);
     
   private:
+    DetectorConstruction*  detector;
     MyKleinNishinaCompton* comptonModel;
     G4bool                 registerBrem;
     PhysicsListMessenger*  pMessenger;    

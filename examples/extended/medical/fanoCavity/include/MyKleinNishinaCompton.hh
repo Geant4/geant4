@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: MyKleinNishinaCompton.hh,v 1.1 2007-01-19 17:20:26 maire Exp $
+// $Id: MyKleinNishinaCompton.hh,v 1.2 2007-01-30 16:02:10 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -34,6 +34,7 @@
 
 #include "G4KleinNishinaCompton.hh"
 
+class DetectorConstruction;
 class G4ParticleChangeForGamma;
 
 class MyKleinNishinaCompton : public G4KleinNishinaCompton
@@ -41,16 +42,16 @@ class MyKleinNishinaCompton : public G4KleinNishinaCompton
 
 public:
 
-  MyKleinNishinaCompton(const G4ParticleDefinition* p = 0, 
+  MyKleinNishinaCompton(DetectorConstruction*,
+                        const G4ParticleDefinition* p = 0, 
 			const G4String& nam = "myKlein-Nishina");
 
   virtual ~MyKleinNishinaCompton();
-
-  virtual G4double ComputeCrossSectionPerAtom(
+				      
+  virtual G4double CrossSectionPerVolume(
+                                const G4Material*,
                                 const G4ParticleDefinition*,
                                       G4double kinEnergy, 
-                                      G4double Z, 
-                                      G4double A, 
                                       G4double cut,
                                       G4double emax);
 
@@ -64,7 +65,8 @@ public:
 
 protected:
 
-  G4double CrossSectionFactor;
+  DetectorConstruction* detector;
+  G4double              CrossSectionFactor;
 
 };
 

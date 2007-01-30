@@ -1,4 +1,4 @@
-$Id: README,v 1.5 2007-01-24 16:23:09 maire Exp $
+$Id: README,v 1.6 2007-01-30 16:02:10 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -90,20 +90,23 @@ $Id: README,v 1.5 2007-01-24 16:23:09 maire Exp $
     StackinAction). This feature can be switched off by an UI command (see
     StackingMessenger).
     
-    The simplest way to study the effect of e- tracking on dose deposition is
-    to use the command /testem/stepMax.
+    The simplest way to study the effect of e- tracking parameters on dose 
+    deposition is to use the command /testem/stepMax.
     	 			 	
  4- PHYSICS
  
-    The physics list contains the standard electromagnetic processes, with some
-    modifications.
+    The physics list contains the standard electromagnetic processes, with few 
+    modifications listed here.
     
     - Compton scattering : as explained above, the final state is modified in
     MyKleinNishinaCompton class.
     
+    The Compton cross section is set to zero in cavity, to force the charged 
+    particle fluence conservation. 
+    
     In order to make the program more efficient, one can increase the Compton
-    cross section via the function SetCSFactor(factor) and its associated UI
-    command. Default is factor=1000.
+    cross section in wall via the function SetCSFactor(factor) and its 
+    associated UI command. Default is factor=1000.
     
     - Bremsstrahlung : Fano conditions imply no energy transfer via
     bremsstrahlung radiation. Therefore this process is not registered in the

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: fanoCavity.cc,v 1.2 2007-01-23 13:34:19 maire Exp $
+// $Id: fanoCavity.cc,v 1.3 2007-01-30 16:02:10 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -69,7 +69,7 @@ int main(int argc,char** argv) {
    PhysicsList* phys;
    PrimaryGeneratorAction* kin;
   runManager->SetUserInitialization(det  = new DetectorConstruction);
-  runManager->SetUserInitialization(phys = new PhysicsList);
+  runManager->SetUserInitialization(phys = new PhysicsList(det));
   runManager->SetUserAction(kin = new PrimaryGeneratorAction(det));
   
 #ifdef G4VIS_USE

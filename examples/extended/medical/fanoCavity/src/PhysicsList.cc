@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.cc,v 1.2 2007-01-24 16:23:09 maire Exp $
+// $Id: PhysicsList.cc,v 1.3 2007-01-30 16:02:10 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -33,6 +33,7 @@
 
 #include "PhysicsList.hh"
 #include "PhysicsListMessenger.hh"
+#include "DetectorConstruction.hh"
 
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTypes.hh"
@@ -43,8 +44,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PhysicsList::PhysicsList()
-: G4VUserPhysicsList()
+PhysicsList::PhysicsList(DetectorConstruction* det)
+: G4VUserPhysicsList(), detector(det)
 {
   defaultCutValue = 1.*km;
   registerBrem = false;
@@ -112,7 +113,7 @@ void PhysicsList::ConstructEM()
     if (particleName == "gamma") {
     
       G4ComptonScattering* compton = new G4ComptonScattering();
-      compton->SetModel(comptonModel = new MyKleinNishinaCompton);
+      compton->SetModel(comptonModel = new MyKleinNishinaCompton(detector));
       comptonModel->SetCSFactor(1000.); 
       pmanager->AddDiscreteProcess(compton);
                 

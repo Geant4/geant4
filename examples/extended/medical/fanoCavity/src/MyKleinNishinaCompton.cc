@@ -23,13 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: MyKleinNishinaCompton.cc,v 1.1 2007-01-19 17:20:27 maire Exp $
+// $Id: MyKleinNishinaCompton.cc,v 1.2 2007-01-30 16:02:10 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "MyKleinNishinaCompton.hh"
+#include "DetectorConstruction.hh"
+
 #include "G4Electron.hh"
 #include "G4Gamma.hh"
 #include "Randomize.hh"
@@ -40,9 +42,10 @@
 
 using namespace std;
 
-MyKleinNishinaCompton::MyKleinNishinaCompton(const G4ParticleDefinition*,
+MyKleinNishinaCompton::MyKleinNishinaCompton(DetectorConstruction* det,
+                                             const G4ParticleDefinition*,
                                              const G4String& nam)
-  : G4KleinNishinaCompton(0,nam)
+  :G4KleinNishinaCompton(0,nam), detector(det)
 {
   CrossSectionFactor = 1.; 
 }
@@ -54,18 +57,20 @@ MyKleinNishinaCompton::~MyKleinNishinaCompton()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double MyKleinNishinaCompton::ComputeCrossSectionPerAtom(
-                                       const G4ParticleDefinition*,
+G4double MyKleinNishinaCompton::CrossSectionPerVolume(
+                                       const G4Material* mat,
+                                       const G4ParticleDefinition* part,
                                              G4double GammaEnergy,
-                                             G4double Z, G4double,
                                              G4double, G4double)
 {
   G4double CrossSection = 
-  G4KleinNishinaCompton::ComputeCrossSectionPerAtom(0,GammaEnergy,Z,0,0,0);
+  G4VEmModel::CrossSectionPerVolume(mat,part,GammaEnergy,0,0);
+    
+  G4double factor = CrossSectionFactor;
+  if (mat == detector->GetCavityMaterial()) factor = 0.;
   
-  return CrossSection*CrossSectionFactor;
+  return CrossSection*factor;
 }
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 std::vector<G4DynamicParticle*>* MyKleinNishinaCompton::SampleSecondaries(
