@@ -190,28 +190,30 @@ G4CrossSectionDataStore::SelectRandomIsotope(const G4DynamicParticle* particle,
    
   G4double ZZ = (*theElementVector)[0]->GetZ();
   G4double AA = AvaluesPerElement[0][0];
-  G4double random = G4UniformRand();
-  for(G4int i=0; i < nElements; i++) {
-    if(i!=0) runningSum[i] += runningSum[i-1];
-    if(random <= runningSum[i]/crossSectionTotal) {
-      ZZ = ((*theElementVector)[i])->GetZ();
+  if (crossSectionTotal != 0.) {
+    G4double random = G4UniformRand();
+    for(G4int i=0; i < nElements; i++) {
+      if(i!=0) runningSum[i] += runningSum[i-1];
+      if(random <= runningSum[i]/crossSectionTotal) {
+        ZZ = ((*theElementVector)[i])->GetZ();
 
-      // Compare random number to running sum over isotope xc to choose A
+        // Compare random number to running sum over isotope xc to choose A
 
-      G4int nIso = awicsPerElement[i].size();
-      G4double* running = new G4double[nIso];
-      for (G4int j=0; j < nIso; j++) {
-        running[j] = awicsPerElement[i][j];
-        if(j!=0) running[j] += running[j-1];
+        G4int nIso = awicsPerElement[i].size();
+        G4double* running = new G4double[nIso];
+        for (G4int j=0; j < nIso; j++) {
+          running[j] = awicsPerElement[i][j];
+          if(j!=0) running[j] += running[j-1];
+        }
+
+        G4double trial = G4UniformRand(); 
+        for (G4int j=0; j < nIso; j++) {
+          AA = AvaluesPerElement[i][j];
+          if (trial <= running[j]/running[nIso-1]) break;
+        }
+        delete [] running;
+        break;
       }
-
-      G4double trial = G4UniformRand(); 
-      for (G4int j=0; j < nIso; j++) {
-        AA = AvaluesPerElement[i][j];
-        if (trial <= running[j]/running[nIso-1]) break;
-      }
-      delete [] running;
-      break;
     }
   }
   return std::pair<G4double, G4double>(ZZ, AA);
