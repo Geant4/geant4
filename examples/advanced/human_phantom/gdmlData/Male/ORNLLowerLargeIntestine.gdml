@@ -9,8 +9,8 @@
   <rotation name="SigmoidColonLowerLargeIntestineRelativeRot" unit="degree" x="0" y="180" z="90" />
   <position name="DescendingColonLowerLargeIntestineRelativePos" unit="cm" x="-5.16" y="0.0" z="-6.885" />
   <rotation name="DescendingColonLowerLargeIntestineRelativeRot" unit="degree" x="-90" y="0" z="0" />
-  <position name="LowerLargeIntestinePos" unit="cm" x="7.86" y="-2.31" z="-16.79" />
-  <rotation name="LowerLargeIntestineRot" unit="degree" x="0" y="0" z="0" />
+  <position name="OrganPos" unit="cm" x="7.86" y="-2.31" z="-16.79" />
+  <rotation name="OrganRot" unit="degree" x="0" y="0" z="0" />
  </define> 
 
  <materials>

@@ -41,6 +41,6 @@ public:
  ~G4ORNLMaleBodyFactory();
   
   G4VPhysicalVolume* CreateOrgan(G4VPhysicalVolume*, G4bool,
-				 G4String, G4String, G4bool);
+				 const G4String&, const G4String&, G4bool);
 };
 #endif

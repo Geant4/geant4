@@ -45,8 +45,9 @@ G4ORNLOrgan::~G4ORNLOrgan()
   sxp.Finalize();
 }
 
-G4VPhysicalVolume* G4ORNLOrgan::ConstructOrgan(G4VPhysicalVolume* mother, G4bool sensitivity, G4String gdmlFile, 
-G4String colourName, G4bool wireFrame)
+G4VPhysicalVolume* G4ORNLOrgan::ConstructOrgan(G4VPhysicalVolume* mother, G4bool sensitivity, 
+					       const G4String& gdmlFile, 
+					       const G4String& colourName, G4bool wireFrame)
 {
   G4cout <<"G4ORNLOrgan::ConstructOrgan" << G4endl;
   // Initialize GDML Processor

@@ -55,7 +55,8 @@ G4MIRDSkull::~G4MIRDSkull()
 }
 
 G4VPhysicalVolume* G4MIRDSkull::ConstructOrgan(G4VPhysicalVolume* mother,G4bool sensitivity,
-					       G4String volumeName,G4String colourName
+					       const G4String& volumeName,
+					       const G4String& colourName
 					       , G4bool wireFrame)
 {
   

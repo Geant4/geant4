@@ -6,8 +6,8 @@
   <constant name="HALFPI" value="0.5*pi"/>
  
   <position name="FirstSubtrPancreasRelativePos" unit="cm" x="-2.87" y="0.0" z="-8.685" />
-  <position name="PancreasPos" unit="cm" x="-0.72" y="0.0" z="1.8" />
-  <rotation name="PancreasRot" unit="degree" x="0" y="90" z="0" />
+  <position name="OrganPos" unit="cm" x="-0.72" y="0.0" z="1.8" />
+  <rotation name="OrganRot" unit="degree" x="0" y="90" z="0" />
  </define> 
 
  <materials>

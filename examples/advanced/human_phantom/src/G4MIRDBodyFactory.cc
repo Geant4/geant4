@@ -132,8 +132,9 @@ G4MIRDBodyFactory::~G4MIRDBodyFactory()
   delete organ["LeftLeg"]; organ["LeftLeg"]=0;
 }
 
-G4VPhysicalVolume* G4MIRDBodyFactory::CreateOrgan(G4VPhysicalVolume* motherVolume, G4bool sensitivity, G4String organ_name,
-						  G4String colourName, G4bool solidColour)
+G4VPhysicalVolume* G4MIRDBodyFactory::CreateOrgan(G4VPhysicalVolume* motherVolume, G4bool sensitivity, 
+						  const G4String& organ_name,
+						  const G4String& colourName, G4bool solidColour)
 {
  return organ[organ_name] -> ConstructOrgan(motherVolume, sensitivity, organ_name, colourName, solidColour);
 }

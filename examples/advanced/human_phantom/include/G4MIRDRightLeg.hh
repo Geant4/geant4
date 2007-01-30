@@ -43,6 +43,6 @@ public:
   G4MIRDRightLeg();
   ~G4MIRDRightLeg();
   G4VPhysicalVolume* ConstructOrgan(G4VPhysicalVolume*,G4bool,
-				    G4String, G4String,G4bool);
+				    const G4String&, const G4String&,G4bool);
 };
 #endif

@@ -55,7 +55,7 @@ G4MIRDRightBreast::~G4MIRDRightBreast()
 }
 
 G4VPhysicalVolume* G4MIRDRightBreast::ConstructOrgan(G4VPhysicalVolume* mother,  
-G4bool sensitivity, G4String volumeName,  G4String colourName, G4bool wireFrame )
+G4bool sensitivity, const G4String& volumeName,  const G4String& colourName, G4bool wireFrame )
 {
   G4cout << "Construct" << volumeName << G4endl;
  

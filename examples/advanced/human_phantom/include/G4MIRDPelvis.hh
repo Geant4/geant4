@@ -42,6 +42,7 @@ public:
 
   G4MIRDPelvis();
   ~G4MIRDPelvis();
-  G4VPhysicalVolume* ConstructOrgan(G4VPhysicalVolume*,G4bool, G4String, G4String, G4bool);
+  G4VPhysicalVolume* ConstructOrgan(G4VPhysicalVolume*,G4bool, const G4String&, 
+				    const G4String&, G4bool);
 };
 #endif

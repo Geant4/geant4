@@ -47,6 +47,17 @@ public:
 
 public:
   //void  DefineColour();
-  G4Colour GetColour(G4String); //returns the colour
+  G4Colour GetColour(const G4String&); //returns the colour
+
+private:
+  G4Colour white;
+  G4Colour pink;
+  G4Colour grey;
+  G4Colour yellow;
+  G4Colour blue;
+  G4Colour lightBlue;
+  G4Colour green;
+  G4Colour brown;
+  G4Colour purple;
 };
 #endif

@@ -56,7 +56,7 @@ G4MIRDLeftKidney::~G4MIRDLeftKidney()
 }
 
 G4VPhysicalVolume* G4MIRDLeftKidney::ConstructOrgan(G4VPhysicalVolume* mother, G4bool sensitivity,
-G4String volumeName, G4String colourName, G4bool wireFrame)
+const G4String& volumeName, const G4String& colourName, G4bool wireFrame)
 {
   G4cout << "Construct "<< volumeName << G4endl;
  

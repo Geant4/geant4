@@ -40,19 +40,21 @@ G4FemaleBuilder::G4FemaleBuilder()
 }
 
 G4FemaleBuilder::~G4FemaleBuilder()
-{
+{ 
+  delete body;
 } 
 
-void G4FemaleBuilder::BuildLeftBreast(G4bool sensitivity, G4String volumeName, G4String colourName, G4bool solidVis)
+void G4FemaleBuilder::BuildLeftBreast(G4bool sensitivity, const G4String& volumeName, const G4String& colourName,
+				      G4bool solidVis)
 {
-  
+
  if (motherVolume == 0)
    G4Exception("The world volume is missing !!!!!");
 
  body -> CreateOrgan(motherVolume,sensitivity, volumeName, colourName, solidVis);  
 }
 
-void G4FemaleBuilder::BuildRightBreast(G4bool sensitivity, G4String volumeName, G4String colourName, G4bool solidVis)
+void G4FemaleBuilder::BuildRightBreast(G4bool sensitivity, const G4String& volumeName, const G4String& colourName, G4bool solidVis)
 {
   
  if (motherVolume == 0)
@@ -61,8 +63,8 @@ void G4FemaleBuilder::BuildRightBreast(G4bool sensitivity, G4String volumeName, 
  body -> CreateOrgan(motherVolume,sensitivity, volumeName, colourName, solidVis);
 }
 
-void G4FemaleBuilder::BuildParameterisedBreast(G4bool sensitivity, G4String volumeName, 
-					       G4String colourName, G4bool solidVis)
+void G4FemaleBuilder::BuildParameterisedBreast(G4bool sensitivity, const G4String& volumeName, 
+					       const G4String& colourName, G4bool solidVis)
 {
   /*
 G4cout << "Builder: build parameterised breast!!!!" <<G4endl;
@@ -74,7 +76,8 @@ G4cout << "Builder: build parameterised breast!!!!" <<G4endl;
   */
 }
 
-void G4FemaleBuilder::BuildLeftOvary(G4bool sensitivity, G4String volumeName, G4String colourName, G4bool solidVis)
+void G4FemaleBuilder::BuildLeftOvary(G4bool sensitivity, const G4String& volumeName, const G4String& colourName, 
+				     G4bool solidVis)
 {   
   
 if (trunkVolume == 0)
@@ -84,9 +87,9 @@ if (trunkVolume == 0)
   
 }
 
-void G4FemaleBuilder::BuildRightOvary(G4bool sensitivity,G4String volumeName, G4String colourName, G4bool solidVis)
+void G4FemaleBuilder::BuildRightOvary(G4bool sensitivity,const G4String& volumeName, const G4String& colourName, G4bool solidVis)
 {   
-  G4cout<<"Female Builder: Rigtht Ovary"<<G4endl;  
+
 if (trunkVolume == 0)
    G4Exception("The trunk volume is missing !!!!!");
    
@@ -94,9 +97,9 @@ if (trunkVolume == 0)
   
 }
 
-void G4FemaleBuilder::BuildUterus(G4bool sensitivity,G4String volumeName,G4String colourName, G4bool solidVis )
+void G4FemaleBuilder::BuildUterus(G4bool sensitivity, const G4String& volumeName,const G4String& colourName, G4bool solidVis )
 {
-   G4cout<<"Female Builder: Uterus"<<G4endl;  
+ 
 if (trunkVolume == 0)
    G4Exception("The trunk volume is missing !!!!!");
 

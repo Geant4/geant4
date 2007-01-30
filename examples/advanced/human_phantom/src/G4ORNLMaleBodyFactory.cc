@@ -41,7 +41,7 @@ G4ORNLMaleBodyFactory::~G4ORNLMaleBodyFactory()
 }
 
 G4VPhysicalVolume* G4ORNLMaleBodyFactory::CreateOrgan(G4VPhysicalVolume* motherVolume,
-G4bool sensitivity, G4String gdmlFile, G4String colour, G4bool solidFrame)
+G4bool sensitivity, const G4String& gdmlFile, const G4String& colour, G4bool solidFrame)
 {
   G4cout<< "ORNLBodyFactory: "<< "gdmlData/Male/ORNL"<< gdmlFile <<".gdml" << G4endl;
   G4ORNLOrgan* organ = new G4ORNLOrgan();

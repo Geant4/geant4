@@ -4,8 +4,8 @@
   <constant name="PI" value="1.*pi" />
   <constant name="TWOPI" value="2.*pi"/>
   <constant name="HALFPI" value="0.5*pi"/>
-  <position name="BrainPos" unit="cm" x="0.0" y="0.0" z="10.125" />
-  <rotation name="BrainRot" unit="degree" x="0" y="0" z="0" />
+  <position name="OrganPos" unit="cm" x="0.0" y="0.0" z="10.125" />
+  <rotation name="OrganRot" unit="degree" x="0" y="0" z="0" />
  </define> 
 
  <materials>

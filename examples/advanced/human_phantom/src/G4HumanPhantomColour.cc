@@ -36,30 +36,26 @@
 #include "G4HumanPhantomColour.hh"
 #include "G4Colour.hh"
 G4HumanPhantomColour::G4HumanPhantomColour()
-{;}
+{
+  white = G4Colour(1.0, 1.0, 1.0);
+  pink = G4Colour(0.94, 0.5, 0.5);
+  grey = G4Colour(0.46, 0.53, 0.6);
+  yellow = G4Colour(1.0, 1.0, 0.);
+  blue = G4Colour(0.25,0.41, 0.88 );
+  lightBlue = G4Colour(0.28, 0.82, 0.8);
+  green = G4Colour(0., 1., 0.);
+  brown = G4Colour(0.5, 0.5, 0.);
+  purple = G4Colour(0.85,0.44,0.84);
+}
 
 G4HumanPhantomColour::~G4HumanPhantomColour()
 { 
-  //delete pink;
-  //delete white;
+
 }
 
-/*
-void G4HumanPhantomColour::DefineColour()
-{}
-*/
-
-G4Colour G4HumanPhantomColour::GetColour(G4String colourName)
+G4Colour G4HumanPhantomColour::GetColour(const G4String& colourName)
 {
-  G4Colour white (1.0, 1.0, 1.0);
-  G4Colour pink (0.94, 0.5, 0.5);
-  G4Colour grey (0.46, 0.53, 0.6);
-  G4Colour yellow (1.0, 1.0, 0.);
-  G4Colour blue (0.25,0.41, 0.88 );
-  G4Colour lightBlue (0.28, 0.82, 0.8);
-  G4Colour green (0., 1., 0.);
-  G4Colour brown (0.5, 0.5, 0.);
-  G4Colour purple (0.85,0.44,0.84);
+  
  // Returns the colour
   if (colourName == "pink") return pink;
   else if(colourName == "white") return white;

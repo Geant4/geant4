@@ -5,8 +5,8 @@
   <constant name="TWOPI" value="2.*pi"/>
   <constant name="HALFPI" value="0.5*pi"/>
 
-  <position name="UpperSpinePos" unit="cm" x="0.0" y="5.39" z="-3.26" />
-  <rotation name="UpperSpineRot" unit="degree" x="0" y="0" z="0" />
+  <position name="OrganPos" unit="cm" x="0.0" y="5.39" z="-3.26" />
+  <rotation name="OrganRot" unit="degree" x="0" y="0" z="0" />
 
  </define> 
 
