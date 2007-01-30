@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UHadronElasticProcess.cc,v 1.29 2007-01-23 19:23:19 vnivanch Exp $
+// $Id: G4UHadronElasticProcess.cc,v 1.30 2007-01-30 10:23:26 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Geant4 Hadron Elastic Scattering Process -- header file
@@ -52,7 +52,6 @@
 #include "G4Neutron.hh"
 #include "G4Proton.hh"
 #include "G4HadronElastic.hh"
-#include "G4NistManager.hh"
  
 G4UHadronElasticProcess::G4UHadronElasticProcess(const G4String& pName, G4double)
   : G4HadronicProcess(pName), lowestEnergy(0.0), first(true)
@@ -157,31 +156,37 @@ G4double G4UHadronElasticProcess::GetMicroscopicCrossSection(
 
     G4double momentum = dp->GetTotalMomentum();
     G4IsotopeVector* isv = elm->GetIsotopeVector();
-    G4double* ab;
-    if(isv) ab = elm->GetRelativeAbundanceVector();
-    else {
-      G4Element* elm1 = G4NistManager::Instance()->FindOrBuildElement(iz);
-      isv = elm1->GetIsotopeVector();
-      ab = elm->GetRelativeAbundanceVector();
-    }
-    G4int ni = isv->size();
+    G4int ni = 0;
+    if(isv) ni = isv->size();
 
     x = 0.0;
-    for(G4int j=0; j<ni; j++) {
-      G4int N = (*isv)[j]->GetN() - iz;
-      if(iz == 1) {
-	if(N > 1) N = 1;
-      } else {
-	N = 2;
-      }
+    if(ni == 0) {
+      G4int N = G4int(elm->GetN()+0.5);
+      x = qCManager->GetCrossSection(false,momentum,iz,N,pPDG);
+      xsecH[0] = x;
       if(verboseLevel>1) 
 	G4cout << "G4UHadronElasticProcess compute CHIPS CS for Z= " << iz
 	       << " N= "  << N << " pdg= " << pPDG 
 	       << " mom(GeV)= " << momentum/GeV 
 	       << "  " << qCManager << G4endl; 
-      G4double y = ab[j]*qCManager->GetCrossSection(false,momentum,iz,N,pPDG);
-      x += y;
-      xsecH[j] = x;
+    } else {
+      G4double* ab = elm->GetRelativeAbundanceVector();
+      for(G4int j=0; j<ni; j++) {
+	G4int N = (*isv)[j]->GetN() - iz;
+	if(iz == 1) {
+	  if(N > 1) N = 1;
+	} else {
+	  N = 2;
+	}
+	if(verboseLevel>1) 
+	  G4cout << "G4UHadronElasticProcess compute CHIPS CS for Z= " << iz
+		 << " N= "  << N << " pdg= " << pPDG 
+		 << " mom(GeV)= " << momentum/GeV 
+		 << "  " << qCManager << G4endl; 
+	G4double y = ab[j]*qCManager->GetCrossSection(false,momentum,iz,N,pPDG);
+	x += y;
+	xsecH[j] = x;
+      }
     }
 
     // GHAD cross section
@@ -242,28 +247,19 @@ G4VParticleChange* G4UHadronElasticProcess::PostStepDoIt(
     elm = (*theElementVector)[i];
   }
   G4double Z = elm->GetZ();
-  G4double A = elm->GetN();
+  G4double A = G4double(G4int(elm->GetN()+0.5));
   G4int iz = G4int(Z);
 
   // Select isotope
   G4IsotopeVector* isv = elm->GetIsotopeVector(); 
-  G4double* ab;
-  if(isv) ab = elm->GetRelativeAbundanceVector();
-  else {
-    G4Element* elm1 = G4NistManager::Instance()->FindOrBuildElement(iz);
-    isv = elm1->GetIsotopeVector();
-    ab = elm->GetRelativeAbundanceVector();
-  }
-  G4int ni = isv->size();
+  G4int ni = 0;
+  if(isv) ni = isv->size();
 
   if(ni == 1) { 
     A = G4double((*isv)[0]->GetN());
-  } else if(ni == 0) {
-    G4cout << "G4UHadronElasticProcess::PostStepDoIt WARNING: "
-	  << " no isotopes are fund out for " << elm->GetName()
-	  << G4endl;
   } else if(ni > 1) {
 
+    G4double* ab = elm->GetRelativeAbundanceVector();
     G4int j = -1;
     ni--;
     // Special treatment of hydrogen and helium for CHIPS
@@ -280,8 +276,10 @@ G4VParticleChange* G4UHadronElasticProcess::PostStepDoIt(
 	y -= ab[j];
       } while (y > 0.0 && j < ni);
     }
+    G4cout << " j= " << j << G4endl;
     A = G4double((*isv)[j]->GetN());
   } 
+
   G4HadronicInteraction* hadi = 
     ChooseHadronicInteraction( kineticEnergy, material, elm);
 

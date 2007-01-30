@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChargeExchangeProcess.cc,v 1.8 2007-01-23 19:23:19 vnivanch Exp $
+// $Id: G4ChargeExchangeProcess.cc,v 1.9 2007-01-30 10:23:26 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -54,7 +54,6 @@
 #include "G4Proton.hh"
 #include "G4HadronElastic.hh"
 #include "G4PhysicsLinearVector.hh"
-#include "G4NistManager.hh"
 
 G4ChargeExchangeProcess::G4ChargeExchangeProcess(const G4String& procName)
   : G4HadronicProcess(procName), first(true)
@@ -252,26 +251,18 @@ G4VParticleChange* G4ChargeExchangeProcess::PostStepDoIt(
     elm = (*theElementVector)[i];
   }
   G4double Z = elm->GetZ();
-  G4double A = elm->GetN();
+  G4double A = G4double(G4int(elm->GetN()+0.5));
 
   // Select isotope
   G4IsotopeVector* isv = elm->GetIsotopeVector(); 
-  G4double* ab;
-  if(isv) ab = elm->GetRelativeAbundanceVector();
-  else {
-    G4Element* elm1 = G4NistManager::Instance()->FindOrBuildElement(G4int(Z));
-    isv = elm1->GetIsotopeVector();
-    ab = elm->GetRelativeAbundanceVector();
-  }
-  G4int ni = isv->size();
+  G4int ni = 0;
+  if(isv) ni = isv->size();
+
   if(ni == 1) { 
     A = G4double((*isv)[0]->GetN());
-  } else if(ni == 0) {
-    G4cout << "G4ChargeExchangeProcess::PostStepDoIt WARNING: "
-	  << " no isotopes are fund out for " << elm->GetName()
-	  << G4endl;
   } else if(ni > 1) {
 
+    G4double* ab = elm->GetRelativeAbundanceVector();
     G4int j = -1;
     ni--;
     G4double y = G4UniformRand();
