@@ -40,14 +40,15 @@ G4ORNLFemaleBodyFactory::~G4ORNLFemaleBodyFactory()
 {
 }
 
-G4VPhysicalVolume* G4ORNLFemaleBodyFactory::CreateOrgan(G4VPhysicalVolume* motherVolume,
-G4bool sensitivity, const G4String& gdmlFile, const G4String& colour, G4bool solidFrame)
+G4VPhysicalVolume* G4ORNLFemaleBodyFactory::CreateOrgan(const G4String& gdmlFile, G4VPhysicalVolume* motherVolume,
+							const G4String& colour, G4bool solidFrame, 
+							G4bool sensitivity)
 {
   G4cout<< "ORNLBodyFactory: "<< "gdmlData/Female/ORNL"<< gdmlFile <<".gdml" << G4endl;
 
   G4ORNLOrgan* organ = new G4ORNLOrgan();
-  return organ -> ConstructOrgan(motherVolume,sensitivity, "Female/ORNL"+ gdmlFile, 
-				 colour, solidFrame);
+  return organ -> ConstructOrgan("Female/ORNL"+ gdmlFile, motherVolume,
+				 colour, solidFrame, sensitivity);
 }
 
 

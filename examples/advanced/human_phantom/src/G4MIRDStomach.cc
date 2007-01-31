@@ -52,9 +52,8 @@ G4MIRDStomach::~G4MIRDStomach()
 {
 }
 
-G4VPhysicalVolume* G4MIRDStomach::ConstructOrgan(G4VPhysicalVolume* mother, G4bool sensitivity,
-					 	 const G4String& volumeName,
-					         const G4String& colourName, G4bool wireFrame)
+G4VPhysicalVolume* G4MIRDStomach::ConstructOrgan(const G4String& volumeName,G4VPhysicalVolume* mother,
+					         const G4String& colourName, G4bool wireFrame, G4bool sensitivity)
 {
 
   G4cout << "Construct "<< volumeName << G4endl;

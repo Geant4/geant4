@@ -41,7 +41,7 @@ class G4VOrgan
 public:
   G4VOrgan();
   virtual ~G4VOrgan();
-  virtual G4VPhysicalVolume* ConstructOrgan(G4VPhysicalVolume*, G4bool, const G4String&, 
-					    const G4String&, G4bool)=0;
+  virtual G4VPhysicalVolume* ConstructOrgan(const G4String&,G4VPhysicalVolume*,  
+					    const G4String&, G4bool,G4bool)=0;
 };
 #endif

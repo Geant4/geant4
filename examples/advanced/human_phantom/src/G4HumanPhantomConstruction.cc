@@ -83,64 +83,61 @@ G4VPhysicalVolume* G4HumanPhantomConstruction::Construct()
   if (sex =="Female") builder = new G4FemaleBuilder;
   else if (sex == "Male") builder = new G4MaleBuilder ;
   
-  builder->SetModel(model);
+  //builder->SetModel(model);
 
   builder->SetMotherVolume(ConstructWorld());
 
-  //builder->SetModel(model);
-
-  builder->SetSex(sex);
+  builder->SetModel(model);
 
   // the argument indicates the sensitivity of the volume
-  builder->BuildHead(sensitivities["Head"],  "Head","pink", false);
+  builder->BuildHead("pink", false, sensitivities["Head"]);
   
-  builder->BuildTrunk(sensitivities["Trunk"],  "Trunk","pink", false);
+  builder->BuildTrunk("pink", false, sensitivities["Trunk"]);
   
-   builder->BuildLeftLeg(sensitivities["LeftLeg"],  "LeftLeg","pink", false);
-  builder->BuildRightLeg(sensitivities["RightLeg"],  "RightLeg", "pink", false);
+   builder->BuildLeftLeg("pink", false,sensitivities["LeftLeg"]);
+  builder->BuildRightLeg("pink", false,sensitivities["RightLeg"]);
  
-  builder->BuildBrain(sensitivities["Brain"],  "Brain", "pink", true); 
+  builder->BuildBrain("pink", true,sensitivities["Brain"]); 
  
    // Remind! the elliptical cone gives problems! Intersections of volumes, 
   // wrong calculation of the volume!
-  builder->BuildLeftArmBone(sensitivities["LeftArmBone"],  "LeftArmBone","grey", true);
-  builder->BuildRightArmBone(sensitivities["RightArmBone"],  "RightArmBone", "grey", true);  
+  builder->BuildLeftArmBone("grey", true,sensitivities["LeftArmBone"]);
+  builder->BuildRightArmBone("grey", true, sensitivities["RightArmBone"]);  
     
-
-  builder->BuildLeftLegBone(sensitivities["LeftLegBone"],  "LeftLegBone", "grey", true);
-  builder ->BuildRightLegBone(sensitivities["RightLegBone"],  "RightLegBone", "grey", true);
+  builder->BuildLeftLegBone("grey", true,sensitivities["LeftLegBone"]);
+  builder ->BuildRightLegBone("grey", true,sensitivities["RightLegBone"]);
   
-  builder->BuildSkull(sensitivities["Skull"],  "Skull", "grey", false); 
+  builder->BuildSkull("grey", false,sensitivities["Skull"]); 
  
-  builder->BuildUpperSpine(sensitivities["UpperSpine"],  "UpperSpine", "grey", true);
+  builder->BuildUpperSpine("grey", true,sensitivities["UpperSpine"]);
   
-  builder->BuildMiddleLowerSpine(sensitivities["MiddleLowerSpine"],  "MiddleLowerSpine", "grey", true);
+  builder->BuildMiddleLowerSpine("grey", true,sensitivities["MiddleLowerSpine"]);
   
-  builder->BuildPelvis(sensitivities["Pelvis"],  "Pelvis","grey", true); 
+  builder->BuildPelvis("grey", true,sensitivities["Pelvis"]); 
   
-  builder->BuildStomach(sensitivities["Stomach"], "Stomach","yellow", true ); 
-  builder->BuildUpperLargeIntestine(sensitivities["UpperLargeIntestine"], "UpperLargeIntestine", "yellow", true);
-  builder->BuildLowerLargeIntestine(sensitivities["LowerLargeIntestine"],  "LowerLargeIntestine", "yellow", true);
-  if (model == "MIRD") builder->BuildRibCage(sensitivities["RibCage"],  "RibCage",  "grey", true); 
-  builder->BuildSpleen(sensitivities["Spleen"],  "Spleen", "brown", true);
-  builder->BuildPancreas(sensitivities["Pancreas"],  "Pancreas", "lightBlue", true); 
+  builder->BuildStomach("yellow", true,sensitivities["Stomach"]); 
+  builder->BuildUpperLargeIntestine("yellow", true,sensitivities["UpperLargeIntestine"]);
+  builder->BuildLowerLargeIntestine("yellow", true,sensitivities["LowerLargeIntestine"]);
+  if (model == "MIRD") builder->BuildRibCage("grey", true,sensitivities["RibCage"]); 
+  builder->BuildSpleen("brown", true,sensitivities["Spleen"]);
+  builder->BuildPancreas("lightBlue", true,sensitivities["Pancreas"]); 
   //builder->BuildLiver(sensitivities["Liver"]);  da fare
 
-  builder->BuildLeftKidney(sensitivities["LeftKidney"],  "LeftKidney", "green", true);
-  builder->BuildRightKidney(sensitivities["RightKidney"],  "RightKidney", "green", true);
-  builder->BuildUrinaryBladder(sensitivities["UrinaryBladder"],  "UrinaryBladder", "yellow", true);
+  builder->BuildLeftKidney("green", true,sensitivities["LeftKidney"]);
+  builder->BuildRightKidney("green", true,sensitivities["RightKidney"]);
+  builder->BuildUrinaryBladder("yellow", true,sensitivities["UrinaryBladder"]);
  
   //builder->BuildHeart(sensitivities["Hearth"]);
-  builder->BuildLeftLung(sensitivities["LeftLung"],  "LeftLung", "blue", true);
-  builder->BuildRightLung(sensitivities["RightLung"],  "RightLung", "blue", true);
+  builder->BuildLeftLung("blue", true,sensitivities["LeftLung"]);
+  builder->BuildRightLung("blue", true,sensitivities["RightLung"]);
   //builder->BuildThyroid(sensitivities["Thyroid"]); 
   
   if(sex=="Female"){
-    builder->BuildLeftOvary(sensitivities["LeftOvary"],  "LeftOvary", "purple", true);
-    builder->BuildRightOvary(sensitivities["RightOvary"],  "RightOvary", "purple", true);
-    builder->BuildUterus(sensitivities["Uterus"],  "Uterus", "purple", true);
-    builder->BuildLeftBreast(sensitivities["LeftBreast"],  "LeftBreast","purple", true); 
-    builder->BuildRightBreast(sensitivities["RightBreast"],  "RightBreast", "purple", true);
+    builder->BuildLeftOvary("purple", true,sensitivities["LeftOvary"]);
+    builder->BuildRightOvary("purple", true,sensitivities["RightOvary"]);
+    builder->BuildUterus("purple", true,sensitivities["Uterus"]);
+    builder->BuildLeftBreast("purple", true,sensitivities["LeftBreast"]); 
+    builder->BuildRightBreast("purple", true,sensitivities["RightBreast"]);
    //if(model == "MIRD") builder->BuildParameterisedBreast(true);
   }
   /*  
@@ -187,16 +184,6 @@ G4VPhysicalVolume* G4HumanPhantomConstruction::ConstructWorld()
   logicWorld->SetVisAttributes(WorldVisAtt);
  
  return motherVolume;
-}
-
-void G4HumanPhantomConstruction::CleanPhantom()
-{
-  //delete mother;
-}
-
-void G4HumanPhantomConstruction::UpdatePhantom()
-{
-  G4RunManager::GetRunManager()->DefineWorldVolume(Construct());
 }
 
 void G4HumanPhantomConstruction::SetPhantomSex(G4String newSex)

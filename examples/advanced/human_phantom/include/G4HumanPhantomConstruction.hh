@@ -51,8 +51,7 @@ class G4HumanPhantomConstruction : public G4VUserDetectorConstruction
      G4VPhysicalVolume* Construct();
 
   void SetBodyPartSensitivity(G4String, G4bool);
-  void CleanPhantom();
-  void UpdatePhantom();
+
   void SetPhantomSex(G4String);
   void SetPhantomModel(G4String);
 

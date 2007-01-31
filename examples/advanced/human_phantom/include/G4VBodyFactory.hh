@@ -39,8 +39,7 @@ public:
 
   G4VBodyFactory();
   virtual ~G4VBodyFactory();
-  virtual G4VPhysicalVolume* CreateOrgan(G4VPhysicalVolume* motherVolume, 
-	                                  G4bool sensitivity, const G4String& gdmlFile,  
-					  const G4String& colour, G4bool solidFrame)=0;
+  virtual G4VPhysicalVolume* CreateOrgan(const G4String& idFile, G4VPhysicalVolume* motherVolume,  
+					 const G4String& colour, G4bool solidFrame,G4bool sensitivity)=0;
 };
 #endif

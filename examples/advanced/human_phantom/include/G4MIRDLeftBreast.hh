@@ -43,7 +43,7 @@ public:
 
   G4MIRDLeftBreast();
   ~G4MIRDLeftBreast();
-  G4VPhysicalVolume* ConstructOrgan(G4VPhysicalVolume*, G4bool,
-				    const G4String&, const G4String&, G4bool);
+  G4VPhysicalVolume* ConstructOrgan(const G4String&,G4VPhysicalVolume*,
+				    const G4String&, G4bool, G4bool);
 };
 #endif

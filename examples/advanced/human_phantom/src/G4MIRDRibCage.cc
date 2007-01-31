@@ -49,9 +49,8 @@ G4MIRDRibCage::~G4MIRDRibCage()
 {
   }
 
-G4VPhysicalVolume* G4MIRDRibCage::ConstructOrgan(G4VPhysicalVolume* mother, G4bool sensitivity,
-						 const G4String& volumeName, const G4String& colourName
-						 , G4bool wireFrame)
+G4VPhysicalVolume* G4MIRDRibCage::ConstructOrgan(const G4String& volumeName, G4VPhysicalVolume* mother,
+						 const G4String& colourName, G4bool wireFrame, G4bool sensitivity)
 {
   G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
    

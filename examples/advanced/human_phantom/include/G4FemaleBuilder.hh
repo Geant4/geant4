@@ -46,12 +46,11 @@ public:
   G4FemaleBuilder();
   ~G4FemaleBuilder();
 
-  void BuildLeftBreast(G4bool, const G4String&, const G4String&, G4bool);
-  void BuildRightBreast(G4bool,const G4String&, const G4String&, G4bool);
-  void BuildParameterisedBreast(G4bool,const G4String&, const G4String&, G4bool);
-  void BuildLeftOvary(G4bool,const G4String&, const G4String&, G4bool);
-  void BuildRightOvary(G4bool, const G4String&, const G4String&, G4bool);
-  void BuildUterus(G4bool, const G4String&, const G4String&, G4bool);
-  //void SetModel(G4String);
+  void BuildLeftBreast(const G4String&, G4bool, G4bool);
+  void BuildRightBreast(const G4String&, G4bool, G4bool);
+  void BuildParameterisedBreast(const G4String&, G4bool, G4bool);
+  void BuildLeftOvary(const G4String&, G4bool, G4bool);
+  void BuildRightOvary(const G4String&, G4bool, G4bool);
+  void BuildUterus(const G4String&, G4bool, G4bool);
 };
 #endif

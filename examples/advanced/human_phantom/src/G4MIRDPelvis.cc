@@ -53,9 +53,8 @@ G4MIRDPelvis::~G4MIRDPelvis()
 
 }
 
-G4VPhysicalVolume* G4MIRDPelvis::ConstructOrgan(G4VPhysicalVolume* mother,G4bool sensitivity, 
-						const G4String& volumeName, 
-						const G4String& colourName, G4bool wireFrame )
+G4VPhysicalVolume* G4MIRDPelvis::ConstructOrgan(const G4String& volumeName,G4VPhysicalVolume* mother, 
+						const G4String& colourName, G4bool wireFrame,G4bool sensitivity)
 {
    G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
    

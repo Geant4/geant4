@@ -44,8 +44,8 @@ class G4MIRDBodyFactory: public G4VBodyFactory
 public:
   G4MIRDBodyFactory();
  ~G4MIRDBodyFactory();
-  G4VPhysicalVolume* CreateOrgan(G4VPhysicalVolume*,G4bool, const G4String&, 
-				 const G4String&, G4bool);
+  G4VPhysicalVolume* CreateOrgan(const G4String&, G4VPhysicalVolume*, 
+				 const G4String&,G4bool,G4bool);
  
 private:
   std::map<std::string,G4VOrgan*> organ; 
