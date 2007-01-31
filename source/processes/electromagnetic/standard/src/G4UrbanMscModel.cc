@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel.cc,v 1.31 2007-01-31 14:12:04 urban Exp $
+// $Id: G4UrbanMscModel.cc,v 1.32 2007-01-31 14:32:32 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -738,7 +738,6 @@ G4double G4UrbanMscModel::ComputeTrueStepLength(G4double geomStepLength)
     return tPathLength;
 
   // recalculation
-  zPathLength = geomStepLength;
   if((geomStepLength > lambda0*tausmall) && (geomStepLength > stepmin))
   {
     if(par1 <  0.)
