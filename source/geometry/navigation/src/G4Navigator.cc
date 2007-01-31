@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.cc,v 1.26 2006-12-07 15:21:52 japost Exp $
+// $Id: G4Navigator.cc,v 1.27 2007-01-31 15:10:09 gcosmo Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4Navigator Implementation
@@ -827,6 +827,7 @@ G4double G4Navigator::ComputeStep( const G4ThreeVector &pGlobalpoint,
              << "        in volume -" << motherPhysical->GetName()
              << "- at point " << pGlobalpoint << G4endl
              << "        direction: " << pDirection << "." << G4endl;
+      motherPhysical->CheckOverlaps(5000, false);
       G4Exception("G4Navigator::ComputeStep()",
                   "StuckTrack", EventMustBeAborted, 
                   "Stuck Track: potential geometry or navigation problem.");
