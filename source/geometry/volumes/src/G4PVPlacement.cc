@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVPlacement.cc,v 1.12 2006-11-10 09:42:27 gcosmo Exp $
+// $Id: G4PVPlacement.cc,v 1.13 2007-01-31 14:58:27 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -240,7 +240,7 @@ G4int G4PVPlacement::GetRegularStructureId() const
 // ----------------------------------------------------------------------
 // CheckOverlaps
 //
-G4bool G4PVPlacement::CheckOverlaps(G4int res)
+G4bool G4PVPlacement::CheckOverlaps(G4int res, G4bool verbose)
 {
   if (res<=0) { return false; }
 
@@ -248,7 +248,10 @@ G4bool G4PVPlacement::CheckOverlaps(G4int res)
   G4LogicalVolume* motherLog = GetMotherLogical();
   if (!motherLog) { return false; }
 
-  G4cout << "Checking overlaps for volume " << GetName() << " ... ";
+  if (verbose)
+  {
+    G4cout << "Checking overlaps for volume " << GetName() << " ... ";
+  }
 
   // Create the transformation from daughter to mother
   //
@@ -307,7 +310,10 @@ G4bool G4PVPlacement::CheckOverlaps(G4int res)
       }
     }
   }
-  G4cout << "OK! " << G4endl;
+  if (verbose)
+  {
+    G4cout << "OK! " << G4endl;
+  }
 
   return false;
 }
