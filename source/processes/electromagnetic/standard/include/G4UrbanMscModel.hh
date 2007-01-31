@@ -1,4 +1,4 @@
-//
+//  
 // ********************************************************************
 // * License and Disclaimer                                           *
 // *                                                                  *
@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel.hh,v 1.16 2007-01-19 11:17:32 urban Exp $
+// $Id: G4UrbanMscModel.hh,v 1.17 2007-01-31 14:12:04 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -71,6 +71,7 @@
 //          function ComputeTheta0,
 //          single scattering modified allowing not small
 //          angles as well (L.Urban)
+// 31-01-07 code cleaning (L.Urban)
 //
 //
 // Class Description:
@@ -176,7 +177,6 @@ private:
   G4double dtrl;
 
   G4double lambdalimit;
-  G4double llimit;
   G4double facrange;
   G4double frscaling1,frscaling2;
   G4double tlimit;
@@ -184,12 +184,11 @@ private:
   G4double tlimitminfix;
   G4double tnow;
   G4double nstepmax;
-  G4double tgeom;
   G4double geombig;
   G4double geommin;
   G4double geomlimit;
   G4double facgeom;
-  G4double skin,skindepth,skindepth1; 
+  G4double skin,skindepth; 
   G4double presafety;
   G4double facsafety;
 
@@ -197,7 +196,6 @@ private:
   G4double lambdaeff;
   G4double tPathLength;
   G4double zPathLength;
-  G4double geomLength;
   G4double par1,par2,par3 ;
 
   G4double stepmin ;
@@ -217,7 +215,6 @@ private:
 
   G4bool   inside;
 
-  G4double prex,prey,prez;   
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -264,7 +261,6 @@ void G4UrbanMscModel::SetParticle(const G4ParticleDefinition* p)
     particle = p;
     mass = p->GetPDGMass();
     charge = p->GetPDGCharge()/eplus;
-    llimit = lambdalimit;
   }
 }
 
