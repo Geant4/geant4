@@ -72,12 +72,17 @@ int main(int, char **)
   Z_Values[5] = 20;
   Z_Values[6] = 30;
   Z_Values[7] = 40;
+
+  double Phi_Values[1];
+  Phi_Values[0]=-10*deg;
+   Phi_Values[1]=10.*deg;
+  // Phi_Values[1]=2*pi;
   
   G4cout << "\n=======     Polycone test      ========";
 
   G4Polycone *MyPCone = new G4Polycone ("MyPCone",
-						    0        ,
-						    2*pi     ,
+						    Phi_Values[0],
+						    Phi_Values[1],
 						    8        ,
 						    Z_Values ,
 						    RMINVec  ,
@@ -183,8 +188,114 @@ int main(int, char **)
     d3 = MyPCone->DistanceToIn(start3, dir3);
     G4cout<<"  distance to in="<<d3<<G4endl;
   }
-  
-  
+  //
+  // Add checks in Phi direction
+  // Point move in Phi direction for differents Z
+  //
+   G4cout<<"\n\n==================================================";
+   
+ for(z=-10; z<=50; z+=5)
+   {
+     G4cout<<"\n\n===================Z="<<z<<"==============================";
+     //G4ThreeVector start4( 0, 0, z-0.00001);
+   G4ThreeVector start4( 0, 0, z);
+  //G4double phi=pi/180.*rad;
+  //  G4double phi=0.0000000001*pi/180.*rad;
+  G4double phi=-pi/180.*rad;
+  G4ThreeVector dir4(std::cos(phi), std::sin(phi), 0);
+  G4double   d4;
+
+  G4cout<<"\nPdep is (0<<R<<50, phi, z)";
+  G4cout<<"\nDir is (cos(phi), sin(phi), 0)\n";
+  G4cout<<"Ndirection is="<<dir4 <<G4endl;
+
+  for(y=-0; y<=50; y+=5)
+  {
+    
+    start4.setX(y*std::cos(phi));
+    start4.setY(y*std::sin(phi));
+    G4cout<<"  R="<<y<<" with Start"<<start4;
+    in = MyPCone->Inside(start4);
+    if( in == kInside )
+      {
+       G4cout <<" is inside";
+        d4 = MyPCone->DistanceToOut(start4, dir4);
+         G4cout<<"  distance to out="<<d4;
+         d4 = MyPCone->DistanceToOut(start4);
+         G4cout<<" closest distance to out="<<d4<<G4endl;
+	}
+    else
+      if( in == kOutside )
+	{
+         G4cout <<" is outside";
+          d4 = MyPCone->DistanceToIn(start4, dir4);
+         G4cout<<"  distance to in="<<d4;
+         d4 = MyPCone->DistanceToIn(start4);
+         G4cout<<" closest distance to in="<<d4<<G4endl;
+	}
+      else
+	{G4cout <<" is on the surface";
+         d4 = MyPCone->DistanceToIn(start4, dir4);
+         G4cout<<"  distance to in="<<d4;
+         d4 = MyPCone->DistanceToIn(start4);
+         G4cout<<" closest distance to in="<<d4<<G4endl;
+	}
+    
+  }
+   }
+ //
+ // Add checks in Phi direction
+ // Point move in X direction for differents Z
+ // and 'schoot' on rhi edge
+   G4cout<<"\n\n==================================================";
+ 
+ for(z=-10; z<=50; z+=5)
+   {
+     G4cout<<"\n\n===================Z="<<z<<"==============================";
+     // G4ThreeVector start5( 0., 0.000000000001, z);
+       G4ThreeVector start5( 0., 1, z);
+  G4ThreeVector dir5(0,-1, 0);
+  G4double   d5;
+
+  G4cout<<"\nPdep is (0<<X<<50, 1, z)";
+  G4cout<<"\nDir is (0, -1, 0)\n";
+  G4cout<<"Ndirection is="<<dir5 <<G4endl;
+
+  for(y=-0; y<=50; y+=5)
+  {
+    
+    start5.setX(y);
+    G4cout<<" Start"<<start5;
+    in = MyPCone->Inside(start5);
+    if( in == kInside )
+      {
+       G4cout <<" is inside";
+       d5 = MyPCone->DistanceToOut(start5, dir5);
+       G4cout<<"  distance to out="<<d5;
+       d5 = MyPCone->DistanceToOut(start5);
+       G4cout<<" closest distance to out="<<d5<<G4endl;
+      }
+    else
+      if( in == kOutside )
+        {
+	 G4cout <<" is outside";
+         d5 = MyPCone->DistanceToIn(start5, dir5);
+         G4cout<<"  distance to in="<<d5;
+         d5 = MyPCone->DistanceToIn(start5);
+         G4cout<<" closest distance to in="<<d5<<G4endl;
+        }
+      else
+        {
+	 G4cout <<" is on the surface";
+         d5 = MyPCone->DistanceToIn(start5, dir5);
+         G4cout<<"  distance to in="<<d5;
+         d5 = MyPCone->DistanceToIn(start5);
+         G4cout<<" closest distance to in="<<d5<<G4endl;
+        }
+    
+  }
+   }
+
   return EXIT_SUCCESS;
 }
 
