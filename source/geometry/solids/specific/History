@@ -1,4 +1,4 @@
-$Id: History,v 1.101 2007-01-22 13:05:05 gcosmo Exp $
+$Id: History,v 1.102 2007-02-01 09:25:10 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+01-Feb-2007, G.Cosmo (geom-specific-V08-02-01)
+- Fix in G4PolyconeSide::DistanceAway() for correct estimation of distance
+  for the case of Phi sections (T.Nikitina).
+  Addresses problem report #598.
+- Updated unit test for G4Polycone to consider new test case.
 
 22-Jan-2007, G.Cosmo (geom-specific-V08-02-00)
 - Do not scale reducible-polygon in G4Polyhedra::Reset() method.
