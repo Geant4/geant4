@@ -32,6 +32,10 @@
 #define G4ORNLFemaleBodyFactory_h 1
 
 #include "G4VBodyFactory.hh"
+#include "G4VPhysicalVolume.hh"
+
+#include "Saxana/SAXProcessor.h"
+#include "Saxana/ProcessingConfigurator.h"
 
 class G4VBodyFactory;
 class G4ORNLFemaleBodyFactory: public G4VBodyFactory
@@ -42,5 +46,8 @@ public:
   
   G4VPhysicalVolume* CreateOrgan(const G4String&,G4VPhysicalVolume*,
 				 const G4String&, G4bool, G4bool);
+private:
+  // SAXProcessor sxp;
+  //ProcessingConfigurator config;
 };
 #endif

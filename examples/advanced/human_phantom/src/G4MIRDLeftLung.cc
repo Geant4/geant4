@@ -55,7 +55,7 @@ G4MIRDLeftLung::~G4MIRDLeftLung()
 
 }
 
-G4VPhysicalVolume* G4MIRDLeftLung::ConstructOrgan(const G4String& volumeName,G4VPhysicalVolume* mother, 
+G4VPhysicalVolume* G4MIRDLeftLung::Construct(const G4String& volumeName,G4VPhysicalVolume* mother, 
 						  const G4String& colourName, G4bool wireFrame,G4bool sensitivity)
 {
 

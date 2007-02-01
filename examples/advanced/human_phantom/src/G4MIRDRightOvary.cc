@@ -54,7 +54,7 @@ G4MIRDRightOvary::~G4MIRDRightOvary()
 
 }
 
-G4VPhysicalVolume* G4MIRDRightOvary::ConstructOrgan(const G4String& volumeName, G4VPhysicalVolume* mother, 
+G4VPhysicalVolume* G4MIRDRightOvary::Construct(const G4String& volumeName, G4VPhysicalVolume* mother, 
 						    const G4String& colourName, G4bool wireFrame,G4bool sensitivity)
 { 
   G4cout << "Construct "<< volumeName << G4endl;

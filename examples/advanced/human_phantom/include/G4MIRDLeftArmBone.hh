@@ -44,7 +44,7 @@ public:
   G4MIRDLeftArmBone();
   ~G4MIRDLeftArmBone();
 
-  G4VPhysicalVolume* ConstructOrgan(const G4String&,G4VPhysicalVolume*, const G4String&, G4bool, G4bool);
+  G4VPhysicalVolume* Construct(const G4String&,G4VPhysicalVolume*, const G4String&, G4bool, G4bool);
  
 private:
   //    SAXProcessor sxp;

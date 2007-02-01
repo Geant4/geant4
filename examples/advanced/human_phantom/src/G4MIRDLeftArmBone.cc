@@ -52,7 +52,7 @@ G4MIRDLeftArmBone::~G4MIRDLeftArmBone()
 {
 }
 
-G4VPhysicalVolume* G4MIRDLeftArmBone::ConstructOrgan(const G4String& volumeName,G4VPhysicalVolume* mother,   
+G4VPhysicalVolume* G4MIRDLeftArmBone::Construct(const G4String& volumeName,G4VPhysicalVolume* mother,   
 						     const G4String& colourName, G4bool wireFrame, G4bool sensitivity)
 {
   // Remind! the elliptical cone gives problems! Intersections of volumes, 

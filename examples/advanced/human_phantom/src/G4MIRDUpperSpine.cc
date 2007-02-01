@@ -52,7 +52,7 @@ G4MIRDUpperSpine::~G4MIRDUpperSpine()
  
 }
 
-G4VPhysicalVolume* G4MIRDUpperSpine::ConstructOrgan(const G4String& volumeName,
+G4VPhysicalVolume* G4MIRDUpperSpine::Construct(const G4String& volumeName,
 						    G4VPhysicalVolume* mother, 
 						    const G4String& colourName
 						    , G4bool wireFrame,G4bool sensitivity)

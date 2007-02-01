@@ -54,7 +54,7 @@ G4MIRDHead::~G4MIRDHead()
   delete material;
 }
 
-G4VPhysicalVolume* G4MIRDHead::ConstructOrgan(const G4String& volumeName,G4VPhysicalVolume* mother,
+G4VPhysicalVolume* G4MIRDHead::Construct(const G4String& volumeName,G4VPhysicalVolume* mother,
 					      const G4String& colourName, G4bool wireFrame, G4bool sensitivity)
 {
   G4cout << "Construct " << volumeName <<G4endl;

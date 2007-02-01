@@ -51,7 +51,7 @@ G4MIRDUpperLargeIntestine::~G4MIRDUpperLargeIntestine()
 {
 }
 
-G4VPhysicalVolume* G4MIRDUpperLargeIntestine::ConstructOrgan(const G4String& volumeName,
+G4VPhysicalVolume* G4MIRDUpperLargeIntestine::Construct(const G4String& volumeName,
 							     G4VPhysicalVolume* mother,
 							     const G4String& colourName
 							     , G4bool wireFrame,G4bool sensitivity)

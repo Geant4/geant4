@@ -56,7 +56,7 @@ G4MIRDRightKidney::~G4MIRDRightKidney()
 {
 }
 
-G4VPhysicalVolume* G4MIRDRightKidney::ConstructOrgan(const G4String& volumeName,
+G4VPhysicalVolume* G4MIRDRightKidney::Construct(const G4String& volumeName,
 						     G4VPhysicalVolume* mother, 
 						     const G4String& colourName,
 						     G4bool wireFrame,G4bool sensitivity)

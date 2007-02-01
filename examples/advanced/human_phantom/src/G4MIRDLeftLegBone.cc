@@ -52,7 +52,7 @@ G4MIRDLeftLegBone::~G4MIRDLeftLegBone()
 {
 }
 
-G4VPhysicalVolume* G4MIRDLeftLegBone::ConstructOrgan(const G4String& volumeName,G4VPhysicalVolume* mother, 
+G4VPhysicalVolume* G4MIRDLeftLegBone::Construct(const G4String& volumeName,G4VPhysicalVolume* mother, 
 						     const G4String& colourName, G4bool wireFrame,G4bool sensitivity)
 {
  

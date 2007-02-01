@@ -50,7 +50,7 @@ G4MIRDUterus::~G4MIRDUterus()
 {
 }
 
-G4VPhysicalVolume* G4MIRDUterus::ConstructOrgan(const G4String& volumeName,G4VPhysicalVolume* mother,  
+G4VPhysicalVolume* G4MIRDUterus::Construct(const G4String& volumeName,G4VPhysicalVolume* mother,  
 						const G4String& colourName, G4bool wireFrame, G4bool sensitivity)
 {
  
@@ -63,6 +63,7 @@ G4VPhysicalVolume* G4MIRDUterus::ConstructOrgan(const G4String& volumeName,G4VPh
  G4double ax= 2.5*cm; //a
  G4double by= 1.5*cm; //c
  G4double cz= 5.*cm; //b
+
  G4double zcut1= -5.* cm; //-b
  G4double zcut2= 2.5*cm; //y1-y0
 

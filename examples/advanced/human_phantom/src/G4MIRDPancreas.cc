@@ -54,7 +54,7 @@ G4MIRDPancreas::~G4MIRDPancreas()
 
 }
 
-G4VPhysicalVolume* G4MIRDPancreas::ConstructOrgan(const G4String& volumeName,G4VPhysicalVolume* mother,
+G4VPhysicalVolume* G4MIRDPancreas::Construct(const G4String& volumeName,G4VPhysicalVolume* mother,
 						  const G4String& colourName
 						  ,G4bool wireFrame, G4bool sensitivity)
 {

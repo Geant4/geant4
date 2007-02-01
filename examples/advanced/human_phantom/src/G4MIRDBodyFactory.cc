@@ -136,7 +136,7 @@ G4VPhysicalVolume* G4MIRDBodyFactory::CreateOrgan(const G4String& organ_name,G4V
 						  const G4String& colourName, G4bool visAttribute,
 						  G4bool sensitivity)
 {
- return organ[organ_name] -> ConstructOrgan(organ_name,motherVolume,colourName, visAttribute, sensitivity);
+ return organ[organ_name] -> Construct(organ_name,motherVolume,colourName, visAttribute, sensitivity);
 }
 
 
