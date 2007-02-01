@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel.cc,v 1.32 2007-01-31 14:32:32 vnivanch Exp $
+// $Id: G4UrbanMscModel.cc,v 1.33 2007-02-01 15:56:07 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -120,6 +120,7 @@
 // 31-01-07 correction in SampleCosineTheta: screening parameter 
 //          corrected in single/plural scattering +
 //          code cleaning (L.Urban)
+// 01-02-07 restore logic inside ComputeTrueStepLength (V.Ivanchenko)
 //
 
 // Class Description:
@@ -630,6 +631,8 @@ void G4UrbanMscModel::GeomLimit(const G4Track&  track)
                   track.GetMomentumDirection(),
                   cstep,
                   presafety);
+    // G4cout << "!!!G4UrbanMscModel::GeomLimit presafety= " << presafety
+    //	   << " limit= " << geomlimit << G4endl;
   }
 }
 
@@ -723,13 +726,11 @@ G4double G4UrbanMscModel::ComputeGeomPathLength(G4double)
 
 G4double G4UrbanMscModel::ComputeTrueStepLength(G4double geomStepLength)
 {
-  G4double trueLength = geomStepLength;
-  zPathLength = geomStepLength;
-
-  // t = z for very small zPathLength
-  if(zPathLength < tlimitminfix)
+  // t = z for very small step
+  if(geomStepLength < tlimitminfix)
   {
-    tPathLength = zPathLength;
+    tPathLength = geomStepLength;
+    zPathLength = geomStepLength;
     return tPathLength;
   }
 
@@ -738,23 +739,22 @@ G4double G4UrbanMscModel::ComputeTrueStepLength(G4double geomStepLength)
     return tPathLength;
 
   // recalculation
+  zPathLength = geomStepLength;
   if((geomStepLength > lambda0*tausmall) && (geomStepLength > stepmin))
   {
     if(par1 <  0.)
-      trueLength = -lambda0*log(1.-geomStepLength/lambda0) ;
+      tPathLength = -lambda0*log(1.-geomStepLength/lambda0) ;
     else 
     {
       if(par1*par3*geomStepLength < 1.)
-        trueLength = (1.-exp(log(1.-par1*par3*geomStepLength)/par3))/par1 ;
+        tPathLength = (1.-exp(log(1.-par1*par3*geomStepLength)/par3))/par1 ;
       else 
-        trueLength = currentRange ;
+        tPathLength = currentRange ;
     }  
   }
-  if(trueLength < geomStepLength) trueLength = geomStepLength;
+  if(tPathLength < geomStepLength) tPathLength = geomStepLength;
 
-  tPathLength = trueLength; 
-
-  return trueLength;
+  return tPathLength;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -808,6 +808,13 @@ std::vector<G4DynamicParticle*>* G4UrbanMscModel::SampleSecondaries(
   if (latDisplasment) {
 
     G4double r = SampleDisplacement();
+/*
+    G4cout << "G4UrbanMscModel::SampleSecondaries: e(MeV)= " << kineticEnergy
+	   << " sinTheta= " << sth << " r(mm)= " << r
+           << " trueStep(mm)= " << truestep 
+           << " geomStep(mm)= " << zPathLength
+           << G4endl;
+*/
       if(r > 0.)
       {
         G4double latcorr = LatCorrelation();
