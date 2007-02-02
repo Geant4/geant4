@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel.cc,v 1.33 2007-02-01 15:56:07 vnivanch Exp $
+// $Id: G4UrbanMscModel.cc,v 1.34 2007-02-02 18:57:03 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -640,16 +640,15 @@ void G4UrbanMscModel::GeomLimit(const G4Track&  track)
 
 G4double G4UrbanMscModel::ComputeGeomPathLength(G4double)
 {
-  //  do the true -> geom transformation
+  lambdaeff = lambda0;
+  par1 = -1. ;  
+  par2 = par3 = 0. ;  
 
+  //  do the true -> geom transformation
   zPathLength = tPathLength;
 
   // z = t for very small tPathLength
   if(tPathLength < tlimitminfix) return zPathLength;
-
-  lambdaeff = lambda0;
-  par1 = -1. ;  
-  par2 = par3 = 0. ;  
 
   // this correction needed to run MSC with eIoni and eBrem inactivated
   // and makes no harm for a normal run
@@ -726,20 +725,16 @@ G4double G4UrbanMscModel::ComputeGeomPathLength(G4double)
 
 G4double G4UrbanMscModel::ComputeTrueStepLength(G4double geomStepLength)
 {
-  // t = z for very small step
-  if(geomStepLength < tlimitminfix)
-  {
-    tPathLength = geomStepLength;
-    zPathLength = geomStepLength;
-    return tPathLength;
-  }
-
   // step defined other than transportation 
   if(geomStepLength == zPathLength && tPathLength <= currentRange)
     return tPathLength;
 
-  // recalculation
+  // t = z for very small step
   zPathLength = geomStepLength;
+  tPathLength = geomStepLength;
+  if(geomStepLength < tlimitminfix) return tPathLength;
+  
+  // recalculation
   if((geomStepLength > lambda0*tausmall) && (geomStepLength > stepmin))
   {
     if(par1 <  0.)
@@ -749,7 +744,7 @@ G4double G4UrbanMscModel::ComputeTrueStepLength(G4double geomStepLength)
       if(par1*par3*geomStepLength < 1.)
         tPathLength = (1.-exp(log(1.-par1*par3*geomStepLength)/par3))/par1 ;
       else 
-        tPathLength = currentRange ;
+        tPathLength = currentRange;
     }  
   }
   if(tPathLength < geomStepLength) tPathLength = geomStepLength;
