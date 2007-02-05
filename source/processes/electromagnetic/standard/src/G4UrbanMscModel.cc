@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel.cc,v 1.34 2007-02-02 18:57:03 vnivanch Exp $
+// $Id: G4UrbanMscModel.cc,v 1.35 2007-02-05 07:55:33 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -908,11 +908,16 @@ G4double G4UrbanMscModel::SampleCosineTheta(G4double trueStepLength,
   }
   else
   {
-    if(trueStepLength >= currentRange*dtrl)
-      if(par1*trueStepLength < 1.)
-        tau = -par2*log(1.-par1*trueStepLength) ;
-      else
-        tau = taubig ;
+    // for the case if ioni/brems are inactivated
+    // see the corresponding condition in ComputeGeomPathLength 
+    if(1.-KineticEnergy/currentKinEnergy > 0.01)
+    {
+      if(trueStepLength >= currentRange*dtrl)
+        if(par1*trueStepLength < 1.)
+          tau = -par2*log(1.-par1*trueStepLength) ;
+        else
+          tau = taubig ;
+    }
 
     currentTau = tau ;
     lambdaeff = trueStepLength/currentTau;
