@@ -178,7 +178,7 @@ if [ `uname -n | grep tersk08` ]; then
   export G4INSTALL=/afs/slac.stanford.edu/u/sf/stesting/stt/$REF/src/geant4
   export G4STTDIR=/afs/slac.stanford.edu/u/sf/stesting/stt/$REF/testtools/geant4/tests/tools
     export G4SYSTEM=SUN-CC
-    export DEBOPT=${DEBOPT}_59_54
+    export DEBOPT=${DEBOPT}_59_58
 
     unset G4USE_OSPACE
 
@@ -328,7 +328,7 @@ if [ `uname -n | grep sungeant` ]; then
     export G4SYSTEM=SUN-CC
     export DEBOPT=${DEBOPT}_ISO
     unset G4USE_OSPACE
-    . /afs/cern.ch/sw/geant4/dev/scripts/CC7.sh
+    . /afs/cern.ch/sw/geant4/dev/scripts/CC8.sh
 #    export PATH=/afs/cern.ch/project/sun/solaris/opt/SUNWspro7/bin:${PATH}
 #    export PATH=`echo $PATH | sed s/SUNWspro50/SUNWspro/`
 #   export LD_LIBRARY_PATH=/afs/cern.ch/project/sun/solaris/opt/SUNWspro7/lib:${LD_LIBRARY_PATH}
@@ -625,7 +625,7 @@ if [ $UNAMEN = pcgeant6.cern.ch ]; then
 #  export G4VIS_BUILD_OIX_DRIVER=1
 fi
 
-if [ $UNAMEN = lxcert-i386 ]; then
+if [ $UNAMEN = pcg4speed2.cern.ch ]; then
   export DEBOPT=${DEBOPT}_slc4_i32
   export CVSROOT=/afs/cern.ch/sw/geant4/cvs
   export G4SYSTEM=Linux-g++
