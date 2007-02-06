@@ -1,4 +1,4 @@
-$Id: History,v 1.275 2007-02-06 14:47:46 vnivanch Exp $
+$Id: History,v 1.276 2007-02-06 15:01:11 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -21,7 +21,7 @@ committal in the CVS repository !
                                  move SetMscStepLimitation from header to source
                                  and add inside extra initialisation
                     L.Urban      add protection for case when energy loss inactived
-                                 cleanup the code 
+                                 fix computation of skindepth value 
 
 29 January 07: V.Ivanchenko (emstand-V08-02-03)
 - G4UrbanMscModel - V.Ivanchenko add protections agains NaN values

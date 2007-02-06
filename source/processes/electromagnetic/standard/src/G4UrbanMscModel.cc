@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel.cc,v 1.37 2007-02-06 14:47:46 vnivanch Exp $
+// $Id: G4UrbanMscModel.cc,v 1.38 2007-02-06 15:01:11 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -172,7 +172,7 @@ G4UrbanMscModel::G4UrbanMscModel(G4double m_facrange, G4double m_dtrl,
   taulim        = 1.e-6;
   currentTau    = taulim;
   stepmin       = 1.e-6*mm;
-  skindepth     = (skin-1)*stepmin;
+  skindepth     = skin*stepmin;
   currentRange  = 0. ;
   frscaling2    = 0.25;
   frscaling1    = 1.-frscaling2;
@@ -229,7 +229,7 @@ void G4UrbanMscModel::SetMscStepLimitation(G4bool alg, G4double factor)
 
   // reinitialisation 
   stepmin       = 1.e-6*mm;
-  skindepth     = (skin-1)*stepmin;
+  skindepth     = skin*stepmin;
   tlimitmin     = 10.e-6*mm;            
   inside        = false;  
 }
@@ -554,7 +554,7 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
       rat = 1.e-3/(rat*(10.+rat)) ;
       //stepmin ~ lambda_elastic
       stepmin = rat*lambda0;
-      skindepth = (skin-1.)*stepmin;
+      skindepth = skin*stepmin;
 
       //define tlimitmin
       tlimitmin = lambda0/nstepmax;
