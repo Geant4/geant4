@@ -1,4 +1,4 @@
-$Id: History,v 1.276 2007-02-06 15:01:11 vnivanch Exp $
+$Id: History,v 1.277 2007-02-06 15:52:27 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,8 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+06 February 07: V.Ivanchenko (emstand-V08-02-04)
+- G4MultipleScattering - allow reinicialisation of model parameters between runs
 - G4UrbanMscModel - V.Ivanchenko add extra protection inside SampleDisplacement
                                  move SetMscStepLimitation from header to source
                                  and add inside extra initialisation
@@ -48,7 +50,7 @@ committal in the CVS repository !
   (L.Urban)
 
 23 Nov 06:  V.Ivanchenko (emstand-V08-01-15)
-- G4MultipleScattering - ste default skin=1 only for e+-,
+- G4MultipleScattering - set default skin=1 only for e+-,
   for all other particles default skin=0 
 
 20 Nov 06: V.Ivanchenko (emstand-V08-01-14)
