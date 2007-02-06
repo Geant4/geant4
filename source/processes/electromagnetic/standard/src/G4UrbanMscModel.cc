@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel.cc,v 1.36 2007-02-06 06:50:46 urban Exp $
+// $Id: G4UrbanMscModel.cc,v 1.37 2007-02-06 14:47:46 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -121,6 +121,9 @@
 //          corrected in single/plural scattering +
 //          code cleaning (L.Urban)
 // 01-02-07 restore logic inside ComputeTrueStepLength (V.Ivanchenko)
+// 06-02-07 Move SetMscStepLimitation method into the source, add there 
+//          reinitialisation of some private members, add protection inside 
+//          SampleDisplacement(VI)
 //
 
 // Class Description:
@@ -215,6 +218,20 @@ void G4UrbanMscModel::Initialise(const G4ParticleDefinition* p,
     ->GetNavigatorForTracking();
 
   safetyHelper= new G4SafetyHelper(); 
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void G4UrbanMscModel::SetMscStepLimitation(G4bool alg, G4double factor)
+{
+  steppingAlgorithm = alg;
+  facrange = factor;
+
+  // reinitialisation 
+  stepmin       = 1.e-6*mm;
+  skindepth     = (skin-1)*stepmin;
+  tlimitmin     = 10.e-6*mm;            
+  inside        = false;  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -1024,12 +1041,13 @@ G4double G4UrbanMscModel::SampleDisplacement()
   }
 
   // protection against z > t ...........................
-  G4double zt = (tPathLength-zPathLength)*(tPathLength+zPathLength);
-  if(zt <= 0.)
-    rmean = 0.;
-  else if(rmean*rmean > zt)
-    rmean = sqrt(zt);
-
+  if(rmean > 0.) {
+    G4double zt = (tPathLength-zPathLength)*(tPathLength+zPathLength);
+    if(zt <= 0.)
+      rmean = 0.;
+    else if(rmean*rmean > zt)
+      rmean = sqrt(zt);
+  }
   return rmean;
 }
 

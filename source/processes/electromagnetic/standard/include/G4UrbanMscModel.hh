@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel.hh,v 1.17 2007-01-31 14:12:04 urban Exp $
+// $Id: G4UrbanMscModel.hh,v 1.18 2007-02-06 14:47:46 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -72,6 +72,7 @@
 //          single scattering modified allowing not small
 //          angles as well (L.Urban)
 // 31-01-07 code cleaning (L.Urban)
+// 06-02-07 Move SetMscStepLimitation method into the source (VI)
 //
 //
 // Class Description:
@@ -224,15 +225,6 @@ inline
 void G4UrbanMscModel::SetLateralDisplasmentFlag(G4bool val) 
 { 
   latDisplasment = val;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-inline
-void G4UrbanMscModel::SetMscStepLimitation(G4bool alg, G4double factor)
-{
-  steppingAlgorithm = alg;
-  facrange = factor;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

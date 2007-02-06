@@ -1,4 +1,4 @@
-$Id: History,v 1.274 2007-01-29 09:37:45 vnivanch Exp $
+$Id: History,v 1.275 2007-02-06 14:47:46 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+- G4UrbanMscModel - V.Ivanchenko add extra protection inside SampleDisplacement
+                                 move SetMscStepLimitation from header to source
+                                 and add inside extra initialisation
+                    L.Urban      add protection for case when energy loss inactived
+                                 cleanup the code 
 
 29 January 07: V.Ivanchenko (emstand-V08-02-03)
 - G4UrbanMscModel - V.Ivanchenko add protections agains NaN values
