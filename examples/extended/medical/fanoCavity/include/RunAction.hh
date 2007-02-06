@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.hh,v 1.1 2007-01-19 17:20:27 maire Exp $
+// $Id: RunAction.hh,v 1.2 2007-02-06 11:47:39 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -79,9 +79,9 @@ class RunAction : public G4UserRunAction
     HistoManager*           histoManager;
     
     G4double                Esecondary;
-    G4int                   nbSec;
+    G4long                  nbSec;
     
-    G4int                   PartFlowCavity[2];
+    G4long                  PartFlowCavity[2];
     G4double                EnerFlowCavity[2];        
     G4double                EdepCavity;
     G4double                trkSegmCavity;
@@ -90,7 +90,7 @@ class RunAction : public G4UserRunAction
         
     G4double                stepWall,   stepWall2;
     G4double                stepCavity, stepCavity2;    
-    G4int                   nbStepWall, nbStepCavity;
+    G4long                  nbStepWall, nbStepCavity;
     
   private:
     G4double                wallThickness;

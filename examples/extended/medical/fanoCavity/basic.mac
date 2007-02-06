@@ -1,4 +1,4 @@
-# $Id: basic.mac,v 1.5 2007-01-30 16:02:10 maire Exp $
+# $Id: basic.mac,v 1.6 2007-02-06 11:47:39 maire Exp $
 #
 /control/verbose 2
 /run/verbose 2
@@ -9,9 +9,9 @@
 /process/eLoss/fluct    false
 /process/eLoss/integral false
 #
-/testem/histo/setFileName stepinwall
+/testem/histo/setFileName nothing
 /testem/histo/setHisto 8 100  0  1 mm	#step size in wall
 #
 /testem/event/printModulo 10000
 #
-/run/beamOn 20000
+/run/beamOn 200000

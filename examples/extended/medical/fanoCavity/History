@@ -1,4 +1,4 @@
-$Id: History,v 1.5 2007-01-30 16:02:10 maire Exp $
+$Id: History,v 1.6 2007-02-06 11:47:39 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+06-02-07 mma (fano-V08-02-03)
+- RunAction: use G4long instead of G4int
+- fanoCavity.in : 4000 events
      
 30-01-07 mma (fano-V08-02-02)
 - MyKleinNishinaModel::CrossSectionPerVolume(): cancel crossSection in cavity
