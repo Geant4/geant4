@@ -104,7 +104,7 @@ HADR_EXAMPLES += 01
 
 POLARISATION_EXAMPLES += 01
 
-MEDICAL += 01
+MEDICAL += 01 02
 
 ELECTRO += 01 02
 
@@ -146,12 +146,6 @@ all:
 	@$(ECHO) Making EM Tests...
 	@for nn in $(ELECTROMAGNETIC); do \
 	  (cd test50$$nn && $(MAKE)); \
-	done;:
-
-# MEDICAL
-	@$(ECHO) Making Medical Tests...
-	@for nn in $(MEDICAL); do \
-	  (cd test20$$nn && $(MAKE)); \
 	done;:
 
 # Persistancy
@@ -303,6 +297,12 @@ examples_links_source:
 	  ln -s $$exdir $$testdir; \
 	  ln -s GammaTherapy.in  $$testdir/test2001.in;  \
           ln -s GammaTherapy.out $$testdir/test2001.out; :
+	 
+	  @testdir=test2002; \
+	  exdir=$(G4INSTALL)/examples/extended/medical/fanoCavity/; \
+	  ln -s $$exdir $$testdir; \
+	  ln -s fanoCavity.in  $$testdir/test2002.in;  \
+          ln -s fanoCavity.out $$testdir/test2002.out; :
 
 # OPTICAL
 	  @testdir=test4001; \
@@ -548,6 +548,8 @@ examples_links_binaries:
 # ADV_EXAMPLES
 	@ln -s Microbeam $(G4WORKDIR)/bin/$(G4SYSTEM)/test1002; \
 	ln -s PhotIn $(G4WORKDIR)/bin/$(G4SYSTEM)/test1003; \
+        ln -s GammaTherapy $(G4WORKDIR)/bin/$(G4SYSTEM)/test2001; \
+        ln -s fanoCavity $(G4WORKDIR)/bin/$(G4SYSTEM)/test2002; \
 	true
 
 #temp
