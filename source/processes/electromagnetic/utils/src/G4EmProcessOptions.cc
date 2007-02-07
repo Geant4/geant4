@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmProcessOptions.cc,v 1.18 2006-06-29 19:55:05 gunter Exp $
+// $Id: G4EmProcessOptions.cc,v 1.19 2007-02-07 15:39:08 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -417,6 +417,13 @@ void G4EmProcessOptions::SetMscStepLimitation(G4bool algorithm,
 void G4EmProcessOptions::SetLPMFlag(G4bool val)
 {
   theManager->SetLPMFlag(val);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4EmProcessOptions::SetMscLateralDisplacement(G4bool val)
+{
+  theManager->SetMscLateralDisplacement(val);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

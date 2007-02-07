@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.hh,v 1.44 2007-01-11 15:33:15 vnivanch Exp $
+// $Id: G4LossTableManager.hh,v 1.45 2007-02-07 15:39:08 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -192,6 +192,8 @@ public:
 
   void SetLPMFlag(G4bool val);
 
+  void SetMscLateralDisplacement(G4bool val);
+
   void SetBremsstrahlungTh(G4double val);
 
   void SetVerbose(G4int val);
@@ -206,11 +208,13 @@ public:
 
   G4bool MscFlag() const;
 
+  G4bool MscLateralDisplacementFlag() const;
+
   G4double FacRange() const;
 
   G4double BremsstrahlungTh() const;
 
-  G4VEnergyLossProcess* GetEnergyLossProcess(const G4ParticleDefinition *aParticle);
+  G4VEnergyLossProcess* GetEnergyLossProcess(const G4ParticleDefinition*);
 
   const std::vector<G4VEnergyLossProcess*>& GetEnergyLossProcessVector();
 
@@ -276,6 +280,7 @@ private:
   G4bool stepFunctionActive;
   G4bool flagLPM;
   G4bool flagMSC;
+  G4bool flagMSCLateral;
   G4bool mscActive;
 
   G4double minSubRange;

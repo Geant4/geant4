@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.cc,v 1.79 2007-01-16 14:30:59 vnivanch Exp $
+// $Id: G4LossTableManager.cc,v 1.80 2007-02-07 15:39:08 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -157,6 +157,7 @@ G4LossTableManager::G4LossTableManager()
   stepFunctionActive = false;
   flagLPM = true;
   flagMSC = true;
+  flagMSCLateral = true;
   facRange = 0.02;
   bremsTh = DBL_MAX;
   mscActive = false;
@@ -818,9 +819,27 @@ void G4LossTableManager::SetLPMFlag(G4bool val)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
+void G4LossTableManager::SetMscLateralDisplacement(G4bool val)
+{
+  flagMSCLateral = val;
+  size_t msc = msc_vector.size();
+  for (size_t j=0; j<msc; j++) {
+    if(msc_vector[j]) msc_vector[j]->SetLateralDisplasmentFlag(val);
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
 G4bool G4LossTableManager::LPMFlag() const
 {
   return flagLPM;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
+G4bool G4LossTableManager::MscLateralDisplacementFlag() const
+{
+  return flagMSCLateral;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

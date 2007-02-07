@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EnergyLossMessenger.cc,v 1.21 2006-11-10 18:34:57 vnivanch Exp $
+// $Id: G4EnergyLossMessenger.cc,v 1.22 2007-02-07 15:39:08 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -41,7 +41,8 @@
 // 10-01-06 SetStepLimits -> SetStepFunction (V.Ivanchenko)
 // 10-01-06 PreciseRange -> CSDARange (V.Ivanchenko)
 // 10-05-06 Add command MscStepLimit (V.Ivanchenko) 
-// 10-10-06 Ann DEDXBinning command (V.Ivanchenko)
+// 10-10-06 Add DEDXBinning command (V.Ivanchenko)
+// 07-02-07 Add MscLateralDisplacement command (V.Ivanchenko)
 //
 // -------------------------------------------------------------------
 //
@@ -149,6 +150,12 @@ G4EnergyLossMessenger::G4EnergyLossMessenger()
   lpmCmd->SetDefaultValue(true);
   lpmCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
+  latCmd = new G4UIcmdWithABool("/process/eLoss/MscLateralDisplecement",this);
+  latCmd->SetGuidance("Switch true/false sampling of latra dislacent.");
+  latCmd->SetParameterName("lat",true);
+  latCmd->SetDefaultValue(true);
+  latCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
   dedxCmd = new G4UIcmdWithAnInteger("/process/eLoss/binsDEDX",this);
   dedxCmd->SetGuidance("Set number of bins for DEDX tables.");
   dedxCmd->SetParameterName("binsDEDX",true);
@@ -200,6 +207,7 @@ G4EnergyLossMessenger::~G4EnergyLossMessenger()
   delete IntegCmd;
   delete rangeCmd;
   delete lpmCmd;
+  delete latCmd;
   delete verCmd;
   delete mscCmd;
   delete dedxCmd;
@@ -253,32 +261,34 @@ void G4EnergyLossMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
      lossTables->SetMscStepLimitation(a,f);
    }
 
-  if (command == MinEnCmd) {
+  if (command == MinEnCmd) 
     lossTables->SetMinEnergy(MinEnCmd->GetNewDoubleValue(newValue));
-  }
 
-  if (command == MaxEnCmd) {
+  if (command == MaxEnCmd) 
     lossTables->SetMaxEnergy(MaxEnCmd->GetNewDoubleValue(newValue));
-  }
-  if (command == IntegCmd) {
+  
+  if (command == IntegCmd) 
     lossTables->SetIntegral(IntegCmd->GetNewBoolValue(newValue));
-  }
-  if (command == rangeCmd) {
+  
+  if (command == rangeCmd) 
     lossTables->SetBuildCSDARange(rangeCmd->GetNewBoolValue(newValue));
-  }
-  if (command == lpmCmd) {
+  
+  if (command == lpmCmd) 
     lossTables->SetLPMFlag(lpmCmd->GetNewBoolValue(newValue));
-  }
-  if (command == verCmd) {
+  
+  if (command == latCmd) 
+    lossTables->SetMscLateralDisplacement(latCmd->GetNewBoolValue(newValue));
+  
+  if (command == verCmd) 
     lossTables->SetVerbose(verCmd->GetNewIntValue(newValue));
-  }
+  
   G4EmProcessOptions opt;
-  if (command == dedxCmd) {
-    opt.SetDEDXBinning(verCmd->GetNewIntValue(newValue));
-  }
-  if (command == lbCmd) {
-    opt.SetDEDXBinning(verCmd->GetNewIntValue(newValue));
-  }
+  if (command == dedxCmd) 
+    opt.SetDEDXBinning(dedxCmd->GetNewIntValue(newValue));
+  
+  if (command == lbCmd) 
+    opt.SetDEDXBinning(lbCmd->GetNewIntValue(newValue));
+  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

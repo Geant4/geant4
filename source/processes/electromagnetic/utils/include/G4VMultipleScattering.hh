@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.hh,v 1.39 2006-06-29 19:54:51 gunter Exp $
+// $Id: G4VMultipleScattering.hh,v 1.40 2007-02-07 15:39:08 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -48,7 +48,7 @@
 // part of calculations for all charged particles
 //
 // 26-11-03 bugfix in AlongStepDoIt (L.Urban)
-// 25-05-04 add protection against case when range is less than steplimit (V.Ivanchenko)
+// 25-05-04 add protection against case when range is less than steplimit (VI)
 // 30-06-04 make destructor virtual (V.Ivanchenko)
 // 27-08-04 Add InitialiseForRun method (V.Ivanchneko)
 // 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivanchenko)

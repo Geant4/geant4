@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmProcessOptions.hh,v 1.9 2006-06-29 19:54:29 gunter Exp $
+// $Id: G4EmProcessOptions.hh,v 1.10 2007-02-07 15:39:08 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -107,6 +107,8 @@ public:
   void SetMscStepLimitation(G4bool algorithm, G4double factor = -1.);
 
   void SetLPMFlag(G4bool val);
+
+  void SetMscLateralDisplacement(G4bool val);
 
   void SetBremsstrahlungTh(G4double val);
 
