@@ -1,4 +1,4 @@
-$Id: History,v 1.277 2007-02-06 15:52:27 vnivanch Exp $
+$Id: History,v 1.278 2007-02-07 15:07:42 urban Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+07 February 07: L.Urban
+- G4UrbanMscModel - L.Urban : fix in the single scattering code for heavy
+                              particles, now the code can be used with
+                              skin=1 e+/e- and for heavy particles as well.
 
 06 February 07: V.Ivanchenko (emstand-V08-02-04)
 - G4MultipleScattering - allow reinicialisation of model parameters between runs
