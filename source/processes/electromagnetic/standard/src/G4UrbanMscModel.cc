@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel.cc,v 1.38 2007-02-06 15:01:11 vnivanch Exp $
+// $Id: G4UrbanMscModel.cc,v 1.39 2007-02-07 14:07:51 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -124,6 +124,8 @@
 // 06-02-07 Move SetMscStepLimitation method into the source, add there 
 //          reinitialisation of some private members, add protection inside 
 //          SampleDisplacement(VI)
+// 07-02-07 fix single scattering for heavy particles, now skin=1 can be used
+//          for heavy particles as well (L.Urban)
 //
 
 // Class Description:
@@ -596,8 +598,8 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
     {
       if(geomlimit > skindepth)
       {
-        if(tnow > geomlimit-skindepth)
-          tnow = geomlimit-skindepth;
+        if(tnow > geomlimit-0.999*skindepth)
+          tnow = geomlimit-0.999*skindepth;
       }
       else
       {
@@ -891,16 +893,15 @@ G4double G4UrbanMscModel::SampleCosineTheta(G4double trueStepLength,
   Zeff = couple->GetMaterial()->GetTotNbOfElectPerVolume()/
          couple->GetMaterial()->GetTotNbOfAtomsPerVolume() ;
 
-  if((trueStepLength <= stepmin) && (skin > 0.))   
+  if(trueStepLength <= stepmin) 
   {
     //no scattering, single or plural scattering
-    // just before boundary crossing only (for skin > 0)
     G4double mean = trueStepLength/stepmin ;
     cth = 1.;
     G4int n = G4Poisson(mean);
     if(n > 0)
     {
-      G4double tm = KineticEnergy/mass;
+      G4double tm = KineticEnergy/electron_mass_c2;
       // ascr - screening parameter
       G4double ascr = exp(log(Zeff)/3.)/(137.*sqrt(tm*(tm+2.)));
       G4double ascr1 = 1.+0.5*ascr*ascr;
