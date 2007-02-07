@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel.cc,v 1.39 2007-02-07 14:07:51 urban Exp $
+// $Id: G4UrbanMscModel.cc,v 1.40 2007-02-07 15:37:48 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -116,7 +116,7 @@
 // 04-12-06 fix in ComputeTruePathLengthLimit (L.Urban)
 // 17-01-07 remove LocatePoint from GeomLimit method (V.Ivanchenko)
 // 19-01-07 fix of true < geom problem (L.Urban)
-// 25-01-07 add protections from NaN vaues and for zero geometry step (V.Ivanchenko)
+// 25-01-07 add protections from NaN vaues and for zero geometry step (VI)
 // 31-01-07 correction in SampleCosineTheta: screening parameter 
 //          corrected in single/plural scattering +
 //          code cleaning (L.Urban)
@@ -173,15 +173,15 @@ G4UrbanMscModel::G4UrbanMscModel(G4double m_facrange, G4double m_dtrl,
   tausmall      = 1.e-20;
   taulim        = 1.e-6;
   currentTau    = taulim;
-  stepmin       = 1.e-6*mm;
+  tlimitminfix  = 1.e-6*mm;            
+  stepmin       = tlimitminfix;
   skindepth     = skin*stepmin;
   currentRange  = 0. ;
   frscaling2    = 0.25;
   frscaling1    = 1.-frscaling2;
   tlimit        = 1.e10*mm;
-  tlimitmin     = 10.e-6*mm;            
-  tlimitminfix  = 1.e-6*mm;            
-  tnow          = 10.e-6*mm;
+  tlimitmin     = 10.*tlimitminfix;            
+  tnow          = 10.*tlimitminfix;
   nstepmax      = 25.;
   geombig       = 1.e50*mm;
   geommin       = 1.e-3*mm;
@@ -230,9 +230,10 @@ void G4UrbanMscModel::SetMscStepLimitation(G4bool alg, G4double factor)
   facrange = factor;
 
   // reinitialisation 
-  stepmin       = 1.e-6*mm;
+  stepmin       = tlimitminfix;
   skindepth     = skin*stepmin;
-  tlimitmin     = 10.e-6*mm;            
+  tlimitmin     = 10.*tlimitminfix;            
+  tnow          = 10.*tlimitminfix;
   inside        = false;  
 }
 
@@ -523,7 +524,7 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
     {
       if((stepNumber == 1) && (currentRange < presafety))
       {
-        stepmin = 1.e-6*mm;
+        stepmin = tlimitminfix;
         inside = true;
         return tPathLength;  
       }
@@ -931,7 +932,7 @@ G4double G4UrbanMscModel::SampleCosineTheta(G4double trueStepLength,
           tau = -par2*log(1.-par1*trueStepLength) ;
         // for the case if ioni/brems are inactivated
         // see the corresponding condition in ComputeGeomPathLength 
-        else if(1.-KineticEnergy/currentKinEnergy > 1.e-6)
+        else if(1.-KineticEnergy/currentKinEnergy > taulim)
           tau = taubig ;
 
     currentTau = tau ;

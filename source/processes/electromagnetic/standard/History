@@ -1,4 +1,4 @@
-$Id: History,v 1.278 2007-02-07 15:07:42 urban Exp $
+$Id: History,v 1.279 2007-02-07 15:37:48 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,18 +17,17 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-07 February 07: L.Urban
+06 February 07: V.Ivanchenko (emstand-V08-02-04)
 - G4UrbanMscModel - L.Urban : fix in the single scattering code for heavy
                               particles, now the code can be used with
                               skin=1 e+/e- and for heavy particles as well.
 
-06 February 07: V.Ivanchenko (emstand-V08-02-04)
 - G4MultipleScattering - allow reinicialisation of model parameters between runs
 - G4UrbanMscModel - V.Ivanchenko add extra protection inside SampleDisplacement
                                  move SetMscStepLimitation from header to source
                                  and add inside extra initialisation
-                    L.Urban      add protection for case when energy loss inactived
-                                 fix computation of skindepth value 
+                    L.Urban      add protection for case when energy loss 
+                                 inactivated; fix computation of skindepth value 
 
 29 January 07: V.Ivanchenko (emstand-V08-02-03)
 - G4UrbanMscModel - V.Ivanchenko add protections agains NaN values
