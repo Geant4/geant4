@@ -1,8 +1,8 @@
-$Id: History,v 1.1 2007-02-08 15:45:28 allison Exp $
+$Id: History,v 1.2 2007-02-08 15:48:55 allison Exp $
 -----------------------------------------------------------------------------
 
 History file for test/test202 subdirectory
 ------------------------------------------------
 
-1st December 2006  John Allison
+8th February 2007  John Allison  (test202-V08-02-00)
 - First version based on visualization/test/test19
