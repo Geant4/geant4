@@ -1,0 +1,43 @@
+# run0.mac
+
+/control/verbose 2
+/vis/verbose warnings
+
+/vis/open OGLIX 600x600-0+0
+
+/vis/drawVolume
+
+/vis/scene/add/trajectories
+/vis/modeling/trajectories/create/drawByCharge
+/vis/modeling/trajectories/drawByCharge-0/default/setDrawStepPts true
+/vis/modeling/trajectories/drawByCharge-0/default/setStepPtsSize 5
+
+# Invoke printing of current volume selection settings
+/test202/select
+
+/tracking/verbose 2
+/control/alias pause 10
+
+# Gun fires a geantino from (0,-3*m,0) in direction (0,1,0).
+/run/beamOn
+################################# Misses everything!
+/control/shell sleep {pause}
+
+# De-select Elliptical_Cone
+/test202/select Elliptical_Cone false
+/run/beamOn
+################################# Elliptical_Cone was de-selected
+################################# Looks fine.  But wait...
+/control/shell sleep {pause}
+
+################################# Fire a second geantino
+/run/beamOn
+################################# Finds just one intersection!
+/control/shell sleep {pause}
+
+# De-select Twisted_Trd
+/test202/select Twisted_Trd false
+/run/beamOn
+/run/beamOn
+################################# Twisted_Trd was de-selected
+################################# All's OK

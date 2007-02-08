@@ -1,0 +1,22 @@
+        geant4/tests/test202
+        --------------------
+
+An idiosyncratic collection of volumes placed here and there.  It
+shows up some vis problems and some tracking problems.
+
+// Usage: test202 [macro-file]
+// Typically: test202  (executes vis.mac and enters interactive session)
+//        or: test202 run0.mac (executes run0.mac, enters interactive session)
+//
+// Note: Type of session determined by G4UI_USE... macros.  The first
+// found is instantiated (see test202.cc code).
+
+A) test202
+   This executes vis.mac and enters an interactive session.  It simply
+   displays a selection of volumes using OpenGL.
+
+B) test202 runN.mac, where N = 0,1,2,...
+   This executes runN.mac and enters an interactive session.  The runN
+   macros vary the volume selection and shoot some particles to
+   demonstrate some problems.  Consult the comment lines of the
+   individual macros for explanations.
