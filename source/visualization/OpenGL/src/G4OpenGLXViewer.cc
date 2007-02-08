@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXViewer.cc,v 1.35 2007-01-09 10:11:53 allison Exp $
+// $Id: G4OpenGLXViewer.cc,v 1.36 2007-02-08 13:47:22 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -490,7 +490,7 @@ void G4OpenGLXViewer::print() {
     win=glxpmap;
     
     glXMakeCurrent (dpy,
-		    glxpmap,
+		    win,
 		    cx);
     
     glViewport (0, 0, WinSize_x, WinSize_y);
@@ -506,7 +506,7 @@ void G4OpenGLXViewer::print() {
     cx=tmp_cx;
     
     glXMakeCurrent (dpy,
-		    glxpmap,
+		    win,
 		    cx);
     
   }
