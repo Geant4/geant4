@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredViewer.cc,v 1.20 2006-10-24 06:23:18 allison Exp $
+// $Id: G4OpenGLStoredViewer.cc,v 1.21 2007-02-08 14:01:55 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -166,11 +166,11 @@ void G4OpenGLStoredViewer::DrawDisplayLists () {
   }
 
   // Display time at "head" of time range, which is fEndTime...
-  if (fDisplayHeadTime && fEndTime < DBL_MAX) {
+  if (fDisplayHeadTime && fEndTime < G4OPENGL_DBL_MAX) {
     glMatrixMode (GL_PROJECTION);
     glPushMatrix();
     glLoadIdentity();
-    glOrtho (-1., 1., -1., 1., -DBL_MAX, DBL_MAX);
+    glOrtho (-1., 1., -1., 1., -G4OPENGL_DBL_MAX, G4OPENGL_DBL_MAX);
     glMatrixMode (GL_MODELVIEW);
     glPushMatrix();
     glLoadIdentity();
@@ -190,7 +190,7 @@ void G4OpenGLStoredViewer::DrawDisplayLists () {
   }
 
   // Display light front...
-  if (fDisplayLightFront && fEndTime < DBL_MAX) {
+  if (fDisplayLightFront && fEndTime < G4OPENGL_DBL_MAX) {
     G4double lightFrontRadius = (fEndTime - fDisplayLightFrontT) * c_light;
     if (lightFrontRadius > 0.) {
       G4Point3D lightFrontCentre(fDisplayLightFrontX, fDisplayLightFrontY, fDisplayLightFrontZ);

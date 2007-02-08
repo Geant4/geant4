@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLBitMapStore.cc,v 1.1 2007-01-09 10:11:16 allison Exp $
+// $Id: G4OpenGLBitMapStore.cc,v 1.2 2007-02-08 14:01:55 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -73,7 +73,7 @@ const GLubyte* GetBitMap(Shape shape, G4double& size, G4bool filled)
   // Fill bitmap.
   GLint linewidth;
   glGetIntegerv(GL_LINE_WIDTH, &linewidth);
-  linewidth = std::min(linewidth, bitSize);
+  if (linewidth > bitSize) linewidth = bitSize;
   G4double outer = bitSize / 2.;
   G4double outer2 = outer * outer;
   G4double inner = bitSize / 2. - linewidth;

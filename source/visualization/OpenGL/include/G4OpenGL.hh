@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4OpenGL.hh,v 1.4 2006-06-29 21:17:36 gunter Exp $
+// $Id: G4OpenGL.hh,v 1.5 2007-02-08 14:01:55 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G.Barrand.
@@ -37,5 +37,7 @@
 
 #include <GL/gl.h>
 #include <GL/glu.h>
+
+#define G4OPENGL_DBL_MAX 1.e308
 
 #endif
