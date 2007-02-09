@@ -24,7 +24,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TessellatedSolid.cc,v 1.5 2006-10-20 13:45:21 gcosmo Exp $
+// $Id: G4TessellatedSolid.cc,v 1.6 2007-02-09 12:05:51 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -321,6 +321,16 @@ size_t G4TessellatedSolid::GetNumberOfFacets () const
 //
 EInside G4TessellatedSolid::Inside (const G4ThreeVector &p) const
 {
+  if ( p.x() < xMinExtent - kCarTolerance ||
+       p.x() > xMaxExtent + kCarTolerance ||
+       p.y() < yMinExtent - kCarTolerance ||
+       p.y() > yMaxExtent + kCarTolerance ||
+       p.z() < zMinExtent - kCarTolerance ||
+       p.z() > zMaxExtent + kCarTolerance )
+  {
+    return kOutside;
+  }  
+
   G4double minDist = kInfinity;
   G4double dist    = 0.0;
   typedef std::multimap< G4double, FacetCI, std::less<G4double> > DistMapType;
@@ -372,6 +382,7 @@ G4ThreeVector G4TessellatedSolid::SurfaceNormal (const G4ThreeVector &p) const
   FacetCI minFacet;
   G4double minDist   = kInfinity;
   G4double dist      = 0.0;
+  G4ThreeVector normal;
   
   for (FacetCI f=facets.begin(); f!=facets.end(); f++)
   {
@@ -383,7 +394,23 @@ G4ThreeVector G4TessellatedSolid::SurfaceNormal (const G4ThreeVector &p) const
     }
   }
   
-  return (*minFacet)->GetSurfaceNormal();
+  if (minDist != kInfinity)
+  {
+     normal = (*minFacet)->GetSurfaceNormal();
+  }
+  else
+  {
+#ifdef G4VERBOSE
+    G4cout << "WARNING - G4TessellatedSolid::SurfaceNormal(p)" << G4endl
+           << "          No facets found for point: " << p << " !" << G4endl
+           << "          Returning approximated value for normal." << G4endl;
+    G4Exception("G4TessellatedSolid::SurfaceNormal(p)", "Notification",
+                JustWarning, "Point p is not on surface !?" );
+#endif
+    normal = (p.z()>0 ? G4ThreeVector(0,0,1) : G4ThreeVector(0,0,-1));
+  }
+
+  return normal;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
