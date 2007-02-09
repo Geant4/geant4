@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QCaptureAtRest.hh,v 1.2 2006-06-29 20:08:00 gunter Exp $
+// $Id: G4QCaptureAtRest.hh,v 1.3 2007-02-09 09:33:28 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCaptureAtRest header ----------------
@@ -140,7 +140,7 @@ protected:
   // zero mean lifetime
   G4double GetMeanLifeTime(const G4Track& aTrack, G4ForceCondition* );
   void MuCaptureEMCascade(G4int Z, G4int N, std::vector<G4double>* dV);
-
+  G4double RandomizeDecayElectron(G4int Z); // Randomize energy of decay electron (in MeV)
 private:
 
   G4bool RandomizeMuDecayOrCapture(G4int Z, G4int N); // true=MuCapture, false=MuDecay
