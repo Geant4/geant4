@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel.cc,v 1.40 2007-02-07 15:37:48 vnivanch Exp $
+// $Id: G4UrbanMscModel.cc,v 1.41 2007-02-11 12:20:12 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -126,6 +126,8 @@
 //          SampleDisplacement(VI)
 // 07-02-07 fix single scattering for heavy particles, now skin=1 can be used
 //          for heavy particles as well (L.Urban)
+// 08-02-07 randomization of tlimit removed (L.Urban)
+// 11-02-07 modified stepping algorithm for skin=0
 //
 
 // Class Description:
@@ -514,89 +516,88 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
   //
   if (steppingAlgorithm)
   {
-    if((stepNumber > 1) && inside)
-      return tPathLength;            
-
-    //compute geomlimit and presafety 
-    GeomLimit(track);
-
-    if((stepStatus == fGeomBoundary) || (stepNumber == 1))
+    //for precise simulation for the case without magnatic field
+    // small step(s) + single/plural scattering around boundaries
+    if(skin > 0.)
     {
-      if((stepNumber == 1) && (currentRange < presafety))
+      if((stepNumber > 1) && inside)
+        return tPathLength;            
+
+      //compute geomlimit and presafety 
+      GeomLimit(track);
+
+      if((stepStatus == fGeomBoundary) || (stepNumber == 1))
       {
-        stepmin = tlimitminfix;
-        inside = true;
-        return tPathLength;  
-      }
-      else
-       inside = false;
-
-      // facrange scaling in lambda 
-      // not so strong step restriction above lambdalimit
-      G4double facr = facrange;
-      if(lambda0 > lambdalimit)
-        facr *= frscaling1+frscaling2*lambda0/lambdalimit;
-
-      // constraint from the physics
-      if (currentRange > lambda0) tlimit = facr*currentRange;
-      else                        tlimit = facr*lambda0;
-
-      // constraint from the geometry (if tlimit above is too big)
-      G4double tgeom = geombig; 
-      if(geomlimit > geommin)
-      {
-        if(stepStatus == fGeomBoundary)  
-          tgeom = geomlimit/facgeom;
+        if((stepNumber == 1) && (currentRange < presafety))
+        {
+          stepmin = tlimitminfix;
+          inside = true;
+          return tPathLength;  
+        }
         else
-          tgeom = 2.*geomlimit/facgeom;
+         inside = false;
+
+        // facrange scaling in lambda 
+        // not so strong step restriction above lambdalimit
+        G4double facr = facrange;
+        if(lambda0 > lambdalimit)
+          facr *= frscaling1+frscaling2*lambda0/lambdalimit;
+
+        // constraint from the physics
+        if (currentRange > lambda0) tlimit = facr*currentRange;
+        else                        tlimit = facr*lambda0;
+
+        // constraint from the geometry (if tlimit above is too big)
+        G4double tgeom = geombig; 
+        if(geomlimit > geommin)
+        {
+          if(stepStatus == fGeomBoundary)  
+            tgeom = geomlimit/facgeom;
+          else
+            tgeom = 2.*geomlimit/facgeom;
+        }
+
+        //define stepmin here (it depends on lambda!)
+        //rough estimation of lambda_elastic/lambda_transport
+        G4double rat = currentKinEnergy/MeV ;
+        rat = 1.e-3/(rat*(10.+rat)) ;
+        //stepmin ~ lambda_elastic
+        stepmin = rat*lambda0;
+        skindepth = skin*stepmin;
+
+        //define tlimitmin
+        tlimitmin = lambda0/nstepmax;
+        if(tlimitmin < stepmin) tlimitmin = 1.01*stepmin;
+        if(tlimitmin < tlimitminfix) tlimitmin = tlimitminfix;
+
+        //lower limit for tlimit
+        if(tlimit < tlimitmin) tlimit = tlimitmin;
+
+        //check against geometry limit
+        if(tlimit > tgeom) tlimit = tgeom;
+
+        //if track starts far from boundaries increase tlimit!
+        if(tlimit < facsafety*presafety)
+          tlimit = facsafety*presafety ;
       }
 
-      //define stepmin here (it depends on lambda!)
-      //rough estimation of lambda_elastic/lambda_transport
-      G4double rat = currentKinEnergy/MeV ;
-      rat = 1.e-3/(rat*(10.+rat)) ;
-      //stepmin ~ lambda_elastic
-      stepmin = rat*lambda0;
-      skindepth = skin*stepmin;
+      if(currentRange < presafety)
+      {
+        inside = true;
+        return tPathLength;   
+      }
 
-      //define tlimitmin
-      tlimitmin = lambda0/nstepmax;
-      if(tlimitmin < stepmin) tlimitmin = 1.01*stepmin;
-      if(tlimitmin < tlimitminfix) tlimitmin = tlimitminfix;
+      // shortcut
+      if((tPathLength < tlimit) &&
+         (tPathLength < presafety))
+        return tPathLength;   
 
-      //lower limit for tlimit
-      if(tlimit < tlimitmin) tlimit = tlimitmin;
-
-      //check against geometry limit
-      if(tlimit > tgeom) tlimit = tgeom;
-
-      //if track starts far from boundaries increase tlimit!
+      //if track far from boundaries increase tPathLength
+      tnow = tlimit;
       if(tlimit < facsafety*presafety)
-        tlimit = facsafety*presafety ;
+        tnow  = facsafety*presafety ;
 
-      // "randomize" tlimit                                      
-      tlimit *= 0.5+G4UniformRand();
-    }
-
-    if(currentRange < presafety)
-    {
-      inside = true;
-      return tPathLength;   
-    }
-
-    // shortcut
-    if((tPathLength < tlimit) &&
-       (tPathLength < presafety))
-      return tPathLength;   
-
-    //if track far from boundaries increase tPathLength
-    tnow = tlimit;
-    if(tlimit < facsafety*presafety)
-      tnow  = facsafety*presafety ;
-
-    // step reduction near to boundary
-    if(skin > 0.)  
-    {
+      // step reduction near to boundary
       if(geomlimit > skindepth)
       {
         if(tnow > geomlimit-0.999*skindepth)
@@ -607,14 +608,72 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
         if(tnow > stepmin)
           tnow = stepmin;
       }
+
+      if(tnow < stepmin)
+        tnow = stepmin;
+
+      if(tPathLength > tnow)
+        tPathLength = tnow ; 
+
     }
+    // for 'normal' simulation with or without magnetic field                    
+    //  there no small step/single scattering at boundaries
+    else 
+    {
+      if((stepNumber > 1) && inside)
+        return tPathLength;            
 
-    if(tnow < stepmin)
-      tnow = stepmin;
+      // compute presafety again if presafety <= 0 and no boundary
+      // i.e. when it is needed for optimization purposes
+      if((stepStatus != fGeomBoundary) && (presafety <= 0.)) 
+      {
+        presafety = safetyHelper->ComputeSafety(sp->GetPosition()); 
+        if(currentRange < presafety)
+        {
+          stepmin = tlimitminfix;
+          inside = true;
+          return tPathLength;  
+        }
+        else
+         inside = false;
+      }
 
-    if(tPathLength > tnow)
-      tPathLength = tnow ; 
+      if((stepStatus == fGeomBoundary) || (stepNumber == 1))
+      {
+        // facrange scaling in lambda 
+        // not so strong step restriction above lambdalimit
+        G4double facr = facrange;
+        if(lambda0 > lambdalimit)
+          facr *= frscaling1+frscaling2*lambda0/lambdalimit;
 
+        // constraint from the physics
+        if (currentRange > lambda0) tlimit = facr*currentRange;
+        else                        tlimit = facr*lambda0;
+
+        //lower limit for tlimit
+        tlimitmin = lambda0/nstepmax;
+        if(tlimitmin < tlimitminfix) tlimitmin = tlimitminfix;
+        if(tlimit < tlimitmin) tlimit = tlimitmin;
+
+        //if track starts far from boundaries increase tlimit!
+        if(tlimit < facsafety*presafety)
+          tlimit = facsafety*presafety ;
+      }
+
+      if(currentRange < presafety)
+      {
+        inside = true;
+        return tPathLength;   
+      }
+
+      // shortcut
+      if((tPathLength < tlimit) &&
+         (tPathLength < presafety))
+        return tPathLength;   
+
+      if(tPathLength > tlimit) tPathLength = tlimit;
+
+    }
   }
 
   // version similar to 7.1 (needed for some experiments)
