@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExtrudedSolid.cc,v 1.1 2007-02-09 12:05:50 gcosmo Exp $
+// $Id: G4ExtrudedSolid.cc,v 1.2 2007-02-12 11:32:27 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -494,10 +494,11 @@ G4double G4ExtrudedSolid::DistanceToOut (const G4ThreeVector &p,
 
   G4double distOut =
     G4TessellatedSolid::DistanceToOut(p, v, calcNorm, validNorm, n);
-  *validNorm = fIsConvex; 
+  if (validNorm) { *validNorm = fIsConvex; }
 
   return distOut;
 }
+
 
 //_____________________________________________________________________________
 
@@ -506,8 +507,9 @@ G4double G4ExtrudedSolid::DistanceToOut (const G4ThreeVector &p) const
   // Override the overloaded base class function
 
   return G4TessellatedSolid::DistanceToOut(p);
-}  
- 
+}
+
+
 //_____________________________________________________________________________
 
 std::ostream& G4ExtrudedSolid::StreamInfo(std::ostream &os) const
