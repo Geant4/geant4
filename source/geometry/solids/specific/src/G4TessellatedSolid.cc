@@ -24,7 +24,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TessellatedSolid.cc,v 1.8 2007-02-12 11:51:52 gcosmo Exp $
+// $Id: G4TessellatedSolid.cc,v 1.9 2007-02-12 12:08:33 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -133,7 +133,6 @@ G4TessellatedSolid::G4TessellatedSolid (const G4TessellatedSolid &s)
 {
   if (&s == this) { return; }
 
-  DeleteObjects ();
   CopyObjects (s);
 }
 
