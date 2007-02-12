@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.cc,v 1.80 2007-02-07 15:39:08 vnivanch Exp $
+// $Id: G4LossTableManager.cc,v 1.81 2007-02-12 12:31:50 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -67,6 +67,7 @@
 // 05-06-06 Do not clear loss_table map between runs (VI)
 // 16-01-07 Create new energy loss table for e+,e-,mu+,mu- and 
 //          left ionisation table for further usage (VI)
+// 12-02-07 Add SetSkin, SetLinearLossLimit (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -771,6 +772,15 @@ void G4LossTableManager::SetStepFunction(G4double v1, G4double v2)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
+void G4LossTableManager::SetLinearLossLimit(G4double val)
+{
+  for(G4int i=0; i<n_loss; i++) {
+    if(loss_vector[i]) loss_vector[i]->SetLinearLossLimit(val);
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
 void G4LossTableManager::SetBuildCSDARange(G4bool val)
 {
   buildCSDARange = val;
@@ -825,6 +835,17 @@ void G4LossTableManager::SetMscLateralDisplacement(G4bool val)
   size_t msc = msc_vector.size();
   for (size_t j=0; j<msc; j++) {
     if(msc_vector[j]) msc_vector[j]->SetLateralDisplasmentFlag(val);
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
+void G4LossTableManager::SetSkin(G4double val)
+{
+  if(val < 0.0) return;
+  size_t msc = msc_vector.size();
+  for (size_t j=0; j<msc; j++) {
+    if(msc_vector[j]) msc_vector[j]->SetSkin(val);
   }
 }
 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LossTableBuilder.cc,v 1.22 2007-01-16 14:30:59 vnivanch Exp $
+// $Id: G4LossTableBuilder.cc,v 1.23 2007-02-12 12:31:50 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -45,6 +45,7 @@
 // 07-12-04 Fix of BuildDEDX table (V.Ivanchenko)
 // 27-03-06 Add bool options isIonisation (V.Ivanchenko)
 // 16-01-07 Fill new (not old) DEDX table (V.Ivanchenko)
+// 12-02-07 Use G4LPhysicsFreeVector for the inverse range table (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -57,6 +58,7 @@
 #include "G4PhysicsTable.hh"
 #include "G4PhysicsLogVector.hh"
 #include "G4PhysicsTableHelper.hh"
+#include "G4LPhysicsFreeVector.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -149,7 +151,8 @@ void G4LossTableBuilder::BuildRangeTable(const G4PhysicsTable* dedxTable,
         G4double de      = (energy2 - energy1) * del;
         G4double energy  = energy1 - de*0.5;
 
-        G4bool   yes     = true;
+	G4bool   yes     = true;
+        //G4bool   yes     = false;
         if(dedx1 < DBL_MIN || dedx2 < DBL_MIN) yes = false;   
 
         G4double fac, f;
@@ -194,8 +197,17 @@ void G4LossTableBuilder::BuildInverseRangeTable(const G4PhysicsTable* rangeTable
       G4double rlow  = pv->GetValue(elow, b);
       G4double rhigh = pv->GetValue(ehigh, b);
 
-      rhigh *= std::exp(std::log(rhigh/rlow)/((G4double)(nbins-1)));
+      //rhigh *= std::exp(std::log(rhigh/rlow)/((G4double)(nbins-1)));
 
+      
+      G4LPhysicsFreeVector* v = new G4LPhysicsFreeVector(nbins,rlow,rhigh);
+      for (size_t j=0; j<nbins; j++) {
+	G4double e  = pv->GetLowEdgeEnergy(j);
+	G4double r  = pv->GetValue(e, b);
+        v->PutValues(j,r,e);
+      }
+
+      /*
       G4PhysicsLogVector* v = new G4PhysicsLogVector(rlow, rhigh, nbins);
 
       v->PutValue(0,elow);
@@ -222,10 +234,12 @@ void G4LossTableBuilder::BuildInverseRangeTable(const G4PhysicsTable* rangeTable
         }
 
         G4double e = std::log(energy1) + 
-                     std::log(energy2/energy1)*std::log(range/range1)/std::log(range2/range1);
+                     std::log(energy2/energy1)*
+	  std::log(range/range1)/std::log(range2/range1);
 
         v->PutValue(j,std::exp(e));
       }
+      */
       G4PhysicsTableHelper::SetPhysicsVector(invRangeTable, i, v);
     }
   }

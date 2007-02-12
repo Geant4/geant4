@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmProcessOptions.hh,v 1.10 2007-02-07 15:39:08 vnivanch Exp $
+// $Id: G4EmProcessOptions.hh,v 1.11 2007-02-12 12:31:50 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -41,6 +41,7 @@
 // Modifications:
 // 10-01-06 PreciseRange -> CSDARange (V.Ivantchenko)
 // 22-05-06 Add SetBremsstrahlungTh (V.Ivanchenko)
+// 12-02-07 Add SetSkin, SetLinearLossLimit (V.Ivanchenko)
 //
 //
 // Class Description:
@@ -101,6 +102,10 @@ public:
   void SetVerbose(G4int val, const G4String& name = "all");
 
   void SetLambdaFactor(G4double val);
+
+  void SetLinearLossLimit(G4double val);
+
+  void SetSkin(G4double val);
 
   void ActivateDeexcitation(G4bool val, const G4Region* r = 0);
 

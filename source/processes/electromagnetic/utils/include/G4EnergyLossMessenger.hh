@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EnergyLossMessenger.hh,v 1.15 2007-02-07 15:39:08 vnivanch Exp $
+// $Id: G4EnergyLossMessenger.hh,v 1.16 2007-02-12 12:31:50 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -41,6 +41,7 @@
 // 10-01-06 SetStepLimits -> SetStepFunction (V.Ivantchenko)
 // 10-05-06 Add command MscStepLimit (V.Ivantchenko) 
 // 10-11-06 Add command binsDEDX (V.Ivantchenko) 
+// 12-02-07 Add SetSkin, SetLinearLossLimit (V.Ivanchenko)
 //
 // -------------------------------------------------------------------
 //
@@ -74,6 +75,7 @@ class G4UIdirectory;
 class G4UIcommand;
 class G4UIcmdWithABool;
 class G4UIcmdWithAnInteger;
+class G4UIcmdWithADouble;
 class G4UIcmdWithADoubleAndUnit;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -105,6 +107,8 @@ private:
   G4UIcmdWithAnInteger*      verCmd;
   G4UIcmdWithAnInteger*      dedxCmd;
   G4UIcmdWithAnInteger*      lbCmd;
+  G4UIcmdWithADouble*        lllCmd;
+  G4UIcmdWithADouble*        skinCmd;
 };
 
 #endif

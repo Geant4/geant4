@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering.cc,v 1.59 2007-02-06 15:52:27 vnivanch Exp $
+// $Id: G4MultipleScattering.cc,v 1.60 2007-02-12 12:31:40 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -118,6 +118,7 @@
 //          there is no z sampling by default  (L.Urban)
 // 23-10-06 skin = 1 by default (L.Urban)
 // 23-11-06 skin = 1 by default for e+-, 0 for other particles (VI)
+// 12-02-07 skin can be changed via UI command (VI)
 //
 // -----------------------------------------------------------------------------
 //
@@ -144,10 +145,6 @@ G4MultipleScattering::G4MultipleScattering(const G4String& processName)
   dtrl              = 0.05;
   lambdalimit       = 1.*mm;
   facgeom           = 2.5;
-  // there is no single scattering for this skin <= 0  
-  // to have single scattering at boundary 
-  //  skin should be > 0 ! 
-  skin              = 0.0;
   
   steppingAlgorithm = true;
   samplez           = false ; 
@@ -158,6 +155,7 @@ G4MultipleScattering::G4MultipleScattering(const G4String& processName)
   SetMaxKinEnergy(highKineticEnergy);
 
   SetLateralDisplasmentFlag(true);
+  SetSkin(0.0);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -191,17 +189,20 @@ void G4MultipleScattering::InitialiseProcess(const G4ParticleDefinition* p)
 {
   if(isInitialized) {
     mscUrban->SetMscStepLimitation(steppingAlgorithm, facrange);
-    if (p->GetParticleType() != "nucleus") 
+    if (p->GetParticleType() != "nucleus") {
       mscUrban->SetLateralDisplasmentFlag(LateralDisplasmentFlag());
+      mscUrban->SetSkin(Skin());
+    }
     return;
   }
 
   G4String part_name = p->GetParticleName();
-  if(part_name == "e-" || part_name == "e+") skin = 1.0; 
+  //  if(part_name == "e-" || part_name == "e+") skin = 1.0; 
 
   if (p->GetParticleType() == "nucleus") {
     SetLateralDisplasmentFlag(false);
     SetBuildLambdaTable(false);
+    SetSkin(0.0);
   } else {
     SetBuildLambdaTable(true);
   }
@@ -209,6 +210,7 @@ void G4MultipleScattering::InitialiseProcess(const G4ParticleDefinition* p)
                                  facgeom,skin,
                                  samplez,steppingAlgorithm);
   mscUrban->SetLateralDisplasmentFlag(LateralDisplasmentFlag());
+  mscUrban->SetSkin(Skin());
   mscUrban->SetLowEnergyLimit(lowKineticEnergy);
   mscUrban->SetHighEnergyLimit(highKineticEnergy);
   AddEmModel(1,mscUrban);

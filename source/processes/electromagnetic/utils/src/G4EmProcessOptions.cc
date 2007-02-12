@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmProcessOptions.cc,v 1.19 2007-02-07 15:39:08 vnivanch Exp $
+// $Id: G4EmProcessOptions.cc,v 1.20 2007-02-12 12:31:50 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -43,6 +43,7 @@
 // 10-01-06 PreciseRange -> CSDARange (V.Ivantchenko)
 // 10-05-06 Add command MscStepLimit to G4LossTableManager (V.Ivantchenko) 
 // 22-05-06 Add SetBremsstrahlungTh (V.Ivanchenko)
+// 12-02-07 Add SetSkin, SetLinearLossLimit (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -424,6 +425,20 @@ void G4EmProcessOptions::SetLPMFlag(G4bool val)
 void G4EmProcessOptions::SetMscLateralDisplacement(G4bool val)
 {
   theManager->SetMscLateralDisplacement(val);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4EmProcessOptions::SetLinearLossLimit(G4double val)
+{
+  theManager->SetLinearLossLimit(val);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4EmProcessOptions::SetSkin(G4double val)
+{
+  theManager->SetSkin(val);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.hh,v 1.40 2007-02-07 15:39:08 vnivanch Exp $
+// $Id: G4VMultipleScattering.hh,v 1.41 2007-02-12 12:31:50 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -60,6 +60,7 @@
 // 17-02-06 Save table of transport cross sections not mfp (V.Ivanchenko)
 // 07-03-06 Move step limit calculation to model (V.Ivanchenko)
 // 13-05-06 Add method to access model by index (V.Ivanchenko)
+// 12-02-07 Add get/set skin (V.Ivanchenko)
 //
 
 // -------------------------------------------------------------------
@@ -185,6 +186,10 @@ public:
   void SetLateralDisplasmentFlag(G4bool val);
      // lateral displacement to be/not to be computed
 
+  G4double Skin() const;
+  void SetSkin(G4double val);
+     // skin parameter
+
   void SetBuildLambdaTable(G4bool val);
 
   G4PhysicsTable* LambdaTable() const;
@@ -252,6 +257,7 @@ private:
 
   G4double                    minKinEnergy;
   G4double                    maxKinEnergy;
+  G4double                    skin;
 
   G4bool                      latDisplasment;
   G4bool                      buildLambdaTable;
@@ -433,6 +439,20 @@ inline  G4bool G4VMultipleScattering::LateralDisplasmentFlag() const
 inline  void G4VMultipleScattering::SetLateralDisplasmentFlag(G4bool val)
 {
   latDisplasment = val;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline  G4double G4VMultipleScattering::Skin() const
+{
+  return skin;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline  void G4VMultipleScattering::SetSkin(G4double val)
+{
+  skin = val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

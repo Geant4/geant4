@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel.hh,v 1.18 2007-02-06 14:47:46 vnivanch Exp $
+// $Id: G4UrbanMscModel.hh,v 1.19 2007-02-12 12:31:40 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -142,6 +142,8 @@ public:
 
   void SetMscStepLimitation(G4bool, G4double);
 
+  void SetSkin(G4double);
+
 private:
 
   G4double SampleCosineTheta(G4double trueStepLength, G4double KineticEnergy);
@@ -225,6 +227,14 @@ inline
 void G4UrbanMscModel::SetLateralDisplasmentFlag(G4bool val) 
 { 
   latDisplasment = val;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline
+void G4UrbanMscModel::SetSkin(G4bool val) 
+{ 
+  skin = val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

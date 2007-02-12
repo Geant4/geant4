@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.hh,v 1.45 2007-02-07 15:39:08 vnivanch Exp $
+// $Id: G4LossTableManager.hh,v 1.46 2007-02-12 12:31:50 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -58,6 +58,7 @@
 // 26-01-06 Rename GetRange -> GetRangeFromRestricteDEDX (V.Ivanchenko)
 // 10-05-06 Add methods  SetMscStepLimitation, FacRange and MscFlag (VI)
 // 22-05-06 Add methods  Set/Get bremsTh (VI)
+// 12-02-07 Add SetSkin, SetLinearLossLimit (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -193,6 +194,10 @@ public:
   void SetLPMFlag(G4bool val);
 
   void SetMscLateralDisplacement(G4bool val);
+
+  void SetSkin(G4double val);
+
+  void SetLinearLossLimit(G4double val);
 
   void SetBremsstrahlungTh(G4double val);
 

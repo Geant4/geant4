@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EnergyLossMessenger.cc,v 1.22 2007-02-07 15:39:08 vnivanch Exp $
+// $Id: G4EnergyLossMessenger.cc,v 1.23 2007-02-12 12:31:50 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -43,6 +43,7 @@
 // 10-05-06 Add command MscStepLimit (V.Ivanchenko) 
 // 10-10-06 Add DEDXBinning command (V.Ivanchenko)
 // 07-02-07 Add MscLateralDisplacement command (V.Ivanchenko)
+// 12-02-07 Add SetSkin, SetLinearLossLimit (V.Ivanchenko)
 //
 // -------------------------------------------------------------------
 //
@@ -60,6 +61,7 @@
 #include "G4UIparameter.hh"
 #include "G4UIcmdWithABool.hh"
 #include "G4UIcmdWithAnInteger.hh"
+#include "G4UIcmdWithADouble.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4EmProcessOptions.hh"
 
@@ -92,6 +94,7 @@ G4EnergyLossMessenger::G4EnergyLossMessenger()
 
   MinSubSecCmd = new G4UIcmdWithADoubleAndUnit("/process/eLoss/minsubsec",this);
   MinSubSecCmd->SetGuidance("Set the min. cut for subcutoff delta in range.");
+  MinEnCmd->SetUnitCategory("Length");
   MinSubSecCmd->SetParameterName("rcmin",true);
   MinSubSecCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
@@ -161,14 +164,14 @@ G4EnergyLossMessenger::G4EnergyLossMessenger()
   dedxCmd->SetParameterName("binsDEDX",true);
   //  dedxCmd->SetParameterRange("binsDEDX>59");
   dedxCmd->SetDefaultValue(120);
-  dedxCmd->AvailableForStates(G4State_PreInit);
+  dedxCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   lbCmd = new G4UIcmdWithAnInteger("/process/eLoss/binsLambda",this);
   lbCmd->SetGuidance("Set number of bins for Lambda tables.");
   lbCmd->SetParameterName("binsL",true);
   //  lbCmd->SetParameterRange("binsL>59");
   lbCmd->SetDefaultValue(120);
-  lbCmd->AvailableForStates(G4State_PreInit);
+  lbCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   verCmd = new G4UIcmdWithAnInteger("/process/eLoss/verbose",this);
   verCmd->SetGuidance("Set verbose level for EM physics.");
@@ -178,18 +181,26 @@ G4EnergyLossMessenger::G4EnergyLossMessenger()
 
   mscCmd = new G4UIcommand("/process/eLoss/MscStepLimit",this);
   mscCmd->SetGuidance("Set msc step limit flag and facRange value.");
-
   G4UIparameter* facRange = new G4UIparameter("facRange",'d',false);
   facRange->SetGuidance("msc parameter facRange");
   facRange->SetParameterRange("facRange>0.");
   mscCmd->SetParameter(facRange);
-
   G4UIparameter* msc = new G4UIparameter("algMsc",'s',true);
   msc->SetGuidance("msc step algorithm flag");
   msc->SetDefaultValue("true");
   mscCmd->SetParameter(msc);
-
   mscCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
+  lllCmd = new G4UIcmdWithADouble("/process/eLoss/linLossLimit",this);
+  lllCmd->SetGuidance("Set linearLossLimit parameter.");
+  lllCmd->SetParameterName("linlim",true);
+  lllCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
+  skinCmd = new G4UIcmdWithADouble("/process/eLoss/MscSkin",this);
+  skinCmd->SetGuidance("Set skin parameter for multiple scattering.");
+  skinCmd->SetParameterName("skin",true);
+  skinCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -212,6 +223,8 @@ G4EnergyLossMessenger::~G4EnergyLossMessenger()
   delete mscCmd;
   delete dedxCmd;
   delete lbCmd;
+  delete lllCmd;
+  delete skinCmd;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -281,6 +294,12 @@ void G4EnergyLossMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
   
   if (command == verCmd) 
     lossTables->SetVerbose(verCmd->GetNewIntValue(newValue));
+
+  if (command == lllCmd) 
+    lossTables->SetLinearLossLimit(lllCmd->GetNewDoubleValue(newValue));
+  
+  if (command == skinCmd) 
+    lossTables->SetSkin(skinCmd->GetNewDoubleValue(newValue));
   
   G4EmProcessOptions opt;
   if (command == dedxCmd) 

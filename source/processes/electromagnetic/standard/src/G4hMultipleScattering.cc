@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4hMultipleScattering.cc,v 1.1 2006-10-26 11:04:39 vnivanch Exp $
+// $Id: G4hMultipleScattering.cc,v 1.2 2007-02-12 12:31:40 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -37,6 +37,7 @@
 // Creation date: 24.10.2006 cloned from G4MultipleScattering
 // 
 // Modified:
+// 12-02-07 skin can be changed via UI command (VI)
 //
 // -----------------------------------------------------------------------------
 //
@@ -77,6 +78,7 @@ G4hMultipleScattering::G4hMultipleScattering(const G4String& processName)
   SetMaxKinEnergy(highKineticEnergy);
 
   SetLateralDisplasmentFlag(true);
+  SetSkin(0.0);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -110,12 +112,17 @@ void G4hMultipleScattering::InitialiseProcess(const G4ParticleDefinition* p)
 {
   if(isInitialized) {
     mscUrban->SetMscStepLimitation(steppingAlgorithm, facrange);
+    if (p->GetParticleType() != "nucleus") {
+      mscUrban->SetLateralDisplasmentFlag(LateralDisplasmentFlag());
+      mscUrban->SetSkin(Skin());
+    }
     return;
   }
 
   if (p->GetParticleType() == "nucleus") {
     SetLateralDisplasmentFlag(false);
     SetBuildLambdaTable(false);
+    SetSkin(0.0);
   } else {
     SetBuildLambdaTable(true);
   }
@@ -123,6 +130,7 @@ void G4hMultipleScattering::InitialiseProcess(const G4ParticleDefinition* p)
                                  facgeom,skin,
                                  samplez,steppingAlgorithm);
   mscUrban->SetLateralDisplasmentFlag(LateralDisplasmentFlag());
+  mscUrban->SetSkin(Skin());
   mscUrban->SetLowEnergyLimit(lowKineticEnergy);
   mscUrban->SetHighEnergyLimit(highKineticEnergy);
   AddEmModel(1,mscUrban);
