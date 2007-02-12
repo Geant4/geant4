@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: testSurfaceArea.cc,v 1.1 2006-10-20 14:38:52 gcosmo Exp $
+// $Id: testSurfaceArea.cc,v 1.2 2007-02-12 11:29:23 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -43,6 +43,7 @@
 #include "geomdefs.hh"
 
 #include "G4ThreeVector.hh"
+#include "G4TwoVector.hh"
 
 #include "G4Box.hh"
 #include "G4Tubs.hh"
@@ -55,6 +56,7 @@
 #include "G4Cons.hh"
 #include "G4BooleanSolid.hh"
 #include "G4IntersectionSolid.hh"
+#include "G4ExtrudedSolid.hh"
 
 #include "G4RotationMatrix.hh"
 #include "G4AffineTransform.hh"
@@ -79,7 +81,7 @@ G4bool testG4Surf()
     toc = clock()-tic;
     G4cout << "Elapsed time= "<< static_cast<G4double>(toc)/CLOCKS_PER_SEC << G4endl;
     G4cout <<"MC result = " << MCsurf << G4endl;
-    G4cout << "deviation =" << (surf-MCsurf)/surf*100 << " %"<< G4endl;
+    G4cout << "deviation = " << (surf-MCsurf)/surf*100 << " %"<< G4endl;
     G4cout <<"*******************" << G4endl;
     
     
@@ -99,7 +101,7 @@ G4bool testG4Surf()
     toc = clock()-tic;
     G4cout << "Elapsed time= "<< static_cast<G4double>(toc)/CLOCKS_PER_SEC << G4endl;
     G4cout <<"MC result = " << MCsurf << G4endl;
-    G4cout << "deviation =" << (surf-MCsurf)/surf*100 << " %"<< G4endl;
+    G4cout << "deviation = " << (surf-MCsurf)/surf*100 << " %"<< G4endl;
     G4cout <<"*******************" << G4endl;
      
     G4cout << " Calculating Cone:" << G4endl;
@@ -113,7 +115,7 @@ G4bool testG4Surf()
     toc = clock()-tic;
     G4cout << "Elapsed time= "<< static_cast<G4double>(toc)/CLOCKS_PER_SEC << G4endl;
     G4cout <<"MC result = " << MCsurf << G4endl;
-    G4cout << "deviation =" << (surf-MCsurf)/surf*100 << " %"<< G4endl;
+    G4cout << "deviation = " << (surf-MCsurf)/surf*100 << " %"<< G4endl;
     G4cout <<"*******************" << G4endl;
     
     
@@ -128,7 +130,7 @@ G4bool testG4Surf()
     toc = clock()-tic;
     G4cout << "Elapsed time= "<< static_cast<G4double>(toc)/CLOCKS_PER_SEC << G4endl;
     G4cout <<"MC result = " << MCsurf << G4endl;
-    G4cout << "deviation =" << (surf-MCsurf)/surf*100 << " %"<< G4endl;
+    G4cout << "deviation = " << (surf-MCsurf)/surf*100 << " %"<< G4endl;
     G4cout <<"*******************" << G4endl;
     
 
@@ -144,7 +146,7 @@ G4bool testG4Surf()
     toc = clock()-tic;
     G4cout << "Elapsed time= "<< static_cast<G4double>(toc)/CLOCKS_PER_SEC << G4endl;
     G4cout <<"MC result = " << MCsurf << G4endl;
-    G4cout << "deviation =" << (surf-MCsurf)/surf*100 << " %"<< G4endl;
+    G4cout << "deviation = " << (surf-MCsurf)/surf*100 << " %"<< G4endl;
     G4cout <<"*******************" << G4endl;
     
 
@@ -163,7 +165,7 @@ G4bool testG4Surf()
     toc = clock()-tic;
     G4cout << "Elapsed time= "<< static_cast<G4double>(toc)/CLOCKS_PER_SEC << G4endl;
     G4cout <<"MC result = " << MCsurf << G4endl;
-    G4cout << "deviation =" << (surf-MCsurf)/surf*100 << " %"<< G4endl;
+    G4cout << "deviation = " << (surf-MCsurf)/surf*100 << " %"<< G4endl;
     G4cout <<"*******************" << G4endl;
     
 
@@ -179,7 +181,7 @@ G4bool testG4Surf()
     toc = clock()-tic;
     G4cout << "Elapsed time= "<< static_cast<G4double>(toc)/CLOCKS_PER_SEC << G4endl;
     G4cout <<"MC result = " << MCsurf << G4endl;
-    G4cout << "deviation =" << (surf-MCsurf)/surf*100 << " %"<< G4endl;
+    G4cout << "deviation = " << (surf-MCsurf)/surf*100 << " %"<< G4endl;
     G4cout <<"*******************" << G4endl;
     
    
@@ -195,12 +197,11 @@ G4bool testG4Surf()
     toc = clock()-tic;
     G4cout << "Elapsed time= "<< static_cast<G4double>(toc)/CLOCKS_PER_SEC << G4endl;
     G4cout <<"MC result = " << MCsurf << G4endl;
-    G4cout << "deviation =" << (surf-MCsurf)/surf*100 << " %"<< G4endl;
+    G4cout << "deviation = " << (surf-MCsurf)/surf*100 << " %"<< G4endl;
     G4cout <<"*******************" << G4endl;
     
 
 
-    
     G4cout << " Calculating Orb:" << G4endl;
     G4Orb orb("Test Orb",2);
     surf = orb.GetSurfaceArea();
@@ -211,10 +212,32 @@ G4bool testG4Surf()
     toc = clock()-tic;
     G4cout << "Elapsed time= "<< static_cast<G4double>(toc)/CLOCKS_PER_SEC << G4endl;
     G4cout <<"MC result = " << MCsurf << G4endl;
-    G4cout << "deviation =" << (surf-MCsurf)/surf*100 << " %"<< G4endl;
+    G4cout << "deviation = " << (surf-MCsurf)/surf*100 << " %"<< G4endl;
     G4cout <<"*******************" << G4endl;
     
   
+
+    G4cout << " Calculating Extruded-Solid (against box):" << G4endl;
+    // Box above defined as Xtru ...
+    std::vector<G4TwoVector> polygon;
+    polygon.push_back(G4TwoVector(-1.,-0.5));
+    polygon.push_back(G4TwoVector(-1., 0.5));
+    polygon.push_back(G4TwoVector( 1., 0.5));
+    polygon.push_back(G4TwoVector( 1.,-0.5));
+
+    G4ExtrudedSolid xtru("xtru-box", polygon, 3,
+                         G4TwoVector(), 1.0, G4TwoVector(), 1.0);
+
+    surf = xtru.GetSurfaceArea();
+    G4cout <<"Surface = " << surf << G4endl;
+    tic=clock();
+    MCsurf=box.GetSurfaceArea();
+    toc = clock()-tic;
+    G4cout << "Elapsed time= "<< static_cast<G4double>(toc)/CLOCKS_PER_SEC << G4endl;
+    G4cout <<"MC result = " << MCsurf << G4endl;
+    G4cout << "deviation = " << (surf-MCsurf)/surf*100 << " %"<< G4endl;
+    G4cout <<"*******************" << G4endl;
+
     /////////////////////////////////////////////////////
     return true;
 }

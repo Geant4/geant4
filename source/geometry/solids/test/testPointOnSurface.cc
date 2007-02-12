@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: testPointOnSurface.cc,v 1.4 2006-06-29 18:52:33 gunter Exp $
+// $Id: testPointOnSurface.cc,v 1.5 2007-02-12 11:29:23 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -42,6 +42,7 @@
 #include "globals.hh"
 #include "geomdefs.hh"
 
+#include "G4TwoVector.hh"
 #include "G4ThreeVector.hh"
 
 #include "G4Tubs.hh"
@@ -60,16 +61,14 @@
 #include "G4Tet.hh"
 #include "G4Polyhedra.hh"
 #include "G4EllipticalCone.hh"
+#include "G4ExtrudedSolid.hh"
 
 #include "G4Timer.hh"
-
 #include "Randomize.hh"
 
 #include "G4RotationMatrix.hh"
 #include "G4AffineTransform.hh"
 #include "G4VoxelLimits.hh"
-
-
 
 G4bool checkBox(G4int N)
 {
@@ -632,7 +631,47 @@ G4bool checkEllipticalCone(G4int N)
   return what;
 }   
 
-   
+G4bool checkExtrudedSolid(G4int N)
+{
+  G4cout<<"**************************************"<<G4endl;
+  G4cout<<"************* G4EXTRUDEDSOLID ********"<<G4endl;
+  G4cout<<"**************************************"<<G4endl<<G4endl;
+  
+  G4ThreeVector point;
+  G4bool what = true;   
+  G4int i=0,n=0;
+  EInside surf;
+       
+  std::vector<G4TwoVector> polygon;
+  polygon.push_back(G4TwoVector(-30.*cm, -30.*cm));
+  polygon.push_back(G4TwoVector(-30.*cm,  30.*cm));
+  polygon.push_back(G4TwoVector( 30.*cm,  30.*cm));
+  polygon.push_back(G4TwoVector( 30.*cm, -30.*cm));
+  polygon.push_back(G4TwoVector( 15.*cm, -30.*cm));
+  polygon.push_back(G4TwoVector( 15.*cm,  15.*cm));
+  polygon.push_back(G4TwoVector(-15.*cm,  15.*cm));
+  polygon.push_back(G4TwoVector(-15.*cm, -30.*cm));
+
+  G4ExtrudedSolid t1("Concave_XTRU", polygon, 25.*cm,
+                     G4TwoVector(-20.*cm, 10.*cm), 1.5, G4TwoVector(), 0.5);
+
+  G4Timer time;
+  time.Start();
+  
+  for(i=0; i<N; i++)
+  {
+    point = t1.GetPointOnSurface();  
+    surf  = t1.Inside(point);
+    if(surf != kSurface){ n++; what = false; }  
+  }
+
+  time.Stop();
+  
+  G4cout <<" Check ExtrudedSolid had "<<n<<" inconsistencies"<< G4endl; 
+  G4cout <<" Time taken was: "<<time.GetRealElapsed()<<" seconds."<<G4endl<<G4endl;
+  return what;
+}   
+
 int main() 
 { 
   G4bool what;    
@@ -662,11 +701,12 @@ int main()
   what = checkTet(1000000);           
   what = checkPolyhedra(1000000);      
   what = checkEllipticalCone(1000000);
+  what = checkExtrudedSolid(1000000);
   
   G4cout <<G4endl;
     
   G4cout <<"********************************************************************************"<<G4endl;
-  G4cout <<"********************** END OF TEST - THANK YOU!! *******************************"<<G4endl;
+  G4cout <<"********************** END OF POINT-ON-SURFACE TEST ****************************"<<G4endl;
   G4cout <<"********************************************************************************"<<G4endl;  
   G4cout <<G4endl;
 
