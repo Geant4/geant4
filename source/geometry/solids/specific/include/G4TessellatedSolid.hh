@@ -24,7 +24,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TessellatedSolid.hh,v 1.5 2007-02-12 09:34:44 gcosmo Exp $
+// $Id: G4TessellatedSolid.hh,v 1.6 2007-02-12 11:33:03 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -139,47 +139,52 @@ class G4TessellatedSolid : public G4VSolid
     G4VFacet *GetFacet (size_t i) const;
     size_t GetNumberOfFacets () const;
     
-    G4double GetCubicVolume ();
-    G4double GetSurfaceArea ();
+    virtual G4double GetCubicVolume ();
+    virtual G4double GetSurfaceArea ();
 
 //
-//  void ComputeDimensions (G4VPVParameterisation* p, const G4int n,
-//                          const G4VPhysicalVolume* pRep) const;
+//  virtual void ComputeDimensions (G4VPVParameterisation* p, const G4int n,
+//                                  const G4VPhysicalVolume* pRep) const;
     
-    EInside Inside (const G4ThreeVector &p) const;
-    G4ThreeVector SurfaceNormal (const G4ThreeVector &p) const;
-    G4double DistanceToIn(const G4ThreeVector &p, const G4ThreeVector &v) const;
-    G4double DistanceToIn(const G4ThreeVector &p) const;
-    G4double DistanceToOut(const G4ThreeVector &p, const G4ThreeVector &v,
-                           const G4bool calcNorm=false,
+    virtual EInside Inside (const G4ThreeVector &p) const;
+    virtual G4ThreeVector SurfaceNormal (const G4ThreeVector &p) const;
+    virtual G4double DistanceToIn(const G4ThreeVector &p,
+                                  const G4ThreeVector &v) const;
+    virtual G4double DistanceToIn(const G4ThreeVector &p) const;
+    virtual G4double DistanceToOut(const G4ThreeVector &p,
+                                   const G4ThreeVector &v,
+                                   const G4bool calcNorm=false,
                            G4bool *validNorm=0, G4ThreeVector *n=0) const;
-    G4double DistanceToOut (const G4ThreeVector &p) const;
-    G4GeometryType GetEntityType () const;
+    virtual G4double DistanceToOut (const G4ThreeVector &p) const;
+    virtual G4GeometryType GetEntityType () const;
     
     void SetSolidClosed (const G4bool t);
     G4bool GetSolidClosed () const;
         
-    G4ThreeVector GetPointOnSurface() const;
+    virtual G4ThreeVector GetPointOnSurface() const;
 
-    G4bool CalculateExtent(const EAxis pAxis, const G4VoxelLimits& pVoxelLimit,
-                           const G4AffineTransform& pTransform, G4double& pMin,
-                           G4double& pMax) const;
+    virtual G4bool CalculateExtent(const EAxis pAxis,
+                                   const G4VoxelLimits& pVoxelLimit,
+                                   const G4AffineTransform& pTransform,
+                                         G4double& pMin, G4double& pMax) const;
 
-    std::ostream &StreamInfo(std::ostream &os) const;
+    virtual std::ostream &StreamInfo(std::ostream &os) const;
 
   // Functions for visualization
  
-    void          DescribeYourselfTo (G4VGraphicsScene& scene) const;
-    G4VisExtent   GetExtent () const;
+    virtual void  DescribeYourselfTo (G4VGraphicsScene& scene) const;
+    virtual G4VisExtent   GetExtent () const;
+
     G4double      GetMinXExtent () const;
     G4double      GetMaxXExtent () const;
     G4double      GetMinYExtent () const;
     G4double      GetMaxYExtent () const;
     G4double      GetMinZExtent () const;
     G4double      GetMaxZExtent () const;
-    G4Polyhedron* CreatePolyhedron () const;
-    G4Polyhedron* GetPolyhedron      () const;
-    G4NURBS*      CreateNURBS () const;
+
+    virtual G4Polyhedron* CreatePolyhedron () const;
+    virtual G4Polyhedron* GetPolyhedron    () const;
+    virtual G4NURBS*      CreateNURBS      () const;
  
   public:  // without description
 
