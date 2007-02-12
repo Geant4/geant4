@@ -24,7 +24,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TessellatedSolid.cc,v 1.7 2007-02-12 09:34:45 gcosmo Exp $
+// $Id: G4TessellatedSolid.cc,v 1.8 2007-02-12 11:51:52 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -126,12 +126,25 @@ G4TessellatedSolid::~G4TessellatedSolid ()
 
 ///////////////////////////////////////////////////////////////////////////////
 //
+// Define copy constructor.
+//
+G4TessellatedSolid::G4TessellatedSolid (const G4TessellatedSolid &s)
+  : G4VSolid(s)
+{
+  if (&s == this) { return; }
+
+  DeleteObjects ();
+  CopyObjects (s);
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//
 // Define assignment operator.
 //
-const G4TessellatedSolid &G4TessellatedSolid::operator=
-   (const G4TessellatedSolid &s)
+const G4TessellatedSolid &
+G4TessellatedSolid::operator= (const G4TessellatedSolid &s)
 {
-  if (&s == this) return *this;
+  if (&s == this) { return *this; }
   
   DeleteObjects ();
   CopyObjects (s);
@@ -143,8 +156,10 @@ const G4TessellatedSolid &G4TessellatedSolid::operator=
 //
 void G4TessellatedSolid::DeleteObjects ()
 {
-  for (std::vector<G4VFacet *>::iterator f=facets.begin(); 
-       f!=facets.end(); f++) delete *f;
+  for (std::vector<G4VFacet *>::iterator f=facets.begin(); f!=facets.end(); f++)
+  {
+    delete *f;
+  }
   facets.clear();
 }
 
