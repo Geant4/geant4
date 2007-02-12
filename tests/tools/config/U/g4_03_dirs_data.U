@@ -28,7 +28,7 @@ esac
 
 case "$g4ledata" in
 '')
-	g4ledata=$g4data/G4EMLOW4.1
+	g4ledata=$g4data/G4EMLOW4.2
 	;;
 esac
 
@@ -80,7 +80,7 @@ gans=$ans
 
 		g4levelgammadata=$g4data/PhotonEvaporation2.0
 		g4radioactivedata=$g4data/RadioactiveDecay3.1
-		g4ledata=$g4data/G4EMLOW4.1
+		g4ledata=$g4data/G4EMLOW4.2
 		g4neutronhpcrosssections=$g4data/G4NDL3.10
 #		g4elasticdata=$g4data/G4ELASTIC1.1
 		fi
@@ -132,7 +132,7 @@ gans=$ans
 	3) 
 		dflt=$g4ledata
 		fn='d~'
-		rp="Where is G4EMLOW4.1 data installed ?"
+		rp="Where is G4EMLOW4.2 data installed ?"
 		. ./getfile
 		g4ledata=$ans
 		;;
