@@ -24,7 +24,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TessellatedSolid.cc,v 1.6 2007-02-09 12:05:51 gcosmo Exp $
+// $Id: G4TessellatedSolid.cc,v 1.7 2007-02-12 09:34:45 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -54,6 +54,7 @@
 #include "G4TessellatedSolid.hh"
 #include "G4PolyhedronArbitrary.hh"
 #include "globals.hh"
+#include "Randomize.hh"
 
 #include <iostream>
 
@@ -774,7 +775,21 @@ G4double G4TessellatedSolid::GetCubicVolume ()
 //
 G4double G4TessellatedSolid::GetSurfaceArea ()
 {
-  if(surfaceArea != 0.) {;}
-  else   { surfaceArea = G4VSolid::GetSurfaceArea(); }
+  if(surfaceArea != 0.) { return surfaceArea; }
+
+  for (FacetI f=facets.begin(); f!=facets.end(); f++)
+  {
+    surfaceArea += (*f)->GetArea();
+  }
   return surfaceArea;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//
+G4ThreeVector G4TessellatedSolid::GetPointOnSurface() const
+{
+  // Select randomly a facet and return a random point on it
+ 
+  G4int i = CLHEP::RandFlat::shootInt(facets.size());
+  return facets[i]->GetPointOnFace();
 }

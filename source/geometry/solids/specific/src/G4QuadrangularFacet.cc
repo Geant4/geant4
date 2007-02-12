@@ -24,7 +24,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QuadrangularFacet.cc,v 1.3 2006-06-29 18:48:51 gunter Exp $
+// $Id: G4QuadrangularFacet.cc,v 1.4 2007-02-12 09:34:44 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -48,6 +48,7 @@
 
 #include "G4QuadrangularFacet.hh"
 #include "globals.hh"
+#include "Randomize.hh"
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -266,4 +267,39 @@ G4bool G4QuadrangularFacet::Intersect (const G4ThreeVector &p,
   }
   
   return intersect;
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// GetPointOnFace
+//
+// Auxiliary method for get a random point on surface
+
+G4ThreeVector G4QuadrangularFacet::GetPointOnFace() const
+{
+  G4ThreeVector pr;
+
+  if ( G4UniformRand() < 0.5 )
+  {
+    pr = facet1->GetPointOnFace();
+  }
+  else
+  {
+    pr = facet2->GetPointOnFace();
+  }
+
+  return pr;
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// GetArea
+//
+// Auxiliary method for returning the surface area
+
+G4double G4QuadrangularFacet::GetArea()
+{
+  if (!area)  { area = facet1->GetArea() + facet2->GetArea(); }
+
+  return area;
 }

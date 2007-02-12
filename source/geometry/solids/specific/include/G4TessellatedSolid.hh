@@ -24,7 +24,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TessellatedSolid.hh,v 1.4 2006-10-20 13:45:20 gcosmo Exp $
+// $Id: G4TessellatedSolid.hh,v 1.5 2007-02-12 09:34:44 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -159,6 +159,8 @@ class G4TessellatedSolid : public G4VSolid
     void SetSolidClosed (const G4bool t);
     G4bool GetSolidClosed () const;
         
+    G4ThreeVector GetPointOnSurface() const;
+
     G4bool CalculateExtent(const EAxis pAxis, const G4VoxelLimits& pVoxelLimit,
                            const G4AffineTransform& pTransform, G4double& pMin,
                            G4double& pMax) const;

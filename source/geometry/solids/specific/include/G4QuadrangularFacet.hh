@@ -24,7 +24,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QuadrangularFacet.hh,v 1.3 2006-06-29 18:47:26 gunter Exp $
+// $Id: G4QuadrangularFacet.hh,v 1.4 2007-02-12 09:34:44 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -88,7 +88,7 @@ class G4QuadrangularFacet : public G4VFacet
     G4QuadrangularFacet (const G4QuadrangularFacet &right);
     const G4QuadrangularFacet &operator=(G4QuadrangularFacet &right);    
 
-    G4VFacet *GetClone();
+    G4VFacet *GetClone ();
     
     G4ThreeVector Distance (const G4ThreeVector &p);
     G4double Distance (const G4ThreeVector &p, const G4double minDist);
@@ -100,6 +100,9 @@ class G4QuadrangularFacet : public G4VFacet
                              G4double &distFromSurface, G4ThreeVector &normal);
     G4bool IsInside   (const G4ThreeVector &p) const;
       
+    G4double GetArea ();
+    G4ThreeVector GetPointOnFace () const;
+
   private:
 
     G4TriangularFacet *facet1;
