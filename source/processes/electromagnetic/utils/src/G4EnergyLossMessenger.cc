@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EnergyLossMessenger.cc,v 1.23 2007-02-12 12:31:50 vnivanch Exp $
+// $Id: G4EnergyLossMessenger.cc,v 1.24 2007-02-12 13:42:40 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -94,7 +94,7 @@ G4EnergyLossMessenger::G4EnergyLossMessenger()
 
   MinSubSecCmd = new G4UIcmdWithADoubleAndUnit("/process/eLoss/minsubsec",this);
   MinSubSecCmd->SetGuidance("Set the min. cut for subcutoff delta in range.");
-  MinEnCmd->SetUnitCategory("Length");
+  MinSubSecCmd->SetUnitCategory("Length");
   MinSubSecCmd->SetParameterName("rcmin",true);
   MinSubSecCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
