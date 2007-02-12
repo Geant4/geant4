@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel.hh,v 1.19 2007-02-12 12:31:40 vnivanch Exp $
+// $Id: G4UrbanMscModel.hh,v 1.20 2007-02-12 12:36:40 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -232,7 +232,7 @@ void G4UrbanMscModel::SetLateralDisplasmentFlag(G4bool val)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline
-void G4UrbanMscModel::SetSkin(G4bool val) 
+void G4UrbanMscModel::SetSkin(G4double val) 
 { 
   skin = val;
 }
