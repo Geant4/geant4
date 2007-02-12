@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EnergyLossMessenger.cc,v 1.24 2007-02-12 13:42:40 vnivanch Exp $
+// $Id: G4EnergyLossMessenger.cc,v 1.25 2007-02-12 17:04:51 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -153,7 +153,7 @@ G4EnergyLossMessenger::G4EnergyLossMessenger()
   lpmCmd->SetDefaultValue(true);
   lpmCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  latCmd = new G4UIcmdWithABool("/process/eLoss/MscLateralDisplecement",this);
+  latCmd = new G4UIcmdWithABool("/process/eLoss/MscLateralDisplacement",this);
   latCmd->SetGuidance("Switch true/false sampling of latra dislacent.");
   latCmd->SetParameterName("lat",true);
   latCmd->SetDefaultValue(true);

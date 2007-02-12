@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.cc,v 1.40 2007-02-12 12:31:50 vnivanch Exp $
+// $Id: G4VMultipleScattering.cc,v 1.41 2007-02-12 17:04:51 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -223,6 +223,8 @@ void G4VMultipleScattering::PrintInfoDefinition()
 	     << " in " << nBins << " bins."
 	     << G4endl;
     }
+    G4cout << "      LateralDisplacementFlag=  " << latDisplasment
+	   << "   Skin= " << skin << G4endl; 
     PrintInfo();
     if (2 < verboseLevel) {
       G4cout << "LambdaTable address= " << theLambdaTable << G4endl;
