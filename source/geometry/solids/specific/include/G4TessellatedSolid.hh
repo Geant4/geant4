@@ -24,7 +24,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TessellatedSolid.hh,v 1.6 2007-02-12 11:33:03 gcosmo Exp $
+// $Id: G4TessellatedSolid.hh,v 1.7 2007-02-12 11:51:25 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -129,7 +129,7 @@ class G4TessellatedSolid : public G4VSolid
 
     G4TessellatedSolid ();
     G4TessellatedSolid (const G4String &name);
-    ~G4TessellatedSolid ();
+    virtual ~G4TessellatedSolid ();
     
     G4TessellatedSolid (const G4TessellatedSolid &s);
     const G4TessellatedSolid &operator= (const G4TessellatedSolid &s);
