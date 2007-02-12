@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExtrudedSolid.hh,v 1.1 2007-02-09 12:05:50 gcosmo Exp $
+// $Id: G4ExtrudedSolid.hh,v 1.2 2007-02-12 11:31:47 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -92,14 +92,14 @@ class G4ExtrudedSolid : public G4TessellatedSolid
 
     // Solid methods                                
 
-    virtual G4GeometryType GetEntityType () const;
-    virtual EInside  Inside (const G4ThreeVector &p) const;
-    virtual G4double DistanceToOut(const G4ThreeVector &p,
-                                   const G4ThreeVector &v,
-                                   const G4bool calcNorm,
-                                         G4bool *validNorm,
-                                         G4ThreeVector *n) const;
-    virtual G4double DistanceToOut (const G4ThreeVector &p) const;
+    EInside  Inside (const G4ThreeVector &p) const;
+    G4double DistanceToOut(const G4ThreeVector &p,
+                           const G4ThreeVector &v,
+                           const G4bool calcNorm=false,
+                                 G4bool *validNorm=0, G4ThreeVector *n=0) const;
+    G4double DistanceToOut (const G4ThreeVector &p) const;
+    G4GeometryType GetEntityType () const;
+
     std::ostream& StreamInfo(std::ostream &os) const;
 
   public:  // without description
