@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4PathFinder.cc,v 1.7 2006-12-13 15:43:34 gunter Exp $
+// $Id: testG4PathFinder.cc,v 1.8 2007-02-13 16:15:34 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $ 
 //
 // 
@@ -185,6 +185,7 @@ G4PathFinder* setupPathFinder(G4VPhysicalVolume *pTopNode)
 
 G4bool testG4PathFinder1(G4VPhysicalVolume *) // pTopNode)
 {
+    G4VPhysicalVolume *located;
     static G4TransportationManager* transportMgr=
       G4TransportationManager::GetTransportationManager(); 
     static G4PathFinder* pathFinder= G4PathFinder::GetInstance();
@@ -197,6 +198,11 @@ G4bool testG4PathFinder1(G4VPhysicalVolume *) // pTopNode)
     pathFinder->PrepareNewTrack( position, dirUx ); 
   //==========  ---------------
     // Also locates !!
+
+    // Need the volume information 
+    // pathFinder->Locate( endPoint, endDirection ); 
+     //==========  ------
+    located= pathFinder->GetLocatedVolume( navId ); 
 
     G4double t0=0.0, Ekin=100.00*MeV, restMass= 0.511*MeV, charge= -1, magDipole=0.0, s=0.0; 
     G4ThreeVector Spin(0.,0.,0.); 
@@ -211,10 +217,9 @@ G4bool testG4PathFinder1(G4VPhysicalVolume *) // pTopNode)
 	   << " len = " << steplen
 	   << " navId = " << navId << " stepNo = " << stepNo << G4endl; 
     G4double stepdone= 
-    pathFinder->ComputeStep( startFT, steplen, navId, stepNo, safetyRet, limited, endFT );
+    pathFinder->ComputeStep( startFT, steplen, navId, stepNo, safetyRet, limited, endFT, located );
   //==========  -----------
 
-    G4VPhysicalVolume *located;
 
     G4ThreeVector endPoint = endFT.GetPosition(); 
     G4ThreeVector endDirection= endFT.GetMomentumDirection(); 
@@ -227,7 +232,7 @@ G4bool testG4PathFinder1(G4VPhysicalVolume *) // pTopNode)
     }
 
     G4double stepAgain=
-    pathFinder->ComputeStep( startFT, steplen, navId, stepNo, safetyRet, limited, endFT );   
+    pathFinder->ComputeStep( startFT, steplen, navId, stepNo, safetyRet, limited, endFT, located );   
     // Should not move, since the 'stepNo' is the same !!
  
     G4double endSafety= pathFinder->ComputeSafety( endFT.GetPosition() );  
@@ -237,7 +242,7 @@ G4bool testG4PathFinder1(G4VPhysicalVolume *) // pTopNode)
       startFT= endFT; 
 
       stepdone= 
-        pathFinder->ComputeStep( startFT, steplen, navId, ++stepNo, safetyRet, limited, endFT );   
+        pathFinder->ComputeStep( startFT, steplen, navId, ++stepNo, safetyRet, limited, endFT, located );   
       pathFinder->Locate( endFT.GetPosition(), endFT.GetMomentumDirection() ); 
       located= pathFinder->GetLocatedVolume( navId ); 
 
