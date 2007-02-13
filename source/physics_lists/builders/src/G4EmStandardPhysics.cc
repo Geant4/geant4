@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmStandardPhysics.cc,v 1.4 2007-02-13 12:01:05 vnivanch Exp $
+// $Id: G4EmStandardPhysics.cc,v 1.5 2007-02-13 16:29:16 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -36,6 +36,7 @@
 // 05.12.2005 V.Ivanchenko add controlled verbosity
 // 13.11.2006 V.Ivanchenko use G4hMultipleScattering
 // 23.11.2006 V.Ivanchenko remove mscStepLimit option and improve cout
+// 13.02.2007 V.Ivanchenko use G4hMultipleScattering for muons
 // 13.02.2007 V.Ivanchenko set skin=0.0
 //
 //----------------------------------------------------------------------------
@@ -201,7 +202,7 @@ void G4EmStandardPhysics::ConstructProcess()
   }
   G4EmProcessOptions opt;
   opt.SetVerbose(verbose);
-  opt.SetSkin(0.0);
+  //  opt.SetSkin(0.0);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

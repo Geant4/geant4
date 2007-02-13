@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmStandardPhysics71.cc,v 1.4 2007-02-13 12:01:05 vnivanch Exp $
+// $Id: G4EmStandardPhysics71.cc,v 1.5 2007-02-13 16:29:16 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -219,7 +219,7 @@ void G4EmStandardPhysics71::ConstructProcess()
   G4EmProcessOptions opt;
   opt.SetVerbose(verbose);
   opt.SetMscStepLimitation(false);
-  opt.SetSkin(0.0);
+  //  opt.SetSkin(0.0);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
