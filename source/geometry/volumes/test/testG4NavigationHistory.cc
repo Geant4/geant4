@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4NavigationHistory.cc,v 1.8 2006-12-13 15:43:54 gunter Exp $
+// $Id: testG4NavigationHistory.cc,v 1.9 2007-02-13 17:24:59 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -113,6 +113,8 @@ G4bool testG4NavigationHistory()
     assert(nullHist.GetDepth()==0);
     assert(nullHist.GetVolume(0)==0); 
     assert(nullHist.GetReplicaNo(0)==(-1));   
+    assert(nullHist.GetTransform(0)==G4AffineTransform(vorigin)); 
+
 //
 // END test of G4NavigationHistory
 //
