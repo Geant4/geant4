@@ -1,4 +1,4 @@
-$Id: History,v 1.280 2007-02-12 13:38:18 urban Exp $
+$Id: History,v 1.281 2007-02-13 11:41:38 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,8 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+
+13 February 07: V.Ivanchenko (emstand-V08-02-05)
 12 February 07: 
 - G4UrbanMscModel - L.Urban: stepping algorithm changed for skin=0,
                     now there are 3 stepping mode :
@@ -24,7 +26,7 @@ committal in the CVS repository !
                     skin=0 designed for high energy simulations with
                            or without magnetic field
                     skin=1 designed for 'precision' simulations 
-                           without magnetif field 
+                           without magnetic field (default)
 
 06 February 07: V.Ivanchenko (emstand-V08-02-04)
 - G4UrbanMscModel - L.Urban : fix in the single scattering code for heavy
