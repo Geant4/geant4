@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExtrudedSolid.cc,v 1.2 2007-02-12 11:32:27 gcosmo Exp $
+// $Id: G4ExtrudedSolid.cc,v 1.3 2007-02-13 09:56:16 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -439,6 +439,18 @@ EInside G4ExtrudedSolid::Inside (const G4ThreeVector &p) const
   
   // G4cout << p << " projected to polygon as " << pscaled << G4endl;
   
+  // Check if on surface of polygon
+  //
+  for ( G4int i=0; i<fNv; i++ )
+  {
+    G4int j = (i+1) % fNv;
+    if ( IsSameLine(pscaled, fPolygon[i], fPolygon[j]) )
+    {
+      // G4cout << "G4ExtrudedSolid::Inside return Surface " << G4endl;
+      return kSurface;
+    }  
+  }   
+
   // Now check if inside triangles
   //
   std::vector< std::vector<G4int> >::const_iterator it = fTriangles.begin();
@@ -464,18 +476,6 @@ EInside G4ExtrudedSolid::Inside (const G4ThreeVector &p) const
     return kInside;
   }  
                             
-  // Check if on surface of polygon
-  //
-  for ( G4int i=0; i<fNv; i++ )
-  {
-    G4int j = (i+1) % fNv;
-    if ( IsSameLine(pscaled, fPolygon[i], fPolygon[j]) )
-    {
-      // G4cout << "G4ExtrudedSolid::Inside return Surface " << G4endl;
-      return kSurface;
-    }  
-  }   
-    
   // G4cout << "G4ExtrudedSolid::Inside return Outside " << G4endl;
   return kOutside; 
 }  
