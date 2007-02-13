@@ -1,4 +1,4 @@
-$Id: History,v 1.9 2007-02-13 12:01:05 vnivanch Exp $
+$Id: History,v 1.10 2007-02-13 14:34:24 ahoward Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,10 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-05.10.2006, V.Ivanchenko 
-- G4EmStandardPhysics - use skin =0, G4hMultipleScattering for muons
-- G4EmStandardPhysics71 - use skin =0
-- G4EmStandardPhysics72 - use default msc 
+13-02-2007, A.Howard  -    phys-lists-V08-02-01
+-  Added set min/max Energy and Inelastic Energy to NeutronHP builder
+-  Fixed special cuts for LBE physics list
 
 15-12-2006, G.Folger  -    phys-lists-V08-02-00
 -  Fix in QGSP_BIC_HP: use HP elastic in this list ( thanks to Alex) 
