@@ -1,4 +1,4 @@
-$Id: History,v 1.73 2007-02-13 17:15:58 japost Exp $
+$Id: History,v 1.74 2007-02-13 17:20:00 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,13 +17,20 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+February 13th, 2007 - J.Apostolakis (geomnav-V08-02-02) - fix created Dec 7th, 2006
+----------------------------------
+- G4Navigator: improvement for creating touchable history when located
+  outside world. Retain whether last point was located outside, and if so
+  call default TouchableHistory constructor (that initialised world to null).
+
 February 13th, 2007 - J.Apostolakis (geomnav-V08-02-01) - fix created Jan 25th, 2007
 -----------------------------------
 - G4PropagatorInField: implemented ClearPropagatorState()
        to clear all the track-dependent state (incl. safety, zero-steps, loop flag ..)
   ** Calling this is mandatory for each new track 
-     because in the case of geometry overlaps, the safety can be 
-     easily inconsistent (and/or incorrect) otherwise **
+       because in the case of geometry overlaps, the safety can be 
+       easily inconsistent (and/or incorrect) otherwise **
+  ** Must be called from G4Transportation (or alternatives) !!
 
 January 31st, 2007 - G.Cosmo (geomnav-V08-02-00)
 ----------------------------
