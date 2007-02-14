@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmStandardPhysics.cc,v 1.5 2007-02-13 16:29:16 vnivanch Exp $
+// $Id: G4EmStandardPhysics.cc,v 1.6 2007-02-14 10:09:48 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -169,6 +169,7 @@ void G4EmStandardPhysics::ConstructProcess()
                particleName == "He3" ||
                particleName == "GenericIon") {
 
+      if(verbose > 1)
         G4cout << "### G4standard instantiates ionIoni for " 
                << particleName << G4endl;
       pmanager->AddProcess(new G4hMultipleScattering, -1, 1, 1);
