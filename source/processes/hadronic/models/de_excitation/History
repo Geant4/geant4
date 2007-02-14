@@ -14,6 +14,13 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+ 14 Feb 2007 Alex Howard (hadr-deex-V08-02-02)
+-----------------------------------------------
+- evaporation
+   Added protection to exclude negative probabilities from the 
+   "competitive channel sum". With fix below this should only happen due to
+   a precision error, but is protected nonetheless.
+
  12 Feb 2007 Alex Howard (hadr-deex-V08-02-01)
 -----------------------------------------------
 - fission
