@@ -1,4 +1,4 @@
-$Id: History,v 1.283 2007-02-15 14:31:15 maire Exp $
+$Id: History,v 1.284 2007-02-15 15:12:28 urban Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,7 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-     
+15-feb-07: 
+- G4UrbanMscModel - L.Urban: small steps with single scattering before and
+                    after boundary for skin > 1, for skin=0 and skin=1
+                    it works as earlier
+
 15 Feb 07: mma (emstand-V08-02-06)
 - G4eBremsstrahlungModel: correct LPMconstant by factor 2, thanks to G. Depaola
 
