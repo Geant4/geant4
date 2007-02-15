@@ -24,7 +24,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TriangularFacet.cc,v 1.6 2007-02-12 09:34:45 gcosmo Exp $
+// $Id: G4TriangularFacet.cc,v 1.7 2007-02-15 17:03:49 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -452,8 +452,8 @@ G4bool G4TriangularFacet::Intersect (const G4ThreeVector &p,
   
   if (intersect)
   {
-    if (dist > kCarTolerance * 0.5) distance = dist;
-    else dist = 0.0;
+    if (dist < kCarTolerance * 0.5)  { dist = 0.0; }
+    distance = dist;
     distFromSurface = dist * normalComp;
     normal          = surfaceNormal;
   }
