@@ -1,4 +1,4 @@
-$Id: History,v 1.281 2007-02-13 11:41:38 vnivanch Exp $
+$Id: History,v 1.282 2007-02-15 10:37:37 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,7 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-
+     
+15 Feb 07: mma
+- G4eBremsstrahlungModel: correct LPMconstant by factor 2, thanks to G. Depaola
 
 13 February 07: V.Ivanchenko (emstand-V08-02-05)
 12 February 07: 

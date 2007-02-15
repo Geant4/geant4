@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungModel.cc,v 1.36 2007-02-01 15:56:07 vnivanch Exp $
+// $Id: G4eBremsstrahlungModel.cc,v 1.37 2007-02-15 10:37:37 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -52,6 +52,7 @@
 // 07-02-06  public function ComputeCrossSectionPerAtom() (mma)
 // 21-03-06  Fix problem of initialisation in case when cuts are not defined (VI)
 // 27-03-06  Fix calculation of fl parameter at low energy (energy loss) (VI)
+// 15-02-07  correct LPMconstant by a factor 2, thanks to G. Depaola (mma)
 //
 // Class Description:
 //
@@ -87,7 +88,7 @@ G4eBremsstrahlungModel::G4eBremsstrahlungModel(const G4ParticleDefinition* p,
   lowKinEnergy(1.0*keV),
   probsup(1.0),
   MigdalConstant(classic_electr_radius*electron_Compton_length*electron_Compton_length/pi),
-  LPMconstant(fine_structure_const*electron_mass_c2*electron_mass_c2/(8.*pi*hbarc)),
+  LPMconstant(fine_structure_const*electron_mass_c2*electron_mass_c2/(4.*pi*hbarc)),
   theLPMflag(true)
 {
   if(p) SetParticle(p);
