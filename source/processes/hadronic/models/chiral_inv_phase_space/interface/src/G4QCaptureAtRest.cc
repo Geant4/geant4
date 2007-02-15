@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QCaptureAtRest.cc,v 1.8 2007-02-09 09:33:28 mkossov Exp $
+// $Id: G4QCaptureAtRest.cc,v 1.9 2007-02-15 15:59:57 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCaptureAtRest class -----------------
@@ -669,8 +669,8 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
     G4QHadron* resnuc = new G4QHadron(rPDG,r4Mom); // Create Hadron for the ResidualNucl
     output->push_back(resnuc);                // Fill the Residual Nucleus to the output
   }
-  //else
-		else if(1>2)// !! Immediately change back - Very temporary to avoid nuclear capture !!
+  else
+		//else if(1>2)// !! Immediately change back - Very temporary to avoid nuclear capture !!
   {
     G4QHadron* neutr = 0; // Create Neutrino
     if(projPDG==13||projPDG==15) mp-=EnergyDeposition;//TheEnergyDeposit is only for LepCap
@@ -919,23 +919,33 @@ G4bool G4QCaptureAtRest::RandomizeMuDecayOrCapture(G4int Z, G4int N)
   else if(Z>0) pC=rate[rin[Z]+N];                // Tabulated light isotopes
   else G4cout<<"--Warning--G4QCaptureAtRest::RandomizeMuDecayOrCapture: NEG Z="<<Z<<G4endl;
   mZ=Z; mN=N; mH=Huff; mR=pC;    // Remember the last calculated parameters
-  G4double DLifeT=-std::log(G4UniformRand())/pD; // Time of the muon decay inside the atom
-  G4double CLifeT=-std::log(G4UniformRand())/pC; // Time of the muon capture by nucleus
-  if(DLifeT<CLifeT)
-  {
-    Time=DLifeT;
+  //G4double DLifeT=-std::log(G4UniformRand())/pD; // Time of the muon decay inside the atom
+  //G4double CLifeT=-std::log(G4UniformRand())/pC; // Time of the muon capture by nucleus
+  //if(DLifeT<CLifeT)
+  //{
+  //  Time=DLifeT;
 #ifdef debug
-    G4cout<<"G4QCaptureAtRest::RandomizeMuDecayOrCapture: DecayLifeTime="<<Time<<G4endl;
+  //  G4cout<<"G4QCaptureAtRest::RandomizeMuDecayOrCapture: DecayLifeTime="<<Time<<G4endl;
 #endif
-    return false;
+  //  return false;
+  //}
+  //else
+  //{
+  //  Time=CLifeT;
+#ifdef debug
+  //  G4cout<<"G4QCaptureAtRest::RandomizeMuDecayOrCapture: CaptureLifeTime="<<Time<<G4endl;
+#endif
+		//  return true;
+  //}
+  if((pD+pC)*G4UniformRand()>pD) // CAPTURE @@ Cash pD+pC
+		{
+     Time=-std::log(G4UniformRand())/pC;
+     return true;
   }
   else
-  {
-    Time=CLifeT;
-#ifdef debug
-    G4cout<<"G4QCaptureAtRest::RandomizeMuDecayOrCapture: CaptureLifeTime="<<Time<<G4endl;
-#endif
-    return true;
+		{
+     Time=-std::log(G4UniformRand())/pD;
+     return false;
   }
 }
 
