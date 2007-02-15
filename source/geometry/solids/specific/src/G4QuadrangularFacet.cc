@@ -24,7 +24,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QuadrangularFacet.cc,v 1.4 2007-02-12 09:34:44 gcosmo Exp $
+// $Id: G4QuadrangularFacet.cc,v 1.5 2007-02-15 17:04:10 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -256,8 +256,9 @@ G4bool G4QuadrangularFacet::Intersect (const G4ThreeVector &p,
   G4bool intersect =
     facet1->Intersect(p,v,outgoing,distance,distFromSurface,normal);
   if (!intersect)
-    intersect =
-    facet2->Intersect(p,v,outgoing,distance,distFromSurface,normal);
+  {
+    intersect = facet2->Intersect(p,v,outgoing,distance,distFromSurface,normal);
+  }
   
   if (!intersect)
   {
