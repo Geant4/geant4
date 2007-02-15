@@ -1,4 +1,4 @@
-$Id: History,v 1.110 2006-11-22 18:52:01 japost Exp $
+$Id: History,v 1.111 2007-02-15 18:54:52 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+February 15th, 2007, J.Apostolakis  transport-V08-02-00
+---------------------------------
+- G4Transportation: call PropagatorInField to clear state for new track
+   --> addresses reliabilitiy problem seen by Atlas.  This fix is related 
+       to overlaps, clearing the safety value (which is multivalued due 
+       to the overlaps, and thus can become invalid for a new track in 
+       an overlap region.) 
 
 November 22nd, 2006, J.Apostolakis  transport-V08-01-04
 ---------------------------------
