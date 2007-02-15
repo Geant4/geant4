@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel.hh,v 1.20 2007-02-12 12:36:40 vnivanch Exp $
+// $Id: G4UrbanMscModel.hh,v 1.21 2007-02-15 15:03:54 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -73,6 +73,7 @@
 //          angles as well (L.Urban)
 // 31-01-07 code cleaning (L.Urban)
 // 06-02-07 Move SetMscStepLimitation method into the source (VI)
+// 15-02-07 new data member : smallstep (L.Urban)
 //
 //
 // Class Description:
@@ -191,9 +192,10 @@ private:
   G4double geommin;
   G4double geomlimit;
   G4double facgeom;
-  G4double skin,skindepth; 
+  G4double skin,skindepth,smallstep; 
   G4double presafety;
   G4double facsafety;
+  G4double optfactor;
 
   G4double lambda0;
   G4double lambdaeff;

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel.cc,v 1.41 2007-02-11 12:20:12 urban Exp $
+// $Id: G4UrbanMscModel.cc,v 1.42 2007-02-15 15:03:54 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -128,6 +128,8 @@
 //          for heavy particles as well (L.Urban)
 // 08-02-07 randomization of tlimit removed (L.Urban)
 // 11-02-07 modified stepping algorithm for skin=0
+// 15-02-04 new data member: smallstep, small steps with single scattering
+//          before + after boundary for skin > 1
 //
 
 // Class Description:
@@ -178,6 +180,7 @@ G4UrbanMscModel::G4UrbanMscModel(G4double m_facrange, G4double m_dtrl,
   tlimitminfix  = 1.e-6*mm;            
   stepmin       = tlimitminfix;
   skindepth     = skin*stepmin;
+  smallstep     = 1.e10;
   currentRange  = 0. ;
   frscaling2    = 0.25;
   frscaling1    = 1.-frscaling2;
@@ -526,8 +529,13 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
       //compute geomlimit and presafety 
       GeomLimit(track);
 
+      smallstep += 1.;
+
       if((stepStatus == fGeomBoundary) || (stepNumber == 1))
       {
+        if(stepNumber == 1) smallstep = 1.e10;
+        else                smallstep = 1.;
+
         if((stepNumber == 1) && (currentRange < presafety))
         {
           stepmin = tlimitminfix;
@@ -579,6 +587,7 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
         //if track starts far from boundaries increase tlimit!
         if(tlimit < facsafety*presafety)
           tlimit = facsafety*presafety ;
+
       }
 
       if(currentRange < presafety)
@@ -598,15 +607,22 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
         tnow  = facsafety*presafety ;
 
       // step reduction near to boundary
-      if(geomlimit > skindepth)
+      if(smallstep < skin)
       {
-        if(tnow > geomlimit-0.999*skindepth)
-          tnow = geomlimit-0.999*skindepth;
+        tnow = stepmin;
       }
       else
-      {
-        if(tnow > stepmin)
-          tnow = stepmin;
+      { 
+        if(geomlimit > skindepth)
+        {
+          if(tnow > geomlimit-0.999*skindepth)
+            tnow = geomlimit-0.999*skindepth;
+        }
+        else
+        {
+          if(tnow > stepmin)
+            tnow = stepmin;
+        }
       }
 
       if(tnow < stepmin)
