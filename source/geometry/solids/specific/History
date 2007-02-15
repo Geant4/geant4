@@ -1,4 +1,4 @@
-$Id: History,v 1.105 2007-02-12 11:53:16 gcosmo Exp $
+$Id: History,v 1.106 2007-02-15 17:08:48 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+15-Feb-2007, I.Hrivnacova (geom-specific-V08-02-03)
+- Corrected caching of values in G4ExtrudedSolid.
+- Bug fix in G4TriangularFacet::Intersect() to allow for correct update of
+  'Distance' in condition.
+- Updated unit test for G4ExtrudedSolid.
 
 09-Feb-2007, G.Cosmo (geom-specific-V08-02-02)
 - Introduced new shape G4ExtrudedSolid, a solid representing the extrusion
