@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4ExtrudedSolid.cc,v 1.1 2007-02-09 12:05:51 gcosmo Exp $
+// $Id: testG4ExtrudedSolid.cc,v 1.2 2007-02-15 17:02:37 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // testG4ExtrudedSolid
@@ -43,6 +43,8 @@
 #include "G4TwoVector.hh"
 #include "G4ThreeVector.hh"
 #include "G4ExtrudedSolid.hh"
+#include "G4UnionSolid.hh"
+#include "G4Timer.hh"
 
 G4bool testExtrudedSolid0()
 {
@@ -69,6 +71,28 @@ G4bool testExtrudedSolid0()
          << "  Inside via G4TessellatedSolid: "
          << XtruS0->G4TessellatedSolid::Inside(testPoint) << G4endl;
 
+  G4bool* validNorm1 = new G4bool(false);
+  G4ThreeVector* n1 = new G4ThreeVector();
+  G4double dist = XtruS0->DistanceToOut(G4ThreeVector(-120.91923,497.2837,-193.42313),
+                                  G4ThreeVector(-0.74140261,0.5750198,-0.34593987),
+                                  true, validNorm1, n1);
+
+  G4cout << "Inside: " << XtruS0->Inside(G4ThreeVector(-120.91923,497.2837,-193.42313)) << G4endl;
+  G4cout << "Distance to out: " << dist << G4endl;
+  G4cout << "Norm1: " << *n1 << G4endl;
+                                    
+  G4ThreeVector newPoint = G4ThreeVector(-120.91923,497.2837,-193.42313) 
+                         + (dist+2.68961e-06)*G4ThreeVector(-0.74140261,0.5750198,-0.34593987);
+                         
+  G4bool* validNorm2 = new G4bool(false);
+  G4ThreeVector* n2 = new G4ThreeVector();
+  G4double dist2 = XtruS0->DistanceToOut(newPoint,
+                                  G4ThreeVector(-0.74140261,0.5750198,-0.34593987),
+                                  true, validNorm2, n2);
+  G4cout << "Inside2: " << XtruS0->Inside(newPoint) << G4endl;
+  G4cout << "Distance to out 2: " << dist2 << G4endl;
+  G4cout << "Norm2: " << *n2 << G4endl;
+ 
   // no offset, only scale
   //G4ExtrudedSolid* XtruS0 
   //  = new G4ExtrudedSolid("XtruS0", polygon, 25.*cm, 
@@ -79,8 +103,8 @@ G4bool testExtrudedSolid0()
   //  = new G4ExtrudedSolid("XtruS0", polygon, 25.*cm, 
   //               G4TwoVector(), 1.0, G4TwoVector(), 1.0);
 
-  G4cout << *XtruS0 << G4endl;                     
-  XtruS0->G4TessellatedSolid::StreamInfo(G4cout);
+  //G4cout << *XtruS0 << G4endl;                     
+  //XtruS0->G4TessellatedSolid::StreamInfo(G4cout);
 
   return true;
 }
@@ -130,10 +154,55 @@ G4bool testExtrudedSolid2()
 
 // ---------------------------------------------------------------------------
 
+G4bool testExtrudedSolid3()
+{
+  // Extruded solid with 4 z-planes defined via union solid
+
+  std::vector<G4TwoVector> polygon;
+  polygon.push_back(G4TwoVector(-30.*cm, -30.*cm));
+  polygon.push_back(G4TwoVector(-30.*cm,  30.*cm));
+  polygon.push_back(G4TwoVector( 30.*cm,  30.*cm));
+  polygon.push_back(G4TwoVector( 30.*cm, -30.*cm));
+  polygon.push_back(G4TwoVector( 15.*cm, -30.*cm));
+  polygon.push_back(G4TwoVector( 15.*cm,  15.*cm));
+  polygon.push_back(G4TwoVector(-15.*cm,  15.*cm));
+  polygon.push_back(G4TwoVector(-15.*cm, -30.*cm));
+  
+  G4ExtrudedSolid* xtruS1 
+    = new G4ExtrudedSolid("XtruS1", polygon, 25.*cm, 
+                 G4TwoVector(-20.*cm, 10.*cm), 1.5, G4TwoVector(), 0.5);
+    
+  xtruS1->G4TessellatedSolid::StreamInfo(G4cout);;                     
+
+  G4ExtrudedSolid* xtruS2 
+    = new G4ExtrudedSolid("XtruS2", polygon, 15.*cm, 
+                 G4TwoVector(), 0.7, G4TwoVector(20.*cm, 20.*cm), 0.9);
+  
+  
+  G4UnionSolid* unionS
+    = new G4UnionSolid(
+            "xtruX", xtruS1, xtruS2, 0, G4ThreeVector(0., 0., 40.*cm));
+
+  G4cout << "Distance to out (xtruS2): "
+         << xtruS2->DistanceToOut(G4ThreeVector(-120.91923,497.2837,-193.42313),
+                                  G4ThreeVector(-0.74140261,0.5750198,-0.34593987))
+         << G4endl;                                  
+
+  G4cout << "Distance to out (union): "
+         << unionS->DistanceToOut(G4ThreeVector(-120.91923,497.2837,-193.42313),
+                                  G4ThreeVector(-0.74140261,0.5750198,-0.34593987))
+         << G4endl;                                  
+
+  return true;
+}
+
+// ---------------------------------------------------------------------------
+
 int main()
 {
   assert(testExtrudedSolid0());
   assert(testExtrudedSolid1());
   assert(testExtrudedSolid2());
+  assert(testExtrudedSolid3());
   return 0;
 }
