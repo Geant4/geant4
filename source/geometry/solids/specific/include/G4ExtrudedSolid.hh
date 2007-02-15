@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExtrudedSolid.hh,v 1.2 2007-02-12 11:31:47 gcosmo Exp $
+// $Id: G4ExtrudedSolid.hh,v 1.3 2007-02-15 17:05:07 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -132,8 +132,8 @@ class G4ExtrudedSolid : public G4TessellatedSolid
 
     G4int       fNv;
     G4double    fHz;
-    G4TwoVector fOffset1, fOffset2;
-    G4double    fScale1, fScale2;
+    G4TwoVector fOffset0, fOffset1, fOffset2, fKOffset;
+    G4double    fScale0, fScale1, fScale2, fKScale;
     std::vector<G4TwoVector> fPolygon;
     std::vector< std::vector<G4int> > fTriangles;
     G4bool          fIsConvex;

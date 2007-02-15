@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExtrudedSolid.cc,v 1.3 2007-02-13 09:56:16 gcosmo Exp $
+// $Id: G4ExtrudedSolid.cc,v 1.4 2007-02-15 17:05:07 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -77,6 +77,19 @@ G4ExtrudedSolid::G4ExtrudedSolid( const G4String& pName,
                 FatalException, "Making facets failed.");
   }
   fIsConvex = IsConvex();
+
+  
+  // Compute parameters for point projections p(z) 
+  // to the polygon scale & offset:
+  // scale(z) = k*z + scale0
+  // offset(z) = l*z + offset0
+  // p(z) = scale(z)*p0 + offset(z)  
+  // p0 = (p(z) - offset(z))/scale(z);
+  //  
+  fKScale = (fScale2 - fScale1)/(2.0*fHz);
+  fScale0 = fScale2 - fKScale*fHz;
+  fKOffset = (fOffset2 - fOffset1)/(2.0*fHz);
+  fOffset0 = fOffset2 - fKOffset*fHz;;
 }
 
 //_____________________________________________________________________________
@@ -415,7 +428,7 @@ EInside G4ExtrudedSolid::Inside (const G4ThreeVector &p) const
        p.z() < GetMinZExtent() - kCarTolerance ||
        p.z() > GetMaxZExtent() + kCarTolerance )
   {
-    //  G4cout << "G4TessellatedSolid::Outside extent: " << p << G4endl;
+    // G4cout << "G4ExtrudedSolid::Outside extent: " << p << G4endl;
     return kOutside;
   }  
 
@@ -425,14 +438,9 @@ EInside G4ExtrudedSolid::Inside (const G4ThreeVector &p) const
   // p(z) = scale(z)*p0 + offset(z)  
   // p0 = (p(z) - offset(z))/scale(z);
   
-  static G4double k = (fScale2 - fScale1)/(2.0*fHz);
-  static G4double scale0 = fScale2 - k*fHz;
-  static G4TwoVector l = (fOffset2 - fOffset1)/(2.0*fHz);
-  static G4TwoVector offset0 = fOffset2 - l*fHz;;
-  
   G4TwoVector p2(p.x(), p.y());
-  G4double pscale  = k*p.z() + scale0;
-  G4TwoVector poffset = l*p.z() + offset0;
+  G4double pscale  = fKScale*p.z() + fScale0;
+  G4TwoVector poffset = fKOffset*p.z() + fOffset0;
   G4TwoVector pscaled = (p2-poffset)/pscale;
     // pscale is always >0 as it is an interpolation between two
     // positive scale values
@@ -446,7 +454,7 @@ EInside G4ExtrudedSolid::Inside (const G4ThreeVector &p) const
     G4int j = (i+1) % fNv;
     if ( IsSameLine(pscaled, fPolygon[i], fPolygon[j]) )
     {
-      // G4cout << "G4ExtrudedSolid::Inside return Surface " << G4endl;
+      // G4cout << "G4ExtrudedSolid::Inside return Surface (on polygon) " << G4endl;
       return kSurface;
     }  
   }   
@@ -468,7 +476,7 @@ EInside G4ExtrudedSolid::Inside (const G4ThreeVector &p) const
     //
     if ( std::fabs( std::fabs(p.z()) - fHz ) < kCarTolerance )
     {
-      // G4cout << "G4ExtrudedSolid::Inside return Surface" << G4endl;
+      // G4cout << "G4ExtrudedSolid::Inside return Surface (on z plane)" << G4endl;
       return kSurface;
     }  
   
@@ -479,7 +487,6 @@ EInside G4ExtrudedSolid::Inside (const G4ThreeVector &p) const
   // G4cout << "G4ExtrudedSolid::Inside return Outside " << G4endl;
   return kOutside; 
 }  
-
 
 //_____________________________________________________________________________
 
