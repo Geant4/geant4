@@ -111,7 +111,7 @@
 
  <solids>
   <ellipsoid aunit="cm" lunit="cm" name="OneBreast" ax="4.95" by="4.35" cz="4.15" zcut1="-4.15" zcut2="4.15" />
- 
+</solids> 
  <structure>
   <volume name="RightBreastVolume" >
    <materialref ref="SoftTissue" />

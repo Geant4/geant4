@@ -63,11 +63,14 @@
 #include "G4MIRDRibCage.hh"
 #include "G4MIRDPelvis.hh"
 #include "G4MIRDTestes.hh"
-#include "G4ParameterisedBreast.hh"
+//#include "G4ParameterisedLeftBreast.hh"
+//#include "G4ParameterisedRightBreast.hh"
 
 G4MIRDBodyFactory::G4MIRDBodyFactory()
 {
   // Map with name of the organ and pointer to the MIRDOrgan class
+  //  organ["ParameterisedRightBreast"] = new G4ParameterisedRightBreast();
+  //organ["ParameterisedLeftBreast"] = new G4ParameterisedLeftBreast();
   organ["Head"] = new G4MIRDHead();
   organ["Trunk"] = new G4MIRDTrunk(); 
   organ["LeftLeg"] = new G4MIRDLeftLeg();
@@ -97,10 +100,13 @@ G4MIRDBodyFactory::G4MIRDBodyFactory()
   organ["RightLegBone"] = new G4MIRDRightLegBone();
   organ["RightBreast"] = new G4MIRDRightBreast();
   organ["LeftBreast"] = new G4MIRDLeftBreast();
+
 }
 
 G4MIRDBodyFactory::~G4MIRDBodyFactory()
 { 
+  //delete organ["ParameterisedRightBreast"]; organ["ParameterisedRightBreast"]=0;
+  //delete organ["ParameterisedLeftBreast"]; organ["ParameterisedLeftBreast"]=0;
   delete organ["LeftBreast"]; organ["LeftBreast"]=0;
   delete organ["RightBreast"]; organ["RightBreast"]=0;
   delete organ["RightLegBone"]; organ["RightLegBone"]=0;
@@ -131,6 +137,8 @@ G4MIRDBodyFactory::~G4MIRDBodyFactory()
   delete organ["RightLeg"]; organ["RightLeg"]=0;
   delete organ["LeftLeg"]; organ["LeftLeg"]=0;
 }
+
+
 
 G4VPhysicalVolume* G4MIRDBodyFactory::CreateOrgan(const G4String& organ_name,G4VPhysicalVolume* motherVolume,
 						  const G4String& colourName, G4bool visAttribute,

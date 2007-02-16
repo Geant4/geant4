@@ -90,17 +90,15 @@ G4VPhysicalVolume* G4HumanPhantomConstruction::Construct()
   builder->SetModel(model);
 
   // the argument indicates the sensitivity of the volume
+
   builder->BuildHead("pink", false, sensitivities["Head"]);
   
   builder->BuildTrunk("pink", false, sensitivities["Trunk"]);
   
-   builder->BuildLeftLeg("pink", false,sensitivities["LeftLeg"]);
+  builder->BuildLeftLeg("pink", false,sensitivities["LeftLeg"]);
   builder->BuildRightLeg("pink", false,sensitivities["RightLeg"]);
- 
   builder->BuildBrain("pink", true,sensitivities["Brain"]); 
  
-   // Remind! the elliptical cone gives problems! Intersections of volumes, 
-  // wrong calculation of the volume!
   builder->BuildLeftArmBone("grey", true,sensitivities["LeftArmBone"]);
   builder->BuildRightArmBone("grey", true, sensitivities["RightArmBone"]);  
     
@@ -133,12 +131,14 @@ G4VPhysicalVolume* G4HumanPhantomConstruction::Construct()
   //builder->BuildThyroid(sensitivities["Thyroid"]); 
   
   if(sex=="Female"){
+
     builder->BuildLeftOvary("purple", true,sensitivities["LeftOvary"]);
     builder->BuildRightOvary("purple", true,sensitivities["RightOvary"]);
     builder->BuildUterus("purple", true,sensitivities["Uterus"]);
     builder->BuildLeftBreast("purple", true,sensitivities["LeftBreast"]); 
     builder->BuildRightBreast("purple", true,sensitivities["RightBreast"]);
-   //if(model == "MIRD") builder->BuildParameterisedBreast(true);
+//builder->BuildParameterisedLeftBreast("purple", false, sensitivities["RightBreast"]); 
+    //builder->BuildParameterisedRightBreast("purple", false, sensitivities["RightBreast"]);  
   }
   /*  
   if(sex=="Male"){
