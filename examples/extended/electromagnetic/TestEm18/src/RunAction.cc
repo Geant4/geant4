@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.1 2007-02-13 17:57:20 maire Exp $
+// $Id: RunAction.cc,v 1.2 2007-02-16 11:59:47 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -215,18 +215,18 @@ G4double RunAction::GetEnergyFromRestrictedRange(G4double range,
 {
   G4EmCalculator emCal;
     
-  G4double Energy = Etry, dE = 0.;
+  G4double Energy = Etry, dE = 0., dEdx;
   G4double r, dr;
-  G4double err  = 1., errmax = 0.0001;
+  G4double err  = 1., errmax = 0.00001;
   G4int    iter = 0 , itermax = 10;  
   while (err > errmax && iter < itermax) {
     iter++;
     Energy -= dE;
     r = emCal.GetRangeFromRestricteDEDX(Energy,particle,material);
     dr = r - range;          
-    err = std::abs(dr)/range;
-    G4double dEdx = emCal.GetDEDX(Energy,particle,material);
+    dEdx = emCal.GetDEDX(Energy,particle,material);
     dE = dEdx*dr;
+    err = std::abs(dE)/Energy;    
   }
   if (iter == itermax) {
     G4cout 
@@ -247,18 +247,18 @@ G4double RunAction::GetEnergyFromCSDARange(G4double range,
 {
   G4EmCalculator emCal;
     
-  G4double Energy = Etry, dE = 0.;
+  G4double Energy = Etry, dE = 0., dEdx;
   G4double r, dr;
-  G4double err  = 1., errmax = 0.0001;
+  G4double err  = 1., errmax = 0.00001;
   G4int    iter = 0 , itermax = 10;  
   while (err > errmax && iter < itermax) {
     iter++;
     Energy -= dE;
     r = emCal.GetCSDARange(Energy,particle,material);
     dr = r - range;          
-    err = std::abs(dr)/range;
-    G4double dEdx = emCal.ComputeTotalDEDX(Energy,particle,material);
+    dEdx = emCal.ComputeTotalDEDX(Energy,particle,material);
     dE = dEdx*dr;
+    err = std::abs(dE)/Energy;
   }
   if (iter == itermax) {
     G4cout 

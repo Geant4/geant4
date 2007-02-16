@@ -1,4 +1,4 @@
-# $Id: csda.mac,v 1.1 2007-02-13 17:57:19 maire Exp $
+# $Id: csda.mac,v 1.2 2007-02-16 11:59:47 maire Exp $
 #
 # macro file for TestEm18.cc
 #
@@ -6,9 +6,10 @@
 /run/verbose 2
 #
 /testem/det/setMat Water
+###/testem/det/setMat Water_vapor
 /testem/det/setSize 1 cm
 #
-/testem/phys/setCuts 1 km
+/testem/phys/setCuts 100 km
 #
 /run/initialize
 #
