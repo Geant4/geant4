@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LossTableBuilder.cc,v 1.23 2007-02-12 12:31:50 vnivanch Exp $
+// $Id: G4LossTableBuilder.cc,v 1.24 2007-02-16 11:59:35 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -197,7 +197,7 @@ void G4LossTableBuilder::BuildInverseRangeTable(const G4PhysicsTable* rangeTable
       G4double rlow  = pv->GetValue(elow, b);
       G4double rhigh = pv->GetValue(ehigh, b);
 
-      //rhigh *= std::exp(std::log(rhigh/rlow)/((G4double)(nbins-1)));
+      rhigh *= std::exp(std::log(rhigh/rlow)/((G4double)(nbins-1)));
 
       
       G4LPhysicsFreeVector* v = new G4LPhysicsFreeVector(nbins,rlow,rhigh);
@@ -207,39 +207,6 @@ void G4LossTableBuilder::BuildInverseRangeTable(const G4PhysicsTable* rangeTable
         v->PutValues(j,r,e);
       }
 
-      /*
-      G4PhysicsLogVector* v = new G4PhysicsLogVector(rlow, rhigh, nbins);
-
-      v->PutValue(0,elow);
-      G4double energy1 = elow;
-      G4double range1  = rlow;
-      G4double energy2 = elow;
-      G4double range2  = rlow;
-      size_t ilow      = 0;
-      size_t ihigh;
-
-      for (size_t j=1; j<nbins; j++) {
-
-        G4double range = v->GetLowEdgeEnergy(j);
-
-        for (ihigh=ilow+1; ihigh<nbins; ihigh++) {
-          energy2 = pv->GetLowEdgeEnergy(ihigh);
-          range2  = pv->GetValue(energy2, b);
-          if(range2 >= range || ihigh == nbins-1) {
-            ilow = ihigh - 1;
-            energy1 = pv->GetLowEdgeEnergy(ilow);
-            range1  = pv->GetValue(energy1, b);
-            break;
-	  }
-        }
-
-        G4double e = std::log(energy1) + 
-                     std::log(energy2/energy1)*
-	  std::log(range/range1)/std::log(range2/range1);
-
-        v->PutValue(j,std::exp(e));
-      }
-      */
       G4PhysicsTableHelper::SetPhysicsVector(invRangeTable, i, v);
     }
   }

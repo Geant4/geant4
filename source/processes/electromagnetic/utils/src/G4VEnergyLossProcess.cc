@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.95 2007-01-16 18:07:55 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.96 2007-02-16 11:59:35 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -100,6 +100,7 @@
 // 07-06-06 Do not reflect AlongStep in subcutoff regime (V.Ivanchenko)
 // 14-01-07 add SetEmModel(index) and SetFluctModel() (mma)
 // 16-01-07 add IonisationTable and IonisationSubTable (V.Ivanchenko)
+// 16-02-07 set linLossLimit=1.e-6 (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -165,7 +166,7 @@ G4VEnergyLossProcess::G4VEnergyLossProcess(const G4String& name,
   nBins(90),
   nBinsCSDA(70),
   nWarnings(0),
-  linLossLimit(0.05),
+  linLossLimit(1.0e-6),
   minSubRange(0.1),
   lambdaFactor(0.8),
   mfpKinEnergy(0.0),
