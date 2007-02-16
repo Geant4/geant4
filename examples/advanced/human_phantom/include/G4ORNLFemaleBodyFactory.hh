@@ -46,8 +46,5 @@ public:
   
   G4VPhysicalVolume* CreateOrgan(const G4String&,G4VPhysicalVolume*,
 				 const G4String&, G4bool, G4bool);
-private:
-  // SAXProcessor sxp;
-  //ProcessingConfigurator config;
 };
 #endif
