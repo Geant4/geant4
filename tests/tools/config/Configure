@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.8 2003-08-26 20:54:45 sadilov Exp $
+# $Id: Configure,v 1.9 2007-02-16 12:17:44 bmorgan Exp $
 #
-# Generated on Tue Aug 26 22:48:39 CEST 2003 [metaconfig 3.0 PL70]
+# Generated on Fri Feb 16 12:09:40 GMT 2007 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -158,13 +158,16 @@ contains=''
 d_portable=''
 g4base=''
 g4conf=''
+g4final_install=''
 g4include=''
+g4includes_flag=''
 g4install=''
 g4workdir=''
 g4bin=''
 g4lib=''
 g4tmp=''
 g4data=''
+g4elasticdata=''
 g4ledata=''
 g4levelgammadata=''
 g4neutronhpcrosssections=''
@@ -173,15 +176,16 @@ g4clhep_base_dir=''
 g4clhep_include_dir=''
 g4clhep_lib=''
 g4clhep_lib_dir=''
+g4lib_build_shared=''
+g4lib_build_static=''
+g4lib_use_dll=''
+g4lib_use_dyn=''
+g4lib_use_shared=''
+g4lib_use_static=''
 g4global=''
 g4granular=''
 g4lib_use_granular=''
 g4debug=''
-g4lib_build_shared=''
-g4lib_build_static=''
-g4lib_use_shared=''
-g4lib_use_static=''
-g4_build_wo_session=''
 g4ui_build_gag_session=''
 g4ui_build_terminal_session=''
 g4ui_build_win32_session=''
@@ -191,34 +195,43 @@ g4ui_use_gag=''
 g4ui_use_tcsh=''
 g4ui_use_terminal=''
 g4ui_use_win32=''
-g4ui_use_wo=''
 g4ui_use_xaw=''
 g4ui_use_xm=''
+g4ui_xawflags=''
+g4ui_xawhome=''
+g4ui_xawlibs=''
+g4vis_xmflags=''
+g4vis_xmhome=''
+g4vis_xmlibs=''
 g4vis_build_asciitree_driver=''
 g4vis_build_dawn_driver=''
 g4vis_build_dawnfile_driver=''
 g4vis_build_oiwin32_driver=''
 g4vis_build_oix_driver=''
-g4vis_build_opacs_driver=''
 g4vis_build_openglwin32_driver=''
 g4vis_build_openglx_driver=''
 g4vis_build_openglxm_driver=''
 g4vis_build_raytracer_driver=''
+g4vis_build_raytracerx_driver=''
 g4vis_build_vrml_driver=''
 g4vis_build_vrmlfile_driver=''
 g4vis_oglhome=''
+g4vis_oivhome=''
 g4vis_use_asciitree=''
 g4vis_use_dawn=''
 g4vis_use_dawnfile=''
 g4vis_use_oiwin32=''
 g4vis_use_oix=''
-g4vis_use_opacs=''
 g4vis_use_openglwin32=''
 g4vis_use_openglx=''
 g4vis_use_openglxm=''
 g4vis_use_raytracer=''
+g4vis_use_raytracerx=''
 g4vis_use_vrml=''
 g4vis_use_vrmlfile=''
+g4vis_xmflags=''
+g4vis_xmhome=''
+g4vis_xmlibs=''
 g4wanalysis_build=''
 g4wanalysis_build_jas=''
 g4wanalysis_build_lab=''
@@ -234,8 +247,8 @@ g4_make_version=''
 g4make=''
 g4w_use_g3tog4=''
 g4wlib_build_g3tog4=''
-g4w_use_step=''
-g4wlib_build_step=''
+g4w_use_zlib=''
+g4wlib_build_zlib=''
 lns=''
 c=''
 n=''
@@ -451,12 +464,13 @@ while test $# -gt 0; do
 	case "$1" in
 	-d) shift; fastread=yes;;
 	-e) shift; alldone=cont;;
+	-build) shift; g4build=yes;;
+	-incflags) shift; g4incflags=yes;;
 	-install) shift; install=yes;;
-	-ldlibs) shift; g4ldlibs=yes;;
-	-ldflags) shift; g4ldflags=yes;;
 	-cppflags) shift; g4cppflags=yes;;
 	-cxxflags) shift; g4cxxflags=yes;;
-	-incflags) shift; g4incflags=yes;;
+	-ldlibs) shift; g4ldlibs=yes;;
+	-ldflags) shift; g4ldflags=yes;;
 	-f)
 		shift
 		cd ../..
@@ -511,16 +525,17 @@ done
 case "$error" in
 true)
 	cat >&2 <<EOM
-Usage: $me [-dehrsEKOSV] [-install] [-libs] [-f config.sh] [-D symbol] [-D symbol=value]
+Usage: $me [-dehrsEKOSV] [-install] [-build] [-libs] [-f config.sh] [-D symbol] [-D symbol=value]
                  [-U symbol] [-U symbol=]
   -d : use defaults for all answers.
   -e : go on without questioning past the production of config.sh.
-  -install : start configuration AND installation of Geant4 libraries. 
-  -ldlibs : retrieve the list of libraries to link
-  -ldflags : retrieve the list of directories where libraries are placed
-  -cxxflags : retrieve the list of cxxflags
+  -build : start configuration AND build of Geant4 libraries. 
   -cppflags : retrieve the list of cppflags
+  -cxxflags : retrieve the list of cxxflags
   -incflags : retrieve the list of incflags
+  -install : start installation of Geant4 libraries. 
+  -ldflags : retrieve the list of directories where libraries are placed
+  -ldlibs : retrieve the list of libraries to link
   -f : specify an alternate default configuration file.
   -h : print this help message and exit (with an error status).
   -r : reuse C symbols value if possible (skips costly nm extraction).
@@ -948,12 +963,37 @@ user=`(logname) 2>/dev/null`
 case "$user" in
 '') user=`whoami 2>&1`;;
 esac
-if [ X$install = Xyes ] ; then
+
+#if [ X$install = Xyes ] ; then
+#
+#echo " "
+#echo " "
+#echo " "
+#echo "                --- Geant4 Toolkit Installation  ---"
+#echo " "
+#echo " "
+#echo " "
+#echo " "
+#
+##if $contains "^$user\$" ../../.config/instruct >/dev/null 2>&1; then
+##	firsttime=false
+##	echo " "
+##	rp='Would you like to see the instructions?'
+##	dflt=n
+##	. ./myread
+##	case "$ans" in
+##	[yY]*) ;;
+##	*) needman=false;;
+##	esac
+##fi
+#fi
+
+if [ X$g4build = Xyes ] ; then
 
 echo " "
 echo " "
 echo " "
-echo "                --- Geant4 Toolkit Installation  ---"
+echo "                --- Geant4 Toolkit Build  ---"
 echo " "
 echo " "
 echo " "
@@ -972,7 +1012,11 @@ if $contains "^$user\$" ../../.config/instruct >/dev/null 2>&1; then
 fi
 fi
 
-if [ X$install = X ] ; then
+if [ X$install = Xyes ] ; then
+needman=false
+fi
+
+if [ X$install = X -a X$g4build = X ] ; then
 needman=false
 fi
 
@@ -1650,6 +1694,15 @@ case  "$g4compiler" in
 				;;
 		'WIN32')
 				g4compiler=VC
+	clcompiler=`( cl 1>/dev/null || echo "ERROR: There is no 'cl' compiler.") 2>&1`
+				case $clcompiler in
+				*"Version 12"*) g4compiler=VC6
+				;;
+				*"Version 13"*) g4compiler=VC
+				;;
+				*) g4compiler=VC
+				;;
+				esac				
 				;;
 		'Darwin')
 				g4compiler=g++
@@ -1657,7 +1710,9 @@ case  "$g4compiler" in
 	esac
 esac
 
-if [ X$install = Xyes ] ; then
+if [ X$g4system = X ] ; then
+
+if [ X$g4build = Xyes ] ; then
 while test 1 = 1  ; do
 
 g4message=`cat << EOM
@@ -1796,6 +1851,8 @@ fi
 #
 g4system=$g4osname-$g4compiler
 
+fi
+
 #cat << EOM
 #
 #G4SYSTEM is now set to $g4system.
@@ -1811,8 +1868,9 @@ newmyuname="$myuname"
 dflt=n
 
 cd ../..
-if [ X$install = X ] ; then
 
+
+if [ X$g4build = X ] ; then
 
 	if test -f $src/.config/bin/$g4system/env.sh; then
 
@@ -1822,6 +1880,16 @@ if [ X$g4ldlibs != X -o X$g4ldflags != X -o X$g4cxxflags != X -o X$g4cppflags !=
 	g4non_display=yes
 #	echo g4non_display=$g4non_display
 fi
+
+	if [ X$install = Xyes ] ; then
+
+	$rm -rf .config/UU
+	
+	. $src/.config/bin/$g4system/move.sh
+
+	exit 1
+
+	fi #end of cppflags
 
 	if [ X$g4cppflags = Xyes ] ; then
 
@@ -1851,25 +1919,66 @@ fi
 
 	fi #end of cxxflags
 
+
+
+	g4install_lib_AAA=`echo $g4install/lib|sed -e "s/\//AAA/g"`
+	g4final_install_lib_AAA=`echo $g4final_install/lib/geant4|sed -e "s/\//AAA/g"`
+	
+
+#############################################################################
 	if [ X$g4incflags = Xyes ] ; then
 
 	. $src/.config/bin/$g4system/env.sh
 
-	INCFLAGS=`grep 'INCFLAGS_FINAL :=' $G4LIB/$G4SYSTEM/GNUmakefile.db | $sed  -e 's/^\(.*\):=//'`
+### Getting G4FIRST_INSTALL
+	G4FIRST_INSTALL_AAA=`grep 'G4INSTALL =' $G4LIB/$G4SYSTEM/GNUmakefile.db | $sed  -e 's/^\(.*\)= //'|$sed -e 's/\//AAA/g'`
+	G4INSTALL_AAA=`echo $G4INSTALL|sed -e "s/\//AAA/g"`
+###
+	INCFLAGS_AAA=`grep 'INCFLAGS_FINAL :=' $G4LIB/$G4SYSTEM/GNUmakefile.db | $sed  -e 's/^\(.*\):=//'|$sed -e 's/\//AAA/g'`
+
+#	echo INCFLAGS_AAA=$INCFLAGS_AAA
+#	echo G4INSTALL_AAA=$G4INSTALL_AAA
+#	echo G4FIRST_INSTALL_AAA=$G4FIRST_INSTALL_AAA
+
+	INCFLAGS_AAA_NEW=`echo $INCFLAGS_AAA| $sed -e "s/$G4FIRST_INSTALL_AAA/$G4INSTALL_AAA/g"`
+
+#	echo INCFLAGS_AAA_NEW=$INCFLAGS_AAA_NEW
+
+	INCFLAGS=`echo $INCFLAGS_AAA_NEW| $sed -e "s/AAA/\//g"`
 
 #	echo INCFLAGS=$INCFLAGS
+
+	if [ X$G4INCLUDE = X ] ; then
 	echo $INCFLAGS
+	else
+	echo -I$G4INCLUDE
+	fi
 	
 	$rm -rf .config/UU
 	exit 1
 
 	fi #end of incflags
+#############################################################################
 
+
+#############################################################################
 	if [ X$g4ldflags = Xyes ] ; then
 
 	. $src/.config/bin/$g4system/env.sh
 
-	LDFLAGS=`grep 'LDFLAGS_FINAL :=' $G4LIB/$G4SYSTEM/GNUmakefile.db | $sed  -e 's/^\(.*\):=//'`
+### Getting G4FIRST_INSTALL
+	G4FIRST_LIB_AAA=`grep 'G4LIB =' $G4LIB/$G4SYSTEM/GNUmakefile.db | $sed  -e 's/^\(.*\)= //'|$sed -e 's/\//AAA/g'`
+	G4LIB_AAA=`echo $G4LIB|sed -e "s/\//AAA/g"`
+###
+#	G4FIRST_INSTALL_LIB_AAA=${G4FIRST_INSTALL_AAA}AAAlib
+#	G4INSTALL_LIB_AAA=${G4INSTALL_AAA}AAAlibAAAgeant4
+
+#	echo G4FIRST_INSTALL_LIB_AAA=$G4FIRST_INSTALL_LIB_AAA
+#	echo G4INSTALL_LIB_AAA=$G4INSTALL_LIB_AAA
+	
+	LDFLAGS_AAA=`grep 'LDFLAGS_FINAL :=' $G4LIB/$G4SYSTEM/GNUmakefile.db | $sed  -e 's/^\(.*\):=//'|$sed -e 's/\//AAA/g'`
+	LDFLAGS_AAA_NEW=`echo $LDFLAGS_AAA| $sed -e "s/$G4FIRST_LIB_AAA/$G4LIB_AAA/g"`
+	LDFLAGS=`echo $LDFLAGS_AAA_NEW| $sed -e "s/AAA/\//g"`
 
 #	echo LDFLAGS=$LDFLAGS
 	echo $LDFLAGS
@@ -1878,6 +1987,7 @@ fi
 	exit 1
 
 	fi #end of ldflags
+#############################################################################
 
 	if [ X$g4ldlibs = Xyes ] ; then
 
@@ -1904,10 +2014,18 @@ fi
 	
 # Global libs
 
-	LDLIBS_1=`grep 'LDLIBS_FINAL :=' $G4LIB/$G4SYSTEM/GNUmakefile.db | $sed  -e 's/^\(.*\):=//'`
-	LDLIBS_2=`echo $LDLIBS_1 | $sed  -e 's/^\(.*\)-lMarker//'`
+###	LDLIBS_1=`grep 'LDLIBS_FINAL :=' $G4LIB/$G4SYSTEM/GNUmakefile.db | $sed  -e 's/^\(.*\):=//'`
+###	LDLIBS_2=`echo $LDLIBS_1 | $sed  -e 's/^\(.*\)-lMarker//'`
+###	echo "$LDLIBS_2 $c"
 
-	echo "$LDLIBS_2 $c"
+	LIBLIST_LIST=`$G4LIB/$G4SYSTEM/liblist -m $G4LIB/$G4SYSTEM < $G4LIB/$G4SYSTEM/libname.map`
+
+	LDLIBS3=`grep 'LDLIBS3 :=' $G4LIB/$G4SYSTEM/GNUmakefile.db | $sed  -e 's/^\(.*\):=//'`
+	LDLIBS4=`grep 'LDLIBS4 :=' $G4LIB/$G4SYSTEM/GNUmakefile.db | $sed  -e 's/^\(.*\):=//'`
+
+	LDLIBS=$LIBLIST_LIST $LDLIBS3 $LDLIBS4
+
+	echo $LDLIBS
 
 #	echo "-L$G4WORKDIR/lib/$G4SYSTEM -lG4persistency -lG4readout -lG4run -lG4event -lG4tracking -lG4parmodels -lG4processes -lG4digits+hits -lG4track -lG4particles -lG4geometry -lG4materials -lG4graphics_reps -lG4intercoms -lG4global $c"
 
@@ -1992,9 +2110,9 @@ echo " "
 echo " "
 
 	echo " "
-	echo "WARNING: Geant4 is NOT installed yet!"
+	echo "WARNING: Geant4 is NOT built yet!"
 	echo "You (or the administrator if you have not enough privileges)"
-	echo "should start with \$G4INSTALL/Configure -install."
+	echo "should start with \$G4INSTALL/Configure -build."
 	echo "(where \$G4INSTALL is Geant4 install directory)."
 	echo " "
 	$rm -rf .config/UU
@@ -2351,6 +2469,23 @@ while test "$type"; do
 done
 cd .config/UU
 ans="$value"
+
+# Check for Windows!
+if test "X$g4system" = "XWIN32-VC" -o "X$g4system" = "XWIN32-VC7"; then
+
+checkdrive=`echo $ans|cut -d"/" -f2`
+
+if test "X$checkdrive" = "Xcygdrive"; then
+
+windrive=`echo $ans|cut -d"/" -f3`
+winpath=`echo $ans|cut -d"/" -f4-`
+
+fullwinpath="$windrive:/$winpath"
+ans=$fullwinpath
+
+fi # if cygwin syntax is used
+fi # if Win
+
 rp="$orig_rp"
 dflt="$orig_dflt"
 rm -f getfile.ok
@@ -2380,10 +2515,39 @@ esac
 
 case "$g4install" in
 '')
-	if [ X$HOME = X/ ] ; then
-	HOME=""
-	fi
-	g4install=$HOME/geant4
+if test $g4system = "WIN32-VC" -o $g4system = "WIN32-VC7"; then
+#	g4install="c:/geant4"
+	g4install=$abssrc
+else
+#	if [ X"$HOME" = X/ ] ; then
+#	HOME=""
+#	fi
+#	g4install="$HOME"/geant4
+	g4install=$abssrc
+
+fi
+
+# Check for Windows!
+if test $g4system = "WIN32-VC" -o $g4system = "WIN32-VC7"; then
+
+checkdrive=`echo $g4install|cut -d"/" -f2`
+
+if test $checkdrive = "cygdrive"; then
+
+windrive=`echo $g4install|cut -d"/" -f3`
+winpath=`echo $g4install|cut -d"/" -f4-`
+
+fullwinpath="$windrive:/$winpath"
+g4install=$fullwinpath
+
+fi
+fi
+	;;
+esac
+
+case "$g4final_install" in
+'')
+	g4final_install=$g4install
 	;;
 esac
 
@@ -2399,16 +2563,10 @@ case "$g4includes_flag" in
 	;;
 esac
 
-case "$g4include" in
-'')
-#	g4include=$g4install/include
-	g4include=''
-	;;
-esac
 
 g4message=`cat << EOM
 
-Where is Geant4 installed?
+Where is Geant4 source installed?
 EOM`
 
 #dflt="NO DEFAULT ANSWER"
@@ -2418,7 +2576,22 @@ rp=$g4message
 . ./getfile
 g4install=$ans
 g4workdir=$g4install
+#################################
+g4message=`cat << EOM
 
+Specify the path where Geant4 libraries and source files should be
+installed.
+EOM`
+
+#dflt="NO DEFAULT ANSWER"
+dflt=$g4final_install
+fn='d~'
+rp=$g4message
+. ./getfile
+g4final_install=$ans
+#g4workdir=$g4install
+
+##################################
 g4message=`cat << EOM
 
 Do you want to copy all Geant4 headers 
@@ -2434,17 +2607,32 @@ g4includes_flag=$ans
 
 if [ X$g4includes_flag = Xy ] ; then
 
-g4message=`cat << EOM
+case "$g4include" in
+'')
+	g4include=$g4install/include
+#	g4include=''
+	;;
+esac
 
-Where will be directory to copy all Geant4 headers?
-EOM`
+#g4message=`cat << EOM
+#
+#Where will be directory to copy all Geant4 headers?
+#EOM`
+#
+##dflt="NO DEFAULT ANSWER"
+####dflt=$g4install/include
+#dflt=$g4include
+#fn='d~+'
+#rp=$g4message
+#. ./getfile
+#g4include=$ans
 
-#dflt="NO DEFAULT ANSWER"
-dflt=$g4install/include
-fn='d~+'
-rp=$g4message
-. ./getfile
-g4include=$ans
+# Set constantly!
+if [ X$g4install != X$g4final_install ] ; then
+g4include=$g4final_install/include/geant4
+else
+g4include=$g4final_install/include
+fi
 
 fi
 
@@ -2466,7 +2654,13 @@ case "$g4lib" in
 	;;
 esac
 
-while test 1 = 1  ; do
+#case "$g4bin" in
+#'')
+#	g4bin=$g4workdir/bin
+#	;;
+#esac
+
+while test 1 = 0  ; do
 
 g4message=`cat << EOM
 
@@ -2533,39 +2727,87 @@ esac
 
 case "$g4levelgammadata" in
 '')
-	g4levelgammadata=$g4data/PhotonEvaporation
+	g4levelgammadata=$g4data/PhotonEvaporation2.0
 	;;
 esac
 
 case "$g4radioactivedata" in
 '')
-	g4radioactivedata=$g4data/RadiativeDecay
+	g4radioactivedata=$g4data/RadioactiveDecay3.1
 	;;
 esac
 
 case "$g4ledata" in
 '')
-	g4ledata=$g4install/../G4EMLOW2.2
+	g4ledata=$g4data/G4EMLOW4.2
 	;;
 esac
 
 case "$g4neutronhpcrosssections" in
 '')
-	g4neutronhpcrosssections=$g4install/../G4NDL3.7
+	g4neutronhpcrosssections=$g4data/G4NDL3.10
 	;;
 esac
+
+#case "$g4elasticdata" in
+#'')
+#	g4elasticdata=$g4data/G4ELASTIC1.1
+#	;;
+#esac
+
+#########################################################################
+
+# while test 1 = 1  ; do
+
+g4message=`cat << EOM
+
+Please, specify default directory where ALL the Geant4 data is installed:
+
+ G4LEVELGAMMADATA:		$g4levelgammadata
+
+ G4RADIOACTIVEDATA:		$g4radioactivedata
+
+ G4LEDATA:			$g4ledata
+
+ NeutronHPCrossSections:	$g4neutronhpcrosssections
+
+You will be asked about customizing these next.
+
+EOM`
+
+#dflt="NO DEFAULT ANSWER"
+dflt=$g4data
+#fn='d~'
+rp=$g4message
+#. ./myread
+gans=$ans
+
+		dflt=$g4data
+		fn='d~'
+		. ./getfile
+
+		if [ X$g4data != X$ans ] ; then
+		g4data=$ans
+
+		g4levelgammadata=$g4data/PhotonEvaporation2.0
+		g4radioactivedata=$g4data/RadioactiveDecay3.1
+		g4ledata=$g4data/G4EMLOW4.2
+		g4neutronhpcrosssections=$g4data/G4NDL3.10
+#		g4elasticdata=$g4data/G4ELASTIC1.1
+		fi
+# done
+
+###################################################################
 
 while test 1 = 1  ; do
 
 g4message=`cat << EOM
 
-Please, specify directories where the Geant4 data is installed:
+Please, specify default directory where the Geant4 data is installed:
 
 1) G4LEVELGAMMADATA:		$g4levelgammadata
 
 2) G4RADIOACTIVEDATA:		$g4radioactivedata
-
-Data which is not part of the default Geant4 distribution:
 
 3) G4LEDATA:			$g4ledata
 
@@ -2586,32 +2828,41 @@ gans=$ans
 
 	1) 
 		dflt=$g4levelgammadata
-		fn='f~'
-		rp="Where is Geant4 PhotonEvaporation data installed?"
+		fn='d~'
+		rp="Where is Geant4 PhotonEvaporation2.0 data installed?"
 		. ./getfile
 		g4levelgammadata=$ans
 		;;
 	2) 
 		dflt=$g4radioactivedata
-		fn='f~'
-		rp="Where is Geant4 RadiativeDecay data installed?"
+		fn='d~'
+		rp="Where is Geant4 RadioactiveDecay3.1 data installed?"
 		. ./getfile
 		g4radioactivedata=$ans
 		;;
 	3) 
 		dflt=$g4ledata
-		fn='f~'
-		rp="Where is G4EMLOW1.1 data installed ?"
+		fn='d~'
+		rp="Where is G4EMLOW4.2 data installed ?"
 		. ./getfile
 		g4ledata=$ans
 		;;
 	4) 
 		dflt=$g4neutronhpcrosssections
-		fn='f~'
-		rp="Where is G4NDL3.7 installed?"
+		fn='d~'
+		rp="Where is G4NDL3.10 data installed?"
 		. ./getfile
 		g4neutronhpcrosssections=$ans
 		;;
+
+#	5) 
+#		dflt=$g4elasticdata
+#		fn='d~'
+#		rp="Where is G4ELASTIC1.1 data installed?"
+#		. ./getfile
+#		g4elasticdata=$ans
+#		;;
+
 #	[eE]) 
 #		break
 #		;;
@@ -2623,83 +2874,146 @@ gans=$ans
 done
 
 
-clhep_dirs=`find /usr/local/include /usr/include -type d -name CLHEP`
+if test "X$g4clhep_base_dir" = "X" ; then
+
+clhep_dirs=`find $g4clhep_base_dir /usr/local/include /usr/include -type d -name CLHEP 2>/dev/null |xargs echo`
 #echo clhep_dirs=$clhep_dirs
+
+fi
 
 if test "X$clhep_dirs" != "X" ; then
 
 g4clhep_base_dir_found=`echo $clhep_dirs|cut -d" " -f1`
 #echo g4clhep_base_dir_found=$g4clhep_base_dir_found
 
-g4clhep_base_dir_n=`echo $g4clhep_base_dir_found |awk -F"/" '{print NF}'`
+
+#g4clhep_base_dir_n=`echo $g4clhep_base_dir_found |awk -F"/" '{print NF}'`
 #echo g4clhep_base_dir_n=$g4clhep_base_dir_n
-
-n=$[$g4clhep_base_dir_n-2]
-#echo n=$n
-
-g4clhep_base_dir_found=`echo $g4clhep_base_dir_found|cut -d"/" -f1-$n`
+g4clhep_base_dir_found=`dirname $g4clhep_base_dir_found`
+g4clhep_base_dir_found=`dirname $g4clhep_base_dir_found`
 
 	g4clhep_base_dir=$g4clhep_base_dir_found
-else
-case "$g4clhep_base_dir" in
-'')
-	g4clhep_base_dir=/usr/local
-	;;
-esac
+
+#else
+#case "$g4clhep_base_dir" in
+#'')
+#	if test "X$g4system" = "XWIN32-VC" -o "X$g4system" = "XWIN32-VC7"; then
+#	g4clhep_base_dir="c:/usr/local"
+#	else
+#	g4clhep_base_dir=/usr/local
+#	fi
+#	;;
+#esac
 fi
 
-case "$g4clhep_include_dir" in
-'')
-	g4clhep_include_dir=$g4clhep_base_dir/include
-	;;
-esac
-
-case "$g4clhep_lib_dir" in
-'')
-	g4clhep_lib_dir=$g4clhep_base_dir/lib
-	;;
-esac
-
-case "$g4clhep_lib" in
-'')
-	g4clhep_lib=CLHEP
-	;;
-esac
 
 #while test 1 = 1  ; do
 
+#if test "X$g4clhep_base_dir" != "X" ; then
+#clhep_dirs=$g4clhep_base_dir
+#echo 1 g4clhep_base_dir=$g4clhep_base_dir
+#fi
+
+if test "X$g4clhep_base_dir" != "X" ; then
+
 g4message=`cat << EOM
 
-Please, specify where CLHEP is installed (it was found or set by defalt):
+Please, specify where CLHEP is installed. It was found in:
 
 CLHEP_BASE_DIR:			$g4clhep_base_dir
 
-According to it will be set:
-
-CLHEP_INCLUDE_DIR		
-CLHEP_LIB_DIR			
-CLHEP_LIB		
-
-You will be asked about customizing these next.
 EOM`
 
+dflt=$g4clhep_base_dir
+fn='d~'
+rp=$g4message
+. ./getfile
+
+cend="no"
+while test "$cend" = "no" ; do
+if test -e "$ans/include/CLHEP" ; then
+cend="yes"
+
+g4clhep_base_dir=$ans
+
+else
+
+g4message=`cat << EOM
+
+Could not find CLHEP installed in $ans!
+Please, specify where CLHEP is installed:
+
+CLHEP_BASE_DIR:			
+
+EOM`
+
+dflt=""
+fn='d~'
+rp=$g4message
+. ./getfile
+fi
+done
+
+else
+
+g4message=`cat << EOM
+
+Could not find CLHEP installed on this system!
+Please, specify where CLHEP is installed:
+
+CLHEP_BASE_DIR:			
+
+EOM`
+
+dflt=""
+fn='d~'
+rp=$g4message
+. ./getfile
+
+cend="no"
+while test "$cend" = "no" ; do
+if test -e "$ans/include/CLHEP" ; then
+cend="yes"
+
+g4clhep_base_dir=$ans
+
+else
+
+g4message=`cat << EOM
+
+Could not find CLHEP installed in $ans!
+Please, specify where CLHEP is installed:
+
+CLHEP_BASE_DIR:			
+
+EOM`
+
+dflt=""
+fn='d~'
+rp=$g4message
+. ./getfile
+fi
+done
+
+fi
 
 #dflt="Press [Enter] for default settings"
 #fn='d~'
-rp=$g4message
+#####rp=$g4message
 #. ./myread
 #gans=$ans
 
 #	case $gans in
 
 #	1) 
-		dflt=$g4clhep_base_dir
-		fn='d~'
+##		dflt=""
+##		fn='d~'
 #		rp="Where is CLHEP installed?"
-		. ./getfile
-		g4clhep_base_dir=$ans
-		g4clhep_include_dir=$ans/include
-		g4clhep_lib_dir=$ans/lib
+##		. ./getfile
+##		g4clhep_base_dir=$ans
+
+#####		g4clhep_include_dir=$ans/include
+#####		g4clhep_lib_dir=$ans/lib
 #		;;
 #	2) 
 #		dflt=$g4clhep_include_dir
@@ -2731,23 +3045,56 @@ rp=$g4message
 #	esac
 #done
 
+case "$g4clhep_include_dir" in
+'')
+	g4clhep_include_dir=$g4clhep_base_dir/include
+	;;
+esac
+
+case "$g4clhep_lib_dir" in
+'')
+	g4clhep_lib_dir=$g4clhep_base_dir/lib
+	;;
+esac
+
+case "$g4clhep_lib" in
+'')
+	if test "X$g4system" = "XWIN32-VC" -o "X$g4system" = "XWIN32-VC7"; then
+	g4clhep_lib="CLHEP.lib"
+	else
+	g4clhep_lib=CLHEP
+	fi
+	;;
+esac
+
 while test 1 = 1  ; do
 
-g4message=`cat << EOM
+g4message_1=`cat << You
 
-You can customize paths of you CLHEP installation:
+You can customize paths and library name of you CLHEP installation:
 
 1) CLHEP_INCLUDE_DIR:		$g4clhep_include_dir
 2) CLHEP_LIB_DIR:		$g4clhep_lib_dir
 3) CLHEP_LIB:			$g4clhep_lib
 
-To modify default settings, select number above (e.g. 2) 
+You`
+
+g4message_2=" need to use full library name with its extension (e.g. libCLHEP.lib)."
+
+g4message_3=`cat << EOM
+
+To modify default settings, select number above (e.g. 2)
 EOM`
 
 
+if test "X$g4system" != "XWIN32-VC" -a "X$g4system" != "XWIN32-VC7"; then
+rp=$g4message_1$g4message_3
+else
+rp=$g4message_1$g4message_2$g4message_3
+fi
+
 dflt="Press [Enter] for default settings"
 #fn='d~'
-rp=$g4message
 . ./myread
 gans=$ans
 
@@ -2783,8 +3130,243 @@ gans=$ans
 	esac
 done
 
+#if test "X$g4clhep_base_dir" = "X/usr" -o "X$g4clhep_base_dir" = "X/usr/local"; then
+#g4clhep_base_dir=""
+#fi
+#
+#if test "X$g4clhep_include_dir" = "X/usr/include" -o "X$g4clhep_include_dir" = "X/usr/local/include"; then
+#g4clhep_include_dir=""
+#fi
+#
+#if test "X$g4clhep_lib_dir" = "X/usr/lib" -o "X$g4clhep_lib_dir" = "X/usr/local/lib"; then
+#g4clhep_lib_dir=""
+#fi
 
+echo " "
 
+case "$g4lib_build_shared" in
+'')
+	g4lib_build_shared=n
+	;;
+esac
+
+echo " "
+
+case "$g4lib_build_static" in
+'')
+	g4lib_build_static=n
+	;;
+esac
+
+echo " "
+
+case "$g4lib_use_shared" in
+'')
+	g4lib_use_shared=n
+	;;
+esac
+
+echo " "
+
+case "$g4lib_use_static" in
+'')
+	g4lib_use_static=n
+	;;
+esac
+
+case "$g4lib_build_dll" in
+'')
+	g4lib_build_dll=n
+	;;
+esac
+
+case "$g4lib_build_dyn" in
+'')
+	g4lib_build_dyn=n
+	;;
+esac
+
+#
+# Ask about building of SHARED|STATIC libraries - default STATIC. 
+#
+echo ""
+
+if test "X$g4system" = "XWIN32-VC" -o "X$g4system" = "XWIN32-VC7"; then
+
+while test 1 = 1  ; do
+
+g4message=`cat << EOM
+
+By default 'static'  libraries are built.
+
+Do you want to build DLL (.dll) libraries?
+EOM`
+
+dflt=$g4lib_build_dll
+rp=$g4message
+. ./myread
+gans=$ans
+
+	case $gans in
+	
+	n*|N*) 
+		g4lib_build_dll=n
+		g4lib_build_shared=n
+		g4lib_build_static=y
+		break
+		;;
+	y*|Y*) 
+		g4lib_build_dll=y
+		g4lib_build_shared=n
+		g4lib_build_static=n
+
+#		g4lib_build_static=""
+#		g4lib_use_shared=1
+#		g4lib_use_static=""
+		break
+		;;
+#	[eE]) 
+#		break
+#		;;
+#	*) 
+#		echo " "
+#		break
+#		;;
+	esac
+done
+
+fi
+
+if test "X$g4system" != "XWIN32-VC" -a "X$g4system" != "XWIN32-VC7" ; then
+
+while test 1 = 1  ; do
+
+g4message=`cat << EOM
+
+By default 'static' (.a) libraries are built.
+
+Do you want to build 'shared' (.so) libraries?
+EOM`
+
+dflt=$g4lib_build_shared
+rp=$g4message
+. ./myread
+gans=$ans
+
+	case $gans in
+	
+	n*|N*) 
+		g4lib_build_shared=n
+		g4lib_build_static=y
+		break
+		;;
+	y*|Y*) 
+		g4lib_build_shared=y
+#		g4lib_build_static=""
+#		g4lib_use_shared=1
+#		g4lib_use_static=""
+		break
+		;;
+#	[eE]) 
+#		break
+#		;;
+#	*) 
+#		echo " "
+#		break
+#		;;
+	esac
+done
+
+if [ X$g4lib_build_shared = Xy ] ; then
+#
+# Ask about g4lib_build_static - default "n". 
+#
+echo ""
+
+while test 1 = 1  ; do
+
+g4message=`cat << EOM
+
+You selected to build 'shared' (.so) libraries. 
+Do you want to build 'static' (.a) libraries too?
+EOM`
+
+#dflt=$g4lib_build_static
+dflt=n
+rp=$g4message
+. ./myread
+gans=$ans
+
+	case $gans in
+	
+	n*|N*) 
+		g4lib_build_static=n
+		break
+		;;
+	y*|Y*) 
+#		g4lib_build_shared=1
+		g4lib_build_static=y
+#		g4lib_use_shared=1
+#		g4lib_use_static=""
+		break
+		;;
+#	[eE]) 
+#		break
+#		;;
+#	*) 
+#		echo " "
+#		break
+#		;;
+	esac
+done
+
+## Comment out in waiting G4LIB_USE_STATIC and G4LIB_USE_SHARED.
+#
+#if [ X$g4lib_build_static = Xy ] ; then
+##
+## Ask about g4lib_use_static - default "n". 
+##
+#echo ""
+#
+#while test 1 = 1  ; do
+#
+#g4message=`cat << EOM
+#
+#You selected to build 'shared' (.so) and 'static' (.a) libraries. 
+#Do you want to use 'static' (.a) libraries?
+#EOM`
+#
+#dflt=$g4lib_use_static
+#rp=$g4message
+#. ./myread
+#gans=$ans
+#
+#	case $gans in
+#	
+#	n*|N*) 
+#		break
+#		;;
+#	y*|Y*) 
+##		g4lib_build_shared=1
+##		g4lib_build_static=1
+##		g4lib_use_shared=1
+#		g4lib_use_static=y
+#		break
+#		;;
+##	[eE]) 
+##		break
+##		;;
+##	*) 
+##		echo " "
+##		break
+##		;;
+#	esac
+#done
+#fi
+
+fi
+
+fi # if !Win
 echo " "
 case "$g4global" in
 '')
@@ -2807,6 +3389,16 @@ case "$g4lib_use_granular" in
 	g4lib_use_granular=y
 	;;
 esac
+
+if test \( \( "X$g4system" = "XWIN32-VC" -o "X$g4system" = "XWIN32-VC7" \) -a "X$g4lib_build_dll" = "Xy" \) -o  \( "X$g4system" = "XDarwin-g++"  -a "X$g4lib_build_dyn" = "Xy" \) ; then
+
+	g4global=n
+	g4granular=n
+	g4lib_use_granular=n
+
+fi
+
+if test \( "X$g4system" != "XWIN32-VC" -a "X$g4system" != "XWIN32-VC7" -a "X$g4system" != "XDarwin-g++" \) -o    \( \( "X$g4system" = "XWIN32-VC" -o "X$g4system" = "XWIN32-VC7" \) -a "X$g4lib_build_dll" = "Xn" \) -o \( "X$g4system" = "XDarwin-g++" -a "X$g4lib_build_dyn" = "Xn" \) ; then
 
 #
 # Ask about g4global - default "(empty)". 
@@ -2932,13 +3524,15 @@ done
 fi
 fi
 
+fi # !Win
+
 ### End file - without will be problem! Check in others...
 
 
 echo " "
 case "$g4debug" in
 '')
-	g4debug=""
+	g4debug=n
 	;;
 esac
 
@@ -2954,7 +3548,7 @@ g4message=`cat << EOM
 Do you want to compile libraries in DEBUG mode (-g)?
 EOM`
 
-dflt="n"
+dflt=$g4debug
 rp=$g4message
 . ./myread
 gans=$ans
@@ -2965,7 +3559,7 @@ gans=$ans
 		break
 		;;
 	y*|Y*) 
-		g4debug=1
+		g4debug=y
 		break
 		;;
 #	[eE]) 
@@ -2977,165 +3571,6 @@ gans=$ans
 #		;;
 	esac
 done
-
-
-echo " "
-
-case "$g4lib_build_shared" in
-'')
-	g4lib_build_shared=n
-	;;
-esac
-
-echo " "
-
-case "$g4lib_build_static" in
-'')
-	g4lib_build_static=n
-	;;
-esac
-
-echo " "
-
-case "$g4lib_use_shared" in
-'')
-	g4lib_use_shared=n
-	;;
-esac
-
-echo " "
-
-case "$g4lib_use_static" in
-'')
-	g4lib_use_static=n
-	;;
-esac
-
-#
-# Ask about building of SHARED|STATIC libraries - default STATIC. 
-#
-echo ""
-
-while test 1 = 1  ; do
-
-g4message=`cat << EOM
-
-By default 'static' (.a) libraries are built.
-
-Do you want to build 'shared' (.so) libraries?
-EOM`
-
-dflt=$g4lib_build_shared
-rp=$g4message
-. ./myread
-gans=$ans
-
-	case $gans in
-	
-	n*|N*) 
-		break
-		;;
-	y*|Y*) 
-		g4lib_build_shared=y
-#		g4lib_build_static=""
-#		g4lib_use_shared=1
-#		g4lib_use_static=""
-		break
-		;;
-#	[eE]) 
-#		break
-#		;;
-#	*) 
-#		echo " "
-#		break
-#		;;
-	esac
-done
-
-if [ X$g4lib_build_shared = Xy ] ; then
-#
-# Ask about g4lib_build_static - default "n". 
-#
-echo ""
-
-while test 1 = 1  ; do
-
-g4message=`cat << EOM
-
-You selected to build 'shared' (.so) libraries. 
-Do you want to build 'static' (.a) libraries too?
-EOM`
-
-dflt=$g4lib_build_static
-rp=$g4message
-. ./myread
-gans=$ans
-
-	case $gans in
-	
-	n*|N*) 
-		break
-		;;
-	y*|Y*) 
-#		g4lib_build_shared=1
-		g4lib_build_static=y
-#		g4lib_use_shared=1
-#		g4lib_use_static=""
-		break
-		;;
-#	[eE]) 
-#		break
-#		;;
-#	*) 
-#		echo " "
-#		break
-#		;;
-	esac
-done
-
-if [ X$g4lib_build_static = Xy ] ; then
-#
-# Ask about g4lib_use_static - default "n". 
-#
-echo ""
-
-while test 1 = 1  ; do
-
-g4message=`cat << EOM
-
-You selected to build 'shared' (.so) and 'static' (.a) libraries. 
-Do you want to use 'static' (.a) libraries?
-EOM`
-
-dflt=$g4lib_use_static
-rp=$g4message
-. ./myread
-gans=$ans
-
-	case $gans in
-	
-	n*|N*) 
-		break
-		;;
-	y*|Y*) 
-#		g4lib_build_shared=1
-#		g4lib_build_static=1
-#		g4lib_use_shared=1
-		g4lib_use_static=y
-		break
-		;;
-#	[eE]) 
-#		break
-#		;;
-#	*) 
-#		echo " "
-#		break
-#		;;
-	esac
-done
-fi
-
-fi
 
 
 echo " "
@@ -3290,18 +3725,6 @@ case "$g4ui_use_xaw" in
 	;;
 esac
 
-case "$g4ui_build_wo_session" in
-'')
-	g4ui_build_wo_session=n
-	;;
-esac
-
-case "$g4ui_use_wo" in
-'')
-	g4ui_use_wo=n
-	;;
-esac
-
 case "$g4ui_build_win32_session" in
 '')
 	g4ui_build_win32_session=n
@@ -3411,6 +3834,8 @@ gans=y
 		;;
 	esac
 
+if test "X$g4system" != "XWIN32-VC" -a "X$g4system" != "XWIN32-VC7"; then
+
 g4message=`cat << EOM
 
   G4UI_BUILD_XAW_SESSION
@@ -3438,6 +3863,200 @@ gans=$ans
 		g4ui_use_xaw=y
 		;;
 	esac
+
+############################################################
+############################################################
+
+if test "X$g4ui_build_xaw_session" = "Xy" ; then
+
+if test "X$g4ui_xawhome" = "X" ; then
+xaw_dirs=`find $g4ui_xawhome /usr/X11R6/include /usr/local/include /usr/include /sw/include -type d -name Xaw 2>/dev/null |xargs echo`
+#echo ogl_dirs=$ogl_dirs
+
+if test "X$xaw_dirs" != "X" ; then
+
+g4xaw_base_dir_found=`echo $xaw_dirs|cut -d" " -f1`
+#echo g4ogl_base_dir_found=$g4ogl_base_dir_found
+
+# That's right: should be 3 times! (e.g./usr/local/lib/libGLU.so -> /usr/local)
+g4xaw_base_dir_found=`dirname $g4xaw_base_dir_found`
+g4xaw_base_dir_found=`dirname $g4xaw_base_dir_found`
+g4xaw_base_dir_found=`dirname $g4xaw_base_dir_found`
+
+	g4ui_xawhome=$g4xaw_base_dir_found
+#else
+#case "$g4ui_xawhome" in
+#'')
+#	g4ui_xawhome=/usr/X11R6/
+#	;;
+#esac
+fi
+fi
+
+##########################################################################
+
+#if test "X$g4ui_xawhome" != "X" ; then
+#xaw_dirs=$g4ui_xawhome
+#fi
+
+if test "X$g4ui_xawhome" != "X" ; then
+
+g4message=`cat << EOM
+
+You have selected to use the XAW based user interfaces.
+Specify the correct path where XAW is installed in your system.
+It was found in $g4ui_xawhome. Press [Enter] to set this path or type the correct one.
+
+You can set '-' (without quotation) to CANCEL the XAW flag at all:
+
+EOM`
+
+dflt=$g4ui_xawhome
+fn='d~(-)'
+rp=$g4message
+. ./getfile
+
+cend="no"
+while test "$cend" = "no" ; do
+if test -e "$ans/include/X11/Xaw" || [ "X$ans" = "X-"  ]; then
+cend="yes"
+if test "X$ans" != "X-" ; then
+
+g4ui_xawhome=$ans
+
+else
+
+g4ui_build_xaw_session=n
+g4ui_use_xaw=n
+
+fi
+else
+
+g4message=`cat << EOM
+
+You have selected to use XAW based user interfaces.
+But XAW was not found in $ans.
+Please specify the correct path where XAW is installed in your system.
+
+You can set '-' (without quotation) to CANCEL the XAW flag at all:
+
+EOM`
+
+dflt=""
+fn='d~(-)'
+rp=$g4message
+. ./getfile
+fi
+done
+
+else
+
+g4message=`cat << EOM
+
+You have selected to use XAW based user interfaces.
+But XAW was not found in expected place.
+Please specify the correct path where XAW is installed in your system.
+
+You can set '-' (without quotation) to CANCEL the XAW flag at all:
+
+EOM`
+
+dflt=""
+fn='d~(-)'
+rp=$g4message
+. ./getfile
+
+cend="no"
+while test "$cend" = "no" ; do
+if test -e "$ans/include/X11/Xaw" || [ "X$ans" = "X-"  ]; then
+cend="yes"
+if test "X$ans" != "X-" ; then
+
+g4ui_xawhome=$ans
+
+else
+
+g4ui_build_xaw_session=n
+g4ui_use_xaw=n
+
+fi
+else
+
+g4message=`cat << EOM
+
+You have selected to use XAW based user interfaces.
+But XAW was not found in $ans.
+Please specify the correct path where XAW is installed in your system.
+
+You can set '-' (without quotation) to CANCEL the XAW flag at all:
+
+EOM`
+
+dflt=""
+fn='d~(-)'
+rp=$g4message
+. ./getfile
+fi
+done
+fi
+
+if test "X$g4osname" = "XLinux"; then 
+
+if test "X$g4ui_xawhome" = "X/usr" -o "X$g4ui_xawhome" = "X/usr/local" ; then
+g4ui_xawhome=""
+fi
+fi
+fi # g4vis_build_opheglxm_driver
+
+###############################################
+# Set XMFLAGS and XMLIBS
+#
+
+if test "X$g4ui_build_xaw_session" = "Xy" ; then
+
+if test "X$g4osname" = "XAIX" ; then
+g4ui_xawflags=" -I$g4ui_xawhome/include "
+g4ui_xawlibs=" -L$g4ui_xawhome/lib -lXaw -lXmu -lXt -lX11 -lXext "
+fi
+
+if test "X$g4osname" = "XLinux" ; then
+g4ui_xawflags=" -I$g4ui_xawhome/include "
+	if test "X$g4ui_xawhome" = "X/usr/X11R6" ; then
+		g4ui_xawlibs=" -lXaw "
+	else
+		g4ui_xawlibs=" -L$g4ui_xawhome/lib -lXaw "
+	fi
+fi
+
+if test "X$g4osname" = "XDarwin" ; then
+g4ui_xawflags=" -I$g4ui_xawhome/include "
+g4ui_xawlibs=" -L$g4ui_xawhome/lib -lXaw "
+fi
+
+if test "X$g4osname" = "XDEC" ; then
+g4ui_xawflags=" -I$g4ui_xawhome/include "
+g4ui_xawlibs=" -L$g4ui_xawhome/lib -lXaw "
+fi
+
+if test "X$g4osname" = "XHP" ; then
+g4ui_xawflags=" -I$g4ui_xawhome/include "
+g4ui_xawlibs=" -L$g4ui_xawhome/lib -lXaw "
+fi
+
+if test "X$g4osname" = "XSGI" ; then
+g4ui_xawflags=" -I$g4ui_xawhome/include "
+g4ui_xawlibs=" -L$g4ui_xawhome/lib -lXaw "
+fi
+
+if test "X$g4osname" = "XSUN" ; then
+g4ui_xawflags=" -I$g4ui_xawhome/include "
+g4ui_xawlibs=" -L$g4ui_xawhome/lib -L/usr/openwin/lib -L/usr/dt/lib -L/usr/ucblib -R/usr/openwin/lib -lXaw -lXmu -lXt -lX11 -lXext "
+fi
+
+fi # end of XM build 
+
+###############################################
+###############################################
 
 g4message=`cat << EOM
 
@@ -3468,6 +4087,203 @@ gans=$ans
 	esac
 
 
+############################################################
+############################################################
+
+if test "X$g4ui_build_xm_session" = "Xy" ; then
+
+if test "X$g4vis_xmhome" = "X" ; then
+xm_dirs=`find $g4vis_xmhome /usr/X11R6/include /usr/local/include /usr/include /sw/include -type d -name Xm 2>/dev/null |xargs echo`
+#echo ogl_dirs=$ogl_dirs
+
+if test "X$xm_dirs" != "X" ; then
+
+g4xm_base_dir_found=`echo $xm_dirs|cut -d" " -f1`
+#echo g4ogl_base_dir_found=$g4ogl_base_dir_found
+
+# That's right: should be twice! (e.g./usr/local/lib/libGLU.so -> /usr/local)
+g4xm_base_dir_found=`dirname $g4xm_base_dir_found`
+g4xm_base_dir_found=`dirname $g4xm_base_dir_found`
+
+	g4vis_xmhome=$g4xm_base_dir_found
+#else
+#case "$g4vis_xmhome" in
+#'')
+#	g4vis_xmhome=/usr/X11R6/
+#	;;
+#esac
+fi
+fi
+
+##########################################################################
+
+#if test "X$g4vis_xmhome" != "X" ; then
+#xm_dirs=$g4vis_xmhome
+#fi
+
+if test "X$g4vis_xmhome" != "X" ; then
+
+g4message=`cat << EOM
+
+You have selected to use the XM Motif based user interfaces.
+Specify the correct path where Xm is installed in your system.
+It was found in $g4vis_xmhome. Press [Enter] to set this path or type the correct one.
+
+You can set '-' (without quotation) to CANCEL the XM flag at all:
+
+EOM`
+
+dflt=$g4vis_xmhome
+fn='d~(-)'
+rp=$g4message
+. ./getfile
+
+cend="no"
+while test "$cend" = "no" ; do
+if test -e "$ans/include/Xm" || [ "X$ans" = "X-"  ]; then
+cend="yes"
+if test "X$ans" != "X-" ; then
+
+g4vis_xmhome=$ans
+
+else
+
+g4ui_build_xm_session=n
+g4ui_use_xm=n
+
+fi
+else
+
+g4message=`cat << EOM
+
+You have selected to use XM Motif based user interfaces.
+But XM Motif was not found in $ans.
+Please specify the correct path where Xm is installed in your system.
+
+You can set '-' (without quotation) to CANCEL the XM flag at all:
+
+EOM`
+
+dflt=""
+fn='d~(-)'
+rp=$g4message
+. ./getfile
+fi
+done
+
+else
+
+g4message=`cat << EOM
+
+You have selected to use XM Motif based user interfaces.
+But XM Motif was not found in expected place.
+Please specify the correct path where Xm is installed in your system.
+
+You can set '-' (without quotation) to CANCEL the XM flag at all:
+
+EOM`
+
+dflt=""
+fn='d~(-)'
+rp=$g4message
+. ./getfile
+
+cend="no"
+while test "$cend" = "no" ; do
+if test -e "$ans/include/Xm" || [ "X$ans" = "X-"  ]; then
+cend="yes"
+if test "X$ans" != "X-" ; then
+
+g4vis_xmhome=$ans
+
+else
+
+g4ui_build_xm_session=n
+g4ui_use_xm=n
+
+fi
+else
+
+g4message=`cat << EOM
+
+You have selected to use XM Motif based user interfaces.
+But XM Motif was not found in $ans.
+Please specify the correct path where Xm is installed in your system.
+
+You can set '-' (without quotation) to CANCEL the XM flag at all:
+
+EOM`
+
+dflt=""
+fn='d~(-)'
+rp=$g4message
+. ./getfile
+fi
+done
+fi
+
+if test "X$g4osname" = "XLinux"; then 
+
+if test "X$g4vis_xmhome" = "X/usr" -o "X$g4vis_xmhome" = "X/usr/local" ; then
+g4vis_xmhome=""
+fi
+fi
+fi # g4vis_build_opheglxm_driver
+
+###############################################
+# Set XMFLAGS and XMLIBS
+#
+
+if test "X$g4ui_build_xm_session" = "Xy" ; then
+
+if test "X$g4osname" = "XAIX" ; then
+g4vis_xmflags=" -I$g4vis_xmhome/include "
+g4vis_xmlibs=" -L$g4vis_xmhome/lib -lXm -lXt -lX11 "
+fi
+
+if test "X$g4osname" = "XLinux" ; then
+g4vis_xmflags=" -I$g4vis_xmhome/include "
+	if test "X$g4vis_xmhome" = "X/usr/X11R6" ; then
+		g4vis_xmlibs=" -lXm -lXpm "
+	else
+		g4vis_xmlibs=" -L$g4vis_xmhome/lib -lXm -lXpm "
+	fi
+fi
+
+if test "X$g4osname" = "XDarwin" ; then
+g4vis_xmflags=" -I$g4vis_xmhome/include "
+g4vis_xmlibs=" -L$g4vis_xmhome/lib -lXm -lXpm "
+fi
+
+if test "X$g4osname" = "XDEC" ; then
+g4vis_xmflags=" -I$g4vis_xmhome/include "
+g4vis_xmlibs=" -L$g4vis_xmhome/lib -lXm "
+fi
+
+if test "X$g4osname" = "XHP" ; then
+g4vis_xmflags=" -I$g4vis_xmhome/include/Motif1.2 "
+g4vis_xmlibs=" -L$g4vis_xmhome/lib/Motif1.2 -lXm "
+fi
+
+if test "X$g4osname" = "XSGI" ; then
+g4vis_xmflags=" -I$g4vis_xmhome/include "
+g4vis_xmlibs=" -L$g4vis_xmhome/lib -lXm "
+fi
+
+if test "X$g4osname" = "XSUN" ; then
+g4vis_xmflags=" -I$g4vis_xmhome/include "
+g4vis_xmlibs=" -L$g4vis_xmhome/lib -L/usr/openwin/lib -L/usr/dt/lib -L/usr/ucblib -R/usr/openwin/lib -lXt -lXm -lX11 "
+fi
+
+fi # end of XM build 
+
+###############################################
+###############################################
+
+fi # if !WIN
+
+if test "X$g4system" = "XWIN32-VC" -o "X$g4system" = "XWIN32-VC7"; then
+
 g4message=`cat << EOM
 
   G4UI_BUILD_WIN32_SESSION
@@ -3495,33 +4311,7 @@ gans=$ans
 		;;
 	esac
 
-g4message=`cat << EOM
-
-  G4UI_BUILD_WO_SESSION
-  G4UI_USE_WO
-
-  Specifies to include in kernel library and use the OPACS WO terminal
-  interface for the OPACS system. The OPACS tool must be installed
-  to activate and build this driver !
-
-EOM`
-
-dflt=$g4ui_use_wo
-rp=$g4message
-. ./myread
-gans=$ans
-
-	case $gans in
-	
-	n*|N*) 
-		g4ui_build_wo_session=n
-		g4ui_use_wo=n
-		;;
-	y*|Y*) 
-		g4ui_build_wo_session=y
-		g4ui_use_wo=y
-		;;
-	esac
+fi # if WIN
 
 g4message=`cat << EOM
 
@@ -3557,33 +4347,6 @@ case "$g4vis_none" in
 	;;
 esac
 
-#####################################################################
-ogl_dirs=`find /usr/local/lib /usr/lib -name libGLU\*`
-#echo ogl_dirs=$ogl_dirs
-
-if test "X$ogl_dirs" != "X" ; then
-
-g4ogl_base_dir_found=`echo $ogl_dirs|cut -d" " -f1`
-#echo g4ogl_base_dir_found=$g4ogl_base_dir_found
-
-g4ogl_base_dir_n=`echo $g4ogl_base_dir_found |awk -F"/" '{print NF}'`
-#echo g4ogl_base_dir_n=$g4ogl_base_dir_n
-
-n=$[$g4ogl_base_dir_n-2]
-#echo n=$n
-
-g4ogl_base_dir_found=`echo $g4ogl_base_dir_found|cut -d"/" -f1-$n`
-
-	g4vis_oglhome=$g4ogl_base_dir_found
-else
-case "$g4vis_oglhome" in
-'')
-	$g4vis_oglhome=/usr
-	;;
-esac
-fi
-
-##########################################################################
 
 case "$g4vis_build_openglwin32_driver" in
 '')
@@ -3635,18 +4398,6 @@ case "$g4vis_use_dawnfile" in
 	;;
 esac
 
-case "$g4vis_build_opacs_driver" in
-'')
-	g4vis_build_opacs_driver=n
-	;;
-esac
-
-case "$g4vis_use_opacs" in
-'')
-	g4vis_use_opacs=n
-	;;
-esac
-
 case "$g4vis_build_openglx_driver" in
 '')
 	g4vis_build_openglx_driver=n
@@ -3680,6 +4431,18 @@ esac
 case "$g4vis_use_oix" in
 '')
 	g4vis_use_oix=n
+	;;
+esac
+
+case "$g4vis_build_raytracerx_driver" in
+'')
+	g4vis_build_raytracerx_driver=n
+	;;
+esac
+
+case "$g4vis_use_raytracerx" in
+'')
+	g4vis_use_raytracerx=n
 	;;
 esac
 
@@ -3767,6 +4530,8 @@ case $g4vis_none in
 
 n)
 
+if test "X$g4system" != "XWIN32-VC" -a "X$g4system" != "XWIN32-VC7"; then
+
 g4message=`cat << EOM
 
   G4VIS_BUILD_OPENGLX_DRIVER
@@ -3795,6 +4560,7 @@ gans=$ans
 		;;
 	esac
 
+#############################################3
 g4message=`cat << EOM
 
   G4VIS_BUILD_OPENGLXM_DRIVER
@@ -3823,6 +4589,212 @@ gans=$ans
 		g4vis_use_openglxm=y
 		;;
 	esac
+
+############################################################
+#echo xm_dirs=$xm_dirs
+#echo g4vis_xmhome=$g4vis_xmhome
+#echo g4ui_build_xm_session=$g4ui_build_xm_session
+#echo g4vis_build_openglxm_driver=$g4vis_build_openglxm_driver
+
+if test "X$g4ui_build_xm_session" = "Xn" ; then
+
+#echo PASS1
+
+if test "X$g4vis_build_openglxm_driver" = "Xy" ; then
+
+#echo PASS2
+
+if test "X$g4vis_xmhome" = "X" ; then
+xm_dirs=`find $g4vis_xmhome /usr/X11R6/include /usr/local/include /usr/include /sw/include -type d -name Xm 2>/dev/null |xargs echo`
+#echo ogl_dirs=$ogl_dirs
+
+if test "X$xm_dirs" != "X" ; then
+
+g4xm_base_dir_found=`echo $xm_dirs|cut -d" " -f1`
+#echo g4ogl_base_dir_found=$g4ogl_base_dir_found
+
+# That's right: should be twice! (e.g./usr/local/lib/libGLU.so -> /usr/local)
+g4xm_base_dir_found=`dirname $g4xm_base_dir_found`
+g4xm_base_dir_found=`dirname $g4xm_base_dir_found`
+
+	g4vis_xmhome=$g4xm_base_dir_found
+#else
+#case "$g4vis_xmhome" in
+#'')
+#	g4vis_xmhome=/usr/X11R6/
+#	;;
+#esac
+fi
+fi
+
+##########################################################################
+
+#if test "X$g4vis_xmhome" != "X" ; then
+#xm_dirs=$g4vis_xmhome
+#fi
+
+if test "X$g4vis_xmhome" != "X" ; then
+
+g4message=`cat << EOM
+
+You have selected to use OPENGLXM driver.
+Specify the correct path where Xm is installed in your system.
+It was found in $g4vis_xmhome. Press [Enter] to set this path or type the correct one.
+
+You can set '-' (without quotation) to CANCEL the XM flag at all:
+
+EOM`
+
+dflt=$g4vis_xmhome
+fn='d~(-)'
+rp=$g4message
+. ./getfile
+
+cend="no"
+while test "$cend" = "no" ; do
+if test -e "$ans/include/Xm" || [ "X$ans" = "X-"  ]; then
+cend="yes"
+if test "X$ans" != "X-" ; then
+
+g4vis_xmhome=$ans
+
+else
+
+g4vis_build_openglxm_driver=n
+g4vis_use_openglxm=n
+
+fi
+else
+
+g4message=`cat << EOM
+
+You have selected to use OPENGLXM driver.
+But it was not found in $ans.
+Please specify the correct path where Xm is installed in your system.
+
+You can set '-' (without quotation) to CANCEL the XM flag at all:
+
+EOM`
+
+dflt=""
+fn='d~(-)'
+rp=$g4message
+. ./getfile
+fi
+done
+
+else
+
+g4message=`cat << EOM
+
+You have selected to use OPENGLXM driver.
+But it was not found in expected place.
+Please specify the correct path where Xm is installed in your system.
+
+You can set '-' (without quotation) to CANCEL the XM flag at all:
+
+EOM`
+
+dflt=""
+fn='d~(-)'
+rp=$g4message
+. ./getfile
+
+cend="no"
+while test "$cend" = "no" ; do
+if test -e "$ans/include/Xm" || [ "X$ans" = "X-"  ]; then
+cend="yes"
+if test "X$ans" != "X-" ; then
+
+g4vis_xmhome=$ans
+
+else
+
+g4vis_build_openglxm_driver=n
+g4vis_use_openglxm=n
+
+fi
+else
+
+g4message=`cat << EOM
+
+You have selected to use OPENGLXM driver.
+But it was not found in $ans.
+Please specify the correct path where Xm is installed in your system.
+
+You can set '-' (without quotation) to CANCEL the XM flag at all:
+
+EOM`
+
+dflt=""
+fn='d~(-)'
+rp=$g4message
+. ./getfile
+fi
+done
+fi
+
+if test "X$g4osname" = "XLinux"; then 
+
+if test "X$g4vis_xmhome" = "X/usr" -o "X$g4vis_xmhome" = "X/usr/local" ; then
+g4vis_xmhome=""
+fi
+fi
+fi # g4vis_build_opheglxm_driver
+
+###############################################
+# Set XMFLAGS and XMLIBS
+#
+
+if test "X$g4vis_build_openglxm_driver" = "Xy" ; then
+
+if test "X$g4osname" = "XAIX" ; then
+g4vis_xmflags=" -I$g4vis_xmhome/include "
+g4vis_xmlibs=" -L$g4vis_xmhome/lib -lXm -lXt -lX11 "
+fi
+
+if test "X$g4osname" = "XLinux" ; then
+g4vis_xmflags=" -I$g4vis_xmhome/include "
+	if test "X$g4vis_xmhome" = "X/usr/X11R6" ; then
+		g4vis_xmlibs=" -lXm -lXpm "
+	else
+		g4vis_xmlibs=" -L$g4vis_xmhome/lib -lXm -lXpm "
+	fi
+fi
+
+if test "X$g4osname" = "XDarwin" ; then
+g4vis_xmflags=" -I$g4vis_xmhome/include "
+g4vis_xmlibs=" -L$g4vis_xmhome/lib -lXm -lXpm "
+fi
+
+if test "X$g4osname" = "XDEC" ; then
+g4vis_xmflags=" -I$g4vis_xmhome/include "
+g4vis_xmlibs=" -L$g4vis_xmhome/lib -lXm "
+fi
+
+if test "X$g4osname" = "XHP" ; then
+g4vis_xmflags=" -I$g4vis_xmhome/include/Motif1.2 "
+g4vis_xmlibs=" -L$g4vis_xmhome/lib/Motif1.2 -lXm "
+fi
+
+if test "X$g4osname" = "XSGI" ; then
+g4vis_xmflags=" -I$g4vis_xmhome/include "
+g4vis_xmlibs=" -L$g4vis_xmhome/lib -lXm "
+fi
+
+if test "X$g4osname" = "XSUN" ; then
+g4vis_xmflags=" -I$g4vis_xmhome/include "
+g4vis_xmlibs=" -L$g4vis_xmhome/lib -L/usr/openwin/lib -L/usr/dt/lib -L/usr/ucblib -R/usr/openwin/lib -lXt -lXm -lX11 "
+fi
+
+fi # end of XM build 
+fi
+###############################################
+
+fi # if !WIN
+
+######################################################################
+if test "X$g4system" = "XWIN32-VC" -o "X$g4system" = "XWIN32-VC7"; then
 
 g4message=`cat << EOM
 
@@ -3853,6 +4825,11 @@ gans=$ans
 		;;
 	esac
 
+fi # if WIN
+###########################################
+
+if test "X$g4system" != "XWIN32-VC" -a "X$g4system" != "XWIN32-VC7"; then
+
 g4message=`cat << EOM
 
   G4VIS_BUILD_DAWN_DRIVER
@@ -3881,14 +4858,15 @@ gans=$ans
 		;;
 	esac
 
+
+#######################################
 g4message=`cat << EOM
 
   G4VIS_BUILD_OIX_DRIVER
   G4VIS_USE_OIX
 
-This driver is based on the "Hepvis" class library.
-The OpenInventor driver and the Hepvis class library are based
-on OpenInventor technology for scientific visualization.
+The OpenInventor driver is based on OpenInventor technology 
+for scientific visualization.
 The X11 version of OpenInventor is required.
 
 EOM`
@@ -3909,6 +4887,192 @@ gans=$ans
 		g4vis_use_oix=y
 		;;
 	esac
+
+############################################################
+if test "X$g4vis_build_oix_driver" = "Xy" ; then
+
+oiv_dirs=`find $g4vis_oivhome /usr/X11R6/include /usr/local/include /usr/include  -type d -name Inventor 2>/dev/null|xargs echo`
+#echo ogl_dirs=$ogl_dirs
+
+if test "X$oiv_dirs" != "X" ; then
+
+g4oiv_base_dir_found=`echo $oiv_dirs|cut -d" " -f1`
+#echo g4ogl_base_dir_found=$g4ogl_base_dir_found
+
+# That's right: should be twice! (e.g./usr/local/lib/libGLU.so -> /usr/local)
+g4oiv_base_dir_found=`dirname $g4oiv_base_dir_found`
+g4oiv_base_dir_found=`dirname $g4oiv_base_dir_found`
+
+	g4vis_oivhome=$g4oiv_base_dir_found
+#else
+#case "$g4vis_oivhome" in
+#'')
+#	g4vis_oivhome=/usr
+#	;;
+#esac
+fi
+
+##########################################################################
+
+#if test "X$g4vis_oivhome" != "X" ; then
+#oiv_dirs=$g4vis_oivhome
+#fi
+
+if test "X$g4vis_oivhome" != "X" ; then
+
+g4message=`cat << EOM
+
+  OIVHOME/include
+  OIVHOME/lib
+
+You have selected to use OpenInventor driver.
+Specify the correct path (OIVHOME) where OpenInventor is installed in your system.
+It was found in $g4vis_oivhome. Press [Enter] to set this path or type the correct one.
+
+You can set '-' (without quotation) to CANCEL the OpenInventor flag at all:
+
+EOM`
+
+dflt=$g4vis_oivhome
+fn='d~(-)'
+rp=$g4message
+. ./getfile
+
+cend="no"
+while test "$cend" = "no" ; do
+if test -e "$ans/include/Inventor" || [ "X$ans" = "X-"  ]; then
+cend="yes"
+if test "X$ans" != "X-" ; then
+
+g4vis_oivhome=$ans
+
+else
+
+g4vis_build_oix_driver=n
+g4vis_use_oix=n
+
+fi
+else
+
+g4message=`cat << EOM
+
+  OIVHOME/include
+  OIVHOME/lib
+
+You have selected to use OpenInventor driver.
+But it was not found in $ans.
+Please specify the correct path where OpenInventor is installed in your system.
+
+You can set '-' (without quotation) to CANCEL the OpenInventor flag at all:
+
+EOM`
+
+dflt=""
+fn='d~(-)'
+rp=$g4message
+. ./getfile
+fi
+done
+
+else
+
+g4message=`cat << EOM
+
+  OIVHOME/include
+  OIVHOME/lib
+
+You have selected to use OpenInventor driver.
+But it was not found in expected place.
+Please specify the correct path where OpenInventor is installed in your system.
+
+You can set '-' (without quotation) to CANCEL the OpenInventor flag at all:
+
+EOM`
+
+dflt=""
+fn='d~(-)'
+rp=$g4message
+. ./getfile
+
+cend="no"
+while test "$cend" = "no" ; do
+if test -e "$ans/include/Inventor" || [ "X$ans" = "X-"  ]; then
+cend="yes"
+if test "X$ans" != "X-" ; then
+
+g4vis_oivhome=$ans
+
+else
+
+g4vis_build_oix_driver=n
+g4vis_use_oix=n
+
+fi
+else
+
+g4message=`cat << EOM
+
+  OIVHOME/include
+  OIVHOME/lib
+
+You have selected to use OpenInventor driver.
+But it was not found in $ans.
+Please specify the correct path where OpenInventor is installed in your system.
+
+You can set '-' (without quotation) to CANCEL the OpenInventor flag at all:
+
+EOM`
+
+dflt=""
+fn='d~(-)'
+rp=$g4message
+. ./getfile
+fi
+done
+fi
+
+if test "X$g4osname" = "XLinux"; then 
+
+if test "X$g4vis_oivhome" = "X/usr" -o "X$g4vis_oivhome" = "X/usr/local"; then
+g4vis_oivhome=""
+fi
+fi
+fi # g4vis_build_oix_driver
+
+###############################################
+
+g4message=`cat << EOM
+
+  G4VIS_BUILD_RAYTRACERX_DRIVER
+  G4VIS_USE_RAYTRACERX
+
+Allows for interactive ray-tracing graphics through X11.
+The X11 package is required.
+
+EOM`
+
+dflt=$g4vis_use_raytracerx
+rp=$g4message
+. ./myread
+gans=$ans
+
+	case $gans in
+	
+	n*|N*) 
+		g4vis_build_raytracerx_driver=n
+		g4vis_use_raytracerx=n
+		;;
+	y*|Y*) 
+		g4vis_build_raytracerx_driver=y
+		g4vis_use_raytracerx=y
+		;;
+	esac
+
+########################################################
+fi # if !WIN
+
+###############################################################
+if test "X$g4system" = "XWIN32-VC" -o "X$g4system" = "XWIN32-VC7"; then
 
 g4message=`cat << EOM
 
@@ -3938,6 +5102,164 @@ gans=$ans
 		;;
 	esac
 
+############################################################
+if test "X$g4vis_build_oiwin32_driver" = "Xy" ; then
+
+oiv_dirs=`find $g4vis_oivhome /usr/X11R6/include /usr/local/include /usr/include  -type d -name Inventor 2>/dev/null|xargs echo`
+#echo ogl_dirs=$ogl_dirs
+
+if test "X$oiv_dirs" != "X" ; then
+
+g4oiv_base_dir_found=`echo $oiv_dirs|cut -d" " -f1`
+#echo g4ogl_base_dir_found=$g4ogl_base_dir_found
+
+# That's right: should be twice! (e.g./usr/local/lib/libGLU.so -> /usr/local)
+g4oiv_base_dir_found=`dirname $g4oiv_base_dir_found`
+g4oiv_base_dir_found=`dirname $g4oiv_base_dir_found`
+
+	g4vis_oivhome=$g4oiv_base_dir_found
+#else
+#case "$g4vis_oivhome" in
+#'')
+#	g4vis_oivhome=/usr
+#	;;
+#esac
+fi
+
+##########################################################################
+
+#if test "X$g4vis_oivhome" != "X" ; then
+#oiv_dirs=$g4vis_oivhome
+#fi
+
+if test "X$g4vis_oivhome" != "X" ; then
+
+g4message=`cat << EOM
+
+  OIVHOME/include
+  OIVHOME/lib
+
+You have selected to use OpenInventor driver.
+Specify the correct path (OIVHOME) where OpenInventor is installed in your system.
+It was found in $g4vis_oivhome. Press [Enter] to set this path or type the correct one.
+
+You can set '-' (without quotation) to CANCEL the OpenInventor flag at all:
+
+EOM`
+
+dflt=$g4vis_oivhome
+fn='d~(-)'
+rp=$g4message
+. ./getfile
+
+cend="no"
+while test "$cend" = "no" ; do
+if test -e "$ans/include/Inventor" || [ "X$ans" = "X-"  ]; then
+cend="yes"
+if test "X$ans" != "X-" ; then
+
+g4vis_oivhome=$ans
+
+else
+
+g4vis_build_oiwin32_driver=n
+g4vis_use_oiwin32=n
+
+fi
+else
+
+g4message=`cat << EOM
+
+  OIVHOME/include
+  OIVHOME/lib
+
+You have selected to use OpenInventor driver.
+But it was not found in $ans.
+Please specify the correct path where OpenInventor is installed in your system.
+
+You can set '-' (without quotation) to CANCEL the OpenInventor flag at all:
+
+EOM`
+
+dflt=""
+fn='d~(-)'
+rp=$g4message
+. ./getfile
+fi
+done
+
+else
+
+g4message=`cat << EOM
+
+  OIVHOME/include
+  OIVHOME/lib
+
+You have selected to use OpenInventor driver.
+But it was not found in expected place.
+Please specify the correct path where OpenInventor is installed in your system.
+
+You can set '-' (without quotation) to CANCEL the OpenInventor flag at all:
+
+EOM`
+
+dflt=""
+fn='d~(-)'
+rp=$g4message
+. ./getfile
+
+cend="no"
+while test "$cend" = "no" ; do
+if test -e "$ans/include/Inventor" || [ "X$ans" = "X-"  ]; then
+cend="yes"
+if test "X$ans" != "X-" ; then
+
+g4vis_oivhome=$ans
+
+else
+
+g4vis_build_oiwin32_driver=n
+g4vis_use_oiwin32=n
+
+fi
+else
+
+g4message=`cat << EOM
+
+  OIVHOME/include
+  OIVHOME/lib
+
+You have selected to use OpenInventor driver.
+But it was not found in $ans.
+Please specify the correct path where OpenInventor is installed in your system.
+
+You can set '-' (without quotation) to CANCEL the OpenInventor flag at all:
+
+EOM`
+
+dflt=""
+fn='d~(-)'
+rp=$g4message
+. ./getfile
+fi
+done
+fi
+
+if test "X$g4osname" = "XLinux"; then 
+
+if test "X$g4vis_oivhome" = "X/usr" -o "X$g4vis_oivhome" = "X/usr/local"; then
+g4vis_oivhome=""
+fi
+fi
+fi # g4vis_build_oiwin32_driver
+
+###############################################
+
+fi # if WIN
+################################################################
+
+if test "X$g4system" != "XWIN32-VC" -a "X$g4system" != "XWIN32-VC7"; then
+
 g4message=`cat << EOM
 
   G4VIS_BUILD_DAWNFILE_DRIVER
@@ -3966,34 +5288,6 @@ gans=y
 	y*|Y*) 
 		g4vis_build_dawnfile_driver=y
 		g4vis_use_dawnfile=y
-		;;
-	esac
-
-g4message=`cat << EOM
-
-  G4VIS_BUILD_OPACS_DRIVER
-  G4VIS_USE_OPACS
-
-OPACS is a visualization environment based on X windows and OpenGL. 
-It is written in ANSI C and is highly portable (UNIX, NT/X11, VMS). 
-The OPACS tool is required to activate and build this driver.
-
-EOM`
-
-dflt=$g4vis_use_opacs
-rp=$g4message
-. ./myread
-gans=$ans
-
-	case $gans in
-	
-	n*|N*) 
-		g4vis_build_opacs_driver=n
-		g4vis_use_opacs=n
-		;;
-	y*|Y*) 
-		g4vis_build_opacs_driver=y
-		g4vis_use_opacs=y
 		;;
 	esac
 
@@ -4086,6 +5380,7 @@ gans=y
 		;;
 	esac
 
+fi # if !WIN
 
 g4message=`cat << EOM
 
@@ -4145,7 +5440,42 @@ gans=y
 ;;
 esac
 
+if test "X$g4system" != "XWIN32-VC" -a "X$g4system" != "XWIN32-VC7" -a "X$g4system" != "XDarwin-g++"; then
+
+#echo PASS1
+
 if [ X$g4vis_build_openglx_driver = Xy ] || [ X$g4vis_build_openglxm_driver = Xy ] || [ X$g4vis_build_openglwin32_driver = Xy ] ; then 
+
+#echo PASS2
+
+#####################################################################
+ogl_dirs=`find $g4vis_oglhome /usr/X11R6/include /usr/local/include /usr/include -type d -name GL 2>/dev/null|xargs echo`
+#echo ogl_dirs=$ogl_dirs
+
+if test "X$ogl_dirs" != "X" ; then
+
+g4ogl_base_dir_found=`echo $ogl_dirs|cut -d" " -f1`
+#echo g4ogl_base_dir_found=$g4ogl_base_dir_found
+
+# That's right: should be twice! (e.g./usr/local/lib/libGLU.so -> /usr/local)
+g4ogl_base_dir_found=`dirname $g4ogl_base_dir_found`
+g4ogl_base_dir_found=`dirname $g4ogl_base_dir_found`
+
+	g4vis_oglhome=$g4ogl_base_dir_found
+#else
+#case "$g4vis_oglhome" in
+#'')
+#	g4vis_oglhome=/usr
+#	;;
+#esac
+fi
+
+##########################################################################
+if test "X$g4vis_oglhome" != "X" ; then
+ogl_dirs=$g4vis_oglhome
+fi
+
+if test "X$ogl_dirs" != "X" ; then
 
 g4message=`cat << EOM
 
@@ -4153,17 +5483,138 @@ g4message=`cat << EOM
   OGLHOME/lib
 
 You have selected to use OpenGL driver.
-Specify the correct path (OGLHOME) where OpenGL is installed in your system
-(it was found or set by defalt):
+Specify the correct path (OGLHOME) where OpenGL is installed in your system.
+It was found in $g4vis_oglhome. Press [Enter] to set this path or type the correct one.
+
+You can set '-' (without quotation) to CANCEL the OpenGL flag at all:
+
 EOM`
 
 dflt=$g4vis_oglhome
-fn='d~'
+fn='d~(-)'
 rp=$g4message
 . ./getfile
+
+cend="no"
+while test "$cend" = "no" ; do
+if test -e "$ans/include/GL" || [ "X$ans" = "X-"  ]; then
+cend="yes"
+
+if test "X$ans" != "X-" ; then
+
 g4vis_oglhome=$ans
 
+else
+
+g4vis_build_openglx_driver=n
+g4vis_use_openglx=n
+
+g4vis_build_openglxm_driver=n
+g4vis_use_openglxm=n
+
+g4vis_build_openglwin32_driver=n
+g4vis_use_openglwin32=n
+
 fi
+else
+
+g4message=`cat << EOM
+
+  OGLHOME/include
+  OGLHOME/lib
+
+You have selected to use OpenGL driver.
+But it was not found in $ans.
+Please specify the correct path where OpenGL is installed in your system.
+
+You can set '-' (without quotation) to CANCEL the OpenGL flag at all:
+
+EOM`
+
+dflt=""
+fn='d~(-)'
+rp=$g4message
+. ./getfile
+fi
+done
+
+else
+
+g4message=`cat << EOM
+
+  OGLHOME/include
+  OGLHOME/lib
+
+You have selected to use OpenGL driver.
+But it was not found in expected place.
+Please specify the correct path where OpenGL is installed in your system.
+
+You can set '-' (without quotation) to CANCEL the OpenGL flag at all:
+
+EOM`
+
+dflt=""
+fn='d~(-)'
+rp=$g4message
+. ./getfile
+
+cend="no"
+while test "$cend" = "no" ; do
+if test -e "$ans/include/GL" || [ "X$ans" = "X-"  ]; then
+cend="yes"
+
+if test "X$ans" != "X-" ; then
+
+g4vis_oglhome=$ans
+
+else
+
+g4vis_build_openglx_driver=n
+g4vis_use_openglx=n
+
+g4vis_build_openglxm_driver=n
+g4vis_use_openglxm=n
+
+g4vis_build_openglwin32_driver=n
+g4vis_use_openglwin32=n
+
+fi
+else
+
+g4message=`cat << EOM
+
+  OGLHOME/include
+  OGLHOME/lib
+
+You have selected to use OpenGL driver.
+But it was not found in $ans.
+Please specify the correct path where OpenGL is installed in your system.
+
+You can set '-' (without quotation) to CANCEL the OpenGL flag at all:
+
+EOM`
+
+dflt=""
+fn='d~(-)'
+rp=$g4message
+. ./getfile
+fi
+done
+
+fi
+
+if test "X$g4osname" = "XLinux"; then 
+
+if test "X$g4vis_oglhome" = "X/usr" -o "X$g4vis_oglhome" = "X/usr/local"; then
+g4vis_oglhome=""
+fi
+
+fi # if platform (Linux vs SUN)
+
+fi # if need
+###########################################
+fi # if platform (Unix vs Win)
+
 echo " "
 case "$g4wlib_build_g3tog4" in
 '')
@@ -4183,9 +5634,12 @@ g4message=`cat << EOM
 
   G4LIB_BUILD_G3TOG4  
 
-If this variable is set, it will be built G3TOG4 module.
-Do you want to set this variable ?
-
+The utility module 'g3tog4' will be built by setting this
+variable. NOTE: it requires a valid FORTRAN compiler to be
+installed on your system and the 'cernlib' command in the
+path, in order to build the ancillary tools!
+Do you want to build 'g3tog4' ?
+ 
 EOM`
 
 dflt=$g4wlib_build_g3tog4
@@ -4207,15 +5661,15 @@ gans=$ans
 
 
 echo " "
-case "$g4wlib_build_step" in
+case "$g4wlib_build_zlib" in
 '')
-	g4wlib_build_step=n
+	g4wlib_build_zlib=n
 	;;
 esac
 
-case "$g4w_use_step" in
+case "$g4w_use_zlib" in
 '')
-	g4w_use_step=n
+	g4w_use_zlib=n
 	;;
 esac
 
@@ -4223,14 +5677,14 @@ echo ""
 
 g4message=`cat << EOM
 
-  G4LIB_BUILD_STEP  
+  G4LIB_BUILD_ZLIB  
 
-If this variable is set, it will be built STEP module.
-Do you want to set this variable ?
-
+Do you want to activate compression for output files
+generated by the HepRep visualization driver?
+ 
 EOM`
 
-dflt=$g4wlib_build_step
+dflt=$g4wlib_build_zlib
 rp=$g4message
 . ./myread
 gans=$ans
@@ -4238,12 +5692,12 @@ gans=$ans
 	case $gans in
 	
 	n*|N*) 
-		g4wlib_build_step=n
-		g4w_use_step=n
+		g4wlib_build_zlib=n
+		g4w_use_zlib=n
 		;;
 	y*|Y*) 
-		g4wlib_build_step=y
-		g4w_use_step=y
+		g4wlib_build_zlib=y
+		g4w_use_zlib=y
 		;;
 	esac
 
@@ -4355,7 +5809,6 @@ cf_time='$cf_time'
 contains='$contains'
 d_portable='$d_portable'
 eunicefix='$eunicefix'
-g4_build_wo_session='$g4_build_wo_session'
 g4_gmake='$g4_gmake'
 g4_gmake_version='$g4_gmake_version'
 g4_make='$g4_make'
@@ -4370,15 +5823,20 @@ g4compiler='$g4compiler'
 g4conf='$g4conf'
 g4data='$g4data'
 g4debug='$g4debug'
+g4elasticdata='$g4elasticdata'
+g4final_install='$g4final_install'
 g4global='$g4global'
 g4granular='$g4granular'
 g4include='$g4include'
+g4includes_flag='$g4includes_flag'
 g4install='$g4install'
 g4ledata='$g4ledata'
 g4levelgammadata='$g4levelgammadata'
 g4lib='$g4lib'
 g4lib_build_shared='$g4lib_build_shared'
 g4lib_build_static='$g4lib_build_static'
+g4lib_use_dll='$g4lib_use_dll'
+g4lib_use_dyn='$g4lib_use_dyn'
 g4lib_use_granular='$g4lib_use_granular'
 g4lib_use_shared='$g4lib_use_shared'
 g4lib_use_static='$g4lib_use_static'
@@ -4397,36 +5855,45 @@ g4ui_use_gag='$g4ui_use_gag'
 g4ui_use_tcsh='$g4ui_use_tcsh'
 g4ui_use_terminal='$g4ui_use_terminal'
 g4ui_use_win32='$g4ui_use_win32'
-g4ui_use_wo='$g4ui_use_wo'
 g4ui_use_xaw='$g4ui_use_xaw'
 g4ui_use_xm='$g4ui_use_xm'
+g4ui_xawflags='$g4ui_xawflags'
+g4ui_xawhome='$g4ui_xawhome'
+g4ui_xawlibs='$g4ui_xawlibs'
 g4vis_build_asciitree_driver='$g4vis_build_asciitree_driver'
 g4vis_build_dawn_driver='$g4vis_build_dawn_driver'
 g4vis_build_dawnfile_driver='$g4vis_build_dawnfile_driver'
 g4vis_build_oiwin32_driver='$g4vis_build_oiwin32_driver'
 g4vis_build_oix_driver='$g4vis_build_oix_driver'
-g4vis_build_opacs_driver='$g4vis_build_opacs_driver'
 g4vis_build_openglwin32_driver='$g4vis_build_openglwin32_driver'
 g4vis_build_openglx_driver='$g4vis_build_openglx_driver'
 g4vis_build_openglxm_driver='$g4vis_build_openglxm_driver'
 g4vis_build_raytracer_driver='$g4vis_build_raytracer_driver'
+g4vis_build_raytracerx_driver='$g4vis_build_raytracerx_driver'
 g4vis_build_vrml_driver='$g4vis_build_vrml_driver'
 g4vis_build_vrmlfile_driver='$g4vis_build_vrmlfile_driver'
 g4vis_oglhome='$g4vis_oglhome'
+g4vis_oivhome='$g4vis_oivhome'
 g4vis_use_asciitree='$g4vis_use_asciitree'
 g4vis_use_dawn='$g4vis_use_dawn'
 g4vis_use_dawnfile='$g4vis_use_dawnfile'
 g4vis_use_oiwin32='$g4vis_use_oiwin32'
 g4vis_use_oix='$g4vis_use_oix'
-g4vis_use_opacs='$g4vis_use_opacs'
 g4vis_use_openglwin32='$g4vis_use_openglwin32'
 g4vis_use_openglx='$g4vis_use_openglx'
 g4vis_use_openglxm='$g4vis_use_openglxm'
 g4vis_use_raytracer='$g4vis_use_raytracer'
+g4vis_use_raytracerx='$g4vis_use_raytracerx'
 g4vis_use_vrml='$g4vis_use_vrml'
 g4vis_use_vrmlfile='$g4vis_use_vrmlfile'
+g4vis_xmflags='$g4vis_xmflags'
+g4vis_xmflags='$g4vis_xmflags'
+g4vis_xmhome='$g4vis_xmhome'
+g4vis_xmhome='$g4vis_xmhome'
+g4vis_xmlibs='$g4vis_xmlibs'
+g4vis_xmlibs='$g4vis_xmlibs'
 g4w_use_g3tog4='$g4w_use_g3tog4'
-g4w_use_step='$g4w_use_step'
+g4w_use_zlib='$g4w_use_zlib'
 g4wanalysis_build='$g4wanalysis_build'
 g4wanalysis_build_jas='$g4wanalysis_build_jas'
 g4wanalysis_build_lab='$g4wanalysis_build_lab'
@@ -4436,7 +5903,7 @@ g4wanalysis_use_jas='$g4wanalysis_use_jas'
 g4wanalysis_use_lab='$g4wanalysis_use_lab'
 g4wanalysis_use_lizard='$g4wanalysis_use_lizard'
 g4wlib_build_g3tog4='$g4wlib_build_g3tog4'
-g4wlib_build_step='$g4wlib_build_step'
+g4wlib_build_zlib='$g4wlib_build_zlib'
 g4workdir='$g4workdir'
 hint='$hint'
 lns='$lns'
@@ -4463,7 +5930,7 @@ echo "CONFIG=true" >> $g4conf/config.sh
 : propagate old symbols
 if $test -f .config/UU/config.sh; then
 	<.config/UU/config.sh sort | uniq >.config/UU/oldconfig.sh
-	sed -n 's/^\([a-zA-Z_0-9]*\)=.*/\1/p' config.sh config.sh .config/UU/oldconfig.sh |\
+	sed -n 's/^\([a-zA-Z_0-9]*\)=.*/\1/p' $g4conf/config.sh $g4conf/config.sh .config/UU/oldconfig.sh |\
 	sort | uniq -u >.config/UU/oldsyms
 	set X `cat .config/UU/oldsyms`
 	shift
@@ -4556,11 +6023,16 @@ EOM
 elif test -f [Mm]akefile; then
 	echo " "
 	echo "Now you must run a make."
-elif test -f $g4conf/install.sh; then
+elif [ -f $g4conf/install.sh -a X$g4build = Xyes ] ; then
+	echo " "
+	echo "Now starting Geant4 libraries build..."
+	echo " "
+	. $g4conf/install.sh
+elif [ -f $g4conf/install.sh -a X$install = Xyes ] ; then
 	echo " "
 	echo "Now starting Geant4 libraries installation..."
 	echo " "
-	. $g4conf/install.sh
+	. $g4conf/move.sh
 else
 	echo " "
 	echo "WARNING: Geant4 is NOT installed yet!"
