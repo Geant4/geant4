@@ -46,45 +46,6 @@ G4FemaleBuilder::~G4FemaleBuilder()
   delete body;
 } 
 
-void G4FemaleBuilder::BuildLeftBreast(const G4String& colourName,
-				      G4bool solidVis, G4bool sensitivity)
-{
- if (motherVolume == 0)
-   G4Exception("The world volume is missing !!!!!");
-
- body -> CreateOrgan("LeftBreast", motherVolume,colourName, solidVis, sensitivity);  
-}
-
-void G4FemaleBuilder::BuildRightBreast(const G4String& colourName, G4bool solidVis, G4bool sensitivity)
-{
-  
- if (motherVolume == 0)
-   G4Exception("The world volume is missing !!!!!");
-
- body -> CreateOrgan("RightBreast", motherVolume, colourName, solidVis, sensitivity);
-}
-
-void G4FemaleBuilder::BuildLeftOvary(const G4String& colourName, 
-				     G4bool solidVis, G4bool sensitivity)
-{   
-  
-if (trunkVolume == 0)
-   G4Exception("The trunk volume is missing !!!!!");
-   
-   body -> CreateOrgan("LeftOvary",trunkVolume, colourName, solidVis, sensitivity);  
-  
-}
-
-void G4FemaleBuilder::BuildRightOvary(const G4String& colourName, G4bool solidVis, G4bool sensitivity)
-{   
-
-if (trunkVolume == 0)
-   G4Exception("The trunk volume is missing !!!!!");
-   
-   body -> CreateOrgan("RightOvary",trunkVolume,colourName,solidVis, sensitivity);  
-  
-}
-
 void G4FemaleBuilder::BuildUterus(const G4String& colourName, G4bool solidVis, G4bool sensitivity )
 
 {
