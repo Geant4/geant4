@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExtrudedSolid.hh,v 1.3 2007-02-15 17:05:07 gcosmo Exp $
+// $Id: G4ExtrudedSolid.hh,v 1.4 2007-02-19 10:17:45 ivana Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -37,7 +37,7 @@
 // Class description:
 //
 // G4ExtrudedSolid is a solid which represents the extrusion of an arbitrary
-// polygon with fixed outline in the two Z sections.
+// polygon with fixed outline in the defined Z sections.
 // The z-sides of the solid are the scaled versions of the same polygon.
 // The solid is implemented as a specification of G4TessellatedSolid.
 //  
@@ -45,6 +45,11 @@
 // const G4String& pName             - solid name
 // std::vector<G4TwoVector> polygon  - the vertices of the outlined polygon
 //                                     defined in clock-wise order     
+// std::vector<ZSection>             - the z-sections defined by
+//                                     z position, offset and scale
+//                                     in increasing z-position order
+//
+// Parameters in the special constructor (for solid with 2 z-sections:
 // G4double hz                       - the solid half length in Z
 // G4TwoVector off1                  - offset of the side in -hz
 // G4double scale1                   - scale of the side in -hz
@@ -67,28 +72,41 @@
 class G4ExtrudedSolid : public G4TessellatedSolid
 {
 
+  public:
+    struct ZSection {
+      ZSection(G4double z, G4TwoVector offset, G4double scale)
+        : fZ(z), fOffset(offset), fScale(scale) {}
+
+      G4double    fZ;
+      G4TwoVector fOffset;
+      G4double    fScale;
+    };
+
   public:  // with description
 
      G4ExtrudedSolid( const G4String&                pName,
-                            std::vector<G4TwoVector> polygon,       
-                            G4double                 hz,
+                            std::vector<G4TwoVector>  polygon,
+                            std::vector<ZSection>     zsections);
+       // General constructor
+
+     G4ExtrudedSolid( const G4String&                pName,
+                            std::vector<G4TwoVector>  polygon,
+                            G4double                  hz,
                             G4TwoVector off1, G4double scale1,
                             G4TwoVector off2, G4double scale2 );
-       // Constructor
+       // Special constructor for solid with 2 z-sections
 
      virtual ~G4ExtrudedSolid();
        // Destructor
 
     // Accessors
-
-    inline G4double    GetZHalfLength()  const;
-    inline G4TwoVector GetOffset1() const;
-    inline G4double    GetScale1() const;
-    inline G4TwoVector GetOffset2() const;
-    inline G4double    GetScale2() const;
     inline G4int       GetNofVertices() const;
     inline G4TwoVector GetVertex(G4int index) const;
     inline std::vector<G4TwoVector> GetPolygon() const;
+
+    inline G4int       GetNofZSections() const;
+    inline ZSection    GetZSection(G4int index) const;
+    inline std::vector<ZSection> GetZSections() const;
 
     // Solid methods                                
 
@@ -111,8 +129,10 @@ class G4ExtrudedSolid : public G4TessellatedSolid
 
   private:
 
-    G4ThreeVector GetDownVertex(G4int ind) const;
-    G4ThreeVector GetUpVertex(G4int ind) const;
+    void ComputeProjectionParameters();
+    
+    G4ThreeVector GetVertex(G4int iz, G4int ind) const;
+    G4TwoVector ProjectPoint(const G4ThreeVector& point) const;
 
     G4bool IsSameLine(G4TwoVector p,
                       G4TwoVector l1, G4TwoVector l2) const;
@@ -128,16 +148,21 @@ class G4ExtrudedSolid : public G4TessellatedSolid
     G4bool MakeFacets();
     G4bool IsConvex() const;
 
+
   private:
 
     G4int       fNv;
-    G4double    fHz;
-    G4TwoVector fOffset0, fOffset1, fOffset2, fKOffset;
-    G4double    fScale0, fScale1, fScale2, fKScale;
+    G4int       fNz;
     std::vector<G4TwoVector> fPolygon;
+    std::vector<ZSection>    fZSections;
     std::vector< std::vector<G4int> > fTriangles;
     G4bool          fIsConvex;
     G4GeometryType  fGeometryType;
+
+    std::vector<G4double>      fKScales;
+    std::vector<G4double>      fScale0s;
+    std::vector<G4TwoVector>   fKOffsets;
+    std::vector<G4TwoVector>   fOffset0s;
 };    
 
 #include "G4ExtrudedSolid.icc"

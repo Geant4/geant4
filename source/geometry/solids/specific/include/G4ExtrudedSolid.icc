@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExtrudedSolid.icc,v 1.1 2007-02-09 12:05:50 gcosmo Exp $
+// $Id: G4ExtrudedSolid.icc,v 1.2 2007-02-19 10:17:45 ivana Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -36,36 +36,6 @@
 // --------------------------------------------------------------------
 
 inline 
-G4double  G4ExtrudedSolid::GetZHalfLength()  const
-{
-  return fHz;
-}  
-
-inline 
-G4TwoVector G4ExtrudedSolid::GetOffset1() const
-{
-  return fOffset1;
-}  
-
-inline 
-G4double  G4ExtrudedSolid::GetScale1() const
-{
-  return fScale1;
-}
-  
-inline 
-G4TwoVector G4ExtrudedSolid::GetOffset2() const
-{
-  return fOffset2;
-}  
-
-inline 
-G4double G4ExtrudedSolid::GetScale2() const
-{
-  return fScale2;
-}
-  
-inline 
 G4int G4ExtrudedSolid::GetNofVertices() const
 {
   return fNv;
@@ -75,7 +45,7 @@ inline G4TwoVector G4ExtrudedSolid::GetVertex(G4int index) const
 {
   if ( index<0 || index >= fNv )
   {
-    G4Exception ("G4ExtrudedSolid::G4GetVertex()", "InvalidInput",
+    G4Exception ("G4ExtrudedSolid::GetVertex()", "InvalidInput",
                  FatalException, "Index outside range.");
     return G4TwoVector();
   }
@@ -86,4 +56,28 @@ inline
 std::vector<G4TwoVector> G4ExtrudedSolid::GetPolygon() const
 {
   return fPolygon;
+}  
+
+inline 
+G4int  G4ExtrudedSolid::GetNofZSections() const
+{
+  return fNz;
+}
+  
+inline 
+G4ExtrudedSolid::ZSection  G4ExtrudedSolid::GetZSection(G4int index) const
+{
+  if ( index<0 || index >= fNz )
+  {
+    G4Exception ("G4ExtrudedSolid::GetZSection()", "InvalidInput",
+                 FatalException, "Index outside range.");
+    return ZSection(0.0, G4TwoVector(), 0.0);
+  }
+  return fZSections[index];
+}
+
+inline 
+std::vector<G4ExtrudedSolid::ZSection> G4ExtrudedSolid::GetZSections() const
+{
+  return fZSections;
 }  
