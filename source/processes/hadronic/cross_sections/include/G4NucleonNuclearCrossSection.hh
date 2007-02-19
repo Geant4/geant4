@@ -57,15 +57,21 @@ class G4NucleonNuclearCrossSection : public G4VCrossSectionDataSet
     if(aParticle->GetKineticEnergy() > 999.9*GeV) result=false;
     return result;
   }
-  virtual G4double GetCrossSection(const G4DynamicParticle* aParticle, 
+
+  G4double GetCrossSection(const G4DynamicParticle* aParticle, 
                            const G4Element* anElement,
                            G4double T=0.);
+  G4double GetCrossSection( const G4DynamicParticle* aParticle, 
+                       G4double  zElement,
+		   G4double                );
 
-  virtual G4double GetCrossSection(const G4DynamicParticle*,
-                           G4double Z, G4double A);
+  G4double GetTotalXsc()  { return fTotalXsc;   };
+  G4double GetElasticXsc(){ return fElasticXsc; };
 
-  virtual void BuildPhysicsTable(const G4ParticleDefinition&) {}
-  virtual void DumpPhysicsTable(const G4ParticleDefinition&) {}
+
+
+  void BuildPhysicsTable(const G4ParticleDefinition&) {}
+  void DumpPhysicsTable(const G4ParticleDefinition&) {}
   
   private:
   G4double Interpolate(G4int Z1, G4int Z2, G4int Z, G4double x1, G4double x2);
@@ -169,6 +175,11 @@ static const G4double u_p_in[46];
 std::vector< G4int >     theZ;
 std::vector< G4PiData* > thePipData;
 std::vector< G4PiData* > thePimData;
+
+  // cross sections
+
+  G4double fTotalXsc;
+  G4double fElasticXsc;
 
 };
 
