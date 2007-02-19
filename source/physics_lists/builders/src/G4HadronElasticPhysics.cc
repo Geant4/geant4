@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronElasticPhysics.cc,v 1.5 2007-02-19 14:48:34 vnivanch Exp $
+// $Id: G4HadronElasticPhysics.cc,v 1.6 2007-02-19 16:00:56 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -39,6 +39,8 @@
 // 10.08.2006 V.Ivanchenko separate neutrons from other particles
 // 17.11.2006 V.Ivanchenko do not redefine G4HadronElastic default parameters
 // 19.02.2007 V.Ivanchenko set QModelLowLimit and LowestEnergyLimit to zero
+// 19.02.2007 A.Howard set QModelLowLimit and LowestEnergyLimit to zero 
+//                     for neutrons
 //
 //----------------------------------------------------------------------------
 //
@@ -167,6 +169,8 @@ void G4HadronElasticPhysics::ConstructProcess()
       if(mname == "elastic") {
 	G4UHadronElasticProcess* h = new G4UHadronElasticProcess("hElastic");
 	G4HadronElastic* nhe = new G4HadronElastic();
+	nhe->SetQModelLowLimit(0.0);
+	nhe->SetLowestEnergyLimit(0.0);
 	neutronModel = nhe;
 	h->SetQElasticCrossSection(nhe->GetCS());
         hel = h;
