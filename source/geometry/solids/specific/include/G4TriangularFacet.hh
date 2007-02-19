@@ -24,7 +24,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TriangularFacet.hh,v 1.4 2007-02-12 09:34:44 gcosmo Exp $
+// $Id: G4TriangularFacet.hh,v 1.5 2007-02-19 10:22:38 ivana Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -94,7 +94,7 @@ class G4TriangularFacet : public G4VFacet
     G4bool Intersect  (const G4ThreeVector &p, const G4ThreeVector &v,
                        const G4bool outgoing, G4double &distance,
                              G4double &distFromSurface, G4ThreeVector &normal);
-    G4bool IsInside (const G4ThreeVector &p) const;
+    // G4bool IsInside (const G4ThreeVector &p) const;
 
     G4double GetArea ();
     G4ThreeVector GetPointOnFace () const;
