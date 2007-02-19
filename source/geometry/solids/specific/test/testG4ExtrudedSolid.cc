@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4ExtrudedSolid.cc,v 1.2 2007-02-15 17:02:37 gcosmo Exp $
+// $Id: testG4ExtrudedSolid.cc,v 1.3 2007-02-19 16:39:10 ivana Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // testG4ExtrudedSolid
@@ -156,7 +156,39 @@ G4bool testExtrudedSolid2()
 
 G4bool testExtrudedSolid3()
 {
-  // Extruded solid with 4 z-planes defined via union solid
+  // Extruded solid with 4 z-sections
+
+  std::vector<G4TwoVector> polygon;
+  polygon.push_back(G4TwoVector(-30.*cm, -30.*cm));
+  polygon.push_back(G4TwoVector(-30.*cm,  30.*cm));
+  polygon.push_back(G4TwoVector( 30.*cm,  30.*cm));
+  polygon.push_back(G4TwoVector( 30.*cm, -30.*cm));
+  polygon.push_back(G4TwoVector( 15.*cm, -30.*cm));
+  polygon.push_back(G4TwoVector( 15.*cm,  15.*cm));
+  polygon.push_back(G4TwoVector(-15.*cm,  15.*cm));
+  polygon.push_back(G4TwoVector(-15.*cm, -30.*cm));
+  
+  std::vector<G4ExtrudedSolid::ZSection> zsections;
+  zsections.push_back(G4ExtrudedSolid::ZSection(-40.*cm, G4TwoVector(-20.*cm, 10.*cm), 1.5));
+  zsections.push_back(G4ExtrudedSolid::ZSection( 10.*cm, G4TwoVector(  0.*cm,  0.*cm), 0.5));
+  zsections.push_back(G4ExtrudedSolid::ZSection( 15.*cm, G4TwoVector(  0.*cm,  0.*cm), 0.7));
+  zsections.push_back(G4ExtrudedSolid::ZSection( 40.*cm, G4TwoVector( 20.*cm, 20.*cm), 0.9));
+
+  G4ExtrudedSolid* XtruS 
+    = new G4ExtrudedSolid("XtruS3", polygon, zsections);
+
+  G4cout << *XtruS << G4endl;                     
+  XtruS->G4TessellatedSolid::StreamInfo(G4cout);;                     
+
+  return true;
+}
+
+// ---------------------------------------------------------------------------
+
+G4bool testExtrudedSolid4()
+{
+  // Extruded solid with 4 z-sections, with 2 sections with the same z position
+  // defined via union solid
 
   std::vector<G4TwoVector> polygon;
   polygon.push_back(G4TwoVector(-30.*cm, -30.*cm));
@@ -172,8 +204,6 @@ G4bool testExtrudedSolid3()
     = new G4ExtrudedSolid("XtruS1", polygon, 25.*cm, 
                  G4TwoVector(-20.*cm, 10.*cm), 1.5, G4TwoVector(), 0.5);
     
-  xtruS1->G4TessellatedSolid::StreamInfo(G4cout);;                     
-
   G4ExtrudedSolid* xtruS2 
     = new G4ExtrudedSolid("XtruS2", polygon, 15.*cm, 
                  G4TwoVector(), 0.7, G4TwoVector(20.*cm, 20.*cm), 0.9);
@@ -204,5 +234,6 @@ int main()
   assert(testExtrudedSolid1());
   assert(testExtrudedSolid2());
   assert(testExtrudedSolid3());
+  assert(testExtrudedSolid4());
   return 0;
 }
