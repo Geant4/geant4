@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ShellDataTest.cc,v 1.3 2006-06-29 19:44:34 gunter Exp $
+// $Id: G4ShellDataTest.cc,v 1.4 2007-02-20 16:53:17 mantero Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -52,11 +52,12 @@
 
 int main()
 {
-  G4cout.setf( ios::scientific, ios::floatfield );
+  //  G4cout.setf( ios::scientific, ios::floatfield );
 
-  G4String file = "fluor/binding";
+  G4String file = "/fluor/binding";
 
-  G4ShellData* dataSet = new G4ShellData(file);
+  G4ShellData* dataSet = new G4ShellData();
+  dataSet->LoadData(file);
   
   G4cout << "Enter Z" << G4endl;
   G4int Z;
@@ -90,7 +91,7 @@ int main()
 
   delete dataSet;
 
-  cout << "END OF THE MAIN PROGRAM" << G4endl;
+  G4cout << "END OF THE MAIN PROGRAM" << G4endl;
 }
 
 

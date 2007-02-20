@@ -110,7 +110,7 @@ public:
    
 protected:
 
-  G4AtomicTransitionManager(G4int minZ = 1, G4int maxZ = 99, 
+  G4AtomicTransitionManager(G4int minZ = 1, G4int maxZ = 100, 
 			    G4int limitInfTable = 6, G4int limitSupTable=100 );
   ~G4AtomicTransitionManager();
 
