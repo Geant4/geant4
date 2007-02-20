@@ -92,9 +92,12 @@
     }
     else if(aScheme==LINLIN||aScheme==CLINLIN||aScheme==ULINLIN)
     {
-      G4double b = (y2-y1)/(x2-x1);
-      G4double a = y1 - b*x1;
-      result = 0.5*a*(x2*x2-x1*x1) + (b/3.)*(x2*x2*x2-x1*x1*x1);
+      //        G4double b = (y2-y1)/(x2-x1);
+      //        G4double a = y1 - b*x1;
+      //        result = 0.5*a*(x2*x2-x1*x1) + (b/3.)*(x2*x2*x2-x1*x1*x1);
+      //  Factor out x2-x1 to avoid divide by zero
+      
+      result = (y1*x2 - y2*x1)*(x2 + x1)/2. + (y2-y1)*(x2*x2 + x2*x1 + x1*x1)/3.;
     }
     else if(aScheme==LINLOG||aScheme==CLINLOG||aScheme==ULINLOG)
     {

@@ -79,7 +79,7 @@
     for(i=0; i<nGammas; i++)
     {
       it = i;
-      if(random<running[i]/sum) break;
+      if(random*sum < running[i]) break;
     }
     delete [] running;
     theResult = theGammas[it]->GetDecayGammas();
