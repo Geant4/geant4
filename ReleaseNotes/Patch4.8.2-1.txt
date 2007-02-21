@@ -48,26 +48,18 @@ List of fixes included in this public patch since the public release 8.2:
         - Added protections against NaN values in two places: sampling of
           theta when tau=0 in lateral displacement, and in method
           ComputeTrueStepLength() for the case of zero true length.
-        - Added extra protection inside SampleDisplacement(); added protection
-          for case when energy loss isinactivated and fixed computation of
-          skindepth value.
-        - Moved SetMscStepLimitation() from header to source and added inside
-          extra initialisation.
-      o G4MultipleScattering: allow for reinitialisation of model parameters
-        between runs.
-      o Fix crash occuring occasionally in PrintInfo() methods.
+      o G4MultipleScattering: fix to allow for reinitialisation of model
+        parameters between runs.
       o Use SetEmModel(index) and added SetFluctModel() from
         G4VEnergyLossProcess in eIonisation, hIonisation, ionIonisation,
         eBremstrahlung.
     + utils:
-      o G4LossTableBuilder: fill new vector for dEdx (do not reuse old).
-      o G4LossTableManager: fixed problem of reinitialisation for next run
-        after activation or deactivation of energy loss process.
-      o G4VEmEnergyLossProcess:
-        - Fixed subcutoff option for Bremsstrahlung.
-        - Added members 'theIonisationTable' and 'theSubIonisationTables' in
-          order to save separately total energy loss and energy loss due to
-          ionisation. Added SetEmModel(index) add SetFluctModel() methods.
+      o Fixed a problem happening in interactive sessions when activating or
+        deactivating processes; the problem resulting in building wrong dEdx
+        tables for e+- and muons. Modified classes are: G4LossTableBuilder,
+        G4LossTableManager and G4VEmEnergyLossProcess.
+        New tables are added for e+- and muons ionisation additionally to
+        total energy loss tables.
 
   o Hadronic Processes:
     ------------------
@@ -102,7 +94,7 @@ List of fixes included in this public patch since the public release 8.2:
     + models/parton_string/management:
       o Debugged method Dump() added in G4InteractionContent to print object.
       o Debugged output in G4VPartonStringModel checking E-p conservation of
-       string model.
+        string model.
     + models/parton_string/qgsm:
       o Corrected E-p non-conservation in QGS. In G4QGSMSplitableHadron,
         the smaller of the lightcone momenta Q+/Q- was ignored.
@@ -118,7 +110,7 @@ List of fixes included in this public patch since the public release 8.2:
       o Cleaned up commented-out code.
     + stopping:
       o G4MuMinusCaptureCascade: added sampling of random vector of e- in
-        decay; added factor 2 in potential energy.
+        decay; added factor 2 in potential energy - fixing decay spectrum.
       o G4MuonMinusCaptureAtRest: fixed problem for the case when isotope
         vector is undefined. Force to use round 'targetA'.
         Addressing problem report #926.
@@ -128,7 +120,8 @@ List of fixes included in this public patch since the public release 8.2:
   o Materials:
     ---------
     + G4Material: fill fAtomVector in the case when material is built
-      from element mass fractions.
+      from element mass fractions, allowing for low-energy package to
+      use NIST G4_WATER.
     + G4NistMaterialBuilder: added liquids O2 and N2.
     + G4NistElementBuilder: added protection for Z<=101.
 
