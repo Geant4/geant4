@@ -101,6 +101,9 @@ G4VPhysicalVolume* G4MIRDHead::Construct(const G4String& volumeName,G4VPhysicalV
   { 
     G4SDManager* SDman = G4SDManager::GetSDMpointer();
     logicHead->SetSensitiveDetector( SDman->FindSensitiveDetector("BodyPartSD") );
+    G4cout <<SDman->FindSensitiveDetector("BodyPartSD")->GetName()<< G4endl;
+    SDman->FindSensitiveDetector("BodyPartSD")->SetVerboseLevel(1);
+
   }
 
   // Visualization Attributes

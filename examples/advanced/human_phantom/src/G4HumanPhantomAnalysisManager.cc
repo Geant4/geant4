@@ -40,9 +40,8 @@
 G4HumanPhantomAnalysisManager* G4HumanPhantomAnalysisManager::instance = 0;
 
 G4HumanPhantomAnalysisManager::G4HumanPhantomAnalysisManager() 
-  :  aFact(0), treeFact(0),theTree(0), histogramFactory(0),
-     histogramParticlePath(0), projectionXY(0), projectionYZ(0), 
-     projectionZX(0), energy(0), innerBreast(0)
+  :  aFact(0), treeFact(0),theTree(0), histogramFactory(0),tupFact(0),
+     ntuple(0), innerBreast(0)
 { 
   aFact = AIDA_createAnalysisFactory();
   treeFact = aFact -> createTreeFactory();
@@ -53,21 +52,12 @@ G4HumanPhantomAnalysisManager::~G4HumanPhantomAnalysisManager()
   delete innerBreast;
   innerBreast = 0;
 
-  delete energy;
-  energy = 0;
-
-  delete projectionXY;
-  projectionXY = 0;
-
-  delete projectionYZ;
-  projectionYZ = 0;
-
-  delete projectionZX;
-  projectionZX = 0;
-
-  delete histogramParticlePath;
-  histogramParticlePath = 0;
+  delete ntuple;
+  ntuple = 0;
   
+  delete tupFact;
+  tupFact =0;
+
   delete histogramFactory;
   histogramFactory = 0;
 
@@ -93,59 +83,43 @@ void G4HumanPhantomAnalysisManager::book()
   theTree = treeFact->create(fileName,"hbook",false, true);
       
   histogramFactory = aFact -> createHistogramFactory( *theTree );
-   
-  G4double histogramDimension = 20.;
+  tupFact  = aFact -> createTupleFactory( *theTree ); 
 
-  G4int bins = 3600; 
 
-  G4int binsProj = 300; 
-
-  histogramParticlePath = histogramFactory->createHistogram1D
-   ("10","Particle Path Distribution",bins,0.,histogramDimension);
-
-  projectionXY = histogramFactory->createHistogram2D
-   ("20","Particle Projection XY",binsProj,-histogramDimension,histogramDimension,binsProj,-histogramDimension,histogramDimension);
-
-  projectionYZ = histogramFactory->createHistogram2D
-   ("30","Particle Projection YZ",binsProj,-histogramDimension,histogramDimension,binsProj,-histogramDimension,histogramDimension);
-
-  projectionZX = histogramFactory->createHistogram2D
-   ("40","Particle Projection ZX",binsProj,-histogramDimension,histogramDimension,binsProj,-histogramDimension,histogramDimension);
-
-  energy = histogramFactory->createHistogram2D
-   ("50","Energy Deposit in Body Part", 1000,0.,30.,500,0.,100.);
-
-  innerBreast = histogramFactory->createHistogram2D("100", "Edep(MeV) in innerBreast, x= slice, y= sector",
+  innerBreast = histogramFactory->createHistogram2D("100", 
+			      "Edep(MeV) in innerBreast, x= slice, y= sector",
 						    11, -0.5, 10.5,
 						    11, -0.5, 10.5); 
-
-  G4cout<<"Booking the histograms"<<G4endl;
-
+  
+  // Defining the ntuple columns' name 
+  std::string columnNames = "int id; float energy";
+  std::string options = "";
+  
+  // Creating a ntuple
+  if (tupFact) ntuple = tupFact -> create("1","1",columnNames, options);       
+  
+  G4cout<<"Booking !!!!"<<G4endl;
  }
 
-void  G4HumanPhantomAnalysisManager::particlePath(G4double path)
+void G4HumanPhantomAnalysisManager::bodyPartEnergyDeposit(G4int bodyPartID, 
+						      G4double eDep)
 {
-  histogramParticlePath -> fill(path);
-}
+ if (ntuple == 0) 
+   {
+     G4cout << "AAAAAAAGH..... The Ntuple is 0" << G4endl;
+     return;
+    }
+ 
+  // Fill the ntuple
+  
+  // Each organ is identified with an integer  
+  G4int indexX = ntuple -> findColumn( "id" );
+  G4int indexEnergy = ntuple -> findColumn( "energy" );
 
-void G4HumanPhantomAnalysisManager::particleProjectionXY(G4double xx,G4double yy)
-{  
- projectionXY -> fill(xx,yy,1.);
-}
+  ntuple -> fill(indexX, bodyPartID);
+  ntuple -> fill(indexEnergy, eDep);
 
-void G4HumanPhantomAnalysisManager::particleProjectionYZ(G4double yy,G4double zz)
-{  
- projectionYZ -> fill(yy,zz,1.);
-}
-
-void G4HumanPhantomAnalysisManager::particleProjectionZX(G4double zz,G4double xx)
-{  
- projectionZX -> fill(zz,xx,1.);
-}
-
-void G4HumanPhantomAnalysisManager::bodypartEnergyDep(G4double bpID, G4double eDep)
-{
-  energy -> fill(bpID,eDep);
+  ntuple->addRow();
 }
 
 void G4HumanPhantomAnalysisManager::innerBreastEnergyDep(G4int slice, G4int sector, G4double edep)

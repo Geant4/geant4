@@ -54,3 +54,24 @@ if (trunkVolume == 0)
    G4Exception("The trunk volume is missing !!!!!");
 
  body -> CreateOrgan("Uterus",trunkVolume, colourName, solidVis, sensitivity);  }
+
+void G4FemaleBuilder::BuildLeftOvary(const G4String& colourName, G4bool solidVis, G4bool sensitivity )
+
+{
+if (trunkVolume == 0)
+    G4Exception("The trunk volume is missing !!!!!");
+
+  body -> CreateOrgan("LeftOvary",trunkVolume, colourName,
+ 		     solidVis, sensitivity);  
+}
+
+void G4FemaleBuilder::BuildRightOvary(const G4String& colourName, G4bool solidVis, G4bool sensitivity )
+
+{
+ if (trunkVolume == 0)
+
+    G4Exception("The trunk volume is missing !!!!!");
+
+  body -> CreateOrgan("RightOvary",trunkVolume, colourName,
+ 		     solidVis, sensitivity);  
+}

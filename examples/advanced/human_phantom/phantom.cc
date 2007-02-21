@@ -50,20 +50,15 @@
 #include "G4HumanPhantomSteppingAction.hh"
 #include "G4HumanPhantomEventAction.hh"
 #include "G4HumanPhantomRunAction.hh"
-#include "G4HumanPhantomEnergyDeposit.hh"
 #ifdef G4ANALYSIS_USE 
 #include  "G4HumanPhantomAnalysisManager.hh"
 #endif
 int main(int argc,char** argv)
 {
-  G4cout << "Starting run " << G4endl;
-
   G4RunManager* runManager = new G4RunManager;
 
-  G4HumanPhantomEnergyDeposit* energyTotal = new G4HumanPhantomEnergyDeposit();
-
   // Set mandatory initialization classes
-  G4HumanPhantomConstruction* userPhantom = new G4HumanPhantomConstruction(energyTotal);
+  G4HumanPhantomConstruction* userPhantom = new G4HumanPhantomConstruction();
   runManager->SetUserInitialization(userPhantom);
 
   runManager->SetUserInitialization(new G4HumanPhantomPhysicsList);
@@ -117,8 +112,6 @@ int main(int argc,char** argv)
       G4String fileName = argv[1];
       UI -> ApplyCommand(command+fileName);
     }     
-
-  energyTotal->TotalEnergyDeposit();
 
 #ifdef G4ANALYSIS_USE
   if (analysis)analysis->finish();

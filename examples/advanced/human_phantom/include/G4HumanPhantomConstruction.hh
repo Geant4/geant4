@@ -38,15 +38,11 @@
 #include <map>
 
 class G4VPhysicalVolume;
-//class G4LogicalVolume;
-//class G4HumanPhantomSD;
 class G4HumanPhantomMaterial;
-//class G4PhantomBuilder;
-class G4HumanPhantomEnergyDeposit;
 class G4HumanPhantomConstruction : public G4VUserDetectorConstruction
 {
   public:
-     G4HumanPhantomConstruction(G4HumanPhantomEnergyDeposit*);
+     G4HumanPhantomConstruction();
     ~G4HumanPhantomConstruction();
      G4VPhysicalVolume* Construct();
 
@@ -59,7 +55,6 @@ class G4HumanPhantomConstruction : public G4VUserDetectorConstruction
  
  private:
   G4HumanPhantomMaterial* material;
-  G4HumanPhantomEnergyDeposit* edepTot;
   G4HumanPhantomMessenger* messenger;
   G4VPhysicalVolume* ConstructWorld();
 

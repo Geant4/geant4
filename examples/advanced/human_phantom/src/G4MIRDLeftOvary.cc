@@ -96,12 +96,16 @@ G4VPhysicalVolume* G4MIRDLeftOvary::Construct(const G4String& volumeName,G4VPhys
   { 
     G4SDManager* SDman = G4SDManager::GetSDMpointer();
     logicLeftOvary->SetSensitiveDetector( SDman->FindSensitiveDetector("BodyPartSD") );
+    G4cout<< SDman->FindSensitiveDetector("BodyPartSD")->GetName()<< G4endl;
+    SDman->FindSensitiveDetector("BodyPartSD")->SetVerboseLevel(1);
   }
 
   // Visualization Attributes
   //G4VisAttributes* LeftOvaryVisAtt = new G4VisAttributes(G4Colour(0.85,0.44,0.84));
   G4HumanPhantomColour* colourPointer = new G4HumanPhantomColour();
   G4Colour colour = colourPointer -> GetColour(colourName);
+  delete colourPointer;
+
   G4VisAttributes* LeftOvaryVisAtt = new G4VisAttributes(colour);
   LeftOvaryVisAtt->SetForceSolid(wireFrame);
   logicLeftOvary->SetVisAttributes(LeftOvaryVisAtt);

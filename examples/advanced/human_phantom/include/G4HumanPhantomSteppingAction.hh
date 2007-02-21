@@ -40,7 +40,6 @@ class G4HumanPhantomSteppingAction : public G4UserSteppingAction
   public:
     G4HumanPhantomSteppingAction();
    ~G4HumanPhantomSteppingAction();
-
     void UserSteppingAction(const G4Step*);
 };
 #endif

@@ -47,7 +47,6 @@
 
 #include "G4RunManager.hh"
 #include "G4HumanPhantomMaterial.hh"
-#include "G4HumanPhantomEnergyDeposit.hh"
 #include "G4Box.hh"
 #include "G4LogicalVolume.hh"
 #include "G4VPhysicalVolume.hh"
@@ -55,8 +54,7 @@
 #include "G4Colour.hh"
 #include "G4PVPlacement.hh"
 
-G4HumanPhantomConstruction::G4HumanPhantomConstruction(G4HumanPhantomEnergyDeposit* energyDep):
-  edepTot(energyDep)
+G4HumanPhantomConstruction::G4HumanPhantomConstruction()
 {
  messenger = new G4HumanPhantomMessenger(this);
  material = new G4HumanPhantomMaterial();
@@ -74,8 +72,8 @@ G4VPhysicalVolume* G4HumanPhantomConstruction::Construct()
   
   G4SDManager* SDman = G4SDManager::GetSDMpointer();
   G4String bodypartSD = "BodyPartSD";
-  G4HumanPhantomSD* userPhantomSD = new G4HumanPhantomSD( bodypartSD, edepTot);
-  SDman->AddNewDetector( userPhantomSD );
+  G4HumanPhantomSD* userPhantomSD = new G4HumanPhantomSD(bodypartSD);
+  SDman->AddNewDetector(userPhantomSD);
  
   //G4PhantomBuilder::SetModel(model);
   G4PhantomBuilder* builder = 0;

@@ -36,10 +36,6 @@
 
 #include "G4PhantomBuilder.hh"
 
-//class G4PhantomBuilder;
-
-//class G4VPhysicalVolume;
-class G4VBodyFactory;
 class G4FemaleBuilder: public G4PhantomBuilder
 {
 public:
@@ -50,8 +46,8 @@ public:
   void BuildRightBreast(const G4String&, G4bool, G4bool){;}
   void BuildParameterisedLeftBreast(const G4String&, G4bool, G4bool){;};
   void BuildParameterisedRightBreast(const G4String&, G4bool, G4bool){;};
-  void BuildLeftOvary(const G4String&, G4bool, G4bool){;}
-  void BuildRightOvary(const G4String&, G4bool, G4bool){;}
+  void BuildLeftOvary(const G4String&, G4bool, G4bool);
+  void BuildRightOvary(const G4String&, G4bool, G4bool);
   void BuildUterus(const G4String&, G4bool, G4bool);
 };
 #endif
