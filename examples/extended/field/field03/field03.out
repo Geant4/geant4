@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V08-01-05    (15-December-2006)
+ Geant4 version Name: geant4-08-02-patch-01-ref    (23-February-2007)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -251,7 +251,7 @@ G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next ma
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.03s Real=0.06s Sys=0.01s
+  User=0.01s Real=0.03s Sys=0s
 ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
 G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
 
@@ -284,7 +284,7 @@ G4GlobalFastSimulationManager::GetFlavoredWorldForThis(...): DEPRECATING, will b
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.83s Real=0.83s Sys=0s
+  User=0.86s Real=0.86s Sys=0s
 ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
 Set field value to (0,0,1000) Gauss 
 
@@ -308,7 +308,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.08s Real=0.08s Sys=0s
+  User=0.09s Real=0.09s Sys=0s
 ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
 Graphics systems deleted.
 Visualization Manager deleting...

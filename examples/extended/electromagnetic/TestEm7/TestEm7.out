@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V08-01-05    (15-December-2006)
+ Geant4 version Name: geant4-08-02-patch-01-ref    (23-February-2007)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -304,25 +304,25 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=361.5s Real=521.63s Sys=56.88s
+  User=359.68s Real=512.81s Sys=54.38s
 
  The run consists of 10000 proton of 160 MeV through 20 cm  of Water (density: 1 g/cm3 )
 
- projected Range= 17.7618 cm    rms= 1.8433 mm 
+ projected Range= 17.7607 cm    rms= 2.32566 mm 
 
 ---------------------------------------------------------
  Cumulated Doses : 	Edep      	Edep/Ebeam 	Dose
- tally 0: 	 	4.67444 GeV	0.292152 % 	9.3616e-05 Gy
- tally 1: 	 	4.96844 GeV	0.310528 % 	9.95041e-05 Gy
- tally 2: 	 	3.34552 GeV	0.209095 % 	6.70015e-05 Gy
- tally 3: 	 	1.87408 GeV	0.11713 % 	3.75326e-05 Gy
+ tally 0: 	 	4.66649 GeV	0.291655 % 	9.34567e-05 Gy
+ tally 1: 	 	4.95774 GeV	0.309859 % 	9.92897e-05 Gy
+ tally 2: 	 	3.32399 GeV	0.20775 % 	6.65703e-05 Gy
+ tally 3: 	 	1.90963 GeV	0.119352 % 	3.82445e-05 Gy
 
 ---------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 753539495, 283867118
+ Current couple of seeds = 2090874575, 496387434
 ----------------------------------------
 #
 /gun/particle ion
@@ -357,7 +357,7 @@ Index : 1     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 753539495, 283867118
+ Current couple of seeds = 2090874575, 496387434
 ----------------------------------------
 Start Run processing.
 
@@ -365,25 +365,25 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=130.85s Real=161.52s Sys=16.87s
+  User=130.43s Real=158.52s Sys=18.09s
 
  The run consists of 1000 C12[0.0] of 3.5 GeV through 20 cm  of Water (density: 1 g/cm3 )
 
- projected Range= 16.4665 cm    rms= 470.061 um 
+ projected Range= 16.467 cm    rms= 477.319 um 
 
 ---------------------------------------------------------
  Cumulated Doses : 	Edep      	Edep/Ebeam 	Dose
- tally 0: 	 	11.1451 GeV	0.318432 % 	0.000223206 Gy
- tally 1: 	 	12.9815 GeV	0.370901 % 	0.000259984 Gy
- tally 2: 	 	15.8161 GeV	0.451888 % 	0.000316752 Gy
- tally 3: 	 	24.3146 GeV	0.694704 % 	0.000486955 Gy
+ tally 0: 	 	11.1063 GeV	0.317322 % 	0.000222428 Gy
+ tally 1: 	 	12.301 GeV	0.351456 % 	0.000246354 Gy
+ tally 2: 	 	15.1061 GeV	0.431602 % 	0.000302533 Gy
+ tally 3: 	 	23.0556 GeV	0.658732 % 	0.00046174 Gy
 
 ---------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1507804140, 239611932
+ Current couple of seeds = 2002275872, 2095953353
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...
