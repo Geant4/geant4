@@ -44,7 +44,7 @@
 #include "G4PhantomBuilder.hh"
 #include "G4FemaleBuilder.hh"
 #include "G4MaleBuilder.hh"
-
+#include "G4CustomFemaleBuilder.hh"
 #include "G4RunManager.hh"
 #include "G4HumanPhantomMaterial.hh"
 #include "G4Box.hh"
@@ -78,10 +78,17 @@ G4VPhysicalVolume* G4HumanPhantomConstruction::Construct()
   //G4PhantomBuilder::SetModel(model);
   G4PhantomBuilder* builder = 0;
   
-  if (sex =="Female") builder = new G4FemaleBuilder;
+  if (sex =="Female") 
+    { 
+      if (model == "MIX") builder = new G4CustomFemaleBuilder;
+         else builder = new G4FemaleBuilder;
+    }
   else if (sex == "Male") builder = new G4MaleBuilder ;
-  
-  //builder->SetModel(model);
+  else if (sex == "Male" && model == "MIX") 
+    { 
+      G4cout<< "Custom Male is not available!!! MIRD model is selected !" << G4endl;
+      model = "MIRD";  
+      builder = new G4MaleBuilder ;} 
 
   builder->SetMotherVolume(ConstructWorld());
 
@@ -133,11 +140,18 @@ G4VPhysicalVolume* G4HumanPhantomConstruction::Construct()
     builder->BuildLeftOvary("purple", true,sensitivities["LeftOvary"]);
     builder->BuildRightOvary("purple", true,sensitivities["RightOvary"]);
     builder->BuildUterus("purple", true,sensitivities["Uterus"]);
-    builder->BuildLeftBreast("purple", true,sensitivities["LeftBreast"]); 
-    builder->BuildRightBreast("purple", true,sensitivities["RightBreast"]);
-//builder->BuildParameterisedLeftBreast("purple", false, sensitivities["RightBreast"]); 
-    //builder->BuildParameterisedRightBreast("purple", false, sensitivities["RightBreast"]);  
-  }
+
+    if (model == "ORNLFemale" || model == "MIRD")
+      {
+       builder->BuildLeftBreast("purple", true,sensitivities["LeftBreast"]); 
+       builder->BuildRightBreast("purple", true,sensitivities["RightBreast"]);
+      }
+    else if (model == "MIX")
+      {
+       builder->BuildVoxelLeftBreast("purple",false, sensitivities["LeftBreast"]); 
+       //builder->BuildParameterisedRightBreast("purple", false, sensitivities["RightBreast"]);  
+      } 
+ }
   /*  
   if(sex=="Male"){
     //    builder->BuildMaleGenitalia(sensitivities["MaleGenitalia"]);
@@ -218,4 +232,8 @@ if (model == "ORNLMale")
       G4cout<<" >> Phantom " << model << " will be built."<<G4endl;
     }
 
+if (model == "MIX")
+    {
+      G4cout<<" >> Phantom " << model << " will be built."<<G4endl;
+    }
 }

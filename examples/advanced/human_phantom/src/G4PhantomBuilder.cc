@@ -45,6 +45,7 @@
 G4PhantomBuilder::G4PhantomBuilder(): model("MIRD")
 {  
   // sex can be "female" or "male"
+  body = 0;
   motherVolume = 0;
   headVolume = 0;
   trunkVolume = 0;
@@ -341,7 +342,7 @@ void G4PhantomBuilder::SetModel(G4String modelFlag)
 {
   model = modelFlag;
 
-  if(model=="MIRD") body = new G4MIRDBodyFactory();
+  if(model=="MIRD" || model =="MIX") body = new G4MIRDBodyFactory();
   if(model=="ORNLFemale") body = new G4ORNLFemaleBodyFactory();
   if(model=="ORNLMale") body = new G4ORNLMaleBodyFactory();
 }

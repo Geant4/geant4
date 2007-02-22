@@ -84,7 +84,7 @@ public:
   virtual void BuildUterus(const G4String&,G4bool,G4bool){return;};
   virtual void BuildLeftBreast(const G4String&,G4bool,G4bool){return;};
   virtual void BuildRightBreast(const G4String&,G4bool,G4bool){return;};
-  virtual void BuildParameterisedLeftBreast(const G4String&,G4bool,G4bool){return;};
-  virtual void BuildParameterisedRightBreast(const G4String&,G4bool,G4bool){return;};
+  virtual void BuildVoxelLeftBreast(const G4String&,G4bool,G4bool){return;};
+  virtual void BuildVoxelRightBreast(const G4String&,G4bool,G4bool){return;};
 };
 #endif

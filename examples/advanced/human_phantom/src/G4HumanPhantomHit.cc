@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HumanPhantomHit.cc,v 1.6 2007-02-22 10:08:43 guatelli Exp $
+// $Id: G4HumanPhantomHit.cc,v 1.7 2007-02-22 14:58:54 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
