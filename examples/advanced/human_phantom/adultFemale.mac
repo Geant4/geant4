@@ -84,5 +84,5 @@
 #
 # Run Particles
 #
-#/control/execute run.mac
+/control/execute run.mac
 #/geometry/test/grid_test

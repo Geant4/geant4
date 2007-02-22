@@ -66,27 +66,16 @@ G4VPhysicalVolume* G4MIRDRightBreast::Construct(const G4String& volumeName,G4VPh
  G4double ax= 4.95* cm;
  G4double by= 4.35* cm;
  G4double cz= 4.15*cm;
- G4double zcut1= -4.15 *cm;
- G4double zcut2= 4.15*cm;
-
+ 
  G4Ellipsoid* oneRightBreast = new G4Ellipsoid("OneRightBreast",
-				      ax, by, cz,
-				      zcut1, zcut2);
+				      ax, by, cz);
 
- G4double dx= 17.25* cm;
- G4double dy= 9.80* cm;
- G4double dz= 31.55*cm;
+ G4double dx= 20.* cm;
+ G4double dy= 10.* cm;
+ G4double dz= 35.* cm;
 
  G4EllipticalTube* Trunk = new G4EllipticalTube("Trunk",dx, dy, dz );
 
- /*
- G4UnionSolid* RightBreastUnion =  new G4UnionSolid("RightBreastUnion",
-					       oneRightBreast,oneRightBreast,
-					       0,
-					       G4ThreeVector(17.26*cm,
-							     0. *cm,
-							     0. *cm));
- */
 					       
  G4RotationMatrix* rm_relative = new G4RotationMatrix();
  rm_relative -> rotateX(90. * degree);
@@ -95,21 +84,24 @@ G4VPhysicalVolume* G4MIRDRightBreast::Construct(const G4String& volumeName,G4VPh
 						      oneRightBreast,
 						      Trunk,
 						      rm_relative,
-                                                      G4ThreeVector(8.63*cm,
+                                                      G4ThreeVector(10.*cm,
 								    0.0*cm,
-								    -8.4854*cm));
+								    -8.66*cm));
 
 
   G4LogicalVolume* logicRightBreast = new G4LogicalVolume(breast, soft,"logical" + volumeName, 0, 0,0);
 
     
   // Define rotation and position here!
-  G4VPhysicalVolume* physRightBreast = new G4PVPlacement(0,G4ThreeVector(-8.63*cm, 46.87* cm, 8.4854 *cm),
-      			       "physicalRightBreast",
-  			       logicRightBreast,
-			       mother,
-			       false,
-			       0, true);
+  G4VPhysicalVolume* physRightBreast = new G4PVPlacement(0,
+							 G4ThreeVector(-10.*cm, 
+								       52.* cm,
+								       8.66 *cm),
+							 "physicalRightBreast",
+							 logicRightBreast,
+							 mother,
+							 false,
+							 0, true);
 
   // Sensitive Body Part
   if (sensitivity==true)

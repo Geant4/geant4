@@ -32,7 +32,7 @@
 #ifndef G4FemaleBuilder_h
 #define G4FemaleBuilder_h 1
 
-#include "G4VPhysicalVolume.hh"
+//#include "G4VPhysicalVolume.hh"
 
 #include "G4PhantomBuilder.hh"
 
@@ -42,8 +42,8 @@ public:
   G4FemaleBuilder();
   ~G4FemaleBuilder();
 
-  void BuildLeftBreast(const G4String&, G4bool, G4bool){;}
-  void BuildRightBreast(const G4String&, G4bool, G4bool){;}
+  void BuildLeftBreast(const G4String&, G4bool, G4bool);
+  void BuildRightBreast(const G4String&, G4bool, G4bool);
   void BuildParameterisedLeftBreast(const G4String&, G4bool, G4bool){;};
   void BuildParameterisedRightBreast(const G4String&, G4bool, G4bool){;};
   void BuildLeftOvary(const G4String&, G4bool, G4bool);
