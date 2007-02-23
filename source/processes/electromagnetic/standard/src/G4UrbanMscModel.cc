@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel.cc,v 1.42 2007-02-15 15:03:54 urban Exp $
+// $Id: G4UrbanMscModel.cc,v 1.43 2007-02-23 14:54:00 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -130,6 +130,7 @@
 // 11-02-07 modified stepping algorithm for skin=0
 // 15-02-04 new data member: smallstep, small steps with single scattering
 //          before + after boundary for skin > 1
+// 23-02-23 use tPathLength inside ComputeStep instead of geombig
 //
 
 // Class Description:
@@ -720,7 +721,7 @@ void G4UrbanMscModel::GeomLimit(const G4Track&  track)
   if((track.GetVolume() != 0) &&
      (track.GetVolume() != navigator->GetWorldVolume()))  
   {
-    const G4double cstep = geombig;
+    const G4double cstep = tPathLength;
     geomlimit = navigator->ComputeStep(
                   track.GetStep()->GetPreStepPoint()->GetPosition(),
                   track.GetMomentumDirection(),
