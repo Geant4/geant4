@@ -18,7 +18,9 @@ Some of the development/fixes included since the last reference tag are:
 
 Summarised, the list of changes is the following:
 
-geometry/solids/specific                         geom-specific-V08-02-00
+(*) Tags also included in release 8.2.p01.
+
+geometry/solids/specific                         geom-specific-V08-02-00 (*)
 ------------------------
 - Do not scale reducible-polygon in G4Polyhedra::Reset() method.
   The 'original_parameters' structure offered as input through the accessors
@@ -35,18 +37,18 @@ graphics_reps                                    greps-V08-02-00
 - G4Colour: replaced static data members by static functions that
   create and copy out the relevant colours.
 
-materials                                        materials-V08-02-00
+materials                                        materials-V08-02-00 (*)
 ---------
 - G4Material: fill 'fAtomVector' in the case, when material
   is built from element mass fractions.
 - G4NistMaterialBuilder: added liquids O2 and N2.
 - G4NistElementBuilder: added protection Z<=101.
 
-physics_lists                                    phys-lists-V08-02-00
+physics_lists                                    phys-lists-V08-02-00 (*)
 -------------
 - Fix in QGSP_BIC_HP: activate missing HP elastic physics.
 
-processes/electromagnetic/standard               emstand-V08-02-02
+processes/electromagnetic/standard               emstand-V08-02-02 (*)
 ----------------------------------
 - Use SetEmModel(index) and added SetFluctModel() from G4VEnergyLossProcess
   in eIonisation, hIonisation, ionIonisation, eBremstrahlung.
@@ -56,7 +58,7 @@ processes/electromagnetic/standard               emstand-V08-02-02
     'GeomStepLength'.
 - Fixed crash in PrintInfo() methods.
 
-processes/electromagnetic/utils                  emutils-V08-02-02
+processes/electromagnetic/utils                  emutils-V08-02-02 (*)
 -------------------------------
 - G4LossTableBuilder:
   o Fill new vector for dedx (do not reuse old).
@@ -87,41 +89,41 @@ processes/hadronic
     + No longer use dispatch pointer to call data store methods.
     + Data members currentZ, currentN and methods GetCurrentZ(),
       GetCurrentN() removed as no longer needed.
-- models/chiral_inv_phase_space/body (hadr-chips-body-V08-02-03)
+- models/chiral_inv_phase_space/body (hadr-chips-body-V08-02-03) (*)
   o Fixed cases of division by 0 in G4Quasmon and G4QNucleus.
     and other cases of generation of NaN.
-- models/chiral_inv_phase_space/interface (hadr-chips-inter-V08-02-01)
+- models/chiral_inv_phase_space/interface (hadr-chips-inter-V08-02-01) (*)
   o Fixed bug of generation of NaN in G4QElastic observed in complicated
     event for the multi-projectile case.
-- models/de_excitation (hadr-deex-V08-02-00)
+- models/de_excitation (hadr-deex-V08-02-00) (*)
   o Fission: fixed several memory leaks in G4ParaFissionModel.
-- models/management (hadr-modman-V08-02-00)
+- models/management (hadr-modman-V08-02-00) (*)
   o For error reporting, added model name arguments and default names to
     constructors for classes G4HadronicInteraction, G4InelasticInteraction,
     G4VIntraNuclearTransportModel and G4VPreCompoundModel.
-- models/parton_string/hadronization (had-hadronization-V08-02-00)
+- models/parton_string/hadronization (had-hadronization-V08-02-00) (*)
   o G4ExcitedStringDecay::EnergyAndMomentumCorrector(): fixed bug which did
     stop correction even if not yet converged; check on convergence must
     check that scale-1 is close to 0, and not less than 0.
-- models/parton_string/management (had-partonstring-mgt-V08-02-00)
+- models/parton_string/management (had-partonstring-mgt-V08-02-00) (*)
   o Debugged method Dump() added in G4InteractionContent to print object.
   o Debugged output in G4VPartonStringModel checking E-p conservation of
     string model.
-- models/parton_string/qgsm (hadr-qgsm-V08-02-01)
+- models/parton_string/qgsm (hadr-qgsm-V08-02-01) (*)
   o Corrected E-p non-conservation in QGS. In 4QGSMSplitableHadron,
     the smaller of the lightcone momenta Q+/Q- was ignored.
   o Fixed division by 0 in G4QGSMSplitableHadron::SampleX().
   o Added debugging output to several classes.
-- models/util (hadr-mod-util-V08-02-00)
+- models/util (hadr-mod-util-V08-02-00) (*)
   o Added method to G4Parton for setting momentum using both + and -
     momentum component
   o G4Fragment: more info on warning output of negative excitation energy.
-- processes (hadr-proc-V08-02-00)
+- processes (hadr-proc-V08-02-00) (*)
   o Added process names to G4HadronElasticProcess, G4HadronCaptureProcess,
     G4HadronFissionProcess.
   o Cleaned up commented-out code.
 
-run                                              run-V08-02-00
+run                                              run-V08-02-00 (*)
 ---
 - Fix to make G4RunManager::NumberOfEventToBeStored() work properly.
   Addressing problem report #925.
@@ -157,17 +159,17 @@ visualization                                    vis-V08-02-01
 examples                                         examples-V08-02-01
 --------
 - Updated reference outputs.
-- advanced/underground_physics (underground_physics-V08-02-00)
+- advanced/underground_physics (underground_physics-V08-02-00) (*)
   o Removed uninitialized 'UserLimitsForXenon'.
 - extended/electromagnetic/TestEm2 (testem2-V08-02-00)
   o Uncommented hadron ionisation in Livermore builder.
-- extended/electromagnetic/TestEm7 (testem7-V08-02-00)
+- extended/electromagnetic/TestEm7 (testem7-V08-02-00) (*)
   o Cleanup of macros.
 - extended/electromagnetic/TestEm9 (testem9-V08-02-00)
   o Uncommented hadron ionisation in Livermore builder.
 - extended/electromagnetic/TestEm12 (testem12-V08-02-00)
   o Uncommented hadron ionisation in Livermore builder.
-- extended/electromagnetic/TestEm16 (testem16-V08-02-00)
+- extended/electromagnetic/TestEm16 (testem16-V08-02-00) (*)
   o Added HistoManager and HistoMessenger.
   o Added command to modify upper step limit.
   o Minor fix to GNUmakefile.
