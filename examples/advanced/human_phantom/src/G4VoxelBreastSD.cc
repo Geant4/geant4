@@ -54,8 +54,9 @@ G4bool G4VoxelBreastSD::ProcessHits(G4Step* aStep,G4TouchableHistory* ROhist)
   if(!ROhist) return false;
    
     // Check the volume
-  if(aStep -> GetPreStepPoint() -> GetPhysicalVolume() -> 
-     GetName() != "innerLeftBreast")
+  if((aStep -> GetPreStepPoint() -> GetPhysicalVolume() -> 
+     GetName() != "LeftBreast") && (aStep -> GetPreStepPoint() -> GetPhysicalVolume() -> 
+     GetName() != "RightBreast"))
     return false;
 
   G4double edep = aStep->GetTotalEnergyDeposit();
@@ -64,13 +65,24 @@ G4bool G4VoxelBreastSD::ProcessHits(G4Step* aStep,G4TouchableHistory* ROhist)
  if(edep != 0)                       
 	    { 
              
-#ifdef G4ANALYSIS_USE
-    G4int sector = ROhist -> GetReplicaNumber();
-    G4int slice = ROhist -> GetReplicaNumber(1);	
-    G4HumanPhantomAnalysisManager* analysis = 
-		G4HumanPhantomAnalysisManager::getInstance();   
-             
-    analysis -> innerBreastEnergyDep(slice,sector,edep/MeV);               
+#ifdef G4ANALYSIS_USE 
+G4HumanPhantomAnalysisManager* analysis = 
+  G4HumanPhantomAnalysisManager::getInstance();   
+
+ if (aStep -> GetPreStepPoint() -> GetPhysicalVolume() -> 
+     GetName() == "LeftBreast")
+   {
+     G4int sector = ROhist -> GetReplicaNumber();
+     G4int slice = ROhist -> GetReplicaNumber(1);	             
+     analysis -> voxelLeftBreastEnergyDeposit(slice,sector,edep/MeV);               
+   }
+ else if (aStep -> GetPreStepPoint() -> GetPhysicalVolume() -> 
+	  GetName() == "RightBreast")
+   {
+     G4int sector = ROhist -> GetReplicaNumber();
+     G4int slice = ROhist -> GetReplicaNumber(1); 
+     analysis -> voxelRightBreastEnergyDeposit(slice,sector,edep/MeV);    
+   }
 #endif	
     }
   return true;

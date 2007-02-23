@@ -149,7 +149,7 @@ G4VPhysicalVolume* G4HumanPhantomConstruction::Construct()
     else if (model == "MIX")
       {
        builder->BuildVoxelLeftBreast("purple",false, sensitivities["LeftBreast"]); 
-       //builder->BuildParameterisedRightBreast("purple", false, sensitivities["RightBreast"]);  
+       builder->BuildVoxelRightBreast("purple", false, sensitivities["RightBreast"]);  
       } 
  }
   /*  

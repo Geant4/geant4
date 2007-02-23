@@ -28,36 +28,20 @@
 // with the design in a forthcoming publication, and subject to a 
 // design and code review.
 //
-#include "G4VoxelBreastFactory.hh"
-#include "G4VoxelLeftBreast.hh"
-#include "G4VoxelRightBreast.hh"
+#ifndef G4VoxelRightBreast_h
+#define G4VoxelRightBreast_h 1
 
-G4VoxelBreastFactory::G4VoxelBreastFactory()
+#include "G4VPhysicalVolume.hh"
+#include "G4VOrgan.hh"
+
+class G4VPhysicalVolume;
+
+class G4VoxelRightBreast: public G4VOrgan
 {
-  // Map with name of the organ and pointer to the MIRDOrgan class
-  //  organ["ParameterisedRightBreast"] = new G4ParameterisedRightBreast();
-  organ["LeftBreast"] = new G4VoxelLeftBreast();
-  organ["RightBreast"] = new G4VoxelRightBreast();
-}
-
-G4VoxelBreastFactory::~G4VoxelBreastFactory()
-{ 
-  delete organ["RightBreast"]; 
-  organ["RightBreast"]=0;
-
-  delete organ["LeftBreast"]; 
-  organ["LeftBreast"]=0;
-}
-
-
-
-G4VPhysicalVolume* G4VoxelBreastFactory::CreateOrgan(const G4String& organ_name,
-						     G4VPhysicalVolume* motherVolume,
-						     const G4String& colourName, 
-						     G4bool visAttribute,
-						     G4bool sensitivity)
-{
- return organ[organ_name] -> Construct(organ_name,motherVolume,colourName, visAttribute, sensitivity);
-}
-
-
+public:
+  G4VoxelRightBreast();
+  ~G4VoxelRightBreast();
+  G4VPhysicalVolume* Construct(const G4String&, G4VPhysicalVolume*, 
+			       const G4String&,G4bool, G4bool);
+};
+#endif

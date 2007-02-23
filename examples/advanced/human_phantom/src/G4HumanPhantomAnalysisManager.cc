@@ -41,7 +41,7 @@ G4HumanPhantomAnalysisManager* G4HumanPhantomAnalysisManager::instance = 0;
 
 G4HumanPhantomAnalysisManager::G4HumanPhantomAnalysisManager() 
   :  aFact(0), treeFact(0),theTree(0), histogramFactory(0),tupFact(0),
-     ntuple(0), innerBreast(0)
+     ntuple(0), voxelLeftBreast(0), voxelRightBreast(0)
 { 
   aFact = AIDA_createAnalysisFactory();
   treeFact = aFact -> createTreeFactory();
@@ -49,8 +49,11 @@ G4HumanPhantomAnalysisManager::G4HumanPhantomAnalysisManager()
 
 G4HumanPhantomAnalysisManager::~G4HumanPhantomAnalysisManager() 
 {
-  delete innerBreast;
-  innerBreast = 0;
+  delete voxelRightBreast;
+  voxelRightBreast = 0;
+
+  delete voxelLeftBreast;
+  voxelLeftBreast = 0;
 
   delete ntuple;
   ntuple = 0;
@@ -86,10 +89,16 @@ void G4HumanPhantomAnalysisManager::book()
   tupFact  = aFact -> createTupleFactory( *theTree ); 
 
 
-  innerBreast = histogramFactory->createHistogram2D("100", 
-			      "Edep(MeV) in innerBreast, x= slice, y= sector",
+  voxelLeftBreast = histogramFactory->createHistogram2D("100", 
+			      "Edep(MeV) in LeftBreast, x= slice, y= sector",
 						    11, -0.5, 10.5,
 						    11, -0.5, 10.5); 
+
+  voxelRightBreast = histogramFactory->createHistogram2D("110", 
+			      "Edep(MeV) in RightBreast, x= slice, y= sector",
+						    11, -0.5, 10.5,
+						    11, -0.5, 10.5); 
+
   
   // Defining the ntuple columns' name 
   std::string columnNames = "int id; float energy";
@@ -122,10 +131,16 @@ void G4HumanPhantomAnalysisManager::bodyPartEnergyDeposit(G4int bodyPartID,
   ntuple->addRow();
 }
 
-void G4HumanPhantomAnalysisManager::innerBreastEnergyDep(G4int slice, G4int sector, G4double edep)
+void G4HumanPhantomAnalysisManager::voxelLeftBreastEnergyDeposit(G4int slice, G4int sector, G4double edep)
 {
   // G4cout << "analisis " << slice << " "<< sector << " "<< edep << G4endl;
-  innerBreast -> fill(slice,sector, edep);
+  voxelLeftBreast -> fill(slice,sector, edep);
+}
+
+void G4HumanPhantomAnalysisManager::voxelRightBreastEnergyDeposit(G4int slice, G4int sector, G4double edep)
+{
+  // G4cout << "analisis " << slice << " "<< sector << " "<< edep << G4endl;
+  voxelRightBreast -> fill(slice,sector, edep);
 }
 
 void G4HumanPhantomAnalysisManager::finish() 

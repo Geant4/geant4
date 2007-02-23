@@ -28,7 +28,7 @@
 // with the design in a forthcoming publication, and subject to a 
 // design and code review.
 //
-#include "G4VoxelLeftBreast.hh"
+#include "G4VoxelRightBreast.hh"
 #include "globals.hh"
 #include "G4SDManager.hh"
 #include "G4VisAttributes.hh"
@@ -42,20 +42,20 @@
 #include "G4VPhysicalVolume.hh"
 #include "G4PVPlacement.hh"
 #include "G4PVReplica.hh"
-#include "G4VoxelLeftBreastROGeometry.hh"
+#include "G4VoxelRightBreastROGeometry.hh"
 #include "G4VoxelBreastSD.hh"
 #include "G4HumanPhantomColour.hh"
-G4VoxelLeftBreast::G4VoxelLeftBreast()
+G4VoxelRightBreast::G4VoxelRightBreast()
 {
 }
 
-G4VoxelLeftBreast::~G4VoxelLeftBreast()
+G4VoxelRightBreast::~G4VoxelRightBreast()
 {
 
 
 }
 
-G4VPhysicalVolume* G4VoxelLeftBreast::Construct(const G4String& volumeName,
+G4VPhysicalVolume* G4VoxelRightBreast::Construct(const G4String& volumeName,
 						G4VPhysicalVolume* mother, 
 						const G4String& colourName, 
 						G4bool wireFrame,G4bool sensitivity)
@@ -93,18 +93,18 @@ G4VPhysicalVolume* G4VoxelLeftBreast::Construct(const G4String& volumeName,
   G4RotationMatrix* matrix = new G4RotationMatrix();
   matrix -> rotateX(-90.* degree);
   matrix -> rotateY(180.* degree);
-  matrix -> rotateZ(-18. * degree);
+  matrix -> rotateZ(18. * degree);
 
 
-  G4VPhysicalVolume* physBreast = new G4PVPlacement(matrix,G4ThreeVector(10.*cm, 52.* cm, 8.7 *cm),
-     			       "physicalVoxelLeftBreast",
+  G4VPhysicalVolume* physBreast = new G4PVPlacement(matrix,G4ThreeVector(-10.*cm, 52.* cm, 8.7 *cm),
+     			       "physicalVoxelRightBreast",
   		       breast_log,
   		       mother,
   		       false,
   		       0, true);
 
  G4VPhysicalVolume* physInnerBreast = new G4PVPlacement(0,0,
-      			       "LeftBreast",
+      			       "RightBreast",
   			       innerBreast_log,
 			       physBreast,
 			       false,
@@ -161,7 +161,7 @@ G4VPhysicalVolume* G4VoxelLeftBreast::Construct(const G4String& volumeName,
   // voxelz_log -> SetVisAttributes(innerBreastVisAtt);
   // voxel_log -> SetVisAttributes(innerBreastVisAtt);
 
-  G4cout << "Voxel Left Breast created !!!!!!" << G4endl;
+  G4cout << "Voxel Right Breast created !!!!!!" << G4endl;
   
 if (sensitivity==true)
   { 
@@ -171,9 +171,9 @@ if (sensitivity==true)
        
        G4VoxelBreastSD* breastSD = new G4VoxelBreastSD(sensitiveDetectorName);
    
-       G4String ROGeometryName = "VoxelLeftROGeometry";
+       G4String ROGeometryName = "VoxelRightROGeometry";
        
-        G4VoxelLeftBreastROGeometry* phantomROGeometry = new G4VoxelLeftBreastROGeometry(ROGeometryName);
+        G4VoxelRightBreastROGeometry* phantomROGeometry = new G4VoxelRightBreastROGeometry(ROGeometryName);
         phantomROGeometry -> BuildROGeometry();
 	breastSD -> SetROgeometry(phantomROGeometry);
         SDman -> AddNewDetector(breastSD);

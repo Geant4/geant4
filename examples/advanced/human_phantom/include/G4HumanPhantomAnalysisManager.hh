@@ -57,7 +57,8 @@ public:
 
   void book();
   void bodyPartEnergyDeposit(G4int,G4double);
-  void innerBreastEnergyDep(G4int, G4int, G4double);
+  void voxelLeftBreastEnergyDeposit(G4int, G4int, G4double);
+  void voxelRightBreastEnergyDeposit(G4int, G4int, G4double);
   void finish();
 
 private:
@@ -70,7 +71,8 @@ private:
   AIDA::IHistogramFactory* histogramFactory; 
   AIDA::ITupleFactory     *tupFact;
   AIDA::ITuple *ntuple;
-  AIDA::IHistogram2D*      innerBreast;
+  AIDA::IHistogram2D*      voxelLeftBreast;
+  AIDA::IHistogram2D*      voxelRightBreast;
 };
 #endif
 #endif

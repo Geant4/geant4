@@ -85,7 +85,7 @@ void G4CustomFemaleBuilder::BuildVoxelLeftBreast(const G4String& colourName,
     G4Exception("The world volume is missing !!!!!");
  
   G4VBodyFactory* customBody = new G4VoxelBreastFactory();
-  customBody -> CreateOrgan("VoxelLeftBreast",motherVolume, colourName,
+  customBody -> CreateOrgan("LeftBreast",motherVolume, colourName,
 		      solidVis, sensitivity);  
   delete customBody;
 }
@@ -95,10 +95,11 @@ void G4CustomFemaleBuilder::BuildVoxelRightBreast(const G4String& colourName,
 				       G4bool solidVis, 
 				       G4bool sensitivity)
 {
-  //if (motherVolume == 0)
-  //G4Exception("The world volume is missing !!!!!");
+  if (motherVolume == 0)
+  G4Exception("The world volume is missing !!!!!");
 
-  //body -> CreateOrgan("RightBreast",motherVolume, colourName,
-  //	      solidVis, sensitivity);  
-
+  G4VBodyFactory* customBody = new G4VoxelBreastFactory();
+  customBody -> CreateOrgan("RightBreast",motherVolume, colourName,
+                       solidVis, sensitivity);  
+  delete customBody;
 }

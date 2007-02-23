@@ -23,51 +23,28 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// Authors: S. Guatelli and M. G. Pia, INFN Genova, Italy
+// 
+// Based on code developed by the undergraduate student G. Guerrieri 
+// Note: this is a preliminary beta-version of the code; an improved 
+// version will be distributed in the next Geant4 public release, compliant
+// with the design in a forthcoming publication, and subject to a 
+// design and code review.
 //
-// $Id: G4HumanPhantomHit.cc,v 1.8 2007-02-23 09:23:13 guatelli Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
 
-#include "G4HumanPhantomHit.hh"
-#include "G4UnitsTable.hh"
-#include "G4VVisManager.hh"
-#include "G4Circle.hh"
-#include "G4Colour.hh"
-#include "G4VisAttributes.hh"
+#ifndef G4VoxelRightBreastROGeometry_h
+#define G4VoxelRightBreastROGeometry_h 
 
-G4Allocator<G4HumanPhantomHit> G4HumanPhantomHitAllocator;
+#include "G4VReadOutGeometry.hh"
 
-
-G4HumanPhantomHit::G4HumanPhantomHit() {}
-
-G4HumanPhantomHit::~G4HumanPhantomHit() {}
-
-G4HumanPhantomHit::G4HumanPhantomHit(const G4HumanPhantomHit& right)
-  : G4VHit()
+class G4VoxelRightBreastROGeometry : public G4VReadOutGeometry
 {
-  bodyPartID = right.bodyPartID;
-  edep = right.edep;
-}
+public:
+  G4VoxelRightBreastROGeometry(G4String aString);
+  ~G4VoxelRightBreastROGeometry();
 
-const G4HumanPhantomHit& G4HumanPhantomHit::operator=(const G4HumanPhantomHit& right)
-{
-  bodyPartID = right.bodyPartID;
-  edep  = right.edep;
-  return *this;
-}
-
-G4int G4HumanPhantomHit::operator==(const G4HumanPhantomHit& right) const
-{
-  return (this==&right) ? 1 : 0;
-}
-
-void G4HumanPhantomHit::Draw()
-{
-}
-
-void G4HumanPhantomHit::Print()
-{
-    G4cout << "Energy deposit: " << G4BestUnit(edep,"Energy")
-	 << "BodyPartID: " << bodyPartID << G4endl;
-}
-
+private:
+  G4VPhysicalVolume* Build();
+  G4VPhysicalVolume* ROvoxel_phys;
+};
+#endif

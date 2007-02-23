@@ -8,7 +8,7 @@
 #
 # Choose model: ORNLFemale, ORNLMale, MIRD, MIX
 #
-/phantom/setPhantomModel MIRD
+/phantom/setPhantomModel MIX
 #/phantom/setPhantomModel ORNLFemale
 #
 # Choose Sex of Phantom: Male or Female
@@ -77,12 +77,12 @@
 #/control/execute vrmlVis.mac
 #
 # Visualize Phantom with OPENGL
-/control/execute openGLVis.mac
+#/control/execute openGLVis.mac
 #
 # Visualize Phantom with DAWN
 #/control/execute dawnVis.mac
 #
 # Run Particles
 #
-#/control/execute run.mac
+/control/execute run.mac
 #/geometry/test/grid_test

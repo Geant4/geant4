@@ -31,8 +31,8 @@
 // with the design in a forthcoming publication, and subject to a 
 // design and code review.
 //
-#include "G4VoxelLeftBreastROGeometry.hh"
-#include "G4HumanDummyLeftBreastSD.hh"
+#include "G4VoxelRightBreastROGeometry.hh"
+#include "G4HumanDummyRightBreastSD.hh"
 #include "G4LogicalVolume.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4PVPlacement.hh"
@@ -43,17 +43,17 @@
 #include "G4Material.hh"
 #include "G4Tubs.hh"
 
-G4VoxelLeftBreastROGeometry::G4VoxelLeftBreastROGeometry(G4String aString):
+G4VoxelRightBreastROGeometry::G4VoxelRightBreastROGeometry(G4String aString):
                                                
   G4VReadOutGeometry(aString), ROvoxel_phys(0)
 {
 }
 
-G4VoxelLeftBreastROGeometry::~G4VoxelLeftBreastROGeometry()
+G4VoxelRightBreastROGeometry::~G4VoxelRightBreastROGeometry()
 {
 }
 
-G4VPhysicalVolume* G4VoxelLeftBreastROGeometry::Build()
+G4VPhysicalVolume* G4VoxelRightBreastROGeometry::Build()
 {
  
   // A dummy material is used to fill the volumes of the readout geometry.
@@ -93,24 +93,24 @@ G4VPhysicalVolume* G4VoxelLeftBreastROGeometry::Build()
   
   // RO geometry is defined for the inner tube of the breast
  
-  G4Tubs* ROinnerLeftBreast = new G4Tubs("innerVoxelLeftBreast",
+  G4Tubs* ROinnerRightBreast = new G4Tubs("innerRightBreast",
 				   rmin, rmax,
 				   zz/2., startPhi, spanningPhi);
   
-  G4LogicalVolume* ROinnerLeftBreast_log = new G4LogicalVolume(ROinnerLeftBreast,
+  G4LogicalVolume* ROinnerRightBreast_log = new G4LogicalVolume(ROinnerRightBreast,
 							dummyMat,
-							"InnerLeftBreast",
+							"InnerRightBreast",
 							 0, 0, 0);
   G4RotationMatrix* matrix = new G4RotationMatrix();
   matrix -> rotateX(-90.* degree);
   matrix -> rotateY(180.* degree);
-  matrix -> rotateZ(-18. * degree);
+  matrix -> rotateZ(18. * degree);
 
 
- G4VPhysicalVolume* ROphysInnerLeftBreast = new G4PVPlacement(matrix,
-							  G4ThreeVector(10.*cm, 52.* cm, 8.7 *cm),
-      			       "physicalVoxelLeftBreast",
-  			       ROinnerLeftBreast_log,
+ G4VPhysicalVolume* ROphysInnerRightBreast = new G4PVPlacement(matrix,
+							  G4ThreeVector(-10.*cm, 52.* cm, 8.7 *cm),
+      			       "innerRightBreast",
+  			       ROinnerRightBreast_log,
 			       ROWorldPhys,
 			       false,
 			       0);
@@ -127,7 +127,7 @@ G4VPhysicalVolume* G4VoxelLeftBreastROGeometry::Build()
 
   G4LogicalVolume* ROvoxelz_log = new G4LogicalVolume(ROvoxelz, dummyMat, "voxelz_log",0 , 0, 0);
   
-  G4VPhysicalVolume* ROvoxelz_phys = new G4PVReplica("LinearArray", ROvoxelz_log, ROphysInnerLeftBreast,
+  G4VPhysicalVolume* ROvoxelz_phys = new G4PVReplica("LinearArray", ROvoxelz_log, ROphysInnerRightBreast,
 						   kZAxis, nslice, zz_voxels/nslice);
 
   G4double voxel_height = (zz_voxels/nslice);
@@ -151,7 +151,7 @@ G4VPhysicalVolume* G4VoxelLeftBreastROGeometry::Build()
 
   //delete matrix;
 						  
-  G4HumanDummyLeftBreastSD *dummySD = new G4HumanDummyLeftBreastSD;
+  G4HumanDummyRightBreastSD* dummySD = new G4HumanDummyRightBreastSD;
   ROvoxel_log -> SetSensitiveDetector(dummySD);
 
   return ROWorldPhys;
