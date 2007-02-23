@@ -64,12 +64,15 @@ List of fixes included in this public patch since the public release 8.2:
   o Hadronic Processes:
     ------------------
     + models/binary_cascade:
-      o G4BinaryCascade::Capture(): added protection agaist division by zero.
+      o G4BinaryCascade::Capture(): added protection against division by zero.
     + models/chiral_inv_phase_space:
       o Fixed cases of division by 0 in G4Quasmon and G4QNucleus.
         and other cases of generation of NaN.
+        Reduces segmentation faults in CHIPS-based models and physics lists
+        such as QGSC.
       o Fixed bug of generation of NaN in G4QElastic observed in complicated
         event for the multi-projectile case.
+        Reduces segmentation faults in elastic scattering.
     + models/de_excitation:
       o Evaporation: added protection to exclude negative probabilities from
         the "competitive channel sum". Together with the fix below for fission
@@ -77,6 +80,8 @@ List of fixes included in this public patch since the public release 8.2:
         nonetheless.
       o Fission: fixed probability to no longer be negative. Is now equivalent
         to what is written in the Physics Reference Manual.
+        The above two fixes also affect the precompound model which invokes
+        these models.
       o Fission: fixed several memory leaks in G4ParaFissionModel.
     + models/low_energy:
       o G4LElastic: added protection against sqrt() of negative value.
@@ -95,6 +100,7 @@ List of fixes included in this public patch since the public release 8.2:
       o Debugged method Dump() added in G4InteractionContent to print object.
       o Debugged output in G4VPartonStringModel checking E-p conservation of
         string model.
+        The above two points provide improved, more detailed verbose output.
     + models/parton_string/qgsm:
       o Corrected E-p non-conservation in QGS. In G4QGSMSplitableHadron,
         the smaller of the lightcone momenta Q+/Q- was ignored.
@@ -102,11 +108,11 @@ List of fixes included in this public patch since the public release 8.2:
       o Added debugging output to several classes.
     + models/util:
       o Added method to G4Parton for setting momentum using both + and -
-        momentum component
+        momentum component. Should help in improving shower shapes.
       o G4Fragment: more info on warning output of negative excitation energy.
     + processes:
       o Added process names to G4HadronElasticProcess, G4HadronCaptureProcess,
-        G4HadronFissionProcess.
+        G4HadronFissionProcess.  This will allow more detailed error reporting.
       o Cleaned up commented-out code.
     + stopping:
       o G4MuMinusCaptureCascade: added sampling of random vector of e- in
@@ -116,6 +122,9 @@ List of fixes included in this public patch since the public release 8.2:
         Addressing problem report #926.
     + util:
       o G4HadFinalState: corrected initialisation of energy deposition.
+        Fix affects elastically scattered neutrons and probably most 
+        hadronic models. Reduces the number of events in which the summed
+        energy of final particles exceeds that of the incident particle.
 
   o Materials:
     ---------
