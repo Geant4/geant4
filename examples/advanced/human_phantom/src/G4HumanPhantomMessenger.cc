@@ -49,10 +49,10 @@ G4HumanPhantomMessenger::G4HumanPhantomMessenger(G4HumanPhantomConstruction* myU
   bpDir->SetGuidance("Add Body Part to Phantom");
 
   modelCmd = new G4UIcmdWithAString("/phantom/setPhantomModel",this);
-  modelCmd->SetGuidance("Set sex of Phantom: MIRD, ORNLFemale, ORNLMale, MIX.");
+  modelCmd->SetGuidance("Set sex of Phantom: MIRD, ORNLFemale, ORNLMale, MIX, MIRDHead, ORNLHead.");
   modelCmd->SetParameterName("phantomModel",true);
   modelCmd->SetDefaultValue("MIRD");
-  modelCmd->SetCandidates("MIRD ORNLFemale ORNLMale MIX");
+  modelCmd->SetCandidates("MIRD ORNLFemale ORNLMale MIX MIRDHead ORNLHead");
   modelCmd->AvailableForStates(G4State_PreInit,G4State_Idle); 
 
   sexCmd = new G4UIcmdWithAString("/phantom/setPhantomSex",this);

@@ -128,7 +128,7 @@ void G4PhantomBuilder::BuildRightArmBone(const G4String& colourName, G4bool soli
 void G4PhantomBuilder::BuildHead(const G4String& colourName, G4bool solidVis, G4bool sensitivity)
 { 
   if (motherVolume == 0)
-    G4Exception("The trunk volume is missing !!!!!");
+    G4Exception("The mother volume is missing !!!!!");
   
   G4cout <<"MotherVolume: " <<  motherVolume -> GetName()<< G4endl;
   G4cout << "sensitivity : "<< sensitivity << G4endl; 
