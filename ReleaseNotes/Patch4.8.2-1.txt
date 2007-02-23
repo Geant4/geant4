@@ -34,7 +34,7 @@ List of fixes included in this public patch since the public release 8.2:
 
   o Global:
     ------
-    + Changed date for public patch-01 to release 8.2.
+    + Changed date for patch-01 to release 8.2.
 
   o Electromagnetic processes:
     -------------------------
