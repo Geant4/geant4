@@ -39,17 +39,17 @@
 //
 // Dummy sensitive used only to flag sensitivity in cells of RO geometry.
 
-#ifndef G4HumanDummySD_h
-#define G4HumanDummySD_h 1
+#ifndef G4HumanDummyRightBreastSD_h
+#define G4HumanDummyRightBreastSD_h 1
 
 #include "G4VSensitiveDetector.hh"
 class G4Step;
 
-class G4HumanDummySD : public G4VSensitiveDetector
+class G4HumanDummyRightBreastSD : public G4VSensitiveDetector
 {
 public:
-  G4HumanDummySD();
-  ~G4HumanDummySD() {};
+  G4HumanDummyRightBreastSD();
+  ~G4HumanDummyRightBreastSD() {};
   
   void Initialize(G4HCofThisEvent* ) {};
   G4bool ProcessHits(G4Step* ,G4TouchableHistory*) {return false;}
@@ -59,6 +59,6 @@ public:
   void PrintAll() {};
 };
 
-G4HumanDummySD::G4HumanDummySD() : G4VSensitiveDetector("dummySD")
+G4HumanDummyRightBreastSD::G4HumanDummyRightBreastSD() : G4VSensitiveDetector("dummyRightBreastSD")
 {}
 #endif
