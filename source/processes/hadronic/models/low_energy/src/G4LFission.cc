@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LFission.cc,v 1.13 2006-06-29 20:45:29 gunter Exp $
+// $Id: G4LFission.cc,v 1.14 2007-02-24 05:15:13 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -46,8 +46,7 @@
 #include "G4LFission.hh"
 #include "Randomize.hh"
 
-G4LFission::G4LFission() : 
-   G4HadronicInteraction()
+G4LFission::G4LFission() : G4HadronicInteraction("G4LFission")
 {
    init();   
    SetMinEnergy( 0.0*GeV );
