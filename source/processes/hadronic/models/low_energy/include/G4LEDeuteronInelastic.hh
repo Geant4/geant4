@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LEDeuteronInelastic.hh,v 1.9 2006-06-29 20:43:49 gunter Exp $
+// $Id: G4LEDeuteronInelastic.hh,v 1.10 2007-02-24 06:45:04 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  // Hadronic Process: Low Energy Deuteron Inelastic Process
@@ -47,7 +47,7 @@
  {
  public:
     
-    G4LEDeuteronInelastic() : G4InelasticInteraction()
+    G4LEDeuteronInelastic() : G4InelasticInteraction("G4LEDeuteronInelastic")
     {
       SetMinEnergy( 0.0 );
       // SetMaxEnergy( 100.*MeV );  // NUCREC only worked for energies < 100MeV
