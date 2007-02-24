@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel.cc,v 1.43 2007-02-23 14:54:00 vnivanch Exp $
+// $Id: G4UrbanMscModel.cc,v 1.44 2007-02-24 09:03:41 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -128,9 +128,10 @@
 //          for heavy particles as well (L.Urban)
 // 08-02-07 randomization of tlimit removed (L.Urban)
 // 11-02-07 modified stepping algorithm for skin=0
-// 15-02-04 new data member: smallstep, small steps with single scattering
+// 15-02-07 new data member: smallstep, small steps with single scattering
 //          before + after boundary for skin > 1
-// 23-02-23 use tPathLength inside ComputeStep instead of geombig
+// 23-02-07 use tPathLength inside ComputeStep instead of geombig
+// 24-02-07 step reduction before boundary for 'small' geomlimit only 
 //
 
 // Class Description:
@@ -612,7 +613,7 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
       {
         tnow = stepmin;
       }
-      else
+      else if(geomlimit < geombig)
       { 
         if(geomlimit > skindepth)
         {
