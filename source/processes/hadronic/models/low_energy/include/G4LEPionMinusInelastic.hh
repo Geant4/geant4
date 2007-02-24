@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LEPionMinusInelastic.hh,v 1.11 2006-06-29 20:44:07 gunter Exp $
+// $Id: G4LEPionMinusInelastic.hh,v 1.12 2007-02-24 05:23:37 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  // Hadronic Process: Low Energy PionMinus Inelastic Process
@@ -47,7 +47,7 @@
  {
  public:
     
-    G4LEPionMinusInelastic() : G4InelasticInteraction()
+    G4LEPionMinusInelastic() : G4InelasticInteraction("G4LEPionMinusInelastic")
     {
       SetMinEnergy( 0.0 );
       SetMaxEnergy( 55.*GeV );
