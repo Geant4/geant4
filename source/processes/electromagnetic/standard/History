@@ -1,4 +1,4 @@
-$Id: History,v 1.285 2007-02-23 14:54:00 vnivanch Exp $
+$Id: History,v 1.286 2007-02-24 17:17:02 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+24 February 07: V.Ivanchenko (emstand-V08-02-08)
+- G4UrbanMscModel - L.Urban step reduction before boundary for  
+	            geomlimit<geombig only 
 
 23 February 07: V.Ivanchenko (emstand-V08-02-07)
 - G4hIonisation - remove dependence on K+ and K- particles
