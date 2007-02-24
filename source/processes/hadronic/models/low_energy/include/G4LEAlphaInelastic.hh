@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LEAlphaInelastic.hh,v 1.9 2006-06-29 20:43:28 gunter Exp $
+// $Id: G4LEAlphaInelastic.hh,v 1.10 2007-02-24 06:06:38 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  // Hadronic Process: Low Energy Alpha Inelastic Process
@@ -47,7 +47,7 @@
  {
  public:
     
-    G4LEAlphaInelastic() : G4InelasticInteraction()
+    G4LEAlphaInelastic() : G4InelasticInteraction("G4LEAlphaInelastic")
     {
       SetMinEnergy( 0.0 );
       // SetMaxEnergy( 100.*MeV );  // NUCREC only worked for energies < 100MeV

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LEAntiNeutronInelastic.hh,v 1.10 2006-06-29 20:43:34 gunter Exp $
+// $Id: G4LEAntiNeutronInelastic.hh,v 1.11 2007-02-24 06:13:02 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  // Hadronic Process: Low Energy AntiNeutron Inelastic Process
@@ -47,7 +47,7 @@
  {
  public:
     
-    G4LEAntiNeutronInelastic() : G4InelasticInteraction()
+    G4LEAntiNeutronInelastic() : G4InelasticInteraction("G4LEAntiNeutronInelastic")
     {
       SetMinEnergy( 0.0 );
       SetMaxEnergy( 25.*GeV );

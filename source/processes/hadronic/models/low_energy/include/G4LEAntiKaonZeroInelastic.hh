@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LEAntiKaonZeroInelastic.hh,v 1.6 2006-06-29 20:43:30 gunter Exp $
+// $Id: G4LEAntiKaonZeroInelastic.hh,v 1.7 2007-02-24 06:10:26 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  // Hadronic Process: Low Energy KaonZeroL Inelastic Process
@@ -47,7 +47,7 @@
  {
  public:
     
-    G4LEAntiKaonZeroInelastic() : G4InelasticInteraction()
+    G4LEAntiKaonZeroInelastic() : G4InelasticInteraction("G4LEAntiKaonZeroInelastic")
     {
       SetMinEnergy( 0.0 );
       SetMaxEnergy( 25.*GeV );
