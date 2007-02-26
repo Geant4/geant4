@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LEKaonPlusInelastic.hh,v 1.10 2006-06-29 20:43:53 gunter Exp $
+// $Id: G4LEKaonPlusInelastic.hh,v 1.11 2007-02-26 18:21:57 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  // Hadronic Process: Low Energy KaonPlus Inelastic Process
@@ -47,7 +47,7 @@
  {
  public:
     
-    G4LEKaonPlusInelastic() : G4InelasticInteraction()
+    G4LEKaonPlusInelastic() : G4InelasticInteraction("G4LEKaonPlusInelastic")
     {
       SetMinEnergy( 0.0 );
       SetMaxEnergy( 25.*GeV );

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LETritonInelastic.hh,v 1.9 2006-06-29 20:44:17 gunter Exp $
+// $Id: G4LETritonInelastic.hh,v 1.10 2007-02-26 18:34:35 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  // Hadronic Process: Low Energy Triton Inelastic Process
@@ -47,7 +47,7 @@
  {
  public:
     
-    G4LETritonInelastic() : G4InelasticInteraction()
+    G4LETritonInelastic() : G4InelasticInteraction("G4LETritonInelastic")
     {
       SetMinEnergy( 0.0 );
       // SetMaxEnergy( 100.*MeV );  // NUCREC only worked for energies < 100MeV

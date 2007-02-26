@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LEOmegaMinusInelastic.hh,v 1.10 2006-06-29 20:44:05 gunter Exp $
+// $Id: G4LEOmegaMinusInelastic.hh,v 1.11 2007-02-26 18:29:56 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  // Hadronic Process: Low Energy OmegaMinus Inelastic Process
@@ -47,7 +47,7 @@
  {
  public:
     
-    G4LEOmegaMinusInelastic() : G4InelasticInteraction()
+    G4LEOmegaMinusInelastic() : G4InelasticInteraction("G4LEOmegaMinusInelastic")
     {
       SetMinEnergy( 0.0 );
       SetMaxEnergy( 25.*GeV );

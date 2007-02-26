@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LEKaonZeroLInelastic.hh,v 1.11 2006-06-29 20:43:57 gunter Exp $
+// $Id: G4LEKaonZeroLInelastic.hh,v 1.12 2007-02-26 18:24:54 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -44,7 +44,7 @@
 class G4LEKaonZeroLInelastic : public G4InelasticInteraction  
 {
   public: 
-    G4LEKaonZeroLInelastic() 
+    G4LEKaonZeroLInelastic() : G4InelasticInteraction("G4LEKaonZeroLInelastic")  
     {
       SetMinEnergy( 0.0 );
       SetMaxEnergy( 25.*GeV );

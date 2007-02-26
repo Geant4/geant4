@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LESigmaPlusInelastic.hh,v 1.10 2006-06-29 20:44:15 gunter Exp $
+// $Id: G4LESigmaPlusInelastic.hh,v 1.11 2007-02-26 18:33:48 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  // Hadronic Process: Low Energy SigmaPlus Inelastic Process
@@ -47,7 +47,7 @@
  {
  public:
     
-    G4LESigmaPlusInelastic() : G4InelasticInteraction()
+    G4LESigmaPlusInelastic() : G4InelasticInteraction("G4LESigmaPlusInelastic")
     {
       SetMinEnergy( 0.0 );
       SetMaxEnergy( 25.*GeV );

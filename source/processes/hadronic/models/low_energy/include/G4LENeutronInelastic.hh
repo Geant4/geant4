@@ -42,7 +42,7 @@
  {
  public:
     
-    G4LENeutronInelastic() : G4InelasticInteraction()
+    G4LENeutronInelastic() : G4InelasticInteraction("G4LENeutronInelastic")
     {
       SetMinEnergy( 0.0 );
       SetMaxEnergy( 55.*GeV );
