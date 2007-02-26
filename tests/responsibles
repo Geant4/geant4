@@ -5,7 +5,7 @@ digits_hits/digits           asai@slac.stanford.edu          Makoto Asai
 digits_hits/hits             asai@slac.stanford.edu          Makoto Asai
 digits_hits/utils            asai@slac.stanford.edu          Makoto Asai
 event                        asai@slac.stanford.edu          Makoto Asai
-g3tog4                       Gabriele.Cosmo@cern.ch          Gabriele Cosmo
+g3tog4                       Ivana.Hrivnakova@cern.ch        Ivana Hrivnakova
 geometry                     Gabriele.Cosmo@cern.ch          Gabriele Cosmo
 geometry/biasing             Alexander.Howard@cern.ch        Alexander Howard
 geometry/magneticfield       John.Apostolakis@cern.ch        John Apostolakis
@@ -15,7 +15,7 @@ geometry/solids              Gabriele Cosmo@cern.ch          Gabriele Cosmo
 geometry/volumes             Gabriele Cosmo@cern.ch          Gabriele Cosmo
 global                       Gabriele.Cosmo@cern.ch          Gabriele Cosmo
 global/management            Gabriele.Cosmo@cern.ch          Gabriele Cosmo
-global/HEPGeometry           Evgueni.Tcherniaev@cern.ch      Evgueni Tcherniaev
+global/HEPGeometry           Gabriele.Cosmo@cern.ch          Gabriele Cosmo
 global/HEPNumerics           Vladimir.Grichine@cern.ch       Vladimir Grichine
 graphics_reps                John.Allison@man.ac.uk          John Allison
 intercoms                    asai@slac.stanford.edu          Makoto Asai
@@ -27,10 +27,10 @@ materials                    Marc.Verderi@in2p3.fr           Marc Verderi
 parameterisations            Marc.Verderi@in2p3.fr           Marc Verderi
 "/gflash                     Joanna.Weng@cern.ch             Joanna Weng
 particles                    kurasige@phys.sci.kobe-u.ac.jp  Hisaya Kurasige
-persistency                  Gabriele.Cosmo@cern.ch          Gabriele Cosmo
+persistency                  Witold.Pokorski@cern.ch         Witold Pokorski
 processes                    John Apostolakis                John Apostolakis
 "/cuts                       kurasige@phys.sci.kobe-u.ac.jp  Hisaya Kurasige
-"/electromagnetic            Michel.Maire@lapp.in2p3.fr      Michel Maire
+"/electromagnetic            Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
 "/"/lowenergy                MariaGrazia.Pia@ge.infn.it      Maria Grazia Pia
 "/decay                      kurasige@phys.sci.kobe-u.ac.jp  Hisaya Kurasige
 "/hadronic                   dwright@slac.stanford.edu       Dennis Wright
@@ -41,24 +41,24 @@ processes                    John Apostolakis                John Apostolakis
 "/"/processes                dwright@slac.stanford.edu       Dennis Wright
 "/"/models/abrasion          flei@space.qinetiq.com          Fan Lei
 "/"/models/binary_cascade    Gunter.Folger@cern.ch           Gunter Folger
-"/"/models/cascade           aatos.heikkinen@cern.ch         Aatos Heikkinen
+"/"/models/cascade           Aatos.Heikkinen@cern.ch         Aatos Heikkinen
 "/"/"/chiral_inv_phase_space Mikhail.Kosov@cern.ch           Mikhail Kossov
 "/"/"/coherent_elastic       Nikolai.Starkov@cern.ch         Nikolai Starkov
-"/"/"/de_excitation          aatos.heikkinen@cern.ch         Aatos Heikkinen
+"/"/"/de_excitation          Aatos.Heikkinen@cern.ch         Aatos Heikkinen
 "/"/"/"/ablation             PRTruscott@space.qinetiq.com    Pete Truscott
-"/"/"/"/evaporation          aatos.heikkinen@cern.ch         Aatos Heikkinen
-"/"/"/"/fermi_breakup        aatos.heikkinen@cern.ch         Aatos Heikkinen
-"/"/"/"/fission              aatos.heikkinen@cern.ch         Aatos Heikkinen
-"/"/"/"/gem_evaporation      aatos.heikkinen@cern.ch         Aatos Heikkinen
-"/"/"/"/handler              aatos.heikkinen@cern.ch         Aatos Heikkinen
-"/"/"/"/management           aatos.heikkinen@cern.ch         Aatos Heikkinen
-"/"/"/"/multifragmentation   aatos.heikkinen@cern.ch         Aatos Heikkinen
-"/"/"/"/photon_evaporation   aatos.heikkinen@cern.ch         Aatos Heikkinen
-"/"/"/"/util                 aatos.heikkinen@cern.ch         Aatos Heikkinen
+"/"/"/"/evaporation          Aatos.Heikkinen@cern.ch         Aatos Heikkinen
+"/"/"/"/fermi_breakup        Aatos.Heikkinen@cern.ch         Aatos Heikkinen
+"/"/"/"/fission              Aatos.Heikkinen@cern.ch         Aatos Heikkinen
+"/"/"/"/gem_evaporation      Aatos.Heikkinen@cern.ch         Aatos Heikkinen
+"/"/"/"/handler              Aatos.Heikkinen@cern.ch         Aatos Heikkinen
+"/"/"/"/management           Aatos.Heikkinen@cern.ch         Aatos Heikkinen
+"/"/"/"/multifragmentation   Aatos.Heikkinen@cern.ch         Aatos Heikkinen
+"/"/"/"/photon_evaporation   Aatos.Heikkinen@cern.ch         Aatos Heikkinen
+"/"/"/"/util                 Aatos.Heikkinen@cern.ch         Aatos Heikkinen
 "/"/"/em_dissociation        PRTruscott@space.qinetiq.com    Pete Truscott
 "/"/"/high_energy            dwright@slac.stanford.edu       Dennis Wright
 "/"/"/im_r_matrix            Gunter.Folger@cern.ch           Gunter Folger
-"/"/"/isotope_production     aatos.heikkinen@cern.ch         Aatos Heikkinen
+"/"/"/isotope_production     Aatos.Heikkinen@cern.ch         Aatos Heikkinen
 "/"/"/leading_particle       asai@slac.stanford.edu          Makoto Asai
 "/"/"/low_energy             dwright@slac.stanford.edu       Dennis Wright
 "/"/"/management             Gunter.Folger@cern.ch           Gunter Folger
@@ -68,7 +68,7 @@ processes                    John Apostolakis                John Apostolakis
 "/"/"/"/management           Gunter.Folger@cern.ch           Gunter Folger
 "/"/"/"/qgsm                 Gunter.Folger@cern.ch           Gunter Folger
 "/"/"/photolepton_hadron     dwright@slac.stanford.edu       Dennis Wright
-"/"/"/pre_equilibrium        aatos.heikkinen@cern.ch         Aatos Heikkinen
+"/"/"/pre_equilibrium        Aatos.Heikkinen@cern.ch         Aatos Heikkinen
 "/"/"/radioactive_decay      flei@space.qinetiq.com          Fan Lei
 "/"/"/theo_high_energy       Gunter.Folger@cern.ch           Gunter Folger
 "/"/"/util                   Gunter.Folger@cern.ch           Gunter Folger
@@ -102,7 +102,7 @@ examples/novice/N04          asai@slac.stanford.edu          Makoto Asai
 examples/novice/N05          Marc.Verderi@in2p3.fr           Marc Verderi
 examples/novice/N06          gum@triumf.ca                   Peter Gumplinger
 examples/novice/N07          asai@slac.stanford.edu          Makoto Asai
-examples/advanced            asai@slac.stanford.edu          Makoto Asai
+examples/advanced            MariaGrazia.Pia@ge.infn.it      Maria Grazia Pia
   brachytherapy              Susanna.Guatelli@ge.infn.it     Susanna Guatelli
   composite_calorimeter      Alberto.Ribon@cern.ch           Alberto Ribon
   cosmicray_charging         h.araujo@ic.ac.uk               Henrique Araujo
@@ -119,19 +119,19 @@ examples/advanced            asai@slac.stanford.edu          Makoto Asai
   underground_physics        Alexander.Howard@cern.ch        Alexander Howard 
   xray_fluorescence          Alfonso.Mantero@ge.infn.it      Alfonso Mantero
   xray_telescope             Giovanni.Santin@esa.int         Giovanni Santin
-examples/extended/analysis   duns@slac.stanford.edu          Mark Donszelmann
+examples/extended/analysis   perl@slac.stanford.edu          Joseph Perl
 examples/extended/biasing    Alexander.Howard@cern.ch        Alexander Howard
 examples/extended/electromagnetic:
   TestEm1,2,5,6,7,9          Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
   TestEm3,4                  Michel.Maire@lapp.in2p3.fr      Michel Maire
   TestEm8,10                 Vladimir.Grichine@cern.ch       Vladimir Grichine
-  TestEm11,12,13,14,15,16,17 Michel.Maire@lapp.in2p3.fr      Michel Maire
+  TestEm11-18                Michel.Maire@lapp.in2p3.fr      Michel Maire
 examples/extended/eventgenerator:
   exgps                      flei@space.qinetiq.com          Fan Lei
   HepMCEx01,02               Koichi.Murakami@kek.jp          Koichi Murakami
   MCTruth                    Witold.Pokorski@cern.ch         Witold Pokorski
 examples/extended/field      John.Apostolakis@cern.ch        John Apostolakis
-examples/extended/g3tog4     Gabriele.Cosmo@cern.ch          Gabriele Cosmo
+examples/extended/g3tog4     Ivana.Hrivnakova@cern.ch        Ivana Hrivnakova
 examples/extended/gdml       Witold.Pokorski@cern.ch         Witold Pokorski
 examples/extended/geometry   Gabriele.Cosmo@cern.ch          Gabriele Cosmo
   olap                       Gabriele.Cosmo@cern.ch          Gabriele Cosmo
@@ -162,7 +162,7 @@ examples/extended/visualization:
   userVisAction              John.Allison@man.ac.uk          John Allison
 tests                        Serguei.Sadilov@cern.ch         Serguei Sadilov
       test01                 Gabriele.Cosmo@cern.ch          Gabriele Cosmo
-      test02                 Michel.Maire@lapp.in2p3.fr      Michel Maire
+      test02                 Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
       test02.hadron          dwright@slac.stanford.edu       Dennis Wright
       test03                 (not currently used - see tests/GNUmakefile)
       test04                 (not currently used - see tests/GNUmakefile)
@@ -170,13 +170,13 @@ tests                        Serguei.Sadilov@cern.ch         Serguei Sadilov
       test06                 (not currently used - see tests/GNUmakefile)
       test07                 Serguei.Sadilov@cern.ch         Serguei Sadilov
       test08                 (not currently used - see tests/GNUmakefile)
-      test09                 Michel.Maire@lapp.in2p3.fr      Michel Maire
+      test09                 Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
       test10                 gum@triumf.ca                   Peter Gumplinger
       test11                 tkoi@slac.stanford.edu          Tatsumi Koi
       test12                 Gunter.Folger@cern.ch           Gunter Folger
       test13                 Gunter.Folger@cern.ch           Gunter Folger
       test14                 MariaGrazia.Pia@ge.infn.it      Maria Grazia Pia
-      test15                 aatos.heikkinen@cern.ch         Aatos Heikkinen
+      test15                 Aatos.Heikkinen@cern.ch         Aatos Heikkinen
       test16                 dwright@slac.stanford.edu       Dennis Wright
       test17                 Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
       test18                 flei@space.qinetiq.com          Fan Lei
@@ -194,11 +194,12 @@ tests                        Serguei.Sadilov@cern.ch         Serguei Sadilov
       test30                 Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
       test31                 Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
       test32                 asai@slac.stanford.edu          Makoto Asai
-      test33                 Michael.Dressel@cern.ch         Michael Dressel
+      test33                 Alexander.Howard@cern.ch        Alexander Howard
       test34                 Joanna.Weng@cern.ch             Joanna Weng
       test35                 Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
       test39                 Mikhail.Kossov@cern.ch          Mikhail Kossov
       test40                 Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
       test50                 Susanna.Guatelli@ge.infn.it     Susanna Guatelli
       test201                barrand@lal.in2p3.fr            Guy Barrand
+      test202                John.Allison@man.ac.uk          John Allison
 
