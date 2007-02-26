@@ -1,4 +1,4 @@
-$Id: History,v 1.106 2007-02-15 17:08:48 gcosmo Exp $
+$Id: History,v 1.107 2007-02-26 08:40:18 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+26-Feb-2007, I.Hrivnacova (geom-specific-V08-02-04)
+- Added specialised constructor for handling Z-sections in G4ExtrudedSolid.
+- Cleared unecessary declaration of IsInside() methods in G4TriangularFacet
+  and G4QuadrangularFacet.
+- Updated unit test for G4ExtrudedSolid.
 
 15-Feb-2007, I.Hrivnacova (geom-specific-V08-02-03)
 - Corrected caching of values in G4ExtrudedSolid.
