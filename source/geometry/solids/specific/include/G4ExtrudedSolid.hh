@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExtrudedSolid.hh,v 1.4 2007-02-19 10:17:45 ivana Exp $
+// $Id: G4ExtrudedSolid.hh,v 1.5 2007-02-26 08:40:01 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -72,8 +72,10 @@
 class G4ExtrudedSolid : public G4TessellatedSolid
 {
 
-  public:
-    struct ZSection {
+  public:  // without description
+
+    struct ZSection
+    {
       ZSection(G4double z, G4TwoVector offset, G4double scale)
         : fZ(z), fOffset(offset), fScale(scale) {}
 
@@ -84,12 +86,12 @@ class G4ExtrudedSolid : public G4TessellatedSolid
 
   public:  // with description
 
-     G4ExtrudedSolid( const G4String&                pName,
+     G4ExtrudedSolid( const G4String&                 pName,
                             std::vector<G4TwoVector>  polygon,
                             std::vector<ZSection>     zsections);
        // General constructor
 
-     G4ExtrudedSolid( const G4String&                pName,
+     G4ExtrudedSolid( const G4String&                 pName,
                             std::vector<G4TwoVector>  polygon,
                             G4double                  hz,
                             G4TwoVector off1, G4double scale1,
@@ -100,6 +102,7 @@ class G4ExtrudedSolid : public G4TessellatedSolid
        // Destructor
 
     // Accessors
+
     inline G4int       GetNofVertices() const;
     inline G4TwoVector GetVertex(G4int index) const;
     inline std::vector<G4TwoVector> GetPolygon() const;

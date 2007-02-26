@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExtrudedSolid.cc,v 1.5 2007-02-19 10:17:45 ivana Exp $
+// $Id: G4ExtrudedSolid.cc,v 1.6 2007-02-26 08:40:01 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -134,11 +134,11 @@ G4ExtrudedSolid::G4ExtrudedSolid( const G4String& pName,
   // Special constructor for solid with 2 z-sections
 
   // First check input parameters
-
-  if ( fNv < 3 ) {
-    G4Exception(
-      "G4ExtrudedSolid::G4ExtrudedSolid()", "InvalidSetup",
-      FatalException, "Number of polygon vertices < 3");
+  //
+  if ( fNv < 3 )
+  {
+    G4Exception("G4ExtrudedSolid::G4ExtrudedSolid()", "InvalidSetup",
+                FatalException, "Number of polygon vertices < 3");
   }
      
   // Copy polygon
@@ -146,6 +146,7 @@ G4ExtrudedSolid::G4ExtrudedSolid( const G4String& pName,
   for ( G4int i=0; i<fNv; ++i ) { fPolygon.push_back(polygon[i]); }
   
   // Copy z-sections
+  //
   fZSections.push_back(ZSection(-dz, off1, scale1));
   fZSections.push_back(ZSection( dz, off2, scale2));
     
@@ -217,10 +218,10 @@ G4ThreeVector G4ExtrudedSolid::GetVertex(G4int iz, G4int ind) const
 {
   // Shift and scale vertices
 
-  return G4ThreeVector(
-           fPolygon[ind].x() * fZSections[iz].fScale + fZSections[iz].fOffset.x(), 
-           fPolygon[ind].y() * fZSections[iz].fScale + fZSections[iz].fOffset.y(), 
-           fZSections[iz].fZ);
+  return G4ThreeVector( fPolygon[ind].x() * fZSections[iz].fScale
+                      + fZSections[iz].fOffset.x(), 
+                        fPolygon[ind].y() * fZSections[iz].fScale
+                      + fZSections[iz].fOffset.y(), fZSections[iz].fZ);
 }       
 
 //_____________________________________________________________________________
@@ -235,6 +236,7 @@ G4TwoVector G4ExtrudedSolid::ProjectPoint(const G4ThreeVector& point) const
   // p0 = (p(z) - offset(z))/scale(z);
   
   // Select projection (z-segment of the solid) according to p.z()
+  //
   G4int iz = 0;
   while ( point.z() > fZSections[iz+1].fZ && iz < fNz-2 ) { ++iz; }
   
@@ -243,12 +245,14 @@ G4TwoVector G4ExtrudedSolid::ProjectPoint(const G4ThreeVector& point) const
   G4double pscale  = fKScales[iz]*(point.z()-z0) + fScale0s[iz];
   G4TwoVector poffset = fKOffsets[iz]*(point.z()-z0) + fOffset0s[iz];
   
-  //G4cout << point << " projected to " 
-  //       << iz << "-th z-segment polygon as " << (p2 - poffset)/pscale << G4endl;
+  // G4cout << point << " projected to " 
+  //        << iz << "-th z-segment polygon as "
+  //        << (p2 - poffset)/pscale << G4endl;
 
+  // pscale is always >0 as it is an interpolation between two
+  // positive scale values
+  //
   return (p2 - poffset)/pscale;
-    // pscale is always >0 as it is an interpolation between two
-    // positive scale values
 }  
 
 //_____________________________________________________________________________
@@ -463,9 +467,9 @@ G4bool G4ExtrudedSolid::MakeFacets()
     for ( G4int i = 0; i < fNv; ++i )
     {
       G4int j = (i+1) % fNv;
-      good = AddFacet( new G4QuadrangularFacet(
-                             GetVertex(iz, j), GetVertex(iz, i), 
-                             GetVertex(iz+1, i), GetVertex(iz+1, j), ABSOLUTE) );
+      good = AddFacet( new G4QuadrangularFacet
+                        ( GetVertex(iz, j), GetVertex(iz, i), 
+                          GetVertex(iz+1, i), GetVertex(iz+1, j), ABSOLUTE) );
       if ( ! good ) { return false; }
     }
   }  
@@ -558,6 +562,7 @@ EInside G4ExtrudedSolid::Inside (const G4ThreeVector &p) const
   }  
 
   // Project point p(z) to the polygon scale p0
+  //
   G4TwoVector pscaled = ProjectPoint(p);
   
   // Check if on surface of polygon
@@ -567,7 +572,9 @@ EInside G4ExtrudedSolid::Inside (const G4ThreeVector &p) const
     G4int j = (i+1) % fNv;
     if ( IsSameLine(pscaled, fPolygon[i], fPolygon[j]) )
     {
-      // G4cout << "G4ExtrudedSolid::Inside return Surface (on polygon) " << G4endl;
+      // G4cout << "G4ExtrudedSolid::Inside return Surface (on polygon) "
+      //        << G4endl;
+
       return kSurface;
     }  
   }   
@@ -590,15 +597,19 @@ EInside G4ExtrudedSolid::Inside (const G4ThreeVector &p) const
     if ( std::fabs( p.z() - fZSections[0].fZ ) < kCarTolerance ||
          std::fabs( p.z() - fZSections[fNz-1].fZ ) < kCarTolerance )
     {
-      // G4cout << "G4ExtrudedSolid::Inside return Surface (on z side)" << G4endl;
+      // G4cout << "G4ExtrudedSolid::Inside return Surface (on z side)"
+      //        << G4endl;
+
       return kSurface;
     }  
   
     // G4cout << "G4ExtrudedSolid::Inside return Inside" << G4endl;
+
     return kInside;
   }  
                             
   // G4cout << "G4ExtrudedSolid::Inside return Outside " << G4endl;
+
   return kOutside; 
 }  
 
@@ -641,9 +652,9 @@ std::ostream& G4ExtrudedSolid::StreamInfo(std::ostream &os) const
      << " Solid geometry type: " << fGeometryType  << G4endl;
 
   if ( fIsConvex) 
-    { os << " Convex polygon; list of verices:" << G4endl; }
+    { os << " Convex polygon; list of vertices:" << G4endl; }
   else  
-    { os << " Concave polygon; list of verices:" << G4endl; }
+    { os << " Concave polygon; list of vertices:" << G4endl; }
   
   for ( G4int i=0; i<fNv; ++i )
   {
