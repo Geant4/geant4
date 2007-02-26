@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LFission.cc,v 1.14 2007-02-24 05:15:13 dennis Exp $
+// $Id: G4LFission.cc,v 1.15 2007-02-26 19:29:30 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -88,7 +88,6 @@ G4LFission::ApplyYourself(const G4HadProjectile & aTrack,G4Nucleus & targetNucle
 
    G4double N = targetNucleus.GetN();
    G4double Z = targetNucleus.GetZ();
-   //   theParticleChange.SetKillSignal(1);
    theParticleChange.SetStatusChange(stopAndKill);
 
    G4double P = aParticle->GetTotalMomentum()/MeV;
