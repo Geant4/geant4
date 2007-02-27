@@ -789,45 +789,19 @@ if [ $UNAMEN = lxplus099.cern.ch ]; then
 #  export G4VIS_BUILD_OIX_DRIVER=1
 fi
 
-if [ $UNAMEN = refslc3-amd64.cern.ch ]; then
-  export DEBOPT=${DEBOPT}_amd64
+if [ $UNAMEN = lxbuild056.cern.ch ]; then
+  export DEBOPT=${DEBOPT}_slc4_amd64
   export CVSROOT=/afs/cern.ch/sw/geant4/cvs
-#  export G4SYSTEM=Linux-gO2
   export G4SYSTEM=Linux-g++
   export G4INSTALL=/afs/cern.ch/sw/geant4/stt/$REF/src/geant4
   export G4STTDIR=/afs/cern.ch/sw/geant4/stt/$REF/testtools/geant4/tests/tools
-#  export G4WORKDIR=/afs/cern.ch/sw/geant4/stt/$REF/$G4SYSTEM/$DEBOPT
-#  export G4WORKDIR=/scratch/stesting/work/g4
   export G4WORKDIR=/afs/cern.ch/sw/geant4/stt/$REF/Linux-g++/$DEBOPT
   export G4LIB=$G4WORKDIR/lib
-#  export CLHEP_BASE_DIR=/home/stesting/CLHEP
-#  export CLHEP_BASE_DIR=/afs/cern.ch/sw/lhcxx/specific/redhat61/gcc-2.95.2/CLHEP/1.7.0.0/
-#
-#  export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/Linux-g++/RH73/$CLHEP_VERSION
-#  export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/pro/Linux-g++
-  export CLHEP_BASE_DIR=/scratch/stesting/local
 
-  export CLHEP_LIB=CLHEP-344
-
-#  export CLHEP_BASE_DIR=/home2/stesting/newA_CLHEP
-
-#  export CLHEP_BASE_DIR=/home2/stesting/local
-#  export G4_NO_CBRT=1
-
-export EXTRALIBS=" -L/usr/X11R6/lib64/ "
-
-## Compiler
-############
-#. /afs/cern.ch/sw/geant4/dev/scripts/gcc32.sh 
-#. /afs/cern.ch/sw/geant4/dev/scripts/gcc323.sh 
-
-# export PATH=/afs/cern.ch/sw/lcg/contrib/gcc/3.4.3/slc3_amd64_gcc343/bin:${PATH}
-# export LD_LIBRARY_PATH=/afs/cern.ch/sw/lcg/contrib/gcc/3.4.3/slc3_amd64_gcc343/lib
-
-
-export PATH=/afs/cern.ch/sw/lcg/contrib/gcc/3.4.4/slc3_amd64_gcc344/bin:${PATH}
-export LD_LIBRARY_PATH=/afs/cern.ch/sw/lcg/contrib/gcc/3.4.4/slc3_amd64_gcc344/lib64:/afs/cern.ch/sw/lcg/contrib/gcc/3.4.4/slc3_amd64_gcc344/lib:${LD_LIBRARY_PATH}
-
+# Take CLHEP with links to lcg area
+  export CLHEP_BASE_DIR=$G4WORKDIR/clhep
+  
+  export EXTRALIBS=" -L/usr/X11R6/lib64/ "
 
   # Shareable library
   #####################
