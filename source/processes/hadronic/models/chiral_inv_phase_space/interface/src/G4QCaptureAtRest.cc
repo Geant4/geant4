@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QCaptureAtRest.cc,v 1.9 2007-02-15 15:59:57 mkossov Exp $
+// $Id: G4QCaptureAtRest.cc,v 1.10 2007-02-27 15:36:58 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCaptureAtRest class -----------------
@@ -669,7 +669,7 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
     G4QHadron* resnuc = new G4QHadron(rPDG,r4Mom); // Create Hadron for the ResidualNucl
     output->push_back(resnuc);                // Fill the Residual Nucleus to the output
   }
-  else
+  else                                        // *** THIS works for all particles ! ***
 		//else if(1>2)// !! Immediately change back - Very temporary to avoid nuclear capture !!
   {
     G4QHadron* neutr = 0; // Create Neutrino
@@ -678,7 +678,7 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
 	   G4cout<<"G4QCaptureAtRest::AtRestDoIt: CHIPS M="<<mp<<",dE="<<EnergyDeposition<<G4endl;
 #endif
     G4LorentzVector projLV(0.,0.,0.,mp);
-    if(projPDG==13) // now for tau it is only energy deposition, for mu this EMCascade
+    if(projPDG==13) // now for tau it is only energy deposition, for mu this EMCascade+qqnu
     {
       MuCaptureEMCascade(Z, N, cascE);
       G4int nsec=cascE->size();
@@ -694,7 +694,7 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
         cascT->push_back(aNewTrack);
       }
       // ----- Ericson mu to pi conversion ----- ????? -----
-      if(G4UniformRand()<.09) // .09 is a parameter !
+      if(G4UniformRand()<.025) // .025 is a parameter !
       {
         projPDG=-211;
         // Phase space decay of mu->nu+q+aq M=1
