@@ -22,25 +22,27 @@ w\:* {behavior:url(#default#VML);}
 <![endif]-->
 <title>Geant4 Microbeam Advanced Example</title>
 <o:SmartTagType namespaceuri="urn:schemas-microsoft-com:office:smarttags"
- name="date"/>
+ name="country-region"/>
+<o:SmartTagType namespaceuri="urn:schemas-microsoft-com:office:smarttags"
+ name="City"/>
 <o:SmartTagType namespaceuri="urn:schemas-microsoft-com:office:smarttags"
  name="place"/>
 <!--[if gte mso 9]><xml>
  <o:DocumentProperties>
   <o:Author>incerti</o:Author>
-  <o:LastAuthor>incerti</o:LastAuthor>
-  <o:Revision>69</o:Revision>
-  <o:TotalTime>187</o:TotalTime>
+  <o:LastAuthor>Sébastien Incerti</o:LastAuthor>
+  <o:Revision>76</o:Revision>
+  <o:TotalTime>214</o:TotalTime>
   <o:Created>2006-03-22T18:40:00Z</o:Created>
-  <o:LastSaved>2006-04-10T14:35:00Z</o:LastSaved>
+  <o:LastSaved>2007-02-27T08:54:00Z</o:LastSaved>
   <o:Pages>1</o:Pages>
-  <o:Words>1370</o:Words>
-  <o:Characters>7537</o:Characters>
+  <o:Words>1674</o:Words>
+  <o:Characters>9209</o:Characters>
   <o:Company>cenbg</o:Company>
-  <o:Lines>62</o:Lines>
-  <o:Paragraphs>17</o:Paragraphs>
-  <o:CharactersWithSpaces>8890</o:CharactersWithSpaces>
-  <o:Version>10.2625</o:Version>
+  <o:Lines>76</o:Lines>
+  <o:Paragraphs>21</o:Paragraphs>
+  <o:CharactersWithSpaces>10862</o:CharactersWithSpaces>
+  <o:Version>10.6825</o:Version>
  </o:DocumentProperties>
 </xml><![endif]--><!--[if gte mso 9]><xml>
  <w:WordDocument>
@@ -80,6 +82,15 @@ st1\:*{behavior:url(#ieooui) }
 	mso-generic-font-family:modern;
 	mso-font-pitch:fixed;
 	mso-font-signature:-1610612033 1757936891 16 0 131231 0;}
+@font-face
+	{font-family:"Times New Roman\, Times\, Serif";
+	panose-1:0 0 0 0 0 0 0 0 0 0;
+	mso-font-alt:"Times New Roman";
+	mso-font-charset:0;
+	mso-generic-font-family:roman;
+	mso-font-format:other;
+	mso-font-pitch:auto;
+	mso-font-signature:0 0 0 0 0 0;}
  /* Style Definitions */
  p.MsoNormal, li.MsoNormal, div.MsoNormal
 	{mso-style-parent:"";
@@ -97,6 +108,22 @@ a:visited, span.MsoHyperlinkFollowed
 	{color:purple;
 	text-decoration:underline;
 	text-underline:single;}
+span.hit
+	{mso-style-name:hit;
+	color:red;
+	font-weight:bold;}
+span.bf
+	{mso-style-name:bf;
+	font-weight:bold;}
+span.pit
+	{mso-style-name:pit;
+	mso-ansi-font-size:10.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:"Times New Roman\, Times\, Serif";
+	mso-ascii-font-family:"Times New Roman\, Times\, Serif";
+	mso-hansi-font-family:"Times New Roman\, Times\, Serif";
+	color:#737373;
+	font-weight:bold;}
 span.SpellE
 	{mso-style-name:"";
 	mso-spl-e:yes;}
@@ -130,7 +157,7 @@ div.Section1
 	font-family:"Times New Roman";}
 </style>
 <![endif]--><!--[if gte mso 9]><xml>
- <o:shapedefaults v:ext="edit" spidmax="29698">
+ <o:shapedefaults v:ext="edit" spidmax="31746">
   <o:colormenu v:ext="edit" fillcolor="black" strokecolor="yellow"/>
  </o:shapedefaults></xml><![endif]--><!--[if gte mso 9]><xml>
  <o:shapelayout v:ext="edit">
@@ -156,87 +183,95 @@ lang=EN-GB style='font-family:Arial;color:white;mso-ansi-language:EN-GB'><o:p>&n
 style='font-family:Arial;color:#FFCC99;mso-ansi-language:EN-GB'>Interface
 Physics Biology group<o:p></o:p></span></b></p>
 
-<p class=MsoNormal align=center style='text-align:center'><span lang=IT
-style='font-family:Arial;color:#FFCC99;mso-ansi-language:IT'>( <b>S. Incerti</b>*,
-O. Boissonnade, C. Habchi, Ph. Moretto, D. T. Nguyen, T. Pouthier, H. Seznec,
-Q. Zhang )<o:p></o:p></span></p>
+<p class=MsoNormal align=center style='text-align:center'><span class=GramE><span
+style='font-family:Arial;color:#FFCC99'>( <b>S</b></span></span><b><span
+style='font-family:Arial;color:#FFCC99'>. Incerti</span></b><span
+style='font-family:Arial;color:#FFCC99'>*, O. <span class=SpellE>Boissonnade</span>,
+C. <span class=SpellE>Habchi</span>, <span class=SpellE>Ph</span>. <span
+class=SpellE>Moretto</span>, D. T. <span class=SpellE>Nguyen</span>, T. <span
+class=SpellE>Pouthier</span>, H. <span class=SpellE>Seznec</span>, Q. Zhang )<o:p></o:p></span></p>
 
 <p class=MsoNormal align=center style='text-align:center;mso-layout-grid-align:
-none;text-autospace:none'><span lang=IT style='font-family:Arial;color:#FFCC99;
-mso-ansi-language:IT'><o:p>&nbsp;</o:p></span></p>
+none;text-autospace:none'><span style='font-family:Arial;color:#FFCC99'><o:p>&nbsp;</o:p></span></p>
 
 <p class=MsoNormal align=center style='text-align:center;mso-layout-grid-align:
 none;text-autospace:none'><b><span style='font-family:Arial;color:#FFCC99'>Centre
 d’Etudes Nucléaires de <span class=SpellE>Bordeaux-Gradignan</span> (CENBG)<o:p></o:p></span></b></p>
 
 <p class=MsoNormal align=center style='text-align:center;mso-layout-grid-align:
-none;text-autospace:none'><b><span style='font-family:Arial;color:#FFCC99'>IN2P3
-/ CNRS / Bordeaux 1 <span class=SpellE>University</span><o:p></o:p></span></b></p>
+none;text-autospace:none'><b><span lang=EN-GB style='font-family:Arial;
+color:#FFCC99;mso-ansi-language:EN-GB'>IN2P3 / CNRS / </span></b><st1:City><st1:place><b><span
+  lang=EN-GB style='font-family:Arial;color:#FFCC99;mso-ansi-language:EN-GB'>Bordeaux</span></b></st1:place></st1:City><b><span
+lang=EN-GB style='font-family:Arial;color:#FFCC99;mso-ansi-language:EN-GB'> 1
+University<o:p></o:p></span></b></p>
 
 <p class=MsoNormal align=center style='text-align:center;mso-layout-grid-align:
-none;text-autospace:none'><b><span style='font-family:Arial;color:#FFCC99'>33175
-Gradignan<o:p></o:p></span></b></p>
+none;text-autospace:none'><b><span lang=EN-GB style='font-family:Arial;
+color:#FFCC99;mso-ansi-language:EN-GB'>33175 <span class=SpellE>Gradignan</span><o:p></o:p></span></b></p>
 
 <p class=MsoNormal align=center style='text-align:center;mso-layout-grid-align:
-none;text-autospace:none'><b><span style='font-family:Arial;color:#FFCC99'>France<o:p></o:p></span></b></p>
+none;text-autospace:none'><st1:country-region><st1:place><b><span lang=EN-GB
+  style='font-family:Arial;color:#FFCC99;mso-ansi-language:EN-GB'>France</span></b></st1:place></st1:country-region><b><span
+lang=EN-GB style='font-family:Arial;color:#FFCC99;mso-ansi-language:EN-GB'><o:p></o:p></span></b></p>
 
 <p class=MsoNormal align=center style='text-align:center;mso-layout-grid-align:
-none;text-autospace:none'><span style='font-family:Arial;color:#FFCC99'><o:p>&nbsp;</o:p></span></p>
+none;text-autospace:none'><span lang=EN-GB style='font-family:Arial;color:#FFCC99;
+mso-ansi-language:EN-GB'><o:p>&nbsp;</o:p></span></p>
 
 <p class=MsoNormal align=center style='text-align:center;mso-layout-grid-align:
-none;text-autospace:none'><span style='font-family:Arial;color:#FFCC99'>* <span
-class=SpellE>corresponding</span> <span class=SpellE>author</span> <span
-class=SpellE>e-mail</span> : </span><span style='font-family:Arial;color:aqua'><a
-href="mailto:incerti@cenbg.in2p3.fr"><span style='color:aqua;text-decoration:
-none;text-underline:none'>incerti@cenbg.in2p3.fr</span></a> <o:p></o:p></span></p>
+none;text-autospace:none'><span lang=EN-GB style='font-family:Arial;color:#FFCC99;
+mso-ansi-language:EN-GB'>* <span class=GramE>corresponding</span> author e-mail
+: </span><span style='font-family:Arial;color:aqua'><a
+href="mailto:incerti@cenbg.in2p3.fr"><span lang=EN-GB style='color:aqua;
+mso-ansi-language:EN-GB;text-decoration:none;text-underline:none'>incerti@cenbg.in2p3.fr</span></a></span><span
+style='font-family:Arial;color:aqua;mso-ansi-language:EN-GB'> <span lang=EN-GB><o:p></o:p></span></span></p>
 
 <p class=MsoNormal style='text-align:justify;text-justify:inter-ideograph;
-mso-layout-grid-align:none;text-autospace:none'><span style='font-family:Arial;
-color:white'><o:p>&nbsp;</o:p></span></p>
+mso-layout-grid-align:none;text-autospace:none'><span lang=EN-GB
+style='font-family:Arial;color:white;mso-ansi-language:EN-GB'><o:p>&nbsp;</o:p></span></p>
 
 <p class=MsoNormal style='text-align:justify;text-justify:inter-ideograph;
-mso-layout-grid-align:none;text-autospace:none'><span style='font-family:Arial;
-color:white'><span
+mso-layout-grid-align:none;text-autospace:none'><span lang=EN-GB
+style='font-family:Arial;color:white;mso-ansi-language:EN-GB'><span
 style='mso-spacerun:yes'>                                                                     
 </span><o:p></o:p></span></p>
 
 <p class=MsoNormal style='text-align:justify;text-justify:inter-ideograph;
-mso-layout-grid-align:none;text-autospace:none'><b><span style='font-family:
-Arial;color:#66CCFF'>INTRODUCTION<o:p></o:p></span></b></p>
+mso-layout-grid-align:none;text-autospace:none'><b><span lang=EN-GB
+style='font-family:Arial;color:#66CCFF;mso-ansi-language:EN-GB'>INTRODUCTION<o:p></o:p></span></b></p>
 
 <p class=MsoNormal style='text-align:justify;text-justify:inter-ideograph;
-mso-layout-grid-align:none;text-autospace:none'><span style='font-family:Arial;
-color:white'><o:p>&nbsp;</o:p></span></p>
+mso-layout-grid-align:none;text-autospace:none'><span lang=EN-GB
+style='font-family:Arial;color:white;mso-ansi-language:EN-GB'><o:p>&nbsp;</o:p></span></p>
 
 <p class=MsoNormal style='text-align:justify;text-justify:inter-ideograph;
-mso-layout-grid-align:none;text-autospace:none'><span class=SpellE><span
-style='font-family:Arial;color:white'>The</span></span><span style='font-family:
-Arial;color:white'> <span class=SpellE>microbeam</span> <span class=SpellE>example</span>
-<span class=SpellE>simulates</span> <span class=SpellE>the</span> <span
-class=SpellE>microbeam</span> cellular irradiation <span class=SpellE>beam</span>
-line <span class=SpellE>installed</span> on <span class=SpellE>the</span>
-AIFIRA <span class=SpellE>electrostatic</span> <span class=SpellE>accelerator</span>
-<span class=SpellE>facility</span> <span class=SpellE>located</span> <span
-class=SpellE>at</span> CENBG, <span class=SpellE>Bordeaux-Gradignan</span>,
-France. </span><span lang=EN-GB style='font-family:Arial;color:white;
-mso-ansi-language:EN-GB'>This setup is mainly used to investigate the effects
-of low dose irradiation on living cells. The <span class=SpellE>microbeam</span>
-line allows </span><b><span lang=EN-GB style='font-family:Arial;color:yellow;
-mso-ansi-language:EN-GB'>irradiation of</span></b><span lang=EN-GB
-style='font-family:Arial;color:white;mso-ansi-language:EN-GB'> </span><b><span
-lang=EN-GB style='font-family:Arial;color:yellow;mso-ansi-language:EN-GB'>individual
-biological living cells</span></b><span lang=EN-GB style='font-family:Arial;
-color:white;mso-ansi-language:EN-GB'> in culture medium in single ion mode,
-with an </span><b><span lang=EN-GB style='font-family:Arial;color:yellow;
-mso-ansi-language:EN-GB'>exact control of the delivered dose to a particular
-cell</span></b><span lang=EN-GB style='font-family:Arial;color:white;
-mso-ansi-language:EN-GB'> among the cell population. This Geant4 example
-simulates the <span class=SpellE>microbeam</span> line in a configuration of
-irradiation with 3 MeV incident alpha particles and allows the calculation of
-the dose deposited by the incident particles in the cell cytoplasm and in the
-cell nucleus, which are inaccessible by experimental measurements. For the
-first time in </span><st1:place><span lang=EN-GB style='font-family:Arial;
- color:white;mso-ansi-language:EN-GB'>Monte Carlo</span></st1:place><span
+mso-layout-grid-align:none;text-autospace:none'><span lang=EN-GB
+style='font-family:Arial;color:white;mso-ansi-language:EN-GB'>The <span
+class=SpellE>microbeam</span> example simulates the <span class=SpellE>microbeam</span>
+cellular irradiation beam line installed on the AIFIRA electrostatic
+accelerator facility located at CENBG, </span><st1:place><st1:City><span
+  lang=EN-GB style='font-family:Arial;color:white;mso-ansi-language:EN-GB'>Bordeaux-<span
+  class=SpellE>Gradignan</span></span></st1:City><span lang=EN-GB
+ style='font-family:Arial;color:white;mso-ansi-language:EN-GB'>, </span><st1:country-region><span
+  lang=EN-GB style='font-family:Arial;color:white;mso-ansi-language:EN-GB'>France</span></st1:country-region></st1:place><span
+lang=EN-GB style='font-family:Arial;color:white;mso-ansi-language:EN-GB'>. This
+setup is mainly used to investigate the effects of low dose irradiation on
+living cells. The <span class=SpellE>microbeam</span> line allows </span><b><span
+lang=EN-GB style='font-family:Arial;color:yellow;mso-ansi-language:EN-GB'>irradiation
+of</span></b><span lang=EN-GB style='font-family:Arial;color:white;mso-ansi-language:
+EN-GB'> </span><b><span lang=EN-GB style='font-family:Arial;color:yellow;
+mso-ansi-language:EN-GB'>individual biological living cells</span></b><span
+lang=EN-GB style='font-family:Arial;color:white;mso-ansi-language:EN-GB'> in
+culture medium in single ion mode, with an </span><b><span lang=EN-GB
+style='font-family:Arial;color:yellow;mso-ansi-language:EN-GB'>exact control of
+the delivered dose to a particular cell</span></b><span lang=EN-GB
+style='font-family:Arial;color:white;mso-ansi-language:EN-GB'> among the cell
+population. This Geant4 example simulates the <span class=SpellE>microbeam</span>
+line in a configuration of irradiation with 3 MeV incident alpha particles and
+allows the calculation of the dose deposited by the incident particles in the
+cell cytoplasm and in the cell nucleus, which are inaccessible by experimental
+measurements. For the first time in </span><st1:place><span lang=EN-GB
+ style='font-family:Arial;color:white;mso-ansi-language:EN-GB'>Monte Carlo</span></st1:place><span
 lang=EN-GB style='font-family:Arial;color:white;mso-ansi-language:EN-GB'> <span
 class=SpellE>microdosimetry</span>, the simulation includes a realistic cell
 phantom obtained from <span class=SpellE>confocal</span> microscopy. <o:p></o:p></span></p>
@@ -298,7 +333,7 @@ color:white'><!--[if gte vml 1]><v:shapetype id="_x0000_t75" coordsize="21600,21
 </v:shape><![endif]--><![if !vml]><img border=0 width=545 height=372
 src="microbeam_fichiers/image002.gif" v:shapes="_x0000_i1025"><![endif]><!--[if gte mso 9]><xml>
  <o:OLEObject Type="Embed" ProgID="MSPhotoEd.3" ShapeID="_x0000_i1025"
-  DrawAspect="Content" ObjectID="_1206192096">
+  DrawAspect="Content" ObjectID="_1234075214">
  </o:OLEObject>
 </xml><![endif]--><o:p></o:p></span></p>
 
@@ -646,8 +681,135 @@ style='font-family:Arial;color:#66CCFF;mso-ansi-language:EN-GB'>SUGGESTED
 PAPERS ABOUT THIS SIMULATION AND ITS VALIDATION<o:p></o:p></span></b></p>
 
 <p class=MsoNormal style='text-align:justify;text-justify:inter-ideograph;
+mso-layout-grid-align:none;text-autospace:none'><b><span lang=EN-GB
+style='font-family:Arial;color:#66CCFF;mso-ansi-language:EN-GB'><o:p>&nbsp;</o:p></span></b></p>
+
+<p class=MsoNormal style='text-align:justify;text-justify:inter-ideograph;
+mso-layout-grid-align:none;text-autospace:none'><b><span lang=EN-GB
+style='font-family:Arial;color:yellow;mso-ansi-language:EN-GB'><span
+style='mso-tab-count:1'>            </span>These papers can be accessed online
+at the SLAC-SPIRES online database by clicking </span></b><b><span lang=EN-GB
+style='font-family:Arial;color:red;mso-ansi-language:EN-GB'><a
+href="http://www.slac.stanford.edu/spires/find/hep/www?rawcmd=find+a+incerti&amp;FORMAT=WWW&amp;SEQUENCE="><span
+style='color:red'>here</span></a></span></b><b><span lang=EN-GB
+style='font-family:Arial;color:yellow;mso-ansi-language:EN-GB'> <o:p></o:p></span></b></p>
+
+<p class=MsoNormal style='text-align:justify;text-justify:inter-ideograph;
 mso-layout-grid-align:none;text-autospace:none'><span lang=EN-GB
 style='font-family:Arial;color:white;mso-ansi-language:EN-GB'><o:p>&nbsp;</o:p></span></p>
+
+<p class=MsoNormal style='margin-left:35.4pt'><span lang=EN-GB
+style='font-family:Arial;color:white;mso-ansi-language:EN-GB'>&#9658;</span><span
+lang=EN-GB style='font-family:Arial;color:#CC99FF;mso-ansi-language:EN-GB'> <b
+style='mso-bidi-font-weight:normal'><span style='text-transform:uppercase'>Monte
+Carlo microdosimetry for targeted irradiation of individual cells using a
+microbeam facility</span></b></span><span lang=EN-GB style='font-family:Arial;
+color:white;mso-ansi-language:EN-GB'> <o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:35.4pt'><span lang=EN-GB
+style='font-family:Arial;color:white;mso-ansi-language:EN-GB'>By </span><st1:place><span
+ lang=EN-GB style='font-family:Arial;color:white;mso-ansi-language:EN-GB'>S.
+ Incerti</span></st1:place><span lang=EN-GB style='font-family:Arial;
+color:white;mso-ansi-language:EN-GB'>, T. <span class=SpellE>Pouthier</span>,
+H. <span class=SpellE>Seznec</span>, Ph. </span><span lang=IT style='font-family:
+Arial;color:white;mso-ansi-language:IT'>Moretto, O. Boissonnade, T. M.&nbsp;H.
+Ha, F. Andersson, Ph. </span><span class=SpellE><span lang=EN-GB
+style='font-family:Arial;color:white;mso-ansi-language:EN-GB'>Barberet</span></span><span
+lang=EN-GB style='font-family:Arial;color:white;mso-ansi-language:EN-GB'>, C. <span
+class=SpellE>Habchi</span> and D. T. Nguyen <o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:35.4pt'><strong><span lang=EN-GB
+style='font-family:Arial;color:white;mso-ansi-language:EN-GB;font-weight:normal;
+mso-bidi-font-weight:bold'>In preparation</span></strong><strong><span
+lang=EN-GB style='font-family:Arial;color:#FF9900;mso-ansi-language:EN-GB'>
+(2007)</span></strong><strong><span lang=EN-GB style='mso-ansi-language:EN-GB'><o:p></o:p></span></strong></p>
+
+<p class=MsoNormal><strong><span lang=EN-GB style='font-family:Arial;
+color:white;mso-ansi-language:EN-GB'><o:p>&nbsp;</o:p></span></strong></p>
+
+<p class=MsoNormal style='margin-left:35.4pt'><span lang=EN-GB
+style='font-family:Arial;color:white;mso-ansi-language:EN-GB'>&#9658;</span><span
+lang=EN-GB style='font-family:Arial;color:#CC99FF;mso-ansi-language:EN-GB'> <b><span
+style='text-transform:uppercase'>Monte Carlo simulation of the CENBG microbeam
+and nanobeam lines with the Geant4 toolkit</span></b></span><span lang=EN-GB
+style='font-family:Arial;color:white;mso-ansi-language:EN-GB'>&nbsp;<br>
+By <span style='mso-bidi-font-weight:bold'>S</span>. <span style='mso-bidi-font-weight:
+bold'>Incerti</span>, Q. Zhang, F. <span class=SpellE>Andersson</span>, Ph. <span
+class=SpellE>Moretto</span>, G.W. Grime, M.J. Merchant, D.T. Nguyen, C. <span
+class=SpellE>Habchi</span>, T. <span class=SpellE>Pouthier</span> and H. <span
+class=SpellE>Seznec</span></span><span lang=EN-GB style='mso-ansi-language:
+EN-GB'><o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:35.4pt;text-align:justify;text-justify:
+inter-ideograph;mso-layout-grid-align:none;text-autospace:none'><span
+lang=EN-GB style='font-family:Arial;color:white;mso-ansi-language:EN-GB'>In
+press in </span><span class=SpellE><b><span lang=EN-GB style='font-family:Arial;
+color:#FF9933;mso-ansi-language:EN-GB'>Nucl.Instrum.Meth.B</span></b></span><b><span
+lang=EN-GB style='font-family:Arial;color:#FF9933;mso-ansi-language:EN-GB'>,
+2007<o:p></o:p></span></b></p>
+
+<p class=MsoNormal style='margin-left:35.4pt;text-align:justify;text-justify:
+inter-ideograph;mso-layout-grid-align:none;text-autospace:none'><span
+lang=EN-GB style='font-family:Arial;color:white;mso-ansi-language:EN-GB'><o:p>&nbsp;</o:p></span></p>
+
+<p class=MsoNormal style='margin-left:35.4pt;mso-layout-grid-align:none;
+text-autospace:none'><span lang=EN-GB style='font-family:Arial;color:white;
+mso-ansi-language:EN-GB'>&#9658;</span><span lang=EN-GB style='font-family:
+Arial;color:#CC99FF;mso-ansi-language:EN-GB'> <b><span style='text-transform:
+uppercase'>A Comparison of cellular irradiation techniques with alpha particles
+using the Geant4 Monte Carlo simulation toolkit</span></b></span><span
+lang=EN-GB style='font-family:Arial;color:white;mso-ansi-language:EN-GB'><br>
+By </span><span style='font-family:Arial;color:white'><a
+href="http://www.slac.stanford.edu/spires/find/wwwhepau/wwwscan?rawcmd=fin+%22Incerti%2C%20S%2E%22"><span
+lang=EN-GB style='color:white;mso-ansi-language:EN-GB;text-decoration:none;
+text-underline:none'>S. Incerti</span></a></span><span lang=EN-GB
+style='font-family:Arial;color:white;mso-ansi-language:EN-GB'>, </span><span
+style='font-family:Arial;color:white'><a
+href="http://www.slac.stanford.edu/spires/find/wwwhepau/wwwscan?rawcmd=fin+%22Gault%2C%20N%2E%22"><span
+lang=EN-GB style='color:white;mso-ansi-language:EN-GB;text-decoration:none;
+text-underline:none'>N. <span class=SpellE>Gault</span></span></a></span><span
+lang=EN-GB style='font-family:Arial;color:white;mso-ansi-language:EN-GB'>, </span><span
+style='font-family:Arial;color:white'><a
+href="http://www.slac.stanford.edu/spires/find/wwwhepau/wwwscan?rawcmd=fin+%22Habchi%2C%20C%2E%22"><span
+lang=EN-GB style='color:white;mso-ansi-language:EN-GB;text-decoration:none;
+text-underline:none'>C. <span class=SpellE>Habchi</span></span></a></span><span
+lang=EN-GB style='font-family:Arial;color:white;mso-ansi-language:EN-GB'>, </span><span
+style='font-family:Arial;color:white'><a
+href="http://www.slac.stanford.edu/spires/find/wwwhepau/wwwscan?rawcmd=fin+%22Lefaix%2C%20J%2EL%2E%2E%22"><span
+lang=EN-GB style='color:white;mso-ansi-language:EN-GB;text-decoration:none;
+text-underline:none'>J.L.. <span class=SpellE>Lefaix</span></span></a></span><span
+lang=EN-GB style='font-family:Arial;color:white;mso-ansi-language:EN-GB'>, </span><span
+style='font-family:Arial;color:white'><a
+href="http://www.slac.stanford.edu/spires/find/wwwhepau/wwwscan?rawcmd=fin+%22Moretto%2C%20Ph%2E%22"><span
+lang=EN-GB style='color:white;mso-ansi-language:EN-GB;text-decoration:none;
+text-underline:none'>Ph. <span class=SpellE>Moretto</span></span></a></span><span
+lang=EN-GB style='font-family:Arial;color:white;mso-ansi-language:EN-GB'>, </span><span
+style='font-family:Arial;color:white'><a
+href="http://www.slac.stanford.edu/spires/find/wwwhepau/wwwscan?rawcmd=fin+%22Poncy%2C%20J%2EL%2E%2E%22"><span
+class=GramE><span lang=EN-GB style='color:white;mso-ansi-language:EN-GB;
+text-decoration:none;text-underline:none'>J.L..</span></span><span lang=EN-GB
+style='color:white;mso-ansi-language:EN-GB;text-decoration:none;text-underline:
+none'> <span class=SpellE>Poncy</span></span></a></span><span lang=EN-GB
+style='font-family:Arial;color:white;mso-ansi-language:EN-GB'>, </span><span
+style='font-family:Arial;color:white'><a
+href="http://www.slac.stanford.edu/spires/find/wwwhepau/wwwscan?rawcmd=fin+%22Pouthier%2C%20T%2E%22"><span
+lang=EN-GB style='color:white;mso-ansi-language:EN-GB;text-decoration:none;
+text-underline:none'>T. <span class=SpellE>Pouthier</span></span></a></span><span
+lang=EN-GB style='font-family:Arial;color:white;mso-ansi-language:EN-GB'>, </span><span
+style='font-family:Arial;color:white'><a
+href="http://www.slac.stanford.edu/spires/find/wwwhepau/wwwscan?rawcmd=fin+%22Seznec%2C%20H%2E%22"><span
+lang=EN-GB style='color:white;mso-ansi-language:EN-GB;text-decoration:none;
+text-underline:none'>H. <span class=SpellE>Seznec</span></span></a></span><span
+lang=EN-GB style='font-family:Arial;color:white;mso-ansi-language:EN-GB'>. Dec
+2006. 3pp<span class=GramE>.</span><br>
+Published in </span><b style='mso-bidi-font-weight:normal'><span lang=EN-GB
+style='font-family:Arial;color:#FF9900;mso-ansi-language:EN-GB'>Rad.Prot.Dos.,1-3,2006
+(Micros 2005 special issue)</span></b><span lang=EN-GB style='font-family:Arial;
+color:white;mso-ansi-language:EN-GB'>.<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:35.4pt;text-align:justify;text-justify:
+inter-ideograph;mso-layout-grid-align:none;text-autospace:none'><span
+lang=EN-GB style='font-family:Arial;color:white;mso-ansi-language:EN-GB'><o:p>&nbsp;</o:p></span></p>
 
 <p class=MsoNormal style='margin-left:35.4pt;text-align:justify;text-justify:
 inter-ideograph;mso-layout-grid-align:none;text-autospace:none'><span
@@ -657,22 +819,41 @@ SIMULATION OF THE NEW CENBG MICRO AND NANO PROBES FACILITY<o:p></o:p></b></span>
 
 <p class=MsoNormal style='margin-left:35.4pt;text-align:justify;text-justify:
 inter-ideograph;mso-layout-grid-align:none;text-autospace:none'><span
-lang=EN-GB style='font-family:Arial;color:white;mso-ansi-language:EN-GB'>By </span><st1:place><span
- lang=EN-GB style='font-family:Arial;color:white;mso-ansi-language:EN-GB'>S.
- Incerti</span></st1:place><span lang=EN-GB style='font-family:Arial;
-color:white;mso-ansi-language:EN-GB'>, C. Habchi, Ph. Moretto, J. Olivier and
-H. Seznec<o:p></o:p></span></p>
+class=GramE><span lang=EN-GB style='font-family:Arial;color:white;mso-ansi-language:
+EN-GB'>By </span></span><st1:place><span class=GramE><span lang=EN-GB
+ style='font-family:Arial;color:white;mso-ansi-language:EN-GB'>S. Incerti</span></span></st1:place><span
+class=GramE><span lang=EN-GB style='font-family:Arial;color:white;mso-ansi-language:
+EN-GB'>, C. Habchi, Ph. Moretto, J. Olivier and H. <span class=SpellE>Seznec</span>.</span></span><span
+lang=EN-GB style='font-family:Arial;color:white;mso-ansi-language:EN-GB'> May
+2006. 5pp.<o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-left:35.4pt;text-align:justify;text-justify:
 inter-ideograph;mso-layout-grid-align:none;text-autospace:none'><span
-lang=EN-GB style='font-family:Arial;color:white;mso-ansi-language:EN-GB'>To be
-published in </span><b><span lang=EN-GB style='font-family:Arial;color:#FF9933;
-mso-ansi-language:EN-GB'>NIMB, 2006</span></b><b><span lang=EN-GB
-style='font-family:Arial;color:white;mso-ansi-language:EN-GB'><o:p></o:p></span></b></p>
+lang=EN-GB style='font-family:Arial;color:white;mso-ansi-language:EN-GB'>Published
+in </span><b><span lang=EN-GB style='font-family:Arial;color:#FF9933;
+mso-ansi-language:EN-GB'>Nucl.Instrum.Meth.B249:738-742, 2006</span></b><b><span
+lang=EN-GB style='font-family:Arial;color:white;mso-ansi-language:EN-GB'><o:p></o:p></span></b></p>
 
 <p class=MsoNormal style='margin-left:35.4pt;text-align:justify;text-justify:
 inter-ideograph;mso-layout-grid-align:none;text-autospace:none'><span
 lang=EN-GB style='font-family:Arial;color:white;mso-ansi-language:EN-GB'><o:p>&nbsp;</o:p></span></p>
+
+<p class=MsoNormal style='margin-left:35.4pt;mso-layout-grid-align:none;
+text-autospace:none'><span lang=EN-GB style='font-family:Arial;color:white;
+mso-ansi-language:EN-GB'>&#9658;</span><span lang=EN-GB style='font-family:
+Arial;color:#CC99FF;mso-ansi-language:EN-GB'> <span class=GramE><b><span
+style='text-transform:uppercase'>A</span></b></span><b><span style='text-transform:
+uppercase'> Comparison of ray-tracing software for the design of quadrupole
+microbeam systems</span></b><span style='text-transform:uppercase'><br>
+</span></span><span lang=EN-GB style='font-family:Arial;color:white;mso-ansi-language:
+EN-GB'>By S. Incerti et al., <br>
+Published </span><span lang=EN-GB style='font-family:Arial;color:#FF9900;
+mso-ansi-language:EN-GB'>in <b>Nucl.Instrum.Meth.B231:76-85, 2005</b></span><b><span
+lang=EN-GB style='font-family:Arial;color:white;mso-ansi-language:EN-GB'><o:p></o:p></span></b></p>
+
+<p class=MsoNormal style='margin-left:35.4pt;mso-layout-grid-align:none;
+text-autospace:none'><b><span lang=EN-GB style='font-family:Arial;color:white;
+mso-ansi-language:EN-GB'><o:p>&nbsp;</o:p></span></b></p>
 
 <p class=MsoNormal style='margin-left:35.4pt;text-align:justify;text-justify:
 inter-ideograph;mso-layout-grid-align:none;text-autospace:none'><span
@@ -687,8 +868,7 @@ inter-ideograph;mso-layout-grid-align:none;text-autospace:none'><span
 lang=EN-GB style='font-family:Arial;color:white;mso-ansi-language:EN-GB'>By Ph.
 <span class=SpellE>Barberet</span>, A. <span class=SpellE>Balana</span>, S.
 Incerti, C. <span class=SpellE>Michelet-Habchi</span>, Ph. Moretto, Th. <span
-class=SpellE>Pouthier</span> (CENBG, <span class=SpellE>Gradignan</span>),. Dec
-2004. 6pp. <o:p></o:p></span></p>
+class=SpellE>Pouthier</span>. Dec 2004. 6pp. <o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-left:35.4pt;text-align:justify;text-justify:
 inter-ideograph;mso-layout-grid-align:none;text-autospace:none'><span
@@ -714,8 +894,7 @@ lang=EN-GB style='font-family:Arial;color:white;mso-ansi-language:EN-GB'>By S.
 Incerti, Ph. <span class=SpellE>Barberet</span>, R. <span class=SpellE>Villeneuve</span>,
 P. <span class=SpellE>Aguer</span>, E. <span class=SpellE>Gontier</span>, C. <span
 class=SpellE>Michelet-Habchi</span>, Ph. Moretto, D.T. Nguyen, T. <span
-class=SpellE>Pouthier</span>, R.W. Smith (CENBG, <span class=SpellE>Gradignan</span>),.
-Oct 2003. 6pp. <o:p></o:p></span></p>
+class=SpellE>Pouthier</span>, R.W. Smith. Oct 2003. 6pp. <o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-left:35.4pt;text-align:justify;text-justify:
 inter-ideograph;mso-layout-grid-align:none;text-autospace:none'><span
@@ -758,15 +937,10 @@ style='font-family:Arial;color:white'><a
 href="http://www.slac.stanford.edu/spires/find/wwwhepau/wwwscan?rawcmd=fin+%22Moretto,+Ph.%22"><span
 lang=EN-GB style='color:white;mso-ansi-language:EN-GB;text-decoration:none;
 text-underline:none'>Ph. <span class=SpellE>Moretto</span></span></a></span><span
-lang=EN-GB style='font-family:Arial;color:white;mso-ansi-language:EN-GB'> (</span><span
-style='font-family:Arial;color:white'><a
-href="http://www.slac.stanford.edu/spires/find/inst/www?icncp=CENBG,+Gradignan"><span
-lang=EN-GB style='color:white;mso-ansi-language:EN-GB;text-decoration:none;
-text-underline:none'>CENBG, <span class=SpellE>Gradignan</span></span></a></span><span
-lang=EN-GB style='font-family:Arial;color:white;mso-ansi-language:EN-GB'>),.
-Sep 2003. <br>
+lang=EN-GB style='font-family:Arial;color:white;mso-ansi-language:EN-GB'>. Sep
+2003. <br>
 Published in </span><b><span lang=EN-GB style='font-family:Arial;color:#FF9933;
-mso-ansi-language:EN-GB'>Nucl.Instrum.Meth.B210:92-97<span class=GramE>,2003</span></span></b><span
+mso-ansi-language:EN-GB'>Nucl.Instrum.Meth.B210:92-97, 2003</span></b><span
 lang=EN-GB style='font-family:Arial;color:#FFCCFF;mso-ansi-language:EN-GB'><o:p></o:p></span></p>
 
 <p class=MsoNormal style='text-align:justify;text-justify:inter-ideograph;
@@ -997,8 +1171,8 @@ lang=EN-GB style='font-family:Arial;color:#CCFFCC;mso-ansi-language:EN-GB'>left<
 lang=EN-GB style='font-family:Arial;color:#CCFFCC;mso-ansi-language:EN-GB'>
 plot :</span></b><span lang=EN-GB style='font-family:Arial;color:#CCFFCC;
 mso-ansi-language:EN-GB'> <i>cytoplasm <span class=SpellE>voxel</span>
-intensity (0-255) distribution, two density zones have been isolated (one for
-pure cytoplasm in red, the other for nucleoli in yellow)</i><o:p></o:p></span></p>
+intensity (0-255) distribution, two density zones have been isolated (one for pure
+cytoplasm in red, the other for nucleoli in yellow)</i><o:p></o:p></span></p>
 
 <p class=MsoNormal align=center style='text-align:center;tab-stops:right 16.0cm;
 mso-layout-grid-align:none;text-autospace:none'><span class=GramE><b><span
@@ -1099,9 +1273,10 @@ style='font-family:Arial;color:white;mso-ansi-language:EN-GB'><o:p>&nbsp;</o:p><
 <p class=MsoNormal style='text-align:justify;text-justify:inter-ideograph;
 mso-layout-grid-align:none;text-autospace:none'><span lang=EN-GB
 style='font-family:Arial;color:white;mso-ansi-language:EN-GB'>Running this
-example requires a large amount of memory and CPU time. Decrease of memory use and
-acceleration of navigation could be investigated using nested parameterization.
-Microdosimetry with other geometries like tissues will be investigated.<o:p></o:p></span></p>
+example requires a large amount of memory and CPU time. Decrease of memory use
+and acceleration of navigation could be investigated using nested
+parameterization. Microdosimetry with other geometries like 3D tissues will be
+investigated.<o:p></o:p></span></p>
 
 <p class=MsoNormal style='text-align:justify;text-justify:inter-ideograph;
 mso-layout-grid-align:none;text-autospace:none'><span lang=EN-GB
@@ -1136,10 +1311,9 @@ style='font-family:Arial;color:white;mso-ansi-language:EN-GB'><o:p>&nbsp;</o:p><
 none;text-autospace:none'><span lang=EN-GB style='font-family:Arial;color:white;
 mso-ansi-language:EN-GB'>Last modified by </span><st1:place><span lang=EN-GB
  style='font-family:Arial;color:white;mso-ansi-language:EN-GB'>S. Incerti</span></st1:place><span
-lang=EN-GB style='font-family:Arial;color:white;mso-ansi-language:EN-GB'>, </span><st1:date
-Month="4" Day="10" Year="2006"><span lang=EN-GB style='font-family:Arial;
- color:white;mso-ansi-language:EN-GB'>10/04/2006</span></st1:date><span
-lang=EN-GB style='font-family:Arial;color:white;mso-ansi-language:EN-GB'><o:p></o:p></span></p>
+lang=EN-GB style='font-family:Arial;color:white;mso-ansi-language:EN-GB'>, <span
+style='mso-field-code:" DATE \\\@ \0022dd\/MM\/yyyy\0022 "'><span
+style='mso-no-proof:yes'>27/02/2007</span></span><o:p></o:p></span></p>
 
 </div>
 

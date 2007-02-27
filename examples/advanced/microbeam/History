@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.10 2006-11-23 12:24:20 sincerti Exp $
+$Id: History,v 1.11 2007-02-27 12:02:09 sincerti Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,11 @@ $Id: History,v 1.10 2006-11-23 12:24:20 sincerti Exp $
 
                        Package History file
                        --------------------
+
+27 Fev 2007 - S. Incerti
+- Modified dE/dX calculation in src/MicrobeamSteppingAction.cc 
+in order to average on Pre/Post step. 
+- Updated README and html files with publications.
 
 23 Nov 2006 - S. Incerti (microbeam-V08-01-01)
 - Replaced G4MultipleScattering process for alphas by 

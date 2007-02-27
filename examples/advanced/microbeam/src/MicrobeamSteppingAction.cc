@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: MicrobeamSteppingAction.cc,v 1.5 2006-06-29 16:05:39 gunter Exp $
+// $Id: MicrobeamSteppingAction.cc,v 1.6 2007-02-27 12:02:09 sincerti Exp $
 // -------------------------------------------------------------------
 
 #include "G4SteppingManager.hh"
@@ -94,11 +94,21 @@ if (       ((aStep->GetPreStepPoint()->GetPhysicalVolume()->GetName() == "Polypr
 	  fclose (myFile);
 	 }
 
+         // Average dE over step syggested by Michel Maire
+
 	 G4StepPoint* p1 = aStep->GetPreStepPoint();
          G4ThreeVector coord1 = p1->GetPosition();
+         const G4AffineTransform transformation1 = p1->GetTouchable()->GetHistory()->GetTopTransform();
+         G4ThreeVector localPosition1 = transformation1.TransformPoint(coord1);
 
-         const G4AffineTransform transformation = p1->GetTouchable()->GetHistory()->GetTopTransform();
-         G4ThreeVector localPosition = transformation.TransformPoint(coord1);
+	 G4StepPoint* p2 = aStep->GetPostStepPoint();
+         G4ThreeVector coord2 = p2->GetPosition();
+         const G4AffineTransform transformation2 = p2->GetTouchable()->GetHistory()->GetTopTransform();
+         G4ThreeVector localPosition2 = transformation2.TransformPoint(coord2);
+
+         G4ThreeVector localPosition = localPosition1 + G4UniformRand()*(localPosition2-localPosition1);
+	 
+	 // end
 
 	 FILE *myFile;
 	 myFile=fopen("beamPosition.txt","a");
