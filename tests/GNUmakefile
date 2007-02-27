@@ -25,6 +25,7 @@ ELECTROMAGNETIC += 14 ## Total cross sections
 ELECTROMAGNETIC += 15 ## Multiple Scattering
 ELECTROMAGNETIC += 16 ## Simulate synchrotron radiation
 ELECTROMAGNETIC += 17 ## Muon interactions
+ELECTROMAGNETIC += 18 ## Energy loss due to ionization and bremsstrahlung
 
 # Symbolic links to extended g3tog4 examples using test601, etc...
 G3TOG4 += 01 02   ## 01 - clGeometry  02 cltog4 (actually hand coded for now)
