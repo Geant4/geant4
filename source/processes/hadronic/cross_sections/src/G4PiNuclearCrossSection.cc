@@ -256,7 +256,7 @@ GetIsoZACrossSection(const G4DynamicParticle* particle, G4double ZZ,
       "Called G4PiNuclearCrossSection outside parametrization");
   }
   G4int Z1, Z2;
-  G4double x1, x2;
+  G4double x1, x2, xt1, xt2;
   if(charge<0)
   {
     if(theZ[it]==Z)
@@ -268,16 +268,24 @@ GetIsoZACrossSection(const G4DynamicParticle* particle, G4double ZZ,
     else
     {
       x1 = thePimData[it-1]->ReactionXSection(kineticEnergy);
+      xt1 = thePimData[it-1]->TotalXSection(kineticEnergy);
       Z1 = theZ[it-1];
       x2 = thePimData[it]->ReactionXSection(kineticEnergy);
+      xt2 = thePimData[it]->TotalXSection(kineticEnergy);
       Z2 = theZ[it];
+
       result = Interpolate(Z1, Z2, Z, x1, x2);
+      fTotalXsc = Interpolate(Z1, Z2, Z, xt1, xt2);
+
       debug.push_back("D2 ");
       debug.push_back(x1);
       debug.push_back(x2);
+      debug.push_back(xt1);
+      debug.push_back(xt2);
       debug.push_back(Z1);
       debug.push_back(Z2);
       debug.push_back(result);
+      debug.push_back(fTotalXsc);
     }
   }
   else
@@ -291,8 +299,11 @@ GetIsoZACrossSection(const G4DynamicParticle* particle, G4double ZZ,
         theData = &thePipData;
       }
       result = theData->operator[](it)->ReactionXSection(kineticEnergy);
+      fTotalXsc = theData->operator[](it)->TotalXSection(kineticEnergy);
+
       debug.push_back("D3 ");
       debug.push_back(result);
+      debug.push_back(fTotalXsc);
     }
     else
     {
@@ -307,21 +318,33 @@ GetIsoZACrossSection(const G4DynamicParticle* particle, G4double ZZ,
         theHData = &thePipData;
       }
       x1 = theLData->operator[](it-1)->ReactionXSection(kineticEnergy);
+      xt1 = theLData->operator[](it-1)->TotalXSection(kineticEnergy);
       Z1 = theZ[it-1];
       x2 = theHData->operator[](it)->ReactionXSection(kineticEnergy);
+      xt2 = theHData->operator[](it)->TotalXSection(kineticEnergy);
       Z2 = theZ[it];
+
       result = Interpolate(Z1, Z2, Z, x1, x2);
+      fTotalXsc = Interpolate(Z1, Z2, Z, xt1, xt2);
+
       debug.push_back("D4 ");
       debug.push_back(x1);
+      debug.push_back(xt1);
       debug.push_back(x2);
+      debug.push_back(xt2);
       debug.push_back(Z1);
       debug.push_back(Z2);
       debug.push_back(result);
+      debug.push_back(fTotalXsc);
     }
   }
-
   debug.dump();
-  return tuning*result;
+  result *= tuning;
+
+  fElasticXsc = fTotalXsc - result;
+  if( fElasticXsc < 0.) fElasticXsc = 0.;
+
+  return result;
  }
 
  G4double G4PiNuclearCrossSection::

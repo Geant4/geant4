@@ -74,6 +74,9 @@ class G4PiNuclearCrossSection : public G4VCrossSectionDataSet
                                 G4double ZZ, G4double AA,
                                 G4double /*aTemperature*/);
 
+  G4double GetTotalXsc()  { return fTotalXsc;   };
+  G4double GetElasticXsc(){ return fElasticXsc; };
+
 
   void BuildPhysicsTable(const G4ParticleDefinition&) {}
   void DumpPhysicsTable(const G4ParticleDefinition&) {}
@@ -158,6 +161,12 @@ static const G4double u_p_in[30];
 std::vector<G4int> theZ;
 std::vector<G4PiData *> thePipData;
 std::vector<G4PiData *> thePimData;
+
+ // cross sections
+
+  G4double fTotalXsc;
+  G4double fElasticXsc;
+
 
 };
 
