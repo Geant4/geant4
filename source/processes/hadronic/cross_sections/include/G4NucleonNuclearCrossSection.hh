@@ -61,9 +61,9 @@ class G4NucleonNuclearCrossSection : public G4VCrossSectionDataSet
   G4double GetCrossSection(const G4DynamicParticle* aParticle, 
                            const G4Element* anElement,
                            G4double T=0.);
-  G4double GetCrossSection( const G4DynamicParticle* aParticle, 
-                       G4double  zElement,
-		   G4double                );
+
+  G4double GetIsoZACrossSection(const G4DynamicParticle* aParticle, 
+                                G4double ZZ, G4double AA, G4double /*temperature*/ );
 
   G4double GetTotalXsc()  { return fTotalXsc;   };
   G4double GetElasticXsc(){ return fElasticXsc; };

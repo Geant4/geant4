@@ -546,7 +546,7 @@ GetCrossSection( const G4DynamicParticle* aParticle,
                        G4double                )
 
 {
-  return GetCrossSection(aParticle, anElement->GetZ(), anElement->GetN());
+  return GetIsoZACrossSection(aParticle, anElement->GetZ(), anElement->GetN(), 0.);
 }
 
 
@@ -555,9 +555,8 @@ GetCrossSection( const G4DynamicParticle* aParticle,
 //
 
 G4double G4NucleonNuclearCrossSection::
-GetCrossSection( const G4DynamicParticle* aParticle, 
-                       G4double  zElement,
-                       G4double                )
+GetIsoZACrossSection( const G4DynamicParticle* aParticle, 
+                      G4double  zElement, G4double, G4double  )
 {
    // precondition
    G4ping debug("debug_NucleonNuclearCrossSection");
