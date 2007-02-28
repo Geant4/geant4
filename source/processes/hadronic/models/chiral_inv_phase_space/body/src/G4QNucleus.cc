@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNucleus.cc,v 1.65 2007-01-23 17:14:21 mkossov Exp $
+// $Id: G4QNucleus.cc,v 1.66 2007-02-28 14:26:26 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QNucleus ----------------
@@ -806,7 +806,7 @@ G4bool G4QNucleus::Split2Baryons()
 G4bool G4QNucleus::EvaporateBaryon(G4QHadron* h1, G4QHadron* h2)
 {//  ===========================================================
   //static const G4double   uWell=2.7;              // EffectiveDepth of potential well B
-  //static const G4double   uWell=2.;               // EffectiveDepth of potential well B
+  //static const G4double   uWell=7.;               // EffectiveDepth of potential well B
   static const G4double   uWell=1.7;              // EffectiveDepth of potential well B
   //static const G4double   uWell=0.0;              // EffectiveDepth of potential well B
   //static const G4double   alpha=7.2;              // Probability for alpha to evaporate
@@ -3013,7 +3013,9 @@ G4double G4QNucleus::CoulombBarrier(const G4double& cZ, const G4double& cA, G4do
   G4double zz=rZ*cZ;
   // Naitive CHIPS radius: CB={1.46=200(MeV)/137}*z*Z/{R=1.13}*((a*z)**1/3+A**1/3) (?)
   //G4double cb=1.29*zz/(pow(rA,third)+pow(cA,third));
-  G4double cb=1.2*zz/(pow(rA,third)+pow((cA*cZ),third)); // Negative hadronic potential
+  G4double ff=cZ;
+  if(cA==1) ff+=3.;
+  G4double cb=zz/(pow(rA,third)+ff*pow(cA,third)); // Negative hadronic potential
   // Geant4 solution for protons is practically the same:
   // G4double cb=1.263*Z/(1.0 + pow(rA,third));
   // @@ --- Temporary "Lambda/Delta barrier for mesons"

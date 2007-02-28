@@ -27,7 +27,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4QEnvironment.cc,v 1.118 2006-11-27 10:44:54 mkossov Exp $
+// $Id: G4QEnvironment.cc,v 1.119 2007-02-28 14:26:25 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QEnvironment ----------------
@@ -59,6 +59,7 @@ G4QEnvironment::G4QEnvironment(const G4QHadronVector& projHadrons, const G4int t
 {
   static const G4QPDGCode pimQPDG(-211);
   theWorld= G4QCHIPSWorld::Get();            // Get a pointer to the CHIPS World
+  G4bool fake=false;                         // At present only fake pi-
   theTargetPDG=targPDG;                      // Remenber it for error message
   G4int nHadrons=projHadrons.size();         // A#of hadrons in the input Vector
 #ifdef debug
@@ -181,17 +182,18 @@ G4QEnvironment::G4QEnvironment(const G4QHadronVector& projHadrons, const G4int t
         G4int         nuPDG=14;
         if(opPDG==15) nuPDG=16;
 		      G4LorentzVector mu4m=opHad->Get4Momentum();
-        G4double qpen=-200.*log(G4UniformRand());   // Energy of target-quark-parton(T=200)
+        //G4double qpen=-200.*log(G4UniformRand()); // Energy of target-quark-parton(T=200)
+        G4double qpen=465.*G4UniformRand();         // Uniform distr. for 3-quarks nucleon
         G4double qpct=2*G4UniformRand()-1.;         // Cos(thet) of target-quark-parton
         G4double qpst=sqrt(1.-qpct*qpct);           // Sin(theta) of target-quark-parton
         G4double qppt=qpen*qpst;                    // PT of target-quark-parton
-        G4double qphi=6.2831853*G4UniformRand();    // Phi of target-quark-parton
+        G4double qphi=twopi*G4UniformRand();        // Phi of target-quark-parton
         G4LorentzVector qi4m(qppt*sin(qphi),qppt*cos(qphi),qpen*qpct,qpen); // quark-parton
         G4LorentzVector qt4m=mu4m+qi4m;             // Total 4mom (iniQP+lepton)
         G4LorentzVector nu4m(0.,0.,0.,0.);          // Prototype of secondary neutrino 4mom
         G4LorentzVector qf4m(0.,0.,0.,0.);          // Prototype for secondary quark-parton
         G4QContent targQC=targQPDG.GetQuarkContent(); // QC of the target nucleus (local!)
-        targQC+=G4QContent(1,0,0,0,1,0);      // Make iso-shift with a fake pi- (changed!)
+        targQC+=G4QContent(1,0,0,0,1,0);      // Make iso-shift with a fake pi-EX(changed!)
         G4LorentzVector fn4m=G4LorentzVector(0.,0.,0.,0.); // Prototype of the residual 4M
         G4QNucleus fnN(targQC,fn4m);          // Define the final state nucleus
         G4double   fnm=fnN.GetMZNS();         // GS Mass of the final state nucleus
@@ -282,7 +284,8 @@ G4QEnvironment::G4QEnvironment(const G4QHadronVector& projHadrons, const G4int t
 	       }
         // At this poin it is possible to convert mu- to pi-
         fn4m=qf4m-qi4m;
-        opHad->SetQPDG(pimQPDG);
+        opHad->SetQPDG(pimQPDG);              //Convert (mu-)u->d to (virt pi-)u->d capture
+        fake=true;                            // fake pi- *****
         opHad->Set4Momentum(fn4m);
       }
     }
@@ -343,7 +346,7 @@ G4QEnvironment::G4QEnvironment(const G4QHadronVector& projHadrons, const G4int t
           G4cout<<"G4QE::Const:CreateQuasm, 4M="<<ch4M<<",QC="<<hQC<<",E="<<envPDG<<",tC="
                 <<totCharge<<",tB="<<totBaryoN<<G4endl;
 #endif
-          CreateQuasmon(hQC, ch4M);
+          CreateQuasmon(hQC, ch4M,fake);
 		      } // End of Existing Nuclear Environment case
 	     } // End of final hadron case
     } // End of the LOOP over input hadrons
@@ -624,14 +627,17 @@ const G4QEnvironment& G4QEnvironment::operator=(const G4QEnvironment &right)
 }
 
 // Member function for Quasmon Creation & Environment nucleus modification
-void G4QEnvironment::CreateQuasmon(const G4QContent& projQC, const G4LorentzVector& proj4M)
-{//========================================================================================
+void G4QEnvironment::CreateQuasmon(const G4QContent& projQC, const G4LorentzVector& pro4M,
+                                   G4bool fake)
+{//=======================================================================================
   static const G4double third=1./3.;
   //static const G4double mNeut= G4QPDGCode(2112).GetMass();
   //static const G4double mProt= G4QPDGCode(2212).GetMass();
   //static const G4double mLamb= G4QPDGCode(3122).GetMass();
   static const G4double mPi  = G4QPDGCode(211).GetMass();
   static const G4double mPi2 = mPi*mPi;
+  //static const G4double mMu  = G4QPDGCode(13).GetMass();
+  //static const G4double mMu2 = mMu*mMu;
   //static const G4QContent gamQC(0,0,0,0,0,0);
   //static const G4QContent pimQC(1,0,0,0,1,0);
   //static const G4QContent pipQC(0,1,0,1,0,0);
@@ -643,11 +649,14 @@ void G4QEnvironment::CreateQuasmon(const G4QContent& projQC, const G4LorentzVect
   G4QContent valQ(0,0,0,0,0,0);             // Prototype of the Quasmon's Quark Content
   G4LorentzVector q4Mom(0.,0.,0.,0.);       // Prototype of the Quasmon's 4-momentum
   nBarClust = 1;                            // By default only quasi-free nucleons
+  G4LorentzVector proj4M=pro4M;             // Fake equivalence to avoid & const
   G4double  projE=proj4M.e();               // energy of the projectile
+  G4int projPDG=projQC.GetSPDGCode();     // Minimum hadron for the projectile QC
   if(projE<0.)
   {
-    G4cout<<"***G4QEnvironment::CreateQuasmon: projE="<<projE<<"<=0, QC="<<projQC<<G4endl;
-    //throw G4QException("G4QEnvironment::CreateQuasmon: Energy of the Projectile <0.");
+    G4cout<<"*Warning*G4QEnvironment::CreateQuasmon:Epr="<<projE<<"<0,QC="<<projQC<<G4endl;
+    projE=0.;
+    proj4M=G4LorentzVector(0.,0.,0.,0.);
   }
   G4double  projM2=proj4M.m2();             // projectile's squared mass (print & v.gamma)
   G4int     targPDG=theEnvironment.GetPDG();// PDG Code of the target nucleus
@@ -679,13 +688,11 @@ void G4QEnvironment::CreateQuasmon(const G4QContent& projQC, const G4LorentzVect
 	   G4cout<<"G4QE::CrQ:TNuc:Z="<<envZ<<",N="<<envN<<",nC="<<nBarClust<<",tC="
           <<totCharge<<", tB="<<totBaryoN<<G4endl;
 #endif
-    G4int projPDG=projQC.GetSPDGCode();     // Minimum hadron for the projectile QC
     G4bool pbpt=projE<PiPrThresh+(M2ShiftVir+projM2)/DiNuclMass;// PhotonBelowPionThreshold
     G4bool din=false;
     G4bool piF=false;
     G4bool gaF=false;
-    //if(abs(projM2-mPi2)<.00001&&projE-mPi<0.1&&projPDG==-211) din=true;//PiAtRest case
-    if(fabs(projM2-mPi2)<.00001&&projE-mPi<0.1&&projPDG==-211) piF=true;// PiMiAtRest case
+    if((projM2-mPi2<.00001||projE-mPi<0.1)&&projPDG==-211&&!fake) piF=true;//PiAtRestCase
     //if(pbpt&&projPDG==22) din=true; // InCaseOf GammaBelowPiThresh needs DiNucl (?)
     if(pbpt&&projPDG==22) gaF=true; // InCaseOf GammaBelowPiThresh needs DiNucl (?)
     theEnvironment.SetMaxClust(nBarClust);
@@ -1043,13 +1050,13 @@ void G4QEnvironment::CreateQuasmon(const G4QContent& projQC, const G4LorentzVect
       G4Quasmon* curQuasmon = new G4Quasmon(valQ, q4Mom, proj4M);//Interaction gam+q inside
       theQuasmons.push_back(curQuasmon);  // Insert Quasmon without incid. gamma (del.eq.)
 	   }
-    else if(fabs(projM2-mPi2)<.00001&&projE-mPi<0.1&&projPDG==-211)
+    else if((projM2-mPi2<.00001&&projE-mPi<0.1)&&projPDG==-211&&!fake)
     //if(2>3)                                //@@ ***TMP*** PionAbsorbAtRest by q is closed
 	   {
       q4Mom=proj4M+G4LorentzVector(0.,0.,0.,tgMass-envMass);// PION + BoundCluster
       valQ=EnFlQC+curQC;
-      if(projE<mPi)G4cout<<"*InputError*G4QE::CrQ:Ener(pi-)="<<projE<<"<mPi="<<mPi<<G4endl;
 #ifdef pdebug
+      if(projE<mPi)G4cout<<"*VirtualPiM*G4QE::CrQ:Ener(pi-)="<<projE<<"<mPi="<<mPi<<G4endl;
       G4cout<<"G4QEnv::CrQ:Q="<<q4Mom<<valQ<<"+pi="<<proj4M<<",E="<<theEnvironment<<G4endl;
 #endif
       G4Quasmon* curQuasmon = new G4Quasmon(valQ, q4Mom, -proj4M);//Interact gam+q inside

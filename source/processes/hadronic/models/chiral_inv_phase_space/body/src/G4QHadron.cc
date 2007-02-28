@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QHadron.cc,v 1.46 2006-12-08 14:54:48 mkossov Exp $
+// $Id: G4QHadron.cc,v 1.47 2007-02-28 14:26:26 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QHadron ----------------
@@ -312,6 +312,9 @@ G4bool G4QHadron::RelDecayIn2(G4LorentzVector& f4Mom, G4LorentzVector& s4Mom,
   if(vdir.mag2() > 0.)                   // the refference particle isn't at rest in CMS
   {
     vx = vdir.unit();                    // Ort in the direction of the reference particle
+#ifdef ppdebug
+    G4cout<<"G4QH::RelDecIn2:Vx="<<vx<<",M="<<theMomentum<<",d="<<dir<<",c="<<cdir<<G4endl;
+#endif
     G4ThreeVector vv= vx.orthogonal();   // Not normed orthogonal vector (!)
     vy = vv.unit();                      // First ort orthogonal to the direction
     vz = vx.cross(vy);                   // Second ort orthoganal to the direction
@@ -323,7 +326,8 @@ G4bool G4QHadron::RelDecayIn2(G4LorentzVector& f4Mom, G4LorentzVector& s4Mom,
   if(minCost<-1.) minCost=-1.;
   if(maxCost<-1.) maxCost=-1.;
   if(minCost> 1.) minCost= 1.;
-  if(iM-fM-sM<.00000001)
+  if(minCost> maxCost) minCost=maxCost;
+  if(fabs(iM-fM-sM)<.00000001)
   {
     G4double fR=fM/iM;
     G4double sR=sM/iM;
@@ -352,7 +356,7 @@ G4bool G4QHadron::RelDecayIn2(G4LorentzVector& f4Mom, G4LorentzVector& s4Mom,
     G4double dcost=maxCost-minCost;
     ct = minCost+dcost*G4UniformRand();
   }
-  G4double phi= 360.*deg*G4UniformRand();  // @@ Change 360.*deg to M_TWOPI (?)
+  G4double phi= twopi*G4UniformRand();  // @@ Change 360.*deg to M_TWOPI (?)
   G4double ps=0.;
   if(fabs(ct)<1.) ps = p * sqrt(1.-ct*ct);
   else
@@ -394,17 +398,17 @@ G4bool G4QHadron::RelDecayIn2(G4LorentzVector& f4Mom, G4LorentzVector& s4Mom,
 // Decay of the Hadron in 2 particles (f + s)
 G4bool G4QHadron::DecayIn2(G4LorentzVector& f4Mom, G4LorentzVector& s4Mom)
 {//    ===================================================================
-  G4double fM  = f4Mom.m();                // Mass of the 1st Hadron
   G4double fM2 = f4Mom.m2();
-  G4double sM  = s4Mom.m();                // Mass of the 2nd Hadron
+  G4double fM  = sqrt(fM2);              // Mass of the 1st Hadron
   G4double sM2 = s4Mom.m2();
-  G4double iM  = theMomentum.m();          // Mass of the decaying hadron
+  G4double sM  = sqrt(sM2);              // Mass of the 2nd Hadron
   G4double iM2 = theMomentum.m2();
+  G4double iM  = sqrt(iM2);              // Mass of the decaying hadron
 #ifdef debug
   G4cout<<"G4QHadron::DecIn2: iM="<<iM<<" => fM="<<fM<<" + sM="<<sM<<" = "<<fM+sM<<G4endl;
 #endif
   //@@ Later on make a quark content check for the decay
-  if (fabs(iM-fM-sM)<.001)
+  if (fabs(iM-fM-sM)<.0000001)
   {
     G4double fR=fM/iM;
     G4double sR=sM/iM;
@@ -435,7 +439,7 @@ G4bool G4QHadron::DecayIn2(G4LorentzVector& f4Mom, G4LorentzVector& s4Mom)
 #ifdef debug
   G4cout<<"G4QHadron::DecayIn2: ct="<<ct<<", p="<<p<<G4endl;
 #endif
-  G4double phi= 360.*deg*G4UniformRand();  // @@ Change 360.*deg to M_TWOPI (?)
+  G4double phi= twopi*G4UniformRand();  // @@ Change 360.*deg to M_TWOPI (?)
   G4double ps = p * sqrt(1.-ct*ct);
   G4ThreeVector pVect(ps*sin(phi),ps*cos(phi),p*ct);
 
