@@ -1,0 +1,231 @@
+
+                       geant4-08-02-ref-02
+                       ===================
+
+Some of the development/fixes included since the last reference tag are:
+
+  o New specific shape G4ExtrudedSolid, a solid representing the extrusion
+    of an arbitrary polygon with fixed outline and multiple Z sections.
+  o Added ability for computing surface area and point on surface for
+    tessellated solids.
+  o Extended stepping algorithm for multiple-scattering (Urban model) to
+    support up to 3 different stepping modes.
+  o Included revised FTF model by V.Uzhinsky for diffraction.
+  o Upgraded CHIPS model for muon capture (G4QCaptureAtRest).
+  o Corrected initialisation of energy deposition in G4HadFinalState.
+    The fix affects in particular elastically scattered neutrons and reduces
+    the number of events in which the summed energy of final particles exceeds
+    that of the incident particle.
+  o New example (FanoCavity) for computing the dose deposited in an ionization
+    chamber by a monoenergetic photon beam.
+
+---------- Reference-tag 'Release Notes' -----------
+
+
+Summarised, the list of changes is the following:
+
+(*) Tags also included in release 8.2.p01.
+
+config
+------
+- Protected generation of dependencies using internal 'make' variable
+  MAKECMDGOALS in binmake.gmk and common.gmk, following suggestion made
+  in problem report #930. This protection resolves the problem of generation
+  of dependencies when issueing the 'clean' target.
+- Configure script (Configure-V08-02-00):  (*)
+  o Updated to prompt for new version 4.2 of G4EMLOW data set.
+
+geometry/management                              geommng-V08-02-00 (*)
+-------------------
+- Added flag for controlling verbosity to CheckOverlaps() method.
+  By default, verbosity is ON.
+
+geometry/navigation                              geomnav-V08-02-01 (*)
+-------------------
+- In G4Navigator, forcing call to CheckOverlaps() on the current volume
+  before event abortion for cases of stuck tracks.
+- G4PropagatorInField: implemented ClearPropagatorState() to clear
+  track-dependent state (safety, zero-steps, loop flag. etc...).
+  Call to this method becomes mandatory in G4Transportation for each new
+  track to overcome side effects of safety inconsistency in presence of
+  geometry overlaps.
+
+geometry/solids/specific                         geom-specific-V08-02-04
+------------------------
+- Introduced new shape G4ExtrudedSolid, a solid representing the extrusion
+  of an arbitrary polygon with fixed outline and multiple Z sections.
+  New files: G4ExtrudedSolid[.hh.icc.cc] and testG4ExtrudedSolid.cc
+- G4TessellatedSolid:
+  o Made relevant solid's methods virtual, to be used as base class.
+  o Added implementation for GetSurfaceArea() and GetPointOnSurface() methods.
+  o Added protection in SurfaceNormal() method in case of facet not found.
+  o Check and return kOutside in Inside() if point out of solid's extent.
+- Bug fix in G4TriangularFacet::Intersect() to allow for correct update of
+  'Distance' in condition. Cleared unecessary declaration of IsInside()
+  methods in both G4TriangularFacet and G4QuadrangularFacet.
+- Fix in G4PolyconeSide::DistanceAway() for correct estimation of distance
+  for the case of Phi sections. Addresses problem report #598.
+  Updated unit test for G4Polycone to consider new test case.
+- Updated global unit tests in geometry/solids/test
+  (geom-solids-tests-V08-02-00).
+
+geometry/volumes                                 geomvol-V08-02-00 (*)
+----------------
+- Added flag for controlling verbosity to CheckOverlaps() method for
+  G4PVPlacement and G4PVParameterised. By default, verbosity is ON.
+
+global                                           global-V08-02-01
+------
+- Added G4TwoVector type, typef of CLHEP's Hep2Vector class.
+- Changed date for public patch-01 to release 8.2.
+
+physics_lists                                    phys-lists-V08-02-04
+-------------
+- G4HadronElasticPhysics: set limits on low energy and QElastic to zero.
+- Fixed special cuts for LBE physics list.
+- Added set min/max Energy and Inelastic Energy to NeutronHP builder.
+- G4EmStandardPhysics:
+  o Use G4hMultipleScattering for muons and removed extra printouts.
+  o Use default multiple-scattering setup in G4EmStandardPhysics72.
+  o Use skin=0 (no use of ComputeStep()) in G4EmStandardPhysics and
+    G4EmStandardPhysics71.
+
+processes/electromagnetic/muons                  emmuons-V08-02-00
+-------------------------------
+- Set 'linLossLimit' to 1.E-6 in G4EnergyLossForExtrapolator.
+
+processes/electromagnetic/standard               emstand-V08-02-08
+----------------------------------
+- G4UrbanMscModel:
+  o Fix in the single scattering code for heavy particles, now the code
+    can be used with skin=1 e+/e- and for heavy particles as well.
+  o Added protections against NaN values in two places: sampling of
+    theta when tau=0 in lateral displacement, and in method
+    ComputeTrueStepLength() for the case of zero true length.
+  o Stepping algorithm changed for skin=0, now there are 3 stepping modes:
+    + Stepping similar to that performed in release 7.1;
+    + skin=0 - designed for high energy simulations with or without
+               magnetic field
+    + skin=1 - designed for 'precision' simulations without magnetic
+               field (default).
+  o If skin>1, perform small steps with single scattering before and
+    after boundary the boundary. The step is reduced before boundary for
+    'geomlimit' less than 'geombig' only.
+  o Use 'tPathLength' inside ComputeStep() instead of 'geombig'.
+- G4MultipleScattering: fix to allow for reinitialisation of model
+  parameters between runs.
+- G4hIonisation: removed dependence on K+ and K- particles.
+- G4BetheHeitlerModel: for any initial energy select atom of the material
+  on which conversion occur (needed for polarisation module).
+- G4eBremsstrahlungModel: corrected 'LPMconstant' by factor 2.
+
+processes/electromagnetic/utils                  emutils-V08-02-05
+-------------------------------
+- G4VEnergyLossProcess: modified initialisation of 'linLossLimit' to 1.E-6.
+  Improved precision of energy loss for high energy incident and high cut.
+- G4LossTableManager, G4EmProcessOptions, G4EnergyLossMessenger: added
+  commands for 'MscLateralDisplacement', 'MscSkin' and 'linearLossLimit'.
+- G4VMultipleScattering: added SetSkin() and Skin() methods.
+- G4LossTableBuilder: use more precise algorithm to build inverse range
+  table using G4LPhysicsFreeVector.
+
+processes/hadronic
+------------------
+- cross_sections (hadr-cross-V08-02-02)
+  o Added implementations of A and Z interfaces to classes
+    G4UPiNuclearCrossSection, G4UInelasticCrossSection, G4UElasticCrossSection,
+    G4GlauberGribovCrossSection and G4NucleonNuclearCrossSection.
+  o Added protection against division by zero in method
+    G4CrossSectionDataStore::SelectRandomIsotope()
+- models/binary_cascade (had-binary-V08-02-00) (*)
+  o G4BinaryCascade::Capture(): added protection against division by zero.
+- models/chiral_inv_phase_space/body (hadr-chips-body-V08-02-04)
+  o Upgraded according to new muon capture interface.
+- models/chiral_inv_phase_space/interface (hadr-chips-inter-V08-02-03)
+  o Upgraded G4QCaptureAtRest for muon capture.
+- models/coherent_elastic (hadr-cohe-V08-02-01)
+  o G4UHadronElasticProcess and G4ChargeExchangeProcess:
+    + Fixed problem for the case, when isotope vector is not defined.
+    + Migrated to interface for cross section with Z and A;
+      do not use QElastic total cross sections in G4ChargeExchangeProcess.
+- models/de_excitation (hadr-deex-V08-02-02) (*)
+  o Evaporation: added protection to exclude negative probabilities from
+    the "competitive channel sum". Together with the fix below for fission
+    this should only happen due to a precision error, but is protected
+    nonetheless.
+  o Fission: fixed probability to no longer be negative. Is now equivalent
+    to what is written in the Physics Reference Manual.
+    The above two fixes also affect the precompound model which invokes
+    these models.
+- models/low_energy (hadr-lep-V08-02-01)
+  o G4LEAntiProtonInelastic: for low energy (< 0.1 MeV) anti-protons, the
+    model was simply returning the particle change which had not yet been
+    initialized, thus leading to an infinite loop. Now model returns particle
+    change initialized from the original kinematics.
+    Addresses problem report #888.
+  o All Low Energy models: added model name to constructor for use in
+    traceback and debugging.
+  o G4LElastic: added protection against sqrt() of negative value.
+- models/neutron_hp (hadr-hpn-V08-02-00) (*)
+  o Fixed potential divisions by zero in: G4NeutronHPVector, G4NeutronHPLevel
+    and G4NeutronHPInterpolator.
+- models/parton_string (hadr-prtn-V08-02-00)
+  o Included revised FTF model by V.Uzhinsky. Affecting codes in diffraction,
+    management, hadronization and qgsm modules.
+- stopping (hadr-stopping-V08-02-02) (*)
+  o G4MuMinusCaptureCascade: added sampling of random vector of e- in
+    decay; added factor 2 in potential energy - fixing decay spectrum.
+  o G4MuonMinusCaptureAtRest: fixed problem for the case when isotope
+    vector is undefined. Force to use round 'targetA'.
+    Addressing problem report #926.
+- util (hadr-util-V08-02-00) (*)
+  o G4HadFinalState: corrected initialisation of energy deposition.
+    The fix affects elastically scattered neutrons and probably most 
+    hadronic models. Reduces the number of events in which the summed
+    energy of final particles exceeds that of the incident particle.
+
+transportation                                   transport-V08-02-01 (*)
+--------------
+- G4Transportation: calling PropagatorInField to clear state for new
+  track. This addresses a reliabilitiy problem observed by ATLAS; the
+  fix is related to overlaps in the geometry, and consists in clearing
+  the safety value, which may become multivalued due to overlaps in the
+  geometry, and thus can become invalid for a new track in an overlap region...
+- Added protection against zero 'velocity' in method
+  G4Transportation::AlongStep().
+
+visualization/OpenGL                             opengl-V08-02-02
+-------------
+- Fixed Windows problem with DBL_MAX.
+- G4OpenGLXViewer.cc: Small bug fix in print(); context was switched
+  but not switched back.
+
+examples                                         examples-V08-02-02
+--------
+- Updated reference outputs.
+- extended/electromagnetic/TestEm18 (testem18-V08-02-01)
+  o New example allowing for studying the energy lost by a charged particle
+    in a single layer, due to ionization and bremsstrahlung.
+    Results are compared to 'reference' values.
+- extended/medical/fanoCavity (fano-V08-02-03)
+  o New example for computing the dose deposited in an ionization chamber
+    by a monoenergetic photon beam.
+- extended/radioactivedecay/exrdm (exrdm-V08-02-01) (*)
+  o Fixed usage of physics-lists and histograms
+- extended/runAndEvent/RE01 (exampleRE01-V08-02-00)
+  o Removed large-N reference output.
+- extended/runAndEvent/RE02 (exampleRE02-V08-02-00) (*)
+  o Fixed missing NULL pointer protection in ComputeMaterial() method.
+
+
+tests                                            tests-V08-02-02
+-----
+- Updated reference outputs and tools.
+- test19 (test19-V08-02-00)
+  o Fixed some compilation warnings in main().
+- test29 (test29-V08-02-00)
+  o Updated according to last development in CHIPS.
+- test30 (test30-V08-02-00)
+  o New internal test for hadronic models.
+- test202 (test202-V08-02-00)
+  o New visualization test with setup of generic geometry constructs.
