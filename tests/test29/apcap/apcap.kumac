@@ -860,12 +860,12 @@ macro datread np=6 file=f
 * P IN MEV
 * X = P
 * Y = 10*dN/dP MeV^-1
-  if [np] = 92 then 
-    ve/cr vchp(44) r
-    ve/cr vchy(44) r
-    ve/cr vchdy(44) r
-    ve/read vchp,vchy,vchdy chen92data_u92146.vexp
-  endif
+**  if [np] = 92 then 
+**    ve/cr vchp(44) r
+**    ve/cr vchy(44) r
+**    ve/cr vchdy(44) r
+**    ve/read vchp,vchy,vchdy chen92data_u92146.vexp
+**  endif
 *
 * -- Read D.Polster's data
 * Polster 95 PRC 51, 1167
@@ -922,14 +922,14 @@ macro datread np=6 file=f
     ve/copy $sigma(dymm*100.) vPlKdy
     ve/del xmm,ymm,dymm
 * pions
-    ve/cr xmm(38) r
-    ve/cr ymm(38) r
-    ve/cr dymm(38) r
-    ve/read xmm,ymm,dymm polst95data_pi_u92146.vexp
-    ve/copy $sigma(xmm) vPlPIt
-    ve/copy $sigma(ymm) vPlPIy
-    ve/copy $sigma(dymm) vPlPIdy
-    ve/del xmm,ymm,dymm
+*    ve/cr xmm(38) r
+*    ve/cr ymm(38) r
+*    ve/cr dymm(38) r
+*    ve/read xmm,ymm,dymm polst95data_pi_u92146.vexp
+*    ve/copy $sigma(xmm) vPlPIt
+*    ve/copy $sigma(ymm) vPlPIy
+*    ve/copy $sigma(dymm) vPlPIdy
+*    ve/del xmm,ymm,dymm
   endif
 *
 * ==============  Carbon =========================================

@@ -73,6 +73,7 @@
 #include "G4VParticleChange.hh"
 #include "G4ParticleChange.hh"
 #include "G4QCaptureAtRest.hh"
+#include "G4MuonMinusCaptureAtRest.hh"
 #include "G4QuasmonString.hh"
 
 #include "G4ApplicationState.hh"
@@ -411,9 +412,9 @@ int main()
   if(!pPDG) npart=nPr;                                // Make a LOOP ove all particles
   // Different Process Managers are used for the atRest and onFlight processes
 		//G4ProcessManager* man = new G4ProcessManager(part);
-  //G4VDiscreteProcess* proc = new G4QCollision;
   //G4VRestProcess* proc = new G4QCaptureAtRest;
-  G4QCaptureAtRest* proc = new G4QCaptureAtRest;
+  G4QCaptureAtRest* proc = new G4QCaptureAtRest;   // CHIPS
+  ///G4MuonMinusCaptureAtRest* proc = new G4MuonMinusCaptureAtRest; // GHAD
   if(!proc)
   {
     G4cout<<"Tst29: there is no G4QCaptureAtRest process"<<G4endl;
@@ -422,9 +423,9 @@ int main()
 #ifdef debug
   G4cout<<"Test29:--***-- process is created --***--" << G4endl; // only one run
 #endif
+  // Only for CHIPS
   proc->SetParameters(temperature, ssin2g, eteps, fN, fD, cP, rM, nop, sA);
-  //man->AddDiscreteProcess(proc);
-		// man->AddRestProcess(proc);
+  //
   G4int nTot=npart*tgm;
   G4int nCur=0;
   for(G4int pnb=0; pnb<npart; pnb++) // LOOP over particles
@@ -432,7 +433,8 @@ int main()
    if (npart>1) pPDG=pli[pnb];
    G4QContent pQC=G4QPDGCode(pPDG).GetQuarkContent();
    G4int      cp = pQC.GetCharge();
-   if (pPDG==13 || pPDG==15) cp=-1; // Quark content of leptons is not supported by CHIPS
+   if (pPDG==11||pPDG==13||pPDG==15)cp=-1;// QC/Charge of leptons isn't supported by CHIPS
+   if (pPDG==-11||pPDG==-13||pPDG==-15) cp=1;// QC/Charge isn't supported by CHIPS
    G4ParticleDefinition* part=G4AntiSigmaPlus::AntiSigmaPlus();//DefaultProj is AntiSigma+
    if(pPDG==-2212) part=G4AntiProton::AntiProton();  //Definition of antiProton projectile
    else if(pPDG==-211) part=G4PionMinus::PionMinus();// Definition of the Pi- projectile
@@ -571,14 +573,19 @@ int main()
     G4double vRandCount = 0.;
     while (iRandCount>0)                // Shift of the RNDN values 
     {
-      vRandCount = G4UniformRand();     // Fake calls
+      G4int nr = static_cast<G4int>(10*G4UniformRand())+1;        // Fake cicle number
+      for(G4int j=0; j<nr; j++) vRandCount = G4UniformRand();     // Fake calls
       iRandCount--;
     }
+    iRandCount = nEvt%100;
 #ifdef pverb
     G4cout<<"Test29: Before the event loop, nEvents= "<<nEvt<<G4endl;
 #endif
     for (G4int iter=0; iter<nEvt; iter++)
     {
+      G4double vRandCount = 0.;
+      G4int nr = static_cast<G4int>(iRandCount*G4UniformRand())+1;// Fake cicle number
+      for(G4int j=0; j<nr; j++) vRandCount = G4UniformRand();     // Fake calls
 #ifdef debug
       G4cout<<"Test29: ### "<<iter<< "-th event starts.###"<<G4endl;
 #endif
@@ -595,7 +602,11 @@ int main()
       G4cout<<"Test29:--***@@@***--After AtRestDoIt--***@@@***--" << G4endl;// only one run
 #endif
       G4double totCharge = totC;
+      // For CHIPS
       G4int    curN=proc->GetNumberOfNeutronsInTarget();
+      // --- for GHAD ---
+      ///G4int    curN=tgN;
+      // --- End
       if(curN!=tgN) G4cerr<<"******Test29: tgN="<<tgN<<" # curN="<<curN<<G4endl;
       G4int    dBN = curN-tgN;
       G4int    totBaryN = totBN+dBN;
@@ -605,7 +616,11 @@ int main()
       G4cout<<"Test29:tN="<<tgN<<",cN="<<curN<<",tPDG="<<tPDG<<",cPDG="<<curPDG<<",cM="
             <<curM<<", E0="<<e0<<G4endl;
 #endif
+      // Only for CHIPS
       G4LorentzVector Residual=proc->GetEnegryMomentumConservation();
+      // for GHAD
+      ///G4LorentzVector Residual(0.,0.,0.,0.);
+      //
       //G4double de = aChange->GetLocalEnergyDeposit();// Init TotalEnergy by EnergyDeposit
       G4int nSec = aChange->GetNumberOfSecondaries();
       G4double EnergyDep = aChange->GetLocalEnergyDeposit();
@@ -648,7 +663,7 @@ int main()
         {
           G4int chrg=static_cast<G4int>(pd->GetPDGCharge());
           G4int bary=static_cast<G4int>(pd->GetBaryonNumber());
-          c=90000000+chrg*999+bary;
+          c=1000000000+chrg*10000+bary*10; // New PDG2006 code
         }
         m   = pd->GetPDGMass();
 #ifdef rdebug
@@ -750,7 +765,12 @@ int main()
 #ifdef pdebug
       G4cout<<"TEST29:r4M="<<totSum<<ss<<",rChg="<<totCharge<<",rBaryN="<<totBaryN<<G4endl;
 #endif
-	     if (totCharge ||totBaryN || ss>.27 || alarm || (nGamma && !EGamma))
+      // Only for CHIPS
+	     if (totBaryN || ss>.27 || alarm || (nGamma && !EGamma))
+						///////////////if (totCharge ||totBaryN || ss>.27 || alarm || (nGamma && !EGamma))
+						// for others no conservation checks
+	     //if (1>2)
+						//
       {
         G4cerr<<"**Test29:#"<<iter<<":n="<<nSec<<",4M="<<totSum<<",Charge="<<totCharge
               <<",BaryN="<<totBaryN<<", R="<<Residual<<",D2="<<ss<<",nN="<<curN<<G4endl;

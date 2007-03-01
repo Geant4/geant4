@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QHBook.cc,v 1.4 2006-06-29 21:55:31 gunter Exp $
+// $Id: G4QHBook.cc,v 1.5 2007-03-01 10:23:32 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QHBook ----------------
@@ -180,7 +180,8 @@ void G4QHBook::FillEvt(const G4VParticleChange* hadrons)
     {
       G4int chrg=static_cast<G4int>(pd->GetPDGCharge());
       G4int bary=static_cast<G4int>(pd->GetBaryonNumber());
-      c=90000000+chrg*999+bary;
+      //c=90000000+chrg*999+bary; // OLD CHIPS notation
+      c=1000000000+chrg*10000+bary*10; // New PDG 2006 definition
     }
 	   if(picount<3 && (c==111 || c==211 || c==-211 || c==311 || c==-311 || c==221 || c==331))
 	   {
@@ -194,13 +195,13 @@ void G4QHBook::FillEvt(const G4VParticleChange* hadrons)
 	     lorVm[picount] =  G4LorentzVector(mom, ten);
 	     picount++;
 	   }
-
-	   if     (c==2212 || c==90001000)      Mprot++;
-	   else if(c==2112 || c==90000001)      Mneut++;
-	   else if(c==90001001)                 Mdeut++;
-	   else if(c==90001002)                 Mtrit++;
-	   else if(c==90002001)                 MHe3++;
-	   else if(c==90002002)                 MHe4++;
+    // count number of particles
+	   if     (c==2212 || c==1000010010)      Mprot++;
+	   else if(c==2112 || c==1000000010)      Mneut++;
+	   else if(c==1000010020)                 Mdeut++;
+	   else if(c==1000010030)                 Mtrit++;
+	   else if(c==1000020030)                 MHe3++;
+	   else if(c==1000020040)                 MHe4++;
 	   else if(c== 111)      Mpi0++;
 	   else if(c== 211)      Mpip++;
 	   else if(c==-211)      Mpim++;
@@ -350,15 +351,16 @@ void G4QHBook::FillEvt(const G4VParticleChange* hadrons)
 	   mom *= p;                                            // 3-momentum
     G4LorentzVector lorV =  G4LorentzVector(mom, e);
     G4int   c = pd->GetPDGEncoding();
-    G4int ns=0;
-    G4int nz=0;
-    G4int nn=0;
-    if(!c)
-    {
-      nz=static_cast<G4int>(pd->GetPDGCharge());
-      nn=static_cast<G4int>(pd->GetBaryonNumber())-nz;
-      c=90000000+nz*1000+nn;
-    }
+    G4int ns=pd->GetQuarkContent(3)-pd->GetAntiQuarkContent(3);
+    G4int nz=static_cast<G4int>(pd->GetPDGCharge());
+    G4int nn=pd->GetBaryonNumber()-nz-ns;
+    //if(!c)
+    //{
+    //  nz=static_cast<G4int>(pd->GetPDGCharge());
+    //  nn=static_cast<G4int>(pd->GetBaryonNumber())-nz;
+				//  //c=90000000+nz*1000+nn;     // Old CHIPS notation
+				//  c=1000000000+nz*10010+nn*10; // New PDG 2006 definition
+    //}
     G4double px = lorV.x();
     G4double py = lorV.y();
     G4double pz = lorV.z();
@@ -455,14 +457,15 @@ void G4QHBook::FillEvt(const G4VParticleChange* hadrons)
     {
       G4int chrg=static_cast<G4int>(pd->GetPDGCharge());
       G4int bary=static_cast<G4int>(pd->GetBaryonNumber());
-      c=90000000+chrg*999+bary;
+      //c=90000000+chrg*999+bary;     // Old CHIPS notation
+      c=1000000000+chrg*10000+bary*10; // New PDG 2006 definition
     }
-	   if     (c==2212 || c==90001000)      Mprot++;
-	   else if(c==2112 || c==90000001)      Mneut++;
-	   else if(c==90001001)                 Mdeut++;
-	   else if(c==90001002)                 Mtrit++;
-	   else if(c==90002001)                 MHe3++;
-	   else if(c==90002002)                 MHe4++;
+	   if     (c==2212 || c==1000010010)      Mprot++;
+	   else if(c==2112 || c==1000000010)      Mneut++;
+	   else if(c==1000010020)                 Mdeut++;
+	   else if(c==1000010030)                 Mtrit++;
+	   else if(c==1000020030)                 MHe3++;
+	   else if(c==1000020040)                 MHe4++;
 	   else if(c== 111)      Mpi0++;
     else if(c== 211)      Mpip++;
     else if(c==-211)      Mpim++;
