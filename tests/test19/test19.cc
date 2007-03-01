@@ -46,6 +46,7 @@
 
 #define nout
 //#define pscan
+//#define csdebug
 //#define smear
 //#define escan
 //#define idebug
@@ -88,6 +89,8 @@
 #include "G4KaonPlusInelasticProcess.hh"
 #include "G4KaonMinusInelasticProcess.hh"
 //#include "G4QuasmonString.hh"
+#include "G4MuNuclearInteraction.hh"
+#include "G4QMuonNuclearCrossSection.hh"
 
 #include "G4ApplicationState.hh"
 #include "G4StateManager.hh"
@@ -366,7 +369,7 @@ int main()
       element->AddIsotope(isotope, 100.*perCent);
       material = new G4Material(tnm[tgi], 1.*g/cm3, 1);
       material->AddElement(element, 1);
-      G4cout<<"Test29:-->Material("<<tgZ<<","<<tgN<<"):"<<tnm[tgi]<<","<<tsy[tgi]<<G4endl;
+      G4cout<<"Test19:-->Material("<<tgZ<<","<<tgN<<"):"<<tnm[tgi]<<","<<tsy[tgi]<<G4endl;
       mat[tgi]=material;
     }
   }
@@ -497,6 +500,7 @@ int main()
    G4ThreeVector aPosition(nx*mm, ny*mm, nz*mm);
    G4DynamicParticle* dParticle = new G4DynamicParticle(part,aDirection,0.);// Dummy Energy
 
+   //G4cout<<"Test19: before the new Track definition"<<G4endl;
    // General Track definition
    G4Track* gTrack = new G4Track(dParticle,aTime,aPosition); // Track definition (NoTarg)
 
@@ -579,7 +583,7 @@ int main()
      }
   			G4cout<<"Test19:NewRun: Targ="<<tPDG<<", Proj="<<pPDG<<", E="<<energy<<" MeV, Run #"
            <<nCur<<" of "<<nTot<<G4endl;
-     G4double mt=G4QPDGCode(tPDG).GetMass();             // @@ just for check
+     //G4double mt=G4QPDGCode(tPDG).GetMass();             // @@ just for check
      G4QContent tQC=G4QPDGCode(tPDG).GetQuarkContent();
      G4int    ct=tQC.GetCharge();
      G4int    bnt=tQC.GetBaryonNumber();
@@ -641,7 +645,7 @@ int main()
      G4ParticleChange* aChange = 0;
      G4double e0 = energy+pMass;
      G4double pmax=std::sqrt(e0*e0-pMass*pMass);
-     G4double et=e0+mt;
+     //G4double et=e0+mt;
      //G4int nEvt=100;
      // Randomization loop: cycle random generator, using 2 lower digits in nEvt
      G4int    iRandCount = nEvt%100;
@@ -653,6 +657,109 @@ int main()
      }
 #ifdef tdebug
      for(G4int it=0; it<nT; it++) tSig[it]=0; // Reset the output value
+#endif
+#ifdef csdebug
+			//G4cout<<"Test19: before new Mu-Nuclear process"<<G4endl;
+   // -----> For GHAD
+   G4MuNuclearInteraction* HadrPR = new G4MuNuclearInteraction;// GHAD MuNuclear Proc.
+   HadrPR->SetPhysicsTableBining(.01*GeV, 7.e8*GeV, 1000); // For the table
+   HadrPR->BuildPhysicsTable(*part);      //NotNecessary for CHIPS G4QCollision
+   // -----> For CHIPS
+   // ..... CHIPS on the Process level
+   //G4QCollision* HadrPR = new G4QCollision(); // CHIPS MuNuc
+   // ..... CHIPS on the Cross-Section level
+   //G4VQCrossSection* HadrCS = G4QMuonNuclearCrossSection::GetPointer(); // CHIPS MuNuc
+   // ______ End of CHIPS/GHAD ___________
+   //G4cout<<"Test19: before new Mu-Nuclear process"<<G4endl;
+   // --- A temporary LOOP for calculation of total cross section ------------
+   //G4double pMin=.02;                            // in GeV --> for protons
+   G4double pMax=600000000.;                     // in GeV
+   //G4double pMax=10000000.;                      // in GeV --> np
+   //G4double pMax=1000.;                           // in GeV --> np->inelastic
+   G4double pMin=.03;                            // in GeV --> np->dg
+   //G4double pMin=.000004;                        // in GeV --> for neutrons
+   //G4double pMax=700.;                           // in GeV
+   G4int nic=50;                                 // Number of points
+   G4double lpMin=std::log(pMin);
+   G4double lpMax=std::log(pMax);
+   G4double dlp=(lpMax-lpMin)/nic;
+   G4double lmic=lpMin-dlp/2;
+   G4double hMa=.938272;                         // Mass of a proton in GeV
+   G4double hMa2=hMa*hMa;
+   G4cout<<"Test19: mi="<<lmic+dlp<<",ma="<<lmic+dlp*nic<<",d="<<dlp<<",n="<<nic<<", Z="
+         <<tgZ<<", N="<<tgN<<", Element="<<*element<<G4endl;
+   for(G4int ic=0; ic<nic; ic++)
+   {
+     lmic+=dlp;
+     G4double mic=std::exp(lmic);                // current Momentum in GeV
+     G4double p2=mic*mic;
+     G4double ken=std::sqrt(p2+hMa2)-hMa;
+				G4double den=0.;
+    // CHIPS calculation by G4QElasticCrossSection___ Only for CHIPS CS level
+    //G4double CS = HadrCS->GetCrossSection(false, mic*GeV, tgZ, tgN, pPDG); 
+    //
+    gTrack->SetStep(step);             // Now step is included in the Track (see above)
+    gTrack->SetKineticEnergy(ken*GeV); // Duplication of Kin. Energy for the Track (?!)
+    gTrack->SetTouchableHandle(touch); // Set Box touchable history
+    //
+    //G4cout<<"Test19: before MeanFreePath out of Loop"<<G4endl;
+    G4double MFP = 2.e99;
+    MFP = HadrPR->GetMeanFreePath(*gTrack,.1,cond);
+    //G4cout<<"Test19: after MeanFreePath out of Loop MFP="<<MFP<<G4endl;
+    G4int nen=10000;
+    G4int cen=0;
+    //if(CS>0.) for(G4int ie=0; ie<nen; ie++) //@@ for CHIPS only
+    if(MFP<1.e99)for(G4int ie=0; ie<nen; ie++)
+    {
+     //
+     gTrack->SetStep(step);             // Now step is included in the Track (see above)
+     gTrack->SetKineticEnergy(ken*GeV); // Duplication of Kin. Energy for the Track (?!)
+     gTrack->SetTouchableHandle(touch); // Set Box touchable history
+     //
+     //G4cout<<"Test19: before MeanFreePath"<<G4endl;
+     HadrPR->GetMeanFreePath(*gTrack,.1,cond);
+     // GHAD/CHIPS Energy Deposition
+     //G4cout<<"Test19: before PostStepDoIt ie="<<ie<<G4endl;
+     G4ParticleChange* aChange =
+                     static_cast<G4ParticleChange*>(HadrPR->PostStepDoIt(*gTrack,*step));
+     //G4cout<<"Test19: after PostStepDoIt, Alive="<<aChange->GetTrackStatus()<<G4endl;
+     //if(aChange->GetTrackStatus()==fAlive) den += ken*GeV-aChange->GetEnergy(); // dE
+     if(aChange->GetTrackStatus()==fAlive && 1.-aChange->GetEnergy()/ken/GeV>.0000001)
+     {
+       G4double dz=aChange->GetMomentumDirection()->z();
+       den += std::sqrt(1.-dz*dz);
+       cen++;
+     }
+     G4int nS = aChange->GetNumberOfSecondaries();
+     //G4cout<<"Test19: before delete secondaries, nS="<<nS<<G4endl;
+     if(nS) for(G4int ides=0; ides<nS; ides++) delete aChange->GetSecondary(ides);
+     //G4cout<<"Test19: before aCange->Clear, nS="<<nS<<G4endl;
+     aChange->Clear();
+     //
+     //dParticle->SetKineticEnergy(ken*GeV);       // Fill Kinetic Energy of the projectile
+     // GHAD Cross-section on process level
+     //G4double MFP = HadrPR->GetMeanFreePath(*gTrack,.1,cond);
+     // ..... GHAD on the Cross-Section level
+					//G4double aZ=tgZ;
+     //G4double aA=(tgZ+tgN)*g/mole;
+     //G4double CS = HadrPR->ComputeMicroscopicCrossSection(part,ken*GeV,aZ,aA);
+     //G4double CS = HadrPR->GetElasticCrossSection(dParticle,element);
+     // ==================== End of GHAD ==============================
+     // CHIPS calculation by G4QElasticCrossSection
+     // ..... CHIPS CS on the CS level
+     //G4double CS = HadrCS->GetCrossSection(true, mic*GeV, tgZ, tgN, pPDG); 
+     // ..... CHIPS dE on the CS level
+     //den += HadrCS->GetExchangeEnergy(); 
+     // ..... CHIPS CS on the Process level
+     //G4double MFP = HadrPR->GetMeanFreePath(*gTrack,.1,cond);
+    } // End of energy loop
+     //G4cout<<"Test19: P="<<mic" (GeV/c), MeanFreePath="<<MFP<<G4endl;
+     //G4cout<<"Test19: P="<<mic<<" (GeV/c), XS="<<CS/millibarn/tgA<<G4endl;
+     //G4cout<<"Test19: P="<<mic<<" (GeV/c), <dE>/E="<<den/nen/ken/GeV<<G4endl;
+     G4cout<<"Test19: P="<<mic<<" (GeV/c), <sin(t)>="<<den/cen<<G4endl;
+   }
+   // --- End of the temporary LOOP for calculation of total cross section ------------
+   return EXIT_SUCCESS;
 #endif
 #ifdef idebug
      G4cout<<"Test19: Before the event loop, nEvents= "<<nEvt<<G4endl;
