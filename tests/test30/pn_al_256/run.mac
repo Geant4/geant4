@@ -49,7 +49,7 @@ CHIPS
 chips.paw
 #run
 #generator
-kinetic
+binary
 #paw
 kin.paw
 #run
