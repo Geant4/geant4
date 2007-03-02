@@ -1,4 +1,4 @@
-$Id: History,v 1.286 2007-02-24 17:17:02 vnivanch Exp $
+$Id: History,v 1.287 2007-03-02 12:06:30 urban Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+03 March 07
+- G4UrbanMscModel - single scattering allowed near to boundaries only,
+                    not everywhere 
 
 24 February 07: V.Ivanchenko (emstand-V08-02-08)
 - G4UrbanMscModel - L.Urban step reduction before boundary for  
