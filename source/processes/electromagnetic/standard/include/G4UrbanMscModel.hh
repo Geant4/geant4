@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel.hh,v 1.21 2007-02-15 15:03:54 urban Exp $
+// $Id: G4UrbanMscModel.hh,v 1.22 2007-03-02 12:03:45 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -219,6 +219,7 @@ private:
   G4bool   isInitialized;
 
   G4bool   inside;
+  G4bool   insideskin;
 
 };
 

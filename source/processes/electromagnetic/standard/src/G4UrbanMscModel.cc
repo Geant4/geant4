@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel.cc,v 1.44 2007-02-24 09:03:41 urban Exp $
+// $Id: G4UrbanMscModel.cc,v 1.45 2007-03-02 12:03:45 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -132,6 +132,7 @@
 //          before + after boundary for skin > 1
 // 23-02-07 use tPathLength inside ComputeStep instead of geombig
 // 24-02-07 step reduction before boundary for 'small' geomlimit only 
+// 03-03-07 single scattering around boundaries only (L.Urban)
 //
 
 // Class Description:
@@ -199,6 +200,7 @@ G4UrbanMscModel::G4UrbanMscModel(G4double m_facrange, G4double m_dtrl,
   particle      = 0;
   theManager    = G4LossTableManager::Instance(); 
   inside        = false;  
+  insideskin    = false;
 
 }
 
@@ -535,8 +537,12 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
 
       if((stepStatus == fGeomBoundary) || (stepNumber == 1))
       {
-        if(stepNumber == 1) smallstep = 1.e10;
-        else                smallstep = 1.;
+        if(stepNumber == 1)
+        {
+          smallstep = 1.e10;
+          insideskin = false;
+        }
+        else  smallstep = 1.;
 
         if((stepNumber == 1) && (currentRange < presafety))
         {
@@ -612,6 +618,7 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
       if(smallstep < skin)
       {
         tnow = stepmin;
+        insideskin = true;
       }
       else if(geomlimit < geombig)
       { 
@@ -622,6 +629,7 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
         }
         else
         {
+          insideskin = true;
           if(tnow > stepmin)
             tnow = stepmin;
         }
@@ -658,6 +666,9 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
 
       if((stepStatus == fGeomBoundary) || (stepNumber == 1))
       {
+        if(stepNumber == 1)
+          insideskin = false;
+ 
         // facrange scaling in lambda 
         // not so strong step restriction above lambdalimit
         G4double facr = facrange;
@@ -698,7 +709,11 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
   else
   {
     if(stepNumber == 1)
+    {
       tlimit = geombig;
+      insideskin = false;
+    }
+
     if (stepStatus == fGeomBoundary)
     {
       if (currentRange > lambda0) tlimit = facrange*currentRange;
@@ -754,7 +769,7 @@ G4double G4UrbanMscModel::ComputeGeomPathLength(G4double)
 
   G4double tau   = tPathLength/lambda0 ;
 
-  if ((tau <= tausmall) || (tPathLength <= stepmin)) {
+  if ((tau <= tausmall) || insideskin) {
     zPathLength  = tPathLength;
     if(zPathLength > lambda0) zPathLength = lambda0;
     return zPathLength;
@@ -832,7 +847,7 @@ G4double G4UrbanMscModel::ComputeTrueStepLength(G4double geomStepLength)
   if(geomStepLength < tlimitminfix) return tPathLength;
   
   // recalculation
-  if((geomStepLength > lambda0*tausmall) && (geomStepLength > stepmin))
+  if((geomStepLength > lambda0*tausmall) && !insideskin)
   {
     if(par1 <  0.)
       tPathLength = -lambda0*log(1.-geomStepLength/lambda0) ;
@@ -971,7 +986,7 @@ G4double G4UrbanMscModel::SampleCosineTheta(G4double trueStepLength,
   Zeff = couple->GetMaterial()->GetTotNbOfElectPerVolume()/
          couple->GetMaterial()->GetTotNbOfAtomsPerVolume() ;
 
-  if(trueStepLength <= stepmin) 
+  if(insideskin)
   {
     //no scattering, single or plural scattering
     G4double mean = trueStepLength/stepmin ;
@@ -1103,7 +1118,7 @@ G4double G4UrbanMscModel::SampleDisplacement()
   const G4double kappapl1 = kappa+1.;
   const G4double kappami1 = kappa-1.;
   G4double rmean = 0.0;
-  if ((currentTau >= tausmall) && (tPathLength > stepmin)) {
+  if ((currentTau >= tausmall) && !insideskin) {
     if (currentTau < taulim) {
       rmean = kappa*currentTau*currentTau*currentTau*
              (1.-kappapl1*currentTau*0.25)/6. ;
@@ -1138,7 +1153,7 @@ G4double G4UrbanMscModel::LatCorrelation()
   const G4double kappami1 = kappa-1.;
 
   G4double latcorr = 0.;
-  if((currentTau >= tausmall) && (tPathLength > stepmin))
+  if((currentTau >= tausmall) && !insideskin)
   {
     if(currentTau < taulim)
       latcorr = lambdaeff*kappa*currentTau*currentTau*
