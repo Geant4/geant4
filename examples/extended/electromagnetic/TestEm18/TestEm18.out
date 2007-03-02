@@ -6,98 +6,67 @@
                             WWW : http://cern.ch/geant4
 *************************************************************
 
-Visualization Manager instantiating...
-Visualization Manager initialising...
-Registering graphics systems...
 
-You have successfully registered the following graphics systems.
-Current available graphics systems are:
-  ASCIITree (ATree)
-  DAWNFILE (DAWNFILE)
-  GAGTree (GAGTree)
-  G4HepRep (HepRepXML)
-  G4HepRepFile (HepRepFile)
-  RayTracer (RayTracer)
-  VRML1FILE (VRML1FILE)
-  VRML2FILE (VRML2FILE)
-
-Registering model factories...
-
-You have successfully registered the following model factories.
-Registered model factories:
-  generic
-  drawByCharge
-  drawByParticleID
-  drawByOriginVolume
-  drawByAttribute
-
-Registered filter factories:
-  chargeFilter
-  particleFilter
-  originVolumeFilter
-  attributeFilter
-
-/run/verbose 2
-#
-/testem/det/setMat Water
-/testem/det/setSizeX  20 cm
-/testem/det/setSizeYZ 20 cm
-#
-/testem/det/tallyMat Water
-/testem/det/tallySize 2. 2. 2. mm
-/testem/det/tallyPosition -9.9 0. 0. cm
-/testem/det/tallyPosition -5.  0. 0. cm
-/testem/det/tallyPosition  0.  0. 0. cm
-/testem/det/tallyPosition  5.  0. 0. cm
-#
-/testem/phys/addPhysics  standard	# em physics  
-PhysicsList::AddPhysicsList: <standard>
-###/testem/phys/addPhysics  binary	# hadronic physics
-#
-/run/initialize
-userDetector->Construct() start.
-
-***** Table : Nb of materials = 3 *****
-
- Material:    Water     density:  1.000 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  36.084 cm 
-   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:  11.19 %  ElmAbundance  66.67 %
-   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  88.81 %  ElmAbundance  33.33 %
+***** Table : Nb of materials = 11 *****
 
  Material:      Air     density:  1.290 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 285.161 m  
    --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
 
- Material: Galactic     density:  0.000 mg/cm3  temperature:   2.73 K  pressure:   0.00 atm  RadLength: 204322175.595 pc 
-   --->  Element: Galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+ Material:    Water     density:  1.000 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  36.092 cm 
+   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:  11.21 %  ElmAbundance  66.67 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  88.79 %  ElmAbundance  33.33 %
+
+ Material: Water_vapor     density:  1.000 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 360.925 m  
+   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:  11.21 %  ElmAbundance  66.67 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  88.79 %  ElmAbundance  33.33 %
+
+ Material:   Carbon     density:  2.267 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  18.833 cm 
+   --->  Element: Carbon ( )   Z =  6.0   N =  12.0   A =  12.01 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+
+ Material: Aluminium     density:  2.700 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   8.893 cm 
+   --->  Element: Aluminium ( )   Z = 13.0   N =  27.0   A =  26.98 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+
+ Material:  Silicon     density:  2.330 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   9.368 cm 
+   --->  Element: Silicon ( )   Z = 14.0   N =  28.1   A =  28.09 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+
+ Material: liquidArgon     density:  1.390 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  14.065 cm 
+   --->  Element: liquidArgon ( )   Z = 18.0   N =  40.0   A =  39.95 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+
+ Material:     Iron     density:  7.870 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.759 cm 
+   --->  Element: Iron ( )   Z = 26.0   N =  55.9   A =  55.85 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+
+ Material: Germanium     density:  5.323 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   2.301 cm 
+   --->  Element: Germanium ( )   Z = 32.0   N =  72.6   A =  72.61 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+
+ Material: Tungsten     density: 19.300 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   3.504 mm 
+   --->  Element: Tungsten ( )   Z = 74.0   N = 183.8   A = 183.85 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+
+ Material:     Lead     density: 11.350 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   5.612 mm 
+   --->  Element: Lead ( )   Z = 82.0   N = 207.2   A = 207.19 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
 
+/run/verbose 2
+#
+/testem/det/setMat Water
+/testem/det/setSize 1 cm
+#
+/testem/phys/setCuts 1 mm
+#
+/run/initialize
+userDetector->Construct() start.
 
----------------------------------------------------------
----> The Absorber is 20 cm  of Water
-
----------------------------------------------------------
----> There are 4 tallies : 2 2 2 mm  of Water  (mass : 8 mg)
-tally 0: position = -9.9 0 0 cm 
-tally 1: position = -5 0 0 cm 
-tally 2: position = 0 0 0 fm 
-tally 3: position = 5 0 0 cm 
-
----------------------------------------------------------
-World is registered to the default region.
+ The Box is 1 cm  of Water
+Water is registered to the default region.
 physicsList->Construct() start.
 physicsList->Construct() start.
 physicsList->setCut() start.
 PhysicsList::SetCuts:CutLength : 1 mm 
 #
-/gun/particle proton
-/gun/energy 160 MeV
-# beam size
-/testem/gun/rndm 3 mm
+/gun/particle e- 
+/gun/energy 10 MeV
 #
-/testem/event/printModulo 1000
-/testem/stepMax 1 mm
-#
-/run/beamOn 10000
+/run/beamOn 100000
 
 phot:  Total cross sections from Sandia parametrisation. 
       Sampling according PhotoElectric model
@@ -112,17 +81,13 @@ conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV f
       tables are built for  gamma
       Lambda tables from 1.022 MeV to 100 GeV in 100 bins.
 
-msc:  Model variant of multiple scattering for e-
-      Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 0
-      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
-
 eIoni:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 480 bins.
       Lambda tables from threshold to 100 TeV in 480 bins.
       Delta cross sections and sampling from MollerBhabha model
       Good description from 1 KeV to 100 GeV.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      CSDA range table up to 100 TeV in 480 bins.
 
 eBrem:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 480 bins.
@@ -136,6 +101,7 @@ eIoni:   tables are built for  e+
       Delta cross sections and sampling from MollerBhabha model
       Good description from 1 KeV to 100 GeV.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      CSDA range table up to 100 TeV in 480 bins.
 
 eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 480 bins.
@@ -147,11 +113,6 @@ annihil:       Sampling according eplus2gg model
       tables are built for  e+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
 
-msc:  Model variant of multiple scattering for proton
-      Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 0
-      Boundary/stepping algorithm is active with facrange= 0.2  Step limitation 0
-
 hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 100 TeV in 480 bins.
       Lambda tables from threshold to 100 TeV in 480 bins.
@@ -159,10 +120,7 @@ hIoni:   tables are built for  proton
       Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
       Parametrisation from Bragg for protons below.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
-
-msc:  Model variant of multiple scattering for GenericIon
-      LateralDisplacementFlag=  0   Skin= 0
-      Boundary/stepping algorithm is active with facrange= 0.2  Step limitation 0
+      CSDA range table up to 100 TeV in 480 bins.
 
 ionIoni:   tables are built for  GenericIon
       dE/dx and range tables from 100 eV  to 100 TeV in 480 bins.
@@ -173,6 +131,7 @@ ionIoni:   tables are built for  GenericIon
 
       Stopping Power data for 8 ion/material pairs are used.
       Step function: finalRange(mm)= 0.1, dRoverRange= 0.1, integral: 1
+      CSDA range table up to 100 TeV in 480 bins.
 
 hIoni:   tables are built for  anti_proton
       dE/dx and range tables from 100 eV  to 100 TeV in 480 bins.
@@ -181,11 +140,7 @@ hIoni:   tables are built for  anti_proton
       Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
       Parametrisation from Bragg for protons below.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
-
-msc:  Model variant of multiple scattering for mu+
-      Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 0
-      Boundary/stepping algorithm is active with facrange= 0.2  Step limitation 0
+      CSDA range table up to 100 TeV in 480 bins.
 
 muIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 480 bins.
@@ -193,6 +148,7 @@ muIoni:   tables are built for  mu+
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      CSDA range table up to 100 TeV in 480 bins.
 
 muBrems:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 480 bins.
@@ -210,6 +166,7 @@ muIoni:   tables are built for  mu-
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      CSDA range table up to 100 TeV in 480 bins.
 
 muBrems:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 480 bins.
@@ -228,11 +185,7 @@ hIoni:   tables are built for  pi+
       Delta cross sections and sampling from BetheBloch model for scaled energy > 0.297504 MeV
       Parametrisation from Bragg for protons below.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
-
-msc:  Model variant of multiple scattering for pi-
-      Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 0
-      Boundary/stepping algorithm is active with facrange= 0.2  Step limitation 0
+      CSDA range table up to 100 TeV in 480 bins.
 
 hIoni:   tables are built for  pi-
       dE/dx and range tables from 100 eV  to 100 TeV in 480 bins.
@@ -241,21 +194,15 @@ hIoni:   tables are built for  pi-
       Delta cross sections and sampling from BetheBloch model for scaled energy > 0.297504 MeV
       Parametrisation from Bragg for protons below.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      CSDA range table up to 100 TeV in 480 bins.
 
-Region <DefaultRegionForTheWorld> -- appears in <World> world volume
- Materials : Galactic Water 
+Region <DefaultRegionForTheWorld> -- appears in <Water> world volume
+ Materials : Water 
  Production cuts :  gamma 1 mm     e- 1 mm     e+ 1 mm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : Galactic
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Water
  Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
  Energy thresholds :  gamma 2.90186 keV    e- 347.138 keV    e+ 338.695 keV
@@ -269,16 +216,6 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
     Total memory consumed for geometry optimisation:   0 kByte
     Total CPU time elapsed for geometry optimisation: 0 seconds
-
-    Voxelisation: top CPU users:
-    Percent   Total CPU    System CPU       Memory  Volume
-    -------   ----------   ----------     --------  ----------
-       0.00         0.00         0.00            0k Absorber
-
-    Voxelisation: top memory users:
-    Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
-    -------   --------     ------   ------   --------   ----------    ----------
-     100.00          0k         1        5          8         0.00    Absorber
 ### Run 0 start.
 
 --------- Ranecu engine status ---------
@@ -289,109 +226,48 @@ Start Run processing.
 
 ---> Begin of Event: 0
 
----> Begin of Event: 1000
+---> Begin of Event: 10000
 
----> Begin of Event: 2000
+---> Begin of Event: 20000
 
----> Begin of Event: 3000
+---> Begin of Event: 30000
 
----> Begin of Event: 4000
+---> Begin of Event: 40000
 
----> Begin of Event: 5000
+---> Begin of Event: 50000
 
----> Begin of Event: 6000
+---> Begin of Event: 60000
 
----> Begin of Event: 7000
+---> Begin of Event: 70000
 
----> Begin of Event: 8000
+---> Begin of Event: 80000
 
----> Begin of Event: 9000
+---> Begin of Event: 90000
 Run terminated.
 Run Summary
-  Number of events processed : 10000
-  User=381.66s Real=567.63s Sys=57.39s
+  Number of events processed : 100000
+  User=62.09s Real=62.12s Sys=0.01s
 
- The run consists of 10000 proton of 160 MeV through 20 cm  of Water (density: 1 g/cm3 )
+ ======================== run summary ======================
 
- projected Range= 17.723 cm    rms= 2.21815 mm 
-
----------------------------------------------------------
- Cumulated Doses : 	Edep      	Edep/Ebeam 	Dose
- tally 0: 	 	4.46163 GeV	0.278852 % 	8.9354e-05 Gy
- tally 1: 	 	5.00116 GeV	0.312573 % 	0.000100159 Gy
- tally 2: 	 	3.27024 GeV	0.20439 % 	6.54938e-05 Gy
- tally 3: 	 	1.92493 GeV	0.120308 % 	3.85511e-05 Gy
-
----------------------------------------------------------
+ The run was 100000 e- of 10 MeV through 1 cm  of Water (density: 1 g/cm3 )
+ ===========================================================
 
 
---------- Ranecu engine status ---------
- Initial seed (index) = 0
- Current couple of seeds = 253930167, 1349948487
-----------------------------------------
-#
-/gun/particle ion
-/gun/ion 6 12 6
-/gun/energy 3.5 GeV
-#
-/run/beamOn 1000
+ trackLength= 1.0004 cm 	 nb of steps= 1.5591  stepSize= 6.4165 mm 
 
-Region <DefaultRegionForTheWorld> -- appears in <World> world volume
- Materials : Galactic Water 
- Production cuts :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ d-rays  : eLoss/primary= 248.16 keV	  nb of d-rays= 0.23747  <Tkin>= 1.045 MeV  Tmin= 347.14 keV  Tmax= 4.944 MeV
 
-========= Table of registered couples ==============================
+ brems   : eLoss/primary= 171.31 keV	  nb of gammas= 0.3073  <Tkin>= 557.48 keV  Tmin= 2.9023 keV  Tmax= 9.6655 MeV
 
-Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : Galactic
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
+ deposit : eLoss/primary= 1.7229 MeV	 <dEcut > table= 1.7347 MeV   ---> simul/reference= 0.99325
 
-Index : 1     used in the geometry : Yes     recalculation needed : No 
- Material : Water
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 2.90186 keV    e- 347.138 keV    e+ 338.695 keV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-### Run 1 start.
+ total   : eLoss/primary= 2.1424 MeV	 <dEfull> table= 2.1625 MeV   ---> simul/reference= 0.99072
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 253930167, 1349948487
+ Current couple of seeds = 635541795, 898538419
 ----------------------------------------
-Start Run processing.
-
----> Begin of Event: 0
-Run terminated.
-Run Summary
-  Number of events processed : 1000
-  User=129.76s Real=446.5s Sys=25.26s
-
- The run consists of 1000 C12[0.0] of 3.5 GeV through 20 cm  of Water (density: 1 g/cm3 )
-
- projected Range= 16.4667 cm    rms= 455.956 um 
-
----------------------------------------------------------
- Cumulated Doses : 	Edep      	Edep/Ebeam 	Dose
- tally 0: 	 	11.2152 GeV	0.320433 % 	0.000224608 Gy
- tally 1: 	 	12.911 GeV	0.368884 % 	0.00025857 Gy
- tally 2: 	 	14.9436 GeV	0.426959 % 	0.000299278 Gy
- tally 3: 	 	23.3299 GeV	0.666568 % 	0.000467233 Gy
-
----------------------------------------------------------
-
-
---------- Ranecu engine status ---------
- Initial seed (index) = 0
- Current couple of seeds = 1875347731, 484070186
-----------------------------------------
-Graphics systems deleted.
-Visualization Manager deleting...
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
 UserRunAction deleted.

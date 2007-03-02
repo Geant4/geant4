@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-08-02-patch-01-ref    (23-February-2007)
+ Geant4 version Name: global-V08-02-01    (23-February-2007)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -59,6 +59,7 @@ conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV f
 
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 eIoni:   tables are built for  e-
@@ -93,6 +94,7 @@ annihil:       Sampling according eplus2gg model
 
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.2  Step limitation 0
 
 hIoni:   tables are built for  proton
@@ -104,6 +106,7 @@ hIoni:   tables are built for  proton
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 msc:  Model variant of multiple scattering for GenericIon
+      LateralDisplacementFlag=  0   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.2  Step limitation 0
 
 ionIoni:   tables are built for  GenericIon
@@ -126,6 +129,7 @@ hIoni:   tables are built for  anti_proton
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.2  Step limitation 0
 
 muIoni:   tables are built for  mu+
@@ -174,6 +178,7 @@ hIoni:   tables are built for  pi+
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.2  Step limitation 0
 
 hIoni:   tables are built for  pi-
@@ -188,23 +193,23 @@ Stage 0->1 : 1 hits found in the muon chamber.
 Stage 1->2 : 1 isolated muon found.
 >>> Event 0
      5 hits are stored in ExN04TrackerHitsCollection.
-     5 hits are stored in ExN04CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 0.2546592 (GeV)
+     4 hits are stored in ExN04CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 0.24408951 (GeV)
      1 hits are stored in ExN04MuonHitsCollection.
 ### Run 1 start.
 Stage 0->1 : 1 hits found in the muon chamber.
 Stage 1->2 : 1 isolated muon found.
 >>> Event 0
-     8 hits are stored in ExN04TrackerHitsCollection.
-     39 hits are stored in ExN04CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 6.6795532 (GeV)
+     24 hits are stored in ExN04TrackerHitsCollection.
+     16 hits are stored in ExN04CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 2.1407331 (GeV)
      1 hits are stored in ExN04MuonHitsCollection.
 Stage 0->1 : 1 hits found in the muon chamber.
 Stage 1->2 : 1 isolated muon found.
 >>> Event 1
-     53 hits are stored in ExN04TrackerHitsCollection.
-     36 hits are stored in ExN04CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 8.4031059 (GeV)
+     43 hits are stored in ExN04TrackerHitsCollection.
+     80 hits are stored in ExN04CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 27.028482 (GeV)
      1 hits are stored in ExN04MuonHitsCollection.
 Graphics systems deleted.
 Visualization Manager deleting...

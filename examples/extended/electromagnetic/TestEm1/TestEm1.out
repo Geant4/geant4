@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-08-02-patch-01-ref    (23-February-2007)
+ Geant4 version Name: global-V08-02-01    (23-February-2007)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -130,6 +130,7 @@ conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV f
 
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 eIoni:   tables are built for  e-
@@ -166,6 +167,7 @@ annihil:       Sampling according eplus2gg model
 
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 hIoni:   tables are built for  proton
@@ -178,6 +180,7 @@ hIoni:   tables are built for  proton
       CSDA range table up to 1 GeV in 70 bins.
 
 msc:  Model variant of multiple scattering for GenericIon
+      LateralDisplacementFlag=  0   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 ionIoni:   tables are built for  GenericIon
@@ -202,6 +205,7 @@ hIoni:   tables are built for  anti_proton
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 muIoni:   tables are built for  mu+
@@ -251,6 +255,7 @@ hIoni:   tables are built for  pi+
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 hIoni:   tables are built for  pi-
@@ -294,7 +299,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=192.19s Real=238.75s Sys=27.6s
+  User=137s Real=227.23s Sys=6.77s
 
  ======================== run summary ======================
 
@@ -302,29 +307,29 @@ Run Summary
 
  ============================================================
 
- total energy deposit: 99.802 MeV
+ total energy deposit: 99.795 MeV
 
- nb tracks/event   neutral:     28.067   charged:     148.98
- nb  steps/event   neutral:      141.9   charged:     363.18
+ nb tracks/event   neutral:     27.945   charged:     149.04
+ nb  steps/event   neutral:     141.99   charged:     218.62
 
  nb of process calls per event: 
-          eBrem       eIoni       compt        phot         mscTransportation        conv     annihil
-         26.367      189.11      113.83      25.675      146.29       0.977       1.417      1.4175
+          eBrem       eIoni       compt        phot        conv     annihilTransportation         msc
+         26.205      190.26      114.04      25.535      1.4465       1.446      0.9655       0.706
 
 ---------------------------------------------------------
  Primary particle : 
- true Range = 11.118 cm    rms = 3.8549 cm 
- proj Range = 9.608 cm    rms = 3.5304 cm 
- proj/true  = 0.86422
- transverse dispersion at end = 1.7517 cm 
-      mass true Range from simulation = 30.017 g/cm2 
+ true Range = 11.043 cm    rms = 3.7229 cm 
+ proj Range = 9.5324 cm    rms = 3.4533 cm 
+ proj/true  = 0.86322
+ transverse dispersion at end = 1.7101 cm 
+      mass true Range from simulation = 29.816 g/cm2 
        from PhysicsTable (csda range) = 31.791 g/cm2 
 ---------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 2086111446, 1640944562
+ Current couple of seeds = 1379929520, 242228984
 ----------------------------------------
 #
 /process/eLoss/verbose 0
@@ -352,7 +357,7 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 2086111446, 1640944562
+ Current couple of seeds = 1379929520, 242228984
 ----------------------------------------
 Start Run processing.
 
@@ -360,7 +365,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=370.96s Real=437.18s Sys=48.04s
+  User=262.94s Real=326.29s Sys=15.67s
 
  ======================== run summary ======================
 
@@ -368,29 +373,29 @@ Run Summary
 
  ============================================================
 
- total energy deposit: 99.797 MeV
+ total energy deposit: 99.774 MeV
 
- nb tracks/event   neutral:     36.506   charged:     290.45
- nb  steps/event   neutral:     145.73   charged:     773.31
+ nb tracks/event   neutral:     36.623   charged:     291.83
+ nb  steps/event   neutral:     147.21   charged:     489.27
 
  nb of process calls per event: 
-          eIoni       eBrem         msc       compt        phot        conv     annihilTransportation
-         450.27      34.712      286.94      109.23      34.172       1.383       1.383        0.96
+          eIoni       eBrem       compt        phot        conv     annihil         mscTransportation
+         451.74      34.853      110.58      34.282       1.404       1.404       1.268       0.942
 
 ---------------------------------------------------------
  Primary particle : 
- true Range = 11.174 cm    rms = 3.7612 cm 
- proj Range = 9.6617 cm    rms = 3.4939 cm 
- proj/true  = 0.86465
- transverse dispersion at end = 1.7489 cm 
-      mass true Range from simulation = 30.17 g/cm2 
+ true Range = 11.181 cm    rms = 3.8408 cm 
+ proj Range = 9.7072 cm    rms = 3.5962 cm 
+ proj/true  = 0.86817
+ transverse dispersion at end = 1.742 cm 
+      mass true Range from simulation = 30.189 g/cm2 
        from PhysicsTable (csda range) = 31.791 g/cm2 
 ---------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 746393031, 942230843
+ Current couple of seeds = 2122528498, 1191483702
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

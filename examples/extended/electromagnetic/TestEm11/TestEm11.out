@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-08-02-patch-01-ref    (23-February-2007)
+ Geant4 version Name: global-V08-02-01    (23-February-2007)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -131,6 +131,7 @@ conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV f
 
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 eIoni:   tables are built for  e-
@@ -167,6 +168,7 @@ annihil:       Sampling according eplus2gg model
 
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 hIoni:   tables are built for  proton
@@ -179,6 +181,7 @@ hIoni:   tables are built for  proton
       CSDA range table up to 1 GeV in 70 bins.
 
 msc:  Model variant of multiple scattering for GenericIon
+      LateralDisplacementFlag=  0   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 ionIoni:   tables are built for  GenericIon
@@ -203,6 +206,7 @@ hIoni:   tables are built for  anti_proton
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 muIoni:   tables are built for  mu+
@@ -252,6 +256,7 @@ hIoni:   tables are built for  pi+
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 hIoni:   tables are built for  pi-
@@ -297,7 +302,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20000
-  User=304.35s Real=628.5s Sys=127.91s
+  User=306.74s Real=733.9s Sys=131.1s
 
  ======================== run summary ======================
 
@@ -305,20 +310,20 @@ Run Summary
 
  ============================================================
 
- Total Energy deposited        = 451.677 keV +- 101.719 keV
+ Total Energy deposited        = 452.160 keV +- 101.228 keV
 
- Track length of primary track = 867.746 um  +- 184.562 um 
+ Track length of primary track = 867.157 um  +- 184.235 um 
  Range from EmCalculator       = 937.365 um  (from full dE/dx)
 
- Projected range               = 337.291 um  +- 204.998 um 
+ Projected range               = 337.220 um  +- 204.467 um 
 
- Nb of steps of primary track  = 87.29 +- 18.45	 Step size= 9.932 um  +- 94.823 nm 
+ Nb of steps of primary track  = 87.24 +- 18.41	 Step size= 9.932 um  +- 87.534 nm 
 
- absorbed = 79.32 %   transmit = 5.17 %   reflected = 15.52 %
+ absorbed = 79.73 %   transmit = 4.82 %   reflected = 15.45 %
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1322266676, 413097053
+ Current couple of seeds = 1800288160, 1663565686
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

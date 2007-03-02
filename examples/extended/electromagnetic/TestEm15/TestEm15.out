@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-08-02-patch-01-ref    (23-February-2007)
+ Geant4 version Name: global-V08-02-01    (23-February-2007)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -135,6 +135,7 @@ conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV f
 
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 eIoni:   tables are built for  e-
@@ -169,6 +170,7 @@ annihil:       Sampling according eplus2gg model
 
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 hIoni:   tables are built for  proton
@@ -180,6 +182,7 @@ hIoni:   tables are built for  proton
       Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 0
 
 msc:  Model variant of multiple scattering for GenericIon
+      LateralDisplacementFlag=  0   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 ionIoni:   tables are built for  GenericIon
@@ -202,6 +205,7 @@ hIoni:   tables are built for  anti_proton
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 muIoni:   tables are built for  mu+
@@ -248,6 +252,7 @@ hIoni:   tables are built for  pi+
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 hIoni:   tables are built for  pi-
@@ -297,31 +302,31 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=7.2s Real=7.2s Sys=0s
+  User=6.9s Real=6.9s Sys=0s
 
  The run consists of 10000 e- of 5 MeV through 100 m   of Water (density: 1 g/cm3 )
 
  Process calls frequency --->	msc = 10000
 
- truePathLength :	2.6289 cm  +- 2.4984 mm 
- geomPathLength :	2.0069 cm  +- 1.3085 mm 
- lateralDisplac :	1.1338 cm  +- 1.0956 mm 
- Psi            :	513.45 mrad +- 27.496 mrad  (29.419 deg +- 1.5754 deg)
+ truePathLength :	2.7521 cm  +- 3.269 nm 
+ geomPathLength :	2.0696 cm  +- 11.392 nm 
+ lateralDisplac :	1.1482 cm  +- 9.6993 nm 
+ Psi            :	506.49 mrad +- 0.00036931 mrad  (29.02 deg +- 2.116e-05 deg)
 
- Theta_plane    :	1683.1 mrad  (96.432 deg)
- phi correlation:	0.28607 +- 0.17847  (std::cos(phi_pos - phi_dir))
+ Theta_plane    :	1818.2 mrad  (104.18 deg)
+ phi correlation:	0.26267 +- 0.058466  (std::cos(phi_pos - phi_dir))
 
  Verification from G4EmCalculator. 
 
  transport mean free path :	8.346 cm 
  range from restrict dE/dx:	2.7521 cm 
- ---> effective facRange  :	0.31499
+ ---> effective facRange  :	1
 
- compute theta0 from Highland :	604.93 mrad  (34.66 deg)
+ compute theta0 from Highland :	620.13 mrad  (35.531 deg)
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 2020779370, 1052086159
+ Current couple of seeds = 1055489048, 167744914
 ----------------------------------------
 #
 /gun/energy 100 keV
@@ -353,7 +358,7 @@ Index : 1     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 2020779370, 1052086159
+ Current couple of seeds = 1055489048, 167744914
 ----------------------------------------
 Start Run processing.
 
@@ -361,31 +366,31 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=7s Real=7s Sys=0s
+  User=6.7s Real=6.7s Sys=0s
 
  The run consists of 10000 e- of 100 keV through 100 m   of Water (density: 1 g/cm3 )
 
  Process calls frequency --->	msc = 10000
 
- truePathLength :	6.2973 um  +- 1.8085 um 
- geomPathLength :	6.1616 um  +- 1.7358 um 
- lateralDisplac :	956.05 nm  +- 399.59 nm 
- Psi            :	147.51 mrad +- 22.563 mrad  (8.452 deg +- 1.2928 deg)
+ truePathLength :	6.3051 um  +- 5404.2 fm 
+ geomPathLength :	6.1807 um  +- 878.92 fm 
+ lateralDisplac :	923.68 nm  +- 256.83 fm 
+ Psi            :	148.35 mrad +- 8.7703e-05 mrad  (8.4998 deg +- 5.025e-06 deg)
 
- Theta_plane    :	238.44 mrad  (13.662 deg)
- phi correlation:	0.089979 +- 0.13128  (std::cos(phi_pos - phi_dir))
+ Theta_plane    :	241.37 mrad  (13.83 deg)
+ phi correlation:	0.090798 +- 0.13131  (std::cos(phi_pos - phi_dir))
 
  Verification from G4EmCalculator. 
 
  transport mean free path :	157.63 um 
  range from restrict dE/dx:	143.16 um 
- ---> effective facRange  :	0.03995
+ ---> effective facRange  :	0.04
 
- compute theta0 from Highland :	180.56 mrad  (10.345 deg)
+ compute theta0 from Highland :	180.68 mrad  (10.352 deg)
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1037881009, 1665763910
+ Current couple of seeds = 647930445, 779579682
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

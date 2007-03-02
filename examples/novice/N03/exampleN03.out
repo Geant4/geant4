@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-08-02-patch-01-ref    (23-February-2007)
+ Geant4 version Name: global-V08-02-01    (23-February-2007)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -113,6 +113,7 @@ conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV f
 
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 eIoni:   tables are built for  e-
@@ -147,6 +148,7 @@ annihil:       Sampling according eplus2gg model
 
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 hIoni:   tables are built for  proton
@@ -167,6 +169,7 @@ hIoni:   tables are built for  anti_proton
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 muIoni:   tables are built for  mu+
@@ -213,6 +216,7 @@ hIoni:   tables are built for  pi+
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 hIoni:   tables are built for  pi-
@@ -257,16 +261,16 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
  Current couple of seeds = 9876, 54321
 ----------------------------------------
 ---> End of event: 0
-   Absorber: total energy: 255.24989 MeV       total track length: 17.775532 cm 
-        Gap: total energy: 12.751693 MeV       total track length: 6.4347173 cm 
+   Absorber: total energy: 285.50755 MeV       total track length: 20.02094 cm 
+        Gap: total energy: 7.909008 MeV       total track length: 3.6753211 cm 
 
 --------------------End of Run------------------------------
 
- mean Energy in Absorber : 255.24989 MeV +- 0 eV 
- mean Energy in Gap      : 12.751693 MeV +- 0 eV 
+ mean Energy in Absorber : 285.50755 MeV +- 0 eV 
+ mean Energy in Gap      : 7.909008 MeV +- 0 eV 
 
- mean trackLength in Absorber : 17.775532 cm  +- 0 fm 
- mean trackLength in Gap      : 6.4347173 cm  +- 0 fm 
+ mean trackLength in Absorber : 20.02094 cm  +- 0 fm 
+ mean trackLength in Gap      : 3.6753211 cm  +- 0 fm 
 ------------------------------------------------------------
 
      Transportation,                msc,              hIoni,              eIoni
@@ -289,6 +293,7 @@ conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV f
 
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 eIoni:   tables are built for  e-
@@ -323,6 +328,7 @@ annihil:       Sampling according eplus2gg model
 
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 hIoni:   tables are built for  proton
@@ -343,6 +349,7 @@ hIoni:   tables are built for  anti_proton
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 muIoni:   tables are built for  mu+
@@ -389,6 +396,7 @@ hIoni:   tables are built for  pi+
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 hIoni:   tables are built for  pi-
@@ -404,19 +412,19 @@ hIoni:   tables are built for  pi-
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1363400685, 1475368346
+ Current couple of seeds = 40329316, 999078265
 ----------------------------------------
 ---> End of event: 0
-   Absorber: total energy: 273.78056 MeV       total track length: 18.732667 cm 
-        Gap: total energy: 22.74196 MeV       total track length: 11.196324 cm 
+   Absorber: total energy: 283.13571 MeV       total track length: 20.049439 cm 
+        Gap: total energy: 15.804137 MeV       total track length: 8.1610398 cm 
 
 --------------------End of Run------------------------------
 
- mean Energy in Absorber : 273.78056 MeV +- 0 eV 
- mean Energy in Gap      : 22.74196 MeV +- 0 eV 
+ mean Energy in Absorber : 283.13571 MeV +- 0 eV 
+ mean Energy in Gap      : 15.804137 MeV +- 0 eV 
 
- mean trackLength in Absorber : 18.732667 cm  +- 0 fm 
- mean trackLength in Gap      : 11.196324 cm  +- 0 fm 
+ mean trackLength in Absorber : 20.049439 cm  +- 0 fm 
+ mean trackLength in Gap      : 8.1610398 cm  +- 0 fm 
 ------------------------------------------------------------
 
 
@@ -439,6 +447,7 @@ conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV f
 
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 eIoni:   tables are built for  e-
@@ -473,6 +482,7 @@ annihil:       Sampling according eplus2gg model
 
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 hIoni:   tables are built for  proton
@@ -493,6 +503,7 @@ hIoni:   tables are built for  anti_proton
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 muIoni:   tables are built for  mu+
@@ -539,6 +550,7 @@ hIoni:   tables are built for  pi+
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 hIoni:   tables are built for  pi-
@@ -554,18 +566,18 @@ hIoni:   tables are built for  pi-
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 606835024, 988202660
+ Current couple of seeds = 1611588435, 1685822402
 ----------------------------------------
 ---> End of event: 0
-   Absorber: total energy: 408.66702 MeV       total track length: 97.709788 cm 
-        Gap: total energy: 83.799117 MeV       total track length: 2.3229686 m  
+   Absorber: total energy: 409.28575 MeV       total track length: 98.456722 cm 
+        Gap: total energy: 84.839818 MeV       total track length: 2.3546492 m  
 
 --------------------End of Run------------------------------
 
- mean Energy in Absorber : 408.66702 MeV +- 0 eV 
- mean Energy in Gap      : 83.799117 MeV +- 0 eV 
+ mean Energy in Absorber : 409.28575 MeV +- 0 eV 
+ mean Energy in Gap      : 84.839818 MeV +- 0 eV 
 
- mean trackLength in Absorber : 97.709788 cm  +- 0 fm 
- mean trackLength in Gap      : 2.3229686 m   +- 0 fm 
+ mean trackLength in Absorber : 98.456722 cm  +- 0 fm 
+ mean trackLength in Gap      : 2.3546492 m   +- 0 fm 
 ------------------------------------------------------------
 

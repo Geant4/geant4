@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-08-02-patch-01-ref    (23-February-2007)
+ Geant4 version Name: global-V08-02-01    (23-February-2007)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -58,6 +58,7 @@ Equal
 
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 eIoni:   tables are built for  e-
@@ -92,6 +93,7 @@ annihil:       Sampling according eplus2gg model
 
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 hIoni:   tables are built for  proton
@@ -112,6 +114,7 @@ hIoni:   tables are built for  anti_proton
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 muIoni:   tables are built for  mu+
@@ -158,6 +161,7 @@ hIoni:   tables are built for  pi+
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 hIoni:   tables are built for  pi-
@@ -179,7 +183,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
  Exiting from G4Cerenkov::DoIt -- NumberOfSecondaries = 34
 
  Exiting from G4Scintillation::DoIt -- NumberOfSecondaries = 28
-    1    953 um    690 um    369 um     43 keV   457 keV  1.49 mm   1.49 mm         Tank       eIoni
+    1    953 um    690 um    369 um   42.4 keV   458 keV  1.49 mm   1.49 mm         Tank       eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = opticalphoton,   Track ID = 63,   Parent ID = 1
@@ -1117,10 +1121,10 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    1    953 um    690 um    369 um     43 keV     0 eV      0 fm   1.49 mm         Tank    initStep
+    1    953 um    690 um    369 um   42.4 keV     0 eV      0 fm   1.49 mm         Tank    initStep
 
  Exiting from G4Scintillation::DoIt -- NumberOfSecondaries = 4
-    2    962 um    693 um    382 um      0 eV     43 keV  30.8 um   1.52 mm         Tank       eIoni
+    2    962 um    693 um    382 um      0 eV   42.4 keV  29.9 um   1.52 mm         Tank       eIoni
     3    962 um    693 um    382 um      0 eV      0 eV      0 fm   1.52 mm         Tank  Scintillation
 
 *********************************************************************************************************
@@ -1209,7 +1213,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
     1  -4.38 m      -5 m   -97.2 cm   2.77 eV      0 eV   6.72 m    6.72 m          Tank  Transportation
     2    -10 m   -7.72 m   -2.22 m    2.77 eV      0 eV   6.36 m    13.1 m    OutOfWorld  Transportation
 Number of optical photons produces in this event : 66
-number of event = 1 User=0.19s Real=0.35s Sys=0.16s
+number of event = 1 User=0.17s Real=0.37s Sys=0.16s
 #
 /process/inactivate Scintillation
 /run/physicsModified
@@ -1219,6 +1223,7 @@ number of event = 1 User=0.19s Real=0.35s Sys=0.16s
 
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 eIoni:   tables are built for  e-
@@ -1253,6 +1258,7 @@ annihil:       Sampling according eplus2gg model
 
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 hIoni:   tables are built for  proton
@@ -1273,6 +1279,7 @@ hIoni:   tables are built for  anti_proton
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 muIoni:   tables are built for  mu+
@@ -1319,6 +1326,7 @@ hIoni:   tables are built for  pi+
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 hIoni:   tables are built for  pi-
@@ -1645,15 +1653,15 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
     1    953 um   -450 um    640 um    195 keV     0 eV      0 fm   1.49 mm         Tank    initStep
-    2   1.06 mm   -652 um    649 um      0 eV    195 keV   415 um   1.91 mm         Tank       eIoni
-    3   1.06 mm   -652 um    649 um      0 eV      0 eV      0 fm   1.91 mm         Tank     annihil
+    2   1.05 mm   -651 um    649 um      0 eV    195 keV   413 um    1.9 mm         Tank       eIoni
+    3   1.05 mm   -651 um    649 um      0 eV      0 eV      0 fm    1.9 mm         Tank     annihil
 
 *********************************************************************************************************
 * G4Track Information:   Particle = gamma,   Track ID = 37,   Parent ID = 1
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   1.06 mm   -652 um    649 um    511 keV     0 eV      0 fm      0 fm         Tank    initStep
+    0   1.05 mm   -651 um    649 um    511 keV     0 eV      0 fm      0 fm         Tank    initStep
     1  -1.05 m   -1.23 m      -5 m     511 keV     0 eV   5.25 m    5.25 m          Tank  Transportation
     2   -2.1 m   -2.45 m     -10 m     511 keV     0 eV   5.25 m    10.5 m    OutOfWorld  Transportation
 
@@ -1662,10 +1670,10 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   1.06 mm   -652 um    649 um    511 keV     0 eV      0 fm      0 fm         Tank    initStep
+    0   1.05 mm   -651 um    649 um    511 keV     0 eV      0 fm      0 fm         Tank    initStep
     1   1.05 m    1.22 m       5 m     511 keV     0 eV   5.25 m    5.25 m          Tank  Transportation
     2    2.1 m    2.45 m      10 m     511 keV     0 eV   5.25 m    10.5 m    OutOfWorld  Transportation
 Number of optical photons produces in this event : 34
-number of event = 1 User=0.11s Real=0.14s Sys=0.03s
+number of event = 1 User=0.1s Real=0.14s Sys=0.04s
 Graphics systems deleted.
 Visualization Manager deleting...

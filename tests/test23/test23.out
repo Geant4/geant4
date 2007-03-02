@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V08-01-05    (15-December-2006)
+ Geant4 version Name: global-V08-02-01    (23-February-2007)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -51,6 +51,7 @@ eIoni:   tables are built for  e-
 
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 eBrem:   tables are built for  e+
@@ -84,9 +85,11 @@ hIoni:   tables are built for  proton
 
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 msc:  Model variant of multiple scattering for GenericIon
+      LateralDisplacementFlag=  0   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 hIoni:   tables are built for  anti_proton
@@ -116,6 +119,7 @@ muPairProd:   tables are built for  mu+
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 muIoni:   tables are built for  mu-
@@ -153,6 +157,7 @@ hIoni:   tables are built for  pi-
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 Test23 event # 100
 Test23 event # 200
@@ -164,5 +169,5 @@ Test23 event # 700
 Test23 event # 800
 Test23 event # 900
 Test23 event # 1000
-Test23_Result: gam=2894(0.93759899), e-=16188(0.42069253), e+=80(3.1800158), p=372(4.8188649), n=2238(4.0774326), d=77(4.7853582), t=47(7.8643946), He3=0(0), alph=325(5.977054), nu=1000(69.19811), anu=121(33.696839), others=22074*0.11480523
+Test23_Result: gam=1638(0.65495006), e-=9248(2.6896123), e+=31(3.8245156), p=189(4.962569), n=1030(3.859842), d=35(5.5685877), t=18(6.6658087), He3=2(11.306356), alph=88(3.5030822), nu=1000(48.124323), anu=656(32.528918), others=11607*0.13497839
 Test23 is done

@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V08-01-05    (15-December-2006)
+ Geant4 version Name: global-V08-02-01    (23-February-2007)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -101,6 +101,7 @@ for LowEnergyBremsstrahlung, LowEnergyPhotoElectric, LowEnergyIonisation
 
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 G4AugerData for Element no. 7 are loaded
 G4AugerData for Element no. 8 are loaded
@@ -192,7 +193,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.02s Sys=0s
+  User=0s Real=0.03s Sys=0.01s
 /tracking/verbose 0
 /run/beamOn 1000
 
@@ -222,7 +223,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.17s Real=1.18s Sys=0.01s
+  User=1.21s Real=1.22s Sys=0.01s
 # 
 /gun/energy 2 keV
 /gun/polarization 0. 1. 0.
@@ -259,7 +260,7 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50     0.002        0        0         0    Absorber initStep
-    1        0        0      -50         0  0.00155  0.00165   0.00165    Absorber LowEnPhotoElec
+    1        0        0      -50         0  0.00155 0.000299  0.000299    Absorber LowEnPhotoElec
     :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  1 ---------------
     :         0         0       -50   0.00045                 e-
     :----------------------------------------------------------------- EndOf2ndaries Info ---------------
@@ -274,7 +275,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0.01s Sys=0.01s
+  User=0s Real=0s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
 
@@ -341,7 +342,7 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50    0.0006        0        0         0    Absorber initStep
-    1        0        0      -50         0 8.07e-05 9.46e-06  9.46e-06    Absorber LowEnPhotoElec
+    1        0        0      -50         0 8.07e-05  0.00048   0.00048    Absorber LowEnPhotoElec
     :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  1 ---------------
     :         0         0       -50  0.000519                 e-
     :----------------------------------------------------------------- EndOf2ndaries Info ---------------
@@ -352,12 +353,11 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50  0.000519        0        0         0    Absorber initStep
-    1  1.1e-06 -3.01e-06      -50  0.000221 0.000298 6.13e-06  6.13e-06    Absorber msc
-    2 2.52e-06 -3.37e-06      -50         0 0.000221 5.82e-06  1.19e-05    Absorber LowEnergyIoni
+    1        0        0      -50         0 0.000519 1.35e-05  1.35e-05    Absorber LowEnergyIoni
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.01s Sys=0s
+  User=0s Real=0.01s Sys=0.01s
 /tracking/verbose 0
 /run/beamOn 1000
 
@@ -387,7 +387,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.15s Real=1.15s Sys=0s
+  User=1.17s Real=1.17s Sys=0s
 #
 /gun/energy 300 eV
 /gun/polarization 0. 0. 1.
@@ -424,7 +424,7 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50    0.0003        0        0         0    Absorber initStep
-    1        0        0      -50         0 8.12e-05 3.05e-05  3.05e-05    Absorber LowEnPhotoElec
+    1        0        0      -50         0 8.07e-05 1.43e-05  1.43e-05    Absorber LowEnPhotoElec
     :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  1 ---------------
     :         0         0       -50  0.000219                 e-
     :----------------------------------------------------------------- EndOf2ndaries Info ---------------
@@ -435,11 +435,11 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50  0.000219        0        0         0    Absorber initStep
-    1        0        0      -50         0 0.000219 5.76e-06  5.76e-06    Absorber LowEnergyIoni
+    1        0        0      -50         0 0.000219 5.77e-06  5.77e-06    Absorber LowEnergyIoni
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.01s Sys=0s
+  User=0s Real=0.01s Sys=0.01s
 /tracking/verbose 0
 /run/beamOn 1000
 
@@ -469,7 +469,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.14s Real=1.14s Sys=0s
+  User=1.17s Real=1.17s Sys=0s
 #
 /calor/setAbsMat Lead      
 #====================
@@ -484,6 +484,7 @@ Run Summary
 
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 LowEnergyIoni:  Total cross sections from EEDL database.
@@ -550,9 +551,9 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50      0.01        0        0         0    Absorber initStep
-    1        0        0      -50         0 0.000634   0.0097    0.0097    Absorber LowEnPhotoElec
+    1        0        0      -50         0  0.00249 0.000732  0.000732    Absorber LowEnPhotoElec
     :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  1 ---------------
-    :         0         0       -50   0.00937                 e-
+    :         0         0       -50   0.00751                 e-
     :----------------------------------------------------------------- EndOf2ndaries Info ---------------
 
 *********************************************************************************************************
@@ -560,8 +561,8 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0        0      -50   0.00937        0        0         0    Absorber initStep
-    1        0        0      -50         0  0.00937 0.000582  0.000582    Absorber LowEnergyIoni
+    0        0        0      -50   0.00751        0        0         0    Absorber initStep
+    1        0        0      -50         0  0.00751 0.000412  0.000412    Absorber LowEnergyIoni
 Run terminated.
 Run Summary
   Number of events processed : 1
@@ -600,7 +601,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.62s Real=1.63s Sys=0.01s
+  User=1.82s Real=1.88s Sys=0.06s
 # 
 /gun/energy 2 keV
 /gun/polarization 0. 1. 0.
@@ -642,9 +643,9 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50     0.002        0        0         0    Absorber initStep
-    1        0        0      -50         0 0.000877 0.000306  0.000306    Absorber LowEnPhotoElec
+    1        0        0      -50         0 0.000412 0.000301  0.000301    Absorber LowEnPhotoElec
     :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  1 ---------------
-    :         0         0       -50   0.00112                 e-
+    :         0         0       -50   0.00159                 e-
     :----------------------------------------------------------------- EndOf2ndaries Info ---------------
 
 *********************************************************************************************************
@@ -652,12 +653,12 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0        0      -50   0.00112        0        0         0    Absorber initStep
-    1        0        0      -50         0  0.00112 3.04e-05  3.04e-05    Absorber LowEnergyIoni
+    0        0        0      -50   0.00159        0        0         0    Absorber initStep
+    1        0        0      -50         0  0.00159 4.59e-05  4.59e-05    Absorber LowEnergyIoni
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.01s Sys=0s
+  User=0s Real=0.01s Sys=0.01s
 /tracking/verbose 0
 /run/beamOn 1000
 
@@ -692,7 +693,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.59s Real=1.59s Sys=0s
+  User=1.73s Real=1.8s Sys=0.07000000000000001s
 #
 /gun/energy 600 eV
 /gun/polarization 0. 0. 0.
@@ -734,7 +735,7 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50    0.0006        0        0         0    Absorber initStep
-    1        0        0      -50         0 0.000148  1.8e-06   1.8e-06    Absorber LowEnPhotoElec
+    1        0        0      -50         0 0.000148 0.000269  0.000269    Absorber LowEnPhotoElec
     :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  1 ---------------
     :         0         0       -50  0.000452                 e-
     :----------------------------------------------------------------- EndOf2ndaries Info ---------------
@@ -745,7 +746,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50  0.000452        0        0         0    Absorber initStep
-    1        0        0      -50         0 0.000452 1.22e-05  1.22e-05    Absorber msc
+    1        0        0      -50         0 0.000452 1.23e-05  1.23e-05    Absorber LowEnergyIoni
 Run terminated.
 Run Summary
   Number of events processed : 1
@@ -784,7 +785,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.53s Real=1.53s Sys=0s
+  User=1.71s Real=1.76s Sys=0.05s
 #
 /gun/energy 300 eV
 /gun/polarization 0. 0. 1.
@@ -826,9 +827,9 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50    0.0003        0        0         0    Absorber initStep
-    1        0        0      -50         0 0.000148 6.36e-05  6.36e-05    Absorber LowEnPhotoElec
+    1        0        0      -50         0 0.000153 0.000351  0.000351    Absorber LowEnPhotoElec
     :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  1 ---------------
-    :         0         0       -50  0.000152                 e-
+    :         0         0       -50  0.000147                 e-
     :----------------------------------------------------------------- EndOf2ndaries Info ---------------
 
 *********************************************************************************************************
@@ -836,8 +837,8 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0        0      -50  0.000152        0        0         0    Absorber initStep
-    1        0        0      -50         0 0.000152 6.42e-06  6.42e-06    Absorber LowEnergyIoni
+    0        0        0      -50  0.000147        0        0         0    Absorber initStep
+    1        0        0      -50         0 0.000147 6.33e-06  6.33e-06    Absorber LowEnergyIoni
 Run terminated.
 Run Summary
   Number of events processed : 1
@@ -876,7 +877,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.48s Real=1.48s Sys=0s
+  User=1.57s Real=1.59s Sys=0.02s
 #
 /calor/setAbsMat Water
 #======================
@@ -891,6 +892,7 @@ Run Summary
 
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 LowEnergyIoni:  Total cross sections from EEDL database.
@@ -962,9 +964,10 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50      0.01        0        0         0    Absorber initStep
-    1        0        0    -49.2         0 0.000537     0.81      0.81    Absorber LowEnPhotoElec
+    1        0        0      -49      0.01        0     1.01      1.01    Absorber LowEnRayleigh
+    2    -1.23     1.02    -44.6         0 0.000537     4.66      5.67    Absorber LowEnPhotoElec
     :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  1 ---------------
-    :         0         0     -49.2   0.00946                 e-
+    :     -1.23      1.02     -44.6   0.00946                 e-
     :----------------------------------------------------------------- EndOf2ndaries Info ---------------
 
 *********************************************************************************************************
@@ -972,10 +975,8 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0        0    -49.2   0.00946        0        0         0    Absorber initStep
-    1  -0.0123   0.0199    -49.2   0.00231  0.00715    0.202     0.202    Absorber msc
-    2  -0.0178    0.021    -49.2  0.000193  0.00212    0.203     0.405    Absorber msc
-    3  -0.0178    0.021    -49.2         0 0.000193    0.204     0.609    Absorber msc
+    0    -1.23     1.02    -44.6   0.00946        0        0         0    Absorber initStep
+    1    -1.23     1.02    -44.6         0  0.00946    0.368     0.368    Absorber LowEnergyIoni
 Run terminated.
 Run Summary
   Number of events processed : 1
@@ -1019,7 +1020,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=2.26s Real=2.42s Sys=0.16s
+  User=2.29s Real=2.42s Sys=0.07s
 # 
 /gun/energy 2 keV
 /gun/polarization 0. 1. 0.
@@ -1066,7 +1067,7 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50     0.002        0        0         0    Absorber initStep
-    1        0        0      -50         0 0.000537   0.0102    0.0102    Absorber LowEnPhotoElec
+    1        0        0      -50         0 0.000537   0.0192    0.0192    Absorber LowEnPhotoElec
     :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  1 ---------------
     :         0         0       -50   0.00146                 e-
     :----------------------------------------------------------------- EndOf2ndaries Info ---------------
@@ -1077,211 +1078,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50   0.00146        0        0         0    Absorber initStep
-    1        0        0      -50         0  0.00146    0.021     0.021    Absorber msc
-Run terminated.
-Run Summary
-  Number of events processed : 1
-  User=0s Real=0.01s Sys=0.01s
-/tracking/verbose 0
-/run/beamOn 1000
-
-Region <DefaultRegionForTheWorld> -- appears in <World> world volume
- Materials : Air Water 
- Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 1     used in the geometry : No      recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 2.331105122779143 keV    e- 130.147332742996 keV    e+ 127.666462607321 keV
-
-Index : 2     used in the geometry : No      recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 29.54600981988182 keV    e- 240.9381519612027 keV    e+ 231.8401670073336 keV
-
-Index : 3     used in the geometry : Yes     recalculation needed : No 
- Material : Water
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 1.104318907643669 keV    e- 85.22155196191412 keV    e+ 83.59705763904017 keV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-Start Run processing.
-Run terminated.
-Run Summary
-  Number of events processed : 1000
-  User=1.14s Real=1.14s Sys=0s
-#
-/gun/energy 600 eV
-/gun/polarization 0. 0. 0.
-/tracking/verbose 2
-/run/beamOn 1
-
-Region <DefaultRegionForTheWorld> -- appears in <World> world volume
- Materials : Air Water 
- Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 1     used in the geometry : No      recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 2.331105122779143 keV    e- 130.147332742996 keV    e+ 127.666462607321 keV
-
-Index : 2     used in the geometry : No      recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 29.54600981988182 keV    e- 240.9381519612027 keV    e+ 231.8401670073336 keV
-
-Index : 3     used in the geometry : Yes     recalculation needed : No 
- Material : Water
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 1.104318907643669 keV    e- 85.22155196191412 keV    e+ 83.59705763904017 keV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-Start Run processing.
-
-*********************************************************************************************************
-* G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0        0      -50    0.0006        0        0         0    Absorber initStep
-    1        0        0      -50         0 0.000537 0.000251  0.000251    Absorber LowEnPhotoElec
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  1 ---------------
-    :         0         0       -50  6.27e-05                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0        0      -50  6.27e-05        0        0         0    Absorber initStep
-    1        0        0      -50         0 6.27e-05   0.0302    0.0302    Absorber msc
-Run terminated.
-Run Summary
-  Number of events processed : 1
-  User=0s Real=0.01s Sys=0.01s
-/tracking/verbose 0
-/run/beamOn 1000
-
-Region <DefaultRegionForTheWorld> -- appears in <World> world volume
- Materials : Air Water 
- Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 1     used in the geometry : No      recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 2.331105122779143 keV    e- 130.147332742996 keV    e+ 127.666462607321 keV
-
-Index : 2     used in the geometry : No      recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 29.54600981988182 keV    e- 240.9381519612027 keV    e+ 231.8401670073336 keV
-
-Index : 3     used in the geometry : Yes     recalculation needed : No 
- Material : Water
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 1.104318907643669 keV    e- 85.22155196191412 keV    e+ 83.59705763904017 keV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-Start Run processing.
-Run terminated.
-Run Summary
-  Number of events processed : 1000
-  User=1.14s Real=1.14s Sys=0s
-#
-/gun/energy 300 eV
-/gun/polarization 0. 0. 1.
-/tracking/verbose 2
-/run/beamOn 1
-
-Region <DefaultRegionForTheWorld> -- appears in <World> world volume
- Materials : Air Water 
- Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 1     used in the geometry : No      recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 2.331105122779143 keV    e- 130.147332742996 keV    e+ 127.666462607321 keV
-
-Index : 2     used in the geometry : No      recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 29.54600981988182 keV    e- 240.9381519612027 keV    e+ 231.8401670073336 keV
-
-Index : 3     used in the geometry : Yes     recalculation needed : No 
- Material : Water
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 1.104318907643669 keV    e- 85.22155196191412 keV    e+ 83.59705763904017 keV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-Start Run processing.
-
-*********************************************************************************************************
-* G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0        0      -50    0.0003        0        0         0    Absorber initStep
-    1        0        0      -50         0 2.92e-05  0.00182   0.00182    Absorber LowEnPhotoElec
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  1 ---------------
-    :         0         0       -50  0.000271                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0        0      -50  0.000271        0        0         0    Absorber initStep
-    1        0        0      -50         0 0.000271   0.0304    0.0304    Absorber msc
+    1        0        0      -50         0  0.00146   0.0215    0.0215    Absorber msc
 Run terminated.
 Run Summary
   Number of events processed : 1
@@ -1325,7 +1122,211 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.11s Real=1.11s Sys=0s
+  User=1.14s Real=1.14s Sys=0s
+#
+/gun/energy 600 eV
+/gun/polarization 0. 0. 0.
+/tracking/verbose 2
+/run/beamOn 1
+
+Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Materials : Air Water 
+ Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
+ Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
+ Energy thresholds :  gamma 2.331105122779143 keV    e- 130.147332742996 keV    e+ 127.666462607321 keV
+
+Index : 2     used in the geometry : No      recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
+ Energy thresholds :  gamma 29.54600981988182 keV    e- 240.9381519612027 keV    e+ 231.8401670073336 keV
+
+Index : 3     used in the geometry : Yes     recalculation needed : No 
+ Material : Water
+ Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
+ Energy thresholds :  gamma 1.104318907643669 keV    e- 85.22155196191412 keV    e+ 83.59705763904017 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0        0        0      -50    0.0006        0        0         0    Absorber initStep
+    1        0        0      -50         0 0.000537 2.67e-05  2.67e-05    Absorber LowEnPhotoElec
+    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  1 ---------------
+    :         0         0       -50  6.27e-05                 e-
+    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0        0        0      -50  6.27e-05        0        0         0    Absorber initStep
+    1        0        0      -50         0 6.27e-05   0.0215    0.0215    Absorber msc
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0.01s Real=0.01s Sys=0s
+/tracking/verbose 0
+/run/beamOn 1000
+
+Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Materials : Air Water 
+ Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
+ Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
+ Energy thresholds :  gamma 2.331105122779143 keV    e- 130.147332742996 keV    e+ 127.666462607321 keV
+
+Index : 2     used in the geometry : No      recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
+ Energy thresholds :  gamma 29.54600981988182 keV    e- 240.9381519612027 keV    e+ 231.8401670073336 keV
+
+Index : 3     used in the geometry : Yes     recalculation needed : No 
+ Material : Water
+ Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
+ Energy thresholds :  gamma 1.104318907643669 keV    e- 85.22155196191412 keV    e+ 83.59705763904017 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1000
+  User=1.14s Real=1.16s Sys=0s
+#
+/gun/energy 300 eV
+/gun/polarization 0. 0. 1.
+/tracking/verbose 2
+/run/beamOn 1
+
+Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Materials : Air Water 
+ Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
+ Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
+ Energy thresholds :  gamma 2.331105122779143 keV    e- 130.147332742996 keV    e+ 127.666462607321 keV
+
+Index : 2     used in the geometry : No      recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
+ Energy thresholds :  gamma 29.54600981988182 keV    e- 240.9381519612027 keV    e+ 231.8401670073336 keV
+
+Index : 3     used in the geometry : Yes     recalculation needed : No 
+ Material : Water
+ Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
+ Energy thresholds :  gamma 1.104318907643669 keV    e- 85.22155196191412 keV    e+ 83.59705763904017 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0        0        0      -50    0.0003        0        0         0    Absorber initStep
+    1        0        0      -50         0 2.92e-05 0.000558  0.000558    Absorber LowEnPhotoElec
+    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  1 ---------------
+    :         0         0       -50  0.000271                 e-
+    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0        0        0      -50  0.000271        0        0         0    Absorber initStep
+    1        0        0      -50         0 0.000271   0.0215    0.0215    Absorber msc
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0s Real=0s Sys=0s
+/tracking/verbose 0
+/run/beamOn 1000
+
+Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Materials : Air Water 
+ Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
+ Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
+ Energy thresholds :  gamma 2.331105122779143 keV    e- 130.147332742996 keV    e+ 127.666462607321 keV
+
+Index : 2     used in the geometry : No      recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
+ Energy thresholds :  gamma 29.54600981988182 keV    e- 240.9381519612027 keV    e+ 231.8401670073336 keV
+
+Index : 3     used in the geometry : Yes     recalculation needed : No 
+ Material : Water
+ Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
+ Energy thresholds :  gamma 1.104318907643669 keV    e- 85.22155196191412 keV    e+ 83.59705763904017 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1000
+  User=1.11s Real=1.12s Sys=0s
 #
 /gun/particle gamma
 #------------------
@@ -1353,6 +1354,7 @@ Run Summary
 
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 LowEnergyIoni:  Total cross sections from EEDL database.
@@ -1420,7 +1422,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.93s Real=1.94s Sys=0.01s
+  User=1.92s Real=1.96s Sys=0.04s
 /gun/energy 100 MeV
 /run/beamOn 1000
 
@@ -1460,7 +1462,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.14s Real=1.14s Sys=0s
+  User=1.12s Real=1.13s Sys=0.01s
 /calor/setAbsMat Lead
 #======================
 /tracking/verbose 0
@@ -1503,7 +1505,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=8.19s Real=8.43s Sys=0.24s
+  User=8.19s Real=8.51s Sys=0.32s
 /gun/energy 100 MeV
 /run/beamOn 1000
 
@@ -1543,7 +1545,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=4.75s Real=4.86s Sys=0.11s
+  User=4.76s Real=4.85s Sys=0.09s
 /calor/setAbsMat Water
 #======================
 /tracking/verbose 0
@@ -1633,37 +1635,39 @@ UserRunAction deleted.
 UserPrimaryGenerator deleted.
 G4 kernel has come to Quit state.
 G4SDManager deleted.
-LowEnBrem for e- in Water : 34 calls
-LowEnConversion for gamma in Aluminium : 440 calls
-LowEnConversion for gamma in Lead : 1500 calls
-LowEnConversion for gamma in Water : 137 calls
-LowEnPhotoElec for gamma in Air : 17 calls
-LowEnPhotoElec for gamma in Aluminium : 4040 calls
-LowEnPhotoElec for gamma in Lead : 4009 calls
+LowEnBrem for e- in Aluminium : 1 calls
+LowEnBrem for e- in Water : 35 calls
+LowEnConversion for gamma in Aluminium : 437 calls
+LowEnConversion for gamma in Lead : 1503 calls
+LowEnConversion for gamma in Water : 138 calls
+LowEnPhotoElec for gamma in Air : 13 calls
+LowEnPhotoElec for gamma in Aluminium : 4042 calls
+LowEnPhotoElec for gamma in Lead : 4008 calls
 LowEnPhotoElec for gamma in Water : 4021 calls
-LowEnRayleigh for gamma in Aluminium : 22 calls
-LowEnRayleigh for gamma in Lead : 38 calls
-LowEnRayleigh for gamma in Water : 45 calls
-LowEnergyIoni for e- in Air : 22 calls
-LowEnergyIoni for e- in Aluminium : 4037 calls
-LowEnergyIoni for e- in Lead : 3956 calls
-LowEnergyIoni for e- in Water : 1513 calls
-Transportation for e+ in Air : 1405 calls
-Transportation for e- in Air : 6404 calls
-Transportation for gamma in Air : 5301 calls
+LowEnRayleigh for gamma in Aluminium : 24 calls
+LowEnRayleigh for gamma in Lead : 41 calls
+LowEnRayleigh for gamma in Water : 48 calls
+LowEnergyIoni for e- in Air : 25 calls
+LowEnergyIoni for e- in Aluminium : 4028 calls
+LowEnergyIoni for e- in Lead : 3923 calls
+LowEnergyIoni for e- in Water : 1488 calls
+Transportation for e+ in Air : 1404 calls
+Transportation for e- in Air : 6423 calls
+Transportation for e- in Lead : 2 calls
+Transportation for gamma in Air : 5299 calls
 Transportation for gamma in Lead : 2 calls
 annihil for e+ in Air : 1 calls
-annihil for e+ in Aluminium : 32 calls
-annihil for e+ in Lead : 635 calls
-annihil for e+ in Water : 5 calls
-msc for e- in Air : 5 calls
-msc for e- in Aluminium : 57 calls
-msc for e- in Lead : 462 calls
-msc for e- in Water : 3936 calls
+annihil for e+ in Aluminium : 36 calls
+annihil for e+ in Lead : 634 calls
+annihil for e+ in Water : 4 calls
+msc for e- in Air : 14 calls
+msc for e- in Aluminium : 368 calls
+msc for e- in Lead : 2604 calls
+msc for e- in Water : 3874 calls
 polarLowEnCompt for gamma in Air : 4 calls
 polarLowEnCompt for gamma in Aluminium : 3525 calls
-polarLowEnCompt for gamma in Lead : 37576 calls
-polarLowEnCompt for gamma in Water : 836 calls
+polarLowEnCompt for gamma in Lead : 37556 calls
+polarLowEnCompt for gamma in Water : 855 calls
 EventManager deleted.
 Default detector region deleted.
 UImanager deleted.

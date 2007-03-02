@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V08-01-05    (15-December-2006)
+ Geant4 version Name: global-V08-02-01    (23-February-2007)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -60,6 +60,7 @@ The cut in energy is set1.79769e+305GeV
 
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 eIoni:   tables are built for  e-
@@ -94,6 +95,7 @@ annihil:       Sampling according eplus2gg model
 
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 hIoni:   tables are built for  proton
@@ -105,6 +107,7 @@ hIoni:   tables are built for  proton
       Step function: finalRange(mm)= 0.01, dRoverRange= 0.05, integral: 1
 
 msc:  Model variant of multiple scattering for GenericIon
+      LateralDisplacementFlag=  0   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 ionIoni:   tables are built for  GenericIon
@@ -127,6 +130,7 @@ hIoni:   tables are built for  anti_proton
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 muIoni:   tables are built for  mu+
@@ -173,6 +177,7 @@ hIoni:   tables are built for  pi+
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 hIoni:   tables are built for  pi-
@@ -216,7 +221,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.12s Real=0.23s Sys=0.01s
+  User=0.11s Real=0.2s Sys=0.01s
 /vis/show/view
     1000.000           1           0     Na24[0.0]
          259           1   6.089e+04     e-
@@ -265,19 +270,19 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.09s Real=0.09s Sys=0s
+  User=0.07s Real=0.09s Sys=0.02s
 /vis/show/view
        1e+03           1           0     Ne24[0.0]
-    1.17e+03           1       27.87     e-
-         830           1       27.87     anti_nu_e
-       0.116           1       27.87     Na24[472.2]
-         472           1        27.9     gamma
-           0           1        27.9     Na24[0.0]
-         396           1        1042     e-
-         994           1        1042     anti_nu_e
-    2.75e+03           1        1042     gamma
-    1.37e+03           1        1042     gamma
-      0.0405           1        1042     Mg24[0.0]
+         763           1       55.87     e-
+    1.23e+03           1       55.87     anti_nu_e
+       0.127           1       55.87     Na24[472.2]
+         472           1       55.88     gamma
+           0           1       55.88     Na24[0.0]
+         216           1        2453     e-
+    1.17e+03           1        2453     anti_nu_e
+    2.75e+03           1        2453     gamma
+    1.37e+03           1        2453     gamma
+      0.0264           1        2453     Mg24[0.0]
 
 #
 #
@@ -319,23 +324,23 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.04s Real=0.04s Sys=0s
+  User=0.03s Real=0.04s Sys=0.01s
 /vis/show/view
        1e+03           1           0     F24[0.0]
-    2.39e+03           1       1.149     e-
-    1.03e+04           1       1.149     anti_nu_e
-    1.98e+03           1       1.149     gamma
-        3.12           1       1.149     Ne24[0.0]
-         696           1       35.43     e-
-     1.3e+03           1       35.43     anti_nu_e
-     0.00422           1       35.43     Na24[472.2]
-         472           1       35.43     gamma
-           0           1       35.43     Na24[0.0]
-         599           1   2.042e+05     e-
-         792           1   2.042e+05     anti_nu_e
-    2.75e+03           1   2.042e+05     gamma
-    1.37e+03           1   2.042e+05     gamma
-     0.00588           1   2.042e+05     Mg24[0.0]
+     5.9e+03           1     0.01044     e-
+    6.81e+03           1     0.01044     anti_nu_e
+    1.98e+03           1     0.01044     gamma
+        3.62           1     0.01044     Ne24[0.0]
+         499           1         231     e-
+     1.5e+03           1         231     anti_nu_e
+      0.0673           1         231     Na24[472.2]
+         472           1       231.1     gamma
+           0           1       231.1     Na24[0.0]
+         694           1   1.309e+04     e-
+         697           1   1.309e+04     anti_nu_e
+    2.75e+03           1   1.309e+04     gamma
+    1.37e+03           1   1.309e+04     gamma
+      0.0403           1   1.309e+04     Mg24[0.0]
 
 #
 #
@@ -380,13 +385,13 @@ Run Summary
   User=0.06s Real=0.06s Sys=0s
 /vis/show/view
        1e+03           1           0     Al24[0.0]
-    1.22e+03           1       2.185     e+
-         511           1       2.185     gamma
-         511           1       2.185     gamma
-    3.19e+03           1       2.185     nu_e
-    7.07e+03           1       2.185     gamma
-    1.37e+03           1       2.185     gamma
-       0.406           1       2.185     Mg24[0.0]
+    1.99e+03           1      0.3201     e+
+         511           1      0.3201     gamma
+         511           1      0.3201     gamma
+    2.43e+03           1      0.3201     nu_e
+    7.07e+03           1      0.3201     gamma
+    1.37e+03           1      0.3201     gamma
+       0.404           1      0.3201     Mg24[0.0]
 
 #
 #
@@ -428,16 +433,16 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.01s Sys=0s
+  User=0.02s Real=0.02s Sys=0s
 /vis/show/view
        1e+03           1           0     Na24[472.0]
-         472           1        0.02     gamma
-           0           1        0.02     Na24[0.0]
-         443           1   1.012e+05     e-
-         948           1   1.012e+05     anti_nu_e
-    2.75e+03           1   1.012e+05     gamma
-    1.37e+03           1   1.012e+05     gamma
-      0.0242           1   1.012e+05     Mg24[0.0]
+         472           1     0.02222     gamma
+           0           1     0.02222     Na24[0.0]
+         178           1   4.245e+04     e-
+    1.21e+03           1   4.245e+04     anti_nu_e
+    2.75e+03           1   4.245e+04     gamma
+    1.37e+03           1   4.245e+04     gamma
+      0.0409           1   4.245e+04     Mg24[0.0]
 
 #
 #
@@ -479,19 +484,19 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.04s Real=0.04s Sys=0s
+  User=0.02s Real=0.04s Sys=0.01s
 /vis/show/view
        1e+03           1           0     Cr46[0.0]
-     4.2e+03           1      0.5104     e+
-         511           1      0.5104     gamma
-         511           1      0.5104     gamma
-    2.38e+03           1      0.5104     nu_e
-       0.285           1      0.5104     V46[0.0]
-    2.18e+03           1      0.7116     e+
-         511           1      0.7116     gamma
-         511           1      0.7116     gamma
-    3.85e+03           1      0.7116     nu_e
-       0.385           1      0.7116     Ti46[0.0]
+    4.27e+03           1     0.06542     e+
+         511           1     0.06542     gamma
+         511           1     0.06542     gamma
+    2.31e+03           1     0.06542     nu_e
+       0.333           1     0.06542     V46[0.0]
+    2.68e+03           1       1.204     e+
+         511           1       1.204     gamma
+         511           1       1.204     gamma
+    3.35e+03           1       1.204     nu_e
+       0.453           1       1.204     Ti46[0.0]
 
 #
 #
@@ -533,11 +538,11 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.05s Sys=0.02s
+  User=0.02s Real=0.04s Sys=0s
 /vis/show/view
        1e+03           1           0     Po215[0.0]
-    7.39e+03           1   0.0004343     alpha
-         140           1   0.0004343     Pb211[0.0]
+    7.39e+03           1   0.0007595     alpha
+         140           1   0.0007595     Pb211[0.0]
 
 Graphics systems deleted.
 Visualization Manager deleting...
