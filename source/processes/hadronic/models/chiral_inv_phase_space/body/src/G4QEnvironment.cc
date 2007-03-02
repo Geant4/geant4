@@ -27,7 +27,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4QEnvironment.cc,v 1.119 2007-02-28 14:26:25 mkossov Exp $
+// $Id: G4QEnvironment.cc,v 1.120 2007-03-02 09:25:49 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QEnvironment ----------------
@@ -163,7 +163,7 @@ G4QEnvironment::G4QEnvironment(const G4QHadronVector& projHadrons, const G4int t
 	       {
           G4QNucleus exEnviron(tot4Mom,targPDG);
           // @@ One can put here the pbpt= (M.K.) @@ What about d,t,alpha splitting?
-          if(!exEnviron.SplitBaryon()) // Nucleus is below the splitting fragment threshold
+          if(targM>999.&&!exEnviron.SplitBaryon())//Nucleus is below SplitFragmentThreshold
 		        {
 #ifdef pdebug
             G4cout<<"G4QEnv::Const:Photon's added to Output, Env="<<theEnvironment<<G4endl;
@@ -172,9 +172,35 @@ G4QEnvironment::G4QEnvironment(const G4QHadronVector& projHadrons, const G4int t
 #ifdef pdebug
             G4cout<<"**G4QE::Const:Phot="<<photon->GetQC()<<photon->Get4Momentum()<<G4endl;
 #endif
-            theQHadrons.push_back(photon);    // (delete equivalent)
+            theQHadrons.push_back(photon);      // (delete equivalent)
             return;
 		        }
+          else if(targM<=999.)                  // Target is a nucleon
+	         {
+            G4LorentzVector prot4m(0.,0.,0.,targM); // Prototype of secondary proton 4mom
+            G4LorentzVector gam4m(0.,0.,0.,0.);     // Prototype for secondary gamma 4mom
+            if(!G4QHadron(tot4Mom).DecayIn2(prot4m,gam4m))
+            {
+#ifdef pdebug
+              G4cout<<"*War*G4QEnv::Const:(P)Photon->Output, Env="<<theEnvironment<<G4endl;
+#endif      
+              G4QHadron* photon = new G4QHadron(opHad); // Fill projPhoton to Output
+#ifdef pdebug
+              G4cout<<"**G4QE::Const:Ph="<<photon->GetQC()<<photon->Get4Momentum()<<G4endl;
+#endif
+              theQHadrons.push_back(photon);    // (delete equivalent)
+              return;
+            }
+            G4QHadron* proton = new G4QHadron(targPDG,prot4m); // Fill tgProton to Output
+            theQHadrons.push_back(proton);      // (delete equivalent)
+            G4QHadron* photon = new G4QHadron(22,gam4m);       // Fill prPhoton to Output
+            theQHadrons.push_back(photon);      // (delete equivalent)
+            theEnvironment.InitByPDG(90000000); // Create nuclear environment
+#ifdef pdebug
+            G4cout<<"G4QEnv::Const:Fill proton and photon from gam+p"<<nuPDG<<nu4m<<G4endl;
+#endif      
+            return;
+          }
         }
       }
       else if(opPDG==13 || opPDG==15)
