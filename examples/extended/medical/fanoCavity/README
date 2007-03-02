@@ -1,4 +1,4 @@
-$Id: README,v 1.6 2007-01-30 16:02:10 maire Exp $
+$Id: README,v 1.7 2007-03-02 11:08:41 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -119,7 +119,7 @@ $Id: README,v 1.6 2007-01-30 16:02:10 maire Exp $
     G4MollerBhabhaModel.
     
     To prevent explicit generation of delta-rays, the default production
-    threshold (i.e. cut) is set to 1 km (CSDA condition).
+    threshold (i.e. cut) is set to 10 km (CSDA condition).
     
     The finalRange of the step function is set to 10 um, which more on less
     correspond to a tracking cut in water of about 20 keV. See emOptions.

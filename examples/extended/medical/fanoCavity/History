@@ -1,4 +1,4 @@
-$Id: History,v 1.6 2007-02-06 11:47:39 maire Exp $
+$Id: History,v 1.7 2007-03-02 11:08:41 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+01-03-07 mma (fano-V08-02-04)
+- default cut 10 km
+- StackingAction: range < 0.8*safe
      
 06-02-07 mma (fano-V08-02-03)
 - RunAction: use G4long instead of G4int

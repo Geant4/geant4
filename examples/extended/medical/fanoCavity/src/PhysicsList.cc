@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.cc,v 1.3 2007-01-30 16:02:10 maire Exp $
+// $Id: PhysicsList.cc,v 1.4 2007-03-02 11:08:41 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -47,7 +47,7 @@
 PhysicsList::PhysicsList(DetectorConstruction* det)
 : G4VUserPhysicsList(), detector(det)
 {
-  defaultCutValue = 1.*km;
+  defaultCutValue = 10.*km;
   registerBrem = false;
   pMessenger = new PhysicsListMessenger(this);
   SetVerboseLevel(1);

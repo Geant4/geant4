@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: StackingAction.cc,v 1.1 2007-01-23 13:34:19 maire Exp $
+// $Id: StackingAction.cc,v 1.2 2007-03-02 11:08:41 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -95,7 +95,7 @@ StackingAction::ClassifyNewTrack(const G4Track* track)
  G4double safe = std::abs(position) - Zcav;
  G4double range = emCal->GetRangeFromRestricteDEDX(energy,particle,matWall);
  if (killTrack) {
-   if (range < safe) status = fKill;
+   if (range < 0.8*safe) status = fKill;
  }
 
  //histograms
