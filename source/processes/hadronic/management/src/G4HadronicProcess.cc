@@ -594,8 +594,8 @@ G4HadronicProcess::FillTotalResult(G4HadFinalState * aR, const G4Track & aT)
     G4Exception("G4HadronicProcess", "007", FatalException,
     "use of unsupported track-status.");
   }
-  if(GetProcessName() != "LElastic"
-     && AlwaysKillLeadingHadron() 
+  if(GetProcessName() != "hElastic"
+     //     && AlwaysKillLeadingHadron() 
      &&  theTotalResult->GetTrackStatus()==fAlive
      && aR->GetStatusChange()==isAlive
     )
