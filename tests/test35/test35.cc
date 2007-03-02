@@ -150,6 +150,7 @@ int main(int argc, char** argv)
   const G4ParticleDefinition* pin = G4PionMinus::PionMinus();
   const G4ParticleDefinition* pip = G4PionPlus::PionPlus();
   const G4ParticleDefinition* pi0 = G4PionZero::PionZero();
+  const G4ParticleDefinition* gamma = G4Gamma::Gamma();
   //  const G4ParticleDefinition* deu = G4Deuteron::DeuteronDefinition();
   // const G4ParticleDefinition* tri = G4Triton::TritonDefinition();
   // const G4ParticleDefinition* alp = G4Alpha::AlphaDefinition();
