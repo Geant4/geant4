@@ -160,7 +160,7 @@ examples/extended/visualization:
   perspective                John.Allison@man.ac.uk          John Allison
   standalone                 John.Allison@man.ac.uk          John Allison
   userVisAction              John.Allison@man.ac.uk          John Allison
-tests                        Serguei.Sadilov@cern.ch         Serguei Sadilov
+tests                        Ian.Mclaren@cern.ch             Ian McLaren
       test01                 Gabriele.Cosmo@cern.ch          Gabriele Cosmo
       test02                 Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
       test02.hadron          dwright@slac.stanford.edu       Dennis Wright
@@ -168,7 +168,7 @@ tests                        Serguei.Sadilov@cern.ch         Serguei Sadilov
       test04                 (not currently used - see tests/GNUmakefile)
       test05                 Gabriele.Cosmo@cern.ch          Gabriele Cosmo
       test06                 (not currently used - see tests/GNUmakefile)
-      test07                 Serguei.Sadilov@cern.ch         Serguei Sadilov
+      test07                 Ian.Mclaren@cern.ch             Ian McLaren
       test08                 (not currently used - see tests/GNUmakefile)
       test09                 Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
       test10                 gum@triumf.ca                   Peter Gumplinger
