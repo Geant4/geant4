@@ -31,6 +31,8 @@
 #include "globals.hh"
 #include "geomdefs.hh"
 
+#include "Randomize.hh"
+
 #include "ApproxEqual.hh"
 
 #include "G4ThreeVector.hh"
@@ -42,12 +44,17 @@
 #include "G4Cons.hh"
 #include "G4Para.hh"
 #include "G4Sphere.hh"
+#include "G4Orb.hh"
+#include "G4Ellipsoid.hh"
 #include "G4Torus.hh"
 #include "G4Trap.hh"
 #include "G4Trd.hh"
 #include "G4Tubs.hh"
 
 #include "G4SubtractionSolid.hh"
+#include "G4IntersectionSolid.hh"
+
+
 // #include "G4DisplacedSolid.hh"
 
 ///////////////////////////////////////////////////////////////////
@@ -229,6 +236,29 @@ int main()
   G4ThreeVector lhcbV(0.6062807093945133,0.06537967965081047,-0.7925586406726276);
 
 
+  G4Orb* largeOrb = new G4Orb("largeOrb",11.*mm);
+  G4Orb* smallOrb = new G4Orb("smallOrb",10.*mm);
+
+  G4VSolid* orbShell = new G4SubtractionSolid( "orbShell", largeOrb, 
+                                                       smallOrb, 0,0 );
+
+  G4Ellipsoid* largeEll = new G4Ellipsoid("largeEll",11.*mm, 11*mm, 11*mm); //, -11*mm, 11*mm);
+  G4Ellipsoid* smallEll = new G4Ellipsoid("smallEll",10.*mm, 10*mm, 10*mm); //, -10*mm, 10*mm);
+
+  G4VSolid* ellShell = new G4SubtractionSolid( "orbShell", largeEll, 
+                                                       smallEll, 0,0 );
+
+  G4Box* orbBox = new G4Box("orbBox",20*mm, 20*mm, 20*mm   );
+
+  G4RotationMatrix orbMat;
+  G4ThreeVector orbTransl(0.,0.,-20.);
+  G4Transform3D orbTran = G4Transform3D(orbMat, orbTransl);
+
+  G4VSolid* orbMirror = new G4IntersectionSolid( "orbMirror", orbShell, 
+                                                       orbBox, orbTran);
+
+  G4VSolid* ellMirror = new G4IntersectionSolid( "orbMirror", ellShell, 
+                                                       orbBox, orbTran);
 
    G4cout.precision(16) ;
 
@@ -485,7 +515,59 @@ int main()
     G4cout<<"c3Ic4->DistanceToIn = "<<dist<<G4endl ;
 
     dist=lhcbSub->DistanceToIn(lhcbP,lhcbV);
-    G4cout<<"lhcbSub->DistanceToIn(lhcbP,lhcbV) = "<<dist<<G4endl ;
+    //  G4cout<<"lhcbSub->DistanceToIn(lhcbP,lhcbV) = "<<dist<<G4endl ;
+
+    G4ThreeVector orbP = G4ThreeVector(0.,0.,-9.999);
+
+
+    G4double orbTheta = 30*degree;
+    G4double orbPhi   = 30*degree;
+
+    G4ThreeVector orbV = G4ThreeVector(std::sin(orbTheta)*std::cos(orbPhi),
+                                       std::sin(orbTheta)*std::sin(orbPhi),
+                                       std::cos(orbTheta));
+
+
+    EInside insideP = smallOrb->Inside(orbP);
+    G4cout<<"smallOrb->Inside(orbP) = "<<OutputInside(insideP)<<G4endl ;
+    dist = smallOrb->DistanceToOut(orbP,orbV);
+    G4cout<<"smallOrb->DistanceToOut(orbP,orbV) = "<<dist<<G4endl ;
+
+    insideP = orbShell->Inside(orbP);
+    G4cout<<"orbShell->Inside(orbP) = "<<OutputInside(insideP)<<G4endl ;
+    dist = orbShell->DistanceToIn(orbP,orbV);
+    G4cout<<"orbShell->DistanceToIn(orbP,orbV) = "<<dist<<G4endl ;
+
+    insideP = orbMirror->Inside(orbP);
+    G4cout<<"orbMirror->Inside(orbP) = "<<OutputInside(insideP)<<G4endl ;
+    dist = orbMirror->DistanceToIn(orbP,orbV);
+    G4cout<<"orbMirror->DistanceToIn(orbP,orbV) = "<<dist<<G4endl ;
+
+    insideP = ellShell->Inside(orbP);
+    G4cout<<"ellShell->Inside(orbP) = "<<OutputInside(insideP)<<G4endl ;
+    dist = ellShell->DistanceToIn(orbP,orbV);
+    G4cout<<"ellShell->DistanceToIn(orbP,orbV) = "<<dist<<G4endl ;
+
+    insideP = ellMirror->Inside(orbP);
+    G4cout<<"ellMirror->Inside(orbP) = "<<OutputInside(insideP)<<G4endl ;
+    dist = ellMirror->DistanceToIn(orbP,orbV);
+    G4cout<<"ellMirror->DistanceToIn(orbP,orbV) = "<<dist<<G4endl ;
+
+  for(i=0;i<3000;i++)
+  {
+    orbTheta = 45*degree*G4UniformRand();
+    orbPhi   = 360*degree*G4UniformRand();
+    orbV = G4ThreeVector(std::sin(orbTheta)*std::cos(orbPhi),
+                                       std::sin(orbTheta)*std::sin(orbPhi),
+			 std::cos(orbTheta));
+    dist = ellMirror->DistanceToIn(orbP,orbV);
+
+    if(dist != kInfinity)
+    {
+      G4cout<<i<<"\t"<<"ellMirror->DistanceToIn(orbP,orbV) = "<<dist<<G4endl ;
+    }
+  }
+  G4cout<<G4endl;
 
     G4cout<<"Tracking functions are OK"<<G4endl ;
 
