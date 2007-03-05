@@ -29,10 +29,13 @@
 // Preprint JINR P2-89-770, p. 12, Dubna 1989 (scanned version from KEK)
 // Based on G. Folger version of G4PiNuclearCrossSection class
 //
+// Modified:
+// 05.03.07 V.Ivanchenko - add IfZAApplicable, remove "debug"
+//
 
 #include "G4NucleonNuclearCrossSection.hh"
-#include "G4HadronicException.hh"
-#include "G4HadTmpUtil.hh"
+//#include "G4HadronicException.hh"
+//#include "G4HadTmpUtil.hh"
 #include "G4Neutron.hh"
 #include "G4Proton.hh"
 //#include "G4ping.hh"
@@ -556,6 +559,30 @@ GetCrossSection( const G4DynamicParticle* aParticle,
   return GetIsoZACrossSection(aParticle, anElement->GetZ(), anElement->GetN(), 0.);
 }
 
+////////////////////////////////////////////////////////////////////////////
+//
+//
+
+G4bool G4NucleonNuclearCrossSection::IsApplicable(const G4DynamicParticle* aParticle, 
+						  const G4Element* anElement)
+{
+  return IsZAApplicable(aParticle, anElement->GetZ(), anElement->GetN()); 
+}
+
+////////////////////////////////////////////////////////////////////////////
+//
+//
+
+G4bool G4NucleonNuclearCrossSection::IsZAApplicable(const G4DynamicParticle* aParticle, 
+						    G4double Z, G4double)
+{
+  G4bool result = false;
+  if(aParticle->GetDefinition() == theNeutron ) result = true;
+  if(aParticle->GetDefinition() == theProton)   result = true;
+  if(Z < 1.5)                                   result = false;
+  if(aParticle->GetKineticEnergy() > 999.9*GeV) result = false;
+  return result;
+}
 
 ////////////////////////////////////////////////////////////////////////////
 //
@@ -565,42 +592,20 @@ G4double G4NucleonNuclearCrossSection::
 GetIsoZACrossSection( const G4DynamicParticle* aParticle, 
                       G4double  zElement, G4double, G4double  )
 {
-   // precondition
-   //   G4ping debug("debug_NucleonNuclearCrossSection");
-
-   // G4double tuning = 1.;
-  //   G4bool ok = false;
-
-  // if(aParticle->GetDefinition() == G4Proton::Proton())     ok = true;
-  //  if(aParticle->GetDefinition() == G4Neutron::Neutron())   ok = true;
-  //  if(!ok) 
-  // {
-  //   throw G4HadronicException(__FILE__, __LINE__,
-  //                        	"Call to G4NucleonNuclearCrossSection failed.");
-  // }
-  // G4double charge = aParticle->GetDefinition()->GetPDGCharge();
    G4double kineticEnergy = aParticle->GetKineticEnergy();
-
   
    G4double result = 0;
-   G4int Z = G4lrint(zElement);
-   // G4int Z = G4lrint(anElement->GetZ());
+   G4int Z = G4int(zElement + 0.5);
+
    // G4cout<<"Z = "<<Z<<G4endl;
-   //   debug.push_back(Z);
+
    size_t it = 0;
 
    while( it < theZ.size() && Z > theZ[it] ) it++;
 
-   //  debug.push_back(theZ[it]);
-   //  debug.push_back(kineticEnergy);
-
    // if( Z == 29 ) tuning=.96;
 
    if( Z > theZ[it] ) Z = theZ[it]; 
-   // {
-   //  throw G4HadronicException(__FILE__, __LINE__,
-   //    "Called G4NucleonNuclearCrossSection outside parametrization");
-   // }
    G4int Z1, Z2;
    G4double x1, x2, xt1, xt2;
 
@@ -610,9 +615,6 @@ GetIsoZACrossSection( const G4DynamicParticle* aParticle,
      {
        result = thePimData[it]->ReactionXSection(kineticEnergy);
        fTotalXsc = thePimData[it]->TotalXSection(kineticEnergy);
-       //       debug.push_back("D1 ");
-       // debug.push_back(result);
-       //debug.push_back(fTotalXsc);
      }
      else
      {
@@ -625,17 +627,6 @@ GetIsoZACrossSection( const G4DynamicParticle* aParticle,
 
        result = Interpolate(Z1, Z2, Z, x1, x2);
        fTotalXsc = Interpolate(Z1, Z2, Z, xt1, xt2);
-       /*
-       debug.push_back("D2 ");
-       debug.push_back(x1);
-       debug.push_back(x2);
-       debug.push_back(xt1);
-       debug.push_back(xt2);
-       debug.push_back(Z1);
-       debug.push_back(Z2);
-       debug.push_back(result);
-       debug.push_back(fTotalXsc);
-       */
      }
    }
    else if(aParticle->GetDefinition() == theProton)
@@ -653,9 +644,6 @@ GetIsoZACrossSection( const G4DynamicParticle* aParticle,
        result = theData->operator[](it)->ReactionXSection(kineticEnergy);
        fTotalXsc = theData->operator[](it)->TotalXSection(kineticEnergy);
 
-       //       debug.push_back("D3 ");
-       // debug.push_back(result);
-       // debug.push_back(fTotalXsc);
      }
      else
      {
@@ -680,21 +668,8 @@ GetIsoZACrossSection( const G4DynamicParticle* aParticle,
 
        result = Interpolate(Z1, Z2, Z, x1, x2);
        fTotalXsc = Interpolate(Z1, Z2, Z, xt1, xt2);
-       /*
-       debug.push_back("D4 ");
-       debug.push_back(x1);
-       debug.push_back(xt1);
-       debug.push_back(x2);
-       debug.push_back(xt2);
-       debug.push_back(Z1);
-       debug.push_back(Z2);
-       debug.push_back(result);
-       debug.push_back(fTotalXsc);
-       */
      }
    }
-   //   debug.dump();
-   // return tuning*result;
 
    fElasticXsc = fTotalXsc - result;
    if( fElasticXsc < 0.) fElasticXsc = 0.;
@@ -739,17 +714,18 @@ Interpolate(G4int Z1, G4int Z2, G4int Z, G4double x1, G4double x2)
     NeedInit=false;
   }
 
-//        for tabulated data, cross section scales with A^.75
-   G4double r1 = x1 / A75[Z1-1] * A75[Z-1];
-   G4double r2 = x2 / A75[Z2-1] * A75[Z-1];
-   G4double result;
-   if(Z1 == Z2) result=0.5*(r1+r2);
-   else {
-     G4double alp1 = G4double(Z - Z1);
-     G4double alp2 = G4double(Z2 - Z);
-     G4double result=(r1*alp2 + r2*alp1)/(alp1 + alp2);
-   }
-//       G4cout << "x1/2, z1/2 z" <<x1<<" "<<x2<<" "<<Z1<<" "<<Z2<<" "<<Z<<G4endl;
-//       G4cout << "res1/2 " << r1 <<" " << r2 <<" " << result<< G4endl;
-   return result;
+  // for tabulated data, cross section scales with A^(2/3)
+  G4double r1 = x1 / A75[Z1-1] * A75[Z-1];
+  G4double r2 = x2 / A75[Z2-1] * A75[Z-1];
+  G4double result = 0.5*(r1+r2);
+
+  // More precise average
+  if(Z1 != Z2) {
+    G4double alp1 = G4double(Z - Z1);
+    G4double alp2 = G4double(Z2 - Z);
+    result = (r1*alp2 + r2*alp1)/(alp1 + alp2);
+  }
+  //       G4cout << "x1/2, z1/2 z" <<x1<<" "<<x2<<" "<<Z1<<" "<<Z2<<" "<<Z<<G4endl;
+  //       G4cout << "res1/2 " << r1 <<" " << r2 <<" " << result<< G4endl;
+  return result;
 }

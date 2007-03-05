@@ -28,6 +28,7 @@
 //
 // 12.08.06 V.Ivanchenko - first implementation
 // 22.01.07 V.Ivanchenko - add GetIsoZACrossSection
+// 05.03.07 V.Ivanchenko - use G4NucleonNuclearCrossSection
 //
 //
 
@@ -41,8 +42,6 @@
 
 class G4ParticleDefinition;
 class G4GlauberGribovCrossSection;
-//class G4ProtonInelasticCrossSection;
-//class G4NeutronInelasticCrossSection;
 class G4NucleonNuclearCrossSection;
 class G4UPiNuclearCrossSection;
 class G4HadronCrossSections;
@@ -60,8 +59,11 @@ public:
   G4bool IsApplicable(const G4DynamicParticle*, const G4Element*);
 
   virtual
+  G4bool IsZAApplicable(const G4DynamicParticle*, G4double Z, G4double A);
+
+  virtual
   G4double GetCrossSection(const G4DynamicParticle*, 
-			   const G4Element*, G4double aTemperature);
+			   const G4Element*, G4double aTemperature = 0.);
 
   virtual
   G4double GetIsoZACrossSection(const G4DynamicParticle*, G4double /*Z*/,
@@ -75,16 +77,11 @@ public:
 
 private:
 
-  G4int idx;
-
-  G4double thGlauber;  // threshold of Glauber model
-  G4double theZ[18];
-  G4double theA[18];
-  G4double theFac[92];
+  G4bool   hasGlauber;
+  G4double thEnergy;  // threshold of Glauber model
+  G4double theFac[93];
 
   G4GlauberGribovCrossSection*    fGlauber;
-  //  G4ProtonInelasticCrossSection*  fGhadProton;
-  //  G4NeutronInelasticCrossSection* fGhadNeutron;
   G4NucleonNuclearCrossSection*   fNucleon;
   G4UPiNuclearCrossSection*       fUPi;
   G4HadronCrossSections*          fGheisha;

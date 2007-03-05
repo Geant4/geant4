@@ -28,7 +28,10 @@
 // Implements data from: Barashenkov V.S., Nucleon-Nucleus Cross Section,
 // Preprint JINR P2-89-770, p. 12, Dubna 1989 (scanned version from KEK)
 // Based on G. Folger version of G4PiNuclearCrossSection class
-
+//
+// Modified:
+// 05.03.07 V.Ivanchenko - add IfZAApplicable, remove "debug"
+//
 
 #ifndef G4NucleonNuclearCrossSection_h
 #define G4NucleonNuclearCrossSection_h
@@ -42,37 +45,31 @@
 
 class G4NucleonNuclearCrossSection : public G4VCrossSectionDataSet
 {
-  public:
+public:
   
   G4NucleonNuclearCrossSection();
   virtual ~G4NucleonNuclearCrossSection();
 
-  virtual G4bool IsApplicable(const G4DynamicParticle* aParticle, const G4Element* anElement)
-  {
-    G4bool result = false;
-    if(aParticle->GetDefinition() == theNeutron ) result = true;
-    if(aParticle->GetDefinition() == theProton)   result = true;
-    if(G4lrint(anElement->GetZ()) == 1)           result = false;
-    if(aParticle->GetKineticEnergy() > 999.9*GeV) result = false;
-    return result;
-  }
+  virtual G4bool IsApplicable(const G4DynamicParticle* aParticle, const G4Element* anElement);
+
+  virtual G4bool IsZAApplicable(const G4DynamicParticle* aParticle, G4double Z, G4double A);
 
   G4double GetCrossSection(const G4DynamicParticle* aParticle, 
                            const G4Element* anElement,
                            G4double T=0.);
 
   G4double GetIsoZACrossSection(const G4DynamicParticle* aParticle, 
-                                G4double ZZ, G4double AA, G4double /*temperature*/ );
+                                G4double ZZ, G4double AA, G4double T=0. );
 
   G4double GetTotalXsc()  { return fTotalXsc;   };
   G4double GetElasticXsc(){ return fElasticXsc; };
 
 
-
   void BuildPhysicsTable(const G4ParticleDefinition&) {}
   void DumpPhysicsTable(const G4ParticleDefinition&) {}
   
-  private:
+private:
+
   G4double Interpolate(G4int Z1, G4int Z2, G4int Z, G4double x1, G4double x2);
 
 // add Hydrogen from PDG group.

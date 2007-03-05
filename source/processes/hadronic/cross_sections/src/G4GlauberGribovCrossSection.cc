@@ -26,6 +26,7 @@
 //
 // 17.07.06 V. Grichine - first implementation
 // 22.01.07 V.Ivanchenko - add interface with Z and A
+// 05.03.07 V.Ivanchenko - add IfZAApplicable
 //
 
 #include "G4GlauberGribovCrossSection.hh"
@@ -91,7 +92,19 @@ G4GlauberGribovCrossSection::~G4GlauberGribovCrossSection()
 
 
 G4bool 
-G4GlauberGribovCrossSection::IsApplicable(const G4DynamicParticle* aDP, const G4Element*  anElement)
+G4GlauberGribovCrossSection::IsApplicable(const G4DynamicParticle* aDP, 
+					  const G4Element*  anElement)
+{
+  return IsZAApplicable(aDP, anElement->GetZ(), anElement->GetN());
+} 
+
+////////////////////////////////////////////////////////////////////////////////////////
+//
+//
+
+G4bool 
+G4GlauberGribovCrossSection::IsZAApplicable(const G4DynamicParticle* aDP, 
+					    G4double Z, G4double)
 {
   G4bool applicable      = false;
   // G4int baryonNumber     = aDP->GetDefinition()->GetBaryonNumber();
@@ -100,7 +113,7 @@ G4GlauberGribovCrossSection::IsApplicable(const G4DynamicParticle* aDP, const G4
   const G4ParticleDefinition* theParticle = aDP->GetDefinition();
  
   if ( ( kineticEnergy  >= fLowerLimit &&
-         anElement->GetZ() > 1. &&      // >=  He
+         Z > 1.5 &&      // >=  He
        ( theParticle == theAProton   ||
          theParticle == theGamma     ||
          theParticle == theKPlus     ||
@@ -108,7 +121,7 @@ G4GlauberGribovCrossSection::IsApplicable(const G4DynamicParticle* aDP, const G4
          theParticle == theSMinus)      )    ||  
 
        ( kineticEnergy  >= 0.1*fLowerLimit &&
-         anElement->GetZ() > 1. &&      // >=  He
+         Z > 1.5 &&      // >=  He
        ( theParticle == theProton    ||
          theParticle == theNeutron   ||   
          theParticle == thePiPlus    ||
@@ -125,11 +138,10 @@ G4GlauberGribovCrossSection::IsApplicable(const G4DynamicParticle* aDP, const G4
 // [1] B.Z. Kopeliovich, nucl-th/0306044 
 
 
-
 G4double G4GlauberGribovCrossSection::
-GetCrossSection(const G4DynamicParticle* aParticle, const G4Element* anElement, G4double )
+GetCrossSection(const G4DynamicParticle* aParticle, const G4Element* anElement, G4double T)
 {
-  return GetCrossSection(aParticle, anElement->GetZ(), anElement->GetN());
+  return GetIsoZACrossSection(aParticle, anElement->GetZ(), anElement->GetN(), T);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -142,12 +154,10 @@ GetCrossSection(const G4DynamicParticle* aParticle, const G4Element* anElement, 
 
 
 G4double G4GlauberGribovCrossSection::
-GetCrossSection(const G4DynamicParticle* aParticle, G4double Z, G4double A)
+GetIsoZACrossSection(const G4DynamicParticle* aParticle, G4double Z, G4double A, G4double)
 {
   G4double xsection, sigma, cofInelastic, cofTotal, nucleusSquare, ratio;
   G4double R             = GetNucleusRadius(A); 
-
-
 
   const G4ParticleDefinition* theParticle = aParticle->GetDefinition();
 

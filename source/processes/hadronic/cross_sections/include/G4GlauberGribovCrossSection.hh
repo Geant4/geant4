@@ -34,6 +34,7 @@
 //
 // 17.07.06 V. Grichine - first implementation
 // 22.01.07 V.Ivanchenko - add interface with Z and A
+// 05.03.07 V.Ivanchenko - add IfZAApplicable
 //
 //
 
@@ -59,12 +60,17 @@ public:
   G4bool IsApplicable(const G4DynamicParticle* aDP, const G4Element*);
 
   virtual
-  G4double GetCrossSection(const G4DynamicParticle*, 
-                            const G4Element*, G4double aTemperature);
+  G4bool IsZAApplicable(const G4DynamicParticle* aDP, G4double Z, G4double A);
 
   virtual
   G4double GetCrossSection(const G4DynamicParticle*, 
-			   G4double Z, G4double A);
+			   const G4Element*, 
+			   G4double aTemperature = 0.0);
+
+  virtual
+  G4double GetIsoZACrossSection(const G4DynamicParticle*, 
+				G4double Z, G4double A, 
+				G4double aTemperature = 0.0);
 
   virtual
   void BuildPhysicsTable(const G4ParticleDefinition&)
