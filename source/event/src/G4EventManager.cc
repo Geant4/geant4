@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EventManager.cc,v 1.26 2006-11-03 03:11:13 asaim Exp $
+// $Id: G4EventManager.cc,v 1.27 2007-03-05 23:46:31 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -49,7 +49,8 @@ G4EventManager* G4EventManager::GetEventManager()
 
 G4EventManager::G4EventManager()
 :currentEvent(0),trajectoryContainer(0),
- verboseLevel(0),tracking(false),abortRequested(false)
+ verboseLevel(0),tracking(false),abortRequested(false),
+ storetRandomNumberStatusToG4Event(false)
 {
  if(fpEventManager)
  {
@@ -108,9 +109,12 @@ void G4EventManager::DoProcessing(G4Event* anEvent)
   }
   currentEvent = anEvent;
   stateManager->SetNewState(G4State_EventProc);
-  std::ostringstream oss;
-  CLHEP::HepRandom::saveFullState(oss);
-  currentEvent->SetRandomNumberStatusForProcessing(oss.str());
+  if(storetRandomNumberStatusToG4Event)
+  {
+    std::ostringstream oss;
+    CLHEP::HepRandom::saveFullState(oss);
+    currentEvent->SetRandomNumberStatusForProcessing(oss.str());
+  }
 
   // Reseting Navigator has been moved to G4Eventmanager, so that resetting
   // is now done for every event.

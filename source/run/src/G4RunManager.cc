@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.cc,v 1.94 2007-01-19 20:19:56 asaim Exp $
+// $Id: G4RunManager.cc,v 1.95 2007-03-05 23:45:42 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -71,8 +71,9 @@ G4RunManager::G4RunManager()
  runAborted(false),initializedAtLeastOnce(false),
  geometryToBeOptimized(true),runIDCounter(0),verboseLevel(0),DCtable(0),
  currentRun(0),currentEvent(0),n_perviousEventsToBeStored(0),
- numberOfEventToBeProcessed(0),storeRandomNumberStatus(false),currentWorld(0),
- nParallelWorlds(0)
+ numberOfEventToBeProcessed(0),storeRandomNumberStatus(false),
+ storeRandomNumberStatusToG4Event(false),
+ currentWorld(0),nParallelWorlds(0)
 {
   if(fRunManager)
   { G4Exception("G4RunManager constructed twice."); }
@@ -261,10 +262,13 @@ G4Event* G4RunManager::GenerateEvent(G4int i_event)
 
   G4Event* anEvent = new G4Event(i_event);
 
-  std::ostringstream oss;
-  HepRandom::saveFullState(oss);
-  randomNumberStatusForThisEvent = oss.str();
-  anEvent->SetRandomNumberStatus(randomNumberStatusForThisEvent);
+  if(storeRandomNumberStatusToG4Event)
+  {
+    std::ostringstream oss;
+    HepRandom::saveFullState(oss);
+    randomNumberStatusForThisEvent = oss.str();
+    anEvent->SetRandomNumberStatus(randomNumberStatusForThisEvent);
+  }
 
   if(storeRandomNumberStatus) {
     G4String fileN = randomNumberStatusDir + "currentEvent.rndm"; 

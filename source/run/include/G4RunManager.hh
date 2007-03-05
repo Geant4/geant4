@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.hh,v 1.43 2006-11-23 00:06:46 asaim Exp $
+// $Id: G4RunManager.hh,v 1.44 2007-03-05 23:45:42 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -245,6 +245,7 @@ class G4RunManager
     G4int numberOfEventToBeProcessed;
 
     G4bool storeRandomNumberStatus;
+    G4bool storeRandomNumberStatusToG4Event;
     G4String randomNumberStatusDir;
     G4String randomNumberStatusForThisRun;
     G4String randomNumberStatusForThisEvent;
@@ -252,6 +253,7 @@ class G4RunManager
     G4VPhysicalVolume* currentWorld;
 
     G4int nParallelWorlds;
+
 
   public:
     virtual void rndmSaveThisRun();
@@ -339,6 +341,11 @@ class G4RunManager
     { return randomNumberStatusForThisRun; }
     inline const G4String& GetRandomNumberStatusForThisEvent() const
     { return randomNumberStatusForThisEvent; }
+    inline void StoreRandomNumberStatusToG4Event(G4bool vl)
+    { 
+      storeRandomNumberStatusToG4Event = vl;
+      eventManager->StoreRandomNumberStatusToG4Event(vl);
+    }
 
   public: // with description
     inline void GeometryHasBeenModified()
