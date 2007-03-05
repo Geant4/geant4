@@ -30,6 +30,7 @@
 // 16.08.06 V.Ivanchenko - first implementation on base of 
 //                         J.P Wellisch class G4PiNuclearCrossSection
 // 22.01.07 V.Ivanchenko - add cross section interfaces with Z and A
+// 05.03.07 V.Ivanchenko - fix weight for interpolation
 //
 
 #include "G4UPiNuclearCrossSection.hh"
@@ -160,7 +161,7 @@ G4double G4UPiNuclearCrossSection::Interpolate(
     G4double w2 = A2 - A;
     G4double y1 = x1*std::pow(A/A1,aPower);
     G4double y2 = x2*std::pow(A/A2,aPower);
-    x = (w1*y1 + w2*y2)/(w1 + w2); 
+    x = (w2*y1 + w1*y2)/(w1 + w2); 
   }
   return std::exp(x);
 }

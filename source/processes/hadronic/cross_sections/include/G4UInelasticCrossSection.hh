@@ -41,8 +41,9 @@
 
 class G4ParticleDefinition;
 class G4GlauberGribovCrossSection;
-class G4ProtonInelasticCrossSection;
-class G4NeutronInelasticCrossSection;
+//class G4ProtonInelasticCrossSection;
+//class G4NeutronInelasticCrossSection;
+class G4NucleonNuclearCrossSection;
 class G4UPiNuclearCrossSection;
 class G4HadronCrossSections;
 class G4ParticleDefinition;
@@ -76,9 +77,15 @@ private:
 
   G4int idx;
 
+  G4double thGlauber;  // threshold of Glauber model
+  G4double theZ[18];
+  G4double theA[18];
+  G4double theFac[92];
+
   G4GlauberGribovCrossSection*    fGlauber;
-  G4ProtonInelasticCrossSection*  fGhadProton;
-  G4NeutronInelasticCrossSection* fGhadNeutron;
+  //  G4ProtonInelasticCrossSection*  fGhadProton;
+  //  G4NeutronInelasticCrossSection* fGhadNeutron;
+  G4NucleonNuclearCrossSection*   fNucleon;
   G4UPiNuclearCrossSection*       fUPi;
   G4HadronCrossSections*          fGheisha;
 

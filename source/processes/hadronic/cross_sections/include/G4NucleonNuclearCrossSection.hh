@@ -34,10 +34,9 @@
 #define G4NucleonNuclearCrossSection_h
 
 #include "G4VCrossSectionDataSet.hh"
+#include "G4ParticleDefinition.hh"
 
 #include "globals.hh"
-#include "G4Neutron.hh"
-#include "G4Proton.hh"
 #include "G4PiData.hh"
 #include "G4HadTmpUtil.hh"
 
@@ -51,10 +50,10 @@ class G4NucleonNuclearCrossSection : public G4VCrossSectionDataSet
   virtual G4bool IsApplicable(const G4DynamicParticle* aParticle, const G4Element* anElement)
   {
     G4bool result = false;
-    if(aParticle->GetDefinition() == G4Neutron::Neutron() ) result = true;
-    if(aParticle->GetDefinition() == G4Proton::Proton())    result = true;
-    if(G4lrint(anElement->GetZ()) == 1) result = false;
-    if(aParticle->GetKineticEnergy() > 999.9*GeV) result=false;
+    if(aParticle->GetDefinition() == theNeutron ) result = true;
+    if(aParticle->GetDefinition() == theProton)   result = true;
+    if(G4lrint(anElement->GetZ()) == 1)           result = false;
+    if(aParticle->GetKineticEnergy() > 999.9*GeV) result = false;
     return result;
   }
 
@@ -180,6 +179,10 @@ std::vector< G4PiData* > thePimData;
 
   G4double fTotalXsc;
   G4double fElasticXsc;
+
+  // particles
+  const G4ParticleDefinition* theProton;
+  const G4ParticleDefinition* theNeutron;
 
 };
 
