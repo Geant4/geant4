@@ -175,10 +175,10 @@ void G4UElasticCrossSection::DumpPhysicsTable(const G4ParticleDefinition&)
 
 void G4UElasticCrossSection::Initialise(const G4ParticleDefinition* p) 
 {
-  G4DynamicParticle dp;
   G4ParticleDefinition* part = const_cast<G4ParticleDefinition*>(p);
-  dp.SetDefinition(part);
-  dp.SetKineticEnergy(thEnergy);
+  G4ThreeVector mom(0.0,0.0,1.0);
+  G4DynamicParticle dp(part, mom, thEnergy);
+
   if(fGlauber->IsZAApplicable(&dp, 2.0, 4.0)) {
     hasGlauber = true;
     G4NistManager* nist = G4NistManager::Instance();
