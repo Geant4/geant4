@@ -113,7 +113,7 @@ inline G4bool G4UPiNuclearCrossSection::IsApplicable(
 		     const G4DynamicParticle* part, 
 		     const G4Element* elm)
 {
-  return IsZAApplicable(part, elm->GetZ(), elm->GetA());
+  return IsZAApplicable(part, elm->GetZ(), elm->GetN());
 }
 
 inline G4bool G4UPiNuclearCrossSection::IsZAApplicable(
@@ -129,7 +129,7 @@ inline G4double G4UPiNuclearCrossSection::GetCrossSection(
 		      const G4DynamicParticle* dp, 
 		      const G4Element* elm, G4double)
 {
-  return GetInelasticCrossSection(dp, elm);
+  return GetInelasticCrossSection(dp, elm->GetZ(), elm->GetN());
 }
 
 inline G4double G4UPiNuclearCrossSection::GetIsoZACrossSection(
@@ -139,5 +139,18 @@ inline G4double G4UPiNuclearCrossSection::GetIsoZACrossSection(
   return GetInelasticCrossSection(dp, Z, A);
 }
 
+inline G4double G4UPiNuclearCrossSection::GetInelasticCrossSection(
+                      const G4DynamicParticle* dp, 
+		      const G4Element* elm)
+{
+  return GetInelasticCrossSection(dp, elm->GetZ(), elm->GetN());
+}
+
+inline G4double G4UPiNuclearCrossSection::GetElasticCrossSection(
+                      const G4DynamicParticle* dp, 
+		      const G4Element* elm)
+{
+  return GetElasticCrossSection(dp, elm->GetZ(), elm->GetN());
+}
 
 #endif

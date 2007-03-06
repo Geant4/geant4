@@ -54,27 +54,6 @@ G4UPiNuclearCrossSection::~G4UPiNuclearCrossSection()
 }
 
 G4double G4UPiNuclearCrossSection::GetElasticCrossSection(
-	 const G4DynamicParticle* dp, const G4Element* elm)
-{
-  G4double cross = 0.0;
-  G4double Z = elm->GetZ();
-  G4double A;
-  G4IsotopeVector* isv = elm->GetIsotopeVector();
-  G4int ni = 0;
-  if(isv) ni = isv->size();
-  if(ni > 0) {
-    G4double* ab = elm->GetRelativeAbundanceVector();
-    for(G4int i=0; i<ni; i++) {
-      A = G4double(elm->GetIsotope(i)->GetN());
-      cross += ab[i]*GetElasticCrossSection(dp,Z,A);
-    }
-  } else {
-    cross = GetElasticCrossSection(dp,Z,elm->GetN());
-  }
-  return cross;
-}
-
-G4double G4UPiNuclearCrossSection::GetElasticCrossSection(
 	 const G4DynamicParticle* dp, G4double Z, G4double A)
 {
   G4double cross = 0.0;
@@ -84,27 +63,6 @@ G4double G4UPiNuclearCrossSection::GetElasticCrossSection(
   else if(part == piMinus) table = piMinusElastic;
   if(table) 
     cross = Interpolate(Z, A, dp->GetKineticEnergy(),table);
-  return cross;
-}
-
-G4double G4UPiNuclearCrossSection::GetInelasticCrossSection(
-	 const G4DynamicParticle* dp, const G4Element* elm)
-{
-  G4double cross = 0.0;
-  G4double Z = elm->GetZ();
-  G4double A;
-  G4IsotopeVector* isv = elm->GetIsotopeVector();
-  G4int ni = 0;
-  if(isv) ni = isv->size();
-  if(ni > 0) {
-    G4double* ab = elm->GetRelativeAbundanceVector();
-    for(G4int i=0; i<ni; i++) {
-      A = G4double(elm->GetIsotope(i)->GetN());
-      cross += ab[i]*GetInelasticCrossSection(dp,Z,A);
-    }
-  } else {
-    cross = GetInelasticCrossSection(dp,Z,elm->GetN());
-  }
   return cross;
 }
 

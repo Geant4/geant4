@@ -35,6 +35,8 @@
 // 17.07.06 V. Grichine - first implementation
 // 22.01.07 V.Ivanchenko - add interface with Z and A
 // 05.03.07 V.Ivanchenko - add IfZAApplicable
+// 06.03.07 V.Ivanchenko - add GetElasticGlauberGribov and GetElasticGlauberGribov
+//                         for combined dataset
 //
 //
 
@@ -93,6 +95,9 @@ public:
 
   G4double CalcMandelstamS( const G4double , const G4double , const G4double );
 
+  G4double GetElasticGlauberGribov(const G4DynamicParticle*,G4double Z, G4double A);
+  G4double GetInelasticGlauberGribov(const G4DynamicParticle*,G4double Z, G4double A);
+
   G4double GetTotalGlauberGribovXsc()    { return fTotalXsc;     }; 
   G4double GetElasticGlauberGribovXsc()  { return fElasticXsc;   }; 
   G4double GetInelasticGlauberGribovXsc(){ return fInelasticXsc; }; 
@@ -142,5 +147,21 @@ private:
   G4ParticleDefinition* theHe3;
 
 };
+
+inline
+G4double G4GlauberGribovCrossSection::GetElasticGlauberGribov(
+	 const G4DynamicParticle* dp, G4double Z, G4double A)
+{
+  GetIsoZACrossSection(dp, Z, A);
+  return fElasticXsc;
+}
+
+inline
+G4double G4GlauberGribovCrossSection::GetInelasticGlauberGribov(
+         const G4DynamicParticle* dp, G4double Z, G4double A)
+{
+  GetIsoZACrossSection(dp, Z, A);
+  return fInelasticXsc;
+}
 
 #endif

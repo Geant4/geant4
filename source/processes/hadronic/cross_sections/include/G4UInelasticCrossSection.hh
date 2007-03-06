@@ -29,6 +29,7 @@
 // 12.08.06 V.Ivanchenko - first implementation
 // 22.01.07 V.Ivanchenko - add GetIsoZACrossSection
 // 05.03.07 V.Ivanchenko - use G4NucleonNuclearCrossSection
+// 06.03.07 V.Ivanchenko - add Initialise function
 //
 //
 
@@ -76,6 +77,8 @@ public:
   void DumpPhysicsTable(const G4ParticleDefinition&); 
 
 private:
+
+  void Initialise(const G4ParticleDefinition*);
 
   G4bool   hasGlauber;
   G4double thEnergy;  // threshold of Glauber model

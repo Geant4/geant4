@@ -27,6 +27,7 @@
 // 12.08.06 V.Ivanchenko - first implementation
 // 22.01.07 V.Ivanchenko - add GetIsoZACrossSection
 // 05.03.07 V.Ivanchenko - use G4NucleonNuclearCrossSection
+// 06.03.07 V.Ivanchenko - add Initialise function
 //
 //
 
@@ -44,6 +45,7 @@
 #include "G4Neutron.hh"
 #include "G4PionPlus.hh"
 #include "G4PionMinus.hh"
+#include "G4NistManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -60,6 +62,7 @@ G4UElasticCrossSection::G4UElasticCrossSection(const G4ParticleDefinition* p)
     fNucleon = new G4NucleonNuclearCrossSection();
   else if(p == G4PionPlus::PionPlus() || p == G4PionMinus::PionMinus())
     fUPi = new G4UPiNuclearCrossSection();
+  Initialise(p);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -75,7 +78,7 @@ G4UElasticCrossSection::~G4UElasticCrossSection()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4bool G4UElasticCrossSection::IsApplicable(const G4DynamicParticle* dp, 
-					    const G4Element*  elm)
+					      const G4Element*  elm)
 {
   return IsZAApplicable(dp, elm->GetZ(), elm->GetN());
 }
@@ -83,7 +86,7 @@ G4bool G4UElasticCrossSection::IsApplicable(const G4DynamicParticle* dp,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4bool G4UElasticCrossSection::IsZAApplicable(const G4DynamicParticle* dp, 
-					      G4double Z, G4double A)
+						G4double Z, G4double A)
 {
   G4bool res = false;
   if(fNucleon || fUPi) res = true;
@@ -121,27 +124,24 @@ G4double G4UElasticCrossSection::GetIsoZACrossSection(const G4DynamicParticle* d
   if(fNucleon) { 
     if(iz == 1) cross = fGheisha->GetElasticCrossSection(dp, Z, A);
     else if(ekin > thEnergy) {
-      cross = fGlauber->GetIsoZACrossSection(dp, Z, A);
-      cross = theFac[iz]*fGlauber->GetElasticGlauberGribovXsc();
+      cross = theFac[iz]*fGlauber->GetElasticGlauberGribov(dp, Z, A);
     } else {
-      cross = fNucleon->GetIsoZACrossSection(dp, Z, A);
+      cross = fNucleon->GetElasticCrossSection(dp, Z, A);
     }
 
     // pions
   } else if(fUPi) {
     if(iz == 1) cross = fGheisha->GetElasticCrossSection(dp, Z, A);
     else if(ekin > thEnergy) {
-      cross = fGlauber->GetIsoZACrossSection(dp, Z, A);
-      cross = theFac[iz]*fGlauber->GetElasticGlauberGribovXsc();
+      cross = theFac[iz]*fGlauber->GetElasticGlauberGribov(dp, Z, A);
     } else {
-      cross = fUPi->GetIsoZACrossSection(dp, Z, A);
+      cross = fUPi->GetElasticCrossSection(dp, Z, A);
     }
 
     //others
   } else {
     if(hasGlauber && ekin > thEnergy) {
-      cross = fGlauber->GetIsoZACrossSection(dp, Z, A);
-      cross = theFac[iz]*fGlauber->GetElasticGlauberGribovXsc();
+      cross = theFac[iz]*fGlauber->GetElasticGlauberGribov(dp, Z, A);
     } else {
       cross = fGheisha->GetElasticCrossSection(dp, Z, A);
     }
@@ -159,51 +159,8 @@ G4double G4UElasticCrossSection::GetIsoZACrossSection(const G4DynamicParticle* d
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4UElasticCrossSection::BuildPhysicsTable(const G4ParticleDefinition& p)
+void G4UElasticCrossSection::BuildPhysicsTable(const G4ParticleDefinition&)
 {
-  G4DynamicParticle dp;
-  G4ParticleDefinition* part = const_cast<G4ParticleDefinition*>(&p);
-  dp.SetDefinition(part);
-  dp.SetKineticEnergy(thEnergy);
-  if(fGlauber->IsZAApplicable(&dp, 2.0, 4.0)) {
-    hasGlauber = true;
-
-    G4double A[92] = 
-      {
-	1.0001, 4.0000, 6.9241, 9.0000, 10.801, 12.011, 14.004, 16.004, 19.000, 20.188,
-	23.000, 24.320, 27.000, 28.109, 31.000, 32.094, 35.484, 39.985, 39.135, 40.116,
-	45.000, 47.918, 50.998, 52.055, 55.000, 55.910, 59.000, 58.760, 63.617, 65.468,
-	69.798, 72.691, 75.000, 79.042, 79.986, 83.887, 85.557, 87.710, 89.000, 91.318,
-	93.000, 96.025, 98.000, 101.16, 103.00, 106.51, 107.96, 112.51, 114.91, 118.81,
-	121.86, 127.70, 127.00, 131.39, 133.00, 137.42, 139.00, 140.21, 141.00, 144.32,
-	145.00, 150.45, 152.04, 157.33, 159.00, 162.57, 165.00, 167.32, 169.00, 173.10,
-	175.03, 178.54, 181.00, 183.89, 186.25, 190.27, 192.25, 195.11, 197.00, 200.63,
-	204.41, 207.24, 209.00, 209.00, 210.00, 222.00, 223.00, 226.00, 227.00, 232.00,
-	231.00, 237.98
-      };			 
-
-    G4double csup, csdn;
-    for(G4int z=2; z<92; z++) {
-
-      G4double Z = G4double(z);
-      csup = fGlauber->GetIsoZACrossSection(&dp, Z, A[z]);
-      csup = fGlauber->GetElasticGlauberGribovXsc();
-
-      // proton and neutron
-      if(fNucleon) { 
-	csdn = fNucleon->GetIsoZACrossSection(&dp, Z, A[z]);
-
-	// pions
-      } else if(fUPi) {
-	csdn = fUPi->GetIsoZACrossSection(&dp, Z, A[z]);
-
-	// other
-      } else {
-	csdn = fGheisha->GetElasticCrossSection(&dp, Z, A[z]);
-      }
-      theFac[z] = csdn/csup;
-    }
-  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -211,6 +168,45 @@ void G4UElasticCrossSection::BuildPhysicsTable(const G4ParticleDefinition& p)
 void G4UElasticCrossSection::DumpPhysicsTable(const G4ParticleDefinition&) 
 {
   G4cout << "G4UElasticCrossSection:"<<G4endl;
+}
+
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void G4UElasticCrossSection::Initialise(const G4ParticleDefinition* p) 
+{
+  G4DynamicParticle dp;
+  G4ParticleDefinition* part = const_cast<G4ParticleDefinition*>(p);
+  dp.SetDefinition(part);
+  dp.SetKineticEnergy(thEnergy);
+  if(fGlauber->IsZAApplicable(&dp, 2.0, 4.0)) {
+    hasGlauber = true;
+    G4NistManager* nist = G4NistManager::Instance();
+
+    G4double csup, csdn;
+    for(G4int iz=2; iz<92; iz++) {
+
+      G4double Z = G4double(iz);
+      G4double A = nist->GetAtomicMassAmu(iz);
+      csup = fGlauber->GetElasticGlauberGribov(&dp, Z, A);
+
+      // proton and neutron
+      if(fNucleon) { 
+	csdn = fNucleon->GetElasticCrossSection(&dp, Z, A);
+
+	// pions
+      } else if(fUPi) {
+	csdn = fUPi->GetElasticCrossSection(&dp, Z, A);
+
+	// other
+      } else {
+	csdn = fGheisha->GetElasticCrossSection(&dp, Z, A);
+      }
+      theFac[iz] = csdn/csup;
+      if(verboseLevel > 1) G4cout << "Z= " << Z <<  "  A= " << A 
+				  << " factor= " << theFac[iz] << G4endl; 
+    }
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

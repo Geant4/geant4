@@ -31,6 +31,7 @@
 //
 // Modified:
 // 05.03.07 V.Ivanchenko - add IfZAApplicable, remove "debug"
+// 06.03.07 V.Ivanchenko - add GetElasticCrossSection for combined dataset
 //
 
 #ifndef G4NucleonNuclearCrossSection_h
@@ -60,6 +61,9 @@ public:
 
   G4double GetIsoZACrossSection(const G4DynamicParticle* aParticle, 
                                 G4double ZZ, G4double AA, G4double T=0. );
+
+  G4double GetElasticCrossSection(const G4DynamicParticle* aParticle, 
+				  G4double ZZ, G4double AA);
 
   G4double GetTotalXsc()  { return fTotalXsc;   };
   G4double GetElasticXsc(){ return fElasticXsc; };
@@ -182,5 +186,13 @@ std::vector< G4PiData* > thePimData;
   const G4ParticleDefinition* theNeutron;
 
 };
+
+inline
+G4double G4NucleonNuclearCrossSection::GetElasticCrossSection(
+         const G4DynamicParticle* dp, G4double ZZ, G4double AA)
+{
+  GetIsoZACrossSection(dp, ZZ, AA);
+  return fElasticXsc;
+}
 
 #endif
