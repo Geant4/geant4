@@ -109,7 +109,7 @@ int main(int argc, char** argv)
   cout << "========================================================" << endl;
   cout << "======             HARP Test Start           ========" << endl;
   cout << "========================================================" << endl;
-
+ 
   G4String  namePart = "proton";
   G4String  nameMat  = "G4_Al";
   G4String  nameGen  = "Binary";
