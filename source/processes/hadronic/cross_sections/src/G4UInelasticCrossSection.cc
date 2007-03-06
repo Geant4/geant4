@@ -54,15 +54,14 @@ G4UInelasticCrossSection::G4UInelasticCrossSection(const G4ParticleDefinition* p
   hasGlauber = false;
   thEnergy   = 50.*GeV;
   fGlauber   = new G4GlauberGribovCrossSection();
-  fGheisha   = new G4HadronCrossSections();
+  fGheisha   = G4HadronCrossSections::Instance();
   fNucleon   = 0;
   fUPi       = 0;
-  fGheisha   = 0;
   if(p == G4Proton::Proton() || p == G4Neutron::Neutron())
     fNucleon = new G4NucleonNuclearCrossSection();
   else if(p == G4PionPlus::PionPlus() || p == G4PionMinus::PionMinus())
     fUPi = new G4UPiNuclearCrossSection();
-  verboseLevel = 2;
+  verboseLevel = 0;
   Initialise(p);
 }
 
@@ -73,7 +72,6 @@ G4UInelasticCrossSection::~G4UInelasticCrossSection()
   delete fGlauber;
   if(fNucleon) delete fNucleon;
   if(fUPi)     delete fUPi;
-  if(fGheisha) delete fGheisha;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -143,7 +141,7 @@ G4double G4UInelasticCrossSection::GetIsoZACrossSection(const G4DynamicParticle*
   } else {
     if(hasGlauber && ekin > thEnergy) {
       cross = theFac[iz]*fGlauber->GetInelasticGlauberGribov(dp, Z, A);
-    } else {
+    } else if(fGheisha->IsApplicable(dp, Z, A)){
       cross = fGheisha->GetInelasticCrossSection(dp, Z, A);
     }
   }
@@ -153,6 +151,7 @@ G4double G4UInelasticCrossSection::GetIsoZACrossSection(const G4DynamicParticle*
 	   << dp->GetDefinition()->GetParticleName()
 	   << "  Ekin(GeV)= " << dp->GetKineticEnergy()
 	   << " in nucleus Z= " << Z << "  A= " << A
+	   << " XS(b)= " << cross/barn 
 	   << G4endl;
 
   return cross;
@@ -180,15 +179,19 @@ void G4UInelasticCrossSection::Initialise(const G4ParticleDefinition* p)
   G4ThreeVector mom(0.0,0.0,1.0);
   G4DynamicParticle dp(part, mom, thEnergy);
 
-  if(fGlauber->IsZAApplicable(&dp, 2.0, 4.0)) {
-    hasGlauber = true;
-    G4NistManager* nist = G4NistManager::Instance();
+  G4NistManager* nist = G4NistManager::Instance();
+  G4double A = nist->GetAtomicMassAmu(2);
 
+  if(fGlauber->IsZAApplicable(&dp, 2.0, A)) {
+    hasGlauber = true;
+
+    if(verboseLevel > 0) G4cout << "### G4UInelasticCrossSection::Initialise for "
+				<< p->GetParticleName() << G4endl;
     G4double csup, csdn;
     for(G4int iz=2; iz<93; iz++) {
 
       G4double Z = G4double(iz);
-      G4double A = nist->GetAtomicMassAmu(iz);
+      A = nist->GetAtomicMassAmu(iz);
       csup = fGlauber->GetInelasticGlauberGribov(&dp, Z, A);
 
       // proton and neutron
@@ -200,14 +203,14 @@ void G4UInelasticCrossSection::Initialise(const G4ParticleDefinition* p)
 	csdn = fUPi->GetInelasticCrossSection(&dp, Z, A);
 
 	// other
-      } else if(fGheisha->IsZAApplicable(&dp, Z, A)) {
+      } else if(fGheisha->IsApplicable(&dp, Z, A)) {
 	csdn = fGheisha->GetInelasticCrossSection(&dp, Z, A);
 
       } else {
         csdn = csup;
       }
       theFac[iz] = csdn/csup;
-      if(verboseLevel > 1) G4cout << "Z= " << Z <<  "  A= " << A 
+      if(verboseLevel > 0) G4cout << "Z= " << Z <<  "  A= " << A 
 				  << " factor= " << theFac[iz] << G4endl; 
     }
   }
