@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EventManager.cc,v 1.27 2007-03-05 23:46:31 asaim Exp $
+// $Id: G4EventManager.cc,v 1.28 2007-03-06 20:06:10 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -111,9 +111,8 @@ void G4EventManager::DoProcessing(G4Event* anEvent)
   stateManager->SetNewState(G4State_EventProc);
   if(storetRandomNumberStatusToG4Event)
   {
-    std::ostringstream oss;
-    CLHEP::HepRandom::saveFullState(oss);
-    currentEvent->SetRandomNumberStatusForProcessing(oss.str());
+    CLHEP::HepRandom::saveFullState(ossRandomNumberStatusForThisEvent);
+    currentEvent->SetRandomNumberStatusForProcessing(ossRandomNumberStatusForThisEvent.str());
   }
 
   // Reseting Navigator has been moved to G4Eventmanager, so that resetting
@@ -344,9 +343,11 @@ void G4EventManager::ProcessOneEvent(const HepMC::GenEvent* hepmcevt,G4Event* an
   {
     anEvent = new G4Event();
     tempEvent = true;
-    std::ostringstream oss;
-    CLHEP::HepRandom::saveFullState(oss);
-    anEvent->SetRandomNumberStatus(oss.str());
+    if(storetRandomNumberStatusToG4Event)
+    {
+      CLHEP::HepRandom::saveFullState(ossRandomNumberStatusForThisEvent);
+      currentEvent->SetRandomNumberStatus(ossRandomNumberStatusForThisEvent.str());
+    }
   }
   G4HepMCInterface::HepMC2G4(hepmcevt,anEvent);
   DoProcessing(anEvent);
@@ -363,9 +364,11 @@ void G4EventManager::ProcessOneEvent(G4TrackVector* trackVector,G4Event* anEvent
   {
     anEvent = new G4Event();
     tempEvent = true;
-    std::ostringstream oss;
-    CLHEP::HepRandom::saveFullState(oss);
-    anEvent->SetRandomNumberStatus(oss.str());
+    if(storetRandomNumberStatusToG4Event)
+    {
+      CLHEP::HepRandom::saveFullState(ossRandomNumberStatusForThisEvent);
+      currentEvent->SetRandomNumberStatus(ossRandomNumberStatusForThisEvent.str());
+    }
   }
   StackTracks(trackVector,false);
   DoProcessing(anEvent);

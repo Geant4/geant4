@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.cc,v 1.95 2007-03-05 23:45:42 asaim Exp $
+// $Id: G4RunManager.cc,v 1.96 2007-03-06 20:05:50 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -54,7 +54,6 @@
 #include "G4SDManager.hh"
 #include "G4UImanager.hh"
 #include "G4ios.hh"
-#include <sstream>
 
 using namespace CLHEP;
 
@@ -88,10 +87,8 @@ G4RunManager::G4RunManager()
   G4ParticleTable::GetParticleTable()->CreateMessenger();
   G4ProcessTable::GetProcessTable()->CreateMessenger();
   randomNumberStatusDir = "./";
-  std::ostringstream oss;
-  HepRandom::saveFullState(oss);
-  randomNumberStatusForThisRun = oss.str();
-  randomNumberStatusForThisEvent = oss.str();
+  HepRandom::saveFullState(ossRandomNumberStatusForThisRun);
+  HepRandom::saveFullState(ossRandomNumberStatusForThisEvent);
 }
 
 G4RunManager::~G4RunManager()
@@ -190,10 +187,8 @@ void G4RunManager::RunInitialization()
   if(fSDM)
   { currentRun->SetHCtable(fSDM->GetHCtable()); }
   
-  std::ostringstream oss;
-  HepRandom::saveFullState(oss);
-  randomNumberStatusForThisRun = oss.str();
-  currentRun->SetRandomNumberStatus(randomNumberStatusForThisRun);
+  HepRandom::saveFullState(ossRandomNumberStatusForThisRun);
+  currentRun->SetRandomNumberStatus(randomNumberStatusForThisRun = ossRandomNumberStatusForThisRun.str());
 
   if(storeRandomNumberStatus) {
     G4String fileN = randomNumberStatusDir + "currentRun.rndm"; 
@@ -264,10 +259,8 @@ G4Event* G4RunManager::GenerateEvent(G4int i_event)
 
   if(storeRandomNumberStatusToG4Event)
   {
-    std::ostringstream oss;
-    HepRandom::saveFullState(oss);
-    randomNumberStatusForThisEvent = oss.str();
-    anEvent->SetRandomNumberStatus(randomNumberStatusForThisEvent);
+    HepRandom::saveFullState(ossRandomNumberStatusForThisEvent);
+    anEvent->SetRandomNumberStatus(randomNumberStatusForThisEvent = ossRandomNumberStatusForThisEvent.str());
   }
 
   if(storeRandomNumberStatus) {
