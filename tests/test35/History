@@ -14,8 +14,13 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+test35-V08-02-00  06 Mar 2007 V.Ivanchenko
+- Use 0.0 low limit for QElastic 
+- Use GeV low limit for FTF
+- Initialise gamma as a particle
+
 test35-V08-01-02  27 Nov 2006 V.Ivanchenko
-- Use 0.0 low limit for HEelastic 
+- Use 0.0 low limit for HElastic 
 
 test35-V08-01-01  16 Nov 2006 V.Ivanchenko
 - LDFLAGS -> LOADLIBS
