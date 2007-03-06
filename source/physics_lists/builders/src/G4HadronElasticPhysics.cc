@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronElasticPhysics.cc,v 1.6 2007-02-19 16:00:56 ahoward Exp $
+// $Id: G4HadronElasticPhysics.cc,v 1.7 2007-03-06 17:52:06 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -41,6 +41,7 @@
 // 19.02.2007 V.Ivanchenko set QModelLowLimit and LowestEnergyLimit to zero
 // 19.02.2007 A.Howard set QModelLowLimit and LowestEnergyLimit to zero 
 //                     for neutrons
+// 06.03.2007 V.Ivanchenko use updated interface to G4UElasticCrossSection
 //
 //----------------------------------------------------------------------------
 //
@@ -154,7 +155,7 @@ void G4HadronElasticPhysics::ConstructProcess()
 	G4UHadronElasticProcess* h = new G4UHadronElasticProcess("hElastic");
 	h->SetQElasticCrossSection(man);
         hel = h;
-        if(glFlag) hel->AddDataSet(new G4UElasticCrossSection());
+        if(glFlag) hel->AddDataSet(new G4UElasticCrossSection(particle));
       } else {                   
 	hel = new G4HadronElasticProcess("hElastic");
       }
@@ -174,7 +175,7 @@ void G4HadronElasticPhysics::ConstructProcess()
 	neutronModel = nhe;
 	h->SetQElasticCrossSection(nhe->GetCS());
         hel = h;
-        if(glFlag) hel->AddDataSet(new G4UElasticCrossSection());
+        if(glFlag) hel->AddDataSet(new G4UElasticCrossSection(particle));
       } else {                   
 	hel = new G4HadronElasticProcess("hElastic");
 	neutronModel = new G4LElastic();
