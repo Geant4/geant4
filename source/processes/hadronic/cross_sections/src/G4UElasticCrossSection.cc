@@ -62,6 +62,7 @@ G4UElasticCrossSection::G4UElasticCrossSection(const G4ParticleDefinition* p)
     fNucleon = new G4NucleonNuclearCrossSection();
   else if(p == G4PionPlus::PionPlus() || p == G4PionMinus::PionMinus())
     fUPi = new G4UPiNuclearCrossSection();
+  verboseLevel = 2;
   Initialise(p);
 }
 
@@ -184,7 +185,7 @@ void G4UElasticCrossSection::Initialise(const G4ParticleDefinition* p)
     G4NistManager* nist = G4NistManager::Instance();
 
     G4double csup, csdn;
-    for(G4int iz=2; iz<92; iz++) {
+    for(G4int iz=2; iz<93; iz++) {
 
       G4double Z = G4double(iz);
       G4double A = nist->GetAtomicMassAmu(iz);
@@ -199,8 +200,11 @@ void G4UElasticCrossSection::Initialise(const G4ParticleDefinition* p)
 	csdn = fUPi->GetElasticCrossSection(&dp, Z, A);
 
 	// other
-      } else {
+      } else if(fGheisha->IsZAApplicable(&dp, Z, A)) {
 	csdn = fGheisha->GetElasticCrossSection(&dp, Z, A);
+
+      } else {
+        csdn = csup;
       }
       theFac[iz] = csdn/csup;
       if(verboseLevel > 1) G4cout << "Z= " << Z <<  "  A= " << A 
