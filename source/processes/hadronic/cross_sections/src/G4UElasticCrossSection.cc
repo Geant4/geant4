@@ -52,7 +52,7 @@
 G4UElasticCrossSection::G4UElasticCrossSection(const G4ParticleDefinition* p) 
 {
   hasGlauber = false;
-  thEnergy   = 50.*GeV;
+  thEnergy   = 100.*GeV;
   fGlauber   = new G4GlauberGribovCrossSection();
   fGheisha   = G4HadronCrossSections::Instance();
   fNucleon   = 0;

@@ -121,7 +121,7 @@ G4double G4UPiNuclearCrossSection::Interpolate(
     G4double y2 = x2*std::pow(A/A2,aPower);
     x = (w2*y1 + w1*y2)/(w1 + w2); 
   }
-  return std::exp(x);
+  return x;
 }
 
 void G4UPiNuclearCrossSection::AddDataSet(const G4String& p, 
@@ -133,8 +133,8 @@ void G4UPiNuclearCrossSection::AddDataSet(const G4String& p,
   G4LPhysicsFreeVector* pvin = new G4LPhysicsFreeVector(n,e[0]*GeV,e[n-1]*GeV);
   G4LPhysicsFreeVector* pvel = new G4LPhysicsFreeVector(n,e[0]*GeV,e[n-1]*GeV);
   for(G4int i=0; i<n; i++) { 
-    pvin->PutValues(i,e[i]*GeV,std::log(in[i]*millibarn)); 
-    pvel->PutValues(i,e[i]*GeV,std::log((tot[i]-in[i])*millibarn)); 
+    pvin->PutValues(i,e[i]*GeV,in[i]*millibarn); 
+    pvel->PutValues(i,e[i]*GeV,std::max(0.0,(tot[i]-in[i])*millibarn)); 
   }
   if(p == "pi+") {
     piPlusInelastic->push_back(pvin);
