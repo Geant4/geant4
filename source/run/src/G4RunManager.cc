@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.cc,v 1.96 2007-03-06 20:05:50 asaim Exp $
+// $Id: G4RunManager.cc,v 1.97 2007-03-07 01:18:22 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -188,7 +188,7 @@ void G4RunManager::RunInitialization()
   { currentRun->SetHCtable(fSDM->GetHCtable()); }
   
   HepRandom::saveFullState(ossRandomNumberStatusForThisRun);
-  currentRun->SetRandomNumberStatus(randomNumberStatusForThisRun = ossRandomNumberStatusForThisRun.str());
+  currentRun->SetRandomNumberStatus(ossRandomNumberStatusForThisRun.str());
 
   if(storeRandomNumberStatus) {
     G4String fileN = randomNumberStatusDir + "currentRun.rndm"; 
@@ -260,7 +260,7 @@ G4Event* G4RunManager::GenerateEvent(G4int i_event)
   if(storeRandomNumberStatusToG4Event)
   {
     HepRandom::saveFullState(ossRandomNumberStatusForThisEvent);
-    anEvent->SetRandomNumberStatus(randomNumberStatusForThisEvent = ossRandomNumberStatusForThisEvent.str());
+    anEvent->SetRandomNumberStatus(ossRandomNumberStatusForThisEvent.str());
   }
 
   if(storeRandomNumberStatus) {

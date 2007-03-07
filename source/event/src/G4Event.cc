@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Event.cc,v 1.12 2007-03-05 20:09:20 asaim Exp $
+// $Id: G4Event.cc,v 1.13 2007-03-07 01:18:08 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -44,8 +44,8 @@ G4Event::G4Event()
 :eventID(0),
  thePrimaryVertex(0),numberOfPrimaryVertex(0),
  HC(0),DC(0),trajectoryContainer(0),eventAborted(false),userInfo(0),
- randomNumberStatus(0),validRandomNumberStatus(false),
- randomNumberStatusForProcessing(0),validRandomNumberStatusForProcessing(false),
+ validRandomNumberStatus(false),
+ validRandomNumberStatusForProcessing(false),
  keepTheEvent(false)
 {;}
 
@@ -53,8 +53,8 @@ G4Event::G4Event(G4int evID)
 :eventID(evID),
  thePrimaryVertex(0),numberOfPrimaryVertex(0),
  HC(0),DC(0),trajectoryContainer(0),eventAborted(false),userInfo(0),
- randomNumberStatus(0),validRandomNumberStatus(false),
- randomNumberStatusForProcessing(0),validRandomNumberStatusForProcessing(false),
+ validRandomNumberStatus(false),
+ validRandomNumberStatusForProcessing(false),
  keepTheEvent(false)
 {;}
 
@@ -69,8 +69,8 @@ G4Event::~G4Event()
     delete trajectoryContainer;
   }
   if(userInfo) delete userInfo;
-  if(validRandomNumberStatus) delete randomNumberStatus;
-  if(validRandomNumberStatusForProcessing) delete randomNumberStatusForProcessing;
+////////  if(validRandomNumberStatus) delete randomNumberStatus;
+////////  if(validRandomNumberStatusForProcessing) delete randomNumberStatusForProcessing;
 }
 
 G4int G4Event::operator==(const G4Event &right) const
