@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel.cc,v 1.46 2007-03-07 11:10:47 vnivanch Exp $
+// $Id: G4UrbanMscModel.cc,v 1.47 2007-03-07 15:44:42 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -133,6 +133,7 @@
 // 23-02-07 use tPathLength inside ComputeStep instead of geombig
 // 24-02-07 step reduction before boundary for 'small' geomlimit only 
 // 03-03-07 single scattering around boundaries only (L.Urban)
+// 07-03-07 bugfix in ComputeTruePathLengthLimit (for skin > 0.) (L.Urban)
 //
 
 // Class Description:
@@ -534,15 +535,12 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
       //compute geomlimit and presafety 
       GeomLimit(track);
 
+      insideskin = false;
       smallstep += 1.;
 
       if((stepStatus == fGeomBoundary) || (stepNumber == 1))
       {
         if(stepNumber == 1) smallstep = 1.e10;
-	//        {
-        //  smallstep = 1.e10;
-        //  insideskin = false;
-	// }
         else  smallstep = 1.;
 
         if((stepNumber == 1) && (currentRange < presafety))
@@ -596,7 +594,6 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
         //if track starts far from boundaries increase tlimit!
         if(tlimit < facsafety*presafety)
           tlimit = facsafety*presafety ;
-
       }
 
       if(currentRange < presafety)
@@ -641,7 +638,6 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
 
       if(tPathLength > tnow)
         tPathLength = tnow ; 
-
     }
     // for 'normal' simulation with or without magnetic field                    
     //  there no small step/single scattering at boundaries
@@ -709,11 +705,8 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
   // version similar to 7.1 (needed for some experiments)
   else
   {
-    //    if(stepNumber == 1)
-    // {
-    //  tlimit = geombig;
-    //  insideskin = false;
-    // }
+    if(stepNumber == 1)
+      tlimit = geombig;
 
     if (stepStatus == fGeomBoundary)
     {

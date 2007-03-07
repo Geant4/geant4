@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel.hh,v 1.22 2007-03-02 12:03:45 urban Exp $
+// $Id: G4UrbanMscModel.hh,v 1.23 2007-03-07 15:44:42 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -195,7 +195,6 @@ private:
   G4double skin,skindepth,smallstep; 
   G4double presafety;
   G4double facsafety;
-  G4double optfactor;
 
   G4double lambda0;
   G4double lambdaeff;
