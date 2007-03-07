@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Run.hh,v 1.15 2007-03-07 01:18:22 asaim Exp $
+// $Id: G4Run.hh,v 1.16 2007-03-07 03:00:14 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -93,7 +93,7 @@ class G4Run
     { HCtable = HCtbl; }
     inline void SetDCtable(G4DCtable* DCtbl)
     { DCtable = DCtbl; }
-    inline void SetRandomNumberStatus(std::string st)
+    inline void SetRandomNumberStatus(G4String& st)
     { randomNumberStatus = st; }
 
   public: // with description

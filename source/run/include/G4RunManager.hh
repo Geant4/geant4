@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.hh,v 1.45 2007-03-06 20:05:50 asaim Exp $
+// $Id: G4RunManager.hh,v 1.46 2007-03-07 03:00:14 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -91,7 +91,6 @@ class G4PrimaryTransformer;
 #include "G4EventManager.hh"
 #include "globals.hh"
 #include <vector>
-#include <sstream>
 
 class G4RunManager
 {
@@ -248,8 +247,6 @@ class G4RunManager
     G4bool storeRandomNumberStatus;
     G4bool storeRandomNumberStatusToG4Event;
     G4String randomNumberStatusDir;
-    std::ostringstream ossRandomNumberStatusForThisRun;
-    std::ostringstream ossRandomNumberStatusForThisEvent;
     G4String randomNumberStatusForThisRun;
     G4String randomNumberStatusForThisEvent;
 
@@ -340,12 +337,10 @@ class G4RunManager
     }
     inline G4String GetRandomNumberStoreDir() const
     { return randomNumberStatusDir; }
-    inline const G4String& GetRandomNumberStatusForThisRun()
-    { randomNumberStatusForThisRun = ossRandomNumberStatusForThisRun.str(); 
-      return randomNumberStatusForThisRun; }
-    inline const G4String& GetRandomNumberStatusForThisEvent()
-    { randomNumberStatusForThisEvent = ossRandomNumberStatusForThisEvent.str(); 
-      return randomNumberStatusForThisEvent; }
+    inline const G4String& GetRandomNumberStatusForThisRun() const
+    { return randomNumberStatusForThisRun; }
+    inline const G4String& GetRandomNumberStatusForThisEvent() const
+    { return randomNumberStatusForThisEvent; }
     inline void StoreRandomNumberStatusToG4Event(G4bool vl)
     { 
       storeRandomNumberStatusToG4Event = vl;
