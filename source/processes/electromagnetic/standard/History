@@ -1,4 +1,4 @@
-$Id: History,v 1.288 2007-03-07 11:10:47 vnivanch Exp $
+$Id: History,v 1.289 2007-03-07 16:09:10 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,7 +19,7 @@ committal in the CVS repository !
 
 24 February 07: V.Ivanchenko (emstand-V08-02-09)
 G4MultipleScattering - remove SetSkin method, which is implemented
-                       in the base class
+                       in the base class - allowing skin>0
 
 03 March 07
 - G4UrbanMscModel - single scattering allowed near to boundaries only,
