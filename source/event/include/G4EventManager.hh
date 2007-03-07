@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EventManager.hh,v 1.20 2007-03-06 20:06:10 asaim Exp $
+// $Id: G4EventManager.hh,v 1.21 2007-03-07 02:44:16 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -50,7 +50,6 @@ class G4EvManMessenger;
 class G4SDManager;
 #include "globals.hh"
 class G4VUserEventInformation;
-#include <sstream>
 
 #ifdef CLHEP_HepMC   // Temporarly disabled
 #include "CLHEP/HepMC/GenEvent.h"
@@ -139,8 +138,6 @@ class G4EventManager
       G4UserSteppingAction* userSteppingAction;
 
       G4bool storetRandomNumberStatusToG4Event;
-      std::ostringstream ossRandomNumberStatusForThisEvent;
-
 
   public: // with description
       inline const G4Event* GetConstCurrentEvent()
