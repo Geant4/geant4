@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel.cc,v 1.45 2007-03-02 12:03:45 urban Exp $
+// $Id: G4UrbanMscModel.cc,v 1.46 2007-03-07 11:10:47 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -518,6 +518,7 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
   presafety = sp->GetSafety();
   G4StepStatus stepStatus = sp->GetStepStatus();
   G4int stepNumber = track.GetCurrentStepNumber();
+  if(stepNumber == 1) insideskin = false;
 
   // standard  version
   //
@@ -537,11 +538,11 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
 
       if((stepStatus == fGeomBoundary) || (stepNumber == 1))
       {
-        if(stepNumber == 1)
-        {
-          smallstep = 1.e10;
-          insideskin = false;
-        }
+        if(stepNumber == 1) smallstep = 1.e10;
+	//        {
+        //  smallstep = 1.e10;
+        //  insideskin = false;
+	// }
         else  smallstep = 1.;
 
         if((stepNumber == 1) && (currentRange < presafety))
@@ -708,11 +709,11 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
   // version similar to 7.1 (needed for some experiments)
   else
   {
-    if(stepNumber == 1)
-    {
-      tlimit = geombig;
-      insideskin = false;
-    }
+    //    if(stepNumber == 1)
+    // {
+    //  tlimit = geombig;
+    //  insideskin = false;
+    // }
 
     if (stepStatus == fGeomBoundary)
     {
@@ -720,8 +721,8 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
       else                        tlimit = facrange*lambda0;
 
       if(tlimit < tlimitmin) tlimit = tlimitmin;
+      if(tPathLength > tlimit) tPathLength = tlimit;
     }
-    if(tPathLength > tlimit) tPathLength = tlimit;
   }
 
   return tPathLength ;

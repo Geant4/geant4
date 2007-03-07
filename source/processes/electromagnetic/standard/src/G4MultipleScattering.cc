@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering.cc,v 1.61 2007-02-13 11:41:38 vnivanch Exp $
+// $Id: G4MultipleScattering.cc,v 1.62 2007-03-07 11:10:47 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -215,6 +215,13 @@ void G4MultipleScattering::InitialiseProcess(const G4ParticleDefinition* p)
   mscUrban->SetHighEnergyLimit(highKineticEnergy);
   AddEmModel(1,mscUrban);
   isInitialized = true;
+  /*
+  G4cout << "G4MultipleScattering::InitialiseProcess for " 
+	 << p->GetParticleName()
+	 << " skin= " << Skin()
+	 << " SA= " << steppingAlgorithm
+	 << G4endl;
+  */
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
