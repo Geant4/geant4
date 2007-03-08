@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EventManager.cc,v 1.29 2007-03-07 02:44:16 asaim Exp $
+// $Id: G4EventManager.cc,v 1.30 2007-03-08 23:56:12 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -109,11 +109,12 @@ void G4EventManager::DoProcessing(G4Event* anEvent)
   }
   currentEvent = anEvent;
   stateManager->SetNewState(G4State_EventProc);
-  if(storetRandomNumberStatusToG4Event)
+  if(storetRandomNumberStatusToG4Event>1)
   {
     std::ostringstream oss;
     CLHEP::HepRandom::saveFullState(oss);
-    currentEvent->SetRandomNumberStatusForProcessing(oss.str());
+    randomNumberStatusToG4Event = oss.str();
+    currentEvent->SetRandomNumberStatusForProcessing(randomNumberStatusToG4Event); 
   }
 
   // Reseting Navigator has been moved to G4Eventmanager, so that resetting
@@ -338,15 +339,19 @@ void G4EventManager::ProcessOneEvent(G4Event* anEvent)
 #include "G4HepMCInterface.hh"
 void G4EventManager::ProcessOneEvent(const HepMC::GenEvent* hepmcevt,G4Event* anEvent)
 {
+  static G4String randStat;
   trackIDCounter = 0;
   G4bool tempEvent = false;
   if(!anEvent)
   {
     anEvent = new G4Event();
     tempEvent = true;
+  }
+  if(storetRandomNumberStatusToG4Event==1 || storetRandomNumberStatusToG4Event==3)
+  {
     std::ostringstream oss;
     CLHEP::HepRandom::saveFullState(oss);
-    anEvent->SetRandomNumberStatus(oss.str());
+    anEvent->SetRandomNumberStatus(randStat=oss.str());
   }
   G4HepMCInterface::HepMC2G4(hepmcevt,anEvent);
   DoProcessing(anEvent);
@@ -357,15 +362,19 @@ void G4EventManager::ProcessOneEvent(const HepMC::GenEvent* hepmcevt,G4Event* an
 
 void G4EventManager::ProcessOneEvent(G4TrackVector* trackVector,G4Event* anEvent)
 {
+  static G4String randStat;
   trackIDCounter = 0;
   G4bool tempEvent = false;
   if(!anEvent)
   {
     anEvent = new G4Event();
     tempEvent = true;
+  }
+  if(storetRandomNumberStatusToG4Event==1 || storetRandomNumberStatusToG4Event==3)
+  {
     std::ostringstream oss;
     CLHEP::HepRandom::saveFullState(oss);
-    anEvent->SetRandomNumberStatus(oss.str());
+    anEvent->SetRandomNumberStatus(randStat=oss.str());
   }
   StackTracks(trackVector,false);
   DoProcessing(anEvent);

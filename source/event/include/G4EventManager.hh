@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EventManager.hh,v 1.21 2007-03-07 02:44:16 asaim Exp $
+// $Id: G4EventManager.hh,v 1.22 2007-03-08 23:56:12 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -137,7 +137,8 @@ class G4EventManager
       G4UserTrackingAction* userTrackingAction;
       G4UserSteppingAction* userSteppingAction;
 
-      G4bool storetRandomNumberStatusToG4Event;
+      G4int storetRandomNumberStatusToG4Event;
+      G4String randomNumberStatusToG4Event;
 
   public: // with description
       inline const G4Event* GetConstCurrentEvent()
@@ -208,7 +209,7 @@ class G4EventManager
       { return transformer; }
       inline void SetPrimaryTransformer(G4PrimaryTransformer* tf)
       { transformer = tf; }
-      inline void StoreRandomNumberStatusToG4Event(G4bool vl)
+      inline void StoreRandomNumberStatusToG4Event(G4int vl)
       { storetRandomNumberStatusToG4Event = vl; }
 };
 

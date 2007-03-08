@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Event.hh,v 1.16 2007-03-07 02:44:16 asaim Exp $
+// $Id: G4Event.hh,v 1.17 2007-03-08 23:56:12 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -116,12 +116,12 @@ class G4Event
       { trajectoryContainer = value; }
       inline void SetEventAborted()
       { eventAborted = true; }
-      inline void SetRandomNumberStatus(G4String st)
+      inline void SetRandomNumberStatus(G4String& st)
       {
         randomNumberStatus = new G4String(st);
         validRandomNumberStatus = true;
       }
-      inline void SetRandomNumberStatusForProcessing(G4String st)
+      inline void SetRandomNumberStatusForProcessing(G4String& st)
       {
         randomNumberStatusForProcessing = new G4String(st);
         validRandomNumberStatusForProcessing = true;
