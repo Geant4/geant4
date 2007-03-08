@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessManager.icc,v 1.4 2006-06-29 21:07:28 gunter Exp $
+// $Id: G4ProcessManager.icc,v 1.5 2007-03-08 09:05:20 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -141,21 +141,21 @@ inline
 }
 
 inline 
- G4int G4ProcessManager::AddRestProcess(G4VProcess *aProcess,G4int ord)
+ G4int G4ProcessManager::AddRestProcess(G4VRestProcess *aProcess,G4int ord)
 {
-  return AddProcess(aProcess, ord, ordInActive, ordInActive);
+  return AddProcess((G4VProcess*)(aProcess), ord, ordInActive, ordInActive);
 }
 
 inline 
- G4int G4ProcessManager::AddContinuousProcess(G4VProcess *aProcess,G4int ord)
+ G4int G4ProcessManager::AddContinuousProcess(G4VContinuousProcess *aProcess,G4int ord)
 {
-  return AddProcess(aProcess, ordInActive, ord, ordInActive);
+  return AddProcess((G4VProcess*)(aProcess), ordInActive, ord, ordInActive);
 }
 
 inline 
- G4int G4ProcessManager::AddDiscreteProcess(G4VProcess *aProcess,G4int ord)
+ G4int G4ProcessManager::AddDiscreteProcess(G4VDiscreteProcess *aProcess,G4int ord)
 {
-  return AddProcess(aProcess, ordInActive, ordInActive, ord);
+  return AddProcess((G4VProcess*)(aProcess), ordInActive, ordInActive, ord);
 }
 
 inline 

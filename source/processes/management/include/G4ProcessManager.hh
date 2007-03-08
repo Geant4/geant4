@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessManager.hh,v 1.12 2006-06-29 21:07:26 gunter Exp $
+// $Id: G4ProcessManager.hh,v 1.13 2007-03-08 09:05:20 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -74,6 +74,9 @@
 #include <vector>
 
 #include "G4VProcess.hh"
+#include "G4VContinuousProcess.hh"
+#include "G4VRestProcess.hh"
+#include "G4VDiscreteProcess.hh"
 #include "G4ProcessVector.hh"
 #include "G4ParticleDefinition.hh"
 
@@ -202,12 +205,14 @@ class G4ProcessManager
       //   ContinuousProcess has only AlongStepDoIt
       //   DiscreteProcess has only PostStepDoIt
       //  if ord is not specified, the process is
-      //  added at the end of List of processvectors for 
-      //  both DoIt and GetPhysicalInteractionLength 
+      //  added at the end of List of processvectors 
+      //  (except for processes assigned to LAST explicitly )
+      //  for both DoIt and GetPhysicalInteractionLength
+      //  
 
-      G4int AddRestProcess(G4VProcess *aProcess, G4int ord = ordDefault);
-      G4int AddDiscreteProcess(G4VProcess *aProcess, G4int ord = ordDefault);
-      G4int AddContinuousProcess(G4VProcess *aProcess, G4int ord = ordDefault);
+      G4int AddRestProcess(G4VRestProcess *aProcess, G4int ord = ordDefault);
+      G4int AddDiscreteProcess(G4VDiscreteProcess *aProcess, G4int ord = ordDefault);
+      G4int AddContinuousProcess(G4VContinuousProcess *aProcess, G4int ord = ordDefault);
 
       // Methods for setting ordering parameters
        // Altanative methods for setting ordering parameters 
