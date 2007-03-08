@@ -112,21 +112,10 @@ if [ $1 = "all" ] ; then
   ${G4STTDIR}/bin/geant4-unix.pl --start-test test10 7
     $G4STTDIR/bin/run.sh test10
   ${G4STTDIR}/bin/geant4-unix.pl --end-test test10 7
-#
-# NDL # Following tag 'neu-V03-02-02'
-# On Thu, 26 Jul 2001, Hans-Peter Wellisch wrote:
-# Please use G4NDL3.4 for test11, and G4NDL0.2 for the other tests.
-# set default to G4NDL0.2 in setup scripts
-
-  NeutronHPCrossSections=/afs/cern.ch/sw/geant4/dev/data/G4NDL3.8;export NeutronHPCrossSections
-  echo "STT:NeutronHPCrossSections G4NDL3.8";
 
   ${G4STTDIR}/bin/geant4-unix.pl --start-test test11 8
   $G4STTDIR/bin/run.sh test11
   ${G4STTDIR}/bin/geant4-unix.pl --end-test test11 8
-
-#  NeutronHPCrossSections=/afs/cern.ch/sw/geant4/dev/data/G4NDL0.2;export NeutronHPCrossSections
-#  echo "STT:NeutronHPCrossSections G4NDL0.2";
 
   ${G4STTDIR}/bin/geant4-unix.pl --start-test test12 9
     $G4STTDIR/bin/run.sh test12
@@ -485,11 +474,6 @@ else
       if [ $1 = test02.hadron -o $1 = test11 -o $1 = test12 -o $1 = test13 \
         -o $1 = test15 -o $1 = test16 -o $1 = test21 ]
       then
-        if [ $1 = test11 ]; then
-          NeutronHPCrossSections=/afs/cern.ch/sw/geant4/dev/data/G4NDL3.8
-          export NeutronHPCrossSections
-          echo "STT:hadrons! NeutronHPCrossSections G4NDL3.8";
-        fi
         rm -f $dir/$1.exerciser$dot_G4LARGE_N.in
         $G4WORKDIR/bin/$G4SYSTEM/$shortname.hadronic.exerciser $G4LARGE_N \
         > $dir/$1.exerciser$dot_G4LARGE_N.in
@@ -498,11 +482,6 @@ else
         /usr/bin/time $G4WORKDIR/bin/$G4SYSTEM/$shortname \
         $dir/$1.exerciser$dot_G4LARGE_N.in \
         > $dir/$1$dot_G4LARGE_N.out 2> $dir/$1$dot_G4LARGE_N.err
-#        if [ $1 = test11 ]; then
-#          NeutronHPCrossSections=/afs/cern.ch/sw/geant4/dev/data/G4NDL0.2
-#          export NeutronHPCrossSections
-#          echo "STT:hadrons! NeutronHPCrossSections G4NDL0.2";
-#        fi
 
       elif [ $1 = test601 -o $1 = test602 ] 
       then
