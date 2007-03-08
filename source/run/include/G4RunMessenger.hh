@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunMessenger.hh,v 1.14 2006-06-29 21:13:22 gunter Exp $
+// $Id: G4RunMessenger.hh,v 1.15 2007-03-08 23:54:04 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -96,7 +96,8 @@ class G4RunMessenger: public G4UImessenger
     G4UIcmdWithoutParameter *   geomCmd;
     G4UIcmdWithoutParameter *   physCmd;
     G4UIcmdWithoutParameter *   cutCmd;
-    
+    G4UIcmdWithAnInteger *      randEvtCmd;
+
     G4UIdirectory *             randomDirectory;
     G4UIcmdWithAString *        randDirCmd;
     G4UIcmdWithABool *          savingFlagCmd;

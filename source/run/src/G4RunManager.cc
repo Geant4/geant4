@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.cc,v 1.98 2007-03-07 03:00:14 asaim Exp $
+// $Id: G4RunManager.cc,v 1.99 2007-03-08 23:54:04 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -72,7 +72,7 @@ G4RunManager::G4RunManager()
  geometryToBeOptimized(true),runIDCounter(0),verboseLevel(0),DCtable(0),
  currentRun(0),currentEvent(0),n_perviousEventsToBeStored(0),
  numberOfEventToBeProcessed(0),storeRandomNumberStatus(false),
- storeRandomNumberStatusToG4Event(false),
+ storeRandomNumberStatusToG4Event(0),
  currentWorld(0),nParallelWorlds(0)
 {
   if(fRunManager)
@@ -262,7 +262,7 @@ G4Event* G4RunManager::GenerateEvent(G4int i_event)
 
   G4Event* anEvent = new G4Event(i_event);
 
-  if(storeRandomNumberStatusToG4Event)
+  if(storeRandomNumberStatusToG4Event==1 || storeRandomNumberStatusToG4Event==3)
   {
     std::ostringstream oss;
     HepRandom::saveFullState(oss);
