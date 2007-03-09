@@ -1174,61 +1174,62 @@ void StatAccepTestAnalysis::fillNtuple( float incidentParticleId,
     maxEdepTot = totalEnergyDepositedInCalorimeter;
   }
 
-#ifdef G4ANALYSIS_USE
-  if (tuple) {
-    //G4cout << " StatAccepTestAnalysis::fillNtuple : DEBUG Info " << G4endl
-    //       << "\t incidentParticleId = " << incidentParticleId << G4endl
-    //       << "\t incidentParticleEnergy = " << incidentParticleEnergy << G4endl
-    //       << "\t totalEnergyDepositedInActiveLayers = " 
-    //       << totalEnergyDepositedInActiveLayers << G4endl
-    //       << "\t totalEnergyDepositedInCalorimeter = " 
-    //       << totalEnergyDepositedInCalorimeter << G4endl;       // ***DEBUG***
+  //G4cout << " StatAccepTestAnalysis::fillNtuple : DEBUG Info " << G4endl
+  //       << "\t incidentParticleId = " << incidentParticleId << G4endl
+  //       << "\t incidentParticleEnergy = " << incidentParticleEnergy << G4endl
+  //       << "\t totalEnergyDepositedInActiveLayers = " 
+  //       << totalEnergyDepositedInActiveLayers << G4endl
+  //       << "\t totalEnergyDepositedInCalorimeter = " 
+  //       << totalEnergyDepositedInCalorimeter << G4endl;       // ***DEBUG***
 
+#ifdef G4ANALYSIS_USE
+  if ( tuple ) {
     tuple->fill( tuple->findColumn( "ID" ), incidentParticleId );
     tuple->fill( tuple->findColumn( "E" ), incidentParticleEnergy );
     tuple->fill( tuple->findColumn( "EDEP_ACT" ), totalEnergyDepositedInActiveLayers );
     tuple->fill( tuple->findColumn( "EDEP_CAL" ), totalEnergyDepositedInCalorimeter );
     tuple->fill( tuple->findColumn( "nLayers" ), numberOfReadoutLayers );
     tuple->fill( tuple->findColumn( "nBinR" ), numberOfRadiusBins );
-    sumEdepAct  += totalEnergyDepositedInActiveLayers;
-    sumEdepAct2 += 
-      totalEnergyDepositedInActiveLayers * totalEnergyDepositedInActiveLayers;
-    sumEdepTot  += totalEnergyDepositedInCalorimeter;
-    sumEdepTot2 += 
-      totalEnergyDepositedInCalorimeter * totalEnergyDepositedInCalorimeter;
     AIDA::ITuple* tpL = tuple->getTuple( tuple->findColumn( "L" ) );
     AIDA::ITuple* tpR = tuple->getTuple( tuple->findColumn( "R" ) );
     for ( int iLayer = 0; iLayer < numberOfReadoutLayers; iLayer++ ) {
       tpL->fill( 0, longitudinalProfile[ iLayer ] );
       tpL->addRow();
-      sumL[ iLayer ]  += longitudinalProfile[ iLayer ];
-      sumL2[ iLayer ] += longitudinalProfile[ iLayer ] * longitudinalProfile[ iLayer ];  
     }
     for ( int iBinR = 0; iBinR < numberOfRadiusBins; iBinR++ ) {
       tpR->fill( 0, transverseProfile[ iBinR ] );
       tpR->addRow();
-      sumR[ iBinR ]  += transverseProfile[ iBinR ];
-      sumR2[ iBinR ] += transverseProfile[ iBinR ] * transverseProfile[ iBinR ];  
     }
     tuple->addRow();
   }
 #endif
 
-  // Reset the longitudinal and transverse profiles, for the next event.
-  for ( int layer = 0; layer < numberOfReadoutLayers; layer++ ) {
+  sumEdepAct  += totalEnergyDepositedInActiveLayers;
+  sumEdepAct2 += 
+    totalEnergyDepositedInActiveLayers * totalEnergyDepositedInActiveLayers;
+  sumEdepTot  += totalEnergyDepositedInCalorimeter;
+  sumEdepTot2 += 
+    totalEnergyDepositedInCalorimeter * totalEnergyDepositedInCalorimeter;
+  for ( int iLayer = 0; iLayer < numberOfReadoutLayers; iLayer++ ) {
     //G4cout << " StatAccepTestAnalysis::fillNtuple : DEBUG Info " << G4endl
-    //       << "\t Longitudinal profile: layer = " << layer
-    //       << "   energy = " << longitudinalProfile[ layer ] / MeV 
+    //       << "\t Longitudinal profile: layer = " << iLayer
+    //       << "   energy = " << longitudinalProfile[ iLayer ] / MeV 
     //       << " MeV " << G4endl;                                 //***DEBUG***
-    longitudinalProfile[ layer ] = 0.0;
+    sumL[ iLayer ]  += longitudinalProfile[ iLayer ];
+    sumL2[ iLayer ] += longitudinalProfile[ iLayer ] * longitudinalProfile[ iLayer ];  
+    longitudinalProfile[ iLayer ] = 0.0;
   }
-  for ( int ir = 0; ir < numberOfRadiusBins; ir++ ) {
+  for ( int iBinR = 0; iBinR < numberOfRadiusBins; iBinR++ ) {
     //G4cout << " StatAccepTestAnalysis::fillNtuple : DEBUG Info " << G4endl
-    //       << "\t Transverse profile: iBinRadius = " << ir / mm
-    //       << " mm   energy = " << transverseProfile[ ir ] / MeV 
+    //       << "\t Transverse profile: iBinRadius = " << iBinR 
+    //       << "   energy = " << transverseProfile[ iBinR ] / MeV 
     //       << " MeV " << G4endl;                                 //***DEBUG***
-    transverseProfile[ ir ] = 0.0;
+    sumR[ iBinR ]  += transverseProfile[ iBinR ];
+    sumR2[ iBinR ] += transverseProfile[ iBinR ] * transverseProfile[ iBinR ];  
+    transverseProfile[ iBinR ] = 0.0;
   }
+
+  numberOfEvents++;
 
 #ifdef G4ANALYSIS_USE
   // This method is called at each event, so it is useful to commit
@@ -1239,7 +1240,6 @@ void StatAccepTestAnalysis::fillNtuple( float incidentParticleId,
   // have anyhow some data already stored in the ntuple to be checked.
   // Remember that when you look the ntuple with PAW, while is running,
   // you need to close the session and open a new one to see the updates.
-  numberOfEvents++;
   if ( numberOfEvents % 1000 == 0 ) {
     if ( tree ) {
       tree->commit();
