@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QElastic.cc,v 1.18 2007-01-18 10:10:58 mkossov Exp $
+// $Id: G4QElastic.cc,v 1.19 2007-03-09 10:07:35 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QElastic class -----------------
@@ -57,7 +57,7 @@ G4QElastic::G4QElastic(const G4String& processName) : G4VDiscreteProcess(process
 #endif
   if (verboseLevel>0) G4cout << GetProcessName() << " process is created "<< G4endl;
 
-  G4QCHIPSWorld::Get()->GetParticles(nPartCWorld); // Create CHIPS World with 234 particles
+  //G4QCHIPSWorld::Get()->GetParticles(nPartCWorld); // Create CHIPS World (234 part. max)
 }
 
 // Destructor
@@ -246,6 +246,14 @@ G4VParticleChange* G4QElastic::PostStepDoIt(const G4Track& track, const G4Step& 
   //static const G4double mProt= G4QPDGCode(2212).GetMass()*.001;   // CHIPS in GeV
   //static const G4double mP2=mProt*mProt;                            // squared proton mass
   //
+  //-------------------------------------------------------------------------------------
+  static G4bool CWinit = true;                       // CHIPS Warld needs to be initted
+  if(CWinit)
+		{
+    CWinit=false;
+    G4QCHIPSWorld::Get()->GetParticles(nPartCWorld); // Create CHIPS World (234 part.max)
+  }
+  //-------------------------------------------------------------------------------------
   const G4DynamicParticle* projHadron = track.GetDynamicParticle();
   const G4ParticleDefinition* particle=projHadron->GetDefinition();
 #ifdef debug
@@ -402,7 +410,7 @@ G4VParticleChange* G4QElastic::PostStepDoIt(const G4Track& track, const G4Step& 
 #endif
   //
   G4int targPDG=90000000+Z*1000+N;         // CHIPS PDG Code of the target nucleus
-  G4QPDGCode targQPDG(targPDG);
+  G4QPDGCode targQPDG(targPDG);         // @@ one can use G4Ion and get rid of CHIPS World
   G4double tM=targQPDG.GetMass();          // CHIPS target mass in MeV
   G4double kinEnergy= projHadron->GetKineticEnergy()*MeV; // Kin energy in MeV (Is *MeV n?)
   G4ParticleMomentum dir = projHadron->GetMomentumDirection();// It is a unit three-vector

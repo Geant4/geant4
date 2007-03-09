@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QCaptureAtRest.cc,v 1.10 2007-02-27 15:36:58 mkossov Exp $
+// $Id: G4QCaptureAtRest.cc,v 1.11 2007-03-09 10:07:35 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCaptureAtRest class -----------------
@@ -49,7 +49,7 @@ G4QCaptureAtRest::G4QCaptureAtRest(const G4String& processName)
 #endif
   if (verboseLevel>0) G4cout << GetProcessName() << " is created "<< G4endl;
 
-  G4QCHIPSWorld::Get()->GetParticles(nPartCWorld); // Create CHIPS World with 234 particles
+  //G4QCHIPSWorld::Get()->GetParticles(nPartCWorld); // Create CHIPS World (234 part. max)
   G4QNucleus::SetParameters(freeNuc,freeDib,clustProb,mediRatio); // Clusterization param's
   G4Quasmon::SetParameters(Temperature,SSin2Gluons,EtaEtaprime);  // Hadronic parameters
   G4QEnvironment::SetParameters(SolidAngle); // SolAngle of pbar-A secondary mesons capture
@@ -153,7 +153,14 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
   //static const G4double mTau = G4QPDGCode(15).GetMass();
   static const G4double mEl  = G4QPDGCode(11).GetMass();
   static const G4double mEl2 = mEl*mEl;
-  //
+  //-------------------------------------------------------------------------------------
+  static G4bool CWinit = true;                       // CHIPS Warld needs to be initted
+  if(CWinit)
+		{
+    CWinit=false;
+    G4QCHIPSWorld::Get()->GetParticles(nPartCWorld); // Create CHIPS World (234 part.max)
+  }
+  //-------------------------------------------------------------------------------------
   const G4DynamicParticle* stoppedHadron = track.GetDynamicParticle();
   const G4ParticleDefinition* particle=stoppedHadron->GetDefinition();
   Time=0.;
