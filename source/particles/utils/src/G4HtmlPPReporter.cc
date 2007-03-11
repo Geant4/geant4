@@ -29,7 +29,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4HtmlPPReporter.cc,v 1.4 2006-06-29 19:27:58 gunter Exp $
+// $Id: G4HtmlPPReporter.cc,v 1.5 2007-03-11 07:17:35 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -222,6 +222,15 @@ void G4HtmlPPReporter::SparseOption(const G4String& option)
   outFile << sTR << sTD << sB << "Charge" << eB << eTD;
   outFile << sTD <<  particle->GetPDGCharge()/eplus;
   outFile << eTD << eTR << G4endl;
+  // Magnetic Moment
+  outFile << sTR << sTD << sB << "Magnetic Moment" << eB << eTD;
+  if  (particle->GetPDGMagneticMoment() != 0.0){
+    outFile << sTD <<  particle->GetPDGMagneticMoment()/MeV*tesla;
+    outFile << "[MeV/T]" << eTD << eTR << G4endl;
+  } else {
+    outFile << sTD <<  " not defined ";
+    outFile << eTD << eTR << G4endl;
+  }
   // life time
   outFile << sTR << sTD << sB << "Life Time" << eB << eTD;
   if ( particle->GetPDGLifeTime() >0.0 ) {

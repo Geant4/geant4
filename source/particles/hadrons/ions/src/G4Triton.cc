@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Triton.cc,v 1.13 2006-10-12 10:59:45 kurasige Exp $
+// $Id: G4Triton.cc,v 1.14 2007-03-11 07:17:35 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -65,7 +65,7 @@ G4Triton* G4Triton::Definition()
   //             stable         lifetime    decay table
   //             shortlived      subType    anti_encoding
   //             excitation 
-   anInstance = new G4Ions(
+    anInstance = new G4Ions(
                  name,   2.80925*GeV,       0.0*MeV,  +1.0*eplus,
                     1,              +1,             0,
                     0,               0,             0,
@@ -74,7 +74,12 @@ G4Triton* G4Triton::Definition()
 		false,           "static",          0,
                   0.0
               );
-  }
+ 
+    // Magnetic Moment
+    G4double mN = eplus*hbar_Planck/2./(proton_mass_c2 /c_squared);
+    anInstance->SetPDGMagneticMoment( 2.97896248 * mN);
+
+   }
   //No Anti particle registered
   anInstance->SetAntiPDGEncoding(0);
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Proton.cc,v 1.12 2006-06-29 19:17:11 gunter Exp $
+// $Id: G4Proton.cc,v 1.13 2007-03-11 07:17:34 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -72,6 +72,10 @@ G4Proton* G4Proton::Definition()
 		false,       "nucleon",             0,
                   0.0 
              );
+
+    // Magnetic Moment
+    G4double mN = eplus*hbar_Planck/2./(proton_mass_c2 /c_squared);
+    anInstance->SetPDGMagneticMoment( 2.792847351 * mN);
   }
   theInstance = reinterpret_cast<G4Proton*>(anInstance);
   return theInstance;

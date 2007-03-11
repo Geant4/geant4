@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiNeutron.cc,v 1.20 2006-10-12 10:59:44 kurasige Exp $
+// $Id: G4AntiNeutron.cc,v 1.21 2007-03-11 07:17:34 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -72,6 +72,9 @@ G4AntiNeutron* G4AntiNeutron::Definition()
 		 true,            -1.0,          NULL,
                 false,        "nucleon"
               );
+    // Magnetic Moment
+    G4double mN = eplus*hbar_Planck/2./(proton_mass_c2 /c_squared);
+    anInstance->SetPDGMagneticMoment( 1.9130427 * mN);
   }
   theInstance = reinterpret_cast<G4AntiNeutron*>(anInstance);
   return theInstance;

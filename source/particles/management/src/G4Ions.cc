@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Ions.cc,v 1.11 2006-06-29 19:25:28 gunter Exp $
+// $Id: G4Ions.cc,v 1.12 2007-03-11 07:17:35 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 

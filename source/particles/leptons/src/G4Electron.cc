@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Electron.cc,v 1.12 2006-06-29 19:21:05 gunter Exp $
+// $Id: G4Electron.cc,v 1.13 2007-03-11 07:17:35 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -71,6 +71,9 @@ G4Electron* G4Electron::Definition()
 		 true,            -1.0,          NULL,
              false,           "e"
               );
+    // Bohr Magnetron
+    anInstance->SetPDGMagneticMoment( -0.5*eplus*hbar_Planck/(0.51099906*MeV/c_squared) );
+
   }
   theInstance = reinterpret_cast<G4Electron*>(anInstance);
   return theInstance;
