@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChange.cc,v 1.28 2006-06-29 21:15:01 gunter Exp $
+// $Id: G4ParticleChange.cc,v 1.29 2007-03-11 07:19:06 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -39,6 +39,8 @@
 //   Add Track weight                               12 Nov. 1998  H.Kurashige
 //   Activate CheckIt method for VERBOSE mode       14 Dec. 1998 H.Kurashige
 //   Modified CheckIt method for time                9 Feb. 1999 H.Kurashige
+//   Rename SetXXX methods to ProposeXXX   DynamicCharge  Oct. 2005 H.Kurashige
+//   Add get/ProposeMagneticMoment                  Mar 2007 H.Kurashige
 // --------------------------------------------------------------
 
 #include "G4ParticleChange.hh"
@@ -75,7 +77,8 @@ G4ParticleChange::G4ParticleChange(const G4ParticleChange &right): G4VParticleCh
    theEnergyChange = right.theEnergyChange;
    theMassChange = right.theMassChange;
    theChargeChange = right.theChargeChange;
-   theWeightChange = right.theWeightChange;
+   theMagneticMomentChange = right.theMagneticMomentChange;
+   //   theWeightChange = right.theWeightChange;
    theProperTimeChange = right.theProperTimeChange;
 }
 
@@ -99,7 +102,8 @@ G4ParticleChange & G4ParticleChange::operator=(const G4ParticleChange &right)
       theEnergyChange = right.theEnergyChange;
       theMassChange = right.theMassChange;
       theChargeChange = right.theChargeChange;
-      theWeightChange = right.theWeightChange;
+      theMagneticMomentChange = right.theMagneticMomentChange;
+      // theWeightChange = right.theWeightChange;
 
       theTrueStepLength = right.theTrueStepLength;
       theLocalEnergyDeposit = right.theLocalEnergyDeposit;
@@ -196,15 +200,16 @@ void G4ParticleChange::Initialize(const G4Track& track)
   thePolarizationChange    = pParticle->GetPolarization();
   theProperTimeChange      = pParticle->GetProperTime();
 
-  // Set mass/charge of DynamicParticle
+  // Set mass/charge/MagneticMoment  of DynamicParticle
   theMassChange = pParticle->GetMass();
   theChargeChange = pParticle->GetCharge();
+  theMagneticMomentChange = pParticle->GetMagneticMoment();
 
   // set Position/Time etc. equal to those of the parent track
   thePositionChange      = track.GetPosition();
   theTimeChange          = track.GetGlobalTime();
 
-  theWeightChange        = track.GetWeight();
+  // theWeightChange        = track.GetWeight();
 }
 
 //----------------------------------------------------------------
@@ -228,9 +233,10 @@ G4Step* G4ParticleChange::UpdateStepForAlongStep(G4Step* pStep)
   G4StepPoint* pPostStepPoint = pStep->GetPostStepPoint(); 
   G4double     mass = theMassChange;
 
-  // Set Mass/Charge
+  // Set Mass/Charge/MagneticMoment 
   pPostStepPoint->SetMass(theMassChange);
   pPostStepPoint->SetCharge(theChargeChange);  
+  pPostStepPoint->SetMagneticMoment(theMagneticMomentChange);  
  
   // calculate new kinetic energy
   G4double energy = pPostStepPoint->GetKineticEnergy() 
@@ -271,8 +277,11 @@ G4Step* G4ParticleChange::UpdateStepForAlongStep(G4Step* pStep)
 				 - pPreStepPoint->GetProperTime());
 
   // update weight
-  G4double newWeight= theWeightChange/(pPreStepPoint->GetWeight())*(pPostStepPoint->GetWeight());
-  pPostStepPoint->SetWeight( newWeight );
+  if (!fSetParentWeightByProcess){
+    G4double newWeight= theParentWeight/(pPreStepPoint->GetWeight())
+                        * (pPostStepPoint->GetWeight());
+    pPostStepPoint->SetWeight( newWeight );
+  }
 
 #ifdef G4VERBOSE
   G4Track*     aTrack  = pStep->GetTrack();
@@ -297,6 +306,7 @@ G4Step* G4ParticleChange::UpdateStepForPostStep(G4Step* pStep)
   // Set Mass/Charge
   pPostStepPoint->SetMass(theMassChange);
   pPostStepPoint->SetCharge(theChargeChange);  
+  pPostStepPoint->SetMagneticMoment(theMagneticMomentChange);  
  
   // update kinetic energy and momentum direction
   pPostStepPoint->SetMomentumDirection(theMomentumDirectionChange);
@@ -313,7 +323,10 @@ G4Step* G4ParticleChange::UpdateStepForPostStep(G4Step* pStep)
   pPostStepPoint->SetProperTime( theProperTimeChange  );
 
   // update weight
-  pPostStepPoint->SetWeight( theWeightChange );
+  if (!fSetParentWeightByProcess){
+    pPostStepPoint->SetWeight( theParentWeight );
+  }
+
 
 #ifdef G4VERBOSE
   if (debugFlag) CheckIt(*aTrack);
@@ -334,6 +347,7 @@ G4Step* G4ParticleChange::UpdateStepForAtRest(G4Step* pStep)
   // Set Mass/Charge
   pPostStepPoint->SetMass(theMassChange);
   pPostStepPoint->SetCharge(theChargeChange);  
+  pPostStepPoint->SetMagneticMoment(theMagneticMomentChange);  
  
   // update kinetic energy and momentum direction
   pPostStepPoint->SetMomentumDirection(theMomentumDirectionChange);
@@ -350,7 +364,9 @@ G4Step* G4ParticleChange::UpdateStepForAtRest(G4Step* pStep)
   pPostStepPoint->SetProperTime( theProperTimeChange  );
 
   // update weight 
-  pPostStepPoint->SetWeight( theWeightChange );
+  if (!fSetParentWeightByProcess){
+    pPostStepPoint->SetWeight( theParentWeight );
+  }
 
 #ifdef G4VERBOSE
   if (debugFlag) CheckIt(*aTrack);
@@ -377,6 +393,12 @@ void G4ParticleChange::DumpInfo() const
   G4cout << "        Charge (eplus)   : " 
        << std::setw(20) << theChargeChange/eplus
        << G4endl; 
+  G4cout << "        MagneticMoment   : " 
+         << std::setw(20) << theMagneticMomentChange << G4endl;
+  G4cout << "                :  = " << std::setw(20) 
+         << theMagneticMomentChange*2.*theMassChange/c_squared/eplus/hbar_Planck 
+         <<  "*[e hbar]/[2 m]" 
+         << G4endl; 
   G4cout << "        Position - x (mm)   : " 
        << std::setw(20) << thePositionChange.x()/mm
        << G4endl; 
@@ -413,9 +435,6 @@ void G4ParticleChange::DumpInfo() const
   G4cout << "        Polarization - z    : " 
        << std::setw(20) <<  thePolarizationChange.z()
        << G4endl;
-  G4cout << "        Track Weight      : " 
-         << std::setw(20) <<  theWeightChange
-         << G4endl;	
 }
 
 G4bool G4ParticleChange::CheckIt(const G4Track& aTrack)

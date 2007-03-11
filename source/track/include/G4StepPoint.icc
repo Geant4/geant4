@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StepPoint.icc,v 1.12 2006-10-31 10:01:43 gcosmo Exp $
+// $Id: G4StepPoint.icc,v 1.13 2007-03-11 07:19:06 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -184,6 +184,15 @@
    { return fCharge; }
    inline void G4StepPoint::SetCharge(G4double value)
    { fCharge = value; }
+
+   inline G4double G4StepPoint::GetMagneticMoment() const
+   {
+     return fMagneticMoment;
+   }
+   inline void G4StepPoint::SetMagneticMoment(G4double value)
+   {
+     fMagneticMoment = value;
+   }
 
    inline G4Material* G4StepPoint::GetMaterial() const
    { return fpMaterial; }
