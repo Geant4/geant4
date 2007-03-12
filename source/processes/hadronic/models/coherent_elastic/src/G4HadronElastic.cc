@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronElastic.cc,v 1.39 2006-11-23 14:51:30 vnivanch Exp $
+// $Id: G4HadronElastic.cc,v 1.40 2007-03-12 10:58:45 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -138,8 +138,8 @@ G4HadFinalState* G4HadronElastic::ApplyYourself(
   const G4ParticleDefinition* theParticle = aParticle->GetDefinition();
   G4double m1 = theParticle->GetPDGMass();
 
-  G4int Z = static_cast<G4int>(zTarget);
-  G4int A = static_cast<G4int>(aTarget);
+  G4int Z = static_cast<G4int>(zTarget+0.5);
+  G4int A = static_cast<G4int>(aTarget+0.5);
   G4int N = A - Z;
   G4int projPDG = theParticle->GetPDGEncoding();
   if (verboseLevel>1) 

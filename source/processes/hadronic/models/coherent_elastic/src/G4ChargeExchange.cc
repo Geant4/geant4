@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChargeExchange.cc,v 1.7 2006-10-20 15:22:24 vnivanch Exp $
+// $Id: G4ChargeExchange.cc,v 1.8 2007-03-12 10:58:45 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -113,8 +113,8 @@ G4HadFinalState* G4ChargeExchange::ApplyYourself(
   G4double aTarget = targetNucleus.GetN();
   G4double zTarget = targetNucleus.GetZ();
 
-  G4int Z = static_cast<G4int>(zTarget);
-  G4int A = static_cast<G4int>(aTarget);
+  G4int Z = static_cast<G4int>(zTarget+0.5);
+  G4int A = static_cast<G4int>(aTarget+0.5);
 
   if(ekin == 0.0 || A < 3) {
     theParticleChange.SetEnergyChange(ekin);

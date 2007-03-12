@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UHadronElasticProcess.cc,v 1.31 2007-01-30 10:41:52 vnivanch Exp $
+// $Id: G4UHadronElasticProcess.cc,v 1.32 2007-03-12 10:58:45 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Geant4 Hadron Elastic Scattering Process -- header file
@@ -161,7 +161,7 @@ G4double G4UHadronElasticProcess::GetMicroscopicCrossSection(
 
     x = 0.0;
     if(ni == 0) {
-      G4int N = G4int(elm->GetN()+0.5);
+      G4int N = G4int(elm->GetN()+0.5) - iz;
       x = qCManager->GetCrossSection(false,momentum,iz,N,pPDG);
       xsecH[0] = x;
       if(verboseLevel>1) 
