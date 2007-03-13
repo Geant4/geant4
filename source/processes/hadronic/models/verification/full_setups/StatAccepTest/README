@@ -1,5 +1,5 @@
 
- Last update: 24-Jan-2007
+ Last update: 13-Mar-2007
  ========================
 
  This directory contains a configurable calorimeter setup to be used
@@ -186,3 +186,6 @@
  The subdirectory  dirUseCases/  contains a set of Geant4 macro
  files to configure the calorimeter as closely as possible to
  the LHC electromagnetic and hadronic calorimeters.
+
+ The subdirectory  dirCPUbench/  is dedicated to some CPU performance
+ benchmarks of Geant4 (see the README file in that directory).
