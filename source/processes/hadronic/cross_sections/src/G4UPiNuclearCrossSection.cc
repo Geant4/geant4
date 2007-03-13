@@ -31,6 +31,7 @@
 //                         J.P Wellisch class G4PiNuclearCrossSection
 // 22.01.07 V.Ivanchenko - add cross section interfaces with Z and A
 // 05.03.07 V.Ivanchenko - fix weight for interpolation
+// 13.03.07 V.Ivanchenko - cleanup at low energies
 //
 
 #include "G4UPiNuclearCrossSection.hh"
@@ -80,7 +81,7 @@ G4double G4UPiNuclearCrossSection::GetInelasticCrossSection(
     if(ekin > elowest) {
       table = piPlusInelastic;
       if(ekin < elow) {
-        fact = ekin/elow;
+        fact = std::sqrt((ekin-elowest)/(elow-elowest));
         ekin = elow;
       }
     }
@@ -103,8 +104,14 @@ G4double G4UPiNuclearCrossSection::Interpolate(
 
   G4double x = (((*table)[idx])->GetValue(ekin, b));
 
+  // one of elements in the table
+  if(iz >= theZ[idx]) {
+    G4double A1 = theA[idx];
+    x *= std::pow(A/A1,aPower);
+
   // Interpolation between Z
-  if(iz < theZ[idx]) {
+  } else {
+
     G4double x2 = x;
     G4double x1 = x;
     if(idx == 0) {
@@ -118,8 +125,12 @@ G4double G4UPiNuclearCrossSection::Interpolate(
     G4double w1 = A - A1;
     G4double w2 = A2 - A;
     G4double y1 = x1*std::pow(A/A1,aPower);
-    G4double y2 = x2*std::pow(A/A2,aPower);
-    x = (w2*y1 + w1*y2)/(w1 + w2); 
+    if(w1 <= 0.0) x = y1;
+    else {
+      G4double y2 = x2*std::pow(A/A2,aPower);
+      if(w2 <= 0.0) x = y2;
+      else  x = (w2*y1 + w1*y2)/(w1 + w2); 
+    }
   }
   return x;
 }
