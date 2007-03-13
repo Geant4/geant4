@@ -3,6 +3,8 @@
 # Last update: 13-Mar-2007
 # ------------------------
 #
+cp start.rndm ../.
+#
 cd ../
 #
 ln -sfn dirCPUbench/setup.sh-6.2.p02 setup.sh
