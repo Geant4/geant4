@@ -94,6 +94,7 @@ G4VPhysicalVolume* G4MIRDBrain::Construct(const G4String& volumeName,G4VPhysical
   
   G4VisAttributes* BrainVisAtt = new G4VisAttributes(colour);
   BrainVisAtt->SetForceSolid(wireFrame);
+  BrainVisAtt->SetLineWidth(0.7* mm);
   logicBrain->SetVisAttributes(BrainVisAtt);
 
   // Testing Brain Volume

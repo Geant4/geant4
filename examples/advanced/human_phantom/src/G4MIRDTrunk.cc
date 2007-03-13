@@ -94,7 +94,7 @@ G4VPhysicalVolume* G4MIRDTrunk::Construct(const G4String& volumeName, G4VPhysica
   // Visualization Attributes
   G4HumanPhantomColour* colourPointer = new G4HumanPhantomColour();
   G4Colour colour = colourPointer -> GetColour(colourName);
-  G4VisAttributes* TrunkVisAtt = new G4VisAttributes(colour);
+  G4VisAttributes* TrunkVisAtt = new G4VisAttributes(G4VisAttributes::Invisible);
   TrunkVisAtt->SetForceSolid(wireFrame);
   logicTrunk->SetVisAttributes(TrunkVisAtt);
 

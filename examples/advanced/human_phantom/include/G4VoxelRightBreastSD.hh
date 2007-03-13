@@ -1,4 +1,4 @@
-  //
+//
 // ********************************************************************
 // * DISCLAIMER                                                       *
 // *                                                                  *
@@ -28,15 +28,23 @@
 // with the design in a forthcoming publication, and subject to a 
 // design and code review.
 //
-#include "G4HumanPhantomSteppingAction.hh"
-#include "G4SteppingManager.hh"
-#include "G4UnitsTable.hh"        
-G4HumanPhantomSteppingAction::G4HumanPhantomSteppingAction()
-{ }
+#ifndef G4VoxelRightBreastSD_h
+#define G4VoxelRightBreastSD_h 1
 
-G4HumanPhantomSteppingAction::~G4HumanPhantomSteppingAction()
-{}
+#include "G4VSensitiveDetector.hh"
 
-void G4HumanPhantomSteppingAction::UserSteppingAction(const G4Step*)
-{ 
-}
+//class G4Step;
+//class G4HCofThisEvent;
+
+class G4VoxelRightBreastSD : public G4VSensitiveDetector
+{
+  public:
+      G4VoxelRightBreastSD(G4String);
+     ~G4VoxelRightBreastSD();
+
+      void Initialize(G4HCofThisEvent*);
+      G4bool ProcessHits(G4Step*, G4TouchableHistory*);
+      void EndOfEvent(G4HCofThisEvent*);
+};
+#endif
+

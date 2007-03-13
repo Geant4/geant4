@@ -28,19 +28,19 @@
 // with the design in a forthcoming publication, and subject to a 
 // design and code review.
 //
-#ifndef G4VoxelBreastSD_h
-#define G4VoxelBreastSD_h 1
+#ifndef G4VoxelLeftBreastSD_h
+#define G4VoxelLeftBreastSD_h 1
 
 #include "G4VSensitiveDetector.hh"
 
 //class G4Step;
 //class G4HCofThisEvent;
 
-class G4VoxelBreastSD : public G4VSensitiveDetector
+class G4VoxelLeftBreastSD : public G4VSensitiveDetector
 {
   public:
-      G4VoxelBreastSD(G4String);
-     ~G4VoxelBreastSD();
+      G4VoxelLeftBreastSD(G4String);
+     ~G4VoxelLeftBreastSD();
 
       void Initialize(G4HCofThisEvent*);
       G4bool ProcessHits(G4Step*, G4TouchableHistory*);

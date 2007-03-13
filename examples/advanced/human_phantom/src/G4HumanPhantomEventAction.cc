@@ -110,7 +110,7 @@ void G4HumanPhantomEventAction::EndOfEventAction(const G4Event* evt)
 	      edep = (*HC)[i]->GetEdep();
 	      bodyPart = (*HC)[i]->GetBodyPartID();
               Fill(bodyPart, edep);
-	      //if(edep !=0.) G4cout << bodyPart <<": "<< edep/MeV << G4endl; 
+	      //	      if(edep !=0.) G4cout << bodyPart <<": "<< edep/MeV << G4endl; 
 	    }
 	}
 

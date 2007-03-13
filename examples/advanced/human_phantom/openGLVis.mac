@@ -11,7 +11,8 @@
 # (Edit the next line(s) to choose another graphic system)
 #
 /vis/viewer/set/viewpointThetaPhi 45 60 deg
-/vis/viewer/zoom 2.
+/vis/viewer/zoom 4.
+/vis/viewer/pan 0. 0.5
 #
 #
 # for drawing the tracks

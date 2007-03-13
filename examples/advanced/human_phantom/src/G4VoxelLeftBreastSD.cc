@@ -1,4 +1,4 @@
-  //
+//
 // ********************************************************************
 // * DISCLAIMER                                                       *
 // *                                                                  *
@@ -28,15 +28,58 @@
 // with the design in a forthcoming publication, and subject to a 
 // design and code review.
 //
-#include "G4HumanPhantomSteppingAction.hh"
-#include "G4SteppingManager.hh"
-#include "G4UnitsTable.hh"        
-G4HumanPhantomSteppingAction::G4HumanPhantomSteppingAction()
-{ }
+#include "G4VoxelLeftBreastSD.hh"
+#include "G4HCofThisEvent.hh"
+#include "G4Step.hh"
+#include "G4ThreeVector.hh"
+#include "G4SDManager.hh"
+#include "G4ios.hh"
+#ifdef G4ANALYSIS_USE	
+#include "G4HumanPhantomAnalysisManager.hh"
+#endif
 
-G4HumanPhantomSteppingAction::~G4HumanPhantomSteppingAction()
+G4VoxelLeftBreastSD::G4VoxelLeftBreastSD(G4String name)
+:G4VSensitiveDetector(name)
+{
+}
+
+G4VoxelLeftBreastSD::~G4VoxelLeftBreastSD()
+{;}
+
+void G4VoxelLeftBreastSD::Initialize(G4HCofThisEvent*)
 {}
 
-void G4HumanPhantomSteppingAction::UserSteppingAction(const G4Step*)
-{ 
+G4bool G4VoxelLeftBreastSD::ProcessHits(G4Step* aStep,G4TouchableHistory* ROhist)
+{
+  if(!ROhist) return false;
+   
+    // Check the volume
+  if(aStep -> GetPreStepPoint() -> GetPhysicalVolume() -> 
+     GetName() != "LeftBreast") 
+    return false;
+
+  G4double edep = aStep->GetTotalEnergyDeposit();
+  if(edep==0.) return false;
+
+ if(edep != 0)                       
+	    { 
+             
+#ifdef G4ANALYSIS_USE 
+G4HumanPhantomAnalysisManager* analysis = 
+  G4HumanPhantomAnalysisManager::getInstance();   
+
+ if (aStep -> GetPreStepPoint() -> GetPhysicalVolume() -> 
+     GetName() == "LeftBreast")
+   {
+     G4int sector = ROhist -> GetReplicaNumber();
+     G4int slice = ROhist -> GetReplicaNumber(1);	             
+     analysis -> voxelLeftBreastEnergyDeposit(slice,sector,edep/MeV);    
+     //     G4cout << "LeftBreast:" << "slice: " << slice << ",sector: "<< sector << " "<< edep/MeV << G4endl;           
+   }
+#endif	
+    }
+  return true;
 }
+
+void G4VoxelLeftBreastSD::EndOfEvent(G4HCofThisEvent*)
+{}

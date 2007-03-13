@@ -77,7 +77,7 @@ G4VPhysicalVolume* G4MIRDRightOvary::Construct(const G4String& volumeName, G4VPh
   
   // Define rotation and position here!
   G4VPhysicalVolume* physRightOvary = new G4PVPlacement(0,
-			       G4ThreeVector(-6. *cm,0.0*cm, -20*cm),
+			       G4ThreeVector(6. *cm,0.0*cm, -20*cm),
       			       "physicalRightOvary",
   			       logicRightOvary,
 			       mother,

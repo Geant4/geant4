@@ -111,7 +111,8 @@ G4VPhysicalVolume* G4MIRDSkull::Construct(const G4String& volumeName,G4VPhysical
  G4HumanPhantomColour* colourPointer = new G4HumanPhantomColour();
   G4Colour colour = colourPointer -> GetColour(colourName);
   G4VisAttributes* SkullVisAtt = new G4VisAttributes(colour);
-  SkullVisAtt->SetForceSolid(wireFrame);
+  SkullVisAtt->SetForceSolid(wireFrame); 
+  SkullVisAtt->SetLineWidth(4.* mm);
   logicSkull->SetVisAttributes(SkullVisAtt);
 
   G4cout << "Skull created !!!!!!" << G4endl;

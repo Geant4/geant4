@@ -59,5 +59,8 @@ private:
   G4Colour green;
   G4Colour brown;
   G4Colour purple;
+  G4Colour red;
+  G4Colour orange;
+  G4Colour black;
 };
 #endif

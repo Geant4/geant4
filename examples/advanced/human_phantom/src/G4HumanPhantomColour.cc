@@ -46,6 +46,9 @@ G4HumanPhantomColour::G4HumanPhantomColour()
   green = G4Colour(0., 1., 0.);
   brown = G4Colour(0.5, 0.5, 0.);
   purple = G4Colour(0.85,0.44,0.84);
+  red = G4Colour(1.0, 0.0, 0.0);
+  orange = G4Colour(1.,0.5,0.); 
+  black =  G4Colour(0.,0.,0.); 
 }
 
 G4HumanPhantomColour::~G4HumanPhantomColour()
@@ -66,5 +69,8 @@ G4Colour G4HumanPhantomColour::GetColour(const G4String& colourName)
   else if (colourName == "green") return green;
   else if (colourName == "brown") return brown;
   else if (colourName == "purple") return purple;
-  else {G4cout<< colourName << "does not exist !!!"<< G4endl; return white;}
+  else if (colourName == "red") return red;
+  else if (colourName == "orange") return orange;
+  else if  (colourName == "black") return black; 
+else {G4cout<< colourName << "does not exist !!!"<< G4endl; return white;}
 }

@@ -43,7 +43,7 @@
 #include "G4PVPlacement.hh"
 #include "G4PVReplica.hh"
 #include "G4VoxelRightBreastROGeometry.hh"
-#include "G4VoxelBreastSD.hh"
+#include "G4VoxelRightBreastSD.hh"
 #include "G4HumanPhantomColour.hh"
 G4VoxelRightBreast::G4VoxelRightBreast()
 {
@@ -112,7 +112,7 @@ G4VPhysicalVolume* G4VoxelRightBreast::Construct(const G4String& volumeName,
 
 
  // Parameterisation with Replicas
- /*
+ /* 
   G4double rmin_voxelz = 0.* cm;
   G4double rmax_voxelz = 5.5 * cm;
   G4double zz_voxels = 5. * cm;
@@ -158,7 +158,7 @@ G4VPhysicalVolume* G4VoxelRightBreast::Construct(const G4String& volumeName,
   innerBreastVisAtt -> SetForceSolid(true);
   innerBreast_log -> SetVisAttributes(innerBreastVisAtt);
  
-  // voxelz_log -> SetVisAttributes(innerBreastVisAtt);
+  //  voxelz_log -> SetVisAttributes(innerBreastVisAtt);
   // voxel_log -> SetVisAttributes(innerBreastVisAtt);
 
   G4cout << "Voxel Right Breast created !!!!!!" << G4endl;
@@ -167,9 +167,9 @@ if (sensitivity==true)
   { 
     G4SDManager* SDman = G4SDManager::GetSDMpointer();
     
-       G4String sensitiveDetectorName = "VoxelBreast";
+       G4String sensitiveDetectorName = "VoxelRightBreast";
        
-       G4VoxelBreastSD* breastSD = new G4VoxelBreastSD(sensitiveDetectorName);
+       G4VoxelRightBreastSD* breastSD = new G4VoxelRightBreastSD(sensitiveDetectorName);
    
        G4String ROGeometryName = "VoxelRightROGeometry";
        

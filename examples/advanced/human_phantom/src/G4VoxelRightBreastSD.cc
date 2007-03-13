@@ -28,7 +28,7 @@
 // with the design in a forthcoming publication, and subject to a 
 // design and code review.
 //
-#include "G4VoxelBreastSD.hh"
+#include "G4VoxelRightBreastSD.hh"
 #include "G4HCofThisEvent.hh"
 #include "G4Step.hh"
 #include "G4ThreeVector.hh"
@@ -38,25 +38,25 @@
 #include "G4HumanPhantomAnalysisManager.hh"
 #endif
 
-G4VoxelBreastSD::G4VoxelBreastSD(G4String name)
+G4VoxelRightBreastSD::G4VoxelRightBreastSD(G4String name)
 :G4VSensitiveDetector(name)
 {
 }
 
-G4VoxelBreastSD::~G4VoxelBreastSD()
+G4VoxelRightBreastSD::~G4VoxelRightBreastSD()
 {;}
 
-void G4VoxelBreastSD::Initialize(G4HCofThisEvent*)
+void G4VoxelRightBreastSD::Initialize(G4HCofThisEvent*)
 {}
 
-G4bool G4VoxelBreastSD::ProcessHits(G4Step* aStep,G4TouchableHistory* ROhist)
+G4bool G4VoxelRightBreastSD::ProcessHits(G4Step* aStep,G4TouchableHistory* ROhist)
 {
   if(!ROhist) return false;
    
     // Check the volume
-  if((aStep -> GetPreStepPoint() -> GetPhysicalVolume() -> 
-     GetName() != "LeftBreast") && (aStep -> GetPreStepPoint() -> GetPhysicalVolume() -> 
-     GetName() != "RightBreast"))
+  if(aStep -> GetPreStepPoint() -> GetPhysicalVolume() -> 
+     GetName() != "RightBreast")
+
     return false;
 
   G4double edep = aStep->GetTotalEnergyDeposit();
@@ -70,23 +70,17 @@ G4HumanPhantomAnalysisManager* analysis =
   G4HumanPhantomAnalysisManager::getInstance();   
 
  if (aStep -> GetPreStepPoint() -> GetPhysicalVolume() -> 
-     GetName() == "LeftBreast")
-   {
-     G4int sector = ROhist -> GetReplicaNumber();
-     G4int slice = ROhist -> GetReplicaNumber(1);	             
-     analysis -> voxelLeftBreastEnergyDeposit(slice,sector,edep/MeV);               
-   }
- else if (aStep -> GetPreStepPoint() -> GetPhysicalVolume() -> 
 	  GetName() == "RightBreast")
    {
      G4int sector = ROhist -> GetReplicaNumber();
      G4int slice = ROhist -> GetReplicaNumber(1); 
      analysis -> voxelRightBreastEnergyDeposit(slice,sector,edep/MeV);    
+     //G4cout << "RightBreast:" << "slice: " << slice << ",sector: "<< sector << " "<< edep/MeV << G4endl;  
    }
 #endif	
     }
   return true;
 }
 
-void G4VoxelBreastSD::EndOfEvent(G4HCofThisEvent*)
+void G4VoxelRightBreastSD::EndOfEvent(G4HCofThisEvent*)
 {}

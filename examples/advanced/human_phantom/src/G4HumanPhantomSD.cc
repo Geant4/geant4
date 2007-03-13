@@ -65,7 +65,7 @@ G4bool G4HumanPhantomSD::ProcessHits(G4Step* aStep,G4TouchableHistory*)
   G4String bodypartName = aStep->GetPreStepPoint()->GetTouchable()
    			->GetVolume()->GetLogicalVolume()->GetName();
 
-  //  G4cout <<bodypartName <<":" << edep/MeV<< G4endl; 
+  // G4cout <<bodypartName <<":" << edep/MeV<< G4endl; 
 
   G4HumanPhantomHit* newHit = new G4HumanPhantomHit();
   newHit->SetEdep(edep);

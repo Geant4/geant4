@@ -91,13 +91,13 @@ void G4HumanPhantomAnalysisManager::book()
 
   voxelLeftBreast = histogramFactory->createHistogram2D("100", 
 			      "Edep(MeV) in LeftBreast, x= slice, y= sector",
-						    11, -0.5, 10.5,
-						    11, -0.5, 10.5); 
+						    10, -0.5, 9.5,
+						    10, -0.5, 9.5); 
 
   voxelRightBreast = histogramFactory->createHistogram2D("110", 
 			      "Edep(MeV) in RightBreast, x= slice, y= sector",
-						    11, -0.5, 10.5,
-						    11, -0.5, 10.5); 
+						    10, -0.5, 9.5,
+						    10, -0.5, 9.5); 
 
   
   // Defining the ntuple columns' name 
@@ -133,13 +133,13 @@ void G4HumanPhantomAnalysisManager::bodyPartEnergyDeposit(G4int bodyPartID,
 
 void G4HumanPhantomAnalysisManager::voxelLeftBreastEnergyDeposit(G4int slice, G4int sector, G4double edep)
 {
-  // G4cout << "analisis " << slice << " "<< sector << " "<< edep << G4endl;
+  //  G4cout << "analisis " << slice << " "<< sector << " "<< edep/MeV << G4endl;
   voxelLeftBreast -> fill(slice,sector, edep);
 }
 
 void G4HumanPhantomAnalysisManager::voxelRightBreastEnergyDeposit(G4int slice, G4int sector, G4double edep)
 {
-  // G4cout << "analisis " << slice << " "<< sector << " "<< edep << G4endl;
+  //G4cout << "analisis " << slice << " "<< sector << " "<< edep/MeV << G4endl;
   voxelRightBreast -> fill(slice,sector, edep);
 }
 

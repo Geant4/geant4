@@ -42,49 +42,15 @@ G4MIRDAdrenal::G4MIRDAdrenal()
 
 G4MIRDAdrenal::~G4MIRDAdrenal()
 {
-  sxp.Finalize();
+
 }
 
-G4VPhysicalVolume* G4MIRDAdrenal::ConstructAdrenal(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity)
+G4VPhysicalVolume* G4MIRDAdrenal::Construct(const G4String& volumeName,
+						   G4VPhysicalVolume* mother,
+						   const G4String& colourName,
+						   G4bool wireFrame,
+						   G4bool sensitivity)
 {
 
-  // Initialize GDML Processor
-  sxp.Initialize();
-  config.SetURI( "gdmlData/"+sex+"/MIRDAdrenal.gdml" );
-  config.SetSetupName( "Default" );
-  sxp.Configure( &config );
 
-  // Run GDML Processor
-  sxp.Run(); 
-
-  G4LogicalVolume* logicAdrenal = (G4LogicalVolume *)GDMLProcessor::GetInstance()->GetLogicalVolume("AdrenalVolume");
-
-  G4ThreeVector position = (G4ThreeVector)*GDMLProcessor::GetInstance()->GetPosition("AdrenalPos");
-  G4RotationMatrix* rm = (G4RotationMatrix*)GDMLProcessor::GetInstance()->GetRotation("AdrenalRot");
-  
-  G4PhysicalVolumeStore::DeRegister((G4VPhysicalVolume*)GDMLProcessor::GetInstance()->GetWorldVolume());
- 
-  // Define rotation and position here!
-  G4VPhysicalVolume* physAdrenal = new G4PVPlacement(rm,position,
-      			       "physicalAdrenal",
-  			       logicAdrenal,
-			       mother,
-			       false,
-			       0);
-
-  // Sensitive Body Part
-  if (sensitivity==true)
-  { 
-    G4SDManager* SDman = G4SDManager::GetSDMpointer();
-    logicAdrenal->SetSensitiveDetector( SDman->FindSensitiveDetector("BodyPartSD") );
-  }
-
-  // Visualization Attributes
-  G4VisAttributes* AdrenalVisAtt = new G4VisAttributes(G4Colour(1.0,1.0,0.0));
-  AdrenalVisAtt->SetForceSolid(true);
-  logicAdrenal->SetVisAttributes(AdrenalVisAtt);
-
-  G4cout << "Adrenal created !!!!!!" << G4endl;
-  
-  return physAdrenal;
 }

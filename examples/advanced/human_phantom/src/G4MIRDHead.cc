@@ -107,12 +107,14 @@ G4VPhysicalVolume* G4MIRDHead::Construct(const G4String& volumeName,G4VPhysicalV
   }
 
   // Visualization Attributes
-  //  G4VisAttributes* HeadVisAtt = new G4VisAttributes(G4Colour(0.94,0.5,0.5));
+
   G4HumanPhantomColour* colourPointer = new G4HumanPhantomColour();
   G4Colour colour = colourPointer -> GetColour(colourName);
-  G4VisAttributes* HeadVisAtt = new G4VisAttributes(colour);
+  G4VisAttributes* HeadVisAtt = new G4VisAttributes(G4VisAttributes::Invisible);
 
-  HeadVisAtt->SetForceSolid(wireFrame);
+ HeadVisAtt->SetForceSolid(wireFrame);
+ // HeadVisAtt->SetLineWidth(0.7* mm);
+  //HeadVisAtt-> SetForceAuxEdgeVisible(true);
   logicHead->SetVisAttributes(HeadVisAtt);
 
   // Testing Head Volume

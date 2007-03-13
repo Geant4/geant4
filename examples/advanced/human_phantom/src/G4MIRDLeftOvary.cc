@@ -70,14 +70,8 @@ G4VPhysicalVolume* G4MIRDLeftOvary::Construct(const G4String& volumeName,G4VPhys
  G4Ellipsoid* OneOvary = new G4Ellipsoid("OneOvary",
 					 ax, by, cz);
 
- G4UnionSolid* Ovary = new G4UnionSolid("Ovary",  OneOvary,
-					OneOvary,0,
-					G4ThreeVector(12.*cm, 
-						      0.0*cm,
-						      0.0*cm));
 
-
-  G4LogicalVolume* logicLeftOvary = new G4LogicalVolume(Ovary,
+ G4LogicalVolume* logicLeftOvary = new G4LogicalVolume(OneOvary,
 						    soft,
 						    "logical" + volumeName,
 						    0, 0, 0);

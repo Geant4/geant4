@@ -90,20 +90,21 @@ G4VPhysicalVolume* G4MIRDLeftLung::Construct(const G4String& volumeName,G4VPhysi
  
 
  //G4SubtractionSolid* section = new G4SubtractionSolid("BoxSub", subtrLung, box, 0, G4ThreeVector(0.*cm, 8.5* cm, 0.*cm)); 
-G4SubtractionSolid* section2 = new G4SubtractionSolid("BoxSub2", subtrLung, box, 0, G4ThreeVector(0.*cm, -8.5* cm, 0.*cm)); 
+G4SubtractionSolid* section2 = new G4SubtractionSolid("BoxSub2", subtrLung, box, 0, G4ThreeVector(0.*cm, 8.5* cm, 0.*cm)); 
 
 //G4SubtractionSolid* lung1 =  new G4SubtractionSolid("Lung1", oneLung,
 //				       section,
 //				       0, G4ThreeVector(6.*cm,0*cm,0.0*cm));
-
+ G4RotationMatrix* matrix_rel = new G4RotationMatrix();
+ //matrix_rel ->rotateZ(90.*degree);
  G4SubtractionSolid* lung2 =  new G4SubtractionSolid("Lung2", oneLung,
 					       section2,
-					       0, G4ThreeVector(6.*cm,0*cm,0.0*cm));
+					      0, G4ThreeVector(-6.*cm,0*cm,0.0*cm));
 
  G4RotationMatrix* matrix = new G4RotationMatrix();  
  // matrix->rotateX(180. * degree);
- matrix ->rotateZ(180.*degree);
- // matrix -> rotateY(180.* degree);
+ //matrix ->rotateZ(180.*degree);
+ //matrix -> rotateY(180.* degree);
 
  //G4UnionSolid* lungs = new G4UnionSolid("Lungs", lung1, lung2, matrix, G4ThreeVector(17*cm, 0., 0.));
 
@@ -112,7 +113,7 @@ G4SubtractionSolid* section2 = new G4SubtractionSolid("BoxSub2", subtrLung, box,
 						  "logical" + volumeName, 0, 0, 0); 
   
 
-  G4VPhysicalVolume* physLeftLung = new G4PVPlacement(matrix,G4ThreeVector(8.50 *cm, 0.0*cm, 8.5*cm),
+  G4VPhysicalVolume* physLeftLung = new G4PVPlacement(0,G4ThreeVector(8.50 *cm, 0.0*cm, 8.5*cm),
 						  "physicalLeftLung",                    
   			       logicLeftLung,
 			       mother,

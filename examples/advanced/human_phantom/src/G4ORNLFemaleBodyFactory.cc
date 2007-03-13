@@ -81,14 +81,24 @@ G4VPhysicalVolume* G4ORNLFemaleBodyFactory::CreateOrgan(const G4String& gdmlFile
   			       logicOrgan,
 			       motherVolume,
 			       false,
-			       0);
+			       0, true);
 
   // Sensitive Body Part
-  if (sensitivity==true)
+    if (sensitivity==true)
   { 
     G4SDManager* SDman = G4SDManager::GetSDMpointer();
     logicOrgan->SetSensitiveDetector( SDman->FindSensitiveDetector("BodyPartSD") );
   }
+
+     if ( (gdmlFile == "Trunk" ) ||
+       (gdmlFile == "Head" ) ||
+       (gdmlFile == "LeftLeg" ) ||
+       (gdmlFile == "RightLeg" ))
+    {
+    logicOrgan->SetVisAttributes(G4VisAttributes::Invisible);
+    }
+  else
+  {
 // Visualization Attributes
   G4HumanPhantomColour* colourPointer = new G4HumanPhantomColour();
   G4Colour colour = colourPointer -> GetColour(colourName);
@@ -96,7 +106,7 @@ G4VPhysicalVolume* G4ORNLFemaleBodyFactory::CreateOrgan(const G4String& gdmlFile
   // Visualization Attributes
   organVisAtt->SetForceSolid(visAttribute);
   logicOrgan->SetVisAttributes(organVisAtt);
-
+  }
   G4cout << "Organ created !!!!!!  from " << name <<G4endl;
   sxp.Finalize();
 
