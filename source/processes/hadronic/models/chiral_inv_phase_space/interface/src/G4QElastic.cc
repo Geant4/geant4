@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QElastic.cc,v 1.19 2007-03-09 10:07:35 mkossov Exp $
+// $Id: G4QElastic.cc,v 1.20 2007-03-14 09:15:32 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QElastic class -----------------
@@ -266,9 +266,9 @@ G4VParticleChange* G4QElastic::PostStepDoIt(const G4Track& track, const G4Step& 
 #ifdef debug
   G4cout<<"G4QElastic::PostStepDoIt: After the GetMeanFreePath is called"<<G4endl;
 #endif
-  G4LorentzVector proj4M=(projHadron->Get4Momentum())*MeV; // Convert to MeV!
+  G4LorentzVector proj4M=(projHadron->Get4Momentum())/MeV; // Convert to MeV!
   G4LorentzVector scat4M=proj4M;                      // @@ Must be filled (?)
-  G4double momentum = projHadron->GetTotalMomentum()*MeV; // 3-momentum of the Proj in MeV
+  G4double momentum = projHadron->GetTotalMomentum()/MeV; // 3-momentum of the Proj in MeV
   G4double Momentum = proj4M.rho();                   // @@ Just for the test purposes
   if(std::fabs(Momentum-momentum)>.000001)
            G4cerr<<"*War*G4QElastic::PostStepDoIt:P(IU)="<<Momentum<<"="<<momentum<<G4endl;
