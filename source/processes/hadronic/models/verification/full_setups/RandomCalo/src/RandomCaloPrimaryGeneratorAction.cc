@@ -14,7 +14,7 @@
 
 // ***LOOKHERE*** These are the particle types that can be used as
 //                primary beam particle, on a event-by-event based.
-const int RandomCaloPrimaryGeneratorAction::numberCandidateParticles = 17;
+const int RandomCaloPrimaryGeneratorAction::numberCandidateParticles = 27;
 const std::string RandomCaloPrimaryGeneratorAction::
 nameParticlesVector[ RandomCaloPrimaryGeneratorAction::numberCandidateParticles ] = {
   "mu-", 
@@ -33,7 +33,17 @@ nameParticlesVector[ RandomCaloPrimaryGeneratorAction::numberCandidateParticles 
   "anti_proton",
   "deuteron",
   "triton", 
-  "alpha"
+  "alpha",
+  "lambda",
+  "sigma+",
+  "sigma-",
+  "xi-",
+  "xi0",
+  "anti_lambda",
+  "anti_sigma+",
+  "anti_sigma-",
+  "anti_xi-",
+  "anti_xi0"
 };
 
 
