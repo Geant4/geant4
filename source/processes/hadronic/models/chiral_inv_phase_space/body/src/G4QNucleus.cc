@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNucleus.cc,v 1.67 2007-03-14 10:43:51 mkossov Exp $
+// $Id: G4QNucleus.cc,v 1.68 2007-03-15 13:37:53 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QNucleus ----------------
@@ -3016,7 +3016,7 @@ G4double G4QNucleus::CoulombBarrier(const G4double& cZ, const G4double& cA, G4do
   G4double ff=cZ;
   if(cA==1) ff+=3.;
   if(rA<0.) rA=0.;
-  if(cA<0.) cA=0;.
+  if(cA<0.) G4cout<<"-Warning-G4QNucl::CoulombBarrier: NucleusCharge="<<cA<<G4endl;
   G4double cb=zz/(pow(rA,third)+ff*pow(cA,third)); // Negative hadronic potential
   // Geant4 solution for protons is practically the same:
   // G4double cb=1.263*Z/(1.0 + pow(rA,third));
