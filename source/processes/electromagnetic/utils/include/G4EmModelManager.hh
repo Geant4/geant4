@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmModelManager.hh,v 1.19 2006-06-29 19:54:25 gunter Exp $
+// $Id: G4EmModelManager.hh,v 1.20 2007-03-15 12:34:46 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -51,6 +51,7 @@
 // 10-01-06 PreciseRange -> CSDARange (V.Ivantchenko)
 // 20-01-06 Introduce G4EmTableType and reducing number of methods (VI)
 // 13-05-06 Add GetModel by index method (VI)
+// 15-03-07 Add maxCutInRange (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -184,6 +185,7 @@ private:
   G4RegionModels**            setOfRegionModels;
 
   G4double                    minSubRange;
+  G4double                    maxCutInRange;
 
   const G4ParticleDefinition* particle;
   const G4ParticleDefinition* secondaryParticle;
