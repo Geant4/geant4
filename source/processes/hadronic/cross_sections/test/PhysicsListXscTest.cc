@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsListXscTest.cc,v 1.1 2007-03-14 14:06:57 grichine Exp $
+// $Id: PhysicsListXscTest.cc,v 1.2 2007-03-15 16:00:44 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -32,9 +32,7 @@
 //
 // History:
 //
-// 29.05.06 V.Grichine: NIST elements/materials, write in file
-// F.W. Jones, TRIUMF, 22-JAN-98
-//                     19-MAY-98
+// 14.03.07 V.Grichine: creation with PLs and NIST elements/materials, write in file
 //
 
 
@@ -189,7 +187,8 @@ int main()
 
   // pList = new  FTFP();
   // pList = new  LHEP();
-  pList = new  QGSP();
+  // pList = new  QGSP();
+  pList = new  QGSC();
 
   pList->ConstructParticle();
   // pList->ConstructProcess();
@@ -377,10 +376,11 @@ int main()
    //   G4cout << "Dumping particle info:" << G4endl;
    //   theParticleDefinition->DumpTable();
 
+  // const G4ParticleDefinition partDef = *theParticleDefinition; 
 
   G4int i, iMax = 70, iProcess, iMaxProcess, iElastic=0, iInelastic=0;
   G4double kinEnergy;
-  G4String processName = "hElastic";
+  G4String processName, pn; //  = "hElastic";
   // G4String processName = "NeutronInelastic";
 
 
@@ -388,27 +388,6 @@ int main()
   // G4ProcessVectorTypeIndex typ = 1;
 
   iMaxProcess = theParticleDefinition->GetProcessManager()->GetProcessListLength();
-
-  for (i = 0; i < iMaxProcess; i++) 
-  {
-    G4cout << i << "\t" 
-           << (*theParticleDefinition->GetProcessManager()->
-                GetPostStepProcessVector(typeDoIt))[i]->GetProcessName()
-	   << G4endl;
-    if((*theParticleDefinition->GetProcessManager()->
-	GetPostStepProcessVector(typeDoIt))[i]->GetProcessName() == "hElastic") 
-    {
-       iElastic = i;
-       theProcess = (*theParticleDefinition->GetProcessManager()->
-		     GetPostStepProcessVector(typeDoIt))[i];
-    }    
-  }
-  G4HadronicProcess* hadProcess = dynamic_cast<G4HadronicProcess*>(theProcess);
-
-
-
- // G4cout << "Kinetic energy in GeV: "<<G4endl;
-  // G4cin >> kinEnergy;
 
 // Make a dynamic particle too
   G4DynamicParticle* theDynamicParticle;
@@ -429,7 +408,27 @@ int main()
   switch (choice) 
   {
       case 1:
+
+        for (i = 0; i < iMaxProcess; i++) 
+        {
+          pn = (*theParticleDefinition->GetProcessManager()->
+		   GetPostStepProcessVector(typeDoIt))[i]->GetProcessName();
+
+          G4cout << i << "\t" << processName << G4endl;
+
+          if( pn  == "hElastic" || pn == "CHIPSElasticScattering" ) 
+          {
+            iElastic = i;
+            theProcess = (*theParticleDefinition->GetProcessManager()->
+		     GetPostStepProcessVector(typeDoIt))[i];
+             processName = (*theParticleDefinition->GetProcessManager()->
+		   GetPostStepProcessVector(typeDoIt))[i]->GetProcessName();
+          }    
+        }
+        G4cout<<"iElastic = "<<iElastic <<G4endl;
+        G4cout<<"processName = "<<processName <<G4endl;
 	iProcess = iElastic;
+
       break;
 
       case 2:
@@ -444,59 +443,67 @@ int main()
 	iProcess = iInelastic;
       break;
   }
-
-     //   sig = theCrossSectionDataStore.GetCrossSection(theDynamicParticle,
-     //                                                  theElement);
+  G4HadronicProcess* hadProcess = dynamic_cast<G4HadronicProcess*>(theProcess);
 
   std::ofstream writef("plxsc.dat", std::ios::out ) ;
   writef.setf( std::ios::scientific, std::ios::floatfield );
 
+  G4VQCrossSection* qElastic;
+  G4int pPDG, iz, N;
+  G4bool boolChips=false;
 
+  if( processName != "CHIPSElasticScattering") 
+  {
+    hadProcess->BuildPhysicsTable(*theParticleDefinition);
+  }
+  else
+  {
+    qElastic = G4QElasticCrossSection::GetPointer();
+
+    pPDG = theParticleDefinition->GetPDGEncoding();
+    iz   = G4int(theElement->GetZ()); 
+    N    = G4int(theElement->GetN()+0.5);
+    N   -= iz;
+    if( N < 0 ) N  = 0;
+    boolChips = true;                              
+  }
   iMax = 90;
     
   writef <<iMax<< G4endl; 
 
-
   kinEnergy = 0.01*GeV;
 
   for(i = 0; i < iMax; i++)
-  {
-   
+  {      
     theDynamicParticle = new G4DynamicParticle(theParticleDefinition,
                                               G4ParticleMomentum(1.,0.,0.), 
                                               kinEnergy);
-    sig = hadProcess->GetMicroscopicCrossSection(theDynamicParticle,theElement,273*kelvin);
 
-
-
-    G4cout << kinEnergy/GeV <<" GeV, \t" << "GHEISHA elastic" <<" \t"
+    if( processName != "CHIPSElasticScattering")
+    {
+      sig = hadProcess->GetMicroscopicCrossSection(theDynamicParticle,
+                                                 theElement,273*kelvin);
+      G4cout << kinEnergy/GeV <<" GeV, \t" << "PL elastic" <<" \t"
            << sig/millibarn << " mb" << G4endl;
-
-
-    G4cout << theProcess->GetProcessName() << " cross section for " << 
-           theParticleDefinition->GetParticleName() <<
-          " on " << theElement->GetName() << G4endl;
-    // G4cout << kinEnergy/GeV <<" GeV, \t"<< sig/millibarn << " mb" << G4endl;
-     //  G4cout << "Mean free path = " << mfp << " mm" << G4endl;
+    }
+    else
+    {
+      if(i > 0) boolChips = false;    
+      G4double momentum = theDynamicParticle->GetTotalMomentum();
+      sig = qElastic->GetCrossSection(boolChips,momentum,iz,N,pPDG);
+      G4cout << "Q-elastic          " <<" \t"<< sig/millibarn << " mb" << G4endl;
+    }
 
     writef << kinEnergy/GeV <<"\t"<< sig/millibarn << G4endl;
 
     kinEnergy *= 1.138;
     delete theDynamicParticle;
   }
-    G4cout << theProcess->GetProcessName() << " cross section for " << 
+  G4cout << theProcess->GetProcessName() << " cross section for " << 
            theParticleDefinition->GetParticleName() <<
           " on " << theElement->GetName() << G4endl;
-                         
-
- 
-    /*
-  G4cout<<"energy in GeV"<<"\t"<<"cross-section in millibarn"<<G4endl;
-  G4cout << theProcess->GetProcessName() << " cross section for " << 
-            theParticleDefinition->GetParticleName() <<
-           " on " << theElement->GetName() << G4endl;
   G4cout <<"with atomic weight = "<<theElement->GetN() << G4endl;
-    */
+                         
 
   return 1;
 } // end of main
