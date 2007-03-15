@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Positron.cc,v 1.12 2007-03-11 07:17:35 kurasige Exp $
+// $Id: G4Positron.cc,v 1.13 2007-03-15 06:53:58 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -73,7 +73,10 @@ G4Positron* G4Positron::Definition()
               );
  
     // Bohr Magnetron
-    anInstance->SetPDGMagneticMoment( 0.5*eplus*hbar_Planck/(0.51099906*MeV/c_squared) );
+   G4double muB =  0.5*eplus*hbar_Planck/(0.51099906*MeV/c_squared) ;
+   
+   anInstance->SetPDGMagneticMoment( muB * 1.0011596521859 );
+
   }
   theInstance = reinterpret_cast<G4Positron*>(anInstance);
   return theInstance;

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuonMinus.cc,v 1.12 2007-03-11 07:17:35 kurasige Exp $
+// $Id: G4MuonMinus.cc,v 1.13 2007-03-15 06:53:57 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -74,8 +74,10 @@ G4MuonMinus* G4MuonMinus::Definition()
 		false,      2197.03*ns,          NULL,
                 false,           "mu"
               );
-  // Bohr Magnetron
-  anInstance->SetPDGMagneticMoment( -0.5*eplus*hbar_Planck/(0.1056584*GeV/c_squared) );
+    // Bohr Magnetron
+   G4double muB =  -0.5*eplus*hbar_Planck/(0.1056584*GeV/c_squared) ;
+   
+   anInstance->SetPDGMagneticMoment( muB * 1.0011659208);
 
   //create Decay Table 
   G4DecayTable* table = new G4DecayTable();
