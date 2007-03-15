@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.97 2007-03-15 12:33:38 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.98 2007-03-15 18:59:15 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -715,20 +715,24 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
       // recompute safety
       if(prePoint->GetStepStatus() != fGeomBoundary &&
 	 postPoint->GetStepStatus() != fGeomBoundary) {
+
+	/*
 	//      G4bool yes = (track.GetTrackID() == 5512);
-	//	G4bool yes = (track.GetTrackID() == 5489 ||track.GetTrackID() == 5512 );
         G4bool yes = false;
 	if(yes)
 	  G4cout << "G4VEnergyLoss: presafety= " << preSafety
 		 << " rcut= " << rcut << "  length= " << length 
 		 << " dir " << track.GetMomentumDirection()
 		 << G4endl;
+	*/
+
 	if(preSafety < rcut) 
 	  preSafety = safetyHelper->ComputeSafety(prePoint->GetPosition());
-	if(yes) {
-	  G4cout << "G4VEnergyLoss: newsafety= " << preSafety << G4endl;
+
+	//if(yes) {
+	//  G4cout << "G4VEnergyLoss: newsafety= " << preSafety << G4endl;
 	  //	   if(preSafety==0.0 && track.GetTrackID() == 5512 ) exit(1);
-	}
+	//}
 	if(postSafety < rcut) postSafety =
           safetyHelper->ComputeSafety(step.GetPostStepPoint()->GetPosition());
 	/*	
