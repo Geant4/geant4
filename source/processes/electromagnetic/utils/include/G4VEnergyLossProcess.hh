@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.hh,v 1.60 2007-01-15 17:27:40 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.hh,v 1.61 2007-03-15 12:33:38 vnivanch Exp $
 // GEANT4 tag $Name:
 //
 // -------------------------------------------------------------------
@@ -73,6 +73,7 @@
 // 14-01-07 add SetEmModel(index) and SetFluctModel() (mma)
 // 15-01-07 Add separate ionisation tables and reorganise get/set methods for
 //          dedx tables (V.Ivanchenko)
+// 13-03-07 use SafetyHelper instead of navigator (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -106,7 +107,7 @@ class G4VEmModel;
 class G4VEmFluctuationModel;
 class G4DataVector;
 class G4Region;
-class G4Navigator;
+class G4SafetyHelper;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -272,7 +273,8 @@ public:
 
   // Return values for given G4MaterialCutsCouple
   G4double GetDEDX(G4double& kineticEnergy, const G4MaterialCutsCouple*);
-  G4double GetDEDXForSubsec(G4double& kineticEnergy, const G4MaterialCutsCouple*);
+  G4double GetDEDXForSubsec(G4double& kineticEnergy, 
+			    const G4MaterialCutsCouple*);
   G4double GetRange(G4double& kineticEnergy, const G4MaterialCutsCouple*);
   G4double GetCSDARange(G4double& kineticEnergy, const G4MaterialCutsCouple*);
   G4double GetRangeForLoss(G4double& kineticEnergy, const G4MaterialCutsCouple*);
@@ -413,7 +415,7 @@ private:
   const G4DataVector*         theCuts;
   const G4DataVector*         theSubCuts;
 
-  G4Navigator*                navigator;
+  G4SafetyHelper*             safetyHelper;
 
   const G4ParticleDefinition* particle;
   const G4ParticleDefinition* baseParticle;
@@ -525,7 +527,8 @@ inline G4double G4VEnergyLossProcess::GetIonisationForScaledEnergy(G4double e)
   G4bool b;
   G4double x = 0.0;
   if(theIonisationTable) {
-    x = ((*theIonisationTable)[currentMaterialIndex]->GetValue(e, b))*chargeSqRatio;
+    x = ((*theIonisationTable)[currentMaterialIndex]->GetValue(e, b))
+      *chargeSqRatio;
     if(e < minKinEnergy) x *= std::sqrt(e/minKinEnergy);
   }
   return x;
@@ -533,12 +536,14 @@ inline G4double G4VEnergyLossProcess::GetIonisationForScaledEnergy(G4double e)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4double G4VEnergyLossProcess::GetSubIonisationForScaledEnergy(G4double e)
+inline 
+G4double G4VEnergyLossProcess::GetSubIonisationForScaledEnergy(G4double e)
 {
   G4bool b;
   G4double x = 0.0;
   if(theIonisationSubTable) {
-    x = ((*theIonisationSubTable)[currentMaterialIndex]->GetValue(e, b))*chargeSqRatio;
+    x = ((*theIonisationSubTable)[currentMaterialIndex]->GetValue(e, b))
+      *chargeSqRatio;
     if(e < minKinEnergy) x *= std::sqrt(e/minKinEnergy);
   }
   return x;

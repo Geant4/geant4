@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.96 2007-02-16 11:59:35 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.97 2007-03-15 12:33:38 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -101,6 +101,7 @@
 // 14-01-07 add SetEmModel(index) and SetFluctModel() (mma)
 // 16-01-07 add IonisationTable and IonisationSubTable (V.Ivanchenko)
 // 16-02-07 set linLossLimit=1.e-6 (V.Ivanchenko)
+// 13-03-07 use SafetyHelper instead of navigator (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -134,7 +135,7 @@
 #include "G4Region.hh"
 #include "G4RegionStore.hh"
 #include "G4PhysicsTableHelper.hh"
-#include "G4Navigator.hh"
+#include "G4SafetyHelper.hh"
 #include "G4TransportationManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -200,8 +201,8 @@ G4VEnergyLossProcess::G4VEnergyLossProcess(const G4String& name,
   scoffRegions.clear();
   scProcesses.clear();
 
-  navigator = (G4TransportationManager::GetTransportationManager())
-                                       ->GetNavigatorForTracking();
+  safetyHelper = new G4SafetyHelper();
+
   const G4int n = 7;
   vstrag = new G4PhysicsLogVector(keV, GeV, n);
   G4double s[n] = {-0.2, -0.85, -1.3, -1.578, -1.76, -1.85, -1.9};
@@ -213,6 +214,7 @@ G4VEnergyLossProcess::G4VEnergyLossProcess(const G4String& name,
 G4VEnergyLossProcess::~G4VEnergyLossProcess()
 {
   delete vstrag;
+  delete safetyHelper;
   Clear();
 
   if ( !baseParticle ) {
@@ -624,6 +626,7 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
 
   // Get the actual (true) Step length
   G4double length = step.GetStepLength();
+  if(length == 0.0) return &fParticleChange;
   G4double eloss  = 0.0;
 
   /*
@@ -696,18 +699,38 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
 
   G4double cut  = (*theCuts)[currentMaterialIndex];
   G4double esec = 0.0;
+  G4double esecdep = 0.0;
 
   // SubCutOff 
   if(useSubCutoff) {
     if(idxSCoffRegions[currentMaterialIndex]) {
 
-      G4double preSafety = step.GetPreStepPoint()->GetSafety();
+      G4double currentMinSafety = 0.0; 
+      G4StepPoint* prePoint  = step.GetPreStepPoint();
+      G4StepPoint* postPoint = step.GetPostStepPoint();
+      G4double preSafety  = prePoint->GetSafety();
+      G4double postSafety = preSafety - length; 
       G4double rcut = currentCouple->GetProductionCuts()->GetProductionCut(1);
-      if(preSafety < rcut) preSafety = 
-	  navigator->ComputeSafety(step.GetPreStepPoint()->GetPosition());
-      if(preSafety - length < rcut) {
-	G4double postSafety = 
-          navigator->ComputeSafety(step.GetPostStepPoint()->GetPosition());
+
+      // recompute safety
+      if(prePoint->GetStepStatus() != fGeomBoundary &&
+	 postPoint->GetStepStatus() != fGeomBoundary) {
+	//      G4bool yes = (track.GetTrackID() == 5512);
+	//	G4bool yes = (track.GetTrackID() == 5489 ||track.GetTrackID() == 5512 );
+        G4bool yes = false;
+	if(yes)
+	  G4cout << "G4VEnergyLoss: presafety= " << preSafety
+		 << " rcut= " << rcut << "  length= " << length 
+		 << " dir " << track.GetMomentumDirection()
+		 << G4endl;
+	if(preSafety < rcut) 
+	  preSafety = safetyHelper->ComputeSafety(prePoint->GetPosition());
+	if(yes) {
+	  G4cout << "G4VEnergyLoss: newsafety= " << preSafety << G4endl;
+	  //	   if(preSafety==0.0 && track.GetTrackID() == 5512 ) exit(1);
+	}
+	if(postSafety < rcut) postSafety =
+          safetyHelper->ComputeSafety(step.GetPostStepPoint()->GetPosition());
 	/*	
 	  if(-1 < verboseLevel) 
 	  G4cout << "Subcutoff: presafety(mm)= " << preSafety/mm
@@ -715,33 +738,50 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
 	         << " rcut(mm)= " << rcut/mm 
 	         << G4endl;
 	*/
-	if(preSafety < rcut || postSafety < rcut) {
+	currentMinSafety = std::min(preSafety,postSafety); 
+      }
 
-	  eloss -= GetSubDEDXForScaledEnergy(preStepScaledEnergy)*length;
-          if(eloss < 0.0) eloss = 0.0;
-	  SampleSubCutSecondaries(scTracks, step, cut, currentModel);
-	  if(nProcesses) {
-	    for(G4int i=0; i<nProcesses; i++) {
-	      (scProcesses[i])->SampleSubCutSecondaries(scTracks, step, rcut, 
-		                (scProcesses[i])->SelectModelForMaterial(
+      // Decide to start subcut sampling
+      if(currentMinSafety < rcut) {
+
+	eloss -= GetSubDEDXForScaledEnergy(preStepScaledEnergy)*length;
+	if(eloss < 0.0) eloss = 0.0;
+	SampleSubCutSecondaries(scTracks, step, cut, currentModel);
+	if(nProcesses) {
+	  for(G4int i=0; i<nProcesses; i++) {
+	    (scProcesses[i])->SampleSubCutSecondaries(scTracks, step, rcut, 
+				 (scProcesses[i])->SelectModelForMaterial(
 				 preStepKinEnergy, currentMaterialIndex));
-	    }
-	  }    
-	  G4int n = scTracks.size();
-	  if(n) {
-            G4ThreeVector mom = dynParticle->GetMomentum();
-	    fParticleChange.SetNumberOfSecondaries(n);
-	    for(G4int i=0; i<n; i++) {
-              G4Track* t = scTracks[i];
-	      G4double e = t->GetKineticEnergy();
-	      if (t->GetDefinition() == thePositron) e += 2.0*electron_mass_c2;
-              esec += e;
-	      pParticleChange->AddSecondary(t);
-              mom -= t->GetMomentum();
-	    }      
-	    scTracks.clear();
-	    //	    fParticleChange.SetProposedMomentum(mom);            
 	  }
+	}    
+	G4int n = scTracks.size();
+	if(n) {
+	  G4ThreeVector mom = dynParticle->GetMomentum();
+	  fParticleChange.SetNumberOfSecondaries(n);
+	  for(G4int i=0; i<n; i++) {
+	    G4Track* t = scTracks[i];
+	    G4double ekin = t->GetKineticEnergy();
+            G4double e = ekin;
+	    if (t->GetDefinition() == thePositron) e += 2.0*electron_mass_c2;
+
+	    // do not track very low-energy delta-electrons
+	    if(theSecondaryRangeTable) {
+	      G4bool b;
+	      G4double rg = 
+		((*theSecondaryRangeTable)[currentMaterialIndex]->GetValue(e, b));
+	      //          if(rg < currentMinSafety) {
+	      if(rg < safetyHelper->ComputeSafety(t->GetPosition())) {
+		esecdep += e;
+		delete t;
+		continue;
+	      }
+	    }
+	    esec += e;
+	    pParticleChange->AddSecondary(t);
+	    mom -= t->GetMomentum();
+	  }      
+	  scTracks.clear();
+	  //	    fParticleChange.SetProposedMomentum(mom);            
 	}
       }
     }
@@ -751,7 +791,8 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
   CorrectionsAlongStep(currentCouple, dynParticle, eloss, length);
 
   // Sample fluctuations
-  if (lossFluctuationFlag && eloss + esec + lowestKinEnergy < preStepKinEnergy) {
+  if (lossFluctuationFlag && 
+      eloss + esec + esecdep + lowestKinEnergy < preStepKinEnergy) {
 
     G4double tmax = 
       std::min(currentModel->MaxSecondaryKinEnergy(dynParticle),cut);
@@ -768,6 +809,8 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
              << G4endl;
     */
   }
+  // add low-energy subcutoff particles
+  eloss += esecdep;
 
   // Energy balanse
   G4double finalT = preStepKinEnergy - eloss - esec;

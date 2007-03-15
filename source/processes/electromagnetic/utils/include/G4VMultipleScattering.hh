@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.hh,v 1.41 2007-02-12 12:31:50 vnivanch Exp $
+// $Id: G4VMultipleScattering.hh,v 1.42 2007-03-15 12:33:38 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -311,13 +311,20 @@ inline G4double G4VMultipleScattering::GetContinuousStepLimit(
                                                 G4double currentMinimalStep,
                                                 G4double&)
 {
+  G4double x = currentMinimalStep;
+  G4double e = track.GetKineticEnergy();
   DefineMaterial(track.GetMaterialCutsCouple());
-  currentModel = SelectModel(track.GetKineticEnergy());
-  G4double tPathLength = 
-    currentModel->ComputeTruePathLengthLimit(track, theLambdaTable, currentMinimalStep);
-  if (tPathLength < currentMinimalStep) valueGPILSelectionMSC = CandidateForSelection;
-  //  G4cout << "tPathLength= " << tPathLength << " currentMinimalStep= " << currentMinimalStep<< G4endl;
-  return currentModel->ComputeGeomPathLength(tPathLength);
+  currentModel = SelectModel(e);
+  if(x > 0.0 && e > 0.0) {
+    G4double tPathLength = 
+      currentModel->ComputeTruePathLengthLimit(track, theLambdaTable, x);
+    if (tPathLength < x) valueGPILSelectionMSC = CandidateForSelection;
+    x = currentModel->ComputeGeomPathLength(tPathLength);  
+    //  G4cout << "tPathLength= " << tPathLength
+    //         << " stepLimit= " << x 
+    //        << " currentMinimalStep= " << currentMinimalStep<< G4endl;
+  }
+  return x;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
