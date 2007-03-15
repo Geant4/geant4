@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EnergyLossMessenger.cc,v 1.25 2007-02-12 17:04:51 vnivanch Exp $
+// $Id: G4EnergyLossMessenger.cc,v 1.26 2007-03-15 12:34:22 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -44,6 +44,8 @@
 // 10-10-06 Add DEDXBinning command (V.Ivanchenko)
 // 07-02-07 Add MscLateralDisplacement command (V.Ivanchenko)
 // 12-02-07 Add SetSkin, SetLinearLossLimit (V.Ivanchenko)
+// 15-03-07 Send a message "/run/physicsModified" if reinitialisation
+//          is needed after the command (V.Ivanchenko)
 //
 // -------------------------------------------------------------------
 //
@@ -64,6 +66,7 @@
 #include "G4UIcmdWithADouble.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4EmProcessOptions.hh"
+#include "G4UImanager.hh"
 
 #include <sstream>
 
@@ -232,6 +235,7 @@ G4EnergyLossMessenger::~G4EnergyLossMessenger()
 void G4EnergyLossMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 {
   G4LossTableManager* lossTables = G4LossTableManager::Instance();
+ 
   if (command == RndmStepCmd)
    { G4VEnergyLoss::SetRndmStep(RndmStepCmd->GetNewBoolValue(newValue));
      lossTables->SetRandomStep(RndmStepCmd->GetNewBoolValue(newValue));
@@ -245,6 +249,7 @@ void G4EnergyLossMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
   if (command == SubSecCmd)
    { G4VEnergyLoss::SetSubSec(SubSecCmd->GetNewBoolValue(newValue));
      lossTables->SetSubCutoff(SubSecCmd->GetNewBoolValue(newValue));
+     G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");
    }
 
   if (command == MinSubSecCmd)
@@ -272,42 +277,52 @@ void G4EnergyLossMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
      is >> f >> s;
      if(s == "false" || s == "0" || s == "no") a = false; 
      lossTables->SetMscStepLimitation(a,f);
+     G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");
    }
 
-  if (command == MinEnCmd) 
+  if (command == MinEnCmd) {
     lossTables->SetMinEnergy(MinEnCmd->GetNewDoubleValue(newValue));
+    G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");
+  }
 
-  if (command == MaxEnCmd) 
+  if (command == MaxEnCmd) { 
     lossTables->SetMaxEnergy(MaxEnCmd->GetNewDoubleValue(newValue));
-  
+    G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");
+  }  
+
   if (command == IntegCmd) 
     lossTables->SetIntegral(IntegCmd->GetNewBoolValue(newValue));
   
   if (command == rangeCmd) 
     lossTables->SetBuildCSDARange(rangeCmd->GetNewBoolValue(newValue));
   
-  if (command == lpmCmd) 
+  if (command == lpmCmd) {
     lossTables->SetLPMFlag(lpmCmd->GetNewBoolValue(newValue));
-  
-  if (command == latCmd) 
+    G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");
+  }
+  if (command == latCmd) {
     lossTables->SetMscLateralDisplacement(latCmd->GetNewBoolValue(newValue));
-  
+    G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");
+  }
   if (command == verCmd) 
     lossTables->SetVerbose(verCmd->GetNewIntValue(newValue));
 
   if (command == lllCmd) 
     lossTables->SetLinearLossLimit(lllCmd->GetNewDoubleValue(newValue));
   
-  if (command == skinCmd) 
+  if (command == skinCmd) {
     lossTables->SetSkin(skinCmd->GetNewDoubleValue(newValue));
-  
+    G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");
+  }  
   G4EmProcessOptions opt;
-  if (command == dedxCmd) 
+  if (command == dedxCmd) { 
     opt.SetDEDXBinning(dedxCmd->GetNewIntValue(newValue));
-  
-  if (command == lbCmd) 
+    G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");
+  }
+  if (command == lbCmd) {
     opt.SetDEDXBinning(lbCmd->GetNewIntValue(newValue));
-  
+    G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
