@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonTable.hh,v 1.23 2006-10-12 10:59:45 kurasige Exp $
+// $Id: G4IonTable.hh,v 1.24 2007-03-15 06:53:27 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -86,7 +86,7 @@ class G4IonTable
 
    // Register Isotope table
    void RegisterIsotopeTable(G4VIsotopeTable* table);
-   G4VIsotopeTable* GetIsotopeTable() const;
+   G4VIsotopeTable* GetIsotopeTable(size_t idx=0) const;
    // G4IonTable asks properties of isotopes to this G4VIsotopeTable 
    // by using FindIsotope(G4IsotopeProperty* property) method.
    
@@ -191,9 +191,10 @@ class G4IonTable
  private:
    G4IonList*                  fIonList; 
 
-   G4VIsotopeTable*            fIsotopeTable;
+   std::vector<G4VIsotopeTable*> *fIsotopeTableList;
+
  
-   enum { numberOfElements = 110};
+   enum { numberOfElements = 118};
    static const G4String       elementName[numberOfElements];
 
 };

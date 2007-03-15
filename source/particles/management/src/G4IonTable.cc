@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonTable.cc,v 1.43 2006-11-15 09:57:52 kurasige Exp $
+// $Id: G4IonTable.cc,v 1.44 2007-03-15 06:53:27 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -66,18 +66,24 @@
 G4IonTable::G4IonTable()
 {
   fIonList = new G4IonList();
-  fIsotopeTable = 0;
+  fIsotopeTableList = new std::vector<G4VIsotopeTable*>;
 }
 
 ////////////////////
 G4IonTable::~G4IonTable()
 {
   // delete IsotopeTable if exists
-  if (fIsotopeTable != 0) delete fIsotopeTable;
-  fIsotopeTable =0;
+  if (fIsotopeTableList != 0) {
+    for (size_t i = 0; i< fIsotopeTableList->size(); ++i) {
+      G4VIsotopeTable* fIsotopeTable= (*fIsotopeTableList)[i];
+      delete fIsotopeTable;
+    }
+    fIsotopeTableList->clear();
+  }
+  fIsotopeTableList =0;
+
 
   if (fIonList ==0) return;
-
   //  No need to delete here because all particles are dynamic objects
   //   
   // delete ion objects
@@ -145,18 +151,20 @@ G4ParticleDefinition* G4IonTable::CreateIon(G4int Z, G4int A, G4double E, G4int 
   G4double life = -1.0;
   G4DecayTable* decayTable =0;
   G4bool stable = true;
+  G4double mu = 0.0;
 
   G4IsotopeProperty*  fProperty = FindIsotope(Z, A, E, J);
   if (fProperty !=0 ){
-    J =    fProperty->GetiSpin();
-    E =    fProperty->GetEnergy();
+    E    = fProperty->GetEnergy();
+    J    = fProperty->GetiSpin();
     life = fProperty->GetLifeTime();
+    mu   = fProperty->GetMagneticMoment();    
     decayTable = fProperty->GetDecayTable();
   }
-  stable = (life <= 0.);
+  stable = life <= 0.;
   G4double mass =  GetNucleusMass(Z, A)+ E;
   G4double charge =  G4double(Z)*eplus;
-  
+ 
   G4int encoding = GetNucleusEncoding(Z,A,E,J);
 
   // create an ion
@@ -169,9 +177,11 @@ G4ParticleDefinition* G4IonTable::CreateIon(G4int Z, G4int A, G4double E, G4int 
 		    stable,            life,    decayTable,       false,
 		  "generic",              0,
 		      E                       );
+  ion->SetPDGMagneticMoment(mu);
+
   //No Anti particle registered
   ion->SetAntiPDGEncoding(0);
-
+  
 #ifdef G4VERBOSE
   if (GetVerboseLevel()>1) {
     G4cout << "G4IonTable::CreateIon() : create ion of " << name << G4endl;
@@ -180,10 +190,7 @@ G4ParticleDefinition* G4IonTable::CreateIon(G4int Z, G4int A, G4double E, G4int 
   
   // Add process manager to the ion
   AddProcessManager(name);
-  
-  // Set cut value same as "GenericIon"
-  // SetCuts(ion);
-    
+      
   if (fProperty !=0) delete fProperty;
   return ion;
 }
@@ -225,18 +232,15 @@ G4ParticleDefinition* G4IonTable::GetIon(G4int encoding)
 ////////////////////
 G4ParticleDefinition* G4IonTable::GetIon(G4int Z, G4int A, G4double E, G4int J)
 {
-  if ( (A<1) || (Z>numberOfElements) || (Z<=0) || (J<0) || (E<0.0) ) {
+  if ( (A<1) || (Z<=0) || (J<0) || (E<0.0) ) {
 #ifdef G4VERBOSE
     if (GetVerboseLevel()>0) {
       G4cout << "G4IonTable::GetIon() : illegal atomic number/mass" << G4endl;
       G4cout << " Z =" << Z << "  A = " << A <<  "  E = " << E/keV << G4endl;
     }
 #endif
-    G4cerr << "G4IonTable::GetIon called with Z="<<Z<<", A="<<A<<G4endl;
-    G4Exception( "G4IonTable::GetIon()","Illegal operation",
-		 JustWarning, "illegal atomic number/mass");
     return 0;
-  }
+   }
 
   // Search ions with A, Z 
   G4ParticleDefinition* ion = FindIon(Z,A,E,J);
@@ -254,13 +258,15 @@ G4ParticleDefinition* G4IonTable::FindIon(G4int Z, G4int A, G4double E, G4int J)
 {
   const G4double EnergyTorelance = 0.1 * keV;
 
-  if ( (A<1) || (Z>numberOfElements) || (Z<=0) || (J<0) || (E<0.0)) {
+  if ( (A<1) || (Z<=0) || (J<0) || (E<0.0)) {
 #ifdef G4VERBOSE
     if (GetVerboseLevel()>0) {
       G4cout << "G4IonTable::FindIon() : illegal atomic number/mass or excitation level " << G4endl;
       G4cout << " Z =" << Z << "  A = " << A <<  "  E = " << E/keV << G4endl;
     }
 #endif
+    G4Exception( "G4IonTable::FindIon()","Illegal operation",
+		 JustWarning, "illegal atomic number/mass");
     return 0;
   }
   // Search ions with A, Z ,E
@@ -345,8 +351,14 @@ G4String G4IonTable::GetIonName(G4int Z, G4int A, G4double E) const
   G4String name;
   if ( (0< Z) && (Z <=numberOfElements) ) {
     name = elementName[Z-1];
+  } else if (Z > numberOfElements) {
+    std::ostringstream os1;
+    os1.setf(std::ios::fixed);
+    os1 << Z ;
+    name = "E" + os1.str() + "-";
   } else {
-    return "?";
+    name = "?";
+    return name;
   }
   std::ostringstream os;
   os.setf(std::ios::fixed);
@@ -413,7 +425,7 @@ G4ParticleDefinition* G4IonTable::GetLightIon(G4int Z, G4int A) const
 /////////////////
 G4double  G4IonTable::GetNucleusMass(G4int Z, G4int A) const
 {
-  if ( (A<1) || (Z>numberOfElements) || (Z<0)) {
+  if ( (A<1)  || (Z<0)) {
 #ifdef G4VERBOSE
     if (GetVerboseLevel()>0) {
       G4cout << "G4IonTable::GetNucleusMass() : illegal atomic number/mass " << G4endl;
@@ -458,7 +470,7 @@ void G4IonTable::Insert(G4ParticleDefinition* particle)
     fIonList->push_back(particle);
   } else {
     //#ifdef G4VERBOSE
-    //if (GetVerboseLevel()>0) {
+    //if (GetVerboseLevel()>1) {
     //  G4cout << "G4IonTable::Insert :" << particle->GetParticleName() ;
     //  G4cout << " is not ions" << G4endl; 
     //}
@@ -518,8 +530,8 @@ const G4String G4IonTable::elementName[] = {
                    "Hf", "Ta", "W", "Re", "Os", "Ir", "Pt", "Au", "Hg", "Tl", "Pb", "Bi", "Po", "At", "Rn", 
   "Fr", "Ra", 
               "Ac", "Th", "Pa",  "U", "Np", "Pu", "Am", "Cm", "Bk", "Cf", "Es", "Fm", "Md", "No", "Lr",
-              "Rf", "Db", "Sg", "Bh", "Hs", "Mt", "Xa"
-  
+              "Rf", "Db", "Sg", "Bh", "Hs", "Mt", "Ds", "Rg", 
+              "Uub", "Uut", "Uuq","Uup","Uuh","Uus","Uuo"
 };
 
 
@@ -553,23 +565,67 @@ void  G4IonTable::AddProcessManager(const G4String& name)
 ////////////////////
 void  G4IonTable::RegisterIsotopeTable(G4VIsotopeTable* table)
 {
-  fIsotopeTable = table;
+  fIsotopeTableList->push_back(table);
 }
 
 ////////////////////
-G4VIsotopeTable* G4IonTable::GetIsotopeTable() const
+G4VIsotopeTable* G4IonTable::GetIsotopeTable(size_t index) const
 {
-  return fIsotopeTable;
+   G4VIsotopeTable* fIsotopeTable=0;
+   if ( index < fIsotopeTableList->size() ) {
+     fIsotopeTable = (*fIsotopeTableList)[index];
+   }
+   return fIsotopeTable;
 }
 
 
 ////////////////////
 G4IsotopeProperty* G4IonTable::FindIsotope(G4int Z, G4int A, G4double E, G4int )
 {
-  if (fIsotopeTable ==0) return 0;
+  if (fIsotopeTableList ==0) return 0;
+  if (fIsotopeTableList->size()==0) return 0;
+  
+  // ask IsotopeTable 
+  G4IsotopeProperty* property =0;
 
-  // ask IsotopeTable // ask IsotopeTable
-  return fIsotopeTable->GetIsotope(Z,A,E);
+  // iterate  reverse order
+  for (G4int i = fIsotopeTableList->size()-1; i>=0 ; i--) {
+    G4VIsotopeTable* fIsotopeTable= (*fIsotopeTableList)[i];
+    G4IsotopeProperty* tmp = fIsotopeTable->GetIsotope(Z,A,E);
+    if ( tmp !=0) {
+      
+#ifdef G4VERBOSE
+      if (GetVerboseLevel()>1) {
+        G4cout << "G4IonTable::FindIsotope:"; 
+        G4cout << " Z: " << Z;
+        G4cout << " A: " << A;
+        G4cout << " E: " << E;
+	G4cout << G4endl; 
+	tmp->DumpInfo();
+      }
+#endif
+      if (property !=0) {
+	// overwrite spin/magnetic moment/decay table if not defined
+	if( property->GetiSpin() ==0) {
+	  property->SetiSpin( tmp->GetiSpin() );
+	}
+	if( property->GetMagneticMoment() <= 0.0) {
+	  property->SetMagneticMoment( tmp->GetMagneticMoment() );
+	}
+	if( property->GetLifeTime() <= 0.0) {
+	  property->SetLifeTime( tmp->GetLifeTime() );
+	  if (    (property->GetLifeTime() > 0.0)
+	       && (property->GetDecayTable() ==0 ) ) {
+	    property->SetDecayTable( tmp->GetDecayTable() );
+	  }
+	}
+      } else {
+	property = tmp;
+      }
+    }
+  }
+  
+  return property;
 }
 
 

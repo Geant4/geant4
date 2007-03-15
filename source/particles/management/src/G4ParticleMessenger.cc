@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleMessenger.cc,v 1.8 2006-06-29 19:25:54 gunter Exp $
+// $Id: G4ParticleMessenger.cc,v 1.9 2007-03-15 06:53:27 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -113,7 +113,7 @@ void G4ParticleMessenger::SetNewValue(G4UIcommand * command,G4String newValues)
     G4int counter = 0;
     G4ParticleTable::G4PTblDicIterator *piter = theParticleTable->GetIterator();
     piter -> reset();
-    // newValues.toLower();  temporaly commented out
+  
     while( (*piter)() ){
       G4ParticleDefinition *particle = piter->value();
       if ((newValues=="all") || (newValues==particle->GetParticleType())) {
@@ -127,7 +127,17 @@ void G4ParticleMessenger::SetNewValue(G4UIcommand * command,G4String newValues)
     }
     G4cout << G4endl;
     if (counter == 0) G4cout << newValues << " is not found " << G4endl;
-
+    
+   //Command  /particle/select
+    // set candidate List
+    G4String candidates("none");
+    piter -> reset();
+    while( (*piter)() ){
+      G4ParticleDefinition *particle = piter->value();
+      candidates += " " + particle->GetParticleName();
+    }
+    selectCmd->SetCandidates((const char *)(candidates));   
+ 
   } else if( command==selectCmd ){
     //Commnad   /particle/select
     currentParticle = theParticleTable->FindParticle(newValues);
