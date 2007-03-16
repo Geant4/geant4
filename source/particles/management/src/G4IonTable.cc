@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonTable.cc,v 1.44 2007-03-15 06:53:27 kurasige Exp $
+// $Id: G4IonTable.cc,v 1.45 2007-03-16 05:25:07 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -588,8 +588,8 @@ G4IsotopeProperty* G4IonTable::FindIsotope(G4int Z, G4int A, G4double E, G4int )
   // ask IsotopeTable 
   G4IsotopeProperty* property =0;
 
-  // iterate  reverse order
-  for (G4int i = fIsotopeTableList->size()-1; i>=0 ; i--) {
+  // iterate 
+  for (size_t i = 0; i< fIsotopeTableList->size(); ++i) {
     G4VIsotopeTable* fIsotopeTable= (*fIsotopeTableList)[i];
     G4IsotopeProperty* tmp = fIsotopeTable->GetIsotope(Z,A,E);
     if ( tmp !=0) {
@@ -617,6 +617,7 @@ G4IsotopeProperty* G4IonTable::FindIsotope(G4int Z, G4int A, G4double E, G4int )
 	  if (    (property->GetLifeTime() > 0.0)
 	       && (property->GetDecayTable() ==0 ) ) {
 	    property->SetDecayTable( tmp->GetDecayTable() );
+	    tmp->SetDecayTable( 0 );
 	  }
 	}
       } else {
