@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QElastic.cc,v 1.20 2007-03-14 09:15:32 mkossov Exp $
+// $Id: G4QElastic.cc,v 1.21 2007-03-16 10:05:05 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QElastic class -----------------
@@ -490,7 +490,7 @@ G4VParticleChange* G4QElastic::PostStepDoIt(const G4Track& track, const G4Step& 
 #endif
   // Update G4VParticleChange for the scattered muon
   G4double finE=scat4M.e()-pM;             // Final kinetic energy of the scattered proton
-  if(finE>=0.0) aParticleChange.ProposeEnergy(finE);
+  if(finE>0.0) aParticleChange.ProposeEnergy(finE);
   else
   {
     if(finE<-1.e-8 || !(finE>-1.||finE<1.)) // NAN or negative
@@ -498,7 +498,7 @@ G4VParticleChange* G4QElastic::PostStepDoIt(const G4Track& track, const G4Step& 
             <<", s4M="<<scat4M<<", r4M="<<reco4M<<", d4M="<<tot4M-scat4M-reco4M<<G4endl;
     //G4Exception("G4QElastic::PostStDoIt()","009", FatalException," <0 or nan energy");
     aParticleChange.ProposeEnergy(0.) ;
-    aParticleChange.ProposeTrackStatus(fStopAndKill);
+    aParticleChange.ProposeTrackStatus(fStopButAlive);
   }
   G4ThreeVector findir=scat4M.vect()/scat4M.rho();  // Unit vector in new direction
   aParticleChange.ProposeMomentumDirection(findir); // new direction for the scattered part
