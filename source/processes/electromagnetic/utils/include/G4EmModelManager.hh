@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmModelManager.hh,v 1.20 2007-03-15 12:34:46 vnivanch Exp $
+// $Id: G4EmModelManager.hh,v 1.21 2007-03-17 19:24:39 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -186,6 +186,7 @@ private:
 
   G4double                    minSubRange;
   G4double                    maxCutInRange;
+  G4double                    maxSubCutInRange;
 
   const G4ParticleDefinition* particle;
   const G4ParticleDefinition* secondaryParticle;

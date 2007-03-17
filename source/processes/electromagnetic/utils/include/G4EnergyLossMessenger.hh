@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EnergyLossMessenger.hh,v 1.16 2007-02-12 12:31:50 vnivanch Exp $
+// $Id: G4EnergyLossMessenger.hh,v 1.17 2007-03-17 19:24:39 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -42,6 +42,7 @@
 // 10-05-06 Add command MscStepLimit (V.Ivantchenko) 
 // 10-11-06 Add command binsDEDX (V.Ivantchenko) 
 // 12-02-07 Add SetSkin, SetLinearLossLimit (V.Ivanchenko)
+// 16-03-07 modify /process/eLoss/minsubsec command (V.Ivanchenko)
 //
 // -------------------------------------------------------------------
 //
@@ -95,7 +96,7 @@ private:
   G4UIcmdWithABool*          RndmStepCmd;
   G4UIcmdWithABool*          EnlossFlucCmd;
   G4UIcmdWithABool*          SubSecCmd;
-  G4UIcmdWithADoubleAndUnit* MinSubSecCmd;
+  G4UIcmdWithADouble*        MinSubSecCmd;
   G4UIcommand*               StepFuncCmd;
   G4UIcommand*               mscCmd;
   G4UIcmdWithADoubleAndUnit* MinEnCmd;

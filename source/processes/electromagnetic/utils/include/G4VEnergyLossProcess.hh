@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.hh,v 1.61 2007-03-15 12:33:38 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.hh,v 1.62 2007-03-17 19:24:39 vnivanch Exp $
 // GEANT4 tag $Name:
 //
 // -------------------------------------------------------------------
@@ -328,7 +328,7 @@ public:
   void AddCollaborativeProcess(G4VEnergyLossProcess*);
 
   void SampleSubCutSecondaries(std::vector<G4Track*>&, const G4Step&, 
-                               G4double& cut, G4VEmModel* model); 
+                               G4VEmModel* model, G4int matIdx); 
 
   // Set scaling parameters
   void SetDynamicMassCharge(G4double massratio, G4double charge2ratio);

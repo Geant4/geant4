@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.cc,v 1.81 2007-02-12 12:31:50 vnivanch Exp $
+// $Id: G4LossTableManager.cc,v 1.82 2007-03-17 19:24:39 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -550,6 +550,7 @@ G4VEnergyLossProcess* G4LossTableManager::BuildTables(
       p->SetDEDXTable(dedx,fSubRestricted);
       listSub.push_back(dedx);
       p->SetSubLambdaTable(p->BuildLambdaTable(fSubRestricted));
+      if(p != em) em->AddCollaborativeProcess(p);
     }
     if(buildCSDARange) { 
       dedx = p->BuildDEDXTable(fTotal);

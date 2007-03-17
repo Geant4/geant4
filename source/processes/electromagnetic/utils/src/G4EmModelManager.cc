@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmModelManager.cc,v 1.37 2007-03-15 12:34:47 vnivanch Exp $
+// $Id: G4EmModelManager.cc,v 1.38 2007-03-17 19:24:39 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -124,7 +124,8 @@ G4EmModelManager::G4EmModelManager():
   regions.clear();
   orderOfModels.clear();
   upperEkin.clear();
-  maxCutInRange = 0.7*mm;
+  maxCutInRange    = 12.*cm;
+  maxSubCutInRange = 0.7*mm;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -404,9 +405,12 @@ const G4DataVector* G4EmModelManager::Initialise(const G4ParticleDefinition* p,
 
       // compute subcut 
       if( cut < DBL_MAX ) subcut = minSubRange*cut;
-      G4double tcutmax = 
-	theCoupleTable->ConvertRangeToEnergy(secondaryParticle,material,maxCutInRange);
-      if(tcutmax < subcut) subcut = tcutmax;
+      if(pcuts->GetProductionCut(idx) < maxCutInRange) {
+	G4double tcutmax = 
+	  theCoupleTable->ConvertRangeToEnergy(secondaryParticle,
+					       material,maxSubCutInRange);
+	if(tcutmax < subcut) subcut = tcutmax;
+      }
     }
 
     G4int nm = setOfRegionModels[reg]->NumberOfModels();

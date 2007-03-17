@@ -1,4 +1,4 @@
-$Id: History,v 1.270 2007-03-15 12:34:46 vnivanch Exp $
+$Id: History,v 1.271 2007-03-17 19:24:38 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,7 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
- March 07: V.Ivant (emutils-V08-02-)
+ March 07: V.Ivant (emutils-V08-02-06)
 - G4VMultipleScattering - add protection against zero step or energy
 - G4EmModelManager - add maxCutInRange varable for sub-cutoff regime
 - G4EmCalculator - add method ComputeEnergyCutFromRangeCut
