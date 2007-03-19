@@ -1,4 +1,4 @@
-$Id: History,v 1.96 2007-03-15 18:56:32 vnivanch Exp $
+$Id: History,v 1.97 2007-03-19 11:36:12 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,7 +16,11 @@ track of all tags.
      ---------------------------------------------------------
 
 15-03-07  V.Ivant (testem3-V08-02-00)
-- By default do not store random seed, add G4standard_exp PhysList
+- By default do not store random seed;
+  add G4standard_exp PhysList;
+  add material Lucite;
+  add reset gun position after change of geometry;
+  do not activate VisManager in batch.
 
 22-11-06  V.Ivant (testem3-V08-01-01)
 - Fix names of standard EM builders
