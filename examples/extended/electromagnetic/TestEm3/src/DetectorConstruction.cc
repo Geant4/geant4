@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.cc,v 1.19 2007-03-19 11:36:12 vnivanch Exp $
+// $Id: DetectorConstruction.cc,v 1.20 2007-03-19 20:10:38 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -275,7 +275,6 @@ void DetectorConstruction::ComputeCalorParameters()
   CalorThickness = NbOfLayers*LayerThickness;     
   WorldSizeX = 1.2*CalorThickness; 
   WorldSizeYZ = 1.2*CalorSizeYZ;
-  G4UImanager::GetUIpointer()->ApplyCommand("/testem/gun/setDefault");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
