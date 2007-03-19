@@ -10,7 +10,7 @@ cd ../
 ln -sfn dirCPUbench/setup.sh-8.2.ref02 setup.sh
 . setup.sh
 #
-ln -sfn dirCPUbench/GNUmakefile-8.2.p01 GNUmakefile
+ln -sfn dirCPUbench/GNUmakefile-new GNUmakefile
 #
 ln -sfn dirCPUbench/mainStatAccepTest.cc-8.2.p01-qgsp mainStatAccepTest.cc
 #

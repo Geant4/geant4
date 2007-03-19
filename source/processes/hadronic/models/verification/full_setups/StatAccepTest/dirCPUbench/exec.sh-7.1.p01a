@@ -10,7 +10,9 @@ cd ../
 ln -sfn dirCPUbench/setup.sh-7.1.p01a setup.sh
 . setup.sh
 #
-ln -sfn dirCPUbench/GNUmakefile-7.1.p01a GNUmakefile
+ln -sfn dirCPUbench/GNUmakefile-old GNUmakefile
+#
+ln -sfn dirCPUbench/hadronic_lists.gmk-7.1.p01a hadronic_lists.gmk
 #
 ln -sfn dirCPUbench/mainStatAccepTest.cc-7.1.p01a mainStatAccepTest.cc
 #

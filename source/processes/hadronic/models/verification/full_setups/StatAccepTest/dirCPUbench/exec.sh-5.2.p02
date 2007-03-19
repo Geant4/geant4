@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# Last update: 13-Mar-2007
+# Last update: 19-Mar-2007
 # ------------------------
 #
 cp start.rndm ../.
@@ -10,7 +10,9 @@ cd ../
 ln -sfn dirCPUbench/setup.sh-5.2.p02 setup.sh
 . setup.sh
 #
-ln -sfn dirCPUbench/GNUmakefile-5.2.p02 GNUmakefile
+ln -sfn dirCPUbench/GNUmakefile-old GNUmakefile
+#
+ln -sfn dirCPUbench/hadronic_lists.gmk-5.2.p02 hadronic_lists.gmk
 #
 ln -sfn dirCPUbench/mainStatAccepTest.cc-5.2.p02 mainStatAccepTest.cc
 #
