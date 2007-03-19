@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# Last update: 13-Mar-2007
+# Last update: 19-Mar-2007
 # ------------------------
 #
 cp start.rndm ../.
@@ -21,13 +21,13 @@ echo " ---> gmake "
 gmake
 #
 echo " "
-echo " ---> Running 8.2.p01 with no B-field"
+echo " ---> Running 8.2.p01 QGSP_EMV with no B-field"
 #
 time mainStatAccepTest dirCPUbench/bench1.g4 > dirCPUbench/bench1.log-8.2.p01-qgsp_emv 2>&1
 #
 echo " done!"
 echo " "
-echo " ---> Running 8.2.p01 with B-field"
+echo " ---> Running 8.2.p01 QGSP_EMV with B-field"
 #
 time mainStatAccepTest dirCPUbench/bench1b.g4 > dirCPUbench/bench1b.log-8.2.p01-qgsp_emv 2>&1
 #
