@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: SteppingAction.hh,v 1.1 2007-01-19 17:20:27 maire Exp $
+// $Id: SteppingAction.hh,v 1.2 2007-03-19 13:08:41 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -34,6 +34,7 @@
 
 #include "G4UserSteppingAction.hh"
 #include "globals.hh"
+#include "G4ThreeVector.hh"
 
 class DetectorConstruction;
 class RunAction;
@@ -62,7 +63,8 @@ class SteppingAction : public G4UserSteppingAction
     G4VPhysicalVolume*    cavity;
     G4bool                first; 
     G4bool                trackCharged;
-    G4double              trackSegm;        
+    G4double              trackSegm;
+    G4ThreeVector         directionIn;        
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.1 2007-01-19 17:20:27 maire Exp $
+// $Id: HistoManager.cc,v 1.2 2007-03-19 13:08:41 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -162,18 +162,19 @@ void HistoManager::SetHisto(G4int ih,
     return;
   }
   
-  const G4String id[] = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" };
-  const G4String title[] = 
+  const G4String id[] = {"0","1","2","3","4","5","6","7","8","9" ,"10"};
+  const G4String title[] =
                 { "dummy",						//0
 		  "emission point of e-",				//1
                   "energy spectrum of e-", 				//2
                   "theta distribution of e-",				//3
 		  "emission point of e- hitting cavity",		//4
 		  "energy spectrum of e- when entering in cavity",	//5
-                  "theta distribution of e- when entering in cavity",	//6
-		  "track segment of e- in cavity",			//7
-		  "step size of e- in wall",				//8
-		  "step size of e- in cavity"				//9
+                  "theta distribution of e- before enter in cavity",	//6
+		  "theta distribution of e- at first step in cavity",	//7
+		  "track segment of e- in cavity",			//8
+		  "step size of e- in wall",				//9
+		  "step size of e- in cavity"				//10
                  };
 
 

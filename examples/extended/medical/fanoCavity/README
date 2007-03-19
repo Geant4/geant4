@@ -1,4 +1,4 @@
-$Id: README,v 1.7 2007-03-02 11:08:41 maire Exp $
+$Id: README,v 1.8 2007-03-19 13:08:41 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -134,10 +134,11 @@ $Id: README,v 1.7 2007-03-02 11:08:41 maire Exp $
       3 : theta distribution of e+-
       4 : emission point of e+- hitting cavity
       5 : energy spectrum of e+- when entering in cavity
-      6 : theta distribution of e+- when entering in cavity
-      7 : track segment of e+- in cavity
-      8 : step size of e+- in wall
-      9 : step size of e+- in cavity
+      6 : theta distribution of e+- before enter in cavity
+      7 : theta distribution of e+- at first step in cavity      
+      8 : track segment of e+- in cavity
+      9 : step size of e+- in wall
+     10 : step size of e+- in cavity
       
    The histograms are managed by the HistoManager class and its Messenger. 
    The histos can be individually activated with the command :
