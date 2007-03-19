@@ -1,4 +1,4 @@
-$Id: History,v 1.16 2006-11-22 09:57:30 gcosmo Exp $
+$Id: History,v 1.17 2007-03-19 16:49:40 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,11 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Mar 17, 2007  Gabriele Cosmo (test10-V08-02-00)
+- Fixed bug in messenger: removed selection of default detector from
+  constructor. Default detector is alredy selected within the Construct()
+  method in DetectorConstruction.
 
 Nov 22, 2006  Gabriele Cosmo (test10-V08-01-00)
 - Removed obsolete vis-manager classes. Now using G4VisExecutive.
