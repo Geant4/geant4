@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UniversalFluctuation.cc,v 1.9 2007-03-20 13:13:03 urban Exp $
+// $Id: G4UniversalFluctuation.cc,v 1.10 2007-03-20 15:24:13 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -172,9 +172,11 @@ G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
   }
 
   G4double a1 = 0. , a2 = 0., a3 = 0. ;
+
   // cut and material dependent rate 
-  G4double rate = log(tmax/ipotFluct);
-  rate = 0.03+0.23*log(rate) ;
+  G4double rate = 1.0;
+  //  G4double rate = log(tmax/ipotFluct);
+  // rate = 0.03+0.23*log(rate) ;
 
   G4double w2 = log(2.*electron_mass_c2*beta2*gam2)-beta2;
 
@@ -182,21 +184,26 @@ G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
   {
     if(w2 >= e2LogFluct)
     {
+      rate = 0.03+0.23*log(log(tmax/ipotFluct));
       G4double C = meanLoss*(1.-rate)/(w2-ipotLogFluct);
       a1 = C*f1Fluct*(w2-e1LogFluct)/e1Fluct;
       a2 = C*f2Fluct*(w2-e2LogFluct)/e2Fluct;
     }
+    /*
     else
     {
       a1 = 0. ;
       a2 = 0. ;
       rate = 1. ;  
     }
+    */
   }
+  /*
   else
   {
     rate = 1. ;
   }
+  */
 
   G4double w1 = tmax/e0;
   if(tmax > e0) 
