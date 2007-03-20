@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4hMultipleScattering.cc,v 1.2 2007-02-12 12:31:40 vnivanch Exp $
+// $Id: G4hMultipleScattering.cc,v 1.3 2007-03-20 15:40:59 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -38,6 +38,7 @@
 // 
 // Modified:
 // 12-02-07 skin can be changed via UI command (VI)
+// 20.03.07 Remove local parameter skin, set facgeom=0.1(V.Ivanchenko) 
 //
 // -----------------------------------------------------------------------------
 //
@@ -63,11 +64,7 @@ G4hMultipleScattering::G4hMultipleScattering(const G4String& processName)
   facrange          = 0.2;
   dtrl              = 0.05;
   lambdalimit       = 1.*mm;
-  facgeom           = 0.5;
-  // there is no single scattering for this skin <= 0  
-  // to have single scattering at boundary 
-  //  skin should be > 0 ! 
-  skin              = 0.;
+  facgeom           = 0.1;
   
   steppingAlgorithm = false;
   samplez           = false ; 
@@ -127,10 +124,9 @@ void G4hMultipleScattering::InitialiseProcess(const G4ParticleDefinition* p)
     SetBuildLambdaTable(true);
   }
   mscUrban = new G4UrbanMscModel(facrange,dtrl,lambdalimit,
-                                 facgeom,skin,
+                                 facgeom,Skin(),
                                  samplez,steppingAlgorithm);
   mscUrban->SetLateralDisplasmentFlag(LateralDisplasmentFlag());
-  mscUrban->SetSkin(Skin());
   mscUrban->SetLowEnergyLimit(lowKineticEnergy);
   mscUrban->SetHighEnergyLimit(highKineticEnergy);
   AddEmModel(1,mscUrban);
