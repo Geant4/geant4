@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UniversalFluctuation.cc,v 1.11 2007-03-20 17:04:39 urban Exp $
+// $Id: G4UniversalFluctuation.cc,v 1.12 2007-03-20 17:19:36 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -53,7 +53,7 @@
 //          distribution is much weaker (L.Urban)
 // 17-10-05 correction for very small loss (L.Urban)
 // 20-03-07 'GLANDZ' part rewritten completely, no 'very small loss'
-//          regime any more
+//          regime any more (L.Urban)
 //          
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

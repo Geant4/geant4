@@ -1,4 +1,4 @@
-$Id: History,v 1.291 2007-03-20 13:17:44 urban Exp $
+$Id: History,v 1.292 2007-03-20 17:19:36 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,16 +17,19 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-20 March 07:
+20 March 07: V.Ivanchenko (emstand-V08-02-10)
+- G4hMultipleScattering - remove SetSkin method, which is implemented
+                          in the base class - allowing skin>0
+
 - G4UniversalFluctuation- L.Urban: 'GLANDZ' part of the fluct. model
                       has been completely rewritten, there is no
                       separate very small loss regime any more.
 
-G4eBremsstrahlungModel - add reinitialisation of LPM flag (VI)
+- G4eBremsstrahlungModel - add reinitialisation of LPM flag (VI)
 
 24 February 07: V.Ivanchenko (emstand-V08-02-09)
-G4MultipleScattering - remove SetSkin method, which is implemented
-                       in the base class - allowing skin>0
+- G4MultipleScattering - remove SetSkin method, which is implemented
+                         in the base class - allowing skin>0
 
 03 March 07
 - G4UrbanMscModel - single scattering allowed near to boundaries only,
