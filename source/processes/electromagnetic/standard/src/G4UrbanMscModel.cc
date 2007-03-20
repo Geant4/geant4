@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel.cc,v 1.47 2007-03-07 15:44:42 urban Exp $
+// $Id: G4UrbanMscModel.cc,v 1.48 2007-03-20 19:00:27 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -229,7 +229,10 @@ void G4UrbanMscModel::Initialise(const G4ParticleDefinition* p,
   navigator = G4TransportationManager::GetTransportationManager()
     ->GetNavigatorForTracking();
 
-  safetyHelper= new G4SafetyHelper(); 
+  safetyHelper = G4TransportationManager::GetTransportationManager()
+    ->GetSafetyHelper();
+
+  //  safetyHelper= new G4SafetyHelper(); 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -729,17 +732,17 @@ void G4UrbanMscModel::GeomLimit(const G4Track&  track)
 
   // no geomlimit for the World volume
   if((track.GetVolume() != 0) &&
-     (track.GetVolume() != navigator->GetWorldVolume()))  
+     (track.GetVolume() != safetyHelper->GetWorldVolume()))  
   {
-    const G4double cstep = tPathLength;
-    geomlimit = navigator->ComputeStep(
+    G4double cstep = tPathLength;
+    geomlimit = safetyHelper->ComputeLinearStep(
                   track.GetStep()->GetPreStepPoint()->GetPosition(),
                   track.GetMomentumDirection(),
                   cstep,
                   presafety);
     // G4cout << "!!!G4UrbanMscModel::GeomLimit presafety= " << presafety
     //	   << " limit= " << geomlimit << G4endl;
-  }
+  }  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

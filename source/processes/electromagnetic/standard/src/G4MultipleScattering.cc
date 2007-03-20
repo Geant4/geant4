@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering.cc,v 1.62 2007-03-07 11:10:47 vnivanch Exp $
+// $Id: G4MultipleScattering.cc,v 1.63 2007-03-20 19:00:27 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -197,7 +197,6 @@ void G4MultipleScattering::InitialiseProcess(const G4ParticleDefinition* p)
   }
 
   G4String part_name = p->GetParticleName();
-  //  if(part_name == "e-" || part_name == "e+") skin = 1.0; 
 
   if (p->GetParticleType() == "nucleus") {
     SetLateralDisplasmentFlag(false);
@@ -207,10 +206,9 @@ void G4MultipleScattering::InitialiseProcess(const G4ParticleDefinition* p)
     SetBuildLambdaTable(true);
   }
   mscUrban = new G4UrbanMscModel(facrange,dtrl,lambdalimit,
-                                 facgeom,skin,
+                                 facgeom,Skin(),
                                  samplez,steppingAlgorithm);
   mscUrban->SetLateralDisplasmentFlag(LateralDisplasmentFlag());
-  mscUrban->SetSkin(Skin());
   mscUrban->SetLowEnergyLimit(lowKineticEnergy);
   mscUrban->SetHighEnergyLimit(highKineticEnergy);
   AddEmModel(1,mscUrban);
