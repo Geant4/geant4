@@ -1,4 +1,4 @@
-$Id: History,v 1.290 2007-03-15 12:24:54 vnivanch Exp $
+$Id: History,v 1.291 2007-03-20 13:17:44 urban Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+20 March 07:
+- G4UniversalFluctuation- L.Urban: 'GLANDZ' part of the fluct. model
+                      has been completely rewritten, there is no
+                      separate very small loss regime any more.
 
 G4eBremsstrahlungModel - add reinitialisation of LPM flag (VI)
 
