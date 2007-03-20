@@ -1,4 +1,4 @@
-$Id: History,v 1.112 2007-01-31 15:01:18 gcosmo Exp $
+$Id: History,v 1.113 2007-03-20 22:35:48 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+March 20, 2007  G.Cosmo                    geommng-V08-02-01
+- Do not reset RegionRootFlag in RemoveRootLogicalVolume() if volume is the
+  world, since the volume itself may be already removed from the store if
+  G4LogicalVolumeStore::Clean() is called.
 
 January 31, 2007  G.Cosmo                  geommng-V08-02-00
 - Added flag for controlling verbosity to CheckOverlaps() method.
