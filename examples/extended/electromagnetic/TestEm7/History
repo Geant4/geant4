@@ -1,4 +1,4 @@
-$Id: History,v 1.45 2007-01-12 16:35:21 maire Exp $
+$Id: History,v 1.46 2007-03-20 18:34:17 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+20-03-07: V.Ivant (testem7-V08-02-01)
+- Fix usage elastic builders in PhysicsList
      
 12-01-07: mma (testem7-V08-02-00)
 - cleanup macros
