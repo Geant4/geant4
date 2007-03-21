@@ -339,7 +339,7 @@ int main(int argc, char** argv)
       } else if(line == "#rad") {
 	xssolang = false;
       } else if(line == "#xs_ghad") {
-	xsbbg = false;
+	xsbgg = false;
       } else if(line == "#run") {
         break;
       } else if(line == "#verbose") {
@@ -476,13 +476,13 @@ int main(int argc, char** argv)
     if(nameGen == "LElastic" || nameGen == "elastic") {
       cs = new G4HadronElasticDataSet();
     } else if(part == proton && Z > 1 && nameGen != "lepar") {
-      if(xsbbg) cs = new G4BGGNucleonInelasticXS(part);
+      if(xsbgg) cs = new G4BGGNucleonInelasticXS(part);
       else      cs = new G4ProtonInelasticCrossSection();
     } else if(part == neutron && Z > 1 && nameGen != "lepar") {
-      if(xsbbg) cs = new G4BGGNucleonInelasticXS(part);
+      if(xsbgg) cs = new G4BGGNucleonInelasticXS(part);
       else      cs = new G4NeutronInelasticCrossSection();
     } else if((part == pin || part == pip) && Z > 1 && nameGen != "lepar") {
-      if(xsbbg) cs = new G4BGGPionInelasticXS(part);
+      if(xsbgg) cs = new G4BGGPionInelasticXS(part);
       else cs = new G4PiNuclearCrossSection();
     } else { 
       cs = new G4HadronInelasticDataSet();
