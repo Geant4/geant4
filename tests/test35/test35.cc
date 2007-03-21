@@ -85,6 +85,9 @@
 #include "G4Step.hh"
 #include "G4GRSVolume.hh"
 
+#include "G4BGGNucleonInelasticXS.hh"
+#include "G4BGGPionInelasticXS.hh"
+
 #include "G4UnitsTable.hh"
 #include "G4ExcitationHandler.hh"
 #include "G4PreCompoundModel.hh"
@@ -144,6 +147,8 @@ int main(int argc, char** argv)
   G4bool nevap = false;
   G4bool gtran = false;
   G4bool gemis = false;
+  G4bool xssolang = true;
+  G4bool xsbgg    = true;
 
   const G4ParticleDefinition* proton = G4Proton::Proton();
   const G4ParticleDefinition* neutron = G4Neutron::Neutron();
@@ -245,6 +250,7 @@ int main(int argc, char** argv)
   cout << "#GEMEvaporation" << endl;
   cout << "#eBound" << endl;
   cout << "#kBound" << endl;
+  cout << "#rad" << endl;
 
   G4String line, line1;
   G4bool end = true;
@@ -330,6 +336,10 @@ int main(int argc, char** argv)
       } else if(line == "#paw") {
         usepaw = true;
         (*fin) >> hFile;
+      } else if(line == "#rad") {
+	xssolang = false;
+      } else if(line == "#xs_ghad") {
+	xsbbg = false;
       } else if(line == "#run") {
         break;
       } else if(line == "#verbose") {
@@ -463,16 +473,20 @@ int main(int argc, char** argv)
     G4VCrossSectionDataSet* cs = 0;
     G4double cross_sec = 0.0;
 
-    if(nameGen == "LElastic" || nameGen == "elastic")
+    if(nameGen == "LElastic" || nameGen == "elastic") {
       cs = new G4HadronElasticDataSet();
-    else if(part == proton && Z > 1 && nameGen != "lepar") 
-      cs = new G4ProtonInelasticCrossSection();
-    else if(part == neutron && Z > 1 && nameGen != "lepar") 
-      cs = new G4NeutronInelasticCrossSection();
-    else if((part == pin || part == pip) && Z > 1 && nameGen != "lepar") 
-      cs = new G4PiNuclearCrossSection();
-    else 
+    } else if(part == proton && Z > 1 && nameGen != "lepar") {
+      if(xsbbg) cs = new G4BGGNucleonInelasticXS(part);
+      else      cs = new G4ProtonInelasticCrossSection();
+    } else if(part == neutron && Z > 1 && nameGen != "lepar") {
+      if(xsbbg) cs = new G4BGGNucleonInelasticXS(part);
+      else      cs = new G4NeutronInelasticCrossSection();
+    } else if((part == pin || part == pip) && Z > 1 && nameGen != "lepar") {
+      if(xsbbg) cs = new G4BGGPionInelasticXS(part);
+      else cs = new G4PiNuclearCrossSection();
+    } else { 
       cs = new G4HadronInelasticDataSet();
+    }
 
     if(cs) {
       cs->BuildPhysicsTable(*part);
@@ -511,7 +525,10 @@ int main(int argc, char** argv)
         nmomtetm[k][j] = 0;
         nmomtet0[k][j] = 0;
         nmomtetp[k][j] = 0;
-        harpcs[k][j]   = coeff/(twopi*dp*(cos(ang0) - cos(angpi[j])));
+	if(xssolang)
+	  harpcs[k][j]   = coeff/(twopi*dp*(cos(ang0) - cos(angpi[j])));
+	else 
+	  harpcs[k][j]   = coeff/(dp*(angpi[j] - ang0));
         ang0 = angpi[j];
       }
       mom0 = mompi[k];
