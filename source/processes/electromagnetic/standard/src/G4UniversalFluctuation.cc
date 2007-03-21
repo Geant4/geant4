@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UniversalFluctuation.cc,v 1.12 2007-03-20 17:19:36 vnivanch Exp $
+// $Id: G4UniversalFluctuation.cc,v 1.13 2007-03-21 15:23:45 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -54,6 +54,7 @@
 // 17-10-05 correction for very small loss (L.Urban)
 // 20-03-07 'GLANDZ' part rewritten completely, no 'very small loss'
 //          regime any more (L.Urban)
+// 21-03-07 optimization in ionization part (L.Urban)
 //          
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -242,8 +243,17 @@ G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
  
     G4double w2 = alfa*e0;
     G4double w  = (tmax-w2)/tmax;
-    G4int    nb = G4Poisson(p3);
-    for (G4int k=0; k<nb; k++) lossc += w2/(1.-w*G4UniformRand());
+    G4double scale = 1.;
+    G4int nb = 0;
+    if(p3 < nmaxCont2)
+      nb = G4Poisson(p3);
+    else
+    {
+      nb = G4Poisson(nmaxCont2);
+      scale = p3/nmaxCont2;
+    }
+    if(nb > 0)
+      for (G4int k=0; k<nb; k++) lossc += scale*w2/(1.-w*G4UniformRand());
   }
 
   if(emean > 0.)
