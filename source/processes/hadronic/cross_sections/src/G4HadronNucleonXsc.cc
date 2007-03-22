@@ -222,7 +222,7 @@ G4double
 G4HadronNucleonXsc::GetHadronNucleonXscPDG(const G4DynamicParticle* aParticle, 
                                            const G4ParticleDefinition* nucleon )
 {
-  G4double xsection;
+  G4double xsection(0);
   G4int Zt=1, Nt=1, At=1;
 
    G4double targ_mass = 0.939*GeV;  // ~mean neutron and proton ???
