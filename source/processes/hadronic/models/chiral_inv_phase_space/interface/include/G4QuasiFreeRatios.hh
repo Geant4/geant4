@@ -35,69 +35,43 @@
 #ifndef G4QuasiFreeRatios_h
 #define G4QuasiFreeRatios_h 1
 
-#include "G4VCrossSectionDataSet.hh"
-#include "G4DynamicParticle.hh"
-#include "G4Element.hh"
-#include "G4ParticleTable.hh"
-#include "G4NucleiProperties.hh"
-#include "G4NucleiPropertiesTable.hh"
-#include "G4QPDGCode.hh"
-#include "G4QException.hh"
-#include <vector>
+#include "globals.hh"
+#include "G4ios.hh"
 #include "Randomize.hh"
-#include "G4Electron.hh"
-#include "G4Positron.hh"
-#include "G4VQCrossSection.hh"
-#include "G4QElasticCrossSection.hh"
+#include <vector>
+//#include "G4VCrossSectionDataSet.hh"
+//#include "G4DynamicParticle.hh"
+//#include "G4Element.hh"
+//#include "G4ParticleTable.hh"
+//#include "G4NucleiProperties.hh"
+//#include "G4NucleiPropertiesTable.hh"
+//#include "G4QPDGCode.hh"
+//#include "G4QElasticCrossSection.hh"
 
 
 class G4QuasiFreeRatios
 {
-protected:
+ protected:
 
-  G4QuasiFreeRatios()  {}               // Constructor
+  G4QuasiFreeRatios()  {}                 // Constructor
 
-public:
+ public:
 
-  ~G4QuasiFreeRatios() {}
+  ~G4QuasiFreeRatios() {}                 // Destructor
 
   static G4QuasiFreeRatios* GetPointer(); // Gives a pointer to this singletone
 
-  std::pair<G4double,G4double> GetRatios(G4double pMom,G4int tgZ,G4int tgN,G4int pPDG=0);
+  // Ret pair(QuasiFree/Inelastic,QuasiElastic/QuasiFree) GetRatios
+  std::pair<G4double,G4double> GetRatios(G4double pIU, G4int prPDG, G4int tgZ, G4int tgN);
+ private:
+  // These working member functions are in CHIPS units and must not be used externally
+  G4double GetQF2IN_Ratio(G4double TotCS_mb, G4int A); // QuasiFree/Inelastic (fast)
+  std::pair<G4double,G4double> GetElTot(G4double pGeV,G4int PDG,G4int Z,G4int N);//El,To,mb
+  G4double CalcQF2IN_Ratio(G4double TCSmb, G4int A); // R=QuasuFree/Inelastic (sig_t in mb)
+  std::pair<G4double,G4double> FetchElTot(G4double pGeV,G4int PDG,G4bool F);//(E,T)fromAMDB
+  std::pair<G4double,G4double> CalcElTot(G4double pGeV,G4int Index);//(sigE,sigT)(Index)
 
-  std::pair<G4double,G4double> CalculateRatios(G4int F, G4int I, G4int pPDG,
-                                               G4int Z, G4int N, G4double pP);
-  std::pair<G4double,G4double> GetElTot(G4double p, G4int PDG, G4int Z, G4int N, G4bool F);
-private:
-  G4double GetPTables(G4double lpP, G4double lPm, G4int PDG, G4int tZ, G4int tN); // newLP
-  std::pair<G4double,G4double> GetTabValues(G4double lp, G4int pPDG, G4int tgZ, G4int tgN);
-  G4double QF2IN_Ratio(G4double TCSmb, G4double A);
-
-// Body
-private:
-  // --- Data formating AMDB (define the precalculated table structure) ---
-  static const G4int nPoints;// #of points in the AMDB tables     
-  static const G4int nLast;  // the Last element in the table
-  static G4double    lPMin;  // Min tabulated logarithmic Momentum  
-  static G4double    lPMax;  // Max tabulated logarithmic Momentum  
-  static G4double    dlnP;   // Log step in the table     
-  // ---- Local (for particular pP, pPDG, tZ, tN) -----
-  static std::pair<G4double,G4double> lastRAT; // Last Ratios (QE/QF,QF/IN) Table (Calc)
-  static G4double  lastLP;   // Last log(mom_of_the_incident_hadron in GeV)
-  static G4int     lastN;    // The last N of calculated nucleus
-  static G4int     lastZ;    // The last Z of calculated nucleus
-  static G4double  lastP;    // Last used for the ratio Momentum
-  static std::pair<G4double,G4double> lastQIR;  // Last Ratios (QE/QF,QF/IN) Values (Get)
-  static G4int     lastI;    // The last position in the DAMDB
-  static G4double  theQFP;   // The Last p-dependent QF/IN function
-  static G4double  theETR;   // The ast p-dependent El/Tot Ratio function
-  // ---- Global (AMBD of P-dependent tables for pPDG,tZ,tN) -----
-  static G4int     lastPDG;  // Last PDG code of the projectile
-  static G4int     lastTZ;   // Last atomic number of the target
-  static G4int     lastTN;   // Last number of neutrons of the target
-  static G4double  lastPIN;  // Last initialized max momentum
-  static std::pair<G4double,G4double>* lastRST;  // Last ratio table
-  static G4double* lastPAR;  // Last parameters for functional calculation
-  static const G4double tolerance;// relative tolerance in momentum to get old Ratio
- }; 					
+ // Body
+ private:
+}; 					
 #endif

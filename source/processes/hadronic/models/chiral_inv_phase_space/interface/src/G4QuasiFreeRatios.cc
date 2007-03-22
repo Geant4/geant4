@@ -20,7 +20,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QuasiFreeRatios.cc,v 1.1 2007-03-20 17:49:39 mkossov Exp $
+// $Id: G4QuasiFreeRatios.cc,v 1.2 2007-03-22 15:21:39 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -31,36 +31,9 @@
 //================================================================================
 
 //#define debug
-//#define isodebug
 //#define pdebug
-//#define ppdebug
-//#define tdebug
-//#define sdebug
 
 #include "G4QuasiFreeRatios.hh"
-
-// Initialization of the static parameters
-const G4double G4QuasiFreeRatios::tolerance=.001; // relTolerance in dMom to get old retio
-const G4int G4QuasiFreeRatios::nPoints=128;//#of points in AMDB tables (>anyPar)(D)
-const G4int G4QuasiFreeRatios::nLast=nPoints-1;// the Last element in the table   (D)
-G4double  G4QuasiFreeRatios::lPMin=-8.; // Min tabulated logarithmic Momentum     (D)
-G4double  G4QuasiFreeRatios::lPMax= 8.; // Max tabulated logarithmic Momentum     (D)
-G4double  G4QuasiFreeRatios::dlnP=(lPMax-lPMin)/nLast;// Log step in the table    (D)
-std::pair<G4double,G4double> G4QuasiFreeRatios::lastRAT(0.,0.);// Last QE,QF rat  (L)
-G4double  G4QuasiFreeRatios::lastLP=-10.;// Last log(mom_of_the_incident_hadron)  (L)
-G4double  G4QuasiFreeRatios::theQFP=0.; // The Last p-dependent QF/IN function    (L)
-G4double  G4QuasiFreeRatios::theETR=0.; // The Last  p-dependent El/Tot Ratio     (L)
-G4int     G4QuasiFreeRatios::lastTZ=0;  // Last atomic number of the target				
-G4int     G4QuasiFreeRatios::lastTN=0;  // Last number of neutrons of the target
-G4double  G4QuasiFreeRatios::lastPIN=0.;// Last initialized max momentum
-std::pair<G4double,G4double>* G4QuasiFreeRatios::lastRST=0;// Last ratio(EQ/QF,QF/IN) Table
-G4double* G4QuasiFreeRatios::lastPAR=0; // Parameters for functional calculation					
-G4int     G4QuasiFreeRatios::lastPDG=0; // The last PDG code of the projectile
-G4int     G4QuasiFreeRatios::lastN=0;   // The last N of calculated nucleus
-G4int     G4QuasiFreeRatios::lastZ=0;   // The last Z of calculated nucleus
-G4double  G4QuasiFreeRatios::lastP=0.;  // Last used in cross section Momentum
-std::pair<G4double,G4double> G4QuasiFreeRatios::lastQIR(0.,0.); // Last ratio(EQ/QF,QF/IN)
-G4int     G4QuasiFreeRatios::lastI=0;   // The last position in the DAMDB
 
 // Returns Pointer to the G4VQCrossSection class
 G4QuasiFreeRatios* G4QuasiFreeRatios::GetPointer()
@@ -69,450 +42,205 @@ G4QuasiFreeRatios* G4QuasiFreeRatios::GetPointer()
   return &theRatios;
 }
 
-// The main member function giving the collision cross section (P is in IU, CS is in mb)
-// Make pMom in independent units ! (Now it is MeV)
- std::pair<G4double,G4double> G4QuasiFreeRatios::GetRatios(G4double pMom, G4int tgZ,
-                                                           G4int tgN, G4int pPDG)
+// Calculation of pair(QuasiFree/Inelastic,QuasiElastic/QuasiFree)
+std::pair<G4double,G4double> G4QuasiFreeRatios::GetRatios(G4double pIU, G4int pPDG,
+                                                           G4int tgZ,    G4int tgN)
 {
-  static std::vector <G4int>    colPDG;// Vector of the projectile PDG code
-  static std::vector <G4int>    colN;  // Vector of N for calculated nuclei (isotops)
-  static std::vector <G4int>    colZ;  // Vector of Z for calculated nuclei (isotops)
-  static std::vector <G4double> colP;  // Vector of last momenta for the reaction
-  static std::vector <std::pair<G4double,G4double> > colQIR; // Vector of last ratios
-  // ***---*** End of the mandatory Static Definitions of the Associative Memory ***---***
-#ifdef pdebug
-  G4cout<<"G4QElCS::GetCS:>>> f="<<fR<<", p="<<pMom<<", Z="<<tgZ<<"("<<lastZ<<") ,N="<<tgN
-        <<"("<<lastN<<"),PDG="<<pPDG<<"("<<lastPDG<<") ,Sz="<<colN.size()<<G4endl;
-#endif
-  if(!pPDG)
+  G4double p=pIU/gigaelectronvolt; // Momentum in GeV/c
+		std::pair<G4double,G4double> ElTot=GetElTot(p, pPDG, tgZ, tgN);// mean El&Tot(mb) for hN
+  G4double R=0.;
+  G4double QF2In=1.;               // Prototype of QuasiFree/Inelastic ratio for hN_tot
+  if(ElTot.second>0.)
   {
-#ifdef pdebug
-    G4cout<<"G4QElCS::GetR: *** Found pPDG="<<pPDG<<" ====> CS=0"<<G4endl;
-#endif
-    return std::make_pair(0.,0.);      // projectile PDG=0 is a mistake (?!) @@
+    R=ElTot.first/ElTot.second;    // Elastic/Total ratio
+    QF2In=GetQF2IN_Ratio(ElTot.second, tgZ+tgN); // QuasiFree/Inelastic ratio for hN_tot
   }
-  G4bool in=false;                     // By default the isotope must be found in the AMDB
-  if(tgN!=lastN || tgZ!=lastZ || pPDG!=lastPDG)// The nucleus was not the last used isotope
-  {
-    in = false;                        // By default the isotope haven't be found in AMDB  
-    lastP   = 0.;                      // New momentum history (nothing to compare with)
-    lastPDG = pPDG;                    // The last PDG of the projectile
-    lastN   = tgN;                     // The last N of the calculated nucleus
-    lastZ   = tgZ;                     // The last Z of the calculated nucleus
-    lastI   = colN.size();             // Size of the Associative Memory DB in the heap
-    if(lastI) for(G4int i=0; i<lastI; i++) // Loop over proj/tgZ/tgN lines of DB
-	   {                                  // The nucleus with projPDG is found in AMDB
-      if(colPDG[i]==pPDG && colN[i]==tgN && colZ[i]==tgZ)
-						{
-        lastI=i;
-#ifdef pdebug
-        G4cout<<"G4QElCS::GetCS:*Found* P="<<pMom<<",i="<<i<<G4endl;
-#endif
-        lastP  =colP [i];               // Last Momentum  (A-dependent)
-        lastQIR =colQIR[i];             // Last Ratios (A-dependent)
-        if(std::fabs(lastP/pMom-1.)<tolerance)
-        {
-#ifdef pdebug
-          G4cout<<"G4QElCS::GetCS:P="<<pMom<<",R="<<lastQIR<<G4endl;
-#endif
-          CalculateRatios(-1,i,lastPDG,lastZ,lastN,pMom); // Update param's only
-          return lastQIR;      // Use theLastRatios
-        }
-        in = true;                      // This is the case when the isotop is found in DB
-        // Momentum pMom is in IU ! @@ Units
-#ifdef pdebug
-        G4cout<<"G4QElCS::GR:UpdateDB P="<<pMom<<",f="<<fR<<",I="<<lastI<<",i="<<i<<G4endl;
-#endif
-        lastQIR=CalculateRatios(-1,i,lastPDG,lastZ,lastN,pMom); // read & update
-#ifdef pdebug
-        G4cout<<"G4QElCS::GetR: *****> New (inDB) Calculated R="<<lastQIR<<G4endl;
-#endif
-        break;                           // Go out of the LOOP with found lastI
-      }
-#ifdef pdebug
-      G4cout<<"---G4QElCrossSec::GetCrosSec:pPDG="<<pPDG<<",i="<<i<<",N="<<colN[i]
-            <<",Z["<<i<<"]="<<colZ[i]<<",cPDG="<<colPDG[i]<<G4endl;
-#endif
-	   }
-	   if(!in)                            // This nucleus has not been calculated previously
-	   {
-#ifdef pdebug
-      G4cout<<"G4QElCS::GetCrosSec:CalcNew P="<<pMom<<",f="<<fR<<",lastI="<<lastI<<G4endl;
-#endif
-      //!!The slave functions must provide cross-sections in millibarns (mb) !! (not in IU)
-      lastQIR=CalculateRatios(0,lastI,lastPDG,lastZ,lastN,pMom);//calculate&create
-#ifdef pdebug
-      G4cout<<"G4QElCS::GetCrosSec: New R="<<lastQIR<<",lZ="<<lastN<<",lN="<<lastZ<<G4endl;
-#endif
-      colN.push_back(tgN);
-      colZ.push_back(tgZ);
-      colPDG.push_back(pPDG);
-      colP.push_back(pMom);
-      colQIR.push_back(lastQIR);
-#ifdef pdebug
-      G4cout<<"G4QElCS::GetCS:1st,P="<<pMom<<"(MeV),R="<<lastQIR<<"(mb)"<<G4endl;
-#endif
-      return lastQIR;
-	   } // End of creation of the new set of parameters
-    else
-				{
-#ifdef pdebug
-      G4cout<<"G4QElCS::GetCS: Update lastI="<<lastI<<G4endl;
-#endif
-      colP[lastI]=pMom;
-      colPDG[lastI]=pPDG;
-      colQIR[lastI]=lastQIR;
-    }
-  } // End of parameters udate
-  else if(std::fabs(lastP/pMom-1.)<tolerance)
-  {
-#ifdef pdebug
-    G4cout<<"G4QElCS::GetCS:OldCur P="<<pMom<<"="<<pMom<<", R="<<lastQIR<<G4endl;
-#endif
-    return lastQIR;     // Use theLastRatios
-  }
-  else
-  {
-#ifdef pdebug
-    G4cout<<"G4QElCS::GetCS:UpdatCur P="<<pMom<<",f="<<fR<<",I="<<lastI<<",j="<<j<<G4endl;
-#endif
-    lastQIR=CalculateRatios(1,lastI,lastPDG,lastZ,lastN,pMom); // Only UpdateDB
-    lastP=pMom;
-  }
-#ifdef pdebug
-  G4cout<<"G4QElCS::GetCrSec:End,P="<<pMom<<"(MeV),R="<<lastQIR<<G4endl;
-#endif
-  return lastQIR;
+  return std::make_pair(QF2In,R);
 }
 
-// Calculation of total elastic cross section (p in IU, CS in mb) @@ Units (?)
-// F=0 - create AMDB, F=-1 - read&update AMDB, F=1 - update AMDB (sinchro with higher AMDB)
-std::pair<G4double,G4double> G4QuasiFreeRatios::CalculateRatios(G4int F,G4int I, G4int PDG,
-                                                        G4int tgZ, G4int tgN, G4double pIU)
+// Calculatio QasiFree/Inelastic Ratio as a function of total hN cross-section (mb) and A
+G4double G4QuasiFreeRatios::GetQF2IN_Ratio(G4double s, G4int A)
 {
-  // *** Begin of Associative Memory DB for acceleration of the cross section calculations
-  static std::vector <G4double>  PIN;   // Vector of max initialized log(P) in the table
-  static std::vector <std::pair<G4double,G4double>*> RST; // Vector of ratio pai tables
-  static std::vector <G4double*> SST;   // Vector of the first squared slope
-  static std::vector <G4double*> S1T;   // Vector of the first mantissa
-  static std::vector <G4double*> B1T;   // Vector of the first slope
-  static std::vector <G4double*> S2T;   // Vector of the secon mantissa
-  static std::vector <G4double*> B2T;   // Vector of the second slope
-  static std::vector <G4double*> S3T;   // Vector of the third mantissa
-  static std::vector <G4double*> B3T;   // Vector of the third slope
-  static std::vector <G4double*> S4T;   // Vector of the 4-th mantissa (gloria)
-  static std::vector <G4double*> B4T;   // Vector of the 4-th slope    (gloria)
-  // *** End of Static Definitions (Associative Memory Data Base) ***
-  G4double pMom=pIU/GeV;                // All calculations are in GeV
-#ifdef pdebug
-  G4cout<<"G4QuasiFreeRatios::CalcCS:->F="<<F<<",p="<<pIU<<G4endl;
-#endif
-  lastLP=std::log(pMom);                // Make a logarithm of the momentum for calculation
-  if(F)                                 // This isotope was found in AMDB =>RETRIEVE/UPDATE
-		{
-    if(F<0)                             // the AMDB must be loded
-    {
-      lastPIN = PIN[I];                 // Max log(P) initialised for this table set
-      lastRST = RST[I];                 // Pointer to the total sross-section table
-#ifdef pdebug
-      G4cout<<"G4QElasticCS::CalcCS: DB is updated for I="<<I<<",*,PIN4="<<PIN[4]<<G4endl;
-#endif
-    }
-#ifdef pdebug
-    G4cout<<"G4QuasiFreeRatios::CalcCS:*read*, LP="<<lastLP<<",PIN="<<lastPIN<<G4endl;
-#endif
-    if(lastLP>lastPIN && lastLP<lPMax)
-    {
-      lastPIN = GetPTables(lastLP,lastPIN,PDG,tgZ,tgN);// Can update upper logP-Limit in tabs
-#ifdef pdebug
-						G4cout<<"G4QElCS::CalcCS:*updated(I)*,LP="<<lastLP<<"<IN["<<I<<"]="<<lastPIN<<G4endl;
-#endif
-      PIN[I]=lastPIN;                   // Remember the new P-Limit of the tables
-    }
-	 }
-	 else                                  // This isotope wasn't initialized => CREATE
+  static const G4int    nps=150;        // Number of steps in the R(s) LinTable
+  static const G4int    mps=nps+1;      // Number of elements in the R(s) LinTable
+  static const G4double sma=150.;       // The first LinTabEl(s=0)=1., s>sma -> logTab
+  static const G4double ds=sma/nps;     // Step of the linear Table
+  static const G4int    nls=100;        // Number of steps in the R(lns) logTable
+  static const G4int    mls=nls+1;      // Number of elements in the R(lns) logTable
+  static const G4double lsi=5.;         // The min ln(s) logTabEl(s=148.4 < sma=150.)
+  static const G4double lsa=9.;         // The max ln(s) logTabEl(s=148.4 - 8103. mb)
+  static const G4double mi=std::exp(lsi);// The min s of logTabEl(~ 148.4 mb)
+  static const G4double ms=std::exp(lsa);// The max s of logTabEl(~ 8103. mb)
+  static const G4double dl=(lsa-lsi)/nls;// Step of the logarithmic Table
+  static const G4double edl=std::exp(dl);// Multiplication step of the logarithmic Table
+  static const G4double toler=.01;      // The tolarence mb defining the same cross-section
+  static G4double lastS=0.;             // The last sigma value for which R was calculated
+  static G4double lastR=0.;             // The last ratio R which was calculated
+  // Local Associative Data Base:
+  static std::vector<G4int>     vA;     // Vector of calculated A
+  static std::vector<G4double>  vH;     // Vector of max s initialized in the LinTable
+  static std::vector<G4int>     vN;     // Vector of topBin number initialized in LinTable
+  static std::vector<G4double>  vM;     // Vector of rel max ln(s) initialized in LogTable
+  static std::vector<G4int>     vK;     // Vector of topBin number initialized in LogTable
+  static std::vector<G4double*> vT;     // Vector of pointers to LinTable in C++ heap
+  static std::vector<G4double*> vL;     // Vector of pointers to LogTable in C++ heap
+  // Last values of the Associative Data Base:
+  static G4int     lastA=0;             // theLast of calculated A
+  static G4double  lastH=0.;            // theLast of max s initialized in the LinTable
+  static G4int     lastN=0;             // theLast of topBin number initialized in LinTable
+  static G4double  lastM=0.;            // theLast of rel max ln(s) initialized in LogTable
+  static G4int     lastK=0;             // theLast of topBin number initialized in LogTable
+  static G4double* lastT=0;             // theLast of pointer to LinTable in the C++ heap
+  static G4double* lastL=0;             // theLast of pointer to LogTable in the C++ heap
+  // LogTable is created only if necessary. The ratio R(s>8100 mb) = 0 for any nuclei
+  if(s<toler || A<2) return 1.;
+  if(s>ms) return 0.;
+  if(A>238)
+  {
+    G4cout<<"-Warning-G4QuasiFreeRatio::GetQF2IN_Ratio:A="<<A<<">238, return zero"<<G4endl;
+    return 0.;
+  }
+  G4int nDB=vA.size();                  // A number of nuclei already initialized in AMDB
+  if(nDB && lastA==A && std::fabs(s-lastS)<toler) return lastR;
+  G4bool found=false;
+  G4int i=-1;
+		if(nDB) for (i=0; i<nDB; i++) if(A==vA[i]) // Sirch for this A in AMDB
+  {
+    found=true;                         // The A value is found
+    break;
+  }
+  if(!nDB || !found)                    // Create new line in the AMDB
 	 {
-    lastRST = new std::pair<G4double,G4double>[nPoints];// Allocate memory for TabulatedRat
-    lastRST[0].first=0.;                // A flag that the Table was not initiated
-#ifdef pdebug
-    G4cout<<"G4QuasiFreeRatios::CalcCS:*ini*,lastLP="<<lastLP<<",min="<<lPMin<<G4endl;
-#endif
-    lastPIN = GetPTables(lastLP,lPMin,PDG,tgZ,tgN); // Returns the new P-limit for tables
-#ifdef pdebug
-    G4cout<<"G4QElCS::CalcCS:*i*Z="<<tgZ<<",N="<<tgN<<",PDG="<<PDG<<",LP"<<lastPIN<<G4endl;
-#endif
-    PIN.push_back(lastPIN);             // Fill parameters of CS function to AMDB
-    RST.push_back(lastRST);             // Fill Tabulated CS function to AMDB				
-	 } // End of creation/update of the new set of parameters and tables
-  // ============= NOW Update (if necessary) and Calculate the Cross Section ===========
-#ifdef pdebug
-  G4cout<<"G4QElCS::CalcCS:?update?,LP="<<lastLP<<",IN="<<lastPIN<<",ML="<<lPMax<<G4endl;
-#endif
-  if(lastLP>lastPIN && lastLP<lPMax)
-  {
-    lastPIN = GetPTables(lastLP,lastPIN,PDG,tgZ,tgN);
-#ifdef pdebug
-    G4cout<<"G4QElCS::CalcCS: *updated(O)*, LP="<<lastLP<<" < IN="<<lastPIN<<G4endl;
-#endif
-  }
-#ifdef pdebug
-  G4cout<<"G4QElastCS::CalcCS: lastLP="<<lastLP<<",lPM="<<lPMin<<",lPIN="<<lastPIN<<G4endl;
-#endif
-#ifdef pdebug
-  G4cout<<"G4QElasticCrosSec::CalcCS: p="<<lastLP<<G4endl;
-#endif
-  if(lastLP>lPMin && lastLP<=lastPIN)   // Linear fit is made using precalculated tables
-  {
-    if(std::fabs(lastLP-lastPIN)<.0001) // Just take the highest tabulated value
+    lastA = A;
+    lastT = new G4double[mps];          // Create the linear Table
+    lastN = static_cast<int>(s/ds)+1;   // MaxBin to be initialized
+    if(lastN>nps)
     {
-      G4double shift=(lastLP-lPMin)/dlnP+.000001; // Log distance from lPMin
-      G4int    blast=static_cast<int>(shift); // this is a bin number of the lower edge (0)
-      if(blast<0 || blast>=nLast) G4cout<<"G4QEleastCS::CCS:b="<<blast<<","<<nLast<<G4endl;
-      lastRAT  = lastRST[blast];
-#ifdef pdebug
-      G4cout<<"G4QuasiFreeRatios::CalculateCS:(E) S1="<<theS1<<", B1="<<theB1<<G4endl;
-#endif
-				}
-    else
-    {
-      G4double shift=(lastLP-lPMin)/dlnP;        // a shift from the beginning of the table
-      G4int    blast=static_cast<int>(shift);    // the lower bin number
-      if(blast<0)   blast=0;
-      if(blast>=nLast) blast=nLast-1;            // low edge of the last bin
-      shift-=blast;                              // step inside the unit bin
-      G4int lastL=blast+1;                       // the upper bin number
-      G4double QEL=lastRST[blast].first;         // the basic value of Q-el/Q-free rat
-      lastRAT.first= QEL+shift*(lastRST[lastL].first-QEL); // calculated Q-el/Q-free rat
-      G4double QFL=lastRST[blast].second;        // the basic value of Q-free/inelastic rat
-      lastRAT.second= QFL+shift*(lastRST[lastL].second-QFL); // calculated Q-free/inel rat
-#ifdef pdebug
-      G4cout<<"G4QElCS::CalcCrossSection: Rat="<<lastRAT<<", P="<<pMom<<", Z="<<tgZ<<", N="
-            <<tgN<<", PDG="<<PDG<<G4endl;
-#endif
-#ifdef pdebug
-      G4cout<<"G4QuasiFreeRatios::CalculateCS:(I) S1="<<theS1<<", B1="<<theB1<<G4endl;
-#endif
+      lastN=nps;
+      lastH=sma;
     }
-  }
-  else lastRAT=GetTabValues(lastLP, PDG, tgZ, tgN); // Direct calculation beyond the table
-#ifdef pdebug
-  G4cout<<"G4QuasiFreeRatios::CalculateCS: END result="<<lastRAT<<G4endl;
-#endif
-  return lastRAT;
-}
-
-// It has parameter sets for all tZ/tN/PDG, using them the tables can be created/updated
-G4double G4QuasiFreeRatios::GetPTables(G4double LP,G4double ILP, G4int PDG, G4int tgZ,
-                                                                                 G4int tgN)
-{
-  // ---------> Each parameter set can have not more than nPoints=128 parameters
-  //static const G4double lmi=3.5;       // min of (lnP-lmi)^2 parabola (common,@@ global?)
-  static const G4int nnn=26;           // #of parameters for nn  (<nPoints=128)
-  static const G4int npi=37;           // #of parameters for pin (<nPoints=128)
-  static const G4int nkm=18;           // #of parameters for kmn (<nPoints=128)
-  static const G4int nkp=16;           // #of parameters for kpn (<nPoints=128)
-  static const G4int n_h=13;           // #of parameters for HyperonN (<nPoints=128)
-  static const G4int n_a=10;           // #of parameters for antibaryonN (<nPoints=128)
-  // p2=p*p;p3=p2*p;lp=log(p);dl=lp-3.5
-  //   np     pp
-		//  0/ 1 | 14/15: parabola coefficient (e/t)
-  //  2/ 3 | 16/17: constant term        (e/t)
-  //  4/ 5 | 18/19: Hiperbola            (e/t)
-  //  6/ 7 | 20/21: LEcutOfHE            (e/t)
-  //  8/ 9 | 22/23: ReversedLETop        (e/t)
-  // 10/11 | 24/25: LESlope              (e/t)
-  // 12/13 |      : LESuperSlope         (e/t)
-  //                       -0- -1-| -2-  -3-|-4--5-|-6- -7-|  -8-    -9- |-10- -11-|12-13|
-  static G4double nn[nnn]={.557,.3,6.72,38.2,30.,0.,.54,.54,.00012,.00012,.051,.051,.1,.1,
-                           .557,.3,6.72,38.2,32.6,52.7,1.,2.72,.00012,.00012,.2,.2};
-  //                       -14--15|-16- -17-|-18- -19-|-20-21-| -22-  -23-  |24-25|
-  // --- nn elastic/total
-		// E=(#0*dl*dl+#2+#4/p)/(1+#6/p2/p)+1./(#8+p2*(#10+p2*#12);
-		// T=(#1*dl*dl+#3+#5/p2)/(1+#7/p2/p2)+1./(#9+p2*(#11+p2*#13));
-  // ======================================================================================
-  //  hp-N   ap-N (@@)
-		//  0/ 1 |  0/ 1: parabola coefficient (e/t)
-  //  2/ 3 |  2/ 3: constant term        (e/t)
-  //  4/ 5 |  4/ 5: Hiperbola            (e/t)
-  //  6/ 7 |  6/ 7: SQRT_Suppress | power(e/t)
-  //  8/ 9 |  8/ 9: LEcutOfHE | norm     (e/t)
-  // 10/11 |      : Norm0/Slope          (e=t)
-  // 12    |      : Suppression          (e=t)
-  //                        -0- -1-| -2- -3- |-4- -5- |-6--7-|-8-9-|-10--11-|12|
-  static G4double hpn[n_h]={.557,.3,6.72,38.2,99.,900.,2.,27.,2.,3.,.002,.12,1.};
-  //                        -0- -1-| -2- -3- |-4- -5-|-6-  -7-|-8-9-|
-  static G4double ann[n_a]={.557,.3,6.72,38.2,80.,80.,1.25,.35,1.,.3};
-
-  // --- hyperon-N elastic/total: sp=SQRT(p)
-		// E=(#0*dl*dl+#2)/(1+#4/sp+#6/p2/p2)+#8/(dd^2+#11^2)+#12/(dl2^2+#11^2)+[#12/p/sp];
-		// T=(#1*dl*dl+#3)/(1+#5/sp+#7/p2/p2)+#9/(dd^2+#11^2)+#13/(dl2^2+#11^2)+[#12/p/sp];
-  // --- antibaryon-N elastic/total: sp=SQRT(p)
-		// E=#0*dl*dl+#2+#4/(p^#6+#8)
-		// T=#1*dl*dl+#3+(#5/p^#7+#8)/p^#7
-  // ======================================================================================
-  // pim-p pip-p
-		//  0/ 1 | 20/21: parabola coefficient (e/t)
-  //  2/ 3 | 22/23: constant term        (e/t)
-  //  4/ 5 | 24/25: Hiperbola            (e/t)
-  //  6/ 7 | 26/27: LEcutOfHE            (e/t)
-  //  8/ 9 | 28/29: Norm 1st resonance   (e/t)
-  // 10/11 | 30/31: Pos/Wid 1st resonance(e=t)
-  // 12/13 | 32/33: Norm 2nd resonance   (e/t)
-  // 14/15 | 34/35: Pos/Wid 2nd resonance(e=t)
-  // 16/17 | 36   : Norm 3d | Sup 1st    (e/t)
-  // 18/19 |      : Pos/Wid 3d resonance (e/t)
-  //                        -0- -1-|-2-  -3-|-4--5-|-6-7-| -8- -9-| -10--11-|12-13|-14-15-|
-  //                        -16-17-|-18--19-|
-  static G4double pin[npi]={.557,.3,2.4,22.3,7.,12.,.7,.4,1.53,4.7,-1.27,.26,.6,1.,-.36,.2,
-																												.05,.06,.017,.05,
-                            .557,.3,2.4,22.3,6.,5.,3.,1.,13.,13.,-1.27,.26,.7,.8,.32,.24,1.
-																											};
-  //                         -20-21|-22--23-|24-25|26-27|-28-29-| -30--31-|32-33|-34-35-|36
-  // --- pin elastic/total: sp=SQRT(p), dd=lp-#10, dl2=lp-#14, dl3=lp-#18 
-		// E=(#0*dl*dl+#2+#4/sp)/(1+#6/p2/p2)+#8/(dd^2*[1+#36*dd^2]+#11^2)+#12/(dl2^2+#11^2)+[3];
-		// T=(#1*dl*dl+#3+#5/sp)/(1+#7/p2/p2)+#9/(dd^2*[1+#36*dd^2]+#11^2)+#13/(dl2^2+#11^2)+[3];
-  // ======================================================================================
-  //  km-N   kp-N (@@)
-		//  0/ 1 |  0/ 1: parabola coefficient (e/t)
-  //  2/ 3 |  2/ 3: constant term        (e/t)
-  //  4/ 5 |  4/ 5: SQRT_Suppression     (e/t)
-  //  6/ 7 |  6/ 7: LEcutOfHE            (e/t)
-  //  8/ 9 |  8/ 9: Norm 1st resonance   (e/t)
-  // 10/11 | 10/11: Pos/Wid 1st resonance(e=t)
-  // 12/13 | 12/13: Norm 2nd resonance   (e/t)
-  // 14/15 | 14/15: Pos/Wid 2nd resonance(e=t)
-  // 16/17 |      : LAMBDA_Hyperbola     (e/t)
-  //                        -0- -1-| -2- -3- |-4- -5- | -6- -7-| -8- -9- |-10--11-|-12-13|
-  //                        -14-15-|-16-17-|
-  static G4double kmn[nkm]={.557,.3,2.23,19.5,-.7,-.21,.075,.52,.004,.006,.39,.0125,.14,.3,
-                            1.,.125,5.2,14.};
-  //                        -0- -1-| -2- -3- |-4- -5-|-6--7-|-8--9-|10-11-|12-13|-14-15-|
-  static G4double kpn[nkp]={.557,.3,2.23,19.5,-.7,.46,.1,1.6,2.,2.6,1.,.61,.7,.7,.38,.26};
-
-  // --- pin elastic/total: sp=SQRT(p), dd=lp-#10, dl2=lp-#14
-		// E=(#0*dl*dl+#2)/(1+#4/sp+#6/p2/p2)+#8/(dd^2+#11^2)+#12/(dl2^2+#11^2)+[#12/p/sp];
-		// T=(#1*dl*dl+#3)/(1+#5/sp+#7/p2/p2)+#9/(dd^2+#11^2)+#13/(dl2^2+#11^2)+[#12/p/sp];
-  // ======================================================================================
-  G4bool kfl=true;                             // Flag of K0/aK0 oscillation
-  G4bool kf=false;
-  if(PDG==130||PDG==310)
-  {
-    kf=true;
-    if(G4UniformRand()>.5) kfl=false;
-  }
-  if     (PDG==2212 || PDG==2112) lastPAR=nn;  // np/pp parameters
-  else if(PDG== 211 || PDG==-112) lastPAR=pin; // pipp/pimp parameters
-		else if(PDG== 321 || PDG== 311 || (kf && kfl)) lastPAR=kpn; // KN parameters
-  else if(PDG==-321 || PDG==-311 || (kf &&!kfl)) lastPAR=kmn; // antiKN parameters
-  else if(PDG> 3000 && PDG< 3335) lastPAR=hpn; // @@ for all hyperons - take Lambda
-  else if(PDG<-2000 && PDG>-3335) lastPAR=ann; // @@ for all anti-baryons - anti-proton/an
-  else
-  {
-    G4cout<<"*Error*G4QuasiFreeRatios::GetPTables: PDG="<<PDG
-          <<", while it is defined only for p,n,hyperons,anti-baryons,pi,K/antiK"<<G4endl;
-    throw G4QException("G4QuasiFreeRatios::GetPTables: projectile is not implemented");
-  }
-    if(lastRST[0].first==0) // A unique flag to avoid the repeatable initialization
+    else lastH = lastN*ds;              // Calculate max initialized s for LinTab
+    G4double sv=0;
+    lastT[0]=1.;
+    for(G4int j=1; j<=lastN; j++)       // Calculate LogTab values
     {
-      // and initialize the zero element of the table
-      G4double lp=lPMin;                                      // ln(momentum)
-      lastRST[0]=GetTabValues(lp, PDG, tgZ, tgN);             // Calculate AMDB tables
-#ifdef pdebug
-      G4cout<<"G4QuasiFreeRatios::GetPTables:ip=0(init), lp="<<lp<<",QI="<<theQFP
-            <<",B3="<<theB3<<",S4="<<theS4<<",B4="<<theB4<<G4endl;
-#endif
+      sv+=ds;
+      lastT[j]=CalcQF2IN_Ratio(sv,A);
     }
-    if(LP>ILP)
-				{
-      G4int ini = static_cast<int>((ILP-lPMin+.000001)/dlnP)+1; // already inited till this
-      if(ini<0) ini=0;
-      if(ini<nPoints)
+    if(s>sma)                           // Initialize the logarithmic Table
+    {
+      lastL=new G4double[mls];          // Create the logarithmic Table
+      G4double ls=std::log(s);
+      lastK = static_cast<int>((ls-lsi)/dl)+1; // MaxBin to be initialized in LogTaB
+      if(lastK>nls)
       {
-        G4int fin = static_cast<int>((LP-lPMin)/dlnP)+1; // final bin of initialization
-        if(fin>nPoints) fin=nLast;                // Limit of the tabular initialization
-        if(fin>=ini)
-        {
-          G4double lp=0.;
-          for(G4int ip=ini; ip<=fin; ip++)        // Calculate tabular CS,S1,B1,S2,B2,S3,B3
-										{
-            lp=lPMin+ip*dlnP;                     // ln(momentum)
-            lastRST[ip]=GetTabValues(lp, PDG, tgZ, tgN); // Calculate AMDB tables (ret CS)
-#ifdef pdebug
-            G4cout<<"G4QuasiFreeRatios::GetPTables:ip="<<ip<<",lp="<<lp<<",S1="<<theS1
-                  <<",B1="<<theB1<<",S2="<<theS2<<",B2="<<theB2<<",S3="
-                  <<theS3<<",B3="<<theB3<<",S4="<<theS4<<",B4="<<theB4<<G4endl;
-#endif
-          }
-          return lp;
-        }
-        else G4cout<<"*Warning*G4QuasiFreeRatios::GetPTables: PDG="<<PDG<<", Z="<<tgZ
-                   <<", N="<<tgN<<", i="<<ini<<" > fin="<<fin<<", LP="<<LP<<" > ILP="<<ILP
-                   <<" nothing is done!"<<G4endl;
+        lastK=nls;
+        lastM=lsa-lsi;
       }
-      else G4cout<<"*Warning*G4QuasiFreeRatios::GetPTables: PDG="<<PDG<<", Z="<<tgZ
-                 <<", N="<<tgN<<", i="<<ini<<">= max="<<nPoints<<", LP="<<LP<<" > ILP="
-                 <<ILP<<", lPMax="<<lPMax<<" nothing is done!"<<G4endl;
+      else lastM = lastK*dl;            // Calculate max initialized ln(s)-lsi for LogTab
+      sv=mi;
+      for(G4int j=0; j<=lastK; j++)     // Calculate LogTab values
+      {
+        lastL[j]=CalcQF2IN_Ratio(sv,A);
+	       if(j!=lastK) sv*=edl;
+      }
     }
-#ifdef pdebug
-    else G4cout<<"*Warning*G4QuasiFreeRatios::GetPTables: PDG="<<PDG<<", Z="<<tgZ
-               <<", N="<<tgN<<", LP="<<LP<<" <= ILP="<<ILP<<" nothing is done!"<<G4endl;
-#endif
-  return ILP;
-}
-
-// lastLP is used, so calculating tables, one need to remember and then recover lastLP
-std::pair<G4double,G4double> G4QuasiFreeRatios::GetTabValues(G4double lp, G4int PDG,
-                                                                   G4int tgZ,G4int tgN)
-{
-  //static const G4double GeVSQ=gigaelectronvolt*gigaelectronvolt;
-  if(tgZ<1 || tgZ>92)
-  {
-    G4cout<<"*Warning*G4QElasticCS::GetTabValue: (1-92) No isotopes for Z="<<tgZ<<G4endl;
-    return std::make_pair(0.,0.);
+    else                                // LogTab is not initialized
+    {
+      lastL = 0;
+      lastK = 0;
+      lastM = 0.;
+    }
+    i++;                                // Make a new record to AMDB and position on it
+    vA.push_back(lastA);
+    vH.push_back(lastH);
+    vN.push_back(lastN);
+    vM.push_back(lastM);
+    vK.push_back(lastK);
+    vT.push_back(lastT);
+    vL.push_back(lastL);
   }
-#ifdef pdebug
-  G4cout<<"G4QElasticCS::GetTabVal: lp="<<lp<<",Z="<<tgZ<<",N="<<tgN<<",PDG="<<PDG<<G4endl;
-#endif
-  G4double p=std::exp(lp);              // momentum
-  G4double sp=std::sqrt(p);             // sqrt(p)
-  if(PDG==2112 && tgZ==1 && tgN==0)       // np
-  {
-    theQFP=lastPAR[1]*p;
-    theETR=lastPAR[2]*sp;
-#ifdef tdebug
-    G4cout<<"G4QElasticCS::GetTableValues:(np) S1="<<theS1<<",B1="<<theB1
-          <<",S2="<<theS2<<",B2="<<theB2<<",S3="<<theS1<<",B3="<<theB1<<G4endl;
-#endif
-    // Returns the total elastic pp cross-section (to avoid spoiling lastRAT)
-    G4double RQEQF=0.;
-    G4double RQFIN=0.;
-    return std::make_pair(RQEQF,RQFIN);
-
+  else                                  // The A value was found in AMDB
+	 {
+    lastA=vA[i];
+    lastH=vH[i];
+    lastN=vN[i];
+    lastM=vM[i];
+    lastK=vK[i];
+    lastT=vT[i];
+    lastL=vL[i];
+    if(s>lastM)                          // At least LinTab must be updated
+    {
+      G4int nextN=lastN+1;               // The next bin to be initialized
+      if(lastN<nps)
+      {
+        lastN = static_cast<int>(s/ds)+1;// MaxBin to be initialized
+        if(lastN>nps)
+        {
+          lastN=nps;
+          lastH=sma;
+        }
+        else lastH = lastN*ds;           // Calculate max initialized s for LinTab
+        G4double sv=lastM;
+        for(G4int j=nextN; j<=lastN; j++)// Calculate LogTab values
+        {
+          sv+=ds;
+          lastT[j]=CalcQF2IN_Ratio(sv,A);
+        }
+      } // End of LinTab update
+      if(lastN>=nextN)
+						{
+        vH[i]=lastH;
+        vN[i]=lastN;
+      }
+      G4int nextK=lastK+1;
+      if(s>sma && lastK<nls)             // LogTab must be updated
+						{
+        G4double sv=std::exp(lastM+lsi); // Define starting poit (lastM will be changed)
+        G4double ls=std::log(s);
+        lastK = static_cast<int>((ls-lsi)/dl)+1; // MaxBin to be initialized in LogTaB
+        if(lastK>nls)
+        {
+          lastK=nls;
+          lastM=lsa-lsi;
+        }
+        else lastM = lastK*dl;           // Calculate max initialized ln(s)-lsi for LogTab
+        for(G4int j=nextK; j<=lastK; j++)// Calculate LogTab values
+        {
+	         sv*=edl;
+          lastL[j]=CalcQF2IN_Ratio(sv,A);
+        }
+      } // End of LogTab update
+      if(lastK>=nextK)
+						{
+        vM[i]=lastM;
+        vK[i]=lastK;
+      }
+    }
   }
-  else if(PDG==2212 && tgZ==1 && tgN==0) // pp
-  {
+  // Now one can use tabeles to calculate the value
+  if(s<sma)                             // Use linear table
+		{
+    G4int n=static_cast<int>(s/ds);     // Low edge number of the bin
+    G4double d=s-n*ds;                  // Linear shift
+    G4double v=lastT[n];                // Base
+    lastR=v+d*(lastT[n+1]-v)/ds;        // Result
   }
-  else if(PDG==2212 || PDG==2112) // n/p+A (isotope/projectile invariant)
-  {
-    // Returns the ratios (to avoid spoiling lastRAT)
-#ifdef tdebug
-    G4cout<<"G4QElCS::GetTabV: PDG="<<PDG<<",P="<<p<<",N="<<tgN<<",Z="<<tgZ<<G4endl;
-#endif
-    G4double RQEQF=0.;
-    G4double RQFIN=0.;
-    return std::make_pair(RQEQF,RQFIN);
+		else                                  // Use log table
+		{
+    G4double ls=std::log(s)-lsi;        // ln(s)-l_min
+    G4int n=static_cast<int>(ls/dl);    // Low edge number of the bin
+    G4double d=ls-n*dl;                 // Log shift
+    G4double v=lastL[n];                // Base
+    lastR=v+d*(lastL[n+1]-v)/dl;        // Result
   }
-  else
-  {
-    G4cout<<"*Error*G4QuasiFreeRatios::GetTabValues: PDG="<<PDG<<", Z="<<tgZ<<", N="
-          <<tgN<<", while it is defined only for PDG=2212, Z=1, N=0"<<G4endl;
-    throw G4QException("G4QuasiFreeRatios::GetTabValues: only pp is implemented");
-  }
-  return std::make_pair(0.,0.);
-} // End of GetTableValues
+  if(lastR<0.) lastR=0.;
+  if(lastR>1.) lastR=1.;
+  return lastR;
+} // End of CalcQF2IN_Ratio
 
 // Calculatio QasiFree/Inelastic Ratio as a function of total hN cross-section and A
-G4double G4QuasiFreeRatios::QF2IN_Ratio(G4double s, G4double A)
+G4double G4QuasiFreeRatios::CalcQF2IN_Ratio(G4double s, G4int A)
 {
   static const G4double C=1.246;
 		G4double s2=s*s;
@@ -521,14 +249,405 @@ G4double G4QuasiFreeRatios::QF2IN_Ratio(G4double s, G4double A)
   G4double P=7.48e-5*s2/(1.+8.77e12/s4/s4/s2);
   G4double E=.2644+.016/(1.+std::exp((29.54-s)/2.49));
   G4double F=ss*.1526*std::exp(-s2*ss*.0000859);
-	 return C*std::exp(-E*pow(A-1.,F))/std::pow(A,P);
-} // End of QF2IN_Ratio
+	 return C*std::exp(-E*std::pow(A-1.,F))/std::pow(A,P);
+} // End of CalcQF2IN_Ratio
 
-// Calculates Mean Elastic and Total Cross-Sections (mb) for PDG+(Z,N) at P=p[GeV/c]
-std::pair<G4double,G4double> G4QuasiFreeRatios::GetElTot(G4double p, G4int PDG,
-                                                         G4int Z, G4int N, G4bool F)
+// Calculatio pair(hN_el,hN_tot) (mb): p in GeV/c, index(PDG,F) (see FetchElTot)
+std::pair<G4double,G4double> G4QuasiFreeRatios::CalcElTot(G4double p, G4int I)
 {
-  G4double A=0;
-  if(F) A=Z+N;
-  return std::make_pair(Z+PDG,N+p);
-} // End of GetHpHnTotal
+  // ---------> Each parameter set can have not more than nPoints=128 parameters
+  static const G4double lmi=3.5;       // min of (lnP-lmi)^2 parabola
+  static const G4double pbe=.0557;     // elastic (lnP-lmi)^2 parabola coefficient
+  static const G4double pbt=.3;        // total (lnP-lmi)^2 parabola coefficient
+  static const G4double pmi=.1;        // Below that fast LE calculation is made
+  static const G4double pma=1000.;     // Above that fast HE calculation is made
+  // ======================================================================================
+  G4double El=0.;                      // prototype of the elastic hN cross-section
+  G4double To=0.;                      // prototype of the total hN cross-section
+  if(p<=0.)
+  {
+    G4cout<<"-Warning-G4QuasiFreeRatios::CalcElTot: p="<<p<<" is zero or negative"<<G4endl;
+    return std::make_pair(El,To);
+  }
+  if     (!I)                          // pp/nn
+		{
+    if(p<pmi)
+    {
+      G4double p2=p*p;
+      El=1./(.00012+p2*.2);
+      To=El;
+    }
+    else if(p>pma)
+    {
+      G4double lp=std::log(p)-lmi;
+      G4double lp2=lp*lp;
+      El=pbe*lp2+6.72;
+      To=pbt*lp2+38.2;
+    }
+    else
+    {
+      G4double p2=p*p;
+      G4double LE=1./(.00012+p2*.2);
+      G4double lp=std::log(p)-lmi;
+      G4double lp2=lp*lp;
+      G4double rp2=1./p2;
+      El=LE+(pbe*lp2+6.72+32.6/p)/(1.+rp2/p);
+      To=LE+(pbt*lp2+38.2+52.7*rp2)/(1.+2.72*rp2*rp2);
+    }
+  }
+  else if(I==1)                        // np/pn
+		{
+    if(p<pmi)
+    {
+      G4double p2=p*p;
+      El=1./(.00012+p2*(.051+.1*p2));
+      To=El;
+    }
+    else if(p>pma)
+    {
+      G4double lp=std::log(p)-lmi;
+      G4double lp2=lp*lp;
+      El=pbe*lp2+6.72;
+      To=pbt*lp2+38.2;
+    }
+    else
+    {
+      G4double p2=p*p;
+      G4double LE=1./(.00012+p2*(.051+.1*p2));
+      G4double lp=std::log(p)-lmi;
+      G4double lp2=lp*lp;
+      G4double rp2=1./p2;
+      El=LE+(pbe*lp2+6.72+30./p)/(1.+.49*rp2/p);
+      To=LE+(pbt*lp2+38.2)/(1.+.54*rp2*rp2);
+    }
+  }
+  else if(I==2)                        // pimp/pipn
+		{
+    G4double lp=std::log(p);
+    if(p<pmi)
+    {
+      G4double lr=lp+1.27;
+      El=1.53/(lr*lr+.0676);
+      To=El*3;
+    }
+    else if(p>pma)
+    {
+      G4double ld=lp-lmi;
+      G4double ld2=ld*ld;
+      El=pbe*ld2+2.4;
+      To=pbt*ld2+22.3;
+    }
+    else
+    {
+      G4double lr=lp+1.27;
+      G4double LE=1.53/(lr*lr+.0676);
+      G4double ld=ld-lmi;
+      G4double ld2=ld*ld;
+      G4double p2=p*p;
+      G4double p4=p2*p2;
+      G4double sp=std::sqrt(p);
+      G4double lm=lp+.36;
+      G4double md=lm*lm+.04;
+      G4double lh=lp-.017;
+      G4double hd=lh*lh+.0025;
+      El=LE+(pbe*ld2+2.4+7./sp)/(1.+.7/p4)+.6/md+.05/hd;
+      To=LE*3+(pbt*ld2+22.3+12./sp)/(1.+.4/p4)+1./md+.06/hd;
+    }
+  }
+  else if(I==3)                        // pipp/pimn
+		{
+    G4double lp=std::log(p);
+    if(p<pmi)
+    {
+      G4double lr=lp+1.27;
+      G4double lr2=lr*lr;
+      El=13./(lr2+lr2*lr2+.0676);
+      To=El;
+    }
+    else if(p>pma)
+    {
+      G4double ld=lp-lmi;
+      G4double ld2=ld*ld;
+      El=pbe*ld2+2.4;
+      To=pbt*ld2+22.3;
+    }
+    else
+    {
+      G4double lr=lp+1.27;
+      G4double lr2=lr*lr;
+      G4double LE=13./(lr2+lr2*lr2+.0676);
+      G4double ld=ld-lmi;
+      G4double ld2=ld*ld;
+      G4double p2=p*p;
+      G4double p4=p2*p2;
+      G4double sp=std::sqrt(p);
+      G4double lm=lp-.32;
+      G4double md=lm*lm+.0576;
+      El=LE+(pbe*ld2+2.4+6./sp)/(1.+3./p4)+.7/md;
+      To=LE+(pbt*ld2+22.3+5./sp)/(1.+1./p4)+.8/md;
+    }
+  }
+		else if(I==4)                        // Kmp/Kmn/K0p/K0n
+		{
+
+    if(p<pmi)
+    {
+      G4double psp=p*std::sqrt(p);
+      El=5.2/psp;
+      To=14./psp;
+    }
+    else if(p>pma)
+    {
+      G4double ld=std::log(p)-lmi;
+      G4double ld2=ld*ld;
+      El=pbe*ld2+2.23;
+      To=pbt*ld2+19.5;
+    }
+    else
+    {
+      G4double ld=std::log(p)-lmi;
+      G4double ld2=ld*ld;
+      G4double sp=std::sqrt(p);
+      G4double psp=p*sp;
+      G4double p2=p*p;
+      G4double p4=p2*p2;
+      G4double lm=p-.39;
+      G4double md=lm*lm+.000156;
+      G4double lh=p-1.;
+      G4double hd=lh*lh+.0156;
+      El=5.2/psp+(pbe*ld2+2.23)/(1.-.7/sp+.075/p4)+.004/md+.15/hd;
+      To=14./psp+(pbt*ld2+19.5)/(1.-.21/sp+.52/p4)+.006/md+.30/hd;
+    }
+  }
+  else if(I==5)                        // Kpp/Kpn/aKp/aKn
+		{
+    if(p<pmi)
+    {
+      G4double lr=p-.38;
+      El=.7/(lr*lr+.0676);
+      To=El;
+    }
+    else if(p>pma)
+    {
+      G4double ld=std::log(p)-lmi;
+      G4double ld2=ld*ld;
+      El=pbe*ld2+2.23;
+      To=pbt*ld2+19.5;
+    }
+    else
+    {
+      G4double ld=std::log(p)-lmi;
+      G4double ld2=ld*ld;
+      G4double lr=p-.38;
+      G4double LE=.7/(lr*lr+.0676);
+      G4double sp=std::sqrt(p);
+      G4double p2=p*p;
+      G4double p4=p2*p2;
+      G4double lm=p-1.;
+      G4double md=lm*lm+.372;
+      El=LE+(pbe*ld2+2.23)/(1.-.7/sp+.1/p4)+2./md;
+      To=LE+(pbt*ld2+19.5)/(1.+.46/sp+1.6/p4)+2.6/md;
+    }
+  }
+  else if(I==6)                        // hyperon-N
+		{
+    if(p<pmi)
+    {
+      G4double p2=p*p;
+      El=1./(.002+p2*(.12+p2));
+      To=El;
+    }
+    else if(p>pma)
+    {
+      G4double lp=std::log(p)-lmi;
+      G4double lp2=lp*lp;
+      El=pbe*lp2+6.72;
+      To=pbt*lp2+38.2;
+    }
+    else
+    {
+      G4double p2=p*p;
+      G4double LE=1./(.002+p2*(.12+p2));
+      G4double lp=std::log(p)-lmi;
+      G4double lp2=lp*lp;
+      G4double p4=p2*p2;
+      G4double sp=std::sqrt(p);
+      El=LE+(pbe*lp2+6.72+99./p2)/(1.+2./sp+2./p4);
+      To=LE+(pbt*lp2+38.2+900./p2)/(1.+27./sp+3./p4);
+    }
+  }
+  else if(I==7)                        // antibaryon-N
+		{
+    if(p>pma)
+    {
+      G4double lp=std::log(p)-lmi;
+      G4double lp2=lp*lp;
+      El=pbe*lp2+6.72;
+      To=pbt*lp2+38.2;
+    }
+    else
+    {
+      G4double ye=std::pow(p,1.25);
+      G4double yt=std::pow(p,.35);
+      G4double lp=std::log(p)-lmi;
+      G4double lp2=lp*lp;
+      El=80./(ye+1.)+pbe*lp2+6.72;
+      To=80./(yt+.3)+pbt*lp2+38.2;
+    }
+  }
+  else
+  {
+    G4cout<<"*Error*G4QuasiFreeRatios::CalcElTot:ind="<<I<<" is not defined (0-7)"<<G4endl;
+    G4Exception("G4QuasiFreeRatios::CalcElTot:","23",FatalException,"CHIPScrash");
+  }
+  if(El>To) El=To;
+  return std::make_pair(El,To);
+} // End of CalcElTot
+
+// Calculatio pair(hN_el,hN_tot)(mb): p in GeV/c, F=true -> N=proton, F=false -> N=neutron
+std::pair<G4double,G4double> G4QuasiFreeRatios::FetchElTot(G4double p, G4int PDG, G4bool F)
+{
+  static const G4int    nlp=300;         // Number of steps in the S(lnp) logTable(5% step)
+  static const G4int    mlp=nlp+1;       // Number of elements in the S(lnp) logTable
+  static const G4double lpi=-5.;         // The min ln(p) logTabEl(p=6.7 MeV/c - 22. TeV/c)
+  static const G4double lpa=10.;         // The max ln(p) logTabEl(p=6.7 MeV/c - 22. TeV/c)
+  static const G4double mi=std::exp(lpi);// The min p of logTabEl(~ 6.7 MeV/c)
+  static const G4double ma=std::exp(lpa);// The max p of logTabEl(~ 22. TeV)
+  static const G4double dl=(lpa-lpi)/nlp;// Step of the logarithmic Table
+  static const G4double edl=std::exp(dl);// Multiplication step of the logarithmic Table
+  static const G4double toler=.001;      // Relative tolarence defining "the same momentum"
+  static G4double lastP=0.;              // The last momentum for which XS was calculated
+  static G4int    lastH=0;               // The last projPDG for which XS was calculated
+  static G4bool   lastF=true;            // The last nucleon for which XS was calculated
+  static std::pair<G4double,G4double> lastR=std::make_pair(0.,0.); // The last result
+  // Local Associative Data Base:
+  static std::vector<G4int>     vI;      // Vector of index for which XS was calculated
+  static std::vector<G4double>  vM;      // Vector of rel max ln(p) initialized in LogTable
+  static std::vector<G4int>     vK;      // Vector of topBin number initialized in LogTable
+  static std::vector<G4double*> vE;      // Vector of ElastPointers to LogTable in C++ heap
+  static std::vector<std::pair<G4double,G4double>*> vX; // Vector of ETPointers to LogTable
+  // Last values of the Associative Data Base:
+  static G4int     lastI=0;              // The Last index for which XS was calculated
+  static G4double  lastM=0.;             // The Last rel max ln(p) initialized in LogTable
+  static G4int     lastK=0;             // The Last topBin number initialized in LogTable
+  static std::pair<G4double,G4double>* lastX=0; // The Last ETPointers to LogTable in heap
+  // LogTable is created only if necessary. The ratio R(s>8100 mb) = 0 for any nuclei
+  G4int nDB=vI.size();                   // A number of hadrons already initialized in AMDB
+  if(nDB && lastH==PDG && lastF==F && p>0. && std::fabs(p-lastP)/p<toler) return lastR;
+  lastH=PDG;
+  lastF=F;
+  G4int ind=-1;                          // Prototipe of the index of the PDG/F combination
+  // i=0: pp(nn), i=1: np(pn), i=2: pimp(pipn), i=3: pipp(pimn), i=4: Kmp(Kmn,K0n,K0p),
+		// i=5: Kpp(Kpn,aK0n,aK0p), i=6: Hp(Hn), i=7: app(apn,ann,anp) 
+  G4bool kfl=true;                             // Flag of K0/aK0 oscillation
+  G4bool kf=false;
+  if(PDG==130||PDG==310)
+  {
+    kf=true;
+    if(G4UniformRand()>.5) kfl=false;
+  }
+  if     (PDG==2212&&F || PDG==2112&&!F) ind=0; // pp/nn
+  else if(PDG==2112&&F || PDG==2212&&!F) ind=1; // np/pn
+  else if(PDG==-211&&F || PDG== 211&&!F) ind=2; // pimp/pipn
+  else if(PDG== 211&&F || PDG==-211&&!F) ind=3; // pipp/pimn
+  else if(PDG==-321 || PDG==-311 || (kf &&!kfl)) ind=4; // KmN/K0N
+		else if(PDG== 321 || PDG== 311 || (kf && kfl)) ind=5; // KpN/aK0N
+  else if(PDG> 3000 && PDG< 3335) ind=6;        // @@ for all hyperons - take Lambda
+  else if(PDG<-2000 && PDG>-3335) ind=7;        // @@ for all anti-baryons - anti-p/anti-n
+  else
+  {
+    G4cout<<"*Error*G4QuasiFreeRatios::FetchElTot: PDG="<<PDG
+          <<", while it is defined only for p,n,hyperons,anti-baryons,pi,K/antiK"<<G4endl;
+    G4Exception("G4QuasiFreeRatio::FetchElTot:","22",FatalException,"CHIPScrash");
+  }
+  if(nDB && lastI==ind && p>0. && std::fabs(p-lastP)/p<toler) return lastR;
+  if(p<=mi || p>=ma) return CalcElTot(p,ind);   // @@ Slow calculation ! (Warning?)
+  G4bool found=false;
+  G4int i=-1;
+		if(nDB) for (i=0; i<nDB; i++) if(ind==vI[i])  // Sirch for this index in AMDB
+  {
+    found=true;                                 // The index is found
+    break;
+  }
+  G4double lp=std::log(p);
+  if(!nDB || !found)                            // Create new line in the AMDB
+	 {
+    lastX = new std::pair<G4double,G4double>[mlp]; // Create logarithmic Table for ElTot
+    lastK = static_cast<int>((lp-lpi)/dl)+1;    // MaxBin to be initialized in LogTaB
+    if(lastK>nlp)
+    {
+      lastK=nlp;
+      lastM=lpa-lpi;
+    }
+    else lastM = lastK*dl;               // Calculate max initialized ln(p)-lpi for LogTab
+    G4double pv=mi;
+    for(G4int j=0; j<=lastK; j++)        // Calculate LogTab values
+    {
+      lastX[j]=CalcElTot(pv,ind);
+      if(j!=lastK) pv*=edl;
+    }
+    i++;                                 // Make a new record to AMDB and position on it
+    vI.push_back(lastI);
+    vM.push_back(lastM);
+    vK.push_back(lastK);
+    vX.push_back(lastX);
+  }
+  else                                   // The A value was found in AMDB
+	 {
+    lastI=vI[i];
+    lastM=vM[i];
+    lastK=vK[i];
+    lastX=vX[i];
+    G4int nextK=lastK+1;
+    G4double lpM=lastM+lpi;
+    if(lp>lpM && lastK<nlp)              // LogTab must be updated
+				{
+      G4double ls=std::log(s);
+      lastK = static_cast<int>((ls-lpi)/dl)+1; // MaxBin to be initialized in LogTaB
+      if(lastK>nlp)
+      {
+        lastK=nlp;
+        lastM=lpa-lpi;
+      }
+      else lastM = lastK*dl;           // Calculate max initialized ln(p)-lpi for LogTab
+      G4double pv=lpM;
+      for(G4int j=nextK; j<=lastK; j++)// Calculate LogTab values
+      {
+        pv*=edl;
+        lastX[j]=CalcElTot(pv,ind);
+      }
+    } // End of LogTab update
+    if(lastK>=nextK)                   // The AMDB was apdated
+				{
+      vM[i]=lastM;
+      vK[i]=lastK;
+    }
+  }
+  // Now one can use tabeles to calculate the value
+  G4double dlp=lp-lpi;                       // Shifted log(p) value
+  G4int n=static_cast<int>(dlp/dl);          // Low edge number of the bin
+  G4double d=dlp-n*dl;                       // Log shift
+  G4double e=lastX[n].first;                 // E-Base
+  lastR.first=e+d*(lastX[n+1].first-e)/dl;   // E-Result
+  if(lastR.first<0.)  lastR.first = 0.;
+  G4double t=lastX[n].second;                // T-Base
+  lastR.second=t+d*(lastX[n+1].second-t)/dl; // T-Result
+  if(lastR.second<0.) lastR.second= 0.;
+  if(lastR.first>lastR.second) lastR.first = lastR.second;
+  return lastR;
+} // End of FetchElTot
+
+// (Mean Elastic and Mean Total) Cross-Sections (mb) for PDG+(Z,N) at P=p[GeV/c]
+std::pair<G4double,G4double> G4QuasiFreeRatios::GetElTot(G4double pGeV, G4int hPDG,
+                                                         G4int Z,       G4int N)
+{
+  if(Z<1 && N<1)
+  {
+    G4cout<<"-Warning-G4QuasiFreeRatio::GetElTot:Z="<<Z<<",N="<<N<<", return zero"<<G4endl;
+    return std::make_pair(0.,0.);
+  }
+  std::pair<G4double,G4double> pA=FetchElTot(pGeV, hPDG, true);
+  std::pair<G4double,G4double> nA=FetchElTot(pGeV, hPDG, false);
+  G4double A=Z+N;
+  return std::make_pair((Z*pA.first+N*nA.first)/A,(Z*pA.second+N*nA.second)/A);
+} // End of GetElTot
