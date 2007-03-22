@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering.hh,v 1.33 2007-03-07 11:10:47 vnivanch Exp $
+// $Id: G4MultipleScattering.hh,v 1.34 2007-03-22 07:59:25 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -151,7 +151,6 @@ private:        // data members
   G4double lambdalimit;
   G4double facrange;
   G4double facgeom;
-  G4double skin; 
   G4double dtrl;
 
   G4bool   steppingAlgorithm;
