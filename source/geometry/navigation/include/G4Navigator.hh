@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.hh,v 1.19 2006-12-07 15:09:18 japost Exp $
+// $Id: G4Navigator.hh,v 1.20 2007-03-23 14:40:25 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -98,6 +98,12 @@ class G4Navigator
     // boundary is >pCurrentProposedStepLength away, kInfinity
     // is returned together with the computed isotropic safety
     // distance. Geometry must be closed.
+
+  G4double CheckNextStep(const G4ThreeVector &pGlobalPoint,
+			 const G4ThreeVector &pDirection,
+			 const G4double pCurrentProposedStepLength,
+ 			       G4double  &pNewSafety); 
+    //  Same as above, but do not distrurb the state of the Navigator.
 
   virtual
   G4VPhysicalVolume* ResetHierarchyAndLocate(const G4ThreeVector &point,
@@ -233,7 +239,7 @@ class G4Navigator
     // verifications and more strict correctness conditions.
     // Is effective only with G4VERBOSE set.
 
-  void PrintState();      
+  void PrintState() const;
     // Print the internal state of the Navigator (for debugging).
     // The level of detail is according to the verbosity.
 
@@ -252,6 +258,15 @@ class G4Navigator
     // in case Navigator is stuck and is returning zero steps.
     // Values: 1 (small problem),  5 (correcting), 
     //         9 (ready to abandon), 10 (abandoned)
+
+  // inline 
+  void SetSavedState(); 
+  // ( fValidExitNormal, fExitNormal, fExiting, fEntering, 
+  //   fBlockedPhysicalVolume, fBlockedReplicaNo, fLastStepWasZero); 
+  // inline 
+  void RestoreSavedState(); 
+    // Copy aspects of the state, to enable a non-state changing
+    //  call to ComputeStep
 
  public:  // with description
 
@@ -371,6 +386,25 @@ class G4Navigator
   //
   // END State information
   //
+
+  // 
+  // BEGIN  Save information for key state information
+  //          --> Not the navigation history (touchable) stack!
+  struct G4SaveNavigatorState { 
+     G4ThreeVector sExitNormal;  
+     G4bool sValidExitNormal;    
+     G4bool sEntering, sExiting;
+     G4VPhysicalVolume *spBlockedPhysicalVolume;
+     G4int sBlockedReplicaNo;  
+     G4int sLastStepWasZero; 
+     //  Potentially relevant -- tbd
+     G4bool sLocatedOutsideWorld;
+     G4ThreeVector sLastLocatedPointLocal; 
+     G4bool sEnteredDaughter, sExitedMother;
+     G4ThreeVector  sPreviousSftOrigin;
+     G4double       sPreviousSafety; 
+  } fSaveState; 
+  // END    Save information for key state information
 
   //
   // BEGIN Tracking Invariants
