@@ -14,8 +14,17 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
-- Added new classes (V.Ivanchenko): G4BGGNucleonElasticXS, G4BGGNucleonInelasticXS,
-  G4BGGPionElasticXS, G4BGGPionInelasticXS
+22 Mar 2007 Dennis Wright for V. Ivanchenko (hadr-cross-V08-02-04)
+------------------------------------------------------------------
+- G4UPiNuclearCrossSection.cc: better handling of low energy cross sections
+- Added new classes (V.Ivanchenko): 
+    G4BGGNucleonElasticXS: proton and neutron elastic cross section wrapper
+                           class using Barashenkov parameterization below 
+                           100 GeV and Glauber-Gribov model above
+    G4BGGNucleonInelasticXS: proton and neutron inelastic cross section
+                             wrapper of Barashenkov-Glauber-Gribov
+    G4BGGPionElasticXS: pion elastic cross section wrapper of BGG
+    G4BGGPionInelasticXS: pion inelastic cross section wrapper of BGG
 
 8 Mar 2007 Dennis Wright for V. Ivanchenko (hadr-cross-V08-02-03)
 -----------------------------------------------------------------
