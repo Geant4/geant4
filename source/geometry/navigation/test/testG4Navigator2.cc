@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4Navigator2.cc,v 1.5 2006-06-29 18:37:19 gunter Exp $
+// $Id: testG4Navigator2.cc,v 1.6 2007-03-23 18:33:08 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -43,7 +43,7 @@
 #include "G4VPhysicalVolume.hh"
 #include "G4PVPlacement.hh"
 // #include "G4PVParameterised.hh"
-#include "G4VPVParameterisation.hh"
+// #include "G4VPVParameterisation.hh"
 #include "G4Box.hh"
 
 #include "G4GeometryManager.hh"
@@ -133,7 +133,6 @@ G4bool testG4NavigatorLocate(G4VPhysicalVolume *pTopNode)
     return true;
 }
 
-//
 // Test ComputeStep
 //
 G4bool testG4NavigatorSteps(G4VPhysicalVolume *pTopNode)
@@ -152,24 +151,114 @@ G4bool testG4NavigatorSteps(G4VPhysicalVolume *pTopNode)
     physStep=kInfinity;
     Step=myNav.ComputeStep(origin,dir,physStep,safety);
     assert(ApproxEqual(Step,10));
+
     pos+=Step*dir;
     myNav.SetGeometricallyLimitedStep();
     located=myNav.LocateGlobalPointAndSetup(pos);
     assert(located->GetName()=="World");
     Step=myNav.ComputeStep(pos,dir,physStep,safety);
     assert(ApproxEqual(Step,5));
+
     pos+=Step*dir;
     myNav.SetGeometricallyLimitedStep();
     located=myNav.LocateGlobalPointAndSetup(pos);
     assert(located->GetName()=="Target 3");
     Step=myNav.ComputeStep(pos,dir,physStep,safety);
     assert(ApproxEqual(Step,30));
+
     pos+=Step*dir;
     myNav.SetGeometricallyLimitedStep();
     located=myNav.LocateGlobalPointAndSetup(pos);
     assert(located->GetName()=="World");
     Step=myNav.ComputeStep(pos,dir,physStep,safety);
     assert(ApproxEqual(Step,5));
+    pos+=Step*dir;
+
+    myNav.SetGeometricallyLimitedStep();
+    located=myNav.LocateGlobalPointAndSetup(pos);
+    assert(located==0);
+    return true;
+}
+
+//
+//
+//
+G4double
+CheckNextStep_And_TakeIt( G4Navigator &Navigator, 
+                          const G4ThreeVector &position,
+                          const G4ThreeVector &direction,
+                          G4double proposedStep,
+  			  G4double &resNewSafety,           //  Output !!
+ 			  G4double expectedStep)
+{
+    // G4double Step1= 0.0, Step2= 0.0; 
+    G4double Step= 0.0;
+    G4double safety1=0.0, safety2=0.0; 
+    // Check new ComputeStep method
+    Step=Navigator.CheckNextStep(position,direction,proposedStep,safety1);
+    assert(ApproxEqual(Step,expectedStep));
+
+    Step=Navigator.ComputeStep(position,direction,proposedStep,safety2);
+    assert(ApproxEqual(Step,expectedStep));
+
+    assert(ApproxEqual(safety1,safety2)); 
+
+    resNewSafety= safety2; 
+    return Step; 
+}
+
+//
+
+//
+// Test CheckNextSteps
+//
+G4bool testG4NavigatorCheckNextSteps(G4VPhysicalVolume *pTopNode)
+{
+    MyNavigator myNav;
+    G4VPhysicalVolume *located;
+    G4double Step,physStep,safety;
+    G4ThreeVector pos,dir,origin,xHat(1,0,0),yHat(0,1,0),zHat(0,0,1);
+    G4ThreeVector mxHat(-1,0,0),myHat(0,-1,0),mzHat(0,0,-1);
+    myNav.SetWorldVolume(pTopNode);
+
+    G4double expectedStep=0.0;
+
+    pos=origin;
+    dir=xHat;
+    located=myNav.LocateGlobalPointAndSetup(pos,0,false);
+    assert(located->GetName()=="Target 1");
+    physStep=kInfinity;
+    // Step=myNav.ComputeStep(origin,dir,physStep,safety);
+    // assert(ApproxEqual(Step,10));
+    Step= CheckNextStep_And_TakeIt(myNav,pos,dir,physStep,safety,expectedStep=10.0);
+    pos+=Step*dir;
+    myNav.SetGeometricallyLimitedStep();
+    located=myNav.LocateGlobalPointAndSetup(pos);
+    assert(located->GetName()=="World");
+    // Step=myNav.ComputeStep(pos,dir,physStep,safety);
+    // assert(ApproxEqual(Step,5));
+    Step= CheckNextStep_And_TakeIt(myNav,pos,dir,physStep,safety,expectedStep=5.0);
+    pos+=Step*dir;
+    myNav.SetGeometricallyLimitedStep();
+    located=myNav.LocateGlobalPointAndSetup(pos);
+    assert(located->GetName()=="Target 3");
+
+    // Step=myNav.ComputeStep(pos,dir,physStep,safety);
+    // assert(ApproxEqual(Step,30));
+    Step= CheckNextStep_And_TakeIt(myNav,pos,dir,physStep,safety,expectedStep=30.0);
+    pos+=Step*dir;
+
+    myNav.SetGeometricallyLimitedStep();
+    located=myNav.LocateGlobalPointAndSetup(pos);
+    assert(located->GetName()=="World");
+
+    // Step=myNav.ComputeStep(pos,dir,physStep,safety);
+    // assert(ApproxEqual(Step,5));
+    Step= CheckNextStep_And_TakeIt(myNav,pos,dir,physStep,safety,expectedStep=5.0);
+    // ** New: Check new ComputeStep method
+    // Step=myNav.CheckNextStep(pos,dir,physStep,safety);
+    // assert(ApproxEqual(Step,5));
+
     pos+=Step*dir;
     myNav.SetGeometricallyLimitedStep();
     located=myNav.LocateGlobalPointAndSetup(pos);
@@ -184,11 +273,14 @@ int main()
     G4GeometryManager::GetInstance()->CloseGeometry(false);
     testG4NavigatorLocate(myTopNode);
     testG4NavigatorSteps(myTopNode);
+    testG4NavigatorCheckNextSteps(myTopNode);
+
 // Repeat tests but with full voxels
     G4GeometryManager::GetInstance()->OpenGeometry();
     G4GeometryManager::GetInstance()->CloseGeometry(true);
     testG4NavigatorLocate(myTopNode);
     testG4NavigatorSteps(myTopNode);
+    testG4NavigatorCheckNextSteps(myTopNode);
 
     G4GeometryManager::GetInstance()->OpenGeometry();
 
