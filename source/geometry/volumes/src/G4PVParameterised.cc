@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVParameterised.cc,v 1.8 2007-01-31 14:58:27 gcosmo Exp $
+// $Id: G4PVParameterised.cc,v 1.9 2007-03-23 01:47:53 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -227,7 +227,8 @@ G4bool G4PVParameterised::CheckOverlaps(G4int res, G4bool verbose)
                  << GetName() << ", parameterised instance: " << i << G4endl
                  << "          with parameterised volume instance: " << j
                  << G4endl
-                 << "          at daughter local point " << md << G4endl;
+                 << "          at local point " << md
+                 << ", related to volume instance: " << j << "." << G4endl;
           G4Exception("G4PVParameterised::CheckOverlaps()", "InvalidSetup",
                       JustWarning, "Overlap within parameterised volumes !");
           return true;
