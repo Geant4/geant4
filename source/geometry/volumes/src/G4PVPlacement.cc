@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVPlacement.cc,v 1.13 2007-01-31 14:58:27 gcosmo Exp $
+// $Id: G4PVPlacement.cc,v 1.14 2007-03-23 01:47:05 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -302,14 +302,50 @@ G4bool G4PVPlacement::CheckOverlaps(G4int res, G4bool verbose)
         G4cout << "WARNING - G4PVPlacement::CheckOverlaps()" << G4endl
                << "          Overlap is detected for volume "
                << GetName() << G4endl
-               << "          with volume " << daughter->GetName() << G4endl
-               << "          at daughter local point " << md << G4endl;
+               << "          with " << daughter->GetName() << " volume's"
+               << G4endl
+               << "          local point " << md << G4endl;
         G4Exception("G4PVPlacement::CheckOverlaps()", "InvalidSetup",
                     JustWarning, "Overlap with volume already placed !");
         return true;
       }
     }
   }
+
+  // Checking that 'sister' volume is not totally included and overlapping
+  //
+  for (G4int m=0; m<motherLog->GetNoDaughters()-1; m++)
+  {
+    G4VPhysicalVolume* daughterPhys = motherLog->GetDaughter(m);
+    G4VSolid* daughterShape = daughterPhys->GetLogicalVolume()->GetSolid();
+
+    // Generate a single point on the surface of the 'sister' volume and
+    // verify that the point is NOT inside the current volume
+
+    G4ThreeVector dPoint = daughterShape->GetPointOnSurface();
+
+    // Transform the generated point to the mother's coordinate system
+    // and finally to current volume's coordinate system
+    //
+    G4ThreeVector mp2 = Tm.TransformPoint(dPoint);
+    G4AffineTransform Ts( GetRotation(), GetTranslation() );
+    G4ThreeVector ms = Ts.Inverse().TransformPoint(mp2);
+
+    if (solid->Inside(ms)==kInside)
+    {
+      G4cout << G4endl;
+      G4cout << "WARNING - G4PVPlacement::CheckOverlaps()" << G4endl
+             << "          Overlap is detected for volume "
+             << GetName() << G4endl
+             << "          apparently fully encapsulating volume "
+             << daughterPhys->GetName() << G4endl
+             << "          at the same level !" << G4endl;
+      G4Exception("G4PVPlacement::CheckOverlaps()", "InvalidSetup",
+                  JustWarning, "Overlap with volume already placed !");
+      return true;
+    }
+  }
+
   if (verbose)
   {
     G4cout << "OK! " << G4endl;
