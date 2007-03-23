@@ -63,13 +63,14 @@ class G4QuasiFreeRatios
 
   // Ret pair(QuasiFree/Inelastic,QuasiElastic/QuasiFree) GetRatios
   std::pair<G4double,G4double> GetRatios(G4double pIU, G4int prPDG, G4int tgZ, G4int tgN);
- private:
-  // These working member functions are in CHIPS units and must not be used externally
+
   G4double GetQF2IN_Ratio(G4double TotCS_mb, G4int A); // QuasiFree/Inelastic (fast)
   std::pair<G4double,G4double> GetElTot(G4double pGeV,G4int PDG,G4int Z,G4int N);//El,To,mb
   G4double CalcQF2IN_Ratio(G4double TCSmb, G4int A); // R=QuasuFree/Inelastic (sig_t in mb)
   std::pair<G4double,G4double> FetchElTot(G4double pGeV,G4int PDG,G4bool F);//(E,T)fromAMDB
   std::pair<G4double,G4double> CalcElTot(G4double pGeV,G4int Index);//(sigE,sigT)(Index)
+ private:
+  // These working member functions are in CHIPS units and must not be used externally
 
  // Body
  private:

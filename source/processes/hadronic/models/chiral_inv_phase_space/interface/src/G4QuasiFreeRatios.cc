@@ -20,7 +20,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QuasiFreeRatios.cc,v 1.2 2007-03-22 15:21:39 mkossov Exp $
+// $Id: G4QuasiFreeRatios.cc,v 1.3 2007-03-23 17:20:13 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -271,11 +271,17 @@ std::pair<G4double,G4double> G4QuasiFreeRatios::CalcElTot(G4double p, G4int I)
   }
   if     (!I)                          // pp/nn
 		{
+#ifdef debug
+				G4cout<<"G4QuasiFreeR::CalcElTot:I=0, p="<<p<<", pmi="<<pmi<<", pma="<<pma<<G4endl;
+#endif
     if(p<pmi)
     {
       G4double p2=p*p;
       El=1./(.00012+p2*.2);
       To=El;
+#ifdef debug
+				  G4cout<<"G4QuasiFreeR::CalcElTot:I=0i, El="<<El<<", To="<<To<<", p2="<<p2<<G4endl;
+#endif
     }
     else if(p>pma)
     {
@@ -283,6 +289,9 @@ std::pair<G4double,G4double> G4QuasiFreeRatios::CalcElTot(G4double p, G4int I)
       G4double lp2=lp*lp;
       El=pbe*lp2+6.72;
       To=pbt*lp2+38.2;
+#ifdef debug
+				  G4cout<<"G4QuasiFreeR::CalcElTot:I=0a, El="<<El<<", To="<<To<<", lp2="<<lp2<<G4endl;
+#endif
     }
     else
     {
@@ -293,6 +302,9 @@ std::pair<G4double,G4double> G4QuasiFreeRatios::CalcElTot(G4double p, G4int I)
       G4double rp2=1./p2;
       El=LE+(pbe*lp2+6.72+32.6/p)/(1.+rp2/p);
       To=LE+(pbt*lp2+38.2+52.7*rp2)/(1.+2.72*rp2*rp2);
+#ifdef debug
+				  G4cout<<"G4QuasiFreeR::CalcElTot:0,E="<<El<<",T="<<To<<",s="<<p2<<",l="<<lp2<<G4endl;
+#endif
     }
   }
   else if(I==1)                        // np/pn
@@ -334,14 +346,15 @@ std::pair<G4double,G4double> G4QuasiFreeRatios::CalcElTot(G4double p, G4int I)
     {
       G4double ld=lp-lmi;
       G4double ld2=ld*ld;
-      El=pbe*ld2+2.4;
-      To=pbt*ld2+22.3;
+      G4double sp=std::sqrt(p);
+      El=pbe*ld2+2.4+7./sp;
+      To=pbt*ld2+22.3+12./sp;
     }
     else
     {
       G4double lr=lp+1.27;
       G4double LE=1.53/(lr*lr+.0676);
-      G4double ld=ld-lmi;
+      G4double ld=lp-lmi;
       G4double ld2=ld*ld;
       G4double p2=p*p;
       G4double p4=p2*p2;
@@ -368,15 +381,16 @@ std::pair<G4double,G4double> G4QuasiFreeRatios::CalcElTot(G4double p, G4int I)
     {
       G4double ld=lp-lmi;
       G4double ld2=ld*ld;
-      El=pbe*ld2+2.4;
-      To=pbt*ld2+22.3;
+      G4double sp=std::sqrt(p);
+      El=pbe*ld2+2.4+6./sp;
+      To=pbt*ld2+22.3+5./sp;
     }
     else
     {
       G4double lr=lp+1.27;
       G4double lr2=lr*lr;
       G4double LE=13./(lr2+lr2*lr2+.0676);
-      G4double ld=ld-lmi;
+      G4double ld=lp-lmi;
       G4double ld2=ld*ld;
       G4double p2=p*p;
       G4double p4=p2*p2;
@@ -424,8 +438,10 @@ std::pair<G4double,G4double> G4QuasiFreeRatios::CalcElTot(G4double p, G4int I)
     if(p<pmi)
     {
       G4double lr=p-.38;
-      El=.7/(lr*lr+.0676);
-      To=El;
+      G4double lm=p-1.;
+      G4double md=lm*lm+.372;   
+      El=.7/(lr*lr+.0676)+2./md;
+      To=El+.6/md;
     }
     else if(p>pma)
     {
@@ -461,8 +477,9 @@ std::pair<G4double,G4double> G4QuasiFreeRatios::CalcElTot(G4double p, G4int I)
     {
       G4double lp=std::log(p)-lmi;
       G4double lp2=lp*lp;
-      El=pbe*lp2+6.72;
-      To=pbt*lp2+38.2;
+      G4double sp=std::sqrt(p);
+      El=(pbe*lp2+6.72)/(1.+2./sp);
+      To=(pbt*lp2+38.2+900./sp)/(1.+27./sp);
     }
     else
     {
@@ -473,7 +490,7 @@ std::pair<G4double,G4double> G4QuasiFreeRatios::CalcElTot(G4double p, G4int I)
       G4double p4=p2*p2;
       G4double sp=std::sqrt(p);
       El=LE+(pbe*lp2+6.72+99./p2)/(1.+2./sp+2./p4);
-      To=LE+(pbt*lp2+38.2+900./p2)/(1.+27./sp+3./p4);
+      To=LE+(pbt*lp2+38.2+900./sp)/(1.+27./sp+3./p4);
     }
   }
   else if(I==7)                        // antibaryon-N
@@ -492,7 +509,7 @@ std::pair<G4double,G4double> G4QuasiFreeRatios::CalcElTot(G4double p, G4int I)
       G4double lp=std::log(p)-lmi;
       G4double lp2=lp*lp;
       El=80./(ye+1.)+pbe*lp2+6.72;
-      To=80./(yt+.3)+pbt*lp2+38.2;
+      To=(80./yt+.3)/yt+pbt*lp2+38.2;
     }
   }
   else
@@ -533,6 +550,9 @@ std::pair<G4double,G4double> G4QuasiFreeRatios::FetchElTot(G4double p, G4int PDG
   static std::pair<G4double,G4double>* lastX=0; // The Last ETPointers to LogTable in heap
   // LogTable is created only if necessary. The ratio R(s>8100 mb) = 0 for any nuclei
   G4int nDB=vI.size();                   // A number of hadrons already initialized in AMDB
+#ifdef pdebug
+		G4cout<<"G4QuasiFreeR::FetchElTot:p="<<p<<",PDG="<<PDG<<",F="<<F<<",nDB="<<nDB<<G4endl;
+#endif
   if(nDB && lastH==PDG && lastF==F && p>0. && std::fabs(p-lastP)/p<toler) return lastR;
   lastH=PDG;
   lastF=F;
@@ -570,6 +590,9 @@ std::pair<G4double,G4double> G4QuasiFreeRatios::FetchElTot(G4double p, G4int PDG
     break;
   }
   G4double lp=std::log(p);
+#ifdef pdebug
+		G4cout<<"G4QuasiFreeR::FetchElTot:I="<<ind<<",i="<<i<<",fd="<<found<<",lp="<<lp<<G4endl;
+#endif
   if(!nDB || !found)                            // Create new line in the AMDB
 	 {
     lastX = new std::pair<G4double,G4double>[mlp]; // Create logarithmic Table for ElTot
@@ -584,6 +607,10 @@ std::pair<G4double,G4double> G4QuasiFreeRatios::FetchElTot(G4double p, G4int PDG
     for(G4int j=0; j<=lastK; j++)        // Calculate LogTab values
     {
       lastX[j]=CalcElTot(pv,ind);
+#ifdef pdebug
+		    G4cout<<"G4QuasiFreeR::FetchElTot:I,j="<<j<<",pv="<<pv<<",E="<<lastX[j].first<<",T="
+            <<lastX[j].second<<G4endl;
+#endif
       if(j!=lastK) pv*=edl;
     }
     i++;                                 // Make a new record to AMDB and position on it
@@ -600,21 +627,30 @@ std::pair<G4double,G4double> G4QuasiFreeRatios::FetchElTot(G4double p, G4int PDG
     lastX=vX[i];
     G4int nextK=lastK+1;
     G4double lpM=lastM+lpi;
+#ifdef pdebug
+		  G4cout<<"G4QuasiFreeR::FetchElTo:M="<<lpM<<",l="<<lp<<",K="<<lastK<<",n="<<nlp<<G4endl;
+#endif
     if(lp>lpM && lastK<nlp)              // LogTab must be updated
 				{
-      G4double ls=std::log(s);
-      lastK = static_cast<int>((ls-lpi)/dl)+1; // MaxBin to be initialized in LogTaB
+      lastK = static_cast<int>((lp-lpi)/dl)+1; // MaxBin to be initialized in LogTab
+#ifdef pdebug
+		    G4cout<<"G4QuasiFreeR::FetET:K="<<lastK<<",lp="<<lp<<",li="<<lpi<<",dl="<<dl<<G4endl;
+#endif
       if(lastK>nlp)
       {
         lastK=nlp;
         lastM=lpa-lpi;
       }
       else lastM = lastK*dl;           // Calculate max initialized ln(p)-lpi for LogTab
-      G4double pv=lpM;
+      G4double pv=std::exp(lpM);       // momentum of the last calculated beam
       for(G4int j=nextK; j<=lastK; j++)// Calculate LogTab values
       {
         pv*=edl;
         lastX[j]=CalcElTot(pv,ind);
+#ifdef pdebug
+		      G4cout<<"G4QuasiFreeR::FetchElTot:U:j="<<j<<",p="<<pv<<",E="<<lastX[j].first<<",T="
+              <<lastX[j].second<<G4endl;
+#endif
       }
     } // End of LogTab update
     if(lastK>=nextK)                   // The AMDB was apdated
