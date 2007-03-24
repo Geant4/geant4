@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel.cc,v 1.49 2007-03-24 17:11:24 vnivanch Exp $
+// $Id: G4UrbanMscModel.cc,v 1.50 2007-03-24 17:32:02 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -713,7 +713,7 @@ void G4UrbanMscModel::GeomLimit(const G4Track&  track)
      (track.GetVolume() != navigator->GetWorldVolume()))  
   {
     G4double cstep = tPathLength;
-    geomlimit = navigator->ComputeLinearStep(
+    geomlimit = navigator->ComputeStep(
                   track.GetStep()->GetPreStepPoint()->GetPosition(),
                   track.GetMomentumDirection(),
                   cstep,
