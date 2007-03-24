@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel.cc,v 1.48 2007-03-20 19:00:27 vnivanch Exp $
+// $Id: G4UrbanMscModel.cc,v 1.49 2007-03-24 17:11:24 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -155,6 +155,7 @@
 #include "G4ParticleChangeForMSC.hh"
 #include "G4TransportationManager.hh"
 #include "G4Navigator.hh"
+#include "G4SafetyHelper.hh"
 
 #include "G4Poisson.hh"
 
@@ -229,10 +230,9 @@ void G4UrbanMscModel::Initialise(const G4ParticleDefinition* p,
   navigator = G4TransportationManager::GetTransportationManager()
     ->GetNavigatorForTracking();
 
-  safetyHelper = G4TransportationManager::GetTransportationManager()
-    ->GetSafetyHelper();
-
-  //  safetyHelper= new G4SafetyHelper(); 
+  //  safetyHelper = G4TransportationManager::GetTransportationManager()
+  //  ->GetSafetyHelper();
+  safetyHelper = new G4SafetyHelper;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -514,15 +514,20 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
   lambda0 = GetLambda(currentKinEnergy);
 
   tPathLength = currentMinimalStep;
-  if(tPathLength > currentRange)
-    tPathLength = currentRange;
+  //  if(tPathLength > currentRange)
+  //  tPathLength = currentRange;
 
   G4StepPoint* sp = track.GetStep()->GetPreStepPoint();
 
   presafety = sp->GetSafety();
   G4StepStatus stepStatus = sp->GetStepStatus();
   G4int stepNumber = track.GetCurrentStepNumber();
-  if(stepNumber == 1) insideskin = false;
+  if(stepNumber == 1) {
+    inside = false;
+    insideskin = false;
+    stepmin = tlimitminfix;
+    skindepth = skin*stepmin;
+  }
 
   // standard  version
   //
@@ -532,28 +537,23 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
     // small step(s) + single/plural scattering around boundaries
     if(skin > 0.)
     {
-      if((stepNumber > 1) && inside)
-        return tPathLength;            
+      if(inside) return tPathLength;            
 
       //compute geomlimit and presafety 
       GeomLimit(track);
 
-      insideskin = false;
+      if(currentRange < presafety)
+      {
+        inside = true;
+        return tPathLength;   
+      }
+
       smallstep += 1.;
 
       if((stepStatus == fGeomBoundary) || (stepNumber == 1))
       {
         if(stepNumber == 1) smallstep = 1.e10;
         else  smallstep = 1.;
-
-        if((stepNumber == 1) && (currentRange < presafety))
-        {
-          stepmin = tlimitminfix;
-          inside = true;
-          return tPathLength;  
-        }
-        else
-         inside = false;
 
         // facrange scaling in lambda 
         // not so strong step restriction above lambdalimit
@@ -599,12 +599,6 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
           tlimit = facsafety*presafety ;
       }
 
-      if(currentRange < presafety)
-      {
-        inside = true;
-        return tPathLength;   
-      }
-
       // shortcut
       if((tPathLength < tlimit) &&
          (tPathLength < presafety))
@@ -646,28 +640,21 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
     //  there no small step/single scattering at boundaries
     else 
     {
-      if((stepNumber > 1) && inside)
-        return tPathLength;            
+      if(inside) return tPathLength;            
 
       // compute presafety again if presafety <= 0 and no boundary
       // i.e. when it is needed for optimization purposes
       if((stepStatus != fGeomBoundary) && (presafety <= 0.)) 
-      {
         presafety = safetyHelper->ComputeSafety(sp->GetPosition()); 
-        if(currentRange < presafety)
+
+      if(currentRange < presafety)
         {
-          stepmin = tlimitminfix;
           inside = true;
           return tPathLength;  
         }
-        else
-         inside = false;
-      }
 
       if((stepStatus == fGeomBoundary) || (stepNumber == 1))
       {
-        if(stepNumber == 1)
-          insideskin = false;
  
         // facrange scaling in lambda 
         // not so strong step restriction above lambdalimit
@@ -689,12 +676,6 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
           tlimit = facsafety*presafety ;
       }
 
-      if(currentRange < presafety)
-      {
-        inside = true;
-        return tPathLength;   
-      }
-
       // shortcut
       if((tPathLength < tlimit) &&
          (tPathLength < presafety))
@@ -708,9 +689,6 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
   // version similar to 7.1 (needed for some experiments)
   else
   {
-    if(stepNumber == 1)
-      tlimit = geombig;
-
     if (stepStatus == fGeomBoundary)
     {
       if (currentRange > lambda0) tlimit = facrange*currentRange;
@@ -732,10 +710,10 @@ void G4UrbanMscModel::GeomLimit(const G4Track&  track)
 
   // no geomlimit for the World volume
   if((track.GetVolume() != 0) &&
-     (track.GetVolume() != safetyHelper->GetWorldVolume()))  
+     (track.GetVolume() != navigator->GetWorldVolume()))  
   {
     G4double cstep = tPathLength;
-    geomlimit = safetyHelper->ComputeLinearStep(
+    geomlimit = navigator->ComputeLinearStep(
                   track.GetStep()->GetPreStepPoint()->GetPosition(),
                   track.GetMomentumDirection(),
                   cstep,
