@@ -197,6 +197,11 @@ GetIsoZACrossSection(const G4DynamicParticle* aParticle, G4double Z, G4double A,
 
   fElasticXsc   = fTotalXsc - fInelasticXsc;
 
+  sigma = GetHNinelasticXsc(aParticle, A, Z);
+  ratio = sigma/nucleusSquare;
+
+  fProductionXsc = nucleusSquare*std::log( 1. + cofInelastic*ratio )/cofInelastic;
+
   if (fElasticXsc < 0.) fElasticXsc = 0.;
 
   return xsection; 
@@ -426,6 +431,8 @@ G4GlauberGribovCrossSection::GetHadronNucleaonXscPDG(const G4DynamicParticle* aP
   xsection *= millibarn; // parametrised in mb
   return xsection;
 }
+
+
 /////////////////////////////////////////////////////////////////////////////////////
 //
 // Returns hadron-nucleon cross-section based on N. Starkov parametrisation of
@@ -754,6 +761,235 @@ G4GlauberGribovCrossSection::GetHadronNucleaonXscNS(const G4DynamicParticle* aPa
   xsection *= millibarn; // parametrised in mb
   return xsection;
 }
+
+
+/////////////////////////////////////////////////////////////////////////////////////
+//
+// Returns hadron-nucleon inelastic cross-section based on FTF-parametrisation 
+
+G4double 
+G4GlauberGribovCrossSection::GetHNinelasticXsc(const G4DynamicParticle* aParticle, 
+                                                  const G4Element* anElement          )
+{
+  G4double At = anElement->GetN();  // number of nucleons 
+  G4double Zt = anElement->GetZ();  // number of protons
+
+
+  return GetHadronNucleaonXscNS( aParticle, At, Zt );
+}
+
+/////////////////////////////////////////////////////////////////////////////////////
+//
+// Returns hadron-nucleon inelastic cross-section based on FTF-parametrisation 
+
+G4double 
+G4GlauberGribovCrossSection::GetHNinelasticXsc(const G4DynamicParticle* aParticle, 
+                                                     G4double At,  G4double Zt )
+{
+  G4int PDGcode    = aParticle->GetDefinition()->GetPDGEncoding();
+  G4int absPDGcode = std::abs(PDGcode);
+
+  G4double Elab = aParticle->GetTotalEnergy();              
+                          // (s - 2*0.88*GeV*GeV)/(2*0.939*GeV)/GeV;
+  G4double Plab = aParticle->GetMomentum().mag();            
+                          // std::sqrt(Elab * Elab - 0.88);
+
+  Elab /= GeV;
+  Plab /= GeV;
+
+  G4double LogPlab    = std::log( Plab );
+  G4double sqrLogPlab = LogPlab * LogPlab;
+
+  //G4cout<<"Plab = "<<Plab<<G4endl;
+
+  G4double NumberOfTargetProtons  = Zt; 
+  G4double NumberOfTargetNucleons = At;
+  G4double NumberOfTargetNeutrons = NumberOfTargetNucleons - NumberOfTargetProtons;
+
+  if(NumberOfTargetNeutrons < 0.) NumberOfTargetNeutrons = 0.;
+
+  G4double Xtotal, Xelastic, Xinelastic;
+
+  if( absPDGcode > 1000 )  //------Projectile is baryon --------
+  {
+       G4double XtotPP = 48.0 +  0. *std::pow(Plab, 0.  ) +
+                         0.522*sqrLogPlab - 4.51*LogPlab;
+
+       G4double XtotPN = 47.3 +  0. *std::pow(Plab, 0.  ) +
+                         0.513*sqrLogPlab - 4.27*LogPlab;
+
+       G4double XelPP  = 11.9 + 26.9*std::pow(Plab,-1.21) +
+                         0.169*sqrLogPlab - 1.85*LogPlab;
+
+       G4double XelPN  = 11.9 + 26.9*std::pow(Plab,-1.21) +
+                         0.169*sqrLogPlab - 1.85*LogPlab;
+
+       Xtotal          = ( NumberOfTargetProtons  * XtotPP +
+                           NumberOfTargetNeutrons * XtotPN  );
+
+       Xelastic        = ( NumberOfTargetProtons  * XelPP  +
+                           NumberOfTargetNeutrons * XelPN   );
+  }
+  else if( PDGcode ==  211 ) //------Projectile is PionPlus -------
+  {
+       G4double XtotPiP = 16.4 + 19.3 *std::pow(Plab,-0.42) +
+                          0.19 *sqrLogPlab - 0.0 *LogPlab;
+
+       G4double XtotPiN = 33.0 + 14.0 *std::pow(Plab,-1.36) +
+                          0.456*sqrLogPlab - 4.03*LogPlab;
+
+       G4double XelPiP  =  0.0 + 11.4*std::pow(Plab,-0.40) +
+                           0.079*sqrLogPlab - 0.0 *LogPlab;
+
+       G4double XelPiN  = 1.76 + 11.2*std::pow(Plab,-0.64) +
+                          0.043*sqrLogPlab - 0.0 *LogPlab;
+
+       Xtotal           = ( NumberOfTargetProtons  * XtotPiP +
+                            NumberOfTargetNeutrons * XtotPiN  );
+
+       Xelastic         = ( NumberOfTargetProtons  * XelPiP  +
+                            NumberOfTargetNeutrons * XelPiN   );
+  }
+  else if( PDGcode == -211 ) //------Projectile is PionMinus -------
+  {
+       G4double XtotPiP = 33.0 + 14.0 *std::pow(Plab,-1.36) +
+                          0.456*sqrLogPlab - 4.03*LogPlab;
+
+       G4double XtotPiN = 16.4 + 19.3 *std::pow(Plab,-0.42) +
+                          0.19 *sqrLogPlab - 0.0 *LogPlab;
+
+       G4double XelPiP  = 1.76 + 11.2*std::pow(Plab,-0.64) +
+                          0.043*sqrLogPlab - 0.0 *LogPlab;
+
+       G4double XelPiN  =  0.0 + 11.4*std::pow(Plab,-0.40) +
+                           0.079*sqrLogPlab - 0.0 *LogPlab;
+
+       Xtotal           = ( NumberOfTargetProtons  * XtotPiP +
+                            NumberOfTargetNeutrons * XtotPiN  );
+
+       Xelastic         = ( NumberOfTargetProtons  * XelPiP  +
+                            NumberOfTargetNeutrons * XelPiN   );
+  }
+  else if( PDGcode ==  111 )  //------Projectile is PionZero  -------
+  {
+       G4double XtotPiP =(16.4 + 19.3 *std::pow(Plab,-0.42) +
+                          0.19 *sqrLogPlab - 0.0 *LogPlab +   //Pi+
+                          33.0 + 14.0 *std::pow(Plab,-1.36) +
+                          0.456*sqrLogPlab - 4.03*LogPlab)/2; //Pi-
+
+       G4double XtotPiN =(33.0 + 14.0 *std::pow(Plab,-1.36) +
+                          0.456*sqrLogPlab - 4.03*LogPlab +   //Pi+
+                          16.4 + 19.3 *std::pow(Plab,-0.42) +
+                          0.19 *sqrLogPlab - 0.0 *LogPlab)/2; //Pi-
+
+       G4double XelPiP  =( 0.0 + 11.4*std::pow(Plab,-0.40) +
+                           0.079*sqrLogPlab - 0.0 *LogPlab +    //Pi+
+                           1.76 + 11.2*std::pow(Plab,-0.64) +
+                           0.043*sqrLogPlab - 0.0 *LogPlab)/2; //Pi-
+
+       G4double XelPiN  =( 1.76 + 11.2*std::pow(Plab,-0.64) +
+                           0.043*sqrLogPlab - 0.0 *LogPlab +   //Pi+
+                           0.0  + 11.4*std::pow(Plab,-0.40) +
+                           0.079*sqrLogPlab - 0.0 *LogPlab)/2; //Pi-
+
+       Xtotal           = ( NumberOfTargetProtons  * XtotPiP +
+                            NumberOfTargetNeutrons * XtotPiN  );
+
+       Xelastic         = ( NumberOfTargetProtons  * XelPiP  +
+                            NumberOfTargetNeutrons * XelPiN   );
+  }
+  else if( PDGcode == 321 ) //------Projectile is KaonPlus -------
+  {
+       G4double XtotKP = 18.1 +  0. *std::pow(Plab, 0.  ) +
+                         0.26 *sqrLogPlab - 1.0 *LogPlab;
+       G4double XtotKN = 18.7 +  0. *std::pow(Plab, 0.  ) +
+                         0.21 *sqrLogPlab - 0.89*LogPlab;
+
+       G4double XelKP  =  5.0 +  8.1*std::pow(Plab,-1.8 ) +
+                          0.16 *sqrLogPlab - 1.3 *LogPlab;
+
+       G4double XelKN  =  7.3 +  0. *std::pow(Plab,-0.  ) +
+                          0.29 *sqrLogPlab - 2.4 *LogPlab;
+
+       Xtotal          = ( NumberOfTargetProtons  * XtotKP +
+                           NumberOfTargetNeutrons * XtotKN  );
+
+       Xelastic        = ( NumberOfTargetProtons  * XelKP  +
+                           NumberOfTargetNeutrons * XelKN   );
+  }
+  else if( PDGcode ==-321 )  //------Projectile is KaonMinus ------
+  {
+       G4double XtotKP = 32.1 +  0. *std::pow(Plab, 0.  ) +
+                         0.66 *sqrLogPlab - 5.6 *LogPlab;
+       G4double XtotKN = 25.2 +  0. *std::pow(Plab, 0.  ) +
+                         0.38 *sqrLogPlab - 2.9 *LogPlab;
+
+       G4double XelKP  =  7.3 +  0. *std::pow(Plab,-0.  ) +
+                          0.29 *sqrLogPlab - 2.4 *LogPlab;
+
+       G4double XelKN  =  5.0 +  8.1*std::pow(Plab,-1.8 ) +
+                          0.16 *sqrLogPlab - 1.3 *LogPlab;
+
+       Xtotal          = ( NumberOfTargetProtons  * XtotKP +
+                           NumberOfTargetNeutrons * XtotKN  );
+
+       Xelastic        = ( NumberOfTargetProtons  * XelKP  +
+                           NumberOfTargetNeutrons * XelKN   );
+  }
+  else if( PDGcode == 311 ) //------Projectile is KaonZero ------
+  {
+       G4double XtotKP = ( 18.1 +  0. *std::pow(Plab, 0.  ) +
+                          0.26 *sqrLogPlab - 1.0 *LogPlab +   //K+
+                          32.1 +  0. *std::pow(Plab, 0.  ) +
+                          0.66 *sqrLogPlab - 5.6 *LogPlab)/2; //K-
+
+       G4double XtotKN = ( 18.7 +  0. *std::pow(Plab, 0.  ) +
+                          0.21 *sqrLogPlab - 0.89*LogPlab +   //K+
+                          25.2 +  0. *std::pow(Plab, 0.  ) +
+                          0.38 *sqrLogPlab - 2.9 *LogPlab)/2; //K-
+
+       G4double XelKP  = (  5.0 +  8.1*std::pow(Plab,-1.8 )
+                           + 0.16 *sqrLogPlab - 1.3 *LogPlab +   //K+
+                           7.3 +  0. *std::pow(Plab,-0.  ) +
+                           0.29 *sqrLogPlab - 2.4 *LogPlab)/2; //K-
+
+       G4double XelKN  = (  7.3 +  0. *std::pow(Plab,-0.  ) +
+                           0.29 *sqrLogPlab - 2.4 *LogPlab +   //K+
+                           5.0 +  8.1*std::pow(Plab,-1.8 ) +
+                           0.16 *sqrLogPlab - 1.3 *LogPlab)/2; //K-
+
+       Xtotal          = ( NumberOfTargetProtons  * XtotKP +
+                           NumberOfTargetNeutrons * XtotKN  );
+
+       Xelastic        = ( NumberOfTargetProtons  * XelKP  +
+                           NumberOfTargetNeutrons * XelKN   );
+  }
+  else  //------Projectile is undefined, Nucleon assumed
+  {
+       G4double XtotPP = 48.0 +  0. *std::pow(Plab, 0.  ) +
+                         0.522*sqrLogPlab - 4.51*LogPlab;
+
+       G4double XtotPN = 47.3 +  0. *std::pow(Plab, 0.  ) +
+                         0.513*sqrLogPlab - 4.27*LogPlab;
+
+       G4double XelPP  = 11.9 + 26.9*std::pow(Plab,-1.21) +
+                         0.169*sqrLogPlab - 1.85*LogPlab;
+       G4double XelPN  = 11.9 + 26.9*std::pow(Plab,-1.21) +
+                         0.169*sqrLogPlab - 1.85*LogPlab;
+
+       Xtotal          = ( NumberOfTargetProtons  * XtotPP +
+                           NumberOfTargetNeutrons * XtotPN  );
+
+       Xelastic        = ( NumberOfTargetProtons  * XelPP  +
+                           NumberOfTargetNeutrons * XelPN   );
+  }
+  Xinelastic = Xtotal - Xelastic;
+
+  if(Xinelastic < 0.) Xinelastic = 0.;
+
+  return Xinelastic*= millibarn;
+}
+
 
 ////////////////////////////////////////////////////////////////////////////////////
 //

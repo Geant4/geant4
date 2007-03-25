@@ -91,6 +91,9 @@ public:
   G4double GetHadronNucleaonXscNS(const G4DynamicParticle*, const G4Element*);
   G4double GetHadronNucleaonXscNS(const G4DynamicParticle*,G4double At, G4double Zt);
 
+  G4double GetHNinelasticXsc(const G4DynamicParticle*, const G4Element*);
+  G4double GetHNinelasticXsc(const G4DynamicParticle*, G4double At, G4double Zt);
+ 
   G4double CalculateEcmValue ( const G4double , const G4double , const G4double ); 
 
   G4double CalcMandelstamS( const G4double , const G4double , const G4double );
@@ -101,6 +104,7 @@ public:
   G4double GetTotalGlauberGribovXsc()    { return fTotalXsc;     }; 
   G4double GetElasticGlauberGribovXsc()  { return fElasticXsc;   }; 
   G4double GetInelasticGlauberGribovXsc(){ return fInelasticXsc; }; 
+  G4double GetProductionGlauberGribovXsc(){ return fProductionXsc; }; 
   G4double GetRadiusConst()              { return fRadiusConst;  }; 
 
   G4double GetNucleusRadius(const G4DynamicParticle*, const G4Element*);
@@ -112,7 +116,7 @@ private:
   const G4double fLowerLimit; 
   const G4double fRadiusConst;
 
-  G4double fTotalXsc, fElasticXsc, fInelasticXsc;
+  G4double fTotalXsc, fElasticXsc, fInelasticXsc, fProductionXsc;
   G4double fHadronNucleonXsc;
  
   G4ParticleDefinition* theGamma;
