@@ -20,7 +20,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QuasiFreeRatios.cc,v 1.3 2007-03-23 17:20:13 mkossov Exp $
+// $Id: G4QuasiFreeRatios.cc,v 1.4 2007-03-27 12:33:26 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -32,6 +32,7 @@
 
 //#define debug
 //#define pdebug
+//#define nandebug
 
 #include "G4QuasiFreeRatios.hh"
 
@@ -687,3 +688,96 @@ std::pair<G4double,G4double> G4QuasiFreeRatios::GetElTot(G4double pGeV, G4int hP
   G4double A=Z+N;
   return std::make_pair((Z*pA.first+N*nA.first)/A,(Z*pA.second+N*nA.second)/A);
 } // End of GetElTot
+
+// scatter (pPDG,p4M) on a virtual nucleon (NPDG,N4M), result: final pair(newN4M,newp4M)
+// if(newN4M.e()==0.) - below threshold, XS=0, no scattering of the progectile happened
+std::pair<G4LorentzVector,G4LorentzVector> G4QuasiFreeRatios::Scatter(G4int NPDG,
+                                     G4LorentzVector N4M, G4int pPDG, G4LorentzVector p4M)
+{
+  static const G4double mNeut= G4QPDGCode(2112).GetMass();
+  static const G4double mProt= G4QPDGCode(2212).GetMass();
+  G4LorentzVector pr4M=p4M/megaelectronvolt;   // Convert 4-momenta in MeV (keep p4M)
+  N4M/=megaelectronvolt;
+  G4LorentzVector tot4M=N4M+p4M;
+  G4double mT=mNeut;
+  G4int Z=0;
+  G4int N=1;
+  if(NPDG==2212)
+  {
+    mT=mProt;
+    Z=1;
+    N=0;
+  }
+  else
+  {
+    G4cout<<"*Error*G4QuasiFreeRatios::Scatter:PDG="<<pPDG<<" is not 2212 or 2112"<<G4endl;
+    G4Exception("G4QuasiFreeRatios::Scatter:","21",FatalException,"CHIPScomplain");
+    //return std::make_pair(pPDG,G4LorentzVector(0.,0.,0.,0.));// Use this if not exception
+  }
+  G4double mT2=mT*mT;
+  G4double mP2=pr4M.m2();
+  G4double E=(tot4M.m2()-mT2-mP2)/(mT+mT);
+  G4double E2=E*E;
+  if(E<0. || E2<mP2)
+  {
+#ifdef pdebug
+    G4cerr<<"-Warning-G4QFR::Scat:*Negative Energy*E="<<E<<",E2="<<E2<<"<M2="<<mP2<<G4endl;
+#endif
+    return std::make_pair(pPDG,G4LorentzVector(0.,0.,0.,0.)); // Do Nothing Action
+  }
+		G4double P=std::sqrt(E2-mP2);                   // Momentum in pseudo laboratory system
+  G4VQCrossSection* CSmanager=G4QElasticCrossSection::GetPointer();
+#ifdef debug
+  G4cout<<"G4QFR::Scatter: Before XS, P="<<P<<", Z="<<Z<<", N="<<N<<", PDG="<<pPDG<<G4endl;
+#endif
+  G4double xSec=CSmanager->GetCrossSection(false, P, Z, N, pPDG); // Rec.CrossSect
+#ifdef debug
+  G4cout<<"G4QElast::PSDI:pPDG="<<pPDG<<",P="<<P<<",CS="<<xSec/millibarn<<G4endl;
+#endif
+#ifdef nandebug
+  if(xSec>0. || xSec<0. || xSec==0);
+  else  G4cout<<"******G4QElast::PSDI:xSec="<<xSec/millibarn<<G4endl;
+#endif
+  // @@ check a possibility to separate p, n, or alpha (!)
+  if(xSec <= 0.) // The cross-section iz 0 -> Do Nothing
+  {
+#ifdef pdebug
+    G4cerr<<"-Warning-G4QFR::Scat:**Zero XS**PDG="<<pPDG<<",NPDG="<<NPDG<<",P="<<P<<G4endl;
+#endif
+    return std::make_pair(pPDG,G4LorentzVector(0.,0.,0.,0.)); //Do Nothing Action
+  }
+  G4double mint=CSmanager->GetExchangeT(Z,N,pPDG); // fanctional randomized -t in MeV^2
+#ifdef pdebug
+  G4cout<<"G4QFR::SCAT:PDG="<<pPDG<<", P="<<Momentum<<", CS="<<xSec<<", -t="<<mint<<G4endl;
+#endif
+#ifdef nandebug
+  if(mint>-.0000001);
+  else  G4cout<<"******G4QFR::Scat:-t="<<mint<<G4endl;
+#endif
+  G4double cost=1.-mint/CSmanager->GetHMaxT(); // cos(theta) in CMS
+#ifdef ppdebug
+  G4cout<<"G4QFR::Scat:-t="<<mint<<",dpc2="<<CSmanager->GetHMaxT()<<",cost="<<cost<<G4endl;
+#endif
+  if(cost>1. || cost<-1. || !(cost>-1. || cost<=1.))
+  {
+    if     (cost>1.)  cost=1.;
+    else if(cost<-1.) cost=-1.;
+    else
+				{
+      G4cerr<<"G4QFR::S:*NAN*c="<<cost<<",t="<<mint<<",tm="<<CSmanager->GetHMaxT()<<G4endl;
+      return std::make_pair(pPDG,G4LorentzVector(0.,0.,0.,0.)); // Do Nothing Action
+    }
+  }
+  G4LorentzVector reco4M=G4LorentzVector(0.,0.,0.,mT);      // 4mom of the recoil nucleon
+  G4LorentzVector dir4M=tot4M-G4LorentzVector(0.,0.,0.,(tot4M.e()-mT)*.01);
+  if(!G4QHadron(tot4M).RelDecayIn2(pr4M, reco4M, dir4M, cost, cost))
+  {
+    G4cerr<<"G4QFR::Scat:t="<<tot4M<<tot4M.m()<<",mT="<<mT<<",mP="<<std::sqrt(mP2)<<G4endl;
+    //G4Exception("G4QFR::Scat:","009",FatalException,"Decay of ElasticComp");
+    return std::make_pair(pPDG,G4LorentzVector(0.,0.,0.,0.)); // Do Nothing Action
+  }
+#ifdef debug
+		G4cout<<"G4QFR::Scat:p4M="<<p4M<<"+r4M="<<reco4M<<"="<<scat4M+reco4M<<"="<<tot4M<<G4endl;
+#endif
+		return std::make_pair(pr4M*megaelectronvolt,reco4M*megaelectronvolt); // Result
+} // End of Scatter

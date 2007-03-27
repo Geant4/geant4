@@ -39,14 +39,15 @@
 #include "G4ios.hh"
 #include "Randomize.hh"
 #include <vector>
-//#include "G4VCrossSectionDataSet.hh"
 //#include "G4DynamicParticle.hh"
 //#include "G4Element.hh"
 //#include "G4ParticleTable.hh"
 //#include "G4NucleiProperties.hh"
 //#include "G4NucleiPropertiesTable.hh"
-//#include "G4QPDGCode.hh"
-//#include "G4QElasticCrossSection.hh"
+#include "G4QPDGCode.hh"
+#include "G4QHadron.hh"
+#include "G4VCrossSectionDataSet.hh"
+#include "G4QElasticCrossSection.hh"
 
 
 class G4QuasiFreeRatios
@@ -61,16 +62,20 @@ class G4QuasiFreeRatios
 
   static G4QuasiFreeRatios* GetPointer(); // Gives a pointer to this singletone
 
-  // Ret pair(QuasiFree/Inelastic,QuasiElastic/QuasiFree) GetRatios
+  // Pair(QuasiFree/Inelastic,QuasiElastic/QuasiFree)
   std::pair<G4double,G4double> GetRatios(G4double pIU, G4int prPDG, G4int tgZ, G4int tgN);
+  // scatter (pPDG,p4M) on a virtual nucleon (NPDG,N4M), result: final pair(newN4M,newp4M)
+  // if(newN4M.e()==0.) - below threshold, XS=0, no scattering of the progectile happened
+  std::pair<G4LorentzVector,G4LorentzVector> Scatter(G4int NPDG, G4LorentzVector N4M,
+                                                     G4int pPDG, G4LorentzVector p4M);
 
+ private:
+  // These working member functions are in CHIPS units and must not be used externally
   G4double GetQF2IN_Ratio(G4double TotCS_mb, G4int A); // QuasiFree/Inelastic (fast)
   std::pair<G4double,G4double> GetElTot(G4double pGeV,G4int PDG,G4int Z,G4int N);//El,To,mb
   G4double CalcQF2IN_Ratio(G4double TCSmb, G4int A); // R=QuasuFree/Inelastic (sig_t in mb)
   std::pair<G4double,G4double> FetchElTot(G4double pGeV,G4int PDG,G4bool F);//(E,T)fromAMDB
   std::pair<G4double,G4double> CalcElTot(G4double pGeV,G4int Index);//(sigE,sigT)(Index)
- private:
-  // These working member functions are in CHIPS units and must not be used externally
 
  // Body
  private:
