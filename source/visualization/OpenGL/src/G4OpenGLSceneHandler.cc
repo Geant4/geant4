@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLSceneHandler.cc,v 1.47 2007-01-09 10:11:16 allison Exp $
+// $Id: G4OpenGLSceneHandler.cc,v 1.48 2007-03-27 15:15:12 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -217,7 +217,7 @@ void G4OpenGLSceneHandler::AddCircleSquare
 
   G4VMarker::FillStyle style = marker.GetFillStyle();
 
-  G4bool filled;
+  G4bool filled = false;
   static G4bool hashedWarned = false;
   
   switch (style) {
