@@ -20,7 +20,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QuasiFreeRatios.cc,v 1.4 2007-03-27 12:33:26 mkossov Exp $
+// $Id: G4QuasiFreeRatios.cc,v 1.5 2007-03-27 13:07:12 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -730,7 +730,10 @@ std::pair<G4LorentzVector,G4LorentzVector> G4QuasiFreeRatios::Scatter(G4int NPDG
 #ifdef debug
   G4cout<<"G4QFR::Scatter: Before XS, P="<<P<<", Z="<<Z<<", N="<<N<<", PDG="<<pPDG<<G4endl;
 #endif
-  G4double xSec=CSmanager->GetCrossSection(false, P, Z, N, pPDG); // Rec.CrossSect
+  // @@ Temporary NN t-dependence for all hadrons
+  G4int PDG=2212;                                                // *TMP*
+  G4double xSec=CSmanager->GetCrossSection(false, P, Z, N, PDG); // Rec.CrossSect *TMP*
+  //G4double xSec=CSmanager->GetCrossSection(false, P, Z, N, pPDG); // Rec.CrossSect
 #ifdef debug
   G4cout<<"G4QElast::PSDI:pPDG="<<pPDG<<",P="<<P<<",CS="<<xSec/millibarn<<G4endl;
 #endif
@@ -746,7 +749,8 @@ std::pair<G4LorentzVector,G4LorentzVector> G4QuasiFreeRatios::Scatter(G4int NPDG
 #endif
     return std::make_pair(pPDG,G4LorentzVector(0.,0.,0.,0.)); //Do Nothing Action
   }
-  G4double mint=CSmanager->GetExchangeT(Z,N,pPDG); // fanctional randomized -t in MeV^2
+  G4double mint=CSmanager->GetExchangeT(Z,N,PDG); // functional randomized -t (MeV^2) *TMP*
+  //G4double mint=CSmanager->GetExchangeT(Z,N,pPDG); // functional randomized -t in MeV^2
 #ifdef pdebug
   G4cout<<"G4QFR::SCAT:PDG="<<pPDG<<", P="<<Momentum<<", CS="<<xSec<<", -t="<<mint<<G4endl;
 #endif

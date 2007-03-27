@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QElasticCrossSection.cc,v 1.20 2007-01-16 14:41:40 mkossov Exp $
+// $Id: G4QElasticCrossSection.cc,v 1.21 2007-03-27 13:07:12 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -510,10 +510,10 @@ G4double G4QElasticCrossSection::GetPTables(G4double LP,G4double ILP, G4int PDG,
     //
     if(lastPAR[nLast]!=pwd) // A unique flag to avoid the repeatable definition
     {
-      if     (PDG==2112&&tgZ==1&&tgN==0)
-                                for(G4int ip=0;ip<n_npel;ip++)lastPAR[ip]=np_el[ip];// np
-						else if(PDG==2212&&tgZ==1&&tgN==0)
-                                for(G4int ip=0;ip<n_ppel;ip++)lastPAR[ip]=pp_el[ip];// pp
+      if     (PDG==2112&&tgZ==1&&tgN==0 || PDG==2212&&tgZ==0&&tgN==1)
+                                for(G4int ip=0;ip<n_npel;ip++)lastPAR[ip]=np_el[ip];//np/pn
+						else if(PDG==2212&&tgZ==1&&tgN==0 || PDG==2112&&tgZ==0&&tgN==1)
+                                for(G4int ip=0;ip<n_ppel;ip++)lastPAR[ip]=pp_el[ip];//pp/nn
       else
       {
         G4double a=tgZ+tgN;
@@ -1417,7 +1417,7 @@ G4double G4QElasticCrossSection::GetTabValues(G4double lp, G4int PDG, G4int tgZ,
   G4double p2=p*p;            
   G4double p3=p2*p;
   G4double p4=p3*p;
-  if(PDG==2112 && tgZ==1 && tgN==0)       // np
+  if(PDG==2112 && tgZ==1 && tgN==0 || PDG==2212 && tgZ==0 && tgN==1)       // np/pn
   {
     G4double ssp=std::sqrt(sp);           // sqrt(sqrt(p))=p^.25
     G4double p2s=p2*sp;
@@ -1440,7 +1440,7 @@ G4double G4QElasticCrossSection::GetTabValues(G4double lp, G4int PDG, G4int tgZ,
     return lastPAR[0]/(p2s+lastPAR[1]*p+lastPAR[2]/ssp)+lastPAR[4]/p
            +(lastPAR[5]+lastPAR[6]*dl1*dl1+lastPAR[7]/p)/(1.+lastPAR[8]/p4);
   }
-  else if(PDG==2212 && tgZ==1 && tgN==0) // pp
+  else if(PDG==2212 && tgZ==1 && tgN==0 || PDG==2112 && tgZ==0 && tgN==1) // pp/nn
   {
     G4double p2s=p2*sp;
 		  G4double dl1=lp-lastPAR[3];
@@ -1545,8 +1545,8 @@ G4double G4QElasticCrossSection::GetTabValues(G4double lp, G4int PDG, G4int tgZ,
   else
   {
     G4cout<<"*Error*G4QElasticCrossSection::GetTabValues: PDG="<<PDG<<", Z="<<tgZ<<", N="
-          <<tgN<<", while it is defined only for PDG=2212, Z=1, N=0"<<G4endl;
-    throw G4QException("G4QElasticCrossSection::GetTabValues: only pp is implemented");
+          <<tgN<<", while it is defined only for PDG=2212/2112, Z>0, N>0"<<G4endl;
+    throw G4QException("G4QElasticCrossSection::GetTabValues: only NA is implemented");
   }
   return 0.;
 } // End of GetTableValues
