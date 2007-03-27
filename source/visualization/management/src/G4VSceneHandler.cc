@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.cc,v 1.79 2007-01-11 16:38:14 allison Exp $
+// $Id: G4VSceneHandler.cc,v 1.80 2007-03-27 15:43:56 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -553,37 +553,40 @@ void G4VSceneHandler::ProcessScene (G4VViewer&) {
     } else {
 
       G4RunManager* runManager = G4RunManager::GetRunManager();
-      const G4Run* run = runManager->GetCurrentRun();
-      const std::vector<const G4Event*>* events =
-	run? run->GetEventVector(): 0;
-      size_t nKeptEvents = 0;
-      if (events) nKeptEvents = events->size();
       if (runManager) {
-	if (fpScene->GetRefreshAtEndOfEvent()) {
+	const G4Run* run = runManager->GetCurrentRun();
+	const std::vector<const G4Event*>* events =
+	  run? run->GetEventVector(): 0;
+	size_t nKeptEvents = 0;
+	if (events) nKeptEvents = events->size();
+	if (nKeptEvents) {
 
-	  if (verbosity >= G4VisManager::confirmations) {
-	    G4cout << "Refreshing event..." << G4endl;
-	  }
-	  const G4Event* event = 0;
-	  if (events && events->size()) event = events->back();
-	  if (event) DrawEvent(event);
+	  if (fpScene->GetRefreshAtEndOfEvent()) {
 
-	} else {  // Accumulating events.
-
-	  if (verbosity >= G4VisManager::confirmations) {
-	    G4cout << "Refreshing events in run..." << G4endl;
-	  }
-	  for (size_t i = 0; i < nKeptEvents; ++i) {
-	    const G4Event* event = (*events)[i];
+	    if (verbosity >= G4VisManager::confirmations) {
+	      G4cout << "Refreshing event..." << G4endl;
+	    }
+	    const G4Event* event = 0;
+	    if (events && events->size()) event = events->back();
 	    if (event) DrawEvent(event);
-	  }
 
-	  if (!fpScene->GetRefreshAtEndOfRun()) {
-	    if (verbosity >= G4VisManager::warnings) {
-	      G4cout <<
-		"WARNING: Cannot refresh events accumulated over more"
-		"\n  than one runs.  Refreshed just the last run..."
-		     << G4endl;
+	  } else {  // Accumulating events.
+
+	    if (verbosity >= G4VisManager::confirmations) {
+	      G4cout << "Refreshing events in run..." << G4endl;
+	    }
+	    for (size_t i = 0; i < nKeptEvents; ++i) {
+	      const G4Event* event = (*events)[i];
+	      if (event) DrawEvent(event);
+	    }
+
+	    if (!fpScene->GetRefreshAtEndOfRun()) {
+	      if (verbosity >= G4VisManager::warnings) {
+		G4cout <<
+		  "WARNING: Cannot refresh events accumulated over more"
+		  "\n  than one runs.  Refreshed just the last run."
+		       << G4endl;
+	      }
 	    }
 	  }
 	}

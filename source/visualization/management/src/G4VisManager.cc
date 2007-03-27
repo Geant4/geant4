@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VisManager.cc,v 1.111 2007-01-11 16:41:59 allison Exp $
+// $Id: G4VisManager.cc,v 1.112 2007-03-27 15:39:43 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -71,6 +71,7 @@
 #include "G4TrajectoryDrawByCharge.hh"
 #include "Randomize.hh"
 #include "G4RunManager.hh"
+#include "G4EventManager.hh"
 #include "G4Run.hh"
 #include "G4Event.hh"
 #include <sstream>
@@ -1131,8 +1132,8 @@ void G4VisManager::EndOfEvent ()
   G4RunManager* runManager = G4RunManager::GetRunManager();
   const G4Run* currentRun = runManager->GetCurrentRun();
 
-  const G4Event* currentEvent =
-    G4EventManager::GetEventManager()->GetConstCurrentEvent();
+  G4EventManager* eventManager = G4EventManager::GetEventManager();
+  const G4Event* currentEvent = eventManager->GetConstCurrentEvent();
   if (!currentEvent) return;
 
   ClearTransientStoreIfMarked();
@@ -1158,7 +1159,7 @@ void G4VisManager::EndOfEvent ()
     } else {  // Last event...
       // Keep, but only if user has not kept any...
       if (!nKeptEvents) {
-	G4EventManager::GetEventManager()->KeepTheCurrentEvent();
+	eventManager->KeepTheCurrentEvent();
 	fKeptLastEvent = true;
       }
     }
@@ -1180,7 +1181,7 @@ void G4VisManager::EndOfEvent ()
 	warned = true;
       }
     } else if (maxNumberOfKeptEvents != 0) {
-      G4EventManager::GetEventManager()->KeepTheCurrentEvent();
+      eventManager->KeepTheCurrentEvent();
     }
   }
 }
