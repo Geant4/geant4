@@ -1,4 +1,4 @@
-$Id: History,v 1.401 2007-01-11 16:46:41 allison Exp $
+$Id: History,v 1.402 2007-03-27 15:54:11 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,16 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+25th March 2007  John Allison  (vis-V08-02-02)
+-  modeling-V08-02-01: Added solid dump and volume transformation to G4Atts.
+- visman-V08-02-02:
+  o Removed G4GAGTree.
+  o Removed /vis/scene/add/eventID (once again) from /vis/drawVolume.
+- opengl-V08-02-03: Fix compiler warnings.
+- vistree-V08-02-01: Removed GAGTree.
+- openinventor-V08-02-01): Added scale factor to list of changes
+  requiring kernel visit, and some rationalisation.
 
 11th January 2007  John Allison  (vis-V08-02-01)
 - visman-V08-02-01:
