@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorSceneHandler.hh,v 1.32 2007-01-05 16:52:47 allison Exp $
+// $Id: G4OpenInventorSceneHandler.hh,v 1.33 2007-03-27 15:24:15 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -47,6 +47,7 @@
 class G4OpenInventor;
 class SoSeparator;
 class Geant4_SoStyleCache;
+class G4VisAttributes;
 
 // Base class for various OpenInventorScene classes.
 class G4OpenInventorSceneHandler: public G4VSceneHandler {
@@ -88,6 +89,7 @@ private:
   enum G4OIMarker {G4OICircle, G4OISquare};
   void AddCircleSquare (G4OIMarker markerType, const G4VMarker&);
   void GeneratePrerequisites();
+  void AddProperties(const G4VisAttributes*);
   std::map <G4LogicalVolume*, SoSeparator*,
     std::less <G4LogicalVolume*> > fSeparatorMap;
   SoSeparator* fRoot;

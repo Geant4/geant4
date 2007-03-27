@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorSceneHandler.cc,v 1.51 2007-01-05 16:52:47 allison Exp $
+// $Id: G4OpenInventorSceneHandler.cc,v 1.52 2007-03-27 15:24:15 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -185,7 +185,10 @@ void G4OpenInventorSceneHandler::BeginPrimitives
 //
 // Method for handling G4Polyline objects (from tracking).
 //
-void G4OpenInventorSceneHandler::AddPrimitive (const G4Polyline& line) {
+void G4OpenInventorSceneHandler::AddPrimitive (const G4Polyline& line)
+{
+  AddProperties(line.GetVisAttributes());  // Transformation, colour, etc.
+
   G4int nPoints = line.size();
   SbVec3f* pCoords = new SbVec3f[nPoints];
 
@@ -195,19 +198,6 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Polyline& line) {
                              (float)line[iPoint].z());
   }
 
-  // Don't understand why I have to do this again (done in
-  // GeneratePrerequisites) - JA.
-  //
-  // Color
-  //
-  const G4Colour& c = GetColour(line);
-  SoMaterial* material = 
-    fStyleCache->getMaterial((float)c.GetRed(),
-                             (float)c.GetGreen(),
-                             (float)c.GetBlue(),
-                             (float)(1-c.GetAlpha()));
-  fCurrentSeparator->addChild(material);
-  
   //
   // Point Set
   // 
@@ -237,7 +227,10 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Polyline& line) {
   delete [] pCoords;
 }
 
-void G4OpenInventorSceneHandler::AddPrimitive (const G4Polymarker& polymarker) {
+void G4OpenInventorSceneHandler::AddPrimitive (const G4Polymarker& polymarker)
+{
+  AddProperties(polymarker.GetVisAttributes()); // Transformation, colour, etc.
+
   G4int pointn = polymarker.size();
   if(pointn<=0) return;
 
@@ -248,16 +241,6 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Polymarker& polymarker) {
                             (float)polymarker[iPoint].z());
   }
 
-  // Don't understand why I have to do this again (done in
-  // GeneratePrerequisites) - JA.
-  const G4Colour& c = GetColour(polymarker);
-  SoMaterial* material = 
-    fStyleCache->getMaterial((float)c.GetRed(),
-                             (float)c.GetGreen(),
-                             (float)c.GetBlue(),
-                             (float)(1-c.GetAlpha()));
-  fCurrentSeparator->addChild(material);
-  
   SoCoordinate3* coordinate3 = new SoCoordinate3;
   coordinate3->point.setValues(0,pointn,points);
   fCurrentSeparator->addChild(coordinate3);
@@ -353,10 +336,13 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Polymarker& polymarker) {
 //
 // Method for handling G4Text objects
 //
-void G4OpenInventorSceneHandler::AddPrimitive (const G4Text& text) {
+void G4OpenInventorSceneHandler::AddPrimitive (const G4Text& text)
+{
+  AddProperties(text.GetVisAttributes());  // Transformation, colour, etc.
+
   //
   // Color.  Note: text colour is worked out differently.  This
-  // over-rides the colour added in GeneratePrerequisites...
+  // over-rides the colour added in AddProperties...
   //
   const G4Colour& c = GetTextColour (text);
   SoMaterial* material = 
@@ -419,20 +405,9 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Square& square) {
 }
 
 void G4OpenInventorSceneHandler::AddCircleSquare
-(G4OIMarker markerType, const G4VMarker& marker) {
-
-  // Don't understand why I have to do this again (done in
-  // GeneratePrerequisites) - JA.
-  //
-  // Color
-  //
-  const G4Colour& c = GetColour(marker);
-  SoMaterial* material = 
-    fStyleCache->getMaterial((float)c.GetRed(),
-                             (float)c.GetGreen(),
-                             (float)c.GetBlue(),
-                             (float)(1-c.GetAlpha()));
-  fCurrentSeparator->addChild(material);
+(G4OIMarker markerType, const G4VMarker& marker)
+{
+  AddProperties(marker.GetVisAttributes());  // Transformation, colour, etc.
 
   MarkerSizeType sizeType;
   G4double screenSize = GetMarkerSize (marker, sizeType);
@@ -517,8 +492,11 @@ void G4OpenInventorSceneHandler::AddCircleSquare
 //
 // Method for handling G4Polyhedron objects for drawing solids.
 //
-void G4OpenInventorSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
+void G4OpenInventorSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron)
+{
   if (polyhedron.GetNoFacets() == 0) return;
+
+  AddProperties(polyhedron.GetVisAttributes()); // Transformation, colour, etc.
 
   SoG4Polyhedron* soPolyhedron = new SoG4Polyhedron(polyhedron);
 
@@ -544,6 +522,8 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
 //
 void G4OpenInventorSceneHandler::AddPrimitive (const G4NURBS& nurb) {
 
+  AddProperties(nurb.GetVisAttributes()); // Transformation, colour, etc.
+
   G4float *u_knot_array, *u_knot_array_ptr;
   u_knot_array = u_knot_array_ptr = new G4float [nurb.GetnbrKnots(G4NURBS::U)];
   G4NURBS::KnotsIterator u_iterator (nurb, G4NURBS::U);
@@ -561,17 +541,6 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4NURBS& nurb) {
   while (c_p_iterator.pick (ctrl_pnt_array_ptr++));
   
   SoSeparator *surfSep = new SoSeparator();
-
-  //
-  // Color
-  //  
-  const G4Colour& c = GetColour(nurb);
-  SoMaterial* material = 
-    fStyleCache->getMaterial((float)c.GetRed(),
-                             (float)c.GetGreen(),
-                             (float)c.GetBlue(),
-                             (float)(1-c.GetAlpha()));
-  surfSep->addChild(material);
 
   //
   // Set up NURBS
@@ -630,35 +599,6 @@ void G4OpenInventorSceneHandler::GeneratePrerequisites()
   // location on in the scene database so that when the solid is
   // actually added (in addthis), it is put in the right place.
 
-  // Use the applicable vis attributes...
-  const G4VisAttributes* pApplicableVisAttribs =
-    fpViewer->GetApplicableVisAttributes (fpVisAttribs);
-
-  // First find the color attributes...
-  const G4Colour& g4Col =  pApplicableVisAttribs->GetColour ();
-  const double red = g4Col.GetRed ();
-  const double green = g4Col.GetGreen ();
-  const double blue = g4Col.GetBlue ();
-  double transparency = 1 - g4Col.GetAlpha();
-
-  // Drawing style...
-  G4ViewParameters::DrawingStyle drawing_style =
-    GetDrawingStyle(pApplicableVisAttribs);
-  switch (drawing_style) {
-  case (G4ViewParameters::wireframe):    
-    fModelingSolid = false;
-    break;
-  case (G4ViewParameters::hlr):
-  case (G4ViewParameters::hsr):
-  case (G4ViewParameters::hlhsr):
-    fModelingSolid = true;
-    break;
-  }	
-
-  // Edge visibility...
-  G4bool isAuxEdgeVisible = GetAuxEdgeVisible (pApplicableVisAttribs);
-  fReducedWireFrame = !isAuxEdgeVisible;
-
   G4PhysicalVolumeModel* pPVModel =
     dynamic_cast<G4PhysicalVolumeModel*>(fpModel);
   
@@ -714,6 +654,33 @@ void G4OpenInventorSceneHandler::GeneratePrerequisites()
 
       if(fPreviewAndFull) detectorTreeKit->setPreviewAndFull();
       else detectorTreeKit->setPreview(TRUE);
+
+      // Colour, etc., for SoDetectorTreeKit.  Treated differently to
+      // othere SoNodes(?).  Use fpVisAttribs stored away in
+      // PreAddSolid...
+      const G4VisAttributes* pApplicableVisAttribs =
+	fpViewer->GetApplicableVisAttributes (fpVisAttribs);
+
+      // First find the color attributes...
+      const G4Colour& g4Col =  pApplicableVisAttribs->GetColour ();
+      const double red = g4Col.GetRed ();
+      const double green = g4Col.GetGreen ();
+      const double blue = g4Col.GetBlue ();
+      double transparency = 1 - g4Col.GetAlpha();
+
+      // Drawing style...
+      G4ViewParameters::DrawingStyle drawing_style =
+	GetDrawingStyle(pApplicableVisAttribs);
+      switch (drawing_style) {
+      case (G4ViewParameters::wireframe):    
+	fModelingSolid = false;
+	break;
+      case (G4ViewParameters::hlr):
+      case (G4ViewParameters::hsr):
+      case (G4ViewParameters::hlhsr):
+	fModelingSolid = true;
+	break;
+      }
 
       SoMaterial* material = 
 	fStyleCache->getMaterial((float)red,
@@ -796,6 +763,38 @@ void G4OpenInventorSceneHandler::GeneratePrerequisites()
       fCurrentSeparator = fDetectorRoot;
     }
   }
+}
+
+void G4OpenInventorSceneHandler::AddProperties(const G4VisAttributes* visAtts)
+{
+  // Use the applicable vis attributes...
+  const G4VisAttributes* pApplicableVisAttribs =
+    fpViewer->GetApplicableVisAttributes (visAtts);
+
+  // First find the color attributes...
+  const G4Colour& g4Col =  pApplicableVisAttribs->GetColour ();
+  const double red = g4Col.GetRed ();
+  const double green = g4Col.GetGreen ();
+  const double blue = g4Col.GetBlue ();
+  double transparency = 1 - g4Col.GetAlpha();
+
+  // Drawing style...
+  G4ViewParameters::DrawingStyle drawing_style =
+    GetDrawingStyle(pApplicableVisAttribs);
+  switch (drawing_style) {
+  case (G4ViewParameters::wireframe):    
+    fModelingSolid = false;
+    break;
+  case (G4ViewParameters::hlr):
+  case (G4ViewParameters::hsr):
+  case (G4ViewParameters::hlhsr):
+    fModelingSolid = true;
+    break;
+  }
+
+  // Edge visibility...
+  G4bool isAuxEdgeVisible = GetAuxEdgeVisible (pApplicableVisAttribs);
+  fReducedWireFrame = !isAuxEdgeVisible;
 
   SoMaterial* material = 
     fStyleCache->getMaterial((float)red,
@@ -826,5 +825,4 @@ void G4OpenInventorSceneHandler::GeneratePrerequisites()
   delete sbMatrix;
   fCurrentSeparator->addChild(matrixTransform);
 }
-
 #endif
