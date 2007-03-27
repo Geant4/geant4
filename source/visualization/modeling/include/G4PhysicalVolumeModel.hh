@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeModel.hh,v 1.32 2006-10-26 11:05:42 allison Exp $
+// $Id: G4PhysicalVolumeModel.hh,v 1.33 2007-03-27 15:36:38 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -205,6 +205,7 @@ protected:
   G4VPhysicalVolume* fpCurrentPV;    // Current physical volume.
   G4LogicalVolume*   fpCurrentLV;    // Current logical volume.
   G4Material*    fpCurrentMaterial;  // Current material.
+  G4Transform3D* fpCurrentTransform; // Current transform.
   std::vector<G4PhysicalVolumeNodeID> fDrawnPVPath;
   G4bool             fCurtailDescent;// Can be set to curtail descent.
   const G4Polyhedron*fpClippingPolyhedron;
