@@ -1,4 +1,4 @@
-$Id: History,v 1.16 2007-03-21 12:36:14 vnivanch Exp $
+$Id: History,v 1.17 2007-03-27 10:01:21 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,8 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+27-03-2007, V.Ivanchenko phys-lists-V08-02-05
+-  G4EmStandardPhysics72 use skin=0 (no ComputeStep)
 -  G4HadronHElasticPhysics uses new cross section classes G4BGGNucleonElasticXS
    and G4BGGPionElasticXS (V.Ivanchenko)
 
