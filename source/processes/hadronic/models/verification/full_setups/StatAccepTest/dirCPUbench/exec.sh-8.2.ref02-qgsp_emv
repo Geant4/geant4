@@ -7,7 +7,7 @@ cp start.rndm ../.
 #
 cd ../
 #
-ln -sfn dirCPUbench/setup.sh-8.2.ref02 setup.shmainStatAccepTest.cc-8.2.p01-qgsp
+ln -sfn dirCPUbench/setup.sh-8.2.ref02 setup.sh
 . setup.sh
 #
 ln -sfn dirCPUbench/GNUmakefile-new GNUmakefile
