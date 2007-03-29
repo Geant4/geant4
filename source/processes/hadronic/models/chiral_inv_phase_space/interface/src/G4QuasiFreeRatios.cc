@@ -20,7 +20,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QuasiFreeRatios.cc,v 1.5 2007-03-27 13:07:12 mkossov Exp $
+// $Id: G4QuasiFreeRatios.cc,v 1.6 2007-03-29 13:37:00 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -47,14 +47,13 @@ G4QuasiFreeRatios* G4QuasiFreeRatios::GetPointer()
 std::pair<G4double,G4double> G4QuasiFreeRatios::GetRatios(G4double pIU, G4int pPDG,
                                                            G4int tgZ,    G4int tgN)
 {
-  G4double p=pIU/gigaelectronvolt; // Momentum in GeV/c
-		std::pair<G4double,G4double> ElTot=GetElTot(p, pPDG, tgZ, tgN);// mean El&Tot(mb) for hN
+		std::pair<G4double,G4double> ElTot=GetElTot(pIU, pPDG, tgZ, tgN); // mean hN El&Tot(IU)
   G4double R=0.;
   G4double QF2In=1.;               // Prototype of QuasiFree/Inelastic ratio for hN_tot
   if(ElTot.second>0.)
   {
-    R=ElTot.first/ElTot.second;    // Elastic/Total ratio
-    QF2In=GetQF2IN_Ratio(ElTot.second, tgZ+tgN); // QuasiFree/Inelastic ratio for hN_tot
+    R=ElTot.first/ElTot.second;    // Elastic/Total ratio (does not depend on units
+    QF2In=GetQF2IN_Ratio(ElTot.second/millibarn, tgZ+tgN); // QuasiFree/Inelastic ratio
   }
   return std::make_pair(QF2In,R);
 }
@@ -675,9 +674,10 @@ std::pair<G4double,G4double> G4QuasiFreeRatios::FetchElTot(G4double p, G4int PDG
 } // End of FetchElTot
 
 // (Mean Elastic and Mean Total) Cross-Sections (mb) for PDG+(Z,N) at P=p[GeV/c]
-std::pair<G4double,G4double> G4QuasiFreeRatios::GetElTot(G4double pGeV, G4int hPDG,
+std::pair<G4double,G4double> G4QuasiFreeRatios::GetElTot(G4double pIU, G4int hPDG,
                                                          G4int Z,       G4int N)
 {
+  G4double pGeV=pIU/gigaelectronvolt;
   if(Z<1 && N<1)
   {
     G4cout<<"-Warning-G4QuasiFreeRatio::GetElTot:Z="<<Z<<",N="<<N<<", return zero"<<G4endl;
@@ -685,7 +685,7 @@ std::pair<G4double,G4double> G4QuasiFreeRatios::GetElTot(G4double pGeV, G4int hP
   }
   std::pair<G4double,G4double> pA=FetchElTot(pGeV, hPDG, true);
   std::pair<G4double,G4double> nA=FetchElTot(pGeV, hPDG, false);
-  G4double A=Z+N;
+  G4double A=(Z+N)/millibarn;                // To make the result in independent units(IU)
   return std::make_pair((Z*pA.first+N*nA.first)/A,(Z*pA.second+N*nA.second)/A);
 } // End of GetElTot
 

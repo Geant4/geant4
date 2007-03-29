@@ -68,11 +68,12 @@ class G4QuasiFreeRatios
   // if(newN4M.e()==0.) - below threshold, XS=0, no scattering of the progectile happened
   std::pair<G4LorentzVector,G4LorentzVector> Scatter(G4int NPDG, G4LorentzVector N4M,
                                                      G4int pPDG, G4LorentzVector p4M);
+  // Mean hN El and Tot XS(IU) for the isotopic (Z,N): on p -> (Z=1,N=0), on n -> (Z=0,N=1)
+  std::pair<G4double,G4double> GetElTot(G4double pIU, G4int hPDG, G4int Z, G4int N); //(IU)
 
  private:
   // These working member functions are in CHIPS units and must not be used externally
   G4double GetQF2IN_Ratio(G4double TotCS_mb, G4int A); // QuasiFree/Inelastic (fast)
-  std::pair<G4double,G4double> GetElTot(G4double pGeV,G4int PDG,G4int Z,G4int N);//El,To,mb
   G4double CalcQF2IN_Ratio(G4double TCSmb, G4int A); // R=QuasuFree/Inelastic (sig_t in mb)
   std::pair<G4double,G4double> FetchElTot(G4double pGeV,G4int PDG,G4bool F);//(E,T)fromAMDB
   std::pair<G4double,G4double> CalcElTot(G4double pGeV,G4int Index);//(sigE,sigT)(Index)
