@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QElasticCrossSection.cc,v 1.22 2007-03-30 10:20:03 mkossov Exp $
+// $Id: G4QElasticCrossSection.cc,v 1.23 2007-03-30 10:33:51 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -1569,21 +1569,21 @@ G4double G4QElasticCrossSection::GetQ2max(G4int PDG, G4int tgZ, G4int tgN, G4dou
   static const G4double mProt2= mProt*mProt;
   static const G4double mNeut2= mNeut*mNeut;
   //static const G4double mDeut2= mDeut*mDeut;
-  G4double pP2=pP*pP;                                 // squared momentum of the projectile
-  if(PDG==2212 && tgZ==1 && tgN==0)                   // ---> pp(identical,symmetric 90deg)
+  G4double pP2=pP*pP;                                  // squared momentum of the projectile
+  if(PDG==2212 && tgZ==1 && tgN==0)
   {
-    G4double tMid=std::sqrt(pP2+mProt2)*mProt-mProt2; // CMS 90deg value of -t=Q2 (GeV^2)
+    G4double tMid=std::sqrt(pP2+mProt2)*mProt-mProt2;  // CMS 90deg value of -t=Q2 (GeV^2)
     return tMid+tMid;
   }
-  else if(PDG==2112 && tgZ)                           // ---> nA
+  else if(PDG==2112 && (tgZ || tgN))                   // ---> nA
   {
-    G4double mt=mProt;                                // Target mass in GeV
+    G4double mt=mProt;                                 // Target mass in GeV
     if(tgN||tgZ>1) mt=G4QPDGCode(90000000+tgZ*1000+tgN).GetMass()*.001; // Target mass GeV
     G4double dmt=mt+mt;
     G4double s=dmt*std::sqrt(pP2+mNeut2)+mNeut2+mt*mt; // Mondelstam s (in GeV^2)
     return dmt*dmt*pP2/s;
   }
-  else if(PDG==2212 && tgZ)                           // ---> pA
+  else if(PDG==2212 && (tgZ || tgN))                   // ---> pA
   {
     G4double mt=G4QPDGCode(90000000+tgZ*1000+tgN).GetMass()*.001; // Target mass in GeV
     G4double dmt=mt+mt;

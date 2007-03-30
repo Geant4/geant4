@@ -20,7 +20,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QuasiFreeRatios.cc,v 1.7 2007-03-30 07:18:25 mkossov Exp $
+// $Id: G4QuasiFreeRatios.cc,v 1.8 2007-03-30 10:33:51 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -783,5 +783,5 @@ std::pair<G4LorentzVector,G4LorentzVector> G4QuasiFreeRatios::Scatter(G4int NPDG
 #ifdef debug
 		G4cout<<"G4QFR::Scat:p4M="<<p4M<<"+r4M="<<reco4M<<"="<<scat4M+reco4M<<"="<<tot4M<<G4endl;
 #endif
-		return std::make_pair(pr4M*megaelectronvolt,reco4M*megaelectronvolt); // Result
+		return std::make_pair(reco4M*megaelectronvolt,pr4M*megaelectronvolt); // Result
 } // End of Scatter
