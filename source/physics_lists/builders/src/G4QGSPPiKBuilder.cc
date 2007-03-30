@@ -29,7 +29,7 @@
 #include "G4ProcessManager.hh"
 
 G4QGSPPiKBuilder::
-G4QGSPPiKBuilder() 
+G4QGSPPiKBuilder(G4bool quasiElastic) 
 {
   theMin = 12*GeV;
   theModel = new G4TheoFSGenerator;
@@ -37,12 +37,19 @@ G4QGSPPiKBuilder()
   theStringModel = new G4QGSModel< G4QGSParticipants >;
   theStringDecay = new G4ExcitedStringDecay(new G4QGSMFragmentation);
   theStringModel->SetFragmentationModel(theStringDecay);
+  
 
   theCascade = new G4GeneratorPrecompoundInterface;
   thePreEquilib = new G4PreCompoundModel(new G4ExcitationHandler);
   theCascade->SetDeExcitation(thePreEquilib);  
 
   theModel->SetHighEnergyGenerator(theStringModel);
+  if (quasiElastic)
+  {
+     theQuasiElastic=new G4QuasiElasticChannel;
+     theModel->SetQuasiElasticChannel(theQuasiElastic);
+  } else 
+  {  theQuasiElastic=0;}  
   theModel->SetTransport(theCascade);
 }
 
@@ -50,6 +57,8 @@ G4QGSPPiKBuilder::
 ~G4QGSPPiKBuilder() 
 {
   delete theCascade;
+  delete thePreEquilib;
+  if ( theQuasiElastic ) delete theQuasiElastic;
   delete theStringDecay;
   delete theStringModel;
   delete theModel;

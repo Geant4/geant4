@@ -23,59 +23,47 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
- #include "G4QGSPProtonBuilder.hh"
- #include "G4ParticleDefinition.hh"
- #include "G4ParticleTable.hh"
- #include "G4ProcessManager.hh"
+//
+// $Id: QGSP_NQSE.hh,v 1.1 2007-03-30 15:38:28 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+//---------------------------------------------------------------------------
+//
+// ClassName:   QGSP
+//
+// Author: 2002 J.P. Wellisch
+//
+// Modified:
+//
+//----------------------------------------------------------------------------
+#ifndef TQGSP_h
+#define TQGSP_h 1
 
- G4QGSPProtonBuilder::
- G4QGSPProtonBuilder(G4bool quasiElastic) 
- {
-   theMin = 12*GeV;
-   theModel = new G4TheoFSGenerator;
+#include "G4VModularPhysicsList.hh"
+#include "globals.hh"
+#include "CompileTimeConstraints.hh"
 
-   theStringModel = new G4QGSModel< G4QGSParticipants >;
-   theStringDecay = new G4ExcitedStringDecay(new G4QGSMFragmentation);
-   theStringModel->SetFragmentationModel(theStringDecay);
+template<class T>
+class TQGSP: public T
+{
+public:
+  TQGSP(G4int ver = 1);
+  virtual ~TQGSP();
+  
+public:
+  // SetCuts() 
+  virtual void SetCuts();
+  
+private:
+  enum {ok = CompileTimeConstraints::IsA<T, G4VModularPhysicsList>::ok };
 
-   theCascade = new G4GeneratorPrecompoundInterface;
-   thePreEquilib = new G4PreCompoundModel(new G4ExcitationHandler);
-   theCascade->SetDeExcitation(thePreEquilib);  
+};
+#include "QGSP.icc"
+typedef TQGSP<G4VModularPhysicsList> QGSP;
 
-   theModel->SetTransport(theCascade);
-   theModel->SetHighEnergyGenerator(theStringModel);
-   if (quasiElastic)
-   {
-      theQuasiElastic=new G4QuasiElasticChannel;
-      theModel->SetQuasiElasticChannel(theQuasiElastic);
-   } else 
-   {  theQuasiElastic=0;}  
- }
+// 2002 by J.P. Wellisch
 
- void G4QGSPProtonBuilder::
- Build(G4ProtonInelasticProcess * aP)
- {
-// G4cout << "adding inelastic Proton in QGSP" << G4endl;
-   aP->AddDataSet(&theXSec);  
-   theModel->SetMinEnergy(theMin);
-   theModel->SetMaxEnergy(100*TeV);
-   aP->RegisterMe(theModel);
- }
+#endif
 
- void G4QGSPProtonBuilder::
- Build(G4HadronElasticProcess * )
- {
- }
 
- G4QGSPProtonBuilder::
- ~G4QGSPProtonBuilder() 
- {
-   delete thePreEquilib;
-   delete theCascade;
-   if ( theQuasiElastic ) delete theQuasiElastic;
-   delete theStringDecay;
-   delete theStringModel;
-   delete theModel;
- }
 
- // 2002 by J.P. Wellisch

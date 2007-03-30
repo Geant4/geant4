@@ -1,4 +1,4 @@
-$Id: History,v 1.17 2007-03-27 10:01:21 vnivanch Exp $
+$Id: History,v 1.18 2007-03-30 15:38:27 gunter Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,14 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+30-03-2007, G. Folger    phys-lists-V08-02-06
+-  Add quasielastic in QGSP; this requiredchanges to 
+   - QGSP{proton,Neutron,PiK}Builder adds QuasiElasticChannel on conditional
+     flag
+   - HadronPhysicsQGSP passes flag (default=false) to Builders
+   - QGSP uses flag to include quasielastic
+- new list QGSP_NQSE is copy of QGSP without quasielastic
 
 27-03-2007, V.Ivanchenko phys-lists-V08-02-05
 -  G4EmStandardPhysics72 use skin=0 (no ComputeStep)

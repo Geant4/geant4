@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadronPhysicsQGSP.hh,v 1.1 2006-10-31 11:35:03 gunter Exp $
+// $Id: HadronPhysicsQGSP.hh,v 1.2 2007-03-30 15:38:28 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -62,7 +62,7 @@
 class HadronPhysicsQGSP : public G4VPhysicsConstructor
 {
   public: 
-    HadronPhysicsQGSP(const G4String& name ="hadron");
+    HadronPhysicsQGSP(const G4String& name ="hadron",G4bool quasiElastic=false);
     virtual ~HadronPhysicsQGSP();
 
   public: 
@@ -84,6 +84,8 @@ class HadronPhysicsQGSP : public G4VPhysicsConstructor
     G4QGSPProtonBuilder * theQGSPPro;    
     
     G4MiscLHEPBuilder * theMiscLHEP;
+    
+    G4bool QuasiElastic;
 };
 
 #endif
