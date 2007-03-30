@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChange.cc,v 1.29 2007-03-11 07:19:06 kurasige Exp $
+// $Id: G4ParticleChange.cc,v 1.30 2007-03-30 01:03:53 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -53,6 +53,9 @@
 
 G4ParticleChange::G4ParticleChange():G4VParticleChange()
 {
+  G4VParticleChange::SetSecondaryWeightByProcess(false);
+  G4VParticleChange::SetParentWeightByProcess(false);
+
 }
 
 G4ParticleChange::~G4ParticleChange() 
