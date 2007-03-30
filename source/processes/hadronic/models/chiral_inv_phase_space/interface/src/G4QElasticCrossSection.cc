@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QElasticCrossSection.cc,v 1.21 2007-03-27 13:07:12 mkossov Exp $
+// $Id: G4QElasticCrossSection.cc,v 1.22 2007-03-30 10:20:03 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -1396,12 +1396,18 @@ G4double G4QElasticCrossSection::GetTabValues(G4double lp, G4int PDG, G4int tgZ,
    X37,X38,X39,X40,X41,X42,X43,X44,X45,X46,X47,X48,X49,X50,X51,X52,X53,X54,X55,X56,X57,X58,
    X59,X60,X61,X62,X63,X64,X65,X66,X67,X68,X69,X70,X71,X72,X73,X74,X75,X76,X77,X78,X79,X80,
    X81,X82,X83,X84,X85,X86,X87,X88,X89,X90,X91,X92};
-  if(tgZ<1 || tgZ>92)
+  if(tgZ<0 || tgZ>92)
   {
     G4cout<<"*Warning*G4QElasticCS::GetTabValue: (1-92) No isotopes for Z="<<tgZ<<G4endl;
     return 0.;
   }
   G4int iZ=tgZ-1; // Z index
+  if(iZ<0)
+		{
+    iZ=0;         // conversion of the neutron target to the proton target
+    tgZ=1;
+    tgN=0;
+  }
   if(nN[iZ][0] < 0)
   {
 #ifdef isodebug
