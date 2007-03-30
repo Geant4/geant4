@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QElasticCrossSection.cc,v 1.23 2007-03-30 10:33:51 mkossov Exp $
+// $Id: G4QElasticCrossSection.cc,v 1.24 2007-03-30 10:53:31 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -103,6 +103,13 @@ G4double G4QElasticCrossSection::GetCrossSection(G4bool fCS, G4double pMom, G4in
   static std::vector <G4double> colTH; // Vector of energy thresholds for the reaction
   static std::vector <G4double> colCS; // Vector of last cross sections for the reaction
   // ***---*** End of the mandatory Static Definitions of the Associative Memory ***---***
+  if(tgZ==0 && tgN==1)                 // Temporary change for Quasi-Elastic
+		{
+    tgZ=1;
+    tgN=1;
+    if     (pPDG==2212) pPDG=2112;
+    else if(pPDG==2112) pPDG=2212;
+  }
   G4double pEn=pMom;
   onlyCS=fCS;
 #ifdef pdebug
@@ -280,6 +287,13 @@ G4double G4QElasticCrossSection::CalculateCrossSection(G4bool CS,G4int F,G4int I
   static std::vector <G4double*> S4T;   // Vector of the 4-th mantissa (gloria)
   static std::vector <G4double*> B4T;   // Vector of the 4-th slope    (gloria)
   // *** End of Static Definitions (Associative Memory Data Base) ***
+  if(tgZ==0 && tgN==1)                 // Temporary change for Quasi-Elastic
+		{
+    tgZ=1;
+    tgN=1;
+    if     (PDG==2212) PDG=2112;
+    else if(PDG==2112) PDG=2212;
+  }
   G4double pMom=pIU/GeV;                // All calculations are in GeV
   onlyCS=CS;                            // Flag to calculate only CS (not Si/Bi)
 #ifdef pdebug
@@ -486,6 +500,13 @@ G4double G4QElasticCrossSection::GetPTables(G4double LP,G4double ILP, G4int PDG,
   //                        .004,.005,1.5e-11,2.3,.002,23.};
   //                      -13- -14-  -15- -16- -17- -18--19--20-21--22--23-  -24- -25-
   //                      -26- -27-   -28- -29- -30- -31-
+  if(tgZ==0 && tgN==1)                 // Temporary change for Quasi-Elastic
+		{
+    tgZ=1;
+    tgN=1;
+    if     (PDG==2212) PDG=2112;
+    else if(PDG==2112) PDG=2212;
+  }
   if(PDG==2212 || PDG==2112)
   {
     // --- Total np elastic cross section cs & s1/b1 (t), s2/b2 (u) --- NotTuned for highE
@@ -758,6 +779,13 @@ G4double G4QElasticCrossSection::GetExchangeT(G4int tgZ, G4int tgN, G4int PDG)
   static const G4double third=1./3.;
   static const G4double fifth=1./5.;
   static const G4double sevth=1./7.;
+  if(tgZ==0 && tgN==1)                 // Temporary change for Quasi-Elastic
+		{
+    tgZ=1;
+    tgN=1;
+    if     (PDG==2212) PDG=2112;
+    else if(PDG==2112) PDG=2212;
+  }
 #ifdef tdebug
   G4cout<<"G4QElasticCS::GetExchangeT:F="<<onlyCS<<",Z="<<tgZ<<",N="<<tgN<<",PDG="<<PDG<<G4endl;
 #endif
@@ -1396,6 +1424,13 @@ G4double G4QElasticCrossSection::GetTabValues(G4double lp, G4int PDG, G4int tgZ,
    X37,X38,X39,X40,X41,X42,X43,X44,X45,X46,X47,X48,X49,X50,X51,X52,X53,X54,X55,X56,X57,X58,
    X59,X60,X61,X62,X63,X64,X65,X66,X67,X68,X69,X70,X71,X72,X73,X74,X75,X76,X77,X78,X79,X80,
    X81,X82,X83,X84,X85,X86,X87,X88,X89,X90,X91,X92};
+  if(tgZ==0 && tgN==1)                 // Temporary change for Quasi-Elastic
+		{
+    tgZ=1;
+    tgN=1;
+    if     (PDG==2212) PDG=2112;
+    else if(PDG==2112) PDG=2212;
+  }
   if(tgZ<0 || tgZ>92)
   {
     G4cout<<"*Warning*G4QElasticCS::GetTabValue: (1-92) No isotopes for Z="<<tgZ<<G4endl;
@@ -1569,10 +1604,22 @@ G4double G4QElasticCrossSection::GetQ2max(G4int PDG, G4int tgZ, G4int tgN, G4dou
   static const G4double mProt2= mProt*mProt;
   static const G4double mNeut2= mNeut*mNeut;
   //static const G4double mDeut2= mDeut*mDeut;
+  if(tgZ==0 && tgN==1)                 // Temporary change for Quasi-Elastic
+		{
+    tgZ=1;
+    tgN=1;
+    if     (PDG==2212) PDG=2112;
+    else if(PDG==2112) PDG=2212;
+  }
   G4double pP2=pP*pP;                                  // squared momentum of the projectile
   if(PDG==2212 && tgZ==1 && tgN==0)
   {
     G4double tMid=std::sqrt(pP2+mProt2)*mProt-mProt2;  // CMS 90deg value of -t=Q2 (GeV^2)
+    return tMid+tMid;
+  }
+  else if(PDG==2112 && tgZ==0 && tgN==1)
+  {
+    G4double tMid=std::sqrt(pP2+mNeut2)*mNeut-mNeut2;  // CMS 90deg value of -t=Q2 (GeV^2)
     return tMid+tMid;
   }
   else if(PDG==2112 && (tgZ || tgN))                   // ---> nA
