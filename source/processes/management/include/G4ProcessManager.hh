@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessManager.hh,v 1.13 2007-03-08 09:05:20 kurasige Exp $
+// $Id: G4ProcessManager.hh,v 1.14 2007-03-30 01:02:28 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -74,9 +74,6 @@
 #include <vector>
 
 #include "G4VProcess.hh"
-#include "G4VContinuousProcess.hh"
-#include "G4VRestProcess.hh"
-#include "G4VDiscreteProcess.hh"
 #include "G4ProcessVector.hh"
 #include "G4ParticleDefinition.hh"
 
@@ -210,9 +207,9 @@ class G4ProcessManager
       //  for both DoIt and GetPhysicalInteractionLength
       //  
 
-      G4int AddRestProcess(G4VRestProcess *aProcess, G4int ord = ordDefault);
-      G4int AddDiscreteProcess(G4VDiscreteProcess *aProcess, G4int ord = ordDefault);
-      G4int AddContinuousProcess(G4VContinuousProcess *aProcess, G4int ord = ordDefault);
+      G4int AddRestProcess(G4VProcess *aProcess, G4int ord = ordDefault);
+      G4int AddDiscreteProcess(G4VProcess *aProcess, G4int ord = ordDefault);
+      G4int AddContinuousProcess(G4VProcess *aProcess, G4int ord = ordDefault);
 
       // Methods for setting ordering parameters
        // Altanative methods for setting ordering parameters 
