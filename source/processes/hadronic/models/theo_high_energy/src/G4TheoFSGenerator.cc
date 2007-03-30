@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TheoFSGenerator.cc,v 1.5 2006-06-29 21:00:39 gunter Exp $
+// $Id: G4TheoFSGenerator.cc,v 1.6 2007-03-30 15:25:54 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4TheoFSGenerator
@@ -34,11 +34,13 @@
 #include "G4ReactionProduct.hh"
 
 G4TheoFSGenerator::G4TheoFSGenerator()
+   : theParallelFSGenerator(0)
 {
  theParticleChange = new G4HadFinalState;
 }
 
 G4TheoFSGenerator::G4TheoFSGenerator(const G4TheoFSGenerator &) : G4HadronicInteraction()
+			, theParallelFSGenerator(0)
 {
 }
 
@@ -80,14 +82,39 @@ G4HadFinalState * G4TheoFSGenerator::ApplyYourself(const G4HadProjectile & thePr
   G4DynamicParticle aTemp(const_cast<G4ParticleDefinition *>(thePrimary.GetDefinition()),
                           thePrimary.Get4Momentum().vect());
   const G4DynamicParticle * aPart = &aTemp;
+
+  if ( theParallelFSGenerator ) {
+  
+     if ( theParallelFSGenerator->GetFraction(theNucleus, *aPart) > G4UniformRand() )
+     {
+        G4KineticTrackVector *result= theParallelFSGenerator->Scatter(theNucleus, *aPart);
+	if (result)
+	{
+	    for(unsigned int  i=0; i<result->size(); i++)
+	    {
+	      G4DynamicParticle * aNew = 
+		 new G4DynamicParticle(result->operator[](i)->GetDefinition(),
+                        	       result->operator[](i)->Get4Momentum().e(),
+                        	       result->operator[](i)->Get4Momentum().vect());
+	      theParticleChange->AddSecondary(aNew);
+	      delete result->operator[](i);
+	    }
+	    delete result;
+	   
+	} else 
+	{
+	    theParticleChange->SetStatusChange(isAlive);
+	    theParticleChange->SetEnergyChange(thePrimary.GetKineticEnergy());
+	    theParticleChange->SetMomentumChange(thePrimary.Get4Momentum().vect().unit());
+ 
+	}
+	return theParticleChange;
+     } 
+  }
+
   G4KineticTrackVector * theInitialResult =
                theHighEnergyGenerator->Scatter(theNucleus, *aPart);
   
-  G4double predecayEnergy = 0;
-  for(size_t hpw=0; hpw<theInitialResult->size(); hpw++)
-  {
-    predecayEnergy += (*theInitialResult)[hpw]->Get4Momentum().t();
-  }
   
   G4ReactionProductVector * theTransportResult = NULL;
   G4int hitCount = 0;
