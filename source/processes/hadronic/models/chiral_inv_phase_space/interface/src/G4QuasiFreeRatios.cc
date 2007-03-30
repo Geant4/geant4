@@ -20,7 +20,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QuasiFreeRatios.cc,v 1.6 2007-03-29 13:37:00 mkossov Exp $
+// $Id: G4QuasiFreeRatios.cc,v 1.7 2007-03-30 07:18:25 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -708,9 +708,9 @@ std::pair<G4LorentzVector,G4LorentzVector> G4QuasiFreeRatios::Scatter(G4int NPDG
     Z=1;
     N=0;
   }
-  else
+  else if(NPDG!=2112)
   {
-    G4cout<<"*Error*G4QuasiFreeRatios::Scatter:PDG="<<pPDG<<" is not 2212 or 2112"<<G4endl;
+    G4cout<<"Error:G4QuasiFreeRatios::Scatter:NPDG="<<NPDG<<" is not 2212 or 2112"<<G4endl;
     G4Exception("G4QuasiFreeRatios::Scatter:","21",FatalException,"CHIPScomplain");
     //return std::make_pair(pPDG,G4LorentzVector(0.,0.,0.,0.));// Use this if not exception
   }
