@@ -1,4 +1,4 @@
-$Id: History,v 1.75 2007-03-31 01:03:18 japost Exp $
+$Id: History,v 1.76 2007-03-31 01:04:59 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -24,7 +24,8 @@ March 31st, 2007 - J. Apostolakis  (geomnav-V08-02-02-beta1
 - G4Navigator:  New method "CheckNextStep"  makes a trial step, without
       changing the state of the Navigator (to be verified). 
       It is a variant of ComputeStep, whose signature it shares.
-
+ ******** Does not include revision of G4Navigator.icc (below) *********
+  
 February 13th, 2007 - J.Apostolakis (tag deleted - due to problems ) 
                       ***> attempted fix created Dec 7th, 2006
 ----------------------------------
