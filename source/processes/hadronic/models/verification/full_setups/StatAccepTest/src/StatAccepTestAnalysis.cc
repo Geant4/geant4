@@ -4470,10 +4470,3 @@ void StatAccepTestAnalysis::finish() {
 }
 
 
-void StatAccepTestAnalysis::setIsHistogramOn( const bool choice ) {
-  isHistogramOn = choice;
-  G4cout << "  --->  StatAccepTestAnalysis::isHistogramOn = " << isHistogramOn 
-	 << "  <---" << G4endl << G4endl; 
-}
-
-

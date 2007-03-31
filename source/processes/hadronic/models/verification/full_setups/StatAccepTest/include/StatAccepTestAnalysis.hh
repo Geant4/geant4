@@ -31,6 +31,12 @@ public:
 
   ~StatAccepTestAnalysis();
   
+  static inline bool getIsHistogramOn();
+  static inline void setIsHistogramOn( const bool choice );
+  // Get/Set method for the "isHistogramOn" boolean variable.
+  // The Set method allows to switch on/off all the histograms,
+  // with the only exception of the ntuple which is always saved.
+
 public:
   
   void init( const G4int numberOfReplicasIn, 
@@ -77,10 +83,6 @@ public:
   // Inform that the event if finished: this is useful to calculate
   // properly the statistical error of the quantities defined per
   // event.
-
-  void setIsHistogramOn( const bool choice );
-  // Allow to switch on/off all the histograms, with the only 
-  // exception of the ntuple which is always saved.
 
 private:
   
@@ -494,5 +496,15 @@ private:
 };
 
 
-#endif
+inline bool StatAccepTestAnalysis::getIsHistogramOn() {
+  return isHistogramOn;
+}
 
+inline void StatAccepTestAnalysis::setIsHistogramOn( const bool choice ) {
+  isHistogramOn = choice;
+  G4cout << "  --->  StatAccepTestAnalysis::isHistogramOn = " << isHistogramOn 
+	 << "  <---" << G4endl << G4endl; 
+}
+
+
+#endif
