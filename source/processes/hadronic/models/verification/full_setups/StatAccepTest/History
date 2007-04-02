@@ -1,6 +1,12 @@
                  History file
                  ------------
 
+02-Apr-2006 - A.Ribon (statAccepTest-V08-02-00)
+- Some CPU optimisation to get the code faster.
+  Unable to replace long if statements with switch
+  statements.
+
+
 13-Dec-2006 - A.Ribon (statAccepTest-V08-01-02)
 - Improvements the diagnostic to help debugging 
   Ganga/Diane problems. 

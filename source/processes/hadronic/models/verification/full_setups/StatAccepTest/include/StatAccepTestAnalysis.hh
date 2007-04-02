@@ -388,14 +388,17 @@ private:
   // tracks of such particle type (excluding e-, e+, gamma).
   std::map< std::string, int > mapParticleNames;
 
-  // To improve performance, save the PDG code of particles.
-  G4int electronId, positronId, gammaId;
-  G4int muonMinusId, muonPlusId, tauMinusId, tauPlusId;
-  G4int eNeutrinoId, antiENeutrinoId, muNeutrinoId, antiMuNeutrinoId,
+  // To improve performance, save the PDG code of particles on 
+  // constant integers. It is important that they are declared
+  // as constant in order to use them in switch statements.
+  const G4int electronId, positronId, gammaId;
+  const G4int muonMinusId, muonPlusId, tauMinusId, tauPlusId;
+  const G4int eNeutrinoId, antiENeutrinoId, muNeutrinoId, antiMuNeutrinoId,
     tauNeutrinoId, antiTauNeutrinoId;
-  G4int pionPlusId, pionMinusId, pionZeroId;
-  G4int kaonMinusId, kaonPlusId, kaonZeroId, antiKaonZeroId, kaonShortId, kaonLongId;
-  G4int protonId, antiProtonId, neutronId, antiNeutronId;
+  const G4int pionPlusId, pionMinusId, pionZeroId;
+  const G4int kaonMinusId, kaonPlusId, kaonZeroId, antiKaonZeroId,
+    kaonShortId, kaonLongId;
+  const G4int protonId, antiProtonId, neutronId, antiNeutronId;
 
 #ifdef G4ANALYSIS_USE
   // AIDA stuff from now on.

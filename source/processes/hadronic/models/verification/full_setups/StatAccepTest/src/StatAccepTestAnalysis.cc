@@ -23,7 +23,6 @@ bool StatAccepTestAnalysis::isHistogramSpectrumWeightedOn = false;
 bool StatAccepTestAnalysis::isCountingProcessesOn = false;  
 bool StatAccepTestAnalysis::isMapParticleNamesOn = false;  
 
-
 StatAccepTestAnalysis* StatAccepTestAnalysis::instance = 0;
 
 
@@ -31,10 +30,41 @@ StatAccepTestAnalysis::StatAccepTestAnalysis() :
   numberOfEvents( 0 ), numberOfReplicas( 0 ), 
   numberOfReadoutLayers( 0 ), numberOfActiveLayersPerReadoutLayer( 1 ), 
   numberOfRadiusBins( 0 ), radiusBin( 0.0 )
+  //
+  // The following integers need to be constant, otherwise you cannot
+  // use them in switch statements.
+  , electronId( G4Electron::ElectronDefinition()->GetPDGEncoding() )
+  , positronId( G4Positron::PositronDefinition()->GetPDGEncoding() )
+  , gammaId( G4Gamma::GammaDefinition()->GetPDGEncoding() )
+  , muonMinusId( G4MuonMinus::MuonMinusDefinition()->GetPDGEncoding() )
+  , muonPlusId( G4MuonPlus::MuonPlusDefinition()->GetPDGEncoding() )
+  , tauMinusId( G4TauMinus::TauMinusDefinition()->GetPDGEncoding() )
+  , tauPlusId( G4TauPlus::TauPlusDefinition()->GetPDGEncoding() )
+  , eNeutrinoId( G4NeutrinoE::NeutrinoEDefinition()->GetPDGEncoding() )
+  , antiENeutrinoId( G4AntiNeutrinoE::AntiNeutrinoEDefinition()->GetPDGEncoding() ) 
+  , muNeutrinoId( G4NeutrinoMu::NeutrinoMuDefinition()->GetPDGEncoding() ) 
+  , antiMuNeutrinoId( G4AntiNeutrinoMu::AntiNeutrinoMuDefinition()->GetPDGEncoding() )
+  , tauNeutrinoId( G4NeutrinoTau::NeutrinoTauDefinition()->GetPDGEncoding() )
+  , antiTauNeutrinoId( G4AntiNeutrinoTau::AntiNeutrinoTauDefinition()->GetPDGEncoding() )
+  , pionPlusId( G4PionPlus::PionPlusDefinition()->GetPDGEncoding() )
+  , pionMinusId( G4PionMinus::PionMinusDefinition()->GetPDGEncoding() )
+  , pionZeroId( G4PionZero::PionZeroDefinition()->GetPDGEncoding() ) 
+  , kaonMinusId( G4KaonMinus::KaonMinusDefinition()->GetPDGEncoding() )
+  , kaonPlusId( G4KaonPlus::KaonPlusDefinition()->GetPDGEncoding() )
+  , kaonZeroId( G4KaonZero::KaonZeroDefinition()->GetPDGEncoding() )
+  , antiKaonZeroId( G4AntiKaonZero::AntiKaonZeroDefinition()->GetPDGEncoding() )
+  , kaonShortId( G4KaonZeroShort::KaonZeroShortDefinition()->GetPDGEncoding() )
+  , kaonLongId( G4KaonZeroLong::KaonZeroLongDefinition()->GetPDGEncoding() )
+  , protonId( G4Proton::ProtonDefinition()->GetPDGEncoding() )
+  , antiProtonId( G4AntiProton::AntiProtonDefinition()->GetPDGEncoding() )
+  , neutronId( G4Neutron::NeutronDefinition()->GetPDGEncoding() )
+  , antiNeutronId( G4AntiNeutron::AntiNeutronDefinition()->GetPDGEncoding() )
+  //
 #ifdef G4ANALYSIS_USE
   , analysisFactory( 0 ), tree( 0 ), tuple( 0 ), histoFactory( 0 )
   , longitudinalProfileHisto( 0 ), transverseProfileHisto( 0 )
 #endif
+
 {
 #ifdef G4ANALYSIS_USE
   analysisFactory = AIDA_createAnalysisFactory();
@@ -425,33 +455,6 @@ void StatAccepTestAnalysis::init() {
   numOtherStoppingAtRestProcesses = 0;
 
   mapParticleNames.clear();
-
-  electronId = G4Electron::ElectronDefinition()->GetPDGEncoding();
-  positronId = G4Positron::PositronDefinition()->GetPDGEncoding();
-  gammaId = G4Gamma::GammaDefinition()->GetPDGEncoding();
-  muonMinusId = G4MuonMinus::MuonMinusDefinition()->GetPDGEncoding();
-  muonPlusId = G4MuonPlus::MuonPlusDefinition()->GetPDGEncoding();
-  tauMinusId = G4TauMinus::TauMinusDefinition()->GetPDGEncoding();
-  tauPlusId = G4TauPlus::TauPlusDefinition()->GetPDGEncoding();
-  eNeutrinoId = G4NeutrinoE::NeutrinoEDefinition()->GetPDGEncoding();
-  antiENeutrinoId = G4AntiNeutrinoE::AntiNeutrinoEDefinition()->GetPDGEncoding(); 
-  muNeutrinoId = G4NeutrinoMu::NeutrinoMuDefinition()->GetPDGEncoding(); 
-  antiMuNeutrinoId = G4AntiNeutrinoMu::AntiNeutrinoMuDefinition()->GetPDGEncoding();
-  tauNeutrinoId = G4NeutrinoTau::NeutrinoTauDefinition()->GetPDGEncoding();
-  antiTauNeutrinoId = G4AntiNeutrinoTau::AntiNeutrinoTauDefinition()->GetPDGEncoding();
-  pionPlusId = G4PionPlus::PionPlusDefinition()->GetPDGEncoding();
-  pionMinusId = G4PionMinus::PionMinusDefinition()->GetPDGEncoding();
-  pionZeroId = G4PionZero::PionZeroDefinition()->GetPDGEncoding(); 
-  kaonMinusId = G4KaonMinus::KaonMinusDefinition()->GetPDGEncoding();
-  kaonPlusId = G4KaonPlus::KaonPlusDefinition()->GetPDGEncoding();
-  kaonZeroId = G4KaonZero::KaonZeroDefinition()->GetPDGEncoding();
-  antiKaonZeroId = G4AntiKaonZero::AntiKaonZeroDefinition()->GetPDGEncoding();
-  kaonShortId = G4KaonZeroShort::KaonZeroShortDefinition()->GetPDGEncoding();
-  kaonLongId = G4KaonZeroLong::KaonZeroLongDefinition()->GetPDGEncoding();
-  protonId = G4Proton::ProtonDefinition()->GetPDGEncoding();
-  antiProtonId = G4AntiProton::AntiProtonDefinition()->GetPDGEncoding();
-  neutronId = G4Neutron::NeutronDefinition()->GetPDGEncoding();
-  antiNeutronId = G4AntiNeutron::AntiNeutronDefinition()->GetPDGEncoding();
 
 }                       
 
@@ -1029,7 +1032,7 @@ void StatAccepTestAnalysis::fillSpectrum( const G4ParticleDefinition* particleDe
   // and save them on variables.
   G4double particleMass = particleDef->GetPDGMass();
   G4int particleId = particleDef->GetPDGEncoding();
-  
+
   G4int sampleLayer = layerNumber / (numberOfReplicas/10); 
   G4double p = std::abs( kinEnergy ); // Momentum for the weighting...
   if ( particleMass/MeV > 1.0e-06 ) {
@@ -1040,6 +1043,16 @@ void StatAccepTestAnalysis::fillSpectrum( const G4ParticleDefinition* particleDe
     //	     <<  "  p=" << p / MeV << " MeV" << G4endl;       //***DEBUG***
   }
   G4double p_inGeV = p / GeV;
+
+  // 02-Apr-2007 : I have tried to transform the following long  if  
+  //               statement into a  switch  statement in which 
+  // "electronId", "positronId", etc. appear as "case label", but 
+  // I got a strange compilation error saying that 
+  //      "case label does not reduce to an integer constant"
+  // in spite of being defined as integer constants. 
+  // The errors do not disappear if static constants are used instead
+  // of simple constant integers. So I gave up!
+
   if ( particleId == electronId  ||  particleId == positronId ) {
     if ( isHistogramSpectrumUnweightedOn ) {
       emSpectrum1[ sampleLayer ]->fill( kinEnergy/GeV );
@@ -1187,6 +1200,7 @@ void StatAccepTestAnalysis::fillSpectrum( const G4ParticleDefinition* particleDe
       }
     }
   }
+  
 #endif
 }
 
@@ -1334,6 +1348,15 @@ fillShowerProfile( G4int replica, const G4double radius,
   //    -  protons  (p   and  pbar  together)
   //    -  nuclei   (all particles with PDG code = 0 and neutrons together)
 
+  // 02-Apr-2007 : I have tried to transform the following long  if  
+  //               statement into a  switch  statement in which 
+  // "electronId", "positronId", etc. appear as "case label", but 
+  // I got a strange compilation error saying that 
+  //      "case label does not reduce to an integer constant"
+  // in spite of being defined as integer constants. 
+  // The errors do not disappear if static constants are used instead
+  // of simple constant integers. So I gave up!
+
   if ( particlePDG == electronId  ||  particlePDG == positronId ) {
     sumEdepAct_electron += edep;
     sumEdepTot_electron += edep;
@@ -1390,6 +1413,15 @@ void StatAccepTestAnalysis::infoStep( const G4Step* aStep ) {
   G4double stepLength = aStep->GetStepLength();
   G4double stepEnergyDeposit = aStep->GetTotalEnergyDeposit();
   G4double stepWeight = aStep->GetTrack()->GetWeight();
+
+  // 02-Apr-2007 : I have tried to transform the following long  if  
+  //               statement into a  switch  statement in which 
+  // "electronId", "positronId", etc. appear as "case label", but 
+  // I got a strange compilation error saying that 
+  //      "case label does not reduce to an integer constant"
+  // in spite of being defined as integer constants. 
+  // The errors do not disappear if static constants are used instead
+  // of simple constant integers. So I gave up!
 
   // Count the number of inelastic and stoppingAtRest processes.
   if ( StatAccepTestAnalysis::isCountingProcessesOn ) { 
@@ -1473,11 +1505,22 @@ void StatAccepTestAnalysis::infoStep( const G4Step* aStep ) {
 #ifdef G4ANALYSIS_USE
   // 2D plots on Step Energy vs. Step Length.
   if ( isHistogramOn && is2DHistogramStepLvsEOn ) {
+
     if ( volumeName == "physiActive" ) {
       h2stepEvsL_active->fill( stepLength / mm, stepEnergyDeposit / MeV );
     } else if ( volumeName == "physiAbsorber" ) {
       h2stepEvsL_absorber->fill( stepLength / mm, stepEnergyDeposit / MeV );
     }
+
+    // 02-Apr-2007 : I have tried to transform the following long  if  
+    //               statement into a  switch  statement in which 
+    // "electronId", "positronId", etc. appear as "case label", but 
+    // I got a strange compilation error saying that 
+    //      "case label does not reduce to an integer constant"
+    // in spite of being defined as integer constants. 
+    // The errors do not disappear if static constants are used instead
+    // of simple constant integers. So I gave up!
+
     if ( particleId == electronId  ||  particleId == positronId ) {
       if ( volumeName == "physiActive" ) {
 	h2stepEvsL_electron_active->fill( stepLength / mm, stepEnergyDeposit / MeV );
@@ -1564,7 +1607,7 @@ void StatAccepTestAnalysis::infoStep( const G4Step* aStep ) {
 void StatAccepTestAnalysis::infoTrack( const G4Track* aTrack ) {
 
   // To improve CPU performance, get particle properties only once 
-  // and save them on variables.
+  // and save them on variables.  
   G4int particleId = aTrack->GetDefinition()->GetPDGEncoding();
   G4String particleName = aTrack->GetDefinition()->GetParticleName();
   G4String volumeName = aTrack->GetVolume()->GetName();
@@ -1588,6 +1631,15 @@ void StatAccepTestAnalysis::infoTrack( const G4Track* aTrack ) {
     //  G4cout << " ***STRANGE VOLUME *** : " << volumeName << G4endl;
     //}
   
+    // 02-Apr-2007 : I have tried to transform the following long  if  
+    //               statement into a  switch  statement in which 
+    // "electronId", "positronId", etc. appear as "case label", but 
+    // I got a strange compilation error saying that 
+    //      "case label does not reduce to an integer constant"
+    // in spite of being defined as integer constants. 
+    // The errors do not disappear if static constants are used instead
+    // of simple constant integers. So I gave up!
+
     // To avoid bias in the track length due to the big world volume
     // (which can affect significantly the track length of neutrons)
     // we consider only those tracks that are fully contained inside
@@ -1675,8 +1727,19 @@ classifyParticle( const bool isTrack, const G4ParticleDefinition* particleDef ) 
   } else {
     numStep++;
   }
+
   G4int id = particleDef->GetPDGEncoding();
   G4int aid = std::abs( id );
+
+  // 02-Apr-2007 : I have tried to transform the following long  if  
+  //               statement into a  switch  statement in which 
+  // "electronId", "positronId", etc. appear as "case label", but 
+  // I got a strange compilation error saying that 
+  //      "case label does not reduce to an integer constant"
+  // in spite of being defined as integer constants. 
+  // The errors do not disappear if static constants are used instead
+  // of simple constant integers. So I gave up!
+
   if ( id == 0  ||  id / 1000000000 >= 1 ) {
     // Before 8.1.ref04, the PDG code for nuclei was 0; 
     // from 8.1.ref04, the new PDG code convention for nuclei has been
