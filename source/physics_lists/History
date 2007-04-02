@@ -1,4 +1,4 @@
-$Id: History,v 1.18 2007-03-30 15:38:27 gunter Exp $
+$Id: History,v 1.19 2007-04-02 09:06:24 gunter Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+02-04-2007, G.Folger     phys-lists-V08-02-07
+-  Correct compilation problem with QGSP.icc
 
 30-03-2007, G. Folger    phys-lists-V08-02-06
 -  Add quasielastic in QGSP; this requiredchanges to 
