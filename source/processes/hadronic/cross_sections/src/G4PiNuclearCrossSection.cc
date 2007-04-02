@@ -350,7 +350,6 @@ GetIsoZACrossSection(const G4DynamicParticle* particle, G4double ZZ,
 {
   // precondition
   G4ping debug("debug_PiNuclearCrossSection");
-  G4double tuning = 1.;
   using namespace std;
   G4bool ok = false;
   if(particle->GetDefinition() == G4PionMinus::PionMinus()) ok=true;
@@ -373,7 +372,6 @@ GetIsoZACrossSection(const G4DynamicParticle* particle, G4double ZZ,
   while(it<theZ.size() && Z>theZ[it]) it++;
   debug.push_back(theZ[it]);
   debug.push_back(kineticEnergy);
-  if(Z==29) tuning=.96;
 
   if(Z > theZ[it]) 
   {
@@ -464,7 +462,6 @@ GetIsoZACrossSection(const G4DynamicParticle* particle, G4double ZZ,
     }
   }
   debug.dump();
-  result *= tuning;
 
   fElasticXsc = fTotalXsc - result;
   if( fElasticXsc < 0.) fElasticXsc = 0.;
