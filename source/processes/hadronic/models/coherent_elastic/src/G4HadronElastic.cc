@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronElastic.cc,v 1.40 2007-03-12 10:58:45 vnivanch Exp $
+// $Id: G4HadronElastic.cc,v 1.41 2007-04-02 08:32:01 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -55,6 +55,8 @@
 // 31-Aug-06 V.Ivanchenko do not sample sacttering for particles with kinetic 
 //                        energy below 10 keV
 // 16-Nov-06 V.Ivanchenko Simplify logic of choosing of the model for sampling
+// 30-Mar-07 V.Ivanchenko lowEnergyLimitQ=0, lowEnergyLimitHE = 1.0*GeV,
+//                        lowestEnergyLimit= 0
 //
 
 #include "G4HadronElastic.hh"
@@ -71,21 +73,24 @@
 #include "G4Alpha.hh"
 #include "G4PionPlus.hh"
 #include "G4PionMinus.hh"
+#include "G4NistManager.hh"
 
-G4HadronElastic::G4HadronElastic(G4double, G4double, G4double) 
+G4HadronElastic::G4HadronElastic() 
   : G4HadronicInteraction()
 {
   SetMinEnergy( 0.0*GeV );
   SetMaxEnergy( 100.*TeV );
   verboseLevel= 0;
   lowEnergyRecoilLimit = 100.*keV;  
-  lowEnergyLimitQ = 19.0*MeV;  
+  lowEnergyLimitQ  = 0.0*MeV;  
   lowEnergyLimitHE = 0.4*GeV;  
-  lowEnergyLimitHE = DBL_MAX;  
-  lowestEnergyLimit= 10.0*keV;  
+  lowEnergyLimitHE = 1.0*GeV;  
+  //  lowEnergyLimitHE = DBL_MAX;  
+  lowestEnergyLimit= 0.0*keV;  
   plabLowLimit     = 20.0*MeV;
 
   qCManager   = G4QElasticCrossSection::GetPointer();
+  nistManager = G4NistManager::Instance();
   hElastic    = new G4ElasticHadrNucleusHE();
 
   theProton   = G4Proton::Proton();
@@ -204,8 +209,10 @@ G4HadFinalState* G4HadronElastic::ApplyYourself(
     if(t > tmax) gtype = fSWave;
   }
 
+  // use mean atomic number
   if(gtype == fHElastic) {
-    t = hElastic->SampleT(theParticle,plab,Z,A);
+    G4int A0 = static_cast<G4int>(nistManager->GetAtomicMassAmu(Z)+0.5);
+    t = hElastic->SampleT(theParticle,plab,Z,A0);
     if(t > tmax) gtype = fSWave;
   }
 
