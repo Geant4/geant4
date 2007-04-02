@@ -20,7 +20,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QuasiFreeRatios.cc,v 1.8 2007-03-30 10:33:51 mkossov Exp $
+// $Id: G4QuasiFreeRatios.cc,v 1.9 2007-04-02 09:12:02 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -712,7 +712,7 @@ std::pair<G4LorentzVector,G4LorentzVector> G4QuasiFreeRatios::Scatter(G4int NPDG
   {
     G4cout<<"Error:G4QuasiFreeRatios::Scatter:NPDG="<<NPDG<<" is not 2212 or 2112"<<G4endl;
     G4Exception("G4QuasiFreeRatios::Scatter:","21",FatalException,"CHIPScomplain");
-    //return std::make_pair(pPDG,G4LorentzVector(0.,0.,0.,0.));// Use this if not exception
+    //return std::make_pair(G4LorentzVector(0.,0.,0.,0.),p4M);// Use this if not exception
   }
   G4double mT2=mT*mT;
   G4double mP2=pr4M.m2();
@@ -723,7 +723,7 @@ std::pair<G4LorentzVector,G4LorentzVector> G4QuasiFreeRatios::Scatter(G4int NPDG
 #ifdef pdebug
     G4cerr<<"-Warning-G4QFR::Scat:*Negative Energy*E="<<E<<",E2="<<E2<<"<M2="<<mP2<<G4endl;
 #endif
-    return std::make_pair(pPDG,G4LorentzVector(0.,0.,0.,0.)); // Do Nothing Action
+    return std::make_pair(G4LorentzVector(0.,0.,0.,0.),p4M); // Do Nothing Action
   }
 		G4double P=std::sqrt(E2-mP2);                   // Momentum in pseudo laboratory system
   G4VQCrossSection* CSmanager=G4QElasticCrossSection::GetPointer();
@@ -731,15 +731,16 @@ std::pair<G4LorentzVector,G4LorentzVector> G4QuasiFreeRatios::Scatter(G4int NPDG
   G4cout<<"G4QFR::Scatter: Before XS, P="<<P<<", Z="<<Z<<", N="<<N<<", PDG="<<pPDG<<G4endl;
 #endif
   // @@ Temporary NN t-dependence for all hadrons
-  G4int PDG=2212;                                                // *TMP*
+  if(pPDG>3400 || pPDG<-3400) G4cout<<"-Warning-G4QElast::Scatter: pPDG="<<pPDG<<G4endl;
+  G4int PDG=2212;                                                // *TMP* instead of pPDG
   G4double xSec=CSmanager->GetCrossSection(false, P, Z, N, PDG); // Rec.CrossSect *TMP*
   //G4double xSec=CSmanager->GetCrossSection(false, P, Z, N, pPDG); // Rec.CrossSect
 #ifdef debug
-  G4cout<<"G4QElast::PSDI:pPDG="<<pPDG<<",P="<<P<<",CS="<<xSec/millibarn<<G4endl;
+  G4cout<<"G4QElast::Scatter:pPDG="<<pPDG<<",P="<<P<<",CS="<<xSec/millibarn<<G4endl;
 #endif
 #ifdef nandebug
   if(xSec>0. || xSec<0. || xSec==0);
-  else  G4cout<<"******G4QElast::PSDI:xSec="<<xSec/millibarn<<G4endl;
+  else  G4cout<<"******G4QElast::Scatter:xSec="<<xSec/millibarn<<G4endl;
 #endif
   // @@ check a possibility to separate p, n, or alpha (!)
   if(xSec <= 0.) // The cross-section iz 0 -> Do Nothing
@@ -747,7 +748,7 @@ std::pair<G4LorentzVector,G4LorentzVector> G4QuasiFreeRatios::Scatter(G4int NPDG
 #ifdef pdebug
     G4cerr<<"-Warning-G4QFR::Scat:**Zero XS**PDG="<<pPDG<<",NPDG="<<NPDG<<",P="<<P<<G4endl;
 #endif
-    return std::make_pair(pPDG,G4LorentzVector(0.,0.,0.,0.)); //Do Nothing Action
+    return std::make_pair(G4LorentzVector(0.,0.,0.,0.),p4M); //Do Nothing Action
   }
   G4double mint=CSmanager->GetExchangeT(Z,N,PDG); // functional randomized -t (MeV^2) *TMP*
   //G4double mint=CSmanager->GetExchangeT(Z,N,pPDG); // functional randomized -t in MeV^2
@@ -769,7 +770,7 @@ std::pair<G4LorentzVector,G4LorentzVector> G4QuasiFreeRatios::Scatter(G4int NPDG
     else
 				{
       G4cerr<<"G4QFR::S:*NAN*c="<<cost<<",t="<<mint<<",tm="<<CSmanager->GetHMaxT()<<G4endl;
-      return std::make_pair(pPDG,G4LorentzVector(0.,0.,0.,0.)); // Do Nothing Action
+      return std::make_pair(G4LorentzVector(0.,0.,0.,0.),p4M); // Do Nothing Action
     }
   }
   G4LorentzVector reco4M=G4LorentzVector(0.,0.,0.,mT);      // 4mom of the recoil nucleon
@@ -778,7 +779,7 @@ std::pair<G4LorentzVector,G4LorentzVector> G4QuasiFreeRatios::Scatter(G4int NPDG
   {
     G4cerr<<"G4QFR::Scat:t="<<tot4M<<tot4M.m()<<",mT="<<mT<<",mP="<<std::sqrt(mP2)<<G4endl;
     //G4Exception("G4QFR::Scat:","009",FatalException,"Decay of ElasticComp");
-    return std::make_pair(pPDG,G4LorentzVector(0.,0.,0.,0.)); // Do Nothing Action
+    return std::make_pair(G4LorentzVector(0.,0.,0.,0.),p4M); // Do Nothing Action
   }
 #ifdef debug
 		G4cout<<"G4QFR::Scat:p4M="<<p4M<<"+r4M="<<reco4M<<"="<<scat4M+reco4M<<"="<<tot4M<<G4endl;
