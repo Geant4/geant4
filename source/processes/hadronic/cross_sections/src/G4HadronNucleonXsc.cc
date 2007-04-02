@@ -939,40 +939,31 @@ G4HadronNucleonXsc::GetHadronNucleonXscMK(const G4DynamicParticle* aParticle,
   static const G4double pbt = .3;        // total (lnP-lmi)^2 parabola coefficient
   static const G4double pmi = .1;        // Below that fast LE calculation is made
   static const G4double pma = 1000.;     // Above that fast HE calculation is made
-
- 
-
-  G4double fElasticXsc = 0.;                      // prototype of the elastic hN cross-section
-  G4double fTotalXsc = 0.;
-                      // prototype of the total hN cross-section
+                  
   if( p <= 0.)
   {
-    G4cout<<"p="<<p<<" is zero or negative"<<G4endl;
-    fElasticXsc = 0.;
+    G4cout<<" p = "<<p<<" is zero or negative"<<G4endl;
+
+    fElasticXsc   = 0.;
     fInelasticXsc = 0.;
-    fTotalXsc = 0.;
+    fTotalXsc     = 0.;
+
     return fTotalXsc;
   }
   if (!I)                          // pp/nn
   {
-
-
     if( p < pmi )
     {
       G4double p2 = p*p;
       fElasticXsc          = 1./(.00012 + p2*.2);
       fTotalXsc          = fElasticXsc;
-
-
     }
     else if(p>pma)
     {
       G4double lp  = std::log(p)-lmi;
       G4double lp2 = lp*lp;
-      fElasticXsc           = pbe*lp2 + 6.72;
-      fTotalXsc           = pbt*lp2 + 38.2;
-
-
+      fElasticXsc  = pbe*lp2 + 6.72;
+      fTotalXsc    = pbt*lp2 + 38.2;
     }
     else
     {
@@ -981,10 +972,8 @@ G4HadronNucleonXsc::GetHadronNucleonXscMK(const G4DynamicParticle* aParticle,
       G4double lp  = std::log(p) - lmi;
       G4double lp2 = lp*lp;
       G4double rp2 = 1./p2;
-      fElasticXsc           = LE + ( pbe*lp2 + 6.72+32.6/p)/( 1. + rp2/p);
-      fTotalXsc           = LE + ( pbt*lp2 + 38.2+52.7*rp2)/( 1. + 2.72*rp2*rp2);
-
-
+      fElasticXsc  = LE + ( pbe*lp2 + 6.72+32.6/p)/( 1. + rp2/p);
+      fTotalXsc    = LE + ( pbt*lp2 + 38.2+52.7*rp2)/( 1. + 2.72*rp2*rp2);
     }
   }
   else if( I==1 )                        // np/pn
@@ -992,15 +981,15 @@ G4HadronNucleonXsc::GetHadronNucleonXscMK(const G4DynamicParticle* aParticle,
     if( p < pmi )
     {
       G4double p2 = p*p;
-      fElasticXsc          = 1./( .00012 + p2*( .051 + .1*p2));
-      fTotalXsc          = fElasticXsc;
+      fElasticXsc = 1./( .00012 + p2*( .051 + .1*p2));
+      fTotalXsc   = fElasticXsc;
     }
     else if( p > pma )
     {
       G4double lp  = std::log(p) - lmi;
       G4double lp2 = lp*lp;
-      fElasticXsc           = pbe*lp2 + 6.72;
-      fTotalXsc           = pbt*lp2 + 38.2;
+      fElasticXsc  = pbe*lp2 + 6.72;
+      fTotalXsc    = pbt*lp2 + 38.2;
     }
     else
     {
@@ -1009,8 +998,8 @@ G4HadronNucleonXsc::GetHadronNucleonXscMK(const G4DynamicParticle* aParticle,
       G4double lp  = std::log(p) - lmi;
       G4double lp2 = lp*lp;
       G4double rp2 = 1./p2;
-      fElasticXsc           = LE + (pbe*lp2 + 6.72 + 30./p)/( 1. + .49*rp2/p);
-      fTotalXsc           = LE + (pbt*lp2 + 38.2)/( 1. + .54*rp2*rp2);
+      fElasticXsc  = LE + (pbe*lp2 + 6.72 + 30./p)/( 1. + .49*rp2/p);
+      fTotalXsc    = LE + (pbt*lp2 + 38.2)/( 1. + .54*rp2*rp2);
     }
   }
   else if( I == 2 )                        // pimp/pipn
@@ -1028,8 +1017,8 @@ G4HadronNucleonXsc::GetHadronNucleonXscMK(const G4DynamicParticle* aParticle,
       G4double ld  = lp - lmi;
       G4double ld2 = ld*ld;
       G4double sp  = std::sqrt(p);
-      fElasticXsc           = pbe*ld2 + 2.4 + 7./sp;
-      fTotalXsc           = pbt*ld2 + 22.3 + 12./sp;
+      fElasticXsc  = pbe*ld2 + 2.4 + 7./sp;
+      fTotalXsc    = pbt*ld2 + 22.3 + 12./sp;
     }
     else
     {
@@ -1044,8 +1033,8 @@ G4HadronNucleonXsc::GetHadronNucleonXscMK(const G4DynamicParticle* aParticle,
       G4double md  = lm*lm + .04;
       G4double lh  = lp - .017;
       G4double hd  = lh*lh + .0025;
-      fElasticXsc           = LE + (pbe*ld2 + 2.4 + 7./sp)/( 1. + .7/p4) + .6/md + .05/hd;
-      fTotalXsc           = LE*3 + (pbt*ld2 + 22.3 + 12./sp)/(1. + .4/p4) + 1./md + .06/hd;
+      fElasticXsc  = LE + (pbe*ld2 + 2.4 + 7./sp)/( 1. + .7/p4) + .6/md + .05/hd;
+      fTotalXsc    = LE*3 + (pbt*ld2 + 22.3 + 12./sp)/(1. + .4/p4) + 1./md + .06/hd;
     }
   }
   else if( I == 3 )                        // pipp/pimn
@@ -1056,16 +1045,16 @@ G4HadronNucleonXsc::GetHadronNucleonXscMK(const G4DynamicParticle* aParticle,
     {
       G4double lr  = lp + 1.27;
       G4double lr2 = lr*lr;
-      fElasticXsc           = 13./( lr2 + lr2*lr2 + .0676);
-      fTotalXsc           = fElasticXsc;
+      fElasticXsc  = 13./( lr2 + lr2*lr2 + .0676);
+      fTotalXsc    = fElasticXsc;
     }
     else if( p > pma )
     {
       G4double ld  = lp - lmi;
       G4double ld2 = ld*ld;
       G4double sp  = std::sqrt(p);
-      fElasticXsc           = pbe*ld2 + 2.4 + 6./sp;
-      fTotalXsc           = pbt*ld2 + 22.3 + 5./sp;
+      fElasticXsc  = pbe*ld2 + 2.4 + 6./sp;
+      fTotalXsc    = pbt*ld2 + 22.3 + 5./sp;
     }
     else
     {
@@ -1079,8 +1068,8 @@ G4HadronNucleonXsc::GetHadronNucleonXscMK(const G4DynamicParticle* aParticle,
       G4double sp  = std::sqrt(p);
       G4double lm  = lp - .32;
       G4double md  = lm*lm + .0576;
-      fElasticXsc           = LE + (pbe*ld2 + 2.4 + 6./sp)/(1. + 3./p4) + .7/md;
-      fTotalXsc           = LE + (pbt*ld2 + 22.3 + 5./sp)/(1. + 1./p4) + .8/md;
+      fElasticXsc  = LE + (pbe*ld2 + 2.4 + 6./sp)/(1. + 3./p4) + .7/md;
+      fTotalXsc    = LE + (pbt*ld2 + 22.3 + 5./sp)/(1. + 1./p4) + .8/md;
     }
   }
   else if( I == 4 )                        // Kmp/Kmn/K0p/K0n
@@ -1088,8 +1077,8 @@ G4HadronNucleonXsc::GetHadronNucleonXscMK(const G4DynamicParticle* aParticle,
     if( p < pmi)
     {
       G4double psp = p*std::sqrt(p);
-      fElasticXsc           = 5.2/psp;
-      fTotalXsc           = 14./psp;
+      fElasticXsc  = 5.2/psp;
+      fTotalXsc    = 14./psp;
     }
     else if( p > pma )
     {
@@ -1110,8 +1099,8 @@ G4HadronNucleonXsc::GetHadronNucleonXscMK(const G4DynamicParticle* aParticle,
       G4double md  = lm*lm + .000156;
       G4double lh  = p - 1.;
       G4double hd  = lh*lh + .0156;
-      fElasticXsc           = 5.2/psp + (pbe*ld2 + 2.23)/(1. - .7/sp + .075/p4) + .004/md + .15/hd;
-      fTotalXsc           = 14./psp + (pbt*ld2 + 19.5)/(1. - .21/sp + .52/p4) + .006/md + .30/hd;
+      fElasticXsc  = 5.2/psp + (pbe*ld2 + 2.23)/(1. - .7/sp + .075/p4) + .004/md + .15/hd;
+      fTotalXsc    = 14./psp + (pbt*ld2 + 19.5)/(1. - .21/sp + .52/p4) + .006/md + .30/hd;
     }
   }
   else if( I == 5 )                        // Kpp/Kpn/aKp/aKn
@@ -1121,8 +1110,8 @@ G4HadronNucleonXsc::GetHadronNucleonXscMK(const G4DynamicParticle* aParticle,
       G4double lr = p - .38;
       G4double lm = p - 1.;
       G4double md = lm*lm + .372;   
-      fElasticXsc          = .7/(lr*lr + .0676) + 2./md;
-      fTotalXsc          = fElasticXsc + .6/md;
+      fElasticXsc = .7/(lr*lr + .0676) + 2./md;
+      fTotalXsc   = fElasticXsc + .6/md;
     }
     else if( p > pma )
     {
@@ -1142,8 +1131,8 @@ G4HadronNucleonXsc::GetHadronNucleonXscMK(const G4DynamicParticle* aParticle,
       G4double p4  = p2*p2;
       G4double lm  = p - 1.;
       G4double md  = lm*lm + .372;
-      fElasticXsc           = LE + (pbe*ld2 + 2.23)/(1. - .7/sp + .1/p4) + 2./md;
-      fTotalXsc           = LE + (pbt*ld2 + 19.5)/(1. + .46/sp + 1.6/p4) + 2.6/md;
+      fElasticXsc  = LE + (pbe*ld2 + 2.23)/(1. - .7/sp + .1/p4) + 2./md;
+      fTotalXsc    = LE + (pbt*ld2 + 19.5)/(1. + .46/sp + 1.6/p4) + 2.6/md;
     }
   }
   else if( I == 6 )                        // hyperon-N
@@ -1151,16 +1140,16 @@ G4HadronNucleonXsc::GetHadronNucleonXscMK(const G4DynamicParticle* aParticle,
     if( p < pmi )
     {
       G4double p2 = p*p;
-      fElasticXsc          = 1./(.002 + p2*(.12 + p2));
-      fTotalXsc          = fElasticXsc;
+      fElasticXsc = 1./(.002 + p2*(.12 + p2));
+      fTotalXsc   = fElasticXsc;
     }
     else if( p > pma )
     {
       G4double lp  = std::log(p) - lmi;
       G4double lp2 = lp*lp;
       G4double sp  = std::sqrt(p);
-      fElasticXsc           = (pbe*lp2 + 6.72)/(1. + 2./sp);
-      fTotalXsc           = (pbt*lp2 + 38.2 + 900./sp)/(1. + 27./sp);
+      fElasticXsc  = (pbe*lp2 + 6.72)/(1. + 2./sp);
+      fTotalXsc    = (pbt*lp2 + 38.2 + 900./sp)/(1. + 27./sp);
     }
     else
     {
@@ -1170,8 +1159,8 @@ G4HadronNucleonXsc::GetHadronNucleonXscMK(const G4DynamicParticle* aParticle,
       G4double lp2 = lp*lp;
       G4double p4  = p2*p2;
       G4double sp  = std::sqrt(p);
-      fElasticXsc           = LE + (pbe*lp2 + 6.72 + 99./p2)/(1. + 2./sp + 2./p4);
-      fTotalXsc           = LE + (pbt*lp2 + 38.2 + 900./sp)/(1. + 27./sp + 3./p4);
+      fElasticXsc  = LE + (pbe*lp2 + 6.72 + 99./p2)/(1. + 2./sp + 2./p4);
+      fTotalXsc    = LE + (pbt*lp2 + 38.2 + 900./sp)/(1. + 27./sp + 3./p4);
     }
   }
   else if( I == 7 )                        // antibaryon-N
@@ -1180,8 +1169,8 @@ G4HadronNucleonXsc::GetHadronNucleonXscMK(const G4DynamicParticle* aParticle,
     {
       G4double lp  = std::log(p) - lmi;
       G4double lp2 = lp*lp;
-      fElasticXsc           = pbe*lp2 + 6.72;
-      fTotalXsc           = pbt*lp2 + 38.2;
+      fElasticXsc  = pbe*lp2 + 6.72;
+      fTotalXsc    = pbt*lp2 + 38.2;
     }
     else
     {
@@ -1189,8 +1178,8 @@ G4HadronNucleonXsc::GetHadronNucleonXscMK(const G4DynamicParticle* aParticle,
       G4double yt  = std::pow(p, .35);
       G4double lp  = std::log(p) - lmi;
       G4double lp2 = lp*lp;
-      fElasticXsc           = 80./(ye + 1.) + pbe*lp2 + 6.72;
-      fTotalXsc           = (80./yt + .3)/yt +pbt*lp2 + 38.2;
+      fElasticXsc  = 80./(ye + 1.) + pbe*lp2 + 6.72;
+      fTotalXsc    = (80./yt + .3)/yt +pbt*lp2 + 38.2;
     }
   }
   else
