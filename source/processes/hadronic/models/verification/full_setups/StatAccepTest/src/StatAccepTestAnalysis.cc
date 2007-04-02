@@ -426,6 +426,33 @@ void StatAccepTestAnalysis::init() {
 
   mapParticleNames.clear();
 
+  electronId = G4Electron::ElectronDefinition()->GetPDGEncoding();
+  positronId = G4Positron::PositronDefinition()->GetPDGEncoding();
+  gammaId = G4Gamma::GammaDefinition()->GetPDGEncoding();
+  muonMinusId = G4MuonMinus::MuonMinusDefinition()->GetPDGEncoding();
+  muonPlusId = G4MuonPlus::MuonPlusDefinition()->GetPDGEncoding();
+  tauMinusId = G4TauMinus::TauMinusDefinition()->GetPDGEncoding();
+  tauPlusId = G4TauPlus::TauPlusDefinition()->GetPDGEncoding();
+  eNeutrinoId = G4NeutrinoE::NeutrinoEDefinition()->GetPDGEncoding();
+  antiENeutrinoId = G4AntiNeutrinoE::AntiNeutrinoEDefinition()->GetPDGEncoding(); 
+  muNeutrinoId = G4NeutrinoMu::NeutrinoMuDefinition()->GetPDGEncoding(); 
+  antiMuNeutrinoId = G4AntiNeutrinoMu::AntiNeutrinoMuDefinition()->GetPDGEncoding();
+  tauNeutrinoId = G4NeutrinoTau::NeutrinoTauDefinition()->GetPDGEncoding();
+  antiTauNeutrinoId = G4AntiNeutrinoTau::AntiNeutrinoTauDefinition()->GetPDGEncoding();
+  pionPlusId = G4PionPlus::PionPlusDefinition()->GetPDGEncoding();
+  pionMinusId = G4PionMinus::PionMinusDefinition()->GetPDGEncoding();
+  pionZeroId = G4PionZero::PionZeroDefinition()->GetPDGEncoding(); 
+  kaonMinusId = G4KaonMinus::KaonMinusDefinition()->GetPDGEncoding();
+  kaonPlusId = G4KaonPlus::KaonPlusDefinition()->GetPDGEncoding();
+  kaonZeroId = G4KaonZero::KaonZeroDefinition()->GetPDGEncoding();
+  antiKaonZeroId = G4AntiKaonZero::AntiKaonZeroDefinition()->GetPDGEncoding();
+  kaonShortId = G4KaonZeroShort::KaonZeroShortDefinition()->GetPDGEncoding();
+  kaonLongId = G4KaonZeroLong::KaonZeroLongDefinition()->GetPDGEncoding();
+  protonId = G4Proton::ProtonDefinition()->GetPDGEncoding();
+  antiProtonId = G4AntiProton::AntiProtonDefinition()->GetPDGEncoding();
+  neutronId = G4Neutron::NeutronDefinition()->GetPDGEncoding();
+  antiNeutronId = G4AntiNeutron::AntiNeutronDefinition()->GetPDGEncoding();
+
 }                       
 
 
@@ -997,18 +1024,23 @@ void StatAccepTestAnalysis::fillSpectrum( const G4ParticleDefinition* particleDe
   if ( numberOfReplicas < 10  ||
        layerNumber % (numberOfReplicas/10) != 0  ||
        layerNumber / (numberOfReplicas/10) >= 10 ) return;
+
+  // To improve CPU performance, get particle properties only once 
+  // and save them on variables.
+  G4double particleMass = particleDef->GetPDGMass();
+  G4int particleId = particleDef->GetPDGEncoding();
+  
   G4int sampleLayer = layerNumber / (numberOfReplicas/10); 
   G4double p = std::abs( kinEnergy ); // Momentum for the weighting...
-  if ( particleDef->GetPDGMass()/MeV > 1.0e-06 ) {
+  if ( particleMass/MeV > 1.0e-06 ) {
     p = std::sqrt( std::abs( kinEnergy ) * 
-		   ( std::abs( kinEnergy ) + 2.0 * particleDef->GetPDGMass()/MeV ) );
-    //G4cout << "  m=" << particleDef->GetPDGMass()/MeV
-    //       << "  Ekin=" << std::abs( kinEnergy ) 
-    //	     <<  "  p=" << p << " MeV" << G4endl;       //***DEBUG***
+		   ( std::abs( kinEnergy ) + 2.0 * particleMass ) );
+    //G4cout << "  m=" << particleMass / MeV
+    //       << "  Ekin=" << std::abs( kinEnergy ) / MeV 
+    //	     <<  "  p=" << p / MeV << " MeV" << G4endl;       //***DEBUG***
   }
   G4double p_inGeV = p / GeV;
-  if ( particleDef == G4Electron::ElectronDefinition() || 
-       particleDef == G4Positron::PositronDefinition() ) {
+  if ( particleId == electronId  ||  particleId == positronId ) {
     if ( isHistogramSpectrumUnweightedOn ) {
       emSpectrum1[ sampleLayer ]->fill( kinEnergy/GeV );
       emSpectrum2[ sampleLayer ]->fill( kinEnergy/GeV );
@@ -1028,7 +1060,7 @@ void StatAccepTestAnalysis::fillSpectrum( const G4ParticleDefinition* particleDe
 						  1.0/(p*std::abs(kinEnergy)) );
       }
     }
-  } else if ( particleDef == G4Gamma::GammaDefinition() ) {
+  } else if ( particleId == gammaId ) {
     if ( isHistogramSpectrumUnweightedOn ) {
       gammaSpectrum1[ sampleLayer ]->fill( kinEnergy/GeV );
       gammaSpectrum2[ sampleLayer ]->fill( kinEnergy/GeV );
@@ -1048,9 +1080,9 @@ void StatAccepTestAnalysis::fillSpectrum( const G4ParticleDefinition* particleDe
 						     1.0/(p*std::abs(kinEnergy)) );
       }
     }
-  } else if ( particleDef == G4PionPlus::PionPlusDefinition() ||
-	      particleDef == G4PionMinus::PionMinusDefinition() ||
-	      particleDef == G4PionZero::PionZeroDefinition() ) {
+  } else if ( particleId == pionPlusId   ||
+	      particleId == pionMinusId  ||
+	      particleId == pionZeroId ) {
     if ( isHistogramSpectrumUnweightedOn ) {
       pionSpectrum1[ sampleLayer ]->fill( kinEnergy/GeV );
       pionSpectrum2[ sampleLayer ]->fill( kinEnergy/GeV );
@@ -1072,7 +1104,7 @@ void StatAccepTestAnalysis::fillSpectrum( const G4ParticleDefinition* particleDe
     }
     // Now separate between pi+ and pi-, because they have, 
     // in general, different spectra.
-    if ( particleDef == G4PionPlus::PionPlusDefinition() ) { 
+    if ( particleId == pionPlusId ) { 
       if ( isHistogramSpectrumUnweightedOn ) {
 	pionPlusSpectrum1[ sampleLayer ]->fill( kinEnergy/GeV );
 	pionPlusSpectrum2[ sampleLayer ]->fill( kinEnergy/GeV );
@@ -1093,7 +1125,7 @@ void StatAccepTestAnalysis::fillSpectrum( const G4ParticleDefinition* particleDe
 	}
       }
     }
-    if ( particleDef == G4PionMinus::PionMinusDefinition() ) { 
+    if ( particleId == pionMinusId ) { 
       if ( isHistogramSpectrumUnweightedOn ) {
 	pionMinusSpectrum1[ sampleLayer ]->fill( kinEnergy/GeV );
 	pionMinusSpectrum2[ sampleLayer ]->fill( kinEnergy/GeV );
@@ -1114,7 +1146,7 @@ void StatAccepTestAnalysis::fillSpectrum( const G4ParticleDefinition* particleDe
 	}
       }
     }
-  } else if ( particleDef == G4Proton::ProtonDefinition() ) {
+  } else if ( particleId == protonId ) {
     if ( isHistogramSpectrumUnweightedOn ) {
       protonSpectrum1[ sampleLayer ]->fill( kinEnergy/GeV );
       protonSpectrum2[ sampleLayer ]->fill( kinEnergy/GeV );
@@ -1134,7 +1166,7 @@ void StatAccepTestAnalysis::fillSpectrum( const G4ParticleDefinition* particleDe
 						      1.0/(p*std::abs(kinEnergy)) );
       }
     }
-  } else if ( particleDef == G4Neutron::NeutronDefinition() ) {
+  } else if ( particleId == neutronId ) {
     if ( isHistogramSpectrumUnweightedOn ) {
       neutronSpectrum1[ sampleLayer ]->fill( kinEnergy/GeV );
       neutronSpectrum2[ sampleLayer ]->fill( kinEnergy/GeV );
@@ -1167,7 +1199,7 @@ void StatAccepTestAnalysis::fillNtuple( float incidentParticleId,
   beamEnergy = incidentParticleEnergy;
   if ( totalEnergyDepositedInCalorimeter - beamEnergy > 0.001*MeV ) {
     G4cout << "\t ***ENERGY-NON-CONSERVATION*** " 
-	   << totalEnergyDepositedInCalorimeter << " MeV" << G4endl;
+	   << totalEnergyDepositedInCalorimeter / MeV << " MeV" << G4endl;
     countEnergyNonConservation++;
   }
   if ( totalEnergyDepositedInCalorimeter > maxEdepTot ) {
@@ -1292,7 +1324,7 @@ fillShowerProfile( G4int replica, const G4double radius,
   //       << "  readoutLayer = " << readoutLayer << G4endl
   //       << " \t radius = " << radius / mm 
   //       << " mm   iBinRadius = " << iBinRadius << G4endl
-  //       << " \t edep = " << edep << " MeV "  << G4endl;  //***DEBUG***
+  //       << " \t edep = " << edep / MeV << " MeV "  << G4endl;  //***DEBUG***
 
   // Consider now the separate contribution due to the following particles:
   //    -  electron (e-  and  e+    together)
@@ -1301,39 +1333,35 @@ fillShowerProfile( G4int replica, const G4double radius,
   //    -  kaons    (k-  and  k+    together)
   //    -  protons  (p   and  pbar  together)
   //    -  nuclei   (all particles with PDG code = 0 and neutrons together)
-  if ( particlePDG == G4Electron::ElectronDefinition()->GetPDGEncoding()  ||
-       particlePDG == G4Positron::PositronDefinition()->GetPDGEncoding() ) {
+
+  if ( particlePDG == electronId  ||  particlePDG == positronId ) {
     sumEdepAct_electron += edep;
     sumEdepTot_electron += edep;
     longitudinalProfile_electron[ readoutLayer ] += edep;
     transverseProfile_electron[ iBinRadius ] += edep;
-  } else if ( particlePDG == G4MuonMinus::MuonMinusDefinition()->GetPDGEncoding()  ||
-	      particlePDG == G4MuonPlus::MuonPlusDefinition()->GetPDGEncoding() ) {
+  } else if ( particlePDG == muonMinusId  ||  particlePDG == muonPlusId ) {
     sumEdepAct_muon += edep;
     sumEdepTot_muon += edep;
     longitudinalProfile_muon[ readoutLayer ] += edep;
     transverseProfile_muon[ iBinRadius ] += edep;
-  } else if ( particlePDG == G4PionPlus::PionPlusDefinition()->GetPDGEncoding()  ||
-	      particlePDG == G4PionMinus::PionMinusDefinition()->GetPDGEncoding() ) {
+  } else if ( particlePDG == pionPlusId  ||  particlePDG == pionMinusId ) {
     sumEdepAct_pion += edep;
     sumEdepTot_pion += edep;
     longitudinalProfile_pion[ readoutLayer ] += edep;
     transverseProfile_pion[ iBinRadius ] += edep;
-  } else if ( particlePDG == G4KaonMinus::KaonMinusDefinition()->GetPDGEncoding()  ||
-	      particlePDG == G4KaonPlus::KaonPlusDefinition()->GetPDGEncoding() ) {
+  } else if ( particlePDG == kaonMinusId  ||  particlePDG == kaonPlusId ) {
     sumEdepAct_kaon += edep;
     sumEdepTot_kaon += edep;
     longitudinalProfile_kaon[ readoutLayer ] += edep;
     transverseProfile_kaon[ iBinRadius ] += edep;
-  } else if ( particlePDG == G4Proton::ProtonDefinition()->GetPDGEncoding()  ||
-	      particlePDG == G4AntiProton::AntiProtonDefinition()->GetPDGEncoding() ) {
+  } else if ( particlePDG == protonId  ||  particlePDG == antiProtonId ) {
     sumEdepAct_proton += edep;
     sumEdepTot_proton += edep;
     longitudinalProfile_proton[ readoutLayer ] += edep;
     transverseProfile_proton[ iBinRadius ] += edep;
   } else if ( particlePDG == 0  || 
 	      particlePDG / 1000000000 >= 1  ||
-	      particlePDG == G4Neutron::NeutronDefinition()->GetPDGEncoding() ) {
+	      particlePDG == neutronId ) {
     // Before 8.1.ref04, the PDG code for nuclei was 0; 
     // from 8.1.ref04, the new PDG code convention for nuclei has been
     // supported: in this schema, the PDG code of nuclei is characterized
@@ -1354,6 +1382,15 @@ void StatAccepTestAnalysis::infoStep( const G4Step* aStep ) {
 
   classifyParticle( false , aStep->GetTrack()->GetDefinition() );
 
+  // To improve CPU performance, get particle properties only once 
+  // and save them on variables.
+  G4int particleId = aStep->GetTrack()->GetDefinition()->GetPDGEncoding();
+  G4String particleName = aStep->GetTrack()->GetDefinition()->GetParticleName();
+  G4String volumeName = aStep->GetTrack()->GetVolume()->GetName();
+  G4double stepLength = aStep->GetStepLength();
+  G4double stepEnergyDeposit = aStep->GetTotalEnergyDeposit();
+  G4double stepWeight = aStep->GetTrack()->GetWeight();
+
   // Count the number of inelastic and stoppingAtRest processes.
   if ( StatAccepTestAnalysis::isCountingProcessesOn ) { 
     G4String processStr( aStep->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName() );  
@@ -1362,103 +1399,71 @@ void StatAccepTestAnalysis::infoStep( const G4Step* aStep ) {
 	 processStr.find( "AbsorptionAtRest" ) != G4String::npos  ||
 	 processStr.find( "CaptureAtRest" ) != G4String::npos ) {
       //G4cout << " Process = " << processStr 
-      //       << "\t particle = " 
-      //       <<  aStep->GetTrack()->GetDefinition()->GetPDGEncoding() 
-      //       << "\t" << aStep->GetTrack()->GetDefinition()->GetParticleName()
+      //       << "\t particle = " << particleId << "\t" << particleName
       //       << G4endl;  //***DEBUG***
       if ( processStr.find( "Inelastic" ) != G4String::npos ) {
 	numInelasticProcesses++;
-	if ( aStep->GetTrack()->GetDefinition() == 
-	     G4Proton::ProtonDefinition() ) {
+	if ( particleId == protonId ) {
           numProtonInelasticProcesses++;
-	} else if ( aStep->GetTrack()->GetDefinition() == 
-		    G4AntiProton::AntiProtonDefinition() ) {
+	} else if ( particleId == antiProtonId ) {
           numAntiProtonInelasticProcesses++;
-	} else if ( aStep->GetTrack()->GetDefinition() == 
-		    G4Neutron::NeutronDefinition() ) {
+	} else if ( particleId == neutronId ) {
           numNeutronInelasticProcesses++;
-	} else if ( aStep->GetTrack()->GetDefinition() == 
-		    G4AntiNeutron::AntiNeutronDefinition() ) {
+	} else if ( particleId == antiNeutronId ) {
           numAntiNeutronInelasticProcesses++;
-	} else if ( aStep->GetTrack()->GetDefinition() == 
-		    G4PionPlus::PionPlusDefinition() ) {
+	} else if ( particleId == pionPlusId ) {
           numPionPlusInelasticProcesses++;
-	} else if ( aStep->GetTrack()->GetDefinition() == 
-		    G4PionMinus::PionMinusDefinition() ) {
+	} else if ( particleId == pionMinusId ) {
           numPionMinusInelasticProcesses++;
-	} else if ( aStep->GetTrack()->GetDefinition() == 
-		    G4KaonPlus::KaonPlusDefinition() ) {
+	} else if ( particleId == kaonPlusId ) {
           numKaonPlusInelasticProcesses++;
-	} else if ( aStep->GetTrack()->GetDefinition() == 
-		    G4KaonMinus::KaonMinusDefinition() ) {
+	} else if ( particleId == kaonMinusId ) {
           numKaonMinusInelasticProcesses++;
-	} else if ( aStep->GetTrack()->GetDefinition() == 
-		    G4KaonZero::KaonZeroDefinition()  ||
-                    aStep->GetTrack()->GetDefinition() == 
-                    G4AntiKaonZero::AntiKaonZeroDefinition()  ||
-                    aStep->GetTrack()->GetDefinition() == 
-                    G4KaonZeroLong::KaonZeroLongDefinition()  ||
-                    aStep->GetTrack()->GetDefinition() == 
-                    G4KaonZeroShort::KaonZeroShortDefinition() ) {
+	} else if ( particleId == kaonZeroId  ||  particleId == antiKaonZeroId  ||
+                    particleId == kaonLongId  ||  particleId == kaonShortId ) {
           numKaonNeutralInelasticProcesses++;
-	} else if ( aStep->GetTrack()->GetDefinition()->GetPDGEncoding() == 3122 ) {
+	} else if ( particleId == 3122 ) {
 	  numLambdaInelasticProcesses++;
-	} else if ( aStep->GetTrack()->GetDefinition()->GetPDGEncoding() == -3122 ) {
+	} else if ( particleId == -3122 ) {
 	  numAntiLambdaInelasticProcesses++;
- 	} else if ( aStep->GetTrack()->GetDefinition()->GetPDGEncoding() == 3112 ) {
+ 	} else if ( particleId == 3112 ) {
 	  numSigmaMinusInelasticProcesses++;
-	} else if ( aStep->GetTrack()->GetDefinition() == 
-		    G4MuonMinus::MuonMinusDefinition() ) {
+	} else if ( particleId == muonMinusId ) {
           numMuonMinusInelasticProcesses++;
         } else {
 	  numOtherInelasticProcesses++;
 	  //G4cout << " OtherInelasticProcess = " << processStr 
-	  //	   << "\t particle = " 
-	  //	   <<  aStep->GetTrack()->GetDefinition()->GetPDGEncoding() 
-	  //	   << "\t" << aStep->GetTrack()->GetDefinition()->GetParticleName()
+	  //	   << "\t particle = " <<  particleId 
+	  //	   << "\t" << particleName
 	  //	   << G4endl;  //***DEBUG***
         }
       } else {
 	numStoppingAtRestProcesses++;
-	if ( aStep->GetTrack()->GetDefinition() == 
-	     G4AntiProton::AntiProtonDefinition() ) {
+	if ( particleId == antiProtonId ) {
           numAntiProtonStoppingAtRestProcesses++;
-	} else if ( aStep->GetTrack()->GetDefinition() == 
-		    G4Neutron::NeutronDefinition() ) {
+	} else if ( particleId == neutronId ) {
           numNeutronStoppingAtRestProcesses++;
-	} else if ( aStep->GetTrack()->GetDefinition() == 
-		    G4AntiNeutron::AntiNeutronDefinition() ) {
+	} else if ( particleId == antiNeutronId ) {
           numAntiNeutronStoppingAtRestProcesses++;
-	} else if ( aStep->GetTrack()->GetDefinition() == 
-		    G4PionMinus::PionMinusDefinition() ) {
+	} else if ( particleId == pionMinusId ) {
           numPionMinusStoppingAtRestProcesses++;
-	} else if ( aStep->GetTrack()->GetDefinition() == 
-		    G4KaonMinus::KaonMinusDefinition() ) {
+	} else if ( particleId == kaonMinusId ) {
           numKaonMinusStoppingAtRestProcesses++;
-	} else if ( aStep->GetTrack()->GetDefinition() == 
-		    G4KaonZero::KaonZeroDefinition()  ||
-                    aStep->GetTrack()->GetDefinition() == 
-                    G4AntiKaonZero::AntiKaonZeroDefinition()  ||
-                    aStep->GetTrack()->GetDefinition() == 
-                    G4KaonZeroLong::KaonZeroLongDefinition()  ||
-                    aStep->GetTrack()->GetDefinition() == 
-                    G4KaonZeroShort::KaonZeroShortDefinition() ) {
+	} else if ( particleId == kaonZeroId  ||  particleId == antiKaonZeroId  ||
+                    particleId == kaonLongId  ||  particleId == kaonShortId ) {
           numKaonNeutralStoppingAtRestProcesses++;
-	} else if ( aStep->GetTrack()->GetDefinition()->GetPDGEncoding() == 3122 ) {
+	} else if ( particleId == 3122 ) {
 	  numLambdaStoppingAtRestProcesses++;
-	} else if ( aStep->GetTrack()->GetDefinition()->GetPDGEncoding() == -3122 ) {
+	} else if ( particleId == -3122 ) {
 	  numAntiLambdaStoppingAtRestProcesses++;
- 	} else if ( aStep->GetTrack()->GetDefinition()->GetPDGEncoding() == 3112 ) {
+ 	} else if ( particleId == 3112 ) {
 	  numSigmaMinusStoppingAtRestProcesses++;
-	} else if ( aStep->GetTrack()->GetDefinition() == 
-		    G4MuonMinus::MuonMinusDefinition() ) {
+	} else if ( particleId == muonMinusId ) {
           numMuonMinusStoppingAtRestProcesses++;
         } else {
 	  numOtherStoppingAtRestProcesses++;
 	  G4cout << " OtherAtRestProcess = " << processStr 
-		 << "\t particle = " 
-		 <<  aStep->GetTrack()->GetDefinition()->GetPDGEncoding() 
-		 << "\t" << aStep->GetTrack()->GetDefinition()->GetParticleName()
+		 << "\t particle = " << particleId << "\t" << particleName
 		 << G4endl;  //***DEBUG***
         }
       }
@@ -1468,67 +1473,46 @@ void StatAccepTestAnalysis::infoStep( const G4Step* aStep ) {
 #ifdef G4ANALYSIS_USE
   // 2D plots on Step Energy vs. Step Length.
   if ( isHistogramOn && is2DHistogramStepLvsEOn ) {
-    if ( aStep->GetTrack()->GetVolume()->GetName() == "physiActive" ) {
-      h2stepEvsL_active->fill( aStep->GetStepLength() / mm, 
-			       aStep->GetTotalEnergyDeposit() / MeV );
-    } else if ( aStep->GetTrack()->GetVolume()->GetName() == "physiAbsorber" ) {
-      h2stepEvsL_absorber->fill( aStep->GetStepLength() / mm, 
-				 aStep->GetTotalEnergyDeposit() / MeV );
+    if ( volumeName == "physiActive" ) {
+      h2stepEvsL_active->fill( stepLength / mm, stepEnergyDeposit / MeV );
+    } else if ( volumeName == "physiAbsorber" ) {
+      h2stepEvsL_absorber->fill( stepLength / mm, stepEnergyDeposit / MeV );
     }
-    if ( aStep->GetTrack()->GetDefinition() == G4Electron::ElectronDefinition() || 
-	 aStep->GetTrack()->GetDefinition() == G4Positron::PositronDefinition() ) {
-      if ( aStep->GetTrack()->GetVolume()->GetName() == "physiActive" ) {
-	h2stepEvsL_electron_active->fill( aStep->GetStepLength() / mm, 
-					  aStep->GetTotalEnergyDeposit() / MeV );
-      } else if ( aStep->GetTrack()->GetVolume()->GetName() == "physiAbsorber" ) {
-	h2stepEvsL_electron_absorber->fill( aStep->GetStepLength() / mm,
-					    aStep->GetTotalEnergyDeposit() / MeV );
+    if ( particleId == electronId  ||  particleId == positronId ) {
+      if ( volumeName == "physiActive" ) {
+	h2stepEvsL_electron_active->fill( stepLength / mm, stepEnergyDeposit / MeV );
+      } else if ( volumeName == "physiAbsorber" ) {
+	h2stepEvsL_electron_absorber->fill( stepLength / mm, stepEnergyDeposit / MeV );
       }
-    } else if ( aStep->GetTrack()->GetDefinition() == G4Gamma::GammaDefinition() ) {
-      if ( aStep->GetTrack()->GetVolume()->GetName() == "physiActive" ) {
-	h2stepEvsL_gamma_active->fill( aStep->GetStepLength() / mm, 
-				       aStep->GetTotalEnergyDeposit() / MeV );
-      } else if ( aStep->GetTrack()->GetVolume()->GetName() == "physiAbsorber" ) {
-	h2stepEvsL_gamma_absorber->fill( aStep->GetStepLength() / mm, 
-					 aStep->GetTotalEnergyDeposit() / MeV );
+    } else if ( particleId == gammaId ) {
+      if ( volumeName == "physiActive" ) {
+	h2stepEvsL_gamma_active->fill( stepLength / mm, stepEnergyDeposit / MeV );
+      } else if ( volumeName == "physiAbsorber" ) {
+	h2stepEvsL_gamma_absorber->fill( stepLength / mm, stepEnergyDeposit / MeV );
       }
-    } else if ( aStep->GetTrack()->GetDefinition() == 
-		G4MuonMinus::MuonMinusDefinition()  ||  
-		aStep->GetTrack()->GetDefinition() == 
-		G4MuonPlus::MuonPlusDefinition() ) {
-      if ( aStep->GetTrack()->GetVolume()->GetName() == "physiActive" ) {
-	h2stepEvsL_muon_active->fill( aStep->GetStepLength() / mm, 
-				      aStep->GetTotalEnergyDeposit() / MeV );
-      } else if ( aStep->GetTrack()->GetVolume()->GetName() == "physiAbsorber" ) {
-	h2stepEvsL_muon_absorber->fill( aStep->GetStepLength() / mm, 
-					aStep->GetTotalEnergyDeposit() / MeV );
+    } else if ( particleId == muonMinusId  ||  particleId == muonPlusId ) {
+      if ( volumeName == "physiActive" ) {
+	h2stepEvsL_muon_active->fill( stepLength / mm, stepEnergyDeposit / MeV );
+      } else if ( volumeName == "physiAbsorber" ) {
+	h2stepEvsL_muon_absorber->fill( stepLength / mm, stepEnergyDeposit / MeV );
       }
-    } else if ( aStep->GetTrack()->GetDefinition() == 
-		G4PionPlus::PionPlusDefinition()  ||
-		aStep->GetTrack()->GetDefinition() == 
-		G4PionMinus::PionMinusDefinition() ) {
-      if ( aStep->GetTrack()->GetVolume()->GetName() == "physiActive" ) {
-	h2stepEvsL_pionCharged_active->fill( aStep->GetStepLength() / mm, 
-					     aStep->GetTotalEnergyDeposit() / MeV );
-      } else if ( aStep->GetTrack()->GetVolume()->GetName() == "physiAbsorber" ) {
-	h2stepEvsL_pionCharged_absorber->fill( aStep->GetStepLength() / mm, 
-					       aStep->GetTotalEnergyDeposit() / MeV );
+    } else if ( particleId == pionPlusId  ||  particleId == pionMinusId ) {
+      if ( volumeName == "physiActive" ) {
+	h2stepEvsL_pionCharged_active->fill( stepLength / mm, stepEnergyDeposit / MeV );
+      } else if ( volumeName == "physiAbsorber" ) {
+	h2stepEvsL_pionCharged_absorber->fill( stepLength / mm, stepEnergyDeposit / MeV );
       }
-    } else if ( aStep->GetTrack()->GetDefinition() == G4Proton::ProtonDefinition() ) {
-      if ( aStep->GetTrack()->GetVolume()->GetName() == "physiActive" ) {
-	h2stepEvsL_proton_active->fill( aStep->GetStepLength() / mm, 
-					aStep->GetTotalEnergyDeposit() / MeV );
-      } else if ( aStep->GetTrack()->GetVolume()->GetName() == "physiAbsorber" ) {
-	h2stepEvsL_proton_absorber->fill( aStep->GetStepLength() / mm,
-					  aStep->GetTotalEnergyDeposit() / MeV );
+    } else if ( particleId == protonId ) {
+      if ( volumeName == "physiActive" ) {
+	h2stepEvsL_proton_active->fill( stepLength / mm, stepEnergyDeposit / MeV );
+      } else if ( volumeName == "physiAbsorber" ) {
+	h2stepEvsL_proton_absorber->fill( stepLength / mm, stepEnergyDeposit / MeV );
       }
-    } else if ( aStep->GetTrack()->GetDefinition() == G4Neutron::NeutronDefinition() ) {
-      if ( aStep->GetTrack()->GetVolume()->GetName() == "physiActive" ) {
-	h2stepEvsL_neutron_active->fill( aStep->GetStepLength() / mm,
-					 aStep->GetTotalEnergyDeposit() / MeV );
-      } else if ( aStep->GetTrack()->GetVolume()->GetName() == "physiAbsorber" ) {
-	h2stepEvsL_neutron_absorber->fill( aStep->GetStepLength() / mm,
-					   aStep->GetTotalEnergyDeposit() / MeV );
+    } else if ( particleId == neutronId ) {
+      if ( volumeName == "physiActive" ) {
+	h2stepEvsL_neutron_active->fill( stepLength / mm, stepEnergyDeposit / MeV );
+      } else if ( volumeName == "physiAbsorber" ) {
+	h2stepEvsL_neutron_absorber->fill( stepLength / mm, stepEnergyDeposit / MeV );
       }    
     }
   }
@@ -1548,38 +1532,21 @@ void StatAccepTestAnalysis::infoStep( const G4Step* aStep ) {
   //                 neutrons are included, as an effective way
   //                 to take into account the recoil of nuclei
   //                 below a certain threshold)
-  if ( aStep->GetTrack()->GetVolume()->GetName() == "physiAbsorber" ) {
-    G4double edep = aStep->GetTotalEnergyDeposit() * aStep->GetTrack()->GetWeight();
-    if ( aStep->GetTrack()->GetDefinition() == 
-	 G4Electron::ElectronDefinition()  ||
-	 aStep->GetTrack()->GetDefinition() == 
-	 G4Positron::PositronDefinition() ) {
+  if ( volumeName == "physiAbsorber" ) {
+    G4double edep = stepEnergyDeposit * stepWeight;
+    if ( particleId == electronId  ||  particleId == positronId ) {
       sumEdepTot_electron += edep;
-    } else if ( aStep->GetTrack()->GetDefinition() == 
-		G4MuonMinus::MuonMinusDefinition()  ||
-		aStep->GetTrack()->GetDefinition() == 
-		G4MuonPlus::MuonPlusDefinition() ) {
+    } else if ( particleId == muonMinusId  ||  particleId == muonPlusId ) {
       sumEdepTot_muon += edep;
-    } else if ( aStep->GetTrack()->GetDefinition() == 
-		G4PionPlus::PionPlusDefinition()  ||
-		aStep->GetTrack()->GetDefinition() == 
-		G4PionMinus::PionMinusDefinition() ) {
+    } else if ( particleId == pionPlusId  ||  particleId == pionMinusId ) {
       sumEdepTot_pion += edep;
-    } else if ( aStep->GetTrack()->GetDefinition() == 
-		G4KaonMinus::KaonMinusDefinition()  ||
-		aStep->GetTrack()->GetDefinition() == 
-		G4KaonPlus::KaonPlusDefinition() ) {
+    } else if ( particleId == kaonMinusId  ||  particleId == kaonPlusId ) {
       sumEdepTot_kaon += edep;
-    } else if ( aStep->GetTrack()->GetDefinition() == 
-		G4Proton::ProtonDefinition()  ||
-		aStep->GetTrack()->GetDefinition() == 
-		G4AntiProton::AntiProtonDefinition() ) {
+    } else if ( particleId == protonId  ||  particleId == antiProtonId ) {
       sumEdepTot_proton += edep;
-    } else if ( aStep->GetTrack()->GetDefinition()->GetPDGEncoding() == 0   ||
-	        aStep->GetTrack()->GetDefinition()->GetPDGEncoding() 
-		/ 1000000000 >= 1   ||
-		aStep->GetTrack()->GetDefinition() == 
-		G4Neutron::NeutronDefinition() ) {
+    } else if ( particleId == 0   ||
+	        particleId / 1000000000 >= 1   ||
+		particleId == neutronId ) {
       // Before 8.1.ref04, the PDG code for nuclei was 0; 
       // from 8.1.ref04, the new PDG code convention for nuclei has been
       // supported: in this schema, the PDG code of nuclei is characterized
@@ -1596,94 +1563,89 @@ void StatAccepTestAnalysis::infoStep( const G4Step* aStep ) {
 
 void StatAccepTestAnalysis::infoTrack( const G4Track* aTrack ) {
 
+  // To improve CPU performance, get particle properties only once 
+  // and save them on variables.
+  G4int particleId = aTrack->GetDefinition()->GetPDGEncoding();
+  G4String particleName = aTrack->GetDefinition()->GetParticleName();
+  G4String volumeName = aTrack->GetVolume()->GetName();
+  G4String volumeAtVertexName = aTrack->GetLogicalVolumeAtVertex()->GetName();
+  G4double trackEkin = aTrack->GetKineticEnergy();
+  G4double trackLength = aTrack->GetTrackLength();
+
   if ( aTrack->GetTrackStatus() == fStopAndKill ) {   
     //G4cout << "\t --- Info Track when fStopAndKill --- " << G4endl
     //	     << "\t TrackID = " << aTrack->GetTrackID() 
-    //       << "\t Name = " << aTrack->GetDefinition()->GetParticleName() << G4endl
-    //       << "\t Volume = " << aTrack->GetVolume()->GetName() 
+    //       << "\t Name = " << particleName << G4endl
+    //       << "\t Volume = " << volumeName 
     //       << "\t Material = " << aTrack->GetMaterial()->GetName() << G4endl
-    //       << "\t Vertex (origin) Volume = " 
-    //       << aTrack->GetLogicalVolumeAtVertex()->GetName() << G4endl
-    //       << "\t Ekin = " << aTrack->GetKineticEnergy() << " MeV "
-    //       << "\t Length track = " << aTrack->GetTrackLength() 
+    //       << "\t Vertex (origin) Volume = " << volumeAtVertexName << G4endl
+    //       << "\t Ekin = " << trackEkin / MeV << " MeV "
+    //       << "\t Length track = " << trackLength / mm << " mm " 
     //       << G4endl;  //***DEBUG*** 
-    //if ( ! ( aTrack->GetVolume()->GetName() == "expHall" ||
-    //	     aTrack->GetVolume()->GetName() == "physiAbsorber" ||
-    //	     aTrack->GetVolume()->GetName() == "physiActive" ) ) {
-    //  G4cout << " ***STRANGE VOLUME *** : " 
-    //          << aTrack->GetVolume()->GetName() << G4endl;
+    //if ( ! ( volumeName == "expHall"  ||
+    //         volumeName == "physiAbsorber" ||
+    //	       volumeName == "physiActive" ) ) {
+    //  G4cout << " ***STRANGE VOLUME *** : " << volumeName << G4endl;
     //}
   
     // To avoid bias in the track length due to the big world volume
     // (which can affect significantly the track length of neutrons)
     // we consider only those tracks that are fully contained inside
     // the calorimeter, i.e. created and terminated inside it.
-    if ( aTrack->GetLogicalVolumeAtVertex()->GetName() != "expHall"  &&
-	 aTrack->GetVolume()->GetName() != "expHall" ) {
-      G4double trackLength = aTrack->GetTrackLength();
-      if ( aTrack->GetDefinition() == G4Electron::ElectronDefinition() || 
-	   aTrack->GetDefinition() == G4Positron::PositronDefinition() ) {
+    if ( volumeAtVertexName != "expHall"  &&  volumeName != "expHall" ) {
+      if ( particleId == electronId || particleId == positronId ) {
 	electronTrackLength += trackLength;
 	electronTrackLength2 += trackLength * trackLength;
-      } else if ( aTrack->GetDefinition() == G4Gamma::GammaDefinition() ) {
+      } else if ( particleId == gammaId ) {
 	gammaTrackLength += trackLength;
 	gammaTrackLength2 += trackLength * trackLength;
-      } else if ( aTrack->GetDefinition() == G4MuonMinus::MuonMinusDefinition() ||  
-		  aTrack->GetDefinition() == G4MuonPlus::MuonPlusDefinition() ) {
+      } else if ( particleId == muonMinusId  ||  particleId == muonPlusId ) {
 	muonTrackLength += trackLength;
 	muonTrackLength2 += trackLength * trackLength;
-      } else if ( aTrack->GetDefinition() == G4PionPlus::PionPlusDefinition() ||
-		  aTrack->GetDefinition() == G4PionMinus::PionMinusDefinition() ) {
+      } else if ( particleId == pionPlusId  ||  particleId == pionMinusId ) {
 	pionChargedTrackLength += trackLength;
 	pionChargedTrackLength2 += trackLength * trackLength;
-      } else if ( aTrack->GetDefinition() == G4PionZero::PionZeroDefinition() ) {
+      } else if ( particleId == pionZeroId ) {
 	pion0TrackLength += trackLength;
 	pion0TrackLength2 += trackLength * trackLength;
-      } else if ( aTrack->GetDefinition() == G4Proton::ProtonDefinition() ) {
+      } else if ( particleId == protonId ) {
 	protonTrackLength += trackLength;
 	protonTrackLength2 += trackLength * trackLength;
-      } else if ( aTrack->GetDefinition() == G4Neutron::NeutronDefinition() ) {
+      } else if ( particleId == neutronId ) {
 	neutronTrackLength += trackLength;
 	neutronTrackLength2 += trackLength * trackLength;
       }
-    } else if ( aTrack->GetVolume()->GetName() == "expHall" ) {
-      kinEnergyExiting += aTrack->GetKineticEnergy();
-      kinEnergyExiting2 += aTrack->GetKineticEnergy() * aTrack->GetKineticEnergy();
+    } else if ( volumeName == "expHall" ) {
+      kinEnergyExiting += trackEkin;
+      kinEnergyExiting2 += trackEkin * trackEkin;
       numExiting++;
-      //G4cout << " Exiting particle: " 
-      //       << aTrack->GetDefinition()->GetParticleName() 
-      //       << "\t" << kinEnergyExiting << " MeV" << G4endl
+      //G4cout << " Exiting particle: " << particleName 
+      //       << "\t" << kinEnergyExiting / MeV << " MeV" << G4endl
       //       << "\t Production: " 
       //       << aTrack->GetCreatorProcess()->GetProcessName() << G4endl
-      //       << "\t" << aTrack->GetVertexPosition() << " mm"
-      //       << "\t" << aTrack->GetLogicalVolumeAtVertex()->GetName() << G4endl
-      //       << "\t" << aTrack->GetVertexKineticEnergy() << " MeV"
-      //       << "\t vertex Ekin = " << aTrack->GetVertexKineticEnergy() 
+      //       << "\t" << aTrack->GetVertexPosition() / mm << " mm"
+      //       << "\t" << volumeAtVertexName << G4endl
+      //       << "\t vertex Ekin = " << aTrack->GetVertexKineticEnergy() / MeV 
       //       << " MeV" << G4endl;  //***DEBUG***
-      if ( aTrack->GetDefinition() == G4Gamma::GammaDefinition() ) {
-	kinEnergyExitingGammas += aTrack->GetKineticEnergy();
+      if ( particleId == gammaId ) {
+	kinEnergyExitingGammas += trackEkin;
 	numExitingGammas++;
-      } else if ( aTrack->GetDefinition() == G4Neutron::NeutronDefinition() ) {
-	kinEnergyExitingNeutrons += aTrack->GetKineticEnergy();
+      } else if ( particleId == neutronId ) {
+	kinEnergyExitingNeutrons += trackEkin;
 	numExitingNeutrons++;
-      } else if ( aTrack->GetDefinition() == G4NeutrinoE::NeutrinoEDefinition()  ||
-		  aTrack->GetDefinition() == G4NeutrinoMu::NeutrinoMuDefinition()  ||
-		  aTrack->GetDefinition() == G4NeutrinoTau::NeutrinoTauDefinition()  ||
-		  aTrack->GetDefinition() == G4AntiNeutrinoE::AntiNeutrinoEDefinition()  ||
-		  aTrack->GetDefinition() == G4AntiNeutrinoMu::AntiNeutrinoMuDefinition()  ||
-		  aTrack->GetDefinition() == G4AntiNeutrinoTau::AntiNeutrinoTauDefinition() ) {
-	kinEnergyExitingNeutrinos += aTrack->GetKineticEnergy();
+      } else if ( particleId == eNeutrinoId  ||  particleId == antiENeutrinoId  ||
+		  particleId == muNeutrinoId  ||  particleId == antiMuNeutrinoId  ||
+		  particleId == tauNeutrinoId  ||  particleId == antiTauNeutrinoId ) {
+	kinEnergyExitingNeutrinos += trackEkin;
 	numExitingNeutrinos++;
-      } else if ( aTrack->GetDefinition() == G4MuonMinus::MuonMinusDefinition() ||  
-		  aTrack->GetDefinition() == G4MuonPlus::MuonPlusDefinition() ) {
-	kinEnergyExitingMuons += aTrack->GetKineticEnergy();
+      } else if ( particleId == muonMinusId  ||  particleId == muonPlusId ) {
+	kinEnergyExitingMuons += trackEkin;
 	numExitingMuons++;        
-      } else if ( aTrack->GetDefinition() == G4Electron::ElectronDefinition() ||  
-		  aTrack->GetDefinition() == G4Positron::PositronDefinition() ) {
-	kinEnergyExitingElectrons += aTrack->GetKineticEnergy();
+      } else if ( particleId == electronId  ||  particleId == positronId ) {
+	kinEnergyExitingElectrons += trackEkin;
 	numExitingElectrons++;        
       } else {
-	kinEnergyExitingOthers += aTrack->GetKineticEnergy();
+	kinEnergyExitingOthers += trackEkin;
 	numExitingOthers++;
       }
     }
@@ -1692,10 +1654,8 @@ void StatAccepTestAnalysis::infoTrack( const G4Track* aTrack ) {
     classifyParticle( true , aTrack->GetDefinition() );
 
     if ( StatAccepTestAnalysis::isMapParticleNamesOn  &&  
-	 aTrack->GetDefinition() != G4Gamma::GammaDefinition()  &&
-	 aTrack->GetDefinition() != G4Electron::ElectronDefinition()  &&
-	 aTrack->GetDefinition() != G4Positron::PositronDefinition() ) {
-      std::string particleName = aTrack->GetDefinition()->GetParticleName();
+	 particleId != gammaId  &&  
+         particleId != electronId  &&  particleId != positronId ) {
       if ( mapParticleNames.find( particleName ) == mapParticleNames.end() ) {
 	mapParticleNames.insert( std::pair< std::string, int >( particleName, 1 ) );
       } else {
@@ -1709,6 +1669,7 @@ void StatAccepTestAnalysis::infoTrack( const G4Track* aTrack ) {
 
 void StatAccepTestAnalysis::
 classifyParticle( const bool isTrack, const G4ParticleDefinition* particleDef ) {
+
   if ( isTrack ) {
     numTrack++;
   } else {
@@ -1726,7 +1687,7 @@ classifyParticle( const bool isTrack, const G4ParticleDefinition* particleDef ) 
     } else {
       numStepNucleus++;
     }
-  } else if ( particleDef == G4Gamma::GammaDefinition() ) {
+  } else if ( id == gammaId ) {
     if ( isTrack ) {
       numTrackNeutral++;
       numTrackEM++;
@@ -1736,7 +1697,7 @@ classifyParticle( const bool isTrack, const G4ParticleDefinition* particleDef ) 
       numStepEM++;
       numStepGamma++;
     }
-  } else if ( particleDef == G4Electron::ElectronDefinition() ) {
+  } else if ( id == electronId ) {
     if ( isTrack ) {
       numTrackNegative++;
       numTrackEM++;
@@ -1746,7 +1707,7 @@ classifyParticle( const bool isTrack, const G4ParticleDefinition* particleDef ) 
       numStepEM++;
       numStepElectron++;
     }
-  } else if ( particleDef == G4Positron::PositronDefinition() ) {
+  } else if ( id == positronId ) {
     if ( isTrack ) {
       numTrackPositive++;
       numTrackEM++;
@@ -1756,7 +1717,7 @@ classifyParticle( const bool isTrack, const G4ParticleDefinition* particleDef ) 
       numStepEM++;
       numStepPositron++;
     }
-  } else if ( particleDef == G4MuonMinus::MuonMinusDefinition() ) {
+  } else if ( id == muonMinusId ) {
     if ( isTrack ) {
       numTrackNegative++;
       numTrackEWK++;
@@ -1766,7 +1727,7 @@ classifyParticle( const bool isTrack, const G4ParticleDefinition* particleDef ) 
       numStepEWK++;
       numStepMuMinus++;
     } 
-  } else if ( particleDef == G4MuonPlus::MuonPlusDefinition() ) {
+  } else if ( id == muonPlusId ) {
     if ( isTrack ) {
       numTrackPositive++;
       numTrackEWK++;
@@ -1776,7 +1737,7 @@ classifyParticle( const bool isTrack, const G4ParticleDefinition* particleDef ) 
       numStepEWK++;
       numStepMuPlus++;
     }
-  } else if ( particleDef == G4TauMinus::TauMinusDefinition() ) {
+  } else if ( id == tauMinusId ) {
     if ( isTrack ) {
       numTrackNegative++;
       numTrackEWK++;
@@ -1786,7 +1747,7 @@ classifyParticle( const bool isTrack, const G4ParticleDefinition* particleDef ) 
       numStepEWK++; 
       numStepTauMinus++;
     } 
-  } else if ( particleDef == G4TauPlus::TauPlusDefinition() ) {
+  } else if ( id == tauPlusId ) {
     if ( isTrack ) {
       numTrackPositive++;
       numTrackEWK++;
@@ -1796,12 +1757,9 @@ classifyParticle( const bool isTrack, const G4ParticleDefinition* particleDef ) 
       numStepEWK++; 
       numStepTauPlus++;
     } 
-  } else if ( particleDef == G4NeutrinoE::NeutrinoEDefinition()  ||
-	      particleDef == G4NeutrinoMu::NeutrinoMuDefinition()  ||
-	      particleDef == G4NeutrinoTau::NeutrinoTauDefinition()  ||
-	      particleDef == G4AntiNeutrinoE::AntiNeutrinoEDefinition()  ||
-	      particleDef == G4AntiNeutrinoMu::AntiNeutrinoMuDefinition()  ||
-	      particleDef == G4AntiNeutrinoTau::AntiNeutrinoTauDefinition() ) {
+  } else if ( id == eNeutrinoId  ||  id == antiENeutrinoId  ||
+	      id == muNeutrinoId  ||  id == antiMuNeutrinoId  ||
+	      id == tauNeutrinoId  ||  id == antiTauNeutrinoId ) {
     if ( isTrack ) {
       numTrackNeutral++;
       numTrackEWK++;
@@ -1811,7 +1769,7 @@ classifyParticle( const bool isTrack, const G4ParticleDefinition* particleDef ) 
       numStepEWK++;
       numStepNeutrino++;
     }
-  } else if ( particleDef == G4PionMinus::PionMinusDefinition() ) {
+  } else if ( id == pionMinusId ) {
     if ( isTrack ) {
       numTrackNegative++;
       numTrackHAD++;
@@ -1825,7 +1783,7 @@ classifyParticle( const bool isTrack, const G4ParticleDefinition* particleDef ) 
       numStepMesonLight++;
       numStepPiMinus++;
     }
-  } else if ( particleDef == G4PionZero::PionZeroDefinition() ) {
+  } else if ( id == pionZeroId ) {
     if ( isTrack ) {
       numTrackNeutral++;
       numTrackHAD++;
@@ -1839,7 +1797,7 @@ classifyParticle( const bool isTrack, const G4ParticleDefinition* particleDef ) 
       numStepMesonLight++;
       numStepPi0++;
     }
-  } else if ( particleDef == G4PionPlus::PionPlusDefinition() ) {
+  } else if ( id == pionPlusId ) {
     if ( isTrack ) {
       numTrackPositive++;
       numTrackHAD++;
@@ -1853,7 +1811,7 @@ classifyParticle( const bool isTrack, const G4ParticleDefinition* particleDef ) 
       numStepMesonLight++;
       numStepPiPlus++;
     }
-  } else if ( particleDef == G4KaonMinus::KaonMinusDefinition() ) {
+  } else if ( id == kaonMinusId ) {
     if ( isTrack ) {
       numTrackNegative++;
       numTrackHAD++;
@@ -1867,10 +1825,8 @@ classifyParticle( const bool isTrack, const G4ParticleDefinition* particleDef ) 
       numStepMesonStrange++;
       numStepKMinus++;
     }
-  } else if ( particleDef == G4KaonZero::KaonZeroDefinition() ||
-	      particleDef == G4AntiKaonZero::AntiKaonZeroDefinition() || 
-	      particleDef == G4KaonZeroLong::KaonZeroLongDefinition() ||
-	      particleDef == G4KaonZeroShort::KaonZeroShortDefinition() ) {
+  } else if ( id == kaonZeroId  ||  id == antiKaonZeroId  || 
+	      id == kaonLongId  ||  id == kaonShortId ) {
     if ( isTrack ) {
       numTrackNeutral++;
       numTrackHAD++;
@@ -1884,7 +1840,7 @@ classifyParticle( const bool isTrack, const G4ParticleDefinition* particleDef ) 
       numStepMesonStrange++;
       numStepKNeutral++;
     }
-  } else if ( particleDef == G4KaonPlus::KaonPlusDefinition() ) {
+  } else if ( id == kaonPlusId ) {
     if ( isTrack ) {
       numTrackPositive++;
       numTrackHAD++;
@@ -1898,7 +1854,7 @@ classifyParticle( const bool isTrack, const G4ParticleDefinition* particleDef ) 
       numStepMesonStrange++;
       numStepKPlus++;
     }
-  } else if ( particleDef == G4Neutron::NeutronDefinition() ) {
+  } else if ( id == neutronId ) {
     if ( isTrack ) {
       numTrackNeutral++;
       numTrackHAD++;
@@ -1912,7 +1868,7 @@ classifyParticle( const bool isTrack, const G4ParticleDefinition* particleDef ) 
       numStepBaryonLight++;
       numStepNeutron++;
     }
-  } else if ( particleDef == G4AntiNeutron::AntiNeutronDefinition() ) {
+  } else if ( id == antiNeutronId ) {
     if ( isTrack ) {
       numTrackNeutral++;
       numTrackHAD++;
@@ -1926,7 +1882,7 @@ classifyParticle( const bool isTrack, const G4ParticleDefinition* particleDef ) 
       numStepBaryonLight++;
       numStepAntiNeutron++;
     }
-  } else if ( particleDef == G4Proton::ProtonDefinition() ) {
+  } else if ( id == protonId ) {
     if ( isTrack ) {
       numTrackPositive++;
       numTrackHAD++;
@@ -1940,7 +1896,7 @@ classifyParticle( const bool isTrack, const G4ParticleDefinition* particleDef ) 
       numStepBaryonLight++;
       numStepProton++;
     }
-  } else if ( particleDef == G4AntiProton::AntiProtonDefinition() ) {
+  } else if ( id == antiProtonId ) {
     if ( isTrack ) {
       numTrackNegative++;
       numTrackHAD++;
@@ -2963,7 +2919,7 @@ void StatAccepTestAnalysis::finish() {
 
   // Print results. 
   G4cout << " Primary particle PDG Id = " << primaryParticleId << G4endl;
-  G4cout << " Beam energy [MeV] = " << beamEnergy << G4endl;
+  G4cout << " Beam energy [MeV] = " << beamEnergy / MeV << G4endl;
 
   // Check for the energy conservation by comparing the beam energy
   // with the maximum total energy deposit.
@@ -2987,12 +2943,12 @@ void StatAccepTestAnalysis::finish() {
   // decide if an eventual message of energy-non-conservation makes sense
   // or not.
   if ( maxEdepTot - beamEnergy > 0.001*MeV ) {
-    G4cout << " maxEdepTot  [MeV] = " << maxEdepTot 
+    G4cout << " maxEdepTot  [MeV] = " << maxEdepTot / MeV 
            << "\t ***ENERGY-NON-CONSERVATION*** " << G4endl;
     G4cout << "\t number of event with energy non conservation = " 
 	   << countEnergyNonConservation << G4endl;
   } else {
-    G4cout << " maxEdepTot  [MeV] = " << maxEdepTot << G4endl;
+    G4cout << " maxEdepTot  [MeV] = " << maxEdepTot / MeV << G4endl;
   }
 
   G4double n = static_cast< G4double >( numberOfEvents );
