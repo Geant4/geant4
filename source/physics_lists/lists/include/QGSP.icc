@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: QGSP.icc,v 1.4 2007-03-30 15:38:28 gunter Exp $
+// $Id: QGSP.icc,v 1.5 2007-04-02 09:05:08 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -92,7 +92,8 @@ template<class T> TQGSP<T>::TQGSP(G4int ver):  T()
   this-> RegisterPhysics( new G4HadronElasticPhysics("elastic",ver,false));
 
    // Hadron Physics
-  this->RegisterPhysics( new HadronPhysicsQGSP("hadron",G4bool quasielastic=true));
+   G4bool quasiElastic;
+  this->RegisterPhysics( new HadronPhysicsQGSP("hadron",quasiElastic=true));
 
   // Stopping Physics
   this->RegisterPhysics( new G4QStoppingPhysics("stopping"));
