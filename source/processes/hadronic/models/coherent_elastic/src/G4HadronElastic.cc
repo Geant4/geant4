@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronElastic.cc,v 1.42 2007-04-02 09:54:45 vnivanch Exp $
+// $Id: G4HadronElastic.cc,v 1.43 2007-04-03 10:38:43 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -75,7 +75,7 @@
 #include "G4PionMinus.hh"
 #include "G4NistManager.hh"
 
-G4HadronElastic::G4HadronElastic(G4double,G4double,G4double) 
+G4HadronElastic::G4HadronElastic() 
   : G4HadronicInteraction()
 {
   SetMinEnergy( 0.0*GeV );

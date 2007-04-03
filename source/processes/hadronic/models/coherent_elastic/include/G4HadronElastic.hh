@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HadronElastic.hh,v 1.23 2007-04-02 09:54:45 vnivanch Exp $
+// $Id: G4HadronElastic.hh,v 1.24 2007-04-03 10:38:43 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -73,7 +73,7 @@ class G4HadronElastic : public G4HadronicInteraction
 {
 public:
 
-  G4HadronElastic(G4double a=0.0, G4double b=0.0,G4double c=0.0);
+  G4HadronElastic();
 
   virtual ~G4HadronElastic();
  
