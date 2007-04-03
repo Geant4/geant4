@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredSceneHandler.cc,v 1.32 2007-02-08 14:01:55 allison Exp $
+// $Id: G4OpenGLStoredSceneHandler.cc,v 1.33 2007-04-03 13:42:59 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -55,7 +55,8 @@ G4OpenGLStoredSceneHandler::G4OpenGLStoredSceneHandler (G4VGraphicsSystem& syste
 G4OpenGLSceneHandler (system, fSceneIdCount++, name),
 fMemoryForDisplayLists (true),
 fAddPrimitivePreambleNestingDepth (0),
-fTopPODL (0)
+fTopPODL (0),
+fProcessing2D (false)
 {}
 
 G4OpenGLStoredSceneHandler::~G4OpenGLStoredSceneHandler ()
@@ -68,37 +69,84 @@ void G4OpenGLStoredSceneHandler::AddPrimitivePreamble(const G4Visible& visible)
   fAddPrimitivePreambleNestingDepth++;
   if (fAddPrimitivePreambleNestingDepth > 1) return;
 
+  // Because of our need to control colour of transients (display by
+  // time fading), display lists may only cover a single primitive.
+  // So display list setup is here.
+
   const G4Colour& c = GetColour (visible);
 
-  if (fMemoryForDisplayLists && fReadyForTransients) {
-
-    TO& to = fTOList.back();  // Transient object information.
-
-    // Get vis attributes - pick up defaults if none.
-    const G4VisAttributes* pVA =
-      fpViewer->GetApplicableVisAttributes(visible.GetVisAttributes());
-
-    // Get time information from vis attributes.
-    to.fStartTime = pVA->GetStartTime();
-    to.fEndTime = pVA->GetEndTime();
-
-    // Keep colour out of (already started) display list so that it
-    // can be applied independently.
-    glEndList();
-    glDeleteLists(fDisplayListId, 1);
-    to.fColour = c;
-    glColor3d (c.GetRed (), c.GetGreen (), c.GetBlue ());
-    glNewList (fDisplayListId, GL_COMPILE_AND_EXECUTE);
-      
+  if (fMemoryForDisplayLists) {
+    fDisplayListId = glGenLists (1);
+    if (!fDisplayListId) {  // Could pre-allocate?
+      G4cout <<
+	"********************* WARNING! ********************"
+	"\nUnable to allocate any more display lists in OpenGL."
+	"\n     Continuing drawing in IMMEDIATE MODE."
+	"\n***************************************************"
+	     << G4endl;
+      fMemoryForDisplayLists = false;
+    }
+  }
+  if (fMemoryForDisplayLists) {
+    if (fReadyForTransients) {
+      TO to(fDisplayListId, *fpObjectTransformation);
+      to.fColour = c;
+      const G4VisAttributes* pVA =
+	fpViewer->GetApplicableVisAttributes(visible.GetVisAttributes());
+      to.fStartTime = pVA->GetStartTime();
+      to.fEndTime = pVA->GetEndTime();
+      fTOList.push_back(to);
+      glDrawBuffer (GL_FRONT);
+      glPushMatrix();
+      G4OpenGLTransform3D oglt (*fpObjectTransformation);
+      glMultMatrixd (oglt.GetGLMatrix ());
+      glColor3d (c.GetRed (), c.GetGreen (), c.GetBlue ());
+      glNewList (fDisplayListId, GL_COMPILE_AND_EXECUTE);
+    }
+    else {
+      fPOList.push_back(PO(fDisplayListId, *fpObjectTransformation));
+      glNewList (fDisplayListId, GL_COMPILE);
+      glColor3d (c.GetRed (), c.GetGreen (), c.GetBlue ());
+    }
   } else {
-
-    // Make sure colour is set in other cases.
+    glDrawBuffer (GL_FRONT);
+    glPushMatrix();
+    G4OpenGLTransform3D oglt (*fpObjectTransformation);
+    glMultMatrixd (oglt.GetGLMatrix ());
     glColor3d (c.GetRed (), c.GetGreen (), c.GetBlue ());
+  }
+
+  if (fProcessing2D) {
+    // Push current 3D world matrices and load identity to define screen
+    // coordinates...
+    glMatrixMode (GL_PROJECTION);
+    glPushMatrix();
+    glLoadIdentity();
+    glOrtho (-1., 1., -1., 1., -G4OPENGL_DBL_MAX, G4OPENGL_DBL_MAX);
+    glMatrixMode (GL_MODELVIEW);
+    glPushMatrix();
+    glLoadIdentity();
   }
 }
 
 void G4OpenGLStoredSceneHandler::AddPrimitivePostamble()
 {
+  if (fProcessing2D) {
+    // Pop current 3D world matrices back again...
+    glMatrixMode (GL_PROJECTION);
+    glPopMatrix();
+    glMatrixMode (GL_MODELVIEW);
+    glPopMatrix();
+  }
+
+  if (fMemoryForDisplayLists) {
+    glEndList();
+  }
+  if (fReadyForTransients || !fMemoryForDisplayLists) {
+    glPopMatrix();
+    glFlush ();
+    glDrawBuffer (GL_BACK);
+  }
   fAddPrimitivePreambleNestingDepth--;
 }
 
@@ -106,6 +154,26 @@ void G4OpenGLStoredSceneHandler::AddPrimitive (const G4Polyline& polyline)
 {
   AddPrimitivePreamble(polyline);
   G4OpenGLSceneHandler::AddPrimitive(polyline);
+  AddPrimitivePostamble();
+}
+
+void G4OpenGLStoredSceneHandler::AddPrimitive (const G4Polymarker& polymarker)
+{
+  AddPrimitivePreamble(polymarker);
+  G4OpenGLSceneHandler::AddPrimitive(polymarker);
+  AddPrimitivePostamble();
+}
+
+void G4OpenGLStoredSceneHandler::AddPrimitive (const G4Text& text)
+{
+  // Note: colour is still handled in
+  // G4OpenGLSceneHandler::AddPrimitive(const G4Text&), so it still
+  // gets into the display list.  If we ever need to control the
+  // colour of text like we do for other primitives, we will have to
+  // handle it here (done in AddPrimitivePreamble) and
+  // G4OpenGLImmediateSceneHandler (not done).
+  AddPrimitivePreamble(text);
+  G4OpenGLSceneHandler::AddPrimitive(text);
   AddPrimitivePostamble();
 }
 
@@ -123,116 +191,49 @@ void G4OpenGLStoredSceneHandler::AddPrimitive (const G4Square& square)
   AddPrimitivePostamble();
 }
 
-void G4OpenGLStoredSceneHandler::AddPrimitive (const G4Polymarker& polymarker)
+void G4OpenGLStoredSceneHandler::AddPrimitive (const G4Scale& scale)
 {
-  AddPrimitivePreamble(polymarker);
-  G4OpenGLSceneHandler::AddPrimitive(polymarker);
+  // Let base class split into primitives.
+  G4OpenGLSceneHandler::AddPrimitive(scale);
+}
+
+void G4OpenGLStoredSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron)
+{
+  AddPrimitivePreamble(polyhedron);
+  G4OpenGLSceneHandler::AddPrimitive(polyhedron);
+  AddPrimitivePostamble();
+}
+
+void G4OpenGLStoredSceneHandler::AddPrimitive (const G4NURBS& nurbs)
+{
+  AddPrimitivePreamble(nurbs);
+  G4OpenGLSceneHandler::AddPrimitive(nurbs);
   AddPrimitivePostamble();
 }
 
 void G4OpenGLStoredSceneHandler::BeginPrimitives
-(const G4Transform3D& objectTransformation) {
-  
-  G4VSceneHandler::BeginPrimitives (objectTransformation);
+(const G4Transform3D& objectTransformation)
+{  
+  G4OpenGLSceneHandler::BeginPrimitives (objectTransformation);
 
-  if (fMemoryForDisplayLists) {
-    fDisplayListId = glGenLists (1);
-    if (!fDisplayListId) {  // Could pre-allocate?
-      G4cout << "********************* WARNING! ********************\n"
-	   <<"Unable to allocate any more display lists in OpenGL.\n "
-	   << "      Continuing drawing in IMMEDIATE MODE.\n"
-	   << "***************************************************" << G4endl;
-      fMemoryForDisplayLists = false;
-    }
-  }
-  if (fMemoryForDisplayLists) {
-    if (fReadyForTransients) {
-      TO to(fDisplayListId, objectTransformation);
-      fTOList.push_back(to);
-      glDrawBuffer (GL_FRONT);
-      glPushMatrix();
-      G4OpenGLTransform3D oglt (objectTransformation);
-      glMultMatrixd (oglt.GetGLMatrix ());
-      glNewList (fDisplayListId, GL_COMPILE_AND_EXECUTE);
-    }
-    else {
-      fPOList.push_back(PO(fDisplayListId, objectTransformation));
-      glNewList (fDisplayListId, GL_COMPILE);
-    }
-  } else {
-    glDrawBuffer (GL_FRONT);
-    glPushMatrix();
-    G4OpenGLTransform3D oglt (objectTransformation);
-    glMultMatrixd (oglt.GetGLMatrix ());
-  }
+  // Display list setup moved to AddPrimitivePreamble.  See notes there.
 }
 
-void G4OpenGLStoredSceneHandler::EndPrimitives () {
-  if (fMemoryForDisplayLists) {
-    glEndList();
-  }
-  if (fReadyForTransients || !fMemoryForDisplayLists) {
-    glPopMatrix();
-    glFlush ();
-    glDrawBuffer (GL_BACK);
-  }
-  G4VSceneHandler::EndPrimitives ();
+void G4OpenGLStoredSceneHandler::EndPrimitives ()
+{
+  G4OpenGLSceneHandler::EndPrimitives ();
 }
 
 void G4OpenGLStoredSceneHandler::BeginPrimitives2D()
 {
-  G4VSceneHandler::BeginPrimitives2D();
-
-  if (fMemoryForDisplayLists) {
-    fDisplayListId = glGenLists (1);
-    if (!fDisplayListId) {  // Could pre-allocate?
-      G4cout << "********************* WARNING! ********************\n"
-	   <<"Unable to allocate any more display lists in OpenGL.\n "
-	   << "      Continuing drawing in IMMEDIATE MODE.\n"
-	   << "***************************************************" << G4endl;
-      fMemoryForDisplayLists = false;
-    }
-  }
-  if (fMemoryForDisplayLists) {
-    if (fReadyForTransients) {
-      fTOList.push_back(TO(fDisplayListId));
-      glDrawBuffer (GL_FRONT);
-      glNewList (fDisplayListId, GL_COMPILE_AND_EXECUTE);
-    }
-    else {
-      fPOList.push_back(PO(fDisplayListId));
-      glNewList (fDisplayListId, GL_COMPILE);
-    }
-  } else {
-    glDrawBuffer (GL_FRONT);
-  }
-  // Push current 3D world matrices and load identity to define screen
-  // coordinates...
-  glMatrixMode (GL_PROJECTION);
-  glPushMatrix();
-  glLoadIdentity();
-  glOrtho (-1., 1., -1., 1., -G4OPENGL_DBL_MAX, G4OPENGL_DBL_MAX);
-  glMatrixMode (GL_MODELVIEW);
-  glPushMatrix();
-  glLoadIdentity();
+  G4OpenGLSceneHandler::BeginPrimitives2D();
+  fProcessing2D = true;
 }
 
 void G4OpenGLStoredSceneHandler::EndPrimitives2D ()
 {
-  // Pop current 3D world matrices back again...
-  glMatrixMode (GL_PROJECTION);
-  glPopMatrix();
-  glMatrixMode (GL_MODELVIEW);
-  glPopMatrix();
-
-  if (fMemoryForDisplayLists) {
-    glEndList();
-  }
-  if (fReadyForTransients || !fMemoryForDisplayLists) {
-    glFlush ();
-    glDrawBuffer (GL_BACK);
-  }
-  G4VSceneHandler::EndPrimitives2D ();
+  fProcessing2D = false;
+  G4OpenGLSceneHandler::EndPrimitives2D ();
 }
 
 void G4OpenGLStoredSceneHandler::BeginModeling () {
@@ -252,8 +253,7 @@ void G4OpenGLStoredSceneHandler::EndModeling () {
       "ERROR: G4OpenGLStoredSceneHandler::EndModeling: Failure to allocate"
       "  display List for fTopPODL - try OpenGL Immediated mode."
 	   << G4endl;
-  }
-  else {
+  } else {
     glNewList (fTopPODL, GL_COMPILE_AND_EXECUTE); {
       for (size_t i = 0; i < fPOList.size (); i++) {
 	glPushMatrix();
@@ -287,6 +287,7 @@ void G4OpenGLStoredSceneHandler::ClearStore () {
   // Clear other lists, dictionary, etc.
   fPOList.clear ();
   fSolidMap.clear ();
+  ClearAndDestroyAtts();
 
   // ...and clear transient store...
   for (size_t i = 0; i < fTOList.size (); i++)

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredSceneHandler.hh,v 1.22 2007-02-08 14:01:55 allison Exp $
+// $Id: G4OpenGLStoredSceneHandler.hh,v 1.23 2007-04-03 13:42:59 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -42,6 +42,8 @@
 #include "globals.hh"
 #include "G4RotationMatrix.hh"
 #include "G4OpenGLSceneHandler.hh"
+#include "G4Text.hh"
+#include "G4Polyhedron.hh"
 #include <map>
 #include <vector>
 
@@ -62,23 +64,13 @@ public:
   void BeginModeling ();
   void EndModeling ();
   void AddPrimitive (const G4Polyline&);
+  void AddPrimitive (const G4Polymarker&);
   void AddPrimitive (const G4Circle&);
   void AddPrimitive (const G4Square&);
-  void AddPrimitive (const G4Polymarker& polymarker);
-  // Explicitly invoke base class methods to avoid warnings about
-  // hiding of base class methods...
-  void AddPrimitive (const G4Text& text) {
-    G4OpenGLSceneHandler::AddPrimitive (text);
-  }
-  void AddPrimitive (const G4Polyhedron& polyhedron) {
-    G4OpenGLSceneHandler::AddPrimitive (polyhedron);
-  }
-  void AddPrimitive (const G4NURBS& nurbs) {
-    G4OpenGLSceneHandler::AddPrimitive (nurbs);
-  }
-  void AddPrimitive (const G4Scale& scale) {
-    G4OpenGLSceneHandler::AddPrimitive (scale);
-  }
+  void AddPrimitive (const G4Text&);
+  void AddPrimitive (const G4Scale&);
+  void AddPrimitive (const G4Polyhedron&);
+  void AddPrimitive (const G4NURBS&);
   void ClearStore ();
   void ClearTransientStore ();
 
@@ -118,6 +110,9 @@ protected:
   // Stop-gap solution of structure re-use.
   // A proper implementation would use geometry hierarchy.
   std::map <const G4VSolid*, G4int, std::less <const G4VSolid*> > fSolidMap;
+
+private:
+  G4bool fProcessing2D;
 };
 
 #endif

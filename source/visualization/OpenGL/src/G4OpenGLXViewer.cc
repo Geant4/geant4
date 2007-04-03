@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXViewer.cc,v 1.36 2007-02-08 13:47:22 allison Exp $
+// $Id: G4OpenGLXViewer.cc,v 1.37 2007-04-03 13:42:59 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -109,10 +109,8 @@ static const char* gouraudtriangleEPS[] =
 XVisualInfo*  G4OpenGLXViewer::vi_single_buffer = 0;
 XVisualInfo*  G4OpenGLXViewer::vi_double_buffer = 0;
 
-extern "C" {
-  Bool G4OpenGLXViewerWaitForNotify (Display*, XEvent* e, char* arg) {
-    return (e->type == MapNotify) && (e->xmap.window == (Window) arg);
-  }
+static Bool G4OpenGLXViewerWaitForNotify (Display*, XEvent* e, char* arg) {
+  return (e->type == MapNotify) && (e->xmap.window == (Window) arg);
 }
 
 void G4OpenGLXViewer::SetView () {
@@ -124,6 +122,21 @@ void G4OpenGLXViewer::ShowView () {
   glXWaitGL (); //Wait for effects of all previous OpenGL commands to
                 //be propagated before progressing.
   glFlush ();
+
+  if (fVP.IsPicking()) {
+    G4cout <<
+      "Window activated for picking (left-mouse), exit (middle-mouse)."
+	   << G4endl;
+    while (true) {
+      if (XPending(dpy)) {
+	XNextEvent(dpy, &event);
+	if (event.type == ButtonPress && event.xbutton.button == 1) {
+	  Pick(event.xbutton.x, event.xbutton.y);
+	}
+	else if (event.type == ButtonPress && event.xbutton.button == 2) break;
+      }
+    }
+  }
 }
 
 void G4OpenGLXViewer::GetXConnection () {

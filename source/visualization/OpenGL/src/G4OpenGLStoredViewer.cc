@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredViewer.cc,v 1.21 2007-02-08 14:01:55 allison Exp $
+// $Id: G4OpenGLStoredViewer.cc,v 1.22 2007-04-03 13:42:59 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -87,11 +87,11 @@ G4bool G4OpenGLStoredViewer::CompareForKernelVisit(G4ViewParameters& lastVP) {
       (lastVP.IsExplode ()          != fVP.IsExplode ())          ||
       (lastVP.GetNoOfSides ()       != fVP.GetNoOfSides ())       ||
       (lastVP.IsMarkerNotHidden ()  != fVP.IsMarkerNotHidden ())  ||
-      (lastVP.GetBackgroundColour ()!= fVP.GetBackgroundColour ())
-      ) {
+      (lastVP.GetBackgroundColour ()!= fVP.GetBackgroundColour ())||
+      (lastVP.IsPicking ()          != fVP.IsPicking ())
+      )
     return true;
-  }
-
+  
   if (lastVP.IsDensityCulling () &&
       (lastVP.GetVisibleDensity () != fVP.GetVisibleDensity ()))
     return true;
@@ -141,7 +141,7 @@ void G4OpenGLStoredViewer::DrawDisplayLists () {
       glEnable (GL_CLIP_PLANE2);
     }
 
-    if (fG4OpenGLStoredSceneHandler.fTopPODL)
+    if (fG4OpenGLStoredSceneHandler.fTopPODL) 
       glCallList (fG4OpenGLStoredSceneHandler.fTopPODL);
 
     for (size_t i = 0; i < fG4OpenGLStoredSceneHandler.fTOList.size(); ++i) {
@@ -182,7 +182,8 @@ void G4OpenGLStoredViewer::DrawDisplayLists () {
 			      fDisplayHeadTimeGreen,
 			      fDisplayHeadTimeBlue));
     headTimeText.SetVisAttributes(&visAtts);
-    fG4OpenGLStoredSceneHandler.AddPrimitive(headTimeText);
+    static_cast<G4OpenGLSceneHandler&>(fSceneHandler).
+      G4OpenGLSceneHandler::AddPrimitive(headTimeText);
     glMatrixMode (GL_PROJECTION);
     glPopMatrix();
     glMatrixMode (GL_MODELVIEW);

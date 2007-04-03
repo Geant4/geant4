@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateSceneHandler.cc,v 1.25 2007-02-08 14:01:55 allison Exp $
+// $Id: G4OpenGLImmediateSceneHandler.cc,v 1.26 2007-04-03 13:42:59 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -46,12 +46,14 @@
 
 #include "G4OpenGLTransform3D.hh"
 #include "G4Polyline.hh"
+#include "G4Polymarker.hh"
 #include "G4Circle.hh"
 #include "G4Square.hh"
+#include "G4Scale.hh"
 
-G4OpenGLImmediateSceneHandler::G4OpenGLImmediateSceneHandler (G4VGraphicsSystem& system,
-						const G4String& name):
-G4OpenGLSceneHandler (system, fSceneIdCount++, name)
+G4OpenGLImmediateSceneHandler::G4OpenGLImmediateSceneHandler
+(G4VGraphicsSystem& system,const G4String& name):
+  G4OpenGLSceneHandler (system, fSceneIdCount++, name)
 {}
 
 G4OpenGLImmediateSceneHandler::~G4OpenGLImmediateSceneHandler ()
@@ -71,6 +73,12 @@ void G4OpenGLImmediateSceneHandler::AddPrimitive (const G4Polyline& polyline)
   G4OpenGLSceneHandler::AddPrimitive(polyline);
 }
 
+void G4OpenGLImmediateSceneHandler::AddPrimitive (const G4Polymarker& polymarker)
+{
+  AddPrimitivePreamble(polymarker);
+  G4OpenGLSceneHandler::AddPrimitive(polymarker);
+}
+
 void G4OpenGLImmediateSceneHandler::AddPrimitive (const G4Circle& circle)
 {
   AddPrimitivePreamble(circle);
@@ -83,9 +91,15 @@ void G4OpenGLImmediateSceneHandler::AddPrimitive (const G4Square& square)
   G4OpenGLSceneHandler::AddPrimitive(square);
 }
 
+void G4OpenGLImmediateSceneHandler::AddPrimitive (const G4Scale& scale)
+{
+  AddPrimitivePreamble(scale);
+  G4OpenGLSceneHandler::AddPrimitive(scale);
+}
+
 void G4OpenGLImmediateSceneHandler::BeginPrimitives
 (const G4Transform3D& objectTransformation) {
-  G4VSceneHandler::BeginPrimitives (objectTransformation);
+  G4OpenGLSceneHandler::BeginPrimitives (objectTransformation);
   glPushMatrix();
   G4OpenGLTransform3D oglt (objectTransformation);
 
@@ -109,12 +123,12 @@ void G4OpenGLImmediateSceneHandler::EndPrimitives ()
   // See all primitives immediately...
   glFlush ();
 
-  G4VSceneHandler::EndPrimitives ();
+  G4OpenGLSceneHandler::EndPrimitives ();
 }
 
 void G4OpenGLImmediateSceneHandler::BeginPrimitives2D()
 {
-  G4VSceneHandler::BeginPrimitives2D();
+  G4OpenGLSceneHandler::BeginPrimitives2D();
 
   // Push current 3D world matrices and load identity to define screen
   // coordinates...
@@ -138,7 +152,7 @@ void G4OpenGLImmediateSceneHandler::EndPrimitives2D()
   // See all primitives immediately...
   glFlush ();
 
-  G4VSceneHandler::EndPrimitives2D ();
+  G4OpenGLSceneHandler::EndPrimitives2D ();
 }
 
 void G4OpenGLImmediateSceneHandler::BeginModeling () {

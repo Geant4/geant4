@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewer.hh,v 1.18 2006-09-19 16:13:15 allison Exp $
+// $Id: G4OpenGLViewer.hh,v 1.19 2007-04-03 13:42:59 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -37,6 +37,7 @@
 #define G4OPENGLVIEWER_HH
 
 #include "G4VViewer.hh"
+#include "G4OpenGL.hh"
 
 class G4OpenGLSceneHandler;
 
@@ -61,7 +62,9 @@ protected:
   void HLRSecondPass ();
   void HLRThirdPass ();
   void InitializeGLView ();
+  void Pick(GLdouble x, GLdouble y);
   virtual void CreateFontLists () {}
+  G4OpenGLSceneHandler& fOpenGLSceneHandler;
   G4Colour background;      //the OpenGL clear colour
   G4bool
     transparency_enabled,   //is alpha blending enabled?

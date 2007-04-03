@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewer.cc,v 1.30 2007-02-08 14:01:55 allison Exp $
+// $Id: G4OpenGLViewer.cc,v 1.31 2007-04-03 13:42:59 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -45,9 +45,12 @@
 #include "G4Point3D.hh"
 #include "G4Normal3D.hh"
 #include "G4Plane3D.hh"
+#include "G4AttHolder.hh"
+#include "G4AttCheck.hh"
 
 G4OpenGLViewer::G4OpenGLViewer (G4OpenGLSceneHandler& scene):
 G4VViewer (scene, -1),
+fOpenGLSceneHandler(scene),
 background (G4Colour(0.,0.,0.)),
 transparency_enabled (true),
 antialiasing_enabled (false),
@@ -270,6 +273,61 @@ void G4OpenGLViewer::HaloingSecondPass () {
   glDepthFunc (GL_LEQUAL);
   glLineWidth (1.0);
 
+}
+
+void G4OpenGLViewer::Pick(GLdouble x, GLdouble y)
+{
+  //G4cout << "X: " << x << ", Y: " << y << G4endl;
+  const G4int BUFSIZE = 512;
+  GLuint selectBuffer[BUFSIZE];
+  glSelectBuffer(BUFSIZE, selectBuffer);
+  glRenderMode(GL_SELECT);
+  glInitNames();
+  glPushName(0);
+  glMatrixMode(GL_PROJECTION);
+  G4double currentProjectionMatrix[16];
+  glGetDoublev(GL_PROJECTION_MATRIX, currentProjectionMatrix);
+  glPushMatrix();
+  glLoadIdentity();
+  GLint viewport[4];
+  glGetIntegerv(GL_VIEWPORT, viewport);
+  gluPickMatrix(x, viewport[3] - y, 3., 3., viewport);
+  glMultMatrixd(currentProjectionMatrix);
+  glMatrixMode(GL_MODELVIEW);
+  DrawView();
+  GLint hits = glRenderMode(GL_RENDER);
+  if (hits < 0)
+    G4cout << "Too many hits.  Zoom in to reduce overlaps." << G4cout;
+  else if (hits > 0) {
+    //G4cout << hits << " hit(s)" << G4endl;
+    GLuint* p = selectBuffer;
+    for (GLint i = 0; i < hits; ++i) {
+      GLuint nnames = *p++;
+      *p++; //OR GLuint zmin = *p++;
+      *p++; //OR GLuint zmax = *p++;
+      //G4cout << "Hit " << i << ": " << nnames << " names"
+      //     << "\nzmin: " << zmin << ", zmax: " << zmax << G4endl;
+      for (GLuint j = 0; j < nnames; ++j) {
+	GLuint name = *p++;
+	//G4cout << "Name " << j << ": PickName: " << name << G4endl;
+	std::map<GLuint, G4AttHolder*>::iterator iter =
+	  fOpenGLSceneHandler.fAttMap.find(name);
+	if (iter != fOpenGLSceneHandler.fAttMap.end()) {
+	  G4AttHolder* attHolder = iter->second;
+	  if(attHolder && attHolder->GetAttDefs().size()) {
+	    for (size_t i = 0; i < attHolder->GetAttDefs().size(); ++i) {
+	      G4cout << G4AttCheck(attHolder->GetAttValues()[i],
+				   attHolder->GetAttDefs()[i]);
+	    }
+	  }
+	}
+      }
+      G4cout << G4endl;
+    }
+  }
+  glMatrixMode(GL_PROJECTION);
+  glPopMatrix();
+  glMatrixMode(GL_MODELVIEW);
 }
 
 #endif
