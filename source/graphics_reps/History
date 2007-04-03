@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.119 2007-04-03 13:58:24 allison Exp $
+cvs log $Id: History,v 1.120 2007-04-03 14:02:32 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -21,7 +21,7 @@ committal in the CVS repository !
 - G4AttDefStore: now comprises utility functions in namespace
   G4AttDefStore.  (Used to be a class with only static functions and
   data members.)
-- G4AttHolder: Made copy cintructor and assignment private to enforce
+- G4AttHolder: Made copy constructor and assignment private to enforce
   proper usage.
 
 5th January 2007  John Allison  (greps-V08-02-00)
