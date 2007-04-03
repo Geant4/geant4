@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ViewParameters.hh,v 1.25 2006-09-19 16:02:31 allison Exp $
+// $Id: G4ViewParameters.hh,v 1.26 2007-04-03 13:33:16 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -160,6 +160,7 @@ public: // With description
   // pages).  Supercedes GetWindowSizeHintX/Y.
         G4bool           IsAutoRefresh           () const;
   const G4Colour&        GetBackgroundColour     () const;
+        G4bool           IsPicking               () const;
 
   // Here Follow functions to evaluate the above algorithms as a
   // function of the radius of the Bounding Sphere of the object being
@@ -220,6 +221,7 @@ public: // With description
   void SetXGeometryString      (const G4String&);
   void SetAutoRefresh          (G4bool);
   void SetBackgroundColour     (const G4Colour&);
+  void SetPicking              (G4bool);
 
   void PrintDifferences (const G4ViewParameters& v) const;
 
@@ -267,6 +269,7 @@ private:
   G4String     fXGeometryString; // If non-null, geometry string for X Windows.
   G4bool       fAutoRefresh;     // ...after change of view parameters.
   G4Colour     fBackgroundColour;
+  G4bool       fPicking;         // Request picking.
 };
 
 #include "G4ViewParameters.icc"
