@@ -1,4 +1,4 @@
-$Id: History,v 1.94 2007-04-03 13:33:16 allison Exp $
+$Id: History,v 1.95 2007-04-03 13:41:42 allison Exp $
 
 -------------------------------------------------------------------
 
@@ -27,7 +27,7 @@ History file for visualization management sub-category
 ------------------------------------------------------
 
 3rd April 2007  John Allison  (visman-V08-02-03)
-- Added /vis/viewer/add/picking.  Picking is false by default, except
+- Added /vis/viewer/set/picking.  Picking is false by default, except
   for OpenInventor.
 
 25th March 2007  John Allison  (visman-V08-02-02)
