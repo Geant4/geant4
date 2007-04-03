@@ -1,4 +1,4 @@
-$Id: History,v 1.92 2007-03-27 15:24:34 allison Exp $
+$Id: History,v 1.93 2007-04-03 13:35:48 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,9 @@ committal in the CVS repository !
 
 History file for visualization/OpenInventor
 -------------------------------------------
+
+3rd April 2007  John Allison  (openinventor-V08-02-02 - needs visman-V08-02-03)
+- Introduced picking control.  Default is "true" for Open Inventor.
 
 25th March 2007  John Allison  (openinventor-V08-02-01)
 - G4OpenInventorSceneHandler: Introduced AddProperties. Rationalises.

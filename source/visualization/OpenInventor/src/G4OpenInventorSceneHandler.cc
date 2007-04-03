@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorSceneHandler.cc,v 1.52 2007-03-27 15:24:15 allison Exp $
+// $Id: G4OpenInventorSceneHandler.cc,v 1.53 2007-04-03 13:35:48 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -214,7 +214,7 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Polyline& line)
   SoG4LineSet *pLine = new SoG4LineSet;
 
   // Loads G4Atts for picking...
-  LoadAtts(line, pLine);
+  if (fpViewer->GetViewParameters().IsPicking()) LoadAtts(line, pLine);
 
 #ifdef INVENTOR2_0
   pLine->numVertices.setValues(0,1,(const long *)&nPoints);
@@ -262,7 +262,8 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Polymarker& polymarker)
   markerSet->numPoints = pointn;
 
   // Loads G4Atts for picking...
-  LoadAtts(polymarker, markerSet);
+  if (fpViewer->GetViewParameters().IsPicking())
+    LoadAtts(polymarker, markerSet);
 
   G4VMarker::FillStyle style = polymarker.GetFillStyle();
   switch (polymarker.GetMarkerType()) {
@@ -437,7 +438,7 @@ void G4OpenInventorSceneHandler::AddCircleSquare
   markerSet->numPoints = 1;
 
   // Loads G4Atts for picking...
-  LoadAtts(marker, markerSet);
+  if (fpViewer->GetViewParameters().IsPicking()) LoadAtts(marker, markerSet);
 
   G4VMarker::FillStyle style = marker.GetFillStyle();
   switch (markerType) {
@@ -501,7 +502,8 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron)
   SoG4Polyhedron* soPolyhedron = new SoG4Polyhedron(polyhedron);
 
   // Loads G4Atts for picking...
-  LoadAtts(polyhedron, soPolyhedron);
+  if (fpViewer->GetViewParameters().IsPicking())
+    LoadAtts(polyhedron, soPolyhedron);
 
   SbString name = "Non-geometry";
   G4PhysicalVolumeModel* pPVModel =

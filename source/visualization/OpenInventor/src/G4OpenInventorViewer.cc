@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4OpenInventorViewer.cc,v 1.58 2007-03-27 15:18:31 allison Exp $
+// $Id: G4OpenInventorViewer.cc,v 1.59 2007-04-03 13:35:48 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifdef G4VIS_BUILD_OI_DRIVER
@@ -68,8 +68,10 @@ G4OpenInventorViewer::G4OpenInventorViewer(
 {
   fNeedKernelVisit = true;  //?? Temporary, until KernelVisitDecision fixed.
 
-  fDefaultVP.SetAutoRefresh(true);
   fVP.SetAutoRefresh(true);
+  fDefaultVP.SetAutoRefresh(true);
+  fVP.SetPicking(true);
+  fDefaultVP.SetPicking(true);
 
   //FIXME : G.Barrand : not convinced that we have to rm culling.
   // For viewing of all objects by default :
@@ -175,13 +177,14 @@ G4bool G4OpenInventorViewer::CompareForKernelVisit(G4ViewParameters& vp) {
       (vp.GetNoOfSides ()       != fVP.GetNoOfSides ())       ||
       (vp.IsMarkerNotHidden ()  != fVP.IsMarkerNotHidden ())  ||
       (vp.GetBackgroundColour ()!= fVP.GetBackgroundColour ())||
+      (vp.IsPicking ()          != fVP.IsPicking ())          ||
       // Scaling for Open Inventor is done by the scene handler so it
       // needs a kernel visit.  (In this respect, it differs from the
-      // OpenGL drivers, where it's done in SetView.
+      // OpenGL drivers, where it's done in SetView.)
       (vp.GetScaleFactor ()     != fVP.GetScaleFactor ())
-      ) {
-      return true;;
-  }
+      )
+    return true;
+
   if (vp.IsDensityCulling () &&
       (vp.GetVisibleDensity () != fVP.GetVisibleDensity ()))
     return true;
