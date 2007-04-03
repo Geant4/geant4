@@ -1,4 +1,4 @@
-$Id: History,v 1.402 2007-03-27 15:54:11 allison Exp $
+$Id: History,v 1.403 2007-04-03 13:50:06 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,16 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+3rd April 2007  John Allison  (vis-V08-02-03)
+- modeling-V08-02-02: Added further information on volume G4Atts.
+- visman-V08-02-03: Added /vis/viewer/set/picking.  Picking is "false"
+  by default, except for Open Inventor.
+- opengl-V08-02-04:
+  o Implemented picking for OGLIX.
+  o Some reorganisation of display list construction to fix rare bug\
+    in Display-by-Time feature
+- openinventor-V08-02-02: Picking is "true" by default for OI.
 
 25th March 2007  John Allison  (vis-V08-02-02)
 -  modeling-V08-02-01: Added solid dump and volume transformation to G4Atts.
