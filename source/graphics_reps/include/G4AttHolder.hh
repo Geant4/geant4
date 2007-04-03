@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AttHolder.hh,v 1.4 2006-11-01 10:11:44 allison Exp $
+// $Id: G4AttHolder.hh,v 1.5 2007-04-03 13:57:12 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef G4ATTHOLDER_HH
@@ -71,6 +71,8 @@ public:
   // life.
 
 private:
+  G4AttHolder(const G4AttHolder&);  // Copy construction not allowed.
+  G4AttHolder& operator=(const G4AttHolder&);  // Assignment not allowed.
   std::vector<const std::vector<G4AttValue>*> fValues;
   std::vector<const std::map<G4String,G4AttDef>*> fDefs;
 };
