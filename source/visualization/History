@@ -1,4 +1,4 @@
-$Id: History,v 1.403 2007-04-03 13:50:06 allison Exp $
+$Id: History,v 1.404 2007-04-04 16:52:15 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,10 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+4th April 2007  John Allison  (vis-V08-02-04)
+- visman-V08-02-04: Bug fix for zero pointer in G4VscenHamdler::LoadAtts.
+- opengl-V08-02-05: Implemented picking for OGLSX (as well as OGLIX).
 
 3rd April 2007  John Allison  (vis-V08-02-03)
 - modeling-V08-02-02: Added further information on volume G4Atts.
