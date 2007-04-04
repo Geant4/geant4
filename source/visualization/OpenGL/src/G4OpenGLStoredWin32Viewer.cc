@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredWin32Viewer.cc,v 1.18 2006-09-04 12:07:59 allison Exp $
+// $Id: G4OpenGLStoredWin32Viewer.cc,v 1.19 2007-04-04 16:50:27 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -122,7 +122,9 @@ void G4OpenGLStoredWin32Viewer::FinishView (
   if(!fHDC) return;
 
   glFlush ();
-  ::SwapBuffers(fHDC);
+  GLint renderMode;
+  glGetIntegerv(GL_RENDER_MODE, &renderMode);
+  if (renderMode == GL_RENDER) ::SwapBuffers(fHDC);
 
   // Empty the Windows message queue :
   MSG event;

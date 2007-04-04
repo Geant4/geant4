@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredViewer.cc,v 1.22 2007-04-03 13:42:59 allison Exp $
+// $Id: G4OpenGLStoredViewer.cc,v 1.23 2007-04-04 16:50:27 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -151,6 +151,7 @@ void G4OpenGLStoredViewer::DrawDisplayLists () {
 	glPushMatrix();
 	G4OpenGLTransform3D oglt (to.fTransform);
 	glMultMatrixd (oglt.GetGLMatrix ());
+	if (fVP.IsPicking()) glLoadName(to.fPickName);
 	G4Colour& c = to.fColour;
 	G4double bsf = 1.;  // Brightness scaling factor.
 	if (fFadeFactor > 0. && to.fEndTime < fEndTime)

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLSceneHandler.cc,v 1.49 2007-04-03 13:42:59 allison Exp $
+// $Id: G4OpenGLSceneHandler.cc,v 1.50 2007-04-04 16:50:27 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -101,8 +101,8 @@ const GLubyte G4OpenGLSceneHandler::fStippleMaskHashed [128] = {
 void G4OpenGLSceneHandler::ClearAndDestroyAtts()
 {
   std::map<GLuint, G4AttHolder*>::iterator i;
-  for (i = fAttMap.begin(); i != fAttMap.end(); ++i) delete i->second;
-  fAttMap.clear();
+  for (i = fPickMap.begin(); i != fPickMap.end(); ++i) delete i->second;
+  fPickMap.clear();
 }
 
 void G4OpenGLSceneHandler::PreAddSolid
@@ -160,10 +160,9 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyline& line)
 
   // Loads G4Atts for picking...
   if (fpViewer->GetViewParameters().IsPicking()) {
-    G4AttHolder* atts = new G4AttHolder;
-    LoadAtts(line, atts);
-    fAttMap[++fPickName] = atts;
-    glLoadName(fPickName);
+    G4AttHolder* holder = new G4AttHolder;
+    LoadAtts(line, holder);
+    fPickMap[fPickName] = holder;
   }
 
   // Note: colour treated in sub-class.
@@ -201,10 +200,9 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polymarker& polymarker)
 
   // Loads G4Atts for picking...
   if (fpViewer->GetViewParameters().IsPicking()) {
-    G4AttHolder* atts = new G4AttHolder;
-    LoadAtts(polymarker, atts);
-    fAttMap[++fPickName] = atts;
-    glLoadName(fPickName);
+    G4AttHolder* holder = new G4AttHolder;
+    LoadAtts(polymarker, holder);
+    fPickMap[fPickName] = holder;
   }
 
   switch (polymarker.GetMarkerType()) {
@@ -247,10 +245,9 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Text& text) {
 
   // Loads G4Atts for picking...
   if (fpViewer->GetViewParameters().IsPicking()) {
-    G4AttHolder* atts = new G4AttHolder;
-    LoadAtts(text, atts);
-    fAttMap[++fPickName] = atts;
-    glLoadName(fPickName);
+    G4AttHolder* holder = new G4AttHolder;
+    LoadAtts(text, holder);
+    fPickMap[fPickName] = holder;
   }
 
   const G4Colour& c = GetTextColour (text);  // Picks up default if none.
@@ -309,10 +306,9 @@ void G4OpenGLSceneHandler::AddCircleSquare
   if (!fProcessingPolymarker) {  // Polymarker has already loaded atts.
     // Loads G4Atts for picking...
     if (fpViewer->GetViewParameters().IsPicking()) {
-      G4AttHolder* atts = new G4AttHolder;
-      LoadAtts(marker, atts);
-      fAttMap[++fPickName] = atts;
-      glLoadName(fPickName);
+      G4AttHolder* holder = new G4AttHolder;
+      LoadAtts(marker, holder);
+      fPickMap[fPickName] = holder;
     }
   }
 
@@ -376,7 +372,7 @@ void G4OpenGLSceneHandler::AddCircleSquare
     const GLubyte* marker =
       G4OpenGLBitMapStore::GetBitMap(shape, size, filled);
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-    glBitmap(size, size, size/2., size/2., 0., 0., marker);
+    glBitmap(GLfloat(size), GLfloat(size), size/2., size/2., 0., 0., marker);
   }
 }
 
@@ -429,10 +425,9 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
 
   // Loads G4Atts for picking...
   if (fpViewer->GetViewParameters().IsPicking()) {
-    G4AttHolder* atts = new G4AttHolder;
-    LoadAtts(polyhedron, atts);
-    fAttMap[++fPickName] = atts;
-    glLoadName(fPickName);
+    G4AttHolder* holder = new G4AttHolder;
+    LoadAtts(polyhedron, holder);
+    fPickMap[fPickName] = holder;
   }
 
   // Get vis attributes - pick up defaults if none.
@@ -720,10 +715,9 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4NURBS& nurb) {
 
   // Loads G4Atts for picking...
   if (fpViewer->GetViewParameters().IsPicking()) {
-    G4AttHolder* atts = new G4AttHolder;
-    LoadAtts(nurb, atts);
-    fAttMap[++fPickName] = atts;
-    glLoadName(fPickName);
+    G4AttHolder* holder = new G4AttHolder;
+    LoadAtts(nurb, holder);
+    fPickMap[fPickName] = holder;
   }
 
   GLUnurbsObj *gl_nurb;

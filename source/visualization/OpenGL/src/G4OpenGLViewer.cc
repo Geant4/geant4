@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewer.cc,v 1.31 2007-04-03 13:42:59 allison Exp $
+// $Id: G4OpenGLViewer.cc,v 1.32 2007-04-04 16:50:27 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -291,7 +291,8 @@ void G4OpenGLViewer::Pick(GLdouble x, GLdouble y)
   glLoadIdentity();
   GLint viewport[4];
   glGetIntegerv(GL_VIEWPORT, viewport);
-  gluPickMatrix(x, viewport[3] - y, 3., 3., viewport);
+  // Define 5x5 pixel pick area
+  gluPickMatrix(x, viewport[3] - y, 5., 5., viewport);
   glMultMatrixd(currentProjectionMatrix);
   glMatrixMode(GL_MODELVIEW);
   DrawView();
@@ -311,8 +312,8 @@ void G4OpenGLViewer::Pick(GLdouble x, GLdouble y)
 	GLuint name = *p++;
 	//G4cout << "Name " << j << ": PickName: " << name << G4endl;
 	std::map<GLuint, G4AttHolder*>::iterator iter =
-	  fOpenGLSceneHandler.fAttMap.find(name);
-	if (iter != fOpenGLSceneHandler.fAttMap.end()) {
+	  fOpenGLSceneHandler.fPickMap.find(name);
+	if (iter != fOpenGLSceneHandler.fPickMap.end()) {
 	  G4AttHolder* attHolder = iter->second;
 	  if(attHolder && attHolder->GetAttDefs().size()) {
 	    for (size_t i = 0; i < attHolder->GetAttDefs().size(); ++i) {

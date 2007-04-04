@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredSceneHandler.cc,v 1.33 2007-04-03 13:42:59 allison Exp $
+// $Id: G4OpenGLStoredSceneHandler.cc,v 1.34 2007-04-04 16:50:27 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -45,10 +45,14 @@
 
 #include "G4PhysicalVolumeModel.hh"
 #include "G4VPhysicalVolume.hh"
+#include "G4LogicalVolume.hh"
 #include "G4Polyline.hh"
 #include "G4Polymarker.hh"
+#include "G4Text.hh"
 #include "G4Circle.hh"
 #include "G4Square.hh"
+#include "G4Polyhedron.hh"
+#include "G4AttHolder.hh"
 
 G4OpenGLStoredSceneHandler::G4OpenGLStoredSceneHandler (G4VGraphicsSystem& system,
 					  const G4String& name):
@@ -73,6 +77,10 @@ void G4OpenGLStoredSceneHandler::AddPrimitivePreamble(const G4Visible& visible)
   // time fading), display lists may only cover a single primitive.
   // So display list setup is here.
 
+  if (fpViewer->GetViewParameters().IsPicking()) {
+    fPickMap[++fPickName] = 0;
+  }
+
   const G4Colour& c = GetColour (visible);
 
   if (fMemoryForDisplayLists) {
@@ -90,6 +98,7 @@ void G4OpenGLStoredSceneHandler::AddPrimitivePreamble(const G4Visible& visible)
   if (fMemoryForDisplayLists) {
     if (fReadyForTransients) {
       TO to(fDisplayListId, *fpObjectTransformation);
+      to.fPickName = fPickName;
       to.fColour = c;
       const G4VisAttributes* pVA =
 	fpViewer->GetApplicableVisAttributes(visible.GetVisAttributes());
@@ -104,7 +113,9 @@ void G4OpenGLStoredSceneHandler::AddPrimitivePreamble(const G4Visible& visible)
       glNewList (fDisplayListId, GL_COMPILE_AND_EXECUTE);
     }
     else {
-      fPOList.push_back(PO(fDisplayListId, *fpObjectTransformation));
+      PO po(fDisplayListId, *fpObjectTransformation);
+      po.fPickName = fPickName;
+      fPOList.push_back(po);
       glNewList (fDisplayListId, GL_COMPILE);
       glColor3d (c.GetRed (), c.GetGreen (), c.GetBlue ());
     }
@@ -168,10 +179,7 @@ void G4OpenGLStoredSceneHandler::AddPrimitive (const G4Text& text)
 {
   // Note: colour is still handled in
   // G4OpenGLSceneHandler::AddPrimitive(const G4Text&), so it still
-  // gets into the display list.  If we ever need to control the
-  // colour of text like we do for other primitives, we will have to
-  // handle it here (done in AddPrimitivePreamble) and
-  // G4OpenGLImmediateSceneHandler (not done).
+  // gets into the display list
   AddPrimitivePreamble(text);
   G4OpenGLSceneHandler::AddPrimitive(text);
   AddPrimitivePostamble();
@@ -199,6 +207,9 @@ void G4OpenGLStoredSceneHandler::AddPrimitive (const G4Scale& scale)
 
 void G4OpenGLStoredSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron)
 {
+  // Note: colour is still handled in
+  // G4OpenGLSceneHandler::AddPrimitive(const G4Polyhedron&), so it still
+  // gets into the display list
   AddPrimitivePreamble(polyhedron);
   G4OpenGLSceneHandler::AddPrimitive(polyhedron);
   AddPrimitivePostamble();
@@ -206,6 +217,9 @@ void G4OpenGLStoredSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron)
 
 void G4OpenGLStoredSceneHandler::AddPrimitive (const G4NURBS& nurbs)
 {
+  // Note: colour is still handled in
+  // G4OpenGLSceneHandler::AddPrimitive(const G4NURBS&), so it still
+  // gets into the display list
   AddPrimitivePreamble(nurbs);
   G4OpenGLSceneHandler::AddPrimitive(nurbs);
   AddPrimitivePostamble();
@@ -259,6 +273,8 @@ void G4OpenGLStoredSceneHandler::EndModeling () {
 	glPushMatrix();
 	G4OpenGLTransform3D oglt (fPOList[i].fTransform);
 	glMultMatrixd (oglt.GetGLMatrix ());
+	if (fpViewer->GetViewParameters().IsPicking())
+	  glLoadName(fPOList[i].fPickName);
 	glCallList (fPOList[i].fDisplayListId);
 	glPopMatrix();
       }
@@ -375,7 +391,22 @@ void G4OpenGLStoredSceneHandler::RequestPrimitives (const G4VSolid& solid)
 	// ...and if the solid has already been rendered...
 	(fSolidMap.find (pSolid) != fSolidMap.end ())) {
       fDisplayListId = fSolidMap [pSolid];
-      fPOList.push_back(PO(fDisplayListId,*fpObjectTransformation));
+      PO po(fDisplayListId,*fpObjectTransformation);
+      if (fpViewer->GetViewParameters().IsPicking()) {
+	G4AttHolder* holder = new G4AttHolder;
+	// Load G4Atts from G4VisAttributes, if any...
+	const G4VisAttributes* va = pPVModel->GetCurrentLV()->GetVisAttributes();
+	if (va) {
+	  const std::map<G4String,G4AttDef>* vaDefs = va->GetAttDefs();
+	  if (vaDefs) holder->AddAtts(va->CreateAttValues(), vaDefs);
+	}
+	// Load G4Atts from G4PhysicalVolumeModel...
+	const std::map<G4String,G4AttDef>* defs = pPVModel->GetAttDefs();
+	if (defs) holder->AddAtts(pPVModel->CreateCurrentAttValues(), defs);
+	fPickMap[++fPickName] = holder;
+	po.fPickName = fPickName;
+      }
+      fPOList.push_back(po);
     }
     else {
       G4VSceneHandler::RequestPrimitives (solid);

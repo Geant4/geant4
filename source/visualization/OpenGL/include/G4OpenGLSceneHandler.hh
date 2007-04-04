@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLSceneHandler.hh,v 1.22 2007-04-03 13:42:59 allison Exp $
+// $Id: G4OpenGLSceneHandler.hh,v 1.23 2007-04-04 16:50:26 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -95,8 +95,8 @@ protected:
   const G4Polyhedron* CreateCutawayPolyhedron ();
 
   GLuint fPickName;
-  std::map<GLuint, G4AttHolder*> fAttMap;  // For picking.
-  void ClearAndDestroyAtts();  // Destroys att holders and clears map.
+  std::map<GLuint, G4AttHolder*> fPickMap;  // For picking.
+  void ClearAndDestroyAtts();  // Destroys att holders and clears pick map.
 
 private:
 

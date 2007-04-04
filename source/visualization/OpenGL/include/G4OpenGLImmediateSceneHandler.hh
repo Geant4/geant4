@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateSceneHandler.hh,v 1.12 2007-04-03 13:42:59 allison Exp $
+// $Id: G4OpenGLImmediateSceneHandler.hh,v 1.13 2007-04-04 16:50:26 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -59,20 +59,12 @@ public:
   void EndModeling ();
   void AddPrimitive (const G4Polyline&);
   void AddPrimitive (const G4Polymarker&);
+  void AddPrimitive (const G4Text& text);
   void AddPrimitive (const G4Circle&);
   void AddPrimitive (const G4Square&);
   void AddPrimitive (const G4Scale& scale);
-  // Explicitly invoke base class methods to avoid warnings about
-  // hiding of base class methods...
-  void AddPrimitive (const G4Text& text) {
-    G4OpenGLSceneHandler::AddPrimitive (text);
-  }
-  void AddPrimitive (const G4Polyhedron& polyhedron) {
-    G4OpenGLSceneHandler::AddPrimitive (polyhedron);
-  }
-  void AddPrimitive (const G4NURBS& nurbs) {
-    G4OpenGLSceneHandler::AddPrimitive (nurbs);
-  }
+  void AddPrimitive (const G4Polyhedron&);
+  void AddPrimitive (const G4NURBS&);
   void ClearTransientStore ();
 
 protected:

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredXViewer.cc,v 1.21 2006-09-04 12:07:59 allison Exp $
+// $Id: G4OpenGLStoredXViewer.cc,v 1.22 2007-04-04 16:50:27 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -125,7 +125,9 @@ void G4OpenGLStoredXViewer::DrawView () {
 void G4OpenGLStoredXViewer::FinishView () {
   glXWaitGL (); //Wait for effects of all previous OpenGL commands to
                 //be propogated before progressing.
-  glXSwapBuffers (dpy, win);  
+  GLint renderMode;
+  glGetIntegerv(GL_RENDER_MODE, &renderMode);
+  if (renderMode == GL_RENDER) glXSwapBuffers (dpy, win);  
 }
 
 #endif

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredSceneHandler.hh,v 1.23 2007-04-03 13:42:59 allison Exp $
+// $Id: G4OpenGLStoredSceneHandler.hh,v 1.24 2007-04-04 16:50:26 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -42,8 +42,6 @@
 #include "globals.hh"
 #include "G4RotationMatrix.hh"
 #include "G4OpenGLSceneHandler.hh"
-#include "G4Text.hh"
-#include "G4Polyhedron.hh"
 #include <map>
 #include <vector>
 
@@ -89,19 +87,21 @@ protected:
   GLint  fTopPODL;                  // List which calls the other PODLs.
   struct PO {
     PO(G4int id, const G4Transform3D& tr = G4Transform3D()):
-      fDisplayListId(id), fTransform(tr) {}
+      fDisplayListId(id), fTransform(tr), fPickName(0) {}
     G4int fDisplayListId;
     G4Transform3D fTransform;
+    GLuint fPickName;
   };
   std::vector<PO> fPOList; 
   
   // TO = Transparent Object.
   struct TO {
     TO(G4int id, const G4Transform3D& tr = G4Transform3D()):
-      fDisplayListId(id), fTransform(tr),
+      fDisplayListId(id), fTransform(tr), fPickName(0),
       fStartTime(-G4OPENGL_DBL_MAX), fEndTime(G4OPENGL_DBL_MAX) {}
     G4int fDisplayListId;
     G4Transform3D fTransform;
+    GLuint fPickName;
     G4double fStartTime, fEndTime;  // Time range (e.g., for trajectory steps).
     G4Colour fColour;
   };
