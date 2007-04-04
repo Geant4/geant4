@@ -1,4 +1,4 @@
-$Id: History,v 1.143 2007-01-31 14:58:41 gcosmo Exp $
+$Id: History,v 1.144 2007-04-04 09:40:56 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Mar 23rd, 2007      G.Cosmo - geomvol-V08-02-01
+- Extended CheckOverlaps() algorithm, detect also cases of daughter volumes
+  which are totally overlapping. Made warning message message more clear.
 
 Jan 31st, 2007      G.Cosmo - geomvol-V08-02-00
 - Added flag for controlling verbosity to CheckOverlaps() method for
