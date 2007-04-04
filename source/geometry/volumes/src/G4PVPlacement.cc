@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVPlacement.cc,v 1.14 2007-03-23 01:47:05 gcosmo Exp $
+// $Id: G4PVPlacement.cc,v 1.15 2007-04-04 14:17:38 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -327,9 +327,10 @@ G4bool G4PVPlacement::CheckOverlaps(G4int res, G4bool verbose)
     // Transform the generated point to the mother's coordinate system
     // and finally to current volume's coordinate system
     //
-    G4ThreeVector mp2 = Tm.TransformPoint(dPoint);
-    G4AffineTransform Ts( GetRotation(), GetTranslation() );
-    G4ThreeVector ms = Ts.Inverse().TransformPoint(mp2);
+    G4AffineTransform Ts( daughterPhys->GetRotation(),
+                          daughterPhys->GetTranslation() );
+    G4ThreeVector mp2 = Ts.TransformPoint(dPoint);
+    G4ThreeVector ms = Tm.Inverse().TransformPoint(mp2);
 
     if (solid->Inside(ms)==kInside)
     {
