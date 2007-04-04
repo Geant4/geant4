@@ -1,4 +1,4 @@
-$Id: History,v 1.293 2007-03-22 07:59:25 vnivanch Exp $
+$Id: History,v 1.294 2007-04-04 13:56:54 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+04 April 07: V.Ivanchenko (emstand-V08-02-12)
+- G4UniversalFluctuation - L.Urban: optimisation of width
 
 22 March 07: V.Ivanchenko (emstand-V08-02-11)
 - G4MultipleScattering   - use skin parameter from the base class 
