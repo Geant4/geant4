@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.cc,v 1.80 2007-03-27 15:43:56 allison Exp $
+// $Id: G4VSceneHandler.cc,v 1.81 2007-04-04 16:43:25 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -712,10 +712,13 @@ const G4Polyhedron* G4VSceneHandler::CreateCutawayPolyhedron()
 void G4VSceneHandler::LoadAtts(const G4Visible& visible, G4AttHolder* holder)
 {
   // Load G4Atts from G4VisAttributes, if any...
-  const std::map<G4String,G4AttDef>* vaDefs =
-    visible.GetVisAttributes()->GetAttDefs();
-  if (vaDefs) {
-    holder->AddAtts(visible.GetVisAttributes()->CreateAttValues(), vaDefs);
+  const G4VisAttributes* va = visible.GetVisAttributes();
+  if (va) {
+    const std::map<G4String,G4AttDef>* vaDefs =
+      va->GetAttDefs();
+    if (vaDefs) {
+      holder->AddAtts(visible.GetVisAttributes()->CreateAttValues(), vaDefs);
+    }
   }
 
   G4PhysicalVolumeModel* pPVModel =
