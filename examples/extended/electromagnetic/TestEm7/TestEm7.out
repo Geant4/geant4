@@ -14,7 +14,6 @@ You have successfully registered the following graphics systems.
 Current available graphics systems are:
   ASCIITree (ATree)
   DAWNFILE (DAWNFILE)
-  GAGTree (GAGTree)
   G4HepRep (HepRepXML)
   G4HepRepFile (HepRepFile)
   RayTracer (RayTracer)
@@ -114,7 +113,7 @@ conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV f
 
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 0
+      LateralDisplacementFlag=  1   Skin= 1
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 eIoni:   tables are built for  e-
@@ -309,25 +308,25 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=381.66s Real=567.63s Sys=57.39s
+  User=362.32s Real=511.04s Sys=55.57s
 
  The run consists of 10000 proton of 160 MeV through 20 cm  of Water (density: 1 g/cm3 )
 
- projected Range= 17.723 cm    rms= 2.21815 mm 
+ projected Range= 17.6112 cm    rms= 5.18638 mm 
 
 ---------------------------------------------------------
  Cumulated Doses : 	Edep      	Edep/Ebeam 	Dose
- tally 0: 	 	4.46163 GeV	0.278852 % 	8.9354e-05 Gy
- tally 1: 	 	5.00116 GeV	0.312573 % 	0.000100159 Gy
- tally 2: 	 	3.27024 GeV	0.20439 % 	6.54938e-05 Gy
- tally 3: 	 	1.92493 GeV	0.120308 % 	3.85511e-05 Gy
+ tally 0: 	 	4.54547 GeV	0.284092 % 	9.10332e-05 Gy
+ tally 1: 	 	5.16219 GeV	0.322637 % 	0.000103384 Gy
+ tally 2: 	 	3.50818 GeV	0.219261 % 	7.0259e-05 Gy
+ tally 3: 	 	2.02558 GeV	0.126599 % 	4.05666e-05 Gy
 
 ---------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 253930167, 1349948487
+ Current couple of seeds = 1072961543, 392647795
 ----------------------------------------
 #
 /gun/particle ion
@@ -362,7 +361,7 @@ Index : 1     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 253930167, 1349948487
+ Current couple of seeds = 1072961543, 392647795
 ----------------------------------------
 Start Run processing.
 
@@ -370,25 +369,25 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=129.76s Real=446.5s Sys=25.26s
+  User=121.45s Real=149.14s Sys=17.96s
 
  The run consists of 1000 C12[0.0] of 3.5 GeV through 20 cm  of Water (density: 1 g/cm3 )
 
- projected Range= 16.4667 cm    rms= 455.956 um 
+ projected Range= 16.4644 cm    rms= 475.555 um 
 
 ---------------------------------------------------------
  Cumulated Doses : 	Edep      	Edep/Ebeam 	Dose
- tally 0: 	 	11.2152 GeV	0.320433 % 	0.000224608 Gy
- tally 1: 	 	12.911 GeV	0.368884 % 	0.00025857 Gy
- tally 2: 	 	14.9436 GeV	0.426959 % 	0.000299278 Gy
- tally 3: 	 	23.3299 GeV	0.666568 % 	0.000467233 Gy
+ tally 0: 	 	10.5221 GeV	0.300632 % 	0.000210729 Gy
+ tally 1: 	 	12.0963 GeV	0.345608 % 	0.000242255 Gy
+ tally 2: 	 	14.322 GeV	0.409199 % 	0.000286829 Gy
+ tally 3: 	 	20.975 GeV	0.599285 % 	0.00042007 Gy
 
 ---------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1875347731, 484070186
+ Current couple of seeds = 1027675449, 1113632438
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

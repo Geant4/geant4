@@ -51,7 +51,7 @@ eIoni:   tables are built for  e-
 
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 0
+      LateralDisplacementFlag=  1   Skin= 1
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 eBrem:   tables are built for  e+
@@ -85,7 +85,7 @@ hIoni:   tables are built for  proton
 
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 0
+      LateralDisplacementFlag=  1   Skin= 1
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 msc:  Model variant of multiple scattering for GenericIon
@@ -119,7 +119,7 @@ muPairProd:   tables are built for  mu+
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 0
+      LateralDisplacementFlag=  1   Skin= 1
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 muIoni:   tables are built for  mu-
@@ -157,7 +157,7 @@ hIoni:   tables are built for  pi-
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 0
+      LateralDisplacementFlag=  1   Skin= 1
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 Test23 event # 100
 Test23 event # 200
@@ -169,5 +169,5 @@ Test23 event # 700
 Test23 event # 800
 Test23 event # 900
 Test23 event # 1000
-Test23_Result: gam=1638(0.65495006), e-=9248(2.6896123), e+=31(3.8245156), p=189(4.962569), n=1030(3.859842), d=35(5.5685877), t=18(6.6658087), He3=2(11.306356), alph=88(3.5030822), nu=1000(48.124323), anu=656(32.528918), others=11607*0.13497839
+Test23_Result: gam=1741(0.74272815), e-=9744(2.4995283), e+=43(3.1142599), p=218(5.4644653), n=1082(4.6138203), d=37(1.8950966), t=9(4.4324375), He3=0(0), alph=71(1.4228482), nu=1000(49.518041), anu=643(32.553886), others=11219*0.13433377
 Test23 is done

@@ -30,7 +30,6 @@ You have successfully registered the following graphics systems.
 Current available graphics systems are:
   ASCIITree (ATree)
   DAWNFILE (DAWNFILE)
-  GAGTree (GAGTree)
   G4HepRep (HepRepXML)
   G4HepRepFile (HepRepFile)
   RayTracer (RayTracer)
@@ -67,19 +66,22 @@ Chamber is registered to the default region.
 physicsList->Construct() start.
 physicsList->Construct() start.
 physicsList->setCut() start.
-PhysicsList::SetCuts:CutLength : 1 km 
+PhysicsList::SetCuts:CutLength : 10 km 
 #
 /testem/event/printModulo 1000
 #
 /run/beamOn 4000
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
-The cut in range [1e+06 (mm)]   is too big   for material  idx=0
+The cut in range [1e+07 (mm)]   is too big   for material  idx=0
 The cut in energy is set1.79769e+305GeV 
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for e-
-The cut in range [1e+06 (mm)]   is too big   for material  idx=0
+The cut in range [1e+07 (mm)]   is too big   for material  idx=0
 The cut in energy is set1.79769e+305GeV 
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for e+
-The cut in range [1e+06 (mm)]   is too big   for material  idx=0
+The cut in range [1e+07 (mm)]   is too big   for material  idx=0
+The cut in energy is set1.79769e+305GeV 
+G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
+The cut in range [1e+07 (mm)]   is too big   for material  idx=1
 The cut in energy is set1.79769e+305GeV 
 
 compt:  Total cross sections has a good parametrisation from 10 KeV to (100/Z) GeV
@@ -97,7 +99,7 @@ conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV f
 
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 0
+      LateralDisplacementFlag=  1   Skin= 1
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 eIoni:   tables are built for  e-
@@ -118,7 +120,7 @@ eIoni:   tables are built for  e+
 
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 0
+      LateralDisplacementFlag=  1   Skin= 1
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 hIoni:   tables are built for  proton
@@ -132,21 +134,21 @@ hIoni:   tables are built for  proton
 
 Region <DefaultRegionForTheWorld> -- appears in <Wall> world volume
  Materials : Water Water_vapor 
- Production cuts :  gamma 1 km     e- 1 km     e+ 1 km 
+ Production cuts :  gamma 10 km     e- 10 km     e+ 10 km 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Water
- Range cuts        :  gamma 1 km     e- 1 km     e+ 1 km 
+ Range cuts        :  gamma 10 km     e- 10 km     e+ 10 km 
  Energy thresholds :  gamma 2.88022e+295 J      e- 2.88022e+295 J      e+ 2.88022e+295 J  
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Water_vapor
- Range cuts        :  gamma 1 km     e- 1 km     e+ 1 km 
- Energy thresholds :  gamma 834.159 keV    e- 317.969 MeV    e+ 302.691 MeV
+ Range cuts        :  gamma 10 km     e- 10 km     e+ 10 km 
+ Energy thresholds :  gamma 2.88022e+295 J      e- 18.4792 GeV    e+ 17.5913 GeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -165,15 +167,15 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 ----------------------------------------
 Start Run processing.
 
- ---> NbofEvents= 1000   NbOfelectr= 70083   Tkin= 588.706 keV (0.000 %)   NbOfelec in cav= 5073   Dose/EnFluence= 33.476 cm2/g (0.000 %)
+ ---> NbofEvents= 1000   NbOfelectr= 69811   Tkin= 586.884 keV (0.000 %)   NbOfelec in cav= 5183   Dose/EnFluence= 33.465 cm2/g (0.000 %)
 
- ---> NbofEvents= 2000   NbOfelectr= 140990   Tkin= 588.536 keV (-0.029 %)   NbOfelec in cav= 9754   Dose/EnFluence= 32.052 cm2/g (-4.253 %)
+ ---> NbofEvents= 2000   NbOfelectr= 140608   Tkin= 587.794 keV (0.155 %)   NbOfelec in cav= 9903   Dose/EnFluence= 31.327 cm2/g (-6.390 %)
 
- ---> NbofEvents= 3000   NbOfelectr= 211881   Tkin= 588.373 keV (-0.028 %)   NbOfelec in cav= 14481   Dose/EnFluence= 31.475 cm2/g (-1.800 %)
+ ---> NbofEvents= 3000   NbOfelectr= 211298   Tkin= 587.870 keV (0.013 %)   NbOfelec in cav= 15024   Dose/EnFluence= 31.711 cm2/g (1.228 %)
 Run terminated.
 Run Summary
   Number of events processed : 4000
-  User=579.21s Real=747.65s Sys=168.41s
+  User=731.59s Real=960.02s Sys=228.39s
 
  ======================== run summary ======================
 
@@ -183,32 +185,32 @@ Run Summary
 
  ============================================================
 
- Process calls frequency --->  compt= 282145  Transportation= 67868  msc= 1022336  eIoni= 1645490
+ Process calls frequency --->  compt= 282248  Transportation= 78343  msc= 1791789  eIoni= 1610100
 
  Gamma crossSections in wall material :  compt= 63.447 cm2/g   --> total= 63.447 cm2/g
 
- Mean energy of secondary e- = 588.1488 keV  (--> range in wall material = 2.2110 mm )
- Mass_energy_transfer coef: 29.8530 cm2/g
+ Mean energy of secondary e- = 588.4651 keV  (--> range in wall material = 2.2125 mm )
+ Mass_energy_transfer coef: 29.8691 cm2/g
 
- StoppingPower in wall   = 1.9779 MeV*cm2/g
-               in cavity = 1.9779 MeV*cm2/g
+ StoppingPower in wall   = 1.9777 MeV*cm2/g
+               in cavity = 1.9777 MeV*cm2/g
 
  Charged particle flow in cavity :
-      Enter --> nbParticles = 19105	 Energy = 9.6658 GeV
-      Exit  --> nbParticles = 19076	 Energy = 9.6520 GeV
+      Enter --> nbParticles = 19594	 Energy = 9.9082 GeV
+      Exit  --> nbParticles = 19567	 Energy = 9.8940 GeV
 
- Total edep in cavity = 13.7636 MeV	 Total charged trackLength = 53.7734 m     (mean value = 2.8146 mm )
- Total dose in cavity = 21.9054 MeV/mg
- Dose/EnergyFluence   = 30.9680 cm2/g
+ Total edep in cavity = 14.1230 MeV	 Total charged trackLength = 54.5058 m     (mean value = 2.7818 mm )
+ Total dose in cavity = 22.4775 MeV/mg
+ Dose/EnergyFluence   = 31.7769 cm2/g
 
- (Dose/EnergyFluence)/Mass_energy_transfer = 1.0374
+ (Dose/EnergyFluence)/Mass_energy_transfer = 1.0639
 
- StepSize of ch. tracks in wall   = 154.9195 um  +- 140.7286 um 	 (nbSteps/track = 9.5961)
- StepSize of ch. tracks in cavity = 2.6042 mm  +- 2.1575 mm 	 (nbSteps/track = 1.0808)
+ StepSize of ch. tracks in wall   = 138.5200 um  +- 107.4414 um 	 (nbSteps/track = 12.0404)
+ StepSize of ch. tracks in cavity = 734.4603 um  +- 741.7655 um 	 (nbSteps/track = 3.7875)
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1408959309, 1314372010
+ Current couple of seeds = 439770062, 743255256
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

@@ -6,37 +6,6 @@
                             WWW : http://cern.ch/geant4
 *************************************************************
 
-Visualization Manager instantiating...
-Visualization Manager initialising...
-Registering graphics systems...
-
-You have successfully registered the following graphics systems.
-Current available graphics systems are:
-  ASCIITree (ATree)
-  DAWNFILE (DAWNFILE)
-  GAGTree (GAGTree)
-  G4HepRep (HepRepXML)
-  G4HepRepFile (HepRepFile)
-  RayTracer (RayTracer)
-  VRML1FILE (VRML1FILE)
-  VRML2FILE (VRML2FILE)
-
-Registering model factories...
-
-You have successfully registered the following model factories.
-Registered model factories:
-  generic
-  drawByCharge
-  drawByParticleID
-  drawByOriginVolume
-  drawByAttribute
-
-Registered filter factories:
-  chargeFilter
-  particleFilter
-  originVolumeFilter
-  attributeFilter
-
 /run/verbose 2
 #
 /testem/phys/addPhysics  standard
@@ -110,7 +79,7 @@ conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV f
 
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 0
+      LateralDisplacementFlag=  1   Skin= 1
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 eIoni:   tables are built for  e-
@@ -145,7 +114,7 @@ annihil:       Sampling according eplus2gg model
 
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 0
+      LateralDisplacementFlag=  1   Skin= 1
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 hIoni:   tables are built for  proton
@@ -180,7 +149,7 @@ hIoni:   tables are built for  anti_proton
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 0
+      LateralDisplacementFlag=  1   Skin= 1
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 muIoni:   tables are built for  mu+
@@ -227,7 +196,7 @@ hIoni:   tables are built for  pi+
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 0
+      LateralDisplacementFlag=  1   Skin= 1
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 hIoni:   tables are built for  pi-
@@ -298,31 +267,29 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=205.73s Real=248.01s Sys=35.77s
+  User=200.4s Real=227.82s Sys=27.36s
 
 ------------------------------------------------------------
 material             Total Edep   sqrt(E0(GeV))*rmsE/Emean     total tracklen 
  
-      Lead: 783.33 MeV +-  14.2 MeV     1.813 +- 0.1813 %        54 cm  +- 1.15 cm 
-liquidArgon: 206.73 MeV +- 13.64 MeV     6.598 +- 0.6598 %      1.02 m   +- 6.89 cm 
+      Lead: 783.24 MeV +- 15.76 MeV     2.013 +- 0.2013 %      53.9 cm  +-  1.2 cm 
+liquidArgon: 204.82 MeV +- 14.94 MeV     7.296 +- 0.7296 %      1.01 m   +- 7.72 cm 
 
 ------------------------------------------------------------
 
  Energy deposition from Energy flow balance : 
   material 	 Total Edep 
  
-      Lead:	 783.334 MeV
-liquidArgon:	 206.626 MeV
+      Lead:	 783.237 MeV
+liquidArgon:	 204.824 MeV
 
 ------------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 677757599, 489520914
+ Current couple of seeds = 536502410, 2064128558
 ----------------------------------------
-Graphics systems deleted.
-Visualization Manager deleting...
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
 UserRunAction deleted.

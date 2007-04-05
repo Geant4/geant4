@@ -58,7 +58,6 @@ You have successfully registered the following graphics systems.
 Current available graphics systems are:
   ASCIITree (ATree)
   DAWNFILE (DAWNFILE)
-  GAGTree (GAGTree)
   G4HepRep (HepRepXML)
   G4HepRepFile (HepRepFile)
   RayTracer (RayTracer)
@@ -130,7 +129,7 @@ conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV f
 
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 0
+      LateralDisplacementFlag=  1   Skin= 1
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 eIoni:   tables are built for  e-
@@ -167,7 +166,7 @@ annihil:       Sampling according eplus2gg model
 
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 0
+      LateralDisplacementFlag=  1   Skin= 1
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 hIoni:   tables are built for  proton
@@ -205,7 +204,7 @@ hIoni:   tables are built for  anti_proton
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 0
+      LateralDisplacementFlag=  1   Skin= 1
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 muIoni:   tables are built for  mu+
@@ -255,7 +254,7 @@ hIoni:   tables are built for  pi+
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 0
+      LateralDisplacementFlag=  1   Skin= 1
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 hIoni:   tables are built for  pi-
@@ -299,7 +298,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=137s Real=227.23s Sys=6.77s
+  User=184.29s Real=230.36s Sys=27.54s
 
  ======================== run summary ======================
 
@@ -307,29 +306,29 @@ Run Summary
 
  ============================================================
 
- total energy deposit: 99.795 MeV
+ total energy deposit: 99.807 MeV
 
- nb tracks/event   neutral:     27.945   charged:     149.04
- nb  steps/event   neutral:     141.99   charged:     218.62
+ nb tracks/event   neutral:     27.774   charged:     147.15
+ nb  steps/event   neutral:     140.02   charged:     359.08
 
  nb of process calls per event: 
-          eBrem       eIoni       compt        phot        conv     annihilTransportation         msc
-         26.205      190.26      114.04      25.535      1.4465       1.446      0.9655       0.706
+          eBrem       eIoni       compt        phot         msc        conv     annihilTransportation
+         26.073       187.2      112.24      25.407      144.39       1.413      1.4135      0.9565
 
 ---------------------------------------------------------
  Primary particle : 
- true Range = 11.043 cm    rms = 3.7229 cm 
- proj Range = 9.5324 cm    rms = 3.4533 cm 
- proj/true  = 0.86322
- transverse dispersion at end = 1.7101 cm 
-      mass true Range from simulation = 29.816 g/cm2 
+ true Range = 11.067 cm    rms = 3.8174 cm 
+ proj Range = 9.5527 cm    rms = 3.5108 cm 
+ proj/true  = 0.86316
+ transverse dispersion at end = 1.7197 cm 
+      mass true Range from simulation = 29.881 g/cm2 
        from PhysicsTable (csda range) = 31.791 g/cm2 
 ---------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1379929520, 242228984
+ Current couple of seeds = 1463304466, 1184543582
 ----------------------------------------
 #
 /process/eLoss/verbose 0
@@ -357,7 +356,7 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1379929520, 242228984
+ Current couple of seeds = 1463304466, 1184543582
 ----------------------------------------
 Start Run processing.
 
@@ -365,7 +364,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=262.94s Real=326.29s Sys=15.67s
+  User=358.55s Real=425.08s Sys=46.34s
 
  ======================== run summary ======================
 
@@ -373,29 +372,29 @@ Run Summary
 
  ============================================================
 
- total energy deposit: 99.774 MeV
+ total energy deposit: 99.788 MeV
 
- nb tracks/event   neutral:     36.623   charged:     291.83
- nb  steps/event   neutral:     147.21   charged:     489.27
+ nb tracks/event   neutral:     36.325   charged:     290.34
+ nb  steps/event   neutral:     145.66   charged:     772.72
 
  nb of process calls per event: 
-          eIoni       eBrem       compt        phot        conv     annihil         mscTransportation
-         451.74      34.853      110.58      34.282       1.404       1.404       1.268       0.942
+          eIoni       eBrem         msc        phot       compt        conv     annihilTransportation
+          450.1      34.538      286.68      33.938      109.33      1.3955      1.3955      0.9965
 
 ---------------------------------------------------------
  Primary particle : 
- true Range = 11.181 cm    rms = 3.8408 cm 
- proj Range = 9.7072 cm    rms = 3.5962 cm 
- proj/true  = 0.86817
- transverse dispersion at end = 1.742 cm 
-      mass true Range from simulation = 30.189 g/cm2 
+ true Range = 11.224 cm    rms = 3.713 cm 
+ proj Range = 9.7216 cm    rms = 3.4642 cm 
+ proj/true  = 0.86613
+ transverse dispersion at end = 1.7534 cm 
+      mass true Range from simulation = 30.305 g/cm2 
        from PhysicsTable (csda range) = 31.791 g/cm2 
 ---------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 2122528498, 1191483702
+ Current couple of seeds = 263306300, 1049470833
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

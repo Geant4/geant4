@@ -103,7 +103,7 @@ conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV f
 
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 0
+      LateralDisplacementFlag=  1   Skin= 1
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 eIoni:   tables are built for  e-
@@ -138,7 +138,7 @@ annihil:       Sampling according eplus2gg model
 
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 0
+      LateralDisplacementFlag=  1   Skin= 1
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 hIoni:   tables are built for  proton
@@ -173,7 +173,7 @@ hIoni:   tables are built for  anti_proton
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 0
+      LateralDisplacementFlag=  1   Skin= 1
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 muIoni:   tables are built for  mu+
@@ -220,7 +220,7 @@ hIoni:   tables are built for  pi+
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 0
+      LateralDisplacementFlag=  1   Skin= 1
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 hIoni:   tables are built for  pi-
@@ -297,28 +297,28 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=101.17s Real=107.86s Sys=6.52s
+  User=97.24s Real=102.78s Sys=5.52s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started
 ========================================================
 Number of events             100
-Average number of e-         1319
-Average number of gamma      699.6
-Average number of e+         47.67
-Average number of steps      4515
-Edep 1x1 =                   0.8268 +- 0.002895  res=  3.502 %
-Edep 3x3 =                   0.9558 +- 0.001366  res=  1.429 %
-Edep 5x5 =                   0.9777 +- 0.001172  res=  1.199 %
+Average number of e-         1311
+Average number of gamma      694.9
+Average number of e+         47.21
+Average number of steps      4417
+Edep 1x1 =                   0.8237 +- 0.003031  res=  3.68 %
+Edep 3x3 =                   0.9554 +- 0.001559  res=  1.632 %
+Edep 5x5 =                   0.9779 +- 0.001158  res=  1.184 %
 ========================================================
 
 
 <<<<<ACCEPTANCE>>>>> 100 events for Crystal Calorimeter
-Edep1x1: 0.8268  delEdep1x1= 0.0007843 nrms= 0.2234
-Erms1x1: 0.02895  delErms1x1= -0.006147 nrms= -1.751
-Edep3x3: 0.9558  delEdep3x3= -0.0005614 nrms= -0.3509
-Erms3x3: 0.01366  delErms3x3= -0.002341 nrms= -1.463
-Edep5x5: 0.9777  delEdep5x5= -0.001273 nrms= -1.07
-Erms5x5: 0.01172  delErms5x5= -0.000179 nrms= -0.1504
+Edep1x1: 0.8237  delEdep1x1= -0.002287 nrms= -0.6515
+Erms1x1: 0.03031  delErms1x1= -0.004786 nrms= -1.364
+Edep3x3: 0.9554  delEdep3x3= -0.0009603 nrms= -0.6002
+Erms3x3: 0.01559  delErms3x3= -0.0004065 nrms= -0.2541
+Edep5x5: 0.9779  delEdep5x5= -0.001083 nrms= -0.9105
+Erms5x5: 0.01158  delErms5x5= -0.0003229 nrms= -0.2713
 <<<<<END>>>>>   IS ACCEPTED
 
 #

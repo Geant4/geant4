@@ -46,7 +46,6 @@ You have successfully registered the following graphics systems.
 Current available graphics systems are:
   ASCIITree (ATree)
   DAWNFILE (DAWNFILE)
-  GAGTree (GAGTree)
   G4HepRep (HepRepXML)
   G4HepRepFile (HepRepFile)
   RayTracer (RayTracer)
@@ -133,7 +132,7 @@ conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV f
 
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 0
+      LateralDisplacementFlag=  1   Skin= 1
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 eIoni:   tables are built for  e-
@@ -170,7 +169,7 @@ annihil:       Sampling according eplus2gg model
 
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 0
+      LateralDisplacementFlag=  1   Skin= 1
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 hIoni:   tables are built for  proton
@@ -208,7 +207,7 @@ hIoni:   tables are built for  anti_proton
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 0
+      LateralDisplacementFlag=  1   Skin= 1
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 muIoni:   tables are built for  mu+
@@ -258,7 +257,7 @@ hIoni:   tables are built for  pi+
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 0
+      LateralDisplacementFlag=  1   Skin= 1
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 hIoni:   tables are built for  pi-
@@ -320,7 +319,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=1183.32s Real=1495.83s Sys=114.23s
+  User=1254.52s Real=1462.25s Sys=111.26s
 
  ======================== run summary ======================
 
@@ -328,18 +327,18 @@ Run Summary
 
  ============================================================
 
- Total Energy deposited        = 3.941 MeV +- 205.422 keV
+ Total Energy deposited        = 3.935 MeV +- 236.584 keV
 
- Track length of primary track = 2.021 cm  +- 2.730 mm 
+ Track length of primary track = 2.017 cm  +- 2.797 mm 
  Range from EmCalculator       = 2.021 cm  (from full dE/dx)
 
- Projected range               = 1.316 cm  +- 4.368 mm 
+ Projected range               = 1.315 cm  +- 4.321 mm 
 
- Nb of steps of primary track  = 238.94 +- 30.25	 Step size= 84.587 um  +- 4.613 um 
+ Nb of steps of primary track  = 238.72 +- 31.04	 Step size= 84.474 um  +- 4.589 um 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1858916247, 68110208
+ Current couple of seeds = 898903773, 944658292
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

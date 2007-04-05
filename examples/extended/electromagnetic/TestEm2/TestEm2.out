@@ -54,7 +54,6 @@ You have successfully registered the following graphics systems.
 Current available graphics systems are:
   ASCIITree (ATree)
   DAWNFILE (DAWNFILE)
-  GAGTree (GAGTree)
   G4HepRep (HepRepXML)
   G4HepRepFile (HepRepFile)
   RayTracer (RayTracer)
@@ -126,7 +125,7 @@ conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV f
 
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 0
+      LateralDisplacementFlag=  1   Skin= 1
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 eIoni:   tables are built for  e-
@@ -161,7 +160,7 @@ annihil:       Sampling according eplus2gg model
 
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 0
+      LateralDisplacementFlag=  1   Skin= 1
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 hIoni:   tables are built for  proton
@@ -196,7 +195,7 @@ hIoni:   tables are built for  anti_proton
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 0
+      LateralDisplacementFlag=  1   Skin= 1
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 muIoni:   tables are built for  mu+
@@ -243,7 +242,7 @@ hIoni:   tables are built for  pi+
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 0
+      LateralDisplacementFlag=  1   Skin= 1
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 hIoni:   tables are built for  pi-
@@ -294,25 +293,25 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=252.74s Real=271.54s Sys=15.08s
+  User=320.6s Real=368.67s Sys=46.88s
 
  SUMMARY 
 
- energy deposit :   94.55 % E0 +-    0.99 % E0
- charged traklen:  485.47 radl +-    5.50 radl
- neutral traklen: 4451.55 radl +-  127.34 radl
+ energy deposit :   94.86 % E0 +-    0.81 % E0
+ charged traklen:  484.55 radl +-    4.61 radl
+ neutral traklen: 4441.30 radl +-  120.38 radl
 
- 90.00 % confinement: radius = 3.12 radl  (2.78 cm )
+ 90.00 % confinement: radius = 3.08 radl  (2.75 cm )
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 286819646, 1230253434
+ Current couple of seeds = 944863527, 958213402
 ----------------------------------------
 
 <<<<ACCEPTANCE>>>> 100 events for Total Energy in Absorber
-Edep: 0.94548441  delEdep= 0.00048441443 nrms= 0.50459836
-Erms: 0.0099390336  delErms= 0.00033903361 nrms= 0.35316001
-<<<<END>>>>   IS ACCEPTED
+Edep: 0.94860978  delEdep= 0.0036097813 nrms= 3.7601889
+Erms: 0.0081070673  delErms= -0.0014929327 nrms= -1.5551382
+<<<<END>>>>   IS NOT ACCEPTED
 
 Graphics systems deleted.
 Visualization Manager deleting...

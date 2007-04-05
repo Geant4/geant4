@@ -18,7 +18,6 @@ You have successfully registered the following graphics systems.
 Current available graphics systems are:
   ASCIITree (ATree)
   DAWNFILE (DAWNFILE)
-  GAGTree (GAGTree)
   G4HepRep (HepRepXML)
   G4HepRepFile (HepRepFile)
   RayTracer (RayTracer)
@@ -236,9 +235,9 @@ Start Run processing.
 Stage 0->1 : 1 hits found in the muon chamber.
 Stage 1->2 : 1 isolated muon found.
 >>> Event 0
-     88 hits are stored in ExN04TrackerHitsCollection.
-     38 hits are stored in ExN04CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 0.60837763 (GeV)
+     71 hits are stored in ExN04TrackerHitsCollection.
+     33 hits are stored in ExN04CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 0.52456676 (GeV)
      1 hits are stored in ExN04MuonHitsCollection.
 Stage 0->1 : 0 hits found in the muon chamber.
 ++++++++ event aborted
@@ -250,14 +249,14 @@ Stage 0->1 : 0 hits found in the muon chamber.
 Stage 0->1 : 1 hits found in the muon chamber.
 Stage 1->2 : 1 isolated muon found.
 >>> Event 2
-     149 hits are stored in ExN04TrackerHitsCollection.
-     25 hits are stored in ExN04CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 0.55316149 (GeV)
+     70 hits are stored in ExN04TrackerHitsCollection.
+     32 hits are stored in ExN04CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 0.60654041 (GeV)
      1 hits are stored in ExN04MuonHitsCollection.
 Run terminated.
 Run Summary
   Number of events processed : 3
-  User=8.33s Real=9.16s Sys=0.49s
+  User=9.57s Real=10.48s Sys=0.58s
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.
