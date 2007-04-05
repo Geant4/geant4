@@ -1,0 +1,208 @@
+
+                       geant4-08-02-ref-03
+                       ===================
+
+Some of the development/fixes included since the last reference tag are:
+
+  o Added magnetic moment in G4ParticleDefinition, G4DynamicParticle and
+    G4IsotopeProperty. Updated magnetic moment for leptons.
+  o Included simulation of quasi-elastic scattering in high-energy-theo
+    hadronic models and updated QGSP physics list accordingly, providing
+    improved simulation of hadronic showers.
+  o Introducing 'picking' for OpenInventor visualization driver.
+
+---------- Reference-tag 'Release Notes' -----------
+
+
+Summarised, the list of changes is the following:
+
+event                                            event-V08-02-01
+-----
+- Prevent from unnecessary creation of G4String objects in G4Event,
+  which were default for random number status.
+  Use new flag in G4EventManager.
+
+geometry/management                              geommng-V08-02-01
+-------------------
+- Do not reset 'RegionRootFlag' in RemoveRootLogicalVolume() if volume is
+  the world, since the volume itself may be already removed from the store
+  if G4LogicalVolumeStore::Clean() is called.
+  Resolves a problem of memory overwrite in case of exchange of full
+  geometry setups (including world volume) at run-time.
+
+geometry/volumes                                 geomvol-V08-02-01
+----------------
+- Extended CheckOverlaps() algorithm, detect also cases of daughter volumes
+  which are totally overlapping and checked in sequence.
+  Made warning message more clear.
+
+graphics_reps                                    greps-V08-02-01
+-------------
+- G4AttDefStore: now comprises utility functions in namespace 'G4AttDefStore'.
+  (Used to be a class with only static functions and data members).
+- G4AttHolder: Made copy constructor and assignment private to enforce
+  proper usage.
+
+particles                                        particles-V08-02-01
+---------
+- Added magnetic moment in G4ParticleDefinition and G4DynamicParticle and
+  G4IsotopeProperty. Updated magnetic moment for leptons.
+  Added G4IsotopeMagneticMomentTable and data file.
+- Allow for registration of several isotope property table in G4IonTable.
+- Allow for any Z,A combination (A>=Z) for G4IonTable::GetIon().
+
+physics_lists                                    phys-lists-V08-02-07
+-------------
+- Added quasi-elastic in QGSP physics list; this required changes to:
+  o QGSP{proton,Neutron,PiK} Builder, adding QuasiElasticChannel on
+    conditional flag;
+  o HadronPhysicsQGSP passes flag (default=false) to Builders;
+  o QGSP uses flag to include quasi-elastic;
+- New list QGSP_NQSE, a copy of QGSP without quasi-elastic.
+- Set 'skin' to zero in G4EmStandardPhysics72 (i.e. no use of ComputeStep()).
+- G4HadronHElasticPhysics uses new cross section classes G4BGGNucleonElasticXS
+  and G4BGGPionElasticXS.
+
+processes/cuts                                   procuts-V08-02-00
+--------------
+- Added method ConvertRangeToEnergy() to G4ProductionCutsTable.
+
+processes/electromagnetic/polarisation           empolar-V08-02-00
+--------------------------------------
+- G4PolarizedGammaConversionModel: fixed non-initialised variable.
+
+processes/electromagnetic/standard               emstand-V08-02-11
+----------------------------------
+- G4UrbanMscModel:
+  o Single scattering is now allowed only near to boundaries, not everywhere.
+- G4MultipleScattering, G4hMultipleScattering:
+  o Use 'skin' parameter from the base class.
+  o Removed SetSkin() method, which is implemented in the base class;
+    allowing skin>0.
+- G4UniversalFluctuation:
+  o 'GLANDZ' part of the fluctuation model has been completely rewritten,
+    there is no longer distinct loss regime.
+- G4eBremsstrahlungModel:
+  o Added reinitialisation of LPM flag.
+
+processes/electromagnetic/utils                  emutils-V08-02-06
+-------------------------------
+- G4VEnergyLossProcess: use G4SafetyHelper instead of G4Navigator for
+  determining distance to boundary, and added protection agains zero step
+  length.
+- G4VMultipleScattering: added protection against zero step or energy.
+- G4EmModelManager: added 'maxCutInRange' variable for sub-cutoff option.
+- G4EmCalculator: added method ComputeEnergyCutFromRangeCut().
+- G4EnergyLossMessenger: send message "/run/physicsModified" after all
+  commands requiring reinitialisation.
+
+processes/hadronic
+------------------
+- cross_sections (hadr-cross-V08-02-05)
+  o Use G4NucleonNuclearCrossSection in G4UInelasticCrossSection and
+    G4UElasticCrossSection.
+  o Completed implementations of A and Z interfaces to classes:
+    G4UPiNuclearCrossSection, G4UInelasticCrossSection, G4UElasticCrossSection,
+    G4GlauberGribovCrossSection, G4NucleonNuclearCrossSection.
+  o G4PiNuclearCrossSection: better handling of low energy cross sections,
+    and removed special treatment ('tuning') for Copper (Z=29), i.e. the Cu
+    cross section is no longer lowered by 4%.
+  o Added new classes:
+    + G4BGGNucleonElasticXS: proton and neutron elastic cross section wrapper
+      class using Barashenkov parameterization below 100 GeV and Glauber-Gribov
+      model above.
+    + G4BGGNucleonInelasticXS: proton and neutron inelastic cross section
+      wrapper of Barashenkov-Glauber-Gribov.
+    + G4BGGPionElasticXS: pion elastic cross section wrapper of BGG.
+    + G4BGGPionInelasticXS: pion inelastic cross section wrapper of BGG.
+- models/chiral_inv_phase_space/body (hadr-chips-body-V08-02-08)
+  o Bug fix for muon-nuclear interactions.
+  o Fix for NaN in G4QNucleus when using pow().
+  o Fixed cases of warning printed for anti-particles by fixing occurences
+    of power of negative values.
+- models/chiral_inv_phase_space/interface (hadr-chips-inter-V08-02-13)
+  o Completed implementation for G4QuasiFreeRatios.
+  o To avoid early particle definition the CHIPS world is created at the
+    run time in processes G4QElastic, G4QCollision, G4QCaptureAtRest.
+  o Bug fix for muon-nuclear interactions.
+  o G4QElastic:
+    + Fix for mis-use of units.
+    + Fix to set 'fStopButAlive' status for E=0.
+- models/coherent_elastic (hadr-cohe-V08-02-02)
+  o G4UHadronElasticProcess: fixed bug in number of neutrons in CHIPS interface.
+  o G4HadronElastic, G4ChargeExchange: more accurately compute Z and A.
+- models/parton_string/hadronization (had-hadronization-V08-02-01)
+  o G4ExcitedStringDecay::EnergyAndMomentumCorrector(), no longer causes
+    exception when not converging. Added more info when failing and
+    return correct status.
+- models/theo_high_energy (had-theo-HE-V08-02-00)
+  o Added G4QuasiElasticChannel to simulate quasi-elastic scattering.
+    Relies on CHIPS class G4QuasiFreeRatios.
+  o Modified G4TheoFSGenerator to use G4QuasiElasticChannel and add
+    quasi-elastic scattering for string models, and use these in competition
+    to the string model.
+
+run                                              run-V08-02-02
+---
+- Prevent from unnecessary creation of G4String objects in G4Event,
+  which were default for random number status.
+- Added new G4RunManager flag and corresponding UI command.
+
+track                                            track-V08-02-02
+-----
+- Fixed weight treatment in G4ParticleChange
+- Added non-ionizing energy deposit in G4Step and G4VParticleChange.
+- Added magnetic moment in G4DynamicParticle.
+
+visualization                                    vis-V08-02-03
+-------------
+- management:
+  o Added command '/vis/viewer/set/picking'.
+    Picking is "false" by default, except for OpenInventor.
+  o Removed G4GAGTree.
+  o Removed /vis/scene/add/eventID (once again) from /vis/drawVolume.
+- modeling:
+  o Added further information on volume G4Atts.
+  o Added solid dump and volume transformation to G4Atts.
+- OpenGL:
+  o Implemented picking for OGLIX.
+  o Some reorganisation of display list construction to fix rare bug
+    in Display-by-Time feature.
+  o Fixed some compilation warnings.
+- OpenInventor:
+  o Picking is "true" by default.
+  o Added scale factor to list of changes requiring kernel visit,
+    and some rationalisation.
+- Tree:
+  o Removed GAGTree.
+
+examples                                         examples-V08-02-03
+--------
+- Updated reference outputs.
+- extended/electromagnetic/TestEm3 (testem3-V08-02-01)
+  o By default do not store random seed and do not activate VisManager in batch.
+  o added G4standard_exp PhysList. Added material Lucite.
+  o Return Z-position computation.
+- extended/electromagnetic/TestEm5 (testem5-V08-02-00)
+  o Use all default values in default PhysList.
+  o Use hadronic builders from physics_lists library.
+- extended/electromagnetic/TestEm7 (testem7-V08-02-01)
+  o Fixed usage of elastic builders in PhysicsList.
+- extended/electromagnetic/TestEm15 (testem15-V08-02-00)
+  o SteppingAction: added protection if no lateral displacement.
+- extended/medical/fanoCavity (fano-V08-02-05)
+  o Set default cut to 10 km.
+  o StackingAction: set range < 0.8*safe.
+  o Added histo of theta distribution before entering in cavity.
+
+tests                                            tests-V08-02-03
+-----
+- Updated reference outputs and tools.
+- test10 (test10-V08-02-00)
+  o Fixed bug in messenger: removed selection of default detector from
+    constructor. Default detector is alredy selected within the Construct()
+    method in DetectorConstruction.
+- test35 (test35-V08-02-00)
+  o Use 0.0 low limit for QElastic.
+  o Use GeV low limit for FTF.
+  o Initialise gamma as a particle.
