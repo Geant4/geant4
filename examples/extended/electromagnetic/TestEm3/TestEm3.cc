@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: TestEm3.cc,v 1.21 2007-03-15 18:56:33 vnivanch Exp $
+// $Id: TestEm3.cc,v 1.22 2007-04-06 17:41:54 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -1,0 +1,20 @@
+# $Id: emtutor.mac,v 1.1 2007-04-06 17:41:54 maire Exp $
+#
+# Macro file for "TestEm3.cc" 
+#
+# water 1 layer;
+#
+/control/verbose 2
+#
+/testem/det/setNbOfLayers 1
+/testem/det/setNbOfAbsor  1
+/testem/det/setAbsor 1 Aluminium 10 cm
+/testem/det/setSizeYZ 10 cm
+#
+/testem/phys/setCuts 2 cm
+#
+/run/initialize
+#
+/control/execute vis.mac
+#
+/testem/gun/setDefault
