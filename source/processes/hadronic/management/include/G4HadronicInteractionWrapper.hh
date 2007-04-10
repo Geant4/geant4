@@ -33,9 +33,11 @@
 class G4HadronicInteractionWrapper
 {
   public:
-  G4HadFinalState * ApplyInteraction(G4HadProjectile & thePro, 
-                                     G4Nucleus & targetNucleus,
-                                     G4HadronicInteraction * theInteraction);
+  G4HadFinalState * ApplyInteraction(G4HadProjectile& thePro, 
+                                     G4Nucleus& targetNucleus,
+                                     G4HadronicInteraction* theInteraction,
+                                     const G4String& theProcessName,
+                                     const G4String& theModelName);
 };
 
 #endif

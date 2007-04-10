@@ -277,7 +277,9 @@ const G4Track &aTrack, const G4Step &)
       // Call the interaction
 
       G4HadronicInteractionWrapper aW;
-      result = aW.ApplyInteraction(thePro, targetNucleus, theInteraction);
+      result = aW.ApplyInteraction(thePro, targetNucleus, theInteraction,
+                                   GetProcessName(),
+                                   theInteraction->GetModelName());
     }
     catch(G4HadReentrentException aR)
     {
