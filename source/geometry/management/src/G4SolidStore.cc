@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SolidStore.cc,v 1.16 2006-11-30 10:39:28 gcosmo Exp $
+// $Id: G4SolidStore.cc,v 1.17 2007-04-10 10:13:50 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4SolidStore
@@ -150,6 +150,27 @@ void G4SolidStore::DeRegister(G4VSolid* pSolid)
       }
     }
   }
+}
+
+// ***************************************************************************
+// Retrieve the first solid pointer in the container having that name
+// ***************************************************************************
+//
+G4VSolid* G4SolidStore::GetSolid(const G4String& name, G4bool verbose) const
+{
+  for (iterator i=GetInstance()->begin(); i!=GetInstance()->end(); i++)
+  {
+    if ((*i)->GetName() == name) { return *i; }
+  }
+  if (verbose)
+  {
+     G4cerr << "ERROR - G4SolidStore::GetSolid()" << G4endl
+            << "        Solid " << name << " not found in store !" << G4endl
+            << "        Returning NULL pointer." << G4endl;
+     G4Exception("G4SolidStore::GetSolid()", "InvalidQuery",
+                 JustWarning, "Solid NOT found in store !");
+  }
+  return 0;
 }
 
 // ***************************************************************************

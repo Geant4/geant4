@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RegionStore.cc,v 1.12 2006-11-30 10:39:28 gcosmo Exp $
+// $Id: G4RegionStore.cc,v 1.13 2007-04-10 10:13:50 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4RegionStore
@@ -224,7 +224,10 @@ G4Region* G4RegionStore::GetRegion(const G4String& name, G4bool verbose) const
   if (verbose)
   {
     G4cerr << "ERROR - G4RegionStore::GetRegion()" << G4endl
-           << "        Region " << name << " NOT found in store !" << G4endl;
+           << "        Region " << name << " NOT found in store !" << G4endl
+           << "        Returning NULL pointer." << G4endl;
+    G4Exception("G4RegionStore::GetRegion()", "InvalidQuery",
+                JustWarning, "Region NOT found in store !");
   }
   return 0;
 }
