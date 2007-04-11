@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HEProtonInelastic.hh,v 1.14 2006-06-29 20:29:39 gunter Exp $
+// $Id: G4HEProtonInelastic.hh,v 1.15 2007-04-11 18:11:30 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -54,29 +54,29 @@
 class G4HEProtonInelastic : public G4HEInelastic  
 {
  public:  // with description
-        G4HEProtonInelastic() : G4HEInelastic()
-           {
-              theMinEnergy =  45*GeV;
-              theMaxEnergy = 10*TeV;
-              MAXPART      = 2048;
-              verboseLevel = 0; 
-           }
+   G4HEProtonInelastic() : G4HEInelastic("G4HEProtonInelastic")
+   {
+     theMinEnergy =  45*GeV;
+     theMaxEnergy = 10*TeV;
+     MAXPART      = 2048;
+     verboseLevel = 0; 
+   }
 
-        ~G4HEProtonInelastic(){ };
+   ~G4HEProtonInelastic(){ };
          
-        G4int vecLength;
+   G4int vecLength;
         
-        G4HadFinalState * ApplyYourself( const G4HadProjectile &aTrack, G4Nucleus &targetNucleus );
+   G4HadFinalState* ApplyYourself(const G4HadProjectile &aTrack, G4Nucleus &targetNucleus);
 
-        G4int  GetNumberOfSecondaries()
-               { return vecLength; }         
+   G4int  GetNumberOfSecondaries()
+        { return vecLength; }         
 
-        void   FirstIntInCasProton(G4bool &inElastic, const G4double availableEnergy,
-                                   G4HEVector pv[],
-                                   G4int &vecLen, 
-                                   G4HEVector incidentParticle,
-                                   G4HEVector targetParticle,
-                                   const G4double atomicWeight);
+   void   FirstIntInCasProton(G4bool &inElastic, const G4double availableEnergy,
+                              G4HEVector pv[],
+                              G4int &vecLen, 
+                              G4HEVector incidentParticle,
+                              G4HEVector targetParticle,
+                              const G4double atomicWeight);
 };
 #endif                     
                                          
