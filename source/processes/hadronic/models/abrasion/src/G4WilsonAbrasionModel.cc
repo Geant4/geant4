@@ -90,6 +90,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 //
 G4WilsonAbrasionModel::G4WilsonAbrasionModel (G4bool useAblation1)
+  :G4HadronicInteraction("G4WilsonAbrasion")
 {
 //
 //
