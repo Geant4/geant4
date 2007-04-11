@@ -38,6 +38,7 @@
 //#include "G4NeutronHPInelasticFS.hh"
 
 G4NeutronHPorLEInelastic::G4NeutronHPorLEInelastic()
+  :G4HadronicInteraction("NeutronHPorLEInelastic")
 {
    SetMinEnergy(0.*eV);
    SetMaxEnergy(20.*MeV);

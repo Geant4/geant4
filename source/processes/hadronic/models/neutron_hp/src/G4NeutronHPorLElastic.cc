@@ -38,6 +38,7 @@
 #include "G4NeutronHPElasticFS.hh"
 
 G4NeutronHPorLElastic::G4NeutronHPorLElastic()
+  :G4HadronicInteraction("NeutronHPorLElastic")
 {
    overrideSuspension = false;
    G4NeutronHPElasticFS * theFS = new G4NeutronHPElasticFS;

@@ -38,6 +38,7 @@
 #include "G4NeutronHPFissionFS.hh"
 
 G4NeutronHPorLFission::G4NeutronHPorLFission()
+  :G4HadronicInteraction("NeutronHPorLFission")
 {
    SetMinEnergy(0.*eV);
    SetMaxEnergy(20.*MeV);
