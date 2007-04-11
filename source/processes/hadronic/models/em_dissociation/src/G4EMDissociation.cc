@@ -79,7 +79,7 @@
 #include "globals.hh"
 ////////////////////////////////////////////////////////////////////////////////
 //
-G4EMDissociation::G4EMDissociation ()
+G4EMDissociation::G4EMDissociation():G4HadronicInteraction("EMDissociation")
 {
 //
 //
