@@ -14,6 +14,12 @@ code and to keep track of all tags.
   * Please list in reverse chronological order (last date on top)
   ---------------------------------------------------------------
 
+11 April 2007 - Dennis Wright (hadr-hep-V08-02-00)
+--------------------------------------------------
+ Add model names to all high energy models in order to complete
+ error reporting for hadronic whiteboard.  Only .hh files were
+ affected.
+ 
 22 November 2006 - Dennis Wright (hadr-hep-V08-01-00)
 -----------------------------------------------------
  G4HEVector::G4HEVector(): 
