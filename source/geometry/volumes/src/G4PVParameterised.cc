@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVParameterised.cc,v 1.9 2007-03-23 01:47:53 gcosmo Exp $
+// $Id: G4PVParameterised.cc,v 1.10 2007-04-11 07:56:38 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -37,6 +37,7 @@
 #include "G4PVParameterised.hh"
 #include "G4VPVParameterisation.hh"
 #include "G4AffineTransform.hh"
+#include "G4UnitsTable.hh"
 #include "G4VSolid.hh"
 #include "G4LogicalVolume.hh"
 
@@ -148,7 +149,8 @@ void  G4PVParameterised::SetRegularStructureId( G4int Code )
 // ----------------------------------------------------------------------
 // CheckOverlaps
 //
-G4bool G4PVParameterised::CheckOverlaps(G4int res, G4bool verbose)
+G4bool
+G4PVParameterised::CheckOverlaps(G4int res, G4double tol, G4bool verbose)
 {
   if (res<=0) { return false; }
 
@@ -186,16 +188,22 @@ G4bool G4PVParameterised::CheckOverlaps(G4int res, G4bool verbose)
       //
       if (motherSolid->Inside(mp)==kOutside)
       {
-        G4cout << G4endl;
-        G4cout << "WARNING - G4PVParameterised::CheckOverlaps()" << G4endl
-               << "          Overlap is detected for volume "
-               << GetName() << ", parameterised instance: " << i << G4endl
-               << "          with its mother volume "
-               << motherLog->GetName() << G4endl
-               << "          at mother local point " << mp << G4endl;
-        G4Exception("G4PVParameterised::CheckOverlaps()", "InvalidSetup",
-                    JustWarning, "Overlap with mother volume !");
-        return true;
+        G4double distin = motherSolid->DistanceToIn(mp);
+        if (distin > tol)
+        {
+          G4cout << G4endl;
+          G4cout << "WARNING - G4PVParameterised::CheckOverlaps()" << G4endl
+                 << "          Overlap is detected for volume "
+                 << GetName() << ", parameterised instance: " << i << G4endl
+                 << "          with its mother volume "
+                 << motherLog->GetName() << G4endl
+                 << "          at mother local point " << mp << ", "
+                 << "overlapping by at least: " << G4BestUnit(distin, "Length")
+                 << G4endl;
+          G4Exception("G4PVParameterised::CheckOverlaps()", "InvalidSetup",
+                      JustWarning, "Overlap with mother volume !");
+          return true;
+        }
       }
       points.push_back(mp);
     }
@@ -221,17 +229,23 @@ G4bool G4PVParameterised::CheckOverlaps(G4int res, G4bool verbose)
 
         if (solidB->Inside(md)==kInside)
         {
-          G4cout << G4endl;
-          G4cout << "WARNING - G4PVParameterised::CheckOverlaps()" << G4endl
-                 << "          Overlap is detected for volume "
-                 << GetName() << ", parameterised instance: " << i << G4endl
-                 << "          with parameterised volume instance: " << j
-                 << G4endl
-                 << "          at local point " << md
-                 << ", related to volume instance: " << j << "." << G4endl;
-          G4Exception("G4PVParameterised::CheckOverlaps()", "InvalidSetup",
-                      JustWarning, "Overlap within parameterised volumes !");
-          return true;
+          G4double distout = solidB->DistanceToOut(md);
+          if (distout > tol)
+          {
+            G4cout << G4endl;
+            G4cout << "WARNING - G4PVParameterised::CheckOverlaps()" << G4endl
+                   << "          Overlap is detected for volume "
+                   << GetName() << ", parameterised instance: " << i << G4endl
+                   << "          with parameterised volume instance: " << j
+                   << G4endl
+                   << "          at local point " << md << ", "
+                   << "overlapping by at least: "
+                   << G4BestUnit(distout, "Length")
+                   << ", related to volume instance: " << j << "." << G4endl;
+            G4Exception("G4PVParameterised::CheckOverlaps()", "InvalidSetup",
+                        JustWarning, "Overlap within parameterised volumes !");
+            return true;
+          }
         }
       }
     }

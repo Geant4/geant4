@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVParameterised.hh,v 1.7 2007-01-31 14:58:27 gcosmo Exp $
+// $Id: G4PVParameterised.hh,v 1.8 2007-04-11 07:56:38 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -98,10 +98,12 @@ class G4PVParameterised : public G4PVReplica
     virtual void SetRegularStructureId( G4int Code ); 
       // Method sets code and can prepare for special type of regular volumes.
 
-    G4bool CheckOverlaps(G4int res=1000, G4bool verbose=true);
+    G4bool CheckOverlaps(G4int res=1000, G4double tol=0., G4bool verbose=true);
       // Verifies if each instance of the parameterised volume is overlapping
       // with other instances or with the mother volume. Provides default
       // resolution for the number of points to be generated and verified.
+      // A tolerance for the precision of the overlap check can be specified,
+      // by default it is set to maximum precision.
       // Returns true if an overlap occurs.
 
   private:
