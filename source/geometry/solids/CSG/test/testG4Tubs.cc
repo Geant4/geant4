@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4Tubs.cc,v 1.18 2006-06-29 18:46:31 gunter Exp $
+// $Id: testG4Tubs.cc,v 1.19 2007-04-12 14:12:33 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -95,6 +95,8 @@ G4bool testG4Tubs()
     pgoodNorm=&goodNorm;
 
     G4Tubs t1("Solid Tube #1",0,50*mm,50*mm,0,2*pi);
+
+    G4Tubs t1a("Solid Tube #1",0,50*mm,50*mm,0,0.5*pi);
 
     G4Tubs t2("Hole Tube #2",45*mm,50*mm,50*mm,0,2*pi);
 
@@ -215,6 +217,14 @@ G4bool testG4Tubs()
     normal=t6.SurfaceNormal(G4ThreeVector(0.,0.,0.));
     assert(ApproxEqual(normal,G4ThreeVector(p2,p2,0.)));
 
+
+  G4ThreeVector pSN1 = G4ThreeVector( 33.315052227388207, 37.284142675357259, 33.366096020078537);
+  G4Tubs t4SN("Hole Sector #4",45*mm,50*mm,50*mm,pi/4.,pi/8.);
+
+    in = t4SN.Inside(pSN1);
+    assert(in == kSurface);
+    normal = t4SN.SurfaceNormal(pSN1);
+
 // DistanceToOut(P)
     Dist=t1.DistanceToOut(pzero);
     assert(ApproxEqual(Dist,50));
@@ -317,6 +327,9 @@ G4bool testG4Tubs()
     // G4cout<<"Dist=tube9.DistanceToOut(p,v) = "<<Dist<<G4endl;
     // assert(ApproxEqual(Dist,4950.348576972614));
 
+    Dist=t1a.DistanceToOut(G4ThreeVector(0.,0.,50.),vx,calcNorm,pgoodNorm,pNorm);
+    G4cout<<"Dist=t1a.DistanceToOut((0,0,50),vx) = "<<Dist<<G4endl;
+    // assert(ApproxEqual(Dist,48.489795));
 
     G4cout<<G4endl ;
 
