@@ -1,4 +1,4 @@
-$Id: History,v 1.76 2007-03-31 01:04:59 japost Exp $
+$Id: History,v 1.77 2007-04-12 11:51:47 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+April 12st, 2007 - V.Ivanchenko  (geomnav-V08-02-02-beta2)
+---> unofficial tag 
+- G4SafetyHelper become a unique class, which can be accessed via
+  G4TransporationManager. Depending on type of navigation (single
+  world or multiple navigation) it uses mass navigator or G4PathFinder.
+  All calls from EM processes to geometry are provided by G4SafetyHelper.
+- G4TransportationManager - G4SafetyHelper is added
+- G4PathFinder - initialisation of G4SafetyHelper is done
 
 March 31st, 2007 - J. Apostolakis  (geomnav-V08-02-02-beta1
 ---> unofficial tag to facilitate private testing with EM)

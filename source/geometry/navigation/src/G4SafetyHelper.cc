@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4SafetyHelper.cc,v 1.7 2006-11-14 10:22:12 japost Exp $
+// $Id: G4SafetyHelper.cc,v 1.8 2007-04-12 11:51:48 vnivanch Exp $
 // GEANT4 tag $ Name:  $
 
 
@@ -32,122 +32,114 @@
 #include "G4TransportationManager.hh"
 #include "G4Navigator.hh"
 
-// #include "G4Exception.hh"
 #include "globals.hh"
 
-G4bool G4SafetyHelper::fUseParallelGeometries= false;  
+//G4bool G4SafetyHelper::fUseParallelGeometries= false;  
                                             // By default, one geometry only
 
 G4SafetyHelper::G4SafetyHelper()
 {
-   fpPathFinder= G4PathFinder::GetInstance();
-   
-   InitialiseNavigator();    
+  first = true;
+  factor = 0.2;   
+  fUseParallelGeometries = false;
 }
 
 void G4SafetyHelper::InitialiseNavigator()
 {
-   // G4Navigator* 
-   static G4TransportationManager* pTransportMgr= 
-     G4TransportationManager::GetTransportationManager();
+  fpPathFinder= G4PathFinder::GetInstance();
+ 
+  G4TransportationManager* pTransportMgr= 
+    G4TransportationManager::GetTransportationManager();
 
-   fpMassNavigator = pTransportMgr->GetNavigatorForTracking(); 
+  fpMassNavigator = pTransportMgr->GetNavigatorForTracking(); 
 
-   fMassNavigatorId = pTransportMgr->ActivateNavigator( fpMassNavigator ); 
-} 
+  // Check
+  G4VPhysicalVolume* worldPV= fpMassNavigator->GetWorldVolume(); 
+  if( worldPV == 0 ) { 
+    G4Exception("G4SafetyHelper::ComputeMassStep",
+		"InvalidNavigatorWorld", 
+		FatalException, 
+		"Found that existing mass Navigator has null world"); 
+  }
+
+  fMassNavigatorId = pTransportMgr->ActivateNavigator( fpMassNavigator ); 
+}
+
+void G4SafetyHelper::InitialiseHelper()
+{
+  lastSafetyPosition = G4ThreeVector(0.0,0.0,0.0);
+  lastSafety         = 0.0;
+  if(first) InitialiseNavigator();    
+  first = false;
+}
 
 G4SafetyHelper::~G4SafetyHelper()
 {}
 
 G4double   
-G4SafetyHelper::ComputeMassStep( const G4ThreeVector &position, 
-				 const G4ThreeVector &direction,
-				 G4double  &newSafety )
+G4SafetyHelper::CheckNextStep(const G4ThreeVector &position, 
+			      const G4ThreeVector &direction,
+			      const G4double &currentMaxStep,
+			      G4double &newSafety )
 {
-   // Step for mass geometry
-    G4double linearStep;
-    const G4double proposedStep = DBL_MAX;
+  // G4cout << "pos= " << position << "  dir= " << direction 
+  //       << "  safety= " << newSafety<< " minStep= " << currentMaxStep << G4endl;
+  
+  // Distance in the Mass geometry
+  G4double linstep = fpMassNavigator->CheckNextStep( position,
+						     direction,
+						     currentMaxStep,
+						     newSafety);
+  lastSafetyPosition = position;
+  lastSafety         = newSafety;
+  //    G4cout << "linStep= " << linstep << "  safety= " 
+  //   << newSafety << " minStep= " << currentMaxStep << G4endl;
 
-    // Check
-    G4VPhysicalVolume* worldPV= fpMassNavigator->GetWorldVolume(); 
-    if( worldPV == 0 ) { 
-       G4Exception("G4SafetyHelper::ComputeMassStep",
-		   "InvalidNavigatorWorld", 
-		   FatalException, 
-		   "Found that existing mass Navigator has null world"); 
-    }
-
-    fpMassNavigator->LocateGlobalPointWithinVolume(position);
-        // Potentially dangerous to relocate the point.  
-        //   Safe in PostStepDoIt -- and possibly in AlongStepGPIL
-
-    G4cout << "G4SafetyHelper::ComputeMassStep " 
-	   << " trial step size = " << proposedStep << " ." << G4endl; 
-
-    // Distance in the Mass geometry
-    linearStep = fpMassNavigator->ComputeStep( position,
-					 direction,
-					 proposedStep,
-					 newSafety);
-
-    fpMassNavigator->LocateGlobalPointWithinVolume(position);
-    G4cout << "G4UrbanMscModel relocates mass Navigator back to " 
-	   << position  << G4endl;
-
-    // TO-DO: Can replace this with a call to PathFinder 
-    //        giving id of Mass Geometry --> this avoid doing the work twice
-
-    return linearStep; 
+  // TO-DO: Can replace this with a call to PathFinder 
+  //        giving id of Mass Geometry --> this avoid doing the work twice
+  return linstep;
 }
 
-G4double   G4SafetyHelper::ComputeSafety( const G4ThreeVector& position ) 
+G4double G4SafetyHelper::ComputeSafety( const G4ThreeVector& position ) 
 {
-   // Safety for all geometries
-   G4double newsafety= 0.0; 
+  G4double newSafety;
 
-   if( !fUseParallelGeometries) {
-      // Old code: safety for mass geometry
-      fpMassNavigator->LocateGlobalPointWithinVolume(position);
-      newsafety = fpMassNavigator->ComputeSafety(position); 
-   }else{
-
-      // fpPathFinder->ReLocate( position );   // Safe in PostStepDoIt only ??
-      newsafety= fpPathFinder->ComputeSafety( position ); 
-
-#ifdef CHECK_WITH_ONE_GEOM 
-      // Check against mass safety
-      fpMassNavigator->LocateGlobalPointWithinVolume(position);
-      G4double mass_safety = fpMassNavigator->ComputeSafety(position); 
-
-      // For initial tests check assume that mass is only geometry
-      if( (mass_safety - newsafety) > 1e-4 * newsafety ){
-         G4cerr << " ERROR in G4SafetyHelper " << G4endl
-	     << "   Safety from PathFinder is " << newsafety << " "
-	     << "    not equal to " <<  mass_safety << "  " << G4endl;
-	 G4Exception("G4SafetyHelper::ComputeSafety", "SafetyError",
-                   FatalException, 
-		  "Incompatible safeties between navigator and pathfinder" );
-	 exit(1); 
-      }
-#endif
-   }
-   return newsafety;
+  // return last value if position is not significantly changed 
+  G4double moveLen=(position-lastSafetyPosition).mag();
+  if(moveLen >= factor*lastSafety) {
+    
+    lastSafetyPosition = position;
+ 
+    if( !fUseParallelGeometries) {
+      // Safety for mass geometry
+      lastSafety = fpMassNavigator->ComputeSafety(position); 
+    } else {
+      // Safety for all geometries
+      lastSafety= fpPathFinder->ComputeSafety( position ); 
+    } 
+    newSafety= lastSafety;
+  }else{
+    newSafety= lastSafety-moveLen;
+  } 
+  // G4cout << "G4SafetyHelper::ComputeSafety: newSafety= " << newSafety << G4endl; 
+  return newSafety;
 }
-
 
 void  G4SafetyHelper::ReLocateWithinVolume( const G4ThreeVector &newPosition )
 {
+  if( !fUseParallelGeometries) {
+    fpMassNavigator->LocateGlobalPointWithinVolume( newPosition ); 
+  }else{
+    fpPathFinder->ReLocate( newPosition ); 
+  }
+}
 
-#ifdef G4VERBOSE_HELPER
-   G4int oldPrec= G4cout.precision( 10 ); 
-   G4cout << "  G4SafetyHelper::ReLocateWithinVolume " 
-	  << " calling PathFinder->ReLocating at position " << newPosition << G4endl;
-   G4cout.precision( oldPrec ); 
-#endif
-
-   if( !fUseParallelGeometries) {
-      fpMassNavigator->LocateGlobalPointWithinVolume( newPosition ); 
-   }else{
-      fpPathFinder->ReLocate( newPosition ); 
-   }
+void  G4SafetyHelper::Locate( const G4ThreeVector& newPosition, 
+                              const G4ThreeVector& newDirection)
+{
+  if( !fUseParallelGeometries) {
+    fpMassNavigator->LocateGlobalPointAndSetup( newPosition, &newDirection, true, false); 
+  }else{
+    fpPathFinder->Locate( newPosition, newDirection ); 
+  }
 }

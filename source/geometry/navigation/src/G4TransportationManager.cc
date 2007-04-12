@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TransportationManager.cc,v 1.14 2006-06-29 18:37:11 gunter Exp $
+// $Id: G4TransportationManager.cc,v 1.15 2007-04-12 11:51:48 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -32,6 +32,7 @@
 //
 // Created : J.Apostolakis, 1997
 // Reviewed: G.Cosmo, 2006
+//  10.04.07 V.Ivanchenko  Use unique G4SafetyHelper
 //
 // --------------------------------------------------------------------
 
@@ -68,6 +69,7 @@ G4TransportationManager::G4TransportationManager()
     fFieldManager      = new G4FieldManager();
     fPropagatorInField = new G4PropagatorInField(trackingNavigator,
                                                  fFieldManager);
+    fSafetyHelper      = new G4SafetyHelper();
   }
   else
   {
@@ -88,6 +90,7 @@ G4TransportationManager::~G4TransportationManager()
   delete fPropagatorInField;
   ClearNavigators(); 
   delete fGeomMessenger;
+  delete fSafetyHelper;
 }
 
 // ----------------------------------------------------------------------------

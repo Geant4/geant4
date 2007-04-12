@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SafetyHelper.hh,v 1.3 2006-10-31 16:53:06 japost Exp $
+// $Id: G4SafetyHelper.hh,v 1.4 2007-04-12 11:51:47 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -36,6 +36,8 @@
 // knowledge of the safety, and the step size for the 'mass' geometry
 
 // First version:  J. Apostolakis,  July 5th, 2006
+// Modified:
+//  10.04.07 V.Ivanchenko  Use unique G4SafetyHelper
 // --------------------------------------------------------------------
 
 #ifndef G4SAFETYHELPER_HH
@@ -44,53 +46,72 @@
 #include <vector>
 #include "G4Types.hh"
 #include "G4ThreeVector.hh"
+#include "G4Navigator.hh"
 
-class G4Navigator;
 class G4PathFinder;
 
 class G4SafetyHelper
 {
-  public: // with description
+public: // with description
 
-   G4SafetyHelper(); 
-   ~G4SafetyHelper();
+  G4SafetyHelper(); 
+  ~G4SafetyHelper();
      //
      // Constructor and destructor
 
-   G4double ComputeMassStep( const G4ThreeVector &position, 
-                             const G4ThreeVector &direction,
-                                   G4double  &newSafety );
+  G4double CheckNextStep( const G4ThreeVector &position, 
+			  const G4ThreeVector &direction,
+			  const G4double &currentMaxStep,
+			  G4double &newSafety );
      //
-     // Return step for mass geometry
+     // Return linear step for mass geometry
 
-   G4double ComputeSafety( const G4ThreeVector& pGlobalPoint ); 
+  G4double ComputeSafety( const G4ThreeVector& pGlobalPoint ); 
      //
      // Return safety for all geometries
 
-   void ReLocateWithinVolume(const G4ThreeVector& pGlobalPoint );
+  void Locate(const G4ThreeVector& pGlobalPoint, const G4ThreeVector& direction);
+     //
+     // Locate the point for all geometries
+
+  void ReLocateWithinVolume(const G4ThreeVector& pGlobalPoint );
      //
      // Relocate the point in the volume of interest
 
-public: // with description
-   static void EnableParallelNavigation(G4bool parallel) 
+  void EnableParallelNavigation(G4bool parallel) 
      { fUseParallelGeometries= parallel; } 
      // 
      //  To have parallel worlds considered, must be true.
      //  Alternative is to use single (mass) Navigator directly
 
-   void InitialiseNavigator();
+  void InitialiseNavigator();
      //
      // Check for new navigator for tracking, and reinitialise pointer
 
+  G4VPhysicalVolume* GetWorldVolume()
+      { return fpMassNavigator->GetWorldVolume(); }
+
+  void SetCurrentSafety(G4double val, const G4ThreeVector& pos)
+      { lastSafety = val; lastSafetyPosition = pos;}
+
+  void InitialiseHelper();
+
 private:
 
-   G4PathFinder* fpPathFinder;
-   G4Navigator*  fpMassNavigator;
-   G4int         fMassNavigatorId;
+  G4PathFinder* fpPathFinder;
+  G4Navigator*  fpMassNavigator;
+  G4int         fMassNavigatorId;
 
-   static G4bool        fUseParallelGeometries; 
-   // Flag whether to use PathFinder or single (mass) Navigator directly
+  G4bool        fUseParallelGeometries; 
+  // Flag whether to use PathFinder or single (mass) Navigator directly
+ 
+  G4bool first;
+  // Flag of first call
 
+  // cash
+  G4ThreeVector lastSafetyPosition;
+  G4double      lastSafety;
+  G4double      factor;
 };
 
 #endif

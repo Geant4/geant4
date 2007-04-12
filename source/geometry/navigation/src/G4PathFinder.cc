@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PathFinder.cc,v 1.25 2006-12-13 15:43:32 gunter Exp $
+// $Id: G4PathFinder.cc,v 1.26 2007-04-12 11:51:48 vnivanch Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4PathFinder Implementation
@@ -36,6 +36,7 @@
 //  31.05.06 J.Apostolakis New Relocate method, to relocate within volume
 //  25.10.06 G.Cosmo       pTransportManager ptr a data member - singleton issue
 //  31.10.06 J.Apostolakis Revised Relocate, to check proposed position vs safety
+//  10.04.07 V.Ivanchenko  Use unique G4SafetyHelper
 // --------------------------------------------------------------------
 
 #include "G4PathFinder.hh"
@@ -124,11 +125,13 @@ G4PathFinder::EnableParallelNavigation(G4bool enableChoice)
    if( enableChoice ){
       // 
       navigatorForPropagation= fpMultiNavigator; 
-      G4SafetyHelper::EnableParallelNavigation(true);  // Enable Msc to use PF
+      // Enable SafetyHelper to use PF
+      fpTransportManager->GetSafetyHelper()->EnableParallelNavigation(true);
    }else{
       // fpNavigator[0]; // must be mass Navigator
       navigatorForPropagation= massNavigator;       
-      G4SafetyHelper::EnableParallelNavigation(false); // Disable Msc from using PF
+      // Disable SafetyHelper to use PF
+      fpTransportManager->GetSafetyHelper()->EnableParallelNavigation(false);
    }
    fpFieldPropagator->SetNavigatorForPropagating(navigatorForPropagation);
 }
