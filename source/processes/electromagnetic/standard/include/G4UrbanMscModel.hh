@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel.hh,v 1.24 2007-03-24 17:11:24 vnivanch Exp $
+// $Id: G4UrbanMscModel.hh,v 1.25 2007-04-12 11:57:50 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -74,6 +74,7 @@
 // 31-01-07 code cleaning (L.Urban)
 // 06-02-07 Move SetMscStepLimitation method into the source (VI)
 // 15-02-07 new data member : smallstep (L.Urban)
+// 10-04-07 remove navigator, smallstep, tnow (V.Ivanchenko)
 //
 //
 // Class Description:
@@ -94,7 +95,6 @@
 
 class G4ParticleChangeForMSC;
 class G4SafetyHelper;
-class G4Navigator;
 class G4LossTableManager;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -165,7 +165,7 @@ private:
 
   const G4ParticleDefinition* particle;
   G4ParticleChangeForMSC*     fParticleChange;
-  G4Navigator*                navigator;
+
   G4SafetyHelper*             safetyHelper;
   G4PhysicsTable*             theLambdaTable;
   const G4MaterialCutsCouple* couple;
@@ -186,13 +186,15 @@ private:
   G4double tlimit;
   G4double tlimitmin;
   G4double tlimitminfix;
-  G4double tnow;
+
   G4double nstepmax;
   G4double geombig;
   G4double geommin;
   G4double geomlimit;
   G4double facgeom;
-  G4double skin,skindepth,smallstep; 
+  G4double skin;
+  G4double skindepth;
+
   G4double presafety;
   G4double facsafety;
 

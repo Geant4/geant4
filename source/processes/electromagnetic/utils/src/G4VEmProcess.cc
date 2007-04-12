@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.cc,v 1.36 2006-09-13 10:34:32 maire Exp $
+// $Id: G4VEmProcess.cc,v 1.37 2007-04-12 11:55:07 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -49,6 +49,7 @@
 // 04-09-05 default lambdaFactor 0.8 (V.Ivanchenko)
 // 11-01-06 add A to parameters of ComputeCrossSectionPerAtom (VI)
 // 12-09-06 add SetModel() (mma)
+// 12-04-07 remove double call to Clear model manager (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -114,6 +115,9 @@ G4VEmProcess::G4VEmProcess(const G4String& name, G4ProcessType type):
 
 G4VEmProcess::~G4VEmProcess()
 {
+  if(1 < verboseLevel) 
+    G4cout << "G4VEmProcess destruct " << GetProcessName() 
+	   << G4endl;
   Clear();
   if(theLambdaTable) theLambdaTable->clearAndDestroy();
   delete modelManager;
@@ -156,7 +160,6 @@ void G4VEmProcess::Clear()
   if(theCrossSectionMax) delete [] theCrossSectionMax;
   theEnergyOfCrossSectionMax = 0;
   theCrossSectionMax = 0;
-  modelManager->Clear();
   currentCouple = 0;
   preStepLambda = 0.0;
   mfpKinEnergy  = DBL_MAX;

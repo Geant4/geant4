@@ -1,4 +1,4 @@
-$Id: History,v 1.295 2007-04-04 16:10:16 urban Exp $
+$Id: History,v 1.296 2007-04-12 11:57:50 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+12 April 07: V.Ivanchenko (emstand-V08-02-13)
+- G4UrbanMscModel - use unique G4safetyHelper; clean up logic in
+                    ComputeTruePathLengthLimit.
 
 04 April 07: V.Ivanchenko (emstand-V08-02-12)
 - G4UniversalFluctuation - L.Urban:correction of the algorithm

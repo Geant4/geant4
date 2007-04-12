@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.99 2007-03-17 19:24:39 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.100 2007-04-12 11:55:07 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -102,6 +102,8 @@
 // 16-01-07 add IonisationTable and IonisationSubTable (V.Ivanchenko)
 // 16-02-07 set linLossLimit=1.e-6 (V.Ivanchenko)
 // 13-03-07 use SafetyHelper instead of navigator (V.Ivanchenko)
+// 10-04-07 use unique SafetyHelper (V.Ivanchenko)
+// 12-04-07 Add verbosity at destruction (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -201,7 +203,9 @@ G4VEnergyLossProcess::G4VEnergyLossProcess(const G4String& name,
   scoffRegions.clear();
   scProcesses.clear();
 
-  safetyHelper = new G4SafetyHelper();
+  safetyHelper = G4TransportationManager::GetTransportationManager()
+    ->GetSafetyHelper();
+  safetyHelper->InitialiseHelper();
 
   const G4int n = 7;
   vstrag = new G4PhysicsLogVector(keV, GeV, n);
@@ -213,8 +217,10 @@ G4VEnergyLossProcess::G4VEnergyLossProcess(const G4String& name,
 
 G4VEnergyLossProcess::~G4VEnergyLossProcess()
 {
+  if(1 < verboseLevel) 
+    G4cout << "G4VEnergyLossProcess destruct " << GetProcessName() 
+	   << G4endl;
   delete vstrag;
-  delete safetyHelper;
   Clear();
 
   if ( !baseParticle ) {

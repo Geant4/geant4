@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.cc,v 1.41 2007-02-12 17:04:51 vnivanch Exp $
+// $Id: G4VMultipleScattering.cc,v 1.42 2007-04-12 11:55:08 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -52,6 +52,7 @@
 // 15-04-05 optimize internal interface (V.Ivanchenko)
 // 15-04-05 remove boundary flag (V.Ivanchenko)
 // 27-10-05 introduce virtual function MscStepLimitation() (V.Ivanchenko)
+// 12-04-07 Add verbosity at destruction (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -107,6 +108,9 @@ G4VMultipleScattering::G4VMultipleScattering(const G4String& name, G4ProcessType
 
 G4VMultipleScattering::~G4VMultipleScattering()
 {
+  if(1 < verboseLevel) 
+    G4cout << "G4VMultipleScattering destruct " << GetProcessName() 
+	   << G4endl;
   delete modelManager;
   if (theLambdaTable) theLambdaTable->clearAndDestroy();
   (G4LossTableManager::Instance())->DeRegister(this);
