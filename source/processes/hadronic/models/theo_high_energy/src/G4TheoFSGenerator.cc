@@ -24,23 +24,26 @@
 // ********************************************************************
 //
 //
-// $Id: G4TheoFSGenerator.cc,v 1.6 2007-03-30 15:25:54 gunter Exp $
+// $Id: G4TheoFSGenerator.cc,v 1.7 2007-04-12 07:53:38 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4TheoFSGenerator
+
 #include "G4DynamicParticle.hh"
 #include "G4TheoFSGenerator.hh"
 #include "G4ReactionProductVector.hh"
 #include "G4ReactionProduct.hh"
 
-G4TheoFSGenerator::G4TheoFSGenerator()
-   : theParallelFSGenerator(0)
+G4TheoFSGenerator::G4TheoFSGenerator(const G4String& name)
+    : G4HadronicInteraction(name)
+    , theParallelFSGenerator(0)
 {
  theParticleChange = new G4HadFinalState;
 }
 
-G4TheoFSGenerator::G4TheoFSGenerator(const G4TheoFSGenerator &) : G4HadronicInteraction()
-			, theParallelFSGenerator(0)
+G4TheoFSGenerator::G4TheoFSGenerator(const G4TheoFSGenerator &) 
+    : G4HadronicInteraction("TheoFSGenerator")
+    , theParallelFSGenerator(0)
 {
 }
 

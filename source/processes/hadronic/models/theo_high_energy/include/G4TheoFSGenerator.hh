@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TheoFSGenerator.hh,v 1.4 2007-03-30 15:25:54 gunter Exp $
+// $Id: G4TheoFSGenerator.hh,v 1.5 2007-04-12 07:53:38 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -54,7 +54,7 @@ class G4TheoFSGenerator : public G4HadronicInteraction
 
 {
   public:
-      G4TheoFSGenerator();
+      G4TheoFSGenerator(const G4String& name = "TheoFSGenerator");
       ~G4TheoFSGenerator();
 
   private:
