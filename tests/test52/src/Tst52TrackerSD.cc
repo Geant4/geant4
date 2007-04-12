@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst52TrackerSD.cc,v 1.1 2007-04-12 12:00:17 guatelli Exp $
+// $Id: Tst52TrackerSD.cc,v 1.2 2007-04-12 14:51:52 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -93,13 +93,13 @@ if(aStep->GetPreStepPoint()->GetPhysicalVolume()->GetName() != "Target")
 
   //G4double xx = aStep -> GetPreStepPoint() -> GetPosition().x();
   //G4double yy = aStep -> GetPreStepPoint() -> GetPosition().y();
-    G4double zz = aStep -> GetPreStepPoint() -> GetPosition().z();
+  //    G4double zz = aStep -> GetPreStepPoint() -> GetPosition().z();
  
   G4double voxelWidthZ = targetZ/numberOfVoxelZ;
   G4double z = (- numberOfVoxelZ+1+2*i)* voxelWidthZ/2;
 
-      G4cout << "Energy deposit (MeV): "<< edep/MeV
-  << " in (" << zz/mm << ")" << " mm"<<G4endl;
+  //     G4cout << "Energy deposit (MeV): "<< edep/MeV
+  //<< " in (" << zz/mm << ")" << " mm"<<G4endl;
    
   //    G4cout<< "ReadOut:" << edep/MeV <<" in ( " << z/mm << " )"
   //  << " mm"<<" i: "<< i <<G4endl;          

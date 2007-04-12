@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: Tst52PhotonEPDL.cc,v 1.1 2007-04-12 12:00:17 guatelli Exp $
+// $Id: Tst52PhotonEPDL.cc,v 1.2 2007-04-12 14:51:52 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: guatelli@ge.infn.it, Maria.Grazia.Pia@cern.ch
@@ -74,15 +74,6 @@ void Tst52PhotonEPDL::ConstructProcess()
 	  manager->AddDiscreteProcess(new G4LowEnergyGammaConversion);
 	  manager->AddDiscreteProcess(new G4LowEnergyRayleigh);
 	  manager -> AddProcess(new G4StepLimiter(),-1,-1,3);
-	  // photo -> SetCutForLowEnSecElectrons(cut);
 	}   
     }
-}
-void Tst52PhotonEPDL::SetLowECut(G4double value)
-{
-  cut = value;
-  G4cout << "Low energy secondary electrons cut is now set to: "
-		     << cut * MeV
-		     << " (MeV) for LowEnergyPhotoElectric"
-		     << G4endl;
 }

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst52ElectronEEDL.hh,v 1.1 2007-04-12 12:00:17 guatelli Exp $
+// $Id: Tst52ElectronEEDL.hh,v 1.2 2007-04-12 14:51:52 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Authors: Susanna Guatelli (guatelli@ge.infn.it)
@@ -68,14 +68,11 @@ public:
   void SetFacRange(G4double value);
   // Change the value of the FacRange
 
-  void SetLowECut(G4double value);
-
 private:
   G4MultipleScattering* scattering; 
   G4LowEnergyIonisation* ionization;
   G4LowEnergyBremsstrahlung* brem;
   G4double facValue;
-  G4double cut;
 };
 
 #endif

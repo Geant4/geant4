@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst52SteppingAction.cc,v 1.1 2007-04-12 12:00:17 guatelli Exp $
+// $Id: Tst52SteppingAction.cc,v 1.2 2007-04-12 14:51:52 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -87,7 +87,7 @@ void Tst52SteppingAction::UserSteppingAction(const G4Step* aStep )
 
        if (volumeName == "Target")
 	 {
-	   G4cout <<"process: " << process <<" to generate particle: " << secondaryParticleName << "with energy: " <<secondaryParticleKineticEnergy/MeV<< G4endl;
+	   //   G4cout <<"process: " << process <<" to generate particle: " << secondaryParticleName << "with energy: " <<secondaryParticleKineticEnergy/MeV<< G4endl;
             
 	   if (secondaryParticleName == "e-") 
 	     {
@@ -99,9 +99,9 @@ void Tst52SteppingAction::UserSteppingAction(const G4Step* aStep )
 		     analysis -> secondaryElectronPhoto(secondaryParticleKineticEnergy/MeV);
 		   else
 		     {
-		       if ((process != "eIoni") && (process != "LowEnergyIoni")  && (process != "PenelopeIoni")
-			   && (process != "LowEnPhotoElec") && (process != "phot") && (process != "PenPhotoElec"))
-			 G4cout<< secondaryParticleName << "is generated with "<< process <<"!!!!!" << G4endl;
+		       //if ((process != "eIoni") && (process != "LowEnergyIoni")  && (process != "PenelopeIoni")
+		       //   && (process != "LowEnPhotoElec") && (process != "phot") && (process != "PenPhotoElec"))
+			 //G4cout<< secondaryParticleName << "is generated with "<< process <<"!!!!!" << G4endl;
 		     }
 		 }
 	       //   G4cout<<secondaryParticleName<< " " << secondaryParticleKineticEnergy/MeV << G4endl; 

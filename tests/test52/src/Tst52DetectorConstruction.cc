@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst52DetectorConstruction.cc,v 1.1 2007-04-12 12:00:17 guatelli Exp $
+// $Id: Tst52DetectorConstruction.cc,v 1.2 2007-04-12 14:51:52 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // author: Susanna Guatelli (guatelli@ge.infn.it)
@@ -52,7 +52,6 @@
 #include "G4ios.hh"
 
 #include "G4Material.hh"
-//#include "G4NistManager.hh"
 
 #include "Tst52PhantomROGeometry.hh"
 

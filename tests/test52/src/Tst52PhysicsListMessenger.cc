@@ -87,11 +87,6 @@ void Tst52PhysicsListMessenger::SetNewValue(G4UIcommand* command,G4String newVal
    {
      Tst52List->SetParticleCut(cutECmd->GetNewDoubleValue(newValue)); }
   
- if (command == cutELowECmd)
-   {
-     Tst52List->SetLowEnSecElecCut(cutECmd->GetNewDoubleValue(newValue)); 
-   }
-
  if (command == facRangeCmd)
    {
      G4double facRange = facRangeCmd->GetNewDoubleValue(newValue);

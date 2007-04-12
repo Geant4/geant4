@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: Tst52PhysicsList.hh,v 1.1 2007-04-12 12:00:17 guatelli Exp $
+// $Id: Tst52PhysicsList.hh,v 1.2 2007-04-12 14:51:52 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: guatelli@ge.infn.it
@@ -62,16 +62,14 @@ public:
   // Production thresholds, expressed in range
   void SetParticleCut(G4double value);
 
+  // Change the value of facrange
   void SetFacRange(G4double value);
 
-  void SetLowEnSecElecCut(G4double cut);
 
 private:
-
   G4bool electronIsRegistered;
   G4bool positronIsRegistered;
   G4bool photonIsRegistered;
-  G4bool protonIsRegistered;
   G4double cutForGamma;
   G4double cutForElectron;
 

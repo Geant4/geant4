@@ -6,7 +6,7 @@
 /physics/addPhysics electron-eedl
 /physics/addPhysics positron-standard
 /physics/cutE 0.00118 mm
-#/physics/facRange 0.005
+/physics/facRange 0.005
 ########
 /run/initialize
 /target/setTargetMat Beryllium
@@ -14,7 +14,8 @@
 /target/voxelNumber 50
 /target/setMaxStep  0.00118 mm
 /gun/energy 0.521 MeV
-/run/beamOn 50000
+/run/beamOn 50
+
 
 
 

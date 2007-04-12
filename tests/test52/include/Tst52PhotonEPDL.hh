@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst52PhotonEPDL.hh,v 1.1 2007-04-12 12:00:17 guatelli Exp $
+// $Id: Tst52PhotonEPDL.hh,v 1.2 2007-04-12 14:51:52 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Susanna Guatelli(guatelli@ge.infn.it)
@@ -61,8 +61,6 @@ public:
   virtual void ConstructParticle() {};
   
   virtual void ConstructProcess();
-
-  void SetLowECut(G4double value);
 
 private:
   G4LowEnergyPhotoElectric* photo;

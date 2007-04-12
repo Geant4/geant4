@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: Tst52ElectronEEDL.cc,v 1.1 2007-04-12 12:00:17 guatelli Exp $
+// $Id: Tst52ElectronEEDL.cc,v 1.2 2007-04-12 14:51:52 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Susanna Guatelli (guatelli@ge.infn.it), Maria.Grazia.Pia@cern.ch
@@ -48,7 +48,6 @@ Tst52ElectronEEDL::Tst52ElectronEEDL(const G4String& name): G4VPhysicsConstructo
 { 
   G4cout<< "Electron EEDL Processes initialized !!!!" << G4endl;
   facValue = 0.02;//default value
-  cut = 250. *eV;
 }
 
 Tst52ElectronEEDL::~Tst52ElectronEEDL()
@@ -83,17 +82,4 @@ void Tst52ElectronEEDL::SetFacRange(G4double value)
 {
  facValue = value;
  G4cout << "The value of the facRange is:" << value << " for electrons"<< G4endl;
-}
-void Tst52ElectronEEDL:: SetLowECut(G4double value)
-{
-  cut = value;
-  G4cout << "Low energy secondary electrons cut is now set to: "
-		     << cut * MeV
-		     << " (MeV) for LowEnergyIonisation"
-		     << G4endl;
-
-G4cout << "Low energy secondary photons cut is now set to: "
-		     << cut * MeV
-		     << " (MeV) for LowEnergyBremsstrahlung"
-		     << G4endl;
 }

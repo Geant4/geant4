@@ -29,7 +29,7 @@
 //    *                             *
 //    *******************************
 //
-// $Id: Tst52AnalysisManager.cc,v 1.1 2007-04-12 12:00:17 guatelli Exp $
+// $Id: Tst52AnalysisManager.cc,v 1.2 2007-04-12 14:51:52 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // Author: Susanna Guatelli (guatelli@ge.infn.it)
 //
@@ -97,7 +97,7 @@ Tst52AnalysisManager* Tst52AnalysisManager::getInstance()
 
 void Tst52AnalysisManager::book() 
 {
- std::string fileName = "test50.hbk";
+ std::string fileName = "test52.hbk";
  theTree = treeFact->create(fileName,"hbook",false, true);
  histogramFactory = aFact -> createHistogramFactory( *theTree );
  

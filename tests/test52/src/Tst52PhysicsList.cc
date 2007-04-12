@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: Tst52PhysicsList.cc,v 1.1 2007-04-12 12:00:17 guatelli Exp $
+// $Id: Tst52PhysicsList.cc,v 1.2 2007-04-12 14:51:52 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: guatelli@ge.infn.it
@@ -113,11 +113,11 @@ void Tst52PhysicsList::AddPhysicsList(const G4String& name)
 	  photonIsRegistered = true;
        
 	}
-   } 
+    } 
   // Register processes a' la Penelope for photons
   if (name == "photon-penelope")
     {
-     if (photonIsRegistered) 
+      if (photonIsRegistered) 
 	{
 	  G4cout << "Tst52PhysicsList::AddPhysicsList: " << name  
 		 << " cannot be registered ---- photon List already existing" << G4endl;
@@ -126,7 +126,7 @@ void Tst52PhysicsList::AddPhysicsList(const G4String& name)
 	{
 	  G4cout << "Tst52PhysicsList::AddPhysicsList: " << name << " is registered" << G4endl;
 	  RegisterPhysics( new Tst52PhotonPenelope(name) );
-	   photonIsRegistered = true; 
+	  photonIsRegistered = true; 
 	}
     }
 
@@ -167,12 +167,12 @@ void Tst52PhysicsList::AddPhysicsList(const G4String& name)
 	  electron_value = name;
           
 	}
-   } 
+    } 
 
   // Register processes a' la Penelope for electrons
   if (name == "electron-penelope")
     {
-     if (electronIsRegistered) 
+      if (electronIsRegistered) 
 	{
 	  G4cout << "Tst52PhysicsList::AddPhysicsList: " << name 
 		 << " cannot be registered ---- electron List already existing" << G4endl;
@@ -206,9 +206,9 @@ void Tst52PhysicsList::AddPhysicsList(const G4String& name)
     }
 
 
- if (name == "positron-penelope")
+  if (name == "positron-penelope")
     {
-     if (positronIsRegistered) 
+      if (positronIsRegistered) 
 	{
 	  G4cout << "Tst52PhysicsList::AddPhysicsList: " << name 
 		 << " cannot be registered ---- positron List already existing" << G4endl;
@@ -241,7 +241,7 @@ void Tst52PhysicsList::SetParticleCut(G4double value)
 
 void Tst52PhysicsList::SetCuts()
 { 
- G4double lowlimit = 250.*eV;
+  G4double lowlimit = 250.*eV;
   G4ProductionCutsTable::GetProductionCutsTable()
     ->SetEnergyRange(lowlimit, 100.*GeV);
 
@@ -256,38 +256,27 @@ void Tst52PhysicsList::SetFacRange(G4double value)
 { 
   if (electronIsRegistered == true)
     {
-      if (electron_value == "electron-standard")  electron_physics_standard ->SetFacRange(value);
+      if (electron_value == "electron-standard")  
+	electron_physics_standard ->SetFacRange(value);
      
-      if (electron_value == "electron-eedl")  electron_physics_eedl -> SetFacRange(value);
+      if (electron_value == "electron-eedl") 
+	electron_physics_eedl -> SetFacRange(value);
 
-      if (electron_value == "electron-penelope")  electron_physics_penelope -> SetFacRange(value);
+      if (electron_value == "electron-penelope") 
+	electron_physics_penelope -> SetFacRange(value);
     }
   else G4cout <<"Activate the electron physics processes before!!!" << G4cout;
 
   if (positronIsRegistered == true)
     {
-      if (positron_value == "positron-standard")  positron_physics_standard -> SetFacRange(value);
-      if (positron_value == "positron-penelope")  positron_physics_penelope -> SetFacRange(value);  
+      if (positron_value == "positron-standard")  
+	positron_physics_standard -> SetFacRange(value);
+     
+      if (positron_value == "positron-penelope")  
+	positron_physics_penelope -> SetFacRange(value);  
     } else G4cout <<"Activate positron physics processes before!!!" << G4cout;
-
 }
 
 
-void Tst52PhysicsList::SetLowEnSecElecCut(G4double value)
-{   
-
-if (electronIsRegistered == true)
-    {
-      if (electron_value == "electron-eedl") 
-	{
-	electron_physics_eedl -> SetLowECut(value);
-      photon_physics_epdl -> SetLowECut(value);
-        }
-    }
-  else G4cout <<"Activate the electron physics processes before!!!" << G4cout;
-
- DumpCutValuesTable();
-
-}
 
 
