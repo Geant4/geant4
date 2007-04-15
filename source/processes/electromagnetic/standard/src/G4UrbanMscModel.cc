@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel.cc,v 1.51 2007-04-12 11:57:50 vnivanch Exp $
+// $Id: G4UrbanMscModel.cc,v 1.52 2007-04-15 17:05:25 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -524,7 +524,8 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
   presafety = sp->GetSafety();
 
   //  G4cout << "G4UrbanMscModel::ComputeTruePathLengthLimit tPathLength= " 
-  //	 <<tPathLength<<" safety= " << presafety<< " range= " <<currentRange<<G4endl;
+  //	 <<tPathLength<<" safety= " << presafety
+  //     << " range= " <<currentRange<<G4endl;
 
   // far from geometry boundary
   if(currentRange < presafety)
@@ -604,8 +605,8 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
       if(tlimit < facsafety*presafety)
 	tlimit = facsafety*presafety ;
 
-      //	G4cout << "tgeom= " << tgeom << " geomlimit= " << geomlimit  
-      //       << " tlimit= " << tlimit << " presafety= " << presafety << G4endl;
+      //  G4cout << "tgeom= " << tgeom << " geomlimit= " << geomlimit  
+      //     << " tlimit= " << tlimit << " presafety= " << presafety << G4endl;
 
       // shortcut
       if((tPathLength < tlimit) &&
@@ -633,7 +634,7 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
       if(tPathLength > tnow)
         tPathLength = tnow ; 
     }
-    // for 'normal' simulation with or without magnetic field                    
+    // for 'normal' simulation with or without magnetic field 
     //  there no small step/single scattering at boundaries
     else 
     {
@@ -879,7 +880,7 @@ std::vector<G4DynamicParticle*>* G4UrbanMscModel::SampleSecondaries(
   newDirection.rotateUz(oldDirection);
   fParticleChange->ProposeMomentumDirection(newDirection);
 
-  if (latDisplasment) {
+  if (latDisplasment && safety > 0.0) {
 
     G4double r = SampleDisplacement();
 /*
