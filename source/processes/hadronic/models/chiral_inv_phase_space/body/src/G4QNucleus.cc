@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNucleus.cc,v 1.69 2007-04-03 09:22:44 mkossov Exp $
+// $Id: G4QNucleus.cc,v 1.70 2007-04-16 07:54:58 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QNucleus ----------------
@@ -3084,11 +3084,17 @@ G4double G4QNucleus::CoulBarPenProb(const G4double& CB, const G4double& E,
   // @@ --- Temporary 1 ---> close the OverBarrierReflection for all
   //return 1.;
   // ^^^^^^^---> End of Themporary 1
-  if(C>B+1)G4cout<<"G4QN::CBPP:SubtractedCharge="<<C<<" >SubtractedBaryonNumber="<<B<<G4endl;
   // @@ --- Temporary 2 ---> close the OverBarrierReflection for fragments and mesons
-  if(E<CB) return 0.;
-  if(B!=1) return 1.;
+  //if(E<CB) return 0.;
+  //if(B!=1) return 1.;
   if(B<1 || B>2) return 1.;
+  if(C>B+1)
+  {
+#ifdef debug
+    G4cout<<"-Warning-G4QN::CBPP:SubtractedChrg="<<C<<" >SubtractedBaryonNmbr="<<B<<G4endl;
+#endif
+    return 1.;
+  }
   // ^^^^^^^---> End of Themporary 2
   //G4double nA=GetA();
   //G4double nA=GetA()-B;
