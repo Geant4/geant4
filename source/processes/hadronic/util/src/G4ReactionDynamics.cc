@@ -1369,6 +1369,7 @@
     
     G4ParticleDefinition *aPiMinus = G4PionMinus::PionMinus();
     G4ParticleDefinition *aPiPlus = G4PionPlus::PionPlus();
+    G4ParticleDefinition* aPiZero = G4PionZero::PionZero();
     G4ParticleDefinition *aProton = G4Proton::Proton();
     G4ParticleDefinition *aNeutron = G4Neutron::Neutron();
     G4double piMass = aPiPlus->GetPDGMass()/GeV;
@@ -1386,6 +1387,7 @@
 
     if( antiTest && (
           currentParticle.GetDefinition() == aPiPlus ||
+          currentParticle.GetDefinition() == aPiZero ||
           currentParticle.GetDefinition() == aPiMinus ) &&
         ( G4UniformRand() <= (10.0-pOriginal)/6.0 ) &&
         ( G4UniformRand() <= atomicWeight/300.0 ) )
@@ -1400,6 +1402,7 @@
     }
     if( antiTest && (
           targetParticle.GetDefinition() == aPiPlus ||
+          targetParticle.GetDefinition() == aPiZero ||
           targetParticle.GetDefinition() == aPiMinus ) &&
         ( G4UniformRand() <= (10.0-pOriginal)/6.0 ) &&
         ( G4UniformRand() <= atomicWeight/300.0 ) )
@@ -1417,6 +1420,7 @@
     {
       if( antiTest && (
             vec[i]->GetDefinition() == aPiPlus ||
+            vec[i]->GetDefinition() == aPiZero ||
             vec[i]->GetDefinition() == aPiMinus ) &&
           ( G4UniformRand() <= (10.0-pOriginal)/6.0 ) &&
           ( G4UniformRand() <= atomicWeight/300.0 ) )
