@@ -42,6 +42,9 @@ class G4HadronicWhiteBoard
     
   void SetTargetNucleus(const G4Nucleus & aTarget);
 
+  void SetProcessName(const G4String& aProcessName);
+
+  void SetModelName(const G4String& aModelName);
 
   const G4HadProjectile * GetProjectile();
   const G4Nucleus & GetTargetNucleus(); 
@@ -71,6 +74,8 @@ class G4HadronicWhiteBoard
   G4double theA;
   G4double theZ;
 
+  G4String theProcessName;
+  G4String theModelName;
 };
 
 #endif
