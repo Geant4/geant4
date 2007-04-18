@@ -112,19 +112,22 @@ void HadrontherapyProtonBertiniElastic::ConstructProcess()
   // BERTINI ELASTIC SCATTERING 
   // FOR PROTON, NEUTRON, PIONS
  
+  // eliminate "the"
   G4CascadeElasticInterface* theBertiniElasticModel = new G4CascadeElasticInterface;
+  // G4HadronElasticProcess* hadronElasticProcess = new G4HadronElasticProcess();
   G4HadronElasticProcess* bertiniElasticModel = new G4HadronElasticProcess();
   bertiniElasticModel -> RegisterMe(theBertiniElasticModel);
 
   // LOW ENERGY ELASTIC SCATTERING 
   // FOR  IONS
   G4LElastic* elasticLEmodel = new G4LElastic();
+  // G4HadronElasticProcess* ionElasticProcess = new G4HadronElasticProcess();
   G4HadronElasticProcess* elasticScattering = new G4HadronElasticProcess();
   elasticScattering -> RegisterMe(elasticLEmodel);
   
   // INELASTIC SCATTERING
   // Bertini Model for protons, pions and neutrons
-  G4CascadeInterface * theBertiniModel = new G4CascadeInterface;
+  G4CascadeInterface* theBertiniModel = new G4CascadeInterface;
   
   // Set the min and max energy for the Bertini Model
   theBertiniModel -> SetMinEnergy(bertiniLowEnergyLimit);
