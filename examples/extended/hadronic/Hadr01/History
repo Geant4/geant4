@@ -1,4 +1,4 @@
-$Id: History,v 1.13 2006-11-24 16:48:57 vnivanch Exp $
+$Id: History,v 1.14 2007-04-18 06:15:08 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+18-04-07 V.Ivant (exhadr01-V08-02-00)
+- PhysicsList update according to QBBC modification
+- Fix QGSP_BIC_HP PhysicsList (bug report #937)
 
 24-11-06 V.Ivant (exhadr01-V08-01-03)
 - Include tracking cut for neutrons

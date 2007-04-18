@@ -13,7 +13,7 @@
 /testhadr/PrintModulo      10
 #
 /testhadr/CutsAll          1 mm
-/testhadr/Physics          QGSP_BERT
+/testhadr/Physics          QBBC
 #
 /run/initialize
 #

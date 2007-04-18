@@ -1,4 +1,3 @@
-#/bin/csh
 #================================================
 #     Macro file for hadr01
 #     06.06.2006 V.Ivanchneko
@@ -22,5 +21,7 @@
 #
 /gun/particle proton
 /gun/energy 20. GeV
+#/gun/energy 8. GeV
+#/gun/energy 40. GeV
 /run/beamOn 1000
 #
