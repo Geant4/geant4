@@ -24,18 +24,15 @@
 // ********************************************************************
 //
 //
-// $Id: HadronNucleonXscTest.cc,v 1.1 2007-03-19 10:45:14 grichine Exp $
+// $Id: HadronNucleonXscTest.cc,v 1.2 2007-04-18 09:44:37 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
-// Test of G4CrossSectionDataStore and G4CrossSectionDataSet classes
+// Test of G4HadronNucleonxsc class
 //
 // History:
 //
-// 29.05.06 V.Grichine: NIST elements/materials, write in file
-// F.W. Jones, TRIUMF, 22-JAN-98
-//                     19-MAY-98
-//
+// 19.03.07 V.Grichine: 
 
 
 
@@ -79,8 +76,9 @@ int main()
   G4cout << " 4 kaon+" << G4endl;
   G4cout << " 5 kaon0short" << G4endl;
   G4cout << " 6 pion-" << G4endl;
+  G4cout << " 7 kaon-" << G4endl;
   //  G4cin >> choice;
-  choice = 3;
+  choice = 7;
 
   G4ParticleDefinition* theParticleDefinition;
 
@@ -115,12 +113,17 @@ int main()
 
       theParticleDefinition = G4PionMinus::PionMinusDefinition();
       break;
+
+    case 7:
+
+      theParticleDefinition = G4KaonMinus::KaonMinusDefinition();
+      break;
   }
   // Nucleon definition
 
   G4cout << " 1 proton" << G4endl;
   G4cout << " 2 neutron" << G4endl;
-  choice = 1;
+  choice = 2;
 
   G4ParticleDefinition* theNucleon;
 
@@ -131,7 +134,7 @@ int main()
       theNucleon = G4Proton::ProtonDefinition();
       break;
 
-    case 3:
+    case 2:
 
       theNucleon = G4Neutron::NeutronDefinition();
       break;
@@ -143,7 +146,8 @@ int main()
   G4cout << " 2 PDG" << G4endl;
   G4cout << " 3 NS" << G4endl;
   G4cout << " 4 VU" << G4endl;
-  choice = 1;
+  G4cout << " 5 MK" << G4endl;
+  choice = 5;
 
 
   G4int i, iMax;
@@ -187,10 +191,15 @@ int main()
     case 4:
       sig = hnXsc->GetHadronNucleonXscVU(theDynamicParticle,theNucleon);
     break;
-  }
-      
 
-  G4cout << kinEnergy/GeV << " GeV, \t"<< " UV xsc = " <<" \t"<< sig/millibarn << " mb" << G4endl;
+    case 5:
+      sig = hnXsc->GetHadronNucleonXscMK(theDynamicParticle,theNucleon);
+    break;
+  }
+  sig = hnXsc->GetInelasticHadronNucleonXsc();     
+  // sig = hnXsc->GetElasticHadronNucleonXsc();     
+
+  G4cout << kinEnergy/GeV << " GeV, \t"<<choice<< " xsc = " <<" \t"<< sig/millibarn << " mb" << G4endl;
 
 
     writef << kinEnergy/GeV <<"\t"<< sig/millibarn << G4endl;
