@@ -105,6 +105,7 @@ public:
   G4double GetElasticGlauberGribovXsc()  { return fElasticXsc;   }; 
   G4double GetInelasticGlauberGribovXsc(){ return fInelasticXsc; }; 
   G4double GetProductionGlauberGribovXsc(){ return fProductionXsc; }; 
+  G4double GetDiffractionGlauberGribovXsc(){ return fDiffractionXsc; }; 
   G4double GetRadiusConst()              { return fRadiusConst;  }; 
 
   G4double GetNucleusRadius(const G4DynamicParticle*, const G4Element*);
@@ -116,7 +117,7 @@ private:
   const G4double fLowerLimit; 
   const G4double fRadiusConst;
 
-  G4double fTotalXsc, fElasticXsc, fInelasticXsc, fProductionXsc;
+  G4double fTotalXsc, fElasticXsc, fInelasticXsc, fProductionXsc, fDiffractionXsc;
   G4double fHadronNucleonXsc;
  
   G4ParticleDefinition* theGamma;

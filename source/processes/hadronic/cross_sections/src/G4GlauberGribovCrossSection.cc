@@ -183,19 +183,17 @@ GetIsoZACrossSection(const G4DynamicParticle* aParticle, G4double Z, G4double A,
 
   fTotalXsc = xsection;
 
-  /*   
-  fElasticXsc = 0.5*( xsection - nucleusSquare*ratio/(1.+ratio) );
-
-  if (fElasticXsc < 0.) fElasticXsc = 0.;
-
-  fInelasticXsc = fTotalXsc - fElasticXsc;
-
-  if (fInelasticXsc < 0.) fInelasticXsc = 0.;
-  */
+  
 
   fInelasticXsc = nucleusSquare*std::log( 1. + cofInelastic*ratio )/cofInelastic;
 
   fElasticXsc   = fTotalXsc - fInelasticXsc;
+
+    
+  G4double difratio = ratio/(1.+ratio);
+
+  fDiffractionXsc = 0.5*nucleusSquare*( difratio - std::log( 1. + difratio ) );
+
 
   sigma = GetHNinelasticXsc(aParticle, A, Z);
   ratio = sigma/nucleusSquare;
