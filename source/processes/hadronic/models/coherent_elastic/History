@@ -16,8 +16,10 @@ code and to keep track of all tags.
 
 2 Apr 2007 - V.Ivanchenko (hadr-cohe-V08-02-03)
 -----------------------------------------------
-  G4ElasticHadrNucleusHE - cleanup  
-  G4HadronElastic - use the most probably isotope for call to HE model 
+  G4ElasticHadrNucleusHE - use iterator search on bin instead of 
+                           computing log
+  G4HadronElastic - use the most probable isotope for given Z to call 
+                    to HE model (CPU/memory more efficient) 
 
 30 Jan 2007 - V.Ivanchenko (hadr-cohe-V08-02-02)
 ------------------------------------------------
