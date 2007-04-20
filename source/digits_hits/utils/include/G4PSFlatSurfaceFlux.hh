@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSFlatSurfaceFlux.hh,v 1.3 2006-06-29 18:07:04 gunter Exp $
+// $Id: G4PSFlatSurfaceFlux.hh,v 1.4 2007-04-20 07:53:33 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -55,6 +55,7 @@
 // 
 // 18-Nov-2005  T.Aso,  To use always positive value for anglefactor.
 //                      Bug fix. Area definition.
+// 29-Mar-2007  T.Aso,  Bug fix for momentum direction at outgoing flux.
 ///////////////////////////////////////////////////////////////////////////////
 
 class G4PSFlatSurfaceFlux : public G4VPrimitiveScorer
