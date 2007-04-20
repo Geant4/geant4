@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.cc,v 1.28 2007-03-23 14:40:25 japost Exp $
+// $Id: G4Navigator.cc,v 1.29 2007-04-20 15:28:37 gcosmo Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4Navigator Implementation
@@ -155,7 +155,7 @@ G4Navigator::LocateGlobalPointAndSetup( const G4ThreeVector& globalPoint,
         else
         {
           fLastLocatedPointLocal = localPoint;
-	  fLocatedOutsideWorld= true;
+          fLocatedOutsideWorld = true;
           return 0;           // Have exited world volume
         }
         // A fix for the case where a volume is "entered" at an edge
@@ -277,7 +277,7 @@ G4Navigator::LocateGlobalPointAndSetup( const G4ThreeVector& globalPoint,
       else
       {
         fLastLocatedPointLocal = localPoint;
-	fLocatedOutsideWorld= true;
+        fLocatedOutsideWorld = true;
         return 0;         // Have exited world volume
       }
     }
@@ -315,7 +315,7 @@ G4Navigator::LocateGlobalPointAndSetup( const G4ThreeVector& globalPoint,
           else
           {
             fLastLocatedPointLocal = localPoint;
-	    fLocatedOutsideWorld= true;
+            fLocatedOutsideWorld = true;
             return 0;          // Have exited world volume
           }
         }
@@ -513,38 +513,46 @@ G4Navigator::LocateGlobalPointWithinVolume(const G4ThreeVector& pGlobalpoint)
    fExitedMother = false;     // Boundary not encountered, did not exit
 }
 
+// ********************************************************************
+// SetSavedState
+//
+// Save the state, in case this is a parasitic call
+// Save fValidExitNormal, fExitNormal, fExiting, fEntering, 
+//      fBlockedPhysicalVolume, fBlockedReplicaNo, fLastStepWasZero; 
+// ********************************************************************
+//
 void G4Navigator::SetSavedState()
 {
-  // -- Save the state, in case this is a parasitic call
-  // Save   fValidExitNormal, fExitNormal, fExiting, fEntering, 
-  // 	    fBlockedPhysicalVolume, fBlockedReplicaNo, fLastStepWasZero; 
+  // fSaveExitNormal = fExitNormal; 
+  fSaveState.sExitNormal = fExitNormal;
+  fSaveState.sValidExitNormal = fValidExitNormal;
+  fSaveState.sExiting = fExiting;
+  fSaveState.sEntering = fEntering;
 
-  // fSaveExitNormal= fExitNormal; 
-  fSaveState.sExitNormal= fExitNormal;
-  fSaveState.sValidExitNormal= fValidExitNormal;
-  fSaveState.sExiting= fExiting;
-  fSaveState.sEntering= fEntering;
+  fSaveState.spBlockedPhysicalVolume = fBlockedPhysicalVolume;
+  fSaveState.sBlockedReplicaNo = fBlockedReplicaNo, 
 
-  fSaveState.spBlockedPhysicalVolume= fBlockedPhysicalVolume;
-  fSaveState.sBlockedReplicaNo= fBlockedReplicaNo, 
-
-  fSaveState.sLastStepWasZero= fLastStepWasZero; 
+  fSaveState.sLastStepWasZero = fLastStepWasZero; 
 }
 
+// ********************************************************************
+// RestoreSavedState
+//
+// Restore the state (in Compute Step), in case this is a parasitic call
+// ********************************************************************
+//
 void G4Navigator::RestoreSavedState()
 {
-  // -- Restore the state (in Compute Step), in case this is a parasitic call
-  fExitNormal= fSaveState.sExitNormal;
-  fValidExitNormal= fSaveState.sValidExitNormal;
-  fExiting= fSaveState.sExiting;
-  fEntering= fSaveState.sEntering;
+  fExitNormal = fSaveState.sExitNormal;
+  fValidExitNormal = fSaveState.sValidExitNormal;
+  fExiting = fSaveState.sExiting;
+  fEntering = fSaveState.sEntering;
 
-  fBlockedPhysicalVolume= fSaveState.spBlockedPhysicalVolume;
-  fBlockedReplicaNo= fSaveState.sBlockedReplicaNo, 
+  fBlockedPhysicalVolume = fSaveState.spBlockedPhysicalVolume;
+  fBlockedReplicaNo = fSaveState.sBlockedReplicaNo, 
 
-  fLastStepWasZero= fSaveState.sLastStepWasZero; 
+  fLastStepWasZero = fSaveState.sLastStepWasZero; 
 }
-
 
 // ********************************************************************
 // ComputeStep
@@ -938,25 +946,30 @@ G4double G4Navigator::ComputeStep( const G4ThreeVector &pGlobalpoint,
   return Step;
 }
 
-G4double G4Navigator::CheckNextStep( const G4ThreeVector &pGlobalpoint,
-                                   const G4ThreeVector &pDirection,
-                                   const G4double pCurrentProposedStepLength,
-				   G4double &pNewSafety)
+// ********************************************************************
+// CheckNextStep
+//
+// Compute the step without altering the navigator state
+// ********************************************************************
+//
+G4double G4Navigator::CheckNextStep( const G4ThreeVector& pGlobalpoint,
+                                     const G4ThreeVector& pDirection,
+                                           G4double pCurrentProposedStepLength,
+                                           G4double pNewSafety)
 {
   G4double step;
 
-  // -- Save the state, for this parasitic call
+  // Save the state, for this parasitic call
+  //
   SetSavedState();
-  // Save   fValidExitNormal, fExitNormal, fExiting, fEntering, 
-  // 	    fBlockedPhysicalVolume, fBlockedReplicaNo, fLastStepWasZero; 
 
-  step= ComputeStep ( pGlobalpoint, 
-		      pDirection,
-		      pCurrentProposedStepLength, 
-		      pNewSafety); 
+  step = ComputeStep ( pGlobalpoint, 
+                       pDirection,
+                       pCurrentProposedStepLength, 
+                       pNewSafety ); 
 
-  // if( !changeState ){ 
   // If a parasitic call, then attempt to restore the key parts of the state
+  //
   RestoreSavedState(); 
 
   return step; 

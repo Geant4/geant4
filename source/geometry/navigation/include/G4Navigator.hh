@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.hh,v 1.20 2007-03-23 14:40:25 japost Exp $
+// $Id: G4Navigator.hh,v 1.21 2007-04-20 15:28:37 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -100,10 +100,10 @@ class G4Navigator
     // distance. Geometry must be closed.
 
   G4double CheckNextStep(const G4ThreeVector &pGlobalPoint,
-			 const G4ThreeVector &pDirection,
-			 const G4double pCurrentProposedStepLength,
- 			       G4double  &pNewSafety); 
-    //  Same as above, but do not distrurb the state of the Navigator.
+                         const G4ThreeVector &pDirection,
+                               G4double pCurrentProposedStepLength,
+                               G4double pNewSafety); 
+    // Same as above, but do not disturb the state of the Navigator.
 
   virtual
   G4VPhysicalVolume* ResetHierarchyAndLocate(const G4ThreeVector &point,
@@ -387,41 +387,34 @@ class G4Navigator
   // END State information
   //
 
-  // 
-  // BEGIN  Save information for key state information
-  //          --> Not the navigation history (touchable) stack!
-  struct G4SaveNavigatorState { 
+  // Save key state information (NOT the navigation history stack)
+  //
+  struct G4SaveNavigatorState
+  { 
      G4ThreeVector sExitNormal;  
      G4bool sValidExitNormal;    
      G4bool sEntering, sExiting;
-     G4VPhysicalVolume *spBlockedPhysicalVolume;
+     G4VPhysicalVolume* spBlockedPhysicalVolume;
      G4int sBlockedReplicaNo;  
      G4int sLastStepWasZero; 
-     //  Potentially relevant -- tbd
+
+     //  Potentially relevant
+     //
      G4bool sLocatedOutsideWorld;
      G4ThreeVector sLastLocatedPointLocal; 
      G4bool sEnteredDaughter, sExitedMother;
      G4ThreeVector  sPreviousSftOrigin;
      G4double       sPreviousSafety; 
   } fSaveState; 
-  // END    Save information for key state information
 
+  // Tracking Invariants
   //
-  // BEGIN Tracking Invariants
-  //
-
   G4VPhysicalVolume  *fTopPhysical;
     // A link to the topmost physical volume in the detector.
     // Must be positioned at the origin and unrotated.
 
+  // Utility information
   //
-  // END Tracking Invariants
-  //
-
-  //
-  // BEGIN Utility information
-  //
-
   G4bool fCheck;
     // Check-mode flag  [if true, more strict checks are performed].
   G4bool fPushed;
@@ -429,11 +422,6 @@ class G4Navigator
   G4int  fVerbose;
     // Verbose(ness) level  [if > 0, printout can occur].
 
-  //
-  // END Utility Invariants
-  //
-
-  // 
   // Helpers/Utility classes
   //
   G4NormalNavigation  fnormalNav;

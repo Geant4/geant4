@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SafetyHelper.hh,v 1.4 2007-04-12 11:51:47 vnivanch Exp $
+// $Id: G4SafetyHelper.hh,v 1.5 2007-04-20 15:28:37 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -44,6 +44,7 @@
 #define G4SAFETYHELPER_HH 1
 
 #include <vector>
+
 #include "G4Types.hh"
 #include "G4ThreeVector.hh"
 #include "G4Navigator.hh"
@@ -59,10 +60,10 @@ public: // with description
      //
      // Constructor and destructor
 
-  G4double CheckNextStep( const G4ThreeVector &position, 
-			  const G4ThreeVector &direction,
-			  const G4double &currentMaxStep,
-			  G4double &newSafety );
+  G4double CheckNextStep( const G4ThreeVector& position, 
+                          const G4ThreeVector& direction,
+                                G4double currentMaxStep,
+                                G4double newSafety );
      //
      // Return linear step for mass geometry
 
@@ -70,7 +71,8 @@ public: // with description
      //
      // Return safety for all geometries
 
-  void Locate(const G4ThreeVector& pGlobalPoint, const G4ThreeVector& direction);
+  void Locate(const G4ThreeVector& pGlobalPoint,
+              const G4ThreeVector& direction);
      //
      // Locate the point for all geometries
 
@@ -78,8 +80,7 @@ public: // with description
      //
      // Relocate the point in the volume of interest
 
-  void EnableParallelNavigation(G4bool parallel) 
-     { fUseParallelGeometries= parallel; } 
+  inline void EnableParallelNavigation(G4bool parallel);
      // 
      //  To have parallel worlds considered, must be true.
      //  Alternative is to use single (mass) Navigator directly
@@ -88,11 +89,10 @@ public: // with description
      //
      // Check for new navigator for tracking, and reinitialise pointer
 
-  G4VPhysicalVolume* GetWorldVolume()
-      { return fpMassNavigator->GetWorldVolume(); }
+  inline G4VPhysicalVolume* GetWorldVolume();
+  inline void SetCurrentSafety(G4double val, const G4ThreeVector& pos);
 
-  void SetCurrentSafety(G4double val, const G4ThreeVector& pos)
-      { lastSafety = val; lastSafetyPosition = pos;}
+public: // without description
 
   void InitialiseHelper();
 
@@ -103,15 +103,35 @@ private:
   G4int         fMassNavigatorId;
 
   G4bool        fUseParallelGeometries; 
-  // Flag whether to use PathFinder or single (mass) Navigator directly
+    // Flag whether to use PathFinder or single (mass) Navigator directly
  
   G4bool first;
-  // Flag of first call
+    // Flag of first call
 
-  // cash
   G4ThreeVector lastSafetyPosition;
   G4double      lastSafety;
   G4double      factor;
 };
+
+// Inline definitions
+
+inline
+void G4SafetyHelper::EnableParallelNavigation(G4bool parallel) 
+{
+  fUseParallelGeometries = parallel;
+} 
+
+inline
+G4VPhysicalVolume* G4SafetyHelper::GetWorldVolume()
+{
+  return fpMassNavigator->GetWorldVolume();
+}
+
+inline
+void G4SafetyHelper::SetCurrentSafety(G4double val, const G4ThreeVector& pos)
+{
+  lastSafety = val;
+  lastSafetyPosition = pos;
+}
 
 #endif
