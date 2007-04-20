@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PathFinder.cc,v 1.27 2007-04-20 15:28:37 gcosmo Exp $
+// $Id: G4PathFinder.cc,v 1.28 2007-04-20 15:41:18 gcosmo Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4PathFinder Implementation
@@ -988,7 +988,6 @@ G4PathFinder::DoNextCurvedStep( const G4FieldTrack &initialState,
   return minStep; 
 }
 
-#if 0 
 G4String& LimitedString( ELimited lim )
 {
   static G4String StrDoNot("DoNot"),
@@ -1008,7 +1007,7 @@ G4String& LimitedString( ELimited lim )
   return *limitedStr;
 }
 
-
+#if 0 
 // Potential extension ..... ?? 
      // Return relevant step
      //  When no field exists or the particle has no charge or EM moment
