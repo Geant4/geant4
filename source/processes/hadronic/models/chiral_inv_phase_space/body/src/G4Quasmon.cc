@@ -27,7 +27,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4Quasmon.cc,v 1.93 2007-03-14 10:43:51 mkossov Exp $
+// $Id: G4Quasmon.cc,v 1.94 2007-04-20 15:50:18 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4Quasmon ----------------
@@ -4309,8 +4309,8 @@ void G4Quasmon::CalculateHadronizationProbabilities
                      <<envA<<",tM="<<totMass<<" > tmpTM+frM="<<tmpTM+frM<<G4endl;
 #endif
 	     //if(pos&&(cPDG<80000000||(cPDG>80000000&&cPDG!=90000000&&dUD<1)))// 1 ** never try
-	     if(pos&&(cPDG<80000000||(cPDG>80000000&&cPDG!=90000000&&dUD<2)))//2 deuteronTooHigh
-	     //if(pos&&(cPDG<80000000||(cPDG>80000000&&cPDG!=90000000&&dUD<3))) // 3 the best
+	     if(pos&&(cPDG<80000000||(cPDG>80000000&&cPDG!=90000000&&dUD<2)))//2 ***The best***
+	     //if(pos&&(cPDG<80000000||(cPDG>80000000&&cPDG!=90000000&&dUD<3))) // 3 *** good ***
 				  //if(pos&&(cPDG<80000000||(cPDG>80000000&&cPDG!=90000000&&dUD<4)))//4 almost the same
 				  //if(pos&&(cPDG<80000000||(cPDG>80000000&&cPDG!=90000000))) // no restrictions
 	     {
@@ -4399,9 +4399,9 @@ void G4Quasmon::CalculateHadronizationProbabilities
               //G4cout<<"G4Q::CHP:PiF="<<piF<<G4endl;
               // The best:
 			           //if(resQ>-2 &&resPDG && resPDG!=10 && !rI && (!piF||piF && cPDG!=90001000 ))
-														if(resQ>-2 && resPDG && resPDG!=10 && !rI && (!piF||piF &&
+														if(resQ>-2 && resPDG && resPDG!=10 && !rI && (!piF || piF &&
 														//cPDG!=90001000||G4UniformRand()<.333333))
-														(cPDG!=90001000||G4UniformRand()<.333333)&&cPDG!=90002001&&cPDG!=90002002))
+														(cPDG!=90001000||G4UniformRand()<.333333) && cPDG!=90002001&&cPDG!=90002002))
 														//(cPDG!=90001000||G4UniformRand()<.5)&&cPDG!=90002001&&cPDG!=90002002))
 														//cPDG!=90001000&&cPDG!=90002001&&cPDG!=90002002))
 														//-----------------------------------------------------------------
@@ -4691,8 +4691,8 @@ void G4Quasmon::CalculateHadronizationProbabilities
 					                   //if(minBM2>rQ2&&piF&&(baryn==1||baryn>2))//==>Check ResidVirtQ
 					                   //if(minBM2>rQ2&&(!piF||piF&&(cPDG!=90000001||G4UniformRand()<.5)))
 					                   //if(minBM2>rQ2&&(!piF||piF&&(cPDG!=90000001)))
-																								if(minBM2>rQ2&&(!piF ||
-                           piF && cPDG!=90000001 && cPDG!=90001001 && cPDG!=90001002))
+																								if(minBM2>rQ2&&(!piF || piF && cPDG!=90000001 &&
+                                                       cPDG!=90001001 && cPDG!=90001002 ))
 																								//if(minBM2>rQ2)        // ==> Check of Residual (Virtual?) Quasmon
 																								//if(2>3)
                         {
@@ -4727,8 +4727,12 @@ void G4Quasmon::CalculateHadronizationProbabilities
 					                   //if(minM2>rQ2&&(baryn>1||!piF))//==>CheckResidualQuasmon**Better**
 					                   //if(minM2>rQ2&&baryn>1&&cPDG!=90002002) //==> CheckResidualQuasmon
 					                   //if(minM2>rQ2&&!piF) // ==> Check of Residual Quasmon
-					                   if(minM2>rQ2&&baryn>3) //=>CheckResidQuasmon *** The Best ***
-					                   //if(minM2>rQ2)            // ==> Check of Residual Quasmon
+					                   //if(minM2>rQ2&&baryn>3) //=>CheckResidQuasmon *** The Best ***
+					                   if(minM2>rQ2 &&
+                           (!piF&&baryn>3 || piF &&
+                            (cPDG!=90000001||G4UniformRand()>.3333333) && cPDG!=90001001) )
+                            //cPDG!=90001001) )
+																								//if(minM2>rQ2)            // ==> Check of Residual Quasmon
 																						  //if(2>3)
                         {
                           G4double nz=1.-(minM2-rQ2)/(boundM*rEP);

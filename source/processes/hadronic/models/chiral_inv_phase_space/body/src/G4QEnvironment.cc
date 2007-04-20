@@ -27,7 +27,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4QEnvironment.cc,v 1.121 2007-03-14 10:43:50 mkossov Exp $
+// $Id: G4QEnvironment.cc,v 1.122 2007-04-20 15:50:17 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QEnvironment ----------------
@@ -320,8 +320,9 @@ G4QEnvironment::G4QEnvironment(const G4QHadronVector& projHadrons, const G4int t
         // At this poin it is possible to convert mu- to pi-
         fn4m=qf4m-qi4m;
         opHad->SetQPDG(pimQPDG);              //Convert (mu-)u->d to (virt pi-)u->d capture
-        fake=true;                            // fake pi- for q-muon scattering *****
-        if(G4UniformRand()>.5) fake=false;    // normal pi- for q-muon csattering *****
+        fake=false;                           // normal pi- for q-muon scattering
+        //fake=true;                            // fake pi- for q-muon scattering *****
+        //if(G4UniformRand()>.5) fake=false;    // normal pi- for q-muon scattering *****
         opHad->Set4Momentum(fn4m);
       }
     }
@@ -1165,6 +1166,7 @@ void G4QEnvironment::PrepareInteractionProbabilities(const G4QContent& projQC, G
         else probab=0.;
       }
       ////////////////////////else if((pPDG==-211&&AP<10.)&&cBN<2) probab=0;//PiCapAtRst(D)
+      //else if((pPDG==-211||pPDG==-13)&&AP<27.)probab=dOfCl*cBN*fact;//Pi/Mu-CaptureAtRest
       //else if(pPDG==-211&&AP<10.)            probab=nOfCl*fact;// special PiCaptureAtRest
       //else if(pPDG==-211&&AP<10.)            probab=nOfCl*cBN*(cBN-1)*fact;
       //else                                   probab=nOfCl*fact;
