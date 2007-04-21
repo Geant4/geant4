@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: Tst10DetectorConstruction.cc,v 1.12 2006-06-29 21:38:28 gunter Exp $
+// $Id: Tst10DetectorConstruction.cc,v 1.13 2007-04-21 08:33:19 ahoward Exp $
 // ------------------------------------------------------------
 //  GEANT 4 class header file 
 //
@@ -293,7 +293,7 @@ void Tst10DetectorConstruction::SetMaterial()
     EFFICIENCY[i]=1.0;
   }  
   G4double PHENERGY[NUMENTRIES] =
-            { 0.0, 1.0, 2.0, 3.0, 4.0};
+            { 0.01, 1.0, 2.0, 3.0, 4.0};
   G4MaterialPropertiesTable *WaterMPT = new G4MaterialPropertiesTable();
   G4MaterialPropertiesTable *WaterMPT1 = new G4MaterialPropertiesTable();
   WaterMPT->AddProperty("RINDEX", PHENERGY, RINDEX_WATER, NUMENTRIES);
