@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.32 2007-04-22 16:25:21 vnivanch Exp $
+// $Id: RunAction.cc,v 1.33 2007-04-22 18:29:39 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -144,7 +144,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
         G4int    nn    = 0;
         G4double sume  = 0.0;
         G4double sume2 = 0.0;
-        G4double lim   = rmsEAbs * 4.0;
+        G4double lim   = rmsEAbs * 2.5;
         for(G4int i=0; i<nEvt; i++) {
           G4double e = (energyDeposit[k])[i];
           if(std::abs(e - MeanEAbs) < lim) {

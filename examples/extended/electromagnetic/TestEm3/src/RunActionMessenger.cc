@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunActionMessenger.cc,v 1.10 2007-04-22 16:25:21 vnivanch Exp $
+// $Id: RunActionMessenger.cc,v 1.11 2007-04-22 18:29:39 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -71,7 +71,7 @@ RunActionMessenger::RunActionMessenger(RunAction* run)
   accCmd->SetParameter(lim);
 
   //
-  limCmd = new G4UIcmdWithABool("/testem/run/restrictEdep",this);
+  limCmd = new G4UIcmdWithABool("/testem/run/limitEdep",this);
   limCmd->SetGuidance("remove energy outside acceptance limit");
   limCmd->AvailableForStates(G4State_PreInit,G4State_Idle);      
 }
