@@ -596,8 +596,7 @@ G4HadronicProcess::FillTotalResult(G4HadFinalState * aR, const G4Track & aT)
     G4Exception("G4HadronicProcess", "007", FatalException,
     "use of unsupported track-status.");
   }
-  if(GetProcessName() != "hElastic"
-     //     && AlwaysKillLeadingHadron() 
+  if(GetProcessName() != "hElastic" && GetProcessName() != "HadronElastic"
      &&  theTotalResult->GetTrackStatus()==fAlive
      && aR->GetStatusChange()==isAlive
     )
@@ -613,7 +612,7 @@ G4HadronicProcess::FillTotalResult(G4HadFinalState * aR, const G4Track & aT)
     //std::cout << "Debug 2 "<<aR->GetMomentumChange()<<" "<< aNew->GetMomentum() << std::endl;
     //std::cout << "Debug 3 "<<newWeight<<std::endl;
     //std::cout << std::endl;
-    G4HadSecondary * theSec = new G4HadSecondary(aNew, newWeight);
+    G4HadSecondary* theSec = new G4HadSecondary(aNew, 1.0);
     aR->AddSecondary(theSec);
     aR->SetStatusChange(stopAndKill);
     theTotalResult->ProposeTrackStatus(fStopAndKill);
