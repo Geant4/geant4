@@ -34,7 +34,7 @@
 </div>
 
 Report on Errors and Warnings arising from system testing on the
-<blink><b>geant4-08-02-ref-02</b></blink> development tag.
+<blink><b>geant4-08-02-ref-03</b></blink> development tag.
 
 <p>
 NOTE: the complete set of tests has not been run, with Large_N(umbers of events),
@@ -48,7 +48,7 @@ NOTE: the complete set of tests has not been run, with Large_N(umbers of events)
 -----------+---------+---------+----------+----------+---------+---------+----------+----------+---------+---------+
            | SUN-CC  | SUN-CC  | Linux-g++| Linux-g++|Linux-g++|Linux-g++ |Linux-g++| Linux-icc|WIN32-VC7|WIN32-VC7|
            |debug_55 |optim_55 |op.SLC4.64|de.SLC4.64|opt.SLC3 |opt.SLC4  |deb.SLC4 |	 deb   |  optim  |  debug  |
-  	   |sungeant | refsol8 |lxbuild056|lxplus098 |pcgeant6 |pcg4speed2|lxplus071| pcg4speed|pcepsft16|pcepsft16|
+  	   |sungeant | refsol8 |lxbuild056|lxbuild056|pcgeant6 |pcg4speed2|lxplus071| pcg4speed|pcepsft16|pcepsft16|
 -----------+---------+---------+----------+----------+---------+--------- +----------+----------+---------+---------+
 test01     |	     |   NA    |	  |	     |         |	  |	    |	NA     |	 |	   |
 test02     |	     |         |	  |	     |         |	  |	    |	       |	 |	   |
@@ -61,8 +61,8 @@ test09     |	     |         |	  |	     |         |	  |	    |	       |	 |	   |
 test10     |	     |         |	  |	     |         |	  |	    |	       |	 |	   |
 -----------+---------+---------+----------+----------+---------+---------+----------+----------+---------+---------+
 test11     |	     |         |	  |	     |         |	  |	    |	       |	 |	   |
-test12     |         |         |          |  WL4     |         |  WL2     |         |	       |	 |	   |
-test13     |  WL1    |         |   WL1    |          |  WL1    |          | WL1WL2  |	       |   WL1   |  WL1    |
+test12     |         |         |          |          |  WL2    |          |         |	       |	 |	   |
+test13     |  WL1WL2 |         |   WL1    |  WL1     |  WL1    |  WL1WL2  | WL1     |	       |   WL1   |  WL1    |
 test14     |	     |         |	  |	     |         |	  |	    |	       |	 |	   |
 test15     |	     |         |	  |	     |         |	  |	    |	       |	 |	   |
 -----------+---------+---------+----------+----------+---------+---------+----------+----------+---------+---------+
@@ -70,7 +70,7 @@ test16     |	     |         |	  |	     |         |	  |	    |	       |	 |	   |
 test17     |	     |         |	  |	     |         |	  |	    |	       |	 |	   |
 test18     |	     |         |	  |	     |         |	  |	    |	       |	 |	   |
 test20     |	     |         |	  |	     |         |	  |	    |	       |	 |	   |
-test21     |  EL2    |         |          |  WL7     |         |  WL2     |  WL7    |	       |	 | EL2     |
+test21     |  EL2    |         |          |  WL8     |  WL2    |  WL2EL6  |  WL7    |	       |	 | EL2     |
 test22     |	     |         |	  |	     |         |	  |	    |	       |	 |	   |
 test24     |	     |         |	  |	     |         |	  |	    |	       |	 |	   |
 test25     |	     |         |	  |	     |         |	  |	    |	       |	 |	   |
@@ -155,8 +155,12 @@ G4Exception : InvalidSetup
 
 WL7
 --------------
-Command terminated by signal 15, timeout on a public system.	      
-	      
+Command terminated by signal 15, timeout on a public system.
+
+WL8
+--------------	      
+---Warning---G4QE::FSI: Try to recover ASN=86003008,5737.37<6183.35+139.57=6322.92
+---Warning---G4QE::FSI:AntiStraN Failed LeaveAsItIs 4m=(4978.9,-1744.42,-3195.37;8423.78)	      
 
 WN1			   
 ------------		   
@@ -275,6 +279,10 @@ GHAD_GHAD_GHAD_GHAD_GHAD_GHAD_GHAD_GHAD_GHAD_GHAD_GHAD_GHAD_GHAD_GHAD
 callback to user-defined or default signal handler
 Command terminated by signal 11
 
+EL6
+--------------
+*** glibc detected *** corrupted double-linked list: 0x0a7b8720 ***
+Command terminated by signal 6
 
 </pre>
 
