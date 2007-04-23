@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel.cc,v 1.53 2007-04-23 05:44:52 urban Exp $
+// $Id: G4UrbanMscModel.cc,v 1.54 2007-04-23 09:33:57 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -549,15 +549,10 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
       //compute geomlimit and presafety 
       GeomLimit(track);
    
-      G4double distmax = currentRange;
-      if(couple->GetMaterial()->GetName() == "Lead")
-        distmax = min(0.55*currentRange,0.43*(currentRange+lambda0));
-      else
-        distmax = min(1.00*currentRange,0.38*(currentRange+lambda0));
+      //      G4double distmax = std::min(currentRange,0.38*(currentRange+lambda0));
 
       // is far from boundary
-     // if(currentRange <= presafety)
-      if(distmax <= presafety)
+     if(currentRange <= presafety)
 	{
 	  inside = true;
 	  return tPathLength;   
@@ -568,6 +563,7 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
 
       if((stepStatus == fGeomBoundary) || (stepNumber == 1))
       {
+
         if(stepNumber == 1) smallstep = 1.e10;
         else  smallstep = 1.;
 
@@ -627,24 +623,24 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
       G4double tnow = tlimit;
       // step reduction near to boundary
       if(smallstep < skin)
-      {
-        tnow = stepmin;
-        insideskin = true;
-      }
+	{
+	  tnow = stepmin;
+	  insideskin = true;
+	}
       else if(geomlimit < geombig)
-      {
-        if(geomlimit > skindepth)
-        {
-          if(tnow > geomlimit-0.999*skindepth)
-            tnow = geomlimit-0.999*skindepth;
-        }
-        else
-        {
-          insideskin = true;
-          if(tnow > stepmin)
-            tnow = stepmin;
-        }
-      }
+	{
+	  if(geomlimit > skindepth)
+	    {
+	      if(tnow > geomlimit-0.999*skindepth)
+		tnow = geomlimit-0.999*skindepth;
+	    }
+	  else
+	    {
+	      insideskin = true;
+	      if(tnow > stepmin)
+		tnow = stepmin;
+	    }
+	}
 
       if(tnow < stepmin)
         tnow = stepmin;
@@ -656,7 +652,6 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
     //  there no small step/single scattering at boundaries
     else 
     {
-
       // compute presafety again if presafety <= 0 and no boundary
       // i.e. when it is needed for optimization purposes
       if((stepStatus != fGeomBoundary) && (presafety <= 0.)) 
