@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel.cc,v 1.52 2007-04-15 17:05:25 vnivanch Exp $
+// $Id: G4UrbanMscModel.cc,v 1.53 2007-04-23 05:44:52 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -187,6 +187,7 @@ G4UrbanMscModel::G4UrbanMscModel(G4double m_facrange, G4double m_dtrl,
   tlimitminfix  = 1.e-6*mm;            
   stepmin       = tlimitminfix;
   skindepth     = skin*stepmin;
+  smallstep     = 1.e10;
   currentRange  = 0. ;
   frscaling2    = 0.25;
   frscaling1    = 1.-frscaling2;
@@ -547,18 +548,28 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
 
       //compute geomlimit and presafety 
       GeomLimit(track);
+   
+      G4double distmax = currentRange;
+      if(couple->GetMaterial()->GetName() == "Lead")
+        distmax = min(0.55*currentRange,0.43*(currentRange+lambda0));
+      else
+        distmax = min(1.00*currentRange,0.38*(currentRange+lambda0));
 
       // is far from boundary
-      if(currentRange <= presafety)
+     // if(currentRange <= presafety)
+      if(distmax <= presafety)
 	{
 	  inside = true;
 	  return tPathLength;   
 	}
 
+      smallstep += 1.;
+      insideskin = false;
+
       if((stepStatus == fGeomBoundary) || (stepNumber == 1))
       {
-
-	insideskin = false;
+        if(stepNumber == 1) smallstep = 1.e10;
+        else  smallstep = 1.;
 
         // facrange scaling in lambda 
         // not so strong step restriction above lambdalimit
@@ -613,20 +624,27 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
          (tPathLength < presafety))
         return tPathLength;   
 
-      // new boundary limitation
       G4double tnow = tlimit;
-
-      if(geomlimit > skindepth)
+      // step reduction near to boundary
+      if(smallstep < skin)
+      {
+        tnow = stepmin;
+        insideskin = true;
+      }
+      else if(geomlimit < geombig)
+      {
+        if(geomlimit > skindepth)
         {
           if(tnow > geomlimit-0.999*skindepth)
             tnow = geomlimit-0.999*skindepth;
         }
-      else
+        else
         {
           insideskin = true;
           if(tnow > stepmin)
             tnow = stepmin;
         }
+      }
 
       if(tnow < stepmin)
         tnow = stepmin;
