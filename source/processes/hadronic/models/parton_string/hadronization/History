@@ -1,3 +1,9 @@
+2-March 2007 G.Folger                   (had-hadronization-V08-02-01)
+---------------------------------------------------------------------
+- G4ExcitedStringDecay::EnergyAndMomentumCorrector no longer causes Exception 
+   when no converging. Add more info when failing. Return correct status.
+   
+
 24-Jan 2007 GF: 				tag had-hadronization-V08-02-00
 	G4ExcitedStringDecay::EnergyAndMomentumCorrector :
           Correct bug which did stop correction even if not yet converged;

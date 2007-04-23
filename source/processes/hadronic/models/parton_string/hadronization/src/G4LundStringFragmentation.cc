@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LundStringFragmentation.cc,v 1.5 2006-06-29 20:55:03 gunter Exp $
+// $Id: G4LundStringFragmentation.cc,v 1.6 2007-04-23 12:06:06 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -76,7 +76,11 @@ int G4LundStringFragmentation::operator!=(const G4LundStringFragmentation &right
 
 //****************************************************************************************
 
-G4double G4LundStringFragmentation::GetLightConeZ(G4double zmin, G4double zmax, G4int ,  G4ParticleDefinition* pHadron, G4double Px, G4double Py)
+//G4double G4LundStringFragmentation::GetLightConeZ(G4double zmin, G4double zmax,           // Uzhi
+//                                                  G4int ,  G4ParticleDefinition* pHadron, // Uzhi
+G4double G4LundStringFragmentation::GetLightConeZ(G4double zmin, G4double zmax, 
+                                                  G4int PartonEncoding,  G4ParticleDefinition* pHadron, // Uzhi
+G4double Px, G4double Py)
     {
     const G4double  alund = 0.7/GeV/GeV; 
 
@@ -89,13 +93,33 @@ G4double G4LundStringFragmentation::GetLightConeZ(G4double zmin, G4double zmax, 
     G4double Mt2 = Px*Px + Py*Py + Mass*Mass;
     G4double zOfMaxyf=alund*Mt2/(alund*Mt2 + 1.);
     G4double maxYf=(1-zOfMaxyf)/zOfMaxyf * std::exp(-alund*Mt2/zOfMaxyf);
-    do
-       {
-       z = zmin + G4UniformRand()*(zmax-zmin);
-//       yf = std::pow(1. - z, blund)/z*std::exp(-alund*Mt2/z);
-	 yf = (1-z)/z * std::exp(-alund*Mt2/z);
-       } 
-    while (G4UniformRand()*maxYf > yf); 
+
+    G4double N=1.;                                                 // Uzhi
+    G4double OverN=1./N;                                           // Uzhi
+    G4double ZminN=std::pow(zmin,N);                               // Uzhi
+    G4double ZmaxN=std::pow(zmax,N);                               // Uzhi
+    G4double Brac=ZmaxN-ZminN;                                     // Uzhi
+
+//G4cout<<" ZminN ZmaxN Brac Code "<<ZminN<<" "<< ZmaxN<<" "<<Brac<<" "<<PartonEncoding<<G4endl;
+
+//    if(std::abs(PartonEncoding) < 1000)                            // Uzhi
+      {                                                            // Uzhi q or q-bar
+//G4cout<<" quark "<<G4endl; // Vova
+       do                                                          // Uzhi 
+         {
+          z = zmin + G4UniformRand()*(zmax-zmin);
+//        yf = std::pow(1. - z, blund)/z*std::exp(-alund*Mt2/z);
+	  yf = (1-z)/z * std::exp(-alund*Mt2/z);
+         } 
+       while (G4UniformRand()*maxYf > yf); 
+      }                                                            // Uzhi
+/*    else                                                           // Uzhi
+      {                                                            // Uzhi qq or qq-bar
+//G4cout<<"Di-quark"<<G4endl; // Vova
+       z = std::pow(Brac * G4UniformRand() + ZminN, OverN);        // Uzhi
+      };                                                           // Uzhi
+*/
+//G4cout<<" test z "<<std::pow(2.,3.)<<" "<<z<<G4endl; // Vova
     return z;
     }
 
