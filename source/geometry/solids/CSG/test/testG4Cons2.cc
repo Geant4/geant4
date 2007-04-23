@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4Cons2.cc,v 1.17 2006-06-29 18:45:57 gunter Exp $
+// $Id: testG4Cons2.cc,v 1.18 2007-04-23 13:58:39 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Simple test of G4Cons
@@ -974,9 +974,23 @@ G4cout<<"Error:c9.Out((1e3*kRadTolerance,0,50),vx2mz,...) = " <<dist << G4endl;
 	// if (OutRange(dist,kInfinity))
 	    G4cout << "ctest10.DistanceToIn(pt10s2,vt10d) = " << dist << G4endl;
 
-	G4cout << "NOT Checking G4Cons::ScopeCar...\n";
-	G4cout << "NOT Checking G4Cons::ScopePhi...\n";
-	G4cout << "NOT Checking G4Cons::ScopeRad...\n";
+	    G4double rad = 90.;
+
+  G4ThreeVector pct10phi1r( rad*std::cos(10.*degree),  rad*std::sin(10*degree), 0);
+  G4ThreeVector pct10phi2r( rad*std::cos(50.*degree), -rad*std::sin(50*degree), 0);
+
+	dist = ctest10.DistanceToIn(pct10phi1r,vmy);
+	// if (OutRange(dist,kInfinity))
+	    G4cout << "ctest10.DistanceToIn(pct10phi1r,vmy) = " << dist << G4endl;
+
+	dist = ctest10.DistanceToIn(pct10phi2r,vx);
+	// if (OutRange(dist,kInfinity))
+	    G4cout << "ctest10.DistanceToIn(pct10phi2r,vx) = " << dist << G4endl;
+
+
+	    // G4cout << "NOT Checking G4Cons::ScopeCar...\n";
+	    // G4cout << "NOT Checking G4Cons::ScopePhi...\n";
+	    // G4cout << "NOT Checking G4Cons::ScopeRad...\n";
 
 	return 0;
 }

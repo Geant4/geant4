@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4Cons1.cc,v 1.7 2006-06-29 18:45:55 gunter Exp $
+// $Id: testG4Cons1.cc,v 1.8 2007-04-23 13:58:39 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -75,7 +75,7 @@ G4bool testG4Cons()
     G4Cons  test10("test10",20.0, 80.0, 60.0, 140.0, 100.0, 
                            0.17453292519943, 5.235987755983);
 
-
+    G4Cons  test10a( "aCone", 2*cm, 6*cm, 8*cm, 14*cm, 10*cm, 10*deg, 300*deg );   
 
 
 
