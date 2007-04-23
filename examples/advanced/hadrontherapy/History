@@ -7,7 +7,15 @@ $Id: History, v 1.6 2004/02/27  G.A.P. Cirrone
      ====================================================
 
                       Category History file
-                      ---------------------
+ 
+23.4.2007 S. Guatelli (hadrontherapy-V08-02-01)
+         - Compilation error corrected - human error of Susanna Guatelli.
+         - The file src/HadrontherapyProtonBertiniElastic.cc
+           and the file include/HadrontherapyProtonBertiniElastic.hh
+           have been removed
+         - This class is part of the previous version of the hadrontherapy 
+	   application,and it not necessary anymore in the current version 
+           of the hadrontherapy application.
 
 24.1.2007 S. Guatelli (hadrontherapy-V08-02-00)
          - Design iteration
