@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.cc,v 1.29 2007-04-20 15:28:37 gcosmo Exp $
+// $Id: G4Navigator.cc,v 1.30 2007-04-23 15:31:25 vnivanch Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4Navigator Implementation
@@ -954,8 +954,8 @@ G4double G4Navigator::ComputeStep( const G4ThreeVector &pGlobalpoint,
 //
 G4double G4Navigator::CheckNextStep( const G4ThreeVector& pGlobalpoint,
                                      const G4ThreeVector& pDirection,
-                                           G4double pCurrentProposedStepLength,
-                                           G4double pNewSafety)
+                                     const G4double pCurrentProposedStepLength,
+                                           G4double& pNewSafety)
 {
   G4double step;
 

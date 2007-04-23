@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4SafetyHelper.cc,v 1.9 2007-04-20 15:28:37 gcosmo Exp $
+// $Id: G4SafetyHelper.cc,v 1.10 2007-04-23 15:31:25 vnivanch Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4SafetyHelper Implementation
@@ -81,8 +81,8 @@ G4SafetyHelper::~G4SafetyHelper()
 G4double   
 G4SafetyHelper::CheckNextStep(const G4ThreeVector &position, 
                               const G4ThreeVector &direction,
-                                    G4double currentMaxStep,
-                                    G4double newSafety )
+                              const G4double currentMaxStep,
+                                    G4double& newSafety )
 {  
   // Distance in the Mass geometry
   //

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SafetyHelper.hh,v 1.5 2007-04-20 15:28:37 gcosmo Exp $
+// $Id: G4SafetyHelper.hh,v 1.6 2007-04-23 15:31:25 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -62,8 +62,8 @@ public: // with description
 
   G4double CheckNextStep( const G4ThreeVector& position, 
                           const G4ThreeVector& direction,
-                                G4double currentMaxStep,
-                                G4double newSafety );
+                          const G4double currentMaxStep,
+                                G4double& newSafety );
      //
      // Return linear step for mass geometry
 

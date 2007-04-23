@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.hh,v 1.21 2007-04-20 15:28:37 gcosmo Exp $
+// $Id: G4Navigator.hh,v 1.22 2007-04-23 15:31:25 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -101,8 +101,8 @@ class G4Navigator
 
   G4double CheckNextStep(const G4ThreeVector &pGlobalPoint,
                          const G4ThreeVector &pDirection,
-                               G4double pCurrentProposedStepLength,
-                               G4double pNewSafety); 
+                         const G4double pCurrentProposedStepLength,
+                               G4double &pNewSafety); 
     // Same as above, but do not disturb the state of the Navigator.
 
   virtual
