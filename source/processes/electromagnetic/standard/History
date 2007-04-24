@@ -1,4 +1,4 @@
-$Id: History,v 1.300 2007-04-24 14:57:52 vnivanch Exp $
+$Id: History,v 1.301 2007-04-24 16:32:49 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -18,7 +18,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
 
 24 April 07:  V.Ivanchenko (emstand-V08-02-14)
-- G4MultipleScattering - use by default skin=0, because navigator has problems
+- G4MultipleScattering - use by default skin=0, because the current 
+	                 interface to G4SafetyHelper does not allow 
+                         it to provide a valid step in the case of 
+                         magnetic field
 
 23 April 07:  V.Ivanchenko (emstand-V08-02-13)
 - G4UrbanMscModel - L.Urban: stepping near to boundaries has been
