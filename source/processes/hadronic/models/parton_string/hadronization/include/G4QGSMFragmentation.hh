@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QGSMFragmentation.hh,v 1.3 2006-06-29 20:54:51 gunter Exp $
+// $Id: G4QGSMFragmentation.hh,v 1.4 2007-04-24 14:55:23 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -43,6 +43,7 @@ class G4QGSMFragmentation:public G4VLongitudinalStringDecay
 public:
       G4QGSMFragmentation();
       ~G4QGSMFragmentation();
+      virtual G4KineticTrackVector* FragmentString(const G4ExcitedString& theString);
 
       const G4QGSMFragmentation & operator=(const G4QGSMFragmentation &right);
       int operator==(const G4QGSMFragmentation &right) const;
@@ -51,6 +52,14 @@ public:
   private:
    virtual G4double GetLightConeZ(G4double zmin, G4double zmax, G4int PartonEncoding,  G4ParticleDefinition* pHadron, G4double Px, G4double Py);      
    G4QGSMFragmentation(const G4QGSMFragmentation &right);
+
+   virtual void Sample4Momentum(G4LorentzVector* Mom, G4double Mass, G4LorentzVector* AntiMom, G4double AntiMass, G4double InitialMass); 
+   virtual G4bool StopFragmenting(const G4FragmentingString  * const string);
+   virtual G4bool IsFragmentable(const G4FragmentingString * const string);
+   virtual G4LorentzVector * SplitEandP(G4ParticleDefinition * pHadron, G4FragmentingString * string);
+   virtual G4bool SplitLast(G4FragmentingString * string, 
+		    G4KineticTrackVector * LeftVector,
+		    G4KineticTrackVector * RightVector);
 
   private:
     // model parameters
