@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunActionMessenger.cc,v 1.11 2007-04-22 18:29:39 vnivanch Exp $
+// $Id: RunActionMessenger.cc,v 1.12 2007-04-24 13:05:14 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -46,12 +46,10 @@ RunActionMessenger::RunActionMessenger(RunAction* run)
   runDir->SetGuidance("run control");
     
   accCmd = new G4UIcommand("/testem/run/acceptance",this);
-  accCmd->SetGuidance("set known values of Edep and RMS");
-  accCmd->SetGuidance("  absor number : from 1 to NbOfAbsor");
-  accCmd->SetGuidance("  acceptance limit nRMS - number of RMS");
+  accCmd->SetGuidance("Check Edep and RMS, parameters: number, Edep, RMS, nRMS");
   //
   G4UIparameter* AbsNbPrm = new G4UIparameter("AbsorNb",'i',false);
-  AbsNbPrm->SetGuidance("absor number : from 1 to NbOfAbsor");
+  AbsNbPrm->SetGuidance("absorber number : from 1 to NbOfAbsor");
   AbsNbPrm->SetParameterRange("AbsorNb>0");
   accCmd->SetParameter(AbsNbPrm);
   //    
@@ -65,11 +63,10 @@ RunActionMessenger::RunActionMessenger(RunAction* run)
   rms->SetParameterRange("RMS>=0.");
   accCmd->SetParameter(rms);
   //    
-  G4UIparameter* lim = new G4UIparameter("Limit",'d',false);
+  G4UIparameter* lim = new G4UIparameter("nRMS",'d',false);
   lim->SetGuidance("Limit in number of RMS of energy deposition");
   lim->SetParameterRange("Limit>=0.");
   accCmd->SetParameter(lim);
-
   //
   limCmd = new G4UIcmdWithABool("/testem/run/limitEdep",this);
   limCmd->SetGuidance("remove energy outside acceptance limit");
