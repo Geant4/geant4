@@ -14,6 +14,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+test35-V08-02-01  24 April 2007 V.Ivanchenko
+- add quasi-elastic to FTF
+
 test35-V08-02-00  06 Mar 2007 V.Ivanchenko
 - Use 0.0 low limit for QElastic 
 - Use GeV low limit for FTF
