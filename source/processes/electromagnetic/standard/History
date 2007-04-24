@@ -1,4 +1,4 @@
-$Id: History,v 1.298 2007-04-23 09:33:57 vnivanch Exp $
+$Id: History,v 1.299 2007-04-24 12:03:24 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -32,6 +32,9 @@ committal in the CVS repository !
                            in order to have better width.
                            The width of the energy loss distribution
                            agree rather well with the data.
+
+24 April 07:  V.Ivanchenko (emstand-V08-02-11a)
+- G4MultipleScattering   - set default skin=0 for 8.3
 
 22 March 07: V.Ivanchenko (emstand-V08-02-11)
 - G4MultipleScattering   - use skin parameter from the base class 
