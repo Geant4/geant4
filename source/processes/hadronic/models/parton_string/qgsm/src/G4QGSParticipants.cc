@@ -34,7 +34,7 @@
 // Promoting model parameters from local variables class properties
 G4int G4QGSParticipants_NPart = 0;
 
-G4QGSParticipants::G4QGSParticipants() : theDiffExcitaton(0.7*GeV, 250*MeV, 250*MeV),
+G4QGSParticipants::G4QGSParticipants() : theDiffExcitaton(), //0.7*GeV, 250*MeV, 250*MeV),
                                          nCutMax(7),ThersholdParameter(0.45*GeV),
                                          QGSMThershold(3*GeV),theNucleonRadius(1.5*fermi)
                                          
