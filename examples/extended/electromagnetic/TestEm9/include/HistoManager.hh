@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.hh,v 1.7 2006-06-29 17:01:09 gunter Exp $
+// $Id: HistoManager.hh,v 1.8 2007-04-24 14:20:04 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef HistoManager_h
@@ -149,14 +149,17 @@ private:
   G4DataVector Evertex;
   G4DataVector Nvertex;
 
-  G4DataVector edeptrue;
-  G4DataVector rmstrue;
-  G4DataVector limittrue;
-  G4DataVector edep;
-  G4DataVector erms;
-  G4int   nmax;
+  G4double  edeptrue[3];
+  G4double  rmstrue[3];
+  G4double  limittrue[3];
+  G4double  edep[3];
+  G4double  erms[3];
+  G4double  edeptr[3];
+  G4double  ermstr[3];
+  G4int     stat[3];
+  G4int     nmax;
 
-  Histo*  histo;
+  Histo*    histo;
   
 
 
