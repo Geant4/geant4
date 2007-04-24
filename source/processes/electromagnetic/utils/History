@@ -1,4 +1,4 @@
-$Id: History,v 1.273 2007-04-12 11:55:07 vnivanch Exp $
+$Id: History,v 1.274 2007-04-24 10:28:59 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,7 +19,7 @@ committal in the CVS repository !
 
 12 April 07: V.Ivant (emutils-V08-02-07)
 - G4VEnegryLossProcess - use unique G4SafetyHelper 
-- G4VEmProcess - remove double call to Clear
+- G4VEmProcess - remove double call to Clear method
 
 19 March 07: V.Ivant (emutils-V08-02-06)
 - G4VMultipleScattering - add protection against zero step or energy
