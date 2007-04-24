@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering.cc,v 1.64 2007-04-24 12:00:16 vnivanch Exp $
+// $Id: G4MultipleScattering.cc,v 1.65 2007-04-24 12:05:48 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -155,7 +155,7 @@ G4MultipleScattering::G4MultipleScattering(const G4String& processName)
   SetMaxKinEnergy(highKineticEnergy);
 
   SetLateralDisplasmentFlag(true);
-  SetSkin(0.0);
+  SetSkin(1.0);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
