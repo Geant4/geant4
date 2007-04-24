@@ -1,4 +1,4 @@
-$Id: History,v 1.46 2007-03-20 18:34:17 vnivanch Exp $
+$Id: History,v 1.47 2007-04-24 13:10:12 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+24-04-07: V.Ivant (testem7-V08-02-02)
+- use standard names for "livermore" and "penelope" PhysLists
+- use skin = 1 as default 
 
 20-03-07: V.Ivant (testem7-V08-02-01)
 - Fix usage elastic builders in PhysicsList
