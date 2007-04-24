@@ -1,4 +1,4 @@
-$Id: History,v 1.299 2007-04-24 12:03:24 vnivanch Exp $
+$Id: History,v 1.300 2007-04-24 14:57:52 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+24 April 07:  V.Ivanchenko (emstand-V08-02-14)
+- G4MultipleScattering - use by default skin=0, because navigator has problems
 
 23 April 07:  V.Ivanchenko (emstand-V08-02-13)
 - G4UrbanMscModel - L.Urban: stepping near to boundaries has been

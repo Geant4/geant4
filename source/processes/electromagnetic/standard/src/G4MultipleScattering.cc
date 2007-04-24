@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering.cc,v 1.65 2007-04-24 12:05:48 vnivanch Exp $
+// $Id: G4MultipleScattering.cc,v 1.66 2007-04-24 14:57:52 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -119,6 +119,7 @@
 // 23-10-06 skin = 1 by default (L.Urban)
 // 23-11-06 skin = 1 by default for e+-, 0 for other particles (VI)
 // 12-02-07 skin can be changed via UI command, default skin=1 (VI)
+// 24-04-07 default skin=0 (temporal protection) (VI)
 //
 // -----------------------------------------------------------------------------
 //
@@ -155,7 +156,7 @@ G4MultipleScattering::G4MultipleScattering(const G4String& processName)
   SetMaxKinEnergy(highKineticEnergy);
 
   SetLateralDisplasmentFlag(true);
-  SetSkin(1.0);
+  SetSkin(0.0);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
