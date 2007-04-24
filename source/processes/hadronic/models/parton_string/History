@@ -18,8 +18,13 @@ code and to keep track of all tags.
 -----------------------------------------------
 - Merge changes from V.Uzhinsky  from ftf-dev branch back to HEAD.
 - Seperate modifications done in G4VLongitudinalStringFragmentation for FTF
-   from original code for QGS. 
-   
+   from original code for QGS.
+-  This tag includes the subdirectory tags: 
+     - had-partonstring-mgt-V08-02-00
+     - hadr-qgsm-V08-02-02
+     - hadr-string-diff-V08-02-00
+     - had-hadronization-V08-02-02
+
 
 1 March 2007 G.Folger     (hadr-prtn-V08-02-00)
 -----------------------------------------------
