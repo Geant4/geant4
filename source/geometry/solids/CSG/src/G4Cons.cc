@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cons.cc,v 1.49 2007-04-25 15:55:53 grichine Exp $
+// $Id: G4Cons.cc,v 1.50 2007-04-25 15:59:52 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -1268,12 +1268,14 @@ G4double G4Cons::DistanceToIn( const G4ThreeVector& p,
     }
   }
   if (snxt < kCarTolerance*0.5) snxt = 0.;
+
+#ifdef consdebug
   G4cout.precision(24);
   G4cout<<"G4Cons::DistanceToIn(p,v) "<<G4endl;
   G4cout<<"position = "<<p<<G4endl;
   G4cout<<"direction = "<<v<<G4endl;
   G4cout<<"distance = "<<snxt<<G4endl;
-
+#endif
 
   return snxt ;
 }
@@ -2115,13 +2117,13 @@ G4double G4Cons::DistanceToOut( const G4ThreeVector& p,
     }
   }
   if (snxt < kCarTolerance*0.5) snxt = 0.;
-
+#ifdef consdebug
   G4cout.precision(24);
   G4cout<<"G4Cons::DistanceToOut(p,v,...) "<<G4endl;
   G4cout<<"position = "<<p<<G4endl;
   G4cout<<"direction = "<<v<<G4endl;
   G4cout<<"distance = "<<snxt<<G4endl;
-
+#endif
   return snxt ;
 }
 
