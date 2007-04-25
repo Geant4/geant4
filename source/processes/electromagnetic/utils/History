@@ -1,4 +1,4 @@
-$Id: History,v 1.274 2007-04-24 10:28:59 vnivanch Exp $
+$Id: History,v 1.275 2007-04-25 10:20:25 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+25 April 07: V.Ivant (emutils-V08-02-08)
+- G4VEnegryLossProcess - move initialisation of safety helper to 
+                         BuildPhysicsTable
 
 12 April 07: V.Ivant (emutils-V08-02-07)
 - G4VEnegryLossProcess - use unique G4SafetyHelper 
