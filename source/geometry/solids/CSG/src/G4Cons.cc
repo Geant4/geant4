@@ -24,8 +24,9 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cons.cc,v 1.48 2006-06-29 18:45:09 gunter Exp $
+// $Id: G4Cons.cc,v 1.49 2007-04-25 15:55:53 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
+//
 //
 // class G4Cons
 //
@@ -176,16 +177,18 @@ G4Cons::~G4Cons()
 
 EInside G4Cons::Inside(const G4ThreeVector& p) const
 {
-  G4double r2, rl, rh, pPhi, tolRMin, tolRMax ;
+  G4double r2, rl, rh, pPhi, tolRMin, tolRMax; // rh2, rl2 ;
   EInside in;
 
   if (std::fabs(p.z()) > fDz + kCarTolerance*0.5 ) return in = kOutside;
   else if(std::fabs(p.z()) >= fDz - kCarTolerance*0.5 )   in = kSurface;
-  else                                               in = kInside;
+  else                                                    in = kInside;
 
   r2 = p.x()*p.x() + p.y()*p.y() ;
   rl = 0.5*(fRmin2*(p.z() + fDz) + fRmin1*(fDz - p.z()))/fDz ;
   rh = 0.5*(fRmax2*(p.z()+fDz)+fRmax1*(fDz-p.z()))/fDz;
+
+  // rh2 = rh*rh;
 
   tolRMin = rl - kRadTolerance*0.5 ;
   if ( tolRMin < 0 ) tolRMin = 0 ;
@@ -199,7 +202,8 @@ EInside G4Cons::Inside(const G4ThreeVector& p) const
       
   if (in == kInside) // else it's kSurface already
   {
-    if (r2 < tolRMin*tolRMin || r2 >= tolRMax*tolRMax) in = kSurface;
+     if (r2 < tolRMin*tolRMin || r2 >= tolRMax*tolRMax) in = kSurface;
+    //  if (r2 <= tolRMin*tolRMin || r2-rh2 >= -rh*kRadTolerance) in = kSurface;
   }
   if ( ( fDPhi < twopi - kAngTolerance ) &&
        ( (p.x() != 0.0 ) || (p.y() != 0.0) ) )
@@ -1264,6 +1268,13 @@ G4double G4Cons::DistanceToIn( const G4ThreeVector& p,
     }
   }
   if (snxt < kCarTolerance*0.5) snxt = 0.;
+  G4cout.precision(24);
+  G4cout<<"G4Cons::DistanceToIn(p,v) "<<G4endl;
+  G4cout<<"position = "<<p<<G4endl;
+  G4cout<<"direction = "<<v<<G4endl;
+  G4cout<<"distance = "<<snxt<<G4endl;
+
+
   return snxt ;
 }
 
@@ -1749,6 +1760,7 @@ G4double G4Cons::DistanceToOut( const G4ThreeVector& p,
 
       sidephi = kNull ;
 
+      /*
       if (pDistS <= 0 && pDistE <= 0)
       {
         // Inside both phi *full* planes
@@ -1877,6 +1889,11 @@ G4double G4Cons::DistanceToOut( const G4ThreeVector& p,
             sphi    = 0.0 ;
           }
         }
+
+      
+      
+
+
       }
       else
       {
@@ -1933,6 +1950,78 @@ G4double G4Cons::DistanceToOut( const G4ThreeVector& p,
           }
         }
       }    
+      */
+
+        if( ( (fDPhi <= pi) && ( (pDistS <= 0.5*kCarTolerance)
+                              && (pDistE <= 0.5*kCarTolerance) ) )
+         || ( (fDPhi >  pi) && !((pDistS >  0.5*kCarTolerance)
+                              && (pDistE >  0.5*kCarTolerance) ) )  )
+        {
+          // Inside both phi *full* planes
+          if ( compS < 0 )
+          {
+            sphi = pDistS/compS ;
+            if (sphi >= -0.5*kCarTolerance)
+            {
+              xi = p.x() + sphi*v.x() ;
+              yi = p.y() + sphi*v.y() ;
+
+              // Check intersecting with correct half-plane
+              // (if not -> no intersect)
+              //
+              if ((yi*cosCPhi-xi*sinCPhi)>=0)
+              {
+                sphi = kInfinity ;
+              }
+              else
+              {
+                sidephi = kSPhi ;
+                if ( pDistS > -kCarTolerance*0.5 )
+                {
+                  sphi = 0.0 ; // Leave by sphi immediately
+                }    
+              }       
+            }
+            else
+            {
+              sphi = kInfinity ;
+            }
+          }
+          else
+          {
+            sphi = kInfinity ;
+          }
+
+          if ( compE < 0 )
+          {
+            sphi2 = pDistE/compE ;
+
+            // Only check further if < starting phi intersection
+            //
+            if ( (sphi2 > -0.5*kCarTolerance) && (sphi2 < sphi) )
+            {
+              xi = p.x() + sphi2*v.x() ;
+              yi = p.y() + sphi2*v.y() ;
+
+              // Check intersecting with correct half-plane 
+
+              if ( (yi*cosCPhi-xi*sinCPhi) >= 0)
+              {
+                // Leaving via ending phi
+
+                sidephi = kEPhi ;
+                if ( pDistE <= -kCarTolerance*0.5 ) sphi = sphi2 ;
+                else                                sphi = 0.0 ;
+              }
+            }
+          }
+        }
+        else
+        {
+          sphi = kInfinity ;
+        }
+
+
     }
     else
     {
@@ -2026,6 +2115,13 @@ G4double G4Cons::DistanceToOut( const G4ThreeVector& p,
     }
   }
   if (snxt < kCarTolerance*0.5) snxt = 0.;
+
+  G4cout.precision(24);
+  G4cout<<"G4Cons::DistanceToOut(p,v,...) "<<G4endl;
+  G4cout<<"position = "<<p<<G4endl;
+  G4cout<<"direction = "<<v<<G4endl;
+  G4cout<<"distance = "<<snxt<<G4endl;
+
   return snxt ;
 }
 
