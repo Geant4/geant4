@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNucleus.cc,v 1.70 2007-04-16 07:54:58 mkossov Exp $
+// $Id: G4QNucleus.cc,v 1.71 2007-04-25 07:30:44 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QNucleus ----------------
@@ -3020,8 +3020,14 @@ G4double G4QNucleus::CoulombBarrier(const G4double& cZ, const G4double& cA, G4do
   if(cA<0.) G4cout<<"-Warning-G4QNucl::CoulombBarrier: NucleusA="<<cA<<", Z="<<cZ<<G4endl;
 #endif
   G4double ca=cA;
+
+  // Alex Howard adding protection against NaNs 25/4/07
   if(cA<0.) ca=0.;
-  G4double cb=zz/(pow(rA,third)+ff*pow(ca,third)); // Negative hadronic potential
+  G4double cb=0.; // default of 0 MeV coulomb barrier if meson? AH
+  G4double denominator = pow(rA,third)+ff*pow(ca,third);
+  if(denominator != 0) cb=zz/denominator; // Negative hadronic potential
+  // AH
+
   // Geant4 solution for protons is practically the same:
   // G4double cb=1.263*Z/(1.0 + pow(rA,third));
   // @@ --- Temporary "Lambda/Delta barrier for mesons"
