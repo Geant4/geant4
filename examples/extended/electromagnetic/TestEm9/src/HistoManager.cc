@@ -199,16 +199,17 @@ void HistoManager::EndOfRun()
     if(limittrue[j] < DBL_MAX) {
       G4double n = G4double(stat[j]);
       if(n > 0) n = 1.0/n;
-      e = edeptr[j]*n/beamEnergy;
-      r = ermstr[j]*n/(beamEnergy*beamEnergy);
-      s = r - e*e;
-      r = 0.0;
-      if(s > 0.0) r = std::sqrt(s);
+      e = edeptr[j]*n;
+      s = ermstr[j]*n;
+      r = s - e*e;
+      s = 0.0;
+      if(r > 0.0) s = std::sqrt(r)/beamEnergy;
+      e /= beamEnergy;
       r = s*std::sqrt(n);
     }
 
     G4cout << std::setprecision(4) << "Edep " << nam[j] << " =                   " << e
-           << " +- " << r;
+           << " +- " << s;
     if(e > 0.0) G4cout << "  res=  " << f*s/e << " %";
     G4cout << G4endl;
   }
