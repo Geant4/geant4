@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunActionMessenger.cc,v 1.12 2007-04-24 13:05:14 vnivanch Exp $
+// $Id: RunActionMessenger.cc,v 1.13 2007-04-25 10:07:27 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -37,16 +37,18 @@
 #include "G4UIparameter.hh"
 #include "G4UIcmdWithABool.hh"
 
+#include <sstream>
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunActionMessenger::RunActionMessenger(RunAction* run)
 :Run(run)
 {
   runDir = new G4UIdirectory("/testem/run/");
-  runDir->SetGuidance("run control");
+  runDir->SetGuidance("run commands");
     
   accCmd = new G4UIcommand("/testem/run/acceptance",this);
-  accCmd->SetGuidance("Check Edep and RMS, parameters: number, Edep, RMS, nRMS");
+  accCmd->SetGuidance("Check Edep and RMS of energy deposition for given absorber");
   //
   G4UIparameter* AbsNbPrm = new G4UIparameter("AbsorNb",'i',false);
   AbsNbPrm->SetGuidance("absorber number : from 1 to NbOfAbsor");
