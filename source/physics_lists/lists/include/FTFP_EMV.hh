@@ -23,86 +23,47 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadronPhysicsQGSC_EMV.cc,v 1.1 2006-11-24 15:49:10 gunter Exp $
+// $Id: FTFP_EMV.hh,v 1.1 2007-04-26 14:47:10 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
-// ClassName:   HadronPhysicsQGSC_EMV
+// ClassName: FTFP_EMV
 //
-// Author: 2006 G.Folger
+// Author: 2007 G.Folger
+//    Created as copy from FTFP
 //
-// Created as copy of HadronPhysicsQGSC
 // Modified:
 //
 //----------------------------------------------------------------------------
 //
-#include "HadronPhysicsQGSC_EMV.hh"
+#ifndef TFTFP_EMV_h
+#define TFTFP_EMV_h 1
 
+#include "G4VModularPhysicsList.hh"
 #include "globals.hh"
-#include "G4ios.hh"
-#include <iomanip>   
-#include "G4ParticleDefinition.hh"
-#include "G4ParticleTable.hh"
+#include "CompileTimeConstraints.hh"
 
-#include "G4MesonConstructor.hh"
-#include "G4BaryonConstructor.hh"
-#include "G4ShortLivedConstructor.hh"
-
-HadronPhysicsQGSC_EMV::HadronPhysicsQGSC_EMV(const G4String& name)
-                    :  G4VPhysicsConstructor(name) 
-{}
-
-void HadronPhysicsQGSC_EMV::CreateModels()
+template<class T>
+class TFTFP_EMV: public T
 {
-  theNeutrons=new G4NeutronBuilder;
-  theNeutrons->RegisterMe(theQGSCNeutron=new G4QGSCNeutronBuilder);
-  theNeutrons->RegisterMe(theLEPNeutron=new G4LEPNeutronBuilder);
-  theLEPNeutron->SetMaxInelasticEnergy(25*GeV);
-
-  thePro=new G4ProtonBuilder;
-  thePro->RegisterMe(theQGSCPro=new G4QGSCProtonBuilder);
-  thePro->RegisterMe(theLEPPro=new G4LEPProtonBuilder);
-  theLEPPro->SetMaxEnergy(25*GeV);
-
-  thePiK=new G4PiKBuilder;
-  thePiK->RegisterMe(theQGSCPiK=new G4QGSCPiKBuilder);
-  thePiK->RegisterMe(theLEPPiK=new G4LEPPiKBuilder);
-  theLEPPiK->SetMaxEnergy(25*GeV);
+public:
+  TFTFP_EMV(G4int ver = 1);
+  virtual ~TFTFP_EMV();
   
-  theMiscLHEP=new G4MiscLHEPBuilder;
-}
+public:
+  // SetCuts() 
+  virtual void SetCuts();
 
-HadronPhysicsQGSC_EMV::~HadronPhysicsQGSC_EMV() 
-{
-   delete theMiscLHEP;
-   delete theQGSCPro;
-   delete theLEPPro;
-   delete thePro;
-   delete theQGSCPiK;
-   delete theLEPPiK;
-   delete thePiK;
-}
+private:
+  enum {ok = CompileTimeConstraints::IsA<T, G4VModularPhysicsList>::ok };
+};
+#include "FTFP_EMV.icc"
+typedef TFTFP_EMV<G4VModularPhysicsList> FTFP_EMV;
 
-void HadronPhysicsQGSC_EMV::ConstructParticle()
-{
-  G4MesonConstructor pMesonConstructor;
-  pMesonConstructor.ConstructParticle();
+// 2002 by J.P. Wellisch
 
-  G4BaryonConstructor pBaryonConstructor;
-  pBaryonConstructor.ConstructParticle();
+#endif
 
-  G4ShortLivedConstructor pShortLivedConstructor;
-  pShortLivedConstructor.ConstructParticle();  
-}
 
-#include "G4ProcessManager.hh"
-void HadronPhysicsQGSC_EMV::ConstructProcess()
-{
-  CreateModels();
-  theNeutrons->Build();
-  thePro->Build();
-  thePiK->Build();
-  theMiscLHEP->Build();
-}
 

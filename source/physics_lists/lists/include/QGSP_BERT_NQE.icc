@@ -23,21 +23,21 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: QGSC_EFLOW.icc,v 1.2 2007-04-26 14:47:11 gunter Exp $
+// $Id: QGSP_BERT_NQE.icc,v 1.1 2007-04-26 14:47:11 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
-// ClassName:   QGSC_EFLOW
+// ClassName:   QGSP_BERT_NQE
 //
-// Author: 2006  Gunter Folger
+// Author: 2007 G.Folger
+//     created from QGSP_BERT
 //
-// Created as copy of QGSC
 // Modified:
-//  26.04.2007 G.Folger: Enable quasielastic for QGS string model
 //
 //----------------------------------------------------------------------------
 //
+
 #include "globals.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleWithCuts.hh"
@@ -56,19 +56,19 @@
 #include "G4EmExtraPhysics.hh"
 #include "G4IonPhysics.hh"
 #include "G4QStoppingPhysics.hh"
-#include "G4HadronQElasticPhysics.hh"
+#include "G4HadronElasticPhysics.hh"
 #include "G4NeutronTrackingCut.hh"
 
 #include "G4DataQuestionaire.hh"
-#include "HadronPhysicsQGSC_EFLOW.hh"
+#include "HadronPhysicsQGSP_BERT.hh"
 
-template<class T> TQGSC_EFLOW<T>::TQGSC_EFLOW(G4int ver):  T()
+template<class T> TQGSP_BERT_NQE<T>::TQGSP_BERT_NQE(G4int ver):  T()
 {
-  // default cut value  (1.0mm) 
-  // defaultCutValue = 1.0*mm;
+
   G4DataQuestionaire it(photon);
-  G4cout << "<<< Geant4 Physics List simulation engine: QGSC_EFLOW 1.1"<<G4endl;
-  G4cout <<G4endl<<G4endl;
+  G4cout << "<<< Geant4 Physics List simulation engine: QGSP_BERT_NQE 1.0"<<G4endl;
+  G4cout <<G4endl;
+
   this->defaultCutValue = 0.7*mm;  
   this->SetVerboseLevel(ver);
 
@@ -81,12 +81,12 @@ template<class T> TQGSC_EFLOW<T>::TQGSC_EFLOW(G4int ver):  T()
   // Decays
   this->RegisterPhysics( new G4DecayPhysics("decay",ver) );
 
-   // Hadron Elastic scattering, "CHIPS" version
-  this-> RegisterPhysics( new G4HadronQElasticPhysics("elastic",ver));
+   // Hadron Elastic scattering
+  this-> RegisterPhysics( new G4HadronElasticPhysics("elastic",ver,false));
 
-   // Hadron Physics
+  // Hadron Physics
    G4bool quasiElastic;
-  this->RegisterPhysics(  new HadronPhysicsQGSC_EFLOW("hadron",quasiElastic=true));
+  this->RegisterPhysics( new HadronPhysicsQGSP_BERT("hadron",quasiElastic=false));
 
   // Stopping Physics
   this->RegisterPhysics( new G4QStoppingPhysics("stopping"));
@@ -99,14 +99,14 @@ template<class T> TQGSC_EFLOW<T>::TQGSC_EFLOW(G4int ver):  T()
 
 }
 
-template<class T> TQGSC_EFLOW<T>::~TQGSC_EFLOW()
+template<class T> TQGSP_BERT_NQE<T>::~TQGSP_BERT_NQE()
 {
 }
 
-template<class T> void TQGSC_EFLOW<T>::SetCuts()
+template<class T> void TQGSP_BERT_NQE<T>::SetCuts()
 {
   if (this->verboseLevel >1){
-    G4cout << "QGSC_EFLOW::SetCuts:";
+    G4cout << "QGSP_BERT_NQE::SetCuts:";
   }  
   //  " G4VUserPhysicsList::SetCutsWithDefault" method sets 
   //   the default cut value for all particle types 
@@ -115,9 +115,5 @@ template<class T> void TQGSC_EFLOW<T>::SetCuts()
   
 //  if (this->verboseLevel >0)
 //    G4VUserPhysicsList::DumpCutValuesTable();  
-  
 }
 
-
-
-// 2002 by J.P. Wellisch

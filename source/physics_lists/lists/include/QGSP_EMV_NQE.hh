@@ -23,66 +23,46 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadronPhysicsQGSC_EMV.hh,v 1.1 2006-11-24 15:49:09 gunter Exp $
+// $Id: QGSP_EMV_NQE.hh,v 1.1 2007-04-26 14:47:11 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
-// ClassName:   HadronPhysicsQGSC_EMV
+// ClassName: QGSP_EMV_NQE
 //
-// Author: 2006 G.Folger
+// Author: 2007 G.Folger
+//     created from QGSP_EMV
 //
-// Created as copy of HadronPhysicsQGSC.hh
+// Modified:
 //
 //----------------------------------------------------------------------------
+//
 
-#ifndef HadronPhysicsQGSC_EMV_h
-#define HadronPhysicsQGSC_EMV_h 1
+#ifndef TQGSP_EMV_NQE_h
+#define TQGSP_EMV_NQE_h 1
 
+#include "G4VModularPhysicsList.hh"
 #include "globals.hh"
-#include "G4ios.hh"
+#include "CompileTimeConstraints.hh"
 
-#include "G4VPhysicsConstructor.hh"
-#include "G4MiscLHEPBuilder.hh"
-
-#include "G4PiKBuilder.hh"
-#include "G4LEPPiKBuilder.hh"
-#include "G4QGSCPiKBuilder.hh"
-
-#include "G4ProtonBuilder.hh"
-#include "G4LEPProtonBuilder.hh"
-#include "G4QGSCProtonBuilder.hh"
-
-#include "G4NeutronBuilder.hh"
-#include "G4LEPNeutronBuilder.hh"
-#include "G4QGSCNeutronBuilder.hh"
-
-class HadronPhysicsQGSC_EMV : public G4VPhysicsConstructor
+template<class T>
+class TQGSP_EMV_NQE: public T
 {
-  public: 
-    HadronPhysicsQGSC_EMV(const G4String& name ="hadron");
-    virtual ~HadronPhysicsQGSC_EMV();
+public:
+  TQGSP_EMV_NQE(G4int ver = 1);
+  virtual ~TQGSP_EMV_NQE();
+  
+public:
+  // SetCuts() 
+  virtual void SetCuts();
 
-  public: 
-    virtual void ConstructParticle();
-    virtual void ConstructProcess();
-
-  private:
-    void CreateModels();
-    G4NeutronBuilder * theNeutrons;
-    G4LEPNeutronBuilder * theLEPNeutron;
-    G4QGSCNeutronBuilder * theQGSCNeutron;
-    
-    G4PiKBuilder * thePiK;
-    G4LEPPiKBuilder * theLEPPiK;
-    G4QGSCPiKBuilder * theQGSCPiK;
-    
-    G4ProtonBuilder * thePro;
-    G4LEPProtonBuilder * theLEPPro;
-    G4QGSCProtonBuilder * theQGSCPro;    
-    
-    G4MiscLHEPBuilder * theMiscLHEP;
+private:
+  enum {ok = CompileTimeConstraints::IsA<T, G4VModularPhysicsList>::ok };
 };
+#include "QGSP_EMV_NQE.icc"
+typedef TQGSP_EMV_NQE<G4VModularPhysicsList> QGSP_EMV_NQE;
 
 #endif
+
+
 

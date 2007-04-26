@@ -23,43 +23,44 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: QGSP_NQSE.hh,v 1.1 2007-03-30 15:38:28 gunter Exp $
+// $Id: QGSP_BERT_EMV.hh,v 1.1 2007-04-26 14:47:11 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
-// ClassName:   QGSP
+// ClassName:   QGSP_BERT_EMV
 //
-// Author: 2002 J.P. Wellisch
+// Author: 2007 G.Folger
+//    Copied from QGSP_BERT (H.P.Wellisch)
 //
 // Modified:
 //
 //----------------------------------------------------------------------------
-#ifndef TQGSP_h
-#define TQGSP_h 1
+//
+#ifndef TQGSP_BERT_EMV_h
+#define TQGSP_BERT_EMV_h 1
 
 #include "G4VModularPhysicsList.hh"
 #include "globals.hh"
 #include "CompileTimeConstraints.hh"
 
 template<class T>
-class TQGSP: public T
+class TQGSP_BERT_EMV: public T
 {
 public:
-  TQGSP(G4int ver = 1);
-  virtual ~TQGSP();
+  TQGSP_BERT_EMV(G4int ver = 1);
+  virtual ~TQGSP_BERT_EMV();
   
 public:
   // SetCuts() 
   virtual void SetCuts();
-  
+
 private:
   enum {ok = CompileTimeConstraints::IsA<T, G4VModularPhysicsList>::ok };
-
 };
-#include "QGSP.icc"
-typedef TQGSP<G4VModularPhysicsList> QGSP;
+
+#include "QGSP_BERT_EMV.icc"
+typedef TQGSP_BERT_EMV<G4VModularPhysicsList> QGSP_BERT_EMV;
 
 // 2002 by J.P. Wellisch
 

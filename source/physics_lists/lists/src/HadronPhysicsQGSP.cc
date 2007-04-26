@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: HadronPhysicsQGSP.cc,v 1.2 2007-03-30 15:38:28 gunter Exp $
+// $Id: HadronPhysicsQGSP.cc,v 1.3 2007-04-26 14:47:11 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -36,6 +36,7 @@
 // Modified:
 // 21.11.2005 G.Folger:  migration to non static particles
 // 08.06.2006 V.Ivanchenko: remove stopping
+// 30.03.2007 G.Folger: Add code for quasielastic
 //
 
 #include "HadronPhysicsQGSP.hh"
@@ -50,7 +51,7 @@
 #include "G4BaryonConstructor.hh"
 #include "G4ShortLivedConstructor.hh"
 
-HadronPhysicsQGSP::HadronPhysicsQGSP(const G4String& name,G4bool quasiElastic )
+HadronPhysicsQGSP::HadronPhysicsQGSP(const G4String& name, G4bool quasiElastic)
                  :  G4VPhysicsConstructor(name) , QuasiElastic(quasiElastic)
 {}
 

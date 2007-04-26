@@ -23,66 +23,48 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadronPhysicsQGSP_EMV.hh,v 1.1 2006-10-31 11:35:03 gunter Exp $
+//
+// $Id: QGSP_NQE.hh,v 1.1 2007-04-26 14:47:11 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
-// ClassName: HadronPhysiosQGSP_EMV
+// ClassName:   QGSP_NQE
 //
-// Author: 2005 G.Folger
+// Author: 2007 G.Folger
+//     created from QGSP 
 //
 // Modified:
-// 08.06.2006 V.Ivanchenko: remove stopping
 //
+//----------------------------------------------------------------------------
+#ifndef TQGSP_NQE_h
+#define TQGSP_NQE_h 1
 
-#ifndef HadronPhysicsQGSP_EMV_h
-#define HadronPhysicsQGSP_EMV_h 1
-
+#include "G4VModularPhysicsList.hh"
 #include "globals.hh"
-#include "G4ios.hh"
+#include "CompileTimeConstraints.hh"
 
-#include "G4VPhysicsConstructor.hh"
-#include "G4MiscLHEPBuilder.hh"
-
-#include "G4PiKBuilder.hh"
-#include "G4LEPPiKBuilder.hh"
-#include "G4QGSPPiKBuilder.hh"
-
-#include "G4ProtonBuilder.hh"
-#include "G4LEPProtonBuilder.hh"
-#include "G4QGSPProtonBuilder.hh"
-
-#include "G4NeutronBuilder.hh"
-#include "G4LEPNeutronBuilder.hh"
-#include "G4QGSPNeutronBuilder.hh"
-
-class HadronPhysicsQGSP_EMV : public G4VPhysicsConstructor
+template<class T>
+class TQGSP_NQE: public T
 {
-  public: 
-    HadronPhysicsQGSP_EMV(const G4String& name ="hadron");
-    virtual ~HadronPhysicsQGSP_EMV();
+public:
+  TQGSP_NQE(G4int ver = 1);
+  virtual ~TQGSP_NQE();
+  
+public:
+  // SetCuts() 
+  virtual void SetCuts();
+  
+private:
+  enum {ok = CompileTimeConstraints::IsA<T, G4VModularPhysicsList>::ok };
 
-  public: 
-    virtual void ConstructParticle();
-    virtual void ConstructProcess();
-
-  private:
-    void CreateModels();
-    G4NeutronBuilder * theNeutrons;
-    G4LEPNeutronBuilder * theLEPNeutron;
-    G4QGSPNeutronBuilder * theQGSPNeutron;
-    
-    G4PiKBuilder * thePiK;
-    G4LEPPiKBuilder * theLEPPiK;
-    G4QGSPPiKBuilder * theQGSPPiK;
-    
-    G4ProtonBuilder * thePro;
-    G4LEPProtonBuilder * theLEPPro;
-    G4QGSPProtonBuilder * theQGSPPro;    
-    
-    G4MiscLHEPBuilder * theMiscLHEP;
 };
+#include "QGSP_NQE.icc"
+typedef TQGSP_NQE<G4VModularPhysicsList> QGSP_NQE;
+
+// 2002 by J.P. Wellisch
 
 #endif
+
+
 
