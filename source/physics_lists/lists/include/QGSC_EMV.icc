@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: QGSC_EMV.icc,v 1.2 2007-04-26 14:47:11 gunter Exp $
+// $Id: QGSC_EMV.icc,v 1.3 2007-04-26 16:03:36 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -36,7 +36,8 @@
 //
 // Modified:
 // 26.04.2007 G.Folger  Use HadronPhysicsQGSC instead of  HadronPhysicsQGSC_EMV
-// 26.04.2007 G.Folger: Enable quasielastic for QGS string model
+// 26.04.2007 G.Folger  Enable quasielastic for QGS string model
+// 26.04.2007 G.Folger  Use QCaptureAtRest for muon
 //
 //----------------------------------------------------------------------------
 //
@@ -69,7 +70,7 @@ template<class T> TQGSC_EMV<T>::TQGSC_EMV(G4int ver):  T()
   // default cut value  (1.0mm) 
   // defaultCutValue = 1.0*mm;
   G4DataQuestionaire it(photon);
-  G4cout << "<<< Geant4 Physics List simulation engine: QGSC_EMV 1.1"<<G4endl;
+  G4cout << "<<< Geant4 Physics List simulation engine: QGSC_EMV 1.2"<<G4endl;
   G4cout <<G4endl<<G4endl;
   this->defaultCutValue = 0.7*mm;  
   this->SetVerboseLevel(ver);
@@ -91,7 +92,7 @@ template<class T> TQGSC_EMV<T>::TQGSC_EMV(G4int ver):  T()
   this->RegisterPhysics(  new HadronPhysicsQGSC("hadron",quasiElastic=true));
 
   // Stopping Physics
-  this->RegisterPhysics( new G4QStoppingPhysics("stopping"));
+  this->RegisterPhysics( new G4QStoppingPhysics("stopping",ver,false));
 
   // Ion Physics
   this->RegisterPhysics( new G4IonPhysics("ion"));
