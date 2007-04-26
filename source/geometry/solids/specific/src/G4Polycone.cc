@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polycone.cc,v 1.36 2007-04-26 06:18:20 tnikitin Exp $
+// $Id: G4Polycone.cc,v 1.37 2007-04-26 13:34:04 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -710,6 +710,8 @@ G4ThreeVector G4Polycone::GetPointOnTubs(G4double fRMin, G4double fRMax,
   zRand = RandFlat::shoot(-1.*fDz,fDz);
   return G4ThreeVector(xRand, yRand, zRand+0.5*(zTwo+zOne));
 }
+
+
 //
 // GetPointOnRing
 //
@@ -725,24 +727,31 @@ G4ThreeVector G4Polycone::GetPointOnRing(G4double fRMin1, G4double fRMax1,
   cosphi = std::cos(phi);
   sinphi = std::sin(phi);
 
-  if(fRMin1==fRMin2){rRand1=fRMin1;A1=0.;}
-  else{
-    rRand1  = RandFlat::shoot(fRMin1,fRMin2);
+  if(fRMin1==fRMin2)
+  {
+    rRand1 = fRMin1; A1=0.;
+  }
+  else
+  {
+    rRand1 = RandFlat::shoot(fRMin1,fRMin2);
     A1=std::abs(fRMin2*fRMin2-fRMin1*fRMin1);
   }
-  if(fRMax1==fRMax2){rRand2=fRMax1;Atot=A1;}
-  else{
-    rRand2 = RandFlat::shoot(fRMax1,fRMax2);
-    Atot=A1+std::abs(fRMax2*fRMax2-fRMax1*fRMax1);
+  if(fRMax1==fRMax2)
+  {
+    rRand2=fRMax1; Atot=A1;
   }
-
-    rCh    = RandFlat::shoot(0.,Atot);
+  else
+  {
+    rRand2 = RandFlat::shoot(fRMax1,fRMax2);
+    Atot   = A1+std::abs(fRMax2*fRMax2-fRMax1*fRMax1);
+  }
+  rCh   = RandFlat::shoot(0.,Atot);
  
-  if(rCh>A1)rRand1=rRand2;
+  if(rCh>A1) { rRand1=rRand2; }
   
-
   xRand = rRand1*cosphi;
   yRand = rRand1*sinphi;
+
   return G4ThreeVector(xRand, yRand, zOne);
 }
 
@@ -756,11 +765,13 @@ G4ThreeVector G4Polycone::GetPointOnCut(G4double fRMin1, G4double fRMax1,
                                         G4double fRMin2, G4double fRMax2,
                                         G4double zOne,  G4double zTwo,
                                         G4double& totArea) const
-{   if(zOne==zTwo){
-    return GetPointOnRing(fRMin1, fRMax1,fRMin2,fRMax2,zOne);}
+{   if(zOne==zTwo)
+    {
+      return GetPointOnRing(fRMin1, fRMax1,fRMin2,fRMax2,zOne);
+    }
     if( (fRMin1 == fRMin2) && (fRMax1 == fRMax2) )
     {
-    return GetPointOnTubs(fRMin1, fRMax1,zOne,zTwo,totArea);
+      return GetPointOnTubs(fRMin1, fRMax1,zOne,zTwo,totArea);
     }
     return GetPointOnCone(fRMin1,fRMax1,fRMin2,fRMax2,zOne,zTwo,totArea);
 }
