@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Region.hh,v 1.17 2006-06-29 18:31:05 gunter Exp $
+// $Id: G4Region.hh,v 1.18 2007-04-26 21:20:53 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Region
@@ -49,6 +49,7 @@ class G4MaterialCutsCouple;
 class G4UserLimits;
 class G4FastSimulationManager;
 class G4VPhysicalVolume;
+class G4VUserSteppingAction;
 
 #include <vector>
 #include <map>
@@ -163,6 +164,10 @@ class G4Region
       // Flag 'unique' is true if there is only one parent region containing
       // the current region.
 
+    inline void SetRegionalSteppingAction(G4VUserSteppingAction* rusa);
+    inline G4VUserSteppingAction* GetRegionalSteppingAction() const;
+      // Set/Get method of the regional user stepping action
+
   public:  // without description
 
     G4Region(__void__&);
@@ -197,6 +202,8 @@ class G4Region
     G4FastSimulationManager* fFastSimulationManager;
 
     G4VPhysicalVolume* fWorldPhys;
+
+    G4VUserSteppingAction* fRegionalSteppingAction;
 };
 
 #include "G4Region.icc"

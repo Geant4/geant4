@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Region.icc,v 1.13 2006-06-29 18:31:07 gunter Exp $
+// $Id: G4Region.icc,v 1.14 2007-04-26 21:20:53 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -273,5 +273,21 @@ void G4Region::AddMaterial(G4Material* aMaterial)
     fRegionMod = true;
   }
 }
+
+// ********************************************************************
+// SetRegionalSteppingAction
+// ********************************************************************
+//
+inline
+void G4Region::SetRegionalSteppingAction(G4VUserSteppingAction* rusa)
+{ fRegionalSteppingAction = rusa; }
+
+// ********************************************************************
+// GetRegionalSteppingAction
+// ********************************************************************
+//
+inline
+G4VUserSteppingAction* G4Region::GetRegionalSteppingAction() const
+{ return fRegionalSteppingAction; }
 
 
