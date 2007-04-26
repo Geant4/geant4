@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polycone.hh,v 1.19 2006-06-29 18:47:12 gunter Exp $
+// $Id: G4Polycone.hh,v 1.20 2007-04-26 06:18:20 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -174,6 +174,10 @@ class G4Polycone : public G4VCSGfaceted
                               G4double fRMin2, G4double fRMax2,
                               G4double zOne,   G4double zTwo,
                               G4double& totArea) const;
+
+  G4ThreeVector GetPointOnRing(G4double fRMin, G4double fRMax,
+                               G4double fRMin2, G4double fRMax2,
+                               G4double zOne) const;
 
  protected:  // without description
 
