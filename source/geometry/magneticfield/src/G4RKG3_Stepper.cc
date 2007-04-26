@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RKG3_Stepper.cc,v 1.11 2007-04-26 06:26:54 tnikitin Exp $
+// $Id: G4RKG3_Stepper.cc,v 1.12 2007-04-26 12:23:55 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -216,7 +216,7 @@ G4double G4RKG3_Stepper::DistChord()   const
   }else{
      distChord = (fyMidPoint-fyInitial).mag();
   }
-  distChord= G4LineSection::Distline(fyMidPoint,fyInitial,fyFinal );
+
  
   return distChord;
   
