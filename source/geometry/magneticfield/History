@@ -1,4 +1,4 @@
-$Id: History,v 1.115 2006-11-14 15:30:11 japost Exp $
+$Id: History,v 1.116 2007-04-26 10:15:42 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+April 26th, 2007  T.Nikitina - field-V08-02-00
+----------------------------
+- Corrected integration constants in G4MagHelicalStepper
+- Added implementation of G4RKG3_Stepper, stepper derived from Geant3.
+- Updated NTST unit test. New unit test "field06" for comparison of steppers.
+
 November 14th, 2006  J.Apostolakis - field-V08-01-02
 ----------------------------------
 - G4MagIntegratorDriver
