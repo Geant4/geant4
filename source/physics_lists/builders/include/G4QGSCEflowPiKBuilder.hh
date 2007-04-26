@@ -42,11 +42,12 @@
 #include "G4QGSParticipants.hh"
 #include "G4QGSMFragmentation.hh"
 #include "G4ExcitedStringDecay.hh"
+#include "G4QuasiElasticChannel.hh"
 
 class G4QGSCEflowPiKBuilder : public G4VPiKBuilder
 {
   public: 
-    G4QGSCEflowPiKBuilder();
+    G4QGSCEflowPiKBuilder(G4bool quasiElastic=false);
     virtual ~G4QGSCEflowPiKBuilder();
 
   public: 
@@ -68,6 +69,8 @@ class G4QGSCEflowPiKBuilder : public G4VPiKBuilder
     G4QGSModel< G4QGSParticipants > * theStringModel;
     G4QGSMFragmentation theFragmentation;
     G4ExcitedStringDecay * theStringDecay;
+    G4QuasiElasticChannel * theQuasiElastic;
+
     G4double theMin;
 
 };

@@ -23,43 +23,50 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
- #include "G4QGSCEflowNeutronBuilder.hh"
- #include "G4ParticleDefinition.hh"
- #include "G4ParticleTable.hh"
- #include "G4ProcessManager.hh"
+#include "G4QGSCEflowNeutronBuilder.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4ParticleTable.hh"
+#include "G4ProcessManager.hh"
 
- G4QGSCEflowNeutronBuilder::
- G4QGSCEflowNeutronBuilder() 
- {
-   theMin = 8*GeV;
-   theModel = new G4TheoFSGenerator;
+G4QGSCEflowNeutronBuilder::
+G4QGSCEflowNeutronBuilder(G4bool quasiElastic) 
+{
+  theMin = 8*GeV;
+  theModel = new G4TheoFSGenerator;
 
-   theStringModel= new G4QGSModel< G4QGSParticipants >;
-   theStringDecay = new G4ExcitedStringDecay(new G4QGSMFragmentation);
-   theStringModel->SetFragmentationModel(theStringDecay);
+  theStringModel= new G4QGSModel< G4QGSParticipants >;
+  theStringDecay = new G4ExcitedStringDecay(new G4QGSMFragmentation);
+  theStringModel->SetFragmentationModel(theStringDecay);
 
-   theCascade = new G4StringChipsParticleLevelInterface;
+  theCascade = new G4StringChipsParticleLevelInterface;
 
-   theModel->SetTransport(theCascade);
-   theModel->SetHighEnergyGenerator(theStringModel);
- }
+  theModel->SetTransport(theCascade);
+  theModel->SetHighEnergyGenerator(theStringModel);
+  if (quasiElastic)
+  {
+     theQuasiElastic=new G4QuasiElasticChannel;
+     theModel->SetQuasiElasticChannel(theQuasiElastic);
+  } else 
+  {  theQuasiElastic=0;}  
+}
 
- G4QGSCEflowNeutronBuilder::
- ~G4QGSCEflowNeutronBuilder() 
- {
-   delete theStringDecay;
-   delete theStringModel;
-   delete theCascade;
-   delete theModel;
- }
+G4QGSCEflowNeutronBuilder::
+~G4QGSCEflowNeutronBuilder() 
+{
+  delete theStringDecay;
+  delete theStringModel;
+  delete theCascade;
+  if ( theQuasiElastic ) delete theQuasiElastic;
+  delete theModel;
+}
 
- void G4QGSCEflowNeutronBuilder::
- Build(G4NeutronInelasticProcess * aP)
- {
-   theModel->SetMinEnergy(theMin);
-   theModel->SetMaxEnergy(100*TeV);
-   aP->RegisterMe(theModel);
-   aP->AddDataSet(&theXSec);  
- }
+void G4QGSCEflowNeutronBuilder::
+Build(G4NeutronInelasticProcess * aP)
+{
+  theModel->SetMinEnergy(theMin);
+  theModel->SetMaxEnergy(100*TeV);
+  aP->RegisterMe(theModel);
+  aP->AddDataSet(&theXSec);  
+}
 
 // 2006 G.Folger

@@ -29,7 +29,7 @@
 #include "G4ProcessManager.hh"
 
 G4QGSCEflowPiKBuilder::
-G4QGSCEflowPiKBuilder() 
+G4QGSCEflowPiKBuilder(G4bool quasiElastic) 
 {
   theMin = 8*GeV;
   theModel = new G4TheoFSGenerator;
@@ -42,6 +42,12 @@ G4QGSCEflowPiKBuilder()
 
   theModel->SetTransport(theCascade);
   theModel->SetHighEnergyGenerator(theStringModel);
+  if (quasiElastic)
+  {
+     theQuasiElastic=new G4QuasiElasticChannel;
+     theModel->SetQuasiElasticChannel(theQuasiElastic);
+  } else 
+  {  theQuasiElastic=0;}  
 }
 
 G4QGSCEflowPiKBuilder::
@@ -50,6 +56,7 @@ G4QGSCEflowPiKBuilder::
   delete theCascade;
   delete theStringDecay;
   delete theStringModel;
+  if ( theQuasiElastic ) delete theQuasiElastic;
   delete theModel;
 }
 

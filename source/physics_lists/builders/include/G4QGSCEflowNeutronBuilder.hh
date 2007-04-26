@@ -41,11 +41,12 @@
 #include "G4QGSParticipants.hh"
 #include "G4QGSMFragmentation.hh"
 #include "G4ExcitedStringDecay.hh"
+#include "G4QuasiElasticChannel.hh"
 
 class G4QGSCEflowNeutronBuilder : public G4VNeutronBuilder
 {
   public: 
-    G4QGSCEflowNeutronBuilder();
+    G4QGSCEflowNeutronBuilder(G4bool quasiElastic=false);
     virtual ~G4QGSCEflowNeutronBuilder();
 
   public: 
@@ -61,6 +62,7 @@ class G4QGSCEflowNeutronBuilder : public G4VNeutronBuilder
     G4StringChipsParticleLevelInterface * theCascade;
     G4TheoFSGenerator * theModel;
     G4ExcitedStringDecay * theStringDecay;
+    G4QuasiElasticChannel * theQuasiElastic;
 
     G4NeutronInelasticCrossSection theXSec;
     G4double theMin;
