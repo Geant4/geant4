@@ -1,4 +1,4 @@
-$Id: History,v 1.21 2007-04-26 14:57:04 gunter Exp $
+$Id: History,v 1.22 2007-04-26 14:57:19 gunter Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,7 +16,7 @@ track of all tags.
      ----------------------------------------------------------
 
 
-26-04-2007, G.Folger     phys-lists-V08-02-08
+26-04-2007, G.Folger     phys-lists-V08-02-09
  - Modifications for Quasielastic. Added to all QGS physics lists execpt 
     the two obsolete QGSC_LEAD/QGSC_LEAD_HP. This also required adapting of
     - HadronsPhysicsXYZ
