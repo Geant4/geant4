@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeomTestSegment.cc,v 1.6 2007-04-26 15:06:11 tnikitin Exp $
+// $Id: G4GeomTestSegment.cc,v 1.7 2007-04-26 15:15:02 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -189,7 +189,7 @@ void G4GeomTestSegment::PatchInconsistencies(  G4GeomTestLogger *logger )
       // Oh oh. No solution. Delete the current point and complain.
       //
       logger->SolidProblem( solid, "Spurious exiting intersection point", p );
-      G4cout<<" dir="<<curr->GetDistance()<<" entering="<<curr->Entering()<<" SigneNorm="<<v.dot(solid->SurfaceNormal(p))<<G4endl;   
+      // G4cout<<" dir="<<curr->GetDistance()<<" entering="<<curr->Entering()<<" SigneNorm="<<v.dot(solid->SurfaceNormal(p))<<G4endl;   
       
       curr = points.erase(curr);
       break;
