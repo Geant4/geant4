@@ -302,9 +302,10 @@ please refer to the related History files provided in most packages):
         <LI>Use <TT>G4SafetyHelper</TT> instead of <TT>G4Navigator</TT> for
             determining distance to boundary, and added protection agains zero
             step length.</LI>
-        <LI>Modified initialisation of <TT>linLossLimit<TT> to <TT>1.E-6</TT>.</LI>
+        <LI>Modified initialisation of <TT>linLossLimit</TT> to <TT>1.E-6</TT>.</LI>
         <LI>Improved precision of energy loss for high energy incident and
             high cut.</LI>
+        </UL></LI>
     <LI><TT>G4VMultipleScattering</TT>:
         <UL>
         <LI>Added protection against zero step or energy.</LI>
@@ -376,35 +377,32 @@ please refer to the related History files provided in most packages):
         responsible for crashes observed when recursive-grid test for overlaps
         was run. Addressing problem report #784.</LI>
     </UL></LI>
-<LI><B>Solids</B>
+<LI><B>Solids (Specific)</B>
     <UL>
-    <LI><I>Specific</I>:
+    <LI>Introduced new shape <TT>G4ExtrudedSolid</TT>, a solid representing
+        the extrusion of an arbitrary polygon with fixed outline and
+        multiple Z sections.</LI>
+    <LI>G4TessellatedSolid:
         <UL>
-        <LI>Introduced new shape <TT>G4ExtrudedSolid</TT>, a solid representing
-            the extrusion of an arbitrary polygon with fixed outline and
-            multiple Z sections.</LI>
-        <LI>G4TessellatedSolid:
-            <UL>
-            <LI>Made relevant solid's methods virtual, to be used as base
-                class.</LI>
-            <LI>Added implementation for <TT>GetSurfaceArea()</TT> and
-                <TT>GetPointOnSurface()</TT> methods.</LI>
-            <LI>Added protection in <TT>SurfaceNormal()</TT> method in case
-                of facet not found.</LI>
-            <LI>Check and return <TT>kOutside</TT> in <TT>Inside()</TT> if
-                point out of solid's extent.</LI>
-            <LI>Bug fix in <TT>G4TriangularFacet::Intersect()</TT> to allow
-                for correct update of <TT>Distance</TT> in condition. Cleared
-                unecessary declaration of <TT>IsInside()</TT> methods in both
-                <TT>G4TriangularFacet</TT> and <TT>G4QuadrangularFacet</TT>.</LI>
-            <LI>Fix in <TT>G4PolyconeSide::DistanceAway()</TT> for correct
-                estimation of distance for the case of <TT>Phi</TT> sections.
-                Addresses problem report #598.</LI>
-            <LI>Fix in <TT>GetPointOnSurface()</TT> for <TT>G4Polycone</TT> to
-                consider also points laying on rings when consecutive
-                <TT>Z</TT>-sections are coincident. Added method
-                <TT>GetPointOnRing()</TT>.</LI>
-            </UL></LI>
+        <LI>Made relevant solid's methods virtual, to be used as base
+            class.</LI>
+        <LI>Added implementation for <TT>GetSurfaceArea()</TT> and
+            <TT>GetPointOnSurface()</TT> methods.</LI>
+        <LI>Added protection in <TT>SurfaceNormal()</TT> method in case
+            of facet not found.</LI>
+        <LI>Check and return <TT>kOutside</TT> in <TT>Inside()</TT> if
+            point out of solid's extent.</LI>
+        <LI>Bug fix in <TT>G4TriangularFacet::Intersect()</TT> to allow
+            for correct update of <TT>Distance</TT> in condition. Cleared
+            unecessary declaration of <TT>IsInside()</TT> methods in both
+            <TT>G4TriangularFacet</TT> and <TT>G4QuadrangularFacet</TT>.</LI>
+        <LI>Fix in <TT>G4PolyconeSide::DistanceAway()</TT> for correct
+            estimation of distance for the case of <TT>Phi</TT> sections.
+            Addresses problem report #598.</LI>
+        <LI>Fix in <TT>GetPointOnSurface()</TT> for <TT>G4Polycone</TT> to
+            consider also points laying on rings when consecutive
+            <TT>Z</TT>-sections are coincident. Added method
+            <TT>GetPointOnRing()</TT>.</LI>
         </UL></LI>
     </UL></LI>
 <LI><B>Volumes</B>
@@ -602,7 +600,7 @@ please refer to the related History files provided in most packages):
 <LI>Removed unnecessary <TT>HadronPhysics...{EMV,EMX}</TT> classes.</LI>
 <LI>Adopting recent upgrades in QGS and FTF for the QBBC physics list.</LI>
 <LI>Set <TT>skin</TT> to zero in <TT>G4EmStandardPhysics7</TT> (i.e. no use
-    of <TT>ComputeStep()<TT> in multiple-scattering).</LI>
+    of <TT>ComputeStep()</TT> in multiple-scattering).</LI>
 <LI><TT>G4HadronHElasticPhysics</TT> uses new cross section classes
     <TT>G4BGGNucleonElasticXS</TT> and <TT>G4BGGPionElasticXS</TT>.</LI>
 <LI><TT>G4HadronElasticPhysics</TT>: set limits on low energy and QElastic
