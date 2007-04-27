@@ -1,0 +1,166 @@
+
+                       geant4-08-02-ref-04
+                       ===================
+
+Some of the development/fixes included since the last reference tag are:
+
+  o Added possibility to define a tolerance for reporting overlaps; added
+    new argument to signature: by default tolerance is set to zero.
+  o Adopt G4SafetyHelper via G4TransportationManager for all queries
+    from EM processes to geometry on estimation of next step.
+  o Completed implementation of hadronic whiteboard error reporting for
+    all hadronic models.
+  o OpenGL: implemented picking for OGLSX and OGLIX.
+
+---------- Reference-tag 'Release Notes' -----------
+
+
+Summarised, the list of changes is the following:
+
+digits_hits                                      digits_hits-V08-02-00
+-----------
+- Fixed way of counting outward steps in flux scorers.
+
+geometry/management                              geommng-V08-02-02
+-------------------
+- Added 'get' methods to stores for retrivial of volumes/solid by name.
+- Modified signature of G4VPhysicalVolume::CheckOverlaps() to introduce
+  ability of handling tolerances for overlaps.
+
+geometry/navigation                              geomnav-V08-02-02
+-------------------
+- G4Navigator: new method CheckNextStep() which makes a trial step, without
+  changing the state of the navigator. It is a variant of ComputeStep(),
+  whose signature it shares.
+- G4SafetyHelper can now be accessed via G4TransportationManager. Depending
+  on type of navigation (single world or multiple navigation) it uses mass
+  navigator or G4PathFinder. All queries from EM processes to geometry are
+  made to G4SafetyHelper.
+- G4TransportationManager: added G4SafetyHelper.
+- G4PathFinder: added initialisation of G4SafetyHelper.
+
+geometry/volumes                                 geomvol-V08-02-02
+----------------
+- More extensions to the CheckOverlaps() algorithm:
+  o Added possibility to define a tolerance for reporting overlaps; added
+    new argument to signature, by default tolerance is set to zero.
+  o Optimised implementation for detecting daughter volumes which are
+    totally overlapping.
+  o Added check on current volume to optimise and correctly handle the
+    case of explicit call of the method when geometry is constructed.
+
+physics_lists                                    phys-lists-V08-02-08
+-------------
+- Adopting recent upgrades in QGS and FTF for the QBBC physics list. 
+
+processes/electromagnetic/muons                  emmuons-V08-02-01
+-------------------------------
+- G4MuPairProductionModel: added protection against zero or negative partial
+  cross section inside SelectRandomAtom() method.
+  Fixes problem reported when runnning tutorial example A01.
+
+processes/electromagnetic/standard               emstand-V08-02-14
+----------------------------------
+- G4MultipleScattering:
+  o Use by default skin=0, according to current interface to G4SafetyHelper
+    which does not yet allow provision of valid steps in the case of magnetic
+    field activated.
+- G4UrbanMscModel:
+  o Stepping near to boundaries has been changed back in order to have small
+    steps with single scattering before+after boundary for skin > 1.
+  o Use unique calls to G4SafetyHelper; cleaned up logic in method
+    ComputeTruePathLengthLimit().
+- G4UniversalFluctuation:
+  o Correction to algorithm in order to provide for better width.
+    Width of the energy loss distribution now agrees rather well with data.
+
+processes/electromagnetic/utils                  emutils-V08-02-08
+-------------------------------
+- G4VEnegyLossProcess:
+  o Adopt unique calls to G4SafetyHelper, with initialisation happening
+    inside BuildPhysicsTable().
+- G4VEmProcess: removed double call to Clear() method.
+
+processes/hadronic
+------------------
+- management (hadr-man-V08-02-03)
+  o G4HadronicProcess:
+    + Removed AlwaysKillLeadingHadron() method.
+    + Fix to stop killing primaries for elastic.
+    + Fix of weighting error in leading particle killer.
+    + Added process and model name arguments to ApplyInteraction() method.
+  o G4HadronicInteractionWrapper:
+    + Added process and model name arguments to ApplyInteraction() method
+      and entered them in the whiteboard.
+- models/abrasion (hadr-abrmod-V08-02-00)
+  o Added model name for hadronic whiteboard error reporting.
+- models/chiral_inv_phase_space/body (hadr-chips-body-V08-02-10)
+  o Fix for NaN, protected coulomb barrier against divide by zero, now
+    defaults to zero.
+  o Removed warning for anti-Delta in G4QNucleus.
+- models/chiral_inv_phase_space/interface (hadr-chips-inter-V08-02-14)
+  o Fixed compilation problem on Windows/VC++, argument to pow() function.
+- models/coherent_elastic (hadr-cohe-V08-02-03)
+  o G4ElasticHadrNucleusHE: use iterator search on bin instead of computing
+    log().
+  o G4HadronElastic: use the most probable isotope for given Z to call
+    to HE model (CPU/memory more efficient).
+- models/em_dissociation (hadr-emd-V08-02-00)
+  o Added model name for hadronic whiteboard error reporting.
+- models/high_energy (hadr-hep-V08-02-00)
+  o Added model name for hadronic whiteboard error reporting.
+- models/neutron_hp (hadr-hpn-V08-02-01)
+  o Added model name for hadronic whiteboard error reporting.
+- models/parton_string (had-prtn-V08-02-01)
+  o Merged changes from FTF model branch.
+  o Separated modifications done in G4VLongitudinalStringFragmentation for
+    FTF from original code for QGS.
+- models/theo_high_energy (had-theo-HE-V08-02-01)
+  o Added model name for hadronic whiteboard error reporting.
+- util (hadr-util-V08-02-01)
+  o G4HadronicWhiteboard: added methods to set process and model names.
+  o G4ReactionDynamics: added pi0 to anti-particle test.
+
+processes/scoring                                procscore-V08-02-00
+-----------------
+- Fix to set step status for ghost pre-step point.
+
+visualization                                    vis-V08-02-04
+-------------
+- management: bug fix for zero pointer in G4VscenHamdler::LoadAtts().
+- OpenGL: implemented picking for OGLSX (as well as OGLIX).
+
+examples                                         examples-V08-02-04
+--------
+- Updated reference outputs.
+- extended/electromagnetic/TestEm3 (testem3-V08-02-04)
+  o Fixed compilation problem at SUN.
+  o Added command "/testem/run/limitEdep" allowing to compute restricted
+    mean values to supress big statistical fluctuations.
+  o Updated command "/testem/run/acceptance".
+  o Parameter skin=1 is set as default PhysList.
+  o Added macro emtutor.mac.
+  o Added physics-lists names: penelope, livermore.
+  o Restored random seed storage.
+- extended/electromagnetic/TestEm7 (testem7-V08-02-02)
+  o Parameter skin=1 is set as default PhysList.
+  o Added physics-lists names: penelope, livermore.
+- extended/electromagnetic/TestEm9 (testem9-V08-02-02)
+  o Compute truncated mean values to reduce statistical fluctuations
+    and fixed output of statistics.
+  o Added physics-lists names: penelope, livermore.
+- extended/electromagnetic/TestEm13 (testem13-V08-02-00)
+- extended/electromagnetic/TestEm14 (testem14-V08-02-00)
+  o vis.mac: suppressed command drawTracks.
+- extended/hadronic/Hadr01 (exhadr01-V08-02-00)
+  o PhysicsList update according to QBBC modification.
+  o Fix in QGSP_BIC_HP physics list. Addressing problem report #937.
+
+tests                                            tests-V08-02-04
+-----
+- Updated reference outputs and tools.
+- test10 (test10-V08-02-01)
+  o Increased minimum energy for optical properties from zero to 0.01.
+    Removes divide by zero in material properties table.
+- test35 (test35-V08-02-01)
+  o Added quasi-elastic to FTF.
