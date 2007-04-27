@@ -20,7 +20,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QuasiFreeRatios.cc,v 1.9 2007-04-02 09:12:02 mkossov Exp $
+// $Id: G4QuasiFreeRatios.cc,v 1.10 2007-04-27 07:30:26 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -249,7 +249,7 @@ G4double G4QuasiFreeRatios::CalcQF2IN_Ratio(G4double s, G4int A)
   G4double P=7.48e-5*s2/(1.+8.77e12/s4/s4/s2);
   G4double E=.2644+.016/(1.+std::exp((29.54-s)/2.49));
   G4double F=ss*.1526*std::exp(-s2*ss*.0000859);
-	 return C*std::exp(-E*std::pow(A-1.,F))/std::pow(A,P);
+	 return C*std::exp(-E*std::pow(G4double(A-1.),F))/std::pow(G4double(A),P);
 } // End of CalcQF2IN_Ratio
 
 // Calculatio pair(hN_el,hN_tot) (mb): p in GeV/c, index(PDG,F) (see FetchElTot)
