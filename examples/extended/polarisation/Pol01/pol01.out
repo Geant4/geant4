@@ -56,7 +56,7 @@ pol-conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 G
 
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 1
+      LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 pol-eIoni:   tables are built for  e-
@@ -126,39 +126,39 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=8.74s Real=8.96s Sys=0.2s
+  User=8.88s Real=9.06s Sys=0.16s
 
  The run consists of 10000 gamma of 10 MeV through 1.75 mm  of G4_Fe (density: 7.874 g/cm3 )
 
 --------- Ranlux engine status ---------
  Initial seed = 9876
- float_seed_table[] = 0.927203 0.290936 0.283004 0.15892 0.445669 0.336311 0.00770295 0.607265 0.924879 0.84422 0.823216 0.878572 0.90881 0.720375 0.554365 0.766014 0.154051 0.573903 0.169257 0.319743 0.733084 0.317826 0.569638 0.558692 
- i_lag = 13, j_lag = 23
- carry = 0, count24 = 17
+ float_seed_table[] = 0.259381 0.89712 0.288013 0.261182 0.185832 0.296451 0.88906 0.0965714 0.550383 0.351448 0.395098 0.0526639 0.205761 0.794483 0.599061 0.188197 0.363025 0.552162 0.929252 0.0926404 0.391822 0.231924 0.0626852 0.930748 
+ i_lag = 20, j_lag = 6
+ carry = 5.96046e-08, count24 = 16
  luxury = 3 nskip = 199
 ----------------------------------------
 
  Process calls frequency --->
-	Transportation = 31190
-	pol-compt = 278
-	msc = 4739
-	pol-eBrem = 349
-	pol-eIoni = 626
-	phot = 174
-	pol-conv = 223
-	pol-annihil = 72
+	Transportation = 31186
+	pol-compt = 287
+	msc = 3667
+	pol-eBrem = 377
+	phot = 176
+	pol-eIoni = 624
+	pol-conv = 204
+	pol-annihil = 68
  Gamma: 
-Mean Number per Event :1.0083
-Mean Energy :9.5732 MeV +- 1.9073 MeV
-Mean Polarization :-0.96357 +- 0.18587
+Mean Number per Event :1.0116
+Mean Energy :9.5589 MeV +- 1.9506 MeV
+Mean Polarization :-0.96189 +- 0.18837
  Electron: 
-Mean Number per Event :0.0361
-Mean Energy :5.1405 MeV +- 2.5287 MeV
-Mean Polarization :-0.71004 +- 0.29959
+Mean Number per Event :0.034
+Mean Energy :5.1731 MeV +- 2.6166 MeV
+Mean Polarization :-0.72033 +- 0.30133
  Positron: 
-Mean Number per Event :0.0151
-Mean Energy :4.2079 MeV +- 2.0224 MeV
-Mean Polarization :-0.58546 +- 0.33583
+Mean Number per Event :0.0137
+Mean Energy :4.5237 MeV +- 1.8643 MeV
+Mean Polarization :-0.64816 +- 0.29127
 #
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.

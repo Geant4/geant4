@@ -111,7 +111,7 @@ conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV f
 
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 1
+      LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 eIoni:   tables are built for  e-
@@ -146,7 +146,7 @@ annihil:       Sampling according eplus2gg model
 
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 1
+      LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 G4AugerData for Element no. 6 are loaded
 G4AugerData for Element no. 7 are loaded
@@ -206,7 +206,7 @@ G4hLowEnergyIonisation::BuildPhysicsTable: end for deuteron
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 1
+      LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 muIoni:   tables are built for  mu+
@@ -245,7 +245,7 @@ muPairProd:   tables are built for  mu-
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 1
+      LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 ========= Table of registered couples ==============================
@@ -269,22 +269,22 @@ Index : 1     used in the geometry : Yes     recalculation needed : No
 ### Run 0 start.
 Start Run processing.
 EvtNo= 791  length= 0.00878405  xend= -3.08247e-15
-EvtNo= 898  length= 0.00827459  xend= -2.33665e-15
+EvtNo= 898  length= 0.00827485  xend= -2.33665e-15
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=6.01s Real=7.79s Sys=1.76s
+  User=5.71s Real=7.55s Sys=1.82s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 998 for proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
-    Track Length in absorber = 9.18306 +- 0.00541914  microns 
-    CSDA  Range  in absorber = 9.03908 +- 0.00585374  microns 
+    Track Length in absorber = 9.18231 +- 0.0053896  microns 
+    CSDA  Range  in absorber = 9.04011 +- 0.00545  microns 
 
     Energy deposit in absorber = 0.5  MeV 
 
 ### Comparison with the ICRU49 data: 
-    Track Length (G4 - ICRU49) = 0.12406 +- 0.00541914 microns 
-    CSDA  Range  (G4 - ICRU49) = 0.170079 +- 0.00585374 microns 
+    Track Length (G4 - ICRU49) = 0.123311 +- 0.0053896 microns 
+    CSDA  Range  (G4 - ICRU49) = 0.171114 +- 0.00545 microns 
 
 Average Number electrons per event = 0
 Average Number photons per event   = 0
@@ -316,12 +316,12 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=5.69s Real=7.63s Sys=1.94s
+  User=5.58s Real=7.31s Sys=1.73s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for anti_proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
-    Track Length in absorber = 9.17699 +- 0.00559134  microns 
-    CSDA  Range  in absorber = 9.03006 +- 0.00539839  microns 
+    Track Length in absorber = 9.17534 +- 0.00565927  microns 
+    CSDA  Range  in absorber = 9.02843 +- 0.00543614  microns 
 
     Energy deposit in absorber = 0.5  MeV 
 
@@ -357,7 +357,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=11.07s Real=13.47s Sys=2.4s
+  User=10.76s Real=13.33s Sys=2.57s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for C12[0.0] with Ekin = 6 MeV p= 366.244 MeV/c
@@ -399,21 +399,21 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=45.82s Real=46.1s Sys=0.28s
+  User=45.25s Real=45.46s Sys=0.21s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 100 for proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
-    Track Length in absorber = 9.16224 +- 0.0148474  microns 
-    CSDA  Range  in absorber = 9.01788 +- 0.0161049  microns 
+    Track Length in absorber = 9.17991 +- 0.0150494  microns 
+    CSDA  Range  in absorber = 9.03318 +- 0.0153157  microns 
 
     Energy deposit in absorber = 0.5  MeV 
 
 ### Comparison with the ICRU49 data: 
-    Track Length (G4 - ICRU49) = 0.103244 +- 0.0148474 microns 
-    CSDA  Range  (G4 - ICRU49) = 0.148881 +- 0.0161049 microns 
+    Track Length (G4 - ICRU49) = 0.120913 +- 0.0150494 microns 
+    CSDA  Range  (G4 - ICRU49) = 0.164176 +- 0.0153157 microns 
 
-Average Number electrons per event = 14.87
-Average Number photons per event   = 14.87
+Average Number electrons per event = 14.4
+Average Number photons per event   = 14.4
 
 #
 /test17/cutAugerEnergy 250 eV
@@ -443,20 +443,20 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=111.77s Real=112.02s Sys=0.25s
+  User=117.95s Real=123.55s Sys=5.6s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 100 for proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
-    Track Length in absorber = 9.1927 +- 0.0179434  microns 
-    CSDA  Range  in absorber = 9.04702 +- 0.0183919  microns 
+    Track Length in absorber = 9.16744 +- 0.0167208  microns 
+    CSDA  Range  in absorber = 9.01489 +- 0.0170776  microns 
 
     Energy deposit in absorber = 0.5  MeV 
 
 ### Comparison with the ICRU49 data: 
-    Track Length (G4 - ICRU49) = 0.133702 +- 0.0179434 microns 
-    CSDA  Range  (G4 - ICRU49) = 0.178024 +- 0.0183919 microns 
+    Track Length (G4 - ICRU49) = 0.108436 +- 0.0167208 microns 
+    CSDA  Range  (G4 - ICRU49) = 0.14589 +- 0.0170776 microns 
 
-Average Number electrons per event = 524.08
-Average Number photons per event   = 2.02
+Average Number electrons per event = 521.81
+Average Number photons per event   = 2.09
 
 G4 kernel has come to Quit state.

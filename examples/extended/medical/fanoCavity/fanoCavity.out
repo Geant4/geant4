@@ -99,7 +99,7 @@ conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV f
 
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 1
+      LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 eIoni:   tables are built for  e-
@@ -120,7 +120,7 @@ eIoni:   tables are built for  e+
 
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 1
+      LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 hIoni:   tables are built for  proton
@@ -167,15 +167,15 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 ----------------------------------------
 Start Run processing.
 
- ---> NbofEvents= 1000   NbOfelectr= 69811   Tkin= 586.884 keV (0.000 %)   NbOfelec in cav= 5183   Dose/EnFluence= 33.465 cm2/g (0.000 %)
+ ---> NbofEvents= 1000   NbOfelectr= 70391   Tkin= 587.928 keV (0.000 %)   NbOfelec in cav= 4881   Dose/EnFluence= 31.061 cm2/g (0.000 %)
 
- ---> NbofEvents= 2000   NbOfelectr= 140608   Tkin= 587.794 keV (0.155 %)   NbOfelec in cav= 9903   Dose/EnFluence= 31.327 cm2/g (-6.390 %)
+ ---> NbofEvents= 2000   NbOfelectr= 140763   Tkin= 588.424 keV (0.084 %)   NbOfelec in cav= 9539   Dose/EnFluence= 29.591 cm2/g (-4.733 %)
 
- ---> NbofEvents= 3000   NbOfelectr= 211298   Tkin= 587.870 keV (0.013 %)   NbOfelec in cav= 15024   Dose/EnFluence= 31.711 cm2/g (1.228 %)
+ ---> NbofEvents= 3000   NbOfelectr= 211461   Tkin= 588.895 keV (0.080 %)   NbOfelec in cav= 13996   Dose/EnFluence= 28.937 cm2/g (-2.212 %)
 Run terminated.
 Run Summary
   Number of events processed : 4000
-  User=731.59s Real=960.02s Sys=228.39s
+  User=633.97s Real=826.95s Sys=192.95s
 
  ======================== run summary ======================
 
@@ -185,32 +185,32 @@ Run Summary
 
  ============================================================
 
- Process calls frequency --->  compt= 282248  Transportation= 78343  msc= 1791789  eIoni= 1610100
+ Process calls frequency --->  compt= 282271  Transportation= 76652  msc= 1035475  eIoni= 1898050
 
  Gamma crossSections in wall material :  compt= 63.447 cm2/g   --> total= 63.447 cm2/g
 
- Mean energy of secondary e- = 588.4651 keV  (--> range in wall material = 2.2125 mm )
- Mass_energy_transfer coef: 29.8691 cm2/g
+ Mean energy of secondary e- = 588.6736 keV  (--> range in wall material = 2.2136 mm )
+ Mass_energy_transfer coef: 29.8797 cm2/g
 
- StoppingPower in wall   = 1.9777 MeV*cm2/g
-               in cavity = 1.9777 MeV*cm2/g
+ StoppingPower in wall   = 1.9776 MeV*cm2/g
+               in cavity = 1.9776 MeV*cm2/g
 
  Charged particle flow in cavity :
-      Enter --> nbParticles = 19594	 Energy = 9.9082 GeV
-      Exit  --> nbParticles = 19567	 Energy = 9.8940 GeV
+      Enter --> nbParticles = 18508	 Energy = 9.3870 GeV
+      Exit  --> nbParticles = 18488	 Energy = 9.3740 GeV
 
- Total edep in cavity = 14.1230 MeV	 Total charged trackLength = 54.5058 m     (mean value = 2.7818 mm )
- Total dose in cavity = 22.4775 MeV/mg
- Dose/EnergyFluence   = 31.7769 cm2/g
+ Total edep in cavity = 13.0436 MeV	 Total charged trackLength = 51.8711 m     (mean value = 2.8026 mm )
+ Total dose in cavity = 20.7596 MeV/mg
+ Dose/EnergyFluence   = 29.3482 cm2/g
 
- (Dose/EnergyFluence)/Mass_energy_transfer = 1.0639
+ (Dose/EnergyFluence)/Mass_energy_transfer = 0.9822
 
- StepSize of ch. tracks in wall   = 138.5200 um  +- 107.4414 um 	 (nbSteps/track = 12.0404)
- StepSize of ch. tracks in cavity = 734.4603 um  +- 741.7655 um 	 (nbSteps/track = 3.7875)
+ StepSize of ch. tracks in wall   = 157.7391 um  +- 139.7570 um 	 (nbSteps/track = 10.5687)
+ StepSize of ch. tracks in cavity = 2.6703 mm  +- 2.1578 mm 	 (nbSteps/track = 1.0495)
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 439770062, 743255256
+ Current couple of seeds = 545644674, 1185871122
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

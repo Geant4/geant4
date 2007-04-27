@@ -88,7 +88,7 @@ conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV f
 
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 1
+      LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 eIoni:   tables are built for  e-
@@ -157,7 +157,7 @@ Lorentz Factor	XTR photon number
 8.085e+04	3.149
 9.283e+04	3.149
 
-total time for build X-ray TR energy loss tables = 0.94 s
+total time for build X-ray TR energy loss tables = 0.95 s
 
 SynRad:  Incoherent Synchrotron Radiation
       good description for long magnets at all energies
@@ -232,11 +232,11 @@ Lorentz Factor	XTR photon number
 8.085e+04	3.149
 9.283e+04	3.149
 
-total time for build X-ray TR energy loss tables = 0.9 s
+total time for build X-ray TR energy loss tables = 0.94 s
 
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 1
+      LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 hIoni:   tables are built for  proton
@@ -249,7 +249,7 @@ hIoni:   tables are built for  proton
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 1
+      LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 muIoni:   tables are built for  mu+
@@ -296,7 +296,7 @@ hIoni:   tables are built for  pi+
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 1
+      LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 hIoni:   tables are built for  pi-
@@ -346,26 +346,26 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=74.51s Real=85.21s Sys=10.68s
+  User=65.82s Real=72.94s Sys=7.07s
  ================== run summary =====================
  end of Run TotNbofEvents = 1000
-    mean charged track length   in absorber=119.201 +- 2.48198  mm  
+    mean charged track length   in absorber=113.323 +- 1.96464  mm  
 
-            mean energy deposit in absorber=0.0529253 +- 0.000931187  MeV 
+            mean energy deposit in absorber=0.0506053 +- 0.000790407  MeV 
 
- mean number of steps in absorber (charged) =62.817 +- 1.52232      
- mean number of steps in absorber (neutral) =2.956 +- 0.0556063      
+ mean number of steps in absorber (charged) =58.628 +- 1.35562      
+ mean number of steps in absorber (neutral) =2.917 +- 0.0566402      
 
-   mean number of charged secondaries = 5.377 +- 0.109091
+   mean number of charged secondaries = 5.079 +- 0.0933422
 
-   mean number of neutral secondaries = 0.148 +- 0.0131945
+   mean number of neutral secondaries = 0.145 +- 0.0127269
 
-   mean number of e-s =5.377  and e+s =0
+   mean number of e-s =5.079  and e+s =0
 
-(number) transmission coeff=0.546  reflection coeff=0.07
+(number) transmission coeff=0.553  reflection coeff=0.071
 
  energy deposit distribution 
-#entries=1000    #underflows=0    #overflows=59
+#entries=1000    #underflows=0    #overflows=42
  bin nb      Elow      entries     normalized 
     0         0           0           0
     1   1.53846           0           0
@@ -374,72 +374,72 @@ Run Summary
     4   6.15385           0           0
     5   7.69231           0           0
     6   9.23077           0           0
-    7   10.7692           1       0.001
-    8   12.3077           1       0.001
-    9   13.8462           8       0.008
-   10   15.3846           2       0.002
-   11   16.9231          11       0.011
+    7   10.7692           0           0
+    8   12.3077           0           0
+    9   13.8462           2       0.002
+   10   15.3846           7       0.007
+   11   16.9231          12       0.012
    12   18.4615          19       0.019
-   13        20          21       0.021
-   14   21.5385          14       0.014
-   15   23.0769          11       0.011
-   16   24.6154          27       0.027
-   17   26.1538          21       0.021
-   18   27.6923          28       0.028
-   19   29.2308          25       0.025
-   20   30.7692          33       0.033
-   21   32.3077          23       0.023
-   22   33.8462          24       0.024
-   23   35.3846          33       0.033
-   24   36.9231          24       0.024
-   25   38.4615          30        0.03
-   26        40          46       0.046
-   27   41.5385          30        0.03
-   28   43.0769          22       0.022
-   29   44.6154          28       0.028
+   13        20          20        0.02
+   14   21.5385          18       0.018
+   15   23.0769          19       0.019
+   16   24.6154          30        0.03
+   17   26.1538          26       0.026
+   18   27.6923          31       0.031
+   19   29.2308          34       0.034
+   20   30.7692          21       0.021
+   21   32.3077          30        0.03
+   22   33.8462          35       0.035
+   23   35.3846          30        0.03
+   24   36.9231          34       0.034
+   25   38.4615          26       0.026
+   26        40          29       0.029
+   27   41.5385          33       0.033
+   28   43.0769          25       0.025
+   29   44.6154          24       0.024
    30   46.1538          29       0.029
-   31   47.6923          33       0.033
-   32   49.2308          28       0.028
-   33   50.7692          20        0.02
-   34   52.3077          17       0.017
-   35   53.8462          23       0.023
-   36   55.3846          22       0.022
-   37   56.9231          33       0.033
-   38   58.4615          16       0.016
-   39        60          21       0.021
-   40   61.5385          11       0.011
-   41   63.0769          14       0.014
-   42   64.6154          23       0.023
-   43   66.1538          16       0.016
-   44   67.6923          19       0.019
-   45   69.2308           7       0.007
-   46   70.7692          11       0.011
-   47   72.3077          15       0.015
-   48   73.8462          10        0.01
-   49   75.3846           5       0.005
-   50   76.9231          11       0.011
-   51   78.4615           4       0.004
-   52        80           6       0.006
-   53   81.5385          11       0.011
-   54   83.0769           7       0.007
-   55   84.6154           3       0.003
-   56   86.1538           8       0.008
-   57   87.6923           4       0.004
-   58   89.2308           6       0.006
-   59   90.7692           6       0.006
-   60   92.3077           9       0.009
-   61   93.8462           4       0.004
-   62   95.3846           1       0.001
-   63   96.9231           4       0.004
-   64   98.4615           2       0.002
+   31   47.6923          29       0.029
+   32   49.2308          22       0.022
+   33   50.7692          28       0.028
+   34   52.3077          24       0.024
+   35   53.8462          32       0.032
+   36   55.3846          19       0.019
+   37   56.9231          27       0.027
+   38   58.4615          21       0.021
+   39        60          12       0.012
+   40   61.5385          15       0.015
+   41   63.0769          16       0.016
+   42   64.6154           9       0.009
+   43   66.1538          10        0.01
+   44   67.6923           9       0.009
+   45   69.2308          14       0.014
+   46   70.7692          21       0.021
+   47   72.3077          14       0.014
+   48   73.8462           9       0.009
+   49   75.3846           9       0.009
+   50   76.9231           7       0.007
+   51   78.4615           6       0.006
+   52        80           4       0.004
+   53   81.5385           6       0.006
+   54   83.0769           1       0.001
+   55   84.6154          10        0.01
+   56   86.1538           2       0.002
+   57   87.6923           5       0.005
+   58   89.2308          14       0.014
+   59   90.7692           3       0.003
+   60   92.3077           5       0.005
+   61   93.8462           6       0.006
+   62   95.3846           6       0.006
+   63   96.9231           3       0.003
+   64   98.4615           6       0.006
 
- Emp =            0.04   width=           0.04  MeV 
+ Emp =       0.0338462   width=      0.0523077  MeV 
 
 ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 2025620178, 1203467948
+ Current couple of seeds = 1109656325, 1557507553
 ----------------------------------------
 
 ========= Table of registered couples ==============================

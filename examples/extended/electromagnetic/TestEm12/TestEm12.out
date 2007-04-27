@@ -132,7 +132,7 @@ conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV f
 
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 1
+      LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 eIoni:   tables are built for  e-
@@ -169,7 +169,7 @@ annihil:       Sampling according eplus2gg model
 
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 1
+      LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 hIoni:   tables are built for  proton
@@ -207,7 +207,7 @@ hIoni:   tables are built for  anti_proton
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 1
+      LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 muIoni:   tables are built for  mu+
@@ -257,7 +257,7 @@ hIoni:   tables are built for  pi+
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 1
+      LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 hIoni:   tables are built for  pi-
@@ -319,7 +319,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=1254.52s Real=1462.25s Sys=111.26s
+  User=1181.65s Real=1397.19s Sys=113.79s
 
  ======================== run summary ======================
 
@@ -327,18 +327,18 @@ Run Summary
 
  ============================================================
 
- Total Energy deposited        = 3.935 MeV +- 236.584 keV
+ Total Energy deposited        = 3.934 MeV +- 235.671 keV
 
- Track length of primary track = 2.017 cm  +- 2.797 mm 
+ Track length of primary track = 2.017 cm  +- 2.759 mm 
  Range from EmCalculator       = 2.021 cm  (from full dE/dx)
 
- Projected range               = 1.315 cm  +- 4.321 mm 
+ Projected range               = 1.310 cm  +- 4.299 mm 
 
- Nb of steps of primary track  = 238.72 +- 31.04	 Step size= 84.474 um  +- 4.589 um 
+ Nb of steps of primary track  = 238.67 +- 30.75	 Step size= 84.499 um  +- 4.527 um 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 898903773, 944658292
+ Current couple of seeds = 1928317596, 1805907459
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

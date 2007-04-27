@@ -267,28 +267,28 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=200.4s Real=227.82s Sys=27.36s
+  User=196.5s Real=224.48s Sys=26.88s
 
 ------------------------------------------------------------
-material             Total Edep   sqrt(E0(GeV))*rmsE/Emean     total tracklen 
+      material       Total Edep         sqrt(E0(GeV))*rmsE/Emean     total tracklen 
  
-      Lead: 783.24 MeV +- 15.76 MeV     2.013 +- 0.2013 %      53.9 cm  +-  1.2 cm 
-liquidArgon: 204.82 MeV +- 14.94 MeV     7.296 +- 0.7296 %      1.01 m   +- 7.72 cm 
+          Lead:  781.7 MeV +- 18.81 MeV     2.406 +- 0.2406 %      53.7 cm  +- 1.38 cm 
+   liquidArgon: 205.39 MeV +- 15.93 MeV     7.754 +- 0.7754 %      1.01 m   +- 8.06 cm 
 
 ------------------------------------------------------------
 
  Energy deposition from Energy flow balance : 
   material 	 Total Edep 
  
-      Lead:	 783.237 MeV
-liquidArgon:	 204.824 MeV
+      Lead:	 781.699 MeV
+liquidArgon:	 205.386 MeV
 
 ------------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 536502410, 2064128558
+ Current couple of seeds = 961092964, 2023400999
 ----------------------------------------
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.

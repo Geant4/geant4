@@ -525,7 +525,7 @@ phot:  Total cross sections from Sandia parametrisation.
 
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 1
+      LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 eIoni:   tables are built for  e-
@@ -564,7 +564,7 @@ annihil:       Sampling according eplus2gg model
 
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 1
+      LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 hIoni:   tables are built for  proton
@@ -589,7 +589,7 @@ hIoni:   tables are built for  anti_proton
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 1
+      LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 muIoni:   tables are built for  mu+
@@ -636,7 +636,7 @@ hIoni:   tables are built for  pi+
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 1
+      LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 hIoni:   tables are built for  pi-
@@ -706,7 +706,7 @@ PhotInPrimaryGeneratorAction::GeneratePrimaries: part&E're redefined
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=78.59s Real=82.33s Sys=3.52s
+  User=50.97s Real=53.17s Sys=2s
 ##############################################################
  Run Summary - Number of events : 1
 ##############################################################
@@ -715,57 +715,57 @@ Region Region0
  Production thresholds :
  -----------------------
  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy deposition in Absorber 398.2177 MeV, in Gap 0 eV 
+ Energy deposition in Absorber 1.1741681 GeV, in Gap 0 eV 
  Number of secondaries in the event :
  ------------------------------------
- gamma in Absorber 3, in Gap      52
- e-    in Absorber 137, in Gap 343
- e+    in Absorber 0, in Gap 5
+ gamma in Absorber 64, in Gap      189
+ e-    in Absorber 579, in Gap 1278
+ e+    in Absorber 4, in Gap 14
  Minimum kinetic energy of generated secondaries :
  -------------------------------------------------
- gamma in Absorber = 18.496378 keV, in Gap = 7.5444806 keV
- e-    in Absorber = 330.32665 eV , in Gap = 25.695074 eV 
- e+    in Absorber = 2.8802232e+295 J      in Gap = 79.317963 keV
- Mean total track length of neutrons in the event : in Absorber = 3.8313025 m  , in Gap = 0 fm 
- Mean number of steps of charged particles in the event : in Absorber =76, in Gap = 0
+ gamma in Absorber = 2.4056356 keV, in Gap = 7.0757961 keV
+ e-    in Absorber = 5.2560042 eV , in Gap = 31.412374 eV 
+ e+    in Absorber = 2.2983876 MeV    in Gap = 2.0529079 MeV
+ Mean total track length of neutrons in the event : in Absorber = 7.7748069 m  , in Gap = 0 fm 
+ Mean number of steps of charged particles in the event : in Absorber =137, in Gap = 0
 ##############################################################
 Region Region1
 ====================
  Production thresholds :
  -----------------------
  gamma 1 cm     e- 1 cm     e+ 1 cm 
- Energy deposition in Absorber 70.547773 GeV, in Gap 0 eV 
+ Energy deposition in Absorber 48.000028 GeV, in Gap 0 eV 
  Number of secondaries in the event :
  ------------------------------------
- gamma in Absorber 2390, in Gap      9856
- e-    in Absorber 25554, in Gap 54731
- e+    in Absorber 128, in Gap 840
+ gamma in Absorber 1400, in Gap      5579
+ e-    in Absorber 13901, in Gap 30914
+ e+    in Absorber 93, in Gap 463
  Minimum kinetic energy of generated secondaries :
  -------------------------------------------------
- gamma in Absorber = 5.7358112 keV, in Gap = 20.499423 keV
- e-    in Absorber = 0.58001207 eV , in Gap = 0.85626695 eV 
- e+    in Absorber = 163.67896 keV    in Gap = 16.566415 keV
- Mean total track length of neutrons in the event : in Absorber = 63.864184 m  , in Gap = 0 fm 
- Mean number of steps of charged particles in the event : in Absorber =1398, in Gap = 0
+ gamma in Absorber = 5.7171872 keV, in Gap = 20.497583 keV
+ e-    in Absorber = 0.23810202 eV , in Gap = 0.54237484 eV 
+ e+    in Absorber = 242.56863 keV    in Gap = 352.48687 keV
+ Mean total track length of neutrons in the event : in Absorber = 75.273991 m  , in Gap = 0 fm 
+ Mean number of steps of charged particles in the event : in Absorber =1746, in Gap = 0
 ##############################################################
 Region Region2
 ====================
  Production thresholds :
  -----------------------
  gamma 10 cm     e- 10 cm     e+ 10 cm 
- Energy deposition in Absorber 276.7854 MeV, in Gap 0 eV 
+ Energy deposition in Absorber 839.85967 MeV, in Gap 0 eV 
  Number of secondaries in the event :
  ------------------------------------
- gamma in Absorber 0, in Gap      41
- e-    in Absorber 223, in Gap 476
- e+    in Absorber 0, in Gap 5
+ gamma in Absorber 7, in Gap      82
+ e-    in Absorber 265, in Gap 641
+ e+    in Absorber 3, in Gap 6
  Minimum kinetic energy of generated secondaries :
  -------------------------------------------------
- gamma in Absorber = 2.8802232e+295 J  , in Gap = 103.6113 keV
- e-    in Absorber = 30.849676 eV , in Gap = 39.109958 eV 
- e+    in Absorber = 2.8802232e+295 J      in Gap = 1.8118798 MeV
- Mean total track length of neutrons in the event : in Absorber = 1.5572853 m  , in Gap = 0 fm 
- Mean number of steps of charged particles in the event : in Absorber =21, in Gap = 0
+ gamma in Absorber = 40.513577 keV, in Gap = 84.264713 keV
+ e-    in Absorber = 194.37708 eV , in Gap = 21.423789 eV 
+ e+    in Absorber = 7.3651406 MeV    in Gap = 385.30321 keV
+ Mean total track length of neutrons in the event : in Absorber = 3.6626342 m  , in Gap = 0 fm 
+ Mean number of steps of charged particles in the event : in Absorber =68, in Gap = 0
 ##############################################################
 /run/dumpCouples
 

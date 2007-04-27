@@ -148,7 +148,7 @@ annihil:       Sampling according eplus2gg model
 
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 0
+      LateralDisplacementFlag=  1   Skin= 1
       Boundary/stepping algorithm is active with facrange= 0.2  Step limitation 0
 
 hIoni:   tables are built for  proton
@@ -183,7 +183,7 @@ hIoni:   tables are built for  anti_proton
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 0
+      LateralDisplacementFlag=  1   Skin= 1
       Boundary/stepping algorithm is active with facrange= 0.2  Step limitation 0
 
 muIoni:   tables are built for  mu+
@@ -230,7 +230,7 @@ hIoni:   tables are built for  pi+
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 0
+      LateralDisplacementFlag=  1   Skin= 1
       Boundary/stepping algorithm is active with facrange= 0.2  Step limitation 0
 
 hIoni:   tables are built for  pi-
@@ -308,25 +308,25 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=362.32s Real=511.04s Sys=55.57s
+  User=371.47s Real=517.65s Sys=53.97s
 
  The run consists of 10000 proton of 160 MeV through 20 cm  of Water (density: 1 g/cm3 )
 
- projected Range= 17.6112 cm    rms= 5.18638 mm 
+ projected Range= 17.6158 cm    rms= 4.06553 mm 
 
 ---------------------------------------------------------
  Cumulated Doses : 	Edep      	Edep/Ebeam 	Dose
- tally 0: 	 	4.54547 GeV	0.284092 % 	9.10332e-05 Gy
- tally 1: 	 	5.16219 GeV	0.322637 % 	0.000103384 Gy
- tally 2: 	 	3.50818 GeV	0.219261 % 	7.0259e-05 Gy
- tally 3: 	 	2.02558 GeV	0.126599 % 	4.05666e-05 Gy
+ tally 0: 	 	4.61502 GeV	0.288439 % 	9.2426e-05 Gy
+ tally 1: 	 	5.06687 GeV	0.316679 % 	0.000101475 Gy
+ tally 2: 	 	3.4004 GeV	0.212525 % 	6.81005e-05 Gy
+ tally 3: 	 	1.89617 GeV	0.118511 % 	3.79751e-05 Gy
 
 ---------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1072961543, 392647795
+ Current couple of seeds = 1466140289, 1620517690
 ----------------------------------------
 #
 /gun/particle ion
@@ -361,7 +361,7 @@ Index : 1     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1072961543, 392647795
+ Current couple of seeds = 1466140289, 1620517690
 ----------------------------------------
 Start Run processing.
 
@@ -369,25 +369,25 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=121.45s Real=149.14s Sys=17.96s
+  User=123.43s Real=151.54s Sys=17.35s
 
  The run consists of 1000 C12[0.0] of 3.5 GeV through 20 cm  of Water (density: 1 g/cm3 )
 
- projected Range= 16.4644 cm    rms= 475.555 um 
+ projected Range= 16.468 cm    rms= 466.921 um 
 
 ---------------------------------------------------------
  Cumulated Doses : 	Edep      	Edep/Ebeam 	Dose
- tally 0: 	 	10.5221 GeV	0.300632 % 	0.000210729 Gy
- tally 1: 	 	12.0963 GeV	0.345608 % 	0.000242255 Gy
- tally 2: 	 	14.322 GeV	0.409199 % 	0.000286829 Gy
- tally 3: 	 	20.975 GeV	0.599285 % 	0.00042007 Gy
+ tally 0: 	 	10.7276 GeV	0.306503 % 	0.000214844 Gy
+ tally 1: 	 	12.4282 GeV	0.355092 % 	0.000248903 Gy
+ tally 2: 	 	15.644 GeV	0.446971 % 	0.000313306 Gy
+ tally 3: 	 	23.2327 GeV	0.663791 % 	0.000465286 Gy
 
 ---------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1027675449, 1113632438
+ Current couple of seeds = 1942042139, 1135383938
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

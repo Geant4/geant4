@@ -59,7 +59,7 @@ conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV f
 
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 1
+      LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 eIoni:   tables are built for  e-
@@ -142,11 +142,11 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=90.82s Real=1768.66s Sys=70.95s
+  User=86.65s Real=1129.39s Sys=119.29s
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 2008020465, 1246269432
+ Current couple of seeds = 1038503277, 1846706828
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

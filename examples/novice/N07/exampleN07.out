@@ -78,7 +78,7 @@ phot:  Total cross sections from Sandia parametrisation.
 
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 1
+      LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 eIoni:   tables are built for  e-
@@ -121,7 +121,7 @@ hIoni:   tables are built for  proton
 
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 1
+      LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 hIoni:   tables are built for  anti_proton
@@ -141,7 +141,7 @@ muIoni:   tables are built for  mu+
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 1
+      LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 muBrems:   tables are built for  mu+
@@ -189,7 +189,7 @@ hIoni:   tables are built for  pi-
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 1
+      LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 ========= Table of registered couples ==============================
@@ -249,7 +249,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=71.38s Real=77.7s Sys=6.29s
+  User=40.9s Real=44.79s Sys=3.86s
 ############################################################
  Run Summary - Number of events : 10
 ############################################################
@@ -257,72 +257,72 @@ Region : Calor-A
  Production thresholds :
     gamma 1 mm     e- 1 mm     e+ 1 mm 
  Energy deposition in an event :
-    Absorber 6.7248482 GeV      Gap 691.93258 MeV
+    Absorber 4.0126143 GeV      Gap 470.73112 MeV
  Number of secondaries in an event :
-    gamma in Absorber 3275    in Gap 177.9
-    e-    in Absorber 5283.2    in Gap 475.3
-    e+    in Absorber 323.8    in Gap 9.6
+    gamma in Absorber 1593.2    in Gap 95.2
+    e-    in Absorber 2543.4    in Gap 253.8
+    e+    in Absorber 152    in Gap 5.3
  Minimum kinetic energy of generated secondaries :
-    gamma in Absorber 100.51332 keV    in Gap 6.1872395 keV
-    e-    in Absorber 31.259033 eV     in Gap 51.828574 eV 
-    e+    in Absorber 1.746655 keV    in Gap 117.02269 keV
+    gamma in Absorber 100.5161 keV    in Gap 6.2355572 keV
+    e-    in Absorber 4.8329908 eV     in Gap 128.16094 eV 
+    e+    in Absorber 3.1470649 keV    in Gap 260.24906 keV
  Total track length of e+/e- in an event :
-    Absorber 3.68507 m        Gap 2.3595649 m  
+    Absorber 1.811657 m        Gap 1.2880736 m  
  Total number of steps of e+/e- in an event :
-    Absorber 11412.9      Gap 1973.2
+    Absorber 5678.4      Gap 1164.7
 ############################################################
 Region : Calor-B
  Production thresholds :
     gamma 1 cm     e- 1 cm     e+ 1 cm 
  Energy deposition in an event :
-    Absorber 2.7769008 GeV      Gap 332.97403 MeV
+    Absorber 2.5562262 GeV      Gap 310.82451 MeV
  Number of secondaries in an event :
-    gamma in Absorber 525.4    in Gap 34.6
-    e-    in Absorber 936.3    in Gap 96.7
-    e+    in Absorber 71.1    in Gap 2.9
+    gamma in Absorber 411.5    in Gap 29
+    e-    in Absorber 746.4    in Gap 72.3
+    e+    in Absorber 56.9    in Gap 2
  Minimum kinetic energy of generated secondaries :
-    gamma in Absorber 280.92959 keV    in Gap 19.238044 keV
-    e-    in Absorber 110.9754 eV     in Gap 163.15048 eV 
-    e+    in Absorber 31.07992 keV    in Gap 12.120115 keV
+    gamma in Absorber 282.4908 keV    in Gap 19.08573 keV
+    e-    in Absorber 275.98235 eV     in Gap 88.660522 eV 
+    e+    in Absorber 14.822989 keV    in Gap 464.83108 keV
  Total track length of e+/e- in an event :
-    Absorber 78.555161 cm       Gap 52.294427 cm 
+    Absorber 61.735255 cm       Gap 43.019569 cm 
  Total number of steps of e+/e- in an event :
-    Absorber 2064.7      Gap 436
+    Absorber 1759.2      Gap 369.7
 ############################################################
 Region : Calor-C
  Production thresholds :
     gamma 10 cm     e- 10 cm     e+ 10 cm 
  Energy deposition in an event :
-    Absorber 2.5796431 GeV      Gap 268.95364 MeV
+    Absorber 3.2196937 GeV      Gap 307.60789 MeV
  Number of secondaries in an event :
-    gamma in Absorber 71.4    in Gap 5.6
-    e-    in Absorber 126.9    in Gap 10.3
-    e+    in Absorber 19.8    in Gap 0.6
+    gamma in Absorber 177    in Gap 17.5
+    e-    in Absorber 327.3    in Gap 29.7
+    e+    in Absorber 48.8    in Gap 1.2
  Minimum kinetic energy of generated secondaries :
-    gamma in Absorber 327.27168 keV    in Gap 58.753322 keV
-    e-    in Absorber 56.694584 eV     in Gap 3.6547079 keV
-    e+    in Absorber 130.73885 keV    in Gap 1.1165921 MeV
+    gamma in Absorber 296.56064 keV    in Gap 56.827996 keV
+    e-    in Absorber 169.63138 eV     in Gap 22.887484 eV 
+    e+    in Absorber 56.386904 keV    in Gap 753.94703 keV
  Total track length of e+/e- in an event :
-    Absorber 18.089199 cm       Gap 10.362577 cm 
+    Absorber 47.12898 cm       Gap 28.338778 cm 
  Total number of steps of e+/e- in an event :
-    Absorber 363.7      Gap 74
+    Absorber 940.8      Gap 186.2
 ############################################################
 
 Region <DefaultRegionForTheWorld>
- All particles : User=0.02  Real=0.05  Sys=0
+ All particles : User=0.01  Real=0.04  Sys=0
  e+ / e-       : User=0  Real=0  Sys=0
 
 Region <Calor-A>
- All particles : User=37.28  Real=41.41  Sys=4.13
- e+ / e-       : User=24.6  Real=28.14  Sys=3.55
+ All particles : User=18.28  Real=20.26  Sys=1.96
+ e+ / e-       : User=11.92  Real=13.63  Sys=1.71
 
 Region <Calor-B>
- All particles : User=7.66  Real=8.7  Sys=1.04
- e+ / e-       : User=4.61  Real=5.55  Sys=0.94
+ All particles : User=5.76  Real=6.64  Sys=0.88
+ e+ / e-       : User=3.55  Real=4.36  Sys=0.81
 
 Region <Calor-C>
- All particles : User=1.86  Real=2.13  Sys=0.27
- e+ / e-       : User=0.68  Real=0.86  Sys=0.18
+ All particles : User=3.04  Real=3.52  Sys=0.48
+ e+ / e-       : User=2.01  Real=2.45  Sys=0.44
 
 /run/dumpCouples
 
@@ -419,7 +419,7 @@ phot:  Total cross sections from Sandia parametrisation.
 
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 1
+      LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 eIoni:   tables are built for  e-
@@ -462,7 +462,7 @@ hIoni:   tables are built for  proton
 
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 1
+      LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 hIoni:   tables are built for  anti_proton
@@ -482,7 +482,7 @@ muIoni:   tables are built for  mu+
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 1
+      LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 muBrems:   tables are built for  mu+
@@ -530,7 +530,7 @@ hIoni:   tables are built for  pi-
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 1
+      LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 ========= Table of registered couples ==============================
@@ -590,7 +590,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=54.25s Real=59.2s Sys=4.95s
+  User=86.28s Real=93.72s Sys=7.44s
 ############################################################
  Run Summary - Number of events : 10
 ############################################################
@@ -598,72 +598,72 @@ Region : Calor-A
  Production thresholds :
     gamma 200 um     e- 200 um     e+ 200 um 
  Energy deposition in an event :
-    Absorber 3.401095 GeV      Gap 395.11614 MeV
+    Absorber 6.3542667 GeV      Gap 682.64194 MeV
  Number of secondaries in an event :
-    gamma in Absorber 1536.2    in Gap 71.2
-    e-    in Absorber 2530.1    in Gap 298.9
-    e+    in Absorber 114.4    in Gap 3.6
+    gamma in Absorber 3824.6    in Gap 191.5
+    e-    in Absorber 5998.2    in Gap 626
+    e+    in Absorber 290.8    in Gap 9.1
  Minimum kinetic energy of generated secondaries :
-    gamma in Absorber 47.189539 keV    in Gap 2.8676698 keV
-    e-    in Absorber 3.7803996 eV     in Gap 2.8872468 eV 
-    e+    in Absorber 4.5764665 keV    in Gap 83.407462 keV
+    gamma in Absorber 47.194812 keV    in Gap 2.7925104 keV
+    e-    in Absorber 14.193647 eV     in Gap 2.677135 eV 
+    e+    in Absorber 6.2595183 keV    in Gap 124.19054 keV
  Total track length of e+/e- in an event :
-    Absorber 1.4846543 m        Gap 95.864647 cm 
+    Absorber 3.6071281 m        Gap 2.3937884 m  
  Total number of steps of e+/e- in an event :
-    Absorber 5391.8      Gap 1014.4
+    Absorber 13150.2      Gap 2494.7
 ############################################################
 Region : Calor-B
  Production thresholds :
     gamma 2 mm     e- 2 mm     e+ 2 mm 
  Energy deposition in an event :
-    Absorber 2.3006759 GeV      Gap 300.88392 MeV
+    Absorber 2.5192146 GeV      Gap 310.2214 MeV
  Number of secondaries in an event :
-    gamma in Absorber 477.7    in Gap 33.4
-    e-    in Absorber 796.8    in Gap 84.9
-    e+    in Absorber 43    in Gap 2.1
+    gamma in Absorber 597.8    in Gap 34
+    e-    in Absorber 991.2    in Gap 96.3
+    e+    in Absorber 59.8    in Gap 1.6
  Minimum kinetic energy of generated secondaries :
-    gamma in Absorber 120.64858 keV    in Gap 8.6845907 keV
-    e-    in Absorber 24.030798 eV     in Gap 101.54839 eV 
-    e+    in Absorber 13.081127 keV    in Gap 203.79707 keV
+    gamma in Absorber 120.62245 keV    in Gap 8.6872955 keV
+    e-    in Absorber 16.295282 eV     in Gap 27.709052 eV 
+    e+    in Absorber 5.6553534 keV    in Gap 29.793913 keV
  Total track length of e+/e- in an event :
-    Absorber 57.863648 cm       Gap 44.682876 cm 
+    Absorber 72.397265 cm       Gap 48.814448 cm 
  Total number of steps of e+/e- in an event :
-    Absorber 1758.6      Gap 387.5
+    Absorber 2240.9      Gap 433.6
 ############################################################
 Region : Calor-C
  Production thresholds :
     gamma 2 cm     e- 2 cm     e+ 2 cm 
  Energy deposition in an event :
-    Absorber 3.6069694 GeV      Gap 405.72321 MeV
+    Absorber 3.2223874 GeV      Gap 368.166 MeV
  Number of secondaries in an event :
-    gamma in Absorber 758.6    in Gap 49.1
-    e-    in Absorber 1381    in Gap 131.9
-    e+    in Absorber 122.3    in Gap 2.7
+    gamma in Absorber 599.5    in Gap 38.1
+    e-    in Absorber 1129.8    in Gap 103.1
+    e+    in Absorber 95.1    in Gap 2.6
  Minimum kinetic energy of generated secondaries :
-    gamma in Absorber 272.82987 keV    in Gap 27.232772 keV
-    e-    in Absorber 66.349732 eV     in Gap 18.143456 eV 
-    e+    in Absorber 7.2124115 keV    in Gap 140.69451 keV
+    gamma in Absorber 280.87026 keV    in Gap 27.05668 keV
+    e-    in Absorber 26.755506 eV     in Gap 11.122141 eV 
+    e+    in Absorber 5.48138 keV    in Gap 343.39198 keV
  Total track length of e+/e- in an event :
-    Absorber 1.2646075 m        Gap 80.27674 cm 
+    Absorber 1.0168427 m        Gap 65.581928 cm 
  Total number of steps of e+/e- in an event :
-    Absorber 3200.3      Gap 625.3
+    Absorber 2573      Gap 496.3
 ############################################################
 
 Region <DefaultRegionForTheWorld>
- All particles : User=0.02  Real=0.02  Sys=0
+ All particles : User=0.01  Real=0.01  Sys=0
  e+ / e-       : User=0  Real=0  Sys=0
 
 Region <Calor-A>
- All particles : User=18.35  Real=20.24  Sys=1.89
- e+ / e-       : User=12.47  Real=14.04  Sys=1.56
+ All particles : User=40.45  Real=44.73  Sys=4.24
+ e+ / e-       : User=27.28  Real=31.07  Sys=3.78
 
 Region <Calor-B>
- All particles : User=6.65  Real=7.41  Sys=0.76
- e+ / e-       : User=4.16  Real=4.73  Sys=0.58
+ All particles : User=7.37  Real=8.07  Sys=0.71
+ e+ / e-       : User=4.77  Real=5.4  Sys=0.63
 
 Region <Calor-C>
- All particles : User=11.24  Real=12.9  Sys=1.66
- e+ / e-       : User=6.94  Real=8.35  Sys=1.42
+ All particles : User=8.11  Real=9.31  Sys=1.21
+ e+ / e-       : User=5.05  Real=6.17  Sys=1.11
 
 /run/dumpCouples
 
@@ -759,7 +759,7 @@ phot:  Total cross sections from Sandia parametrisation.
 
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 1
+      LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 eIoni:   tables are built for  e-
@@ -802,7 +802,7 @@ hIoni:   tables are built for  proton
 
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 1
+      LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 hIoni:   tables are built for  anti_proton
@@ -822,7 +822,7 @@ muIoni:   tables are built for  mu+
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 1
+      LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 muBrems:   tables are built for  mu+
@@ -870,7 +870,7 @@ hIoni:   tables are built for  pi-
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 1
+      LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 ========= Table of registered couples ==============================
@@ -960,7 +960,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=11.53s Real=12.48s Sys=0.95s
+  User=10.02s Real=10.81s Sys=0.79s
 ############################################################
  Run Summary - Number of events : 10
 ############################################################
@@ -968,55 +968,55 @@ Region : Calor-A
  Production thresholds :
     gamma 200 um     e- 200 um     e+ 200 um 
  Energy deposition in an event :
-    Absorber 582.97914 MeV      Gap 249.43144 MeV
+    Absorber 669.0904 MeV      Gap 293.24592 MeV
  Number of secondaries in an event :
-    gamma in Absorber 47.5    in Gap 11.2
-    e-    in Absorber 310.4    in Gap 144.7
-    e+    in Absorber 1    in Gap 0.6
+    gamma in Absorber 78.8    in Gap 21.1
+    e-    in Absorber 466.1    in Gap 220.6
+    e+    in Absorber 2.5    in Gap 0.5
  Minimum kinetic energy of generated secondaries :
-    gamma in Absorber 3.236447 keV    in Gap 1.5511916 keV
-    e-    in Absorber 4.9743131 eV     in Gap 21.049815 eV 
-    e+    in Absorber 733.12494 keV    in Gap 2.6549722 MeV
+    gamma in Absorber 3.2197055 keV    in Gap 1.5793597 keV
+    e-    in Absorber 20.424721 eV     in Gap 4.1636759 eV 
+    e+    in Absorber 975.32575 keV    in Gap 6.2419049 MeV
  Total track length of e+/e- in an event :
-    Absorber 42.788085 cm       Gap 37.067471 cm 
+    Absorber 63.64625 cm       Gap 61.139395 cm 
  Total number of steps of e+/e- in an event :
-    Absorber 638.1      Gap 349.2
+    Absorber 915      Gap 514
 ############################################################
 Region : Calor-B
  Production thresholds :
     gamma 2 mm     e- 2 mm     e+ 2 mm 
  Energy deposition in an event :
-    Absorber 567.40121 MeV      Gap 245.79866 MeV
+    Absorber 526.85641 MeV      Gap 228.61341 MeV
  Number of secondaries in an event :
-    gamma in Absorber 30.5    in Gap 8.6
-    e-    in Absorber 157.9    in Gap 70.5
-    e+    in Absorber 1    in Gap 0.3
+    gamma in Absorber 21    in Gap 7.2
+    e-    in Absorber 111.6    in Gap 50.3
+    e+    in Absorber 0.6    in Gap 0.1
  Minimum kinetic energy of generated secondaries :
-    gamma in Absorber 9.6747493 keV    in Gap 3.9255034 keV
-    e-    in Absorber 89.385335 eV     in Gap 37.075935 eV 
-    e+    in Absorber 533.13083 keV    in Gap 388.06105 keV
+    gamma in Absorber 10.063858 keV    in Gap 4.0534863 keV
+    e-    in Absorber 3.4910258 eV     in Gap 22.575347 eV 
+    e+    in Absorber 420.85155 keV    in Gap 4.944285 MeV
  Total track length of e+/e- in an event :
-    Absorber 32.024725 cm       Gap 30.620958 cm 
+    Absorber 22.27052 cm       Gap 22.470058 cm 
  Total number of steps of e+/e- in an event :
-    Absorber 364.9      Gap 216.5
+    Absorber 307.8      Gap 159.5
 ############################################################
 Region : Calor-C
  Production thresholds :
     gamma 2 cm     e- 2 cm     e+ 2 cm 
  Energy deposition in an event :
-    Absorber 624.93219 MeV      Gap 273.49613 MeV
+    Absorber 561.08293 MeV      Gap 239.05065 MeV
  Number of secondaries in an event :
-    gamma in Absorber 34.4    in Gap 10.8
-    e-    in Absorber 187.3    in Gap 76.6
-    e+    in Absorber 2.4    in Gap 0.2
+    gamma in Absorber 15.9    in Gap 4.9
+    e-    in Absorber 95.8    in Gap 38.6
+    e+    in Absorber 0.5    in Gap 0.2
  Minimum kinetic energy of generated secondaries :
-    gamma in Absorber 28.461358 keV    in Gap 10.661903 keV
-    e-    in Absorber 17.218288 eV     in Gap 8.0099154 eV 
-    e+    in Absorber 256.14793 keV    in Gap 2.4804361 MeV
+    gamma in Absorber 29.188913 keV    in Gap 12.415452 keV
+    e-    in Absorber 7.0526985 eV     in Gap 32.591867 eV 
+    e+    in Absorber 575.86389 keV    in Gap 5.1957892 MeV
  Total track length of e+/e- in an event :
-    Absorber 33.338672 cm       Gap 34.610347 cm 
+    Absorber 18.413568 cm       Gap 17.906727 cm 
  Total number of steps of e+/e- in an event :
-    Absorber 367      Gap 183.1
+    Absorber 175      Gap 73.7
 ############################################################
 
 Region <DefaultRegionForTheWorld>
@@ -1024,16 +1024,16 @@ Region <DefaultRegionForTheWorld>
  e+ / e-       : User=0  Real=0  Sys=0
 
 Region <Calor-A>
- All particles : User=3.53  Real=3.84  Sys=0.31
- e+ / e-       : User=1.87  Real=2.08  Sys=0.2
+ All particles : User=4.5  Real=4.9  Sys=0.41
+ e+ / e-       : User=2.42  Real=2.68  Sys=0.26
 
 Region <Calor-B>
- All particles : User=2.36  Real=2.69  Sys=0.33
- e+ / e-       : User=1.13  Real=1.32  Sys=0.19
+ All particles : User=1.39  Real=1.6  Sys=0.21
+ e+ / e-       : User=0.8  Real=0.99  Sys=0.19
 
 Region <Calor-C>
- All particles : User=2.67  Real=2.83  Sys=0.16
- e+ / e-       : User=1.06  Real=1.17  Sys=0.11
+ All particles : User=1.17  Real=1.22  Sys=0.05
+ e+ / e-       : User=0.44  Real=0.48  Sys=0.04
 
 /run/dumpCouples
 
@@ -1160,7 +1160,7 @@ phot:  Total cross sections from Sandia parametrisation.
 
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 1
+      LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 eIoni:   tables are built for  e-
@@ -1203,7 +1203,7 @@ hIoni:   tables are built for  proton
 
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 1
+      LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 hIoni:   tables are built for  anti_proton
@@ -1223,7 +1223,7 @@ muIoni:   tables are built for  mu+
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 1
+      LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 muBrems:   tables are built for  mu+
@@ -1271,7 +1271,7 @@ hIoni:   tables are built for  pi-
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 1
+      LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 ========= Table of registered couples ==============================
@@ -1361,7 +1361,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=28.66s Real=30.91s Sys=2.23s
+  User=27.62s Real=30.22s Sys=2.59s
 ############################################################
  Run Summary - Number of events : 10
 ############################################################
@@ -1369,72 +1369,72 @@ Region : Calor-A
  Production thresholds :
     gamma 10 um     e- 10 um     e+ 10 um 
  Energy deposition in an event :
-    Absorber 529.55743 MeV      Gap 244.71198 MeV
+    Absorber 568.04462 MeV      Gap 251.12534 MeV
  Number of secondaries in an event :
-    gamma in Absorber 45    in Gap 12.9
-    e-    in Absorber 912.2    in Gap 2003.1
-    e+    in Absorber 0.6    in Gap 0
+    gamma in Absorber 53.4    in Gap 14.1
+    e-    in Absorber 988.1    in Gap 2072.6
+    e+    in Absorber 0.9    in Gap 0.3
  Minimum kinetic energy of generated secondaries :
-    gamma in Absorber 1.0073548 keV    in Gap 1.0458524 keV
-    e-    in Absorber 13.447834 eV     in Gap 42.053582 eV 
-    e+    in Absorber 581.34203 keV    in Gap 2.8802232e+295 J  
+    gamma in Absorber 1.0118436 keV    in Gap 1.0419129 keV
+    e-    in Absorber 5.4561558 eV     in Gap 29.629932 eV 
+    e+    in Absorber 984.62488 keV    in Gap 1.367395 MeV
  Total track length of e+/e- in an event :
-    Absorber 32.439099 cm       Gap 37.08397 cm 
+    Absorber 42.396431 cm       Gap 40.643146 cm 
  Total number of steps of e+/e- in an event :
-    Absorber 1344.2      Gap 2812
+    Absorber 1530.6      Gap 2949.7
 ############################################################
 Region : Calor-B
  Production thresholds :
     gamma 100 um     e- 100 um     e+ 100 um 
  Energy deposition in an event :
-    Absorber 584.1426 MeV      Gap 256.73807 MeV
+    Absorber 556.24876 MeV      Gap 246.66446 MeV
  Number of secondaries in an event :
-    gamma in Absorber 52.8    in Gap 15.7
-    e-    in Absorber 398.1    in Gap 209.5
-    e+    in Absorber 1.4    in Gap 0.3
+    gamma in Absorber 44.7    in Gap 10.3
+    e-    in Absorber 358.2    in Gap 191.2
+    e+    in Absorber 0.9    in Gap 0.3
  Minimum kinetic energy of generated secondaries :
-    gamma in Absorber 2.3981849 keV    in Gap 1.1136828 keV
-    e-    in Absorber 11.509054 eV     in Gap 6.1805138 eV 
-    e+    in Absorber 1.3566703 MeV    in Gap 2.3389813 MeV
+    gamma in Absorber 2.3198937 keV    in Gap 1.184784 keV
+    e-    in Absorber 16.655995 eV     in Gap 6.0668272 eV 
+    e+    in Absorber 1.244437 MeV    in Gap 905.98925 keV
  Total track length of e+/e- in an event :
-    Absorber 44.143242 cm       Gap 41.845326 cm 
+    Absorber 37.348775 cm       Gap 36.3359 cm 
  Total number of steps of e+/e- in an event :
-    Absorber 779.6      Gap 442.4
+    Absorber 739.6      Gap 401.5
 ############################################################
 Region : Calor-C
  Production thresholds :
     gamma 1 mm     e- 1 mm     e+ 1 mm 
  Energy deposition in an event :
-    Absorber 564.27122 MeV      Gap 255.80846 MeV
+    Absorber 607.94837 MeV      Gap 266.67071 MeV
  Number of secondaries in an event :
-    gamma in Absorber 33.5    in Gap 10.5
-    e-    in Absorber 196.1    in Gap 91.5
-    e+    in Absorber 0.6    in Gap 0.1
+    gamma in Absorber 42.5    in Gap 11.3
+    e-    in Absorber 231.1    in Gap 111.1
+    e+    in Absorber 1.6    in Gap 0.2
  Minimum kinetic energy of generated secondaries :
-    gamma in Absorber 7.0964238 keV    in Gap 2.9045125 keV
-    e-    in Absorber 5.1835283 eV     in Gap 16.093663 eV 
-    e+    in Absorber 1.0454932 MeV    in Gap 19.781399 MeV
+    gamma in Absorber 7.1109235 keV    in Gap 3.4808807 keV
+    e-    in Absorber 2.4258146 eV     in Gap 22.486067 eV 
+    e+    in Absorber 457.01203 keV    in Gap 19.006579 MeV
  Total track length of e+/e- in an event :
-    Absorber 34.032057 cm       Gap 37.685128 cm 
+    Absorber 44.599653 cm       Gap 43.522588 cm 
  Total number of steps of e+/e- in an event :
-    Absorber 446.2      Gap 268
+    Absorber 544      Gap 296
 ############################################################
 
 Region <DefaultRegionForTheWorld>
- All particles : User=0.03  Real=0.03  Sys=0
+ All particles : User=0.02  Real=0.02  Sys=0
  e+ / e-       : User=0  Real=0  Sys=0
 
 Region <Calor-A>
- All particles : User=12.8  Real=14.03  Sys=1.24
- e+ / e-       : User=6.77  Real=7.26  Sys=0.49
+ All particles : User=12.61  Real=14.02  Sys=1.43
+ e+ / e-       : User=6.98  Real=7.64  Sys=0.66
 
 Region <Calor-B>
- All particles : User=4.12  Real=4.63  Sys=0.5
- e+ / e-       : User=2.24  Real=2.54  Sys=0.29
+ All particles : User=3.33  Real=3.76  Sys=0.43
+ e+ / e-       : User=1.87  Real=2.19  Sys=0.31
 
 Region <Calor-C>
- All particles : User=2.75  Real=3.07  Sys=0.32
- e+ / e-       : User=1.32  Real=1.53  Sys=0.21
+ All particles : User=2.73  Real=3  Sys=0.25
+ e+ / e-       : User=1.56  Real=1.79  Sys=0.23
 
 /run/dumpCouples
 

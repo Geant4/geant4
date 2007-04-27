@@ -99,7 +99,7 @@ zModule = 21790 mm
 21790 mm	
 F03PhysicsList::SetCuts:CutLength : 1 mm 
 
-total time(SetCuts)=0 s 
+total time(SetCuts)=0.01 s 
 G4ClassicalRK4 (default) is called
 The minimal step is equal to 10 mm
 
@@ -144,7 +144,7 @@ eBrem:   tables are built for  e+
 
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 1
+      LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 hIoni:   tables are built for  proton
@@ -157,7 +157,7 @@ hIoni:   tables are built for  proton
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 1
+      LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 muIoni:   tables are built for  mu+
@@ -204,7 +204,7 @@ hIoni:   tables are built for  pi+
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 1
+      LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 hIoni:   tables are built for  pi-
@@ -253,7 +253,7 @@ G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next ma
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.02s Real=0.07s Sys=0s
+  User=0.01s Real=0.03s Sys=0.01s
 ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
 G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
 
@@ -286,7 +286,7 @@ G4GlobalFastSimulationManager::GetFlavoredWorldForThis(...): DEPRECATING, will b
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.84s Real=0.84s Sys=0s
+  User=0.82s Real=0.82s Sys=0s
 ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
 Set field value to (0,0,1000) Gauss 
 
@@ -310,7 +310,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.09s Real=0.09s Sys=0s
+  User=0.08s Real=0.08s Sys=0s
 ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
 Graphics systems deleted.
 Visualization Manager deleting...
