@@ -491,21 +491,39 @@ void StatAccepTestAnalysis::init( const G4int numberOfReplicasIn,
   //       << G4endl;  //***DEBUG***
 
 #ifdef G4ANALYSIS_USE
-  // Create two histograms: one for the longitudinal shower profile,
-  // and one for the transverse shower profile.
   assert( histoFactory );
   if ( histoFactory ) {
-      // // // if ( ! tree->find( "50" ) ) {
-      longitudinalProfileHisto = 
-	histoFactory->createHistogram1D("50", "Longitudinal shower profile", 
-					numberOfReadoutLayers, 0.0, 
-					1.0*numberOfReadoutLayers );
-      //G4cout << " Created longitudinalProfileHisto " << G4endl;
-      // // // if ( ! tree->find( "60" ) ) {
-      transverseProfileHisto = 
-	histoFactory->createHistogram1D("60", "Transverse shower profile", 
-					numberOfRadiusBins, 0.0, 1.0*numberOfRadiusBins );
-      //G4cout << " Created transverseProfileHisto " << G4endl;
+ 
+    // Create two histograms: one for the longitudinal shower profile,
+    // and one for the transverse shower profile.
+    // // // if ( ! tree->find( "50" ) ) {
+    longitudinalProfileHisto = 
+      histoFactory->createHistogram1D("50", "Longitudinal shower profile", 
+				      numberOfReadoutLayers, 0.0, 
+				      1.0*numberOfReadoutLayers );
+    //G4cout << " Created longitudinalProfileHisto " << G4endl;
+    // // // if ( ! tree->find( "60" ) ) {
+    transverseProfileHisto = 
+      histoFactory->createHistogram1D("60", "Transverse shower profile", 
+				      numberOfRadiusBins, 0.0, 1.0*numberOfRadiusBins );
+    //G4cout << " Created transverseProfileHisto " << G4endl;
+
+    // Kinetic spectra of some particles when they are created.
+    // The x-axis is LOG10(energy/MeV), from inf=-4.0 to sup=+6.0
+    // (i.e. from 0.1 keV up to 1000 GeV), with 1000 (logarithmic) 
+    // bins. 
+    gammaSpectrum = histoFactory->
+      createHistogram1D( "71", "log10(energy/MeV) for gamma", 1000, -4.0, 6.0 );
+    neutronSpectrum = histoFactory->
+      createHistogram1D( "72", "log10(energy/MeV) for neutron", 1000, -4.0, 6.0 );
+    protonSpectrum = histoFactory->
+      createHistogram1D( "73", "log10(energy/MeV) for proton", 1000, -4.0, 6.0 );
+    pionZeroSpectrum = histoFactory->
+      createHistogram1D( "74", "log10(energy/MeV) for pionZero", 1000, -4.0, 6.0 );
+    pionPlusSpectrum = histoFactory->
+      createHistogram1D( "75", "log10(energy/MeV) for pionPlus", 1000, -4.0, 6.0 );
+    pionMinusSpectrum = histoFactory->
+      createHistogram1D( "76", "log10(energy/MeV) for pionMinus", 1000, -4.0, 6.0 );
 
   }
 
@@ -544,7 +562,8 @@ void StatAccepTestAnalysis::init( const G4int numberOfReplicasIn,
 	  histoFactory->createHistogram2D( "96", "Step: Energy(MeV) vs. Length(mm), absorber, NEUTRON", 100, 0.0, 10.0, 100, 0.0, 10.0 );
       }
 
-      // Kinetic spectra of some particles.
+      // Kinetic spectra of some particles in some planes (normal
+      // to the beam direction).
       // We evaluate the kinetic spectra in 10 active layers,
       // uniformely spread along the calorimeter.
       // Here is the decoding of the histograms:
@@ -1199,8 +1218,7 @@ void StatAccepTestAnalysis::fillSpectrum( const G4ParticleDefinition* particleDe
 						       1.0/(p*std::abs(kinEnergy)) );
       }
     }
-  }
-  
+  }  
 #endif
 }
 
@@ -1714,6 +1732,26 @@ void StatAccepTestAnalysis::infoTrack( const G4Track* aTrack ) {
 	mapParticleNames.find( particleName )->second += 1;
       }
     }
+
+#ifdef G4ANALYSIS_USE
+    if ( trackEkin < 1.0*eV ) {
+      // To avoid problem with the logarithm below.
+      trackEkin = 1.0*eV;  
+    }
+    if ( particleId == gammaId ) {
+      gammaSpectrum->fill( std::log10( trackEkin/MeV ) );
+    } else if ( particleId == neutronId ) {
+      neutronSpectrum->fill( std::log10( trackEkin/MeV ) );      
+    } else if ( particleId == protonId ) {
+      protonSpectrum->fill( std::log10( trackEkin/MeV ) );
+    } else if ( particleId == pionZeroId ) {
+      pionZeroSpectrum->fill( std::log10( trackEkin/MeV ) );
+    } else if ( particleId == pionPlusId ) {
+      pionPlusSpectrum->fill( std::log10( trackEkin/MeV ) );
+    } else if ( particleId == pionMinusId ) {
+      pionMinusSpectrum->fill( std::log10( trackEkin/MeV ) );
+    }
+#endif
 
   }
 }

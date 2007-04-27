@@ -401,6 +401,7 @@ private:
   const G4int protonId, antiProtonId, neutronId, antiNeutronId;
 
 #ifdef G4ANALYSIS_USE
+
   // AIDA stuff from now on.
   AIDA::IAnalysisFactory* analysisFactory;
   AIDA::ITree* tree;
@@ -503,6 +504,15 @@ private:
   AIDA::IHistogram1D* pionMinusSpectrumWeighted3[10];
   AIDA::IHistogram1D* pionMinusSpectrumWeighted4[10];
   AIDA::IHistogram1D* pionMinusSpectrumWeighted5[10];
+
+  // Kinetic spectra of some particles when created.
+  AIDA::IHistogram1D* gammaSpectrum;
+  AIDA::IHistogram1D* neutronSpectrum;
+  AIDA::IHistogram1D* protonSpectrum;
+  AIDA::IHistogram1D* pionZeroSpectrum;
+  AIDA::IHistogram1D* pionPlusSpectrum;
+  AIDA::IHistogram1D* pionMinusSpectrum;
+
 #endif
 
 };

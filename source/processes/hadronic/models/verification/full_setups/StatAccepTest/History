@@ -1,7 +1,11 @@
                  History file
                  ------------
 
-02-Apr-2006 - A.Ribon (statAccepTest-V08-02-00)
+27-Apr-2007 - A.Ribon (statAccepTest-V08-02-01)
+- Added spectrum of some particles when created.
+
+
+02-Apr-2007 - A.Ribon (statAccepTest-V08-02-00)
 - Some CPU optimisation to get the code faster.
   Unable to replace long if statements with switch
   statements.
