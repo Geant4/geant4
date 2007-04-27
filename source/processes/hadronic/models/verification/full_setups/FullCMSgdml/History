@@ -1,0 +1,13 @@
+
+                 History file
+                 ------------
+
+27-Apr-2007 - A.Ribon
+- Created a new application: full CMS detector imported via GDML.
+  Any Physics List can be selected. 
+  Magnetic field can be turned on.
+  As primary particle, one can shoot random particle types, in
+  random direction, starting always from the origin, and with
+  random energy; as an alternative, one can shoot always one 
+  type of particle of a specified energy.
+
