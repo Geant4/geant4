@@ -1,0 +1,66 @@
+#!/bin/sh
+#
+#-----------------------------------------------------------------
+# Last update: 30-Apr-2007
+#-----------------------------------------------------------------
+#
+# ==============================
+# === Special setup for GDML ===
+# ==============================
+#
+export XERCESCROOT=/afs/cern.ch/sw/lcg/external/XercesC/2.7.0/slc3_ia32_gcc323
+###export XERCESCROOT=/afs/cern.ch/sw/geant4/dev/XercesC/Linux-g++
+#
+GDML_BASE=/afs/cern.ch/sw/lcg/app/releases/GDML/GDML_2_9_0/slc3_ia32_gcc323
+###GDML_BASE=/users/ribon/dirGDML/dirInstall/dir2.9.0/slc3_ia32_gcc323
+#
+export GDML_INC=$GDML_BASE/../include
+export GDML_LIB=$GDML_BASE/lib
+#
+export LD_LIBRARY_PATH=$GDML_LIB:$XERCESCROOT/lib:$LD_LIBRARY_PATH
+#
+# ===========================================
+# === Local setup for Geant4 applications ===
+#
+#     ***********************************************************
+#     NB) Global dynamic (shared, .so) libraries for Geant4
+#         are needed in order to use GDML.
+#	  To get them do:  $  gmake G4LIB_BUILD_SHARED=1 global
+#     ***********************************************************
+#
+# ===========================================
+#
+export G4SYSTEM=Linux-g++
+#
+export G4INSTALL=/users/ribon/geant4
+export G4LIB=$G4INSTALL/lib
+#
+export G4DEV=/afs/cern.ch/sw/geant4/dev
+#
+export G4LEVELGAMMADATA=$G4DEV/data/PhotonEvaporation
+export G4RADIOACTIVEDATA=$G4DEV/data/RadiativeDecay
+export G4LEDATA=$G4DEV/data/G4EMLOW
+export NeutronHPCrossSections=$G4DEV/data/G4NDL
+#
+###export CLHEP_BASE_DIR=$G4DEV/CLHEP/1.9.2.3/slc3_gcc323
+export CLHEP_BASE_DIR=$G4DEV/CLHEP/2.0.3.1/slc3_gcc323
+export CLHEP_INCLUDE_DIR=$CLHEP_BASE_DIR/include
+export CLHEP_LIB_DIR=$CLHEP_BASE_DIR/lib
+export CLHEP_LIB=CLHEP
+#
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$G4LIB/$G4SYSTEM
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$CLHEP_LIB_DIR
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$G4LIB/plists/$G4SYSTEM
+#
+# ===================
+# === Application ===
+# ===================
+#
+export G4WORKDIR=$PWD
+export G4TMP=$G4WORKDIR/tmp
+export G4BIN=$G4WORKDIR/bin
+#
+export PATH=$PATH:$G4WORKDIR/bin/$G4SYSTEM
+#
+###export G4ANALYSIS_USE=1
+#

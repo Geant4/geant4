@@ -1,5 +1,5 @@
 
- Last update: 27-Apr-2007
+ Last update: 30-Apr-2007
  ========================
 
  In this directory you can find an example of a Geant4 application
@@ -15,7 +15,8 @@
   mainApplication.cc; by default, the Physics List QGSP is used).
 
  You can select the number of events, and the eventual magnetic
- field (along the Z-axis) in the macro file:  run.g4 
+ field (which is a global, constant, uniform field, along the Z-axis)
+ in the macro file:  run.g4 
  (by default, the magnetic field of 4 Tesla is activated).
  In the same file you can also choose if you want to start each
  run with the same random seed (specified in the file start.rndm;
@@ -39,6 +40,9 @@
  "***LOOKHERE*** in the file setup.sh; by default, Geant4 8.2.p01
  is used; notice that if you use version 8.1, or older, you need
  to symbolic link "GNUmakefile-old" to "GNUmakefile).
+ In the case you want to run your local version of Geant4, then
+ edit the file  setup.sh-localG4  (notice that you need to have
+ global dynamic libraries) and then use it instead of the setup.sh.
 
  To build the application:   $  . setup.sh
                              $  gmake  
