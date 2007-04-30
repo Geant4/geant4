@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NistMessenger.cc,v 1.2 2006-06-29 19:13:05 gunter Exp $
+// $Id: G4NistMessenger.cc,v 1.3 2007-04-30 05:54:32 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -35,6 +35,7 @@
 // Creation date: 23.12.2004
 //
 // Modifications:
+// 29.04.07 V.Ivanchenko add recCmd
 //
 //
 // -------------------------------------------------------------------
@@ -50,6 +51,7 @@
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithAnInteger.hh"
 #include "G4UIcmdWithAString.hh"
+#include "G4UIcmdWithADoubleAndUnit.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -57,8 +59,8 @@ G4NistMessenger::G4NistMessenger(G4NistManager* man)
 :manager(man)
 {
   matDir = new G4UIdirectory("/material/");
-  matDir->SetGuidance("Commands for Materials");
-  
+  matDir->SetGuidance("Commands for materials");
+
   verCmd = new G4UIcmdWithAnInteger("/material/verbose",this);
   verCmd->SetGuidance("Set verbose level.");
   
@@ -95,7 +97,15 @@ G4NistMessenger::G4NistMessenger(G4NistManager* man)
     
   g4MatCmd = new G4UIcmdWithAString("/material/g4/printMaterial",this);
   g4MatCmd->SetGuidance("print Material in G4MaterialTable.");
-            
+
+  ionDir = new G4UIdirectory("/ion/");
+  ionDir->SetGuidance("Commands for ions");
+  
+  recCmd = new G4UIcmdWithADoubleAndUnit("/ion/energyThreshold",this);
+  recCmd->SetGuidance("Set the min kinetic energy of recoil ion");
+  recCmd->SetParameterName("eion",true);
+  recCmd->SetUnitCategory("Energy");
+  recCmd->AvailableForStates(G4State_PreInit,G4State_Idle);            
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -109,9 +119,11 @@ G4NistMessenger::~G4NistMessenger()
   delete nistDir;
   
   delete g4ElmCmd;   
-  delete g4MatCmd;  
+  delete g4MatCmd;
+  delete recCmd;  
   delete g4Dir;
   delete matDir;  
+  delete ionDir;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -135,6 +147,9 @@ void G4NistMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
    
   if (command == g4MatCmd)
    { manager->PrintG4Material(newValue);}
+
+  if (command == recCmd)
+   { manager->SetIonEnergyThreshold(recCmd->GetNewDoubleValue(newValue));}
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

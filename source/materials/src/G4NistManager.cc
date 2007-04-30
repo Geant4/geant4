@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistManager.cc,v 1.7 2006-10-17 15:15:46 vnivanch Exp $
+// $Id: G4NistManager.cc,v 1.8 2007-04-30 05:54:32 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -41,6 +41,7 @@
 // 27.02.06 V.Ivanchneko add ConstructNewGasMaterial
 // 18.04.06 V.Ivanchneko add combined creation of materials (NIST + user)
 // 11.05.06 V.Ivanchneko add warning flag to FindMaterial method
+// 29.04.07 V.Ivanchenko add ionEnergyThreshold
 //
 // -------------------------------------------------------------------
 //
@@ -77,6 +78,8 @@ G4NistManager::G4NistManager()
   nElements  = 0;
   nMaterials = 0;
   verbose    = 0;
+
+  ionEnergyThreshold = 100.*keV;
 
   elmBuilder = new G4NistElementBuilder(verbose);
   matBuilder = new G4NistMaterialBuilder(this,elmBuilder,verbose);
