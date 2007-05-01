@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel.cc,v 1.55 2007-05-01 16:49:44 urban Exp $
+// $Id: G4UrbanMscModel.cc,v 1.56 2007-05-01 17:31:41 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -624,7 +624,7 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
 
       G4double tnow = tlimit;
       // optimization ...
-      if(geomlimit < geombig) tlimit = max(tlimit,facsafety*geomlimit);
+      if(geomlimit < geombig) tnow = max(tlimit,facsafety*geomlimit);
    
       // step reduction near to boundary
       if(smallstep < skin)
