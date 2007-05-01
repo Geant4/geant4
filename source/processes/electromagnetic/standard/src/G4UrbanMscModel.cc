@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel.cc,v 1.54 2007-04-23 09:33:57 vnivanch Exp $
+// $Id: G4UrbanMscModel.cc,v 1.55 2007-05-01 16:49:44 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -136,6 +136,7 @@
 // 07-03-07 bugfix in ComputeTruePathLengthLimit (for skin > 0.) (L.Urban)
 // 10-04-07 optimize logic of ComputeTruePathLengthLimit, remove
 //          unused members, use unique G4SafetyHelper (V.Ivanchenko)
+// 01-05-07 optimization for skin > 0 (L.Urban)
 //
 
 // Class Description:
@@ -576,6 +577,7 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
         // constraint from the physics
         if (currentRange > lambda0) tlimit = facr*currentRange;
         else                        tlimit = facr*lambda0;
+        // tlimit = facr*(currentRange+lambda0);
 
         // constraint from the geometry (if tlimit above is too big)
         G4double tgeom = geombig; 
@@ -621,6 +623,9 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
         return tPathLength;   
 
       G4double tnow = tlimit;
+      // optimization ...
+      if(geomlimit < geombig) tlimit = max(tlimit,facsafety*geomlimit);
+   
       // step reduction near to boundary
       if(smallstep < skin)
 	{
