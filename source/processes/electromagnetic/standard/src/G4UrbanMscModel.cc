@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel.cc,v 1.56 2007-05-01 17:31:41 urban Exp $
+// $Id: G4UrbanMscModel.cc,v 1.57 2007-05-01 17:41:43 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -577,7 +577,7 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
         // constraint from the physics
         if (currentRange > lambda0) tlimit = facr*currentRange;
         else                        tlimit = facr*lambda0;
-        // tlimit = facr*(currentRange+lambda0);
+
 
         // constraint from the geometry (if tlimit above is too big)
         G4double tgeom = geombig; 
@@ -908,7 +908,7 @@ std::vector<G4DynamicParticle*>* G4UrbanMscModel::SampleSecondaries(
            << " geomStep(mm)= " << zPathLength
            << G4endl;
 */
-      if(r > 0.)
+    if(r > 0.)
       {
         G4double latcorr = LatCorrelation();
         if(latcorr > r) latcorr = r;
@@ -982,7 +982,7 @@ G4double G4UrbanMscModel::SampleCosineTheta(G4double trueStepLength,
   {
     //no scattering, single or plural scattering
     G4double mean = trueStepLength/stepmin ;
-    cth = 1.;
+
     G4int n = G4Poisson(mean);
     if(n > 0)
     {
