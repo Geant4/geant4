@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SafetyHelper.hh,v 1.6 2007-04-23 15:31:25 vnivanch Exp $
+// $Id: G4SafetyHelper.hh,v 1.7 2007-05-02 15:32:13 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -104,13 +104,16 @@ private:
 
   G4bool        fUseParallelGeometries; 
     // Flag whether to use PathFinder or single (mass) Navigator directly
- 
-  G4bool first;
+  G4bool fFirstCall;
     // Flag of first call
 
-  G4ThreeVector lastSafetyPosition;
-  G4double      lastSafety;
-  G4double      factor;
+  // State used during tracking -- for optimisation
+  G4ThreeVector fLastSafetyPosition;
+  G4double      fLastSafety;
+  const G4double  fRecomputeFactor;   
+       // parameter for further optimisation: 
+       // if ( move < fact*safety )  do fast recomputation of safety
+  // End State (tracking)
 };
 
 // Inline definitions
@@ -130,8 +133,8 @@ G4VPhysicalVolume* G4SafetyHelper::GetWorldVolume()
 inline
 void G4SafetyHelper::SetCurrentSafety(G4double val, const G4ThreeVector& pos)
 {
-  lastSafety = val;
-  lastSafetyPosition = pos;
+  fLastSafety = val;
+  fLastSafetyPosition = pos;
 }
 
 #endif
