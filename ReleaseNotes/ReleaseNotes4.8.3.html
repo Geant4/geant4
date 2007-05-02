@@ -120,11 +120,6 @@ Note that a full re-installation of libraries (or a full recompilation) and
 a recompilation of user applications is anyhow required.
 
 <P> </P>
-<B>Standard Electromagnetic physics</B>
-<P> </P>
-!!! TO ADD TEXT HERE  !!!
-
-<P> </P>
 <B>Physics Lists</B>
 <P> </P>
 !!! TO ADD TEXT HERE  !!!
@@ -137,30 +132,38 @@ a recompilation of user applications is anyhow required.
 
 <H2>4. Expected effects on physics and performance</H2>
 
-<b>Hadronic physics</b>
-<ul>
-  <li><u>Improved shower shapes</u>:<br> 
+<B>Standard Electromagnetic physics</B>
+<UL>
+<LI>No visible effects in CPU performance.</LI>
+<LI>Calorimeter response: stable within 1% for visible energy and resolution.</LI>
+<LI>Energy deposition in thin layers: stable for step size down to <TT>1 um</TT>.</LI>
+<LI>Improved precision of mean energy loss calculations for big cuts.</LI>
+</UL>
+
+<B>Hadronic physics</B>
+<UL>
+  <LI><U>Improved shower shapes</u>:<BR>
       the improved FTF model contributes to improved shower shapes.  
       The longitudinal component now starts later and ends later, 
       in better agreement with data.  The addition of quasi-elastic 
       scattering (<TT>G4QuasiElasticChannel</TT>) to the string models also
-      improved the shower shapes by reducing the deep inelastic component.</li>
-  <li><u>New cross section data sets added</u>:<br>
+      improved the shower shapes by reducing the deep inelastic component.</LI>
+  <LI><U>New cross section data sets added</U>:<BR>
       Barashenkov parameterised cross sections are now available for elastic 
       and inelastic nucleon-nucleus and elastic and inelastic pion-nucleus 
-      scattering.</li>
-  <li><u>Cross sections for user-defined elements</u>:<br>
+      scattering.</LI>
+  <LI><U>Cross sections for user-defined elements</U>:<BR>
       cross sections are now calculated based on user-defined isotope 
       abundances, if they are provided. Natural abundances are used 
-      otherwise.</li>
-  <li><u>Improved muon capture model</u>:<br>
+      otherwise.</LI>
+  <LI><U>Improved muon capture model</U>:<BR>
       uses <TT>G4QCaptureAtRest</TT> model for more accurate final state
-      electron spectrum.</li>
-  <li><u>Error reporting</u>:<br>
+      electron spectrum.</LI>
+  <LI><U>Error reporting</U>:<BR>
       when a segmentation fault occurs in a hadronic process, the information
       about the process and model name where the fault has occurred will be
-      printed out.</li>
-</ul>  
+      printed out.</LI>
+</UL>  
 
 <P> </P>
 <A NAME="5."></A>
@@ -269,8 +272,6 @@ please refer to the related History files provided in most packages):
     <UL>
     <LI><TT>G4UrbanMscModel</TT>:
         <UL>
-        <LI>Single scattering is now allowed only near to boundaries, not
-            everywhere.</LI>
         <LI>Fix in the single scattering code for heavy particles, now the code
             can be used with skin=1 e+/e- and for heavy particles as well.</LI>
         <LI>Added protections against NaN values in two places: sampling of
@@ -296,15 +297,12 @@ please refer to the related History files provided in most packages):
         <UL>
         <LI>Use <TT>skin</TT> parameter from the base class (default
             <TT>skin=0</TT>).</LI>
-        <LI>Removed <TT>SetSkin()</TT> method, which is implemented in the
-            base class; allowing <TT>skin>0</TT>.</LI>
-        <LI>Fix to allow for reinitialisation of model parameters between
-            runs in G4MultipleScattering.</LI>
         </UL></LI>
     <LI><TT>G4eBremsstrahlungModel</TT>:
         <UL>
-        <LI>Added reinitialisation of LPM flag.</LI>
-        <LI>Corrected <TT>LPMconstant</TT> by factor 2.</LI>
+        <LI>Added reinitialisation of LPM flag between runs.</LI>
+        <LI>Corrected <TT>LPMconstant</TT> by factor 2 (according to SLAC
+            recent publication).</LI>
          </UL></LI>
     <LI><TT>G4BetheHeitlerModel</TT>: for any initial energy select atom of
         the material on which conversion occur (needed for polarisation
@@ -321,9 +319,9 @@ please refer to the related History files provided in most packages):
         <LI>Use <TT>G4SafetyHelper</TT> instead of <TT>G4Navigator</TT> for
             determining distance to boundary, and added protection agains zero
             step length.</LI>
-        <LI>Modified initialisation of <TT>linLossLimit</TT> to <TT>1.E-6</TT>.</LI>
-        <LI>Improved precision of energy loss for high energy incident and
-            high cut.</LI>
+        <LI>Modified initialisation of <TT>linLossLimit</TT> to <TT>1.E-6</TT>
+            in order to improve precision of energy loss for high energy
+            incident and high cut.</LI>
         </UL></LI>
     <LI><TT>G4VMultipleScattering</TT>:
         <UL>
