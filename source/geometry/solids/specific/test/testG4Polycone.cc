@@ -206,7 +206,7 @@ int main(int, char **)
   G4double   d4;
 
   G4cout<<"\nPdep is (0<<R<<50, phi, z)";
-  G4cout<<"\nDir is (cos(phi), sin(phi), 0)\n";
+  G4cout<<"\nDir is (std::cos(phi), std::sin(phi), 0)\n";
   G4cout<<"Ndirection is="<<dir4 <<G4endl;
 
   for(y=-0; y<=50; y+=5)

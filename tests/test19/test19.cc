@@ -756,7 +756,7 @@ int main()
      //G4cout<<"Test19: P="<<mic" (GeV/c), MeanFreePath="<<MFP<<G4endl;
      //G4cout<<"Test19: P="<<mic<<" (GeV/c), XS="<<CS/millibarn/tgA<<G4endl;
      //G4cout<<"Test19: P="<<mic<<" (GeV/c), <dE>/E="<<den/nen/ken/GeV<<G4endl;
-     G4cout<<"Test19: P="<<mic<<" (GeV/c), <sin(t)>="<<den/cen<<G4endl;
+     G4cout<<"Test19: P="<<mic<<" (GeV/c), <std::sin(t)>="<<den/cen<<G4endl;
    }
    // --- End of the temporary LOOP for calculation of total cross section ------------
    return EXIT_SUCCESS;

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExtrudedSolid.cc,v 1.6 2007-02-26 08:40:01 gcosmo Exp $
+// $Id: G4ExtrudedSolid.cc,v 1.7 2007-05-02 14:59:31 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -84,7 +84,7 @@ G4ExtrudedSolid::G4ExtrudedSolid( const G4String& pName,
         FatalException, 
         "Z-sections have to be ordered by z value (z0 < z1 < z2 ...)");
     }
-    if ( fabs( zsections[i+1].fZ - zsections[i].fZ ) < kCarTolerance ) 
+    if ( std::fabs( zsections[i+1].fZ - zsections[i].fZ ) < kCarTolerance ) 
     {
       G4Exception(
         "G4ExtrudedSolid::G4ExtrudedSolid()", "InvalidSetup",

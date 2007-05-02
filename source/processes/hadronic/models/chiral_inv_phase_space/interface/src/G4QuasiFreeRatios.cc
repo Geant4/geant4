@@ -1,3 +1,7 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
 // * The  Geant4 software  is  copyright of the Copyright Holders  of *
 // * the Geant4 Collaboration.  It is provided  under  the terms  and *
 // * conditions of the Geant4 Software License,  included in the file *
@@ -20,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QuasiFreeRatios.cc,v 1.10 2007-04-27 07:30:26 gcosmo Exp $
+// $Id: G4QuasiFreeRatios.cc,v 1.11 2007-05-02 15:00:02 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QCollision.cc,v 1.18 2007-03-09 10:07:35 mkossov Exp $
+// $Id: G4QCollision.cc,v 1.19 2007-05-02 14:59:57 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCollision class -----------------
@@ -653,7 +653,7 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
     //
     // Scatter the lepton ( @@ make the same thing for real photons)
     // At this point we have photonEnergy and photonQ2 (with notDefinedPhi)->SelectProjPart
-    G4double absEn = pow(am,third)*GeV;  // @@(b) Mean Energy Absorbed by a Nucleus
+    G4double absEn = std::pow(am,third)*GeV;  // @@(b) Mean Energy Absorbed by a Nucleus
     //if(am>1 && absEn < photonEnergy)     // --> the absorption of energy can happen
 				if(absEn < photonEnergy)     // --> the absorption of energy can happen
     {

@@ -8,7 +8,7 @@
 // * LICENSE and available at  http://cern.ch/geant4/license .  These *
 // * include a list of copyright holders.                             *
 // *                                                                  *
-// * Neither the authors 262of this software system, nor their employing *
+// * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: exampleS5.cc,v 1.1 2006-11-28 15:19:42 tnikitin Exp $
+// $Id: exampleS5.cc,v 1.2 2007-05-02 14:59:26 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
