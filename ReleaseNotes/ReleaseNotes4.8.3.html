@@ -125,11 +125,6 @@ a recompilation of user applications is anyhow required.
 !!! TO ADD TEXT HERE  !!!
 
 <P> </P>
-<B>Hadronic physics</B>
-<P> </P>
-!!! TO ADD TEXT HERE  !!!
-
-<P> </P>
 <B>Physics Lists</B>
 <P> </P>
 !!! TO ADD TEXT HERE  !!!
@@ -141,7 +136,31 @@ a recompilation of user applications is anyhow required.
 <!-- ============================================== -->
 
 <H2>4. Expected effects on physics and performance</H2>
-!!! TO ADD TEXT HERE  !!!
+
+<b>Hadronic physics</b>
+<ul>
+  <li><u>Improved shower shapes</u>:<br> 
+      the improved FTF model contributes to improved shower shapes.  
+      The longitudinal component now starts later and ends later, 
+      in better agreement with data.  The addition of quasi-elastic 
+      scattering (<TT>G4QuasiElasticChannel</TT>) to the string models also
+      improved the shower shapes by reducing the deep inelastic component.</li>
+  <li><u>New cross section data sets added</u>:<br>
+      Barashenkov parameterised cross sections are now available for elastic 
+      and inelastic nucleon-nucleus and elastic and inelastic pion-nucleus 
+      scattering.</li>
+  <li><u>Cross sections for user-defined elements</u>:<br>
+      cross sections are now calculated based on user-defined isotope 
+      abundances, if they are provided. Natural abundances are used 
+      otherwise.</li>
+  <li><u>Improved muon capture model</u>:<br>
+      uses <TT>G4QCaptureAtRest</TT> model for more accurate final state
+      electron spectrum.</li>
+  <li><u>Error reporting</u>:<br>
+      when a segmentation fault occurs in a hadronic process, the information
+      about the process and model name where the fault has occurred will be
+      printed out.</li>
+</ul>  
 
 <P> </P>
 <A NAME="5."></A>
