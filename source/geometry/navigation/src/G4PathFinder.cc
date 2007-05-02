@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PathFinder.cc,v 1.28 2007-04-20 15:41:18 gcosmo Exp $
+// $Id: G4PathFinder.cc,v 1.29 2007-05-02 15:22:22 japost Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4PathFinder Implementation
@@ -604,7 +604,7 @@ G4double  G4PathFinder::ComputeSafety( const G4ThreeVector& position )
        // fNewSafety[num]= safety; 
   
        // G4cout << " Navigator # " << num << " gives safety = " << safety << G4endl;
-  } 
+    } 
 
     fSafetyLocation= position;
     fMinSafety_atSafLocation = minSafety;
@@ -874,16 +874,17 @@ G4PathFinder::DoNextCurvedStep( const G4FieldTrack &initialState,
   fMinStep=   minStep; 
   fTrueMinStep = std::min( minStep, proposedStepLength );
 
-  if( fVerboseLevel > 2 )
+  if( fVerboseLevel > 2 ){
     G4cout << "G4PathFinder::DoNextCurvedStep : " << G4endl
            << " initialState = " << initialState << G4endl
            << " and endState = " << fEndState << G4endl;
 
+    G4cout << "G4PathFinder::DoNextCurvedStep : " 
+	   << " minStep = " << minStep 
+	   << " proposedStepLength " << proposedStepLength 
+	   << " safety = " << newSafety << G4endl;
+  }
   G4double currentStepSize = 0;  
-  G4cout << "G4PathFinder::DoNextCurvedStep : " 
-         << " minStep = " << minStep 
-         << " proposedStepLength " << proposedStepLength 
-         << " safety = " << newSafety << G4endl;
   if( minStep < proposedStepLength ) {   // if == , then a boundary found at end ??
 
     // Recover the remaining information from MultiNavigator
