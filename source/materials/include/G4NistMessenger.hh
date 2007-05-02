@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NistMessenger.hh,v 1.3 2007-04-30 05:54:32 vnivanch Exp $
+// $Id: G4NistMessenger.hh,v 1.4 2007-05-02 10:48:52 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // File name:     G4NistMessenger
@@ -76,7 +76,6 @@ class G4NistManager;
 class G4UIdirectory;
 class G4UIcmdWithAnInteger;
 class G4UIcmdWithAString;
-class G4UIcmdWithADoubleAndUnit;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -105,8 +104,6 @@ private:
   G4UIcmdWithAString*        g4ElmCmd;   
   G4UIcmdWithAString*        g4MatCmd;     
 
-  G4UIdirectory*             ionDir;
-  G4UIcmdWithADoubleAndUnit* recCmd;
 };
 
 #endif

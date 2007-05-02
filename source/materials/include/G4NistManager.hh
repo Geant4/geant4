@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistManager.hh,v 1.10 2007-04-30 05:54:32 vnivanch Exp $
+// $Id: G4NistManager.hh,v 1.11 2007-05-02 10:48:52 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -42,7 +42,6 @@
 // 11.05.06 V.Ivanchneko add warning flag to FindMaterial method
 // 17.10.06 V.Ivanchneko add methods: GetAtomicMass, GetNistElementNames,
 //                       GetNistMaterialNames
-// 29.04.07 V.Ivanchenko add ionEnergyThreshold
 //
 // Class Description:
 //
@@ -147,9 +146,6 @@ public:
 				      G4bool isotopes=true);
 
   size_t GetNumberOfMaterials();
-
-  void SetIonEnergyThreshold(G4double);
-  G4double GetIonEnergyThreshold();
   
   void SetVerbose(G4int);
   G4int GetVerbose();
@@ -175,9 +171,6 @@ private:
   G4NistElementBuilder*    elmBuilder;
   G4NistMaterialBuilder*   matBuilder;
   G4NistMessenger*         messenger;
-
-  // enegry threshold on recoil ion in a media
-  G4double                 ionEnergyThreshold;  
 
 };
 
@@ -289,22 +282,6 @@ inline
 G4int G4NistManager::GetVerbose()
 {
   return verbose;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-inline
-void G4NistManager::SetIonEnergyThreshold(G4double val)
-{
-  ionEnergyThreshold = val;  
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-inline
-G4double G4NistManager::GetIonEnergyThreshold()
-{
-  return ionEnergyThreshold;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
