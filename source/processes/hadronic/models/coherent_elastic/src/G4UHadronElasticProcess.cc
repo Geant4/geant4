@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UHadronElasticProcess.cc,v 1.32 2007-03-12 10:58:45 vnivanch Exp $
+// $Id: G4UHadronElasticProcess.cc,v 1.33 2007-05-02 13:37:36 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Geant4 Hadron Elastic Scattering Process -- header file
@@ -37,6 +37,7 @@
 // 26.09.06 V.Ivanchenko add lowestEnergy
 // 20.10.06 V.Ivanchenko initialise lowestEnergy=0 for neitrals, eV for charged
 // 23.01.07 V.Ivanchnko add cross section interfaces with Z and A
+// 02.05.07 V.Ivanchnko add He3
 //
 
 #include "G4UHadronElasticProcess.hh"
@@ -351,6 +352,7 @@ IsApplicable(const G4ParticleDefinition& aParticleType)
            aParticleType == *(G4AntiXiMinus::AntiXiMinus()) ||
            aParticleType == *(G4Deuteron::Deuteron()) ||
            aParticleType == *(G4Triton::Triton()) ||
+           aParticleType == *(G4He3::He3()) ||
            aParticleType == *(G4Alpha::Alpha()) ||
            aParticleType == *(G4OmegaMinus::OmegaMinus()) ||
            aParticleType == *(G4AntiOmegaMinus::AntiOmegaMinus()));

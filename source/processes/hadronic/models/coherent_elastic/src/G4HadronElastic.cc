@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronElastic.cc,v 1.43 2007-04-03 10:38:43 vnivanch Exp $
+// $Id: G4HadronElastic.cc,v 1.44 2007-05-02 13:37:36 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -57,6 +57,8 @@
 // 16-Nov-06 V.Ivanchenko Simplify logic of choosing of the model for sampling
 // 30-Mar-07 V.Ivanchenko lowEnergyLimitQ=0, lowEnergyLimitHE = 1.0*GeV,
 //                        lowestEnergyLimit= 0
+// 02-May-07 V.Ivanchenko lowEnergyLimitQ=GeV, lowEnergyLimitHE = 0; use 
+//                        lowEnergyLimitQ as an upper limit for QElastic
 //
 
 #include "G4HadronElastic.hh"
@@ -82,10 +84,8 @@ G4HadronElastic::G4HadronElastic()
   SetMaxEnergy( 100.*TeV );
   verboseLevel= 0;
   lowEnergyRecoilLimit = 100.*keV;  
-  lowEnergyLimitQ  = 0.0*MeV;  
-  lowEnergyLimitHE = 0.4*GeV;  
-  lowEnergyLimitHE = 1.0*GeV;  
-  //  lowEnergyLimitHE = DBL_MAX;  
+  lowEnergyLimitQ  = 1.0*GeV;  
+  lowEnergyLimitHE = 0.0*GeV;  
   lowestEnergyLimit= 0.0*keV;  
   plabLowLimit     = 20.0*MeV;
 
@@ -179,15 +179,16 @@ G4HadFinalState* G4HadronElastic::ApplyYourself(
   G4ElasticGenerator gtype = fLElastic;
 
   // Q-elastic for p,n scattering on H and He
-  if ((theParticle == theProton || theParticle == theNeutron) 
-      && Z <= 2 && ekin >= lowEnergyLimitQ) 
+  if ((theParticle == theProton || theParticle == theNeutron)
+      && (Z <= 2 || ekin < lowEnergyLimitQ))  
     gtype = fQElastic;
 
-  // HE-elastic for energetic projectiles
-  else if(ekin >= lowEnergyLimitHE && A < 238) 
-    gtype = fHElastic;
-  // S-wave for very low energy
-  else if(plab < plabLowLimit) gtype = fSWave;
+  else {
+    // S-wave for very low energy
+    if(plab < plabLowLimit) gtype = fSWave;
+    // HE-elastic for energetic projectiles
+    else if(ekin >= lowEnergyLimitHE && A < 238) gtype = fHElastic;
+  }
 
   //
   // Sample t
@@ -201,7 +202,7 @@ G4HadFinalState* G4HadronElastic::ApplyYourself(
     else if(Z == 2 && N == 1) N = 2;
     G4double cs = qCManager->GetCrossSection(false,plab,Z,N,projPDG);
     if(cs > 0.0) t = qCManager->GetExchangeT(Z,N,projPDG);
-    else gtype = fLElastic;
+    else gtype = fHElastic;
   }
 
   if(gtype == fLElastic) {

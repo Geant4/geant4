@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElasticHadrNucleusHE.cc,v 1.57 2007-04-02 08:32:00 vnivanch Exp $
+// $Id: G4ElasticHadrNucleusHE.cc,v 1.58 2007-05-02 13:37:35 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -36,6 +36,7 @@
 //  19.11.05 The HE elastic scattering on proton is added (N.Starkov)
 //  16.11.06 The low energy boundary is shifted to T = 400 MeV (N.Starkov)
 //  23.11.06 General cleanup, ONQ0=3, use pointer instead of particle name (VI)
+//  02.05.07 Scale sampled t as p^2 (VI)
 //
 
 #include  "G4ElasticHadrNucleusHE.hh"
@@ -66,7 +67,7 @@ ElasticData:: ElasticData(const G4ParticleDefinition* p,
 
   for(G4int kk=0; kk<NENERGY; kk++) {
     dnkE[kk] = 0;
-    G4double Q2m = 4.0*eGeV[kk]*(eGeV[kk] + massGeV);
+    G4double Q2m = 4.0*eGeV[kk]*(eGeV[kk] + 2.0*massGeV);
     maxQ2[kk] = std::min(limitQ2, Q2m);
     TableCrossSec[ONQ2*kk] = 0.0;
   }
@@ -448,7 +449,8 @@ G4double G4ElasticHadrNucleusHE::HadronNucleusQ2_2(
   }
 
   Q2 = GetQ2_2(iNumbQ2, dNumbQ2, dNumbFQ2, Rand);
-  if(Q2max < pElD->limitQ2) Q2 *= ptot2/P2;
+  //  if(Q2max < pElD->limitQ2) 
+  Q2 *= ptot2/P2;
 
   if(verboselevel > 1)
     G4cout<<" HadrNucleusQ2_2(2): Q2= "<<Q2<<" iNumbQ2= " << iNumbQ2 

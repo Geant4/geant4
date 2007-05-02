@@ -14,6 +14,12 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+2 May 2007 - V.Ivanchenko (hadr-cohe-V08-02-04)
+-----------------------------------------------
+  G4ElasticHadrNucleusHE - scale sampled t as ptot^2
+  G4HadronElastic - use QElastic for p, n < GeV and HE model above
+                    still use QElastic for H and He targets  
+
 2 Apr 2007 - V.Ivanchenko (hadr-cohe-V08-02-03)
 -----------------------------------------------
   G4ElasticHadrNucleusHE - use iterator search on bin instead of 
