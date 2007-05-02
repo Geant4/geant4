@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4SafetyHelper.cc,v 1.10 2007-04-23 15:31:25 vnivanch Exp $
+// $Id: G4SafetyHelper.cc,v 1.11 2007-05-02 15:32:41 japost Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4SafetyHelper Implementation
@@ -39,11 +39,19 @@
 
 #include "globals.hh"
 
-G4SafetyHelper::G4SafetyHelper()
+G4SafetyHelper::G4SafetyHelper() : 
+  fUseParallelGeometries(false),     // By default, one geometry only
+  fFirstCall(true),
+  fLastSafetyPosition(0.0,0.0,0.0),
+  fLastSafety(0.0),
+  fRecomputeFactor(0.2)
 {
-  first = true;
-  factor = 0.2;   
-  fUseParallelGeometries = false;  // By default, one geometry only
+  fpPathFinder= 0; //  Cannot initialise this yet - a loop results
+
+  // Initialization of the Navigator pointer is postponed, and must
+  //   be undertaken by another class calling InitialiseHelper()
+  fpMassNavigator= 0;  
+  fMassNavigatorId= -1; 
 }
 
 void G4SafetyHelper::InitialiseNavigator()
@@ -59,7 +67,7 @@ void G4SafetyHelper::InitialiseNavigator()
   G4VPhysicalVolume* worldPV = fpMassNavigator->GetWorldVolume(); 
   if( worldPV == 0 )
   { 
-    G4Exception("G4SafetyHelper::ComputeMassStep",
+    G4Exception("G4SafetyHelper::InitialiseNavigator",
                 "InvalidNavigatorWorld", FatalException, 
                 "Found that existing tracking Navigator has NULL world"); 
   }
@@ -69,10 +77,10 @@ void G4SafetyHelper::InitialiseNavigator()
 
 void G4SafetyHelper::InitialiseHelper()
 {
-  lastSafetyPosition = G4ThreeVector(0.0,0.0,0.0);
-  lastSafety         = 0.0;
-  if (first) { InitialiseNavigator(); }
-  first = false;
+  fLastSafetyPosition = G4ThreeVector(0.0,0.0,0.0);
+  fLastSafety         = 0.0;
+  if (fFirstCall) { InitialiseNavigator(); }
+  fFirstCall = false;
 }
 
 G4SafetyHelper::~G4SafetyHelper()
@@ -104,26 +112,26 @@ G4double G4SafetyHelper::ComputeSafety( const G4ThreeVector& position )
 
   // return last value if position is not significantly changed
   //
-  G4double moveLen = (position-lastSafetyPosition).mag();
-  if(moveLen >= factor*lastSafety)
+  G4double moveLen = (position-fLastSafetyPosition).mag();
+  if(moveLen >= fRecomputeFactor*fLastSafety)
   {
-    lastSafetyPosition = position;
+    fLastSafetyPosition = position;
  
     if( !fUseParallelGeometries )
     {
       // Safety for mass geometry
-      lastSafety = fpMassNavigator->ComputeSafety(position); 
+      fLastSafety = fpMassNavigator->ComputeSafety(position); 
     }
     else
     {
       // Safety for all geometries
-      lastSafety = fpPathFinder->ComputeSafety( position ); 
+      fLastSafety = fpPathFinder->ComputeSafety( position ); 
     } 
-    newSafety = lastSafety;
+    newSafety = fLastSafety;
   }
   else
   {
-    newSafety = lastSafety-moveLen;
+    newSafety = fLastSafety-moveLen;
   } 
   return newSafety;
 }
