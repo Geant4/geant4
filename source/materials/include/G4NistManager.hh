@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistManager.hh,v 1.11 2007-05-02 10:48:52 vnivanch Exp $
+// $Id: G4NistManager.hh,v 1.12 2007-05-02 11:22:35 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -42,6 +42,7 @@
 // 11.05.06 V.Ivanchneko add warning flag to FindMaterial method
 // 17.10.06 V.Ivanchneko add methods: GetAtomicMass, GetNistElementNames,
 //                       GetNistMaterialNames
+// 02.05.07 V.Ivanchneko add GetNistFirstIsotopeN and GetNumberOfNistIsotopes 
 //
 // Class Description:
 //
@@ -102,6 +103,10 @@ public:
   // Mass in Geant4 units
   G4double GetIsotopeMass(G4int Z, G4int N) const;
   G4double GetAtomicMass(G4int Z, G4int N) const;
+
+  // Number of isotopes
+  G4int    GetNistFirstIsotopeN(G4int Z) const;
+  G4int    GetNumberOfNistIsotopes(G4int Z) const;
 
   G4double GetIsotopeAbundance(G4int Z, G4int N) const;
 
@@ -256,6 +261,22 @@ inline
 G4double G4NistManager::GetIsotopeAbundance(G4int Z, G4int N) const
 {
   return elmBuilder->GetIsotopeAbundance(Z, N);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline 
+G4int G4NistManager::GetNistFirstIsotopeN(G4int Z) const
+{
+  return elmBuilder->GetNistFirstIsotopeN(Z);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline 
+G4int G4NistManager::GetNumberOfNistIsotopes(G4int Z) const
+{
+  return elmBuilder->GetNumberOfNistIsotopes(Z);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

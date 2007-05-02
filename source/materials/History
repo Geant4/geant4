@@ -1,4 +1,4 @@
-$Id: History,v 1.81 2007-04-25 16:21:08 gum Exp $
+$Id: History,v 1.82 2007-05-02 11:22:35 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+02-05-07 V.Ivanchenko (materials-V08-02-02)
+- G4NistManager and G4NistElementBuilder - add GetNistFirstIsotopeN
+  and GetNumberOfNistIsotopes methods
 
 25-04-07 P.Gumplinger (materials-V08-02-01)
 - add file G4SurfaceProperty.cc, modify G4SurfaceProperty.hh to provide
