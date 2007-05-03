@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExcitedStringDecay.hh,v 1.6 2007-01-24 10:08:59 gunter Exp $
+// $Id: G4ExcitedStringDecay.hh,v 1.7 2007-05-03 22:06:17 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4ExcitedStringDecay_h
@@ -114,7 +114,7 @@ FragmentStrings(const G4ExcitedStringVector * theStrings)
 
 	KTsecondaries+=KTsum1;
 	
-	if  ( std::abs((KTsum1.e()-theStrings->operator[](astring)->Get4Momentum().e()) / KTsum1.e()) > perMillion ) 
+	if  ( KTsum1.e() > 0 && std::abs((KTsum1.e()-theStrings->operator[](astring)->Get4Momentum().e()) / KTsum1.e()) > perMillion ) 
 	{
 //--debug--           G4cout << "String secondaries(" <<generatedKineticTracks->size()<< ")  momentum: " 
 //--debug--	          << theStrings->operator[](astring)->Get4Momentum() << " " << KTsum1 << G4endl;
