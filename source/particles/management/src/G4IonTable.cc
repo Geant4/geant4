@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonTable.cc,v 1.45 2007-03-16 05:25:07 kurasige Exp $
+// $Id: G4IonTable.cc,v 1.46 2007-05-03 14:02:09 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -80,32 +80,13 @@ G4IonTable::~G4IonTable()
     }
     fIsotopeTableList->clear();
   }
+  delete fIsotopeTableList;
   fIsotopeTableList =0;
 
 
   if (fIonList ==0) return;
-  //  No need to delete here because all particles are dynamic objects
-  //   
-  // delete ion objects
-  //G4ParticleDefinition* particle;
-  //G4IonList::reverse_iterator i;
-  //for (i = fIonList->rbegin(); i!= fIonList->rend(); ++i) {
-  //  particle = *i;
-  //
-  //if ( !IsLightIon(particle) ) {
-  //    delete if not static objects
-#ifdef G4VERBOSE
-  //    G4String name;
-  //    if (GetVerboseLevel()>1) {
-  //      G4cout << "G4IonTable:~IonTable() : delete ion of  " ;
-  //      G4cout << particle->GetParticleName() << G4endl;
-  //    }
-#endif
-  //    delete particle;
-  //  }
-  //}
-
   // remove all contents in the Ion List 
+  //  No need to delete here because all particles are dynamic objects
   fIonList->clear();
 
   delete fIonList;
