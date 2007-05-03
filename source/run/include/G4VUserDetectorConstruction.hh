@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserDetectorConstruction.hh,v 1.8 2006-12-13 15:49:30 gunter Exp $
+// $Id: G4VUserDetectorConstruction.hh,v 1.9 2007-05-03 17:59:18 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -63,6 +63,10 @@ class G4VUserDetectorConstruction
 
   private:
     std::vector<G4VUserParallelWorld*> parallelWorld;
+
+  public:
+    G4int GetNumberOfParallelWorld() const;
+    G4VUserParallelWorld* GetParallelWorld(G4int i) const;
 };
 
 #endif
