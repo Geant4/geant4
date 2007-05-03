@@ -14,9 +14,16 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+03 May 2007 Dennis Wright (hadr-cross-V08-02-06)
+------------------------------------------------
+- G4HadronCrossSections::GetParticleCode() : replace code which
+    tested by particle name with code that tests by PDG ID.  Also
+    use switch-case instead of else-if.
+
 02 Apr 2007 Gunter Folger (hadr-cross-V08-02-05)
+------------------------------------------------
 - G4PiNuclearCrossSection.cc: remove special treatment ('tuning')
-   for Copper (Z=29), i.e. the Cu cross section is no longer lowered by 4%
+    for Copper (Z=29), i.e. the Cu cross section is no longer lowered by 4%
 
 22 Mar 2007 Dennis Wright for V. Ivanchenko (hadr-cross-V08-02-04)
 ------------------------------------------------------------------
