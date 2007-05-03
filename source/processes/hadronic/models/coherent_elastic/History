@@ -14,11 +14,18 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+3 May 2007 - V.Ivanchenko (hadr-cohe-V08-02-03)
+-----------------------------------------------
+  G4HadronElastic - add protection for NaNs by using
+                    QElasticCrossSection for p and n incident 
+                    for any energy
+
 2 May 2007 - V.Ivanchenko (hadr-cohe-V08-02-04)
 -----------------------------------------------
   G4ElasticHadrNucleusHE - scale sampled t as ptot^2
-  G4HadronElastic - use QElastic for p, n < GeV and HE model above
-                    still use QElastic for H and He targets  
+  G4HadronElastic - use QElasticCrossSection for p, n < GeV and 
+                    G4ElasticHadrNucleusHE model above
+                    still use QElasticCrossSEction for H and He targets  
 
 2 Apr 2007 - V.Ivanchenko (hadr-cohe-V08-02-03)
 -----------------------------------------------
