@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronElastic.cc,v 1.45 2007-05-03 14:56:06 vnivanch Exp $
+// $Id: G4HadronElastic.cc,v 1.46 2007-05-03 17:37:58 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -201,8 +201,11 @@ G4HadFinalState* G4HadronElastic::ApplyYourself(
     if(Z == 1 && N == 2) N = 1;
     else if(Z == 2 && N == 1) N = 2;
     G4double cs = qCManager->GetCrossSection(false,plab,Z,N,projPDG);
+
+    // check if cross section is reasonable
     if(cs > 0.0) t = qCManager->GetExchangeT(Z,N,projPDG);
-    else gtype = fLElastic;
+    else if(plab > plabLowLimit) gtype = fLElastic;
+    else gtype = fSWave;
   }
 
   if(gtype == fLElastic) {

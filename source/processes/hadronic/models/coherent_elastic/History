@@ -14,7 +14,7 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
-3 May 2007 - V.Ivanchenko (hadr-cohe-V08-02-03)
+3 May 2007 - V.Ivanchenko (hadr-cohe-V08-02-05)
 -----------------------------------------------
   G4HadronElastic - add protection for NaNs by using
                     QElasticCrossSection for p and n incident 
