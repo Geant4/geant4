@@ -562,8 +562,14 @@ generateSCMfinalState(G4double ekin,
 	G4double m2 = dummy.getParticleMass(particle_kinds[1]);
 	m2 *= m2;	 
 	G4double a = 0.5 * (etot_scm * etot_scm - m1 - m2);
-	G4double np = std::sqrt((a * a - m1 * m2) / (m1 + m2 + 2.0 * a));
-	mom = particleSCMmomentumFor2to2(is, kw, ekin, np);
+	G4double em = a * a - m1 * m2;
+
+        if (em > 0) { //  see if it is possible to rescale?
+	  G4double np = std::sqrt( em / (m1 + m2 + 2.0 * a));
+	  mom = particleSCMmomentumFor2to2(is, kw, ekin, np);
+	} else { // rescaling not possible
+	  mom = particleSCMmomentumFor2to2(is, kw, ekin, pscm); 
+	}
 
       } else {
 	mom = particleSCMmomentumFor2to2(is, kw, ekin, pscm);
