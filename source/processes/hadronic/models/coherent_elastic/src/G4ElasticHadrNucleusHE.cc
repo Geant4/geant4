@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElasticHadrNucleusHE.cc,v 1.58 2007-05-02 13:37:35 vnivanch Exp $
+// $Id: G4ElasticHadrNucleusHE.cc,v 1.59 2007-05-03 14:56:06 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -458,10 +458,9 @@ G4double G4ElasticHadrNucleusHE::HadronNucleusQ2_2(
 
   return Q2;
 
-}       //  function
-//  =========================================================
-//  +++++++  The randomization of one dimensional array ++++++
+}       
 
+//  +++++++  The randomization of one dimensional array ++++++
 G4double G4ElasticHadrNucleusHE::GetQ2_2(G4int kk, G4double * Q,
 					 G4double * F, G4double ranUni)
 {
@@ -580,8 +579,6 @@ G4double G4ElasticHadrNucleusHE::GetLightFq2(G4int Nucleus, G4double Q2)
 
   return Prod0;
 }
-
-//  #########################################################
 //  ++++++++++++++++++++  The interpolation +++++++++++++++++++++
 G4double G4ElasticHadrNucleusHE::InterPol(
                   G4double X1, G4double X2, G4double X3,
@@ -609,24 +606,23 @@ G4double G4ElasticHadrNucleusHE::InterPol(
 }
 
 //  =====================================================
-void  G4ElasticHadrNucleusHE::
-       GetKinematics(const G4ParticleDefinition * aHadron,
-                           G4double MomentumH)
+void  G4ElasticHadrNucleusHE::GetKinematics(const G4ParticleDefinition * aHadron,
+					    G4double MomentumH)
 {
   GetHadronValues(aHadron, MomentumH);
 
   SigTot = HadrTot;
   ReOnIm = HadrReIm;
 
-  if(Slope==0) Slope  = HadrSlope;
+  if(Slope==0.) Slope  = HadrSlope;
 
-  IntConst = (1-Coeff1)/Slope;
+  IntConst = (1.-Coeff1)/Slope;
 
   ProtonM = proton_mass_c2/GeV;
   HadronM = aHadron->GetPDGMass()/GeV;      
   HadronE = std::sqrt(MomentumH*MomentumH + HadronM*HadronM);
 
-  HdrE      = HadronE;
+  HdrE   = HadronE;
 
   PM2    = ProtonM*ProtonM;
   HM2    = HadronM*HadronM;
@@ -634,11 +630,11 @@ void  G4ElasticHadrNucleusHE::
   SqrtS  = std::sqrt(Sh);
   ConstU = 2*PM2+2*HM2-Sh;
 
-  EcmH   = (Sh+HM2-PM2)/2/SqrtS;
-  EcmP   = (Sh-HM2+PM2)/2/SqrtS;
+  EcmH   = 0.5*(Sh+HM2-PM2)/SqrtS;
+  EcmP   = 0.5*(Sh-HM2+PM2)/SqrtS;
      
-  Kcm    = sqrt(EcmH*EcmH-HM2);
-  MaxT   = 4*Kcm*Kcm;
+  Kcm    = std::sqrt(EcmH*EcmH-HM2);
+  MaxT   = 4.*Kcm*Kcm;
 
   BoundaryP[0]=9.0; BoundaryTG[0]=5.0;BoundaryTL[0]=MaxT/2.0;
   BoundaryP[1]=20.0;BoundaryTG[1]=1.5;BoundaryTL[1]=MaxT;
@@ -665,10 +661,8 @@ void  G4ElasticHadrNucleusHE::
   GetParametersHP(aHadron, MomentumH);
 }
 //  +++++++++++++++++++++++++++++++++++++++
-//  ++++++++++++++++++++++++++++++++++++++++
-void  G4ElasticHadrNucleusHE::
-       GetParametersHP(const G4ParticleDefinition * aHadron,
-                             G4double HadrP)
+void  G4ElasticHadrNucleusHE::GetParametersHP(const G4ParticleDefinition * aHadron,
+					      G4double HadrP)
   {
     G4int  iStep;
 
@@ -942,58 +936,49 @@ void  G4ElasticHadrNucleusHE::
     }
   }
 //  ++++++++++++++++++++++++++++++++++++++++
-G4double G4ElasticHadrNucleusHE::
-               LineInterpol(G4double p1, G4double p2,
-                            G4double c1, G4double c2,
-                            G4double p)
-  {
-    G4double c;
-
-    c = c1+(p-p1)/(p2-p1)*(c2-c1);
-    return c;
-  }
+G4double G4ElasticHadrNucleusHE::LineInterpol(G4double p1, G4double p2,
+					      G4double c1, G4double c2,
+					      G4double p)
+{
+  return c1+(p-p1)*(c2-c1)/(p2-p1);
+}
 //  ============================================================
 G4float G4ElasticHadrNucleusHE::GetFt(G4double Q2)
-  {
-    G4float Fdistr, SqrQ2 = std::sqrt(Q2);
+{
+  G4float Fdistr, SqrQ2 = std::sqrt(Q2);
 
-    Fdistr = (1-Coeff1-Coeff0/*-0.0*Coeff2*std::exp(ConstU)*/)
-                   /Slope*(1-std::exp(-Slope*Q2))
+  Fdistr = (1.-Coeff1-Coeff0)/Slope*(1.-std::exp(-Slope*Q2))
 
-                  +Coeff0*(1-std::exp(-Slope0*Q2))
+    + Coeff0*(1.-std::exp(-Slope0*Q2))
 
-                  +Coeff2/Slope2*std::exp(Slope2*ConstU)*
-                      (std::exp(Slope2*Q2)-1)
+    + Coeff2/Slope2*std::exp(Slope2*ConstU)*(std::exp(Slope2*Q2)-1.)
 
-                  +2*Coeff1/Slope1*(1/Slope1-(1/Slope1+SqrQ2)*
-                  std::exp(-Slope1*SqrQ2))
-                   ;
+    + 2.*Coeff1/Slope1*(1./Slope1-(1./Slope1+SqrQ2)*std::exp(-Slope1*SqrQ2));
 
-    return Fdistr;
-  }
+  return Fdistr;
+}
 //  +++++++++++++++++++++++++++++++++++++++
 G4float G4ElasticHadrNucleusHE::GetDistrFun(G4double Q2)
-  {
-    G4float Fq2;
+{
+  G4float Fq2;
 
-    Fq2   = GetFt(Q2);
+  Fq2   = GetFt(Q2);
 
-  if(verboselevel == 1)
-  G4cout<<" GetDistrFun: Fq2  "<<Fq2<<G4endl;
+  if(verboselevel>-1)
+    G4cout<<" GetDistrFun: Q2= " << Q2 
+	  << " Fq2=  "<<Fq2<<" FmaxT= " << FmaxT<<G4endl;
 
-    return Fq2/FmaxT;
-  }
+  return Fq2/FmaxT;
+}
 //  +++++++++++++++++++++++++++++++++++++++
-  G4double G4ElasticHadrNucleusHE::
-              GetQ2(G4double Ran)
-  {
-    G4double DDD0=MaxTR*0.5, DDD1=0.0, DDD2=MaxTR, delta;
-    G4double Q2;
+G4double G4ElasticHadrNucleusHE::GetQ2(G4double Ran)
+{
+  G4double DDD0=MaxTR*0.5, DDD1=0.0, DDD2=MaxTR;
 
-    FmaxT = GetFt(MaxTR);
-    delta = GetDistrFun(DDD0)-Ran;
+  FmaxT = GetFt(MaxTR);
+  G4double delta = GetDistrFun(DDD0)-Ran;
 
-    while(std::fabs(delta) > 0.0001)
+  while(std::fabs(delta) > 0.0001)
     {
       if(delta>0) 
       {
@@ -1005,93 +990,99 @@ G4float G4ElasticHadrNucleusHE::GetDistrFun(G4double Q2)
         DDD1 = DDD0; 
         DDD0 = (DDD0+DDD2)*0.5;
       }
-    delta = GetDistrFun(DDD0)-Ran;
+      delta = GetDistrFun(DDD0)-Ran;
     }
 
-    Q2 = DDD0;
-
-    return Q2;
-  }
+  return DDD0;
+}
 //  ++++++++++++++++++++++++++++++++++++++++++
-G4double G4ElasticHadrNucleusHE::
-       HadronProtonQ2(const G4ParticleDefinition * aHadron,
-                            G4double inLabMom)
-  {
-    G4double Ran = G4UniformRand(), Q2;
+G4double G4ElasticHadrNucleusHE::HadronProtonQ2(const G4ParticleDefinition * aHadron,
+						G4double inLabMom)
+{
+  G4double Ran = G4UniformRand();
+  GetKinematics(aHadron, inLabMom);
+  G4double Q2 = GetQ2(Ran);
 
-    GetKinematics(aHadron, inLabMom);
-
-    Q2 = GetQ2(Ran);
-
-    return Q2;
-  }
-
-//  ===========================================
-//  ##########################################################
-void  G4ElasticHadrNucleusHE::
-  GetHadronValues(const G4ParticleDefinition * aHadron,
-                        G4double HadrMoment)
+  return Q2;
+}
+//  ++++++++++++++++++++++++++++++++++++++++++
+void  G4ElasticHadrNucleusHE::GetHadronValues(const G4ParticleDefinition * aHadron,
+					      G4double HadrMoment)
 {
   G4double protM  = proton_mass_c2/GeV;
   G4double protM2 = protM*protM;
 
-  G4int iHadron(-1), iHadrCode;
-  iHadrCode = aHadron->GetPDGEncoding();
+  G4int iHadron   = -1;
+  G4int iHadrCode = aHadron->GetPDGEncoding();
 
-       if(  iHadrCode == 2212 ||
-            iHadrCode == 2112 ||
-            iHadrCode == 3122 ||
-            iHadrCode == 3222 ||
-            iHadrCode == 3112 ||
-            iHadrCode == 3212 ||
-            iHadrCode == 3312 ||
-            iHadrCode == 3322 ||
-            iHadrCode == 3334 )   iHadron = 0;
+   switch (iHadrCode)
+     {
+     case 2212:
+     case 2112:
+     case 3122:
+     case 3222:
+     case 3112:
+     case 3212:
+     case 3312:
+     case 3322:
+     case 3334:   
+       iHadron = 0;
+       break;
 
-       else if(
-            iHadrCode == -2212 ||
-            iHadrCode == -2112 ||
-            iHadrCode == -3122 ||
-            iHadrCode == -3222 ||
-            iHadrCode == -3112 ||
-            iHadrCode == -3212 ||
-            iHadrCode == -3312 ||
-            iHadrCode == -3322 ||
-            iHadrCode == -3334 )   iHadron = 1;
+     case -2212:
+     case -2112:
+     case -3122:
+     case -3222:
+     case -3112:
+     case -3212:
+     case -3312:
+     case -3322:
+     case -3334:
+       iHadron = 1;
+       break;
 
-       else if(  iHadrCode ==  211)     iHadron = 2;
-       else if(  iHadrCode == -211)     iHadron = 3;
+     case  211:
+       iHadron = 2;
+       break;
 
-       else if(  iHadrCode ==  321 ||
-                 iHadrCode ==  130 ||
-                 iHadrCode ==  310 ||
-                 iHadrCode ==  311)     iHadron = 4;
+     case -211:
+       iHadron = 3;
+       break;
+
+     case  321:
+     case  130:
+     case  310:
+     case  311:     
+       iHadron = 4;
+       break;
                  
-       else if(  iHadrCode == -321 ||
-                 iHadrCode == -130 ||
-                 iHadrCode == -310 ||
-                 iHadrCode == -311)     iHadron = 5;
+     case -321:
+     case -130:
+     case -310:
+     case -311:
+       iHadron = 5;
+       break;
 
-       else
-           {  
-             G4cout<<" ElasticHE: For the hadron "
-                   << aHadron->GetParticleName() 
-                   <<" other method must be used."<<G4endl;
-             HadrTot   = 20;
-             HadrSlope = 7;
-             HadrReIm  = 0.2;
-             return;
-           }
+     default:
+       { 
+	 G4cout<<" ElasticHE: For the hadron "
+	       << aHadron->GetParticleName() 
+	       <<" other method must be used."<<G4endl;
+	 HadrTot   = 20;
+	 HadrSlope = 7;
+	 HadrReIm  = 0.2;
+	 return;
+       }
+     }
+   G4double mHadr      = aHadron->GetPDGMass()/GeV;  // In GeV
+   G4double mHadr2     = mHadr*mHadr;
 
-       G4double mHadr      = aHadron->GetPDGMass()/GeV;  // In GeV
-       G4double mHadr2     = mHadr*mHadr;
+   G4double HadrEnergy = sqrt(mHadr2+HadrMoment*HadrMoment);
 
-       G4double HadrEnergy = sqrt(mHadr2+HadrMoment*HadrMoment);
-
-       G4double sHadr      = 2*HadrEnergy*protM+protM2+mHadr2;
-       G4double sqrS       = std::sqrt(sHadr);
-       G4double Ecm        = (sHadr-mHadr2+protM2)/2/sqrS;
-                MomentumCM = std::sqrt(Ecm*Ecm-protM2);
+   G4double sHadr      = 2.*HadrEnergy*protM+protM2+mHadr2;
+   G4double sqrS       = std::sqrt(sHadr);
+   G4double Ecm        = 0.5*(sHadr-mHadr2+protM2)/sqrS;
+   MomentumCM          = std::sqrt(Ecm*Ecm-protM2);
 
    if(HadrEnergy-mHadr<0.39)
    {
@@ -1110,249 +1101,208 @@ void  G4ElasticHadrNucleusHE::
      case 0:                  //  proton, neutron
 
        G4double A0, B0;
+       if(HadrMoment>10.)
+	 {
+	   B0 = 7.5;
+	   A0 = 100. - B0*17.2167;   // log(3.0e7)
 
-//              HadrTot   = 5.2+5.2*std::log(HadrEnergy)
-//                          +51*std::pow(HadrEnergy,-0.35); //  mb
-
-     if(HadrMoment>10)
-     {
-       B0 = 7.5;
-       A0 = 100-B0*17.2167;   // log(3.0e7)
-
-//            HadrTot   = A0+B0*std::log(HadrEnergy) -8
-//                          +81*std::pow(HadrEnergy,-0.175); //  mb
-
-          TotP = TotN = A0+B0*logE-11
-                 +103*std::pow(sHadr,-0.165);        //  mb
-     }
+	   TotP = TotN = A0 + B0*logE - 11. + 103*std::pow(sHadr,-0.165); //  mb
+	 }
 // ==================  neutron  ================
-     else if(HadrMoment <= 10 && HadrMoment >1.4 /*iHadrCode == 2112*/)
-     {
-//         HadrTot 
-
+       else if(HadrMoment <= 10 && HadrMoment >1.4 /*iHadrCode == 2112*/)
+	 {
               TotN = 33.3+
-                    15.2*(HadrMoment*HadrMoment-1.35)/
-                    (std::pow(HadrMoment,2.37)+0.95);
-     }
+		15.2*(HadrMoment*HadrMoment-1.35)/
+		(std::pow(HadrMoment,2.37)+0.95);
+	 }
 
-     else if(HadrMoment <= 1.4  && HadrMoment > 0.8 /*iHadrCode == 2112*/)
-     {
-//       HadrTot = 33+25.5*std::pow(std::log(HadrMoment/0.95),2.0);
+       else if(HadrMoment <= 1.4  && HadrMoment > 0.8 /*iHadrCode == 2112*/)
+	 {
 
             TotN = 33+25.5*(logE+0.0513)*(logE+0.0513);  //  -log(0.95)
-     }
+	 }
 
-     else if(HadrMoment <= 0.8  /*&& iHadrCode == 2112*/)
-     {
-//       HadrTot = 33+30*std::pow(std::log(HadrMoment/1.3),4.0);
-
+       else if(HadrMoment <= 0.8  /*&& iHadrCode == 2112*/)
+	 {
             A0   = (logE-0.2634)*(logE-0.2634);  // log(1.3)
             TotN = 33+30*A0*A0;
-     }
+	 }
 //  =================  proton  ===============
-     if(HadrMoment <= 10  && HadrMoment>1.05 /*iHadrCode == 2212*/)
-     {
-//         HadrTot 
+       if(HadrMoment <= 10  && HadrMoment>1.05 /*iHadrCode == 2212*/)
+	 {
+	   TotP = 39.0+
+	     75.*(HadrMoment-1.2)/(HadrMoment*HadrMoment*HadrMoment+0.15);
+	 }
 
-            TotP = 39.0+
-              75*(HadrMoment-1.2)/(HadrMoment*HadrMoment*HadrMoment+0.15);
-     }
+       else if(HadrMoment <= 1.05  && HadrMoment > 0.7 /*iHadrCode == 2212*/)
+	 {
+	   A0 = logE+0.3147;
+	   TotP = 23+40*A0*A0;
+	 }
 
-     else if(HadrMoment <= 1.05  && HadrMoment > 0.7 /*iHadrCode == 2212*/)
-     {
-          A0 = logE+0.3147;
-//       HadrTot 
-
-            TotP = 23+40*A0*A0;
-     }
-
-     else if(HadrMoment <= 0.7  /*&& iHadrCode == 2212*/)
-     {
-//       HadrTot = 23+50*std::pow(std::log(0.73/HadrMoment),3.5);
-
+       else if(HadrMoment <= 0.7  /*&& iHadrCode == 2212*/)
+	 {
             TotP = 23+50*std::pow(std::log(0.73/HadrMoment),3.5);
-     }
+	 }
 
-         HadrTot = (TotP+TotN)/2;
+       HadrTot = (TotP+TotN)/2.;
 
 //  ============================================
-         HadrSlope = 6.44+0.88*std::log(sHadr)-1;     //  GeV-2
-         if(HadrMoment<2) HadrSlope = 1.5;
+       HadrSlope = 6.44+0.88*std::log(sHadr)-1;     //  GeV-2
+       if(HadrMoment<2.) HadrSlope = 1.5;
 
-     if(HadrMoment>1.2)
-              HadrReIm  = 0.13*std::log(sHadr/350)*
-                                            std::pow(sHadr,-0.18);
+       if(HadrMoment>1.2)
+	 HadrReIm  = 0.13*std::log(sHadr/350)*std::pow(sHadr,-0.18);
 
-     else if(HadrMoment <= 1.2 && HadrMoment > 0.6)
-     {
-       HadrReIm = -0.0-
+       else if(HadrMoment <= 1.2 && HadrMoment > 0.6)
+	 {
+	   HadrReIm = -0.0-
              75.5*(std::pow(HadrMoment,0.25)-0.95)/
-                 (std::pow(3*HadrMoment,2.2)+1);     
-     }
+	     (std::pow(3*HadrMoment,2.2)+1);     
+	 }
                                                                                
-     else if(HadrMoment <= 0.6)
-     {
-         A0 = 9*HadrMoment*HadrMoment;
-         HadrReIm = -0.0+
-             15.5*HadrMoment/(A0*3*HadrMoment+2);
-     }
+       else if(HadrMoment <= 0.6)
+	 {
+	   A0 = 9*HadrMoment*HadrMoment;
+	   HadrReIm = -0.0 + 15.5*HadrMoment/(A0*3*HadrMoment+2);
+	 }
 
-              DDSect2   = 11;                              //mb*GeV-2
-              DDSect3   = 3;                               //mb*GeV-2
+       DDSect2   = 11;                              //mb*GeV-2
+       DDSect3   = 3;                               //mb*GeV-2
 //  ================== lambda  ==================
-     if( iHadrCode == 3122)
-     {
-       HadrTot *= 0.88;
-       HadrSlope *=0.85;
-     }
+       if( iHadrCode == 3122)
+	 {
+	   HadrTot *= 0.88;
+	   HadrSlope *=0.85;
+	 }
 //  ================== sigma +  ==================
-     if( iHadrCode == 3222)
-     {
-       HadrTot   *=0.81;
-       HadrSlope *=0.85;
-     }
+       if( iHadrCode == 3222)
+	 {
+	   HadrTot   *=0.81;
+	   HadrSlope *=0.85;
+	 }
 //  ================== sigma 0,-  ==================
-     if(iHadrCode == 3112 || iHadrCode == 3212 )
-     {
-       HadrTot   *=0.88;
-       HadrSlope *=0.85;
-     }
+       if(iHadrCode == 3112 || iHadrCode == 3212 )
+	 {
+	   HadrTot   *=0.88;
+	   HadrSlope *=0.85;
+	 }
 //  ===================  xi  =================
-     if( iHadrCode == 3312 || iHadrCode == 3322 )
-     {
-       HadrTot   *=0.77;
-       HadrSlope *=0.75;
-     }
+       if( iHadrCode == 3312 || iHadrCode == 3322 )
+	 {
+	   HadrTot   *=0.77;
+	   HadrSlope *=0.75;
+	 }
 //  =================  omega  =================
-     if( iHadrCode == 3334)
-     {
-       HadrTot   *=0.78;
-       HadrSlope *=0.7;
-     }
+       if( iHadrCode == 3334)
+	 {
+	   HadrTot   *=0.78;
+	   HadrSlope *=0.7;
+	 }
 
-     break;
+       break;
 //  &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
-     case 1:              //   antiproton
+    case 1:              //   antiproton
 
-       sqrS      = std::sqrt(sHadr);
-       HadrTot   = 5.2+5.2*std::log(HadrEnergy)
-                        +123.2*std::pow(HadrEnergy,-0.5);     //  mb
-       HadrSlope = 8.32+0.57*std::log(sHadr); //GeV-2
+      sqrS      = std::sqrt(sHadr);
+      HadrTot   = 5.2+5.2*std::log(HadrEnergy) + 123.2/sqrS;     //  mb
+      HadrSlope = 8.32+0.57*std::log(sHadr); //GeV-2
 
-       if(HadrEnergy<1000)
-           HadrReIm  =0.06*(sqrS-2.236)*(sqrS-14.14)*
-                                              std::pow(sHadr,-0.8);
-       else
-            HadrReIm  = 0.6*std::log(sHadr/350)*std::pow(sHadr,-0.25);
+      if(HadrEnergy<1000)
+	HadrReIm  = 0.06*(sqrS-2.236)*(sqrS-14.14)*std::pow(sHadr,-0.8);
+      else
+	HadrReIm  = 0.6*std::log(sHadr/350)*std::pow(sHadr,-0.25);
 
-       DDSect2   = 11;                                //mb*GeV-2
-       DDSect3   = 3;                                 //mb*GeV-2
+      DDSect2   = 11;                                //mb*GeV-2
+      DDSect3   = 3;                                 //mb*GeV-2
 //  ================== lambda  ==================
-       if( iHadrCode == -3122)
-       {
-         HadrTot *= 0.88;
-         HadrSlope *=0.85;
-       }
+      if( iHadrCode == -3122)
+	{
+	  HadrTot *= 0.88;
+	  HadrSlope *=0.85;
+	}
 //  ================== sigma +  ==================
-       if( iHadrCode == -3222)
-       {
-         HadrTot   *=0.81;
-         HadrSlope *=0.85;
-       }
+      if( iHadrCode == -3222)
+	{
+	  HadrTot   *=0.81;
+	  HadrSlope *=0.85;
+	}
 //  ================== sigma 0,-  ==================
-       if(iHadrCode == -3112 || iHadrCode == -3212 )
-       {
-         HadrTot   *=0.88;
-         HadrSlope *=0.85;
-       }
+      if(iHadrCode == -3112 || iHadrCode == -3212 )
+	{
+	  HadrTot   *=0.88;
+	  HadrSlope *=0.85;
+	}
 //  ===================  xi  =================
-       if( iHadrCode == -3312 || iHadrCode == -3322 )
-       {
-         HadrTot   *=0.77;
-         HadrSlope *=0.75;
-       }
+      if( iHadrCode == -3312 || iHadrCode == -3322 )
+	{
+	  HadrTot   *=0.77;
+	  HadrSlope *=0.75;
+	}
 //  =================  omega  =================
-       if( iHadrCode == -3334)
-       {
-         HadrTot   *=0.78;
+      if( iHadrCode == -3334)
+	{
+	  HadrTot   *=0.78;
           HadrSlope *=0.7;
-       }
+	}
 
-    break;
+      break;
 //  -------------------------------------------
     case 2:             //   pi plus, pi minus
     case 3:
 
-     if(HadrMoment>3.5)
-//              HadrTot    
-              TotP = 10.6+2.*logE+
-                              25*std::pow(HadrEnergy,-0.43); // mb
+      if(HadrMoment>3.5)
+	TotP = 10.6+2.*logE + 25.*std::pow(HadrEnergy,-0.43); // mb
+      //  =========================================
+      else if(HadrMoment <= 3.5  &&  HadrMoment >1.15)
+	{
+	  G4double Ex1 = 3.2*
+	    std::exp(-(HadrMoment-2.55)*(HadrMoment-2.55)/0.55/0.55);
+
+	  G4double Ex2 = 12.*
+	    std::exp(-(HadrMoment-1.47)*(HadrMoment-1.47)/0.225/0.225);
+
+	  TotP = Ex1+Ex2+27.5;
+	}
 //  =========================================
-    else if(HadrMoment <= 3.5  && HadrMoment >1.15)
-    {
-     G4double Ex1 = 3.2*
-  std::exp(-(HadrMoment-2.55)*(HadrMoment-2.55)/0.55/0.55);
-
-     G4double Ex2 = 12*
-  std::exp(-(HadrMoment-1.47)*(HadrMoment-1.47)/0.225/0.225);
-
-       TotP = Ex1+Ex2+27.5;
-    }
+      else if(HadrMoment <= 1.15 &&  HadrMoment >0.4)
+	TotP  = 88*(logE+0.2877)*(logE+0.2877)+14.0;
+	
 //  =========================================
-    else if(HadrMoment <= 1.15)
-    {
-//     G4double Ex4 = 88*(std::log(HadrMoment/0.75))*
-//                        (std::log(HadrMoment/0.75));
-
-          TotP  = 88*(logE+0.2877)*(logE+0.2877)+14.0;
-
-// G4cout<<"HadrValue:  Pi+ Mom Kin Tot Ex3 "<<HadrMoment
-//       <<HadrEnergy-mHadr<<"  "<<HadrTot<<"  "<<Ex4<<G4endl;
-    }
+      else if(HadrMoment <= 0.4)
+	{
+	  G4double x = (HadrMoment-0.29)/0.085;
+	  TotP = 20. + 180.*std::exp(-x*x);
+	}
 //  =========================================
-    else if(HadrMoment <= 0.4)
-    {
-     G4double Ex3 = 180*
-  std::exp(-(HadrMoment-0.29)*(HadrMoment-0.29)/0.085/0.085);
-
-           TotP = Ex3+20.0;
-
-//  G4cout<<"HadrValue:  Pi+ Tot Ex3 "<<HadrTot<<"  "
-//        <<"  "<<Ex3<<G4endl;
-    }
-//  =========================================
-     HadrSlope = 7.28+0.245*std::log(sHadr);        //GeV-2
-     HadrReIm  = 0.2*std::log(sHadr/100)*
-                                 std::pow(sHadr,-0.15);
-     DDSect2   = 4.6;                               //mb*GeV-2
-     DDSect3   = 1.33;                              //mb*GeV-2
-///   break;
+      HadrSlope = 7.28+0.245*std::log(sHadr);        //GeV-2
+      HadrReIm  = 0.2*std::log(sHadr/100)*std::pow(sHadr,-0.15);
+      DDSect2   = 4.6;                               //mb*GeV-2
+      DDSect3   = 1.33;                              //mb*GeV-2
 //  -------------------------------------------
-//         case 3:             //   pi minus
 
-     if(HadrMoment > 3.0 )
-     TotN = 10.6+2*std::log(HadrEnergy)+
-                          30*std::pow(HadrEnergy,-0.43);       // mb
+      if(HadrMoment > 3.0 )
+	TotN = 10.6 + 2.*std::log(HadrEnergy) + 30.*std::pow(HadrEnergy,-0.43); // mb
 
-     else if(HadrMoment <= 3.0 && HadrMoment > 1.3)
-             TotN = 36.1+0.079-4.313*logE+
-    3*std::exp(-(HadrMoment-2.1)*(HadrMoment-2.1)/0.4/0.4)+
-  1.5*std::exp(-(HadrMoment-1.4)*(HadrMoment-1.4)/0.12/0.12);
+      else if(HadrMoment <= 3.0 && HadrMoment > 1.3)
+	TotN = 36.1+0.079-4.313*logE+
+	  3*std::exp(-(HadrMoment-2.1)*(HadrMoment-2.1)/0.4/0.4)+
+	  1.5*std::exp(-(HadrMoment-1.4)*(HadrMoment-1.4)/0.12/0.12);
 
-     else if(HadrMoment <= 1.3 && HadrMoment > 0.65)
-              TotN = 36.1+
-  10*std::exp(-(HadrMoment-0.72)*(HadrMoment-0.72)/0.06/0.06)+
-  24*std::exp(-(HadrMoment-1.015)*(HadrMoment-1.015)/0.075/0.075);
+      else if(HadrMoment <= 1.3 && HadrMoment > 0.65)
+	TotN = 36.1+
+	  10*std::exp(-(HadrMoment-0.72)*(HadrMoment-0.72)/0.06/0.06)+
+	  24*std::exp(-(HadrMoment-1.015)*(HadrMoment-1.015)/0.075/0.075);
 
-     else if(HadrMoment <= 0.65 && HadrMoment > 0.37)
-     {
-             TotN = 26+110*(std::log(HadrMoment/0.48))*
-                         (std::log(HadrMoment/0.48));
-     }
+      else if(HadrMoment <= 0.65 && HadrMoment > 0.37)
+	{
+	  G4double x = std::log(HadrMoment/0.48);
+	  TotN = 26. + 110.*x*x;
+	}
 
-     else ///(HadrMoment<0.37)
-             TotN = 28.0+
-        40*std::exp(-(HadrMoment-0.29)*(HadrMoment-0.29)/0.07/0.07);
+      else ///(HadrMoment<0.37)
+	TotN = 28.0+
+	  40.*std::exp(-(HadrMoment-0.29)*(HadrMoment-0.29)/0.07/0.07);
 
       HadrTot = (TotP+TotN)/2;
 
@@ -1362,37 +1312,30 @@ void  G4ElasticHadrNucleusHE::
       DDSect2   = 4.6;                               //mb*GeV-2
       DDSect3   = 1.33;                              //mb*GeV-2
 
-    break;
-// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+      break;
+      // &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
     case 4:            //  K plus
 
       HadrTot   = 10.6+1.8*std::log(HadrEnergy)+
                           9.0*std::pow(HadrEnergy,-0.55);  // mb
       if(HadrEnergy>100) HadrSlope = 15.0;
-         else
-//              HadrSlope = 5.28+1.76*std::log(sHadr)-
-      HadrSlope = 1.0+1.76*std::log(sHadr)-
-                            2.84*std::pow(sHadr,-0.5);   // GeV-2
-      HadrReIm  = 0.4*(sHadr-20)*(sHadr-150)*
-                                       std::pow(sHadr+50,-2.1);
+      else HadrSlope = 1.0+1.76*std::log(sHadr) - 2.84/std::sqrt(sHadr);   // GeV-2
+
+      HadrReIm  = 0.4*(sHadr-20)*(sHadr-150)*std::pow(sHadr+50,-2.1);
       DDSect2   = 3.5;                             //mb*GeV-2
       DDSect3   = 1.03;                            //mb*GeV-2
-    break;
-//  &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+      break;
+      //  &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
     case 5:              //   K minus
 
-      HadrTot   = 10+1.8*std::log(HadrEnergy)
-                           +25*std::pow(HadrEnergy,-0.5); // mb
+      HadrTot   = 10+1.8*std::log(HadrEnergy) + 25./std::sqrt(HadrEnergy); // mb
       HadrSlope = 6.98+0.127*std::log(sHadr);         // GeV-2
-//         if(HadrEnergy<8) HadrReIm = 0.7;
-//         else
-      HadrReIm  = 0.4*(sHadr-20)*(sHadr-20)*
-                                        std::pow(sHadr+50,-2.1);
+      HadrReIm  = 0.4*(sHadr-20)*(sHadr-20)*std::pow(sHadr+50,-2.1);
       DDSect2   = 3.5;                             //mb*GeV-2
       DDSect3   = 1.03;                            //mb*GeV-2
-   break;
-   }   //  switch
-  }
+      break;
+    }   //  switch
+}
 //  =========================================================
 
 /*  End of file  */
