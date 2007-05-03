@@ -27,7 +27,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4QEnvironment.cc,v 1.122 2007-04-20 15:50:17 mkossov Exp $
+// $Id: G4QEnvironment.cc,v 1.123 2007-05-03 07:35:27 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QEnvironment ----------------
@@ -5976,8 +5976,9 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
   }
   // ***
 #endif
-  G4double p2cut=250000./envA/envA; // 250000=(2*p_Ferm)**2
-  //G4double p2cut2=0.; //cut for the alpha creation
+  G4double p2cut=250000.;        // 250000=(2*p_Ferm)**2
+  if(envA>0) p2cut/=envA*envA;
+  //G4double p2cut2=0.;          //cut for the alpha creation
   //
   G4int bfCountM=3;
   if(envA>10) bfCountM*=(envA-1)/3;
