@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QHadron.cc,v 1.47 2007-02-28 14:26:26 mkossov Exp $
+// $Id: G4QHadron.cc,v 1.48 2007-05-03 07:54:58 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QHadron ----------------
@@ -399,10 +399,13 @@ G4bool G4QHadron::RelDecayIn2(G4LorentzVector& f4Mom, G4LorentzVector& s4Mom,
 G4bool G4QHadron::DecayIn2(G4LorentzVector& f4Mom, G4LorentzVector& s4Mom)
 {//    ===================================================================
   G4double fM2 = f4Mom.m2();
+  if(fM2<0.) fM2=0.;
   G4double fM  = sqrt(fM2);              // Mass of the 1st Hadron
   G4double sM2 = s4Mom.m2();
+  if(sM2<0.) sM2=0.;
   G4double sM  = sqrt(sM2);              // Mass of the 2nd Hadron
   G4double iM2 = theMomentum.m2();
+  if(iM2<0.) iM2=0.;
   G4double iM  = sqrt(iM2);              // Mass of the decaying hadron
 #ifdef debug
   G4cout<<"G4QHadron::DecIn2: iM="<<iM<<" => fM="<<fM<<" + sM="<<sM<<" = "<<fM+sM<<G4endl;
@@ -604,6 +607,7 @@ G4bool G4QHadron::CorEDecayIn2(G4double corE, G4LorentzVector& fr4Mom)
     return false;
   }
   G4double fM2=fr4Mom.m2();                 // Squared Mass of the Fragment
+  if(fM2<0.) fM2=0.;
   G4double iPx=fr4Mom.px();                 // Initial Px of the Fragment
   G4double iPy=fr4Mom.py();                 // Initial Py of the Fragment
   G4double iPz=fr4Mom.pz();                 // Initial Pz of the Fragment
