@@ -140,8 +140,8 @@ a recompilation of user applications is anyhow required.
       the FTF model now has improved treatment of diffraction.  As a result
       the longitudinal shower component now starts later and ends later, which
       goes in the direction of the data. The addition of quasi-elastic
-      scattering (<TT>G4QuasiElasticChannel</TT>) to the string models also
-      improved the shower shapes by reducing the deep inelastic component.</LI>
+      scattering (<TT>G4QuasiElasticChannel</TT>) to the QGS model is also
+      expected to improve shower shapes by reducing the deep inelastic component.</LI>
   <LI><U>New cross section data sets added</U>:<BR>
       Barashenkov parameterised cross sections are now available for elastic 
       and inelastic nucleon-nucleus and elastic and inelastic pion-nucleus 
@@ -151,8 +151,9 @@ a recompilation of user applications is anyhow required.
       abundances, if they are provided. Natural abundances are used 
       otherwise.</LI>
   <LI><U>Improved muon capture model</U>:<BR>
-      uses <TT>G4QCaptureAtRest</TT> model for more accurate final state
-      electron spectrum.</LI>
+      <TT>G4QCaptureAtRest</TT> model provides more accurate final state
+      electron spectrum for muon capture and more accurate secondary hadron
+      sprectra for hadron capture.</LI>
   <LI><U>Error reporting</U>:<BR>
       when a segmentation fault occurs in a hadronic process, the information
       about the process and model name where the fault has occurred will be
@@ -495,31 +496,27 @@ please refer to the related History files provided in most packages):
 <LI>Added model name for hadronic whiteboard error reporting.</LI>
 <LI><B>Cross sections</B>
     <UL>
-    <LI>Use <TT>G4NucleonNuclearCrossSection</TT> in
-        <TT>G4UInelasticCrossSection</TT> and <TT>G4UElasticCrossSection</TT>.</LI>
-    <LI>Completed implementations of A and Z interfaces to classes:
+    <LI>Extend user-chosen isotope abundance capability to several classes:
         <TT>G4UPiNuclearCrossSection</TT>, <TT>G4UInelasticCrossSection</TT>,
         <TT>G4UElasticCrossSection</TT>, <TT>G4GlauberGribovCrossSection</TT>,
         <TT>G4NucleonNuclearCrossSection</TT>.</LI>
-    <LI><TT>G4PiNuclearCrossSection</TT>: better handling of low energy cross
-        sections, and removed special treatment ('tuning') for Copper (Z=29),
-        i.e. the <TT>Cu</TT> cross section is no longer lowered by 4%.</LI>
-    <LI>Added new classes:
+    <LI><TT>G4PiNuclearCrossSection</TT>: removed special treatment ('tuning') for 
+            Copper (Z=29),i.e. the <TT>Cu</TT> cross section is no longer lowered 
+            by 4%.</LI>
+    <LI>New classes added:
         <UL>
-        <LI><TT>G4BGGNucleonElasticXS</TT>: proton and neutron elastic cross
-            section wrapper class using Barashenkov parameterization below 100
-            GeV and Glauber-Gribov model above.</LI>
-        <LI><TT>G4BGGNucleonInelasticXS</TT>: proton and neutron inelastic
-            cross section wrapper of Barashenkov-Glauber-Gribov.</LI>
-        <LI><TT>G4BGGPionElasticXS</TT>: pion elastic cross section wrapper of
-            BGG.</LI>
-        <LI><TT>G4BGGPionInelasticXS</TT>: pion inelastic cross section wrapper
-            of BGG.</LI>
+        <LI><TT>G4BGGNucleonElasticXS</TT>: 
+            provided proton and neutron elastic and cross section class 
+            (<TT>G4BGGNucleonElasticXS</TT>) which uses the Barashenkov 
+            parameterization below 100 GeV and Glauber-Gribov model above.</LI>
+        <LI>also provided proton and neutron inelastic cross sections 
+            (<TT>G4BGGNucleonInelasticXS</TT>), pion elastic cross sections 
+            (<TT>G4BGGPionElasticXS</TT>), and pion inelastic cross sections
+            (<TT>G4BGGPionInelasticXS</TT>) which combine the Barashenkov 
+            parameterization below 100 GeV and Glauber-Gribov model above.</LI>
+        <LI><TT>G4NucleonNuclearCrossSection</TT> which contains Barashenkov 
+            cross sections for nucleon-nucleus scattering</LI> 
         </UL></LI>
-    <LI>Added implementations of A and Z interfaces to classes
-        <TT>G4UPiNuclearCrossSection</TT>, <TT>G4UInelasticCrossSection</TT>,
-        <TT>G4UElasticCrossSection</TT>, <TT>G4GlauberGribovCrossSection</TT>
-        and <TT>G4NucleonNuclearCrossSection</TT>.</LI>
     <LI>Added protection against division by zero in method
         <TT>G4CrossSectionDataStore::SelectRandomIsotope()</TT>.</LI>
     <LI>Added handling of user-defined isotope abundances for elements and
@@ -527,9 +524,6 @@ please refer to the related History files provided in most packages):
         reactions. New virtual methods for <TT>IsApplicable()</TT> and
         <TT>GetCrossSections()</TT> added to classes
         <TT>G4VCrossSectionDataSet</TT> and <TT>G4CrossSectionDataStore</TT>.</LI>
-    <LI>Added new class <TT>G4NucleonNuclearCrossSection</TT> which contains
-        Barashenkov cross sections for nucleon-nucleus scattering; modified the
-        <TT>G4PiData</TT> and <TT>G4GlauberGribovCrossSection</TT> classes.</LI>
     <LI><TT>G4HadronCrossSections::GetParticleCode()</TT>: following report from CMS,
         replaced code which tested by particle name with more performant code
         that tests by PDG ID. Also, use switch-case instead of else-if.</LI>
@@ -537,18 +531,18 @@ please refer to the related History files provided in most packages):
 <LI><B>Management</B>
     <UL>
     <LI><TT>G4HadronicProcess</TT>:
-        <UL>
-        <LI>Removed <TT>AlwaysKillLeadingHadron()</TT> method.</LI>
-        <LI>Fix to stop killing primaries for elastic.</LI>
-        <LI>Fix of weighting error in leading particle killer.</LI>
+      <UL>
+        <LI>Removed unused <TT>AlwaysKillLeadingHadron()</TT> method.</LI>
+        <LI>Fixed bug which was killing primaries in elastic scattering.</LI>
+        <LI>Fix weighting error in leading particle killer.</LI>
         <LI>Added handling of user-defined isotopes: re-implemented methods
             <TT>GetMeanFreePath()</TT> and <TT>ChooseAandZ()</TT> to use new
             methods in <TT>G4CrossSectionDataStore</TT>.</LI>
         <LI>No longer use dispatch pointer to call data store methods.</LI>
-        <LI>Data members <TT>currentZ</TT>, <TT>currentN</TT> and methods
-            <TT>GetCurrentZ()</TT>, <TT>GetCurrentN()</TT> removed as no
+        <LI>Remove data members <TT>currentZ</TT>, <TT>currentN</TT> and methods
+            <TT>GetCurrentZ()</TT>, <TT>GetCurrentN()</TT>.  They are no
             longer needed.</LI>
-        </UL></LI>
+      </UL></LI>
     </UL></LI>
 <LI><B>Binary Cascade</B>
     <UL>
@@ -562,51 +556,48 @@ please refer to the related History files provided in most packages):
         value to <TT>sqrt()</TT>.</LI>
     </UL></LI>
 <LI><B>Chiral Invariant Phase Space (CHIPS)</B>
-    <UL>
+  <UL>
     <LI>Fix for NaN, protected coulomb barrier against divide by zero, now
         defaults to zero. Fix for NaN in <TT>G4QNucleus</TT> when using
         <TT>pow()</TT> and in <TT>G4QEnvironment</TT>.</LI>
-    <LI>Removed warning for anti-Delta in <TT>G4QNucleus</TT>.</LI>
-    <LI>Bug fix for muon-nuclear interactions.</LI>
-    <LI>Fixed cases of warning printed for anti-particles by fixing occurences
-        of power of negative values.</LI>
-    <LI>Upgraded according to new muon capture interface.</LI>
-    <LI>Completed implementation for G4QuasiFreeRatios.</LI>
-    <LI>To avoid early particle definition the CHIPS world is created at the
-        run time in processes <TT>G4QElastic</TT>, <TT>G4QCollision</TT>,
-        <TT>G4QCaptureAtRest</TT>.</LI>
-    <LI>Bug fix for muon-nuclear interactions.</LI>
+    <LI>Completed implementation of G4QuasiFreeRatios which enables
+        quasi-elastic scattering.</LI>
+    <LI>To avoid early particle definition the CHIPS world is now created 
+        at run time in the processes <TT>G4QElastic</TT>, <TT>G4QCollision</TT>,
+        and <TT>G4QCaptureAtRest</TT>.</LI>
     <LI><TT>G4QElastic</TT>:
-        <UL>
+      <UL>
         <LI>Fix for mis-use of units.</LI>
-        <LI>Fix to set <TT>fStopButAlive</TT> status for <TT>E=0</TT>.</LI>
-        </UL></LI>
-    <LI>Upgraded <TT>G4QCaptureAtRest</TT> for muon capture.</LI>
-    </UL></LI>
+        <LI>Treat particles with <TT>E=0</TT> as alive for tracking purposes</LI>
+      </UL></LI>
+    <LI>CHIPS model for muon capture now available.  It is handled by 
+      <TT>G4QCaptureAtRest</TT> </LI>
+    <LI>Bug fix for muon-nuclear interactions.</LI>
+  </UL></LI>
 <LI><B>Elastic scattering</B>
-    <UL>
-    <LI><TT>G4ElasticHadrNucleusHE</TT>: use iterator search on bin instead
-        of computing <TT>log()</TT>.</LI>
+  <UL>
+    <LI>Speed up coherent hadron-nucleus scattering (<TT>G4ElasticHadrNucleusHE</TT>)
+        by using iterator search on bin instead of computing <TT>log()</TT>.</LI>
     <LI><TT>G4HadronElastic</TT>:
-        <UL>
-        <LI>Use the most probable isotope for given Z to call to HE model
-            (CPU/memory more efficient).</LI>
-        <LI>Fix for avoid NaN: do not use HE model for hydrogen target, use
-            <TT>QElasticCrossSection</TT> for <TT>p, n</TT> incident for any
+      <UL>
+        <LI>Use the most probable isotope for given Z to call the high energy part
+            of the model (CPU/memory more efficient).</LI>
+        <LI>NaN fix: do not use high energy model for hydrogen target, use
+            <TT>QElasticCrossSection</TT> for incident <TT>p, n</TT> at any
             energy.</LI>
-        </UL></LI>
+      </UL></LI>
     <LI><TT>G4UHadronElasticProcess</TT>: fixed bug in number of neutrons in
         CHIPS interface.</LI>
     <LI><TT>G4HadronElastic</TT>, <TT>G4ChargeExchange</TT>: more accurately
         compute Z and A.</LI>
     <LI><TT>G4UHadronElasticProcess</TT> and <TT>G4ChargeExchangeProcess</TT>:
-        <UL>
-        <LI>Fixed problem for the case, when isotope vector is not defined.</LI>
-        <LI>Migrated to interface for cross section with Z and A;
+      <UL>
+        <LI>Fixed bug of undefined isotope vector</LI>
+        <LI>Migrated to interface for isotope-dependent cross sections;
             do not use QElastic total cross sections in
             <TT>G4ChargeExchangeProcess</TT>.</LI>
-        </UL></LI>
-    </UL></LI>
+      </UL></LI>
+  </UL></LI>
 <LI><B>High Energy</B>
     <UL>
     <LI>Added <TT>G4QuasiElasticChannel</TT> to simulate quasi-elastic
@@ -629,14 +620,14 @@ please refer to the related History files provided in most packages):
     </UL></LI>
 <LI><B>Parton String</B>
     <UL>
-    <LI>Separated modifications done in <TT>G4VLongitudinalStringFragmentation</TT>
-        for FTF from original code for QGS.</LI>
-    <LI>Included revised FTF model. Affecting codes in diffraction, management,
-        hadronization and qgsm modules.</LI>
+    <LI>Several modifications made to <TT>G4VLongitudinalStringFragmentation</TT>
+        for use in FTF model. This was taken from the original QGS code.</LI>
+    <LI>Revised FTF model now available. Single diffraction was added and 
+        hadronization was improved.  Management and qgsm modules also affected.</LI>
     <LI><TT>G4ExcitedStringDecay::EnergyAndMomentumCorrector()</TT>, no longer
         causes exception when not converging. Added more info when failing and
         return correct status. Added protection in G4ExcitedStringDecay against
-        division by 0 over <TT>KTsum1.e()</TT>.</LI>
+        division by 0.</LI>
     </UL></LI>
 <LI><B>Pre-Compound</B>
     <UL>
