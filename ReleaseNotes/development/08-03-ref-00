@@ -340,6 +340,8 @@ processes/hadronic
 - models/parton_string/hadronization (had-hadronization-V08-02-03)
   o Added protection in G4ExcitedStringDecay against division by 0 over
     KTsum1.e().
+- models/pre_equilibrium (hadr-pre-V08-02-00)
+  o Added protection against division by zero in G4PreCompoundTransitions.
 - models/theo_high_energy (had-theo-HE-V08-02-01)
   o Added G4QuasiElasticChannel to simulate quasi-elastic scattering.
     Relies on CHIPS class G4QuasiFreeRatios.
