@@ -182,8 +182,16 @@ a recompilation of user applications is anyhow required.
     to model capture of muons at rest instead of <TT>G4MuonMinusCaptureAtRest</TT>.
     This model better reproduces the spectrum of secondaries close to the
     kinematic limit.</LI>
-<LI>Hadronelastic ?????</LI>
-<LI>EM ?????</LI>
+<LI>CHIPS elastic is used for all targets with incident protons and neutrons;
+    H-elastic models are used for all other particles with energy above
+    1 <TT>GeV</TT>.</LI>
+<LI>In all lists for electro-magnetic physics, the "skin" for
+    multiple-scattering on boundaries is set to zero, meaning that no
+    computation of the linear distance to the geometrical boundaries is
+    made by the multiple-scattering model.</LI>
+<LI>In the QBBC physics lists, the Binary Cascade is used up to 4 <TT>GeV</TT>,
+    the FTFP model between to 3.5 to 12 <TT>GeV</TT>, and QGSP above 11.5
+    <TT>GeV</TT>.</LI>
 </UL>
 
 <P> </P>
