@@ -275,6 +275,9 @@ processes/hadronic
       and entered them in the whiteboard.
 - models/abrasion (hadr-abrmod-V08-02-00)
   o Added model name for hadronic whiteboard error reporting.
+- models/binary_cascade (had-binary-V08-02-01)
+  o G4RKPropagation: added protection against integrating 0 timeStep.
+    This used to cause in some cases division by 0 in integration.
 - models/cascade (hadr-casc-V08-02-00)
   o Added protection in G4ElementaryParticleCollider against negative
     value to sqrt().
@@ -427,6 +430,8 @@ examples                                         examples-V08-03-00
   o New example allowing for studying the energy lost by a charged particle
     in a single layer, due to ionization and bremsstrahlung.
     Results are compared to 'reference' values.
+- extended/field/field03 (fieldex03-V08-02-00)
+  o Fixed bug in F03FieldSetup for the activation of local fields.
 - extended/hadronic/Hadr01 (exhadr01-V08-02-01)
   o PhysicsList update according to QBBC and quasi-elastic modifications.
   o Fix in QGSP_BIC_HP physics list. Addressing problem report #937.

@@ -113,16 +113,10 @@ AIDA headers can be downloaded from:
 
 <H2>3. Items for migration of the user code</H2>
 
-Listed here is some relevant information on developments included in this
-release, some of which may require minor migrations for advanced uses of
-features in Geant4 in order to upgrade from release 8.2 to release 8.3.
+No particular migrations are required in order to upgrade from release 8.2
+to release 8.3.
 Note that a full re-installation of libraries (or a full recompilation) and
 a recompilation of user applications is anyhow required.
-
-<P> </P>
-<B>Physics Lists</B>
-<P> </P>
-!!! TO ADD TEXT HERE  !!!
 
 <P> </P>
 <A NAME="4."></A>
@@ -164,6 +158,33 @@ a recompilation of user applications is anyhow required.
       about the process and model name where the fault has occurred will be
       printed out.</LI>
 </UL>  
+
+<B>Physics Lists</B>
+<UL>
+<LI>FTFP and FTFC use a significantly revised FTF model. Comparisons to thin
+    target experiment at ~10 GeV show much better agreement with data; the
+    model is still under validation at higher energies. Prelimirary tests
+    display slightly longer showers than the previous version of FTFP/FTFC.</LI>
+<LI>QGS type physics lists (QGSP, QGSC, QGSP_BERT, etc) now include a simple
+    quasi-elastic model for a small fraction of high energy inelastic
+    interactions. The cross-section parameterisations for inelastic
+    interactions include the quasi-elastic cross-section, while QGS only
+    models deep inelastic interactions.
+    <UL>
+    <LI>For comparison or backward compatibility, the new QGSP_NQE,
+        QGSP_EMV_NEQ, and QGSP_BERT_NQE ignore this new quasi-elastic,
+        and are therefore the equivalent of QGSP, QGSP_EMV, and QGSP_BERT
+        available in release 8.2 and before.</LI>
+    <LI>Also, the obsolete QGSP_LEAD/QGSP_LEAD_HP do not include
+        quasi-elastic.</LI>
+    </UL></LI>
+<LI>QGSC physics list and its variants use CHIPS <TT>G4QCaptureAtRest</TT>
+    to model capture of muons at rest instead of <TT>G4MuonMinusCaptureAtRest</TT>.
+    This model better reproduces the spectrum of secondaries close to the
+    kinematic limit.</LI>
+<LI>Hadronelastic ?????</LI>
+<LI>EM ?????</LI>
+</UL>
 
 <P> </P>
 <A NAME="5."></A>
@@ -521,6 +542,12 @@ please refer to the related History files provided in most packages):
             longer needed.</LI>
         </UL></LI>
     </UL></LI>
+<LI><B>Binary Cascade</B>
+    <UL>
+    <LI>Added protection against integrating zero <TT>timeStep</TT> in
+        <TT>G4RKPropagation</TT>. This used to cause in some cases division
+        by zero in integration.</LI>
+    </UL></LI>
 <LI><B>Cascade</B>
     <UL>
     <LI>Added protection in <TT>G4ElementaryParticleCollider</TT> against negative
@@ -767,6 +794,11 @@ please refer to the related History files provided in most packages):
         <LI>New example allowing for studying the energy lost by a charged
             particle in a single layer, due to ionization and bremsstrahlung.
             Results are compared to 'reference' values.</LI>
+        </UL></LI>
+    <LI>field/field03
+        <UL>
+        <LI>Fixed bug in <TT>F03FieldSetup</TT> for the activation of local
+            fields.</LI>
         </UL></LI>
     <LI>hadronic/Hadr01
         <UL>
