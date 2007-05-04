@@ -14,11 +14,10 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
-3 May 2007 - V.Ivanchenko (hadr-cohe-V08-02-05)
+4 May 2007 - V.Ivanchenko (hadr-cohe-V08-02-05)
 -----------------------------------------------
-  G4HadronElastic - add protection for NaNs by using
-                    QElasticCrossSection for p and n incident 
-                    for any energy
+  G4HadronElastic - do not use HE model for hydrogen target to avoid NaN;
+                    use QElasticCrossSection for p, n incident for any energy 
 
 2 May 2007 - V.Ivanchenko (hadr-cohe-V08-02-04)
 -----------------------------------------------

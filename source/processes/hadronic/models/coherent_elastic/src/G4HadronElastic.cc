@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronElastic.cc,v 1.46 2007-05-03 17:37:58 vnivanch Exp $
+// $Id: G4HadronElastic.cc,v 1.47 2007-05-04 09:37:07 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -57,8 +57,8 @@
 // 16-Nov-06 V.Ivanchenko Simplify logic of choosing of the model for sampling
 // 30-Mar-07 V.Ivanchenko lowEnergyLimitQ=0, lowEnergyLimitHE = 1.0*GeV,
 //                        lowestEnergyLimit= 0
-// 02-May-07 V.Ivanchenko lowEnergyLimitQ=GeV, lowEnergyLimitHE = 0; use 
-//                        lowEnergyLimitQ as an upper limit for QElastic
+// 04-May-07 V.Ivanchenko do not use HE model for hydrogen target to avoid NaN;
+//                        use QElastic for p, n incident for any energy 
 //
 
 #include "G4HadronElastic.hh"
@@ -85,7 +85,7 @@ G4HadronElastic::G4HadronElastic()
   verboseLevel= 0;
   lowEnergyRecoilLimit = 100.*keV;  
   lowEnergyLimitQ  = 0.0*GeV;  
-  lowEnergyLimitHE = 0.0*GeV;  
+  lowEnergyLimitHE = 1.0*GeV;  
   lowestEnergyLimit= 0.0*keV;  
   plabLowLimit     = 20.0*MeV;
 
