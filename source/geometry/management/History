@@ -1,4 +1,4 @@
-$Id: History,v 1.115 2007-04-11 08:00:12 gcosmo Exp $
+$Id: History,v 1.116 2007-05-04 15:25:42 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+April 26, 2007  M.Asai                     geommng-V08-03-00
+- Added forward declaration and pointer (with set/get methods) to
+  G4VUserSteppingAction, to allow for stepping actions defined at region.
 
 April 11, 2007  G.Cosmo                    geommng-V08-02-02
 - Added 'get' methods to stores for retrivial of volumes/solid by name.
