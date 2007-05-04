@@ -488,15 +488,78 @@ G4ThreeVector GetVectorOnTorus(G4Torus& torus)
   return G4ThreeVector(px,py,pz);
 }
 
+enum Esolid {kBox, kOrb, kSphere, kCons, kTubs, kTorus, kPara, kTrapezoid, kTrd};
+
 
 //////////////////////////////////////////////////////////////////////
 //
 // Main executable function
 
-int main(void)
+int main(int argc, char** argv)
 {
-  G4int i,j, iMax=1000000, jMax=1000;
+  G4int test_one_solid( Esolid, int, int );
+
+  G4int no_points      = 1000;
+  G4int dirs_per_point = 10000;
+
+  G4cout << "Usage: testDistanceAccuracy [ no_surface_points ]  [ no_directions_each ]"
+         << G4endl << G4endl;
+
+  G4int points_in = 0, dirs_in = 0;
+
+  if( argc >= 2 )     points_in = atoi(argv[1]);
+  if( argc >= 3 )     dirs_in = atoi(argv[2]);
+
+
+  if( points_in > 0 ) { no_points= points_in; }
+  if( dirs_in > 0 ) { dirs_per_point = dirs_in; }
+
+G4cout << "Testing each solid with " << no_points << " surface points and "
+         << dirs_per_point  << " directions each. " << G4endl;
+
+  Esolid useCase;
+
+  /*
+  G4cout<< "To test Box." << G4endl;
+  test_one_solid( useCase= kBox,  no_points, dirs_per_point );
+  */
+
+  G4cout<< "To test Tubs." << G4endl;
+  test_one_solid( useCase= kTubs,  no_points, dirs_per_point );
+
+  /*
+  G4cout<< "To test Sphere." << G4endl;
+  test_one_solid( useCase= kSphere,  no_points, dirs_per_point );
+  
+  G4cout<< "To test Orb." << G4endl;
+  test_one_solid( useCase= kOrb,  no_points, dirs_per_point );
+
+  G4cout<< "To test Cons." << G4endl;
+  test_one_solid( useCase= kCons,  no_points, dirs_per_point );
+
+  G4cout<< "To test Para." << G4endl;
+  test_one_solid( useCase= kPara,  no_points, dirs_per_point );
+
+  G4cout<< "To test Trapezoid." << G4endl;
+  test_one_solid( useCase= kTrapezoid,  no_points, dirs_per_point );
+
+  G4cout<< "To test Trd." << G4endl;
+  test_one_solid( useCase= kTrd,  no_points, dirs_per_point );
+  */
+
+  return 0;
+}
+
+//////////////////////////////////////////////////////////////////
+//
+// Test one solid selected with statistics in main
+
+int test_one_solid ( Esolid useCase,  int num_points, int directions_per_point )
+{
+  G4int i,j;
+  G4int iMax =  num_points, jMax = directions_per_point;
   G4int iCheck=iMax/10;
+
   G4double distIn, distOut;
 
   G4double Rtor = 100 ;
@@ -510,9 +573,6 @@ int main(void)
   G4bool *pgoodNorm, goodNorm, calcNorm = true;
   G4Timer timer;
 
-  enum Esolid {kBox, kOrb, kSphere, kCons, kTubs, kTorus, kPara, kTrapezoid, kTrd};
-
-  Esolid useCase = kSphere;
 
   pNorm=&norm;
   pgoodNorm=&goodNorm;
@@ -797,8 +857,9 @@ int main(void)
 
       if(surfaceP != kSurface)
       {
-        G4cout<<"p is out of surface: "<<G4endl;
-        G4cout<<"( "<<p.x()<<", "<<p.y()<<", "<<p.z()<<" ); "<<G4endl<<G4endl;
+        // G4cout<<"p is out of surface: "<<G4endl;
+        // G4cout<<"( "<<p.x()<<", "<<p.y()<<", "<<p.z()<<" ); "<<G4endl<<G4endl;
+        // norm = t4.SurfaceNormal(p);
 
       }
       else

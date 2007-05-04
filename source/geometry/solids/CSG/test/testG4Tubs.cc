@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4Tubs.cc,v 1.19 2007-04-12 14:12:33 grichine Exp $
+// $Id: testG4Tubs.cc,v 1.20 2007-05-04 08:44:57 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -329,6 +329,10 @@ G4bool testG4Tubs()
 
     Dist=t1a.DistanceToOut(G4ThreeVector(0.,0.,50.),vx,calcNorm,pgoodNorm,pNorm);
     G4cout<<"Dist=t1a.DistanceToOut((0,0,50),vx) = "<<Dist<<G4endl;
+    // assert(ApproxEqual(Dist,48.489795));
+
+    Dist=t1a.DistanceToOut(G4ThreeVector(0.,5.,50.),vmy,calcNorm,pgoodNorm,pNorm);
+    G4cout<<"Dist=t1a.DistanceToOut((0,5,50),vmy) = "<<Dist<<G4endl;
     // assert(ApproxEqual(Dist,48.489795));
 
     G4cout<<G4endl ;

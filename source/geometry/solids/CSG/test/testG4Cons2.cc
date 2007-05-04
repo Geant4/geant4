@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4Cons2.cc,v 1.18 2007-04-23 13:58:39 grichine Exp $
+// $Id: testG4Cons2.cc,v 1.19 2007-05-04 08:44:57 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Simple test of G4Cons
@@ -987,6 +987,31 @@ G4cout<<"Error:c9.Out((1e3*kRadTolerance,0,50),vx2mz,...) = " <<dist << G4endl;
 	// if (OutRange(dist,kInfinity))
 	    G4cout << "ctest10.DistanceToIn(pct10phi2r,vx) = " << dist << G4endl;
 
+
+  G4ThreeVector alex1P(49.840299921054168,-59.39735648688918,-20.893051766050633);
+  G4ThreeVector alex1V(0.6068108874999103,0.35615926907657169,0.71058505603651234);
+
+  in = ctest10.Inside(alex1P);
+  G4cout << "ctest10.Inside(alex1P) = " <<OutputInside(in)<< G4endl;
+
+  dist = ctest10.DistanceToIn(alex1P,alex1V);
+  // if (OutRange(dist,kInfinity))
+  G4cout << "ctest10.DistanceToIn(alex1P,alex1V) = " << dist << G4endl;
+
+  dist = ctest10.DistanceToOut(alex1P,alex1V);
+  // if (OutRange(dist,kInfinity))
+  G4cout << "ctest10.DistanceToOut(alex1P,alex1V) = " << dist << G4endl;
+
+
+  G4ThreeVector alex2P(127.0075852717127, -514.1050841937065, 69.47104834263656);
+  G4ThreeVector alex2V(0.1277616879490939, 0.4093610465777845, 0.9033828007202369);
+
+  in = ctest10.Inside(alex2P);
+  G4cout << "ctest10.Inside(alex2P) = " <<OutputInside(in)<< G4endl;
+
+  dist = ctest10.DistanceToIn(alex2P,alex2V);
+  // if (OutRange(dist,kInfinity))
+  G4cout << "ctest10.DistanceToIn(alex2P,alex2V) = " << dist << G4endl;
 
 	    // G4cout << "NOT Checking G4Cons::ScopeCar...\n";
 	    // G4cout << "NOT Checking G4Cons::ScopePhi...\n";
