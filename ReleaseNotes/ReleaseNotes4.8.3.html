@@ -501,6 +501,9 @@ please refer to the related History files provided in most packages):
     <LI>Added new class <TT>G4NucleonNuclearCrossSection</TT> which contains
         Barashenkov cross sections for nucleon-nucleus scattering; modified the
         <TT>G4PiData</TT> and <TT>G4GlauberGribovCrossSection</TT> classes.</LI>
+    <LI><TT>G4HadronCrossSections::GetParticleCode()</TT>: following report from CMS,
+        replaced code which tested by particle name with more performant code
+        that tests by PDG ID. Also, use switch-case instead of else-if.</LI>
     </UL></LI>
 <LI><B>Management</B>
     <UL>
@@ -518,11 +521,16 @@ please refer to the related History files provided in most packages):
             longer needed.</LI>
         </UL></LI>
     </UL></LI>
+<LI><B>Cascade</B>
+    <UL>
+    <LI>Added protection in <TT>G4ElementaryParticleCollider</TT> against negative
+        value to <TT>sqrt()</TT>.</LI>
+    </UL></LI>
 <LI><B>Chiral Invariant Phase Space (CHIPS)</B>
     <UL>
     <LI>Fix for NaN, protected coulomb barrier against divide by zero, now
         defaults to zero. Fix for NaN in <TT>G4QNucleus</TT> when using
-        <TT>pow()</TT>.</LI>
+        <TT>pow()</TT> and in <TT>G4QEnvironment</TT>.</LI>
     <LI>Removed warning for anti-Delta in <TT>G4QNucleus</TT>.</LI>
     <LI>Bug fix for muon-nuclear interactions.</LI>
     <LI>Fixed cases of warning printed for anti-particles by fixing occurences
@@ -586,7 +594,8 @@ please refer to the related History files provided in most packages):
         hadronization and qgsm modules.</LI>
     <LI><TT>G4ExcitedStringDecay::EnergyAndMomentumCorrector()</TT>, no longer
         causes exception when not converging. Added more info when failing and
-        return correct status.</LI>
+        return correct status. Added protection in G4ExcitedStringDecay against
+        division by 0 over <TT>KTsum1.e()</TT>.</LI>
     </UL></LI>
 <LI><B>Utils</B>
     <UL>
@@ -736,6 +745,8 @@ please refer to the related History files provided in most packages):
     <LI>electromagnetic/TestEm12
         <UL>
         <LI>Uncommented hadron ionisation in Livermore builder.</LI>
+        <LI><TT>HistoManager</TT>: by default, get <TT>csdaRange</TT> from
+            <TT>G4EmCalculator</TT>.</LI>
         </UL></LI>
     <LI>electromagnetic/TestEm13, TestEm14
         <UL>

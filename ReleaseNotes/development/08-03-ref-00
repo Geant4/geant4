@@ -128,7 +128,7 @@ graphics_reps                                    greps-V08-02-00
 - G4Colour: replaced static data members by static functions that
   create and copy out the relevant colours.
 
-physics_lists                                    phys-lists-V08-02-10
+physics_lists                                    phys-lists-V08-02-11
 -------------
 - For QGSC, QGSC_EMV, and QGSC_EFLOW enable use of G4QCaptureAtRest()
   also for muons. Changes made in G4QStoppingPhysics as well.
@@ -226,7 +226,7 @@ processes/electromagnetic/utils                  emutils-V08-02-06
 
 processes/hadronic
 ------------------
-- cross_sections (hadr-cross-V08-02-05)
+- cross_sections (hadr-cross-V08-02-06)
   o Use G4NucleonNuclearCrossSection in G4UInelasticCrossSection and
     G4UElasticCrossSection.
   o Completed implementations of A and Z interfaces to classes:
@@ -255,6 +255,9 @@ processes/hadronic
   o Added new class G4NucleonNuclearCrossSection which contains Barashenkov
     cross sections for nucleon-nucleus scattering; modified the G4PiData and
     G4GlauberGribovCrossSection classes.
+  o G4HadronCrossSections::GetParticleCode(): following report from CMS,
+    replaced code which tested by particle name with more performant code
+    that tests by PDG ID. Also, use switch-case instead of else-if.
 - management (hadr-man-V08-02-03)
   o G4HadronicProcess:
     + Removed AlwaysKillLeadingHadron() method.
@@ -272,12 +275,15 @@ processes/hadronic
       and entered them in the whiteboard.
 - models/abrasion (hadr-abrmod-V08-02-00)
   o Added model name for hadronic whiteboard error reporting.
-- models/chiral_inv_phase_space/body (hadr-chips-body-V08-02-10)
+- models/cascade (hadr-casc-V08-02-00)
+  o Added protection in G4ElementaryParticleCollider against negative
+    value to sqrt().
+- models/chiral_inv_phase_space/body (hadr-chips-body-V08-02-12)
   o Fix for NaN, protected coulomb barrier against divide by zero, now
     defaults to zero.
   o Removed warning for anti-Delta in G4QNucleus.
   o Bug fix for muon-nuclear interactions.
-  o Fix for NaN in G4QNucleus when using pow().
+  o Fix for NaN in G4QNucleus when using pow() and in G4QEnvironment.
   o Fixed cases of warning printed for anti-particles by fixing occurences
     of power of negative values.
   o Upgraded according to new muon capture interface.
@@ -325,6 +331,9 @@ processes/hadronic
   o G4ExcitedStringDecay::EnergyAndMomentumCorrector(), no longer causes
     exception when not converging. Added more info when failing and
     return correct status.
+- models/parton_string/hadronization (had-hadronization-V08-02-03)
+  o Added protection in G4ExcitedStringDecay against division by 0 over
+    KTsum1.e().
 - models/theo_high_energy (had-theo-HE-V08-02-01)
   o Added G4QuasiElasticChannel to simulate quasi-elastic scattering.
     Relies on CHIPS class G4QuasiFreeRatios.
@@ -403,8 +412,9 @@ examples                                         examples-V08-03-00
     and fixed output of statistics.
   o Added physics-lists names: penelope, livermore.
   o Uncommented hadron ionisation in Livermore builder.
-- extended/electromagnetic/TestEm12 (testem12-V08-02-00)
+- extended/electromagnetic/TestEm12 (testem12-V08-02-01)
   o Uncommented hadron ionisation in Livermore builder.
+  o HistoManager: by default, get csdaRange from G4EmCalculator.
 - extended/electromagnetic/TestEm13 (testem13-V08-02-00)
 - extended/electromagnetic/TestEm14 (testem14-V08-02-00)
   o vis.mac: suppressed command drawTracks.
