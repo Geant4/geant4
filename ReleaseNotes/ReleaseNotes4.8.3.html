@@ -552,8 +552,14 @@ please refer to the related History files provided in most packages):
     <UL>
     <LI><TT>G4ElasticHadrNucleusHE</TT>: use iterator search on bin instead
         of computing <TT>log()</TT>.</LI>
-    <LI><TT>G4HadronElastic</TT>: use the most probable isotope for given Z
-        to call to HE model (CPU/memory more efficient).</LI>
+    <LI><TT>G4HadronElastic</TT>:
+        <UL>
+        <LI>Use the most probable isotope for given Z to call to HE model
+            (CPU/memory more efficient).</LI>
+        <LI>Fix for avoid NaN: do not use HE model for hydrogen target, use
+            <TT>QElasticCrossSection</TT> for <TT>p, n</TT> incident for any
+            energy.</LI>
+        </UL></LI>
     <LI><TT>G4UHadronElasticProcess</TT>: fixed bug in number of neutrons in
         CHIPS interface.</LI>
     <LI><TT>G4HadronElastic</TT>, <TT>G4ChargeExchange</TT>: more accurately
