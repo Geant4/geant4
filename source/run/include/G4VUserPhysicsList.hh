@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserPhysicsList.hh,v 1.31 2006-11-23 00:06:48 asaim Exp $
+// $Id: G4VUserPhysicsList.hh,v 1.32 2007-05-04 16:02:58 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -294,13 +294,6 @@ class G4VUserPhysicsList
 
   private:
    enum { FixedStringLengthForStore = 32 }; 
-
-  private:
-   G4bool useCoupledTransportation;
-
-  public:
-   inline void UseCoupledTransportation(G4bool vl=true)
-   { useCoupledTransportation = vl; }
 
 ////////////////////////////////////////////////////////////////////////////
 // Following method is for backward compatibility and removed soon

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserPhysicsList.cc,v 1.57 2007-05-03 14:19:58 kurasige Exp $
+// $Id: G4VUserPhysicsList.cc,v 1.58 2007-05-04 16:02:58 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -73,8 +73,7 @@ G4VUserPhysicsList::G4VUserPhysicsList()
 		    fIsCheckedForRetrievePhysicsTable(false),
 		    fIsRestoredCutValues(false),
                     directoryPhysicsTable("."),
-                    fDisplayThreshold(0),
-                    useCoupledTransportation(false)
+                    fDisplayThreshold(0)
 {
   // default cut value  (1.0mm)
   defaultCutValue = 1.0*mm;
@@ -221,25 +220,11 @@ void G4VUserPhysicsList::RemoveProcessManager()
 
 ////////////////////////////////////////////////////////
 #include "G4Transportation.hh"
-#include "G4CoupledTransportation.hh"
 
 void G4VUserPhysicsList::AddTransportation()
 {
-  G4VProcess* theTransportationProcess;
-
-  if(!useCoupledTransportation)
-  { theTransportationProcess= new G4Transportation(); }
-  else
-  {
-    G4int verboseLevelTransport = 0;
-    theTransportationProcess= new G4CoupledTransportation(verboseLevelTransport);
-    G4cout << G4endl; 
-    G4cout << " ********************************************************************* " << G4endl; 
-    G4cout << " **  Now using G4CoupledTransportation in place of G4Transportation ** " << G4endl;
-    G4cout << " ********************************************************************* " 
-	   << G4endl; 
-    G4cout << G4endl; 
-  }
+  G4int verboseLevelTransport = 0;
+  G4VProcess* theTransportationProcess = new G4Transportation(verboseLevelTransport);
 
 #ifdef G4VERBOSE
     if (verboseLevel >2){
