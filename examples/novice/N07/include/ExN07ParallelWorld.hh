@@ -24,45 +24,50 @@
 // ********************************************************************
 //
 //
-// $Id: ExN07PhysicsList.hh,v 1.4 2007-05-04 01:49:28 asaim Exp $
+// $Id: ExN07ParallelWorld.hh,v 1.1 2007-05-04 01:49:28 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+// 
 
-#ifndef ExN07PhysicsList_h
-#define ExN07PhysicsList_h 1
+#ifndef ExN07ParallelWorld_h
+#define ExN07ParallelWorld_h 1
 
-#include "G4VUserPhysicsList.hh"
+#include "G4VUserParallelWorld.hh"
 #include "globals.hh"
 
-class ExN07PhysicsList: public G4VUserPhysicsList
+class G4LogicalVolume;
+class G4VPhysicalVolume;
+
+class ExN07ParallelWorld : public G4VUserParallelWorld
 {
   public:
-    ExN07PhysicsList();
-   ~ExN07PhysicsList();
+    ExN07ParallelWorld(G4String worldName);
+    virtual ~ExN07ParallelWorld();
 
-  protected:
-    // Construct particle and physics
-    void ConstructParticle();
-    void ConstructProcess();
- 
-    void SetCuts();
+  public:
+    virtual void Construct();
 
-   
-  protected:
-    // these methods Construct particles 
-    void ConstructBosons();
-    void ConstructLeptons();
-    void ConstructMesons();
-    void ConstructBaryons();
+  private:
+    void SetupGeometry();
+    void SetupDetectors();
+     
+  public:
+    void SetSerialGeometry(G4bool ser);
+    inline G4bool IsSerial() const
+    { return serial; }
 
-  protected:
-    // these methods Construct physics processes and register them
-    void ConstructGeneral();
-    void ConstructEM();
-
+  private:
+    G4LogicalVolume*   calorLogical[3];
+    G4LogicalVolume*   layerLogical[3];
+    G4VPhysicalVolume* calorPhysical[3];
+    G4VPhysicalVolume* layerPhysical[3];
+    G4String           calName[3];
+    G4bool             constructed;
+    G4bool             serial;
+    G4double           totalThickness;
+    G4int              numberOfLayers;
 };
 
+
 #endif
-
-
 

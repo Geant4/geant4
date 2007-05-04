@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN07RunAction.cc,v 1.6 2006-11-04 19:23:07 asaim Exp $
+// $Id: ExN07RunAction.cc,v 1.7 2007-05-04 01:49:28 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -112,6 +112,18 @@ void ExN07RunAction::EndOfRunAction(const G4Run* aRun)
            << " Absorber " << (theRun->GetNStep(ih1))/nEvt
            << "      Gap " << (theRun->GetNStep(ih2))/nEvt
            << G4endl;
+    G4cout
+    << "------------------------------------------------------------" << G4endl;
+    G4cout << "Scores in parallel geometry" << G4endl;
+    G4cout << "layer  eDep/evt   nGamma/evt   nElec/evt   nPosi/evt   stepLen/evt   nStep/evt"
+           << G4endl;
+    for(size_t k=0;k<20;k++)
+    {
+      G4cout << "  " << k;
+      for(size_t j=0;j<6;j++)
+      { G4cout << "  " << (theRun->GetParaValue(i,j,k))/nEvt; }
+      G4cout << G4endl;
+    }
     G4cout
     << "############################################################" << G4endl;
   }
