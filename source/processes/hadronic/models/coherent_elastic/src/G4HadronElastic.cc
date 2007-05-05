@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronElastic.cc,v 1.47 2007-05-04 09:37:07 vnivanch Exp $
+// $Id: G4HadronElastic.cc,v 1.48 2007-05-05 18:45:23 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -58,7 +58,8 @@
 // 30-Mar-07 V.Ivanchenko lowEnergyLimitQ=0, lowEnergyLimitHE = 1.0*GeV,
 //                        lowestEnergyLimit= 0
 // 04-May-07 V.Ivanchenko do not use HE model for hydrogen target to avoid NaN;
-//                        use QElastic for p, n incident for any energy 
+//                        use QElastic for p, n incident for any energy for 
+//                        p and He targets only  
 //
 
 #include "G4HadronElastic.hh"
@@ -179,15 +180,15 @@ G4HadFinalState* G4HadronElastic::ApplyYourself(
   G4ElasticGenerator gtype = fLElastic;
 
   // Q-elastic for p,n scattering on H and He
-  if (theParticle == theProton || theParticle == theNeutron)
-  //      && (Z <= 2 || ekin < lowEnergyLimitQ))  
+  if ((theParticle == theProton || theParticle == theNeutron)
+       && Z <= 2 && ekin >= lowEnergyLimitQ)  
     gtype = fQElastic;
 
   else {
     // S-wave for very low energy
     if(plab < plabLowLimit) gtype = fSWave;
     // HE-elastic for energetic projectiles
-    else if(ekin >= lowEnergyLimitHE && A < 238) gtype = fHElastic;
+    else if(ekin >= lowEnergyLimitHE && A < 238 && Z>= 2) gtype = fHElastic;
   }
 
   //
