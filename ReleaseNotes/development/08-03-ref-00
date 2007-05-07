@@ -281,14 +281,14 @@ processes/hadronic
 - models/cascade (hadr-casc-V08-02-00)
   o Added protection in G4ElementaryParticleCollider against negative
     value to sqrt().
-- models/chiral_inv_phase_space/body (hadr-chips-body-V08-02-12)
+- models/chiral_inv_phase_space/body (hadr-chips-body-V08-02-13)
   o Fix for NaN, protected coulomb barrier against divide by zero, now
     defaults to zero.
-  o Removed warning for anti-Delta in G4QNucleus.
-  o Bug fix for muon-nuclear interactions.
-  o Fix for NaN in G4QNucleus when using pow() and in G4QEnvironment.
+  o Fix for NaN in G4QNucleus and in G4QEnvironment.
   o Fixed cases of warning printed for anti-particles by fixing occurences
     of power of negative values.
+  o Removed warning for anti-Delta in G4QNucleus.
+  o Bug fix for muon-nuclear interactions.
   o Upgraded according to new muon capture interface.
 - models/chiral_inv_phase_space/interface (hadr-chips-inter-V08-02-14)
   o Fixed compilation problem on Windows/VC++, argument to pow() function.
