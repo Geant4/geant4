@@ -8,7 +8,11 @@ $Id: History, v 1.6 2004/02/27  G.A.P. Cirrone
 
                       Category History file
  
-23.4.2007 S. Guatelli (hadrontherapy-V08-02-01)
+07.05.2007 G.A.P. Cirrone (hadrontherapy-V08-02-02)
+	  - Geometry upgrade(hadrontherapyBeamLine class) according to the experimental CATANA 
+	    proton therapy beam line; 
+
+23.04.2007 S. Guatelli (hadrontherapy-V08-02-01)
          - Compilation error corrected - human error of Susanna Guatelli.
          - The file src/HadrontherapyProtonBertiniElastic.cc
            and the file include/HadrontherapyProtonBertiniElastic.hh

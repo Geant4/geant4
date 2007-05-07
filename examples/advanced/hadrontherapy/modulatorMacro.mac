@@ -42,7 +42,7 @@
 # SET OF THE VISUALISATION CHARACTERISTICS
 /vis/scene/create
 /vis/open OGLIX
-/vis/viewer/zoom 5.5
+/vis/viewer/zoom 3.5
 /vis/viewer/set/viewpointThetaPhi  50 130 deg
 /vis/viewer/pan -60 40 cm
 /tracking/storeTrajectory 1
