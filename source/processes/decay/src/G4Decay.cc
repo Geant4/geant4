@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Decay.cc,v 1.23 2007-05-07 10:16:08 kurasige Exp $
+// $Id: G4Decay.cc,v 1.24 2007-05-07 12:05:45 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -256,7 +256,7 @@ G4VParticleChange* G4Decay::DecayIt(const G4Track& aTrack, const G4Step& )
   if (ParentEnergy < ParentMass) {
     ParentEnergy = ParentMass;
 #ifdef G4VERBOSE
-    if (GetVerboseLevel()>1) {
+    if (GetVerboseLevel()>0) {
       G4cerr << "G4Decay::DoIt  : Total Energy is less than its mass" << G4endl;
       G4cerr << " Particle: " << aParticle->GetDefinition()->GetParticleName();
       G4cerr << " Energy:"    << ParentEnergy/MeV << "[MeV]";
