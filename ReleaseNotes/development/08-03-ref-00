@@ -160,6 +160,10 @@ physics_lists                                    phys-lists-V08-02-11
   o Use default multiple-scattering setup in G4EmStandardPhysics72.
   o Use skin=0 (no use of ComputeStep()) in G4EmStandardPhysics and
     G4EmStandardPhysics71.
+- Added new physics list QGSP_BERT_TRV, based on QGSP_BERT, but changing
+  to Bertini Cascade occurs at 5.0-5.4 GeV for proton, neutron, pion and
+  kaon.
+- Increased version number to 5.2.
 
 processes/cuts                                   procuts-V08-02-00
 --------------
