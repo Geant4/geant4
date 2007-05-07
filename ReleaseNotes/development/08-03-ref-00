@@ -133,7 +133,7 @@ particles/management                             partman-V08-02-00
 - Added protection against negative argument to sqrt() in method
   G4DecayProducts::Boost().
 
-physics_lists                                    phys-lists-V08-02-11
+physics_lists                                    phys-lists-V08-02-12
 -------------
 - For QGSC, QGSC_EMV, and QGSC_EFLOW enable use of G4QCaptureAtRest()
   also for muons. Changes made in G4QStoppingPhysics as well.
