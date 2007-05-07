@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Decay.cc,v 1.22 2006-06-29 19:31:16 gunter Exp $
+// $Id: G4Decay.cc,v 1.23 2007-05-07 10:16:08 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -252,6 +252,20 @@ G4VParticleChange* G4Decay::DecayIt(const G4Track& aTrack, const G4Step& )
   
   // get parent particle information ...................................
   G4double   ParentEnergy  = aParticle->GetTotalEnergy();
+  G4double   ParentMass    = aParticle->GetMass();
+  if (ParentEnergy < ParentMass) {
+    ParentEnergy = ParentMass;
+#ifdef G4VERBOSE
+    if (GetVerboseLevel()>1) {
+      G4cerr << "G4Decay::DoIt  : Total Energy is less than its mass" << G4endl;
+      G4cerr << " Particle: " << aParticle->GetDefinition()->GetParticleName();
+      G4cerr << " Energy:"    << ParentEnergy/MeV << "[MeV]";
+      G4cerr << " Mass:"    << ParentMass/MeV << "[MeV]";
+      G4cerr << G4endl;
+    }
+#endif
+  }
+
   G4ThreeVector ParentDirection(aParticle->GetMomentumDirection());
 
   //boost all decay products to laboratory frame
