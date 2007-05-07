@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNucleus.cc,v 1.71 2007-04-25 07:30:44 ahoward Exp $
+// $Id: G4QNucleus.cc,v 1.72 2007-05-07 07:47:54 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QNucleus ----------------
@@ -2785,6 +2785,7 @@ void G4QNucleus::PrepareCandidates(G4QCandidateVector& theQCandidates, G4bool pi
   G4int mCand=theQCandidates.size();    // Full set of candidates made in UpdateClusters
   G4double s=0.;                        // Prototype of summ for constant A (=ac>2)
   G4double comb=ae0*(ae0-1)/2;          // Product up to ac=2
+  if(comb<=0.) comb=1;
 #ifdef cldebug
   G4double sZ=0.;                       // Percent of protons
   G4double sN=0.;                       // Percent of neutrons
@@ -2942,7 +2943,7 @@ void G4QNucleus::PrepareCandidates(G4QCandidateVector& theQCandidates, G4bool pi
 	         {
             if(acm<ac)                             // first time that big cluster
 		          {
-              if(ac<ae1) comb*=(ae1-ac)/ac;
+              if(ac<ae1 && ac>0) comb*=(ae1-ac)/ac;
               acm=ac;
               s=0.;
               cca=0;
