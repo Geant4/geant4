@@ -128,6 +128,11 @@ graphics_reps                                    greps-V08-02-00
 - G4Colour: replaced static data members by static functions that
   create and copy out the relevant colours.
 
+particles/management                             partman-V08-02-00
+--------------------
+- Added protection against negative argument to sqrt() in method
+  G4DecayProducts::Boost().
+
 physics_lists                                    phys-lists-V08-02-11
 -------------
 - For QGSC, QGSC_EMV, and QGSC_EFLOW enable use of G4QCaptureAtRest()
