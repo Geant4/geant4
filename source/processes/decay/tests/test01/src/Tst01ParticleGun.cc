@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst01ParticleGun.cc,v 1.4 2006-06-29 19:32:02 gunter Exp $
+// $Id: Tst01ParticleGun.cc,v 1.5 2007-05-07 10:12:29 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -42,7 +42,7 @@ Tst01ParticleGun::Tst01ParticleGun()
 }
 
 
-Tst01ParticleGun::Tst01ParticleGun(G4int numberofparticles)
+Tst01ParticleGun::Tst01ParticleGun(G4int )
                  :G4ParticleGun(1)
 {
   SetInitialValues();
@@ -50,7 +50,7 @@ Tst01ParticleGun::Tst01ParticleGun(G4int numberofparticles)
 
 
 Tst01ParticleGun::Tst01ParticleGun(G4ParticleDefinition * particleDef, 
-				   G4int numberofparticles)
+				   G4int )
                  :G4ParticleGun(particleDef, 1)  
 {
   SetInitialValues();
@@ -65,7 +65,7 @@ Tst01ParticleGun::~Tst01ParticleGun()
     delete particle;
   }
 }
-     
+    
 Tst01ParticleGun::Tst01ParticleGun(const Tst01ParticleGun &right)
 {
   *this = right;
@@ -75,8 +75,13 @@ Tst01ParticleGun::Tst01ParticleGun(const Tst01ParticleGun &right)
 const Tst01ParticleGun & Tst01ParticleGun::operator=(const Tst01ParticleGun &right)
 {
   if ( this == &right) return *this;
-  G4ParticleGun(*this) =  (const G4ParticleGun)(right);
-  particle_decay_time = right.particle_decay_time;
+  NumberOfParticlesToBeGenerated = right.NumberOfParticlesToBeGenerated;
+  particle_definition = right.particle_definition;
+  particle_momentum_direction = right.particle_momentum_direction; 
+  particle_energy = right.particle_energy;
+  particle_charge = right.particle_charge;
+  particle_polarization = right.particle_polarization;
+  particle_decay_time  =  right.particle_decay_time;
   decay_products.clear();
   return *this;
 }

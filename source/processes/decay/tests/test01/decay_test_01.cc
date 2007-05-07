@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: decay_test_01.cc,v 1.3 2006-06-29 19:31:42 gunter Exp $
+// $Id: decay_test_01.cc,v 1.4 2007-05-07 10:12:29 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -41,9 +41,9 @@
 
 int main(int argc,char** argv) {
 
-  // Set the default random engine to RanecuEngine
-  RanecuEngine defaultEngine;
-  HepRandom::setTheEngine(&defaultEngine);
+ // Set the default random engine to RanecuEngine
+  CLHEP::RanecuEngine defaultEngine;
+  CLHEP::HepRandom::setTheEngine(&defaultEngine);
 
   // Run manager
   G4RunManager * runManager = new G4RunManager;
