@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UserPhysicsListMessenger.cc,v 1.26 2006-06-29 21:13:56 gunter Exp $
+// $Id: G4UserPhysicsListMessenger.cc,v 1.27 2007-05-07 16:36:34 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -181,6 +181,10 @@ G4UserPhysicsListMessenger::G4UserPhysicsListMessenger(G4VUserPhysicsList* pPart
   dumpCutValuesCmd->SetDefaultValue("all");
   dumpCutValuesCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
+  //  /run/useOldTransport command
+  useOldTransportCmd = new G4UIcmdWithoutParameter("/run/useOldTransport",this);
+  useOldTransportCmd->SetGuidance("Use old G4Transportation8. Parallel world is now allowed.");
+  useOldTransportCmd->AvailableForStates(G4State_PreInit);
 }
 
 G4UserPhysicsListMessenger::~G4UserPhysicsListMessenger()
@@ -197,6 +201,7 @@ G4UserPhysicsListMessenger::~G4UserPhysicsListMessenger()
   delete asciiCmd;
   delete applyCutsCmd;
   delete dumpCutValuesCmd;
+  delete useOldTransportCmd;
   delete theDirectory;
 }
 
@@ -271,8 +276,11 @@ void G4UserPhysicsListMessenger::SetNewValue(G4UIcommand * command,G4String newV
  
   } else if( command == dumpCutValuesCmd ) {
     thePhysicsList->DumpCutValuesTable(1);
-  }
 
+  } else if( command == useOldTransportCmd ) {
+    thePhysicsList->UseG4Transportation8();
+
+  }
 } 
 
 G4String G4UserPhysicsListMessenger::GetCurrentValue(G4UIcommand * command)

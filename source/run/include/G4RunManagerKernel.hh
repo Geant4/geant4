@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManagerKernel.hh,v 1.7 2006-06-29 21:13:20 gunter Exp $
+// $Id: G4RunManagerKernel.hh,v 1.8 2007-05-07 16:36:34 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -136,6 +136,7 @@ class G4RunManagerKernel
     G4bool geometryToBeOptimized;
     G4bool physicsNeedsToBeReBuilt;
     G4int verboseLevel;
+    G4int numberOfParallelWorld;
 
     G4EventManager * eventManager;
     G4ExceptionHandler* defaultExceptionHandler;
@@ -182,6 +183,11 @@ class G4RunManagerKernel
         geometryNeedsToBeClosed = true;
       }
     }
+
+    inline G4int GetNumberOfParallelWorld() const
+    { return numberOfParallelWorld; }
+    inline void SetNumberOfParallelWorld(G4int i)
+    { numberOfParallelWorld = i; }
 };
 
 #endif

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManagerKernel.cc,v 1.37 2006-12-01 01:23:35 asaim Exp $
+// $Id: G4RunManagerKernel.cc,v 1.38 2007-05-07 16:36:34 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -67,7 +67,8 @@ G4RunManagerKernel::G4RunManagerKernel()
 :physicsList(0),currentWorld(0),
  geometryInitialized(false),physicsInitialized(false),
  geometryNeedsToBeClosed(true),geometryToBeOptimized(true),
- physicsNeedsToBeReBuilt(true),verboseLevel(0)
+ physicsNeedsToBeReBuilt(true),verboseLevel(0),
+ numberOfParallelWorld(0)
 {
 #ifdef G4FPE_DEBUG
   InvalidOperationDetection();

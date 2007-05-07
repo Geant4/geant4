@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.cc,v 1.100 2007-05-04 16:02:58 asaim Exp $
+// $Id: G4RunManager.cc,v 1.101 2007-05-07 16:36:34 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -348,6 +348,7 @@ void G4RunManager::InitializeGeometry()
   if(verboseLevel>1) G4cout << "userDetector->Construct() start." << G4endl;
   kernel->DefineWorldVolume(userDetector->Construct(),false);
   nParallelWorlds = userDetector->ConstructParallelGeometries();
+  kernel->SetNumberOfParallelWorld(nParallelWorlds);
   geometryInitialized = true;
 }
 
