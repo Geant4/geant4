@@ -582,9 +582,8 @@ please refer to the related History files provided in most packages):
       <UL>
         <LI>Use the most probable isotope for given Z to call the high energy part
             of the model (CPU/memory more efficient).</LI>
-        <LI>NaN fix: do not use high energy model for hydrogen target, use
-            <TT>QElasticCrossSection</TT> for incident <TT>p, n</TT> at any
-            energy.</LI>
+        <LI>Use <TT>QElasticCrossSection</TT> only for <TT>p, He</TT> targets,
+            do not use HElastic for proton targets.</LI>
       </UL></LI>
     <LI><TT>G4UHadronElasticProcess</TT>: fixed bug in number of neutrons in
         CHIPS interface.</LI>

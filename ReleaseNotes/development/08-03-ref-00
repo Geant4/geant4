@@ -300,14 +300,14 @@ processes/hadronic
     + Fix for mis-use of units.
     + Fix to set 'fStopButAlive' status for E=0.
   o Upgraded G4QCaptureAtRest for muon capture.
-- models/coherent_elastic (hadr-cohe-V08-02-05)
+- models/coherent_elastic (hadr-cohe-V08-02-06)
   o G4ElasticHadrNucleusHE: use iterator search on bin instead of computing
     log().
   o G4HadronElastic:
     + Use the most probable isotope for given Z to call to HE model
       (CPU/memory more efficient).
-    + Fix for avoid NaN: do not use HE model for hydrogen target, use
-      QElasticCrossSection for p, n incident for any energy.
+    +  Use QElasticCrossSection only for p, He targets, do not use HElastic
+       for proton targets.
   o G4UHadronElasticProcess: fixed bug in number of neutrons in CHIPS interface.
   o G4HadronElastic, G4ChargeExchange: more accurately compute Z and A.
   o G4UHadronElasticProcess and G4ChargeExchangeProcess:
