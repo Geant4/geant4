@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DecayProducts.cc,v 1.14 2006-06-29 19:25:00 gunter Exp $
+// $Id: G4DecayProducts.cc,v 1.15 2007-05-07 10:04:33 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -169,7 +169,8 @@ void G4DecayProducts::Boost(G4double totalEnergy, const G4ThreeVector &momentumD
 {
   // calcurate new beta
   G4double   mass = theParentParticle->GetMass();
-  G4double   totalMomentum  = std::sqrt( (totalEnergy - mass)*(totalEnergy + mass) );
+  G4double   totalMomentum(0);
+  if (totalEnergy > mass ) totalMomentum  = std::sqrt( (totalEnergy - mass)*(totalEnergy + mass) );
   G4double   betax = momentumDirection.x()*totalMomentum/totalEnergy;  
   G4double   betay = momentumDirection.y()*totalMomentum/totalEnergy;  
   G4double   betaz = momentumDirection.z()*totalMomentum/totalEnergy;  
