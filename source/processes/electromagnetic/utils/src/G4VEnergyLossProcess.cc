@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.101 2007-04-25 10:20:26 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.102 2007-05-08 17:52:00 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -102,9 +102,6 @@
 // 16-01-07 add IonisationTable and IonisationSubTable (V.Ivanchenko)
 // 16-02-07 set linLossLimit=1.e-6 (V.Ivanchenko)
 // 13-03-07 use SafetyHelper instead of navigator (V.Ivanchenko)
-// 10-04-07 use unique SafetyHelper (V.Ivanchenko)
-// 12-04-07 Add verbosity at destruction (V.Ivanchenko)
-// 25-04-07 move initialisation of safety helper to BuildPhysicsTable (VI)
 //
 // Class Description:
 //
@@ -170,7 +167,7 @@ G4VEnergyLossProcess::G4VEnergyLossProcess(const G4String& name,
   nBins(90),
   nBinsCSDA(70),
   nWarnings(0),
-  linLossLimit(1.0e-6),
+  linLossLimit(0.05),
   minSubRange(0.1),
   lambdaFactor(0.8),
   mfpKinEnergy(0.0),
@@ -204,8 +201,7 @@ G4VEnergyLossProcess::G4VEnergyLossProcess(const G4String& name,
   scoffRegions.clear();
   scProcesses.clear();
 
-  safetyHelper = G4TransportationManager::GetTransportationManager()
-    ->GetSafetyHelper();
+  safetyHelper = new G4SafetyHelper();
 
   const G4int n = 7;
   vstrag = new G4PhysicsLogVector(keV, GeV, n);
@@ -217,10 +213,8 @@ G4VEnergyLossProcess::G4VEnergyLossProcess(const G4String& name,
 
 G4VEnergyLossProcess::~G4VEnergyLossProcess()
 {
-  if(1 < verboseLevel) 
-    G4cout << "G4VEnergyLossProcess destruct " << GetProcessName() 
-	   << G4endl;
   delete vstrag;
+  delete safetyHelper;
   Clear();
 
   if ( !baseParticle ) {
@@ -408,10 +402,8 @@ void G4VEnergyLossProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
   if(!tablesAreBuilt && &part == particle)
     G4LossTableManager::Instance()->BuildPhysicsTable(particle, this);
 
-  if(0 < verboseLevel && (&part == particle) && !baseParticle) {
+  if(0 < verboseLevel && (&part == particle) && !baseParticle) 
     PrintInfoDefinition();
-    safetyHelper->InitialiseHelper();
-  }
 
   if(1 < verboseLevel) {
     G4cout << "### G4VEnergyLossProcess::BuildPhysicsTable() done for "
@@ -640,7 +632,7 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
   if(length == 0.0) return &fParticleChange;
   G4double eloss  = 0.0;
 
-  /*  
+  /* 
   if(-1 < verboseLevel) {
     const G4ParticleDefinition* d = track.GetDefinition();
     G4cout << "AlongStepDoIt for "
