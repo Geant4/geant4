@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V08-02-01    (23-February-2007)
+ Geant4 version Name: geant4-08-03-cand-00    (5-May-2007)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -69,6 +69,7 @@ You have successfully registered the following graphics systems.
 Current available graphics systems are:
   ASCIITree (ATree)
   DAWNFILE (DAWNFILE)
+  GAGTree (GAGTree)
   G4HepRep (HepRepXML)
   G4HepRepFile (HepRepFile)
   RayTracer (RayTracer)
@@ -260,16 +261,16 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
  Current couple of seeds = 9876, 54321
 ----------------------------------------
 ---> End of event: 0
-   Absorber: total energy: 270.34149 MeV       total track length: 18.778855 cm 
-        Gap: total energy: 7.2683181 MeV       total track length: 3.5983537 cm 
+   Absorber: total energy: 268.00612 MeV       total track length: 19.083114 cm 
+        Gap: total energy: 23.591628 MeV       total track length: 11.752229 cm 
 
 --------------------End of Run------------------------------
 
- mean Energy in Absorber : 270.34149 MeV +- 0 eV 
- mean Energy in Gap      : 7.2683181 MeV +- 0 eV 
+ mean Energy in Absorber : 268.00612 MeV +- 0 eV 
+ mean Energy in Gap      : 23.591628 MeV +- 0 eV 
 
- mean trackLength in Absorber : 18.778855 cm  +- 0 fm 
- mean trackLength in Gap      : 3.5983537 cm  +- 0 fm 
+ mean trackLength in Absorber : 19.083114 cm  +- 0 fm 
+ mean trackLength in Gap      : 11.752229 cm  +- 0 fm 
 ------------------------------------------------------------
 
      Transportation,                msc,              hIoni,              eIoni
@@ -411,19 +412,19 @@ hIoni:   tables are built for  pi-
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 443544737, 1142417910
+ Current couple of seeds = 889551171, 717724786
 ----------------------------------------
 ---> End of event: 0
-   Absorber: total energy: 275.15243 MeV       total track length: 18.963556 cm 
-        Gap: total energy: 21.729486 MeV       total track length: 9.8821869 cm 
+   Absorber: total energy: 275.15533 MeV       total track length: 19.398203 cm 
+        Gap: total energy: 16.593489 MeV       total track length: 8.6559137 cm 
 
 --------------------End of Run------------------------------
 
- mean Energy in Absorber : 275.15243 MeV +- 0 eV 
- mean Energy in Gap      : 21.729486 MeV +- 0 eV 
+ mean Energy in Absorber : 275.15533 MeV +- 0 eV 
+ mean Energy in Gap      : 16.593489 MeV +- 0 eV 
 
- mean trackLength in Absorber : 18.963556 cm  +- 0 fm 
- mean trackLength in Gap      : 9.8821869 cm  +- 0 fm 
+ mean trackLength in Absorber : 19.398203 cm  +- 0 fm 
+ mean trackLength in Gap      : 8.6559137 cm  +- 0 fm 
 ------------------------------------------------------------
 
 
@@ -565,18 +566,18 @@ hIoni:   tables are built for  pi-
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1517609764, 2041203823
+ Current couple of seeds = 809191624, 1207602374
 ----------------------------------------
 ---> End of event: 0
-   Absorber: total energy: 282.79005 MeV       total track length: 67.47886 cm 
-        Gap: total energy: 58.729424 MeV       total track length: 1.6574125 m  
+   Absorber: total energy: 291.88848 MeV       total track length: 69.61889 cm 
+        Gap: total energy: 66.027538 MeV       total track length: 1.8251736 m  
 
 --------------------End of Run------------------------------
 
- mean Energy in Absorber : 282.79005 MeV +- 0 eV 
- mean Energy in Gap      : 58.729424 MeV +- 0 eV 
+ mean Energy in Absorber : 291.88848 MeV +- 0 eV 
+ mean Energy in Gap      : 66.027538 MeV +- 0 eV 
 
- mean trackLength in Absorber : 67.47886 cm  +- 0 fm 
- mean trackLength in Gap      : 1.6574125 m   +- 0 fm 
+ mean trackLength in Absorber : 69.61889 cm  +- 0 fm 
+ mean trackLength in Gap      : 1.8251736 m   +- 0 fm 
 ------------------------------------------------------------
 

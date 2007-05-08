@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V08-02-01    (23-February-2007)
+ Geant4 version Name: geant4-08-03-cand-00    (5-May-2007)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -297,28 +297,28 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=97.82s Real=103.76s Sys=5.93s
+  User=102.24s Real=108.87s Sys=6.58s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started
 ========================================================
 Number of events             100
-Average number of e-         1326
-Average number of gamma      704.4
-Average number of e+         48.67
-Average number of steps      4468
-Edep 1x1 =                   0.8242 +- 0.0311  res=  3.773 %
-Edep 3x3 =                   0.9555 +- 0.0132  res=  1.382 %
-Edep 5x5 =                   0.9795 +- 0.008268  res=  0.844 %
+Average number of e-         1314
+Average number of gamma      697.4
+Average number of e+         48.17
+Average number of steps      4482
+Edep 1x1 =                   0.8323 +- 0.0303  res=  3.641 %
+Edep 3x3 =                   0.959 +- 0.0122  res=  1.272 %
+Edep 5x5 =                   0.9802 +- 0.008353  res=  0.8522 %
 ========================================================
 
 
 <<<<<ACCEPTANCE>>>>> 100 events for Crystal Calorimeter
-Edep1x1: 0.8233  delEdep1x1= -0.002661 nrms= -0.7582
-Erms1x1: 0.03211  delErms1x1= -0.002992 nrms= -0.8524
-Edep3x3: 0.9555  delEdep3x3= -0.0009179 nrms= -0.5737
-Erms3x3: 0.0132  delErms3x3= -0.002795 nrms= -1.747
-Edep5x5: 0.9785  delEdep5x5= -0.0004536 nrms= -0.3812
-Erms5x5: 0.009895  delErms5x5= -0.002005 nrms= -1.685
+Edep1x1: 0.8311  delEdep1x1= 0.005141 nrms= 1.465
+Erms1x1: 0.03216  delErms1x1= -0.002944 nrms= -0.8387
+Edep3x3: 0.9563  delEdep3x3= -9.751e-05 nrms= -0.06094
+Erms3x3: 0.01836  delErms3x3= 0.002359 nrms= 1.474
+Edep5x5: 0.978  delEdep5x5= -0.001003 nrms= -0.8427
+Erms5x5: 0.01504  delErms5x5= 0.00314 nrms= 2.639
 <<<<<END>>>>>   IS ACCEPTED
 
 #

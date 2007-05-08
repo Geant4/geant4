@@ -1,14 +1,14 @@
 
 *************************************************************
- Geant4 version Name: global-V08-02-01    (23-February-2007)
+ Geant4 version Name: geant4-08-03-cand-00    (5-May-2007)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
 
 
-<<< Geant4 Physics List engine packaging library: PACK 5.1
-<<< Geant4 Physics List simulation engine: QGSP 3.2
+<<< Geant4 Physics List engine packaging library: PACK 5.2
+<<< Geant4 Physics List simulation engine: QGSP 3.3
 
 Visualization Manager instantiating...
 Visualization Manager initialising...
@@ -18,6 +18,7 @@ You have successfully registered the following graphics systems.
 Current available graphics systems are:
   ASCIITree (ATree)
   DAWNFILE (DAWNFILE)
+  GAGTree (GAGTree)
   G4HepRep (HepRepXML)
   G4HepRepFile (HepRepFile)
   RayTracer (RayTracer)
@@ -235,9 +236,9 @@ Start Run processing.
 Stage 0->1 : 1 hits found in the muon chamber.
 Stage 1->2 : 1 isolated muon found.
 >>> Event 0
-     86 hits are stored in ExN04TrackerHitsCollection.
+     71 hits are stored in ExN04TrackerHitsCollection.
      34 hits are stored in ExN04CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 0.48866043 (GeV)
+     Total energy deposition in calorimeter : 0.54371478 (GeV)
      1 hits are stored in ExN04MuonHitsCollection.
 Stage 0->1 : 0 hits found in the muon chamber.
 ++++++++ event aborted
@@ -249,14 +250,14 @@ Stage 0->1 : 0 hits found in the muon chamber.
 Stage 0->1 : 1 hits found in the muon chamber.
 Stage 1->2 : 1 isolated muon found.
 >>> Event 2
-     111 hits are stored in ExN04TrackerHitsCollection.
-     23 hits are stored in ExN04CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 0.51675112 (GeV)
+     41 hits are stored in ExN04TrackerHitsCollection.
+     37 hits are stored in ExN04CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 0.68554679 (GeV)
      1 hits are stored in ExN04MuonHitsCollection.
 Run terminated.
 Run Summary
   Number of events processed : 3
-  User=8.21s Real=8.97s Sys=0.38s
+  User=61.95s Real=62.66s Sys=0.49s
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.

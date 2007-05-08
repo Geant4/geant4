@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V08-02-01    (23-February-2007)
+ Geant4 version Name: geant4-08-03-cand-00    (5-May-2007)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -30,6 +30,7 @@ You have successfully registered the following graphics systems.
 Current available graphics systems are:
   ASCIITree (ATree)
   DAWNFILE (DAWNFILE)
+  GAGTree (GAGTree)
   G4HepRep (HepRepXML)
   G4HepRepFile (HepRepFile)
   RayTracer (RayTracer)
@@ -222,7 +223,7 @@ G4SynchrotronRadiation::GetRandomEnergySR :
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=26.17s Real=27.32s Sys=0.12s
+  User=28.64s Real=29.93s Sys=0.08s
 Summary for synchrotron radiation :
   Number of photons = 64554
   Emean             = 20.24 +/- 0.1449 keV

@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V08-02-01    (23-February-2007)
+ Geant4 version Name: geant4-08-03-cand-00    (5-May-2007)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -46,6 +46,7 @@ You have successfully registered the following graphics systems.
 Current available graphics systems are:
   ASCIITree (ATree)
   DAWNFILE (DAWNFILE)
+  GAGTree (GAGTree)
   G4HepRep (HepRepXML)
   G4HepRepFile (HepRepFile)
   RayTracer (RayTracer)
@@ -319,7 +320,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=1181.65s Real=1397.19s Sys=113.79s
+  User=1204.52s Real=1426.72s Sys=112.39s
 
  ======================== run summary ======================
 
@@ -327,18 +328,18 @@ Run Summary
 
  ============================================================
 
- Total Energy deposited        = 3.934 MeV +- 235.671 keV
+ Total Energy deposited        = 3.937 MeV +- 227.712 keV
 
- Track length of primary track = 2.017 cm  +- 2.759 mm 
+ Track length of primary track = 2.012 cm  +- 2.787 mm 
  Range from EmCalculator       = 2.021 cm  (from full dE/dx)
 
- Projected range               = 1.310 cm  +- 4.299 mm 
+ Projected range               = 1.314 cm  +- 4.323 mm 
 
- Nb of steps of primary track  = 238.67 +- 30.75	 Step size= 84.499 um  +- 4.527 um 
+ Nb of steps of primary track  = 238.10 +- 30.94	 Step size= 84.472 um  +- 4.581 um 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1928317596, 1805907459
+ Current couple of seeds = 1876977844, 634096150
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

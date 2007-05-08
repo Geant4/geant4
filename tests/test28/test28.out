@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V08-02-01    (23-February-2007)
+ Geant4 version Name: geant4-08-03-cand-00    (5-May-2007)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -204,25 +204,23 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     Total memory consumed for geometry optimisation:   0 kByte
     Total CPU time elapsed for geometry optimisation: 0 seconds
 Start Run processing.
- G4NuclearLevelManager: nuclide (35,90) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (92,228) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (89,222) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (59,150) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (45,118) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (60,160) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (90,225) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (44,114) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (45,116) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (46,121) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (34,85) does not have a gamma levels file
  G4NuclearLevelManager: nuclide (35,86) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (37,95) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (56,149) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (41,107) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (34,88) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (44,115) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (91,232) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (55,148) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (47,122) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (52,137) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (35,88) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (43,115) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (41,98) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (51,135) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (53,141) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (89,233) does not have a gamma levels file
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=23s Real=24s Sys=0.19s
+  User=23s Real=23s Sys=0.18s
 #
 # deuteron at 1 GeV/nucleon on H 
 #
@@ -574,7 +572,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=5.65s Real=5.73s Sys=0.04s
+  User=6.58s Real=6.67s Sys=0.08s
 #
 #
 # deuteron at 200 MeV in U
@@ -616,11 +614,10 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     Total memory consumed for geometry optimisation:   0 kByte
     Total CPU time elapsed for geometry optimisation: 0 seconds
 Start Run processing.
- G4NuclearLevelManager: nuclide (44,114) does not have a gamma levels file
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.85s Real=0.87s Sys=0.01s
+  User=1.3s Real=1.3s Sys=0.02s
 #
 # deuteron at 200 MeV/nucleon on H 
 #
@@ -664,7 +661,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.01s Real=0.01s Sys=0s
+  User=0.03s Real=0.03s Sys=0s
 #
 # deuteron at 200 MeV/nucleon on Silicon 
 #
@@ -708,7 +705,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.12s Real=0.12s Sys=0s
+  User=0.2s Real=0.2s Sys=0s
 #
 #  .....end deuteron.............
 #
@@ -751,11 +748,11 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     Total memory consumed for geometry optimisation:   0 kByte
     Total CPU time elapsed for geometry optimisation: 0 seconds
 Start Run processing.
- G4NuclearLevelManager: nuclide (52,138) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (47,124) does not have a gamma levels file
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=7.3s Real=7.5s Sys=0.07s
+  User=3.4s Real=3.5s Sys=0.06s
 #
 # alpha at 1 GeV/nucleon on H 
 #
@@ -799,7 +796,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.01s Real=0.01s Sys=0s
+  User=0.03s Real=0.03s Sys=0s
 #
 # alpha at 1 GeV/nucleon on Silicon 
 #
@@ -843,7 +840,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=2.5s Real=2.5s Sys=0.01s
+  User=2.5s Real=2.5s Sys=0s
 #
 # deuteron at 200 MeV/nucleon in U
 #
@@ -931,7 +928,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.02s Real=0.02s Sys=0s
+  User=0.04s Real=0.04s Sys=0s
 #
 # alpha at 200 MeV/nucleon on Silicon 
 #
@@ -975,7 +972,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.03s Real=0.04s Sys=0.01s
+  User=0.29s Real=0.31s Sys=0.01s
 #
 #  .....end alpha............
 #
@@ -1019,41 +1016,44 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     Total memory consumed for geometry optimisation:   0 kByte
     Total CPU time elapsed for geometry optimisation: 0 seconds
 Start Run processing.
- G4NuclearLevelManager: nuclide (44,113) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (36,95) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (11,27) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (49,129) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (33,85) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (89,226) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (91,237) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (43,116) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (53,138) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (47,125) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (86,224) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (89,229) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (60,155) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (35,93) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (46,120) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (89,221) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (87,218) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (37,97) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (86,225) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (54,145) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (44,121) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (46,118) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (48,126) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (45,117) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (19,48) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (35,88) does not have a gamma levels file
  G4NuclearLevelManager: nuclide (91,230) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (45,116) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (46,119) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (34,86) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (27,71) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (47,124) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (85,214) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (55,144) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (57,150) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (87,218) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (47,123) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (47,121) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (57,149) does not have a gamma levels file
  G4NuclearLevelManager: nuclide (42,110) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (46,123) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (47,122) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (46,120) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (28,75) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (40,106) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (53,139) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (24,58) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (44,116) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (35,90) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (36,94) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (48,125) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (15,41) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (93,236) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (53,140) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (44,115) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (33,85) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (22,59) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (64,169) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (36,96) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (35,89) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (55,136) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (91,238) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (41,107) does not have a gamma levels file
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=57s Real=58s Sys=0.38s
+  User=56s Real=58s Sys=0.73s
 #
 # C(12,6)++ at 1 GeV/nucleon on H 
 #
@@ -1098,7 +1098,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.23s Real=0.29s Sys=0.06s
+  User=0.02s Real=0.02s Sys=0s
 #
 # C(12,6)++ at 1 GeV/nucleon on Silicon 
 #
@@ -1143,7 +1143,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=15s Real=17s Sys=1.7s
+  User=13.18s Real=14.41s Sys=1.22s
 #
 # C(12,6)++ at 1 GeV/nucleon on Water 
 #
@@ -1157,59 +1157,59 @@ SimpleBox is now made of H2O
 conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
       sampling secondary e+e- according Bethe-Heitler model
       tables are built for  gamma
-      Lambda tables from 1 MeV to 1e+02 GeV in 100 bins.
+      Lambda tables from 1.0219981 MeV to 100 GeV in 100 bins.
 
 compt:  Total cross sections has a good parametrisation from 10 KeV to (100/Z) GeV
       Sampling according Klein-Nishina model
       tables are built for  gamma
-      Lambda tables from 1e+02 eV  to 1e+02 GeV in 90 bins.
+      Lambda tables from 100 eV  to 100 GeV in 90 bins.
 
 phot:  Total cross sections from Sandia parametrisation. 
       Sampling according PhotoElectric model
 
 msc:  Model variant of multiple scattering for e-
-      Lambda tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
       LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 eIoni:   tables are built for  e-
-      dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
-      Lambda tables from threshold to 1e+02 TeV in 120 bins.
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
       Delta cross sections and sampling from MollerBhabha model
       Good description from 1 KeV to 100 GeV.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 eBrem:   tables are built for  e-
-      dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
-      Lambda tables from threshold to 1e+02 TeV in 120 bins.
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
       Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
 
 eIoni:   tables are built for  e+
-      dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
-      Lambda tables from threshold to 1e+02 TeV in 120 bins.
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
       Delta cross sections and sampling from MollerBhabha model
       Good description from 1 KeV to 100 GeV.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 eBrem:   tables are built for  e+
-      dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
-      Lambda tables from threshold to 1e+02 TeV in 120 bins.
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
       Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
 
 annihil:       Sampling according eplus2gg model
       tables are built for  e+
-      Lambda tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
 
 msc:  Model variant of multiple scattering for proton
-      Lambda tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
       LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 hIoni:   tables are built for  proton
-      dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
-      Lambda tables from threshold to 1e+02 TeV in 120 bins.
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
       Parametrisation from Bragg for protons below.
@@ -1220,70 +1220,70 @@ msc:  Model variant of multiple scattering for GenericIon
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 hIoni:   tables are built for  anti_proton
-      dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
-      Lambda tables from threshold to 1e+02 TeV in 120 bins.
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
       Parametrisation from Bragg for protons below.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 msc:  Model variant of multiple scattering for mu+
-      Lambda tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
       LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 muIoni:   tables are built for  mu+
-      dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
-      Lambda tables from threshold to 1e+02 TeV in 120 bins.
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 muBrems:   tables are built for  mu+
-      dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
-      Lambda tables from threshold to 1e+02 TeV in 120 bins.
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
       Parametrised model 
 
 muPairProd:   tables are built for  mu+
-      dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
-      Lambda tables from threshold to 1e+02 TeV in 120 bins.
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
       Parametrised model 
 
 muIoni:   tables are built for  mu-
-      dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
-      Lambda tables from threshold to 1e+02 TeV in 120 bins.
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 muBrems:   tables are built for  mu-
-      dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
-      Lambda tables from threshold to 1e+02 TeV in 120 bins.
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
       Parametrised model 
 
 muPairProd:   tables are built for  mu-
-      dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
-      Lambda tables from threshold to 1e+02 TeV in 120 bins.
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
       Parametrised model 
 
 hIoni:   tables are built for  pi+
-      dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
-      Lambda tables from threshold to 1e+02 TeV in 120 bins.
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
       Scaling relation is used from proton dE/dx and range.
-      Delta cross sections and sampling from BetheBloch model for scaled energy > 0.3 MeV
+      Delta cross sections and sampling from BetheBloch model for scaled energy > 0.29750425 MeV
       Parametrisation from Bragg for protons below.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 msc:  Model variant of multiple scattering for pi-
-      Lambda tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
       LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 hIoni:   tables are built for  pi-
-      dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
-      Lambda tables from threshold to 1e+02 TeV in 120 bins.
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
       Scaling relation is used from proton dE/dx and range.
-      Delta cross sections and sampling from BetheBloch model for scaled energy > 0.3 MeV
+      Delta cross sections and sampling from BetheBloch model for scaled energy > 0.29750425 MeV
       Parametrisation from Bragg for protons below.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
@@ -1296,22 +1296,22 @@ Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
 Index : 0     used in the geometry : No      recalculation needed : No 
  Material : Uranium
  Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.9e+295 J      e- 2.9e+295 J      e+ 2.9e+295 J  
+ Energy thresholds :  gamma 2.8802232e+295 J      e- 2.8802232e+295 J      e+ 2.8802232e+295 J  
 
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : H
  Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 9.9e+02 eV     e- 7.1e+02 keV    e+ 6.8e+02 keV
+ Energy thresholds :  gamma 990 eV     e- 708.90956 keV    e+ 683.20614 keV
 
 Index : 2     used in the geometry : No      recalculation needed : No 
  Material : Silicon
  Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.9e+295 J      e- 1 GeV    e+ 9.6e+02 MeV
+ Energy thresholds :  gamma 2.8802232e+295 J      e- 1.0114457 GeV    e+ 962.84668 MeV
 
 Index : 3     used in the geometry : Yes     recalculation needed : No 
  Material : Water
  Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 8.3e+02 keV    e- 3.2e+02 MeV    e+ 3e+02 MeV
+ Energy thresholds :  gamma 834.15882 keV    e- 317.96904 MeV    e+ 302.69093 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -1326,7 +1326,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=10.37s Real=11.87s Sys=1.03s
+  User=9.43s Real=9.95s Sys=0.5s
 #
 #
 # C(12,6)++ at 200 MeV in U
@@ -1374,11 +1374,16 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     Total memory consumed for geometry optimisation:   0 kByte
     Total CPU time elapsed for geometry optimisation: 0 seconds
 Start Run processing.
- G4NuclearLevelManager: nuclide (14,35) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (65,173) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (52,138) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (58,150) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (91,237) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (90,235) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (48,126) does not have a gamma levels file
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=8.2s Real=8.3s Sys=0.04s
+  User=4.2s Real=4.3s Sys=0.09s
 #
 # C(12,6)++ at 200 MeV/nucleon on H 
 #
@@ -1478,7 +1483,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=5.3s Real=6s Sys=0.67s
+  User=8.04s Real=8.6s Sys=0.55s
 #
 #  .....end C(12,6)++............
 #
@@ -1492,71 +1497,71 @@ Run Summary
 SimpleBox is now made of Pb
 /run/beamOn 1
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
-The cut in range [1e+03 (mm)]   is too big   for material  idx=3
-The cut in energy is set1.8e+305GeV 
+The cut in range [1000 (mm)]   is too big   for material  idx=3
+The cut in energy is set1.7976931e+305GeV 
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for e-
-The cut in range [1e+03 (mm)]   is too big   for material  idx=3
-The cut in energy is set1.8e+305GeV 
+The cut in range [1000 (mm)]   is too big   for material  idx=3
+The cut in energy is set1.7976931e+305GeV 
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for e+
-The cut in range [1e+03 (mm)]   is too big   for material  idx=3
-The cut in energy is set1.8e+305GeV 
+The cut in range [1000 (mm)]   is too big   for material  idx=3
+The cut in energy is set1.7976931e+305GeV 
 
 conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
       sampling secondary e+e- according Bethe-Heitler model
       tables are built for  gamma
-      Lambda tables from 1 MeV to 1e+02 GeV in 100 bins.
+      Lambda tables from 1.0219981 MeV to 100 GeV in 100 bins.
 
 compt:  Total cross sections has a good parametrisation from 10 KeV to (100/Z) GeV
       Sampling according Klein-Nishina model
       tables are built for  gamma
-      Lambda tables from 1e+02 eV  to 1e+02 GeV in 90 bins.
+      Lambda tables from 100 eV  to 100 GeV in 90 bins.
 
 phot:  Total cross sections from Sandia parametrisation. 
       Sampling according PhotoElectric model
 
 msc:  Model variant of multiple scattering for e-
-      Lambda tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
       LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 eIoni:   tables are built for  e-
-      dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
-      Lambda tables from threshold to 1e+02 TeV in 120 bins.
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
       Delta cross sections and sampling from MollerBhabha model
       Good description from 1 KeV to 100 GeV.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 eBrem:   tables are built for  e-
-      dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
-      Lambda tables from threshold to 1e+02 TeV in 120 bins.
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
       Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
 
 eIoni:   tables are built for  e+
-      dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
-      Lambda tables from threshold to 1e+02 TeV in 120 bins.
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
       Delta cross sections and sampling from MollerBhabha model
       Good description from 1 KeV to 100 GeV.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 eBrem:   tables are built for  e+
-      dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
-      Lambda tables from threshold to 1e+02 TeV in 120 bins.
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
       Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
 
 annihil:       Sampling according eplus2gg model
       tables are built for  e+
-      Lambda tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
 
 msc:  Model variant of multiple scattering for proton
-      Lambda tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
       LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 hIoni:   tables are built for  proton
-      dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
-      Lambda tables from threshold to 1e+02 TeV in 120 bins.
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
       Parametrisation from Bragg for protons below.
@@ -1567,70 +1572,70 @@ msc:  Model variant of multiple scattering for GenericIon
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 hIoni:   tables are built for  anti_proton
-      dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
-      Lambda tables from threshold to 1e+02 TeV in 120 bins.
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
       Parametrisation from Bragg for protons below.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 msc:  Model variant of multiple scattering for mu+
-      Lambda tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
       LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 muIoni:   tables are built for  mu+
-      dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
-      Lambda tables from threshold to 1e+02 TeV in 120 bins.
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 muBrems:   tables are built for  mu+
-      dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
-      Lambda tables from threshold to 1e+02 TeV in 120 bins.
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
       Parametrised model 
 
 muPairProd:   tables are built for  mu+
-      dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
-      Lambda tables from threshold to 1e+02 TeV in 120 bins.
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
       Parametrised model 
 
 muIoni:   tables are built for  mu-
-      dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
-      Lambda tables from threshold to 1e+02 TeV in 120 bins.
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 muBrems:   tables are built for  mu-
-      dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
-      Lambda tables from threshold to 1e+02 TeV in 120 bins.
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
       Parametrised model 
 
 muPairProd:   tables are built for  mu-
-      dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
-      Lambda tables from threshold to 1e+02 TeV in 120 bins.
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
       Parametrised model 
 
 hIoni:   tables are built for  pi+
-      dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
-      Lambda tables from threshold to 1e+02 TeV in 120 bins.
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
       Scaling relation is used from proton dE/dx and range.
-      Delta cross sections and sampling from BetheBloch model for scaled energy > 0.3 MeV
+      Delta cross sections and sampling from BetheBloch model for scaled energy > 0.29750425 MeV
       Parametrisation from Bragg for protons below.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 msc:  Model variant of multiple scattering for pi-
-      Lambda tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
       LateralDisplacementFlag=  1   Skin= 0
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 hIoni:   tables are built for  pi-
-      dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
-      Lambda tables from threshold to 1e+02 TeV in 120 bins.
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
       Scaling relation is used from proton dE/dx and range.
-      Delta cross sections and sampling from BetheBloch model for scaled energy > 0.3 MeV
+      Delta cross sections and sampling from BetheBloch model for scaled energy > 0.29750425 MeV
       Parametrisation from Bragg for protons below.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
@@ -1643,27 +1648,27 @@ Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
 Index : 0     used in the geometry : No      recalculation needed : No 
  Material : Uranium
  Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.9e+295 J      e- 2.9e+295 J      e+ 2.9e+295 J  
+ Energy thresholds :  gamma 2.8802232e+295 J      e- 2.8802232e+295 J      e+ 2.8802232e+295 J  
 
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : H
  Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 9.9e+02 eV     e- 7.1e+02 keV    e+ 6.8e+02 keV
+ Energy thresholds :  gamma 990 eV     e- 708.90956 keV    e+ 683.20614 keV
 
 Index : 2     used in the geometry : No      recalculation needed : No 
  Material : Silicon
  Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.9e+295 J      e- 1 GeV    e+ 9.6e+02 MeV
+ Energy thresholds :  gamma 2.8802232e+295 J      e- 1.0114457 GeV    e+ 962.84668 MeV
 
 Index : 3     used in the geometry : No      recalculation needed : No 
  Material : Water
  Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 8.3e+02 keV    e- 3.2e+02 MeV    e+ 3e+02 MeV
+ Energy thresholds :  gamma 834.15882 keV    e- 317.96904 MeV    e+ 302.69093 MeV
 
 Index : 4     used in the geometry : Yes     recalculation needed : No 
  Material : Lead
  Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.9e+295 J      e- 2.9e+295 J      e+ 2.9e+295 J  
+ Energy thresholds :  gamma 2.8802232e+295 J      e- 2.8802232e+295 J      e+ 2.8802232e+295 J  
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -1678,7 +1683,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=3s Real=3.2s Sys=0.13s
+  User=18s Real=18s Sys=0.17s
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
 UserRunAction deleted.

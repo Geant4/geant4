@@ -5,7 +5,7 @@
 +-------------------------------------------------------+
 
 *************************************************************
- Geant4 version Name: global-V08-02-01    (23-February-2007)
+ Geant4 version Name: geant4-08-03-cand-00    (5-May-2007)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -206,11 +206,11 @@ G4GlobalFastSimulationManager::GetFlavoredWorldForThis(...): DEPRECATING, will b
 ******************************************
 Internal Real Elapsed Time is: 0.21
 Internal System Elapsed Time: 0.01
-Internal GetUserElapsed Time: 0.18
+Internal GetUserElapsed Time: 0.19
 ******************************************
  ------ Tst34EventAction::End of event nr. 0  -----
-  5332 hits are stored in Tst34HitsCollection 
- #### Tst34EventAction::Test: Total energy deposited in the calorimeter: 19.9691 (GeV)
+  5320 hits are stored in Tst34HitsCollection 
+ #### Tst34EventAction::Test: Total energy deposited in the calorimeter: 19.9527 (GeV)
 G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
 G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
 ::Initializing the sensitive detector
@@ -224,8 +224,8 @@ Internal System Elapsed Time: 0
 Internal GetUserElapsed Time: 0.18
 ******************************************
  ------ Tst34EventAction::End of event nr. 1  -----
-  5323 hits are stored in Tst34HitsCollection 
- #### Tst34EventAction::Test: Total energy deposited in the calorimeter: 19.9832 (GeV)
+  5288 hits are stored in Tst34HitsCollection 
+ #### Tst34EventAction::Test: Total energy deposited in the calorimeter: 19.9366 (GeV)
 ::Initializing the sensitive detector
  ------ Start Tst34EventAction ----- 
  Start generating event Nr 2
@@ -237,34 +237,34 @@ Internal System Elapsed Time: 0
 Internal GetUserElapsed Time: 0.18
 ******************************************
  ------ Tst34EventAction::End of event nr. 2  -----
-  5311 hits are stored in Tst34HitsCollection 
- #### Tst34EventAction::Test: Total energy deposited in the calorimeter: 19.9717 (GeV)
+  5302 hits are stored in Tst34HitsCollection 
+ #### Tst34EventAction::Test: Total energy deposited in the calorimeter: 19.9375 (GeV)
 ::Initializing the sensitive detector
  ------ Start Tst34EventAction ----- 
  Start generating event Nr 3
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.18
+Internal Real Elapsed Time is: 0.17
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.18
+Internal GetUserElapsed Time: 0.17
 ******************************************
  ------ Tst34EventAction::End of event nr. 3  -----
-  5332 hits are stored in Tst34HitsCollection 
- #### Tst34EventAction::Test: Total energy deposited in the calorimeter: 19.971378 (GeV)
+  5336 hits are stored in Tst34HitsCollection 
+ #### Tst34EventAction::Test: Total energy deposited in the calorimeter: 19.9721 (GeV)
 ::Initializing the sensitive detector
  ------ Start Tst34EventAction ----- 
  Start generating event Nr 4
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.19
+Internal Real Elapsed Time is: 0.17
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.19
+Internal GetUserElapsed Time: 0.17
 ******************************************
  ------ Tst34EventAction::End of event nr. 4  -----
-  5331 hits are stored in Tst34HitsCollection 
- #### Tst34EventAction::Test: Total energy deposited in the calorimeter: 19.980681 (GeV)
+  5328 hits are stored in Tst34HitsCollection 
+ #### Tst34EventAction::Test: Total energy deposited in the calorimeter: 19.9614 (GeV)
 ::Initializing the sensitive detector
  ------ Start Tst34EventAction ----- 
  Start generating event Nr 5
@@ -276,64 +276,64 @@ Internal System Elapsed Time: 0
 Internal GetUserElapsed Time: 0.18
 ******************************************
  ------ Tst34EventAction::End of event nr. 5  -----
-  5316 hits are stored in Tst34HitsCollection 
- #### Tst34EventAction::Test: Total energy deposited in the calorimeter: 19.953155 (GeV)
+  5312 hits are stored in Tst34HitsCollection 
+ #### Tst34EventAction::Test: Total energy deposited in the calorimeter: 19.9679 (GeV)
 ::Initializing the sensitive detector
  ------ Start Tst34EventAction ----- 
  Start generating event Nr 6
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.2
+Internal Real Elapsed Time is: 0.18
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.2
+Internal GetUserElapsed Time: 0.18
 ******************************************
  ------ Tst34EventAction::End of event nr. 6  -----
-  5635 hits are stored in Tst34HitsCollection 
- #### Tst34EventAction::Test: Total energy deposited in the calorimeter: 19.963596 (GeV)
+  5293 hits are stored in Tst34HitsCollection 
+ #### Tst34EventAction::Test: Total energy deposited in the calorimeter: 19.9108 (GeV)
 ::Initializing the sensitive detector
  ------ Start Tst34EventAction ----- 
  Start generating event Nr 7
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.19
-Internal System Elapsed Time: 0.01
+Internal Real Elapsed Time is: 0.18
+Internal System Elapsed Time: 0
 Internal GetUserElapsed Time: 0.18
 ******************************************
  ------ Tst34EventAction::End of event nr. 7  -----
-  5297 hits are stored in Tst34HitsCollection 
- #### Tst34EventAction::Test: Total energy deposited in the calorimeter: 19.938694 (GeV)
+  5323 hits are stored in Tst34HitsCollection 
+ #### Tst34EventAction::Test: Total energy deposited in the calorimeter: 19.9632 (GeV)
 ::Initializing the sensitive detector
  ------ Start Tst34EventAction ----- 
  Start generating event Nr 8
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.18
+Internal Real Elapsed Time is: 0.19
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.18
+Internal GetUserElapsed Time: 0.19
 ******************************************
  ------ Tst34EventAction::End of event nr. 8  -----
-  5326 hits are stored in Tst34HitsCollection 
- #### Tst34EventAction::Test: Total energy deposited in the calorimeter: 19.933775 (GeV)
+  5334 hits are stored in Tst34HitsCollection 
+ #### Tst34EventAction::Test: Total energy deposited in the calorimeter: 19.9613 (GeV)
 ::Initializing the sensitive detector
  ------ Start Tst34EventAction ----- 
  Start generating event Nr 9
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.18
+Internal Real Elapsed Time is: 0.19
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.18
+Internal GetUserElapsed Time: 0.19
 ******************************************
  ------ Tst34EventAction::End of event nr. 9  -----
-  5257 hits are stored in Tst34HitsCollection 
- #### Tst34EventAction::Test: Total energy deposited in the calorimeter: 19.775868 (GeV)
+  5330 hits are stored in Tst34HitsCollection 
+ #### Tst34EventAction::Test: Total energy deposited in the calorimeter: 19.9791 (GeV)
 number of events = 10
 
 ******************************************
-Total Real Elapsed Time is: 14.38
-Total System Elapsed Time: 0.11
-Total GetUserElapsed Time: 13.91
+Total Real Elapsed Time is: 14.07
+Total System Elapsed Time: 0.1
+Total GetUserElapsed Time: 13.71
 ******************************************

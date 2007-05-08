@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V08-02-01    (23-February-2007)
+ Geant4 version Name: geant4-08-03-cand-00    (5-May-2007)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -14,6 +14,7 @@ You have successfully registered the following graphics systems.
 Current available graphics systems are:
   ASCIITree (ATree)
   DAWNFILE (DAWNFILE)
+  GAGTree (GAGTree)
   G4HepRep (HepRepXML)
   G4HepRepFile (HepRepFile)
   RayTracer (RayTracer)
@@ -179,1039 +180,999 @@ hIoni:   tables are built for  pi-
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
     0      0 fm      0 fm      0 fm    500 keV     0 eV      0 fm      0 fm         Tank    initStep
 
- Exiting from G4Cerenkov::DoIt -- NumberOfSecondaries = 4
+ Exiting from G4Cerenkov::DoIt -- NumberOfSecondaries = 38
 
- Exiting from G4Scintillation::DoIt -- NumberOfSecondaries = 3
-    1   88.9 um  -12.1 um   5.89 um    474 keV  26.5 keV  90.8 um   90.8 um         Tank         msc
-
-*********************************************************************************************************
-* G4Track Information:   Particle = opticalphoton,   Track ID = 8,   Parent ID = 1
-*********************************************************************************************************
-
-Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   80.5 um    -11 um   5.33 um   3.52 eV      0 eV      0 fm      0 fm         Tank    initStep
- Photon at Boundary! 
- Old Momentum Direction: (0.0332378,-0.92489,0.37878)
- Old Polarization:       (0.306705,0.370143,0.876884)
- New Momentum Direction: (0.0451289,-0.856426,0.514293)
- New Polarization:       (0.152576,-0.502868,-0.85079)
- *** FresnelRefraction *** 
-    1     18 cm     -5 m    2.05 m    3.52 eV      0 eV   5.41 m    5.41 m          Tank  Transportation
-    2   44.3 cm    -10 m    5.05 m    3.52 eV      0 eV   5.84 m    11.2 m    OutOfWorld  Transportation
-
-*********************************************************************************************************
-* G4Track Information:   Particle = opticalphoton,   Track ID = 7,   Parent ID = 1
-*********************************************************************************************************
-
-Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0     79 um  -10.8 um   5.23 um   3.71 eV      0 eV      0 fm      0 fm         Tank    initStep
- Photon at Boundary! 
- Old Momentum Direction: (-0.085502587,0.62291985,-0.77759898)
- Old Polarization:       (-0.38661145,-0.74004795,-0.55032773)
- New Momentum Direction: (-0.11618,0.84641683,-0.51969295)
- New Polarization:       (-0.39447294,-0.51952109,-0.75795049)
- *** FresnelRefraction *** 
-    1    -55 cm   4.01 m      -5 m    3.71 eV      0 eV   6.43 m    6.43 m          Tank  Transportation
-    2  -1.37 m      10 m   -8.68 m    3.71 eV      0 eV   7.08 m    13.5 m    OutOfWorld  Transportation
-
-*********************************************************************************************************
-* G4Track Information:   Particle = opticalphoton,   Track ID = 6,   Parent ID = 1
-*********************************************************************************************************
-
-Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   77.5 um  -10.6 um   5.13 um   3.56 eV      0 eV      0 fm      0 fm         Tank    initStep
- Photon at Boundary! 
- Old Momentum Direction: (0.98577531,-0.16479937,-0.032988071)
- Old Polarization:       (0.12444753,0.84764477,-0.51576269)
- New Momentum Direction: (0.97360306,-0.22380807,-0.044799907)
- New Polarization:       (0.16915165,0.83927263,-0.5167293)
- *** FresnelRefraction *** 
-    1      5 m   -83.6 cm  -16.7 cm   3.56 eV      0 eV   5.07 m    5.07 m          Tank  Transportation
-    2     10 m   -1.99 m   -39.7 cm   3.56 eV      0 eV   5.14 m    10.2 m    OutOfWorld  Transportation
-
-*********************************************************************************************************
-* G4Track Information:   Particle = opticalphoton,   Track ID = 5,   Parent ID = 1
-*********************************************************************************************************
-
-Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   81.1 um      0 fm      0 fm   2.92 eV      0 eV      0 fm      0 fm         Tank    initStep
- Photon at Boundary! 
- Old Momentum Direction: (0.85606959,-0.076741873,-0.51113162)
- Old Polarization:       (-0.51686057,-0.12710659,-0.84658081)
- New Momentum Direction: (0.71441919,-0.10389198,-0.6919622)
- New Polarization:       (0.69971796,0.10607477,0.70650047)
- *** FresnelRefraction *** 
-    1      5 m   -44.8 cm  -2.99 m    2.92 eV      0 eV   5.84 m    5.84 m          Tank  Transportation
-    2     10 m   -1.18 m   -7.83 m    2.92 eV      0 eV      7 m    12.8 m    OutOfWorld  Transportation
-
-*********************************************************************************************************
-* G4Track Information:   Particle = opticalphoton,   Track ID = 4,   Parent ID = 1
-*********************************************************************************************************
-
-Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   56.3 um      0 fm      0 fm   2.08 eV      0 eV      0 fm      0 fm         Tank    initStep
-
-** Photon absorbed! **
-    1   1.86 m     -84 cm  -69.8 cm   2.08 eV      0 eV   2.16 m    2.16 m          Tank  OpAbsorption
-
-*********************************************************************************************************
-* G4Track Information:   Particle = opticalphoton,   Track ID = 3,   Parent ID = 1
-*********************************************************************************************************
-
-Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   67.2 um      0 fm      0 fm   3.69 eV      0 eV      0 fm      0 fm         Tank    initStep
- Photon at Boundary! 
- Old Momentum Direction: (0.8529732,-0.33722403,-0.3983926)
- Old Polarization:       (-0.52195471,-0.55108817,-0.65104924)
- New Momentum Direction: (0.70502805,-0.45818601,-0.54129569)
- New Polarization:       (0.70917942,0.4555039,0.53812708)
- *** FresnelRefraction *** 
-    1      5 m   -1.98 m   -2.34 m    3.69 eV      0 eV   5.86 m    5.86 m          Tank  Transportation
-    2     10 m   -5.23 m   -6.17 m    3.69 eV      0 eV   7.09 m      13 m    OutOfWorld  Transportation
-
-*********************************************************************************************************
-* G4Track Information:   Particle = opticalphoton,   Track ID = 2,   Parent ID = 1
-*********************************************************************************************************
-
-Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   3.18 um      0 fm      0 fm   4.13 eV      0 eV      0 fm      0 fm         Tank    initStep
- Photon at Boundary! 
- Old Momentum Direction: (0.85167843,-0.11413412,0.51148534)
- Old Polarization:       (-0.52406474,-0.1854839,0.83123515)
- New Momentum Direction: (0.70103303,-0.15530969,0.6960112)
- New Polarization:       (0.71312881,0.15267539,-0.68420576)
- *** FresnelRefraction *** 
-    1      5 m     -67 cm      3 m    4.13 eV      0 eV   5.87 m    5.87 m          Tank  Transportation
-    2     10 m   -1.78 m    7.97 m    4.13 eV      0 eV   7.13 m      13 m    OutOfWorld  Transportation
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e+,   Track ID = 1,   Parent ID = 0
-*********************************************************************************************************
-
-Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    1   88.9 um  -12.1 um   5.89 um    474 keV     0 eV      0 fm   90.8 um         Tank    initStep
-
- Exiting from G4Cerenkov::DoIt -- NumberOfSecondaries = 20
-
- Exiting from G4Scintillation::DoIt -- NumberOfSecondaries = 19
-    2   1.22 mm  -24.1 um    274 um    200 keV   273 keV  1.43 mm   1.52 mm         Tank       eIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = opticalphoton,   Track ID = 47,   Parent ID = 1
-*********************************************************************************************************
-
-Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0    723 um  -18.8 um    156 um   2.53 eV      0 eV      0 fm      0 fm         Tank    initStep
-
-** Photon absorbed! **
-    1   2.06 m   -1.77 m    5.55 cm   2.53 eV      0 eV   2.72 m    2.72 m          Tank  OpAbsorption
-
-*********************************************************************************************************
-* G4Track Information:   Particle = opticalphoton,   Track ID = 46,   Parent ID = 1
-*********************************************************************************************************
-
-Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0    114 um  -12.4 um   11.9 um   3.64 eV      0 eV      0 fm      0 fm         Tank    initStep
- Photon at Boundary! 
- Old Momentum Direction: (0.29544454,0.12428277,0.94724143)
- Old Polarization:       (-0.95207142,0.12049762,0.28114113)
- New Momentum Direction: (0.40135032,0.16883348,0.90022952)
- New Polarization:       (-0.91424666,0.13331221,0.38259757)
- *** FresnelRefraction *** 
-    1   1.56 m    65.6 cm      5 m    3.64 eV      0 eV   5.28 m    5.28 m          Tank  Transportation
-    2   3.79 m    1.59 m      10 m    3.64 eV      0 eV   5.55 m    10.8 m    OutOfWorld  Transportation
-
-*********************************************************************************************************
-* G4Track Information:   Particle = opticalphoton,   Track ID = 45,   Parent ID = 1
-*********************************************************************************************************
-
-Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0    587 um  -17.4 um    124 um   2.34 eV      0 eV      0 fm      0 fm         Tank    initStep
- Photon at Boundary! 
- Old Momentum Direction: (-0.87767911,-0.44259019,-0.18382955)
- Old Polarization:       (0.18631926,0.038285648,-0.98174301)
- New Momentum Direction: (-0.7635244,-0.59638222,-0.24770696)
- New Polarization:       (-0.2554749,0.63123719,-0.73230608)
- *** FresnelRefraction *** 
-    1     -5 m   -2.52 m   -1.05 m    2.34 eV      0 eV    5.7 m     5.7 m          Tank  Transportation
-    2    -10 m   -6.43 m   -2.67 m    2.34 eV      0 eV   6.55 m    12.2 m    OutOfWorld  Transportation
-
-*********************************************************************************************************
-* G4Track Information:   Particle = opticalphoton,   Track ID = 44,   Parent ID = 1
-*********************************************************************************************************
-
-Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0    371 um  -15.1 um   72.8 um    2.1 eV      0 eV      0 fm      0 fm         Tank    initStep
-
-** Photon absorbed! **
-    1   59.6 cm     50 cm  -67.8 cm    2.1 eV      0 eV   1.03 m    1.03 m          Tank  OpAbsorption
-
-*********************************************************************************************************
-* G4Track Information:   Particle = opticalphoton,   Track ID = 43,   Parent ID = 1
-*********************************************************************************************************
-
-Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   1.19 mm  -23.7 um    266 um   2.07 eV      0 eV      0 fm      0 fm         Tank    initStep
-
-** Photon absorbed! **
-    1  -77.1 cm  -64.4 cm   2.36 m    2.07 eV      0 eV   2.56 m    2.56 m          Tank  OpAbsorption
-
-*********************************************************************************************************
-* G4Track Information:   Particle = opticalphoton,   Track ID = 42,   Parent ID = 1
-*********************************************************************************************************
-
-Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0    428 um  -15.7 um   86.5 um   3.11 eV      0 eV      0 fm      0 fm         Tank    initStep
- Photon at Boundary! 
- Old Momentum Direction: (0.25205395,0.95883479,0.13078475)
- Old Polarization:       (0.96691809,-0.24405889,-0.07419346)
- New Momentum Direction: (0.34154609,0.92300559,0.17722007)
- New Polarization:       (-0.47076319,0.33120676,-0.81773107)
- *** FresnelRefraction *** 
-    1   1.31 m       5 m    68.2 cm   3.11 eV      0 eV   5.21 m    5.21 m          Tank  Transportation
-    2   3.16 m      10 m    1.64 m    3.11 eV      0 eV   5.42 m    10.6 m    OutOfWorld  Transportation
-
-*********************************************************************************************************
-* G4Track Information:   Particle = opticalphoton,   Track ID = 41,   Parent ID = 1
-*********************************************************************************************************
-
-Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0    271 um    -14 um   49.1 um    2.3 eV      0 eV      0 fm      0 fm         Tank    initStep
- Photon at Boundary! 
- Old Momentum Direction: (-0.060989593,-0.60116717,-0.79679251)
- Old Polarization:       (-0.98880753,0.14528742,-0.033929862)
- New Momentum Direction: (-0.082156679,-0.80980863,-0.5809133)
- New Polarization:       (-0.98972331,0.13474626,-0.047866535)
- *** FresnelRefraction *** 
-    1  -38.2 cm  -3.77 m      -5 m     2.3 eV      0 eV   6.28 m    6.28 m          Tank  Transportation
-    2  -1.01 m     -10 m   -9.47 m     2.3 eV      0 eV   7.69 m      14 m    OutOfWorld  Transportation
-
-*********************************************************************************************************
-* G4Track Information:   Particle = opticalphoton,   Track ID = 40,   Parent ID = 1
-*********************************************************************************************************
-
-Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0    198 um  -13.3 um   31.9 um   2.68 eV      0 eV      0 fm      0 fm         Tank    initStep
- Photon at Boundary! 
- Old Momentum Direction: (-0.02984382,-0.99953087,0.0068840981)
- Old Polarization:       (-0.83956414,0.021328831,-0.54284172)
- New Momentum Direction: (-0.040337637,-0.99914278,0.0093047154)
- New Polarization:       (0.51671136,-0.028829433,-0.85567414)
- *** FresnelRefraction *** 
-    1  -14.9 cm     -5 m    3.45 cm   2.68 eV      0 eV      5 m       5 m          Tank  Transportation
-    2  -35.1 cm    -10 m     8.1 cm   2.68 eV      0 eV      5 m      10 m    OutOfWorld  Transportation
-
-*********************************************************************************************************
-* G4Track Information:   Particle = opticalphoton,   Track ID = 39,   Parent ID = 1
-*********************************************************************************************************
-
-Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0    467 um  -16.1 um   95.8 um    3.2 eV      0 eV      0 fm      0 fm         Tank    initStep
- Photon at Boundary! 
- Old Momentum Direction: (-0.36159578,-0.28588738,-0.88742149)
- Old Polarization:       (-0.39037413,0.91080021,-0.13435403)
- New Momentum Direction: (-0.49018909,-0.38755672,-0.78071406)
- New Polarization:       (-0.41060395,0.892771,-0.18537623)
- *** FresnelRefraction *** 
-    1  -2.04 m   -1.61 m      -5 m     3.2 eV      0 eV   5.63 m    5.63 m          Tank  Transportation
-    2  -5.18 m   -4.09 m     -10 m     3.2 eV      0 eV    6.4 m      12 m    OutOfWorld  Transportation
-
-*********************************************************************************************************
-* G4Track Information:   Particle = opticalphoton,   Track ID = 38,   Parent ID = 1
-*********************************************************************************************************
-
-Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0    151 um  -12.8 um   20.7 um   3.46 eV      0 eV      0 fm      0 fm         Tank    initStep
-Scattering Photon!
-Old Momentum Direction: (0.68915163,0.71678501,-0.106251)
-Old Polarization: (-0.59496616,0.47603083,-0.64761866)
-New Polarization: (0.16862062,0.44676661,-0.87861635)
-Polarization Change: (0.16862062,0.44676661,-0.87861635)
-New Momentum Direction: (-0.96981817,0.23447287,-0.066896874)
-Momentum Change: (-0.96981817,0.23447287,-0.066896874)
-    1   1.56 m    1.63 m   -24.1 cm   3.46 eV      0 eV   2.27 m    2.27 m          Tank  OpRayleigh
- Photon at Boundary! 
- Old Momentum Direction: (-0.96981817,0.23447287,-0.066896874)
- Old Polarization:       (0.16862062,0.44676661,-0.87861635)
- New Momentum Direction: (-0.96981817,-0.23447287,-0.066896874)
- New Polarization:       (-0.16862062,0.44676661,0.87861635)
- *** TotalInternalReflection *** 
-    2   2.29 cm      2 m   -34.8 cm   3.46 eV      0 eV   1.59 m    3.86 m          Tank  Transportation
-    3   2.29 cm      2 m   -34.8 cm   3.46 eV      0 eV      0 fm   3.86 m        Bubble  Transportation
- Photon at Boundary! 
- Old Momentum Direction: (-0.96981817,-0.23447287,-0.066896874)
- Old Polarization:       (-0.16862062,0.44676661,0.87861635)
- New Momentum Direction: (0.96981817,0.23447287,0.066896874)
- New Polarization:       (0.16862062,-0.44676661,-0.87861635)
- *** BackScattering *** 
-    4     -5 m    78.6 cm  -69.4 cm   3.46 eV      0 eV   5.18 m    9.04 m          Tank  Transportation
-    5     -5 m    78.6 cm  -69.4 cm   3.46 eV      0 eV      0 fm   9.04 m         World  Transportation
-Scattering Photon!
-Old Momentum Direction: (0.96981817,0.23447287,0.066896874)
-Old Polarization: (0.16862062,-0.44676661,-0.87861635)
-New Polarization: (-0.16321696,0.64450851,0.74697323)
-Polarization Change: (-0.16321696,0.64450851,0.74697323)
-New Momentum Direction: (0.042433178,0.76101144,-0.64734922)
-Momentum Change: (0.042433178,0.76101144,-0.64734922)
-    6  -4.83 cm   1.98 m   -35.2 cm   3.46 eV      0 eV   5.11 m    14.1 m          Tank  OpRayleigh
- Photon at Boundary! 
- Old Momentum Direction: (0.042433178,0.76101144,-0.64734922)
- Old Polarization:       (-0.16321696,0.64450851,0.74697323)
- New Momentum Direction: (0.057593788,0.47400709,-0.87863544)
- New Polarization:       (-0.13694243,0.87552815,0.46335432)
- *** FresnelRefraction *** 
-    7  -4.73 cm      2 m   -36.7 cm   3.46 eV      0 eV   2.26 cm   14.2 m          Tank  Transportation
- Photon at Boundary! 
- Old Momentum Direction: (0.057593788,0.47400709,-0.87863544)
- Old Polarization:       (-0.13694243,0.87552815,0.46335432)
- New Momentum Direction: (0.042433178,0.34923258,-0.9360748)
- New Polarization:       (-0.34724889,-0.8733532,-0.34157342)
- *** FresnelRefraction *** 
-    8  -3.86 cm   2.07 m     -50 cm   3.46 eV      0 eV   15.1 cm   14.3 m        Bubble  Transportation
-
-** Photon absorbed! **
-    9   12.1 cm   3.38 m   -4.02 m    3.46 eV      0 eV   3.76 m    18.1 m          Tank  OpAbsorption
-
-*********************************************************************************************************
-* G4Track Information:   Particle = opticalphoton,   Track ID = 37,   Parent ID = 1
-*********************************************************************************************************
-
-Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0    265 um    -14 um   47.6 um   3.72 eV      0 eV      0 fm      0 fm         Tank    initStep
- Photon at Boundary! 
- Old Momentum Direction: (0.98600474,-0.089697135,0.14053142)
- Old Polarization:       (0.066066183,0.98414324,0.16461272)
- New Momentum Direction: (0.97400291,-0.12188049,0.19095414)
- New Polarization:       (0.089911788,0.98168393,0.16796588)
- *** FresnelRefraction *** 
-    1      5 m   -45.5 cm   71.3 cm   3.72 eV      0 eV   5.07 m    5.07 m          Tank  Transportation
-    2     10 m   -1.08 m    1.69 m    3.72 eV      0 eV   5.13 m    10.2 m    OutOfWorld  Transportation
-
-*********************************************************************************************************
-* G4Track Information:   Particle = opticalphoton,   Track ID = 36,   Parent ID = 1
-*********************************************************************************************************
-
-Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0    635 um  -17.9 um    135 um   3.84 eV      0 eV      0 fm      0 fm         Tank    initStep
- Photon at Boundary! 
- Old Momentum Direction: (-0.64772122,0.11457374,-0.75321317)
- Old Polarization:       (-0.74897753,-0.27691308,0.60195665)
- New Momentum Direction: (-0.88048836,0.15574732,-0.4477533)
- New Polarization:       (0.34253116,-0.44395037,-0.82799787)
- *** FresnelRefraction *** 
-    1   -4.3 m    76.1 cm     -5 m    3.84 eV      0 eV   6.64 m    6.64 m          Tank  Transportation
-    2    -10 m    1.77 m    -7.9 m    3.84 eV      0 eV   6.47 m    13.1 m    OutOfWorld  Transportation
-
-*********************************************************************************************************
-* G4Track Information:   Particle = opticalphoton,   Track ID = 35,   Parent ID = 1
-*********************************************************************************************************
-
-Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   1.12 mm  -23.1 um    252 um   4.07 eV      0 eV      0 fm      0 fm         Tank    initStep
-
-** Photon absorbed! **
-    1   24.6 cm  -1.17 m    1.53 m    4.07 eV      0 eV   1.94 m    1.94 m          Tank  OpAbsorption
-
-*********************************************************************************************************
-* G4Track Information:   Particle = opticalphoton,   Track ID = 34,   Parent ID = 1
-*********************************************************************************************************
-
-Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0    1.1 mm  -22.9 um    247 um    3.4 eV      0 eV      0 fm      0 fm         Tank    initStep
-
-** Photon absorbed! **
-    1  -22.9 cm  -1.46 cm    -21 cm    3.4 eV      0 eV   31.2 cm   31.2 cm         Tank  OpAbsorption
-
-*********************************************************************************************************
-* G4Track Information:   Particle = opticalphoton,   Track ID = 33,   Parent ID = 1
-*********************************************************************************************************
-
-Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0    617 um  -17.7 um    131 um   3.38 eV      0 eV      0 fm      0 fm         Tank    initStep
- Photon at Boundary! 
- Old Momentum Direction: (0.48956411,0.73077698,0.47570157)
- Old Polarization:       (0.043280142,-0.56524226,0.82378882)
- New Momentum Direction: (0.66429789,0.37690065,0.64548758)
- New Polarization:       (-0.59518004,0.78913448,0.15174815)
- *** FresnelRefraction *** 
-    1   3.35 m       5 m    3.25 m    3.38 eV      0 eV   6.84 m    6.84 m          Tank  Transportation
-    2     10 m    8.77 m    9.72 m    3.38 eV      0 eV     10 m    16.9 m    OutOfWorld  Transportation
-
-*********************************************************************************************************
-* G4Track Information:   Particle = opticalphoton,   Track ID = 32,   Parent ID = 1
-*********************************************************************************************************
-
-Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0    952 um  -21.3 um    211 um   3.32 eV      0 eV      0 fm      0 fm         Tank    initStep
-
-** Photon absorbed! **
-    1  -1.25 m     6.2 cm  -4.95 m    3.32 eV      0 eV    5.1 m     5.1 m          Tank  OpAbsorption
-
-*********************************************************************************************************
-* G4Track Information:   Particle = opticalphoton,   Track ID = 31,   Parent ID = 1
-*********************************************************************************************************
-
-Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0    158 um  -12.8 um   22.4 um   3.55 eV      0 eV      0 fm      0 fm         Tank    initStep
-Scattering Photon!
-Old Momentum Direction: (-0.24746335,0.13333022,-0.9596796)
-Old Polarization: (0.18646019,0.97852534,0.087867804)
-New Polarization: (0.1680966,0.75787843,0.630368)
-Polarization Change: (0.1680966,0.75787843,0.630368)
-New Momentum Direction: (0.084286118,0.6260755,-0.77519373)
-Momentum Change: (0.084286118,0.6260755,-0.77519373)
-    1   -1.1 m    59.1 cm  -4.25 m    3.55 eV      0 eV   4.43 m    4.43 m          Tank  OpRayleigh
-Scattering Photon!
-Old Momentum Direction: (0.084286118,0.6260755,-0.77519373)
-Old Polarization: (0.1680966,0.75787843,0.630368)
-New Polarization: (0.61295246,0.7154838,0.33521966)
-Polarization Change: (0.61295246,0.7154838,0.33521966)
-New Momentum Direction: (0.69179417,-0.28100999,-0.66517232)
-Momentum Change: (0.69179417,-0.28100999,-0.66517232)
-    2  -1.06 m    84.2 cm  -4.56 m    3.55 eV      0 eV   40.1 cm   4.83 m          Tank  OpRayleigh
- Photon at Boundary! 
- Old Momentum Direction: (0.69179417,-0.28100999,-0.66517232)
- Old Polarization:       (0.61295246,0.7154838,0.33521966)
- New Momentum Direction: (0.69179417,-0.28100999,0.66517232)
- New Polarization:       (-0.61295246,-0.7154838,0.33521966)
- *** SpikeReflection *** 
-    3  -60.9 cm   65.8 cm     -5 m    3.55 eV      0 eV   65.6 cm   5.49 m          Tank  Transportation
-    4  -60.9 cm   65.8 cm     -5 m    3.55 eV      0 eV      0 fm   5.49 m         World  Transportation
-
-** Photon absorbed! **
-    5   3.07 m   -83.7 cm  -1.46 m    3.55 eV      0 eV   5.32 m    10.8 m          Tank  OpAbsorption
-
-*********************************************************************************************************
-* G4Track Information:   Particle = opticalphoton,   Track ID = 30,   Parent ID = 1
-*********************************************************************************************************
-
-Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0    600 um  -17.5 um    127 um   3.99 eV      0 eV      0 fm      0 fm         Tank    initStep
- Photon at Boundary! 
- Old Momentum Direction: (-0.92411402,0.33017083,0.19235516)
- Old Polarization:       (-0.13978553,-0.76060309,0.63398971)
- New Momentum Direction: (-0.85436828,0.44902292,0.26159753)
- New Polarization:       (-0.19208136,-0.74060848,0.64389738)
- *** FresnelRefraction *** 
-    1     -5 m    1.79 m    1.04 m    3.99 eV      0 eV   5.41 m    5.41 m          Tank  Transportation
-    2    -10 m    4.41 m    2.57 m    3.99 eV      0 eV   5.85 m    11.3 m    OutOfWorld  Transportation
-
-*********************************************************************************************************
-* G4Track Information:   Particle = opticalphoton,   Track ID = 29,   Parent ID = 1
-*********************************************************************************************************
-
-Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0    232 um  -13.6 um   39.7 um   3.03 eV      0 eV      0 fm      0 fm         Tank    initStep
- Photon at Boundary! 
- Old Momentum Direction: (0.88444991,-0.27627529,-0.37605894)
- Old Polarization:       (-0.068668508,0.72006334,-0.6905023)
- New Momentum Direction: (0.77491014,-0.37422323,-0.5093832)
- New Polarization:       (0.094839575,0.8656113,-0.49165286)
- *** FresnelRefraction *** 
-    1      5 m   -1.56 m   -2.13 m    3.03 eV      0 eV   5.65 m    5.65 m          Tank  Transportation
-    2     10 m   -3.98 m   -5.41 m    3.03 eV      0 eV   6.45 m    12.1 m    OutOfWorld  Transportation
-
-*********************************************************************************************************
-* G4Track Information:   Particle = opticalphoton,   Track ID = 28,   Parent ID = 1
-*********************************************************************************************************
-
-Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0    216 um  -71.9 um  -42.4 um   2.41 eV      0 eV      0 fm      0 fm         Tank    initStep
-
-** Photon absorbed! **
-    1    3.1 m   -3.76 m   -3.98 m    2.41 eV      0 eV   6.29 m    6.29 m          Tank  OpAbsorption
-
-*********************************************************************************************************
-* G4Track Information:   Particle = opticalphoton,   Track ID = 27,   Parent ID = 1
-*********************************************************************************************************
-
-Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0    491 um   -201 um   -147 um   3.65 eV      0 eV      0 fm      0 fm         Tank    initStep
- Photon at Boundary! 
- Old Momentum Direction: (0.64111016,-0.76736926,-0.011053525)
- Old Polarization:       (-0.59720075,-0.50788276,0.62081105)
- New Momentum Direction: (0.87096364,-0.49111795,-0.015016481)
- New Polarization:       (-0.38825015,-0.70662242,0.59156283)
- *** FresnelRefraction *** 
-    1   4.18 m      -5 m   -7.22 cm   3.65 eV      0 eV   6.52 m    6.52 m          Tank  Transportation
-    2     10 m   -8.28 m   -17.3 cm   3.65 eV      0 eV   6.68 m    13.2 m    OutOfWorld  Transportation
-
-*********************************************************************************************************
-* G4Track Information:   Particle = opticalphoton,   Track ID = 26,   Parent ID = 1
-*********************************************************************************************************
-
-Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0    153 um  -42.1 um  -18.3 um   4.02 eV      0 eV      0 fm      0 fm         Tank    initStep
- Photon at Boundary! 
- Old Momentum Direction: (0.77687566,0.022656685,-0.62924628)
- Old Polarization:       (-0.3674921,0.82780093,-0.42390468)
- New Momentum Direction: (0.516344,0.030814955,-0.85582669)
- New Polarization:       (0.52005445,0.78269845,0.34194518)
- *** FresnelRefraction *** 
-    1      5 m    14.6 cm  -4.05 m    4.02 eV      0 eV   6.44 m    6.44 m          Tank  Transportation
-    2   8.59 m      36 cm    -10 m    4.02 eV      0 eV   6.95 m    13.4 m    OutOfWorld  Transportation
-
-*********************************************************************************************************
-* G4Track Information:   Particle = opticalphoton,   Track ID = 25,   Parent ID = 1
-*********************************************************************************************************
-
-Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0    601 um   -253 um   -189 um   2.38 eV      0 eV      0 fm      0 fm         Tank    initStep
- Photon at Boundary! 
- Old Momentum Direction: (0.84479838,0.06823466,-0.53071625)
- Old Polarization:       (-0.24653166,0.92992708,-0.27286952)
- New Momentum Direction: (0.69265115,0.091977579,-0.71538417)
- New Polarization:       (0.34003337,0.83305993,0.43633526)
- *** FresnelRefraction *** 
-    1      5 m    40.4 cm  -3.14 m    2.38 eV      0 eV   5.92 m    5.92 m          Tank  Transportation
-    2     10 m    1.07 m    -8.3 m    2.38 eV      0 eV   7.22 m    13.1 m    OutOfWorld  Transportation
-
-*********************************************************************************************************
-* G4Track Information:   Particle = opticalphoton,   Track ID = 24,   Parent ID = 1
-*********************************************************************************************************
-
-Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0    244 um  -84.9 um  -52.9 um   3.32 eV      0 eV      0 fm      0 fm         Tank    initStep
- Photon at Boundary! 
- Old Momentum Direction: (0.77848671,-0.60927151,0.15082)
- Old Polarization:       (-0.36406269,-0.24257846,0.8992297)
- New Momentum Direction: (0.52444813,-0.82649634,0.20459216)
- New Polarization:       (0.51318185,0.49857361,0.69861917)
- *** FresnelRefraction *** 
-    1      5 m   -3.91 m    96.9 cm   3.32 eV      0 eV   6.42 m    6.42 m          Tank  Transportation
-    2   8.86 m     -10 m    2.48 m    3.32 eV      0 eV   7.36 m    13.8 m    OutOfWorld  Transportation
-
-*********************************************************************************************************
-* G4Track Information:   Particle = opticalphoton,   Track ID = 23,   Parent ID = 1
-*********************************************************************************************************
-
-Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0    224 um  -75.8 um  -45.5 um   3.44 eV      0 eV      0 fm      0 fm         Tank    initStep
- Photon at Boundary! 
- Old Momentum Direction: (0.69162161,-0.092838066,-0.71626855)
- Old Polarization:       (-0.51192562,0.63656405,-0.57681745)
- New Momentum Direction: (0.93864688,-0.12599687,-0.32104023)
- New Polarization:       (-0.20306012,0.55051022,-0.80975619)
- *** FresnelRefraction *** 
-    1   4.83 m   -64.8 cm     -5 m    3.44 eV      0 eV   6.98 m    6.98 m          Tank  Transportation
-    2     10 m   -1.34 m   -6.77 m    3.44 eV      0 eV   5.51 m    12.5 m    OutOfWorld  Transportation
-
-*********************************************************************************************************
-* G4Track Information:   Particle = opticalphoton,   Track ID = 22,   Parent ID = 1
-*********************************************************************************************************
-
-Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0    565 um   -236 um   -175 um   3.66 eV      0 eV      0 fm      0 fm         Tank    initStep
- Photon at Boundary! 
- Old Momentum Direction: (0.94851754,0.11518483,-0.29503716)
- Old Polarization:       (-0.076434856,0.98724007,0.13969522)
- New Momentum Direction: (0.90269102,0.1564855,-0.40082566)
- New Polarization:       (0.10457969,0.82380575,0.55714197)
- *** FresnelRefraction *** 
-    1      5 m    60.7 cm  -1.56 m    3.66 eV      0 eV   5.27 m    5.27 m          Tank  Transportation
-    2     10 m    1.47 m   -3.78 m    3.66 eV      0 eV   5.54 m    10.8 m    OutOfWorld  Transportation
-
-*********************************************************************************************************
-* G4Track Information:   Particle = opticalphoton,   Track ID = 21,   Parent ID = 1
-*********************************************************************************************************
-
-Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0    472 um   -192 um   -140 um   3.17 eV      0 eV      0 fm      0 fm         Tank    initStep
- Photon at Boundary! 
- Old Momentum Direction: (0.48831435,-0.57811305,-0.65370819)
- Old Polarization:       (-0.85983472,-0.190741,-0.47360546)
- New Momentum Direction: (-0.48831435,0.57811305,0.65370819)
- New Polarization:       (0.85983472,0.190741,0.47360546)
- *** BackScattering *** 
-    1   3.74 m   -4.42 m      -5 m    3.17 eV      0 eV   7.65 m    7.65 m          Tank  Transportation
-    2   3.74 m   -4.42 m      -5 m    3.17 eV      0 eV      0 fm   7.65 m         World  Transportation
- Photon at Boundary! 
- Old Momentum Direction: (-0.48831435,0.57811305,0.65370819)
- Old Polarization:       (0.85983472,0.190741,0.47360546)
- New Momentum Direction: (0.5181129,0.64732714,-0.55904079)
- New Polarization:       (-0.61377463,-0.17381894,-0.77010887)
- *** LambertianReflection *** 
-    3  -3.73 m    4.42 m       5 m    3.17 eV      0 eV   15.3 m    22.9 m          Tank  Transportation
-    4  -3.73 m    4.42 m       5 m    3.17 eV      0 eV      0 fm   22.9 m         World  Transportation
- Photon at Boundary! 
- Old Momentum Direction: (0.5181129,0.64732714,-0.55904079)
- Old Polarization:       (-0.61377463,-0.17381894,-0.77010887)
- New Momentum Direction: (0.5181129,-0.64732714,-0.55904079)
- New Polarization:       (0.61377463,-0.17381894,0.77010887)
- *** LobeReflection *** 
-    5  -3.27 m       5 m     4.5 m    3.17 eV      0 eV   89.3 cm   23.8 m          Tank  Transportation
-    6  -3.27 m       5 m     4.5 m    3.17 eV      0 eV      0 fm   23.8 m         World  Transportation
- Photon at Boundary! 
- Old Momentum Direction: (0.5181129,-0.64732714,-0.55904079)
- Old Polarization:       (0.61377463,-0.17381894,0.77010887)
- New Momentum Direction: (0.5181129,0.64732714,-0.55904079)
- New Polarization:       (-0.61377463,-0.17381894,-0.77010887)
- *** LobeReflection *** 
-    7   4.73 m      -5 m   -4.14 m    3.17 eV      0 eV   15.4 m    39.3 m          Tank  Transportation
-    8   4.73 m      -5 m   -4.14 m    3.17 eV      0 eV      0 fm   39.3 m         World  Transportation
- Photon at Boundary! 
- Old Momentum Direction: (0.5181129,0.64732714,-0.55904079)
- Old Polarization:       (-0.61377463,-0.17381894,-0.77010887)
- New Momentum Direction: (-0.66677643,-0.7151738,0.20960827)
- New Polarization:       (0.38478338,-0.089497464,0.91865769)
- *** LambertianReflection *** 
-    9      5 m   -4.67 m   -4.42 m    3.17 eV      0 eV   51.7 cm   39.8 m          Tank  Transportation
-   10      5 m   -4.67 m   -4.42 m    3.17 eV      0 eV      0 fm   39.8 m         World  Transportation
- Photon at Boundary! 
- Old Momentum Direction: (-0.66677643,-0.7151738,0.20960827)
- Old Polarization:       (0.38478338,-0.089497464,0.91865769)
- New Momentum Direction: (-0.66677643,0.7151738,0.20960827)
- New Polarization:       (0.25656417,-0.043784001,0.96553498)
- *** LobeReflection *** 
-   11   4.69 m      -5 m   -4.33 m    3.17 eV      0 eV   46.8 cm   40.3 m          Tank  Transportation
-   12   4.69 m      -5 m   -4.33 m    3.17 eV      0 eV      0 fm   40.3 m         World  Transportation
- Photon at Boundary! 
- Old Momentum Direction: (-0.66677643,0.7151738,0.20960827)
- Old Polarization:       (0.25656417,-0.043784001,0.96553498)
- New Momentum Direction: (-0.90376845,0.32013205,0.28410923)
- New Polarization:       (0.32060819,0.066563884,0.94487017)
- *** FresnelRefraction *** 
-   13  -4.64 m       5 m    -1.4 m    3.17 eV      0 eV     14 m    54.3 m          Tank  Transportation
-   14    -10 m     6.9 m    29.1 cm   3.17 eV      0 eV   5.94 m    60.2 m    OutOfWorld  Transportation
-
-*********************************************************************************************************
-* G4Track Information:   Particle = opticalphoton,   Track ID = 20,   Parent ID = 1
-*********************************************************************************************************
-
-Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0    618 um   -261 um   -195 um   2.16 eV      0 eV      0 fm      0 fm         Tank    initStep
-
-** Photon absorbed! **
-    1   3.79 m   -4.45 m   -15.4 cm   2.16 eV      0 eV   5.84 m    5.84 m          Tank  OpAbsorption
-
-*********************************************************************************************************
-* G4Track Information:   Particle = opticalphoton,   Track ID = 19,   Parent ID = 1
-*********************************************************************************************************
-
-Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0    109 um  -21.5 um  -1.67 um   2.49 eV      0 eV      0 fm      0 fm         Tank    initStep
- Photon at Boundary! 
- Old Momentum Direction: (0.75625326,-0.01811209,-0.65402826)
- Old Polarization:       (-0.40135611,0.77660217,-0.48559484)
- New Momentum Direction: (0.4696241,-0.024439966,-0.88252812)
- New Polarization:       (0.56494661,0.7764823,0.27912464)
- *** FresnelRefraction *** 
-    1      5 m     -12 cm  -4.32 m    2.49 eV      0 eV   6.61 m    6.61 m          Tank  Transportation
-    2   8.02 m   -27.7 cm    -10 m    2.49 eV      0 eV   6.43 m      13 m    OutOfWorld  Transportation
-
-*********************************************************************************************************
-* G4Track Information:   Particle = opticalphoton,   Track ID = 18,   Parent ID = 1
-*********************************************************************************************************
-
-Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0    410 um   -163 um   -116 um   2.88 eV      0 eV      0 fm      0 fm         Tank    initStep
-
-** Photon absorbed! **
-    1   1.29 m   -47.5 cm   26.2 cm   2.88 eV      0 eV    1.4 m     1.4 m          Tank  OpAbsorption
-
-*********************************************************************************************************
-* G4Track Information:   Particle = opticalphoton,   Track ID = 17,   Parent ID = 1
-*********************************************************************************************************
-
-Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0    248 um  -87.1 um  -54.6 um   3.59 eV      0 eV      0 fm      0 fm         Tank    initStep
-
-** Photon absorbed! **
-    1   2.02 m    19.3 cm  -40.4 cm   3.59 eV      0 eV   2.07 m    2.07 m          Tank  OpAbsorption
-
-*********************************************************************************************************
-* G4Track Information:   Particle = opticalphoton,   Track ID = 16,   Parent ID = 1
-*********************************************************************************************************
-
-Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0    477 um   -195 um   -141 um   3.87 eV      0 eV      0 fm      0 fm         Tank    initStep
- Photon at Boundary! 
- Old Momentum Direction: (0.47426107,-0.64991688,-0.59387245)
- Old Polarization:       (-0.87868351,-0.30752324,-0.36516399)
- New Momentum Direction: (-0.39505244,0.76647104,-0.50641456)
- New Polarization:       (0.69264713,0.61063562,0.38388031)
- *** LambertianReflection *** 
-    1   3.65 m      -5 m   -4.57 m    3.87 eV      0 eV   7.69 m    7.69 m          Tank  Transportation
-    2   3.65 m      -5 m   -4.57 m    3.87 eV      0 eV      0 fm   7.69 m         World  Transportation
- Photon at Boundary! 
- Old Momentum Direction: (-0.39505244,0.76647104,-0.50641456)
- Old Polarization:       (0.69264713,0.61063562,0.38388031)
- New Momentum Direction: (-0.1361257,-0.3621578,0.92212338)
- New Polarization:       (-0.68674335,-0.63636944,-0.35130828)
- *** LambertianReflection *** 
-    3   3.31 m   -4.35 m      -5 m    3.87 eV      0 eV   85.1 cm   8.54 m          Tank  Transportation
-    4   3.31 m   -4.35 m      -5 m    3.87 eV      0 eV      0 fm   8.54 m         World  Transportation
- Photon at Boundary! 
- Old Momentum Direction: (-0.1361257,-0.3621578,0.92212338)
- Old Polarization:       (-0.68674335,-0.63636944,-0.35130828)
- New Momentum Direction: (0.1361257,0.3621578,-0.92212338)
- New Polarization:       (0.68674335,0.63636944,0.35130828)
- *** BackScattering *** 
-    5   3.07 m      -5 m   -3.34 m    3.87 eV      0 eV    1.8 m    10.3 m          Tank  Transportation
-    6   3.07 m      -5 m   -3.34 m    3.87 eV      0 eV      0 fm   10.3 m         World  Transportation
- Photon at Boundary! 
- Old Momentum Direction: (0.1361257,0.3621578,-0.92212338)
- Old Polarization:       (0.68674335,0.63636944,0.35130828)
- New Momentum Direction: (0.18505834,0.49234145,-0.8505018)
- New Polarization:       (0.11587902,-0.87034489,-0.47861449)
- *** FresnelRefraction *** 
-    7   3.31 m   -4.35 m      -5 m    3.87 eV      0 eV    1.8 m    12.1 m          Tank  Transportation
-    8    4.4 m   -1.45 m     -10 m    3.87 eV      0 eV   5.88 m      18 m    OutOfWorld  Transportation
-
-*********************************************************************************************************
-* G4Track Information:   Particle = opticalphoton,   Track ID = 15,   Parent ID = 1
-*********************************************************************************************************
-
-Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0    447 um   -181 um   -130 um      3 eV      0 eV      0 fm      0 fm         Tank    initStep
- Photon at Boundary! 
- Old Momentum Direction: (0.7133093,-0.066221595,-0.6977138)
- Old Polarization:       (-0.47539164,0.68577325,-0.55110601)
- New Momentum Direction: (-0.7133093,0.066221595,0.6977138)
- New Polarization:       (0.47539164,-0.68577325,0.55110601)
- *** BackScattering *** 
-    1      5 m   -46.4 cm  -4.89 m       3 eV      0 eV   7.01 m    7.01 m          Tank  Transportation
-    2      5 m   -46.4 cm  -4.89 m       3 eV      0 eV      0 fm   7.01 m         World  Transportation
-Scattering Photon!
-Old Momentum Direction: (-0.7133093,0.066221595,0.6977138)
-Old Polarization: (0.47539164,-0.68577325,0.55110601)
-New Polarization: (0.94229665,-0.090332662,-0.32236164)
-Polarization Change: (0.94229665,-0.090332662,-0.32236164)
-New Momentum Direction: (0.17208767,-0.69525719,0.6978562)
-Momentum Change: (0.17208767,-0.69525719,0.6978562)
-    3   3.54 m   -32.9 cm  -3.46 m       3 eV      0 eV   2.05 m    9.06 m          Tank  OpRayleigh
- Photon at Boundary! 
- Old Momentum Direction: (0.17208767,-0.69525719,0.6978562)
- Old Polarization:       (0.94229665,-0.090332662,-0.32236164)
- New Momentum Direction: (0.23306313,-0.2289503,0.9451261)
- New Polarization:       (0.9525236,-0.14204807,-0.26929748)
- *** FresnelRefraction *** 
-    4    4.7 m      -5 m    1.23 m       3 eV      0 eV   6.72 m    15.8 m          Tank  Transportation
-    5   6.86 m   -7.13 m      10 m       3 eV      0 eV   9.28 m    25.1 m    OutOfWorld  Transportation
-
-*********************************************************************************************************
-* G4Track Information:   Particle = opticalphoton,   Track ID = 14,   Parent ID = 1
-*********************************************************************************************************
-
-Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0    792 um   -343 um   -261 um   3.36 eV      0 eV      0 fm      0 fm         Tank    initStep
- Photon at Boundary! 
- Old Momentum Direction: (0.48044109,-0.61796993,-0.6223259)
- Old Polarization:       (-0.87151988,-0.25700732,-0.41761266)
- New Momentum Direction: (-0.44407228,0.17619352,0.87849624)
- New Polarization:       (0.88395412,0.24632622,0.39742736)
- *** LambertianReflection *** 
-    1   3.86 m   -4.97 m      -5 m    3.36 eV      0 eV   8.03 m    8.03 m          Tank  Transportation
-    2   3.86 m   -4.97 m      -5 m    3.36 eV      0 eV      0 fm   8.03 m         World  Transportation
-
-** Photon absorbed! **
-    3  -87.6 cm  -3.09 m    4.37 m    3.36 eV      0 eV   10.7 m    18.7 m          Tank  OpAbsorption
-
-*********************************************************************************************************
-* G4Track Information:   Particle = opticalphoton,   Track ID = 13,   Parent ID = 1
-*********************************************************************************************************
-
-Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0    102 um  -18.1 um   1.03 um   2.23 eV      0 eV      0 fm      0 fm         Tank    initStep
-
-** Photon absorbed! **
-    1   3.41 m   -4.31 m   -4.23 m    2.23 eV      0 eV   6.93 m    6.93 m          Tank  OpAbsorption
-
-*********************************************************************************************************
-* G4Track Information:   Particle = opticalphoton,   Track ID = 12,   Parent ID = 1
-*********************************************************************************************************
-
-Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0    246 um  -86.2 um  -53.9 um   3.44 eV      0 eV      0 fm      0 fm         Tank    initStep
- Photon at Boundary! 
- Old Momentum Direction: (0.56189472,-0.3367613,-0.75555685)
- Old Polarization:       (-0.73254581,0.22170937,-0.64360049)
- New Momentum Direction: (0.76259456,-0.45704708,-0.4577745)
- New Polarization:       (-0.47587401,0.082976368,-0.87559057)
- *** FresnelRefraction *** 
-    1   3.72 m   -2.23 m      -5 m    3.44 eV      0 eV   6.62 m    6.62 m          Tank  Transportation
-    2     10 m   -5.99 m   -8.77 m    3.44 eV      0 eV   8.24 m    14.9 m    OutOfWorld  Transportation
-
-*********************************************************************************************************
-* G4Track Information:   Particle = opticalphoton,   Track ID = 11,   Parent ID = 1
-*********************************************************************************************************
-
-Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0    480 um   -196 um   -143 um   4.01 eV      0 eV      0 fm      0 fm         Tank    initStep
- Photon at Boundary! 
- Old Momentum Direction: (0.87494247,0.10466902,-0.4727791)
- Old Polarization:       (-0.20205795,0.96621139,-0.16002544)
- New Momentum Direction: (0.75251916,0.14235457,-0.64300085)
- New Polarization:       (0.28004552,0.81451744,0.50807071)
- *** FresnelRefraction *** 
-    1      5 m    59.8 cm   -2.7 m    4.01 eV      0 eV   5.71 m    5.71 m          Tank  Transportation
-    2     10 m    1.54 m   -6.97 m    4.01 eV      0 eV   6.64 m    12.4 m    OutOfWorld  Transportation
-
-*********************************************************************************************************
-* G4Track Information:   Particle = opticalphoton,   Track ID = 10,   Parent ID = 1
-*********************************************************************************************************
-
-Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0    242 um    -84 um  -52.2 um    3.1 eV      0 eV      0 fm      0 fm         Tank    initStep
- Photon at Boundary! 
- Old Momentum Direction: (0.9973898,0.028683917,-0.066263298)
- Old Polarization:       (0.010910001,0.84730426,0.53099573)
- New Momentum Direction: (0.99520254,0.038865954,-0.089785029)
- New Polarization:       (0.014787546,0.84740937,0.5307341)
- *** FresnelRefraction *** 
-    1      5 m    14.4 cm  -33.2 cm    3.1 eV      0 eV   5.01 m    5.01 m          Tank  Transportation
-    2     10 m    33.9 cm  -78.3 cm    3.1 eV      0 eV   5.02 m      10 m    OutOfWorld  Transportation
-
-*********************************************************************************************************
-* G4Track Information:   Particle = opticalphoton,   Track ID = 9,   Parent ID = 1
-*********************************************************************************************************
-
-Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0    342 um   -131 um  -90.2 um   2.49 eV      0 eV      0 fm      0 fm         Tank    initStep
- Photon at Boundary! 
- Old Momentum Direction: (0.59120505,-0.28911263,-0.7529213)
- Old Polarization:       (-0.68859469,0.30508685,-0.65784448)
- New Momentum Direction: (0.79771344,-0.3900999,-0.45986447)
- New Polarization:       (-0.42459391,0.17817836,-0.88767814)
- *** FresnelRefraction *** 
-    1   3.93 m   -1.92 m      -5 m    2.49 eV      0 eV   6.64 m    6.64 m          Tank  Transportation
-    2     10 m   -4.89 m    -8.5 m    2.49 eV      0 eV   7.61 m    14.3 m    OutOfWorld  Transportation
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e+,   Track ID = 1,   Parent ID = 0
-*********************************************************************************************************
-
-Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    2   1.22 mm  -24.1 um    274 um    200 keV     0 eV      0 fm   1.52 mm         Tank    initStep
-
- Exiting from G4Scintillation::DoIt -- NumberOfSecondaries = 13
-    3   1.13 mm  -9.67 um    494 um      0 eV    200 keV   432 um   1.95 mm         Tank       eIoni
-    4   1.13 mm  -9.67 um    494 um      0 eV      0 eV      0 fm   1.95 mm         Tank  Scintillation
-
-*********************************************************************************************************
-* G4Track Information:   Particle = gamma,   Track ID = 62,   Parent ID = 1
-*********************************************************************************************************
-
-Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   1.13 mm  -9.67 um    494 um    511 keV     0 eV      0 fm      0 fm         Tank    initStep
-    1     -5 m   -17.8 cm  -3.32 mm    511 keV     0 eV      5 m       5 m          Tank  Transportation
-    2    -10 m   -35.6 cm  -7.14 mm    511 keV     0 eV      5 m      10 m    OutOfWorld  Transportation
-
-*********************************************************************************************************
-* G4Track Information:   Particle = gamma,   Track ID = 61,   Parent ID = 1
-*********************************************************************************************************
-
-Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   1.13 mm  -9.67 um    494 um    511 keV     0 eV      0 fm      0 fm         Tank    initStep
-    1      5 m    17.8 cm   4.31 mm    511 keV     0 eV      5 m       5 m          Tank  Transportation
-    2     10 m    35.6 cm   8.13 mm    511 keV     0 eV      5 m      10 m    OutOfWorld  Transportation
-
-*********************************************************************************************************
-* G4Track Information:   Particle = opticalphoton,   Track ID = 60,   Parent ID = 1
-*********************************************************************************************************
-
-Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0    1.2 mm  -21.6 um    311 um   2.53 eV      0 eV      0 fm      0 fm         Tank    initStep
- Photon at Boundary! 
- Old Momentum Direction: (0.63177683,0.77383842,-0.045079231)
- Old Polarization:       (-0.716852,0.56114591,-0.41380972)
- New Momentum Direction: (0.85283505,0.51862256,-0.060852419)
- New Polarization:       (-0.49537992,0.76669719,-0.40837991)
- *** FresnelRefraction *** 
-    1   4.08 m       5 m   -29.1 cm   2.53 eV      0 eV   6.46 m    6.46 m          Tank  Transportation
-    2     10 m     8.6 m   -71.3 cm   2.53 eV      0 eV   6.94 m    13.4 m    OutOfWorld  Transportation
-
-*********************************************************************************************************
-* G4Track Information:   Particle = opticalphoton,   Track ID = 59,   Parent ID = 1
-*********************************************************************************************************
-
-Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   1.14 mm  -11.1 um    472 um   3.37 eV      0 eV      0 fm      0 fm         Tank    initStep
-
-** Photon absorbed! **
-    1  -1.99 m    23.5 cm  -45.8 cm   3.37 eV      0 eV   2.06 m    2.06 m          Tank  OpAbsorption
-
-*********************************************************************************************************
-* G4Track Information:   Particle = opticalphoton,   Track ID = 58,   Parent ID = 1
-*********************************************************************************************************
-
-Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   1.17 mm  -16.9 um    384 um   3.58 eV      0 eV      0 fm      0 fm         Tank    initStep
-
-** Photon absorbed! **
-    1  -1.14 m    97.7 cm  -1.07 m    3.58 eV      0 eV   1.84 m    1.84 m          Tank  OpAbsorption
-
-*********************************************************************************************************
-* G4Track Information:   Particle = opticalphoton,   Track ID = 57,   Parent ID = 1
-*********************************************************************************************************
-
-Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   1.21 mm  -22.9 um    291 um   3.77 eV      0 eV      0 fm      0 fm         Tank    initStep
-Scattering Photon!
-Old Momentum Direction: (0.61044671,-0.59580344,-0.52189374)
-Old Polarization: (0.53612673,-0.17420222,0.82596714)
-New Polarization: (0.81299637,-0.28576551,0.50732138)
-Polarization Change: (0.81299637,-0.28576551,0.50732138)
-New Momentum Direction: (-0.46791898,0.19790279,0.86132822)
-Momentum Change: (-0.46791898,0.19790279,0.86132822)
-    1   3.99 m   -3.89 m   -3.41 m    3.77 eV      0 eV   6.53 m    6.53 m          Tank  OpRayleigh
-
-** Photon absorbed! **
-    2   3.35 m   -3.62 m   -2.24 m    3.77 eV      0 eV   1.36 m    7.89 m          Tank  OpAbsorption
-
-*********************************************************************************************************
-* G4Track Information:   Particle = opticalphoton,   Track ID = 56,   Parent ID = 1
-*********************************************************************************************************
-
-Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   1.17 mm  -15.7 um    401 um   2.16 eV      0 eV      0 fm      0 fm         Tank    initStep
-
-** Photon absorbed! **
-    1   3.34 m    14.5 cm   2.24 m    2.16 eV      0 eV   4.02 m    4.02 m          Tank  OpAbsorption
+ Exiting from G4Scintillation::DoIt -- NumberOfSecondaries = 16
+    1    953 um   -768 um   -149 um    172 keV   328 keV  1.49 mm   1.49 mm         Tank       eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = opticalphoton,   Track ID = 55,   Parent ID = 1
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   1.21 mm  -22.7 um    295 um   2.79 eV      0 eV      0 fm      0 fm         Tank    initStep
+    0    763 um   -614 um   -120 um    3.3 eV      0 eV      0 fm      0 fm         Tank    initStep
  Photon at Boundary! 
- Old Momentum Direction: (-0.41599532,-0.1230935,0.90099716)
- Old Polarization:       (0.26078471,0.93303211,0.24787582)
- New Momentum Direction: (-0.56270897,-0.16650625,0.80971247)
- New Polarization:       (0.21677779,0.91550379,0.33891031)
+ Old Momentum Direction: (-0.985954,0.102222,0.132081)
+ Old Polarization:       (0.0757615,-0.431046,0.899144)
+ New Momentum Direction: (-0.974006,0.138642,0.179139)
+ New Polarization:       (-0.102904,-0.975324,0.19533)
  *** FresnelRefraction *** 
-    1  -2.31 m   -68.3 cm      5 m    2.79 eV      0 eV   5.55 m    5.55 m          Tank  Transportation
-    2  -5.78 m   -1.71 m      10 m    2.79 eV      0 eV   6.18 m    11.7 m    OutOfWorld  Transportation
+    1     -5 m    51.8 cm     67 cm    3.3 eV      0 eV   5.07 m    5.07 m          Tank  Transportation
+    2    -10 m    1.23 m    1.59 m     3.3 eV      0 eV   5.13 m    10.2 m    OutOfWorld  Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = opticalphoton,   Track ID = 54,   Parent ID = 1
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   1.18 mm  -17.9 um    368 um   3.11 eV      0 eV      0 fm      0 fm         Tank    initStep
+    0    821 um   -662 um   -129 um   3.72 eV      0 eV      0 fm      0 fm         Tank    initStep
  Photon at Boundary! 
- Old Momentum Direction: (-0.3963132,-0.60773963,0.68817759)
- Old Polarization:       (-0.19930186,-0.67473377,-0.71064274)
- New Momentum Direction: (-0.53702154,-0.8235135,0.18284798)
- New Polarization:       (0.24099572,0.057949556,0.96879457)
+ Old Momentum Direction: (0.86539246,-0.49681618,-0.065341949)
+ Old Polarization:       (-0.49263728,-0.81966575,-0.29232956)
+ New Momentum Direction: (0.73237446,-0.67508832,-0.088788548)
+ New Polarization:       (0.66996401,0.73773573,-0.083031482)
  *** FresnelRefraction *** 
-    1  -2.88 m   -4.42 m       5 m    3.11 eV      0 eV   7.27 m    7.27 m          Tank  Transportation
-    2  -6.52 m     -10 m    6.24 m    3.11 eV      0 eV   6.78 m      14 m    OutOfWorld  Transportation
+    1      5 m   -2.87 m   -37.8 cm   3.72 eV      0 eV   5.78 m    5.78 m          Tank  Transportation
+    2     10 m   -7.48 m   -98.4 cm   3.72 eV      0 eV   6.83 m    12.6 m    OutOfWorld  Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = opticalphoton,   Track ID = 53,   Parent ID = 1
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   1.17 mm  -16.7 um    387 um   2.77 eV      0 eV      0 fm      0 fm         Tank    initStep
+    0    922 um   -742 um   -144 um   3.36 eV      0 eV      0 fm      0 fm         Tank    initStep
  Photon at Boundary! 
- Old Momentum Direction: (-0.65242199,-0.74392016,-0.14466631)
- Old Polarization:       (0.72255438,-0.55301218,-0.41484058)
- New Momentum Direction: (-0.88232194,-0.42805552,-0.19564372)
- New Polarization:       (0.46909541,-0.76611303,-0.43934077)
+ Old Momentum Direction: (0.69295142,-0.51044537,0.50917959)
+ Old Polarization:       (0.71997421,0.45254145,-0.52615908)
+ New Momentum Direction: (0.2074461,-0.69258288,0.69086545)
+ New Polarization:       (0.97725791,0.11497887,-0.17817643)
  *** FresnelRefraction *** 
-    1  -4.38 m      -5 m   -97.2 cm   2.77 eV      0 eV   6.72 m    6.72 m          Tank  Transportation
-    2    -10 m   -7.72 m   -2.22 m    2.77 eV      0 eV   6.37 m    13.1 m    OutOfWorld  Transportation
+    1      5 m   -3.68 m    3.67 m    3.36 eV      0 eV   7.21 m    7.21 m          Tank  Transportation
+    2   6.89 m     -10 m    9.97 m    3.36 eV      0 eV   9.12 m    16.3 m    OutOfWorld  Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = opticalphoton,   Track ID = 52,   Parent ID = 1
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   1.17 mm  -17.1 um    380 um   3.81 eV      0 eV      0 fm      0 fm         Tank    initStep
+    0    620 um   -499 um  -97.2 um   2.39 eV      0 eV      0 fm      0 fm         Tank    initStep
  Photon at Boundary! 
- Old Momentum Direction: (-0.83863519,0.30756166,-0.44955182)
- Old Polarization:       (0.10250366,0.89969688,0.42430946)
- New Momentum Direction: (-0.67221997,0.4180401,-0.6110342)
- New Polarization:       (-0.14389984,0.73581415,0.66171774)
+ Old Momentum Direction: (-0.97341876,0.19864121,-0.114007)
+ Old Polarization:       (0.21300473,0.96810819,-0.13189205)
+ New Momentum Direction: (-0.95114662,0.26777149,-0.15368323)
+ New Polarization:       (-0.28726641,-0.58516384,0.75832796)
  *** FresnelRefraction *** 
-    1     -5 m    1.83 m   -2.68 m    3.81 eV      0 eV   5.96 m    5.96 m          Tank  Transportation
-    2    -10 m    4.94 m   -7.23 m    3.81 eV      0 eV   7.44 m    13.4 m    OutOfWorld  Transportation
+    1     -5 m    1.02 m   -58.6 cm   2.39 eV      0 eV   5.14 m    5.14 m          Tank  Transportation
+    2    -10 m    2.43 m   -1.39 m    2.39 eV      0 eV   5.26 m    10.4 m    OutOfWorld  Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = opticalphoton,   Track ID = 51,   Parent ID = 1
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   1.15 mm  -13.2 um    440 um   2.11 eV      0 eV      0 fm      0 fm         Tank    initStep
-
-** Photon absorbed! **
-    1  -1.48 m    1.45 m    68.5 cm   2.11 eV      0 eV   2.18 m    2.18 m          Tank  OpAbsorption
+    0    611 um   -492 um  -95.7 um   3.07 eV      0 eV      0 fm      0 fm         Tank    initStep
+ Photon at Boundary! 
+ Old Momentum Direction: (0.080235619,-0.87750316,0.47281122)
+ Old Polarization:       (-0.91431716,0.12411729,0.3855114)
+ New Momentum Direction: (0.080235619,0.87750316,0.47281122)
+ New Polarization:       (-0.99548972,0.046454442,0.08271761)
+ *** LobeReflection *** 
+    1   45.8 cm     -5 m    2.69 m    3.07 eV      0 eV    5.7 m     5.7 m          Tank  Transportation
+    2   45.8 cm     -5 m    2.69 m    3.07 eV      0 eV      0 fm    5.7 m         World  Transportation
+ Photon at Boundary! 
+ Old Momentum Direction: (0.080235619,0.87750316,0.47281122)
+ Old Polarization:       (-0.99548972,0.046454442,0.08271761)
+ New Momentum Direction: (-0.080235619,-0.87750316,-0.47281122)
+ New Polarization:       (0.99548972,-0.046454442,-0.08271761)
+ *** BackScattering *** 
+    3   84.9 cm    -72 cm      5 m    3.07 eV      0 eV   4.88 m    10.6 m          Tank  Transportation
+    4   84.9 cm    -72 cm      5 m    3.07 eV      0 eV      0 fm   10.6 m         World  Transportation
+ Photon at Boundary! 
+ Old Momentum Direction: (-0.080235619,-0.87750316,-0.47281122)
+ Old Polarization:       (0.99548972,-0.046454442,-0.08271761)
+ New Momentum Direction: (-0.10870154,-0.76017996,-0.64055476)
+ New Polarization:       (0.99365151,-0.064295611,-0.092318749)
+ *** FresnelRefraction *** 
+    5   45.8 cm     -5 m    2.69 m    3.07 eV      0 eV   4.88 m    15.5 m          Tank  Transportation
+    6  -25.7 cm    -10 m   -1.52 m    3.07 eV      0 eV   6.58 m      22 m    OutOfWorld  Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = opticalphoton,   Track ID = 50,   Parent ID = 1
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   1.18 mm  -18.2 um    364 um   3.88 eV      0 eV      0 fm      0 fm         Tank    initStep
+    0    585 um   -471 um  -91.7 um   2.92 eV      0 eV      0 fm      0 fm         Tank    initStep
  Photon at Boundary! 
- Old Momentum Direction: (0.51865611,-0.69270697,0.50115156)
- Old Polarization:       (0.015546156,-0.57841619,-0.81559366)
- New Momentum Direction: (-0.51865611,0.69270697,-0.50115156)
- New Polarization:       (-0.015546156,0.57841619,0.81559366)
- *** BackScattering *** 
-    1   3.74 m      -5 m    3.62 m    3.88 eV      0 eV   7.22 m    7.22 m          Tank  Transportation
-    2   3.74 m      -5 m    3.62 m    3.88 eV      0 eV      0 fm   7.22 m         World  Transportation
-
-** Photon absorbed! **
-    3   3.55 m   -4.74 m    3.43 m    3.88 eV      0 eV     38 cm    7.6 m          Tank  OpAbsorption
+ Old Momentum Direction: (0.84920788,0.34612392,-0.39880347)
+ Old Polarization:       (0.36403908,0.16334417,0.91694833)
+ New Momentum Direction: (0.6992675,0.46856569,-0.53988069)
+ New Polarization:       (0.50029768,0.21867231,0.83778556)
+ *** FresnelRefraction *** 
+    1      5 m    2.04 m   -2.35 m    2.92 eV      0 eV   5.89 m    5.89 m          Tank  Transportation
+    2     10 m    5.39 m   -6.21 m    2.92 eV      0 eV   7.15 m      13 m    OutOfWorld  Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = opticalphoton,   Track ID = 49,   Parent ID = 1
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   1.17 mm  -15.6 um    404 um   2.21 eV      0 eV      0 fm      0 fm         Tank    initStep
+    0    690 um   -555 um   -108 um   2.97 eV      0 eV      0 fm      0 fm         Tank    initStep
  Photon at Boundary! 
- Old Momentum Direction: (-0.59522158,0.69965606,-0.39521217)
- Old Polarization:       (0.047264902,-0.46049066,-0.88640532)
- New Momentum Direction: (-0.80114829,0.27422394,-0.53194233)
- New Polarization:       (0.55735272,0.6656352,-0.49627384)
+ Old Momentum Direction: (-0.91907449,0.28088298,0.27641785)
+ Old Polarization:       (0.33248258,0.17612355,0.92651812)
+ New Momentum Direction: (-0.84571561,0.38034716,0.37430087)
+ New Polarization:       (-0.45182994,-0.88357883,-0.12303721)
  *** FresnelRefraction *** 
-    1  -4.25 m       5 m   -2.82 m    2.21 eV      0 eV   7.15 m    7.15 m          Tank  Transportation
-    2    -10 m    6.97 m   -6.64 m    2.21 eV      0 eV   7.17 m    14.3 m    OutOfWorld  Transportation
+    1     -5 m    1.53 m     1.5 m    2.97 eV      0 eV   5.44 m    5.44 m          Tank  Transportation
+    2    -10 m    3.78 m    3.72 m    2.97 eV      0 eV   5.91 m    11.4 m    OutOfWorld  Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = opticalphoton,   Track ID = 48,   Parent ID = 1
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   1.16 mm  -15.3 um    407 um    2.8 eV      0 eV      0 fm      0 fm         Tank    initStep
+    0    889 um   -716 um   -139 um   4.03 eV      0 eV      0 fm      0 fm         Tank    initStep
  Photon at Boundary! 
- Old Momentum Direction: (-0.6044248,0.49222399,0.62640738)
- Old Polarization:       (-0.78257423,-0.21962822,-0.58252984)
- New Momentum Direction: (-0.6044248,0.49222399,-0.62640738)
- New Polarization:       (0.78257423,0.21962822,-0.58252984)
- *** LobeReflection *** 
-    1  -4.82 m    3.93 m       5 m     2.8 eV      0 eV   7.98 m    7.98 m          Tank  Transportation
-    2  -4.82 m    3.93 m       5 m     2.8 eV      0 eV      0 fm   7.98 m         World  Transportation
- Photon at Boundary! 
- Old Momentum Direction: (-0.6044248,0.49222399,-0.62640738)
- Old Polarization:       (0.78257423,0.21962822,-0.58252984)
- New Momentum Direction: (0.6044248,0.49222399,-0.62640738)
- New Polarization:       (0.78257423,-0.21962822,0.58252984)
- *** SpikeReflection *** 
-    3     -5 m    4.07 m    4.82 m     2.8 eV      0 eV   29.3 cm   8.27 m          Tank  Transportation
-    4     -5 m    4.07 m    4.82 m     2.8 eV      0 eV      0 fm   8.27 m         World  Transportation
-Scattering Photon!
-Old Momentum Direction: (0.6044248,0.49222399,-0.62640738)
-Old Polarization: (0.78257423,-0.21962822,0.58252984)
-New Polarization: (-0.74272601,0.19086998,-0.64181518)
-Polarization Change: (-0.74272601,0.19086998,-0.64181518)
-New Momentum Direction: (0.54648197,-0.38109407,-0.74573773)
-Momentum Change: (0.54648197,-0.38109407,-0.74573773)
-    5  -4.82 m    4.22 m    4.63 m     2.8 eV      0 eV   29.5 cm   8.57 m          Tank  OpRayleigh
- Photon at Boundary! 
- Old Momentum Direction: (0.54648197,-0.38109407,-0.74573773)
- Old Polarization:       (-0.74272601,0.19086998,-0.64181518)
- New Momentum Direction: (0.73927829,-0.5155423,-0.43322483)
- New Polarization:       (-0.48663473,0.035677713,-0.8728767)
+ Old Momentum Direction: (0.44934757,0.45695064,0.76764762)
+ Old Polarization:       (0.88626589,-0.33606831,-0.31873321)
+ New Momentum Direction: (0.61120045,0.62154211,0.49001981)
+ New Polarization:       (0.42821172,-0.78036292,0.45570653)
  *** FresnelRefraction *** 
-    6   2.24 m   -70.4 cm     -5 m     2.8 eV      0 eV   12.9 m    21.5 m          Tank  Transportation
-    7     10 m   -6.12 m   -9.55 m     2.8 eV      0 eV   10.5 m      32 m    OutOfWorld  Transportation
-Number of optical photons produces in this event : 59
-number of event = 1 User=0.17s Real=0.37s Sys=0.16s
+    1   2.93 m    2.98 m       5 m    4.03 eV      0 eV   6.51 m    6.51 m          Tank  Transportation
+    2   9.16 m    9.32 m      10 m    4.03 eV      0 eV   10.2 m    16.7 m    OutOfWorld  Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = opticalphoton,   Track ID = 47,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    452 um   -364 um  -70.8 um    3.2 eV      0 eV      0 fm      0 fm         Tank    initStep
+ Photon at Boundary! 
+ Old Momentum Direction: (-0.61717235,-0.085375032,0.78218246)
+ Old Polarization:       (-0.7424677,0.39226338,-0.54302041)
+ New Momentum Direction: (-0.83666479,-0.11573798,0.53534732)
+ New Polarization:       (0.40392209,0.52975078,0.74579559)
+ *** FresnelRefraction *** 
+    1  -3.94 m   -54.6 cm      5 m     3.2 eV      0 eV   6.39 m    6.39 m          Tank  Transportation
+    2    -10 m   -1.38 m    8.87 m     3.2 eV      0 eV   7.24 m    13.6 m    OutOfWorld  Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = opticalphoton,   Track ID = 46,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    160 um   -129 um  -25.1 um   3.15 eV      0 eV      0 fm      0 fm         Tank    initStep
+ Photon at Boundary! 
+ Old Momentum Direction: (-0.50468398,-0.57407264,0.64477491)
+ Old Polarization:       (-0.81797565,0.079150931,-0.56978151)
+ New Momentum Direction: (0.50468398,0.57407264,-0.64477491)
+ New Polarization:       (0.81797565,-0.079150931,0.56978151)
+ *** BackScattering *** 
+    1  -3.91 m   -4.45 m       5 m    3.15 eV      0 eV   7.75 m    7.75 m          Tank  Transportation
+    2  -3.91 m   -4.45 m       5 m    3.15 eV      0 eV      0 fm   7.75 m         World  Transportation
+ Photon at Boundary! 
+ Old Momentum Direction: (0.50468398,0.57407264,-0.64477491)
+ Old Polarization:       (0.81797565,-0.079150931,0.56978151)
+ New Momentum Direction: (0.50468398,0.57407264,0.64477491)
+ New Polarization:       (-0.81797565,0.079150931,0.56978151)
+ *** LobeReflection *** 
+    3   3.91 m    4.45 m      -5 m    3.15 eV      0 eV   15.5 m    23.3 m          Tank  Transportation
+    4   3.91 m    4.45 m      -5 m    3.15 eV      0 eV      0 fm   23.3 m         World  Transportation
+ Photon at Boundary! 
+ Old Momentum Direction: (0.50468398,0.57407264,0.64477491)
+ Old Polarization:       (-0.81797565,0.079150931,0.56978151)
+ New Momentum Direction: (0.50468398,-0.57407264,0.64477491)
+ New Polarization:       (0.81797565,0.079150931,-0.56978151)
+ *** SpikeReflection *** 
+    5    4.4 m       5 m   -4.38 m    3.15 eV      0 eV   95.5 cm   24.2 m          Tank  Transportation
+    6    4.4 m       5 m   -4.38 m    3.15 eV      0 eV      0 fm   24.2 m         World  Transportation
+ Photon at Boundary! 
+ Old Momentum Direction: (0.50468398,-0.57407264,0.64477491)
+ Old Polarization:       (0.81797565,0.079150931,-0.56978151)
+ New Momentum Direction: (-0.50468398,0.57407264,-0.64477491)
+ New Polarization:       (-0.81797565,-0.079150931,0.56978151)
+ *** BackScattering *** 
+    7      5 m    4.31 m   -3.61 m    3.15 eV      0 eV    1.2 m    25.4 m          Tank  Transportation
+    8      5 m    4.31 m   -3.61 m    3.15 eV      0 eV      0 fm   25.4 m         World  Transportation
+ Photon at Boundary! 
+ Old Momentum Direction: (-0.50468398,0.57407264,-0.64477491)
+ Old Polarization:       (-0.81797565,-0.079150931,0.56978151)
+ New Momentum Direction: (0.50468398,-0.57407264,0.64477491)
+ New Polarization:       (0.81797565,0.079150931,-0.56978151)
+ *** BackScattering *** 
+    9    4.4 m       5 m   -4.38 m    3.15 eV      0 eV    1.2 m    26.6 m          Tank  Transportation
+   10    4.4 m       5 m   -4.38 m    3.15 eV      0 eV      0 fm   26.6 m         World  Transportation
+ Photon at Boundary! 
+ Old Momentum Direction: (0.50468398,-0.57407264,0.64477491)
+ Old Polarization:       (0.81797565,0.079150931,-0.56978151)
+ New Momentum Direction: (-0.50468398,-0.57407264,0.64477491)
+ New Polarization:       (0.81797565,-0.079150931,0.56978151)
+ *** SpikeReflection *** 
+   11      5 m    4.31 m   -3.61 m    3.15 eV      0 eV    1.2 m    27.8 m          Tank  Transportation
+   12      5 m    4.31 m   -3.61 m    3.15 eV      0 eV      0 fm   27.8 m         World  Transportation
+
+** Photon absorbed! **
+   13   4.45 m    3.69 m   -2.91 m    3.15 eV      0 eV   1.09 m    28.9 m          Tank  OpAbsorption
+
+*********************************************************************************************************
+* G4Track Information:   Particle = opticalphoton,   Track ID = 45,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    207 um   -167 um  -32.5 um   2.89 eV      0 eV      0 fm      0 fm         Tank    initStep
+ Photon at Boundary! 
+ Old Momentum Direction: (0.56271694,0.32954926,0.75812066)
+ Old Polarization:       (0.58654938,-0.8054132,-0.085260773)
+ New Momentum Direction: (0.56271694,0.32954926,-0.75812066)
+ New Polarization:       (0.52540392,-0.85061246,0.020227624)
+ *** LobeReflection *** 
+    1   3.71 m    2.17 m       5 m    2.89 eV      0 eV    6.6 m     6.6 m          Tank  Transportation
+    2   3.71 m    2.17 m       5 m    2.89 eV      0 eV      0 fm    6.6 m         World  Transportation
+
+** Photon absorbed! **
+    3   4.33 m    2.54 m    4.16 m    2.89 eV      0 eV   1.11 m     7.7 m          Tank  OpAbsorption
+
+*********************************************************************************************************
+* G4Track Information:   Particle = opticalphoton,   Track ID = 44,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    646 um   -520 um   -101 um   2.46 eV      0 eV      0 fm      0 fm         Tank    initStep
+ Photon at Boundary! 
+ Old Momentum Direction: (-0.53906468,-0.51233467,0.6685226)
+ Old Polarization:       (0.32811584,-0.85875565,-0.39354635)
+ New Momentum Direction: (-0.53906468,-0.51233467,-0.6685226)
+ New Polarization:       (-0.32811584,0.85875565,-0.39354635)
+ *** LobeReflection *** 
+    1  -4.03 m   -3.83 m       5 m    2.46 eV      0 eV   7.48 m    7.48 m          Tank  Transportation
+    2  -4.03 m   -3.83 m       5 m    2.46 eV      0 eV      0 fm   7.48 m         World  Transportation
+ Photon at Boundary! 
+ Old Momentum Direction: (-0.53906468,-0.51233467,-0.6685226)
+ Old Polarization:       (-0.32811584,0.85875565,-0.39354635)
+ New Momentum Direction: (0.53906468,-0.51233467,-0.6685226)
+ New Polarization:       (-0.32811584,-0.85875565,0.39354635)
+ *** SpikeReflection *** 
+    3     -5 m   -4.75 m     3.8 m    2.46 eV      0 eV    1.8 m    9.28 m          Tank  Transportation
+    4     -5 m   -4.75 m     3.8 m    2.46 eV      0 eV      0 fm   9.28 m         World  Transportation
+ Photon at Boundary! 
+ Old Momentum Direction: (0.53906468,-0.51233467,-0.6685226)
+ Old Polarization:       (-0.32811584,-0.85875565,0.39354635)
+ New Momentum Direction: (0.92465712,0.37564885,0.062427127)
+ New Polarization:       (0.01292113,0.13289156,-0.99104635)
+ *** LambertianReflection *** 
+    5  -4.74 m      -5 m    3.48 m    2.46 eV      0 eV   48.2 cm   9.76 m          Tank  Transportation
+    6  -4.74 m      -5 m    3.48 m    2.46 eV      0 eV      0 fm   9.76 m         World  Transportation
+
+** Photon absorbed! **
+    7  -2.02 m   -3.89 m    3.66 m    2.46 eV      0 eV   2.94 m    12.7 m          Tank  OpAbsorption
+
+*********************************************************************************************************
+* G4Track Information:   Particle = opticalphoton,   Track ID = 43,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    297 um   -240 um  -46.6 um   2.31 eV      0 eV      0 fm      0 fm         Tank    initStep
+
+** Photon absorbed! **
+    1   42.6 cm   89.1 cm   1.69 m    2.31 eV      0 eV   1.96 m    1.96 m          Tank  OpAbsorption
+
+*********************************************************************************************************
+* G4Track Information:   Particle = opticalphoton,   Track ID = 42,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    600 um   -483 um    -94 um    3.1 eV      0 eV      0 fm      0 fm         Tank    initStep
+ Photon at Boundary! 
+ Old Momentum Direction: (-0.35833645,-0.75490345,-0.5492866)
+ Old Polarization:       (0.91033841,-0.41303267,-0.026229732)
+ New Momentum Direction: (-0.48553664,-0.45860395,-0.74426917)
+ New Polarization:       (0.79578131,-0.58431077,-0.15910071)
+ *** FresnelRefraction *** 
+    1  -2.37 m      -5 m   -3.64 m     3.1 eV      0 eV   6.62 m    6.62 m          Tank  Transportation
+    2  -6.52 m   -8.92 m     -10 m     3.1 eV      0 eV   8.55 m    15.2 m    OutOfWorld  Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = opticalphoton,   Track ID = 41,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    365 um   -294 um  -57.2 um   3.24 eV      0 eV      0 fm      0 fm         Tank    initStep
+ Photon at Boundary! 
+ Old Momentum Direction: (-0.29726426,-0.90136946,-0.31490803)
+ Old Polarization:       (-0.33380386,-0.21089389,0.91874847)
+ New Momentum Direction: (-0.40304627,-0.80947608,-0.4269686)
+ New Polarization:       (-0.35869609,-0.28948848,0.88743086)
+ *** FresnelRefraction *** 
+    1  -1.65 m      -5 m   -1.75 m    3.24 eV      0 eV   5.55 m    5.55 m          Tank  Transportation
+    2  -4.14 m     -10 m   -4.38 m    3.24 eV      0 eV   6.18 m    11.7 m    OutOfWorld  Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = opticalphoton,   Track ID = 40,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   25.1 um  -20.2 um  -3.93 um   2.93 eV      0 eV      0 fm      0 fm         Tank    initStep
+ Photon at Boundary! 
+ Old Momentum Direction: (-0.6895524,-0.4540972,0.56419253)
+ Old Polarization:       (-0.034816033,-0.75733277,-0.65210039)
+ New Momentum Direction: (0.6895524,-0.4540972,0.56419253)
+ New Polarization:       (-0.023663883,-0.79272854,-0.60911533)
+ *** SpikeReflection *** 
+    1     -5 m   -3.29 m    4.09 m    2.93 eV      0 eV   7.25 m    7.25 m          Tank  Transportation
+    2     -5 m   -3.29 m    4.09 m    2.93 eV      0 eV      0 fm   7.25 m         World  Transportation
+ Photon at Boundary! 
+ Old Momentum Direction: (0.6895524,-0.4540972,0.56419253)
+ Old Polarization:       (-0.023663883,-0.79272854,-0.60911533)
+ New Momentum Direction: (0.6895524,-0.4540972,-0.56419253)
+ New Polarization:       (0.023663883,0.79272854,-0.60911533)
+ *** LobeReflection *** 
+    3  -3.89 m   -4.02 m       5 m    2.93 eV      0 eV   1.61 m    8.86 m          Tank  Transportation
+    4  -3.89 m   -4.02 m       5 m    2.93 eV      0 eV      0 fm   8.86 m         World  Transportation
+ Photon at Boundary! 
+ Old Momentum Direction: (0.6895524,-0.4540972,-0.56419253)
+ Old Polarization:       (0.023663883,0.79272854,-0.60911533)
+ New Momentum Direction: (0.6895524,0.4540972,-0.56419253)
+ New Polarization:       (-0.023663883,0.79272854,0.60911533)
+ *** LobeReflection *** 
+    5  -2.41 m      -5 m    3.79 m    2.93 eV      0 eV   2.15 m      11 m          Tank  Transportation
+    6  -2.41 m      -5 m    3.79 m    2.93 eV      0 eV      0 fm     11 m         World  Transportation
+ Photon at Boundary! 
+ Old Momentum Direction: (0.6895524,0.4540972,-0.56419253)
+ Old Polarization:       (-0.023663883,0.79272854,0.60911533)
+ New Momentum Direction: (0.19668889,0.61475399,-0.76380037)
+ New Polarization:       (0.03787231,0.77367274,0.63245252)
+ *** FresnelRefraction *** 
+    7      5 m   -12.2 cm  -2.27 m    2.93 eV      0 eV   10.7 m    21.8 m          Tank  Transportation
+    8   6.99 m     6.1 m     -10 m    2.93 eV      0 eV   10.1 m    31.9 m    OutOfWorld  Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = opticalphoton,   Track ID = 39,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    408 um      0 fm      0 fm   3.85 eV      0 eV      0 fm      0 fm         Tank    initStep
+ Photon at Boundary! 
+ Old Momentum Direction: (0.85254802,-0.5220183,0.025666671)
+ Old Polarization:       (-0.52264891,-0.85151936,0.041867627)
+ New Momentum Direction: (0.70372064,-0.70961954,0.034890677)
+ New Polarization:       (0.71047678,0.70287156,-0.034558891)
+ *** FresnelRefraction *** 
+    1      5 m   -3.06 m    15.1 cm   3.85 eV      0 eV   5.86 m    5.86 m          Tank  Transportation
+    2     10 m    -8.1 m    39.8 cm   3.85 eV      0 eV   7.11 m      13 m    OutOfWorld  Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = opticalphoton,   Track ID = 38,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    323 um      0 fm      0 fm    2.2 eV      0 eV      0 fm      0 fm         Tank    initStep
+ Photon at Boundary! 
+ Old Momentum Direction: (0.86112734,-0.36381845,-0.35509977)
+ Old Polarization:       (-0.50838933,-0.61624821,-0.6014802)
+ New Momentum Direction: (0.72928752,-0.48963904,-0.47790514)
+ New Polarization:       (0.68420736,0.52189974,0.50939273)
+ *** FresnelRefraction *** 
+    1      5 m   -2.11 m   -2.06 m     2.2 eV      0 eV   5.81 m    5.81 m          Tank  Transportation
+    2     10 m   -5.47 m   -5.34 m     2.2 eV      0 eV   6.86 m    12.7 m    OutOfWorld  Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = opticalphoton,   Track ID = 37,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    146 um      0 fm      0 fm   3.88 eV      0 eV      0 fm      0 fm         Tank    initStep
+ Photon at Boundary! 
+ Old Momentum Direction: (0.85247191,0.1295654,0.50646268)
+ Old Polarization:       (-0.52277302,0.21127882,0.82587507)
+ New Momentum Direction: (0.70348617,0.17614392,0.68853506)
+ New Polarization:       (0.71070895,-0.17435381,-0.68153763)
+ *** FresnelRefraction *** 
+    1      5 m      76 cm   2.97 m    3.88 eV      0 eV   5.87 m    5.87 m          Tank  Transportation
+    2     10 m    2.01 m    7.86 m    3.88 eV      0 eV   7.11 m      13 m    OutOfWorld  Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = opticalphoton,   Track ID = 36,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    444 um      0 fm      0 fm   3.87 eV      0 eV      0 fm      0 fm         Tank    initStep
+ Photon at Boundary! 
+ Old Momentum Direction: (0.85248781,-0.38235925,0.35646309)
+ Old Polarization:       (-0.5227471,-0.6235455,0.58131444)
+ New Momentum Direction: (0.70353517,-0.51980699,0.48460186)
+ New Polarization:       (0.71066045,0.51459526,-0.47974311)
+ *** FresnelRefraction *** 
+    1      5 m   -2.24 m    2.09 m    3.87 eV      0 eV   5.86 m    5.86 m          Tank  Transportation
+    2     10 m   -5.94 m    5.53 m    3.87 eV      0 eV   7.11 m      13 m    OutOfWorld  Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = opticalphoton,   Track ID = 35,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    857 um      0 fm      0 fm   4.09 eV      0 eV      0 fm      0 fm         Tank    initStep
+
+** Photon absorbed! **
+    1   59.8 cm   20.4 cm  -30.5 cm   4.09 eV      0 eV   70.1 cm   70.1 cm         Tank  OpAbsorption
+
+*********************************************************************************************************
+* G4Track Information:   Particle = opticalphoton,   Track ID = 34,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    279 um      0 fm      0 fm   2.42 eV      0 eV      0 fm      0 fm         Tank    initStep
+ Photon at Boundary! 
+ Old Momentum Direction: (0.8595015,-0.44787952,0.24629478)
+ Old Polarization:       (-0.51113323,-0.75313654,0.4141596)
+ New Momentum Direction: (0.72456979,-0.60391144,0.33209877)
+ New Polarization:       (0.68920143,0.6349029,-0.34914137)
+ *** FresnelRefraction *** 
+    1      5 m   -2.61 m    1.43 m    2.42 eV      0 eV   5.82 m    5.82 m          Tank  Transportation
+    2     10 m   -6.77 m    3.72 m    2.42 eV      0 eV    6.9 m    12.7 m    OutOfWorld  Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = opticalphoton,   Track ID = 33,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    669 um      0 fm      0 fm   2.72 eV      0 eV      0 fm      0 fm         Tank    initStep
+ Photon at Boundary! 
+ Old Momentum Direction: (0.85724849,-0.1900385,-0.4785503)
+ Old Polarization:       (-0.51490292,-0.31639017,-0.79672595)
+ New Momentum Direction: (0.71793601,-0.25691743,-0.64696316)
+ New Polarization:       (0.69610911,0.26497322,0.66724906)
+ *** FresnelRefraction *** 
+    1      5 m   -1.11 m   -2.79 m    2.72 eV      0 eV   5.83 m    5.83 m          Tank  Transportation
+    2     10 m    -2.9 m    -7.3 m    2.72 eV      0 eV   6.96 m    12.8 m    OutOfWorld  Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = opticalphoton,   Track ID = 32,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    908 um      0 fm      0 fm   4.13 eV      0 eV      0 fm      0 fm         Tank    initStep
+ Photon at Boundary! 
+ Old Momentum Direction: (0.85168109,-0.020373577,0.52366424)
+ Old Polarization:       (-0.52406042,-0.033110285,0.85103724)
+ New Momentum Direction: (0.70104127,-0.027723558,0.7125816)
+ New Polarization:       (0.7131207,0.027253953,-0.7005113)
+ *** FresnelRefraction *** 
+    1      5 m     -12 cm   3.07 m    4.13 eV      0 eV   5.87 m    5.87 m          Tank  Transportation
+    2     10 m   -31.7 cm   8.16 m    4.13 eV      0 eV   7.13 m      13 m    OutOfWorld  Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = opticalphoton,   Track ID = 31,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    449 um      0 fm      0 fm   2.59 eV      0 eV      0 fm      0 fm         Tank    initStep
+ Photon at Boundary! 
+ Old Momentum Direction: (0.85813547,0.50155418,-0.10975845)
+ Old Polarization:       (-0.51342332,0.83829739,-0.18345021)
+ New Momentum Direction: (0.72056118,0.67736178,-0.1482316)
+ New Polarization:       (0.69339136,-0.70390349,0.1540399)
+ *** FresnelRefraction *** 
+    1      5 m    2.92 m   -63.9 cm   2.59 eV      0 eV   5.83 m    5.83 m          Tank  Transportation
+    2     10 m    7.62 m   -1.67 m    2.59 eV      0 eV   6.94 m    12.8 m    OutOfWorld  Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = opticalphoton,   Track ID = 30,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    352 um      0 fm      0 fm   2.17 eV      0 eV      0 fm      0 fm         Tank    initStep
+
+** Photon absorbed! **
+    1   4.95 m    2.83 m   -71.7 cm   2.17 eV      0 eV   5.75 m    5.75 m          Tank  OpAbsorption
+
+*********************************************************************************************************
+* G4Track Information:   Particle = opticalphoton,   Track ID = 29,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    460 um      0 fm      0 fm   2.21 eV      0 eV      0 fm      0 fm         Tank    initStep
+ Photon at Boundary! 
+ Old Momentum Direction: (0.86103311,-0.50406594,-0.067375947)
+ Old Polarization:       (-0.5085489,-0.85344292,-0.1140754)
+ New Momentum Direction: (0.72901566,-0.67846303,-0.090686726)
+ New Polarization:       (0.68449702,0.72258923,0.096584852)
+ *** FresnelRefraction *** 
+    1      5 m   -2.93 m   -39.1 cm   2.21 eV      0 eV   5.81 m    5.81 m          Tank  Transportation
+    2     10 m   -7.58 m   -1.01 m    2.21 eV      0 eV   6.86 m    12.7 m    OutOfWorld  Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = opticalphoton,   Track ID = 28,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    680 um      0 fm      0 fm    2.3 eV      0 eV      0 fm      0 fm         Tank    initStep
+ Photon at Boundary! 
+ Old Momentum Direction: (0.8603348,0.15836832,-0.48450336)
+ Old Polarization:       (-0.50972937,0.26729826,-0.81775767)
+ New Momentum Direction: (0.72699497,0.21333372,-0.6526615)
+ New Polarization:       (0.68664278,-0.22587078,0.6910167)
+ *** FresnelRefraction *** 
+    1      5 m      92 cm  -2.82 m     2.3 eV      0 eV   5.81 m    5.81 m          Tank  Transportation
+    2     10 m    2.39 m    -7.3 m     2.3 eV      0 eV   6.88 m    12.7 m    OutOfWorld  Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = opticalphoton,   Track ID = 27,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    631 um      0 fm      0 fm    2.8 eV      0 eV      0 fm      0 fm         Tank    initStep
+ Photon at Boundary! 
+ Old Momentum Direction: (0.85672622,-0.50882352,0.084373071)
+ Old Polarization:       (-0.51577145,-0.8451853,0.14014855)
+ New Momentum Direction: (0.7163819,-0.68830957,0.11413543)
+ New Polarization:       (0.69770837,0.70673156,-0.11719017)
+ *** FresnelRefraction *** 
+    1      5 m   -2.97 m    49.2 cm    2.8 eV      0 eV   5.84 m    5.84 m          Tank  Transportation
+    2     10 m   -7.77 m    1.29 m     2.8 eV      0 eV   6.98 m    12.8 m    OutOfWorld  Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = opticalphoton,   Track ID = 26,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    432 um      0 fm      0 fm   2.03 eV      0 eV      0 fm      0 fm         Tank    initStep
+
+** Photon absorbed! **
+    1    1.5 m    69.4 cm  -53.7 cm   2.03 eV      0 eV   1.73 m    1.73 m          Tank  OpAbsorption
+
+*********************************************************************************************************
+* G4Track Information:   Particle = opticalphoton,   Track ID = 25,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   65.1 um      0 fm      0 fm    3.6 eV      0 eV      0 fm      0 fm         Tank    initStep
+ Photon at Boundary! 
+ Old Momentum Direction: (0.85323787,-0.50655797,0.12403288)
+ Old Polarization:       (-0.52152194,-0.82875602,0.20292445)
+ New Momentum Direction: (0.70583968,-0.68804639,0.16847109)
+ New Polarization:       (0.70837161,0.68558711,-0.16786893)
+ *** FresnelRefraction *** 
+    1      5 m   -2.97 m    72.7 cm    3.6 eV      0 eV   5.86 m    5.86 m          Tank  Transportation
+    2     10 m   -7.84 m    1.92 m     3.6 eV      0 eV   7.08 m    12.9 m    OutOfWorld  Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = opticalphoton,   Track ID = 24,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    671 um      0 fm      0 fm   4.07 eV      0 eV      0 fm      0 fm         Tank    initStep
+ Photon at Boundary! 
+ Old Momentum Direction: (0.85189856,-0.27616861,-0.44497161)
+ Old Polarization:       (-0.52370682,-0.4492354,-0.7238223)
+ New Momentum Direction: (0.70171514,-0.3757034,-0.60534521)
+ New Polarization:       (0.71245763,0.37003851,0.59621777)
+ *** FresnelRefraction *** 
+    1      5 m   -1.62 m   -2.61 m    4.07 eV      0 eV   5.87 m    5.87 m          Tank  Transportation
+    2     10 m    -4.3 m   -6.92 m    4.07 eV      0 eV   7.13 m      13 m    OutOfWorld  Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = opticalphoton,   Track ID = 23,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   56.7 um      0 fm      0 fm   3.94 eV      0 eV      0 fm      0 fm         Tank    initStep
+
+** Photon absorbed! **
+    1   41.8 cm   24.9 cm   6.28 cm   3.94 eV      0 eV   49.1 cm   49.1 cm         Tank  OpAbsorption
+
+*********************************************************************************************************
+* G4Track Information:   Particle = opticalphoton,   Track ID = 22,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    195 um      0 fm      0 fm   3.97 eV      0 eV      0 fm      0 fm         Tank    initStep
+
+** Photon absorbed! **
+    1   1.22 m   -29.4 cm  -69.2 cm   3.97 eV      0 eV   1.44 m    1.44 m          Tank  OpAbsorption
+
+*********************************************************************************************************
+* G4Track Information:   Particle = opticalphoton,   Track ID = 21,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    325 um      0 fm      0 fm   4.12 eV      0 eV      0 fm      0 fm         Tank    initStep
+ Photon at Boundary! 
+ Old Momentum Direction: (0.85169957,0.45236164,-0.26453125)
+ Old Polarization:       (-0.52403038,0.73521734,-0.4299391)
+ New Momentum Direction: (0.70109859,0.61554248,-0.35995586)
+ New Polarization:       (0.71306435,-0.60521321,0.35391552)
+ *** FresnelRefraction *** 
+    1      5 m    2.66 m   -1.55 m    4.12 eV      0 eV   5.87 m    5.87 m          Tank  Transportation
+    2     10 m    7.05 m   -4.12 m    4.12 eV      0 eV   7.13 m      13 m    OutOfWorld  Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = opticalphoton,   Track ID = 20,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    625 um      0 fm      0 fm   3.49 eV      0 eV      0 fm      0 fm         Tank    initStep
+ Photon at Boundary! 
+ Old Momentum Direction: (0.85368378,-0.50525028,0.12627812)
+ Old Polarization:       (-0.52079172,-0.8282082,0.20699558)
+ New Momentum Direction: (0.70720326,-0.68591173,0.17143116)
+ New Polarization:       (0.70701028,0.68609895,-0.17147796)
+ *** FresnelRefraction *** 
+    1      5 m   -2.96 m      74 cm   3.49 eV      0 eV   5.86 m    5.86 m          Tank  Transportation
+    2     10 m   -7.81 m    1.95 m    3.49 eV      0 eV   7.07 m    12.9 m    OutOfWorld  Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = opticalphoton,   Track ID = 19,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    535 um      0 fm      0 fm   3.75 eV      0 eV      0 fm      0 fm         Tank    initStep
+
+** Photon absorbed! **
+    1   2.74 m    -1.6 m    49.4 cm   3.75 eV      0 eV   3.21 m    3.21 m          Tank  OpAbsorption
+
+*********************************************************************************************************
+* G4Track Information:   Particle = opticalphoton,   Track ID = 18,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    520 um      0 fm      0 fm    2.4 eV      0 eV      0 fm      0 fm         Tank    initStep
+
+** Photon absorbed! **
+    1   2.13 m    1.22 m    35.1 cm    2.4 eV      0 eV   2.48 m    2.48 m          Tank  OpAbsorption
+
+*********************************************************************************************************
+* G4Track Information:   Particle = opticalphoton,   Track ID = 17,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    216 um      0 fm      0 fm   3.16 eV      0 eV      0 fm      0 fm         Tank    initStep
+
+** Photon absorbed! **
+    1   1.42 m      47 cm   72.4 cm   3.16 eV      0 eV   1.66 m    1.66 m          Tank  OpAbsorption
+
+*********************************************************************************************************
+* G4Track Information:   Particle = opticalphoton,   Track ID = 16,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    638 um      0 fm      0 fm   3.76 eV      0 eV      0 fm      0 fm         Tank    initStep
+ Photon at Boundary! 
+ Old Momentum Direction: (0.85278639,0.41130284,-0.32184678)
+ Old Polarization:       (-0.52225988,0.67160714,-0.52553636)
+ New Momentum Direction: (0.70445415,0.55895924,-0.43738875)
+ New Polarization:       (0.7097495,-0.55478892,0.43412545)
+ *** FresnelRefraction *** 
+    1      5 m    2.41 m   -1.89 m    3.76 eV      0 eV   5.86 m    5.86 m          Tank  Transportation
+    2     10 m    6.38 m   -4.99 m    3.76 eV      0 eV    7.1 m      13 m    OutOfWorld  Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = opticalphoton,   Track ID = 15,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    781 um      0 fm      0 fm   2.48 eV      0 eV      0 fm      0 fm         Tank    initStep
+
+** Photon absorbed! **
+    1   99.2 cm   51.7 cm  -28.6 cm   2.48 eV      0 eV   1.15 m    1.15 m          Tank  OpAbsorption
+
+*********************************************************************************************************
+* G4Track Information:   Particle = opticalphoton,   Track ID = 14,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    121 um      0 fm      0 fm   3.72 eV      0 eV      0 fm      0 fm         Tank    initStep
+
+** Photon absorbed! **
+    1   1.01 m   -36.4 cm  -49.9 cm   3.72 eV      0 eV   1.18 m    1.18 m          Tank  OpAbsorption
+
+*********************************************************************************************************
+* G4Track Information:   Particle = opticalphoton,   Track ID = 13,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    269 um      0 fm      0 fm   2.25 eV      0 eV      0 fm      0 fm         Tank    initStep
+
+** Photon absorbed! **
+    1   95.1 cm     33 cm  -45.5 cm   2.25 eV      0 eV   1.11 m    1.11 m          Tank  OpAbsorption
+
+*********************************************************************************************************
+* G4Track Information:   Particle = opticalphoton,   Track ID = 12,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    127 um      0 fm      0 fm   2.16 eV      0 eV      0 fm      0 fm         Tank    initStep
+ Photon at Boundary! 
+ Old Momentum Direction: (0.8615111,-0.051191657,0.50515149)
+ Old Polarization:       (-0.50773873,-0.08685999,0.85712118)
+ New Momentum Direction: (0.73039278,-0.068864754,0.67954693)
+ New Polarization:       (0.68302737,0.07364027,-0.72667099)
+ *** FresnelRefraction *** 
+    1      5 m   -29.7 cm   2.93 m    2.16 eV      0 eV    5.8 m     5.8 m          Tank  Transportation
+    2     10 m   -76.9 cm   7.58 m    2.16 eV      0 eV   6.85 m    12.6 m    OutOfWorld  Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = opticalphoton,   Track ID = 11,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    863 um      0 fm      0 fm   2.69 eV      0 eV      0 fm      0 fm         Tank    initStep
+ Photon at Boundary! 
+ Old Momentum Direction: (0.8574164,0.16457695,0.48759773)
+ Old Polarization:       (-0.51462328,0.27420247,0.812389)
+ New Momentum Direction: (0.71843431,0.22245179,0.6590655)
+ New Polarization:       (0.69559481,-0.22975588,-0.68070559)
+ *** FresnelRefraction *** 
+    1      5 m      96 cm   2.84 m    2.69 eV      0 eV   5.83 m    5.83 m          Tank  Transportation
+    2     10 m    2.51 m    7.43 m    2.69 eV      0 eV   6.96 m    12.8 m    OutOfWorld  Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = opticalphoton,   Track ID = 10,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    597 um      0 fm      0 fm    2.2 eV      0 eV      0 fm      0 fm         Tank    initStep
+ Photon at Boundary! 
+ Old Momentum Direction: (0.86112833,0.26833694,-0.43180236)
+ Old Polarization:       (-0.50838764,0.45452037,-0.73140498)
+ New Momentum Direction: (0.7292904,0.3611364,-0.58113339)
+ New Polarization:       (0.68420429,-0.38493373,0.61942757)
+ *** FresnelRefraction *** 
+    1      5 m    1.56 m   -2.51 m     2.2 eV      0 eV   5.81 m    5.81 m          Tank  Transportation
+    2     10 m    4.03 m   -6.49 m     2.2 eV      0 eV   6.86 m    12.7 m    OutOfWorld  Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = opticalphoton,   Track ID = 9,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    259 um      0 fm      0 fm   2.74 eV      0 eV      0 fm      0 fm         Tank    initStep
+ Photon at Boundary! 
+ Old Momentum Direction: (0.85714229,-0.33130843,-0.3943879)
+ Old Polarization:       (-0.51507969,-0.55132919,-0.6562995)
+ New Momentum Direction: (0.71762049,-0.44795899,-0.53324814)
+ New Polarization:       (0.69643437,0.46158628,0.54946999)
+ *** FresnelRefraction *** 
+    1      5 m   -1.93 m    -2.3 m    2.74 eV      0 eV   5.83 m    5.83 m          Tank  Transportation
+    2     10 m   -5.05 m   -6.02 m    2.74 eV      0 eV   6.97 m    12.8 m    OutOfWorld  Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = opticalphoton,   Track ID = 8,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    831 um      0 fm      0 fm   3.12 eV      0 eV      0 fm      0 fm         Tank    initStep
+ Photon at Boundary! 
+ Old Momentum Direction: (0.85523123,0.44391052,-0.26743782)
+ Old Polarization:       (-0.5182466,0.73255887,-0.44133656)
+ New Momentum Direction: (0.71189876,0.60154841,-0.36240815)
+ New Polarization:       (0.70228211,-0.60978567,0.36737077)
+ *** FresnelRefraction *** 
+    1      5 m    2.59 m   -1.56 m    3.12 eV      0 eV   5.85 m    5.85 m          Tank  Transportation
+    2     10 m    6.82 m   -4.11 m    3.12 eV      0 eV   7.02 m    12.9 m    OutOfWorld  Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = opticalphoton,   Track ID = 7,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    691 um      0 fm      0 fm   3.03 eV      0 eV      0 fm      0 fm         Tank    initStep
+
+** Photon absorbed! **
+    1   47.7 cm    -19 cm  -21.7 cm   3.03 eV      0 eV   55.7 cm   55.7 cm         Tank  OpAbsorption
+
+*********************************************************************************************************
+* G4Track Information:   Particle = opticalphoton,   Track ID = 6,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    869 um      0 fm      0 fm   2.92 eV      0 eV      0 fm      0 fm         Tank    initStep
+ Photon at Boundary! 
+ Old Momentum Direction: (0.85606959,-0.076741873,-0.51113162)
+ Old Polarization:       (-0.51686057,-0.12710659,-0.84658081)
+ New Momentum Direction: (0.71441919,-0.10389198,-0.6919622)
+ New Polarization:       (0.69971796,0.10607477,0.70650047)
+ *** FresnelRefraction *** 
+    1      5 m   -44.8 cm  -2.98 m    2.92 eV      0 eV   5.84 m    5.84 m          Tank  Transportation
+    2     10 m   -1.18 m   -7.83 m    2.92 eV      0 eV      7 m    12.8 m    OutOfWorld  Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = opticalphoton,   Track ID = 5,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    604 um      0 fm      0 fm   2.08 eV      0 eV      0 fm      0 fm         Tank    initStep
+
+** Photon absorbed! **
+    1   2.26 m   -1.02 m   -84.8 cm   2.08 eV      0 eV   2.62 m    2.62 m          Tank  OpAbsorption
+
+*********************************************************************************************************
+* G4Track Information:   Particle = opticalphoton,   Track ID = 4,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    720 um      0 fm      0 fm   3.69 eV      0 eV      0 fm      0 fm         Tank    initStep
+ Photon at Boundary! 
+ Old Momentum Direction: (0.8529732,-0.33722403,-0.3983926)
+ Old Polarization:       (-0.52195471,-0.55108817,-0.65104924)
+ New Momentum Direction: (0.70502805,-0.45818601,-0.54129569)
+ New Polarization:       (0.70917942,0.4555039,0.53812708)
+ *** FresnelRefraction *** 
+    1      5 m   -1.98 m   -2.33 m    3.69 eV      0 eV   5.86 m    5.86 m          Tank  Transportation
+    2     10 m   -5.23 m   -6.17 m    3.69 eV      0 eV   7.09 m      13 m    OutOfWorld  Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = opticalphoton,   Track ID = 3,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   34.1 um      0 fm      0 fm   4.13 eV      0 eV      0 fm      0 fm         Tank    initStep
+
+** Photon absorbed! **
+    1   3.74 m   -50.1 cm   2.24 m    4.13 eV      0 eV   4.39 m    4.39 m          Tank  OpAbsorption
+
+*********************************************************************************************************
+* G4Track Information:   Particle = opticalphoton,   Track ID = 2,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    891 um      0 fm      0 fm   3.19 eV      0 eV      0 fm      0 fm         Tank    initStep
+ Photon at Boundary! 
+ Old Momentum Direction: (0.85494202,0.16692248,0.4911324)
+ Old Polarization:       (-0.51872357,0.27511578,0.80946721)
+ New Momentum Direction: (0.71102548,0.22627515,0.66576446)
+ New Polarization:       (0.70316624,-0.22880421,-0.67320567)
+ *** FresnelRefraction *** 
+    1      5 m    97.6 cm   2.87 m    3.19 eV      0 eV   5.85 m    5.85 m          Tank  Transportation
+    2     10 m    2.57 m    7.55 m    3.19 eV      0 eV   7.03 m    12.9 m    OutOfWorld  Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e+,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    1    953 um   -768 um   -149 um    172 keV     0 eV      0 fm   1.49 mm         Tank    initStep
+
+ Exiting from G4Scintillation::DoIt -- NumberOfSecondaries = 6
+    2    980 um   -837 um   -317 um      0 eV    172 keV   339 um   1.83 mm         Tank       eIoni
+    3    980 um   -837 um   -317 um      0 eV      0 eV      0 fm   1.83 mm         Tank  Scintillation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 63,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    980 um   -837 um   -317 um    511 keV     0 eV      0 fm      0 fm         Tank    initStep
+    1     -5 m   -2.97 m    94.3 cm    511 keV     0 eV   5.89 m    5.89 m          Tank  Transportation
+    2    -10 m   -5.94 m    1.89 m     511 keV     0 eV   5.89 m    11.8 m    OutOfWorld  Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 62,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    980 um   -837 um   -317 um    511 keV     0 eV      0 fm      0 fm         Tank    initStep
+    1      5 m    2.97 m   -94.3 cm    511 keV     0 eV   5.89 m    5.89 m          Tank  Transportation
+    2     10 m    5.94 m   -1.89 m     511 keV     0 eV   5.89 m    11.8 m    OutOfWorld  Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = opticalphoton,   Track ID = 61,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    964 um   -795 um   -215 um   4.07 eV      0 eV      0 fm      0 fm         Tank    initStep
+Scattering Photon!
+Old Momentum Direction: (-0.50217682,0.56057216,-0.65846586)
+Old Polarization: (-0.51694408,-0.80500897,-0.2910831)
+New Polarization: (0.80387048,0.075207075,0.59003064)
+Polarization Change: (0.80387048,0.075207075,0.59003064)
+New Momentum Direction: (-0.0050415567,0.99280013,-0.11967656)
+Momentum Change: (-0.0050415567,0.99280013,-0.11967656)
+    1  -1.31 m    1.47 m   -1.73 m    4.07 eV      0 eV   2.62 m    2.62 m          Tank  OpRayleigh
+ Photon at Boundary! 
+ Old Momentum Direction: (-0.0050415567,0.99280013,-0.11967656)
+ Old Polarization:       (0.80387048,0.075207075,0.59003064)
+ New Momentum Direction: (-0.0068585023,0.98663406,-0.16280724)
+ New Polarization:       (0.80343084,0.10237019,0.58653153)
+ *** FresnelRefraction *** 
+    2  -1.33 m       5 m   -2.15 m    4.07 eV      0 eV   3.56 m    6.18 m          Tank  Transportation
+    3  -1.37 m      10 m   -2.98 m    4.07 eV      0 eV   5.07 m    11.2 m    OutOfWorld  Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = opticalphoton,   Track ID = 60,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    968 um   -805 um   -238 um    2.2 eV      0 eV      0 fm      0 fm         Tank    initStep
+ Photon at Boundary! 
+ Old Momentum Direction: (0.12926647,0.9914764,-0.016270638)
+ Old Polarization:       (-0.046139279,-0.010376617,-0.99888112)
+ New Momentum Direction: (0.17395981,0.98450929,-0.021896142)
+ New Polarization:       (-0.20236349,0.013978718,-0.97921071)
+ *** FresnelRefraction *** 
+    1   26.2 cm      2 m   -3.31 cm    2.2 eV      0 eV   2.02 m    2.02 m          Tank  Transportation
+ Photon at Boundary! 
+ Old Momentum Direction: (0.17395981,0.98450929,-0.021896142)
+ Old Polarization:       (-0.20236349,0.013978718,-0.97921071)
+ New Momentum Direction: (0.12926647,0.9914764,-0.016270638)
+ New Polarization:       (-0.20299483,0.010398073,-0.9791246)
+ *** FresnelRefraction *** 
+    2   43.9 cm      3 m   -5.53 cm    2.2 eV      0 eV   1.02 m    3.03 m        Bubble  Transportation
+ Photon at Boundary! 
+ Old Momentum Direction: (0.12926647,0.9914764,-0.016270638)
+ Old Polarization:       (-0.20299483,0.010398073,-0.9791246)
+ New Momentum Direction: (0.17395981,0.98450929,-0.021896142)
+ New Polarization:       (-0.20252287,0.014007622,-0.97917735)
+ *** FresnelRefraction *** 
+    3   69.9 cm      5 m   -8.81 cm    2.2 eV      0 eV   2.02 m    5.05 m          Tank  Transportation
+    4   1.58 m      10 m   -19.9 cm    2.2 eV      0 eV   5.08 m    10.1 m    OutOfWorld  Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = opticalphoton,   Track ID = 59,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    980 um   -837 um   -316 um   2.64 eV      0 eV      0 fm      0 fm         Tank    initStep
+ Photon at Boundary! 
+ Old Momentum Direction: (-0.39817296,0.76373392,-0.50810313)
+ Old Polarization:       (-0.22602906,-0.6185125,-0.75256438)
+ New Momentum Direction: (-0.53794649,0.48926236,-0.68646625)
+ New Polarization:       (0.50274928,0.83986609,0.20461698)
+ *** FresnelRefraction *** 
+    1  -2.61 m       5 m   -3.33 m    2.64 eV      0 eV   6.55 m    6.55 m          Tank  Transportation
+    2  -7.84 m    9.76 m     -10 m    2.64 eV      0 eV   9.72 m    16.3 m    OutOfWorld  Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = opticalphoton,   Track ID = 58,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    960 um   -785 um   -191 um   3.43 eV      0 eV      0 fm      0 fm         Tank    initStep
+ Photon at Boundary! 
+ Old Momentum Direction: (0.37095926,-0.68046356,0.63194823)
+ Old Polarization:       (0.16549038,-0.62117048,-0.76600272)
+ New Momentum Direction: (0.61097402,0.79163506,-0.0049665743)
+ New Polarization:       (-0.2360849,0.18818842,0.95333574)
+ *** LambertianReflection *** 
+    1   2.73 m      -5 m    4.64 m    3.43 eV      0 eV   7.35 m    7.35 m          Tank  Transportation
+    2   2.73 m      -5 m    4.64 m    3.43 eV      0 eV      0 fm   7.35 m         World  Transportation
+ Photon at Boundary! 
+ Old Momentum Direction: (0.61097402,0.79163506,-0.0049665743)
+ Old Polarization:       (-0.2360849,0.18818842,0.95333574)
+ New Momentum Direction: (-0.61097402,-0.79163506,0.0049665743)
+ New Polarization:       (0.2360849,-0.18818842,-0.95333574)
+ *** BackScattering *** 
+    3      5 m   -2.05 m    4.62 m    3.43 eV      0 eV   3.72 m    11.1 m          Tank  Transportation
+    4      5 m   -2.05 m    4.62 m    3.43 eV      0 eV      0 fm   11.1 m         World  Transportation
+
+** Photon absorbed! **
+    5   4.57 m   -2.61 m    4.63 m    3.43 eV      0 eV   70.6 cm   11.8 m          Tank  OpAbsorption
+
+*********************************************************************************************************
+* G4Track Information:   Particle = opticalphoton,   Track ID = 57,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    970 um   -810 um   -250 um   3.53 eV      0 eV      0 fm      0 fm         Tank    initStep
+ Photon at Boundary! 
+ Old Momentum Direction: (0.79915338,-0.43052656,-0.41952443)
+ Old Polarization:       (0.036302195,0.73118704,-0.68121044)
+ New Momentum Direction: (0.57765388,-0.58462007,-0.56968006)
+ New Polarization:       (0.051753653,0.72272244,-0.68919797)
+ *** FresnelRefraction *** 
+    1      5 m   -2.69 m   -2.62 m    3.53 eV      0 eV   6.26 m    6.26 m          Tank  Transportation
+    2     10 m   -7.75 m   -7.56 m    3.53 eV      0 eV   8.66 m    14.9 m    OutOfWorld  Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = opticalphoton,   Track ID = 56,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    965 um   -799 um   -223 um   4.02 eV      0 eV      0 fm      0 fm         Tank    initStep
+
+** Photon absorbed! **
+    1   1.24 m   -2.24 m   -2.73 m    4.02 eV      0 eV   3.74 m    3.74 m          Tank  OpAbsorption
+Number of optical photons produces in this event : 60
+number of event = 1 User=0.16s Real=0.38s Sys=0.16s
 #
 /process/inactivate Scintillation
 /run/physicsModified
@@ -1342,358 +1303,353 @@ hIoni:   tables are built for  pi-
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
     0      0 fm      0 fm      0 fm    500 keV     0 eV      0 fm      0 fm         Tank    initStep
-    1   88.9 um   8.17 um  -10.7 um    480 keV    20 keV  90.8 um   90.8 um         Tank         msc
+    1    953 um      0 fm      0 fm      0 eV    500 keV  1.49 mm   1.49 mm         Tank       eIoni
 
 *********************************************************************************************************
-* G4Track Information:   Particle = opticalphoton,   Track ID = 2,   Parent ID = 1
-*********************************************************************************************************
-
-Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   53.2 um      0 fm      0 fm   2.59 eV      0 eV      0 fm      0 fm         Tank    initStep
-    1      5 m     2.3 m   -1.91 m    2.59 eV      0 eV   5.83 m    5.83 m          Tank  Transportation
-    2     10 m    6.01 m   -4.98 m    2.59 eV      0 eV   6.94 m    12.8 m    OutOfWorld  Transportation
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e+,   Track ID = 1,   Parent ID = 0
+* G4Track Information:   Particle = opticalphoton,   Track ID = 37,   Parent ID = 1
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    1   88.9 um   8.17 um  -10.7 um    480 keV     0 eV      0 fm   90.8 um         Tank    initStep
-    2    883 um    460 um   -755 um    196 keV   284 keV  1.44 mm   1.53 mm         Tank       eIoni
+    0    492 um      0 fm      0 fm   2.39 eV      0 eV      0 fm      0 fm         Tank    initStep
+    1      5 m    2.96 m   -21.6 cm   2.39 eV      0 eV   5.82 m    5.82 m          Tank  Transportation
+    2     10 m     7.7 m     -56 cm   2.39 eV      0 eV   6.89 m    12.7 m    OutOfWorld  Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = opticalphoton,   Track ID = 36,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    404 um      0 fm      0 fm   2.24 eV      0 eV      0 fm      0 fm         Tank    initStep
+    1      5 m   -2.92 m    43.8 cm   2.24 eV      0 eV   5.81 m    5.81 m          Tank  Transportation
+    2     10 m   -7.57 m    1.13 m    2.24 eV      0 eV   6.86 m    12.7 m    OutOfWorld  Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = opticalphoton,   Track ID = 35,   Parent ID = 1
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0    215 um   58.6 um  -9.85 um   2.61 eV      0 eV      0 fm      0 fm         Tank    initStep
-    1      5 m   -70.3 cm   51.4 cm   2.61 eV      0 eV   5.08 m    5.08 m          Tank  Transportation
-    2     10 m   -1.66 m    1.22 m    2.61 eV      0 eV   5.14 m    10.2 m    OutOfWorld  Transportation
+    0    314 um      0 fm      0 fm   2.64 eV      0 eV      0 fm      0 fm         Tank    initStep
+    1      5 m    2.54 m   -1.58 m    2.64 eV      0 eV   5.83 m    5.83 m          Tank  Transportation
+    2     10 m    6.64 m   -4.13 m    2.64 eV      0 eV   6.95 m    12.8 m    OutOfWorld  Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = opticalphoton,   Track ID = 34,   Parent ID = 1
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0    288 um   87.7 um  -9.36 um   2.57 eV      0 eV      0 fm      0 fm         Tank    initStep
-    1   4.08 m       5 m    1.04 m    2.57 eV      0 eV   6.53 m    6.53 m          Tank  Transportation
-    2     10 m    8.47 m    2.55 m    2.57 eV      0 eV   7.03 m    13.6 m    OutOfWorld  Transportation
+    0    186 um      0 fm      0 fm   2.96 eV      0 eV      0 fm      0 fm         Tank    initStep
+    1      5 m    2.83 m   -1.07 m    2.96 eV      0 eV   5.84 m    5.84 m          Tank  Transportation
+    2     10 m    7.41 m    -2.8 m    2.96 eV      0 eV      7 m    12.8 m    OutOfWorld  Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = opticalphoton,   Track ID = 33,   Parent ID = 1
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0    402 um    133 um  -8.59 um   3.78 eV      0 eV      0 fm      0 fm         Tank    initStep
-    1      5 m    3.15 m    3.35 m    3.78 eV      0 eV   6.79 m    6.79 m          Tank  Transportation
-    2   8.89 m    9.41 m      10 m    3.78 eV      0 eV   9.93 m    16.7 m    OutOfWorld  Transportation
+    0    749 um      0 fm      0 fm   2.77 eV      0 eV      0 fm      0 fm         Tank    initStep
+    1      5 m    44.4 cm   2.97 m    2.77 eV      0 eV   5.83 m    5.83 m          Tank  Transportation
+    2     10 m    1.16 m    7.78 m    2.77 eV      0 eV   6.97 m    12.8 m    OutOfWorld  Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = opticalphoton,   Track ID = 32,   Parent ID = 1
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0    224 um   62.1 um  -9.79 um   3.18 eV      0 eV      0 fm      0 fm         Tank    initStep
-    1      5 m   -77.2 cm  -3.68 cm   3.18 eV      0 eV   5.06 m    5.06 m          Tank  Transportation
-    2     10 m   -1.83 m   -8.72 cm   3.18 eV      0 eV   5.11 m    10.2 m    OutOfWorld  Transportation
+    0   96.9 um      0 fm      0 fm   2.57 eV      0 eV      0 fm      0 fm         Tank    initStep
+    1      5 m     2.8 m    1.05 m    2.57 eV      0 eV   5.83 m    5.83 m          Tank  Transportation
+    2     10 m     7.3 m    2.73 m    2.57 eV      0 eV   6.94 m    12.8 m    OutOfWorld  Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = opticalphoton,   Track ID = 31,   Parent ID = 1
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0    308 um   95.9 um  -9.22 um   3.15 eV      0 eV      0 fm      0 fm         Tank    initStep
-    1   3.95 m       5 m    79.2 cm   3.15 eV      0 eV   6.42 m    6.42 m          Tank  Transportation
-    2     10 m    8.81 m       2 m    3.15 eV      0 eV   7.25 m    13.7 m    OutOfWorld  Transportation
+    0   45.3 um      0 fm      0 fm   3.29 eV      0 eV      0 fm      0 fm         Tank    initStep
+    1      5 m    2.95 m   -73.3 cm   3.29 eV      0 eV   5.85 m    5.85 m          Tank  Transportation
+    2     10 m    7.77 m   -1.93 m    3.29 eV      0 eV   7.04 m    12.9 m    OutOfWorld  Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = opticalphoton,   Track ID = 30,   Parent ID = 1
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0    481 um    165 um  -8.05 um   4.04 eV      0 eV      0 fm      0 fm         Tank    initStep
-    1      5 m   -54.3 cm   1.26 m    4.04 eV      0 eV   5.18 m    5.18 m          Tank  Transportation
-    2     10 m   -1.31 m    3.04 m    4.04 eV      0 eV   5.36 m    10.5 m    OutOfWorld  Transportation
+    0    133 um      0 fm      0 fm   2.61 eV      0 eV      0 fm      0 fm         Tank    initStep
+    1     10 cm   4.78 cm  -3.64 cm   2.61 eV      0 eV   11.7 cm   11.7 cm         Tank  OpAbsorption
 
 *********************************************************************************************************
 * G4Track Information:   Particle = opticalphoton,   Track ID = 29,   Parent ID = 1
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0    693 um    250 um  -6.61 um   3.78 eV      0 eV      0 fm      0 fm         Tank    initStep
-    1      5 m    1.22 m       3 m    3.78 eV      0 eV   5.95 m    5.95 m          Tank  Transportation
-    2     10 m    3.28 m    8.07 m    3.78 eV      0 eV   7.41 m    13.4 m    OutOfWorld  Transportation
+    0    180 um      0 fm      0 fm   3.49 eV      0 eV      0 fm      0 fm         Tank    initStep
+    1      5 m   -2.32 m   -1.98 m    3.49 eV      0 eV   5.86 m    5.86 m          Tank  Transportation
+    2     10 m   -6.11 m   -5.23 m    3.49 eV      0 eV   7.07 m    12.9 m    OutOfWorld  Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = opticalphoton,   Track ID = 28,   Parent ID = 1
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0    914 um    338 um  -5.11 um   2.07 eV      0 eV      0 fm      0 fm         Tank    initStep
-    1   67.4 cm   72.7 cm   29.1 cm   2.07 eV      0 eV   1.03 m    1.03 m          Tank  OpAbsorption
+    0    915 um      0 fm      0 fm   4.08 eV      0 eV      0 fm      0 fm         Tank    initStep
+    1      5 m   -2.92 m   -95.5 cm   4.08 eV      0 eV   5.87 m    5.87 m          Tank  Transportation
+    2     10 m   -7.75 m   -2.53 m    4.08 eV      0 eV   7.13 m      13 m    OutOfWorld  Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = opticalphoton,   Track ID = 27,   Parent ID = 1
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0    301 um     93 um  -9.27 um   2.29 eV      0 eV      0 fm      0 fm         Tank    initStep
-    1      5 m   -70.2 cm   32.8 cm   2.29 eV      0 eV   5.06 m    5.06 m          Tank  Transportation
-    2     10 m   -1.66 m    77.3 cm   2.29 eV      0 eV   5.11 m    10.2 m    OutOfWorld  Transportation
+    0    672 um      0 fm      0 fm   3.52 eV      0 eV      0 fm      0 fm         Tank    initStep
+    1      5 m   -1.65 m    2.57 m    3.52 eV      0 eV   5.86 m    5.86 m          Tank  Transportation
+    2     10 m   -4.35 m    6.78 m    3.52 eV      0 eV   7.07 m    12.9 m    OutOfWorld  Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = opticalphoton,   Track ID = 26,   Parent ID = 1
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0    621 um    221 um   -7.1 um   3.66 eV      0 eV      0 fm      0 fm         Tank    initStep
-    1      5 m    3.94 m    3.21 m    3.66 eV      0 eV   7.13 m    7.13 m          Tank  Transportation
-    2      5 m    3.94 m    3.21 m    3.66 eV      0 eV      0 fm   7.13 m         World  Transportation
-    3   4.51 m       5 m    1.46 m    3.66 eV      0 eV    2.1 m    9.23 m          Tank  Transportation
-    4   4.51 m       5 m    1.46 m    3.66 eV      0 eV      0 fm   9.23 m         World  Transportation
-    5   2.68 m    1.07 m      -5 m    3.66 eV      0 eV   7.78 m      17 m          Tank  Transportation
-    6   24.4 cm  -4.17 m     -10 m    3.66 eV      0 eV   7.64 m    24.7 m    OutOfWorld  Transportation
+    0    665 um      0 fm      0 fm   2.97 eV      0 eV      0 fm      0 fm         Tank    initStep
+    1      5 m    2.78 m    1.19 m    2.97 eV      0 eV   5.84 m    5.84 m          Tank  Transportation
+    2     10 m    7.29 m    3.11 m    2.97 eV      0 eV   7.01 m    12.8 m    OutOfWorld  Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = opticalphoton,   Track ID = 25,   Parent ID = 1
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0    593 um    210 um  -7.29 um   2.64 eV      0 eV      0 fm      0 fm         Tank    initStep
-    1   3.88 m    4.97 m    6.52 cm   2.64 eV      0 eV    6.3 m     6.3 m          Tank  OpRayleigh
-    2   3.86 m       5 m    7.06 cm   2.64 eV      0 eV   4.02 cm   6.34 m          Tank  Transportation
-    3  -76.9 cm     10 m    1.33 m    2.64 eV      0 eV   6.93 m    13.3 m    OutOfWorld  Transportation
+    0   8.37 um      0 fm      0 fm   2.19 eV      0 eV      0 fm      0 fm         Tank    initStep
+    1   3.93 m    1.83 m   -1.42 m    2.19 eV      0 eV   4.57 m    4.57 m          Tank  OpAbsorption
 
 *********************************************************************************************************
 * G4Track Information:   Particle = opticalphoton,   Track ID = 24,   Parent ID = 1
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0    904 um    334 um  -5.18 um   4.06 eV      0 eV      0 fm      0 fm         Tank    initStep
-    1   27.2 cm   23.7 cm  -16.2 cm   4.06 eV      0 eV   39.5 cm   39.5 cm         Tank  OpAbsorption
+    0    355 um      0 fm      0 fm   2.97 eV      0 eV      0 fm      0 fm         Tank    initStep
+    1      5 m   -2.64 m    1.47 m    2.97 eV      0 eV   5.84 m    5.84 m          Tank  Transportation
+    2     10 m   -6.93 m    3.85 m    2.97 eV      0 eV      7 m    12.8 m    OutOfWorld  Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = opticalphoton,   Track ID = 23,   Parent ID = 1
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0    178 um   43.9 um  -10.1 um    2.1 eV      0 eV      0 fm      0 fm         Tank    initStep
-    1      5 m   -59.5 cm   80.7 cm    2.1 eV      0 eV    5.1 m     5.1 m          Tank  Transportation
-    2     10 m   -1.41 m    1.91 m     2.1 eV      0 eV   5.18 m    10.3 m    OutOfWorld  Transportation
+    0    761 um      0 fm      0 fm   4.06 eV      0 eV      0 fm      0 fm         Tank    initStep
+    1      5 m    2.17 m    2.17 m    4.06 eV      0 eV   5.87 m    5.87 m          Tank  Transportation
+    2     10 m    5.76 m    5.76 m    4.06 eV      0 eV   7.12 m      13 m    OutOfWorld  Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = opticalphoton,   Track ID = 22,   Parent ID = 1
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0    274 um   82.1 um  -9.46 um   3.65 eV      0 eV      0 fm      0 fm         Tank    initStep
-    1   3.95 m       5 m   -79.3 cm   3.65 eV      0 eV   6.42 m    6.42 m          Tank  Transportation
-    2     10 m     8.8 m   -2.01 m    3.65 eV      0 eV   7.25 m    13.7 m    OutOfWorld  Transportation
+    0   31.2 um      0 fm      0 fm   4.13 eV      0 eV      0 fm      0 fm         Tank    initStep
+    1      5 m   -17.1 cm  -3.07 m    4.13 eV      0 eV   5.87 m    5.87 m          Tank  Transportation
+    2     10 m   -45.5 cm  -8.15 m    4.13 eV      0 eV   7.13 m      13 m    OutOfWorld  Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = opticalphoton,   Track ID = 21,   Parent ID = 1
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0    333 um    106 um  -9.05 um   2.23 eV      0 eV      0 fm      0 fm         Tank    initStep
-    1    2.5 m    2.27 m    1.41 m    2.23 eV      0 eV   3.66 m    3.66 m          Tank  OpAbsorption
+    0    842 um      0 fm      0 fm   3.81 eV      0 eV      0 fm      0 fm         Tank    initStep
+    1   2.46 m   -1.09 m   -1.04 m    3.81 eV      0 eV   2.88 m    2.88 m          Tank  OpRayleigh
+    2  -2.36 m      -5 m    1.77 m    3.81 eV      0 eV   6.81 m    9.69 m          Tank  Transportation
+    3  -2.36 m      -5 m    1.77 m    3.81 eV      0 eV      0 fm   9.69 m         World  Transportation
+    4     -5 m   -2.86 m    3.31 m    3.81 eV      0 eV   3.74 m    13.4 m          Tank  Transportation
+    5   -8.3 m    6.44 m      10 m    3.81 eV      0 eV   11.9 m    25.3 m    OutOfWorld  Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = opticalphoton,   Track ID = 20,   Parent ID = 1
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0    916 um    339 um   -5.1 um   3.94 eV      0 eV      0 fm      0 fm         Tank    initStep
-    1      5 m   -79.8 cm  -5.24 cm   3.94 eV      0 eV   5.06 m    5.06 m          Tank  Transportation
-    2     10 m    -1.9 m   -12.5 cm   3.94 eV      0 eV   5.12 m    10.2 m    OutOfWorld  Transportation
+    0    827 um      0 fm      0 fm   2.33 eV      0 eV      0 fm      0 fm         Tank    initStep
+    1      5 m    1.09 m   -2.76 m    2.33 eV      0 eV   5.81 m    5.81 m          Tank  Transportation
+    2     10 m    2.83 m   -7.16 m    2.33 eV      0 eV   6.88 m    12.7 m    OutOfWorld  Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = opticalphoton,   Track ID = 19,   Parent ID = 1
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0    245 um   70.3 um  -9.65 um   3.29 eV      0 eV      0 fm      0 fm         Tank    initStep
-    1      5 m    1.26 cm   2.08 m    3.29 eV      0 eV   5.42 m    5.42 m          Tank  Transportation
-    2     10 m    3.09 cm   5.13 m    3.29 eV      0 eV   5.86 m    11.3 m    OutOfWorld  Transportation
+    0    232 um      0 fm      0 fm    2.9 eV      0 eV      0 fm      0 fm         Tank    initStep
+    1      5 m   -2.37 m    1.86 m     2.9 eV      0 eV   5.84 m    5.84 m          Tank  Transportation
+    2     10 m   -6.22 m    4.89 m     2.9 eV      0 eV      7 m    12.8 m    OutOfWorld  Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = opticalphoton,   Track ID = 18,   Parent ID = 1
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0    801 um    293 um  -5.87 um   3.94 eV      0 eV      0 fm      0 fm         Tank    initStep
-    1     82 cm   1.07 m    4.13 cm   3.94 eV      0 eV   1.35 m    1.35 m          Tank  OpAbsorption
+    0    160 um      0 fm      0 fm   3.81 eV      0 eV      0 fm      0 fm         Tank    initStep
+    1   2.19 m    14.9 cm   1.33 m    3.81 eV      0 eV   2.57 m    2.57 m          Tank  OpAbsorption
 
 *********************************************************************************************************
 * G4Track Information:   Particle = opticalphoton,   Track ID = 17,   Parent ID = 1
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0    566 um    199 um  -7.47 um   2.54 eV      0 eV      0 fm      0 fm         Tank    initStep
-    1   4.45 m       5 m   -1.73 m    2.54 eV      0 eV   6.91 m    6.91 m          Tank  Transportation
-    2   4.45 m       5 m   -1.73 m    2.54 eV      0 eV      0 fm   6.91 m         World  Transportation
-    3      5 m    4.38 m   -1.94 m    2.54 eV      0 eV   85.7 cm   7.77 m          Tank  Transportation
-    4      5 m    4.38 m   -1.94 m    2.54 eV      0 eV      0 fm   7.77 m         World  Transportation
-    5   4.93 m    4.37 m   -1.95 m    2.54 eV      0 eV   7.32 cm   7.84 m          Tank  OpAbsorption
+    0    171 um      0 fm      0 fm   3.16 eV      0 eV      0 fm      0 fm         Tank    initStep
+    1      5 m    2.04 m   -2.24 m    3.16 eV      0 eV   5.85 m    5.85 m          Tank  Transportation
+    2     10 m    5.37 m   -5.89 m    3.16 eV      0 eV   7.03 m    12.9 m    OutOfWorld  Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = opticalphoton,   Track ID = 16,   Parent ID = 1
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0    920 um    340 um  -5.07 um   3.01 eV      0 eV      0 fm      0 fm         Tank    initStep
-    1      5 m    1.24 m   -2.88 m    3.01 eV      0 eV    5.9 m     5.9 m          Tank  Transportation
-    2     10 m    3.29 m   -7.63 m    3.01 eV      0 eV    7.2 m    13.1 m    OutOfWorld  Transportation
+    0    876 um      0 fm      0 fm   2.27 eV      0 eV      0 fm      0 fm         Tank    initStep
+    1   4.13 m    1.26 m   -2.09 m    2.27 eV      0 eV    4.8 m     4.8 m          Tank  OpAbsorption
 
 *********************************************************************************************************
 * G4Track Information:   Particle = opticalphoton,   Track ID = 15,   Parent ID = 1
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0    424 um    142 um  -8.44 um    3.4 eV      0 eV      0 fm      0 fm         Tank    initStep
-    1   4.03 m       5 m    1.11 m     3.4 eV      0 eV   6.52 m    6.52 m          Tank  Transportation
-    2     10 m     8.5 m    2.75 m     3.4 eV      0 eV   7.11 m    13.6 m    OutOfWorld  Transportation
+    0    607 um      0 fm      0 fm   4.09 eV      0 eV      0 fm      0 fm         Tank    initStep
+    1      5 m   -37.2 cm  -3.05 m    4.09 eV      0 eV   5.87 m    5.87 m          Tank  Transportation
+    2     10 m   -98.7 cm  -8.09 m    4.09 eV      0 eV   7.13 m      13 m    OutOfWorld  Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = opticalphoton,   Track ID = 14,   Parent ID = 1
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0    321 um    101 um  -9.13 um   3.69 eV      0 eV      0 fm      0 fm         Tank    initStep
-    1   3.99 m       5 m    1.02 m    3.69 eV      0 eV   6.48 m    6.48 m          Tank  Transportation
-    2     10 m    8.63 m    2.57 m    3.69 eV      0 eV   7.19 m    13.7 m    OutOfWorld  Transportation
+    0    433 um      0 fm      0 fm   3.03 eV      0 eV      0 fm      0 fm         Tank    initStep
+    1      5 m     -71 cm   2.94 m    3.03 eV      0 eV   5.84 m    5.84 m          Tank  Transportation
+    2     10 m   -1.86 m    7.72 m    3.03 eV      0 eV   7.01 m    12.9 m    OutOfWorld  Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = opticalphoton,   Track ID = 13,   Parent ID = 1
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0    476 um    163 um  -8.08 um   2.26 eV      0 eV      0 fm      0 fm         Tank    initStep
-    1      5 m     -62 cm  -69.7 cm   2.26 eV      0 eV   5.09 m    5.09 m          Tank  Transportation
-    2     10 m   -1.47 m   -1.65 m    2.26 eV      0 eV   5.16 m    10.2 m    OutOfWorld  Transportation
+    0   72.6 um      0 fm      0 fm   2.06 eV      0 eV      0 fm      0 fm         Tank    initStep
+    1   2.02 m    36.7 cm  -1.13 m    2.06 eV      0 eV   2.34 m    2.34 m          Tank  OpAbsorption
 
 *********************************************************************************************************
 * G4Track Information:   Particle = opticalphoton,   Track ID = 12,   Parent ID = 1
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0    443 um    150 um  -8.31 um   2.69 eV      0 eV      0 fm      0 fm         Tank    initStep
-    1   93.3 cm   5.33 cm   43.2 cm   2.69 eV      0 eV   1.03 m    1.03 m          Tank  OpAbsorption
+    0    160 um      0 fm      0 fm   3.87 eV      0 eV      0 fm      0 fm         Tank    initStep
+    1      5 m   -3.01 m    56.9 cm   3.87 eV      0 eV   5.87 m    5.87 m          Tank  Transportation
+    2     10 m   -7.98 m    1.51 m    3.87 eV      0 eV   7.11 m      13 m    OutOfWorld  Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = opticalphoton,   Track ID = 11,   Parent ID = 1
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0    631 um    225 um  -7.03 um   3.95 eV      0 eV      0 fm      0 fm         Tank    initStep
-    1   3.07 m   -42.7 cm   50.8 cm   3.95 eV      0 eV   3.14 m    3.14 m          Tank  OpAbsorption
+    0    637 um      0 fm      0 fm   2.04 eV      0 eV      0 fm      0 fm         Tank    initStep
+    1   17.5 cm   10.2 cm  -5.47 mm   2.04 eV      0 eV   20.2 cm   20.2 cm         Tank  OpAbsorption
 
 *********************************************************************************************************
 * G4Track Information:   Particle = opticalphoton,   Track ID = 10,   Parent ID = 1
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0    159 um   36.4 um  -10.2 um   3.52 eV      0 eV      0 fm      0 fm         Tank    initStep
-    1      5 m    4.69 m    2.91 m    3.52 eV      0 eV   7.45 m    7.45 m          Tank  Transportation
-    2      5 m    4.69 m    2.91 m    3.52 eV      0 eV      0 fm   7.45 m         World  Transportation
-    3   4.67 m       5 m    3.11 m    3.52 eV      0 eV   49.8 cm   7.94 m          Tank  Transportation
-    4   4.67 m       5 m    3.11 m    3.52 eV      0 eV      0 fm   7.94 m         World  Transportation
-    5   1.41 m    1.95 m       5 m    3.52 eV      0 eV   4.85 m    12.8 m          Tank  Transportation
-    6   1.41 m    1.95 m       5 m    3.52 eV      0 eV      0 fm   12.8 m         World  Transportation
-    7   1.86 m       5 m    1.89 m    3.52 eV      0 eV   4.38 m    17.2 m          Tank  Transportation
-    8   1.86 m       5 m    1.89 m    3.52 eV      0 eV      0 fm   17.2 m         World  Transportation
-    9   1.41 m    1.95 m       5 m    3.52 eV      0 eV   4.38 m    21.5 m          Tank  Transportation
-   10  -32.7 cm    -10 m    8.69 m    3.52 eV      0 eV   12.6 m    34.2 m    OutOfWorld  Transportation
+    0    643 um      0 fm      0 fm   2.89 eV      0 eV      0 fm      0 fm         Tank    initStep
+    1      5 m   -2.51 m    1.68 m    2.89 eV      0 eV   5.84 m    5.84 m          Tank  Transportation
+    2     10 m   -6.57 m     4.4 m    2.89 eV      0 eV   6.99 m    12.8 m    OutOfWorld  Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = opticalphoton,   Track ID = 9,   Parent ID = 1
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0    672 um    241 um  -6.75 um   2.38 eV      0 eV      0 fm      0 fm         Tank    initStep
-    1   2.69 m    2.16 m    1.65 m    2.38 eV      0 eV   3.82 m    3.82 m          Tank  OpAbsorption
+    0    918 um      0 fm      0 fm   2.21 eV      0 eV      0 fm      0 fm         Tank    initStep
+    1   11.4 cm  -3.85 cm  -5.48 cm   2.21 eV      0 eV   13.2 cm   13.2 cm         Tank  OpAbsorption
 
 *********************************************************************************************************
 * G4Track Information:   Particle = opticalphoton,   Track ID = 8,   Parent ID = 1
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0    717 um    259 um  -6.45 um   3.49 eV      0 eV      0 fm      0 fm         Tank    initStep
-    1      5 m    82.2 cm   2.77 m    3.49 eV      0 eV   5.77 m    5.77 m          Tank  Transportation
-    2     10 m    2.14 m    7.21 m    3.49 eV      0 eV   6.82 m    12.6 m    OutOfWorld  Transportation
+    0   59.6 um      0 fm      0 fm   2.81 eV      0 eV      0 fm      0 fm         Tank    initStep
+    1   3.01 m   -74.4 cm   1.65 m    2.81 eV      0 eV   3.51 m    3.51 m          Tank  OpAbsorption
 
 *********************************************************************************************************
 * G4Track Information:   Particle = opticalphoton,   Track ID = 7,   Parent ID = 1
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   91.7 um   9.29 um  -10.7 um   2.52 eV      0 eV      0 fm      0 fm         Tank    initStep
-    1      5 m    3.45 m    3.22 m    2.52 eV      0 eV   6.87 m    6.87 m          Tank  Transportation
-    2   8.66 m      10 m    9.34 m    2.52 eV      0 eV   9.69 m    16.6 m    OutOfWorld  Transportation
+    0    206 um      0 fm      0 fm   2.15 eV      0 eV      0 fm      0 fm         Tank    initStep
+    1      5 m    80.2 cm  -2.83 m    2.15 eV      0 eV    5.8 m     5.8 m          Tank  Transportation
+    2     10 m    2.08 m   -7.33 m    2.15 eV      0 eV   6.84 m    12.6 m    OutOfWorld  Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = opticalphoton,   Track ID = 6,   Parent ID = 1
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0    631 um    225 um  -7.03 um   3.06 eV      0 eV      0 fm      0 fm         Tank    initStep
-    1      5 m   -76.3 cm  -13.9 cm   3.06 eV      0 eV   5.06 m    5.06 m          Tank  Transportation
-    2     10 m   -1.81 m   -32.9 cm   3.06 eV      0 eV   5.11 m    10.2 m    OutOfWorld  Transportation
+    0    592 um      0 fm      0 fm   3.34 eV      0 eV      0 fm      0 fm         Tank    initStep
+    1   4.68 m   -1.33 m    2.52 m    3.34 eV      0 eV   5.48 m    5.48 m          Tank  OpRayleigh
+    2   2.57 m     -14 cm      5 m    3.34 eV      0 eV   3.47 m    8.94 m          Tank  Transportation
+    3    -10 m    6.95 m    9.87 m    3.34 eV      0 eV   15.2 m    24.2 m    OutOfWorld  Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = opticalphoton,   Track ID = 5,   Parent ID = 1
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0    826 um    303 um  -5.71 um   4.02 eV      0 eV      0 fm      0 fm         Tank    initStep
-    1      5 m     -80 cm   14.6 cm   4.02 eV      0 eV   5.06 m    5.06 m          Tank  Transportation
-    2     10 m    -1.9 m    34.7 cm   4.02 eV      0 eV   5.12 m    10.2 m    OutOfWorld  Transportation
+    0    748 um      0 fm      0 fm   2.28 eV      0 eV      0 fm      0 fm         Tank    initStep
+    1      5 m    95.2 cm   -2.8 m    2.28 eV      0 eV   5.81 m    5.81 m          Tank  Transportation
+    2     10 m    2.47 m   -7.27 m    2.28 eV      0 eV   6.87 m    12.7 m    OutOfWorld  Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = opticalphoton,   Track ID = 4,   Parent ID = 1
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0    488 um    168 um     -8 um   3.93 eV      0 eV      0 fm      0 fm         Tank    initStep
-    1   3.84 m       5 m    42.3 cm   3.93 eV      0 eV   6.32 m    6.32 m          Tank  Transportation
-    2     10 m    9.14 m     1.1 m    3.93 eV      0 eV   7.45 m    13.8 m    OutOfWorld  Transportation
+    0   46.3 um      0 fm      0 fm    2.6 eV      0 eV      0 fm      0 fm         Tank    initStep
+    1    2.1 m    94.4 cm  -83.2 cm    2.6 eV      0 eV   2.45 m    2.45 m          Tank  OpAbsorption
 
 *********************************************************************************************************
 * G4Track Information:   Particle = opticalphoton,   Track ID = 3,   Parent ID = 1
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0    153 um   33.6 um  -10.3 um   3.61 eV      0 eV      0 fm      0 fm         Tank    initStep
-    1      5 m    46.6 cm   2.53 m    3.61 eV      0 eV   5.62 m    5.62 m          Tank  Transportation
-    2     10 m    1.18 m    6.43 m    3.61 eV      0 eV   6.38 m      12 m    OutOfWorld  Transportation
+    0    360 um      0 fm      0 fm   3.98 eV      0 eV      0 fm      0 fm         Tank    initStep
+    1      5 m    2.82 m   -1.21 m    3.98 eV      0 eV   5.87 m    5.87 m          Tank  Transportation
+    2     10 m    7.47 m    -3.2 m    3.98 eV      0 eV   7.12 m      13 m    OutOfWorld  Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = opticalphoton,   Track ID = 2,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    946 um      0 fm      0 fm    3.5 eV      0 eV      0 fm      0 fm         Tank    initStep
+    1      5 m   -1.89 m    2.39 m     3.5 eV      0 eV   5.86 m    5.86 m          Tank  Transportation
+    2     10 m      -5 m    6.31 m     3.5 eV      0 eV   7.07 m    12.9 m    OutOfWorld  Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e+,   Track ID = 1,   Parent ID = 0
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    2    883 um    460 um   -755 um    196 keV     0 eV      0 fm   1.53 mm         Tank    initStep
-    3    697 um    549 um   -853 um      0 eV    196 keV   417 um   1.95 mm         Tank       eIoni
-    4    697 um    549 um   -853 um      0 eV      0 eV      0 fm   1.95 mm         Tank     annihil
+    1    953 um      0 fm      0 fm      0 eV      0 eV      0 fm   1.49 mm         Tank    initStep
+    2    953 um      0 fm      0 fm      0 eV      0 eV      0 fm   1.49 mm         Tank     annihil
 
 *********************************************************************************************************
-* G4Track Information:   Particle = gamma,   Track ID = 37,   Parent ID = 1
-*********************************************************************************************************
-
-Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0    697 um    549 um   -853 um    511 keV     0 eV      0 fm      0 fm         Tank    initStep
-    1     -5 m   -61.5 cm   1.44 m     511 keV     0 eV   5.24 m    5.24 m          Tank  Transportation
-    2    -10 m   -1.23 m    2.87 m     511 keV     0 eV   5.24 m    10.5 m    OutOfWorld  Transportation
-
-*********************************************************************************************************
-* G4Track Information:   Particle = gamma,   Track ID = 36,   Parent ID = 1
+* G4Track Information:   Particle = gamma,   Track ID = 39,   Parent ID = 1
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0    697 um    549 um   -853 um    511 keV     0 eV      0 fm      0 fm         Tank    initStep
-    1      5 m    61.6 cm  -1.44 m     511 keV     0 eV   5.24 m    5.24 m          Tank  Transportation
-    2     10 m    1.23 m   -2.87 m     511 keV     0 eV   5.24 m    10.5 m    OutOfWorld  Transportation
-Number of optical photons produces in this event : 34
-number of event = 1 User=0.09s Real=0.2s Sys=0.06s
+    0    953 um      0 fm      0 fm    511 keV     0 eV      0 fm      0 fm         Tank    initStep
+    1  -12.6 cm      5 m    3.82 m     511 keV     0 eV   6.29 m    6.29 m          Tank  Transportation
+    2  -25.4 cm     10 m    7.63 m     511 keV     0 eV   6.29 m    12.6 m    OutOfWorld  Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 38,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    953 um      0 fm      0 fm    511 keV     0 eV      0 fm      0 fm         Tank    initStep
+    1   12.8 cm     -5 m   -3.82 m     511 keV     0 eV   6.29 m    6.29 m          Tank  Transportation
+    2   25.6 cm    -10 m   -7.63 m     511 keV     0 eV   6.29 m    12.6 m    OutOfWorld  Transportation
+Number of optical photons produces in this event : 36
+number of event = 1 User=0.11s Real=0.13s Sys=0.02s
 Graphics systems deleted.
 Visualization Manager deleting...

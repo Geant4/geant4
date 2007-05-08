@@ -1,12 +1,12 @@
 
 *************************************************************
- Geant4 version Name: global-V08-02-01    (23-February-2007)
+ Geant4 version Name: geant4-08-03-cand-00    (5-May-2007)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
 
-Instantiated G3toG4DetectorConstruction using call list file "/afs/cern.ch/sw/geant4/stt/dev1/src/geant4/examples/extended/g3tog4/data/testmodel.dat"
+Instantiated G3toG4DetectorConstruction using call list file "/afs/cern.ch/sw/geant4/stt/dev2/src/geant4/examples/extended/g3tog4/data/testmodel.dat"
 G4VUserPhysicsList::SetVerboseLevel  : Verbose level is set to 2
 Visualization Manager instantiating...
 Visualization Manager initialising...
@@ -16,6 +16,7 @@ You have successfully registered the following graphics systems.
 Current available graphics systems are:
   ASCIITree (ATree)
   DAWNFILE (DAWNFILE)
+  GAGTree (GAGTree)
   G4HepRep (HepRepXML)
   G4HepRepFile (HepRepFile)
   RayTracer (RayTracer)
@@ -43,7 +44,7 @@ Registered filter factories:
 /tracking/storeTrajectory 1
 /run/initialize
 Instantiated unit rotation matrix irot=0
-Reading the call List file /afs/cern.ch/sw/geant4/stt/dev1/src/geant4/examples/extended/g3tog4/data/testmodel.dat...
+Reading the call List file /afs/cern.ch/sw/geant4/stt/dev2/src/geant4/examples/extended/g3tog4/data/testmodel.dat...
 G4ggclos: setting top-level VolTableEntry
 Dump of VTD - 26 entries:
 Instantiated 26 volume table entries 
@@ -91,7 +92,7 @@ Top-level G3toG4 logical volume HALL G4VisAttributes: invisible, daughters visib
 G4VUserPhysicsList::Construct()
 Construct processes 
 G3toG4PhysicsList::SetCuts:CutLength : 2 mm 
-/control/execute /afs/cern.ch/sw/geant4/stt/dev1/src/geant4/tests/test601/test601.in
+/control/execute /afs/cern.ch/sw/geant4/stt/dev2/src/geant4/tests/test601/test601.in
 /run/verbose 2
 /process/eLoss/verbose 1
 /gun/position   0. -1.5 0. mm
@@ -298,7 +299,7 @@ WARNING: G4VisManager::IsValidView(): Attempt to draw when no graphics system
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0.05s Sys=0s
+  User=0s Real=0.03s Sys=0s
 /gun/particle mu+
 /run/beamOn 1
 
