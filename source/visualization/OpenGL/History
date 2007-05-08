@@ -1,4 +1,4 @@
-$Id: History,v 1.88 2007-04-04 16:50:26 allison Exp $
+$Id: History,v 1.89 2007-05-08 11:04:11 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,12 @@ committal in the CVS repository !
 
 History file for visualization/OpenGL
 -------------------------------------
+
+8th May 2007  John Allison  (opengl-V08-02-06)
+- Moved vectored PostScript printing to G4OpenGLViewer.
+- /vis/ogl/printEPS should work for all viewers, including Win32.
+- Introduced /vis/ogl/set/printMode vectored|pixmap, currently only
+  effective on X windows (and still somewhat buggy).
 
 4th April 2007  John Allison  (opengl-V08-02-05 - needs visman-V08-02-04)
 - Implemented picking for OGLSX ( as well as OGLIX).  Hopefully works

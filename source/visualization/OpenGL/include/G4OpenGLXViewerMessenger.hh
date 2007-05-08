@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXViewerMessenger.hh,v 1.2 2006-11-01 11:22:26 allison Exp $
+// $Id: G4OpenGLXViewerMessenger.hh,v 1.3 2007-05-08 11:04:11 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifdef G4VIS_BUILD_OPENGLX_DRIVER
@@ -38,7 +38,6 @@
 
 class G4OpenGLXViewer;
 class G4UIdirectory;
-class G4UIcmdWithoutParameter;
 
 class G4OpenGLXViewerMessenger: public G4UImessenger {
 public:
@@ -50,7 +49,7 @@ private:
   G4OpenGLXViewerMessenger();  // Private constructor.
   static G4OpenGLXViewerMessenger* fpInstance;
   G4UIdirectory* fpDirectory;
-  G4UIcmdWithoutParameter* fpCommandPrintEPS;
+  G4UIdirectory* fpDirectorySet;
 };
 
 #endif

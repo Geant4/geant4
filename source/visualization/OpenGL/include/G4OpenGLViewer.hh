@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewer.hh,v 1.19 2007-04-03 13:42:59 allison Exp $
+// $Id: G4OpenGLViewer.hh,v 1.20 2007-05-08 11:04:11 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -64,6 +64,18 @@ protected:
   void InitializeGLView ();
   void Pick(GLdouble x, GLdouble y);
   virtual void CreateFontLists () {}
+  virtual void print();
+//////////////////////////////Vectored PostScript production functions///
+  void printBuffer(GLint, GLfloat*);
+  GLfloat* spewPrimitiveEPS (FILE*, GLfloat*);
+  void spewSortedFeedback (FILE*, GLint, GLfloat*);
+  void spewWireframeEPS (FILE*, GLint, GLfloat*, const char*);
+  void print3DcolorVertex(GLint, GLint*, GLfloat*);
+  G4float                           pointSize;
+  char                              print_string[50];
+  G4bool                            print_colour;
+  G4bool                            vectored_ps;
+
   G4OpenGLSceneHandler& fOpenGLSceneHandler;
   G4Colour background;      //the OpenGL clear colour
   G4bool
@@ -81,6 +93,16 @@ protected:
     fDisplayLightFrontT;
   G4double fDisplayLightFrontRed, fDisplayLightFrontGreen, fDisplayLightFrontBlue;
 };
+
+typedef struct G4OpenGLViewerFeedback3Dcolor {
+  GLfloat x;
+  GLfloat y;
+  GLfloat z;
+  GLfloat red;
+  GLfloat green;
+  GLfloat blue;
+  GLfloat alpha;
+} Feedback3Dcolor;
 
 #endif
 
