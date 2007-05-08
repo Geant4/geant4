@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXViewer.cc,v 1.38 2007-05-08 11:04:11 allison Exp $
+// $Id: G4OpenGLXViewer.cc,v 1.39 2007-05-08 17:20:23 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -336,6 +336,7 @@ G4VViewer (scene, -1),
 G4OpenGLViewer (scene),
 vi_immediate (0),
 vi_stored (0),
+vi (0),
 cmap (0)
 {
   GetXConnection ();
@@ -427,6 +428,12 @@ void G4OpenGLXViewer::print() {
 
     XVisualInfo* pvi;
     GLXContext pcx = create_GL_print_context(pvi);
+
+    if (!pcx) {
+      G4cout << "Unable to create print context." << G4endl;
+      return;
+    }
+
     GLXContext tmp_cx;
     tmp_cx = cx;
     cx=pcx;
