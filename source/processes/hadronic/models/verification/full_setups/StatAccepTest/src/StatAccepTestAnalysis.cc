@@ -456,6 +456,7 @@ void StatAccepTestAnalysis::init() {
 
   mapParticleNames.clear();
 
+  eventTimeSet.clear();
 }                       
 
 
@@ -2425,7 +2426,7 @@ classifyParticle( const bool isTrack, const G4ParticleDefinition* particleDef ) 
 
 
 
-void StatAccepTestAnalysis::endOfEvent() {
+void StatAccepTestAnalysis::endOfEvent( const G4double timeEventInSec ) {
   // This method is useful to update the "squared" event variables
   // which are used at the end of the Run to compute the statistical
   // uncertainties of various quantities.
@@ -2996,6 +2997,9 @@ void StatAccepTestAnalysis::endOfEvent() {
                              transverseProfile_nuclei[ iBinR ];  
     transverseProfile_nuclei[ iBinR ] = 0.0;  // Reset it for the next event.
   }
+
+  // Keep the time per event in a multiset.
+  eventTimeSet.insert( timeEventInSec );
 
 }
 
@@ -4524,6 +4528,73 @@ void StatAccepTestAnalysis::finish() {
 	     << G4endl;
     }   
   }
-}
 
+  // Print information about the CPU time per event.
+  // We are interested in the mininum and maximum time, and on the
+  // average, its error, and the rms of the distribution. However,
+  // to avoid that an eventual long tail in the distribution would
+  // bias the mean to high values, we also calculate the reduced
+  // mean and rms taking into consideration only those values which
+  // are within 5% and 95% of the ordered distribution of values
+  // (kept automatically in a multiset object).
+  G4cout << G4endl << " Information on Time per Event " << G4endl;
+  G4int numberOfTimes = eventTimeSet.size();
+  G4double tmin = 0.0, tmax = 0.0;
+  sum = 0.0; sum2 = 0.0;
+  G4double sumReduced = 0.0, sumReduced2 = 0.0;
+  G4double t5perCent = 0.0, t95perCent = 0.0;
+  const G4int num5perCent = numberOfTimes * 5 / 100 ;
+  mu = sigma = mu_sigma = 0.0; 
+  G4double muReduced = 0.0, sigmaReduced = 0.0, mu_sigmaReduced = 0.0;
+  if ( numberOfTimes > 0 ) {
+    G4int count = 0, countReduced = 0;
+    for ( std::multiset<G4double>::const_iterator cit = eventTimeSet.begin();
+	  cit != eventTimeSet.end(); ++cit ) {
+      count++;
+      G4double t = *cit;
+      //G4cout << "\t" << count - 1 << "\t" << t << "s" << G4endl;
+      if ( count == 1 ) tmin = t;
+      if ( count == num5perCent ) t5perCent = t;
+      if ( count == ( numberOfTimes - num5perCent + 1 ) ) t95perCent = t;
+      if ( count == numberOfTimes ) tmax = t;
+      sum += t;
+      sum2 += t*t;
+      if ( count > num5perCent  &&  count <= ( numberOfTimes - num5perCent ) ) {
+	countReduced++;
+	sumReduced += t;
+	sumReduced2 += t*t;
+      }
+    }
+    //G4cout << "\t countReduced = " << countReduced << G4endl; 
+    n = static_cast< G4double >( numberOfTimes );
+    mu = sum / n;
+    if ( n > 1.0 ) {
+      sigma = std::sqrt( std::abs( ( sum2 - sum*sum/n ) ) / (n - 1.0) );
+    }
+    mu_sigma = sigma / std::sqrt( n );
+
+    n = static_cast< G4double >( countReduced );
+    muReduced = sumReduced / n;
+    if ( n > 1.0 ) {
+      sigmaReduced = std::sqrt( std::abs( ( sumReduced2 - sumReduced*sumReduced/n ) )
+				/ (n - 1.0) );
+    }
+    mu_sigmaReduced = sigmaReduced / std::sqrt( n );
+  }
+  G4cout << "\t eventTimeSet.size() = " << numberOfTimes << G4endl
+         << "\t num5perCent = " << num5perCent << G4endl
+         << "\t tmin = " << tmin << "s" << G4endl
+         << "\t t5perCent = " << t5perCent << "s" << G4endl
+         << "\t t95perCent = " << t95perCent << "s" << G4endl
+         << "\t tmax = " << tmax << "s" << G4endl
+         //   << "\t sum = " << sum << " sec   sum2 = " << sum2 << " sec^2" << G4endl 
+         << "\t mean = " << mu << " +/- " << mu_sigma << " sec" << G4endl
+         << "\t rms = " << sigma << " sec" << G4endl
+         //   << "\t sumReduced = " << sumReduced << " sec   sumReduced2 = " 
+	 //   << sumReduced2 << " sec^2" << G4endl
+         << "\t meanReduced = " << muReduced << " +/- " << mu_sigmaReduced 
+	 << " sec" << G4endl 
+         << "\t rmsReduced = " << sigmaReduced << " sec" << G4endl;
+
+}
 

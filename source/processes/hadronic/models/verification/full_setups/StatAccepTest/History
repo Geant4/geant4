@@ -1,6 +1,10 @@
                  History file
                  ------------
 
+08-May-2007 - A.Ribon (statAccepTest-V08-02-02)
+- Added monitoring of the CPU time event by event.
+
+
 27-Apr-2007 - A.Ribon (statAccepTest-V08-02-01)
 - Added spectrum of some particles when created.
 

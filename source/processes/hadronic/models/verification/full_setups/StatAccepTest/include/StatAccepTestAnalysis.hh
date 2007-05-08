@@ -4,6 +4,7 @@
 #include "globals.hh"
 #include <vector>
 #include <map>
+#include <set>
 #include "G4ThreeVector.hh"
 
 #ifdef G4ANALYSIS_USE
@@ -79,7 +80,7 @@ public:
   // Notice that the kinetic energy is defined negative when the particle 
   // is going backward with respect to the beam direction.
 
-  void endOfEvent();
+  void endOfEvent( const G4double timeEventInSec );
   // Inform that the event if finished: this is useful to calculate
   // properly the statistical error of the quantities defined per
   // event.
@@ -399,6 +400,9 @@ private:
   const G4int kaonMinusId, kaonPlusId, kaonZeroId, antiKaonZeroId,
     kaonShortId, kaonLongId;
   const G4int protonId, antiProtonId, neutronId, antiNeutronId;
+
+  // Monitor the CPU time event by event.
+  std::multiset<G4double> eventTimeSet;
 
 #ifdef G4ANALYSIS_USE
 

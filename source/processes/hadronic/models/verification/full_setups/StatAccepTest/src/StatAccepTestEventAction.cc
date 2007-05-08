@@ -17,6 +17,7 @@
 
 #include "StatAccepTestSteppingAction.hh"
 #include "G4RunManager.hh"
+#include "G4Timer.hh"
 
 #include "StatAccepTestAnalysis.hh"
 
@@ -24,21 +25,22 @@
 StatAccepTestEventAction::StatAccepTestEventAction() : 
   theSteppingAction( 0 ) {
   instanciateSteppingAction();
+  eventTimer = new G4Timer;
 }
 
 
-StatAccepTestEventAction::~StatAccepTestEventAction() {}
+StatAccepTestEventAction::~StatAccepTestEventAction() {
+  delete eventTimer;
+}
 
 
-void StatAccepTestEventAction::BeginOfEventAction( const G4Event* ) { 
+void StatAccepTestEventAction::BeginOfEventAction( const G4Event* ) {
   //G4cout << "\n---> Begin of event: " << evt->GetEventID() << G4endl;
+  eventTimer->Start();
 }
 
 
 void StatAccepTestEventAction::EndOfEventAction( const G4Event* evt ) {
-
-  G4cout << " ---  StatAccepTestEventAction::EndOfEventAction  ---    event = " 
-	 << evt->GetEventID() << G4endl;
 
   // Get the IDs of the collections of calorimeter hits and tracker hits. 
   G4SDManager * SDman = G4SDManager::GetSDMpointer();
@@ -92,6 +94,17 @@ void StatAccepTestEventAction::EndOfEventAction( const G4Event* evt ) {
 
   theSteppingAction->reset();
 
+  G4cout << " ---  StatAccepTestEventAction::EndOfEventAction  ---  event= " 
+	 << evt->GetEventID() << "   t=";
+  eventTimer->Stop();
+  G4double timeEventInSeconds = 0.0;
+  if ( eventTimer->IsValid() ) {
+    timeEventInSeconds = eventTimer->GetUserElapsed();
+    G4cout << timeEventInSeconds << "s" << G4endl;
+  } else {
+    G4cout << "UNDEFINED" << G4endl;
+  }
+
   // Fill the histograms/ntuple.
   StatAccepTestAnalysis* analysis = StatAccepTestAnalysis::getInstance();
   if ( analysis ) {
@@ -99,7 +112,7 @@ void StatAccepTestEventAction::EndOfEventAction( const G4Event* evt ) {
 			  incidentParticleEnergy / MeV,
 			  energyDepositedInActiveCalorimeterLayer / MeV,
 			  totalEdepAllParticles / MeV );
-    analysis->endOfEvent();
+    analysis->endOfEvent( timeEventInSeconds );
   }
 
   // Now print out the information.

@@ -5,6 +5,7 @@
 #include "globals.hh"
 
 class StatAccepTestSteppingAction;
+class G4Timer;
 
 
 class StatAccepTestEventAction: public G4UserEventAction {
@@ -22,6 +23,8 @@ private:
   void instanciateSteppingAction();      
 
   StatAccepTestSteppingAction* theSteppingAction;
+
+  G4Timer* eventTimer;
 
 };
 
