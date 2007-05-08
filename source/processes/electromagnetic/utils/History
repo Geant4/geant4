@@ -1,4 +1,4 @@
-$Id: History,v 1.275 2007-04-25 10:20:25 vnivanch Exp $
+$Id: History,v 1.276 2007-05-08 17:56:12 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -24,6 +24,10 @@ committal in the CVS repository !
 12 April 07: V.Ivant (emutils-V08-02-07)
 - G4VEnegryLossProcess - use unique G4SafetyHelper 
 - G4VEmProcess - remove double call to Clear method
+
+08 May 07: V.Ivant (emutils-V08-02-06a)
+- G4VEnegryLossProcess - use linearLossLimit 0.05 as in 8.2
+- G4EmCorrections - fix division by zero by using ion mass from G4IonTable
 
 19 March 07: V.Ivant (emutils-V08-02-06)
 - G4VMultipleScattering - add protection against zero step or energy
