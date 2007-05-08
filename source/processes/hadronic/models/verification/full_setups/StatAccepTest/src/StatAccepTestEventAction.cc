@@ -30,7 +30,7 @@ StatAccepTestEventAction::StatAccepTestEventAction() :
 StatAccepTestEventAction::~StatAccepTestEventAction() {}
 
 
-void StatAccepTestEventAction::StartOfEventAction( const G4Event* ) { 
+void StatAccepTestEventAction::BeginOfEventAction( const G4Event* ) { 
   //G4cout << "\n---> Begin of event: " << evt->GetEventID() << G4endl;
 }
 

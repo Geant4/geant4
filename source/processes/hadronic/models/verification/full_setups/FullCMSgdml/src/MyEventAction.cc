@@ -11,7 +11,7 @@ MyEventAction::MyEventAction() {}
 MyEventAction::~MyEventAction() {}
 
 
-void MyEventAction::StartOfEventAction( const G4Event* ) { 
+void MyEventAction::BeginOfEventAction( const G4Event* ) { 
   //G4cout << "\n---> Begin of event: " << evt->GetEventID() << G4endl;
 }
 

@@ -12,7 +12,7 @@ public:
   MyEventAction();
   ~MyEventAction();
 
-  virtual void StartOfEventAction( const G4Event* evt );    
+  virtual void BeginOfEventAction( const G4Event* evt );    
   virtual void EndOfEventAction( const G4Event* evt );    
 
 };

@@ -2,6 +2,10 @@
                  History file
                  ------------
 
+27-Apr-2007 - A.Ribon (randomCalo-V08-02-00)
+- Ready for the June release testing.
+
+
 07-Dec-2006 - A.Ribon
 - Created a new calorimeter application: each layer is made
   of a different NIST material, and the primary particle type,

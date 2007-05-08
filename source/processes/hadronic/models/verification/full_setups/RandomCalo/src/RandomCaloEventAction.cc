@@ -35,7 +35,7 @@ RandomCaloEventAction::~RandomCaloEventAction() {
 }
 
 
-void RandomCaloEventAction::StartOfEventAction( const G4Event* ) { 
+void RandomCaloEventAction::BeginOfEventAction( const G4Event* ) { 
   //G4cout << "\n---> Begin of event: " << evt->GetEventID() << G4endl;
 }
 
