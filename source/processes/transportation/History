@@ -1,4 +1,4 @@
-$Id: History,v 1.117 2007-05-09 13:53:47 japost Exp $
+$Id: History,v 1.118 2007-05-09 14:02:44 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -12,19 +12,22 @@ to briefly summarize all major modifications introduced in the code
 and keep track of all category-tags.
 It DOES NOT substitute the  CVS log-message one should put at every
 committal in the CVS repository !
-
+`
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-May 9th, 2007, J.Apostolakis  transport-V08-03-00 (on trunk)
+May 9th, 2007, J.Apostolakis  transport-V08-03-00 
 ----------------------------
 G4Transportation (hh,icc,cc)
+- Renamed G4CoupledTransportation to G4Transportation
 - Merged changes on branch used to bring in CoupledTransportation,
   porting changes in G4Transportation since the creation of CoupledTransportation
 - Also merged branch used for fixes in G4Transportation.cc (1.60.2, 1.60.4)
+   -->  For convergence to Release 9.0
 
-G4Transportation8 is old G4Transportation.
+G4Transportation8 
+- Renamed G4Transportation to G4Transportation8
 
 G4ProcessPlader changed to reflect these revisions.  (A. Howard)
 
@@ -32,16 +35,7 @@ Summarising:
  G4CoupledTransportation file deleted (changes merged into G4Transportation)
  G4Transportation8 created. 
 
-
-May 4th, 2007, J.Apostolakis  transport-V08-03-dev-01 (on new branch)
-----------------------------
-- Renamed G4Transportation to G4Transportation8
-- Renamed G4CoupledTransportation to G4Transportation
-  --> Tag made for convergence to Release 9.0 (with expectation that 
-      Coupled Transportation renamed to Transportation and is default, 
-      and the old Transportation is retained as option as Transportation8
-       (development and tag are on a branch currently).
-
+-
 May 2nd, 2007, J.Apostolakis  transport-V08-02-02
 ----------------------------
 - G4CoupledTransportation: 
