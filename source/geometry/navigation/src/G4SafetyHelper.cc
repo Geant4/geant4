@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4SafetyHelper.cc,v 1.11 2007-05-02 15:32:41 japost Exp $
+// $Id: G4SafetyHelper.cc,v 1.12 2007-05-09 12:57:31 japost Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4SafetyHelper Implementation
@@ -98,8 +98,8 @@ G4SafetyHelper::CheckNextStep(const G4ThreeVector &position,
                                                      direction,
                                                      currentMaxStep,
                                                      newSafety);
-  lastSafetyPosition = position;
-  lastSafety         = newSafety;
+  fLastSafetyPosition = position;
+  fLastSafety         = newSafety;
 
   // TO-DO: Can replace this with a call to PathFinder 
   //        giving id of Mass Geometry --> this avoid doing the work twice
