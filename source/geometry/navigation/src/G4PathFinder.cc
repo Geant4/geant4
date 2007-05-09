@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PathFinder.cc,v 1.29 2007-05-02 15:22:22 japost Exp $
+// $Id: G4PathFinder.cc,v 1.30 2007-05-09 13:57:14 japost Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4PathFinder Implementation
@@ -795,8 +795,6 @@ G4PathFinder::WhichLimited()       // Flag which processes limited the step
 void
 G4PathFinder::PrintLimited()
 {
-  G4String& LimitedString( ELimited lim ); 
-
   // Report results -- for checking   
   G4cout << "G4PathFinder::PrintLimited reports: " ; 
   G4cout << "  Minimum step (true)= " << fTrueMinStep 
@@ -927,7 +925,7 @@ G4PathFinder::DoNextCurvedStep( const G4FieldTrack &initialState,
                    || ( (minStepLast != kInfinity) && (diffStep < 0) ) ; 
       if( StepError || (fVerboseLevel > 2) ){
         
-        G4String& LimitedString( ELimited lim ); 
+        // G4String& LimitedString( ELimited lim ); 
         G4String  limitedString=  LimitedString( fLimitedStep[numNav] ); 
         
         G4cout << " G4PathFinder::ComputeStep. Geometry " << numNav << "  step= " << fCurrentStepSize[numNav] 
@@ -989,7 +987,7 @@ G4PathFinder::DoNextCurvedStep( const G4FieldTrack &initialState,
   return minStep; 
 }
 
-G4String& LimitedString( ELimited lim )
+G4String& G4PathFinder::LimitedString( ELimited lim )
 {
   static G4String StrDoNot("DoNot"),
                   StrUnique("Unique"),
