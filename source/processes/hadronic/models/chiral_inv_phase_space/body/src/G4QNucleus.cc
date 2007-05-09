@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNucleus.cc,v 1.72 2007-05-07 07:47:54 mkossov Exp $
+// $Id: G4QNucleus.cc,v 1.73 2007-05-09 07:27:31 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QNucleus ----------------
@@ -2669,6 +2669,7 @@ G4int G4QNucleus::RandomizeBinom(G4double p,G4int aN)
 {//  ===============================================
   G4double r = G4UniformRand();
   G4double d = 1.-p;
+  if(d<=0.) return 0;
   G4double v = pow(d,aN);
   G4double s = v;
   if(r<s) return 0;
