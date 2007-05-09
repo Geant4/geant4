@@ -1,4 +1,4 @@
-$Id: History,v 1.115 2007-05-09 13:33:41 japost Exp $
+$Id: History,v 1.116 2007-05-09 13:52:24 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,19 +17,19 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-May 9th, 2007, J.Apostolakis  transport-V08-03-00 (on trunk - mostly)
+May 9th, 2007, J.Apostolakis  transport-V08-03-00 (on trunk)
 ----------------------------
 G4Transportation (hh,icc,cc)
 - Merged changes on branch used to bring in CoupledTransportation,
   porting changes in G4Transportation since the creation of CoupledTransportation
-- Also merged branch used for fixes in G4Transportation.cc
+- Also merged branch used for fixes in G4Transportation.cc (1.60.2, 1.60.4)
+
+G4Transportation8 is old G4Transportation.
 
 Summarising:
  G4CoupledTransportation file deleted (changes merged into G4Transportation)
  G4Transportation8 created. 
 
-Not yet on trunk:
- G4Transportation8
 
 May 4th, 2007, J.Apostolakis  transport-V08-03-dev-01 (on new branch)
 ----------------------------
