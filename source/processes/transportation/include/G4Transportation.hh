@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Transportation.hh,v 1.12 2006-06-29 21:10:32 gunter Exp $
+// $Id: G4Transportation.hh,v 1.13 2007-05-09 13:20:38 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -34,23 +34,29 @@
 //
 // Class description:
 //
-// G4Transportation is a process responsible for the transportation of 
-// a particle, i.e. the geometrical propagation encountering the 
-// geometrical sub-volumes of the detectors.
-// It is also tasked with part of updating the "safety".
+// G4Transportation is an optional process to transport  
+// a particle, in case of coupled navigation in parallel geometries
+//  i.e. the geometrical propagation will be done
+//   encountering the geometrical volumes of the detectors and
+//   those of parallel geometries (eg for biasing, scoring, fast simulation)
+// It is tasked with updating the "safety" to reflect the geometrical
+//   distance to the nearest volume, and the time of flight of the particle.
 
 // =======================================================================
-// Created:  19 March 1997, J. Apostolakis
+// Created:  17 May 2006, J. Apostolakis
 // =======================================================================
 #ifndef G4Transportation_hh
 #define G4Transportation_hh 1
 
 #include "G4VProcess.hh"
+
 #include "G4FieldManager.hh"
 
 #include "G4Navigator.hh"
 #include "G4TransportationManager.hh"
 #include "G4PropagatorInField.hh"
+#include "G4PathFinder.hh"
+
 #include "G4Track.hh"
 #include "G4Step.hh"
 #include "G4ParticleChangeForTransport.hh"
@@ -61,7 +67,7 @@ class G4Transportation : public G4VProcess
 
   public:  // with description
 
-     G4Transportation( G4int verbosityLevel= 1);
+     G4Transportation( G4int verbosityLevel= 0); 
      ~G4Transportation(); 
 
      G4double      AlongStepGetPhysicalInteractionLength(
@@ -120,6 +126,8 @@ class G4Transportation : public G4VProcess
 
   public:  // without description
 
+     void StartTracking(G4Track* aTrack); 
+
      G4double AtRestGetPhysicalInteractionLength(
                              const G4Track& ,
                              G4ForceCondition* 
@@ -132,22 +140,28 @@ class G4Transportation : public G4VProcess
                             ) {return 0;};
        // No operation in  AtRestDoIt.
 
-  void StartTracking(G4Track* aTrack);
-       // Reset state for new (potentially resumed) track 
-
   protected:
 
      G4bool               DoesGlobalFieldExist();
        // Checks whether a field exists for the "global" field manager.
 
+     void ReportInexactEnergy(G4double startEnergy, G4double endEnergy);
+       // Issue warning
+
   private:
 
-     G4Navigator*         fLinearNavigator;
-     G4PropagatorInField* fFieldPropagator;
-       // The Propagators used to transport the particle
+     G4Navigator*         fMassNavigator;
+       // The navigator for the 'mass' geometry (the real one, that physics occurs in)
+     G4PathFinder*        fPathFinder;
+     G4int fNavigatorId;
+       // The PathFinder used to transport the particle
 
-     // G4FieldManager*      fGlobalFieldMgr;     // Used MagneticField CC
-       // Field Manager for the whole Detector
+     G4PropagatorInField* fFieldPropagator;
+       // Still required in order to find/set the fieldmanager
+
+     G4bool fGlobalFieldExists; 
+     // G4bool fStartedNewTrack;   //  True for first step or restarted tracking 
+                                   //    until first step's AlongStepGPIL
 
      G4ThreeVector        fTransportEndPosition;
      G4ThreeVector        fTransportEndMomentumDir;
@@ -155,11 +169,16 @@ class G4Transportation : public G4VProcess
      G4ThreeVector        fTransportEndSpin;
      G4bool               fMomentumChanged;
      G4bool               fEnergyChanged;
-     G4bool               fEndGlobalTimeComputed; 
-     G4double             fCandidateEndGlobalTime;
        // The particle's state after this Step, Store for DoIt
 
+     G4bool               fEndGlobalTimeComputed; 
+     G4double             fCandidateEndGlobalTime;
+
      G4bool               fParticleIsLooping;
+   
+     G4ThreeVector        fPreviousSftOrigin; 
+     G4double             fPreviousMassSafety;
+     G4double             fPreviousFullSafety;
 
      G4TouchableHandle    fCurrentTouchableHandle;
      
@@ -171,14 +190,11 @@ class G4Transportation : public G4VProcess
      G4bool fGeometryLimitedStep;
        // Flag to determine whether a boundary was reached.
 
-     G4ThreeVector  fPreviousSftOrigin;
-     G4double       fPreviousSafety; 
-       // Remember last safety origin & value.
-
      G4ParticleChangeForTransport fParticleChange;
        // New ParticleChange
 
      G4double endpointDistance;
+
 
   // Thresholds for looping particles: 
   // 
@@ -196,7 +212,6 @@ class G4Transportation : public G4VProcess
   // Statistics for tracks abandoned
      G4double fSumEnergyKilled;
      G4double fMaxEnergyKilled;
-
 
   // Verbosity 
      G4int    fVerboseLevel;
