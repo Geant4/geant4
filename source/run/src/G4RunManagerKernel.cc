@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManagerKernel.cc,v 1.38 2007-05-07 16:36:34 asaim Exp $
+// $Id: G4RunManagerKernel.cc,v 1.39 2007-05-09 17:49:59 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -304,7 +304,6 @@ G4bool G4RunManagerKernel::RunInitialization()
     return false;
   }
 
-  CheckRegions();
   UpdateRegion();
   BuildPhysicsTables();
 
@@ -343,6 +342,18 @@ void G4RunManagerKernel::ResetNavigator()
 
 void G4RunManagerKernel::UpdateRegion()
 {
+  G4StateManager*    stateManager = G4StateManager::GetStateManager();
+  G4ApplicationState currentState = stateManager->GetCurrentState();
+  if( currentState != G4State_Idle )
+  { 
+    G4Exception("G4RunManagerKernel::UpdateRegion",
+                "RegionUpdateAtIncorrectState",
+                JustWarning,
+                "Geant4 kernel not in Idle state : method ignored.");
+    return;
+  }
+
+  CheckRegions();
   G4RegionStore::GetInstance()->UpdateMaterialList(currentWorld);
   G4ProductionCutsTable::GetProductionCutsTable()->UpdateCoupleTable(currentWorld);
 }
@@ -413,8 +424,28 @@ void G4RunManagerKernel::DumpRegion(G4Region* region) const
   else
   {
     G4cout << G4endl;
-    G4cout << "Region <" << region->GetName() << "> -- appears in <" 
-           << region->GetWorldPhysical()->GetName() << "> world volume" << G4endl;
+    G4cout << "Region <" << region->GetName() << ">";
+    if(region->GetWorldPhysical())
+    {
+      G4cout << " -- appears in <" 
+           << region->GetWorldPhysical()->GetName() << "> world volume";
+    }
+    else
+    { G4cout << " -- is not associated to any world."; }
+    G4cout << G4endl;
+
+    G4cout << " Root logical volume(s) : ";
+    size_t nRootLV = region->GetNumberOfRootVolumes();
+    std::vector<G4LogicalVolume*>::iterator lvItr = region->GetRootLogicalVolumeIterator();
+    for(size_t j=0;j<nRootLV;j++)
+    { G4cout << (*lvItr)->GetName() << " "; }
+    G4cout << G4endl;
+
+    G4cout << " Pointers : G4VUserRegionInformation[" << region->GetUserInformation() 
+           << "], G4UserLimits[" << region->GetUserLimits() 
+           << "], G4FastSimulationManager[" << region->GetFastSimulationManager()
+           << "], G4UserSteppingAction[" << region->GetRegionalSteppingAction() << "]" << G4endl;
+    
     if(region->GetWorldPhysical()!=currentWorld)
     {
       G4cout << G4endl;
