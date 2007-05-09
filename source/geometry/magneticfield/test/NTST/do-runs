@@ -2,7 +2,8 @@
 #  Run the test program with different input files
 #   Check output for killed tracks
 #
-set exe=$G4WORKDIR/bin/Linux-g++/testNTST
+#et exe=$G4WORKDIR/bin/$G4SYSTEM/testNTST
+set exe=$G4BIN/$G4SYSTEM/testNTST
 set runid=$1; shift
 set n=$1; shift
 
