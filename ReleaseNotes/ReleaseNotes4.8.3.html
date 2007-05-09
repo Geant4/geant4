@@ -131,7 +131,6 @@ a recompilation of user applications is anyhow required.
 <LI>No visible effects in CPU performance.</LI>
 <LI>Calorimeter response: stable within 1% for visible energy and resolution.</LI>
 <LI>Energy deposition in thin layers: stable for step size down to <TT>1 um</TT>.</LI>
-<LI>Improved precision of mean energy loss calculations for big cuts.</LI>
 </UL>
 
 <B>Hadronic physics</B>
@@ -186,11 +185,9 @@ a recompilation of user applications is anyhow required.
 <LI>The new physics list QGSP_BERT_TRV is a variant of QGSP_BERT where Bertini
     cascade model is used only up to energies of 5.4 <TT>GeV</TT> for protons,
     neutrons, pions and kaons. For comparisons QGSP_BERT uses Bertini cascade
-    model up to 9.9 <TT>GeV</TT>. 
-</LI>    
-<LI>CHIPS elastic is used for all targets with incident protons and neutrons;
-    H-elastic models are used for all other particles with energy above
-    1 <TT>GeV</TT>.</LI>
+    model up to 9.9 <TT>GeV</TT>.</LI>    
+<LI>HElastic model for projectile energy above 1 <TT>GeV</TT> is used for all
+    targets with <TT>Z&gt;1</TT>.</LI>
 <LI>In all lists for electro-magnetic physics, the "skin" for
     multiple-scattering on boundaries is set to zero, meaning that no
     computation of the linear distance to the geometrical boundaries is
@@ -354,9 +351,6 @@ please refer to the related History files provided in most packages):
         <LI>Use <TT>G4SafetyHelper</TT> instead of <TT>G4Navigator</TT> for
             determining distance to boundary, and added protection agains zero
             step length.</LI>
-        <LI>Modified initialisation of <TT>linLossLimit</TT> to <TT>1.E-6</TT>
-            in order to improve precision of energy loss for high energy
-            incident and high cut.</LI>
         </UL></LI>
     <LI><TT>G4VMultipleScattering</TT>:
         <UL>
@@ -373,6 +367,8 @@ please refer to the related History files provided in most packages):
         and <TT>linearLossLimit</TT>.</LI>
     <LI><TT>G4LossTableBuilder</TT>: use more precise algorithm to build
         inverse range table using <TT>G4LPhysicsFreeVector</TT>.</LI>
+    <LI><TT>G4EmCorrections</TT>: taking mass of ion from <TT>G4IonTable</TT>
+        to avoid division by zero.</LI>
     </UL></LI>
 </UL>
 
@@ -573,11 +569,12 @@ please refer to the related History files provided in most packages):
     <LI><TT>G4QElastic</TT>:
       <UL>
         <LI>Fix for mis-use of units.</LI>
-        <LI>Treat particles with <TT>E=0</TT> as alive for tracking purposes</LI>
+        <LI>Treat particles with <TT>E=0</TT> as alive for tracking purposes.</LI>
       </UL></LI>
-    <LI>CHIPS model for muon capture now available.  It is handled by 
-      <TT>G4QCaptureAtRest</TT> </LI>
+    <LI>CHIPS model for muon capture now available. It is handled by 
+      <TT>G4QCaptureAtRest</TT>.</LI>
     <LI>Bug fix for muon-nuclear interactions.</LI>
+    <LI>Bug fix for binomial distribution with <TT>p=1,q=0</TT> in <TT>G4QNucleus</TT>.</LI>
   </UL></LI>
 <LI><B>Elastic scattering</B>
   <UL>
@@ -587,8 +584,8 @@ please refer to the related History files provided in most packages):
       <UL>
         <LI>Use the most probable isotope for given Z to call the high energy part
             of the model (CPU/memory more efficient).</LI>
-        <LI>Use <TT>QElasticCrossSection</TT> only for <TT>p, He</TT> targets,
-            do not use HElastic for proton targets.</LI>
+        <LI>HElastic model for projectile energy above 1 <TT>GeV</TT> is used
+            for all targets with <TT>Z&gt;1</TT>.</LI>
       </UL></LI>
     <LI><TT>G4UHadronElasticProcess</TT>: fixed bug in number of neutrons in
         CHIPS interface.</LI>

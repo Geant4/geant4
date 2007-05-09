@@ -214,13 +214,11 @@ processes/electromagnetic/standard               emstand-V08-02-11a
   completely rewritten, there is no longer distinct loss regime.
 - G4hIonisation: removed dependence on K+ and K- particles.
 
-processes/electromagnetic/utils                  emutils-V08-02-06
+processes/electromagnetic/utils                  emutils-V08-02-06a
 -------------------------------
 - G4VEnergyLossProcess:
   o Use G4SafetyHelper instead of G4Navigator for determining distance to
     boundary, and added protection agains zero step length.
-  o Modified initialisation of 'linLossLimit' to 1.E-6.
-    Improved precision of energy loss for high energy incident and high cut.
 - G4VMultipleScattering:
   o Added protection against zero step or energy.
   o Added SetSkin() and Skin() methods.
@@ -232,6 +230,8 @@ processes/electromagnetic/utils                  emutils-V08-02-06
   commands for 'MscLateralDisplacement', 'MscSkin' and 'linearLossLimit'.
 - G4LossTableBuilder: use more precise algorithm to build inverse range
   table using G4LPhysicsFreeVector.
+- G4EmCorrections: taking mass of ion from G4IonTable to avoid division
+  by zero.
 
 processes/hadronic
 ------------------
@@ -290,10 +290,10 @@ processes/hadronic
 - models/cascade (hadr-casc-V08-02-00)
   o Added protection in G4ElementaryParticleCollider against negative
     value to sqrt().
-- models/chiral_inv_phase_space/body (hadr-chips-body-V08-02-13)
+- models/chiral_inv_phase_space/body (hadr-chips-body-V08-02-14)
   o Fix for NaN, protected coulomb barrier against divide by zero, now
-    defaults to zero.
-  o Fix for NaN in G4QNucleus and in G4QEnvironment.
+    defaults to zero. Fix for NaN in G4QNucleus and in G4QEnvironment.
+  o Bug fix for binomial distribution with p=1,q=0 in G4QNucleus.
   o Fixed cases of warning printed for anti-particles by fixing occurences
     of power of negative values.
   o Removed warning for anti-Delta in G4QNucleus.
@@ -315,8 +315,8 @@ processes/hadronic
   o G4HadronElastic:
     + Use the most probable isotope for given Z to call to HE model
       (CPU/memory more efficient).
-    +  Use QElasticCrossSection only for p, He targets, do not use HElastic
-       for proton targets.
+    + HElastic model for projectile energy above 1 GeV is used
+      for all targets with Z>1.
   o G4UHadronElasticProcess: fixed bug in number of neutrons in CHIPS interface.
   o G4HadronElastic, G4ChargeExchange: more accurately compute Z and A.
   o G4UHadronElasticProcess and G4ChargeExchangeProcess:
