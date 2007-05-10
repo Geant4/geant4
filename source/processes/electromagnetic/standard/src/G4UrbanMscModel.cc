@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel.cc,v 1.57 2007-05-01 17:41:43 vnivanch Exp $
+// $Id: G4UrbanMscModel.cc,v 1.58 2007-05-10 17:04:31 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -698,7 +698,7 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
   // version similar to 7.1 (needed for some experiments)
   else
   {
-    if (stepStatus == fGeomBoundary || stepNumber == 1)
+    if (stepStatus == fGeomBoundary)
     {
       if (currentRange > lambda0) tlimit = facrange*currentRange;
       else                        tlimit = facrange*lambda0;
@@ -932,7 +932,8 @@ std::vector<G4DynamicParticle*>* G4UrbanMscModel::SampleSecondaries(
         G4double fac = 1.;
         if(r >  safety) {
           //  ******* so safety is computed at boundary too ************
-          G4double newsafety = safetyHelper->ComputeSafety(Position);
+	  G4double newsafety = safetyHelper->ComputeSafety(Position);
+          //G4double newsafety = safety;
           if(r > newsafety)
             fac = newsafety/r ;
         }  
@@ -943,7 +944,8 @@ std::vector<G4DynamicParticle*>* G4UrbanMscModel::SampleSecondaries(
           G4ThreeVector newPosition = Position+fac*r*latDirection;
 
 	  // definetly not on boundary
-          if(1. == fac) {
+	  if(1. == fac) {
+	    //if(0. < fac) {
 	    safetyHelper->ReLocateWithinVolume(newPosition);
 
 	    
