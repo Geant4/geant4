@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagIntegratorDriver.cc,v 1.45 2007-05-10 09:26:48 japost Exp $
+// $Id: G4MagIntegratorDriver.cc,v 1.46 2007-05-10 10:10:31 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -942,4 +942,15 @@ void G4MagInt_Driver::PrintStatisticsReport()
  #endif 
 
  G4cout.precision(oldPrec);
+}
+ 
+void G4MagInt_Driver::SetSmallestFraction(G4double newFraction)
+{
+  if( (newFraction > 1.e-16) && (newFraction < 1e-8) ) {
+     fSmallestFraction= newFraction;
+  }else{ 
+     G4cerr << "Warning: SmallestFraction not changed. " << G4endl
+	    << "  Proposed value was " << newFraction << G4endl
+	    << "  Value must be between 1.e-8 and 1.e-16" << G4endl;
+  }
 }
