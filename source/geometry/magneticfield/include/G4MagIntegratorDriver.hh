@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagIntegratorDriver.hh,v 1.19 2007-05-10 09:27:25 japost Exp $
+// $Id: G4MagIntegratorDriver.hh,v 1.20 2007-05-10 10:10:05 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -157,6 +157,9 @@ class G4MagInt_Driver
      inline void SetHmin(G4double newval);
      inline void SetVerboseLevel(G4int newLevel); 
      inline G4double GetVerboseLevel() const;
+
+     inline G4double GetSmallestFraction() const; 
+     void     SetSmallestFraction( G4double val ); 
 
    protected:  // without description
      void WarnSmallStepSize( G4double hnext, G4double hstep, 
