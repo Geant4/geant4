@@ -56,10 +56,10 @@
 #include "HadrontherapyDetectorConstruction.hh"
 #include "HadrontherapyMaterial.hh"
 #include "HadrontherapyBeamLine.hh"
-//#include "HadrontherapyModulator.hh"
+#include "HadrontherapyModulator.hh"
 
 HadrontherapyDetectorConstruction::HadrontherapyDetectorConstruction()
-  : phantomSD(0), phantomROGeometry(0), beamLine(0), /*modulator(0),*/
+  : phantomSD(0), phantomROGeometry(0), beamLine(0), modulator(0),
     physicalTreatmentRoom(0),
     patientPhysicalVolume(0), 
     phantomLogicalVolume(0), 
@@ -146,8 +146,8 @@ void HadrontherapyDetectorConstruction::ConstructBeamLine()
   beamLine -> HadrontherapyBeamNozzle();
   beamLine -> HadrontherapyBeamFinalCollimator();
 
-  //modulator = new HadrontherapyModulator();
-  //modulator -> BuildModulator(physicalTreatmentRoom);
+  modulator = new HadrontherapyModulator();
+  modulator -> BuildModulator(physicalTreatmentRoom);
 
   // Patient - Mother volume of the phantom
   G4Box* patient = new G4Box("patient",20 *cm, 20 *cm, 20 *cm);
@@ -243,13 +243,13 @@ void  HadrontherapyDetectorConstruction::ConstructSensitiveDetector()
       phantomLogicalVolume -> SetSensitiveDetector(phantomSD);
     }
 }
-/*
+
 void HadrontherapyDetectorConstruction::SetModulatorAngle(G4double value)
 {  
   modulator -> SetModulatorAngle(value);
   G4RunManager::GetRunManager() -> GeometryHasBeenModified();
 }
-*/
+
 void HadrontherapyDetectorConstruction::SetRangeShifterXPosition(G4double value)
 {
   beamLine -> SetRangeShifterXPosition(value);
