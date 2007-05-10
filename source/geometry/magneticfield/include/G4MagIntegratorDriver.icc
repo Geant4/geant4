@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagIntegratorDriver.icc,v 1.12 2006-11-14 15:08:02 japost Exp $
+// $Id: G4MagIntegratorDriver.icc,v 1.13 2007-05-10 10:10:48 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -161,3 +161,9 @@ void G4MagInt_Driver::SetVerboseLevel(G4int newLevel)
 {
       fVerboseLevel= newLevel;
 }
+
+inline
+G4double G4MagInt_Driver::GetSmallestFraction() const
+{
+      return fSmallestFraction; 
+} 
