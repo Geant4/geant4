@@ -1,23 +1,26 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
 
@@ -64,18 +67,19 @@
 //#define debug_1_BinaryCascade 1
 
 //  specific debuuging info per method or functionality
-#define debug_BIC_ApplyCollision 1
+//#define debug_BIC_ApplyCollision 1
 //#define debug_BIC_CheckPauli 1
 //#define debug_BIC_CorrectFinalPandE 1
-#define debug_BIC_Propagate 1
+//#define debug_BIC_Propagate 1
 //#define debug_BIC_Propagate_Excitation 1
+//#define debug_BIC_Propagate_Collisions 1
 //#define debug_BIC_Propagate_finals 1
-#define debug_BIC_DoTimeStep 1
+//#define debug_BIC_DoTimeStep 1
 //#define debug_BIC_CorrectBarionsOnBoundary 1
 //#define debug_BIC_GetExcitationEnergy 1
 //#define debug_BIC_FinalNucleusMomentum 1
-#define debug_BIC_FindFragments 1
-#define debug_BIC_BuildTargetList
+//#define debug_BIC_FindFragments 1
+//#define debug_BIC_BuildTargetList
 
 //  C O N S T R U C T O R S   A N D   D E S T R U C T O R S
 //
@@ -99,7 +103,8 @@ G4BinaryCascade::G4BinaryCascade() : G4VIntraNuclearTransportModel()
 G4cout << "CTOR: decay ="<< theDecay << ", Scatter=" << aSc <<", MesonAbsorb="<<aAb << G4endl;
   thePropagator = new G4RKPropagation;
   theCurrentTime = 0.;
-  theCutOnP = 90*MeV; 
+  theBCminP = 45*MeV;
+  theCutOnP = 90*MeV;
   theCutOnPAbsorb= 0*MeV;
 //  G4ExcitationHandler *
   theExcitationHandler = new G4ExcitationHandler;
@@ -148,7 +153,7 @@ G4HadFinalState * G4BinaryCascade::ApplyYourself(const G4HadProjectile & aTrack,
   eventcounter++;
   if(getenv("BCDEBUG") ) G4cerr << " ######### Binary Cascade Reaction number starts ######### "<<eventcounter<<G4endl;
   G4LorentzVector initial4Momentum = aTrack.Get4Momentum();
-  if(initial4Momentum.e()-initial4Momentum.m()<theCutOnP/2.)
+  if(initial4Momentum.e()-initial4Momentum.m()<theBCminP)
   {
     return theDeExcitation->ApplyYourself(aTrack, aNucleus);
   }
@@ -188,7 +193,7 @@ G4HadFinalState * G4BinaryCascade::ApplyYourself(const G4HadProjectile & aTrack,
 // reset status that could be changed in previous loop event
     theCollisionMgr->ClearAndDestroy();
 
-    if(products != NULL)
+    if(products != 0)
     {  // free memory from previous loop event
       ClearAndDestroy(products);
       delete products;
@@ -197,7 +202,7 @@ G4HadFinalState * G4BinaryCascade::ApplyYourself(const G4HadProjectile & aTrack,
 
     the3DNucleus->Init(aNucleus.GetN(), aNucleus.GetZ());
     thePropagator->Init(the3DNucleus);
-    //      GF Leak??? but where to delete?
+    //      GF Leak on kt??? but where to delete?
     G4KineticTrack * kt = new G4KineticTrack(definition, 0., initialPosition,
 					     initial4Momentum);
     do                  // sample impact parameter until collisions are found 
@@ -305,6 +310,7 @@ G4ReactionProductVector * G4BinaryCascade::Propagate(
   BuildTargetList();
   thePropagator->Init(the3DNucleus);
 
+  theCutOnP=90*MeV;
   if(nucleus->GetMass()>30) theCutOnP = 70*MeV;
   if(nucleus->GetMass()>60) theCutOnP = 50*MeV;
   if(nucleus->GetMass()>120) theCutOnP = 45*MeV;
@@ -319,16 +325,18 @@ G4ReactionProductVector * G4BinaryCascade::Propagate(
     } else
     {
        theSecondaryList.push_back(*iter);
+#ifdef debug_BIC_Propagate
        G4cout << " Adding initial secondary " << *iter 
                               << " time" << (*iter)->GetFormationTime()
 			      << ", state " << (*iter)->GetState() << G4endl;
+#endif
     }
-    theCollisionMgr->Print();
+//    theCollisionMgr->Print();
     theProjectileList.push_back(new G4KineticTrack(*(*iter)));
   }
   FindCollisions(&theSecondaryList);
   secondaries->clear(); // Don't leave "G4KineticTrack *"s in two vectors
-
+			// ?GF? should we delete secondaries as well?
 
 // if called stand alone, build theTargetList and find first collisions
 
@@ -367,9 +375,11 @@ G4ReactionProductVector * G4BinaryCascade::Propagate(
     {
        G4CollisionInitialState *
 	nextCollision = theCollisionMgr->GetNextCollision();
+#ifdef debug_BIC_Propagate_Collisions
        G4cout << " NextCollision  * , Time, curtime = " << nextCollision << " "
        		<<nextCollision->GetCollisionTime()<< " " <<
 		theCurrentTime<< G4endl; 
+#endif
        debug.push_back("======>    test 1"); debug.dump();
        if (!DoTimeStep(nextCollision->GetCollisionTime()-theCurrentTime) )
        {
@@ -401,8 +411,9 @@ G4ReactionProductVector * G4BinaryCascade::Propagate(
 //       G4cerr <<"post-post- DoTimeStep 1"<<G4endl;
     }
   }
+  
+//--------- end of while on Collsions  
 
-   debug.push_back("======>    #### through the first loop"); debug.dump();
 // No more collisions: absorb, capture and propagate the secondaries out of the nucleus
   if(Absorb()) {
     haveProducts = true;
@@ -876,7 +887,7 @@ void  G4BinaryCascade::FindCollisions(G4KineticTrackVector * secondaries)
       {
         theCollisionMgr->AddCollision(aCandList[count]);
 	G4cout << "====================== New Collision ================="<<G4endl;
-	theCollisionMgr->Print();
+//	theCollisionMgr->Print();
       }
     }
   }
@@ -923,7 +934,11 @@ void  G4BinaryCascade::FindLateParticleCollision(G4KineticTrack * secondary)
        secondary->SetState(G4KineticTrack::miss_nucleus);
     }
 
-    G4cout << " times " << tin << " " << tout << G4endl;
+    G4cout << "FindLateP Particle, 4-mom, times newState" 
+           << secondary->GetDefinition()->GetParticleName() << " " 
+	   << secondary->Get4Momentum() 
+	   << " times " <<  tin << " " << tout 
+           << secondary->GetState() << G4endl;
 
     const std::vector<G4CollisionInitialState *> & aCandList
         = theLateParticle->GetCollisions(secondary, theTargetList, theCurrentTime);
@@ -942,12 +957,12 @@ G4bool G4BinaryCascade::ApplyCollision(G4CollisionInitialState * collision)
   G4ping debug("debug_ApplyCollision");
 #ifdef debug_BIC_ApplyCollision
   G4cerr << "G4BinaryCascade::ApplyCollision start"<<G4endl;
-#endif
   theCollisionMgr->Print();
+#endif
   G4KineticTrack * primary = collision->GetPrimary();
   G4KineticTrackVector target_collection=collision->GetTargetCollection();
   G4bool haveTarget=target_collection.size()>0;
-//  if( haveTarget && (primary->GetState() != G4KineticTrack::inside) )
+  if( haveTarget && (primary->GetState() != G4KineticTrack::inside) )
   {
 #ifdef debug_G4BinaryCascade
      G4cout << "G4BinaryCasacde::ApplyCollision(): StateError " << primary << G4endl;
@@ -1061,6 +1076,8 @@ if ( !products )
 	  G4cout << "mom = " << mom <<" newE " << newEnergy<< G4endl;
 	  if ( newEnergy2 < mass2 )
 	  {
+             ClearAndDestroy(products);
+             if (target_collection.size() == 0 ) FindDecayCollision(primary);  // for decay, sample new decay
 	     delete products;
 	     return false;
 	  }
@@ -1383,7 +1400,7 @@ G4bool G4BinaryCascade::Capture(G4bool verbose)
 			 << particlesAboveCut << " " << particlesBelowCut << " " << capturedEnergy
 			 << " " << capturedEnergy/particlesBelowCut << " " << 0.2*theCutOnP << G4endl;
 //  if(particlesAboveCut==0 && particlesBelowCut>0 && capturedEnergy/particlesBelowCut<0.2*theCutOnP)
-  if(capturedEnergy/particlesBelowCut<0.2*theCutOnP)
+  if(particlesBelowCut>0 && capturedEnergy/particlesBelowCut<0.2*theCutOnP)
   {
     capture=true;
     for(i = theSecondaryList.begin(); i != theSecondaryList.end(); ++i)
