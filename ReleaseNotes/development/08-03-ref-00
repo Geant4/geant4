@@ -52,11 +52,14 @@ event                                            event-V08-02-01
   which were default for random number status.
   Use new flag in G4EventManager.
 
-geometry/magneticfield                           field-V08-02-00
+geometry/magneticfield                           field-V08-02-01
 ----------------------
 - Corrected integration constants in G4MagHelicalStepper
 - Added implementation of G4RKG3_Stepper, stepper derived from Geant3.
 - Updated NTST unit test. New unit test "field06" for comparison of steppers.
+- G4MagIntegratorDriver: added protections against zero initial or internal
+  step h=0; revised (re)calculation of h, and protect more against very small
+  steps.
 
 geometry/management                              geommng-V08-02-02
 -------------------

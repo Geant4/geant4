@@ -402,6 +402,9 @@ please refer to the related History files provided in most packages):
     <LI>Corrected integration constants in <TT>G4MagHelicalStepper</TT>.</LI>
     <LI>Added implementation of <TT>G4RKG3_Stepper</TT>, stepper derived
         from Geant3.</LI>
+    <LI><TT>G4MagIntegratorDriver</TT>: added protections against zero initial
+        or internal step <TT>h=0</TT>; revised (re)calculation of <TT>h</TT>,
+        and protect more against very small steps.</LI>
     </UL></LI>
 <LI><B>Management</B>
     <UL>
