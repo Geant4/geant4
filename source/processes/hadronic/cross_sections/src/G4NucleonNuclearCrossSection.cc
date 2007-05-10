@@ -670,7 +670,6 @@ GetIsoZACrossSection( const G4DynamicParticle* aParticle,
        fTotalXsc = Interpolate(Z1, Z2, Z, xt1, xt2);
      }
    }
-
    fElasticXsc = fTotalXsc - result;
    if( fElasticXsc < 0.) fElasticXsc = 0.;
 

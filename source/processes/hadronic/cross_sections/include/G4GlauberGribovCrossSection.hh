@@ -82,18 +82,24 @@ public:
   void DumpPhysicsTable(const G4ParticleDefinition&) 
   {G4cout << "G4GlauberGribovCrossSection: uses Glauber-Gribov formula"<<G4endl;}
 
-  G4double GetHadronNucleaonXsc(const G4DynamicParticle*, const G4Element*);
-  G4double GetHadronNucleaonXsc(const G4DynamicParticle*, G4double At, G4double Zt);
+  G4double GetRatioSD(const G4DynamicParticle*, G4double At, G4double Zt);
+  G4double GetRatioQE(const G4DynamicParticle*, G4double At, G4double Zt);
 
-  G4double GetHadronNucleaonXscPDG(const G4DynamicParticle*, const G4Element*);
-  G4double GetHadronNucleaonXscPDG(const G4DynamicParticle*, G4double At, G4double Zt);
+  G4double GetHadronNucleonXsc(const G4DynamicParticle*, const G4Element*);
+  G4double GetHadronNucleonXsc(const G4DynamicParticle*, G4double At, G4double Zt);
 
-  G4double GetHadronNucleaonXscNS(const G4DynamicParticle*, const G4Element*);
-  G4double GetHadronNucleaonXscNS(const G4DynamicParticle*,G4double At, G4double Zt);
+  G4double GetHadronNucleonXscPDG(const G4DynamicParticle*, const G4Element*);
+  G4double GetHadronNucleonXscPDG(const G4DynamicParticle*, G4double At, G4double Zt);
+
+  G4double GetHadronNucleonXscNS(const G4DynamicParticle*, const G4Element*);
+  G4double GetHadronNucleonXscNS(const G4DynamicParticle*,G4double At, G4double Zt);
 
   G4double GetHNinelasticXsc(const G4DynamicParticle*, const G4Element*);
   G4double GetHNinelasticXsc(const G4DynamicParticle*, G4double At, G4double Zt);
- 
+  G4double GetHNinelasticXscVU(const G4DynamicParticle*, G4double At, G4double Zt);
+  G4double GetHadronNucleonXscMK(const G4DynamicParticle* aParticle, 
+				 const G4ParticleDefinition* nucleon  ); 
+
   G4double CalculateEcmValue ( const G4double , const G4double , const G4double ); 
 
   G4double CalcMandelstamS( const G4double , const G4double , const G4double );

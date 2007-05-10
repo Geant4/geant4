@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CrossSectionDataTest.cc,v 1.16 2007-04-18 09:44:37 grichine Exp $
+// $Id: G4CrossSectionDataTest.cc,v 1.17 2007-05-10 09:51:29 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -87,6 +87,7 @@
 
 #include "G4VQCrossSection.hh"
 #include "G4QElasticCrossSection.hh"
+#include "G4QuasiFreeRatios.hh"
 
 
 
@@ -116,7 +117,7 @@ int main()
   G4cout << "15 helium" << G4endl;
   G4int choice;
   // G4cin >> choice;
-  choice = 3;
+  choice = 15;
 
 
 
@@ -231,7 +232,7 @@ int main()
   G4cout << " 5 kaon0short" << G4endl;
   G4cout << " 6 pion-" << G4endl;
   //  G4cin >> choice;
-  choice = 2;
+  choice = 4;
 
   G4ParticleDefinition* theParticleDefinition;
   G4VProcess* theProcess;
@@ -296,7 +297,7 @@ int main()
   G4cout << " 4 inelastic" << G4endl;
 
   // G4cin >> choice;
-  choice = 1;
+  choice = 4;
 
   /////////////////////////////
 
@@ -391,16 +392,20 @@ int main()
   G4PiNuclearCrossSection barIn;
   G4NucleonNuclearCrossSection barNucIn;
 
-  G4VQCrossSection* qElastic = G4QElasticCrossSection::GetPointer();
+  G4double ratio = 1.;
+  std::pair<G4double,G4double> chipsRat;
+
+  G4VQCrossSection*  qElastic = G4QElasticCrossSection::GetPointer();
+  G4QuasiFreeRatios* qRatio = G4QuasiFreeRatios::GetPointer();
 
   G4int pPDG = theParticleDefinition->GetPDGEncoding();
   G4int iz   = G4int(theElement->GetZ()); 
   G4int N    = G4int(theElement->GetN()+0.5);
         N   -= iz;
-  if(N<0) N  = 0;
+  if( N < 0 ) N  = 0;
   G4bool boolChips = true; 
 
-  /*                          
+  /*                                
   kinEnergy = 0.01*GeV;
   iMax = 90;
     
@@ -408,40 +413,52 @@ int main()
   for(i = 0; i < iMax; i++)
   {
    
-    theDynamicParticle = new G4DynamicParticle(theParticleDefinition,
+   theDynamicParticle = new G4DynamicParticle(theParticleDefinition,
                                               G4ParticleMomentum(1.,0.,0.), 
                                               kinEnergy);
-    sig = theCrossSectionDataStore.GetCrossSection(theDynamicParticle,theElement, 273*kelvin);
-    G4cout << "GHEISHA elastic" <<" \t"<< sig/millibarn << " mb" << G4endl;
+    // sig = theCrossSectionDataStore.GetCrossSection(theDynamicParticle,theElement, 273*kelvin);
+    // G4cout << "GHEISHA" <<" \t"<< sig/millibarn << " mb" << G4endl;
 
 
     G4double momentum = theDynamicParticle->GetTotalMomentum();
-    if(i > 0) boolChips = false;
-    sig = qElastic->GetCrossSection(boolChips,momentum,iz,N,pPDG);
-    G4cout << "Q-elastic          " <<" \t"<< sig/millibarn << " mb" << G4endl;
+    // if(i > 0) boolChips = false;
+    // sig = qElastic->GetCrossSection(boolChips,momentum,iz,N,pPDG);
+
+    chipsRat = qRatio->GetRatios(momentum,pPDG,iz,N);
+    ratio = chipsRat.first*chipsRat.second; // !!!
+
+    // G4cout << "Q-elastic          " <<" \t"<< sig/millibarn << " mb" << G4endl;
 
 
     // sig = hpwPrIn.GetCrossSection(theDynamicParticle, theElement, 273*kelvin);
     // sig += hpwNeIn.GetCrossSection(theDynamicParticle,theElement, 273*kelvin);
-    G4cout << kinEnergy/GeV <<" GeV, \t"<< sig/millibarn << " mb" << G4endl;
+    // G4cout << kinEnergy/GeV <<" GeV, \t"<< sig/millibarn << " mb" << G4endl;
 
     // sig = barNucIn.GetCrossSection(theDynamicParticle,theElement, 273*kelvin);
     // sig = barNucIn.GetTotalXsc();
     // sig = barNucIn.GetElasticXsc();
 
-    G4cout << theProcess->GetProcessName() << " cross section for " << 
-           theParticleDefinition->GetParticleName() <<
-          " on " << theElement->GetName() << G4endl;
+    // sig = barIn.GetCrossSection(theDynamicParticle,theElement, 273*kelvin);
+    // sig = barIn.GetTotalXsc();
+    // sig = barIn.GetElasticXsc();
+
+    // G4cout << theProcess->GetProcessName() << " cross section for " << 
+    //        theParticleDefinition->GetParticleName() <<
+    //    " on " << theElement->GetName() << G4endl;
     // G4cout << kinEnergy/GeV <<" GeV, \t"<< sig/millibarn << " mb" << G4endl;
      //  G4cout << "Mean free path = " << mfp << " mm" << G4endl;
 
-    writef << kinEnergy/GeV <<"\t"<< sig/millibarn << G4endl;
+    // writef << kinEnergy/GeV <<"\t"<< sig/millibarn << G4endl;
+
+
+     G4cout << kinEnergy/GeV <<" GeV, \t"<< "chips qe/in = "<< ratio << G4endl;
+     writef << kinEnergy/GeV <<"\t"<< ratio <<G4endl;
 
     kinEnergy *= 1.138;
     delete theDynamicParticle;
   }
-                         
-  */  
+  G4cout<<"iz = "<<iz<<";  N = "<<N<<"; sum = "<<iz+N<<G4endl;                         
+  */     
    
   // Check Glauber-Gribov model
   G4cout<<"Check Glauber-Gribov model"<<G4endl;
@@ -450,10 +467,10 @@ int main()
   writegg.setf( std::ios::scientific, std::ios::floatfield );
 
   G4GlauberGribovCrossSection ggXsc;
-  G4double ggTotXsc, ggElaXsc, ggIneXsc, ggProdXsc, ratio=1.;
+  G4double ggTotXsc, ggElaXsc, ggIneXsc, ggProdXsc,ggDifXsc;
 
   
-            
+                  
   kinEnergy = 0.1*GeV;
   iMax = 80;
   // writegg <<iMax<< G4endl; 
@@ -470,28 +487,38 @@ int main()
      ggElaXsc = ggXsc.GetElasticGlauberGribovXsc();
      // ggElaXsc = ggXsc.GetHadronNucleaonXscPDG(theDynamicParticle, theElement);
 
-     ggIneXsc = ggXsc.GetInelasticGlauberGribovXsc();
+     ggIneXsc  = ggXsc.GetInelasticGlauberGribovXsc();
      ggProdXsc = ggXsc.GetProductionGlauberGribovXsc();
-     if(ggIneXsc != 0.) ratio = ggProdXsc/ggIneXsc;
+     ggDifXsc  = ggXsc.GetDiffractionGlauberGribovXsc();
+
+     // if(ggIneXsc != 0.) ratio = 1 - ggProdXsc/ggIneXsc;
+     // if(ratio < 0.) ratio = 0.;
+     // if(ggIneXsc != 0.) ratio = ggDifXsc/ggIneXsc;
+
+     // ratio = ggXsc.GetRatioSD(theDynamicParticle, theElement->GetN(), theElement->GetZ() );
+     ratio = ggXsc.GetRatioQE(theDynamicParticle, theElement->GetN(), theElement->GetZ() );
 
      // G4cout << kinEnergy/GeV <<" GeV, total Xsc = "<<  ggTotXsc/millibarn 
      // << " mb; elastic Xsc = "
      // <<  ggElaXsc/millibarn << " mb; inelastic Xsc =" <<  ggIneXsc/millibarn << G4endl;
     
-     G4cout << kinEnergy/GeV <<" GeV, in Xsc = "<<  ggIneXsc/millibarn << " mb; prod Xsc = "
-            <<  ggProdXsc/millibarn << " mb; ratio = prod/in = " <<  ratio << G4endl;
+     // G4cout << kinEnergy/GeV <<" GeV, in Xsc = "<<  ggIneXsc/millibarn << " mb; prod Xsc = "
+     //       <<  ggProdXsc/millibarn << " mb; ratio = 1 - prod/in = " <<  ratio << G4endl;
+    
+      G4cout << kinEnergy/GeV <<" GeV, in-Xsc = "<<  ggIneXsc/millibarn << " mb; sdif-Xsc = "
+            <<  ggDifXsc/millibarn << " mb; ratio = dif/in = " <<  ratio << G4endl;
     
 
   // writegg << kinEnergy/GeV <<"\t"<< ggTotXsc/millibarn <<"\t"<< ggIneXsc/millibarn << G4endl;
-  //   writef << kinEnergy/GeV <<"\t"<< ggTotXsc/millibarn <<"\t"<< ggIneXsc/millibarn << G4endl;
+     // writef << kinEnergy/GeV <<"\t"<< ggTotXsc/millibarn <<"\t"<< ggIneXsc/millibarn << G4endl;
   // writef << kinEnergy/GeV <<"\t"<< ggIneXsc/millibarn <<"\t"<< ggProdXsc/millibarn << G4endl;
      writef << kinEnergy/GeV <<"\t"<< ratio <<G4endl;
 
      kinEnergy *= 1.145;
      delete theDynamicParticle;
   }
-          
-  
+              
+    
 
  
   /*
