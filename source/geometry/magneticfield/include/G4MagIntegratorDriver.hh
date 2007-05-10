@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagIntegratorDriver.hh,v 1.18 2006-11-14 15:08:02 japost Exp $
+// $Id: G4MagIntegratorDriver.hh,v 1.19 2007-05-10 09:27:25 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -208,7 +208,11 @@ class G4MagInt_Driver
    private:
 
      G4double  fMinimumStep;
-        // Minimum Step allowed in a Step.
+        // Minimum Step allowed in a Step (in absolute units)
+     G4double  fSmallestFraction;      //   Expected range 1e-12 to 5e-15;  
+        // Smallest fraction of (existing) curve length - in relative units
+        //  below this fraction the current step will be the last 
+   
 
      const G4int  fNoIntegrationVariables;  // Number of Variables in integration
      const G4int  fMinNoVars;               // Minimum number for FieldTrack
