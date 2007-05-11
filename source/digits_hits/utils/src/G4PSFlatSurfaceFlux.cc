@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSFlatSurfaceFlux.cc,v 1.6 2007-04-20 07:53:33 asaim Exp $
+// $Id: G4PSFlatSurfaceFlux.cc,v 1.7 2007-05-11 13:10:41 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4PSFlatSurfaceFlux
@@ -32,6 +32,7 @@
 #include "G4StepStatus.hh"
 #include "G4Track.hh"
 #include "G4UnitsTable.hh"
+#include "G4GeometryTolerance.hh"
 ////////////////////////////////////////////////////////////////////////////////
 // (Description)
 //   This is a primitive scorer class for scoring Surface Flux.
@@ -109,8 +110,10 @@ G4bool G4PSFlatSurfaceFlux::ProcessHits(G4Step* aStep,G4TouchableHistory*)
 
 G4int G4PSFlatSurfaceFlux::IsSelectedSurface(G4Step* aStep, G4Box* boxSolid){
 
-  G4TouchableHandle theTouchable = 
-    aStep->GetPreStepPoint()->GetTouchableHandle();
+  G4TouchableHandle theTouchable = aStep->GetPreStepPoint()
+                           ->GetTouchableHandle();
+  G4double kCarTolerance = G4GeometryTolerance::GetInstance()
+                           ->GetSurfaceTolerance();
 
   if (aStep->GetPreStepPoint()->GetStepStatus() == fGeomBoundary ){
     // Entering Geometry
