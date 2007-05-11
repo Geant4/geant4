@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RKG3_Stepper.hh,v 1.11 2006-06-29 18:23:18 gunter Exp $
+// $Id: G4RKG3_Stepper.hh,v 1.12 2007-05-11 15:45:05 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -98,6 +98,11 @@ class G4RKG3_Stepper : public G4MagIntegratorStepper
     G4ThreeVector fyInitial,
                   fyMidPoint,
                   fyFinal;
+   G4ThreeVector  fpInitial;
+   G4ThreeVector  BfldIn;
+   G4double       hStep;
+  
+   G4Mag_EqRhs*  fPtrMagEqOfMot;
 };
 
 #endif
