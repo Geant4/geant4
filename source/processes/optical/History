@@ -16,6 +16,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+11th May 2007 Gabriele Cosmo (op-V08-03-00)
+- Use call to G4GeometryTolerance instead of kCarTolerance in
+  G4OpBoundaryProcess.
+- Requires tag "global-V08-03-00" and related tag set.
+
 11th May 2006 Peter Gumplinger (op-V08-00-01)
               thanks to Andreia Trindade and Pedro Rodrigues, the WLS time
               delay can now be a delta function or exponential. New classes:
