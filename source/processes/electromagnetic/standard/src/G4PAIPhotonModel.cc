@@ -56,6 +56,7 @@
 #include "G4DynamicParticle.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleChangeForLoss.hh"
+#include "G4GeometryTolerance.hh"
 
 ////////////////////////////////////////////////////////////////////////
 
@@ -377,6 +378,8 @@ G4PAIPhotonModel::BuildLambdaVector(const G4MaterialCutsCouple* matCutsCouple)
 {
   G4int i ;
   G4double dNdxCut,dNdxPhotonCut,dNdxPlasmonCut, lambda;
+  G4double kCarTolerance = G4GeometryTolerance::GetInstance()
+                           ->GetSurfaceTolerance();
 
   const G4ProductionCutsTable* theCoupleTable=
         G4ProductionCutsTable::GetProductionCutsTable();
