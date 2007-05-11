@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSolid.cc,v 1.33 2006-10-23 08:33:40 gcosmo Exp $
+// $Id: G4VSolid.cc,v 1.34 2007-05-11 13:30:12 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4VSolid
@@ -46,6 +46,7 @@
 #include "G4SolidStore.hh"
 #include "globals.hh"
 #include "Randomize.hh"
+#include "G4GeometryTolerance.hh"
 
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
@@ -60,6 +61,8 @@
 G4VSolid::G4VSolid(const G4String& name)
   : fshapeName(name)
 {
+    kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
+
     // Register to store
     //
     G4SolidStore::GetInstance()->Register(this);

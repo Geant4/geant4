@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelNavigator.hh,v 1.10 2006-06-29 18:16:23 gunter Exp $
+// $Id: G4ParallelNavigator.hh,v 1.11 2007-05-11 13:25:19 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -128,19 +128,7 @@ private:
   G4int fMaxShiftedTrys;  
   G4TouchableHandle fCurrentTouchableH;
   G4int fVerbose;
+  G4double kCarTolerance;
 };
 
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-

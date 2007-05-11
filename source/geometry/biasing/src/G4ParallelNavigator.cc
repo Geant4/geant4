@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelNavigator.cc,v 1.20 2006-06-29 18:17:27 gunter Exp $
+// $Id: G4ParallelNavigator.cc,v 1.21 2007-05-11 13:25:19 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -38,7 +38,7 @@
 
 #include <sstream>
 #include "G4VParallelStepper.hh"
-
+#include "G4GeometryTolerance.hh"
 
 G4ParallelNavigator::G4ParallelNavigator(G4VPhysicalVolume &aWorldVolume)
   : 
@@ -47,7 +47,9 @@ G4ParallelNavigator::G4ParallelNavigator(G4VPhysicalVolume &aWorldVolume)
   fCurrentTouchableH((fNavigator.SetWorldVolume(&aWorldVolume),
 		      fNavigator.CreateTouchableHistory())),
   fVerbose(0)
-{}
+{
+  kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
+}
 
 G4ParallelNavigator::~G4ParallelNavigator()
 {
