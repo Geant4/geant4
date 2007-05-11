@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FastSimulationMessenger.hh,v 1.6 2006-11-03 17:26:04 mverderi Exp $
+// $Id: G4FastSimulationMessenger.hh,v 1.7 2007-05-11 13:50:20 mverderi Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -64,13 +64,13 @@ private:
   G4GlobalFastSimulationManager* fGlobalFastSimulationManager;
   
   //commands
-  G4UIdirectory*           fFSDirectory;
-  G4UIcmdWithoutParameter* fShowSetupCmd;
-  G4UIcmdWithAString*      fListEnvelopesCmd;
-  G4UIcmdWithAString*      fListModelsCmd;
+  G4UIdirectory*                   fFSDirectory;
+  G4UIcmdWithoutParameter*        fShowSetupCmd;
+  G4UIcmdWithAString*         fListEnvelopesCmd;
+  G4UIcmdWithAString*            fListModelsCmd;
   G4UIcmdWithAString*      fListIsApplicableCmd;
-  G4UIcmdWithAString*      fActivateModel;
-  G4UIcmdWithAString*      fInActivateModel;
+  G4UIcmdWithAString*            fActivateModel;
+  G4UIcmdWithAString*          fInActivateModel;
 };
 
 #endif
