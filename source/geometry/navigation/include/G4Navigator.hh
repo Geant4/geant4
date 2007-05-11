@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.hh,v 1.22 2007-04-23 15:31:25 vnivanch Exp $
+// $Id: G4Navigator.hh,v 1.23 2007-05-11 13:43:59 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -305,6 +305,9 @@ class G4Navigator
     //   volumes.
 
  protected:  // without description
+
+  G4double kCarTolerance;
+    // Geometrical tolerance for surface thickness of shapes.
 
   //
   // BEGIN State information

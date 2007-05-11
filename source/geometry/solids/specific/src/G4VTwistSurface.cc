@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTwistSurface.cc,v 1.5 2006-06-29 18:49:34 gunter Exp $
+// $Id: G4VTwistSurface.cc,v 1.6 2007-05-11 13:54:29 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -42,8 +42,10 @@
 //                 from original version in Jupiter-2.5.02 application.
 // --------------------------------------------------------------------
 
-#include "G4VTwistSurface.hh"
 #include <iomanip>
+
+#include "G4VTwistSurface.hh"
+#include "G4GeometryTolerance.hh"
 
 const G4int  G4VTwistSurface::sOutside        = 0x00000000;
 const G4int  G4VTwistSurface::sInside         = 0x10000000;
@@ -127,6 +129,7 @@ G4VTwistSurface::G4VTwistSurface(const G4String         &name,
    
    fAmIOnLeftSide.me.set(kInfinity, kInfinity, kInfinity);
    fAmIOnLeftSide.vec.set(kInfinity, kInfinity, kInfinity);
+   kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
 }
 
 //=====================================================================

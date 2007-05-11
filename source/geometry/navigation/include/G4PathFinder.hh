@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PathFinder.hh,v 1.21 2007-04-20 15:28:37 gcosmo Exp $
+// $Id: G4PathFinder.hh,v 1.22 2007-05-11 13:43:59 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // class G4PathFinder 
@@ -220,7 +220,9 @@ class G4PathFinder
      // Limit for the number of sub-steps taken in one call to ComputeStep
 
    G4TransportationManager* fpTransportManager; // Cache for frequent use
-   G4PropagatorInField* fpFieldPropagator; 
+   G4PropagatorInField* fpFieldPropagator;
+
+   G4double kCarTolerance;
 };
 
 // ********************************************************************

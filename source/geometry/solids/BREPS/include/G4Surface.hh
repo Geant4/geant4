@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Surface.hh,v 1.9 2006-06-29 18:40:41 gunter Exp $
+// $Id: G4Surface.hh,v 1.10 2007-05-11 13:49:32 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -190,6 +190,8 @@ protected:
 
   G4SurfaceBoundary surfaceBoundary;
     // The boundaries of the surface.
+
+  G4double kCarTolerance;
 
   G4int Intersected;
     // BSplineSurface and FPlane sets it, no one gets it.

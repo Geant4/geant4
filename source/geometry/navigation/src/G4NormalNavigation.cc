@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NormalNavigation.cc,v 1.8 2006-06-29 18:37:01 gunter Exp $
+// $Id: G4NormalNavigation.cc,v 1.9 2007-05-11 13:43:59 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -122,7 +122,7 @@ G4NormalNavigation::ComputeStep(const G4ThreeVector &localPoint,
       G4double estDistToSolid= motherSolid->DistanceToIn(localPoint); 
       G4cout << "          Estimated isotropic distance to solid (distToIn)= " 
              << estDistToSolid << G4endl;
-      if( estDistToSolid > 100.0 * kCarTolerance )
+      if( estDistToSolid > 100.0 * motherSolid->GetTolerance() )
       {
         motherSolid->DumpInfo();
         G4Exception("G4NormalNavigation::ComputeStep()",

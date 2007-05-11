@@ -24,7 +24,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VFacet.hh,v 1.4 2007-02-12 09:34:44 gcosmo Exp $
+// $Id: G4VFacet.hh,v 1.5 2007-05-11 13:54:28 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -117,6 +117,7 @@ class G4VFacet
     G4double             radiusSqr;
 
     G4double             dirTolerance;
+    G4double             kCarTolerance;
     G4double             area;
 
   private:

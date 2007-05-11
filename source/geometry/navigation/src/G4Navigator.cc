@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.cc,v 1.30 2007-04-23 15:31:25 vnivanch Exp $
+// $Id: G4Navigator.cc,v 1.31 2007-05-11 13:43:59 gcosmo Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4Navigator Implementation
@@ -37,6 +37,7 @@
 #include "G4ios.hh"
 #include <iomanip>
 
+#include "G4GeometryTolerance.hh"
 #include "G4VPhysicalVolume.hh"
 
 // ********************************************************************
@@ -52,6 +53,8 @@ G4Navigator::G4Navigator()
 
   fActionThreshold_NoZeroSteps  = 10; 
   fAbandonThreshold_NoZeroSteps = 25; 
+
+  kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
 }
 
 // ********************************************************************

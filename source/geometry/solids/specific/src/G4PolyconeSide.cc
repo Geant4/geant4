@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolyconeSide.cc,v 1.14 2007-02-01 09:20:33 gcosmo Exp $
+// $Id: G4PolyconeSide.cc,v 1.15 2007-05-11 13:54:29 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,6 +44,7 @@
 #include "G4AffineTransform.hh"
 #include "meshdefs.hh"
 #include "G4SolidExtentList.hh"
+#include "G4GeometryTolerance.hh"
 
 //
 // Constructor
@@ -61,6 +62,8 @@ G4PolyconeSide::G4PolyconeSide( const G4PolyconeSideRZ *prevRZ,
                                       G4bool isAllBehind )
   : corners(0)
 {
+  kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
+
   //
   // Record values
   //

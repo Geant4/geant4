@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolyPhiFace.hh,v 1.9 2006-06-29 18:47:08 gunter Exp $
+// $Id: G4PolyPhiFace.hh,v 1.10 2007-05-11 13:54:28 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -167,6 +167,7 @@ class G4PolyPhiFace : public G4VCSGface
                zMin, zMax; // Extent in z
     G4bool      allBehind; // True if the polycone/polyhedra
                            // is behind the place of this face
+    G4double   kCarTolerance;       // Surface thickness
 };
 
 #include "G4PolyPhiFace.icc"

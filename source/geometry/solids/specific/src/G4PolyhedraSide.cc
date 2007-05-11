@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolyhedraSide.cc,v 1.11 2006-06-29 18:48:48 gunter Exp $
+// $Id: G4PolyhedraSide.cc,v 1.12 2007-05-11 13:54:29 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -43,6 +43,7 @@
 #include "G4ClippablePolygon.hh"
 #include "G4AffineTransform.hh"
 #include "G4SolidExtentList.hh"
+#include "G4GeometryTolerance.hh"
 
 //
 // Constructor
@@ -60,6 +61,9 @@ G4PolyhedraSide::G4PolyhedraSide( const G4PolyhedraSideRZ *prevRZ,
                                         G4bool thePhiIsOpen,
                                         G4bool isAllBehind )
 {
+
+  kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
+
   //
   // Record values
   //

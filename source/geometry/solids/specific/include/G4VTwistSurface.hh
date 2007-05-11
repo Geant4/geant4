@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTwistSurface.hh,v 1.5 2006-06-29 18:48:17 gunter Exp $
+// $Id: G4VTwistSurface.hh,v 1.6 2007-05-11 13:54:28 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -332,6 +332,7 @@ class G4VTwistSurface
    };
    G4SurfCurNormal     fCurrentNormal;
    G4bool              fIsValidNorm;
+   G4double            kCarTolerance;
                         
  private:
                      
@@ -376,7 +377,7 @@ G4bool DistanceSort( const Intersection &a, const Intersection &b)
 inline
 G4bool EqualIntersection( const Intersection &a, const Intersection &b)
 {
-  return ( ( a.xx - b.xx ).mag() < kCarTolerance ) ;
+  return ( ( a.xx - b.xx ).mag() < 1E-9*mm ) ;
 }
 
 #include "G4VTwistSurface.icc"

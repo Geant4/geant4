@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReplicaNavigation.cc,v 1.11 2006-06-29 18:37:09 gunter Exp $
+// $Id: G4ReplicaNavigation.cc,v 1.12 2007-05-11 13:43:59 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -40,6 +40,7 @@
 #include "G4SmartVoxelProxy.hh"
 #include "G4SmartVoxelNode.hh"
 #include "G4VSolid.hh"
+#include "G4GeometryTolerance.hh"
 
 #include <assert.h>
 
@@ -50,6 +51,7 @@
 G4ReplicaNavigation::G4ReplicaNavigation()
   : fCheck(false), fVerbose(0)
 {
+  kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
 }
 
 // ********************************************************************

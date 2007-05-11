@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4KnotVector.hh,v 1.9 2006-06-29 18:39:40 gunter Exp $
+// $Id: G4KnotVector.hh,v 1.10 2007-05-11 13:49:31 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -100,6 +100,9 @@ class G4KnotVector
 
   G4double *knots;
     // Knot vector.
+
+  G4double kCarTolerance;
+    // Surface thickness.
 
 };
 

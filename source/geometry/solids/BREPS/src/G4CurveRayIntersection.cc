@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CurveRayIntersection.cc,v 1.6 2006-06-29 18:42:06 gunter Exp $
+// $Id: G4CurveRayIntersection.cc,v 1.7 2007-05-11 13:49:32 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -35,12 +35,14 @@
 // ----------------------------------------------------------------------
 
 #include "G4CurveRayIntersection.hh"
+#include "G4GeometryTolerance.hh"
 
 const G4int G4CurveRayIntersection::dFlag= 4;
 
 G4CurveRayIntersection::G4CurveRayIntersection()
   : r(0), d(kInfinity)
 {
+  kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
 }
 
 G4CurveRayIntersection::G4CurveRayIntersection(G4Curve& c0, const G4Ray& r0)

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ClippablePolygon.hh,v 1.10 2006-06-29 18:46:38 gunter Exp $
+// $Id: G4ClippablePolygon.hh,v 1.11 2007-05-11 13:54:28 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -121,6 +121,7 @@ class G4ClippablePolygon
 
   G4ThreeVectorList vertices;
   G4ThreeVector normal;
+  G4double kCarTolerance;
 };
 
 #include "G4ClippablePolygon.icc"

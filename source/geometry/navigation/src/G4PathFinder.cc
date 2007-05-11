@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PathFinder.cc,v 1.30 2007-05-09 13:57:14 japost Exp $
+// $Id: G4PathFinder.cc,v 1.31 2007-05-11 13:47:27 gcosmo Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4PathFinder Implementation
@@ -37,6 +37,7 @@
 
 class G4FieldManager;
 
+#include "G4GeometryTolerance.hh"
 #include "G4Navigator.hh"
 #include "G4PropagatorInField.hh"
 #include "G4TransportationManager.hh"
@@ -71,6 +72,8 @@ G4PathFinder::G4PathFinder()
 
    fpTransportManager= G4TransportationManager::GetTransportationManager();
    fpFieldPropagator = fpTransportManager->GetPropagatorInField() ;
+
+   kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
 
    fNoActiveNavigators= 0; 
    G4ThreeVector  Big3Vector( DBL_MAX, DBL_MAX, DBL_MAX ); 

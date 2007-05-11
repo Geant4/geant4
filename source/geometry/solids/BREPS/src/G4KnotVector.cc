@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4KnotVector.cc,v 1.8 2006-06-29 18:42:20 gunter Exp $
+// $Id: G4KnotVector.cc,v 1.9 2007-05-11 13:49:32 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -35,10 +35,12 @@
 // ----------------------------------------------------------------------
 
 #include "G4KnotVector.hh"
+#include "G4GeometryTolerance.hh"
 
 G4KnotVector::G4KnotVector()
 {
   knots=(G4double*)0;
+  kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
 }
 
 G4KnotVector::G4KnotVector(G4int sz)

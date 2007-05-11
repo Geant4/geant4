@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeomTestSegment.cc,v 1.7 2007-04-26 15:15:02 gcosmo Exp $
+// $Id: G4GeomTestSegment.cc,v 1.8 2007-05-11 13:43:59 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -39,6 +39,7 @@
 
 #include "G4VSolid.hh"
 #include "G4GeomTestLogger.hh"
+#include "G4GeometryTolerance.hh"
 
 //
 // Constructor
@@ -51,6 +52,7 @@ G4GeomTestSegment::G4GeomTestSegment( const G4VSolid *theSolid,
     p0(theP),
     v(theV)
 {
+  kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
   FindPoints(logger);
 }
 

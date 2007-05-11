@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReflectionFactory.cc,v 1.5 2006-06-29 18:58:17 gunter Exp $
+// $Id: G4ReflectionFactory.cc,v 1.6 2007-05-11 13:58:35 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -60,7 +60,8 @@
 #include "G4LogicalVolume.hh"  
 #include "G4PVPlacement.hh"  
 #include "G4PVReplica.hh"  
-#include "G4VPVDivisionFactory.hh"  
+#include "G4VPVDivisionFactory.hh"
+#include "G4GeometryTolerance.hh"
 
 G4ReflectionFactory* G4ReflectionFactory::fInstance = 0;
 const G4String  G4ReflectionFactory::fDefaultNameExtension = "_refl";
@@ -87,7 +88,8 @@ G4ReflectionFactory::G4ReflectionFactory()
   // Protected singleton constructor.
   // ---
 
-  fScalePrecision = 10.*kCarTolerance;
+  fScalePrecision = 10.
+                  * G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
   fInstance = this;
 }
 

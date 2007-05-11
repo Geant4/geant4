@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolyPhiFace.cc,v 1.10 2006-06-29 18:48:40 gunter Exp $
+// $Id: G4PolyPhiFace.cc,v 1.11 2007-05-11 13:54:29 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,6 +44,7 @@
 #include "G4ReduciblePolygon.hh"
 #include "G4AffineTransform.hh"
 #include "G4SolidExtentList.hh"
+#include "G4GeometryTolerance.hh"
 
 //
 // Constructor
@@ -60,6 +61,8 @@ G4PolyPhiFace::G4PolyPhiFace( const G4ReduciblePolygon *rz,
                                     G4double deltaPhi,
                                     G4double phiOther )
 {
+  kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
+
   numEdges = rz->NumVertices();
   
   rMin = rz->Amin();

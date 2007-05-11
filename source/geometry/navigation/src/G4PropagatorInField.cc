@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.cc,v 1.30 2007-01-25 21:27:50 japost Exp $
+// $Id: G4PropagatorInField.cc,v 1.31 2007-05-11 13:43:59 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // 
@@ -46,6 +46,7 @@
 #include "G4ThreeVector.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4Navigator.hh"
+#include "G4GeometryTolerance.hh"
 #include "G4VCurvedTrajectoryFilter.hh"
 #include "G4ChordFinder.hh"
 
@@ -80,14 +81,12 @@ G4PropagatorInField::G4PropagatorInField( G4Navigator    *theNavigator,
 
   fPreviousSftOrigin= G4ThreeVector(0.,0.,0.);
   fPreviousSafety= 0.0;
-
+  kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
 }
 
 G4PropagatorInField::~G4PropagatorInField()
 {
 }
-
-
 
 ///////////////////////////////////////////////////////////////////////////
 //

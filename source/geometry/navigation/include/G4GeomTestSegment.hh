@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeomTestSegment.hh,v 1.3 2006-06-29 18:35:50 gunter Exp $
+// $Id: G4GeomTestSegment.hh,v 1.4 2007-05-11 13:43:59 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -78,6 +78,8 @@ class G4GeomTestSegment
     const G4ThreeVector p0,v;
   
     std::vector<G4GeomTestPoint> points;
+
+    G4double kCarTolerance;
 };
 
 #endif
