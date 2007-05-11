@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagIntegratorDriver.cc,v 1.46 2007-05-10 10:10:31 japost Exp $
+// $Id: G4MagIntegratorDriver.cc,v 1.47 2007-05-11 13:19:40 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,7 +41,7 @@
 // --------------------------------------------------------------------
 
 #include "globals.hh"
-#include "geomdefs.hh"         //  for kCarTolerance
+#include "G4GeometryTolerance.hh"
 #include <iomanip>
 #include "G4MagIntegratorDriver.hh"
 #include "G4FieldTrack.hh"
@@ -427,7 +427,7 @@ G4MagInt_Driver::WarnEndPointTooFar (G4double endPointDist,
  	   maxRelError_last_printed = maxRelError;
 
         if(    dbg 
-	    && (h > kCarTolerance) 
+	    && (h > G4GeometryTolerance::GetInstance()->GetSurfaceTolerance()) 
 	    && ( (dbg>1) || prNewMax || (endPointDist >= h*(1.+eps) ) ) 
           ){ 
            static G4int noWarnings = 0;
