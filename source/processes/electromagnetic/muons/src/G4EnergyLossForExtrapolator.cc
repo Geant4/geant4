@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EnergyLossForExtrapolator.cc,v 1.10 2007-02-16 16:03:18 vnivanch Exp $
+// $Id: G4EnergyLossForExtrapolator.cc,v 1.11 2007-05-12 16:40:14 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -41,6 +41,7 @@
 // 21-03-06 Add verbosity defined in the constructor and Initialisation
 //          start only when first public method is called (V.Ivanchenko)
 // 03-05-06 Remove unused pointer G4Material* from number of methods (VI)
+// 12-05-06 SEt linLossLimit=0.001 (VI)
 //
 //----------------------------------------------------------------------------
 //
@@ -201,7 +202,7 @@ void G4EnergyLossForExtrapolator::Initialisation()
 
   currentParticleName = "";
 
-  linLossLimit = 1.e-6;
+  linLossLimit = 0.001;
   emin         = 1.*MeV;
   emax         = 100.*GeV;
   nbins        = 50;

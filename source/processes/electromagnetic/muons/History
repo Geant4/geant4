@@ -1,4 +1,4 @@
-$Id: History,v 1.95 2007-04-24 11:51:52 vnivanch Exp $
+$Id: History,v 1.96 2007-05-12 16:40:14 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,16 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+- G4ErrorEnergyLoss - new class needed for GEANTe (p. Arce)
+
+12 May 07: V.Ivant (emmuons-V08-03-00)
+- G4EnergyLossForExtrapolator - linLossLimit=0.001
+- Remove obsolete G4MuIonisation52, G4MuPairProduction52, G4MuBremsstrahlung52,
+  G4VMuEnergyLoss
+- G4MuPairProductionModel - fix usage of cut value inside SelectRandomAtom,
+                            providing correct sampling of atom of mixture
+                            for production of e+e- pair (A.Bogdanov)
 
 24 April 07: V.Ivant (emmuons-V08-02-01)
 - G4MuPairProductionModel - add protection against zero or negative partial
