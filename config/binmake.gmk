@@ -1,4 +1,4 @@
-# $Id: binmake.gmk,v 1.118 2007-03-21 22:00:45 gcosmo Exp $
+# $Id: binmake.gmk,v 1.119 2007-05-12 15:57:08 gcosmo Exp $
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
 #    First implementation: Gabriele Cosmo, 25/06/1998.
@@ -142,6 +142,7 @@ ifndef INCFLAGS
               -I$(G4BASE)/persistency/include \
               -I$(G4BASE)/readout/include \
               -I$(G4BASE)/event/include \
+              -I$(G4BASE)/error_propagation \
               -I$(G4BASE)/graphics_reps/include \
               -I$(G4BASE)/intercoms/include
   ifdef G4LIB_USE_G3TOG4
@@ -207,13 +208,10 @@ ifdef GLOBALLIBS
     LDLIBS2 += -lG3toG4
   endif
 
-  LDLIBS2 += -lG4readout
-
-  ifeq ($(G4LIB_BUILD_LISTS),1)
-    LDLIBS2 += -lG4physicslists
-  endif
-    
-  LDLIBS2 += -lG4run \
+  LDLIBS2 += -lG4errpropagation \
+             -lG4readout \
+             -lG4physicslists \
+             -lG4run \
              -lG4event \
              -lG4tracking \
 	     -lG4parmodels \
