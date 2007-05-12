@@ -1,6 +1,6 @@
-# $Id: GNUmakefile,v 1.1 2007-05-12 15:43:45 gcosmo Exp $
+# $Id: GNUmakefile,v 1.2 2007-05-12 16:07:11 gcosmo Exp $
 # ----------------------------------------------------------
-# GNUmakefile for run library.  Gabriele Cosmo, 3/4/1997.
+# GNUmakefile for error_propagation library.  G.Cosmo, 12/5/2007.
 # ----------------------------------------------------------
 
 name := G4errpropagation
