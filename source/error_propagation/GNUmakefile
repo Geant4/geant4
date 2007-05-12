@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.2 2007-05-12 16:07:11 gcosmo Exp $
+# $Id: GNUmakefile,v 1.3 2007-05-12 16:11:35 gcosmo Exp $
 # ----------------------------------------------------------
 # GNUmakefile for error_propagation library.  G.Cosmo, 12/5/2007.
 # ----------------------------------------------------------
@@ -9,7 +9,7 @@ ifndef G4INSTALL
   G4INSTALL = ../..
 endif
 
-GLOBLIBS  = libG4run.lib libG4event.lib
+GLOBLIBS  = libG4physicslists libG4run.lib libG4event.lib
 GLOBLIBS += libG4tracking.lib libG4processes.lib libG4digits_hits.lib
 GLOBLIBS += libG4track.lib libG4particles.lib libG4geometry.lib
 GLOBLIBS += libG4materials.lib libG4graphics_reps.lib
@@ -24,6 +24,7 @@ CPPFLAGS += \
             -I$(G4BASE)/processes/management/include \
             -I$(G4BASE)/materials/include \
             -I$(G4BASE)/particles/management/include \
+            -I$(G4BASE)/physics_lists/lists/include \
             -I$(G4BASE)/processes/management/include \
             -I$(G4BASE)/processes/cuts/include \
             -I$(G4BASE)/processes/electromagnetic/utils/include \
