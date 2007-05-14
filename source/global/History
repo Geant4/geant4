@@ -1,4 +1,4 @@
-$Id: History,v 1.179 2007-05-14 10:07:48 vnivanch Exp $
+$Id: History,v 1.180 2007-05-14 10:28:08 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,8 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-- G4LPhysicsFreeVector : initialise vectors of length=nbin+1 (one bin
-                         is hidden for users) - fix bug #942
+May 13, 2007  V.Ivanchenko (global-V08-03-01)
+- Fixed bug in G4LPhysicsVector constructor: initialise vectors of
+  length=nbin+1 (one bin is hidden for users). Addresses bug report #942.
 
 May 11, 2007  G.Cosmo (global-V08-03-00)
 - Added G4GeometryTolerance singleton class for the definition of
