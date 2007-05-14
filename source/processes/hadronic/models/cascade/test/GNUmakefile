@@ -17,3 +17,7 @@ ifndef G4INSTALL
 endif
 
 include $(G4INSTALL)/config/binmake.gmk
+
+
+b1:  # benchmark 1
+	$(G4INSTALL)/bin/$(G4SYSTEM)/benchmarks >> b1.out 
