@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LPhysicsFreeVector.cc,v 1.11 2007-05-14 10:07:35 vnivanch Exp $
+// $Id: G4LPhysicsFreeVector.cc,v 1.12 2007-05-14 10:27:06 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -36,14 +36,10 @@
 // F.W. Jones, TRIUMF, 04-JUN-96
 //
 // 27-MAR-97 FWJ: first version for Alpha release
-// 11-NOV-00 H.Kurashige : use STL vector for dataVector and binVector
-// 13-MAY-07 V.Ivanchenko : initialise vectors of length=nbin+1 (one bin
-//                          is hidden for users) - fixed bug #942 
-//
 
 #include "G4LPhysicsFreeVector.hh"
 
-#include <stdio.h>
+#include "G4ios.hh"
 
 G4LPhysicsFreeVector::G4LPhysicsFreeVector()
    : verboseLevel(0)
@@ -85,6 +81,6 @@ void G4LPhysicsFreeVector::DumpValues()
 {
    for (size_t i = 0; i < numberOfBin; i++)
    {
-      printf(" %12.4f   %7.1f\n", binVector[i], dataVector[i]/millibarn);
+      G4cout << binVector[i] << "   " << dataVector[i]/millibarn << G4endl;
    }
 }
