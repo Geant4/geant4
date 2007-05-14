@@ -1,5 +1,4 @@
 name := basicTest
-name := benchmarks
 name := bertiniDataTest
 name := cascade
 name := cascadeTest
@@ -8,6 +7,7 @@ name := evaporationTest
 name := hetcCascadeTest
 name := testInterface
 name := toyModelTest
+name := benchmarks
 
 G4TARGET := $(name)
 #G4EXLIB := true
