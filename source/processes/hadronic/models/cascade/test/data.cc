@@ -38,7 +38,7 @@ int main(int argc, char **argv ) {
   crossSections();   
 
   return 0;       
-};
+}
 
 G4int crossSections() {   // print cross section data
 
@@ -71,7 +71,7 @@ G4int crossSections() {   // print cross section data
   }
 
   return 0;
-};
+}
 
 
 

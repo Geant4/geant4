@@ -86,7 +86,7 @@ int main(int argc, char **argv ) {
    
 	//		do
 	  {
-	    cout << "+";
+	    G4cout << "+";
 	    output = collider->collide(bullet, targetH); 
 	  } 
 	  //		while(output.getOutgoingParticles().size()<2.5);
@@ -108,7 +108,7 @@ int main(int argc, char **argv ) {
     std::vector<G4InuclElementaryParticle> particles =       output.getOutgoingParticles();
 
     G4int numSecondaries = nucleiFragments.size()+particles.size();
-    cout << "num secondaries: " << numSecondaries << G4endl;
+    G4cout << "num secondaries: " << numSecondaries << G4endl;
     if(!particles.empty()) { 
       particleIterator ipart;
       G4int outgoingParticle;

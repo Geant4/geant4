@@ -30,7 +30,9 @@
 #include "G4KineticTrack.hh"
 #include "G4KineticTrackVector.hh"
 #include "G4Fancy3DNucleus.hh"
-#include "G4BertiniCascade.hh"
+//#include "G4BertiniCascade.hh"
+#include "G4CascadeInterface.hh"
+
 #include "G4VParticleChange.hh"
 #include "G4Track.hh"
 #include "G4Nucleus.hh"
@@ -81,10 +83,10 @@ int main() {
     G4cout << " atomic mass    : " << targetNucleus.AtomicMass(a, z) << G4endl;
   }
 
-  G4BertiniCascade *theCascade  = new G4BertiniCascade();
+  G4CascadeInterface *theCascade  = new G4CascadeInterface();
   for (G4int cascadeID =1 ; cascadeID <= numberOfCascades; cascadeID++) { 
     if (verboseLevel > 1) G4cout << "inc " << cascadeID << G4endl;
-    cascadeParticles = theCascade->ApplyYourself(aTrack, targetNucleus);
+    //    cascadeParticles = theCascade->ApplyYourself(aTrack, targetNucleus);
   }
 
   delete projectile;

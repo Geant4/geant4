@@ -77,7 +77,7 @@ int main() {
     // Bullet could be nucleon or pion or nuclei
     // proton momentum in Z-direction [GeV]
     G4double bulletEnergy = eMin + eStep * e; 
-    G4cout << "Bullet E =" << bulletEnergy << " GeV" << endl;
+    G4cout << "Bullet E =" << bulletEnergy << " GeV" << G4endl;
     G4InuclParticle* bull = new G4InuclElementaryParticle(bulletEnergy, 1); 
 
     /*

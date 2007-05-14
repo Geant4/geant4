@@ -23,6 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+#include <vector.h>
 #include "G4ios.hh"
 #include "G4ThreeVector.hh"
 #include "G4LorentzVector.hh"
@@ -30,6 +31,8 @@
 #include "G4KineticTrack.hh"
 #include "G4KineticTrackVector.hh"
 #include "G4Fancy3DNucleus.hh"
+
+
 //#include "G4Cascade.hh"
 
 int main() {
@@ -107,7 +110,8 @@ int main() {
     G4cout << "target particle        : " << "\t" << targetParticle << G4endl;
 
     // Choose the struck nucleon momentum
-    G4double qMax = (300.0 / radius0) * std::pow(10, -15) * MeV;
+    //    G4double qMax = (300.0 / radius0) * std::pow(10, -15) * MeV;
+    G4double qMax = (300.0 / radius0) * pow(10, -15) * MeV;
     G4double q    = qMax * std::sqrt(G4UniformRand());
 
     G4cout << "target  momentum       : " << "\t" << q << G4endl;

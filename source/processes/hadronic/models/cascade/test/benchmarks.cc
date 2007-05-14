@@ -47,21 +47,17 @@
 
 G4int benchmarkAll();
 
-// Banchmarking. 
-// Uses permanent datafile banchmarks.data
 int main() {
 
   benchmarkAll(); // Run all models in tandem
 
   return 0;       
-};
+}
 
 G4int benchmarkAll()  {
 
   G4int verboseLevel = 1; // For benchmarking  quals 1.
   
-  // General benchmark test program
-
   const G4int to_report = 1;
   G4int    nrain = 100;  // number of interactions to be generated
   G4double eMin  = 0.1;  // minimun energy for bullet
@@ -86,24 +82,20 @@ G4int benchmarkAll()  {
     G4BigBanger*                     bigb = new G4BigBanger;
     G4InuclCollider*             collider = new G4InuclCollider(colep, cascade, noneq, eqil, fiss, bigb);
 
-    // Bullet / Target initialisation
-    // Bullet could be nucleon or pion or nuclei
     // proton momentum in Z-direction [GeV]
     G4double bulletEnergy = eMin + eStep * e;
  
     if (verboseLevel > 1) {
-      G4cout << "Bullet E =" << bulletEnergy << " GeV" << endl;
+      G4cout << "Bullet E =" << bulletEnergy << " GeV" << G4endl;
     };
 
     G4InuclParticle* bull = new G4InuclElementaryParticle(bulletEnergy, 1); 
-
     G4InuclParticle* targ = NULL;
 
     switch (e) {
      // ::: add standard H,Be, Cu, Lb, U
       case 1:
      targ = new G4InuclNuclei(0.0, 197.0, 79.0);     // Au197 target at rest
-
      default:
       targ = new G4InuclNuclei(0.0, 208.0, 82.0); // Pb
     }
@@ -116,13 +108,12 @@ G4int benchmarkAll()  {
     bull->printParticle();
     targ->printParticle();
     if (verboseLevel > 1) {
-      G4cout << " tot in mom: px " << total_mom_in[1] << " py " << total_mom_in[2] << " pz " << total_mom_in[3] << " e " << total_mom_in[0] << G4endl;
+      G4cout <<std::setw(15)<< " tot in mom: px " <<E<< total_mom_in[1] << " py " << total_mom_in[2] << " pz " << total_mom_in[3] << " e " << total_mom_in[0] << G4endl;
     }
 
 #endif
     for(G4int i = 0; i < nrain; i++) {
       if((i + 1) % to_report == 0) 
-
 	if (verboseLevel > 1) {
 	  G4cout << " Event " << i+1 <<":" << G4endl;
       	}
@@ -145,7 +136,4 @@ G4int benchmarkAll()  {
   }
 
   return 0;
-};
-
-
-
+}

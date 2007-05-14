@@ -112,7 +112,7 @@ int main(int argc, char **argv ) {
   test();        // misc. testing
 
   return 0;       
-};
+}
 
 G4int testINCEvap() {
 
@@ -123,7 +123,7 @@ G4int testINCEvap() {
   }
   
   return 0;
-};
+}
 
 G4int testINCAll(G4int nCollisions, G4int bulletType, G4double momZ, G4double A, G4double Z) {
 
@@ -208,7 +208,8 @@ G4int testINCAll(G4int nCollisions, G4int bulletType, G4double momZ, G4double A,
       G4cout << " Event " << e+1 <<":" << G4endl;
     }
 
-    for (G4int i = 1; i <= nCollisions; i++) {
+    G4int i;
+    for (i = 1; i <= nCollisions; i++) {
       
       if (verboseLevel > 3) {
 	G4cout << "collision " << i << G4endl; 
@@ -271,7 +272,7 @@ G4int testINCAll(G4int nCollisions, G4int bulletType, G4double momZ, G4double A,
   }
 
   return 0;
-};
+}
 
 G4int printData(G4int i) {
 
@@ -412,14 +413,16 @@ G4int printData(G4int i) {
   }
   //  eTot = 0.0;
   return 0;
-};
+}
 
 G4int printCross(G4int i) {
 
   G4int verboseLevel = 1;
 
   if (verboseLevel > 4) {
+
     G4cout << " After Cascade " << G4endl;
+    G4cout << " i " << i << G4endl;
     output.printCollisionOutput();
   }
 

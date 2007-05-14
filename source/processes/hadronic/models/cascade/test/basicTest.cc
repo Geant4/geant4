@@ -24,6 +24,8 @@
 // ********************************************************************
 //
 #include "G4ios.hh"
+#include "globals.hh"
+#include <iomanip>
 #include <time.h>
 #include <vector>
 
@@ -40,12 +42,15 @@ int main() {
   startTime = clock();
 
   for(G4int i = 1; i < LOOPS; i++){
-    G4double ans = std::pow(y[2], 2);
+       G4double ans = std::pow(y[2], 2);
   };
   endTime = clock();
-  G4double firstTime = (G4double)(endTime - startTime) /
-    (CLOCKS_PER_SEC * 1000000.0);
-  cout << "pow(x, 2) time: " << firstTime  << endl;
+  //  G4double firstTime = (G4double)(endTime - startTime) /
+  //  (CLOCKS_PER_SEC * 1000000.0);
+
+  G4double firstTime = (G4double)(endTime - startTime);
+
+  G4cout << "pow(x, 2) time: " << firstTime  << G4endl;
 
   startTime = clock();
   for(G4int j = 1; j < LOOPS; j++){
@@ -53,8 +58,11 @@ int main() {
   };
 
   endTime = clock();
-  G4double secondTime = (G4double)(endTime - startTime) / 
-    (CLOCKS_PER_SEC * 1000000.0);
-  cout << "x * x time: " << secondTime << endl;
-  cout << "pow / * speed ratio = " << firstTime / secondTime << endl;
+  //  G4double secondTime = (G4double)(endTime - startTime) / 
+  //  (CLOCKS_PER_SEC * 1000000.0);
+
+
+  G4double secondTime = (G4double)(endTime - startTime);
+  G4cout << "x * x time: " << secondTime << G4endl;
+  G4cout << "pow / * speed ratio = " << firstTime / secondTime << G4endl;
 }
