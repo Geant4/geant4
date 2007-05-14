@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LPhysicsFreeVector.cc,v 1.10 2006-06-29 19:04:04 gunter Exp $
+// $Id: G4LPhysicsFreeVector.cc,v 1.11 2007-05-14 10:07:35 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -37,6 +37,8 @@
 //
 // 27-MAR-97 FWJ: first version for Alpha release
 // 11-NOV-00 H.Kurashige : use STL vector for dataVector and binVector
+// 13-MAY-07 V.Ivanchenko : initialise vectors of length=nbin+1 (one bin
+//                          is hidden for users) - fixed bug #942 
 //
 
 #include "G4LPhysicsFreeVector.hh"
@@ -66,9 +68,9 @@ G4LPhysicsFreeVector::G4LPhysicsFreeVector(size_t nbin,
    lastEnergy = 0.;
    lastValue = 0.;
    lastBin = 0;
-   binVector.reserve(nbin);
-   dataVector.reserve(nbin);
-   for (size_t i=0; i<numberOfBin; i++)
+   binVector.reserve(nbin+1);
+   dataVector.reserve(nbin+1);
+   for (size_t i=0; i<=numberOfBin; i++)
    {
      binVector.push_back(0.0);
      dataVector.push_back(0.0);
