@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronElastic.cc,v 1.50 2007-05-15 13:08:53 vnivanch Exp $
+// $Id: G4HadronElastic.cc,v 1.51 2007-05-15 16:06:47 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -77,23 +77,21 @@
 #include "G4Alpha.hh"
 #include "G4PionPlus.hh"
 #include "G4PionMinus.hh"
-#include "G4NistManager.hh"
 
-G4HadronElastic::G4HadronElastic() 
-  : G4HadronicInteraction()
+G4HadronElastic::G4HadronElastic(G4ElasticHadrNucleusHE* HModel) 
+  : G4HadronicInteraction(), hElastic(HModel)
 {
   SetMinEnergy( 0.0*GeV );
   SetMaxEnergy( 100.*TeV );
   verboseLevel= 0;
   lowEnergyRecoilLimit = 100.*keV;  
   lowEnergyLimitQ  = 0.0*GeV;  
-  lowEnergyLimitHE = 1.0*GeV;  
+  lowEnergyLimitHE = 0.0*GeV;  
   lowestEnergyLimit= 0.0*keV;  
   plabLowLimit     = 20.0*MeV;
 
   qCManager   = G4QElasticCrossSection::GetPointer();
-  nistManager = G4NistManager::Instance();
-  hElastic    = new G4ElasticHadrNucleusHE();
+  if(!hElastic) hElastic = new G4ElasticHadrNucleusHE();
 
   theProton   = G4Proton::Proton();
   theNeutron  = G4Neutron::Neutron();
@@ -181,15 +179,16 @@ G4HadFinalState* G4HadronElastic::ApplyYourself(
   G4ElasticGenerator gtype = fLElastic;
 
   // Q-elastic for p,n scattering on H and He
-  if ((theParticle == theProton || theParticle == theNeutron)
-       && Z <= 2 && ekin >= lowEnergyLimitQ)  
+  if (theParticle == theProton || theParticle == theNeutron)
+    //     && Z <= 2 && ekin >= lowEnergyLimitQ)  
     gtype = fQElastic;
 
   else {
     // S-wave for very low energy
     if(plab < plabLowLimit) gtype = fSWave;
     // HE-elastic for energetic projectiles
-    else if(ekin >= lowEnergyLimitHE && A < 238 && Z>= 2) gtype = fHElastic;
+    else if(ekin >= lowEnergyLimitHE && theParticle->GetParticleType() != "nucleus") 
+      gtype = fHElastic;
   }
 
   //

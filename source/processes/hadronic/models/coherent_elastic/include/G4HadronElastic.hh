@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HadronElastic.hh,v 1.25 2007-05-15 09:27:45 vnivanch Exp $
+// $Id: G4HadronElastic.hh,v 1.26 2007-05-15 16:06:47 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -68,13 +68,12 @@ enum G4ElasticGenerator
 class G4ParticleDefinition;
 class G4VQCrossSection;
 class G4ElasticHadrNucleusHE;
-class G4NistManager;
 
 class G4HadronElastic : public G4HadronicInteraction
 {
 public:
 
-  G4HadronElastic();
+  G4HadronElastic(G4ElasticHadrNucleusHE* HModel = 0);
 
   virtual ~G4HadronElastic();
  
@@ -109,7 +108,6 @@ private:
 		  G4double rr);
 
   G4VQCrossSection*           qCManager;
-  G4NistManager*              nistManager;
   G4ElasticHadrNucleusHE*     hElastic;
 
   G4ParticleDefinition* theProton;
