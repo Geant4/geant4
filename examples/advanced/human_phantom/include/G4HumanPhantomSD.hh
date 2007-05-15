@@ -45,9 +45,12 @@ class G4HumanPhantomSD : public G4VSensitiveDetector
       void Initialize(G4HCofThisEvent*);
       G4bool ProcessHits(G4Step*, G4TouchableHistory*);
       void EndOfEvent(G4HCofThisEvent*);
+<<<<<<< G4HumanPhantomSD.hh
+=======
  
  private:
       G4HumanPhantomHitsCollection* collection;
+>>>>>>> 1.6
 };
 #endif
 

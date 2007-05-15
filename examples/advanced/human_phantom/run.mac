@@ -4,9 +4,9 @@
 #
 # Sets some default verbose
 #
-/run/verbose 0
-/event/verbose 0
-/tracking/verbose 0
+#/run/verbose 0
+#/event/verbose 0
+#/tracking/verbose 0
 #/control/execute openGLVis.mac
 # Visualize Phantom with DAWN
 #/control/execute dawnVis.mac
@@ -33,7 +33,31 @@
 /gun/setBeam beamAlongZ
 #/gun/setBeam isotropicFlux
 #
-/run/beamOn 5000000
+#/tracking/verbose 1
+/run/beamOn 100
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

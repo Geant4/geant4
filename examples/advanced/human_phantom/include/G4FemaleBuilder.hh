@@ -42,10 +42,19 @@ public:
   G4FemaleBuilder();
   ~G4FemaleBuilder();
 
+<<<<<<< G4FemaleBuilder.hh
+  void BuildLeftBreast(const G4String&, G4bool, G4bool){;}
+  void BuildRightBreast(const G4String&, G4bool, G4bool){;}
+  void BuildParameterisedLeftBreast(const G4String&, G4bool, G4bool){;};
+  void BuildParameterisedRightBreast(const G4String&, G4bool, G4bool){;};
+  void BuildLeftOvary(const G4String&, G4bool, G4bool);
+  void BuildRightOvary(const G4String&, G4bool, G4bool);
+=======
   void BuildLeftBreast(const G4String&, G4bool, G4bool);
   void BuildRightBreast(const G4String&, G4bool, G4bool);
   void BuildLeftOvary(const G4String&, G4bool, G4bool);
   void BuildRightOvary(const G4String&, G4bool, G4bool);
+>>>>>>> 1.18
   void BuildUterus(const G4String&, G4bool, G4bool);
 };
 #endif

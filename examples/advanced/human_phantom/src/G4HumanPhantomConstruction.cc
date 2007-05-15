@@ -73,6 +73,13 @@ G4VPhysicalVolume* G4HumanPhantomConstruction::Construct()
   
   G4SDManager* SDman = G4SDManager::GetSDMpointer();
   G4String bodypartSD = "BodyPartSD";
+<<<<<<< G4HumanPhantomConstruction.cc
+  G4HumanPhantomSD* userPhantomSD = new G4HumanPhantomSD(bodypartSD);
+  SDman->AddNewDetector(userPhantomSD);
+ 
+  //G4PhantomBuilder::SetModel(model);
+  G4PhantomBuilder* builder = 0;
+=======
   G4HumanPhantomSD* userPhantomSD = new G4HumanPhantomSD(bodypartSD);
   SDman->AddNewDetector(userPhantomSD);
 
@@ -106,6 +113,7 @@ G4VPhysicalVolume* G4HumanPhantomConstruction::Construct()
 	      builder->SetModel(model);}
 	}
     }
+>>>>>>> 1.23
   
   builder->SetMotherVolume(ConstructWorld());
 

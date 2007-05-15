@@ -53,11 +53,15 @@
 #ifdef G4ANALYSIS_USE 
 #include  "G4HumanPhantomAnalysisManager.hh"
 #endif
+
 int main(int argc,char** argv)
 {
   G4RunManager* runManager = new G4RunManager;
 
-  // Set mandatory initialization classes
+  // G4VSteppingVerbose* verbosity = new ExN02SteppingVerbose; 
+  //  G4VSteppingVerbose::SetInstance(new ExN02SteppingVerbose);
+ 
+ // Set mandatory initialization classes
   G4HumanPhantomConstruction* userPhantom = new G4HumanPhantomConstruction();
   runManager->SetUserInitialization(userPhantom);
 
@@ -102,7 +106,7 @@ int main(int argc,char** argv)
   if (session)   // Define UI session for interactive mode.
     { 
       G4cout << " UI session starts ..." << G4endl;
-      UI -> ApplyCommand("/control/execute adultFemale.mac");    
+      UI -> ApplyCommand("/control/execute default.mac");    
       session -> SessionStart();
       delete session;
     }
