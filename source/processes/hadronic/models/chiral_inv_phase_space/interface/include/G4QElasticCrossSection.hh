@@ -48,6 +48,8 @@
 #include "G4Electron.hh"
 #include "G4Positron.hh"
 #include "G4VQCrossSection.hh"
+#include "G4QElastic.hh"
+#include "G4QuasiFreeRatios.hh"
 
 class G4QElasticCrossSection : public G4VQCrossSection
 {
@@ -67,7 +69,9 @@ public:
 
   G4double CalculateCrossSection(G4bool CS, G4int F, G4int I, G4int pPDG, G4int Z, G4int N,
                                                                               G4double pP);
-
+protected:
+  friend class G4QElastic;
+  friend class G4QuasiFreeRatios;
   G4double GetExchangeT(G4int tZ, G4int tN, G4int pPDG); // Randomizes -t=Q2 (in IU=MeV^2)
   G4double GetHMaxT();                   // Currrent Max(-t=Q2)/2. (in IU=MeV^2)
 
