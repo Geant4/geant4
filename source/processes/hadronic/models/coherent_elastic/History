@@ -14,6 +14,10 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+15 May 2007 - V.Ivanchenko (hadr-cohe-V08-03-00)
+-----------------------------------------------
+  G4ElasticHadrNucleusHE - general cleanup and redesign of private methods
+
 5 May 2007 - V.Ivanchenko (hadr-cohe-V08-02-06)
 -----------------------------------------------
   G4HadronElastic - do not use HE model for hydrogen target to avoid NaN;

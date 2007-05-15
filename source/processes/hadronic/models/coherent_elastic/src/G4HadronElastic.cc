@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronElastic.cc,v 1.49 2007-05-15 09:27:45 vnivanch Exp $
+// $Id: G4HadronElastic.cc,v 1.50 2007-05-15 13:08:53 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -217,8 +217,7 @@ G4HadFinalState* G4HadronElastic::ApplyYourself(
 
   // use mean atomic number
   if(gtype == fHElastic) {
-    G4int A0 = static_cast<G4int>(nistManager->GetAtomicMassAmu(Z)+0.5);
-    t = hElastic->SampleT(theParticle,plab,tmax,Z,A0);
+    t = hElastic->SampleT(theParticle,plab,Z,A);
     if(t > tmax) gtype = fSWave;
   }
 

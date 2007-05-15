@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElasticHadrNucleusHE.hh,v 1.35 2007-05-15 09:27:45 vnivanch Exp $
+// $Id: G4ElasticHadrNucleusHE.hh,v 1.36 2007-05-15 13:08:53 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4ElasticHadrNucleusHe.hh
@@ -60,14 +60,14 @@ static const G4int  ONQ2     = 100; //  The total number of steps on Q2
 static const G4int  NENERGY  = 30;  
 static const G4int  NQTABLE  = NENERGY*ONQ2;  
 
-class ElasticData
+class G4ElasticData
 {
 public:
 
-  ElasticData(const G4ParticleDefinition* h, 
+  G4ElasticData(const G4ParticleDefinition* h, 
 	      G4int Z, G4double A, G4double* eGeV);
 
-  ~ElasticData(){}
+  ~G4ElasticData(){}
 
   const G4ParticleDefinition* Hadron() {return hadr;}
 
@@ -75,11 +75,18 @@ private:
   void DefineNucleusParameters(G4int A);
   const G4ParticleDefinition*  hadr;
 
+  // hide assignment operator
+  G4ElasticData & operator=(const G4ElasticData &right);
+  G4ElasticData(const G4ElasticData&);
+
 public:
   G4int     AtomicWeight;
   G4double  R1, R2, Pnucl, Aeff;
   G4double  limitQ2;
   G4double  massGeV;
+  G4double  mass2GeV2;
+  G4double  massA;
+  G4double  massA2;
   G4int     dnkE[NENERGY];
   G4double  maxQ2[NENERGY];
   G4double  TableQ2[ONQ2];
@@ -95,21 +102,20 @@ public:
 
   virtual ~G4ElasticHadrNucleusHE();
 
-  G4HadFinalState * ApplyYourself(const G4HadProjectile &aTrack,
-				  G4Nucleus       &G4Nucleus);
+  G4HadFinalState * ApplyYourself(const G4HadProjectile& aTrack,
+				  G4Nucleus& G4Nucleus);
 
-  G4double SampleT(const G4ParticleDefinition* p,
-		   G4double pTotLabMomentum, G4double tmax, G4int Z, G4int N);
+  G4double SampleT(const G4ParticleDefinition* p, G4double plab, 
+		   G4int Z, G4int A);
 
 private:
 
-  G4double HadronNucleusQ2_2(ElasticData * pElD, G4int Z, G4double plabGeV, G4double tmax);
+  G4double HadronNucleusQ2_2(G4ElasticData * pElD, G4int Z, 
+			     G4double plabGeV, G4double tmax);
 
-  void GetHadronValues(G4int Z);
+  void DefineHadronValues(G4int Z);
 
   G4double GetLightFq2(G4int Z, G4int A, G4double Q);
-
-  G4int    GetBinom(G4int m, G4int n);
 
   void     Binom();
 
@@ -123,6 +129,10 @@ private:
   void InterpolateHN(G4int n, const G4double EnP[], 
 		     const G4double C0P[], const G4double C1P[], 
 		     const G4double B0P[], const G4double B1P[]);
+
+  // hide assignment operator
+  G4ElasticHadrNucleusHE & operator=(const G4ElasticHadrNucleusHE &right);
+  G4ElasticHadrNucleusHE(const G4ElasticHadrNucleusHE&);
 
   //  ======================================================
 
@@ -170,7 +180,7 @@ private:
 
   G4double        SetBinom[240][240];
 
-  ElasticData*    SetOfElasticData[NHADRONS][93];
+  G4ElasticData*  SetOfElasticData[NHADRONS][93];
   G4NistManager*  nistManager;
 
 };     //   The end of the class description

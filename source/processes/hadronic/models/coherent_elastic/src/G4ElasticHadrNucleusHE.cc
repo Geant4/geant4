@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElasticHadrNucleusHE.cc,v 1.60 2007-05-15 09:27:45 vnivanch Exp $
+// $Id: G4ElasticHadrNucleusHE.cc,v 1.61 2007-05-15 13:08:53 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -51,11 +51,12 @@
 using namespace std;
 
 //  ############################################################
-ElasticData:: ElasticData(const G4ParticleDefinition* p, 
-			  G4int Z, G4double AWeight, G4double* eGeV)
+G4ElasticData::G4ElasticData(const G4ParticleDefinition* p, 
+			     G4int Z, G4double AWeight, G4double* eGeV)
 { 
   hadr     = p;
   massGeV  = p->GetPDGMass()/GeV;
+  mass2GeV2= massGeV*massGeV;
   AtomicWeight = G4int(AWeight + 0.5);
   DefineNucleusParameters(AtomicWeight);
 
@@ -67,15 +68,14 @@ ElasticData:: ElasticData(const G4ParticleDefinition* p,
     TableQ2[ii] = TableQ2[ii-1]+dQ2;
   }
 
-  G4double mass2  = massGeV*massGeV;
-  G4double massA  = AWeight*amu_c2/GeV;
-  G4double massA2 = massA*massA; 
+  massA  = AWeight*amu_c2/GeV;
+  massA2 = massA*massA; 
 
   for(G4int kk=0; kk<NENERGY; kk++) {
     dnkE[kk] = 0;
     G4double elab = eGeV[kk] + massGeV;
     G4double plab2= eGeV[kk]*(eGeV[kk] + 2.0*massGeV);
-    G4double Q2m  = 4.0*plab2*massA2/(mass2 + massA2 + 2.*massA2*elab);
+    G4double Q2m  = 4.0*plab2*massA2/(mass2GeV2 + massA2 + 2.*massA2*elab);
     if(Z == 1 && p == G4Proton::Proton()) Q2m *= 0.5;
     maxQ2[kk] = std::min(limitQ2, Q2m);
     TableCrossSec[ONQ2*kk] = 0.0;
@@ -83,7 +83,7 @@ ElasticData:: ElasticData(const G4ParticleDefinition* p,
 }
 
 //  ##########################################################
-void ElasticData::DefineNucleusParameters(G4int Nucleus)
+void G4ElasticData::DefineNucleusParameters(G4int Nucleus)
 {
   if(Nucleus == 208)
     {
@@ -284,7 +284,7 @@ G4HadFinalState * G4ElasticHadrNucleusHE::ApplyYourself(
 
   // normal sampling
   if(!swave) {
-    t = SampleT(theParticle,plab,tmax,Z,A);
+    t = SampleT(theParticle,plab,Z,A);
     if(t > tmax) swave = true;
   }
 
@@ -350,15 +350,12 @@ G4HadFinalState * G4ElasticHadrNucleusHE::ApplyYourself(
 G4double G4ElasticHadrNucleusHE::SampleT(
                           const G4ParticleDefinition * p,
                           G4double inLabMom, 
-                          G4double tmax, 
                           G4int Z, G4int N)
 {
   G4double plab  = inLabMom/GeV; // (GeV/c)
-  G4double Q2max = tmax/GeV2;
   G4double Q2 = 0;
 
   iHadrCode = p->GetPDGEncoding();
-  hMass     = p->GetPDGMass()/GeV;
 
   if(verboselevel > 1)
     G4cout<< " G4ElasticHadrNucleusHE::SampleT: " 
@@ -375,18 +372,25 @@ G4double G4ElasticHadrNucleusHE::SampleT(
 
   iHadron = HadronType[idx];
   iHadrCode = HadronCode[idx];
-  ElasticData* ElD1 = SetOfElasticData[idx][Z];
+  G4ElasticData* ElD1 = SetOfElasticData[idx][Z];
 
   // Construct elastic data
   if(!ElD1) {
     G4double AWeight = nistManager->GetAtomicMassAmu(Z);
-    ElD1 = new  ElasticData(p, Z, AWeight, Energy);
+    ElD1 = new  G4ElasticData(p, Z, AWeight, Energy);
     SetOfElasticData[idx][Z] = ElD1;
     if(verboselevel > 1)
       G4cout<< " G4ElasticHadrNucleusHE::SampleT:  new record " << idx
 	    << " for " << p->GetParticleName() << " Z= " << Z
 	    << G4endl;
   }  
+
+  hMass      = ElD1->massGeV;
+  hMass2     = ElD1->mass2GeV2;
+  G4double M = ElD1->massA;
+  G4double M2= ElD1->massA2;
+  G4double plab2 = plab*plab;
+  G4double Q2max = 4.*plab2*M2/(hMass2 + M2 + 2.*M*std::sqrt(plab2 + hMass2));
 
   // sample scattering
   Q2 = HadronNucleusQ2_2(ElD1, Z, plab, Q2max);
@@ -398,7 +402,7 @@ G4double G4ElasticHadrNucleusHE::SampleT(
 }
 
 //  ########################################################
-G4double G4ElasticHadrNucleusHE::HadronNucleusQ2_2(ElasticData* pElD, G4int Z, 
+G4double G4ElasticHadrNucleusHE::HadronNucleusQ2_2(G4ElasticData* pElD, G4int Z, 
 						   G4double plab, G4double tmax)
 {
 
@@ -407,7 +411,6 @@ G4double G4ElasticHadrNucleusHE::HadronNucleusQ2_2(ElasticData* pElD, G4int Z,
   G4int      iNumbQ2 = 0;
   G4double   Q2 = 0.0, Buf = 0.0;
 
-  hMass2         = hMass*hMass;
   G4double ptot2 = plab*plab;
   G4double ekin  = std::sqrt(hMass2 + ptot2) - hMass;
 
@@ -440,7 +443,7 @@ G4double G4ElasticHadrNucleusHE::HadronNucleusQ2_2(ElasticData* pElD, G4int Z,
     Aeff  = pElD->Aeff;
     Pnucl = pElD->Pnucl;
     hLabMomentum = std::sqrt(hLabMomentum2);
-    GetHadronValues(Z);
+    DefineHadronValues(Z);
     G4int AWeight = pElD->AtomicWeight;
     Weight = GetLightFq2(Z, AWeight, Q2max);
 
@@ -493,7 +496,7 @@ G4double G4ElasticHadrNucleusHE::HadronNucleusQ2_2(ElasticData* pElD, G4int Z,
       Aeff  = pElD->Aeff;
       Pnucl = pElD->Pnucl;
       hLabMomentum = std::sqrt(hLabMomentum2);
-      GetHadronValues(Z);
+      DefineHadronValues(Z);
     }
     G4int AWeight = pElD->AtomicWeight;
     Weight = GetLightFq2(Z, AWeight, Q2max);
@@ -663,7 +666,7 @@ G4double G4ElasticHadrNucleusHE::GetLightFq2(G4int Z, G4int Nucleus, G4double Q2
 }
 
 //  ++++++++++++++++++++++++++++++++++++++++++
-void  G4ElasticHadrNucleusHE::GetHadronValues(G4int Z)
+void  G4ElasticHadrNucleusHE::DefineHadronValues(G4int Z)
 {
   HadrEnergy = std::sqrt(hMass2 + hLabMomentum2);
 
