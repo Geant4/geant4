@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChargeExchange.cc,v 1.8 2007-03-12 10:58:45 vnivanch Exp $
+// $Id: G4ChargeExchange.cc,v 1.9 2007-05-15 09:27:45 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -292,7 +292,7 @@ G4HadFinalState* G4ChargeExchange::ApplyYourself(
   }
 
   if(gtype == fHElastic) {
-    t = hElastic->SampleT(theParticle,plab,Z,A);
+    t = hElastic->SampleT(theParticle,plab,tmax,Z,A);
     if(t > tmax) gtype = fSWave;
   }
 

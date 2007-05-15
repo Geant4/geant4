@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronElastic.cc,v 1.48 2007-05-05 18:45:23 vnivanch Exp $
+// $Id: G4HadronElastic.cc,v 1.49 2007-05-15 09:27:45 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -60,6 +60,7 @@
 // 04-May-07 V.Ivanchenko do not use HE model for hydrogen target to avoid NaN;
 //                        use QElastic for p, n incident for any energy for 
 //                        p and He targets only  
+// 11-May-07 V.Ivanchenko remove unused method Defs1
 //
 
 #include "G4HadronElastic.hh"
@@ -217,7 +218,7 @@ G4HadFinalState* G4HadronElastic::ApplyYourself(
   // use mean atomic number
   if(gtype == fHElastic) {
     G4int A0 = static_cast<G4int>(nistManager->GetAtomicMassAmu(Z)+0.5);
-    t = hElastic->SampleT(theParticle,plab,Z,A0);
+    t = hElastic->SampleT(theParticle,plab,tmax,Z,A0);
     if(t > tmax) gtype = fSWave;
   }
 
@@ -461,9 +462,7 @@ label17:
    goto label4;
 }
 
-
 // Test function for root-finder
-
 G4double
 G4HadronElastic::Fctcos(G4double t, 
 			G4double aa, G4double bb, G4double cc, G4double dd, 
@@ -484,35 +483,3 @@ G4HadronElastic::Fctcos(G4double t,
 }
 
 
-void
-G4HadronElastic::Defs1(G4double p, G4double px, G4double py, G4double pz, 
-		       G4double pxinc, G4double pyinc, G4double pzinc, 
-		       G4double* pxnew, G4double* pynew, G4double* pznew)
-{
-// Transform scattered particle to reflect direction of incident particle
-   G4double pt2 = pxinc*pxinc + pyinc*pyinc;
-   if (pt2 > 0.) {
-      G4double cost = pzinc/p;
-      G4double sint1 = std::sqrt(std::abs((1. - cost )*(1.+cost)));
-      G4double sint2 = std::sqrt(pt2)/p;
-      G4double sint = 0.5*(sint1 + sint2);
-      G4double ph = pi*0.5;
-      if (pyinc < 0.) ph = pi*1.5;
-      if (std::abs(pxinc) > 1.e-6) ph = std::atan2(pyinc, pxinc);
-      G4double cosp = std::cos(ph);
-      G4double sinp = std::sin(ph);
-      if (verboseLevel > 1) {
-         G4cout << "cost sint " << cost << " " << sint << G4endl;
-         G4cout << "cosp sinp " << cosp << " " << sinp << G4endl;
-      }
-      *pxnew = cost*cosp*px - sinp*py + sint*cosp*pz;
-      *pynew = cost*sinp*px + cosp*py + sint*sinp*pz;
-      *pznew =     -sint*px                 +cost*pz;
-   }
-   else {
-       G4double cost=pzinc/p;
-       *pxnew = cost*px;
-       *pynew = py;
-       *pznew = cost*pz;
-   }
-}
