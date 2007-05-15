@@ -332,8 +332,11 @@ G4VPhysicalVolume* StatAccepTestDetectorConstruction::ConstructCalorimeter() {
   //            --- absorber layer : logical
   G4double zAbsorber = absorberTotalLength / static_cast< double >( theActiveLayerNumber );
   // In the case of homogenous calorimeter the "active" part must be
-  // subtracted because it is made of the same material.
+  // subtracted because it is made of the same material
+  // (the material of the "active" part is set to be the same as
+  //  the aborber).
   if ( theIsCalHomogeneous ) { 
+    theActiveMaterial = theAbsorberMaterial;
     zAbsorber -= theActiveLayerSize; 
   }
   zAbsorber /= 2.0;                                  // half dimension along z
