@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNucleus.cc,v 1.74 2007-05-15 13:25:05 mkossov Exp $
+// $Id: G4QNucleus.cc,v 1.75 2007-05-15 13:30:47 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QNucleus ----------------
@@ -331,12 +331,15 @@ void G4QNucleus::InitByPDG(G4int nucPDG)
 #ifdef debug
   G4cout<<"G4QNucleus::InitByPDG: >Called< PDG="<<nucPDG<<G4endl;
 #endif
+  dZ=0;
+  dN=0;
+  dS=0;
   probVect[0]=mediRatio;                        // init Vacuum/Medium probability
   if(nucPDG<80000000) nucPDG=HadrToNucPDG(nucPDG); // Convert HadrPDGCode to NucPDGCode
   G4int s=0;
   G4int z=0;
   G4int n=0;
-  if(nucPDG>80000000&&nucPDG<100000000) // Try to convert the NUCCoding to PDGCoding
+  if(nucPDG>80000000 && nucPDG<100000000) // Try to convert the NUCCoding to PDGCoding
   {
     G4QPDGCode(22).ConvertPDGToZNS(nucPDG, z, n, s);
     Z  =z;
@@ -354,7 +357,7 @@ void G4QNucleus::InitByPDG(G4int nucPDG)
     Set4Momentum(p);
     SetNFragments(0);
 #ifdef debug
-	G4cout<<"G4QNucleus::InitByPDG:->QPDG="<<nPDG<<": 4M="<<p<<G4endl;
+	   G4cout<<"G4QNucleus::InitByPDG:->QPDG="<<nPDG<<": 4M="<<p<<G4endl;
 #endif
   }
   else
