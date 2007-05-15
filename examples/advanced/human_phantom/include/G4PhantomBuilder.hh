@@ -59,7 +59,10 @@ public:
   void BuildSkull(const G4String&,G4bool,G4bool);
   void BuildRibCage(const G4String&,G4bool,G4bool);
   void BuildPelvis(const G4String&,G4bool,G4bool);
-//  void BuildScapulae(G4bool);
+  void BuildLeftScapula(const G4String&,G4bool,G4bool); 
+  void BuildRightScapula(const G4String&,G4bool,G4bool);
+  void BuildLeftAdrenal(const G4String&,G4bool,G4bool);  
+  void BuildRightAdrenal(const G4String&,G4bool,G4bool); 
 //  void BuildClavicles(G4bool);
 
   void BuildBrain(const G4String&,G4bool,G4bool);

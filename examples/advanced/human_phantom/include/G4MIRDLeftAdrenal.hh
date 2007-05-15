@@ -28,26 +28,21 @@
 // with the design in a forthcoming publication, and subject to a 
 // design and code review.
 //
-#ifndef G4HumanPhantomSD_h
-#define G4HumanPhantomSD_h 1
+#ifndef G4MIRDLeftAdrenal_h
+#define G4MIRDLeftAdrenal_h 1
 
-#include "G4VSensitiveDetector.hh"
-#include "G4HumanPhantomHit.hh"
+#include "G4VPhysicalVolume.hh"
+#include "G4VOrgan.hh"
+class G4VPhysicalVolume;
+class G4LogicalVolume;
 
-class G4Step;
-
-class G4HumanPhantomSD : public G4VSensitiveDetector
+class G4MIRDLeftAdrenal: public G4VOrgan
 {
-  public:
-      G4HumanPhantomSD(G4String);
-     ~G4HumanPhantomSD();
+public:
 
-      void Initialize(G4HCofThisEvent*);
-      G4bool ProcessHits(G4Step*, G4TouchableHistory*);
-      void EndOfEvent(G4HCofThisEvent*);
- 
- private:
-      G4HumanPhantomHitsCollection* collection;
+  G4MIRDLeftAdrenal();
+  ~G4MIRDLeftAdrenal();
+  G4VPhysicalVolume* Construct(const G4String&,G4VPhysicalVolume*, 
+				    const G4String&,G4bool, G4bool);
 };
 #endif
-

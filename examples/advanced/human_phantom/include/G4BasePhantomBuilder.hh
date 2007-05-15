@@ -73,23 +73,27 @@ public:
 
   virtual void BuildLeftKidney(const G4String&,G4bool,G4bool) {return ;};
   virtual void BuildRightKidney(const G4String&,G4bool,G4bool) {return ;};
-  // virtual void BuildAdrenal(G4bool,G4bool) = 0;
+  virtual void BuildLeftAdrenal(const G4String&,G4bool,G4bool) {return ;};
+  virtual void BuildRightAdrenal(const G4String&,G4bool,G4bool) {return ;};
   virtual void BuildLiver(const G4String&,G4bool,G4bool) {return ;};
   virtual void BuildPancreas(const G4String&,G4bool,G4bool) {return ;};
   virtual void BuildSpleen(const G4String&,G4bool,G4bool) {return ;};
   virtual void BuildUrinaryBladder(const G4String& ,G4bool,G4bool) {return ;};
   virtual void BuildThyroid(const G4String&,G4bool,G4bool) {return ;};
-
+  virtual void BuildLeftScapula(const G4String&,G4bool,G4bool){return;};
+  virtual void BuildRightScapula(const G4String&,G4bool,G4bool){return;};
   virtual void SetModel(G4String) {return ;};
   virtual void SetMotherVolume(G4VPhysicalVolume*) {return;};
   virtual G4VPhysicalVolume* GetPhantom() {return 0;};
 
   virtual void BuildLeftOvary(const G4String&,G4bool,G4bool ) {return ;};
+  
   virtual void BuildRightOvary(const G4String&,G4bool,G4bool) {return ;};
   virtual void BuildUterus(const G4String&,G4bool,G4bool){return;};
   virtual void BuildLeftBreast(const G4String&,G4bool,G4bool){return;};
   virtual void BuildRightBreast(const G4String&,G4bool,G4bool){return;};
   virtual void BuildVoxelLeftBreast(const G4String&,G4bool,G4bool){return;};
   virtual void BuildVoxelRightBreast(const G4String&,G4bool,G4bool){return;};
+
 };
 #endif

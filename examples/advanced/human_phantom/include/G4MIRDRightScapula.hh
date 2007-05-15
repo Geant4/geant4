@@ -28,29 +28,21 @@
 // with the design in a forthcoming publication, and subject to a 
 // design and code review.
 //
-#include "G4MIRDAdrenal.hh"
+#ifndef G4MIRDRightScapula_h
+#define G4MIRDRightScapula_h 1
 
-#include "G4Processor/GDMLProcessor.h"
-#include "globals.hh"
-#include "G4SDManager.hh"
-#include "G4VisAttributes.hh"
-#include "G4PhysicalVolumeStore.hh"
+#include "G4VPhysicalVolume.hh"
+#include "G4VOrgan.hh"
+class G4VPhysicalVolume;
+class G4LogicalVolume;
 
-G4MIRDAdrenal::G4MIRDAdrenal()
+class G4MIRDRightScapula:public G4VOrgan
 {
-}
+public:
 
-G4MIRDAdrenal::~G4MIRDAdrenal()
-{
-
-}
-
-G4VPhysicalVolume* G4MIRDAdrenal::Construct(const G4String& volumeName,
-						   G4VPhysicalVolume* mother,
-						   const G4String& colourName,
-						   G4bool wireFrame,
-						   G4bool sensitivity)
-{
-
-
-}
+  G4MIRDRightScapula();
+  ~G4MIRDRightScapula();
+  G4VPhysicalVolume* Construct(const G4String&,G4VPhysicalVolume*,
+				    const G4String&, G4bool, G4bool);
+};
+#endif

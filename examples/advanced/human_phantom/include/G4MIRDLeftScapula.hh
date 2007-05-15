@@ -28,18 +28,21 @@
 // with the design in a forthcoming publication, and subject to a 
 // design and code review.
 //
-#ifndef G4MIRDAdrenal_h
-#define G4MIRDAdrenal_h 1
+#ifndef G4MIRDLeftScapula_h
+#define G4MIRDLeftScapula_h 1
 
 #include "G4VPhysicalVolume.hh"
 #include "G4VOrgan.hh"
-class G4MIRDAdrenal: public G4VOrgan
+class G4VPhysicalVolume;
+class G4LogicalVolume;
+
+class G4MIRDLeftScapula:public G4VOrgan
 {
 public:
 
-  G4MIRDAdrenal();
-  ~G4MIRDAdrenal();
-  G4VPhysicalVolume* Construct(const G4String&,G4VPhysicalVolume*, 
-			       const G4String&, G4bool, G4bool);
+  G4MIRDLeftScapula();
+  ~G4MIRDLeftScapula();
+  G4VPhysicalVolume* Construct(const G4String&,G4VPhysicalVolume*,
+				    const G4String&, G4bool, G4bool);
 };
 #endif

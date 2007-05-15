@@ -89,20 +89,20 @@ G4VPhysicalVolume* G4MIRDRightLung::Construct(const G4String& volumeName,G4VPhys
  G4Box* box = new G4Box("Box", dx, dy, dz);
  
 
- G4SubtractionSolid* section = new G4SubtractionSolid("BoxSub", subtrLung, box, 0, G4ThreeVector(0.*cm, -8.5* cm, 0.*cm)); 
+ G4SubtractionSolid* section = new G4SubtractionSolid("BoxSub", subtrLung, box, 0, G4ThreeVector(0.*cm, 8.5* cm, 0.*cm)); 
  //G4SubtractionSolid* section2 = new G4SubtractionSolid("BoxSub2", subtrLung, box, 0, G4ThreeVector(0.*cm, -8.5* cm, 0.*cm)); 
 
  G4SubtractionSolid* lung1 =  new G4SubtractionSolid("Lung1", oneLung,
 					       section,
-					       0, G4ThreeVector(-6.*cm,0*cm,0.0*cm));
+					       0, G4ThreeVector(6.*cm,0*cm,0.0*cm));
 
 
  G4LogicalVolume* logicRightLung = new G4LogicalVolume(lung1,lung_material,
 						  "logical" + volumeName, 0, 0, 0); 
   
  G4RotationMatrix* matrix = new G4RotationMatrix();
- matrix -> rotateZ(-180. * deg);
-  G4VPhysicalVolume* physRightLung = new G4PVPlacement(matrix,G4ThreeVector(-8.50 *cm, 0.0*cm, 8.5*cm),
+ matrix -> rotateZ(-360. * deg);
+  G4VPhysicalVolume* physRightLung = new G4PVPlacement(0,G4ThreeVector(-8.50 *cm, 0.0*cm, 8.5*cm),
 						  "physicalRightLung",                    
   			       logicRightLung,
 			       mother,

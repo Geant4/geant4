@@ -110,7 +110,7 @@ G4VPhysicalVolume* G4MIRDHead::Construct(const G4String& volumeName,G4VPhysicalV
 
   G4HumanPhantomColour* colourPointer = new G4HumanPhantomColour();
   G4Colour colour = colourPointer -> GetColour(colourName);
-  G4VisAttributes* HeadVisAtt = new G4VisAttributes(G4VisAttributes::Invisible);
+  G4VisAttributes* HeadVisAtt = new G4VisAttributes(colour);
 
  HeadVisAtt->SetForceSolid(wireFrame);
  // HeadVisAtt->SetLineWidth(0.7* mm);

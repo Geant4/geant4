@@ -125,6 +125,28 @@ void G4PhantomBuilder::BuildRightArmBone(const G4String& colourName, G4bool soli
   body -> CreateOrgan("RightArmBone",trunkVolume,colourName,solidVis, sensitivity);
 }
 
+void G4PhantomBuilder::BuildLeftScapula(const G4String& colourName, G4bool solidVis, G4bool sensitivity)
+{ 
+  if (trunkVolume == 0)
+    G4Exception("The trunk volume is missing !!!!!");
+  
+  G4cout <<"MotherVolume: " <<  trunkVolume -> GetName()<< G4endl;
+  G4cout << "sensitivity : "<< sensitivity << G4endl; 
+  body -> CreateOrgan("LeftScapula",trunkVolume,colourName,solidVis, sensitivity);
+}
+
+void G4PhantomBuilder::BuildRightScapula(const G4String& colourName, G4bool solidVis, G4bool sensitivity)
+{ 
+  if (trunkVolume == 0)
+    G4Exception("The trunk volume is missing !!!!!");
+  
+  G4cout <<"MotherVolume: " <<  trunkVolume -> GetName()<< G4endl;
+  G4cout << "sensitivity : "<< sensitivity << G4endl; 
+  body -> CreateOrgan("RightScapula",trunkVolume,colourName,solidVis, sensitivity);
+}
+
+
+
 void G4PhantomBuilder::BuildHead(const G4String& colourName, G4bool solidVis, G4bool sensitivity)
 { 
   if (motherVolume == 0)
@@ -174,13 +196,6 @@ void G4PhantomBuilder::BuildPelvis(const G4String& colourName, G4bool solidVis, 
 			colourName, solidVis, sensitivity);
 }
 /*
-void G4PhantomBuilder::BuildScapulae(G4bool sensitivity)
-{ 
-   if (trunkVolume == 0)
-   G4Exception("The trunk volume is missing !!!!!");
-
-   body -> CreateScapulae(trunkVolume, sensitivity);
-}
 
 void G4PhantomBuilder::BuildClavicles(G4bool sensitivity)
 { 
@@ -285,15 +300,23 @@ void G4PhantomBuilder::BuildRightKidney(const G4String& colourName, G4bool solid
     body -> CreateOrgan("RightKidney",trunkVolume,colourName, solidVis, sensitivity);
 }
 
-/*
-void G4PhantomBuilder::BuildAdrenal(G4bool sensitivity)
+void G4PhantomBuilder::BuildLeftAdrenal(const G4String& colourName, G4bool solidVis, G4bool sensitivity)
 { 
-   if (trunkVolume == 0)
-   G4Exception("The trunk volume is missing !!!!!");
+  if (trunkVolume == 0)
+    G4Exception("The trunk volume is missing !!!!!");
 
-   body -> CreateAdrenal(trunkVolume, sensitivity);
+    body -> CreateOrgan("LeftAdrenal", trunkVolume,colourName, solidVis, sensitivity);
 }
-*/
+
+void G4PhantomBuilder::BuildRightAdrenal(const G4String& colourName, G4bool solidVis, G4bool sensitivity)
+{ 
+  if (trunkVolume == 0)
+    G4Exception("The trunk volume is missing !!!!!");
+
+    body -> CreateOrgan("RightAdrenal", trunkVolume,colourName, solidVis, sensitivity);
+}
+
+
 void G4PhantomBuilder::BuildLiver(const G4String& colourName, G4bool solidVis, G4bool sensitivity)
 { 
   if (trunkVolume == 0)

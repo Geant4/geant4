@@ -28,108 +28,95 @@
 // with the design in a forthcoming publication, and subject to a 
 // design and code review.
 //
-#include "G4MIRDHeart.hh"
+
+#include "G4MIRDRightAdrenal.hh"
+
 #include "globals.hh"
 #include "G4SDManager.hh"
 #include "G4VisAttributes.hh"
+#include "G4HumanPhantomMaterial.hh"
+#include "G4SDManager.hh"
+#include "G4PVPlacement.hh"
+#include "G4SubtractionSolid.hh"
 #include "G4Ellipsoid.hh"
 #include "G4ThreeVector.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4RotationMatrix.hh"
 #include "G4Material.hh"
-#include "G4LogicalVolume.hh"
-#include "G4HumanPhantomMaterial.hh"
-#include "G4VPhysicalVolume.hh"
-#include "G4PVPlacement.hh"
-#include "G4Sphere.hh"
+#include "G4EllipticalTube.hh"
+#include "G4Box.hh"
 #include "G4UnionSolid.hh"
-
-G4MIRDHeart::G4MIRDHeart()
+#include "G4HumanPhantomColour.hh"
+G4MIRDRightAdrenal::G4MIRDRightAdrenal()
 {
 }
 
-G4MIRDHeart::~G4MIRDHeart()
+G4MIRDRightAdrenal::~G4MIRDRightAdrenal()
 {
-
 }
 
-G4VPhysicalVolume* G4MIRDHeart::Construct(const G4String&,G4VPhysicalVolume*,
-				    const G4String&, G4bool, G4bool)
+G4VPhysicalVolume* G4MIRDRightAdrenal::Construct(const G4String& volumeName,G4VPhysicalVolume* mother,
+						    const G4String& colourName, G4bool wireFrame, G4bool sensitivity)
 {
-  
- G4cout << " MIRD Heart is not available yet !!!! " << G4endl;
- /* 
+  G4cout << "Construct "<< volumeName << G4endl;
+ 
  G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
  G4Material* soft = material -> GetMaterial("soft_tissue");
  delete material;
-
- G4double ax= 4.00* cm;
- G4double by= 4.00 *cm;
- G4double cz= 7.00 *cm;
- G4double zcut1= -7.00 *cm;
- G4double zcut2= 0.0 *cm;
-
- G4Ellipsoid* heart1 =  new G4Ellipsoid("Heart1",ax, by, cz, zcut1, zcut2);
-
- G4double rmin =0.*cm;
- G4double rmax = 3.99*cm;
- G4double startphi = 0. * degree;
- G4double deltaphi = 360. * degree;
- G4double starttheta = 0. * degree;
- G4double deltatheta = 90. * degree;
  
- G4Sphere* heart2 = new G4Sphere("Heart2", rmin,rmax,
-                                           startphi,   deltaphi,
-                                           starttheta, deltatheta);
+ G4double ax= 1.5 *cm; //a
+ G4double by= 0.5 *cm; //b
+ G4double cz= 5.0 *cm; //c
+ 
+ G4VSolid* rightAdrenal = new G4Ellipsoid("OneRightAdrenal",ax, by, cz, 0. *cm, cz); 
+ 
+ 
+ G4LogicalVolume* logicRightAdrenal = new G4LogicalVolume(rightAdrenal,
+						     soft,
+						     "logical" + volumeName,
+						     0, 0, 0);
 
- G4UnionSolid* heart = new G4UnionSolid("Heart", heart1, heart2);
-
- G4LogicalVolume* logicHeart = new G4LogicalVolume(heart, soft,
-						   "HeartVolume",
-						   0, 0, 0);
-
-  G4RotationMatrix* matrix = new G4RotationMatrix();
-  matrix -> rotateY(25. * degree); 
-  
-  // Define rotation and position here!
-  G4VPhysicalVolume* physHeart = new G4PVPlacement(matrix,G4ThreeVector(0.0,-3.0*cm, 15.32 *cm),
-      			       "physicalHeart",
-  			       logicHeart,
+  G4VPhysicalVolume* physRightAdrenal = new G4PVPlacement(0 ,G4ThreeVector(-4.5*cm,  // xo
+								     6.5 *cm, //yo
+								     3. *cm),//zo
+  			       "physicalRightAdrenal", logicRightAdrenal,
 			       mother,
 			       false,
-			       0);
+			       0, true);
 
   // Sensitive Body Part
   if (sensitivity==true)
   { 
     G4SDManager* SDman = G4SDManager::GetSDMpointer();
-    logicHeart->SetSensitiveDetector( SDman->FindSensitiveDetector("BodyPartSD") );
+    logicRightAdrenal->SetSensitiveDetector( SDman->FindSensitiveDetector("BodyPartSD") );
   }
 
   // Visualization Attributes
-  G4VisAttributes* HeartVisAtt = new G4VisAttributes(G4Colour(1.0,0.0,0.0));
-  HeartVisAtt->SetForceSolid(true);
-  logicHeart->SetVisAttributes(HeartVisAtt);
+  //  G4VisAttributes* RightAdrenalVisAtt = new G4VisAttributes(G4Colour(0.72,0.52,0.04));
+  G4HumanPhantomColour* colourPointer = new G4HumanPhantomColour();
+  G4Colour colour = colourPointer -> GetColour(colourName);
+  G4VisAttributes* RightAdrenalVisAtt = new G4VisAttributes(colour);
+  RightAdrenalVisAtt->SetForceSolid(wireFrame);
+  logicRightAdrenal->SetVisAttributes(RightAdrenalVisAtt);
 
-  G4cout << "Heart created !!!!!!" << G4endl;
+  G4cout << "Right RightAdrenal created !!!!!!" << G4endl;
 
-  // Testing Heart Volume
-  G4double HeartVol = logicHeart->GetSolid()->GetCubicVolume();
-  G4cout << "Volume of Heart = " << HeartVol/cm3 << " cm^3" << G4endl;
+  // Testing RightAdrenal Volume
+  G4double RightAdrenalVol = logicRightAdrenal->GetSolid()->GetCubicVolume();
+  G4cout << "Volume of RightAdrenal = " << RightAdrenalVol/cm3 << " cm^3" << G4endl;
   
-  // Testing Heart Material
-  G4String HeartMat = logicHeart->GetMaterial()->GetName();
-  G4cout << "Material of Heart = " << HeartMat << G4endl;
+  // Testing RightAdrenal Material
+  G4String RightAdrenalMat = logicRightAdrenal->GetMaterial()->GetName();
+  G4cout << "Material of RightAdrenal = " << RightAdrenalMat << G4endl;
   
   // Testing Density
-  G4double HeartDensity = logicHeart->GetMaterial()->GetDensity();
-  G4cout << "Density of Material = " << HeartDensity*cm3/g << " g/cm^3" << G4endl;
+  G4double RightAdrenalDensity = logicRightAdrenal->GetMaterial()->GetDensity();
+  G4cout << "Density of Material = " << RightAdrenalDensity*cm3/g << " g/cm^3" << G4endl;
 
   // Testing Mass
-  G4double HeartMass = (HeartVol)*HeartDensity;
-  G4cout << "Mass of Heart = " << HeartMass/gram << " g" << G4endl;
+  G4double RightAdrenalMass = (RightAdrenalVol)*RightAdrenalDensity;
+  G4cout << "Mass of RightAdrenal = " << RightAdrenalMass/gram << " g" << G4endl;
 
   
-  return physHeart;
-  */
+  return physRightAdrenal;
 }

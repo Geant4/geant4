@@ -34,7 +34,6 @@
 #include "G4VPhysicalVolume.hh"
 #include "G4VOrgan.hh"
 class G4VPhysicalVolume;
-class G4LogicalVolume;
 
 class G4MIRDLiver: public G4VOrgan
 {

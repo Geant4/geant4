@@ -34,7 +34,6 @@
 #include "G4MIRDLowerLargeIntestine.hh"
 #include "G4MIRDLeftKidney.hh"
 #include "G4MIRDRightKidney.hh"
-#include "G4MIRDAdrenal.hh"
 #include "G4MIRDLiver.hh"
 #include "G4MIRDPancreas.hh"
 #include "G4MIRDSpleen.hh"
@@ -63,8 +62,10 @@
 #include "G4MIRDRibCage.hh"
 #include "G4MIRDPelvis.hh"
 #include "G4MIRDTestes.hh"
-//#include "G4ParameterisedLeftBreast.hh"
-//#include "G4ParameterisedRightBreast.hh"
+#include "G4MIRDLeftScapula.hh"
+#include "G4MIRDRightScapula.hh"
+#include "G4MIRDLeftAdrenal.hh"
+#include "G4MIRDRightAdrenal.hh"
 
 G4MIRDBodyFactory::G4MIRDBodyFactory()
 {
@@ -100,13 +101,18 @@ G4MIRDBodyFactory::G4MIRDBodyFactory()
   organ["RightLegBone"] = new G4MIRDRightLegBone();
   organ["RightBreast"] = new G4MIRDRightBreast();
   organ["LeftBreast"] = new G4MIRDLeftBreast();
-
+  organ["LeftScapula"]= new G4MIRDLeftScapula(); 
+  organ["RightScapula"]= new G4MIRDRightScapula(); 
+  organ["LeftAdrenal"]= new G4MIRDLeftAdrenal();  
+  organ["RightAdrenal"]= new G4MIRDRightAdrenal(); 
 }
 
 G4MIRDBodyFactory::~G4MIRDBodyFactory()
-{ 
-  //delete organ["ParameterisedRightBreast"]; organ["ParameterisedRightBreast"]=0;
-  //delete organ["ParameterisedLeftBreast"]; organ["ParameterisedLeftBreast"]=0;
+{
+  delete organ["RightAdrenal"]; organ["RightAdrenal"]=0;
+  delete organ["LeftAdrenal"]; organ["LeftAdrenal"]=0;
+  delete organ["RightScapula"];organ["RightScapula"] =0;
+  delete organ["LeftScapula"];organ["LeftScapula"] =0;
   delete organ["LeftBreast"]; organ["LeftBreast"]=0;
   delete organ["RightBreast"]; organ["RightBreast"]=0;
   delete organ["RightLegBone"]; organ["RightLegBone"]=0;

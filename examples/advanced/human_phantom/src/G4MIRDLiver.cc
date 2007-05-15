@@ -56,7 +56,7 @@ G4MIRDLiver::~G4MIRDLiver()
 G4VPhysicalVolume* G4MIRDLiver::Construct(const G4String&,G4VPhysicalVolume*,
 				    const G4String&, G4bool, G4bool)
 {
-  // G4cout << "ConstructLiver for " << sex << G4endl;
+  G4cout << "MIRD Liver is not available yet !!!" << G4endl;
  
 //  G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
 //  G4Material* soft = material -> GetMaterial("soft_tissue");

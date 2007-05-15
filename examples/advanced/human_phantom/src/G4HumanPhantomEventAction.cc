@@ -82,7 +82,10 @@ void G4HumanPhantomEventAction::BeginOfEventAction(const G4Event*)
  energyTotal["logicalRightLegBone"]=0.;
  energyTotal["logicalLeftBreast"]=0.;
  energyTotal["logicalRightBreast"]=0.; 
-  
+ energyTotal["logicalLeftScapula"]=0.; 
+ energyTotal["logicalRightScapula"]=0.;
+ energyTotal["logicalLeftAdrenal"]=0.; 
+ energyTotal["logicalRightADrenal"]=0.;
  G4SDManager * SDman = G4SDManager::GetSDMpointer();  
 
   if (hitCollectionID==-1) {

@@ -95,13 +95,12 @@ G4SubtractionSolid* section2 = new G4SubtractionSolid("BoxSub2", subtrLung, box,
 //G4SubtractionSolid* lung1 =  new G4SubtractionSolid("Lung1", oneLung,
 //				       section,
 //				       0, G4ThreeVector(6.*cm,0*cm,0.0*cm));
- G4RotationMatrix* matrix_rel = new G4RotationMatrix();
- //matrix_rel ->rotateZ(90.*degree);
+ 
  G4SubtractionSolid* lung2 =  new G4SubtractionSolid("Lung2", oneLung,
 					       section2,
 					      0, G4ThreeVector(-6.*cm,0*cm,0.0*cm));
 
- G4RotationMatrix* matrix = new G4RotationMatrix();  
+ // G4RotationMatrix* matrix = new G4RotationMatrix();  
  // matrix->rotateX(180. * degree);
  //matrix ->rotateZ(180.*degree);
  //matrix -> rotateY(180.* degree);
