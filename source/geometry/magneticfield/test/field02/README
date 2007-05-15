@@ -1,4 +1,4 @@
-$Id: README,v 1.1 2001-10-11 07:17:37 grichine Exp $
+$Id: README,v 1.2 2007-05-15 17:46:43 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -42,15 +42,8 @@ $Id: README,v 1.1 2001-10-11 07:17:37 grichine Exp $
  	
  3- DETECTOR RESPONSE
 
-        Here we test G4PAIionisation , G4IonisationByLogicalVolume and 
-        transition radiation processes
- 
  	A HIT is a record, event per event , of all the 
  	informations needed to simulate and analyse the detector response.
- 	
- 	In this example a CalorHit is defined as a set of 2 informations:
- 	- the total energy deposit in the absorber,
- 	- the total tracklength of all charged particles in the absorber,  
  	
  	Therefore  the absorber is declared
  	'sensitive detector' (SD), which means they can contribute to the hit.
