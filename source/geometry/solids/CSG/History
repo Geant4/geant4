@@ -1,4 +1,4 @@
-$Id: History,v 1.94 2007-05-16 12:59:04 gcosmo Exp $
+$Id: History,v 1.95 2007-05-16 13:00:16 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,7 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-Mai 16, 2007  T.Nikitina                 geom-csg-V08-03-00          
+May 16, 2007  T.Nikitina                 geom-csg-V08-03-00          
 - G4Tubs: fixed bug for DistanceToOut(p,v) for phi section.
   Bug was causing segmentation fault in recursive_test (problem report #784). 
   For v crossing the center of the tub DistanceToOut was always giving
