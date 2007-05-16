@@ -111,7 +111,12 @@ int main(int argc,char** argv) {
 
       visManager = new G4VisExecutive();
       visManager->Initialize();
-      G4UIsession * session = new G4UIterminal;
+      G4UIsession * session;
+#ifdef G4UI_USE_TCSH
+      session = new G4UIterminal(new G4UItcsh);
+#else
+      session = new G4UIterminal();
+#endif
       UI->ApplyCommand("/control/execute init.mac");
       session->SessionStart();
       delete session;
