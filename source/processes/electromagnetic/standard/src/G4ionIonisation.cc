@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ionIonisation.cc,v 1.39 2007-01-18 12:17:04 vnivanch Exp $
+// $Id: G4ionIonisation.cc,v 1.40 2007-05-16 13:45:13 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -52,6 +52,7 @@
 // 10-05-06 Add a possibility to download user data (V.Ivantchenko)
 // 13-05-06 Add data for light ion stopping in water (V.Ivantchenko)
 // 14-01-07 use SetEmModel() and SetFluctModel() from G4VEnergyLossProcess (mma)
+// 16-05-07 Add data for light ion stopping only for GenericIon (V.Ivantchenko)
 //
 //
 // -------------------------------------------------------------------
@@ -130,8 +131,13 @@ void G4ionIonisation::InitialiseEnergyLossProcess(
   EmModel(2)->SetHighEnergyLimit(100*TeV);
   AddEmModel(2, EmModel(2), FluctModel());    
 
-  effCharge = corr->GetIonEffectiveCharge(EmModel(1));
-  G4WaterStopping  ws(corr);
+  // Add ion stoping tables for Generic Ion
+  if(part == G4GenericIon::GenericIon()) {
+    G4WaterStopping  ws(corr);
+    effCharge = corr->GetIonEffectiveCharge(EmModel(1));
+  } else {
+    effCharge = corr->GetIonEffectiveCharge(0);
+  }
 
   isInitialised = true;
 }
