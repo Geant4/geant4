@@ -24,7 +24,11 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cons.cc,v 1.51 2007-05-11 15:15:27 tnikitin Exp $
+//<<<<<<< G4Cons.cc
+// $Id: G4Cons.cc,v 1.52 2007-05-16 08:27:07 tnikitin Exp $
+//=======
+// $Id: G4Cons.cc,v 1.52 2007-05-16 08:27:07 tnikitin Exp $
+//>>>>>>> 1.51
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //

@@ -1,4 +1,4 @@
-$Id: History,v 1.92 2006-10-19 15:34:03 gcosmo Exp $
+$Id: History,v 1.93 2007-05-16 08:27:16 tnikitin Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Mai 16, 2007  T.Nikitina                 
+- G4Tubs: fixed bug for DistanceToOut(p,v) for phi section.
+  Bug was causing segmentation fault in recursive_test(problem report #784). 
+  For v crossing the center of the tub DistanceToOut was always giving
+  Radial distance and not distance in Phi.  
+- G4Cons: fixed bug for DistanceToOut(p,v) for phi section,
+  the same as for G4Tubs. 
 
 Oct 19, 2006  G.Cosmo                    geom-csg-V08-01-00
 - Added explicit computation for GetSurfaceArea() for all solids

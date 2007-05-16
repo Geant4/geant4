@@ -24,8 +24,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4Tubs.cc,v 1.61 2007-05-11 15:15:27 tnikitin Exp $
+//<<<<<<< G4Tubs.cc
+// $Id: G4Tubs.cc,v 1.62 2007-05-16 08:26:51 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
+//=======
+// $Id: G4Tubs.cc,v 1.62 2007-05-16 08:26:51 tnikitin Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//>>>>>>> 1.61
 //
 // 
 // class G4Tubs
