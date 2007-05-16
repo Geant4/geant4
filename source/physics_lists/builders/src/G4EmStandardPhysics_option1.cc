@@ -23,26 +23,28 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmStandardPhysics.cc,v 1.8 2007-05-16 11:35:36 vnivanch Exp $
+// $Id: G4EmStandardPhysics_option1.cc,v 1.1 2007-05-16 11:35:36 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
-// ClassName:   G4EmStandardPhysics
+// ClassName:   G4EmStandardPhysics_option1
 //
 // Author:      V.Ivanchenko 09.11.2005
 //
 // Modified:
-// 05.12.2005 V.Ivanchenko add controlled verbosity
+// 19.12.2005 V.Ivanchenko StepFunction for electrons (1.0, 1.0*mm)
+// 21.06.2006 V.Ivanchenko use recent msc with step limitation off
+// 23.06.2006 V.Ivanchenko set dRoverRange = 0.8 for e- and e+
 // 13.11.2006 V.Ivanchenko use G4hMultipleScattering
 // 23.11.2006 V.Ivanchenko remove mscStepLimit option and improve cout
-// 13.02.2007 V.Ivanchenko use G4hMultipleScattering for muons
 // 13.02.2007 V.Ivanchenko set skin=0.0
+// 15.05.2007 V.Ivanchenko rename to _option1
 //
 //----------------------------------------------------------------------------
 //
 
-#include "G4EmStandardPhysics.hh"
+#include "G4EmStandardPhysics_option1.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
 #include "G4LossTableManager.hh"
@@ -52,8 +54,8 @@
 #include "G4GammaConversion.hh"
 #include "G4PhotoElectricEffect.hh"
 
-#include "G4MultipleScattering.hh"
 #include "G4hMultipleScattering.hh"
+#include "G4MultipleScattering.hh"
 
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
@@ -85,7 +87,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4EmStandardPhysics::G4EmStandardPhysics(G4int ver, const G4String& name)
+G4EmStandardPhysics_option1::G4EmStandardPhysics_option1(
+    G4int ver, const G4String& name)
   : G4VPhysicsConstructor(name), verbose(ver)
 {
   G4LossTableManager::Instance();
@@ -93,12 +96,12 @@ G4EmStandardPhysics::G4EmStandardPhysics(G4int ver, const G4String& name)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4EmStandardPhysics::~G4EmStandardPhysics()
+G4EmStandardPhysics_option1::~G4EmStandardPhysics_option1()
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4EmStandardPhysics::ConstructParticle()
+void G4EmStandardPhysics_option1::ConstructParticle()
 {
 // gamma
   G4Gamma::Gamma();
@@ -129,7 +132,7 @@ void G4EmStandardPhysics::ConstructParticle()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4EmStandardPhysics::ConstructProcess()
+void G4EmStandardPhysics_option1::ConstructProcess()
 {
   // Add standard EM Processes
 
@@ -150,24 +153,30 @@ void G4EmStandardPhysics::ConstructProcess()
 
     } else if (particleName == "e-") {
 
-      pmanager->AddProcess(new G4MultipleScattering, -1, 1, 1);
-      pmanager->AddProcess(new G4eIonisation,        -1, 2, 2);
-      pmanager->AddProcess(new G4eBremsstrahlung(),  -1, 3, 3);
+      G4eIonisation* eioni = new G4eIonisation();
+      eioni->SetStepFunction(0.8, 1.0*mm);
+      G4MultipleScattering* msc = new G4MultipleScattering;
+      pmanager->AddProcess(msc,                   -1, 1, 1);
+      pmanager->AddProcess(eioni,                 -1, 2, 2);
+      pmanager->AddProcess(new G4eBremsstrahlung, -1, 3, 3);
 
     } else if (particleName == "e+") {
 
-      pmanager->AddProcess(new G4MultipleScattering, -1, 1, 1);
-      pmanager->AddProcess(new G4eIonisation,        -1, 2, 2);
-      pmanager->AddProcess(new G4eBremsstrahlung,    -1, 3, 3);
-      pmanager->AddProcess(new G4eplusAnnihilation,   0,-1, 4);
+      G4eIonisation* eioni = new G4eIonisation();
+      eioni->SetStepFunction(0.8, 1.0*mm);
+      G4MultipleScattering* msc = new G4MultipleScattering;
+      pmanager->AddProcess(msc,                     -1, 1, 1);
+      pmanager->AddProcess(eioni,                   -1, 2, 2);
+      pmanager->AddProcess(new G4eBremsstrahlung,   -1, 3, 3);
+      pmanager->AddProcess(new G4eplusAnnihilation,  0,-1, 4);
 
     } else if (particleName == "mu+" ||
                particleName == "mu-"    ) {
 
-      pmanager->AddProcess(new G4hMultipleScattering,-1, 1, 1);
-      pmanager->AddProcess(new G4MuIonisation,       -1, 2, 2);
-      pmanager->AddProcess(new G4MuBremsstrahlung,   -1, 3, 3);
-      pmanager->AddProcess(new G4MuPairProduction,   -1, 4, 4);
+      pmanager->AddProcess(new G4hMultipleScattering, -1, 1, 1);
+      pmanager->AddProcess(new G4MuIonisation,        -1, 2, 2);
+      pmanager->AddProcess(new G4MuBremsstrahlung,    -1, 3, 3);
+      pmanager->AddProcess(new G4MuPairProduction,    -1, 4, 4);
 
     } else if (particleName == "alpha" ||
                particleName == "He3" ||
@@ -201,7 +210,7 @@ void G4EmStandardPhysics::ConstructProcess()
   }
   G4EmProcessOptions opt;
   opt.SetVerbose(verbose);
-  opt.SetSkin(0.0);
+  opt.SetMscStepLimitation(false);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

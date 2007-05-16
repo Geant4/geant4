@@ -24,37 +24,42 @@
 // ********************************************************************
 //
 //
-// $Id: G4EmStandardPhysics.hh,v 1.4 2007-05-16 11:35:36 vnivanch Exp $
+// $Id: G4EmStandardPhysics_option1.hh,v 1.1 2007-05-16 11:35:36 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
-// ClassName:   G4EmStandardPhysics
+// ClassName:   G4EmStandardPhysics_option1
 //
 // Author:      V.Ivanchenko 09.11.2005
 //
 // Modified:
 // 05.12.2005 V.Ivanchenko add controlled verbosity
-// 23.11.2006 V.Ivanchenko remove mscStepLimit option and improve cout
+// 13.11.2006 V.Ivanchenko set default msc step limit false
+// 15.05.2007 V.Ivanchenko rename to _option1
 //
 //----------------------------------------------------------------------------
 //
-// This class provides construction of default EM standard physics
+// This class provides construction of EM standard physics using set of options
+// allowing speed up simulation. Results for simulation in thin layers of
+// materials with different density may be biased. 
 //
 
-#ifndef G4EmStandardPhysics_h
-#define G4EmStandardPhysics_h 1
+#ifndef G4EmStandardPhysics_option1_h
+#define G4EmStandardPhysics_option1_h 1
 
 #include "G4VPhysicsConstructor.hh"
 #include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class G4EmStandardPhysics : public G4VPhysicsConstructor
+class G4EmStandardPhysics_option1 : public G4VPhysicsConstructor
 {
 public:
-  G4EmStandardPhysics(G4int ver = 0, const G4String& name = "G4EmStandard");
-  virtual ~G4EmStandardPhysics();
+  G4EmStandardPhysics_option1(G4int ver = 1,
+			      const G4String& name = "G4EmStandard_opt1");
+
+  virtual ~G4EmStandardPhysics_option1();
 
   virtual void ConstructParticle();
   virtual void ConstructProcess();

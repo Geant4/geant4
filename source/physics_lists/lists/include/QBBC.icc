@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: QBBC.icc,v 1.5 2007-04-16 11:57:40 vnivanch Exp $
+// $Id: QBBC.icc,v 1.6 2007-05-16 11:35:36 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -34,6 +34,7 @@
 //
 // Modified:
 // 24.11.06 Add G4HadronHElasticPhysics and G4NeutronTrackingCut
+// 16.05.2007 V.Ivanchenko: rename EM builders
 //
 //----------------------------------------------------------------------------
 //
@@ -66,7 +67,7 @@ template<class T> TQBBC<T>::TQBBC( G4int ver, const G4String& type, G4bool gl): 
   this->SetVerboseLevel(ver);
 
   // EM Physics
-  this->RegisterPhysics( new G4EmStandardPhysics("standard EM",ver));
+  this->RegisterPhysics( new G4EmStandardPhysics(ver));
 
   // Synchroton Radiation & GN Physics
   this->RegisterPhysics( new G4EmExtraPhysics("extra EM"));
