@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.cc,v 1.19 2007-04-26 18:16:55 vnivanch Exp $
+// $Id: PhysicsList.cc,v 1.20 2007-05-16 11:43:30 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /////////////////////////////////////////////////////////////////////////
@@ -44,8 +44,8 @@
 #include "PhysicsListMessenger.hh"
 
 #include "G4DecayPhysics.hh"
-#include "G4EmStandardPhysics72.hh"
-#include "G4EmStandardPhysics71.hh"
+#include "G4EmStandardPhysics_option2.hh"
+#include "G4EmStandardPhysics_option1.hh"
 #include "G4EmStandardPhysics.hh"
 #include "G4HadronElasticPhysics.hh"
 #include "G4HadronQElasticPhysics.hh"
@@ -98,7 +98,7 @@ PhysicsList::PhysicsList() : G4VModularPhysicsList()
   particleList = new G4DecayPhysics("decays");
 
   // EM physics
-  emPhysicsList = new G4EmStandardPhysics("G4standard");
+  emPhysicsList = new G4EmStandardPhysics();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
@@ -149,19 +149,19 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     hadronPhys.push_back( new HadronPhysicsLHEP());
     hadronPhys.push_back( new G4IonPhysics("ion"));
 
-  } else if (name == "G4standard_exp") {
+  } else if (name == "emstandard_opt2") {
 
     delete emPhysicsList;
-    emPhysicsList = new G4EmStandardPhysics72("standard");
+    emPhysicsList = new G4EmStandardPhysics_option2();
 
-  } else if (name == "G4standard_fast") {
+  } else if (name == "emstandard_opt1") {
 
     delete emPhysicsList;
-    emPhysicsList = new G4EmStandardPhysics71("standard");
+    emPhysicsList = new G4EmStandardPhysics_option1();
 
   } else if (name == "FTFP_EMV") {
 
-    AddPhysicsList("G4standard_fast");
+    AddPhysicsList("emstandard_opt1");
     AddPhysicsList("FTFP");
     dump = true;
 
@@ -198,7 +198,7 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 
   } else if (name == "QGSC_EMV") {
 
-    AddPhysicsList("G4standard_fast");
+    AddPhysicsList("emstandard_opt1");
     AddPhysicsList("QGSC");
     dump = true;
 
@@ -238,31 +238,31 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 
   } else if (name == "QGSP_EMV_NQE") {
 
-    AddPhysicsList("G4standard_fast");
+    AddPhysicsList("emstandard_opt1");
     AddPhysicsList("QGSP_NQE");
     dump = true;
 
   } else if (name == "LHEP_EMV") {
 
-    AddPhysicsList("G4standard_fast");
+    AddPhysicsList("emstandard_opt1");
     AddPhysicsList("LHEP");
     dump = true;
 
   } else if (name == "QGSP_EMV") {
 
-    AddPhysicsList("G4standard_fast");
+    AddPhysicsList("emstandard_opt1");
     AddPhysicsList("QGSP");
     dump = true;
 
   } else if (name == "QGSP_EMX") {
 
-    AddPhysicsList("G4standard_exp");
+    AddPhysicsList("emstandard_opt2");
     AddPhysicsList("QGSP");
     dump = true;
 
   } else if (name == "QGSP_BERT_EMV") {
 
-    AddPhysicsList("G4standard_fast");
+    AddPhysicsList("emstandard_opt1");
     AddPhysicsList("QGSP_BERT");
     dump = true;
 
