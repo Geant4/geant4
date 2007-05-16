@@ -59,23 +59,11 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-/*
-#include <stdio.h>
-#include <fenv.h>
-void fpu_ ()
-{
-  fesetenv (FE_NOMASK_ENV);
-}
-*/
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 int main(int argc,char** argv) {
 
   G4Timer* timer = new G4Timer();
   timer->Start();
-
-  //fpu_();
 
   G4int verbose = 1;
   //choose the Random engine
@@ -94,9 +82,7 @@ int main(int argc,char** argv) {
   if(verbose >0) G4cout << "Physics List is defined" << G4endl;
 
 #ifdef G4VIS_USE
-  G4cout << "VisManager will be initialized" << G4endl;
-  G4VisManager* visManager = new G4VisExecutive();
-  visManager->Initialize();
+  G4VisManager* visManager = 0;
 #endif 
 
   G4cout << "User actions will be initialized" << G4endl;
@@ -123,17 +109,19 @@ int main(int argc,char** argv) {
   if (argc==1)   // Define UI terminal for interactive mode
     {
 
-     G4UIsession * session = new G4UIterminal;
-     UI->ApplyCommand("/control/execute init.mac");
-     session->SessionStart();
-     delete session;
+      visManager = new G4VisExecutive();
+      visManager->Initialize();
+      G4UIsession * session = new G4UIterminal;
+      UI->ApplyCommand("/control/execute init.mac");
+      session->SessionStart();
+      delete session;
     }
   else if (argc>1) // Batch mode with 1 or more files
     {
-     if(verbose >0) G4cout << "UI interface is started" << G4endl;
-     G4String command = "/control/execute ";
-     G4String fileName = argv[1];
-     UI->ApplyCommand(command+fileName);
+      if(verbose >0) G4cout << "UI interface is started" << G4endl;
+      G4String command = "/control/execute ";
+      G4String fileName = argv[1];
+      UI->ApplyCommand(command+fileName);
     }
     
  // job termination
