@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXViewer.cc,v 1.39 2007-05-08 17:20:23 allison Exp $
+// $Id: G4OpenGLXViewer.cc,v 1.40 2007-05-16 15:59:58 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -458,6 +458,7 @@ void G4OpenGLXViewer::print() {
     glViewport (0, 0, WinSize_x, WinSize_y);
     
     ClearView ();
+    SetView ();
     DrawView ();
     
     generateEPS (print_string,

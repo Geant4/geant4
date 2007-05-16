@@ -1,4 +1,4 @@
-$Id: History,v 1.89 2007-05-08 11:04:11 allison Exp $
+$Id: History,v 1.90 2007-05-16 15:59:58 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,13 @@ committal in the CVS repository !
 
 History file for visualization/OpenGL
 -------------------------------------
+
+16th May 2007  John Allison  (opengl-V08-03-00)
+- Fix compiler warnings on SLC4.
+- Bug fixes:
+  o Correct path /vis/ogl/set/printMode.
+  o Add SetView to pixmap screen dump ("/vis/ogl/set/printMode pixmap"
+    and "/vis/ogl/printEPS").
 
 8th May 2007  John Allison  (opengl-V08-02-06)
 - Moved vectored PostScript printing to G4OpenGLViewer.

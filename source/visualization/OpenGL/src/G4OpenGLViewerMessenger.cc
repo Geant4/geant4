@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewerMessenger.cc,v 1.7 2007-05-08 11:04:11 allison Exp $
+// $Id: G4OpenGLViewerMessenger.cc,v 1.8 2007-05-16 15:59:58 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4OpenGLViewerMessenger.hh"
@@ -174,7 +174,7 @@ G4OpenGLViewerMessenger::G4OpenGLViewerMessenger()
   fpCommandFade->SetDefaultValue(0.);
 
   fpCommandPrintMode = new G4UIcmdWithAString
-    ("/vis/oglx/set/printMode",this);
+    ("/vis/ogl/set/printMode",this);
   fpCommandPrintMode->SetGuidance("Set print mode");
   fpCommandPrintMode->SetParameterName("print_mode",omitable = true);
   fpCommandPrintMode->SetCandidates("vectored pixmap");
