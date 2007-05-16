@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PathFinder.hh,v 1.22 2007-05-11 13:43:59 gcosmo Exp $
+// $Id: G4PathFinder.hh,v 1.23 2007-05-16 15:59:06 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // class G4PathFinder 
@@ -136,6 +136,9 @@ class G4PathFinder
    inline void MovePoint();
      //
      // Signal that location will be moved -- internal use primarily
+
+   G4String& LimitedString( ELimited lim );
+     // Convert ELimited to string
 
  protected:  // without description
 
