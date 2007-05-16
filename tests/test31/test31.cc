@@ -118,7 +118,6 @@ int main(int argc,char** argv) {
 #else
       session = new G4UIterminal();
 #endif
-      UI->ApplyCommand("/control/execute init.mac");
       session->SessionStart();
       delete session;
     }
