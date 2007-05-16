@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.13 2007-05-16 15:33:04 vnivanch Exp $
+// $Id: PhysicsList.cc,v 1.14 2007-05-16 16:27:53 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -111,6 +111,7 @@ void PhysicsList::ConstructProcess()
   if(verbose > 0) 
     G4cout << "### PhysicsList Construte Processes" << G4endl;
   if(!emBuilderIsRegisted) AddPhysicsList("emstandard");
+  RegisterPhysics(new G4StepLimiterBuilder());
   G4VModularPhysicsList::ConstructProcess();
 
   // Define energy interval for loss processes
@@ -163,10 +164,6 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     emBuilderIsRegisted = true;
     G4cout << "PhysicsList::AddPhysicsList <" << name << ">" << G4endl;
     */
-  } else if (name == "step_limit" && !stepLimiterIsRegisted && emBuilderIsRegisted) {
-    RegisterPhysics(new G4StepLimiterBuilder());
-    stepLimiterIsRegisted = true;
-    G4cout << "PhysicsList::AddPhysicsList <" << name << ">" << G4endl;
 
   } else if (name == "decay" && !decayIsRegisted && emBuilderIsRegisted) {
     RegisterPhysics(new G4DecayPhysics());
