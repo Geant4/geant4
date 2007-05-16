@@ -12,14 +12,13 @@
 /process/eLoss/StepFunction   0.2 1. mm
 /testem/stepMax               0.5 mm
 #
-/testem/phys/addPhysics       standard
-#/testem/phys/addPhysics        g4v52
-#/testem/phys/addPhysics       modelP
-#/testem/phys/addPhysics       lowenergy
-/testem/phys/addPhysics       elastic
-/testem/phys/addPhysics       binary
-/testem/phys/addPhysics       binary_ion
-/testem/phys/addPhysics       gamma_nuc
+/testem/phys/addPhysics       emstandard
+#/testem/phys/addPhysics      emstandard_opt2
+#/testem/phys/addPhysics       livermore
+#/testem/phys/addPhysics       elastic
+#/testem/phys/addPhysics       binary
+#/testem/phys/addPhysics       binary_ion
+#/testem/phys/addPhysics       gamma_nuc
 #
 /testem/target1Material       G4_Be
 /testem/target2Material       G4_W
