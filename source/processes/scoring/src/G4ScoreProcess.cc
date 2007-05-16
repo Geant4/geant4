@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoreProcess.cc,v 1.1 2006-11-20 10:02:18 ahoward Exp $
+// $Id: G4ScoreProcess.cc,v 1.2 2007-05-16 09:08:38 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -247,27 +247,27 @@ G4ScoreProcess::PostStepDoIt(const G4Track& aTrack, const G4Step &aStep)
 	    pstep.SetCrossBoundary(true);
 	  } 
 	fScorer.Score(aStep, pstep); 
-      } else {	  
-	if (aStep.GetStepLength() > kCarTolerance) 
-	  {
-	    G4StepPoint *prepoint = aStep.GetPreStepPoint();
-	    G4StepPoint *postpoint = aStep.GetPostStepPoint();
-	    
-	    G4GeometryCell prekey(*(prepoint->GetPhysicalVolume()), 
-				  prepoint->GetTouchable()->GetReplicaNumber());
-	    G4GeometryCell postkey(*(postpoint->GetPhysicalVolume()), 
-				   postpoint->GetTouchable()->GetReplicaNumber());
-	    G4GeometryCellStep pstep(prekey, postkey);
-	    pstep.SetCrossBoundary(false);
-	    
-	    if (prekey != postkey)
-	      {
-		pstep.SetCrossBoundary(true);
-	      } 
-	    fScorer.Score(aStep, pstep); 
-	  }
       }
-  }  
+  } else {	  
+    if (aStep.GetStepLength() > kCarTolerance) 
+      {
+	G4StepPoint *prepoint = aStep.GetPreStepPoint();
+	G4StepPoint *postpoint = aStep.GetPostStepPoint();
+	
+	G4GeometryCell prekey(*(prepoint->GetPhysicalVolume()), 
+			      prepoint->GetTouchable()->GetReplicaNumber());
+	G4GeometryCell postkey(*(postpoint->GetPhysicalVolume()), 
+			       postpoint->GetTouchable()->GetReplicaNumber());
+	G4GeometryCellStep pstep(prekey, postkey);
+	pstep.SetCrossBoundary(false);
+	
+	if (prekey != postkey)
+	  {
+	    pstep.SetCrossBoundary(true);
+	  } 
+	fScorer.Score(aStep, pstep); 
+      }
+  }
 
   if (fKillTrack)
     {
