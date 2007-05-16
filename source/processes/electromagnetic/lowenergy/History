@@ -1,4 +1,4 @@
-$Id: History,v 1.254 2006-10-19 11:19:50 pia Exp $
+$Id: History,v 1.255 2007-05-16 20:57:59 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+16.05.2007   MGP, tag emlowen-V08-03-00
+             First set of Geant4-DNA processes compliant with design
+             documented in draft publication
 
 19.10.2006   MGP, tag emlowen-V08-01-02
              Bug fixes in G4FluoData.cc

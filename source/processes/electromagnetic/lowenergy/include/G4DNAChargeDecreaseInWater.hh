@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DNAChargeDecreaseInWater.hh,v 1.4 2006-06-29 19:33:40 gunter Exp $
+// $Id: G4DNAChargeDecreaseInWater.hh,v 1.5 2007-05-16 20:57:59 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -32,6 +32,9 @@
 #define  G4DNACHARGEDECREASEINWATER_HH 1
 
 #include "G4VDNAProcessInWater.hh"
+#include "G4VParticleChange.hh"
+#include "G4VDNAProcessInWater.hh"
+
 
 // TotalCrossSectionPolicy must provide:
 //  - [protected] const G4ParticleDefinition * IncomingParticleDefinition(void)
