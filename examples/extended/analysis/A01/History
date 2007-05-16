@@ -1,4 +1,4 @@
-$Id: History,v 1.41 2006-11-14 07:11:18 perl Exp $
+$Id: History,v 1.42 2007-05-16 14:50:34 duns Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -10,6 +10,8 @@ $Id: History,v 1.41 2006-11-14 07:11:18 perl Exp $
      ----------------------------------------------------------
 
 ---------------------------------------------------------------------------  
+16 May 2007 - Mark Donszelmann (exampleA01-V08-03-01)
+- Fixed warning message about JAS-JAIDA window on exit.
 
 13 November 2006 - Joseph Perl (exampleA01-V08-01-02)
 - Remove unused attributes from hit classes.
