@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: exampleB02_para.cc,v 1.1 2006-11-20 10:08:17 ahoward Exp $
+// $Id: exampleB02_para.cc,v 1.2 2007-05-16 08:58:50 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -109,6 +109,14 @@ int main(int argc, char **argv)
     G4cout << "Usage : " << G4endl;
     G4cout << "  % exampleB02_para e-|neutron verbosity" << G4endl;
     return 1;
+  }
+  if(!argv[2]) {
+    G4cout << "Tracking Verbosity not set! " << G4endl << " Usage : " << G4endl;
+    G4cout << "  % exampleB02_para e-|neutron verbosity" << G4endl;
+    return 1;
+  } else {
+    G4String param2 = argv[2];
+    G4cout << " tracking verbosity is set to: " << param2 << G4endl;
   }
 
   std::ostream *myout = &G4cout;
