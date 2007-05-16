@@ -1,4 +1,4 @@
-# $Id: TestEm9.in,v 1.14 2007-04-24 14:20:04 vnivanch Exp $
+# $Id: TestEm9.in,v 1.15 2007-05-16 13:21:07 vnivanch Exp $
 # GEANT4 tag $Name: not supported by cvs2svn $
 #
 # Macro file for TestEm9 - Crystal Calorimeter
@@ -11,7 +11,7 @@
 #
 #  select EM PhysicsList
 #
-/testem/phys/addPhysics  standard
+/testem/phys/addPhysics  emstandard_opt1
 #
 /testem/phys/setCuts    0.3 mm
 /testem/phys/VertexCuts 0.01 mm
