@@ -1,4 +1,4 @@
-# $Id: TestEm7.in,v 1.12 2006-01-30 10:35:33 maire Exp $
+# $Id: TestEm7.in,v 1.13 2007-05-16 13:20:40 vnivanch Exp $
 #
 # Macro file for "TestEm7.cc"
 # (can be run in batch, without graphic)
@@ -7,11 +7,11 @@
 /control/verbose 2
 /run/verbose 2
 #
-/testem/det/setMat Water
+/testem/det/setMat G4_WATER
 /testem/det/setSizeX  20 cm
 /testem/det/setSizeYZ 20 cm
 #
-/testem/det/tallyMat Water
+/testem/det/tallyMat G4_WATER
 /testem/det/tallySize 2. 2. 2. mm
 /testem/det/tallyPosition -9.9 0. 0. cm
 /testem/det/tallyPosition -5.  0. 0. cm
