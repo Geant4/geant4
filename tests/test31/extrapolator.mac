@@ -10,7 +10,7 @@
 #
 /testem/phys/setCuts         1.0 mm
 #/testem/phys/stepMax         10 mm
-/testem/phys/addPhysics      standard
+/testem/phys/addPhysics      emstandard
 #/testem/phys/addPhysics      g4v52
 /test31/AbsorberMaterial     G4_Fe
 /test31/AbsorberThick        10 mm

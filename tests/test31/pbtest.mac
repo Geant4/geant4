@@ -10,9 +10,8 @@
 #
 /testem/phys/setCuts         1.0 mm
 /testem/phys/stepMax        1 mm
-/testem/phys/addPhysics      standard
-#/testem/phys/addPhysics      g4v52
-/test31/AbsorberMaterial     Lead
+/testem/phys/addPhysics      emstandard
+/test31/AbsorberMaterial     G4_Pb
 /test31/AbsorberThick        10 mm
 /test31/NumberOfAbsorbers    1
 /test31/maxDeltaEnergy       10.0 MeV

@@ -144,6 +144,29 @@ int main(int argc,char** argv) {
 
   timer->Stop();
   G4cout << "  "  << *timer << G4endl;
+  /*
+  G4double R1 = 55.*mm;
+  G4double R2 = 400.*mm;
+  G4double r  = 82.*mm;
+  G4double dr = 15.5*mm;
+  G4double lr = std::log(R2/R1);
+  G4double al = 1.0;
+  G4double d  = R2 - R1;
+  G4double dd = d;
+  if(al != 1.0) dd = std::pow(R2,2.0 - al) - std::pow(R2,2.0 - al);
+
+  G4cout << "  R1(mm)= " << R1 << "  R2(mm)= " << R2 << G4endl; 
+  G4double x;
+  for(G4int i=1; i<21; i++) {
+    if(al == 1.0)
+      x = 2.0*d*(1.0/dd - 1.0/(r*lr));
+    else
+      x = 2.0*d*(std::pow(r,1.0 - al)/dd - 1.0/((2.0 - al)*r*lr));
+
+    G4cout << "Row# " << i << " r(mm)= " << r << "   E= " << x << G4endl;
+    r += dr;
+  }
+  */
   delete timer;
   delete runManager;
   return 0;

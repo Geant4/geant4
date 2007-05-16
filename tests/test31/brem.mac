@@ -12,7 +12,7 @@
 /testem/phys/cutElectron 95 cm
 /testem/phys/stepMax     0.2 mm
 #
-/testem/phys/addPhysics standard
+/testem/phys/addPhysics emstandard
 #
 /test31/AbsorberMaterial    Aluminum
 /test31/AbsorberThick       1000 cm
