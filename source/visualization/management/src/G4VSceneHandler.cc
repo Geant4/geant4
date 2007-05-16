@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.cc,v 1.81 2007-04-04 16:43:25 allison Exp $
+// $Id: G4VSceneHandler.cc,v 1.82 2007-05-16 15:47:44 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -79,6 +79,7 @@
 #include "G4Run.hh"
 #include "G4Transform3D.hh"
 #include "G4AttHolder.hh"
+#include "G4AttDef.hh"
 
 G4VSceneHandler::G4VSceneHandler (G4VGraphicsSystem& system, G4int id, const G4String& name):
   fSystem                (system),
