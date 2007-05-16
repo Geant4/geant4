@@ -1,4 +1,4 @@
-$Id: History,v 1.117 2007-05-11 13:32:20 gcosmo Exp $
+$Id: History,v 1.118 2007-05-16 12:51:13 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May 16, 2007  G.Cosmo                      geommng-V08-03-02
+- Introduced new classes for handling error propagation: G4ErrorTarget,
+  G4ErrorSurfaceTarget, G4ErrorTanPlaneTarget, G4ErrorPlaneSurfaceTarget,
+  G4ErrorCylSurfaceTarget (by P.Arce).
+- Coworks with tag "global-V08-03-02".
 
 May 11, 2007  G.Cosmo                      geommng-V08-03-01
 - Use call to G4GeometryTolerance instead of kCarTolerance where needed.
