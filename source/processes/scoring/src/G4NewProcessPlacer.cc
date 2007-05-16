@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NewProcessPlacer.cc,v 1.1 2006-11-20 10:02:16 ahoward Exp $
+// $Id: G4NewProcessPlacer.cc,v 1.2 2007-05-16 09:09:10 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -90,7 +90,7 @@ void G4NewProcessPlacer::AddProcessAs(G4VProcess *process, SecondOrLast sol)
     {
       G4Exception(" G4NewProcessPlacer:: could not get process id=0");
     }
-    if (transportation->GetProcessName() != "Transportation" && transportation->GetProcessName() != "CoupledTransportation")
+    if (transportation->GetProcessName() != "Transportation" && transportation->GetProcessName() != "Transportation8")
     {
       //      G4cout << " GOT HERE CoupledTransportation" << G4endl;
       G4cout << transportation->GetProcessName() << G4endl;
