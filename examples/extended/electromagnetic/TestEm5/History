@@ -1,4 +1,4 @@
-$Id: History,v 1.81 2007-03-20 18:50:53 vnivanch Exp $
+$Id: History,v 1.82 2007-05-16 12:02:54 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+16-05-07 V.Ivant (testem5-V08-03-00)
+- Fixed bug in standardSS Physics Lists
+- Added EM builders from physics_lists library
 
 20-03-07 V.Ivant (testem5-V08-02-00)
 - Use all default values in default PhysList
