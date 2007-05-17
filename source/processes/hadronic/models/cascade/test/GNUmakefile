@@ -1,7 +1,5 @@
 name := cascade
 name := cascadeTest
-name := data
-name := evaporationTest
 name := hetcCascadeTest
 name := testInterface
 name := toyModelTest
