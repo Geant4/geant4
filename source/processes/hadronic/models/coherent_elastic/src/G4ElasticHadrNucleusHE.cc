@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElasticHadrNucleusHE.cc,v 1.62 2007-05-17 10:56:43 grichine Exp $
+// $Id: G4ElasticHadrNucleusHE.cc,v 1.63 2007-05-17 10:57:52 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -38,6 +38,7 @@
 //  23.11.06 General cleanup, ONQ0=3, use pointer instead of particle name (VI)
 //  02.05.07 Scale sampled t as p^2 (VI)
 //  15.05.07 Redesign and cleanup (V.Ivanchenko)
+//  17.05.07 cleanup (V.Grichine)
 //
 
 #include  "G4ElasticHadrNucleusHE.hh"
