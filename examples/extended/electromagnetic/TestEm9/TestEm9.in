@@ -1,4 +1,4 @@
-# $Id: TestEm9.in,v 1.15 2007-05-16 13:21:07 vnivanch Exp $
+# $Id: TestEm9.in,v 1.16 2007-05-17 15:23:04 vnivanch Exp $
 # GEANT4 tag $Name: not supported by cvs2svn $
 #
 # Macro file for TestEm9 - Crystal Calorimeter
@@ -18,9 +18,9 @@
 /testem/phys/MuonCuts  10.0 mm
 /testem/stepMax         100 mm
 #
-/testem/det/acceptance1  0.8260 0.0351 2.5
-/testem/det/acceptance9  0.9564 0.0160 2.5
-/testem/det/acceptance25 0.9790 0.0119 2.5
+/testem/det/acceptance1  0.8271 0.02974 2.5
+/testem/det/acceptance9  0.9570 0.01286 2.5
+/testem/det/acceptance25 0.9793 0.00884 2.5
 #
 #/process/eLoss/preciseRange  true
 #/process/eLoss/integral      true
