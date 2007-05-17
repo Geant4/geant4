@@ -45,12 +45,19 @@
 
 #include "vector"
 
+#include "G4ios.hh"
+#include <iomanip>
+#include <time.h>
+
+
 G4int benchmarkAll();
+G4int tTiming();
 
 int main() {
 
   benchmarkAll(); // Run all models in tandem
 
+  G4cout << "Timing:  " ; if (tTiming()){ G4cout << "OK";} else {G4cout << "fail" << G4endl;}; G4cout << G4endl;  % test timing 
   return 0;       
 }
 
@@ -137,3 +144,46 @@ G4int benchmarkAll()  {
 
   return 0;
 }
+
+
+
+
+// Test speed of pow(x, 2) compared to x * x
+
+int tTiming() {
+  G4double y[3]= {1.0, 1.3, 1.2}; 
+  y[1]=1.2;
+  G4int LOOPS = 20000000; // Set test parameters
+  G4double x = 1.2;
+  clock_t startTime;
+  clock_t endTime;
+
+  startTime = clock();
+
+  for(G4int i = 1; i < LOOPS; i++){
+       G4double ans = std::pow(y[2], 2);
+  };
+  endTime = clock();
+  //  G4double firstTime = (G4double)(endTime - startTime) /
+  //  (CLOCKS_PER_SEC * 1000000.0);
+
+  G4double firstTime = (G4double)(endTime - startTime);
+
+  G4cout << "pow(x, 2) time: " << firstTime  << G4endl;
+
+  startTime = clock();
+  for(G4int j = 1; j < LOOPS; j++){
+    G4double ans = y[2] * y[2];
+  };
+
+  endTime = clock();
+  //  G4double secondTime = (G4double)(endTime - startTime) / 
+  //  (CLOCKS_PER_SEC * 1000000.0);
+
+
+  G4double secondTime = (G4double)(endTime - startTime);
+  G4cout << "x * x time: " << secondTime << G4endl;
+  G4cout << "pow / * speed ratio = " << firstTime / secondTime << G4endl;
+  return 1;
+}
+

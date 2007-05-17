@@ -36,8 +36,8 @@ int main()
    G4BertiniData *data2 = db->Instance(); // old instance used
 
    delete db;
-   delete data1;
-   delete data2;
+   //   delete data1;
+   //delete data2;
 }    
     
 
