@@ -2,7 +2,8 @@
 
 \subsection{Starting with {\sc Geant4}}
  
-Visit \htmladdnormallink{\textsf{http:// wwwinfo.cern.ch/ asd/ geant4/}}{http://wwwinfo.cern.ch/asd/geant4/}
+%Visit \htmladdnormallink{\textsf{http:// wwwinfo.cern.ch/ asd/ geant4/}}{http://wwwinfo.cern.ch/asd/geant4/}
+Visit \url{http://wwwinfo.cern.ch/asd/geant4/}
 and study downloading documents. The quidance there should be enough, but here follows general outline, though.
 
 
@@ -13,16 +14,18 @@ You can start {\sc Geant4} -use from the scratch, with following steps:
 \item Prepare full Linux (A PC and even a Mac is a possibility.) environment (with minimum $\sim 1~GB$ free disk space)
  
 \item Set numeric libraries. {\sc Geant4} needs CLHEP-1.X library.
-Download it from \htmladdnormallink{\textsf{http:// wwwinfo.cern.ch/ asd/ lhc++/ clhep/}}{http://wwwinfo.cern.ch/asd/lhc++/clhep/}. , and follow installation instructions. 
+%Download it from \htmladdnormallink{\textsf{http:// wwwinfo.cern.ch/ asd/ lhc++/ clhep/}}{http://wwwinfo.cern.ch/asd/lhc++/clhep/}. , and follow installation instructions. 
+Download it from \url{http://wwwinfo.cern.ch/asd/lhc++/clhep/}. , and follow installation instructions. 
+
 Run tests in {\sf CLHEP/test} directory with command {\sf gmake})
  
 \item Set visualization packages you want use. Choises are listed in {\sc Geant4} documentation.
-I use Mesa (Dowload free OpenGL from \htmladdnormallink{\textsf{http:// www.mesa3d.org/}}{http://www.mesa3d.org/} , follow instructions and compile libraries and demos. 
+I use Mesa (Dowload free OpenGL from \url{http://www.mesa3d.org/} , follow instructions and compile libraries and demos. 
 Run prgrams in samples and demos directories. 
 Also I've been using VRMLView Pro software to visualise geometries {\sf bash\$ vrmlview g4.wrl \&}
  
 \item Set environment variables as advised in geant4 installation guide
-\htmladdnormallink{\textsf{http:// wwwinfo.cern.ch/ asd/ geant4/ G4UsersDocuments/ UsersGuides/ InstallationGuide/ html/ UnixMachines/ unixMachines.html}}{http://wwwinfo.cern.ch/asd/geant4/G4UsersDocuments/UsersGuides/InstallationGuide/html/UnixMachines/unixMachines.html}
+\url{http://wwwinfo.cern.ch/asd/geant4/G4UsersDocuments/UsersGuides/InstallationGuide/html/UnixMachines/unixMachines.html}
 
 At least variables {\sf G4SYSTEM, G4INSTALL, CLHEP\_BASE\_DIR} are reguired.
  

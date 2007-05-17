@@ -2,7 +2,7 @@ all:	# :::
 	grep ":::" GNUmakefile
 
 man:	# ::: Make manual.
-	make clean; latex manCascade; bibtex manCascade; latex manCascade; latex manCascade; dvips manCascade.dvi -o manCascade.ps; gv manCascade.ps
+	make clean; latex manCascade; bibtex manCascade; latex manCascade; latex manCascade; dvips manCascade.dvi -o manCascade.ps;
 
 pub:	# ::: Make publication.
 	make clean; latex pubCascade; bibtex pubCascade; latex pubCascade; latex pubCascade; dvips pubCascade.dvi -o pubCascade.ps; gv pubCascade.ps
