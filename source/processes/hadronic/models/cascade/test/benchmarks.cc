@@ -26,7 +26,7 @@
 //#define CHECK_MOMC
 
 #include "globals.hh"
-//#include "Randomize.hh"
+#include "Randomize.hh"
 
 #include "G4Collider.hh"
 #include "G4InuclCollider.hh"
@@ -50,18 +50,22 @@
 #include <time.h>
 
 #include "G4BertiniData.hh"
-
+#include "G4CascadSpecialFunctions.hh"
 
 G4int benchmarkAll();
 G4int tTiming();
 G4int tBertiniData();
+G4int tCrossSections();
 
-int main() {
+int main(int argc, char **argv ) {
 
   benchmarkAll(); // Run all models in tandem
 
   G4cout << "Timing:  " ; if (tTiming()){ G4cout << "OK";} else {G4cout << "fail" << G4endl;}; G4cout << G4endl;  // test timing 
+
   G4cout << "Bertini data:  " ; if (tBertiniData()){ G4cout << "OK";} else {G4cout << "fail" << G4endl;}; G4cout << G4endl;  // test singleton data container 
+
+  G4cout << "Cross section:  " ; if (tCrossSections()){ G4cout << "OK";} else {G4cout << "fail" << G4endl;}; G4cout << G4endl;  // test cross sections 
   return 0;       
 
 
@@ -206,3 +210,33 @@ int tBertiniData() // test and demontrate singleton usage
    delete db;
    return 1;
 }    
+
+
+G4int tCrossSections() {   // print cross section data
+  G4int verboseLevel = 1;
+
+  if (verboseLevel > 1) {
+    G4cout << " >>> crossSections() " << G4endl;
+  }
+
+  if (verboseLevel > 1) {
+    G4cout << " MeV: " << MeV << " GeV: " << GeV << G4endl;
+  }
+
+  // 100  <> 10 GeV
+  const G4int types[] = { 1, 2, 3, 5, 7};
+
+  for (G4int iE = 1; iE < 151; iE++) { 
+
+    if (verboseLevel > 0) {
+      G4cout.precision(4);
+      G4double e = G4double(iE) / 10.0;
+      G4cout << std::setw(9)  << e;
+
+	for (G4int j = 0; j < 5; j++) {
+	  G4cout << std::setw(9)  << G4CascadSpecialFunctions::crossSection(e, types[j]);
+	}}
+    G4cout << G4endl;
+  }
+  return 1;
+}

@@ -1,5 +1,3 @@
-name := basicTest
-name := bertiniDataTest
 name := cascade
 name := cascadeTest
 name := data
