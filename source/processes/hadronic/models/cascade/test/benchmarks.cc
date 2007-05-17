@@ -49,16 +49,22 @@
 #include <iomanip>
 #include <time.h>
 
+#include "G4BertiniData.hh"
+
 
 G4int benchmarkAll();
 G4int tTiming();
+G4int tBertiniData();
 
 int main() {
 
   benchmarkAll(); // Run all models in tandem
 
-  G4cout << "Timing:  " ; if (tTiming()){ G4cout << "OK";} else {G4cout << "fail" << G4endl;}; G4cout << G4endl;  % test timing 
+  G4cout << "Timing:  " ; if (tTiming()){ G4cout << "OK";} else {G4cout << "fail" << G4endl;}; G4cout << G4endl;  // test timing 
+  G4cout << "Bertini data:  " ; if (tBertiniData()){ G4cout << "OK";} else {G4cout << "fail" << G4endl;}; G4cout << G4endl;  // test singleton data container 
   return 0;       
+
+
 }
 
 G4int benchmarkAll()  {
@@ -187,3 +193,16 @@ int tTiming() {
   return 1;
 }
 
+
+
+int tBertiniData() // test and demontrate singleton usage
+{
+   G4cout << G4endl << "testing G4BertiniData" << G4endl;
+   G4BertiniData *db = new G4BertiniData(); // sever
+
+   G4BertiniData *data1 = db->Instance(); // client 
+   G4BertiniData *data2 = db->Instance(); // old instance used
+
+   delete db;
+   return 1;
+}    
