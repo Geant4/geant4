@@ -64,6 +64,9 @@
 #include "G4KineticTrackVector.hh"
 #include "G4Fancy3DNucleus.hh"
 
+#include "G4CascadeInterface.hh"
+#include "G4VParticleChange.hh"
+#include "G4Track.hh"
 
 void test(char*, int);
 G4int benchmarkAll();
@@ -73,16 +76,18 @@ G4int tCrossSections();
 G4int tInterface();
 G4int tAnalyzer();
 G4int tToyModel();
+G4int tCascadeInterface();
 
 int main(int argc, char **argv ) {
 
-  test("Productions",    benchmarkAll()); // Run all models in tandem
-  test("Timing",         tTiming());
-  test("Bertini data",   tBertiniData());
-  test("Cross sections", tCrossSections());
-  test("Interface",      tInterface());
-  test("Analyzer",       tAnalyzer());
-  test("Toy model",       tToyModel());
+  test("Productions",       benchmarkAll()); // Run all models in tandem
+  test("Timing",            tTiming());
+  test("Bertini data",      tBertiniData());
+  test("Cross sections",    tCrossSections());
+  test("Interface",         tInterface());
+  test("Analyzer",          tAnalyzer());
+  test("Toy model",         tToyModel());
+  test("Cascade interface", tCascadeInterface());
 
   return 0;       
 }
@@ -137,10 +142,10 @@ G4int benchmarkAll()  {
     G4InuclParticle* targ = NULL;
 
     switch (e) {
-     // ::: add standard H,Be, Cu, Lb, U
-      case 1:
-     targ = new G4InuclNuclei(0.0, 197.0, 79.0);     // Au197 target at rest
-     default:
+      // ::: add standard H,Be, Cu, Lb, U
+    case 1:
+      targ = new G4InuclNuclei(0.0, 197.0, 79.0);     // Au197 target at rest
+    default:
       targ = new G4InuclNuclei(0.0, 208.0, 82.0); // Pb
     }
 
@@ -193,7 +198,7 @@ int tTiming() { // Test speed of pow(x, 2) compared to x * x
   startTime = clock();
 
   for(G4int i = 1; i < LOOPS; i++){
-       G4double ans = std::pow(y[2], 2);
+    G4double ans = std::pow(y[2], 2);
   };
   endTime = clock();
   //  G4double firstTime = (G4double)(endTime - startTime) /
@@ -223,14 +228,14 @@ int tTiming() { // Test speed of pow(x, 2) compared to x * x
 
 int tBertiniData() // test and demontrate singleton usage
 {
-   G4cout << G4endl << "testing G4BertiniData" << G4endl;
-   G4BertiniData *db = new G4BertiniData(); // sever
+  G4cout << G4endl << "testing G4BertiniData" << G4endl;
+  G4BertiniData *db = new G4BertiniData(); // sever
 
-   G4BertiniData *data1 = db->Instance(); // client 
-   G4BertiniData *data2 = db->Instance(); // old instance used
+  G4BertiniData *data1 = db->Instance(); // client 
+  G4BertiniData *data2 = db->Instance(); // old instance used
 
-   delete db;
-   return 1;
+  delete db;
+  return 1;
 }    
 
 
@@ -255,9 +260,9 @@ G4int tCrossSections() {   // print cross section data
       G4double e = G4double(iE) / 10.0;
       G4cout << std::setw(9)  << e;
 
-	for (G4int j = 0; j < 5; j++) {
-	  G4cout << std::setw(9)  << G4CascadSpecialFunctions::crossSection(e, types[j]);
-	}}
+      for (G4int j = 0; j < 5; j++) {
+	G4cout << std::setw(9)  << G4CascadSpecialFunctions::crossSection(e, types[j]);
+      }}
     G4cout << G4endl;
   }
   return 1;
@@ -268,8 +273,8 @@ G4int tCrossSections() {   // print cross section data
 
 int tInterface() { // test iterface
 
-typedef std::vector<G4InuclElementaryParticle>::iterator particleIterator;
-typedef std::vector<G4InuclNuclei>::iterator nucleiIterator;
+  typedef std::vector<G4InuclElementaryParticle>::iterator particleIterator;
+  typedef std::vector<G4InuclNuclei>::iterator nucleiIterator;
 
   enum particleType { nuclei = 0, proton = 1, neutron = 2, pionPlus = 3, pionMinus = 5, pionZero = 7, photon = 10 };
   G4int verboseLevel = 3;
@@ -311,11 +316,11 @@ typedef std::vector<G4InuclNuclei>::iterator nucleiIterator;
 	targetH = new G4InuclElementaryParticle((model->generateNucleon(1, 1)).getMomentum(), 1); 
    
 	//		do
-	  {
-	    G4cout << "+";
-	    output = collider->collide(bullet, targetH); 
-	  } 
-	  //		while(output.getOutgoingParticles().size()<2.5);
+	{
+	  G4cout << "+";
+	  output = collider->collide(bullet, targetH); 
+	} 
+	//		while(output.getOutgoingParticles().size()<2.5);
       } 
     else 
       {
@@ -530,7 +535,7 @@ int tToyModel() {
   for (G4int cascadeIndex = 1; cascadeIndex <= numberOfCascades; cascadeIndex++){
 
     G4cout << G4endl << "........................ cascade " << cascadeIndex << 
-                        " .............................." << G4endl;
+      " .............................." << G4endl;
 
     // Select the impact parameter b
     G4double targetNucleusA = targetNucleusN + targetNucleusZ;
@@ -555,7 +560,7 @@ int tToyModel() {
     // Choose the sruck particle (n/p)
     particleType targetParticle;
     if (G4UniformRand() < targetNucleusZ * xSecProton / 
-                        ( targetNucleusZ * xSecProton + targetNucleusN * xSecNeutron))
+	( targetNucleusZ * xSecProton + targetNucleusN * xSecNeutron))
       targetParticle = proton;
     else 
       targetParticle = neutron;
@@ -646,41 +651,94 @@ int tToyModel() {
   return 1;
 }    
 /*
-       ... intra-nuclear cascade toy model ...
+  ... intra-nuclear cascade toy model ...
 
- Nucleus mass number = 12
- Nucleus mass = 11174.9
- Nucleus charge = 6
- projectile                 : 0
- projectile energy          : 1000 MeV
- neutrons in target nucleus : 10
- protons  in target nucleus : 10
+  Nucleus mass number = 12
+  Nucleus mass = 11174.9
+  Nucleus charge = 6
+  projectile                 : 0
+  projectile energy          : 1000 MeV
+  neutrons in target nucleus : 10
+  protons  in target nucleus : 10
 
-........................ cascade 1 ..............................
-impact point (x, y, z) :        -2.82281e-31,   0,      2.36724e-31
-interaction distance   :        3.54704e-20
-target particle        :        1
-target  momentum       :        152.393
-target direction       :        -0.713471,      2.86607
-collision type         :        0
- scattering angle      :        0.159015
- azimuthal angle       :        4.14197
-pauli plocking
+  ........................ cascade 1 ..............................
+  impact point (x, y, z) :        -2.82281e-31,   0,      2.36724e-31
+  interaction distance   :        3.54704e-20
+  target particle        :        1
+  target  momentum       :        152.393
+  target direction       :        -0.713471,      2.86607
+  collision type         :        0
+  scattering angle      :        0.159015
+  azimuthal angle       :        4.14197
+  pauli plocking
 
-........................ cascade 2 ..............................
-impact point (x, y, z) :        -2.82281e-31,   0,      2.36724e-31
-interaction distance   :        3.54704e-20
-target particle        :        1
-target  momentum       :        152.393
-target direction       :        -0.713471,      2.86607
-collision type         :        0
- scattering angle      :        0.159015
- azimuthal angle       :        4.14197
-pauli plocking
-energy below cut-off  
+  ........................ cascade 2 ..............................
+  impact point (x, y, z) :        -2.82281e-31,   0,      2.36724e-31
+  interaction distance   :        3.54704e-20
+  target particle        :        1
+  target  momentum       :        152.393
+  target direction       :        -0.713471,      2.86607
+  collision type         :        0
+  scattering angle      :        0.159015
+  azimuthal angle       :        4.14197
+  pauli plocking
+  energy below cut-off  
 
 */
 
+int tCascadeInterface() {
+ 
+  // Set test parameters
+  G4int verboseLevel                = 2;                          
+  G4int numberOfCascades            = 10; 
+  G4double projectileMomentum       = 1.0 * GeV;
+  //G4ParticleDefinition *particle = G4PionMinus::PionMinus();  
+  //G4ParticleDefinition *particle = G4Neutron::Neutron();  
+  G4ParticleDefinition *particle = G4Proton::Proton();  
 
+  // Create projectile particle
+  G4DynamicParticle *projectile = new G4DynamicParticle(); 
+  projectile->SetDefinition(particle);
+  //projectile->SetKineticEnergy( 1.0 * GeV);
+  projectile->SetMomentum(projectileMomentum);
+  projectile->SetMomentumDirection(1.0, 0.0, 0.0);  
 
+  if (verboseLevel > 1) {
+    G4cout << "projectile" << G4endl;
+    G4cout << " type           : " << projectile->GetDefinition()        << G4endl;
+    G4cout << " kinetic energy : " << projectile->GetKineticEnergy()     << G4endl;
+    G4cout << " momentum       : " << projectile->GetMomentum()          << G4endl;
+    G4cout << " p direction    : " << projectile->GetMomentumDirection() << G4endl;
+  }
 
+  // Set projectile particle track
+  G4ThreeVector v;                                            
+  v.setX(0.0 * fermi); 
+  v.setY(0.0 * fermi); 
+  v.setZ(0.0 * fermi);
+  G4Track aTrack(projectile, 0, v);
+
+  // Set target nucleus
+  G4Nucleus targetNucleus;                                        
+  G4double a(10);
+  G4double z(10);
+  targetNucleus.SetParameters(a, z);
+  G4VParticleChange *cascadeParticles;
+
+  if (verboseLevel > 1) {
+    G4cout << "target" << G4endl;
+    G4cout << " a              : " << a                              << G4endl;
+    G4cout << " z              : " << z                              << G4endl;
+    G4cout << " atomic mass    : " << targetNucleus.AtomicMass(a, z) << G4endl;
+  }
+
+  G4CascadeInterface *theCascade  = new G4CascadeInterface();
+  for (G4int cascadeID =1 ; cascadeID <= numberOfCascades; cascadeID++) { 
+    if (verboseLevel > 1) G4cout << "inc " << cascadeID << G4endl;
+    //    cascadeParticles = theCascade->ApplyYourself(aTrack, targetNucleus);
+  }
+
+  delete projectile;
+  delete theCascade;
+  return 1;   
+}

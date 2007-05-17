@@ -1,8 +1,4 @@
 name := cascade
-name := cascadeTest
-name := hetcCascadeTest
-name := testInterface
-name := toyModelTest
 name := benchmarks
 
 G4TARGET := $(name)
