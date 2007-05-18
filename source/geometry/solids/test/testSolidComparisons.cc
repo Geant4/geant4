@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: testSolidComparisons.cc,v 1.5 2007-02-12 11:29:23 gcosmo Exp $
+// $Id: testSolidComparisons.cc,v 1.6 2007-05-18 11:06:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -42,6 +42,7 @@
 
 #include "globals.hh"
 #include "geomdefs.hh"
+#include "G4GeometryTolerance.hh"
 
 #include "G4ThreeVector.hh"
 #include "G4TwoVector.hh"
@@ -78,7 +79,9 @@ G4bool compareEllipsoidtoOrb(G4int N)
   G4int i=0, n=0;
   G4ThreeVector pin, pout, dir;
   G4double xin, yin, zin, xout, yout, zout, dist1, dist2, dist;
-   
+
+  G4double kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
+
   // construct the ellipsoid and Orb with the same dimensions 
   
   G4Ellipsoid t1("Solid Ellipsoid #1",
@@ -148,6 +151,8 @@ G4bool compareEllipsoidtoSphere(G4int N)
   G4ThreeVector pin, pout, dir;
   G4double xin, yin, zin, xout, yout, zout, dist1, dist2, dist;
     
+  G4double kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
+
   // construct the ellipsoid and sphere with the same dimensions 
   
   G4Ellipsoid  t1("Solid Ellipsoid #1",
@@ -221,6 +226,8 @@ G4bool compareEllipticalTubetoTubs(G4int N)
   G4ThreeVector pin, pout, dir;
   G4double xin, yin, zin, xout, yout, zout, dist1, dist2,dist;
     
+  G4double kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
+
   // construct the tube and elliptical tube with the same dimensions 
   
   G4EllipticalTube t1("Solid EllipticalTube #1",
@@ -294,6 +301,8 @@ G4bool compareBoxtoTrap(G4int N)
   G4ThreeVector pin, pout, dir;
   G4double xin, yin, zin, xout, yout, zout, dist1, dist2, dist;
     
+  G4double kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
+
   G4ThreeVector pt[8] = { G4ThreeVector(-20*cm,-20*cm,-20*cm ),
 			  G4ThreeVector( 20*cm,-20*cm,-20*cm ),
 			  G4ThreeVector(-20*cm, 20*cm,-20*cm ),
@@ -373,6 +382,8 @@ G4bool compareSpheretoOrb(G4int N)
   G4ThreeVector pin, pout, dir;
   G4double xin, yin, zin, xout, yout, zout, dist1, dist2,dist;
     
+  G4double kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
+
   // construct the ellipsoid and sphere with the same dimensions 
   
   G4Orb  t1("Solid Orb #1",
@@ -442,6 +453,8 @@ G4bool compareBoxtoExtruded(G4int N)
   G4ThreeVector pin, pout, dir;
   G4double xin, yin, zin, xout, yout, zout, dist1, dist2, dist;
  
+  G4double kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
+
   // construct the Extruded-Solid and Box with the same dimensions 
   
   std::vector<G4TwoVector> polygon;
