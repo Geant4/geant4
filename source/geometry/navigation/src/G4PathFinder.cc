@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PathFinder.cc,v 1.36 2007-05-18 22:17:16 japost Exp $
+// $Id: G4PathFinder.cc,v 1.37 2007-05-18 22:25:48 japost Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4PathFinder Implementation
@@ -908,6 +908,23 @@ G4PathFinder::DoNextCurvedStep( const G4FieldTrack &initialState,
            << " and proposed step= " << proposedStepLength  << G4endl;
 #endif
 
+  // Calculate the safety values before making the step
+  G4ThreeVector startPoint= initialState.GetPosition(); 
+  for( numNav=0; numNav < fNoActiveNavigators; ++numNav ) {
+     fNewSafety[numNav]= 
+       fpNavigator[numNav]->ComputeSafety( startPoint );
+     
+#ifdef G4DEBUG_PATHFINDER
+     if( fVerboseLevel > 4 ) {
+       int prc= G4cout.precision(9);  // 9
+       G4cout << " PF::Do..Curved..> Calculated safety = " << fNewSafety[numNav] 
+         // << " for nav " << numNav 
+	      << " at " << startPoint << G4endl; 
+       G4cout.precision(prc); 
+     }
+#endif
+  }
+
   // Allow Propagator In Field to do the hard work, calling G4MultiNavigator
   minStep=  fpFieldPropagator->ComputeStep( fieldTrack,
                                             proposedStepLength,
@@ -930,7 +947,7 @@ G4PathFinder::DoNextCurvedStep( const G4FieldTrack &initialState,
 	   << " safety = " << newSafety << G4endl;
   }
 #endif
-  G4double currentStepSize = 0;  
+  G4double currentStepSize;   // = 0.0; 
   if( minStep < proposedStepLength ) {   // if == , then a boundary found at end ??
 
     // Recover the remaining information from MultiNavigator
@@ -957,11 +974,8 @@ G4PathFinder::DoNextCurvedStep( const G4FieldTrack &initialState,
       // if( (currentStepSize < 0) || (diffStep < 0) ) {  }
       
       // fNewSafety[numNav]= preSafety;
-      fNewSafety[numNav]= 0.0;  
+      // WAS: fNewSafety[numNav]= 0.0;  
     // TODO: improve this safety !!
-      // Currently would need to call ComputeSafety at start or endpoint
-      //     endSafety= fpNavigator[numNav]->ComputeSafety( endPoint ); 
-      //     ...
       //   else 
       //     - for pre step safety
       //        notify MultiNavigator about new set of sub-steps
@@ -969,6 +983,8 @@ G4PathFinder::DoNextCurvedStep( const G4FieldTrack &initialState,
       //        instead of lastPreSafety (or as well?)
       //     - for final step start (available)
       //        get final Step start from MultiNavigator
+      // ALSO could calculate ComputeSafety at endpoint
+      //     endSafety= fpNavigator[numNav]->ComputeSafety( endPoint ); 
       fLimitedStep[numNav] = didLimit; 
       fLimitTruth[numNav] = (didLimit != kDoNot ); 
       
@@ -1013,7 +1029,7 @@ G4PathFinder::DoNextCurvedStep( const G4FieldTrack &initialState,
     currentStepSize= minStep;  
     for( numNav=0; numNav < fNoActiveNavigators; ++numNav ) {
       fCurrentStepSize[numNav] = minStep; 
-      fNewSafety[numNav]= 0.0;  
+      // fNewSafety[numNav]= 0.0;   // Correct only for endSafety now
       // Improve it -- see TODO above
       fLimitedStep[numNav] = kDoNot; 
       fLimitTruth[numNav] = false; 
