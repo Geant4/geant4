@@ -12,4 +12,4 @@ include $(G4INSTALL)/config/binmake.gmk
 
 
 b1:  # benchmark 1
-	rm -f b1.out; date; $(G4INSTALL)/bin/$(G4SYSTEM)/benchmarks >> b1.out; date; cat b1.out 
+	rm -f b1.out; date; $(G4INSTALL)/bin/$(G4SYSTEM)/benchmarks 1 >> b1.out; date; cat b1.out 

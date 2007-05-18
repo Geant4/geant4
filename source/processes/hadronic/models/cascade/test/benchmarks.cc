@@ -26,8 +26,6 @@
 //#define CHECK_MOMC
 
 #include <vector>
-//#include <vector.h>
-//#include "vector"
 
 #include <iomanip>
 #include <iostream>
@@ -35,10 +33,8 @@
 #include <stdio.h>
 #include <time.h>
 
-
 #include "globals.hh"
 #include "Randomize.hh"
-
 
 #include "G4Collider.hh"
 #include "G4InuclCollider.hh"
@@ -72,6 +68,7 @@
 
 
 void test(std::string, int);
+G4int tCoulomb();
 G4int benchmarkAll();
 G4int tTiming();
 G4int tBertiniData();
@@ -82,17 +79,54 @@ G4int tToyModel();
 G4int tCascadeInterface();
 
 int main(int argc, char **argv ) {
+    G4int verboseLevel = 2;
+  G4cout << "Geant4 cascade region benchmarks" << G4endl;
 
-  test("Timing",            tTiming());
-  test("Bertini data",      tBertiniData());
-  test("Cross sections",    tCrossSections());
-  test("Toy model",         tToyModel());
-  test("Cascade interface", tCascadeInterface());
-  test("Interface",         tInterface());
-  test("Productions",       benchmarkAll()); // Run all models in tandem
-  test("Analyzer",          tAnalyzer());  
+ if (argc < 2)
+    {
+        printf("usage: benchmarks <test ID> <parameters>\n");
+        return(1);
+    }
+enum particleType { nuclei = 0, proton = 1, neutron = 2, pionPlus = 3, pionMinus = 5, pionZero = 7, foton = 10 };
 
+ // defaults
+G4int testId      = 1;
+G4int nCollisions = 10;      // collisions to be generated
+G4int  bulletType = proton;    // bullet particle
+G4double     momZ = 160;      // momentum in z-direction
+G4double        A = 27.0;      // target atomic weight Al
+G4double        Z = 13.0;      // target atomic number
+  testId      =           (argc > 2) ? atoi(argv[1]) : testId;
+  nCollisions =           (argc > 2) ? atoi(argv[1]) : nCollisions;
+  bulletType  =           (argc > 3) ? atoi(argv[2]) : proton;
+  momZ        = G4double(((argc > 4) ? atoi(argv[3]) : momZ)) / GeV;
+  A           = G4double(((argc > 5) ? atoi(argv[4]) : A));
+  Z           = G4double(((argc > 7) ? atoi(argv[5]) : Z));
 
+  if (verboseLevel > 1) {
+    G4cout << " nCollisions " << nCollisions << G4endl;
+    G4cout << "  bulletType " << bulletType  << G4endl;
+    G4cout << "        momZ " << momZ        << G4endl;
+    G4cout << "           A " << A           << G4endl;
+    G4cout << "           Z " << Z           << G4endl;
+  }
+
+  test("Coulomb",               tCoulomb());
+
+  //  test("Evaporation interface", tEvaporation());
+
+  /*
+  test("Timing",                tTiming());
+
+  test("Bertini data",          tBertiniData());
+  test("Cross sections",        tCrossSections());
+  test("Toy model",             tToyModel());
+  test("Cascade interface",     tCascadeInterface());
+  test("Interface",             tInterface());
+  test("Productions",           benchmarkAll()); // Run all models in tandem
+  test("Analyzer",              tAnalyzer());  
+
+  */
   return 0;       
 }
 
@@ -107,9 +141,8 @@ void test(std::string txt, int testStatus) {
   G4cout << G4endl;  // test timing 
 }
 
-G4int benchmarkAll()  {
-
-  G4int verboseLevel = 1; // For benchmarking  quals 1.
+G4int tCoulomb()  {
+    G4int verboseLevel = 1; // For benchmarking  quals 1.
   
   const G4int to_report = 1;
   G4int    nrain = 100;  // number of interactions to be generated
@@ -154,14 +187,14 @@ G4int benchmarkAll()  {
     }
 
 #ifdef CHECK_MOMC
-    vector<G4double> total_mom_in = bull->getMomentum();
-    vector<G4double> momt = targ->getMomentum();
+    std::vector<G4double> total_mom_in = bull->getMomentum();
+    std::vector<G4double> momt = targ->getMomentum();
     for(G4int i = 0; i < 4; i++) total_mom_in[i] += momt[i];
-    vector<G4double> total_mom_out;
+    std::vector<G4double> total_mom_out;
     bull->printParticle();
     targ->printParticle();
     if (verboseLevel > 1) {
-      G4cout <<std::setw(15)<< " tot in mom: px " <<E<< total_mom_in[1] << " py " << total_mom_in[2] << " pz " << total_mom_in[3] << " e " << total_mom_in[0] << G4endl;
+      G4cout <<std::setw(15)<< " tot in mom: px " << total_mom_in[1] << " py " << total_mom_in[2] << " pz " << total_mom_in[3] << " e " << total_mom_in[0] << G4endl;
     }
 
 #endif
@@ -191,19 +224,106 @@ G4int benchmarkAll()  {
   return 1;
 }
 
+G4int benchmarkAll()  {
+  G4int verboseLevel = 1; // For benchmarking  quals 1.
+  
+  const G4int to_report = 1;
+  G4int    nrain = 100;  // number of interactions to be generated
+  G4double eMin  = 0.1;  // minimun energy for bullet
+  G4double eMax  = 10.0; // maximum energy for bullet
+  G4int    eBins = 10;   // bullet energy bins
+  G4double eStep = (eMax-eMin)/eBins;
+
+  for(G4int e = 0; e < eBins; e++) { // Scan with different energy 
+    // Auxiliarly stuff for ugly analysis
+    G4Analyser* analyser = new G4Analyser();
+    G4WatcherGun* gun = new G4WatcherGun;
+    gun->setWatchers();
+    analyser->setWatchers(gun->getWatchers());
+    analyser->setInelCsec(1760.0, true);
+
+    // Colliders initialisation
+    G4ElementaryParticleCollider*   colep = new G4ElementaryParticleCollider;
+    G4IntraNucleiCascader*        cascade = new G4IntraNucleiCascader; // the actual cascade
+    G4NonEquilibriumEvaporator*     noneq = new G4NonEquilibriumEvaporator;
+    G4EquilibriumEvaporator*         eqil = new G4EquilibriumEvaporator;
+    G4Fissioner*                     fiss = new G4Fissioner;
+    G4BigBanger*                     bigb = new G4BigBanger;
+    G4InuclCollider*             collider = new G4InuclCollider(colep, cascade, noneq, eqil, fiss, bigb);
+
+    // proton momentum in Z-direction [GeV]
+    G4double bulletEnergy = eMin + eStep * e;
+ 
+    if (verboseLevel > 1) {
+      G4cout << "Bullet E =" << bulletEnergy << " GeV" << G4endl;
+    };
+
+    G4InuclParticle* bull = new G4InuclElementaryParticle(bulletEnergy, 1); 
+    G4InuclParticle* targ = NULL;
+
+
+    switch (e) {
+      // ::: add standard H,Be, Cu, Lb, U
+    case 1:
+      targ = new G4InuclNuclei(0.0, 197.0, 79.0);     // Au197 target at rest
+    default:
+      targ = new G4InuclNuclei(0.0, 208.0, 82.0); // Pb
+    }
+
+#ifdef CHECK_MOMC
+    std::vector<G4double> total_mom_in = bull->getMomentum();
+    std::vector<G4double> momt = targ->getMomentum();
+    for(G4int i = 0; i < 4; i++) total_mom_in[i] += momt[i];
+    std::vector<G4double> total_mom_out;
+    bull->printParticle();
+    targ->printParticle();
+    if (verboseLevel > 1) {
+      G4cout <<std::setw(15)<< " tot in mom: px " << total_mom_in[1] << " py " << total_mom_in[2] << " pz " << total_mom_in[3] << " e " << total_mom_in[0] << G4endl;
+    }
+
+#endif
+    for(G4int i = 0; i < nrain; i++) {
+      if((i + 1) % to_report == 0) 
+	if (verboseLevel > 1) {
+	  G4cout << " Event " << i+1 <<":" << G4endl;
+      	}
+
+      G4CollisionOutput cascadeParticles = collider->collide(bull, targ); // standard method
+
+#ifdef CHECK_MOMC
+      total_mom_out = cascadeParticles.getTotalOutputMomentum();
+      G4cout << " 4 - momentum conservation check " << G4endl
+	     << " dE " << total_mom_out[0] - total_mom_in[0] << 
+	" dPx " << total_mom_out[1] - total_mom_in[1] <<
+	" dPy " << total_mom_out[2] - total_mom_in[2] <<
+	" dPz " << total_mom_out[3] - total_mom_in[3] << G4endl;
+#endif
+      analyser->analyse(cascadeParticles);
+    };
+    //  analyser->printResults();
+    //  analyser->printResultsSimple();
+    analyser->printResultsNtuple();
+  }
+
+  return 1;
+
+}
+
 int tTiming() { // Test speed of pow(x, 2) compared to x * x
   G4double y[3]= {1.0, 1.3, 1.2}; 
   y[1]=1.2;
   G4int LOOPS = 20000000; // Set test parameters
-  G4double x = 1.2;
+
   clock_t startTime;
   clock_t endTime;
 
   startTime = clock();
-
+  G4double ans;
   for(G4int i = 1; i < LOOPS; i++){
-    G4double ans = std::pow(y[2], 2);
+    ans = std::pow(y[2], 2);
   };
+  G4cout << "ans =" << ans << G4endl;
+
   endTime = clock();
   //  G4double firstTime = (G4double)(endTime - startTime) /
   //  (CLOCKS_PER_SEC * 1000000.0);
@@ -214,9 +334,9 @@ int tTiming() { // Test speed of pow(x, 2) compared to x * x
 
   startTime = clock();
   for(G4int j = 1; j < LOOPS; j++){
-    G4double ans = y[2] * y[2];
+    ans = y[2] * y[2];
   };
-
+  G4cout << "ans =" << ans << G4endl;
   endTime = clock();
   //  G4double secondTime = (G4double)(endTime - startTime) / 
   //  (CLOCKS_PER_SEC * 1000000.0);
@@ -235,9 +355,8 @@ int tBertiniData() // test and demontrate singleton usage
   G4cout << G4endl << "testing G4BertiniData" << G4endl;
   G4BertiniData *db = new G4BertiniData(); // sever
 
-  G4BertiniData *data1 = db->Instance(); // client 
-  G4BertiniData *data2 = db->Instance(); // old instance used
-
+  // G4BertiniData *data1 = db->Instance(); // client 
+  //G4BertiniData *data2 = db->Instance(); // old instance used
   delete db;
   return 1;
 }    
@@ -272,9 +391,6 @@ G4int tCrossSections() {   // print cross section data
   return 1;
 }
 
-
-
-
 int tInterface() { // test iterface
 
   typedef std::vector<G4InuclElementaryParticle>::iterator particleIterator;
@@ -287,7 +403,7 @@ int tInterface() { // test iterface
       G4cout << "tInterface::   begin" << G4endl; 
     }
 
-  G4int bulletType = 0;
+    //  G4int bulletType = 0;
 
   std::vector<G4double>  momentumBullet(4, 0.0);
   momentumBullet[0] = 1.37126;
@@ -357,13 +473,17 @@ int tInterface() { // test iterface
       particleIterator ipart;
       G4int outgoingParticle;
 
+      G4double ekin;
       for(ipart = particles.begin(); ipart != particles.end(); ipart++) {
 	outgoingParticle = ipart->type();
 	std::vector<G4double> mom = ipart->getMomentum();
-	G4double ekin = ipart->getKineticEnergy() * GeV;
+	ekin = ipart->getKineticEnergy() * GeV;
 	G4ThreeVector aMom(mom[1], mom[2], mom[3]);
 	aMom = aMom.unit();
 
+    if (verboseLevel > 2) {
+      G4cout << "ekin" << ekin << G4endl; 
+    }
       
       }
 
@@ -371,20 +491,22 @@ int tInterface() { // test iterface
 
       for(ifrag = nucleiFragments.begin(); ifrag != nucleiFragments.end(); ifrag++) 
 	{
-	  G4double eKin = ifrag->getKineticEnergy() * GeV;
+	  ekin = ifrag->getKineticEnergy() * GeV;
 	  std::vector<G4double> mom = ifrag->getMomentum();
 	  G4ThreeVector aMom(mom[1], mom[2], mom[3]);
 	  aMom = aMom.unit();
 
 	  // hpw @@@ ==> Should be zero: G4double fragmentExitation = ifrag->getExitationEnergyInGeV();
 
-	  if (verboseLevel > 2) {
-	    G4cout << " Nuclei fragment: " << G4endl;
-	    ifrag->printParticle();
-	  }
+
 	  G4int A = G4int(ifrag->getA());
 	  G4int Z = G4int(ifrag->getZ());
 
+	  if (verboseLevel > 2) {
+	    G4cout << " Nuclei fragment: " << G4endl;
+	    G4cout << "A: " << A << " Z: " << Z << G4endl;
+	    ifrag->printParticle();
+	  }
 	}
     }
   }
@@ -740,7 +862,7 @@ int tCascadeInterface() {
   G4double a(10);
   G4double z(10);
   targetNucleus.SetParameters(a, z);
-  G4VParticleChange *cascadeParticles;
+  //  G4VParticleChange *cascadeParticles;
 
   if (verboseLevel > 1) {
     G4cout << "target" << G4endl;
