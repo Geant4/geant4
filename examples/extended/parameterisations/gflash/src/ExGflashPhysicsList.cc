@@ -128,17 +128,6 @@ void ExGflashPhysicsList::ConstructProcess()
 void ExGflashPhysicsList::AddTransportation()
 {
   G4VUserPhysicsList::AddTransportation();
-
-   theParticleIterator->reset();
-  while( (*theParticleIterator)() ){
- // G4ParticleDefinition* particle = theParticleIterator->value();
-  //G4ProcessManager* pmanager = particle->GetProcessManager();
-//   pmanager->AddDiscreteProcess(new MaxTimeCuts());
-//   pmanager->AddDiscreteProcess(new MinEkineCuts());
-  // pmanager->AddDiscreteProcess(new ExN05MinEkineCuts());
- 
-  ///  pmanager->AddDiscreteProcess(new MinRangeCuts());
-  }		      
 }
 
 #include "G4ComptonScattering.hh"
@@ -318,10 +307,8 @@ void ExGflashPhysicsList::AddParameterisation()
     G4ParticleDefinition* particle = theParticleIterator->value();
     // std::cout<<"--- particle "<<particle->GetParticleName()<<std::endl;
     G4ProcessManager* pmanager = particle->GetProcessManager();
-    // both postStep and alongStep action are required: because
-    // of the use of ghost volumes. If no ghost, the postStep
-    // is sufficient.
-    pmanager->AddProcess(theFastSimulationManagerProcess, -1, 1, 1);
+    // The fast simulation process becomes a discrete process only since 9.0:
+    pmanager->AddDiscreteProcess(theFastSimulationManagerProcess);
   }
 }
 
