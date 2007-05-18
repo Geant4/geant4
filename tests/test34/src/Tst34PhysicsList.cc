@@ -285,10 +285,8 @@ void Tst34PhysicsList::AddParameterisation()
   {
     G4ParticleDefinition* particle = theParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
-    // both postStep and alongStep action are required: because
-    // of the use of ghost volumes. If no ghost, the postStep
-    // is sufficient.
-    pmanager->AddProcess(theFastSimulationManagerProcess, -1, 1, 1);
+    // since 9.0, the fast simulation process is a discrete only process:
+    pmanager->AddDiscreteProcess(theFastSimulationManagerProcess);
   }
 }
 

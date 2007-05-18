@@ -1,4 +1,4 @@
-$Id: History,v 1.4 2005-11-04 14:07:44 gcosmo Exp $
+$Id: History,v 1.5 2007-05-18 15:38:30 mverderi Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+18 may 2007, M. Verderi (test34-V08-03-00)
+- src/Tst34PhysicsList.cc : register fast simulation process a discrete process 
 
 4th November 2005  J.Weng (test34-V07-01-01)
 - Porting to new scheme for G4Region as envelope.
