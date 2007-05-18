@@ -1,4 +1,4 @@
-$Id: History,v 1.44 2007-05-11 14:29:16 mverderi Exp $
+$Id: History,v 1.45 2007-05-18 14:47:41 mverderi Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,7 +15,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-11th May 2007 M. Verderi
+18th May M. Verderi (exampleN05-V09-00-00)
+- remove exampleN05.ref
+
+11th May 2007 M. Verderi (HEAD)
 - migrate to parallel geometry scheme
 - add vis.mac
 
