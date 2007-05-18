@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NewProcessPlacer.cc,v 1.2 2007-05-16 09:09:10 ahoward Exp $
+// $Id: G4NewProcessPlacer.cc,v 1.3 2007-05-18 07:00:57 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -156,7 +156,7 @@ G4ProcessManager *G4NewProcessPlacer::GetProcessManager()
   if (!processmanager)
   {
     G4Exception("G4NewProcessPlacer::GetProcessManager()", "InvalidSetup",
-                FatalException, "NULL pointer to Process Manager !");
+                FatalException, "NULL pointer to Process Manager ! Sampler.Configure() must be after PhysicsList instantiation");
   }
   return processmanager;
 }
