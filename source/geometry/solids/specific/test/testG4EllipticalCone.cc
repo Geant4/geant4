@@ -38,6 +38,7 @@
 
 #include "globals.hh"
 #include "geomdefs.hh"
+#include "G4GeometryTolerance.hh"
 
 #include "G4ThreeVector.hh"
 #include "G4EllipticalCone.hh"
@@ -108,7 +109,9 @@ G4bool testDistanceToIn()
   
   G4int N = 10000;
   G4int n = 0;
-  
+
+  G4double kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
+
   for(G4int i=0; i<N; i++)
   {
     G4ThreeVector point = t1.GetPointOnSurface();
