@@ -69,9 +69,11 @@ void G4HelixMixedStepper::Stepper(  const G4double  yInput[7],
   G4ThreeVector initVelocity= G4ThreeVector( pIn[0], pIn[1], pIn[2]);
   G4double      velocityVal = initVelocity.mag();
   G4double R_1;  
+  G4double Ang_curve;
 
    R_1=std::abs(GetInverseCurve(velocityVal,Bmag));
    Ang_curve=R_1*Step;
+   SetAngCurve(Ang_curve);
    fLastStepSize=Step;
 
    if(Ang_curve<0.33*pi){
@@ -131,6 +133,7 @@ G4double G4HelixMixedStepper::DistChord()   const
   G4double distChord;
   G4double H_helix;
   H_helix=fLastStepSize; 
+  G4double Ang_curve=GetAngCurve();
   
   if(Ang_curve<pi){
     
@@ -138,10 +141,9 @@ G4double G4HelixMixedStepper::DistChord()   const
 
   }
   else{
-    distChord=R_helix;
-   
+    distChord=GetRadHelix();
   }
-  //G4cout<<"distChord="<<distChord<<" hstep="<<H_helix<<"  Helix/R ="<<std::abs(H_helix/R_curve)<<G4endl; 
+ 
   return distChord;
   
 }

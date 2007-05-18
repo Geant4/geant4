@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagHelicalStepper.cc,v 1.18 2007-05-18 12:48:28 tnikitin Exp $
+// $Id: G4MagHelicalStepper.cc,v 1.19 2007-05-18 15:48:42 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -70,6 +70,7 @@ G4MagHelicalStepper::AdvanceHelix( const G4double  yIn[],
   G4double B_d_P;  // B_perp;
   G4double Theta;  // , Theta_1;
   G4double R_1;
+  G4double R_Helix;
   G4double CosT2, SinT2, CosT, SinT;
   //G4double CosT, SinT;
   G4ThreeVector positionMove, endTangent;
@@ -88,9 +89,10 @@ G4MagHelicalStepper::AdvanceHelix( const G4double  yIn[],
    if( (std::fabs(R_1) < 1e-10)||(Bmag<1e-12) ) {
       LinearStep( yIn, h, yHelix );
       // Store and/or calculate parameters for chord distance.
-        R_curve=h;
-        R_helix=0.;
-        Ang_curve=1.;
+     
+         SetAngCurve(1.);     
+         SetCurve(h);
+         SetRadHelix(0.);  
  
   } else {
     // Bnorm = Bfld.unit();
@@ -149,14 +151,16 @@ G4MagHelicalStepper::AdvanceHelix( const G4double  yIn[],
       yHelix[5] = velocityVal * endTangent.z();
 
       // Store and/or calculate parameters for chord distance.
-       R_curve=std::abs(R);
-       Ang_curve=std::abs(Theta);
-
+           
        G4ThreeVector B_x_P_x_B = B_x_P.cross(Bnorm); 
        G4double ptan=B_x_P_x_B.dot(initVelocity);
        G4double particleCharge = fPtrMagEqOfMot->FCof() / (eplus*c_light); 
-       R_helix =std::abs( ptan/(fUnitConstant  * particleCharge*Bmag));
+       R_Helix =std::abs( ptan/(fUnitConstant  * particleCharge*Bmag));
        
+       SetAngCurve(std::abs(Theta));
+       SetCurve(std::abs(R));
+       SetRadHelix(R_Helix);  
+ 
     
   }
 }
@@ -229,15 +233,18 @@ G4MagHelicalStepper::DistChord() const
 {
   // Check whether h/R >  pi  !!
   //  Method DistLine is good only for <  pi
- 
-  if(Ang_curve<pi){
+
+  G4double Ang=GetAngCurve();
+  
+   if(Ang<pi){
      return G4LineSection::Distline( yMidPoint, yInitial, yFinal );
     //  This is a class method that gives distance of Mid 
     //  from the Chord between the Initial and Final points.
 
   }
   else{
-    return R_helix;
+    
+    return GetRadHelix();
   }
  
 }
