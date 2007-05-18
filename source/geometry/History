@@ -1,4 +1,4 @@
-$Id: History,v 1.37 2007-05-11 14:05:00 gcosmo Exp $
+$Id: History,v 1.38 2007-05-18 07:45:44 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May 18, 2007   Gabriele Cosmo               geometry-V08-03-01
+-----------------------------
+- Includes tags: geomdiv-V08-03-01, geomnav-V08-03-02, breps-V08-03-01,
+                 geom-bool-V08-03-00, geom-csg-V08-03-01 and
+                 geom-specific-V08-03-01.
+- Use kAngTolerance and kRadTolerance from G4GeometryTolerance class.
+- Coworks with tag "global-V08-03-03".
 
 May 11, 2007   Gabriele Cosmo               geometry-V08-03-00
 -----------------------------
