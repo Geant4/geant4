@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PathFinder.cc,v 1.34 2007-05-18 17:15:56 japost Exp $
+// $Id: G4PathFinder.cc,v 1.35 2007-05-18 21:37:52 japost Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4PathFinder Implementation
@@ -94,6 +94,9 @@ G4PathFinder::G4PathFinder()
       fLimitedStep[num] = kUndefLimited;
       fCurrentStepSize[num] = -1.0; 
       fLocatedVolume[num] = 0; 
+
+      fNewSafety[num]= -1.0; 
+      fNewSafetyComputed[num]= -1.0; 
    }
    // fpNavigator= new[MaxNav] (G4Navigator*); 
 
@@ -617,7 +620,7 @@ G4double  G4PathFinder::ComputeSafety( const G4ThreeVector& position )
        safety= (*pNavigatorIter)->ComputeSafety( position ); 
   
        if( safety < minSafety ){ minSafety = safety; } 
-       // fNewSafety[num]= safety; 
+       fNewSafetyComputed[num]= safety; 
   
        // G4cout << " Navigator # " << num << " gives safety = " << safety << G4endl;
     } 
@@ -676,6 +679,8 @@ G4PathFinder::CreateTouchableHandle( G4int navId ) const
 
   return G4TouchableHandle(touchHist); 
 }
+
+static const G4int  IdTransport= 0;  // Id of Mass Navigator !!
 
 G4double
 G4PathFinder::DoNextLinearStep( const G4FieldTrack &initialState,
@@ -776,7 +781,7 @@ void
 G4PathFinder::WhichLimited()       // Flag which processes limited the step
 {
   G4int num=-1, last=-1; 
-  const G4int  IdTransport= 0;  // Id of Mass Navigator !!
+  //  const G4int  IdTransport= 0;  // Id of Mass Navigator !!
   G4int noLimited=0; 
   ELimited shared= kSharedOther; 
 
@@ -930,6 +935,9 @@ G4PathFinder::DoNextCurvedStep( const G4FieldTrack &initialState,
 
       finalStep=  fpMultiNavigator->ObtainFinalStep( numNav, lastPreSafety, 
                                                      minStepLast, didLimit );
+
+      // Calculate the step for this geometry, using the 
+      //   final step (the only one which can differ.)
       currentStepSize = fTrueMinStep;  
       G4double diffStep= 0.0; 
       if( (minStepLast != kInfinity) ){ 
