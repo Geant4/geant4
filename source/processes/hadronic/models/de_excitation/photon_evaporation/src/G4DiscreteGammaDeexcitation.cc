@@ -142,12 +142,12 @@ G4bool G4DiscreteGammaDeexcitation::CanDoTransition() const
   if (canDo)  {
     G4double A = nucleus.GetA();
     G4double Z = nucleus.GetZ();
-    if (A <2 || Z<3 || Z>100)
+    if (Z<2 || A<3 || Z>98)
       {
 	canDo = false;
 	if (_verbose > 0) 
 	  G4cout 
-	    << "G4DiscreteGammaDeexcitation::CanDoTransition - n/p/H/>U"
+	    << "G4DiscreteGammaDeexcitation::CanDoTransition - n/p/H/>Cf"
 	    << G4endl;
       }
   }
