@@ -25,7 +25,13 @@
 //
 //#define CHECK_MOMC
 
-#include <iomanip.h>
+#include <vector>
+//#include <iomanip.h>
+#include <iomanip>
+#include <iostream>
+#include <string>
+#include <stdio.h>
+#include <time.h>
 
 #include "globals.hh"
 #include "Randomize.hh"
@@ -43,7 +49,6 @@
 #include "G4CollisionOutput.hh"
 #include "G4Analyser.hh"
 #include "G4WatcherGun.hh"
-#include "vector"
 #include "G4ThreeVector.hh"
 #include "G4NucleiModel.hh"
 #include "G4LorentzConvertor.hh"
@@ -162,7 +167,7 @@ G4int testINCAll(G4int nCollisions, G4int bulletType, G4double momZ, G4double A,
     //G4double bulletEnergy = eMin + eStep * e; 
 
     //    if (verboseLevel > 2) {
-    //  G4cout << "Bullet E =" << bulletEnergy << " GeV" << endl;
+    //  G4cout << "Bullet E =" << bulletEnergy << " GeV" << G4endl;
     //};
 
     // Set target
@@ -260,14 +265,14 @@ G4int testINCAll(G4int nCollisions, G4int bulletType, G4double momZ, G4double A,
 
     if (verboseLevel > -1) {
       G4cout << 
-	setw(8)  << momZ    << 
-	setw(8)  << i    << 
-	setw(8)  << n1 / nc   << 
-	setw(13) << n2 / nc   << 
-	setw(13) << n3 / nc   << 
-	setw(13) << n5 / nc   << 
-	setw(13) << n7 / nc   << 
-	setw(13) << n10 / nc  << G4endl;
+	std::setw(8)  << momZ    << 
+	std::setw(8)  << i    << 
+	std::setw(8)  << n1 / nc   << 
+	std::setw(13) << n2 / nc   << 
+	std::setw(13) << n3 / nc   << 
+	std::setw(13) << n5 / nc   << 
+	std::setw(13) << n7 / nc   << 
+	std::setw(13) << n10 / nc  << G4endl;
     }
   }
 
@@ -331,20 +336,20 @@ G4int printData(G4int i) {
       }
 	
       if (verboseLevel > 0) {
-	cout.precision(3);
+	G4cout.precision(3);
 
 	G4cout << 
-	  setw(8)  << i            << 
-	  setw(8)  << type         << 
-	  setw(13) << ekin / GeV   << 
-	  setw(13) << mom[0]       << 
-	  setw(13) << mom[1]       << 
-	  setw(13) << mom[2]       << 
-	  setw(13) << fA           << 
-	  setw(13) << fZ           << 
-	  setw(13) << fEx          << G4endl;
-	//	  setw(13) << sumBaryon    << 
-	//setw(13) << sumEnergy    << G4endl;
+	  std::setw(8)  << i            << 
+	  std::setw(8)  << type         << 
+	  std::setw(13) << ekin / GeV   << 
+	  std::setw(13) << mom[0]       << 
+	  std::setw(13) << mom[1]       << 
+	  std::setw(13) << mom[2]       << 
+	  std::setw(13) << fA           << 
+	  std::setw(13) << fZ           << 
+	  std::setw(13) << fEx          << G4endl;
+	//	  std::setw(13) << sumBaryon    << 
+	//std::setw(13) << sumEnergy    << G4endl;
       }
 
       eKinTot += ekin;
@@ -370,39 +375,39 @@ G4int printData(G4int i) {
       sumEnergy -= ekin / GeV;
 
       if (verboseLevel > 0) {
-	cout.precision(4);
+	G4cout.precision(4);
 
 	G4cout << 
-	  setw(8)  << i            << 
-	  setw(8)  << type         << 
-	  setw(13) << ekin / GeV   << 
-       	  setw(13) << mom[1]       << 
-       	  setw(13) << mom[2]       << 
-	  setw(13) << mom[3]       << 
-	  setw(13) << 0            << 
-	  setw(13) << 0            << 
-	  setw(13) << 0.0          << G4endl;
-	//	  setw(13) << sumBaryon    << 
-	// setw(13) << sumEnergy    << G4endl;
+	  std::setw(8)  << i            << 
+	  std::setw(8)  << type         << 
+	  std::setw(13) << ekin / GeV   << 
+       	  std::setw(13) << mom[1]       << 
+       	  std::setw(13) << mom[2]       << 
+	  std::setw(13) << mom[3]       << 
+	  std::setw(13) << 0            << 
+	  std::setw(13) << 0            << 
+	  std::setw(13) << 0.0          << G4endl;
+	//	  std::setw(13) << sumBaryon    << 
+	// std::setw(13) << sumEnergy    << G4endl;
       }
       eKinTot += ekin;
     }
   }
 
   if (sumBaryon != 0) {
-    cout << "ERROR: no baryon number conservation, sum of baryons = " << sumBaryon << G4endl;
+    G4cout << "ERROR: no baryon number conservation, sum of baryons = " << sumBaryon << G4endl;
   }
 
   if (verboseLevel > 2) {
     if (sumEnergy > 0.01 ) {
-      cout << "NOTE: Kinetic energy conservation violated by " << sumEnergy << " GeV" << G4endl;
+      G4cout << "NOTE: Kinetic energy conservation violated by " << sumEnergy << " GeV" << G4endl;
     }
 
-    cout << "ERROR: nergy conservation at level  ~" << (eInit  - eTot) * GeV << " MeV" << G4endl;
+    G4cout << "ERROR: nergy conservation at level  ~" << (eInit  - eTot) * GeV << " MeV" << G4endl;
   }
 
   if (sumEnergy < -5.0e-5 ) { // 0.05 MeV
-    cout << "FATAL ERROR: energy created  " << sumEnergy * GeV << " MeV" << G4endl;
+    G4cout << "FATAL ERROR: energy created  " << sumEnergy * GeV << " MeV" << G4endl;
   }
 
   if (verboseLevel > 2) {
@@ -475,7 +480,7 @@ G4int printCross(G4int i) {
 	break;
 
       default:
-	cout << "ERROR: unknown particle" << endl;
+	G4cout << "ERROR: unknown particle" << G4endl;
       }
     }
   }
@@ -511,17 +516,17 @@ G4int test() {
     //G4ThreeVector aMom(mom[1], mom[2], mom[3]);
     //aMom = aMom.unit();
   
-    cout << endl << ">>> previous bug in kin e" << endl;
+    G4cout << G4endl << ">>> previous bug in kin e" << G4endl;
     bull = new G4InuclElementaryParticle(m, 1);
     bull->printParticle();
 
 
-    cout << endl << ">>> kinetic energy ok in z-dir" << endl;
+    G4cout << G4endl << ">>> kinetic energy ok in z-dir" << G4endl;
     m[3] = std::sqrt(momZ * momZ + 2 * momZ * mass);
     bull = new G4InuclElementaryParticle(m, 1);
     bull->printParticle();
 
-    cout << endl << ">>> hole vectos set" << endl;
+    G4cout << G4endl << ">>> hole vectos set" << G4endl;
 
 
     m[3] = mZ;
@@ -536,12 +541,12 @@ G4int test() {
     m[1] = mX;
     m[0] = e;
 
-    cout << endl << ">>> inciming:" << endl;
+    G4cout << G4endl << ">>> inciming:" << G4endl;
     bull = new G4InuclElementaryParticle(m, 1); // expects full mom[0]-mom[3] with correct E tot
     bull->printParticle();
 
-    G4double pLength = std::sqrt(m[0] * m[0] - mass * mass); cout << " pLength " << pLength  << endl;
-    G4double mLength = std::sqrt(m[1] * m[1] + m[2] * m[2] + m[3] * m[3]); cout << " mLength " << mLength << endl;
+    G4double pLength = std::sqrt(m[0] * m[0] - mass * mass); G4cout << " pLength " << pLength  << G4endl;
+    G4double mLength = std::sqrt(m[1] * m[1] + m[2] * m[2] + m[3] * m[3]); G4cout << " mLength " << mLength << G4endl;
 
     G4double scale = 1;
     m[3] = m[3] * scale;
@@ -555,11 +560,11 @@ G4int test() {
     //    bull = new G4InuclElementaryParticle(bulletMomentum, bulletType); // counts mom[0] = E tot from mom[1]-mom[3]
     //    bull = new G4InuclParticle(bulletMomentum); // expects full mom[0]-mom[3] with correct E tot
 
-    cout << endl << ">>> outgoing:" << endl;
+    G4cout << G4endl << ">>> outgoing:" << G4endl;
     bull = new G4InuclElementaryParticle(m, 1); // expects full mom[0]-mom[3] with correct E tot
     bull->printParticle();
 
-    cout << endl << ">>> Bullet initialization" << endl;
+    G4cout << G4endl << ">>> Bullet initialization" << G4endl;
 
     m[3] = 0.0 ;
     m[2] = .585;

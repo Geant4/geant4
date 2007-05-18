@@ -1,5 +1,5 @@
 name := cascade
-name := benchmarks
+#name := benchmarks
 
 G4TARGET := $(name)
 #G4EXLIB := true
