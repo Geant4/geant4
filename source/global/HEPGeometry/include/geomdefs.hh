@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: geomdefs.hh,v 1.7 2007-05-11 13:07:14 gcosmo Exp $
+// $Id: geomdefs.hh,v 1.8 2007-05-18 07:21:39 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,11 +41,6 @@
 
 // `Infinity' - Distance returned for no intersection etc.
 static const G4double kInfinity = 9.0E99;
-
-// Note: values not `tuned', and because of approximations kRadtolerance and
-//       kAngTolerance may not always be used as an exact radius
-static const G4double kRadTolerance = 1E-9*mm;
-static const G4double kAngTolerance = 1E-9*rad;
 
 // Minimum cosine of angle between surface normal & track direction
 // for exiting normal optimisation
