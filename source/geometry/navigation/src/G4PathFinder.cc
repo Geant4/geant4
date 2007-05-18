@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PathFinder.cc,v 1.33 2007-05-18 15:53:15 ahoward Exp $
+// $Id: G4PathFinder.cc,v 1.34 2007-05-18 17:15:56 japost Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4PathFinder Implementation
@@ -172,10 +172,8 @@ G4PathFinder::ComputeStep( const G4FieldTrack &InitialFieldTrack,
 
     // G4cout << " initial = " << InitialFieldTrack << G4endl;
     G4FieldTrack currentState= InitialFieldTrack;
-#ifdef G4DEBUG_PATHFINDER
-    if( fVerboseLevel > 1 )
-      G4cout << " current = " << currentState << G4endl;
-#endif
+    // ifdef G4DEBUG_PATHFINDER // if( fVerboseLevel > 1 )
+    // G4cout << " current = " << currentState << G4endl;
 
     fCurrentStepNo = stepNo; 
 
@@ -191,18 +189,16 @@ G4PathFinder::ComputeStep( const G4FieldTrack &InitialFieldTrack,
           G4double moveLen= std::sqrt( moveLenSq ); 
           G4cout << " G4PathFinder::ComputeStep : Point moved since last step " 
                  << " -- at step # = " << stepNo << G4endl
-                 << " by " << moveLen 
-                 << " to " << newPosition << G4endl;      
+                 << " by " << moveLen  << " to " << newPosition << G4endl;      
        } 
 #endif
        // fRelocatedPoint= true;  //  It has moved !!
        this->MovePoint(); 
 
-#ifdef G4VERBOSE      
-       if( fVerboseLevel > 2 ) { 
-         G4cout << " Calling PathFinder::Locate() from G4PathFinder::ComputeStep() " << G4endl;
-       }
-#endif
+       // if( fVerboseLevel > 2 ) { 
+       //  G4cout << " Calling PathFinder::Locate() from G4PathFinder::ComputeStep() " << G4endl;
+       // }
+
        // Relocate to cope with this move -- else could abort !? 
        Locate( newPosition, newDirection ); 
     }
@@ -280,12 +276,8 @@ G4PathFinder::PrepareNewTrack( const G4ThreeVector position,
   EnableParallelNavigation(true); 
     // Switch PropagatorInField to use MultiNavigator
 
-#ifdef G4DEBUG_PATHFINDER
-  if( fVerboseLevel > 1 ) 
-    G4cout << " G4PathFinder::PrepareNewTrack - entered " << G4endl;
-#endif
-  // static G4TransportationManager* fpTransportManager= 
-  //       G4TransportationManager::GetTransportationManager();
+  // if( fVerboseLevel > 1 ) 
+  // G4cout << " G4PathFinder::PrepareNewTrack - entered " << G4endl;
 
   fNewTrack= true; 
   this->MovePoint();   // Signal further that the last status is wiped
@@ -318,10 +310,8 @@ G4PathFinder::PrepareNewTrack( const G4ThreeVector position,
      fLocatedVolume[num] = 0; 
   }
 
-#ifdef G4DEBUG_PATHFINDER
-  if( fVerboseLevel > 1 ) 
-    G4cout << " Calling PathFinder::Locate() from G4PathFinder::PrepareNewTrack() " << G4endl;
-#endif
+  // if( fVerboseLevel > 1 ) 
+  //   G4cout << " Calling PathFinder::Locate() from G4PathFinder::PrepareNewTrack() " << G4endl;
 
   Locate( position, direction, false );   
   // The first location for each Navigator must be non-relative
@@ -329,11 +319,8 @@ G4PathFinder::PrepareNewTrack( const G4ThreeVector position,
 
   fRelocatedPoint= false; 
 
-#ifdef G4DEBUG_PATHFINDER
-  if( fVerboseLevel > 0 ) {
-    G4cout << " G4PathFinder::PrepareNewTrack : exiting. " << G4endl;
-  }
-#endif
+  // if( fVerboseLevel > 0 )
+  // { G4cout << " G4PathFinder::PrepareNewTrack : exiting. " << G4endl; }
 }
 
 #ifdef G4DEBUG_PATHFINDER
@@ -388,9 +375,7 @@ G4PathFinder::Locate( const   G4ThreeVector& position,
               << "  newTr = " << fNewTrack 
               << "  relocated = " << fRelocatedPoint << G4endl;
     }
-  }
 
-  if( fVerboseLevel > 2 ) { 
     G4cout << " Located at " << position ; 
     if( fNoActiveNavigators > 1 )  G4cout << G4endl;
   }
@@ -417,8 +402,7 @@ G4PathFinder::Locate( const   G4ThreeVector& position,
     
 #ifdef G4DEBUG_PATHFINDER
      if( fVerboseLevel > 2 ){
-       G4cout << " - In world " << num 
-              << "  geomLimStp= " << fLimitTruth[num]
+       G4cout << " - In world " << num << " geomLimStep= " << fLimitTruth[num]
               << "  gives volume= " << pLocated ; 
        if( pLocated ){ 
          G4cout << "  name = '" << pLocated->GetName() << "'"; 
@@ -429,11 +413,8 @@ G4PathFinder::Locate( const   G4ThreeVector& position,
 #endif
   } // ending for (num= ....
 
-#ifdef G4DEBUG_PATHFINDER
-  if( fVerboseLevel > 2 ){
-    G4cout << " G4PathFinder::Locate : exiting. " << G4endl << G4endl; 
-  }
-#endif
+  // if( fVerboseLevel > 2 )
+  // {  G4cout << " G4PathFinder::Locate : exiting. " << G4endl << G4endl; }
   fRelocatedPoint= false;
 }
 
@@ -575,7 +556,6 @@ G4PathFinder::ReLocate( const   G4ThreeVector& position )
     }
   }
 
-#ifdef G4VERBOSE
 #ifdef G4DEBUG_PATHFINDER
   if( fVerboseLevel > 2 ){
     G4cout << G4endl; 
@@ -591,7 +571,6 @@ G4PathFinder::ReLocate( const   G4ThreeVector& position )
               << "  relocated = " << fRelocatedPoint << G4endl;
     }
   }
-#endif
 #endif
 
   for ( num=0; num< fNoActiveNavigators ; ++pNavIter,++num ) {
@@ -614,8 +593,7 @@ G4PathFinder::ReLocate( const   G4ThreeVector& position )
 #ifdef G4DEBUG_PATHFINDER
   if( fVerboseLevel > 2 ){
     G4cout << " G4PathFinder::ReLocate : exiting " 
-           << "  at position " << fLastLocatedPosition << G4endl;
-    G4cout << G4endl;
+           << "  at position " << fLastLocatedPosition << G4endl << G4endl;
   }
 #endif
 
@@ -836,7 +814,6 @@ G4PathFinder::WhichLimited()       // Flag which processes limited the step
     fLimitedStep[ last ] = kUnique; 
   }
 
-#ifdef G4VERBOSE
 #ifdef G4DEBUG_PATHFINDER
   if( fVerboseLevel > 1 ){
     this->PrintLimited();   // --> for tracing 
@@ -844,11 +821,9 @@ G4PathFinder::WhichLimited()       // Flag which processes limited the step
       G4cout << " G4PathFinder::WhichLimited - exiting. " << G4endl;
   }
 #endif
-#endif
 
 }
 
-#ifdef G4DEBUG_PATHFINDER
 void
 G4PathFinder::PrintLimited()
 {
@@ -901,7 +876,6 @@ G4PathFinder::PrintLimited()
   if( fVerboseLevel > 4 )
     G4cout << " G4PathFinder::PrintLimited - exiting. " << G4endl;
 }
-#endif
 
 G4double
 G4PathFinder::DoNextCurvedStep( const G4FieldTrack &initialState,
@@ -1070,27 +1044,3 @@ G4String& G4PathFinder::LimitedString( ELimited lim )
   }
   return *limitedStr;
 }
-
-#if 0 
-// Potential extension ..... ?? 
-     // Return relevant step
-     //  When no field exists or the particle has no charge or EM moment
-
-G4double 
-G4PathFinder::ComputeLinearStep(const G4ThreeVector &pGlobalPoint,
-                                const G4ThreeVector &pDirection,
-                                      G4double  pCurrentProposedStepLength,
-                                      G4double &pNewSafety,
-                                      G4bool   &limitedStep, 
-                                      G4int     stepNo, // See next step/check 
-                                      G4int     navId ) 
-{
-  G4cout << pGlobalPoint << pDirection << pCurrentProposedStepLength
-         << pNewSafety << limitedStep << stepNo << navId << G4endl; 
-
-  G4cout << " G4PathFinder::ComputeLinearStep" << G4endl;
-  G4Exception( " G4PathFinder::ComputeLinearStep is Null",  "203-No Method",
-               FatalException,  "G4PathFinder::ComputeLinearStep is Null" );
-  return 0.500 * pCurrentProposedStepLength;
-}
-#endif
