@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MultiNavigator.cc,v 1.4 2006-11-14 15:41:56 japost Exp $
+// $Id: G4MultiNavigator.cc,v 1.5 2007-05-18 16:21:50 ahoward Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4PathFinder Implementation
@@ -108,12 +108,14 @@ G4double G4MultiNavigator::ComputeStep(const G4ThreeVector &pGlobalPoint,
   G4double safety= 0.0, step=0.0;
   G4double minSafety= DBL_MAX, minStep= DBL_MAX;
 
+#ifdef G4DEBUG_NAVIGATION
   if( fVerboseLevel > 2 ){
     G4cout << " G4MultiNavigator::ComputeStep : entered " << G4endl;
     G4cout << "   Input position= " << pGlobalPoint
            << "   direction= "      << pDirection         << G4endl;
     G4cout << "   Requested step= " << proposedStepLength << G4endl;
   }
+#endif
 
   std::vector<G4Navigator*>::iterator pNavigatorIter;
 
@@ -138,9 +140,11 @@ G4double G4MultiNavigator::ComputeStep(const G4ThreeVector &pGlobalPoint,
      fNewSafety[num]= safety; 
       // This is currently the safety from the last sub-step
 
+#ifdef G4DEBUG_NAVIGATION
      if( fVerboseLevel > 2 ){
        G4cout << "G4MultiNavigator::ComputeStep : Navigator [" << num << "] -- step size " << step << " safety= " << safety << G4endl;
      }
+#endif
   } 
 
   // fWasLimitedByGeometry= false;  // <----- Could reset(?), but navigator leaves it as is
@@ -161,6 +165,7 @@ G4double G4MultiNavigator::ComputeStep(const G4ThreeVector &pGlobalPoint,
   }
   fTrueMinStep = trueMinStep;
 
+#ifdef G4DEBUG_NAVIGATION
   if( fVerboseLevel > 1 ){
     G4ThreeVector endPosition;
     endPosition= initialPosition + trueMinStep * initialDirection ; 
@@ -171,6 +176,7 @@ G4double G4MultiNavigator::ComputeStep(const G4ThreeVector &pGlobalPoint,
            << " and endPosition = " << endPosition<< G4endl;
     G4cout.precision( oldPrec );
   }
+#endif
 
   pNewSafety= minSafety; 
   // Set the EndState
@@ -181,9 +187,11 @@ G4double G4MultiNavigator::ComputeStep(const G4ThreeVector &pGlobalPoint,
 
   this->WhichLimited(); 
 
+#ifdef G4DEBUG_NAVIGATION
   if( fVerboseLevel > 2 ){
     G4cout << " G4MultiNavigator::ComputeStep : exits returning " << minStep << G4endl;
   }
+#endif
 
   return minStep;  // must return kInfinity if do not limit step
 }
@@ -211,11 +219,13 @@ G4MultiNavigator::ObtainFinalStep( G4int        navigatorId,
   minStep= fMinStep; 
 
   // if( (minStep==kInfinity) || (fVerboseLevel > 1) ){ 
+#ifdef G4DEBUG_NAVIGATION
   if( fVerboseLevel > 1 ){ 
      G4cout << " G4MultiNavigator::ComputeStep returns " << fCurrentStepSize[ navigatorNo ]
             << " for Navigator " << navigatorNo << " Limited step = " << limitedStep 
             << " Safety(mm) = " << pNewSafety / mm << G4endl; 
   }
+#endif
 
   return fCurrentStepSize[ navigatorNo ];
 }
@@ -226,16 +236,20 @@ void
 G4MultiNavigator::PrepareNewTrack( const G4ThreeVector position, 
                                    const G4ThreeVector direction )
 {
+#ifdef G4DEBUG_NAVIGATION
   if( fVerboseLevel > 1 ) 
     G4cout << " Entered G4MultiNavigator::PrepareNewTrack() " << G4endl;
+#endif
 
   G4MultiNavigator::PrepareNavigators(); 
   //***********************************
 
+#ifdef G4DEBUG_NAVIGATION
   if( fVerboseLevel > 1 ) {
     G4cout << " Calling MultiNavigator::Locate() from G4MultiNavigator::PrepareNewTrack() " 
            << G4endl;
   }
+#endif
 
   this->LocateGlobalPointAndSetup( position, &direction, false, false );   
   //    =========================
@@ -245,9 +259,11 @@ G4MultiNavigator::PrepareNewTrack( const G4ThreeVector position,
 
   // fRelocatedPoint= false; 
 
+#ifdef G4DEBUG_NAVIGATION
   if( fVerboseLevel > 0 ) {
     G4cout << " G4MultiNavigator::PrepareNewTrack : exiting. " << G4endl;
   }
+#endif
 
 }
 
@@ -259,8 +275,10 @@ G4MultiNavigator::PrepareNavigators()
   //   - Reset state for new track
   G4int num=0; 
 
+#ifdef G4DEBUG_NAVIGATION
   if( fVerboseLevel > 1 ) 
     G4cout << " G4MultiNavigator::PrepareNavigators - entered " << G4endl;
+#endif
   // static G4TransportationManager* pTransportManager= 
   //       G4TransportationManager::GetTransportationManager();
 
@@ -298,23 +316,29 @@ G4MultiNavigator::PrepareNavigators()
   if( (massWorld != fLastMassWorld) && (massWorld!=0) ) { 
      // Pass along change to Mass Navigator
      fpNavigator[0] -> SetWorldVolume( massWorld ); 
+#ifdef G4DEBUG_NAVIGATION
      if( fVerboseLevel > 0 ) { 
        G4cout << "G4MultiNavigator::PrepareNavigators changed world volume " 
               << " for mass geometry to " << massWorld->GetName() << G4endl; 
      }
+#endif
      fLastMassWorld= massWorld;
   }else{
+#ifdef G4DEBUG_NAVIGATION
      if( fVerboseLevel > 2 ) { 
           G4cout << "G4MultiNavigator::PrepareNavigators retained world volume " 
                  << " Pointer= " << massWorld << G4endl;
           if( massWorld ) 
              G4cout << " Name= " << massWorld->GetName() << G4endl;
      }
+#endif
   }
 
+#ifdef G4DEBUG_NAVIGATION
   if( fVerboseLevel > 2 ) {
     G4cout << " G4MultiNavigator::PrepareNavigators : exiting. " << G4endl;
   }
+#endif
 }
 
 
@@ -348,12 +372,14 @@ G4MultiNavigator::LocateGlobalPointAndSetup(const G4ThreeVector& position,
   fLastLocatedPosition= position; 
 #endif
 
+#ifdef G4DEBUG_NAVIGATION
   if( fVerboseLevel > 2 ){
     G4cout << " G4MultiNavigator::LocateGlobalPointAndSetup : entered " << " ---------------" <<  G4endl;
     G4cout << "   Locating at position " << position << "  with direction " << direction 
            << "  relative= " << relative << " ignore direction= " << ignoreDirection<< G4endl;
     G4cout << "   Number of active navigators= " << fNoActiveNavigators << G4endl;
   }
+#endif
 
   for ( num=0; num< fNoActiveNavigators ; ++pNavIter,++num ) {
      //  ... who limited the step ....
@@ -380,6 +406,7 @@ G4MultiNavigator::LocateGlobalPointAndSetup(const G4ThreeVector& position,
      fCurrentStepSize[num] = 0.0;      
      fLimitTruth[ num ] = false;   // Always clear on locating (see Navigator)
     
+#ifdef G4DEBUG_NAVIGATION
      if( fVerboseLevel > 2 ){
        G4cout << " Located in world " << num << " at " << position
               << "  used geomLimStp " << fLimitTruth[num]
@@ -393,12 +420,15 @@ G4MultiNavigator::LocateGlobalPointAndSetup(const G4ThreeVector& position,
        }
        G4cout  << G4endl; 
      }
+#endif
   } // ending for (num= ....
   fWasLimitedByGeometry= false;   // Clear on locating
 
+#ifdef G4DEBUG_NAVIGATION
   if( fVerboseLevel > 2 ){
     G4cout << " G4MultiNavigator::Locate : exiting. " << G4endl << G4endl; 
   }
+#endif
   // fRelocatedPoint= false;
 
   G4VPhysicalVolume* volMassLocated= fLocatedVolume[0]; 
@@ -414,12 +444,14 @@ G4MultiNavigator::LocateGlobalPointWithinVolume(const G4ThreeVector& position)
   // Maximum relative error from roundoff of arithmetic 
   G4int num=0; 
 
+#ifdef G4DEBUG_NAVIGATION
   if( fVerboseLevel > 2 ){
     G4cout << G4endl; 
     G4cout << " G4MultiNavigator::ReLocate : entered " << G4endl;
     G4cout << " ----------------------   -------" <<  G4endl;
     G4cout << "  *Re*Locating at position " << position  << G4endl; 
   }
+#endif
 
   for ( num=0; num< fNoActiveNavigators ; ++pNavIter,++num ) {
      //  ... none limited the step
@@ -442,11 +474,13 @@ G4MultiNavigator::LocateGlobalPointWithinVolume(const G4ThreeVector& position)
   fLastLocatedPosition= position; 
   // fRelocatedPoint= false;
 
+#ifdef G4DEBUG_NAVIGATION
   if( fVerboseLevel > 2 ){
     G4cout << " G4MultiNavigator::LocateGlobalPointWithinVolume : exiting " 
            << "  at position " << position << G4endl;
     G4cout << G4endl;
   }
+#endif
 
 }
 
@@ -475,11 +509,13 @@ G4double  G4MultiNavigator::ComputeSafety( const G4ThreeVector& position,
     fSafetyLocation= position;
     fMinSafety_atSafLocation = minSafety;
 
+#ifdef G4DEBUG_NAVIGATION
     if( fVerboseLevel > 1 ) { 
       G4cout << " G4MultiNavigator::ComputeSafety - returns " 
              << minSafety << " at location " << position 
              << G4endl;
     }
+#endif
     return minSafety; 
 }
 
@@ -494,10 +530,12 @@ G4MultiNavigator::CreateTouchableHistoryHandle() const
                FatalException,  
                "Getting a touchable from G4MultiNavigator is not defined."); 
 
+#ifdef G4DEBUG_NAVIGATION
   if( fVerboseLevel > 2 ){
     G4cout << "G4MultiNavigator::CreateTouchableHandle : navId = " << 0 ;
       //   << " -- " << GetNavigator(navId) << G4endl;
   }
+#endif
 
   G4TouchableHistory* touchHist;
   touchHist= fpNavigator[0] -> CreateTouchableHistory(); 
@@ -523,8 +561,10 @@ G4MultiNavigator::WhichLimited()       // Flag which processes limited the step
   G4int noLimited=0; 
   ELimited shared= kSharedOther; 
 
+#ifdef G4DEBUG_NAVIGATION
   if( fVerboseLevel > 2 )
     G4cout << " G4MultiNavigator::WhichLimited - entered " << G4endl;
+#endif
 
   // Assume that [IdTransport] is Mass / Transport
   // G4bool transportLimited = (fCurrentStepSize[IdTransport] == fMinStep); 
@@ -556,10 +596,12 @@ G4MultiNavigator::WhichLimited()       // Flag which processes limited the step
   }
 
 #ifndef G4NO_VERBOSE
+#ifdef G4DEBUG_NAVIGATION
   if( fVerboseLevel > 1 ){
     this->PrintLimited();   // --> for tracing 
     G4cout << " G4MultiNavigator::WhichLimited - exiting. " << G4endl;
   }
+#endif
 #endif
 
 }
@@ -574,6 +616,7 @@ G4MultiNavigator::PrintLimited()
   G4cout << "  Minimum step (true)= " << fTrueMinStep 
          << "  reported min = " << fMinStep 
          << G4endl; 
+#ifdef G4DEBUG_NAVIGATION
   if(  // (fCurrentStepNo <= 2) || 
       (fVerboseLevel>=2) ) {
     G4cout // << std::setw(5) << " Step#"  << " "
@@ -585,6 +628,7 @@ G4MultiNavigator::PrintLimited()
          << std::setw(15) << "  World "  << " "
          << G4endl;  
   }
+#endif
   int num;
   for ( num= 0; num < fNoActiveNavigators; num++ ) { 
     G4double rawStep = fCurrentStepSize[num]; 
@@ -623,8 +667,10 @@ G4MultiNavigator::PrintLimited()
     G4cout << G4endl;
   }
 
+#ifdef G4DEBUG_NAVIGATION
   if( fVerboseLevel > 2 )
     G4cout << " G4MultiNavigator::PrintLimited - exiting. " << G4endl;
+#endif
 }
  
 
