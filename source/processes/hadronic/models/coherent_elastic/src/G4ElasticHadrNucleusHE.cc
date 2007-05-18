@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElasticHadrNucleusHE.cc,v 1.63 2007-05-17 10:57:52 grichine Exp $
+// $Id: G4ElasticHadrNucleusHE.cc,v 1.64 2007-05-18 10:39:40 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -319,9 +319,22 @@ G4HadFinalState * G4ElasticHadrNucleusHE::ApplyYourself(
   // Sampling in CM system
   G4double phi  = G4UniformRand()*twopi;
   G4double cost = 1. - 2.0*t/tmax;
-  if(std::abs(cost) > 1.0) cost = -1.0 + 2.0*G4UniformRand();
-  G4double sint = std::sqrt((1.0-cost)*(1.0+cost));
-  
+  G4double sint;
+
+  if( cost >= 1.0 ) 
+  {
+    cost = 1.0;
+    sint = 0.0;
+  }
+  else if( cost <= -1.0) 
+  {
+    cost = -1.0;
+    sint =  0.0;
+  }
+  else  
+  {
+    sint = std::sqrt((1.0-cost)*(1.0+cost));
+  }  
   if (verboseLevel>1)
   { 
     G4cout << "cos(t)=" << cost << " std::sin(t)=" << sint << G4endl;

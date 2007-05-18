@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronElastic.cc,v 1.51 2007-05-15 16:06:47 vnivanch Exp $
+// $Id: G4HadronElastic.cc,v 1.52 2007-05-18 10:39:40 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -245,9 +245,22 @@ G4HadFinalState* G4HadronElastic::ApplyYourself(
   // Sampling in CM system
   G4double phi  = G4UniformRand()*twopi;
   G4double cost = 1. - 2.0*t/tmax;
-  if(std::abs(cost) > 1.0) cost = -1.0 + 2.0*G4UniformRand();
-  G4double sint = std::sqrt((1.0-cost)*(1.0+cost));
-  
+  G4double sint;
+
+  if( cost >= 1.0 ) 
+  {
+    cost = 1.0;
+    sint = 0.0;
+  }
+  else if( cost <= -1.0) 
+  {
+    cost = -1.0;
+    sint =  0.0;
+  }
+  else  
+  {
+    sint = std::sqrt((1.0-cost)*(1.0+cost));
+  }    
   if (verboseLevel>1) 
     G4cout << "cos(t)=" << cost << " std::sin(t)=" << sint << G4endl;
 
