@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //////////////////////////////////////////////////////////////////////////
-// $Id: G4FPlaneTest.cc,v 1.7 2006-06-29 18:43:23 gunter Exp $
+// $Id: G4FPlaneTest.cc,v 1.8 2007-05-18 10:31:11 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //////////////////////////////////////////////////////////////////////////
 //
@@ -35,7 +35,7 @@
 #include "G4FPlane.hh"
 #include "G4Surface.hh"
 #include "G4Axis2Placement3D.hh"
-
+#include "G4GeometryTolerance.hh"
 
 
 int main()
@@ -248,6 +248,7 @@ int main()
 	<<"\n   z="<<Rayref.GetDir().z();
 
   int intersec = SurfaceVec1.Intersect(Rayref);
+  G4double kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
 
   if(intersec)
   {

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 
-// $Id: testG4Sphere.cc,v 1.21 2006-06-29 18:46:06 gunter Exp $
+// $Id: testG4Sphere.cc,v 1.22 2007-05-18 10:24:32 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4Sphere Test File
@@ -45,6 +45,7 @@
 #include "geomdefs.hh"
 
 #include "ApproxEqual.hh"
+#include "G4GeometryTolerance.hh"
 
 #include "G4ThreeVector.hh"
 #include "G4RotationMatrix.hh"
@@ -92,6 +93,8 @@ const G4String OutputInside(const EInside a)
 
 int main(void)
 {
+    G4double kAngTolerance = G4GeometryTolerance::GetInstance()->GetAngularTolerance();
+
     G4double Dist, vol, volCheck;
     G4ThreeVector pzero(0,0,0),px(30,0,0),py(0,30,0),pz(0,0,30);
     G4ThreeVector pmx(-30,0,0),pmy(0,-30,0),pmz(0,0,-30);

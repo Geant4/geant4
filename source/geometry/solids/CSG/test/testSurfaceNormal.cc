@@ -46,6 +46,7 @@
 #include "G4Timer.hh"
 
 #include "ApproxEqual.hh"
+#include "G4GeometryTolerance.hh"
 
 #include "G4ThreeVector.hh"
 #include "G4RotationMatrix.hh"
@@ -140,6 +141,8 @@ G4ThreeVector GetVectorOnBox( G4Box& box )
   G4double rand, a, b, c, px, py, pz;
   G4double part = 1./6.;
 
+  G4double kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
+
   a = box.GetXHalfLength();
   b = box.GetYHalfLength();
   c = box.GetZHalfLength();
@@ -194,6 +197,8 @@ G4ThreeVector GetVectorOnOrb(G4Orb& orb)
 {
   G4double cosTheta, sinTheta, phi, radius, px, py, pz;
 
+  G4double kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
+
   radius = orb.GetRadius();
   radius += -0.5*kCarTolerance + (kCarTolerance)*G4UniformRand(); 
 
@@ -220,6 +225,9 @@ G4ThreeVector GetVectorOnSphere(G4Sphere& sphere)
   G4double cosTheta, sinTheta, phi, radius, px, py, pz;
   G4double part = 1./6.;
   G4double rand = G4UniformRand();
+
+  G4double kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
+  G4double kAngTolerance = G4GeometryTolerance::GetInstance()->GetAngularTolerance();
 
   G4double pRmin  = sphere.GetInsideRadius();
   G4double pRmax  = sphere.GetOuterRadius();
@@ -318,6 +326,9 @@ G4ThreeVector GetVectorOnTubs(G4Tubs& tubs)
   G4double part = 1./6.;
   G4double rand = G4UniformRand();
 
+  G4double kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
+  G4double kAngTolerance = G4GeometryTolerance::GetInstance()->GetAngularTolerance();
+
   G4double pRmin = tubs.GetInnerRadius   ();
   G4double pRmax = tubs.GetOuterRadius   ();
   G4double tubsZ = tubs.GetZHalfLength   ();
@@ -379,6 +390,9 @@ G4ThreeVector GetVectorOnCons(G4Cons& cons)
   G4double phi, pRmin, pRmax, radius, px, py, pz;
   G4double part = 1./6.;
   G4double rand = G4UniformRand();
+
+  G4double kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
+  G4double kAngTolerance = G4GeometryTolerance::GetInstance()->GetAngularTolerance();
 
   G4double pRmin1 = cons.GetInnerRadiusMinusZ   ();
   G4double pRmax1 = cons.GetOuterRadiusMinusZ   ();
@@ -448,6 +462,9 @@ G4ThreeVector GetVectorOnTorus(G4Torus& torus)
   G4double phi, radius, alpha, px, py, pz;
   G4double part = 1./4.;
   G4double rand = G4UniformRand();
+
+  G4double kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
+  G4double kAngTolerance = G4GeometryTolerance::GetInstance()->GetAngularTolerance();
 
   G4double pRmin = torus.GetRmin();
   G4double pRmax = torus.GetRmax();
@@ -561,6 +578,7 @@ int test_one_solid ( Esolid useCase,  int num_points, int directions_per_point )
   G4int iCheck=iMax/10;
 
   G4double distIn, distOut;
+  G4double kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
 
   G4double Rtor = 100 ;
   G4double Rmax = Rtor*0.9 ;

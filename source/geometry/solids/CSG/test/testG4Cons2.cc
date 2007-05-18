@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4Cons2.cc,v 1.19 2007-05-04 08:44:57 grichine Exp $
+// $Id: testG4Cons2.cc,v 1.20 2007-05-18 10:24:32 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Simple test of G4Cons
@@ -44,6 +44,7 @@
 #include "G4RotationMatrix.hh"
 #include "G4AffineTransform.hh"
 #include "G4VoxelLimits.hh"
+#include "G4GeometryTolerance.hh"
 
 #define	DELTA 0.0001
 
@@ -81,6 +82,9 @@ const G4String OutputInside(const EInside a)
 int main(void)
 {
 	G4double dist, vol, volCheck;
+
+        G4double kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
+        G4double kRadTolerance = G4GeometryTolerance::GetInstance()->GetRadialTolerance();
 
 	G4ThreeVector   pzero(0,0,0);
 	
@@ -1019,14 +1023,3 @@ G4cout<<"Error:c9.Out((1e3*kRadTolerance,0,50),vx2mz,...) = " <<dist << G4endl;
 
 	return 0;
 }
-
-
-
-
-
-
-
-
-
-
-

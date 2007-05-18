@@ -53,6 +53,7 @@
 #include "G4RotationMatrix.hh"
 #include "G4AffineTransform.hh"
 #include "G4VoxelLimits.hh"
+#include "G4GeometryTolerance.hh"
 
 #include "G4Box.hh"
 #include "G4Orb.hh"
@@ -142,6 +143,8 @@ G4ThreeVector GetVectorAroundBox( G4Box& box )
   G4double a, b, c, px, py, pz;
   G4double part = std::pow(2,1./3.);
 
+  G4double kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
+
   a = part*box.GetXHalfLength();
   b = part*box.GetYHalfLength();
   c = part*box.GetZHalfLength();
@@ -221,6 +224,9 @@ G4ThreeVector GetVectorOnSphere(G4Sphere& sphere)
   G4double phi2   = phi1 + sphere.GetDeltaPhiAngle();
   G4double theta1 = sphere.GetStartThetaAngle();
   G4double theta2 = theta1 + sphere.GetDeltaThetaAngle();
+
+  G4double kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
+  G4double kAngTolerance = G4GeometryTolerance::GetInstance()->GetAngularTolerance();
 
   if      ( rand < part ) // Rmax
   {
@@ -344,14 +350,17 @@ G4ThreeVector GetVectorAroundSphere(G4Sphere& sphere)
 G4ThreeVector GetVectorOnTubs(G4Tubs& tubs)
 {
   G4double phi, radius, px, py, pz;
-  G4double part = 1.;
-  G4double rand = G4UniformRand();
+  // G4double part = 1.;
+  // G4double rand = G4UniformRand();
 
-  G4double pRmin = tubs.GetInnerRadius   ();
+  // G4double pRmin = tubs.GetInnerRadius   ();
   G4double pRmax = tubs.GetOuterRadius   ();
   G4double tubsZ = 0.999*tubs.GetZHalfLength   ();
-  G4double phi1  = tubs.GetStartPhiAngle ();
-  G4double phi2  = phi1 + tubs.GetDeltaPhiAngle ();
+  // G4double phi1  = tubs.GetStartPhiAngle ();
+  // G4double phi2  = phi1 + tubs.GetDeltaPhiAngle ();
+
+  // G4double kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
+  // G4double kAngTolerance = G4GeometryTolerance::GetInstance()->GetAngularTolerance();
 
   // if      ( rand < part ) // Rmax
   {
@@ -443,6 +452,9 @@ G4ThreeVector GetVectorOnCons(G4Cons& cons)
   // G4double part = 1.;   // /6.;
   // G4double rand = G4UniformRand();
 
+  // G4double kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
+  // G4double kAngTolerance = G4GeometryTolerance::GetInstance()->GetAngularTolerance();
+
   // G4double pRmin1 = cons.GetInnerRadiusMinusZ   ();
   G4double pRmax1 = cons.GetOuterRadiusMinusZ   ();
   // G4double pRmin2 = cons.GetInnerRadiusPlusZ   ();
@@ -516,18 +528,18 @@ G4ThreeVector GetVectorOnCons(G4Cons& cons)
 
 G4ThreeVector GetVectorAroundCons(G4Cons& cons)
 {
-  G4double phi, pRmin, pRmax, radius, px, py, pz;
+  G4double phi, pRmax, radius, px, py, pz;
  
-  G4double rand = G4UniformRand();
+  // G4double rand = G4UniformRand();
 
-  G4double pRmin1 = cons.GetInnerRadiusMinusZ   ();
+  // G4double pRmin1 = cons.GetInnerRadiusMinusZ   ();
   G4double pRmax1 = cons.GetOuterRadiusMinusZ   ();
-  G4double pRmin2 = cons.GetInnerRadiusPlusZ   ();
+  // G4double pRmin2 = cons.GetInnerRadiusPlusZ   ();
   G4double pRmax2 = cons.GetOuterRadiusPlusZ   ();
   G4double consZ  = cons.GetZHalfLength   ();
-  G4double phi1   = cons.GetStartPhiAngle ();
-  G4double phi2   = phi1 + cons.GetDeltaPhiAngle ();
-  G4double tgMin  = (pRmin2 - pRmin1)/(2.*consZ);
+  // G4double phi1   = cons.GetStartPhiAngle ();
+  // G4double phi2   = phi1 + cons.GetDeltaPhiAngle ();
+  // G4double tgMin  = (pRmin2 - pRmin1)/(2.*consZ);
   G4double tgMax  = (pRmax2 - pRmax1)/(2.*consZ);
 
   consZ *= 0.999;
@@ -559,6 +571,9 @@ G4ThreeVector GetVectorOnTorus(G4Torus& torus)
   G4double pRtor = torus.GetRtor();
   // G4double phi1  = torus.GetSPhi();
   // G4double phi2  = phi1 + torus.GetDPhi ();
+
+  // G4double kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
+  // G4double kAngTolerance = G4GeometryTolerance::GetInstance()->GetAngularTolerance();
 
   // if      ( rand < part ) // Rmax
   {
@@ -690,6 +705,8 @@ int test_one_solid ( Esolid useCase,  int num_points, int directions_per_point )
   G4int i,j;
   G4int iMax =  num_points, jMax = directions_per_point;
   G4int iCheck=iMax/10;
+
+  G4double kRadTolerance = G4GeometryTolerance::GetInstance()->GetRadialTolerance();
 
   jMax = 50;
 

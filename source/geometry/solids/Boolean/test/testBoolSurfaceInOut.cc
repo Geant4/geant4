@@ -232,7 +232,7 @@ G4ThreeVector GetVectorOnSphere(G4Sphere& sphere)
   G4double theta1 = sphere.GetStartThetaAngle();
   G4double theta2 = theta1 + sphere.GetDeltaThetaAngle();
   G4double kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
-  G4double kAngTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
+  G4double kAngTolerance = G4GeometryTolerance::GetInstance()->GetAngularTolerance();
 
   if      ( rand < part ) // Rmax
   {

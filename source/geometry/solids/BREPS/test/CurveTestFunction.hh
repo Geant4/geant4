@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //////////////////////////////////////////////////////////////////////////
-// $Id: CurveTestFunction.hh,v 1.8 2006-06-29 18:43:03 gunter Exp $
+// $Id: CurveTestFunction.hh,v 1.9 2007-05-18 10:31:11 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //////////////////////////////////////////////////////////////////////////
 //
@@ -85,7 +85,7 @@ G4double GetRandomP(G4Curve* c)
   if ( max<=min && pMax>0) 
     max+= pMax;
   
-  G4double r= RandFlat::shoot(min, max);
+  G4double r= CLHEP::RandFlat::shoot(min, max);
   
   if (pMax>0 && r>=pMax) 
     r-= pMax;

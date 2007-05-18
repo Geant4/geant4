@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4Tubs.cc,v 1.20 2007-05-04 08:44:57 grichine Exp $
+// $Id: testG4Tubs.cc,v 1.21 2007-05-18 10:24:32 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -46,6 +46,7 @@
 #include "geomdefs.hh"
 
 #include "ApproxEqual.hh"
+#include "G4GeometryTolerance.hh"
 
 #include "G4ThreeVector.hh"
 #include "G4Tubs.hh"
@@ -74,6 +75,8 @@ G4bool testG4Tubs()
     G4cout.precision(16) ;
     EInside side;
     G4ThreeVector pzero(0,0,0);
+
+    G4double kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
 
     G4ThreeVector pbigx(100,0,0),pbigy(0,100,0),pbigz(0,0,100);
     G4ThreeVector pbigmx(-100,0,0),pbigmy(0,-100,0),pbigmz(0,0,-100);

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4Torus.cc,v 1.15 2006-06-29 18:46:12 gunter Exp $
+// $Id: testG4Torus.cc,v 1.16 2007-05-18 10:24:32 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -41,6 +41,7 @@
 
 #include "globals.hh"
 #include "geomdefs.hh"
+#include "G4GeometryTolerance.hh"
 
 #include "ApproxEqual.hh"
 
@@ -81,6 +82,8 @@ G4bool testG4Torus()
    EInside side;
    G4ThreeVector *pNorm,norm;
    G4bool *pgoodNorm,goodNorm,calcNorm=true;
+
+   G4double kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
 
    pNorm=&norm;
    pgoodNorm=&goodNorm;

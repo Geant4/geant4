@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 
-// $Id: testG4Sphere2.cc,v 1.5 2006-06-29 18:46:09 gunter Exp $
+// $Id: testG4Sphere2.cc,v 1.6 2007-05-18 10:24:32 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4Sphere Test File
@@ -43,6 +43,7 @@
 #include <cmath>
 #include "globals.hh"
 #include "geomdefs.hh"
+#include "G4GeometryTolerance.hh"
 
 #include "ApproxEqual.hh"
 
@@ -92,6 +93,8 @@ const G4String OutputInside(const EInside a)
 
 int main(void)
 {
+  G4double kAngTolerance = G4GeometryTolerance::GetInstance()->GetAngularTolerance();
+
   G4ThreeVector pzero(0,0,0),px(30,0,0),py(0,30,0),pz(0,0,30);
   G4ThreeVector Pmx(-30,0,0),pmy(0,-30,0),pmz(0,0,-30);
   G4ThreeVector pbigx(100,0,0),pbigy(0,100,0),pbigz(0,0,100);
@@ -247,6 +250,8 @@ checkPoint( const G4Sphere &rSphere,
   G4int verbose = 0, verboseErr= 2; 
   G4bool  testAll = false ;   //  if false, do not call DistToIn if Outside etc.
 
+  G4double kAngTolerance = G4GeometryTolerance::GetInstance()->GetAngularTolerance();
+
   G4ThreeVector newPoint; 
   G4double  distIn = -1.0, distOut = -1.0; 
 
@@ -325,7 +330,7 @@ checkPoint( const G4Sphere &rSphere,
       G4cout << "  Original pt=  " << origin << G4endl; 
     }
     G4cout <<   "  Actual-point= " << newPoint << G4endl;
-    G4cout <<   "  Rho= " << G4ThreeVector(newPoint.x(), newPoint.y(), 0.).mag() << G4endl;     
+    G4cout <<   "  Rho= " << G4ThreeVector(newPoint.x(), newPoint.y(), 0.).mag() << G4endl;
   } 
   if( testAll || (inSphere!=kOutside) ) 
   { 
