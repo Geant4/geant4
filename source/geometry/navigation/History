@@ -1,4 +1,4 @@
-$Id: History,v 1.83 2007-05-16 15:39:17 japost Exp $
+$Id: History,v 1.84 2007-05-18 07:31:27 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+May 18th, 2007 - G.Cosmo (geomnav-V08-03-02)
+------------------------
+- Use kAngTolerance and kRadTolerance from G4GeometryTolerance class.
+- Coworks with tag "global-V08-03-03".
 
 May 16th, 2007 - G.Cosmo (geomnav-V08-03-01)
 ------------------------
