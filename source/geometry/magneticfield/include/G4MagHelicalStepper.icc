@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagHelicalStepper.icc,v 1.12 2007-05-18 12:55:11 tnikitin Exp $
+// $Id: G4MagHelicalStepper.icc,v 1.13 2007-05-18 15:45:15 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Linear Step in regions of no field
@@ -57,17 +57,7 @@ G4MagHelicalStepper::MagFieldEvaluate(const G4double y[],
   GetEquationOfMotion()->  GetFieldValue(y, B);
   Bfield= G4ThreeVector( B[0], B[1], B[2] );
 }
-/*inline G4double
-G4MagHelicalStepper::GetInverseCurve(const G4double yIn[],
-                                      const G4ThreeVector Bfield)   
-{
-  G4double  momentum_val = std::sqrt(yIn[3]*yIn[3] + yIn[4]*yIn[4] + yIn[5]*yIn[5]) ;
-  G4double  inv_momentum = 1.0 / momentum_val ;
-  G4double particleCharge = fPtrMagEqOfMot->FCof() / (eplus*c_light); 
-  G4double fCoefficient = -fUnitConstant  * particleCharge*inv_momentum;
-  G4double Bmag=Bfield.mag();
-  return  fCoefficient*Bmag;
-}*/
+
 inline G4double
 G4MagHelicalStepper::GetInverseCurve(const G4double Momentum,
                                       const G4double Bmag)   
@@ -79,3 +69,40 @@ G4MagHelicalStepper::GetInverseCurve(const G4double Momentum,
  
   return  fCoefficient*Bmag;
 }
+inline void G4MagHelicalStepper:: SetAngCurve(const G4double Ang)
+{                                                
+fAngCurve=Ang; 
+    
+}
+
+inline G4double G4MagHelicalStepper:: GetAngCurve() const 
+{
+return fAngCurve;  
+
+}
+
+inline void G4MagHelicalStepper:: SetCurve(const G4double Curve)
+{
+ frCurve=Curve;  
+}
+
+inline G4double G4MagHelicalStepper:: GetCurve() const 
+{
+return frCurve;  
+
+}
+
+inline void G4MagHelicalStepper:: SetRadHelix(const G4double Rad)
+{
+ frHelix=Rad;  
+}
+
+inline G4double G4MagHelicalStepper:: GetRadHelix() const 
+{
+return frHelix;  
+
+}
+
+
+
+
