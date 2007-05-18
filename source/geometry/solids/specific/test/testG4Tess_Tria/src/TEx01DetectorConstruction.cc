@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: TEx01DetectorConstruction.cc,v 1.4 2006-06-29 18:52:23 gunter Exp $
+// $Id: TEx01DetectorConstruction.cc,v 1.5 2007-05-18 10:40:29 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -68,7 +68,7 @@ G4VPhysicalVolume* TEx01DetectorConstruction::Construct()
 //--------- Material definition ---------
 
   G4double a, z;
-  G4double density, temperature, pressure;
+  G4double density;
   G4int nel;
 
   //Air
