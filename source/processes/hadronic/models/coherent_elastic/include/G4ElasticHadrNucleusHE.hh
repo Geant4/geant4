@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElasticHadrNucleusHE.hh,v 1.36 2007-05-15 13:08:53 vnivanch Exp $
+// $Id: G4ElasticHadrNucleusHE.hh,v 1.37 2007-05-18 08:06:43 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4ElasticHadrNucleusHe.hh
@@ -38,6 +38,7 @@
 //  16.11.06 General redesign (N.Starkov)
 //  23.11.06 General cleanup, ONQ0=3 (V.Ivanchenko)
 //  15.05.07 Redesign and cleanup (V.Ivanchenko)
+//  18.05.07 Cleanup (V.Grichine)
 //
 
 #ifndef G4ElasticHadrNucleusHE_h
@@ -59,6 +60,11 @@ static const G4int  ONQ0     = 5;   //  The initial number of steps on Q2
 static const G4int  ONQ2     = 100; //  The total number of steps on Q2
 static const G4int  NENERGY  = 30;  
 static const G4int  NQTABLE  = NENERGY*ONQ2;  
+
+
+///////////////////////////////////////////////////////////////////////
+//
+//
 
 class G4ElasticData
 {
@@ -93,7 +99,10 @@ public:
   G4double  TableCrossSec[NQTABLE];
 };
 
-//  ############################################################
+/////////////////////////////////////////////////////////////////////
+//
+//
+
 class G4ElasticHadrNucleusHE : public G4HadronicInteraction
 {
 public:
@@ -107,18 +116,12 @@ public:
 
   G4double SampleT(const G4ParticleDefinition* p, G4double plab, 
 		   G4int Z, G4int A);
-
-private:
-
   G4double HadronNucleusQ2_2(G4ElasticData * pElD, G4int Z, 
 			     G4double plabGeV, G4double tmax);
 
   void DefineHadronValues(G4int Z);
 
   G4double GetLightFq2(G4int Z, G4int A, G4double Q);
-
-  void     Binom();
-
   G4double GetQ2_2(G4int  N, G4double * Q, 
 		   G4double * F, G4double R);
 
@@ -134,7 +137,16 @@ private:
   G4ElasticHadrNucleusHE & operator=(const G4ElasticHadrNucleusHE &right);
   G4ElasticHadrNucleusHE(const G4ElasticHadrNucleusHE&);
 
-  //  ======================================================
+  G4double GetBinomCof( G4int n, G4int m );
+
+
+private:
+
+
+  void     Binom();
+
+
+  //  fields
 
   G4int    verboselevel;
   G4int    iHadrCode;
@@ -143,10 +155,12 @@ private:
   G4int    HadronType[NHADRONS];
 
   // protection energy and momemtum
+
   G4double lowestEnergyLimit;  
   G4double plabLowLimit;  
 
   // transition between internal and CLHEP units
+
   G4double MbToGeV2;
   G4double sqMbToGeV;
   G4double Fm2ToGeV2;
@@ -155,6 +169,7 @@ private:
   G4double protonM2;    // GeV^2
 
   // projectile kinematics in GeV
+
   G4double hMass;
   G4double hMass2;
   G4double hLabMomentum;
@@ -163,15 +178,18 @@ private:
   G4double HadrEnergy;
 
   // nucleaus parameters
+
   G4double  R1, R2, Pnucl, Aeff;
 
   // elastic parameters
+
   G4double  HadrTot, HadrSlope, HadrReIm,  DDSect2, DDSect3;
 
   // momentum limits for different models of hadron/nucleon scatetring
   //  G4double BoundaryP[7], BoundaryTL[7], BoundaryTG[7];
 
   // parameterisation of scattering
+
   G4double Slope1, Slope2, Coeff1, Coeff2, MaxTR;
   G4double Slope0, Coeff0;
 
@@ -185,7 +203,8 @@ private:
 
 };     //   The end of the class description
 
-//  ++++++++++++++++++++++++++++++++++++++++
+////////////////////////////////////////////////////////////////
+
 inline
 G4double G4ElasticHadrNucleusHE::LineInterpol(G4double p1, G4double p2,
 					      G4double c1, G4double c2,
@@ -194,7 +213,7 @@ G4double G4ElasticHadrNucleusHE::LineInterpol(G4double p1, G4double p2,
   return c1+(p-p1)*(c2-c1)/(p2-p1);
 }
 
-//  ++++++++++++++++++++++++++++++++++++++++++++++++++++++
+////////////////////////////////////////////////////////////////
 
 inline
 void G4ElasticHadrNucleusHE::InterpolateHN(G4int n, const G4double EnP[], 
@@ -202,9 +221,9 @@ void G4ElasticHadrNucleusHE::InterpolateHN(G4int n, const G4double EnP[],
 					   const G4double B0P[], const G4double B1P[])
 {
   G4int i;
-  for(i=1; i<n; i++) {
-    if(hLabMomentum <= EnP[i]) break;
-  }
+
+  for( i = 1; i < n; i++) if( hLabMomentum <= EnP[i] ) break;
+  
   if(i == n) i = n - 1;
 
   Coeff0 = LineInterpol(EnP[i], EnP[i-1], C0P[i], C0P[i-1], hLabMomentum);
@@ -212,5 +231,15 @@ void G4ElasticHadrNucleusHE::InterpolateHN(G4int n, const G4double EnP[],
   Slope0 = LineInterpol(EnP[i], EnP[i-1], B0P[i], B0P[i-1], hLabMomentum);
   Slope1 = LineInterpol(EnP[i], EnP[i-1], B1P[i], B1P[i-1], hLabMomentum);
 }
+
+////////////////////////////////////////////////////////////////
+
+inline
+G4double G4ElasticHadrNucleusHE::GetBinomCof( G4int n, G4int m )
+{
+  if ( n >= m && n <= 240) return SetBinom[n][m];
+  else                     return 0.;
+}
+
 
 #endif
