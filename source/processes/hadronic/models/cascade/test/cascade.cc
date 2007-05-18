@@ -473,10 +473,10 @@ G4int printData(G4int runId, G4int i) {
 	  std::setw(8)  << runId        << 
 	  std::setw(8)  << i            << 
 	  std::setw(8)  << type         << 
-	  std::setw(13) << ekin / GeV   << 
-	  std::setw(13) << mom[0]       << 
-	  std::setw(13) << mom[1]       << 
-	  std::setw(13) << mom[2]       << 
+	  std::setw(13) << ekin   /GeV  << 
+	  std::setw(13) << mom[0] /GeV  << 
+	  std::setw(13) << mom[1] /GeV  << 
+	  std::setw(13) << mom[2] /GeV  << 
 	  std::setw(13) << fA           << 
 	  std::setw(13) << fZ           << 
 	  std::setw(13) << fEx          << G4endl;
@@ -513,10 +513,10 @@ G4int printData(G4int runId, G4int i) {
 	  std::setw(8)  << runId        << 
 	  std::setw(8)  << i            << 
 	  std::setw(8)  << type         << 
-	  std::setw(13) << ekin / GeV   << 
-       	  std::setw(13) << mom[1]       << 
-       	  std::setw(13) << mom[2]       << 
-	  std::setw(13) << mom[3]       << 
+	  std::setw(13) << ekin   / GeV << 
+       	  std::setw(13) << mom[1] / GeV << 
+       	  std::setw(13) << mom[2] / GeV << 
+	  std::setw(13) << mom[3] / GeV << 
 	  std::setw(13) << 0            << 
 	  std::setw(13) << 0            << 
 	  std::setw(13) << 0.0          << G4endl;
