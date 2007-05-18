@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RKG3_Stepper.cc,v 1.13 2007-05-11 15:45:06 tnikitin Exp $
+// $Id: G4RKG3_Stepper.cc,v 1.14 2007-05-18 12:44:28 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -36,9 +36,9 @@
 G4RKG3_Stepper::G4RKG3_Stepper(G4Mag_EqRhs *EqRhs)
   : G4MagIntegratorStepper(EqRhs,6)
 {
-  // G4Exception("G4RKG3_Stepper::G4RKG3_Stepper()", "NotImplemented",
-  //            FatalException, "Stepper not yet available.");
+  
   fPtrMagEqOfMot=EqRhs;
+
 }
 
 G4RKG3_Stepper::~G4RKG3_Stepper()
@@ -65,6 +65,7 @@ void G4RKG3_Stepper::Stepper(  const G4double  yInput[7],
    // Do two half steps
 
    StepNoErr(yIn, dydx,h, yTemp,B) ;
+   //Store Bfld for DistChord Calculation
    for(i=0;i<3;i++)BfldIn[i]=B[i];
 
    //   RightHandSide(yTemp,dydxTemp) ;
@@ -192,34 +193,14 @@ void G4RKG3_Stepper::StepNoErr(const G4double tIn[7],
   
 #endif
 }
-// ---------------------------------------------------------------------------
 
-/*G4double G4RKG3_Stepper::DistChord()   const 
-{
-  // Soon: must check whether h/R > 2 pi  !!
-  //  Method below is good only for < 2 pi
-  G4double distChord,distLine;
-  
-  if (fyInitial != fyFinal) {
-     distLine= G4LineSection::Distline(fyMidPoint,fyInitial,fyFinal );
- 
-       distChord = distLine;
-  }else{
-     distChord = (fyMidPoint-fyInitial).mag();
-  }
-
- 
-  return distChord;
-  
-}
-*/
 // ---------------------------------------------------------------------------
 
 G4double G4RKG3_Stepper::DistChord()   const 
 {
-  // Implementation : must check whether h/R > 2 pi  !!
-  //   If( h/R <  pi) use G4LineSection::DistLine
-  //   Else           DistChord=R_helix
+  // Implementation : must check whether h/R >  pi  !!
+  //   If( h/R <  pi) use  G4LineSection::DistLine
+  //   Else           use  DistChord=R_helix
   G4double distChord,distLine;
 
   //Calculation of R_helix and R_curv
@@ -238,7 +219,7 @@ G4double G4RKG3_Stepper::DistChord()   const
   
   // for too small field there is no curvature
   
-  if( Bmag> 1e-12 ) {
+  if( Bmag>1e-12 ) {
   
     // Bnorm = Bfld.unit();
     G4ThreeVector Bnorm = (1.0/Bmag)*BfldIn;
@@ -252,8 +233,8 @@ G4double G4RKG3_Stepper::DistChord()   const
     G4ThreeVector B_x_P_x_B = B_x_P.cross(Bnorm); 
     G4double ptan=B_x_P_x_B.dot(initVelocity);
      
-     R_helix  =( - 1./fCoefficient)* ptan/Bmag;
-     R_curv=( - 1./fCoefficient)* velocityVal/Bmag;
+     R_helix  =std::abs((  1./fCoefficient)* ptan/Bmag);
+     R_curv=std::abs((  1./fCoefficient)* velocityVal/Bmag);
 
      // G4cout<<"Bfld="<<BfldIn<<" Momentum="<<velocityVal<<" DirectionM="<<initTangent<<G4endl;
      // G4cout<<"R_helix="<<R_helix/mm<<" mm R_curv="<<R_curv/mm<<" BxP="<< B_x_P<<" BxPxP="<<B_x_P_x_B<<G4endl;   
@@ -264,7 +245,7 @@ G4double G4RKG3_Stepper::DistChord()   const
     R_curv=H_helix;
   }
    
-  
+  // DistChord Calculation 
   if(std::abs(H_helix/R_curv)<pi){
     if (fyInitial != fyFinal) {
       distLine= G4LineSection::Distline(fyMidPoint,fyInitial,fyFinal );
@@ -276,8 +257,7 @@ G4double G4RKG3_Stepper::DistChord()   const
   else{
     distChord=R_helix;
   }
- 
+  // G4cout<<"distChord="<<distChord<<" hstep="<<H_helix<<"  Helix/R ="<<std::abs(H_helix/R_curv)<<" R_helix="<<R_helix<<G4endl; 
   return distChord;
   
 }
-

@@ -24,8 +24,10 @@
 // ********************************************************************
 //
 //
-// $Id: G4RKG3_Stepper.hh,v 1.12 2007-05-11 15:45:05 tnikitin Exp $
+//
+// $Id: G4RKG3_Stepper.hh,v 1.13 2007-05-18 12:44:02 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
+//
 //
 //
 // class G4RKG3_Stepper
@@ -33,7 +35,7 @@
 // Class description:
 //
 // Integrator Runga-Kutta Stepper from Geant3.
-
+//
 // History:
 // - Created. J.Apostolakis, V.Grichine - 30.01.97
 // -------------------------------------------------------------------

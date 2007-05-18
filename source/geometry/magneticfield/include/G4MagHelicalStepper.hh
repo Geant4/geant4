@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagHelicalStepper.hh,v 1.11 2006-06-29 18:22:54 gunter Exp $
+// $Id: G4MagHelicalStepper.hh,v 1.12 2007-05-18 12:45:18 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -80,14 +80,18 @@ class G4MagHelicalStepper : public G4MagIntegratorStepper
                                   G4double  yHelix[]) const;
       // A linear Step in regions without magnetic field.
 
-    void AdvanceHelix( const G4double  yIn[],
+     void AdvanceHelix( const G4double  yIn[],
                              G4ThreeVector   Bfld,
                              G4double  h,
-                             G4double  yHelix[]) const;    // output 
+			G4double  yHelix[]);    // output 
       // A first order Step along a helix inside the field.
 
     inline void MagFieldEvaluate( const G4double y[], G4ThreeVector& Bfield );
       // Evaluate the field at a certain point.
+
+  //  inline G4double GetInverseCurve( const G4double y[], const G4ThreeVector Bfield );
+       inline G4double GetInverseCurve( const G4double Momentum, const G4double Bmag );
+      // Evaluate Inverse of Curvature of Track
 
   protected:  // without description
 
@@ -101,12 +105,14 @@ class G4MagHelicalStepper : public G4MagIntegratorStepper
       // Private copy constructor and assignment operator.
 
     static const G4double fUnitConstant;   //  As in G4Mag_EqRhs.hh/cc where it is not used.
-  private:
-  
-    G4ThreeVector yInitial, yMidPoint, yFinal;
-      // Data stored in order to find the chord.
-
-    G4Mag_EqRhs*  fPtrMagEqOfMot;
+  protected:
+    // Data stored in order to find the chord.
+      G4ThreeVector yInitial, yMidPoint, yFinal;
+       
+      G4Mag_EqRhs*  fPtrMagEqOfMot;
+  protected:
+    G4double  R_curve,R_helix,Ang_curve;
+   
 };
 
 #include  "G4MagHelicalStepper.icc"
