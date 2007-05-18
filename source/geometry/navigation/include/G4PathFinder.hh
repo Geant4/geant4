@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PathFinder.hh,v 1.23 2007-05-16 15:59:06 japost Exp $
+// $Id: G4PathFinder.hh,v 1.24 2007-05-18 21:15:42 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // class G4PathFinder 
@@ -68,16 +68,19 @@ class G4PathFinder
      //
      // Retrieve singleton instance
 
-   G4double ComputeStep( const G4FieldTrack &pFieldTrack,// Or update non-c
+   G4double ComputeStep( const G4FieldTrack &pFieldTrack,
                          G4double            pCurrentProposedStepLength,
-                         G4int               navigatorId, 
+                         G4int               navigatorId,    // Identifies the geometry
                          G4int               stepNo,     // See next step/check 
-                         G4double           &pNewSafety, // for this geom 
-                         ELimited           &limitedStep, 
+                         G4double           &pNewSafety,     // Only for this geometry
+                         ELimited           &limitedStep,      
                          G4FieldTrack       &EndState, 
                          G4VPhysicalVolume*  currentVolume );
      //
      // Compute the next geometric Step  -- Curved or linear
+     //   If it is called with a larger 'stepNo' it will execute a new step;
+     //   if 'stepNo' is same as last call, then the results for 
+     //   the geometry with Id. number 'navigatorId' will be returned. 
 
    void Locate( const G4ThreeVector& position, 
                 const G4ThreeVector& direction,
@@ -110,10 +113,14 @@ class G4PathFinder
      //
      // Minimum value of safety after last ComputeStep
 
-   G4double       ComputeSafety( const G4ThreeVector& pGlobalPoint ); 
+   G4double       ComputeSafety( const G4ThreeVector& globalPoint ); 
      //
      // Recompute safety for the relevant point
      // the endpoint of the last step!!
+
+   G4double       ObtainSafety( G4int navId, G4ThreeVector& globalCenterPoint ); 
+     // Obtain safety for navigator/geometry navId for last point computed
+     //   Returns the point (center) for which this safety is valid
 
    void EnableParallelNavigation( G4bool enableChoice=true ); 
      //
@@ -193,6 +200,9 @@ class G4PathFinder
    G4bool        fLimitTruth[fMaxNav];
    G4double      fCurrentStepSize[fMaxNav]; 
    G4double      fNewSafety[ fMaxNav ];      // Safety for starting point
+   G4ThreeVector fPreStepLocation;      //  point where last ComputeStep called
+   G4double      fMinSafety_PreStepPt;  //   /\ corresponding value of safety
+
    G4double      fMinSafety;
 
    G4double      fMinStep;      // As reported by Navigators -- can be kInfinity
@@ -210,16 +220,18 @@ class G4PathFinder
                              //   or the endpoint resulting from ComputeStep 
                              //   -- invalidates fEndState
 
+   // State for 'ComputeSafety' and related methods
    G4ThreeVector fSafetyLocation;       //  point where ComputeSafety is called
    G4double      fMinSafety_atSafLocation; // /\ corresponding value of safety
-   G4ThreeVector fPreStepLocation;      //  point where last ComputeStep called
-   G4double      fMinSafety_PreStepPt;  //   /\ corresponding value of safety
+   G4double      fNewSafetyComputed[ fMaxNav ];  // Safeties for last ComputeSafety
 
-   G4int           fLastStepNo, fCurrentStepNo; 
-   G4bool      fParticleIsLooping;
-   G4int  fVerboseLevel;
-     // For debuging purposes
-   G4int  fMax_loop_count;
+   // State for Step numbers 
+   G4int         fLastStepNo, fCurrentStepNo; 
+   G4bool        fParticleIsLooping;
+
+   G4int         fVerboseLevel;            // For debuging purposes
+
+   G4int         fMax_loop_count;
      // Limit for the number of sub-steps taken in one call to ComputeStep
 
    G4TransportationManager* fpTransportManager; // Cache for frequent use
@@ -260,4 +272,10 @@ inline G4Navigator* G4PathFinder::GetNavigator(G4int n) const
   return fpNavigator[n];
 }
 
+inline G4double      G4PathFinder::ObtainSafety( G4int navId, G4ThreeVector& globalCenterPoint )
+{
+  globalCenterPoint= fSafetyLocation; 
+  navId = std::max ( navId, fMaxNav-1 ); 
+  return  fNewSafetyComputed[ navId ];
+}
 #endif 
