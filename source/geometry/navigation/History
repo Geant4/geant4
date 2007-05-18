@@ -1,4 +1,4 @@
-$Id: History,v 1.84 2007-05-18 07:31:27 gcosmo Exp $
+$Id: History,v 1.85 2007-05-18 15:53:15 ahoward Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May 18th, 2007 - A.Howard (geomnav-V08-03-03)
+------------------------
+- Added compiler flags for verbosity in G4PathFinder.cc
+
 
 May 18th, 2007 - G.Cosmo (geomnav-V08-03-02)
 ------------------------
