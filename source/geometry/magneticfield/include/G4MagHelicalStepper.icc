@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagHelicalStepper.icc,v 1.11 2006-06-29 18:22:56 gunter Exp $
+// $Id: G4MagHelicalStepper.icc,v 1.12 2007-05-18 12:55:11 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Linear Step in regions of no field
@@ -56,4 +56,26 @@ G4MagHelicalStepper::MagFieldEvaluate(const G4double y[],
   G4double B[3];
   GetEquationOfMotion()->  GetFieldValue(y, B);
   Bfield= G4ThreeVector( B[0], B[1], B[2] );
+}
+/*inline G4double
+G4MagHelicalStepper::GetInverseCurve(const G4double yIn[],
+                                      const G4ThreeVector Bfield)   
+{
+  G4double  momentum_val = std::sqrt(yIn[3]*yIn[3] + yIn[4]*yIn[4] + yIn[5]*yIn[5]) ;
+  G4double  inv_momentum = 1.0 / momentum_val ;
+  G4double particleCharge = fPtrMagEqOfMot->FCof() / (eplus*c_light); 
+  G4double fCoefficient = -fUnitConstant  * particleCharge*inv_momentum;
+  G4double Bmag=Bfield.mag();
+  return  fCoefficient*Bmag;
+}*/
+inline G4double
+G4MagHelicalStepper::GetInverseCurve(const G4double Momentum,
+                                      const G4double Bmag)   
+{
+  
+  G4double  inv_momentum = 1.0 / Momentum ;
+  G4double particleCharge = fPtrMagEqOfMot->FCof() / (eplus*c_light); 
+  G4double fCoefficient = -fUnitConstant  * particleCharge*inv_momentum;
+ 
+  return  fCoefficient*Bmag;
 }
