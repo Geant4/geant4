@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel.cc,v 1.58 2007-05-10 17:04:31 vnivanch Exp $
+// $Id: G4UrbanMscModel.cc,v 1.59 2007-05-18 18:43:33 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -169,7 +169,7 @@ using namespace std;
 G4UrbanMscModel::G4UrbanMscModel(G4double m_facrange, G4double m_dtrl, 
 				 G4double m_lambdalimit, 
 				 G4double m_facgeom,G4double m_skin, 
-				 G4bool m_samplez, G4bool m_stepAlg, 
+				 G4bool m_samplez, G4MscStepLimitType m_stepAlg, 
 				 const G4String& nam)
   : G4VEmModel(nam),
     dtrl(m_dtrl),
@@ -177,8 +177,8 @@ G4UrbanMscModel::G4UrbanMscModel(G4double m_facrange, G4double m_dtrl,
     facrange(m_facrange),
     facgeom(m_facgeom),
     skin(m_skin),
-    samplez(m_samplez),
     steppingAlgorithm(m_stepAlg),
+    samplez(m_samplez),
     isInitialized(false)
 {
   taubig        = 8.0;
@@ -230,20 +230,6 @@ void G4UrbanMscModel::Initialise(const G4ParticleDefinition* p,
   safetyHelper = G4TransportationManager::GetTransportationManager()
     ->GetSafetyHelper();
   safetyHelper->InitialiseHelper();
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void G4UrbanMscModel::SetMscStepLimitation(G4bool alg, G4double factor)
-{
-  steppingAlgorithm = alg;
-  facrange = factor;
-
-  // reinitialisation 
-  stepmin       = tlimitminfix;
-  skindepth     = skin*stepmin;
-  tlimitmin     = 10.*tlimitminfix;            
-  inside        = false;  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -540,20 +526,13 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
 
   // standard  version
   //
-  if (steppingAlgorithm)
-  {
-    //for precise simulation for the case without magnatic field
-    // small step(s) + single/plural scattering around boundaries
-    if(skin > 0.)
+  if (steppingAlgorithm == fUseDistanceToBoundary)
     {
-
       //compute geomlimit and presafety 
       GeomLimit(track);
    
-      //      G4double distmax = std::min(currentRange,0.38*(currentRange+lambda0));
-
       // is far from boundary
-     if(currentRange <= presafety)
+      if(currentRange <= presafety)
 	{
 	  inside = true;
 	  return tPathLength;   
@@ -563,64 +542,60 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
       insideskin = false;
 
       if((stepStatus == fGeomBoundary) || (stepNumber == 1))
-      {
+	{
 
-        if(stepNumber == 1) smallstep = 1.e10;
-        else  smallstep = 1.;
+	  if(stepNumber == 1) smallstep = 1.e10;
+	  else  smallstep = 1.;
 
-        // facrange scaling in lambda 
-        // not so strong step restriction above lambdalimit
-        G4double facr = facrange;
-        if(lambda0 > lambdalimit)
-          facr *= frscaling1+frscaling2*lambda0/lambdalimit;
+	  // facrange scaling in lambda 
+	  // not so strong step restriction above lambdalimit
+	  G4double facr = facrange;
+	  if(lambda0 > lambdalimit)
+	    facr *= frscaling1+frscaling2*lambda0/lambdalimit;
 
-        // constraint from the physics
-        if (currentRange > lambda0) tlimit = facr*currentRange;
-        else                        tlimit = facr*lambda0;
+	  // constraint from the physics
+	  if (currentRange > lambda0) tlimit = facr*currentRange;
+	  else                        tlimit = facr*lambda0;
 
+	  // constraint from the geometry (if tlimit above is too big)
+	  G4double tgeom = geombig; 
+	  if(geomlimit > geommin)
+	    {
+	      if(stepStatus == fGeomBoundary)  
+		tgeom = geomlimit/facgeom;
+	      else
+		tgeom = 2.*geomlimit/facgeom;
+	    }
 
-        // constraint from the geometry (if tlimit above is too big)
-        G4double tgeom = geombig; 
-        if(geomlimit > geommin)
-        {
-          if(stepStatus == fGeomBoundary)  
-            tgeom = geomlimit/facgeom;
-          else
-            tgeom = 2.*geomlimit/facgeom;
-        }
+	  //define stepmin here (it depends on lambda!)
+	  //rough estimation of lambda_elastic/lambda_transport
+	  G4double rat = currentKinEnergy/MeV ;
+	  rat = 1.e-3/(rat*(10.+rat)) ;
+	  //stepmin ~ lambda_elastic
+	  stepmin = rat*lambda0;
+	  skindepth = skin*stepmin;
 
-        //define stepmin here (it depends on lambda!)
-        //rough estimation of lambda_elastic/lambda_transport
-        G4double rat = currentKinEnergy/MeV ;
-        rat = 1.e-3/(rat*(10.+rat)) ;
-        //stepmin ~ lambda_elastic
-        stepmin = rat*lambda0;
-        skindepth = skin*stepmin;
+	  //define tlimitmin
+	  tlimitmin = lambda0/nstepmax;
+	  if(tlimitmin < stepmin) tlimitmin = 1.01*stepmin;
+	  if(tlimitmin < tlimitminfix) tlimitmin = tlimitminfix;
 
-        //define tlimitmin
-        tlimitmin = lambda0/nstepmax;
-        if(tlimitmin < stepmin) tlimitmin = 1.01*stepmin;
-        if(tlimitmin < tlimitminfix) tlimitmin = tlimitminfix;
+	  //lower limit for tlimit
+	  if(tlimit < tlimitmin) tlimit = tlimitmin;
 
-        //lower limit for tlimit
-        if(tlimit < tlimitmin) tlimit = tlimitmin;
-
-        //check against geometry limit
-        if(tlimit > tgeom) tlimit = tgeom;
-
-      }
+	  //check against geometry limit
+	  if(tlimit > tgeom) tlimit = tgeom;
+	}
 
       //if track starts far from boundaries increase tlimit!
-      if(tlimit < facsafety*presafety)
-	tlimit = facsafety*presafety ;
+      if(tlimit < facsafety*presafety) tlimit = facsafety*presafety ;
 
       //  G4cout << "tgeom= " << tgeom << " geomlimit= " << geomlimit  
       //     << " tlimit= " << tlimit << " presafety= " << presafety << G4endl;
 
       // shortcut
-      if((tPathLength < tlimit) &&
-         (tPathLength < presafety))
-        return tPathLength;   
+      if((tPathLength < tlimit) && (tPathLength < presafety))
+	return tPathLength;   
 
       G4double tnow = tlimit;
       // optimization ...
@@ -642,20 +617,17 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
 	  else
 	    {
 	      insideskin = true;
-	      if(tnow > stepmin)
-		tnow = stepmin;
+	      if(tnow > stepmin) tnow = stepmin;
 	    }
 	}
 
-      if(tnow < stepmin)
-        tnow = stepmin;
+      if(tnow < stepmin) tnow = stepmin;
 
-      if(tPathLength > tnow)
-        tPathLength = tnow ; 
+      if(tPathLength > tnow) tPathLength = tnow ; 
     }
     // for 'normal' simulation with or without magnetic field 
     //  there no small step/single scattering at boundaries
-    else 
+  else if(steppingAlgorithm == fUseSafety)
     {
       // compute presafety again if presafety <= 0 and no boundary
       // i.e. when it is needed for optimization purposes
@@ -670,43 +642,40 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
         }
 
       if((stepStatus == fGeomBoundary) || (stepNumber == 1))
-      { 
-        // facrange scaling in lambda 
-        // not so strong step restriction above lambdalimit
-        G4double facr = facrange;
-        if(lambda0 > lambdalimit)
-          facr *= frscaling1+frscaling2*lambda0/lambdalimit;
+	{ 
+	  // facrange scaling in lambda 
+	  // not so strong step restriction above lambdalimit
+	  G4double facr = facrange;
+	  if(lambda0 > lambdalimit)
+	    facr *= frscaling1+frscaling2*lambda0/lambdalimit;
 
-        // constraint from the physics
-        if (currentRange > lambda0) tlimit = facr*currentRange;
-        else                        tlimit = facr*lambda0;
+	  // constraint from the physics
+	  if (currentRange > lambda0) tlimit = facr*currentRange;
+	  else                        tlimit = facr*lambda0;
 
-        //lower limit for tlimit
-        tlimitmin = std::max(tlimitminfix,lambda0/nstepmax);
-        if(tlimit < tlimitmin) tlimit = tlimitmin;
-      }
+	  //lower limit for tlimit
+	  tlimitmin = std::max(tlimitminfix,lambda0/nstepmax);
+	  if(tlimit < tlimitmin) tlimit = tlimitmin;
+	}
 
       //if track starts far from boundaries increase tlimit!
-      if(tlimit < facsafety*presafety)
-	tlimit = facsafety*presafety ;
+      if(tlimit < facsafety*presafety) tlimit = facsafety*presafety ;
 
       if(tPathLength > tlimit) tPathLength = tlimit;
-
     }
-  }
-
+  
   // version similar to 7.1 (needed for some experiments)
   else
-  {
-    if (stepStatus == fGeomBoundary)
     {
-      if (currentRange > lambda0) tlimit = facrange*currentRange;
-      else                        tlimit = facrange*lambda0;
+      if (stepStatus == fGeomBoundary)
+	{
+	  if (currentRange > lambda0) tlimit = facrange*currentRange;
+	  else                        tlimit = facrange*lambda0;
 
-      if(tlimit < tlimitmin) tlimit = tlimitmin;
-      if(tPathLength > tlimit) tPathLength = tlimit;
+	  if(tlimit < tlimitmin) tlimit = tlimitmin;
+	  if(tPathLength > tlimit) tPathLength = tlimit;
+	}
     }
-  }
   //  G4cout << "tPathLength= " << tPathLength << "  geomlimit= " << geomlimit 
   //	 << " currentMinimalStep= " << currentMinimalStep << G4endl;
 

@@ -1,4 +1,4 @@
-$Id: History,v 1.278 2007-05-18 18:39:54 vnivanch Exp $
+$Id: History,v 1.279 2007-05-18 18:43:54 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -30,6 +30,7 @@ committal in the CVS repository !
 - G4VMultipleScattering - cleanup comments and reorgnize code for
                          easier reading; move short methods to inline;
                          add method to set msc parameters
+- G4MscStepLimitType - is added
 
 10 May 07: V.Ivant (emutils-V08-02-09)
 - integrated fixes of emutils-V08-02-06a

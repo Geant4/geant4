@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel.hh,v 1.26 2007-04-23 05:44:52 urban Exp $
+// $Id: G4UrbanMscModel.hh,v 1.27 2007-05-18 18:43:32 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -92,6 +92,7 @@
 
 #include "G4VEmModel.hh"
 #include "G4PhysicsTable.hh"
+#include "G4MscStepLimitType.hh"
 
 class G4ParticleChangeForMSC;
 class G4SafetyHelper;
@@ -106,7 +107,7 @@ public:
 
   G4UrbanMscModel(G4double facrange, G4double dtrl, G4double lambdalimit, 
 		  G4double facgeom,G4double skin, 
-		  G4bool samplez, G4bool stepAlg, 
+		  G4bool samplez, G4MscStepLimitType stepAlg, 
 		  const G4String& nam = "UrbanMscUni");
 
   virtual ~G4UrbanMscModel();
@@ -139,9 +140,13 @@ public:
   G4double ComputeTheta0(G4double truePathLength,
                          G4double KineticEnergy);
 
+  void SetStepLimitType(G4MscStepLimitType);
+
   void SetLateralDisplasmentFlag(G4bool val);
 
-  void SetMscStepLimitation(G4bool, G4double);
+  void SetRangeFactor(G4double);
+
+  void SetGeomFactor(G4double);
 
   void SetSkin(G4double);
 
@@ -170,6 +175,7 @@ private:
   G4PhysicsTable*             theLambdaTable;
   const G4MaterialCutsCouple* couple;
   G4LossTableManager*         theManager;
+
 
   G4double mass;
   G4double charge;
@@ -215,9 +221,10 @@ private:
 
   G4int    currentMaterialIndex;
 
+  G4MscStepLimitType steppingAlgorithm;
+
   G4bool   samplez;
   G4bool   latDisplasment;
-  G4bool   steppingAlgorithm;
   G4bool   isInitialized;
 
   G4bool   inside;
@@ -240,6 +247,32 @@ inline
 void G4UrbanMscModel::SetSkin(G4double val) 
 { 
   skin = val;
+  stepmin       = tlimitminfix;
+  skindepth     = skin*stepmin;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline
+void G4UrbanMscModel::SetRangeFactor(G4double val) 
+{ 
+  facrange = val;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline
+void G4UrbanMscModel::SetGeomFactor(G4double val) 
+{ 
+  facgeom = val;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline
+void G4UrbanMscModel::SetStepLimitType(G4MscStepLimitType val) 
+{ 
+  steppingAlgorithm = val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

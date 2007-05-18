@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4hMultipleScattering.cc,v 1.3 2007-03-20 15:40:59 vnivanch Exp $
+// $Id: G4hMultipleScattering.cc,v 1.4 2007-05-18 18:43:33 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -47,8 +47,7 @@
 
 #include "G4hMultipleScattering.hh"
 #include "G4UrbanMscModel.hh"
-#include "G4TransportationManager.hh"
-#include "G4Navigator.hh"
+#include "G4MscStepLimitType.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -57,25 +56,17 @@ using namespace std;
 G4hMultipleScattering::G4hMultipleScattering(const G4String& processName)
   : G4VMultipleScattering(processName)
 {
-  lowKineticEnergy  = 0.1*keV;
-  highKineticEnergy = 100.*TeV;
-  totBins           = 120;
-
-  facrange          = 0.2;
   dtrl              = 0.05;
   lambdalimit       = 1.*mm;
-  facgeom           = 0.1;
   
-  steppingAlgorithm = false;
   samplez           = false ; 
   isInitialized     = false;  
 
-  SetBinning(totBins);
-  SetMinKinEnergy(lowKineticEnergy);
-  SetMaxKinEnergy(highKineticEnergy);
-
   SetLateralDisplasmentFlag(true);
   SetSkin(0.0);
+  SetRangeFactor(0.2);
+  SetGeomFactor(0.1);
+  SetStepLimitType(fG4v71);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -92,43 +83,33 @@ G4bool G4hMultipleScattering::IsApplicable (const G4ParticleDefinition& p)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4hMultipleScattering::MscStepLimitation(G4bool algorithm, G4double factor) 
-{
-  steppingAlgorithm = algorithm;
-  if (factor > 0.) SetFacrange(factor);
-  else { if (algorithm) SetFacrange(0.02); else SetFacrange(0.2);}
-
-  if(verboseLevel > 1)  
-    G4cout << "Stepping algorithm is set to " << steppingAlgorithm 
-	   << " with facrange = " << facrange << G4endl;  
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void G4hMultipleScattering::InitialiseProcess(const G4ParticleDefinition* p)
 {
+  // Modification of parameters between runs
   if(isInitialized) {
-    mscUrban->SetMscStepLimitation(steppingAlgorithm, facrange);
     if (p->GetParticleType() != "nucleus") {
+      mscUrban->SetStepLimitType(StepLimitType());
       mscUrban->SetLateralDisplasmentFlag(LateralDisplasmentFlag());
       mscUrban->SetSkin(Skin());
+      mscUrban->SetRangeFactor(RangeFactor());
+      mscUrban->SetGeomFactor(GeomFactor());
     }
     return;
   }
 
+  // initialisation of parameters
+  G4String part_name = p->GetParticleName();
+  mscUrban = new G4UrbanMscModel(RangeFactor(),dtrl,lambdalimit,
+                                 GeomFactor(),Skin(),
+                                 samplez,StepLimitType());
+
   if (p->GetParticleType() == "nucleus") {
+    mscUrban->SetStepLimitType(fG4v71);
     SetLateralDisplasmentFlag(false);
     SetBuildLambdaTable(false);
     SetSkin(0.0);
-  } else {
-    SetBuildLambdaTable(true);
+    SetRangeFactor(0.2);
   }
-  mscUrban = new G4UrbanMscModel(facrange,dtrl,lambdalimit,
-                                 facgeom,Skin(),
-                                 samplez,steppingAlgorithm);
-  mscUrban->SetLateralDisplasmentFlag(LateralDisplasmentFlag());
-  mscUrban->SetLowEnergyLimit(lowKineticEnergy);
-  mscUrban->SetHighEnergyLimit(highKineticEnergy);
   AddEmModel(1,mscUrban);
   isInitialized = true;
 }
@@ -137,9 +118,9 @@ void G4hMultipleScattering::InitialiseProcess(const G4ParticleDefinition* p)
 
 void G4hMultipleScattering::PrintInfo()
 {
-  G4cout << "      Boundary/stepping algorithm is active with facrange= "
-	 << facrange
-	 << "  Step limitation " << steppingAlgorithm
+  G4cout << "      Boundary/stepping algorithm is active with RangeFactor= "
+	 << RangeFactor()
+	 << "  Step limit type " << StepLimitType()
 	 << G4endl;
 }
 
