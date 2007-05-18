@@ -1,4 +1,4 @@
-$Id: History,v 1.45 2007-05-18 14:47:41 mverderi Exp $
+$Id: History,v 1.46 2007-05-18 15:24:48 mverderi Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,7 +15,7 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-18th May M. Verderi (exampleN05-V09-00-00)
+18th May M. Verderi (exampleN05-V08-03-00)
 - remove exampleN05.ref
 
 11th May 2007 M. Verderi (HEAD)
