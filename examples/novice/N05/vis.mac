@@ -12,7 +12,7 @@
 #
 /vis/drawVolume worlds
 /vis/viewer/set/viewpointThetaPhi -90 0 deg
-# Set specific colur for identification
+# Set specific colour for identification : ghost parallel geometry envelope ("ghost") as yellow
 /vis/geometry/set/colour GhostLogical ! yellow
 /vis/viewer/zoom 2.5
 /vis/viewer/flush
