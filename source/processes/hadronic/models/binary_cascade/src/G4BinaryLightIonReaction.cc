@@ -618,19 +618,20 @@ G4bool G4BinaryLightIonReaction::EnergyAndMomentumCorrector(
       }
       OldScale=Scale;   
       Scale = TotalCollisionMass/Sum - 1;
+//  G4cout << "E/P corr - " << cAttempt << " " << Scale << G4endl;
+      if (std::abs(Scale) <= ErrLimit  
+          || OldScale == Scale)			// protect 'frozen' situation and divide by 0 in calculating new factor below
+      {
+        if (getenv("debug_G4BinaryLightIonReactionResults")) G4cout << "E/p corrector: " << cAttempt << G4endl;
+        success = true;
+	break;
+      }
       if ( cAttempt > 10 ) 
       {
 //         G4cout << " speed it up? " << std::abs(OldScale/(OldScale-Scale)) << G4endl;
 	 factor=std::max(1.,std::log(std::abs(OldScale/(OldScale-Scale))));
 //	 G4cout << " ? factor ? " << factor << G4endl;
       }   
-//  G4cout << "E/P corr - " << cAttempt << " " << Scale << G4endl;
-      if (std::abs(Scale) <= ErrLimit) 
-      {
-        if (getenv("debug_G4BinaryLightIonReactionResults")) G4cout << "E/p corrector: " << cAttempt << G4endl;
-        success = true;
-	break;
-      }
     }
     
     if( (!success)  && getenv("debug_G4BinaryLightIonReactionResults"))      
