@@ -25,8 +25,20 @@
 //
 //#define CHECK_MOMC
 
+#include <vector>
+//#include <vector.h>
+//#include "vector"
+
+#include <iomanip>
+#include <iostream>
+#include <string>
+#include <stdio.h>
+#include <time.h>
+
+
 #include "globals.hh"
 #include "Randomize.hh"
+
 
 #include "G4Collider.hh"
 #include "G4InuclCollider.hh"
@@ -42,33 +54,24 @@
 #include "G4CollisionOutput.hh"
 #include "G4Analyser.hh"
 #include "G4WatcherGun.hh"
-
-#include "vector"
-
 #include "G4ios.hh"
-#include <iomanip>
-#include <time.h>
-
 #include "G4BertiniData.hh"
 #include "G4CascadSpecialFunctions.hh"
-
 #include "G4IonTable.hh"
 #include "G4Nucleus.hh"
 #include "G4NucleiModel.hh"
-
-#include <vector.h>
 #include "G4ThreeVector.hh"
 #include "G4LorentzVector.hh"
 #include "G4Proton.hh"
 #include "G4KineticTrack.hh"
 #include "G4KineticTrackVector.hh"
 #include "G4Fancy3DNucleus.hh"
-
 #include "G4CascadeInterface.hh"
 #include "G4VParticleChange.hh"
 #include "G4Track.hh"
 
-void test(char*, int);
+
+void test(std::string, int);
 G4int benchmarkAll();
 G4int tTiming();
 G4int tBertiniData();
@@ -80,19 +83,20 @@ G4int tCascadeInterface();
 
 int main(int argc, char **argv ) {
 
-  test("Productions",       benchmarkAll()); // Run all models in tandem
   test("Timing",            tTiming());
   test("Bertini data",      tBertiniData());
   test("Cross sections",    tCrossSections());
-  test("Interface",         tInterface());
-  test("Analyzer",          tAnalyzer());
   test("Toy model",         tToyModel());
   test("Cascade interface", tCascadeInterface());
+  test("Interface",         tInterface());
+  test("Productions",       benchmarkAll()); // Run all models in tandem
+  test("Analyzer",          tAnalyzer());  
+
 
   return 0;       
 }
 
-void test(char* txt, int testStatus) {
+void test(std::string txt, int testStatus) {
   G4cout << txt << ": ";
   if (testStatus){ 
     G4cout << "OK";
@@ -279,7 +283,9 @@ int tInterface() { // test iterface
   enum particleType { nuclei = 0, proton = 1, neutron = 2, pionPlus = 3, pionMinus = 5, pionZero = 7, photon = 10 };
   G4int verboseLevel = 3;
 
-
+    if (verboseLevel > 1) {
+      G4cout << "tInterface::   begin" << G4endl; 
+    }
 
   G4int bulletType = 0;
 
@@ -309,6 +315,10 @@ int tInterface() { // test iterface
 
   G4InuclCollider*             collider = new G4InuclCollider(colep, inc, noneq, eqil, fiss, bigb);
 
+    if (verboseLevel > 1) {
+      G4cout << "tInterface::   Bertini classes instantiated" << G4endl; 
+    }
+
   for (G4int i = 1; i< 100 ; i++) {
     if ( theNucleusA < 1.5 ) 
       {
@@ -335,6 +345,9 @@ int tInterface() { // test iterface
   
     // Convert cascade data to use hadronics interface
 
+    if (verboseLevel > 1) {
+      G4cout << "tInterface::   collide done" << G4endl; 
+    }
     std::vector<G4InuclNuclei>             nucleiFragments = output.getNucleiFragments();
     std::vector<G4InuclElementaryParticle> particles =       output.getOutgoingParticles();
 
@@ -375,6 +388,10 @@ int tInterface() { // test iterface
 	}
     }
   }
+
+    if (verboseLevel > 1) {
+      G4cout << "tInterface::   end" << G4endl; 
+    }
   return 1;
 }
 
@@ -453,10 +470,10 @@ int tAnalyzer() {
     */
 
 #ifdef CHECK_MOMC
-    vector<G4double> total_mom_in = bull->getMomentum();
-    vector<G4double> momt = targ->getMomentum();
+    std::vector<G4double> total_mom_in = bull->getMomentum();
+    std::vector<G4double> momt = targ->getMomentum();
     for(G4int i = 0; i < 4; i++) total_mom_in[i] += momt[i];
-    vector<G4double> total_mom_out;
+    std::vector<G4double> total_mom_out;
     bull->printParticle();
     targ->printParticle();
     G4cout << " tot in mom: px " << total_mom_in[1] << " py " << total_mom_in[2]
@@ -510,7 +527,7 @@ int tToyModel() {
   // Eenum channelType {pionProduction, };
   enum collisionType {elastic, inelastic};
 
-  vector<G4KineticTrack*>  particleVector;   
+  std::vector<G4KineticTrack*>  particleVector;   
 
   // Set test parameters
   G4int        numberOfCascades       = 3;
