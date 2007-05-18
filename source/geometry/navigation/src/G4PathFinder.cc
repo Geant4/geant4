@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PathFinder.cc,v 1.35 2007-05-18 21:37:52 japost Exp $
+// $Id: G4PathFinder.cc,v 1.36 2007-05-18 22:17:16 japost Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4PathFinder Implementation
@@ -764,7 +764,13 @@ G4PathFinder::DoNextLinearStep( const G4FieldTrack &initialState,
   fEndState.SetPosition( endPosition ); 
   fEndState.SetProperTimeOfFlight( -1.000 );   // Not defined YET
   // fEndState.SetMomentum( initialState.GetMomentum ); 
-  this->WhichLimited(); 
+  if( fNoActiveNavigators == 1 ) { 
+     G4bool transportLimited = (fMinStep!= kInfinity); 
+     fLimitTruth[IdTransport] = transportLimited; 
+     fLimitedStep[IdTransport] = transportLimited ? kUnique : kDoNot;
+  }else{
+     this->WhichLimited(); 
+  }
 
 #ifdef G4DEBUG_PATHFINDER
   if( fVerboseLevel > 2 ){
