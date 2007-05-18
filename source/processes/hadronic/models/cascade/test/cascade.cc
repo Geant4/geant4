@@ -63,6 +63,7 @@ typedef std::vector<G4InuclNuclei>::iterator nucleiIterator;
 
 enum particleType { nuclei = 0, proton = 1, neutron = 2, pionPlus = 3, pionMinus = 5, pionZero = 7, foton = 10 };
 
+G4int runId       = 0; 
 G4int nCollisions = 10;      // collisions to be generated
 G4int  bulletType = proton;    // bullet particle
 G4double     momZ = 160;      // momentum in z-direction
@@ -78,15 +79,16 @@ G4int n10 = 0;
 
 G4CollisionOutput output;
 
+G4int tCoulomb(G4int, G4int, G4int, G4double, G4double, G4double);
 //G4int testINC(G4int, G4int, G4double, G4double, G4double);
 G4int testINCEvap();
 G4int testINCAll(G4int, G4int, G4double, G4double, G4double);
-G4int printData(G4int event);
+G4int printData(G4int runId, G4int event);
 G4int printCross(G4int i);
 
 G4int test();
 
-G4int verboseLevel = 1;
+G4int verboseLevel = 3;
 G4InuclElementaryParticle* bull;
 
 int main(int argc, char **argv ) {
@@ -96,25 +98,27 @@ int main(int argc, char **argv ) {
   }
 
   // Get argumets from command line
-  nCollisions =           (argc > 1) ? atoi(argv[1]) : nCollisions;
-  bulletType  =           (argc > 2) ? atoi(argv[2]) : proton;
-  momZ        = G4double(((argc > 3) ? atoi(argv[3]) : momZ)) / GeV;
-  A           = G4double(((argc > 4) ? atoi(argv[4]) : A));
-  Z           = G4double(((argc > 5) ? atoi(argv[5]) : Z));
+  runId       =           (argc > 1) ? atoi(argv[1]) : runId;
+  nCollisions =           (argc > 2) ? atoi(argv[2]) : nCollisions;
+  bulletType  =           (argc > 3) ? atoi(argv[3]) : proton;
+  momZ        = G4double(((argc > 4) ? atoi(argv[4]) : momZ)) / GeV;
+  A           = G4double(((argc > 5) ? atoi(argv[5]) : A));
+  Z           = G4double(((argc > 6) ? atoi(argv[6]) : Z));
 
   if (verboseLevel > 2) {
-    G4cout << " nCollisions " << nCollisions << G4endl;
-    G4cout << "  bulletType " << bulletType  << G4endl;
-    G4cout << "        momZ " << momZ        << G4endl;
-    G4cout << "           A " << A           << G4endl;
-    G4cout << "           Z " << Z           << G4endl;
+    G4cout << " # collisions " << nCollisions << G4endl;
+    G4cout << "  bullet type " << bulletType  << G4endl;
+    G4cout << "     momentum " << momZ        << " [GeV]" << G4endl;
+    G4cout << "            A " << A           << G4endl;
+    G4cout << "            Z " << Z           << G4endl;
   }
 
+  tCoulomb(runId, nCollisions, bulletType, momZ, A, Z);  // test coulomb
   //testINC(nCollisions, bulletType, momZ, A, Z);     // Only INC model  
-  testINCAll(nCollisions, bulletType, momZ, A, Z);  // INC, pre-eq, evap, fission
+  //  testINCAll(nCollisions, bulletType, momZ, A, Z);  // INC, pre-eq, evap, fission
  
   //testINCEvap(); // INC and evaporation 
-  test();        // misc. testing
+  //  test();        // misc. testing
 
   return 0;       
 }
@@ -127,6 +131,133 @@ G4int testINCEvap() {
     G4cout << " >>> testINCEvap " << G4endl;
   }
   
+  return 0;
+}
+
+G4int tCoulomb(G4int runId, G4int nCollisions, G4int bulletType, G4double momZ, G4double A, G4double Z) {
+
+  G4int verboseLevel = 3;
+
+  if (verboseLevel > 1) {
+    G4cout << " >>> tCoulomb  Start" << G4endl;
+  }
+  
+    n1 = 0;
+    n2 = 0;
+    n3 = 0;
+    n5 = 0;
+    n7 = 0;
+    n10 = 0;
+ 
+    // Colliders initialisation
+    G4ElementaryParticleCollider*   colep = new G4ElementaryParticleCollider;
+    G4IntraNucleiCascader*        cascade = new G4IntraNucleiCascader; // the actual cascade
+    cascade->setInteractionCase(1); // Interaction type is particle with nuclei.
+
+    G4NonEquilibriumEvaporator*     noneq = new G4NonEquilibriumEvaporator;
+    G4EquilibriumEvaporator*         eqil = new G4EquilibriumEvaporator;
+    G4Fissioner*                     fiss = new G4Fissioner;
+    G4BigBanger*                     bigb = new G4BigBanger;
+    G4InuclCollider*             collider = new G4InuclCollider(colep, cascade, noneq, eqil, fiss, bigb);
+
+
+    std::vector<G4double> targetMomentum(4, 0.0);
+    std::vector<G4double>  bulletMomentum(4, 0.0);
+    G4double mass = 0.93827;
+    bulletMomentum[3] = momZ;
+    bulletMomentum[3] = std::sqrt(bulletMomentum[3] * bulletMomentum[3] + 2 * bulletMomentum[3] * mass); // only this is used in tests
+    bulletMomentum[2] = std::sqrt(bulletMomentum[2] * bulletMomentum[2] + 2 * bulletMomentum[2] * mass);
+    bulletMomentum[1] = std::sqrt(bulletMomentum[1] * bulletMomentum[1] + 2 * bulletMomentum[1] * mass); 
+
+    bull = new G4InuclElementaryParticle(bulletMomentum, bulletType); // counts mom[0] = E tot from mom[1]-mom[3]
+   
+    if (verboseLevel > 2) {
+      G4cout << "Bullet:  " << G4endl;  
+      bull->printParticle();
+    }
+
+    G4InuclNuclei* targ = NULL;
+    G4InuclParticle* targIsH = NULL;
+
+
+    if ( !(G4int(A) == 1) ) {
+      targ = new G4InuclNuclei(targetMomentum, A, Z);
+      targ->setEnergy();      
+
+      std::vector<G4double>  bmom = bull->getMomentum();
+      eInit = std::sqrt(bmom[0] * bmom[0]);
+      std::vector<G4double> tmom = targ->getMomentum();
+      eInit += std::sqrt(tmom[0] * tmom[0]);
+
+      if (verboseLevel > 2) {
+	G4cout << "Target:  " << G4endl;  
+	targ->printParticle();
+      }
+    };
+
+    G4int i;
+    for (i = 1; i <= nCollisions; i++) {
+      
+      if (verboseLevel > 3) {
+	G4cout << "collision " << i << G4endl; 
+      }
+
+      if ( G4int(A) == 1 ) {
+	G4int is = 0;
+	targIsH = new G4InuclElementaryParticle(targetMomentum, 1);
+
+	std::vector<G4double>  bmom = bull->getMomentum();
+	eInit = std::sqrt(bmom[0] * bmom[0]);
+	std::vector<G4double> tmom = targIsH->getMomentum();
+	eInit += std::sqrt(tmom[0] * tmom[0]);
+
+	do {
+	  if (verboseLevel > 1) {
+	    G4cout << "Target:  " << G4endl;  
+	    targIsH->printParticle();
+	  }
+
+	  output = collider->collide(bull, targIsH);
+	  is = output.getOutgoingParticles().size();
+	  //	  		cout << "+";
+	
+	} while( is == 2);
+
+	//		cout << " "  << G4endl;
+
+      } else {
+
+	output = collider->collide(bull, targ); 
+      }
+      printData(runId, i);
+      //      printCross(i);
+    }
+
+    delete bull;
+    delete targ;
+    delete colep;
+    delete cascade; 
+    delete noneq;
+    delete eqil;
+    delete fiss;
+    delete bigb;
+    delete collider;
+
+    G4double nc = G4double(nCollisions);
+
+    if (verboseLevel > 3) {
+      G4cout << 
+	std::setw(8)  << momZ    << 
+	std::setw(8)  << i    << 
+	std::setw(8)  << n1 / nc   << 
+	std::setw(13) << n2 / nc   << 
+	std::setw(13) << n3 / nc   << 
+	std::setw(13) << n5 / nc   << 
+	std::setw(13) << n7 / nc   << 
+	std::setw(13) << n10 / nc  << G4endl;
+    }
+  
+
   return 0;
 }
 
@@ -216,7 +347,7 @@ G4int testINCAll(G4int nCollisions, G4int bulletType, G4double momZ, G4double A,
     G4int i;
     for (i = 1; i <= nCollisions; i++) {
       
-      if (verboseLevel > 3) {
+      if (verboseLevel > 4) {
 	G4cout << "collision " << i << G4endl; 
       }
 
@@ -279,7 +410,7 @@ G4int testINCAll(G4int nCollisions, G4int bulletType, G4double momZ, G4double A,
   return 0;
 }
 
-G4int printData(G4int i) {
+G4int printData(G4int runId, G4int i) {
 
   G4int verboseLevel = 1;
   if (verboseLevel > 4) {
@@ -339,6 +470,7 @@ G4int printData(G4int i) {
 	G4cout.precision(3);
 
 	G4cout << 
+	  std::setw(8)  << runId        << 
 	  std::setw(8)  << i            << 
 	  std::setw(8)  << type         << 
 	  std::setw(13) << ekin / GeV   << 
@@ -378,6 +510,7 @@ G4int printData(G4int i) {
 	G4cout.precision(4);
 
 	G4cout << 
+	  std::setw(8)  << runId        << 
 	  std::setw(8)  << i            << 
 	  std::setw(8)  << type         << 
 	  std::setw(13) << ekin / GeV   << 
