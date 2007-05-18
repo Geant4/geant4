@@ -211,7 +211,10 @@ G4ReactionProductVector * G4ExcitationHandler::BreakItUp(const G4Fragment &theIn
     }
   theResult->clear();
   
-  for (j = theResultList.begin(); j != theResultList.end(); j++) 
+  
+  //  for (j = theResultList.begin(); j != theResultList.end(); j++) 
+  j = theResultList.begin();  //AH
+  while (j != theResultList.end()) //AH
     {
       if ((*j)->GetA() > 1 && (*j)->GetExcitationEnergy() > 0.1*eV) 
         {
@@ -222,7 +225,8 @@ G4ReactionProductVector * G4ExcitationHandler::BreakItUp(const G4Fragment &theIn
             {
               // Remove excited fragment from the result 
               delete (*j);
-              theResultList.erase(j--);
+	      //              theResultList.erase(j--);
+              theResultList.erase(j);
               // and add theTempResult elements to theResult
               for (G4FragmentVector::reverse_iterator ri = theTempResult->rbegin();
                    ri != theTempResult->rend(); ++ri)
@@ -279,8 +283,11 @@ G4ReactionProductVector * G4ExcitationHandler::BreakItUp(const G4Fragment &theIn
                      << *(*j) << '\n'
                      << "-----------------------------------------------------------------------\n";
 #endif
+	      j++; // AH only increment if not erased:
             }	
-        } 
+        } else {
+	  j++; // AH increment iterator if a proton or excitation energy small
+	}
     }
   for (j = theResultList.begin(); j != theResultList.end(); j++)
     {
