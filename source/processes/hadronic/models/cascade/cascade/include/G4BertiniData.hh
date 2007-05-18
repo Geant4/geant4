@@ -47,6 +47,9 @@ class G4BertiniData //: public G4VIntraNuclearTransportModel
 
   private:
     static G4BertiniData* theInstance;
+
+public:
+  static const G4int pair[6][2]; 
 };
 
 #endif
