@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSSphereSurfaceCurrent.cc,v 1.6 2007-05-11 13:10:41 gcosmo Exp $
+// $Id: G4PSSphereSurfaceCurrent.cc,v 1.7 2007-05-18 00:00:38 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4PSSphereSurfaceCurrent
@@ -87,14 +87,12 @@ G4bool G4PSSphereSurfaceCurrent::ProcessHits(G4Step* aStep,G4TouchableHistory*)
   return TRUE;
 }
 
-G4int G4PSSphereSurfaceCurrent::
-IsSelectedSurface(G4Step* aStep, G4Sphere* sphereSolid)
-{
-  G4TouchableHandle theTouchable = aStep->GetPreStepPoint()
-                           ->GetTouchableHandle();
-  G4double kCarTolerance = G4GeometryTolerance::GetInstance()
-                           ->GetSurfaceTolerance();
+G4int G4PSSphereSurfaceCurrent::IsSelectedSurface(G4Step* aStep, G4Sphere* sphereSolid){
 
+  G4TouchableHandle theTouchable = 
+    aStep->GetPreStepPoint()->GetTouchableHandle();
+  G4double kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
+  
   if (aStep->GetPreStepPoint()->GetStepStatus() == fGeomBoundary ){
     // Entering Geometry
     G4ThreeVector stppos1= aStep->GetPreStepPoint()->GetPosition();

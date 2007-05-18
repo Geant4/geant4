@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSSphereSurfaceFlux.cc,v 1.2 2007-05-11 13:10:41 gcosmo Exp $
+// $Id: G4PSSphereSurfaceFlux.cc,v 1.3 2007-05-18 00:00:38 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4PSSphereSurfaceFlux
@@ -122,9 +122,8 @@ G4int G4PSSphereSurfaceFlux::IsSelectedSurface(G4Step* aStep, G4Sphere* sphereSo
 
   G4TouchableHandle theTouchable = 
     aStep->GetPreStepPoint()->GetTouchableHandle();
-  G4double kCarTolerance = G4GeometryTolerance::GetInstance()
-                         ->GetSurfaceTolerance();
-
+  G4double kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
+  
   if (aStep->GetPreStepPoint()->GetStepStatus() == fGeomBoundary ){
     // Entering Geometry
     G4ThreeVector stppos1= aStep->GetPreStepPoint()->GetPosition();

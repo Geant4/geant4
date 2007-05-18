@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSDirectionFlag.hh,v 1.2 2006-06-29 18:06:53 gunter Exp $
+// $Id: G4PSDirectionFlag.hh,v 1.3 2007-05-18 00:00:37 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //

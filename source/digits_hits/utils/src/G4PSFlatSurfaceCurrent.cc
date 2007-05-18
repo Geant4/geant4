@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSFlatSurfaceCurrent.cc,v 1.6 2007-05-11 13:10:41 gcosmo Exp $
+// $Id: G4PSFlatSurfaceCurrent.cc,v 1.7 2007-05-18 00:00:38 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4PSFlatSurfaceCurrent
@@ -88,12 +88,11 @@ G4bool G4PSFlatSurfaceCurrent::ProcessHits(G4Step* aStep,G4TouchableHistory*)
   return TRUE;
 }
 
-G4int G4PSFlatSurfaceCurrent::IsSelectedSurface(G4Step* aStep, G4Box* boxSolid)
-{
-  G4TouchableHandle theTouchable = aStep->GetPreStepPoint()
-                           ->GetTouchableHandle();
-  G4double kCarTolerance = G4GeometryTolerance::GetInstance()
-                           ->GetSurfaceTolerance();
+G4int G4PSFlatSurfaceCurrent::IsSelectedSurface(G4Step* aStep, G4Box* boxSolid){
+
+  G4TouchableHandle theTouchable = 
+    aStep->GetPreStepPoint()->GetTouchableHandle();
+  G4double kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
 
   if (aStep->GetPreStepPoint()->GetStepStatus() == fGeomBoundary ){
     // Entering Geometry

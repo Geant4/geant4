@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSSphereSurfaceFlux.hh,v 1.1 2007-04-20 07:55:38 asaim Exp $
+// $Id: G4PSSphereSurfaceFlux.hh,v 1.2 2007-05-18 00:00:37 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 

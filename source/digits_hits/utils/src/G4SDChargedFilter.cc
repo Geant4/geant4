@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SDChargedFilter.cc,v 1.2 2006-06-29 18:08:05 gunter Exp $
+// $Id: G4SDChargedFilter.cc,v 1.3 2007-05-18 00:00:38 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4VSensitiveDetector

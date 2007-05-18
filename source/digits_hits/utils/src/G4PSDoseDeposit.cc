@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSDoseDeposit.cc,v 1.4 2006-06-29 18:07:38 gunter Exp $
+// $Id: G4PSDoseDeposit.cc,v 1.5 2007-05-18 00:00:38 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4PSDoseDeposit
