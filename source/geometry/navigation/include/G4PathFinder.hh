@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PathFinder.hh,v 1.25 2007-05-18 21:33:57 japost Exp $
+// $Id: G4PathFinder.hh,v 1.26 2007-05-18 23:46:09 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // class G4PathFinder 
@@ -203,8 +203,6 @@ class G4PathFinder
    G4ThreeVector fPreStepLocation;      //  point where last ComputeStep called
    G4double      fMinSafety_PreStepPt;  //   /\ corresponding value of safety
 
-   G4double      fMinSafety;
-
    G4double      fMinStep;      // As reported by Navigators -- can be kInfinity
    G4double      fTrueMinStep;  // Corrected in case >= proposed
 
@@ -258,7 +256,7 @@ inline G4int  G4PathFinder::SetVerboseLevel(G4int newLevel)
 
 inline G4double G4PathFinder::GetCurrentSafety() const
 {
-  return fMinSafety;
+  return fMinSafety_PreStepPt;
 }
 
 inline void G4PathFinder::MovePoint()
