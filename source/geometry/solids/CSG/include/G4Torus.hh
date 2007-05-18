@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Torus.hh,v 1.26 2006-10-19 15:33:37 gcosmo Exp $
+// $Id: G4Torus.hh,v 1.27 2007-05-18 07:38:00 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -193,6 +193,11 @@ class G4Torus : public G4CSGSolid
     G4ThreeVector ApproxSurfaceNormal( const G4ThreeVector& p) const;
       // Algorithm for SurfaceNormal() following the original
       // specification for points not on the surface
+
+  private:
+
+    G4double kRadTolerance, kAngTolerance;
+      // Radial and angular tolerances
 };
 
 #include "G4Torus.icc"

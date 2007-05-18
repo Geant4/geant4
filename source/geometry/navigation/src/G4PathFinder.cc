@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PathFinder.cc,v 1.31 2007-05-11 13:47:27 gcosmo Exp $
+// $Id: G4PathFinder.cc,v 1.32 2007-05-18 07:31:03 gcosmo Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4PathFinder Implementation
@@ -418,6 +418,10 @@ void
 G4PathFinder::ReLocate( const   G4ThreeVector& position )
   //        const   G4ThreeVector& direction, G4bool relative  )
 {
+
+  static const G4double kRadTolerance =
+    G4GeometryTolerance::GetInstance()->GetRadialTolerance();
+
   // Locate the point in each geometry
   std::vector<G4Navigator*>::iterator pNavIter= fpTransportManager->GetActiveNavigatorsIterator(); 
   const G4double cErrorTolerance=1e-12;   

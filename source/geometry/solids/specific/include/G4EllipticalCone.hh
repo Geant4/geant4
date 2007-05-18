@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EllipticalCone.hh,v 1.9 2006-10-20 13:45:20 gcosmo Exp $
+// $Id: G4EllipticalCone.hh,v 1.10 2007-05-18 07:39:56 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -140,6 +140,8 @@ class G4EllipticalCone : public G4VSolid
     mutable G4Polyhedron* fpPolyhedron;
 
   private:
+
+    G4double kRadTolerance;
 
     G4double fCubicVolume;
     G4double fSurfaceArea;

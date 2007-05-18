@@ -24,11 +24,7 @@
 // ********************************************************************
 //
 //
-//<<<<<<< G4Cons.cc
-// $Id: G4Cons.cc,v 1.52 2007-05-16 08:27:07 tnikitin Exp $
-//=======
-// $Id: G4Cons.cc,v 1.52 2007-05-16 08:27:07 tnikitin Exp $
-//>>>>>>> 1.51
+// $Id: G4Cons.cc,v 1.53 2007-05-18 07:38:00 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -58,6 +54,7 @@
 
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
+#include "G4GeometryTolerance.hh"
 
 #include "G4VPVParameterisation.hh"
 
@@ -95,6 +92,9 @@ G4Cons::G4Cons( const G4String& pName,
   : G4CSGSolid(pName)
 {
   // Check z-len
+
+  kRadTolerance = G4GeometryTolerance::GetInstance()->GetRadialTolerance();
+  kAngTolerance = G4GeometryTolerance::GetInstance()->GetAngularTolerance();
 
   if ( pDz > 0 )
     fDz = pDz ;

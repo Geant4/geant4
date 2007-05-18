@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sphere.cc,v 1.56 2006-06-29 18:45:20 gunter Exp $
+// $Id: G4Sphere.cc,v 1.57 2007-05-18 07:38:01 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Sphere
@@ -57,6 +57,7 @@
 
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
+#include "G4GeometryTolerance.hh"
 
 #include "G4VPVParameterisation.hh"
 
@@ -92,6 +93,9 @@ G4Sphere::G4Sphere( const G4String& pName,
   : G4CSGSolid(pName)
 {
   fEpsilon = 1.0e-14;
+
+  kRadTolerance = G4GeometryTolerance::GetInstance()->GetRadialTolerance();
+  kAngTolerance = G4GeometryTolerance::GetInstance()->GetAngularTolerance();
 
   // Check radii
 

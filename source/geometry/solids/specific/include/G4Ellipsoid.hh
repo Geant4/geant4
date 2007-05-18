@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Ellipsoid.hh,v 1.11 2006-10-20 13:45:20 gcosmo Exp $
+// $Id: G4Ellipsoid.hh,v 1.12 2007-05-18 07:39:56 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -125,6 +125,8 @@ class G4Ellipsoid : public G4VSolid
     mutable G4Polyhedron* fpPolyhedron;
 
   private:
+
+    G4double kRadTolerance;
 
     G4double fCubicVolume;
     G4double fSurfaceArea;

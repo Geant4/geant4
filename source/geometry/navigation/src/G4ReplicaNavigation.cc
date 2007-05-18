@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReplicaNavigation.cc,v 1.12 2007-05-11 13:43:59 gcosmo Exp $
+// $Id: G4ReplicaNavigation.cc,v 1.13 2007-05-18 07:31:03 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -52,6 +52,8 @@ G4ReplicaNavigation::G4ReplicaNavigation()
   : fCheck(false), fVerbose(0)
 {
   kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
+  kRadTolerance = G4GeometryTolerance::GetInstance()->GetRadialTolerance();
+  kAngTolerance = G4GeometryTolerance::GetInstance()->GetAngularTolerance();
 }
 
 // ********************************************************************

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedTubs.cc,v 1.23 2006-10-20 13:45:21 gcosmo Exp $
+// $Id: G4TwistedTubs.cc,v 1.24 2007-05-18 07:39:56 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,6 +44,7 @@
 
 #include "G4TwistedTubs.hh"
 
+#include "G4GeometryTolerance.hh"
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
 #include "G4SolidExtentList.hh"
@@ -470,7 +471,8 @@ void G4TwistedTubs::AddPolyToExtent( const G4ThreeVector &v0,
 EInside G4TwistedTubs::Inside(const G4ThreeVector& p) const
 {
 
-   static const G4double halftol = 0.5 * kRadTolerance;
+   static const G4double halftol
+     = 0.5 * G4GeometryTolerance::GetInstance()->GetRadialTolerance();
    // static G4int timerid = -1;
    // G4Timer timer(timerid, "G4TwistedTubs", "Inside");
    // timer.Start();

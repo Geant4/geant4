@@ -24,13 +24,8 @@
 // ********************************************************************
 //
 //
-//<<<<<<< G4Tubs.cc
-// $Id: G4Tubs.cc,v 1.62 2007-05-16 08:26:51 tnikitin Exp $
+// $Id: G4Tubs.cc,v 1.63 2007-05-18 07:38:01 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-//=======
-// $Id: G4Tubs.cc,v 1.62 2007-05-16 08:26:51 tnikitin Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//>>>>>>> 1.61
 //
 // 
 // class G4Tubs
@@ -67,6 +62,7 @@
 
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
+#include "G4GeometryTolerance.hh"
 
 #include "G4VPVParameterisation.hh"
 
@@ -94,6 +90,9 @@ G4Tubs::G4Tubs( const G4String &pName,
                       G4double pSPhi, G4double pDPhi )
   : G4CSGSolid(pName)
 {
+
+  kRadTolerance = G4GeometryTolerance::GetInstance()->GetRadialTolerance();
+  kAngTolerance = G4GeometryTolerance::GetInstance()->GetAngularTolerance();
 
   if (pDz>0) // Check z-len
   {

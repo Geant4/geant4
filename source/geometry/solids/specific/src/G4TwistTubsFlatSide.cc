@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistTubsFlatSide.cc,v 1.5 2006-06-29 18:49:14 gunter Exp $
+// $Id: G4TwistTubsFlatSide.cc,v 1.6 2007-05-18 07:39:56 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -43,6 +43,7 @@
 // --------------------------------------------------------------------
 
 #include "G4TwistTubsFlatSide.hh"
+#include "G4GeometryTolerance.hh"
 
 //=====================================================================
 //* constructors ------------------------------------------------------
@@ -309,7 +310,8 @@ G4int G4TwistTubsFlatSide::GetAreaCode(const G4ThreeVector &xx,
                                        G4bool withTol)
 {
 
-   static const G4double rtol = 0.5*kRadTolerance;
+   static const G4double rtol
+     = 0.5*G4GeometryTolerance::GetInstance()->GetRadialTolerance();
    
    G4int areacode = sInside;
 

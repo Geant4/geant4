@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VTwistedFaceted.cc,v 1.14 2006-10-20 13:45:21 gcosmo Exp $
+// $Id: G4VTwistedFaceted.cc,v 1.15 2007-05-18 07:39:56 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -46,6 +46,7 @@
 #include "G4SolidExtentList.hh"
 #include "G4ClippablePolygon.hh"
 #include "G4VPVParameterisation.hh"
+#include "G4GeometryTolerance.hh"
 #include "meshdefs.hh"
 
 #include "G4VGraphicsScene.hh"
@@ -92,6 +93,9 @@ G4VTwistedFaceted( const G4String &pname,     // Name of instance
   fDy1 = pDy1 ;
   fDy2 = pDy2 ;
   fDz  = pDz  ;
+
+  G4double kAngTolerance
+    = G4GeometryTolerance::GetInstance()->GetAngularTolerance();
 
   // maximum values
   //

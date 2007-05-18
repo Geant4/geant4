@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReplicaNavigation.hh,v 1.5 2007-05-11 13:43:59 gcosmo Exp $
+// $Id: G4ReplicaNavigation.hh,v 1.6 2007-05-18 07:31:09 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -145,7 +145,7 @@ class G4ReplicaNavigation
 
     G4bool fCheck; 
     G4int  fVerbose;
-    G4double kCarTolerance;
+    G4double kCarTolerance, kRadTolerance, kAngTolerance;
 };
 
 #include "G4ReplicaNavigation.icc"

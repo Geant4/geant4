@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTwistSurface.cc,v 1.6 2007-05-11 13:54:29 gcosmo Exp $
+// $Id: G4VTwistSurface.cc,v 1.7 2007-05-18 07:39:56 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -162,6 +162,9 @@ G4int G4VTwistSurface::AmIOnLeftSide(const G4ThreeVector &me,
    // (The return value represents z-coordinate of normal vector
    //  of me.cross(vec).)
    // If me is on boundary of vec, return 0.
+
+   static const G4double kAngTolerance
+     = G4GeometryTolerance::GetInstance()->GetAngularTolerance();
 
    static G4RotationMatrix unitrot;  // unit matrix
    static const G4RotationMatrix rottol    = unitrot.rotateZ(0.5*kAngTolerance);
