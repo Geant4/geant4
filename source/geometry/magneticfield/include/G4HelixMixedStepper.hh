@@ -1,0 +1,85 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+// class G4HelixMixedStepper
+//
+// Class description:
+//
+// G4HelixMixedStepper split the Method used for Integration in two:
+//
+// If Stepping Angle ( h / R_curve) < pi/3 : use Classical RK4Stepper
+// Else use  HelixExplicitEuler Stepper
+//
+// History: 
+// Derived from ExactHelicalStepper 18/05/07 
+//
+// -------------------------------------------------------------------
+
+#ifndef G4HELIXMIXEDSTEPPER_HH
+#define G4HELIXMIXEDSTEPPER_HH
+
+#include "G4MagHelicalStepper.hh"
+
+
+class G4HelixMixedStepper: public G4MagHelicalStepper
+{
+
+  public:  
+
+  G4HelixMixedStepper(G4Mag_EqRhs *EqRhs);
+  ~G4HelixMixedStepper();
+
+   void Stepper( const G4double y[],
+                  const G4double dydx[],
+                        G4double h,
+                        G4double yout[],
+                        G4double yerr[]  );
+      // Step 'integration' for step size 'h'
+      // If SteppingAngle=h/R_curve<pi/3 uses RK4Stepper
+      // Else Helix Fast Method 
+      
+  
+    void DumbStepper( const G4double y[],
+                            G4ThreeVector  Bfld,
+                            G4double       h,
+                            G4double       yout[]);
+   G4double DistChord() const;
+      // Estimate maximum distance of curved solution and chord ... 
+  
+   public:  // without description
+
+    G4int IntegratorOrder() const { return 4; }
+  
+      // Mixed Integration RK4 for 'small' steps
+        G4MagIntegratorStepper* fRK4Stepper;
+   
+   private:
+    // Used for DistChord Calculation
+    G4double         fLastStepSize;  // Length of last step
+  
+  
+};
+
+#endif /* G4HELIXMIXEDSTEPPER_HH */
