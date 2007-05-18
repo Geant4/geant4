@@ -1,4 +1,4 @@
-$Id: History,v 1.26 2007-05-16 11:35:36 vnivanch Exp $
+$Id: History,v 1.27 2007-05-18 17:47:17 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+18-05-2007, V.Ivanchenko phys-lists-V08-03-01
+- remove obsolete G4EmStandardPhysics72 and G4EmStandardPhysics71
+- use new commands for G4EmStandardPhysics_option1,2
 
 16-05-2007, V.Ivanchenko phys-lists-V08-03-00
 -  Create new builders G4EmStandardPhysics_option1 from G4EmStandardPhysics71

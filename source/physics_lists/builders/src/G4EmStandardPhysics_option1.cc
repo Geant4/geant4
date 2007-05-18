@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmStandardPhysics_option1.cc,v 1.1 2007-05-16 11:35:36 vnivanch Exp $
+// $Id: G4EmStandardPhysics_option1.cc,v 1.2 2007-05-18 17:47:17 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -56,6 +56,7 @@
 
 #include "G4hMultipleScattering.hh"
 #include "G4MultipleScattering.hh"
+#include "G4MscStepLimitType.hh"
 
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
@@ -156,6 +157,7 @@ void G4EmStandardPhysics_option1::ConstructProcess()
       G4eIonisation* eioni = new G4eIonisation();
       eioni->SetStepFunction(0.8, 1.0*mm);
       G4MultipleScattering* msc = new G4MultipleScattering;
+      msc->SetStepLimitType(fG4v71);
       pmanager->AddProcess(msc,                   -1, 1, 1);
       pmanager->AddProcess(eioni,                 -1, 2, 2);
       pmanager->AddProcess(new G4eBremsstrahlung, -1, 3, 3);
@@ -165,6 +167,7 @@ void G4EmStandardPhysics_option1::ConstructProcess()
       G4eIonisation* eioni = new G4eIonisation();
       eioni->SetStepFunction(0.8, 1.0*mm);
       G4MultipleScattering* msc = new G4MultipleScattering;
+      msc->SetStepLimitType(fG4v71);
       pmanager->AddProcess(msc,                     -1, 1, 1);
       pmanager->AddProcess(eioni,                   -1, 2, 2);
       pmanager->AddProcess(new G4eBremsstrahlung,   -1, 3, 3);
@@ -210,7 +213,6 @@ void G4EmStandardPhysics_option1::ConstructProcess()
   }
   G4EmProcessOptions opt;
   opt.SetVerbose(verbose);
-  opt.SetMscStepLimitation(false);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
