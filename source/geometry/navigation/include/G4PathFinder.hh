@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PathFinder.hh,v 1.24 2007-05-18 21:15:42 japost Exp $
+// $Id: G4PathFinder.hh,v 1.25 2007-05-18 21:33:57 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // class G4PathFinder 
@@ -275,7 +275,7 @@ inline G4Navigator* G4PathFinder::GetNavigator(G4int n) const
 inline G4double      G4PathFinder::ObtainSafety( G4int navId, G4ThreeVector& globalCenterPoint )
 {
   globalCenterPoint= fSafetyLocation; 
-  navId = std::max ( navId, fMaxNav-1 ); 
+  //  navId = std::min( navId, fMaxNav-1 ); 
   return  fNewSafetyComputed[ navId ];
 }
 #endif 
