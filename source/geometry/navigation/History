@@ -1,4 +1,4 @@
-$Id: History,v 1.86 2007-05-18 16:22:58 ahoward Exp $
+$Id: History,v 1.87 2007-05-18 16:32:49 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,9 +19,10 @@ committal in the CVS repository !
 
 May 18th, 2007 - A.Howard (geomnav-V08-03-03)
 ------------------------
+- Fixed return value for G4PathFinder::ComputeStep in case of
+   step smaller than tolerance (now kInfinity): fixes PathFinder issue.
 - Added compiler flags for verbosity in G4PathFinder.cc
 - Added compiler flags for verbosity in G4MultiNavigator.cc
-
 
 May 18th, 2007 - G.Cosmo (geomnav-V08-03-02)
 ------------------------
