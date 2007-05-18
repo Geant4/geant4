@@ -1,4 +1,4 @@
-$Id: History,v 1.277 2007-05-10 17:06:33 vnivanch Exp $
+$Id: History,v 1.278 2007-05-18 18:39:54 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,20 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+18 May 07: V.Ivant (emutils-V08-02-10)
+- G4EnergyLossMessenger - make new UI sub-directory "/process/msc"
+                          and reorganise UI commands for msc
+                          processes; use G4EmProcessOptions as
+                          an interface to all EM processes
+- G4LossTableManager - remove set msc parameters
+- G4EmProcessOptions - update interface to msc processes, add
+                       extra methods to set parameters
+- G4VEnergyLossProcess - cleanup comments and reorgnize code for
+                         easier reading; move short methods to inline;
+- G4VMultipleScattering - cleanup comments and reorgnize code for
+                         easier reading; move short methods to inline;
+                         add method to set msc parameters
 
 10 May 07: V.Ivant (emutils-V08-02-09)
 - integrated fixes of emutils-V08-02-06a

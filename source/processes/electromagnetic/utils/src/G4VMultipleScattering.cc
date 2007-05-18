@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.cc,v 1.42 2007-04-12 11:55:08 vnivanch Exp $
+// $Id: G4VMultipleScattering.cc,v 1.43 2007-05-18 18:39:55 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -89,11 +89,14 @@ G4VMultipleScattering::G4VMultipleScattering(const G4String& name, G4ProcessType
   currentParticle(0),
   currentCouple(0),
   nBins(120),
+  stepLimit(fUseSafety),
   skin(0.0),
+  facrange(0.02),
+  facgeom(2.5),
   latDisplasment(true),
   buildLambdaTable(true)
 {
-  minKinEnergy = 100.0*eV;
+  minKinEnergy = 0.1*keV;
   maxKinEnergy = 100.0*TeV;
   SetVerboseLevel(1);
 
@@ -310,11 +313,6 @@ G4bool G4VMultipleScattering::RetrievePhysicsTable(const G4ParticleDefinition* p
   }
   return yes;
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void G4VMultipleScattering::MscStepLimitation(G4bool, G4double)
-{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
