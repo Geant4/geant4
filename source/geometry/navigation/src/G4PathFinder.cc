@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PathFinder.cc,v 1.37 2007-05-18 22:25:48 japost Exp $
+// $Id: G4PathFinder.cc,v 1.38 2007-05-18 23:45:07 japost Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4PathFinder Implementation
@@ -83,7 +83,6 @@ G4PathFinder::G4PathFinder()
 
    fMinSafety_PreStepPt=  -1.0; 
    fMinSafety_atSafLocation= -1.0; 
-   fMinSafety= -1.0;  // Invalid value
    fMinStep=   -1.0;  // 
    fNewTrack= false; 
 
@@ -737,7 +736,6 @@ G4PathFinder::DoNextLinearStep( const G4FieldTrack &initialState,
   fMinSafety_PreStepPt= minSafety;
 
   // Also store in simple 'safety' status ?
-  // fMinSafety= minSafety;
   // fMinSafety_atSafLocation = minSafety;
 
   fMinStep=   minStep; 
@@ -910,10 +908,13 @@ G4PathFinder::DoNextCurvedStep( const G4FieldTrack &initialState,
 
   // Calculate the safety values before making the step
   G4ThreeVector startPoint= initialState.GetPosition(); 
+  G4double minSafety= DBL_MAX; 
   for( numNav=0; numNav < fNoActiveNavigators; ++numNav ) {
-     fNewSafety[numNav]= 
+     G4double safety= 
        fpNavigator[numNav]->ComputeSafety( startPoint );
-     
+     fNewSafety[numNav]= safety; 
+     minSafety = std::min( safety, minSafety ); 
+
 #ifdef G4DEBUG_PATHFINDER
      if( fVerboseLevel > 4 ) {
        int prc= G4cout.precision(9);  // 9
@@ -924,6 +925,10 @@ G4PathFinder::DoNextCurvedStep( const G4FieldTrack &initialState,
      }
 #endif
   }
+
+  // Save safety value, related position
+  fPreStepLocation=     startPoint;   
+  fMinSafety_PreStepPt= minSafety;
 
   // Allow Propagator In Field to do the hard work, calling G4MultiNavigator
   minStep=  fpFieldPropagator->ComputeStep( fieldTrack,
