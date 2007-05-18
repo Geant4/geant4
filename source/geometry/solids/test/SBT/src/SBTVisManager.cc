@@ -41,7 +41,6 @@
 // Not needing external packages or libraries...
 #include "G4ASCIITree.hh"
 #include "G4DAWNFILE.hh"
-#include "G4GAGTree.hh"
 #include "G4HepRepFile.hh"
 #include "G4HepRep.hh"
 #include "G4RayTracer.hh"
@@ -88,7 +87,6 @@ void SBTVisManager::RegisterGraphicsSystems () {
   // Graphics Systems not needing external packages or libraries...
   RegisterGraphicsSystem (new G4ASCIITree);
   RegisterGraphicsSystem (new G4DAWNFILE);
-  RegisterGraphicsSystem (new G4GAGTree);
   RegisterGraphicsSystem (new G4HepRepFile);
   RegisterGraphicsSystem (new G4HepRep);
   RegisterGraphicsSystem (new G4RayTracer);
@@ -152,26 +150,28 @@ void SBTVisManager::RegisterGraphicsSystems () {
 //
 G4int SBTVisManager::BuildFakeWorld() const
 {
-	//
-	// These are probably leaks...
-	//
+        //
+        // These are probably leaks...
+        //
         G4ModelingParameters::DrawingStyle style = G4ModelingParameters::wf;
-	G4ModelingParameters *model = new G4ModelingParameters
-					    (0,      // No default vis attributes.
-					     style,  // Wireframe
-					     true,   // Global culling.
-					     true,   // Cull invisible volumes.
-					     false,  // Density culling.
-					     0.,     // Density (not relevant if density culling false).
-					     true,   // Cull daughters of opaque mothers.
-					     24);    // No of sides (not relevant for this operation).
-	SBTFakeModel *fakeModel = new SBTFakeModel(model);
-	
-	if (!fpScene) {
-		G4cerr << "Please create a view first" << G4endl;
-		return 1;
-	}
-	
-	fpScene->AddRunDurationModel( (G4VModel *)fakeModel );
-	return 0;
+        G4ModelingParameters *model = new G4ModelingParameters
+                                            (0,      // No default vis attributes.
+                                             style,  // Wireframe
+                                             true,   // Global culling.
+                                             true,   // Cull invisible volumes.
+                                             false,  // Density culling.
+                                             0.,     // Density (not relevant if density culling false).
+                                             true,   // Cull daughters of opaque mothers.
+                                             24);    // No of sides (not relevant for this operation).
+        SBTFakeModel *fakeModel = new SBTFakeModel(model);
+
+        G4Scene *currentScene = GetCurrentScene();
+
+        if (!currentScene) {
+                G4cerr << "Please create a view first" << G4endl;
+                return 1;
+        }
+        
+        currentScene->AddRunDurationModel( (G4VModel *)fakeModel );
+        return 0;
 }
