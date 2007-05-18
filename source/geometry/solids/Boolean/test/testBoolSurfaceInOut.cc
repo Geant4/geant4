@@ -49,6 +49,7 @@
 #include "G4RotationMatrix.hh"
 #include "G4AffineTransform.hh"
 #include "G4VoxelLimits.hh"
+#include "G4GeometryTolerance.hh"
 
 #include "G4Box.hh"
 #include "G4Orb.hh"
@@ -146,6 +147,7 @@ G4ThreeVector GetVectorOnBox( G4Box& box )
   c = box.GetZHalfLength();
   
   rand = G4UniformRand();
+  G4double kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
 
   if      ( rand < part )
   {
@@ -194,6 +196,7 @@ G4ThreeVector GetVectorOnBox( G4Box& box )
 G4ThreeVector GetVectorOnOrb(G4Orb& orb)
 {
   G4double cosTheta, sinTheta, phi, radius, px, py, pz;
+  G4double kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
 
   radius = orb.GetRadius();
   radius += -0.5*kCarTolerance + (kCarTolerance)*G4UniformRand(); 
@@ -228,6 +231,8 @@ G4ThreeVector GetVectorOnSphere(G4Sphere& sphere)
   G4double phi2   = phi1 + sphere.GetDeltaPhiAngle();
   G4double theta1 = sphere.GetStartThetaAngle();
   G4double theta2 = theta1 + sphere.GetDeltaThetaAngle();
+  G4double kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
+  G4double kAngTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
 
   if      ( rand < part ) // Rmax
   {
@@ -324,7 +329,8 @@ G4ThreeVector GetVectorOnTubs(G4Tubs& tubs)
   G4double tubsZ = tubs.GetZHalfLength   ();
   G4double phi1  = tubs.GetStartPhiAngle ();
   G4double phi2  = phi1 + tubs.GetDeltaPhiAngle ();
-
+  G4double kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
+  G4double kAngTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
 
   if      ( rand < part ) // Rmax
   {
@@ -388,7 +394,7 @@ G4ThreeVector GetVectorOutOfTubs(G4Tubs& tubs)
   G4double phi1  = tubs.GetStartPhiAngle ();
   G4double deltaPhi  = tubs.GetDeltaPhiAngle ();
   G4double phi2  = phi1 + deltaPhi;
-
+  G4double kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
 
   if      ( rand < part ) // Rmax
   {
@@ -446,6 +452,8 @@ G4ThreeVector GetVectorOnCons(G4Cons& cons)
   G4double phi2   = phi1 + cons.GetDeltaPhiAngle ();
   G4double tgMin  = (pRmin2 - pRmin1)/(2.*consZ);
   G4double tgMax  = (pRmax2 - pRmax1)/(2.*consZ);
+  G4double kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
+  G4double kAngTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
 
   if      ( rand < part ) // Rmax
   {
@@ -511,7 +519,8 @@ G4ThreeVector GetVectorOnTorus(G4Torus& torus)
   G4double pRtor = torus.GetRtor();
   G4double phi1  = torus.GetSPhi();
   G4double phi2  = phi1 + torus.GetDPhi ();
-
+  G4double kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
+  G4double kAngTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
 
   if      ( rand < part ) // Rmax
   {
@@ -571,6 +580,7 @@ int main(void)
   EInside surfaceP, surfaceP1, surfaceP2;
   G4ThreeVector norm, *pNorm;
   G4bool *pgoodNorm, goodNorm, calcNorm=true;
+  G4double kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
 
   enum Esolid {kInter, kBox, kOrb, kSphere, kCons, kTubs, kTorus, kPara, kTrapezoid, kTrd};
 
