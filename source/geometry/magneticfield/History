@@ -1,4 +1,4 @@
-$Id: History,v 1.119 2007-05-16 12:54:19 gcosmo Exp $
+$Id: History,v 1.120 2007-05-19 00:52:17 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+May 18th, 2007 T. Nikitina - field-V08-03-02
+--------------------------
+- New class G4HelixMixedStepper, mixing helical stepper and RK
+G4MagHelicalStepper
+-  Keep values of  inverse Radius, ..
+-  New calculation of DistChord for SteppingAngle > pi
+G4RKG3Stepper
+-  New calculation of DistChord for SteppingAngle > pi
 
 May 16th, 2007    G.Cosmo - field-V08-03-01
 -------------------------
