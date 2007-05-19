@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Transportation.cc,v 1.62 2007-05-09 13:09:57 japost Exp $
+// $Id: G4Transportation.cc,v 1.63 2007-05-19 00:38:11 japost Exp $
 // --> Merged with 1.60.4.2.2.3 2007/05/09 09:30:28 japost 
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
@@ -169,10 +169,12 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
   G4double      MagSqShift  = OriginShift.mag2() ;
   startMassSafety = 0.0; 
   startFullSafety= 0.0; 
+
+  //  Recall that FullSafety <= MassSafety 
   if( MagSqShift < sqr(fPreviousMassSafety) ) {
      G4double mag_shift= std::sqrt(MagSqShift); 
-     startMassSafety = fPreviousMassSafety - mag_shift; // std::sqrt(MagSqShift) ;
-     startFullSafety = fPreviousFullSafety - mag_shift; 
+     startMassSafety = std::max( (fPreviousMassSafety - mag_shift), 0.0); 
+     startFullSafety = std::max( (fPreviousFullSafety - mag_shift), 0.0);
        // Need to be consistent between full safety with Mass safety
        //   in order reproduce results in simple case  --> use same calculation method
 
@@ -360,8 +362,9 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
         //   currently revise the safety  
         //   ==> so we use the all-geometry safety as a precaution
 
-      G4double endMassSafety= fMassNavigator->ComputeSafety( fTransportEndPosition) ;
-        //  To-do: retrieve the mass value from PathFinder (it calculated it)
+      G4ThreeVector centerPt= G4ThreeVector(0.0, 0.0, 0.0);  // Used for return value
+      G4double endMassSafety= fPathFinder->ObtainSafety( fNavigatorId, centerPt); 
+        //  Retrieves the mass value from PathFinder (it calculated it)
 
       fPreviousMassSafety = endMassSafety ; 
       fPreviousFullSafety = endFullSafety; 
