@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Transportation8.cc,v 1.2 2007-05-09 13:50:01 japost Exp $
+// $Id: G4Transportation8.cc,v 1.3 2007-05-19 00:20:58 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // ------------------------------------------------------------
@@ -50,9 +50,6 @@
 //                          correction for spin tracking   
 //            20 Febr 2001, J.Apostolakis:  update for new FieldTrack
 //            22 Sept 2000, V.Grichine:     update of Kinetic Energy
-//             9 June 1999, J.Apostolakis & S.Giani: protect full relocation
-//                          in DEBUG for track  starting on surface that
-//                          goes step < tolerance.
 // Created:  19 March 1997, J. Apostolakis
 // =======================================================================
 
@@ -88,6 +85,8 @@ G4Transportation8::G4Transportation8( G4int verboseLevel )
   // fGlobalFieldMgr = transportMgr->GetFieldManager() ;
 
   fFieldPropagator = transportMgr->GetPropagatorInField() ;
+
+  // fpSafetyHelper = fpTransportManager->GetSafetyHelper();  // New 
 
   // Cannot determine whether a field exists here,
   //  because it would only work if the field manager has informed 
@@ -233,6 +232,7 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
        //
        fPreviousSftOrigin = startPosition ;
        fPreviousSafety    = newSafety ; 
+       // fSafetyHelper->SetCurrentSafety( newSafety, startPosition);
 
        // The safety at the initial point has been re-calculated:
        //
@@ -321,7 +321,8 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
      //
      fPreviousSftOrigin = startPosition ;
      fPreviousSafety    = currentSafety ;         
-        
+     // fSafetyHelper->SetCurrentSafety( newSafety, startPosition);
+       
      // Get the End-Position and End-Momentum (Dir-ection)
      //
      fTransportEndPosition = aFieldTrack.GetPosition() ;
@@ -428,6 +429,7 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
       currentSafety      = endSafety ;
       fPreviousSftOrigin = fTransportEndPosition ;
       fPreviousSafety    = currentSafety ; 
+      // fSafetyHelper->SetCurrentSafety( currentSafety, fTransportEndPosition);
 
       // Because the Stepping Manager assumes it is from the start point, 
       //  add the StepLength
@@ -435,13 +437,13 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
       currentSafety     += endpointDistance ;
 
 #ifdef G4DEBUG_TRANSPORT 
-      G4cout.precision(16) ;
+      G4cout.precision(12) ;
       G4cout << "***Transportation8::AlongStepGPIL ** " << G4endl  ;
       G4cout << "  Called Navigator->ComputeSafety at "
              << fTransportEndPosition
              << "    and it returned safety= " << endSafety << G4endl ; 
       G4cout << "  Adding endpoint distance " << endpointDistance 
-             << "   we obtain pseudo-safety= " << currentSafety << G4endl ; 
+             << "   to obtain pseudo-safety= " << currentSafety << G4endl ; 
 #endif
   }            
 
