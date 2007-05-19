@@ -88,12 +88,12 @@ G4int printCross(G4int i);
 
 G4int test();
 
-G4int verboseLevel = 3;
+G4int verboseLevel = 1;
 G4InuclElementaryParticle* bull;
 
 int main(int argc, char **argv ) {
 
-  if (verboseLevel > 1) {
+  if (verboseLevel > 3) {
     G4cout << " >>> cascade::main " << G4endl;
   }
 
@@ -105,12 +105,17 @@ int main(int argc, char **argv ) {
   A           = G4double(((argc > 5) ? atoi(argv[5]) : A));
   Z           = G4double(((argc > 6) ? atoi(argv[6]) : Z));
 
-  if (verboseLevel > 2) {
+  if (verboseLevel > 3) {
     G4cout << " # collisions " << nCollisions << G4endl;
     G4cout << "  bullet type " << bulletType  << G4endl;
     G4cout << "     momentum " << momZ        << " [GeV]" << G4endl;
     G4cout << "            A " << A           << G4endl;
     G4cout << "            Z " << Z           << G4endl;
+  }
+
+  if (verboseLevel > 0) {
+    //    G4cout << "# cascade.cc with parameters : runId, nCollisions, bulletType,  momZ,  targetA, targetZ" << G4endl;
+    G4cout << runId << " " << nCollisions << " " << bulletType  << " " << momZ  << " " << A << " " << Z << G4endl;
   }
 
   tCoulomb(runId, nCollisions, bulletType, momZ, A, Z);  // test coulomb
@@ -127,7 +132,7 @@ G4int testINCEvap() {
 
   G4int verboseLevel = 1;
 
-  if (verboseLevel > 1) {
+  if (verboseLevel > 2) {
     G4cout << " >>> testINCEvap " << G4endl;
   }
   
@@ -136,7 +141,7 @@ G4int testINCEvap() {
 
 G4int tCoulomb(G4int runId, G4int nCollisions, G4int bulletType, G4double momZ, G4double A, G4double Z) {
 
-  G4int verboseLevel = 3;
+  G4int verboseLevel = 1;
 
   if (verboseLevel > 1) {
     G4cout << " >>> tCoulomb  Start" << G4endl;
