@@ -23,10 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-
-// This file is based on G4CascadeInterface.cc
-// Modifications by Pekka Kaitaniemi (kaitanie@cc.helsinki.fi)
-// Helsinki Institute of Physics
+// Pekka Kaitaniemi, HIP
+// Aatos Heikkinen
 
 #include "G4ElasticCascadeInterface.hh"
 #include "globals.hh"
@@ -69,7 +67,7 @@ G4ReactionProductVector* G4ElasticCascadeInterface::Propagate(G4KineticTrackVect
 
 G4HadFinalState* G4ElasticCascadeInterface::ApplyYourself(const G4HadProjectile& aTrack, 
 							  G4Nucleus& theNucleus) {
-#ifdef debug_G4ElasticCascadeInterface
+#ifdef DEBUG_ELASTIC
   static G4int counter(0);
   counter++;
   G4cerr << "Reaction number "<< counter << " "<<aTrack.GetDynamicParticle()->GetDefinition()->GetParticleName()<<" "<< aTrack.GetDynamicParticle()->GetKineticEnergy()<<G4endl;
@@ -297,7 +295,7 @@ G4HadFinalState* G4ElasticCascadeInterface::ApplyYourself(const G4HadProjectile&
       switch(outgoingParticle) {
 
       case proton: 
-#ifdef debug_G4ElasticCascadeInterface
+#ifdef DEBUG_ELASTIC
 	G4cerr << "proton " << counter << " " << aMom << " " << ekin << G4endl;
 #endif
 	cascadeParticle = 
@@ -306,7 +304,7 @@ G4HadFinalState* G4ElasticCascadeInterface::ApplyYourself(const G4HadProjectile&
 
       case neutron: 
 
-#ifdef debug_G4ElasticCascadeInterface
+#ifdef DEBUG_ELASTIC
 	G4cerr << "neutron "<< counter<<" "<<aMom<<" "<<  ekin<<G4endl;
 #endif
 	cascadeParticle = 
@@ -317,7 +315,7 @@ G4HadFinalState* G4ElasticCascadeInterface::ApplyYourself(const G4HadProjectile&
 	cascadeParticle = 
 	  new G4DynamicParticle(G4PionPlus::PionPlusDefinition(), aMom, ekin);
 
-#ifdef debug_G4ElasticCascadeInterface
+#ifdef DEBUG_ELASTIC
 	G4cerr << "pionPlus "<< counter<<" "<<aMom<<" "<<  ekin<<G4endl;
 #endif
 	break;
@@ -326,7 +324,7 @@ G4HadFinalState* G4ElasticCascadeInterface::ApplyYourself(const G4HadProjectile&
 	cascadeParticle = 
 	  new G4DynamicParticle(G4PionMinus::PionMinusDefinition(), aMom, ekin);
 
-#ifdef debug_G4ElasticCascadeInterface
+#ifdef DEBUG_ELASTIC
 	G4cerr << "pionMinus "<< counter<<" "<<aMom<<" "<<  ekin<<G4endl;
 #endif
 	break;
@@ -335,7 +333,7 @@ G4HadFinalState* G4ElasticCascadeInterface::ApplyYourself(const G4HadProjectile&
 	cascadeParticle = 
 	  new G4DynamicParticle(G4PionZero::PionZeroDefinition(), aMom, ekin);
 
-#ifdef debug_G4ElasticCascadeInterface
+#ifdef DEBUG_ELASTIC
 	G4cerr << "pionZero "<< counter<<" "<<aMom<<" "<<  ekin<<G4endl;
 #endif
 	break;
@@ -344,7 +342,7 @@ G4HadFinalState* G4ElasticCascadeInterface::ApplyYourself(const G4HadProjectile&
 	cascadeParticle = 
 	  new G4DynamicParticle(G4Gamma::Gamma(), aMom, ekin);
 
-#ifdef debug_G4ElasticCascadeInterface
+#ifdef DEBUG_ELASTIC
 	G4cerr << "photon "<< counter<<" "<<aMom<<" "<<  ekin<<G4endl;
 #endif
 	break;
