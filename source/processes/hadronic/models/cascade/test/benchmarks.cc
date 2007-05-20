@@ -23,8 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: benchmarks.cc,v 1.15 2007-05-20 16:54:36 miheikki Exp $
+// $Id: benchmarks.cc,v 1.16 2007-05-20 17:26:32 miheikki Exp $
 // $Log: not supported by cvs2svn $
+// Revision 1.15  2007/05/20 16:54:36  miheikki
+// minor cleaning
+//
 // Revision 1.14  2007/05/20 15:23:11  miheikki
 // added test for G4InuclEvaporation
 //
@@ -68,9 +71,11 @@
 #include "G4KineticTrack.hh"
 #include "G4KineticTrackVector.hh"
 #include "G4Fancy3DNucleus.hh"
-#include "G4CascadeInterface.hh"
 #include "G4VParticleChange.hh"
 #include "G4Track.hh"
+
+#include "G4CascadeInterface.hh"
+#include "G4ElasticCascadeInterface.hh"
 #include "G4InuclEvaporation.hh"
 
 
@@ -152,7 +157,13 @@ void test(std::string txt, int testStatus) {
 
 
 // Test program for G4 Bertini Evaporation.
+G4int tElastic() { // test G4lasticCascadeInterface.hh
+  G4cout << ">>> tElastic start" << G4endl;
+  G4ElasticCascadeInterface *elastic = new G4ElasticCascadeInterface();
+  G4cout << ">>> tElastic end" << G4endl;
 
+  return 0;
+}
 
 int tEvaporation(G4int A, G4int Z, G4double E) { // test evaporation
   //G4LayeredNucleus nucl;
