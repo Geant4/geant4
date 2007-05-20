@@ -23,20 +23,18 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InuclEvaporation.hh,v 1.1 2007-05-20 12:04:05 miheikki Exp $
+// $Id: G4InuclEvaporation.hh,v 1.2 2007-05-20 20:03:21 miheikki Exp $
 //
 #ifndef G4INUCLEVAPORATION_h
 #define G4INUCLEVAPORATION_h 1
 
 #include "globals.hh"
-
 #include "G4VEvaporation.hh"
 #include "G4Fragment.hh"
 
-//#define debug
+//#define DEBUG
 
-class G4InuclEvaporation : public G4VEvaporation
-{
+class G4InuclEvaporation : public G4VEvaporation {
 public:
   G4InuclEvaporation();
   ~G4InuclEvaporation();
@@ -53,7 +51,7 @@ public:
   
 private:
 
-#ifdef debug
+#ifdef DEBUG
 
 #endif
 
