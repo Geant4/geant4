@@ -1,3 +1,5 @@
+# $Id: GNUmakefile,v 1.43 2007-05-20 11:21:56 miheikki Exp $
+# $Log: not supported by cvs2svn $
 name := cascade
 #name := benchmarks
 
