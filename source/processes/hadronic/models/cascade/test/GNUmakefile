@@ -1,7 +1,10 @@
-# $Id: GNUmakefile,v 1.43 2007-05-20 11:21:56 miheikki Exp $
+# $Id: GNUmakefile,v 1.44 2007-05-20 15:23:11 miheikki Exp $
 # $Log: not supported by cvs2svn $
-name := cascade
-#name := benchmarks
+# Revision 1.43  2007/05/20 11:21:56  miheikki
+# adding keywords
+#
+#name := cascade
+name := benchmarks
 
 G4TARGET := $(name)
 #G4EXLIB := true

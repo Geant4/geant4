@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: benchmarks.cc,v 1.14 2007-05-20 15:23:11 miheikki Exp $
+// $Log: not supported by cvs2svn $
+//
 //#define CHECK_MOMC
 
 #include <vector>
@@ -65,9 +68,11 @@
 #include "G4CascadeInterface.hh"
 #include "G4VParticleChange.hh"
 #include "G4Track.hh"
+#include "G4InuclEvaporation.hh"
 
 
 void test(std::string, int);
+G4int tEvaporation(G4int A, G4int Z, G4double E);
 G4int tCoulomb();
 G4int benchmarkAll();
 G4int tTiming();
@@ -79,23 +84,23 @@ G4int tToyModel();
 G4int tCascadeInterface();
 
 int main(int argc, char **argv ) {
-    G4int verboseLevel = 2;
+  G4int verboseLevel = 2;
   G4cout << "Geant4 cascade region benchmarks" << G4endl;
 
- if (argc < 2)
+  if (argc < 2)
     {
-        printf("usage: benchmarks <test ID> <parameters>\n");
-        return(1);
+      printf("usage: benchmarks <test ID> <parameters>\n");
+      return(1);
     }
-enum particleType { nuclei = 0, proton = 1, neutron = 2, pionPlus = 3, pionMinus = 5, pionZero = 7, foton = 10 };
+  enum particleType { nuclei = 0, proton = 1, neutron = 2, pionPlus = 3, pionMinus = 5, pionZero = 7, foton = 10 };
 
- // defaults
-G4int testId      = 1;
-G4int nCollisions = 10;      // collisions to be generated
-G4int  bulletType = proton;    // bullet particle
-G4double     momZ = 160;      // momentum in z-direction
-G4double        A = 27.0;      // target atomic weight Al
-G4double        Z = 13.0;      // target atomic number
+  // defaults
+  G4int testId      = 1;
+  G4int nCollisions = 10;      // collisions to be generated
+  G4int  bulletType = proton;    // bullet particle
+  G4double     momZ = 160;      // momentum in z-direction
+  G4double        A = 27.0;      // target atomic weight Al
+  G4double        Z = 13.0;      // target atomic number
   testId      =           (argc > 2) ? atoi(argv[1]) : testId;
   nCollisions =           (argc > 2) ? atoi(argv[1]) : nCollisions;
   bulletType  =           (argc > 3) ? atoi(argv[2]) : proton;
@@ -111,20 +116,21 @@ G4double        Z = 13.0;      // target atomic number
     G4cout << "           Z " << Z           << G4endl;
   }
 
+  test("Evaporation", tEvaporation(27,13, 100));
   test("Coulomb",               tCoulomb());
 
   //  test("Evaporation interface", tEvaporation());
 
   /*
-  test("Timing",                tTiming());
+    test("Timing",                tTiming());
 
-  test("Bertini data",          tBertiniData());
-  test("Cross sections",        tCrossSections());
-  test("Toy model",             tToyModel());
-  test("Cascade interface",     tCascadeInterface());
-  test("Interface",             tInterface());
-  test("Productions",           benchmarkAll()); // Run all models in tandem
-  test("Analyzer",              tAnalyzer());  
+    test("Bertini data",          tBertiniData());
+    test("Cross sections",        tCrossSections());
+    test("Toy model",             tToyModel());
+    test("Cascade interface",     tCascadeInterface());
+    test("Interface",             tInterface());
+    test("Productions",           benchmarkAll()); // Run all models in tandem
+    test("Analyzer",              tAnalyzer());  
 
   */
   return 0;       
@@ -141,8 +147,61 @@ void test(std::string txt, int testStatus) {
   G4cout << G4endl;  // test timing 
 }
 
+
+// Test program for G4 Bertini Evaporation.
+
+
+int tEvaporation(G4int A, G4int Z, G4double E) { // test evaporation
+  //G4LayeredNucleus nucl;
+  G4InuclEvaporation bert;
+  //  G4VParticleChange * pc;
+  G4cout << ">>> tEvaporation start" << G4endl;
+  G4cout << A << " " << Z << " " << E << G4endl;
+  //      nucl.SetParameters( A, Z);
+  //nucl.AddExcitationEnergy( E );
+
+  //  bert.setVerboseLevel(0);
+  
+  for ( G4double energy = 1 ; energy < 150 ; energy += 0.5 )
+    {
+      //   G4int n=0, p=0, d=0, t=0, h3=0, h4=0, g=0;
+
+      //    nucl.SetParameters( A, Z);
+      //nucl.AddExcitationEnergy( E - nucl.GetEnergyDeposit() );
+
+      //pc = bert.BreakItUp( nucl );
+
+      /*
+	for ( G4int i = 0 ; i < pc->GetNumberOfSecondaries() ;  i++ )
+	{
+	char * name = pc->GetSecondary( i )->GetDefinition()->GetParticleName() ;
+	if ( strcmp ( name , "proton" ) == 0 ) p++;
+	if ( strcmp ( name , "neutron" ) == 0 ) n++;
+	if ( strcmp ( name , "deuteron" ) == 0 ) d++;
+	if ( strcmp ( name , "triton" ) == 0 ) t++;
+	if ( strcmp ( name , "He3" ) == 0 ) h3++;
+	if ( strcmp ( name , "alpha" ) == 0 ) h4++;
+	if ( strcmp ( name , "gamma" ) == 0 ) g++;
+	} // loop over particle change vector
+
+	G4cout << energy << "\t"
+	<< n << " "
+	<< p << " "
+	<< d << " "
+	<< t << " "
+	<< h3 << " "
+	<< h4 << " "
+	<< g << endl;
+      */
+
+    } // energy loop
+  
+  G4cout << ">>> tEvaporation end" << G4endl;
+  return 0;
+}
+
 G4int tCoulomb()  {
-    G4int verboseLevel = 1; // For benchmarking  quals 1.
+  G4int verboseLevel = 1; // For benchmarking  quals 1.
   
   const G4int to_report = 1;
   G4int    nrain = 100;  // number of interactions to be generated
@@ -399,11 +458,11 @@ int tInterface() { // test iterface
   enum particleType { nuclei = 0, proton = 1, neutron = 2, pionPlus = 3, pionMinus = 5, pionZero = 7, photon = 10 };
   G4int verboseLevel = 3;
 
-    if (verboseLevel > 1) {
-      G4cout << "tInterface::   begin" << G4endl; 
-    }
+  if (verboseLevel > 1) {
+    G4cout << "tInterface::   begin" << G4endl; 
+  }
 
-    //  G4int bulletType = 0;
+  //  G4int bulletType = 0;
 
   std::vector<G4double>  momentumBullet(4, 0.0);
   momentumBullet[0] = 1.37126;
@@ -431,9 +490,9 @@ int tInterface() { // test iterface
 
   G4InuclCollider*             collider = new G4InuclCollider(colep, inc, noneq, eqil, fiss, bigb);
 
-    if (verboseLevel > 1) {
-      G4cout << "tInterface::   Bertini classes instantiated" << G4endl; 
-    }
+  if (verboseLevel > 1) {
+    G4cout << "tInterface::   Bertini classes instantiated" << G4endl; 
+  }
 
   for (G4int i = 1; i< 100 ; i++) {
     if ( theNucleusA < 1.5 ) 
@@ -481,9 +540,9 @@ int tInterface() { // test iterface
 	G4ThreeVector aMom(mom[1], mom[2], mom[3]);
 	aMom = aMom.unit();
 
-    if (verboseLevel > 2) {
-      G4cout << "ekin" << ekin << G4endl; 
-    }
+	if (verboseLevel > 2) {
+	  G4cout << "ekin" << ekin << G4endl; 
+	}
       
       }
 
@@ -511,9 +570,9 @@ int tInterface() { // test iterface
     }
   }
 
-    if (verboseLevel > 1) {
-      G4cout << "tInterface::   end" << G4endl; 
-    }
+  if (verboseLevel > 1) {
+    G4cout << "tInterface::   end" << G4endl; 
+  }
   return 1;
 }
 
