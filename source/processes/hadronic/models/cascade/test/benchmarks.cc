@@ -23,8 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: benchmarks.cc,v 1.16 2007-05-20 17:26:32 miheikki Exp $
+// $Id: benchmarks.cc,v 1.17 2007-05-20 19:58:32 miheikki Exp $
 // $Log: not supported by cvs2svn $
+// Revision 1.16  2007/05/20 17:26:32  miheikki
+// minor tuning
+//
 // Revision 1.15  2007/05/20 16:54:36  miheikki
 // minor cleaning
 //
@@ -72,7 +75,10 @@
 #include "G4KineticTrackVector.hh"
 #include "G4Fancy3DNucleus.hh"
 #include "G4VParticleChange.hh"
+#include "G4ParticleChange.hh"
 #include "G4Track.hh"
+#include "G4HadFinalState.hh"
+#include "G4DynamicParticle.hh"
 
 #include "G4CascadeInterface.hh"
 #include "G4ElasticCascadeInterface.hh"
@@ -124,8 +130,10 @@ int main(int argc, char **argv ) {
     G4cout << "           Z " << Z           << G4endl;
   }
 
-  test("Evaporation", tEvaporation(27,13, 100));
-  test("Coulomb",               tCoulomb());
+  test("Cascade interface", tCascadeInterface());
+
+  //  test("Evaporation", tEvaporation(27,13, 100));
+  //test("Coulomb",               tCoulomb());
 
   //  test("Evaporation interface", tEvaporation());
 
@@ -899,16 +907,17 @@ int tToyModel() {
 */
 
 int tCascadeInterface() {
- 
-  // Set test parameters
   G4int verboseLevel                = 2;                          
+  if (verboseLevel > 1) {
+    G4cout << ">>> tCascadeInterface start" << G4endl;
+  }
   G4int numberOfCascades            = 10; 
   G4double projectileMomentum       = 1.0 * GeV;
+
   //G4ParticleDefinition *particle = G4PionMinus::PionMinus();  
   //G4ParticleDefinition *particle = G4Neutron::Neutron();  
   G4ParticleDefinition *particle = G4Proton::Proton();  
 
-  // Create projectile particle
   G4DynamicParticle *projectile = new G4DynamicParticle(); 
   projectile->SetDefinition(particle);
   //projectile->SetKineticEnergy( 1.0 * GeV);
@@ -935,7 +944,6 @@ int tCascadeInterface() {
   G4double a(10);
   G4double z(10);
   targetNucleus.SetParameters(a, z);
-  //  G4VParticleChange *cascadeParticles;
 
   if (verboseLevel > 1) {
     G4cout << "target" << G4endl;
@@ -944,10 +952,61 @@ int tCascadeInterface() {
     G4cout << " atomic mass    : " << targetNucleus.AtomicMass(a, z) << G4endl;
   }
 
+  //  G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& theNucleus); 
+  G4double            px = 0;
+  G4double            py = 0;
+  G4double            pz = 2000;
+  G4ThreeVector       inVector(px, py, pz);
+  G4ThreeVector       outVector, aPosition(0., 0., 0.);
+
+  G4Proton          * aProton   = G4Proton::Proton();
+
+  G4DynamicParticle   aParticle;
+  aParticle.SetDefinition(aProton);
+  G4double Momentum = 2000;
+  G4double Tkin = sqrt(Momentum*Momentum+938.27*938.27)-938.27;
+
+  inVector.setZ(Momentum);
+
+  G4cout <<  "  inVector " <<inVector.x()<<" " << 
+    inVector.y()<<" "<<  inVector.z()<<" " << " Tkin " << Tkin <<G4endl;
+
+  aParticle.SetMomentum(inVector);
+
+  aParticle.SetKineticEnergy(Tkin);
+
+  const  G4HadProjectile hadProj = G4HadProjectile(aParticle);
+
+  G4HadFinalState   * hadSta    = new G4HadFinalState();   
+
   G4CascadeInterface *theCascade  = new G4CascadeInterface();
   for (G4int cascadeID =1 ; cascadeID <= numberOfCascades; cascadeID++) { 
     if (verboseLevel > 1) G4cout << "inc " << cascadeID << G4endl;
-    //    cascadeParticles = theCascade->ApplyYourself(aTrack, targetNucleus);
+    hadSta = theCascade->ApplyYourself(hadProj, targetNucleus);
+
+    G4int nPart = hadSta->GetNumberOfSecondaries();
+    G4cout << "  # secondaries " << nPart << G4endl;
+    outVector  =  hadSta->GetMomentumChange();
+    G4cout << "  momentum change " << outVector << G4endl;
+    G4double outE = hadSta->GetEnergyChange();
+    G4cout << "  energy change " << outE << G4endl;
+    G4double outP = sqrt(outE*outE-938.27*938.27);
+
+    for (G4int iSecondary =1 ; iSecondary <= nPart; iSecondary++) { 
+
+      G4HadSecondary    * NuclSecond = hadSta->GetSecondary(iSecondary);
+      G4cout << "    secondary         " << iSecondary << G4endl;  
+      G4DynamicParticle * secPart = NuclSecond->GetParticle();
+
+      G4cout<<"      nucleus name      " << secPart->GetDefinition()->GetParticleName() << G4endl;
+
+      G4ThreeVector outVectorN =  secPart->GetMomentum();
+      G4cout << "      out vector      " << outVectorN << G4endl;
+      G4double outEtot =  secPart->GetTotalEnergy();
+      G4cout << "      particle  tot E " << outEtot << G4endl;  
+      G4double outEkin =  secPart->GetKineticEnergy();
+      G4cout << "      particle  kin E " << outEkin << G4endl;  
+    }
   }
 
   delete projectile;
