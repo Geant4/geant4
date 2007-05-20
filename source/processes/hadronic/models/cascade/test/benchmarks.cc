@@ -23,8 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: benchmarks.cc,v 1.14 2007-05-20 15:23:11 miheikki Exp $
+// $Id: benchmarks.cc,v 1.15 2007-05-20 16:54:36 miheikki Exp $
 // $Log: not supported by cvs2svn $
+// Revision 1.14  2007/05/20 15:23:11  miheikki
+// added test for G4InuclEvaporation
+//
 //
 //#define CHECK_MOMC
 
@@ -197,7 +200,7 @@ int tEvaporation(G4int A, G4int Z, G4double E) { // test evaporation
     } // energy loop
   
   G4cout << ">>> tEvaporation end" << G4endl;
-  return 0;
+  return 1;
 }
 
 G4int tCoulomb()  {

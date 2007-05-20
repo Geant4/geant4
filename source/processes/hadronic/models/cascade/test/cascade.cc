@@ -26,7 +26,6 @@
 //#define CHECK_MOMC
 
 #include <vector>
-//#include <iomanip.h>
 #include <iomanip>
 #include <iostream>
 #include <string>
@@ -35,6 +34,7 @@
 
 #include "globals.hh"
 #include "Randomize.hh"
+
 #include "G4Collider.hh"
 #include "G4InuclCollider.hh"
 #include "G4IntraNucleiCascader.hh"
@@ -165,7 +165,6 @@ G4int tCoulomb(G4int runId, G4int nCollisions, G4int bulletType, G4double momZ, 
     G4BigBanger*                     bigb = new G4BigBanger;
     G4InuclCollider*             collider = new G4InuclCollider(colep, cascade, noneq, eqil, fiss, bigb);
 
-
     std::vector<G4double> targetMomentum(4, 0.0);
     std::vector<G4double>  bulletMomentum(4, 0.0);
     G4double mass = 0.93827;
@@ -183,7 +182,6 @@ G4int tCoulomb(G4int runId, G4int nCollisions, G4int bulletType, G4double momZ, 
 
     G4InuclNuclei* targ = NULL;
     G4InuclParticle* targIsH = NULL;
-
 
     if ( !(G4int(A) == 1) ) {
       targ = new G4InuclNuclei(targetMomentum, A, Z);
@@ -227,17 +225,13 @@ G4int tCoulomb(G4int runId, G4int nCollisions, G4int bulletType, G4double momZ, 
 	  //	  		cout << "+";
 	
 	} while( is == 2);
-
 	//		cout << " "  << G4endl;
-
       } else {
-
 	output = collider->collide(bull, targ); 
       }
       printData(runId, i);
       //      printCross(i);
     }
-
     delete bull;
     delete targ;
     delete colep;
@@ -261,8 +255,6 @@ G4int tCoulomb(G4int runId, G4int nCollisions, G4int bulletType, G4double momZ, 
 	std::setw(13) << n7 / nc   << 
 	std::setw(13) << n10 / nc  << G4endl;
     }
-  
-
   return 0;
 }
 
@@ -308,7 +300,6 @@ G4int testINCAll(G4int nCollisions, G4int bulletType, G4double momZ, G4double A,
 
     // Set target
     std::vector<G4double> targetMomentum(4, 0.0);
-
     std::vector<G4double>  bulletMomentum(4, 0.0);
     G4double mass = 0.93827;
     bulletMomentum[3] = momZ;
@@ -326,7 +317,6 @@ G4int testINCAll(G4int nCollisions, G4int bulletType, G4double momZ, G4double A,
     G4InuclNuclei* targ = NULL;
     G4InuclParticle* targIsH = NULL;
 
-
     if ( !(G4int(A) == 1) ) {
       targ = new G4InuclNuclei(targetMomentum, A, Z);
       targ->setEnergy();      
@@ -342,8 +332,6 @@ G4int testINCAll(G4int nCollisions, G4int bulletType, G4double momZ, G4double A,
       }
 
     };
-
-    //:::::::::::::::
 
     if (verboseLevel > 2) {
       G4cout << " Event " << e+1 <<":" << G4endl;
@@ -376,11 +364,8 @@ G4int testINCAll(G4int nCollisions, G4int bulletType, G4double momZ, G4double A,
 	  //	  		cout << "+";
 	
 	} while( is == 2);
-
 	//		cout << " "  << G4endl;
-
       } else {
-
 	output = collider->collide(bull, targ); 
       }
       //printData(i);
@@ -424,7 +409,6 @@ G4int printData(G4int runId, G4int i) {
   }
 
   sumEnergy = bull->getKineticEnergy(); // In GeV 
-
   sumBaryon = A;
   if (bulletType == proton || bulletType == neutron) {
     sumBaryon += 1;
@@ -448,7 +432,7 @@ G4int printData(G4int runId, G4int i) {
       G4ThreeVector mom(m[1], m[2], m[3]);    
       ekin = ifrag->getKineticEnergy() * GeV;
 
-      G4int type = 0; // :::
+      G4int type = 0; 
 
       if (verboseLevel > 2) {
 	G4cout << " Fragment mass: " << ifrag->getMass()  << G4endl;
@@ -569,17 +553,14 @@ G4int printCross(G4int i) {
     output.printCollisionOutput();
   }
 
-
   // Convert Bertini data to Geant4 format
   std::vector<G4InuclNuclei> nucleiFragments = output.getNucleiFragments();
 
   if(!nucleiFragments.empty()) { 
     nucleiIterator ifrag;
         
-    for(ifrag = nucleiFragments.begin(); ifrag != nucleiFragments.end(); ifrag++) {
-    
+    for(ifrag = nucleiFragments.begin(); ifrag != nucleiFragments.end(); ifrag++) {    
       std::vector<G4double> m = ifrag->getMomentum();
-
     }
   }
 
@@ -592,37 +573,29 @@ G4int printCross(G4int i) {
       type = ipart->type();
 
       switch(type) {
-
       case proton:
 	n1 +=1;
 	break;
-
       case neutron:
 	n2 +=1;
 	break;
-
       case pionPlus:
 	n3 +=1;
 	break;
-
       case pionMinus:
 	n5 +=1;
 	break;
-
       case pionZero:
 	n7 +=1;
 	break;
-
       case foton:
 	n10 +=1;
 	break;
-
       default:
 	G4cout << "ERROR: unknown particle" << G4endl;
       }
     }
   }
-
   return 0;
     
 }
@@ -658,7 +631,6 @@ G4int test() {
     bull = new G4InuclElementaryParticle(m, 1);
     bull->printParticle();
 
-
     G4cout << G4endl << ">>> kinetic energy ok in z-dir" << G4endl;
     m[3] = std::sqrt(momZ * momZ + 2 * momZ * mass);
     bull = new G4InuclElementaryParticle(m, 1);
@@ -666,14 +638,12 @@ G4int test() {
 
     G4cout << G4endl << ">>> hole vectos set" << G4endl;
 
-
     m[3] = mZ;
     m[2] = 0;
     m[1] = 0;
     m[0] = std::sqrt(m[1] * m[1] + m[2] * m[2] + m[3] * m[3] + mass * mass);
 
     // fix m so that  ekin with the mass gets ok.
-
     m[3] = mZ;
     m[2] = mY;
     m[1] = mX;
@@ -715,7 +685,6 @@ G4int test() {
     G4InuclParticle* bull2 = new G4InuclElementaryParticle(m, 1); 
     bull2->printParticle();
   }
-
   return 0;
 }
 
