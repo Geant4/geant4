@@ -23,18 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: PhysicsListMessenger.cc,v 1.2 2006-06-29 22:03:56 gunter Exp $
+// $Id: PhysicsListMessenger.cc,v 1.3 2007-05-21 18:01:19 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "PhysicsListMessenger.hh"
 
 #include "PhysicsList.hh"
+#include "G4UIdirectory.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithAString.hh"
 
@@ -42,7 +40,10 @@
 
 PhysicsListMessenger::PhysicsListMessenger(PhysicsList* pPhys)
 :pPhysicsList(pPhys)
-{   
+{
+  physDir = new G4UIdirectory("/testem/phys/");
+  physDir->SetGuidance("physics list commands");
+   
   gammaCutCmd = new G4UIcmdWithADoubleAndUnit("/testem/phys/setGCut",this);  
   gammaCutCmd->SetGuidance("Set gamma cut.");
   gammaCutCmd->SetParameterName("Gcut",false);
@@ -71,10 +72,6 @@ PhysicsListMessenger::PhysicsListMessenger(PhysicsList* pPhys)
   allCutCmd->SetRange("cut>0.0");
   allCutCmd->AvailableForStates(G4State_PreInit,G4State_Idle);  
 
-  pListCmd = new G4UIcmdWithAString("/testem/phys/addPhysics",this);  
-  pListCmd->SetGuidance("Add modula physics list.");
-  pListCmd->SetParameterName("PList",false);
-  pListCmd->AvailableForStates(G4State_PreInit);  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -85,7 +82,7 @@ PhysicsListMessenger::~PhysicsListMessenger()
   delete electCutCmd;
   delete protoCutCmd;
   delete allCutCmd;
-  delete pListCmd;
+  delete physDir;    
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -110,8 +107,6 @@ void PhysicsListMessenger::SetNewValue(G4UIcommand* command,
       pPhysicsList->SetCutForPositron(cut);
     } 
 
-  if( command == pListCmd )
-   { pPhysicsList->AddPhysicsList(newValue);}
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

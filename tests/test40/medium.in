@@ -1,4 +1,4 @@
-# $Id: medium.in,v 1.1 2006-02-02 10:08:08 vnivanch Exp $
+# $Id: medium.in,v 1.2 2007-05-21 18:01:19 vnivanch Exp $
 #
 # Macro file for "TestEm2.cc" 
 # (can be run in batch, without graphic)
@@ -7,7 +7,6 @@
 #
 /control/verbose 2
 #
-##/testem/phys/addPhysics  model
 /testem/phys/addPhysics  standard
 /testem/phys/setCuts 1 mm
 #

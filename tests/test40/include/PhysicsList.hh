@@ -24,20 +24,12 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.hh,v 1.2 2006-06-29 22:03:12 gunter Exp $
+// $Id: PhysicsList.hh,v 1.3 2007-05-21 18:01:19 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //
-//---------------------------------------------------------------------------
-//
-// ClassName:   PhysicsList
-//
-// Author:      V.Ivanchenko 03.05.2004
-//
-// Modified:
-//
-//----------------------------------------------------------------------------
+// 14.10.02 (V.Ivanchenko) provide modular list on base of old PhysicsList
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -56,33 +48,21 @@ class PhysicsList: public G4VModularPhysicsList
 {
 public:
   PhysicsList();
-  ~PhysicsList();
+  virtual ~PhysicsList();
 
-  virtual void ConstructParticle();
-  virtual void ConstructProcess();
-  virtual void SetCuts();
-
+  // void ConstructParticle();
+    
+  void SetCuts();
   void SetCutForGamma(G4double);
   void SetCutForElectron(G4double);
-  void SetCutForPositron(G4double);
-
-  void AddPhysicsList(const G4String&);
-  void SetVerbose(G4int val);
-
+  void SetCutForPositron(G4double);        
+        
 private:
-
-  // hide assignment operator
-  PhysicsList & operator=(const PhysicsList &right);
-  PhysicsList(const PhysicsList&);
-
   G4double cutForGamma;
   G4double cutForElectron;
   G4double cutForPositron;
-  G4int    verbose;
-  G4bool   emBuilderIsRegisted;
-
+       
   PhysicsListMessenger* pMessenger;
-
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

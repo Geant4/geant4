@@ -1,4 +1,4 @@
-# $Id: big.in,v 1.1 2004-07-01 11:21:32 japost Exp $
+# $Id: big.in,v 1.2 2007-05-21 18:01:19 vnivanch Exp $
 #
 # Macro file for "TestEm2.cc" 
 # (can be run in batch, without graphic)
@@ -7,7 +7,6 @@
 #
 /control/verbose 2
 #
-##/testem/phys/addPhysics  model
 /testem/phys/addPhysics  standard
 /testem/phys/setCuts 1 mm
 #
