@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManagerKernel.cc,v 1.39 2007-05-09 17:49:59 asaim Exp $
+// $Id: G4RunManagerKernel.cc,v 1.40 2007-05-21 16:30:18 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -189,8 +189,8 @@ void G4RunManagerKernel::DefineWorldVolume(G4VPhysicalVolume* worldVol,
     std::vector<G4LogicalVolume*>::iterator lvItr
      = defaultRegion->GetRootLogicalVolumeIterator();
     defaultRegion->RemoveRootLogicalVolume(*lvItr);
-    if(verboseLevel>1) G4cout << (*lvItr)->GetName()
-     << " is removed from the default region." << G4endl;
+    if(verboseLevel>1) G4cout 
+     << "Obsolete world logical volume is removed from the default region." << G4endl;
   }
 
   // Accept the world volume
