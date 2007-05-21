@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.hh,v 1.23 2007-05-11 13:43:59 gcosmo Exp $
+// $Id: G4Navigator.hh,v 1.24 2007-05-21 15:36:25 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -330,6 +330,9 @@ class G4Navigator
   G4bool fWasLimitedByGeometry;
     // Set true if last Step was limited by geometry.
 
+  G4int  fVerbose;
+    // Verbose(ness) level  [if > 0, printout can occur].
+
  private:
 
   G4bool fActive;
@@ -422,8 +425,6 @@ class G4Navigator
     // Check-mode flag  [if true, more strict checks are performed].
   G4bool fPushed;
     // Push flag  [if true, means a stuck particle has been pushed].
-  G4int  fVerbose;
-    // Verbose(ness) level  [if > 0, printout can occur].
 
   // Helpers/Utility classes
   //

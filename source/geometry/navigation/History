@@ -1,4 +1,4 @@
-$Id: History,v 1.88 2007-05-19 00:01:41 japost Exp $
+$Id: History,v 1.89 2007-05-21 15:36:25 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May 21st, 2007 - G.Cosmo
+------------------------
+- Made 'fVerbose' protected in G4Navigator, reused in G4MultipleNavigator.
+- Some cleanup in G4MultipleNavigator implementation.
+
 May 19th, 2007 - J.Apostolakis (geomnav-V08-03-04)
 ------------------------------
 - Corrections and additions in G4PathFinder: 
