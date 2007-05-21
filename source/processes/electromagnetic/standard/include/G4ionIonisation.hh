@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ionIonisation.hh,v 1.42 2007-01-17 09:17:56 maire Exp $
+// $Id: G4ionIonisation.hh,v 1.43 2007-05-21 10:37:40 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -94,6 +94,8 @@ public:
 
   void ActivateStoppingData(G4bool);
 
+  void ActivateNuclearStopping(G4bool);
+
 protected:
 
   void CorrectionsAlongStep(
@@ -148,6 +150,7 @@ private:
 
   G4bool                      isInitialised;
   G4bool                      stopDataActive;
+  G4bool                      nuclearStopping;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -198,7 +201,8 @@ inline void G4ionIonisation::CorrectionsAlongStep(
     else {
       if(stopDataActive)
 	eloss *= corr->EffectiveChargeCorrection(part,mat,preKinEnergy);
-      eloss += s*corr->NuclearDEDX(part,mat,preKinEnergy - eloss*0.5);
+      if(nuclearStopping)
+	eloss += s*corr->NuclearDEDX(part,mat,preKinEnergy - eloss*0.5);
     }
     fParticleChange.SetProposedCharge(effCharge->EffectiveCharge(part,
                                       mat,preKinEnergy-eloss));
@@ -221,6 +225,13 @@ inline std::vector<G4DynamicParticle*>* G4ionIonisation::SecondariesPostStep(
 inline void G4ionIonisation::ActivateStoppingData(G4bool val)
 {
   stopDataActive = val;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline void G4ionIonisation::ActivateNuclearStopping(G4bool val)
+{
+  nuclearStopping = val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

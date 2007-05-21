@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ionIonisation.cc,v 1.40 2007-05-16 13:45:13 vnivanch Exp $
+// $Id: G4ionIonisation.cc,v 1.41 2007-05-21 10:37:40 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -81,7 +81,8 @@ G4ionIonisation::G4ionIonisation(const G4String& name)
     theParticle(0),
     theBaseParticle(0),
     isInitialised(false),
-    stopDataActive(true)
+    stopDataActive(true),
+    nuclearStopping(true)
 {
   SetDEDXBinning(120);
   SetLambdaBinning(120);
@@ -153,6 +154,7 @@ void G4ionIonisation::PrintInfo()
 	   << eth/MeV << " MeV"
 	   << "\n      Parametrisation from "
 	   << EmModel(1)->GetName() << " for protons below."
+	   << " NuclearStopping " << nuclearStopping
 	   << G4endl;	 
   if (stopDataActive)
     G4cout << "\n      Stopping Power data for " 

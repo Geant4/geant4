@@ -1,4 +1,4 @@
-$Id: History,v 1.309 2007-05-18 19:20:18 vnivanch Exp $
+$Id: History,v 1.310 2007-05-21 10:37:40 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+20 May 07:  V.Ivanchenko (emstand-V08-03-04)
+- G4ionIonisation - added NuclearStopping flag
 
 18 May 07:  V.Ivanchenko (emstand-V08-03-03)
 - remove obsolete G4VeEnergyLoss and G4VhEnergyLoss 
