@@ -25,15 +25,16 @@
 //
 
 //
-// $Id: test203.cc,v 1.2 2006-12-07 15:25:40 allison Exp $
+// $Id: test203.cc,v 1.3 2007-05-21 10:44:25 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
-// Usage: test203 [dumb|tcsh|Xm|Xaw|GAG] [vis-verbosity] [macro-file]
-// Typically: test203
-//        or: test203 tcsh 3 cms.mac
-// See help /vis/verbose.
+// Usage: test203 [macro-file]
+// Typically: test203  (executes vis.mac and enters interactive session)
+//        or: test203 filename (executes filename enters interactive session)
+// Note: Type of session determined by G4UI_USE... macros.  The first
+// found is instantiated (see code below).
 
 #include "globals.hh"
 
@@ -43,19 +44,20 @@
 #include "G4UIsession.hh"
 #include "G4UImanager.hh"
 #include "G4UIterminal.hh"
-#include "G4UItcsh.hh"
-
-#ifdef G4UI_USE_GAG
-  #include "G4UIGAG.hh"
+#ifdef G4UI_USE_WIN32
+#include "G4UIWin32.hh"
 #endif
 #ifdef G4UI_USE_XM
-  #include "G4UIXm.hh"
+#include "G4UIXm.hh"
 #endif
 #ifdef G4UI_USE_XAW
-  #include "G4UIXaw.hh"
+#include "G4UIXaw.hh"
 #endif
-#ifdef G4UI_USE_WIN32
-  #include "G4UIWin32.hh"
+#ifdef G4UI_USE_GAG
+#include "G4UIGAG.hh"
+#endif
+#ifdef G4UI_USE_TCSH
+#include "G4UItcsh.hh"
 #endif
 
 #include "G4RunManager.hh"
@@ -82,39 +84,25 @@ int main (int argc, char** argv) {
 #ifdef G4UI_USE_WIN32
   session = new G4UIWin32 (hInstance,hPrevInstance,lpszCmdLine,nCmdShow);
 #else
-  if (argc >= 2) {
-    if (strcmp (argv[1], "dumb")==0)
-      session = new G4UIterminal;
-    else if (strcmp (argv[1], "tcsh")==0)
-      session = new G4UIterminal(new G4UItcsh);
 #ifdef G4UI_USE_XM
-    else if (strcmp (argv[1], "Xm")==0)
-      session = new G4UIXm (argc, argv);
-#endif
+  session = new G4UIXm (argc, argv);
+#else
 #ifdef G4UI_USE_XAW
-    else if (strcmp (argv[1], "Xaw")==0)
-      session = new G4UIXaw (argc, argv);
-#endif
+  session = new G4UIXaw (argc, argv);
+#else
 #ifdef G4UI_USE_GAG
-    else if (strcmp (argv[1], "gag")==0)
-      session = new G4UIGAG ;
-#endif
-#ifdef G4UI_USE_GAG
-    else
-      session = new G4UIGAG;
-#endif
-  } else {  // argc < 2
-#ifdef G4UI_USE_GAG
-    session = new G4UIGAG;
+  session = new G4UIGAG ;
 #else
 #ifdef G4UI_USE_TCSH
-    session = new G4UIterminal(new G4UItcsh);
+   session = new G4UIterminal(new G4UItcsh);
 #else
-    session = new G4UIterminal();
+   session = new G4UIterminal();
 #endif
 #endif
-  }
 #endif
+#endif
+#endif
+
   G4UImanager::GetUIpointer()->SetSession(session);  //So that Pause works..
 
   // Run manager
@@ -145,13 +133,16 @@ int main (int argc, char** argv) {
 
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
   G4String controlExecute = "/control/execute ";
-  // execute an argument macro file if exist
-  if(argc>3){
-    G4String fileName = argv[3];
+  if(argc>1){
+    // execute an argument macro file if exist
+    G4String fileName = argv[1];
     UImanager->ApplyCommand(controlExecute + fileName);
-  } else {  // start interactive session
-    session->SessionStart();
+  } else {
+    // Execute vis.mac
+    UImanager->ApplyCommand(controlExecute + "vis.mac");
   }
+  // start interactive session
+  session->SessionStart();
 
 #ifdef G4VIS_USE
   delete visManager;

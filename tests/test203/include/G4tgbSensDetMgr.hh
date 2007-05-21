@@ -13,8 +13,8 @@ Changes:     03/08/00: creation
 It is a singleton, accesed always with GetInstance() */ 
 
 #include <vector>
-#include <map.h>
-#include <multimap.h>
+#include <map>
+//#include <multimap>
 
 class G4VSensitiveDetector;
 

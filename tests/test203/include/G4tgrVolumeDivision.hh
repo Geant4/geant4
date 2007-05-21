@@ -11,7 +11,7 @@ Changes:     12/12/00: creation
 //----------------------------------------------- 
 //! Class to manage the geometry info of detector unit made by dividing a mother detector unit
 
-#include <multimap.h>
+//#include <multimap>
 #include "G4tgrVolume.hh"
 #include "G4tgrPlaceDivRep.hh"
 
