@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UItcsh.cc,v 1.12 2006-06-29 19:09:54 gunter Exp $
+// $Id: G4UItcsh.cc,v 1.13 2007-05-21 07:31:57 kmura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -464,14 +464,14 @@ void G4UItcsh::CompleteCommand()
   else jhead++;
 
   G4int jt= input.find_last_of('/');
-  if(jt<jhead) jt=G4String::npos;
+  if(jt<jhead) jt=G4int(G4String::npos);
 
   if(jt==G4int(G4String::npos)) jt= jhead;
   else jt++;
 
   G4String dspstr; 
   G4int i;
-  for(i=jt; i<=G4int(input.length())-1; i++) dspstr+= G4String(AsciiBS); // cleanup
+  for(i=jt; i<=G4int(input.length())-1; i++) dspstr+= G4String(AsciiBS); 
   for(i=jt; i<=G4int(input.length())-1; i++) dspstr+= G4String(' '); 
   for(i=jt; i<=G4int(input.length())-1; i++) dspstr+= G4String(AsciiBS); 
 
