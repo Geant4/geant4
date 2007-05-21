@@ -1,4 +1,4 @@
-$Id: History,v 1.78 2005-11-28 18:20:20 gcosmo Exp $
+$Id: History,v 1.79 2007-05-21 07:30:47 kmura Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+22 May 2007, Koichi Murakami (interface-V08-03-00)
+- G4UIterminal.cc: implement signal handler for soft-abort
 
 28 November 2005, Gabriele Cosmo (interface-V07-01-02)
 - G4UIXm.cc migrated to sstream

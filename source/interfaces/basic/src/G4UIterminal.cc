@@ -24,10 +24,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIterminal.cc,v 1.21 2006-06-29 19:09:56 gunter Exp $
+// $Id: G4UIterminal.cc,v 1.22 2007-05-21 07:30:34 kmura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-
+// ====================================================================
+//   G4UIterminal.cc
+//
+// ====================================================================
 #include "G4Types.hh"
 #include "G4StateManager.hh"
 #include "G4UIcommandTree.hh"
@@ -37,6 +40,44 @@
 #include "G4UIcsh.hh"
 #include <sstream>
 
+#ifndef WIN32
+#include "G4RunManager.hh"
+#include <signal.h>
+#endif
+
+// ====================================================================
+// signal handler for soft-abort
+// ====================================================================
+#ifndef WIN32
+////////////////////////////////
+static void SignalHandler(G4int)
+////////////////////////////////
+{
+  G4RunManager* runManager= G4RunManager::GetRunManager();
+  G4StateManager* stateManager= G4StateManager::GetStateManager();
+  G4ApplicationState state= stateManager-> GetCurrentState();
+
+  if(state==G4State_GeomClosed || state==G4State_EventProc) {
+    G4cout << "aborting Run ...";
+    runManager-> AbortRun(true);
+    G4cout << G4endl;
+  } else {
+    G4cout << G4endl
+           << "Session terminated." << G4endl;
+    delete runManager;
+    exit(0);
+  }
+
+  // for original Unix / System V
+  signal(SIGINT, SignalHandler);
+}
+#endif
+
+// ====================================================================
+//
+// class description
+//
+// ====================================================================
 
 //////////////////////////////////////////////
 G4UIterminal::G4UIterminal(G4VUIshell* aShell)
@@ -51,6 +92,12 @@ G4UIterminal::G4UIterminal(G4VUIshell* aShell)
 
   if(aShell) shell= aShell;
   else shell= new G4UIcsh;
+
+#ifndef WIN32
+  // add signal handler
+  signal(SIGINT, SignalHandler);
+#endif
+
 }
 
 /////////////////////////////
