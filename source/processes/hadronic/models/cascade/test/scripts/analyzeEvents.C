@@ -1,8 +1,8 @@
-{  
-  gROOT->Reset();
+{
+   gROOT->Reset();
   gROOT->SetStyle("clearRetro");
 
-#include "Riostream.h"
+#include "Riostream.h";
 
   enum particleType { nuclei = 0, proton = 1, neutron = 2, pionPlus = 3, pionMinus = 5, pionZero = 7, foton = 10 };
 
@@ -18,8 +18,10 @@
   TH1F *hpE = new TH1F("hpE","p kinetic energy",100,0,1);
   TH1F *hnE = new TH1F("hnE","n kinetic energy",100,0,1);
   TH1F *hgE = new TH1F("hgE","gamma energy",100,0,1);
+
   TH1F *hppE = new TH1F("hppE","pi+ energy",100,0,1);
 
+  
   TNtuple *ntuple = new TNtuple("ntuple","foorified data from cascade.cc  ouput","runId:eventId:particleId:kineticEnergy:momX:momY:momZ:fragmentA:fragmentZ:exitationEnergy");
   // read first comment line and second line with parameters
 
@@ -48,9 +50,11 @@
     if (particleId==pionPlus) hppE->Fill(kineticEnergy/eMax);
     ntuple->Fill(runId, eventId, particleId, kineticEnergy, momX, momY, momZ, fragmentA, fragmentZ, exitationEnergy);
     nlines++;
-  }
+  };
   printf(" found %d lines \n",nlines);
+
+  
   in.close();
   f->Write();
-}
 
+}
