@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst202DetectorConstruction.cc,v 1.1 2007-02-08 15:45:29 allison Exp $
+// $Id: Tst202DetectorConstruction.cc,v 1.2 2007-05-21 10:38:12 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -205,8 +205,8 @@ G4VPhysicalVolume* Tst202DetectorConstruction::Construct()
                         experimentalHall_log,0,false,0);
 
   //------------------------------ calorimeter boxes
-  G4VPhysicalVolume* calo_phys;
-  G4LogicalVolume * calorimeter_log;
+  G4VPhysicalVolume* calo_phys = 0;
+  G4LogicalVolume * calorimeter_log = 0;
   if (volumeSelection["calorimeter_boxes"]) {
     G4Box * calorimeter_box
       = new G4Box("calorimeter_b",calBox_x,calBox_y,calBox_z);
@@ -361,8 +361,8 @@ G4VPhysicalVolume* Tst202DetectorConstruction::Construct()
 
   //----------- Tubes, replicas(!?) and daughter boxes
 
-  G4LogicalVolume * divided_tube_inset_log;
-  G4LogicalVolume * grand_daughter_box2_log;
+  G4LogicalVolume * divided_tube_inset_log = 0;
+  G4LogicalVolume * grand_daughter_box2_log = 0;
   if (volumeSelection["Tubes_etc"]) {
     const G4double eps = 10 * mm;
     const G4double alp = 10 * mrad;
