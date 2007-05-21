@@ -14,7 +14,7 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
 
 
-18-May-2007 Gunter Folger
+18-May-2007 Gunter Folger                had-binary-V08-03-00
 -   G4BinaryLightIonReaction: Protect against divide by 0 when energy momentum
      correction stalls (for numerical precision?)     
      
