@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.hh,v 1.43 2007-05-18 18:39:55 vnivanch Exp $
+// $Id: G4VMultipleScattering.hh,v 1.44 2007-05-21 10:37:06 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -156,13 +156,20 @@ public:
 
   // The function overloads the corresponding function of the base
   // class.It limits the step near to boundaries only
-  // and invokes the method GetContinuousStepLimit at every step.
+  // and invokes the method GetMscContinuousStepLimit at every step.
   inline virtual G4double AlongStepGetPhysicalInteractionLength(
                                             const G4Track&,
                                                   G4double  previousStepSize,
                                                   G4double  currentMinimalStep,
                                                   G4double& currentSafety,
                                                   G4GPILSelection* selection);
+
+  // The function overloads the corresponding function of the base
+  // class.
+  inline virtual G4double PostStepGetPhysicalInteractionLength(
+                                            const G4Track&,
+					    G4double  previousStepSize,
+					    G4ForceCondition* condition);
 
   // This method does not used for tracking, it is intended only for tests
   inline virtual G4double ContinuousStepLimit(const G4Track& track,
@@ -326,11 +333,19 @@ inline void G4VMultipleScattering::DefineMaterial(const G4MaterialCutsCouple* co
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4double G4VMultipleScattering::GetMeanFreePath(const G4Track&,
-                                                             G4double,
-                                                             G4ForceCondition* cond)
+inline G4double G4VMultipleScattering::PostStepGetPhysicalInteractionLength(
+              const G4Track&, G4double, G4ForceCondition* condition)
 {
-  *cond = Forced;
+  *condition = Forced;
+  return DBL_MAX;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4double G4VMultipleScattering::GetMeanFreePath(
+              const G4Track&, G4double, G4ForceCondition* condition)
+{
+  *condition = Forced;
   return DBL_MAX;
 }
 

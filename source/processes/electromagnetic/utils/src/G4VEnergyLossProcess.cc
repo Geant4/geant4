@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.104 2007-05-18 18:39:55 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.105 2007-05-21 10:37:06 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -203,6 +203,7 @@ G4VEnergyLossProcess::G4VEnergyLossProcess(const G4String& name,
   modelManager = new G4EmModelManager();
   safetyHelper = G4TransportationManager::GetTransportationManager()
     ->GetSafetyHelper();
+  aGPILSelection = CandidateForSelection;
 
   // initialise model
   (G4LossTableManager::Instance())->Register(this);
