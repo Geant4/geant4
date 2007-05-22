@@ -1,4 +1,4 @@
-$Id: History,v 1.280 2007-05-21 10:37:06 vnivanch Exp $
+$Id: History,v 1.281 2007-05-22 13:38:59 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+21 May 07: V.Ivant (emutils-V08-02-12)
+- G4VEnergyLossProcess - speadup the code by added implementation
+         method PostStepGetPhysicalInteractionLength;
+         added methods InitialiseStep and InitialiseMassCharge 
+- G4VEmProcess - speadup the code by added implementation
+         method PostStepGetPhysicalInteractionLength;
+         add comments to header and inline methods
 
 20 May 07: V.Ivant (emutils-V08-02-11)
 - G4VMultipleScattering - speadup the code by added implementation

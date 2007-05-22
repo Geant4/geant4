@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.105 2007-05-21 10:37:06 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.106 2007-05-22 13:39:00 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -179,8 +179,6 @@ G4VEnergyLossProcess::G4VEnergyLossProcess(const G4String& name,
   rndmStepFlag(false),
   tablesAreBuilt(false),
   integral(true),
-  meanFreePath(false),
-  aboveCSmax(true),
   isIonisation(true),
   useSubCutoff(false)
 {
@@ -310,7 +308,6 @@ void G4VEnergyLossProcess::PreparePhysicsTable(
   currentCouple = 0;
   preStepLambda = 0.0;
   mfpKinEnergy  = DBL_MAX;
-  preStepMFP    = DBL_MAX;
   fRange        = DBL_MAX;
 
   // Base particle and set of models can be defined here
@@ -352,7 +349,7 @@ void G4VEnergyLossProcess::PreparePhysicsTable(
     massRatio = (baseParticle->GetPDGMass())/initialMass;
     G4double q = initialCharge/baseParticle->GetPDGCharge();
     chargeSqRatio = q*q;
-    reduceFactor = 1.0/(chargeSqRatio*massRatio);
+    if(chargeSqRatio > 0.0) reduceFactor = 1.0/(chargeSqRatio*massRatio);
   }
 
   theCuts = modelManager->Initialise(particle, secondaryParticle, 
@@ -817,7 +814,7 @@ void G4VEnergyLossProcess::SampleSubCutSecondaries(
   G4double length = step.GetStepLength();
 
   // negligible probability to get any interaction
-  if(length*cross < 1.e-6) return;
+  if(length*cross < perMillion) return;
   /*    
   if(-1 < verboseLevel) 
     G4cout << "<<< Subcutoff for " << GetProcessName()
@@ -883,7 +880,7 @@ void G4VEnergyLossProcess::SampleSubCutSecondaries(
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4VParticleChange* G4VEnergyLossProcess::PostStepDoIt(const G4Track& track,
-                                                      const G4Step& step)
+                                                      const G4Step&)
 {
   fParticleChange.InitializeForPostStep(track);
   G4double finalT = track.GetKineticEnergy();
@@ -911,8 +908,10 @@ G4VParticleChange* G4VEnergyLossProcess::PostStepDoIt(const G4Track& track,
       nWarnings++;
     }
     */
-    if(preStepLambda*G4UniformRand() > lx)
-      return G4VContinuousDiscreteProcess::PostStepDoIt(track,step);
+    if(preStepLambda*G4UniformRand() > lx) {
+      ClearNumberOfInteractionLengthLeft();
+      return &fParticleChange;
+    }
   }
 
   G4VEmModel* currentModel = SelectModel(postStepScaledEnergy);
@@ -929,7 +928,7 @@ G4VParticleChange* G4VEnergyLossProcess::PostStepDoIt(const G4Track& track,
       fParticleChange.AddSecondary((*newp)[i]);
     }
     delete newp;
-    }
+  }
 
   /*
   if(-1 < verboseLevel) {
@@ -943,7 +942,8 @@ G4VParticleChange* G4VEnergyLossProcess::PostStepDoIt(const G4Track& track,
            << G4endl;
   }
   */
-  return G4VContinuousDiscreteProcess::PostStepDoIt(track,step);
+  ClearNumberOfInteractionLengthLeft();
+  return &fParticleChange;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

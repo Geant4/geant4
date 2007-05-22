@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.hh,v 1.64 2007-05-21 10:37:06 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.hh,v 1.65 2007-05-22 13:38:59 vnivanch Exp $
 // GEANT4 tag $Name:
 //
 // -------------------------------------------------------------------
@@ -153,15 +153,6 @@ protected:
 			           G4double& eloss,
                                    G4double& length);
 
-  inline G4double GetMeanFreePath(const G4Track& track,
-				  G4double previousStepSize,
-				  G4ForceCondition* condition);
-
-  inline G4double GetContinuousStepLimit(const G4Track& track,
-					 G4double previousStepSize,
-					 G4double currentMinimumStep,
-					 G4double& currentSafety);
-
   //------------------------------------------------------------------------
   // Generic methods common to all ContinuousDiscrete processes 
   //------------------------------------------------------------------------
@@ -192,9 +183,22 @@ public:
                               const G4String& directory,
                                     G4bool ascii);
 
+protected:
+
+  inline G4double GetMeanFreePath(const G4Track& track,
+				  G4double previousStepSize,
+				  G4ForceCondition* condition);
+
+  inline G4double GetContinuousStepLimit(const G4Track& track,
+					 G4double previousStepSize,
+					 G4double currentMinimumStep,
+					 G4double& currentSafety);
+
   //------------------------------------------------------------------------
-  // Specific methods for along step simulation 
+  // Specific methods for along/post step simulation 
   //------------------------------------------------------------------------
+
+public:
 
   void AddCollaborativeProcess(G4VEnergyLossProcess*);
 
@@ -213,6 +217,12 @@ public:
                              G4double  currentMinimumStep,
                              G4double& currentSafety,
                              G4GPILSelection* selection
+                            );
+
+  inline G4double PostStepGetPhysicalInteractionLength(
+                             const G4Track& track,
+                             G4double   previousStepSize,
+                             G4ForceCondition* condition
                             );
 
   //------------------------------------------------------------------------
@@ -315,7 +325,7 @@ public:
   inline G4int NumberOfModels();
 
   //------------------------------------------------------------------------
-  // Parameters used for simulation of energy loss
+  // Get/set parameters used for simulation of energy loss
   //------------------------------------------------------------------------
 
   inline void SetLossFluctuations(G4bool val);
@@ -349,9 +359,6 @@ public:
 
   inline G4double SampleRange();
 
-  // reset NumberOfInteractionLengthLeft
-  inline void ResetNumberOfInteractionLengthLeft();
-
   inline G4VEmModel* SelectModelForMaterial(G4double kinEnergy, size_t& idx) const;
 
 
@@ -359,9 +366,7 @@ public:
   inline void SetDynamicMassCharge(G4double massratio, G4double charge2ratio);
 
   // Helper functions
-  inline G4double MeanFreePath(const G4Track& track,
-			       G4double previousStepSize,
-			       G4ForceCondition* condition);
+  inline G4double MeanFreePath(const G4Track& track);
 
   inline G4double ContinuousStepLimit(const G4Track& track,
 				      G4double previousStepSize,
@@ -372,6 +377,8 @@ protected:
 
   G4PhysicsVector* LambdaPhysicsVector(const G4MaterialCutsCouple*, 
 				       G4double cut);
+
+  inline virtual void InitialiseMassCharge(const G4Track&);
 
   inline void SetParticle(const G4ParticleDefinition* p);
 
@@ -387,6 +394,8 @@ private:
 
   // Clear tables
   void Clear();
+
+  inline void InitialiseStep(const G4Track&);
 
   inline void DefineMaterial(const G4MaterialCutsCouple* couple);
 
@@ -475,7 +484,6 @@ private:
   G4double chargeSqRatio;
 
   G4double preStepLambda;
-  G4double preStepMFP;
   G4double fRange;
   G4double preStepKinEnergy;
   G4double preStepScaledEnergy;
@@ -493,8 +501,6 @@ private:
   G4bool   rndmStepFlag;
   G4bool   tablesAreBuilt;
   G4bool   integral;
-  G4bool   meanFreePath;
-  G4bool   aboveCSmax;
   G4bool   isIonisation;
   G4bool   useSubCutoff;
 };
@@ -509,9 +515,25 @@ inline void G4VEnergyLossProcess::DefineMaterial(
     currentCouple   = couple;
     currentMaterial = couple->GetMaterial();
     currentMaterialIndex = couple->GetIndex();
-    if(!meanFreePath) ResetNumberOfInteractionLengthLeft();
+    mfpKinEnergy = DBL_MAX;
   }
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline void G4VEnergyLossProcess::InitialiseStep(const G4Track& track)
+{
+  InitialiseMassCharge(track);
+  preStepKinEnergy = track.GetKineticEnergy();
+  preStepScaledEnergy = preStepKinEnergy*massRatio;
+  DefineMaterial(track.GetMaterialCutsCouple());
+  if (theNumberOfInteractionLengthLeft < 0.0) mfpKinEnergy = DBL_MAX;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline void G4VEnergyLossProcess::InitialiseMassCharge(const G4Track&)
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -708,13 +730,11 @@ inline G4double G4VEnergyLossProcess::GetLambdaForScaledEnergy(G4double e)
 
 inline void G4VEnergyLossProcess::ComputeLambdaForScaledEnergy(G4double e)
 {
-  meanFreePath  = false;
-  aboveCSmax    = false;
   mfpKinEnergy  = theEnergyOfCrossSectionMax[currentMaterialIndex];
   if (e <= mfpKinEnergy) {
     preStepLambda = GetLambdaForScaledEnergy(e);
+    //   mfpKinEnergy = 0.0;
   } else {
-    aboveCSmax  = true;
     G4double e1 = e*lambdaFactor;
     if(e1 > mfpKinEnergy) {
       preStepLambda  = GetLambdaForScaledEnergy(e);
@@ -727,36 +747,7 @@ inline void G4VEnergyLossProcess::ComputeLambdaForScaledEnergy(G4double e)
       preStepLambda = chargeSqRatio*theCrossSectionMax[currentMaterialIndex];
     }
   }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4double G4VEnergyLossProcess::GetMeanFreePath(
-                const G4Track& track, G4double, G4ForceCondition* condition)
-{
-  *condition = NotForced;
-  preStepKinEnergy = track.GetKineticEnergy();
-  preStepScaledEnergy = preStepKinEnergy*massRatio;
-  if(aboveCSmax && preStepScaledEnergy < mfpKinEnergy) 
-    ResetNumberOfInteractionLengthLeft();
-  DefineMaterial(track.GetMaterialCutsCouple());
-  if (meanFreePath) {
-    if (integral) ComputeLambdaForScaledEnergy(preStepScaledEnergy);
-    else  preStepLambda = GetLambdaForScaledEnergy(preStepScaledEnergy);
-    if(0.0 < preStepLambda) preStepMFP = 1.0/preStepLambda;
-    else                    preStepMFP = DBL_MAX;
-  }
-  //  G4cout<<GetProcessName()<<": e= "<<preStepKinEnergy<< " eCSmax= " 
-  //<<mfpKinEnergy<< " mfp= "<<preStepMFP<<G4endl;
-  return preStepMFP;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4double G4VEnergyLossProcess::MeanFreePath(
-         const G4Track& track, G4double s, G4ForceCondition* cond)
-{
-  return GetMeanFreePath(track, s, cond);
+  //  theNumberOfInteractionLengthLeft = -1.;  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -819,11 +810,74 @@ inline G4double G4VEnergyLossProcess::SampleRange()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline void G4VEnergyLossProcess::ResetNumberOfInteractionLengthLeft()
+inline G4double G4VEnergyLossProcess::PostStepGetPhysicalInteractionLength(
+                             const G4Track& track,
+                             G4double   previousStepSize,
+                             G4ForceCondition* condition)
 {
-  meanFreePath = true;
-  aboveCSmax   = false;
-  G4VProcess::ResetNumberOfInteractionLengthLeft();
+  // condition is set to "Not Forced"
+  *condition = NotForced;
+  G4double x = DBL_MAX;
+  InitialiseStep(track);
+
+  if(preStepScaledEnergy < mfpKinEnergy) {
+    if (integral) ComputeLambdaForScaledEnergy(preStepScaledEnergy);
+    else  preStepLambda = GetLambdaForScaledEnergy(preStepScaledEnergy);
+    if(preStepLambda <= DBL_MIN) mfpKinEnergy = 0.0;
+  }
+
+  if(preStepLambda > DBL_MIN) {
+
+    if (theNumberOfInteractionLengthLeft < 0.0) {
+      // beggining of tracking (or just after DoIt of this process)
+      ResetNumberOfInteractionLengthLeft();
+    } else if(previousStepSize > DBL_MIN) {
+      // subtract NumberOfInteractionLengthLeft
+      SubtractNumberOfInteractionLengthLeft(previousStepSize);
+      if(theNumberOfInteractionLengthLeft<0.)
+	theNumberOfInteractionLengthLeft=perMillion;
+    }
+
+    // get mean free path
+    currentInteractionLength = 1.0/preStepLambda;
+    x = theNumberOfInteractionLengthLeft * currentInteractionLength;
+#ifdef G4VERBOSE
+    if (verboseLevel>2){
+      G4cout << "G4VEnergyLossProcess::PostStepGetPhysicalInteractionLength ";
+      G4cout << "[ " << GetProcessName() << "]" << G4endl; 
+      G4cout << " for " << particle->GetParticleName() 
+             << " in Material  " <<  currentMaterial->GetName()
+	     << " Ekin(MeV)= " << preStepKinEnergy/MeV 
+	     <<G4endl;
+      G4cout << "MeanFreePath = " << currentInteractionLength/cm << "[cm]" 
+	     << "InteractionLength= " << x/cm <<"[cm] " <<G4endl;
+    }
+#endif
+  }
+  return x;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4double G4VEnergyLossProcess::MeanFreePath(const G4Track& track)
+{
+  DefineMaterial(track.GetMaterialCutsCouple());
+  preStepLambda = GetLambdaForScaledEnergy(track.GetKineticEnergy()*massRatio);
+  G4double x = DBL_MAX;
+  if(DBL_MIN < preStepLambda) x = 1.0/preStepLambda;
+  return x;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4double G4VEnergyLossProcess::GetMeanFreePath(
+                             const G4Track& track,
+                             G4double,
+                             G4ForceCondition* condition)
+
+{
+  *condition = NotForced;
+  return MeanFreePath(track);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
