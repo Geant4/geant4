@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ionIonisation.hh,v 1.43 2007-05-21 10:37:40 vnivanch Exp $
+// $Id: G4ionIonisation.hh,v 1.44 2007-05-22 13:40:46 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -104,7 +104,7 @@ protected:
 			         G4double& eloss,
 			         G4double& length);
 
-  virtual std::vector<G4DynamicParticle*>* SecondariesPostStep(
+  std::vector<G4DynamicParticle*>* SecondariesPostStep(
 			    G4VEmModel*,
 			    const G4MaterialCutsCouple*,
 			    const G4DynamicParticle*,
@@ -113,12 +113,10 @@ protected:
   void InitialiseEnergyLossProcess(const G4ParticleDefinition*,
 				   const G4ParticleDefinition*);
 
-  G4double GetMeanFreePath(const G4Track& track,
-			   G4double previousStepSize,
-			   G4ForceCondition* condition);
+  void InitialiseMassCharge(const G4Track&);
 
-  virtual G4double MinPrimaryEnergy(const G4ParticleDefinition* p,
-				    const G4Material*, G4double cut);
+  G4double MinPrimaryEnergy(const G4ParticleDefinition* p,
+			    const G4Material*, G4double cut);
 
 private:
 
@@ -174,14 +172,13 @@ inline G4double G4ionIonisation::MinPrimaryEnergy(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline void G4ionIonisation::DefineMassCharge(const G4ParticleDefinition* pd,
-					      const G4Material* mat,
-					      G4double mass,
-					      G4double kinEnergy)
+inline void G4ionIonisation::InitialiseMassCharge(const G4Track& track)
 {
-  preKinEnergy    = kinEnergy;
-  massRatio       = baseMass/mass;
-  charge2         = effCharge->EffectiveChargeSquareRatio(pd,mat,kinEnergy);
+  preKinEnergy = track.GetKineticEnergy();
+  massRatio    = baseMass/track.GetDynamicParticle()->GetMass();
+  charge2      = effCharge->EffectiveChargeSquareRatio(track.GetDefinition(),
+						       track.GetMaterial(),
+						       preKinEnergy);
   SetDynamicMassCharge(massRatio, charge2);
 }
 

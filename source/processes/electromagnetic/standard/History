@@ -1,4 +1,4 @@
-$Id: History,v 1.310 2007-05-21 10:37:40 vnivanch Exp $
+$Id: History,v 1.311 2007-05-22 13:40:46 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+21 May 07:  V.Ivanchenko (emstand-V08-03-05)
+- G4ionIonisation - added InitialiseMassCharge method; remove
+      GetMeanFreePath implementation
 
 20 May 07:  V.Ivanchenko (emstand-V08-03-04)
 - G4ionIonisation - added NuclearStopping flag

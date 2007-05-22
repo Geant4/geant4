@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ionIonisation.cc,v 1.41 2007-05-21 10:37:40 vnivanch Exp $
+// $Id: G4ionIonisation.cc,v 1.42 2007-05-22 13:40:46 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -161,19 +161,6 @@ void G4ionIonisation::PrintInfo()
            << corr->GetNumberOfStoppingVectors()
 	   << " ion/material pairs are used."
            << G4endl;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4double G4ionIonisation::GetMeanFreePath(const G4Track& track,
-					  G4double,
-					  G4ForceCondition* cond)
-{
-  DefineMassCharge(track.GetDefinition(),
-		   track.GetMaterial(),
-		   track.GetDynamicParticle()->GetMass(),
-		   track.GetKineticEnergy());
-  return G4VEnergyLossProcess::GetMeanFreePath(track, 0.0, cond);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
