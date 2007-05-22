@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeModel.cc,v 1.60 2007-04-03 13:46:49 allison Exp $
+// $Id: G4PhysicalVolumeModel.cc,v 1.61 2007-05-22 17:13:19 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -681,12 +681,8 @@ const std::map<G4String,G4AttDef>* G4PhysicalVolumeModel::GetAttDefs() const
     std::map<G4String,G4AttDef>* store
       = G4AttDefStore::GetInstance("G4PhysicalVolumeModel", isNew);
     if (isNew) {
-      (*store)["PVol"] =
-	G4AttDef("PVol","Physical Volume","Physics","","G4String");
-      (*store)["Copy"] =
-	G4AttDef("Copy","Physical Volume Copy No.","Physics","","G4int");
-      (*store)["Depth"] =
-	G4AttDef("Depth","Physical Volume Depth","Physics","","G4int");
+      (*store)["PVPath"] =
+	G4AttDef("PVPath","Physical Volume Path","Physics","","G4String");
       (*store)["LVol"] =
 	G4AttDef("LVol","Logical Volume","Physics","","G4String");
       (*store)["Solid"] =
@@ -760,13 +756,11 @@ std::vector<G4AttValue>* G4PhysicalVolumeModel::CreateCurrentAttValues() const
   std::ostringstream oss;
   std::vector<G4PhysicalVolumeNodeID>::const_iterator i;
   for (i = fFullPVPath.begin(); i != fFullPVPath.end(); ++i) {
-    values->push_back
-      (G4AttValue("PVol", i->GetPhysicalVolume()->GetName(),""));
-    oss.str(""); oss << i->GetCopyNo();
-    values->push_back(G4AttValue("Copy", oss.str(),""));
-    oss.str(""); oss << i->GetNonCulledDepth();
-    values->push_back(G4AttValue("Depth", oss.str(),""));
+    oss << i->GetPhysicalVolume()->GetName()
+	<< ':' << i->GetCopyNo();
+    if (i != --fFullPVPath.end()) oss << '/';
   }
+  values->push_back(G4AttValue("PVPath", oss.str(),""));
   values->push_back(G4AttValue("LVol", fpCurrentLV->GetName(),""));
   G4VSolid* pSol = fpCurrentLV->GetSolid();
   values->push_back(G4AttValue("Solid", pSol->GetName(),""));
