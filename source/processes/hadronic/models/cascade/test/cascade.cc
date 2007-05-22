@@ -444,7 +444,7 @@ G4int printData(G4int runId, G4int i) {
       G4double fEx = ifrag->getExitationEnergyInGeV();
       G4int fA = G4int(ifrag->getA());
       G4int fZ = G4int(ifrag->getZ());
-
+      G4int modelId = ifrag->getModel();
       sumBaryon -= fA;
       sumEnergy -= ekin;
       sumEnergy -= fEx;
@@ -464,13 +464,14 @@ G4int printData(G4int runId, G4int i) {
 	  std::setw(8)  << runId        << 
 	  std::setw(8)  << i            << 
 	  std::setw(8)  << type         << 
-	  std::setw(13) << ekin *kE  << 
+	  std::setw(8)  << modelId      <<
+	  std::setw(13) << ekin *kE     << 
 	  std::setw(13) << mom[0] *kE   << 
-	  std::setw(13) << mom[1] *kE  << 
-	  std::setw(13) << mom[2] *kE  << 
+	  std::setw(13) << mom[1] *kE   << 
+	  std::setw(13) << mom[2] *kE   << 
 	  std::setw(13) << fA           << 
 	  std::setw(13) << fZ           << 
-	  std::setw(13) << fEx    *kE  << G4endl;
+	  std::setw(13) << fEx    *kE   << G4endl;
 	//	  std::setw(13) << sumBaryon    << 
 	//std::setw(13) << sumEnergy    << G4endl;
       }
@@ -490,7 +491,7 @@ G4int printData(G4int runId, G4int i) {
       // std::vector<G4double>  mom(3, 0.0);
       ekin = ipart->getKineticEnergy();
       G4int type = ipart->type();
-
+      G4int modelId = ipart->getModel();
       if (type == proton || type == neutron) {
 	sumBaryon -= 1;
       } 
@@ -503,7 +504,8 @@ G4int printData(G4int runId, G4int i) {
 	G4cout << 
 	  std::setw(8)  << runId        << 
 	  std::setw(8)  << i            << 
-	  std::setw(8)  << type         << 
+	  std::setw(8)  << type         <<
+	  std::setw(8)  << modelId     <<
 	  std::setw(13) << ekin   *kE << 
        	  std::setw(13) << mom[1] *kE << 
        	  std::setw(13) << mom[2] *kE << 

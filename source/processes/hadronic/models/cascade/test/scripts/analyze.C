@@ -30,6 +30,33 @@ ntuple.Draw("kineticEnergy","particleId==2","E1 same");// neutron spectrum
 ntuple->SetLineStyle(3);
   ntuple.Draw("kineticEnergy","particleId==1","same"); // neutron spectrum  
 
+
+  TCanvas *g =new TCanvas("g","g",0,0,600,400);
+  g->Divide(3,2);
+ntuple->SetLineStyle(1);
+  g->cd(1); ntuple.Draw("sqrt(momX*momX+momY*momY+momZ*momZ)");   
+  g->cd(2); ntuple.Draw("modelId");   
+  g->cd(3); ntuple.Draw("modelId:particleId", "", "box");   
+
+   TH1F *h2 = new TH1F("h2","h2",100,0,1.1);
+
+  g->cd(4); gPad->SetLogy(); 
+  // h1->Scale(0.1);
+ntuple.Draw("kineticEnergy >>h2","particleId==1"); 
+ntuple->SetLineStyle(3);
+  ntuple.Draw("kineticEnergy","particleId==1 && modelId<6","same"); // proton spectrum  
+
+   TH1F *h3 = new TH1F("h3","h3",100,0,1.1);
+  g->cd(5); gPad->SetLogy(); 
+  // h1->Scale(0.1);
+ntuple.Draw("kineticEnergy >>h3","particleId==2"); 
+ntuple->SetLineStyle(3);
+  ntuple.Draw("kineticEnergy","particleId==2 && modelId<6","same"); // neutron spectrum  
+
+ntuple->SetLineStyle(2);
+  ntuple.Draw("kineticEnergy","particleId==2 && modelId>=6","same"); // evaporation
+
+
   TCanvas *d =new TCanvas("d","d",0,0,600,400);
   d->Divide(3,2);
 ntuple->SetLineStyle(2);
@@ -42,13 +69,13 @@ ntuple->SetLineWidth(2);
   TEventList *list = (TEventList*)gDirectory->Get("myList");
   ntuple->SetEventList(list);
 
+
 ntuple->SetLineStyle(0);
 ntuple->SetLineWidth(2);
   d->cd(4); ntuple->Draw("kineticEnergy "); // now draws only protons
   d->cd(5); ntuple->Draw("kineticEnergy:momX ");
   d->cd(6); ntuple->Draw("kineticEnergy:momZ ");
 
-  TCanvas *g =new TCanvas("g","g",0,0,600,400);
-  g->cd(1); ntuple.Draw("sqrt(momX*momX+momY*momY+momZ*momZ)");   
+
 
 }

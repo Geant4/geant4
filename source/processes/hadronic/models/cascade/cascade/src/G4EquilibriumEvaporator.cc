@@ -143,6 +143,7 @@ G4CollisionOutput G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 
 	  G4InuclNuclei nuclei(PEX, A, Z);        
 
+	  nuclei.setModel(6);
 	  nuclei.setExitationEnergy(EEXS);      
 
 	  G4CollisionOutput explosion = theBigBanger->collide(0, &nuclei);
@@ -284,6 +285,8 @@ G4CollisionOutput G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 		if (itry < itry_max) {
 		  // new photon escape
 		  G4InuclElementaryParticle particle(10);
+
+		  particle.setModel(6);
 		  G4double pmod = 0.001 * S;
 		  std::vector<G4double> mom(4);
 		  std::pair<G4double, G4double> COS_SIN = randomCOS_SIN();
@@ -378,6 +381,8 @@ G4CollisionOutput G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 		    if (icase < 2) { // particle escape
 		      G4int ptype = 2 - icase;
 		      G4InuclElementaryParticle particle(ptype);
+
+		      particle.setModel(6);
 		      G4double mass = particle.getMass();
 		      // generate particle momentum
 		      G4double pmod = std::sqrt((2.0 * mass + S) * S);
@@ -429,6 +434,7 @@ G4CollisionOutput G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 
 		    } else {
 		      G4InuclNuclei nuclei(AN[icase], Q[icase]);
+	              nuclei.setModel(6);
 		      G4double mass = nuclei.getMass();
 		      // generate particle momentum
 		      G4double pmod = std::sqrt((2.0 * mass + S) * S);
@@ -488,6 +494,7 @@ G4CollisionOutput G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 
 	      } else { // fission
 		G4InuclNuclei nuclei(A, Z);        
+	        nuclei.setModel(6);
 		nuclei.setExitationEnergy(EEXS);
 
 		if (verboseLevel > 2){
@@ -546,6 +553,7 @@ G4CollisionOutput G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
       for (G4int i = 1; i < 4; i++) pnuc[i] = pin[i] - ppout[i];
 
       G4InuclNuclei nuclei(pnuc, A, Z);
+      nuclei.setModel(6);
       nuclei.setEnergy();
       pnuc = nuclei.getMomentum(); 
       G4double eout = pnuc[0] + ppout[0];  

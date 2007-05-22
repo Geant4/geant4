@@ -138,7 +138,10 @@ G4CollisionOutput G4Fissioner::collide(G4InuclParticle* /*bullet*/,
 
       G4double Z2 = Z - Z1;
       G4InuclNuclei nuclei1(A1, Z1);
+      nuclei1.setModel(7); // sign in the modelId (=G4Fissioner)
       G4InuclNuclei nuclei2(A2, Z2);        
+      nuclei2.setModel(7);
+
       G4double mass1 = nuclei1.getMass();
       G4double mass2 = nuclei2.getMass();
       G4double EK = config.ekin;
@@ -164,12 +167,14 @@ G4CollisionOutput G4Fissioner::collide(G4InuclParticle* /*bullet*/,
 	G4double EEXS2 = EV*A2;
 	G4InuclNuclei nuclei1(mom1, A1, Z1);        
 
+        nuclei1.setModel(7);
 	nuclei1.setExitationEnergy(EEXS1);
 	nuclei1.setEnergy();
 	output.addTargetFragment(nuclei1);
 
 	G4InuclNuclei nuclei2(mom2, A2, Z2);        
 
+        nuclei2.setModel(7);
 	nuclei2.setExitationEnergy(EEXS2);
 	nuclei2.setEnergy();
 	output.addTargetFragment(nuclei2);

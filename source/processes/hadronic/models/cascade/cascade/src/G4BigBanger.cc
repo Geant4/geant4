@@ -163,7 +163,8 @@ G4BigBanger::generateBangInSCM(G4double etot,
 
     G4int knd = iz > 0 ? 1 : 2;
 
-    particles.push_back(G4InuclElementaryParticle(mom, knd));
+    //    particles.push_back(G4InuclElementaryParticle(mom, knd));
+    particles.push_back(G4InuclElementaryParticle(mom, knd, 8)); // modelId included
 
     return particles;
   };  
