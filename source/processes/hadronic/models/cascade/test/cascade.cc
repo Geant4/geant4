@@ -53,6 +53,8 @@
 #include "G4NucleiModel.hh"
 #include "G4LorentzConvertor.hh"
 
+G4double kE=1000; // scale energy ok
+
 G4double eInit = 0.0;
 G4double eTot = 0.0;
 G4double sumBaryon = 0.0;
@@ -66,7 +68,7 @@ enum particleType { nuclei = 0, proton = 1, neutron = 2, pionPlus = 3, pionMinus
 G4int runId       = 0; 
 G4int nCollisions = 10;      // collisions to be generated
 G4int  bulletType = proton;    // bullet particle
-G4double     momZ = 160;      // momentum in z-direction
+G4double     momZ = 160;      // momentum in z-direction MeV/c
 G4double        A = 27.0;      // target atomic weight Al
 G4double        Z = 13.0;      // target atomic number
 
@@ -88,7 +90,7 @@ G4int printCross(G4int i);
 
 G4int test();
 
-G4int verboseLevel = 1;
+G4int verboseLevel = 2;
 G4InuclElementaryParticle* bull;
 
 int main(int argc, char **argv ) {
@@ -108,14 +110,14 @@ int main(int argc, char **argv ) {
   if (verboseLevel > 3) {
     G4cout << " # collisions " << nCollisions << G4endl;
     G4cout << "  bullet type " << bulletType  << G4endl;
-    G4cout << "     momentum " << momZ        << " [GeV]" << G4endl;
+    G4cout << "     momentum " << momZ*kE    << " [MeV]" << G4endl;
     G4cout << "            A " << A           << G4endl;
     G4cout << "            Z " << Z           << G4endl;
   }
 
   if (verboseLevel > 0) {
     //    G4cout << "# cascade.cc with parameters : runId, nCollisions, bulletType,  momZ,  targetA, targetZ" << G4endl;
-    G4cout << runId << " " << nCollisions << " " << bulletType  << " " << momZ  << " " << A << " " << Z << G4endl;
+    G4cout << runId << " " << nCollisions << " " << bulletType  << " " << momZ*kE  << " " << A << " " << Z << G4endl;
   }
 
   tCoulomb(runId, nCollisions, bulletType, momZ, A, Z);  // test coulomb
@@ -246,7 +248,7 @@ G4int tCoulomb(G4int runId, G4int nCollisions, G4int bulletType, G4double momZ, 
 
     if (verboseLevel > 3) {
       G4cout << 
-	std::setw(8)  << momZ    << 
+	std::setw(8)  << momZ*kE    << 
 	std::setw(8)  << i    << 
 	std::setw(8)  << n1 / nc   << 
 	std::setw(13) << n2 / nc   << 
@@ -386,7 +388,7 @@ G4int testINCAll(G4int nCollisions, G4int bulletType, G4double momZ, G4double A,
 
     if (verboseLevel > -1) {
       G4cout << 
-	std::setw(8)  << momZ    << 
+	std::setw(8)  << momZ*kE    << 
 	std::setw(8)  << i    << 
 	std::setw(8)  << n1 / nc   << 
 	std::setw(13) << n2 / nc   << 
@@ -430,7 +432,7 @@ G4int printData(G4int runId, G4int i) {
       eTot  += std::sqrt(m[0] * m[0]);
 
       G4ThreeVector mom(m[1], m[2], m[3]);    
-      ekin = ifrag->getKineticEnergy() * GeV;
+      ekin = ifrag->getKineticEnergy();
 
       G4int type = 0; 
 
@@ -444,7 +446,7 @@ G4int printData(G4int runId, G4int i) {
       G4int fZ = G4int(ifrag->getZ());
 
       sumBaryon -= fA;
-      sumEnergy -= ekin / GeV;
+      sumEnergy -= ekin;
       sumEnergy -= fEx;
 
       if (verboseLevel > 2) {
@@ -462,13 +464,13 @@ G4int printData(G4int runId, G4int i) {
 	  std::setw(8)  << runId        << 
 	  std::setw(8)  << i            << 
 	  std::setw(8)  << type         << 
-	  std::setw(13) << ekin   /GeV  << 
-	  std::setw(13) << mom[0] /GeV  << 
-	  std::setw(13) << mom[1] /GeV  << 
-	  std::setw(13) << mom[2] /GeV  << 
+	  std::setw(13) << ekin *kE  << 
+	  std::setw(13) << mom[0] *kE   << 
+	  std::setw(13) << mom[1] *kE  << 
+	  std::setw(13) << mom[2] *kE  << 
 	  std::setw(13) << fA           << 
 	  std::setw(13) << fZ           << 
-	  std::setw(13) << fEx          << G4endl;
+	  std::setw(13) << fEx    *kE  << G4endl;
 	//	  std::setw(13) << sumBaryon    << 
 	//std::setw(13) << sumEnergy    << G4endl;
       }
@@ -486,14 +488,14 @@ G4int printData(G4int runId, G4int i) {
       eTot   += std::sqrt(mom[0] * mom[0]);
 
       // std::vector<G4double>  mom(3, 0.0);
-      ekin = ipart->getKineticEnergy() * GeV;
+      ekin = ipart->getKineticEnergy();
       G4int type = ipart->type();
 
       if (type == proton || type == neutron) {
 	sumBaryon -= 1;
       } 
 
-      sumEnergy -= ekin / GeV;
+      sumEnergy -= ekin;
 
       if (verboseLevel > 0) {
 	G4cout.precision(4);
@@ -502,10 +504,10 @@ G4int printData(G4int runId, G4int i) {
 	  std::setw(8)  << runId        << 
 	  std::setw(8)  << i            << 
 	  std::setw(8)  << type         << 
-	  std::setw(13) << ekin   / GeV << 
-       	  std::setw(13) << mom[1] / GeV << 
-       	  std::setw(13) << mom[2] / GeV << 
-	  std::setw(13) << mom[3] / GeV << 
+	  std::setw(13) << ekin   *kE << 
+       	  std::setw(13) << mom[1] *kE << 
+       	  std::setw(13) << mom[2] *kE << 
+	  std::setw(13) << mom[3] *kE << 
 	  std::setw(13) << 0            << 
 	  std::setw(13) << 0            << 
 	  std::setw(13) << 0.0          << G4endl;
@@ -534,8 +536,8 @@ G4int printData(G4int runId, G4int i) {
 
   if (verboseLevel > 2) {
 
-    G4cout << "Total energy           : " << eTot << "GeV" << G4endl; 
-    G4cout << "Total kinetice energy  : " << eKinTot / GeV << "GeV" << G4endl; 
+    G4cout << "Total energy           : " << eTot*kE << "MeV" << G4endl; 
+    G4cout << "Total kinetice energy  : " << eKinTot*kE << "MeV" << G4endl; 
     G4cout << "Baryon sum             : " << sumBaryon << G4endl;
   }
   //  eTot = 0.0;

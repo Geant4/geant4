@@ -35,7 +35,7 @@
   cout << "runId        : " << runId       << endl; 
   cout << "# collisions : " << nCollisions << endl;  
   cout << "bullet type  : " << bulletType  << endl; 
-  cout << "bullet Zmom  : " << bulletMomZ  << endl; 
+  cout << "bullet Zmom  : " << bulletMomZ  << " MeV"<< endl; 
   cout << "target A     : " << targetA     << endl; 
   cout << "target Z     : " << targetZ     <<endl;
 
@@ -49,7 +49,8 @@
     if (particleId==neutron) hnE->Fill(kineticEnergy/eMax);
     if (particleId==foton) hgE->Fill(kineticEnergy/eMax);
     if (particleId==pionPlus) hppE->Fill(kineticEnergy/eMax);
-    ntuple->Fill(runId, eventId, particleId, kineticEnergy, momX, momY, momZ, fragmentA, fragmentZ, exitationEnergy);
+
+    ntuple->Fill(runId, eventId, particleId, kineticEnergy/eMax, momX/eMax, momY/eMax, momZ/eMax, fragmentA, fragmentZ, exitationEnergy/eMax);
     nlines++;
   };
   printf(" found %d lines \n",nlines);
