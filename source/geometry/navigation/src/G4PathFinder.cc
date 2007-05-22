@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PathFinder.cc,v 1.39 2007-05-22 09:01:38 gcosmo Exp $
+// $Id: G4PathFinder.cc,v 1.40 2007-05-22 15:10:33 japost Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4PathFinder Implementation
@@ -205,7 +205,8 @@ G4PathFinder::ComputeStep( const G4FieldTrack &InitialFieldTrack,
        } 
 #endif
        // fRelocatedPoint= true;  //  It has moved !!
-       this->MovePoint(); 
+       this->MovePoint();  // Unintentional changed -- ????
+       // this->ReportMove(fLastLocatedPosition, newPosition, "Position"); 
 
        // if( fVerboseLevel > 2 ) { 
        //  G4cout << " Calling PathFinder::Locate() from G4PathFinder::ComputeStep() " << G4endl;
@@ -322,10 +323,20 @@ G4PathFinder::PrepareNewTrack( const G4ThreeVector position,
      fLocatedVolume[num] = 0; 
   }
 
-  // if( fVerboseLevel > 1 ) 
-  //   G4cout << " Calling PathFinder::Locate() from G4PathFinder::PrepareNewTrack() " << G4endl;
-
-  Locate( position, direction, false );   
+  // In case of one geometry, the tracking will have done the locating!!
+  if( fNoActiveNavigators > 1 ){
+     // if( fVerboseLevel > 1 ) 
+     //   G4cout << " In PathFinder::PrepareNewTrack() : calling Locate() " << G4endl;
+     Locate( position, direction, false );   
+  }else{
+     // Update state -- depending on the tracking's call to Mass Navigator
+     fLastLocatedPosition= position; 
+     // fLocatedVolume[0] = pLocated;  // This information is not available
+     fLocatedVolume[0] = 0;  // This information is not available --->>>> TODO: fix
+     fLimitedStep[0]   = kDoNot; 
+     fCurrentStepSize[0] = 0.0;
+     // fRelocatedPoint= false;
+  }
   // The first location for each Navigator must be non-relative
   //   or else call ResetStackAndState() for each Navigator
 
@@ -335,9 +346,9 @@ G4PathFinder::PrepareNewTrack( const G4ThreeVector position,
   // { G4cout << " G4PathFinder::PrepareNewTrack : exiting. " << G4endl; }
 }
 
-#ifdef G4DEBUG_PATHFINDER
-static 
-void ReportMove( G4ThreeVector OldVector, G4ThreeVector NewVector, G4String Quantity )
+void G4PathFinder::ReportMove( const G4ThreeVector& OldVector, 
+			       const G4ThreeVector& NewVector, 
+			       const G4String& Quantity ) const
 {
     G4ThreeVector moveVec = ( NewVector - OldVector );
 
@@ -350,7 +361,6 @@ void ReportMove( G4ThreeVector OldVector, G4ThreeVector NewVector, G4String Quan
            << "Endpoint of ComputeStep was " << OldVector
            << " and current position to locate is " << NewVector << G4endl;
 }
-#endif
 
 void
 G4PathFinder::Locate( const   G4ThreeVector& position, 
@@ -365,9 +375,7 @@ G4PathFinder::Locate( const   G4ThreeVector& position,
   G4ThreeVector moveVec = (position - lastEndPosition );
   G4double      moveLenSq= moveVec.mag2();
   if( (!fNewTrack) && (!fRelocatedPoint) && ( moveLenSq> kCarTolerance*kCarTolerance ) ){   // ( moveLenSq> 0.0) ){
-#ifdef G4DEBUG_PATHFINDER    
      ReportMove( position, lastEndPosition, "Position" ); 
-#endif
      G4Exception( "G4PathFinder::Locate", "201-LocateUnexpectedPoint", 
                    JustWarning,   // FatalException,  
                   "Location is not where last ComputeStep ended."); 
@@ -558,9 +566,7 @@ G4PathFinder::ReLocate( const   G4ThreeVector& position )
 
         G4cout << " Debub:  distCheckRevisedEnd = " << distCheckRevisedEnd << G4endl;
 
-#ifdef G4DEBUG_PATHFINDER
         ReportMove( lastEndPosition, position, "Position" ); 
-#endif
         G4Exception( "G4PathFinder::ReLocate", "205-RelocatePointTooFar", 
                     FatalException,  
                   "ReLocation is further than end-safety value from step-end point (and the other-safety-value around the last-called safety 'check' point.)"); 
@@ -622,16 +628,15 @@ G4double  G4PathFinder::ComputeSafety( const G4ThreeVector& position )
     std::vector<G4Navigator*>::iterator pNavigatorIter;
     pNavigatorIter= fpTransportManager-> GetActiveNavigatorsIterator();
 
-    G4int num=0; 
-    for( num=0; num< fNoActiveNavigators; ++pNavigatorIter,++num ) {
+    register unsigned int num=0; 
+    register unsigned int activeNavigators=fNoActiveNavigators; 
+    for( num=0; num< activeNavigators; ++pNavigatorIter,++num ) {
 
        G4double safety;
        safety= (*pNavigatorIter)->ComputeSafety( position ); 
   
        if( safety < minSafety ){ minSafety = safety; } 
-       fNewSafetyComputed[num]= safety; 
-  
-       // G4cout << " Navigator # " << num << " gives safety = " << safety << G4endl;
+       fNewSafetyComputed[num]= safety;
     } 
 
     fSafetyLocation= position;
@@ -902,10 +907,6 @@ G4PathFinder::DoNextCurvedStep( const G4FieldTrack &initialState,
                                 G4VPhysicalVolume* pCurrentPhysicalVolume )
 {
   const G4double toleratedRelativeError= 1.0e-10; 
-#ifdef G4DEBUG_PATHFINDER
-  if( fVerboseLevel > 2 )
-    G4cout << " G4PathFinder::DoNextCurvedStep ****** " << G4endl;
-#endif
   G4double minStep= DBL_MAX, newSafety=0.0;
   G4int numNav; 
   G4FieldTrack  fieldTrack= initialState;
