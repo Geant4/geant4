@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QElasticCrossSection.cc,v 1.25 2007-05-15 09:09:17 mkossov Exp $
+// $Id: G4QElasticCrossSection.cc,v 1.26 2007-05-22 13:29:12 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -563,7 +563,7 @@ G4double G4QElasticCrossSection::GetPTables(G4double LP,G4double ILP, G4int PDG,
 								  }
           else
           {
-            lastPAR[1]/=1.+2.e-7*a3;     // @@ reduction for n, can be for p too // p2(n)
+            lastPAR[1]/=1.+4.e-3*a;      // @@ reduction for n, can be for p too // p2(n)
             lastPAR[3]=a*(.5+3.e-10*a4)/(1.+7.e5/a6);                            // p4
             lastPAR[4]=a*3.5e-5/(1.+2.e12/a12);                                  // p5
             lastPAR[5]=.0006/(1.+4.e5/a3)/(1.+3.e23/a16/a8);                     // p6

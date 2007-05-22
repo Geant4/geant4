@@ -679,12 +679,13 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
       }
       throw;
     }
-    // clean up particles
-    std::for_each(projHV.begin(), projHV.end(), DeleteQHadron());
-    projHV.clear();
     delete pan;
   }
   else output = new G4QHadronVector;
+
+  // clean up impinging particles
+  std::for_each(projHV.begin(), projHV.end(), DeleteQHadron());
+  projHV.clear();
    
   // Fill the result.
 #ifdef CHIPSdebug
