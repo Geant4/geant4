@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIterminal.cc,v 1.22 2007-05-21 07:30:34 kmura Exp $
+// $Id: G4UIterminal.cc,v 1.23 2007-05-22 01:51:17 kmura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ====================================================================
@@ -79,9 +79,9 @@ static void SignalHandler(G4int)
 //
 // ====================================================================
 
-//////////////////////////////////////////////
-G4UIterminal::G4UIterminal(G4VUIshell* aShell)
-//////////////////////////////////////////////
+///////////////////////////////////////////////////////////
+G4UIterminal::G4UIterminal(G4VUIshell* aShell, G4bool qsig)
+///////////////////////////////////////////////////////////
 {
   UI= G4UImanager::GetUIpointer();
   UI-> SetSession(this);
@@ -93,11 +93,12 @@ G4UIterminal::G4UIterminal(G4VUIshell* aShell)
   if(aShell) shell= aShell;
   else shell= new G4UIcsh;
 
-#ifndef WIN32
   // add signal handler
+  if(qsig) {
+#ifndef WIN32
   signal(SIGINT, SignalHandler);
 #endif
-
+  }
 }
 
 /////////////////////////////
