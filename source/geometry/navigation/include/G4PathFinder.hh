@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PathFinder.hh,v 1.27 2007-05-22 09:01:38 gcosmo Exp $
+// $Id: G4PathFinder.hh,v 1.28 2007-05-22 15:08:03 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // class G4PathFinder 
@@ -168,6 +168,9 @@ class G4PathFinder
   inline G4bool UseSafetyForOptimization( G4bool );
   //
   // Whether use safety to discard unneccesary calls to navigator
+
+  void ReportMove( const G4ThreeVector& OldV, const G4ThreeVector& NewV, const G4String& Quantity ) const; 
+  // Helper method to report movement (likely of initial point)
 
  protected:
 
