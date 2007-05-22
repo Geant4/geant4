@@ -1,4 +1,4 @@
-$Id: History,v 1.405 2007-05-16 16:01:17 allison Exp $
+$Id: History,v 1.406 2007-05-22 17:20:21 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,11 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+22nd May 2007  John Allison  (vis-V08-03-01)
+- modeling-V08-03-00: Simplified G4Atts for Physical Volume Path.
+- vis-HepRep-V08-03-00: Fixed memory leak in G4HepRepFile.
+- raytracer-V08-03-00: Fixed for dubious ValGrind diagnostic.
 
 16th May 2007  John Allison  (vis-V08-03-00)
 - visman-V08-03-00: Fix for Windows compiler.
