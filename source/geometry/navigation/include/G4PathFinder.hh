@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PathFinder.hh,v 1.26 2007-05-18 23:46:09 japost Exp $
+// $Id: G4PathFinder.hh,v 1.27 2007-05-22 09:01:38 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // class G4PathFinder 
@@ -69,11 +69,11 @@ class G4PathFinder
      // Retrieve singleton instance
 
    G4double ComputeStep( const G4FieldTrack &pFieldTrack,
-                         G4double            pCurrentProposedStepLength,
-                         G4int               navigatorId,    // Identifies the geometry
-                         G4int               stepNo,     // See next step/check 
-                         G4double           &pNewSafety,     // Only for this geometry
-                         ELimited           &limitedStep,      
+                         G4double  pCurrentProposedStepLength,
+                         G4int     navigatorId, // Identifies the geometry
+                         G4int     stepNo,      // See next step/check 
+                         G4double &pNewSafety,  // Only for this geometry
+                         ELimited &limitedStep,      
                          G4FieldTrack       &EndState, 
                          G4VPhysicalVolume*  currentVolume );
      //
@@ -113,12 +113,12 @@ class G4PathFinder
      //
      // Minimum value of safety after last ComputeStep
 
-   G4double       ComputeSafety( const G4ThreeVector& globalPoint ); 
+   G4double ComputeSafety( const G4ThreeVector& globalPoint ); 
      //
      // Recompute safety for the relevant point
      // the endpoint of the last step!!
 
-   G4double       ObtainSafety( G4int navId, G4ThreeVector& globalCenterPoint ); 
+   G4double ObtainSafety( G4int navId, G4ThreeVector& globalCenterPoint );
      // Obtain safety for navigator/geometry navId for last point computed
      //   Returns the point (center) for which this safety is valid
 
@@ -182,8 +182,9 @@ class G4PathFinder
   //  DATA Members
   // ----------------------------------------------------------------------
 
-  G4MultiNavigator *fpMultiNavigator; 
-    //  Object that enables G4PropagatorInField to see many geometries
+   G4MultiNavigator *fpMultiNavigator; 
+   //
+   //  Object that enables G4PropagatorInField to see many geometries
 
    G4int   fNoActiveNavigators; 
    G4bool  fNewTrack;               // Flag a new track (ensure first step)
@@ -236,6 +237,8 @@ class G4PathFinder
    G4PropagatorInField* fpFieldPropagator;
 
    G4double kCarTolerance;
+
+   static G4PathFinder* fpPathFinder;
 };
 
 // ********************************************************************

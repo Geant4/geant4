@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PathFinder.cc,v 1.38 2007-05-18 23:45:07 japost Exp $
+// $Id: G4PathFinder.cc,v 1.39 2007-05-22 09:01:38 gcosmo Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4PathFinder Implementation
@@ -35,34 +35,38 @@
 
 #include "G4PathFinder.hh"
 
-class G4FieldManager;
+#include <iomanip>
 
 #include "G4GeometryTolerance.hh"
 #include "G4Navigator.hh"
 #include "G4PropagatorInField.hh"
 #include "G4TransportationManager.hh"
 #include "G4MultiNavigator.hh"
+#include "G4SafetyHelper.hh"
 
-#include <iomanip>
-
-// ********************************************************************
-// Constructor
-// ********************************************************************
+// Initialise the static instance of the singleton
 //
+G4PathFinder* G4PathFinder::fpPathFinder=0;
 
-G4PathFinder*
-G4PathFinder::GetInstance()
+// ----------------------------------------------------------------------------
+// GetInstance()
+//
+// Retrieve the static instance of the singleton
+//
+G4PathFinder* G4PathFinder::GetInstance()
 {
-   static G4PathFinder* fpInstance= 0; 
-   if( ! fpInstance ) {
-     fpInstance= new G4PathFinder(); 
+   static G4PathFinder theInstance; 
+   if( ! fpPathFinder )
+   {
+     fpPathFinder = &theInstance; 
    }
-   return fpInstance;
+   return fpPathFinder;
 }
 
-
+// ----------------------------------------------------------------------------
+// Constructor
+//
 G4PathFinder::G4PathFinder() 
-  // : fpActiveNavigators()
   : fEndState( G4ThreeVector(), G4ThreeVector(), 0., 0., 0., 0., 0.),
     fRelocatedPoint(true),
     fLastStepNo(-1), 
@@ -71,64 +75,70 @@ G4PathFinder::G4PathFinder()
    fpMultiNavigator= new G4MultiNavigator(); 
 
    fpTransportManager= G4TransportationManager::GetTransportationManager();
-   fpFieldPropagator = fpTransportManager->GetPropagatorInField() ;
+   fpFieldPropagator = fpTransportManager->GetPropagatorInField();
 
    kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
 
    fNoActiveNavigators= 0; 
-   G4ThreeVector  Big3Vector( DBL_MAX, DBL_MAX, DBL_MAX ); 
+   G4ThreeVector  Big3Vector( DBL_MAX, DBL_MAX, DBL_MAX );
    fLastLocatedPosition= Big3Vector;
-   fSafetyLocation= G4ThreeVector( DBL_MAX, DBL_MAX, DBL_MAX ); 
+   fSafetyLocation= Big3Vector; 
    fPreStepLocation= Big3Vector;
 
    fMinSafety_PreStepPt=  -1.0; 
    fMinSafety_atSafLocation= -1.0; 
-   fMinStep=   -1.0;  // 
+   fMinStep=   -1.0;
    fNewTrack= false; 
 
-   G4int num;
-   for( num=0; num<= fMaxNav; ++num ) {
+   for( register int num=0; num<= fMaxNav; ++num )
+   {
       fpNavigator[num] =  0;   
       fLimitTruth[num] = false;
       fLimitedStep[num] = kUndefLimited;
       fCurrentStepSize[num] = -1.0; 
-      fLocatedVolume[num] = 0; 
-
+      fLocatedVolume[num] = 0;
       fNewSafety[num]= -1.0; 
       fNewSafetyComputed[num]= -1.0; 
    }
-   // fpNavigator= new[MaxNav] (G4Navigator*); 
-
 }
 
+// ----------------------------------------------------------------------------
+// Destructor
+//
 G4PathFinder::~G4PathFinder() 
 {
-   // delete[] fpNavigator;
    delete fpMultiNavigator; 
 }
 
-#include "G4SafetyHelper.hh"
-
+// ----------------------------------------------------------------------------
+//
 void
 G4PathFinder::EnableParallelNavigation(G4bool enableChoice)
 {
    G4Navigator *navigatorForPropagation=0, *massNavigator=0;
 
    massNavigator= fpTransportManager->GetNavigatorForTracking(); 
-   if( enableChoice ){
-      // 
-      navigatorForPropagation= fpMultiNavigator; 
+   if( enableChoice )
+   {
+      navigatorForPropagation= fpMultiNavigator;
+
       // Enable SafetyHelper to use PF
+      //
       fpTransportManager->GetSafetyHelper()->EnableParallelNavigation(true);
-   }else{
-      // fpNavigator[0]; // must be mass Navigator
-      navigatorForPropagation= massNavigator;       
+   }
+   else
+   {
+      navigatorForPropagation= massNavigator;
+       
       // Disable SafetyHelper to use PF
+      //
       fpTransportManager->GetSafetyHelper()->EnableParallelNavigation(false);
    }
    fpFieldPropagator->SetNavigatorForPropagating(navigatorForPropagation);
 }
 
+// ----------------------------------------------------------------------------
+//
 G4double 
 G4PathFinder::ComputeStep( const G4FieldTrack &InitialFieldTrack, 
                                  G4double     proposedStepLength,
@@ -139,11 +149,11 @@ G4PathFinder::ComputeStep( const G4FieldTrack &InitialFieldTrack,
                                  G4FieldTrack &EndState,
                                  G4VPhysicalVolume* currentVolume)
 {
-  // ---
   G4int navigatorNo=-1; 
 
 #ifdef G4DEBUG_PATHFINDER
-  if( fVerboseLevel > 2 ){ 
+  if( fVerboseLevel > 2 )
+  { 
     G4cout << " -------------------------" <<  G4endl;
     G4cout << " G4PathFinder::ComputeStep - entered " << G4endl;
     G4cout << "   - stepNo = "  << std::setw(4) << stepNo  << " "
@@ -920,7 +930,7 @@ G4PathFinder::DoNextCurvedStep( const G4FieldTrack &initialState,
        int prc= G4cout.precision(9);  // 9
        G4cout << " PF::Do..Curved..> Calculated safety = " << fNewSafety[numNav] 
          // << " for nav " << numNav 
-	      << " at " << startPoint << G4endl; 
+              << " at " << startPoint << G4endl; 
        G4cout.precision(prc); 
      }
 #endif
@@ -947,9 +957,9 @@ G4PathFinder::DoNextCurvedStep( const G4FieldTrack &initialState,
            << " and endState = " << fEndState << G4endl;
 
     G4cout << "G4PathFinder::DoNextCurvedStep : " 
-	   << " minStep = " << minStep 
-	   << " proposedStepLength " << proposedStepLength 
-	   << " safety = " << newSafety << G4endl;
+           << " minStep = " << minStep 
+           << " proposedStepLength " << proposedStepLength 
+           << " safety = " << newSafety << G4endl;
   }
 #endif
   G4double currentStepSize;   // = 0.0; 
