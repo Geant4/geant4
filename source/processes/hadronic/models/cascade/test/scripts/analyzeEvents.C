@@ -8,7 +8,7 @@
 
   float MeV=0.001;
   ifstream in;
-  in.open("../data/b2.out");
+  in.open("../data/data.out");
 
   int runId, eventId, particleId, fragmentA, fragmentZ;
   float kineticEnergy, momX, momY, momZ, exitationEnergy;
@@ -28,7 +28,8 @@
   char commentLine[80], executable[15];
   //   fgets(&line,80,in);
 
-  int runId, nCollisions, bulletType, bulletMomZ, targetA, targetZ;  
+  int runId, nCollisions, bulletType, targetA, targetZ;  
+  float bulletMomZ;
   in >> runId >> nCollisions >> bulletType >> bulletMomZ >> targetA >> targetZ;
 
   cout << "runId        : " << runId       << endl; 

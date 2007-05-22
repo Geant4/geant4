@@ -529,7 +529,7 @@ G4int printData(G4int runId, G4int i) {
   }
 
   if (sumEnergy < -5.0e-5 ) { // 0.05 MeV
-    G4cout << "FATAL ERROR: energy created  " << sumEnergy * GeV << " MeV" << G4endl;
+    //    G4cout << "FATAL ERROR: energy created  " << sumEnergy * GeV << " MeV" << G4endl; // this really givesignal ::: 
   }
 
   if (verboseLevel > 2) {

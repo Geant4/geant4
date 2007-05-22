@@ -23,8 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: benchmarks.cc,v 1.17 2007-05-20 19:58:32 miheikki Exp $
+// $Id: benchmarks.cc,v 1.18 2007-05-22 12:32:56 miheikki Exp $
 // $Log: not supported by cvs2svn $
+// Revision 1.17  2007/05/20 19:58:32  miheikki
+// cascade interface test rewritten
+//
 // Revision 1.16  2007/05/20 17:26:32  miheikki
 // minor tuning
 //
@@ -992,7 +995,7 @@ int tCascadeInterface() {
     G4cout << "  energy change " << outE << G4endl;
     G4double outP = sqrt(outE*outE-938.27*938.27);
 
-    for (G4int iSecondary =1 ; iSecondary <= nPart; iSecondary++) { 
+    for (G4int iSecondary =1 ; iSecondary < nPart; iSecondary++) { 
 
       G4HadSecondary    * NuclSecond = hadSta->GetSecondary(iSecondary);
       G4cout << "    secondary         " << iSecondary << G4endl;  
