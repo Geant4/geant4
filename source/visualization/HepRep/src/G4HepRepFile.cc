@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HepRepFile.cc,v 1.10 2006-06-29 21:17:22 gunter Exp $
+// $Id: G4HepRepFile.cc,v 1.11 2007-05-22 17:05:26 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -48,7 +48,10 @@ G4HepRepFile::G4HepRepFile():
         hepRepXMLWriter = new G4HepRepFileXMLWriter();
 }
 
-G4HepRepFile::~G4HepRepFile() {}
+G4HepRepFile::~G4HepRepFile()
+{
+        delete hepRepXMLWriter;
+}
 
 G4VSceneHandler* G4HepRepFile::CreateSceneHandler(const G4String& name) {
   G4VSceneHandler* pScene = new G4HepRepFileSceneHandler(*this, name);
