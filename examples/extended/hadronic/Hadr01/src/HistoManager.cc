@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.12 2007-05-16 11:43:30 vnivanch Exp $
+// $Id: HistoManager.cc,v 1.13 2007-05-22 13:58:25 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -133,7 +133,7 @@ void HistoManager::bookHisto()
   histo->add1D("20","Log10 Energy (MeV) of pi+",nBinsE,-4.,6.,1.0);
   histo->add1D("21","Log10 Energy (MeV) of pi-",nBinsE,-4.,6.,1.0);
   histo->add1D("22","Energy deposition (GeV) in the target",
-	       nBinsE,0.0,edepMax/GeV,GeV);
+	       nBinsE,0.0,edepMax,GeV);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -264,6 +264,7 @@ void HistoManager::EndOfEvent()
 {
   edepSum  += edepEvt;
   edepSum2 += edepEvt*edepEvt;
+  histo->fill(21,edepEvt,1.0);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
