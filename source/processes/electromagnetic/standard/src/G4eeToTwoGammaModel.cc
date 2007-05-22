@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eeToTwoGammaModel.cc,v 1.12 2006-10-20 08:59:50 vnivanch Exp $
+// $Id: G4eeToTwoGammaModel.cc,v 1.13 2007-05-22 17:34:36 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -148,13 +148,12 @@ G4double G4eeToTwoGammaModel::CrossSectionPerVolume(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-vector<G4DynamicParticle*>* G4eeToTwoGammaModel::SampleSecondaries(
-                             const G4MaterialCutsCouple*,
-                             const G4DynamicParticle* dp,
-                                   G4double,
-                                   G4double)
+void G4eeToTwoGammaModel::SampleSecondaries(vector<G4DynamicParticle*>* vdp,
+					    const G4MaterialCutsCouple*,
+					    const G4DynamicParticle* dp,
+					    G4double,
+					    G4double)
 {
-  vector<G4DynamicParticle*>* vdp = new vector<G4DynamicParticle*>;
   G4double PositKinEnergy = dp->GetKineticEnergy();
 
   // Case at rest
@@ -244,7 +243,6 @@ vector<G4DynamicParticle*>* G4eeToTwoGammaModel::SampleSecondaries(
       << Phot2Direction << G4endl;
     */
   }
-  return vdp;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

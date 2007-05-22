@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungModel.cc,v 1.37 2007-02-15 10:37:37 maire Exp $
+// $Id: G4eBremsstrahlungModel.cc,v 1.38 2007-05-22 17:34:36 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -645,11 +645,11 @@ G4DataVector* G4eBremsstrahlungModel::ComputePartialSumSigma(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-std::vector<G4DynamicParticle*>* G4eBremsstrahlungModel::SampleSecondaries(
-                             const G4MaterialCutsCouple* couple,
-                             const G4DynamicParticle* dp,
-                                   G4double tmin,
-                                   G4double maxEnergy)
+void G4eBremsstrahlungModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp, 
+					       const G4MaterialCutsCouple* couple,
+					       const G4DynamicParticle* dp,
+					       G4double tmin,
+					       G4double maxEnergy)
 // The emitted gamma energy is sampled using a parametrized formula 
 // from L. Urban.
 // This parametrization is derived from :
@@ -861,10 +861,9 @@ std::vector<G4DynamicParticle*>* G4eBremsstrahlungModel::SampleSecondaries(
   gammaDirection.rotateUz(direction);
 
   // create G4DynamicParticle object for the Gamma
-  std::vector<G4DynamicParticle*>* newp = new std::vector<G4DynamicParticle*>;
   G4DynamicParticle* g = new G4DynamicParticle(theGamma,gammaDirection,
                                                         gammaEnergy);
-  newp->push_back(g);
+  vdp->push_back(g);
   
   G4double totMomentum = sqrt(kineticEnergy*(totalEnergy + electron_mass_c2));
   G4ThreeVector dir = totMomentum*direction - gammaEnergy*gammaDirection;
@@ -872,8 +871,6 @@ std::vector<G4DynamicParticle*>* G4eBremsstrahlungModel::SampleSecondaries(
   fParticleChange->SetProposedMomentumDirection(direction);
 
   fParticleChange->SetProposedKineticEnergy(kineticEnergy - gammaEnergy);
-
-  return newp;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

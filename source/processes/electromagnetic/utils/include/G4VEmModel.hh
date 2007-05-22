@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmModel.hh,v 1.45 2006-08-29 19:18:54 vnivanch Exp $
+// $Id: G4VEmModel.hh,v 1.46 2007-05-22 17:31:57 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -102,11 +102,11 @@ public:
   virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&) = 0;
 
 
-  virtual std::vector<G4DynamicParticle*>* SampleSecondaries(
-                                const G4MaterialCutsCouple*,
-                                const G4DynamicParticle*,
-                                      G4double tmin = 0.0,
-                                      G4double tmax = DBL_MAX) = 0;
+  virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
+				 const G4MaterialCutsCouple*,
+				 const G4DynamicParticle*,
+				 G4double tmin = 0.0,
+				 G4double tmax = DBL_MAX) = 0;
 
   //------------------------------------------------------------------------
   // Methods with standard implementation; may be overwritten if needed 

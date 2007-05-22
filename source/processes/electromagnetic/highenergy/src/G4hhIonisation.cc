@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4hhIonisation.cc,v 1.5 2006-10-27 14:11:12 vnivanch Exp $
+// $Id: G4hhIonisation.cc,v 1.6 2007-05-22 17:37:30 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -66,7 +66,6 @@ G4hhIonisation::G4hhIonisation(const G4String& name)
   minKinEnergy = 0.1*keV;
   maxKinEnergy = 100.*TeV;
   SetDEDXBinning(120);
-  SetLambdaBinning(120);
   SetMinKinEnergy(minKinEnergy);
   SetMaxKinEnergy(maxKinEnergy);
   SetStepFunction(0.1, 0.1*mm);

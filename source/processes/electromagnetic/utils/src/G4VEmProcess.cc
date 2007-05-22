@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.cc,v 1.38 2007-05-22 13:39:00 vnivanch Exp $
+// $Id: G4VEmProcess.cc,v 1.39 2007-05-22 17:31:58 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -104,6 +104,7 @@ G4VEmProcess::G4VEmProcess(const G4String& name, G4ProcessType type):
   thePositron  = G4Positron::Positron();
 
   pParticleChange = &fParticleChange;
+  secParticles.reserve(5);
 
   modelManager = new G4EmModelManager();
   (G4LossTableManager::Instance())->Register(this);
@@ -278,16 +279,20 @@ G4VParticleChange* G4VEmProcess::PostStepDoIt(const G4Track& track,
   */
 
   
-  std::vector<G4DynamicParticle*>* newp = 
-    SecondariesPostStep(currentModel,currentCouple,track.GetDynamicParticle());
+  // sample secondaries
+  secParticles.clear();
+  SecondariesPostStep(&secParticles, currentModel, 
+		      currentCouple, track.GetDynamicParticle());
 
-  if (newp) {
-    G4int num = newp->size();
+  // save secondaries
+  G4int num = secParticles.size();
+  if(num > 0) {
+
     fParticleChange.SetNumberOfSecondaries(num);
     G4double edep = fParticleChange.GetLocalEnergyDeposit();
      
     for (G4int i=0; i<num; i++) {
-      G4DynamicParticle* dp = (*newp)[i];
+      G4DynamicParticle* dp = secParticles[i];
       const G4ParticleDefinition* p = dp->GetDefinition();
       G4double e = dp->GetKineticEnergy();
       G4bool good = true;
@@ -312,7 +317,6 @@ G4VParticleChange* G4VEmProcess::PostStepDoIt(const G4Track& track,
       if (good) fParticleChange.AddSecondary(dp);
     } 
     fParticleChange.ProposeLocalEnergyDeposit(edep);
-    delete newp;
   }
 
   ClearNumberOfInteractionLengthLeft();

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlung.cc,v 1.46 2007-01-18 12:17:04 vnivanch Exp $
+// $Id: G4eBremsstrahlung.cc,v 1.47 2007-05-22 17:34:36 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -92,13 +92,7 @@ G4eBremsstrahlung::G4eBremsstrahlung(const G4String& name, G4double thresh):
   G4VEnergyLossProcess(name), 
   gammaThreshold(thresh),
   isInitialised(false)
-{
-  SetDEDXBinning(120);
-  SetLambdaBinning(120);
-  SetMinKinEnergy(0.1*keV);
-  SetMaxKinEnergy(100.0*TeV);
-
-}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

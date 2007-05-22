@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.hh,v 1.44 2007-05-21 10:37:06 vnivanch Exp $
+// $Id: G4VMultipleScattering.hh,v 1.45 2007-05-22 17:31:58 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -449,8 +449,11 @@ inline G4VParticleChange* G4VMultipleScattering::PostStepDoIt(const G4Track& tra
 							      const G4Step& step)
 {
   fParticleChange.Initialize(track);
-  currentModel->SampleSecondaries(currentCouple,track.GetDynamicParticle(),
-		    step.GetStepLength(),step.GetPostStepPoint()->GetSafety());
+  std::vector<G4DynamicParticle*>* p=0;
+  currentModel->SampleSecondaries(p, currentCouple,
+				  track.GetDynamicParticle(),
+				  step.GetStepLength(),
+				  step.GetPostStepPoint()->GetSafety());
   return &fParticleChange;
 }
 

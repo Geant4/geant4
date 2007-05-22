@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ComptonScattering.hh,v 1.18 2006-09-14 10:27:19 maire Exp $
+// $Id: G4ComptonScattering.hh,v 1.19 2007-05-22 17:34:36 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //------------------ G4ComptonScattering physics process -----------------------
@@ -91,10 +91,10 @@ protected:
 
   virtual void InitialiseProcess(const G4ParticleDefinition*);
 
-  std::vector<G4DynamicParticle*>* SecondariesPostStep(
-                                   G4VEmModel*,
-                             const G4MaterialCutsCouple*,
-                             const G4DynamicParticle*);
+  void SecondariesPostStep(std::vector<G4DynamicParticle*>*,
+			   G4VEmModel*,
+			   const G4MaterialCutsCouple*,
+			   const G4DynamicParticle*);
 
 private:
      
@@ -113,12 +113,12 @@ G4bool G4ComptonScattering::IsApplicable(const G4ParticleDefinition& p)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline 
-std::vector<G4DynamicParticle*>* G4ComptonScattering::SecondariesPostStep(
-                                   G4VEmModel* model,
-                             const G4MaterialCutsCouple* couple,
-                             const G4DynamicParticle* dp)
+void G4ComptonScattering::SecondariesPostStep(std::vector<G4DynamicParticle*>* vdp,
+					      G4VEmModel* model,
+					      const G4MaterialCutsCouple* couple,
+					      const G4DynamicParticle* dp)
 { 
-  return model->SampleSecondaries(couple, dp);
+  model->SampleSecondaries(vdp, couple, dp);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

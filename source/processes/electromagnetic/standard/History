@@ -1,4 +1,4 @@
-$Id: History,v 1.311 2007-05-22 13:40:46 vnivanch Exp $
+$Id: History,v 1.312 2007-05-22 17:34:35 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+21 May 07:  V.Ivanchenko (emstand-V08-03-06)
+- G4VEmModel - changed interface of SampleSecondary method, it become 
+  void, extra parameter std::vector<G4DynamicParticle*>*, all
+  classes using or inhereting this interface are modified.
+  About 5% speadup of EM shower simulation
 
 21 May 07:  V.Ivanchenko (emstand-V08-03-05)
 - G4ionIonisation - added InitialiseMassCharge method; remove

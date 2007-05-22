@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungModel.hh,v 1.20 2006-08-29 14:00:24 vnivanch Exp $
+// $Id: G4eBremsstrahlungModel.hh,v 1.21 2007-05-22 17:34:36 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -94,11 +94,11 @@ public:
 					 G4double cutEnergy,
 					 G4double maxEnergy);
 
-  virtual std::vector<G4DynamicParticle*>* SampleSecondaries(
-                                const G4MaterialCutsCouple*,
-                                const G4DynamicParticle*,
-                                      G4double tmin,
-                                      G4double maxEnergy);
+  virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
+				 const G4MaterialCutsCouple*,
+				 const G4DynamicParticle*,
+				 G4double tmin,
+				 G4double maxEnergy);
 
   void   SetLPMflag(G4bool val) {theLPMflag = val;};
   G4bool LPMflag() const {return theLPMflag;};
@@ -162,14 +162,14 @@ inline G4double G4eBremsstrahlungModel::ScreenFunction1(G4double ScreenVariable)
 // compute the value of the screening function 3*PHI1 - PHI2
 
 {
-   G4double screenVal;
+  G4double screenVal;
 
-   if (ScreenVariable > 1.)
-     screenVal = 42.24 - 8.368*std::log(ScreenVariable+0.952);
-   else
-     screenVal = 42.392 - ScreenVariable* (7.796 - 1.961*ScreenVariable);
+  if (ScreenVariable > 1.)
+    screenVal = 42.24 - 8.368*std::log(ScreenVariable+0.952);
+  else
+    screenVal = 42.392 - ScreenVariable* (7.796 - 1.961*ScreenVariable);
 
-   return screenVal;
+  return screenVal;
 } 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -180,14 +180,14 @@ G4double G4eBremsstrahlungModel::ScreenFunction2(G4double ScreenVariable)
 // compute the value of the screening function 1.5*PHI1 - 0.5*PHI2
 
 {
-   G4double screenVal;
+  G4double screenVal;
 
-   if (ScreenVariable > 1.)
-     screenVal = 42.24 - 8.368*std::log(ScreenVariable+0.952);
-   else
-     screenVal = 41.734 - ScreenVariable* (6.484 - 1.250*ScreenVariable);
+  if (ScreenVariable > 1.)
+    screenVal = 42.24 - 8.368*std::log(ScreenVariable+0.952);
+  else
+    screenVal = 41.734 - ScreenVariable* (6.484 - 1.250*ScreenVariable);
 
-   return screenVal;
+  return screenVal;
 } 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

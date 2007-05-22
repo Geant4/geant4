@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuPairProductionModel.cc,v 1.32 2007-05-12 16:40:14 vnivanch Exp $
+// $Id: G4MuPairProductionModel.cc,v 1.33 2007-05-22 17:35:58 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -471,11 +471,11 @@ void G4MuPairProductionModel::MakeSamplingTables()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-vector<G4DynamicParticle*>* G4MuPairProductionModel::SampleSecondaries(
-                             const G4MaterialCutsCouple* couple,
-                             const G4DynamicParticle* aDynamicParticle,
-                                   G4double tmin,
-                                   G4double tmax)
+void G4MuPairProductionModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp, 
+						const G4MaterialCutsCouple* couple,
+						const G4DynamicParticle* aDynamicParticle,
+						G4double tmin,
+						G4double tmax)
 {
   G4double kineticEnergy = aDynamicParticle->GetKineticEnergy();
   G4double totalEnergy   = kineticEnergy + particleMass ;
@@ -494,7 +494,7 @@ vector<G4DynamicParticle*>* G4MuPairProductionModel::SampleSecondaries(
   G4double maxPairEnergy = MaxSecondaryEnergy(particle,kineticEnergy);
   G4double maxEnergy     = std::min(tmax, maxPairEnergy);
   G4double minEnergy     = std::max(tmin, minPairEnergy);
-  if(minEnergy >= maxEnergy) return 0;
+  if(minEnergy >= maxEnergy) return;
   //G4cout << "emin= " << minEnergy << " emax= " << maxEnergy 
   //	 << " minPair= " << minPairEnergy << " maxpair= " << maxPairEnergy 
   //       << " ymin= " << ymin << " dy= " << dy << G4endl;
@@ -595,11 +595,8 @@ vector<G4DynamicParticle*>* G4MuPairProductionModel::SampleSecondaries(
   kineticEnergy -= (ElectronEnergy + PositronEnergy);
   fParticleChange->SetProposedKineticEnergy(kineticEnergy);
 
-  vector<G4DynamicParticle*>* vdp = new vector<G4DynamicParticle*>;
   vdp->push_back(aParticle1);
   vdp->push_back(aParticle2);
-
-  return vdp;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

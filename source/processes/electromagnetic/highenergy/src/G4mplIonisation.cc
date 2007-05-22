@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4mplIonisation.cc,v 1.3 2006-12-13 15:44:25 gunter Exp $
+// $Id: G4mplIonisation.cc,v 1.4 2007-05-22 17:37:30 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -62,10 +62,6 @@ G4mplIonisation::G4mplIonisation(G4double mCharge, const G4String& name)
   // By default classical magnetic charge is used
   if(magneticCharge == 0.0) magneticCharge = eplus*0.5/fine_structure_const;
 
-  SetDEDXBinning(120);
-  SetLambdaBinning(120);
-  SetMinKinEnergy(0.1*keV);
-  SetMaxKinEnergy(100.0*TeV);
   SetVerboseLevel(0);
 }
 

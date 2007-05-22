@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.106 2007-05-22 13:39:00 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.107 2007-05-22 17:31:58 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -211,6 +211,7 @@ G4VEnergyLossProcess::G4VEnergyLossProcess(const G4String& name,
   scoffRegions.clear();
   scProcesses.clear();
   scTracks.reserve(5);
+  secParticles.reserve(5);
 
   // Data for stragling of ranges from ICRU'37 report
   const G4int nrbins = 7;
@@ -836,43 +837,42 @@ void G4VEnergyLossProcess::SampleSubCutSecondaries(
     G4double del = -std::log(G4UniformRand())/cross;
     fragment += del/length;
     if (fragment > 1.0) break;
-    std::vector<G4DynamicParticle*>* newp =
-      model->SampleSecondaries(track->GetMaterialCutsCouple(),dp,subcut,cut);
-    if (newp) {
 
-      // position of subcutoff particles
-      G4ThreeVector r = prepoint + fragment*dr;
-      std::vector<G4DynamicParticle*>::iterator it;
-      for (it=newp->begin(); it!=newp->end(); it++) {
+    // sample secondaries
+    secParticles.clear();
+    model->SampleSecondaries(&secParticles,track->GetMaterialCutsCouple(),dp,subcut,cut);
 
-	G4bool addSec = true;
-	// do not track very low-energy delta-electrons
-	if(theSecondaryRangeTable && (*it)->GetDefinition() == theElectron) {
-	  G4bool b;
-          G4double ekin = (*it)->GetKineticEnergy();
-	  G4double rg = ((*theSecondaryRangeTable)[idx]->GetValue(ekin, b));
-	      //          if(rg < currentMinSafety) {
-	  if(rg < safetyHelper->ComputeSafety(r)) {
-	    extraEdep += ekin;
-	    delete (*it);
-	    addSec = false;
-	  }
-	}
-	if(addSec) {
-	  G4Track* t = new G4Track((*it), pretime + fragment*dt, r);
-	  t->SetTouchableHandle(track->GetTouchableHandle());
-	  tracks.push_back(t);
+    // position of subcutoff particles
+    G4ThreeVector r = prepoint + fragment*dr;
+    std::vector<G4DynamicParticle*>::iterator it;
+    for(it=secParticles.begin(); it!=secParticles.end(); it++) {
 
-	  /*
-	    if(-1 < verboseLevel) 
-	    G4cout << "New track " << p->GetDefinition()->GetParticleName()
-	    << " e(keV)= " << p->GetKineticEnergy()/keV
-	    << " fragment= " << fragment
-	    << G4endl;
-	  */
+      G4bool addSec = true;
+      // do not track very low-energy delta-electrons
+      if(theSecondaryRangeTable && (*it)->GetDefinition() == theElectron) {
+	G4bool b;
+	G4double ekin = (*it)->GetKineticEnergy();
+	G4double rg = ((*theSecondaryRangeTable)[idx]->GetValue(ekin, b));
+	//          if(rg < currentMinSafety) {
+	if(rg < safetyHelper->ComputeSafety(r)) {
+	  extraEdep += ekin;
+	  delete (*it);
+	  addSec = false;
 	}
       }
-      delete newp;
+      if(addSec) {
+	G4Track* t = new G4Track((*it), pretime + fragment*dt, r);
+	t->SetTouchableHandle(track->GetTouchableHandle());
+	tracks.push_back(t);
+
+	/*
+	  if(-1 < verboseLevel) 
+	  G4cout << "New track " << p->GetDefinition()->GetParticleName()
+	  << " e(keV)= " << p->GetKineticEnergy()/keV
+	  << " fragment= " << fragment
+	  << G4endl;
+	*/
+      }
     }
   } while (fragment <= 1.0);
 } 
@@ -918,16 +918,17 @@ G4VParticleChange* G4VEnergyLossProcess::PostStepDoIt(const G4Track& track,
   const G4DynamicParticle* dynParticle = track.GetDynamicParticle();
   G4double tcut = (*theCuts)[currentMaterialIndex];
 
-  std::vector<G4DynamicParticle*>* newp = 
-    SecondariesPostStep(currentModel, currentCouple, dynParticle, tcut);
+  // sample secondaries
+  secParticles.clear();
+  SecondariesPostStep(&secParticles, currentModel, currentCouple, dynParticle, tcut);
 
-  if(newp) {
-    G4int num = newp->size();
+  // save secondaries
+  G4int num = secParticles.size();
+  if(num > 0) {
     fParticleChange.SetNumberOfSecondaries(num);
     for (G4int i=0; i<num; i++) {
-      fParticleChange.AddSecondary((*newp)[i]);
+      fParticleChange.AddSecondary(secParticles[i]);
     }
-    delete newp;
   }
 
   /*

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eplusAnnihilation.hh,v 1.21 2006-09-14 10:27:19 maire Exp $
+// $Id: G4eplusAnnihilation.hh,v 1.22 2007-05-22 17:34:36 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -90,10 +90,10 @@ protected:
 
   virtual void InitialiseProcess(const G4ParticleDefinition*);
 
-  std::vector<G4DynamicParticle*>* SecondariesPostStep(
-                                   G4VEmModel*,
-                             const G4MaterialCutsCouple*,
-                             const G4DynamicParticle*);
+  void SecondariesPostStep(std::vector<G4DynamicParticle*>*,
+			   G4VEmModel*,
+			   const G4MaterialCutsCouple*,
+			   const G4DynamicParticle*);
 
 private:
   
@@ -121,14 +121,14 @@ G4double G4eplusAnnihilation::AtRestGetPhysicalInteractionLength(
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline 
-std::vector<G4DynamicParticle*>* G4eplusAnnihilation::SecondariesPostStep(
-                                                  G4VEmModel* model,
-                                            const G4MaterialCutsCouple* couple,
-                                            const G4DynamicParticle* dp)
+void G4eplusAnnihilation::SecondariesPostStep(std::vector<G4DynamicParticle*>* vdp,
+					      G4VEmModel* model,
+					      const G4MaterialCutsCouple* couple,
+					      const G4DynamicParticle* dp)
 {
   fParticleChange.SetProposedKineticEnergy(0.);
   fParticleChange.ProposeTrackStatus(fStopAndKill);
-  return model->SampleSecondaries(couple, dp);
+  model->SampleSecondaries(vdp, couple, dp);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

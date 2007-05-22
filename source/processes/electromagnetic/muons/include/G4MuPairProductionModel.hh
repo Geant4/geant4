@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuPairProductionModel.hh,v 1.21 2007-05-12 16:40:14 vnivanch Exp $
+// $Id: G4MuPairProductionModel.hh,v 1.22 2007-05-22 17:35:58 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -102,11 +102,11 @@ public:
                                 G4double kineticEnergy,
                                 G4double cutEnergy);
 
-  std::vector<G4DynamicParticle*>* SampleSecondaries(
-                                const G4MaterialCutsCouple*,
-                                const G4DynamicParticle*,
-                                      G4double tmin,
-                                      G4double maxEnergy);
+  void SampleSecondaries(std::vector<G4DynamicParticle*>*, 
+			 const G4MaterialCutsCouple*,
+			 const G4DynamicParticle*,
+			 G4double tmin,
+			 G4double maxEnergy);
 
 protected:
 

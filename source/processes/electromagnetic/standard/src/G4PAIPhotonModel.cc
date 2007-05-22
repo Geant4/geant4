@@ -724,13 +724,12 @@ G4double G4PAIPhotonModel::CrossSection( const G4MaterialCutsCouple* matCC,
 // be returned as G4Dynamicparticle*.
 //
 
-std::vector<G4DynamicParticle*>*
-G4PAIPhotonModel::SampleSecondaries( const G4MaterialCutsCouple* matCC,
-                                     const G4DynamicParticle* dp,
-                                           G4double tmin,
-                                           G4double maxEnergy)
+void G4PAIPhotonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
+					 const G4MaterialCutsCouple* matCC,
+					 const G4DynamicParticle* dp,
+					 G4double tmin,
+					 G4double maxEnergy)
 {
-  std::vector<G4DynamicParticle*>* vdp = new std::vector<G4DynamicParticle*>;
   size_t jMat;
   for( jMat = 0 ;jMat < fMaterialCutsCoupleVector.size() ; ++jMat )
   {
@@ -870,7 +869,6 @@ G4PAIPhotonModel::SampleSecondaries( const G4MaterialCutsCouple* matCC,
   }
 
   fParticleChange->SetProposedKineticEnergy(kineticEnergy);
-  return vdp;
 }
 
 

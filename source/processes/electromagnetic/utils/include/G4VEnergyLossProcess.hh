@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.hh,v 1.65 2007-05-22 13:38:59 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.hh,v 1.66 2007-05-22 17:31:58 vnivanch Exp $
 // GEANT4 tag $Name:
 //
 // -------------------------------------------------------------------
@@ -130,7 +130,7 @@ public:
 
 protected:
 
-  virtual std::vector<G4DynamicParticle*>* SecondariesPostStep(
+  virtual void SecondariesPostStep(std::vector<G4DynamicParticle*>*,
                                    G4VEmModel*,
                              const G4MaterialCutsCouple*,
                              const G4DynamicParticle*,
@@ -430,6 +430,7 @@ private:
   std::vector<const G4Region*>          scoffRegions;
   G4int                                 nSCoffRegions;
   G4int*                                idxSCoffRegions;
+  std::vector<G4DynamicParticle*>       secParticles;
   std::vector<G4Track*>                 scTracks;
   std::vector<G4VEnergyLossProcess*>    scProcesses;
   G4int                                 nProcesses;

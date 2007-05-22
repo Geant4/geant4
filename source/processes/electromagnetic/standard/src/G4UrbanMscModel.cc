@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel.cc,v 1.59 2007-05-18 18:43:33 vnivanch Exp $
+// $Id: G4UrbanMscModel.cc,v 1.60 2007-05-22 17:34:36 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -847,14 +847,14 @@ G4double G4UrbanMscModel::ComputeTheta0(G4double trueStepLength,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-std::vector<G4DynamicParticle*>* G4UrbanMscModel::SampleSecondaries(
-                                const G4MaterialCutsCouple*,
-                                const G4DynamicParticle* dynParticle,
-                                      G4double truestep,
-                                      G4double safety)
+void G4UrbanMscModel::SampleSecondaries(std::vector<G4DynamicParticle*>*,
+					const G4MaterialCutsCouple*,
+					const G4DynamicParticle* dynParticle,
+					G4double truestep,
+					G4double safety)
 {
   G4double kineticEnergy = dynParticle->GetKineticEnergy();
-  if((kineticEnergy <= 0.0) || (truestep <= tlimitminfix)) return 0;
+  if((kineticEnergy <= 0.0) || (truestep <= tlimitminfix)) return;
 
   G4double cth  = SampleCosineTheta(truestep,kineticEnergy);
   G4double sth  = sqrt((1.0 - cth)*(1.0 + cth));
@@ -935,7 +935,6 @@ std::vector<G4DynamicParticle*>* G4UrbanMscModel::SampleSecondaries(
         } 
      }
   }
-  return 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

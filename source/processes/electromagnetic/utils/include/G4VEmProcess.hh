@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.hh,v 1.35 2007-05-22 13:38:59 vnivanch Exp $
+// $Id: G4VEmProcess.hh,v 1.36 2007-05-22 17:31:57 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -102,10 +102,10 @@ protected:
 
   virtual void InitialiseProcess(const G4ParticleDefinition*) = 0;
 
-  virtual std::vector<G4DynamicParticle*>* SecondariesPostStep(
-                                 G4VEmModel*,
-				 const G4MaterialCutsCouple*,
-				 const G4DynamicParticle*) = 0;
+  virtual void SecondariesPostStep(std::vector<G4DynamicParticle*>*,
+				   G4VEmModel*,
+				   const G4MaterialCutsCouple*,
+				   const G4DynamicParticle*) = 0;
 
   //------------------------------------------------------------------------
   // Methods with standard implementation; may be overwritten if needed 
@@ -285,6 +285,8 @@ protected:
   G4ParticleChangeForGamma     fParticleChange;
 
 private:
+
+  std::vector<G4DynamicParticle*> secParticles;
 
   G4EmModelManager*            modelManager;
   G4VEmModel*                  selectedModel;  

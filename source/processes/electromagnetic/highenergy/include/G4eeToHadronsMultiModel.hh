@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eeToHadronsMultiModel.hh,v 1.3 2006-06-29 19:32:28 gunter Exp $
+// $Id: G4eeToHadronsMultiModel.hh,v 1.4 2007-05-22 17:37:30 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -87,11 +87,11 @@ public:
                                          G4double cutEnergy = 0.0,
                                          G4double maxEnergy = DBL_MAX);
 
-  virtual std::vector<G4DynamicParticle*>* SampleSecondaries(
-                                const G4MaterialCutsCouple*,
-                                const G4DynamicParticle*,
-                                      G4double tmin = 0.0,
-                                      G4double maxEnergy = DBL_MAX);
+  virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
+				 const G4MaterialCutsCouple*,
+				 const G4DynamicParticle*,
+				 G4double tmin = 0.0,
+				 G4double maxEnergy = DBL_MAX);
 
   void PrintInfo();
 
@@ -165,23 +165,22 @@ inline G4double G4eeToHadronsMultiModel::ComputeCrossSectionPerElectron(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline std::vector<G4DynamicParticle*>* G4eeToHadronsMultiModel::SampleSecondaries(
-                                      const G4MaterialCutsCouple* couple,
-                                      const G4DynamicParticle* dp,
-                                      G4double, G4double)
+inline 
+void G4eeToHadronsMultiModel::SampleSecondaries(std::vector<G4DynamicParticle*>* newp,
+						const G4MaterialCutsCouple* couple,
+						const G4DynamicParticle* dp,
+						G4double, G4double)
 {
-  std::vector<G4DynamicParticle*>* newp = 0;
   G4double kinEnergy = dp->GetKineticEnergy();
   if (kinEnergy > thKineticEnergy) {
     G4double q = cumSum[nModels-1]*G4UniformRand();
     for(G4int i=0; i<nModels; i++) {
       if(q <= cumSum[i]) {
-        newp = (models[i])->SampleSecondaries(couple,dp);
+        (models[i])->SampleSecondaries(newp, couple,dp);
 	break;
       }
     }
   }
-  return newp;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

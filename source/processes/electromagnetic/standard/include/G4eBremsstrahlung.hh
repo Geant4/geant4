@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlung.hh,v 1.34 2006-08-28 17:44:36 vnivanch Exp $
+// $Id: G4eBremsstrahlung.hh,v 1.35 2007-05-22 17:34:36 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -99,11 +99,11 @@ public:
 
 protected:
 
-  std::vector<G4DynamicParticle*>* SecondariesPostStep(
-                                   G4VEmModel*,
-                             const G4MaterialCutsCouple*,
-                             const G4DynamicParticle*,
-                                   G4double&);
+  void SecondariesPostStep(std::vector<G4DynamicParticle*>*,
+			   G4VEmModel*,
+			   const G4MaterialCutsCouple*,
+			   const G4DynamicParticle*,
+			   G4double&);
 
   virtual void InitialiseEnergyLossProcess(const G4ParticleDefinition*,
 					   const G4ParticleDefinition*);
@@ -132,14 +132,14 @@ inline G4bool G4eBremsstrahlung::IsApplicable(const G4ParticleDefinition& p)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline std::vector<G4DynamicParticle*>* G4eBremsstrahlung::SecondariesPostStep(
-                                                      G4VEmModel* model,
-                                                const G4MaterialCutsCouple* couple,
-                                                const G4DynamicParticle* dp,
-                                                      G4double& tcut)
+inline void G4eBremsstrahlung::SecondariesPostStep(std::vector<G4DynamicParticle*>* newp,
+						   G4VEmModel* model,
+						   const G4MaterialCutsCouple* couple,
+						   const G4DynamicParticle* dp,
+						   G4double& tcut)
 {
   G4ThreeVector dir = dp->GetMomentumDirection();
-  std::vector<G4DynamicParticle*>* newp = model->SampleSecondaries(couple, dp, tcut);
+  model->SampleSecondaries(newp, couple, dp, tcut);
   if(((*newp)[0])->GetKineticEnergy() > gammaThreshold) {
     fParticleChange.ProposeTrackStatus(fStopAndKill);
     G4DynamicParticle* el = new G4DynamicParticle(dp->GetDefinition(),
@@ -148,7 +148,6 @@ inline std::vector<G4DynamicParticle*>* G4eBremsstrahlung::SecondariesPostStep(
     
     newp->push_back(el);
   }
-  return newp;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

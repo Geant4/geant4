@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Vee2hadrons.hh,v 1.2 2006-06-29 19:32:20 gunter Exp $
+// $Id: G4Vee2hadrons.hh,v 1.3 2007-05-22 17:37:30 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -74,7 +74,7 @@ public:
 
   virtual G4PhysicsVector* PhysicsVector(G4double, G4double) const = 0;
 
-  virtual std::vector<G4DynamicParticle*>* SampleSecondaries(
+  virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
                       G4double, const G4ThreeVector&) const = 0;
 
 private:
