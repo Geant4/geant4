@@ -42,7 +42,6 @@
 #include  "G4ParticleTable.hh"
 #include  "G4IonTable.hh"
 
-
 using namespace std;
 
 
@@ -268,7 +267,7 @@ int main()
 
   G4double kinEnergy = 1.0*GeV;
 
-  iMax = 100000;
+  iMax = 1000;
 
   G4DynamicParticle*  theDynamicParticle = new G4DynamicParticle(theParticleDefinition,
                                               G4ParticleMomentum(0.,0.,1.),

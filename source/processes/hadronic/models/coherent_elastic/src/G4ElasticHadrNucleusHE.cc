@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElasticHadrNucleusHE.cc,v 1.64 2007-05-18 10:39:40 grichine Exp $
+// $Id: G4ElasticHadrNucleusHE.cc,v 1.65 2007-05-23 11:05:58 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -163,8 +163,9 @@ void G4ElasticData::DefineNucleusParameters(G4int Nucleus)
 
 G4ElasticHadrNucleusHE::G4ElasticHadrNucleusHE()
 {
-  lowestEnergyLimit = 0.0;
+  verboseLevel = 0;
   plabLowLimit = 20.0*MeV;
+  lowestEnergyLimit = 0.0;
 
   MbToGeV2  =  2.568;
   sqMbToGeV =  1.602;
@@ -196,7 +197,6 @@ G4ElasticHadrNucleusHE::G4ElasticHadrNucleusHE()
     LowEdgeEnergy[i] = e/f;
     e *= f*f;
   }
-  verboselevel = 0;
   nistManager = G4NistManager::Instance();
 
   // PDG code for hadrons
@@ -406,7 +406,7 @@ G4double G4ElasticHadrNucleusHE::SampleT( const G4ParticleDefinition* p,
 
   iHadrCode = p->GetPDGEncoding();
 
-  if(verboselevel > 1)
+  if(verboseLevel > 1)
   {
     G4cout<< " G4ElasticHadrNucleusHE::SampleT: " 
 	  << " for " << p->GetParticleName() 
@@ -437,7 +437,7 @@ G4double G4ElasticHadrNucleusHE::SampleT( const G4ParticleDefinition* p,
     ElD1 = new  G4ElasticData(p, Z, AWeight, Energy);
     SetOfElasticData[idx][Z] = ElD1;
     
-    if(verboselevel > 1)
+    if(verboseLevel > 1)
     {
       G4cout<< " G4ElasticHadrNucleusHE::SampleT:  new record " << idx
 	    << " for " << p->GetParticleName() << " Z= " << Z
@@ -455,10 +455,9 @@ G4double G4ElasticHadrNucleusHE::SampleT( const G4ParticleDefinition* p,
 
   Q2 = HadronNucleusQ2_2(ElD1, Z, plab, Q2max);
 
-  if(verboselevel > 1)
-  {
-    G4cout<<" SampleT: Q2(GeV^2)= "<<Q2<<G4endl;
-  }
+  if(verboseLevel > 1)
+    G4cout<<" SampleT: Q2(GeV^2)= "<<Q2<< "  t/tmax= " << Q2/Q2max <<G4endl;
+  
   return  Q2*GeV2;
 }
 
@@ -514,14 +513,13 @@ G4double G4ElasticHadrNucleusHE::HadronNucleusQ2_2(G4ElasticData* pElD, G4int Z,
     G4int AWeight = pElD->AtomicWeight;
     Weight = GetLightFq2(Z, AWeight, Q2max);
 
-    if(verboselevel > 1)
-    {
+    if(verboseLevel > 1)
       G4cout<<" HadrNucleusQ2_2: NumbOnE= " << NumbOnE 
 	    << " length= " << length 
 	    << " Weight "<<Weight
 	    << " Q2max= " << Q2max 
 	    << " ekin= " << ekin <<G4endl;
-    }
+    
     pElD->TableCrossSec[index] = 0;
 
     for(G4int ii=1; ii<ONQ0; ii++)
@@ -533,11 +531,9 @@ G4double G4ElasticHadrNucleusHE::HadronNucleusQ2_2(G4ElasticData* pElD, G4int Z,
 
 	pElD->TableCrossSec[index+ii] = Buf;
 
-	if(verboselevel > 1)
-	{
+	if(verboseLevel > 1)
 	  G4cout<<" HadrNucleusQ2_2: ii= " << ii << " Q2= "
 		<<Q2 <<" p= " <<Buf<<" B*W "<<Buf*Weight<<G4endl;
-	}
     }   // for ii
 
     rmax    = Buf;
@@ -590,12 +586,11 @@ G4double G4ElasticHadrNucleusHE::HadronNucleusQ2_2(G4ElasticData* pElD, G4int Z,
 
       pElD->TableCrossSec[index+iNumbQ2] = Buf;
 
-      if(verboselevel > 1)
-      {
+      if(verboseLevel > 1)
 	G4cout<<" HadrNucleusQ2_2: NumbOnE= " << NumbOnE 
 	      << " iNumbQ2= " << iNumbQ2 << " Q2= "
 	      <<Q2 <<" Buf= " <<Buf<<" B*W "<<Buf*Weight<<G4endl;
-      }
+      
       if(Rand <= Buf) 
       {
 	pElD->dnkE[NumbOnE] = iNumbQ2+1;
@@ -607,11 +602,10 @@ G4double G4ElasticHadrNucleusHE::HadronNucleusQ2_2(G4ElasticData* pElD, G4int Z,
 
   if(tmax < Q2max) Q2 *= tmax/Q2max;
 
-  if(verboselevel > 1)
-  {
+  if(verboseLevel > 1)
     G4cout<<" HadrNucleusQ2_2(2): Q2= "<<Q2<<" iNumbQ2= " << iNumbQ2 
 	  << " rand= " << Rand << G4endl;
-  }
+  
   return Q2;
 }       
 
@@ -628,6 +622,10 @@ G4double G4ElasticHadrNucleusHE::GetQ2_2(G4int kk, G4double * Q,
   G4double X2  = Q[kk-1];
   G4double X3  = Q[kk];
 
+  if(verboseLevel > 2) 
+    G4cout << "GetQ2_2 kk= " << kk << " X2= " << X2 << " X3= " << X3 
+	   << " F2= " << F2 << " F3= " << F3 << " Rndm= " << ranUni << G4endl;
+
   if(kk <= 2)
   {
       ranQ2 = X2 + (ranUni - F2)*(X3 - X2)/(F3 - F2);
@@ -642,6 +640,9 @@ G4double G4ElasticHadrNucleusHE::GetQ2_2(G4int kk, G4double * Q,
   G4double X1  = Q[kk-2];          //  MeV^2
 
   G4double D0  = F12*F2+F1*F32+F3*F22-F32*F2-F22*F1-F12*F3;
+
+  if(verboseLevel > 2) 
+    G4cout << "       X1= " << X1 << " F1= " << F1 << "  D0= " << D0 << G4endl; 
 
   if(std::abs(D0) < 0.00000001)
   { 
@@ -774,12 +775,13 @@ void  G4ElasticHadrNucleusHE::DefineHadronValues(G4int Z)
   G4double sqrS  = std::sqrt(sHadr);
   G4double Ecm   = 0.5*(sHadr-hMass2+protonM2)/sqrS;
   MomentumCM     = std::sqrt(Ecm*Ecm-protonM2);
-  /*
-  G4cout << "Z= " << Z << " iHadr= " << iHadron 
-	 << " E(GeV)= " << HadrEnergy << " sqrS= " << sqrS
-	 << " plab= " << hLabMomentum   
-	 << G4endl;
-  */
+  
+  if(verboseLevel>2)
+    G4cout << "Z= " << Z << " iHadr= " << iHadron 
+	   << " E(GeV)= " << HadrEnergy << " sqrS= " << sqrS
+	   << " plab= " << hLabMomentum   
+	   << G4endl;
+  
   if( HadrEnergy - hMass <0.39 )
   {
       G4cout<<"ElasticHE(GetHadronValues): The energy T = "
@@ -1023,11 +1025,11 @@ void  G4ElasticHadrNucleusHE::DefineHadronValues(G4int Z)
        DDSect3   = 1.03;                            //mb*GeV-2
        break;
   }   
-  /*
-  G4cout << "HadrTot= " << HadrTot << " HadrSlope= " << HadrSlope
-	 << " HadrReIm= " << HadrReIm << " DDSect2= " << DDSect2
-	 << " DDSect3= " << DDSect3 << G4endl;
-  */
+  if(verboseLevel>2)
+    G4cout << "HadrTot= " << HadrTot << " HadrSlope= " << HadrSlope
+	   << " HadrReIm= " << HadrReIm << " DDSect2= " << DDSect2
+	   << " DDSect3= " << DDSect3 << G4endl;
+  
   if(Z != 1) return;
 
   // Scattering of protons

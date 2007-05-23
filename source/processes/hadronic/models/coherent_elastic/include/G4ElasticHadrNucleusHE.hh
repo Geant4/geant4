@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElasticHadrNucleusHE.hh,v 1.37 2007-05-18 08:06:43 grichine Exp $
+// $Id: G4ElasticHadrNucleusHE.hh,v 1.38 2007-05-23 11:05:58 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4ElasticHadrNucleusHe.hh
@@ -148,7 +148,6 @@ private:
 
   //  fields
 
-  G4int    verboselevel;
   G4int    iHadrCode;
   G4int    iHadron;
   G4int    HadronCode[NHADRONS];
