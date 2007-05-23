@@ -27,6 +27,8 @@
 // J.P. Wellisch, Nov-1996
 // A prototype of the low energy neutron transport model.
 //
+// 070523 bug fix for G4FPE_DEBUG on by A. Howard ( and T. Koi)
+//
 #include "G4NeutronHPCapture.hh"
 #include "G4NeutronHPCaptureFS.hh"
 #include "G4NeutronHPDeExGammas.hh"
@@ -98,7 +100,8 @@
       {
         running += xSec[i];
         index = theMaterial->GetElement(i)->GetIndex();
-        if(random<=running/sum) break;
+        //if(random<=running/sum) break;
+        if( sum == 0 || random <= running/sum ) break;
       }
       if(i==n) i=std::max(0, n-1);
       delete [] xSec;

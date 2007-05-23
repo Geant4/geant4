@@ -27,6 +27,8 @@
 // J.P. Wellisch, Nov-1996
 // A prototype of the low energy neutron transport model.
 //
+// 070523 bug fix for G4FPE_DEBUG on by A. Howard ( and T. Koi)
+//
 #include "G4NeutronHPChannel.hh"
 #include "G4NeutronHPFinalState.hh"
 #include "globals.hh"
@@ -225,7 +227,8 @@
       for (G4int ix=0; ix<niso; ix++)
       {
         running += xsec[ix];
-        if(random<=running/sum) 
+        //if(random<=running/sum) 
+        if( sum == 0 || random <= running/sum ) 
         { 
           it = ix;
 	  break;
