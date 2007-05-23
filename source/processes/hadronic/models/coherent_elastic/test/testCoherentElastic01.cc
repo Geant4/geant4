@@ -268,17 +268,20 @@ int main()
 
   G4double kinEnergy = 1.0*GeV;
 
-  iMax = 1000000;
+  iMax = 100000;
 
   G4DynamicParticle*  theDynamicParticle = new G4DynamicParticle(theParticleDefinition,
                                               G4ParticleMomentum(0.,0.,1.),
                                               kinEnergy);
   G4double m1 = theParticleDefinition->GetPDGMass();
   G4double plab = theDynamicParticle->GetTotalMomentum();
+  G4cout <<"lab momentum, plab = "<<plab/GeV<<" GeV"<<G4endl;
   G4double plabLowLimit = 20.0*MeV;
 
   G4int Z   = G4int(theElement->GetZ());
   G4int A    = G4int(theElement->GetN()+0.5);
+
+
   /*
   G4ParticleDefinition * theTargetDef = 0;
 
@@ -291,9 +294,12 @@ int main()
  
   G4double m2 = theTargetDef->GetPDGMass();
   */
+
+
   G4double m2 = man->GetAtomicMassAmu(Z)*GeV;
   // G4double m2 = man->GetAtomicMass( Z, A);
   G4cout <<" target mass, m2 = "<<m2/GeV<<" GeV"<<G4endl;
+
   G4LorentzVector lv1 = theDynamicParticle->Get4Momentum();
   G4LorentzVector lv(0.0,0.0,0.0,m2);   
   lv += lv1;
@@ -303,6 +309,7 @@ int main()
 
   G4ThreeVector p1   = lv1.vect();
   G4double      ptot = p1.mag();
+  G4cout <<"cms momentum, ptot = "<<ptot/GeV<<" GeV"<<G4endl;
   G4double      tmax = 4.0*ptot*ptot;
   G4double      t    = 0.0;
 
@@ -353,35 +360,51 @@ int main()
 
     G4ThreeVector np1 = nlv1.vect();
 
-    G4double theta = std::acos( np1.z()/np1.mag() );  // degree;
+    // G4double theta = std::acos( np1.z()/np1.mag() );  // degree;
+    G4double theta = np1.theta();
 
     // G4cout <<"theta = "<<theta/degree<<G4endl;
-
+    /*
     for( k = 0; k < kAngle; k++) 
     {
-      if (theta < k*thetaMax/kAngle) 
+      // if (theta < k*thetaMax/kAngle) 
+      if (t < k*tmax/kAngle) 
       {
         angleDistr[k] += 1;
         break;
       }
     }
+    */
+
+    // k = G4int(theta*kAngle/thetaMax);
+    k = G4int(t*kAngle*100/tmax);
+    angleDistr[k] += 1;
   }
   // G4double sig = barash->GetCrossSection(theDynamicParticle,theElement, 273*kelvin);
   G4double sig = barash->GetElasticCrossSection(theDynamicParticle, G4double(Z), G4double(A));
   // sig = barash->GetTotalXsc();
   // sig = barash->GetElasticXsc();
 
+  G4double sum = 0;
+
+  for( k = 0; k < kAngle; k++) sum += angleDistr[k];
+  
+  G4cout<<"relative number of event inside array = "<<sum/iMax<<G4endl;
+ 
 
   std::ofstream writef("angle.dat", std::ios::out ) ;
   writef.setf( std::ios::scientific, std::ios::floatfield );
 
-  for( k = 1; k < kAngle; k++) 
+  for( k = 0; k < kAngle; k++) 
   {
-    angleDistr[k] *= sig/iMax/(2*pi)/std::sin(k*thetaMax/kAngle);
-    angleDistr[k] *= steradian/millibarn;
-    G4cout <<k*thetaMax/kAngle/degree<<"\t"<<"\t"<<angleDistr[k]<<G4endl;
-    writef <<k*thetaMax/kAngle/degree<<"\t"<<angleDistr[k]<<G4endl;
+    // angleDistr[k] *= sig/iMax/(2*pi)/std::sin(k*thetaMax/kAngle);
+    // angleDistr[k] *= steradian/millibarn;
+    // G4cout <<k*thetaMax/kAngle/degree<<"\t"<<"\t"<<angleDistr[k]<<G4endl;
+    // writef <<k*thetaMax/kAngle/degree<<"\t"<<angleDistr[k]<<G4endl;
+    G4cout <<k<<"\t"<<"\t"<<angleDistr[k]<<G4endl;
+    writef <<k<<"\t"<<angleDistr[k]<<G4endl;
   }
+  
 
   return 1;
 } // end of main
