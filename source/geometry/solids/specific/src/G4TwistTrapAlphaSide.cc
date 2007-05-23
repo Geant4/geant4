@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistTrapAlphaSide.cc,v 1.7 2007-05-23 09:31:02 gcosmo Exp $
+// $Id: G4TwistTrapAlphaSide.cc,v 1.8 2007-05-23 13:26:06 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -748,17 +748,17 @@ G4TwistTrapAlphaSide::DistanceToSurface(const G4ThreeVector &gp,
      //
      GetPhiUAtX(xx, phiR, uR) ;
      
-     // check validity of solution ( valid phi,psi ) 
-
-     uMax = GetBoundaryMax(phiR) ;
-
-     if (  phiR > halfphi ) { phiR =  halfphi ; }
-     if ( phiR < -halfphi ) { phiR = -halfphi ; }
-     if ( uR > uMax )  { uR = uMax ;  }
-     if ( uR < -uMax ) { uR = -uMax ; }
-
      if ( deltaX <= ctol ) { break ; }
    }
+
+   // check validity of solution ( valid phi,psi ) 
+
+   uMax = GetBoundaryMax(phiR) ;
+
+   if (  phiR > halfphi ) { phiR =  halfphi ; }
+   if ( phiR < -halfphi ) { phiR = -halfphi ; }
+   if ( uR > uMax )  { uR = uMax ;  }
+   if ( uR < -uMax ) { uR = -uMax ; }
 
    xxonsurface = SurfacePoint(phiR,uR) ;
    distance[0] = (  p - xx ).mag() ;
