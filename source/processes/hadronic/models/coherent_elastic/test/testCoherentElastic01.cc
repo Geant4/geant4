@@ -44,7 +44,6 @@
 
 using namespace std;
 
-
 int main()
 {
 
@@ -62,7 +61,6 @@ int main()
         x = cohelastic->GetBinomCof(i,j); 
 
         // NaN finder
-
         if(!(x < 0.0 || x >= 0.0)) 
         {
           G4cout << "i = " << i << ";  j = " << j <<"; binom[i][j] = "

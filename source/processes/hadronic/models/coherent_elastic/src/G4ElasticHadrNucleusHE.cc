@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElasticHadrNucleusHE.cc,v 1.65 2007-05-23 11:05:58 vnivanch Exp $
+// $Id: G4ElasticHadrNucleusHE.cc,v 1.66 2007-05-23 11:45:21 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -720,7 +720,6 @@ G4double G4ElasticHadrNucleusHE::GetLightFq2(G4int Z, G4int Nucleus, G4double Q2
 
   for(G4int i1 = 1; i1<= Nucleus; i1++) 
   {
-
     N1 *= UnucRho2*G4double(Nucleus-i1+1)/G4double(i1);
     Prod1 = 0;
     Tot0  = 0;
@@ -728,25 +727,23 @@ G4double G4ElasticHadrNucleusHE::GetLightFq2(G4int Z, G4int Nucleus, G4double Q2
 
     for(G4int i2 = 1; i2<=Nucleus; i2++) 
     {
-
       N2 *= UnucRho2*G4double(Nucleus-i2+1)/G4double(i2);
       Prod2 = 0; 
-      N5    = -1/NN2;
+      N5    = -1.0/NN2;
 
       for(G4int m2=0; m2<= i2; m2++) 
       {
 	Prod3 = 0;
-	exp2  = 1/(m2/R22B+(i2-m2)/R12B);
-	N5   *= -NN2;
-	N4    = -1/NN2;
+	exp2  = 1.0/(m2/R22B+(i2-m2)/R12B);
+	N5   *= (-NN2);
+	N4    = -1.0/NN2;
 
 	for(G4int m1=0; m1<=i1; m1++) 
         {
-	  exp1   = 1/(m1/R22B+(i1-m1)/R12B);
-	  dddd   = 0.25*exp1+exp2;
-	  N4    *= -NN2;
-	  Prod3 += N4*exp1*exp2*SetBinom[i1][m1]*
-	    (1-std::exp(-Q2*dddd))/dddd;
+	  exp1   = 1.0/(m1/R22B+(i1-m1)/R12B);
+	  dddd   = 0.25*(exp1 + exp2);
+	  N4    *= (-NN2);
+	  Prod3 += N4*exp1*exp2*SetBinom[i1][m1]*(1-std::exp(-Q2*dddd))/dddd;
 	}                                   // m1
 	Prod2 += Prod3*N5*SetBinom[i2][m2];
       }                                      // m2
@@ -759,7 +756,8 @@ G4double G4ElasticHadrNucleusHE::GetLightFq2(G4int Z, G4int Nucleus, G4double Q2
     if(std::abs(N1*Prod1/Prod0) < prec) break;
   }                                           // i1
   Prod0 *= 0.25*pi/MbToGeV2;  //  This is in mb
-
+  if(verboseLevel>2) G4cout << "GetLightFq2 Z= " << Z << " A= " << Nucleus 
+			    <<" Q2= " << Q2 << " Res= " << Prod0 << G4endl;
   return Prod0;
 }
 
