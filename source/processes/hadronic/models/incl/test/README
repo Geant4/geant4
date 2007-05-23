@@ -1,0 +1,9 @@
+
+INCL/ABLA tests
+
+Pekka Kaitaniemi, HIP
+pekka.kaitaniemi@helsinki.fi
+
+interfacetest/   Test for the INCL/ABLA Geant4 interface
+unittest/        This directory contains the unittests for INCL/ABLA
+
