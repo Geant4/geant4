@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElasticHadrNucleusHE.hh,v 1.38 2007-05-23 11:05:58 vnivanch Exp $
+// $Id: G4ElasticHadrNucleusHE.hh,v 1.39 2007-05-23 17:14:49 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4ElasticHadrNucleusHe.hh
@@ -57,7 +57,7 @@ class G4NistManager;
 
 static const G4int  NHADRONS = 26;  //  Number of hadrons for which model is applied
 static const G4int  ONQ0     = 5;   //  The initial number of steps on Q2
-static const G4int  ONQ2     = 100; //  The total number of steps on Q2
+static const G4int  ONQ2     = 150; //  The total number of steps on Q2
 static const G4int  NENERGY  = 30;  
 static const G4int  NQTABLE  = NENERGY*ONQ2;  
 
@@ -95,6 +95,7 @@ public:
   G4double  massA2;
   G4int     dnkE[NENERGY];
   G4double  maxQ2[NENERGY];
+  G4double  CrossSecMaxQ2[NENERGY];
   G4double  TableQ2[ONQ2];
   G4double  TableCrossSec[NQTABLE];
 };

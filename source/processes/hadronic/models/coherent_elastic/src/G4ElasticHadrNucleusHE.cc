@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElasticHadrNucleusHE.cc,v 1.66 2007-05-23 11:45:21 vnivanch Exp $
+// $Id: G4ElasticHadrNucleusHE.cc,v 1.67 2007-05-23 17:14:50 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -153,7 +153,6 @@ void G4ElasticData::DefineNucleusParameters(G4int Nucleus)
       Pnucl = 0.176 + 0.00167*AtomicWeight + 8.69E-6*AtomicWeight*AtomicWeight;
       Aeff  = 0.9;
   }
-  //   G4cout<<" Nucl.Par. "<<Nucleus<<"  R1  "<<R1<<G4endl;
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -502,7 +501,6 @@ G4double G4ElasticHadrNucleusHE::HadronNucleusQ2_2(G4ElasticData* pElD, G4int Z,
 
   if(length == 0) 
   {
-   
     isIni = true;
     R1    = pElD->R1;
     R2    = pElD->R2;
@@ -512,6 +510,7 @@ G4double G4ElasticHadrNucleusHE::HadronNucleusQ2_2(G4ElasticData* pElD, G4int Z,
     DefineHadronValues(Z);
     G4int AWeight = pElD->AtomicWeight;
     Weight = GetLightFq2(Z, AWeight, Q2max);
+    pElD->CrossSecMaxQ2[NumbOnE] = Weight;
 
     if(verboseLevel > 1)
       G4cout<<" HadrNucleusQ2_2: NumbOnE= " << NumbOnE 
@@ -570,9 +569,9 @@ G4double G4ElasticHadrNucleusHE::HadronNucleusQ2_2(G4ElasticData* pElD, G4int Z,
       Pnucl = pElD->Pnucl;
       hLabMomentum = std::sqrt(hLabMomentum2);
       DefineHadronValues(Z);
+      Weight = pElD->CrossSecMaxQ2[NumbOnE];
     }
     G4int AWeight = pElD->AtomicWeight;
-    Weight = GetLightFq2(Z, AWeight, Q2max);
      
     // Stop building when find out the node
 
@@ -688,8 +687,10 @@ G4double G4ElasticHadrNucleusHE::GetLightFq2(G4int Z, G4int Nucleus, G4double Q2
   G4double    Asq      = 1+HadrReIm*HadrReIm;
   G4double    Rho2     = std::sqrt(Asq);
 
-  //  G4cout << "Stot= " << Stot << " Bhad= " << Bhad << " Asq= " << Asq << G4endl;
-
+  if(verboseLevel > 1) {
+    G4cout << "Stot= " << Stot << " Bhad= " << Bhad << " Asq= " << Asq << G4endl;
+    G4cout << "R1= " << R1 << " R2= " << R2 << " Pnucl= " << Pnucl <<G4endl;
+  }
   G4double    R12      = R1*R1;
   G4double    R22      = R2*R2;
   G4double    R12B     = R12+2*Bhad;
@@ -705,7 +706,9 @@ G4double G4ElasticHadrNucleusHE::GetLightFq2(G4int Z, G4int Nucleus, G4double Q2
   G4double    FiH      = std::asin(HadrReIm/Rho2);
   G4double    NN2      = R23/R13;
 
-  //  G4cout << "UnucRho2= " << UnucRho2 << " FiH= " << FiH << " NN2= " << NN2 << G4endl;
+  if(verboseLevel > 2) 
+    G4cout << "UnucRho2= " << UnucRho2 << " FiH= " << FiH << " NN2= " << NN2 
+	   << " Norm= " << Norm << G4endl;
 
   G4double    dddd;
  
@@ -717,7 +720,44 @@ G4double G4ElasticHadrNucleusHE::GetLightFq2(G4int Z, G4int Nucleus, G4double Q2
   G4double    Prod3 ;
   G4double    exp2  ;
   G4double    N4, N5, N2, Prod1, Prod2;
+  G4int    i1, i2, m1, m2;
 
+  for(i1 = 1; i1<= Nucleus; i1++) ////++++++++++  i1
+    {
+      N1    = -N1*Unucl*(Nucleus-i1+1)/i1*Rho2;
+      Prod1 = 0;
+      Tot0  = 0;
+      N2    = -1;
+
+      for(i2 = 1; i2<=Nucleus; i2++) ////+++++++++ i2
+        {
+          N2    = -N2*Unucl*(Nucleus-i2+1)/i2*Rho2;
+          Prod2 = 0; 
+          N5    = -1/NN2;
+	  for(m2=0; m2<= i2; m2++) ////+++++++++ m2
+            {
+              Prod3 = 0;
+              exp2  = 1/(m2/R22B+(i2-m2)/R12B);
+              N5    = -N5*NN2;
+              N4    = -1/NN2;
+	      for(m1=0; m1<=i1; m1++) ////++++++++ m1
+		{
+		  exp1  = 1/(m1/R22B+(i1-m1)/R12B);
+		  dddd  = exp1+exp2;
+		  N4    = -N4*NN2;
+		  Prod3 = Prod3+N4*exp1*exp2*
+		    (1-std::exp(-Q2*dddd/4))/dddd*4*SetBinom[i1][m1];
+               }                                   // m1
+	      Prod2 = Prod2 +Prod3*N5*SetBinom[i2][m2];
+	    }                                      // m2
+	  Prod1 = Prod1 + Prod2*N2*std::cos(FiH*(i1-i2));
+
+	  if (std::fabs(Prod2*N2/Prod1)<prec) break;
+        }                                         // i2
+      Prod0   = Prod0 + Prod1*N1;
+      if(std::fabs(N1*Prod1/Prod0) < prec) break;
+    }                                           // i1
+      /*
   for(G4int i1 = 1; i1<= Nucleus; i1++) 
   {
     N1 *= UnucRho2*G4double(Nucleus-i1+1)/G4double(i1);
@@ -754,10 +794,12 @@ G4double G4ElasticHadrNucleusHE::GetLightFq2(G4int Z, G4int Nucleus, G4double Q2
     Prod0  += Prod1*N1;
 
     if(std::abs(N1*Prod1/Prod0) < prec) break;
-  }                                           // i1
+  }     
+      */                                      // i1
   Prod0 *= 0.25*pi/MbToGeV2;  //  This is in mb
-  if(verboseLevel>2) G4cout << "GetLightFq2 Z= " << Z << " A= " << Nucleus 
-			    <<" Q2= " << Q2 << " Res= " << Prod0 << G4endl;
+  if(verboseLevel>1) 
+    G4cout << "GetLightFq2 Z= " << Z << " A= " << Nucleus 
+	   <<" Q2= " << Q2 << " Res= " << Prod0 << G4endl;
   return Prod0;
 }
 
@@ -792,107 +834,97 @@ void  G4ElasticHadrNucleusHE::DefineHadronValues(G4int Z)
   G4double logS = std::log(sHadr);
 
   switch (iHadron)
-  {
-     case 0:                  //  proton, neutron
-     case 6:
+    {
+    case 0:                  //  proton, neutron
+    case 6:
 
-       TotP = TotN = 7.5*logE - 40.12525 + 103*std::pow(sHadr,-0.165); //  mb
+      TotP = TotN = 7.5*logE - 40.12525 + 103*std::pow(sHadr,-0.165); //  mb
 
-       if(hLabMomentum<10.)
-       {
-	   // ==================  neutron  ================
+      if(hLabMomentum<10.)
+	{
+	  // ==================  neutron  ================
 
-	   if(iHadrCode == 2112) 
-           {
-           
-	     if( hLabMomentum > 1.4 )
-	     {
-	       TotN = 33.3+15.2*(hLabMomentum2-1.35)/(std::pow(hLabMomentum,2.37)+0.95);
-	     }
-	     else if(hLabMomentum > 0.8)
-	     {
-	       TotN = 33+25.5*(logE+0.0513)*(logE+0.0513);  
-	     }
-	     else 
-	     {
-		 G4double A0 = (logE-0.2634)*(logE-0.2634);  // log(1.3)
-		 TotN = 33+30*A0;
-	     }
-	     //  =================  proton  ===============
-	   } 
-           else if(iHadrCode == 2212) 
+	  if(iHadrCode == 2112) 
+	    {    
+	      if( hLabMomentum > 1.4 )
+		TotN = 33.3+15.2*(hLabMomentum2-1.35)/(std::pow(hLabMomentum,2.37)+0.95);
+		
+	      else if(hLabMomentum > 0.8)
+		TotN = 33+25.5*(logE+0.0513)*(logE+0.0513);  
+	   
+	      else 
+		{
+		  G4double A0 = logE-0.2634;  // log(1.3)
+		  TotN = 33+30*A0*A0;
+		}
+	  //  =================  proton  ===============
+	    }
+	  else if(iHadrCode == 2212) 
            {
 	     if(hLabMomentum>1.05)
-	     {
 	       TotP = 39.0+75.*(hLabMomentum-1.2)/(hLabMomentum2*hLabMomentum+0.15);
-	     }
+	    
 	     else if(hLabMomentum > 0.7)
-	     {
+	       {
 		 G4double A0 = logE+0.3147;
 		 TotP = 23+40*A0*A0;
-	     }
+	       }
 	     else 
-	     {
 	       TotP = 23+50*std::pow(std::log(0.73/hLabMomentum),3.5);
-	     }
 	   }
 	 }
-         HadrTot = 0.5*(TotP+TotN);
+      HadrTot = 0.5*(TotP+TotN);
 	
-       //  Proton slope
+      //  Proton slope
+      HadrSlope = 6.44+0.88*std::log(sHadr)-1;     //  GeV-2
 
-       HadrSlope = 6.44+0.88*std::log(sHadr)-1;     //  GeV-2
+      if( hLabMomentum < 2.) HadrSlope = 1.5;
 
-       if( hLabMomentum < 2.) HadrSlope = 1.5;
-
-       if(hLabMomentum>1.2)
-       {
+      if(hLabMomentum>1.2)
 	 HadrReIm  = 0.13*(logS - 5.8579332)*std::pow(sHadr,-0.18);
-       }
-       else if(hLabMomentum > 0.6)
-       {
-	   HadrReIm = -75.5*(std::pow(hLabMomentum,0.25)-0.95)/
-	     (std::pow(3*hLabMomentum,2.2)+1);     
-       }                                                                               
-       else 
-       {
-	   HadrReIm = 15.5*hLabMomentum/(27*hLabMomentum2*hLabMomentum+2);
-       }
-       DDSect2   = 11;                              //mb*GeV-2
-       DDSect3   = 3;                               //mb*GeV-2
-//  ================== lambda  ==================
-       if( iHadrCode == 3122)
-	 {
-	   HadrTot *= 0.88;
-	   HadrSlope *=0.85;
-	 }
-//  ================== sigma +  ==================
-       if( iHadrCode == 3222)
-	 {
-	   HadrTot   *=0.81;
-	   HadrSlope *=0.85;
-	 }
-//  ================== sigma 0,-  ==================
-       if(iHadrCode == 3112 || iHadrCode == 3212 )
-	 {
-	   HadrTot   *=0.88;
-	   HadrSlope *=0.85;
-	 }
-//  ===================  xi  =================
-       if( iHadrCode == 3312 || iHadrCode == 3322 )
-	 {
-	   HadrTot   *=0.77;
-	   HadrSlope *=0.75;
-	 }
-//  =================  omega  =================
-       if( iHadrCode == 3334)
-	 {
-	   HadrTot   *=0.78;
-	   HadrSlope *=0.7;
-	 }
+       
+      else if(hLabMomentum > 0.6)
+	HadrReIm = -75.5*(std::pow(hLabMomentum,0.25)-0.95)/
+	  (std::pow(3*hLabMomentum,2.2)+1);     
+                                                                                    
+      else 
+	HadrReIm = 15.5*hLabMomentum/(27*hLabMomentum2*hLabMomentum+2);
+      
+      DDSect2   = 11;                              //mb*GeV-2
+      DDSect3   = 3;                               //mb*GeV-2
+      //  ================== lambda  ==================
+      if( iHadrCode == 3122)
+	{
+	  HadrTot *= 0.88;
+	  HadrSlope *=0.85;
+	}
+      //  ================== sigma +  ==================
+      if( iHadrCode == 3222)
+	{
+	  HadrTot   *=0.81;
+	  HadrSlope *=0.85;
+	}
+      //  ================== sigma 0,-  ==================
+      if(iHadrCode == 3112 || iHadrCode == 3212 )
+	{
+	  HadrTot   *=0.88;
+	  HadrSlope *=0.85;
+	}
+      //  ===================  xi  =================
+      if( iHadrCode == 3312 || iHadrCode == 3322 )
+	{
+	  HadrTot   *=0.77;
+	  HadrSlope *=0.75;
+	}
+      //  =================  omega  =================
+      if( iHadrCode == 3334)
+	{
+	  HadrTot   *=0.78;
+	  HadrSlope *=0.7;
+	}
 
-       break;
-// 
+      break;
+      
     case 1:              
     case 7:              //   antiproton
 
@@ -906,31 +938,31 @@ void  G4ElasticHadrNucleusHE::DefineHadronValues(G4int Z)
 
       DDSect2   = 11;                                //mb*GeV-2
       DDSect3   = 3;                                 //mb*GeV-2
-//  ================== lambda  ==================
+      //  ================== lambda  ==================
       if( iHadrCode == -3122)
 	{
 	  HadrTot *= 0.88;
 	  HadrSlope *=0.85;
 	}
-//  ================== sigma +  ==================
+      //  ================== sigma +  ==================
       else if( iHadrCode == -3222)
 	{
 	  HadrTot   *=0.81;
 	  HadrSlope *=0.85;
 	}
-//  ================== sigma 0,-  ==================
+      //  ================== sigma 0,-  ==================
       else if(iHadrCode == -3112 || iHadrCode == -3212 )
 	{
 	  HadrTot   *=0.88;
 	  HadrSlope *=0.85;
 	}
-//  ===================  xi  =================
+      //  ===================  xi  =================
       else if( iHadrCode == -3312 || iHadrCode == -3322 )
 	{
 	  HadrTot   *=0.77;
 	  HadrSlope *=0.75;
 	}
-//  =================  omega  =================
+      //  =================  omega  =================
       else if( iHadrCode == -3334)
 	{
 	  HadrTot   *=0.78;
@@ -938,7 +970,7 @@ void  G4ElasticHadrNucleusHE::DefineHadronValues(G4int Z)
 	}
 
       break;
-//  -------------------------------------------
+      //  -------------------------------------------
     case 2:             //   pi plus, pi minus
     case 3:
 
@@ -946,53 +978,48 @@ void  G4ElasticHadrNucleusHE::DefineHadronValues(G4int Z)
 	TotP = 10.6+2.*logE + 25.*std::pow(HadrEnergy,-0.43); // mb
       //  =========================================
       else if(hLabMomentum >1.15)
-      {
+	{
           G4double x = (hLabMomentum - 2.55)/0.55; 
 	  G4double y = (hLabMomentum - 1.47)/0.225;
 	  TotP = 3.2*std::exp(-x*x) + 12.*std::exp(-y*y) + 27.5;
-      }
-//  =========================================
+	}
+      //  =========================================
       else if(hLabMomentum >0.4)
 	TotP  = 88*(logE+0.2877)*(logE+0.2877)+14.0;
-	
-//  =========================================
+      
+      //  =========================================
       else 
-      {
+	{
 	  G4double x = (hLabMomentum - 0.29)/0.085;
 	  TotP = 20. + 180.*std::exp(-x*x);
-      }
-//  =========================================
-      HadrSlope = 7.28+0.245*logS;        //GeV-2
-      HadrReIm  = 0.2*(logS - 4.6051702)*std::pow(sHadr,-0.15);
-      DDSect2   = 4.6;                               //mb*GeV-2
-      DDSect3   = 1.33;                              //mb*GeV-2
-//  -------------------------------------------
+	}
+      //  -------------------------------------------
 
       if(hLabMomentum > 3.0 )
 	TotN = 10.6 + 2.*logE + 30.*std::pow(HadrEnergy,-0.43); // mb
 
       else if(hLabMomentum > 1.3) 
-      {
+	{
           G4double x = (hLabMomentum - 2.1)/0.4;
           G4double y = (hLabMomentum - 1.4)/0.12;
 	  TotN = 36.1+0.079 - 4.313*logE + 3.*std::exp(-x*x) + 1.5*std::exp(-y*y);
-      }
+	}
       else if(hLabMomentum > 0.65)
-      {
+	{
           G4double x = (hLabMomentum - 0.72)/0.06;
           G4double y = (hLabMomentum - 1.015)/0.075;
 	  TotN = 36.1 + 10.*std::exp(-x*x) + 24*std::exp(-y*y);
-      }
+	}
       else if(hLabMomentum > 0.37)
-      {
+	{
 	  G4double x = std::log(hLabMomentum/0.48);
 	  TotN = 26. + 110.*x*x;
-      }
+	}
       else 
-      {
+	{
           G4double x = (hLabMomentum - 0.29)/0.07;
 	  TotN = 28.0 + 40.*std::exp(-x*x);
-      }
+	}
       HadrTot = (TotP+TotN)/2;
 
       HadrSlope = 7.28+0.245*logS;        // GeV-2

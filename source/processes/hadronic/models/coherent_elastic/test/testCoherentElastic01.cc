@@ -51,7 +51,7 @@ int main()
   G4double x;
 
   G4ElasticHadrNucleusHE* cohelastic = new G4ElasticHadrNucleusHE();
-
+  /*
   for( i = 0; i < 240; i++)
   {
     for( j = 0; j < 240; j++)
@@ -71,7 +71,7 @@ int main()
       }    
     }   
   }
-
+  */
   // Element definition
 
   G4Element*     theElement;
@@ -205,7 +205,7 @@ int main()
   G4cout << " 5 kaon0short" << G4endl;
 
   //  G4cin >> choice;
-  choice = 1;
+  choice = 3;
 
   G4ParticleDefinition* theParticleDefinition;
 
@@ -357,24 +357,12 @@ int main()
 
     G4ThreeVector np1 = nlv1.vect();
 
-    // G4double theta = std::acos( np1.z()/np1.mag() );  // degree;
     G4double theta = np1.theta();
 
-    // G4cout <<"theta = "<<theta/degree<<G4endl;
-    /*
-    for( k = 0; k < kAngle; k++) 
-    {
-      // if (theta < k*thetaMax/kAngle) 
-      if (t < k*tmax/kAngle) 
-      {
-        angleDistr[k] += 1;
-        break;
-      }
-    }
-    */
+    G4cout <<"theta = "<<theta/degree<< " t= " << t << " tmax= " << tmax <<G4endl;
 
-    // k = G4int(theta*kAngle/thetaMax);
-    k = G4int(t*kAngle*100/tmax);
+    //k = G4int(theta*kAngle/thetaMax);
+    k = G4int(t*kAngle/tmax);
     angleDistr[k] += 1;
   }
   // G4double sig = barash->GetCrossSection(theDynamicParticle,theElement, 273*kelvin);
