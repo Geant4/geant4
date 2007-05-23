@@ -28,6 +28,7 @@
 // A prototype of the low energy neutron transport model.
 //
 // 12-April-06 Enable IC electron emissions T. Koi 
+// 26-January-07 Add NeutronHP_ALWAYS_USE_PHOTONEVAPORATION_FOR_CAPTURE_FS flag
 //
 #include "G4NeutronHPCaptureFS.hh"
 #include "G4Gamma.hh"
@@ -67,7 +68,7 @@
 // dice the photons
 
     G4ReactionProductVector * thePhotons = NULL;    
-    if (HasFSData()) 
+    if ( HasFSData() && !getenv ( "NeutronHP_ALWAYS_USE_PHOTONEVAPORATION_FOR_CAPTURE_FS" ) ) 
     { 
       thePhotons = theFinalStatePhotons.GetPhotons(eKinetic);
     }
