@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QCoherentChargeExchange.cc,v 1.1 2007-05-23 09:04:32 mkossov Exp $
+// $Id: G4QCoherentChargeExchange.cc,v 1.2 2007-05-23 10:04:38 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCoherentChargeExchange class -----------------
@@ -94,7 +94,6 @@ G4double G4QCoherentChargeExchange::GetMeanFreePath(const G4Track& aTrack,G4doub
 #ifdef debug
   G4cout<<"G4QCohChargeExchange::GetMeanFreePath:"<<nE<<" Elem's in theMaterial"<<G4endl;
 #endif
-  G4VQCrossSection* CSmanager=G4QElasticCrossSection::GetPointer();
   G4int pPDG=0;
 
   if     (incidentParticleDefinition == G4Proton::Proton()  ) pPDG=2212;
@@ -183,7 +182,7 @@ G4double G4QCoherentChargeExchange::GetMeanFreePath(const G4Track& aTrack,G4doub
 #ifdef debug
       G4cout<<"G4QCoherentChargeExchange::GMFP: GetCS #1 j="<<j<<G4endl;
 #endif
-      G4double CSI=CSmanager->GetCrossSection(ccsf,Momentum,Z,N,pPDG);//CS(j,i) for isotope
+      G4double CSI=CalculateXSt(ccsf, true, Momentum, Z, N, pPDG);// CS(j,i) for theIsotope
 
 #ifdef debug
       G4cout<<"G4QCohChEx::GetMeanFreePath:jI="<<j<<",Zt="<<Z<<",Nt="<<N<<",Mom="<<Momentum
@@ -207,7 +206,6 @@ G4double G4QCoherentChargeExchange::GetMeanFreePath(const G4Track& aTrack,G4doub
   if(sigma > 0.) return 1./sigma;                 // Mean path [distance] 
   return DBL_MAX;
 }
-
 
 G4bool G4QCoherentChargeExchange::IsApplicable(const G4ParticleDefinition& particle) 
 {
@@ -423,12 +421,11 @@ G4VParticleChange* G4QCoherentChargeExchange::PostStepDoIt(const G4Track& track,
   G4cout<<"G4QCohChrgEx::PostStepDoIt: tM="<<tM<<", p4M="<<proj4M<<", t4M="<<tot4M<<G4endl;
 #endif
   EnMomConservation=tot4M;                 // Total 4-mom of reaction for E/M conservation
-  G4VQCrossSection* CSmanager=G4QElasticCrossSection::GetPointer();
   // @@ Probably this is not necessary any more
 #ifdef debug
   G4cout<<"G4QCCX::PSDI:false, P="<<Momentum<<",Z="<<Z<<",N="<<N<<",PDG="<<projPDG<<G4endl;
 #endif
-  G4double xSec=CSmanager->GetCrossSection(false, Momentum, Z, N, projPDG);// Rec.CrossSect
+  G4double xSec=CalculateXSt(false, true, Momentum, Z, N, projPDG); // Recalc. CrossSection
 #ifdef debug
   G4cout<<"G4QCoChEx::PSDI:PDG="<<projPDG<<",P="<<Momentum<<",CS="<<xSec/millibarn<<G4endl;
 #endif
@@ -449,7 +446,7 @@ G4VParticleChange* G4QCoherentChargeExchange::PostStepDoIt(const G4Track& track,
     aParticleChange.ProposeMomentumDirection(dir) ;
     return G4VDiscreteProcess::PostStepDoIt(track,step);
   }
-  G4double mint=CSmanager->GetExchangeT(Z,N,projPDG); // fanctional randomized -t in MeV^2
+  G4double mint=CalculateXSt(false, false, Momentum, Z, N, projPDG);// randomize t in MeV^2
 #ifdef pdebug
   G4cout<<"G4QCohChEx::PoStDoIt:pPDG="<<projPDG<<",tPDG="<<targPDG<<",P="<<Momentum<<",CS="
         <<xSec<<",-t="<<mint<<G4endl;
@@ -458,11 +455,12 @@ G4VParticleChange* G4QCoherentChargeExchange::PostStepDoIt(const G4Track& track,
   if(mint>-.0000001);
   else  G4cout<<"*Warning*G4QCoherentChargeExchange::PostStDoIt:-t="<<mint<<G4endl;
 #endif
-  //G4double cost=1.-mint/twop2cm;              // cos(theta) in CMS
-  G4double cost=1.-mint/CSmanager->GetHMaxT();// cos(theta) in CMS
+  G4double maxt=CalculateXSt(true, false, Momentum, Z, N, projPDG);
+  if(maxt<=0.) maxt=1.e-27;
+  G4double cost=1.-mint/maxt; // cos(theta) in CMS
   // 
 #ifdef ppdebug
-  G4cout<<"G4QCoherentChargeExchange::PoStDoIt:t="<<mint<<",dpcm2="<<CSmanager->GetHMaxT()
+  G4cout<<"G4QCoherentChargeExchange::PoStDoIt:t="<<mint<<",dpcm2="<<maxt
         <<",Ek="<<kinEnergy<<",tM="<<tM<<",pM="<<pM<<",cost="<<cost<<G4endl;
 #endif
   if(cost>1. || cost<-1. || !(cost>-1. || cost<1.))
@@ -475,7 +473,7 @@ G4VParticleChange* G4QCoherentChargeExchange::PostStepDoIt(const G4Track& track,
       G4double twop2cm=(tM2+tM2)*(pEn*pEn-pM2)/sM;// Max_t/2 (2*p^2_cm)
       G4cout<<"*Warning*G4QCohChEx::PostStepDoIt:cos="<<cost<<",t="<<mint<<",T="<<kinEnergy
             <<",tM="<<tM<<",tmax="<<2*kinEnergy*tM<<",p="<<projPDG<<",t="<<targPDG<<G4endl;
-      G4cout<<"..G4QCohChEx::PoStDoI: dpcm2="<<twop2cm<<"="<<CSmanager->GetHMaxT()<<G4endl;
+      G4cout<<"..G4QCohChEx::PoStDoI: dpcm2="<<twop2cm<<"="<<maxt<<G4endl;
     }
     if     (cost>1.)  cost=1.;
     else if(cost<-1.) cost=-1.;
@@ -542,4 +540,35 @@ G4VParticleChange* G4QCoherentChargeExchange::PostStepDoIt(const G4Track& track,
     G4cout<<"G4QCoherentChargeExchange::PostStepDoIt:*** PostStepDoIt is done ***"<<G4endl;
 #endif
   return G4VDiscreteProcess::PostStepDoIt(track, step);
+}
+
+G4double G4QCoherentChargeExchange::CalculateXSt(G4bool oxs, G4bool xst, G4double p,
+                                                 G4int Z, G4int N, G4int pPDG) 
+{
+  static G4bool init=false;
+  static G4bool first=true;
+  static G4VQCrossSection* CSmanager;
+  if(first)                              // Connection with a singletone
+  {
+    CSmanager=G4QElasticCrossSection::GetPointer();
+    first=false;
+  }
+  G4double res=0.;
+  if(oxs && xst)                         // Only the Cross-Section can be returened
+  {
+    res=CSmanager->GetCrossSection(true, p, Z, N, pPDG); // XS for isotope
+  }
+  else if(!oxs && xst)                   // Calculate Cross-Section & prepare differential
+  {
+    res=CSmanager->GetCrossSection(false, p, Z, N, pPDG);// XS for isotope + init t-distr.
+    // The XS for the nucleus must be calculated the last
+    init=true;
+  }
+  else if(init)                          // Return t-value for scattering (=G4QElastic)
+  {
+    if(oxs) res=CSmanager->GetHMaxT();   // Calculate the max_t value
+				else res=CSmanager->GetExchangeT(Z, N, pPDG); // fanctionally randomized -t in MeV^2
+  }
+  else G4cout<<"*Warning*G4QCohChrgExchange::CalculateXSt:*NotInitiatedScattering"<<G4endl;
+  return res;
 }
