@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ePolarizedIonisation.cc,v 1.2 2006-09-26 09:08:48 gcosmo Exp $
+// $Id: G4ePolarizedIonisation.cc,v 1.3 2007-05-23 08:52:20 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // -------------------------------------------------------------------
 //
@@ -281,18 +281,4 @@ G4double G4ePolarizedIonisation::ComputeAsymmetry(G4double energy,
   return lAsymmetry;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-std::vector<G4DynamicParticle*>* G4ePolarizedIonisation::SecondariesPostStep(
-                                                  G4VEmModel* model,
-                                            const G4MaterialCutsCouple* couple,
-                                            const G4DynamicParticle* dp,
-                                                  G4double& tcut)
-{
-  // determine the delta electron
-  std::vector<G4DynamicParticle*>* particles = model->SampleSecondaries(couple, dp, tcut);
-  // Note: G4VEnergyLossProcess relies on fParticleChange and not on polParticleChange,
-  //       but the former does not allow for polarization!
-  return particles;
-}
 

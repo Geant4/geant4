@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eeToHadronsMultiModel.hh,v 1.4 2007-05-22 17:37:30 vnivanch Exp $
+// $Id: G4eeToHadronsMultiModel.hh,v 1.5 2007-05-23 08:50:41 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -52,6 +52,8 @@
 
 #include "G4VEmModel.hh"
 #include "G4eeToHadronsModel.hh"
+#include "G4ParticleChangeForGamma.hh"
+#include "G4TrackStatus.hh"
 #include "Randomize.hh"
 #include <vector>
 
@@ -105,6 +107,7 @@ private:
   G4eeToHadronsMultiModel(const  G4eeToHadronsMultiModel&);
 
   G4eeCrossSections*               cross;
+  G4ParticleChangeForGamma*        fParticleChange;
 
   std::vector<G4eeToHadronsModel*> models;
 
@@ -177,6 +180,7 @@ void G4eeToHadronsMultiModel::SampleSecondaries(std::vector<G4DynamicParticle*>*
     for(G4int i=0; i<nModels; i++) {
       if(q <= cumSum[i]) {
         (models[i])->SampleSecondaries(newp, couple,dp);
+	if(newp->size() > 0) fParticleChange->ProposeTrackStatus(fStopAndKill);
 	break;
       }
     }

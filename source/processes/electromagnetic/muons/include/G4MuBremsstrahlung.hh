@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuBremsstrahlung.hh,v 1.28 2007-05-22 17:35:58 vnivanch Exp $
+// $Id: G4MuBremsstrahlung.hh,v 1.29 2007-05-23 08:49:32 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -91,12 +91,6 @@ public:
 			    const G4Material*, 
 			    G4double cut);
 
-  void SecondariesPostStep(std::vector<G4DynamicParticle*>*, 
-			   G4VEmModel*,
-			   const G4MaterialCutsCouple*,
-			   const G4DynamicParticle*,
-			   G4double& tcut);
-
   // Print out of the class parameters
   void PrintInfo();
 
@@ -133,18 +127,6 @@ inline G4double G4MuBremsstrahlung::MinPrimaryEnergy(const G4ParticleDefinition*
                                                            G4double)
 {
   return lowestKinEnergy;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline 
-void G4MuBremsstrahlung::SecondariesPostStep(std::vector<G4DynamicParticle*>* vdp,
-					     G4VEmModel* model,
-					     const G4MaterialCutsCouple* couple,
-					     const G4DynamicParticle* dp,
-					     G4double& tcut)
-{
-  model->SampleSecondaries(vdp, couple, dp, tcut);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

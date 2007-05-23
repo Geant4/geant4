@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolarizedCompton.cc,v 1.3 2006-11-17 14:14:20 vnivanch Exp $
+// $Id: G4PolarizedCompton.cc,v 1.4 2007-05-23 08:52:20 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //
@@ -297,15 +297,4 @@ G4double G4PolarizedCompton::ComputeAsymmetry(G4double energy,
   return lAsymmetry;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-
-std::vector<G4DynamicParticle*>* G4PolarizedCompton::SecondariesPostStep(
-                                   G4VEmModel* model,
-                             const G4MaterialCutsCouple* couple,
-                             const G4DynamicParticle* dp)
-{ 
-  std::vector<G4DynamicParticle*>* secondaries =  model->SampleSecondaries(couple, dp);
-  return secondaries;
-}
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

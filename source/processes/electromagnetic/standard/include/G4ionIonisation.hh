@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ionIonisation.hh,v 1.45 2007-05-22 17:34:36 vnivanch Exp $
+// $Id: G4ionIonisation.hh,v 1.46 2007-05-23 08:47:34 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -103,12 +103,6 @@ protected:
 	             	   const G4DynamicParticle*,
 			         G4double& eloss,
 			         G4double& length);
-
-  void SecondariesPostStep(std::vector<G4DynamicParticle*>*,
-			   G4VEmModel*,
-			   const G4MaterialCutsCouple*,
-			   const G4DynamicParticle*,
-			   G4double&);
 
   void InitialiseEnergyLossProcess(const G4ParticleDefinition*,
 				   const G4ParticleDefinition*);
@@ -204,17 +198,6 @@ inline void G4ionIonisation::CorrectionsAlongStep(
     fParticleChange.SetProposedCharge(effCharge->EffectiveCharge(part,
                                       mat,preKinEnergy-eloss));
   }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline void G4ionIonisation::SecondariesPostStep(std::vector<G4DynamicParticle*>* vdp,
-                                                 G4VEmModel* model,
-						 const G4MaterialCutsCouple* couple,
-						 const G4DynamicParticle* dp,
-                                                 G4double& tcut)
-{
-  model->SampleSecondaries(vdp, couple, dp, tcut);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

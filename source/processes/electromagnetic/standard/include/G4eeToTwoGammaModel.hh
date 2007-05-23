@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eeToTwoGammaModel.hh,v 1.13 2007-05-22 17:34:36 vnivanch Exp $
+// $Id: G4eeToTwoGammaModel.hh,v 1.14 2007-05-23 08:47:34 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -55,6 +55,8 @@
 #define G4eeToTwoGammaModel_h 1
 
 #include "G4VEmModel.hh"
+
+class G4ParticleChangeForGamma;
 
 class G4eeToTwoGammaModel : public G4VEmModel
 {
@@ -102,6 +104,8 @@ private:
 
   G4double pi_rcl2;
   G4ParticleDefinition*  theGamma;
+  G4ParticleChangeForGamma* fParticleChange;
+  G4bool isInitialised;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

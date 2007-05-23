@@ -1,4 +1,4 @@
-$Id: History,v 1.313 2007-05-23 08:47:34 vnivanch Exp $
+$Id: History,v 1.314 2007-05-23 08:48:27 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,7 @@ committal in the CVS repository !
 - G4eBremsstrahlung - remove definition of gamma threshold from constructor,
   define this parameter at initialisation of the process from 
   G4LossTableManager
+- G4eeToTwoGammaModel use fParticleChange inside SampleSecondaries
 
 22 May 07:  V.Ivanchenko (emstand-V08-03-06)
 - G4VEmModel - changed interface of SampleSecondary method, it become 

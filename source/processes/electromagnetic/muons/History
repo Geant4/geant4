@@ -1,4 +1,4 @@
-$Id: History,v 1.98 2007-05-22 17:35:58 vnivanch Exp $
+$Id: History,v 1.99 2007-05-23 08:49:32 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-21 May 07:  V.Ivanchenko (emmuons-V08-03-02)
+23 May 07:  V.Ivanchenko (emmuons-V08-03-03)
+- In all processes inherit from G4VEnergyLossProcess or G4VEmProcess 
+  remove method SecondaryPostStep;
+
+22 May 07:  V.Ivanchenko (emmuons-V08-03-02)
 - G4VEmModel - changed interface of SampleSecondary method, it become 
   void, extra parameter std::vector<G4DynamicParticle*>*, all
   classes using or inhereting this interface are modified.

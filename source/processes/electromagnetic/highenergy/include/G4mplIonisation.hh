@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4mplIonisation.hh,v 1.4 2007-05-22 17:37:30 vnivanch Exp $
+// $Id: G4mplIonisation.hh,v 1.5 2007-05-23 08:50:41 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -78,12 +78,6 @@ public:
 
 protected:
 
-  void SecondariesPostStep(std::vector<G4DynamicParticle*>*,
-			   G4VEmModel*,
-			   const G4MaterialCutsCouple*,
-			   const G4DynamicParticle*,
-			   G4double&);
-
   virtual void InitialiseEnergyLossProcess(const G4ParticleDefinition*,
 					   const G4ParticleDefinition*);
 
@@ -105,16 +99,6 @@ inline G4bool G4mplIonisation::IsApplicable(const G4ParticleDefinition& p)
 {
   return (p.GetParticleName() == "monopole");
 }
-
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline void G4mplIonisation::SecondariesPostStep(std::vector<G4DynamicParticle*>*,
-						 G4VEmModel*,
-						 const G4MaterialCutsCouple*,
-						 const G4DynamicParticle*,
-						 G4double&)
-{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

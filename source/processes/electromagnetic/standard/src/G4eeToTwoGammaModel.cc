@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eeToTwoGammaModel.cc,v 1.13 2007-05-22 17:34:36 vnivanch Exp $
+// $Id: G4eeToTwoGammaModel.cc,v 1.14 2007-05-23 08:47:35 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -70,10 +70,12 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4eeToTwoGammaModel.hh"
+#include "G4TrackStatus.hh"
 #include "G4Electron.hh"
 #include "G4Positron.hh"
 #include "G4Gamma.hh"
 #include "Randomize.hh"
+#include "G4ParticleChangeForGamma.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -82,7 +84,8 @@ using namespace std;
 G4eeToTwoGammaModel::G4eeToTwoGammaModel(const G4ParticleDefinition*,
                                          const G4String& nam)
   : G4VEmModel(nam),
-  pi_rcl2(pi*classic_electr_radius*classic_electr_radius)
+    pi_rcl2(pi*classic_electr_radius*classic_electr_radius),
+    isInitialised(false)
 {
   theGamma = G4Gamma::Gamma();
 }
@@ -96,7 +99,18 @@ G4eeToTwoGammaModel::~G4eeToTwoGammaModel()
 
 void G4eeToTwoGammaModel::Initialise(const G4ParticleDefinition*,
                                      const G4DataVector&)
-{}
+{
+  if(isInitialised) return;
+
+  if(pParticleChange)
+    fParticleChange =
+      reinterpret_cast<G4ParticleChangeForGamma*>(pParticleChange);
+  else
+    fParticleChange = new G4ParticleChangeForGamma();
+
+  isInitialised = true;
+}
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4eeToTwoGammaModel::ComputeCrossSectionPerElectron(
@@ -243,6 +257,8 @@ void G4eeToTwoGammaModel::SampleSecondaries(vector<G4DynamicParticle*>* vdp,
       << Phot2Direction << G4endl;
     */
   }
+  fParticleChange->SetProposedKineticEnergy(0.);
+  fParticleChange->ProposeTrackStatus(fStopAndKill);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungModel.cc,v 1.38 2007-05-22 17:34:36 vnivanch Exp $
+// $Id: G4eBremsstrahlungModel.cc,v 1.39 2007-05-23 08:47:35 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -81,18 +81,20 @@ using namespace std;
 G4eBremsstrahlungModel::G4eBremsstrahlungModel(const G4ParticleDefinition* p,
                                                const G4String& nam)
   : G4VEmModel(nam),
-  particle(0),
-  minThreshold(1.0*keV),
-  isElectron(true),
-  highKinEnergy(100.*TeV),
-  lowKinEnergy(1.0*keV),
-  probsup(1.0),
-  MigdalConstant(classic_electr_radius*electron_Compton_length*electron_Compton_length/pi),
-  LPMconstant(fine_structure_const*electron_mass_c2*electron_mass_c2/(4.*pi*hbarc)),
-  theLPMflag(true)
+    particle(0),
+    isElectron(true),
+    probsup(1.0),
+    MigdalConstant(classic_electr_radius*electron_Compton_length*electron_Compton_length/pi),
+    LPMconstant(fine_structure_const*electron_mass_c2*electron_mass_c2/(4.*pi*hbarc)),
+    theLPMflag(true),
+    isInitialised(false)
 {
   if(p) SetParticle(p);
   theGamma = G4Gamma::Gamma();
+  minThreshold = 1.0*keV;
+  highKinEnergy= 100.*TeV;
+  lowKinEnergy = 1.0*keV;
+  highEnergyTh = DBL_MAX;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -159,11 +161,14 @@ void G4eBremsstrahlungModel::Initialise(const G4ParticleDefinition* p,
       }
     }
   }
+  if(isInitialised) return;
+
   if(pParticleChange)
     fParticleChange = reinterpret_cast<G4ParticleChangeForLoss*>(pParticleChange);
   else
     fParticleChange = new G4ParticleChangeForLoss();
 
+  isInitialised = true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -666,7 +671,7 @@ void G4eBremsstrahlungModel::SampleSecondaries(std::vector<G4DynamicParticle*>* 
 {
   G4double kineticEnergy = dp->GetKineticEnergy();
   G4double tmax = min(maxEnergy, kineticEnergy);
-  if(tmin >= tmax) return 0;
+  if(tmin >= tmax) return;
 
 //
 // GEANT4 internal units.
@@ -868,9 +873,24 @@ void G4eBremsstrahlungModel::SampleSecondaries(std::vector<G4DynamicParticle*>* 
   G4double totMomentum = sqrt(kineticEnergy*(totalEnergy + electron_mass_c2));
   G4ThreeVector dir = totMomentum*direction - gammaEnergy*gammaDirection;
   direction = dir.unit();
-  fParticleChange->SetProposedMomentumDirection(direction);
 
-  fParticleChange->SetProposedKineticEnergy(kineticEnergy - gammaEnergy);
+  // energy of primary
+  G4double finalE = kineticEnergy - gammaEnergy;
+
+  // stop tracking and create new secondary instead of primary
+  if(gammaEnergy > highEnergyTh) {
+    fParticleChange->ProposeTrackStatus(fStopAndKill);
+    fParticleChange->SetProposedKineticEnergy(0.0);
+    G4DynamicParticle* el = 
+      new G4DynamicParticle(const_cast<G4ParticleDefinition*>(particle),
+			    direction, finalE);
+    vdp->push_back(el);
+
+    // continue tracking
+  } else {
+    fParticleChange->SetProposedMomentumDirection(direction);
+    fParticleChange->SetProposedKineticEnergy(finalE);
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

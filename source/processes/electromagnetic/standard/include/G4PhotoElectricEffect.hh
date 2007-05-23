@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhotoElectricEffect.hh,v 1.23 2007-05-22 17:34:36 vnivanch Exp $
+// $Id: G4PhotoElectricEffect.hh,v 1.24 2007-05-23 08:47:34 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -99,11 +99,6 @@ protected:
 
   void InitialiseProcess(const G4ParticleDefinition*);
 
-  void SecondariesPostStep(std::vector<G4DynamicParticle*>*,
-			   G4VEmModel*,
-			   const G4MaterialCutsCouple*,
-			   const G4DynamicParticle*);
-
 private:
 
   G4bool  isInitialised;
@@ -116,17 +111,6 @@ inline
 G4bool G4PhotoElectricEffect::IsApplicable(const G4ParticleDefinition& p)
 {
   return (&p == G4Gamma::Gamma());
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline 
-void G4PhotoElectricEffect::SecondariesPostStep(std::vector<G4DynamicParticle*>* vdp,
-						G4VEmModel* model,
-						const G4MaterialCutsCouple* couple,
-						const G4DynamicParticle* dp)
-{
-  model->SampleSecondaries(vdp, couple, dp);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

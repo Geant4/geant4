@@ -91,11 +91,6 @@ protected:
 
   virtual void InitialiseProcess(const G4ParticleDefinition*);
 
-  virtual std::vector<G4DynamicParticle*>* SecondariesPostStep(
-                                   G4VEmModel*,
-                             const G4MaterialCutsCouple*,
-                             const G4DynamicParticle*);
-
   // added for polarization treatment of polarized media:
   virtual void BuildPhysicsTable(const G4ParticleDefinition&);
   virtual void PreparePhysicsTable(const G4ParticleDefinition&);

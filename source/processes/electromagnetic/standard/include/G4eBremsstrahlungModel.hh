@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungModel.hh,v 1.21 2007-05-22 17:34:36 vnivanch Exp $
+// $Id: G4eBremsstrahlungModel.hh,v 1.22 2007-05-23 08:47:34 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -100,13 +100,16 @@ public:
 				 G4double tmin,
 				 G4double maxEnergy);
 
-  void   SetLPMflag(G4bool val) {theLPMflag = val;};
-  G4bool LPMflag() const {return theLPMflag;};
+  inline void SetLPMflag(G4bool val);
+  inline G4bool LPMflag() const;
+
+  inline void SetEnergyThreshold(G4double val);
+  inline G4double EnergyThreshold() const;
 
 protected:
 
-  G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
-			      G4double kineticEnergy);
+  inline G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
+				     G4double kineticEnergy);
 
   const G4Element* SelectRandomAtom(const G4MaterialCutsCouple* couple);
 
@@ -126,9 +129,9 @@ private:
   G4double SupressionFunction(const G4Material* material, G4double tkin,
                                     G4double gammaEnergy);
 
-  G4double ScreenFunction1(G4double ScreenVariable);
+  inline G4double ScreenFunction1(G4double ScreenVariable);
 
-  G4double ScreenFunction2(G4double ScreenVariable);
+  inline G4double ScreenFunction2(G4double ScreenVariable);
 
   // hide assignment operator
   G4eBremsstrahlungModel & operator=(const  G4eBremsstrahlungModel &right);
@@ -150,7 +153,10 @@ private:
   G4double probsup;
   G4double MigdalConstant;
   G4double LPMconstant;
+  G4double highEnergyTh;
   G4bool   theLPMflag;
+  G4bool   isInitialised;
+
   std::vector<G4DataVector*> partialSumSigma;
 
 };
@@ -198,6 +204,38 @@ G4double G4eBremsstrahlungModel::MaxSecondaryEnergy(
     				       G4double kineticEnergy)
 {
   return kineticEnergy;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline 
+void G4eBremsstrahlungModel::SetLPMflag(G4bool val) 
+{
+  theLPMflag = val;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline 
+G4bool G4eBremsstrahlungModel::LPMflag() const 
+{
+  return theLPMflag;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline 
+void G4eBremsstrahlungModel::SetEnergyThreshold(G4double val) 
+{
+  highEnergyTh = val;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline 
+G4double G4eBremsstrahlungModel::EnergyThreshold() const 
+{
+  return highEnergyTh;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

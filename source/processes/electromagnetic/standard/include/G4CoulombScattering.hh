@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CoulombScattering.hh,v 1.5 2007-05-22 17:34:36 vnivanch Exp $
+// $Id: G4CoulombScattering.hh,v 1.6 2007-05-23 08:47:34 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -79,11 +79,6 @@ protected:
 
   virtual void InitialiseProcess(const G4ParticleDefinition*);
 
-  virtual void SecondariesPostStep(std::vector<G4DynamicParticle*>*,
-                                   G4VEmModel*,
-				   const G4MaterialCutsCouple*,
-				   const G4DynamicParticle*);
-
 private:
 
  // hide assignment operator
@@ -132,16 +127,6 @@ inline void G4CoulombScattering::SetQ2Max(G4double val)
 inline void G4CoulombScattering::SetBuildTableFlag(G4bool val)
 {
   buildTableFlag = val;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline void G4CoulombScattering::SecondariesPostStep(std::vector<G4DynamicParticle*>* vdp,
-						     G4VEmModel* model,
-						     const G4MaterialCutsCouple* couple,
-						     const G4DynamicParticle* dp)
-{
-  model->SampleSecondaries(vdp, couple, dp);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

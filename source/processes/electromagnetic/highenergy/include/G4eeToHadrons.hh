@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eeToHadrons.hh,v 1.7 2007-05-22 17:37:30 vnivanch Exp $
+// $Id: G4eeToHadrons.hh,v 1.8 2007-05-23 08:50:41 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -78,11 +78,6 @@ protected:
 
   void InitialiseProcess(const G4ParticleDefinition*);
 
-  void SecondariesPostStep(std::vector<G4DynamicParticle*>*,
-			   G4VEmModel*,
-			   const G4MaterialCutsCouple*,
-			   const G4DynamicParticle*);
-
 private:
 
   std::vector<G4DynamicParticle*>* GenerateSecondaries(const G4DynamicParticle*);
@@ -102,17 +97,6 @@ private:
 inline G4bool G4eeToHadrons::IsApplicable(const G4ParticleDefinition& p)
 {
   return (&p == G4Positron::Positron());
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline void G4eeToHadrons::SecondariesPostStep(std::vector<G4DynamicParticle*>* newp,
-					       G4VEmModel*,
-					       const G4MaterialCutsCouple* couple,
-					       const G4DynamicParticle* dp)
-{
-  multimodel->SampleSecondaries(newp, couple, dp);
-  if(newp->size() > 0) fParticleChange.ProposeTrackStatus(fStopAndKill);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuIonisation.hh,v 1.29 2007-05-22 17:35:58 vnivanch Exp $
+// $Id: G4MuIonisation.hh,v 1.30 2007-05-23 08:49:32 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -99,12 +99,6 @@ public:
   G4double MinPrimaryEnergy(const G4ParticleDefinition* p,
 			    const G4Material*, G4double cut);
 
-  void SecondariesPostStep(std::vector<G4DynamicParticle*>*,
-			   G4VEmModel*,
-			   const G4MaterialCutsCouple*,
-			   const G4DynamicParticle*,
-			   G4double& tcut);
-
   // Print out of the class parameters
   void PrintInfo();
 
@@ -148,18 +142,6 @@ inline G4double G4MuIonisation::MinPrimaryEnergy(const G4ParticleDefinition*,
   G4double x = 0.5*cut/electron_mass_c2;
   G4double g = x*ratio + std::sqrt((1. + x)*(1. + x*ratio*ratio));
   return mass*(g - 1.0);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline 
-void G4MuIonisation::SecondariesPostStep(std::vector<G4DynamicParticle*>* vdp,
-					 G4VEmModel* model,
-					 const G4MaterialCutsCouple* couple,
-					 const G4DynamicParticle* dp,
-					 G4double& tcut)
-{
-  model->SampleSecondaries(vdp, couple, dp, tcut);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
