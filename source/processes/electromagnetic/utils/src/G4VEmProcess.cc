@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.cc,v 1.39 2007-05-22 17:31:58 vnivanch Exp $
+// $Id: G4VEmProcess.cc,v 1.40 2007-05-23 08:43:46 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -281,8 +281,9 @@ G4VParticleChange* G4VEmProcess::PostStepDoIt(const G4Track& track,
   
   // sample secondaries
   secParticles.clear();
-  SecondariesPostStep(&secParticles, currentModel, 
-		      currentCouple, track.GetDynamicParticle());
+  currentModel->SampleSecondaries(&secParticles, 
+				  currentCouple, 
+				  track.GetDynamicParticle());
 
   // save secondaries
   G4int num = secParticles.size();

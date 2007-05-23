@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.hh,v 1.36 2007-05-22 17:31:57 vnivanch Exp $
+// $Id: G4VEmProcess.hh,v 1.37 2007-05-23 08:43:46 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -102,11 +102,6 @@ protected:
 
   virtual void InitialiseProcess(const G4ParticleDefinition*) = 0;
 
-  virtual void SecondariesPostStep(std::vector<G4DynamicParticle*>*,
-				   G4VEmModel*,
-				   const G4MaterialCutsCouple*,
-				   const G4DynamicParticle*) = 0;
-
   //------------------------------------------------------------------------
   // Methods with standard implementation; may be overwritten if needed 
   //------------------------------------------------------------------------
@@ -159,7 +154,7 @@ public:
   // Specific methods for post step simulation 
   //------------------------------------------------------------------------
 
-  inline G4double PostStepGetPhysicalInteractionLength(
+  G4double PostStepGetPhysicalInteractionLength(
                              const G4Track& track,
                              G4double   previousStepSize,
                              G4ForceCondition* condition
@@ -435,6 +430,7 @@ inline G4double G4VEmProcess::PostStepGetPhysicalInteractionLength(
   // condition is set to "Not Forced"
   *condition = NotForced;
   G4double x = DBL_MAX;
+  if(previousStepSize <= DBL_MIN) theNumberOfInteractionLengthLeft = -1.0;
   InitialiseStep(track);
 
   if(preStepKinEnergy < mfpKinEnergy) {

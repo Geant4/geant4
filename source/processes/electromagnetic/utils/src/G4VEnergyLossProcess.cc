@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.107 2007-05-22 17:31:58 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.108 2007-05-23 08:43:46 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -920,7 +920,7 @@ G4VParticleChange* G4VEnergyLossProcess::PostStepDoIt(const G4Track& track,
 
   // sample secondaries
   secParticles.clear();
-  SecondariesPostStep(&secParticles, currentModel, currentCouple, dynParticle, tcut);
+  currentModel->SampleSecondaries(&secParticles, currentCouple, dynParticle, tcut);
 
   // save secondaries
   G4int num = secParticles.size();

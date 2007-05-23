@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.hh,v 1.66 2007-05-22 17:31:58 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.hh,v 1.67 2007-05-23 08:43:46 vnivanch Exp $
 // GEANT4 tag $Name:
 //
 // -------------------------------------------------------------------
@@ -129,12 +129,6 @@ public:
   virtual void PrintInfo() = 0;
 
 protected:
-
-  virtual void SecondariesPostStep(std::vector<G4DynamicParticle*>*,
-                                   G4VEmModel*,
-                             const G4MaterialCutsCouple*,
-                             const G4DynamicParticle*,
-                                   G4double& tcut) = 0;
 
   virtual void InitialiseEnergyLossProcess(const G4ParticleDefinition*,
                                            const G4ParticleDefinition*) = 0;
@@ -819,6 +813,7 @@ inline G4double G4VEnergyLossProcess::PostStepGetPhysicalInteractionLength(
   // condition is set to "Not Forced"
   *condition = NotForced;
   G4double x = DBL_MAX;
+  if(previousStepSize <= DBL_MIN) theNumberOfInteractionLengthLeft = -1.0;
   InitialiseStep(track);
 
   if(preStepScaledEnergy < mfpKinEnergy) {
