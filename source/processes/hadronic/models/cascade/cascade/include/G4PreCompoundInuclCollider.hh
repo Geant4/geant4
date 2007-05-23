@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-#ifndef G4INUCL_COLLIDER_HH
-#define G4INUCL_COLLIDER_HH
+#ifndef G4PRECOMPOUNDINUCL_COLLIDER_HH
+#define G4PRECOMPOUNDINUCL_COLLIDER_HH
  
 #include "G4Collider.hh"
 #include "G4IntraNucleiCascader.hh"
