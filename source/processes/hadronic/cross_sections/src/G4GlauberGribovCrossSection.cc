@@ -1111,8 +1111,11 @@ G4double
 G4GlauberGribovCrossSection::GetHadronNucleonXscMK(const G4DynamicParticle* aParticle, 
                                           const G4ParticleDefinition* nucleon  )
 {
-  G4int I, PDG = aParticle->GetDefinition()->GetPDGEncoding();
-  G4double totalXsc, elasticXsc, inelasticXsc;
+  G4int I = 0;
+  G4int PDG = aParticle->GetDefinition()->GetPDGEncoding();
+  G4double totalXsc = 0;
+  G4double elasticXsc = 0;
+  G4double inelasticXsc;
   // G4int absPDG = std::abs(PDG);
 
   G4double p = aParticle->GetMomentum().mag()/GeV;
