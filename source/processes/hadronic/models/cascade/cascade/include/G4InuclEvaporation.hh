@@ -23,7 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InuclEvaporation.hh,v 1.2 2007-05-20 20:03:21 miheikki Exp $
+// $Id: G4InuclEvaporation.hh,v 1.3 2007-05-23 14:37:28 miheikki Exp $
+// Defines an interface to evaporation models of Bertini cascase (BERT)
+// based on INUCL code.
 //
 #ifndef G4INUCLEVAPORATION_h
 #define G4INUCLEVAPORATION_h 1
@@ -47,9 +49,21 @@ private:
   G4bool operator!=(const G4InuclEvaporation &right) const;
 
 public:
-  G4FragmentVector * BreakItUp(const G4Fragment &theNucleus);
-  
+
+  //  G4FragmentVector * BreakItUp(const G4Fragment &theNucleus) {
+      
+    //G4LayeredNucleus aNuc( theNucleus.GetA(), theNucleus.GetZ() );
+    //aNuc.AddExcitationEnergy(theNucleus.GetExcitationEnergy());
+    //return BreakItUp(aNuc);
+//return   G4FragmentVector();
+//}
+
+  //  G4FragmentVector * BreakItUp( G4LayeredNucleus & nucleus);
+ 
+  void setVerboseLevel( const G4int verbose );
+
 private:
+  G4int verboseLevel;
 
 #ifdef DEBUG
 

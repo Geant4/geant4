@@ -23,72 +23,47 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InuclEvaporation.cc,v 1.3 2007-05-23 14:37:28 miheikki Exp $
-//
-#include "G4InuclEvaporation.hh"
-#include "G4HadronicException.hh"
-#include <numeric>
+// $Id: G4PreCompoundCascadeInterface.hh,v 1.1 2007-05-23 14:37:28 miheikki Exp $
+// Defines an interface to Bertini (BERT) INC with exitons. Evaporation is NOT included
 
-G4InuclEvaporation::G4InuclEvaporation() {
-  verboseLevel=0;
-}
+#ifndef G4PRECOMPOUNDCASCADEINTERFACE_H
+#define G4PRECOMPOUNDCASCADEINTERFACE_H 1
 
+#include "G4Nucleon.hh"
+#include "G4Nucleus.hh"
+#include "G4VIntraNuclearTransportModel.hh"
+#include "G4KineticTrackVector.hh"
+#include "G4FragmentVector.hh"
+#include "G4ParticleChange.hh"
+#include "G4ReactionProductVector.hh"
+#include "G4ReactionProduct.hh"
 
-G4InuclEvaporation::G4InuclEvaporation(const G4InuclEvaporation &) : G4VEvaporation() {
-    throw G4HadronicException(__FILE__, __LINE__, "G4InuclEvaporation::copy_constructor meant to not be accessable.");
-}
+class G4PreCompoundCascadeInterface : public G4VIntraNuclearTransportModel {
 
+public:
+  G4PreCompoundCascadeInterface();
 
-G4InuclEvaporation::~G4InuclEvaporation() {
-}
+  ~G4PreCompoundCascadeInterface(){
+  }
 
-const G4InuclEvaporation & G4InuclEvaporation::operator=(const G4InuclEvaporation &) {
-    throw G4HadronicException(__FILE__, __LINE__, "G4InuclEvaporation::operator= meant to not be accessable.");
-    return *this;
-}
+  G4ReactionProductVector* Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus);
 
+  G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& theNucleus); 
 
-G4bool G4InuclEvaporation::operator==(const G4InuclEvaporation &) const {
-    return false;
-}
+private:
+  G4int operator==(G4PreCompoundCascadeInterface& right) {
+    return (this == &right);
+  }
 
-G4bool G4InuclEvaporation::operator!=(const G4InuclEvaporation &) const {
-    return true;
-}
+  G4int operator!=(G4PreCompoundCascadeInterface& right) {
+    return (this != &right);
+  }
 
-void G4InuclEvaporation::setVerboseLevel( const G4int verbose ) {
-  verboseLevel = verbose;
-}
+  G4int verboseLevel;
 
-/*
-G4FragmentVector * G4InuclEvaporation::BreakItUp(const G4Fragment &theNucleus) {
-    G4FragmentVector * theResult = new G4FragmentVector;
+private:
+  G4HadFinalState theResult;  
+  
+};
 
-    // CHECK that Excitation Energy != 0
-    if (theNucleus.GetExcitationEnergy() <= 0.0) {
-	theResult->push_back(new G4Fragment(theNucleus));
-	return theResult;
-    }
-
-    // The residual nucleus (after evaporation of each fragment)
-    G4Fragment theResidualNucleus = theNucleus;
-
-	
-
-    // Starts loop over evaporated particles
-    for (;;) {
-
-#ifdef DEBUG
-		G4cout <<           "-----------------------------------------------------------\n"; 
-#endif  
-
-
-    return theResult;
-    }
-}
-
-*/
-
-
-
-
+#endif // G4PRECOMPOUNDCASCADEINTERFACE_H
