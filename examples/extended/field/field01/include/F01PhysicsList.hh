@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: F01PhysicsList.hh,v 1.4 2006-06-29 17:15:47 gunter Exp $
+// $Id: F01PhysicsList.hh,v 1.5 2007-05-23 09:14:09 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -83,7 +83,7 @@ class F01PhysicsList: public G4VUserPhysicsList
 
     // these methods Construct physics processes and register them
 
-    void AddParameterisation();
+    // void AddParameterisation();
     void ConstructGeneral();
     void ConstructEM();
 
