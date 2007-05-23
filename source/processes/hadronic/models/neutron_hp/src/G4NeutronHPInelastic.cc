@@ -32,8 +32,10 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPInelastic.cc,v 1.21 2007-04-11 16:52:52 dennis Exp $
+// $Id: G4NeutronHPInelastic.cc,v 1.22 2007-05-23 19:23:28 tkoi Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
+//
+// 070523 bug fix for G4FPE_DEBUG on by A. Howard ( and T. Koi)
 //
 #include "G4NeutronHPInelastic.hh"
 
@@ -137,7 +139,8 @@
         running += xSec[i];
         index = theMaterial->GetElement(i)->GetIndex();
         it = i;
-        if(random<=running/sum) break;
+        //if(random<=running/sum) break;
+        if( sum == 0 || random<=running/sum) break;
       }
       delete [] xSec;
     }

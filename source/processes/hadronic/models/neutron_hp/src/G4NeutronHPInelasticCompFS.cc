@@ -27,6 +27,8 @@
 // J.P. Wellisch, Nov-1996
 // A prototype of the low energy neutron transport model.
 //
+// 070523 bug fix for G4FPE_DEBUG on by A. Howard ( and T. Koi)
+//
 #include "G4NeutronHPInelasticCompFS.hh"
 #include "G4Nucleus.hh"
 #include "G4NucleiPropertiesTable.hh"
@@ -241,9 +243,19 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4HadProjectile & theTrack
       iLevel=-1;
       aHadron.SetKineticEnergy(availableEnergy*residualMass*G4Neutron::Neutron()->GetPDGMass()/
                                (aHadron.GetMass()+residualMass*G4Neutron::Neutron()->GetPDGMass()));
-      aHadron.SetMomentum(theNeutron.GetMomentum()*(1./theNeutron.GetTotalMomentum())*
-                           std::sqrt(aHadron.GetTotalEnergy()*aHadron.GetTotalEnergy()-
-                                aHadron.GetMass()*aHadron.GetMass()));
+
+      //aHadron.SetMomentum(theNeutron.GetMomentum()*(1./theNeutron.GetTotalMomentum())*
+      //                  std::sqrt(aHadron.GetTotalEnergy()*aHadron.GetTotalEnergy()-
+      //                            aHadron.GetMass()*aHadron.GetMass()));
+
+      G4double p2 = ( aHadron.GetTotalEnergy()*aHadron.GetTotalEnergy()-aHadron.GetMass()*aHadron.GetMass() );
+      G4double p = 0.0;
+      if ( p2 > 0.0 )
+      { 
+         p = std::sqrt( p ); 
+      } 
+      aHadron.SetMomentum(theNeutron.GetMomentum()*(1./theNeutron.GetTotalMomentum())*p );
+
     }
     else
     {
@@ -396,8 +408,16 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4HadProjectile & theTrack
       G4double SinTheta = std::sqrt(1.0 - CosTheta*CosTheta);
       G4double Phi = twopi*G4UniformRand();
       G4ThreeVector Vector(std::cos(Phi)*SinTheta, std::sin(Phi)*SinTheta, CosTheta);
-      aHadron.SetMomentum(Vector* std::sqrt(aHadron.GetTotalEnergy()*aHadron.GetTotalEnergy()-
-                                       aHadron.GetMass()*aHadron.GetMass()));
+      //aHadron.SetMomentum(Vector* std::sqrt(aHadron.GetTotalEnergy()*aHadron.GetTotalEnergy()-
+      //                                 aHadron.GetMass()*aHadron.GetMass()));
+      G4double p2 = aHadron.GetTotalEnergy()*aHadron.GetTotalEnergy()- aHadron.GetMass()*aHadron.GetMass();
+
+      G4double p = 0.0;
+      if ( p2 > 0.0 )
+         p = std::sqrt ( p2 ); 
+
+      aHadron.SetMomentum( Vector*p ); 
+                                      
     }
 
 // fill the result

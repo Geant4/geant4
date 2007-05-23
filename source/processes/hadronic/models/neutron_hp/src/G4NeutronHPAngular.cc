@@ -27,6 +27,8 @@
 // J.P. Wellisch, Nov-1996
 // A prototype of the low energy neutron transport model.
 //
+// 070523 bug fix for G4FPE_DEBUG on by A. Howard ( and T. Koi)
+//
 #include "G4NeutronHPAngular.hh"
 
 void G4NeutronHPAngular::Init(std::ifstream & aDataFile)
@@ -152,10 +154,16 @@ void G4NeutronHPAngular::SampleAndUpdate(G4ReactionProduct & aHadron)
       fac*=gamma;
       
       G4double mom;
-      mom = std::sqrt( en*fac*en*fac - 
+//    For G4FPE_DEBUG ON
+      G4double mom2 = ( en*fac*en*fac - 
                    (fac*fac - gamma*gamma)*
                    (en*en - gamma*gamma*aHadron.GetMass()*aHadron.GetMass())
                 );
+      if ( mom2 > 0.0 ) 
+        mom = std::sqrt( mom2 );
+      else
+        mom = 0.0; 
+
       mom = -en*fac - mom;
       mom /= (fac*fac-gamma*gamma);
       temp = mom*temp;
