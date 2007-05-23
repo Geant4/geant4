@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QCoherentChargeExchange.hh,v 1.2 2007-05-23 10:04:38 mkossov Exp $
+// $Id: G4QCoherentChargeExchange.hh,v 1.3 2007-05-23 15:14:25 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCoherentChargeExchange header ----------------
@@ -104,8 +104,11 @@ private:
   // Copy constructor
   G4QCoherentChargeExchange(const G4QCoherentChargeExchange&);
 
-  // Calculate XS/t: oxs=true - only CS; xst=true - calculate XS, xst=false (oxs=false) - t
+  // Calculate XS/t: oxs=true - only CS; xst=true - calculate XS, xst=false(oxs=f/t) - t/tm
   G4double CalculateXSt(G4bool oxs, G4bool xst, G4double p, G4int Z, G4int N, G4int pPDG);
+
+  // Calculate ChEx/El suppression coefficient
+  G4double ChExElCoef(G4double p, G4int Z, G4int N, G4int pPDG);
 
 		// BODY
   // Static Parameters --------------------------------------------------------------------

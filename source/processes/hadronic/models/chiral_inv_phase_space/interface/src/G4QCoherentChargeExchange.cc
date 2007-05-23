@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QCoherentChargeExchange.cc,v 1.2 2007-05-23 10:04:38 mkossov Exp $
+// $Id: G4QCoherentChargeExchange.cc,v 1.3 2007-05-23 15:14:25 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCoherentChargeExchange class -----------------
@@ -244,9 +244,8 @@ G4bool G4QCoherentChargeExchange::IsApplicable(const G4ParticleDefinition& parti
 G4VParticleChange* G4QCoherentChargeExchange::PostStepDoIt(const G4Track& track,
                                                            const G4Step& step)
 {
-  //static const G4double mProt=G4Proton::Proton()->GetPDGMass()*GeV; // protonMass (GeV)
-  //static const G4double mProt= G4QPDGCode(2212).GetMass()*.001;     // CHIPS pMass in GeV
-  //static const G4double mP2=mProt*mProt;                            // squared protonMass
+  static const G4double mProt= G4QPDGCode(2212).GetMass();     // CHIPS pMass in MeV
+  static const G4double mNeut= G4QPDGCode(2212).GetMass();     // CHIPS pMass in MeV
   //
   //-------------------------------------------------------------------------------------
   static G4bool CWinit = true;                       // CHIPS Warld needs to be initted
@@ -269,16 +268,13 @@ G4VParticleChange* G4QCoherentChargeExchange::PostStepDoIt(const G4Track& track,
   G4cout<<"G4QCohChargeExchange::PostStepDoIt: After GetMeanFreePath is called"<<G4endl;
 #endif
   G4LorentzVector proj4M=(projHadron->Get4Momentum())/MeV; // Convert to MeV!
-  G4LorentzVector scat4M=proj4M;                      // @@ Must be filled (?)
   G4double momentum = projHadron->GetTotalMomentum()/MeV; // 3-momentum of the Proj in MeV
   G4double Momentum = proj4M.rho();                   // @@ Just for the test purposes
   if(std::fabs(Momentum-momentum)>.000001)
        G4cerr<<"*Warning*G4QCohChEx::PostStepDoIt:P(IU)="<<Momentum<<"#"<<momentum<<G4endl;
-  G4double pM2=proj4M.m2();        // in MeV^2
-  G4double pM=std::sqrt(pM2);      // in MeV
 #ifdef pdebug
   G4cout<<"G4QCoherentChargeExchange::PostStepDoIt: pP(IU)="<<Momentum<<"="<<momentum
-        <<",pM="<<pM<<",scat4M="<<scat4M<<scat4M.m()<<G4endl;
+        <<",pM="<<pM<<",proj4M="<<proj4M<<proj4M.m()<<G4endl;
 #endif
   if (!IsApplicable(*particle))  // Check applicability
   {
@@ -333,6 +329,17 @@ G4VParticleChange* G4QCoherentChargeExchange::PostStepDoIt(const G4Track& track,
     G4cerr<<"*Warning*G4QCoherentChargeExchange::PostStepDoIt:UndefinedProjHadron"<<G4endl;
     return 0;
   }
+  //G4double pM2=proj4M.m2();        // in MeV^2
+  //G4double pM=std::sqrt(pM2);      // in MeV
+  G4double pM=mNeut;
+  G4int    fPDG=2112;
+  if(projPDG==2112)
+  {
+    pM=mProt;
+    fPDG=2212;
+  }
+  G4double pM2=pM*pM;
+		// Element treatment
   G4int EPIM=ElProbInMat.size();
 #ifdef debug
 		G4cout<<"G4QCohChEx::PostStDoIt:m="<<EPIM<<",n="<<nE<<",T="<<ElProbInMat[EPIM-1]<<G4endl;
@@ -412,8 +419,10 @@ G4VParticleChange* G4QCoherentChargeExchange::PostStepDoIt(const G4Track& track,
 #endif
   //
   G4int targPDG=90000000+Z*1000+N;         // CHIPS PDG Code of the target nucleus
-  G4QPDGCode targQPDG(targPDG);         // @@ one can use G4Ion and get rid of CHIPS World
-  G4double tM=targQPDG.GetMass();          // CHIPS target mass in MeV
+  if(projPDG==2212) targPDG+=999;          // convert to final nucleus code
+  else if(projPDG==2112) targPDG-=999;
+  G4QPDGCode targQPDG(targPDG);            // @@ use G4Ion and get rid of CHIPS World
+  G4double tM=targQPDG.GetMass();          // CHIPS final nucleus mass in MeV
   G4double kinEnergy= projHadron->GetKineticEnergy()*MeV; // Kin energy in MeV (Is *MeV n?)
   G4ParticleMomentum dir = projHadron->GetMomentumDirection();// It is a unit three-vector
   G4LorentzVector tot4M=proj4M+G4LorentzVector(0.,0.,0.,tM); // Total 4-mom of the reaction
@@ -457,7 +466,7 @@ G4VParticleChange* G4QCoherentChargeExchange::PostStepDoIt(const G4Track& track,
 #endif
   G4double maxt=CalculateXSt(true, false, Momentum, Z, N, projPDG);
   if(maxt<=0.) maxt=1.e-27;
-  G4double cost=1.-mint/maxt; // cos(theta) in CMS
+  G4double cost=1.-mint/maxt; // cos(theta) in CMS (@@ we neglect mass diff for ChEx)
   // 
 #ifdef ppdebug
   G4cout<<"G4QCoherentChargeExchange::PoStDoIt:t="<<mint<<",dpcm2="<<maxt
@@ -479,6 +488,7 @@ G4VParticleChange* G4QCoherentChargeExchange::PostStepDoIt(const G4Track& track,
     else if(cost<-1.) cost=-1.;
   }
   G4LorentzVector reco4M=G4LorentzVector(0.,0.,0.,tM);      // 4mom of the recoil target
+  G4LorentzVector scat4M=G4LorentzVector(0.,0.,0.,pM);      // 4mom of the recoil target
   G4LorentzVector dir4M=tot4M-G4LorentzVector(0.,0.,0.,(tot4M.e()-tM-pM)*.01);
   if(!G4QHadron(tot4M).RelDecayIn2(scat4M, reco4M, dir4M, cost, cost))
   {
@@ -490,37 +500,30 @@ G4VParticleChange* G4QCoherentChargeExchange::PostStepDoIt(const G4Track& track,
   G4cout<<"G4QCohChEx::PoStDoIt: scatE="<<scat4M.e()-pM<<", recoE="<<reco4M.e()-tM<<",d4M="
         <<tot4M-scat4M-reco4M<<G4endl;
 #endif
-  // Update G4VParticleChange for the scattered muon
-  G4double finE=scat4M.e()-pM;             // Final kinetic energy of the scattered proton
-  if(finE>0.0) aParticleChange.ProposeEnergy(finE);
-  else
-  {
-    if(finE<-1.e-8 || !(finE>-1.||finE<1.)) // NAN or negative
-      G4cerr<<"*Warning*G4QCohChargeExchange::PostStDoIt: Zero or negative scattered finE="
-            <<finE<<",s4M="<<scat4M<<",r4M="<<reco4M<<",d4M="<<tot4M-scat4M-reco4M<<G4endl;
-    //G4Exception("G4QCoherentChargeExchange::PostStDoIt()","009", FatalException," E<0");
-    aParticleChange.ProposeEnergy(0.) ;
-    aParticleChange.ProposeTrackStatus(fStopButAlive);
-  }
-  G4ThreeVector findir=scat4M.vect()/scat4M.rho();  // Unit vector in new direction
-  aParticleChange.ProposeMomentumDirection(findir); // new direction for the scattered part
-  EnMomConservation-=scat4M;                        // It must be initialized by (pE+tM,pP)
-  // This is how in general the secondary should be identified
+  // Kill scattered hadron
+  aParticleChange.ProposeTrackStatus(fStopAndKill);
+  // Definition of the scattered nucleon
 		G4DynamicParticle* theSec = new G4DynamicParticle; // A secondary for the recoil hadron 
-  //G4int targPDG=2212;                      // PDG for the recoil proton @@only for p targ
-  //G4ParticleDefinition* theDefinition=G4Proton::Proton(); // @@ only for p target
+  G4ParticleDefinition* theDefinition=G4Proton::Proton();
+  if(projPDG==2212) theDefinition=G4Neutron::Neutron();
+  theSec->SetDefinition(theDefinition);
+  EnMomConservation-=scat4M;
+  theSec->Set4Momentum(scat4M);
+  G4Track* aNewTrack = new G4Track(theSec, localtime, position );
+  aNewTrack->SetTouchableHandle(trTouchable);
+  aParticleChange.AddSecondary( aNewTrack );
+  // Filling the recoil nucleus
+		theSec = new G4DynamicParticle; // A secondary for the recoil hadron 
   G4int aA = Z+N;
 #ifdef pdebug
 		G4cout<<"G4QCoherentChargeExchange::PostStepDoIt: Ion Z="<<Z<<", A="<<aA<<G4endl;
 #endif
-  G4ParticleDefinition* theDefinition=G4ParticleTable::GetParticleTable()
-                                                                       ->FindIon(Z,aA,0,Z);
+  theDefinition=G4ParticleTable::GetParticleTable()->FindIon(Z,aA,0,Z);
   if(!theDefinition)G4cout<<"*Warning*G4QCohChEx::PostStepDoIt:drop PDG="<<targPDG<<G4endl;
 #ifdef pdebug
   G4cout<<"G4QCohChEx::PostStepDoIt:RecoilName="<<theDefinition->GetParticleName()<<G4endl;
 #endif
   theSec->SetDefinition(theDefinition);
-
   EnMomConservation-=reco4M;
 #ifdef tdebug
   G4cout<<"G4QCohChEx::PostSDoIt:"<<targPDG<<reco4M<<reco4M.m()<<EnMomConservation<<G4endl;
@@ -533,7 +536,7 @@ G4VParticleChange* G4QCoherentChargeExchange::PostStepDoIt(const G4Track& track,
   G4cout<<"G4QCohChEx::PostStpDoIt:p="<<curD<<curD.mag()<<",e="<<curE<<",m="<<curM<<G4endl;
 #endif
   // Make a recoil nucleus
-  G4Track* aNewTrack = new G4Track(theSec, localtime, position );
+  aNewTrack = new G4Track(theSec, localtime, position );
   aNewTrack->SetTouchableHandle(trTouchable);
   aParticleChange.AddSecondary( aNewTrack );
 #ifdef debug
@@ -557,10 +560,12 @@ G4double G4QCoherentChargeExchange::CalculateXSt(G4bool oxs, G4bool xst, G4doubl
   if(oxs && xst)                         // Only the Cross-Section can be returened
   {
     res=CSmanager->GetCrossSection(true, p, Z, N, pPDG); // XS for isotope
+    res*=ChExElCoef(p, Z, N, pPDG);
   }
   else if(!oxs && xst)                   // Calculate Cross-Section & prepare differential
   {
     res=CSmanager->GetCrossSection(false, p, Z, N, pPDG);// XS for isotope + init t-distr.
+    res*=ChExElCoef(p, Z, N, pPDG);      // @@ is that necessary?
     // The XS for the nucleus must be calculated the last
     init=true;
   }
@@ -569,6 +574,26 @@ G4double G4QCoherentChargeExchange::CalculateXSt(G4bool oxs, G4bool xst, G4doubl
     if(oxs) res=CSmanager->GetHMaxT();   // Calculate the max_t value
 				else res=CSmanager->GetExchangeT(Z, N, pPDG); // fanctionally randomized -t in MeV^2
   }
-  else G4cout<<"*Warning*G4QCohChrgExchange::CalculateXSt:*NotInitiatedScattering"<<G4endl;
+  else G4cout<<"*Warning*G4QCohChrgExchange::CalculateXSt: NotInitiatedScattering"<<G4endl;
   return res;
+}
+
+G4double G4QCoherentChargeExchange::ChExElCoef(G4double p, G4int Z, G4int N, G4int pPDG) 
+{
+  G4double A=Z+N;
+  if(A<1.5) return 0.;
+  G4double C=0.;
+  if     (pPDG==2212) C=N/A;
+  else if(pPDG==2112) C=Z/A;
+  else G4cout<<"*Warning*G4QCohChrgExchange::ChExElCoef: wrong PDG="<<pPDG<<G4endl;
+  C*=C;                         // Coherent processes squares the amplitude
+  // @@ This is true only for nucleons: other projectiles must be treated differently
+  G4double sp=std::sqrt(p);
+  G4double p2=p*p;            
+  G4double p4=p2*p2;
+		G4double dl1=std::log(p)-5.;
+  G4double T=(6.75+.14*dl1*dl1+13./p)/(1.+.14/p4)+.6/(p4+.00013);
+  G4double U=(6.25+8.33e-5/p4/p)*(p*sp+.34)/p2/p; 
+  G4double R=U/T;
+  return C*R*R;
 }

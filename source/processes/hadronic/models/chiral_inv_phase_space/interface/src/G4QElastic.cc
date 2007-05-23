@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QElastic.cc,v 1.22 2007-05-23 09:04:32 mkossov Exp $
+// $Id: G4QElastic.cc,v 1.23 2007-05-23 15:14:25 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QElastic class -----------------
@@ -538,4 +538,36 @@ G4VParticleChange* G4QElastic::PostStepDoIt(const G4Track& track, const G4Step& 
     G4cout<<"G4QElastic::PostStepDoIt: **** PostStepDoIt is done ****"<<G4endl;
 #endif
   return G4VDiscreteProcess::PostStepDoIt(track, step);
+}
+
+// @@ For future improvement @@
+G4double G4QElastic::CalculateXSt(G4bool oxs, G4bool xst, G4double p, G4int Z, G4int N,
+                                  G4int pPDG) 
+{
+  static G4bool init=false;
+  static G4bool first=true;
+  static G4VQCrossSection* CSmanager;
+  if(first)                              // Connection with a singletone
+  {
+    CSmanager=G4QElasticCrossSection::GetPointer();
+    first=false;
+  }
+  G4double res=0.;
+  if(oxs && xst)                         // Only the Cross-Section can be returened
+  {
+    res=CSmanager->GetCrossSection(true, p, Z, N, pPDG); // XS for isotope
+  }
+  else if(!oxs && xst)                   // Calculate Cross-Section & prepare differential
+  {
+    res=CSmanager->GetCrossSection(false, p, Z, N, pPDG);// XS for isotope + init t-distr.
+    // The XS for the nucleus must be calculated the last
+    init=true;
+  }
+  else if(init)                          // Return t-value for scattering (=G4QElastic)
+  {
+    if(oxs) res=CSmanager->GetHMaxT();   // Calculate the max_t value
+				else res=CSmanager->GetExchangeT(Z, N, pPDG); // fanctionally randomized -t in MeV^2
+  }
+  else G4cout<<"*Warning*G4QCohChrgExchange::CalculateXSt:*NotInitiatedScattering"<<G4endl;
+  return res;
 }
