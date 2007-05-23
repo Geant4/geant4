@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysListEmStandard.cc,v 1.12 2006-10-19 17:24:13 maire Exp $
+// $Id: PhysListEmStandard.cc,v 1.13 2007-05-23 08:28:26 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -50,6 +50,8 @@
 
 #include "G4hIonisation.hh"
 #include "G4ionIonisation.hh"
+
+#include "G4EmProcessOptions.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -84,13 +86,13 @@ void PhysListEmStandard::ConstructProcess()
       //electron
       pmanager->AddProcess(new G4MultipleScattering, -1, 1, 1);
       pmanager->AddProcess(new G4eIonisation,        -1, 2, 2);
-      pmanager->AddProcess(new G4eBremsstrahlung("eBrem", 10*GeV),-1, 3, 3);
+      pmanager->AddProcess(new G4eBremsstrahlung,    -1, 3, 3);
 	    
     } else if (particleName == "e+") {
       //positron
       pmanager->AddProcess(new G4MultipleScattering, -1, 1, 1);
       pmanager->AddProcess(new G4eIonisation,        -1, 2, 2);
-      pmanager->AddProcess(new G4eBremsstrahlung("eBrem", 10*GeV),-1, 3, 3);
+      pmanager->AddProcess(new G4eBremsstrahlung,    -1, 3, 3);
       pmanager->AddProcess(new G4eplusAnnihilation,   0,-1, 4);
       
     } else if( particleName == "mu+" || 
@@ -101,7 +103,9 @@ void PhysListEmStandard::ConstructProcess()
       pmanager->AddProcess(new G4MuBremsstrahlung,  -1, 3, 3);
       pmanager->AddProcess(new G4MuPairProduction,  -1, 4, 4);       
      
-    } else if( particleName == "alpha" || particleName == "GenericIon" ) { 
+    } else if( particleName == "alpha" || particleName == "He3" 
+	       || particleName == "GenericIon" ) { 
+
       pmanager->AddProcess(new G4MultipleScattering,-1, 1, 1);
       pmanager->AddProcess(new G4ionIonisation,     -1, 2, 2);
 
@@ -113,6 +117,9 @@ void PhysListEmStandard::ConstructProcess()
       pmanager->AddProcess(new G4hIonisation,       -1, 2, 2);
     }
   }
+  // define high energy threshold for bremstrahlung 
+  G4EmProcessOptions opt;
+  opt.SetBremsstrahlungTh(10.*GeV);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
