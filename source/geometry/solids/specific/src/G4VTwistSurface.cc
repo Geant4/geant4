@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTwistSurface.cc,v 1.7 2007-05-18 07:39:56 gcosmo Exp $
+// $Id: G4VTwistSurface.cc,v 1.8 2007-05-23 09:31:02 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -208,7 +208,7 @@ G4int G4VTwistSurface::AmIOnLeftSide(const G4ThreeVector &me,
       }
    }
 
-#ifdef G4SPECSDEBUG
+#ifdef G4TWISTDEBUG
    G4cout << "         === G4VTwistSurface::AmIOnLeftSide() =============="
           << G4endl;
    G4cout << "             Name , returncode  : " << fName << " " 
@@ -283,7 +283,7 @@ G4double G4VTwistSurface::DistanceToIn(const G4ThreeVector &gp,
                                   const G4ThreeVector &gv,
                                         G4ThreeVector &gxxbest)
 {
-#ifdef G4SPECSDEBUG
+#ifdef G4TWISTDEBUG
    G4cout << " ~~~~~ G4VTwistSurface::DistanceToIn(p,v) - Start ~~~~~" << G4endl;
    G4cout << "      Name : " << fName << G4endl;
    G4cout << "      gp   : " << gp << G4endl;
@@ -324,7 +324,7 @@ G4double G4VTwistSurface::DistanceToIn(const G4ThreeVector &gp,
 
       if ((normal * gv) >= 0) {
 
-#ifdef G4SPECSDEBUG
+#ifdef G4TWISTDEBUG
          G4cout << "   G4VTwistSurface::DistanceToIn(p,v): "
                 << "particle goes outword the surface." << G4endl;
 #endif 
@@ -341,7 +341,7 @@ G4double G4VTwistSurface::DistanceToIn(const G4ThreeVector &gp,
             bestgxx = gxx[i];
             besti   = i;
 
-#ifdef G4SPECSDEBUG
+#ifdef G4TWISTDEBUG
             G4cout << "   G4VTwistSurface::DistanceToIn(p,v): "
                    << " areacode sInside name, distance = "
                    << fName <<  " "<< bestdistance << G4endl;
@@ -389,7 +389,7 @@ G4double G4VTwistSurface::DistanceToIn(const G4ThreeVector &gp,
 
                if (IsInside(tmpareacode[k])) {
 
-#ifdef G4SPECSDEBUG
+#ifdef G4TWISTDEBUG
                   G4cout << "   G4VTwistSurface:DistanceToIn(p,v): "
                          << " intersection "<< tmpgxx[k] << G4endl
                          << "   is inside of neighbour surface of " << fName 
@@ -432,7 +432,7 @@ G4double G4VTwistSurface::DistanceToIn(const G4ThreeVector &gp,
                 bestdistance = distance[i];
                 gxxbest = gxx[i];
                 besti   = i;
-#ifdef G4SPECSDEBUG
+#ifdef G4TWISTDEBUG
                G4cout << "   G4VTwistSurface::DistanceToIn(p,v): "
                       << " areacode sBoundary & sBoundary distance = "
                       << fName  << " " << distance[i] << G4endl;
@@ -445,7 +445,7 @@ G4double G4VTwistSurface::DistanceToIn(const G4ThreeVector &gp,
 
    gxxbest = bestgxx;
 
-#ifdef G4SPECSDEBUG
+#ifdef G4TWISTDEBUG
    if (besti < 0) {
       G4cout << "~~~~~ G4VTwistSurface::DistanceToIn(p,v) - return ~~~~" << G4endl;
       G4cout << "      No intersections " << G4endl; 
@@ -471,7 +471,7 @@ G4double G4VTwistSurface::DistanceToOut(const G4ThreeVector &gp,
                                    const G4ThreeVector &gv,
                                          G4ThreeVector &gxxbest)
 {
-#ifdef G4SPECSDEBUG
+#ifdef G4TWISTDEBUG
    G4cout << "~~~~~ G4VTwistSurface::DistanceToOut(p,v) - Start ~~~~" << G4endl;
    G4cout << "      Name : " << fName << G4endl;
    G4cout << "      gp   : " << gp << G4endl;
@@ -507,7 +507,7 @@ G4double G4VTwistSurface::DistanceToOut(const G4ThreeVector &gp,
       G4ThreeVector normal = GetNormal(gxx[i], true);
       if (normal * gv <= 0) {
          // particle goes toword inside of solid, return kInfinity
-#ifdef G4SPECSDEBUG
+#ifdef G4TWISTDEBUG
           G4cout << "   G4VTwistSurface::DistanceToOut(p,v): normal*gv < 0, normal " 
                  << fName << " " << normal 
                  << G4endl;
@@ -522,7 +522,7 @@ G4double G4VTwistSurface::DistanceToOut(const G4ThreeVector &gp,
       } 
    }
 
-#ifdef G4SPECSDEBUG
+#ifdef G4TWISTDEBUG
    if (besti < 0) {
       G4cout << "~~~~~ G4VTwistSurface::DistanceToOut(p,v) - return ~~~" << G4endl;
       G4cout << "      No intersections   " << G4endl; 
@@ -547,7 +547,7 @@ G4double G4VTwistSurface::DistanceToOut(const G4ThreeVector &gp,
 G4double G4VTwistSurface::DistanceTo(const G4ThreeVector &gp,
                                       G4ThreeVector &gxxbest)
 {
-#ifdef G4SPECSDEBUG
+#ifdef G4TWISTDEBUG
    G4cout << "~~~~~ G4VTwistSurface::DistanceTo(p) - Start ~~~~~~~~~" << G4endl;
    G4cout << "      Name : " << fName << G4endl;
    G4cout << "      gp   : " << gp << G4endl;
@@ -569,7 +569,7 @@ G4double G4VTwistSurface::DistanceTo(const G4ThreeVector &gp,
    nxx = DistanceToSurface(gp, gxx, distance, areacode);
    gxxbest = gxx[0];
 
-#ifdef G4SPECSDEBUG
+#ifdef G4TWISTDEBUG
    G4cout << "~~~~~ G4VTwistSurface::DistanceTo(p) - return ~~~~~~~~" << G4endl;
    G4cout << "      Name     : " << fName << G4endl; 
    G4cout << "      gxx      : " << gxxbest << G4endl; 

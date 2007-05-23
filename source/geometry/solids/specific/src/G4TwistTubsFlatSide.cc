@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistTubsFlatSide.cc,v 1.6 2007-05-18 07:39:56 gcosmo Exp $
+// $Id: G4TwistTubsFlatSide.cc,v 1.7 2007-05-23 09:31:02 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -237,7 +237,7 @@ G4int G4TwistTubsFlatSide::DistanceToSurface(const G4ThreeVector &gp,
    fCurStatWithV.SetCurrentStatus(0, gxx[0], distance[0], areacode[0],
                                   isvalid[0], 1, validate, &gp, &gv);
 
-#ifdef G4SPECSDEBUG
+#ifdef G4TWISTDEBUG
    G4cerr << "ERROR - G4TwistTubsFlatSide::DistanceToSurface(p,v)" << G4endl;
    G4cerr << "        Name        : " << GetName() << G4endl;
    G4cerr << "        xx          : " << xx << G4endl;

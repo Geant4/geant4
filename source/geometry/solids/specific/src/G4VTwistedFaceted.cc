@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VTwistedFaceted.cc,v 1.15 2007-05-18 07:39:56 gcosmo Exp $
+// $Id: G4VTwistedFaceted.cc,v 1.16 2007-05-23 09:31:02 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -121,7 +121,7 @@ G4VTwistedFaceted( const G4String &pname,     // Name of instance
     }
   }
 
-#ifdef G4SPECSDEBUG
+#ifdef G4TWISTDEBUG
   if ( fDx1 == fDx2 && fDx3 == fDx4 )
   { 
       G4cout << "Trapezoid is a box" << G4endl ;
@@ -498,7 +498,7 @@ EInside G4VTwistedFaceted::Inside(const G4ThreeVector& p) const
    G4double yMax = GetValueB(phi)/2. ;  // b(phi)/2 is limit
    G4double yMin = -yMax ;
 
-#ifdef G4SPECSDEBUG
+#ifdef G4TWISTDEBUG
 
    G4cout << "inside called: p = " << p << G4endl ; 
    G4cout << "fDx1 = " << fDx1 << G4endl ;
@@ -551,7 +551,7 @@ EInside G4VTwistedFaceted::Inside(const G4ThreeVector& p) const
     }
   }
 
-#ifdef G4SPECSDEBUG
+#ifdef G4TWISTDEBUG
   G4cout << "inside = " << fLastInside.inside << G4endl ;
 #endif
 
@@ -693,11 +693,11 @@ G4double G4VTwistedFaceted::DistanceToIn (const G4ThreeVector& p,
      //for (i=1; i < 2 ; i++)
    {
 
-#ifdef G4SPECSDEBUG
+#ifdef G4TWISTDEBUG
       G4cout << G4endl << "surface " << i << ": " << G4endl << G4endl ;
 #endif
       G4double tmpdistance = surfaces[i]->DistanceToIn(p, v, xx);
-#ifdef G4SPECSDEBUG
+#ifdef G4TWISTDEBUG
       G4cout << "Solid DistanceToIn : distance = " << tmpdistance << G4endl ; 
       G4cout << "intersection point = " << xx << G4endl ;
 #endif 
@@ -709,7 +709,7 @@ G4double G4VTwistedFaceted::DistanceToIn (const G4ThreeVector& p,
       }
    }
 
-#ifdef G4SPECSDEBUG
+#ifdef G4TWISTDEBUG
    G4cout << "best distance = " << distance << G4endl ;
 #endif
 
@@ -1188,7 +1188,7 @@ G4ThreeVector G4VTwistedFaceted::GetPointOnSurface() const
   G4double a5   = fLowerEndcap->GetSurfaceArea() ;
   G4double a6   = fUpperEndcap->GetSurfaceArea() ;
 
-#ifdef G4SPECSDEBUG
+#ifdef G4TWISTDEBUG
   G4cout << "Surface 0   deg = " << a1 << G4endl ;
   G4cout << "Surface 90  deg = " << a2 << G4endl ;
   G4cout << "Surface 180 deg = " << a3 << G4endl ;
