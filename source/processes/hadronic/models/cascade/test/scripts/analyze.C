@@ -1,5 +1,10 @@
 {
   // run first analyzeEvents.C
+  //  Interactivly: ntuple->Scan("modelId:particleId")
+
+  ntuple->Print();
+  ntuple->Show(1); // print first
+
   TCanvas *c =new TCanvas("c","c",0,0,600,400);
   c->Divide(3,2);
 
@@ -72,9 +77,9 @@
   l.DrawLatex(0.3, 5 , "Evaporation");
   l.DrawLatex(0.05, 20, "INC with exitons");
 
- TLine line(0.8,80,0.6,20);
-   line.SetLineWidth(1);
-   line.Draw();
+  TLine line(0.8,80,0.6,20);
+  line.SetLineWidth(1);
+  line.Draw();
 
   h3.GetYaxis()->SetLabelOffset(0.00);
 
@@ -92,7 +97,6 @@
   ntuple->Draw(">>myList", "particleId==1");
   TEventList *list = (TEventList*)gDirectory->Get("myList");
   ntuple->SetEventList(list);
-
 
   ntuple->SetLineStyle(0);
   ntuple->SetLineWidth(2);
