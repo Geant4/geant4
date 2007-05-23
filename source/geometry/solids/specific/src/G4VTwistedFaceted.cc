@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VTwistedFaceted.cc,v 1.16 2007-05-23 09:31:02 gcosmo Exp $
+// $Id: G4VTwistedFaceted.cc,v 1.17 2007-05-23 13:26:54 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -950,6 +950,17 @@ G4double G4VTwistedFaceted::DistanceToOut( const G4ThreeVector& p ) const
    {
       case (kOutside) :
       {
+#ifdef G4SPECSDEBUG
+        G4cout.precision(16) ;
+        G4cout << G4endl ;
+        DumpInfo();
+        G4cout << "Position:"  << G4endl << G4endl ;
+        G4cout << "p.x() = "   << p.x()/mm << " mm" << G4endl ;
+        G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl ;
+        G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl ;
+        G4Exception("G4VTwistedFaceted::DistanceToOut(p)", "Notification",
+                    JustWarning, "Point p is outside !?" );
+#endif
       }
       case (kSurface) :
       {
@@ -1000,7 +1011,7 @@ G4double G4VTwistedFaceted::DistanceToOut( const G4ThreeVector& p ) const
       }
    } // switch end
 
-   return 0;
+   return kInfinity;
 }
 
 
