@@ -37,6 +37,7 @@
 
 #include "G4Collider.hh"
 #include "G4InuclCollider.hh"
+#include "G4PreCompoundInuclCollider.hh"
 #include "G4IntraNucleiCascader.hh"
 #include "G4NonEquilibriumEvaporator.hh"
 #include "G4EquilibriumEvaporator.hh"
@@ -52,6 +53,9 @@
 #include "G4ThreeVector.hh"
 #include "G4NucleiModel.hh"
 #include "G4LorentzConvertor.hh"
+
+#include "G4InuclCollider.hh"
+#include "G4PreCompoundInuclCollider.hh"
 
 G4double kE=1000; // scale energy ok
 
@@ -163,9 +167,11 @@ G4int tCoulomb(G4int runId, G4int nCollisions, G4int bulletType, G4double momZ, 
 
     G4NonEquilibriumEvaporator*     noneq = new G4NonEquilibriumEvaporator;
     G4EquilibriumEvaporator*         eqil = new G4EquilibriumEvaporator;
-    G4Fissioner*                     fiss = new G4Fissioner;
+   G4Fissioner*                     fiss = new G4Fissioner;
     G4BigBanger*                     bigb = new G4BigBanger;
-    G4InuclCollider*             collider = new G4InuclCollider(colep, cascade, noneq, eqil, fiss, bigb);
+    //    G4InuclCollider*             collider = new G4InuclCollider(colep, cascade, noneq, eqil, fiss, bigb);
+
+     G4PreCompoundInuclCollider*  collider = new G4PreCompoundInuclCollider(colep, cascade, noneq, bigb);
 
     std::vector<G4double> targetMomentum(4, 0.0);
     std::vector<G4double>  bulletMomentum(4, 0.0);
@@ -229,7 +235,34 @@ G4int tCoulomb(G4int runId, G4int nCollisions, G4int bulletType, G4double momZ, 
 	} while( is == 2);
 	//		cout << " "  << G4endl;
       } else {
+
+
+	//	output = collider->collide(bull, targ); 
+	int maxTries=10;
+	int nTries=0;
+
+    do  // we try to create inelastic interaction
+      {
+	//	output = collider->collide(bullet, target );
 	output = collider->collide(bull, targ); 
+	nTries++;
+      } while (
+	       //	      (nTries < maxTries)                                                               &&
+	       //(output.getOutgoingParticles().size() + output.getNucleiFragments().size() < 2.5) &&
+	       //(output.getOutgoingParticles().size()!=0)                                         &&
+	       //(output.getOutgoingParticles().begin()->type()==bullet->type())
+	       //);
+
+	       (nTries < maxTries) &&
+	       output.getOutgoingParticles().size() == 1 &&     // we retry when elastic collision happened
+               output.getNucleiFragments().size() == 1 &&            
+	       output.getOutgoingParticles().begin()->type() == bull->type() &&
+	       output.getNucleiFragments().begin()->getA() == targ->getA() && 
+	       output.getNucleiFragments().begin()->getZ() == targ->getZ() 
+	       );
+
+
+
       }
       printData(runId, i);
       //      printCross(i);

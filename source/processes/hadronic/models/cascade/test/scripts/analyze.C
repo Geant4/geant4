@@ -8,7 +8,7 @@
   TCanvas *c =new TCanvas("c","c",0,0,600,400);
   c->Divide(3,2);
 
-  c->cd(1);ntuple.Draw("momX");
+  c->cd(1);ntuple.Draw("momX","particleId==2");
   TLatex l;
   l.SetTextAlign(23);
   l.SetTextSize(0.05);

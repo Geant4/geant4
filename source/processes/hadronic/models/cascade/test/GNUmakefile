@@ -1,8 +1,8 @@
-# $Id: GNUmakefile,v 1.51 2007-05-23 12:13:54 miheikki Exp $
+# $Id: GNUmakefile,v 1.52 2007-05-24 16:31:33 miheikki Exp $
 #G4TARGET := testIncl
 G4TARGET := cascade
-G4TARGET := benchmarks
-
+#G4TARGET := benchmarks
+G4TARGET := testEvaporation
 #G4EXLIB := true
 
 ifndef G4INSTALL
@@ -10,6 +10,9 @@ ifndef G4INSTALL
 endif
 
 include $(G4INSTALL)/config/binmake.gmk
+
+e1:  # evaporation test1
+	rm -f e1.out; date; $(G4INSTALL)/bin/$(G4SYSTEM)/testEvaporation 
 
 b1:  # benchmark 1
 	rm -f b1.out; date; $(G4INSTALL)/bin/$(G4SYSTEM)/benchmarks 1 >> b1.out; date; cat b1.out 
