@@ -40,7 +40,6 @@
 #include <iomanip>
 
 #ifdef G4ANALYSIS_USE
-#include <memory> // for the auto_ptr(T>
 #include "AIDA/AIDA.h"
 #endif
 
@@ -244,10 +243,10 @@ void Histo::bookHisto()
 #ifdef G4ANALYSIS_USE
   G4cout << "### Histo books " << nHisto << " histograms " << G4endl;
   // Creating the analysis factory
-  std::auto_ptr< AIDA::IAnalysisFactory > af( AIDA_createAnalysisFactory() );
+  af = AIDA_createAnalysisFactory();
 
   // Creating the tree factory
-  std::auto_ptr< AIDA::ITreeFactory > tf( af->createTreeFactory() );
+  AIDA::ITreeFactory* tf = af->createTreeFactory();
 
   // Creating a tree mapped to a new hbook file.
   G4String tt = "hbook";
@@ -255,7 +254,8 @@ void Histo::bookHisto()
   if(histType == "root") {
     tt = "root";
     nn = histName + ".root";
-  } else if(histType == "xml" || histType == "XML" || histType == "aida" || histType == "AIDA") {
+  } else if(histType == "xml" || histType == "XML" 
+	    || histType == "aida" || histType == "AIDA") {
     tt = "xml";
     nn = histName + ".aida";
   }
@@ -267,11 +267,11 @@ void Histo::bookHisto()
     G4cout << "Fail to open tree store " << nn << G4endl;
     return;
   }
-
+  delete tf;
   histo.resize(nHisto1);
 
   // Creating a histogram factory, whose histograms will be handled by the tree
-  std::auto_ptr< AIDA::IHistogramFactory > hf(af->createHistogramFactory( *tree ));
+  AIDA::IHistogramFactory* hf = af->createHistogramFactory( *tree );
 
   // Creating an 1-dimensional histograms in the root directory of the tree
 
@@ -306,13 +306,13 @@ void Histo::bookHisto()
     "Gamma Energy Fluence (MeV/cm2) at radius(mm) in front of phantom",nBinsR,0.,absorberR/mm);
 
   // Creating a tuple factory, whose tuples will be handled by the tree
-  std::auto_ptr< AIDA::ITupleFactory > tpf( af->createTupleFactory( *tree ) );
+  AIDA::ITupleFactory* tpf = af->createTupleFactory( *tree );
 
   // If using Anaphe HBOOK implementation, there is a limitation on the
   // length of the variable names in a ntuple
-  if(nTuple) {
+  if(nTuple) 
      ntup = tpf->create( "100", "Dose deposite","float r, z, e" );
-  }
+  delete tpf;
 #endif
 }
 
