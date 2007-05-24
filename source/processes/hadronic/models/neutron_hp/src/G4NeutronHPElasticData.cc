@@ -27,6 +27,8 @@
 // J.P. Wellisch, Nov-1996
 // A prototype of the low energy neutron transport model.
 //
+// 070523 add neglecting doppler broadening on the fly. T. Koi
+//
 #include "G4NeutronHPElasticData.hh"
 #include "G4Neutron.hh"
 #include "G4ElementTable.hh"
@@ -52,6 +54,7 @@ G4NeutronHPElasticData::~G4NeutronHPElasticData()
    
 void G4NeutronHPElasticData::BuildPhysicsTable(const G4ParticleDefinition& aP)
 {
+
   if(&aP!=G4Neutron::Neutron()) 
      throw G4HadronicException(__FILE__, __LINE__, "Attempt to use NeutronHP data for particles other than neutrons!!!");  
   size_t numberOfElements = G4Element::GetNumberOfElements();
@@ -89,6 +92,21 @@ GetCrossSection(const G4DynamicParticle* aP, const G4Element*anE, G4double aT)
 
   // prepare neutron
   G4double eKinetic = aP->GetKineticEnergy();
+
+  // T. K. 
+  if ( getenv( "NeutronHP_NEGLECT_DOPPLER_BROADENING" ) )
+  {
+     G4double factor = 1.0;
+     if ( eKinetic < aT * k_Boltzmann ) 
+     {
+        // below 0.1 eV neutrons 
+        // Have to do some, but now just igonre.   
+        // Will take care after performance check.  
+        // factor = factor * targetV;
+     }
+     return ( (*((*theCrossSections)(index))).GetValue(eKinetic, outOfRange) )* factor; 
+  }
+
   G4ReactionProduct theNeutron( aP->GetDefinition() );
   theNeutron.SetMomentum( aP->GetMomentum() );
   theNeutron.SetKineticEnergy( eKinetic );
@@ -99,6 +117,8 @@ GetCrossSection(const G4DynamicParticle* aP, const G4Element*anE, G4double aT)
   G4double theA = anE->GetN();
   G4double theZ = anE->GetZ();
   G4double eleMass; 
+
+
   eleMass = ( G4NucleiPropertiesTable::GetNuclearMass(static_cast<G4int>(theZ+eps), static_cast<G4int>(theA+eps))
 	     ) / G4Neutron::Neutron()->GetPDGMass();
   
@@ -130,5 +150,11 @@ GetCrossSection(const G4DynamicParticle* aP, const G4Element*anE, G4double aT)
     size += size;
   }
   result /= counter;
+/*
+  // Checking impact of  NeutronHP_NEGLECT_DOPPLER_BROADENING
+  G4cout << " result " << result << " " 
+         << (*((*theCrossSections)(index))).GetValue(eKinetic, outOfRange) << " " 
+         << (*((*theCrossSections)(index))).GetValue(eKinetic, outOfRange) /result << G4endl;
+*/
   return result;
 }

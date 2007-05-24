@@ -27,6 +27,8 @@
 // J.P. Wellisch, Nov-1996
 // A prototype of the low energy neutron transport model.
 //
+// 070523 add neglecting doppler broadening on the fly. T. Koi
+//
 #include "G4NeutronHPCaptureData.hh"
 #include "G4Neutron.hh"
 #include "G4ElementTable.hh"
@@ -92,6 +94,20 @@ GetCrossSection(const G4DynamicParticle* aP, const G4Element*anE, G4double aT)
 
   // prepare neutron
   G4double eKinetic = aP->GetKineticEnergy();
+
+  if ( getenv( "NeutronHP_NEGLECT_DOPPLER_BROADENING" ) )
+  {
+     G4double factor = 1.0;
+     if ( eKinetic < aT * k_Boltzmann ) 
+     {
+        // below 0.1 eV neutrons 
+        // Have to do some, but now just igonre.   
+        // Will take care after performance check.  
+        // factor = factor * targetV;
+     }
+     return ( (*((*theCrossSections)(index))).GetValue(eKinetic, outOfRange) )* factor; 
+  }
+
   G4ReactionProduct theNeutron( aP->GetDefinition() );
   theNeutron.SetMomentum( aP->GetMomentum() );
   theNeutron.SetKineticEnergy( eKinetic );
@@ -133,5 +149,11 @@ GetCrossSection(const G4DynamicParticle* aP, const G4Element*anE, G4double aT)
     size += size;
   }
   result /= counter;
+/*
+  // Checking impact of  NeutronHP_NEGLECT_DOPPLER_BROADENING
+  G4cout << " result " << result << " " 
+         << (*((*theCrossSections)(index))).GetValue(eKinetic, outOfRange) << " " 
+         << (*((*theCrossSections)(index))).GetValue(eKinetic, outOfRange) /result << G4endl;
+*/
   return result;
 }
