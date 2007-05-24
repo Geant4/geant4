@@ -16,6 +16,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+24.05.2007 - Vladimir Ivanchenko, tag cosmicray_charging-V08-03-00
+             Fix compilation problem in Physics List 
+
 08.12.2005 - Henrique Araujo, tag cosmicray_charging-V07-01-02
              Removed all compilation warnings
 

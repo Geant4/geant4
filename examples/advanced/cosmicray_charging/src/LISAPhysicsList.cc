@@ -212,7 +212,7 @@ void LISAPhysicsList::ElectromagneticPhysics() {
       G4MultipleScattering* aMultipleScattering = new G4MultipleScattering();
       // Modifying Facrange from default value (0.199) 
       // to improve backscattering fraction for electrons
-      aMultipleScattering->SetFacrange(0.01);
+      //      aMultipleScattering->SetRangeFactor(0.01);
       pmanager->AddProcess(aMultipleScattering,      -1, 1, 1);
       pmanager->AddProcess(loweIon,                  -1, 2, 2);
       pmanager->AddProcess(loweBrem,                 -1,-1, 3);
@@ -236,7 +236,9 @@ void LISAPhysicsList::ElectromagneticPhysics() {
       if( particleName == "mu-" )
 	pmanager->AddProcess(new G4MuonMinusCaptureAtRest(),0,-1,-1);
       
-    } else if( particleName == "GenericIon" ) { 
+    } else if( particleName == "GenericIon" || 
+	       particleName == "alpha" ||
+	       particleName == "He3") { 
       // ions
       pmanager->AddProcess(new G4MultipleScattering, -1, 1, 1);
       pmanager->AddProcess(new G4ionIonisation,      -1, 2, 2);
