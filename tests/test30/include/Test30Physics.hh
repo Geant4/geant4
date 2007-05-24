@@ -46,31 +46,33 @@
 
 class G4VProcess;
 class G4Material;
+class G4QuasiElasticChannel;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 class Test30Physics
 {
-  public:
+public:
 
-    Test30Physics();
-   ~Test30Physics();
+  Test30Physics();
+  ~Test30Physics();
 
-    G4VProcess* GetProcess(const G4String&, const G4String&, G4Material*);
-    G4double GetNucleusMass() {return theProcess->GetMass();};
-    G4ExcitationHandler* GetDeExcitation() {return theDeExcitation;};
-    G4PreCompoundModel* GetPreCompound() {return thePreCompound;};
+  G4VProcess* GetProcess(const G4String&, const G4String&, G4Material*);
+  G4double GetNucleusMass() {return theProcess->GetMass();};
+  G4ExcitationHandler* GetDeExcitation() {return theDeExcitation;};
+  G4PreCompoundModel* GetPreCompound() {return thePreCompound;};
 //    void setCutOnP(G4double val) {if(hkmod) hkmod->setCutOnP(val);};
 //    void setCutOnPPP(G4double val) {if(hkmod) hkmod->setCutOnPPP(val);};
 
-  private:
+private:
 
-    void Initialise();
+  void Initialise();
 
-    Test30HadronProduction* theProcess;
-    G4ExcitationHandler*    theDeExcitation;
-    G4PreCompoundModel*     thePreCompound;
-    G4BinaryCascade*        hkmod;
+  Test30HadronProduction* theProcess;
+  G4ExcitationHandler*    theDeExcitation;
+  G4PreCompoundModel*     thePreCompound;
+  G4BinaryCascade*        hkmod;
+  G4QuasiElasticChannel*  theQuasiElastic;
 };
 
 #endif

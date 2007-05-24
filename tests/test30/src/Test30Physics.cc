@@ -99,7 +99,9 @@
 #include "G4LElastic.hh"
 #include "G4HadronElastic.hh"
 #include "G4CascadeElasticInterface.hh"
-
+#include "G4QuasiElasticChannel.hh"
+#include "G4GeneratorPrecompoundInterface.hh"
+#include "G4StringChipsParticleLevelInterface.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -170,6 +172,7 @@ void Test30Physics::Initialise()
   theProcess = 0;
   theDeExcitation = 0;
   thePreCompound = 0;
+  theQuasiElastic = 0;
   hkmod = 0;
 }
 
@@ -231,6 +234,66 @@ G4VProcess* Test30Physics::GetProcess(const G4String& gen_name,
   } else if(gen_name == "binary") {
     G4BinaryCascade* hkm = new G4BinaryCascade();
     sg = new Test30VSecondaryGenerator(hkm, mat);
+    theProcess->SetSecondaryGenerator(sg);
+    man->AddDiscreteProcess(theProcess);
+
+  } else if(gen_name == "ftfp") {
+
+    G4TheoFSGenerator* theModel = new G4TheoFSGenerator;
+    G4FTFModel* theStringModel = new G4FTFModel();
+    G4GeneratorPrecompoundInterface* theCascade = 
+      new G4GeneratorPrecompoundInterface;
+    G4ExcitedStringDecay* theStringDecay = 
+      new G4ExcitedStringDecay(new G4LundStringFragmentation());
+    theStringModel->SetFragmentationModel(theStringDecay);
+
+    theModel->SetTransport(theCascade);
+    //    theQuasiElastic = new G4QuasiElasticChannel;
+    // theModel->SetQuasiElasticChannel(theQuasiElastic);
+    theModel->SetHighEnergyGenerator(theStringModel);
+    theModel->SetMinEnergy(GeV);
+
+    sg = new Test30VSecondaryGenerator(theModel, mat);
+    theProcess->SetSecondaryGenerator(sg);
+    man->AddDiscreteProcess(theProcess);
+
+  } else if(gen_name == "ftfpqel") {
+
+    G4TheoFSGenerator* theModel = new G4TheoFSGenerator;
+    G4FTFModel* theStringModel = new G4FTFModel();
+    G4GeneratorPrecompoundInterface* theCascade = 
+      new G4GeneratorPrecompoundInterface;
+    G4ExcitedStringDecay* theStringDecay = 
+      new G4ExcitedStringDecay(new G4LundStringFragmentation());
+    theStringModel->SetFragmentationModel(theStringDecay);
+
+    theModel->SetTransport(theCascade);
+    theQuasiElastic = new G4QuasiElasticChannel;
+    theModel->SetQuasiElasticChannel(theQuasiElastic);
+    theModel->SetHighEnergyGenerator(theStringModel);
+    theModel->SetMinEnergy(GeV);
+
+    sg = new Test30VSecondaryGenerator(theModel, mat);
+    theProcess->SetSecondaryGenerator(sg);
+    man->AddDiscreteProcess(theProcess);
+
+  } else if(gen_name == "ftfc") {
+
+    G4TheoFSGenerator* theModel = new G4TheoFSGenerator;
+    G4FTFModel* theStringModel = new G4FTFModel();
+    G4StringChipsParticleLevelInterface* theCascade = 
+      new G4StringChipsParticleLevelInterface;
+    G4ExcitedStringDecay* theStringDecay = 
+      new G4ExcitedStringDecay(new G4LundStringFragmentation());
+    theStringModel->SetFragmentationModel(theStringDecay);
+
+    theModel->SetTransport(theCascade);
+    //theQuasiElastic = new G4QuasiElasticChannel;
+    // theModel->SetQuasiElasticChannel(theQuasiElastic);
+    theModel->SetHighEnergyGenerator(theStringModel);
+    theModel->SetMinEnergy(GeV);
+
+    sg = new Test30VSecondaryGenerator(theModel, mat);
     theProcess->SetSecondaryGenerator(sg);
     man->AddDiscreteProcess(theProcess);
 

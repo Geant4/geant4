@@ -65,6 +65,11 @@
 #include "G4HadronElasticDataSet.hh"
 #include "G4PiNuclearCrossSection.hh"
 
+#include "G4BGGNucleonElasticXS.hh"
+#include "G4BGGPionElasticXS.hh"
+#include "G4BGGNucleonInelasticXS.hh"
+#include "G4BGGPionInelasticXS.hh"
+
 #include "G4ParticleTable.hh"
 #include "G4ParticleChange.hh"
 #include "G4DynamicParticle.hh"
@@ -98,7 +103,6 @@
 #include "G4StateManager.hh"
 #include "G4NistManager.hh"
 
-#include <memory> // for the auto_ptr(T>
 #include "AIDA/AIDA.h"
 
 #include "G4Timer.hh"
@@ -145,6 +149,7 @@ int main(int argc, char** argv)
   G4bool nevap = false;
   G4bool gtran = false;
   G4bool gemis = false;
+  G4bool xsbgg = true;
 
   G4double ang[20] = {0.0};
   G4double bng1[20] = {0.0};
@@ -376,6 +381,8 @@ int main(int argc, char** argv)
         aTime *= ns;
       } else if(line == "#logx") {
         logx = true;
+      } else if(line == "#xs_ghad") {
+	xsbgg = false;
       } else if(line == "#exit") {
         end = false;
         break;
@@ -453,15 +460,18 @@ int main(int argc, char** argv)
     // -------------------------------------------------------------------
 
     // Creating the analysis factory
-    std::auto_ptr< AIDA::IAnalysisFactory > af( AIDA_createAnalysisFactory() );
+    AIDA::IAnalysisFactory* af = AIDA_createAnalysisFactory();
 
     // Creating the tree factory
-    std::auto_ptr< AIDA::ITreeFactory > tf( af->createTreeFactory() );
+    AIDA::ITreeFactory* tf = af->createTreeFactory();
+
+    G4String option = "--noErrors uncompress";
 
     // Creating a tree mapped to a new hbook file.
-    std::auto_ptr< AIDA::ITree > tree( tf->create( hFile,"hbook", 
-						   false,true,"--noErrors uncompress"));
+    AIDA::ITree* tree = tf->create( hFile, "hbook", false, true, option);
+
     std::cout << "Tree store : " << tree->storeName() << std::endl;
+    delete tf;
 
     const G4int nhisto = 63;
     AIDA::IHistogram1D* h[nhisto];
@@ -486,8 +496,7 @@ int main(int argc, char** argv)
 
       // Creating a histogram factory, whose histograms 
       // will be handled by the tree
-      std::auto_ptr< AIDA::IHistogramFactory > 
-	hf( af->createHistogramFactory( *tree ) );
+      AIDA::IHistogramFactory* hf = af->createHistogramFactory( *tree );
 
       // Creating an 1-dimensional histogram in the root directory of the tree
 
@@ -601,24 +610,39 @@ int main(int argc, char** argv)
       h[61]=hf->createHistogram1D("62","cos(Theta) for primary particle in CM.Sys.",nbinsa,-1.,1.);
       h[62]=hf->createHistogram1D("63","Ekin (MeV) for recoil particle",120,0.,energy*1.2/MeV);
 
+      delete hf;
       G4cout << "Histograms is initialised nbins=" << nbins
              << G4endl;
     }
+    delete af;
 
     // Create a DynamicParticle
     G4DynamicParticle dParticle(part,aDirection,energy);
     G4VCrossSectionDataSet* cs = 0;
     G4double cross_sec = 0.0;
 
-    if(nameGen == "LElastic" || nameGen == "elastic" || 
-       nameGen == "HElastic" || nameGen == "BertiniElastic") {
+    if(nameGen == "LElastic" || nameGen == "BertiniElastic" ) {
       cs = new G4HadronElasticDataSet();
+    } else if (nameGen == "elastic" || nameGen == "HElastic" ) {
+      if(Z == 1) cs = new G4HadronElasticDataSet();
+      else if(part == proton || part == neutron) {
+	if(xsbgg) cs = new G4BGGNucleonElasticXS(part);
+	else      cs = new G4HadronElasticDataSet();
+      } else if(part == pip || part == pin) {
+	if(xsbgg) cs = new G4BGGPionElasticXS(part);
+	else      cs = new G4HadronElasticDataSet();
+      } else {
+	cs = new G4HadronElasticDataSet();
+      }
     } else if(part == proton && Z > 1 && nameGen != "lepar") {
-      cs = new G4ProtonInelasticCrossSection();
+      if(xsbgg) cs = new G4BGGNucleonInelasticXS(part);
+      else      cs = new G4ProtonInelasticCrossSection();
     } else if(part == neutron && Z > 1 && nameGen != "lepar") {
-      cs = new G4NeutronInelasticCrossSection();
-    } else if((part == pip || part == pin) && Z > 1 && nameGen != "lepar") {
-      cs = new G4PiNuclearCrossSection();
+      if(xsbgg) cs = new G4BGGNucleonInelasticXS(part);
+      else      cs = new G4NeutronInelasticCrossSection();
+    } else if((part == pin || part == pip) && Z > 1 && nameGen != "lepar") {
+      if(xsbgg) cs = new G4BGGPionInelasticXS(part);
+      else cs = new G4PiNuclearCrossSection();
     } else if( ionParticle ) {
       if ( Shen ) {
         cs = new G4IonsShenCrossSection();
@@ -956,6 +980,7 @@ int main(int argc, char** argv)
       std::cout << "Closing the tree..." << std::endl;
       tree->close();
     }
+    delete tree;
 
     G4cout << "###### End of run # " << run << "     ######" << G4endl;
 
