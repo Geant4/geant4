@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.hh,v 1.24 2007-05-21 15:36:25 gcosmo Exp $
+// $Id: G4Navigator.hh,v 1.25 2007-05-24 09:14:10 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -329,6 +329,10 @@ class G4Navigator
 
   G4bool fWasLimitedByGeometry;
     // Set true if last Step was limited by geometry.
+
+  G4ThreeVector fStepEndPoint;
+    //  Endpoint of last ComputeStep 
+    //  - can be used for optimisation (eg when computing safety)
 
   G4int  fVerbose;
     // Verbose(ness) level  [if > 0, printout can occur].
