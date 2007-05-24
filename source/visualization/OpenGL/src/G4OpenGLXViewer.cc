@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXViewer.cc,v 1.40 2007-05-16 15:59:58 allison Exp $
+// $Id: G4OpenGLXViewer.cc,v 1.41 2007-05-24 18:27:13 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -79,8 +79,10 @@ int G4OpenGLXViewer::dblBuf_RGBA[13] =
 XVisualInfo*  G4OpenGLXViewer::vi_single_buffer = 0;
 XVisualInfo*  G4OpenGLXViewer::vi_double_buffer = 0;
 
-static Bool G4OpenGLXViewerWaitForNotify (Display*, XEvent* e, char* arg) {
-  return (e->type == MapNotify) && (e->xmap.window == (Window) arg);
+extern "C" {
+  static Bool G4OpenGLXViewerWaitForNotify (Display*, XEvent* e, char* arg) {
+    return (e->type == MapNotify) && (e->xmap.window == (Window) arg);
+  }
 }
 
 void G4OpenGLXViewer::SetView () {

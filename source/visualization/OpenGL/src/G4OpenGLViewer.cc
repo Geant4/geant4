@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewer.cc,v 1.33 2007-05-08 11:04:11 allison Exp $
+// $Id: G4OpenGLViewer.cc,v 1.34 2007-05-24 18:27:13 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -47,6 +47,7 @@
 #include "G4Plane3D.hh"
 #include "G4AttHolder.hh"
 #include "G4AttCheck.hh"
+#include <sstream>
 
 static const char* gouraudtriangleEPS[] =
 {
