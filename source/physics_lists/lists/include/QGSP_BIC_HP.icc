@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: QGSP_BIC_HP.icc,v 1.4 2007-05-16 11:35:36 vnivanch Exp $
+// $Id: QGSP_BIC_HP.icc,v 1.5 2007-05-24 11:32:57 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -62,22 +62,18 @@
 #include "G4DataQuestionaire.hh"
 #include "HadronPhysicsQGSP_BIC_HP.hh"
 
-#include "G4WarnPLStatus.hh"
-
 template<class T> TQGSP_BIC_HP<T>::TQGSP_BIC_HP(G4int ver):  T()
 {
   // default cut value  (1.0mm) 
   // defaultCutValue = 1.0*mm;
 
   G4DataQuestionaire it(photon);
-  G4cout << "<<< Geant4 Physics List simulation engine: QGSP_BIC_HP 1.1"<<G4endl;
+  G4cout << "<<< Geant4 Physics List simulation engine: QGSP_BIC_HP 1.2"<<G4endl;
   G4cout <<G4endl;
 
   this->defaultCutValue = 0.7*mm;  
   this->SetVerboseLevel(ver);
 
-  G4WarnPLStatus exp;
-  exp.Experimental("QGSP_BIC_HP");
 
   // EM Physics
   this->RegisterPhysics( new G4EmStandardPhysics(ver));
