@@ -22,16 +22,16 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-//
-
+// $Id: testEvaporation.cc,v 1.2 2007-05-24 19:03:51 miheikki Exp $
+// based on V.Lara evaporation test
 #include <iostream>
 #include <iomanip>
 #include "globals.hh"
+#include "Randomize.hh"
 
+#include "G4InuclEvaporation.hh" // evaporations to be tested
+#include "G4Evaporation.hh"
 
-
-#include "G4InuclEvaporation.hh"
 #include "G4NucleiProperties.hh"
 #include "G4Gamma.hh"
 #include "G4Neutron.hh"
@@ -47,30 +47,33 @@
 #include "G4ThreeVector.hh" 
 
 
-int main()
-{
+int main() {
 
   /*
-  G4ParticleDefinition *theGamma = G4Gamma::GammaDefinition();
-  G4ParticleDefinition *theElectron = G4Electron::ElectronDefinition();
-  G4ParticleDefinition *theNeutron = G4Neutron::NeutronDefinition();
-  G4ParticleDefinition *theProton = G4Proton::ProtonDefinition();   
-  G4ParticleDefinition *theDeuteron = G4Deuteron::DeuteronDefinition();
-  G4ParticleDefinition *theTriton = G4Triton::TritonDefinition();
-  G4ParticleDefinition *theHelium3 = G4He3::He3Definition();
-  G4ParticleDefinition *theAlpha = G4Alpha::AlphaDefinition();
+    G4ParticleDefinition *theGamma = G4Gamma::GammaDefinition();
+    G4ParticleDefinition *theElectron = G4Electron::ElectronDefinition();
+    G4ParticleDefinition *theNeutron = G4Neutron::NeutronDefinition();
+    G4ParticleDefinition *theProton = G4Proton::ProtonDefinition();   
+    G4ParticleDefinition *theDeuteron = G4Deuteron::DeuteronDefinition();
+    G4ParticleDefinition *theTriton = G4Triton::TritonDefinition();
+    G4ParticleDefinition *theHelium3 = G4He3::He3Definition();
+    G4ParticleDefinition *theAlpha = G4Alpha::AlphaDefinition();
   */
-
 
   G4cout << G4endl << "Evaporation Test program" << G4endl;
  
   G4InuclEvaporation * theEvaporation = new G4InuclEvaporation;
+  theEvaporation->setVerboseLevel(3);
+  //  G4Evaporation * theEvaporation = new G4Evaporation;
 
-  G4int mode = -1;
+  G4int mode = 1;
+
   while (mode != 0 && mode != 1) {
     G4cout << "Mode (0 or 1): ";
     G4cin >> mode;
   }
+
+  G4cout << G4endl << ":::" << G4endl;
 
   G4cout << G4endl << G4endl << G4endl;
 
@@ -98,15 +101,12 @@ int main()
     G4double MyPz;
     G4cin >> MyPz;
     
-
     G4ThreeVector triV(MyPx*MeV,MyPy*MeV,MyPz*MeV);
     //    G4LorentzVector initialMomentum(triV,sqrt(triV.mag2()+AtomicMass*AtomicMass));
     G4LorentzVector initialMomentum(triV,std::sqrt(triV.mag2()+AtomicMass*AtomicMass*MeV*MeV));
     
-
     // put info about excited nucleus in fragment class
     G4Fragment theExcitedNucleus(MyA,MyZ,initialMomentum);
-
 
     G4int events = 1;
     G4cout << "Iterations: ";
@@ -116,7 +116,6 @@ int main()
     G4double NofN = 0.0;
 
     for (G4int i = 0; i < events; i++) {
-
       G4cout << "Iteration: " << i+1 << G4endl;
       G4cout << "----------------" << G4endl;
       G4cout << "     Initial fragment" << G4endl;
@@ -126,7 +125,8 @@ int main()
       // DeExcite the nucleus 
       G4FragmentVector * theFragVector = theEvaporation->BreakItUp(theExcitedNucleus);
 
-      
+      G4cout << "#fragments " << theFragVector->size()<< G4endl;
+
       G4LorentzVector TestMomentum(initialMomentum);
       for (G4int j=0; j < (int)theFragVector->size(); j++) {
 	G4cout << theFragVector->at(j) << G4endl;
@@ -150,10 +150,10 @@ int main()
     G4cout << "Multiplicities: Neutrons -> " << NofN/events << " Protons -> " << NofP/events << G4endl;
   } else if (mode == 1) {
 
-
-    G4int events = 0;
-    G4cout << "Number of events: ";
-    G4cin >> events;
+    G4int events = 3;
+    G4cout << "Number of events: " << events << G4endl;
+    //    G4cout << "Number of events: ";
+    //    G4cin >> events;
 
     for (G4int i = 0; i < events; i++) {
 
@@ -161,28 +161,27 @@ int main()
       G4cout << "--------------------" << G4endl;
       
       /*
-      G4int MyA = RandFlat::shoot(17,200);
-      G4int MyZ = RandFlat::shoot(G4NucleiPropertiesTable::MinZ(MyA), G4NucleiPropertiesTable::MaxZ(MyA));
-      G4double AtomicMass = G4NucleiProperties::GetAtomicMass(MyA,MyZ)/MeV;      
-      G4double MyExE = RandFlat::shoot(2.0*MyA,10.0*MyA);
-      G4double MyPx = RandFlat::shoot(-2000,2000);
-      G4double MyPy = RandFlat::shoot(-2000,2000);
-      G4double MyPz = RandFlat::shoot(-2000,2000);
+	G4int MyA = RandFlat::shoot(17,200);
+	G4int MyZ = RandFlat::shoot(G4NucleiPropertiesTable::MinZ(MyA), G4NucleiPropertiesTable::MaxZ(MyA));
+	G4double AtomicMass = G4NucleiProperties::GetAtomicMass(MyA,MyZ)/MeV;      
+	G4double MyExE = RandFlat::shoot(2.0*MyA,10.0*MyA);
+	G4double MyPx = RandFlat::shoot(-2000,2000);
+	G4double MyPy = RandFlat::shoot(-2000,2000);
+	G4double MyPz = RandFlat::shoot(-2000,2000);
       */
       G4int MyA = 197;
       G4int MyZ = 79;
       G4double AtomicMass = G4NucleiProperties::GetAtomicMass(MyA,MyZ)/MeV;      
-      G4double MyExE = 400;
-      G4double MyPx = 0;
-      G4double MyPy = 0;
+      G4double MyExE = 10+G4UniformRand()*10;
+      G4double MyPx = 10;
+      G4double MyPy = 100;
       G4double MyPz = 1000;
 
       G4ThreeVector triV(MyPx*MeV,MyPy*MeV,MyPz*MeV);
       G4LorentzVector initialMomentum(triV,std::sqrt(triV.mag2()+
-						(AtomicMass*MeV+MyExE*MeV)*
-						(AtomicMass*MeV+MyExE*MeV))
+						     (AtomicMass*MeV+MyExE*MeV)*
+						     (AtomicMass*MeV+MyExE*MeV))
 				      );
-
     
       // put info about excited nucleus in fragment class
       G4Fragment theExcitedNucleus(MyA,MyZ,initialMomentum);
@@ -190,8 +189,10 @@ int main()
       G4cout << "Excited fragment: "<< G4endl;
       G4cout << theExcitedNucleus << G4endl;
       
+      G4cout << "Break it!" << G4endl;
       G4FragmentVector * theFragVector = theEvaporation->BreakItUp(theExcitedNucleus);
       
+      G4cout << "#fragments " << theFragVector->size()<< G4endl;
 
       G4LorentzVector TestMomentum(initialMomentum);
       for (G4int j=0; j < (int)theFragVector->size(); j++) {
@@ -200,25 +201,16 @@ int main()
 	// Test 4-momentum conservation 
 	TestMomentum -= theFragVector->at(j)->GetMomentum();
       }
-
       G4cout << "******************" << G4endl;
       G4cout << "* Test Momentum = " << TestMomentum << G4endl;
       G4cout << "******************" << G4endl;
 
-
-
       theFragVector->clear();
-      delete theFragVector;
-      
-    }
-    
+      delete theFragVector; 
+    }    
   }
-
   delete theEvaporation;
-
-
   return 0;
-
 }
 
 
