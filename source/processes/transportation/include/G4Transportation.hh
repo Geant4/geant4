@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Transportation.hh,v 1.13 2007-05-09 13:20:38 japost Exp $
+// $Id: G4Transportation.hh,v 1.14 2007-05-24 17:10:52 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -187,8 +187,10 @@ class G4Transportation : public G4VProcess
        // A data member for this is problematic: it is useful only if it
        // can be initialised and updated -- and a scheme is not yet possible.
 
-     G4bool fGeometryLimitedStep;
-       // Flag to determine whether a boundary was reached.
+     G4bool fMassGeometryLimitedStep;
+       // Flag to determine whether a 'mass' boundary was reached.
+     G4bool fAnyGeometryLimitedStep; 
+       // Did any geometry limit the step ?
 
      G4ParticleChangeForTransport fParticleChange;
        // New ParticleChange
