@@ -84,7 +84,7 @@ void Histo::book()
 #ifdef G4ANALYSIS_USE
   G4cout << "### Histo books " << nHisto << " histograms " << G4endl;
   // Creating the analysis factory
-  af = AIDA_createAnalysisFactory();
+  if(!af) af = AIDA_createAnalysisFactory();
   if(verbose>0)
     G4cout<<"HIsto books analysis factory ......... "<<G4endl;
 
