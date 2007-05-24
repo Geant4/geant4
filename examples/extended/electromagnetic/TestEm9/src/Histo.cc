@@ -73,9 +73,6 @@ Histo::Histo()
 Histo::~Histo()
 {
 #ifdef G4ANALYSIS_USE
-  for(G4int i=0; i<nHisto; i++) {
-    if(histo[i]) delete histo[i];
-  }
   delete messenger;
   delete af;
 #endif
@@ -88,7 +85,7 @@ void Histo::book()
 #ifdef G4ANALYSIS_USE
   G4cout << "### Histo books " << nHisto << " histograms " << G4endl;
   // Creating the analysis factory
-  af = AIDA_createAnalysisFactory();
+  if(!af) af = AIDA_createAnalysisFactory();
   // Creating the tree factory
   AIDA::ITreeFactory* tf = af->createTreeFactory();
 
