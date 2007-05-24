@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.cc,v 1.33 2007-05-24 09:21:09 japost Exp $
+// $Id: G4Navigator.cc,v 1.34 2007-05-24 09:53:27 japost Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4Navigator Implementation
@@ -414,9 +414,8 @@ G4Navigator::LocateGlobalPointAndSetup( const G4ThreeVector& globalPoint,
       //
       fEntering = false;
       fEnteredDaughter = true;
-#ifdef G4VERBOSE
-      if( fVerbose > 1 )
-      { 
+#ifdef G4DEBUG_NAVIGATION
+      if( fVerbose > 2 ) { 
          G4VPhysicalVolume* enteredPhysical = fHistory.GetTopVolume();
          G4cout << "*** G4Navigator::LocateGlobalPointAndSetup: ***" << G4endl; 
          G4cout << "    Entering volume: " << enteredPhysical->GetName()
@@ -439,8 +438,8 @@ G4Navigator::LocateGlobalPointAndSetup( const G4ThreeVector& globalPoint,
     G4cout << "    ----- Upon exiting:" << G4endl;
     PrintState();
 #ifdef G4DEBUG_NAVIGATION
-    G4cerr << "Upon exiting LocateGlobalPointAndSetup():" << G4endl;
-    G4cerr << "    History = " << G4endl << fHistory << G4endl << G4endl;
+    G4cout << "Upon exiting LocateGlobalPointAndSetup():" << G4endl;
+    G4cout << "    History = " << G4endl << fHistory << G4endl << G4endl;
 #endif
   }
   G4cout.precision(oldcoutPrec);
@@ -468,6 +467,13 @@ void
 G4Navigator::LocateGlobalPointWithinVolume(const G4ThreeVector& pGlobalpoint)
 {  
    fLastLocatedPointLocal = ComputeLocalPoint(pGlobalpoint);
+
+#ifdef G4DEBUG_NAVIGATION
+   if( fVerbose > 2 ){ 
+     G4cout << "Entering LocateGlobalWithinVolume(): History = " << G4endl;
+     G4cout << fHistory << G4endl;
+   }
+#endif
 
    // For the case of Voxel (or Parameterised) volume the respective 
    // Navigator must be messaged to update its voxel information etc
@@ -612,16 +618,16 @@ G4double G4Navigator::ComputeStep( const G4ThreeVector &pGlobalpoint,
     G4cout << "    Volume = " << motherPhysical->GetName() 
            << " - Proposed step length = " << pCurrentProposedStepLength
            << G4endl; 
-    if( fVerbose == 4 ) 
+#ifdef G4DEBUG_NAVIGATION
+    if( fVerbose >= 4 ) 
     {
-      G4cout << "    Called with the arguments: " << G4endl
-             << "    Globalpoint = " << std::setw(25) << pGlobalpoint
-             << G4endl
-             << "    Direction   = " << std::setw(25) << pDirection
-             << G4endl;
-      G4cout << "    ----- Upon entering :" << G4endl;
+      G4cout << "  Called with the arguments: " << G4endl
+             << "  Globalpoint = " << std::setw(25) << pGlobalpoint << G4endl
+             << "  Direction   = " << std::setw(25) << pDirection << G4endl;
+      G4cout << "  ---- Upon entering :" << G4endl;
       PrintState();
     }
+#endif
   }
 
   static G4double fAccuracyForWarning   = kCarTolerance,
@@ -834,7 +840,7 @@ G4double G4Navigator::ComputeStep( const G4ThreeVector &pGlobalpoint,
 #ifdef G4DEBUG_NAVIGATION
     if( fNumberZeroSteps > 1 )
     {
-       G4cout << "G4Nav - CompStep: another zero step, # " << fNumberZeroSteps
+       G4cout << "G4Nav - ComputeStep: another zero step, # " << fNumberZeroSteps
               << " at " << pGlobalpoint
               << " in volume " << motherPhysical->GetName()
               << " nav-comp-step calls # " << sNavCScalls
@@ -890,9 +896,11 @@ G4double G4Navigator::ComputeStep( const G4ThreeVector &pGlobalpoint,
   if( fExiting )
   {
 #ifdef G4DEBUG_NAVIGATION
-    G4cout << " At G4Nav CompStep End - if(exiting) - fExiting= " << fExiting 
-           << " fValidExitNormal = " << fValidExitNormal  << G4endl;
-    G4cout << " fExitNormal= " << fExitNormal << G4endl;
+    if( fVerbose > 2 ) { 
+      G4cout << " At G4Nav CompStep End - if(exiting) - fExiting= " << fExiting 
+	     << " fValidExitNormal = " << fValidExitNormal  << G4endl;
+      G4cout << " fExitNormal= " << fExitNormal << G4endl;
+    }
 #endif
 
     if(fValidExitNormal)
@@ -920,7 +928,8 @@ G4double G4Navigator::ComputeStep( const G4ThreeVector &pGlobalpoint,
       }
     }
 #ifdef G4DEBUG_NAVIGATION
-    G4cout << " fGrandMotherExitNormal= " << fGrandMotherExitNormal << G4endl;
+    if( fVerbose > 2 )
+      G4cout << " fGrandMotherExitNormal= " << fGrandMotherExitNormal << G4endl;
 #endif
   }
 
@@ -1116,24 +1125,20 @@ G4double G4Navigator::ComputeSafety( const G4ThreeVector &pGlobalpoint,
 {
   G4double newSafety = 0.0;
 
-#ifdef G4VERBOSE
+#ifdef G4DEBUG_NAVIGATION
   G4int oldcoutPrec = G4cout.precision(8);
   if( fVerbose > 0 )
   {
     G4cout << "*** G4Navigator::ComputeSafety: ***" << G4endl
-           << "    Called at point: " 
-           << pGlobalpoint << G4endl
-           << "    for Navigator: " << this << G4endl; 
+           << "    Called at point: " << pGlobalpoint << G4endl;
+    // G4cout << "    for Navigator: " << this << G4endl; 
 
     G4VPhysicalVolume  *motherPhysical = fHistory.GetTopVolume();
     G4cout << "    Volume = " << motherPhysical->GetName() 
            << " - Maximum length = " << pMaxLength << G4endl; 
-    if( fVerbose == 4 ) 
-    {
-      G4cout << "    Called with the arguments: " << G4endl
-             << "    Globalpoint = " << pGlobalpoint << G4endl;
-      G4cout << "    ----- Upon entering :" << G4endl;
-      PrintState();
+    if( fVerbose >= 4 ) {
+       G4cout << "    ----- Upon entering Compute Safety:" << G4endl;
+       PrintState();
     }
   }
 #endif
@@ -1151,12 +1156,12 @@ G4double G4Navigator::ComputeSafety( const G4ThreeVector &pGlobalpoint,
     //      ------>> Dangerous <<----------
     //      Replaced by calls 
 
-    if( fVerbose >= 2 )
-    {
+#ifdef G4DEBUG_NAVIGATION
+    if( fVerbose >= 2 ) {
       G4cout << "    ComputeSafety() relocates-in-volume to point: " 
              << pGlobalpoint << G4endl;
     }
-
+#endif 
     G4VPhysicalVolume *motherPhysical = fHistory.GetTopVolume();
     G4LogicalVolume *motherLogical = motherPhysical->GetLogicalVolume();
     G4SmartVoxelHeader* pVoxelHeader = motherLogical->GetVoxelHeader();
@@ -1216,11 +1221,10 @@ G4double G4Navigator::ComputeSafety( const G4ThreeVector &pGlobalpoint,
   fPreviousSftOrigin = pGlobalpoint;
   fPreviousSafety = newSafety; 
 
-#ifdef G4VERBOSE
-  if( fVerbose > 1 ) 
-  {
-    G4cout << "    ----- Upon exiting :" << G4endl;
-    PrintState();
+#ifdef G4DEBUG_NAVIGATION
+  if( fVerbose > 1 ) {
+    G4cout << "   ---- Exiting ComputeSafety  " << G4endl;
+    if( fVerbose > 2 ) PrintState();
     G4cout << "    Returned value of Safety = " << newSafety << G4endl;
   }
   G4cout.precision(oldcoutPrec);
