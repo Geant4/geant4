@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: BremSplittingProcess.cc,v 1.1 2007-05-24 21:57:03 tinslay Exp $
+// $Id: BremSplittingProcess.cc,v 1.2 2007-05-24 22:05:50 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Jane Tinslay, May 2007
@@ -56,7 +56,7 @@ BremSplittingProcess::PostStepDoIt(const G4Track& track, const G4Step& step)
   // Do brem splitting
   assert (nSplit > 0);
 
-  G4int i(0);
+  unsigned i(0);
   G4double weight = track.GetWeight()/nSplit;
   
   // Secondary store
