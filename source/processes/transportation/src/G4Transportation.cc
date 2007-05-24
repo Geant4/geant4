@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Transportation.cc,v 1.63 2007-05-19 00:38:11 japost Exp $
+// $Id: G4Transportation.cc,v 1.64 2007-05-24 16:39:15 japost Exp $
 // --> Merged with 1.60.4.2.2.3 2007/05/09 09:30:28 japost 
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
@@ -288,6 +288,7 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
       fTransportEndMomentumDir = track.GetMomentumDirection();
       fTransportEndKineticEnergy  = track.GetKineticEnergy();
 
+      fTransportEndPosition = startPosition;
       // If the step length requested is 0, and we are on a boundary
       //   then a boundary will also limit the step.
       if( startMassSafety == 0.0 )  fGeometryLimitedStep = true ;
@@ -647,7 +648,7 @@ G4VParticleChange* G4Transportation::PostStepDoIt( const G4Track& track,
        fParticleChange.ProposeTrackStatus( fStopAndKill ) ;
     }
     retCurrentTouchable = fCurrentTouchableHandle ;
-    fParticleChange.SetTouchableHandle( fCurrentTouchableHandle ) ;
+    // fParticleChange.SetTouchableHandle( fCurrentTouchableHandle ) ;
 
     // Notify particle change that this is last step in volume
     fParticleChange.ProposeLastStepInVolume(true);
@@ -670,8 +671,8 @@ G4VParticleChange* G4Transportation::PostStepDoIt( const G4Track& track,
     // Expect this must be fCurrentTouchable too
     //   - could it be different, eg at the start of a step ?
     //
-    fParticleChange.SetTouchableHandle( track.GetTouchableHandle() ) ;
     retCurrentTouchable = track.GetTouchableHandle() ;
+    // fParticleChange.SetTouchableHandle( track.GetTouchableHandle() ) ;
 
     // Have not reached a boundary
     fParticleChange.ProposeLastStepInVolume(false);
@@ -740,9 +741,9 @@ G4Transportation::StartTracking(G4Track* aTrack)
   fMassNavigator = transportMgr->GetNavigatorForTracking() ; 
   fNavigatorId= transportMgr->ActivateNavigator( fMassNavigator );  // Confirm it!
 
-  if( fVerboseLevel > 1 ){
-    G4cout << " Navigator Id obtained in StartTracking " << fNavigatorId << G4endl;
-  }
+  // if( fVerboseLevel > 1 ){
+  //  G4cout << " Navigator Id obtained in StartTracking " << fNavigatorId << G4endl;
+  // }
   G4ThreeVector position = aTrack->GetPosition(); 
   G4ThreeVector direction = aTrack->GetMomentumDirection(); // G48
 
