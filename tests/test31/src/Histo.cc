@@ -119,7 +119,7 @@ void Histo::book()
 #ifdef G4ANALYSIS_USE
   G4cout << "### Histo books " << m_Histo << " histograms " << G4endl;
   // Creating the analysis factory
-  m_af = AIDA_createAnalysisFactory();
+  if(!m_af) m_af = AIDA_createAnalysisFactory();
 
   // Creating the tree factory
   AIDA::ITreeFactory* tf = m_af->createTreeFactory();

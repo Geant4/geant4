@@ -42,6 +42,7 @@
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
+#include "G4QuasiElasticChannel.hh"
 
 HsQGSPInterface::HsQGSPInterface() 
 {
@@ -51,6 +52,8 @@ HsQGSPInterface::HsQGSPInterface()
   theCascade->SetDeExcitation(thePreEquilib);  
   theModel->SetTransport(theCascade);
   theModel->SetHighEnergyGenerator(&theStringModel);
+  G4QuasiElasticChannel* theQuasiElastic = new G4QuasiElasticChannel;
+  theModel->SetQuasiElasticChannel(theQuasiElastic);
   theStringDecay = new G4ExcitedStringDecay(&theFragmentation);
   theStringModel.SetFragmentationModel(theStringDecay);
   theModel->SetMinEnergy(GeV);

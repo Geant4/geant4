@@ -95,9 +95,7 @@
 
 #include "G4StateManager.hh"
 
-#include <memory> // for the auto_ptr(T>
 #include "AIDA/AIDA.h"
-
 #include "G4Timer.hh"
 
 #include <fstream>
@@ -155,7 +153,8 @@ int main(int argc, char** argv)
   const G4ParticleDefinition* pin = G4PionMinus::PionMinus();
   const G4ParticleDefinition* pip = G4PionPlus::PionPlus();
   const G4ParticleDefinition* pi0 = G4PionZero::PionZero();
-  const G4ParticleDefinition* gamma = G4Gamma::Gamma();
+  //  const G4ParticleDefinition* gamma = 
+  G4Gamma::Gamma();
   //  const G4ParticleDefinition* deu = G4Deuteron::DeuteronDefinition();
   // const G4ParticleDefinition* tri = G4Triton::TritonDefinition();
   // const G4ParticleDefinition* alp = G4Alpha::AlphaDefinition();
@@ -408,17 +407,17 @@ int main(int argc, char** argv)
     cout << "The time:      " << aTime/ns << " ns" << endl;
 
     // Creating the analysis factory
-    std::auto_ptr< AIDA::IAnalysisFactory > af( AIDA_createAnalysisFactory() );
+    AIDA::IAnalysisFactory* af = AIDA_createAnalysisFactory();
 
     // Creating the tree factory
-    std::auto_ptr< AIDA::ITreeFactory > tf( af->createTreeFactory() );
+    AIDA::ITreeFactory* tf = af->createTreeFactory();
+
+    G4String option = "--noErrors uncompress";
 
     // Creating a tree mapped to a new hbook file.
-    std::auto_ptr< AIDA::ITree > tree( tf->create( hFile+".paw", "hbook", false, true) );
+    AIDA::ITree* tree = tf->create( hFile+".paw", "hbook", false, true, option);
     std::cout << "Tree store : " << tree->storeName() << std::endl;
-
-    // Creating a tuple factory, whose tuples will be handled by the tree
-    //   std::auto_ptr< AIDA::ITupleFactory > tpf( af->createTupleFactory( *tree ) );
+    delete tf;
 
     const G4int nhisto = 10;
     AIDA::IHistogram1D* h[nhisto];
@@ -443,7 +442,7 @@ int main(int argc, char** argv)
     if(usepaw) {
 
       // Creating a histogram factory, whose histograms will be handled by the tree
-      std::auto_ptr< AIDA::IHistogramFactory > hf( af->createHistogramFactory( *tree ) );
+      AIDA::IHistogramFactory* hf = af->createHistogramFactory( *tree );
 
       // Creating an 1-dimensional histogram in the root directory of the tree
 
@@ -464,9 +463,11 @@ int main(int argc, char** argv)
       h[8]=hf->createHistogram1D("18","Proton cos(theta)",m_bint,cosmin,1.0);
       h[9]=hf->createHistogram1D("19","Proton cos(theta)",m_bint,cosmin,1.0);
 
+      delete hf;
       cout << "Histograms is initialised nbins=" << nbins
-             << endl;
+	   << endl;
     }
+    delete af;
 
     // Create a DynamicParticle
     G4DynamicParticle dParticle(part,aDirection,energy);
@@ -691,6 +692,7 @@ int main(int argc, char** argv)
       std::cout << "Closing the tree..." << std::endl;
       tree->close();
     }
+    delete tree;
 
     cout.setf(std::ios::fixed);
     G4int prec = cout.precision(6);

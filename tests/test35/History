@@ -14,6 +14,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+24-05-07  V.Ivanchenko (test35-V08-03-00)
+- substitute autoptr by normal pointers in Histo to avoid crash
+
 test35-V08-02-01  24 April 2007 V.Ivanchenko
 - add quasi-elastic to FTF
 
