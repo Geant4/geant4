@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Transportation.cc,v 1.64 2007-05-24 16:39:15 japost Exp $
+// $Id: G4Transportation.cc,v 1.65 2007-05-24 17:09:51 japost Exp $
 // --> Merged with 1.60.4.2.2.3 2007/05/09 09:30:28 japost 
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
@@ -228,7 +228,8 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
   ELimited limitedStep; 
   G4FieldTrack endTrackState('a');  //  Default values
 
-  fGeometryLimitedStep = false ;    //  default 
+  fMassGeometryLimitedStep = false ;    //  default 
+  fAnyGeometryLimitedStep  = false ;
   if( currentMinimumStep > 0 )  {
       G4double newMassSafety= 0.0;     //  temp. for recalculation
 
@@ -248,13 +249,10 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
                // this was estimated already in step above
 
       if( limitedStep == kUnique || limitedStep == kSharedTransport ) {
-	 fGeometryLimitedStep = true ;
+	 fMassGeometryLimitedStep = true ;
       }
-      if( lengthAlongCurve < currentMinimumStep){
-         geometryStepLength   = lengthAlongCurve ;
-      } else {
-         geometryStepLength   = currentMinimumStep ;
-      }
+      fAnyGeometryLimitedStep = ( limitedStep != kDoNot ); 
+      geometryStepLength = std::min( lengthAlongCurve, currentMinimumStep); 
 
       // Momentum:  Magnitude and direction can be changed too now ...
       //
@@ -265,6 +263,7 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
       fPreviousSftOrigin  = startPosition ;
       fPreviousMassSafety = newMassSafety ;         
       fPreviousFullSafety = newFullSafety ; 
+      // fSafetyHelper->SetCurrentSafety( newFullSafety, startPosition);
 
       if( fVerboseLevel > 1 ){
 	G4cout << "G4Transport:CompStep> " 
@@ -291,7 +290,7 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
       fTransportEndPosition = startPosition;
       // If the step length requested is 0, and we are on a boundary
       //   then a boundary will also limit the step.
-      if( startMassSafety == 0.0 )  fGeometryLimitedStep = true ;
+      if( startMassSafety == 0.0 )  fMassGeometryLimitedStep = true ;
       //   TODO:  Add explicit logical status for being at a boundary
   }
   // G4FieldTrack aTrackState(endTrackState);  
@@ -353,7 +352,7 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
 
   // Update safety for the end-point, if becomes negative at the end-point.
   //                                       To-Try:  No safety update if at a boundary
-  if( startFullSafety < endpointDistance ) // && !fGeometryLimitedStep ) 
+  if( startFullSafety < endpointDistance ) // && !fAnyGeometryLimitedStep ) 
   {
       G4double endFullSafety =
 	fPathFinder->ComputeSafety( fTransportEndPosition); 
@@ -370,6 +369,7 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
       fPreviousMassSafety = endMassSafety ; 
       fPreviousFullSafety = endFullSafety; 
       fPreviousSftOrigin = fTransportEndPosition ;
+      // fSafetyHelper->SetCurrentSafety( endFullSafety, fTransportEndPosition);
 
       // The convention (Stepping Manager's) is safety from the start point
       //
@@ -616,12 +616,12 @@ G4VParticleChange* G4Transportation::PostStepDoIt( const G4Track& track,
      G4cout << " Calling PathFinder::Locate() from " 
 	    << " G4Transportation::PostStepDoIt " << G4endl;
   }
-  fPathFinder->Locate( track.GetPosition(), 
+  if(fAnyGeometryLimitedStep)
+  {  
+    fPathFinder->Locate( track.GetPosition(), 
 		       track.GetMomentumDirection(),
 		       true); 
 
-  if(fGeometryLimitedStep)
-  {  
     // fCurrentTouchable will now become the previous touchable, 
     // and what was the previous will be freed.
     // (Needed because the preStepPoint can point to the previous touchable)
@@ -635,7 +635,7 @@ G4VParticleChange* G4Transportation::PostStepDoIt( const G4Track& track,
     // Check whether the particle is out of the world volume 
     // If so it has exited and must be killed.
     //
-#ifdef G4VERBOSE
+#ifdef G4DEBUG_TRANSPORT
     if( fVerboseLevel > 1 ){
        G4VPhysicalVolume* vol= fCurrentTouchableHandle->GetVolume(); 
        G4cout << "CHECK !!!!!!!!!!! fCurrentTouchableHandle->GetVolume() = " << vol;
@@ -656,15 +656,22 @@ G4VParticleChange* G4Transportation::PostStepDoIt( const G4Track& track,
     // if( fLinearNavigator->Get
 
   }
-  else                 // fGeometryLimitedStep  is false
+  else                 // fAnyGeometryLimitedStep  is false
   { 
+#ifdef G4DEBUG_TRANSPORT
     if( fVerboseLevel > 1 ){
-       G4cout << "G4Transportation::PostStepDoIt -- fGeometryLimitedStep = false !!" 
-	      << G4endl;
+       G4cout << "G4Transportation::PostStepDoIt -- "
+              << " fAnyGeometryLimitedStep  = " << fAnyGeometryLimitedStep  
+              << " must be false " << G4endl;
     }
-    // This serves only to move the Navigator's location
+#endif
+    // This serves only to move each of the Navigator's location
     //
     // fLinearNavigator->LocateGlobalPointWithinVolume( track.GetPosition() ) ;
+
+    // G4cout << "G4Transportation calling PathFinder::ReLocate() " << G4endl;
+    fPathFinder->ReLocate( track.GetPosition() );
+			   // track.GetMomentumDirection() ); 
 
     // Keep the value of the track's current Touchable is retained,
     //  and use it to overwrite the (unset) one in particle change.
@@ -676,7 +683,7 @@ G4VParticleChange* G4Transportation::PostStepDoIt( const G4Track& track,
 
     // Have not reached a boundary
     fParticleChange.ProposeLastStepInVolume(false);
-  }         // endif ( fGeometryLimitedStep ) 
+  }         // endif ( fAnyGeometryLimitedStep ) 
 
   const G4VPhysicalVolume* pNewVol = retCurrentTouchable->GetVolume() ;
   const G4Material* pNewMaterial   = 0 ;
@@ -745,7 +752,7 @@ G4Transportation::StartTracking(G4Track* aTrack)
   //  G4cout << " Navigator Id obtained in StartTracking " << fNavigatorId << G4endl;
   // }
   G4ThreeVector position = aTrack->GetPosition(); 
-  G4ThreeVector direction = aTrack->GetMomentumDirection(); // G48
+  G4ThreeVector direction = aTrack->GetMomentumDirection();
 
   // if( fVerboseLevel > 1 ){
   //   G4cout << " Calling PathFinder::PrepareNewTrack from    " 
