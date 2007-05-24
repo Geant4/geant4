@@ -27,12 +27,18 @@
 // J.P. Wellisch, Nov-1996
 // A prototype of the low energy neutron transport model.
 //
+// 070523 Try to limit sum of secondary photon energy while keeping distribution shape 
+//        in the of nDiscrete = 1 an nPartial = 1. Most case are satisfied. 
+//        T. Koi
+//
 // there is a lot of unused (and undebugged) code in this file. Kept for the moment just in case. @@
 
 #include "G4NeutronHPPhotonDist.hh"
 #include "G4NeutronHPLegendreStore.hh"
 #include "G4Electron.hh"
 #include "G4Poisson.hh"
+
+#include <numeric>
 
 G4bool G4NeutronHPPhotonDist::InitMean(std::ifstream & aDataFile)
 {
@@ -223,6 +229,7 @@ G4ReactionProductVector * G4NeutronHPPhotonDist::GetPhotons(G4double anEnergy)
       }
       nSecondaries += actualMult[i];
     }
+    //G4cout << "nSecondaries " << nSecondaries  << " anEnergy " << anEnergy/eV << G4endl;
     for(i=0;i<nSecondaries;i++)
     {
       G4ReactionProduct * theOne = new G4ReactionProduct;
@@ -230,6 +237,75 @@ G4ReactionProductVector * G4NeutronHPPhotonDist::GetPhotons(G4double anEnergy)
       thePhotons->push_back(theOne);
     }
     G4int count=0;
+
+    //Gcout << "nDiscrete " << nDiscrete << " nPartials " << nPartials << G4endl;
+//3456
+      if ( nDiscrete == 1 && nPartials == 1 )  
+      {
+         if ( actualMult[ 0 ] > 0 ) 
+         {
+	 if ( disType[0] == 1 ) // continuum
+         {
+
+            G4NeutronHPVector * temp;
+            temp = partials[ 0 ]->GetY(anEnergy); //@@@ look at, seems fishy
+            G4double maximumE = temp->GetX( temp->GetVectorLength()-1 ); // This is an assumption.
+
+            //G4cout << "start " << actualMult[ 0 ] << " maximumE " << maximumE/eV << G4endl;
+
+            std::vector< G4double > photons_e_best( actualMult[ 0 ] , 0.0 );
+            G4double best = DBL_MAX;
+            G4int maxTry = 1000; 
+            for ( G4int j = 0 ; j < maxTry ; j++ )
+            {
+               std::vector< G4double > photons_e( actualMult[ 0 ] , 0.0 );
+               for ( std::vector< G4double >::iterator 
+                   it = photons_e.begin() ; it < photons_e.end() ; it++ ) 
+              {
+                  *it = temp->Sample();   
+              }
+              if ( std::accumulate( photons_e.begin() , photons_e.end() , 0.0 ) > maximumE ) 
+              {
+                 if ( std::accumulate( photons_e.begin() , photons_e.end() , 0.0 ) < best )
+                    photons_e_best = photons_e;
+                 continue;
+              }
+              else
+              {
+                 for ( std::vector< G4double >::iterator 
+                     it = photons_e.begin() ; it < photons_e.end() ; it++ ) 
+                 {
+                    thePhotons->operator[](count)->SetKineticEnergy( *it );
+                 }  
+                 //G4cout << "OK " << actualMult[0] << " j " << j << " total photons E  " 
+                 //          << std::accumulate( photons_e.begin() , photons_e.end() , 0.0 )/eV << " ratio " << std::accumulate( photons_e.begin() , photons_e.end() , 0.0 ) / maximumE 
+                 //          << G4endl;
+                 
+                 break;
+              }
+              G4cout << "NeutronHPPhotonDist could not find fitted energy set for multiplicity of " <<  actualMult[0] << "." << G4endl; 
+              G4cout << "NeutronHPPhotonDist will use the best set." << G4endl; 
+              for ( std::vector< G4double >::iterator 
+                  it = photons_e_best.begin() ; it < photons_e_best.end() ; it++ ) 
+              {
+                  thePhotons->operator[](count)->SetKineticEnergy( *it );
+              }
+              //G4cout << "Not Good " << actualMult[0] << " j " << j << " total photons E  " 
+              //       << best/eV << " ratio " << best / maximumE 
+              //       << G4endl;
+           }
+        }
+	else // discrete
+	{
+          thePhotons->operator[](count)->SetKineticEnergy(energy[i]);
+	}
+	count++;
+	if(count > nSecondaries)  throw G4HadronicException(__FILE__, __LINE__, "G4NeutronHPPhotonDist::GetPhotons inconsistancy");
+        }
+         
+      }
+      else
+      {
     for(i=0; i<nDiscrete; i++)
     { 
       for(ii=0; ii< actualMult[i]; ii++)
@@ -262,6 +338,7 @@ G4ReactionProductVector * G4NeutronHPPhotonDist::GetPhotons(G4double anEnergy)
 	if(count > nSecondaries)  throw G4HadronicException(__FILE__, __LINE__, "G4NeutronHPPhotonDist::GetPhotons inconsistancy");
       }
     }
+      }
     // now do the angular distributions...
     if( isoFlag == 1)
     {
