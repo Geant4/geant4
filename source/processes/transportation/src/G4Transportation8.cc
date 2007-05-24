@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Transportation8.cc,v 1.3 2007-05-19 00:20:58 japost Exp $
+// $Id: G4Transportation8.cc,v 1.4 2007-05-24 17:13:30 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // ------------------------------------------------------------
@@ -165,6 +165,15 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
   G4ThreeVector startPosition          = track.GetPosition() ;
 
   // G4double   theTime        = track.GetGlobalTime() ;
+
+  // #define G4DEBUG_TRANSPORT 1
+#ifdef G4DEBUG_TRANSPORT 
+  G4int prc=G4cout.precision(8); 
+  G4cout << " Previous Safety: origin = " << fPreviousSftOrigin 
+	 << " val= " << fPreviousSafety << G4endl;
+  G4cout.precision(prc);
+#endif
+
 
   // The Step Point safety can be limited by other geometries and/or the 
   // assumptions of any process - it's not always the geometrical safety.
@@ -310,6 +319,11 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
            geometryStepLength   = currentMinimumStep ;
            fGeometryLimitedStep = false ;
         }
+	//G4cout << "Transport8: fieldPropagator returned safety= " << currentSafety 
+	//       << " at " << startPosition << G4endl;
+	// int prc= G4cout.precision(9);  
+	// G4cout << "Tr8: PiF gave safety= " << currentSafety << " at " << startPosition << G4endl;
+	// G4cout.precision(prc); 
      }
      else
      {
@@ -419,6 +433,13 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
       if( currentSafety == 0.0 )  fGeometryLimitedStep = true ;
   }
 
+#ifdef G4DEBUG_TRANSPORT 
+  G4int prc2=G4cout.precision(9); 
+  G4cout << " Check for EndSafety <= 0.0 : start " << currentSafety 
+	 << " end-dist " << endpointDistance << G4endl;
+  G4cout.precision(prc2); 
+#endif
+
   // Update the safety starting from the end-point,
   // if it will become negative at the end-point.
   //
@@ -439,8 +460,7 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
 #ifdef G4DEBUG_TRANSPORT 
       G4cout.precision(12) ;
       G4cout << "***Transportation8::AlongStepGPIL ** " << G4endl  ;
-      G4cout << "  Called Navigator->ComputeSafety at "
-             << fTransportEndPosition
+      G4cout << "  Called Navigator->ComputeSafety at " << fTransportEndPosition
              << "    and it returned safety= " << endSafety << G4endl ; 
       G4cout << "  Adding endpoint distance " << endpointDistance 
              << "   to obtain pseudo-safety= " << currentSafety << G4endl ; 
@@ -726,13 +746,17 @@ G4Transportation8::StartTracking(G4Track* aTrack)
   fPreviousSftOrigin = G4ThreeVector(0.,0.,0.) ;
   
   // reset looping counter -- for motion in field
-  if( aTrack->GetCurrentStepNumber()==1 ) {
-     fNoLooperTrials= 0; 
-  }
+  fNoLooperTrials= 0; 
+  // Must clear this state .. else it depends on last track's value
+  //  --> a better solution would set this from state of suspended track TODO ? 
+  // Was if( aTrack->GetCurrentStepNumber()==1 ) { .. }
 
   // ChordFinder reset internal state
   //
   if( DoesGlobalFieldExist() ) {
+     fFieldPropagator->ClearPropagatorState();   
+       // Resets safety values, in case of overlaps.  
+
      G4ChordFinder* chordF= fFieldPropagator->GetChordFinder();
      if( chordF ) chordF->ResetStepEstimate();
   }
