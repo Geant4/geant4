@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.cc,v 1.32 2007-05-21 15:36:25 gcosmo Exp $
+// $Id: G4Navigator.cc,v 1.33 2007-05-24 09:21:09 japost Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4Navigator Implementation
@@ -55,6 +55,8 @@ G4Navigator::G4Navigator()
   fAbandonThreshold_NoZeroSteps = 25; 
 
   kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
+
+  fStepEndPoint = G4ThreeVector( kInfinity, kInfinity, kInfinity ); 
 }
 
 // ********************************************************************
@@ -946,6 +948,8 @@ G4double G4Navigator::ComputeStep( const G4ThreeVector &pGlobalpoint,
   G4cerr.precision(oldcerrPrec);
 #endif
 
+  fStepEndPoint= pGlobalpoint+Step*pDirection; 
+
   return Step;
 }
 
@@ -1134,11 +1138,18 @@ G4double G4Navigator::ComputeSafety( const G4ThreeVector &pGlobalpoint,
   }
 #endif
 
-  if( !(fEnteredDaughter || fExitedMother) )
+  G4double distEndpointSq= (pGlobalpoint-fStepEndPoint).mag2(); 
+  G4bool   stayedOnEndpoint= distEndpointSq < kCarTolerance*kCarTolerance; 
+
+  G4bool   endpointOnSurface= fEnteredDaughter || fExitedMother;
+
+  if( !(endpointOnSurface && stayedOnEndpoint) )
   {
     // Pseudo-relocate to this point (updates voxel information only)
     //
-    LocateGlobalPointWithinVolume( pGlobalpoint );
+    //  LocateGlobalPointWithinVolume( pGlobalpoint ); 
+    //      ------>> Dangerous <<----------
+    //      Replaced by calls 
 
     if( fVerbose >= 2 )
     {
@@ -1148,6 +1159,7 @@ G4double G4Navigator::ComputeSafety( const G4ThreeVector &pGlobalpoint,
 
     G4VPhysicalVolume *motherPhysical = fHistory.GetTopVolume();
     G4LogicalVolume *motherLogical = motherPhysical->GetLogicalVolume();
+    G4SmartVoxelHeader* pVoxelHeader = motherLogical->GetVoxelHeader();
     G4ThreeVector localPoint = ComputeLocalPoint(pGlobalpoint);
 
     if ( fHistory.GetTopVolumeType()!=kReplica )
@@ -1155,9 +1167,12 @@ G4double G4Navigator::ComputeSafety( const G4ThreeVector &pGlobalpoint,
       switch(CharacteriseDaughters(motherLogical))
       {
         case kNormal:
-          if ( motherLogical->GetVoxelHeader() )
+          if ( pVoxelHeader )
           {
-            newSafety=fvoxelNav.ComputeSafety(localPoint,fHistory,pMaxLength);
+	     fvoxelNav.VoxelLocate( pVoxelHeader, pGlobalpoint );
+	     newSafety=fvoxelNav.ComputeSafety(localPoint,fHistory,pMaxLength);
+	     // if( !stayedOnEndpoint) 
+	     fvoxelNav.VoxelLocate( pVoxelHeader, fLastLocatedPointLocal );
           }
           else
           {
@@ -1165,7 +1180,10 @@ G4double G4Navigator::ComputeSafety( const G4ThreeVector &pGlobalpoint,
           }
           break;
         case kParameterised:
-          newSafety = fparamNav.ComputeSafety(localPoint,fHistory,pMaxLength);
+	  fparamNav.ParamVoxelLocate( pVoxelHeader, pGlobalpoint );
+	  newSafety = fparamNav.ComputeSafety(localPoint,fHistory,pMaxLength);
+	  // if( !stayedOnEndpoint) 
+	  fparamNav.ParamVoxelLocate( pVoxelHeader, fLastLocatedPointLocal );
           break;
         case kReplica:
           G4Exception("G4Navigator::ComputeSafety()", "NotApplicable",
@@ -1181,20 +1199,16 @@ G4double G4Navigator::ComputeSafety( const G4ThreeVector &pGlobalpoint,
   }
   else
   {
-    if( fVerbose >= 2 )
-    {
+    // Already have newSafety = 0.0; 
+#ifdef G4DEBUG_NAVIGATION
+    if( fVerbose >= 2 ) {
       G4cout << "    ComputeSafety() finds that point - " 
              << pGlobalpoint << " - is on surface " << G4endl; 
-      if( fEnteredDaughter )
-      {
-        G4cout << "   entered new daughter volume" << G4endl; 
-      }
-      if( fExitedMother )
-      { 
-        G4cout << "   and exited previous volume."; 
-      }
+      if( fEnteredDaughter ) G4cout << "   entered new daughter volume"; 
+      if( fExitedMother )    G4cout << "   and exited previous volume."; 
       G4cout << G4endl;
     } 
+#endif
   }
 
   // Remember last safety origin & value
