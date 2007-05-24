@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.cc,v 1.101 2007-05-07 16:36:34 asaim Exp $
+// $Id: G4RunManager.cc,v 1.102 2007-05-24 20:42:37 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -410,11 +410,11 @@ void G4RunManager::DefineWorldVolume(G4VPhysicalVolume* worldVol,
 
 void G4RunManager::rndmSaveThisRun()
 {
-  G4int runNumber = runIDCounter;
-  /////////////if(currentRun == 0) runNumber--;        //state Idle; decrease runNumber
-  if(!storeRandomNumberStatus || runNumber < 0) {
+  G4int runNumber = 0;
+  if(currentRun) runNumber = currentRun->GetRunID();
+  if(!storeRandomNumberStatus) {
      G4cerr << "Warning from G4RunManager::rndmSaveThisRun():"
-          << " there is no currentRun or its RandomEngineStatus is not available." 
+          << " Random number status was not stored prior to this run." 
 	  << G4endl << "Command ignored." << G4endl;
      return;
   }
