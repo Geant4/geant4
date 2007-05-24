@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PathFinder.hh,v 1.28 2007-05-22 15:08:03 japost Exp $
+// $Id: G4PathFinder.hh,v 1.29 2007-05-24 10:49:18 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // class G4PathFinder 
@@ -94,7 +94,7 @@ class G4PathFinder
      // Make secondary relocation of global point (within safety only) 
      // in all navigators, and update them.
 
-   void PrepareNewTrack( G4ThreeVector position, G4ThreeVector direction); 
+   void PrepareNewTrack( G4ThreeVector position, G4ThreeVector direction, G4VPhysicalVolume* massStartVol=0); 
      //
      // Check and cache set of active navigators.
 
@@ -161,7 +161,7 @@ class G4PathFinder
   //
   // Print key details out - for debugging
 
-  void ClearState();
+  // void ClearState();
   //
   // Clear all the State of this class and its current associates
 
@@ -198,14 +198,21 @@ class G4PathFinder
 
    G4Navigator*  fpNavigator[fMaxNav];
 
-   // State after a step computation 
+   // State changed in a step computation
 
    ELimited      fLimitedStep[fMaxNav];
    G4bool        fLimitTruth[fMaxNav];
    G4double      fCurrentStepSize[fMaxNav]; 
-   G4double      fNewSafety[ fMaxNav ];      // Safety for starting point
+
+   G4ThreeVector fPreSafetyLocation;    //  last initial position for which safety evaluated
+   G4double      fPreSafetyMinValue;    //   /\ corresponding value of safety
+   G4double      fNewSafety[ fMaxNav ]; //   Safeties for the above point
+   // This part of the state can be retained for severall calls --> CARE
+
    G4ThreeVector fPreStepLocation;      //  point where last ComputeStep called
    G4double      fMinSafety_PreStepPt;  //   /\ corresponding value of safety
+   // This changes at each step, 
+   //   so it can differ when steps inside min-safety are made
 
    G4double      fMinStep;      // As reported by Navigators -- can be kInfinity
    G4double      fTrueMinStep;  // Corrected in case >= proposed
