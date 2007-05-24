@@ -76,6 +76,7 @@ Histo::Histo()
   scoreZ    = 100.*mm;
 
 #ifdef G4ANALYSIS_USE
+  af   = 0;
   tree = 0;
   ntup = 0;
 #endif
@@ -84,7 +85,11 @@ Histo::Histo()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 Histo::~Histo()
-{}
+{
+#ifdef G4ANALYSIS_USE
+  delete af;
+#endif
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -243,7 +248,7 @@ void Histo::bookHisto()
 #ifdef G4ANALYSIS_USE
   G4cout << "### Histo books " << nHisto << " histograms " << G4endl;
   // Creating the analysis factory
-  af = AIDA_createAnalysisFactory();
+  if(!af) af = AIDA_createAnalysisFactory();
 
   // Creating the tree factory
   AIDA::ITreeFactory* tf = af->createTreeFactory();
