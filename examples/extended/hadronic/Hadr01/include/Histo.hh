@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: Histo.hh,v 1.5 2007-05-24 13:19:29 vnivanch Exp $
+// $Id: Histo.hh,v 1.6 2007-05-24 13:52:31 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef Histo_h
@@ -65,7 +65,7 @@ class Histo
 {
 
 public:
-  Histo();
+  Histo(G4int ver);
 
   ~Histo();
 
@@ -74,6 +74,9 @@ public:
 
   void save();
   // Save histogramms to file
+
+  void reset();
+  // Reset histogramms 
 
   void add1D(const G4String&, const G4String&, G4int nb=100, G4double x1=0., 
                                                G4double x2=1., G4double u=1.);
@@ -96,14 +99,21 @@ public:
   void addRow();
   // Save tuple event 
 
-  void setFileName(const G4String&);
+  void setFileName(const G4String& nam) {histName = nam;};
 
-  void setFileType(const G4String&);
+  void setFileOption(const G4String& nam) {option = nam;};
+
+  void setFileType(const G4String& nam);
+
+  void print(G4int i);
+
+  void setVerbose(G4int val) {verbose = val;};
 
 private:
- 
+
   G4String histName;
   G4String histType;
+  G4String option;
   G4String tupleName;
   G4String tupleId;
   G4String tupleList;
@@ -122,7 +132,7 @@ private:
   std::vector<G4double>  xmax;
   std::vector<G4double>  unit;
   std::vector<G4String>  ids;
-  std::vector<G4String>  titles;
+  std::vector<G4String>  tittles;
 };
 
 #endif

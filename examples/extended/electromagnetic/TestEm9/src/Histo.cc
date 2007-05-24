@@ -110,6 +110,7 @@ void Histo::book()
     if(active[i]) 
       histo[i] = hf->createHistogram1D(ids[i], titles[i], bins[i], xmin[i], xmax[i]);
   }
+  delete hf;
   // Creating a tuple factory, whose tuples will be handled by the tree
   if(tupleList != "") {
      AIDA::ITupleFactory* tpf = af->createTupleFactory( *tree );
@@ -231,7 +232,7 @@ void Histo::fillTuple(const G4String& parname, G4double x)
     G4cout << "fill tuple by parameter <" << parname << "> = " << x << G4endl; 
   }
 #ifdef G4ANALYSIS_USE  
-  if(ntup) ntup->fill(ntup->findColumn(parname), x);
+  if(ntup) ntup->fill(ntup->findColumn(parname), (float)x);
 #endif
 }
 
