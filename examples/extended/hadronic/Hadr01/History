@@ -1,4 +1,4 @@
-$Id: History,v 1.17 2007-05-22 13:58:25 vnivanch Exp $
+$Id: History,v 1.18 2007-05-24 13:19:29 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+24-05-07  V.Ivant (exhadr01-V08-03-02)
+- substitute autoptr by normal pointers in Histo to avoid crash
 
 21-05-07 V.Ivant (exhadr01-V08-03-01)
 - Fix filling histogram on total energy deposit in the target

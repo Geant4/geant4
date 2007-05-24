@@ -205,7 +205,7 @@ void HistoManager::EndOfRun()
     G4double s = ermstr[j];
     G4double r = s*std::sqrt(x);
     G4cout << std::setprecision(4) << "Edep " << nam[j] << " =                   " << e
-           << " +- " << s;
+           << " +- " << r;
     if(e > 0.0) G4cout << "  res=  " << f*s/e << " %";
     G4cout << G4endl;
   }
@@ -216,7 +216,7 @@ void HistoManager::EndOfRun()
       G4double s = erms[j];
       G4double r = s*std::sqrt(x);
       G4cout << std::setprecision(4) << "Edep " << nam[j] << " =                   " << e
-	     << " +- " << s;
+	     << " +- " << r;
       if(e > 0.0) G4cout << "  res=  " << f*s/e << " %";
       G4cout << G4endl;
     }
