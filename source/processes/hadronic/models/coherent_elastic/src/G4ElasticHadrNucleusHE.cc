@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElasticHadrNucleusHE.cc,v 1.68 2007-05-24 08:34:30 vnivanch Exp $
+// $Id: G4ElasticHadrNucleusHE.cc,v 1.69 2007-05-24 10:57:43 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -857,7 +857,7 @@ void  G4ElasticHadrNucleusHE::DefineHadronValues(G4int Z)
 	      else 
 		{
 		  G4double A0 = logE - 0.2634;  // log(1.3)
-		  TotN = 33.0 + 30.*A0*A0;
+		  TotN = 33.0 + 30.*A0*A0*A0*A0;
 		}
 	  //  =================  proton  ===============
 	    }
