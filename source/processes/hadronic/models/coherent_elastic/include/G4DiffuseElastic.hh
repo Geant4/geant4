@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DiffuseElastic.hh,v 1.1 2007-05-24 14:08:04 grichine Exp $
+// $Id: G4DiffuseElastic.hh,v 1.2 2007-05-24 14:38:29 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -87,6 +87,10 @@ public:
 
   G4double SampleT(G4double p, G4double m1, G4double m2, G4double A);
 
+  G4double GetDiffuseElasticXsc( G4ParticleDefiniton* particle, 
+                                 G4double theta, 
+			         G4double momentum, 
+				 G4double A         );  
   G4double BesselJzero(G4double z);
   G4double BesselJone(G4double z);
 
