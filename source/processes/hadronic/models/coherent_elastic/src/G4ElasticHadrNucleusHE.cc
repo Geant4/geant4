@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElasticHadrNucleusHE.cc,v 1.67 2007-05-23 17:14:50 vnivanch Exp $
+// $Id: G4ElasticHadrNucleusHE.cc,v 1.68 2007-05-24 08:34:30 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -850,12 +850,14 @@ void  G4ElasticHadrNucleusHE::DefineHadronValues(G4int Z)
 		TotN = 33.3+15.2*(hLabMomentum2-1.35)/(std::pow(hLabMomentum,2.37)+0.95);
 		
 	      else if(hLabMomentum > 0.8)
-		TotN = 33+25.5*(logE+0.0513)*(logE+0.0513);  
-	   
+		{
+		  G4double A0 = logE + 0.0513;
+		  TotN = 33.0 + 25.5*A0*A0;  
+		}
 	      else 
 		{
-		  G4double A0 = logE-0.2634;  // log(1.3)
-		  TotN = 33+30*A0*A0;
+		  G4double A0 = logE - 0.2634;  // log(1.3)
+		  TotN = 33.0 + 30.*A0*A0;
 		}
 	  //  =================  proton  ===============
 	    }
@@ -866,17 +868,17 @@ void  G4ElasticHadrNucleusHE::DefineHadronValues(G4int Z)
 	    
 	     else if(hLabMomentum > 0.7)
 	       {
-		 G4double A0 = logE+0.3147;
-		 TotP = 23+40*A0*A0;
+		 G4double A0 = logE + 0.3147;
+		 TotP = 23.0 + 40.*A0*A0;
 	       }
 	     else 
-	       TotP = 23+50*std::pow(std::log(0.73/hLabMomentum),3.5);
+	       TotP = 23.+50.*std::pow(std::log(0.73/hLabMomentum),3.5);
 	   }
 	 }
       HadrTot = 0.5*(TotP+TotN);
 	
       //  Proton slope
-      HadrSlope = 6.44+0.88*std::log(sHadr)-1;     //  GeV-2
+      HadrSlope = 5.44 + 0.88*logS;     //  GeV-2
 
       if( hLabMomentum < 2.) HadrSlope = 1.5;
 
