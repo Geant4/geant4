@@ -42,17 +42,12 @@ G4EvaporationInuclCollider::G4EvaporationInuclCollider()
 
 G4CollisionOutput G4EvaporationInuclCollider::collide(G4InuclParticle* /*bullet*/, G4InuclParticle* target) {
 
-  verboseLevel = 0;
+  verboseLevel = 4;
   if (verboseLevel > 3) {
     G4cout << " >>> G4EvaporationInuclCollider::evaporate" << G4endl;
   }
 
   G4CollisionOutput globalOutput;
-  G4InuclElementaryParticle* targetParticle = dynamic_cast<G4InuclElementaryParticle*>(target);
-  
-  if (verboseLevel > 2) {
-    targetParticle->printParticle();
-  }
 
   G4LorentzConvertor convertToTargetRestFrame;
   G4InuclNuclei* ntarget = dynamic_cast<G4InuclNuclei*>(target);
@@ -60,69 +55,40 @@ G4CollisionOutput G4EvaporationInuclCollider::collide(G4InuclParticle* /*bullet*
 
   G4double at = ntarget->getA();
   G4double zt = ntarget->getZ();
+  G4double eEx = ntarget->getExitationEnergy();
 
   std::vector<G4double> bmom(4, 0.0);
   bmom[3] = convertToTargetRestFrame.getTRSMomentum();
 
-
   G4InuclNuclei targ(at, zt);
   std::vector<G4double> tmom(4, 0.0);
+  targ.setExitationEnergy(eEx);
   targ.setMomentum(tmom);
   targ.setEnergy();
 
-  G4CollisionOutput TRFoutput;
-  G4CollisionOutput output;
+  targ.printParticle();
 
+  G4CollisionOutput output;
   output = theEquilibriumEvaporator->collide(0, &targ);
 
+  G4CollisionOutput TRFoutput;	   
   TRFoutput.addOutgoingParticles(output.getOutgoingParticles());  
   TRFoutput.addTargetFragments(output.getNucleiFragments());         
 
   if (verboseLevel > 3) {
     G4cout << " After EquilibriumEvaporator " << G4endl;
-
     output.printCollisionOutput();
   };
 	 
 
-  // convert to the LAB       
-  G4bool withReflection = convertToTargetRestFrame.reflectionNeeded();       
-  std::vector<G4InuclElementaryParticle> particles = 
-    TRFoutput.getOutgoingParticles();
-
-  if (!particles.empty()) { 
-    particleIterator ipart;
-    for(ipart = particles.begin(); ipart != particles.end(); ipart++) {
-      std::vector<G4double> mom = ipart->getMomentum();
-
-      if (withReflection) mom[3] = -mom[3];
-      mom = convertToTargetRestFrame.rotate(mom);
-      ipart->setMomentum(mom); 
-      mom = convertToTargetRestFrame.backToTheLab(ipart->getMomentum());
-      ipart->setMomentum(mom); 
-    };
-    std::sort(particles.begin(), particles.end(), G4ParticleLargerEkin());
-  };
-           
+  std::vector<G4InuclElementaryParticle> particles = TRFoutput.getOutgoingParticles();
   std::vector<G4InuclNuclei> nucleus = TRFoutput.getNucleiFragments();
 
-  if (!nucleus.empty()) { 
-    nucleiIterator inuc;
-
-    for (inuc = nucleus.begin(); inuc != nucleus.end(); inuc++) {
-      std::vector<G4double> mom = inuc->getMomentum(); 
-
-      if (withReflection) mom[3] = -mom[3];
-      mom = convertToTargetRestFrame.rotate(mom);
-      inuc->setMomentum(mom);
-      inuc->setEnergy(); 
-      mom = convertToTargetRestFrame.backToTheLab(inuc->getMomentum());
-      inuc->setMomentum(mom);
-      inuc->setEnergy(); 
-    };
-  };
   globalOutput.addOutgoingParticles(particles);
   globalOutput.addTargetFragments(nucleus);
+
+  if (verboseLevel > 3) G4cout << "G4EvaporationInuclCollider::collide end" << G4endl;
+ 
 	
   return globalOutput;
 	

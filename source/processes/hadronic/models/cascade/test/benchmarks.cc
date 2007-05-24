@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: benchmarks.cc,v 1.20 2007-05-24 16:31:33 miheikki Exp $
+// $Id: benchmarks.cc,v 1.21 2007-05-24 23:26:03 miheikki Exp $
 //#define CHECK_MOMC
 
 #include <vector>
@@ -119,9 +119,9 @@ int main(int argc, char **argv ) {
     G4cout << "           Z " << Z           << G4endl;
   }
 
-  //  test("Cascade interface", tCascadeInterface());
+    test("Cascade interface", tCascadeInterface());
 
-   test("Evaporation", tEvaporation(27,13, 100));
+    // test("Evaporation", tEvaporation(27,13, 100));
   //test("Coulomb",               tCoulomb());
 
   //  test("Evaporation interface", tEvaporation());

@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: testEvaporation.cc,v 1.2 2007-05-24 19:03:51 miheikki Exp $
+// $Id: testEvaporation.cc,v 1.3 2007-05-24 23:26:03 miheikki Exp $
 // based on V.Lara evaporation test
 #include <iostream>
 #include <iomanip>
@@ -45,6 +45,54 @@
 #include "G4ParticleTable.hh"
 #include "G4IonTable.hh"
 #include "G4ThreeVector.hh" 
+
+#include <vector>
+
+#include <iomanip>
+#include <iostream>
+#include <string>
+#include <stdio.h>
+#include <time.h>
+
+//
+#include "globals.hh"
+#include "Randomize.hh"
+
+#include "G4Collider.hh"
+#include "G4InuclCollider.hh"
+#include "G4IntraNucleiCascader.hh"
+#include "G4NonEquilibriumEvaporator.hh"
+#include "G4EquilibriumEvaporator.hh"
+#include "G4Fissioner.hh"
+#include "G4BigBanger.hh"
+#include "G4ElementaryParticleCollider.hh"
+#include "G4InuclParticle.hh"
+#include "G4InuclElementaryParticle.hh"
+#include "G4InuclNuclei.hh"
+#include "G4CollisionOutput.hh"
+#include "G4Analyser.hh"
+#include "G4WatcherGun.hh"
+#include "G4ios.hh"
+#include "G4BertiniData.hh"
+#include "G4CascadSpecialFunctions.hh"
+#include "G4IonTable.hh"
+#include "G4Nucleus.hh"
+#include "G4NucleiModel.hh"
+#include "G4ThreeVector.hh"
+#include "G4LorentzVector.hh"
+#include "G4Proton.hh"
+#include "G4KineticTrack.hh"
+#include "G4KineticTrackVector.hh"
+#include "G4Fancy3DNucleus.hh"
+#include "G4VParticleChange.hh"
+#include "G4ParticleChange.hh"
+#include "G4Track.hh"
+#include "G4HadFinalState.hh"
+#include "G4DynamicParticle.hh"
+
+#include "G4CascadeInterface.hh"
+#include "G4ElasticCascadeInterface.hh"
+#include "G4InuclEvaporation.hh"
 
 
 int main() {
@@ -150,7 +198,7 @@ int main() {
     G4cout << "Multiplicities: Neutrons -> " << NofN/events << " Protons -> " << NofP/events << G4endl;
   } else if (mode == 1) {
 
-    G4int events = 3;
+    G4int events = 100;
     G4cout << "Number of events: " << events << G4endl;
     //    G4cout << "Number of events: ";
     //    G4cin >> events;
@@ -172,7 +220,7 @@ int main() {
       G4int MyA = 197;
       G4int MyZ = 79;
       G4double AtomicMass = G4NucleiProperties::GetAtomicMass(MyA,MyZ)/MeV;      
-      G4double MyExE = 10+G4UniformRand()*10;
+      G4double MyExE = 10+G4UniformRand()*1000;
       G4double MyPx = 10;
       G4double MyPy = 100;
       G4double MyPz = 1000;
@@ -192,7 +240,7 @@ int main() {
       G4cout << "Break it!" << G4endl;
       G4FragmentVector * theFragVector = theEvaporation->BreakItUp(theExcitedNucleus);
       
-      G4cout << "#fragments " << theFragVector->size()<< G4endl;
+      G4cout << "#fragments >>>>" << theFragVector->size()<< G4endl;
 
       G4LorentzVector TestMomentum(initialMomentum);
       for (G4int j=0; j < (int)theFragVector->size(); j++) {

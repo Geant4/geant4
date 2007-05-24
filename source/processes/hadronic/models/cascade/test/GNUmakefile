@@ -1,7 +1,7 @@
-# $Id: GNUmakefile,v 1.52 2007-05-24 16:31:33 miheikki Exp $
+# $Id: GNUmakefile,v 1.53 2007-05-24 23:26:03 miheikki Exp $
 #G4TARGET := testIncl
 G4TARGET := cascade
-#G4TARGET := benchmarks
+G4TARGET := benchmarks
 G4TARGET := testEvaporation
 #G4EXLIB := true
 
@@ -12,7 +12,7 @@ endif
 include $(G4INSTALL)/config/binmake.gmk
 
 e1:  # evaporation test1
-	rm -f e1.out; date; $(G4INSTALL)/bin/$(G4SYSTEM)/testEvaporation 
+	rm -f e1.out; date; $(G4INSTALL)/bin/$(G4SYSTEM)/testEvaporation  >> e1.out; date
 
 b1:  # benchmark 1
 	rm -f b1.out; date; $(G4INSTALL)/bin/$(G4SYSTEM)/benchmarks 1 >> b1.out; date; cat b1.out 
@@ -26,3 +26,5 @@ c2:  # compare with heikkinen07::: 1(b) Bismut isotope 100% neutron production
 c1:  # test run for cascade  parameters: runId #events particle energy [MeV] A Z
 	rm -f b1.out; date; $(G4INSTALL)/bin/$(G4SYSTEM)/cascade 1000 1000 1 1000 27 13 > c1.out; date; head c1.out; cp c1.out data/data.out 
 
+eva:
+	make clean; make; make e1

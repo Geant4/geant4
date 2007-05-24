@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InuclEvaporation.hh,v 1.4 2007-05-24 17:41:20 miheikki Exp $
+// $Id: G4InuclEvaporation.hh,v 1.5 2007-05-24 23:27:01 miheikki Exp $
 // Defines an interface to evaporation models of Bertini cascase (BERT)
 // based on INUCL code.
 //
@@ -48,6 +48,8 @@ private:
   G4bool operator==(const G4InuclEvaporation &right) const;
   G4bool operator!=(const G4InuclEvaporation &right) const;
 
+  void fillResult( std::vector< G4DynamicParticle * > secondaryParticleVector,
+		   G4FragmentVector * aResult );
 public:
 
   G4FragmentVector * BreakItUp(const G4Fragment &theNucleus);
