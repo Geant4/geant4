@@ -1,4 +1,4 @@
-$Id: History,v 1.28 2007-05-23 17:38:35 vnivanch Exp $
+$Id: History,v 1.29 2007-05-24 11:36:24 gunter Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,14 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+
+24-05-2007, G.Folger     phys-lists-V08-03-03
+- remove obsolete physics lists LHEP_HP, QGSP_HP, LHEP_BIC,
+   LHEP_BIC_HP, LHEP_PRECO.
+- remove physics lists using Mars leading particle classes (*LEAD*).
+- QGSP_BIC_HP is no longer experimental
+- Increment PACK version number
 
 23-05-2007, V.Ivanchenko phys-lists-V08-03-02
 - add G4QEmExtraPhysics for gamma, e+-, mu+- nuclear CHIPS
