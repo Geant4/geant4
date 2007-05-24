@@ -23,44 +23,66 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InuclEvaporation.hh,v 1.4 2007-05-24 17:41:20 miheikki Exp $
-// Defines an interface to evaporation models of Bertini cascase (BERT)
-// based on INUCL code.
-//
-#ifndef G4INUCLEVAPORATION_h
-#define G4INUCLEVAPORATION_h 1
+// $Id: G4EvaporationInuclCollider.hh,v 1.1 2007-05-24 17:41:20 miheikki Exp $
+#ifndef G4EVAPORATIONINUCL_COLLIDER_HH
+#define G4EVAPORATIONINUCL_COLLIDER_HH
+ 
+#include "G4Collider.hh"
 
-#include "globals.hh"
-#include "G4VEvaporation.hh"
-#include "G4Fragment.hh"
+#include "G4EquilibriumEvaporator.hh"
+#include "G4Fissioner.hh"
+#include "G4BigBanger.hh"
 
-//#define DEBUG
+#include "G4ElementaryParticleCollider.hh"
+#include "G4InteractionCase.hh"
+#include "G4InuclNuclei.hh"
+#include "G4InuclSpecialFunctions.hh"
+#include "G4Analyser.hh"
 
-class G4InuclEvaporation : public G4VEvaporation {
-public:
-  G4InuclEvaporation();
-  ~G4InuclEvaporation();
+using namespace G4InuclSpecialFunctions;
 
-private:
-  G4InuclEvaporation(const G4InuclEvaporation &right);
-
-  const G4InuclEvaporation & operator=(const G4InuclEvaporation &right);
-  G4bool operator==(const G4InuclEvaporation &right) const;
-  G4bool operator!=(const G4InuclEvaporation &right) const;
+class G4EvaporationInuclCollider : public G4Collider {
 
 public:
 
-  G4FragmentVector * BreakItUp(const G4Fragment &theNucleus);
-       
-  void setVerboseLevel( const G4int verbose );
+  G4EvaporationInuclCollider();
 
-private:
+  G4EvaporationInuclCollider(G4EquilibriumEvaporator* eqevaporator, G4Fissioner* fissioner, G4BigBanger* bigbanger) {
+
+    setEquilibriumEvaporator(eqevaporator, fissioner, bigbanger);
+  };
+
+  void setEquilibriumEvaporator(G4EquilibriumEvaporator* eqevaporator, G4Fissioner* fissioner, G4BigBanger* bigbanger) {
+    theEquilibriumEvaporator = eqevaporator;
+    theEquilibriumEvaporator->setFissioner(fissioner);   
+    theEquilibriumEvaporator->setBigBanger(bigbanger);   
+  };
+
+  void setBigBanger(G4BigBanger* bigbanger) {
+
+    theBigBanger = bigbanger;   
+  };
+ 
+  virtual G4CollisionOutput collide(G4InuclParticle* bullet, G4InuclParticle* target);
+
+private: 
+
   G4int verboseLevel;
 
-#ifdef DEBUG
+  G4bool inelasticInteractionPossible(G4InuclParticle* bullet,
+				      G4InuclParticle* target, 
+				      G4double ekin) const;
 
-#endif
+  G4InteractionCase bulletTargetSetter(G4InuclParticle* bullet,
+				       G4InuclParticle* target) const; 
 
-};
+  G4bool explosion(G4InuclNuclei* target) const; 
+       
+  G4EquilibriumEvaporator* theEquilibriumEvaporator;
+  G4BigBanger* theBigBanger;
 
-#endif
+};        
+
+#endif // G4EVAPORATIONINUCL_COLLIDER_HH 
+
+
