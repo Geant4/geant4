@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: Histo.hh,v 1.8 2006-06-29 21:56:35 gunter Exp $
+// $Id: Histo.hh,v 1.9 2007-05-24 14:35:39 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef Histo_h
@@ -55,10 +55,11 @@
 class HistoMessenger;
 
 namespace AIDA {
- class ITree;
- class ITuple;
- class IHistogram1D;
- class ICloud1D;
+  class ITree;
+  class ITuple;
+  class IHistogram1D;
+  class ICloud1D;
+  class IAnalysisFactory;
 }
 
 class Histo
@@ -66,7 +67,7 @@ class Histo
 public:
   static Histo* GetInstance();
 
-  virtual ~Histo();
+  ~Histo();
 
 private:
   Histo();
@@ -152,6 +153,7 @@ private:
   std::vector<AIDA::ICloud1D*>     m_cloud;
   std::vector<AIDA::ITuple*>       m_ntup;
 
+  AIDA::IAnalysisFactory* m_af;  
   AIDA::ITree*    m_tree;
   HistoMessenger* m_messenger;
 

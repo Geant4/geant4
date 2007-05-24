@@ -39,11 +39,8 @@
 #include "Histo.hh"
 
 #ifdef G4ANALYSIS_USE
-
-#include <memory> // for the auto_ptr(T>
 #include "AIDA/AIDA.h"
 #include "HistoMessenger.hh"
-
 #endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -78,6 +75,7 @@ Histo::Histo()
   m_tupleColumns.clear();
   m_ntup.clear();
   m_tree       = 0;
+  m_af         = 0;
 #ifdef G4ANALYSIS_USE
   m_messenger = new HistoMessenger(this);
 #endif
@@ -91,6 +89,7 @@ Histo::~Histo()
   clear();
   delete m_messenger;
 #endif
+  delete m_af;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -120,9 +119,10 @@ void Histo::book()
 #ifdef G4ANALYSIS_USE
   G4cout << "### Histo books " << m_Histo << " histograms " << G4endl;
   // Creating the analysis factory
-  std::auto_ptr< AIDA::IAnalysisFactory > af( AIDA_createAnalysisFactory() );
+  m_af = AIDA_createAnalysisFactory();
+
   // Creating the tree factory
-  std::auto_ptr< AIDA::ITreeFactory > tf( af->createTreeFactory() );
+  AIDA::ITreeFactory* tf = m_af->createTreeFactory();
 
   // Creating a tree mapped to a new file.
   G4String comp = "uncompress";
@@ -132,30 +132,34 @@ void Histo::book()
     G4cout << "Tree store  : " << m_tree->storeName() << G4endl;
   else
     G4cout << "ERROR: Tree store " << m_histName  << " is not created!" << G4endl;
+  delete tf;
 
   // Creating a histogram factory, whose histograms will be handled by the tree
-  std::auto_ptr<AIDA::IHistogramFactory> hf(af->createHistogramFactory(*m_tree));
+  AIDA::IHistogramFactory* hf = m_af->createHistogramFactory(*m_tree);
 
   // Creating an 1-dimensional histograms in the root directory of the tree
   G4int i;
   for(i=0; i<m_Histo; i++) {
     if(m_active[i]) {
       m_histo[i] = hf->createHistogram1D(m_ids[i], m_titles[i], m_bins[i], 
-                                         m_xmin[i], m_xmax[i]);
+					 m_xmin[i], m_xmax[i]);
       if(m_histo[i] && m_verbose>0) ListHistogram(i);
     }
   }
   for(i=0; i<m_Clouds; i++) {
     if(m_activeCl[i]) m_cloud[i] = hf->createCloud1D(m_titlesCl[i]);
   }
+  delete hf;
+
   // Creating a tuple factory, whose tuples will be handled by the tree
   G4int nt = m_ntup.size();
   if(0 < nt) {
     G4cout << "### Histo books " << nt << " tuples " << G4endl;
-    std::auto_ptr<AIDA::ITupleFactory> tpf(af->createTupleFactory(*m_tree));
+    AIDA::ITupleFactory* tpf = m_af->createTupleFactory(*m_tree);
     for(G4int i=0; i<nt; i++) {
        m_ntup[i] = tpf->create(m_tuplePath[i], m_tupleTitle[i], m_tupleColumns[i]);
     }
+    delete tpf;
   }
 #endif
 } 
