@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronElastic.cc,v 1.52 2007-05-18 10:39:40 grichine Exp $
+// $Id: G4HadronElastic.cc,v 1.53 2007-05-24 10:15:25 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -86,7 +86,7 @@ G4HadronElastic::G4HadronElastic(G4ElasticHadrNucleusHE* HModel)
   verboseLevel= 0;
   lowEnergyRecoilLimit = 100.*keV;  
   lowEnergyLimitQ  = 0.0*GeV;  
-  lowEnergyLimitHE = 0.0*GeV;  
+  lowEnergyLimitHE = 1.0*GeV;  
   lowestEnergyLimit= 0.0*keV;  
   plabLowLimit     = 20.0*MeV;
 
@@ -186,8 +186,8 @@ G4HadFinalState* G4HadronElastic::ApplyYourself(
   else {
     // S-wave for very low energy
     if(plab < plabLowLimit) gtype = fSWave;
-    // HE-elastic for energetic projectiles
-    else if(ekin >= lowEnergyLimitHE && theParticle->GetParticleType() != "nucleus") 
+    // HE-elastic for energetic projectile mesons
+    else if(ekin >= lowEnergyLimitHE && theParticle->GetBaryonNumber() == 0) 
       gtype = fHElastic;
   }
 
@@ -211,13 +211,11 @@ G4HadFinalState* G4HadronElastic::ApplyYourself(
 
   if(gtype == fLElastic) {
     t = GeV*GeV*SampleT(ptot,m1,m2,aTarget);
-    if(t > tmax) gtype = fSWave;
   }
 
   // use mean atomic number
   if(gtype == fHElastic) {
     t = hElastic->SampleT(theParticle,plab,Z,A);
-    if(t > tmax) gtype = fSWave;
   }
 
   // NaN finder
@@ -233,7 +231,7 @@ G4HadFinalState* G4HadronElastic::ApplyYourself(
       G4cout << " S-wave will be sampled" 
 	     << G4endl; 
     }
-    gtype = fSWave;
+    t = 0.0;
   }
 
   if(gtype == fSWave) t = G4UniformRand()*tmax;

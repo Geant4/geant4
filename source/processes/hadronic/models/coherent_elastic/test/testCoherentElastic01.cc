@@ -205,7 +205,7 @@ int main()
   G4cout << " 5 kaon0short" << G4endl;
 
   //  G4cin >> choice;
-  choice = 3;
+  choice = 4;
 
   G4ParticleDefinition* theParticleDefinition;
 
