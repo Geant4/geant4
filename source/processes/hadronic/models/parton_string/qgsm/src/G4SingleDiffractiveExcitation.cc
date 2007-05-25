@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SingleDiffractiveExcitation.cc,v 1.5 2006-11-07 12:48:29 gunter Exp $
+// $Id: G4SingleDiffractiveExcitation.cc,v 1.1 2007-05-25 07:30:47 gunter Exp $
 // ------------------------------------------------------------
 //      GEANT 4 class implemetation file
 //
@@ -240,7 +240,7 @@ G4ThreeVector G4SingleDiffractiveExcitation::GaussianPt(G4double widthSquare, G4
 }
 
 G4SingleDiffractiveExcitation::G4SingleDiffractiveExcitation(const G4SingleDiffractiveExcitation &)
-: G4DiffractiveExcitation(),
+: G4QGSDiffractiveExcitation(),
 widthOfPtSquare(0) , minExtraMass(0),
 minmass(0)
 {

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SingleDiffractiveExcitation.hh,v 1.2 2006-06-29 20:55:21 gunter Exp $
+// $Id: G4SingleDiffractiveExcitation.hh,v 1.1 2007-05-25 07:30:47 gunter Exp $
 
 #ifndef G4SingleDiffractiveExcitation_h
 #define G4SingleDiffractiveExcitation_h 1
@@ -42,9 +42,9 @@
 class G4VSplitableHadron;
 class G4ExcitedString;
 #include "G4ThreeVector.hh"
-#include "G4DiffractiveExcitation.hh"
+#include "G4QGSDiffractiveExcitation.hh"
 
-class G4SingleDiffractiveExcitation : public G4DiffractiveExcitation
+class G4SingleDiffractiveExcitation : public G4QGSDiffractiveExcitation
 {
 
   public:
