@@ -35,8 +35,7 @@
 // Initialization of static data arrays:
 #include "G4LEppData.hh"
 
-G4LEpp::G4LEpp() :
-  G4HadronicInteraction()
+G4LEpp::G4LEpp():G4HadronicInteraction("G4LEpp")
 {
   //    theParticleChange.SetNumberOfSecondaries(1);
   //    SetMinEnergy(10.*MeV);

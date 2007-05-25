@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronElastic.cc,v 1.53 2007-05-24 10:15:25 vnivanch Exp $
+// $Id: G4HadronElastic.cc,v 1.54 2007-05-25 17:50:49 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -79,7 +79,7 @@
 #include "G4PionMinus.hh"
 
 G4HadronElastic::G4HadronElastic(G4ElasticHadrNucleusHE* HModel) 
-  : G4HadronicInteraction(), hElastic(HModel)
+  : G4HadronicInteraction("G4HadronElastic"), hElastic(HModel)
 {
   SetMinEnergy( 0.0*GeV );
   SetMaxEnergy( 100.*TeV );

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChargeExchange.cc,v 1.10 2007-05-15 13:08:53 vnivanch Exp $
+// $Id: G4ChargeExchange.cc,v 1.11 2007-05-25 17:46:52 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -49,7 +49,7 @@
 
 G4ChargeExchange::G4ChargeExchange(G4HadronElastic* hel, G4double elim,
                                    G4double ehigh)
-: G4HadronicInteraction(),
+: G4HadronicInteraction("G4ChargeExchange"),
   fElastic(hel),
   native(false),
   ekinlim(elim),
