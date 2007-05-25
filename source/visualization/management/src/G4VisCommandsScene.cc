@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsScene.cc,v 1.65 2006-11-26 19:37:54 allison Exp $
+// $Id: G4VisCommandsScene.cc,v 1.66 2007-05-25 10:49:55 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/scene commands - John Allison  9th August 1998
@@ -479,8 +479,29 @@ void G4VisCommandSceneNotifyHandlers::SetNewValue (G4UIcommand*,
   // Store current context...
   G4VSceneHandler* pCurrentSceneHandler =
     fpVisManager -> GetCurrentSceneHandler();
+  if (!pCurrentSceneHandler) {
+    if (verbosity >= G4VisManager::warnings) {
+      G4cout << "WARNING: No current scene handler."
+	     << G4endl;
+    }
+    return;
+  }
   G4VViewer* pCurrentViewer = fpVisManager -> GetCurrentViewer();
+  if (!pCurrentViewer) {
+    if (verbosity >= G4VisManager::warnings) {
+      G4cout << "WARNING: No current viewer."
+	     << G4endl;
+    }
+    return;
+  }
   G4Scene* pCurrentScene = fpVisManager -> GetCurrentScene();
+  if (!pCurrentScene) {
+    if (verbosity >= G4VisManager::warnings) {
+      G4cout << "WARNING: No current scene."
+	     << G4endl;
+    }
+    return;
+  }
   G4VisManager::Verbosity currentVerbosity = fpVisManager -> GetVerbosity();
 
   // Suppress messages during this process (only print errors)...
