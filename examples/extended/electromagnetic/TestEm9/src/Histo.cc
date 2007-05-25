@@ -51,11 +51,11 @@
 Histo::Histo()
 {
   verbose    = 0;
-  histName   = "histo.paw";
+  histName   = "testem9";
   histType   = "hbook";
   nHisto     = 0;
   defaultAct = 1;
-  tupleName  = "tuple.paw";
+  tupleName  = "tuple9";
   tupleId    = "100";
   tupleList  = "";
   ntup = 0;
@@ -91,7 +91,9 @@ void Histo::book()
 
   // Creating a tree mapped to a new hbook file.
 
-  tree = tf->create(histName,histType,false,true,"uncompress");
+  G4String nam = histName + "." + histType;
+
+  tree = tf->create(nam,histType,false,true,"uncompress");
   delete tf;
   if(tree) {
     G4cout << "Tree store  : " << tree->storeName() << G4endl;
@@ -253,7 +255,8 @@ void Histo::setFileName(const G4String& nam)
 
 void Histo::setFileType(const G4String& nam) 
 {
-  histType = nam;
+  if(nam == "root" || nam == "hbook" || nam == "aida") histType = nam;
+  else if(nam == "xml" || nam == "XML") histType = "aida";
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
