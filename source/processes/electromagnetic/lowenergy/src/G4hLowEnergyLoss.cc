@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4hLowEnergyLoss.cc,v 1.23 2006-06-29 19:42:23 gunter Exp $
+// $Id: G4hLowEnergyLoss.cc,v 1.24 2007-05-25 18:43:38 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------
@@ -144,7 +144,13 @@ G4bool   G4hLowEnergyLoss::EnlossFlucFlag = true ;
 G4double G4hLowEnergyLoss::LowestKineticEnergy = 10.*eV;
 G4double G4hLowEnergyLoss::HighestKineticEnergy= 100.*GeV;
 G4int    G4hLowEnergyLoss::TotBin = 360;
-G4double G4hLowEnergyLoss::RTable,G4hLowEnergyLoss::LOGRTable;
+
+// ---- MGP added initialization according to the comments below found in the header file
+// LOGRTable=std::log(HighestKineticEnergy/LowestKineticEnergy)/TotBin;
+// RTable = std::exp(LOGRTable);
+
+G4double G4hLowEnergyLoss::RTable = std::log(HighestKineticEnergy / LowestKineticEnergy) / TotBin;
+G4double G4hLowEnergyLoss::LOGRTable = std::exp(LOGRTable);
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
