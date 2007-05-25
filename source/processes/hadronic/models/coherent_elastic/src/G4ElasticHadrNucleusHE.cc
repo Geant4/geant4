@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElasticHadrNucleusHE.cc,v 1.69 2007-05-24 10:57:43 vnivanch Exp $
+// $Id: G4ElasticHadrNucleusHE.cc,v 1.70 2007-05-25 17:57:51 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -161,6 +161,7 @@ void G4ElasticData::DefineNucleusParameters(G4int Nucleus)
 //
 
 G4ElasticHadrNucleusHE::G4ElasticHadrNucleusHE()
+  :G4HadronicInteraction("G4ElasticHadrNucleusHE")
 {
   verboseLevel = 0;
   plabLowLimit = 20.0*MeV;
