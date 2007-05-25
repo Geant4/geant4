@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InclAblaCascadeInterface.hh,v 1.2 2007-05-25 05:39:11 miheikki Exp $ 
+// $Id: G4InclCascadeInterface.hh,v 1.1 2007-05-25 05:39:11 miheikki Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -32,18 +32,17 @@
 
 
 // CLASS DESCRIPTION
-// This class is a preliminary interface code for INCL4 cascade and
-// ABLA evaporation codes. This class is intended to be used as an 
-// interface for colliding light ions (deuterons, tritons, he3 and 
-// alphas) to nuclei.
+// This class is a preliminary interface code for INCL4 cascade
+// code. This class is intended to be used as an interface for
+// colliding hadrons (protons, neutrons, pions) to nuclei.
 
 // This class was created by Pekka Kaitaniemi
 // (kaitanie@cc.helsinki.fi) , Helsinki Institute of Physics using
 // G4CascadeInterface as a template.
 
 
-#ifndef G4INCLABLACASCADEINTERFACE_H
-#define G4INCLABLACASCADEINTERFACE_H 1
+#ifndef G4INCLCASCADEINTERFACE_H
+#define G4INCLCASCADEINTERFACE_H 1
 
 #include "G4Nucleon.hh"
 #include "G4Nucleus.hh"
@@ -65,10 +64,10 @@
 
 using namespace std;
 
-class G4InclAblaCascadeInterface : public G4VIntraNuclearTransportModel {
+class G4InclCascadeInterface : public G4VIntraNuclearTransportModel {
 
   /**
-   * Interface for INCL/ABLA. This interface handles basic hadron
+   * Interface for INCL. This interface handles basic hadron
    * bullet particles (protons, neutrons, pions).
    * @see G4InclAblaLightIonInterface
   */
@@ -76,21 +75,21 @@ public:
   /**
    * Basic constructor.
    */
-  G4InclAblaCascadeInterface();
+  G4InclCascadeInterface();
 
   
-  G4int operator==(G4InclAblaCascadeInterface& right) {
+  G4int operator==(G4InclCascadeInterface& right) {
     return (this == &right);
   }
 
-  G4int operator!=(G4InclAblaCascadeInterface& right) {
+  G4int operator!=(G4InclCascadeInterface& right) {
     return (this != &right);
   }
 
   /**
    * Destructor
    */
-  ~G4InclAblaCascadeInterface();
+  ~G4InclCascadeInterface();
 
   /**
    * Propagate
@@ -122,4 +121,4 @@ private:
   G4bool theAblaModelEnabled;
 };
 
-#endif // G4INCLABLACASCADEINTERFACE_H
+#endif // G4INCLCASCADEINTERFACE_H

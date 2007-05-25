@@ -23,33 +23,54 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InclAblaHardcodedData.hh,v 1.2 2007-05-25 05:39:11 miheikki Exp $ 
+// $Id: G4InclAblaVirtualData.hh,v 1.1 2007-05-25 05:39:11 miheikki Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
 // Alain Boudard, CEA (contact person INCL/ABLA)
 // Aatos Heikkinen, HIP (project coordination)
 
-#ifndef G4InclAblaHardcodedData_hh
-#define G4InclAblaHardcodedData_hh 1
+#ifndef G4InclAblaVirtualData_hh
+#define G4InclAblaVirtualData_hh 1
 
-#include "G4InclAblaVirtualData.hh"
+#include "globals.hh"
 
-class G4InclAblaHardcodedData : public G4InclAblaVirtualData {
+class G4InclAblaVirtualData {
+
+protected:
+  G4InclAblaVirtualData();
 
 public:
-  /**
-   * Hardcoded deformation and shell effects.
-   */
-  G4InclAblaHardcodedData();
+  G4bool setAlpha(G4int A, G4int Z, G4double value);
+  G4bool setEcnz(G4int A, G4int Z, G4double value);
+  G4bool setVgsld(G4int A, G4int Z, G4double value);
+  G4bool setPace2(G4int A, G4int Z, G4double value);
 
-  /**
-   * Sets the data into suitable arrays.
-   */
-  bool readData();
+  G4double getAlpha(G4int A, G4int Z);
+  G4double getEcnz(G4int A, G4int Z);
+  G4double getVgsld(G4int A, G4int Z);
+  G4double getPace2(G4int A, G4int Z);
 
+  G4int getAlphaRows();
+  G4int getAlphaCols();
+
+  G4int getPaceRows();
+  G4int getPaceCols();
+
+  virtual G4bool readData() = 0;
+	
 private:
 
+  static const G4int alphaRows = 155;
+  static const G4int alphaCols = 100;
+
+  static const G4int paceRows = 500;
+  static const G4int paceCols = 500;
+
+  G4double alpha[alphaRows][alphaCols];
+  G4double ecnz[alphaRows][alphaCols];
+  G4double vgsld[alphaRows][alphaCols];
+  G4double pace2[paceRows][paceCols];
 };
 
 #endif

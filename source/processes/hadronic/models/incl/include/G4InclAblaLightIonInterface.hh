@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InclAblaCascadeInterface.hh,v 1.2 2007-05-25 05:39:11 miheikki Exp $ 
+// $Id: G4InclAblaLightIonInterface.hh,v 1.1 2007-05-25 05:39:11 miheikki Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -42,8 +42,8 @@
 // G4CascadeInterface as a template.
 
 
-#ifndef G4INCLABLACASCADEINTERFACE_H
-#define G4INCLABLACASCADEINTERFACE_H 1
+#ifndef G4INCLABLALIGHTIONINTERFACE_H
+#define G4INCLABLALIGHTIONINTERFACE_H 1
 
 #include "G4Nucleon.hh"
 #include "G4Nucleus.hh"
@@ -65,7 +65,7 @@
 
 using namespace std;
 
-class G4InclAblaCascadeInterface : public G4VIntraNuclearTransportModel {
+class G4InclAblaLightIonInterface : public G4VIntraNuclearTransportModel {
 
   /**
    * Interface for INCL/ABLA. This interface handles basic hadron
@@ -76,21 +76,21 @@ public:
   /**
    * Basic constructor.
    */
-  G4InclAblaCascadeInterface();
+  G4InclAblaLightIonInterface();
 
   
-  G4int operator==(G4InclAblaCascadeInterface& right) {
+  G4int operator==(G4InclAblaLightIonInterface& right) {
     return (this == &right);
   }
 
-  G4int operator!=(G4InclAblaCascadeInterface& right) {
+  G4int operator!=(G4InclAblaLightIonInterface& right) {
     return (this != &right);
   }
 
   /**
    * Destructor
    */
-  ~G4InclAblaCascadeInterface();
+  ~G4InclAblaLightIonInterface();
 
   /**
    * Propagate
@@ -122,4 +122,4 @@ private:
   G4bool theAblaModelEnabled;
 };
 
-#endif // G4INCLABLACASCADEINTERFACE_H
+#endif // G4INCLABLALIGHTIONINTERFACE_H
