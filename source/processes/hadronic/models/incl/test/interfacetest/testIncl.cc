@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: testIncl.cc,v 1.1 2007-05-23 09:55:08 miheikki Exp $
+// $Id: testIncl.cc,v 1.2 2007-05-25 06:01:14 miheikki Exp $
 
 #include <vector>
 
@@ -35,6 +35,9 @@
 
 #include "globals.hh"
 #include "Randomize.hh"
+
+#include "G4StateManager.hh"
+#include "G4ParticleTable.hh"
 
 #include "G4Collider.hh"
 #include "G4InuclCollider.hh"
@@ -72,6 +75,7 @@
 #include "G4ElasticCascadeInterface.hh"
 //#include "G4InuclEvaporation.hh"
 
+#include "G4InclCascadeInterface.hh"
 #include "G4InclAblaCascadeInterface.hh"
 
 void test(std::string, int);
@@ -165,8 +169,11 @@ int tCascadeInterface() {
   G4Nucleus targetNucleus;                                        
 //   G4double a(10);
 //   G4double z(10);
-  G4double a(207);
-  G4double z(82);
+//   G4double a(207);
+//   G4double z(82);
+     G4double a(27);
+     G4double z(13);
+
   targetNucleus.SetParameters(a, z);
 
   if (verboseLevel > 1) {
@@ -179,6 +186,7 @@ int tCascadeInterface() {
   //  G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& theNucleus); 
   G4double            px = 0;
   G4double            py = 0;
+  //  G4double            pz = 2000;
   G4double            pz = 2000;
   G4ThreeVector       inVector(px, py, pz);
   G4ThreeVector       outVector, aPosition(0., 0., 0.);
@@ -187,6 +195,7 @@ int tCascadeInterface() {
 
   G4DynamicParticle   aParticle;
   aParticle.SetDefinition(aProton);
+  //  G4double Momentum = 2000;
   G4double Momentum = 2000;
   G4double Tkin = sqrt(Momentum*Momentum+938.27*938.27)-938.27;
 
@@ -203,9 +212,12 @@ int tCascadeInterface() {
 
   G4HadFinalState   * hadSta    = new G4HadFinalState();   
 
+  // Set the particle table singleton ready:
+  //  G4ParticleTable::GetParticleTable()->SetReadiness();
+
   //G4CascadeInterface *theCascade  = new G4CascadeInterface();
-  G4InclAblaCascadeInterface *theCascade = new G4InclAblaCascadeInterface();
-  
+  G4InclCascadeInterface *theCascade = new G4InclCascadeInterface();
+ 
   for (G4int cascadeID =1 ; cascadeID <= numberOfCascades; cascadeID++) { 
     if (verboseLevel > 1) G4cout << "inc " << cascadeID << G4endl;
     hadSta = theCascade->ApplyYourself(hadProj, targetNucleus);
