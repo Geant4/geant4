@@ -42,7 +42,7 @@ G4EvaporationInuclCollider::G4EvaporationInuclCollider()
 
 G4CollisionOutput G4EvaporationInuclCollider::collide(G4InuclParticle* /*bullet*/, G4InuclParticle* target) {
 
-  verboseLevel = 4;
+  verboseLevel = 0;
   if (verboseLevel > 3) {
     G4cout << " >>> G4EvaporationInuclCollider::evaporate" << G4endl;
   }
