@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolarizedCompton.cc,v 1.4 2007-05-23 08:52:20 vnivanch Exp $
+// $Id: G4PolarizedCompton.cc,v 1.5 2007-05-25 13:35:03 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //
@@ -172,21 +172,15 @@ G4double G4PolarizedCompton::GetMeanFreePath(
        G4cout << " Material     " << aMaterial          << G4endl;
      }
 
-     G4bool isOutRange;
-
-
      G4int midx= CurrentMaterialCutsCoupleIndex();
      G4PhysicsVector * aVector=(*theAsymmetryTable)(midx);
      
      G4double asymmetry=0;
-     if (aVector) 
+     if (aVector) {
+       G4bool isOutRange;
        asymmetry = aVector->GetValue(GammaEnergy, isOutRange);
-     else {
+     } else {
        G4cout << " MaterialIndex     " << midx << " is out of range \n";
-     }
-     if (isOutRange) {
-       G4cout << " MaterialIndex     " << midx 
-	      << "  GammaEnergy=" << GammaEnergy << " is out of range \n"; 
        asymmetry=0;
      }
 
