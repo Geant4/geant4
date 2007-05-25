@@ -1,0 +1,25 @@
+#
+# Macro file of "test10"
+# for Optical photons geometry test
+#
+/run/initialize
+# /particle/list
+#
+/tracking/verbose 1
+# Cone
+# TwistedBox
+/mydet/SelectDetector TwistedBox
+/run/beamOn 5
+#
+# TwistedTrd
+/mydet/SelectDetector TwistedTrd
+/run/beamOn 5
+#
+# TwistedTrap
+/mydet/SelectDetector TwistedTrap
+/run/beamOn 5
+#
+# TwistedTrap2
+/mydet/SelectDetector TwistedTrap2
+/run/beamOn 5
+
