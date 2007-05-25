@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DiffractiveExcitation.cc,v 1.5 2007-04-24 10:37:10 gunter Exp $
+// $Id: G4DiffractiveExcitation.cc,v 1.1 2007-05-25 06:56:53 vuzhinsk Exp $
 // ------------------------------------------------------------
 //      GEANT 4 class implemetation file
 //
@@ -35,7 +35,9 @@
 //	   excite the projectile and target
 //  Essential changed by V. Uzhinsky in November - December 2006
 //  in order to put it in a correspondence with original FRITIOF
-//  model. Variant of FRITIOF with nucleon de-excitation is implemented.  
+//  model. Variant of FRITIOF with nucleon de-excitation is implemented.
+//  Other changes by V.Uzhinsky in May 2007 were introduced to fit
+//  meson-nucleon interactions  
 // ---------------------------------------------------------------------
 
 
@@ -50,7 +52,7 @@
 #include "G4ExcitedString.hh"
 //#include "G4ios.hh"
 
-G4DiffractiveExcitation::G4DiffractiveExcitation()                                     // Uzhi
+G4DiffractiveExcitation::G4DiffractiveExcitation()                         // Uzhi
 {
 }
 
@@ -63,8 +65,10 @@ G4bool G4DiffractiveExcitation::
 // -------------------- Projectile parameters -----------------------------------
            G4bool PutOnMassShell=0;
 
-//	   G4double M0projectile=projectile->GetDefinition()->GetPDGMass();  // With de-excitation
-	   G4double M0projectile = Pprojectile.mag();                        // Without de-excitation
+// With de-excitation
+//	   G4double M0projectile=projectile->GetDefinition()->GetPDGMass();  
+// Without de-excitation
+	   G4double M0projectile = Pprojectile.mag();                        
 
            if(M0projectile < projectile->GetDefinition()->GetPDGMass()) 
              {
@@ -77,26 +81,35 @@ G4bool G4DiffractiveExcitation::
            G4int    PDGcode=projectile->GetDefinition()->GetPDGEncoding();
            G4int    absPDGcode=std::abs(PDGcode);
            G4double ProjectileDiffCut;
+           G4double ProjectileBackgroundWeight;           // Uzhi May 2007
+
+           G4double TargetBackgroundWeight;               // Uzhi May 2007
+
            G4double AveragePt2;
 
            if( absPDGcode > 1000 )                        //------Projectile is baryon --------
              {
               ProjectileDiffCut = 1.1;                    // GeV
+              ProjectileBackgroundWeight=0.;              // Uzhi May 2007
               AveragePt2 = 0.3;                           // GeV^2
              }
            else if( absPDGcode == 211 || PDGcode ==  111) //------Projectile is Pion -----------
              {
-              ProjectileDiffCut = 1.0;                   // GeV
+              ProjectileDiffCut = 0.6;                   // GeV Uzhi May 2007 1.0->0.6
+              ProjectileBackgroundWeight=0.9;            // Uzhi May 2007
               AveragePt2 = 0.3;                          // GeV^2
              }
            else if( absPDGcode == 321 || PDGcode == -311) //------Projectile is Kaon -----------
              {
-              ProjectileDiffCut = 1.1;                    // GeV
+              ProjectileDiffCut = 0.7;                    // GeV 1.1
+              ProjectileBackgroundWeight=0.5;             // Uzhi May 2007   ???
               AveragePt2 = 0.3;                           // GeV^2
              }
-           else                                           //------Projectile is undefined, Nucleon assumed
+           else                                           //------Projectile is undefined,
+                                                          //------Nucleon assumed
              {
               ProjectileDiffCut = 1.1;                    // GeV
+              ProjectileBackgroundWeight=0.;              // Uzhi May 2007
               AveragePt2 = 0.3;                           // GeV^2
              };
 
@@ -114,9 +127,11 @@ G4bool G4DiffractiveExcitation::
               M0target=target->GetDefinition()->GetPDGMass();
              }
      
-   	   G4double Mtarget2 = M0target * M0target;                      //Ptarget.mag2(); // for AA-inter.
+   	   G4double Mtarget2 = M0target * M0target;                      //Ptarget.mag2(); 
+                                                                         // for AA-inter.
 
            G4double NuclearNucleonDiffCut = 1.1*GeV;        
+           TargetBackgroundWeight=0.;                           // Uzhi May 2007
 
            G4double ProjectileDiffCut2 = ProjectileDiffCut * ProjectileDiffCut;
            G4double NuclearNucleonDiffCut2 = NuclearNucleonDiffCut * NuclearNucleonDiffCut;
@@ -154,8 +169,20 @@ G4bool G4DiffractiveExcitation::
            G4double S=Psum.mag2();                                          
            G4double SqrtS=std::sqrt(S);                                     
 
-           if(SqrtS < 2200*MeV) {return false;}   // The model cannot work for pp-interactions
-                                                  // at Plab < 1.3 GeV/c. Uzhi   
+           if(absPDGcode > 1000 && SqrtS < 2200*MeV) 
+             {return false;}                         // The model cannot work for 
+                                                     // p+p-interactions
+                                                     // at Plab < 1.3 GeV/c.
+
+           if(( absPDGcode == 211 || PDGcode ==  111) && SqrtS < 1600*MeV) 
+             {return false;}                         // The model cannot work for 
+                                                     // Pi+p-interactions
+                                                     // at Plab < 1. GeV/c.  
+
+           if(( absPDGcode == 321 || PDGcode == -311) && SqrtS < 1600*MeV) 
+             {return false;}                         // The model cannot work for 
+                                                     // K+p-interactions
+                                                     // at Plab < ??? GeV/c.  ???
 
 	   PZcms2=(S*S+Mprojectile2*Mprojectile2+Mtarget2*Mtarget2-
                                  2*S*Mprojectile2-2*S*Mtarget2-2*Mprojectile2*Mtarget2)/4./S;
@@ -201,7 +228,6 @@ G4bool G4DiffractiveExcitation::
 	   G4LorentzVector Qmomentum;
            G4double Qminus, Qplus;                                          
 
-// /* Vova
 	   G4int whilecount=0;
 	   do {
 //  Generate pt		
@@ -254,13 +280,31 @@ G4bool G4DiffractiveExcitation::
                G4double PMinusMin=std::sqrt(ProjMassT2+PZcms2)-PZcms;       
                G4double PMinusMax=SqrtS-TargMassT;                          
 
-               PMinusNew=ChooseP(PMinusMin,PMinusMax);                      
+               if(G4UniformRand() < ProjectileBackgroundWeight)              // Uzhi May 2007
+                 {
+                  PMinusNew=PMinusMax-(PMinusMax-PMinusMin)*G4UniformRand(); // Uzhi May 2007
+                 }                                                           // Uzhi May 2007
+               else                                                          // Uzhi May 2007
+                 {                                                           // Uzhi May 2007
+                  PMinusNew=ChooseP(PMinusMin, PMinusMax);                   // Uzhi May 2007
+                 };                                                          // Uzhi May 2007
+//               PMinusNew=ChooseP(PMinusMin, PMinusMax);                    // Uzhi May 2007
                Qminus=PMinusNew-Pprojectile.minus();                        
 
                G4double TPlusMin=std::sqrt(TargMassT2+PZcms2)-PZcms;        
-               G4double TPlusMax=SqrtS-ProjMassT;                           
+               G4double TPlusMax=SqrtS-PMinusNew;                            // Uzhi May 2007
+//               G4double TPlusMax=SqrtS-ProjMassT;                          // Uzhi May 2007 
 
-               TPlusNew=ChooseP(TPlusMin, TPlusMax);                        
+               if(G4UniformRand() < TargetBackgroundWeight)                  // Uzhi May 2007
+                 {
+                  TPlusNew=TPlusMax-(TPlusMax-TPlusMin)*G4UniformRand();     // Uzhi May 2007
+                 }                                                           // Uzhi May 2007
+               else                                                          // Uzhi May 2007
+                 {                                                           // Uzhi May 2007
+                  TPlusNew=ChooseP(TPlusMin, TPlusMax);                      // Uzhi May 2007
+                 };                                                          // Uzhi May 2007
+
+//               TPlusNew=ChooseP(TPlusMin, TPlusMax);                       // Uzhi May 2007 
                Qplus=-(TPlusNew-Ptarget.plus());                            
 
 	       Qmomentum.setPz( (Qplus-Qminus)/2 );
@@ -271,18 +315,15 @@ G4bool G4DiffractiveExcitation::
 //	     G4cout << "Qmomentum " << Qmomentum << G4endl;
 //	     G4cout << " Masses (P/T) : " << (Pprojectile+Qmomentum).mag() <<
 //	   		       " / " << (Ptarget-Qmomentum).mag() << G4endl;
-/*                                                                                 // Uzhi
-	   } while ( (Pprojectile+Qmomentum).mag2() <= Mprojectile2 ||
-	   	     (Ptarget-Qmomentum).mag2()     <= Mtarget2 );
-*/                                                                                 // Uzhi     *
 
+	   } while (
+( (Pprojectile+Qmomentum).mag2() <  Mprojectile2       ||      // Uzhi No without excitation
+  (Ptarget    -Qmomentum).mag2() <  Mtarget2             ) ||  // Uzhi   
+( (Pprojectile+Qmomentum).mag2() <  ProjectileDiffCut2 &&      // Uzhi No double Diffraction
+  (Ptarget    -Qmomentum).mag2()  <  NuclearNucleonDiffCut2) );// Uzhi
 
-	   } while (( (Pprojectile+Qmomentum).mag2() <  Mprojectile2       ||      // Uzhi No without excitation
-	   	      (Ptarget    -Qmomentum).mag2() <  Mtarget2             ) ||  // Uzhi   
-                    ( (Pprojectile+Qmomentum).mag2()  <  ProjectileDiffCut2 &&     // Uzhi No double Diffraction
-                      (Ptarget    -Qmomentum).mag2()  <  NuclearNucleonDiffCut2) );// Uzhi
-
-           if((Ptarget-Qmomentum).mag2() < NuclearNucleonDiffCut2)                 // Uzhi Projectile diffraction
+           if((Ptarget-Qmomentum).mag2() < NuclearNucleonDiffCut2)           // Uzhi 
+//Projectile diffraction
              {
               G4double TMinusNew=SqrtS-PMinusNew;
               Qminus=Ptarget.minus()-TMinusNew;
@@ -292,7 +333,8 @@ G4bool G4DiffractiveExcitation::
 	      Qmomentum.setPz( (Qplus-Qminus)/2 );                          
 	      Qmomentum.setE(  (Qplus+Qminus)/2 );                          
              }
-           else if((Pprojectile+Qmomentum).mag2() <  ProjectileDiffCut2)    // Uzhi Target diffraction
+           else if((Pprojectile+Qmomentum).mag2() <  ProjectileDiffCut2)    // Uzhi 
+//Target diffraction
              {
               G4double PPlusNew=SqrtS-TPlusNew;
               Qplus=PPlusNew-Pprojectile.plus();
@@ -305,8 +347,6 @@ G4bool G4DiffractiveExcitation::
 
 	   Pprojectile += Qmomentum;
 	   Ptarget     -= Qmomentum;
-
-   // Vova
 
 /*
 Pprojectile.setPz(0.);
