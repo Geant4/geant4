@@ -23,7 +23,7 @@ To run it:
         cd topc
 	./configure
 	make
-	make test
+	make check
 	[ Copy bin/topc-config to your path ]
     c. Verify that the Geant4 example installs:
         cd $G4INSTALL/examples/extended/parallel/ParN02
