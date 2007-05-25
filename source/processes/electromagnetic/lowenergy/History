@@ -1,4 +1,4 @@
-$Id: History,v 1.255 2007-05-16 20:57:59 pia Exp $
+$Id: History,v 1.256 2007-05-25 20:19:25 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,18 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+25.05.2007   MGP, tag emlowen-V08-03-01
+             Initialized static variables in G4hLowEnergyLoss;
+             not sure whether this is correct, since this is old
+             code moved from utils/, deprived of any documentation
+             and with an evident fortran look. A design review
+             is planned to take care of this domain in a proper way.
+             Also included an updated version of G4BraggModel
+             provided by V.I. due to an interface change: however
+             this class is not used anywhere in the package, and is
+             retained only for historical reasons; it is candidate to be
+             trashed in the next design review.
 
 16.05.2007   MGP, tag emlowen-V08-03-00
              First set of Geant4-DNA processes compliant with design
