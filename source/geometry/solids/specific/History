@@ -1,4 +1,4 @@
-$Id: History,v 1.111 2007-05-18 07:40:06 gcosmo Exp $
+$Id: History,v 1.112 2007-05-25 09:47:11 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+25-May-2007, G.Cosmo (geom-specific-V08-03-02)
+- Fixed default response of DistToIn/DistToOut for twisted solids.
+- Use G4TWISTDEBUG instead of G4SPECSDEBUG as debug conditional flag
+  for twisted solids.
+- Some cleanup in G4TwistTrapAlphaSide code.
 
 18-May-2007, G.Cosmo (geom-specific-V08-03-01)
 - Use kAngTolerance and kRadTolerance from G4GeometryTolerance class.
