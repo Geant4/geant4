@@ -37,24 +37,36 @@
 // 
 // * cirrone@lns.infn.it
 // ----------------------------------------------------------------------------
+
+// ==============================
+// PHYSICS PROCESSES:
+// ==============================
+//  Electromagnetic processes for: 
+//      muon plus, muon minus
+//     
+// 
+// ==============================
+// COMMENTS:
+// ==============================
+//  The considered processes are G4MultipleScattering, G4MuIonisation,
+//  G4MuBremsstrahlung, G4MuPairProduction and G4MuonMinusCaptureAtRest
+//
+
 #ifndef HADRONTHERAPYMUONSTANDARD_HH
 #define HADRONTHERAPYMUONSTANDARD_HH 1
 
 #include "G4VPhysicsConstructor.hh"
 #include "globals.hh"
 
-class HadrontherapyMuonStandard : public G4VPhysicsConstructor {
-
-public: 
-
-  HadrontherapyMuonStandard(const G4String& name = "muon-standard");
-  
+class HadrontherapyMuonStandard : public G4VPhysicsConstructor 
+{
+ public: 
+  HadrontherapyMuonStandard(const G4String& name = "Muon-Standard");
   virtual ~HadrontherapyMuonStandard();
   
-  // This method is dummy for physics
-  virtual void ConstructParticle() {};
-  
-  virtual void ConstructProcess();
+ protected:
+  void ConstructParticle() {};
+  void ConstructProcess();
 };
 #endif
 

@@ -38,24 +38,35 @@
 // * cirrone@lns.infn.it
 // ----------------------------------------------------------------------------
 
+// ==============================
+// PHYSICS PROCESSES:
+// ==============================
+//  Electromagnetic processes for: 
+//      photons
+//     
+// 
+// ==============================
+// COMMENTS:
+// ==============================
+//  The considered processes are G4PenelopePhotoElectric, G4PenelopeCompton
+//  G4PenelopeGammaConversion and G4PenelopeRayleigh 
+//
+
 #ifndef HADRONTHERAPYPHOTONPENELOPE_HH
 #define HADRONTHERAPYPHOTONPENELOPE_HH 1
 
 #include "G4VPhysicsConstructor.hh"
 #include "globals.hh"
 
-class HadrontherapyPhotonPenelope : public G4VPhysicsConstructor {
-
-public: 
-
-  HadrontherapyPhotonPenelope(const G4String& name = "photon-penelope");
-  
+class HadrontherapyPhotonPenelope : public G4VPhysicsConstructor 
+{
+ public: 
+  HadrontherapyPhotonPenelope(const G4String& name = "Photon-Penelope"); 
   virtual ~HadrontherapyPhotonPenelope();
   
-  // This method is dummy for physics
-  virtual void ConstructParticle() {};
-  
-  virtual void ConstructProcess();
+ protected:
+  void ConstructParticle() {};
+  void ConstructProcess();
 };
 #endif
 

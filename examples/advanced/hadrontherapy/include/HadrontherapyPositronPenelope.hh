@@ -38,24 +38,35 @@
 // * cirrone@lns.infn.it
 // ----------------------------------------------------------------------------
 
+// ==============================
+// PHYSICS PROCESSES:
+// ==============================
+//  Electromagnetic processes for: 
+//      positrons
+//     
+// 
+// ==============================
+// COMMENTS:
+// ==============================
+//  The considered processes are G4MultipleScattering, G4PenelopeIonisation,
+//  G4PenelopeBremsstrahlung and G4PenelopeAnnihilation
+//
+
 #ifndef HADRONTHERAPYPOSITRONPENELOPE_HH
 #define HADRONTHERAPYPOSITRONPENELOPE_HH 1
 
 #include "G4VPhysicsConstructor.hh"
 #include "globals.hh"
 
-class HadrontherapyPositronPenelope : public G4VPhysicsConstructor {
-
-public: 
-
-  HadrontherapyPositronPenelope(const G4String& name = "positron-penelope");
-  
+class HadrontherapyPositronPenelope : public G4VPhysicsConstructor 
+{
+ public: 
+  HadrontherapyPositronPenelope(const G4String& name = "Positron-Penelope");
   virtual ~HadrontherapyPositronPenelope();
   
-  // This method is dummy for physics
-  virtual void ConstructParticle() {};
-  
-  virtual void ConstructProcess();
+ protected:
+  void ConstructParticle() {};
+  void ConstructProcess();
 };
 
 #endif

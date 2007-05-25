@@ -38,24 +38,35 @@
 // * cirrone@lns.infn.it
 // ----------------------------------------------------------------------------
 
-#ifndef TST50PHOTONSTANDARD_HH
-#define TST50PHOTONSTANDARD_HH 1
+// ==============================
+// PHYSICS PROCESSES:
+// ==============================
+//  Electromagnetic processes for: 
+//      photons
+//     
+// 
+// ==============================
+// COMMENTS:
+// ==============================
+//  The considered processes are G4PhotoElectricEffect, G4ComptonScattering
+//  and G4GammaConversion 
+//
+
+#ifndef HADRONTHERAPYPHOTONSTANDARD_HH
+#define HADRONTHERAPYPHOTONSTANDARD_HH 1
 
 #include "G4VPhysicsConstructor.hh"
 #include "globals.hh"
 
-class HadrontherapyPhotonStandard : public G4VPhysicsConstructor {
-
-public: 
-
-  HadrontherapyPhotonStandard(const G4String& name = "photon-standard");
-  
+class HadrontherapyPhotonStandard : public G4VPhysicsConstructor 
+{
+ public: 
+  HadrontherapyPhotonStandard(const G4String& name = "Photon-Standard");
   virtual ~HadrontherapyPhotonStandard();
   
-  // This method is dummy for physics
-  virtual void ConstructParticle() {};
-  
-  virtual void ConstructProcess();
+ protected:
+  void ConstructParticle() {};
+  void ConstructProcess();
 };
 
 #endif

@@ -38,24 +38,35 @@
 // * cirrone@lns.infn.it
 // --------------------------------------------------------------
 
+// ==============================
+// PHYSICS PROCESSES:
+// ==============================
+//  Electromagnetic processes for: 
+//      electrons
+//     
+// 
+// ==============================
+// COMMENTS:
+// ==============================
+//  The considered processes are G4MultipleScattering, G4eIonisation
+//  and G4eBremsstrahlung 
+//
+
 #ifndef HADRONTHERAPYELECTRONSTANDARD_HH
 #define HADRONTHERAPYELECTRONSTANDARD_HH 1
 
 #include "G4VPhysicsConstructor.hh"
 #include "globals.hh"
 
-class HadrontherapyElectronStandard : public G4VPhysicsConstructor {
-
-public: 
-
-  HadrontherapyElectronStandard(const G4String& name = "electron-standard");
-  
+class HadrontherapyElectronStandard : public G4VPhysicsConstructor 
+{
+ public: 
+  HadrontherapyElectronStandard(const G4String& name = "Electron-Standard"); 
   virtual ~HadrontherapyElectronStandard();
   
-  // This method is dummy for physics
-  virtual void ConstructParticle() {};
-  
-  virtual void ConstructProcess();
+ protected:
+  void ConstructParticle() {};
+  void ConstructProcess();
 };
 
 #endif

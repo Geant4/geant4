@@ -38,24 +38,35 @@
 // * cirrone@lns.infn.it
 // ----------------------------------------------------------------------------
 
+// ==============================
+// PHYSICS PROCESSES:
+// ==============================
+//  Electromagnetic processes for: 
+//      positrons
+//     
+// 
+// ==============================
+// COMMENTS:
+// ==============================
+//  The considered processes are G4MultipleScattering, G4eIonisation,
+//  G4eBremsstrahlung and G4eplusAnnihilation
+//
+
 #ifndef HADRONTHERAPYPOSITRONSTANDARD_HH
 #define HADRONTHERAPYPOSITRONSTANDARD_HH 1
 
 #include "G4VPhysicsConstructor.hh"
 #include "globals.hh"
 
-class HadrontherapyPositronStandard : public G4VPhysicsConstructor {
-
-public: 
-
-  HadrontherapyPositronStandard(const G4String& name = "positron-standard");
-  
+class HadrontherapyPositronStandard : public G4VPhysicsConstructor 
+{
+ public: 
+  HadrontherapyPositronStandard(const G4String& name = "Positron-Standard");
   virtual ~HadrontherapyPositronStandard();
   
-  // This method is dummy for physics
-  virtual void ConstructParticle() {};
-  
-  virtual void ConstructProcess();
+ protected:
+  void ConstructParticle() {};
+  void ConstructProcess();
 };
 
 #endif

@@ -38,24 +38,35 @@
 // * cirrone@lns.infn.it
 // --------------------------------------------------------------
 
+// ==============================
+// PHYSICS PROCESSES:
+// ==============================
+//  Electromagnetic processes for: 
+//      electrons
+//     
+// 
+// ==============================
+// COMMENTS:
+// ==============================
+//  The considered processes are G4MultipleScattering, G4LowEnergyIonisation
+//  and G4LowEnergyBremsstrahlung (Low Energy Package, EEDL libraries)
+//
+
 #ifndef HADRONTHERAPYELECTRONEEDL_HH
 #define HADRONTHERAPYELECTRONEEDL_HH 1
 
 #include "G4VPhysicsConstructor.hh"
 #include "globals.hh"
 
-class HadrontherapyElectronEEDL : public G4VPhysicsConstructor {
-
-public: 
-
-  HadrontherapyElectronEEDL(const G4String& name = "electron-eedl");
-  
+class HadrontherapyElectronEEDL : public G4VPhysicsConstructor 
+{
+ public: 
+  HadrontherapyElectronEEDL(const G4String& name = "Electron-EEDL"); 
   virtual ~HadrontherapyElectronEEDL();
   
-  // This method is dummy for physics
-  virtual void ConstructParticle() {};
-  
-  virtual void ConstructProcess();
+ protected:
+  void ConstructParticle() {}; 
+  void ConstructProcess();
 };
 
 #endif

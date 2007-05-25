@@ -38,24 +38,36 @@
 // * cirrone@lns.infn.it
 // ----------------------------------------------------------------------------
 
+// ==============================
+// PHYSICS PROCESSES:
+// ==============================
+//  Electromagnetic processes for: 
+//      photons
+//     
+// 
+// ==============================
+// COMMENTS:
+// ==============================
+//  The considered processes are G4LowEnergyPhotoElectric, G4LowEnergyCompton
+//  G4LowEnergyGammaConversion and G4LowEnergyRayleigh (Low Energy Package, 
+//  EEDL libraries)
+//
+
 #ifndef HADRONTHERAPYPHOTONEPDL_HH
 #define HADRONTHERAPYPHOTONEPDL_HH 1
 
 #include "G4VPhysicsConstructor.hh"
 #include "globals.hh"
 
-class HadrontherapyPhotonEPDL : public G4VPhysicsConstructor {
-
-public: 
-
-  HadrontherapyPhotonEPDL(const G4String& name = "photon-epdl");
-  
+class HadrontherapyPhotonEPDL : public G4VPhysicsConstructor 
+{
+ public: 
+  HadrontherapyPhotonEPDL(const G4String& name = "Photon-EPDL"); 
   virtual ~HadrontherapyPhotonEPDL();
   
-  // This method is dummy for physics
-  virtual void ConstructParticle() {};
-  
-  virtual void ConstructProcess();
+ protected:
+  void ConstructParticle() {};
+  void ConstructProcess();
 };
 
 #endif
