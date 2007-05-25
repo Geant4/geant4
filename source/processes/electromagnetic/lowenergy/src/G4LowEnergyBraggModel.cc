@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LowEnergyBraggModel.cc,v 1.6 2006-06-29 19:40:11 gunter Exp $
+// $Id: G4LowEnergyBraggModel.cc,v 1.7 2007-05-25 08:21:08 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -221,11 +221,11 @@ G4double G4LowEnergyBraggModel::CrossSection(const G4MaterialCutsCouple* couple,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4DynamicParticle* G4LowEnergyBraggModel::SampleSecondary(
-                             const G4MaterialCutsCouple*,
-                             const G4DynamicParticle* dp,
-                                   G4double tmin,
-                                   G4double maxEnergy)
+void G4LowEnergyBraggModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
+					      const G4MaterialCutsCouple*,
+					      const G4DynamicParticle* dp,
+					      G4double tmin,
+					      G4double maxEnergy)
 {
   G4double tmax = MaxSecondaryEnergy(dp);
   G4double xmax = std::min(tmax, maxEnergy);
@@ -272,22 +272,7 @@ G4DynamicParticle* G4LowEnergyBraggModel::SampleSecondary(
   G4DynamicParticle* delta = new G4DynamicParticle(G4Electron::Electron(),
                                                    deltaDirection,deltaKinEnergy);
 
-  return delta;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-std::vector<G4DynamicParticle*>* G4LowEnergyBraggModel::SampleSecondaries(
-                             const G4MaterialCutsCouple* couple,
-                             const G4DynamicParticle* dp,
-                                   G4double tmin,
-                                   G4double maxEnergy)
-{
-  std::vector<G4DynamicParticle*>* vdp = new std::vector<G4DynamicParticle*>;
-  G4DynamicParticle* delta = SampleSecondary(couple, dp, tmin, maxEnergy);
   vdp->push_back(delta);
-
-  return vdp;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
