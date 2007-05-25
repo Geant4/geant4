@@ -1,4 +1,4 @@
-$Id: History,v 1.23 2007-05-24 14:19:19 vnivanch Exp $
+$Id: History,v 1.24 2007-05-25 09:59:14 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+25-05-07  V.Ivant (gtherapy-V08-03-02)
+- Fixed singleton GetPointer method 
 
 24-05-07  V.Ivant (gtherapy-V08-03-01)
 - substitute autoptr by normal pointers in Histo to avoid crash

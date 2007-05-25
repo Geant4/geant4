@@ -52,7 +52,8 @@ Histo* Histo::fManager = 0;
 Histo* Histo::GetPointer()
 {
   if(!fManager) {
-    fManager = new Histo();
+    static Histo manager;
+    fManager = &manager;
   }
   return fManager;
 }
@@ -317,6 +318,8 @@ void Histo::bookHisto()
   // length of the variable names in a ntuple
   if(nTuple) 
      ntup = tpf->create( "100", "Dose deposite","float r, z, e" );
+
+  delete hf;
   delete tpf;
 #endif
 }
