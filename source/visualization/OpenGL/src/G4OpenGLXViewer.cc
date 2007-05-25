@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXViewer.cc,v 1.41 2007-05-24 18:27:13 allison Exp $
+// $Id: G4OpenGLXViewer.cc,v 1.42 2007-05-25 10:47:17 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -292,7 +292,17 @@ void G4OpenGLXViewer::CreateMainWindow () {
   XIfEvent (dpy, &event, G4OpenGLXViewerWaitForNotify, (char*) win);
 
 // connect the context to a window
-  glXMakeCurrent (dpy, win, cx);
+  Bool success = glXMakeCurrent (dpy, win, cx);
+  if (!success) {
+    fViewId = -1;  // This flags an error.
+    G4cerr << "G4OpenGLViewer::G4OpenGLViewer failed to attach a GLX context."
+	 << G4endl;
+    GLint error = GL_NO_ERROR;
+    while ((error = glGetError()) != GL_NO_ERROR) {
+      G4cout << "GL Error: " << gluErrorString(error) << G4endl;
+    }
+    return;
+  }
 
 }
 
