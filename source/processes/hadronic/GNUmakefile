@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.19 2004-06-01 05:37:34 hpw Exp $
+# $Id: GNUmakefile,v 1.20 2007-05-25 19:29:59 dennis Exp $
 # ----------------------------------------------------------------
 # GNUmakefile for hadronic processes library.  G.Folger 10-Dec-97.
 # ----------------------------------------------------------------
@@ -38,6 +38,7 @@ SUBDIRS += models/leading_particle
 SUBDIRS += models/low_energy
 SUBDIRS += models/management
 SUBDIRS += models/neutron_hp
+SUBDIRS += models/lll_fission
 SUBDIRS += models/photolepton_hadron/muon_nuclear
 SUBDIRS += models/parton_string/diffraction
 SUBDIRS += models/parton_string/hadronization
@@ -63,6 +64,7 @@ SUBLIBS +=  G4hadronic_leading_particle
 SUBLIBS +=  G4hadronic_LE
 SUBLIBS +=  G4had_mod_man
 SUBLIBS +=  G4had_neu_hp
+SUBLIBS +=  G4had_lll_fis
 SUBLIBS +=  G4hadronic_radioactivedecay
 SUBLIBS +=  G4had_theo_max
 SUBLIBS +=  G4had_mod_util
