@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VTwistedFaceted.cc,v 1.17 2007-05-23 13:26:54 gcosmo Exp $
+// $Id: G4VTwistedFaceted.cc,v 1.18 2007-05-25 09:42:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -803,7 +803,7 @@ G4double G4VTwistedFaceted::DistanceToIn (const G4ThreeVector& p) const
       }
    } // switch end
 
-   return kInfinity;
+   return 0;
 }
 
 
