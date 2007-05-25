@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DiffuseElastic.cc,v 1.1 2007-05-24 14:08:04 grichine Exp $
+// $Id: G4DiffuseElastic.cc,v 1.2 2007-05-25 16:00:07 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -166,7 +166,8 @@ G4HadFinalState* G4DiffuseElastic::ApplyYourself(
   //
   // Sample t
   //
-  if(gtype == fQElastic) {
+  if(gtype == fQElastic) 
+  {
     if (verboseLevel >1) 
       G4cout << "G4DiffuseElastic: Z= " << Z << " N= " 
 	     << N << " pdg= " <<  projPDG
@@ -180,8 +181,8 @@ G4HadFinalState* G4DiffuseElastic::ApplyYourself(
     else if(plab > plabLowLimit) gtype = fLElastic;
     else gtype = fSWave;
   }
-
-  if(gtype == fLElastic) {
+  if(gtype == fLElastic) 
+  {
     t = GeV*GeV*SampleT(ptot,m1,m2,aTarget);
     if(t > tmax) gtype = fSWave;
   }
@@ -466,3 +467,64 @@ G4DiffuseElastic::Fctcos(G4double t,
 }
 
 
+
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////
+//
+// return differential elastic cross section d(sigma)/d(omega) 
+
+G4double 
+G4DiffuseElastic::GetDiffuseElasticXsc( G4ParticleDefinition* particle, 
+                                        G4double theta, 
+			                G4double momentum, 
+                                        G4double A         )
+{
+  G4double sigma, bzero, bzero2, bonebyarg, bonebyarg2, damp, damp2;
+  G4double delta, diffuse, gamma;
+
+  G4double wavek = momentum/hbarc;  // wave vector
+  G4double r0    = 1.08*fermi;
+  G4double rad   = r0*std::pow(A, 1./3.);
+  G4double kr    = wavek*rad;
+  G4double kr2   = kr*kr;
+  G4double krt   = kr*theta;
+
+  bzero      = BesselJzero(krt);
+  bzero2     = bzero*bzero;    
+  bonebyarg  = BesselOneByArg(krt);
+  bonebyarg2 = bonebyarg*bonebyarg;  
+
+  if (particle == theProton)
+  {
+    diffuse = 0.63*fermi;
+    gamma   = 0.3*fermi;
+    delta   = 0.1*fermi*fermi;
+  }
+  else // as proton, if were not defined 
+  {
+    diffuse = 0.63*fermi;
+    gamma   = 0.3*fermi;
+    delta   = 0.1*fermi*fermi;
+  }
+  G4double kg    = wavek*delta;
+  G4double kg2   = kg*kg;
+  G4double dk2t  = delta*wavek*wavek*theta;
+  G4double dk2t2 = dk2t*dk2t;
+
+  G4double pikdt = pi*wavek*diffuse*theta;
+  damp           = DampFactor(pikdt);
+  damp2          = damp*damp;
+
+  sigma  = kg2 + dk2t2;
+  sigma *= bzero2;
+  sigma += kr2*bonebyarg2;
+  sigma *= damp2*rad*rad;
+
+  return sigma;
+}

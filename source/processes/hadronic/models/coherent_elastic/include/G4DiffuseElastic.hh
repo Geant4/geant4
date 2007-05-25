@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DiffuseElastic.hh,v 1.2 2007-05-24 14:38:29 grichine Exp $
+// $Id: G4DiffuseElastic.hh,v 1.3 2007-05-25 16:00:07 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -87,12 +87,14 @@ public:
 
   G4double SampleT(G4double p, G4double m1, G4double m2, G4double A);
 
-  G4double GetDiffuseElasticXsc( G4ParticleDefiniton* particle, 
+  G4double GetDiffuseElasticXsc( G4ParticleDefinition* particle, 
                                  G4double theta, 
 			         G4double momentum, 
 				 G4double A         );  
   G4double BesselJzero(G4double z);
   G4double BesselJone(G4double z);
+  G4double DampFactor(G4double z);
+  G4double BesselOneByArg(G4double z);
 
 private:
 
@@ -254,7 +256,48 @@ inline G4double G4DiffuseElastic::BesselJone(G4double value)
   return bessel;
 }
 
+////////////////////////////////////////////////////////////////////
+//
+// damp factor in diffraction x*pi/sh(x*pi)
+
+inline G4double G4DiffuseElastic::DampFactor(G4double x)
+{
+  G4double df;
+  G4double f2 = 2., f3 = 6., f4 = 24.; // first factorials
+
+  // x *= pi;
+
+  if( std::fabs(x) < 0.01 )
+  { 
+    df = 1./(1. + x/f2 + x*x/f3 + x*x*x/f4);
+  }
+  else
+  {
+    df = x/std::sinh(x); 
+  }
+  return df;
+}
 
 
+////////////////////////////////////////////////////////////////////
+//
+// return J1(x)/x with special case for small x
+
+inline G4double G4DiffuseElastic::BesselOneByArg(G4double x)
+{
+  G4double x2, result;
+  
+  if( std::fabs(x) < 0.01 )
+  { 
+   x     *= 0.5;
+   x2     = x*x;
+   result = 2. - x2 + x2*x2/6.;
+  }
+  else
+  {
+    result = BesselJone(x)/x; 
+  }
+  return result;
+}
 
 #endif
