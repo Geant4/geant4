@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VisManager.cc,v 1.112 2007-03-27 15:39:43 allison Exp $
+// $Id: G4VisManager.cc,v 1.113 2007-05-25 10:50:26 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -586,56 +586,64 @@ void G4VisManager::CreateViewer (G4String name) {
 
   if (fpSceneHandler) {
     G4VViewer* p = fpGraphicsSystem -> CreateViewer (*fpSceneHandler, name);
-    if (p) {
-      fpViewer = p;                             // Make current.
-      fpViewer -> Initialise ();
-      fpSceneHandler -> AddViewerToList (fpViewer);
-      fpSceneHandler -> SetCurrentViewer (fpViewer);
-
-      if (fVerbosity >= confirmations) {
-	G4cout << "G4VisManager::CreateViewer: new viewer created:"
+    if (!p) {
+      if (fVerbosity >= errors) {
+	G4cout << "ERROR in G4VisManager::CreateViewer during "
+	       << fpGraphicsSystem -> GetName ()
+	       << " viewer creation.\n  No action taken."
 	       << G4endl;
       }
+    } else {
+      p -> Initialise ();
+      if (p -> GetViewId() < 0) {
+	if (fVerbosity >= errors) {
+	G4cout << "ERROR in G4VisManager::CreateViewer during "
+	       << fpGraphicsSystem -> GetName ()
+	       << " viewer initialisation.\n  No action taken."
+	       << G4endl;
+	}
+      } else {
+	fpViewer = p;                             // Make current.
+	fpSceneHandler -> AddViewerToList (fpViewer);
+	fpSceneHandler -> SetCurrentViewer (fpViewer);
 
-      const G4ViewParameters& vp = fpViewer->GetViewParameters();
-      if (fVerbosity >= parameters) {
-	G4cout << " view parameters are:\n  " << vp << G4endl;
-      }
-
-      if (vp.IsCulling () && vp.IsCullingInvisible ()) {
-	static G4bool warned = false;
 	if (fVerbosity >= confirmations) {
-	  if (!warned) {
-	    G4cout <<
+	  G4cout << "G4VisManager::CreateViewer: new viewer created."
+		 << G4endl;
+	}
+
+	const G4ViewParameters& vp = fpViewer->GetViewParameters();
+	if (fVerbosity >= parameters) {
+	  G4cout << " view parameters are:\n  " << vp << G4endl;
+	}
+
+	if (vp.IsCulling () && vp.IsCullingInvisible ()) {
+	  static G4bool warned = false;
+	  if (fVerbosity >= confirmations) {
+	    if (!warned) {
+	      G4cout <<
   "NOTE: objects with visibility flag set to \"false\""
   " will not be drawn!"
   "\n  \"/vis/viewer/set/culling global false\" to Draw such objects."
   "\n  Also see other \"/vis/viewer/set\" commands."
-		   << G4endl;
-	    warned = true;
+		     << G4endl;
+	      warned = true;
+	    }
 	  }
 	}
-      }
-      if (vp.IsCullingCovered ()) {
-	static G4bool warned = false;
-	if (fVerbosity >= warnings) {
-	  if (!warned) {
-	    G4cout <<
+	if (vp.IsCullingCovered ()) {
+	  static G4bool warned = false;
+	  if (fVerbosity >= warnings) {
+	    if (!warned) {
+	      G4cout <<
   "WARNING: covered objects in solid mode will not be rendered!"
   "\n  \"/vis/viewer/set/culling coveredDaughters false\" to reverse this."
   "\n  Also see other \"/vis/viewer/set\" commands."
-		 << G4endl;
-	    warned = true;
+		     << G4endl;
+	      warned = true;
+	    }
 	  }
 	}
-      }
-    }
-    else {
-      if (fVerbosity >= errors) {
-	G4cout << "ERROR in G4VisManager::CreateViewer during "
-	       << fpGraphicsSystem -> GetName ()
-	       <<	" viewer creation.\n  No action taken."
-	       << G4endl;
       }
     }
   }
