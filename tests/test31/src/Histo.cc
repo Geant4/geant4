@@ -63,7 +63,7 @@ Histo* Histo::GetInstance()
 Histo::Histo()
 {
   m_verbose    = 0;
-  m_histName   = "histo.paw";
+  m_histName   = "histo.hbook";
   m_histType   = "hbook";
   m_Histo      = 0;
   m_Clouds     = 0;
@@ -74,10 +74,10 @@ Histo::Histo()
   m_tuplePath.clear();
   m_tupleColumns.clear();
   m_ntup.clear();
-  m_tree       = 0;
-  m_af         = 0;
 #ifdef G4ANALYSIS_USE
   m_messenger = new HistoMessenger(this);
+  m_af        = 0;
+  m_tree      = 0;
 #endif
 }
 
@@ -88,8 +88,8 @@ Histo::~Histo()
 #ifdef G4ANALYSIS_USE
   clear();
   delete m_messenger;
-#endif
   delete m_af;
+#endif
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
