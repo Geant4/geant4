@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLSceneHandler.cc,v 1.50 2007-04-04 16:50:27 allison Exp $
+// $Id: G4OpenGLSceneHandler.cc,v 1.51 2007-05-25 15:41:38 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -372,7 +372,7 @@ void G4OpenGLSceneHandler::AddCircleSquare
     const GLubyte* marker =
       G4OpenGLBitMapStore::GetBitMap(shape, size, filled);
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-    glBitmap(GLfloat(size), GLfloat(size), size/2., size/2., 0., 0., marker);
+    glBitmap(GLsizei(size), GLsizei(size), size/2., size/2., 0., 0., marker);
   }
 }
 
