@@ -48,19 +48,18 @@
 /mydet/SelectDetector Polycone
 /run/beamOn 5
 #
-# TwistedBox
-/mydet/SelectDetector TwistedBox
-/run/beamOn 5
-#
-# TwistedTrd
-/mydet/SelectDetector TwistedTrd
-/run/beamOn 5
-#
 # TwistedTrap
 /mydet/SelectDetector TwistedTrap
-/run/beamOn 5
+/run/beamOn 1
 #
 # TwistedTrap2
 /mydet/SelectDetector TwistedTrap2
-/run/beamOn 5
-
+/run/beamOn 1
+#
+# TwistedTrd
+/mydet/SelectDetector TwistedTrd
+/run/beamOn 1
+#
+# TwistedBox
+/mydet/SelectDetector TwistedBox
+/run/beamOn 1
