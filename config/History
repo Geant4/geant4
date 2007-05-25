@@ -1,4 +1,4 @@
-$Id: History,v 1.290 2007-05-12 15:57:08 gcosmo Exp $
+$Id: History,v 1.291 2007-05-25 10:42:03 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,7 +16,7 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-12th May 2007  Gabriele Cosmo
+12th May 2007  Gabriele Cosmo (config-V08-03-00)
 - Added "error_propagation" module to binmake.gmk.
 - Removed G4LIB_BUILD_LISTS flag. Physics lists are built by default.
 
