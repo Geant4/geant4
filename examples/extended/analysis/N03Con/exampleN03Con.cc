@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: exampleN03Con.cc,v 1.1 2007-05-26 00:18:27 tkoi Exp $
+// $Id: exampleN03Con.cc,v 1.2 2007-05-26 00:24:09 tkoi Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -134,11 +134,11 @@ int main(int argc,char** argv)
     {
       // G4UIterminal is a (dumb) terminal
       //
-      UI->ApplyCommand("/control/execute vis.mac");    
+      // UI->ApplyCommand("/control/execute vis.mac");    
 #if defined(G4UI_USE_XM) || defined(G4UI_USE_WIN32)
       // Customize the G4UIXm,Win32 menubar with a macro file
       //
-      UI->ApplyCommand("/control/execute visTutor/gui.mac");
+      // UI->ApplyCommand("/control/execute visTutor/gui.mac");
 #endif
       session->SessionStart();
       delete session;
