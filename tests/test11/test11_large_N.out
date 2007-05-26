@@ -853,7 +853,7 @@ Tst11PhysicsList::SetCuts:CutLength : 1000 (mm)
 /gun/energy 10 GeV
 /mydet/SelectMaterial Pb
 SimpleBox is now made of Pb
-/run/beamOn 1
+/run/beamOn 20
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
 The cut in range [1000 (mm)]   is too big   for material  idx=2
 The cut in energy is set1.79769e+305GeV 
@@ -1003,7 +1003,7 @@ hIoni:   tables are built for  pi-
 /gun/energy 10 GeV
 /mydet/SelectMaterial Pb
 SimpleBox is now made of Pb
-/run/beamOn 1
+/run/beamOn 20
 #
 # pi+ at 10 GeV in Pb
 #
@@ -1011,7 +1011,7 @@ SimpleBox is now made of Pb
 /gun/energy 10 GeV
 /mydet/SelectMaterial Pb
 SimpleBox is now made of Pb
-/run/beamOn 1
+/run/beamOn 20
 #
 # pi- at 10 GeV in Pb
 #
@@ -1019,7 +1019,7 @@ SimpleBox is now made of Pb
 /gun/energy 10 GeV
 /mydet/SelectMaterial Pb
 SimpleBox is now made of Pb
-/run/beamOn 1
+/run/beamOn 20
 #
 # kaon+ at 10 GeV in Pb
 #
@@ -1027,7 +1027,7 @@ SimpleBox is now made of Pb
 /gun/energy 10 GeV
 /mydet/SelectMaterial Pb
 SimpleBox is now made of Pb
-/run/beamOn 1
+/run/beamOn 20
 #
 # kaon- at 10 GeV in Pb
 #
@@ -1035,7 +1035,7 @@ SimpleBox is now made of Pb
 /gun/energy 10 GeV
 /mydet/SelectMaterial Pb
 SimpleBox is now made of Pb
-/run/beamOn 1
+/run/beamOn 20
 #
 # kaon0S at 10 GeV in Pb
 #
@@ -1043,7 +1043,7 @@ SimpleBox is now made of Pb
 /gun/energy 10 GeV
 /mydet/SelectMaterial Pb
 SimpleBox is now made of Pb
-/run/beamOn 1
+/run/beamOn 20
 #
 # kaon0L at 10 GeV in Pb
 #
@@ -1051,7 +1051,7 @@ SimpleBox is now made of Pb
 /gun/energy 10 GeV
 /mydet/SelectMaterial Pb
 SimpleBox is now made of Pb
-/run/beamOn 1
+/run/beamOn 20
 #
 # proton at 10 GeV in Al
 #
@@ -1059,7 +1059,7 @@ SimpleBox is now made of Pb
 /gun/energy 10 GeV
 /mydet/SelectMaterial Al
 SimpleBox is now made of Al
-/run/beamOn 1
+/run/beamOn 20
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
 The cut in range [1000 (mm)]   is too big   for material  idx=1
 The cut in energy is set1.7976931e+305GeV 
@@ -1203,7 +1203,7 @@ hIoni:   tables are built for  pi-
 /gun/energy 10 GeV
 /mydet/SelectMaterial Al
 SimpleBox is now made of Al
-/run/beamOn 1
+/run/beamOn 20
 #
 # pi+ at 10 GeV in Al
 #
@@ -1211,7 +1211,7 @@ SimpleBox is now made of Al
 /gun/energy 10 GeV
 /mydet/SelectMaterial Al
 SimpleBox is now made of Al
-/run/beamOn 1
+/run/beamOn 20
 #
 # pi- at 10 GeV in Al
 #
@@ -1219,7 +1219,7 @@ SimpleBox is now made of Al
 /gun/energy 10 GeV
 /mydet/SelectMaterial Al
 SimpleBox is now made of Al
-/run/beamOn 1
+/run/beamOn 20
 #
 # kaon+ at 10 GeV in Al
 #
@@ -1227,7 +1227,7 @@ SimpleBox is now made of Al
 /gun/energy 10 GeV
 /mydet/SelectMaterial Al
 SimpleBox is now made of Al
-/run/beamOn 1
+/run/beamOn 20
 #
 # kaon- at 10 GeV in Al
 #
@@ -1235,7 +1235,7 @@ SimpleBox is now made of Al
 /gun/energy 10 GeV
 /mydet/SelectMaterial Al
 SimpleBox is now made of Al
-/run/beamOn 1
+/run/beamOn 20
 #
 # kaon0S at 10 GeV in Al
 #
@@ -1243,7 +1243,7 @@ SimpleBox is now made of Al
 /gun/energy 10 GeV
 /mydet/SelectMaterial Al
 SimpleBox is now made of Al
-/run/beamOn 1
+/run/beamOn 20
 #
 # kaon0L at 10 GeV in Al
 #
@@ -1251,7 +1251,7 @@ SimpleBox is now made of Al
 /gun/energy 10 GeV
 /mydet/SelectMaterial Al
 SimpleBox is now made of Al
-/run/beamOn 1
+/run/beamOn 20
 #
 # proton at 10 GeV in Air
 #
@@ -1259,7 +1259,7 @@ SimpleBox is now made of Al
 /gun/energy 10 GeV
 /mydet/SelectMaterial Air
 SimpleBox is now made of Air
-/run/beamOn 1
+/run/beamOn 20
 
 conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
       sampling secondary e+e- according Bethe-Heitler model
@@ -1400,7 +1400,7 @@ hIoni:   tables are built for  pi-
 /gun/energy 10 GeV
 /mydet/SelectMaterial Air
 SimpleBox is now made of Air
-/run/beamOn 1
+/run/beamOn 20
 #
 # pi+ at 10 GeV in Air
 #
@@ -1408,7 +1408,7 @@ SimpleBox is now made of Air
 /gun/energy 10 GeV
 /mydet/SelectMaterial Air
 SimpleBox is now made of Air
-/run/beamOn 1
+/run/beamOn 20
 #
 # pi- at 10 GeV in Air
 #
@@ -1416,7 +1416,7 @@ SimpleBox is now made of Air
 /gun/energy 10 GeV
 /mydet/SelectMaterial Air
 SimpleBox is now made of Air
-/run/beamOn 1
+/run/beamOn 20
 #
 # kaon+ at 10 GeV in Air
 #
@@ -1424,7 +1424,7 @@ SimpleBox is now made of Air
 /gun/energy 10 GeV
 /mydet/SelectMaterial Air
 SimpleBox is now made of Air
-/run/beamOn 1
+/run/beamOn 20
 #
 # kaon- at 10 GeV in Air
 #
@@ -1432,7 +1432,7 @@ SimpleBox is now made of Air
 /gun/energy 10 GeV
 /mydet/SelectMaterial Air
 SimpleBox is now made of Air
-/run/beamOn 1
+/run/beamOn 20
 #
 # kaon0S at 10 GeV in Air
 #
@@ -1440,7 +1440,7 @@ SimpleBox is now made of Air
 /gun/energy 10 GeV
 /mydet/SelectMaterial Air
 SimpleBox is now made of Air
-/run/beamOn 1
+/run/beamOn 20
 #
 # kaon0L at 10 GeV in Air
 #
@@ -1448,7 +1448,7 @@ SimpleBox is now made of Air
 /gun/energy 10 GeV
 /mydet/SelectMaterial Air
 SimpleBox is now made of Air
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 MeV in G4_H
 #
@@ -1456,7 +1456,7 @@ SimpleBox is now made of Air
 /gun/energy 10 MeV
 /mydet/SelectMaterial G4_H
 SimpleBox is now made of G4_H
-/run/beamOn 1
+/run/beamOn 20
 
 conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
       sampling secondary e+e- according Bethe-Heitler model
@@ -1597,7 +1597,7 @@ hIoni:   tables are built for  pi-
 /gun/energy 1 MeV
 /mydet/SelectMaterial G4_H
 SimpleBox is now made of G4_H
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 keV in G4_H
 #
@@ -1605,7 +1605,7 @@ SimpleBox is now made of G4_H
 /gun/energy 100 keV
 /mydet/SelectMaterial G4_H
 SimpleBox is now made of G4_H
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 keV in G4_H
 #
@@ -1613,7 +1613,7 @@ SimpleBox is now made of G4_H
 /gun/energy 10 keV
 /mydet/SelectMaterial G4_H
 SimpleBox is now made of G4_H
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 keV in G4_H
 #
@@ -1621,7 +1621,7 @@ SimpleBox is now made of G4_H
 /gun/energy 1 keV
 /mydet/SelectMaterial G4_H
 SimpleBox is now made of G4_H
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 eV  in G4_H
 #
@@ -1629,7 +1629,7 @@ SimpleBox is now made of G4_H
 /gun/energy 100 eV 
 /mydet/SelectMaterial G4_H
 SimpleBox is now made of G4_H
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 eV  in G4_H
 #
@@ -1637,7 +1637,7 @@ SimpleBox is now made of G4_H
 /gun/energy 10 eV 
 /mydet/SelectMaterial G4_H
 SimpleBox is now made of G4_H
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 eV  in G4_H
 #
@@ -1645,7 +1645,7 @@ SimpleBox is now made of G4_H
 /gun/energy 1 eV 
 /mydet/SelectMaterial G4_H
 SimpleBox is now made of G4_H
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 MeV in G4_He
 #
@@ -1653,7 +1653,7 @@ SimpleBox is now made of G4_H
 /gun/energy 10 MeV
 /mydet/SelectMaterial G4_He
 SimpleBox is now made of G4_He
-/run/beamOn 1
+/run/beamOn 20
 
 conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
       sampling secondary e+e- according Bethe-Heitler model
@@ -1794,7 +1794,7 @@ hIoni:   tables are built for  pi-
 /gun/energy 1 MeV
 /mydet/SelectMaterial G4_He
 SimpleBox is now made of G4_He
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 keV in G4_He
 #
@@ -1802,7 +1802,7 @@ SimpleBox is now made of G4_He
 /gun/energy 100 keV
 /mydet/SelectMaterial G4_He
 SimpleBox is now made of G4_He
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 keV in G4_He
 #
@@ -1810,7 +1810,7 @@ SimpleBox is now made of G4_He
 /gun/energy 10 keV
 /mydet/SelectMaterial G4_He
 SimpleBox is now made of G4_He
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 keV in G4_He
 #
@@ -1818,7 +1818,7 @@ SimpleBox is now made of G4_He
 /gun/energy 1 keV
 /mydet/SelectMaterial G4_He
 SimpleBox is now made of G4_He
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 eV  in G4_He
 #
@@ -1826,7 +1826,7 @@ SimpleBox is now made of G4_He
 /gun/energy 100 eV 
 /mydet/SelectMaterial G4_He
 SimpleBox is now made of G4_He
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 eV  in G4_He
 #
@@ -1834,7 +1834,7 @@ SimpleBox is now made of G4_He
 /gun/energy 10 eV 
 /mydet/SelectMaterial G4_He
 SimpleBox is now made of G4_He
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 eV  in G4_He
 #
@@ -1842,7 +1842,7 @@ SimpleBox is now made of G4_He
 /gun/energy 1 eV 
 /mydet/SelectMaterial G4_He
 SimpleBox is now made of G4_He
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 MeV in G4_Li
 #
@@ -1850,7 +1850,7 @@ SimpleBox is now made of G4_He
 /gun/energy 10 MeV
 /mydet/SelectMaterial G4_Li
 SimpleBox is now made of G4_Li
-/run/beamOn 1
+/run/beamOn 20
 
 conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
       sampling secondary e+e- according Bethe-Heitler model
@@ -1991,7 +1991,7 @@ hIoni:   tables are built for  pi-
 /gun/energy 1 MeV
 /mydet/SelectMaterial G4_Li
 SimpleBox is now made of G4_Li
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 keV in G4_Li
 #
@@ -1999,7 +1999,7 @@ SimpleBox is now made of G4_Li
 /gun/energy 100 keV
 /mydet/SelectMaterial G4_Li
 SimpleBox is now made of G4_Li
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 keV in G4_Li
 #
@@ -2007,7 +2007,7 @@ SimpleBox is now made of G4_Li
 /gun/energy 10 keV
 /mydet/SelectMaterial G4_Li
 SimpleBox is now made of G4_Li
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 keV in G4_Li
 #
@@ -2015,7 +2015,7 @@ SimpleBox is now made of G4_Li
 /gun/energy 1 keV
 /mydet/SelectMaterial G4_Li
 SimpleBox is now made of G4_Li
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 eV  in G4_Li
 #
@@ -2023,7 +2023,7 @@ SimpleBox is now made of G4_Li
 /gun/energy 100 eV 
 /mydet/SelectMaterial G4_Li
 SimpleBox is now made of G4_Li
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 eV  in G4_Li
 #
@@ -2031,7 +2031,7 @@ SimpleBox is now made of G4_Li
 /gun/energy 10 eV 
 /mydet/SelectMaterial G4_Li
 SimpleBox is now made of G4_Li
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 eV  in G4_Li
 #
@@ -2039,7 +2039,7 @@ SimpleBox is now made of G4_Li
 /gun/energy 1 eV 
 /mydet/SelectMaterial G4_Li
 SimpleBox is now made of G4_Li
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 MeV in G4_Be
 #
@@ -2047,7 +2047,7 @@ SimpleBox is now made of G4_Li
 /gun/energy 10 MeV
 /mydet/SelectMaterial G4_Be
 SimpleBox is now made of G4_Be
-/run/beamOn 1
+/run/beamOn 20
 
 conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
       sampling secondary e+e- according Bethe-Heitler model
@@ -2188,7 +2188,7 @@ hIoni:   tables are built for  pi-
 /gun/energy 1 MeV
 /mydet/SelectMaterial G4_Be
 SimpleBox is now made of G4_Be
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 keV in G4_Be
 #
@@ -2196,7 +2196,7 @@ SimpleBox is now made of G4_Be
 /gun/energy 100 keV
 /mydet/SelectMaterial G4_Be
 SimpleBox is now made of G4_Be
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 keV in G4_Be
 #
@@ -2204,7 +2204,7 @@ SimpleBox is now made of G4_Be
 /gun/energy 10 keV
 /mydet/SelectMaterial G4_Be
 SimpleBox is now made of G4_Be
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 keV in G4_Be
 #
@@ -2212,7 +2212,7 @@ SimpleBox is now made of G4_Be
 /gun/energy 1 keV
 /mydet/SelectMaterial G4_Be
 SimpleBox is now made of G4_Be
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 eV  in G4_Be
 #
@@ -2220,7 +2220,7 @@ SimpleBox is now made of G4_Be
 /gun/energy 100 eV 
 /mydet/SelectMaterial G4_Be
 SimpleBox is now made of G4_Be
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 eV  in G4_Be
 #
@@ -2228,7 +2228,7 @@ SimpleBox is now made of G4_Be
 /gun/energy 10 eV 
 /mydet/SelectMaterial G4_Be
 SimpleBox is now made of G4_Be
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 eV  in G4_Be
 #
@@ -2236,7 +2236,7 @@ SimpleBox is now made of G4_Be
 /gun/energy 1 eV 
 /mydet/SelectMaterial G4_Be
 SimpleBox is now made of G4_Be
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 MeV in G4_B
 #
@@ -2244,7 +2244,7 @@ SimpleBox is now made of G4_Be
 /gun/energy 10 MeV
 /mydet/SelectMaterial G4_B
 SimpleBox is now made of G4_B
-/run/beamOn 1
+/run/beamOn 20
 
 conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
       sampling secondary e+e- according Bethe-Heitler model
@@ -2385,7 +2385,7 @@ hIoni:   tables are built for  pi-
 /gun/energy 1 MeV
 /mydet/SelectMaterial G4_B
 SimpleBox is now made of G4_B
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 keV in G4_B
 #
@@ -2393,7 +2393,7 @@ SimpleBox is now made of G4_B
 /gun/energy 100 keV
 /mydet/SelectMaterial G4_B
 SimpleBox is now made of G4_B
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 keV in G4_B
 #
@@ -2401,7 +2401,7 @@ SimpleBox is now made of G4_B
 /gun/energy 10 keV
 /mydet/SelectMaterial G4_B
 SimpleBox is now made of G4_B
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 keV in G4_B
 #
@@ -2409,7 +2409,7 @@ SimpleBox is now made of G4_B
 /gun/energy 1 keV
 /mydet/SelectMaterial G4_B
 SimpleBox is now made of G4_B
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 eV  in G4_B
 #
@@ -2417,7 +2417,7 @@ SimpleBox is now made of G4_B
 /gun/energy 100 eV 
 /mydet/SelectMaterial G4_B
 SimpleBox is now made of G4_B
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 eV  in G4_B
 #
@@ -2425,7 +2425,7 @@ SimpleBox is now made of G4_B
 /gun/energy 10 eV 
 /mydet/SelectMaterial G4_B
 SimpleBox is now made of G4_B
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 eV  in G4_B
 #
@@ -2433,7 +2433,7 @@ SimpleBox is now made of G4_B
 /gun/energy 1 eV 
 /mydet/SelectMaterial G4_B
 SimpleBox is now made of G4_B
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 MeV in G4_C
 #
@@ -2441,7 +2441,7 @@ SimpleBox is now made of G4_B
 /gun/energy 10 MeV
 /mydet/SelectMaterial G4_C
 SimpleBox is now made of G4_C
-/run/beamOn 1
+/run/beamOn 20
 
 conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
       sampling secondary e+e- according Bethe-Heitler model
@@ -2582,7 +2582,7 @@ hIoni:   tables are built for  pi-
 /gun/energy 1 MeV
 /mydet/SelectMaterial G4_C
 SimpleBox is now made of G4_C
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 keV in G4_C
 #
@@ -2590,7 +2590,7 @@ SimpleBox is now made of G4_C
 /gun/energy 100 keV
 /mydet/SelectMaterial G4_C
 SimpleBox is now made of G4_C
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 keV in G4_C
 #
@@ -2598,7 +2598,7 @@ SimpleBox is now made of G4_C
 /gun/energy 10 keV
 /mydet/SelectMaterial G4_C
 SimpleBox is now made of G4_C
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 keV in G4_C
 #
@@ -2606,7 +2606,7 @@ SimpleBox is now made of G4_C
 /gun/energy 1 keV
 /mydet/SelectMaterial G4_C
 SimpleBox is now made of G4_C
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 eV  in G4_C
 #
@@ -2614,7 +2614,7 @@ SimpleBox is now made of G4_C
 /gun/energy 100 eV 
 /mydet/SelectMaterial G4_C
 SimpleBox is now made of G4_C
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 eV  in G4_C
 #
@@ -2622,7 +2622,7 @@ SimpleBox is now made of G4_C
 /gun/energy 10 eV 
 /mydet/SelectMaterial G4_C
 SimpleBox is now made of G4_C
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 eV  in G4_C
 #
@@ -2630,7 +2630,7 @@ SimpleBox is now made of G4_C
 /gun/energy 1 eV 
 /mydet/SelectMaterial G4_C
 SimpleBox is now made of G4_C
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 MeV in G4_N
 #
@@ -2638,7 +2638,7 @@ SimpleBox is now made of G4_C
 /gun/energy 10 MeV
 /mydet/SelectMaterial G4_N
 SimpleBox is now made of G4_N
-/run/beamOn 1
+/run/beamOn 20
 
 conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
       sampling secondary e+e- according Bethe-Heitler model
@@ -2779,7 +2779,7 @@ hIoni:   tables are built for  pi-
 /gun/energy 1 MeV
 /mydet/SelectMaterial G4_N
 SimpleBox is now made of G4_N
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 keV in G4_N
 #
@@ -2787,7 +2787,7 @@ SimpleBox is now made of G4_N
 /gun/energy 100 keV
 /mydet/SelectMaterial G4_N
 SimpleBox is now made of G4_N
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 keV in G4_N
 #
@@ -2795,7 +2795,7 @@ SimpleBox is now made of G4_N
 /gun/energy 10 keV
 /mydet/SelectMaterial G4_N
 SimpleBox is now made of G4_N
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 keV in G4_N
 #
@@ -2803,7 +2803,7 @@ SimpleBox is now made of G4_N
 /gun/energy 1 keV
 /mydet/SelectMaterial G4_N
 SimpleBox is now made of G4_N
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 eV  in G4_N
 #
@@ -2811,7 +2811,7 @@ SimpleBox is now made of G4_N
 /gun/energy 100 eV 
 /mydet/SelectMaterial G4_N
 SimpleBox is now made of G4_N
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 eV  in G4_N
 #
@@ -2819,7 +2819,7 @@ SimpleBox is now made of G4_N
 /gun/energy 10 eV 
 /mydet/SelectMaterial G4_N
 SimpleBox is now made of G4_N
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 eV  in G4_N
 #
@@ -2827,7 +2827,7 @@ SimpleBox is now made of G4_N
 /gun/energy 1 eV 
 /mydet/SelectMaterial G4_N
 SimpleBox is now made of G4_N
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 MeV in G4_O
 #
@@ -2835,7 +2835,7 @@ SimpleBox is now made of G4_N
 /gun/energy 10 MeV
 /mydet/SelectMaterial G4_O
 SimpleBox is now made of G4_O
-/run/beamOn 1
+/run/beamOn 20
 
 conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
       sampling secondary e+e- according Bethe-Heitler model
@@ -2976,7 +2976,7 @@ hIoni:   tables are built for  pi-
 /gun/energy 1 MeV
 /mydet/SelectMaterial G4_O
 SimpleBox is now made of G4_O
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 keV in G4_O
 #
@@ -2984,7 +2984,7 @@ SimpleBox is now made of G4_O
 /gun/energy 100 keV
 /mydet/SelectMaterial G4_O
 SimpleBox is now made of G4_O
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 keV in G4_O
 #
@@ -2992,7 +2992,7 @@ SimpleBox is now made of G4_O
 /gun/energy 10 keV
 /mydet/SelectMaterial G4_O
 SimpleBox is now made of G4_O
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 keV in G4_O
 #
@@ -3000,7 +3000,7 @@ SimpleBox is now made of G4_O
 /gun/energy 1 keV
 /mydet/SelectMaterial G4_O
 SimpleBox is now made of G4_O
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 eV  in G4_O
 #
@@ -3008,7 +3008,7 @@ SimpleBox is now made of G4_O
 /gun/energy 100 eV 
 /mydet/SelectMaterial G4_O
 SimpleBox is now made of G4_O
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 eV  in G4_O
 #
@@ -3016,7 +3016,7 @@ SimpleBox is now made of G4_O
 /gun/energy 10 eV 
 /mydet/SelectMaterial G4_O
 SimpleBox is now made of G4_O
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 eV  in G4_O
 #
@@ -3024,7 +3024,7 @@ SimpleBox is now made of G4_O
 /gun/energy 1 eV 
 /mydet/SelectMaterial G4_O
 SimpleBox is now made of G4_O
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 MeV in G4_F
 #
@@ -3032,7 +3032,7 @@ SimpleBox is now made of G4_O
 /gun/energy 10 MeV
 /mydet/SelectMaterial G4_F
 SimpleBox is now made of G4_F
-/run/beamOn 1
+/run/beamOn 20
 
 conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
       sampling secondary e+e- according Bethe-Heitler model
@@ -3173,7 +3173,7 @@ hIoni:   tables are built for  pi-
 /gun/energy 1 MeV
 /mydet/SelectMaterial G4_F
 SimpleBox is now made of G4_F
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 keV in G4_F
 #
@@ -3181,7 +3181,7 @@ SimpleBox is now made of G4_F
 /gun/energy 100 keV
 /mydet/SelectMaterial G4_F
 SimpleBox is now made of G4_F
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 keV in G4_F
 #
@@ -3189,7 +3189,7 @@ SimpleBox is now made of G4_F
 /gun/energy 10 keV
 /mydet/SelectMaterial G4_F
 SimpleBox is now made of G4_F
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 keV in G4_F
 #
@@ -3197,7 +3197,7 @@ SimpleBox is now made of G4_F
 /gun/energy 1 keV
 /mydet/SelectMaterial G4_F
 SimpleBox is now made of G4_F
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 eV  in G4_F
 #
@@ -3205,7 +3205,7 @@ SimpleBox is now made of G4_F
 /gun/energy 100 eV 
 /mydet/SelectMaterial G4_F
 SimpleBox is now made of G4_F
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 eV  in G4_F
 #
@@ -3213,7 +3213,7 @@ SimpleBox is now made of G4_F
 /gun/energy 10 eV 
 /mydet/SelectMaterial G4_F
 SimpleBox is now made of G4_F
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 eV  in G4_F
 #
@@ -3221,7 +3221,7 @@ SimpleBox is now made of G4_F
 /gun/energy 1 eV 
 /mydet/SelectMaterial G4_F
 SimpleBox is now made of G4_F
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 MeV in G4_Ne
 #
@@ -3229,7 +3229,7 @@ SimpleBox is now made of G4_F
 /gun/energy 10 MeV
 /mydet/SelectMaterial G4_Ne
 SimpleBox is now made of G4_Ne
-/run/beamOn 1
+/run/beamOn 20
 
 conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
       sampling secondary e+e- according Bethe-Heitler model
@@ -3370,7 +3370,7 @@ hIoni:   tables are built for  pi-
 /gun/energy 1 MeV
 /mydet/SelectMaterial G4_Ne
 SimpleBox is now made of G4_Ne
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 keV in G4_Ne
 #
@@ -3378,7 +3378,7 @@ SimpleBox is now made of G4_Ne
 /gun/energy 100 keV
 /mydet/SelectMaterial G4_Ne
 SimpleBox is now made of G4_Ne
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 keV in G4_Ne
 #
@@ -3386,7 +3386,7 @@ SimpleBox is now made of G4_Ne
 /gun/energy 10 keV
 /mydet/SelectMaterial G4_Ne
 SimpleBox is now made of G4_Ne
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 keV in G4_Ne
 #
@@ -3394,7 +3394,7 @@ SimpleBox is now made of G4_Ne
 /gun/energy 1 keV
 /mydet/SelectMaterial G4_Ne
 SimpleBox is now made of G4_Ne
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 eV  in G4_Ne
 #
@@ -3402,7 +3402,7 @@ SimpleBox is now made of G4_Ne
 /gun/energy 100 eV 
 /mydet/SelectMaterial G4_Ne
 SimpleBox is now made of G4_Ne
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 eV  in G4_Ne
 #
@@ -3410,7 +3410,7 @@ SimpleBox is now made of G4_Ne
 /gun/energy 10 eV 
 /mydet/SelectMaterial G4_Ne
 SimpleBox is now made of G4_Ne
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 eV  in G4_Ne
 #
@@ -3418,7 +3418,7 @@ SimpleBox is now made of G4_Ne
 /gun/energy 1 eV 
 /mydet/SelectMaterial G4_Ne
 SimpleBox is now made of G4_Ne
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 MeV in G4_Na
 #
@@ -3426,7 +3426,7 @@ SimpleBox is now made of G4_Ne
 /gun/energy 10 MeV
 /mydet/SelectMaterial G4_Na
 SimpleBox is now made of G4_Na
-/run/beamOn 1
+/run/beamOn 20
 
 conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
       sampling secondary e+e- according Bethe-Heitler model
@@ -3567,7 +3567,7 @@ hIoni:   tables are built for  pi-
 /gun/energy 1 MeV
 /mydet/SelectMaterial G4_Na
 SimpleBox is now made of G4_Na
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 keV in G4_Na
 #
@@ -3575,7 +3575,7 @@ SimpleBox is now made of G4_Na
 /gun/energy 100 keV
 /mydet/SelectMaterial G4_Na
 SimpleBox is now made of G4_Na
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 keV in G4_Na
 #
@@ -3583,7 +3583,7 @@ SimpleBox is now made of G4_Na
 /gun/energy 10 keV
 /mydet/SelectMaterial G4_Na
 SimpleBox is now made of G4_Na
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 keV in G4_Na
 #
@@ -3591,7 +3591,7 @@ SimpleBox is now made of G4_Na
 /gun/energy 1 keV
 /mydet/SelectMaterial G4_Na
 SimpleBox is now made of G4_Na
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 eV  in G4_Na
 #
@@ -3599,7 +3599,7 @@ SimpleBox is now made of G4_Na
 /gun/energy 100 eV 
 /mydet/SelectMaterial G4_Na
 SimpleBox is now made of G4_Na
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 eV  in G4_Na
 #
@@ -3607,7 +3607,7 @@ SimpleBox is now made of G4_Na
 /gun/energy 10 eV 
 /mydet/SelectMaterial G4_Na
 SimpleBox is now made of G4_Na
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 eV  in G4_Na
 #
@@ -3615,7 +3615,7 @@ SimpleBox is now made of G4_Na
 /gun/energy 1 eV 
 /mydet/SelectMaterial G4_Na
 SimpleBox is now made of G4_Na
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 MeV in G4_Mg
 #
@@ -3623,7 +3623,7 @@ SimpleBox is now made of G4_Na
 /gun/energy 10 MeV
 /mydet/SelectMaterial G4_Mg
 SimpleBox is now made of G4_Mg
-/run/beamOn 1
+/run/beamOn 20
 
 conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
       sampling secondary e+e- according Bethe-Heitler model
@@ -3764,7 +3764,7 @@ hIoni:   tables are built for  pi-
 /gun/energy 1 MeV
 /mydet/SelectMaterial G4_Mg
 SimpleBox is now made of G4_Mg
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 keV in G4_Mg
 #
@@ -3772,7 +3772,7 @@ SimpleBox is now made of G4_Mg
 /gun/energy 100 keV
 /mydet/SelectMaterial G4_Mg
 SimpleBox is now made of G4_Mg
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 keV in G4_Mg
 #
@@ -3780,7 +3780,7 @@ SimpleBox is now made of G4_Mg
 /gun/energy 10 keV
 /mydet/SelectMaterial G4_Mg
 SimpleBox is now made of G4_Mg
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 keV in G4_Mg
 #
@@ -3788,7 +3788,7 @@ SimpleBox is now made of G4_Mg
 /gun/energy 1 keV
 /mydet/SelectMaterial G4_Mg
 SimpleBox is now made of G4_Mg
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 eV  in G4_Mg
 #
@@ -3796,7 +3796,7 @@ SimpleBox is now made of G4_Mg
 /gun/energy 100 eV 
 /mydet/SelectMaterial G4_Mg
 SimpleBox is now made of G4_Mg
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 eV  in G4_Mg
 #
@@ -3804,7 +3804,7 @@ SimpleBox is now made of G4_Mg
 /gun/energy 10 eV 
 /mydet/SelectMaterial G4_Mg
 SimpleBox is now made of G4_Mg
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 eV  in G4_Mg
 #
@@ -3812,7 +3812,7 @@ SimpleBox is now made of G4_Mg
 /gun/energy 1 eV 
 /mydet/SelectMaterial G4_Mg
 SimpleBox is now made of G4_Mg
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 MeV in G4_Al
 #
@@ -3820,7 +3820,7 @@ SimpleBox is now made of G4_Mg
 /gun/energy 10 MeV
 /mydet/SelectMaterial G4_Al
 SimpleBox is now made of G4_Al
-/run/beamOn 1
+/run/beamOn 20
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
 The cut in range [1000 (mm)]   is too big   for material  idx=16
 The cut in energy is set1.7976931e+305GeV 
@@ -3964,7 +3964,7 @@ hIoni:   tables are built for  pi-
 /gun/energy 1 MeV
 /mydet/SelectMaterial G4_Al
 SimpleBox is now made of G4_Al
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 keV in G4_Al
 #
@@ -3972,7 +3972,7 @@ SimpleBox is now made of G4_Al
 /gun/energy 100 keV
 /mydet/SelectMaterial G4_Al
 SimpleBox is now made of G4_Al
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 keV in G4_Al
 #
@@ -3980,7 +3980,7 @@ SimpleBox is now made of G4_Al
 /gun/energy 10 keV
 /mydet/SelectMaterial G4_Al
 SimpleBox is now made of G4_Al
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 keV in G4_Al
 #
@@ -3988,7 +3988,7 @@ SimpleBox is now made of G4_Al
 /gun/energy 1 keV
 /mydet/SelectMaterial G4_Al
 SimpleBox is now made of G4_Al
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 eV  in G4_Al
 #
@@ -3996,7 +3996,7 @@ SimpleBox is now made of G4_Al
 /gun/energy 100 eV 
 /mydet/SelectMaterial G4_Al
 SimpleBox is now made of G4_Al
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 eV  in G4_Al
 #
@@ -4004,7 +4004,7 @@ SimpleBox is now made of G4_Al
 /gun/energy 10 eV 
 /mydet/SelectMaterial G4_Al
 SimpleBox is now made of G4_Al
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 eV  in G4_Al
 #
@@ -4012,7 +4012,7 @@ SimpleBox is now made of G4_Al
 /gun/energy 1 eV 
 /mydet/SelectMaterial G4_Al
 SimpleBox is now made of G4_Al
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 MeV in G4_Si
 #
@@ -4020,7 +4020,7 @@ SimpleBox is now made of G4_Al
 /gun/energy 10 MeV
 /mydet/SelectMaterial G4_Si
 SimpleBox is now made of G4_Si
-/run/beamOn 1
+/run/beamOn 20
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
 The cut in range [1000 (mm)]   is too big   for material  idx=17
 The cut in energy is set1.7976931e+305GeV 
@@ -4164,7 +4164,7 @@ hIoni:   tables are built for  pi-
 /gun/energy 1 MeV
 /mydet/SelectMaterial G4_Si
 SimpleBox is now made of G4_Si
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 keV in G4_Si
 #
@@ -4172,7 +4172,7 @@ SimpleBox is now made of G4_Si
 /gun/energy 100 keV
 /mydet/SelectMaterial G4_Si
 SimpleBox is now made of G4_Si
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 keV in G4_Si
 #
@@ -4180,7 +4180,7 @@ SimpleBox is now made of G4_Si
 /gun/energy 10 keV
 /mydet/SelectMaterial G4_Si
 SimpleBox is now made of G4_Si
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 keV in G4_Si
 #
@@ -4188,7 +4188,7 @@ SimpleBox is now made of G4_Si
 /gun/energy 1 keV
 /mydet/SelectMaterial G4_Si
 SimpleBox is now made of G4_Si
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 eV  in G4_Si
 #
@@ -4196,7 +4196,7 @@ SimpleBox is now made of G4_Si
 /gun/energy 100 eV 
 /mydet/SelectMaterial G4_Si
 SimpleBox is now made of G4_Si
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 eV  in G4_Si
 #
@@ -4204,7 +4204,7 @@ SimpleBox is now made of G4_Si
 /gun/energy 10 eV 
 /mydet/SelectMaterial G4_Si
 SimpleBox is now made of G4_Si
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 eV  in G4_Si
 #
@@ -4212,7 +4212,7 @@ SimpleBox is now made of G4_Si
 /gun/energy 1 eV 
 /mydet/SelectMaterial G4_Si
 SimpleBox is now made of G4_Si
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 MeV in G4_P
 #
@@ -4220,7 +4220,7 @@ SimpleBox is now made of G4_Si
 /gun/energy 10 MeV
 /mydet/SelectMaterial G4_P
 SimpleBox is now made of G4_P
-/run/beamOn 1
+/run/beamOn 20
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
 The cut in range [1000 (mm)]   is too big   for material  idx=18
 The cut in energy is set1.7976931e+305GeV 
@@ -4364,7 +4364,7 @@ hIoni:   tables are built for  pi-
 /gun/energy 1 MeV
 /mydet/SelectMaterial G4_P
 SimpleBox is now made of G4_P
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 keV in G4_P
 #
@@ -4372,7 +4372,7 @@ SimpleBox is now made of G4_P
 /gun/energy 100 keV
 /mydet/SelectMaterial G4_P
 SimpleBox is now made of G4_P
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 keV in G4_P
 #
@@ -4380,7 +4380,7 @@ SimpleBox is now made of G4_P
 /gun/energy 10 keV
 /mydet/SelectMaterial G4_P
 SimpleBox is now made of G4_P
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 keV in G4_P
 #
@@ -4388,7 +4388,7 @@ SimpleBox is now made of G4_P
 /gun/energy 1 keV
 /mydet/SelectMaterial G4_P
 SimpleBox is now made of G4_P
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 eV  in G4_P
 #
@@ -4396,7 +4396,7 @@ SimpleBox is now made of G4_P
 /gun/energy 100 eV 
 /mydet/SelectMaterial G4_P
 SimpleBox is now made of G4_P
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 eV  in G4_P
 #
@@ -4404,7 +4404,7 @@ SimpleBox is now made of G4_P
 /gun/energy 10 eV 
 /mydet/SelectMaterial G4_P
 SimpleBox is now made of G4_P
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 eV  in G4_P
 #
@@ -4412,7 +4412,7 @@ SimpleBox is now made of G4_P
 /gun/energy 1 eV 
 /mydet/SelectMaterial G4_P
 SimpleBox is now made of G4_P
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 MeV in G4_S
 #
@@ -4420,7 +4420,7 @@ SimpleBox is now made of G4_P
 /gun/energy 10 MeV
 /mydet/SelectMaterial G4_S
 SimpleBox is now made of G4_S
-/run/beamOn 1
+/run/beamOn 20
 
 conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
       sampling secondary e+e- according Bethe-Heitler model
@@ -4561,7 +4561,7 @@ hIoni:   tables are built for  pi-
 /gun/energy 1 MeV
 /mydet/SelectMaterial G4_S
 SimpleBox is now made of G4_S
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 keV in G4_S
 #
@@ -4569,7 +4569,7 @@ SimpleBox is now made of G4_S
 /gun/energy 100 keV
 /mydet/SelectMaterial G4_S
 SimpleBox is now made of G4_S
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 keV in G4_S
 #
@@ -4577,7 +4577,7 @@ SimpleBox is now made of G4_S
 /gun/energy 10 keV
 /mydet/SelectMaterial G4_S
 SimpleBox is now made of G4_S
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 keV in G4_S
 #
@@ -4585,7 +4585,7 @@ SimpleBox is now made of G4_S
 /gun/energy 1 keV
 /mydet/SelectMaterial G4_S
 SimpleBox is now made of G4_S
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 eV  in G4_S
 #
@@ -4593,7 +4593,7 @@ SimpleBox is now made of G4_S
 /gun/energy 100 eV 
 /mydet/SelectMaterial G4_S
 SimpleBox is now made of G4_S
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 eV  in G4_S
 #
@@ -4601,7 +4601,7 @@ SimpleBox is now made of G4_S
 /gun/energy 10 eV 
 /mydet/SelectMaterial G4_S
 SimpleBox is now made of G4_S
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 eV  in G4_S
 #
@@ -4609,7 +4609,7 @@ SimpleBox is now made of G4_S
 /gun/energy 1 eV 
 /mydet/SelectMaterial G4_S
 SimpleBox is now made of G4_S
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 MeV in G4_Cl
 #
@@ -4617,7 +4617,7 @@ SimpleBox is now made of G4_S
 /gun/energy 10 MeV
 /mydet/SelectMaterial G4_Cl
 SimpleBox is now made of G4_Cl
-/run/beamOn 1
+/run/beamOn 20
 
 conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
       sampling secondary e+e- according Bethe-Heitler model
@@ -4758,7 +4758,7 @@ hIoni:   tables are built for  pi-
 /gun/energy 1 MeV
 /mydet/SelectMaterial G4_Cl
 SimpleBox is now made of G4_Cl
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 keV in G4_Cl
 #
@@ -4766,7 +4766,7 @@ SimpleBox is now made of G4_Cl
 /gun/energy 100 keV
 /mydet/SelectMaterial G4_Cl
 SimpleBox is now made of G4_Cl
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 keV in G4_Cl
 #
@@ -4774,7 +4774,7 @@ SimpleBox is now made of G4_Cl
 /gun/energy 10 keV
 /mydet/SelectMaterial G4_Cl
 SimpleBox is now made of G4_Cl
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 keV in G4_Cl
 #
@@ -4782,7 +4782,7 @@ SimpleBox is now made of G4_Cl
 /gun/energy 1 keV
 /mydet/SelectMaterial G4_Cl
 SimpleBox is now made of G4_Cl
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 eV  in G4_Cl
 #
@@ -4790,7 +4790,7 @@ SimpleBox is now made of G4_Cl
 /gun/energy 100 eV 
 /mydet/SelectMaterial G4_Cl
 SimpleBox is now made of G4_Cl
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 eV  in G4_Cl
 #
@@ -4798,7 +4798,7 @@ SimpleBox is now made of G4_Cl
 /gun/energy 10 eV 
 /mydet/SelectMaterial G4_Cl
 SimpleBox is now made of G4_Cl
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 eV  in G4_Cl
 #
@@ -4806,7 +4806,7 @@ SimpleBox is now made of G4_Cl
 /gun/energy 1 eV 
 /mydet/SelectMaterial G4_Cl
 SimpleBox is now made of G4_Cl
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 MeV in G4_Ar
 #
@@ -4814,7 +4814,7 @@ SimpleBox is now made of G4_Cl
 /gun/energy 10 MeV
 /mydet/SelectMaterial G4_Ar
 SimpleBox is now made of G4_Ar
-/run/beamOn 1
+/run/beamOn 20
 
 conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
       sampling secondary e+e- according Bethe-Heitler model
@@ -4955,7 +4955,7 @@ hIoni:   tables are built for  pi-
 /gun/energy 1 MeV
 /mydet/SelectMaterial G4_Ar
 SimpleBox is now made of G4_Ar
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 keV in G4_Ar
 #
@@ -4963,7 +4963,7 @@ SimpleBox is now made of G4_Ar
 /gun/energy 100 keV
 /mydet/SelectMaterial G4_Ar
 SimpleBox is now made of G4_Ar
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 keV in G4_Ar
 #
@@ -4971,7 +4971,7 @@ SimpleBox is now made of G4_Ar
 /gun/energy 10 keV
 /mydet/SelectMaterial G4_Ar
 SimpleBox is now made of G4_Ar
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 keV in G4_Ar
 #
@@ -4979,7 +4979,7 @@ SimpleBox is now made of G4_Ar
 /gun/energy 1 keV
 /mydet/SelectMaterial G4_Ar
 SimpleBox is now made of G4_Ar
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 eV  in G4_Ar
 #
@@ -4987,7 +4987,7 @@ SimpleBox is now made of G4_Ar
 /gun/energy 100 eV 
 /mydet/SelectMaterial G4_Ar
 SimpleBox is now made of G4_Ar
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 eV  in G4_Ar
 #
@@ -4995,7 +4995,7 @@ SimpleBox is now made of G4_Ar
 /gun/energy 10 eV 
 /mydet/SelectMaterial G4_Ar
 SimpleBox is now made of G4_Ar
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 eV  in G4_Ar
 #
@@ -5003,7 +5003,7 @@ SimpleBox is now made of G4_Ar
 /gun/energy 1 eV 
 /mydet/SelectMaterial G4_Ar
 SimpleBox is now made of G4_Ar
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 MeV in G4_K
 #
@@ -5011,7 +5011,7 @@ SimpleBox is now made of G4_Ar
 /gun/energy 10 MeV
 /mydet/SelectMaterial G4_K
 SimpleBox is now made of G4_K
-/run/beamOn 1
+/run/beamOn 20
 
 conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
       sampling secondary e+e- according Bethe-Heitler model
@@ -5152,7 +5152,7 @@ hIoni:   tables are built for  pi-
 /gun/energy 1 MeV
 /mydet/SelectMaterial G4_K
 SimpleBox is now made of G4_K
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 keV in G4_K
 #
@@ -5160,7 +5160,7 @@ SimpleBox is now made of G4_K
 /gun/energy 100 keV
 /mydet/SelectMaterial G4_K
 SimpleBox is now made of G4_K
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 keV in G4_K
 #
@@ -5168,7 +5168,7 @@ SimpleBox is now made of G4_K
 /gun/energy 10 keV
 /mydet/SelectMaterial G4_K
 SimpleBox is now made of G4_K
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 keV in G4_K
 #
@@ -5176,7 +5176,7 @@ SimpleBox is now made of G4_K
 /gun/energy 1 keV
 /mydet/SelectMaterial G4_K
 SimpleBox is now made of G4_K
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 eV  in G4_K
 #
@@ -5184,7 +5184,7 @@ SimpleBox is now made of G4_K
 /gun/energy 100 eV 
 /mydet/SelectMaterial G4_K
 SimpleBox is now made of G4_K
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 eV  in G4_K
 #
@@ -5192,7 +5192,7 @@ SimpleBox is now made of G4_K
 /gun/energy 10 eV 
 /mydet/SelectMaterial G4_K
 SimpleBox is now made of G4_K
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 eV  in G4_K
 #
@@ -5200,7 +5200,7 @@ SimpleBox is now made of G4_K
 /gun/energy 1 eV 
 /mydet/SelectMaterial G4_K
 SimpleBox is now made of G4_K
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 MeV in G4_Ca
 #
@@ -5208,7 +5208,7 @@ SimpleBox is now made of G4_K
 /gun/energy 10 MeV
 /mydet/SelectMaterial G4_Ca
 SimpleBox is now made of G4_Ca
-/run/beamOn 1
+/run/beamOn 20
 
 conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
       sampling secondary e+e- according Bethe-Heitler model
@@ -5349,7 +5349,7 @@ hIoni:   tables are built for  pi-
 /gun/energy 1 MeV
 /mydet/SelectMaterial G4_Ca
 SimpleBox is now made of G4_Ca
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 keV in G4_Ca
 #
@@ -5357,7 +5357,7 @@ SimpleBox is now made of G4_Ca
 /gun/energy 100 keV
 /mydet/SelectMaterial G4_Ca
 SimpleBox is now made of G4_Ca
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 keV in G4_Ca
 #
@@ -5365,7 +5365,7 @@ SimpleBox is now made of G4_Ca
 /gun/energy 10 keV
 /mydet/SelectMaterial G4_Ca
 SimpleBox is now made of G4_Ca
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 keV in G4_Ca
 #
@@ -5373,7 +5373,7 @@ SimpleBox is now made of G4_Ca
 /gun/energy 1 keV
 /mydet/SelectMaterial G4_Ca
 SimpleBox is now made of G4_Ca
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 eV  in G4_Ca
 #
@@ -5381,7 +5381,7 @@ SimpleBox is now made of G4_Ca
 /gun/energy 100 eV 
 /mydet/SelectMaterial G4_Ca
 SimpleBox is now made of G4_Ca
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 eV  in G4_Ca
 #
@@ -5389,7 +5389,7 @@ SimpleBox is now made of G4_Ca
 /gun/energy 10 eV 
 /mydet/SelectMaterial G4_Ca
 SimpleBox is now made of G4_Ca
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 eV  in G4_Ca
 #
@@ -5397,7 +5397,7 @@ SimpleBox is now made of G4_Ca
 /gun/energy 1 eV 
 /mydet/SelectMaterial G4_Ca
 SimpleBox is now made of G4_Ca
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 MeV in G4_Sc
 #
@@ -5405,7 +5405,7 @@ SimpleBox is now made of G4_Ca
 /gun/energy 10 MeV
 /mydet/SelectMaterial G4_Sc
 SimpleBox is now made of G4_Sc
-/run/beamOn 1
+/run/beamOn 20
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
 The cut in range [1000 (mm)]   is too big   for material  idx=24
 The cut in energy is set1.7976931e+305GeV 
@@ -5549,7 +5549,7 @@ hIoni:   tables are built for  pi-
 /gun/energy 1 MeV
 /mydet/SelectMaterial G4_Sc
 SimpleBox is now made of G4_Sc
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 keV in G4_Sc
 #
@@ -5557,7 +5557,7 @@ SimpleBox is now made of G4_Sc
 /gun/energy 100 keV
 /mydet/SelectMaterial G4_Sc
 SimpleBox is now made of G4_Sc
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 keV in G4_Sc
 #
@@ -5565,7 +5565,7 @@ SimpleBox is now made of G4_Sc
 /gun/energy 10 keV
 /mydet/SelectMaterial G4_Sc
 SimpleBox is now made of G4_Sc
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 keV in G4_Sc
 #
@@ -5573,7 +5573,7 @@ SimpleBox is now made of G4_Sc
 /gun/energy 1 keV
 /mydet/SelectMaterial G4_Sc
 SimpleBox is now made of G4_Sc
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 eV  in G4_Sc
 #
@@ -5581,7 +5581,7 @@ SimpleBox is now made of G4_Sc
 /gun/energy 100 eV 
 /mydet/SelectMaterial G4_Sc
 SimpleBox is now made of G4_Sc
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 eV  in G4_Sc
 #
@@ -5589,7 +5589,7 @@ SimpleBox is now made of G4_Sc
 /gun/energy 10 eV 
 /mydet/SelectMaterial G4_Sc
 SimpleBox is now made of G4_Sc
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 eV  in G4_Sc
 #
@@ -5597,7 +5597,7 @@ SimpleBox is now made of G4_Sc
 /gun/energy 1 eV 
 /mydet/SelectMaterial G4_Sc
 SimpleBox is now made of G4_Sc
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 MeV in G4_Ti
 #
@@ -5605,7 +5605,7 @@ SimpleBox is now made of G4_Sc
 /gun/energy 10 MeV
 /mydet/SelectMaterial G4_Ti
 SimpleBox is now made of G4_Ti
-/run/beamOn 1
+/run/beamOn 20
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
 The cut in range [1000 (mm)]   is too big   for material  idx=25
 The cut in energy is set1.7976931e+305GeV 
@@ -5749,7 +5749,7 @@ hIoni:   tables are built for  pi-
 /gun/energy 1 MeV
 /mydet/SelectMaterial G4_Ti
 SimpleBox is now made of G4_Ti
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 keV in G4_Ti
 #
@@ -5757,7 +5757,7 @@ SimpleBox is now made of G4_Ti
 /gun/energy 100 keV
 /mydet/SelectMaterial G4_Ti
 SimpleBox is now made of G4_Ti
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 keV in G4_Ti
 #
@@ -5765,7 +5765,7 @@ SimpleBox is now made of G4_Ti
 /gun/energy 10 keV
 /mydet/SelectMaterial G4_Ti
 SimpleBox is now made of G4_Ti
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 keV in G4_Ti
 #
@@ -5773,7 +5773,7 @@ SimpleBox is now made of G4_Ti
 /gun/energy 1 keV
 /mydet/SelectMaterial G4_Ti
 SimpleBox is now made of G4_Ti
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 eV  in G4_Ti
 #
@@ -5781,7 +5781,7 @@ SimpleBox is now made of G4_Ti
 /gun/energy 100 eV 
 /mydet/SelectMaterial G4_Ti
 SimpleBox is now made of G4_Ti
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 eV  in G4_Ti
 #
@@ -5789,7 +5789,7 @@ SimpleBox is now made of G4_Ti
 /gun/energy 10 eV 
 /mydet/SelectMaterial G4_Ti
 SimpleBox is now made of G4_Ti
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 eV  in G4_Ti
 #
@@ -5797,7 +5797,7 @@ SimpleBox is now made of G4_Ti
 /gun/energy 1 eV 
 /mydet/SelectMaterial G4_Ti
 SimpleBox is now made of G4_Ti
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 MeV in G4_V
 #
@@ -5805,7 +5805,7 @@ SimpleBox is now made of G4_Ti
 /gun/energy 10 MeV
 /mydet/SelectMaterial G4_V
 SimpleBox is now made of G4_V
-/run/beamOn 1
+/run/beamOn 20
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
 The cut in range [1000 (mm)]   is too big   for material  idx=26
 The cut in energy is set1.7976931e+305GeV 
@@ -5949,7 +5949,7 @@ hIoni:   tables are built for  pi-
 /gun/energy 1 MeV
 /mydet/SelectMaterial G4_V
 SimpleBox is now made of G4_V
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 keV in G4_V
 #
@@ -5957,7 +5957,7 @@ SimpleBox is now made of G4_V
 /gun/energy 100 keV
 /mydet/SelectMaterial G4_V
 SimpleBox is now made of G4_V
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 keV in G4_V
 #
@@ -5965,7 +5965,7 @@ SimpleBox is now made of G4_V
 /gun/energy 10 keV
 /mydet/SelectMaterial G4_V
 SimpleBox is now made of G4_V
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 keV in G4_V
 #
@@ -5973,7 +5973,7 @@ SimpleBox is now made of G4_V
 /gun/energy 1 keV
 /mydet/SelectMaterial G4_V
 SimpleBox is now made of G4_V
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 eV  in G4_V
 #
@@ -5981,7 +5981,7 @@ SimpleBox is now made of G4_V
 /gun/energy 100 eV 
 /mydet/SelectMaterial G4_V
 SimpleBox is now made of G4_V
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 eV  in G4_V
 #
@@ -5989,7 +5989,7 @@ SimpleBox is now made of G4_V
 /gun/energy 10 eV 
 /mydet/SelectMaterial G4_V
 SimpleBox is now made of G4_V
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 eV  in G4_V
 #
@@ -5997,7 +5997,7 @@ SimpleBox is now made of G4_V
 /gun/energy 1 eV 
 /mydet/SelectMaterial G4_V
 SimpleBox is now made of G4_V
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 MeV in G4_Cr
 #
@@ -6005,7 +6005,7 @@ SimpleBox is now made of G4_V
 /gun/energy 10 MeV
 /mydet/SelectMaterial G4_Cr
 SimpleBox is now made of G4_Cr
-/run/beamOn 1
+/run/beamOn 20
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
 The cut in range [1000 (mm)]   is too big   for material  idx=27
 The cut in energy is set1.7976931e+305GeV 
@@ -6149,7 +6149,7 @@ hIoni:   tables are built for  pi-
 /gun/energy 1 MeV
 /mydet/SelectMaterial G4_Cr
 SimpleBox is now made of G4_Cr
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 keV in G4_Cr
 #
@@ -6157,7 +6157,7 @@ SimpleBox is now made of G4_Cr
 /gun/energy 100 keV
 /mydet/SelectMaterial G4_Cr
 SimpleBox is now made of G4_Cr
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 keV in G4_Cr
 #
@@ -6165,7 +6165,7 @@ SimpleBox is now made of G4_Cr
 /gun/energy 10 keV
 /mydet/SelectMaterial G4_Cr
 SimpleBox is now made of G4_Cr
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 keV in G4_Cr
 #
@@ -6173,7 +6173,7 @@ SimpleBox is now made of G4_Cr
 /gun/energy 1 keV
 /mydet/SelectMaterial G4_Cr
 SimpleBox is now made of G4_Cr
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 eV  in G4_Cr
 #
@@ -6181,7 +6181,7 @@ SimpleBox is now made of G4_Cr
 /gun/energy 100 eV 
 /mydet/SelectMaterial G4_Cr
 SimpleBox is now made of G4_Cr
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 eV  in G4_Cr
 #
@@ -6189,7 +6189,7 @@ SimpleBox is now made of G4_Cr
 /gun/energy 10 eV 
 /mydet/SelectMaterial G4_Cr
 SimpleBox is now made of G4_Cr
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 eV  in G4_Cr
 #
@@ -6197,7 +6197,7 @@ SimpleBox is now made of G4_Cr
 /gun/energy 1 eV 
 /mydet/SelectMaterial G4_Cr
 SimpleBox is now made of G4_Cr
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 MeV in G4_Mn
 #
@@ -6205,7 +6205,7 @@ SimpleBox is now made of G4_Cr
 /gun/energy 10 MeV
 /mydet/SelectMaterial G4_Mn
 SimpleBox is now made of G4_Mn
-/run/beamOn 1
+/run/beamOn 20
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
 The cut in range [1000 (mm)]   is too big   for material  idx=28
 The cut in energy is set1.7976931e+305GeV 
@@ -6349,7 +6349,7 @@ hIoni:   tables are built for  pi-
 /gun/energy 1 MeV
 /mydet/SelectMaterial G4_Mn
 SimpleBox is now made of G4_Mn
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 keV in G4_Mn
 #
@@ -6357,7 +6357,7 @@ SimpleBox is now made of G4_Mn
 /gun/energy 100 keV
 /mydet/SelectMaterial G4_Mn
 SimpleBox is now made of G4_Mn
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 keV in G4_Mn
 #
@@ -6365,7 +6365,7 @@ SimpleBox is now made of G4_Mn
 /gun/energy 10 keV
 /mydet/SelectMaterial G4_Mn
 SimpleBox is now made of G4_Mn
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 keV in G4_Mn
 #
@@ -6373,7 +6373,7 @@ SimpleBox is now made of G4_Mn
 /gun/energy 1 keV
 /mydet/SelectMaterial G4_Mn
 SimpleBox is now made of G4_Mn
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 eV  in G4_Mn
 #
@@ -6381,7 +6381,7 @@ SimpleBox is now made of G4_Mn
 /gun/energy 100 eV 
 /mydet/SelectMaterial G4_Mn
 SimpleBox is now made of G4_Mn
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 eV  in G4_Mn
 #
@@ -6389,7 +6389,7 @@ SimpleBox is now made of G4_Mn
 /gun/energy 10 eV 
 /mydet/SelectMaterial G4_Mn
 SimpleBox is now made of G4_Mn
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 eV  in G4_Mn
 #
@@ -6397,7 +6397,7 @@ SimpleBox is now made of G4_Mn
 /gun/energy 1 eV 
 /mydet/SelectMaterial G4_Mn
 SimpleBox is now made of G4_Mn
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 MeV in G4_Fe
 #
@@ -6405,7 +6405,7 @@ SimpleBox is now made of G4_Mn
 /gun/energy 10 MeV
 /mydet/SelectMaterial G4_Fe
 SimpleBox is now made of G4_Fe
-/run/beamOn 1
+/run/beamOn 20
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
 The cut in range [1000 (mm)]   is too big   for material  idx=29
 The cut in energy is set1.7976931e+305GeV 
@@ -6549,7 +6549,7 @@ hIoni:   tables are built for  pi-
 /gun/energy 1 MeV
 /mydet/SelectMaterial G4_Fe
 SimpleBox is now made of G4_Fe
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 keV in G4_Fe
 #
@@ -6557,7 +6557,7 @@ SimpleBox is now made of G4_Fe
 /gun/energy 100 keV
 /mydet/SelectMaterial G4_Fe
 SimpleBox is now made of G4_Fe
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 keV in G4_Fe
 #
@@ -6565,7 +6565,7 @@ SimpleBox is now made of G4_Fe
 /gun/energy 10 keV
 /mydet/SelectMaterial G4_Fe
 SimpleBox is now made of G4_Fe
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 keV in G4_Fe
 #
@@ -6573,7 +6573,7 @@ SimpleBox is now made of G4_Fe
 /gun/energy 1 keV
 /mydet/SelectMaterial G4_Fe
 SimpleBox is now made of G4_Fe
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 eV  in G4_Fe
 #
@@ -6581,7 +6581,7 @@ SimpleBox is now made of G4_Fe
 /gun/energy 100 eV 
 /mydet/SelectMaterial G4_Fe
 SimpleBox is now made of G4_Fe
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 eV  in G4_Fe
 #
@@ -6589,7 +6589,7 @@ SimpleBox is now made of G4_Fe
 /gun/energy 10 eV 
 /mydet/SelectMaterial G4_Fe
 SimpleBox is now made of G4_Fe
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 eV  in G4_Fe
 #
@@ -6597,7 +6597,7 @@ SimpleBox is now made of G4_Fe
 /gun/energy 1 eV 
 /mydet/SelectMaterial G4_Fe
 SimpleBox is now made of G4_Fe
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 MeV in G4_Co
 #
@@ -6605,7 +6605,7 @@ SimpleBox is now made of G4_Fe
 /gun/energy 10 MeV
 /mydet/SelectMaterial G4_Co
 SimpleBox is now made of G4_Co
-/run/beamOn 1
+/run/beamOn 20
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
 The cut in range [1000 (mm)]   is too big   for material  idx=30
 The cut in energy is set1.7976931e+305GeV 
@@ -6749,7 +6749,7 @@ hIoni:   tables are built for  pi-
 /gun/energy 1 MeV
 /mydet/SelectMaterial G4_Co
 SimpleBox is now made of G4_Co
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 keV in G4_Co
 #
@@ -6757,7 +6757,7 @@ SimpleBox is now made of G4_Co
 /gun/energy 100 keV
 /mydet/SelectMaterial G4_Co
 SimpleBox is now made of G4_Co
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 keV in G4_Co
 #
@@ -6765,7 +6765,7 @@ SimpleBox is now made of G4_Co
 /gun/energy 10 keV
 /mydet/SelectMaterial G4_Co
 SimpleBox is now made of G4_Co
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 keV in G4_Co
 #
@@ -6773,7 +6773,7 @@ SimpleBox is now made of G4_Co
 /gun/energy 1 keV
 /mydet/SelectMaterial G4_Co
 SimpleBox is now made of G4_Co
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 eV  in G4_Co
 #
@@ -6781,7 +6781,7 @@ SimpleBox is now made of G4_Co
 /gun/energy 100 eV 
 /mydet/SelectMaterial G4_Co
 SimpleBox is now made of G4_Co
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 eV  in G4_Co
 #
@@ -6789,7 +6789,7 @@ SimpleBox is now made of G4_Co
 /gun/energy 10 eV 
 /mydet/SelectMaterial G4_Co
 SimpleBox is now made of G4_Co
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 eV  in G4_Co
 #
@@ -6797,7 +6797,7 @@ SimpleBox is now made of G4_Co
 /gun/energy 1 eV 
 /mydet/SelectMaterial G4_Co
 SimpleBox is now made of G4_Co
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 MeV in G4_Ni
 #
@@ -6805,7 +6805,7 @@ SimpleBox is now made of G4_Co
 /gun/energy 10 MeV
 /mydet/SelectMaterial G4_Ni
 SimpleBox is now made of G4_Ni
-/run/beamOn 1
+/run/beamOn 20
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
 The cut in range [1000 (mm)]   is too big   for material  idx=31
 The cut in energy is set1.7976931e+305GeV 
@@ -6949,7 +6949,7 @@ hIoni:   tables are built for  pi-
 /gun/energy 1 MeV
 /mydet/SelectMaterial G4_Ni
 SimpleBox is now made of G4_Ni
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 keV in G4_Ni
 #
@@ -6957,7 +6957,7 @@ SimpleBox is now made of G4_Ni
 /gun/energy 100 keV
 /mydet/SelectMaterial G4_Ni
 SimpleBox is now made of G4_Ni
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 keV in G4_Ni
 #
@@ -6965,7 +6965,7 @@ SimpleBox is now made of G4_Ni
 /gun/energy 10 keV
 /mydet/SelectMaterial G4_Ni
 SimpleBox is now made of G4_Ni
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 keV in G4_Ni
 #
@@ -6973,7 +6973,7 @@ SimpleBox is now made of G4_Ni
 /gun/energy 1 keV
 /mydet/SelectMaterial G4_Ni
 SimpleBox is now made of G4_Ni
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 eV  in G4_Ni
 #
@@ -6981,7 +6981,7 @@ SimpleBox is now made of G4_Ni
 /gun/energy 100 eV 
 /mydet/SelectMaterial G4_Ni
 SimpleBox is now made of G4_Ni
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 eV  in G4_Ni
 #
@@ -6989,7 +6989,7 @@ SimpleBox is now made of G4_Ni
 /gun/energy 10 eV 
 /mydet/SelectMaterial G4_Ni
 SimpleBox is now made of G4_Ni
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 eV  in G4_Ni
 #
@@ -6997,7 +6997,7 @@ SimpleBox is now made of G4_Ni
 /gun/energy 1 eV 
 /mydet/SelectMaterial G4_Ni
 SimpleBox is now made of G4_Ni
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 MeV in G4_Cu
 #
@@ -7005,7 +7005,7 @@ SimpleBox is now made of G4_Ni
 /gun/energy 10 MeV
 /mydet/SelectMaterial G4_Cu
 SimpleBox is now made of G4_Cu
-/run/beamOn 1
+/run/beamOn 20
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
 The cut in range [1000 (mm)]   is too big   for material  idx=32
 The cut in energy is set1.7976931e+305GeV 
@@ -7149,7 +7149,7 @@ hIoni:   tables are built for  pi-
 /gun/energy 1 MeV
 /mydet/SelectMaterial G4_Cu
 SimpleBox is now made of G4_Cu
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 keV in G4_Cu
 #
@@ -7157,7 +7157,7 @@ SimpleBox is now made of G4_Cu
 /gun/energy 100 keV
 /mydet/SelectMaterial G4_Cu
 SimpleBox is now made of G4_Cu
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 keV in G4_Cu
 #
@@ -7165,7 +7165,7 @@ SimpleBox is now made of G4_Cu
 /gun/energy 10 keV
 /mydet/SelectMaterial G4_Cu
 SimpleBox is now made of G4_Cu
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 keV in G4_Cu
 #
@@ -7173,7 +7173,7 @@ SimpleBox is now made of G4_Cu
 /gun/energy 1 keV
 /mydet/SelectMaterial G4_Cu
 SimpleBox is now made of G4_Cu
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 eV  in G4_Cu
 #
@@ -7181,7 +7181,7 @@ SimpleBox is now made of G4_Cu
 /gun/energy 100 eV 
 /mydet/SelectMaterial G4_Cu
 SimpleBox is now made of G4_Cu
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 eV  in G4_Cu
 #
@@ -7189,7 +7189,7 @@ SimpleBox is now made of G4_Cu
 /gun/energy 10 eV 
 /mydet/SelectMaterial G4_Cu
 SimpleBox is now made of G4_Cu
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 eV  in G4_Cu
 #
@@ -7197,7 +7197,7 @@ SimpleBox is now made of G4_Cu
 /gun/energy 1 eV 
 /mydet/SelectMaterial G4_Cu
 SimpleBox is now made of G4_Cu
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 MeV in G4_Zn
 #
@@ -7205,7 +7205,7 @@ SimpleBox is now made of G4_Cu
 /gun/energy 10 MeV
 /mydet/SelectMaterial G4_Zn
 SimpleBox is now made of G4_Zn
-/run/beamOn 1
+/run/beamOn 20
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
 The cut in range [1000 (mm)]   is too big   for material  idx=33
 The cut in energy is set1.7976931e+305GeV 
@@ -7349,7 +7349,7 @@ hIoni:   tables are built for  pi-
 /gun/energy 1 MeV
 /mydet/SelectMaterial G4_Zn
 SimpleBox is now made of G4_Zn
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 keV in G4_Zn
 #
@@ -7357,7 +7357,7 @@ SimpleBox is now made of G4_Zn
 /gun/energy 100 keV
 /mydet/SelectMaterial G4_Zn
 SimpleBox is now made of G4_Zn
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 keV in G4_Zn
 #
@@ -7365,7 +7365,7 @@ SimpleBox is now made of G4_Zn
 /gun/energy 10 keV
 /mydet/SelectMaterial G4_Zn
 SimpleBox is now made of G4_Zn
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 keV in G4_Zn
 #
@@ -7373,7 +7373,7 @@ SimpleBox is now made of G4_Zn
 /gun/energy 1 keV
 /mydet/SelectMaterial G4_Zn
 SimpleBox is now made of G4_Zn
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 eV  in G4_Zn
 #
@@ -7381,7 +7381,7 @@ SimpleBox is now made of G4_Zn
 /gun/energy 100 eV 
 /mydet/SelectMaterial G4_Zn
 SimpleBox is now made of G4_Zn
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 eV  in G4_Zn
 #
@@ -7389,7 +7389,7 @@ SimpleBox is now made of G4_Zn
 /gun/energy 10 eV 
 /mydet/SelectMaterial G4_Zn
 SimpleBox is now made of G4_Zn
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 eV  in G4_Zn
 #
@@ -7397,7 +7397,7 @@ SimpleBox is now made of G4_Zn
 /gun/energy 1 eV 
 /mydet/SelectMaterial G4_Zn
 SimpleBox is now made of G4_Zn
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 MeV in G4_Ga
 #
@@ -7405,7 +7405,7 @@ SimpleBox is now made of G4_Zn
 /gun/energy 10 MeV
 /mydet/SelectMaterial G4_Ga
 SimpleBox is now made of G4_Ga
-/run/beamOn 1
+/run/beamOn 20
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
 The cut in range [1000 (mm)]   is too big   for material  idx=34
 The cut in energy is set1.7976931e+305GeV 
@@ -7549,7 +7549,7 @@ hIoni:   tables are built for  pi-
 /gun/energy 1 MeV
 /mydet/SelectMaterial G4_Ga
 SimpleBox is now made of G4_Ga
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 keV in G4_Ga
 #
@@ -7557,7 +7557,7 @@ SimpleBox is now made of G4_Ga
 /gun/energy 100 keV
 /mydet/SelectMaterial G4_Ga
 SimpleBox is now made of G4_Ga
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 keV in G4_Ga
 #
@@ -7565,7 +7565,7 @@ SimpleBox is now made of G4_Ga
 /gun/energy 10 keV
 /mydet/SelectMaterial G4_Ga
 SimpleBox is now made of G4_Ga
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 keV in G4_Ga
 #
@@ -7573,7 +7573,7 @@ SimpleBox is now made of G4_Ga
 /gun/energy 1 keV
 /mydet/SelectMaterial G4_Ga
 SimpleBox is now made of G4_Ga
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 eV  in G4_Ga
 #
@@ -7581,7 +7581,7 @@ SimpleBox is now made of G4_Ga
 /gun/energy 100 eV 
 /mydet/SelectMaterial G4_Ga
 SimpleBox is now made of G4_Ga
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 eV  in G4_Ga
 #
@@ -7589,7 +7589,7 @@ SimpleBox is now made of G4_Ga
 /gun/energy 10 eV 
 /mydet/SelectMaterial G4_Ga
 SimpleBox is now made of G4_Ga
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 eV  in G4_Ga
 #
@@ -7597,7 +7597,7 @@ SimpleBox is now made of G4_Ga
 /gun/energy 1 eV 
 /mydet/SelectMaterial G4_Ga
 SimpleBox is now made of G4_Ga
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 MeV in G4_Ge
 #
@@ -7605,7 +7605,7 @@ SimpleBox is now made of G4_Ga
 /gun/energy 10 MeV
 /mydet/SelectMaterial G4_Ge
 SimpleBox is now made of G4_Ge
-/run/beamOn 1
+/run/beamOn 20
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
 The cut in range [1000 (mm)]   is too big   for material  idx=35
 The cut in energy is set1.7976931e+305GeV 
@@ -7749,7 +7749,7 @@ hIoni:   tables are built for  pi-
 /gun/energy 1 MeV
 /mydet/SelectMaterial G4_Ge
 SimpleBox is now made of G4_Ge
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 keV in G4_Ge
 #
@@ -7757,7 +7757,7 @@ SimpleBox is now made of G4_Ge
 /gun/energy 100 keV
 /mydet/SelectMaterial G4_Ge
 SimpleBox is now made of G4_Ge
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 keV in G4_Ge
 #
@@ -7765,7 +7765,8 @@ SimpleBox is now made of G4_Ge
 /gun/energy 10 keV
 /mydet/SelectMaterial G4_Ge
 SimpleBox is now made of G4_Ge
-/run/beamOn 1
+/run/beamOn 20
+ G4NuclearLevelManager: nuclide (32,74) does not have a gamma levels file
 #
 # neutron at 1 keV in G4_Ge
 #
@@ -7773,7 +7774,7 @@ SimpleBox is now made of G4_Ge
 /gun/energy 1 keV
 /mydet/SelectMaterial G4_Ge
 SimpleBox is now made of G4_Ge
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 eV  in G4_Ge
 #
@@ -7781,7 +7782,7 @@ SimpleBox is now made of G4_Ge
 /gun/energy 100 eV 
 /mydet/SelectMaterial G4_Ge
 SimpleBox is now made of G4_Ge
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 eV  in G4_Ge
 #
@@ -7789,7 +7790,8 @@ SimpleBox is now made of G4_Ge
 /gun/energy 10 eV 
 /mydet/SelectMaterial G4_Ge
 SimpleBox is now made of G4_Ge
-/run/beamOn 1
+/run/beamOn 20
+ G4NuclearLevelManager: nuclide (32,71) does not have a gamma levels file
 #
 # neutron at 1 eV  in G4_Ge
 #
@@ -7797,7 +7799,9 @@ SimpleBox is now made of G4_Ge
 /gun/energy 1 eV 
 /mydet/SelectMaterial G4_Ge
 SimpleBox is now made of G4_Ge
-/run/beamOn 1
+/run/beamOn 20
+ G4NuclearLevelManager: nuclide (32,73) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (32,75) does not have a gamma levels file
 #
 # neutron at 10 MeV in G4_As
 #
@@ -7805,7 +7809,7 @@ SimpleBox is now made of G4_Ge
 /gun/energy 10 MeV
 /mydet/SelectMaterial G4_As
 SimpleBox is now made of G4_As
-/run/beamOn 1
+/run/beamOn 20
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
 The cut in range [1000 (mm)]   is too big   for material  idx=36
 The cut in energy is set1.7976931e+305GeV 
@@ -7942,6 +7946,7 @@ hIoni:   tables are built for  pi-
       Delta cross sections and sampling from BetheBloch model for scaled energy > 0.29750425 MeV
       Parametrisation from Bragg for protons below.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+ G4NuclearLevelManager: nuclide (33,76) does not have a gamma levels file
 #
 # neutron at 1 MeV in G4_As
 #
@@ -7949,7 +7954,7 @@ hIoni:   tables are built for  pi-
 /gun/energy 1 MeV
 /mydet/SelectMaterial G4_As
 SimpleBox is now made of G4_As
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 keV in G4_As
 #
@@ -7957,7 +7962,7 @@ SimpleBox is now made of G4_As
 /gun/energy 100 keV
 /mydet/SelectMaterial G4_As
 SimpleBox is now made of G4_As
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 keV in G4_As
 #
@@ -7965,8 +7970,7 @@ SimpleBox is now made of G4_As
 /gun/energy 10 keV
 /mydet/SelectMaterial G4_As
 SimpleBox is now made of G4_As
-/run/beamOn 1
- G4NuclearLevelManager: nuclide (33,76) does not have a gamma levels file
+/run/beamOn 20
 #
 # neutron at 1 keV in G4_As
 #
@@ -7974,7 +7978,7 @@ SimpleBox is now made of G4_As
 /gun/energy 1 keV
 /mydet/SelectMaterial G4_As
 SimpleBox is now made of G4_As
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 eV  in G4_As
 #
@@ -7982,7 +7986,7 @@ SimpleBox is now made of G4_As
 /gun/energy 100 eV 
 /mydet/SelectMaterial G4_As
 SimpleBox is now made of G4_As
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 eV  in G4_As
 #
@@ -7990,7 +7994,7 @@ SimpleBox is now made of G4_As
 /gun/energy 10 eV 
 /mydet/SelectMaterial G4_As
 SimpleBox is now made of G4_As
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 eV  in G4_As
 #
@@ -7998,7 +8002,7 @@ SimpleBox is now made of G4_As
 /gun/energy 1 eV 
 /mydet/SelectMaterial G4_As
 SimpleBox is now made of G4_As
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 MeV in G4_Se
 #
@@ -8006,7 +8010,7 @@ SimpleBox is now made of G4_As
 /gun/energy 10 MeV
 /mydet/SelectMaterial G4_Se
 SimpleBox is now made of G4_Se
-/run/beamOn 1
+/run/beamOn 20
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
 The cut in range [1000 (mm)]   is too big   for material  idx=37
 The cut in energy is set1.7976931e+305GeV 
@@ -8150,7 +8154,7 @@ hIoni:   tables are built for  pi-
 /gun/energy 1 MeV
 /mydet/SelectMaterial G4_Se
 SimpleBox is now made of G4_Se
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 keV in G4_Se
 #
@@ -8158,7 +8162,9 @@ SimpleBox is now made of G4_Se
 /gun/energy 100 keV
 /mydet/SelectMaterial G4_Se
 SimpleBox is now made of G4_Se
-/run/beamOn 1
+/run/beamOn 20
+ G4NuclearLevelManager: nuclide (34,78) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (34,81) does not have a gamma levels file
 #
 # neutron at 10 keV in G4_Se
 #
@@ -8166,7 +8172,9 @@ SimpleBox is now made of G4_Se
 /gun/energy 10 keV
 /mydet/SelectMaterial G4_Se
 SimpleBox is now made of G4_Se
-/run/beamOn 1
+/run/beamOn 20
+ G4NuclearLevelManager: nuclide (34,79) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (34,83) does not have a gamma levels file
 #
 # neutron at 1 keV in G4_Se
 #
@@ -8174,8 +8182,7 @@ SimpleBox is now made of G4_Se
 /gun/energy 1 keV
 /mydet/SelectMaterial G4_Se
 SimpleBox is now made of G4_Se
-/run/beamOn 1
- G4NuclearLevelManager: nuclide (34,81) does not have a gamma levels file
+/run/beamOn 20
 #
 # neutron at 100 eV  in G4_Se
 #
@@ -8183,7 +8190,7 @@ SimpleBox is now made of G4_Se
 /gun/energy 100 eV 
 /mydet/SelectMaterial G4_Se
 SimpleBox is now made of G4_Se
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 eV  in G4_Se
 #
@@ -8191,7 +8198,7 @@ SimpleBox is now made of G4_Se
 /gun/energy 10 eV 
 /mydet/SelectMaterial G4_Se
 SimpleBox is now made of G4_Se
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 eV  in G4_Se
 #
@@ -8199,7 +8206,7 @@ SimpleBox is now made of G4_Se
 /gun/energy 1 eV 
 /mydet/SelectMaterial G4_Se
 SimpleBox is now made of G4_Se
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 MeV in G4_Br
 #
@@ -8207,7 +8214,7 @@ SimpleBox is now made of G4_Se
 /gun/energy 10 MeV
 /mydet/SelectMaterial G4_Br
 SimpleBox is now made of G4_Br
-/run/beamOn 1
+/run/beamOn 20
 
 conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
       sampling secondary e+e- according Bethe-Heitler model
@@ -8348,7 +8355,7 @@ hIoni:   tables are built for  pi-
 /gun/energy 1 MeV
 /mydet/SelectMaterial G4_Br
 SimpleBox is now made of G4_Br
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 keV in G4_Br
 #
@@ -8356,7 +8363,7 @@ SimpleBox is now made of G4_Br
 /gun/energy 100 keV
 /mydet/SelectMaterial G4_Br
 SimpleBox is now made of G4_Br
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 keV in G4_Br
 #
@@ -8364,7 +8371,7 @@ SimpleBox is now made of G4_Br
 /gun/energy 10 keV
 /mydet/SelectMaterial G4_Br
 SimpleBox is now made of G4_Br
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 keV in G4_Br
 #
@@ -8372,7 +8379,7 @@ SimpleBox is now made of G4_Br
 /gun/energy 1 keV
 /mydet/SelectMaterial G4_Br
 SimpleBox is now made of G4_Br
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 eV  in G4_Br
 #
@@ -8380,7 +8387,8 @@ SimpleBox is now made of G4_Br
 /gun/energy 100 eV 
 /mydet/SelectMaterial G4_Br
 SimpleBox is now made of G4_Br
-/run/beamOn 1
+/run/beamOn 20
+ G4NuclearLevelManager: nuclide (35,80) does not have a gamma levels file
 #
 # neutron at 10 eV  in G4_Br
 #
@@ -8388,7 +8396,7 @@ SimpleBox is now made of G4_Br
 /gun/energy 10 eV 
 /mydet/SelectMaterial G4_Br
 SimpleBox is now made of G4_Br
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 eV  in G4_Br
 #
@@ -8396,7 +8404,7 @@ SimpleBox is now made of G4_Br
 /gun/energy 1 eV 
 /mydet/SelectMaterial G4_Br
 SimpleBox is now made of G4_Br
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 MeV in G4_Kr
 #
@@ -8404,7 +8412,7 @@ SimpleBox is now made of G4_Br
 /gun/energy 10 MeV
 /mydet/SelectMaterial G4_Kr
 SimpleBox is now made of G4_Kr
-/run/beamOn 1
+/run/beamOn 20
 
 conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
       sampling secondary e+e- according Bethe-Heitler model
@@ -8545,7 +8553,7 @@ hIoni:   tables are built for  pi-
 /gun/energy 1 MeV
 /mydet/SelectMaterial G4_Kr
 SimpleBox is now made of G4_Kr
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 keV in G4_Kr
 #
@@ -8553,7 +8561,7 @@ SimpleBox is now made of G4_Kr
 /gun/energy 100 keV
 /mydet/SelectMaterial G4_Kr
 SimpleBox is now made of G4_Kr
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 keV in G4_Kr
 #
@@ -8561,7 +8569,7 @@ SimpleBox is now made of G4_Kr
 /gun/energy 10 keV
 /mydet/SelectMaterial G4_Kr
 SimpleBox is now made of G4_Kr
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 keV in G4_Kr
 #
@@ -8569,7 +8577,7 @@ SimpleBox is now made of G4_Kr
 /gun/energy 1 keV
 /mydet/SelectMaterial G4_Kr
 SimpleBox is now made of G4_Kr
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 eV  in G4_Kr
 #
@@ -8577,7 +8585,7 @@ SimpleBox is now made of G4_Kr
 /gun/energy 100 eV 
 /mydet/SelectMaterial G4_Kr
 SimpleBox is now made of G4_Kr
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 eV  in G4_Kr
 #
@@ -8585,7 +8593,7 @@ SimpleBox is now made of G4_Kr
 /gun/energy 10 eV 
 /mydet/SelectMaterial G4_Kr
 SimpleBox is now made of G4_Kr
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 eV  in G4_Kr
 #
@@ -8593,7 +8601,7 @@ SimpleBox is now made of G4_Kr
 /gun/energy 1 eV 
 /mydet/SelectMaterial G4_Kr
 SimpleBox is now made of G4_Kr
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 MeV in G4_Rb
 #
@@ -8601,7 +8609,7 @@ SimpleBox is now made of G4_Kr
 /gun/energy 10 MeV
 /mydet/SelectMaterial G4_Rb
 SimpleBox is now made of G4_Rb
-/run/beamOn 1
+/run/beamOn 20
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
 The cut in range [1000 (mm)]   is too big   for material  idx=40
 The cut in energy is set1.7976931e+305GeV 
@@ -8745,7 +8753,7 @@ hIoni:   tables are built for  pi-
 /gun/energy 1 MeV
 /mydet/SelectMaterial G4_Rb
 SimpleBox is now made of G4_Rb
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 keV in G4_Rb
 #
@@ -8753,7 +8761,7 @@ SimpleBox is now made of G4_Rb
 /gun/energy 100 keV
 /mydet/SelectMaterial G4_Rb
 SimpleBox is now made of G4_Rb
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 keV in G4_Rb
 #
@@ -8761,7 +8769,7 @@ SimpleBox is now made of G4_Rb
 /gun/energy 10 keV
 /mydet/SelectMaterial G4_Rb
 SimpleBox is now made of G4_Rb
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 keV in G4_Rb
 #
@@ -8769,7 +8777,7 @@ SimpleBox is now made of G4_Rb
 /gun/energy 1 keV
 /mydet/SelectMaterial G4_Rb
 SimpleBox is now made of G4_Rb
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 eV  in G4_Rb
 #
@@ -8777,7 +8785,7 @@ SimpleBox is now made of G4_Rb
 /gun/energy 100 eV 
 /mydet/SelectMaterial G4_Rb
 SimpleBox is now made of G4_Rb
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 eV  in G4_Rb
 #
@@ -8785,7 +8793,7 @@ SimpleBox is now made of G4_Rb
 /gun/energy 10 eV 
 /mydet/SelectMaterial G4_Rb
 SimpleBox is now made of G4_Rb
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 eV  in G4_Rb
 #
@@ -8793,7 +8801,7 @@ SimpleBox is now made of G4_Rb
 /gun/energy 1 eV 
 /mydet/SelectMaterial G4_Rb
 SimpleBox is now made of G4_Rb
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 MeV in G4_Sr
 #
@@ -8801,7 +8809,7 @@ SimpleBox is now made of G4_Rb
 /gun/energy 10 MeV
 /mydet/SelectMaterial G4_Sr
 SimpleBox is now made of G4_Sr
-/run/beamOn 1
+/run/beamOn 20
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
 The cut in range [1000 (mm)]   is too big   for material  idx=41
 The cut in energy is set1.7976931e+305GeV 
@@ -8945,7 +8953,7 @@ hIoni:   tables are built for  pi-
 /gun/energy 1 MeV
 /mydet/SelectMaterial G4_Sr
 SimpleBox is now made of G4_Sr
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 keV in G4_Sr
 #
@@ -8953,7 +8961,7 @@ SimpleBox is now made of G4_Sr
 /gun/energy 100 keV
 /mydet/SelectMaterial G4_Sr
 SimpleBox is now made of G4_Sr
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 keV in G4_Sr
 #
@@ -8961,7 +8969,7 @@ SimpleBox is now made of G4_Sr
 /gun/energy 10 keV
 /mydet/SelectMaterial G4_Sr
 SimpleBox is now made of G4_Sr
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 keV in G4_Sr
 #
@@ -8969,7 +8977,7 @@ SimpleBox is now made of G4_Sr
 /gun/energy 1 keV
 /mydet/SelectMaterial G4_Sr
 SimpleBox is now made of G4_Sr
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 eV  in G4_Sr
 #
@@ -8977,7 +8985,7 @@ SimpleBox is now made of G4_Sr
 /gun/energy 100 eV 
 /mydet/SelectMaterial G4_Sr
 SimpleBox is now made of G4_Sr
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 eV  in G4_Sr
 #
@@ -8985,7 +8993,7 @@ SimpleBox is now made of G4_Sr
 /gun/energy 10 eV 
 /mydet/SelectMaterial G4_Sr
 SimpleBox is now made of G4_Sr
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 eV  in G4_Sr
 #
@@ -8993,7 +9001,7 @@ SimpleBox is now made of G4_Sr
 /gun/energy 1 eV 
 /mydet/SelectMaterial G4_Sr
 SimpleBox is now made of G4_Sr
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 MeV in G4_Y
 #
@@ -9001,7 +9009,7 @@ SimpleBox is now made of G4_Sr
 /gun/energy 10 MeV
 /mydet/SelectMaterial G4_Y
 SimpleBox is now made of G4_Y
-/run/beamOn 1
+/run/beamOn 20
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
 The cut in range [1000 (mm)]   is too big   for material  idx=42
 The cut in energy is set1.7976931e+305GeV 
@@ -9145,7 +9153,7 @@ hIoni:   tables are built for  pi-
 /gun/energy 1 MeV
 /mydet/SelectMaterial G4_Y
 SimpleBox is now made of G4_Y
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 keV in G4_Y
 #
@@ -9153,7 +9161,7 @@ SimpleBox is now made of G4_Y
 /gun/energy 100 keV
 /mydet/SelectMaterial G4_Y
 SimpleBox is now made of G4_Y
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 keV in G4_Y
 #
@@ -9161,7 +9169,7 @@ SimpleBox is now made of G4_Y
 /gun/energy 10 keV
 /mydet/SelectMaterial G4_Y
 SimpleBox is now made of G4_Y
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 keV in G4_Y
 #
@@ -9169,7 +9177,7 @@ SimpleBox is now made of G4_Y
 /gun/energy 1 keV
 /mydet/SelectMaterial G4_Y
 SimpleBox is now made of G4_Y
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 eV  in G4_Y
 #
@@ -9177,7 +9185,7 @@ SimpleBox is now made of G4_Y
 /gun/energy 100 eV 
 /mydet/SelectMaterial G4_Y
 SimpleBox is now made of G4_Y
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 eV  in G4_Y
 #
@@ -9185,7 +9193,7 @@ SimpleBox is now made of G4_Y
 /gun/energy 10 eV 
 /mydet/SelectMaterial G4_Y
 SimpleBox is now made of G4_Y
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 eV  in G4_Y
 #
@@ -9193,7 +9201,7 @@ SimpleBox is now made of G4_Y
 /gun/energy 1 eV 
 /mydet/SelectMaterial G4_Y
 SimpleBox is now made of G4_Y
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 MeV in G4_Zr
 #
@@ -9201,7 +9209,7 @@ SimpleBox is now made of G4_Y
 /gun/energy 10 MeV
 /mydet/SelectMaterial G4_Zr
 SimpleBox is now made of G4_Zr
-/run/beamOn 1
+/run/beamOn 20
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
 The cut in range [1000 (mm)]   is too big   for material  idx=43
 The cut in energy is set1.7976931e+305GeV 
@@ -9345,7 +9353,7 @@ hIoni:   tables are built for  pi-
 /gun/energy 1 MeV
 /mydet/SelectMaterial G4_Zr
 SimpleBox is now made of G4_Zr
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 keV in G4_Zr
 #
@@ -9353,7 +9361,7 @@ SimpleBox is now made of G4_Zr
 /gun/energy 100 keV
 /mydet/SelectMaterial G4_Zr
 SimpleBox is now made of G4_Zr
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 keV in G4_Zr
 #
@@ -9361,7 +9369,7 @@ SimpleBox is now made of G4_Zr
 /gun/energy 10 keV
 /mydet/SelectMaterial G4_Zr
 SimpleBox is now made of G4_Zr
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 keV in G4_Zr
 #
@@ -9369,7 +9377,7 @@ SimpleBox is now made of G4_Zr
 /gun/energy 1 keV
 /mydet/SelectMaterial G4_Zr
 SimpleBox is now made of G4_Zr
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 eV  in G4_Zr
 #
@@ -9377,7 +9385,7 @@ SimpleBox is now made of G4_Zr
 /gun/energy 100 eV 
 /mydet/SelectMaterial G4_Zr
 SimpleBox is now made of G4_Zr
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 eV  in G4_Zr
 #
@@ -9385,7 +9393,7 @@ SimpleBox is now made of G4_Zr
 /gun/energy 10 eV 
 /mydet/SelectMaterial G4_Zr
 SimpleBox is now made of G4_Zr
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 eV  in G4_Zr
 #
@@ -9393,7 +9401,7 @@ SimpleBox is now made of G4_Zr
 /gun/energy 1 eV 
 /mydet/SelectMaterial G4_Zr
 SimpleBox is now made of G4_Zr
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 MeV in G4_Nb
 #
@@ -9401,7 +9409,7 @@ SimpleBox is now made of G4_Zr
 /gun/energy 10 MeV
 /mydet/SelectMaterial G4_Nb
 SimpleBox is now made of G4_Nb
-/run/beamOn 1
+/run/beamOn 20
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
 The cut in range [1000 (mm)]   is too big   for material  idx=44
 The cut in energy is set1.7976931e+305GeV 
@@ -9545,7 +9553,7 @@ hIoni:   tables are built for  pi-
 /gun/energy 1 MeV
 /mydet/SelectMaterial G4_Nb
 SimpleBox is now made of G4_Nb
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 keV in G4_Nb
 #
@@ -9553,7 +9561,7 @@ SimpleBox is now made of G4_Nb
 /gun/energy 100 keV
 /mydet/SelectMaterial G4_Nb
 SimpleBox is now made of G4_Nb
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 keV in G4_Nb
 #
@@ -9561,7 +9569,7 @@ SimpleBox is now made of G4_Nb
 /gun/energy 10 keV
 /mydet/SelectMaterial G4_Nb
 SimpleBox is now made of G4_Nb
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 keV in G4_Nb
 #
@@ -9569,7 +9577,7 @@ SimpleBox is now made of G4_Nb
 /gun/energy 1 keV
 /mydet/SelectMaterial G4_Nb
 SimpleBox is now made of G4_Nb
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 eV  in G4_Nb
 #
@@ -9577,7 +9585,7 @@ SimpleBox is now made of G4_Nb
 /gun/energy 100 eV 
 /mydet/SelectMaterial G4_Nb
 SimpleBox is now made of G4_Nb
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 eV  in G4_Nb
 #
@@ -9585,7 +9593,7 @@ SimpleBox is now made of G4_Nb
 /gun/energy 10 eV 
 /mydet/SelectMaterial G4_Nb
 SimpleBox is now made of G4_Nb
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 eV  in G4_Nb
 #
@@ -9593,7 +9601,7 @@ SimpleBox is now made of G4_Nb
 /gun/energy 1 eV 
 /mydet/SelectMaterial G4_Nb
 SimpleBox is now made of G4_Nb
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 MeV in G4_Mo
 #
@@ -9601,7 +9609,7 @@ SimpleBox is now made of G4_Nb
 /gun/energy 10 MeV
 /mydet/SelectMaterial G4_Mo
 SimpleBox is now made of G4_Mo
-/run/beamOn 1
+/run/beamOn 20
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
 The cut in range [1000 (mm)]   is too big   for material  idx=45
 The cut in energy is set1.7976931e+305GeV 
@@ -9751,7 +9759,7 @@ hIoni:   tables are built for  pi-
 /gun/energy 1 MeV
 /mydet/SelectMaterial G4_Mo
 SimpleBox is now made of G4_Mo
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 keV in G4_Mo
 #
@@ -9759,7 +9767,7 @@ SimpleBox is now made of G4_Mo
 /gun/energy 100 keV
 /mydet/SelectMaterial G4_Mo
 SimpleBox is now made of G4_Mo
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 keV in G4_Mo
 #
@@ -9767,7 +9775,7 @@ SimpleBox is now made of G4_Mo
 /gun/energy 10 keV
 /mydet/SelectMaterial G4_Mo
 SimpleBox is now made of G4_Mo
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 keV in G4_Mo
 #
@@ -9775,7 +9783,7 @@ SimpleBox is now made of G4_Mo
 /gun/energy 1 keV
 /mydet/SelectMaterial G4_Mo
 SimpleBox is now made of G4_Mo
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 eV  in G4_Mo
 #
@@ -9783,7 +9791,7 @@ SimpleBox is now made of G4_Mo
 /gun/energy 100 eV 
 /mydet/SelectMaterial G4_Mo
 SimpleBox is now made of G4_Mo
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 eV  in G4_Mo
 #
@@ -9791,7 +9799,7 @@ SimpleBox is now made of G4_Mo
 /gun/energy 10 eV 
 /mydet/SelectMaterial G4_Mo
 SimpleBox is now made of G4_Mo
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 eV  in G4_Mo
 #
@@ -9799,7 +9807,7 @@ SimpleBox is now made of G4_Mo
 /gun/energy 1 eV 
 /mydet/SelectMaterial G4_Mo
 SimpleBox is now made of G4_Mo
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 MeV in G4_Tc
 #
@@ -9807,7 +9815,7 @@ SimpleBox is now made of G4_Mo
 /gun/energy 10 MeV
 /mydet/SelectMaterial G4_Tc
 SimpleBox is now made of G4_Tc
-/run/beamOn 1
+/run/beamOn 20
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
 The cut in range [1000 (mm)]   is too big   for material  idx=46
 The cut in energy is set1.7976931e+305GeV 
@@ -9957,7 +9965,7 @@ hIoni:   tables are built for  pi-
 /gun/energy 1 MeV
 /mydet/SelectMaterial G4_Tc
 SimpleBox is now made of G4_Tc
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 keV in G4_Tc
 #
@@ -9965,7 +9973,7 @@ SimpleBox is now made of G4_Tc
 /gun/energy 100 keV
 /mydet/SelectMaterial G4_Tc
 SimpleBox is now made of G4_Tc
-/run/beamOn 1
+/run/beamOn 20
  G4NuclearLevelManager: nuclide (43,99) does not have a gamma levels file
 #
 # neutron at 10 keV in G4_Tc
@@ -9974,7 +9982,7 @@ SimpleBox is now made of G4_Tc
 /gun/energy 10 keV
 /mydet/SelectMaterial G4_Tc
 SimpleBox is now made of G4_Tc
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 keV in G4_Tc
 #
@@ -9982,7 +9990,7 @@ SimpleBox is now made of G4_Tc
 /gun/energy 1 keV
 /mydet/SelectMaterial G4_Tc
 SimpleBox is now made of G4_Tc
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 eV  in G4_Tc
 #
@@ -9990,7 +9998,7 @@ SimpleBox is now made of G4_Tc
 /gun/energy 100 eV 
 /mydet/SelectMaterial G4_Tc
 SimpleBox is now made of G4_Tc
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 eV  in G4_Tc
 #
@@ -9998,7 +10006,7 @@ SimpleBox is now made of G4_Tc
 /gun/energy 10 eV 
 /mydet/SelectMaterial G4_Tc
 SimpleBox is now made of G4_Tc
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 eV  in G4_Tc
 #
@@ -10006,7 +10014,7 @@ SimpleBox is now made of G4_Tc
 /gun/energy 1 eV 
 /mydet/SelectMaterial G4_Tc
 SimpleBox is now made of G4_Tc
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 MeV in G4_Ru
 #
@@ -10014,7 +10022,7 @@ SimpleBox is now made of G4_Tc
 /gun/energy 10 MeV
 /mydet/SelectMaterial G4_Ru
 SimpleBox is now made of G4_Ru
-/run/beamOn 1
+/run/beamOn 20
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
 The cut in range [1000 (mm)]   is too big   for material  idx=47
 The cut in energy is set1.7976931e+305GeV 
@@ -10157,6 +10165,7 @@ hIoni:   tables are built for  pi-
       Delta cross sections and sampling from BetheBloch model for scaled energy > 0.29750425 MeV
       Parametrisation from Bragg for protons below.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+ G4NuclearLevelManager: nuclide (44,102) does not have a gamma levels file
 #
 # neutron at 1 MeV in G4_Ru
 #
@@ -10164,7 +10173,10 @@ hIoni:   tables are built for  pi-
 /gun/energy 1 MeV
 /mydet/SelectMaterial G4_Ru
 SimpleBox is now made of G4_Ru
-/run/beamOn 1
+/run/beamOn 20
+ G4NuclearLevelManager: nuclide (44,101) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (44,100) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (44,103) does not have a gamma levels file
 #
 # neutron at 100 keV in G4_Ru
 #
@@ -10172,8 +10184,7 @@ SimpleBox is now made of G4_Ru
 /gun/energy 100 keV
 /mydet/SelectMaterial G4_Ru
 SimpleBox is now made of G4_Ru
-/run/beamOn 1
- G4NuclearLevelManager: nuclide (44,97) does not have a gamma levels file
+/run/beamOn 20
 #
 # neutron at 10 keV in G4_Ru
 #
@@ -10181,8 +10192,9 @@ SimpleBox is now made of G4_Ru
 /gun/energy 10 keV
 /mydet/SelectMaterial G4_Ru
 SimpleBox is now made of G4_Ru
-/run/beamOn 1
- G4NuclearLevelManager: nuclide (44,103) does not have a gamma levels file
+/run/beamOn 20
+ G4NuclearLevelManager: nuclide (44,97) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (44,105) does not have a gamma levels file
 #
 # neutron at 1 keV in G4_Ru
 #
@@ -10190,7 +10202,8 @@ SimpleBox is now made of G4_Ru
 /gun/energy 1 keV
 /mydet/SelectMaterial G4_Ru
 SimpleBox is now made of G4_Ru
-/run/beamOn 1
+/run/beamOn 20
+ G4NuclearLevelManager: nuclide (44,99) does not have a gamma levels file
 #
 # neutron at 100 eV  in G4_Ru
 #
@@ -10198,7 +10211,7 @@ SimpleBox is now made of G4_Ru
 /gun/energy 100 eV 
 /mydet/SelectMaterial G4_Ru
 SimpleBox is now made of G4_Ru
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 eV  in G4_Ru
 #
@@ -10206,7 +10219,7 @@ SimpleBox is now made of G4_Ru
 /gun/energy 10 eV 
 /mydet/SelectMaterial G4_Ru
 SimpleBox is now made of G4_Ru
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 eV  in G4_Ru
 #
@@ -10214,7 +10227,7 @@ SimpleBox is now made of G4_Ru
 /gun/energy 1 eV 
 /mydet/SelectMaterial G4_Ru
 SimpleBox is now made of G4_Ru
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 MeV in G4_Rh
 #
@@ -10222,7 +10235,7 @@ SimpleBox is now made of G4_Ru
 /gun/energy 10 MeV
 /mydet/SelectMaterial G4_Rh
 SimpleBox is now made of G4_Rh
-/run/beamOn 1
+/run/beamOn 20
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
 The cut in range [1000 (mm)]   is too big   for material  idx=48
 The cut in energy is set1.7976931e+305GeV 
@@ -10365,6 +10378,7 @@ hIoni:   tables are built for  pi-
       Delta cross sections and sampling from BetheBloch model for scaled energy > 0.29750425 MeV
       Parametrisation from Bragg for protons below.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+ G4NuclearLevelManager: nuclide (45,104) does not have a gamma levels file
 #
 # neutron at 1 MeV in G4_Rh
 #
@@ -10372,8 +10386,7 @@ hIoni:   tables are built for  pi-
 /gun/energy 1 MeV
 /mydet/SelectMaterial G4_Rh
 SimpleBox is now made of G4_Rh
-/run/beamOn 1
- G4NuclearLevelManager: nuclide (45,104) does not have a gamma levels file
+/run/beamOn 20
 #
 # neutron at 100 keV in G4_Rh
 #
@@ -10381,7 +10394,7 @@ SimpleBox is now made of G4_Rh
 /gun/energy 100 keV
 /mydet/SelectMaterial G4_Rh
 SimpleBox is now made of G4_Rh
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 keV in G4_Rh
 #
@@ -10389,7 +10402,7 @@ SimpleBox is now made of G4_Rh
 /gun/energy 10 keV
 /mydet/SelectMaterial G4_Rh
 SimpleBox is now made of G4_Rh
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 keV in G4_Rh
 #
@@ -10397,7 +10410,7 @@ SimpleBox is now made of G4_Rh
 /gun/energy 1 keV
 /mydet/SelectMaterial G4_Rh
 SimpleBox is now made of G4_Rh
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 eV  in G4_Rh
 #
@@ -10405,7 +10418,7 @@ SimpleBox is now made of G4_Rh
 /gun/energy 100 eV 
 /mydet/SelectMaterial G4_Rh
 SimpleBox is now made of G4_Rh
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 eV  in G4_Rh
 #
@@ -10413,7 +10426,7 @@ SimpleBox is now made of G4_Rh
 /gun/energy 10 eV 
 /mydet/SelectMaterial G4_Rh
 SimpleBox is now made of G4_Rh
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 eV  in G4_Rh
 #
@@ -10421,7 +10434,7 @@ SimpleBox is now made of G4_Rh
 /gun/energy 1 eV 
 /mydet/SelectMaterial G4_Rh
 SimpleBox is now made of G4_Rh
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 MeV in G4_Pd
 #
@@ -10429,7 +10442,7 @@ SimpleBox is now made of G4_Rh
 /gun/energy 10 MeV
 /mydet/SelectMaterial G4_Pd
 SimpleBox is now made of G4_Pd
-/run/beamOn 1
+/run/beamOn 20
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
 The cut in range [1000 (mm)]   is too big   for material  idx=49
 The cut in energy is set1.7976931e+305GeV 
@@ -10579,7 +10592,10 @@ hIoni:   tables are built for  pi-
 /gun/energy 1 MeV
 /mydet/SelectMaterial G4_Pd
 SimpleBox is now made of G4_Pd
-/run/beamOn 1
+/run/beamOn 20
+ G4NuclearLevelManager: nuclide (46,106) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (46,109) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (46,105) does not have a gamma levels file
 #
 # neutron at 100 keV in G4_Pd
 #
@@ -10587,7 +10603,8 @@ SimpleBox is now made of G4_Pd
 /gun/energy 100 keV
 /mydet/SelectMaterial G4_Pd
 SimpleBox is now made of G4_Pd
-/run/beamOn 1
+/run/beamOn 20
+ G4NuclearLevelManager: nuclide (46,107) does not have a gamma levels file
 #
 # neutron at 10 keV in G4_Pd
 #
@@ -10595,8 +10612,8 @@ SimpleBox is now made of G4_Pd
 /gun/energy 10 keV
 /mydet/SelectMaterial G4_Pd
 SimpleBox is now made of G4_Pd
-/run/beamOn 1
- G4NuclearLevelManager: nuclide (46,109) does not have a gamma levels file
+/run/beamOn 20
+ G4NuclearLevelManager: nuclide (46,111) does not have a gamma levels file
 #
 # neutron at 1 keV in G4_Pd
 #
@@ -10604,8 +10621,7 @@ SimpleBox is now made of G4_Pd
 /gun/energy 1 keV
 /mydet/SelectMaterial G4_Pd
 SimpleBox is now made of G4_Pd
-/run/beamOn 1
- G4NuclearLevelManager: nuclide (46,107) does not have a gamma levels file
+/run/beamOn 20
 #
 # neutron at 100 eV  in G4_Pd
 #
@@ -10613,8 +10629,7 @@ SimpleBox is now made of G4_Pd
 /gun/energy 100 eV 
 /mydet/SelectMaterial G4_Pd
 SimpleBox is now made of G4_Pd
-/run/beamOn 1
- G4NuclearLevelManager: nuclide (46,111) does not have a gamma levels file
+/run/beamOn 20
 #
 # neutron at 10 eV  in G4_Pd
 #
@@ -10622,7 +10637,7 @@ SimpleBox is now made of G4_Pd
 /gun/energy 10 eV 
 /mydet/SelectMaterial G4_Pd
 SimpleBox is now made of G4_Pd
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 eV  in G4_Pd
 #
@@ -10630,8 +10645,7 @@ SimpleBox is now made of G4_Pd
 /gun/energy 1 eV 
 /mydet/SelectMaterial G4_Pd
 SimpleBox is now made of G4_Pd
-/run/beamOn 1
- G4NuclearLevelManager: nuclide (46,106) does not have a gamma levels file
+/run/beamOn 20
 #
 # neutron at 10 MeV in G4_Ag
 #
@@ -10639,7 +10653,7 @@ SimpleBox is now made of G4_Pd
 /gun/energy 10 MeV
 /mydet/SelectMaterial G4_Ag
 SimpleBox is now made of G4_Ag
-/run/beamOn 1
+/run/beamOn 20
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
 The cut in range [1000 (mm)]   is too big   for material  idx=50
 The cut in energy is set1.7976931e+305GeV 
@@ -10782,6 +10796,8 @@ hIoni:   tables are built for  pi-
       Delta cross sections and sampling from BetheBloch model for scaled energy > 0.29750425 MeV
       Parametrisation from Bragg for protons below.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+ G4NuclearLevelManager: nuclide (47,108) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (47,110) does not have a gamma levels file
 #
 # neutron at 1 MeV in G4_Ag
 #
@@ -10789,7 +10805,7 @@ hIoni:   tables are built for  pi-
 /gun/energy 1 MeV
 /mydet/SelectMaterial G4_Ag
 SimpleBox is now made of G4_Ag
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 keV in G4_Ag
 #
@@ -10797,7 +10813,7 @@ SimpleBox is now made of G4_Ag
 /gun/energy 100 keV
 /mydet/SelectMaterial G4_Ag
 SimpleBox is now made of G4_Ag
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 keV in G4_Ag
 #
@@ -10805,8 +10821,7 @@ SimpleBox is now made of G4_Ag
 /gun/energy 10 keV
 /mydet/SelectMaterial G4_Ag
 SimpleBox is now made of G4_Ag
-/run/beamOn 1
- G4NuclearLevelManager: nuclide (47,108) does not have a gamma levels file
+/run/beamOn 20
 #
 # neutron at 1 keV in G4_Ag
 #
@@ -10814,7 +10829,7 @@ SimpleBox is now made of G4_Ag
 /gun/energy 1 keV
 /mydet/SelectMaterial G4_Ag
 SimpleBox is now made of G4_Ag
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 eV  in G4_Ag
 #
@@ -10822,7 +10837,7 @@ SimpleBox is now made of G4_Ag
 /gun/energy 100 eV 
 /mydet/SelectMaterial G4_Ag
 SimpleBox is now made of G4_Ag
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 eV  in G4_Ag
 #
@@ -10830,8 +10845,7 @@ SimpleBox is now made of G4_Ag
 /gun/energy 10 eV 
 /mydet/SelectMaterial G4_Ag
 SimpleBox is now made of G4_Ag
-/run/beamOn 1
- G4NuclearLevelManager: nuclide (47,110) does not have a gamma levels file
+/run/beamOn 20
 #
 # neutron at 1 eV  in G4_Ag
 #
@@ -10839,7 +10853,7 @@ SimpleBox is now made of G4_Ag
 /gun/energy 1 eV 
 /mydet/SelectMaterial G4_Ag
 SimpleBox is now made of G4_Ag
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 MeV in G4_Cd
 #
@@ -10847,7 +10861,7 @@ SimpleBox is now made of G4_Ag
 /gun/energy 10 MeV
 /mydet/SelectMaterial G4_Cd
 SimpleBox is now made of G4_Cd
-/run/beamOn 1
+/run/beamOn 20
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
 The cut in range [1000 (mm)]   is too big   for material  idx=51
 The cut in energy is set1.7976931e+305GeV 
@@ -10984,6 +10998,8 @@ hIoni:   tables are built for  pi-
       Delta cross sections and sampling from BetheBloch model for scaled energy > 0.29750425 MeV
       Parametrisation from Bragg for protons below.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+ G4NuclearLevelManager: nuclide (48,114) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (48,115) does not have a gamma levels file
 #
 # neutron at 1 MeV in G4_Cd
 #
@@ -10991,7 +11007,9 @@ hIoni:   tables are built for  pi-
 /gun/energy 1 MeV
 /mydet/SelectMaterial G4_Cd
 SimpleBox is now made of G4_Cd
-/run/beamOn 1
+/run/beamOn 20
+ G4NuclearLevelManager: nuclide (48,117) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (48,111) does not have a gamma levels file
 #
 # neutron at 100 keV in G4_Cd
 #
@@ -10999,7 +11017,8 @@ SimpleBox is now made of G4_Cd
 /gun/energy 100 keV
 /mydet/SelectMaterial G4_Cd
 SimpleBox is now made of G4_Cd
-/run/beamOn 1
+/run/beamOn 20
+ G4NuclearLevelManager: nuclide (48,112) does not have a gamma levels file
 #
 # neutron at 10 keV in G4_Cd
 #
@@ -11007,7 +11026,8 @@ SimpleBox is now made of G4_Cd
 /gun/energy 10 keV
 /mydet/SelectMaterial G4_Cd
 SimpleBox is now made of G4_Cd
-/run/beamOn 1
+/run/beamOn 20
+ G4NuclearLevelManager: nuclide (48,113) does not have a gamma levels file
 #
 # neutron at 1 keV in G4_Cd
 #
@@ -11015,7 +11035,7 @@ SimpleBox is now made of G4_Cd
 /gun/energy 1 keV
 /mydet/SelectMaterial G4_Cd
 SimpleBox is now made of G4_Cd
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 eV  in G4_Cd
 #
@@ -11023,8 +11043,7 @@ SimpleBox is now made of G4_Cd
 /gun/energy 100 eV 
 /mydet/SelectMaterial G4_Cd
 SimpleBox is now made of G4_Cd
-/run/beamOn 1
- G4NuclearLevelManager: nuclide (48,112) does not have a gamma levels file
+/run/beamOn 20
 #
 # neutron at 10 eV  in G4_Cd
 #
@@ -11032,7 +11051,7 @@ SimpleBox is now made of G4_Cd
 /gun/energy 10 eV 
 /mydet/SelectMaterial G4_Cd
 SimpleBox is now made of G4_Cd
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 eV  in G4_Cd
 #
@@ -11040,8 +11059,7 @@ SimpleBox is now made of G4_Cd
 /gun/energy 1 eV 
 /mydet/SelectMaterial G4_Cd
 SimpleBox is now made of G4_Cd
-/run/beamOn 1
- G4NuclearLevelManager: nuclide (48,114) does not have a gamma levels file
+/run/beamOn 20
 #
 # neutron at 10 MeV in G4_In
 #
@@ -11049,7 +11067,7 @@ SimpleBox is now made of G4_Cd
 /gun/energy 10 MeV
 /mydet/SelectMaterial G4_In
 SimpleBox is now made of G4_In
-/run/beamOn 1
+/run/beamOn 20
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
 The cut in range [1000 (mm)]   is too big   for material  idx=52
 The cut in energy is set1.7976931e+305GeV 
@@ -11193,7 +11211,7 @@ hIoni:   tables are built for  pi-
 /gun/energy 1 MeV
 /mydet/SelectMaterial G4_In
 SimpleBox is now made of G4_In
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 keV in G4_In
 #
@@ -11201,7 +11219,7 @@ SimpleBox is now made of G4_In
 /gun/energy 100 keV
 /mydet/SelectMaterial G4_In
 SimpleBox is now made of G4_In
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 keV in G4_In
 #
@@ -11209,7 +11227,7 @@ SimpleBox is now made of G4_In
 /gun/energy 10 keV
 /mydet/SelectMaterial G4_In
 SimpleBox is now made of G4_In
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 keV in G4_In
 #
@@ -11217,7 +11235,7 @@ SimpleBox is now made of G4_In
 /gun/energy 1 keV
 /mydet/SelectMaterial G4_In
 SimpleBox is now made of G4_In
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 eV  in G4_In
 #
@@ -11225,7 +11243,7 @@ SimpleBox is now made of G4_In
 /gun/energy 100 eV 
 /mydet/SelectMaterial G4_In
 SimpleBox is now made of G4_In
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 eV  in G4_In
 #
@@ -11233,7 +11251,7 @@ SimpleBox is now made of G4_In
 /gun/energy 10 eV 
 /mydet/SelectMaterial G4_In
 SimpleBox is now made of G4_In
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 eV  in G4_In
 #
@@ -11241,7 +11259,7 @@ SimpleBox is now made of G4_In
 /gun/energy 1 eV 
 /mydet/SelectMaterial G4_In
 SimpleBox is now made of G4_In
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 MeV in G4_Sn
 #
@@ -11249,7 +11267,7 @@ SimpleBox is now made of G4_In
 /gun/energy 10 MeV
 /mydet/SelectMaterial G4_Sn
 SimpleBox is now made of G4_Sn
-/run/beamOn 1
+/run/beamOn 20
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
 The cut in range [1000 (mm)]   is too big   for material  idx=53
 The cut in energy is set1.7976931e+305GeV 
@@ -11393,7 +11411,7 @@ hIoni:   tables are built for  pi-
 /gun/energy 1 MeV
 /mydet/SelectMaterial G4_Sn
 SimpleBox is now made of G4_Sn
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 keV in G4_Sn
 #
@@ -11401,7 +11419,7 @@ SimpleBox is now made of G4_Sn
 /gun/energy 100 keV
 /mydet/SelectMaterial G4_Sn
 SimpleBox is now made of G4_Sn
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 keV in G4_Sn
 #
@@ -11409,7 +11427,7 @@ SimpleBox is now made of G4_Sn
 /gun/energy 10 keV
 /mydet/SelectMaterial G4_Sn
 SimpleBox is now made of G4_Sn
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 keV in G4_Sn
 #
@@ -11417,7 +11435,7 @@ SimpleBox is now made of G4_Sn
 /gun/energy 1 keV
 /mydet/SelectMaterial G4_Sn
 SimpleBox is now made of G4_Sn
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 eV  in G4_Sn
 #
@@ -11425,7 +11443,7 @@ SimpleBox is now made of G4_Sn
 /gun/energy 100 eV 
 /mydet/SelectMaterial G4_Sn
 SimpleBox is now made of G4_Sn
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 eV  in G4_Sn
 #
@@ -11433,7 +11451,7 @@ SimpleBox is now made of G4_Sn
 /gun/energy 10 eV 
 /mydet/SelectMaterial G4_Sn
 SimpleBox is now made of G4_Sn
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 eV  in G4_Sn
 #
@@ -11441,7 +11459,7 @@ SimpleBox is now made of G4_Sn
 /gun/energy 1 eV 
 /mydet/SelectMaterial G4_Sn
 SimpleBox is now made of G4_Sn
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 MeV in G4_Sb
 #
@@ -11449,7 +11467,7 @@ SimpleBox is now made of G4_Sn
 /gun/energy 10 MeV
 /mydet/SelectMaterial G4_Sb
 SimpleBox is now made of G4_Sb
-/run/beamOn 1
+/run/beamOn 20
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
 The cut in range [1000 (mm)]   is too big   for material  idx=54
 The cut in energy is set1.7976931e+305GeV 
@@ -11593,7 +11611,7 @@ hIoni:   tables are built for  pi-
 /gun/energy 1 MeV
 /mydet/SelectMaterial G4_Sb
 SimpleBox is now made of G4_Sb
-/run/beamOn 1
+/run/beamOn 20
  G4NuclearLevelManager: nuclide (51,122) does not have a gamma levels file
 #
 # neutron at 100 keV in G4_Sb
@@ -11602,7 +11620,7 @@ SimpleBox is now made of G4_Sb
 /gun/energy 100 keV
 /mydet/SelectMaterial G4_Sb
 SimpleBox is now made of G4_Sb
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 keV in G4_Sb
 #
@@ -11610,7 +11628,8 @@ SimpleBox is now made of G4_Sb
 /gun/energy 10 keV
 /mydet/SelectMaterial G4_Sb
 SimpleBox is now made of G4_Sb
-/run/beamOn 1
+/run/beamOn 20
+ G4NuclearLevelManager: nuclide (51,124) does not have a gamma levels file
 #
 # neutron at 1 keV in G4_Sb
 #
@@ -11618,7 +11637,7 @@ SimpleBox is now made of G4_Sb
 /gun/energy 1 keV
 /mydet/SelectMaterial G4_Sb
 SimpleBox is now made of G4_Sb
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 eV  in G4_Sb
 #
@@ -11626,7 +11645,7 @@ SimpleBox is now made of G4_Sb
 /gun/energy 100 eV 
 /mydet/SelectMaterial G4_Sb
 SimpleBox is now made of G4_Sb
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 eV  in G4_Sb
 #
@@ -11634,7 +11653,7 @@ SimpleBox is now made of G4_Sb
 /gun/energy 10 eV 
 /mydet/SelectMaterial G4_Sb
 SimpleBox is now made of G4_Sb
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 eV  in G4_Sb
 #
@@ -11642,7 +11661,7 @@ SimpleBox is now made of G4_Sb
 /gun/energy 1 eV 
 /mydet/SelectMaterial G4_Sb
 SimpleBox is now made of G4_Sb
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 MeV in G4_Te
 #
@@ -11650,7 +11669,7 @@ SimpleBox is now made of G4_Sb
 /gun/energy 10 MeV
 /mydet/SelectMaterial G4_Te
 SimpleBox is now made of G4_Te
-/run/beamOn 1
+/run/beamOn 20
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
 The cut in range [1000 (mm)]   is too big   for material  idx=55
 The cut in energy is set1.7976931e+305GeV 
@@ -11794,7 +11813,7 @@ hIoni:   tables are built for  pi-
 /gun/energy 1 MeV
 /mydet/SelectMaterial G4_Te
 SimpleBox is now made of G4_Te
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 keV in G4_Te
 #
@@ -11802,7 +11821,7 @@ SimpleBox is now made of G4_Te
 /gun/energy 100 keV
 /mydet/SelectMaterial G4_Te
 SimpleBox is now made of G4_Te
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 keV in G4_Te
 #
@@ -11810,7 +11829,9 @@ SimpleBox is now made of G4_Te
 /gun/energy 10 keV
 /mydet/SelectMaterial G4_Te
 SimpleBox is now made of G4_Te
-/run/beamOn 1
+/run/beamOn 20
+ G4NuclearLevelManager: nuclide (52,124) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (52,126) does not have a gamma levels file
 #
 # neutron at 1 keV in G4_Te
 #
@@ -11818,8 +11839,7 @@ SimpleBox is now made of G4_Te
 /gun/energy 1 keV
 /mydet/SelectMaterial G4_Te
 SimpleBox is now made of G4_Te
-/run/beamOn 1
- G4NuclearLevelManager: nuclide (52,126) does not have a gamma levels file
+/run/beamOn 20
 #
 # neutron at 100 eV  in G4_Te
 #
@@ -11827,7 +11847,7 @@ SimpleBox is now made of G4_Te
 /gun/energy 100 eV 
 /mydet/SelectMaterial G4_Te
 SimpleBox is now made of G4_Te
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 eV  in G4_Te
 #
@@ -11835,7 +11855,7 @@ SimpleBox is now made of G4_Te
 /gun/energy 10 eV 
 /mydet/SelectMaterial G4_Te
 SimpleBox is now made of G4_Te
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 eV  in G4_Te
 #
@@ -11843,7 +11863,8 @@ SimpleBox is now made of G4_Te
 /gun/energy 1 eV 
 /mydet/SelectMaterial G4_Te
 SimpleBox is now made of G4_Te
-/run/beamOn 1
+/run/beamOn 20
+ G4NuclearLevelManager: nuclide (52,131) does not have a gamma levels file
 #
 # neutron at 10 MeV in G4_I
 #
@@ -11851,7 +11872,7 @@ SimpleBox is now made of G4_Te
 /gun/energy 10 MeV
 /mydet/SelectMaterial G4_I
 SimpleBox is now made of G4_I
-/run/beamOn 1
+/run/beamOn 20
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
 The cut in range [1000 (mm)]   is too big   for material  idx=56
 The cut in energy is set1.7976931e+305GeV 
@@ -11995,7 +12016,7 @@ hIoni:   tables are built for  pi-
 /gun/energy 1 MeV
 /mydet/SelectMaterial G4_I
 SimpleBox is now made of G4_I
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 keV in G4_I
 #
@@ -12003,7 +12024,7 @@ SimpleBox is now made of G4_I
 /gun/energy 100 keV
 /mydet/SelectMaterial G4_I
 SimpleBox is now made of G4_I
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 keV in G4_I
 #
@@ -12011,7 +12032,7 @@ SimpleBox is now made of G4_I
 /gun/energy 10 keV
 /mydet/SelectMaterial G4_I
 SimpleBox is now made of G4_I
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 keV in G4_I
 #
@@ -12019,7 +12040,7 @@ SimpleBox is now made of G4_I
 /gun/energy 1 keV
 /mydet/SelectMaterial G4_I
 SimpleBox is now made of G4_I
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 eV  in G4_I
 #
@@ -12027,7 +12048,7 @@ SimpleBox is now made of G4_I
 /gun/energy 100 eV 
 /mydet/SelectMaterial G4_I
 SimpleBox is now made of G4_I
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 eV  in G4_I
 #
@@ -12035,7 +12056,7 @@ SimpleBox is now made of G4_I
 /gun/energy 10 eV 
 /mydet/SelectMaterial G4_I
 SimpleBox is now made of G4_I
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 eV  in G4_I
 #
@@ -12043,7 +12064,7 @@ SimpleBox is now made of G4_I
 /gun/energy 1 eV 
 /mydet/SelectMaterial G4_I
 SimpleBox is now made of G4_I
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 MeV in G4_Xe
 #
@@ -12051,7 +12072,7 @@ SimpleBox is now made of G4_I
 /gun/energy 10 MeV
 /mydet/SelectMaterial G4_Xe
 SimpleBox is now made of G4_Xe
-/run/beamOn 1
+/run/beamOn 20
 
 conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
       sampling secondary e+e- according Bethe-Heitler model
@@ -12192,7 +12213,7 @@ hIoni:   tables are built for  pi-
 /gun/energy 1 MeV
 /mydet/SelectMaterial G4_Xe
 SimpleBox is now made of G4_Xe
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 keV in G4_Xe
 #
@@ -12200,7 +12221,7 @@ SimpleBox is now made of G4_Xe
 /gun/energy 100 keV
 /mydet/SelectMaterial G4_Xe
 SimpleBox is now made of G4_Xe
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 keV in G4_Xe
 #
@@ -12208,7 +12229,8 @@ SimpleBox is now made of G4_Xe
 /gun/energy 10 keV
 /mydet/SelectMaterial G4_Xe
 SimpleBox is now made of G4_Xe
-/run/beamOn 1
+/run/beamOn 20
+ G4NuclearLevelManager: nuclide (54,130) does not have a gamma levels file
 #
 # neutron at 1 keV in G4_Xe
 #
@@ -12216,7 +12238,8 @@ SimpleBox is now made of G4_Xe
 /gun/energy 1 keV
 /mydet/SelectMaterial G4_Xe
 SimpleBox is now made of G4_Xe
-/run/beamOn 1
+/run/beamOn 20
+ G4NuclearLevelManager: nuclide (54,135) does not have a gamma levels file
 #
 # neutron at 100 eV  in G4_Xe
 #
@@ -12224,7 +12247,8 @@ SimpleBox is now made of G4_Xe
 /gun/energy 100 eV 
 /mydet/SelectMaterial G4_Xe
 SimpleBox is now made of G4_Xe
-/run/beamOn 1
+/run/beamOn 20
+ G4NuclearLevelManager: nuclide (54,127) does not have a gamma levels file
 #
 # neutron at 10 eV  in G4_Xe
 #
@@ -12232,8 +12256,9 @@ SimpleBox is now made of G4_Xe
 /gun/energy 10 eV 
 /mydet/SelectMaterial G4_Xe
 SimpleBox is now made of G4_Xe
-/run/beamOn 1
- G4NuclearLevelManager: nuclide (54,130) does not have a gamma levels file
+/run/beamOn 20
+ G4NuclearLevelManager: nuclide (54,125) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (54,132) does not have a gamma levels file
 #
 # neutron at 1 eV  in G4_Xe
 #
@@ -12241,7 +12266,7 @@ SimpleBox is now made of G4_Xe
 /gun/energy 1 eV 
 /mydet/SelectMaterial G4_Xe
 SimpleBox is now made of G4_Xe
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 MeV in G4_Cs
 #
@@ -12249,7 +12274,7 @@ SimpleBox is now made of G4_Xe
 /gun/energy 10 MeV
 /mydet/SelectMaterial G4_Cs
 SimpleBox is now made of G4_Cs
-/run/beamOn 1
+/run/beamOn 20
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
 The cut in range [1000 (mm)]   is too big   for material  idx=58
 The cut in energy is set1.7976931e+305GeV 
@@ -12393,7 +12418,7 @@ hIoni:   tables are built for  pi-
 /gun/energy 1 MeV
 /mydet/SelectMaterial G4_Cs
 SimpleBox is now made of G4_Cs
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 keV in G4_Cs
 #
@@ -12401,7 +12426,7 @@ SimpleBox is now made of G4_Cs
 /gun/energy 100 keV
 /mydet/SelectMaterial G4_Cs
 SimpleBox is now made of G4_Cs
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 keV in G4_Cs
 #
@@ -12409,7 +12434,7 @@ SimpleBox is now made of G4_Cs
 /gun/energy 10 keV
 /mydet/SelectMaterial G4_Cs
 SimpleBox is now made of G4_Cs
-/run/beamOn 1
+/run/beamOn 20
  G4NuclearLevelManager: nuclide (55,134) does not have a gamma levels file
 #
 # neutron at 1 keV in G4_Cs
@@ -12418,7 +12443,7 @@ SimpleBox is now made of G4_Cs
 /gun/energy 1 keV
 /mydet/SelectMaterial G4_Cs
 SimpleBox is now made of G4_Cs
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 eV  in G4_Cs
 #
@@ -12426,7 +12451,7 @@ SimpleBox is now made of G4_Cs
 /gun/energy 100 eV 
 /mydet/SelectMaterial G4_Cs
 SimpleBox is now made of G4_Cs
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 eV  in G4_Cs
 #
@@ -12434,7 +12459,7 @@ SimpleBox is now made of G4_Cs
 /gun/energy 10 eV 
 /mydet/SelectMaterial G4_Cs
 SimpleBox is now made of G4_Cs
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 eV  in G4_Cs
 #
@@ -12442,7 +12467,7 @@ SimpleBox is now made of G4_Cs
 /gun/energy 1 eV 
 /mydet/SelectMaterial G4_Cs
 SimpleBox is now made of G4_Cs
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 MeV in G4_Ba
 #
@@ -12450,7 +12475,7 @@ SimpleBox is now made of G4_Cs
 /gun/energy 10 MeV
 /mydet/SelectMaterial G4_Ba
 SimpleBox is now made of G4_Ba
-/run/beamOn 1
+/run/beamOn 20
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
 The cut in range [1000 (mm)]   is too big   for material  idx=59
 The cut in energy is set1.7976931e+305GeV 
@@ -12594,7 +12619,7 @@ hIoni:   tables are built for  pi-
 /gun/energy 1 MeV
 /mydet/SelectMaterial G4_Ba
 SimpleBox is now made of G4_Ba
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 keV in G4_Ba
 #
@@ -12602,7 +12627,7 @@ SimpleBox is now made of G4_Ba
 /gun/energy 100 keV
 /mydet/SelectMaterial G4_Ba
 SimpleBox is now made of G4_Ba
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 keV in G4_Ba
 #
@@ -12610,7 +12635,8 @@ SimpleBox is now made of G4_Ba
 /gun/energy 10 keV
 /mydet/SelectMaterial G4_Ba
 SimpleBox is now made of G4_Ba
-/run/beamOn 1
+/run/beamOn 20
+ G4NuclearLevelManager: nuclide (56,136) does not have a gamma levels file
 #
 # neutron at 1 keV in G4_Ba
 #
@@ -12618,7 +12644,7 @@ SimpleBox is now made of G4_Ba
 /gun/energy 1 keV
 /mydet/SelectMaterial G4_Ba
 SimpleBox is now made of G4_Ba
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 eV  in G4_Ba
 #
@@ -12626,7 +12652,9 @@ SimpleBox is now made of G4_Ba
 /gun/energy 100 eV 
 /mydet/SelectMaterial G4_Ba
 SimpleBox is now made of G4_Ba
-/run/beamOn 1
+/run/beamOn 20
+ G4NuclearLevelManager: nuclide (56,135) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (56,133) does not have a gamma levels file
 #
 # neutron at 10 eV  in G4_Ba
 #
@@ -12634,7 +12662,7 @@ SimpleBox is now made of G4_Ba
 /gun/energy 10 eV 
 /mydet/SelectMaterial G4_Ba
 SimpleBox is now made of G4_Ba
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 eV  in G4_Ba
 #
@@ -12642,7 +12670,8 @@ SimpleBox is now made of G4_Ba
 /gun/energy 1 eV 
 /mydet/SelectMaterial G4_Ba
 SimpleBox is now made of G4_Ba
-/run/beamOn 1
+/run/beamOn 20
+ G4NuclearLevelManager: nuclide (56,138) does not have a gamma levels file
 #
 # neutron at 10 MeV in G4_La
 #
@@ -12650,7 +12679,7 @@ SimpleBox is now made of G4_Ba
 /gun/energy 10 MeV
 /mydet/SelectMaterial G4_La
 SimpleBox is now made of G4_La
-/run/beamOn 1
+/run/beamOn 20
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
 The cut in range [1000 (mm)]   is too big   for material  idx=60
 The cut in energy is set1.7976931e+305GeV 
@@ -12794,7 +12823,7 @@ hIoni:   tables are built for  pi-
 /gun/energy 1 MeV
 /mydet/SelectMaterial G4_La
 SimpleBox is now made of G4_La
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 keV in G4_La
 #
@@ -12802,7 +12831,7 @@ SimpleBox is now made of G4_La
 /gun/energy 100 keV
 /mydet/SelectMaterial G4_La
 SimpleBox is now made of G4_La
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 keV in G4_La
 #
@@ -12810,7 +12839,7 @@ SimpleBox is now made of G4_La
 /gun/energy 10 keV
 /mydet/SelectMaterial G4_La
 SimpleBox is now made of G4_La
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 keV in G4_La
 #
@@ -12818,7 +12847,7 @@ SimpleBox is now made of G4_La
 /gun/energy 1 keV
 /mydet/SelectMaterial G4_La
 SimpleBox is now made of G4_La
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 eV  in G4_La
 #
@@ -12826,7 +12855,7 @@ SimpleBox is now made of G4_La
 /gun/energy 100 eV 
 /mydet/SelectMaterial G4_La
 SimpleBox is now made of G4_La
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 eV  in G4_La
 #
@@ -12834,7 +12863,7 @@ SimpleBox is now made of G4_La
 /gun/energy 10 eV 
 /mydet/SelectMaterial G4_La
 SimpleBox is now made of G4_La
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 eV  in G4_La
 #
@@ -12842,7 +12871,7 @@ SimpleBox is now made of G4_La
 /gun/energy 1 eV 
 /mydet/SelectMaterial G4_La
 SimpleBox is now made of G4_La
-/run/beamOn 1
+/run/beamOn 20
  G4NuclearLevelManager: nuclide (57,140) does not have a gamma levels file
 #
 # neutron at 10 MeV in G4_Ce
@@ -12851,7 +12880,7 @@ SimpleBox is now made of G4_La
 /gun/energy 10 MeV
 /mydet/SelectMaterial G4_Ce
 SimpleBox is now made of G4_Ce
-/run/beamOn 1
+/run/beamOn 20
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
 The cut in range [1000 (mm)]   is too big   for material  idx=61
 The cut in energy is set1.7976931e+305GeV 
@@ -12988,6 +13017,7 @@ hIoni:   tables are built for  pi-
       Delta cross sections and sampling from BetheBloch model for scaled energy > 0.29750425 MeV
       Parametrisation from Bragg for protons below.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+ G4NuclearLevelManager: nuclide (58,141) does not have a gamma levels file
 #
 # neutron at 1 MeV in G4_Ce
 #
@@ -12995,7 +13025,7 @@ hIoni:   tables are built for  pi-
 /gun/energy 1 MeV
 /mydet/SelectMaterial G4_Ce
 SimpleBox is now made of G4_Ce
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 keV in G4_Ce
 #
@@ -13003,7 +13033,7 @@ SimpleBox is now made of G4_Ce
 /gun/energy 100 keV
 /mydet/SelectMaterial G4_Ce
 SimpleBox is now made of G4_Ce
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 keV in G4_Ce
 #
@@ -13011,7 +13041,7 @@ SimpleBox is now made of G4_Ce
 /gun/energy 10 keV
 /mydet/SelectMaterial G4_Ce
 SimpleBox is now made of G4_Ce
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 keV in G4_Ce
 #
@@ -13019,7 +13049,7 @@ SimpleBox is now made of G4_Ce
 /gun/energy 1 keV
 /mydet/SelectMaterial G4_Ce
 SimpleBox is now made of G4_Ce
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 eV  in G4_Ce
 #
@@ -13027,7 +13057,7 @@ SimpleBox is now made of G4_Ce
 /gun/energy 100 eV 
 /mydet/SelectMaterial G4_Ce
 SimpleBox is now made of G4_Ce
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 eV  in G4_Ce
 #
@@ -13035,7 +13065,8 @@ SimpleBox is now made of G4_Ce
 /gun/energy 10 eV 
 /mydet/SelectMaterial G4_Ce
 SimpleBox is now made of G4_Ce
-/run/beamOn 1
+/run/beamOn 20
+ G4NuclearLevelManager: nuclide (58,143) does not have a gamma levels file
 #
 # neutron at 1 eV  in G4_Ce
 #
@@ -13043,8 +13074,7 @@ SimpleBox is now made of G4_Ce
 /gun/energy 1 eV 
 /mydet/SelectMaterial G4_Ce
 SimpleBox is now made of G4_Ce
-/run/beamOn 1
- G4NuclearLevelManager: nuclide (58,141) does not have a gamma levels file
+/run/beamOn 20
 #
 # neutron at 10 MeV in G4_Pr
 #
@@ -13052,7 +13082,7 @@ SimpleBox is now made of G4_Ce
 /gun/energy 10 MeV
 /mydet/SelectMaterial G4_Pr
 SimpleBox is now made of G4_Pr
-/run/beamOn 1
+/run/beamOn 20
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
 The cut in range [1000 (mm)]   is too big   for material  idx=62
 The cut in energy is set1.7976931e+305GeV 
@@ -13196,7 +13226,7 @@ hIoni:   tables are built for  pi-
 /gun/energy 1 MeV
 /mydet/SelectMaterial G4_Pr
 SimpleBox is now made of G4_Pr
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 keV in G4_Pr
 #
@@ -13204,7 +13234,8 @@ SimpleBox is now made of G4_Pr
 /gun/energy 100 keV
 /mydet/SelectMaterial G4_Pr
 SimpleBox is now made of G4_Pr
-/run/beamOn 1
+/run/beamOn 20
+ G4NuclearLevelManager: nuclide (59,142) does not have a gamma levels file
 #
 # neutron at 10 keV in G4_Pr
 #
@@ -13212,7 +13243,7 @@ SimpleBox is now made of G4_Pr
 /gun/energy 10 keV
 /mydet/SelectMaterial G4_Pr
 SimpleBox is now made of G4_Pr
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 keV in G4_Pr
 #
@@ -13220,7 +13251,7 @@ SimpleBox is now made of G4_Pr
 /gun/energy 1 keV
 /mydet/SelectMaterial G4_Pr
 SimpleBox is now made of G4_Pr
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 eV  in G4_Pr
 #
@@ -13228,7 +13259,7 @@ SimpleBox is now made of G4_Pr
 /gun/energy 100 eV 
 /mydet/SelectMaterial G4_Pr
 SimpleBox is now made of G4_Pr
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 eV  in G4_Pr
 #
@@ -13236,8 +13267,7 @@ SimpleBox is now made of G4_Pr
 /gun/energy 10 eV 
 /mydet/SelectMaterial G4_Pr
 SimpleBox is now made of G4_Pr
-/run/beamOn 1
- G4NuclearLevelManager: nuclide (59,142) does not have a gamma levels file
+/run/beamOn 20
 #
 # neutron at 1 eV  in G4_Pr
 #
@@ -13245,7 +13275,7 @@ SimpleBox is now made of G4_Pr
 /gun/energy 1 eV 
 /mydet/SelectMaterial G4_Pr
 SimpleBox is now made of G4_Pr
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 MeV in G4_Nd
 #
@@ -13253,7 +13283,7 @@ SimpleBox is now made of G4_Pr
 /gun/energy 10 MeV
 /mydet/SelectMaterial G4_Nd
 SimpleBox is now made of G4_Nd
-/run/beamOn 1
+/run/beamOn 20
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
 The cut in range [1000 (mm)]   is too big   for material  idx=63
 The cut in energy is set1.7976931e+305GeV 
@@ -13397,7 +13427,7 @@ hIoni:   tables are built for  pi-
 /gun/energy 1 MeV
 /mydet/SelectMaterial G4_Nd
 SimpleBox is now made of G4_Nd
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 keV in G4_Nd
 #
@@ -13405,7 +13435,7 @@ SimpleBox is now made of G4_Nd
 /gun/energy 100 keV
 /mydet/SelectMaterial G4_Nd
 SimpleBox is now made of G4_Nd
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 keV in G4_Nd
 #
@@ -13413,7 +13443,9 @@ SimpleBox is now made of G4_Nd
 /gun/energy 10 keV
 /mydet/SelectMaterial G4_Nd
 SimpleBox is now made of G4_Nd
-/run/beamOn 1
+/run/beamOn 20
+ G4NuclearLevelManager: nuclide (60,151) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (60,149) does not have a gamma levels file
 #
 # neutron at 1 keV in G4_Nd
 #
@@ -13421,7 +13453,8 @@ SimpleBox is now made of G4_Nd
 /gun/energy 1 keV
 /mydet/SelectMaterial G4_Nd
 SimpleBox is now made of G4_Nd
-/run/beamOn 1
+/run/beamOn 20
+ G4NuclearLevelManager: nuclide (60,144) does not have a gamma levels file
 #
 # neutron at 100 eV  in G4_Nd
 #
@@ -13429,7 +13462,7 @@ SimpleBox is now made of G4_Nd
 /gun/energy 100 eV 
 /mydet/SelectMaterial G4_Nd
 SimpleBox is now made of G4_Nd
-/run/beamOn 1
+/run/beamOn 20
  G4NuclearLevelManager: nuclide (60,146) does not have a gamma levels file
 #
 # neutron at 10 eV  in G4_Nd
@@ -13438,7 +13471,8 @@ SimpleBox is now made of G4_Nd
 /gun/energy 10 eV 
 /mydet/SelectMaterial G4_Nd
 SimpleBox is now made of G4_Nd
-/run/beamOn 1
+/run/beamOn 20
+ G4NuclearLevelManager: nuclide (60,143) does not have a gamma levels file
 #
 # neutron at 1 eV  in G4_Nd
 #
@@ -13446,8 +13480,8 @@ SimpleBox is now made of G4_Nd
 /gun/energy 1 eV 
 /mydet/SelectMaterial G4_Nd
 SimpleBox is now made of G4_Nd
-/run/beamOn 1
- G4NuclearLevelManager: nuclide (60,143) does not have a gamma levels file
+/run/beamOn 20
+ G4NuclearLevelManager: nuclide (60,145) does not have a gamma levels file
 #
 # neutron at 10 MeV in G4_Pm
 #
@@ -13455,7 +13489,7 @@ SimpleBox is now made of G4_Nd
 /gun/energy 10 MeV
 /mydet/SelectMaterial G4_Pm
 SimpleBox is now made of G4_Pm
-/run/beamOn 1
+/run/beamOn 20
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
 The cut in range [1000 (mm)]   is too big   for material  idx=64
 The cut in energy is set1.7976931e+305GeV 
@@ -13599,7 +13633,8 @@ hIoni:   tables are built for  pi-
 /gun/energy 1 MeV
 /mydet/SelectMaterial G4_Pm
 SimpleBox is now made of G4_Pm
-/run/beamOn 1
+/run/beamOn 20
+ G4NuclearLevelManager: nuclide (61,146) does not have a gamma levels file
 #
 # neutron at 100 keV in G4_Pm
 #
@@ -13607,7 +13642,7 @@ SimpleBox is now made of G4_Pm
 /gun/energy 100 keV
 /mydet/SelectMaterial G4_Pm
 SimpleBox is now made of G4_Pm
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 keV in G4_Pm
 #
@@ -13615,7 +13650,7 @@ SimpleBox is now made of G4_Pm
 /gun/energy 10 keV
 /mydet/SelectMaterial G4_Pm
 SimpleBox is now made of G4_Pm
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 keV in G4_Pm
 #
@@ -13623,7 +13658,7 @@ SimpleBox is now made of G4_Pm
 /gun/energy 1 keV
 /mydet/SelectMaterial G4_Pm
 SimpleBox is now made of G4_Pm
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 eV  in G4_Pm
 #
@@ -13631,7 +13666,7 @@ SimpleBox is now made of G4_Pm
 /gun/energy 100 eV 
 /mydet/SelectMaterial G4_Pm
 SimpleBox is now made of G4_Pm
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 eV  in G4_Pm
 #
@@ -13639,7 +13674,7 @@ SimpleBox is now made of G4_Pm
 /gun/energy 10 eV 
 /mydet/SelectMaterial G4_Pm
 SimpleBox is now made of G4_Pm
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 eV  in G4_Pm
 #
@@ -13647,7 +13682,7 @@ SimpleBox is now made of G4_Pm
 /gun/energy 1 eV 
 /mydet/SelectMaterial G4_Pm
 SimpleBox is now made of G4_Pm
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 MeV in G4_Sm
 #
@@ -13655,7 +13690,7 @@ SimpleBox is now made of G4_Pm
 /gun/energy 10 MeV
 /mydet/SelectMaterial G4_Sm
 SimpleBox is now made of G4_Sm
-/run/beamOn 1
+/run/beamOn 20
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
 The cut in range [1000 (mm)]   is too big   for material  idx=65
 The cut in energy is set1.7976931e+305GeV 
@@ -13792,6 +13827,8 @@ hIoni:   tables are built for  pi-
       Delta cross sections and sampling from BetheBloch model for scaled energy > 0.29750425 MeV
       Parametrisation from Bragg for protons below.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+ G4NuclearLevelManager: nuclide (62,150) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (62,153) does not have a gamma levels file
 #
 # neutron at 1 MeV in G4_Sm
 #
@@ -13799,7 +13836,8 @@ hIoni:   tables are built for  pi-
 /gun/energy 1 MeV
 /mydet/SelectMaterial G4_Sm
 SimpleBox is now made of G4_Sm
-/run/beamOn 1
+/run/beamOn 20
+ G4NuclearLevelManager: nuclide (62,148) does not have a gamma levels file
 #
 # neutron at 100 keV in G4_Sm
 #
@@ -13807,7 +13845,8 @@ SimpleBox is now made of G4_Sm
 /gun/energy 100 keV
 /mydet/SelectMaterial G4_Sm
 SimpleBox is now made of G4_Sm
-/run/beamOn 1
+/run/beamOn 20
+ G4NuclearLevelManager: nuclide (62,155) does not have a gamma levels file
 #
 # neutron at 10 keV in G4_Sm
 #
@@ -13815,7 +13854,8 @@ SimpleBox is now made of G4_Sm
 /gun/energy 10 keV
 /mydet/SelectMaterial G4_Sm
 SimpleBox is now made of G4_Sm
-/run/beamOn 1
+/run/beamOn 20
+ G4NuclearLevelManager: nuclide (62,149) does not have a gamma levels file
 #
 # neutron at 1 keV in G4_Sm
 #
@@ -13823,8 +13863,7 @@ SimpleBox is now made of G4_Sm
 /gun/energy 1 keV
 /mydet/SelectMaterial G4_Sm
 SimpleBox is now made of G4_Sm
-/run/beamOn 1
- G4NuclearLevelManager: nuclide (62,150) does not have a gamma levels file
+/run/beamOn 20
 #
 # neutron at 100 eV  in G4_Sm
 #
@@ -13832,7 +13871,7 @@ SimpleBox is now made of G4_Sm
 /gun/energy 100 eV 
 /mydet/SelectMaterial G4_Sm
 SimpleBox is now made of G4_Sm
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 eV  in G4_Sm
 #
@@ -13840,8 +13879,7 @@ SimpleBox is now made of G4_Sm
 /gun/energy 10 eV 
 /mydet/SelectMaterial G4_Sm
 SimpleBox is now made of G4_Sm
-/run/beamOn 1
- G4NuclearLevelManager: nuclide (62,153) does not have a gamma levels file
+/run/beamOn 20
 #
 # neutron at 1 eV  in G4_Sm
 #
@@ -13849,7 +13887,7 @@ SimpleBox is now made of G4_Sm
 /gun/energy 1 eV 
 /mydet/SelectMaterial G4_Sm
 SimpleBox is now made of G4_Sm
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 MeV in G4_Gd
 #
@@ -13857,7 +13895,7 @@ SimpleBox is now made of G4_Sm
 /gun/energy 10 MeV
 /mydet/SelectMaterial G4_Gd
 SimpleBox is now made of G4_Gd
-/run/beamOn 1
+/run/beamOn 20
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
 The cut in range [1000 (mm)]   is too big   for material  idx=67
 The cut in energy is set1.7976931e+305GeV 
@@ -13994,6 +14032,7 @@ hIoni:   tables are built for  pi-
       Delta cross sections and sampling from BetheBloch model for scaled energy > 0.29750425 MeV
       Parametrisation from Bragg for protons below.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+ G4NuclearLevelManager: nuclide (64,156) does not have a gamma levels file
 #
 # neutron at 1 MeV in G4_Gd
 #
@@ -14001,7 +14040,7 @@ hIoni:   tables are built for  pi-
 /gun/energy 1 MeV
 /mydet/SelectMaterial G4_Gd
 SimpleBox is now made of G4_Gd
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 keV in G4_Gd
 #
@@ -14009,7 +14048,8 @@ SimpleBox is now made of G4_Gd
 /gun/energy 100 keV
 /mydet/SelectMaterial G4_Gd
 SimpleBox is now made of G4_Gd
-/run/beamOn 1
+/run/beamOn 20
+ G4NuclearLevelManager: nuclide (64,157) does not have a gamma levels file
 #
 # neutron at 10 keV in G4_Gd
 #
@@ -14017,8 +14057,9 @@ SimpleBox is now made of G4_Gd
 /gun/energy 10 keV
 /mydet/SelectMaterial G4_Gd
 SimpleBox is now made of G4_Gd
-/run/beamOn 1
+/run/beamOn 20
  G4NuclearLevelManager: nuclide (64,158) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (64,161) does not have a gamma levels file
 #
 # neutron at 1 keV in G4_Gd
 #
@@ -14026,8 +14067,7 @@ SimpleBox is now made of G4_Gd
 /gun/energy 1 keV
 /mydet/SelectMaterial G4_Gd
 SimpleBox is now made of G4_Gd
-/run/beamOn 1
- G4NuclearLevelManager: nuclide (64,156) does not have a gamma levels file
+/run/beamOn 20
 #
 # neutron at 100 eV  in G4_Gd
 #
@@ -14035,7 +14075,8 @@ SimpleBox is now made of G4_Gd
 /gun/energy 100 eV 
 /mydet/SelectMaterial G4_Gd
 SimpleBox is now made of G4_Gd
-/run/beamOn 1
+/run/beamOn 20
+ G4NuclearLevelManager: nuclide (64,159) does not have a gamma levels file
 #
 # neutron at 10 eV  in G4_Gd
 #
@@ -14043,7 +14084,7 @@ SimpleBox is now made of G4_Gd
 /gun/energy 10 eV 
 /mydet/SelectMaterial G4_Gd
 SimpleBox is now made of G4_Gd
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 eV  in G4_Gd
 #
@@ -14051,7 +14092,7 @@ SimpleBox is now made of G4_Gd
 /gun/energy 1 eV 
 /mydet/SelectMaterial G4_Gd
 SimpleBox is now made of G4_Gd
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 MeV in G4_Tb
 #
@@ -14059,7 +14100,7 @@ SimpleBox is now made of G4_Gd
 /gun/energy 10 MeV
 /mydet/SelectMaterial G4_Tb
 SimpleBox is now made of G4_Tb
-/run/beamOn 1
+/run/beamOn 20
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
 The cut in range [1000 (mm)]   is too big   for material  idx=68
 The cut in energy is set1.7976931e+305GeV 
@@ -14209,7 +14250,7 @@ hIoni:   tables are built for  pi-
 /gun/energy 1 MeV
 /mydet/SelectMaterial G4_Tb
 SimpleBox is now made of G4_Tb
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 keV in G4_Tb
 #
@@ -14217,7 +14258,7 @@ SimpleBox is now made of G4_Tb
 /gun/energy 100 keV
 /mydet/SelectMaterial G4_Tb
 SimpleBox is now made of G4_Tb
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 keV in G4_Tb
 #
@@ -14225,7 +14266,8 @@ SimpleBox is now made of G4_Tb
 /gun/energy 10 keV
 /mydet/SelectMaterial G4_Tb
 SimpleBox is now made of G4_Tb
-/run/beamOn 1
+/run/beamOn 20
+ G4NuclearLevelManager: nuclide (65,160) does not have a gamma levels file
 #
 # neutron at 1 keV in G4_Tb
 #
@@ -14233,7 +14275,7 @@ SimpleBox is now made of G4_Tb
 /gun/energy 1 keV
 /mydet/SelectMaterial G4_Tb
 SimpleBox is now made of G4_Tb
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 eV  in G4_Tb
 #
@@ -14241,7 +14283,7 @@ SimpleBox is now made of G4_Tb
 /gun/energy 100 eV 
 /mydet/SelectMaterial G4_Tb
 SimpleBox is now made of G4_Tb
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 eV  in G4_Tb
 #
@@ -14249,7 +14291,7 @@ SimpleBox is now made of G4_Tb
 /gun/energy 10 eV 
 /mydet/SelectMaterial G4_Tb
 SimpleBox is now made of G4_Tb
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 eV  in G4_Tb
 #
@@ -14257,7 +14299,7 @@ SimpleBox is now made of G4_Tb
 /gun/energy 1 eV 
 /mydet/SelectMaterial G4_Tb
 SimpleBox is now made of G4_Tb
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 MeV in G4_Dy
 #
@@ -14265,7 +14307,7 @@ SimpleBox is now made of G4_Tb
 /gun/energy 10 MeV
 /mydet/SelectMaterial G4_Dy
 SimpleBox is now made of G4_Dy
-/run/beamOn 1
+/run/beamOn 20
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
 The cut in range [1000 (mm)]   is too big   for material  idx=69
 The cut in energy is set1.7976931e+305GeV 
@@ -14408,6 +14450,7 @@ hIoni:   tables are built for  pi-
       Delta cross sections and sampling from BetheBloch model for scaled energy > 0.29750425 MeV
       Parametrisation from Bragg for protons below.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+ G4NuclearLevelManager: nuclide (66,164) does not have a gamma levels file
 #
 # neutron at 1 MeV in G4_Dy
 #
@@ -14415,7 +14458,7 @@ hIoni:   tables are built for  pi-
 /gun/energy 1 MeV
 /mydet/SelectMaterial G4_Dy
 SimpleBox is now made of G4_Dy
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 keV in G4_Dy
 #
@@ -14423,7 +14466,8 @@ SimpleBox is now made of G4_Dy
 /gun/energy 100 keV
 /mydet/SelectMaterial G4_Dy
 SimpleBox is now made of G4_Dy
-/run/beamOn 1
+/run/beamOn 20
+ G4NuclearLevelManager: nuclide (66,165) does not have a gamma levels file
 #
 # neutron at 10 keV in G4_Dy
 #
@@ -14431,8 +14475,7 @@ SimpleBox is now made of G4_Dy
 /gun/energy 10 keV
 /mydet/SelectMaterial G4_Dy
 SimpleBox is now made of G4_Dy
-/run/beamOn 1
- G4NuclearLevelManager: nuclide (66,163) does not have a gamma levels file
+/run/beamOn 20
 #
 # neutron at 1 keV in G4_Dy
 #
@@ -14440,7 +14483,7 @@ SimpleBox is now made of G4_Dy
 /gun/energy 1 keV
 /mydet/SelectMaterial G4_Dy
 SimpleBox is now made of G4_Dy
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 eV  in G4_Dy
 #
@@ -14448,7 +14491,7 @@ SimpleBox is now made of G4_Dy
 /gun/energy 100 eV 
 /mydet/SelectMaterial G4_Dy
 SimpleBox is now made of G4_Dy
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 eV  in G4_Dy
 #
@@ -14456,7 +14499,7 @@ SimpleBox is now made of G4_Dy
 /gun/energy 10 eV 
 /mydet/SelectMaterial G4_Dy
 SimpleBox is now made of G4_Dy
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 eV  in G4_Dy
 #
@@ -14464,7 +14507,8 @@ SimpleBox is now made of G4_Dy
 /gun/energy 1 eV 
 /mydet/SelectMaterial G4_Dy
 SimpleBox is now made of G4_Dy
-/run/beamOn 1
+/run/beamOn 20
+ G4NuclearLevelManager: nuclide (66,163) does not have a gamma levels file
 #
 # neutron at 10 MeV in G4_Ho
 #
@@ -14472,7 +14516,7 @@ SimpleBox is now made of G4_Dy
 /gun/energy 10 MeV
 /mydet/SelectMaterial G4_Ho
 SimpleBox is now made of G4_Ho
-/run/beamOn 1
+/run/beamOn 20
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
 The cut in range [1000 (mm)]   is too big   for material  idx=70
 The cut in energy is set1.7976931e+305GeV 
@@ -14615,6 +14659,7 @@ hIoni:   tables are built for  pi-
       Delta cross sections and sampling from BetheBloch model for scaled energy > 0.29750425 MeV
       Parametrisation from Bragg for protons below.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+ G4NuclearLevelManager: nuclide (67,166) does not have a gamma levels file
 #
 # neutron at 1 MeV in G4_Ho
 #
@@ -14622,7 +14667,7 @@ hIoni:   tables are built for  pi-
 /gun/energy 1 MeV
 /mydet/SelectMaterial G4_Ho
 SimpleBox is now made of G4_Ho
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 keV in G4_Ho
 #
@@ -14630,7 +14675,7 @@ SimpleBox is now made of G4_Ho
 /gun/energy 100 keV
 /mydet/SelectMaterial G4_Ho
 SimpleBox is now made of G4_Ho
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 keV in G4_Ho
 #
@@ -14638,7 +14683,7 @@ SimpleBox is now made of G4_Ho
 /gun/energy 10 keV
 /mydet/SelectMaterial G4_Ho
 SimpleBox is now made of G4_Ho
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 keV in G4_Ho
 #
@@ -14646,7 +14691,7 @@ SimpleBox is now made of G4_Ho
 /gun/energy 1 keV
 /mydet/SelectMaterial G4_Ho
 SimpleBox is now made of G4_Ho
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 eV  in G4_Ho
 #
@@ -14654,7 +14699,7 @@ SimpleBox is now made of G4_Ho
 /gun/energy 100 eV 
 /mydet/SelectMaterial G4_Ho
 SimpleBox is now made of G4_Ho
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 eV  in G4_Ho
 #
@@ -14662,7 +14707,7 @@ SimpleBox is now made of G4_Ho
 /gun/energy 10 eV 
 /mydet/SelectMaterial G4_Ho
 SimpleBox is now made of G4_Ho
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 eV  in G4_Ho
 #
@@ -14670,7 +14715,7 @@ SimpleBox is now made of G4_Ho
 /gun/energy 1 eV 
 /mydet/SelectMaterial G4_Ho
 SimpleBox is now made of G4_Ho
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 MeV in G4_Er
 #
@@ -14678,7 +14723,7 @@ SimpleBox is now made of G4_Ho
 /gun/energy 10 MeV
 /mydet/SelectMaterial G4_Er
 SimpleBox is now made of G4_Er
-/run/beamOn 1
+/run/beamOn 20
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
 The cut in range [1000 (mm)]   is too big   for material  idx=71
 The cut in energy is set1.7976931e+305GeV 
@@ -14821,6 +14866,9 @@ hIoni:   tables are built for  pi-
       Delta cross sections and sampling from BetheBloch model for scaled energy > 0.29750425 MeV
       Parametrisation from Bragg for protons below.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+ G4NuclearLevelManager: nuclide (68,171) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (68,168) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (68,167) does not have a gamma levels file
 #
 # neutron at 1 MeV in G4_Er
 #
@@ -14828,7 +14876,7 @@ hIoni:   tables are built for  pi-
 /gun/energy 1 MeV
 /mydet/SelectMaterial G4_Er
 SimpleBox is now made of G4_Er
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 keV in G4_Er
 #
@@ -14836,7 +14884,8 @@ SimpleBox is now made of G4_Er
 /gun/energy 100 keV
 /mydet/SelectMaterial G4_Er
 SimpleBox is now made of G4_Er
-/run/beamOn 1
+/run/beamOn 20
+ G4NuclearLevelManager: nuclide (68,169) does not have a gamma levels file
 #
 # neutron at 10 keV in G4_Er
 #
@@ -14844,8 +14893,7 @@ SimpleBox is now made of G4_Er
 /gun/energy 10 keV
 /mydet/SelectMaterial G4_Er
 SimpleBox is now made of G4_Er
-/run/beamOn 1
- G4NuclearLevelManager: nuclide (68,167) does not have a gamma levels file
+/run/beamOn 20
 #
 # neutron at 1 keV in G4_Er
 #
@@ -14853,8 +14901,7 @@ SimpleBox is now made of G4_Er
 /gun/energy 1 keV
 /mydet/SelectMaterial G4_Er
 SimpleBox is now made of G4_Er
-/run/beamOn 1
- G4NuclearLevelManager: nuclide (68,168) does not have a gamma levels file
+/run/beamOn 20
 #
 # neutron at 100 eV  in G4_Er
 #
@@ -14862,7 +14909,7 @@ SimpleBox is now made of G4_Er
 /gun/energy 100 eV 
 /mydet/SelectMaterial G4_Er
 SimpleBox is now made of G4_Er
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 eV  in G4_Er
 #
@@ -14870,7 +14917,7 @@ SimpleBox is now made of G4_Er
 /gun/energy 10 eV 
 /mydet/SelectMaterial G4_Er
 SimpleBox is now made of G4_Er
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 eV  in G4_Er
 #
@@ -14878,8 +14925,8 @@ SimpleBox is now made of G4_Er
 /gun/energy 1 eV 
 /mydet/SelectMaterial G4_Er
 SimpleBox is now made of G4_Er
-/run/beamOn 1
- G4NuclearLevelManager: nuclide (68,171) does not have a gamma levels file
+/run/beamOn 20
+ G4NuclearLevelManager: nuclide (68,165) does not have a gamma levels file
 #
 # neutron at 10 MeV in G4_Tm
 #
@@ -14887,7 +14934,7 @@ SimpleBox is now made of G4_Er
 /gun/energy 10 MeV
 /mydet/SelectMaterial G4_Tm
 SimpleBox is now made of G4_Tm
-/run/beamOn 1
+/run/beamOn 20
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
 The cut in range [1000 (mm)]   is too big   for material  idx=72
 The cut in energy is set1.7976931e+305GeV 
@@ -15030,6 +15077,7 @@ hIoni:   tables are built for  pi-
       Delta cross sections and sampling from BetheBloch model for scaled energy > 0.29750425 MeV
       Parametrisation from Bragg for protons below.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+ G4NuclearLevelManager: nuclide (69,170) does not have a gamma levels file
 #
 # neutron at 1 MeV in G4_Tm
 #
@@ -15037,7 +15085,7 @@ hIoni:   tables are built for  pi-
 /gun/energy 1 MeV
 /mydet/SelectMaterial G4_Tm
 SimpleBox is now made of G4_Tm
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 keV in G4_Tm
 #
@@ -15045,7 +15093,7 @@ SimpleBox is now made of G4_Tm
 /gun/energy 100 keV
 /mydet/SelectMaterial G4_Tm
 SimpleBox is now made of G4_Tm
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 keV in G4_Tm
 #
@@ -15053,7 +15101,7 @@ SimpleBox is now made of G4_Tm
 /gun/energy 10 keV
 /mydet/SelectMaterial G4_Tm
 SimpleBox is now made of G4_Tm
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 keV in G4_Tm
 #
@@ -15061,8 +15109,7 @@ SimpleBox is now made of G4_Tm
 /gun/energy 1 keV
 /mydet/SelectMaterial G4_Tm
 SimpleBox is now made of G4_Tm
-/run/beamOn 1
- G4NuclearLevelManager: nuclide (69,170) does not have a gamma levels file
+/run/beamOn 20
 #
 # neutron at 100 eV  in G4_Tm
 #
@@ -15070,7 +15117,7 @@ SimpleBox is now made of G4_Tm
 /gun/energy 100 eV 
 /mydet/SelectMaterial G4_Tm
 SimpleBox is now made of G4_Tm
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 eV  in G4_Tm
 #
@@ -15078,7 +15125,7 @@ SimpleBox is now made of G4_Tm
 /gun/energy 10 eV 
 /mydet/SelectMaterial G4_Tm
 SimpleBox is now made of G4_Tm
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 eV  in G4_Tm
 #
@@ -15086,7 +15133,7 @@ SimpleBox is now made of G4_Tm
 /gun/energy 1 eV 
 /mydet/SelectMaterial G4_Tm
 SimpleBox is now made of G4_Tm
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 MeV in G4_Yb
 #
@@ -15094,7 +15141,7 @@ SimpleBox is now made of G4_Tm
 /gun/energy 10 MeV
 /mydet/SelectMaterial G4_Yb
 SimpleBox is now made of G4_Yb
-/run/beamOn 1
+/run/beamOn 20
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
 The cut in range [1000 (mm)]   is too big   for material  idx=73
 The cut in energy is set1.7976931e+305GeV 
@@ -15231,6 +15278,7 @@ hIoni:   tables are built for  pi-
       Delta cross sections and sampling from BetheBloch model for scaled energy > 0.29750425 MeV
       Parametrisation from Bragg for protons below.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+ G4NuclearLevelManager: nuclide (70,177) does not have a gamma levels file
 #
 # neutron at 1 MeV in G4_Yb
 #
@@ -15238,7 +15286,8 @@ hIoni:   tables are built for  pi-
 /gun/energy 1 MeV
 /mydet/SelectMaterial G4_Yb
 SimpleBox is now made of G4_Yb
-/run/beamOn 1
+/run/beamOn 20
+ G4NuclearLevelManager: nuclide (70,173) does not have a gamma levels file
 #
 # neutron at 100 keV in G4_Yb
 #
@@ -15246,8 +15295,9 @@ SimpleBox is now made of G4_Yb
 /gun/energy 100 keV
 /mydet/SelectMaterial G4_Yb
 SimpleBox is now made of G4_Yb
-/run/beamOn 1
- G4NuclearLevelManager: nuclide (70,172) does not have a gamma levels file
+/run/beamOn 20
+ G4NuclearLevelManager: nuclide (70,171) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (70,175) does not have a gamma levels file
 #
 # neutron at 10 keV in G4_Yb
 #
@@ -15255,7 +15305,9 @@ SimpleBox is now made of G4_Yb
 /gun/energy 10 keV
 /mydet/SelectMaterial G4_Yb
 SimpleBox is now made of G4_Yb
-/run/beamOn 1
+/run/beamOn 20
+ G4NuclearLevelManager: nuclide (70,174) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (70,172) does not have a gamma levels file
 #
 # neutron at 1 keV in G4_Yb
 #
@@ -15263,8 +15315,7 @@ SimpleBox is now made of G4_Yb
 /gun/energy 1 keV
 /mydet/SelectMaterial G4_Yb
 SimpleBox is now made of G4_Yb
-/run/beamOn 1
- G4NuclearLevelManager: nuclide (70,175) does not have a gamma levels file
+/run/beamOn 20
 #
 # neutron at 100 eV  in G4_Yb
 #
@@ -15272,7 +15323,7 @@ SimpleBox is now made of G4_Yb
 /gun/energy 100 eV 
 /mydet/SelectMaterial G4_Yb
 SimpleBox is now made of G4_Yb
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 eV  in G4_Yb
 #
@@ -15280,7 +15331,7 @@ SimpleBox is now made of G4_Yb
 /gun/energy 10 eV 
 /mydet/SelectMaterial G4_Yb
 SimpleBox is now made of G4_Yb
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 eV  in G4_Yb
 #
@@ -15288,8 +15339,7 @@ SimpleBox is now made of G4_Yb
 /gun/energy 1 eV 
 /mydet/SelectMaterial G4_Yb
 SimpleBox is now made of G4_Yb
-/run/beamOn 1
- G4NuclearLevelManager: nuclide (70,173) does not have a gamma levels file
+/run/beamOn 20
 #
 # neutron at 10 MeV in G4_Lu
 #
@@ -15297,7 +15347,7 @@ SimpleBox is now made of G4_Yb
 /gun/energy 10 MeV
 /mydet/SelectMaterial G4_Lu
 SimpleBox is now made of G4_Lu
-/run/beamOn 1
+/run/beamOn 20
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
 The cut in range [1000 (mm)]   is too big   for material  idx=74
 The cut in energy is set1.7976931e+305GeV 
@@ -15448,7 +15498,7 @@ hIoni:   tables are built for  pi-
 /gun/energy 1 MeV
 /mydet/SelectMaterial G4_Lu
 SimpleBox is now made of G4_Lu
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 keV in G4_Lu
 #
@@ -15456,7 +15506,7 @@ SimpleBox is now made of G4_Lu
 /gun/energy 100 keV
 /mydet/SelectMaterial G4_Lu
 SimpleBox is now made of G4_Lu
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 keV in G4_Lu
 #
@@ -15464,7 +15514,8 @@ SimpleBox is now made of G4_Lu
 /gun/energy 10 keV
 /mydet/SelectMaterial G4_Lu
 SimpleBox is now made of G4_Lu
-/run/beamOn 1
+/run/beamOn 20
+ G4NuclearLevelManager: nuclide (71,177) does not have a gamma levels file
 #
 # neutron at 1 keV in G4_Lu
 #
@@ -15472,7 +15523,7 @@ SimpleBox is now made of G4_Lu
 /gun/energy 1 keV
 /mydet/SelectMaterial G4_Lu
 SimpleBox is now made of G4_Lu
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 eV  in G4_Lu
 #
@@ -15480,7 +15531,7 @@ SimpleBox is now made of G4_Lu
 /gun/energy 100 eV 
 /mydet/SelectMaterial G4_Lu
 SimpleBox is now made of G4_Lu
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 eV  in G4_Lu
 #
@@ -15488,7 +15539,7 @@ SimpleBox is now made of G4_Lu
 /gun/energy 10 eV 
 /mydet/SelectMaterial G4_Lu
 SimpleBox is now made of G4_Lu
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 eV  in G4_Lu
 #
@@ -15496,7 +15547,7 @@ SimpleBox is now made of G4_Lu
 /gun/energy 1 eV 
 /mydet/SelectMaterial G4_Lu
 SimpleBox is now made of G4_Lu
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 MeV in G4_Hf
 #
@@ -15504,7 +15555,7 @@ SimpleBox is now made of G4_Lu
 /gun/energy 10 MeV
 /mydet/SelectMaterial G4_Hf
 SimpleBox is now made of G4_Hf
-/run/beamOn 1
+/run/beamOn 20
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
 The cut in range [1000 (mm)]   is too big   for material  idx=75
 The cut in energy is set1.7976931e+305GeV 
@@ -15648,6 +15699,8 @@ hIoni:   tables are built for  pi-
       Parametrisation from Bragg for protons below.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
  G4NuclearLevelManager: nuclide (72,181) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (72,180) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (72,179) does not have a gamma levels file
 #
 # neutron at 1 MeV in G4_Hf
 #
@@ -15655,7 +15708,7 @@ hIoni:   tables are built for  pi-
 /gun/energy 1 MeV
 /mydet/SelectMaterial G4_Hf
 SimpleBox is now made of G4_Hf
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 keV in G4_Hf
 #
@@ -15663,7 +15716,8 @@ SimpleBox is now made of G4_Hf
 /gun/energy 100 keV
 /mydet/SelectMaterial G4_Hf
 SimpleBox is now made of G4_Hf
-/run/beamOn 1
+/run/beamOn 20
+ G4NuclearLevelManager: nuclide (72,178) does not have a gamma levels file
 #
 # neutron at 10 keV in G4_Hf
 #
@@ -15671,7 +15725,7 @@ SimpleBox is now made of G4_Hf
 /gun/energy 10 keV
 /mydet/SelectMaterial G4_Hf
 SimpleBox is now made of G4_Hf
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 keV in G4_Hf
 #
@@ -15679,8 +15733,7 @@ SimpleBox is now made of G4_Hf
 /gun/energy 1 keV
 /mydet/SelectMaterial G4_Hf
 SimpleBox is now made of G4_Hf
-/run/beamOn 1
- G4NuclearLevelManager: nuclide (72,178) does not have a gamma levels file
+/run/beamOn 20
 #
 # neutron at 100 eV  in G4_Hf
 #
@@ -15688,7 +15741,7 @@ SimpleBox is now made of G4_Hf
 /gun/energy 100 eV 
 /mydet/SelectMaterial G4_Hf
 SimpleBox is now made of G4_Hf
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 eV  in G4_Hf
 #
@@ -15696,8 +15749,7 @@ SimpleBox is now made of G4_Hf
 /gun/energy 10 eV 
 /mydet/SelectMaterial G4_Hf
 SimpleBox is now made of G4_Hf
-/run/beamOn 1
- G4NuclearLevelManager: nuclide (72,179) does not have a gamma levels file
+/run/beamOn 20
 #
 # neutron at 1 eV  in G4_Hf
 #
@@ -15705,7 +15757,7 @@ SimpleBox is now made of G4_Hf
 /gun/energy 1 eV 
 /mydet/SelectMaterial G4_Hf
 SimpleBox is now made of G4_Hf
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 MeV in G4_Ta
 #
@@ -15713,7 +15765,7 @@ SimpleBox is now made of G4_Hf
 /gun/energy 10 MeV
 /mydet/SelectMaterial G4_Ta
 SimpleBox is now made of G4_Ta
-/run/beamOn 1
+/run/beamOn 20
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
 The cut in range [1000 (mm)]   is too big   for material  idx=76
 The cut in energy is set1.7976931e+305GeV 
@@ -15863,7 +15915,7 @@ hIoni:   tables are built for  pi-
 /gun/energy 1 MeV
 /mydet/SelectMaterial G4_Ta
 SimpleBox is now made of G4_Ta
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 keV in G4_Ta
 #
@@ -15871,7 +15923,7 @@ SimpleBox is now made of G4_Ta
 /gun/energy 100 keV
 /mydet/SelectMaterial G4_Ta
 SimpleBox is now made of G4_Ta
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 keV in G4_Ta
 #
@@ -15879,7 +15931,7 @@ SimpleBox is now made of G4_Ta
 /gun/energy 10 keV
 /mydet/SelectMaterial G4_Ta
 SimpleBox is now made of G4_Ta
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 keV in G4_Ta
 #
@@ -15887,7 +15939,7 @@ SimpleBox is now made of G4_Ta
 /gun/energy 1 keV
 /mydet/SelectMaterial G4_Ta
 SimpleBox is now made of G4_Ta
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 eV  in G4_Ta
 #
@@ -15895,7 +15947,7 @@ SimpleBox is now made of G4_Ta
 /gun/energy 100 eV 
 /mydet/SelectMaterial G4_Ta
 SimpleBox is now made of G4_Ta
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 eV  in G4_Ta
 #
@@ -15903,7 +15955,7 @@ SimpleBox is now made of G4_Ta
 /gun/energy 10 eV 
 /mydet/SelectMaterial G4_Ta
 SimpleBox is now made of G4_Ta
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 eV  in G4_Ta
 #
@@ -15911,7 +15963,7 @@ SimpleBox is now made of G4_Ta
 /gun/energy 1 eV 
 /mydet/SelectMaterial G4_Ta
 SimpleBox is now made of G4_Ta
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 MeV in G4_W
 #
@@ -15919,7 +15971,7 @@ SimpleBox is now made of G4_Ta
 /gun/energy 10 MeV
 /mydet/SelectMaterial G4_W
 SimpleBox is now made of G4_W
-/run/beamOn 1
+/run/beamOn 20
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
 The cut in range [1000 (mm)]   is too big   for material  idx=77
 The cut in energy is set1.7976931e+305GeV 
@@ -16069,7 +16121,7 @@ hIoni:   tables are built for  pi-
 /gun/energy 1 MeV
 /mydet/SelectMaterial G4_W
 SimpleBox is now made of G4_W
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 keV in G4_W
 #
@@ -16077,7 +16129,7 @@ SimpleBox is now made of G4_W
 /gun/energy 100 keV
 /mydet/SelectMaterial G4_W
 SimpleBox is now made of G4_W
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 keV in G4_W
 #
@@ -16085,7 +16137,7 @@ SimpleBox is now made of G4_W
 /gun/energy 10 keV
 /mydet/SelectMaterial G4_W
 SimpleBox is now made of G4_W
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 keV in G4_W
 #
@@ -16093,7 +16145,7 @@ SimpleBox is now made of G4_W
 /gun/energy 1 keV
 /mydet/SelectMaterial G4_W
 SimpleBox is now made of G4_W
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 eV  in G4_W
 #
@@ -16101,7 +16153,7 @@ SimpleBox is now made of G4_W
 /gun/energy 100 eV 
 /mydet/SelectMaterial G4_W
 SimpleBox is now made of G4_W
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 eV  in G4_W
 #
@@ -16109,7 +16161,7 @@ SimpleBox is now made of G4_W
 /gun/energy 10 eV 
 /mydet/SelectMaterial G4_W
 SimpleBox is now made of G4_W
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 eV  in G4_W
 #
@@ -16117,7 +16169,7 @@ SimpleBox is now made of G4_W
 /gun/energy 1 eV 
 /mydet/SelectMaterial G4_W
 SimpleBox is now made of G4_W
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 MeV in G4_Re
 #
@@ -16125,7 +16177,7 @@ SimpleBox is now made of G4_W
 /gun/energy 10 MeV
 /mydet/SelectMaterial G4_Re
 SimpleBox is now made of G4_Re
-/run/beamOn 1
+/run/beamOn 20
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
 The cut in range [1000 (mm)]   is too big   for material  idx=78
 The cut in energy is set1.7976931e+305GeV 
@@ -16275,7 +16327,7 @@ hIoni:   tables are built for  pi-
 /gun/energy 1 MeV
 /mydet/SelectMaterial G4_Re
 SimpleBox is now made of G4_Re
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 keV in G4_Re
 #
@@ -16283,7 +16335,7 @@ SimpleBox is now made of G4_Re
 /gun/energy 100 keV
 /mydet/SelectMaterial G4_Re
 SimpleBox is now made of G4_Re
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 keV in G4_Re
 #
@@ -16291,7 +16343,7 @@ SimpleBox is now made of G4_Re
 /gun/energy 10 keV
 /mydet/SelectMaterial G4_Re
 SimpleBox is now made of G4_Re
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 keV in G4_Re
 #
@@ -16299,7 +16351,7 @@ SimpleBox is now made of G4_Re
 /gun/energy 1 keV
 /mydet/SelectMaterial G4_Re
 SimpleBox is now made of G4_Re
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 eV  in G4_Re
 #
@@ -16307,7 +16359,7 @@ SimpleBox is now made of G4_Re
 /gun/energy 100 eV 
 /mydet/SelectMaterial G4_Re
 SimpleBox is now made of G4_Re
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 eV  in G4_Re
 #
@@ -16315,7 +16367,7 @@ SimpleBox is now made of G4_Re
 /gun/energy 10 eV 
 /mydet/SelectMaterial G4_Re
 SimpleBox is now made of G4_Re
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 eV  in G4_Re
 #
@@ -16323,7 +16375,7 @@ SimpleBox is now made of G4_Re
 /gun/energy 1 eV 
 /mydet/SelectMaterial G4_Re
 SimpleBox is now made of G4_Re
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 MeV in G4_Os
 #
@@ -16331,7 +16383,7 @@ SimpleBox is now made of G4_Re
 /gun/energy 10 MeV
 /mydet/SelectMaterial G4_Os
 SimpleBox is now made of G4_Os
-/run/beamOn 1
+/run/beamOn 20
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
 The cut in range [1000 (mm)]   is too big   for material  idx=79
 The cut in energy is set1.7976931e+305GeV 
@@ -16481,7 +16533,7 @@ hIoni:   tables are built for  pi-
 /gun/energy 1 MeV
 /mydet/SelectMaterial G4_Os
 SimpleBox is now made of G4_Os
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 keV in G4_Os
 #
@@ -16489,7 +16541,7 @@ SimpleBox is now made of G4_Os
 /gun/energy 100 keV
 /mydet/SelectMaterial G4_Os
 SimpleBox is now made of G4_Os
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 keV in G4_Os
 #
@@ -16497,7 +16549,7 @@ SimpleBox is now made of G4_Os
 /gun/energy 10 keV
 /mydet/SelectMaterial G4_Os
 SimpleBox is now made of G4_Os
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 keV in G4_Os
 #
@@ -16505,7 +16557,7 @@ SimpleBox is now made of G4_Os
 /gun/energy 1 keV
 /mydet/SelectMaterial G4_Os
 SimpleBox is now made of G4_Os
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 eV  in G4_Os
 #
@@ -16513,7 +16565,7 @@ SimpleBox is now made of G4_Os
 /gun/energy 100 eV 
 /mydet/SelectMaterial G4_Os
 SimpleBox is now made of G4_Os
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 eV  in G4_Os
 #
@@ -16521,7 +16573,7 @@ SimpleBox is now made of G4_Os
 /gun/energy 10 eV 
 /mydet/SelectMaterial G4_Os
 SimpleBox is now made of G4_Os
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 eV  in G4_Os
 #
@@ -16529,7 +16581,7 @@ SimpleBox is now made of G4_Os
 /gun/energy 1 eV 
 /mydet/SelectMaterial G4_Os
 SimpleBox is now made of G4_Os
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 MeV in G4_Ir
 #
@@ -16537,7 +16589,7 @@ SimpleBox is now made of G4_Os
 /gun/energy 10 MeV
 /mydet/SelectMaterial G4_Ir
 SimpleBox is now made of G4_Ir
-/run/beamOn 1
+/run/beamOn 20
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
 The cut in range [1000 (mm)]   is too big   for material  idx=80
 The cut in energy is set1.7976931e+305GeV 
@@ -16687,7 +16739,7 @@ hIoni:   tables are built for  pi-
 /gun/energy 1 MeV
 /mydet/SelectMaterial G4_Ir
 SimpleBox is now made of G4_Ir
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 keV in G4_Ir
 #
@@ -16695,7 +16747,7 @@ SimpleBox is now made of G4_Ir
 /gun/energy 100 keV
 /mydet/SelectMaterial G4_Ir
 SimpleBox is now made of G4_Ir
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 keV in G4_Ir
 #
@@ -16703,7 +16755,7 @@ SimpleBox is now made of G4_Ir
 /gun/energy 10 keV
 /mydet/SelectMaterial G4_Ir
 SimpleBox is now made of G4_Ir
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 keV in G4_Ir
 #
@@ -16711,7 +16763,7 @@ SimpleBox is now made of G4_Ir
 /gun/energy 1 keV
 /mydet/SelectMaterial G4_Ir
 SimpleBox is now made of G4_Ir
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 eV  in G4_Ir
 #
@@ -16719,7 +16771,7 @@ SimpleBox is now made of G4_Ir
 /gun/energy 100 eV 
 /mydet/SelectMaterial G4_Ir
 SimpleBox is now made of G4_Ir
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 eV  in G4_Ir
 #
@@ -16727,7 +16779,7 @@ SimpleBox is now made of G4_Ir
 /gun/energy 10 eV 
 /mydet/SelectMaterial G4_Ir
 SimpleBox is now made of G4_Ir
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 eV  in G4_Ir
 #
@@ -16735,7 +16787,7 @@ SimpleBox is now made of G4_Ir
 /gun/energy 1 eV 
 /mydet/SelectMaterial G4_Ir
 SimpleBox is now made of G4_Ir
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 MeV in G4_Pt
 #
@@ -16743,7 +16795,7 @@ SimpleBox is now made of G4_Ir
 /gun/energy 10 MeV
 /mydet/SelectMaterial G4_Pt
 SimpleBox is now made of G4_Pt
-/run/beamOn 1
+/run/beamOn 20
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
 The cut in range [1000 (mm)]   is too big   for material  idx=81
 The cut in energy is set1.7976931e+305GeV 
@@ -16893,7 +16945,7 @@ hIoni:   tables are built for  pi-
 /gun/energy 1 MeV
 /mydet/SelectMaterial G4_Pt
 SimpleBox is now made of G4_Pt
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 keV in G4_Pt
 #
@@ -16901,7 +16953,7 @@ SimpleBox is now made of G4_Pt
 /gun/energy 100 keV
 /mydet/SelectMaterial G4_Pt
 SimpleBox is now made of G4_Pt
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 keV in G4_Pt
 #
@@ -16909,7 +16961,7 @@ SimpleBox is now made of G4_Pt
 /gun/energy 10 keV
 /mydet/SelectMaterial G4_Pt
 SimpleBox is now made of G4_Pt
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 keV in G4_Pt
 #
@@ -16917,7 +16969,7 @@ SimpleBox is now made of G4_Pt
 /gun/energy 1 keV
 /mydet/SelectMaterial G4_Pt
 SimpleBox is now made of G4_Pt
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 eV  in G4_Pt
 #
@@ -16925,7 +16977,7 @@ SimpleBox is now made of G4_Pt
 /gun/energy 100 eV 
 /mydet/SelectMaterial G4_Pt
 SimpleBox is now made of G4_Pt
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 eV  in G4_Pt
 #
@@ -16933,7 +16985,7 @@ SimpleBox is now made of G4_Pt
 /gun/energy 10 eV 
 /mydet/SelectMaterial G4_Pt
 SimpleBox is now made of G4_Pt
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 eV  in G4_Pt
 #
@@ -16941,7 +16993,7 @@ SimpleBox is now made of G4_Pt
 /gun/energy 1 eV 
 /mydet/SelectMaterial G4_Pt
 SimpleBox is now made of G4_Pt
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 MeV in G4_Au
 #
@@ -16949,7 +17001,7 @@ SimpleBox is now made of G4_Pt
 /gun/energy 10 MeV
 /mydet/SelectMaterial G4_Au
 SimpleBox is now made of G4_Au
-/run/beamOn 1
+/run/beamOn 20
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
 The cut in range [1000 (mm)]   is too big   for material  idx=82
 The cut in energy is set1.7976931e+305GeV 
@@ -17099,7 +17151,7 @@ hIoni:   tables are built for  pi-
 /gun/energy 1 MeV
 /mydet/SelectMaterial G4_Au
 SimpleBox is now made of G4_Au
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 keV in G4_Au
 #
@@ -17107,7 +17159,7 @@ SimpleBox is now made of G4_Au
 /gun/energy 100 keV
 /mydet/SelectMaterial G4_Au
 SimpleBox is now made of G4_Au
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 keV in G4_Au
 #
@@ -17115,7 +17167,7 @@ SimpleBox is now made of G4_Au
 /gun/energy 10 keV
 /mydet/SelectMaterial G4_Au
 SimpleBox is now made of G4_Au
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 keV in G4_Au
 #
@@ -17123,7 +17175,7 @@ SimpleBox is now made of G4_Au
 /gun/energy 1 keV
 /mydet/SelectMaterial G4_Au
 SimpleBox is now made of G4_Au
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 eV  in G4_Au
 #
@@ -17131,7 +17183,7 @@ SimpleBox is now made of G4_Au
 /gun/energy 100 eV 
 /mydet/SelectMaterial G4_Au
 SimpleBox is now made of G4_Au
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 eV  in G4_Au
 #
@@ -17139,7 +17191,7 @@ SimpleBox is now made of G4_Au
 /gun/energy 10 eV 
 /mydet/SelectMaterial G4_Au
 SimpleBox is now made of G4_Au
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 eV  in G4_Au
 #
@@ -17147,7 +17199,7 @@ SimpleBox is now made of G4_Au
 /gun/energy 1 eV 
 /mydet/SelectMaterial G4_Au
 SimpleBox is now made of G4_Au
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 MeV in G4_Hg
 #
@@ -17157,7 +17209,7 @@ SimpleBox is now made of G4_Au
 
 ---> warning from G4Material::GetMaterial(). The material: G4_Hg does not exist in the table. Return NULL pointer.
 SimpleBox is now made of G4_Hg
-/run/beamOn 1
+/run/beamOn 20
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
 The cut in range [1000 (mm)]   is too big   for material  idx=3
 The cut in energy is set1.7976931e+305GeV 
@@ -17309,7 +17361,7 @@ hIoni:   tables are built for  pi-
 
 ---> warning from G4Material::GetMaterial(). The material: G4_Hg does not exist in the table. Return NULL pointer.
 SimpleBox is now made of G4_Hg
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 keV in G4_Hg
 #
@@ -17319,7 +17371,7 @@ SimpleBox is now made of G4_Hg
 
 ---> warning from G4Material::GetMaterial(). The material: G4_Hg does not exist in the table. Return NULL pointer.
 SimpleBox is now made of G4_Hg
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 keV in G4_Hg
 #
@@ -17329,7 +17381,7 @@ SimpleBox is now made of G4_Hg
 
 ---> warning from G4Material::GetMaterial(). The material: G4_Hg does not exist in the table. Return NULL pointer.
 SimpleBox is now made of G4_Hg
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 keV in G4_Hg
 #
@@ -17339,7 +17391,7 @@ SimpleBox is now made of G4_Hg
 
 ---> warning from G4Material::GetMaterial(). The material: G4_Hg does not exist in the table. Return NULL pointer.
 SimpleBox is now made of G4_Hg
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 eV  in G4_Hg
 #
@@ -17349,7 +17401,7 @@ SimpleBox is now made of G4_Hg
 
 ---> warning from G4Material::GetMaterial(). The material: G4_Hg does not exist in the table. Return NULL pointer.
 SimpleBox is now made of G4_Hg
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 eV  in G4_Hg
 #
@@ -17359,7 +17411,7 @@ SimpleBox is now made of G4_Hg
 
 ---> warning from G4Material::GetMaterial(). The material: G4_Hg does not exist in the table. Return NULL pointer.
 SimpleBox is now made of G4_Hg
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 eV  in G4_Hg
 #
@@ -17369,7 +17421,7 @@ SimpleBox is now made of G4_Hg
 
 ---> warning from G4Material::GetMaterial(). The material: G4_Hg does not exist in the table. Return NULL pointer.
 SimpleBox is now made of G4_Hg
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 MeV in G4_Tl
 #
@@ -17377,7 +17429,7 @@ SimpleBox is now made of G4_Hg
 /gun/energy 10 MeV
 /mydet/SelectMaterial G4_Tl
 SimpleBox is now made of G4_Tl
-/run/beamOn 1
+/run/beamOn 20
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
 The cut in range [1000 (mm)]   is too big   for material  idx=83
 The cut in energy is set1.7976931e+305GeV 
@@ -17527,7 +17579,7 @@ hIoni:   tables are built for  pi-
 /gun/energy 1 MeV
 /mydet/SelectMaterial G4_Tl
 SimpleBox is now made of G4_Tl
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 keV in G4_Tl
 #
@@ -17535,7 +17587,7 @@ SimpleBox is now made of G4_Tl
 /gun/energy 100 keV
 /mydet/SelectMaterial G4_Tl
 SimpleBox is now made of G4_Tl
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 keV in G4_Tl
 #
@@ -17543,7 +17595,7 @@ SimpleBox is now made of G4_Tl
 /gun/energy 10 keV
 /mydet/SelectMaterial G4_Tl
 SimpleBox is now made of G4_Tl
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 keV in G4_Tl
 #
@@ -17551,7 +17603,7 @@ SimpleBox is now made of G4_Tl
 /gun/energy 1 keV
 /mydet/SelectMaterial G4_Tl
 SimpleBox is now made of G4_Tl
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 eV  in G4_Tl
 #
@@ -17559,7 +17611,7 @@ SimpleBox is now made of G4_Tl
 /gun/energy 100 eV 
 /mydet/SelectMaterial G4_Tl
 SimpleBox is now made of G4_Tl
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 eV  in G4_Tl
 #
@@ -17567,7 +17619,7 @@ SimpleBox is now made of G4_Tl
 /gun/energy 10 eV 
 /mydet/SelectMaterial G4_Tl
 SimpleBox is now made of G4_Tl
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 eV  in G4_Tl
 #
@@ -17575,7 +17627,7 @@ SimpleBox is now made of G4_Tl
 /gun/energy 1 eV 
 /mydet/SelectMaterial G4_Tl
 SimpleBox is now made of G4_Tl
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 MeV in G4_Pb
 #
@@ -17583,7 +17635,7 @@ SimpleBox is now made of G4_Tl
 /gun/energy 10 MeV
 /mydet/SelectMaterial G4_Pb
 SimpleBox is now made of G4_Pb
-/run/beamOn 1
+/run/beamOn 20
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
 The cut in range [1000 (mm)]   is too big   for material  idx=84
 The cut in energy is set1.7976931e+305GeV 
@@ -17733,7 +17785,7 @@ hIoni:   tables are built for  pi-
 /gun/energy 1 MeV
 /mydet/SelectMaterial G4_Pb
 SimpleBox is now made of G4_Pb
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 keV in G4_Pb
 #
@@ -17741,7 +17793,7 @@ SimpleBox is now made of G4_Pb
 /gun/energy 100 keV
 /mydet/SelectMaterial G4_Pb
 SimpleBox is now made of G4_Pb
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 keV in G4_Pb
 #
@@ -17749,7 +17801,7 @@ SimpleBox is now made of G4_Pb
 /gun/energy 10 keV
 /mydet/SelectMaterial G4_Pb
 SimpleBox is now made of G4_Pb
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 keV in G4_Pb
 #
@@ -17757,7 +17809,7 @@ SimpleBox is now made of G4_Pb
 /gun/energy 1 keV
 /mydet/SelectMaterial G4_Pb
 SimpleBox is now made of G4_Pb
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 eV  in G4_Pb
 #
@@ -17765,7 +17817,7 @@ SimpleBox is now made of G4_Pb
 /gun/energy 100 eV 
 /mydet/SelectMaterial G4_Pb
 SimpleBox is now made of G4_Pb
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 eV  in G4_Pb
 #
@@ -17773,7 +17825,7 @@ SimpleBox is now made of G4_Pb
 /gun/energy 10 eV 
 /mydet/SelectMaterial G4_Pb
 SimpleBox is now made of G4_Pb
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 eV  in G4_Pb
 #
@@ -17781,7 +17833,7 @@ SimpleBox is now made of G4_Pb
 /gun/energy 1 eV 
 /mydet/SelectMaterial G4_Pb
 SimpleBox is now made of G4_Pb
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 MeV in G4_Bi
 #
@@ -17789,7 +17841,7 @@ SimpleBox is now made of G4_Pb
 /gun/energy 10 MeV
 /mydet/SelectMaterial G4_Bi
 SimpleBox is now made of G4_Bi
-/run/beamOn 1
+/run/beamOn 20
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
 The cut in range [1000 (mm)]   is too big   for material  idx=85
 The cut in energy is set1.7976931e+305GeV 
@@ -17939,7 +17991,7 @@ hIoni:   tables are built for  pi-
 /gun/energy 1 MeV
 /mydet/SelectMaterial G4_Bi
 SimpleBox is now made of G4_Bi
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 keV in G4_Bi
 #
@@ -17947,7 +17999,7 @@ SimpleBox is now made of G4_Bi
 /gun/energy 100 keV
 /mydet/SelectMaterial G4_Bi
 SimpleBox is now made of G4_Bi
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 keV in G4_Bi
 #
@@ -17955,7 +18007,7 @@ SimpleBox is now made of G4_Bi
 /gun/energy 10 keV
 /mydet/SelectMaterial G4_Bi
 SimpleBox is now made of G4_Bi
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 keV in G4_Bi
 #
@@ -17963,7 +18015,7 @@ SimpleBox is now made of G4_Bi
 /gun/energy 1 keV
 /mydet/SelectMaterial G4_Bi
 SimpleBox is now made of G4_Bi
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 eV  in G4_Bi
 #
@@ -17971,7 +18023,7 @@ SimpleBox is now made of G4_Bi
 /gun/energy 100 eV 
 /mydet/SelectMaterial G4_Bi
 SimpleBox is now made of G4_Bi
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 eV  in G4_Bi
 #
@@ -17979,7 +18031,7 @@ SimpleBox is now made of G4_Bi
 /gun/energy 10 eV 
 /mydet/SelectMaterial G4_Bi
 SimpleBox is now made of G4_Bi
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 eV  in G4_Bi
 #
@@ -17987,7 +18039,7 @@ SimpleBox is now made of G4_Bi
 /gun/energy 1 eV 
 /mydet/SelectMaterial G4_Bi
 SimpleBox is now made of G4_Bi
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 MeV in G4_Po
 #
@@ -17995,7 +18047,7 @@ SimpleBox is now made of G4_Bi
 /gun/energy 10 MeV
 /mydet/SelectMaterial G4_Po
 SimpleBox is now made of G4_Po
-/run/beamOn 1
+/run/beamOn 20
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
 The cut in range [1000 (mm)]   is too big   for material  idx=86
 The cut in energy is set1.7976931e+305GeV 
@@ -18145,7 +18197,7 @@ hIoni:   tables are built for  pi-
 /gun/energy 1 MeV
 /mydet/SelectMaterial G4_Po
 SimpleBox is now made of G4_Po
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 keV in G4_Po
 #
@@ -18153,7 +18205,7 @@ SimpleBox is now made of G4_Po
 /gun/energy 100 keV
 /mydet/SelectMaterial G4_Po
 SimpleBox is now made of G4_Po
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 keV in G4_Po
 #
@@ -18161,7 +18213,7 @@ SimpleBox is now made of G4_Po
 /gun/energy 10 keV
 /mydet/SelectMaterial G4_Po
 SimpleBox is now made of G4_Po
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 keV in G4_Po
 #
@@ -18169,7 +18221,7 @@ SimpleBox is now made of G4_Po
 /gun/energy 1 keV
 /mydet/SelectMaterial G4_Po
 SimpleBox is now made of G4_Po
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 100 eV  in G4_Po
 #
@@ -18177,7 +18229,7 @@ SimpleBox is now made of G4_Po
 /gun/energy 100 eV 
 /mydet/SelectMaterial G4_Po
 SimpleBox is now made of G4_Po
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 10 eV  in G4_Po
 #
@@ -18185,7 +18237,7 @@ SimpleBox is now made of G4_Po
 /gun/energy 10 eV 
 /mydet/SelectMaterial G4_Po
 SimpleBox is now made of G4_Po
-/run/beamOn 1
+/run/beamOn 20
 #
 # neutron at 1 eV  in G4_Po
 #
@@ -18193,33 +18245,33 @@ SimpleBox is now made of G4_Po
 /gun/energy 1 eV 
 /mydet/SelectMaterial G4_Po
 SimpleBox is now made of G4_Po
-/run/beamOn 1
+/run/beamOn 20
 
 ------------------------------------------------------------
-Sender: LSF System <lsf@cob0353>
-Subject: Job 785869: <../../bin/Linux-g++/test11 test11.in> Done
+Sender: LSF System <lsf@cob0352>
+Subject: Job 785870: <../../bin/Linux-g++/test11 test11_large_N.in> Done
 
-Job <../../bin/Linux-g++/test11 test11.in> was submitted from host <noric01> by user <tkoi>.
-Job was executed on host(s) <cob0353>, in queue <medium>, as user <tkoi>.
+Job <../../bin/Linux-g++/test11 test11_large_N.in> was submitted from host <noric01> by user <tkoi>.
+Job was executed on host(s) <cob0352>, in queue <medium>, as user <tkoi>.
 </u/sf/tkoi> was used as the home directory.
 </u/sf/tkoi/geant4/vol43/geant4.8.3/work/test11> was used as the working directory.
 Started at Fri May 25 11:20:45 2007
-Results reported at Fri May 25 11:24:00 2007
+Results reported at Fri May 25 11:24:37 2007
 
 Your job looked like:
 
 ------------------------------------------------------------
 # LSBATCH: User input
-../../bin/Linux-g++/test11 test11.in
+../../bin/Linux-g++/test11 test11_large_N.in
 ------------------------------------------------------------
 
 Successfully completed.
 
 Resource usage summary:
 
-    CPU time   :    188.72 sec.
-    Max Memory :       870 MB
-    Max Swap   :       885 MB
+    CPU time   :    225.79 sec.
+    Max Memory :      1027 MB
+    Max Swap   :      1042 MB
 
     Max Processes  :         3
     Max Threads    :         3

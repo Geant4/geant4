@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: test11.hadronic.exerciser.cc,v 1.17 2006-06-29 21:38:46 gunter Exp $
+// $Id: test11.hadronic.exerciser.cc,v 1.18 2007-05-26 00:06:44 tkoi Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -106,6 +106,128 @@ int main (int argc, char** argv) {
   materialNameList.push_back ("Air");
 
   OutputCases (N, particleNameList, energyList, materialNameList);
+
+// Below T. K. add  for neutron HP
+  std::vector <G4String> TK_particleNameList;
+  TK_particleNameList.push_back ("neutron");
+  std::vector <G4double> TK_energyList;
+  TK_energyList.push_back (  10 * MeV);
+  TK_energyList.push_back (   1 * MeV);
+  TK_energyList.push_back ( 100 * keV);
+  TK_energyList.push_back (  10 * keV);
+  TK_energyList.push_back (   1 * keV);
+  TK_energyList.push_back ( 100 *  eV);
+  TK_energyList.push_back (  10 *  eV);
+  TK_energyList.push_back (   1 *  eV);
+
+  std::vector <G4String> TK_materialNameList;
+   TK_materialNameList.push_back ( "G4_H" );
+   TK_materialNameList.push_back ( "G4_He" );
+   TK_materialNameList.push_back ( "G4_Li" );
+   TK_materialNameList.push_back ( "G4_Be" );
+   TK_materialNameList.push_back ( "G4_B" );
+   TK_materialNameList.push_back ( "G4_C" );
+   TK_materialNameList.push_back ( "G4_N" );
+   TK_materialNameList.push_back ( "G4_O" );
+   TK_materialNameList.push_back ( "G4_F" );
+   TK_materialNameList.push_back ( "G4_Ne" );
+   TK_materialNameList.push_back ( "G4_Na" );
+   TK_materialNameList.push_back ( "G4_Mg" );
+   TK_materialNameList.push_back ( "G4_Al" );
+   TK_materialNameList.push_back ( "G4_Si" );
+   TK_materialNameList.push_back ( "G4_P" );
+   TK_materialNameList.push_back ( "G4_S" );
+   TK_materialNameList.push_back ( "G4_Cl" );
+   TK_materialNameList.push_back ( "G4_Ar" );
+   TK_materialNameList.push_back ( "G4_K" );
+   TK_materialNameList.push_back ( "G4_Ca" );
+   TK_materialNameList.push_back ( "G4_Sc" );
+   TK_materialNameList.push_back ( "G4_Ti" );
+   TK_materialNameList.push_back ( "G4_V" );
+   TK_materialNameList.push_back ( "G4_Cr" );
+   TK_materialNameList.push_back ( "G4_Mn" );
+   TK_materialNameList.push_back ( "G4_Fe" );
+   TK_materialNameList.push_back ( "G4_Co" );
+   TK_materialNameList.push_back ( "G4_Ni" );
+   TK_materialNameList.push_back ( "G4_Cu" );
+   TK_materialNameList.push_back ( "G4_Zn" );
+   TK_materialNameList.push_back ( "G4_Ga" );
+   TK_materialNameList.push_back ( "G4_Ge" );
+   TK_materialNameList.push_back ( "G4_As" );
+   TK_materialNameList.push_back ( "G4_Se" );
+   TK_materialNameList.push_back ( "G4_Br" );
+   TK_materialNameList.push_back ( "G4_Kr" );
+   TK_materialNameList.push_back ( "G4_Rb" );
+   TK_materialNameList.push_back ( "G4_Sr" );
+   TK_materialNameList.push_back ( "G4_Y" );
+   TK_materialNameList.push_back ( "G4_Zr" );
+   TK_materialNameList.push_back ( "G4_Nb" );
+   TK_materialNameList.push_back ( "G4_Mo" );
+   TK_materialNameList.push_back ( "G4_Tc" );
+   TK_materialNameList.push_back ( "G4_Ru" );
+   TK_materialNameList.push_back ( "G4_Rh" );
+   TK_materialNameList.push_back ( "G4_Pd" );
+   TK_materialNameList.push_back ( "G4_Ag" );
+   TK_materialNameList.push_back ( "G4_Cd" );
+   TK_materialNameList.push_back ( "G4_In" );
+   TK_materialNameList.push_back ( "G4_Sn" );
+   TK_materialNameList.push_back ( "G4_Sb" );
+   TK_materialNameList.push_back ( "G4_Te" );
+   TK_materialNameList.push_back ( "G4_I" );
+   TK_materialNameList.push_back ( "G4_Xe" );
+   TK_materialNameList.push_back ( "G4_Cs" );
+   TK_materialNameList.push_back ( "G4_Ba" );
+   TK_materialNameList.push_back ( "G4_La" );
+   TK_materialNameList.push_back ( "G4_Ce" );
+   TK_materialNameList.push_back ( "G4_Pr" );
+   TK_materialNameList.push_back ( "G4_Nd" );
+   TK_materialNameList.push_back ( "G4_Pm" );
+   TK_materialNameList.push_back ( "G4_Sm" );
+   //TK_materialNameList.push_back ( "G4_Eu" );
+   TK_materialNameList.push_back ( "G4_Gd" );
+   TK_materialNameList.push_back ( "G4_Tb" );
+   TK_materialNameList.push_back ( "G4_Dy" );
+   TK_materialNameList.push_back ( "G4_Ho" );
+   TK_materialNameList.push_back ( "G4_Er" );
+   TK_materialNameList.push_back ( "G4_Tm" );
+   TK_materialNameList.push_back ( "G4_Yb" );
+   TK_materialNameList.push_back ( "G4_Lu" );
+   TK_materialNameList.push_back ( "G4_Hf" );
+   TK_materialNameList.push_back ( "G4_Ta" );
+   TK_materialNameList.push_back ( "G4_W" );
+   TK_materialNameList.push_back ( "G4_Re" );
+   TK_materialNameList.push_back ( "G4_Os" );
+   TK_materialNameList.push_back ( "G4_Ir" );
+   TK_materialNameList.push_back ( "G4_Pt" );
+   TK_materialNameList.push_back ( "G4_Au" );
+   TK_materialNameList.push_back ( "G4_Hg" ); // No data HP
+   TK_materialNameList.push_back ( "G4_Tl" );
+   TK_materialNameList.push_back ( "G4_Pb" );
+   TK_materialNameList.push_back ( "G4_Bi" );
+   TK_materialNameList.push_back ( "G4_Po" );
+   //TK_materialNameList.push_back ( "G4_At" );
+   //TK_materialNameList.push_back ( "G4_Rn" ); // No data HP
+   //TK_materialNameList.push_back ( "G4_Fr" ); // No data HP
+   //TK_materialNameList.push_back ( "G4_Ra" );
+   //TK_materialNameList.push_back ( "G4_Ac" );
+   //TK_materialNameList.push_back ( "G4_Th" );
+   //TK_materialNameList.push_back ( "G4_Pa" );
+   //TK_materialNameList.push_back ( "G4_U" );
+   //TK_materialNameList.push_back ( "G4_Np" );
+   //TK_materialNameList.push_back ( "G4_Pu" );
+   //TK_materialNameList.push_back ( "G4_Am" );
+   //TK_materialNameList.push_back ( "G4_Cm" );
+   //TK_materialNameList.push_back ( "G4_Bk" );
+   //TK_materialNameList.push_back ( "G4_Cf" ); // No data HP even with Am
+
+/*
+  if (argc > 1) {
+    if (strcmp (argv[1], "large_N") == 0) {
+      N = 10;
+    }
+  }
+*/
+  OutputCases (N, TK_particleNameList, TK_energyList, TK_materialNameList);
 
   G4cout << G4endl;
 }

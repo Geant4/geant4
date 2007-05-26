@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst11DetectorConstruction.hh,v 1.5 2006-06-29 21:38:48 gunter Exp $
+// $Id: Tst11DetectorConstruction.hh,v 1.6 2007-05-26 00:06:45 tkoi Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -48,8 +48,10 @@ class Tst11DetectorConstruction : public G4VUserDetectorConstruction
   public:
      G4VPhysicalVolume* Construct();
      void SelectMaterial(G4String val);
+     void SetMaterial( G4String materialChoice );
 
   private:
+     void defineNISTMaterials();
      void SelectMaterialPointer();
 
      G4LogicalVolume*   simpleBoxLog;

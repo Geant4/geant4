@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst11DetectorMessenger.cc,v 1.5 2006-06-29 21:39:02 gunter Exp $
+// $Id: Tst11DetectorMessenger.cc,v 1.6 2007-05-26 00:06:45 tkoi Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -50,7 +50,7 @@ Tst11DetectorMessenger::Tst11DetectorMessenger(Tst11DetectorConstruction * myDC)
   selMatCmd->SetGuidance("  Choice : Air, Al, Pb, U (default)");
   selMatCmd->SetParameterName("choice",true);
   selMatCmd->SetDefaultValue("Pb");
-  selMatCmd->SetCandidates("Air Al Pb U");
+//  selMatCmd->SetCandidates("Air Al Pb U");
   selMatCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   myDetector->SelectMaterial(defParam="Pb");

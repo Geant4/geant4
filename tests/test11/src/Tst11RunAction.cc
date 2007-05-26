@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst11RunAction.cc,v 1.6 2006-06-29 21:39:08 gunter Exp $
+// $Id: Tst11RunAction.cc,v 1.7 2007-05-26 00:06:45 tkoi Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -33,6 +33,7 @@
 #include "G4Run.hh"
 #include "G4UImanager.hh"
 #include "G4ios.hh"
+#include "Randomize.hh"
 
 Tst11RunAction::Tst11RunAction()
 {
@@ -44,9 +45,11 @@ Tst11RunAction::~Tst11RunAction()
 
 void Tst11RunAction::BeginOfRunAction(const G4Run* )
 {
+   //CLHEP::HepRandom::showEngineStatus();
 }
 
 void Tst11RunAction::EndOfRunAction(const G4Run* )
 {
+   //CLHEP::HepRandom::showEngineStatus();
 }
 

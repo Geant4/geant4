@@ -23,11 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// 070522 Add Nist Materals T. Koi
 //
 
 #include "Tst11DetectorConstruction.hh"
 
 #include "Tst11DetectorMessenger.hh"
+
 
 #include "G4Material.hh"
 #include "G4MaterialTable.hh"
@@ -45,6 +47,7 @@ Tst11DetectorConstruction::Tst11DetectorConstruction()
 {
   detectorMessenger = new Tst11DetectorMessenger(this);
   materialChoice = "Pb";
+  defineNISTMaterials();
 }
 
 Tst11DetectorConstruction::~Tst11DetectorConstruction()
@@ -104,6 +107,7 @@ void Tst11DetectorConstruction::SelectMaterialPointer()
     U->AddElement(elU, 1);
   }
 
+
   if(materialChoice=="Air")
   { selectedMaterial = Air; }
   else if(materialChoice=="Al")
@@ -111,7 +115,10 @@ void Tst11DetectorConstruction::SelectMaterialPointer()
   else if(materialChoice=="Pb")
   { selectedMaterial = Pb; }
   else
-  { selectedMaterial = U; }
+  { 
+    SetMaterial( materialChoice ); 
+    if ( selectedMaterial == NULL ) selectedMaterial = U; 
+  }
 
   if(simpleBoxLog)
   { simpleBoxLog->SetMaterial(selectedMaterial); }
@@ -128,5 +135,119 @@ G4VPhysicalVolume* Tst11DetectorConstruction::Construct()
                                         "SPhys",simpleBoxLog,0,false,0);
 
   return simpleBoxDetector;
+}
+
+#include "G4NistManager.hh"
+void Tst11DetectorConstruction::defineNISTMaterials()
+{
+//--------- Material definition with NIST Manager ---------
+
+   G4NistManager* nistMan = G4NistManager::Instance();
+
+   nistMan->FindOrBuildMaterial( "G4_H" );
+   nistMan->FindOrBuildMaterial( "G4_He" );
+   nistMan->FindOrBuildMaterial( "G4_Li" );
+   nistMan->FindOrBuildMaterial( "G4_Be" );
+   nistMan->FindOrBuildMaterial( "G4_B" );
+   nistMan->FindOrBuildMaterial( "G4_C" );
+   nistMan->FindOrBuildMaterial( "G4_N" );
+   nistMan->FindOrBuildMaterial( "G4_O" );
+   nistMan->FindOrBuildMaterial( "G4_F" );
+   nistMan->FindOrBuildMaterial( "G4_Ne" );
+   nistMan->FindOrBuildMaterial( "G4_Na" );
+   nistMan->FindOrBuildMaterial( "G4_Mg" );
+   nistMan->FindOrBuildMaterial( "G4_Al" );
+   nistMan->FindOrBuildMaterial( "G4_Si" );
+   nistMan->FindOrBuildMaterial( "G4_P" );
+   nistMan->FindOrBuildMaterial( "G4_S" );
+   nistMan->FindOrBuildMaterial( "G4_Cl" );
+   nistMan->FindOrBuildMaterial( "G4_Ar" );
+   nistMan->FindOrBuildMaterial( "G4_K" );
+   nistMan->FindOrBuildMaterial( "G4_Ca" );
+   nistMan->FindOrBuildMaterial( "G4_Sc" );
+   nistMan->FindOrBuildMaterial( "G4_Ti" );
+   nistMan->FindOrBuildMaterial( "G4_V" );
+   nistMan->FindOrBuildMaterial( "G4_Cr" );
+   nistMan->FindOrBuildMaterial( "G4_Mn" );
+   nistMan->FindOrBuildMaterial( "G4_Fe" );
+   nistMan->FindOrBuildMaterial( "G4_Co" );
+   nistMan->FindOrBuildMaterial( "G4_Ni" );
+   nistMan->FindOrBuildMaterial( "G4_Cu" );
+   nistMan->FindOrBuildMaterial( "G4_Zn" );
+   nistMan->FindOrBuildMaterial( "G4_Ga" );
+   nistMan->FindOrBuildMaterial( "G4_Ge" );
+   nistMan->FindOrBuildMaterial( "G4_As" );
+   nistMan->FindOrBuildMaterial( "G4_Se" );
+   nistMan->FindOrBuildMaterial( "G4_Br" );
+   nistMan->FindOrBuildMaterial( "G4_Kr" );
+   nistMan->FindOrBuildMaterial( "G4_Rb" );
+   nistMan->FindOrBuildMaterial( "G4_Sr" );
+   nistMan->FindOrBuildMaterial( "G4_Y" );
+   nistMan->FindOrBuildMaterial( "G4_Zr" );
+   nistMan->FindOrBuildMaterial( "G4_Nb" );
+   nistMan->FindOrBuildMaterial( "G4_Mo" );
+   nistMan->FindOrBuildMaterial( "G4_Tc" );
+   nistMan->FindOrBuildMaterial( "G4_Ru" );
+   nistMan->FindOrBuildMaterial( "G4_Rh" );
+   nistMan->FindOrBuildMaterial( "G4_Pd" );
+   nistMan->FindOrBuildMaterial( "G4_Ag" );
+   nistMan->FindOrBuildMaterial( "G4_Cd" );
+   nistMan->FindOrBuildMaterial( "G4_In" );
+   nistMan->FindOrBuildMaterial( "G4_Sn" );
+   nistMan->FindOrBuildMaterial( "G4_Sb" );
+   nistMan->FindOrBuildMaterial( "G4_Te" );
+   nistMan->FindOrBuildMaterial( "G4_I" );
+   nistMan->FindOrBuildMaterial( "G4_Xe" );
+   nistMan->FindOrBuildMaterial( "G4_Cs" );
+   nistMan->FindOrBuildMaterial( "G4_Ba" );
+   nistMan->FindOrBuildMaterial( "G4_La" );
+   nistMan->FindOrBuildMaterial( "G4_Ce" );
+   nistMan->FindOrBuildMaterial( "G4_Pr" );
+   nistMan->FindOrBuildMaterial( "G4_Nd" );
+   nistMan->FindOrBuildMaterial( "G4_Pm" );
+   nistMan->FindOrBuildMaterial( "G4_Sm" );
+   nistMan->FindOrBuildMaterial( "G4_Eu" );
+   nistMan->FindOrBuildMaterial( "G4_Gd" );
+   nistMan->FindOrBuildMaterial( "G4_Tb" );
+   nistMan->FindOrBuildMaterial( "G4_Dy" );
+   nistMan->FindOrBuildMaterial( "G4_Ho" );
+   nistMan->FindOrBuildMaterial( "G4_Er" );
+   nistMan->FindOrBuildMaterial( "G4_Tm" );
+   nistMan->FindOrBuildMaterial( "G4_Yb" );
+   nistMan->FindOrBuildMaterial( "G4_Lu" );
+   nistMan->FindOrBuildMaterial( "G4_Hf" );
+   nistMan->FindOrBuildMaterial( "G4_Ta" );
+   nistMan->FindOrBuildMaterial( "G4_W" );
+   nistMan->FindOrBuildMaterial( "G4_Re" );
+   nistMan->FindOrBuildMaterial( "G4_Os" );
+   nistMan->FindOrBuildMaterial( "G4_Ir" );
+   nistMan->FindOrBuildMaterial( "G4_Pt" );
+   nistMan->FindOrBuildMaterial( "G4_Au" );
+   //nistMan->FindOrBuildMaterial( "G4_Hg" ); // No data HP
+   nistMan->FindOrBuildMaterial( "G4_Tl" );
+   nistMan->FindOrBuildMaterial( "G4_Pb" );
+   nistMan->FindOrBuildMaterial( "G4_Bi" );
+   nistMan->FindOrBuildMaterial( "G4_Po" );
+   nistMan->FindOrBuildMaterial( "G4_At" );
+   //nistMan->FindOrBuildMaterial( "G4_Rn" ); // No data HP
+   //nistMan->FindOrBuildMaterial( "G4_Fr" ); // No data HP
+   nistMan->FindOrBuildMaterial( "G4_Ra" );
+   nistMan->FindOrBuildMaterial( "G4_Ac" );
+   nistMan->FindOrBuildMaterial( "G4_Th" );
+   nistMan->FindOrBuildMaterial( "G4_Pa" );
+   nistMan->FindOrBuildMaterial( "G4_U" );
+   //nistMan->FindOrBuildMaterial( "G4_Np" );
+   //nistMan->FindOrBuildMaterial( "G4_Pu" );
+   //nistMan->FindOrBuildMaterial( "G4_Am" );
+   //nistMan->FindOrBuildMaterial( "G4_Cm" );
+   //nistMan->FindOrBuildMaterial( "G4_Bk" );
+   //nistMan->FindOrBuildMaterial( "G4_Cf" ); // No data HP even with Am
+
+}
+
+void Tst11DetectorConstruction::SetMaterial( G4String materialChoice )
+{
+  // search the material by its name
+  selectedMaterial = G4Material::GetMaterial( materialChoice );
 }
 
