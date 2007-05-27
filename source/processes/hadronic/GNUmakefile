@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.20 2007-05-25 19:29:59 dennis Exp $
+# $Id: GNUmakefile,v 1.21 2007-05-27 08:27:15 gcosmo Exp $
 # ----------------------------------------------------------------
 # GNUmakefile for hadronic processes library.  G.Folger 10-Dec-97.
 # ----------------------------------------------------------------
@@ -35,10 +35,10 @@ SUBDIRS += models/high_energy
 SUBDIRS += models/im_r_matrix
 SUBDIRS += models/isotope_production
 SUBDIRS += models/leading_particle
+SUBDIRS += models/lll_fission
 SUBDIRS += models/low_energy
 SUBDIRS += models/management
 SUBDIRS += models/neutron_hp
-SUBDIRS += models/lll_fission
 SUBDIRS += models/photolepton_hadron/muon_nuclear
 SUBDIRS += models/parton_string/diffraction
 SUBDIRS += models/parton_string/hadronization
