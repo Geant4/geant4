@@ -79,6 +79,13 @@ public:
   void InvokePostUserTrackingAction( G4Track* fpTrack );
   // invoke the G4UserTrackingAction::PostUserTrackingAction
 
+  G4bool CheckIfLastStep( G4Track* aTrack );
+  // check if it is the last step for error propagation:
+  //  - G4ErrorState is G4ErrorState_StoppedAtTarget
+  //  - Track is OutOfWorld
+  //  - G4TrackStatus is fStopAndKill
+
+
 public:
   // Get and Set methods 
   const G4ErrorTrajState* GetInitialTrajState() const
@@ -97,11 +104,6 @@ private:
   G4int MakeSteps( G4ErrorFreeTrajState* currentTS_FREE );
   // advance steps until target is reached
 
-  G4bool CheckIfLastStep( G4Track* aTrack );
-  // check if it is the last step for error propagation:
-  //  - G4ErrorState is G4ErrorState_StoppedAtTarget
-  //  - Track is OutOfWorld
-  //  - G4TrackStatus is fStopAndKill
 
 private:
   G4double theStepLength;

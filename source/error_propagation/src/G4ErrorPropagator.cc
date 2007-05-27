@@ -411,17 +411,17 @@ G4bool G4ErrorPropagator::CheckIfLastStep( G4Track* aTrack )
     //----- If particle is out of world, without finding the G4ErrorTarget, give a n error/warning
     lastG4eStep = true;
     if( exception ){
-      G4Exception(" !!!EXITING:  G4ErrorPropagator::CheckIfLastSte: track extrapolated until end of World without finding the defined target ");
+      G4Exception(" !!!EXITING:  G4ErrorPropagator::CheckIfLastStep: track extrapolated until end of World without finding the defined target ");
     } else {
-      if( verbose >= 1 ) G4cerr << " !!!WARNING:  G4ErrorPropagator::CheckIfLastSte: track extrapolated until end of World without finding the defined target " << G4endl;
+      if( verbose >= 1 ) G4cerr << " !!!WARNING:  G4ErrorPropagator::CheckIfLastStep: track extrapolated until end of World without finding the defined target " << G4endl;
     }
   //----- not last step from G4e, but track is stopped (energy exhausted)
   } else if( aTrack->GetTrackStatus() == fStopAndKill ) { 
     if( exception ){
-      G4cerr << " !!!EXITING:  G4ErrorPropagator::CheckIfLastSte: track extrapolated until energy is exhausted without finding the defined target " << G4endl;
+      G4cerr << " !!!EXITING:  G4ErrorPropagator::CheckIfLastStep: track extrapolated until energy is exhausted without finding the defined target " << G4endl;
       exit(1);
     } else {
-      if( verbose >= 1 ) G4cerr << " !!!WARNING:  G4ErrorPropagator::CheckIfLastSte track extrapolated until energy is exhausted without finding the defined target " << G4endl;
+      if( verbose >= 1 ) G4cerr << " !!!WARNING:  G4ErrorPropagator::CheckIfLastStep: track extrapolated until energy is exhausted without finding the defined target " << G4endl;
       lastG4eStep = 1;
     }
   }
