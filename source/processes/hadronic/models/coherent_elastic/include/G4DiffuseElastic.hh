@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DiffuseElastic.hh,v 1.3 2007-05-25 16:00:07 grichine Exp $
+// $Id: G4DiffuseElastic.hh,v 1.4 2007-05-27 15:09:29 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -90,11 +90,20 @@ public:
   G4double GetDiffuseElasticXsc( G4ParticleDefinition* particle, 
                                  G4double theta, 
 			         G4double momentum, 
-				 G4double A         );  
+				 G4double A         );
+  
   G4double BesselJzero(G4double z);
   G4double BesselJone(G4double z);
   G4double DampFactor(G4double z);
   G4double BesselOneByArg(G4double z);
+
+  G4double GetDiffElasticProb(G4double theta);
+  G4double GetIntegrandFunction(G4double theta);
+
+  G4double IntegralElasticProb( G4ParticleDefinition* particle, 
+                                 G4double theta, 
+			         G4double momentum, 
+				 G4double A            );
 
 private:
 
@@ -123,6 +132,12 @@ private:
   G4double lowEnergyLimitQ;  
   G4double lowestEnergyLimit;  
   G4double plabLowLimit;
+
+  G4ParticleDefinition* fParticle;
+  G4double fWaveVector;
+  G4double fAtomicWeight;
+  G4double fNuclearRadius;
+
 };
 
 inline void G4DiffuseElastic::SetRecoilKinEnergyLimit(G4double value)

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DiffuseElastic.cc,v 1.2 2007-05-25 16:00:07 grichine Exp $
+// $Id: G4DiffuseElastic.cc,v 1.3 2007-05-27 15:09:29 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -43,6 +43,8 @@
 #include "G4VQCrossSection.hh"
 #include "G4ElasticHadrNucleusHE.hh"
 #include "Randomize.hh"
+#include "G4Integrator.hh"
+#include "globals.hh"
 #include "G4Proton.hh"
 #include "G4Neutron.hh"
 #include "G4Deuteron.hh"
@@ -51,7 +53,7 @@
 #include "G4PionMinus.hh"
 
 G4DiffuseElastic::G4DiffuseElastic(G4ElasticHadrNucleusHE* HModel) 
-  : G4HadronicInteraction(), hElastic(HModel)
+  : G4HadronicInteraction(), hElastic(HModel),fParticle(0)
 {
   SetMinEnergy( 0.0*GeV );
   SetMaxEnergy( 100.*TeV );
@@ -470,11 +472,6 @@ G4DiffuseElastic::Fctcos(G4double t,
 
 
 
-
-
-
-
-
 ////////////////////////////////////////////////////////////////////////////
 //
 // return differential elastic cross section d(sigma)/d(omega) 
@@ -485,13 +482,42 @@ G4DiffuseElastic::GetDiffuseElasticXsc( G4ParticleDefinition* particle,
 			                G4double momentum, 
                                         G4double A         )
 {
+  fParticle      = particle;
+  fWaveVector    = momentum/hbarc;
+  fAtomicWeight  = A;
+  G4double r0    = 1.08*fermi;
+  fNuclearRadius = r0*std::pow(A, 1./3.);
+
+  G4double sigma = fNuclearRadius*fNuclearRadius*GetDiffElasticProb(theta);
+
+  return sigma;
+}
+
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////
+//
+// return differential elastic probability d(probability)/d(omega) 
+
+G4double 
+G4DiffuseElastic::GetDiffElasticProb( // G4ParticleDefinition* particle, 
+                                        G4double theta 
+					//  G4double momentum, 
+					// G4double A         
+                                     )
+{
   G4double sigma, bzero, bzero2, bonebyarg, bonebyarg2, damp, damp2;
   G4double delta, diffuse, gamma;
 
-  G4double wavek = momentum/hbarc;  // wave vector
-  G4double r0    = 1.08*fermi;
-  G4double rad   = r0*std::pow(A, 1./3.);
-  G4double kr    = wavek*rad;
+  // G4double wavek = momentum/hbarc;  // wave vector
+  // G4double r0    = 1.08*fermi;
+  // G4double rad   = r0*std::pow(A, 1./3.);
+  G4double kr    = fWaveVector*fNuclearRadius; // wavek*rad;
   G4double kr2   = kr*kr;
   G4double krt   = kr*theta;
 
@@ -500,7 +526,7 @@ G4DiffuseElastic::GetDiffuseElasticXsc( G4ParticleDefinition* particle,
   bonebyarg  = BesselOneByArg(krt);
   bonebyarg2 = bonebyarg*bonebyarg;  
 
-  if (particle == theProton)
+  if (fParticle == theProton)
   {
     diffuse = 0.63*fermi;
     gamma   = 0.3*fermi;
@@ -512,19 +538,62 @@ G4DiffuseElastic::GetDiffuseElasticXsc( G4ParticleDefinition* particle,
     gamma   = 0.3*fermi;
     delta   = 0.1*fermi*fermi;
   }
-  G4double kg    = wavek*delta;
+  G4double kg    = fWaveVector*delta;   // wavek*delta;
   G4double kg2   = kg*kg;
-  G4double dk2t  = delta*wavek*wavek*theta;
+  G4double dk2t  = delta*fWaveVector*fWaveVector*theta; // delta*wavek*wavek*theta;
   G4double dk2t2 = dk2t*dk2t;
 
-  G4double pikdt = pi*wavek*diffuse*theta;
+  G4double pikdt = pi*fWaveVector*diffuse*theta;// pi*wavek*diffuse*theta;
   damp           = DampFactor(pikdt);
   damp2          = damp*damp;
 
   sigma  = kg2 + dk2t2;
   sigma *= bzero2;
   sigma += kr2*bonebyarg2;
-  sigma *= damp2*rad*rad;
+  sigma *= damp2;          // *rad*rad;
 
   return sigma;
+}
+
+
+////////////////////////////////////////////////////////////////////////////
+//
+// return differential elastic probability 2*pi*sin(theta)*d(probability)/d(omega) 
+
+G4double 
+G4DiffuseElastic::GetIntegrandFunction( G4double theta )
+{
+  G4double result;
+
+  result  = 2*pi*std::sin(theta);
+  result *= GetDiffElasticProb(theta);
+  return result;
+}
+
+////////////////////////////////////////////////////////////////////////////
+//
+// return integral elastic cross section d(sigma)/d(omega) integrated 0 - theta 
+
+G4double 
+G4DiffuseElastic::IntegralElasticProb( G4ParticleDefinition* particle, 
+                                        G4double theta, 
+			                G4double momentum, 
+                                        G4double A         )
+{
+  G4double result;
+  fParticle      = particle;
+  fWaveVector    = momentum/hbarc;
+  fAtomicWeight  = A;
+  G4double r0    = 1.08*fermi;
+  fNuclearRadius = r0*std::pow(A, 1./3.);
+
+
+  G4Integrator<G4DiffuseElastic,G4double(G4DiffuseElastic::*)(G4double)> integral;
+
+  // result = integral.Legendre10(this,&G4DiffuseElastic::GetDiffElasticProb, 0., theta ); 
+  // result = integral.Legendre96(this,&G4DiffuseElastic::GetDiffElasticProb, 0., theta ); 
+  // result = integral.Legendre10(this,&G4DiffuseElastic::GetIntegrandFunction, 0., theta ); 
+  result = integral.Legendre96(this,&G4DiffuseElastic::GetIntegrandFunction, 0., theta ); 
+
+  return result;
 }
