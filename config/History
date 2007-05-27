@@ -1,4 +1,4 @@
-$Id: History,v 1.291 2007-05-25 10:42:03 gcosmo Exp $
+$Id: History,v 1.292 2007-05-27 08:21:25 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+27th May 2007  Gabriele Cosmo (config-V08-03-01)
+- Added "lll_fission" hadronic model module to binmake.gmk.
 
 12th May 2007  Gabriele Cosmo (config-V08-03-00)
 - Added "error_propagation" module to binmake.gmk.
