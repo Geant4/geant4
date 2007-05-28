@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DiffuseElastic.cc,v 1.3 2007-05-27 15:09:29 grichine Exp $
+// $Id: G4DiffuseElastic.cc,v 1.4 2007-05-28 15:07:03 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -485,20 +485,13 @@ G4DiffuseElastic::GetDiffuseElasticXsc( G4ParticleDefinition* particle,
   fParticle      = particle;
   fWaveVector    = momentum/hbarc;
   fAtomicWeight  = A;
-  G4double r0    = 1.08*fermi;
+  G4double r0    = 1.16*( 1 - std::pow(A, -2./3.) )*fermi;   // 1.08*fermi;
   fNuclearRadius = r0*std::pow(A, 1./3.);
 
   G4double sigma = fNuclearRadius*fNuclearRadius*GetDiffElasticProb(theta);
 
   return sigma;
 }
-
-
-
-
-
-
-
 
 ////////////////////////////////////////////////////////////////////////////
 //
@@ -584,14 +577,12 @@ G4DiffuseElastic::IntegralElasticProb( G4ParticleDefinition* particle,
   fParticle      = particle;
   fWaveVector    = momentum/hbarc;
   fAtomicWeight  = A;
-  G4double r0    = 1.08*fermi;
+  G4double r0    = 1.16*(1 - std::pow(A, -2./3.) )*fermi;   // 1.08*fermi;
   fNuclearRadius = r0*std::pow(A, 1./3.);
 
 
   G4Integrator<G4DiffuseElastic,G4double(G4DiffuseElastic::*)(G4double)> integral;
 
-  // result = integral.Legendre10(this,&G4DiffuseElastic::GetDiffElasticProb, 0., theta ); 
-  // result = integral.Legendre96(this,&G4DiffuseElastic::GetDiffElasticProb, 0., theta ); 
   // result = integral.Legendre10(this,&G4DiffuseElastic::GetIntegrandFunction, 0., theta ); 
   result = integral.Legendre96(this,&G4DiffuseElastic::GetIntegrandFunction, 0., theta ); 
 

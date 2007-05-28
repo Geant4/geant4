@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DiffuseElastic.hh,v 1.4 2007-05-27 15:09:29 grichine Exp $
+// $Id: G4DiffuseElastic.hh,v 1.5 2007-05-28 15:07:03 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -104,6 +104,8 @@ public:
                                  G4double theta, 
 			         G4double momentum, 
 				 G4double A            );
+
+  G4double GetNuclearRadius(){return fNuclearRadius;};
 
 private:
 
