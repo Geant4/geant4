@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.cc,v 1.34 2007-05-24 09:53:27 japost Exp $
+// $Id: G4Navigator.cc,v 1.35 2007-05-29 20:30:05 japost Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4Navigator Implementation
@@ -932,6 +932,7 @@ G4double G4Navigator::ComputeStep( const G4ThreeVector &pGlobalpoint,
       G4cout << " fGrandMotherExitNormal= " << fGrandMotherExitNormal << G4endl;
 #endif
   }
+  fStepEndPoint= pGlobalpoint+Step*pDirection; 
 
   if( (Step == pCurrentProposedStepLength) && (!fExiting) && (!fEntering) )
   {
@@ -956,8 +957,6 @@ G4double G4Navigator::ComputeStep( const G4ThreeVector &pGlobalpoint,
   G4cout.precision(oldcoutPrec);
   G4cerr.precision(oldcerrPrec);
 #endif
-
-  fStepEndPoint= pGlobalpoint+Step*pDirection; 
 
   return Step;
 }
@@ -1158,7 +1157,7 @@ G4double G4Navigator::ComputeSafety( const G4ThreeVector &pGlobalpoint,
 
 #ifdef G4DEBUG_NAVIGATION
     if( fVerbose >= 2 ) {
-      G4cout << "    ComputeSafety() relocates-in-volume to point: " 
+      G4cout << "  G4Navigator::ComputeSafety() relocates-in-volume to point: " 
              << pGlobalpoint << G4endl;
     }
 #endif 
@@ -1202,16 +1201,17 @@ G4double G4Navigator::ComputeSafety( const G4ThreeVector &pGlobalpoint,
                                             fHistory, pMaxLength);
     }
   }
-  else
+  else // if( endpointOnSurface && stayedOnEndpoint )
   {
     // Already have newSafety = 0.0; 
 #ifdef G4DEBUG_NAVIGATION
     if( fVerbose >= 2 ) {
-      G4cout << "    ComputeSafety() finds that point - " 
+      G4cout << "    G4Navigator::ComputeSafety() finds that point - " 
              << pGlobalpoint << " - is on surface " << G4endl; 
       if( fEnteredDaughter ) G4cout << "   entered new daughter volume"; 
       if( fExitedMother )    G4cout << "   and exited previous volume."; 
       G4cout << G4endl;
+      G4cout << " EndPoint was = " << fStepEndPoint << G4endl;
     } 
 #endif
   }
