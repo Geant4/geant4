@@ -52,7 +52,7 @@
 // All rights reserved.
 // UCRL-CODE-224807
 //
-// $Id: fissionEvent.cc,v 1.1 2007-05-22 00:53:11 dennis Exp $
+// $Id: fissionEvent.cc,v 1.2 2007-05-29 12:36:48 gcosmo Exp $
 //
 
 #include "fissionEvent.hh"
@@ -175,7 +175,7 @@ fissionEvent::fissionEvent(int isotope, double time, double nubar, double eng) {
          photonAges[i] = time;
       }
    }
-};
+}
 
 fissionEvent::~fissionEvent() {
    if (neutronNu > 0) {
@@ -195,4 +195,4 @@ fissionEvent::~fissionEvent() {
       delete [] photonDircosw;
       delete [] photonAges;
    }
-};
+}

@@ -53,7 +53,7 @@
 // UCRL-CODE-224807
 //
 //
-// $Id: G4LLNLFission.cc,v 1.1 2007-05-22 00:52:06 dennis Exp $
+// $Id: G4LLNLFission.cc,v 1.2 2007-05-29 12:36:48 gcosmo Exp $
 //
 // This class is a copy of Fission.cc, made for use with Geant4.
 //
@@ -74,76 +74,76 @@ extern "C" {
    void genspfissevt_(int *isotope, double *time) {
       if (fe != 0) delete fe;
       fe = new fissionEvent(*isotope, *time, -1., 0.);
-   };
+   }
 
    void genfissevt_(int *isotope, double *time, double *nubar, double *eng) {
       if (fe != 0) delete fe;
       fe = new fissionEvent(*isotope, *time, *nubar, *eng);
-   };
+   }
 
    int getnnu_() {
       return (*fe).getNeutronNu();
-   };
+   }
 
    int getpnu_() {
       return (*fe).getPhotonNu();
-   };
+   }
 
    double getneng_(int *index) {
       return (*fe).getNeutronEnergy(*index);
-   };
+   }
 
    double getnvel_(int *index) {
       return (*fe).getNeutronVelocity(*index);
-   };
+   }
 
    double getndircosu_(int *index) {
       return (*fe).getNeutronDircosu(*index);
-   };
+   }
 
    double getndircosv_(int *index) {
       return (*fe).getNeutronDircosv(*index);
-   };
+   }
 
    double getndircosw_(int *index) {
       return (*fe).getNeutronDircosw(*index);
-   };
+   }
 
    double getpeng_(int *index) {
       return (*fe).getPhotonEnergy(*index);
-   };
+   }
 
    double getpvel_(int *index) {
       return (*fe).getPhotonVelocity(*index);
-   };
+   }
 
    double getpdircosu_(int *index) {
       return (*fe).getPhotonDircosu(*index);
-   };
+   }
 
    double getpdircosv_(int *index) {
       return (*fe).getPhotonDircosv(*index);
-   };
+   }
 
    double getpdircosw_(int *index) {
       return (*fe).getPhotonDircosw(*index);
-   };
+   }
 
    double getnage_(int *index) {
       return (*fe).getNeutronAge(*index);
-   };
+   }
 
    double getpage_(int *index) {
       return (*fe).getPhotonAge(*index);
-   };
+   }
 
    void setdelay_(int *delay) {
       (*fe).setDelayOption(*delay);
-   };
+   }
 
    void setcorrel_(int *correlation) {
       (*fe).setCorrelationOption(*correlation);
-   };
+   }
 
    void setnudist_(int *nudist) {
 /*
@@ -183,7 +183,7 @@ extern "C" {
 */
 
       (*fe).setNudistOption(*nudist);
-   };
+   }
 
    void setcf252_(int *ndist, int *neng) {
 /*
@@ -199,7 +199,7 @@ extern "C" {
          2 to sample the Froehner Watt spectrum
 */
       (*fe).setCf252Option(*ndist, *neng);
-   }; 
+   }
 
    void setrngf_(float (*funcptr) (void)) {
       fissionEvent::setRNGf(funcptr);
