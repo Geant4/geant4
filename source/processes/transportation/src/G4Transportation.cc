@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Transportation.cc,v 1.65 2007-05-24 17:09:51 japost Exp $
+// $Id: G4Transportation.cc,v 1.66 2007-05-29 13:34:24 japost Exp $
 // --> Merged with 1.60.4.2.2.3 2007/05/09 09:30:28 japost 
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
@@ -53,6 +53,8 @@
 #include "G4ParticleTable.hh"
 #include "G4ChordFinder.hh"
 class G4VSensitiveDetector;
+
+// #define G4DEBUG_TRANSPORT 1
 
 //////////////////////////////////////////////////////////////////////////
 //
@@ -377,7 +379,6 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
           //  --> was endMassSafety
       // Changed to accomodate processes that cannot update the safety -- JA 22 Nov 06
 
-      // #define G4DEBUG_TRANSPORT 1
 
 #ifdef G4DEBUG_TRANSPORT 
       int prec= G4cout.precision(12) ;
