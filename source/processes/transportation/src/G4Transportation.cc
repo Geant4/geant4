@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Transportation.cc,v 1.67 2007-05-29 13:50:15 japost Exp $
+// $Id: G4Transportation.cc,v 1.68 2007-05-29 19:53:47 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // ------------------------------------------------------------
@@ -64,7 +64,7 @@ class G4VSensitiveDetector;
 // Constructor
 
 G4Transportation::G4Transportation( G4int verboseLevel )
-  : G4VProcess( G4String("Transportation8"), fTransportation ),
+  : G4VProcess( G4String("Transportation"), fTransportation ),
     fParticleIsLooping( false ),
     fPreviousSftOrigin (0.,0.,0.),
     fPreviousSafety    ( 0.0 ),
@@ -319,10 +319,10 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
            geometryStepLength   = currentMinimumStep ;
            fGeometryLimitedStep = false ;
         }
-	//G4cout << "Transport8: fieldPropagator returned safety= " << currentSafety 
+	//G4cout << "Transport: fieldPropagator returned safety= " << currentSafety 
 	//       << " at " << startPosition << G4endl;
 	// int prc= G4cout.precision(9);  
-	// G4cout << "Tr8: PiF gave safety= " << currentSafety << " at " << startPosition << G4endl;
+	// G4cout << "Tr: PiF gave safety= " << currentSafety << " at " << startPosition << G4endl;
 	// G4cout.precision(prc); 
      }
      else
@@ -459,7 +459,7 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
 
 #ifdef G4DEBUG_TRANSPORT 
       G4cout.precision(12) ;
-      G4cout << "***Transportation8::AlongStepGPIL ** " << G4endl  ;
+      G4cout << "***G4Transportation::AlongStepGPIL ** " << G4endl  ;
       G4cout << "  Called Navigator->ComputeSafety at " << fTransportEndPosition
              << "    and it returned safety= " << endSafety << G4endl ; 
       G4cout << "  Adding endpoint distance " << endpointDistance 
@@ -585,7 +585,7 @@ G4VParticleChange* G4Transportation::AlongStepDoIt( const G4Track& track,
 	fNoLooperTrials ++; 
 #ifdef G4VERBOSE
 	if( (fVerboseLevel > 2) ){
-	  G4cout << "   Transportation8::AlongStepDoIt(): Particle looping -  "
+	  G4cout << "   G4Transportation::AlongStepDoIt(): Particle looping -  "
 		 << "   Number of trials = " << fNoLooperTrials 
 		 << "   No of calls to  = " << noCalls 
 		 << G4endl;
