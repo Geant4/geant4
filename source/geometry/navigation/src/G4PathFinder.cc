@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PathFinder.cc,v 1.41 2007-05-24 11:57:40 japost Exp $
+// $Id: G4PathFinder.cc,v 1.42 2007-05-29 21:04:08 japost Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4PathFinder Implementation
@@ -291,6 +291,8 @@ G4PathFinder::PrepareNewTrack( const G4ThreeVector position,
 
   EnableParallelNavigation(true); 
     // Switch PropagatorInField to use MultiNavigator
+  fpTransportManager->GetSafetyHelper()->InitialiseHelper(); 
+    // Reinitialise state of safety helper -- avoid problems with overlaps
 
   // if( fVerboseLevel > 1 ) 
   // G4cout << " G4PathFinder::PrepareNewTrack - entered " << G4endl;
@@ -498,9 +500,20 @@ G4PathFinder::ReLocate( const   G4ThreeVector& position )
   G4double revisedSafety= 0.0; 
   if( (!fNewTrack) && ( longMoveEnd && longMoveSaf ) ){  
        // Used to use ( longMoveEnd || longMoveSaf ) for extra checking
+     G4double       LastSafetyValue;      // Copy to keep last value - and restore
+     G4ThreeVector  LastSafetyLocation; 
+
+     // G4cout << "  --> last ComputeSafety Location was " << fSafetyLocation << G4endl;
+     // G4cout << "       safety value =  " << fMinSafety_atSafLocation << G4endl;
+ 
+     LastSafetyLocation= fSafetyLocation; 
+     LastSafetyValue= fMinSafety_atSafLocation; 
 
      // Recompute ComputeSafety for end position
      revisedSafety= ComputeSafety(lastEndPosition); 
+
+     fSafetyLocation= LastSafetyLocation;
+     fMinSafety_atSafLocation= LastSafetyValue; 
 
      G4double  distCheckRevisedEnd= 
          ( moveLenEndPosSq - revisedSafety * revisedSafety ); 
@@ -572,12 +585,13 @@ G4PathFinder::ReLocate( const   G4ThreeVector& position )
                <<  revisedSafety << " as safety value."  << G4endl;
         G4cout << "  --> last position for safety " << fSafetyLocation << G4endl;
         G4cout << "       its safety value =  " << fMinSafety_atSafLocation << G4endl;
-        G4cout << "       move from safety location = " << std::sqrt(moveLenSafSq) << G4endl;
-        // moveVecSafety.mag() *** (position-fSafetyLocation).mag() << G4endl;
+        G4cout << "       move from safety location = " << std::sqrt(moveLenSafSq) << G4endl
+	       << "         again= " << moveVecSafety.mag() << G4endl;
+	  // *** (position-fSafetyLocation).mag() << G4endl;
         G4cout << "       safety - Move-from-end= " 
                << revisedSafety - moveLenEndPosition << " (negative is Bad.)" << G4endl;
 
-        G4cout << " Debub:  distCheckRevisedEnd = " << distCheckRevisedEnd << G4endl;
+        G4cout << " Debug:  distCheckRevisedEnd = " << distCheckRevisedEnd << G4endl;
 
         ReportMove( lastEndPosition, position, "Position" ); 
         G4Exception( "G4PathFinder::ReLocate", "205-RelocatePointTooFar", 
@@ -796,7 +810,9 @@ G4PathFinder::DoNextLinearStep( const G4FieldTrack &initialState,
 #endif
 	}
 	else {
+#ifdef G4DEBUG_PATHFINDER
            G4double previousSafety= safety; 
+#endif
 	   step= 
 	     (*pNavigatorIter)->ComputeStep( initialPosition, 
 					     initialDirection,
