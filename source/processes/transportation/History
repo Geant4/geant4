@@ -1,4 +1,4 @@
-$Id: History,v 1.125 2007-05-29 13:33:33 japost Exp $
+$Id: History,v 1.126 2007-05-29 13:50:14 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+May 29th, 2007, J.Apostolakis  transport-V08-03-10
+-----------------------------
+Gone back to G4CoupledTransportation.
+G4Transportation is now the original (what was called G4Transportation8 since transport-V08-03-00.
+G4Transportation8 still exists, to enable code that utilises it to compile (transitional). 
+  --> Expect that G4Transportation8 will be taken away asap.
 
 May 29th, 2007, J.Apostolakis  transport-V08-03-04
 -----------------------------
