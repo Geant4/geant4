@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering.cc,v 1.67 2007-05-18 18:43:32 vnivanch Exp $
+// $Id: G4MultipleScattering.cc,v 1.68 2007-05-29 08:47:23 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -177,6 +177,7 @@ void G4MultipleScattering::InitialiseProcess(const G4ParticleDefinition* p)
   mscUrban = new G4UrbanMscModel(RangeFactor(),dtrl,lambdalimit,
                                  GeomFactor(),Skin(),
                                  samplez,StepLimitType());
+  mscUrban->SetLateralDisplasmentFlag(LateralDisplasmentFlag());
 
   if (p->GetParticleType() == "nucleus") {
     mscUrban->SetStepLimitType(fG4v71);
