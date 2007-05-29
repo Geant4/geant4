@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EnergyLossForExtrapolator.cc,v 1.11 2007-05-12 16:40:14 vnivanch Exp $
+// $Id: G4EnergyLossForExtrapolator.cc,v 1.12 2007-05-29 04:43:31 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -204,8 +204,8 @@ void G4EnergyLossForExtrapolator::Initialisation()
 
   linLossLimit = 0.001;
   emin         = 1.*MeV;
-  emax         = 100.*GeV;
-  nbins        = 50;
+  emax         = 10.*TeV;
+  nbins        = 70;
 
   nmat = G4Material::GetNumberOfMaterials();
   const G4MaterialTable* mtable = G4Material::GetMaterialTable();
