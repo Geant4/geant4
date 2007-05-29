@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CoupledTransportation.cc,v 1.16 2007-05-29 17:31:28 japost Exp $
+// $Id: G4CoupledTransportation.cc,v 1.17 2007-05-29 19:52:56 japost Exp $
 // --> Merged with 1.60.4.2.2.3 2007/05/09 09:30:28 japost 
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
@@ -59,7 +59,7 @@ class G4VSensitiveDetector;
 // Constructor
 
 G4CoupledTransportation::G4CoupledTransportation( G4int verboseLevel )
-  : G4VProcess( G4String("Transportation"), fTransportation ),
+  : G4VProcess( G4String("CoupledTransportation"), fTransportation ),
     fParticleIsLooping( false ),
     fPreviousSftOrigin (0.,0.,0.),
     fPreviousMassSafety    ( 0.0 ),
@@ -186,10 +186,10 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
   //
   G4double              particleCharge = pParticle->GetCharge() ; 
 
-  fMassGeometryLimitedStep = false ; //alex
+  fMassGeometryLimitedStep = false ; //  Set default - alex
   fAnyGeometryLimitedStep = false; 
 
-  //alex  fEndGlobalTimeComputed = false ;
+  // fEndGlobalTimeComputed = false ;
 
   // There is no need to locate the current volume. It is Done elsewhere:
   //   On track construction 
@@ -197,14 +197,14 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
   // Check whether the particle has an (EM) field force exerted upon it
   //
   G4FieldManager* fieldMgr=0;
-  G4bool fieldExertsForce = false; //alex
+  G4bool fieldExertsForce = false; 
   if( (particleCharge != 0.0) ) // ||  (magneticMoment != 0.0 ) )
   {
      fieldMgr= fFieldPropagator->FindAndSetFieldManager( currentVolume ); 
      if (fieldMgr != 0) {
 	// Message the field Manager, to configure it for this track
 	fieldMgr->ConfigureForTrack( &track );
-        fieldExertsForce = (fieldMgr->GetDetectorField() != 0); //alex
+        fieldExertsForce = (fieldMgr->GetDetectorField() != 0); 
      } 
      // the PathFinder will recognise whether the field exerts force
   }
@@ -304,15 +304,15 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
   }
   // G4FieldTrack aTrackState(endTrackState);  
 
-  if( !fieldExertsForce ) //alex
-  { //alex if 1
-      fParticleIsLooping         = false ; //alex
-      fMomentumChanged           = false ; //alex
-      fEndGlobalTimeComputed     = false ; //alex
-      //      G4cout << " global time is false " << G4endl; //alex
-  } // alex
+  if( !fieldExertsForce ) 
+  { 
+      fParticleIsLooping         = false ; 
+      fMomentumChanged           = false ; 
+      fEndGlobalTimeComputed     = false ; 
+      // G4cout << " global time is false " << G4endl; 
+  } 
   else 
-  { // alex else 1
+  { 
   
 #ifdef G4VERBOSE
       if( fVerboseLevel > 1 ){
@@ -362,7 +362,7 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
 	  //       - but gives a better physical answer
 	  fTransportEndKineticEnergy= track.GetKineticEnergy(); 
       }
-  } //alex end if 1
+  }
 
   endpointDistance   = (fTransportEndPosition - startPosition).mag() ;
   // fParticleIsLooping = fFieldPropagator->IsParticleLooping() ;
