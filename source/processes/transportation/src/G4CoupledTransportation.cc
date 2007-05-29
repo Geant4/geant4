@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CoupledTransportation.cc,v 1.15 2007-05-29 13:50:15 japost Exp $
+// $Id: G4CoupledTransportation.cc,v 1.16 2007-05-29 17:31:28 japost Exp $
 // --> Merged with 1.60.4.2.2.3 2007/05/09 09:30:28 japost 
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
@@ -53,8 +53,6 @@
 #include "G4ParticleTable.hh"
 #include "G4ChordFinder.hh"
 class G4VSensitiveDetector;
-
-// #define G4DEBUG_TRANSPORT 1
 
 //////////////////////////////////////////////////////////////////////////
 //
@@ -188,7 +186,10 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
   //
   G4double              particleCharge = pParticle->GetCharge() ; 
 
-  fEndGlobalTimeComputed = false ;
+  fMassGeometryLimitedStep = false ; //alex
+  fAnyGeometryLimitedStep = false; 
+
+  //alex  fEndGlobalTimeComputed = false ;
 
   // There is no need to locate the current volume. It is Done elsewhere:
   //   On track construction 
@@ -196,12 +197,14 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
   // Check whether the particle has an (EM) field force exerted upon it
   //
   G4FieldManager* fieldMgr=0;
+  G4bool fieldExertsForce = false; //alex
   if( (particleCharge != 0.0) ) // ||  (magneticMoment != 0.0 ) )
   {
      fieldMgr= fFieldPropagator->FindAndSetFieldManager( currentVolume ); 
      if (fieldMgr != 0) {
 	// Message the field Manager, to configure it for this track
 	fieldMgr->ConfigureForTrack( &track );
+        fieldExertsForce = (fieldMgr->GetDetectorField() != 0); //alex
      } 
      // the PathFinder will recognise whether the field exerts force
   }
@@ -285,63 +288,81 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
   } else {
       geometryStepLength   = lengthAlongCurve= 0.0 ;
       fMomentumChanged         = false ; 
-      // fGeometryLimitedStep = false ;   //  --- ???
+      // fMassGeometryLimitedStep = false ;   //  --- ???
+      // fAnyGeometryLimitedStep = true;
       fTransportEndMomentumDir = track.GetMomentumDirection();
       fTransportEndKineticEnergy  = track.GetKineticEnergy();
 
       fTransportEndPosition = startPosition;
       // If the step length requested is 0, and we are on a boundary
       //   then a boundary will also limit the step.
-      if( startMassSafety == 0.0 )  fMassGeometryLimitedStep = true ;
+      if( startMassSafety == 0.0 )  {
+	 fMassGeometryLimitedStep = true ;
+	 fAnyGeometryLimitedStep = true;
+      }
       //   TODO:  Add explicit logical status for being at a boundary
   }
   // G4FieldTrack aTrackState(endTrackState);  
 
-  if( fVerboseLevel > 1 ){
-    G4cout << " G4CT::CS End Position = "  << fTransportEndPosition << G4endl; 
-    G4cout << " G4CT::CS End Direction = " << fTransportEndMomentumDir << G4endl; 
-  }
-
-  if( fFieldPropagator->GetCurrentFieldManager()->DoesFieldChangeEnergy() )
-    {
-      // If the field can change energy, then the time must be integrated
-      //    - so this should have been updated
-      //
-      fCandidateEndGlobalTime   = endTrackState.GetLabTimeOfFlight();
-      fEndGlobalTimeComputed    = true;
-      
-      // was ( fCandidateEndGlobalTime != track.GetGlobalTime() );
-      // a cleaner way is to have FieldTrack knowing whether time is updated.
-    }
-  else
-    {
-      // The energy should be unchanged by field transport,
-      //    - so the time changed will be calculated elsewhere
-      //
-      fEndGlobalTimeComputed = false;
-      
-      // Check that the integration preserved the energy 
-      //     -  and if not correct this!
-      G4double  startEnergy= track.GetKineticEnergy();
-      G4double  endEnergy= fTransportEndKineticEnergy; 
-      
-      static G4int no_inexact_steps=0; // , no_large_ediff;
-      G4double absEdiff = std::fabs(startEnergy- endEnergy);
-      if( absEdiff > perMillion * endEnergy )  {
-	 no_inexact_steps++;
-	 // Possible statistics keeping here ...
-      }
+  if( !fieldExertsForce ) //alex
+  { //alex if 1
+      fParticleIsLooping         = false ; //alex
+      fMomentumChanged           = false ; //alex
+      fEndGlobalTimeComputed     = false ; //alex
+      //      G4cout << " global time is false " << G4endl; //alex
+  } // alex
+  else 
+  { // alex else 1
+  
 #ifdef G4VERBOSE
-      if( (fVerboseLevel > 1) && ( absEdiff > perThousand * endEnergy) ){
-	 ReportInexactEnergy(startEnergy, endEnergy); 
-      }  // end of if (fVerboseLevel)
+      if( fVerboseLevel > 1 ){
+	G4cout << " G4CT::CS End Position = "  << fTransportEndPosition << G4endl; 
+	G4cout << " G4CT::CS End Direction = " << fTransportEndMomentumDir << G4endl; 
+      }
 #endif
-
-      // Correct the energy for fields that conserve it
-      //  This - hides the integration error
-      //       - but gives a better physical answer
-      fTransportEndKineticEnergy= track.GetKineticEnergy(); 
-    }
+      //      G4cout << " G4CoupledTransportation Before if change energy statement: " << fFieldPropagator->GetCurrentFieldManager()->DoesFieldChangeEnergy() << G4endl;
+      if( fFieldPropagator->GetCurrentFieldManager()->DoesFieldChangeEnergy() )
+      {
+	  // If the field can change energy, then the time must be integrated
+	  //    - so this should have been updated
+	  //
+	  fCandidateEndGlobalTime   = endTrackState.GetLabTimeOfFlight();
+	  fEndGlobalTimeComputed    = true;
+	  //	  G4cout << " setting global time to true - why? " << G4endl;
+	  
+	  // was ( fCandidateEndGlobalTime != track.GetGlobalTime() );
+	  // a cleaner way is to have FieldTrack knowing whether time is updated.
+      }
+      else
+      {
+	  // The energy should be unchanged by field transport,
+	  //    - so the time changed will be calculated elsewhere
+	  //
+	  fEndGlobalTimeComputed = false;
+	  
+	  // Check that the integration preserved the energy 
+	  //     -  and if not correct this!
+	  G4double  startEnergy= track.GetKineticEnergy();
+	  G4double  endEnergy= fTransportEndKineticEnergy; 
+      
+	  static G4int no_inexact_steps=0; // , no_large_ediff;
+	  G4double absEdiff = std::fabs(startEnergy- endEnergy);
+	  if( absEdiff > perMillion * endEnergy )  {
+	    no_inexact_steps++;
+	    // Possible statistics keeping here ...
+	  }
+#ifdef G4VERBOSE
+	  if( (fVerboseLevel > 1) && ( absEdiff > perThousand * endEnergy) ){
+	    ReportInexactEnergy(startEnergy, endEnergy); 
+	  }  // end of if (fVerboseLevel)
+#endif
+	  
+	  // Correct the energy for fields that conserve it
+	  //  This - hides the integration error
+	  //       - but gives a better physical answer
+	  fTransportEndKineticEnergy= track.GetKineticEnergy(); 
+      }
+  } //alex end if 1
 
   endpointDistance   = (fTransportEndPosition - startPosition).mag() ;
   // fParticleIsLooping = fFieldPropagator->IsParticleLooping() ;
@@ -379,6 +400,7 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
           //  --> was endMassSafety
       // Changed to accomodate processes that cannot update the safety -- JA 22 Nov 06
 
+      // #define G4DEBUG_TRANSPORT 1
 
 #ifdef G4DEBUG_TRANSPORT 
       int prec= G4cout.precision(12) ;
