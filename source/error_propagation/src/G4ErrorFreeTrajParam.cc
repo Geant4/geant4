@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4ErrorFreeTrajParam.cc,v 1.2 2007-05-29 14:41:35 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file 
 // ------------------------------------------------------------
@@ -30,17 +33,20 @@
 
 #include "G4ErrorFreeTrajParam.hh"
 #include "G4ThreeVector.hh"
+
 #include <iomanip>
 
 //------------------------------------------------------------------------
-G4ErrorFreeTrajParam::G4ErrorFreeTrajParam( const G4Point3D& pos, const G4Vector3D& mom )
+G4ErrorFreeTrajParam::G4ErrorFreeTrajParam( const G4Point3D& pos,
+                                            const G4Vector3D& mom )
 {
   SetParameters( pos, mom );
 }
 
 
 //------------------------------------------------------------------------
-void G4ErrorFreeTrajParam::SetParameters( const G4Point3D& pos, const G4Vector3D& mom )
+void G4ErrorFreeTrajParam::SetParameters( const G4Point3D& pos,
+                                          const G4Vector3D& mom )
 {
   fDir = mom;
   fInvP = 1./mom.mag();
@@ -79,7 +85,9 @@ std::ostream& operator<<(std::ostream& out, const G4ErrorFreeTrajParam& tp)
   
   //  out << tp.theType;
   //  out << std::setprecision(5) << std::setw(10);
-  out << std::setprecision(8) << " InvP= " << tp.fInvP << " Theta= " << tp.fLambda << " Phi= " << tp.fPhi << " YPerp= " << tp.fYPerp << " ZPerp= " << tp.fZPerp << G4endl;
+  out << std::setprecision(8) << " InvP= " << tp.fInvP << " Theta= "
+      << tp.fLambda << " Phi= " << tp.fPhi << " YPerp= " << tp.fYPerp
+      << " ZPerp= " << tp.fZPerp << G4endl;
   out << " momentum direction= " << tp.fDir << G4endl;
     
   return out;

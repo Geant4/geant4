@@ -23,36 +23,52 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4ErrorSurfaceTrajParam.cc,v 1.2 2007-05-29 14:41:35 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file 
 // ------------------------------------------------------------
 //
 
 #include "G4ErrorSurfaceTrajParam.hh"
-#include "G4ThreeVector.hh"
 #include <iomanip>
 
+#include "G4ThreeVector.hh"
+#include "G4GeometryTolerance.hh"
+
 //------------------------------------------------------------------------
-G4ErrorSurfaceTrajParam::G4ErrorSurfaceTrajParam( const G4Point3D& pos, const G4Vector3D& mom, const G4Vector3D& vecV, const G4Vector3D& vecW )
+G4ErrorSurfaceTrajParam::
+G4ErrorSurfaceTrajParam( const G4Point3D& pos, const G4Vector3D& mom,
+                         const G4Vector3D& vecV, const G4Vector3D& vecW )
 {
   SetParameters( pos, mom, vecV, vecW );
 }
 
 
 //------------------------------------------------------------------------
-G4ErrorSurfaceTrajParam::G4ErrorSurfaceTrajParam( const G4Point3D& pos, const G4Vector3D& mom, const G4Plane3D& plane )
+G4ErrorSurfaceTrajParam::
+G4ErrorSurfaceTrajParam( const G4Point3D& pos, const G4Vector3D& mom,
+                         const G4Plane3D& plane )
 {
   SetParameters( pos, mom, plane );
 }
 
-
 //------------------------------------------------------------------------
-void G4ErrorSurfaceTrajParam::SetParameters( const G4Point3D& pos, const G4Vector3D& mom, const G4Plane3D& plane )
+void G4ErrorSurfaceTrajParam::
+SetParameters( const G4Point3D& pos, const G4Vector3D& mom,
+               const G4Plane3D& plane )
 {
-  //--- Get two perpendicular vectors: first parallel X (unless normal is parallel to X, then take Y)
+  //--- Get two perpendicular vectors: first parallel X
+  //    (unless normal is parallel to X, then take Y)
+
+  G4double kCarTolerance =
+    G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
+
   G4ThreeVector Xvec(1.,0.,0.);
   G4Vector3D vecV = -Xvec.cross(plane.normal());
-  if( vecV.mag() < kCarTolerance ) {
+  if( vecV.mag() < kCarTolerance )
+  {
     G4ThreeVector Zvec(0.,0.,1.);
     vecV = Zvec.cross(plane.normal());
   }
@@ -64,7 +80,9 @@ void G4ErrorSurfaceTrajParam::SetParameters( const G4Point3D& pos, const G4Vecto
 
 
 //------------------------------------------------------------------------
-void G4ErrorSurfaceTrajParam::SetParameters( const G4Point3D& pos, const G4Vector3D& mom, const G4Vector3D& vecV, const G4Vector3D& vecW )
+void G4ErrorSurfaceTrajParam::
+SetParameters( const G4Point3D& pos, const G4Vector3D& mom,
+               const G4Vector3D& vecV, const G4Vector3D& vecW )
 {
   if( mom.mag() > 0. ) {
     fDir = mom;
@@ -83,7 +101,6 @@ void G4ErrorSurfaceTrajParam::SetParameters( const G4Point3D& pos, const G4Vecto
 
   fV = pos*vecV;
   fW = pos*vecW;
-
 }
 
 
@@ -94,8 +111,10 @@ std::ostream& operator<<(std::ostream& out, const G4ErrorSurfaceTrajParam& tp)
   
   //  out << tp.theType;
   //  out << std::setprecision(5) << std::setw(10);
-  out << " InvP= " << tp.fInvP << " PV= " << tp.fPV << " PW= " << tp.fPW << " V= " << tp.fV << " W= " << tp.fW << G4endl;
-  out << " vectorV direction= " << tp.fVectorV << " vectorW direction= " << tp.fVectorW << G4endl;
+  out << " InvP= " << tp.fInvP << " PV= " << tp.fPV
+      << " PW= " << tp.fPW << " V= " << tp.fV << " W= " << tp.fW << G4endl;
+  out << " vectorV direction= " << tp.fVectorV
+      << " vectorW direction= " << tp.fVectorW << G4endl;
     
   return out;
 }

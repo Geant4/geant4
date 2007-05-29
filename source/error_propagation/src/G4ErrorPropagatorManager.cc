@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4ErrorPropagatorManager.cc,v 1.2 2007-05-29 14:41:35 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file 
 // ------------------------------------------------------------
@@ -57,8 +60,8 @@
 #include "G4FieldManager.hh"
 #include "G4VParticleChange.hh"
 
-G4ErrorPropagatorManager* G4ErrorPropagatorManager::theG4ErrorPropagatorManager = 0;
-
+G4ErrorPropagatorManager*
+G4ErrorPropagatorManager::theG4ErrorPropagatorManager = 0;
 
 //-----------------------------------------------------------------------
 G4ErrorPropagatorManager* G4ErrorPropagatorManager::GetErrorPropagatorManager()
@@ -182,10 +185,10 @@ void G4ErrorPropagatorManager::InitGeant4e()
     InitTrackPropagation();
   } else {
     G4cerr << "G4ErrorPropagatorManager::InitGeant4e: Illegal application state - "
-	   << "G4ErrorPropagatorManager::InitGeant4e() ignored." << G4endl;
+           << "G4ErrorPropagatorManager::InitGeant4e() ignored." << G4endl;
     G4cerr << " GEANT4e State= " << PrintG4ErrorState() 
       //<< " GEANT4 State= " <<  PrintG4State() 
-	   << G4endl;
+           << G4endl;
   }
   
   //----- Set the tracking geometry for this propagation

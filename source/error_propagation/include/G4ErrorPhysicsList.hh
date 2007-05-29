@@ -23,53 +23,50 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// ------------------------------------------------------------
-//      GEANT 4 class header file 
-// ------------------------------------------------------------
+//
+// $Id: G4ErrorPhysicsList.hh,v 1.2 2007-05-29 14:41:35 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
 //
 // Class Description:
 //
-//  Default physics list for GEANT4e (should not be overridden, unless by experts)
-//  No multiple scattering and no production of secondaries.
-//  The energy loss process is G4eMuIonisation or G4EnergyLossForExtrapolator 
+//  Default physics list for GEANT4e (should not be overridden, unless by
+//  experts). No multiple scattering and no production of secondaries.
+//  The energy loss process is G4eMuIonisation or G4EnergyLossForExtrapolator
 //  (depending on the value of the enviromental variable G4EELOSSEXTRAP)
-//  It also defines the geant4e processes to limit the step: G4eMagneticFieldLimitProcess, G4eStepLimitProcess
-//
+//  It also defines the geant4e processes to limit the step:
+//  G4eMagneticFieldLimitProcess, G4eStepLimitProcess.
+
 // History:
 // - Created:   P. Arce
-//
+// ---------------------------------------------------------------------
 
 #ifndef G4ErrorPhysicsList_hh
 #define G4ErrorPhysicsList_hh
 
-#include "G4VUserPhysicsList.hh"
 #include "globals.hh"
+#include "G4VUserPhysicsList.hh"
 
 class G4ErrorPhysicsList: public G4VUserPhysicsList
 {
-public:
+ public:  // with description
+
   G4ErrorPhysicsList();
   virtual ~G4ErrorPhysicsList();
   
-protected:
+ protected:
+
   virtual void ConstructParticle();
-  // constructs gamma, e+/-, mu+/- and stable hadrons
+    // constructs gamma, e+/-, mu+/- and stable hadrons
 
   virtual void ConstructProcess();
-  // construct physical processes
+    // construct physical processes
 
   virtual void SetCuts();  
-  // SetCutsWithDefault
+    // SetCutsWithDefault
 
-protected:
   virtual void ConstructEM();
-  // constructs electromagnetic processes
-
-  private:
-
+    // constructs electromagnetic processes
 };
 
 #endif
-
-
-

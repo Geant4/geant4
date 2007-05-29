@@ -1,9 +1,9 @@
-# $Id: GNUmakefile,v 1.4 2007-05-21 16:07:09 arce Exp $
+# $Id: GNUmakefile,v 1.5 2007-05-29 14:41:35 gcosmo Exp $
 # ----------------------------------------------------------
 # GNUmakefile for tracking library.  Katsuya Amako, 5/9/95.
 # ----------------------------------------------------------
 
-name := G4error
+name := G4error_propagation
 
 ifndef G4INSTALL
   G4INSTALL = ../..
@@ -40,7 +40,9 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/digits_hits/hits/include \
             -I$(G4BASE)/digits_hits/digits/include 
 
-CPPFLAGS += -DG4EVERBOSE
+ifdef G4EVERBOSE
+  CPPFLAGS += -DG4EVERBOSE
+endif
 
 include $(G4INSTALL)/config/common.gmk
 

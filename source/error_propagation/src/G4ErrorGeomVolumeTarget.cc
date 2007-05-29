@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4ErrorGeomVolumeTarget.cc,v 1.2 2007-05-29 14:41:35 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file 
 // ------------------------------------------------------------
@@ -32,6 +35,7 @@
 #include "G4Point3D.hh"
 #include "G4ThreeVector.hh"
 #include "G4Step.hh"
+
 #ifdef G4VERBOSE
 #include "G4ErrorPropagatorData.hh" //for verbosity checking
 #endif
@@ -50,7 +54,9 @@ bool G4ErrorGeomVolumeTarget::TargetReached( const G4Step* aStep )
   if( aStep->GetTrack()->GetNextVolume() != 0 ){
 #ifdef G4VERBOSE
     if(G4ErrorPropagatorData::verbose() >= 3 ) { 
-      G4cout << " G4ErrorGeomVolumeTarget::TargetReached( " << aStep->GetTrack()->GetNextVolume()->GetName() << " =? " <<  theName  << G4endl;
+      G4cout << " G4ErrorGeomVolumeTarget::TargetReached( "
+             << aStep->GetTrack()->GetNextVolume()->GetName()
+             << " =? " <<  theName  << G4endl;
     }
 #endif
     if( aStep->GetTrack()->GetNextVolume()->GetName() == theName ){

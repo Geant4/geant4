@@ -23,17 +23,20 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// ------------------------------------------------------------
-//      GEANT 4 class header file 
-// ------------------------------------------------------------
+//
+// $Id: G4ErrorFreeTrajParam.hh,v 1.2 2007-05-29 14:41:35 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Class Description:
 //
-// Holds the 5 independent variables of the trajectory for a G4ErrorFreeTrajState object. It is not used for anything but for printing, but anyhow it is updated everytime the position and momentum are updated 
-//
+// Holds the 5 independent variables of the trajectory for a
+// G4ErrorFreeTrajState object. It is not used for anything but for
+// printing, but anyhow it is updated everytime the position and
+// momentum are updated.
+
 // History:
 // - Created: Pedro Arce, September 2004
-//
+// --------------------------------------------------------------------
 
 #ifndef G4ErrorFreeTrajParam_hh
 #define G4ErrorFreeTrajParam_hh
@@ -46,20 +49,22 @@
 
 class G4ErrorFreeTrajParam
 {
-public:
-  G4ErrorFreeTrajParam(){};
+ public:  // with description
+
+  G4ErrorFreeTrajParam(){}
   G4ErrorFreeTrajParam( const G4Point3D& pos, const G4Vector3D& mom );
-  // build parameters from position and momentum
-  virtual ~G4ErrorFreeTrajParam(){};
+    // build parameters from position and momentum
+
+  virtual ~G4ErrorFreeTrajParam(){}
 
   void Update( const G4Track* aTrack );
-  // update parameters from G4Track
+    // update parameters from G4Track
 
   friend
     std::ostream& operator<<(std::ostream&, const G4ErrorFreeTrajParam& ts);
   
-public:
   // Set and Get methods 
+
   void SetParameters( const G4Point3D& pos, const G4Vector3D& mom );
 
   G4Vector3D GetDirection() const { return fDir;}
@@ -70,14 +75,14 @@ public:
   G4double GetYPerp() const { return fYPerp; }
   G4double GetZPerp() const { return fZPerp; }
 
-private:
+ private:
+
   G4Vector3D fDir; //direction to which YPerp, ZPerp refer
   G4double fInvP; // inverse of momentum
   G4double fLambda; // 90 - theta angle of direction
   G4double fPhi; // phi angle of direction
   G4double fYPerp; // Y coordinate
   G4double fZPerp; // Z coordinate
-
 };
 
 #endif

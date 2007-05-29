@@ -23,19 +23,21 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// ------------------------------------------------------------
-//      GEANT 4 class header file 
-// ------------------------------------------------------------
+//
+// $Id: G4ErrorRunManagerHelper.hh,v 1.2 2007-05-29 14:41:35 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
 //
 // Class Description:
 //
 // This class helps G4ErrorPropagatorManager with the initialization of 
-//  geometry and physics, definition of actions and run termination
-//  (things done by G4RunManager in an standard GEANT4 run)
+// geometry and physics, definition of actions and run termination
+// (things done by G4RunManager in an standard GEANT4 run)
 // It holds a pointer to G4RunManagerKernel
-//
+
 // History:
 // - Created:  Pedro Arce, January 2005
+// --------------------------------------------------------------------
 
 #ifndef G4ErrorRunManagerHelper_hh
 #define G4ErrorRunManagerHelper_hh
@@ -47,44 +49,47 @@ class G4VUserPhysicsList;
 class G4UserTrackingAction;
 class G4UserSteppingAction;
 
-
 class G4ErrorRunManagerHelper 
 {
-public:
+
+ public:  // with description
+
   G4ErrorRunManagerHelper();
   virtual ~G4ErrorRunManagerHelper();
 
   static G4ErrorRunManagerHelper* GetRunManagerKernel();
-  // static method which returns the singleton pointer of G4ErrorRunManagerHelper 
+    // Static method which returns the singleton pointer of
+    // G4ErrorRunManagerHelper 
 
   void SetUserInitialization(G4VUserDetectorConstruction* userInit);
-  // initialize geometry by passing a G4VUserDetectorConstruction
+    // Initialize geometry by passing a G4VUserDetectorConstruction
   void SetUserInitialization(G4VPhysicalVolume* userInit);
-  // initialize geometry by passing a G4VPhysicalVolume
+    // Initialize geometry by passing a G4VPhysicalVolume
 
   void SetUserInitialization(G4VUserPhysicsList* userInit);
-  // initializes physics
+    // Initializes physics
 
   void SetUserAction(G4UserTrackingAction* userAction);
-  // set the user tracking action
+    // Set the user tracking action
   void SetUserAction(G4UserSteppingAction* userAction);
-  // set the user stepping action
+    // Set the user stepping action
 
   void RunInitialization();
-  // invokes G4RunManagerKernel RunInitialization();
+    // Invokes G4RunManagerKernel RunInitialization();
 
   void InitializeGeometry();
-  // initializes GEANT4 geometry
+    // Initializes GEANT4 geometry
   void InitializePhysics();
-  // initializes GEANT4 physics
+    // Initializes GEANT4 physics
 
   void RunTermination();
-  // invokes G4RunManagerKernel RunTermination();
+    // Invokes G4RunManagerKernel RunTermination();
 
-  G4VUserPhysicsList* GetUserPhysicsList() const { 
-    return theUserPhysicsList; }
+  G4VUserPhysicsList* GetUserPhysicsList() const
+    { return theUserPhysicsList; }
 
-private:
+ private:
+
   static G4ErrorRunManagerHelper* fRunManagerKernel;
   
   G4VUserPhysicsList* theUserPhysicsList;
@@ -94,4 +99,3 @@ private:
 };
 
 #endif
-

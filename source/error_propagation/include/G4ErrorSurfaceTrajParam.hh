@@ -23,17 +23,21 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// ------------------------------------------------------------
-//      GEANT 4 class header file 
-// ------------------------------------------------------------
+//
+// $Id: G4ErrorSurfaceTrajParam.hh,v 1.2 2007-05-29 14:41:35 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
 //
 // Class Description:
 //
-//  Holds the 5 independent variables of the trajectory for a G4ErrorSurfaceTrajState object.  It is not used for anything but for printing, but anyhow it is updated everytime the position and momentum are updated 
-//
+// Holds the 5 independent variables of the trajectory for a
+// G4ErrorSurfaceTrajState object. It is not used for anything but for
+// printing, but anyhow it is updated everytime the position and momentum
+// are updated 
+
 // History:
 // - Created:  P. Arce
-//
+// --------------------------------------------------------------------
 
 #ifndef G4ErrorSurfaceTrajParam_hh
 #define G4ErrorSurfaceTrajParam_hh
@@ -48,30 +52,36 @@
 
 class G4ErrorSurfaceTrajParam
 {
-public:
-  G4ErrorSurfaceTrajParam(){};
-  G4ErrorSurfaceTrajParam( const G4Point3D& pos, const G4Vector3D& mom, const G4Vector3D& vecV, const G4Vector3D& vecW );
-  G4ErrorSurfaceTrajParam( const G4Point3D& pos, const G4Vector3D& mom, const G4Plane3D& plane );
-  virtual ~G4ErrorSurfaceTrajParam(){};
+ public:  // with description
+
+  G4ErrorSurfaceTrajParam(){}
+  G4ErrorSurfaceTrajParam( const G4Point3D& pos, const G4Vector3D& mom,
+                           const G4Vector3D& vecV, const G4Vector3D& vecW );
+  G4ErrorSurfaceTrajParam( const G4Point3D& pos, const G4Vector3D& mom,
+                           const G4Plane3D& plane );
+  virtual ~G4ErrorSurfaceTrajParam(){}
 
   friend
     std::ostream& operator<<(std::ostream&, const G4ErrorSurfaceTrajParam& ts);
   
-public:
   // Get and Set methods 
-  void SetParameters( const G4Point3D& pos, const G4Vector3D& mom, const G4Vector3D& vecV, const G4Vector3D& vecW );
-  void SetParameters( const G4Point3D& pos, const G4Vector3D& mom, const G4Plane3D& plane );
 
-  G4Vector3D GetDirection() const { return fDir;}
-  G4Vector3D GetPlaneNormal() const { return fVectorV.cross(fVectorW);}
-  G4Vector3D GetVectorV() const { return fVectorV;}
-  G4Vector3D GetVectorW() const { return fVectorW;}
+  void SetParameters( const G4Point3D& pos, const G4Vector3D& mom,
+                      const G4Vector3D& vecV, const G4Vector3D& vecW );
+  void SetParameters( const G4Point3D& pos, const G4Vector3D& mom,
+                      const G4Plane3D& plane );
+
+  G4Vector3D GetDirection() const { return fDir; }
+  G4Vector3D GetPlaneNormal() const { return fVectorV.cross(fVectorW); }
+  G4Vector3D GetVectorV() const { return fVectorV; }
+  G4Vector3D GetVectorW() const { return fVectorW; }
   G4double GetPV() const{ return fPV; }
   G4double GetPW() const{ return fPW; }
   G4double GetV() const{ return fV; }
   G4double GetW() const{ return fW; }
 
-private:
+ private:
+
   G4ThreeVector fDir;
   G4Vector3D fVectorV; //one of the vectors defining the plane
   G4Vector3D fVectorW; //one of the vectors defining the plane
@@ -84,5 +94,3 @@ private:
 };
 
 #endif
-
-

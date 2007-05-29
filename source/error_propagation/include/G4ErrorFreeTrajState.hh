@@ -23,9 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// ------------------------------------------------------------
-//      GEANT 4 class header file 
-// ------------------------------------------------------------
+//
+// $Id: G4ErrorFreeTrajState.hh,v 1.2 2007-05-29 14:41:35 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Class Description:
 //
@@ -43,75 +43,89 @@
 //
 // This class also takes care of propagating the error associated to 
 // the trajectory 
-//
+
 // History:
 // - Created:   P. Arce
-//
+// --------------------------------------------------------------------
 
 #ifndef G4ErrorFreeTrajState_hh
 #define G4ErrorFreeTrajState_hh
 
 #include "globals.hh"
 
+#include <CLHEP/Matrix/Matrix.h>
+
 #include "G4ErrorTrajState.hh"
 #include "G4ErrorFreeTrajParam.hh"
 
 #include "G4Point3D.hh"
 #include "G4Vector3D.hh"
-#include "CLHEP/Matrix/Matrix.h"
+
 class G4ErrorSurfaceTrajState;
 
 class G4ErrorFreeTrajState : public G4ErrorTrajState
 {
-public:
-  G4ErrorFreeTrajState(){ }; 
-  G4ErrorFreeTrajState( const G4String& partType, const G4Point3D& pos, const G4Vector3D& mom, const G4ErrorTrajErr& errmat = G4ErrorTrajErr(5,0) );
-  // construct by providing particle, position and momentum 
-  G4ErrorFreeTrajState( const G4ErrorSurfaceTrajState& tpOS );
-  // construct by providing G4ErrorSurfaceTrajState
+ public:  // with description
 
-  ~G4ErrorFreeTrajState(){};
+  G4ErrorFreeTrajState(){}
+  G4ErrorFreeTrajState( const G4String& partType,
+                        const G4Point3D& pos,
+                        const G4Vector3D& mom,
+                        const G4ErrorTrajErr& errmat = G4ErrorTrajErr(5,0) );
+    // Constructor by providing particle, position and momentum
+
+  G4ErrorFreeTrajState( const G4ErrorSurfaceTrajState& tpOS );
+    // Constructor by providing G4ErrorSurfaceTrajState
+
+  ~G4ErrorFreeTrajState(){}
 
   virtual G4int Update( const G4Track* aTrack );
-  // update parameters from G4Track
+    // update parameters from G4Track
 
   virtual G4int PropagateError( const G4Track* aTrack );
-  // propagate the error along the step
+    // propagate the error along the step
 
   virtual void Dump( std::ostream& out = G4cout ) const;
-  // dump TrajState parameters
+    // dump TrajState parameters
+
   friend
     std::ostream& operator<<(std::ostream&, const G4ErrorFreeTrajState& ts);
 
-private:  
+  // Set and Get methods 
+
+  virtual void SetPosition( const G4Point3D pos )
+    { SetParameters( pos, fMomentum ); }
+
+  virtual void SetMomentum( const G4Vector3D& mom )
+    { SetParameters( fPosition, mom ); }
+
+  void SetParameters( const G4Point3D& pos, const G4Vector3D& mom )
+    {
+      fPosition = pos;
+      fMomentum = mom;
+      fTrajParam.SetParameters( pos, mom );
+    }
+
+  G4ErrorFreeTrajParam GetParameters() const
+    { return fTrajParam; }
+
+ private:  
+
   void Init();
-  // define TrajState type and build charge
+    // define TrajState type and build charge
 
   G4int PropagateErrorMSC( const G4Track* aTrack );
-  // add the error associated to multiple scattering
+    // add the error associated to multiple scattering
 
   void CalculateEffectiveZandA( const G4Material* mate, double& effZ, double& effA );
-  // calculate effective Z and A (needed by PropagateErrorMSC)
+    // calculate effective Z and A (needed by PropagateErrorMSC)
   
   G4int PropagateErrorIoni( const G4Track* aTrack );
-  // add the error associated to ionization energy loss
+    // add the error associated to ionization energy loss
 
-public:
-  // Set and Get methods 
-  virtual void SetPosition( const G4Point3D pos ) {
-    SetParameters( pos, fMomentum ); }
 
-  virtual void SetMomentum( const G4Vector3D& mom ) {
-    SetParameters( fPosition, mom ); }
+ private:
 
-  void SetParameters( const G4Point3D& pos, const G4Vector3D& mom ){
-    fPosition = pos;
-    fMomentum = mom;
-    fTrajParam.SetParameters( pos, mom ); }
-
-  G4ErrorFreeTrajParam GetParameters() const { return fTrajParam; }
-
-private:
   G4ErrorFreeTrajParam fTrajParam;
 
   CLHEP::HepMatrix theTransfMat;
@@ -120,4 +134,3 @@ private:
 };
 
 #endif
-

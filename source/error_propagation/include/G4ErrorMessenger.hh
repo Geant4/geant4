@@ -23,18 +23,17 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// ------------------------------------------------------------
-//      GEANT 4 class header file 
-// ------------------------------------------------------------
+//
+// $Id: G4ErrorMessenger.hh,v 1.2 2007-05-29 14:41:35 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Class Description:
 //
-// Messenger class for Geant4e processes limiting the step
-//
+// Messenger class for Geant4e processes limiting the step.
 
 // History:
 // - Created:   P. Arce
-// 
+// --------------------------------------------------------------------
 
 #ifndef G4ErrorMessenger_hh
 #define G4ErrorMessenger_hh
@@ -52,15 +51,19 @@ class G4ErrorEnergyLoss;
 
 //-----------------------------------------------------------------
 
-class G4ErrorMessenger: public G4UImessenger
+class G4ErrorMessenger : public G4UImessenger
 {
-public:
-  G4ErrorMessenger(G4ErrorStepLengthLimitProcess* lengthAct, G4ErrorMagFieldLimitProcess* magAct, G4ErrorEnergyLoss* elossAct);
+ public:  // with description
+
+  G4ErrorMessenger(G4ErrorStepLengthLimitProcess* lengthAct,
+                   G4ErrorMagFieldLimitProcess* magAct,
+                   G4ErrorEnergyLoss* elossAct);
   ~G4ErrorMessenger();
   
   void SetNewValue(G4UIcommand*, G4String);
-  
-private:
+
+ private:
+
   G4ErrorStepLengthLimitProcess* StepLengthAction;
   G4ErrorMagFieldLimitProcess* MagFieldAction;
   G4ErrorEnergyLoss* EnergyLossAction;

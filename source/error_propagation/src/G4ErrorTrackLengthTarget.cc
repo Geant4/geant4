@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4ErrorTrackLengthTarget.cc,v 1.2 2007-05-29 14:41:35 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file 
 // ------------------------------------------------------------
@@ -35,69 +38,84 @@
 #include "G4VProcess.hh"
 #include "G4ProcessVector.hh"
 #include "G4ProcessManager.hh"
+
 #ifdef G4VERBOSE
 #include "G4ErrorPropagatorData.hh" //for verbosity checking
 #endif
 
 //----------------------------------------------------------------------------
-G4ErrorTrackLengthTarget::G4ErrorTrackLengthTarget(const G4double maxTrkLength )
-  : G4VDiscreteProcess ("G4ErrorTrackLengthTarget"), theMaximumTrackLength( maxTrkLength )
+G4ErrorTrackLengthTarget::
+G4ErrorTrackLengthTarget(const G4double maxTrkLength )
+  : G4VDiscreteProcess ("G4ErrorTrackLengthTarget"),
+    theMaximumTrackLength( maxTrkLength )
 {
   theType = G4ErrorTarget_TrkL;
 
-   G4ParticleTable::G4PTblDicIterator* theParticleIterator = G4ParticleTable::GetParticleTable()->GetIterator();
+   G4ParticleTable::G4PTblDicIterator* theParticleIterator
+     = G4ParticleTable::GetParticleTable()->GetIterator();
+
   // loop over all particles in G4ParticleTable
+
   theParticleIterator->reset();
-  while( (*theParticleIterator)() ){
+  while( (*theParticleIterator)() )
+  {
     G4ParticleDefinition* particle = theParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
-    if (!particle->IsShortLived()) {
+    if (!particle->IsShortLived())
+    {
       // Add transportation process for all particles other than  "shortlived"
-      if ( pmanager == 0) {
+      if ( pmanager == 0)
+      {
         // Error !! no process manager
         G4String particleName = particle->GetParticleName();
-        G4Exception("G4ErrorTrackLengthTarget::G4ErrorTrackLengthTarget","No process manager",
-                    RunMustBeAborted, particleName );
-      } else {
-	G4ProcessVector* procvec = pmanager->GetProcessList();
-	uint isiz = procvec->size();
-	G4bool processAlreadyDefined = false;
-	//-	G4ErrorTrackLengthTarget* tlproc = 0;
-	for( uint ii=0; ii < isiz; ii++ ){
-	  if( ((*procvec)[ii])->GetProcessName() == "G4ErrorTrackLengthTarget") {
-	   pmanager->RemoveProcess( (*procvec)[ii] );
-	   processAlreadyDefined = true;
-	  }
-	}
-	pmanager ->AddDiscreteProcess(this,4);
-	isiz = procvec->size();
+        G4Exception("G4ErrorTrackLengthTarget::G4ErrorTrackLengthTarget",
+                    "No process manager", RunMustBeAborted, particleName );
       }
-    } else {
+      else
+      {
+        G4ProcessVector* procvec = pmanager->GetProcessList();
+        size_t isiz = procvec->size();
+        G4bool processAlreadyDefined = false;
+
+        for( size_t ii=0; ii < isiz; ii++ )
+        {
+          if( ((*procvec)[ii])->GetProcessName() == "G4ErrorTrackLengthTarget")
+          {
+            pmanager->RemoveProcess( (*procvec)[ii] );
+            processAlreadyDefined = true;
+          }
+        }
+        pmanager ->AddDiscreteProcess(this,4);
+        isiz = procvec->size();
+      }
+    }
+    else
+    {
       // shortlived particle case
     }
   }
-
 }
 
 
 //-----------------------------------------------------------------------
-G4double G4ErrorTrackLengthTarget::PostStepGetPhysicalInteractionLength(
-			     const G4Track& track,
-			     G4double,
-			     G4ForceCondition* condition )
+G4double G4ErrorTrackLengthTarget::
+PostStepGetPhysicalInteractionLength(const G4Track& track, G4double,
+                                     G4ForceCondition* condition )
 {
   *condition = NotForced;
   return GetMeanFreePath( track, 0., condition );
-
 }
 
 
 //-----------------------------------------------------------------------
-G4double G4ErrorTrackLengthTarget::GetMeanFreePath(const class G4Track & track, G4double, enum G4ForceCondition *)
+G4double G4ErrorTrackLengthTarget::
+GetMeanFreePath(const class G4Track & track, G4double, enum G4ForceCondition *)
 {
 #ifdef G4VERBOSE
-  if(G4ErrorPropagatorData::verbose() >= 3 ) { 
-    G4cout << " G4ErrorTrackLengthTarget::GetMeanFreePath " << theMaximumTrackLength - track.GetTrackLength() << G4endl;
+  if(G4ErrorPropagatorData::verbose() >= 3 )
+  { 
+    G4cout << " G4ErrorTrackLengthTarget::GetMeanFreePath "
+           << theMaximumTrackLength - track.GetTrackLength() << G4endl;
   }
 #endif
 
@@ -105,20 +123,18 @@ G4double G4ErrorTrackLengthTarget::GetMeanFreePath(const class G4Track & track, 
 }
 
 
-G4VParticleChange* G4ErrorTrackLengthTarget::PostStepDoIt(
-						       const G4Track& aTrack ,
-						       const G4Step& )
+G4VParticleChange* G4ErrorTrackLengthTarget::
+PostStepDoIt(const G4Track& aTrack, const G4Step& )
 {
   G4ParticleChange* aParticleChange = new G4ParticleChange;
   aParticleChange->Initialize(aTrack);
-  return aParticleChange; 
-  
+  return aParticleChange;
 }
 
 
 //-----------------------------------------------------------------------
 void G4ErrorTrackLengthTarget::Dump( const G4String& msg ) const
 {
-  G4cout << msg << "G4ErrorTrackLengthTarget: max track length = " << theMaximumTrackLength << G4endl;
-
+  G4cout << msg << "G4ErrorTrackLengthTarget: max track length = "
+         << theMaximumTrackLength << G4endl;
 }

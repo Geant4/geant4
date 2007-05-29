@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4ErrorPropagator.cc,v 1.3 2007-05-29 14:41:35 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file 
 // ------------------------------------------------------------
@@ -46,6 +49,7 @@
 #include "G4VPhysicalVolume.hh"
 #include "G4PhysicalVolumeStore.hh"
 #include "G4UnitsTable.hh"
+
 #include <vector>
 
 
@@ -143,7 +147,7 @@ G4int G4ErrorPropagator::PropagateOneStep( G4ErrorTrajState* currentTS )
 
   if( g4edata->GetState() == G4ErrorState_PreInit || G4StateManager::GetStateManager()->GetCurrentState() != G4State_GeomClosed) {
     //G4cout << g4edata << " G4ErrorState " <<  g4edata->GetState() << " <> " << G4ErrorState_Propagating 
-    //	   << " G4State " << G4StateManager::GetStateManager()->GetCurrentState()<< " <> " << G4State_GeomClosed << G4endl;
+    //       << " G4State " << G4StateManager::GetStateManager()->GetCurrentState()<< " <> " << G4State_GeomClosed << G4endl;
     G4Exception("!!! G4ErrorPropagator::PropagateOneStep called before initialization is done for this track, please call G4ErrorPropagatorManager::InitGeant4e() " );
   }
 
@@ -307,7 +311,7 @@ G4int G4ErrorPropagator::MakeOneStep( G4ErrorFreeTrajState* currentTS_FREE )
     } else if( g4edata->GetTarget()->GetType() == G4ErrorTarget_GeomVolume ) {
       G4ErrorGeomVolumeTarget* target = (G4ErrorGeomVolumeTarget*)(g4edata->GetTarget());
       if( static_cast<G4ErrorGeomVolumeTarget*>( target )->TargetReached( theG4Track->GetStep() ) ) {
-	g4edata->SetState( G4ErrorState_StoppedAtTarget ); 
+        g4edata->SetState( G4ErrorState_StoppedAtTarget ); 
       } 
     }
   }else if( theG4Track->GetStep()->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName() == "G4ErrorTrackLengthTarget" ){

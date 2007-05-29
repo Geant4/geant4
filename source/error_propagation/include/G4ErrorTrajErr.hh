@@ -24,26 +24,24 @@
 // ********************************************************************
 //
 //
-// History:
+// $Id: G4ErrorTrajErr.hh,v 1.2 2007-05-29 14:41:35 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
-//
-// ------------------------------------------------------------
-//      GEANT 4 class header file 
-// ------------------------------------------------------------
 //
 // Class Description:
 //
-// Trajectory error. Implemented for the moment as a CLHEP HepSymMatrix, until other possibly faster implementations are studied
-//
+// Trajectory error. Implemented for the moment as a CLHEP HepSymMatrix,
+// until other possibly faster implementations are studied
+
 // History:
 // - Created:   P. Arce
-//
+// --------------------------------------------------------------------
+
 #ifndef G4ErrorTrajErr_hh
 #define G4ErrorTrajErr_hh
 
-#include "CLHEP/Matrix/SymMatrix.h"
+#include <CLHEP/Matrix/SymMatrix.h>
 
 typedef CLHEP::HepSymMatrix G4ErrorTrajErr;
 
 #endif
-

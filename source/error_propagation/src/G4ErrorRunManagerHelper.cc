@@ -23,14 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4ErrorRunManagerHelper.cc,v 1.2 2007-05-29 14:41:35 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file 
 // ------------------------------------------------------------
 //
 
 #include "G4Navigator.hh"
-// On Sun, to prevent conflict with ObjectSpace, G4Timer.hh has to be
-// loaded *before* globals.hh...
+
 #include "G4Timer.hh"
 
 #include "G4ErrorRunManagerHelper.hh"
@@ -38,7 +40,6 @@
 #include "G4RunManagerKernel.hh"
 #include "G4VUserDetectorConstruction.hh"
 #include "G4ErrorPhysicsList.hh"
-//#include "ExN02PhysicsList.hh"
 #include "G4TransportationManager.hh"
 #include "G4RunManager.hh"
 
@@ -115,7 +116,7 @@ void G4ErrorRunManagerHelper::InitializeGeometry()
     //      << " WORLD " << G4TransportationManager::GetTransportationManager()->GetNavigatorForTracking()->GetWorldVolume() << G4endl;
     //--- Check that indeed geometry has been defined to GEANT4
     if ( G4TransportationManager::GetTransportationManager()
-	 ->GetNavigatorForTracking()->GetWorldVolume() == 0 ) {
+         ->GetNavigatorForTracking()->GetWorldVolume() == 0 ) {
       G4Exception("G4ErrorRunManagerHelper::InitializeGeometry no world defined in your geometry!" );
     }
     
@@ -138,7 +139,7 @@ void G4ErrorRunManagerHelper::InitializePhysics()
     if( G4RunManager::GetRunManager() != 0 && G4RunManager::GetRunManager()->GetUserPhysicsList() != 0 ){ 
       //--- Physics should be G4ErrorPhysicsList, else send a warning
       if( static_cast<const G4ErrorPhysicsList*>(G4RunManager::GetRunManager()->GetUserPhysicsList()) != 0 ) {
-	G4cerr << " WARNING G4ErrorRunManagerHelper::InitializePhysics() physics list is not G4ErrorPhysicsList. Are you sure? " << G4endl;
+        G4cerr << " WARNING G4ErrorRunManagerHelper::InitializePhysics() physics list is not G4ErrorPhysicsList. Are you sure? " << G4endl;
       }
     } else {
       //----- Third option: no physics list has been defined, define a G4ErrorPhysicsList

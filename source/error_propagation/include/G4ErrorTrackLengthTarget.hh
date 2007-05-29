@@ -24,21 +24,19 @@
 // ********************************************************************
 //
 //
-// History:
+// $Id: G4ErrorTrackLengthTarget.hh,v 1.2 2007-05-29 14:41:35 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
-//
-// ------------------------------------------------------------
-//      GEANT 4 class header file 
-// ------------------------------------------------------------
 //
 // Class Description:
 //
-// G4ErrorTarget class: limits step when track length is bigger than theMaximumTrackLength
-// It is a G4VDiscreteProcess: limits the step in PostStepGetPhysicalInteractionLength
-//
+// G4ErrorTarget class: limits step when track length is bigger than
+// theMaximumTrackLength. It is a G4VDiscreteProcess: limits the step in
+// PostStepGetPhysicalInteractionLength().
+
 // History:
 // - Created. P. Arce, September 2004
-//
+// --------------------------------------------------------------------
 
 #ifndef G4ErrorTrackLengthTarget_hh
 #define G4ErrorTrackLengthTarget_hh
@@ -53,38 +51,42 @@
 #include "G4ErrorTarget.hh"
 
 //---------------------------------------------------------------------------- 
-class G4ErrorTrackLengthTarget : public G4VDiscreteProcess, public G4ErrorTarget
+
+class G4ErrorTrackLengthTarget : public G4VDiscreteProcess,
+                                 public G4ErrorTarget
 {
-public: 
+ public:  // with description
 
   G4ErrorTrackLengthTarget(const G4double maxTrkLength );
-  // constructs and add this process to G4ProcessManager of all particles
-  virtual ~G4ErrorTrackLengthTarget(){ };
+    // Constructs and add this process to G4ProcessManager of all particles
+  virtual ~G4ErrorTrackLengthTarget(){}
   
-  virtual G4double GetDistanceFromPoint( const G4ThreeVector&, const G4ThreeVector& ) const    { return DBL_MAX; }   
-  virtual G4double GetDistanceFromPoint( const G4ThreeVector& ) const   { return DBL_MAX; } 
-  // these methods are dummy, as the step limitation is done in the PostStepGetPhysicalInteractionLength
+    // These methods are dummy, as the step limitation is done in the
+    // PostStepGetPhysicalInteractionLength().
 
-  virtual G4double PostStepGetPhysicalInteractionLength(
-                             const G4Track& track,
-                             G4double   previousStepSize,
-                             G4ForceCondition* condition
-                            );
-  // checks if the maximum track length has been reached
+  virtual G4double GetDistanceFromPoint( const G4ThreeVector&,
+                                         const G4ThreeVector& ) const
+    { return DBL_MAX; }   
+  virtual G4double GetDistanceFromPoint( const G4ThreeVector& ) const
+    { return DBL_MAX; } 
 
-  virtual  G4double GetMeanFreePath(const class G4Track & track, G4double, G4ForceCondition *);
-  // mean free path = theMaximumTrackLength - track.GetTrackLength();
+  virtual G4double
+  PostStepGetPhysicalInteractionLength( const G4Track& track,
+                                              G4double previousStepSize,
+                                              G4ForceCondition* condition );
+    // Checks if the maximum track length has been reached
 
-   virtual G4VParticleChange* PostStepDoIt(
-					  const G4Track& ,
-					  const G4Step& );
+  virtual  G4double GetMeanFreePath(const class G4Track & track,
+                                    G4double, G4ForceCondition *);
+    // Mean free path = theMaximumTrackLength - track.GetTrackLength()
+
+   virtual G4VParticleChange* PostStepDoIt( const G4Track&, const G4Step& );
                        
-  virtual void Dump( const G4String& msg ) const;
+   virtual void Dump( const G4String& msg ) const;
 
-private:
+ private:
+
   G4double theMaximumTrackLength;
 };
- 
-  
+   
 #endif
- 

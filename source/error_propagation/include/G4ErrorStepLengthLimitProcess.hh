@@ -23,17 +23,19 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// ------------------------------------------------------------
-//      GEANT 4 class header file 
-// ------------------------------------------------------------
+//
+// $Id: G4ErrorStepLengthLimitProcess.hh,v 1.2 2007-05-29 14:41:35 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
 //
 // Class Description:
 //
-//  Limits the step length if change of direction due to magnetic field is too big (user defined limit)
-//
+// Limits the step length if change of direction due to magnetic field
+// is too big (user defined limit)
+
 // History:
 // - Created:   P. Arce, September 2004
-//
+// --------------------------------------------------------------------
 
 #ifndef G4ErrorStepLengthLimitProcess_hh
 #define G4ErrorStepLengthLimitProcess_hh
@@ -50,22 +52,21 @@
 #include "G4VErrorLimitProcess.hh"
 
 //-----------------------------------------------------------------
+
 class G4ErrorStepLengthLimitProcess : public G4VErrorLimitProcess
 {
-public:  // with description
+
+ public:  // with description
   
-  G4ErrorStepLengthLimitProcess(const G4String& processName ="G4ErrorStepLengthLimit");
-  
+  G4ErrorStepLengthLimitProcess(const G4String& processName =
+                                     "G4ErrorStepLengthLimit");
   ~G4ErrorStepLengthLimitProcess();
   
-  virtual G4double PostStepGetPhysicalInteractionLength(
-                             const G4Track& track,
-                             G4double   previousStepSize,
-                             G4ForceCondition* condition
-                            );
-  // returns the step length
-
+  virtual G4double
+  PostStepGetPhysicalInteractionLength( const G4Track& track,
+                                              G4double previousStepSize,
+                                              G4ForceCondition* condition );
+    // returns the step length
 };
   
 #endif
- 

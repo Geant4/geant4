@@ -23,17 +23,17 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// ------------------------------------------------------------
-//      GEANT 4 class header file 
-// ------------------------------------------------------------
+//
+// $Id: G4ErrorGeomVolumeTarget.hh,v 1.2 2007-05-29 14:41:35 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Class Description:
 //
 // G4ErrorTarget class: limits step when volume is reached.
-//
+
 // History:
 // - Created:  P. Arce, September 2004
-//
+// --------------------------------------------------------------------
 
 #ifndef G4ErrorGeomVolumeTarget_HH
 #define G4ErrorGeomVolumeTarget_HH
@@ -48,20 +48,19 @@ class G4String;
 
 class G4ErrorGeomVolumeTarget : public G4ErrorTarget
 {
-public:
-  G4ErrorGeomVolumeTarget( const G4String& name );
-  virtual ~G4ErrorGeomVolumeTarget(){};
+ public:  // with description
 
-public:
+  G4ErrorGeomVolumeTarget( const G4String& name );
+  virtual ~G4ErrorGeomVolumeTarget(){}
+
   virtual bool TargetReached(const G4Step* aStep);
-  // return true when particle is entering the volume
+    // return true when particle is entering the volume
+
   virtual void Dump( const G4String& msg ) const;
 
  private:
-  G4String  theName;
 
+  G4String  theName;
 };
 
 #endif
-
-

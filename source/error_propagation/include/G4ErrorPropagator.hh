@@ -23,17 +23,20 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// ------------------------------------------------------------
-//      GEANT 4 class header file 
-// ------------------------------------------------------------
+//
+// $Id: G4ErrorPropagator.hh,v 1.3 2007-05-29 14:41:35 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
 //
 // Class Description:
 //
-//   Manages the propagation of tracks by GEANT4. Creates a G4Track, asks GEANT4 to propagate it and takes also care to propagate the errors. Stops the track when GEANT4 stops it or a G4ErrorTarget is reached
-//
+//  Manages the propagation of tracks. Creates a G4Track, asks to
+//  propagate it and takes also care to propagate the errors.
+//  Stops the track when GEANT4 stops it or a G4ErrorTarget is reached.
+
 // History:
 // - Created:   P. Arce
-//
+// --------------------------------------------------------------------
 
 #ifndef G4ErrorPropagator_hh
 #define G4ErrorPropagator_hh
@@ -51,61 +54,68 @@ class G4ErrorTarget;
 
 class G4ErrorPropagator 
 {
-public:
+ public:  // with description
+
   G4ErrorPropagator();
-  ~G4ErrorPropagator(){};
+  ~G4ErrorPropagator(){}
 
   G4Track* InitG4Track( G4ErrorTrajState& initialTS );
-  // create a G4Track from a G4ErrorTrajState
+    // Creates a G4Track from a G4ErrorTrajState
 
-  G4int Propagate( G4ErrorTrajState* currentTS, const G4ErrorTarget* target, G4ErrorMode mode = G4ErrorMode_PropForwards);
-  // steers the GEANT4 propagation of a track:
-  //  The particle will be extrapolated until the Target is reached. The final G4Track parameters will be passed to theFinalTrajState
+  G4int Propagate( G4ErrorTrajState* currentTS,
+                   const G4ErrorTarget* target,
+                   G4ErrorMode mode = G4ErrorMode_PropForwards);
+    // Steers the GEANT4 propagation of a track:
+    // the particle will be extrapolated until the Target is reached.
+    // The final G4Track parameters will be passed to theFinalTrajState
 
   G4int PropagateOneStep( G4ErrorTrajState* currentTS );
-  // propagates a G4Track by one step, and then returns control to the user
+    // Propagates a G4Track by one step, and then returns control to the user
 
   G4int MakeOneStep( G4ErrorFreeTrajState* currentTS_FREE );
-  // advance one step
+    // Advance one step
 
   G4ErrorFreeTrajState* InitFreeTrajState( G4ErrorTrajState* currentTS );
-  // creates theCurrentTS_FREE (transforms the user G4ErrorSurfaceTrajState or copies the G4ErrorFreeTrajState)
+    // Creates theCurrentTS_FREE (transforms the user G4ErrorSurfaceTrajState
+    // or copies the G4ErrorFreeTrajState)
 
   void GetFinalTrajState( G4ErrorTrajState* currentTS, G4ErrorFreeTrajState* currentTS_FREE, const G4ErrorTarget* target );
-  // after steps are done, convert the G4ErrorFreeTrajState used for error propagation to the class of origin (G4ErrorFreeTrajState or G4eTrajStatOnSurface)
+    // After steps are done, convert the G4ErrorFreeTrajState used for error
+    // propagation to the class of origin (G4ErrorFreeTrajState or
+    // G4eTrajStatOnSurface)
 
   void InvokePreUserTrackingAction( G4Track* fpTrack );
-  // invoke the G4UserTrackingAction::PreUserTrackingAction
+    // Invoke the G4UserTrackingAction::PreUserTrackingAction
   void InvokePostUserTrackingAction( G4Track* fpTrack );
-  // invoke the G4UserTrackingAction::PostUserTrackingAction
+    // Invoke the G4UserTrackingAction::PostUserTrackingAction
 
   G4bool CheckIfLastStep( G4Track* aTrack );
-  // check if it is the last step for error propagation:
-  //  - G4ErrorState is G4ErrorState_StoppedAtTarget
-  //  - Track is OutOfWorld
-  //  - G4TrackStatus is fStopAndKill
+    // Check if it is the last step for error propagation:
+    //  - G4ErrorState is G4ErrorState_StoppedAtTarget
+    //  - Track is OutOfWorld
+    //  - G4TrackStatus is fStopAndKill
 
-
-public:
   // Get and Set methods 
+
   const G4ErrorTrajState* GetInitialTrajState() const
-  { return theInitialTrajState; };
+    { return theInitialTrajState; }
 
-  G4double GetStepLength() const {
-    return theStepLength; }
-  void SetStepLength( const G4double sl ){
-    theStepLength = sl; }
+  G4double GetStepLength() const
+    { return theStepLength; }
 
-  void SetStepN( const G4int sn ){ 
-    theStepN = sn; }
+  void SetStepLength( const G4double sl )
+    { theStepLength = sl; }
 
+  void SetStepN( const G4int sn )
+    { theStepN = sn; }
 
-private:
+ private:
+
   G4int MakeSteps( G4ErrorFreeTrajState* currentTS_FREE );
-  // advance steps until target is reached
+    // Advance steps until target is reached
 
+ private:
 
-private:
   G4double theStepLength;
 
   G4ErrorTrajState* theInitialTrajState;

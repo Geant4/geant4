@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4ErrorPhysicsList.cc,v 1.2 2007-05-29 14:41:35 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file 
 // ------------------------------------------------------------
@@ -61,7 +64,6 @@
 #include "G4PhysicsTable.hh"
 #include "G4Transportation.hh"
 
-//#include "G4ePhysListEmModel.hh"
 #include "G4ErrorEnergyLoss.hh"
 
 //------------------------------------------------------------------------
@@ -116,15 +118,15 @@ void G4ErrorPhysicsList::ConstructProcess()
       G4cout << particle << "G4ErrorPhysicsList:: particle process manager " << particle->GetParticleName() << " = " << particle->GetProcessManager() << G4endl;
       // Add transportation process for all particles other than  "shortlived"
       if ( pmanager == 0) {
-	// Error !! no process manager
-	G4String particleName = particle->GetParticleName();
-	G4Exception("G4ErrorPhysicsList::ConstructProcess","No process manager",
-		    RunMustBeAborted, particleName );
+        // Error !! no process manager
+        G4String particleName = particle->GetParticleName();
+        G4Exception("G4ErrorPhysicsList::ConstructProcess","No process manager",
+                    RunMustBeAborted, particleName );
       } else {
-	// add transportation with ordering = ( -1, "first", "first" )
-	pmanager ->AddProcess(theTransportationProcess);
-	pmanager ->SetProcessOrderingToFirst(theTransportationProcess, idxAlongStep);
-	pmanager ->SetProcessOrderingToFirst(theTransportationProcess, idxPostStep);
+        // add transportation with ordering = ( -1, "first", "first" )
+        pmanager ->AddProcess(theTransportationProcess);
+        pmanager ->SetProcessOrderingToFirst(theTransportationProcess, idxAlongStep);
+        pmanager ->SetProcessOrderingToFirst(theTransportationProcess, idxPostStep);
       }
     } else {
       // shortlived particle case
@@ -147,9 +149,7 @@ void G4ErrorPhysicsList::ConstructProcess()
 
 #include "G4PhysicsTable.hh"
 
-#include "G4VeEnergyLoss.hh"
 #include "G4VEnergyLoss.hh"
-#include "G4VMuEnergyLoss.hh"
 
 #include "G4MuIonisation.hh"
 
@@ -178,7 +178,7 @@ void G4ErrorPhysicsList::ConstructEM()
       pmanager->AddDiscreteProcess(new G4PhotoElectricEffect());
 
       //    } else if (particleName == "e-" || particleName == "e+"
-      //	       || particleName == "mu+" || particleName == "mu-" ) {
+      //               || particleName == "mu+" || particleName == "mu-" ) {
     }else if (!particle->IsShortLived() && particle->GetPDGCharge() != 0 ) {
   
       pmanager->AddContinuousProcess(eLossProcess,1);
@@ -186,8 +186,8 @@ void G4ErrorPhysicsList::ConstructEM()
       pmanager->AddDiscreteProcess( magFieldLimitProcess, 3 );     
       
     } else if ((!particle->IsShortLived()) &&
-	       (particle->GetPDGCharge() != 0.0) && 
-	       (particle->GetParticleName() != "chargedgeantino")) {
+               (particle->GetPDGCharge() != 0.0) && 
+               (particle->GetParticleName() != "chargedgeantino")) {
      // all others charged particles except geantino
       //   G4VProcess* aMultipleScattering = new G4MultipleScattering();
      G4VProcess* anIonisation        = new G4hIonisation();     

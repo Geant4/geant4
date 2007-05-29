@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4ErrorFreeTrajState.cc,v 1.2 2007-05-29 14:41:35 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file 
 // ------------------------------------------------------------
@@ -31,13 +34,15 @@
 #include "G4ErrorFreeTrajParam.hh"
 #include "G4ErrorSurfaceTrajState.hh"
 
+#include <CLHEP/Matrix/Matrix.h>
+#include <iomanip>
+
 #include "G4Field.hh"
 #include "G4FieldManager.hh"
 #include "G4TransportationManager.hh"
-#include "CLHEP/Matrix/Matrix.h"
+#include "G4GeometryTolerance.hh"
 #include "G4Material.hh"
 #include "G4ErrorPropagatorData.hh"
-#include <iomanip>
 
 //------------------------------------------------------------------------
 G4ErrorFreeTrajState::G4ErrorFreeTrajState( const G4String& partType, const G4Point3D& pos, const G4Vector3D& mom, const G4ErrorTrajErr& errmat) : G4ErrorTrajState( partType, pos, mom, errmat )
@@ -197,6 +202,7 @@ std::ostream& operator<<(std::ostream& out, const G4ErrorFreeTrajState& ts)
 G4int G4ErrorFreeTrajState::PropagateError( const G4Track* aTrack )
 {
   G4double stepLengthCm = aTrack->GetStep()->GetStepLength()/cm;
+  G4double kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
 
   if( fabs(stepLengthCm) <= kCarTolerance/cm ) return 0;
   
@@ -220,9 +226,9 @@ G4int G4ErrorFreeTrajState::PropagateError( const G4Track* aTrack )
 #ifdef G4EVERBOSE
   if( iverbose >= 2 ) {
     G4cout << "G4EP: vposPre " << vposPre << G4endl
-	      << "G4EP: vposPost " << vposPost << G4endl;
+              << "G4EP: vposPost " << vposPost << G4endl;
     G4cout << "G4EP: vpPre " << vpPre << G4endl
-	      << "G4EP: vpPost " << vpPost << G4endl;
+              << "G4EP: vpPost " << vpPost << G4endl;
     G4cout << " err start step " << fError << G4endl;
     G4cout << "G4EP: stepLengthCm " << stepLengthCm << G4endl;
   }
@@ -289,7 +295,7 @@ G4int G4ErrorFreeTrajState::PropagateError( const G4Track* aTrack )
     G4double magHPost = HPost.mag();
 #ifdef G4EVERBOSE
     if( iverbose >= 2 ) G4cout << "G4EP: HPre " << HPre << G4endl
-			    << "G4EP: HPost " << HPost << G4endl;
+                            << "G4EP: HPost " << HPost << G4endl;
 #endif
     
   if( magHPre + magHPost != 0. ) {
@@ -338,21 +344,21 @@ G4int G4ErrorFreeTrajState::PropagateError( const G4Track* aTrack )
     G4double AU = 1./vpPreNorm.perp();
     //t  G4ThreeVector vU( vpPreNorm.cross( G4ThreeVector(0.,0.,1.) ) * AU );
     G4ThreeVector vUPre( -AU*vpPreNorm.y(), 
-		      AU*vpPreNorm.x(), 
-		      0. );
+                      AU*vpPreNorm.x(), 
+                      0. );
     G4ThreeVector vVPre( -vpPreNorm.z()*vUPre.y(), 
-		      vpPreNorm.z()*vUPre.x(), 
-		      vpPreNorm.x()*vUPre.y() - vpPreNorm.y()*vUPre.x() );
+                      vpPreNorm.z()*vUPre.x(), 
+                      vpPreNorm.x()*vUPre.y() - vpPreNorm.y()*vUPre.x() );
     
     //
     AU = 1./vpPostNorm.perp();
     //t  G4ThreeVector vU( vpPostNorm.cross( G4ThreeVector(0.,0.,1.) ) * AU );
     G4ThreeVector vUPost( -AU*vpPostNorm.y(), 
-		       AU*vpPostNorm.x(), 
-		       0. );
+                       AU*vpPostNorm.x(), 
+                       0. );
     G4ThreeVector vVPost( -vpPostNorm.z()*vUPost.y(), 
-		       vpPostNorm.z()*vUPost.x(), 
-		       vpPostNorm.x()*vUPost.y() - vpPostNorm.y()*vUPost.x() );
+                       vpPostNorm.z()*vUPost.x(), 
+                       vpPostNorm.x()*vUPost.y() - vpPostNorm.y()*vUPost.x() );
 #ifdef G4EVERBOSE
     //-    G4cout << " vpPostNorm " << vpPostNorm << G4endl;
     if( iverbose >= 2 ) G4cout << " G4EP: AU " << AU << " vUPre " << vUPre << " vVPre " << vVPre << " vUPost " << vUPost << " vVPost " << vVPost << G4endl;
@@ -379,14 +385,14 @@ G4int G4ErrorFreeTrajState::PropagateError( const G4Track* aTrack )
 #endif
     
     G4ThreeVector vHUPre( -vHAverNorm.z() * vUPre.y(),
-			  vHAverNorm.z() * vUPre.x(),
-			  vHAverNorm.x() * vUPre.y() - vHAverNorm.y() * vUPre.x() );
+                          vHAverNorm.z() * vUPre.x(),
+                          vHAverNorm.x() * vUPre.y() - vHAverNorm.y() * vUPre.x() );
 #ifdef G4EVERBOSE
     //    if( iverbose >= 2 ) G4cout << "G4EP: HUPre(1) " << vHUPre.x() << " " << vHAverNorm.z() << " " << vUPre.y() << G4endl;
 #endif
     G4ThreeVector vHVPre( vHAverNorm.y() * vVPre.z() - vHAverNorm.z() * vVPre.y(),
-			  vHAverNorm.z() * vVPre.x() - vHAverNorm.x() * vVPre.z(),
-			  vHAverNorm.x() * vVPre.y() - vHAverNorm.y() * vVPre.x() );
+                          vHAverNorm.z() * vVPre.x() - vHAverNorm.x() * vVPre.z(),
+                          vHAverNorm.x() * vVPre.y() - vHAverNorm.y() * vVPre.x() );
 #ifdef G4EVERBOSE
     if( iverbose >= 2 ) G4cout << " G4EP: HUPre " << vHUPre << " HVPre " << vHVPre << G4endl;
 #endif
@@ -399,13 +405,13 @@ G4int G4ErrorFreeTrajState::PropagateError( const G4Track* aTrack )
     
     transf[0][1] =  -deltaPInv/thetaAver*
       ( TMSINT*gamma*(vHAverNorm.x()*vVPre.x()+vHAverNorm.y()*vVPre.y()+vHAverNorm.z()*vVPre.z()) +
-	sinThetaAver*(vVPre.x()*vpPostNorm.x()+vVPre.y()*vpPostNorm.y()+vVPre.z()*vpPostNorm.z()) +
-	OMcosThetaAver*(vHVPre.x()*vpPostNorm.x()+vHVPre.y()*vpPostNorm.y()+vHVPre.z()*vpPostNorm.z()) );
+        sinThetaAver*(vVPre.x()*vpPostNorm.x()+vVPre.y()*vpPostNorm.y()+vVPre.z()*vpPostNorm.z()) +
+        OMcosThetaAver*(vHVPre.x()*vpPostNorm.x()+vHVPre.y()*vpPostNorm.y()+vHVPre.z()*vpPostNorm.z()) );
     
     transf[0][2] =  -sinpPre*deltaPInv/thetaAver*
       ( TMSINT*gamma*(vHAverNorm.x()*vUPre.x()+vHAverNorm.y()*vUPre.y()            ) +
-	sinThetaAver*(vUPre.x()*vpPostNorm.x()+vUPre.y()*vpPostNorm.y()            ) +
-	OMcosThetaAver*(vHUPre.x()*vpPostNorm.x()+vHUPre.y()*vpPostNorm.y()+vHUPre.z()*vpPostNorm.z()) );
+        sinThetaAver*(vUPre.x()*vpPostNorm.x()+vUPre.y()*vpPostNorm.y()            ) +
+        OMcosThetaAver*(vHUPre.x()*vpPostNorm.x()+vHUPre.y()*vpPostNorm.y()+vHUPre.z()*vpPostNorm.z()) );
     
     transf[0][3] =  -deltaPInv/stepLengthCm*(vUPre.x()*vpPostNorm.x()+vUPre.y()*vpPostNorm.y()            );
     
@@ -424,16 +430,16 @@ G4int G4ErrorFreeTrajState::PropagateError( const G4Track* aTrack )
       OMcosThetaAver*(vHAverNorm.x()*vVPre.x()+vHAverNorm.y()*vVPre.y()+vHAverNorm.z()*vVPre.z())*
       (vHAverNorm.x()*vVPost.x()+vHAverNorm.y()*vVPost.y()+vHAverNorm.z()*vVPost.z()) +
       ANV*( -sinThetaAver*(vVPre.x()*vpPostNorm.x()+vVPre.y()*vpPostNorm.y()+vVPre.z()*vpPostNorm.z()) +
-	    OMcosThetaAver*(vVPre.x()*AN2.x()+vVPre.y()*AN2.y()+vVPre.z()*AN2.z()) -
-	    TMSINT*gamma*(vHAverNorm.x()*vVPre.x()+vHAverNorm.y()*vVPre.y()+vHAverNorm.z()*vVPre.z()) );
+            OMcosThetaAver*(vVPre.x()*AN2.x()+vVPre.y()*AN2.y()+vVPre.z()*AN2.z()) -
+            TMSINT*gamma*(vHAverNorm.x()*vVPre.x()+vHAverNorm.y()*vVPre.y()+vHAverNorm.z()*vVPre.z()) );
     
     transf[1][2] = cosThetaAver*(vUPre.x()*vVPost.x()+vUPre.y()*vVPost.y()            ) +
       sinThetaAver*(vHUPre.x()*vVPost.x()+vHUPre.y()*vVPost.y()+vHUPre.z()*vVPost.z()) +
       OMcosThetaAver*(vHAverNorm.x()*vUPre.x()+vHAverNorm.y()*vUPre.y()            )*
       (vHAverNorm.x()*vVPost.x()+vHAverNorm.y()*vVPost.y()+vHAverNorm.z()*vVPost.z()) +
       ANV*( -sinThetaAver*(vUPre.x()*vpPostNorm.x()+vUPre.y()*vpPostNorm.y()            ) +
-	    OMcosThetaAver*(vUPre.x()*AN2.x()+vUPre.y()*AN2.y()             ) -
-	    TMSINT*gamma*(vHAverNorm.x()*vUPre.x()+vHAverNorm.y()*vUPre.y()            ) );
+            OMcosThetaAver*(vUPre.x()*AN2.x()+vUPre.y()*AN2.y()             ) -
+            TMSINT*gamma*(vHAverNorm.x()*vUPre.x()+vHAverNorm.y()*vUPre.y()            ) );
     transf[1][2] = sinpPre*transf[1][3];
     
     transf[1][3] = -QAver*ANV*(vUPre.x()*vpPostNorm.x()+vUPre.y()*vpPostNorm.y()            );
@@ -446,15 +452,15 @@ G4int G4ErrorFreeTrajState::PropagateError( const G4Track* aTrack )
       *(1.+deltaPInv*pAver);
 #ifdef G4EVERBOSE
    if(iverbose >= 3)G4cout <<"ctransf20= " << transf[2][0] <<" "<< -QP<<" "<<ANU<<" "<<vpPostNorm.x()<<" "<<deltaPos.x()<<" "<<vpPostNorm.y()<<" "<<deltaPos.y()<<" "<<vpPostNorm.z()<<" "<<deltaPos.z()<<" "<<sinpPostInv
-	 <<" "<<deltaPInv<<" "<<pAver<< G4endl;
+         <<" "<<deltaPInv<<" "<<pAver<< G4endl;
 #endif
     transf[2][1] = cosThetaAver*(vVPre.x()*vUPost.x()+vVPre.y()*vUPost.y()            ) +
       sinThetaAver*(vHVPre.x()*vUPost.x()+vHVPre.y()*vUPost.y()             ) +
       OMcosThetaAver*(vHAverNorm.x()*vVPre.x()+vHAverNorm.y()*vVPre.y()+vHAverNorm.z()*vVPre.z())*
       (vHAverNorm.x()*vUPost.x()+vHAverNorm.y()*vUPost.y()            ) +
       ANU*( -sinThetaAver*(vVPre.x()*vpPostNorm.x()+vVPre.y()*vpPostNorm.y()+vVPre.z()*vpPostNorm.z()) +
-	    OMcosThetaAver*(vVPre.x()*AN2.x()+vVPre.y()*AN2.y()+vVPre.z()*AN2.z()) -
-	    TMSINT*gamma*(vHAverNorm.x()*vVPre.x()+vHAverNorm.y()*vVPre.y()+vHAverNorm.z()*vVPre.z()) );
+            OMcosThetaAver*(vVPre.x()*AN2.x()+vVPre.y()*AN2.y()+vVPre.z()*AN2.z()) -
+            TMSINT*gamma*(vHAverNorm.x()*vVPre.x()+vHAverNorm.y()*vVPre.y()+vHAverNorm.z()*vVPre.z()) );
     transf[2][1] = sinpPostInv*transf[2][1];
     
     transf[2][2] = cosThetaAver*(vUPre.x()*vUPost.x()+vUPre.y()*vUPost.y()            ) +
@@ -462,8 +468,8 @@ G4int G4ErrorFreeTrajState::PropagateError( const G4Track* aTrack )
       OMcosThetaAver*(vHAverNorm.x()*vUPre.x()+vHAverNorm.y()*vUPre.y()            )*
       (vHAverNorm.x()*vUPost.x()+vHAverNorm.y()*vUPost.y()            ) +
       ANU*( -sinThetaAver*(vUPre.x()*vpPostNorm.x()+vUPre.y()*vpPostNorm.y()            ) +
-	    OMcosThetaAver*(vUPre.x()*AN2.x()+vUPre.y()*AN2.y()             ) -
-	    TMSINT*gamma*(vHAverNorm.x()*vUPre.x()+vHAverNorm.y()*vUPre.y()            ) );
+            OMcosThetaAver*(vUPre.x()*AN2.x()+vUPre.y()*AN2.y()             ) -
+            TMSINT*gamma*(vHAverNorm.x()*vUPre.x()+vHAverNorm.y()*vUPre.y()            ) );
     transf[2][2] = sinpPostInv*sinpPre*transf[2][2];
     
     transf[2][3] = -QAver*ANU*(vUPre.x()*vpPostNorm.x()+vUPre.y()*vpPostNorm.y()            )*sinpPostInv;
@@ -483,18 +489,18 @@ G4int G4ErrorFreeTrajState::PropagateError( const G4Track* aTrack )
 #endif
 
     transf[3][1] = (   sinThetaAver*(vVPre.x()*vUPost.x()+vVPre.y()*vUPost.y()            ) +
-		       OMcosThetaAver*(vHVPre.x()*vUPost.x()+vHVPre.y()*vUPost.y()             ) +
-		       TMSINT*(vHAverNorm.x()*vUPost.x()+vHAverNorm.y()*vUPost.y()            )*
-		       (vHAverNorm.x()*vVPre.x()+vHAverNorm.y()*vVPre.y()+vHAverNorm.z()*vVPre.z()) )/QAver;
+                       OMcosThetaAver*(vHVPre.x()*vUPost.x()+vHVPre.y()*vUPost.y()             ) +
+                       TMSINT*(vHAverNorm.x()*vUPost.x()+vHAverNorm.y()*vUPost.y()            )*
+                       (vHAverNorm.x()*vVPre.x()+vHAverNorm.y()*vVPre.y()+vHAverNorm.z()*vVPre.z()) )/QAver;
     
     transf[3][2] = (   sinThetaAver*(vUPre.x()*vUPost.x()+vUPre.y()*vUPost.y()            ) +
-		       OMcosThetaAver*(vHUPre.x()*vUPost.x()+vHUPre.y()*vUPost.y()             ) +
-		       TMSINT*(vHAverNorm.x()*vUPost.x()+vHAverNorm.y()*vUPost.y()            )*
-		       (vHAverNorm.x()*vUPre.x()+vHAverNorm.y()*vUPre.y()            ) )*sinpPre/QAver;
+                       OMcosThetaAver*(vHUPre.x()*vUPost.x()+vHUPre.y()*vUPost.y()             ) +
+                       TMSINT*(vHAverNorm.x()*vUPost.x()+vHAverNorm.y()*vUPost.y()            )*
+                       (vHAverNorm.x()*vUPre.x()+vHAverNorm.y()*vUPre.y()            ) )*sinpPre/QAver;
 #ifdef G4EVERBOSE 
    if(iverbose >= 3) G4cout <<"ctransf32= " << transf[3][2] <<" "<< sinThetaAver<<" "<<vUPre.x()<<" "<<vUPost.x()<<" "<<vUPre.y()<<" "<<vUPost.y() <<" "<<
-		       OMcosThetaAver<<" "<<vHUPre.x()<<" "<<vUPost.x()<<" "<<vHUPre.y()<<" "<<vUPost.y() <<" "<<
-		       TMSINT<<" "<<vHAverNorm.x()<<" "<<vUPost.x()<<" "<<vHAverNorm.y()<<" "<<vUPost.y() <<" "<<
+                       OMcosThetaAver<<" "<<vHUPre.x()<<" "<<vUPost.x()<<" "<<vHUPre.y()<<" "<<vUPost.y() <<" "<<
+                       TMSINT<<" "<<vHAverNorm.x()<<" "<<vUPost.x()<<" "<<vHAverNorm.y()<<" "<<vUPost.y() <<" "<<
       vHAverNorm.x()<<" "<<vUPre.x()<<" "<<vHAverNorm.y()<<" "<<vUPre.y() <<" "<<sinpPre<<" "<<QAver<<G4endl;
 #endif
    
@@ -507,16 +513,16 @@ G4int G4ErrorFreeTrajState::PropagateError( const G4Track* aTrack )
       *(1.+deltaPInv*pAver);
    
     transf[4][1] = (   sinThetaAver*(vVPre.x()*vVPost.x()+vVPre.y()*vVPost.y()+vVPre.z()*vVPost.z()) +
-		       OMcosThetaAver*(vHVPre.x()*vVPost.x()+vHVPre.y()*vVPost.y()+vHVPre.z()*vVPost.z()) +
-		       TMSINT*(vHAverNorm.x()*vVPost.x()+vHAverNorm.y()*vVPost.y()+vHAverNorm.z()*vVPost.z())*
-		       (vHAverNorm.x()*vVPre.x()+vHAverNorm.y()*vVPre.y()+vHAverNorm.z()*vVPre.z()) )/QAver;
+                       OMcosThetaAver*(vHVPre.x()*vVPost.x()+vHVPre.y()*vVPost.y()+vHVPre.z()*vVPost.z()) +
+                       TMSINT*(vHAverNorm.x()*vVPost.x()+vHAverNorm.y()*vVPost.y()+vHAverNorm.z()*vVPost.z())*
+                       (vHAverNorm.x()*vVPre.x()+vHAverNorm.y()*vVPre.y()+vHAverNorm.z()*vVPre.z()) )/QAver;
 #ifdef G4EVERBOSE
     if(iverbose >= 3)G4cout <<"ctransf41= " << transf[4][1] <<" "<< sinThetaAver<<" "<< OMcosThetaAver <<" "<<TMSINT<<" "<< vVPre <<" "<<vVPost <<" "<<vHVPre<<" "<<vHAverNorm <<" "<< QAver<<G4endl;
 #endif
     
     transf[4][2] = (   sinThetaAver*(vUPre.x()*vVPost.x()+vUPre.y()*vVPost.y()            ) +
-		       OMcosThetaAver*(vHUPre.x()*vVPost.x()+vHUPre.y()*vVPost.y()+vHUPre.z()*vVPost.z()) +
-		       TMSINT*(vHAverNorm.x()*vVPost.x()+vHAverNorm.y()*vVPost.y()+vHAverNorm.z()*vVPost.z())*
+                       OMcosThetaAver*(vHUPre.x()*vVPost.x()+vHUPre.y()*vVPost.y()+vHUPre.z()*vVPost.z()) +
+                       TMSINT*(vHAverNorm.x()*vVPost.x()+vHAverNorm.y()*vVPost.y()+vHAverNorm.z()*vVPost.z())*
                        (vHAverNorm.x()*vUPre.x()+vHAverNorm.y()*vUPre.y()            ) )*sinpPre/QAver;
 
     transf[4][3] = (vUPre.x()*vVPost.x()+vUPre.y()*vVPost.y()  );
@@ -530,7 +536,7 @@ G4int G4ErrorFreeTrajState::PropagateError( const G4Track* aTrack )
 #endif
     /*    for( G4int ii=0;ii<5;ii++){
       for( G4int jj=0;jj<5;jj++){
-	G4cout << transf[ii][jj] << " ";
+        G4cout << transf[ii][jj] << " ";
       }
       G4cout << G4endl;
       } */
@@ -550,7 +556,7 @@ G4int G4ErrorFreeTrajState::PropagateError( const G4Track* aTrack )
 #ifdef G4EVERBOSE
     if( iverbose >= 1 ) G4cout << "G4EP: error matrix before transformation " << fError << G4endl;
     if( iverbose >= 2 ) G4cout << " tf * err " << theTransfMat * fError << G4endl
-				  << " transf matrix " << theTransfMat.T() << G4endl;
+                                  << " transf matrix " << theTransfMat.T() << G4endl;
 #endif
     
     fError = fError.similarity(theTransfMat).T();
@@ -585,9 +591,9 @@ G4int G4ErrorFreeTrajState::PropagateErrorMSC( const G4Track* aTrack )
 
 #ifdef G4EVERBOSE
   if( iverbose >= 4 ) G4cout << "material " << mate->GetName() 
-		     //<< " " << mate->GetZ() << " "  << mate->GetA() 
-			<< " " << effZ << " " << effA
-			<< " "  << mate->GetDensity()/g*mole << " " << mate->GetRadlen()/cm << " " << mate->GetNuclearInterLength()/cm << G4endl;
+                     //<< " " << mate->GetZ() << " "  << mate->GetA() 
+                        << " " << effZ << " " << effA
+                        << " "  << mate->GetDensity()/g*mole << " " << mate->GetRadlen()/cm << " " << mate->GetNuclearInterLength()/cm << G4endl;
 #endif
 
   G4double RI = stepLengthCm / (mate->GetRadlen()/cm);

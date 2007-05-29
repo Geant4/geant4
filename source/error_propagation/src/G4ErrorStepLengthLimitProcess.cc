@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4ErrorStepLengthLimitProcess.cc,v 1.2 2007-05-29 14:41:35 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file 
 // ------------------------------------------------------------
@@ -30,12 +33,14 @@
 
 #include "G4ErrorStepLengthLimitProcess.hh"
 #include "G4ErrorMessenger.hh"
+
 #ifdef G4VERBOSE
 #include "G4ErrorPropagatorData.hh"
 #endif
 
 //------------------------------------------------------------------------
-G4ErrorStepLengthLimitProcess::G4ErrorStepLengthLimitProcess(const G4String& processName)
+G4ErrorStepLengthLimitProcess::
+G4ErrorStepLengthLimitProcess(const G4String& processName)
   : G4VErrorLimitProcess(processName) 
 {
   theStepLimit = 1000.*mm; // kInfinity;
@@ -48,18 +53,19 @@ G4ErrorStepLengthLimitProcess::~G4ErrorStepLengthLimitProcess()
 
 
 //------------------------------------------------------------------------
-G4double G4ErrorStepLengthLimitProcess::PostStepGetPhysicalInteractionLength(
-			     const G4Track& ,
-			     G4double ,
-			     G4ForceCondition* condition )
+G4double G4ErrorStepLengthLimitProcess::
+PostStepGetPhysicalInteractionLength( const G4Track&, G4double,
+                                      G4ForceCondition* condition )
 {
   *condition = NotForced;
+
 #ifdef G4VERBOSE
-  if(G4ErrorPropagatorData::verbose() >= 3 ) { 
-     G4cout << "G4ErrorStepLengthLimitProcess::PostStepGetPhysicalInteractionLength " << theStepLimit << G4endl;
+  if(G4ErrorPropagatorData::verbose() >= 3 )
+  { 
+     G4cout << "G4ErrorStepLengthLimitProcess::PostStepGetPhysicalInteractionLength "
+            << theStepLimit << G4endl;
   }
 #endif
-  return theStepLimit; 
-  //return kInfinity;
-}
 
+  return theStepLimit;
+}

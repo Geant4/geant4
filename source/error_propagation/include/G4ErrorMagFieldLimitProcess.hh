@@ -23,23 +23,18 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// ------------------------------------------------------------
-//      GEANT 4 class header file 
-// ------------------------------------------------------------
 //
-// Class Description:
-//
-//
-// class G4ErrorMagFieldLimitProcess
+// $Id: G4ErrorMagFieldLimitProcess.hh,v 1.2 2007-05-29 14:41:35 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Class description:
 //
-//  Limits the step length if change of magnetic field is too big (user defined limit)
+// Limits the step length if change of magnetic field is too big
+// (user defined limit).
 
 // History:
 // - Created:   P. Arce, September 2004
-//
-//-----------------------------------------------------------------
+//---------------------------------------------------------------------
 
 #ifndef G4ErrorMagFieldLimitProcess_h
 #define G4ErrorMagFieldLimitProcess_h 1
@@ -59,19 +54,18 @@
  
 class G4ErrorMagFieldLimitProcess : public G4VErrorLimitProcess
 {
-public: 
+
+ public:  // with description
   
-  G4ErrorMagFieldLimitProcess(const G4String& processName ="G4ErrorMagFieldLimit");
-  
+  G4ErrorMagFieldLimitProcess(const G4String& processName
+                                  ="G4ErrorMagFieldLimit");
   ~G4ErrorMagFieldLimitProcess();
   
-  virtual G4double PostStepGetPhysicalInteractionLength(
-                             const G4Track& track,
-                             G4double   previousStepSize,
-                             G4ForceCondition* condition
-                            );
-    // returns the step length
-
+  virtual G4double
+     PostStepGetPhysicalInteractionLength(const G4Track& track,
+                                                G4double previousStepSize,
+                                                G4ForceCondition* condition);
+    // Returns the step length.
 };
   
 #endif

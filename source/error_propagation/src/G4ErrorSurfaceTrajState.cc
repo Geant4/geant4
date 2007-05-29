@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4ErrorSurfaceTrajState.cc,v 1.2 2007-05-29 14:41:35 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file 
 // ------------------------------------------------------------
@@ -35,12 +38,17 @@
 #include "G4FieldManager.hh"
 #include "G4TransportationManager.hh"
 
-#include "CLHEP/Matrix/Matrix.h"
+#include <CLHEP/Matrix/Matrix.h>
+
 #include <iomanip>
 
 
 //------------------------------------------------------------------------
-G4ErrorSurfaceTrajState::G4ErrorSurfaceTrajState( const G4String& partType, const G4Point3D& pos, const G4Vector3D& mom, const G4Vector3D& vecU, const G4Vector3D& vecV, const G4ErrorTrajErr& errmat) : G4ErrorTrajState( partType, pos, mom, errmat )
+G4ErrorSurfaceTrajState::
+G4ErrorSurfaceTrajState( const G4String& partType, const G4Point3D& pos,
+                         const G4Vector3D& mom, const G4Vector3D& vecU,
+                         const G4Vector3D& vecV, const G4ErrorTrajErr& errmat)
+  : G4ErrorTrajState( partType, pos, mom, errmat )
 {
   Init();
   fTrajParam = G4ErrorSurfaceTrajParam( pos, mom, vecU, vecV );
@@ -48,7 +56,11 @@ G4ErrorSurfaceTrajState::G4ErrorSurfaceTrajState( const G4String& partType, cons
 
 
 //------------------------------------------------------------------------
-G4ErrorSurfaceTrajState::G4ErrorSurfaceTrajState( const G4String& partType, const G4Point3D& pos, const G4Vector3D& mom, const G4Plane3D& plane, const G4ErrorTrajErr& errmat ): G4ErrorTrajState( partType, pos, mom, errmat )
+G4ErrorSurfaceTrajState::
+G4ErrorSurfaceTrajState( const G4String& partType, const G4Point3D& pos,
+                         const G4Vector3D& mom, const G4Plane3D& plane,
+                         const G4ErrorTrajErr& errmat )
+  : G4ErrorTrajState( partType, pos, mom, errmat )
 {
   Init();
   fTrajParam = G4ErrorSurfaceTrajParam( pos, mom, plane );
@@ -57,7 +69,10 @@ G4ErrorSurfaceTrajState::G4ErrorSurfaceTrajState( const G4String& partType, cons
 
 
 //------------------------------------------------------------------------
-G4ErrorSurfaceTrajState::G4ErrorSurfaceTrajState( G4ErrorFreeTrajState& tpSC, const G4Plane3D& plane ): G4ErrorTrajState( tpSC.GetParticleType(), tpSC.GetPosition(), tpSC.GetMomentum() )
+G4ErrorSurfaceTrajState::
+G4ErrorSurfaceTrajState( G4ErrorFreeTrajState& tpSC, const G4Plane3D& plane )
+  : G4ErrorTrajState( tpSC.GetParticleType(), tpSC.GetPosition(),
+                      tpSC.GetMomentum() )
 {
   //  fParticleType = tpSC.GetParticleType();
   //  fPosition = tpSC.GetPosition();
@@ -71,7 +86,11 @@ G4ErrorSurfaceTrajState::G4ErrorSurfaceTrajState( G4ErrorFreeTrajState& tpSC, co
 
 
 //------------------------------------------------------------------------
-G4ErrorSurfaceTrajState::G4ErrorSurfaceTrajState( G4ErrorFreeTrajState& tpSC, const G4Vector3D& vecU, const G4Vector3D& vecV ) : G4ErrorTrajState( tpSC.GetParticleType(), tpSC.GetPosition(), tpSC.GetMomentum() )
+G4ErrorSurfaceTrajState::
+G4ErrorSurfaceTrajState( G4ErrorFreeTrajState& tpSC, const G4Vector3D& vecU,
+                         const G4Vector3D& vecV )
+  : G4ErrorTrajState( tpSC.GetParticleType(), tpSC.GetPosition(),
+                      tpSC.GetMomentum() )
 {
   fTrajParam = G4ErrorSurfaceTrajParam( fPosition, fMomentum, vecU, vecV );
   theTSType = G4eTS_OS;
@@ -81,7 +100,9 @@ G4ErrorSurfaceTrajState::G4ErrorSurfaceTrajState( G4ErrorFreeTrajState& tpSC, co
 
 
 //------------------------------------------------------------------------
-void G4ErrorSurfaceTrajState::BuildErrorMatrix( G4ErrorFreeTrajState& tpSC, const G4Vector3D&, const G4Vector3D& )
+void G4ErrorSurfaceTrajState::
+BuildErrorMatrix( G4ErrorFreeTrajState& tpSC, const G4Vector3D&,
+                  const G4Vector3D& )
 {
   G4double sclambda = tpSC.GetParameters().GetLambda();
   G4double scphi = tpSC.GetParameters().GetPhi();
@@ -145,10 +166,10 @@ void G4ErrorSurfaceTrajState::BuildErrorMatrix( G4ErrorFreeTrajState& tpSC, cons
       G4double VI = vVN * vectorU;
 #ifdef G4EVERBOSE
       if( iverbose >= 4) {
-	G4cout << " T1R " << T1R << " T3R " << T3R << G4endl;
-	G4cout << " UI " << UI << " VI " << VI << " vectorU " << vectorU << G4endl;
-	G4cout << " UJ " << UJ << " VJ " << VJ << G4endl;
-	G4cout << " UK " << UK << " VK " << VK << G4endl;
+        G4cout << " T1R " << T1R << " T3R " << T3R << G4endl;
+        G4cout << " UI " << UI << " VI " << VI << " vectorU " << vectorU << G4endl;
+        G4cout << " UJ " << UJ << " VJ " << VJ << G4endl;
+        G4cout << " UK " << UK << " VK " << VK << G4endl;
       }
 #endif
 
@@ -208,4 +229,3 @@ std::ostream& operator<<(std::ostream& out, const G4ErrorSurfaceTrajState& ts)
   out << " G4ErrorSurfaceTrajState: Params: " << ts.fTrajParam << G4endl;
   return out;
 }
-

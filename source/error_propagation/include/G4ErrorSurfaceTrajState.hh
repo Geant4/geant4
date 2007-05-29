@@ -24,25 +24,23 @@
 // ********************************************************************
 //
 //
-// History:
+// $Id: G4ErrorSurfaceTrajState.hh,v 1.2 2007-05-29 14:41:35 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
-//
-// ------------------------------------------------------------
-//      GEANT 4 class header file 
-// ------------------------------------------------------------
 //
 // Class description:
 //
-// Represents a trajectory state on a surface
-// It can be represented by the 5 variables
+// Represents a trajectory state on a surface.
+// It can be represented by the 5 variables:
 //      1/p, v', w', v, w
-//  where v'=dv/du and w'=dw/du in an orthonormal coordinate system with
-//  axis u, v and w
-//
+// where v'=dv/du and w'=dw/du in an orthonormal coordinate system
+// with axis u, v and w.
+
 // History:
 //
 // - Created:   P. Arce 
-//
+// --------------------------------------------------------------------
+
 #ifndef G4ErrorSurfaceTrajState_hh
 #define G4ErrorSurfaceTrajState_hh
 
@@ -56,62 +54,83 @@
 #include "G4Vector3D.hh"
 #include "G4Plane3D.hh"
 
-
 class G4ErrorSurfaceTrajState : public G4ErrorTrajState
 {
 
-public:
-  G4ErrorSurfaceTrajState( const G4String& partType, const G4Point3D& pos, const G4Vector3D& mom, const G4Plane3D& plane, const G4ErrorTrajErr& errmat = G4ErrorTrajErr(5,0) );
-  // construct by providing particle, position, momentum and G4Plane3D surface
-  
-  G4ErrorSurfaceTrajState( const G4String& partType, const G4Point3D& pos, const G4Vector3D& mom, const G4Vector3D& vecV, const G4Vector3D& vecW, const G4ErrorTrajErr& errmat = G4ErrorTrajErr(5,0) );
-  // construct by providing particle, position, momentum and two vectors on surface
+ public:  // with description
+
+  G4ErrorSurfaceTrajState( const G4String& partType, const G4Point3D& pos,
+                           const G4Vector3D& mom, const G4Plane3D& plane,
+                           const G4ErrorTrajErr& errmat = G4ErrorTrajErr(5,0) );
+    // Constructor by providing particle, position, momentum and
+    // G4Plane3D surface
+
+  G4ErrorSurfaceTrajState( const G4String& partType, const G4Point3D& pos,
+                           const G4Vector3D& mom, const G4Vector3D& vecV,
+                           const G4Vector3D& vecW,
+                           const G4ErrorTrajErr& errmat = G4ErrorTrajErr(5,0) );
+    // Constructor by providing particle, position, momentum and
+    // two vectors on surface
 
   G4ErrorSurfaceTrajState( G4ErrorFreeTrajState& tpSC, const G4Plane3D& plane );
-  // construct by providing G4ErrorFreeTrajState and G4Plane3D surface
+    // Constructor by providing G4ErrorFreeTrajState and G4Plane3D surface
 
-  G4ErrorSurfaceTrajState( G4ErrorFreeTrajState& tpSC, const G4Vector3D& vecV, const G4Vector3D& vecW );
-  // construct by providing G4ErrorFreeTrajState and two vectors on surface
+  G4ErrorSurfaceTrajState( G4ErrorFreeTrajState& tpSC, const G4Vector3D& vecV,
+                           const G4Vector3D& vecW );
+    // Constructor by providing G4ErrorFreeTrajState and two vectors on surface
 
-  ~G4ErrorSurfaceTrajState(){};
+  ~G4ErrorSurfaceTrajState(){}
 
-  void BuildErrorMatrix( G4ErrorFreeTrajState& tpSC, const G4Vector3D& vecV, const G4Vector3D& vecW );
-  // build the error matrix from a free state plus the vectors of the surface
+  void BuildErrorMatrix( G4ErrorFreeTrajState& tpSC, const G4Vector3D& vecV,
+                         const G4Vector3D& vecW );
+    // Build the error matrix from a free state plus the vectors of the surface
 
   virtual void Dump( std::ostream& out = G4cout ) const;
 
   friend
     std::ostream& operator<<(std::ostream&, const G4ErrorSurfaceTrajState& ts);
 
-  //--- Set and Get methods 
-  G4ErrorSurfaceTrajParam GetParameters() const { return fTrajParam; }
-  void SetParameters( const G4Point3D& pos, const G4Vector3D& mom, const G4Vector3D& vecV, const G4Vector3D& vecW ){
-    fPosition = pos;
-    fMomentum = mom;
-    fTrajParam.SetParameters( pos, mom, vecV, vecW ); }
-  void SetParameters( const G4Point3D& pos, const G4Vector3D& mom, const G4Plane3D& plane ){
-    fPosition = pos;
-    fMomentum = mom;
-    fTrajParam.SetParameters( pos, mom, plane ); }
+  // Set and Get methods 
 
-  G4Vector3D GetVectorV() const { return fTrajParam.GetVectorV();}
+  G4ErrorSurfaceTrajParam GetParameters() const
+    { return fTrajParam; }
+  void SetParameters( const G4Point3D& pos, const G4Vector3D& mom,
+                      const G4Vector3D& vecV, const G4Vector3D& vecW )
+    {
+      fPosition = pos;
+      fMomentum = mom;
+      fTrajParam.SetParameters( pos, mom, vecV, vecW );
+    }
 
-  G4Vector3D GetVectorW() const { return fTrajParam.GetVectorW();}
+  void SetParameters( const G4Point3D& pos, const G4Vector3D& mom,
+                      const G4Plane3D& plane )
+    {
+      fPosition = pos;
+      fMomentum = mom;
+      fTrajParam.SetParameters( pos, mom, plane );
+    }
 
-  virtual void SetPosition( const G4Point3D pos ) {
-    SetParameters( pos, fMomentum, GetVectorV(), GetVectorW() ); }
+  G4Vector3D GetVectorV() const
+    { return fTrajParam.GetVectorV(); }
 
-  virtual void SetMomentum( const G4Vector3D& mom ) {
-    SetParameters( fPosition, mom, GetVectorV(), GetVectorW() ); }
+  G4Vector3D GetVectorW() const
+    { return fTrajParam.GetVectorW(); }
+
+  virtual void SetPosition( const G4Point3D pos )
+    { SetParameters( pos, fMomentum, GetVectorV(), GetVectorW() ); }
+
+  virtual void SetMomentum( const G4Vector3D& mom )
+    { SetParameters( fPosition, mom, GetVectorV(), GetVectorW() ); }
     
-private:
-  void Init();
-  // define Trajectory State type and build charge
+ private:
 
-private:
+  void Init();
+    // Define Trajectory State type and build charge
+
+ private:
+
   G4ErrorSurfaceTrajParam fTrajParam;
 
 };
 
 #endif
-
