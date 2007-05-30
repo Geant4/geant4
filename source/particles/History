@@ -1,4 +1,4 @@
-$Id: History,v 1.142 2007-05-12 02:47:53 kurasige Exp $
+$Id: History,v 1.143 2007-05-30 08:33:28 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+- May. 30  2007    H.Kurashige (particles-V08-03-01)
+- Fix G4PDGCodeChecker::GetQuarkFlavor
+
 - May.  12 2007    H.Kurashige (particles-V08-03-00)
 - Add check against sqrt(negative) in G4DecayProducts
 - Add deletion of IsotopeTableList in the destructor in G4IonTable
