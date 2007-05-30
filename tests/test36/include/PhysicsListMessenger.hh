@@ -22,9 +22,9 @@ class PhysicsListMessenger: public G4UImessenger
     
   private:
   
-    PhysicsList*               pPhysicsList;
+    PhysicsList* pPhysicsList;
     
-    G4UIdirectory*             physDir;    
+    G4UIdirectory*             physDir;        
     G4UIcmdWithADoubleAndUnit* gammaCutCmd;
     G4UIcmdWithADoubleAndUnit* electCutCmd;
     G4UIcmdWithADoubleAndUnit* protoCutCmd;    

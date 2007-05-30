@@ -56,7 +56,7 @@ PhysicsListMessenger::~PhysicsListMessenger()
   delete protoCutCmd;
   delete allCutCmd;
   delete pListCmd;
-  delete physDir;      
+  delete physDir;    
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

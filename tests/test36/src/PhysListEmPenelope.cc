@@ -56,7 +56,7 @@ void PhysListEmPenelope::ConstructProcess()
       pmanager->AddProcess(new G4PenelopeBremsstrahlung, -1,-1, 3);      
       pmanager->AddProcess(new G4PenelopeAnnihilation,    0,-1, 4);
       
-    } 
+    }
   }
 }
 

@@ -2,43 +2,30 @@
 #include "PhysicsListMessenger.hh"
 
 #include "PhysListEmStandard.hh"
+#include "PhysListEmStandardSS.hh"
+
 #include "PhysListEmLivermore.hh"
 #include "PhysListEmPenelope.hh"
 
-#include "G4EmStandardPhysics.hh"
-#include "G4EmStandardPhysics_option1.hh"
-#include "G4EmStandardPhysics_option2.hh"
-
 #include "G4LossTableManager.hh"
 #include "G4UnitsTable.hh"
-
-// Bosons
-#include "G4Gamma.hh"
-
-// leptons
-#include "G4Electron.hh"
-#include "G4Positron.hh"
-
-#include "G4ProcessManager.hh"
-#include "G4Decay.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsList::PhysicsList() : G4VModularPhysicsList()
 {
   G4LossTableManager::Instance();
-  currentDefaultCut   = 1.0*mm;
-  cutForGamma         = currentDefaultCut;
-  cutForElectron      = currentDefaultCut;
-  cutForPositron      = currentDefaultCut;
+  defaultCutValue = 1.*mm;
+  cutForGamma     = defaultCutValue;
+  cutForElectron  = defaultCutValue;
+  cutForPositron  = defaultCutValue;
 
   pMessenger = new PhysicsListMessenger(this);
 
   SetVerboseLevel(1);
 
   // EM physics
-  emName = G4String("standard");
-  emPhysicsList = new PhysListEmStandard(emName);
+  emPhysicsList = new PhysListEmStandard(emName = "standard");
 
 }
 
@@ -47,9 +34,21 @@ PhysicsList::PhysicsList() : G4VModularPhysicsList()
 PhysicsList::~PhysicsList()
 {
   delete pMessenger;
+  delete emPhysicsList;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+// Bosons
+#include "G4Gamma.hh"
+
+// leptons
+#include "G4Electron.hh"
+#include "G4Positron.hh"
+
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void PhysicsList::ConstructParticle()
 {
 // gamma
@@ -62,44 +61,29 @@ void PhysicsList::ConstructParticle()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+#include "G4ProcessManager.hh"
+
 void PhysicsList::ConstructProcess()
 {
+  // transportation
+  //
   AddTransportation();
-
-  // electromagnetic Physics List
+  
+  // electromagnetic physics list
   //
   emPhysicsList->ConstructProcess();
-
-  // Add Decay Process
+  
+  // decay process
   //
-  G4Decay* fDecayProcess = new G4Decay();
+  AddDecay();
 
-  theParticleIterator->reset();
-  while( (*theParticleIterator)() ){
-    G4ParticleDefinition* particle = theParticleIterator->value();
-    G4ProcessManager* pmanager = particle->GetProcessManager();
-
-    if (fDecayProcess->IsApplicable(*particle)) { 
-
-      pmanager ->AddProcess(fDecayProcess);
-
-      // set ordering for PostStepDoIt and AtRestDoIt
-      pmanager ->SetProcessOrdering(fDecayProcess, idxPostStep);
-      pmanager ->SetProcessOrdering(fDecayProcess, idxAtRest);
-
-    }
-  }
-    
-  // stepLimitation (as a full process)
-  //
-  AddStepMax();  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PhysicsList::AddPhysicsList(const G4String& name)
 {
-  if (verboseLevel>1) {
+  if (verboseLevel>-1) {
     G4cout << "PhysicsList::AddPhysicsList: <" << name << ">" << G4endl;
   }
 
@@ -111,36 +95,24 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     delete emPhysicsList;
     emPhysicsList = new PhysListEmStandard(name);
 
-  } else if (name == "emstandard") {
+  } else if (name == "standardSS") {
 
     emName = name;
     delete emPhysicsList;
-    emPhysicsList = new G4EmStandardPhysics();
-
-  } else if (name == "emstandard_opt1") {
-
-    emName = name;
-    delete emPhysicsList;
-    emPhysicsList = new G4EmStandardPhysics_option1();
-
-  } else if (name == "emstandard_opt2") {
-
-    emName = name;
-    delete emPhysicsList;
-    emPhysicsList = new G4EmStandardPhysics_option2();
+    emPhysicsList = new PhysListEmStandardSS(name);
 
   } else if (name == "livermore") {
 
     emName = name;
     delete emPhysicsList;
     emPhysicsList = new PhysListEmLivermore(name);
-
+    
   } else if (name == "penelope") {
 
     emName = name;
     delete emPhysicsList;
     emPhysicsList = new PhysListEmPenelope(name);
-
+        
   } else {
 
     G4cout << "PhysicsList::AddPhysicsList: <" << name << ">"
@@ -151,49 +123,57 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "StepMax.hh"
+#include "G4Decay.hh"
 
-void PhysicsList::AddStepMax()
+void PhysicsList::AddDecay()
 {
-  // Step limitation seen as a process
-  stepMaxProcess = new StepMax();
+  // decay process
+  //
+  G4Decay* fDecayProcess = new G4Decay();
 
   theParticleIterator->reset();
-  while ((*theParticleIterator)()){
-      G4ParticleDefinition* particle = theParticleIterator->value();
-      G4ProcessManager* pmanager = particle->GetProcessManager();
+  while( (*theParticleIterator)() ){
+    G4ParticleDefinition* particle = theParticleIterator->value();
+    G4ProcessManager* pmanager = particle->GetProcessManager();
 
-      if (stepMaxProcess->IsApplicable(*particle))
-        {
-	  pmanager ->AddDiscreteProcess(stepMaxProcess);
-        }
+    if (fDecayProcess->IsApplicable(*particle) && !particle->IsShortLived()) { 
+
+      pmanager ->AddProcess(fDecayProcess);
+
+      // set ordering for PostStepDoIt and AtRestDoIt
+      pmanager ->SetProcessOrdering(fDecayProcess, idxPostStep);
+      pmanager ->SetProcessOrdering(fDecayProcess, idxAtRest);
+
+    }
   }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void PhysicsList::SetCuts()
-{
-     
-  if (verboseLevel >0){
-    G4cout << "PhysicsList::SetCuts:";
-    G4cout << "CutLength : " << G4BestUnit(defaultCutValue,"Length") << G4endl;
-  }  
-
-  // set cut values for gamma at first and for e- second and next for e+,
-  // because some processes for e+/e- need cut values for gamma
-  SetCutValue(cutForGamma, "gamma");
-  SetCutValue(cutForElectron, "e-");
-  SetCutValue(cutForPositron, "e+");   
-    
-  if (verboseLevel>0) DumpCutValuesTable();
-}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4Gamma.hh"
 #include "G4Electron.hh"
 #include "G4Positron.hh"
+
+void PhysicsList::SetCuts()
+{
+
+  if (verboseLevel >0){
+    G4cout << "PhysicsList::SetCuts:";
+    G4cout << "CutLength : " << G4BestUnit(defaultCutValue,"Length") << G4endl;
+  }
+
+  // set cut values for gamma at first and for e- second and next for e+,
+  // because some processes for e+/e- need cut values for gamma
+  SetCutValue(cutForGamma, "gamma");
+  SetCutValue(cutForElectron, "e-");
+  SetCutValue(cutForPositron, "e+");
+
+  if (verboseLevel>0) DumpCutValuesTable();
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PhysicsList::SetCutForGamma(G4double cut)
 {

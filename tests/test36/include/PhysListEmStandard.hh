@@ -10,7 +10,7 @@ class PhysListEmStandard : public G4VPhysicsConstructor
 {
   public: 
     PhysListEmStandard(const G4String& name = "standard");
-    ~PhysListEmStandard();
+   ~PhysListEmStandard();
 
   public: 
     // This method is dummy for physics

@@ -1,3 +1,4 @@
+
 #ifndef PhysicsList_h
 #define PhysicsList_h 1
 
@@ -6,7 +7,6 @@
 
 class StepMax;
 class PhysicsListMessenger;
-class G4VPhysicsConstructor;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -17,26 +17,25 @@ class PhysicsList: public G4VModularPhysicsList
    ~PhysicsList();
 
     void ConstructParticle();
-    void ConstructProcess();
-    
-    void AddPhysicsList(const G4String& name);
-    void AddStepMax();
     
     void SetCuts();
     void SetCutForGamma(G4double);
     void SetCutForElectron(G4double);
-    void SetCutForPositron(G4double);
+    void SetCutForPositron(G4double);        
+        
+    void AddPhysicsList(const G4String& name);
+    void ConstructProcess();
+    
+    void AddDecay();
+    void AddStepMax();       
 
   private:
     G4double cutForGamma;
     G4double cutForElectron;
     G4double cutForPositron;
-    G4double currentDefaultCut;
-    
-    G4VPhysicsConstructor*  emPhysicsList;
-    G4String emName;
-    
-    StepMax* stepMaxProcess;
+       
+    G4String                             emName;
+    G4VPhysicsConstructor*               emPhysicsList;    
     
     PhysicsListMessenger* pMessenger;
 };
