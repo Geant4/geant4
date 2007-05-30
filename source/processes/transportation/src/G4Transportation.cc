@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Transportation.cc,v 1.68 2007-05-29 19:53:47 japost Exp $
+// $Id: G4Transportation.cc,v 1.69 2007-05-30 15:32:29 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // ------------------------------------------------------------
@@ -165,15 +165,6 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
   G4ThreeVector startPosition          = track.GetPosition() ;
 
   // G4double   theTime        = track.GetGlobalTime() ;
-
-  // #define G4DEBUG_TRANSPORT 1
-#ifdef G4DEBUG_TRANSPORT 
-  G4int prc=G4cout.precision(8); 
-  G4cout << " Previous Safety: origin = " << fPreviousSftOrigin 
-	 << " val= " << fPreviousSafety << G4endl;
-  G4cout.precision(prc);
-#endif
-
 
   // The Step Point safety can be limited by other geometries and/or the 
   // assumptions of any process - it's not always the geometrical safety.
@@ -319,11 +310,6 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
            geometryStepLength   = currentMinimumStep ;
            fGeometryLimitedStep = false ;
         }
-	//G4cout << "Transport: fieldPropagator returned safety= " << currentSafety 
-	//       << " at " << startPosition << G4endl;
-	// int prc= G4cout.precision(9);  
-	// G4cout << "Tr: PiF gave safety= " << currentSafety << " at " << startPosition << G4endl;
-	// G4cout.precision(prc); 
      }
      else
      {
@@ -433,13 +419,6 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
       if( currentSafety == 0.0 )  fGeometryLimitedStep = true ;
   }
 
-#ifdef G4DEBUG_TRANSPORT 
-  G4int prc2=G4cout.precision(9); 
-  G4cout << " Check for EndSafety <= 0.0 : start " << currentSafety 
-	 << " end-dist " << endpointDistance << G4endl;
-  G4cout.precision(prc2); 
-#endif
-
   // Update the safety starting from the end-point,
   // if it will become negative at the end-point.
   //
@@ -513,6 +492,7 @@ G4VParticleChange* G4Transportation::AlongStepDoIt( const G4Track& track,
      G4double initialVelocity = stepData.GetPreStepPoint()->GetVelocity() ;
      G4double stepLength      = track.GetStepLength() ;
 
+     deltaTime= 0.0;  // in case initialVelocity = 0 
      const G4DynamicParticle* fpDynamicParticle = track.GetDynamicParticle();
      if (fpDynamicParticle->GetDefinition()== fOpticalPhoton)
      {
@@ -528,7 +508,7 @@ G4VParticleChange* G4Transportation::AlongStepDoIt( const G4Track& track,
                             * ( 1.0 / initialVelocity + 1.0 / finalVelocity ) ;
         deltaTime = stepLength * meanInverseVelocity ;
      }
-     else
+     else if( initialVelocity > 0.0 )
      {
         deltaTime = stepLength/initialVelocity ;
      }
@@ -660,12 +640,6 @@ G4VParticleChange* G4Transportation::PostStepDoIt( const G4Track& track,
     }
     retCurrentTouchable = fCurrentTouchableHandle ;
     fParticleChange.SetTouchableHandle( fCurrentTouchableHandle ) ;
-
-    // Notify particle change that this is last step in volume
-    fParticleChange.ProposeLastStepInVolume(true);
-    // Double check that a boundary limited the step, and 
-    // if( fLinearNavigator->Get
-
   }
   else                 // fGeometryLimitedStep  is false
   {                    
@@ -680,9 +654,6 @@ G4VParticleChange* G4Transportation::PostStepDoIt( const G4Track& track,
     //
     fParticleChange.SetTouchableHandle( track.GetTouchableHandle() ) ;
     retCurrentTouchable = track.GetTouchableHandle() ;
-
-    // Have not reached a boundary
-    fParticleChange.ProposeLastStepInVolume(false);
   }         // endif ( fGeometryLimitedStep ) 
 
   const G4VPhysicalVolume* pNewVol = retCurrentTouchable->GetVolume() ;
