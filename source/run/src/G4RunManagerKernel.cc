@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManagerKernel.cc,v 1.40 2007-05-21 16:30:18 asaim Exp $
+// $Id: G4RunManagerKernel.cc,v 1.41 2007-05-30 00:42:09 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -262,6 +262,7 @@ void G4RunManagerKernel::InitializePhysics()
   //physicsList->ConstructParticle();
 
   if(verboseLevel>1) G4cout << "physicsList->Construct() start." << G4endl;
+  if(numberOfParallelWorld>0) physicsList->UseCoupledTransportation();
   physicsList->Construct();
 
   if(verboseLevel>1) G4cout << "physicsList->setCut() start." << G4endl;
@@ -304,6 +305,12 @@ G4bool G4RunManagerKernel::RunInitialization()
     return false;
   }
 
+  if(numberOfParallelWorld>0)
+  { // Confirm G4CoupledTransportation is used 
+    if(!ConfirmCoupledTransportation())
+    { G4Exception("G4CoupledTransportation must be used for parallel world."); }
+  }
+    
   UpdateRegion();
   BuildPhysicsTables();
 
@@ -476,3 +483,25 @@ void G4RunManagerKernel::DumpRegion(G4Region* region) const
            << G4endl;
   }
 }
+
+#include "G4ParticleTable.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4ProcessManager.hh"
+#include "G4ProcessVector.hh"
+#include "G4VProcess.hh"
+G4bool G4RunManagerKernel::ConfirmCoupledTransportation()
+{
+  G4ParticleTable* theParticleTable = G4ParticleTable::GetParticleTable();
+  G4ParticleTable::G4PTblDicIterator* theParticleIterator = theParticleTable->GetIterator();
+  theParticleIterator->reset();
+  if((*theParticleIterator)())
+  {
+    G4ParticleDefinition* pd = theParticleIterator->value();
+    G4ProcessManager* pm = pd->GetProcessManager();
+    G4ProcessVector* pv = pm->GetAlongStepProcessVector(typeDoIt);
+    G4VProcess* p = (*pv)[0];
+    return ( (p->GetProcessName()) == "CoupledTransportation" );
+  }
+  return false;
+}
+

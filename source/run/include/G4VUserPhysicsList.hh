@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserPhysicsList.hh,v 1.33 2007-05-07 16:36:34 asaim Exp $
+// $Id: G4VUserPhysicsList.hh,v 1.34 2007-05-30 00:42:09 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -303,6 +303,13 @@ class G4VUserPhysicsList
    // This is for testing purpose.
    inline void UseG4Transportation8()
    { useG4Transportation8 = true; }
+
+  private:
+   G4bool useCoupledTransportation;
+    
+  public:
+   inline void UseCoupledTransportation(G4bool vl=true)
+   { useCoupledTransportation = vl; }
 
 ////////////////////////////////////////////////////////////////////////////
 // Following method is for backward compatibility and removed soon

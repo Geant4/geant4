@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManagerKernel.hh,v 1.8 2007-05-07 16:36:34 asaim Exp $
+// $Id: G4RunManagerKernel.hh,v 1.9 2007-05-30 00:42:09 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -188,6 +188,9 @@ class G4RunManagerKernel
     { return numberOfParallelWorld; }
     inline void SetNumberOfParallelWorld(G4int i)
     { numberOfParallelWorld = i; }
+
+  private:
+    G4bool ConfirmCoupledTransportation();
 };
 
 #endif
