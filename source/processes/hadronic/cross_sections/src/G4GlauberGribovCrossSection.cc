@@ -1111,7 +1111,7 @@ G4double
 G4GlauberGribovCrossSection::GetHadronNucleonXscMK(const G4DynamicParticle* aParticle, 
                                           const G4ParticleDefinition* nucleon  )
 {
-  G4int I = 0;
+  G4int I = -1;
   G4int PDG = aParticle->GetDefinition()->GetPDGEncoding();
   G4double totalXsc = 0;
   G4double elasticXsc = 0;

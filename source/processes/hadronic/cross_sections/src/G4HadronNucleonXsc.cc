@@ -891,7 +891,8 @@ G4double
 G4HadronNucleonXsc::GetHadronNucleonXscMK(const G4DynamicParticle* aParticle, 
                                           const G4ParticleDefinition* nucleon  )
 {
-  G4int I, PDG = aParticle->GetDefinition()->GetPDGEncoding();
+  G4int I = -1;
+  G4int PDG = aParticle->GetDefinition()->GetPDGEncoding();
 
   // G4int absPDG = std::abs(PDG);
 
