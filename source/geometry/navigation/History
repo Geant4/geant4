@@ -1,4 +1,4 @@
-$Id: History,v 1.92 2007-05-24 12:38:46 japost Exp $
+$Id: History,v 1.93 2007-05-30 00:30:51 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,18 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+May 9th, 2007 - J.Apostolakis (geomnav-V08-03-06)   
+------------------------------
+G4Navigator
+  - Fixed **ComputeSafety**: wrong coordinates used (last tag only). 
+      For certainty reinstated LocateGlobalPointWithinVolume (for now).
+  - Corrected calculation of fStepEndPoint (in ComputeStep)
+      for case of step not limited by geometry
+G4PathFinder
+  - PrepareNewTrack: calls to re-initialise SafetyHelper (reset safety)
+  - ReLocate:  Corrected check of move (avoid one side effect on stored safety)
+                --> ComputeSafety still results individual navigators' values
+
 May 24th, 2007 - J.Apostolakis (geomnav-V08-03-05)
 ------------------------------
 G4PathFinder: 1 correction and 2 optimisations:
