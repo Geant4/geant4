@@ -31,7 +31,7 @@
 #include <sstream>
 #include <stdlib.h>
 #include "G4HadronicProcess.hh"
-#include "G4EffectiveCharge.hh"
+// #include "G4EffectiveCharge.hh"
 #include "G4HadProjectile.hh"
 #include "G4ElementVector.hh"
 #include "G4Track.hh"
@@ -333,6 +333,7 @@ const G4Track &aTrack, const G4Step &)
 
   result->SetTrafoToLab(thePro.GetTrafoToLab());
 
+  /*
   // Loop over charged ion secondaries
 
   for(G4int i=0; i<result->GetNumberOfSecondaries(); i++)
@@ -354,7 +355,8 @@ const G4Track &aTrack, const G4Step &)
       aSecTrack->SetCharge(charge);
     }
   }
-  
+  */
+
   if(getenv("HadronicDoitLogging") )
   {
     G4cout << "HadronicDoitLogging "
@@ -601,7 +603,7 @@ G4HadronicProcess::FillTotalResult(G4HadFinalState * aR, const G4Track & aT)
      && aR->GetStatusChange()==isAlive
     )
   {
-    G4double newWeight = theTotalResult->GetParentWeight();
+    // Use for debugging:   G4double newWeight = theTotalResult->GetParentWeight();
     G4double newM=aT.GetDefinition()->GetPDGMass();
     G4double newE=aR->GetEnergyChange() + newM;
     G4double newP=std::sqrt(newE*newE - newM*newM);
