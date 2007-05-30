@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PathFinder.cc,v 1.42 2007-05-29 21:04:08 japost Exp $
+// $Id: G4PathFinder.cc,v 1.43 2007-05-30 16:01:00 japost Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4PathFinder Implementation
@@ -500,20 +500,22 @@ G4PathFinder::ReLocate( const   G4ThreeVector& position )
   G4double revisedSafety= 0.0; 
   if( (!fNewTrack) && ( longMoveEnd && longMoveSaf ) ){  
        // Used to use ( longMoveEnd || longMoveSaf ) for extra checking
-     G4double       LastSafetyValue;      // Copy to keep last value - and restore
-     G4ThreeVector  LastSafetyLocation; 
+     // G4double       LastSafetyValue;    
+     G4ThreeVector  LastSafetyLocation;   // Copy to keep last value - and restore
 
+     // G4cout << "  G4PathFinder::Relocate: Potential problem with relocation " << G4endl;
      // G4cout << "  --> last ComputeSafety Location was " << fSafetyLocation << G4endl;
      // G4cout << "       safety value =  " << fMinSafety_atSafLocation << G4endl;
  
      LastSafetyLocation= fSafetyLocation; 
-     LastSafetyValue= fMinSafety_atSafLocation; 
+     // LastSafetyValue= fMinSafety_atSafLocation; 
 
      // Recompute ComputeSafety for end position
      revisedSafety= ComputeSafety(lastEndPosition); 
+     // G4cout << "       safety value (new) =  " << revisedSafety << G4endl;
 
-     fSafetyLocation= LastSafetyLocation;
-     fMinSafety_atSafLocation= LastSafetyValue; 
+     // Reset the state of last call to ComputeSafety
+     ComputeSafety( LastSafetyLocation ); 
 
      G4double  distCheckRevisedEnd= 
          ( moveLenEndPosSq - revisedSafety * revisedSafety ); 
