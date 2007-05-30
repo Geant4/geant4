@@ -1,4 +1,4 @@
-$Id: History,v 1.256 2007-05-25 20:19:25 pia Exp $
+$Id: History,v 1.257 2007-05-30 19:26:27 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+30.05.2007   MGP, tag emlowen-V08-03-02
+             Removed from CVS unused class G4LowEnergyBraggModel,
+             which introduced never agreed dependency on standard
+             G4VreEmModel
+             Attempt to fix issue identified by VALGRIND related to
+             PIXE model
 
 25.05.2007   MGP, tag emlowen-V08-03-01
              Initialized static variables in G4hLowEnergyLoss;

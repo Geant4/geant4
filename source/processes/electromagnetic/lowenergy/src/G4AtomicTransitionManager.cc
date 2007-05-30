@@ -36,9 +36,9 @@
 //
 // -------------------------------------------------------------------
 
-G4AtomicTransitionManager* G4AtomicTransitionManager::instance = 0;
-
 #include "G4AtomicTransitionManager.hh"
+
+G4AtomicTransitionManager* G4AtomicTransitionManager::instance = 0;
 
 G4AtomicTransitionManager::G4AtomicTransitionManager(G4int minZ, G4int maxZ, 
   G4int limitInfTable,G4int limitSupTable)
