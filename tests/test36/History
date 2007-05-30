@@ -14,5 +14,8 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+30-05-07  V.Ivanchenko (test36-V08-03-01)
+- fixed problem of CVS
+
 25-05-07  V.Ivanchenko (test36-V08-03-00)
 - first commit
