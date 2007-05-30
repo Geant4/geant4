@@ -1,4 +1,4 @@
-$Id: History,v 1.2 2007-05-25 19:15:19 tinslay Exp $
+$Id: History,v 1.3 2007-05-30 17:30:09 ahoward Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,9 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-March 21st, 2007  G.Cosmo
-- Module and history file created.
+May 30th, 2007 Alex Howard (procbiasing-V08-03-00)
+- migrated classes and tests from processes/scoring
 
 May 25th, 2007 Jane Tinslay
 - Add tests for physics biasing under test/physics_biasing
+
+March 21st, 2007  G.Cosmo
+- Module and history file created.
+
 
