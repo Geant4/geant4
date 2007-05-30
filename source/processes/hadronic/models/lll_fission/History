@@ -14,6 +14,17 @@ code and to keep track of all tags.
     * Please list in reverse chronological order (last date on top)
     ---------------------------------------------------------------
 
+30 May 2007 Dennis Wright (hadr-lllfis-V08-03-03)
+-------------------------------------------------
+- fixed compiler warnings: 
+  control reaches end of function:
+    G4SmpGEng.cc, G4SmpNEngCf252.cc, G4SmpNuDistDataU235.cc, 
+    G4SmpNugDist.cc
+  unused parameter: G4SmpPVel.cc
+  un-initialized array: G4SmpNuDistDataU235.cc, G4SmpNuDistDataU238.cc
+  missing braces in array initialization: G4SmpSpNuDistData.cc,
+    G4SmpWatt.cc
+
 29 May 2007 Dennis Wright (hadr-lllfis-V08-03-02)
 -------------------------------------------------
 - Changed all file names to start with G4, changed int, float
