@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.cc,v 1.35 2007-05-29 20:30:05 japost Exp $
+// $Id: G4Navigator.cc,v 1.36 2007-05-30 00:23:52 japost Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4Navigator Implementation
@@ -118,8 +118,10 @@ G4Navigator::LocateGlobalPointAndSetup( const G4ThreeVector& globalPoint,
   }
 
 #ifdef G4DEBUG_NAVIGATION
-  G4cerr << "Upon entering LocateGlobalPointAndSetup():" << G4endl;
-  G4cerr << "    History = " << G4endl << fHistory << G4endl << G4endl;
+  if( fVerbose > 2 ){
+    G4cout << "Upon entering LocateGlobalPointAndSetup():" << G4endl;
+    G4cout << "    History = " << G4endl << fHistory << G4endl << G4endl;
+  }
 #endif
 
 #ifdef G4VERBOSE
@@ -928,8 +930,8 @@ G4double G4Navigator::ComputeStep( const G4ThreeVector &pGlobalpoint,
       }
     }
 #ifdef G4DEBUG_NAVIGATION
-    if( fVerbose > 2 )
-      G4cout << " fGrandMotherExitNormal= " << fGrandMotherExitNormal << G4endl;
+    // if( fVerbose > 3 )
+    // G4cout << " fGrandMotherExitNormal= " << fGrandMotherExitNormal << G4endl;
 #endif
   }
   fStepEndPoint= pGlobalpoint+Step*pDirection; 
@@ -1151,9 +1153,14 @@ G4double G4Navigator::ComputeSafety( const G4ThreeVector &pGlobalpoint,
   {
     // Pseudo-relocate to this point (updates voxel information only)
     //
-    //  LocateGlobalPointWithinVolume( pGlobalpoint ); 
-    //      ------>> Dangerous <<----------
-    //      Replaced by calls 
+    LocateGlobalPointWithinVolume( pGlobalpoint ); 
+    //      ----->> Danger: Side effects on sub-navigator voxel information <<--------
+    //      Could be replaced again by 'granular' calls to sub-navigator locates
+    //       (similar side-effects, but faster.  
+    //      Solutions: 
+    //        1) Re-locate (to where?)
+    //        2) Insure that the methods using (G4ComputeStep?) does a relocation 
+    //               (if information is disturbed only ?)
 
 #ifdef G4DEBUG_NAVIGATION
     if( fVerbose >= 2 ) {
@@ -1173,10 +1180,11 @@ G4double G4Navigator::ComputeSafety( const G4ThreeVector &pGlobalpoint,
         case kNormal:
           if ( pVoxelHeader )
           {
-	     fvoxelNav.VoxelLocate( pVoxelHeader, pGlobalpoint );
+  	    // fvoxelNav.VoxelLocate( pVoxelHeader, localPoint );
 	     newSafety=fvoxelNav.ComputeSafety(localPoint,fHistory,pMaxLength);
 	     // if( !stayedOnEndpoint) 
-	     fvoxelNav.VoxelLocate( pVoxelHeader, fLastLocatedPointLocal );
+	     //  fvoxelNav.VoxelLocate( pVoxelHeader, fLastLocatedPointLocal );
+	     //  fvoxelNav.VoxelLocate( pVoxelHeader, fStepEndPoint );
           }
           else
           {
@@ -1184,10 +1192,11 @@ G4double G4Navigator::ComputeSafety( const G4ThreeVector &pGlobalpoint,
           }
           break;
         case kParameterised:
-	  fparamNav.ParamVoxelLocate( pVoxelHeader, pGlobalpoint );
+	  // fparamNav.ParamVoxelLocate( pVoxelHeader, localPoint );
 	  newSafety = fparamNav.ComputeSafety(localPoint,fHistory,pMaxLength);
 	  // if( !stayedOnEndpoint) 
-	  fparamNav.ParamVoxelLocate( pVoxelHeader, fLastLocatedPointLocal );
+	  //  fparamNav.ParamVoxelLocate( pVoxelHeader, fLastLocatedPointLocal );
+	  //  fparamNav.ParamVoxelLocate( pVoxelHeader, fStepEndPoint );
           break;
         case kReplica:
           G4Exception("G4Navigator::ComputeSafety()", "NotApplicable",
@@ -1203,7 +1212,6 @@ G4double G4Navigator::ComputeSafety( const G4ThreeVector &pGlobalpoint,
   }
   else // if( endpointOnSurface && stayedOnEndpoint )
   {
-    // Already have newSafety = 0.0; 
 #ifdef G4DEBUG_NAVIGATION
     if( fVerbose >= 2 ) {
       G4cout << "    G4Navigator::ComputeSafety() finds that point - " 
@@ -1214,6 +1222,7 @@ G4double G4Navigator::ComputeSafety( const G4ThreeVector &pGlobalpoint,
       G4cout << " EndPoint was = " << fStepEndPoint << G4endl;
     } 
 #endif
+    newSafety = 0.0; 
   }
 
   // Remember last safety origin & value
