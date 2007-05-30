@@ -53,7 +53,7 @@
 // UCRL-CODE-224807
 //
 //
-// $Id: G4SmpNuDistDataU235.cc,v 1.1 2007-05-30 01:10:28 dennis Exp $
+// $Id: G4SmpNuDistDataU235.cc,v 1.2 2007-05-30 19:01:32 dennis Exp $
 //
 
 #include <math.h>
@@ -84,7 +84,8 @@ G4int G4fissionEvent::G4SmpNuDistDataU235(G4double erg, G4int option) {
     
 */
  
-  G4double pnu[7], cpnu;
+  G4double cpnu;
+  G4double pnu[] = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
   G4double eng;
   G4double r;
 
@@ -184,4 +185,11 @@ G4int G4fissionEvent::G4SmpNuDistDataU235(G4double erg, G4int option) {
      if (r <= cpnu) return 6;
      else return 7;
   }
+  //
+  // Fall through
+  //
+
+  G4cout << " SmpNuDistDataU235: unrecognized option = " << option << G4endl;
+  return -1;
+
 }

@@ -53,7 +53,7 @@
 // UCRL-CODE-224807
 //
 //
-// $Id: G4SmpNugDist.cc,v 1.1 2007-05-30 01:07:04 dennis Exp $
+// $Id: G4SmpNugDist.cc,v 1.2 2007-05-30 19:01:32 dennis Exp $
 //
 
 #include <math.h>
@@ -143,4 +143,12 @@ G4int G4fissionEvent::G4SmpNugDist(G4int isotope, G4double nubar) {
   r=fisslibrng();
 
   for(i=0; i<=nfissg; i++) if (r <= cpi[i]) return i;
+
+  //
+  // Fall through
+  //
+
+  G4cout << " SmpNugDist: random number " << r << " out of range " << G4endl;
+  return -1;
+
 }

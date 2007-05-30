@@ -53,7 +53,7 @@
 // UCRL-CODE-224807
 //
 //
-// $Id: G4SmpNuDistDataU238.cc,v 1.1 2007-05-30 01:08:35 dennis Exp $
+// $Id: G4SmpNuDistDataU238.cc,v 1.2 2007-05-30 19:01:32 dennis Exp $
 //
 
 #include <math.h>
@@ -75,7 +75,8 @@ G4int G4fissionEvent::G4SmpNuDistDataU238(G4double erg) {
     
 */
  
-  G4double pnu[8], cpnu;
+  G4double cpnu;
+  G4double pnu[] = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
   G4double eng;
   G4double r;
 

@@ -53,7 +53,7 @@
 // UCRL-CODE-224807
 //
 //
-// $Id: G4SmpNEngCf252.cc,v 1.1 2007-05-30 03:52:09 dennis Exp $
+// $Id: G4SmpNEngCf252.cc,v 1.2 2007-05-30 19:01:32 dennis Exp $
 //
 
 #include <math.h>
@@ -176,4 +176,11 @@ G4double G4fissionEvent::G4SmpNEngCf252(G4int option) {
      } while (pow((1-g)*(1+g2)-log(fisslibrng()),2.) > b*erg);
      return erg;
   }
+
+  //
+  // Fall through
+  //
+   
+  G4cout << " SmpNEngCf252: unrecognized option = " << option << G4endl;
+  return -1.0;
 }
