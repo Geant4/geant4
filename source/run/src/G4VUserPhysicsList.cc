@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserPhysicsList.cc,v 1.60 2007-05-30 00:42:09 asaim Exp $
+// $Id: G4VUserPhysicsList.cc,v 1.61 2007-05-30 10:16:28 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -74,7 +74,6 @@ G4VUserPhysicsList::G4VUserPhysicsList()
 		    fIsRestoredCutValues(false),
                     directoryPhysicsTable("."),
                     fDisplayThreshold(0),
-                    useG4Transportation8(false),
                     useCoupledTransportation(false)
 {
   // default cut value  (1.0mm)
@@ -222,7 +221,6 @@ void G4VUserPhysicsList::RemoveProcessManager()
 
 ////////////////////////////////////////////////////////
 #include "G4Transportation.hh"
-#include "G4Transportation8.hh"
 #include "G4CoupledTransportation.hh"
 #include "G4RunManagerKernel.hh"
 
@@ -232,31 +230,16 @@ void G4VUserPhysicsList::AddTransportation()
   G4VProcess* theTransportationProcess = 0;
   G4int nParaWorld = G4RunManagerKernel::GetRunManagerKernel()->GetNumberOfParallelWorld();
 
-  if(useG4Transportation8)
-  {
-    if(nParaWorld)
-    { G4Exception("Old G4Transportation8 is requested though the is a parallel world."); }
-    else
-    {
-      theTransportationProcess = new G4Transportation8(verboseLevelTransport);
-      G4cout << "###########################################################################" << G4endl
-             << " G4VUserPhysicsList::AddTransportation() --- Old G4Transportation8 is used " << G4endl
-             << "###########################################################################" << G4endl;
-    }
-  }
-  else
-  {
-    if(nParaWorld)
+  if(nParaWorld || useCoupledTransportation)
     {
       theTransportationProcess = new G4CoupledTransportation(verboseLevelTransport);
       G4cout << "#############################################################################" << G4endl
              << " G4VUserPhysicsList::AddTransportation() --- G4CoupledTransportation is used " << G4endl
              << "#############################################################################" << G4endl;
     }
-    else
+  else
     { theTransportationProcess = new G4Transportation(verboseLevelTransport); }
-  }
-
+ 
 #ifdef G4VERBOSE
     if (verboseLevel >2){
       G4cout << "G4VUserPhysicsList::AddTransportation()  "<< G4endl;

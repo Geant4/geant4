@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserPhysicsList.hh,v 1.34 2007-05-30 00:42:09 asaim Exp $
+// $Id: G4VUserPhysicsList.hh,v 1.35 2007-05-30 10:16:27 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -295,14 +295,6 @@ class G4VUserPhysicsList
   private:
    enum { FixedStringLengthForStore = 32 }; 
 
-  protected:
-   G4bool useG4Transportation8;
-
-  public: // with description
-   // Use the old transportation process (parallel world is not allowed)
-   // This is for testing purpose.
-   inline void UseG4Transportation8()
-   { useG4Transportation8 = true; }
 
   private:
    G4bool useCoupledTransportation;
