@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeModel.cc,v 1.61 2007-05-22 17:13:19 allison Exp $
+// $Id: G4PhysicalVolumeModel.cc,v 1.62 2007-05-30 07:58:19 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -754,11 +754,10 @@ std::vector<G4AttValue>* G4PhysicalVolumeModel::CreateCurrentAttValues() const
 {
   std::vector<G4AttValue>* values = new std::vector<G4AttValue>;
   std::ostringstream oss;
-  std::vector<G4PhysicalVolumeNodeID>::const_iterator i;
-  for (i = fFullPVPath.begin(); i != fFullPVPath.end(); ++i) {
-    oss << i->GetPhysicalVolume()->GetName()
-	<< ':' << i->GetCopyNo();
-    if (i != --fFullPVPath.end()) oss << '/';
+  for (size_t i = 0; i < fFullPVPath.size(); ++i) {
+    oss << fFullPVPath[i].GetPhysicalVolume()->GetName()
+	<< ':' << fFullPVPath[i].GetCopyNo();
+    if (i != fFullPVPath.size() - 1) oss << '/';
   }
   values->push_back(G4AttValue("PVPath", oss.str(),""));
   values->push_back(G4AttValue("LVol", fpCurrentLV->GetName(),""));
