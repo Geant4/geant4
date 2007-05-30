@@ -1,4 +1,4 @@
-name := test36
+name := test37
 G4TARGET := $(name)
 G4EXLIB := true
 
