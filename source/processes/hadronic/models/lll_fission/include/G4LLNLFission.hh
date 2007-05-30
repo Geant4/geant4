@@ -52,15 +52,14 @@
 // All rights reserved.
 // UCRL-CODE-224807
 //
-// $Id: G4LLNLFission.hh,v 1.1 2007-05-22 00:47:59 dennis Exp $
+// $Id: G4LLNLFission.hh,v 1.2 2007-05-30 00:43:20 dennis Exp $
 //
 
 //
 // This class is a copy of Fission.hh, made for use with Geant4.
 //
 
-extern "C" {
-  extern void genspfissevt_(int *isotope, double *time);
+  extern void genspfissevt_(G4int *isotope, G4double *time);
 /*
  * This function is called to trigger a spontaneous fission.
  * Multiple neutrons and photons are generated and stored
@@ -71,7 +70,7 @@ extern "C" {
  *      time:           the time of the spontaneous fission
  */
 
-  extern void genfissevt_(int *isotope, double *time, double *nubar, double *eng);
+  extern void genfissevt_(G4int *isotope, G4double *time, G4double *nubar, G4double *eng);
 /*
  * This function is called to trigger a neutron-induced fission.
  * Multiple neutrons and photons are generated and stored
@@ -84,62 +83,62 @@ extern "C" {
  *      eng:            energy of the neutron inducing fission
  */
 
-  extern int getnnu_();
+  extern G4int getnnu_();
 /*
  * This function returns the number of neutrons emitted by the
  * fission, -1 if there is no neutron data for that isotope in 
  * the fission library.
  */
 
-  extern int getpnu_();
+  extern G4int getpnu_();
 /*
  * This function returns the number of photons emitted by the
  * fission, -1 if there is no photon data for that isotope in 
  * the fission library.
  */
 
-  extern double getneng_(int *index);
+  extern G4double getneng_(G4int *index);
 /*
  * Given the index of the emitted neutron, this function returns
  * its energy, -1 if index isout of range.
  */
 
-  extern double getnvel_(int *index);
+  extern G4double getnvel_(G4int *index);
 /*
  * Given the index of the emitted neutron, this function returns
  * the amplitude of its velocity, -1 if index is out of range.
  */
 
-  extern double getndircosu_(int *index);
-  extern double getndircosv_(int *index);
-  extern double getndircosw_(int *index);
+  extern G4double getndircosu_(G4int *index);
+  extern G4double getndircosv_(G4int *index);
+  extern G4double getndircosw_(G4int *index);
 /*
  * Given the index of the emitted neutron, this function returns
  * the direction cosines of its velocity vector on the x, y and z 
  * axes.
  */
 
-  extern double getpeng_(int *index);
+  extern G4double getpeng_(G4int *index);
 /*
  * Given the index of the emitted photon, this function returns
  * its energy, -1 if index is out of range.
  */
 
-  extern double getpvel_(int *index);
+  extern G4double getpvel_(G4int *index);
 /*
  * Given the index of the emitted photon, this function returns
  * the amplitude of its velocity, -1 if index is out of range.
  */
 
-  extern double getpdircosu_(int *index);
-  extern double getpdircosv_(int *index);
-  extern double getpdircosw_(int *index);
+  extern G4double getpdircosu_(G4int *index);
+  extern G4double getpdircosv_(G4int *index);
+  extern G4double getpdircosw_(G4int *index);
 /*
  * Given the index of the emitted photon, this function returns
  * the direction cosines of its velocity.
  */
 
-  extern double getnage_(int *index);
+  extern G4double getnage_(G4int *index);
 /*
  * Given the index of the emitted neutron, this function returns
  * its age, -1 if index is out of range.
@@ -148,7 +147,7 @@ extern "C" {
  * for non-prompt neutrons, i.e. delayed neutrons. 
  */
 
-  extern double getpage_(int *index);
+  extern G4double getpage_(G4int *index);
 /*
  * Given the index of the emitted photon, this function returns
  * its age, -1 of index is out of range.
@@ -158,7 +157,7 @@ extern "C" {
  * fragments.
  */
 
-  extern void setdelay_(int *delay);
+  extern void setdelay_(G4int *delay);
 /*
  * This function is called to enable delayed neutrons and photons
  * Input
@@ -173,7 +172,7 @@ extern "C" {
  *                and delayed photons
  */
 
-  extern void setcorrel_(int *correlation);
+  extern void setcorrel_(G4int *correlation);
 /*
  * This function is called to set the type of neutron photon correlation
  * Input
@@ -186,7 +185,7 @@ extern "C" {
  *                neutrons and photons
  */
 
-  extern void setnudist_(int *nudist);
+  extern void setnudist_(G4int *nudist);
 /*
  * This function is called to set the data to be sampled for the neutron
  * number distributions in induced fissions
@@ -210,7 +209,7 @@ extern "C" {
  */
 
 
-  extern void setcf252_(int *ndist, int *neng);
+  extern void setcf252_(G4int *ndist, G4int *neng);
 /*
  * This function is called to set the data to be sampled for the 
  * (a) Cf252 spontaneous fission number distribution, and 
@@ -229,7 +228,7 @@ extern "C" {
  *                the Froehner Watt spectrum
  */
 
-  extern void setrngf_(float (*funcptr) (void));
+  extern void setrngf_(G4float (*funcptr) (void));
 /*
  * This function sets the random number generator to the user-defined
  * one specified in the argument. If either setrngf_ or setrngd_ are
@@ -237,10 +236,10 @@ extern "C" {
  * Input
  *      funcptr:
  *               a random number generator function that returns a
- *               variable of type float
+ *               variable of type G4float
  */
 
-  extern void setrngd_(double (*funcptr) (void));
+  extern void setrngd_(G4double (*funcptr) (void));
 /*
  * This function sets the random number generator to the user-defined
  * one specified in the argument. If either setrngf_ or setrngd_ are
@@ -248,6 +247,6 @@ extern "C" {
  * Input
  *      funcptr:
  *               a random number generator function that returns a
- *               variable of type double
+ *               variable of type G4double
  */
-}
+// }
