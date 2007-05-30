@@ -10,3 +10,5 @@ pub:	# ::: Make publication.
 
 clean:	# ::: clean directory
 	rm -f \#*.*\# \#*\# \#* .*~ .#* *.*~ *~ *.o; rm -f core tmp.txt *.blg *.bbl *.toc *.log *.aux *.dvi
+physRef:
+	make clean; latex useCascade; bibtex useCascade; latex useCascade; latex useCascade; dvips useCascade.dvi -o useCascade.ps; 
