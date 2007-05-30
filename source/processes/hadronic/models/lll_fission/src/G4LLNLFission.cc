@@ -53,99 +53,99 @@
 // UCRL-CODE-224807
 //
 //
-// $Id: G4LLNLFission.cc,v 1.2 2007-05-29 12:36:48 gcosmo Exp $
+// $Id: G4LLNLFission.cc,v 1.3 2007-05-30 00:52:19 dennis Exp $
 //
 // This class is a copy of Fission.cc, made for use with Geant4.
 //
 
-#include "fissionEvent.hh"
+#include "G4fissionEvent.hh"
 #include <stdio.h>
 #include <stdlib.h>
 
-fissionEvent* fe;
+G4fissionEvent* fe;
 
-extern "C" {
-   extern float (*rngfptr) (void);
 
-   extern double (*rngdptr) (void);
+   extern G4float (*rngfptr) (void);
 
-   extern double rngf2d(void);
+   extern G4double (*rngdptr) (void);
 
-   void genspfissevt_(int *isotope, double *time) {
+   extern G4double rngf2d(void);
+
+   void genspfissevt_(G4int *isotope, G4double *time) {
       if (fe != 0) delete fe;
-      fe = new fissionEvent(*isotope, *time, -1., 0.);
+      fe = new G4fissionEvent(*isotope, *time, -1., 0.);
    }
 
-   void genfissevt_(int *isotope, double *time, double *nubar, double *eng) {
+   void genfissevt_(G4int *isotope, G4double *time, G4double *nubar, G4double *eng) {
       if (fe != 0) delete fe;
-      fe = new fissionEvent(*isotope, *time, *nubar, *eng);
+      fe = new G4fissionEvent(*isotope, *time, *nubar, *eng);
    }
 
-   int getnnu_() {
+   G4int getnnu_() {
       return (*fe).getNeutronNu();
    }
 
-   int getpnu_() {
+   G4int getpnu_() {
       return (*fe).getPhotonNu();
    }
 
-   double getneng_(int *index) {
+   G4double getneng_(G4int *index) {
       return (*fe).getNeutronEnergy(*index);
    }
 
-   double getnvel_(int *index) {
+   G4double getnvel_(G4int *index) {
       return (*fe).getNeutronVelocity(*index);
    }
 
-   double getndircosu_(int *index) {
+   G4double getndircosu_(G4int *index) {
       return (*fe).getNeutronDircosu(*index);
    }
 
-   double getndircosv_(int *index) {
+   G4double getndircosv_(G4int *index) {
       return (*fe).getNeutronDircosv(*index);
    }
 
-   double getndircosw_(int *index) {
+   G4double getndircosw_(G4int *index) {
       return (*fe).getNeutronDircosw(*index);
    }
 
-   double getpeng_(int *index) {
+   G4double getpeng_(G4int *index) {
       return (*fe).getPhotonEnergy(*index);
    }
 
-   double getpvel_(int *index) {
+   G4double getpvel_(G4int *index) {
       return (*fe).getPhotonVelocity(*index);
    }
 
-   double getpdircosu_(int *index) {
+   G4double getpdircosu_(G4int *index) {
       return (*fe).getPhotonDircosu(*index);
    }
 
-   double getpdircosv_(int *index) {
+   G4double getpdircosv_(G4int *index) {
       return (*fe).getPhotonDircosv(*index);
    }
 
-   double getpdircosw_(int *index) {
+   G4double getpdircosw_(G4int *index) {
       return (*fe).getPhotonDircosw(*index);
    }
 
-   double getnage_(int *index) {
+   G4double getnage_(G4int *index) {
       return (*fe).getNeutronAge(*index);
    }
 
-   double getpage_(int *index) {
+   G4double getpage_(G4int *index) {
       return (*fe).getPhotonAge(*index);
    }
 
-   void setdelay_(int *delay) {
+   void setdelay_(G4int *delay) {
       (*fe).setDelayOption(*delay);
    }
 
-   void setcorrel_(int *correlation) {
+   void setcorrel_(G4int *correlation) {
       (*fe).setCorrelationOption(*correlation);
    }
 
-   void setnudist_(int *nudist) {
+   void setnudist_(G4int *nudist) {
 /*
       where the argument *nudist affects induced fissions only, it
       is set to
@@ -185,7 +185,7 @@ extern "C" {
       (*fe).setNudistOption(*nudist);
    }
 
-   void setcf252_(int *ndist, int *neng) {
+   void setcf252_(G4int *ndist, G4int *neng) {
 /*
       where the argument
       *ndist is set to 
@@ -201,11 +201,11 @@ extern "C" {
       (*fe).setCf252Option(*ndist, *neng);
    }
 
-   void setrngf_(float (*funcptr) (void)) {
-      fissionEvent::setRNGf(funcptr);
+   void setrngf_(G4float (*funcptr) (void)) {
+      G4fissionEvent::setRNGf(funcptr);
    }
 
-   void setrngd_(double (*funcptr) (void)) {
-      fissionEvent::setRNGd(funcptr);
+   void setrngd_(G4double (*funcptr) (void)) {
+      G4fissionEvent::setRNGd(funcptr);
    }
-}
+// }
