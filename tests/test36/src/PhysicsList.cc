@@ -11,8 +11,17 @@
 #include "PhysListEmLivermore.hh"
 #include "PhysListEmPenelope.hh"
 
+#include "StepMax.hh"
+#include "Decay.hh"
+
 #include "G4LossTableManager.hh"
 #include "G4UnitsTable.hh"
+
+#include "G4ProcessManager.hh"
+
+#include "G4Gamma.hh"
+#include "G4Electron.hh"
+#include "G4Positron.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -43,16 +52,6 @@ PhysicsList::~PhysicsList()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-// Bosons
-#include "G4Gamma.hh"
-
-// leptons
-#include "G4Electron.hh"
-#include "G4Positron.hh"
-
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void PhysicsList::ConstructParticle()
 {
 // gamma
@@ -64,8 +63,6 @@ void PhysicsList::ConstructParticle()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#include "G4ProcessManager.hh"
 
 void PhysicsList::ConstructProcess()
 {
@@ -145,13 +142,12 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4Decay.hh"
-
 void PhysicsList::AddDecay()
 {
   // decay process
   //
   G4Decay* fDecayProcess = new G4Decay();
+  StepMax* fStepMax = new StepMax();
 
   theParticleIterator->reset();
   while( (*theParticleIterator)() ){
@@ -167,16 +163,14 @@ void PhysicsList::AddDecay()
       pmanager ->SetProcessOrdering(fDecayProcess, idxAtRest);
 
     }
+    if(fStepMax->IsApplicable(*particle)  && !particle->IsShortLived())
+      pmanager ->AddDiscreteProcess(fStepMax);
   }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#include "G4Gamma.hh"
-#include "G4Electron.hh"
-#include "G4Positron.hh"
 
 void PhysicsList::SetCuts()
 {
