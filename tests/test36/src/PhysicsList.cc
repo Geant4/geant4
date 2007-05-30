@@ -12,7 +12,7 @@
 #include "PhysListEmPenelope.hh"
 
 #include "StepMax.hh"
-#include "Decay.hh"
+#include "G4Decay.hh"
 
 #include "G4LossTableManager.hh"
 #include "G4UnitsTable.hh"
@@ -167,8 +167,6 @@ void PhysicsList::AddDecay()
       pmanager ->AddDiscreteProcess(fStepMax);
   }
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

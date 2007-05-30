@@ -12,32 +12,31 @@ class PhysicsListMessenger;
 
 class PhysicsList: public G4VModularPhysicsList
 {
-  public:
-    PhysicsList();
-   ~PhysicsList();
+public:
+  PhysicsList();
+  virtual ~PhysicsList();
 
-    void ConstructParticle();
+  void ConstructParticle();
     
-    void SetCuts();
-    void SetCutForGamma(G4double);
-    void SetCutForElectron(G4double);
-    void SetCutForPositron(G4double);        
+  void SetCuts();
+  void SetCutForGamma(G4double);
+  void SetCutForElectron(G4double);
+  void SetCutForPositron(G4double);        
         
-    void AddPhysicsList(const G4String& name);
-    void ConstructProcess();
+  void AddPhysicsList(const G4String& name);
+  void ConstructProcess();
     
-    void AddDecay();
-    void AddStepMax();       
+  void AddDecay();
 
-  private:
-    G4double cutForGamma;
-    G4double cutForElectron;
-    G4double cutForPositron;
+private:
+  G4double cutForGamma;
+  G4double cutForElectron;
+  G4double cutForPositron;
        
-    G4String                             emName;
-    G4VPhysicsConstructor*               emPhysicsList;    
+  G4String                             emName;
+  G4VPhysicsConstructor*               emPhysicsList;    
     
-    PhysicsListMessenger* pMessenger;
+  PhysicsListMessenger* pMessenger;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
