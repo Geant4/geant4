@@ -1,4 +1,4 @@
-$Id: History,v 1.3 2007-05-30 17:30:09 ahoward Exp $
+$Id: History,v 1.4 2007-05-30 17:59:46 ahoward Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May 30th, 2007 Alex Howard (procbiasing-V08-03-01)
+- added missing includes to GNUmakefile
 
 May 30th, 2007 Alex Howard (procbiasing-V08-03-00)
 - migrated classes and tests from processes/scoring
