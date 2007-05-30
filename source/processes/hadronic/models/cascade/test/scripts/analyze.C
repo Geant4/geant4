@@ -86,6 +86,7 @@
   h3.GetYaxis()->SetTitle("d#sigma/dE (mb/MeV)");
   h3.GetXaxis()->SetTitle("E_{kin}/E_{90 MeV}");
 
+  g_5->Print("nFromSubModels.eps");
   TCanvas *d =new TCanvas("d","d",0,0,600,400);
   d->Divide(3,2);
   ntuple->SetLineStyle(2);
