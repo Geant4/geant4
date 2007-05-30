@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UserPhysicsListMessenger.hh,v 1.17 2007-05-07 16:36:34 asaim Exp $
+// $Id: G4UserPhysicsListMessenger.hh,v 1.18 2007-05-30 10:34:54 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -105,7 +105,6 @@ public: // with description
     G4UIcmdWithAnInteger *      asciiCmd;
     G4UIcommand *               applyCutsCmd;
     G4UIcmdWithAString *        dumpCutValuesCmd;
-    G4UIcmdWithoutParameter *   useOldTransportCmd;
 };
 
 #endif
