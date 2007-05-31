@@ -1,4 +1,4 @@
-$Id: History,v 1.6 2007-05-31 16:01:45 ahoward Exp $
+$Id: History,v 1.7 2007-05-31 16:29:05 ahoward Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -20,6 +20,8 @@ committal in the CVS repository !
 May 31st, 2007 Alex Howard (procbiasing-V08-03-02)
 - removed dependency on old biasing within transportation, although still
   requires old scoring process in geometry
+- HEAD contains a different version of G4GeometrySampler that includes the old
+  biasing scoring for the purpose of testing
 
 May 30th, 2007 Alex Howard (procbiasing-V08-03-01)
 - added missing includes to GNUmakefile
