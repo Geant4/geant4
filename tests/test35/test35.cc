@@ -911,6 +911,8 @@ int main(int argc, char** argv)
     }
     fout->close();
     fout1->close();
+    fout2->close();
+    fout3->close();
 
     cout << "###### End of run # " << run << "     ######" << endl;
     cout.precision(prec);
