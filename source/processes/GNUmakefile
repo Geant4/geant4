@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.37 2007-05-27 09:52:12 gcosmo Exp $
+# $Id: GNUmakefile,v 1.38 2007-05-31 08:12:53 gcosmo Exp $
 # ----------------------------------------------------------------------
 # GNUmakefile for processes library, Gabriele Cosmo 27-Jun-1998
 # ----------------------------------------------------------------------
@@ -10,6 +10,7 @@ SUBDIRS += cuts
 SUBDIRS += optical 
 SUBDIRS += decay 
 SUBDIRS += scoring
+SUBDIRS += biasing
 SUBDIRS += transportation 
 SUBDIRS += parameterisation
 SUBDIRS += electromagnetic/muons 
@@ -24,7 +25,8 @@ SUBLIBS  = G4procman
 SUBLIBS += G4cuts 
 SUBLIBS += G4optical 
 SUBLIBS += G4decay
-SUBLIBS += G4scoring 
+SUBLIBS += G4scoring
+SUBLIBS += G4biasing
 SUBLIBS += G4transportation 
 SUBLIBS += G4parameterisation
 SUBLIBS += G4muons 
