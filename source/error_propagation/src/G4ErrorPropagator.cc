@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ErrorPropagator.cc,v 1.3 2007-05-29 14:41:35 gcosmo Exp $
+// $Id: G4ErrorPropagator.cc,v 1.4 2007-05-31 10:08:22 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -351,7 +351,7 @@ G4int G4ErrorPropagator::MakeOneStep( G4ErrorFreeTrajState* currentTS_FREE )
 //-----------------------------------------------------------------------
 G4ErrorFreeTrajState* G4ErrorPropagator::InitFreeTrajState( G4ErrorTrajState* currentTS )
 {
-  G4ErrorFreeTrajState* currentTS_FREE;
+  G4ErrorFreeTrajState* currentTS_FREE = 0;
   //----- Transform the TrajState to Free coordinates if it is OnSurface
   if( currentTS->GetTSType() == G4eTS_OS ){
     G4ErrorSurfaceTrajState* tssd = static_cast<G4ErrorSurfaceTrajState*>(currentTS);
