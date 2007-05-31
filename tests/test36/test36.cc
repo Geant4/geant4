@@ -1,89 +1,138 @@
+//
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
+//
+//
+// $Id: test36.cc,v 1.3 2007-05-31 18:25:19 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// 
+// --------------------------------------------------------------
+//      GEANT 4 - TestEm10 
+//
+// --------------------------------------------------------------
+// Comments
+//     
+//   
+// --------------------------------------------------------------
+
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
 #include "G4UIterminal.hh"
-#include "G4UItcsh.hh"
 #include "Randomize.hh"
-
-
-#include "DetectorConstruction.hh"
-#include "PhysicsList.hh"
-#include "PrimaryGeneratorAction.hh"
-#include "RunAction.hh"
-#include "EventAction.hh"
-#include "SteppingAction.hh"
-#include "SteppingVerbose.hh"
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
 #endif
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+#include "Em10DetectorConstruction.hh"
+// #include "ALICEDetectorConstruction.hh"
+#include "Em10PhysicsList.hh"
+#include "Em10PrimaryGeneratorAction.hh"
+#include "Em10RunAction.hh"
+#include "Em10EventAction.hh"
+#include "Em10SteppingAction.hh"
+#include "Em10SteppingVerbose.hh"
 
-int main(int argc,char** argv) {
+int main(int argc,char** argv) 
+{
 
   //choose the Random engine
-  CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
 
+  CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
+  
   //my Verbose output class
-  G4VSteppingVerbose::SetInstance(new SteppingVerbose);
+
+  G4VSteppingVerbose::SetInstance(new Em10SteppingVerbose);
     
   // Construct the default run manager
+
   G4RunManager * runManager = new G4RunManager;
 
   // set mandatory initialization classes
-  DetectorConstruction* detector = new DetectorConstruction;
+
+  Em10DetectorConstruction* detector;
+  detector = new Em10DetectorConstruction;
+
+  // ALICEDetectorConstruction* detector;
+  // detector = new ALICEDetectorConstruction;
+
   runManager->SetUserInitialization(detector);
-  runManager->SetUserInitialization(new PhysicsList);
-  //
-
-#ifdef G4VIS_USE
-  // visualization manager
-  G4VisManager* visManager = 0;
-#endif
-
-  PrimaryGeneratorAction* primary = new PrimaryGeneratorAction(detector);
-  runManager->SetUserAction(primary);
-
-   
-  // set user action classes
-  RunAction*      runAct = new RunAction(detector,primary);
-  EventAction*    evtAct = new EventAction(detector);
-  SteppingAction* stpAct = new SteppingAction(detector,runAct);
+  runManager->SetUserInitialization(new Em10PhysicsList(detector));
   
-  runManager->SetUserAction(runAct);
-  runManager->SetUserAction(evtAct);
-  runManager->SetUserAction(stpAct);
+#ifdef G4VIS_USE
 
+  // visualization manager
+
+  G4VisManager* visManager = new G4VisExecutive;
+  visManager->Initialize();
+
+#endif 
+ 
+  // set user action classes
+
+  runManager->SetUserAction(new Em10PrimaryGeneratorAction(detector));
+
+  Em10RunAction* runAction = new Em10RunAction;
+
+  runManager->SetUserAction(runAction);
+
+  Em10EventAction* eventAction = new Em10EventAction(runAction);
+
+  runManager->SetUserAction(eventAction);
+
+  Em10SteppingAction* steppingAction = new Em10SteppingAction(detector,
+                                                            eventAction, 
+                                                            runAction);
+  runManager->SetUserAction(steppingAction);
+  
+  //Initialize G4 kernel, physics tables ...
+
+  //  runManager->Initialize();
+    
   // get the pointer to the User Interface manager 
-    G4UImanager* UI = G4UImanager::GetUIpointer();  
+
+  G4UImanager* UI = G4UImanager::GetUIpointer();  
  
   if (argc==1)   // Define UI terminal for interactive mode  
-    { 
-      visManager = new G4VisExecutive;
-      visManager->Initialize();
-      G4UIsession * session = 0;
-#ifdef G4UI_USE_TCSH
-      session = new G4UIterminal(new G4UItcsh);      
-#else
-      session = new G4UIterminal();
-#endif                      
-      session->SessionStart();
-      delete session;
-    }
+  { 
+     G4UIsession * session = new G4UIterminal;
+     UI->ApplyCommand("/control/execute init.mac");    
+     session->SessionStart();
+     delete session;
+  }
   else           // Batch mode
-    { 
-      G4String command = "/control/execute ";
-      G4String fileName = argv[1];
-      UI->ApplyCommand(command+fileName);
-    }
+  { 
+     G4String command = "/control/execute ";
+     G4String fileName = argv[1];
+     UI->ApplyCommand(command+fileName);
+  }
     
   // job termination
 
 #ifdef G4VIS_USE
   delete visManager;
-#endif
-  
+#endif  
   delete runManager;
+
   return 0;
 }
 
