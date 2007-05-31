@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeometrySampler.cc,v 1.1 2007-05-30 17:30:09 ahoward Exp $
+// $Id: G4GeometrySampler.cc,v 1.2 2007-05-31 14:01:41 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -228,14 +228,14 @@ void G4GeometrySampler::Configure()
     }
     
     G4cout << " vsampler configurator loop " << G4endl;
-    G4VSamplerConfigurator *preConf = 0;
+    G4VNewSamplerConfigurator *preConf = 0;
     G4int i = 0;
     for (G4Configurators::iterator it = fConfigurators.begin();
          it != fConfigurators.end(); it++)
     {
       i++;
       G4cout << " looping " << i << G4endl;
-      G4VSamplerConfigurator *currConf =*it;
+      G4VNewSamplerConfigurator *currConf =*it;
       G4cout << " sampler configurator " << G4endl;
       currConf->Configure(preConf);
       G4cout << " configure preconf " << G4endl;

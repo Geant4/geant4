@@ -24,16 +24,16 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeometrySampler.hh,v 1.2 2007-05-31 13:51:13 ahoward Exp $
+// $Id: G4GeometrySampler.hh,v 1.3 2007-05-31 14:04:57 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
 // Class G4GeometrySampler
 //
 // Class description:
-// This class inherits from G4VSampler. It is used for scoring and 
+// This class inherits from G4VNewSampler. It is used for scoring and 
 // importance sampling in the tracking (mass) geometry.
-// See also the description in G4VSampler.hh.
+// See also the description in G4VNewSampler.hh.
 
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ImportanceConfigurator.cc,v 1.1 2007-05-30 17:30:09 ahoward Exp $
+// $Id: G4ImportanceConfigurator.cc,v 1.2 2007-05-31 14:03:29 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -69,7 +69,7 @@ G4ImportanceConfigurator::~G4ImportanceConfigurator()
 }
 
 void  
-G4ImportanceConfigurator::Configure(G4VSamplerConfigurator *preConf)
+G4ImportanceConfigurator::Configure(G4VNewSamplerConfigurator *preConf)
 {
   G4cout << " entering importance configure, paraflag " << paraflag << G4endl;
   const G4VTrackTerminator *terminator = 0;

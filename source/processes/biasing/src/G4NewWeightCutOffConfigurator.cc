@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NewWeightCutOffConfigurator.cc,v 1.1 2007-05-30 17:30:09 ahoward Exp $
+// $Id: G4NewWeightCutOffConfigurator.cc,v 1.2 2007-05-31 14:03:29 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -68,7 +68,7 @@ G4NewWeightCutOffConfigurator::~G4NewWeightCutOffConfigurator()
   }
 }
 
-void G4NewWeightCutOffConfigurator::Configure(G4VSamplerConfigurator *)
+void G4NewWeightCutOffConfigurator::Configure(G4VNewSamplerConfigurator *)
 {
   G4cout << " entering new weight window configure " << G4endl;
 
