@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.cc,v 1.32 2007-05-18 16:30:37 japost Exp $
+// $Id: G4PropagatorInField.cc,v 1.33 2007-05-31 13:41:21 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // 
@@ -1201,8 +1201,9 @@ ReEstimateEndpoint( const G4FieldTrack &CurrentStateA,
   {
      G4double currentCurveLen= newEndPoint.GetCurveLength();
      G4double advanceLength= endCurveLen - currentCurveLen ; 
-
-     goodAdvance= 
+      if (std::abs(advanceLength)<kCarTolerance)
+       advanceLength=(EstimatedEndStateB.GetPosition()-newEndPoint.GetPosition()).mag();
+      goodAdvance= 
        integrDriver->AccurateAdvance(newEndPoint, advanceLength, fEpsilonStep);
      //              ***************
   }
