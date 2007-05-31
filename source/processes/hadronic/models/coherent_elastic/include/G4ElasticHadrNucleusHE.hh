@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElasticHadrNucleusHE.hh,v 1.40 2007-05-24 10:15:25 vnivanch Exp $
+// $Id: G4ElasticHadrNucleusHE.hh,v 1.41 2007-05-31 17:03:01 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4ElasticHadrNucleusHe.hh
@@ -78,7 +78,7 @@ public:
   const G4ParticleDefinition* Hadron() {return hadr;}
 
 private:
-  void DefineNucleusParameters(G4int A);
+  void DefineNucleusParameters(G4double A);
   const G4ParticleDefinition*  hadr;
 
   // hide assignment operator

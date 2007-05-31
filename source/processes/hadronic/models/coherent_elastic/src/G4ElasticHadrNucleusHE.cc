@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElasticHadrNucleusHE.cc,v 1.71 2007-05-31 08:25:14 vnivanch Exp $
+// $Id: G4ElasticHadrNucleusHE.cc,v 1.72 2007-05-31 17:03:01 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -62,7 +62,7 @@ G4ElasticData::G4ElasticData(const G4ParticleDefinition* p,
   massGeV  = p->GetPDGMass()/GeV;
   mass2GeV2= massGeV*massGeV;
   AtomicWeight = G4int(AWeight + 0.5);
-  DefineNucleusParameters(AtomicWeight);
+  DefineNucleusParameters(AWeight);
 
   limitQ2 = 35./(R1*R1);     //  (GeV/c)^2
   G4double dQ2 = limitQ2/(ONQ2 - 1.);
@@ -95,51 +95,51 @@ G4ElasticData::G4ElasticData(const G4ParticleDefinition* p,
 //
 //
 
-void G4ElasticData::DefineNucleusParameters(G4int Nucleus)
+void G4ElasticData::DefineNucleusParameters(G4double A)
 {
-  if(Nucleus == 208)
+  if(AtomicWeight == 208)
   {
       R1       = 20.5;    //  26.09.06
       R2       = 15.74;
       Pnucl    = 0.4;
       Aeff     = 0.7;
   }
-  else if(Nucleus == 90)
+  else if(AtomicWeight == 90)
   {
       R1    = 16.5*1.1;
       R2    = 11.62;
       Pnucl = 0.4;
       Aeff  = 0.7;
   }
-  else if(Nucleus == 58)
+  else if(AtomicWeight == 58)
   {
       R1    = 15.0*1.05;
       R2    = 9.9;
       Pnucl = 0.45;
       Aeff  = 0.85;
   }
-  else if(Nucleus == 16)
+  else if(AtomicWeight == 16)
   {
       R1    = 10.50;
       R2    = 5.5;
       Pnucl = 0.7;
       Aeff  = 0.98;
   }
-  else if(Nucleus == 9)
+  else if(AtomicWeight == 9)
   {
       R1    = 9.0;
       R2    = 7.0;
       Pnucl = 0.190;
       Aeff  = 0.9;
   }
-  else if(Nucleus == 4)
+  else if(AtomicWeight == 4)
   {
       R1    = 6.0;   //  26.09.06
       R2    = 3.7;
       Pnucl = 0.4;
       Aeff  = 0.87;
   }
-  else if(Nucleus == 1)
+  else if(AtomicWeight == 1)
   {
       R1    = 4.5;   
       R2    = 2.3;
@@ -148,9 +148,9 @@ void G4ElasticData::DefineNucleusParameters(G4int Nucleus)
   }
   else
   {
-      R1    = 4.45*std::pow(AtomicWeight - 1.,0.309)*0.9;
-      R2    = 2.3*std::pow(AtomicWeight, 0.36);
-      Pnucl = 0.176 + 0.00167*AtomicWeight + 8.69E-6*AtomicWeight*AtomicWeight;
+      R1    = 4.45*std::pow(A - 1.,0.309)*0.9;
+      R2    = 2.3 *std::pow(A, 0.36);
+      Pnucl = 0.176 + 0.00167*A + 8.69E-6*A*A;
       Aeff  = 0.9;
   }
 }
