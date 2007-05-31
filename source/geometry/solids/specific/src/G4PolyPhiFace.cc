@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolyPhiFace.cc,v 1.11 2007-05-11 13:54:29 gcosmo Exp $
+// $Id: G4PolyPhiFace.cc,v 1.12 2007-05-31 13:52:48 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -326,7 +326,9 @@ void G4PolyPhiFace::CopyStuff( const G4PolyPhiFace &source )
   zMin    = source.zMin;
   zMax    = source.zMax;
   allBehind  = source.allBehind;
-  
+
+  kCarTolerance = source.kCarTolerance;
+
   //
   // Corner dynamic array
   //

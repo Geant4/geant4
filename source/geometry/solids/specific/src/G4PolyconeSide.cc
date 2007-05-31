@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolyconeSide.cc,v 1.15 2007-05-11 13:54:29 gcosmo Exp $
+// $Id: G4PolyconeSide.cc,v 1.16 2007-05-31 13:52:48 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -207,6 +207,8 @@ void G4PolyconeSide::CopyStuff( const G4PolyconeSide &source )
   deltaPhi  = source.deltaPhi;
   phiIsOpen  = source.phiIsOpen;
   allBehind  = source.allBehind;
+
+  kCarTolerance = source.kCarTolerance;
   
   cone    = new G4IntersectingCone( *source.cone );
   

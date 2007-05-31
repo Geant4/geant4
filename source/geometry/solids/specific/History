@@ -1,4 +1,4 @@
-$Id: History,v 1.112 2007-05-25 09:47:11 gcosmo Exp $
+$Id: History,v 1.113 2007-05-31 13:52:48 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+31-May-2007, G.Cosmo (geom-specific-V08-03-03)
+- Fixed initialisation of constants in constructor for - G4VTwistSurface,
+  G4PolyPhiFace, G4PolyconeSide, G4PolyhedraSide - following latest changes
+  for tunable tolerance.
 
 25-May-2007, G.Cosmo (geom-specific-V08-03-02)
 - Fixed default response of DistToIn/DistToOut for twisted solids.

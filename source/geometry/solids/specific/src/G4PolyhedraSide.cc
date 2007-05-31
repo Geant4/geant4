@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolyhedraSide.cc,v 1.12 2007-05-11 13:54:29 gcosmo Exp $
+// $Id: G4PolyhedraSide.cc,v 1.13 2007-05-31 13:52:48 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -356,6 +356,8 @@ void G4PolyhedraSide::CopyStuff( const G4PolyhedraSide &source )
   lenPhi[0] = source.lenPhi[0];
   lenPhi[1] = source.lenPhi[1];
   edgeNorm  = source.edgeNorm;
+
+  kCarTolerance = source.kCarTolerance;
   
   cone = new G4IntersectingCone( *source.cone );
 

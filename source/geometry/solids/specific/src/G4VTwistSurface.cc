@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTwistSurface.cc,v 1.8 2007-05-23 09:31:02 gcosmo Exp $
+// $Id: G4VTwistSurface.cc,v 1.9 2007-05-31 13:52:48 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -95,6 +95,7 @@ G4VTwistSurface::G4VTwistSurface(const G4String &name)
    
    fAmIOnLeftSide.me.set(kInfinity, kInfinity, kInfinity);
    fAmIOnLeftSide.vec.set(kInfinity, kInfinity, kInfinity);
+   kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
 }
 
 G4VTwistSurface::G4VTwistSurface(const G4String         &name,
