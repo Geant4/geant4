@@ -1,4 +1,4 @@
-$Id: History,v 1.22 2007-05-31 12:30:21 ahoward Exp $
+$Id: History,v 1.23 2007-05-31 12:31:22 ahoward Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -18,7 +18,7 @@ committal in the CVS repository !
      ----------------------------------------------------------
 
 May 31, 2007, A.Howard (digits_hits-V08-03-02)
-- Removed classes associated with old biasing/scoring scheme:
+- Removed classes associated with old biasing/scoring scheme in detector:
   G4CellScoreComposer, G4CellScoreValues, G4CellStoreScorer
 - Files remain on the HEAD for testing purposes
 
