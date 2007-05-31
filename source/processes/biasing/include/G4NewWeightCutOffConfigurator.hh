@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NewWeightCutOffConfigurator.hh,v 1.1 2007-05-30 17:30:09 ahoward Exp $
+// $Id: G4NewWeightCutOffConfigurator.hh,v 1.2 2007-05-31 13:51:13 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -41,7 +41,7 @@
 #define G4NewWeightCutOffConfigurator_hh G4NewWeightCutOffConfigurator_hh
 
 #include "G4Types.hh"
-#include "G4VSamplerConfigurator.hh"
+#include "G4VNewSamplerConfigurator.hh"
 #include "G4NewProcessPlacer.hh"
 
 class G4NewWeightCutOffProcess;
@@ -49,7 +49,7 @@ class G4VGCellFinder;
 class G4VIStore;
 class G4VPhysicalVolume;
 
-class G4NewWeightCutOffConfigurator : public G4VSamplerConfigurator
+class G4NewWeightCutOffConfigurator : public G4VNewSamplerConfigurator
 {
 
 public:  // with description
@@ -63,7 +63,7 @@ public:  // with description
                              const G4VGCellFinder &aGCellFinder,G4bool paraflag);
 
   virtual ~G4NewWeightCutOffConfigurator();
-  virtual void Configure(G4VSamplerConfigurator *preConf);
+  virtual void Configure(G4VNewSamplerConfigurator *preConf);
   virtual const G4VTrackTerminator *GetTrackTerminator() const ;
   
 private:

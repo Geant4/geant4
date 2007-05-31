@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeometrySampler.hh,v 1.1 2007-05-30 17:30:09 ahoward Exp $
+// $Id: G4GeometrySampler.hh,v 1.2 2007-05-31 13:51:13 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -42,8 +42,8 @@
 
 #include "G4Types.hh"
 #include "G4String.hh"
-#include "G4VSampler.hh"
-#include "G4VSamplerConfigurator.hh"
+#include "G4VNewSampler.hh"
+#include "G4VNewSamplerConfigurator.hh"
 
 class G4ImportanceConfigurator;
 class G4WeightWindowConfigurator;
@@ -51,7 +51,7 @@ class G4ScoreConfigurator;
 class G4NewWeightCutOffConfigurator;
 class G4VGCellFinder;
 
-class G4GeometrySampler : public G4VSampler
+class G4GeometrySampler : public G4VNewSampler
 {
 
 public:  // with description

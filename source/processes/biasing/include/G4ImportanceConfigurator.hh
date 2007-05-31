@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ImportanceConfigurator.hh,v 1.1 2007-05-30 17:30:09 ahoward Exp $
+// $Id: G4ImportanceConfigurator.hh,v 1.2 2007-05-31 13:51:13 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -43,14 +43,14 @@
 
 #include "G4Types.hh"
 #include "G4NewProcessPlacer.hh"
-#include "G4VSamplerConfigurator.hh"
+#include "G4VNewSamplerConfigurator.hh"
 
 class G4ImportanceProcess;
 class G4VImportanceAlgorithm;
 class G4VIStore;
 class G4VPhysicalVolume;
 
-class G4ImportanceConfigurator : public G4VSamplerConfigurator
+class G4ImportanceConfigurator : public G4VNewSamplerConfigurator
 {
 
 public:  // with description
@@ -62,7 +62,7 @@ public:  // with description
 			   G4bool paraflag);
 
   virtual ~G4ImportanceConfigurator();
-  virtual void Configure(G4VSamplerConfigurator *preConf);
+  virtual void Configure(G4VNewSamplerConfigurator *preConf);
   virtual const G4VTrackTerminator *GetTrackTerminator() const;
 
 private:
