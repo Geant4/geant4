@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElasticHadrNucleusHE.cc,v 1.70 2007-05-25 17:57:51 dennis Exp $
+// $Id: G4ElasticHadrNucleusHE.cc,v 1.71 2007-05-31 08:25:14 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -1066,14 +1066,58 @@ void  G4ElasticHadrNucleusHE::DefineHadronValues(G4int Z)
   Slope0 = Slope1 = 1.0;
   Slope2 = 5.0;
 
+  // data for iHadron=0
+  static const G4double EnP0[6]={1.5,3.0,5.0,9.0,14.0,19.0};
+  static const G4double C0P0[6]={0.15,0.02,0.06,0.08,0.0003,0.0002};
+  static const G4double C1P0[6]={0.05,0.02,0.03,0.025,0.0,0.0};
+  static const G4double B0P0[6]={1.5,2.5,3.0,4.5,1.4,1.25};
+  static const G4double B1P0[6]={5.0,1.0,3.5,4.0,4.8,4.8};
+      
+  // data for iHadron=6,7
+  static const G4double EnN[5]={1.5,5.0,10.0,14.0,20.0};
+  static const G4double C0N[5]={0.0,0.0,0.02,0.02,0.01};
+  static const G4double C1N[5]={0.06,0.008,0.0015,0.001,0.0003};
+  static const G4double B0N[5]={1.5,2.5,3.8,3.8,3.5};
+  static const G4double B1N[5]={1.5,2.2,3.6,4.5,4.8};
+
+  // data for iHadron=1
+  static const G4double EnP[2]={1.5,4.0};
+  static const G4double C0P[2]={0.001,0.0005};
+  static const G4double C1P[2]={0.003,0.001};
+  static const G4double B0P[2]={2.5,4.5};
+  static const G4double B1P[2]={1.0,4.0};
+
+  // data for iHadron=2
+  static const G4double EnPP[4]={1.0,2.0,3.0,4.0};
+  static const G4double C0PP[4]={0.0,0.0,0.0,0.0};
+  static const G4double C1PP[4]={0.15,0.08,0.02,0.01};
+  static const G4double B0PP[4]={1.5,2.8,3.8,3.8};
+  static const G4double B1PP[4]={0.8,1.6,3.6,4.6};
+
+  // data for iHadron=3
+  static const G4double EnPPN[4]={1.0,2.0,3.0,4.0};
+  static const G4double C0PPN[4]={0.0,0.0,0.0,0.0};
+  static const G4double C1PPN[4]={0.0,0.0,0.0,0.0};
+  static const G4double B0PPN[4]={1.5,2.8,3.8,3.8};
+  static const G4double B1PPN[4]={0.8,1.6,3.6,4.6};
+
+  // data for iHadron=4
+  static const G4double EnK[4]={1.4,2.33,3.0,5.0};
+  static const G4double C0K[4]={0.0,0.0,0.0,0.0};
+  static const G4double C1K[4]={0.01,0.007,0.005,0.003};
+  static const G4double B0K[4]={1.5,2.0,3.8,3.8};
+  static const G4double B1K[4]={1.6,1.6,1.6,1.6};
+
+  // data for iHadron=5
+  static const G4double EnKM[2]={1.4,4.0};
+  static const G4double C0KM[2]={0.006,0.002};
+  static const G4double C1KM[2]={0.00,0.00};
+  static const G4double B0KM[2]={2.5,3.5};
+  static const G4double B1KM[2]={1.6,1.6};
+
   switch(iHadron)
   {
     case 0 :
-      static const G4double EnP0[6]={1.5,3.0,5.0,9.0,14.0,19.0};
-      static const G4double C0P0[6]={0.15,0.02,0.06,0.08,0.0003,0.0002};
-      static const G4double C1P0[6]={0.05,0.02,0.03,0.025,0.0,0.0};
-      static const G4double B0P0[6]={1.5,2.5,3.0,4.5,1.4,1.25};
-      static const G4double B1P0[6]={5.0,1.0,3.5,4.0,4.8,4.8};
 
       if(hLabMomentum < EnP0[5])
 	InterpolateHN(6,EnP0,C0P0,C1P0,B0P0,B1P0);
@@ -1081,33 +1125,18 @@ void  G4ElasticHadrNucleusHE::DefineHadronValues(G4int Z)
 
     case  6 :
     case  7 :
-      static const G4double EnN[5]={1.5,5.0,10.0,14.0,20.0};
-      static const G4double C0N[5]={0.0,0.0,0.02,0.02,0.01};
-      static const G4double C1N[5]={0.06,0.008,0.0015,0.001,0.0003};
-      static const G4double B0N[5]={1.5,2.5,3.8,3.8,3.5};
-      static const G4double B1N[5]={1.5,2.2,3.6,4.5,4.8};
 
       if(hLabMomentum < EnN[4])
 	InterpolateHN(5,EnN,C0N,C1N,B0N,B1N);
       break; 
 
     case 1 :
-      static const G4double EnP[2]={1.5,4.0};
-      static const G4double C0P[2]={0.001,0.0005};
-      static const G4double C1P[2]={0.003,0.001};
-      static const G4double B0P[2]={2.5,4.5};
-      static const G4double B1P[2]={1.0,4.0};
 
       if(hLabMomentum < EnP[1])
 	InterpolateHN(2,EnP,C0P,C1P,B0P,B1P);
       break; 
 
     case 2 :
-      static const G4double EnPP[4]={1.0,2.0,3.0,4.0};
-      static const G4double C0PP[4]={0.0,0.0,0.0,0.0};
-      static const G4double C1PP[4]={0.15,0.08,0.02,0.01};
-      static const G4double B0PP[4]={1.5,2.8,3.8,3.8};
-      static const G4double B1PP[4]={0.8,1.6,3.6,4.6};
 
       if(hLabMomentum < EnPP[3])
 	InterpolateHN(4,EnPP,C0PP,C1PP,B0PP,B1PP);
@@ -1115,11 +1144,6 @@ void  G4ElasticHadrNucleusHE::DefineHadronValues(G4int Z)
       break; 
 
     case 3 :
-      static const G4double EnPPN[4]={1.0,2.0,3.0,4.0};
-      static const G4double C0PPN[4]={0.0,0.0,0.0,0.0};
-      static const G4double C1PPN[4]={0.0,0.0,0.0,0.0};
-      static const G4double B0PPN[4]={1.5,2.8,3.8,3.8};
-      static const G4double B1PPN[4]={0.8,1.6,3.6,4.6};
 
       if(hLabMomentum < EnPPN[3])
 	InterpolateHN(4,EnPPN,C0PPN,C1PPN,B0PPN,B1PPN);
@@ -1127,11 +1151,6 @@ void  G4ElasticHadrNucleusHE::DefineHadronValues(G4int Z)
       break;
  
     case 4 :
-      static const G4double EnK[4]={1.4,2.33,3.0,5.0};
-      static const G4double C0K[4]={0.0,0.0,0.0,0.0};
-      static const G4double C1K[4]={0.01,0.007,0.005,0.003};
-      static const G4double B0K[4]={1.5,2.0,3.8,3.8};
-      static const G4double B1K[4]={1.6,1.6,1.6,1.6};
 
       if(hLabMomentum < EnK[3])
 	InterpolateHN(4,EnK,C0K,C1K,B0K,B1K);
@@ -1139,11 +1158,6 @@ void  G4ElasticHadrNucleusHE::DefineHadronValues(G4int Z)
       break; 
 
     case 5 :
-      static const G4double EnKM[2]={1.4,4.0};
-      static const G4double C0KM[2]={0.006,0.002};
-      static const G4double C1KM[2]={0.00,0.00};
-      static const G4double B0KM[2]={2.5,3.5};
-      static const G4double B1KM[2]={1.6,1.6};
       if(hLabMomentum < EnKM[1])
 	InterpolateHN(2,EnKM,C0KM,C1KM,B0KM,B1KM);
       Coeff2 = 0.01/hLabMomentum2/hLabMomentum;
