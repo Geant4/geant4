@@ -24,13 +24,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4ErrorTrajErr.hh,v 1.2 2007-05-29 14:41:35 gcosmo Exp $
+// $Id: G4ErrorTrajErr.hh,v 1.3 2007-05-31 20:27:07 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // Class Description:
 //
-// Trajectory error. Implemented for the moment as a CLHEP HepSymMatrix,
+// Trajectory error. Implemented for the moment as a CLHEP HepG4ErrorSymMatrix,
 // until other possibly faster implementations are studied
 
 // History:
@@ -40,8 +40,8 @@
 #ifndef G4ErrorTrajErr_hh
 #define G4ErrorTrajErr_hh
 
-#include <CLHEP/Matrix/SymMatrix.h>
+#include "G4ErrorSymMatrix.hh"
 
-typedef CLHEP::HepSymMatrix G4ErrorTrajErr;
+typedef G4ErrorSymMatrix G4ErrorTrajErr;
 
 #endif

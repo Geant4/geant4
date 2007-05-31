@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ErrorFreeTrajState.cc,v 1.3 2007-05-31 15:28:51 gcosmo Exp $
+// $Id: G4ErrorFreeTrajState.cc,v 1.4 2007-05-31 20:22:45 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -34,7 +34,7 @@
 #include "G4ErrorFreeTrajParam.hh"
 #include "G4ErrorSurfaceTrajState.hh"
 
-#include <CLHEP/Matrix/Matrix.h>
+#include "G4ErrorMatrix.hh"
 #include <iomanip>
 
 #include "G4Field.hh"
@@ -109,7 +109,7 @@ G4ErrorFreeTrajState::G4ErrorFreeTrajState( const G4ErrorSurfaceTrajState& tpSD 
 
 
   //--- Get transformation first
-  CLHEP::HepMatrix transfM(5, 5, 1 );
+  G4ErrorMatrix transfM(5, 5, 1 );
   //--- Get magnetic field
   const G4Field* field = G4TransportationManager::GetTransportationManager()->GetFieldManager()->GetDetectorField();
   G4ThreeVector dir = fTrajParam.GetDirection();
@@ -162,7 +162,7 @@ void G4ErrorFreeTrajState::Init()
 {
   theTSType = G4eTS_FREE;
   BuildCharge();
-  theTransfMat = CLHEP::HepMatrix(5,5,0);
+  theTransfMat = G4ErrorMatrix(5,5,0);
   //-  theFirstStep = true;
 }
 
@@ -253,11 +253,11 @@ G4int G4ErrorFreeTrajState::PropagateError( const G4Track* aTrack )
 #endif
   //* *** DEFINE TRANSFORMATION MATRIX BETWEEN X1 AND X2 FOR
   //* *** NEUTRAL PARTICLE OR FIELDFREE REGION
-  CLHEP::HepMatrix transf(5, 5, 0 );
+  G4ErrorMatrix transf(5, 5, 0 );
 
   transf[3][2] = stepLengthCm * sinpPost;
   transf[4][1] = stepLengthCm;
-  for( size_t ii=0;ii < 5; ii++ ){
+  for( uint ii=0;ii < 5; ii++ ){
     transf[ii][ii] = 1.;
   }
 #ifdef G4EVERBOSE

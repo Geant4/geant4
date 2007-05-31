@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ErrorSurfaceTrajParam.cc,v 1.2 2007-05-29 14:41:35 gcosmo Exp $
+// $Id: G4ErrorSurfaceTrajParam.cc,v 1.3 2007-05-31 20:22:45 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -93,14 +93,15 @@ SetParameters( const G4Point3D& pos, const G4Vector3D& mom,
   fVectorV = vecV / vecV.mag();
   fVectorW = vecW / vecW.mag();
   fInvP = 1./mom.mag();
-  G4ThreeVector posv(pos);
+  G4ThreeVector momv(mom);
   //check 3 vectors are ortogonal and right handed
 
-  fPV = mom*vecV;
-  fPW = mom*vecW;
+  fPV = momv.project( vecV ).mag();
+  fPW = momv.project( vecW ).mag();
 
-  fV = pos*vecV;
-  fW = pos*vecW;
+  G4ThreeVector posv(pos);
+  fV = posv.project( vecV ).mag();
+  fW = posv.project( vecW ).mag();
 }
 
 

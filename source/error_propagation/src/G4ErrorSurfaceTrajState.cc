@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ErrorSurfaceTrajState.cc,v 1.3 2007-05-31 15:42:43 gcosmo Exp $
+// $Id: G4ErrorSurfaceTrajState.cc,v 1.4 2007-05-31 20:22:45 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -38,7 +38,7 @@
 #include "G4FieldManager.hh"
 #include "G4TransportationManager.hh"
 
-#include <CLHEP/Matrix/Matrix.h>
+#include "G4ErrorMatrix.hh"
 
 #include <iomanip>
 
@@ -108,7 +108,7 @@ BuildErrorMatrix( G4ErrorFreeTrajState& tpSC, const G4Vector3D&,
   G4double scphi = tpSC.GetParameters().GetPhi();
   if( G4ErrorPropagatorData::GetErrorPropagatorData()->GetMode() == G4ErrorMode_PropBackwards ){
     sclambda *= -1;
-    scphi += CLHEP::pi;
+    scphi += M_PI;
   }
   G4double cosLambda = cos( sclambda );
   G4double sinLambda = sin( sclambda );
@@ -133,7 +133,7 @@ BuildErrorMatrix( G4ErrorFreeTrajState& tpSC, const G4Vector3D&,
 
 
   //--- Get transformation first
-  CLHEP::HepMatrix transfM(5, 5, 0 );
+  G4ErrorMatrix transfM(5, 5, 0 );
   //--- Get magnetic field
   const G4Field* field = G4TransportationManager::GetTransportationManager()->GetFieldManager()->GetDetectorField();
 

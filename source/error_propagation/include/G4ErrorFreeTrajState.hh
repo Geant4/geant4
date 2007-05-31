@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ErrorFreeTrajState.hh,v 1.3 2007-05-31 15:28:50 gcosmo Exp $
+// $Id: G4ErrorFreeTrajState.hh,v 1.4 2007-05-31 20:27:06 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Class Description:
@@ -53,7 +53,7 @@
 
 #include "globals.hh"
 
-#include <CLHEP/Matrix/Matrix.h>
+#include "G4ErrorMatrix.hh"
 
 #include "G4ErrorTrajState.hh"
 #include "G4ErrorFreeTrajParam.hh"
@@ -128,7 +128,7 @@ class G4ErrorFreeTrajState : public G4ErrorTrajState
 
   G4ErrorFreeTrajParam fTrajParam;
 
-  CLHEP::HepMatrix theTransfMat;
+  G4ErrorMatrix theTransfMat;
 
   G4bool theFirstStep; // to count if transf mat is updated or initialized
 };

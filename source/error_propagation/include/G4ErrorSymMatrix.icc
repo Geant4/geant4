@@ -1,0 +1,138 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+// ------------------------------------------------------------
+//      GEANT 4 class inline implementation
+// ------------------------------------------------------------
+
+
+inline G4ErrorSymMatrix::G4ErrorSymMatrix() 
+  : m(0), nrow(0), size(0)
+{}
+
+inline int G4ErrorSymMatrix::num_row() const { return nrow;}
+inline int G4ErrorSymMatrix::num_col() const  { return nrow;}
+inline int G4ErrorSymMatrix::num_size() const  { return size;}
+
+inline double & G4ErrorSymMatrix::fast(int row,int col)
+{
+#ifdef MATRIX_BOUND_CHECK
+  if(row<1||row>num_row() || col<1||col>num_col())
+    error("Range error in G4ErrorSymMatrix::fast()");
+#endif
+  return *(m.begin()+(row*(row-1))/2+(col-1));
+}
+inline const double & G4ErrorSymMatrix::fast(int row,int col) const
+{
+#ifdef MATRIX_BOUND_CHECK
+  if(row<1||row>num_row() || col<1||col>num_col())
+    error("Range error in G4ErrorSymMatrix::fast()");
+#endif
+  return *(m.begin()+(row*(row-1))/2+(col-1));
+}
+
+inline double & G4ErrorSymMatrix::operator()(int row, int col)
+    {return (row>=col? fast(row,col) : fast(col,row));}
+inline const double & G4ErrorSymMatrix::operator()(int row, int col) const 
+    {return (row>=col? fast(row,col) : fast(col,row));}
+
+inline void G4ErrorSymMatrix::assign(const G4ErrorSymMatrix &m2) 
+  {(*this)=m2;}
+
+inline G4ErrorSymMatrix G4ErrorSymMatrix::T() const {return G4ErrorSymMatrix(*this);}
+
+inline G4ErrorSymMatrix::G4ErrorSymMatrix_row G4ErrorSymMatrix::operator[] (int r)
+#ifdef HEP_GNU_OPTIMIZED_RETURN
+  return b(*this,r);
+{
+#else
+{
+  G4ErrorSymMatrix_row b(*this,r);
+#endif
+  return b;
+}
+
+inline G4ErrorSymMatrix::G4ErrorSymMatrix_row_const G4ErrorSymMatrix::operator[] (int r) const
+#ifdef HEP_GNU_OPTIMIZED_RETURN
+  return b(*this,r);
+{
+#else
+{
+  const G4ErrorSymMatrix_row_const b(*this,r);
+#endif
+  return b;
+}
+
+inline double &G4ErrorSymMatrix::G4ErrorSymMatrix_row::operator[](int c)
+{
+#ifdef MATRIX_BOUND_CHECK
+   if(_r<0||_r>=_a.nrow || c<0||c>=_a.nrow)
+      error("Range error in G4ErrorSymMatrix::operator[][]");
+#endif
+   if (_r >= c ) {
+      return *(_a.m.begin() + (_r+1)*_r/2 + c);
+   } else {
+      return *(_a.m.begin() + (c+1)*c/2 + _r);
+   }
+}
+
+inline const double &
+G4ErrorSymMatrix::G4ErrorSymMatrix_row_const::operator[](int c) const 
+{
+#ifdef MATRIX_BOUND_CHECK
+   if(_r<0||_r>=_a.nrow || c<0||c>=_a.nrow)
+      error("Range error in G4ErrorSymMatrix::operator[][]");
+#endif
+   if (_r >= c ) {
+      return *(_a.m.begin() + (_r+1)*_r/2 + c);
+   } else {
+      return *(_a.m.begin() + (c+1)*c/2 + _r);
+   }
+}
+
+inline G4ErrorSymMatrix::G4ErrorSymMatrix_row::G4ErrorSymMatrix_row(G4ErrorSymMatrix &a,
+							   int r) 
+   : _a(a), _r(r)
+{}
+
+inline G4ErrorSymMatrix::G4ErrorSymMatrix_row_const::G4ErrorSymMatrix_row_const
+(const G4ErrorSymMatrix&a,int r) 
+   : _a(a), _r(r)
+{}
+
+inline G4ErrorSymMatrix G4ErrorSymMatrix::inverse(int &ifail) const
+#ifdef HEP_GNU_OPTIMIZED_RETURN
+     return mTmp(*this);
+{
+#else
+{
+  G4ErrorSymMatrix mTmp(*this);
+#endif
+  mTmp.invert(ifail);
+  return mTmp;
+}
+
+
+
