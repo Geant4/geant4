@@ -80,7 +80,7 @@ int main()
   G4cout << "92 uranium" << G4endl;
   G4int choice;
   // G4cin >> choice;
-  choice = 82;
+  choice = 13;
 
 
 
@@ -189,13 +189,13 @@ int main()
   G4cout << " 5 kaon0short" << G4endl;
 
   //  G4cin >> choice;
-  choice = 1;
+  choice = 4;
 
   G4ParticleDefinition* theParticleDefinition;
 
-  G4NucleonNuclearCrossSection* barash = new G4NucleonNuclearCrossSection();
+  // G4NucleonNuclearCrossSection* barash = new G4NucleonNuclearCrossSection();
 
-  // G4PiNuclearCrossSection* barash = new G4PiNuclearCrossSection();
+  G4PiNuclearCrossSection* barash = new G4PiNuclearCrossSection();
 
   switch (choice)
   {
@@ -245,9 +245,13 @@ int main()
 
   for( k = 0; k < kAngle; k++) angleDistr[k] = 0;
 
+
+  G4double momentum = 9.92*GeV;
+  G4double pMass    = theParticleDefinition->GetPDGMass();
+
   G4double thetaMax  = 15.*degree; 
 
-  G4double kinEnergy = 1.0*GeV;
+  G4double kinEnergy = std::sqrt(momentum*momentum + pMass*pMass) - pMass;
 
   G4DynamicParticle*  theDynamicParticle = new G4DynamicParticle(theParticleDefinition,
                                               G4ParticleMomentum(0.,0.,1.),
@@ -303,20 +307,23 @@ int main()
   std::ofstream writes("sigma.dat", std::ios::out ) ;
   writes.setf( std::ios::scientific, std::ios::floatfield );
 
-  G4double theta, sigma;
+  G4double theta, sigma, integral;
 
-  iMax = 30;
+  iMax = 35;
+
+  writes << iMax  << G4endl;
 
   for( i = 0; i < iMax; i++)
   {
     // normal sampling in CMS
 
-    theta = 0.5*i*degree;
+    theta = (4.5 + 1.*i)*milliradian;
 
     sigma = diffelastic->GetDiffuseElasticXsc( theParticleDefinition, theta, plab, A);
+    integral = diffelastic->IntegralElasticProb( theParticleDefinition, theta, plab, A);
 
-    G4cout << theta/degree << "\t" << "\t" << sigma/millibarn << G4endl;
-    writes << theta/degree << "\t" << "\t" << sigma/millibarn << G4endl;
+    G4cout << theta/milliradian << "\t" << "\t" << sigma/barn  << "\t"<< integral << G4endl;
+    writes << theta/milliradian << "\t" << "\t" << sigma/barn << "\t"<< integral << G4endl;
 
   /*
     if(!swave) 
@@ -364,10 +371,16 @@ int main()
   */
 
   }
-  // G4double sig = barash->GetCrossSection(theDynamicParticle,theElement, 273*kelvin);
+  G4double sig = barash->GetCrossSection(theDynamicParticle,theElement, 273*kelvin);
   // G4double sig = barash->GetElasticCrossSection(theDynamicParticle, G4double(Z), G4double(A));
   // sig = barash->GetTotalXsc();
-  // sig = barash->GetElasticXsc();
+  sig = barash->GetElasticXsc();
+  
+  G4double rad = diffelastic->GetNuclearRadius();
+
+  integral *= rad*rad;
+
+  G4cout<<integral/millibarn<<"\t"<<sig/millibarn<<"\t"<<integral/sig<<G4endl;
   /*
   G4double sum = 0;
 

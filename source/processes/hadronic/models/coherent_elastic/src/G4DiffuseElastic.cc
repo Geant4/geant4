@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DiffuseElastic.cc,v 1.4 2007-05-28 15:07:03 grichine Exp $
+// $Id: G4DiffuseElastic.cc,v 1.5 2007-05-31 14:02:58 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -506,6 +506,7 @@ G4DiffuseElastic::GetDiffElasticProb( // G4ParticleDefinition* particle,
 {
   G4double sigma, bzero, bzero2, bonebyarg, bonebyarg2, damp, damp2;
   G4double delta, diffuse, gamma;
+  G4double e1, e2, bone, bone2;
 
   // G4double wavek = momentum/hbarc;  // wave vector
   // G4double r0    = 1.08*fermi;
@@ -516,6 +517,8 @@ G4DiffuseElastic::GetDiffElasticProb( // G4ParticleDefinition* particle,
 
   bzero      = BesselJzero(krt);
   bzero2     = bzero*bzero;    
+  bone       = BesselJone(krt);
+  bone2      = bone*bone;
   bonebyarg  = BesselOneByArg(krt);
   bonebyarg2 = bonebyarg*bonebyarg;  
 
@@ -524,24 +527,33 @@ G4DiffuseElastic::GetDiffElasticProb( // G4ParticleDefinition* particle,
     diffuse = 0.63*fermi;
     gamma   = 0.3*fermi;
     delta   = 0.1*fermi*fermi;
+    e1      = 0.3*fermi;
+    e2      = 0.35*fermi;
   }
   else // as proton, if were not defined 
   {
     diffuse = 0.63*fermi;
     gamma   = 0.3*fermi;
     delta   = 0.1*fermi*fermi;
+    e1      = 0.3*fermi;
+    e2      = 0.35*fermi;
   }
-  G4double kg    = fWaveVector*delta;   // wavek*delta;
+  G4double kg    = fWaveVector*gamma;   // wavek*delta;
   G4double kg2   = kg*kg;
   G4double dk2t  = delta*fWaveVector*fWaveVector*theta; // delta*wavek*wavek*theta;
   G4double dk2t2 = dk2t*dk2t;
-
   G4double pikdt = pi*fWaveVector*diffuse*theta;// pi*wavek*diffuse*theta;
+
+  G4double mode2k2 = (e1*e1+e2*e2)*fWaveVector*fWaveVector;  
+  G4double e2dk3t  = -2.*e2*delta*fWaveVector*fWaveVector*fWaveVector*theta;
+
+
   damp           = DampFactor(pikdt);
   damp2          = damp*damp;
 
   sigma  = kg2 + dk2t2;
   sigma *= bzero2;
+  sigma += mode2k2*bone2 + e2dk3t*bzero*bone;
   sigma += kr2*bonebyarg2;
   sigma *= damp2;          // *rad*rad;
 
