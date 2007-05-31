@@ -52,7 +52,7 @@
 // All rights reserved.
 // UCRL-CODE-224807
 //
-// $Id: G4FissionLibrary.hh,v 1.1 2007-05-22 00:47:34 dennis Exp $
+// $Id: G4FissionLibrary.hh,v 1.2 2007-05-31 22:52:38 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -79,8 +79,9 @@ class G4FissionLibrary : public G4NeutronHPFinalState
 {
   public:
   
-  G4FissionLibrary(){ hasXsec = false; }
+  G4FissionLibrary();
   ~G4FissionLibrary(){}
+
   void Init (G4double A, G4double Z, G4String & dirName, G4String &);
   G4HadFinalState * ApplyYourself(const G4HadProjectile & theTrack);
   G4NeutronHPFinalState * New() ;

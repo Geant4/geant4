@@ -53,7 +53,7 @@
 // UCRL-CODE-224807
 //
 //
-// $Id: G4FissionLibrary.cc,v 1.1 2007-05-22 00:51:37 dennis Exp $
+// $Id: G4FissionLibrary.cc,v 1.2 2007-05-31 22:52:51 dennis Exp $
 //
 // neutron_hp -- source file
 // J.M. Verbeke, Jan-2007
@@ -61,6 +61,13 @@
 //
 
 #include "G4FissionLibrary.hh"
+
+
+G4FissionLibrary::G4FissionLibrary()
+  : G4NeutronHPFinalState()
+{
+  hasXsec = false;
+}
 
 G4NeutronHPFinalState * G4FissionLibrary::New()
 {

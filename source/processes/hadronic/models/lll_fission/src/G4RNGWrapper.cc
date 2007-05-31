@@ -53,12 +53,12 @@
 // UCRL-CODE-224807
 //
 //
-// $Id: G4RNGWrapper.cc,v 1.1 2007-05-22 00:52:36 dennis Exp $
+// $Id: G4RNGWrapper.cc,v 1.2 2007-05-31 22:52:51 dennis Exp $
 //
 
 #include "G4RNGWrapper.hh"
 #include "Randomize.hh"
 
-template CLHEP::HepRandomEngine* G4RNGWrapper<CLHEP::HepRandomEngine>::m_obj;
+template<class T> CLHEP::HepRandomEngine* G4RNGWrapper<CLHEP::HepRandomEngine>::m_obj;
 
-template double (CLHEP::HepRandomEngine::*G4RNGWrapper<CLHEP::HepRandomEngine>::m_func)(void);
+template<class T> double (CLHEP::HepRandomEngine::*G4RNGWrapper<CLHEP::HepRandomEngine>::m_func)(void);

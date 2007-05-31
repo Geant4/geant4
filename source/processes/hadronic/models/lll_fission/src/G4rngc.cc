@@ -53,22 +53,25 @@
 // UCRL-CODE-224807
 //
 //
-// $Id: G4rngc.cc,v 1.1 2007-05-30 00:50:29 dennis Exp $
+// $Id: G4rngc.cc,v 1.2 2007-05-31 22:52:51 dennis Exp $
 //
 
 #include <stdio.h>
 #include <stdlib.h>
 #include "G4fissionEvent.hh"
+#include "Randomize.hh"
 
 G4double (*G4fissionEvent::rngdptr)(void) = 0;
 G4float (*G4fissionEvent::rngfptr)(void) = 0;
 
 G4double G4fissionEvent::fisslibrng(void) {
-   if (rngdptr == 0) {
-      return drand48();
-   } else {
-      return rngdptr();
-   }
+  //   if (rngdptr == 0) {
+  //      return drand48();
+  //   } else {
+  //      return rngdptr();
+  //   }
+
+  return G4UniformRand();
 }
 
 G4double G4fissionEvent::rngf2d() {

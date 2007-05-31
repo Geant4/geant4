@@ -53,7 +53,7 @@
 // UCRL-CODE-224807
 //
 //
-// $Id: G4SmpIsoDir.cc,v 1.1 2007-05-30 03:53:52 dennis Exp $
+// $Id: G4SmpIsoDir.cc,v 1.2 2007-05-31 22:52:51 dennis Exp $
 //
 
 #include <math.h>
@@ -85,7 +85,7 @@ void G4fissionEvent::G4SmpIsoDir(G4double* cosdiru, G4double* cosdirv, G4double*
 /*
    Select an azimuthal angle uniformly on (0,2*pi)
 */
-   phi = 2.*M_PI*fisslibrng();
+   phi = twopi*fisslibrng();
    *cosdiru = sinpolang * cos(phi);
    *cosdirv = sinpolang * sin(phi);
    *cosdirw = cospolang;
