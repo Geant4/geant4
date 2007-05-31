@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ErrorGeomVolumeTarget.cc,v 1.2 2007-05-29 14:41:35 gcosmo Exp $
+// $Id: G4ErrorGeomVolumeTarget.cc,v 1.3 2007-05-31 15:28:51 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -49,7 +49,7 @@ G4ErrorGeomVolumeTarget::G4ErrorGeomVolumeTarget( const G4String& name )
 
 
 //------------------------------------------------------------------------
-bool G4ErrorGeomVolumeTarget::TargetReached( const G4Step* aStep )
+G4bool G4ErrorGeomVolumeTarget::TargetReached( const G4Step* aStep )
 {
   if( aStep->GetTrack()->GetNextVolume() != 0 ){
 #ifdef G4VERBOSE

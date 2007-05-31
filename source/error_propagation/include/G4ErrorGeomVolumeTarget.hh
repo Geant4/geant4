@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ErrorGeomVolumeTarget.hh,v 1.2 2007-05-29 14:41:35 gcosmo Exp $
+// $Id: G4ErrorGeomVolumeTarget.hh,v 1.3 2007-05-31 15:28:51 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Class Description:
@@ -53,7 +53,7 @@ class G4ErrorGeomVolumeTarget : public G4ErrorTarget
   G4ErrorGeomVolumeTarget( const G4String& name );
   virtual ~G4ErrorGeomVolumeTarget(){}
 
-  virtual bool TargetReached(const G4Step* aStep);
+  virtual G4bool TargetReached(const G4Step* aStep);
     // return true when particle is entering the volume
 
   virtual void Dump( const G4String& msg ) const;

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ErrorFreeTrajState.cc,v 1.2 2007-05-29 14:41:35 gcosmo Exp $
+// $Id: G4ErrorFreeTrajState.cc,v 1.3 2007-05-31 15:28:51 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -257,7 +257,7 @@ G4int G4ErrorFreeTrajState::PropagateError( const G4Track* aTrack )
 
   transf[3][2] = stepLengthCm * sinpPost;
   transf[4][1] = stepLengthCm;
-  for( uint ii=0;ii < 5; ii++ ){
+  for( size_t ii=0;ii < 5; ii++ ){
     transf[ii][ii] = 1.;
   }
 #ifdef G4EVERBOSE

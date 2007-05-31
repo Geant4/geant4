@@ -1,4 +1,4 @@
-$Id: History,v 1.3 2007-05-29 14:42:31 gcosmo Exp $
+$Id: History,v 1.4 2007-05-31 15:28:50 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+31 May 2007 - G.Cosmo (error_propagation-V08-03-05)
+- Fixed compilation problems on Windows/VC++.
+- Use G4bool for bool.
+
+31 May 2007 - P.Arce (error_propagation-V08-03-04)
+- Fixed problem of uninitialised variables.
 
 29 May 2007 - G.Cosmo (error_propagation-V08-03-03)
 - Fixed errors for unnecessary inclusion of non-existing headers.

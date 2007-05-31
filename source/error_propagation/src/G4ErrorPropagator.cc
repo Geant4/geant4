@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ErrorPropagator.cc,v 1.4 2007-05-31 10:08:22 arce Exp $
+// $Id: G4ErrorPropagator.cc,v 1.5 2007-05-31 15:28:51 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -194,7 +194,7 @@ G4Track* G4ErrorPropagator::InitG4Track( G4ErrorTrajState& initialTS )
   if( verbose >= 5 ) G4cout << "InitG4Track " << G4endl;
 
   //----- Close geometry
-  //-  bool geometryToBeOptimized = true;
+  //-  G4bool geometryToBeOptimized = true;
   //  if(verboseLevel>1)
   //-  G4GeometryManager* geomManager = G4GeometryManager::GetInstance();
   //-  geomManager->OpenGeometry();

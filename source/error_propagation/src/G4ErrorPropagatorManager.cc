@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ErrorPropagatorManager.cc,v 1.2 2007-05-29 14:41:35 gcosmo Exp $
+// $Id: G4ErrorPropagatorManager.cc,v 1.3 2007-05-31 15:28:51 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -216,7 +216,7 @@ void G4ErrorPropagatorManager::InitTrackPropagation()
 
 
 //-----------------------------------------------------------------------
-bool G4ErrorPropagatorManager::InitFieldForBackwards()
+G4bool G4ErrorPropagatorManager::InitFieldForBackwards()
 {
 
   if( G4ErrorPropagatorData::verbose() >= 4 ) G4cout << " G4ErrorPropagatorManager::InitFieldForBackwards() " << G4endl;
@@ -292,7 +292,7 @@ G4int G4ErrorPropagatorManager::PropagateOneStep( G4ErrorTrajState* currentTS, G
 
 
 //-----------------------------------------------------------------------
-bool G4ErrorPropagatorManager::CloseGeometry()
+G4bool G4ErrorPropagatorManager::CloseGeometry()
 {
   G4GeometryManager* geomManager = G4GeometryManager::GetInstance();
   geomManager->OpenGeometry();
