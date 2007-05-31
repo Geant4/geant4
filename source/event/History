@@ -1,4 +1,4 @@
-$Id: History,v 1.109 2007-05-31 12:41:54 ahoward Exp $
+$Id: History,v 1.110 2007-05-31 12:45:55 ahoward Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,7 +19,7 @@ committal in the CVS repository !
 
 May 31, 2007, A.Howard (event-V08-03-00)
 - Removal of classes from old biasing/scoring scheme:
-  G4CellScorer, G4CellScorerStore
+  G4CellScorer, G4CellScorerStore, G4ScoreTable, G4Scorer
 - Files remain on the HEAD for testing purposes
 
 March 8, 2007, M.Asai (event-V08-02-01)
