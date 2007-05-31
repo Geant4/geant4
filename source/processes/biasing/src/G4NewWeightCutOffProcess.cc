@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NewWeightCutOffProcess.cc,v 1.1 2007-05-30 17:30:09 ahoward Exp $
+// $Id: G4NewWeightCutOffProcess.cc,v 1.2 2007-05-31 16:01:45 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -35,7 +35,7 @@
 // ----------------------------------------------------------------------
 
 #include "G4NewWeightCutOffProcess.hh"
-#include "G4VScorer.hh"
+//#include "G4VScorer.hh"
 #include "G4GeometryCellStep.hh"
 #include "G4GCellFinder.hh"
 #include "G4TouchableHandle.hh"

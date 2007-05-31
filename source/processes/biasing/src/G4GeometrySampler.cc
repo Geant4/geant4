@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeometrySampler.cc,v 1.2 2007-05-31 14:01:41 ahoward Exp $
+// $Id: G4GeometrySampler.cc,v 1.3 2007-05-31 16:01:45 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -38,7 +38,7 @@
 
 #include "G4VIStore.hh"
 #include "G4WeightWindowStore.hh"
-#include "G4VScorer.hh"
+//#include "G4VScorer.hh"
 
 #include "G4VPhysicalVolume.hh"
 #include "G4ScoreConfigurator.hh"
@@ -113,25 +113,25 @@ G4bool G4GeometrySampler::IsConfigured() const
   return isconf;
 }
 
-void G4GeometrySampler::PrepareScoring(G4VScorer *scorer)
-{
-  G4cout << " preparing scoring configurator " << G4endl;
-  G4cout << G4endl;
-  G4cout << G4endl;
-  G4cout << G4endl;
-  G4cout << " new fWorld Name: " << fWorld->GetName() << G4endl;
-  G4cout << G4endl;
-  G4cout << G4endl;
-  G4cout << G4endl;
-  fScoreConfigurator = new G4ScoreConfigurator(fWorld, fParticleName, *scorer, paraflag);
-  G4cout << " configured scoring " << G4endl;
-  if (!fScoreConfigurator)
-  {
-    G4Exception("G4GeometrySampler::PrepareScoring()",
-                "FatalError", FatalException,
-                "Failed allocation of G4ScoreConfigurator !");
-  }
-}
+// void G4GeometrySampler::PrepareScoring(G4VScorer *scorer)
+// {
+//   G4cout << " preparing scoring configurator " << G4endl;
+//   G4cout << G4endl;
+//   G4cout << G4endl;
+//   G4cout << G4endl;
+//   G4cout << " new fWorld Name: " << fWorld->GetName() << G4endl;
+//   G4cout << G4endl;
+//   G4cout << G4endl;
+//   G4cout << G4endl;
+//   fScoreConfigurator = new G4ScoreConfigurator(fWorld, fParticleName, *scorer, paraflag);
+//   G4cout << " configured scoring " << G4endl;
+//   if (!fScoreConfigurator)
+//   {
+//     G4Exception("G4GeometrySampler::PrepareScoring()",
+//                 "FatalError", FatalException,
+//                 "Failed allocation of G4ScoreConfigurator !");
+//   }
+// }
 
 void
 G4GeometrySampler::PrepareImportanceSampling(G4VIStore *istore,
