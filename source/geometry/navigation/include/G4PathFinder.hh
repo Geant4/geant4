@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PathFinder.hh,v 1.29 2007-05-24 10:49:18 japost Exp $
+// $Id: G4PathFinder.hh,v 1.30 2007-05-31 17:57:11 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // class G4PathFinder 
@@ -113,13 +113,13 @@ class G4PathFinder
      //
      // Minimum value of safety after last ComputeStep
 
-   G4double ComputeSafety( const G4ThreeVector& globalPoint ); 
-     //
-     // Recompute safety for the relevant point
-     // the endpoint of the last step!!
+   G4double ComputeSafety( const G4ThreeVector& globalPoint); 
+     // Recompute safety for the relevant point the endpoint of the last step!!
+     // Maintain vector of individual safety values (for next method)
 
    G4double ObtainSafety( G4int navId, G4ThreeVector& globalCenterPoint );
-     // Obtain safety for navigator/geometry navId for last point computed
+     // Obtain safety for navigator/geometry navId for last point 'computed'
+     //   --> last point for which ComputeSafety was called
      //   Returns the point (center) for which this safety is valid
 
    void EnableParallelNavigation( G4bool enableChoice=true ); 
@@ -143,6 +143,17 @@ class G4PathFinder
    inline void MovePoint();
      //
      // Signal that location will be moved -- internal use primarily
+
+   // To provide best compatibility between Coupled and Old Transportation
+   //   the next two methods are provided:
+   G4double LastPreSafety( G4int navId, G4ThreeVector& globalCenterPoint, G4double& minSafety ); 
+     // Obtain last safety needed in ComputeStep (for geometry navId)
+     //   --> last point at which ComputeStep recalculated safety
+     //   Returns the point (center) for which this safety is valid
+     //    and also the minimum safety over all navigators (ie full)
+
+   void PushPostSafetyToPreSafety(); 
+     // Tell PathFinder to copy PostStep Safety to PreSafety (for use at next step)
 
    G4String& LimitedString( ELimited lim );
      // Convert ELimited to string
@@ -205,14 +216,17 @@ class G4PathFinder
    G4double      fCurrentStepSize[fMaxNav]; 
 
    G4ThreeVector fPreSafetyLocation;    //  last initial position for which safety evaluated
-   G4double      fPreSafetyMinValue;    //   /\ corresponding value of safety
-   G4double      fNewSafety[ fMaxNav ]; //   Safeties for the above point
+   G4double      fPreSafetyMinValue;    //   /\ corresponding value of full safety
+   G4double      fPreSafetyValues[ fMaxNav ]; //   Safeties for the above point
    // This part of the state can be retained for severall calls --> CARE
 
    G4ThreeVector fPreStepLocation;      //  point where last ComputeStep called
-   G4double      fMinSafety_PreStepPt;  //   /\ corresponding value of safety
+   G4double      fMinSafety_PreStepPt;  //   /\ corresponding value of full safety
+   G4double      fCurrentPreStepSafety[ fMaxNav ]; //   Safeties for the above point
    // This changes at each step, 
    //   so it can differ when steps inside min-safety are made
+
+   G4bool        fPreStepCenterRenewed;   // Whether PreSafety coincides with PreStep point 
 
    G4double      fMinStep;      // As reported by Navigators -- can be kInfinity
    G4double      fTrueMinStep;  // Corrected in case >= proposed
@@ -288,5 +302,15 @@ inline G4double      G4PathFinder::ObtainSafety( G4int navId, G4ThreeVector& glo
   globalCenterPoint= fSafetyLocation; 
   //  navId = std::min( navId, fMaxNav-1 ); 
   return  fNewSafetyComputed[ navId ];
+}
+
+inline G4double  G4PathFinder::LastPreSafety( G4int navId, 
+					      G4ThreeVector& globalCenterPoint, 
+					      G4double& minSafety )
+{
+  globalCenterPoint= fPreSafetyLocation;
+  minSafety=         fPreSafetyMinValue;
+  //  navId = std::min( navId, fMaxNav-1 ); 
+  return  fPreSafetyValues[ navId ];
 }
 #endif 
