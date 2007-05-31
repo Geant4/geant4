@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4mplIonisation.cc,v 1.4 2007-05-22 17:37:30 vnivanch Exp $
+// $Id: G4mplIonisation.cc,v 1.5 2007-05-31 11:13:31 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -80,7 +80,7 @@ void G4mplIonisation::InitialiseEnergyLossProcess(const G4ParticleDefinition*,
   SetBaseParticle(0);
   SetSecondaryParticle(G4Electron::Electron());
 
-  G4mplIonisationModel* ion  = new G4mplIonisationModel(magneticCharge);
+  G4mplIonisationModel* ion  = new G4mplIonisationModel(magneticCharge,"PAI");
   ion->SetLowEnergyLimit(0.1*keV);
   ion->SetHighEnergyLimit(100.*TeV);
   AddEmModel(0,ion,ion);
