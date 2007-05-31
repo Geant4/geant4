@@ -1,4 +1,4 @@
-$Id: History,v 1.4 2007-05-30 17:59:46 ahoward Exp $
+$Id: History,v 1.5 2007-05-31 13:20:01 ahoward Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May 31st, 2007 Alex Howard (procbiasing-V08-03-02)
+- removed dependency on old biasing within transportation
 
 May 30th, 2007 Alex Howard (procbiasing-V08-03-01)
 - added missing includes to GNUmakefile
