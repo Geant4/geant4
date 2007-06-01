@@ -1,4 +1,4 @@
-$Id: History,v 1.9 2007-06-01 09:40:08 ahoward Exp $
+$Id: History,v 1.10 2007-06-01 15:00:42 ahoward Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+June 1st, 2007 Alex Howard (procbiasing-V08-03-04)
+- Added missing source file G4VProcessPlacer.cc previously resident in
+  processes/transportation
 
 June 1st, 2007 Alex Howard (procbiasing-V08-03-03)
 - Renamed New classes back to normal classes, simultaneously 
