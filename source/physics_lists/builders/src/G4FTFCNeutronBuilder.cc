@@ -23,59 +23,67 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
- #include "G4FTFCNeutronBuilder.hh"
- #include "G4ParticleDefinition.hh"
- #include "G4ParticleTable.hh"
- #include "G4ProcessManager.hh"
+#include "G4FTFCNeutronBuilder.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4ParticleTable.hh"
+#include "G4ProcessManager.hh"
 
- G4FTFCNeutronBuilder::
- G4FTFCNeutronBuilder() 
- {
-   theMin = 15*GeV;
-   theModel = new G4TheoFSGenerator;
+G4FTFCNeutronBuilder::
+G4FTFCNeutronBuilder(G4bool quasiElastic) 
+{
+  theMin = 4*GeV;
+  theModel = new G4TheoFSGenerator;
 
-   theStringModel = new G4FTFModel;
-   theStringDecay = new G4ExcitedStringDecay(new G4LundStringFragmentation);
-   theStringModel->SetFragmentationModel(theStringDecay);
-   
-   theCascade = new G4StringChipsParticleLevelInterface;
+  theStringModel = new G4FTFModel;
+  theStringDecay = new G4ExcitedStringDecay(new G4LundStringFragmentation);
+  theStringModel->SetFragmentationModel(theStringDecay);
 
-   theModel->SetHighEnergyGenerator(theStringModel);
-   theModel->SetTransport(theCascade);
- }
+  theCascade = new G4StringChipsParticleLevelInterface;
 
- G4FTFCNeutronBuilder::
- ~G4FTFCNeutronBuilder() 
- {
-   delete theCascade;
-   delete theStringDecay;
-   delete theStringModel;
-   delete theModel;
- }
+  theModel->SetHighEnergyGenerator(theStringModel);
+  if (quasiElastic)
+  {
+     theQuasiElastic=new G4QuasiElasticChannel;
+     theModel->SetQuasiElasticChannel(theQuasiElastic);
+  } else 
+  {  theQuasiElastic=0;}  
 
- void G4FTFCNeutronBuilder::
- Build(G4HadronElasticProcess * )
- {
- }
+  theModel->SetTransport(theCascade);
+}
 
- void G4FTFCNeutronBuilder::
- Build(G4HadronFissionProcess * )
- {
- }
+G4FTFCNeutronBuilder::
+~G4FTFCNeutronBuilder() 
+{
+  delete theCascade;
+  delete theStringDecay;
+  if ( theQuasiElastic ) delete theQuasiElastic;
+  delete theStringModel;
+  delete theModel;
+}
 
- void G4FTFCNeutronBuilder::
- Build(G4HadronCaptureProcess * )
- {
- }
+void G4FTFCNeutronBuilder::
+Build(G4HadronElasticProcess * )
+{
+}
 
- void G4FTFCNeutronBuilder::
- Build(G4NeutronInelasticProcess * aP)
- {
-   aP->AddDataSet(&theXSec);  
+void G4FTFCNeutronBuilder::
+Build(G4HadronFissionProcess * )
+{
+}
 
-   theModel->SetMinEnergy(theMin);
-   theModel->SetMaxEnergy(100*TeV);
-   aP->RegisterMe(theModel);
- }
+void G4FTFCNeutronBuilder::
+Build(G4HadronCaptureProcess * )
+{
+}
+
+void G4FTFCNeutronBuilder::
+Build(G4NeutronInelasticProcess * aP)
+{
+  aP->AddDataSet(&theXSec);  
+
+  theModel->SetMinEnergy(theMin);
+  theModel->SetMaxEnergy(100*TeV);
+  aP->RegisterMe(theModel);
+}
 
  // 2002 by J.P. Wellisch

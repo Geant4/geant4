@@ -42,13 +42,14 @@
 #include "G4FTFModel.hh"
 #include "G4LundStringFragmentation.hh"
 #include "G4ExcitedStringDecay.hh"
+#include "G4QuasiElasticChannel.hh"
 
 #include "G4ProtonInelasticCrossSection.hh"
 
 class G4FTFPProtonBuilder : public G4VProtonBuilder
 {
   public: 
-    G4FTFPProtonBuilder();
+    G4FTFPProtonBuilder(G4bool quasiElastic=false);
     virtual ~G4FTFPProtonBuilder();
 
   public: 
@@ -58,12 +59,14 @@ class G4FTFPProtonBuilder : public G4VProtonBuilder
     void SetMinEnergy(G4double aM) {theMin = aM;}
 
   private:
-    G4ProtonInelasticCrossSection theXSec;
     G4TheoFSGenerator * theModel;
     G4PreCompoundModel * thePreEquilib;
     G4GeneratorPrecompoundInterface * theCascade;
     G4FTFModel * theStringModel;
     G4ExcitedStringDecay * theStringDecay;
+    G4QuasiElasticChannel * theQuasiElastic;
+
+    G4ProtonInelasticCrossSection theXSec;
     G4double theMin;
 
 };

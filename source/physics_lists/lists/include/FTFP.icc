@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: FTFP.icc,v 1.4 2007-05-16 11:35:36 vnivanch Exp $
+// $Id: FTFP.icc,v 1.5 2007-06-01 15:20:06 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -73,7 +73,7 @@ template<class T> TFTFP<T>::TFTFP(G4int ver):  T()
   // default cut value  (1.0mm) 
   // defaultCutValue = 1.0*mm;
   G4DataQuestionaire it(photon);
-  G4cout << "<<< Geant4 Physics List simulation engine: FTFP 4.2"<<G4endl;
+  G4cout << "<<< Geant4 Physics List simulation engine: FTFP 4.3"<<G4endl;
   G4cout <<G4endl;
   this->defaultCutValue = 0.7*mm;  
   this->SetVerboseLevel(ver);
@@ -91,7 +91,8 @@ template<class T> TFTFP<T>::TFTFP(G4int ver):  T()
   this-> RegisterPhysics( new G4HadronElasticPhysics("elastic",ver,false));
 
    // Hadron Physics
-  this->RegisterPhysics(  new HadronPhysicsFTFP("hadron"));
+   G4bool quasiElastic;
+  this->RegisterPhysics(  new HadronPhysicsFTFP("hadron",quasiElastic=true));
 
   // Stopping Physics
   this->RegisterPhysics( new G4QStoppingPhysics("stopping"));

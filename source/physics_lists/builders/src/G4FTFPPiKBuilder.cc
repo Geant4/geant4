@@ -29,9 +29,9 @@
  #include "G4ProcessManager.hh"
 
  G4FTFPPiKBuilder::
- G4FTFPPiKBuilder() 
+ G4FTFPPiKBuilder(G4bool quasiElastic) 
  {
-   theMin = 15*GeV;
+   theMin = 4*GeV;
    theModel = new G4TheoFSGenerator;
 
    theStringModel = new G4FTFModel;
@@ -43,6 +43,13 @@
    theCascade->SetDeExcitation(thePreEquilib);  
 
    theModel->SetHighEnergyGenerator(theStringModel);
+   if (quasiElastic)
+   {
+      theQuasiElastic=new G4QuasiElasticChannel;
+      theModel->SetQuasiElasticChannel(theQuasiElastic);
+   } else 
+   {  theQuasiElastic=0;}  
+
    theModel->SetTransport(theCascade);
  }
 
@@ -53,6 +60,7 @@
    delete theStringDecay;
    delete theStringModel;
    delete theModel;
+   if ( theQuasiElastic ) delete theQuasiElastic;
  }
 
  void G4FTFPPiKBuilder::

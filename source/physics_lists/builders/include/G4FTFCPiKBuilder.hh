@@ -39,13 +39,14 @@
 #include "G4FTFModel.hh"
 #include "G4LundStringFragmentation.hh"
 #include "G4ExcitedStringDecay.hh"
+#include "G4QuasiElasticChannel.hh"
 
 #include "G4PiNuclearCrossSection.hh"
 
 class G4FTFCPiKBuilder : public G4VPiKBuilder
 {
   public: 
-    G4FTFCPiKBuilder();
+    G4FTFCPiKBuilder(G4bool quasiElastic=false);
     virtual ~G4FTFCPiKBuilder();
 
   public: 
@@ -60,11 +61,13 @@ class G4FTFCPiKBuilder : public G4VPiKBuilder
     void SetMinEnergy(G4double aM) {theMin = aM;}
 
   private:
-    G4PiNuclearCrossSection thePiData;
     G4TheoFSGenerator * theModel;
     G4StringChipsParticleLevelInterface * theCascade;
     G4FTFModel * theStringModel;
     G4ExcitedStringDecay * theStringDecay;
+    G4QuasiElasticChannel * theQuasiElastic;
+
+    G4PiNuclearCrossSection thePiData;
     G4double theMin;
 
 };
