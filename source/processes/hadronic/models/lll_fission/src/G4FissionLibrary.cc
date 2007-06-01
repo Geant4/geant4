@@ -53,7 +53,7 @@
 // UCRL-CODE-224807
 //
 //
-// $Id: G4FissionLibrary.cc,v 1.3 2007-06-01 13:46:53 gcosmo Exp $
+// $Id: G4FissionLibrary.cc,v 1.4 2007-06-01 14:02:08 gcosmo Exp $
 //
 // neutron_hp -- source file
 // J.M. Verbeke, Jan-2007
@@ -61,7 +61,6 @@
 //
 
 #include "G4FissionLibrary.hh"
-
 
 G4FissionLibrary::G4FissionLibrary()
   : G4NeutronHPFinalState()
@@ -75,10 +74,6 @@ G4FissionLibrary::~G4FissionLibrary()
 
 G4NeutronHPFinalState * G4FissionLibrary::New()
 {
-  // set the random number generator
-  G4RNGWrapper<CLHEP::HepRandomEngine>::set(CLHEP::HepRandom::getTheEngine(), &CLHEP::HepRandomEngine::flat);
-  setrngd_(G4RNGWrapper<CLHEP::HepRandomEngine>::rng);
-
   G4FissionLibrary * theNew = new G4FissionLibrary;
   return theNew;
 }

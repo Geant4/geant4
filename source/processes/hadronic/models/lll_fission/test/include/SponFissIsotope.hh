@@ -18,7 +18,6 @@
 #include "G4Gamma.hh"
 #include "Randomize.hh"
 #include "G4LLNLFission.hh"
-#include "G4RNGWrapper.hh"
 
 class G4Event;
 

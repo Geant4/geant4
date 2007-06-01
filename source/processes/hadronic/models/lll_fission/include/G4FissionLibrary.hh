@@ -52,7 +52,7 @@
 // All rights reserved.
 // UCRL-CODE-224807
 //
-// $Id: G4FissionLibrary.hh,v 1.3 2007-06-01 13:46:53 gcosmo Exp $
+// $Id: G4FissionLibrary.hh,v 1.4 2007-06-01 14:02:08 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -73,7 +73,6 @@
 #include "G4Nucleus.hh"
 #include "Randomize.hh"
 #include "G4LLNLFission.hh"
-#include "G4RNGWrapper.hh"
 
 class G4FissionLibrary : public G4NeutronHPFinalState
 {

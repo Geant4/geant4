@@ -20,10 +20,6 @@ SponFissIsotope::SponFissIsotope(G4int iso)
   // verbosity
   verbosityLevel = 0;
 
-  // set random number generator
-  G4RNGWrapper<CLHEP::HepRandomEngine>::set(CLHEP::HepRandom::getTheEngine(),&CLHEP::HepRandomEngine::flat);
-  setrngd_(G4RNGWrapper<CLHEP::HepRandomEngine>::rng);
-
   isotope = iso;
 }
 
