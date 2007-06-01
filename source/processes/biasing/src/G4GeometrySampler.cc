@@ -24,13 +24,8 @@
 // ********************************************************************
 //
 //
-<<<<<<< G4GeometrySampler.cc
-// $Id: G4GeometrySampler.cc,v 1.7 2007-06-01 09:40:08 ahoward Exp $
+// $Id: G4GeometrySampler.cc,v 1.8 2007-06-01 09:52:23 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-=======
-// $Id: G4GeometrySampler.cc,v 1.7 2007-06-01 09:40:08 ahoward Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
->>>>>>> 1.6
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -43,10 +38,10 @@
 
 #include "G4VIStore.hh"
 #include "G4WeightWindowStore.hh"
-#include "G4VScorer.hh"
+//#include "G4VScorer.hh"
 
 #include "G4VPhysicalVolume.hh"
-#include "G4ScoreConfigurator.hh"
+//#include "G4ScoreConfigurator.hh"
 #include "G4ImportanceConfigurator.hh"
 #include "G4WeightWindowConfigurator.hh"
 #include "G4WeightCutOffConfigurator.hh"
@@ -57,7 +52,7 @@
   : fParticleName(particlename),
     fWorld(parallelworld),
     fImportanceConfigurator(0),
-    fScoreConfigurator(0),
+    //    fScoreConfigurator(0),
     fGCellFinder(0),
     fWeightCutOffConfigurator(0),
     fIStore(0),
@@ -85,29 +80,15 @@ void G4GeometrySampler::ClearSampling()
     delete fWeightWindowConfigurator;
     fWeightWindowConfigurator = 0;
   }
-<<<<<<< G4GeometrySampler.cc
 //   if (fScoreConfigurator)
 //   {
 //     delete fScoreConfigurator;
 //     fScoreConfigurator = 0;
 //   }
   if (fWeightCutOffConfigurator)
-=======
-  if (fScoreConfigurator)
->>>>>>> 1.6
-  {
-<<<<<<< G4GeometrySampler.cc
-    delete fWeightCutOffConfigurator;
-    fWeightCutOffConfigurator = 0;
-=======
-    delete fScoreConfigurator;
-    fScoreConfigurator = 0;
-  }
-  if (fWeightCutOffConfigurator)
   {
     delete fWeightCutOffConfigurator;
     fWeightCutOffConfigurator = 0;
->>>>>>> 1.6
   }
   if (fGCellFinder)
   {
@@ -132,25 +113,25 @@ G4bool G4GeometrySampler::IsConfigured() const
   return isconf;
 }
 
-void G4GeometrySampler::PrepareScoring(G4VScorer *scorer)
-{
-  G4cout << " preparing scoring configurator " << G4endl;
-  G4cout << G4endl;
-  G4cout << G4endl;
-  G4cout << G4endl;
-  G4cout << " new fWorld Name: " << fWorld->GetName() << G4endl;
-  G4cout << G4endl;
-  G4cout << G4endl;
-  G4cout << G4endl;
-  fScoreConfigurator = new G4ScoreConfigurator(fWorld, fParticleName, *scorer, paraflag);
-  G4cout << " configured scoring " << G4endl;
-  if (!fScoreConfigurator)
-  {
-    G4Exception("G4GeometrySampler::PrepareScoring()",
-                "FatalError", FatalException,
-                "Failed allocation of G4ScoreConfigurator !");
-  }
-}
+// void G4GeometrySampler::PrepareScoring(G4VScorer *scorer)
+// {
+//   G4cout << " preparing scoring configurator " << G4endl;
+//   G4cout << G4endl;
+//   G4cout << G4endl;
+//   G4cout << G4endl;
+//   G4cout << " new fWorld Name: " << fWorld->GetName() << G4endl;
+//   G4cout << G4endl;
+//   G4cout << G4endl;
+//   G4cout << G4endl;
+//   fScoreConfigurator = new G4ScoreConfigurator(fWorld, fParticleName, *scorer, paraflag);
+//   G4cout << " configured scoring " << G4endl;
+//   if (!fScoreConfigurator)
+//   {
+//     G4Exception("G4GeometrySampler::PrepareScoring()",
+//                 "FatalError", FatalException,
+//                 "Failed allocation of G4ScoreConfigurator !");
+//   }
+// }
 
 void
 G4GeometrySampler::PrepareImportanceSampling(G4VIStore *istore,
@@ -227,12 +208,12 @@ void G4GeometrySampler::Configure()
   {
     fIsConfigured = true;
 
-    if (fScoreConfigurator)
-    {
-      G4cout << " score configurator push_back " << G4endl;
-      fConfigurators.push_back(fScoreConfigurator);
-      G4cout << " pushed " << G4endl;
-    }
+//     if (fScoreConfigurator)
+//     {
+//       G4cout << " score configurator push_back " << G4endl;
+//       fConfigurators.push_back(fScoreConfigurator);
+//       G4cout << " pushed " << G4endl;
+//     }
     if (fImportanceConfigurator)
     {
       G4cout << " importance configurator push_back " << G4endl;
