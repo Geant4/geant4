@@ -24,22 +24,22 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSamplerConfigurator.cc,v 1.1 2007-06-01 08:07:00 ahoward Exp $
+// $Id: G4VSamplerConfigurator.cc,v 1.2 2007-06-01 09:16:34 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
 //
-// G4VNewSamplerConfigurator.cc
+// G4VSamplerConfigurator.cc
 //
 // ----------------------------------------------------------------------
 
 
-#include "G4VNewSamplerConfigurator.hh"
+#include "G4VSamplerConfigurator.hh"
 
 
-G4VNewSamplerConfigurator::G4VNewSamplerConfigurator()
+G4VSamplerConfigurator::G4VSamplerConfigurator()
 {}
 
-G4VNewSamplerConfigurator::~G4VNewSamplerConfigurator()
+G4VSamplerConfigurator::~G4VSamplerConfigurator()
 {}

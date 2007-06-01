@@ -24,20 +24,20 @@
 // ********************************************************************
 //
 //
-// $Id: G4WeightCutOffConfigurator.cc,v 1.1 2007-06-01 08:07:00 ahoward Exp $
+// $Id: G4WeightCutOffConfigurator.cc,v 1.2 2007-06-01 09:16:34 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
-// Class G4NewWeightCutOffConfigurator
+// Class G4WeightCutOffConfigurator
 //
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
 
-#include "G4NewWeightCutOffConfigurator.hh"
-#include "G4NewWeightCutOffProcess.hh"
+#include "G4WeightCutOffConfigurator.hh"
+#include "G4WeightCutOffProcess.hh"
 
-G4NewWeightCutOffConfigurator::
-G4NewWeightCutOffConfigurator(G4VPhysicalVolume* worldvolume,
+G4WeightCutOffConfigurator::
+G4WeightCutOffConfigurator(G4VPhysicalVolume* worldvolume,
 			      const G4String &particlename,
                                  G4double wsurvival,
                                  G4double wlimit,
@@ -49,37 +49,37 @@ G4NewWeightCutOffConfigurator(G4VPhysicalVolume* worldvolume,
     fPlaced(false),
     paraflag(para)
 {
-  fNewWeightCutOffProcess =
-    new G4NewWeightCutOffProcess(wsurvival,wlimit,isource,istore,aGCellfinder,"NewWeightCutOffProcess",paraflag);
-  if (!fNewWeightCutOffProcess)
+  fWeightCutOffProcess =
+    new G4WeightCutOffProcess(wsurvival,wlimit,isource,istore,aGCellfinder,"WeightCutOffProcess",paraflag);
+  if (!fWeightCutOffProcess)
   {
-    G4Exception("G4NewWeightCutOffConfigurator::G4NewWeightCutOffConfigurator()",
+    G4Exception("G4WeightCutOffConfigurator::G4WeightCutOffConfigurator()",
                 "FatalError", FatalException,
-                "Failed to allocate G4NewWeightCutOffProcess !");
+                "Failed to allocate G4WeightCutOffProcess !");
   }
 }
 
-G4NewWeightCutOffConfigurator::~G4NewWeightCutOffConfigurator()
+G4WeightCutOffConfigurator::~G4WeightCutOffConfigurator()
 {
   if (fPlaced)
   {
-    fPlacer.RemoveProcess(fNewWeightCutOffProcess);
-    delete fNewWeightCutOffProcess;
+    fPlacer.RemoveProcess(fWeightCutOffProcess);
+    delete fWeightCutOffProcess;
   }
 }
 
-void G4NewWeightCutOffConfigurator::Configure(G4VNewSamplerConfigurator *)
+void G4WeightCutOffConfigurator::Configure(G4VSamplerConfigurator *)
 {
   G4cout << " entering new weight window configure " << G4endl;
 
-  if(paraflag) fNewWeightCutOffProcess->SetParallelWorld(fWorld);
+  if(paraflag) fWeightCutOffProcess->SetParallelWorld(fWorld);
 
-  fPlacer.AddProcessAsLastDoIt(fNewWeightCutOffProcess); 
+  fPlacer.AddProcessAsLastDoIt(fWeightCutOffProcess); 
   fPlaced = true;
 }
 
 const G4VTrackTerminator
-*G4NewWeightCutOffConfigurator::GetTrackTerminator() const
+*G4WeightCutOffConfigurator::GetTrackTerminator() const
 {
   return 0;
 }

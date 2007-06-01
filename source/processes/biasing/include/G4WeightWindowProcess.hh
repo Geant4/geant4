@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4WeightWindowProcess.hh,v 1.2 2007-05-31 13:19:07 ahoward Exp $
+// $Id: G4WeightWindowProcess.hh,v 1.3 2007-06-01 09:16:33 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -46,7 +46,7 @@
 #include "G4VTrackTerminator.hh"
 #include "G4PlaceOfAction.hh"
 
-class G4NewSamplingPostStepAction;
+class G4SamplingPostStepAction;
 class G4VWeightWindowAlgorithm;
 class G4VWeightWindowStore;
 
@@ -144,7 +144,7 @@ private:
   G4ParticleChange *fParticleChange;
   const G4VWeightWindowAlgorithm &fWeightWindowAlgorithm;
   const G4VWeightWindowStore &fWeightWindowStore;
-  G4NewSamplingPostStepAction *fPostStepAction;
+  G4SamplingPostStepAction *fPostStepAction;
   G4PlaceOfAction fPlaceOfAction;
 
   G4TransportationManager* fTransportationManager;

@@ -24,11 +24,11 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessPlacer.hh,v 1.1 2007-06-01 08:07:00 ahoward Exp $
+// $Id: G4ProcessPlacer.hh,v 1.2 2007-06-01 09:16:33 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
-// Class G4NewProcessPlacer
+// Class G4ProcessPlacer
 //
 // Class description:
 //
@@ -37,8 +37,8 @@
 
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
-#ifndef G4NewProcessPlacer_hh
-#define G4NewProcessPlacer_hh G4NewProcessPlacer_hh 
+#ifndef G4ProcessPlacer_hh
+#define G4ProcessPlacer_hh G4ProcessPlacer_hh 
 
 #include "G4Types.hh"
 #include "G4String.hh"
@@ -47,15 +47,15 @@
 class G4ProcessManager;
 class G4ProcessVector;
 
-class G4NewProcessPlacer : public G4VProcessPlacer
+class G4ProcessPlacer : public G4VProcessPlacer
 {
 
 public:  // with description
 
-  explicit G4NewProcessPlacer(const G4String &particlename);
+  explicit G4ProcessPlacer(const G4String &particlename);
     // create a process placer for a particle type
 
-  virtual ~G4NewProcessPlacer();
+  virtual ~G4ProcessPlacer();
 
   virtual void AddProcessAsLastDoIt(G4VProcess *process);
     // place a post step do it process such that the 

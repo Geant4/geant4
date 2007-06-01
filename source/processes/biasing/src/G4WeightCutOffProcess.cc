@@ -24,17 +24,17 @@
 // ********************************************************************
 //
 //
-// $Id: G4WeightCutOffProcess.cc,v 1.1 2007-06-01 08:07:00 ahoward Exp $
+// $Id: G4WeightCutOffProcess.cc,v 1.2 2007-06-01 09:16:34 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
 //
-// G4NewWeightCutOffProcess.cc
+// G4WeightCutOffProcess.cc
 //
 // ----------------------------------------------------------------------
 
-#include "G4NewWeightCutOffProcess.hh"
+#include "G4WeightCutOffProcess.hh"
 //#include "G4VScorer.hh"
 #include "G4GeometryCellStep.hh"
 #include "G4GCellFinder.hh"
@@ -52,8 +52,8 @@
 #include "G4FieldTrackUpdator.hh"
 
 
-G4NewWeightCutOffProcess::
-G4NewWeightCutOffProcess(G4double wsurvival,
+G4WeightCutOffProcess::
+G4WeightCutOffProcess(G4double wsurvival,
                       G4double wlimit,
                       G4double isource,
                       G4VIStore *istore,
@@ -70,7 +70,7 @@ G4NewWeightCutOffProcess(G4double wsurvival,
 {
   if (!fParticleChange)
   {
-    G4Exception("G4NewWeightCutOffProcess::G4NewWeightCutOffProcess()",
+    G4Exception("G4WeightCutOffProcess::G4WeightCutOffProcess()",
                 "FatalError", FatalException,
                 "Failed to allocate G4ParticleChange !");
   }
@@ -93,7 +93,7 @@ G4NewWeightCutOffProcess(G4double wsurvival,
 
 }
 
-G4NewWeightCutOffProcess::~G4NewWeightCutOffProcess()
+G4WeightCutOffProcess::~G4WeightCutOffProcess()
 {
   delete fParticleChange;
   delete fGhostStep;
@@ -105,7 +105,7 @@ G4NewWeightCutOffProcess::~G4NewWeightCutOffProcess()
 // SetParallelWorld 
 //
 //------------------------------------------------------
-void G4NewWeightCutOffProcess::
+void G4WeightCutOffProcess::
 SetParallelWorld(G4String parallelWorldName)
 {
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -117,7 +117,7 @@ SetParallelWorld(G4String parallelWorldName)
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 }
 
-void G4NewWeightCutOffProcess::
+void G4WeightCutOffProcess::
 SetParallelWorld(G4VPhysicalVolume* parallelWorld)
 {
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -134,7 +134,7 @@ SetParallelWorld(G4VPhysicalVolume* parallelWorld)
 // StartTracking
 //
 //------------------------------------------------------
-void G4NewWeightCutOffProcess::StartTracking(G4Track* trk)
+void G4WeightCutOffProcess::StartTracking(G4Track* trk)
 {
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // Activate navigator and get the navigator ID
@@ -146,9 +146,9 @@ void G4NewWeightCutOffProcess::StartTracking(G4Track* trk)
       { fNavigatorID = fTransportationManager->ActivateNavigator(fGhostNavigator); }
     else
       {
-	G4Exception("G4NewWeightCutOffProcess::StartTracking",
+	G4Exception("G4WeightCutOffProcess::StartTracking",
 		    "ProcParaWorld000",FatalException,
-		    "G4NewWeightCutOffProcess is used for tracking without having a parallel world assigned");
+		    "G4WeightCutOffProcess is used for tracking without having a parallel world assigned");
       }
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -174,7 +174,7 @@ void G4NewWeightCutOffProcess::StartTracking(G4Track* trk)
 }
 
 
-G4double G4NewWeightCutOffProcess::
+G4double G4WeightCutOffProcess::
 PostStepGetPhysicalInteractionLength(const G4Track &,
                                      G4double, G4ForceCondition* condition)
 {
@@ -187,7 +187,7 @@ PostStepGetPhysicalInteractionLength(const G4Track &,
 }
   
 G4VParticleChange * 
-G4NewWeightCutOffProcess::PostStepDoIt(const G4Track& aTrack, 
+G4WeightCutOffProcess::PostStepDoIt(const G4Track& aTrack, 
                                     const G4Step &aStep)
 {
   fParticleChange->Initialize(aTrack);
@@ -252,12 +252,12 @@ G4NewWeightCutOffProcess::PostStepDoIt(const G4Track& aTrack,
   return fParticleChange;
 }
 
-const G4String &G4NewWeightCutOffProcess::GetName() const
+const G4String &G4WeightCutOffProcess::GetName() const
 {
   return theProcessName;
 }
 
-G4double G4NewWeightCutOffProcess::
+G4double G4WeightCutOffProcess::
 AlongStepGetPhysicalInteractionLength(
             const G4Track& track, G4double  previousStepSize, G4double  currentMinimumStep,
             G4double& proposedSafety, G4GPILSelection* selection)
@@ -333,7 +333,7 @@ AlongStepGetPhysicalInteractionLength(
 }
 
   
-G4double G4NewWeightCutOffProcess::
+G4double G4WeightCutOffProcess::
 AtRestGetPhysicalInteractionLength(const G4Track& ,
                                    G4ForceCondition*)
 {
@@ -341,13 +341,13 @@ AtRestGetPhysicalInteractionLength(const G4Track& ,
 }
   
 G4VParticleChange*
-G4NewWeightCutOffProcess::AtRestDoIt(const G4Track&, const G4Step&)
+G4WeightCutOffProcess::AtRestDoIt(const G4Track&, const G4Step&)
 {
   return 0;
 }
 
 G4VParticleChange*
-G4NewWeightCutOffProcess::AlongStepDoIt(const G4Track& track, const G4Step&)
+G4WeightCutOffProcess::AlongStepDoIt(const G4Track& track, const G4Step&)
 {
   // Dummy ParticleChange ie: does nothing
   // Expecting G4Transportation to move the track
@@ -357,7 +357,7 @@ G4NewWeightCutOffProcess::AlongStepDoIt(const G4Track& track, const G4Step&)
   //  return 0;
 }
 
-void G4NewWeightCutOffProcess::CopyStep(const G4Step & step)
+void G4WeightCutOffProcess::CopyStep(const G4Step & step)
 {
   fGhostStep->SetTrack(step.GetTrack());
   fGhostStep->SetStepLength(step.GetStepLength());

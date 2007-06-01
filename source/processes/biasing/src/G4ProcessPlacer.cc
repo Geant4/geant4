@@ -24,33 +24,33 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessPlacer.cc,v 1.1 2007-06-01 08:07:00 ahoward Exp $
+// $Id: G4ProcessPlacer.cc,v 1.2 2007-06-01 09:16:33 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
 //
-// G4NewProcessPlacer.cc
+// G4ProcessPlacer.cc
 //
 // ----------------------------------------------------------------------
 
-#include "G4NewProcessPlacer.hh"
+#include "G4ProcessPlacer.hh"
 #include "G4ProcessManager.hh"
 #include "G4VProcess.hh"
 #include "G4ParticleTable.hh"
 
-G4NewProcessPlacer::G4NewProcessPlacer(const G4String &particlename)
+G4ProcessPlacer::G4ProcessPlacer(const G4String &particlename)
   : fParticleName(particlename)
 {
 }
 
-G4NewProcessPlacer::~G4NewProcessPlacer()
+G4ProcessPlacer::~G4ProcessPlacer()
 {
 }
 
-void G4NewProcessPlacer::RemoveProcess(G4VProcess *process)
+void G4ProcessPlacer::RemoveProcess(G4VProcess *process)
 {
-  G4cout << "=== G4NewProcessPlacer::RemoveProcess: for: " <<  fParticleName 
+  G4cout << "=== G4ProcessPlacer::RemoveProcess: for: " <<  fParticleName 
          << G4endl;
   G4cout << "  ProcessName: " << process->GetProcessName() 
          << ", will be removed!" << G4endl;
@@ -69,7 +69,7 @@ void G4NewProcessPlacer::RemoveProcess(G4VProcess *process)
   
 }
 
-void G4NewProcessPlacer::AddProcessAs(G4VProcess *process, SecondOrLast sol)
+void G4ProcessPlacer::AddProcessAs(G4VProcess *process, SecondOrLast sol)
 {
   G4cout << "  ProcessName: " << process->GetProcessName() << G4endl;
   G4cout << "The initial Vectors: " << G4endl;
@@ -88,13 +88,13 @@ void G4NewProcessPlacer::AddProcessAs(G4VProcess *process, SecondOrLast sol)
 
     if (!transportation)
     {
-      G4Exception(" G4NewProcessPlacer:: could not get process id=0");
+      G4Exception(" G4ProcessPlacer:: could not get process id=0");
     }
     if (transportation->GetProcessName() != "Transportation" && transportation->GetProcessName() != "Transportation8")
     {
       //      G4cout << " GOT HERE CoupledTransportation" << G4endl;
       G4cout << transportation->GetProcessName() << G4endl;
-      G4Exception(" G4NewProcessPlacer:: process id=0 is not Transportation");
+      G4Exception(" G4ProcessPlacer:: process id=0 is not Transportation");
     }
 
     // place the given proces as first for the moment
@@ -118,21 +118,21 @@ void G4NewProcessPlacer::AddProcessAs(G4VProcess *process, SecondOrLast sol)
   G4cout << "================================================" << G4endl;
 }
 
-void G4NewProcessPlacer::AddProcessAsSecondDoIt(G4VProcess *process)
+void G4ProcessPlacer::AddProcessAsSecondDoIt(G4VProcess *process)
 {
-  G4cout << "=== G4NewProcessPlacer::AddProcessAsSecondDoIt: for: " 
+  G4cout << "=== G4ProcessPlacer::AddProcessAsSecondDoIt: for: " 
          << fParticleName << G4endl;
   AddProcessAs(process, eSecond);
 }
 
-void G4NewProcessPlacer::AddProcessAsLastDoIt(G4VProcess *process)
+void G4ProcessPlacer::AddProcessAsLastDoIt(G4VProcess *process)
 {
-  G4cout << "=== G4NewProcessPlacer::AddProcessAsLastDoIt: for: " 
+  G4cout << "=== G4ProcessPlacer::AddProcessAsLastDoIt: for: " 
          << fParticleName << G4endl;
   AddProcessAs(process, eLast);
 }
 
-G4ProcessManager *G4NewProcessPlacer::GetProcessManager()
+G4ProcessManager *G4ProcessPlacer::GetProcessManager()
 { 
   // get particle iterator to add processes ---------------------
   G4ParticleTable* theParticleTable = 0;
@@ -155,13 +155,13 @@ G4ProcessManager *G4NewProcessPlacer::GetProcessManager()
   // ---------------------------------------------------------
   if (!processmanager)
   {
-    G4Exception("G4NewProcessPlacer::GetProcessManager()", "InvalidSetup",
+    G4Exception("G4ProcessPlacer::GetProcessManager()", "InvalidSetup",
                 FatalException, "NULL pointer to Process Manager ! Sampler.Configure() must be after PhysicsList instantiation");
   }
   return processmanager;
 }
 
-void G4NewProcessPlacer::PrintPostStepGPILVec()
+void G4ProcessPlacer::PrintPostStepGPILVec()
 {
   G4cout << "GPIL Vector: " << G4endl;
   G4ProcessVector* processGPILVec = 
@@ -169,7 +169,7 @@ void G4NewProcessPlacer::PrintPostStepGPILVec()
   PrintProcVec(processGPILVec);
 } 
 
-void G4NewProcessPlacer::PrintPostStepDoItVec()
+void G4ProcessPlacer::PrintPostStepDoItVec()
 {
   G4cout << "DoIt Vector: " << G4endl;
   G4ProcessVector* processDoItVec = 
@@ -178,17 +178,17 @@ void G4NewProcessPlacer::PrintPostStepDoItVec()
 }
 
 
-void G4NewProcessPlacer::PrintProcVec(G4ProcessVector* processVec)
+void G4ProcessPlacer::PrintProcVec(G4ProcessVector* processVec)
 {
   if (!processVec)
   {
-    G4Exception("G4NewProcessPlacer::G4NewProcessPlacer()", "InvalidArgument",
+    G4Exception("G4ProcessPlacer::G4ProcessPlacer()", "InvalidArgument",
                 FatalException, "NULL pointer to process-vector !");
   }
   G4int len = processVec->length();
   if (len==0)
   {
-    G4Exception("G4NewProcessPlacer::G4NewProcessPlacer()", "InvalidSetup",
+    G4Exception("G4ProcessPlacer::G4ProcessPlacer()", "InvalidSetup",
                 FatalException, "Length of process-vector is zero !");
   }
   for (int pi=0; pi<len; pi++)

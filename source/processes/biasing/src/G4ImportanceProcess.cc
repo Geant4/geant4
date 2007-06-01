@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ImportanceProcess.cc,v 1.2 2007-05-31 13:19:07 ahoward Exp $
+// $Id: G4ImportanceProcess.cc,v 1.3 2007-06-01 09:16:33 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -37,7 +37,7 @@
 #include "G4ImportanceProcess.hh"
 #include "G4VImportanceAlgorithm.hh"
 #include "G4GeometryCell.hh"
-#include "G4NewSamplingPostStepAction.hh"
+#include "G4SamplingPostStepAction.hh"
 #include "G4VTrackTerminator.hh"
 #include "G4VIStore.hh"
 
@@ -68,11 +68,11 @@ G4ImportanceProcess(const G4VImportanceAlgorithm &aImportanceAlgorithm,
 {
   if (TrackTerminator)
   {
-    fPostStepAction = new G4NewSamplingPostStepAction(*TrackTerminator);
+    fPostStepAction = new G4SamplingPostStepAction(*TrackTerminator);
   }
   else
   {
-    fPostStepAction = new G4NewSamplingPostStepAction(*this);
+    fPostStepAction = new G4SamplingPostStepAction(*this);
   }
   if (!fParticleChange)
   {

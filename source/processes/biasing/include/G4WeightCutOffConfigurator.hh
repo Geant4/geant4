@@ -24,37 +24,37 @@
 // ********************************************************************
 //
 //
-// $Id: G4WeightCutOffConfigurator.hh,v 1.1 2007-06-01 08:07:00 ahoward Exp $
+// $Id: G4WeightCutOffConfigurator.hh,v 1.2 2007-06-01 09:16:33 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
-// Class G4NewWeightCutOffConfigurator
+// Class G4WeightCutOffConfigurator
 //
 // Class description:
-// This class builds and places the G4NewWeightCutOffProcess.
+// This class builds and places the G4WeightCutOffProcess.
 // If the object is deleted the process is removed from the 
 // process list.
 
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
-#ifndef G4NewWeightCutOffConfigurator_hh
-#define G4NewWeightCutOffConfigurator_hh G4NewWeightCutOffConfigurator_hh
+#ifndef G4WeightCutOffConfigurator_hh
+#define G4WeightCutOffConfigurator_hh G4WeightCutOffConfigurator_hh
 
 #include "G4Types.hh"
-#include "G4VNewSamplerConfigurator.hh"
-#include "G4NewProcessPlacer.hh"
+#include "G4VSamplerConfigurator.hh"
+#include "G4ProcessPlacer.hh"
 
-class G4NewWeightCutOffProcess;
+class G4WeightCutOffProcess;
 class G4VGCellFinder;
 class G4VIStore;
 class G4VPhysicalVolume;
 
-class G4NewWeightCutOffConfigurator : public G4VNewSamplerConfigurator
+class G4WeightCutOffConfigurator : public G4VSamplerConfigurator
 {
 
 public:  // with description
 
-  G4NewWeightCutOffConfigurator(G4VPhysicalVolume* worldvolume,
+  G4WeightCutOffConfigurator(G4VPhysicalVolume* worldvolume,
 				const G4String &particlename,
                              G4double wsurvival,
                              G4double wlimit,
@@ -62,18 +62,18 @@ public:  // with description
                              G4VIStore *istore,
                              const G4VGCellFinder &aGCellFinder,G4bool paraflag);
 
-  virtual ~G4NewWeightCutOffConfigurator();
-  virtual void Configure(G4VNewSamplerConfigurator *preConf);
+  virtual ~G4WeightCutOffConfigurator();
+  virtual void Configure(G4VSamplerConfigurator *preConf);
   virtual const G4VTrackTerminator *GetTrackTerminator() const ;
   
 private:
 
-  G4NewWeightCutOffConfigurator(const G4NewWeightCutOffConfigurator&);
-  G4NewWeightCutOffConfigurator &
-  operator=(const G4NewWeightCutOffConfigurator&);
+  G4WeightCutOffConfigurator(const G4WeightCutOffConfigurator&);
+  G4WeightCutOffConfigurator &
+  operator=(const G4WeightCutOffConfigurator&);
   G4VPhysicalVolume* fWorld;
-  G4NewProcessPlacer fPlacer;
-  G4NewWeightCutOffProcess *fNewWeightCutOffProcess;
+  G4ProcessPlacer fPlacer;
+  G4WeightCutOffProcess *fWeightCutOffProcess;
   G4bool fPlaced;
 
 

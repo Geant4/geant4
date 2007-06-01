@@ -24,11 +24,11 @@
 // ********************************************************************
 //
 //
-// $Id: G4WeightCutOffProcess.hh,v 1.1 2007-06-01 08:07:00 ahoward Exp $
+// $Id: G4WeightCutOffProcess.hh,v 1.2 2007-06-01 09:16:33 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
-// Class G4NewWeightCutOffProcess
+// Class G4WeightCutOffProcess
 //
 // Class description:
 //
@@ -36,8 +36,8 @@
 
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
-#ifndef G4NewWeightCutOffProcess_hh 
-#define G4NewWeightCutOffProcess_hh G4NewWeightCutOffProcess_hh
+#ifndef G4WeightCutOffProcess_hh 
+#define G4WeightCutOffProcess_hh G4WeightCutOffProcess_hh
 
 #include "G4VProcess.hh"
 #include "G4VTrackTerminator.hh"
@@ -57,20 +57,20 @@ class G4VTouchable;
 
 
 
-class G4NewWeightCutOffProcess : public G4VProcess
+class G4WeightCutOffProcess : public G4VProcess
 {
 
 public:  // with description
 
-  G4NewWeightCutOffProcess(G4double wsurvival,
+  G4WeightCutOffProcess(G4double wsurvival,
                         G4double wlimit,
                         G4double isource,
                         G4VIStore *istore,
                         const G4VGCellFinder &aGCellFinder,
-                        const G4String &aName = "NewWeightCutOffProcess", G4bool para = false);
+                        const G4String &aName = "WeightCutOffProcess", G4bool para = false);
     // create a G4ParticleChange
 
-  virtual ~G4NewWeightCutOffProcess();
+  virtual ~G4WeightCutOffProcess();
     // delete the G4ParticleChange
 
 
@@ -125,8 +125,8 @@ private:
   G4StepPoint * fGhostPreStepPoint;
   G4StepPoint * fGhostPostStepPoint;
 
-  G4NewWeightCutOffProcess(const G4NewWeightCutOffProcess &);
-  G4NewWeightCutOffProcess &operator=(const G4NewWeightCutOffProcess &);
+  G4WeightCutOffProcess(const G4WeightCutOffProcess &);
+  G4WeightCutOffProcess &operator=(const G4WeightCutOffProcess &);
 
   G4ParticleChange *fParticleChange;
   G4double fWeightSurvival;

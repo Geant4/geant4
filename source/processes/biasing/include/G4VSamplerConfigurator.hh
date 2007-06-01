@@ -24,11 +24,11 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSamplerConfigurator.hh,v 1.1 2007-06-01 08:07:00 ahoward Exp $
+// $Id: G4VSamplerConfigurator.hh,v 1.2 2007-06-01 09:16:33 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
-// Class G4VNewSamplerConfigurator
+// Class G4VSamplerConfigurator
 //
 // Class description:
 //
@@ -41,23 +41,23 @@
 
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
-#ifndef G4VNewSamplerConfigurator_hh
-#define G4VNewSamplerConfigurator_hh G4VNewSamplerConfigurator_hh
+#ifndef G4VSamplerConfigurator_hh
+#define G4VSamplerConfigurator_hh G4VSamplerConfigurator_hh
 
 #include "G4Types.hh"
 #include <vector>
 
 class G4VTrackTerminator;
 
-class G4VNewSamplerConfigurator
+class G4VSamplerConfigurator
 {
 
 public:  // with description
 
-  G4VNewSamplerConfigurator();
-  virtual ~G4VNewSamplerConfigurator();
+  G4VSamplerConfigurator();
+  virtual ~G4VSamplerConfigurator();
 
-  virtual void Configure(G4VNewSamplerConfigurator *preConf) = 0;
+  virtual void Configure(G4VSamplerConfigurator *preConf) = 0;
     // Do the configuration, if preConf is given a
     // G4VTrackTerminator may be obtained from it.
 
@@ -65,6 +65,6 @@ public:  // with description
     // Return a G4VTrackTerminator or 0.
 };
 
-typedef std::vector<G4VNewSamplerConfigurator *> G4Configurators;
+typedef std::vector<G4VSamplerConfigurator *> G4Configurators;
 
 #endif

@@ -1,4 +1,4 @@
-$Id: History,v 1.7 2007-05-31 16:29:05 ahoward Exp $
+$Id: History,v 1.8 2007-06-01 09:18:22 ahoward Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+June 1st, 2007 Alex Howard (procbiasing-V08-03-03)
+- Renamed New classes back to normal classes, simultaneously 
+  processes/transportation old biasing classes renamed with 
+  suffix 8 to avoid clashes.
 
 May 31st, 2007 Alex Howard (procbiasing-V08-03-02)
 - removed dependency on old biasing within transportation, although still

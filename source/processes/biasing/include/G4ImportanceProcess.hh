@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ImportanceProcess.hh,v 1.2 2007-05-31 13:19:07 ahoward Exp $
+// $Id: G4ImportanceProcess.hh,v 1.3 2007-06-01 09:16:33 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -45,7 +45,7 @@
 #include "G4VProcess.hh"
 #include "G4VTrackTerminator.hh"
 
-class G4NewSamplingPostStepAction;
+class G4SamplingPostStepAction;
 class G4VImportanceAlgorithm;
 class G4VIStore;
 
@@ -139,7 +139,7 @@ private:
   G4ParticleChange *fParticleChange;
   const G4VImportanceAlgorithm &fImportanceAlgorithm;
   const G4VIStore &fIStore;
-  G4NewSamplingPostStepAction *fPostStepAction;
+  G4SamplingPostStepAction *fPostStepAction;
 
   G4TransportationManager* fTransportationManager;
   G4PathFinder*        fPathFinder;

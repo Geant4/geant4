@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeometrySampler.cc,v 1.5 2007-05-31 16:27:06 ahoward Exp $
+// $Id: G4GeometrySampler.cc,v 1.6 2007-06-01 09:16:33 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -44,7 +44,7 @@
 #include "G4ScoreConfigurator.hh"
 #include "G4ImportanceConfigurator.hh"
 #include "G4WeightWindowConfigurator.hh"
-#include "G4NewWeightCutOffConfigurator.hh"
+#include "G4WeightCutOffConfigurator.hh"
 #include "G4GCellFinder.hh"
 
  G4GeometrySampler::
@@ -54,7 +54,7 @@
     fImportanceConfigurator(0),
     fScoreConfigurator(0),
     fGCellFinder(0),
-    fNewWeightCutOffConfigurator(0),
+    fWeightCutOffConfigurator(0),
     fIStore(0),
     fWeightWindowConfigurator(0),
     fWWStore(0),
@@ -85,10 +85,10 @@ void G4GeometrySampler::ClearSampling()
     delete fScoreConfigurator;
     fScoreConfigurator = 0;
   }
-  if (fNewWeightCutOffConfigurator)
+  if (fWeightCutOffConfigurator)
   {
-    delete fNewWeightCutOffConfigurator;
-    fNewWeightCutOffConfigurator = 0;
+    delete fWeightCutOffConfigurator;
+    fWeightCutOffConfigurator = 0;
   }
   if (fGCellFinder)
   {
@@ -169,18 +169,18 @@ G4GeometrySampler::PrepareWeightRoulett(G4double wsurvive,
                 "Failed allocation of G4GCellFinder !");
   }
   
-  fNewWeightCutOffConfigurator = 
-    new G4NewWeightCutOffConfigurator(fWorld, fParticleName,
+  fWeightCutOffConfigurator = 
+    new G4WeightCutOffConfigurator(fWorld, fParticleName,
                                    wsurvive,
                                    wlimit,
                                    isource,
                                    fIStore,
                                    *fGCellFinder, paraflag);
-  if (!fNewWeightCutOffConfigurator)
+  if (!fWeightCutOffConfigurator)
   {
     G4Exception("G4GeometrySampler::PrepareWeightRoulett()",
                 "FatalError", FatalException,
-                "Failed allocation of G4NewWeightCutOffConfigurator !");
+                "Failed allocation of G4WeightCutOffConfigurator !");
   }
 }
 
@@ -228,23 +228,23 @@ void G4GeometrySampler::Configure()
     }
     
     G4cout << " vsampler configurator loop " << G4endl;
-    G4VNewSamplerConfigurator *preConf = 0;
+    G4VSamplerConfigurator *preConf = 0;
     G4int i = 0;
     for (G4Configurators::iterator it = fConfigurators.begin();
          it != fConfigurators.end(); it++)
     {
       i++;
       G4cout << " looping " << i << G4endl;
-      G4VNewSamplerConfigurator *currConf =*it;
+      G4VSamplerConfigurator *currConf =*it;
       G4cout << " sampler configurator " << G4endl;
       currConf->Configure(preConf);
       G4cout << " configure preconf " << G4endl;
       preConf = *it;
     }
-    if (fNewWeightCutOffConfigurator)
+    if (fWeightCutOffConfigurator)
     {
       G4cout << " NEW weight window configure " << G4endl;
-      fNewWeightCutOffConfigurator->Configure(0);
+      fWeightCutOffConfigurator->Configure(0);
       G4cout << " configured " << G4endl;
     }
   }

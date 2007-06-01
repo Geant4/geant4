@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoreConfigurator.hh,v 1.2 2007-05-31 13:51:13 ahoward Exp $
+// $Id: G4ScoreConfigurator.hh,v 1.3 2007-06-01 09:16:33 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -42,9 +42,9 @@
 #define G4ScoreConfigurator_hh G4ScoreConfigurator_hh
 
 #include "G4Types.hh"
-#include "G4NewProcessPlacer.hh"
+#include "G4ProcessPlacer.hh"
 
-#include "G4VNewSamplerConfigurator.hh"
+#include "G4VSamplerConfigurator.hh"
 
 class G4VScorer;
 class G4VTrackTerminator;
@@ -52,7 +52,7 @@ class G4ScoreProcess;
 
 class G4VPhysicalVolume;
 
-class G4ScoreConfigurator : public G4VNewSamplerConfigurator
+class G4ScoreConfigurator : public G4VSamplerConfigurator
 {
 
 public:  // with description
@@ -64,7 +64,7 @@ public:  // with description
 
   virtual ~G4ScoreConfigurator();
   
-  virtual void Configure(G4VNewSamplerConfigurator *preConf);
+  virtual void Configure(G4VSamplerConfigurator *preConf);
   virtual const G4VTrackTerminator *GetTrackTerminator() const;
 
 private:
@@ -73,7 +73,7 @@ private:
   G4ScoreConfigurator &operator=(const G4ScoreConfigurator&);
 
   G4VPhysicalVolume* fWorld;
-  G4NewProcessPlacer fPlacer;
+  G4ProcessPlacer fPlacer;
   G4VScorer &fScorer;
   G4ScoreProcess *fScoreProcess;
 

@@ -24,11 +24,11 @@
 // ********************************************************************
 //
 //
-// $Id: G4SamplingPostStepAction.hh,v 1.1 2007-06-01 08:07:00 ahoward Exp $
+// $Id: G4SamplingPostStepAction.hh,v 1.2 2007-06-01 09:16:33 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
-// Class G4NewSamplingPostStepAction
+// Class G4SamplingPostStepAction
 //
 // Class description:
 //
@@ -37,8 +37,8 @@
 
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
-#ifndef G4NewSamplingPostStepAction_hh
-#define G4NewSamplingPostStepAction_hh G4NewSamplingPostStepAction_hh
+#ifndef G4SamplingPostStepAction_hh
+#define G4SamplingPostStepAction_hh G4SamplingPostStepAction_hh
 
 class G4VImportanceSplitExaminer;
 class G4ParticleChange;
@@ -47,15 +47,15 @@ class G4Step;
 class G4Nsplit_Weight;
 class G4VTrackTerminator;
 
-class G4NewSamplingPostStepAction
+class G4SamplingPostStepAction
 {
 
 public:  // with description
 
-  explicit G4NewSamplingPostStepAction(const G4VTrackTerminator &TrackTerminator);
+  explicit G4SamplingPostStepAction(const G4VTrackTerminator &TrackTerminator);
     // Constructor
 
-  ~G4NewSamplingPostStepAction();
+  ~G4SamplingPostStepAction();
     // Destructor
   
   void DoIt(const G4Track& aTrack, 

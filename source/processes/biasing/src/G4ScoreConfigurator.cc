@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoreConfigurator.cc,v 1.2 2007-05-31 14:04:57 ahoward Exp $
+// $Id: G4ScoreConfigurator.cc,v 1.3 2007-06-01 09:16:33 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -64,7 +64,7 @@ G4ScoreConfigurator::GetTrackTerminator() const
   return fScoreProcess;
 }
 
-void G4ScoreConfigurator::Configure(G4VNewSamplerConfigurator *)
+void G4ScoreConfigurator::Configure(G4VSamplerConfigurator *)
 {
   G4cout << " entering scoring configure " << G4endl;
   fScoreProcess = new G4ScoreProcess(fScorer,"ScoringProcess",paraflag);
