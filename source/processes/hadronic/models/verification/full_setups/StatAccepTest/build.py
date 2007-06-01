@@ -73,7 +73,9 @@ if ( PHYSICS != "LHEP"          and
      PHYSICS != "QGSP_BIC"      and
      PHYSICS != "QGSP_BERT_HP"  and
      PHYSICS != "QGSC"          and
-     PHYSICS != "QGSP_EMV" 
+     PHYSICS != "QGSP_EMV"      and
+     PHYSICS != "FTFP"          and 
+     PHYSICS != "FTFC" 
    ) :
     print '  ***ERROR*** in build.py : WRONG PHYSICS LIST = ', PHYSICS
     sys.exit( 1 )        
@@ -220,7 +222,7 @@ g4file.close()
 
 setupFile = open( "setup.sh", "w" )
 
-###setupFile.write( "export VO_GEANT4_SW_DIR=/data/dirGrid/dirDec06 \n" )   #***LOOKHERE***
+###setupFile.write( "export VO_GEANT4_SW_DIR=/data/dirGrid/dirJun07 \n" )   #***LOOKHERE***
 
 setupFile.write( "export DIR_INSTALLATIONS=$VO_GEANT4_SW_DIR/dirInstallations \n" )
 
@@ -294,6 +296,8 @@ setupFile.write( "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$GSL_DIR/lib \n" )
 
 setupFile.write( "export PATH=$PATH:$DIR_INSTALLATIONS/dirPAW \n" )
 
+setupFile.write( "export AlwaysKillLeadingHadron=1 \n" )
+
 setupFile.close()
 
 # ----------------- Write mainStatAccepTest.cc file -------------------
@@ -305,12 +309,14 @@ mainProgram.write( "#include \"G4UImanager.hh\" \n" )
 mainProgram.write( "#include \"StatAccepTestDetectorConstruction.hh\" \n" )
 mainProgram.write( "#include \"LHEP.hh\" \n" )
 mainProgram.write( "#include \"QGSP.hh\" \n" )
-mainProgram.write( "#include \"QGSP_HP.hh\" \n" )
+###mainProgram.write( "#include \"QGSP_HP.hh\" \n" )
 mainProgram.write( "#include \"QGSP_BERT.hh\" \n" )
 ###mainProgram.write( "#include \"QGSP_BERT_HP.hh\" \n" )
 mainProgram.write( "#include \"QGSP_BIC.hh\" \n" )
 mainProgram.write( "#include \"QGSC.hh\" \n" )
 mainProgram.write( "#include \"QGSP_EMV.hh\" \n" )
+mainProgram.write( "#include \"FTFP.hh\" \n" )
+mainProgram.write( "#include \"FTFC.hh\" \n" )
 mainProgram.write( "#include \"StatAccepTestPrimaryGeneratorAction.hh\" \n" )
 mainProgram.write( "#include \"StatAccepTestEventAction.hh\" \n" )
 mainProgram.write( "#include \"StatAccepTestRunAction.hh\" \n" )

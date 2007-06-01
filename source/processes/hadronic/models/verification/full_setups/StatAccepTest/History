@@ -1,6 +1,11 @@
                  History file
                  ------------
 
+01-Jun-2007 - A.Ribon (statAccepTest-V08-03-01)
+- Added FTFP and FTFC Physics Lists, and the
+  environmental variable  AlwaysKillLeadingHadron .
+
+
 01-Jun-2007 - A.Ribon (statAccepTest-V08-03-00)
 - Ready for the June 2007 release.
 

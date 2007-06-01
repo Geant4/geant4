@@ -100,7 +100,7 @@ echo ' BFIELD      =' $BFIELD
 #
     echo '  '; echo ' G4INSTALL = ' $G4INSTALL; echo ' running REF = ' $REF ; echo '  ' ;
     rm -rf tmp/ ;
-    ln -sfn GNUmakefile-1 GNUmakefile  ; #***LOOKHERE*** Temporary for 8.1 / 8.2 ;
+    ln -sfn GNUmakefile-2 GNUmakefile  ; #***LOOKHERE*** Temporary for 8.1 / 8.2 ;
     gmake ;
     if [ $? != 0 ] ; then
 	echo ' ***ERROR*** from: gmake ! exitCode = 13' ;  
