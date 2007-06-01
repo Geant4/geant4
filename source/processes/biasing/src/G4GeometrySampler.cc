@@ -24,8 +24,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeometrySampler.cc,v 1.6 2007-06-01 09:16:33 ahoward Exp $
+<<<<<<< G4GeometrySampler.cc
+// $Id: G4GeometrySampler.cc,v 1.7 2007-06-01 09:40:08 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
+=======
+// $Id: G4GeometrySampler.cc,v 1.7 2007-06-01 09:40:08 ahoward Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+>>>>>>> 1.6
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -80,8 +85,21 @@ void G4GeometrySampler::ClearSampling()
     delete fWeightWindowConfigurator;
     fWeightWindowConfigurator = 0;
   }
+<<<<<<< G4GeometrySampler.cc
+//   if (fScoreConfigurator)
+//   {
+//     delete fScoreConfigurator;
+//     fScoreConfigurator = 0;
+//   }
+  if (fWeightCutOffConfigurator)
+=======
   if (fScoreConfigurator)
+>>>>>>> 1.6
   {
+<<<<<<< G4GeometrySampler.cc
+    delete fWeightCutOffConfigurator;
+    fWeightCutOffConfigurator = 0;
+=======
     delete fScoreConfigurator;
     fScoreConfigurator = 0;
   }
@@ -89,6 +107,7 @@ void G4GeometrySampler::ClearSampling()
   {
     delete fWeightCutOffConfigurator;
     fWeightCutOffConfigurator = 0;
+>>>>>>> 1.6
   }
   if (fGCellFinder)
   {

@@ -1,4 +1,4 @@
-$Id: History,v 1.8 2007-06-01 09:18:22 ahoward Exp $
+$Id: History,v 1.9 2007-06-01 09:40:08 ahoward Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -21,10 +21,15 @@ June 1st, 2007 Alex Howard (procbiasing-V08-03-03)
 - Renamed New classes back to normal classes, simultaneously 
   processes/transportation old biasing classes renamed with 
   suffix 8 to avoid clashes.
+- includes modified G4GeometrySampler (without scoring)
+- HEAD contains un-modifier G4GeometrySampler and depends on old scoring scheme
+  in geometry/biasing.
 
 May 31st, 2007 Alex Howard (procbiasing-V08-03-02)
-- removed dependency on old biasing within transportation, although still
-  requires old scoring process in geometry
+- removed dependency on old biasing within transportation and on old scoring
+  within geometry
+- G4GeometrySampler is modified to remove scoring dependency
+- HEAD of G4GeometrySampler is the old file
 - HEAD contains a different version of G4GeometrySampler that includes the old
   biasing scoring for the purpose of testing
 

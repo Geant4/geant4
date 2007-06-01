@@ -24,8 +24,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeometrySampler.hh,v 1.7 2007-06-01 09:16:33 ahoward Exp $
+<<<<<<< G4GeometrySampler.hh
+// $Id: G4GeometrySampler.hh,v 1.8 2007-06-01 09:40:08 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
+=======
+// $Id: G4GeometrySampler.hh,v 1.8 2007-06-01 09:40:08 ahoward Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+>>>>>>> 1.7
 //
 // ----------------------------------------------------------------------
 // Class G4GeometrySampler
@@ -47,8 +52,13 @@
 
 class G4ImportanceConfigurator;
 class G4WeightWindowConfigurator;
+<<<<<<< G4GeometrySampler.hh
+//class G4ScoreConfigurator;
+class G4WeightCutOffConfigurator;
+=======
 class G4ScoreConfigurator;
 class G4WeightCutOffConfigurator;
+>>>>>>> 1.7
 class G4VGCellFinder;
 
 class G4GeometrySampler : public G4VSampler
