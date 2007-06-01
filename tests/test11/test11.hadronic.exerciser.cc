@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: test11.hadronic.exerciser.cc,v 1.18 2007-05-26 00:06:44 tkoi Exp $
+// $Id: test11.hadronic.exerciser.cc,v 1.19 2007-06-01 00:29:10 tkoi Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -129,11 +129,14 @@ int main (int argc, char** argv) {
    TK_materialNameList.push_back ( "G4_C" );
    TK_materialNameList.push_back ( "G4_N" );
    TK_materialNameList.push_back ( "G4_O" );
+/*
    TK_materialNameList.push_back ( "G4_F" );
    TK_materialNameList.push_back ( "G4_Ne" );
    TK_materialNameList.push_back ( "G4_Na" );
    TK_materialNameList.push_back ( "G4_Mg" );
+*/
    TK_materialNameList.push_back ( "G4_Al" );
+/*
    TK_materialNameList.push_back ( "G4_Si" );
    TK_materialNameList.push_back ( "G4_P" );
    TK_materialNameList.push_back ( "G4_S" );
@@ -146,13 +149,19 @@ int main (int argc, char** argv) {
    TK_materialNameList.push_back ( "G4_V" );
    TK_materialNameList.push_back ( "G4_Cr" );
    TK_materialNameList.push_back ( "G4_Mn" );
+*/
    TK_materialNameList.push_back ( "G4_Fe" );
+/*
    TK_materialNameList.push_back ( "G4_Co" );
    TK_materialNameList.push_back ( "G4_Ni" );
+*/
    TK_materialNameList.push_back ( "G4_Cu" );
    TK_materialNameList.push_back ( "G4_Zn" );
+/*
    TK_materialNameList.push_back ( "G4_Ga" );
+*/
    TK_materialNameList.push_back ( "G4_Ge" );
+/*
    TK_materialNameList.push_back ( "G4_As" );
    TK_materialNameList.push_back ( "G4_Se" );
    TK_materialNameList.push_back ( "G4_Br" );
@@ -167,7 +176,9 @@ int main (int argc, char** argv) {
    TK_materialNameList.push_back ( "G4_Ru" );
    TK_materialNameList.push_back ( "G4_Rh" );
    TK_materialNameList.push_back ( "G4_Pd" );
+*/
    TK_materialNameList.push_back ( "G4_Ag" );
+/*
    TK_materialNameList.push_back ( "G4_Cd" );
    TK_materialNameList.push_back ( "G4_In" );
    TK_materialNameList.push_back ( "G4_Sn" );
@@ -199,7 +210,9 @@ int main (int argc, char** argv) {
    TK_materialNameList.push_back ( "G4_Os" );
    TK_materialNameList.push_back ( "G4_Ir" );
    TK_materialNameList.push_back ( "G4_Pt" );
+*/
    TK_materialNameList.push_back ( "G4_Au" );
+/*
    TK_materialNameList.push_back ( "G4_Hg" ); // No data HP
    TK_materialNameList.push_back ( "G4_Tl" );
    TK_materialNameList.push_back ( "G4_Pb" );
@@ -212,7 +225,8 @@ int main (int argc, char** argv) {
    //TK_materialNameList.push_back ( "G4_Ac" );
    //TK_materialNameList.push_back ( "G4_Th" );
    //TK_materialNameList.push_back ( "G4_Pa" );
-   //TK_materialNameList.push_back ( "G4_U" );
+*/
+   TK_materialNameList.push_back ( "G4_U" );
    //TK_materialNameList.push_back ( "G4_Np" );
    //TK_materialNameList.push_back ( "G4_Pu" );
    //TK_materialNameList.push_back ( "G4_Am" );
