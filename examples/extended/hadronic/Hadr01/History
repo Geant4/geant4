@@ -1,4 +1,4 @@
-$Id: History,v 1.18 2007-05-24 13:19:29 vnivanch Exp $
+$Id: History,v 1.19 2007-06-01 16:07:31 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+01-06-07  V.Ivant (exhadr01-V08-03-03)
+- Physics List updated according to recent changes in hadronics and
+  physics_lists packages
 
 24-05-07  V.Ivant (exhadr01-V08-03-02)
 - substitute autoptr by normal pointers in Histo to avoid crash
