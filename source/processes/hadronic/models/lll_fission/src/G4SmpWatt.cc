@@ -53,7 +53,7 @@
 // UCRL-CODE-224807
 //
 //
-// $Id: G4SmpWatt.cc,v 1.3 2007-06-01 13:46:53 gcosmo Exp $
+// $Id: G4SmpWatt.cc,v 1.4 2007-06-01 18:30:38 dennis Exp $
 //
 
 #define nZAfis 39    /* 38 fissionable isotopes in ENDL + U-232 from ENDF7 */
@@ -162,7 +162,6 @@ G4double G4fissionEvent::G4SmpWatt(G4double ePart, G4int iso) {
 
       rand1= -std::log(fisslibrng());
       rand2= -std::log(fisslibrng());
- 
       eSmp= y*rand1;
 
    } while ((rand2-z*(rand1+1.))*(rand2-z*(rand1+1.)) > b*y*rand1 ||
