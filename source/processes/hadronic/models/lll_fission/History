@@ -14,6 +14,12 @@ code and to keep track of all tags.
     * Please list in reverse chronological order (last date on top)
     ---------------------------------------------------------------
 
+1 June 2007 Gabriele Cosmo (hadr-lllfis-V08-03-05)
+--------------------------------------------------
+- Use <cmath> and std:: in front of mathematical functions.
+- Get rid of templated wrapper for random generator. Not necessary ?
+  Resolves compilation problems on Windows.
+
 31 May 2007 Dennis Wright (hadr-lllfis-V08-03-04)
 -------------------------------------------------
 - G4FissionLibrary.hh, .cc : moved constructor to .cc and instantiated base
