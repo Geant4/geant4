@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QDiffractionRatio.cc,v 1.1 2007-05-21 15:23:40 mkossov Exp $
+// $Id: G4QDiffractionRatio.cc,v 1.2 2007-06-01 07:20:45 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -249,7 +249,7 @@ G4double G4QDiffractionRatio::GetRatio(G4double pIU, G4int pPDG, G4int tgZ, G4in
 // Calculate Diffraction/Production Ratio as a function of total sq(s)(hN) (in GeV), A=Z+N
 G4double G4QDiffractionRatio::CalcDiff2Prod_Ratio(G4double s, G4int A)
 {
-  static G4int    a=0;
+  static G4int    mA=0;
   static G4double S=.1; // s=SQRT(M_N^2+M_h^2+2*E_h*M_N)
   static G4double R=0.; // Prototype of the result
   static G4double p1=0.;
@@ -259,10 +259,11 @@ G4double G4QDiffractionRatio::CalcDiff2Prod_Ratio(G4double s, G4int A)
   static G4double p6=0.;
   static G4double p7=0.;
   if(s<=0. || A<=1) return 0.;
-  if(A!=a && A!=1)
+  if(A!=mA && A!=1)
 		{
-    a=A;
-    G4double sa=std::sqrt(G4double(a));
+    ma=A;
+    G4double a=ma;
+    G4double sa=std::sqrt(a);
     G4double a2=a*a;
     G4double a3=a2*a;
     G4double a4=a3*a;
@@ -281,7 +282,7 @@ G4double G4QDiffractionRatio::CalcDiff2Prod_Ratio(G4double s, G4int A)
     p6=.00046*(a+11830./a2);
     p7=1./(1.+6.17/a2+.00406*a);
   }
-  else if(A==1 && a!=1)
+  else if(A==1 && mA!=1)
   {
     p1=.0315;
     p2=.73417;
