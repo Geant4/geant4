@@ -152,11 +152,14 @@ void Tst11DetectorConstruction::defineNISTMaterials()
    nistMan->FindOrBuildMaterial( "G4_C" );
    nistMan->FindOrBuildMaterial( "G4_N" );
    nistMan->FindOrBuildMaterial( "G4_O" );
+/*
    nistMan->FindOrBuildMaterial( "G4_F" );
    nistMan->FindOrBuildMaterial( "G4_Ne" );
    nistMan->FindOrBuildMaterial( "G4_Na" );
    nistMan->FindOrBuildMaterial( "G4_Mg" );
+*/
    nistMan->FindOrBuildMaterial( "G4_Al" );
+/*
    nistMan->FindOrBuildMaterial( "G4_Si" );
    nistMan->FindOrBuildMaterial( "G4_P" );
    nistMan->FindOrBuildMaterial( "G4_S" );
@@ -169,13 +172,19 @@ void Tst11DetectorConstruction::defineNISTMaterials()
    nistMan->FindOrBuildMaterial( "G4_V" );
    nistMan->FindOrBuildMaterial( "G4_Cr" );
    nistMan->FindOrBuildMaterial( "G4_Mn" );
+*/
    nistMan->FindOrBuildMaterial( "G4_Fe" );
+/*
    nistMan->FindOrBuildMaterial( "G4_Co" );
    nistMan->FindOrBuildMaterial( "G4_Ni" );
+*/
    nistMan->FindOrBuildMaterial( "G4_Cu" );
    nistMan->FindOrBuildMaterial( "G4_Zn" );
+/*
    nistMan->FindOrBuildMaterial( "G4_Ga" );
+*/
    nistMan->FindOrBuildMaterial( "G4_Ge" );
+/*
    nistMan->FindOrBuildMaterial( "G4_As" );
    nistMan->FindOrBuildMaterial( "G4_Se" );
    nistMan->FindOrBuildMaterial( "G4_Br" );
@@ -190,7 +199,9 @@ void Tst11DetectorConstruction::defineNISTMaterials()
    nistMan->FindOrBuildMaterial( "G4_Ru" );
    nistMan->FindOrBuildMaterial( "G4_Rh" );
    nistMan->FindOrBuildMaterial( "G4_Pd" );
+*/
    nistMan->FindOrBuildMaterial( "G4_Ag" );
+/*
    nistMan->FindOrBuildMaterial( "G4_Cd" );
    nistMan->FindOrBuildMaterial( "G4_In" );
    nistMan->FindOrBuildMaterial( "G4_Sn" );
@@ -222,7 +233,9 @@ void Tst11DetectorConstruction::defineNISTMaterials()
    nistMan->FindOrBuildMaterial( "G4_Os" );
    nistMan->FindOrBuildMaterial( "G4_Ir" );
    nistMan->FindOrBuildMaterial( "G4_Pt" );
+*/
    nistMan->FindOrBuildMaterial( "G4_Au" );
+/*
    //nistMan->FindOrBuildMaterial( "G4_Hg" ); // No data HP
    nistMan->FindOrBuildMaterial( "G4_Tl" );
    nistMan->FindOrBuildMaterial( "G4_Pb" );
@@ -235,6 +248,7 @@ void Tst11DetectorConstruction::defineNISTMaterials()
    nistMan->FindOrBuildMaterial( "G4_Ac" );
    nistMan->FindOrBuildMaterial( "G4_Th" );
    nistMan->FindOrBuildMaterial( "G4_Pa" );
+*/
    nistMan->FindOrBuildMaterial( "G4_U" );
    //nistMan->FindOrBuildMaterial( "G4_Np" );
    //nistMan->FindOrBuildMaterial( "G4_Pu" );
