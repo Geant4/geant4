@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+31th May 2007  Tatsumi Koi ( test11-V08-03-03 )
+- delete test11.in and test11_large_N.in 
+
 31th May 2007  Tatsumi Koi ( test11-V08-03-02 )
 - reduce materials to reduce memory consume
 
