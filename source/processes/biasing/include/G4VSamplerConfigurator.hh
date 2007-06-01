@@ -24,22 +24,47 @@
 // ********************************************************************
 //
 //
-// $Id: G4VNewSamplerConfigurator.cc,v 1.1 2007-05-31 13:39:51 ahoward Exp $
+// $Id: G4VSamplerConfigurator.hh,v 1.1 2007-06-01 08:07:00 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
-// GEANT 4 class source file
+// Class G4VNewSamplerConfigurator
 //
-// G4VNewSamplerConfigurator.cc
+// Class description:
 //
+// This is an interface for configurators setting up processes
+// needed for importance sampling and scoring. 
+// The Configurator may be given a pointer to another Configurator.
+// If a configurator will be given a pointer to another configurator
+// it may obtain a G4VTrackTerminator from the given Configurator.
+// This way it is possible to delegate the killing of a track.
+
+// Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
+#ifndef G4VNewSamplerConfigurator_hh
+#define G4VNewSamplerConfigurator_hh G4VNewSamplerConfigurator_hh
 
+#include "G4Types.hh"
+#include <vector>
 
-#include "G4VNewSamplerConfigurator.hh"
+class G4VTrackTerminator;
 
+class G4VNewSamplerConfigurator
+{
 
-G4VNewSamplerConfigurator::G4VNewSamplerConfigurator()
-{}
+public:  // with description
 
-G4VNewSamplerConfigurator::~G4VNewSamplerConfigurator()
-{}
+  G4VNewSamplerConfigurator();
+  virtual ~G4VNewSamplerConfigurator();
+
+  virtual void Configure(G4VNewSamplerConfigurator *preConf) = 0;
+    // Do the configuration, if preConf is given a
+    // G4VTrackTerminator may be obtained from it.
+
+  virtual const G4VTrackTerminator *GetTrackTerminator() const = 0;
+    // Return a G4VTrackTerminator or 0.
+};
+
+typedef std::vector<G4VNewSamplerConfigurator *> G4Configurators;
+
+#endif

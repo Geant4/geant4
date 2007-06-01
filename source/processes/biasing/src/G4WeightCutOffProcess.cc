@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NewWeightCutOffProcess.cc,v 1.2 2007-05-31 16:01:45 ahoward Exp $
+// $Id: G4WeightCutOffProcess.cc,v 1.1 2007-06-01 08:07:00 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------

@@ -24,55 +24,22 @@
 // ********************************************************************
 //
 //
-// $Id: G4NewSamplingPostStepAction.hh,v 1.1 2007-05-31 13:11:53 ahoward Exp $
+// $Id: G4VSamplerConfigurator.cc,v 1.1 2007-06-01 08:07:00 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
-// Class G4NewSamplingPostStepAction
+// GEANT 4 class source file
 //
-// Class description:
+// G4VNewSamplerConfigurator.cc
 //
-// Used internally by importance and weight window sampling.
-// Creates cloned tracks or kills tracks.
-
-// Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
-#ifndef G4NewSamplingPostStepAction_hh
-#define G4NewSamplingPostStepAction_hh G4NewSamplingPostStepAction_hh
 
-class G4VImportanceSplitExaminer;
-class G4ParticleChange;
-class G4Track;
-class G4Step;
-class G4Nsplit_Weight;
-class G4VTrackTerminator;
 
-class G4NewSamplingPostStepAction
-{
+#include "G4VNewSamplerConfigurator.hh"
 
-public:  // with description
 
-  explicit G4NewSamplingPostStepAction(const G4VTrackTerminator &TrackTerminator);
-    // Constructor
+G4VNewSamplerConfigurator::G4VNewSamplerConfigurator()
+{}
 
-  ~G4NewSamplingPostStepAction();
-    // Destructor
-  
-  void DoIt(const G4Track& aTrack, 
-            G4ParticleChange *aParticleChange, 
-            const G4Nsplit_Weight &nw);
-    // Do the PostStepDoIt part common to importance and weight window
-    // sampling in the 
-    // "mass" and "parallel" geometry.
-  
-private:
-
-  void Split(const G4Track &aTrack,
-             const G4Nsplit_Weight &nw,
-             G4ParticleChange *aParticleChange);
-
-  const G4VTrackTerminator &fTrackTerminator;
-
-};
-
-#endif
+G4VNewSamplerConfigurator::~G4VNewSamplerConfigurator()
+{}

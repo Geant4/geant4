@@ -24,63 +24,55 @@
 // ********************************************************************
 //
 //
-// $Id: G4NewWeightCutOffConfigurator.cc,v 1.2 2007-05-31 14:03:29 ahoward Exp $
+// $Id: G4SamplingPostStepAction.hh,v 1.1 2007-06-01 08:07:00 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
-// Class G4NewWeightCutOffConfigurator
+// Class G4NewSamplingPostStepAction
 //
+// Class description:
+//
+// Used internally by importance and weight window sampling.
+// Creates cloned tracks or kills tracks.
+
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
+#ifndef G4NewSamplingPostStepAction_hh
+#define G4NewSamplingPostStepAction_hh G4NewSamplingPostStepAction_hh
 
-#include "G4NewWeightCutOffConfigurator.hh"
-#include "G4NewWeightCutOffProcess.hh"
+class G4VImportanceSplitExaminer;
+class G4ParticleChange;
+class G4Track;
+class G4Step;
+class G4Nsplit_Weight;
+class G4VTrackTerminator;
 
-G4NewWeightCutOffConfigurator::
-G4NewWeightCutOffConfigurator(G4VPhysicalVolume* worldvolume,
-			      const G4String &particlename,
-                                 G4double wsurvival,
-                                 G4double wlimit,
-                                 G4double isource,
-                                 G4VIStore *istore,
-                           const G4VGCellFinder &aGCellfinder, G4bool para)
-  : fWorld(worldvolume),
-    fPlacer(particlename),
-    fPlaced(false),
-    paraflag(para)
+class G4NewSamplingPostStepAction
 {
-  fNewWeightCutOffProcess =
-    new G4NewWeightCutOffProcess(wsurvival,wlimit,isource,istore,aGCellfinder,"NewWeightCutOffProcess",paraflag);
-  if (!fNewWeightCutOffProcess)
-  {
-    G4Exception("G4NewWeightCutOffConfigurator::G4NewWeightCutOffConfigurator()",
-                "FatalError", FatalException,
-                "Failed to allocate G4NewWeightCutOffProcess !");
-  }
-}
 
-G4NewWeightCutOffConfigurator::~G4NewWeightCutOffConfigurator()
-{
-  if (fPlaced)
-  {
-    fPlacer.RemoveProcess(fNewWeightCutOffProcess);
-    delete fNewWeightCutOffProcess;
-  }
-}
+public:  // with description
 
-void G4NewWeightCutOffConfigurator::Configure(G4VNewSamplerConfigurator *)
-{
-  G4cout << " entering new weight window configure " << G4endl;
+  explicit G4NewSamplingPostStepAction(const G4VTrackTerminator &TrackTerminator);
+    // Constructor
 
-  if(paraflag) fNewWeightCutOffProcess->SetParallelWorld(fWorld);
+  ~G4NewSamplingPostStepAction();
+    // Destructor
+  
+  void DoIt(const G4Track& aTrack, 
+            G4ParticleChange *aParticleChange, 
+            const G4Nsplit_Weight &nw);
+    // Do the PostStepDoIt part common to importance and weight window
+    // sampling in the 
+    // "mass" and "parallel" geometry.
+  
+private:
 
-  fPlacer.AddProcessAsLastDoIt(fNewWeightCutOffProcess); 
-  fPlaced = true;
-}
+  void Split(const G4Track &aTrack,
+             const G4Nsplit_Weight &nw,
+             G4ParticleChange *aParticleChange);
 
-const G4VTrackTerminator
-*G4NewWeightCutOffConfigurator::GetTrackTerminator() const
-{
-  return 0;
-}
+  const G4VTrackTerminator &fTrackTerminator;
 
+};
+
+#endif

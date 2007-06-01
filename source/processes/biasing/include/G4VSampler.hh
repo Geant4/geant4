@@ -24,20 +24,65 @@
 // ********************************************************************
 //
 //
-// $Id: G4VNewSampler.cc,v 1.1 2007-05-31 13:39:51 ahoward Exp $
+// $Id: G4VSampler.hh,v 1.1 2007-06-01 08:07:00 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
-// GEANT 4 class source file
+// Class G4VNewSampler
 //
-// G4VNewSampler.cc
+// Class description:
 //
+// This interface describes a configurable sampler.
+// It applies to a given particle type.
+// Concrete classes with this interface may be used for 
+// scoring, importance sampling and weight cutoff (weight roulette).
+
+// Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
+#ifndef G4VNewSampler_hh
+#define G4VNewSampler_hh G4VNewSampler_hh
 
-#include "G4VNewSampler.hh"
+#include "G4Types.hh"
+#include "G4PlaceOfAction.hh"
 
-G4VNewSampler::G4VNewSampler()
-{}
+class G4VPhysicalVolume;
+class G4VImportanceAlgorithm;
+class G4VIStore;
+class G4VWeightWindowAlgorithm;
+class G4VWeightWindowStore;
+class G4VScorer;
 
-G4VNewSampler::~G4VNewSampler()
-{}
+class G4VNewSampler
+{
+
+public:  // with description
+  
+  G4VNewSampler();
+  virtual ~G4VNewSampler();
+
+  virtual void PrepareScoring(G4VScorer *Scorer) = 0;
+
+  virtual void PrepareImportanceSampling(G4VIStore *istore,
+                                         const G4VImportanceAlgorithm 
+                                         *ialg = 0) = 0;
+
+
+  virtual void PrepareWeightRoulett(G4double wsurvive = 0.5, 
+                                    G4double wlimit = 0.25,
+                                    G4double isource = 1) = 0;
+
+  virtual void PrepareWeightWindow(G4VWeightWindowStore *wwstore,
+                                   G4VWeightWindowAlgorithm *wwAlg = 0,
+                                   G4PlaceOfAction placeOfAction = 
+                                   onBoundary) = 0;
+
+  virtual void Configure() = 0;
+
+  virtual void ClearSampling() = 0;
+    // clear the sampler and remove the processes
+
+  virtual G4bool IsConfigured() const = 0;
+    // check if some initialization hase already been done
+};
+  
+#endif

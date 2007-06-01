@@ -24,70 +24,60 @@
 // ********************************************************************
 //
 //
-// $Id: G4NewProcessPlacer.hh,v 1.1 2007-05-30 17:30:09 ahoward Exp $
+// $Id: G4WeightCutOffConfigurator.hh,v 1.1 2007-06-01 08:07:00 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
-// Class G4NewProcessPlacer
+// Class G4NewWeightCutOffConfigurator
 //
 // Class description:
-//
-// Used internally by importance sampling and scoring. 
-// See G4VProcessPlacer.
+// This class builds and places the G4NewWeightCutOffProcess.
+// If the object is deleted the process is removed from the 
+// process list.
 
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
-#ifndef G4NewProcessPlacer_hh
-#define G4NewProcessPlacer_hh G4NewProcessPlacer_hh 
+#ifndef G4NewWeightCutOffConfigurator_hh
+#define G4NewWeightCutOffConfigurator_hh G4NewWeightCutOffConfigurator_hh
 
 #include "G4Types.hh"
-#include "G4String.hh"
-#include "G4VProcessPlacer.hh"
+#include "G4VNewSamplerConfigurator.hh"
+#include "G4NewProcessPlacer.hh"
 
-class G4ProcessManager;
-class G4ProcessVector;
+class G4NewWeightCutOffProcess;
+class G4VGCellFinder;
+class G4VIStore;
+class G4VPhysicalVolume;
 
-class G4NewProcessPlacer : public G4VProcessPlacer
+class G4NewWeightCutOffConfigurator : public G4VNewSamplerConfigurator
 {
 
 public:  // with description
 
-  explicit G4NewProcessPlacer(const G4String &particlename);
-    // create a process placer for a particle type
+  G4NewWeightCutOffConfigurator(G4VPhysicalVolume* worldvolume,
+				const G4String &particlename,
+                             G4double wsurvival,
+                             G4double wlimit,
+                             G4double isource,
+                             G4VIStore *istore,
+                             const G4VGCellFinder &aGCellFinder,G4bool paraflag);
 
-  virtual ~G4NewProcessPlacer();
-
-  virtual void AddProcessAsLastDoIt(G4VProcess *process);
-    // place a post step do it process such that the 
-    // PostStepDoIt function is called last
-    // THE ORDER CHANGES BY SUBSEQUENT CALLS     
-
-  virtual void AddProcessAsSecondDoIt(G4VProcess *process);
-    // place a post step do it process such that the 
-    // PostStepDoIt function is called second
-    // THE ORDER CHANGES BY SUBSEQUENT CALLS         
-
-  virtual void RemoveProcess(G4VProcess *process);
-    // removes a given process 
-
-  enum SecondOrLast
-  {
-    eSecond = 1,            
-    eLast = 0
-  };
-
+  virtual ~G4NewWeightCutOffConfigurator();
+  virtual void Configure(G4VNewSamplerConfigurator *preConf);
+  virtual const G4VTrackTerminator *GetTrackTerminator() const ;
+  
 private:
 
-  G4ProcessManager *GetProcessManager();
-  void AddProcessAs(G4VProcess *process, SecondOrLast);
+  G4NewWeightCutOffConfigurator(const G4NewWeightCutOffConfigurator&);
+  G4NewWeightCutOffConfigurator &
+  operator=(const G4NewWeightCutOffConfigurator&);
+  G4VPhysicalVolume* fWorld;
+  G4NewProcessPlacer fPlacer;
+  G4NewWeightCutOffProcess *fNewWeightCutOffProcess;
+  G4bool fPlaced;
 
-  void PrintProcVec(G4ProcessVector* processVec);
-  void PrintPostStepGPILVec();  
-  void PrintPostStepDoItVec();  
 
-private:
-
-  G4String fParticleName;
+  G4bool paraflag;
 
 };
 
