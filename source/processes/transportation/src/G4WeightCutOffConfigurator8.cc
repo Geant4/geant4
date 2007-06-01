@@ -24,54 +24,56 @@
 // ********************************************************************
 //
 //
-// $Id: G4WeightCutOffConfigurator.hh,v 1.5 2006-06-29 21:10:46 gunter Exp $
+// $Id: G4WeightCutOffConfigurator8.cc,v 1.1 2007-06-01 06:52:59 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
 // Class G4WeightCutOffConfigurator
 //
-// Class description:
-// This class builds and places the G4WeightCutOffProcess.
-// If the object is deleted the process is removed from the 
-// process list.
-
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
-#ifndef G4WeightCutOffConfigurator_hh
-#define G4WeightCutOffConfigurator_hh G4WeightCutOffConfigurator_hh
 
-#include "G4Types.hh"
-#include "G4VSamplerConfigurator.hh"
-#include "G4ProcessPlacer.hh"
+#include "G4WeightCutOffConfigurator.hh"
+#include "G4WeightCutOffProcess.hh"
 
-class G4WeightCutOffProcess;
-class G4VGCellFinder;
-class G4VIStore;
-
-class G4WeightCutOffConfigurator : public G4VSamplerConfigurator
+G4WeightCutOffConfigurator::
+G4WeightCutOffConfigurator(const G4String &particlename,
+                                 G4double wsurvival,
+                                 G4double wlimit,
+                                 G4double isource,
+                                 G4VIStore *istore,
+                           const G4VGCellFinder &aGCellfinder)
+  : fPlacer(particlename),
+    fPlaced(false)
 {
+  fWeightCutOffProcess =
+    new G4WeightCutOffProcess(wsurvival,wlimit,isource,istore,aGCellfinder);
+  if (!fWeightCutOffProcess)
+  {
+    G4Exception("G4WeightCutOffConfigurator::G4WeightCutOffConfigurator()",
+                "FatalError", FatalException,
+                "Failed to allocate G4WeightCutOffProcess !");
+  }
+}
 
-public:  // with description
+G4WeightCutOffConfigurator::~G4WeightCutOffConfigurator()
+{
+  if (fPlaced)
+  {
+    fPlacer.RemoveProcess(fWeightCutOffProcess);
+    delete fWeightCutOffProcess;
+  }
+}
 
-  G4WeightCutOffConfigurator(const G4String &particlename,
-                             G4double wsurvival,
-                             G4double wlimit,
-                             G4double isource,
-                             G4VIStore *istore,
-                             const G4VGCellFinder &aGCellFinder);
+void G4WeightCutOffConfigurator::Configure(G4VSamplerConfigurator *)
+{
+  fPlacer.AddProcessAsLastDoIt(fWeightCutOffProcess); 
+  fPlaced = true;
+}
 
-  virtual ~G4WeightCutOffConfigurator();
-  virtual void Configure(G4VSamplerConfigurator *preConf);
-  virtual const G4VTrackTerminator *GetTrackTerminator() const ;
-  
-private:
+const G4VTrackTerminator
+*G4WeightCutOffConfigurator::GetTrackTerminator() const
+{
+  return 0;
+}
 
-  G4WeightCutOffConfigurator(const G4WeightCutOffConfigurator&);
-  G4WeightCutOffConfigurator &
-  operator=(const G4WeightCutOffConfigurator&);
-  G4ProcessPlacer fPlacer;
-  G4WeightCutOffProcess *fWeightCutOffProcess;
-  G4bool fPlaced;
-};
-
-#endif

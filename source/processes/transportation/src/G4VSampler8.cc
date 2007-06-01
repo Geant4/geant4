@@ -24,19 +24,20 @@
 // ********************************************************************
 //
 //
-// $Id: G4VProcessPlacer.cc,v 1.4 2006-11-14 09:11:18 gcosmo Exp $
+// $Id: G4VSampler8.cc,v 1.1 2007-06-01 06:52:59 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
 //
-// G4VProcessPlacer.cc
+// G4VSampler.cc
 //
 // ----------------------------------------------------------------------
 
-#include "G4VProcessPlacer.hh"
+#include "G4VSampler.hh"
 
-G4VProcessPlacer::G4VProcessPlacer()
+G4VSampler::G4VSampler()
 {}
-G4VProcessPlacer::~G4VProcessPlacer()
+
+G4VSampler::~G4VSampler()
 {}

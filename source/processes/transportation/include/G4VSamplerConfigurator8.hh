@@ -24,56 +24,47 @@
 // ********************************************************************
 //
 //
-// $Id: G4WeightCutOffConfigurator.cc,v 1.7 2006-11-14 09:11:18 gcosmo Exp $
+// $Id: G4VSamplerConfigurator8.hh,v 1.1 2007-06-01 06:52:59 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
-// Class G4WeightCutOffConfigurator
+// Class G4VSamplerConfigurator
 //
+// Class description:
+//
+// This is an interface for configurators setting up processes
+// needed for importance sampling and scoring. 
+// The Configurator may be given a pointer to another Configurator.
+// If a configurator will be given a pointer to another configurator
+// it may obtain a G4VTrackTerminator from the given Configurator.
+// This way it is possible to delegate the killing of a track.
+
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
+#ifndef G4VSamplerConfigurator_hh
+#define G4VSamplerConfigurator_hh G4VSamplerConfigurator_hh
 
-#include "G4WeightCutOffConfigurator.hh"
-#include "G4WeightCutOffProcess.hh"
+#include "G4Types.hh"
+#include <vector>
 
-G4WeightCutOffConfigurator::
-G4WeightCutOffConfigurator(const G4String &particlename,
-                                 G4double wsurvival,
-                                 G4double wlimit,
-                                 G4double isource,
-                                 G4VIStore *istore,
-                           const G4VGCellFinder &aGCellfinder)
-  : fPlacer(particlename),
-    fPlaced(false)
+class G4VTrackTerminator;
+
+class G4VSamplerConfigurator
 {
-  fWeightCutOffProcess =
-    new G4WeightCutOffProcess(wsurvival,wlimit,isource,istore,aGCellfinder);
-  if (!fWeightCutOffProcess)
-  {
-    G4Exception("G4WeightCutOffConfigurator::G4WeightCutOffConfigurator()",
-                "FatalError", FatalException,
-                "Failed to allocate G4WeightCutOffProcess !");
-  }
-}
 
-G4WeightCutOffConfigurator::~G4WeightCutOffConfigurator()
-{
-  if (fPlaced)
-  {
-    fPlacer.RemoveProcess(fWeightCutOffProcess);
-    delete fWeightCutOffProcess;
-  }
-}
+public:  // with description
 
-void G4WeightCutOffConfigurator::Configure(G4VSamplerConfigurator *)
-{
-  fPlacer.AddProcessAsLastDoIt(fWeightCutOffProcess); 
-  fPlaced = true;
-}
+  G4VSamplerConfigurator();
+  virtual ~G4VSamplerConfigurator();
 
-const G4VTrackTerminator
-*G4WeightCutOffConfigurator::GetTrackTerminator() const
-{
-  return 0;
-}
+  virtual void Configure(G4VSamplerConfigurator *preConf) = 0;
+    // Do the configuration, if preConf is given a
+    // G4VTrackTerminator may be obtained from it.
 
+  virtual const G4VTrackTerminator *GetTrackTerminator() const = 0;
+    // Return a G4VTrackTerminator or 0.
+};
+
+typedef std::vector<G4VSamplerConfigurator *> G4Configurators;
+
+#endif

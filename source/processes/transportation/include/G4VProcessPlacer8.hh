@@ -24,70 +24,46 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessPlacer.hh,v 1.8 2006-06-29 21:10:24 gunter Exp $
+// $Id: G4VProcessPlacer8.hh,v 1.1 2007-06-01 06:52:59 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
-// Class G4ProcessPlacer
+// Class G4VProcessPlacer
 //
 // Class description:
 //
-// Used internally by importance sampling and scoring. 
-// See G4VProcessPlacer.
+// Used internally by importance sampling and scoring to place
+// processes as second or last PostStepDoIt processes.
 
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
-#ifndef G4ProcessPlacer_hh
-#define G4ProcessPlacer_hh G4ProcessPlacer_hh 
+#ifndef G4VProcessPlacer_hh
+#define G4VProcessPlacer_hh G4VProcessPlacer_hh
 
 #include "G4Types.hh"
-#include "G4String.hh"
-#include "G4VProcessPlacer.hh"
 
-class G4ProcessManager;
-class G4ProcessVector;
-
-class G4ProcessPlacer : public G4VProcessPlacer
+class G4VProcess;
+ 
+class G4VProcessPlacer
 {
 
 public:  // with description
 
-  explicit G4ProcessPlacer(const G4String &particlename);
-    // create a process placer for a particle type
+  G4VProcessPlacer();
+  virtual ~G4VProcessPlacer();
 
-  virtual ~G4ProcessPlacer();
-
-  virtual void AddProcessAsLastDoIt(G4VProcess *process);
+  virtual void AddProcessAsLastDoIt(G4VProcess *process) = 0;
     // place a post step do it process such that the 
     // PostStepDoIt function is called last
     // THE ORDER CHANGES BY SUBSEQUENT CALLS     
 
-  virtual void AddProcessAsSecondDoIt(G4VProcess *process);
+  virtual void AddProcessAsSecondDoIt(G4VProcess *process) = 0;
     // place a post step do it process such that the 
     // PostStepDoIt function is called second
     // THE ORDER CHANGES BY SUBSEQUENT CALLS         
 
-  virtual void RemoveProcess(G4VProcess *process);
+  virtual void RemoveProcess(G4VProcess *process) = 0;
     // removes a given process 
-
-  enum SecondOrLast
-  {
-    eSecond = 1,            
-    eLast = 0
-  };
-
-private:
-
-  G4ProcessManager *GetProcessManager();
-  void AddProcessAs(G4VProcess *process, SecondOrLast);
-
-  void PrintProcVec(G4ProcessVector* processVec);
-  void PrintPostStepGPILVec();  
-  void PrintPostStepDoItVec();  
-
-private:
-
-  G4String fParticleName;
 
 };
 

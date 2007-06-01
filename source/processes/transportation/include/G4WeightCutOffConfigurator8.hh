@@ -24,47 +24,54 @@
 // ********************************************************************
 //
 //
-// $Id: G4VProcessPlacer.hh,v 1.9 2006-06-29 21:10:38 gunter Exp $
+// $Id: G4WeightCutOffConfigurator8.hh,v 1.1 2007-06-01 06:52:59 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
-// Class G4VProcessPlacer
+// Class G4WeightCutOffConfigurator
 //
 // Class description:
-//
-// Used internally by importance sampling and scoring to place
-// processes as second or last PostStepDoIt processes.
+// This class builds and places the G4WeightCutOffProcess.
+// If the object is deleted the process is removed from the 
+// process list.
 
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
-#ifndef G4VProcessPlacer_hh
-#define G4VProcessPlacer_hh G4VProcessPlacer_hh
+#ifndef G4WeightCutOffConfigurator_hh
+#define G4WeightCutOffConfigurator_hh G4WeightCutOffConfigurator_hh
 
 #include "G4Types.hh"
+#include "G4VSamplerConfigurator.hh"
+#include "G4ProcessPlacer.hh"
 
-class G4VProcess;
- 
-class G4VProcessPlacer
+class G4WeightCutOffProcess;
+class G4VGCellFinder;
+class G4VIStore;
+
+class G4WeightCutOffConfigurator : public G4VSamplerConfigurator
 {
 
 public:  // with description
 
-  G4VProcessPlacer();
-  virtual ~G4VProcessPlacer();
+  G4WeightCutOffConfigurator(const G4String &particlename,
+                             G4double wsurvival,
+                             G4double wlimit,
+                             G4double isource,
+                             G4VIStore *istore,
+                             const G4VGCellFinder &aGCellFinder);
 
-  virtual void AddProcessAsLastDoIt(G4VProcess *process) = 0;
-    // place a post step do it process such that the 
-    // PostStepDoIt function is called last
-    // THE ORDER CHANGES BY SUBSEQUENT CALLS     
+  virtual ~G4WeightCutOffConfigurator();
+  virtual void Configure(G4VSamplerConfigurator *preConf);
+  virtual const G4VTrackTerminator *GetTrackTerminator() const ;
+  
+private:
 
-  virtual void AddProcessAsSecondDoIt(G4VProcess *process) = 0;
-    // place a post step do it process such that the 
-    // PostStepDoIt function is called second
-    // THE ORDER CHANGES BY SUBSEQUENT CALLS         
-
-  virtual void RemoveProcess(G4VProcess *process) = 0;
-    // removes a given process 
-
+  G4WeightCutOffConfigurator(const G4WeightCutOffConfigurator&);
+  G4WeightCutOffConfigurator &
+  operator=(const G4WeightCutOffConfigurator&);
+  G4ProcessPlacer fPlacer;
+  G4WeightCutOffProcess *fWeightCutOffProcess;
+  G4bool fPlaced;
 };
 
 #endif

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SamplingPostStepAction.cc,v 1.4 2006-06-29 21:12:24 gunter Exp $
+// $Id: G4SamplingPostStepAction8.cc,v 1.1 2007-06-01 06:52:59 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------

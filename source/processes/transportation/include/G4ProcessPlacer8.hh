@@ -24,65 +24,71 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSampler.hh,v 1.10 2006-06-29 21:10:40 gunter Exp $
+// $Id: G4ProcessPlacer8.hh,v 1.1 2007-06-01 06:52:58 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
-// Class G4VSampler
+// Class G4ProcessPlacer
 //
 // Class description:
 //
-// This interface describes a configurable sampler.
-// It applies to a given particle type.
-// Concrete classes with this interface may be used for 
-// scoring, importance sampling and weight cutoff (weight roulette).
+// Used internally by importance sampling and scoring. 
+// See G4VProcessPlacer.
 
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
-#ifndef G4VSampler_hh
-#define G4VSampler_hh G4VSampler_hh
+#ifndef G4ProcessPlacer_hh
+#define G4ProcessPlacer_hh G4ProcessPlacer_hh 
 
 #include "G4Types.hh"
-#include "G4PlaceOfAction.hh"
+#include "G4String.hh"
+#include "G4VProcessPlacer.hh"
 
-class G4VPhysicalVolume;
-class G4VImportanceAlgorithm;
-class G4VIStore;
-class G4VWeightWindowAlgorithm;
-class G4VWeightWindowStore;
-class G4VScorer;
+class G4ProcessManager;
+class G4ProcessVector;
 
-class G4VSampler
+class G4ProcessPlacer : public G4VProcessPlacer
 {
 
 public:  // with description
-  
-  G4VSampler();
-  virtual ~G4VSampler();
 
-  virtual void PrepareScoring(G4VScorer *Scorer) = 0;
+  explicit G4ProcessPlacer(const G4String &particlename);
+    // create a process placer for a particle type
 
-  virtual void PrepareImportanceSampling(G4VIStore *istore,
-                                         const G4VImportanceAlgorithm 
-                                         *ialg = 0) = 0;
+  virtual ~G4ProcessPlacer();
 
+  virtual void AddProcessAsLastDoIt(G4VProcess *process);
+    // place a post step do it process such that the 
+    // PostStepDoIt function is called last
+    // THE ORDER CHANGES BY SUBSEQUENT CALLS     
 
-  virtual void PrepareWeightRoulett(G4double wsurvive = 0.5, 
-                                    G4double wlimit = 0.25,
-                                    G4double isource = 1) = 0;
+  virtual void AddProcessAsSecondDoIt(G4VProcess *process);
+    // place a post step do it process such that the 
+    // PostStepDoIt function is called second
+    // THE ORDER CHANGES BY SUBSEQUENT CALLS         
 
-  virtual void PrepareWeightWindow(G4VWeightWindowStore *wwstore,
-                                   G4VWeightWindowAlgorithm *wwAlg = 0,
-                                   G4PlaceOfAction placeOfAction = 
-                                   onBoundary) = 0;
+  virtual void RemoveProcess(G4VProcess *process);
+    // removes a given process 
 
-  virtual void Configure() = 0;
+  enum SecondOrLast
+  {
+    eSecond = 1,            
+    eLast = 0
+  };
 
-  virtual void ClearSampling() = 0;
-    // clear the sampler and remove the processes
+private:
 
-  virtual G4bool IsConfigured() const = 0;
-    // check if some initialization hase already been done
+  G4ProcessManager *GetProcessManager();
+  void AddProcessAs(G4VProcess *process, SecondOrLast);
+
+  void PrintProcVec(G4ProcessVector* processVec);
+  void PrintPostStepGPILVec();  
+  void PrintPostStepDoItVec();  
+
+private:
+
+  G4String fParticleName;
+
 };
-  
+
 #endif
