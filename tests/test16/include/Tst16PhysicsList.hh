@@ -45,7 +45,6 @@ protected:
   
 protected:
   // these methods Construct physics processes and register them
-  void AddParameterisation();
   virtual void ConstructGeneral();
   virtual void ConstructEM();
   virtual void ConstructHad();

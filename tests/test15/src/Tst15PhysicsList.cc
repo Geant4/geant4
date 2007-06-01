@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst15PhysicsList.cc,v 1.7 2006-06-29 21:42:52 gunter Exp $
+// $Id: Tst15PhysicsList.cc,v 1.8 2007-06-01 14:33:16 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -49,7 +49,6 @@
 #include "G4ios.hh"
 #include <iomanip>   
 
-#include "G4FastSimulationManagerProcess.hh"
 #include "G4NeutronIsotopeProduction.hh"
 
 Tst15PhysicsList::Tst15PhysicsList():  G4VUserPhysicsList()
@@ -121,7 +120,6 @@ void Tst15PhysicsList::ConstructAllShortLiveds()
 void Tst15PhysicsList::ConstructProcess()
 {
   AddTransportation();
-  AddParameterisation();
   ConstructEM();
   ConstructLeptHad();
   ConstructHad();
@@ -702,18 +700,6 @@ void Tst15PhysicsList::ConstructGeneral()
       pmanager ->SetProcessOrdering(theDecayProcess, idxPostStep);
       pmanager ->SetProcessOrdering(theDecayProcess, idxAtRest);
     }
-  }
-}
-void Tst15PhysicsList::AddParameterisation()
-{
-  G4FastSimulationManagerProcess* 
-    theFastSimulationManagerProcess = 
-      new G4FastSimulationManagerProcess();
-  theParticleIterator->reset();
-  while( (*theParticleIterator)() ){
-    G4ParticleDefinition* particle = theParticleIterator->value();
-    G4ProcessManager* pmanager = particle->GetProcessManager();
-    pmanager->AddDiscreteProcess(theFastSimulationManagerProcess);
   }
 }
 

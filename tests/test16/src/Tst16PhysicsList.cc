@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst16PhysicsList.cc,v 1.8 2006-06-29 21:43:20 gunter Exp $
+// $Id: Tst16PhysicsList.cc,v 1.9 2007-06-01 14:35:11 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -49,7 +49,6 @@
 #include "G4ios.hh"
 #include <iomanip>   
 
-#include "G4FastSimulationManagerProcess.hh"
 #include "G4ProtonInelasticCrossSection.hh"
 #include "G4NeutronInelasticCrossSection.hh"
 
@@ -122,7 +121,6 @@ void Tst16PhysicsList::ConstructAllShortLiveds()
 void Tst16PhysicsList::ConstructProcess()
 {
   AddTransportation();
-  AddParameterisation();
   ConstructEM();
   ConstructLeptHad();
   ConstructHad();
@@ -704,18 +702,6 @@ void Tst16PhysicsList::ConstructGeneral()
       pmanager ->SetProcessOrdering(theDecayProcess, idxPostStep);
       pmanager ->SetProcessOrdering(theDecayProcess, idxAtRest);
     }
-  }
-}
-void Tst16PhysicsList::AddParameterisation()
-{
-  G4FastSimulationManagerProcess* 
-    theFastSimulationManagerProcess = 
-      new G4FastSimulationManagerProcess();
-  theParticleIterator->reset();
-  while( (*theParticleIterator)() ){
-    G4ParticleDefinition* particle = theParticleIterator->value();
-    G4ProcessManager* pmanager = particle->GetProcessManager();
-    pmanager->AddDiscreteProcess(theFastSimulationManagerProcess);
   }
 }
 

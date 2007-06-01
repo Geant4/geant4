@@ -1,4 +1,4 @@
-$Id: History,v 1.8 2005-12-06 16:03:34 gcosmo Exp $
+$Id: History,v 1.9 2007-06-01 14:35:10 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+1st June 2007  Gabriele Cosmo (test16-V08-03-00)
+- Removed useless setup for fast-parameterisation in physics list !
 
 6th December 2005  Gabriele Cosmo
 - Trivial changes for support of CLHEP-2.0.X series.
