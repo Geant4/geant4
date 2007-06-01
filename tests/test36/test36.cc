@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: test36.cc,v 1.3 2007-05-31 18:25:19 vnivanch Exp $
+// $Id: test36.cc,v 1.4 2007-06-01 10:11:39 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -37,6 +37,7 @@
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
 #include "G4UIterminal.hh"
+#include "G4UItcsh.hh"
 #include "Randomize.hh"
 
 #ifdef G4VIS_USE
@@ -82,8 +83,7 @@ int main(int argc,char** argv)
 
   // visualization manager
 
-  G4VisManager* visManager = new G4VisExecutive;
-  visManager->Initialize();
+  G4VisManager* visManager = 0;
 
 #endif 
  
@@ -114,10 +114,18 @@ int main(int argc,char** argv)
  
   if (argc==1)   // Define UI terminal for interactive mode  
   { 
-     G4UIsession * session = new G4UIterminal;
-     UI->ApplyCommand("/control/execute init.mac");    
-     session->SessionStart();
-     delete session;
+    visManager = new G4VisExecutive;
+    visManager->Initialize();
+
+    G4UIsession * session = 0;
+#ifdef G4UI_USE_TCSH
+    session = new G4UIterminal(new G4UItcsh);
+#else
+    session = new G4UIterminal();
+#endif
+    UI->ApplyCommand("/control/execute init.mac");    
+    session->SessionStart();
+    delete session;
   }
   else           // Batch mode
   { 

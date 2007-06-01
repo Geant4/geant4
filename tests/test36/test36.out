@@ -1,0 +1,395 @@
+
+*************************************************************
+ Geant4 version Name: geant4-09-00-cand-03    (29-June-2007)
+                      Copyright : Geant4 Collaboration
+                      Reference : NIM A 506 (2003), 250-303
+                            WWW : http://cern.ch/geant4
+*************************************************************
+
+ hist file = g4.p11
+ Nb of bins in Edep plot = 65
+ Elow  in the  Edep plot = 0
+ Ehigh in the  Edep plot = 0.1
+Material is selected: Mylar
+Material is selected: Air
+Material is selected: Al
+Material is selected: Xe15CO2
+
+ The  WORLD   is made of 4000mm of Air, the transverse size (R) of the world is 200 mm. 
+ The ABSORBER is made of 38.3mm of Xe15CO2, the transverse size (R) is 100 mm. 
+ Z position of the (middle of the) absorber 293.401  mm.
+fRadZ = 129.58 mm
+fStartZ = 100 mm
+fRadThick = 59.16 mm
+fFoilNumber = 220
+fRadiatorMat = radiatorMat
+WorldMaterial = Air
+
+XTR model = transpM
+the number of TR radiator plates = 220
+total radiator thickness = 5.94 cm
+plate material = Mylar
+gas material = Air
+plate plasma energy = 24.5068 eV
+gas plasma energy = 0.731967 eV
+Regular transparent X-ray TR  radiator EM process is called
+Em10PhysicsList::SetCuts:CutLength for e-, e+ and gamma is: 1 mm 
+Radiator gamma cut    = 1 mm
+Radiator electron cut = 1 mm
+Radiator positron cut = 1 mm
+Radiator cuts are set
+Detector gamma cut    = 1 mm
+Detector electron cut = 1 mm
+Detector positron cut = 1 mm
+Detector cuts are set
+
+phot:  Total cross sections from Sandia parametrisation. 
+      Sampling according PhotoElectric model
+
+compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
+       Scattered gamma energy according Klein-Nishina.
+        PhysicsTables from 1 keV to 100 GeV in 80 bins. 
+
+conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
+      sampling secondary e+e- according Bethe-Heitler model
+      tables are built for  gamma
+      Lambda tables from 1.022 MeV to 100 GeV in 100 bins.
+
+eIoni:   tables are built for  e-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Delta cross sections and sampling from MollerBhabha model
+      Good description from 1 KeV to 100 GeV.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
+msc:  Model variant of multiple scattering for e-
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      LateralDisplacementFlag=  1   Skin= 0
+      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
+
+eBrem:   tables are built for  e-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
+
+Lorentz Factor	XTR photon number
+
+107.6	0.0003511
+123.4	0.0006268
+141.5	0.00108
+162.3	0.001512
+186.2	0.002884
+213.7	0.004693
+245.2	0.006089
+281.3	0.009624
+322.9	0.01836
+370.5	0.03094
+425.3	0.04305
+488.2	0.05196
+560.3	0.06382
+643.2	0.08555
+738.3	0.1271
+847.6	0.1977
+973	0.3108
+1117	0.4511
+1282	0.5943
+1472	0.74
+1690	1.109
+1940	1.509
+2228	1.863
+2558	2.155
+2936	2.388
+3371	2.571
+3871	2.71
+4444	2.816
+5102	2.897
+5858	2.958
+6726	3.004
+7722	3.039
+8866	3.066
+1.018e+04	3.086
+1.169e+04	3.102
+1.342e+04	3.113
+1.541e+04	3.122
+1.769e+04	3.129
+2.031e+04	3.134
+2.332e+04	3.138
+2.677e+04	3.141
+3.074e+04	3.143
+3.529e+04	3.145
+4.052e+04	3.146
+4.652e+04	3.147
+5.342e+04	3.148
+6.133e+04	3.148
+7.042e+04	3.149
+8.085e+04	3.149
+9.283e+04	3.149
+
+total time for build X-ray TR energy loss tables = 0.21 s
+
+SynRad:  Incoherent Synchrotron Radiation
+      good description for long magnets at all energies
+
+eIoni:   tables are built for  e+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Delta cross sections and sampling from MollerBhabha model
+      Good description from 1 KeV to 100 GeV.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
+eBrem:   tables are built for  e+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
+
+annihil:       Sampling according eplus2gg model
+      tables are built for  e+
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+
+msc:  Model variant of multiple scattering for proton
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      LateralDisplacementFlag=  1   Skin= 0
+      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
+
+hIoni:   tables are built for  proton
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used from proton dE/dx and range.
+      Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
+      Parametrisation from Bragg for protons below.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
+msc:  Model variant of multiple scattering for mu+
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      LateralDisplacementFlag=  1   Skin= 0
+      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
+
+muIoni:   tables are built for  mu+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
+      radiative corrections for E > 1 GeV
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
+muBrems:   tables are built for  mu+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+
+muPairProd:   tables are built for  mu+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+
+muIoni:   tables are built for  mu-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
+      radiative corrections for E > 1 GeV
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
+muBrems:   tables are built for  mu-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+
+muPairProd:   tables are built for  mu-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+
+hIoni:   tables are built for  pi+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used from proton dE/dx and range.
+      Delta cross sections and sampling from BetheBloch model for scaled energy > 0.297504 MeV
+      Parametrisation from Bragg for protons below.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
+msc:  Model variant of multiple scattering for pi-
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      LateralDisplacementFlag=  1   Skin= 0
+      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
+
+hIoni:   tables are built for  pi-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used from proton dE/dx and range.
+      Delta cross sections and sampling from BetheBloch model for scaled energy > 0.297504 MeV
+      Parametrisation from Bragg for protons below.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : Mylar
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 2.97898 keV    e- 417.539 keV    e+ 402.4 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : radiatorMat
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 1.05919 keV    e- 83.2385 keV    e+ 81.2141 keV
+ Region(s) which use this couple : 
+    XTRradiator
+
+Index : 3     used in the geometry : Yes     recalculation needed : No 
+ Material : Xe15CO2
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 990 eV     e- 1.50609 keV    e+ 1.48766 keV
+ Region(s) which use this couple : 
+    XTRdEdxDetector
+
+====================================================================
+
+### Run 0 start.
+
+--------- Ranecu engine status ---------
+ Initial seed (index) = 0
+ Current couple of seeds = 9876, 54321
+----------------------------------------
+Start Run processing.
+
+---> Begin of Event: 0
+Run terminated.
+Run Summary
+  Number of events processed : 1000
+  User=2.9s Real=3.89s Sys=0s
+ ================== run summary =====================
+ end of Run TotNbofEvents = 1000
+    mean charged track length   in absorber=108.194 +- 1.66579  mm  
+
+            mean energy deposit in absorber=0.0499632 +- 0.000747782  MeV 
+
+ mean number of steps in absorber (charged) =49.952 +- 1.28964      
+ mean number of steps in absorber (neutral) =2.821 +- 0.0534318      
+
+   mean number of charged secondaries = 4.912 +- 0.0887032
+
+   mean number of neutral secondaries = 0.114 +- 0.0105358
+
+   mean number of e-s =4.911  and e+s =0.001
+
+(number) transmission coeff=0.548  reflection coeff=0.074
+
+ energy deposit distribution 
+#entries=1000    #underflows=0    #overflows=37
+ bin nb      Elow      entries     normalized 
+    0         0           0           0
+    1   1.53846           0           0
+    2   3.07692           0           0
+    3   4.61538           0           0
+    4   6.15385           0           0
+    5   7.69231           0           0
+    6   9.23077           0           0
+    7   10.7692           0           0
+    8   12.3077           3       0.003
+    9   13.8462           3       0.003
+   10   15.3846           8       0.008
+   11   16.9231          12       0.012
+   12   18.4615          11       0.011
+   13        20          25       0.025
+   14   21.5385          17       0.017
+   15   23.0769          29       0.029
+   16   24.6154          17       0.017
+   17   26.1538          26       0.026
+   18   27.6923          32       0.032
+   19   29.2308          26       0.026
+   20   30.7692          26       0.026
+   21   32.3077          34       0.034
+   22   33.8462          28       0.028
+   23   35.3846          29       0.029
+   24   36.9231          30        0.03
+   25   38.4615          36       0.036
+   26        40          39       0.039
+   27   41.5385          27       0.027
+   28   43.0769          30        0.03
+   29   44.6154          29       0.029
+   30   46.1538          27       0.027
+   31   47.6923          30        0.03
+   32   49.2308          28       0.028
+   33   50.7692          19       0.019
+   34   52.3077          20        0.02
+   35   53.8462          15       0.015
+   36   55.3846          16       0.016
+   37   56.9231          29       0.029
+   38   58.4615          19       0.019
+   39        60          25       0.025
+   40   61.5385          17       0.017
+   41   63.0769          12       0.012
+   42   64.6154          17       0.017
+   43   66.1538          18       0.018
+   44   67.6923          12       0.012
+   45   69.2308          10        0.01
+   46   70.7692          15       0.015
+   47   72.3077          12       0.012
+   48   73.8462           9       0.009
+   49   75.3846          10        0.01
+   50   76.9231           9       0.009
+   51   78.4615           9       0.009
+   52        80          12       0.012
+   53   81.5385          10        0.01
+   54   83.0769           6       0.006
+   55   84.6154           6       0.006
+   56   86.1538          12       0.012
+   57   87.6923           6       0.006
+   58   89.2308           4       0.004
+   59   90.7692           0           0
+   60   92.3077           6       0.006
+   61   93.8462           1       0.001
+   62   95.3846           4       0.004
+   63   96.9231           1       0.001
+   64   98.4615           0           0
+
+ Emp =            0.04   width=           0.04  MeV 
+
+
+--------- Ranecu engine status ---------
+ Initial seed (index) = 0
+ Current couple of seeds = 470548925, 1303404484
+----------------------------------------
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : Mylar
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 2.978977 keV    e- 417.53934 keV    e+ 402.40033 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : radiatorMat
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 1.0591879 keV    e- 83.238528 keV    e+ 81.214144 keV
+ Region(s) which use this couple : 
+    XTRradiator
+
+Index : 3     used in the geometry : Yes     recalculation needed : No 
+ Material : Xe15CO2
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 990 eV     e- 1.5060904 keV    e+ 1.4876634 keV
+ Region(s) which use this couple : 
+    XTRdEdxDetector
+
+====================================================================
+
+G4 kernel has come to Quit state.
