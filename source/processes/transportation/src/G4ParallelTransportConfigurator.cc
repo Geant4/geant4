@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelTransportConfigurator.cc,v 1.7 2006-11-14 09:11:18 gcosmo Exp $
+// $Id: G4ParallelTransportConfigurator.cc,v 1.8 2007-06-01 07:53:27 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -54,7 +54,7 @@ G4ParallelTransportConfigurator::~G4ParallelTransportConfigurator()
   }
 }
 
-void G4ParallelTransportConfigurator::Configure(G4VSamplerConfigurator *)
+void G4ParallelTransportConfigurator::Configure(G4VSamplerConfigurator8 *)
 {
   fParallelTransport = new G4ParallelTransport(fPWorld.GetGeoDriver(), 
                                          fPWorld.GetParallelStepper());

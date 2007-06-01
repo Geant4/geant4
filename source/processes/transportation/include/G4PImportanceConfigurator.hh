@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PImportanceConfigurator.hh,v 1.6 2006-06-29 21:10:00 gunter Exp $
+// $Id: G4PImportanceConfigurator.hh,v 1.7 2007-06-01 07:53:26 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -42,15 +42,15 @@
 #define G4PImportanceConfigurator_hh G4PImportanceConfigurator_hh
 
 #include "G4Types.hh"
-#include "G4VSamplerConfigurator.hh"
+#include "G4VSamplerConfigurator8.hh"
 #include "G4ImportanceSplitExaminer.hh"
-#include "G4ProcessPlacer.hh"
+#include "G4ProcessPlacer8.hh"
 
 class G4ParallelWorld;
 class G4VImportanceAlgorithm;
 class G4ParallelImportanceProcess;
 
-class G4PImportanceConfigurator : public G4VSamplerConfigurator
+class G4PImportanceConfigurator : public G4VSamplerConfigurator8
 {
 
 public:  // with description
@@ -60,7 +60,7 @@ public:  // with description
                               G4VIStore &istore,
                               const G4VImportanceAlgorithm *ialg);
   virtual ~G4PImportanceConfigurator();
-  virtual void Configure(G4VSamplerConfigurator *preConf);
+  virtual void Configure(G4VSamplerConfigurator8 *preConf);
   virtual const G4VTrackTerminator *GetTrackTerminator() const;
   
 private:
@@ -68,7 +68,7 @@ private:
   G4PImportanceConfigurator(const G4PImportanceConfigurator &);
   G4PImportanceConfigurator &
   operator=(const G4PImportanceConfigurator &);
-  G4ProcessPlacer fPlacer;
+  G4ProcessPlacer8 fPlacer;
   G4ParallelWorld &fPWorld;
   G4bool fDeleteIalg;
   const G4VImportanceAlgorithm *fIalgorithm;

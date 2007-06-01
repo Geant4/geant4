@@ -24,11 +24,11 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSampler8.hh,v 1.1 2007-06-01 06:52:59 ahoward Exp $
+// $Id: G4VSampler8.hh,v 1.2 2007-06-01 07:53:26 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
-// Class G4VSampler
+// Class G4VSampler8
 //
 // Class description:
 //
@@ -39,8 +39,8 @@
 
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
-#ifndef G4VSampler_hh
-#define G4VSampler_hh G4VSampler_hh
+#ifndef G4VSampler8_hh
+#define G4VSampler8_hh G4VSampler8_hh
 
 #include "G4Types.hh"
 #include "G4PlaceOfAction.hh"
@@ -52,13 +52,13 @@ class G4VWeightWindowAlgorithm;
 class G4VWeightWindowStore;
 class G4VScorer;
 
-class G4VSampler
+class G4VSampler8
 {
 
 public:  // with description
   
-  G4VSampler();
-  virtual ~G4VSampler();
+  G4VSampler8();
+  virtual ~G4VSampler8();
 
   virtual void PrepareScoring(G4VScorer *Scorer) = 0;
 

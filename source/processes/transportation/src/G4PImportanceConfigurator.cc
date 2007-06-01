@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PImportanceConfigurator.cc,v 1.8 2006-11-14 09:11:18 gcosmo Exp $
+// $Id: G4PImportanceConfigurator.cc,v 1.9 2007-06-01 07:53:27 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -72,7 +72,7 @@ G4PImportanceConfigurator::~G4PImportanceConfigurator()
 }
 
 void
-G4PImportanceConfigurator::Configure(G4VSamplerConfigurator *preConf)
+G4PImportanceConfigurator::Configure(G4VSamplerConfigurator8 *preConf)
 {
   const G4VTrackTerminator *terminator = 0;
   if (preConf)

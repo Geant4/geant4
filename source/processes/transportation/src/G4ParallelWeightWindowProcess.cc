@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelWeightWindowProcess.cc,v 1.13 2006-06-29 21:12:20 gunter Exp $
+// $Id: G4ParallelWeightWindowProcess.cc,v 1.14 2007-06-01 07:53:27 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -38,7 +38,7 @@
 #include "G4ParallelWeightWindowProcess.hh"
 #include "G4VWeightWindowExaminer.hh"
 #include "G4VTrackTerminator.hh"
-#include "G4SamplingPostStepAction.hh"
+#include "G4SamplingPostStepAction8.hh"
 #include "G4VParallelStepper.hh"
 
 G4ParallelWeightWindowProcess::G4ParallelWeightWindowProcess(
@@ -56,11 +56,11 @@ G4ParallelWeightWindowProcess::G4ParallelWeightWindowProcess(
 {
   if (TrackTerminator)
   {
-    fPostStepAction = new G4SamplingPostStepAction(*TrackTerminator);
+    fPostStepAction = new G4SamplingPostStepAction8(*TrackTerminator);
   }
   else
   {
-    fPostStepAction = new G4SamplingPostStepAction(*this);
+    fPostStepAction = new G4SamplingPostStepAction8(*this);
   }
 
 }

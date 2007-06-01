@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MWeightWindowConfigurator.cc,v 1.6 2006-11-14 09:11:18 gcosmo Exp $
+// $Id: G4MWeightWindowConfigurator.cc,v 1.7 2007-06-01 07:53:26 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -66,7 +66,7 @@ G4MWeightWindowConfigurator::~G4MWeightWindowConfigurator()
 }
 
 void
-G4MWeightWindowConfigurator::Configure(G4VSamplerConfigurator *preConf)
+G4MWeightWindowConfigurator::Configure(G4VSamplerConfigurator8 *preConf)
 {
   const G4VTrackTerminator *terminator = 0;
   if (preConf)

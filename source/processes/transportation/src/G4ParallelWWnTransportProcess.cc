@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelWWnTransportProcess.cc,v 1.6 2006-06-29 21:12:18 gunter Exp $
+// $Id: G4ParallelWWnTransportProcess.cc,v 1.7 2007-06-01 07:53:27 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -38,7 +38,7 @@
 #include "G4ParallelWWnTransportProcess.hh"
 #include "G4VWeightWindowExaminer.hh"
 #include "G4VTrackTerminator.hh"
-#include "G4SamplingPostStepAction.hh"
+#include "G4SamplingPostStepAction8.hh"
 
 G4ParallelWWnTransportProcess::G4ParallelWWnTransportProcess(
                       const G4VWeightWindowExaminer &aWeightWindowExaminer,
@@ -53,11 +53,11 @@ G4ParallelWWnTransportProcess::G4ParallelWWnTransportProcess(
 {
   if (TrackTerminator)
   {
-    fPostStepAction = new G4SamplingPostStepAction(*TrackTerminator);
+    fPostStepAction = new G4SamplingPostStepAction8(*TrackTerminator);
   }
   else
   {
-    fPostStepAction = new G4SamplingPostStepAction(*this);
+    fPostStepAction = new G4SamplingPostStepAction8(*this);
   }
 }
 

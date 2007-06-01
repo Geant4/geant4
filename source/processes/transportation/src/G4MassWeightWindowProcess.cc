@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MassWeightWindowProcess.cc,v 1.7 2006-11-14 09:11:18 gcosmo Exp $
+// $Id: G4MassWeightWindowProcess.cc,v 1.8 2007-06-01 07:53:27 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -37,7 +37,7 @@
 #include "G4MassWeightWindowProcess.hh"
 #include "G4VWeightWindowAlgorithm.hh"
 #include "G4GeometryCell.hh"
-#include "G4SamplingPostStepAction.hh"
+#include "G4SamplingPostStepAction8.hh"
 #include "G4VTrackTerminator.hh"
 #include "G4PlaceOfAction.hh"
 #include "G4VWeightWindowStore.hh"
@@ -57,11 +57,11 @@ G4MassWeightWindowProcess::G4MassWeightWindowProcess(
 {
   if (TrackTerminator)
   {
-    fPostStepAction = new G4SamplingPostStepAction(*TrackTerminator);
+    fPostStepAction = new G4SamplingPostStepAction8(*TrackTerminator);
   }
   else
   {
-    fPostStepAction = new G4SamplingPostStepAction(*this);
+    fPostStepAction = new G4SamplingPostStepAction8(*this);
   }
   if (!fParticleChange)
   {

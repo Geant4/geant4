@@ -24,11 +24,11 @@
 // ********************************************************************
 //
 //
-// $Id: G4WeightCutOffProcess8.hh,v 1.1 2007-06-01 06:52:59 ahoward Exp $
+// $Id: G4WeightCutOffProcess8.hh,v 1.2 2007-06-01 07:53:26 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
-// Class G4WeightCutOffProcess
+// Class G4WeightCutOffProcess8
 //
 // Class description:
 //
@@ -36,8 +36,8 @@
 
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
-#ifndef G4WeightCutOffProcess_hh 
-#define G4WeightCutOffProcess_hh G4WeightCutOffProcess_hh
+#ifndef G4WeightCutOffProcess8_hh 
+#define G4WeightCutOffProcess8_hh G4WeightCutOffProcess8_hh
 
 #include "G4VProcess.hh"
 #include "G4VTrackTerminator.hh"
@@ -46,20 +46,20 @@
 class G4VGCellFinder;
 class G4VIStore;
 
-class G4WeightCutOffProcess : public G4VProcess
+class G4WeightCutOffProcess8 : public G4VProcess
 {
 
 public:  // with description
 
-  G4WeightCutOffProcess(G4double wsurvival,
+  G4WeightCutOffProcess8(G4double wsurvival,
                         G4double wlimit,
                         G4double isource,
                         G4VIStore *istore,
                         const G4VGCellFinder &aGCellFinder,
-                        const G4String &aName = "WeightCutOffProcess");
+                        const G4String &aName = "WeightCutOffProcess8");
     // create a G4ParticleChange
 
-  virtual ~G4WeightCutOffProcess();
+  virtual ~G4WeightCutOffProcess8();
     // delete the G4ParticleChange
 
   virtual G4double 
@@ -94,8 +94,8 @@ public:  // without description
   
 private:
 
-  G4WeightCutOffProcess(const G4WeightCutOffProcess &);
-  G4WeightCutOffProcess &operator=(const G4WeightCutOffProcess &);
+  G4WeightCutOffProcess8(const G4WeightCutOffProcess8 &);
+  G4WeightCutOffProcess8 &operator=(const G4WeightCutOffProcess8 &);
 
   G4ParticleChange *fParticleChange;
   G4double fWeightSurvival;

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelImportanceProcess.cc,v 1.19 2006-06-29 21:12:12 gunter Exp $
+// $Id: G4ParallelImportanceProcess.cc,v 1.20 2007-06-01 07:53:27 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -38,7 +38,7 @@
 #include "G4ParallelImportanceProcess.hh"
 #include "G4VImportanceSplitExaminer.hh"
 #include "G4VTrackTerminator.hh"
-#include "G4SamplingPostStepAction.hh"
+#include "G4SamplingPostStepAction8.hh"
 
 G4ParallelImportanceProcess::G4ParallelImportanceProcess(
                  const G4VImportanceSplitExaminer &aImportanceSplitExaminer,
@@ -53,11 +53,11 @@ G4ParallelImportanceProcess::G4ParallelImportanceProcess(
 {
   if (TrackTerminator)
   {
-    fPostStepAction = new G4SamplingPostStepAction(*TrackTerminator);
+    fPostStepAction = new G4SamplingPostStepAction8(*TrackTerminator);
   }
   else
   {
-    fPostStepAction = new G4SamplingPostStepAction(*this);
+    fPostStepAction = new G4SamplingPostStepAction8(*this);
   }
 
 }

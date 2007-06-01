@@ -24,17 +24,17 @@
 // ********************************************************************
 //
 //
-// $Id: G4SamplingPostStepAction8.cc,v 1.1 2007-06-01 06:52:59 ahoward Exp $
+// $Id: G4SamplingPostStepAction8.cc,v 1.2 2007-06-01 07:53:27 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
 //
-// G4SamplingPostStepAction.cc
+// G4SamplingPostStepAction8.cc
 //
 // ----------------------------------------------------------------------
 
-#include "G4SamplingPostStepAction.hh"
+#include "G4SamplingPostStepAction8.hh"
 #include "G4Track.hh"
 #include "G4ParticleChange.hh"
 #include "G4VImportanceSplitExaminer.hh"
@@ -42,17 +42,17 @@
 #include "G4VTrackTerminator.hh"
 #include <sstream>
 
-G4SamplingPostStepAction::
-G4SamplingPostStepAction(const G4VTrackTerminator &TrackTerminator)
+G4SamplingPostStepAction8::
+G4SamplingPostStepAction8(const G4VTrackTerminator &TrackTerminator)
   : fTrackTerminator(TrackTerminator)
 {
 }
 
-G4SamplingPostStepAction::~G4SamplingPostStepAction()
+G4SamplingPostStepAction8::~G4SamplingPostStepAction8()
 {
 }
 
-void G4SamplingPostStepAction::DoIt(const G4Track& aTrack, 
+void G4SamplingPostStepAction8::DoIt(const G4Track& aTrack, 
                                           G4ParticleChange *aParticleChange,
                                     const G4Nsplit_Weight &nw)
 {  
@@ -81,12 +81,12 @@ void G4SamplingPostStepAction::DoIt(const G4Track& aTrack,
        << "\n";
     G4String m = os.str();
     
-    G4Exception("G4SamplingPostStepAction::DoIt()",
+    G4Exception("G4SamplingPostStepAction8::DoIt()",
                 "InvalidCondition", FatalException, m);
   }
 }
 
-void G4SamplingPostStepAction::Split(const G4Track &aTrack,
+void G4SamplingPostStepAction8::Split(const G4Track &aTrack,
                                      const G4Nsplit_Weight &nw,
                                            G4ParticleChange *aParticleChange)
 {
@@ -102,7 +102,7 @@ void G4SamplingPostStepAction::Split(const G4Track &aTrack,
     
     if (ptrack->GetMomentumDirection() != aTrack.GetMomentumDirection())
     {
-      G4Exception("G4SamplingPostStepAction::Split()", "InvalidCondition",
+      G4Exception("G4SamplingPostStepAction8::Split()", "InvalidCondition",
                   FatalException, "Track with same momentum !");
     }
     aParticleChange->AddSecondary(ptrack);

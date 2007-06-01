@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MassGeometrySampler.cc,v 1.13 2006-11-14 09:11:18 gcosmo Exp $
+// $Id: G4MassGeometrySampler.cc,v 1.14 2007-06-01 07:53:26 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -43,7 +43,7 @@
 #include "G4MScoreConfigurator.hh"
 #include "G4MImportanceConfigurator.hh"
 #include "G4MWeightWindowConfigurator.hh"
-#include "G4WeightCutOffConfigurator.hh"
+#include "G4WeightCutOffConfigurator8.hh"
 #include "G4MassGCellFinder.hh"
 
 G4MassGeometrySampler::
@@ -52,7 +52,7 @@ G4MassGeometrySampler(const G4String &particlename)
     fMImportanceConfigurator(0),
     fMScoreConfigurator(0),
     fGCellFinder(0),
-    fWeightCutOffConfigurator(0),
+    fWeightCutOffConfigurator8(0),
     fIStore(0),
     fMWeightWindowConfigurator(0),
     fWWStore(0),
@@ -82,10 +82,10 @@ void G4MassGeometrySampler::ClearSampling()
     delete fMScoreConfigurator;
     fMScoreConfigurator = 0;
   }
-  if (fWeightCutOffConfigurator)
+  if (fWeightCutOffConfigurator8)
   {
-    delete fWeightCutOffConfigurator;
-    fWeightCutOffConfigurator = 0;
+    delete fWeightCutOffConfigurator8;
+    fWeightCutOffConfigurator8 = 0;
   }
   if (fGCellFinder)
   {
@@ -150,18 +150,18 @@ G4MassGeometrySampler::PrepareWeightRoulett(G4double wsurvive,
                 "Failed allocation of G4MassGCellFinder !");
   }
   
-  fWeightCutOffConfigurator = 
-    new G4WeightCutOffConfigurator(fParticleName,
+  fWeightCutOffConfigurator8 = 
+    new G4WeightCutOffConfigurator8(fParticleName,
                                    wsurvive,
                                    wlimit,
                                    isource,
                                    fIStore,
                                    *fGCellFinder);
-  if (!fWeightCutOffConfigurator)
+  if (!fWeightCutOffConfigurator8)
   {
     G4Exception("G4MassGeometrySampler::PrepareWeightRoulett()",
                 "FatalError", FatalException,
-                "Failed allocation of G4WeightCutOffConfigurator !");
+                "Failed allocation of G4WeightCutOffConfigurator8 !");
   }
 }
 
@@ -199,17 +199,17 @@ void G4MassGeometrySampler::Configure()
       fConfigurators.push_back(fMWeightWindowConfigurator);
     }
     
-    G4VSamplerConfigurator *preConf = 0;
+    G4VSamplerConfigurator8 *preConf = 0;
     for (G4Configurators::iterator it = fConfigurators.begin();
          it != fConfigurators.end(); it++)
     {
-      G4VSamplerConfigurator *currConf =*it;
+      G4VSamplerConfigurator8 *currConf =*it;
       currConf->Configure(preConf);
       preConf = *it;
     }
-    if (fWeightCutOffConfigurator)
+    if (fWeightCutOffConfigurator8)
     {
-      fWeightCutOffConfigurator->Configure(0);
+      fWeightCutOffConfigurator8->Configure(0);
     }
   }
   return;

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MImportanceConfigurator.cc,v 1.7 2006-11-13 16:13:50 japost Exp $
+// $Id: G4MImportanceConfigurator.cc,v 1.8 2007-06-01 07:53:26 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -36,7 +36,7 @@
 #include "G4MImportanceConfigurator.hh"
 
 #include "G4MassImportanceProcess.hh"
-#include "G4ProcessPlacer.hh"
+#include "G4ProcessPlacer8.hh"
 #include "G4ImportanceAlgorithm.hh"
 
 G4MImportanceConfigurator::
@@ -66,7 +66,7 @@ G4MImportanceConfigurator::~G4MImportanceConfigurator()
 }
 
 void  
-G4MImportanceConfigurator::Configure(G4VSamplerConfigurator *preConf)
+G4MImportanceConfigurator::Configure(G4VSamplerConfigurator8 *preConf)
 {
   const G4VTrackTerminator *terminator = 0;
   if (preConf)

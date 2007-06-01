@@ -24,20 +24,20 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSampler8.cc,v 1.1 2007-06-01 06:52:59 ahoward Exp $
+// $Id: G4VSampler8.cc,v 1.2 2007-06-01 07:53:27 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
 //
-// G4VSampler.cc
+// G4VSampler8.cc
 //
 // ----------------------------------------------------------------------
 
-#include "G4VSampler.hh"
+#include "G4VSampler8.hh"
 
-G4VSampler::G4VSampler()
+G4VSampler8::G4VSampler8()
 {}
 
-G4VSampler::~G4VSampler()
+G4VSampler8::~G4VSampler8()
 {}

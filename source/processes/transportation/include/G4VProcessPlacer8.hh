@@ -24,11 +24,11 @@
 // ********************************************************************
 //
 //
-// $Id: G4VProcessPlacer8.hh,v 1.1 2007-06-01 06:52:59 ahoward Exp $
+// $Id: G4VProcessPlacer8.hh,v 1.2 2007-06-01 07:53:26 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
-// Class G4VProcessPlacer
+// Class G4VProcessPlacer8
 //
 // Class description:
 //
@@ -37,20 +37,20 @@
 
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
-#ifndef G4VProcessPlacer_hh
-#define G4VProcessPlacer_hh G4VProcessPlacer_hh
+#ifndef G4VProcessPlacer8_hh
+#define G4VProcessPlacer8_hh G4VProcessPlacer8_hh
 
 #include "G4Types.hh"
 
 class G4VProcess;
  
-class G4VProcessPlacer
+class G4VProcessPlacer8
 {
 
 public:  // with description
 
-  G4VProcessPlacer();
-  virtual ~G4VProcessPlacer();
+  G4VProcessPlacer8();
+  virtual ~G4VProcessPlacer8();
 
   virtual void AddProcessAsLastDoIt(G4VProcess *process) = 0;
     // place a post step do it process such that the 

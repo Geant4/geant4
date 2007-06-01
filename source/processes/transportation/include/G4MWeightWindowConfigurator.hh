@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MWeightWindowConfigurator.hh,v 1.6 2006-06-29 21:09:50 gunter Exp $
+// $Id: G4MWeightWindowConfigurator.hh,v 1.7 2007-06-01 07:53:26 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -40,15 +40,15 @@
 #define G4MWeightWindowConfigurator_hh G4MWeightWindowConfigurator_hh
 
 #include "G4Types.hh"
-#include "G4ProcessPlacer.hh"
-#include "G4VSamplerConfigurator.hh"
+#include "G4ProcessPlacer8.hh"
+#include "G4VSamplerConfigurator8.hh"
 #include "G4PlaceOfAction.hh"
 
 class G4VWeightWindowStore;
 class G4VWeightWindowAlgorithm;
 class G4MassWeightWindowProcess;
 
-class G4MWeightWindowConfigurator : public G4VSamplerConfigurator
+class G4MWeightWindowConfigurator : public G4VSamplerConfigurator8
 {
 
 public:  // with description
@@ -59,7 +59,7 @@ public:  // with description
                               G4PlaceOfAction placeOfAction);
 
   virtual ~G4MWeightWindowConfigurator();
-  virtual void Configure(G4VSamplerConfigurator *preConf);
+  virtual void Configure(G4VSamplerConfigurator8 *preConf);
   virtual const G4VTrackTerminator *GetTrackTerminator() const;
 
 private:
@@ -68,7 +68,7 @@ private:
   G4MWeightWindowConfigurator &
   operator=(const G4MWeightWindowConfigurator &);
 
-  G4ProcessPlacer fPlacer;
+  G4ProcessPlacer8 fPlacer;
   G4VWeightWindowStore &fWeightWindowStore;
   G4bool fDeleteWWalg;
   const G4VWeightWindowAlgorithm *fWWalgorithm;

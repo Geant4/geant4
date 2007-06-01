@@ -24,16 +24,16 @@
 // ********************************************************************
 //
 //
-// $Id: G4MassGeometrySampler.hh,v 1.7 2006-06-29 21:09:54 gunter Exp $
+// $Id: G4MassGeometrySampler.hh,v 1.8 2007-06-01 07:53:26 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
 // Class G4MassGeometrySampler
 //
 // Class description:
-// This class inherits from G4VSampler. It is used for scoring and 
+// This class inherits from G4VSampler8. It is used for scoring and 
 // importance sampling in the tracking (mass) geometry.
-// See also the description in G4VSampler.hh.
+// See also the description in G4VSampler8.hh.
 
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
@@ -42,16 +42,16 @@
 
 #include "G4Types.hh"
 #include "G4String.hh"
-#include "G4VSampler.hh"
-#include "G4VSamplerConfigurator.hh"
+#include "G4VSampler8.hh"
+#include "G4VSamplerConfigurator8.hh"
 
 class G4MImportanceConfigurator;
 class G4MWeightWindowConfigurator;
 class G4MScoreConfigurator;
-class G4WeightCutOffConfigurator;
+class G4WeightCutOffConfigurator8;
 class G4VGCellFinder;
 
-class G4MassGeometrySampler : public G4VSampler
+class G4MassGeometrySampler : public G4VSampler8
 {
 
 public:  // with description
@@ -88,7 +88,7 @@ private:
   G4MImportanceConfigurator *fMImportanceConfigurator;
   G4MScoreConfigurator *fMScoreConfigurator;
   G4VGCellFinder *fGCellFinder;
-  G4WeightCutOffConfigurator *fWeightCutOffConfigurator;
+  G4WeightCutOffConfigurator8 *fWeightCutOffConfigurator8;
   G4VIStore *fIStore;
   G4MWeightWindowConfigurator *fMWeightWindowConfigurator;
   G4VWeightWindowStore *fWWStore;

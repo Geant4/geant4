@@ -24,53 +24,53 @@
 // ********************************************************************
 //
 //
-// $Id: G4WeightCutOffConfigurator8.hh,v 1.1 2007-06-01 06:52:59 ahoward Exp $
+// $Id: G4WeightCutOffConfigurator8.hh,v 1.2 2007-06-01 07:53:26 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
-// Class G4WeightCutOffConfigurator
+// Class G4WeightCutOffConfigurator8
 //
 // Class description:
-// This class builds and places the G4WeightCutOffProcess.
+// This class builds and places the G4WeightCutOffProcess8.
 // If the object is deleted the process is removed from the 
 // process list.
 
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
-#ifndef G4WeightCutOffConfigurator_hh
-#define G4WeightCutOffConfigurator_hh G4WeightCutOffConfigurator_hh
+#ifndef G4WeightCutOffConfigurator8_hh
+#define G4WeightCutOffConfigurator8_hh G4WeightCutOffConfigurator8_hh
 
 #include "G4Types.hh"
-#include "G4VSamplerConfigurator.hh"
-#include "G4ProcessPlacer.hh"
+#include "G4VSamplerConfigurator8.hh"
+#include "G4ProcessPlacer8.hh"
 
-class G4WeightCutOffProcess;
+class G4WeightCutOffProcess8;
 class G4VGCellFinder;
 class G4VIStore;
 
-class G4WeightCutOffConfigurator : public G4VSamplerConfigurator
+class G4WeightCutOffConfigurator8 : public G4VSamplerConfigurator8
 {
 
 public:  // with description
 
-  G4WeightCutOffConfigurator(const G4String &particlename,
+  G4WeightCutOffConfigurator8(const G4String &particlename,
                              G4double wsurvival,
                              G4double wlimit,
                              G4double isource,
                              G4VIStore *istore,
                              const G4VGCellFinder &aGCellFinder);
 
-  virtual ~G4WeightCutOffConfigurator();
-  virtual void Configure(G4VSamplerConfigurator *preConf);
+  virtual ~G4WeightCutOffConfigurator8();
+  virtual void Configure(G4VSamplerConfigurator8 *preConf);
   virtual const G4VTrackTerminator *GetTrackTerminator() const ;
   
 private:
 
-  G4WeightCutOffConfigurator(const G4WeightCutOffConfigurator&);
-  G4WeightCutOffConfigurator &
-  operator=(const G4WeightCutOffConfigurator&);
-  G4ProcessPlacer fPlacer;
-  G4WeightCutOffProcess *fWeightCutOffProcess;
+  G4WeightCutOffConfigurator8(const G4WeightCutOffConfigurator8&);
+  G4WeightCutOffConfigurator8 &
+  operator=(const G4WeightCutOffConfigurator8&);
+  G4ProcessPlacer8 fPlacer;
+  G4WeightCutOffProcess8 *fWeightCutOffProcess8;
   G4bool fPlaced;
 };
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelGeometrySampler.cc,v 1.12 2006-11-14 09:11:18 gcosmo Exp $
+// $Id: G4ParallelGeometrySampler.cc,v 1.13 2007-06-01 07:53:27 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -43,7 +43,7 @@
 #include "G4ParallelTransportConfigurator.hh"
 #include "G4PScoreConfigurator.hh"
 #include "G4PImportanceConfigurator.hh"
-#include "G4WeightCutOffConfigurator.hh"
+#include "G4WeightCutOffConfigurator8.hh"
 #include "G4ParallelGCellFinder.hh"
 #include "G4PWeightWindowConfigurator.hh"
 
@@ -56,7 +56,7 @@ G4ParallelGeometrySampler(G4VPhysicalVolume &worldvolume,
     fPImportanceConfigurator(0),
     fPScoreConfigurator(0),
     fGCellFinder(0),
-    fWeightCutOffConfigurator(0),
+    fWeightCutOffConfigurator8(0),
     fIStore(0),
     fPWeightWindowConfigurator(0),
     fWWStore(0),
@@ -91,10 +91,10 @@ void G4ParallelGeometrySampler::ClearSampling()
     delete fPScoreConfigurator;
     fPScoreConfigurator = 0;
   }
-  if (fWeightCutOffConfigurator)
+  if (fWeightCutOffConfigurator8)
   {
-    delete fWeightCutOffConfigurator;
-    fWeightCutOffConfigurator = 0;
+    delete fWeightCutOffConfigurator8;
+    fWeightCutOffConfigurator8 = 0;
   }
   if (fGCellFinder)
   {
@@ -165,18 +165,18 @@ G4ParallelGeometrySampler::PrepareWeightRoulett(G4double wsuvive,
                 "Failed to allocate G4ParallelGCellFinder !");
   }
 
-  fWeightCutOffConfigurator = 
-    new G4WeightCutOffConfigurator(fParticleName,
+  fWeightCutOffConfigurator8 = 
+    new G4WeightCutOffConfigurator8(fParticleName,
                                    wsuvive,
                                    wlimit,
                                    isource,
                                    fIStore,
                                    *fGCellFinder);
-  if (!fWeightCutOffConfigurator)
+  if (!fWeightCutOffConfigurator8)
   {
     G4Exception("G4ParallelGeometrySampler::PrepareWeightRoulett()",
                 "FatalError", FatalException,
-                "Failed to allocate G4WeightCutOffConfigurator !");
+                "Failed to allocate G4WeightCutOffConfigurator8 !");
   }
 }
 
@@ -236,18 +236,18 @@ void G4ParallelGeometrySampler::Configure()
       }
       fConfigurators.push_back(fParallelTransportConfigurator);
     }
-    G4VSamplerConfigurator *preConf = 0;
+    G4VSamplerConfigurator8 *preConf = 0;
     for (G4Configurators::iterator it = fConfigurators.begin();
          it != fConfigurators.end(); it++)
     {
-      G4VSamplerConfigurator *currConf =*it;
+      G4VSamplerConfigurator8 *currConf =*it;
       currConf->Configure(preConf);
       preConf = *it;
     }
     
-    if (fWeightCutOffConfigurator)
+    if (fWeightCutOffConfigurator8)
     {
-      fWeightCutOffConfigurator->Configure(0);
+      fWeightCutOffConfigurator8->Configure(0);
     }
   }
   return;

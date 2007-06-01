@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PScoreConfigurator.cc,v 1.9 2006-11-14 09:11:18 gcosmo Exp $
+// $Id: G4PScoreConfigurator.cc,v 1.10 2007-06-01 07:53:27 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -58,7 +58,7 @@ G4PScoreConfigurator::~G4PScoreConfigurator()
   }
 }
  
-void G4PScoreConfigurator::Configure(G4VSamplerConfigurator *)
+void G4PScoreConfigurator::Configure(G4VSamplerConfigurator8 *)
 {
   fPScoreProcess = new G4PScoreProcess(fPStepper, fScorer);
   if (!fPScoreProcess)

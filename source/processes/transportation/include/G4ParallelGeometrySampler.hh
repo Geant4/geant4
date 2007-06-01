@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelGeometrySampler.hh,v 1.8 2006-06-29 21:10:10 gunter Exp $
+// $Id: G4ParallelGeometrySampler.hh,v 1.9 2007-06-01 07:53:26 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -33,9 +33,9 @@
 // Class description:
 //
 // Class description:
-// This class inherits from G4VSampler. It is used for scoring and 
+// This class inherits from G4VSampler8. It is used for scoring and 
 // importance sampling in a parallel geometry.
-// See also the description in G4VSampler.
+// See also the description in G4VSampler8.
 
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
@@ -43,19 +43,19 @@
 #define G4ParallelGeometrySampler_hh G4ParallelGeometrySampler_hh
 
 #include "G4Types.hh"
-#include "G4VSampler.hh"
+#include "G4VSampler8.hh"
 #include "G4ParallelWorld.hh"
-#include "G4VSamplerConfigurator.hh"
+#include "G4VSamplerConfigurator8.hh"
 
 class G4ParallelTransportConfigurator;
 class G4PScoreConfigurator;
 class G4PImportanceConfigurator;
-class G4WeightCutOffConfigurator;
+class G4WeightCutOffConfigurator8;
 class G4VGCellFinder;
 class G4PWeightWindowConfigurator;
 class G4WeightWindowStore;
 
-class G4ParallelGeometrySampler : public G4VSampler
+class G4ParallelGeometrySampler : public G4VSampler8
 {
 
 public:  // with description
@@ -96,7 +96,7 @@ private:
   G4PImportanceConfigurator *fPImportanceConfigurator;
   G4PScoreConfigurator *fPScoreConfigurator;
   G4VGCellFinder *fGCellFinder;
-  G4WeightCutOffConfigurator *fWeightCutOffConfigurator;
+  G4WeightCutOffConfigurator8 *fWeightCutOffConfigurator8;
   G4VIStore *fIStore;
   G4PWeightWindowConfigurator *fPWeightWindowConfigurator;
   G4VWeightWindowStore *fWWStore;
