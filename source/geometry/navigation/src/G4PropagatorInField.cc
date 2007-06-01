@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.cc,v 1.33 2007-05-31 13:41:21 tnikitin Exp $
+// $Id: G4PropagatorInField.cc,v 1.34 2007-06-01 13:42:12 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // 
@@ -82,10 +82,25 @@ G4PropagatorInField::G4PropagatorInField( G4Navigator    *theNavigator,
   fPreviousSftOrigin= G4ThreeVector(0.,0.,0.);
   fPreviousSafety= 0.0;
   kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
+
+   // In case of too slow progress in finding Intersection Point
+   // Intermediates Points on the Track  must be stored.
+   // Initialise the array of Pointers [max_depth+1] to do this  
+  
+  G4ThreeVector zeroV(0.0,0.0,0.0);
+  for (G4int idepth=0; idepth<max_depth+1; idepth++ )
+  {
+    ptrInterMedFT[ idepth ] = new G4FieldTrack( zeroV, zeroV, 0., 0., 0., 0.);
+  }
+
 }
 
 G4PropagatorInField::~G4PropagatorInField()
 {
+ for ( G4int idepth=0; idepth<max_depth+1; idepth++)
+  {
+    delete ptrInterMedFT[idepth];
+  }
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -488,19 +503,9 @@ G4PropagatorInField::LocateIntersectionPoint(
 
   G4int depth=0; // Depth counts how many subdivisions of initial step made
 
-  const G4int max_depth=4; // Max allowed depth, test parameter
+  //const G4int max_depth=4; // Max allowed depth, test parameter
 
   // Intermediates Points on the Track = Subdivided Points must be stored.
-  // Use array of Pointers [max_depth+1] to do this  
-  // Array of pointers to the Intermediate G4FieldTrack
-
-  G4FieldTrack* ptrInterMedFT[max_depth+1];
-  G4ThreeVector zeroV(0.0,0.0,0.0);
-  for (G4int idepth=0; idepth<max_depth+1; idepth++ )
-  {
-    ptrInterMedFT[ idepth ] = new G4FieldTrack( zeroV, zeroV, 0., 0., 0., 0.);
-  }
-  
   // Give the initial values to 'InterMedFt'
   // Important is 'ptrInterMedFT[0]', it saves the 'EndCurvePoint'
   //
@@ -945,11 +950,7 @@ G4PropagatorInField::LocateIntersectionPoint(
                 "Many substeps while trying to locate intersection.");
     G4cout.precision( oldprc ); 
   }
-
-  for ( G4int idepth=0; idepth<max_depth+1; idepth++)
-  {
-    delete ptrInterMedFT[idepth];
-  }
+ 
   return  !there_is_no_intersection; //  Success or failure
 }
 
@@ -1203,6 +1204,8 @@ ReEstimateEndpoint( const G4FieldTrack &CurrentStateA,
      G4double advanceLength= endCurveLen - currentCurveLen ; 
       if (std::abs(advanceLength)<kCarTolerance)
        advanceLength=(EstimatedEndStateB.GetPosition()-newEndPoint.GetPosition()).mag();
+       
+       
       goodAdvance= 
        integrDriver->AccurateAdvance(newEndPoint, advanceLength, fEpsilonStep);
      //              ***************

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.hh,v 1.11 2007-05-11 13:43:59 gcosmo Exp $
+// $Id: G4PropagatorInField.hh,v 1.12 2007-06-01 13:41:07 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // class G4PropagatorInField 
@@ -264,7 +264,10 @@ class G4PropagatorInField
 
    G4double  kCarTolerance;
      // Geometrical tolerance defining surface thickness
-
+private:
+   static const G4int max_depth=4;
+   G4FieldTrack* ptrInterMedFT[max_depth+1];
+    // Used to store intermediate values of Tracsk in case of to slow progress
 private:
 
   G4VCurvedTrajectoryFilter* fpTrajectoryFilter;
