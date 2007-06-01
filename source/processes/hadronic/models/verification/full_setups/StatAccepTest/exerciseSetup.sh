@@ -1,6 +1,6 @@
 #
 #***LOOKHERE***
-export VO_GEANT4_SW_DIR=/data/dirGrid/dirJun06
+export VO_GEANT4_SW_DIR=/data/dirGrid/dirJun07
 #
 export DIR_INSTALLATIONS=$VO_GEANT4_SW_DIR/dirInstallations
 #
@@ -23,7 +23,7 @@ echo ' '
 #
 export G4SYSTEM=Linux-g++
 #
-export G4_RELEASE=dirGeant4-7.1.p01
+export G4_RELEASE=dirGeant4-8.2.p01
 #
 export G4INSTALL=$DIR_INSTALLATIONS/$G4_RELEASE
 export G4LIB=$G4INSTALL/lib

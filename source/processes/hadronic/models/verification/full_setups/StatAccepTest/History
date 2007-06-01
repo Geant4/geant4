@@ -1,6 +1,10 @@
                  History file
                  ------------
 
+01-Jun-2007 - A.Ribon (statAccepTest-V08-03-00)
+- Ready for the June 2007 release.
+
+
 08-May-2007 - A.Ribon (statAccepTest-V08-02-02)
 - Added monitoring of the CPU time event by event.
 
