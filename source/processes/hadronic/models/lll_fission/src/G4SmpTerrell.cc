@@ -53,11 +53,10 @@
 // UCRL-CODE-224807
 //
 //
-// $Id: G4SmpTerrell.cc,v 1.1 2007-05-30 00:57:48 dennis Exp $
+// $Id: G4SmpTerrell.cc,v 1.2 2007-06-01 13:46:53 gcosmo Exp $
 //
 
-#include <math.h>
-#include <string>
+#include <cmath>
 #include "G4fissionEvent.hh"
 
 #define TWOPI 6.283185307
@@ -92,14 +91,14 @@ G4double G4fissionEvent::G4SmpTerrell(G4double nubar) {
   temp1 = nubar + 0.5;
   temp2 = temp1/width;
   temp2 *= temp2;
-  expo = exp(-temp2);
+  expo = std::exp(-temp2);
   cshift = temp1 + BSHIFT * WIDTH * expo/(1. - expo);
 
   do {
-    rw = sqrt(-log(fisslibrng()));
+    rw = std::sqrt(-std::log(fisslibrng()));
     theta = TWOPI * fisslibrng();
-    sampleg = width * rw * cos(theta) + cshift;
+    sampleg = width * rw * std::cos(theta) + cshift;
   } while (sampleg < 0.0);
 
-  return floor(sampleg);
+  return std::floor(sampleg);
 }

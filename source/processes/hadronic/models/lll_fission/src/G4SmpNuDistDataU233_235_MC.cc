@@ -53,10 +53,10 @@
 // UCRL-CODE-224807
 //
 //
-// $Id: G4SmpNuDistDataU233_235_MC.cc,v 1.1 2007-05-30 01:11:36 dennis Exp $
+// $Id: G4SmpNuDistDataU233_235_MC.cc,v 1.2 2007-06-01 13:46:53 gcosmo Exp $
 //
 
-#include <math.h>
+#include <cmath>
 #include "G4fissionEvent.hh"
 
 G4int G4fissionEvent::G4SmpNuDistDataU233_235_MC(G4double nubar) {

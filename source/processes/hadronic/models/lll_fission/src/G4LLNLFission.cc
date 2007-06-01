@@ -53,14 +53,12 @@
 // UCRL-CODE-224807
 //
 //
-// $Id: G4LLNLFission.cc,v 1.3 2007-05-30 00:52:19 dennis Exp $
+// $Id: G4LLNLFission.cc,v 1.4 2007-06-01 13:46:53 gcosmo Exp $
 //
 // This class is a copy of Fission.cc, made for use with Geant4.
 //
 
 #include "G4fissionEvent.hh"
-#include <stdio.h>
-#include <stdlib.h>
 
 G4fissionEvent* fe;
 

@@ -53,11 +53,9 @@
 // UCRL-CODE-224807
 //
 //
-// $Id: G4rngc.cc,v 1.2 2007-05-31 22:52:51 dennis Exp $
+// $Id: G4rngc.cc,v 1.3 2007-06-01 13:46:53 gcosmo Exp $
 //
 
-#include <stdio.h>
-#include <stdlib.h>
 #include "G4fissionEvent.hh"
 #include "Randomize.hh"
 

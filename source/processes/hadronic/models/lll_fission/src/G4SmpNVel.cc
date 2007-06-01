@@ -53,11 +53,10 @@
 // UCRL-CODE-224807
 //
 //
-// $Id: G4SmpNVel.cc,v 1.1 2007-05-30 03:50:32 dennis Exp $
+// $Id: G4SmpNVel.cc,v 1.2 2007-06-01 13:46:53 gcosmo Exp $
 //
 
-#include <math.h>
-#include <stdio.h>
+#include <cmath>
 #include "G4fissionEvent.hh"
 
 G4double G4fissionEvent::G4SmpNVel(G4double eng, G4double* cosdiru, G4double* cosdirv, G4double* cosdirw) {
@@ -84,10 +83,10 @@ G4double G4fissionEvent::G4SmpNVel(G4double eng, G4double* cosdiru, G4double* co
 
    if (ratio > 1.e-8) {
 /*    Relativistic vel calculation */
-      vel = cspeed*sqrt(1.-rme*rme/((rme+eng)*(rme+eng)));
+      vel = cspeed*std::sqrt(1.-rme*rme/((rme+eng)*(rme+eng)));
    } else {
 /*    Non-relativistic vel calculation */
-      vel = cspeed*sqrt(2.*eng/rme);
+      vel = cspeed*std::sqrt(2.*eng/rme);
    }
 
    G4SmpIsoDir(cosdiru, cosdirv, cosdirw);

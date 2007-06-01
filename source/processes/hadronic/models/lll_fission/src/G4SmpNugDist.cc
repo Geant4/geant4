@@ -53,10 +53,10 @@
 // UCRL-CODE-224807
 //
 //
-// $Id: G4SmpNugDist.cc,v 1.3 2007-05-31 22:52:51 dennis Exp $
+// $Id: G4SmpNugDist.cc,v 1.4 2007-06-01 13:46:53 gcosmo Exp $
 //
 
-#include <math.h>
+#include <cmath>
 #include "G4fissionEvent.hh"
 
 #define nfissg 40
@@ -133,12 +133,12 @@ G4int G4fissionEvent::G4SmpNugDist(G4int isotope, G4double nubar) {
 */
   A = (G4int) (isotope-1000*((G4int)(isotope/1000)));
   Z = (G4int) ((isotope-A)/1000);
-  nubarg = ((2.51-1.13e-5*pow(G4double(Z),2.)*sqrt(G4double(A)))*nubar+4.0)
-           /(-1.33+119.6*pow(G4double(Z),1./3.)/G4double(A));
+  nubarg = ((2.51-1.13e-5*std::pow(G4double(Z),2.)*std::sqrt(G4double(A)))*nubar+4.0)
+           /(-1.33+119.6*std::pow(G4double(Z),1./3.)/G4double(A));
   p = 1.*alphanegbin/(alphanegbin+nubarg);
   q = 1.-p;
-  cpi[0] = exp(logcoeff[0]+26.*log(p));
-  for (i=1; i<=nfissg; i++) cpi[i] = cpi[i-1] + exp(logcoeff[i]+26.*log(p)+i*log(q));
+  cpi[0] = std::exp(logcoeff[0]+26.*std::log(p));
+  for (i=1; i<=nfissg; i++) cpi[i] = cpi[i-1] + std::exp(logcoeff[i]+26.*std::log(p)+i*std::log(q));
   for (i=0; i<=nfissg; i++) cpi[i] = cpi[i]/cpi[nfissg-1];
 
   r=fisslibrng();

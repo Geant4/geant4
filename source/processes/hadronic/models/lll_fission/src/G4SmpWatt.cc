@@ -53,16 +53,14 @@
 // UCRL-CODE-224807
 //
 //
-// $Id: G4SmpWatt.cc,v 1.2 2007-05-30 19:01:32 dennis Exp $
+// $Id: G4SmpWatt.cc,v 1.3 2007-06-01 13:46:53 gcosmo Exp $
 //
 
 #define nZAfis 39    /* 38 fissionable isotopes in ENDL + U-232 from ENDF7 */
 #define WATTEMIN 1.0e-6
 #define WATTEMAX 20.0
 
-#include <string>
-#include <math.h>
-#include <stdio.h>
+#include <cmath>
 #include "G4fissionEvent.hh"
 
 G4double G4fissionEvent::G4SmpWatt(G4double ePart, G4int iso) {
@@ -157,13 +155,13 @@ G4double G4fissionEvent::G4SmpWatt(G4double ePart, G4int iso) {
    a= Watta[isoindex][2] + ePart*(Watta[isoindex][1] + ePart*Watta[isoindex][0]);
 
    x= 1. + (b/(8.*a));
-   y= (x + sqrt(x*x-1.))/a;
+   y= (x + std::sqrt(x*x-1.))/a;
    z= a*y - 1.;
 
    do {
 
-      rand1= -log(fisslibrng());
-      rand2= -log(fisslibrng());
+      rand1= -std::log(fisslibrng());
+      rand2= -std::log(fisslibrng());
  
       eSmp= y*rand1;
 

@@ -53,14 +53,11 @@
 // UCRL-CODE-224807
 //
 //
-// $Id: G4fissionerr.cc,v 1.1 2007-05-30 00:50:58 dennis Exp $
+// $Id: G4fissionerr.cc,v 1.2 2007-06-01 13:46:53 gcosmo Exp $
 //
 
 #include <iostream>
 #include <sstream>
-#include <stdlib.h>
-#include <string>
-#include <stdlib.h>
 #include "G4fissionEvent.hh"
 
 std::string itoa(const G4int& x);

@@ -52,12 +52,10 @@
 // All rights reserved.
 // UCRL-CODE-224807
 //
-// $Id: G4fissionEvent.cc,v 1.1 2007-05-30 00:53:43 dennis Exp $
+// $Id: G4fissionEvent.cc,v 1.2 2007-06-01 13:46:53 gcosmo Exp $
 //
 
 #include "G4fissionEvent.hh"
-#include <stdio.h>
-#include <stdlib.h>
 
 G4int G4fissionEvent::delayoption=0;
 G4int G4fissionEvent::correlationoption=0;

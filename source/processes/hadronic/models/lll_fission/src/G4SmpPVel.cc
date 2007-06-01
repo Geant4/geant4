@@ -53,11 +53,10 @@
 // UCRL-CODE-224807
 //
 //
-// $Id: G4SmpPVel.cc,v 1.2 2007-05-30 19:01:32 dennis Exp $
+// $Id: G4SmpPVel.cc,v 1.3 2007-06-01 13:46:53 gcosmo Exp $
 //
 
-#include <math.h>
-#include <stdio.h>
+#include <cmath>
 #include "G4fissionEvent.hh"
 
 G4double G4fissionEvent::G4SmpPVel(G4double /*eng*/, G4double* cosdiru, G4double* cosdirv, G4double* cosdirw) {

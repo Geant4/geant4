@@ -53,11 +53,10 @@
 // UCRL-CODE-224807
 //
 //
-// $Id: G4SmpIsoDir.cc,v 1.2 2007-05-31 22:52:51 dennis Exp $
+// $Id: G4SmpIsoDir.cc,v 1.3 2007-06-01 13:46:53 gcosmo Exp $
 //
 
-#include <math.h>
-#include <stdio.h>
+#include <cmath>
 #include "G4fissionEvent.hh"
 
 void G4fissionEvent::G4SmpIsoDir(G4double* cosdiru, G4double* cosdirv, G4double* cosdirw) {
@@ -81,12 +80,12 @@ void G4fissionEvent::G4SmpIsoDir(G4double* cosdiru, G4double* cosdirv, G4double*
    Select a polar angle direction cosine.
 */
    cospolang = 1.-2.*fisslibrng();
-   sinpolang = sqrt(1.-pow(cospolang, 2.));
+   sinpolang = std::sqrt(1.-std::pow(cospolang, 2.));
 /*
    Select an azimuthal angle uniformly on (0,2*pi)
 */
    phi = twopi*fisslibrng();
-   *cosdiru = sinpolang * cos(phi);
-   *cosdirv = sinpolang * sin(phi);
+   *cosdiru = sinpolang * std::cos(phi);
+   *cosdirv = sinpolang * std::sin(phi);
    *cosdirw = cospolang;
 }
