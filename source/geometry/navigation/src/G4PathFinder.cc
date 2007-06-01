@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PathFinder.cc,v 1.44 2007-05-31 18:05:07 japost Exp $
+// $Id: G4PathFinder.cc,v 1.45 2007-06-01 15:22:24 japost Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4PathFinder Implementation
@@ -366,14 +366,16 @@ void G4PathFinder::ReportMove( const G4ThreeVector& OldVector,
 {
     G4ThreeVector moveVec = ( NewVector - OldVector );
 
+    G4int prc= G4cerr.precision(12); 
     G4cerr << G4endl
            << "**************************************************************" << G4endl;
-    G4cerr << "Endpoint has moved between value returned by ComputeStep"
+    G4cerr << "G4PathFinder::ReportMove> Endpoint has moved between value returned by ComputeStep"
            << " and call to Locate. " << G4endl
            << "Change of " << Quantity << " is " << moveVec.mag() / mm << " mm long, "
            << " and its vector is " << (1.0/mm) * moveVec << " mm " << G4endl
            << "Endpoint of ComputeStep was " << OldVector
            << " and current position to locate is " << NewVector << G4endl;
+    G4cerr.precision(prc); 
 }
 
 void
@@ -389,6 +391,7 @@ G4PathFinder::Locate( const   G4ThreeVector& position,
   G4ThreeVector moveVec = (position - lastEndPosition );
   G4double      moveLenSq= moveVec.mag2();
   if( (!fNewTrack) && (!fRelocatedPoint) && ( moveLenSq> kCarTolerance*kCarTolerance ) ){   // ( moveLenSq> 0.0) ){
+     G4cerr << " ***** Problem in G4PathFinder::Locate ***** " << G4endl;
      ReportMove( position, lastEndPosition, "Position" ); 
      G4Exception( "G4PathFinder::Locate", "201-LocateUnexpectedPoint", 
                    JustWarning,   // FatalException,  
@@ -1057,6 +1060,9 @@ G4PathFinder::DoNextCurvedStep( const G4FieldTrack &initialState,
      // Save safety value, related position
      fPreSafetyLocation=  startPoint;   
      fPreSafetyMinValue=  minSafety;
+
+     fPreStepLocation=    startPoint;
+     fMinSafety_PreStepPt= minSafety;
   }
 
   // Allow Propagator In Field to do the hard work, calling G4MultiNavigator
@@ -1070,12 +1076,18 @@ G4PathFinder::DoNextCurvedStep( const G4FieldTrack &initialState,
   fTrueMinStep = std::min( minStep, proposedStepLength );
 
   if( fNoActiveNavigators== 1 ){ 
-    // G4cout << " PF::Do..Curved..> 1 navigator -> took safety from PiFi:ComputeStep= " << newSafety << G4endl;
-     fPreSafetyValues[0]=   newSafety;
-     fCurrentPreStepSafety[0]= newSafety; 
+     // G4cout << " PathFinder::DoNextCurved: 1 navigator -> took safety from FieldProp:ComputeStep.  safety = " << newSafety ; 
 
+     // Update the 'PreSafety' sphere - as any ComputeStep was called 
+     //          (must be done anyway in field)
+     fPreSafetyValues[0]=   newSafety;
      fPreSafetyLocation= startPoint;   
      fPreSafetyMinValue= newSafety;
+
+     // Update the current 'PreStep' point's values - mandatory
+     fCurrentPreStepSafety[0]= newSafety; 
+     fPreStepLocation=  startPoint;
+     fMinSafety_PreStepPt= newSafety;
   }
 
 #ifdef G4DEBUG_PATHFINDER
@@ -1170,8 +1182,7 @@ G4PathFinder::DoNextCurvedStep( const G4FieldTrack &initialState,
     currentStepSize= minStep;  
     for( numNav=0; numNav < fNoActiveNavigators; ++numNav ) {
       fCurrentStepSize[numNav] = minStep; 
-      // fPreSafetyValues[numNav]= 0.0;   // Correct only for endSafety now
-      // Improve it -- see TODO above
+      // Safety for endpoint ??  // Can eventuall improve it -- see TODO above
       fLimitedStep[numNav] = kDoNot; 
       fLimitTruth[numNav] = false; 
     }
