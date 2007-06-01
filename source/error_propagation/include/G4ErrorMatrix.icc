@@ -23,98 +23,84 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4ErrorMatrix.icc,v 1.2 2007-06-01 12:43:28 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
 // ------------------------------------------------------------
 //      GEANT 4 class inline implementation
 // ------------------------------------------------------------
 
 inline G4ErrorMatrix::G4ErrorMatrix()
-  : m(0), nrow(0), ncol(0), size(0) {}
-
-inline int G4ErrorMatrix::num_row() const { return nrow;}
-
-inline int G4ErrorMatrix::num_col() const  { return ncol;}
-
-inline int G4ErrorMatrix::num_size() const { return size;}
-
-inline double & G4ErrorMatrix::operator()(int row, int col)
+  : m(0), nrow(0), ncol(0), size(0)
 {
-#ifdef MATRIX_BOUND_CHECK
-  if(row<1 || row>num_row() || col<1 || col>num_col())
-    error("Range error in G4ErrorMatrix::operator()");
-#endif
+}
+
+inline G4int G4ErrorMatrix::num_row() const
+{
+  return nrow;
+}
+
+inline G4int G4ErrorMatrix::num_col() const
+{
+  return ncol;
+}
+
+inline G4int G4ErrorMatrix::num_size() const
+{
+  return size;
+}
+
+inline G4double & G4ErrorMatrix::operator()(G4int row, G4int col)
+{
   return *(m.begin()+(row-1)*ncol+col-1);
 }
 
-inline const double & G4ErrorMatrix::operator()(int row, int col) const 
+inline const G4double & G4ErrorMatrix::operator()(G4int row, G4int col) const 
 {
-#ifdef MATRIX_BOUND_CHECK
-  if(row<1 || row>num_row() || col<1 || col>num_col())
-    error("Range error in G4ErrorMatrix::operator()");
-#endif
   return *(m.begin()+(row-1)*ncol+col-1);
 }
 
-inline G4ErrorMatrix::G4ErrorMatrix_row G4ErrorMatrix::operator[] (int r)
-#ifdef HEP_GNU_OPTIMIZED_RETURN
-  return b(*this,r);
-{
-#else
+inline G4ErrorMatrix::G4ErrorMatrix_row G4ErrorMatrix::operator[] (G4int r)
 {
   G4ErrorMatrix_row b(*this,r);
-#endif
   return b;
 }
 
-inline const G4ErrorMatrix::G4ErrorMatrix_row_const G4ErrorMatrix::operator[] (int r) const
-#ifdef HEP_GNU_OPTIMIZED_RETURN
-  return b(*this,r);
-{
-#else
+inline const G4ErrorMatrix::G4ErrorMatrix_row_const
+G4ErrorMatrix::operator[] (G4int r) const
 {
   G4ErrorMatrix_row_const b(*this,r);
-#endif
   return b;
 }
 
-inline double &G4ErrorMatrix::G4ErrorMatrix_row::operator[](int c) {
-  #ifdef MATRIX_BOUND_CHECK
-   if (_r<0 || _r>=_a.num_row() || c<0 || c>=_a.num_col())
-     G4ErrorMatrix::error("Range error in G4ErrorMatrix::operator[][]");
-  #endif
-  return *(_a.m.begin()+_r*_a.ncol+c);
-}
-
-inline const double &G4ErrorMatrix::G4ErrorMatrix_row_const::operator[](int c) const
+inline G4double &G4ErrorMatrix::G4ErrorMatrix_row::operator[](G4int c)
 {
-  #ifdef MATRIX_BOUND_CHECK
-  if (_r<0 || _r>=_a.num_row() || c<0 || c>=_a.num_col())
-    G4ErrorMatrix::error("Range error in G4ErrorMatrix::operator[][]");
-#endif
-  
   return *(_a.m.begin()+_r*_a.ncol+c);
 }
 
-inline G4ErrorMatrix::G4ErrorMatrix_row::G4ErrorMatrix_row(G4ErrorMatrix&a,int r) 
-: _a(a) {
+inline const G4double &
+G4ErrorMatrix::G4ErrorMatrix_row_const::operator[](G4int c) const
+{
+  return *(_a.m.begin()+_r*_a.ncol+c);
+}
+
+inline G4ErrorMatrix::
+G4ErrorMatrix_row::G4ErrorMatrix_row(G4ErrorMatrix&a, G4int r)
+   : _a(a)
+{
   _r = r;
 }
 
 inline G4ErrorMatrix::G4ErrorMatrix_row_const::G4ErrorMatrix_row_const 
-(const G4ErrorMatrix&a, int r) 
+(const G4ErrorMatrix&a, G4int r) 
    : _a(a) 
 {
   _r = r;
 }
 
-  /*-ap inline */ G4ErrorMatrix G4ErrorMatrix::inverse(int &ierr) const
-#ifdef HEP_GNU_OPTIMIZED_RETURN
-  return mTmp(*this);
-{
-#else
+inline G4ErrorMatrix G4ErrorMatrix::inverse(G4int &ierr) const
 {
   G4ErrorMatrix mTmp(*this);
-#endif
   mTmp.invert(ierr);
   return mTmp;
 }
-
