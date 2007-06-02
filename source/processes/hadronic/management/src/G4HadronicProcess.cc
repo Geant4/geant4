@@ -77,7 +77,7 @@ G4HadronicProcess::G4HadronicProcess( const G4String &processName,
 G4VDiscreteProcess( processName, aType)
 { 
   ModelingState = 0;
-  isoIsOnAnyway = 0;
+  isoIsOnAnyway = -1;
   theTotalResult = new G4ParticleChange();
   theCrossSectionDataStore = new G4CrossSectionDataStore();
   aScaleFactor = 1;
@@ -417,9 +417,10 @@ G4HadronicProcess::DoIsotopeCounting(G4HadFinalState * aResult,
       break;
     }
   }
-  // if none in charge, use default iso production
+
+  // If no production models active, use default iso production
   if(!done) anIsoResult = ExtractResidualNucleus(aTrack, aNucleus, aResult); 
-  
+
   // Add all info explicitely and add typename from model called.
   theIsoResult->SetIsotope(anIsoResult->GetIsotope());
   theIsoResult->SetProductionPosition(aTrack.GetPosition());
@@ -429,6 +430,17 @@ G4HadronicProcess::DoIsotopeCounting(G4HadFinalState * aResult,
   theIsoResult->SetProducer(typeid(*theInteraction).name());
   
   delete anIsoResult;
+
+  // If isotope production is enabled the GetIsotopeProductionInfo() 
+  // method must be called or else a memory leak will result
+  //
+  // The following code will fix the memory leak, but remove the 
+  // isotope information:
+  //
+  //  if(theIsoResult) {
+  //    delete theIsoResult;
+  //    theIsoResult = 0;
+  //  }
   
   return aResult;
 }
@@ -471,14 +483,6 @@ G4HadronicProcess::ExtractResidualNucleus(const G4Track&,
   ost1 <<Z<<"_"<<A;
   G4String biff = ost1.str();
   G4IsoResult * theResult = new G4IsoResult(biff, aNucleus);
-
-  //  char the1[100] = {""};
-  //  std::ostrstream ost1(the1, 100, std::ios::out);
-  //  ost1 <<Z<<"_"<<A<<"\0";
-  //  G4String * biff = new G4String(the1);
-  //  G4IsoResult * theResult = new G4IsoResult(*biff, aNucleus);
-  //  // cleaning up.
-  //  delete biff;
 
   return theResult;
 }
