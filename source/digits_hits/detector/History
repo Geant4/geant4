@@ -1,4 +1,4 @@
-$Id: History,v 1.5 2007-05-31 12:30:21 ahoward Exp $
+$Id: History,v 1.6 2007-06-04 13:17:18 ahoward Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+June 4, 2007, A.Howard
+- Put back some classes required for scoring of geometrical biasing cells:
+  G4CellScoreValues, G4CellScoreComposer
+  (in module tag: "digits_hits-V08-03-03")
 
 May 31, 2007, A.Howard
 - Removed classes associated with old biasing/scoring scheme:
