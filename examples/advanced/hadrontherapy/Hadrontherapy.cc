@@ -71,10 +71,19 @@ int main(int argc ,char ** argv)
 <<<<<<< Hadrontherapy.cc
 
   CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine); 
+
+  //  HepRandom::setTheEngine(new RanecuEngine);
+  //G4int seed = time(0);
+  //HepRandom::setTheSeed(seed);
+=======
+<<<<<<< Hadrontherapy.cc
+
+  CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine); 
 =======
 
   CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine());
 >>>>>>> 1.26
+>>>>>>> 1.27
 
   G4RunManager* runManager = new G4RunManager;
 
