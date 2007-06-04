@@ -67,9 +67,7 @@
 int main(int argc ,char ** argv)
 {
   // Set the Random engine
-  HepRandom::setTheEngine(new RanecuEngine);
-  G4int seed = time(0);
-  HepRandom::setTheSeed(seed);
+  CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine());
 
   G4RunManager* runManager = new G4RunManager;
 
