@@ -66,9 +66,15 @@
 
 int main(int argc ,char ** argv)
 {
+
   // Set the Random engine
+<<<<<<< Hadrontherapy.cc
+
+  CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine); 
+=======
 
   CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine());
+>>>>>>> 1.26
 
   G4RunManager* runManager = new G4RunManager;
 
