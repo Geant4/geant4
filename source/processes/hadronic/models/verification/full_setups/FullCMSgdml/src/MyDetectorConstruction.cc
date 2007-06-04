@@ -10,6 +10,9 @@
 #include "MyDetectorMessenger.hh"
 #include "G4RunManager.hh"
 
+// 04-June-2007 : Added to test Gabriele's tolerance.
+#include "G4GeometryTolerance.hh"
+
 
 MyDetectorConstruction::MyDetectorConstruction() :
   fieldMgr( 0 ) , uniformMagField( 0 ) , detectorMessenger( 0 ) {
@@ -35,7 +38,7 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct() {
   fieldMgr = G4TransportationManager::GetTransportationManager()->GetFieldManager();
 
   sxp.Run();
-  
+                                                                                
   fWorld = (G4VPhysicalVolume *) GDMLProcessor::GetInstance()->GetWorldVolume();
 
   fWorld->GetLogicalVolume()->SetVisAttributes (G4VisAttributes::Invisible);
@@ -45,6 +48,48 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct() {
       "World volume not set properly check your setup selection criteria or GDML input!"
       );
   }
+
+  // ------------------------------------------------------------
+  // 04-June-2007 : Added to test Gabriele's tolerance.
+
+  // Calculate the dimensions of the World Volume by randomly
+  // drawing points on its surface. 
+   
+  G4double minX = 0.0, maxX = 0.0;
+  G4double minY = 0.0, maxY = 0.0;
+  G4double minZ = 0.0, maxZ = 0.0;
+  for ( int i = 0 ; i < 1000 ; i++ ) {
+    G4ThreeVector surfacePoint = 
+      fWorld->GetLogicalVolume()->GetSolid()->GetPointOnSurface();
+    if ( surfacePoint.x() < minX ) minX = surfacePoint.x();
+    if ( surfacePoint.x() > maxX ) maxX = surfacePoint.x();
+    if ( surfacePoint.y() < minY ) minY = surfacePoint.y();
+    if ( surfacePoint.y() > maxY ) maxY = surfacePoint.y();
+    if ( surfacePoint.z() < minZ ) minZ = surfacePoint.z();
+    if ( surfacePoint.z() > maxZ ) maxZ = surfacePoint.z();
+  }
+
+  // Consider the maximum extent of the World Volume.
+  G4double maxWorldExtent = maxX - minX;
+  if ( maxWorldExtent < ( maxY - minY ) ) maxWorldExtent = maxY - minY;
+  if ( maxWorldExtent < ( maxZ - minZ ) ) maxWorldExtent = maxZ - minZ;
+
+  G4cout << G4endl 
+         << " WORLD VOLUME = " 
+         << fWorld->GetLogicalVolume()->GetSolid()->GetName() << G4endl
+	 << " \t x-axis : " << minX/m << " , " << maxX/m << " metres" << G4endl
+	 << " \t y-axis : " << minY/m << " , " << maxY/m << " metres" << G4endl
+	 << " \t z-axis : " << minZ/m << " , " << maxZ/m << " metres" << G4endl
+         << " \t -->  maxWorldExtent = " << maxWorldExtent/m << " metres" << G4endl 
+         << G4endl;
+
+  G4cout << G4endl
+	 << " Compute tolerance = "
+	 << G4GeometryTolerance::GetInstance()->GetSurfaceTolerance()/m 
+	 << " metres" << G4endl
+	 << G4endl;
+
+  // ------------------------------------------------------------
 
   return fWorld;
 }

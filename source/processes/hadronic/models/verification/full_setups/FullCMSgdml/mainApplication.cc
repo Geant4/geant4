@@ -23,6 +23,8 @@
 #include "G4VisExecutive.hh"
 #endif
 
+#include "G4GeometryManager.hh"
+
 
 int main(int argc,char** argv) { 
 
@@ -37,6 +39,11 @@ int main(int argc,char** argv) {
 	 << G4endl; 
 
   G4RunManager* runManager = new G4RunManager; 
+
+  // Added to test Gabriele's tolerance.
+  // The argument is the world's maximum length, which is printed out
+  // after building the GDML geometry (see MyDetectorConstruction.cc).
+  // G4GeometryManager::GetInstance()->SetWorldMaximumExtent( 54.0*m );
 
 #ifdef G4VIS_USE
   G4VisManager* visManager = new G4VisExecutive;
