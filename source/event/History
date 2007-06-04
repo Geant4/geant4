@@ -1,4 +1,4 @@
-$Id: History,v 1.110 2007-05-31 12:45:55 ahoward Exp $
+$Id: History,v 1.111 2007-06-04 13:11:56 ahoward Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+June 4, 2007, A.Howard (event-V08-03-01)
+- Put back some classes required for scoring of biasing cells:
+  G4CellScorerStore and G4CellScorer
 
 May 31, 2007, A.Howard (event-V08-03-00)
 - Removal of classes from old biasing/scoring scheme:
