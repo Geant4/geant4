@@ -58,5 +58,5 @@
 /beamLine/RangeShifter/RSMat Air
 #/tracking/verbose 1
 /vis/viewer/flush
-/run/beamOn 10
+/run/beamOn 1000
 
