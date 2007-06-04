@@ -1,4 +1,4 @@
-$Id: History,v 1.42 2007-05-31 09:41:18 ahoward Exp $
+$Id: History,v 1.43 2007-06-04 13:05:14 ahoward Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+June 4th, 2007 A.Howard geombias-V08-03-02
+     - Put back some missing store and scoring classes:
+       G4IStore, G4VCellScorerstore, G4VCellScorer
 
 May 31st, 2007 A.Howard geombias-V08-03-01
      - Removed classes from old biasing scheme.  These are now replaced by
