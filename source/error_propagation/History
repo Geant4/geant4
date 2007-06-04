@@ -1,4 +1,4 @@
-$Id: History,v 1.7 2007-06-01 12:43:45 gcosmo Exp $
+$Id: History,v 1.8 2007-06-04 15:04:12 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+4 June 2007 - G.Cosmo (error_propagation-V08-03-08)
+- Fixed compilation errors and warnings on WIN32-VC platform: replaced
+  usage of M_PI with CLHEP::pi; replaced usage of 'uint' with 'size_t';
+  fixed boolean operation in conditional statement.
 
 1 June 2007 - G.Cosmo (error_propagation-V08-03-07)
 - Some cleanup and further simplification of matrices classes.
