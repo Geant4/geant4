@@ -97,23 +97,24 @@ void MyPrimaryGeneratorAction::GeneratePrimaries( G4Event* anEvent ) {
 
   //***LOOKHERE*** If you want to specify a given beam particle,
   //               with a given beam energy, position, and direction:
-  //nameParticle geantino
-  //nameParticle chargedgeantino
-  //nameParticle mu-
-  //nameParticle mu+
-  //nameParticle e-
-  //nameParticle e+
-  //nameParticle gamma
-  //nameParticle pi-
-  //nameParticle pi+
-  //nameParticle kaon-
-  //nameParticle kaon+
-  //nameParticle kaon0L
-  //nameParticle neutron
-  //nameParticle proton
-  #
-  //beamEnergy = 10.0*GeV;
-  //positionVector = G4ThreeVector( 0.0, 0.0, 0.0 );
+  //
+  //nameParticle = "geantino"
+  //nameParticle = "chargedgeantino"
+  //nameParticle = "mu-"
+  //nameParticle = "mu+"
+  //nameParticle = "e-"
+  //nameParticle = "e+"
+  //nameParticle = "gamma"
+  //nameParticle = "pi-";
+  //nameParticle = "pi+"
+  //nameParticle = "kaon-"
+  //nameParticle = "kaon+"
+  //nameParticle = "kaon0L"
+  //nameParticle = "neutron"
+  //nameParticle = "proton"
+  //
+  //beamEnergy = 20.0*GeV;
+  //  
   //directionVector = G4ThreeVector( 0.0, 1.0, 0.0 );
   //***endLOOKHERE***
 
