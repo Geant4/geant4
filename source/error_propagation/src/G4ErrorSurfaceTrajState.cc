@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ErrorSurfaceTrajState.cc,v 1.4 2007-05-31 20:22:45 arce Exp $
+// $Id: G4ErrorSurfaceTrajState.cc,v 1.5 2007-06-04 14:59:32 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -108,7 +108,7 @@ BuildErrorMatrix( G4ErrorFreeTrajState& tpSC, const G4Vector3D&,
   G4double scphi = tpSC.GetParameters().GetPhi();
   if( G4ErrorPropagatorData::GetErrorPropagatorData()->GetMode() == G4ErrorMode_PropBackwards ){
     sclambda *= -1;
-    scphi += M_PI;
+    scphi += CLHEP::pi;
   }
   G4double cosLambda = cos( sclambda );
   G4double sinLambda = sin( sclambda );

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ErrorPropagator.cc,v 1.5 2007-05-31 15:28:51 gcosmo Exp $
+// $Id: G4ErrorPropagator.cc,v 1.6 2007-06-04 14:59:32 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -377,8 +377,8 @@ void G4ErrorPropagator::GetFinalTrajState( G4ErrorTrajState* currentTS, G4ErrorF
   if(verbose >= 1 ) G4cout << " G4ErrorPropagator::Propagate: final state " << int(g4edata->GetState()) << " TSType " << currentTS->GetTSType() << G4endl;
 #endif
 
-  if( currentTS->GetTSType() == G4eTS_FREE || 
-      ! g4edata->GetState() == G4ErrorState_StoppedAtTarget ){
+  if( (currentTS->GetTSType() == G4eTS_FREE) || 
+      (g4edata->GetState() != G4ErrorState_StoppedAtTarget) ){
     currentTS = currentTS_FREE;
   } else if( currentTS->GetTSType() == G4eTS_OS ){
     if( target->GetType() == G4ErrorTarget_TrkL ){
