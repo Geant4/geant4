@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagIntegratorDriver.cc,v 1.47 2007-05-11 13:19:40 gcosmo Exp $
+// $Id: G4MagIntegratorDriver.cc,v 1.48 2007-06-04 15:30:22 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -154,10 +154,14 @@ G4MagInt_Driver::AccurateAdvance(G4FieldTrack& y_current,
 
   //  Ensure that hstep > 0 
   if( hstep <= 0.0 ) { 
-    G4cerr << " Hstep is " << hstep << G4endl;
+    if(hstep==0.0){ G4cerr << " G4MagIntegratorDriver::AccurateAdvance(): Hstep is " << hstep << G4endl;
+      return succeeded; 
+    }
+    else{ 
     G4Exception("G4MagInt_Driver::AccurateAdvance()", 
-		"Requested Integration Step is zero or negative: it must be positive",
-		FatalException, "Requested-Step-not-Positive."); 
+		"Requested Integration Step is  negative: it must be positive",
+		FatalException, "Requested-Step-is-Negative"); 
+    }
   }
 
   y_current.DumpToArray( ystart );
