@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ErrorPropagatorData.hh,v 1.1 2007-05-16 12:55:38 gcosmo Exp $
+// $Id: G4ErrorPropagatorData.hh,v 1.2 2007-06-05 13:04:30 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -76,7 +76,7 @@ public:  // with description
   void SetTarget( const G4ErrorTarget* target );
 
   static G4int verbose();
-  void SetVerbose( G4int ver );
+  static void SetVerbose( G4int ver );
 
 
 private:

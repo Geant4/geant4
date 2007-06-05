@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ErrorPropagatorData.icc,v 1.1 2007-05-16 12:55:38 gcosmo Exp $
+// $Id: G4ErrorPropagatorData.icc,v 1.2 2007-06-05 13:00:30 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -73,12 +73,6 @@ inline
 void G4ErrorPropagatorData::SetTarget( const G4ErrorTarget* target )
 {
   theTarget = const_cast<G4ErrorTarget*>(target);
-}
-
-inline 
-G4int G4ErrorPropagatorData::verbose() 
-{
-  return theVerbosity;
 }
 
 inline 
