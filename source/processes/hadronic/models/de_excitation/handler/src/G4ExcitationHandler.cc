@@ -97,6 +97,7 @@ G4ReactionProductVector * G4ExcitationHandler::BreakItUp(const G4Fragment &theIn
 
   G4FragmentVector * theResult = 0; 
   G4double exEnergy = theInitialState.GetExcitationEnergy();
+  //  G4cout << " first exEnergy in MeV: " << exEnergy/MeV << G4endl;
   G4double A = theInitialState.GetA();
   G4int Z = static_cast<G4int>(theInitialState.GetZ());
   G4FragmentVector* theTempResult = 0; 
@@ -137,6 +138,7 @@ G4ReactionProductVector * G4ExcitationHandler::BreakItUp(const G4Fragment &theIn
       for (i = theResultList.begin(); i != theResultList.end(); i++) 
         {
           exEnergy = (*i)->GetExcitationEnergy();
+	  //	  G4cout << " exEnergy in MeV: " << exEnergy/MeV << G4endl;
           if (exEnergy > 0.0) 
             {
               A = (*i)->GetA();
@@ -202,16 +204,22 @@ G4ReactionProductVector * G4ExcitationHandler::BreakItUp(const G4Fragment &theIn
   // which are excited.
   
   theTempResult = 0;
+  std::list<G4Fragment*> theFinalResultList;
+  std::list<G4Fragment*> theFinalPhotonResultList;
   std::list<G4Fragment*> theResultList;
   std::list<G4Fragment*>::iterator j;
   G4FragmentVector::iterator i;
   for (i = theResult->begin(); i != theResult->end();i++) 
     {
       theResultList.push_back(*i);
+      //      G4cout << " Before loop list energy in MeV: " << ((*i)->GetExcitationEnergy())/MeV << G4endl;
     }
   theResult->clear();
-  
-  
+
+  for (j = theResultList.begin(); j != theResultList.end(); j++) {
+    //    G4cout << " Test loop list: " << (*j)->GetExcitationEnergy() << " size: " << theResultList.size() << G4endl;
+  }
+
   //  for (j = theResultList.begin(); j != theResultList.end(); j++) 
   j = theResultList.begin();  //AH
   while (j != theResultList.end()) //AH
@@ -224,12 +232,12 @@ G4ReactionProductVector * G4ExcitationHandler::BreakItUp(const G4Fragment &theIn
           if (theTempResult->size() > 1) 
             {
               // Remove excited fragment from the result 
-              delete (*j);
+	      //	      delete (*j);
 	      //              theResultList.erase(j--);
-              theResultList.erase(j);
+	      //	      theResultList.erase(j); don't delete as there's no push back...
               // and add theTempResult elements to theResult
-              for (G4FragmentVector::reverse_iterator ri = theTempResult->rbegin();
-                   ri != theTempResult->rend(); ++ri)
+	      for (G4FragmentVector::reverse_iterator ri = theTempResult->rbegin();
+		   ri != theTempResult->rend(); ++ri)
                 {
 #ifdef PRECOMPOUND_TEST
                   if ((*ri)->GetA() == 0)
@@ -237,7 +245,9 @@ G4ReactionProductVector * G4ExcitationHandler::BreakItUp(const G4Fragment &theIn
                   else
                     (*ri)->SetCreatorModel(G4String("ResidualNucleus"));
 #endif
-                  theResultList.push_back(*ri);
+		  //		  theResultList.push_back(*ri);
+		  theFinalPhotonResultList.push_back(*ri);
+		  //		  theFinalResultList.push_back(*ri); don't add to final result as they'll go through the loop
                 }
               delete theTempResult;
             }
@@ -275,7 +285,10 @@ G4ReactionProductVector * G4ExcitationHandler::BreakItUp(const G4Fragment &theIn
 #ifdef PRECOMPOUND_TEST
               theHandlerPhoton->SetCreatorModel("G4ExcitationHandler");
 #endif
-              theResultList.push_back( theHandlerPhoton );
+	      theFinalPhotonResultList.push_back( theHandlerPhoton );
+	      //	      theResultList.push_back( theHandlerPhoton );
+	      //	      theFinalResultList.push_back( theHandlerPhoton );
+	      theFinalResultList.push_back(*j);
 #ifdef debugphoton
               G4cout << "Emmited photon:\n"
                      << theResultList.back() << '\n'
@@ -283,17 +296,33 @@ G4ReactionProductVector * G4ExcitationHandler::BreakItUp(const G4Fragment &theIn
                      << *(*j) << '\n'
                      << "-----------------------------------------------------------------------\n";
 #endif
-	      j++; // AH only increment if not erased:
+	      //test	      j++; // AH only increment if not erased:
             }	
         } else {
-	  j++; // AH increment iterator if a proton or excitation energy small
+	  //test	  j++; // AH increment iterator if a proton or excitation energy small
+	  theFinalResultList.push_back(*j);
 	}
+//      G4cout << " Inside loop list: " << (*j)->GetExcitationEnergy() << " size: " << theFinalResultList.size() << G4endl;
+      j++;
     }
-  for (j = theResultList.begin(); j != theResultList.end(); j++)
+  //  for (j = theResultList.begin(); j != theResultList.end(); j++)
+  G4int number_results = 0;
+  for (j = theFinalResultList.begin(); j != theFinalResultList.end(); j++)
     {
       theResult->push_back(*j);
+      number_results++;
     }
+  for (j = theFinalPhotonResultList.begin(); j != theFinalPhotonResultList.end(); j++)
+    {
+      theResult->push_back(*j);
+      number_results++;
+    }
+
+  //  G4cout << " ExcitationHandler number of results: " << number_results << G4endl;    
+
   theResultList.clear();
+  theFinalResultList.clear();
+  theFinalPhotonResultList.clear();
   
   
 #ifdef debug
