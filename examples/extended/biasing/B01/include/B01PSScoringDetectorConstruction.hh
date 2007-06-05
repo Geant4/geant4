@@ -24,55 +24,51 @@
 // ********************************************************************
 //
 //
-#ifndef B01PhysicsList_h
-#define B01PhysicsList_h 1
+// $Id: B01PSScoringDetectorConstruction.hh,v 1.1 2007-06-05 18:20:09 ahoward Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
 
-#include "G4VUserPhysicsList.hh"
+#ifndef B01PSScoringDetectorConstruction_hh 
+#define B01PSScoringDetectorConstruction_hh  B01PSScoringDetectorConstruction_hh 
+
 #include "globals.hh"
+#include <map>
+//#include "G4GeometryCell.hh"
+//#include "B01PVolumeStore.hh"
 
-#include <vector> 
+#include "G4VUserParallelWorld.hh"
 
-// taken from Tst12PhysicsList
+#include <vector> //ASO
+class G4VPhysicalVolume;
+class G4LogicalVolume; //ASO
 
-class B01PhysicsList: public G4VUserPhysicsList
+
+class B01PSScoringDetectorConstruction: public G4VUserParallelWorld
 {
-  public:
-    B01PhysicsList();
-    virtual ~B01PhysicsList();
+public:
+  B01PSScoringDetectorConstruction(G4String worldName);
+  ~B01PSScoringDetectorConstruction();
 
-  public: 
-    void AddParallelWorldName(G4String& pname)
-         {paraWorldName.push_back(pname);}
+  //const G4VPhysicalVolume &GetPhysicalVolumeByName(const G4String& name) const;
+  //  G4VPhysicalVolume *GetWorldVolume() const;
+  //G4String ListPhysNamesAsG4String();
+  G4String GetCellName(G4int i);
+  //G4GeometryCell GetGeometryCell(G4int i);
 
-  protected:
-    // Construct particle and physics
-    virtual void ConstructParticle();
-    virtual void ConstructProcess();
+  G4VPhysicalVolume* GetWorldVolume();
+  G4VPhysicalVolume& GetWorldVolumeAddress() const;
 
-    // 
-    virtual void SetCuts();
-    
-  protected:
-  // these methods Construct physics processes and register them
-    virtual void ConstructGeneral();
-    virtual void ConstructEM();
-    virtual void ConstructHad();
-    virtual void ConstructLeptHad();
-    void AddScoringProcess();
- //
-    void  ConstructAllBosons();
-    void  ConstructAllLeptons();
-    void  ConstructAllMesons();
-    void  ConstructAllBaryons();
-    void  ConstructAllIons();
-    void  ConstructAllShortLiveds();
+  void SetSensitive(); //ASO
 
-  private:
-    std::vector<G4String>  paraWorldName;
+private:
+  void Construct();
+  //B01PVolumeStore fPVolumeStore;
+  G4VPhysicalVolume *fWorldVolume;
+
+  G4VPhysicalVolume* ghostWorld;
+
+  std::vector< G4LogicalVolume* > fLogicalVolumeVector; //ASO
 
 };
 
 #endif
-
-
-

@@ -23,49 +23,69 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: B01DetectorConstruction.hh,v 1.8 2007-06-05 18:20:09 ahoward Exp $
+// $Id: B01ScoreTable.hh,v 1.1 2007-06-05 18:20:09 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+// ----------------------------------------------------------------------
+// Class B01ScoreTable
+//
+// Class description:
+// 
+// This class creates a table from a given G4CellScoreStore
+// and prints it to a given output stream.
+//
 
-#ifndef B01DetectorConstruction_hh
-#define B01DetectorConstruction_hh B01DetectorConstruction_hh
+// Author: Michael Dressel (Michael.Dressel@cern.ch)
+// ----------------------------------------------------------------------
+//
+
+#ifndef B01ScoreTable_hh
+#define B01ScoreTable_hh B01ScoreTable_hh
+
+#include <iostream>
+#include <iomanip>
+#include <vector>
 
 #include "globals.hh"
-#include "G4VUserDetectorConstruction.hh"
-#include <vector>
-class G4VPhysicalVolume;
-class G4LogicalVolume; //ASO
+#include "G4CellScorerStore.hh"
+#include "G4CellScoreValues.hh"
 class G4VIStore;
-class G4VWeightWindowStore;
 
-class B01DetectorConstruction : public G4VUserDetectorConstruction
+
+class B01ScoreTable
 {
-public:
-  B01DetectorConstruction();
-  ~B01DetectorConstruction();
-  
-  G4VPhysicalVolume* Construct();
+public: // with description
+  explicit B01ScoreTable(const G4VIStore *aIStore = 0);
 
-  G4VIStore* CreateImportanceStore();
-    // create an importance store, caller is responsible for deleting it
+  ~B01ScoreTable();
 
-  G4VWeightWindowStore *CreateWeightWindowStore();
-    // create an weight window  store, caller is responsible for 
-    // deleting it
+  void Print(const G4MapGeometryCellCellScorer &cs, 
+	     std::ostream *out = 0);
+    // create the table and print it to the ouput stream.
 
-  G4String GetCellName(G4int i);
+  void PrintHeader(std::ostream *out);
+    // print the table header, done by the above Print() function
 
-  G4VPhysicalVolume* GetWorldVolume();
+  void PrintTable(const G4MapGeometryCellCellScorer &cs,
+		  std::ostream *out);
+    // print the table contend, done by the above Print() function
 
-  void SetSensitive();  //ASO
+  std::string FillString(const std::string &name, 
+			   char c, G4int n, G4bool back = true);
+    // create a string of length n, by filling up
+    // name with the char c.
 
 private:
-  std::vector< G4VPhysicalVolume * > fPhysicalVolumeVector;
-  std::vector< G4LogicalVolume * > fLogicalVolumeVector;  //ASO
+  B01ScoreTable(const B01ScoreTable &);
+  B01ScoreTable &operator=(const B01ScoreTable &);
 
-  G4VPhysicalVolume* pWorldVolume;
-
+  G4String CreateName(const G4GeometryCell &gCell);
+  void PrintLine(const G4String &name,
+		 const G4CellScoreValues &sc_scores,
+		 std::ostream *out);
+  const G4VIStore *fIStore;
+  G4int FieldName;
+  G4int FieldValue;
 };
 
 #endif
