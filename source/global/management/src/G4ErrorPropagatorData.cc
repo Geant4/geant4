@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ErrorPropagatorData.cc,v 1.2 2007-06-05 13:00:30 gcosmo Exp $
+// $Id: G4ErrorPropagatorData.cc,v 1.3 2007-06-05 13:04:30 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -38,7 +38,7 @@
 
 G4ErrorPropagatorData* G4ErrorPropagatorData::theErrorPropagatorData = 0;
 
-G4int G4ErrorPropagatorData::theVerbosity;
+G4int G4ErrorPropagatorData::theVerbosity = 0;
 
 //-------------------------------------------------------------------
 
@@ -58,4 +58,9 @@ G4ErrorPropagatorData* G4ErrorPropagatorData::GetErrorPropagatorData()
 G4int G4ErrorPropagatorData::verbose() 
 {
   return theVerbosity;
+}
+
+void G4ErrorPropagatorData::SetVerbose( G4int ver )
+{
+  theVerbosity = ver;
 }
