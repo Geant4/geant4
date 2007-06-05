@@ -220,6 +220,9 @@ G4ReactionProductVector * G4ExcitationHandler::BreakItUp(const G4Fragment &theIn
     //    G4cout << " Test loop list: " << (*j)->GetExcitationEnergy() << " size: " << theResultList.size() << G4endl;
   }
 
+  G4int number_photons = 0;
+  G4int number_photon_fragments = 0;
+  G4int number_other_fragments = 0;
   //  for (j = theResultList.begin(); j != theResultList.end(); j++) 
   j = theResultList.begin();  //AH
   while (j != theResultList.end()) //AH
@@ -245,8 +248,9 @@ G4ReactionProductVector * G4ExcitationHandler::BreakItUp(const G4Fragment &theIn
                   else
                     (*ri)->SetCreatorModel(G4String("ResidualNucleus"));
 #endif
-		  //		  theResultList.push_back(*ri);
-		  theFinalPhotonResultList.push_back(*ri);
+		  theResultList.push_back(*ri);
+		  //xx		  theFinalPhotonResultList.push_back(*ri);
+		  number_photons++;
 		  //		  theFinalResultList.push_back(*ri); don't add to final result as they'll go through the loop
                 }
               delete theTempResult;
@@ -285,10 +289,13 @@ G4ReactionProductVector * G4ExcitationHandler::BreakItUp(const G4Fragment &theIn
 #ifdef PRECOMPOUND_TEST
               theHandlerPhoton->SetCreatorModel("G4ExcitationHandler");
 #endif
-	      theFinalPhotonResultList.push_back( theHandlerPhoton );
-	      //	      theResultList.push_back( theHandlerPhoton );
+//	      theFinalPhotonResultList.push_back( theHandlerPhoton );
+//	      G4cout << " adding photon fragment " << G4endl;
+	      number_photon_fragments++;
+	      theResultList.push_back( theHandlerPhoton );
 	      //	      theFinalResultList.push_back( theHandlerPhoton );
 	      theFinalResultList.push_back(*j);
+	      number_other_fragments++;
 #ifdef debugphoton
               G4cout << "Emmited photon:\n"
                      << theResultList.back() << '\n'
@@ -301,6 +308,7 @@ G4ReactionProductVector * G4ExcitationHandler::BreakItUp(const G4Fragment &theIn
         } else {
 	  //test	  j++; // AH increment iterator if a proton or excitation energy small
 	  theFinalResultList.push_back(*j);
+	  number_other_fragments++;
 	}
 //      G4cout << " Inside loop list: " << (*j)->GetExcitationEnergy() << " size: " << theFinalResultList.size() << G4endl;
       j++;
@@ -318,7 +326,7 @@ G4ReactionProductVector * G4ExcitationHandler::BreakItUp(const G4Fragment &theIn
       number_results++;
     }
 
-  //  G4cout << " ExcitationHandler number of results: " << number_results << G4endl;    
+  //  G4cout << " ExcitationHandler number of results: " << number_results << " number_photons: " << number_photons << " number_photon_fragments: " << number_photon_fragments << " number_other_fragments " << number_other_fragments << G4endl;    
 
   theResultList.clear();
   theFinalResultList.clear();
