@@ -1,4 +1,4 @@
-$Id: History,v 1.24 2007-06-04 13:17:29 ahoward Exp $
+$Id: History,v 1.25 2007-06-05 16:46:55 ahoward Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+June 4, 2007, A.Howard (digits_hits-V08-03-04)
+- Removed G4PSPopulation class to obviate circular dependency
 
 June 4, 2007, A.Howard (digits_hits-V08-03-03)
 - Put back some classes required for scoring of geometrical biasing cells:
