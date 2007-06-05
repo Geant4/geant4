@@ -2,7 +2,6 @@
 #  Run the test program with different input files
 #   Check output for killed tracks
 #
-#et exe=$G4WORKDIR/bin/$G4SYSTEM/testNTST
 set exe=$G4BIN/$G4SYSTEM/testNTST
 set runid=$1; shift
 set n=$1; shift
@@ -21,7 +20,7 @@ foreach inp ( 2xa 2xb 2xc 2a 2b 2c )
 
    time $exe run$inp.mac > & oer.$suffix
    #    ****
-   tail -18 oer.$suffix | egrep -v 'delet|report|Proce|trajectories|getFieldStats' | \
+   tail -18 oer.$suffix | egrep -v 'delet|[Rr]eport|Proce|trajectories|getFieldStats|/vis' | \
                       grep -v 'Number of Vertices =   23.1 +-  0.515' | \
 		      grep -v 'User='  | \
 		      sort -u 
