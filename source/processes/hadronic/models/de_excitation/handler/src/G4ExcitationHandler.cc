@@ -205,7 +205,7 @@ G4ReactionProductVector * G4ExcitationHandler::BreakItUp(const G4Fragment &theIn
   
   theTempResult = 0;
   std::list<G4Fragment*> theFinalResultList;
-  std::list<G4Fragment*> theFinalPhotonResultList;
+  //AHtest  std::list<G4Fragment*> theFinalPhotonResultList;
   std::list<G4Fragment*> theResultList;
   std::list<G4Fragment*>::iterator j;
   G4FragmentVector::iterator i;
@@ -220,9 +220,6 @@ G4ReactionProductVector * G4ExcitationHandler::BreakItUp(const G4Fragment &theIn
     //    G4cout << " Test loop list: " << (*j)->GetExcitationEnergy() << " size: " << theResultList.size() << G4endl;
   }
 
-  G4int number_photons = 0;
-  G4int number_photon_fragments = 0;
-  G4int number_other_fragments = 0;
   //  for (j = theResultList.begin(); j != theResultList.end(); j++) 
   j = theResultList.begin();  //AH
   while (j != theResultList.end()) //AH
@@ -249,8 +246,7 @@ G4ReactionProductVector * G4ExcitationHandler::BreakItUp(const G4Fragment &theIn
                     (*ri)->SetCreatorModel(G4String("ResidualNucleus"));
 #endif
 		  theResultList.push_back(*ri);
-		  //xx		  theFinalPhotonResultList.push_back(*ri);
-		  number_photons++;
+		  //AHtest		  theFinalPhotonResultList.push_back(*ri);
 		  //		  theFinalResultList.push_back(*ri); don't add to final result as they'll go through the loop
                 }
               delete theTempResult;
@@ -291,7 +287,6 @@ G4ReactionProductVector * G4ExcitationHandler::BreakItUp(const G4Fragment &theIn
 #endif
 //	      theFinalPhotonResultList.push_back( theHandlerPhoton );
 //	      G4cout << " adding photon fragment " << G4endl;
-	      number_photon_fragments++;
 	      theResultList.push_back( theHandlerPhoton );
 	      //	      theFinalResultList.push_back( theHandlerPhoton );
 	      theFinalResultList.push_back(*j);
@@ -314,23 +309,21 @@ G4ReactionProductVector * G4ExcitationHandler::BreakItUp(const G4Fragment &theIn
       j++;
     }
   //  for (j = theResultList.begin(); j != theResultList.end(); j++)
-  G4int number_results = 0;
   for (j = theFinalResultList.begin(); j != theFinalResultList.end(); j++)
     {
       theResult->push_back(*j);
-      number_results++;
-    }
-  for (j = theFinalPhotonResultList.begin(); j != theFinalPhotonResultList.end(); j++)
-    {
-      theResult->push_back(*j);
-      number_results++;
     }
 
-  //  G4cout << " ExcitationHandler number of results: " << number_results << " number_photons: " << number_photons << " number_photon_fragments: " << number_photon_fragments << " number_other_fragments " << number_other_fragments << G4endl;    
+//AHtest   for (j = theFinalPhotonResultList.begin(); j != theFinalPhotonResultList.end(); j++)
+//AHtest     {
+//AHtest       theResult->push_back(*j);
+//AHtest       number_results++;
+//AHtest     }
+
 
   theResultList.clear();
   theFinalResultList.clear();
-  theFinalPhotonResultList.clear();
+  //AHtest  theFinalPhotonResultList.clear();
   
   
 #ifdef debug
