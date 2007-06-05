@@ -1,4 +1,4 @@
-$Id: History,v 1.8 2007-06-04 15:04:12 gcosmo Exp $
+$Id: History,v 1.9 2007-06-05 13:37:36 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+5 June 2007 - G.Cosmo (error_propagation-V08-03-09)
+- Added missing definition of GLOBLIBS in GNUmakefile to allow for
+  building DLLs on Windows.
 
 4 June 2007 - G.Cosmo (error_propagation-V08-03-08)
 - Fixed compilation errors and warnings on WIN32-VC platform: replaced
