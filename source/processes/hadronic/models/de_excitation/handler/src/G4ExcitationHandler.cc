@@ -290,7 +290,6 @@ G4ReactionProductVector * G4ExcitationHandler::BreakItUp(const G4Fragment &theIn
 	      theResultList.push_back( theHandlerPhoton );
 	      //	      theFinalResultList.push_back( theHandlerPhoton );
 	      theFinalResultList.push_back(*j);
-	      number_other_fragments++;
 #ifdef debugphoton
               G4cout << "Emmited photon:\n"
                      << theResultList.back() << '\n'
@@ -303,7 +302,6 @@ G4ReactionProductVector * G4ExcitationHandler::BreakItUp(const G4Fragment &theIn
         } else {
 	  //test	  j++; // AH increment iterator if a proton or excitation energy small
 	  theFinalResultList.push_back(*j);
-	  number_other_fragments++;
 	}
 //      G4cout << " Inside loop list: " << (*j)->GetExcitationEnergy() << " size: " << theFinalResultList.size() << G4endl;
       j++;
