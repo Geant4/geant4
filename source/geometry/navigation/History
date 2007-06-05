@@ -1,4 +1,4 @@
-$Id: History,v 1.93 2007-05-30 00:30:51 japost Exp $
+$Id: History,v 1.94 2007-06-05 16:15:14 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,7 +16,20 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-May 9th, 2007 - J.Apostolakis (geomnav-V08-03-06)   
+June 5th, 2007 - J.Apostolakis (geomnav-V08-03-07)
+------------------------------
+G4PathFinder: 
+   - New method to return the safety sphere last calculated for
+      a PreStep point (it could be a previous one - due to optimasation).
+      >> If last step(s) were smaller than safety, then for a linear
+      track (no field or no charge) Navigator's ComputeSafety is not
+      called.  The older PreStep (previous step or some steps back 
+      in case of many small steps) is stored for this - and provided.
+   - ComputeStep still returns current PreStep point's safety (must)
+   - Revisions are to make this (used by CoupledTransportation) more
+   compatible with the old direct use of Navigator (by Tranportation)
+
+May 29th, 2007 - J.Apostolakis (geomnav-V08-03-06)   
 ------------------------------
 G4Navigator
   - Fixed **ComputeSafety**: wrong coordinates used (last tag only). 
