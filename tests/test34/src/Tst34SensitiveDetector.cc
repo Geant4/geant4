@@ -56,7 +56,7 @@ void Tst34SensitiveDetector::EndOfEvent(G4HCofThisEvent*HCE)
 }
 
 G4bool Tst34SensitiveDetector::ProcessHits(G4Step* aStep,
-                                           G4TouchableHistory* ROhist)
+                                           G4TouchableHistory*)
 {
   G4double e=aStep->GetTotalEnergyDeposit();
   if(e<=0.)return false;
@@ -65,14 +65,12 @@ G4bool Tst34SensitiveDetector::ProcessHits(G4Step* aStep,
   caloHit->SetEdep(e);
   caloHit->SetPos(aStep->GetPreStepPoint()->GetPosition());
   caloHitsCollection->insert(caloHit);
-  if (ROhist); 
-//  G4VPhysicalVolume* physVol = theTouchable->GetVolume();
 
   return true;
 }
 
 G4bool Tst34SensitiveDetector::ProcessHits(G4GFlashSpot*aSpot,
-                                           G4TouchableHistory* ROhist)
+                                           G4TouchableHistory*)
 {
   G4double e=aSpot->GetEnergySpot()->GetEnergy();
   if(e<=0.) return false;
@@ -81,7 +79,6 @@ G4bool Tst34SensitiveDetector::ProcessHits(G4GFlashSpot*aSpot,
   caloHit->SetEdep(e);
   caloHit->SetPos(aSpot->GetEnergySpot()->GetPosition());
   caloHitsCollection->insert(caloHit);
-  if (ROhist); 
 
   return true;
 }
