@@ -1,4 +1,4 @@
-$Id: History,v 1.129 2007-06-01 07:59:32 ahoward Exp $
+$Id: History,v 1.130 2007-06-06 12:19:23 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,15 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+June 6th, 2007, J.Apostolakis transport-V08-03-14
+-----------------------------
+- Includes G4Transportation and G4CoupledTransportation implementations
+  as in tag "transport-V08-03-11":
+  o Corrected bug in ComputeSafety() from introduced in "transport-V08-03-10".
+  o Reinitialise SafetyHelper state from G4PathFinder::PrepareNewTrack().
+  o Should fix the problem seen in test33 and reported by system testing.
+- All the rest is kept as in tag "transport-V08-03-12".
 
 June 1st, 2007, A.Howard      transport-V08-03-13
 ------------------------
@@ -45,50 +54,50 @@ May 31st, 2007, A.Howard      transport-V08-03-12
   "transport-V08-03-11" inclusive.
 
 May 29th, 2007, A.Howard       transport-V08-03-11
------------------------- (recorded JA)
-G4CoupledTransportation  (fixes by A. Howard)
-- Corrected treatment of time integration (made flags do as in original Transport).
-  Again use momentum change flag in particle Change (optimisation.)
-  Also reset looping counter when no field or charge is present.
-Corrected names in Transport, Coupled Transport (JA)
+------------------------
+- G4CoupledTransportation:
+  o Corrected treatment of time integration (made flags do as in original
+    Transport).
+  o Again use momentum change flag in particle-change (optimisation).
+  o Also reset looping counter when no field or charge is present.
+- Corrected names in Transport, Coupled Transport. (J.Apostolakis)
 
 May 29th, 2007, J.Apostolakis  transport-V08-03-10
 -----------------------------
-Gone back to G4CoupledTransportation.
-G4Transportation is now the original (what was called G4Transportation8 since transport-V08-03-00.
-G4Transportation8 still exists, to enable code that utilises it to compile (transitional). 
-  --> Expect that G4Transportation8 will be taken away asap.
+- Gone back to G4CoupledTransportation.
+  o G4Transportation is now the original (what was called G4Transportation8
+    since "transport-V08-03-03").
+  o G4Transportation8 still exists, to enable code that utilises it to compile
+    (transitional). Expect that G4Transportation8 will be taken away asap.
 
 May 29th, 2007, J.Apostolakis  transport-V08-03-04
 -----------------------------
-G4Transportation
-  Refined relocation:
-  - full (re)location only if any geometry limited the step
-  - fast relocation otherwise
-  Renamed & new data members: f(Mass,Any)GeometryLimitedStep 
+- G4Transportation. Refined relocation:
+  o Full (re)location only if any geometry limited the step.
+  o Fast relocation otherwise.
+- Renamed & new data members: f(Mass,Any)GeometryLimitedStep.
 
 May 25th, 2007, J.Apostolakis  transport-V08-03-03
 -----------------------------
-G4Transportation
-- Fix for case of zero proposed step: missed to set end position
-  ( Problem discovered by Alex Howard )
-G4Transportation8
-- Fixed StartTracking to reset number of looping steps and 
-  to clear propagator state (safety issue in case of overlaps)
+- G4Transportation
+  o Fix for case of zero proposed step: missed to set end position. (A.Howard)
+- G4Transportation8
+  o Fixed StartTracking() to reset number of looping steps and 
+    to clear propagator state (safety issue in case of overlaps).
 
 May 18th, 2007, J.Apostolakis  transport-V08-03-02
 -----------------------------
-G4Transportation
-- Corrected full safety at step start, to protect against negative value.
-- Obtain the endMassSafety from new saved value in G4PathFinder.
-G4Transportation8
-- Small cleanup, and hints for saving Safety to helper
+- G4Transportation:
+  o Corrected full safety at step start, to protect against negative value.
+  o Obtain the endMassSafety from new saved value in G4PathFinder.
+- G4Transportation8:
+  o Small cleanup, and hints for saving Safety to helper.
 
 May 13th, 2007, A.Howard       transport-V08-03-01 
 ------------------------
-G4VTrackTerminator:
-- Use call to G4GeometryTolerance instead of kCarTolerance 
-- Requires tag "global-V08-03-00" and related tag set.
+- G4VTrackTerminator:
+  o Use call to G4GeometryTolerance instead of kCarTolerance.
+  o Requires tag "global-V08-03-00" and related tag set.
 
 May 9th, 2007, J.Apostolakis  transport-V08-03-00 
 ----------------------------
