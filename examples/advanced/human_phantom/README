@@ -1,4 +1,4 @@
-qYY$Id: README,v 1.12 2007-05-15 15:01:43 guatelli Exp $
+qYY$Id: README,v 1.13 2007-06-06 19:11:20 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -158,9 +158,3 @@ gdmlData/Female and gdmlData/Male, specifying in the top line the
 - Run particles: run.mac
 
 ---------------------------------------------------------------------------
-
-for comments, advices, doubts and questions please contact: 
-guatelli@ge.infn.it, pia@ge.infn.it
-
-last modified: S. Guatelli, 15/5/2007
-
