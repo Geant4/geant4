@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcontrolMessenger.hh,v 1.11 2006-06-29 19:08:13 gunter Exp $
+// $Id: G4UIcontrolMessenger.hh,v 1.12 2007-06-06 15:14:51 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -54,6 +54,8 @@ class G4UIcommand;
 //   /control/alias
 //   /control/unalias
 //   /control/listAlias
+//   /control/getEnv
+//   /control/echo
 //   /control/shell
 //   /control/manual
 //   /control/createHTML
@@ -77,6 +79,8 @@ class G4UIcontrolMessenger : public G4UImessenger
       G4UIcommand * aliasCommand;
       G4UIcmdWithAString * unaliasCommand;
       G4UIcmdWithoutParameter * listAliasCommand;
+      G4UIcmdWithAString * getEnvCmd;
+      G4UIcmdWithAString * echoCmd;
       G4UIcmdWithAString * shellCommand;
       G4UIcommand * loopCommand;
       G4UIcommand * foreachCommand;
