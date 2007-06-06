@@ -360,7 +360,8 @@ void DMXPhysicsList::ConstructEM() {
 
   // turn off msc step-limitation - especially as electron cut 1nm
   G4EmProcessOptions opt;
-  opt.SetMscStepLimitation(false);
+  //  opt.SetMscStepLimitation(false);
+  opt.SetMscStepLimitation(fG4v71);
 
 }
 
