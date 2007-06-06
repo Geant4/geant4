@@ -21,13 +21,11 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSPopulation.cc,v 1.1 2007-05-18 00:00:38 asaim Exp $
+// $Id: G4PSPopulation.cc,v 1.2 2007-06-06 07:46:50 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4PSPopulation
 #include "G4PSPopulation.hh"
-#include "G4EventManager.hh"
-#include "G4Event.hh"
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -64,13 +62,6 @@ void G4PSPopulation::Initialize(G4HCofThisEvent* HCE)
   EvtMap = new G4THitsMap<G4double>(detector->GetName(),GetName());
   if(HCID < 0) {HCID = GetCollectionID(0);}
   HCE->AddHitsCollection(HCID, (G4VHitsCollection*)EvtMap);
-  //    check for new event
-  std::map<G4int,G4TrackLogger>::iterator itr = fCellTrackLogger.begin();
-  for ( ; itr !=fCellTrackLogger.end(); itr++){
-    (itr->second).SetEventID(G4EventManager::GetEventManager()->
-			     GetConstCurrentEvent()->
-			     GetEventID());
-  }
 }
 
 void G4PSPopulation::EndOfEvent(G4HCofThisEvent*)
