@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPFissionBaseFS.hh,v 1.12 2006-06-29 20:47:49 gunter Exp $
+// $Id: G4NeutronHPFissionBaseFS.hh,v 1.13 2007-06-06 12:45:13 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPFissionBaseFS_h
@@ -77,7 +77,7 @@ class G4NeutronHPFissionBaseFS : public G4NeutronHPFinalState
   
   private:
   
-  G4HadFinalState * ApplyYourself(const G4HadProjectile & ) {return NULL;}
+  G4HadFinalState * ApplyYourself(const G4HadProjectile & ) {return 0;}
   
   G4NeutronHPVector * theXsection;
   G4NeutronHPEnergyDistribution theEnergyDistribution;

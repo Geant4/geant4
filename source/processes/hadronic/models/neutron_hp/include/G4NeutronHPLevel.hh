@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPLevel.hh,v 1.10 2006-06-29 20:48:29 gunter Exp $
+// $Id: G4NeutronHPLevel.hh,v 1.11 2007-06-06 12:45:13 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPLevel_h
@@ -45,7 +45,7 @@ class G4NeutronHPLevel
   G4NeutronHPLevel() 
   {
     nGammas = 0;
-    theGammas = NULL;
+    theGammas = 0;
   }
 
   ~G4NeutronHPLevel();

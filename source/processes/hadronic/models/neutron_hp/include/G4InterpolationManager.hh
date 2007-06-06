@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4InterpolationManager.hh,v 1.12 2006-06-29 20:46:15 gunter Exp $
+// $Id: G4InterpolationManager.hh,v 1.13 2007-06-06 12:45:13 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4InterpolationManager_h
@@ -56,9 +56,9 @@ class G4InterpolationManager
    
    ~G4InterpolationManager()
    {
-     if(start!=NULL) delete [] start;
-     if(range!=NULL) delete [] range;
-     if(scheme!=NULL) delete [] scheme;
+     if(start!=0) delete [] start;
+     if(range!=0) delete [] range;
+     if(scheme!=0) delete [] scheme;
    }
    
    G4InterpolationManager & operator= (const G4InterpolationManager & aManager)
@@ -67,9 +67,9 @@ class G4InterpolationManager
      {
        nRanges = aManager.nRanges;
        nEntries = aManager.nEntries;
-       if(scheme!=NULL) delete [] scheme;
-       if(start!=NULL) delete [] start;
-       if(range!=NULL) delete [] range;
+       if(scheme!=0) delete [] scheme;
+       if(start!=0) delete [] start;
+       if(range!=0) delete [] range;
        scheme = new G4InterpolationScheme[nRanges];
        start = new G4int[nRanges];
        range = new G4int[nRanges];

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPGamma.hh,v 1.13 2006-06-29 20:47:59 gunter Exp $
+// $Id: G4NeutronHPGamma.hh,v 1.14 2007-06-06 12:45:13 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPGamma_h
@@ -55,7 +55,7 @@ class G4NeutronHPGamma
   G4DynamicParticleVector * GetDecayGammas()
   {
     G4DynamicParticleVector * theResult;
-    if(next == NULL)
+    if(next == 0)
     {
       theResult = new G4DynamicParticleVector;
     }

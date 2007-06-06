@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VNeutronHPEnergyAngular.hh,v 1.10 2006-06-29 20:50:07 gunter Exp $
+// $Id: G4VNeutronHPEnergyAngular.hh,v 1.11 2007-06-06 12:45:13 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4VNeutronHPEnergyAngular_h
@@ -41,8 +41,8 @@ class G4VNeutronHPEnergyAngular
   
   G4VNeutronHPEnergyAngular()
   {
-    theTarget = NULL;
-    theNeutron = NULL;
+    theTarget = 0;
+    theNeutron = 0;
     theQValue=0;
   }
   virtual ~G4VNeutronHPEnergyAngular(){}
@@ -58,7 +58,7 @@ class G4VNeutronHPEnergyAngular
   void SetNeutron(G4ReactionProduct * aNeutron) 
   { 
     theNeutron = aNeutron; 
-    if(theTarget!=NULL) theCMS = *theNeutron+*theTarget;
+    if(theTarget!=0) theCMS = *theNeutron+*theTarget;
   }
   
   void SetTarget(G4ReactionProduct * aTarget)

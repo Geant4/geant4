@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPDiscreteTwoBody.hh,v 1.10 2006-06-29 20:47:19 gunter Exp $
+// $Id: G4NeutronHPDiscreteTwoBody.hh,v 1.11 2007-06-06 12:45:13 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPDiscreteTwoBody_h
@@ -44,11 +44,11 @@ class G4NeutronHPDiscreteTwoBody : public G4VNeutronHPEnergyAngular
   
   G4NeutronHPDiscreteTwoBody()
   {
-    theCoeff = NULL;
+    theCoeff = 0;
   }
   ~G4NeutronHPDiscreteTwoBody()
   {
-    if(theCoeff!=NULL) delete [] theCoeff;
+    if(theCoeff!=0) delete [] theCoeff;
   }
   
   void Init(std::ifstream & aDataFile)

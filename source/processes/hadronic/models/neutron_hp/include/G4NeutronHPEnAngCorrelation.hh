@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPEnAngCorrelation.hh,v 1.10 2006-06-29 20:47:29 gunter Exp $
+// $Id: G4NeutronHPEnAngCorrelation.hh,v 1.11 2007-06-06 12:45:13 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPEnAngCorrelation_h
@@ -44,13 +44,13 @@ class G4NeutronHPEnAngCorrelation
   public:
   G4NeutronHPEnAngCorrelation()
   {
-    theProducts = NULL;
+    theProducts = 0;
     inCharge = false;
     theTotalMeanEnergy = -1.;
   }
   ~G4NeutronHPEnAngCorrelation()
   {
-    if(theProducts!=NULL) delete [] theProducts;
+    if(theProducts!=0) delete [] theProducts;
   }
   
   inline void Init(std::ifstream & aDataFile)

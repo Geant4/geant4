@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPChannel.hh,v 1.12 2006-06-29 20:46:57 gunter Exp $
+// $Id: G4NeutronHPChannel.hh,v 1.13 2007-06-06 12:45:13 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  // Hadronic Process: Very Low Energy Neutron X-Sections
@@ -56,10 +56,10 @@ public:
   G4NeutronHPChannel()
   {
     theChannelData = new G4NeutronHPVector; 
-    theBuffer = NULL;
-    theIsotopeWiseData = NULL;
-    theFinalStates = NULL;
-    active = NULL;
+    theBuffer = 0;
+    theIsotopeWiseData = 0;
+    theFinalStates = 0;
+    active = 0;
     registerCount = -1;
   }
   
@@ -69,11 +69,11 @@ public:
     // Following statement disabled to avoid SEGV
     // theBuffer is also deleted as "theChannelData" in
     // ~G4NeutronHPIsoData.  FWJ 06-Jul-1999
-    //if(theBuffer != NULL) delete theBuffer; 
-    if(theIsotopeWiseData != NULL) delete [] theIsotopeWiseData;
+    //if(theBuffer != 0) delete theBuffer; 
+    if(theIsotopeWiseData != 0) delete [] theIsotopeWiseData;
     // Deletion of FinalStates disabled to avoid endless looping
     // in the destructor heirarchy.  FWJ 06-Jul-1999
-    //if(theFinalStates != NULL)
+    //if(theFinalStates != 0)
     //{
     //  for(i=0; i<niso; i++)
     //  {
@@ -82,7 +82,7 @@ public:
     //  delete [] theFinalStates;
     //}
     // FWJ experiment
-    //if(active!=NULL) delete [] active;
+    //if(active!=0) delete [] active;
     
   }
   

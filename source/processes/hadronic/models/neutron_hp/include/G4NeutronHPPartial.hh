@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPPartial.hh,v 1.11 2006-06-29 20:49:15 gunter Exp $
+// $Id: G4NeutronHPPartial.hh,v 1.12 2007-06-06 12:45:13 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPPartial_h
@@ -44,7 +44,7 @@ class G4NeutronHPPartial
     X = new G4double[n];
     data = new G4NeutronHPVector[n];
     nData = n;
-    T=NULL;
+    T=0;
   }
   
   G4NeutronHPPartial(G4int n1, G4int n2)
@@ -97,7 +97,7 @@ class G4NeutronHPPartial
   ~G4NeutronHPPartial()
   {
     delete [] X;
-    if(T!=NULL) delete [] T;
+    if(T!=0) delete [] T;
     delete [] data;
   }
   inline G4int GetNumberOfEnergies() {return nData;}

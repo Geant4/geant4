@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPAngularP.hh,v 1.10 2006-06-29 20:46:47 gunter Exp $
+// $Id: G4NeutronHPAngularP.hh,v 1.11 2007-06-06 12:45:13 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPAngularP_h
@@ -39,13 +39,13 @@ class G4NeutronHPAngularP
   
   G4NeutronHPAngularP()
   {
-    theCosTh = NULL;
-    theProb = NULL;
+    theCosTh = 0;
+    theProb = 0;
   }
   ~G4NeutronHPAngularP()
   {
-    if(theCosTh!=NULL) delete [] theCosTh;
-    if(theProb!=NULL) delete [] theProb;
+    if(theCosTh!=0) delete [] theCosTh;
+    if(theProb!=0) delete [] theProb;
   }
   
   inline void Init(std::ifstream & aDataFile)

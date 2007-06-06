@@ -65,7 +65,7 @@ class G4NeutronHPVector
     {
       theData[i].SetY(theData[i].GetY()*factor);
     }
-    if(theIntegral!=NULL)
+    if(theIntegral!=0)
     {
       theIntegral[i] *= factor;
     }
@@ -223,7 +223,7 @@ class G4NeutronHPVector
   {
     G4int total;
     aDataFile >> total;
-    if(theData!=NULL) delete [] theData;
+    if(theData!=0) delete [] theData;
     theData = new G4NeutronHPDataPoint[total]; 
     nPoints=total;
     nEntries=0;    
@@ -302,7 +302,7 @@ class G4NeutronHPVector
   G4double SampleLin() // Samples X according to distribution Y, linear int
   {
     G4double result;
-    if(theIntegral==NULL) IntegrateAndNormalise();
+    if(theIntegral==0) IntegrateAndNormalise();
     if(GetVectorLength()==1)
     {
       result = theData[0].GetX();
@@ -351,7 +351,7 @@ class G4NeutronHPVector
   inline void IntegrateAndNormalise()
   {
     G4int i;
-    if(theIntegral!=NULL) return;
+    if(theIntegral!=0) return;
     theIntegral = new G4double[nEntries];
     if(nEntries == 1)
     {

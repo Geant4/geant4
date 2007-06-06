@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPContEnergyAngular.hh,v 1.10 2006-06-29 20:47:03 gunter Exp $
+// $Id: G4NeutronHPContEnergyAngular.hh,v 1.11 2007-06-06 12:45:13 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPContEnergyAngular_h
@@ -45,13 +45,13 @@ class G4NeutronHPContEnergyAngular : public G4VNeutronHPEnergyAngular
   
   G4NeutronHPContEnergyAngular()
   {
-    theAngular = NULL;
+    theAngular = 0;
     currentMeanEnergy = -2;
   }
   
   ~G4NeutronHPContEnergyAngular()
   {
-    if(theAngular!=NULL) delete [] theAngular;
+    if(theAngular!=0) delete [] theAngular;
   }
   
   public:

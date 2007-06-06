@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPPolynomExpansion.hh,v 1.10 2006-06-29 20:49:21 gunter Exp $
+// $Id: G4NeutronHPPolynomExpansion.hh,v 1.11 2007-06-06 12:45:13 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPPolynomExpansion_h
@@ -39,12 +39,12 @@ class G4NeutronHPPolynomExpansion
   public:
   G4NeutronHPPolynomExpansion()
   {
-    theCoeff = NULL;
+    theCoeff = 0;
     nPoly=0;
   }
   ~G4NeutronHPPolynomExpansion()
   {
-    if(theCoeff!=NULL) delete [] theCoeff;
+    if(theCoeff!=0) delete [] theCoeff;
   }
   
   inline void Init(std::ifstream & theData)

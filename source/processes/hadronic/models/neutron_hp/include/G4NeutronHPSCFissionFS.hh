@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPSCFissionFS.hh,v 1.10 2006-06-29 20:49:25 gunter Exp $
+// $Id: G4NeutronHPSCFissionFS.hh,v 1.11 2007-06-06 12:45:13 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPSCFissionFS_h
@@ -50,7 +50,7 @@ class G4NeutronHPSCFissionFS : public G4NeutronHPFissionBaseFS
   }
   
   private:
-  G4HadFinalState * ApplyYourself(const G4HadProjectile &) { return NULL; }
+  G4HadFinalState * ApplyYourself(const G4HadProjectile &) { return 0; }
     
 };
 #endif

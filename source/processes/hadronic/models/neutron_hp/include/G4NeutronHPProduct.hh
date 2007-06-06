@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPProduct.hh,v 1.11 2006-06-29 20:49:23 gunter Exp $
+// $Id: G4NeutronHPProduct.hh,v 1.12 2007-06-06 12:45:13 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPProduct_h
@@ -51,11 +51,11 @@ class G4NeutronHPProduct
   public:
   G4NeutronHPProduct()
   {
-    theDist = NULL;
+    theDist = 0;
   }
   ~G4NeutronHPProduct()
   {
-    if(theDist != NULL) delete theDist;
+    if(theDist != 0) delete theDist;
   }
   
   inline void Init(std::ifstream & aDataFile)
@@ -94,7 +94,7 @@ class G4NeutronHPProduct
       // recoils need to be addressed
       // properly
       delete theDist;
-      theDist = NULL;
+      theDist = 0;
     }
     else if(theDistLaw == 5)
     {
@@ -114,7 +114,7 @@ class G4NeutronHPProduct
     {
       throw G4HadronicException(__FILE__, __LINE__, "distribution law unknown to G4NeutronHPProduct");
     }
-    if(theDist!=NULL)
+    if(theDist!=0)
     {
       theDist->SetQValue(theActualStateQValue);      
       theDist->Init(aDataFile);
@@ -145,7 +145,7 @@ class G4NeutronHPProduct
   inline G4double MeanEnergyOfThisInteraction() 
   { 
     G4double result;
-    if(theDist == NULL)
+    if(theDist == 0)
     {
       result = 0;
     }

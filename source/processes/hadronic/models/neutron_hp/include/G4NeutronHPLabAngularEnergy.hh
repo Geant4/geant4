@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPLabAngularEnergy.hh,v 1.10 2006-06-29 20:48:23 gunter Exp $
+// $Id: G4NeutronHPLabAngularEnergy.hh,v 1.11 2007-06-06 12:45:13 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPLabAngularEnergy_h
@@ -46,22 +46,22 @@ class G4NeutronHPLabAngularEnergy : public G4VNeutronHPEnergyAngular
   
   G4NeutronHPLabAngularEnergy()
   {
-    theEnergies = NULL;
-    theData = NULL;
-    nCosTh = NULL;
-    theSecondManager = NULL;
+    theEnergies = 0;
+    theData = 0;
+    nCosTh = 0;
+    theSecondManager = 0;
   }
   ~G4NeutronHPLabAngularEnergy()
   {
-    if(theEnergies != NULL) delete [] theEnergies;
-    if(nCosTh != NULL) delete [] nCosTh;
-    if(theData != NULL) 
+    if(theEnergies != 0) delete [] theEnergies;
+    if(nCosTh != 0) delete [] nCosTh;
+    if(theData != 0) 
     {
       for(G4int i=0; i<nEnergies; i++)
         delete [] theData[i];
       delete [] theData;
     }
-    if(theSecondManager != NULL) delete [] theSecondManager;
+    if(theSecondManager != 0) delete [] theSecondManager;
   }
   
   public:

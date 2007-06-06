@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPPhotonXSection.hh,v 1.10 2006-06-29 20:49:19 gunter Exp $
+// $Id: G4NeutronHPPhotonXSection.hh,v 1.11 2007-06-06 12:45:13 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPPhotonXSection_h
@@ -45,19 +45,19 @@ class G4NeutronHPPhotonXSection
   public:
   G4NeutronHPPhotonXSection()
   {
-    theExclusive = NULL;
-    theExShell = NULL;
-    theExEnergy = NULL;
-    theExFlag = NULL;
-    theExDisFlag = NULL;
+    theExclusive = 0;
+    theExShell = 0;
+    theExEnergy = 0;
+    theExFlag = 0;
+    theExDisFlag = 0;
   }
   ~G4NeutronHPPhotonXSection()
   {
-    if(theExclusive!=NULL) delete [] theExclusive;
-    if(theExShell != NULL) delete [] theExShell;
-    if(theExEnergy != NULL) delete [] theExEnergy;
-    if(theExFlag != NULL) delete [] theExFlag;
-    if(theExDisFlag != NULL) delete [] theExDisFlag;
+    if(theExclusive!=0) delete [] theExclusive;
+    if(theExShell != 0) delete [] theExShell;
+    if(theExEnergy != 0) delete [] theExEnergy;
+    if(theExFlag != 0) delete [] theExFlag;
+    if(theExDisFlag != 0) delete [] theExDisFlag;
   }
   
   inline void Init(std::ifstream & aDataFile)
