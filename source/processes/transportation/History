@@ -1,4 +1,4 @@
-$Id: History,v 1.131 2007-06-06 12:31:34 gcosmo Exp $
+$Id: History,v 1.132 2007-06-07 15:15:14 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,8 +17,8 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-June 6th, 2007, J.Apostolakis transport-V08-03-14
------------------------------
+June 6th, 2007, G.Cosmo  transport-V08-03-14
+-----------------------
 - Includes G4Transportation and G4CoupledTransportation implementations
   as in tag "transport-V08-03-11":
   o Corrected bug in ComputeSafety() introduced in "transport-V08-03-10".
@@ -53,8 +53,8 @@ May 31st, 2007, A.Howard      transport-V08-03-12
 - Tag does NOT include changes from tags "transport-V08-03-00" to
   "transport-V08-03-11" inclusive.
 
-May 29th, 2007, A.Howard       transport-V08-03-11
-------------------------
+May 29th, 2007, A.Howard/J.Apostolakis  transport-V08-03-11
+--------------------------------------
 - G4CoupledTransportation:
   o Corrected treatment of time integration (made flags do as in original
     Transport).
