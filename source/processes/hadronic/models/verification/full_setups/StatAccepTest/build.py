@@ -257,9 +257,9 @@ setupFile.write( "  export G4LEDATA=$G4INSTALL/data/G4EMLOW \n" )
 setupFile.write( "  export NeutronHPCrossSections=$G4INSTALL/data/G4NDL \n")
 setupFile.write( "else \n")
 setupFile.write( "  export G4LEVELGAMMADATA=$DIR_INSTALLATIONS/dirG4DATA/PhotonEvaporation2.0 \n" )
-setupFile.write( "  export G4RADIOACTIVEDATA=$DIR_INSTALLATIONS/dirG4DATA/RadiativeDecay3.1 \n" )
-setupFile.write( "  export G4LEDATA=$DIR_INSTALLATIONS/dirG4DATA/G4EMLOW4.1 \n" )
-setupFile.write( "  export NeutronHPCrossSections=$DIR_INSTALLATIONS/dirG4DATA/G4NDL3.10 \n")
+setupFile.write( "  export G4RADIOACTIVEDATA=$DIR_INSTALLATIONS/dirG4DATA/RadioactiveDecay3.2 \n" )
+setupFile.write( "  export G4LEDATA=$DIR_INSTALLATIONS/dirG4DATA/G4EMLOW4.3 \n" )
+setupFile.write( "  export NeutronHPCrossSections=$DIR_INSTALLATIONS/dirG4DATA/G4NDL3.11 \n")
 setupFile.write( "fi \n")
 #
 setupFile.write( "echo --- Data libraries --- \n")
@@ -296,6 +296,10 @@ setupFile.write( "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$GSL_DIR/lib \n" )
 
 setupFile.write( "export PATH=$PATH:$DIR_INSTALLATIONS/dirPAW \n" )
 
+# The following line should be commented out if you use
+# Geant4 versions (either as reference or as candidate)
+# older than 8.3, because otherwise you would get a crash
+# when using biasing.
 setupFile.write( "export AlwaysKillLeadingHadron=1 \n" )
 
 setupFile.close()

@@ -1,6 +1,10 @@
                  History file
                  ------------
 
+07-Jun-2007 - A.Ribon (statAccepTest-V08-03-02)
+- Updated G4 DATA libraries in build.py .
+
+
 01-Jun-2007 - A.Ribon (statAccepTest-V08-03-01)
 - Added FTFP and FTFC Physics Lists, and the
   environmental variable  AlwaysKillLeadingHadron .
