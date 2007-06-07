@@ -7,14 +7,20 @@ $Id: History, v 1.6 2004/02/27  G.A.P. Cirrone
      ====================================================
 
                       Category History file
-<<<<<<< History
+
+07.06.2007 MGP tag hadrontherapy-V08-03-04
+           On top of head as on 07.06.2007
+           Physics component redesigned and reimplemented by Anton Lechner
+           as a result of code review
+           Physics version to be used for Bragg peak validation paper
+           Note: previous tag hadrontherapy-V09-00-00 does not respect
+           the tag numbering scheme, to be cvs removed
+
 04.06.2007 G.A.P. Cirrone (harontherapy-V08-03-03)
 	 - Various bugs fixed and random engine changed.
-=======
 
 04.06.2007 G.A.P. Cirrone (hadrontherapy-V09-00-00)
 	 - Changed the random engine.
->>>>>>> 1.40
  
 10.05.2007 G.A.P. Cirrone (hadrontherapy-V08-03-02)
 	 - Improved the modulator geometry and fixed a bug on its rotation; 
