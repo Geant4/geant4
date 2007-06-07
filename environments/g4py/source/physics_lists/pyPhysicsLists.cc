@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyPhysicsLists.cc,v 1.2 2007-05-28 03:11:20 kmura Exp $
+// $Id: pyPhysicsLists.cc,v 1.3 2007-06-07 09:06:43 kmura Exp $
 // $Name: not supported by cvs2svn $
 // ====================================================================
 //   pyPhysicsLists.cc
@@ -44,20 +44,12 @@
 #include "LHEP.hh"
 #include "LHEP_BERT.hh"
 #include "LHEP_BERT_HP.hh"
-#include "LHEP_BIC.hh"
-#include "LHEP_BIC_HP.hh"
 #include "LHEP_EMV.hh"
-#include "LHEP_HP.hh"
-#include "LHEP_LEAD.hh"
-#include "LHEP_LEAD_HP.hh"
-#include "LHEP_PRECO.hh"
 #include "LHEP_PRECO_HP.hh"
 #include "QBBC.hh"
 #include "QGSC.hh"
 #include "QGSC_EFLOW.hh"
 #include "QGSC_EMV.hh"
-#include "QGSC_LEAD.hh"
-#include "QGSC_LEAD_HP.hh"
 #include "QGSP.hh"
 #include "QGSP_BERT.hh"
 #include "QGSP_BERT_HP.hh"
@@ -65,20 +57,29 @@
 #include "QGSP_BIC_HP.hh"
 #include "QGSP_EMV.hh"
 #include "QGSP_EMX.hh"
-#include "QGSP_HP.hh"
 #include "QGSP_QEL.hh"
+
+#if G4VERSION_NUMBER <= 830
+#include "LHEP_BIC.hh"
+#include "LHEP_BIC_HP.hh"
+#include "LHEP_HP.hh"
+#include "LHEP_LEAD.hh"
+#include "LHEP_LEAD_HP.hh"
+#include "LHEP_PRECO.hh"
+#include "QGSC_LEAD.hh"
+#include "QGSC_LEAD_HP.hh"
+#include "QGSP_HP.hh"
+#endif
 
 #endif
 
 #if G4VERSION_NUMBER >= 830
-
 #include "FTFP_EMV.hh"
 #include "QGSP_BERT_EMV.hh"
 #include "QGSP_BERT_NQE.hh"
 #include "QGSP_BERT_TRV.hh"
 #include "QGSP_EMV_NQE.hh"
 #include "QGSP_NQE.hh"
-
 #endif
 
 using namespace boost::python;
@@ -114,32 +115,9 @@ void export_PhysicsLists()
     ("LHEP_BERT_HP", "LHEP_BERT_HP physics list")
     ;
 
-  class_<LHEP_BIC, LHEP_BIC*, bases<G4VUserPhysicsList> >
-    ("LHEP_BIC", "LHEP_BIC physics list")
-    ;
-
-  class_<LHEP_BIC_HP, LHEP_BIC_HP*, bases<G4VUserPhysicsList> >
-    ("LHEP_BIC_HP", "LHEP_BIC_HP physics list")
-    ;
 
   class_<LHEP_EMV, LHEP_EMV*, bases<G4VUserPhysicsList> >
     ("LHEP_EMV", "LHEP_EMV physics list")
-    ;
-
-  class_<LHEP_HP, LHEP_HP*, bases<G4VUserPhysicsList> >
-    ("LHEP_HP", "LHEP_HP physics list")
-    ;
-
-  class_<LHEP_LEAD, LHEP_LEAD*, bases<G4VUserPhysicsList> >
-    ("LHEP_LEAD", "LHEP_LEAD physics list")
-    ;
-
-  class_<LHEP_LEAD_HP, LHEP_LEAD_HP*, bases<G4VUserPhysicsList> >
-    ("LHEP_LEAD_HP", "LHEP_LEAD_HP physics list")
-    ;
-
-  class_<LHEP_PRECO, LHEP_PRECO*, bases<G4VUserPhysicsList> >
-    ("LHEP_PRECO", "LHEP_PRECO physics list")
     ;
 
   class_<LHEP_PRECO_HP, LHEP_PRECO_HP*, bases<G4VUserPhysicsList> >
@@ -160,14 +138,6 @@ void export_PhysicsLists()
 
   class_<QGSC_EMV, QGSC_EMV*, bases<G4VUserPhysicsList> >
     ("QGSC", "QGSC_EMV physics list")
-    ;
-
-  class_<QGSC_LEAD, QGSC_LEAD*, bases<G4VUserPhysicsList> >
-    ("QGSC_LEAD", "QGSC_LEAD physics list")
-    ;
-
-  class_<QGSC_LEAD_HP, QGSC_LEAD_HP*, bases<G4VUserPhysicsList> >
-    ("QGSC_LEAD_HP", "QGSC_LEAD_HP physics list")
     ;
 
   class_<QGSP, QGSP*, bases<G4VUserPhysicsList> >
@@ -198,13 +168,49 @@ void export_PhysicsLists()
     ("QGSP_EMX", "QGSP_EMX physics list")
     ;
 
-  class_<QGSP_HP, QGSP_HP*, bases<G4VUserPhysicsList> >
-    ("QGSP_HP", "QGSP_HP physics list")
-    ;
-
   class_<QGSP_QEL, QGSP_QEL*, bases<G4VUserPhysicsList> >
     ("QGSP_QEL", "QGSP_QEL physics list")
     ;
+
+
+#if G4VERSION_NUMBER <= 830
+  class_<LHEP_BIC, LHEP_BIC*, bases<G4VUserPhysicsList> >
+    ("LHEP_BIC", "LHEP_BIC physics list")
+    ;
+
+  class_<LHEP_BIC_HP, LHEP_BIC_HP*, bases<G4VUserPhysicsList> >
+    ("LHEP_BIC_HP", "LHEP_BIC_HP physics list")
+    ;
+
+  class_<LHEP_HP, LHEP_HP*, bases<G4VUserPhysicsList> >
+    ("LHEP_HP", "LHEP_HP physics list")
+    ;
+
+  class_<LHEP_LEAD, LHEP_LEAD*, bases<G4VUserPhysicsList> >
+    ("LHEP_LEAD", "LHEP_LEAD physics list")
+    ;
+
+  class_<LHEP_LEAD_HP, LHEP_LEAD_HP*, bases<G4VUserPhysicsList> >
+    ("LHEP_LEAD_HP", "LHEP_LEAD_HP physics list")
+    ;
+
+  class_<LHEP_PRECO, LHEP_PRECO*, bases<G4VUserPhysicsList> >
+    ("LHEP_PRECO", "LHEP_PRECO physics list")
+    ;
+
+  class_<QGSC_LEAD, QGSC_LEAD*, bases<G4VUserPhysicsList> >
+    ("QGSC_LEAD", "QGSC_LEAD physics list")
+    ;
+
+  class_<QGSC_LEAD_HP, QGSC_LEAD_HP*, bases<G4VUserPhysicsList> >
+    ("QGSC_LEAD_HP", "QGSC_LEAD_HP physics list")
+    ;
+
+  class_<QGSP_HP, QGSP_HP*, bases<G4VUserPhysicsList> >
+    ("QGSP_HP", "QGSP_HP physics list")
+    ;
+#endif
+
 #endif
 
 #if G4VERSION_NUMBER >= 830
