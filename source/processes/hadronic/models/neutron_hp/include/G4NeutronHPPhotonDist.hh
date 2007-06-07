@@ -24,13 +24,8 @@
 // ********************************************************************
 //
 //
-<<<<<<< G4NeutronHPPhotonDist.hh
-// $Id: G4NeutronHPPhotonDist.hh,v 1.12 2007-06-07 06:31:09 tkoi Exp $
+// $Id: G4NeutronHPPhotonDist.hh,v 1.13 2007-06-07 07:03:00 tkoi Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-=======
-// $Id: G4NeutronHPPhotonDist.hh,v 1.12 2007-06-07 06:31:09 tkoi Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
->>>>>>> 1.11
 //
  // Hadronic Process: Very Low Energy Neutron X-Sections
  // original by H.P. Wellisch, TRIUMF, 14-Feb-97
@@ -72,7 +67,6 @@ public:
       , nGammaEnergies( 0 )
       , theBaseEnergy( 0.0 )
   {
-<<<<<<< G4NeutronHPPhotonDist.hh
 
      disType = NULL;
      energy = NULL;
@@ -92,31 +86,7 @@ public:
      theLevelEnergies = NULL;
      theTransitionProbabilities = NULL;
      thePhotonTransitionFraction = NULL;
-=======
-     disType = 0;
-     energy = 0;
-     theYield = 0;
-     thePartialXsec = 0;
-     isPrimary = 0;
-     theShells = 0;
-     theGammas = 0;
-     nNeu = 0;
-     theLegendre = 0;
-     theAngular = 0;
-     distribution = 0;
-     probs = 0;
-     partials = 0;
-     actualMult = 0;
 
-     theLevelEnergies = 0;
-     theTransitionProbabilities = 0;
-     thePhotonTransitionFraction = 0;
-     
-     repFlag = 0;
-     nDiscrete = 0;
-     nPartials = 0;
-
->>>>>>> 1.11
   }
 
   ~G4NeutronHPPhotonDist()
