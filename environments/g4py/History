@@ -1,4 +1,4 @@
-$Id: History,v 1.24 2007-05-28 03:11:51 kmura Exp $
+$Id: History,v 1.25 2007-06-07 09:07:37 kmura Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -13,6 +13,11 @@ Geant4Py is a Geant4-Python bridge.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+07 June 2007 K.Murakami
+ - modified for 9.0
+  - pyG4LossTableManager.cc : updated
+  - physics lists : removed some staffs
 
 24 May 2007 K.Murakami (1.3.0)
  - implement software abort by Ctrl-C.
