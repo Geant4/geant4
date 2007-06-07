@@ -1,4 +1,4 @@
--n $Id: History,v 1.32 2005-12-06 16:01:18 gcosmo Exp $
+-n $Id: History,v 1.33 2007-06-07 08:19:21 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,10 +15,14 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+07 Jun 2007 - G.Cosmo, tag test14-V08-03-00
+              Corrected commands for activation of models in specific
+              input macros. Reduced tracking verbosity.
+
 06 Dec 2005 - G.Cosmo
               Trivial changes for support of CLHEP-2.0.X series.
 
-20 May 2005 - MGP, tag test14-V00-07-00
+20 May 2005 - MGP, tag test14-V07-00-00
               Added test for low energy polarized Rayleigh
 
 02 Dec 2004 - MGP, tag test14-V06-02-00
