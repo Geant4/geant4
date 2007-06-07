@@ -24,11 +24,19 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPPhotonDist.hh,v 1.11 2007-06-06 12:45:13 ahoward Exp $
+<<<<<<< G4NeutronHPPhotonDist.hh
+// $Id: G4NeutronHPPhotonDist.hh,v 1.12 2007-06-07 06:31:09 tkoi Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
+=======
+// $Id: G4NeutronHPPhotonDist.hh,v 1.12 2007-06-07 06:31:09 tkoi Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+>>>>>>> 1.11
 //
  // Hadronic Process: Very Low Energy Neutron X-Sections
  // original by H.P. Wellisch, TRIUMF, 14-Feb-97
+//
+// 070606 fix for Valgrind error by T. Koi
+//
  
 #ifndef G4NeutronHPPhotonDist_h
 #define G4NeutronHPPhotonDist_h 1
@@ -52,7 +60,39 @@ class G4NeutronHPPhotonDist
 public:
 
   G4NeutronHPPhotonDist()
+      : repFlag( 0 ) 
+      , targetMass( 0.0 ) 
+      , nDiscrete( 0 ) 
+      , isoFlag( 0 )
+      , tabulationType( 0 )
+      , nDiscrete2( 0 ) 
+      , nIso( 0 ) 
+      , nPartials( 0 )
+      , theInternalConversionFlag( 0 )
+      , nGammaEnergies( 0 )
+      , theBaseEnergy( 0.0 )
   {
+<<<<<<< G4NeutronHPPhotonDist.hh
+
+     disType = NULL;
+     energy = NULL;
+     theYield = NULL;
+     thePartialXsec = NULL;
+     isPrimary = NULL;
+     theShells = NULL;
+     theGammas = NULL;
+     nNeu = NULL;
+     theLegendre = NULL;
+     theAngular = NULL;
+     distribution = NULL;
+     probs = NULL;
+     partials = NULL;
+     actualMult = NULL;
+
+     theLevelEnergies = NULL;
+     theTransitionProbabilities = NULL;
+     thePhotonTransitionFraction = NULL;
+=======
      disType = 0;
      energy = 0;
      theYield = 0;
@@ -76,6 +116,7 @@ public:
      nDiscrete = 0;
      nPartials = 0;
 
+>>>>>>> 1.11
   }
 
   ~G4NeutronHPPhotonDist()

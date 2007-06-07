@@ -28,6 +28,7 @@
 // A prototype of the low energy neutron transport model.
 //
 // 070523 bug fix for G4FPE_DEBUG on by A. Howard ( and T. Koi)
+// 070606 bug fix and migrate to enable to Partial cases by T. Koi 
 //
 #include "G4NeutronHPInelasticCompFS.hh"
 #include "G4Nucleus.hh"
@@ -109,6 +110,7 @@ void G4NeutronHPInelasticCompFS::Init (G4double A, G4double Z, G4String & dirNam
       G4int total;
       theData >> total;
       theXsection[it]->Init(theData, total, eV);
+      //std::cout << theXsection[it]->GetXsec(1*MeV) << std::endl;
     }
     else if(dataType==4)
     {
@@ -153,6 +155,8 @@ void G4NeutronHPInelasticCompFS::Init (G4double A, G4double Z, G4String & dirNam
 
 G4int G4NeutronHPInelasticCompFS::SelectExitChannel(G4double eKinetic)
 {
+
+// it = 0 has without Photon
   G4double running[50];
   running[0] = 0;
   unsigned int i;
@@ -183,6 +187,7 @@ G4int G4NeutronHPInelasticCompFS::SelectExitChannel(G4double eKinetic)
 void G4NeutronHPInelasticCompFS::CompositeApply(const G4HadProjectile & theTrack, G4ParticleDefinition * aDefinition)
 {
 
+    //G4cout << "G4NeutronHPInelasticCompFS::CompositeApply " << G4endl; 
 // prepare neutron
     theResult.Clear();
     G4double eKinetic = theTrack.GetKineticEnergy();
@@ -238,7 +243,9 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4HadProjectile & theTrack
     G4int dummy;
     G4double eGamm = 0;
     G4int iLevel=it-1;
-    if(50==it) 
+//  TK debug 070530  (without photon has it = 0)
+    //if(50==it) 
+    if( 0 == it ) 
     {
       iLevel=-1;
       aHadron.SetKineticEnergy(availableEnergy*residualMass*G4Neutron::Neutron()->GetPDGMass()/
@@ -297,6 +304,7 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4HadProjectile & theTrack
       theAngularDistribution[it]->SampleAndUpdate(aHadron);
       if(theFinalStatePhotons[it] == NULL)
       {
+// TK comment Most n,n* eneter to this  
 	thePhotons = theGammas.GetDecayGammas(iLevel);
 	eGamm -= theGammas.GetLevelEnergy(iLevel);
 	if(eGamm>0) // @ ok for now, but really needs an efficient way of correllated sampling @
@@ -323,6 +331,13 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4HadProjectile & theTrack
       // @@@ what to do, if we have photon data, but no info on the hadron itself
       nothingWasKnownOnHadron = 1;
     }
+    //G4cout << "theFinalStatePhotons it " << it << G4endl;
+    //G4cout << "theFinalStatePhotons[it] " << theFinalStatePhotons[it] << G4endl;
+//  TK 070530
+    if ( it != 0 ) it = 50;  // it 50 has final state data for photon MF13 cross and MF14 ang
+    //G4cout << "theFinalStatePhotons it " << it << G4endl;
+    //G4cout << "theFinalStatePhotons[it] " << theFinalStatePhotons[it] << G4endl;
+    //G4cout << "thePhotons " << thePhotons << G4endl;
     if(theFinalStatePhotons[it]!=NULL) 
     {
       // the photon distributions are in the Nucleus rest frame.
@@ -388,6 +403,7 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4HadProjectile & theTrack
 	thePhotons->operator[](i0)->Lorentz(*(thePhotons->operator[](i0)), -1.*theTarget);
       }
     }
+    //G4cout << "nothingWasKnownOnHadron " << nothingWasKnownOnHadron << G4endl;
     if(nothingWasKnownOnHadron)
     {
       G4double totalPhotonEnergy = 0;

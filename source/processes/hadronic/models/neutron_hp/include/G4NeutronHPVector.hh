@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// 070606 fix with Valgrind by T. Koi
+//
 #ifndef G4NeutronHPVector_h
 #define G4NeutronHPVector_h 1
 
@@ -287,7 +289,8 @@ class G4NeutronHPVector
     }
     while (p!=passive->GetVectorLength())
     {
-      if(std::abs(GetEnergy(m)-passive->GetEnergy(p))/passive->GetEnergy(p)>0.001)
+      if(std::abs(GetEnergy(m-1)-passive->GetEnergy(p))/passive->GetEnergy(p)>0.001)
+      //if(std::abs(GetEnergy(m)-passive->GetEnergy(p))/passive->GetEnergy(p)>0.001)
       {
         SetData(m, passive->GetEnergy(p), passive->GetXsec(p));
         theManager.AppendScheme(m++, active->GetScheme(p));
