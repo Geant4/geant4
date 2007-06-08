@@ -1,4 +1,4 @@
-$Id: History,v 1.94 2007-06-05 16:15:14 japost Exp $
+$Id: History,v 1.95 2007-06-08 10:20:21 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,19 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+June 8th, 2007 - T.Nikitina
+---------------------------
+- G4PropagatorInField:
+  o Put in the constructor creation of array of FieldTracks used in
+    LocateInterSectionPoint().
+  o Change in ReEstimateNewPoint() in order to handle cases with zero step
+    caused by diffCurve=0.
+  o In case of proposed step less than tolerance, now return 'kInfinity'
+    as per convention of geometry instead of 'DBL_MAX'.
+    (by J.Apostolakis, May 18th 2007)
+- Changes included in tag  "geomnav-V08-03-02b".
+
 June 5th, 2007 - J.Apostolakis (geomnav-V08-03-07)
 ------------------------------
 G4PathFinder: 
