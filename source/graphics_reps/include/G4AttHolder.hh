@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AttHolder.hh,v 1.5 2007-04-03 13:57:12 allison Exp $
+// $Id: G4AttHolder.hh,v 1.6 2007-06-08 14:24:29 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef G4ATTHOLDER_HH
@@ -48,8 +48,8 @@
 #include <vector>
 #include <map>
 
-class G4AttValue;
-class G4AttDef;
+#include "G4AttValue.hh"
+#include "G4AttDef.hh"
 
 class G4AttHolder {
 
