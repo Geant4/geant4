@@ -1,4 +1,4 @@
-$Id: History,v 1.184 2007-06-05 13:08:08 gcosmo Exp $
+$Id: History,v 1.185 2007-06-08 10:34:04 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Jun 05, 2007  G.Cosmo (global-V08-03-06)
+- Fixed compilation warnings on Intel icc compiler for useless const
+  specification in return values of G4ErrorPropagatorData methods.
 
 Jun 05, 2007  G.Cosmo (global-V08-03-05)
 - Define static methods not inline in G4ErrorPropagatorData class, to allow
