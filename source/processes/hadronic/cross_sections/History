@@ -14,6 +14,11 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+08 June 2007 Vladimir Ivantchenko (hadr-cross-V08-03-03)
+-------------------------------------------------------
+- G4PiNuclearCrossSection.cc - fix non-initilised total cross section 
+                               for pi-
+
 30 May 2007 Dennis Wright (hadr-cross-V08-03-02)
 ------------------------------------------------
 - G4GlauberGribovCrossSection.cc, G4HadronNucleonXsc.cc
