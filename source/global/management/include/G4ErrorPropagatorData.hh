@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ErrorPropagatorData.hh,v 1.2 2007-06-05 13:04:30 gcosmo Exp $
+// $Id: G4ErrorPropagatorData.hh,v 1.3 2007-06-08 10:33:47 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -66,10 +66,10 @@ public:  // with description
     // Singleton instance
 
   // Get and Set methods
-  const G4ErrorMode GetMode() const;
+  G4ErrorMode GetMode() const;
   void SetMode( G4ErrorMode mode );
 
-  const G4ErrorState GetState() const;
+  G4ErrorState GetState() const;
   void SetState( G4ErrorState sta );
 
   const G4ErrorTarget* GetTarget( G4bool mustExist = 0) const;
