@@ -385,6 +385,7 @@ GetIsoZACrossSection(const G4DynamicParticle* particle, G4double ZZ,
     if(theZ[it]==Z)
     {
       result = thePimData[it]->ReactionXSection(kineticEnergy);
+      fTotalXsc = thePimData[it]->TotalXSection(kineticEnergy);
       debug.push_back("D1 ");
       debug.push_back(result);
     }
