@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPFissionERelease.hh,v 1.11 2007-06-07 06:31:09 tkoi Exp $
+// $Id: G4NeutronHPFissionERelease.hh,v 1.12 2007-06-08 22:39:50 tkoi Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 070606 fix for Valgrind by T. Koi
@@ -55,7 +55,6 @@ class G4NeutronHPFissionERelease
   inline void Init(std::ifstream & aDataFile)
   {
     G4double dummy;
-    std::cout << "NAGISA G4NeutronHPFissionERelease::Init " << std::endl;
     
     aDataFile >>dummy
               >>fragmentKinetic
