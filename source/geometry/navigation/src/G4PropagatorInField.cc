@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.cc,v 1.34 2007-06-01 13:42:12 tnikitin Exp $
+// $Id: G4PropagatorInField.cc,v 1.35 2007-06-08 10:05:46 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // 
@@ -83,21 +83,20 @@ G4PropagatorInField::G4PropagatorInField( G4Navigator    *theNavigator,
   fPreviousSafety= 0.0;
   kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
 
-   // In case of too slow progress in finding Intersection Point
-   // Intermediates Points on the Track  must be stored.
-   // Initialise the array of Pointers [max_depth+1] to do this  
+  // In case of too slow progress in finding Intersection Point
+  // intermediates Points on the Track must be stored.
+  // Initialise the array of Pointers [max_depth+1] to do this  
   
   G4ThreeVector zeroV(0.0,0.0,0.0);
   for (G4int idepth=0; idepth<max_depth+1; idepth++ )
   {
     ptrInterMedFT[ idepth ] = new G4FieldTrack( zeroV, zeroV, 0., 0., 0., 0.);
   }
-
 }
 
 G4PropagatorInField::~G4PropagatorInField()
 {
- for ( G4int idepth=0; idepth<max_depth+1; idepth++)
+  for ( G4int idepth=0; idepth<max_depth+1; idepth++)
   {
     delete ptrInterMedFT[idepth];
   }
@@ -115,13 +114,17 @@ G4PropagatorInField::ComputeStep(
                 G4VPhysicalVolume* pPhysVol)
 {
   // If CurrentProposedStepLength is too small for finding Chords
-  //   then return with no action (for now - TODO: some action)
-  if(CurrentProposedStepLength<kCarTolerance) {
+  // then return with no action (for now - TODO: some action)
+  //
+  if(CurrentProposedStepLength<kCarTolerance)
+  {
     return kInfinity;
   }
 
   // Introducing smooth trajectory display (jacek 01/11/2002)
-  if (fpTrajectoryFilter) {
+  //
+  if (fpTrajectoryFilter)
+  {
     fpTrajectoryFilter->CreateNewTrajectorySegment();
   }
 
@@ -502,8 +505,6 @@ G4PropagatorInField::LocateIntersectionPoint(
   // depthness or if we are in the first section
 
   G4int depth=0; // Depth counts how many subdivisions of initial step made
-
-  //const G4int max_depth=4; // Max allowed depth, test parameter
 
   // Intermediates Points on the Track = Subdivided Points must be stored.
   // Give the initial values to 'InterMedFt'
@@ -1161,7 +1162,7 @@ G4PropagatorInField::IntersectChord( G4ThreeVector  StartPointA,
 
     G4cout << " G4PropagatorInField::IntersectChord reports " << G4endl;
     G4cout << " PiF-IC> "
-	   << "Start="  << std::setw(12) << StartPointA       << " "
+           << "Start="  << std::setw(12) << StartPointA       << " "
            << "End= "   << std::setw(8) << EndPointB         << " "
            << "StepIn=" << std::setw(8) << LinearStepLength  << " "
            << "NewSft=" << std::setw(8) << NewSafety << " " 
@@ -1202,19 +1203,23 @@ ReEstimateEndpoint( const G4FieldTrack &CurrentStateA,
   {
      G4double currentCurveLen= newEndPoint.GetCurveLength();
      G4double advanceLength= endCurveLen - currentCurveLen ; 
-      if (std::abs(advanceLength)<kCarTolerance)
-       advanceLength=(EstimatedEndStateB.GetPosition()-newEndPoint.GetPosition()).mag();
-       
-       
-      goodAdvance= 
+     if (std::abs(advanceLength)<kCarTolerance)
+     {
+       advanceLength=(EstimatedEndStateB.GetPosition()
+                     -newEndPoint.GetPosition()).mag();
+     }
+     goodAdvance= 
        integrDriver->AccurateAdvance(newEndPoint, advanceLength, fEpsilonStep);
      //              ***************
   }
   while( !goodAdvance && (++itrial < no_trials) );
 
-  if( goodAdvance ) {
+  if( goodAdvance )
+  {
     retEndPoint= newEndPoint; 
-  }else{
+  }
+  else
+  {
     retEndPoint= EstimatedEndStateB; // Could not improve without major work !!
   }
 
@@ -1222,16 +1227,22 @@ ReEstimateEndpoint( const G4FieldTrack &CurrentStateA,
   //   below are some diagnostics only -- before the return!
   // 
   static const G4String MethodName("G4PropagatorInField::ReEstimateEndpoint");
+
 #ifdef G4VERBOSE
   G4int  latest_good_trials=0;
-  if( itrial > 1) {
-    if( fVerboseLevel > 0 ) {
+  if( itrial > 1)
+  {
+    if( fVerboseLevel > 0 )
+    {
       G4cout << MethodName << " called - goodAdv= " << goodAdvance
-         << " trials = " << itrial << " previous good= " << latest_good_trials
-         << G4endl;
+             << " trials = " << itrial
+             << " previous good= " << latest_good_trials
+             << G4endl;
     }
     latest_good_trials=0; 
-  }else{   
+  }
+  else
+  {   
     latest_good_trials++; 
   }
 #endif
@@ -1239,13 +1250,16 @@ ReEstimateEndpoint( const G4FieldTrack &CurrentStateA,
 #ifdef G4DEBUG_FIELD
   G4double lengthDone=  newEndPoint.GetCurveLength() 
                            - CurrentStateA.GetCurveLength(); 
-  if( !goodAdvance ) {
-    if( fVerboseLevel >= 3 ){
+  if( !goodAdvance )
+  {
+    if( fVerboseLevel >= 3 )
+    {
       G4cout << MethodName << "> AccurateAdvance failed " ;
       G4cout << " in " << itrial << " integration trials/steps. " << G4endl
       G4cout << " It went only " << lengthDone << " instead of " << curveDist 
              << " -- a difference of " << curveDist - lengthDone  << G4endl;
-      G4cout << " ReEstimateEndpoint> Reset endPoint to original value!" << G4endl;
+      G4cout << " ReEstimateEndpoint> Reset endPoint to original value!"
+             << G4endl;
     }
   }
 
@@ -1268,10 +1282,12 @@ ReEstimateEndpoint( const G4FieldTrack &CurrentStateA,
     }
 #else
   // Statistics on the RMS value of the corrections
+
   static G4int    noCorrections=0;
   static G4double sumCorrectionsSq = 0;
   noCorrections++; 
-  if( goodAdvance ){
+  if( goodAdvance )
+  {
     sumCorrectionsSq += (EstimatedEndStateB.GetPosition() - 
                          newEndPoint.GetPosition()).mag2();
   }
@@ -1290,36 +1306,38 @@ ReEstimateEndpoint( const G4FieldTrack &CurrentStateA,
 // the points are not re-used in subsequent steps, therefore THIS
 // METHOD MUST BE CALLED EXACTLY ONCE PER STEP. (jacek 08/11/2002)
 
-
 std::vector<G4ThreeVector>*
-G4PropagatorInField::GimmeTrajectoryVectorAndForgetIt() const {
+G4PropagatorInField::GimmeTrajectoryVectorAndForgetIt() const
+{
   // NB, GimmeThePointsAndForgetThem really forgets them, so it can
   // only be called (exactly) once for each step.
-  if (fpTrajectoryFilter) {
+
+  if (fpTrajectoryFilter)
+  {
     return fpTrajectoryFilter->GimmeThePointsAndForgetThem();
-  } else {
-    return NULL;
+  }
+  else
+  {
+    return 0;
   }
 }
 
 void 
-G4PropagatorInField::SetTrajectoryFilter(G4VCurvedTrajectoryFilter* filter) {
+G4PropagatorInField::SetTrajectoryFilter(G4VCurvedTrajectoryFilter* filter)
+{
   fpTrajectoryFilter = filter;
 }
 
-
 void G4PropagatorInField::ClearPropagatorState()
 {
-  // G4Exception("G4PropagatorInField::ClearPropagatorState()", "NotImplemented",
-  //              FatalException, "Functionality not yet implemented.");
-
   // Goal: Clear all memory of previous steps,  cached information
+
   fParticleIsLooping= false;
   fNoZeroStep= 0;
 
   End_PointAndTangent= G4FieldTrack( G4ThreeVector(0.,0.,0.),
-				     G4ThreeVector(0.,0.,0.),0.0,0.0,0.0,0.0,0.0); 
-
+                                     G4ThreeVector(0.,0.,0.),
+                                     0.0,0.0,0.0,0.0,0.0); 
   fFull_CurveLen_of_LastAttempt = -1; 
   fLast_ProposedStepLength = -1;
 
@@ -1327,8 +1345,8 @@ void G4PropagatorInField::ClearPropagatorState()
   fPreviousSafety= 0.0;
 }
 
-G4FieldManager* 
-G4PropagatorInField::FindAndSetFieldManager( G4VPhysicalVolume* pCurrentPhysicalVolume)
+G4FieldManager* G4PropagatorInField::
+FindAndSetFieldManager( G4VPhysicalVolume* pCurrentPhysicalVolume)
 {
   G4FieldManager* currentFieldMgr;
 
@@ -1353,7 +1371,9 @@ G4int G4PropagatorInField::SetVerboseLevel( G4int Verbose )
   G4int oldval= fVerboseLevel;
   fVerboseLevel= Verbose;
 
-  // Forward the verbose level 'reduced' to ChordFinder, MagIntegratorDriver ... ? 
+  // Forward the verbose level 'reduced' to ChordFinder,
+  // MagIntegratorDriver ... ? 
+  //
   G4MagInt_Driver* integrDriver= GetChordFinder()->GetIntegrationDriver(); 
   integrDriver->SetVerboseLevel( Verbose - 2 ); 
   G4cout << "Set Driver verbosity to " << Verbose - 2 << G4endl;
