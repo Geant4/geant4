@@ -23,21 +23,20 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: signalsDemo.cc,v 1.1 2007-05-25 19:14:38 tinslay Exp $
+// $Id: observerCollectionDemo.cc,v 1.1 2007-06-11 19:25:47 tinslay Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
-// Jane Tinslay, May 2007. Signals demonstration
+// Jane Tinslay, May 2007. ObserverCollectionT demonstration.
 //
-#include "G4Functor.hh"
-#include "G4ProcessWrappers.hh"
 #include "G4Scopes.hh"
 #include "G4VDiscreteProcess.hh"
 #include "G4VParticleChange.hh"
 
+// Regular G4VProcess
 struct VProcess : public G4VDiscreteProcess
 {
   VProcess():G4VDiscreteProcess("test"){}
-  G4double GetMeanFreePath(const G4Track&, G4double, G4ForceCondition*){return 0;}
+  G4double GetMeanFreePath(const G4Track&, G4double, G4ForceCondition*) {return 0;} // Required to implement
 
   void StartTracking(G4Track*)
   {
@@ -45,29 +44,49 @@ struct VProcess : public G4VDiscreteProcess
   }
 };
 
+// Simple class
 struct OtherProcess
 {
   void Method(G4Track*)
   {
     G4cout<<"Execute OtherProcess::Method"<<G4endl;
   }
+
+  void operator()(G4Track*)
+  {
+    G4cout<<"Execute OtherProcess::operator"<<G4endl;
+  }
 };
+
+// Function
+void MyFunc(G4Track*)
+{
+  G4cout<<"Execute MyFunc"<<G4endl;
+}
 
 int main(int argc, char** argv) {
 
+  // Create demo processes
   G4VProcess* vProcess = new VProcess();
   OtherProcess* otherProcess = new OtherProcess();
 
-  typedef G4Scopes::Tracking::StartTracking::Signal Signal;
+  // Create observer collection
+  G4Scopes::Tracking::StartTracking::ObserverCollection observerCollection;
 
-  Signal mySignal;
-
-  mySignal.Connect(G4FunctorIdentifier("VProcess"), vProcess, &G4VProcess::StartTracking);
-  mySignal.Connect(G4FunctorIdentifier("OtherProcess"), otherProcess, &OtherProcess::Method);
+  // Register demo observers
+  observerCollection.RegisterObserver(G4FunctorIdentifier("VProcess"), vProcess, &G4VProcess::StartTracking);
+  observerCollection.RegisterObserver(G4FunctorIdentifier("OtherProcess::Method"), otherProcess, &OtherProcess::Method);
+  observerCollection.RegisterObserver(G4FunctorIdentifier("OtherProcess::Operator"), otherProcess, &OtherProcess::operator());
+  observerCollection.RegisterObserver(G4FunctorIdentifier("MyFunc"), &MyFunc);
 
   G4Track* dummyTrk(0);
 
-  mySignal(dummyTrk);
- 
+  // Notify observers for no particular reason - just a demo
+  observerCollection(dummyTrk);
+
+  // Cleanup
+  delete vProcess;
+  delete otherProcess;
+
   return 0;
 }
