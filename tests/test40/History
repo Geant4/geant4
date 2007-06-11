@@ -1,4 +1,4 @@
-$Id: History,v 1.16 2007-05-21 18:01:19 vnivanch Exp $
+$Id: History,v 1.17 2007-06-11 10:35:38 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+11-06-07 V.Ivanchenko (test40-V08-03-01)
+- Fixed macro file - phys list name
 
 21-05-07 V.Ivanchenko (test40-V08-03-00)
 - Use PhysicsLists components from physics_lists library
