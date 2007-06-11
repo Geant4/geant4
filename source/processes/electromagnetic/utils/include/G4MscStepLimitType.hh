@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MscStepLimitType.hh,v 1.1 2007-05-18 18:39:54 vnivanch Exp $
+// $Id: G4MscStepLimitType.hh,v 1.2 2007-06-11 14:56:51 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------
@@ -47,7 +47,7 @@
 
 enum G4MscStepLimitType
 {
-  fG4v71 = 0,
+  fMinimal = 0,
   fUseSafety,
   fUseDistanceToBoundary
 };

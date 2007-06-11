@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EnergyLossMessenger.cc,v 1.28 2007-05-18 18:39:55 vnivanch Exp $
+// $Id: G4EnergyLossMessenger.cc,v 1.29 2007-06-11 14:56:51 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -289,8 +289,8 @@ void G4EnergyLossMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
   }
 
   if (command == mscCmd) {
-    if(newValue == "g4v71" || newValue == "G4v71") 
-      opt->SetMscStepLimitation(fG4v71);
+    if(newValue == "Minimal") 
+      opt->SetMscStepLimitation(fMinimal);
 
     else if(newValue == "UseDistanceToBoundary") 
       opt->SetMscStepLimitation(fUseDistanceToBoundary);
@@ -299,8 +299,8 @@ void G4EnergyLossMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
       opt->SetMscStepLimitation(fUseSafety);
 
     else {
-      G4cout << "### G4EnergyLossMessenger: StepLimit type " 
-	     << newValue << " unknown!" << G4endl;
+      G4cout << "### G4EnergyLossMessenger WARNING: StepLimit type <" 
+	     << newValue << "> unknown!" << G4endl;
       return;
     }
     G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");

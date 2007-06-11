@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.hh,v 1.45 2007-05-22 17:31:58 vnivanch Exp $
+// $Id: G4VMultipleScattering.hh,v 1.46 2007-06-11 14:56:51 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -588,7 +588,7 @@ inline G4MscStepLimitType G4VMultipleScattering::StepLimitType() const
 inline void G4VMultipleScattering::SetStepLimitType(G4MscStepLimitType val) 
 {
   stepLimit = val;
-  if(val == fG4v71) {
+  if(val == fMinimal) {
     skin = 0;
     facrange = 0.2;
   } else if(val == fUseSafety) {
