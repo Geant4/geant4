@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolarizedCompton.cc,v 1.5 2007-05-25 13:35:03 vnivanch Exp $
+// $Id: G4PolarizedCompton.cc,v 1.6 2007-06-11 13:37:56 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //
@@ -50,6 +50,7 @@
 // 17-10-05, correct reference frame dependence in GetMeanFreePath (A.Schalicke)
 // 26-07-06, cross section recalculated (P.Starovoitov)
 // 09-08-06, make it work under current geant4 release (A.Schalicke)
+// 11-06-07, add PostStepGetPhysicalInteractionLength (A.Schalicke)
 // -----------------------------------------------------------------------------
 
 
@@ -141,6 +142,76 @@ G4double G4PolarizedCompton::GetMeanFreePath(
 {
   // *** get unploarised mean free path from lambda table ***
   G4double mfp = G4VEmProcess::GetMeanFreePath(aTrack, previousStepSize, condition);
+
+
+   if (theAsymmetryTable && useAsymmetryTable) {
+     // *** get asymmetry, if target is polarized ***
+     const G4DynamicParticle* aDynamicGamma = aTrack.GetDynamicParticle();
+     const G4double GammaEnergy = aDynamicGamma->GetKineticEnergy();
+     const G4StokesVector GammaPolarization = aTrack.GetPolarization();
+     const G4ParticleMomentum GammaDirection0 = aDynamicGamma->GetMomentumDirection();
+
+     G4Material*         aMaterial = aTrack.GetMaterial();
+     G4VPhysicalVolume*  aPVolume  = aTrack.GetVolume();
+     G4LogicalVolume*    aLVolume  = aPVolume->GetLogicalVolume();
+
+     //   G4Material* bMaterial = aLVolume->GetMaterial();
+     G4PolarizationManager * polarizationManger = G4PolarizationManager::GetInstance();
+
+     const G4bool VolumeIsPolarized = polarizationManger->IsPolarized(aLVolume);
+     G4StokesVector ElectronPolarization = polarizationManger->GetVolumePolarization(aLVolume);
+
+     if (!VolumeIsPolarized || mfp == DBL_MAX) return mfp;
+     
+     if (verboseLevel>=2) {
+
+       G4cout << " Mom " << GammaDirection0  << G4endl;
+       G4cout << " Polarization " << GammaPolarization  << G4endl;
+       G4cout << " MaterialPol. " << ElectronPolarization  << G4endl;
+       G4cout << " Phys. Volume " << aPVolume->GetName() << G4endl;
+       G4cout << " Log. Volume  " << aLVolume->GetName() << G4endl;
+       G4cout << " Material     " << aMaterial          << G4endl;
+     }
+
+     G4int midx= CurrentMaterialCutsCoupleIndex();
+     G4PhysicsVector * aVector=(*theAsymmetryTable)(midx);
+     
+     G4double asymmetry=0;
+     if (aVector) {
+       G4bool isOutRange;
+       asymmetry = aVector->GetValue(GammaEnergy, isOutRange);
+     } else {
+       G4cout << " MaterialIndex     " << midx << " is out of range \n";
+       asymmetry=0;
+     }
+
+     //  we have to determine angle between particle motion 
+     //  and target polarisation here  
+     //      circ pol * Vec(ElectronPol)*Vec(PhotonMomentum)
+     //  both vectors in global reference frame
+     
+     G4double pol=ElectronPolarization*GammaDirection0;
+     
+     G4double polProduct = GammaPolarization.p3() * pol;
+     mfp *= 1. / ( 1. + polProduct * asymmetry );
+
+     if (verboseLevel>=2) {
+       G4cout << " MeanFreePath:  " << mfp / mm << " mm " << G4endl;
+       G4cout << " Asymmetry:     " << asymmetry          << G4endl;
+       G4cout << " PolProduct:    " << polProduct         << G4endl;
+     }
+   }
+
+   return mfp;
+}
+
+G4double G4PolarizedCompton::PostStepGetPhysicalInteractionLength(
+				   const G4Track& aTrack,
+				   G4double   previousStepSize,
+				   G4ForceCondition* condition)
+{
+  // *** get unploarised mean free path from lambda table ***
+  G4double mfp = G4VEmProcess::PostStepGetPhysicalInteractionLength(aTrack, previousStepSize, condition);
 
 
    if (theAsymmetryTable && useAsymmetryTable) {

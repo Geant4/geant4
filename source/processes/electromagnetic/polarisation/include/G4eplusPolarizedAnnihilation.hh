@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eplusPolarizedAnnihilation.hh,v 1.2 2007-05-23 08:52:20 vnivanch Exp $
+// $Id: G4eplusPolarizedAnnihilation.hh,v 1.3 2007-06-11 13:37:56 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -40,6 +40,7 @@
 // Modifications:
 // 26-07-06 modified cross section  (P. Starovoitov)
 // 21-08-06 interface updated   (A. Schaelicke)
+// 11-06-07, add PostStepGetPhysicalInteractionLength (A.Schalicke)
 //
 //
 // Class Description:
@@ -89,6 +90,12 @@ public:
   G4double GetMeanFreePath(const G4Track& track,
                               G4double previousStepSize,
                               G4ForceCondition* condition);
+
+  G4double PostStepGetPhysicalInteractionLength(
+                             const G4Track& track,
+                             G4double   previousStepSize,
+                             G4ForceCondition* condition
+                            );
 
   virtual void BuildPhysicsTable(const G4ParticleDefinition&);
   void BuildAsymmetryTable(const G4ParticleDefinition& part);

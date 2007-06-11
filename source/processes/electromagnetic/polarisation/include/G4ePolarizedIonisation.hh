@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ePolarizedIonisation.hh,v 1.2 2007-05-23 08:52:20 vnivanch Exp $
+// $Id: G4ePolarizedIonisation.hh,v 1.3 2007-06-11 13:37:56 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // -------------------------------------------------------------------
 //
@@ -42,7 +42,8 @@
 // , create asymmetry table and determine interactionlength 
 // , update polarized differential cross section 
 //
-// 20-08-05, modified interface (A.Schaelicke)
+// 20-08-06, modified interface (A.Schaelicke)
+// 11-06-07, add PostStepGetPhysicalInteractionLength (A.Schalicke)
 //
 // Class Description:
 //
@@ -87,6 +88,12 @@ protected:
 
 
   // for polarization
+  G4double PostStepGetPhysicalInteractionLength(
+                             const G4Track& track,
+                             G4double   previousStepSize,
+                             G4ForceCondition* condition
+                            );
+
   G4double GetMeanFreePath(const G4Track& track,
                               G4double previousStepSize,
                               G4ForceCondition* condition);
