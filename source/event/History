@@ -1,4 +1,4 @@
-$Id: History,v 1.111 2007-06-04 13:11:56 ahoward Exp $
+$Id: History,v 1.112 2007-06-11 22:15:21 santin Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,10 +17,24 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+<<<<<<< History
+<<<<<<< History
+June 11, 2007, G.Santin (event-V08-03-02)
+- Fix to normalisation of source intensities with multiple sources:
+  G4GeneralParticleSource::IntensityNormalization
+
 June 4, 2007, A.Howard (event-V08-03-01)
 - Put back some classes required for scoring of biasing cells:
   G4CellScorerStore and G4CellScorer
 
+=======
+>>>>>>> 1.110
+=======
+June 4, 2007, A.Howard (event-V08-03-01)
+- Put back some classes required for scoring of biasing cells:
+  G4CellScorerStore and G4CellScorer
+
+>>>>>>> 1.111
 May 31, 2007, A.Howard (event-V08-03-00)
 - Removal of classes from old biasing/scoring scheme:
   G4CellScorer, G4CellScorerStore, G4ScoreTable, G4Scorer

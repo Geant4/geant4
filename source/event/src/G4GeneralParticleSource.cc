@@ -99,19 +99,23 @@ void G4GeneralParticleSource::IntensityNormalization()
     total += sourceIntensity[i] ;
   //
   sourceProbability.clear();
-  sourceIntensity[0] =  sourceIntensity[0]/total;
-  sourceProbability.push_back(sourceIntensity[0]);
+  std::vector <G4double> sourceNormalizedIntensity;
+  sourceNormalizedIntensity.clear();
+
+  sourceNormalizedIntensity.push_back(sourceIntensity[0]/total);
+  sourceProbability.push_back(sourceNormalizedIntensity[0]);
+
   for ( i = 1 ;  i < sourceIntensity.size(); i++) {
-    sourceIntensity[i] = sourceIntensity[i]/total;
-    sourceProbability.push_back(sourceIntensity[i] + sourceProbability[i-1]);
-  } 
+    sourceNormalizedIntensity.push_back(sourceIntensity[i]/total);
+    sourceProbability.push_back(sourceNormalizedIntensity[i] + sourceProbability[i-1]);
+  }
 
   // set source weights here based on sampling scheme (analog/flat) and intensities
   for ( i = 0 ;  i < sourceIntensity.size(); i++) {
     if (!flat_sampling) {
       sourceVector[i]->GetBiasRndm()->SetIntensityWeight(1.);
     } else {
-      sourceVector[i]->GetBiasRndm()->SetIntensityWeight(sourceIntensity[i]*sourceIntensity.size());
+      sourceVector[i]->GetBiasRndm()->SetIntensityWeight(sourceNormalizedIntensity[i]*sourceIntensity.size());
     }
   }
 
@@ -120,8 +124,8 @@ void G4GeneralParticleSource::IntensityNormalization()
 
 void G4GeneralParticleSource::ListSource()
 {
-  G4cout << " The number of particle source is " << sourceIntensity.size() << G4endl;
-  for (size_t i = 0 ; i < sourceIntensity.size(); i++) 
+  G4cout << " The number of particle sources is " << sourceIntensity.size() << G4endl;
+  for (size_t i = 0 ; i < sourceIntensity.size(); i++)
     G4cout << "   source " << i << " intensity is " << sourceIntensity[i] << G4endl;
 }
 
