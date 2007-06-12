@@ -74,9 +74,9 @@ geometry/magneticfield                           field-V08-03-03
 - New class G4HelixMixedStepper, mixing helical stepper and Runge-Kutta
   G4MagHelicalStepper.
 - New calculation of DistChord for SteppingAngle > pi in G4RKG3Stepper
-- Relax FatalExeption to Warning in G4PropagatorInField::AccurateAdvance() for
-  case of step zero and return previous value. This fixes problem observed by
-  ATLAS in release 8.3 when using very conservative values for field
+- Relaxed fatal exception to warning in G4PropagatorInField::AccurateAdvance()
+  for case of step zero and return previous value. This fixes problem observed
+  by ATLAS in release 8.3 when using very conservative values for field
   parameters.
 - Introduced new class G4ErrorMag_UsualEqRhs used to reverse the magnetic
   field when propagation is backwards for error propagation.
@@ -89,7 +89,7 @@ geometry/management                              geommng-V08-03-02
   G4ErrorSurfaceTarget, G4ErrorTanPlaneTarget, G4ErrorPlaneSurfaceTarget,
   G4ErrorCylSurfaceTarget.
 - Added forward declaration and pointer (with set/get methods) to
-  G4VUserSteppingAction, to allow for stepping actions defined at region.
+  G4VUserSteppingAction, to allow for stepping actions to be defined at region.
 - Use call to G4GeometryTolerance instead of kCarTolerance where needed.
 
 geometry/navigation                              geomnav-V08-03-02b
