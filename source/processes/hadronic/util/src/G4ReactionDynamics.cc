@@ -1321,11 +1321,7 @@
                              kineticFactor, modifiedOriginal,
                              PinNucleus, NinNucleus, targetNucleus,
                              vec, vecLen);
-//       G4double jpw=0; 
-//       jpw+=GetQValue(&currentParticle);
-//       jpw+=GetQValue(&targetParticle);
-//       for( i=0; i<vecLen; ++i )jpw += GetQValue(vec[i]);
-//       G4cout << "JPW ### "<<jpw<<G4endl;
+
       // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);
     }
     //if( centerofmassEnergy <= (4.0+G4UniformRand()) )
@@ -1715,22 +1711,22 @@
     const G4double cpar[] = { 0.6, 0.6, 0.35, 0.15, 0.10 };
     const G4double gpar[] = { 2.6, 2.6, 1.8, 1.30, 1.20 };
     
-    if (forwardCount <= 0) {
-      return false;     //      array bounds protection
-    } else if (forwardCount == 1) {
-      rmc = forwardMass;
-    } else {
-//      G4int ntc = std::min(5,forwardCount); // check if offset by 1 @@
+    if (forwardCount <= 0 || backwardCount <= 0) return false;  // array bounds protection
+
+    if (forwardCount == 1) rmc = forwardMass;
+    else 
+    {
       G4int ntc = std::max(1, std::min(5,forwardCount))-1; // check if offset by 1 @@
       rmc = forwardMass + std::pow(-std::log(1.0-G4UniformRand()),cpar[ntc-1])/gpar[ntc-1];
     }
-    if( backwardCount == 1 )rmd = backwardMass;
+
+    if (backwardCount == 1) rmd = backwardMass;
     else
     {
-//      G4int ntc = std::min(5,backwardCount); // check, if offfset by 1 @@
       G4int ntc = std::max(1, std::min(5,backwardCount)); // check, if offfset by 1 @@
       rmd = backwardMass + std::pow(-std::log(1.0-G4UniformRand()),cpar[ntc-1])/gpar[ntc-1];
     }
+
     while( rmc+rmd > centerofmassEnergy )
     {
       if( (rmc <= forwardMass) && (rmd <= backwardMass) )
