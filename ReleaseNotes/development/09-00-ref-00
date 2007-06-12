@@ -239,10 +239,6 @@ processes/electromagnetic/muons                  emmuons-V08-03-04
 -------------------------------
 - G4EnergyLossForExtrapolator: added Set methods for first and last
   bins in tables. Default maximum value is set to 10 TeV (CMS request).
-- G4VEmModel: changed interface of SampleSecondary() method, return type
-  becomes 'void', added extra parameter std::vector<G4DynamicParticle*>*.
-  All classes using or inhereting this interface are modified.
-  About 5% speedup of EM shower simulation
 - G4MuPairProductionModel: fixed usage of cut value inside SelectRandomAtom(),
   providing correct sampling of atom of mixture for production of e+e- pair.
 - In all processes inherit from G4VEnergyLossProcess or G4VEmProcess
