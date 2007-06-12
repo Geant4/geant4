@@ -506,12 +506,17 @@ examples                                         examples-V09-00-00
   o Removed B03 (redundant/obsolete use of Python).
 - extended/electromagnetic/TestEm1 (testem1-V08-03-00)
   o Use G4EmProcessOptions to define bremsstrahlung threshold energy.
+- extended/electromagnetic/TestEm2 (testem2-V08-03-00)
+  o Updated main input macro file; use visualisation only for interactive
+    session.
 - extended/electromagnetic/TestEm3 (testem3-V08-03-01)
   o Use renamed EM builders and update macro files.
 - extended/electromagnetic/TestEm5 (testem5-V08-03-00)
-- extended/electromagnetic/TestEm7 (testem7-V08-03-00)
+- extended/electromagnetic/TestEm7 (testem7-V08-03-01)
   o Fixed bug in standardSS Physics Lists.
   o Added EM builders from physics_lists library.
+  o Added output of mean number of primary steps and kaon+ run in
+    main input macro TestEm7.in.
 - extended/electromagnetic/TestEm9 (testem9-V08-03-03)
   o Use standard names for histograms and updated macro files.
   o Substituted 'autoptr' by normal pointers in Histo to avoid crash.
