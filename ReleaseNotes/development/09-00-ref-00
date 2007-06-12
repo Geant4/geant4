@@ -66,7 +66,7 @@ geometry/biasing                                 geombias-V08-03-02
 
 geometry/divisions                               geomdiv-V08-03-01
 ------------------
-o Use call to G4GeometryTolerance instead of kCarTolerance and
+- Use call to G4GeometryTolerance instead of kCarTolerance and
   kAngTolerance constants where necessary.
 
 geometry/magneticfield                           field-V08-03-03
@@ -471,6 +471,17 @@ visualization                                    vis-V08-03-06
 environments                                     envs-V08-03-01
 ------------
 - g4py: implemented software abort by Ctrl-C.
+
+data sets
+---------
+- New data for neutron cross-sections, G4NDL.3.11:
+  o Added Germanium data and Silver data.
+  o Added Special file 0_0_Zero which give 0 cross section over all
+    energy range.
+- New low-energy data set, G4EMLOW.4.3:
+  o Added auger file au-tr-pr-100.dat.
+- New data set for radioactive-decay, G4RadioactiveDecay.3.2:
+  o Fixed z81.a188 element.
 
 examples                                         examples-V09-00-00
 --------
