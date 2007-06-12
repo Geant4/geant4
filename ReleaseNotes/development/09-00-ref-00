@@ -291,7 +291,7 @@ processes/electromagnetic/utils                  emutils-V08-03-03
 -------------------------------
 - G4VEmModel: changed interface of SampleSecondary() method, return type
   becomes 'void', added extra parameter std::vector<G4DynamicParticle*>*.
-  All classes using or inhereting this interface are modified.
+  All classes using or inheriting this interface are modified.
   About 5% speedup of EM shower simulation; G4VEnergyLossProcess,
   G4VEmProcess and G4VMultipleScattering modified to follow new interface.
 - G4VEnergyLossProcess, G4VEmProcess:
