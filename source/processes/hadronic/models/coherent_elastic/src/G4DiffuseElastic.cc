@@ -23,14 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DiffuseElastic.cc,v 1.5 2007-05-31 14:02:58 grichine Exp $
+// $Id: G4DiffuseElastic.cc,v 1.6 2007-06-12 10:03:17 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // Physics model class G4DiffuseElastic 
 //
 //
-// G4 Model: Low-energy diffuse elastic scattering with 4-momentum balance
+// G4 Model: optical diffuse elastic scattering with 4-momentum balance
 //                         
 // 24-May-07 V. Grichine
 //
@@ -52,20 +52,17 @@
 #include "G4PionPlus.hh"
 #include "G4PionMinus.hh"
 
-G4DiffuseElastic::G4DiffuseElastic(G4ElasticHadrNucleusHE* HModel) 
-  : G4HadronicInteraction(), hElastic(HModel),fParticle(0)
+G4DiffuseElastic::G4DiffuseElastic() 
+  : G4HadronicInteraction(), fParticle(0)
 {
   SetMinEnergy( 0.0*GeV );
   SetMaxEnergy( 100.*TeV );
-  verboseLevel= 0;
+  verboseLevel = 0;
   lowEnergyRecoilLimit = 100.*keV;  
   lowEnergyLimitQ  = 0.0*GeV;  
   lowEnergyLimitHE = 0.0*GeV;  
   lowestEnergyLimit= 0.0*keV;  
   plabLowLimit     = 20.0*MeV;
-
-  qCManager   = G4QElasticCrossSection::GetPointer();
-  if(!hElastic) hElastic = new G4ElasticHadrNucleusHE();
 
   theProton   = G4Proton::Proton();
   theNeutron  = G4Neutron::Neutron();
@@ -75,29 +72,25 @@ G4DiffuseElastic::G4DiffuseElastic(G4ElasticHadrNucleusHE* HModel)
   thePionMinus= G4PionMinus::PionMinus();
 }
 
+
 G4DiffuseElastic::~G4DiffuseElastic()
 {
-  delete hElastic;
 }
 
-G4VQCrossSection* G4DiffuseElastic::GetCS()
-{
-  return qCManager;
-}
 
-G4ElasticHadrNucleusHE* G4DiffuseElastic::GetHElastic()
-{
-  return hElastic;
-}
 
-G4HadFinalState* G4DiffuseElastic::ApplyYourself(
-		 const G4HadProjectile& aTrack, G4Nucleus& targetNucleus)
+G4HadFinalState* 
+G4DiffuseElastic::ApplyYourself( const G4HadProjectile& aTrack, 
+                                       G4Nucleus& targetNucleus )
 {
   theParticleChange.Clear();
 
   const G4HadProjectile* aParticle = &aTrack;
+
   G4double ekin = aParticle->GetKineticEnergy();
-  if(ekin <= lowestEnergyLimit) {
+
+  if(ekin <= lowestEnergyLimit) 
+  {
     theParticleChange.SetEnergyChange(ekin);
     theParticleChange.SetMomentumChange(aTrack.Get4Momentum().vect().unit());
     return &theParticleChange;
@@ -107,26 +100,32 @@ G4HadFinalState* G4DiffuseElastic::ApplyYourself(
   G4double zTarget = targetNucleus.GetZ();
 
   G4double plab = aParticle->GetTotalMomentum();
-  if (verboseLevel >1) 
+
+  if (verboseLevel >1)
+  { 
     G4cout << "G4DiffuseElastic::DoIt: Incident particle plab=" 
 	   << plab/GeV << " GeV/c " 
 	   << " ekin(MeV) = " << ekin/MeV << "  " 
 	   << aParticle->GetDefinition()->GetParticleName() << G4endl;
-
+  }
   // Scattered particle referred to axis of incident particle
+
   const G4ParticleDefinition* theParticle = aParticle->GetDefinition();
   G4double m1 = theParticle->GetPDGMass();
 
   G4int Z = static_cast<G4int>(zTarget+0.5);
   G4int A = static_cast<G4int>(aTarget+0.5);
   G4int N = A - Z;
+
   G4int projPDG = theParticle->GetPDGEncoding();
+
   if (verboseLevel>1) 
+  {
     G4cout << "G4DiffuseElastic for " << theParticle->GetParticleName()
 	   << " PDGcode= " << projPDG << " on nucleus Z= " << Z 
 	   << " A= " << A << " N= " << N 
 	   << G4endl;
-
+  }
   G4ParticleDefinition * theDef = 0;
 
   if(Z == 1 && A == 1)       theDef = theProton;
@@ -149,75 +148,33 @@ G4HadFinalState* G4DiffuseElastic::ApplyYourself(
   G4double tmax = 4.0*ptot*ptot;
   G4double t = 0.0;
 
-  // Choose generator
-  G4ElasticGenerator gtype = fLElastic;
-
-  // Q-elastic for p,n scattering on H and He
-  if (theParticle == theProton || theParticle == theNeutron)
-    //     && Z <= 2 && ekin >= lowEnergyLimitQ)  
-    gtype = fQElastic;
-
-  else {
-    // S-wave for very low energy
-    if(plab < plabLowLimit) gtype = fSWave;
-    // HE-elastic for energetic projectiles
-    else if(ekin >= lowEnergyLimitHE && theParticle->GetParticleType() != "nucleus") 
-      gtype = fHElastic;
-  }
 
   //
   // Sample t
   //
-  if(gtype == fQElastic) 
-  {
-    if (verboseLevel >1) 
-      G4cout << "G4DiffuseElastic: Z= " << Z << " N= " 
-	     << N << " pdg= " <<  projPDG
-	     << " mom(GeV)= " << plab/GeV << "  " << qCManager << G4endl; 
-    if(Z == 1 && N == 2) N = 1;
-    else if(Z == 2 && N == 1) N = 2;
-    G4double cs = qCManager->GetCrossSection(false,plab,Z,N,projPDG);
-
-    // check if cross section is reasonable
-    if(cs > 0.0) t = qCManager->GetExchangeT(Z,N,projPDG);
-    else if(plab > plabLowLimit) gtype = fLElastic;
-    else gtype = fSWave;
-  }
-  if(gtype == fLElastic) 
-  {
-    t = GeV*GeV*SampleT(ptot,m1,m2,aTarget);
-    if(t > tmax) gtype = fSWave;
-  }
-
-  // use mean atomic number
-  if(gtype == fHElastic) {
-    t = hElastic->SampleT(theParticle,plab,Z,A);
-    if(t > tmax) gtype = fSWave;
-  }
+  
+  t = SampleT( theParticle, ptot, A);
 
   // NaN finder
-  if(!(t < 0.0 || t >= 0.0)) {
-    if (verboseLevel > 0) {
+  if(!(t < 0.0 || t >= 0.0)) 
+  {
+    if (verboseLevel > 0) 
+    {
       G4cout << "G4DiffuseElastic:WARNING: Z= " << Z << " N= " 
 	     << N << " pdg= " <<  projPDG
 	     << " mom(GeV)= " << plab/GeV 
-	     << " the model type " << gtype;
-      if(gtype ==  fQElastic) G4cout << " CHIPS ";
-      else if(gtype ==  fLElastic) G4cout << " LElastic ";
-      else if(gtype ==  fHElastic) G4cout << " HElastic ";
-      G4cout << " S-wave will be sampled" 
+              << " S-wave will be sampled" 
 	     << G4endl; 
     }
-    gtype = fSWave;
+    t = G4UniformRand()*tmax; 
   }
-
-  if(gtype == fSWave) t = G4UniformRand()*tmax;
-
   if(verboseLevel>1)
-    G4cout <<"type= " << gtype <<" t= " << t << " tmax= " << tmax 
+  {
+    G4cout <<" t= " << t << " tmax= " << tmax 
 	   << " ptot= " << ptot << G4endl;
+  }
+  // Sampling of angles in CM system
 
-  // Sampling in CM system
   G4double phi  = G4UniformRand()*twopi;
   G4double cost = 1. - 2.0*t/tmax;
   G4double sint;
@@ -246,12 +203,16 @@ G4HadFinalState* G4DiffuseElastic::ApplyYourself(
   nlv1.boost(bst); 
 
   G4double eFinal = nlv1.e() - m1;
-  if (verboseLevel > 1) 
+
+  if (verboseLevel > 1)
+  { 
     G4cout << "Scattered: "
 	   << nlv1<<" m= " << m1 << " ekin(MeV)= " << eFinal 
 	   << " Proj: 4-mom " << lv1 
 	   <<G4endl;
-  if(eFinal < 0.0) {
+  }
+  if(eFinal < 0.0) 
+  {
     G4cout << "G4DiffuseElastic WARNING ekin= " << eFinal
 	   << " after scattering of " 
 	   << aParticle->GetDefinition()->GetParticleName()
@@ -267,12 +228,15 @@ G4HadFinalState* G4DiffuseElastic::ApplyYourself(
   
   G4LorentzVector nlv0 = lv - nlv1;
   G4double erec =  nlv0.e() - m2;
+
   if (verboseLevel > 1) 
+  {
     G4cout << "Recoil: "
 	   << nlv0<<" m= " << m2 << " ekin(MeV)= " << erec 
 	   <<G4endl;
-
-  if(erec > lowEnergyRecoilLimit) {
+  }
+  if(erec > lowEnergyRecoilLimit) 
+  {
     G4DynamicParticle * aSec = new G4DynamicParticle(theDef, nlv0);
     theParticleChange.AddSecondary(aSec);
   } else {
@@ -283,201 +247,13 @@ G4HadFinalState* G4DiffuseElastic::ApplyYourself(
   return &theParticleChange;
 }
 
-G4double 
-G4DiffuseElastic::SampleT(G4double, G4double, G4double, G4double atno2)
-{
-  // G4cout << "Entering elastic scattering 2"<<G4endl;
-  // Compute the direction of elastic scattering.
-  // It is planned to replace this code with a method based on
-  // parameterized functions and a Monte Carlo method to invert the CDF.
-
-  G4double ran = G4UniformRand();
-  G4double aa, bb, cc, dd, rr;
-  if (atno2 <= 62.) {
-    aa = std::pow(atno2, 1.63);
-    bb = 14.5*std::pow(atno2, 0.66);
-    cc = 1.4*std::pow(atno2, 0.33);
-    dd = 10.;
-  } else {
-    aa = std::pow(atno2, 1.33);
-    bb = 60.*std::pow(atno2, 0.33);
-    cc = 0.4*std::pow(atno2, 0.40);
-    dd = 10.;
-  }
-  aa = aa/bb;
-  cc = cc/dd;
-  rr = (aa + cc)*ran;
-  if (verboseLevel > 1) {
-    G4cout << "DoIt: aa,bb,cc,dd,rr" << G4endl;
-    G4cout << aa << " " << bb << " " << cc << " " << dd << " " << rr << G4endl;
-  }
-  G4double t1 = -std::log(ran)/bb;
-  G4double t2 = -std::log(ran)/dd;
-  if (verboseLevel > 1) {
-    G4cout << "t1,Fctcos " << t1 << " " << Fctcos(t1, aa, bb, cc, dd, rr) << G4endl;
-    G4cout << "t2,Fctcos " << t2 << " " << Fctcos(t2, aa, bb, cc, dd, rr) << G4endl;
-  }
-  G4double eps = 0.001;
-  G4int ind1 = 10;
-  G4double t = 0.0;
-  G4int ier1;
-  ier1 = Rtmi(&t, t1, t2, eps, ind1,
-	      aa, bb, cc, dd, rr);
-  if (verboseLevel > 1) {
-    G4cout << "From Rtmi, ier1=" << ier1 << G4endl;
-    G4cout << "t, Fctcos " << t << " " << Fctcos(t, aa, bb, cc, dd, rr) << G4endl;
-  }
-  if (ier1 != 0) t = 0.25*(3.*t1 + t2);
-  if (verboseLevel > 1) {
-      G4cout << "t, Fctcos " << t << " " << Fctcos(t, aa, bb, cc, dd, rr) << 
-              G4endl;
-  }
-  return t;
-}
-
-// The following is a "translation" of a root-finding routine
-// from GEANT3.21/GHEISHA.  Some of the labelled block structure has
-// been retained for clarity.  This routine will not be needed after
-// the planned revisions to DoIt().
-
-G4int
-G4DiffuseElastic::Rtmi(G4double* x, G4double xli, G4double xri, G4double eps, 
-		      G4int iend, 
-		      G4double aa, G4double bb, G4double cc, G4double dd, 
-		      G4double rr)
-{
-   G4int ier = 0;
-   G4double xl = xli;
-   G4double xr = xri;
-   *x = xl;
-   G4double tol = *x;
-   G4double f = Fctcos(tol, aa, bb, cc, dd, rr);
-   if (f == 0.) return ier;
-   G4double fl, fr;
-   fl = f;
-   *x = xr;
-   tol = *x;
-   f = Fctcos(tol, aa, bb, cc, dd, rr);
-   if (f == 0.) return ier;
-   fr = f;
-
-// Error return in case of wrong input data
-   if (fl*fr >= 0.) {
-      ier = 2;
-      return ier;
-   }
-
-// Basic assumption fl*fr less than 0 is satisfied.
-// Generate tolerance for function values.
-   G4int i = 0;
-   G4double tolf = 100.*eps;
-
-// Start iteration loop
-label4:
-   i++;
-
-// Start bisection loop
-   for (G4int k = 1; k <= iend; k++) {
-      *x = 0.5*(xl + xr);
-      tol = *x;
-      f = Fctcos(tol, aa, bb, cc, dd, rr);
-      if (f == 0.) return 0;
-      if (f*fr < 0.) {      // Interchange xl and xr in order to get the
-         tol = xl;          // same Sign in f and fr
-         xl = xr;
-         xr = tol;
-         tol = fl;
-         fl = fr;
-         fr = tol;
-      }
-      tol = f - fl;
-      G4double a = f*tol;
-      a = a + a;
-      if (a < fr*(fr - fl) && i <= iend) goto label17;
-      xr = *x;
-      fr = f;
-
-// Test on satisfactory accuracy in bisection loop
-      tol = eps;
-      a = std::abs(xr);
-      if (a > 1.) tol = tol*a;
-      if (std::abs(xr - xl) <= tol && std::abs(fr - fl) <= tolf) goto label14;
-   }
-// End of bisection loop
-
-// No convergence after iend iteration steps followed by iend
-// successive steps of bisection or steadily increasing function
-// values at right bounds.  Error return.
-   ier = 1;
-
-label14:
-   if (std::abs(fr) > std::abs(fl)) {
-      *x = xl;
-      f = fl;
-   }
-   return ier;
-
-// Computation of iterated x-value by inverse parabolic interp
-label17:
-   G4double a = fr - f;
-   G4double dx = (*x - xl)*fl*(1. + f*(a - tol)/(a*(fr - fl)))/tol;
-   G4double xm = *x;
-   G4double fm = f;
-   *x = xl - dx;
-   tol = *x;
-   f = Fctcos(tol, aa, bb, cc, dd, rr);
-   if (f == 0.) return ier;
-
-// Test on satisfactory accuracy in iteration loop
-   tol = eps;
-   a = std::abs(*x);
-   if (a > 1) tol = tol*a;
-   if (std::abs(dx) <= tol && std::abs(f) <= tolf) return ier;
-
-// Preparation of next bisection loop
-   if (f*fl < 0.) {
-      xr = *x;
-      fr = f;
-   }
-   else {
-      xl = *x;
-      fl = f;
-      xr = xm;
-      fr = fm;
-   }
-   goto label4;
-}
-
-// Test function for root-finder
-G4double
-G4DiffuseElastic::Fctcos(G4double t, 
-			G4double aa, G4double bb, G4double cc, G4double dd, 
-			G4double rr)
-{
-   const G4double expxl = -82.;
-   const G4double expxu = 82.;
-
-   G4double test1 = -bb*t;
-   if (test1 > expxu) test1 = expxu;
-   if (test1 < expxl) test1 = expxl;
-
-   G4double test2 = -dd*t;
-   if (test2 > expxu) test2 = expxu;
-   if (test2 < expxl) test2 = expxl;
-
-   return aa*std::exp(test1) + cc*std::exp(test2) - rr;
-}
-
-
-
-
 
 ////////////////////////////////////////////////////////////////////////////
 //
 // return differential elastic cross section d(sigma)/d(omega) 
 
 G4double 
-G4DiffuseElastic::GetDiffuseElasticXsc( G4ParticleDefinition* particle, 
+G4DiffuseElastic::GetDiffuseElasticXsc( const G4ParticleDefinition* particle, 
                                         G4double theta, 
 			                G4double momentum, 
                                         G4double A         )
@@ -485,7 +261,10 @@ G4DiffuseElastic::GetDiffuseElasticXsc( G4ParticleDefinition* particle,
   fParticle      = particle;
   fWaveVector    = momentum/hbarc;
   fAtomicWeight  = A;
-  G4double r0    = 1.16*( 1 - std::pow(A, -2./3.) )*fermi;   // 1.08*fermi;
+  
+  G4double r0;
+  if(A > 10.) r0  = 1.16*( 1 - std::pow(A, -2./3.) )*fermi;   // 1.08*fermi;
+  else        r0  = 1.1*fermi;
   fNuclearRadius = r0*std::pow(A, 1./3.);
 
   G4double sigma = fNuclearRadius*fNuclearRadius*GetDiffElasticProb(theta);
@@ -580,7 +359,7 @@ G4DiffuseElastic::GetIntegrandFunction( G4double theta )
 // return integral elastic cross section d(sigma)/d(omega) integrated 0 - theta 
 
 G4double 
-G4DiffuseElastic::IntegralElasticProb( G4ParticleDefinition* particle, 
+G4DiffuseElastic::IntegralElasticProb(  const G4ParticleDefinition* particle, 
                                         G4double theta, 
 			                G4double momentum, 
                                         G4double A         )
@@ -589,7 +368,9 @@ G4DiffuseElastic::IntegralElasticProb( G4ParticleDefinition* particle,
   fParticle      = particle;
   fWaveVector    = momentum/hbarc;
   fAtomicWeight  = A;
-  G4double r0    = 1.16*(1 - std::pow(A, -2./3.) )*fermi;   // 1.08*fermi;
+  G4double r0;
+  if(A > 10.) r0  = 1.16*( 1 - std::pow(A, -2./3.) )*fermi;   // 1.08*fermi;
+  else        r0  = 1.1*fermi;
   fNuclearRadius = r0*std::pow(A, 1./3.);
 
 
@@ -598,5 +379,63 @@ G4DiffuseElastic::IntegralElasticProb( G4ParticleDefinition* particle,
   // result = integral.Legendre10(this,&G4DiffuseElastic::GetIntegrandFunction, 0., theta ); 
   result = integral.Legendre96(this,&G4DiffuseElastic::GetIntegrandFunction, 0., theta ); 
 
+  return result;
+}
+
+////////////////////////////////////////////////////////////////////////////
+//
+// Return inv momentum transfer -t > 0
+
+G4double G4DiffuseElastic::SampleT( const G4ParticleDefinition* aParticle, G4double p, G4double A)
+{
+  G4double theta = SampleThetaCMS( aParticle,  p, A); // sample theta in cms
+  G4double t     = 2*p*p*( 1 - std::cos(theta) ); // -t !!!
+  return t;
+}
+
+////////////////////////////////////////////////////////////////////////////
+//
+// Return scattering angle sampled in cms
+
+
+G4double 
+G4DiffuseElastic::SampleThetaCMS(const G4ParticleDefinition* particle, 
+                                       G4double momentum, G4double A)
+{
+  G4int i, iMax = 100;  
+  G4double r0, norm, result, theta1, theta2, thetaMax, sum = 0.;
+
+  fParticle      = particle;
+  fWaveVector    = momentum/hbarc;
+  fAtomicWeight  = A;
+  
+  if(A > 10.) r0  = 1.16*( 1 - std::pow(A, -2./3.) )*fermi;   // 1.08*fermi;
+  else        r0  = 1.1*fermi;
+
+  fNuclearRadius  = r0*std::pow(A, 1./3.);
+  
+  thetaMax = 10.174/fWaveVector/fNuclearRadius;
+  if (thetaMax > pi) thetaMax = pi;
+
+  G4Integrator<G4DiffuseElastic,G4double(G4DiffuseElastic::*)(G4double)> integral;
+
+  // result = integral.Legendre10(this,&G4DiffuseElastic::GetIntegrandFunction, 0., theta ); 
+  norm = integral.Legendre96(this,&G4DiffuseElastic::GetIntegrandFunction, 0., thetaMax );
+
+  norm *= G4UniformRand();
+
+  for(i = 1; i <= iMax; i++)
+  {
+    theta1 = (i-1)*thetaMax/iMax; 
+    theta2 = i*thetaMax/iMax;
+    sum   += integral.Legendre10(this,&G4DiffuseElastic::GetIntegrandFunction, theta1, theta2);
+
+    if ( sum >= norm ) 
+    {
+      result = 0.5*(theta1 + theta2);
+      break;
+    }
+  }
+  if (i > iMax ) result = 0.5*(theta1 + theta2);
   return result;
 }

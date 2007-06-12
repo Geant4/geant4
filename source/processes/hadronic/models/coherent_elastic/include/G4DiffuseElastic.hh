@@ -24,11 +24,11 @@
 // ********************************************************************
 //
 //
-// $Id: G4DiffuseElastic.hh,v 1.5 2007-05-28 15:07:03 grichine Exp $
+// $Id: G4DiffuseElastic.hh,v 1.6 2007-06-12 10:03:17 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
-// G4 Model: Low energy elastic scattering with 4-momentum balance 
+// G4 Model: optical elastic scattering with 4-momentum balance 
 //
 // Class Description
 // Final state production model for hadron nuclear elastic scattering; 
@@ -48,32 +48,19 @@
 
 using namespace std;
 
-enum G4ElasticGenerator
-{
-  fLElastic = 0,
-  fHElastic,
-  fQElastic,
-  fSWave
-};
-
 class G4ParticleDefinition;
-class G4VQCrossSection;
-class G4ElasticHadrNucleusHE;
 
 class G4DiffuseElastic : public G4HadronicInteraction
 {
 public:
 
-  G4DiffuseElastic(G4ElasticHadrNucleusHE* HModel = 0);
+  G4DiffuseElastic();
 
   virtual ~G4DiffuseElastic();
  
   G4HadFinalState * ApplyYourself(const G4HadProjectile & aTrack, 
 				  G4Nucleus & targetNucleus);
 
-  G4VQCrossSection* GetCS();
-
-  G4ElasticHadrNucleusHE* GetHElastic();
 
   void SetPlabLowLimit(G4double value);
 
@@ -85,12 +72,19 @@ public:
 
   void SetRecoilKinEnergyLimit(G4double value);
 
-  G4double SampleT(G4double p, G4double m1, G4double m2, G4double A);
+  G4double SampleT(const G4ParticleDefinition* aParticle, 
+                         G4double p, G4double A);
 
-  G4double GetDiffuseElasticXsc( G4ParticleDefinition* particle, 
+  G4double SampleThetaCMS(const G4ParticleDefinition* aParticle, G4double p, G4double A);
+
+  G4double GetDiffuseElasticXsc( const G4ParticleDefinition* particle, 
                                  G4double theta, 
 			         G4double momentum, 
 				 G4double A         );
+  G4double IntegralElasticProb( const G4ParticleDefinition* particle, 
+                                 G4double theta, 
+			         G4double momentum, 
+				 G4double A            );
   
   G4double BesselJzero(G4double z);
   G4double BesselJone(G4double z);
@@ -100,32 +94,17 @@ public:
   G4double GetDiffElasticProb(G4double theta);
   G4double GetIntegrandFunction(G4double theta);
 
-  G4double IntegralElasticProb( G4ParticleDefinition* particle, 
-                                 G4double theta, 
-			         G4double momentum, 
-				 G4double A            );
 
   G4double GetNuclearRadius(){return fNuclearRadius;};
 
 private:
 
-  G4int Rtmi(G4double* x, G4double xli, G4double xri, G4double eps, 
-	     G4int iend,
-	     G4double aa, G4double bb, G4double cc, G4double dd, 
-	     G4double rr);
-
-  G4double Fctcos(G4double t, 
-		  G4double aa, G4double bb, G4double cc, G4double dd, 
-		  G4double rr);
-
-
-  G4VQCrossSection*           qCManager;
-  G4ElasticHadrNucleusHE*     hElastic;
 
   G4ParticleDefinition* theProton;
   G4ParticleDefinition* theNeutron;
   G4ParticleDefinition* theDeuteron;
   G4ParticleDefinition* theAlpha;
+
   const G4ParticleDefinition* thePionPlus;
   const G4ParticleDefinition* thePionMinus;
 
@@ -135,7 +114,7 @@ private:
   G4double lowestEnergyLimit;  
   G4double plabLowLimit;
 
-  G4ParticleDefinition* fParticle;
+  const G4ParticleDefinition* fParticle;
   G4double fWaveVector;
   G4double fAtomicWeight;
   G4double fNuclearRadius;
