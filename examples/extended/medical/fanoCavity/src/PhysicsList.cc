@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.cc,v 1.4 2007-03-02 11:08:41 maire Exp $
+// $Id: PhysicsList.cc,v 1.5 2007-06-12 12:04:15 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -155,6 +155,8 @@ void PhysicsList::ConstructEM()
   //
   G4EmProcessOptions emOptions;
   emOptions.SetStepFunction(0.2, 10*um);
+  emOptions.SetLinearLossLimit(1.e-6);
+  emOptions.SetSkin(2.);		//single scattering at boundaries
   emOptions.SetBuildCSDARange(true);  
 }
 
