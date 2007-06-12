@@ -214,7 +214,7 @@ processes/biasing                                procbiasing-V08-03-04
 
 processes/cuts                                   procuts-V08-03-01
 --------------
-- Fix in G4VRangeToEnergyConverter::convert(), range-energu conversion,
+- Fix in G4VRangeToEnergyConverter::convert(), range-energy conversion,
   correcting artifact observed in the visible energy plot over range-cut,
   where a jump in the distribution was evident.
   The correction can influence the result only for the tests, where
