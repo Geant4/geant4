@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DiffuseElastic.cc,v 1.6 2007-06-12 10:03:17 grichine Exp $
+// $Id: G4DiffuseElastic.cc,v 1.7 2007-06-12 14:46:26 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -438,4 +438,93 @@ G4DiffuseElastic::SampleThetaCMS(const G4ParticleDefinition* particle,
   }
   if (i > iMax ) result = 0.5*(theta1 + theta2);
   return result;
+}
+
+
+////////////////////////////////////////////////////////////////////////////
+//
+// Return scattering angle sampled in lab system (target at rest)
+
+
+
+G4double 
+G4DiffuseElastic::SampleThetaLab( const G4HadProjectile* aParticle, 
+                                        G4double tmass, G4double A)
+{
+  const G4ParticleDefinition* theParticle = aParticle->GetDefinition();
+  G4double m1 = theParticle->GetPDGMass();
+  G4double plab = aParticle->GetTotalMomentum();
+  G4LorentzVector lv1 = aParticle->Get4Momentum();
+  G4LorentzVector lv(0.0,0.0,0.0,tmass);   
+  lv += lv1;
+
+  G4ThreeVector bst = lv.boostVector();
+  lv1.boost(-bst);
+
+  G4ThreeVector p1 = lv1.vect();
+  G4double ptot = p1.mag();
+  G4double tmax = 4.0*ptot*ptot;
+  G4double t = 0.0;
+
+
+  //
+  // Sample t
+  //
+  
+  t = SampleT( theParticle, ptot, A);
+
+  // NaN finder
+  if(!(t < 0.0 || t >= 0.0)) 
+  {
+    if (verboseLevel > 0) 
+    {
+      G4cout << "G4DiffuseElastic:WARNING: A = " << A 
+	     << " mom(GeV)= " << plab/GeV 
+             << " S-wave will be sampled" 
+	     << G4endl; 
+    }
+    t = G4UniformRand()*tmax; 
+  }
+  if(verboseLevel>1)
+  {
+    G4cout <<" t= " << t << " tmax= " << tmax 
+	   << " ptot= " << ptot << G4endl;
+  }
+  // Sampling of angles in CM system
+
+  G4double phi  = G4UniformRand()*twopi;
+  G4double cost = 1. - 2.0*t/tmax;
+  G4double sint;
+
+  if( cost >= 1.0 ) 
+  {
+    cost = 1.0;
+    sint = 0.0;
+  }
+  else if( cost <= -1.0) 
+  {
+    cost = -1.0;
+    sint =  0.0;
+  }
+  else  
+  {
+    sint = std::sqrt((1.0-cost)*(1.0+cost));
+  }    
+  if (verboseLevel>1) 
+  {
+    G4cout << "cos(t)=" << cost << " std::sin(t)=" << sint << G4endl;
+  }
+  G4ThreeVector v1(sint*std::cos(phi),sint*std::sin(phi),cost);
+  v1 *= ptot;
+  G4LorentzVector nlv1(v1.x(),v1.y(),v1.z(),std::sqrt(ptot*ptot + m1*m1));
+
+  nlv1.boost(bst); 
+
+  G4ThreeVector np1 = nlv1.vect();
+
+    // G4double theta = std::acos( np1.z()/np1.mag() );  // degree;
+
+  G4double theta = np1.theta();
+
+  return theta;
 }

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DiffuseElastic.hh,v 1.6 2007-06-12 10:03:17 grichine Exp $
+// $Id: G4DiffuseElastic.hh,v 1.7 2007-06-12 14:46:26 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -76,6 +76,9 @@ public:
                          G4double p, G4double A);
 
   G4double SampleThetaCMS(const G4ParticleDefinition* aParticle, G4double p, G4double A);
+
+  G4double SampleThetaLab(const G4HadProjectile* aParticle, 
+                                G4double tmass, G4double A);
 
   G4double GetDiffuseElasticXsc( const G4ParticleDefinition* particle, 
                                  G4double theta, 
