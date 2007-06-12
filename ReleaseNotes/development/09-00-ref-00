@@ -1,0 +1,585 @@
+
+                       geant4-09-00-ref-00
+                       ===================
+
+Some of the development/fixes included since the last development tags are:
+
+  o Introduced G4GeometryTolerance singleton class for the definition of
+    tunable geometrical tolerances. The Cartesian tolerance can be set to
+    a value computed on the basis of the maximum extent of the world volume.
+  o Handling of parallel geometries is now happening through the unified
+    parallel-navigation scheme by default for biasing, scoring and
+    fast-parameterisation.
+  o Introduced new scorers for event biasing options, replacing old scoring
+    classes and scheme.
+  o New error_propagation module for backwards error propagation of tracks
+    (Geant4e utility).
+  o New class G4HelixMixedStepper, mixing helical stepper and Runge-Kutta
+    G4MagHelicalStepper.
+  o Activated quasi-elastic for FTF physics lists.
+  o New hadronic module for Livermore LLNL spontaneous fission model.
+
+
+---------- Reference-tag 'Release Notes' -----------
+
+
+Summarised, the list of changes is the following:
+
+config                                           config-V08-03-01
+------
+- Added modules "biasing", "error_propagation" and "lll_fission" to
+  binmake.gmk.
+- Removed G4LIB_BUILD_LISTS flag. Physics lists are built by default.
+- Updated Configure script to detect new data sets (Configure-V08-03-00).
+
+digits_hits                                      digits_hits-V08-03-04
+-----------
+- Introducing new scorers for event biasing options.
+- Removed G4CellStoreScorer class associated with old biasing/scoring scheme
+  in detector module.
+- Make use of G4GeometryTolerance instead of kCarTolerance constant.
+
+error_propagation                                error_propagation-V08-03-09
+-----------------
+- New module for backwards error propagation of tracks (Geant4e).
+
+event                                            event-V08-03-02
+-----
+- Fixed normalisation of source intensities with multiple sources in
+  G4GeneralParticleSource::IntensityNormalization().
+- Removed classes using old biasing/scoring scheme: G4ScoreTable, G4Scorer.
+
+geometry/biasing                                 geombias-V08-03-02
+----------------
+- Removed classes from old biasing scheme. These are now replaced by
+  either CoupledTransportation (parallel navigation) or in processes/biasing
+  module. In addition the scoring is implemented with the new scoring
+  framework (digits_hits) and processes/scoring.
+  The following classes are removed: G4ParallelNavigator, G4ParallelStepper,
+  G4ParallelWorld, G4VIStore, G4VParallelStepper, G4VPGeoDriver, G4VScorer,
+  G4ImportanceSplitExaminer, G4VImportanceSplitExaminer,
+  G4VWeightWindowExaminer, G4WeightWindowExaminer.
+- Use call to G4GeometryTolerance instead of kCarTolerance constant in
+  G4ParallelNavigator.
+
+geometry/divisions                               geomdiv-V08-03-01
+------------------
+o Use call to G4GeometryTolerance instead of kCarTolerance and
+  kAngTolerance constants where necessary.
+
+geometry/magneticfield                           field-V08-03-03
+----------------------
+- New class G4HelixMixedStepper, mixing helical stepper and Runge-Kutta
+  G4MagHelicalStepper.
+- New calculation of DistChord for SteppingAngle > pi in G4RKG3Stepper
+- Relax FatalExeption to Warning in G4PropagatorInField::AccurateAdvance() for
+  case of step zero and return previous value. This fixes problem observed by
+  ATLAS in release 8.3 when using very conservative values for field
+  parameters.
+- Introduced new class G4ErrorMag_UsualEqRhs used to reverse the magnetic
+  field when propagation is backwards for error propagation.
+- Use call to G4GeometryTolerance instead of kCarTolerance constant in
+  G4MagIntegratorDriver.
+
+geometry/management                              geommng-V08-03-02
+-------------------
+- Introduced new classes for handling error propagation: G4ErrorTarget,
+  G4ErrorSurfaceTarget, G4ErrorTanPlaneTarget, G4ErrorPlaneSurfaceTarget,
+  G4ErrorCylSurfaceTarget.
+- Added forward declaration and pointer (with set/get methods) to
+  G4VUserSteppingAction, to allow for stepping actions defined at region.
+- Use call to G4GeometryTolerance instead of kCarTolerance where needed.
+
+geometry/navigation                              geomnav-V08-03-02b
+-------------------
+- G4SafetyHelper can now be accessed via G4TransportationManager. Depending
+  on type of navigation (single world or multiple navigation) it uses mass
+  navigator or G4PathFinder. All calls from EM processes to geometry are
+  provided by G4SafetyHelper. Initialisation of the class is done in
+  G4TransportationManager and G4PathFinder.
+- G4Navigator: added new method CheckNextStep(), which makes a trial step,
+  without changing the state of the Navigator. It's a variant of ComputeStep(),
+  whose signature it shares.
+- Fixed bug in G4GeomTestSegment in case of TestPoint on the surface,
+  reducing cases of reported spurious overlaps.
+- G4PropagatorInField:
+  o Put in the constructor creation of array of FieldTracks used in
+    LocateInterSectionPoint().
+  o Change in ReEstimateNewPoint() in order to handle cases with zero step
+    caused by diffCurve=0.
+- Introduced new class G4ErrorPropagationNavigator, a specialised navigator
+  for performing double navigation in the detector geometry and on the
+  target surface for error propagation.
+- Added method CheckPointExiting() in G4AuxiliaryNavServices utility class.
+- Use call to G4GeometryTolerance instead of kCarTolerance, kAngTolerance
+  and kRadTolerance where needed.
+
+geometry/solids/Boolean                          geom-bool-V08-03-00
+-----------------------
+o Use call to G4GeometryTolerance instead of kRadTolerance and
+  kAngTolerance constants where necessary.
+
+geometry/solids/BREPS                            breps-V08-03-01
+---------------------
+o Use call to G4GeometryTolerance instead of kCarTolerance, kRadTolerance
+  and kAngTolerance constants where necessary.
+
+geometry/solids/CSG                              geom-csg-V08-03-01
+-------------------
+- Use call to G4GeometryTolerance instead of kAngTolerance and kRadTolerance
+  where needed.
+- G4Tubs: fixed bug for DistanceToOut(p,v) for phi section.
+  Bug was causing segmentation fault in recursive_test (problem report #784).
+  For v crossing the center of the tub DistanceToOut was always giving
+  Radial distance and not distance in Phi.
+- G4Cons: fixed bug for DistanceToOut(p,v) for phi section,
+  the same as for G4Tubs.
+
+geometry/solids/specific                         geom-specific-V08-03-03
+------------------------
+- Use call to G4GeometryTolerance instead of kCarTolerance, kAngTolerance
+  and kRadTolerance where needed.
+- Fixed default response of DistToIn/DistToOut for twisted solids.
+- Use G4TWISTDEBUG instead of G4SPECSDEBUG as debug conditional flag
+  for twisted solids and some cleanup in G4TwistTrapAlphaSide code.
+
+geometry/volumes                                 geomvol-V08-03-00
+----------------
+- Use call to G4GeometryTolerance instead of kCarTolerance in
+  G4ReflectionFactory.
+
+global                                           global-V08-03-06
+------
+- Added G4GeometryTolerance singleton class for the definition of
+  tunable geometrical tolerances. The Cartesian tolerance can either be set
+  to a fixed value (kCarTolerance=1E-9 mm) or to a value computed on the basis
+  of the maximum extent of the world volume assigned through the
+  G4GeometryManager at the beginning of the application -before- any
+  geometrical object is created.
+- Old static constants 'kCarTolerance', 'kRadTolerance' and 'kAngTolerance'
+  have been removed.
+- Added new class G4SimplexDownhill in HEPNumerics module: a Simplex method
+  for function minimization.
+- Introduced new utility class G4ErrorPropagatorData to provide access to
+  mode, state, target and manager verbosity for the error propagation
+  classes.
+- Fixed bug in G4LPhysicsVector constructor: initialise vectors of
+  length=nbin+1 (one bin is hidden for users). Addresses bug report #942.
+- Changed date for release 9.0.
+
+graphics_reps                                    greps-V08-03-00
+-------------
+- G4AttHolder: replaced forward declarations in header with explicit
+  inclusions to allow for porting on Intel-icc compiler.
+
+interfaces                                       interface-V08-03-00
+----------
+- Implemented signal handler for soft-abort in G4UIterminal.
+
+materials                                        materials-V08-02-02
+---------
+- Added implementation file for G4SurfaceProperty.
+- Added static G4SurfacePropertyTable to G4MaterialTable
+- Added G4Exception to SetGROUPVEL() when E_photon <= 0.
+- G4NistManager and G4NistElementBuilder: added GetNistFirstIsotopeN()
+  and GetNumberOfNistIsotopes() methods.
+
+particles                                        particles-V08-03-01
+---------
+- Added deletion of IsotopeTableList in G4IonTable destructor.
+- Fix in G4PDGCodeChecker::GetQuarkFlavor().
+
+physics_lists                                    phys-lists-V08-03-06
+-------------
+- In QBBC list, use consistent cross sections for elastic and inelastic.
+- Activated quasi-elastic for FTF lists. Lower threshold for FTF: FTF starts
+  at 4.0 GeV, overlaps with LEP up to 5.0 GeV.
+- Added G4QEmExtraPhysics for gamma, e+-, mu+- nuclear CHIPS
+- Removed obsolete physics lists LHEP_HP, QGSP_HP, LHEP_BIC, LHEP_BIC_HP
+  and LHEP_PRECO. Removed physics lists using Mars leading particle classes
+  (*LEAD*).
+- Removed obsolete G4EmStandardPhysics72 and G4EmStandardPhysics71;
+  using new commands for G4EmStandardPhysics_option1,2
+- QGSP_BIC_HP is no longer experimental.
+- Removed definition of name of EM constructor, now name of EM constructor
+  defined inside the constructor itself.
+- Incremented version number.
+
+processes/biasing                                procbiasing-V08-03-04
+-----------------
+- New module for process-based biasing.
+- Migrated classes from processes/scoring and transportation modules.
+
+processes/cuts                                   procuts-V08-03-01
+--------------
+- Fix in G4VRangeToEnergyConverter::convert(), range-energu conversion,
+  correcting artifact observed in the visible energy plot over range-cut,
+  where a jump in the distribution was evident.
+  The correction can influence the result only for the tests, where
+  the e+/e- energy cuts are below 30 keV and even in this case the change
+  in results should be small.
+- Fix in G4ProductionCutsTable::CheckMaterialCutsCoupleInfo().
+
+processes/electromagnetic/highenergy             emhighenergy-V08-03-02
+------------------------------------
+- G4mplIonisation: fixed destruction of monopole ionisation model.
+- In all processes inherit from G4VEnergyLossProcess or G4VEmProcess
+  removed method SecondaryPostStep().
+- Modified interface of SampleSecondary() method according to changes in
+  base class G4VEmModel.
+
+processes/electromagnetic/lowenergy              emlowen-V08-03-03
+-----------------------------------
+- Archived obsolete class G4LowEnergyBraggModel.
+- Updated license information in G4DNACrossSectionDataSet.
+
+processes/electromagnetic/muons                  emmuons-V08-03-04
+-------------------------------
+- G4EnergyLossForExtrapolator: added Set methods for first and last
+  bins in tables. Default maximum value is set to 10 TeV (CMS request).
+- G4VEmModel: changed interface of SampleSecondary() method, return type
+  becomes 'void', added extra parameter std::vector<G4DynamicParticle*>*.
+  All classes using or inhereting this interface are modified.
+  About 5% speedup of EM shower simulation
+- G4MuPairProductionModel: fixed usage of cut value inside SelectRandomAtom(),
+  providing correct sampling of atom of mixture for production of e+e- pair.
+- In all processes inherit from G4VEnergyLossProcess or G4VEmProcess
+  removed method SecondaryPostStep().
+- New class G4ErrorEnergyLoss for error-propagation.
+- Removed obsolete classes G4MuIonisation52, G4MuPairProduction52,
+  G4MuBremsstrahlung52 and G4VMuEnergyLoss.
+
+processes/electromagnetic/polarisation           empolar-V08-03-02
+--------------------------------------
+- G4PolarizedCompton, G4ePolarizedIonisation, G4eplusPolarizedAnnihilation:
+  added method PostStepGetPhysicalInteractionLength() in order to provide
+  simulation of polarized target. Addition required following the design
+  change in 'utils' module.
+- G4PolarizedCompton: fixed compilation warning and incorrect usage of
+  G4PhysicsVector.
+- In all processes inherit from G4VEnergyLossProcess or G4VEmProcess
+  removed method SecondaryPostStep().
+- Modified interface of SampleSecondary() method according to changes in
+  base class G4VEmModel.
+
+processes/electromagnetic/standard               emstand-V08-03-09
+----------------------------------
+- G4ionIonisation:
+  o Added InitialiseMassCharge() method; removed GetMeanFreePath()
+    implementation.
+  o Added 'NuclearStopping' flag; add data for stopping only for GenericIons.
+- G4MultipleScattering, G4hMultipleScattering:
+  o Reorganised methods for setting multiple-scattering parameters.
+  o Replaced identifier "G4v71" with "Minimal".
+- G4UrbanMscModel:
+  o Reorganised initialisation; using G4MscStepLimitType enumerator to choose
+    step limit algorithm.
+  o Fixed bug affecting performance of EMV PhysicsLists.
+  o Optimisation of step limitation for skin>0 (about 5% CPU save).
+- G4eBremsstrahlung: removed definition of gamma threshold from constructor,
+  define this parameter at initialisation of the process from
+  G4LossTableManager.
+- Use 'fParticleChange' in G4eeToTwoGammaModel::SampleSecondaries().
+- Use call to G4GeometryTolerance instead of kCarTolerance in PAI classes.
+- In all processes inherit from G4VEnergyLossProcess or G4VEmProcess
+  removed method SecondaryPostStep().
+- Modified interface of SampleSecondary() method according to changes in
+  base class G4VEmModel.
+- Removed obsolete classes G4VeEnergyLoss, G4VhEnergyLoss, G4GammaConversion52,
+  G4PhotoElectricEffect52, G4eBremsstrahlung52, G4eIonisation52,
+  G4eplusAnnihilation52, G4hIonisation52 and G4MultipleScattering52.
+
+processes/electromagnetic/utils                  emutils-V08-03-03
+-------------------------------
+- G4VEmModel: changed interface of SampleSecondary() method, return type
+  becomes 'void', added extra parameter std::vector<G4DynamicParticle*>*.
+  All classes using or inhereting this interface are modified.
+  About 5% speedup of EM shower simulation; G4VEnergyLossProcess,
+  G4VEmProcess and G4VMultipleScattering modified to follow new interface.
+- G4VEnergyLossProcess, G4VEmProcess:
+  o Removed method SecondaryPostStep(); use a direct call to selected
+    model instead.
+  o Speedup code by adding implementation method
+    PostStepGetPhysicalInteractionLength().
+  o Added methods InitialiseStep() and InitialiseMassCharge() in
+    G4VEnergyLossProcess.
+  o Added implementation method AlongStepGetPhysicalInteractionLength()
+    in G4VEnergyLossProcess and do not use ContinuousStepLimit().
+  o Cleanup comments and reorganised code for easier reading; moved short
+    methods to inline.
+- G4VMultipleScattering:
+  o Speedup code by adding implementation of methods
+    AlongStepGetPhysicalInteractionLength() and
+    PostStepGetPhysicalInteractionLength()
+  o Cleanup comments and reorganised code for easier reading; moved short
+    methods to inline; added method to set multiple-scattering parameters.
+- G4EnergyLossMessenger: defined new UI sub-directory "/process/msc"
+  and reorganised UI commands for multiple-scattering processes.
+  Using G4EmProcessOptions as an interface to all EM processes.
+- G4MscStepLimitType, G4VMultipleScattering, G4EnergyLossMessenger:
+  replaced identifier "G4v71" with "Minimal".
+- G4LossTableManager: removed set multiple-scattering parameters.
+- G4EmProcessOptions: updated interface to multiple-scattering processes,
+  added extra methods to set parameters.
+- Added class G4MscStepLimitType.
+
+processes/electromagnetic/xrays                  xrays-V08-03-00
+-------------------------------
+- Use call to G4GeometryTolerance instead of kCarTolerance constant
+  in G4ForwardXrayTR.
+
+processes/hadronic                               hadr-V08-03-00
+------------------
+- cross_sections (hadr-cross-V08-03-03)
+  o Fix for non-initialised total cross section for pi- G4PiNuclearCrossSection.
+  o G4GlauberGribovCrossSection, G4HadronNucleonXsc: fixed compiler warning
+    for un-initialized variable.
+  o G4HadronCrossSections: replaced 'PSIZE' with 'NPARTS' to avoid
+    name conflict with SDK Windows environment.
+  o G4GlauberGribovCrossSection: add new methods GetRatioSD() and
+    GetRatioQE() allowing for retrieving qe/in and sd/in ratios.
+  o G4HadronNucleonXsc: add new method GetHadronNucleonXscMK() to get
+    hadron-nucleon cross section.
+- management (hadr-man-V08-03-01)
+  o G4HadronicProcess:
+    + Changed default for isotope production to off to fix a memory leak.
+    + Removed effective charge calculation.
+- models/binary_cascade (had-binary-V08-03-00)
+  o G4BinaryLightIonReaction: added protection against divide by 0 when energy
+    momentum correction stalls.
+- models/cascade (hadr-casc-V08-03-00)
+  o Implemented interfaces for pre-equilibrium and equilbrium evaporation
+    models.
+- models/chiral_inv_phase_space/body (hadr-chips-body-V08-03-01)
+  o More accurate initialization of dZ, dN, dS (dense area) in G4QNucleus.
+- models/chiral_inv_phase_space/interface (hadr-chips-inter-V08-03-06)
+  o Elastic cross-section for low energy neutrons upgraded in
+    G4QElasticCrossSection. High energy, heavy nuclei nA correction in
+    G4QElasticCrossSection
+  o Memory leak correction in G4StringChipsParticleLevelInterface.
+  o First implementation of the G4QDiffractionRatio class.
+  o First implementation of the charge-exchange: coherent in the new process
+    G4QCoherentChargeExchange and incoherent as an extention of the
+    G4QuasiFreeRatios.
+  o Large A tuning of the reaction cross-sections in G4QElasticCrossSection.
+- models/coherent_elastic (hadr-cohe-V08-03-05)
+  o G4ElasticHadrNucleusHE:
+    + Optimised computation of tables.
+    + general cleanup and redesign of private methods.
+  o Added model names to constructors in G4LEnp, G4LEpp, G4ChargeExchange,
+    G4HadronElastic and G4ElasticHadrNucleusHE.
+  o G4HadronElastic: use QElasticCrossSection for p, n incident for any energy
+    and any target; use HElastic for mesons only.
+- models/de_excitation (hadr-deex-V08-03-01)
+  o Fixed bug in G4ExcitationHandler: deleted pointers and iterators were
+    attempted to be accessed. Now a final state iterator list is created and
+    filled when necessary.
+  o Fixed bug in low A,Z false condition in G4DiscreteGammaDeexcitation, now
+    the condition is (Z<2 || A<3 || Z>98) false (so stops at Cf rather than
+    >100) and includes helium (previously excluded).
+- models/lll_fission (hadr-lllfis-V08-03-06)
+  o New module for Livermore LLNL spontaneous fission model.
+- models/neutron_hp (hadr-hpn-V08-03-02)
+  o Try to limit sum of secondary photons energy while keeping distributions
+    in G4NeutronHPPhotonDist.
+  o Added neglecting doppler broadening mode for boosting perfomance in
+    G4NeutronHPElasticData, G4NeutronHPInelasticData and G4NeutronHPCaptureData.
+  o Enabled to use only exact data file and added warning when substituted
+    file is used. Modified method of searching substitute isotope data in
+    G4NeutronHPNames.
+  o Added 'NeutronHP_ALWAYS_USE_PHOTONEVAPORATION_FOR_CAPTURE_FS' flag in
+    G4NeutronHPCaptureFS.
+  o Bug fixes for Valgrind run-time errors and NaNs.
+- models/parton_string (had-prtn-V08-02-02)
+  o Separate G4DiffractiveExcitation for FTF from QGS. Added original
+    G4DiffractiveExcitation to qgsm as G4QGSDiffractiveExcitation
+    Moved G4SingleDiffractiveExcitation from management to qgsm.
+- util (hadr-util-V08-03-00)
+  o Removed un-used classes G4Fuzzy, G4EffectiveCharge and G4ParticleVector.
+
+processes/management                             procman-V08-02-00
+--------------------
+- Added PreparePhysicsTable() method in G4WrapperProcess.
+
+processes/optical                                op-V08-03-00
+-----------------
+- Use call to G4GeometryTolerance instead of kCarTolerance constant
+  in G4OpBoundaryProcess.
+
+processes/parameterisation                       param-V08-03-00
+--------------------------
+- Removed classes implementing old interface to fast-simulation manager
+  process and setting of parallel world: G4FastSimulationManagerProcess81,
+  G4FlavoredParallelWorld and G4GFSManager81.
+
+processes/scoring                                procscore-V08-03-03
+-----------------
+- Moved biasing classes and tests into processes/biasing.
+- Fixed bug in G4ScoreProcess which didn't get applied to non-parallel
+  geometries.
+- Added comment to exception in G4NewProcessPlacer to emphasise
+  configuration after physics list.
+
+processes/transportation                         transport-V08-03-12
+------------------------
+- G4CoupledTransportation: make treatment of mass and full safety coherent.
+  Added storing of full safety in state; retrieve it after compute step from
+  G4PathFinder; calculate them same way at start of step.
+  Put back in the code for treating looping particles.
+- Use call to G4GeometryTolerance instead of kCarTolerance in
+  G4VTrackTerminator.
+- Archived classes for old biasing scheme, now replaced in module
+  processes/biasing. Removed classes:
+  G4MImportanceConfigurator, G4MScoreConfigurator, G4MScoreProcess,
+  G4MWeightWindowConfigurator, G4MassGCellFinder, G4MassGeometrySampler,
+  G4MassImportanceProcess, G4MassWeightWindowProcess,
+  G4PImportanceConfigurator, G4PScoreConfigurator, G4PScoreProcess,
+  G4PWeightWindowConfigurator, G4ParallelGCellFinder,
+  G4ParallelGeometrySampler, G4ParallelImportanceProcess, G4ParallelTransport,
+  G4ParallelTransportConfigurator, G4ParallelWWnTransportProcess,
+  G4ParallelWeightWindowProcess, G4PlaceOfAction, G4ProcessPlacer,
+  G4SamplingPostStepAction, G4VProcessPlacer, G4VSampler,
+  G4VSamplerConfigurator, G4WeightCutOffConfigurator.
+
+run                                              run-V08-03-05
+---
+- G4VUserDetectorConstruction class now has access methods to the parallel
+  worlds.
+- Fix against accessing to the world logical volume that had already been
+  deleted.
+- Fixed memory leak in G4VUserPhysicsList.
+- Fixed the name of random number status file.
+- In G4RunManagerKernel, UpdateRegion() method now internally invokes
+  CheckRegions() method to make sure all region information are updated.
+
+visualization                                    vis-V08-03-06
+-------------
+- management:
+  o Improved error trapping and bug fix.
+- modeling:
+  o Simplified G4Atts for Physical Volume path.
+- HepRep:
+  o Fixed memory leak in G4HepRepFile.
+- OpenGL:
+  o /vis/ogl/printEPS should work for all viewers.
+  o Improved error trapping and bug fixes.
+- RayTracer:
+  o Fix for dubious ValGrind diagnostic.
+
+environments                                     envs-V08-03-01
+------------
+- g4py: implemented software abort by Ctrl-C.
+
+examples                                         examples-V09-00-00
+--------
+- Updated reference outputs.
+- advanced/brachytherapy (brachy-V08-03-00)
+  o Few improvements resulting from code review. No functionality changes.
+- advanced/cosmicray_charging (cosmicray_charging-V08-03-00)
+  o Fixed compilation problem in physics-list.
+- advanced/hadrontherapy (hadrontherapy-V08-03-04)
+  o Geometry upgrade (hadrontherapyBeamLine class) according to the
+    experimental CATANA proton therapy beam line.
+  o Improved the modulator geometry and fixed a bug on its rotation.
+  o Physics component redesigned and reimplemented as a result of code review.
+- advanced/human_phantom-V08-03-00)
+  o Corrected bug in MIRDLeftBreast and MIRDRightBreast.
+  o Introduced voxel Left/Right breast, VoxelBreastSensitive detector and
+    PhantomHeadBuilder.
+  o Introduced  Left and Right Adrenals and Scapulae.
+  o Minor correction to documentation.
+- advanced/radioprotection (radioprotection-V08-03-00)
+  o Correction to documentation.
+- extended/analysis/N03Con (exampleN03Con-V08-03-01)
+  o New example showing how to apply convergence test in simulation.
+- extended/biasing (exbiasing-V08-03-00)
+  o Migrated example B01 to new biasing/scoring scheme.
+  o Removed B03 (redundant/obsolete use of Python).
+- extended/electromagnetic/TestEm1 (testem1-V08-03-00)
+  o Use G4EmProcessOptions to define bremsstrahlung threshold energy.
+- extended/electromagnetic/TestEm3 (testem3-V08-03-01)
+  o Use renamed EM builders and update macro files.
+- extended/electromagnetic/TestEm5 (testem5-V08-03-00)
+- extended/electromagnetic/TestEm7 (testem7-V08-03-00)
+  o Fixed bug in standardSS Physics Lists.
+  o Added EM builders from physics_lists library.
+- extended/electromagnetic/TestEm9 (testem9-V08-03-03)
+  o Use standard names for histograms and updated macro files.
+  o Substituted 'autoptr' by normal pointers in Histo to avoid crash.
+  o Use renamed EM builders, and emstandard_opt1 EM physics in TestEm9.in
+  o Extended reference output: showing both mean/RMS values and truncated
+    mean/RMS.
+- extended/errorpropagation (errorpropagation-V08-03-01)
+  o New example illustrating the use of the error propagation utility.
+    A G4ErrorFreeTrajState is created to simulate a muon track of 20 GeV
+    along the X axis. Then the track is propagated until the target is reached.
+- extended/field (fieldex-V08-03-00)
+  o Removed un-necessary initialisation of G4FastSimulationManagerProcess
+    from setup.
+- extended/hadronic/Hadr01 (exhadr01-V08-03-03)
+  o Physics List updated according to recent changes in hadronics and
+    physics_lists packages.
+  o Substituted usage of 'autoptr' by normal pointers in Histo to avoid crash.
+  o Added histogram on total energy deposit in the target.
+  o Use renamed EM builders G4EmStandardPhysics_option1 and
+    G4EmStandardPhysics_option2.
+- extended/medical/fanoCavity (fano-V08-03-00)
+  o Updated to follow change of interface of G4VEmModel::SampleSecondaries().
+- extended/medical/GammaTherapy (gtherapy-V08-03-02)
+  o Use renamed EM physics-list components from physics_lists module.
+  o Substituted usage of 'autoptr' by normal pointers in Histo to avoid crash.
+  o Fixed singleton GetPointer() method.
+- extended/parameterisations/gflash (exgflash-V08-03-00)
+  o Updated physics-list: register the fast simulation process as a discrete
+    process.
+- extended/runAndEvent/RE02 (exampleRE02-V08-03-00)
+  o Fixed indexing scheme of GetIndex() method in the scorers.
+- novice/N02 (exampleN02-V08-03-00)
+  o Show usage of G4GeometryTolerance tuned for the geometry topology.
+- novice/N03 (exampleN03-V08-03-00)
+  o Changed visTutor/exN03Vis12 and visTutor/exN03Vis13 macros, following
+    change to /vis/ogl/printEPS command.
+- novice/N05 (exampleN05-V08-03-00)
+  o Migrated to new parallel geometry scheme.
+  o Added vis.mac macro.
+- novice/N07 (exampleN07-V08-02-00)
+  o Introduced ExN07ParallelWorld and related modifications.
+  o Modified vis.mac to allow for visualization of the parallel world.
+
+tests                                            tests-V09-00-00
+-----
+- Updated reference outputs and tools.
+- test10 (test10-V08-02-02)
+  o Reduced statistics for twisted solids in both normal and large-N runs.
+- test11 (test11-V08-03-03)
+  o Added NIST Materials from H to U.
+  o Added HP range test from 10MeV, 1MeV,,,10eV and 1eV.
+  o New input macros.
+- test14 (test14-V08-03-00)
+  o Corrected commands for activation of models in specific input macros.
+    Reduced tracking verbosity.
+- test15 (test15-V08-03-00)
+- test16 (test16-V08-03-00)
+  o Removed useless setup for fast-parameterisation in physics list.
+- test31 (test31-V08-03-03)
+  o Use renamed EM physics-list components from physics_lists module;
+    adopt default EM physics opt2.
+  o Substituted usage of 'autoptr' by normal pointers in Histo to avoid crash.
+  o Fixed name of default file.
+- test34 (test34-V08-03-01)
+  o Updated physics-list: register the fast simulation process as a discrete
+    process.
+  o Cleared compilation warnings in Tst34SensitiveDetector.
+    Removed unused statements on RO-geometry.
+- test35 (test35-V08-03-00)
+  o Substituted usage of 'autoptr' by normal pointers in Histo to avoid crash.
+- test36 (test36-V08-03-03)
+  o New EM validation test for XTR processes.
+- test37 (test37-V08-03-00)
+  o New EM validation test; Sandia data on energy deposit for an electron
+    beam in semi-infinite media.
+- test40 (test40-V08-03-01)
+  o Use physics-list components from physics_lists module.
+    Fixed large-N input macro for physics-list name.
+- test202 (test202-V08-03-00)
+  o Fixed compiler warnings.
