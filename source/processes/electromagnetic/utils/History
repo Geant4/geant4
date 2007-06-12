@@ -1,4 +1,4 @@
-$Id: History,v 1.285 2007-06-11 14:56:51 vnivanch Exp $
+$Id: History,v 1.286 2007-06-12 11:29:09 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+11 May 07: V.Ivant (emutils-V08-03-03)
+- G4VEnergyLossProcess fixed estimation of step limit inside
+  AlongStepGetPhysicalInteractionLength method - do not use safety
 
 11 May 07: V.Ivant (emutils-V08-03-03)
 - G4MscStepLimitType, G4VMultipleScattering, G4EnergyLossMessenger
