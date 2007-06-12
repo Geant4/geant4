@@ -1,4 +1,4 @@
-$Id: README,v 1.16 2007-02-26 10:26:01 gcosmo Exp $
+$Id: README,v 1.17 2007-06-12 09:31:49 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -57,6 +57,8 @@ test32 ## Leading_particle biasing model of G4Mars5Ge on MARS13.
 test33 ## Importance biasing and scoring.
 test34 ## Shower parameterisation with 'gflash'.
 test35 ## Internal test exercising HARP physics
+test36 ## EM XTR processes
+test37 ## Sandia data, electron beam in semi-infinite media
 test39 ## CHIPS elastic & lA scattering at process level
 test40 ## Benchmark test for e.m. shower development from single primary
 test50 ## Statistical test suite for e.m. processes:

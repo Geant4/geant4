@@ -4,10 +4,12 @@ digits_hits/detector         asai@slac.stanford.edu          Makoto Asai
 digits_hits/digits           asai@slac.stanford.edu          Makoto Asai
 digits_hits/hits             asai@slac.stanford.edu          Makoto Asai
 digits_hits/utils            asai@slac.stanford.edu          Makoto Asai
+error_propagation            Pedro.Arce@ciemat.es            Pedro Arce
 event                        asai@slac.stanford.edu          Makoto Asai
 g3tog4                       Ivana.Hrivnakova@cern.ch        Ivana Hrivnakova
 geometry                     Gabriele.Cosmo@cern.ch          Gabriele Cosmo
 geometry/biasing             Alexander.Howard@cern.ch        Alexander Howard
+geometry/divisions           Pedro.Arce@ciemat.es            Pedro Arce
 geometry/magneticfield       John.Apostolakis@cern.ch        John Apostolakis
 geometry/management          Gabriele Cosmo@cern.ch          Gabriele Cosmo
 geometry/navigation          Gabriele Cosmo@cern.ch          Gabriele Cosmo
@@ -20,15 +22,15 @@ global/HEPNumerics           Vladimir.Grichine@cern.ch       Vladimir Grichine
 graphics_reps                John.Allison@man.ac.uk          John Allison
 intercoms                    asai@slac.stanford.edu          Makoto Asai
 interfaces                   yoshidah@naruto-u.ac.jp         Hajime Yoshida
-interfaces/basic             yoshidah@naruto-u.ac.jp	     Hajime Yoshida
-interfaces/GAG               yoshidah@naruto-u.ac.jp	     Hajime Yoshida
-interfaces/common            barrand@lal.in2p3.fr            Guy Barrand
+"/basic                      yoshidah@naruto-u.ac.jp	     Hajime Yoshida
+"/GAG                        yoshidah@naruto-u.ac.jp	     Hajime Yoshida
+"/common                     barrand@lal.in2p3.fr            Guy Barrand
 materials                    Marc.Verderi@in2p3.fr           Marc Verderi
-parameterisations            Marc.Verderi@in2p3.fr           Marc Verderi
-"/gflash                     Joanna.Weng@cern.ch             Joanna Weng
+parameterisations/gflash     Marc.Verderi@in2p3.fr           Marc Verderi
 particles                    kurasige@phys.sci.kobe-u.ac.jp  Hisaya Kurasige
 persistency                  Witold.Pokorski@cern.ch         Witold Pokorski
 processes                    John Apostolakis                John Apostolakis
+"/biasing                    Alexander.Howard@cern.ch        Alexander Howard
 "/cuts                       kurasige@phys.sci.kobe-u.ac.jp  Hisaya Kurasige
 "/electromagnetic            Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
 "/"/lowenergy                MariaGrazia.Pia@ge.infn.it      Maria Grazia Pia
@@ -60,6 +62,7 @@ processes                    John Apostolakis                John Apostolakis
 "/"/"/im_r_matrix            Gunter.Folger@cern.ch           Gunter Folger
 "/"/"/isotope_production     Aatos.Heikkinen@cern.ch         Aatos Heikkinen
 "/"/"/leading_particle       asai@slac.stanford.edu          Makoto Asai
+"/"/"/lll_fission            dwright@slac.stanford.edu       Dennis Wright
 "/"/"/low_energy             dwright@slac.stanford.edu       Dennis Wright
 "/"/"/management             Gunter.Folger@cern.ch           Gunter Folger
 "/"/"/neutron_hp             tkoi@slac.stanford.edu          Tatsumi Koi
@@ -103,63 +106,68 @@ examples/novice/N05          Marc.Verderi@in2p3.fr           Marc Verderi
 examples/novice/N06          gum@triumf.ca                   Peter Gumplinger
 examples/novice/N07          asai@slac.stanford.edu          Makoto Asai
 examples/advanced            MariaGrazia.Pia@ge.infn.it      Maria Grazia Pia
-  brachytherapy              Susanna.Guatelli@ge.infn.it     Susanna Guatelli
+  air_shower                 bernardo@lip.pt                 Bernardo Tome
+  brachytherapy              MariaGrazia.Pia@ge.infn.it      Maria Grazia Pia
   composite_calorimeter      Alberto.Ribon@cern.ch           Alberto Ribon
   cosmicray_charging         h.araujo@ic.ac.uk               Henrique Araujo
   gammaray_telescope         longof@ts.infn.it               Francesco Longo
-  hadrontherapy              Susanna.Guatelli@ge.infn.it     Susanna Guatelli
-  human_phantom              Susanna.Guatelli@ge.infn.it     Susanna Guatelli
+  hadrontherapy              MariaGrazia.Pia@ge.infn.it      Maria Grazia Pia
+  human_phantom              MariaGrazia.Pia@ge.infn.it      Maria Grazia Pia
   lAr_calorimeter            Alberto.Ribon@cern.ch           Alberto Ribon
   medical_linac              Michela.Piergentili@ge.infn.it  Michela Piergentili
+  microbeam                  incerti@cenbg.in2p3.fr          Sebastien Incerti
   purging_magnet             John.Apostolakis@cern.ch        John Apostolakis
-  radioprotection            Susanna.Guatelli@ge.infn.it     Susanna Guatelli
+  radiation_monitor          MariaGrazia.Pia@ge.infn.it      Maria Grazia Pia
+  radioprotection            MariaGrazia.Pia@ge.infn.it      Maria Grazia Pia
   raredecay_calorimetry      Mikhail.Kosov@cern.ch           Mikhail Kossov
   Rich                       Alberto.Ribon@cern.ch           Alberto Ribon
   Tiara                      Alexander.Howard@cern.ch        Alexander Howard
   underground_physics        Alexander.Howard@cern.ch        Alexander Howard 
   xray_fluorescence          Alfonso.Mantero@ge.infn.it      Alfonso Mantero
   xray_telescope             Giovanni.Santin@esa.int         Giovanni Santin
-examples/extended/analysis   perl@slac.stanford.edu          Joseph Perl
-examples/extended/biasing    Alexander.Howard@cern.ch        Alexander Howard
-examples/extended/electromagnetic:
-  TestEm1,2,5,6,7,9          Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
-  TestEm3,4                  Michel.Maire@lapp.in2p3.fr      Michel Maire
-  TestEm8,10                 Vladimir.Grichine@cern.ch       Vladimir Grichine
-  TestEm11-18                Michel.Maire@lapp.in2p3.fr      Michel Maire
-examples/extended/eventgenerator:
-  exgps                      flei@space.qinetiq.com          Fan Lei
-  HepMCEx01,02               Koichi.Murakami@kek.jp          Koichi Murakami
-  MCTruth                    Witold.Pokorski@cern.ch         Witold Pokorski
-examples/extended/field      John.Apostolakis@cern.ch        John Apostolakis
-examples/extended/g3tog4     Ivana.Hrivnakova@cern.ch        Ivana Hrivnakova
-examples/extended/gdml       Witold.Pokorski@cern.ch         Witold Pokorski
-examples/extended/geometry   Gabriele.Cosmo@cern.ch          Gabriele Cosmo
-  olap                       Gabriele.Cosmo@cern.ch          Gabriele Cosmo
-examples/extended/hadronic
-  Hadr01                     Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
-examples/extended/medical    MariaGrazia.Pia@ge.infn.it	     Maria Grazia Pia
-  DICOM                      Susanna.Guatelli@ge.infn.it     Susanna Guatelli
-  GammaTherapy               Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
-examples/extended/optical:
-  LXe                        gum@triumf.ca                   Peter Gumplinger
-examples/extended/parallel:
-  ParN02, ParN04             gene@ccs.neu.edu                Gene Cooperman
-  ExDiane                    Susanna.Guatelli@ge.infn.it     Susanna Guatelli
-examples/extended/parameterisations:
-  gflash                     Joanna.Weng@cern.ch             Joanna Weng
-examples/extended/persistency:
-  P01                        Witold.Pokorski@cern.ch         Witold Pokorski
-examples/extended/polarisation:
-  Pol01                      Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
-examples/extended/radioactivedecay:
-  exrdm                      flei@space.qinetiq.com          Fan Lei
-examples/extended/runAndEvent:
-  RE01                       asai@slac.stanford.edu          Makoto Asai
-  RE02                       asai@slac.stanford.edu          Makoto Asai
-examples/extended/visualization:
-  perspective                John.Allison@man.ac.uk          John Allison
-  standalone                 John.Allison@man.ac.uk          John Allison
-  userVisAction              John.Allison@man.ac.uk          John Allison
+examples/extended
+  analysis:
+    A01                      perl@slac.stanford.edu          Joseph Perl
+    AnaEx01                  Guy.Barrand@lal.in2p3.fr        Guy Barrand
+    N03Con                   tkoi@slac.stanford.edu          Tatsumi Koi
+  biasing
+    B01, B02                 Alexander.Howard@cern.ch        Alexander Howard
+  electromagnetic:
+    TestEm1,2,5,6,7,9        Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
+    TestEm3,4                Michel.Maire@lapp.in2p3.fr      Michel Maire
+    TestEm8,10               Vladimir.Grichine@cern.ch       Vladimir Grichine
+    TestEm11-18              Michel.Maire@lapp.in2p3.fr      Michel Maire
+  errorpropagation           Pedro.Arce@ciemat.es            Pedro Arce
+  eventgenerator:
+    exgps                    flei@space.qinetiq.com          Fan Lei
+    HepMCEx01,02             Koichi.Murakami@kek.jp          Koichi Murakami
+    MCTruth                  Witold.Pokorski@cern.ch         Witold Pokorski
+  field:
+    field01,02,03            John.Apostolakis@cern.ch        John Apostolakis
+  g3tog4:
+    clGeometry, cltog4       Ivana.Hrivnakova@cern.ch        Ivana Hrivnakova
+  gdml                       Witold.Pokorski@cern.ch         Witold Pokorski
+  geometry/olap              Gabriele.Cosmo@cern.ch          Gabriele Cosmo
+  hadronic/Hadr01            Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
+  medical:
+    DICOM                    MariaGrazia.Pia@ge.infn.it	     Maria Grazia Pia
+    fanoCavity               Michel.Maire@lapp.in2p3.fr      Michel Maire
+    GammaTherapy             Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
+  optical/LXe                gum@triumf.ca                   Peter Gumplinger
+  parallel:
+    ParN02, ParN04           gene@ccs.neu.edu                Gene Cooperman
+    ExDiane                  MariaGrazia.Pia@ge.infn.it	     Maria Grazia Pia
+  parameterisations/gflash   Marc.Verderi@in2p3.fr           Marc Verderi
+  persistency/P01            Witold.Pokorski@cern.ch         Witold Pokorski
+  polarisation/Pol01         Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
+  radioactivedecay/exrdm     flei@space.qinetiq.com          Fan Lei
+  runAndEvent:
+    RE01                     asai@slac.stanford.edu          Makoto Asai
+    RE02                     asai@slac.stanford.edu          Makoto Asai
+  visualization:
+    perspective              John.Allison@man.ac.uk          John Allison
+    standalone               John.Allison@man.ac.uk          John Allison
+    userVisAction            John.Allison@man.ac.uk          John Allison
 tests                        Ian.Mclaren@cern.ch             Ian McLaren
       test01                 Gabriele.Cosmo@cern.ch          Gabriele Cosmo
       test02                 Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
@@ -197,9 +205,10 @@ tests                        Ian.Mclaren@cern.ch             Ian McLaren
       test33                 Alexander.Howard@cern.ch        Alexander Howard
       test34                 Joanna.Weng@cern.ch             Joanna Weng
       test35                 Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
+      test36                 Vladimir.Grichine@cern.ch       Vladimir Grichine
+      test37                 Omrane.Ben.Mbarek.Kadri@cern.ch Omrane Kadri                    
       test39                 Mikhail.Kossov@cern.ch          Mikhail Kossov
       test40                 Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
-      test50                 Susanna.Guatelli@ge.infn.it     Susanna Guatelli
+      test50                 MariaGrazia.Pia@ge.infn.it	     Maria Grazia Pia
       test201                barrand@lal.in2p3.fr            Guy Barrand
       test202                John.Allison@man.ac.uk          John Allison
-
