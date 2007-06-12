@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: TestEm7.cc,v 1.6 2006-06-29 16:57:27 gunter Exp $
+// $Id: TestEm7.cc,v 1.7 2007-06-12 14:01:13 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -63,17 +63,16 @@ int main(int argc,char** argv) {
   G4RunManager * runManager = new G4RunManager;
 
   //set mandatory initialization classes
-   DetectorConstruction* det;
-   PhysicsList* phys;
-   PrimaryGeneratorAction* kin;
+  DetectorConstruction* det;
+  PhysicsList* phys;
+  PrimaryGeneratorAction* kin;
   runManager->SetUserInitialization(det  = new DetectorConstruction);
   runManager->SetUserInitialization(phys = new PhysicsList);
   runManager->SetUserAction(kin = new PrimaryGeneratorAction(det));
   
 #ifdef G4VIS_USE
   //visualization manager
-  G4VisManager* visManager = new G4VisExecutive;
-  visManager->Initialize();
+  G4VisManager* visManager = 0;
 #endif
     
   //set user action classes
@@ -89,7 +88,9 @@ int main(int argc,char** argv) {
 
   if (argc==1)   // Define UI terminal for interactive mode  
     { 
-     G4UIsession* session = 0;
+      visManager = new G4VisExecutive;
+      visManager->Initialize();
+      G4UIsession* session = 0;
 #ifdef G4UI_USE_TCSH
       session = new G4UIterminal(new G4UItcsh);      
 #else

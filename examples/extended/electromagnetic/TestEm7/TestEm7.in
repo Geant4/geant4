@@ -1,11 +1,11 @@
-# $Id: TestEm7.in,v 1.14 2007-06-12 09:51:05 vnivanch Exp $
+# $Id: TestEm7.in,v 1.15 2007-06-12 14:01:13 vnivanch Exp $
 #
 # Macro file for "TestEm7.cc"
 # (can be run in batch, without graphic)
 #
 #
-/control/verbose 2
-/run/verbose 2
+/control/verbose 1
+/run/verbose 1
 #
 /testem/det/setMat G4_WATER
 /testem/det/setSizeX  20 cm
@@ -33,6 +33,7 @@
 #
 /run/beamOn 10000
 #
+/testem/stepMax 100 mm
 /gun/particle ion
 /gun/ion 6 12 6
 /gun/energy 3.5 GeV
@@ -40,6 +41,6 @@
 #
 /testem/det/setMat G4_Cu
 /testem/det/update
-/gun/particle pi+
+/gun/particle kaon+
 /gun/energy 100 MeV
 /run/beamOn 1000

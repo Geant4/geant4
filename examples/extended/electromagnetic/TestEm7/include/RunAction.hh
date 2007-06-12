@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.hh,v 1.10 2006-11-22 17:58:11 vnivanch Exp $
+// $Id: RunAction.hh,v 1.11 2007-06-12 14:01:13 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -64,25 +64,27 @@ public:
   G4double GetOffsetX()   {return offsetX;} 
   void     FillHisto(G4int id, G4double x, G4double weight = 1.0);
     
-    void AddProjRange (G4double x) {projRange += x; projRange2 += x*x;};
+  void AddProjRange (G4double x) {projRange += x; projRange2 += x*x;};
+  void AddPrimaryStep() {nPrimarySteps++;};
                    
-  private:  
-    void bookHisto();
-    void cleanHisto();
+private:  
+  void bookHisto();
+  void cleanHisto();
     
-  private:
-    DetectorConstruction*   detector;
-    PhysicsList*            physics;
-    PrimaryGeneratorAction* kinematic;
-    G4double*               tallyEdep;   
-    G4double                binLength;
-    G4double                offsetX;
-    G4double                length;
-    G4double                projRange, projRange2;
-             
-    AIDA::IAnalysisFactory* af;  
-    AIDA::ITree*            tree;
-    AIDA::IHistogram1D*     histo[1];        
+private:
+  DetectorConstruction*   detector;
+  PhysicsList*            physics;
+  PrimaryGeneratorAction* kinematic;
+  G4double*               tallyEdep;   
+  G4double                binLength;
+  G4double                offsetX;
+  G4double                length;
+  G4double                projRange, projRange2;
+  G4int                   nPrimarySteps;
+           
+  AIDA::IAnalysisFactory* af;  
+  AIDA::ITree*            tree;
+  AIDA::IHistogram1D*     histo[1];        
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
