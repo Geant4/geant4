@@ -100,7 +100,7 @@ echo ' BFIELD      =' $BFIELD
 #
     echo '  '; echo ' G4INSTALL = ' $G4INSTALL; echo ' running REF = ' $REF ; echo '  ' ;
     rm -rf tmp/ ;
-    ln -sfn GNUmakefile-2 GNUmakefile  ; #***LOOKHERE*** Temporary for 8.1 / 8.2 ;
+    ln -sfn GNUmakefile-2 GNUmakefile ; #***LOOKHERE*** Use GNUmakefile-1 before G4 8.2
     gmake ;
     if [ $? != 0 ] ; then
 	echo ' ***ERROR*** from: gmake ! exitCode = 13' ;  
@@ -109,10 +109,11 @@ echo ' BFIELD      =' $BFIELD
     mv bin/$G4SYSTEM/mainStatAccepTest bin/$G4SYSTEM/mainStatAccepTest-$REF-$PHYSICS ;
     mainStatAccepTest-$REF-$PHYSICS run.g4-$LABEL > output.log-$LABEL 2>&1 ;
 ###    mainStatAccepTest-$REF-$PHYSICS run.g4-$LABEL ;
-    if [ $? != 0 ] ; then
+    EXITCODE=$? ;
+    if [ $EXITCODE != 0 ] ; then
 	echo ' ***ERROR*** from: mainStatAccepTest-... run.g4-... ! exitCode = 14' ;  
 	rm -rf tmp/ ;
-	exit 14 ;
+	exit $EXITCODE ;
     fi
     mv ntuple.hbook ntuple.hbook-$LABEL ;
 #
@@ -160,7 +161,7 @@ fi
     fi
     echo '  '; echo ' G4INSTALL = ' $G4INSTALL; echo ' running REF = ' $REF ; echo '  ' ;
     rm -rf tmp/ ;
-    ln -sfn GNUmakefile-2 GNUmakefile  ; #***LOOKHERE*** Temporary for 8.1 / 8.2
+    ln -sfn GNUmakefile-2 GNUmakefile ; #***LOOKHERE*** Use GNUmakefile-1 before G4 8.2
     gmake ;
     if [ $? != 0 ] ; then
 	echo ' ***ERROR*** from: gmake ! exitCode = 23' ; 
@@ -169,10 +170,11 @@ fi
     mv bin/$G4SYSTEM/mainStatAccepTest bin/$G4SYSTEM/mainStatAccepTest-$REF-$PHYSICS ;
     mainStatAccepTest-$REF-$PHYSICS run.g4-$LABEL > output.log-$LABEL 2>&1 ;
 ###    mainStatAccepTest-$REF-$PHYSICS run.g4-$LABEL ;
-    if [ $? != 0 ] ; then
+    EXITCODE=$? ;
+    if [ $EXITCODE != 0 ] ; then
 	echo ' ***ERROR*** from: mainStatAccepTest-... run.g4-... ! exitCode = 24' ;   
 	rm -rf tmp/ ;
-	exit 24 ;
+	exit $EXITCODE ;
     fi
     mv ntuple.hbook ntuple.hbook-$LABEL ;
 #
