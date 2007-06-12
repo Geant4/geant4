@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.hh,v 1.67 2007-05-23 08:43:46 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.hh,v 1.68 2007-06-12 11:29:09 vnivanch Exp $
 // GEANT4 tag $Name:
 //
 // -------------------------------------------------------------------
@@ -768,8 +768,8 @@ inline G4double G4VEnergyLossProcess::GetContinuousStepLimit(
 inline G4double G4VEnergyLossProcess::AlongStepGetPhysicalInteractionLength(
                              const G4Track&,
                              G4double,
-                             G4double  currentMinimumStep,
-                             G4double& currentSafety,
+                             G4double  currentMinStep,
+                             G4double&,
                              G4GPILSelection* selection)
 {
   G4double x = DBL_MAX;
@@ -780,11 +780,13 @@ inline G4double G4VEnergyLossProcess::AlongStepGetPhysicalInteractionLength(
     x = fRange;
     G4double y = x*dRoverRange;
 
-    if(x > finalRange && y < currentMinimumStep && x > currentSafety) {
+    //    G4double safety = track.GetStep()->GetPreStepPoint()->GetSafety();
+    if(x > finalRange && y < currentMinStep) { // && x > safety) {
       x = y + finalRange*(1.0 - dRoverRange)*(2.0 - finalRange/fRange);
-      // G4cout<<GetProcessName()<<": e= "<<preStepKinEnergy
-      // <<" range= "<<fRange <<" cMinSt="<<currentMinStep<< G4endl;
     } else if (rndmStepFlag) x = SampleRange();
+    //    G4cout<<GetProcessName()<<": e= "<<preStepKinEnergy
+    //	  <<" range= "<<fRange <<" cMinSt="<<currentMinStep
+    //	  <<" safety= " << safety<< " limit= " << x <<G4endl;
   }
   //  G4cout<<GetProcessName()<<": e= "<<preStepKinEnergy
   //  <<" stepLimit= "<<x<<G4endl;
