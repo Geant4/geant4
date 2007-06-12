@@ -1782,27 +1782,22 @@
     const G4double bMin = 0.01;
     const G4double b1 = 4.0;
     const G4double b2 = 1.6;
-    G4double t = std::log( 1.0-G4UniformRand() ) / std::max( bMin, b1+b2*std::log(pOriginal) );
-    G4double t1 =
-      pseudoParticle[1].GetTotalEnergy()/GeV - pseudoParticle[3].GetTotalEnergy()/GeV;
+
     G4double pin = pseudoParticle[1].GetMomentum().mag()/GeV;
-    G4double tacmin = t1*t1 - (pin-pf)*(pin-pf);
-    //
-    // calculate (std::sin(teta/2.)^2 and std::cos(teta), set azimuth angle phi
-    //
-    const G4double smallValue = 1.0e-10;
-    G4double dumnve = 4.0*pin*pf;
-    if( dumnve == 0.0 )dumnve = smallValue;
-    G4double ctet = std::max( -1.0, std::min( 1.0, 1.0+2.0*(t-tacmin)/dumnve ) );
-    dumnve = std::max( 0.0, 1.0-ctet*ctet );
-    G4double stet = std::sqrt(dumnve);
+    G4double dtb = 4.0*pin*pf*std::max( bMin, b1+b2*std::log(pOriginal) );
+    G4double factor = 1.0 - std::exp(-dtb);
+    G4double costheta = 1.0 + 2.0*std::log(1.0 - G4UniformRand()*factor) / dtb;
+    costheta = std::max(-1.0, std::min(1.0, costheta));
+    G4double sintheta = std::sqrt(1.0-costheta*costheta);
     G4double phi = G4UniformRand() * twopi;
+
     //
     // calculate final state momenta in centre of mass system
     //
-    pseudoParticle[3].SetMomentum( pf*stet*std::sin(phi)*GeV,
-                                   pf*stet*std::cos(phi)*GeV,
-                                   pf*ctet*GeV );
+    pseudoParticle[3].SetMomentum( pf*sintheta*std::cos(phi)*GeV,
+                                   pf*sintheta*std::sin(phi)*GeV,
+                                   pf*costheta*GeV );
+
     pseudoParticle[4].SetMomentum( pseudoParticle[3].GetMomentum() * (-1.0) );
     //
     // simulate backward nucleon cluster in lab. system and transform in cms
@@ -1827,7 +1822,7 @@
             std::pow( (G4UniformRand()*(1.0-ga)/a+std::pow(ekit1,(1.0-ga))), (1.0/(1.0-ga)) );
           vec[i]->SetKineticEnergy( kineticE*GeV );
           G4double vMass = vec[i]->GetMass()/MeV;
-          G4double totalE = kineticE + vMass;
+          G4double totalE = kineticE*GeV + vMass;
           pp = std::sqrt( std::abs(totalE*totalE-vMass*vMass) );
           G4double cost = std::min( 1.0, std::max( -1.0, std::log(2.23*G4UniformRand()+0.383)/0.96 ) );
           G4double sint = std::sqrt( std::max( 0.0, (1.0-cost*cost) ) );
