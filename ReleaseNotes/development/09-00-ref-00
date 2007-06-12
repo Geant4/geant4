@@ -12,12 +12,14 @@ Some of the development/fixes included since the last development tags are:
     fast-parameterisation.
   o Introduced new scorers for event biasing options, replacing old scoring
     classes and scheme.
+  o Unified process biasing classes in a new dedicated module.
   o New error_propagation module for backwards error propagation of tracks
     (Geant4e utility).
   o New class G4HelixMixedStepper, mixing helical stepper and Runge-Kutta
     G4MagHelicalStepper.
   o Activated quasi-elastic for FTF physics lists.
   o New hadronic module for Livermore LLNL spontaneous fission model.
+  o Implemented signal handler for soft-abort in G4UIterminal.
 
 
 ---------- Reference-tag 'Release Notes' -----------
