@@ -1,4 +1,4 @@
-$Id: History,v 1.34 2007-06-05 18:23:42 ahoward Exp $
+$Id: History,v 1.35 2007-06-13 14:45:49 ahoward Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+June 5, 2007  A. Howard - exbiasing-V08-03-01
+- Removed B03 from GNUmakefile
+- Included "B02-V08-03-00" - migration of B02 to new biasing/scoring scheme:
+  test version
 
 June 5, 2007  A. Howard - exbiasing-V08-03-00
 - Migrated example B01 to new biasing/scoring scheme - test version 
