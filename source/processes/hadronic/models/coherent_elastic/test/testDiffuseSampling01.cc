@@ -1,5 +1,5 @@
 //
-// Unit test for coherent elastic models
+// Unit test for diffuse elastic models
 //
 //  18.05.07 V. Grichine
 //
@@ -18,6 +18,8 @@
 
 
 #include "G4UHadronElasticProcess.hh"
+#include "G4HadProjectile.hh"
+#include "G4DynamicParticle.hh"
 
 #include "G4Element.hh"
 #include "G4NistManager.hh"
@@ -41,7 +43,7 @@ using namespace std;
 int main()
 {
 
-  G4int i, j, k, iMax;
+  G4int i, j, k, iMax, iMod;
   G4double x;
 
   G4DiffuseElastic* diffelastic = new G4DiffuseElastic();
@@ -81,7 +83,7 @@ int main()
   G4int choice;
   // G4cin >> choice;
 
-  choice = 8;
+  choice = 82;
 
 
   switch (choice)
@@ -189,7 +191,7 @@ int main()
   G4cout << " 5 kaon0short" << G4endl;
 
   //  G4cin >> choice;
-  choice = 4;
+  choice = 1;
 
   G4ParticleDefinition* theParticleDefinition;
 
@@ -238,13 +240,7 @@ int main()
       break;
 
   }
-  // Sampling array of scattering angles 
-
-  const G4int kAngle = 101;
-  G4double angleDistr[kAngle];
-
-  for( k = 0; k < kAngle; k++) angleDistr[k] = 0;
-
+  // Physics data
 
   G4double momentum = 9.92*GeV;
   G4double pMass    = theParticleDefinition->GetPDGMass();
@@ -258,6 +254,8 @@ int main()
   G4DynamicParticle*  theDynamicParticle = new G4DynamicParticle(theParticleDefinition,
                                               G4ParticleMomentum(0.,0.,1.),
                                               kinEnergy);
+  G4HadProjectile* projectile = new G4HadProjectile(*theDynamicParticle); 
+
   G4double m1 = theParticleDefinition->GetPDGMass();
   G4double plab = theDynamicParticle->GetTotalMomentum();
   G4cout <<"lab momentum, plab = "<<plab/GeV<<" GeV"<<G4endl;
@@ -309,7 +307,7 @@ int main()
   G4int  numberOfSimPoints =0;
   G4double pData, sData, dData, tData[200];
   std::ifstream simRead;
-  simRead.open("pOT1GeV.dat");
+  simRead.open("pPbT1GeV.dat");
 
   simRead>>numberOfSimPoints;
 
@@ -325,14 +323,21 @@ int main()
   }
   simRead.close();
 
+  const G4int kAngle = numberOfSimPoints;
+  G4double angleDistr[kAngle];
 
+  for( k = 0; k < kAngle; k++) 
+  {
+    tData[k] *= degree;
+    angleDistr[k] = 0;
+  }
   std::ofstream writes("sigma.dat", std::ios::out ) ;
   writes.setf( std::ios::scientific, std::ios::floatfield );
 
   G4double theta, sigma, integral;
 
-  iMax = numberOfSimPoints;
-
+  iMax = 1000000;   // numberOfSimPoints;
+  iMod = iMax/10;
   writes << iMax  << G4endl;
 
   for( i = 0; i < iMax; i++)
@@ -344,82 +349,27 @@ int main()
     // theta = std::acos(1-2*tData[i]/tmax);
 
     // theta = std::sqrt(tData[i]/plab/plab);
-    theta = tData[i]*degree;
+    // theta = tData[i]*degree;
 
 
-    sigma = diffelastic->GetDiffuseElasticXsc( theParticleDefinition, theta, plab, A);
-    integral = diffelastic->IntegralElasticProb( theParticleDefinition, theta, plab, A);
-    // sigma *= 4*pi/tmax;
+    // sigma = diffelastic->GetDiffuseElasticXsc( theParticleDefinition, theta, plab, A);
+    // integral = diffelastic->IntegralElasticProb( theParticleDefinition, theta, plab, A);
 
-    // G4cout << theta/milliradian << "\t" << "\t" << sigma/barn  << "\t"<< integral << G4endl;
-    // writes << theta/milliradian << "\t" << "\t" << sigma/barn << "\t"<< integral << G4endl;
+    theta = diffelastic->SampleThetaLab(projectile, m2, A);
 
-   G4cout << theta/degree << "\t" << "\t" << sigma/millibarn  << "\t"<< integral << G4endl;
-   writes << theta/degree << "\t" << "\t" << sigma/millibarn << "\t"<< integral << G4endl;
-
-    // G4cout << theta/milliradian << "\t"<< "\t"<< tData[i]/GeV/GeV << "\t" << "\t" 
-    //        << sigma*GeV*GeV/millibarn << "\t"<< integral << G4endl;
-
-    // writes << tData[i]/GeV/GeV << "\t" << "\t" 
-    //        << sigma*GeV*GeV/millibarn  << "\t"<< integral << G4endl;
-
-  /*
-    if(!swave) 
+    for( k = 0; k < kAngle; k++)
     {
-      // t = diffelastic->SampleT( theParticleDefinition, plab, Z, A );
+      if( theta <= tData[k] )
+      {
+        // k = G4int(theta*kAngle/thetaMax);
+        // k = G4int(t*kAngle*100/tmax);
 
-      if( t > tmax ) swave = true;
+        angleDistr[k] += 1;
+        break;
+      }
     }
-    if(swave) t = G4UniformRand()*tmax;
-
-    G4double phi  = G4UniformRand()*twopi;
-    G4double cost = 1. - 2.0*t/tmax;
-    G4double sint;
-
-    if( cost >= 1.0 ) 
-    {
-      cost = 1.0;
-      sint = 0.0;
-    }
-    else if( cost <= -1.0) 
-    {
-      cost = -1.0;
-      sint =  0.0;
-    }
-    else  
-    {
-      sint = std::sqrt((1.0-cost)*(1.0+cost));
-    }  
-    G4ThreeVector v1( sint*std::cos(phi), sint*std::sin(phi), cost);
-
-    v1 *= ptot;
-    G4LorentzVector nlv1( v1.x(), v1.y(), v1.z(), std::sqrt(ptot*ptot + m1*m1));
-
-    nlv1.boost(bst); 
-
-    G4ThreeVector np1 = nlv1.vect();
-
-    // G4double theta = std::acos( np1.z()/np1.mag() );  // degree;
-    // G4double theta = np1.theta();
-
-
-    // k = G4int(theta*kAngle/thetaMax);
-    k = G4int(t*kAngle*100/tmax);
-    angleDistr[k] += 1;
-  */
-
+    if (i%iMod == 0) G4cout <<"i = "<<i<<G4endl;
   }
-  G4double sig = barash->GetCrossSection(theDynamicParticle,theElement, 273*kelvin);
-  // G4double sig = barash->GetElasticCrossSection(theDynamicParticle, G4double(Z), G4double(A));
-  // sig = barash->GetTotalXsc();
-  sig = barash->GetElasticXsc();
-  
-  G4double rad = diffelastic->GetNuclearRadius();
-
-  integral *= rad*rad;
-
-  G4cout<<integral/millibarn<<"\t"<<sig/millibarn<<"\t"<<integral/sig<<G4endl;
-  /*
   G4double sum = 0;
 
   for( k = 0; k < kAngle; k++) sum += angleDistr[k];
@@ -430,18 +380,18 @@ int main()
   std::ofstream writef("angle.dat", std::ios::out ) ;
   writef.setf( std::ios::scientific, std::ios::floatfield );
 
+  writef <<kAngle<<G4endl;
+
   for( k = 0; k < kAngle; k++) 
   {
     // angleDistr[k] *= sig/iMax/(2*pi)/std::sin(k*thetaMax/kAngle);
     // angleDistr[k] *= steradian/millibarn;
     // G4cout <<k*thetaMax/kAngle/degree<<"\t"<<"\t"<<angleDistr[k]<<G4endl;
     // writef <<k*thetaMax/kAngle/degree<<"\t"<<angleDistr[k]<<G4endl;
-    // G4cout <<k<<"\t"<<"\t"<<angleDistr[k]<<G4endl;
-    // writef <<k<<"\t"<<angleDistr[k]<<G4endl;
+    G4cout <<tData[k]/degree<<"\t"<<"\t"<<angleDistr[k]<<G4endl;
+    writef <<tData[k]/degree<<"\t"<<angleDistr[k]<<G4endl;
   }
   
-  */
-
   G4cout<<"energy in GeV"<<"\t"<<"cross-section in millibarn"<<G4endl;
   G4cout << " elastic cross section for " <<
             theParticleDefinition->GetParticleName() <<
