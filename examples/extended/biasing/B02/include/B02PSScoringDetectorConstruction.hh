@@ -24,38 +24,50 @@
 // ********************************************************************
 //
 //
-// $Id: B02DetectorConstruction.hh,v 1.5 2007-06-13 13:31:41 ahoward Exp $
+// $Id: B02PSScoringDetectorConstruction.hh,v 1.1 2007-06-13 13:31:41 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
-#ifndef B02DetectorConstruction_hh
-#define B02DetectorConstruction_hh B02DetectorConstruction_hh
+#ifndef B02PSScoringDetectorConstruction_hh 
+#define B02PSScoringDetectorConstruction_hh  B02PSScoringDetectorConstruction_hh 
 
 #include "globals.hh"
-#include "G4VUserDetectorConstruction.hh"
+#include <map>
+//#include "G4GeometryCell.hh"
+//#include "B02PVolumeStore.hh"
 
+#include "G4VUserParallelWorld.hh"
+
+#include <vector> //ASO
 class G4VPhysicalVolume;
-class G4IStore;
+class G4LogicalVolume; //ASO
 
-class B02DetectorConstruction : public G4VUserDetectorConstruction
+
+class B02PSScoringDetectorConstruction: public G4VUserParallelWorld
 {
 public:
-  B02DetectorConstruction();
-  ~B02DetectorConstruction();
-  
-  G4VPhysicalVolume* Construct();
+  B02PSScoringDetectorConstruction(G4String worldName);
+  ~B02PSScoringDetectorConstruction();
+
+  //const G4VPhysicalVolume &GetPhysicalVolumeByName(const G4String& name) const;
+  //  G4VPhysicalVolume *GetWorldVolume() const;
+  //G4String ListPhysNamesAsG4String();
+  G4String GetCellName(G4int i);
+  //G4GeometryCell GetGeometryCell(G4int i);
 
   G4VPhysicalVolume* GetWorldVolume();
   G4VPhysicalVolume& GetWorldVolumeAddress() const;
 
-  //  G4String GetCellName(G4int i);
-
-  void SetSensitive();  //ASO  
+  void SetSensitive(); //ASO
 
 private:
+  void Construct();
+  //B02PVolumeStore fPVolumeStore;
+  G4VPhysicalVolume *fWorldVolume;
 
-  G4VPhysicalVolume* pWorldVolume;
+  G4VPhysicalVolume* ghostWorld;
 
+  std::vector< G4LogicalVolume* > fLogicalVolumeVector; //ASO
 
 };
 

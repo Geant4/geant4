@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: B02ImportanceDetectorConstruction.hh,v 1.5 2006-06-29 16:34:31 gunter Exp $
+// $Id: B02ImportanceDetectorConstruction.hh,v 1.6 2007-06-13 13:31:41 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -33,29 +33,44 @@
 
 #include "globals.hh"
 #include <map>
+#include <vector>
 #include "G4GeometryCell.hh"
 #include "B02PVolumeStore.hh"
 
+#include "G4VUserParallelWorld.hh"
+
 class G4VPhysicalVolume;
+class G4LogicalVolume; //ASO
 
 
 
-class B02ImportanceDetectorConstruction
+class B02ImportanceDetectorConstruction : public G4VUserParallelWorld
 {
 public:
-  B02ImportanceDetectorConstruction();
+  B02ImportanceDetectorConstruction(G4String worldName);
   ~B02ImportanceDetectorConstruction();
 
   const G4VPhysicalVolume &GetPhysicalVolumeByName(const G4String& name) const;
-  G4VPhysicalVolume &GetWorldVolume() const;
+  G4VPhysicalVolume &GetWorldVolumeAddress() const;
   G4String ListPhysNamesAsG4String();
   G4String GetCellName(G4int i);
   G4GeometryCell GetGeometryCell(G4int i);
 
+  G4VPhysicalVolume* GetWorldVolume();
+
+  void SetSensitive();  //ASO  
+
 private:
   void Construct();
   B02PVolumeStore fPVolumeStore;
-  G4VPhysicalVolume *fWorldVolume;
+
+  //  std::vector< G4VPhysicalVolume * > fPhysicalVolumeVector;
+  std::vector< G4LogicalVolume * > fLogicalVolumeVector;  //ASO
+
+  //  G4VPhysicalVolume *fWorldVolume;
+
+  G4VPhysicalVolume* ghostWorld;
+
 };
 
 #endif

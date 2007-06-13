@@ -23,40 +23,69 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: B02DetectorConstruction.hh,v 1.5 2007-06-13 13:31:41 ahoward Exp $
+// $Id: B02ScoreTable.hh,v 1.1 2007-06-13 13:31:41 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+// ----------------------------------------------------------------------
+// Class B02ScoreTable
+//
+// Class description:
+// 
+// This class creates a table from a given G4CellScoreStore
+// and prints it to a given output stream.
+//
 
-#ifndef B02DetectorConstruction_hh
-#define B02DetectorConstruction_hh B02DetectorConstruction_hh
+// Author: Michael Dressel (Michael.Dressel@cern.ch)
+// ----------------------------------------------------------------------
+//
+
+#ifndef B02ScoreTable_hh
+#define B02ScoreTable_hh B02ScoreTable_hh
+
+#include <iostream>
+#include <iomanip>
+#include <vector>
 
 #include "globals.hh"
-#include "G4VUserDetectorConstruction.hh"
+#include "G4CellScorerStore.hh"
+#include "G4CellScoreValues.hh"
+class G4VIStore;
 
-class G4VPhysicalVolume;
-class G4IStore;
 
-class B02DetectorConstruction : public G4VUserDetectorConstruction
+class B02ScoreTable
 {
-public:
-  B02DetectorConstruction();
-  ~B02DetectorConstruction();
-  
-  G4VPhysicalVolume* Construct();
+public: // with description
+  explicit B02ScoreTable(const G4VIStore *aIStore = 0);
 
-  G4VPhysicalVolume* GetWorldVolume();
-  G4VPhysicalVolume& GetWorldVolumeAddress() const;
+  ~B02ScoreTable();
 
-  //  G4String GetCellName(G4int i);
+  void Print(const G4MapGeometryCellCellScorer &cs, 
+	     std::ostream *out = 0);
+    // create the table and print it to the ouput stream.
 
-  void SetSensitive();  //ASO  
+  void PrintHeader(std::ostream *out);
+    // print the table header, done by the above Print() function
+
+  void PrintTable(const G4MapGeometryCellCellScorer &cs,
+		  std::ostream *out);
+    // print the table contend, done by the above Print() function
+
+  std::string FillString(const std::string &name, 
+			   char c, G4int n, G4bool back = true);
+    // create a string of length n, by filling up
+    // name with the char c.
 
 private:
+  B02ScoreTable(const B02ScoreTable &);
+  B02ScoreTable &operator=(const B02ScoreTable &);
 
-  G4VPhysicalVolume* pWorldVolume;
-
-
+  G4String CreateName(const G4GeometryCell &gCell);
+  void PrintLine(const G4String &name,
+		 const G4CellScoreValues &sc_scores,
+		 std::ostream *out);
+  const G4VIStore *fIStore;
+  G4int FieldName;
+  G4int FieldValue;
 };
 
 #endif

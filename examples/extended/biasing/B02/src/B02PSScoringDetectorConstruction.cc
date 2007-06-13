@@ -24,14 +24,14 @@
 // ********************************************************************
 //
 //
-// $Id: B02ImportanceDetectorConstruction.cc,v 1.10 2007-06-13 13:31:41 ahoward Exp $
+// $Id: B02PSScoringDetectorConstruction.cc,v 1.1 2007-06-13 13:31:41 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "globals.hh"
 #include <sstream>
 
-#include "B02ImportanceDetectorConstruction.hh"
+#include "B02PSScoringDetectorConstruction.hh"
 
 #include "G4Material.hh"
 #include "G4Tubs.hh"
@@ -39,7 +39,6 @@
 #include "G4ThreeVector.hh"
 #include "G4PVPlacement.hh"
 
-//ASO
 // For Primitive Scorers
 #include "G4SDManager.hh"
 #include "G4MultiFunctionalDetector.hh"
@@ -51,19 +50,20 @@
 
 
 
-B02ImportanceDetectorConstruction::B02ImportanceDetectorConstruction(G4String worldName) 
-:G4VUserParallelWorld(worldName),fLogicalVolumeVector()
+B02PSScoringDetectorConstruction::B02PSScoringDetectorConstruction(G4String worldName)
+  :G4VUserParallelWorld(worldName),fLogicalVolumeVector() //ASO
 {
   //  Construct();
 }
 
-B02ImportanceDetectorConstruction::~B02ImportanceDetectorConstruction()
+B02PSScoringDetectorConstruction::~B02PSScoringDetectorConstruction()
 {
   fLogicalVolumeVector.clear(); //ASO
 }
 
-void B02ImportanceDetectorConstruction::Construct()
+void B02PSScoringDetectorConstruction::Construct()
 {  
+
   G4cout << " constructing parallel world " << G4endl;
 
   //GetWorld methods create a clone of the mass world to the parallel world (!)
@@ -91,14 +91,13 @@ void B02ImportanceDetectorConstruction::Construct()
 
   // parallel world solid larger than in the mass geometry
 
-  // don't create parallel world as it's now synonymous with physical world
-  /*
-  G4double innerRadiusCylinder = 0*cm;
-  G4double outerRadiusCylinder = 110*cm;
-  G4double hightCylinder       = 110*cm;
-  G4double startAngleCylinder  = 0*deg;
-  G4double spanningAngleCylinder    = 360*deg;
+  //G4double innerRadiusCylinder = 0*cm;
+  //G4double outerRadiusCylinder = 110*cm;
+  //G4double hightCylinder       = 110*cm;
+  //G4double startAngleCylinder  = 0*deg;
+  //G4double spanningAngleCylinder    = 360*deg;
 
+  /*
   G4Tubs *worldCylinder = new G4Tubs("worldCylinder",
                                      innerRadiusCylinder,
                                      outerRadiusCylinder,
@@ -110,17 +109,14 @@ void B02ImportanceDetectorConstruction::Construct()
 
   G4LogicalVolume *worldCylinder_log = 
     new G4LogicalVolume(worldCylinder, Galactic, "worldCylinder_log");
-  fLogicalVolumeVector.push_back(worldCylinder_log);  //ASO
 
   name = "parallelWorld";
-  pWorldVolume = new 
+  fWorldVolume = new 
     G4PVPlacement(0, G4ThreeVector(0,0,0), worldCylinder_log,
 		  name, 0, false, 0);
+
   */
-
-
-  //  fPVolumeStore.AddPVolume(G4GeometryCell(*pWorldVolume, 0));
-  fPVolumeStore.AddPVolume(G4GeometryCell(*ghostWorld, 0));
+  //fPVolumeStore.AddPVolume(G4GeometryCell(*ghostWorld, 0));
 
 
 
@@ -144,14 +140,13 @@ void B02ImportanceDetectorConstruction::Construct()
 
   G4LogicalVolume *aShield_log = 
     new G4LogicalVolume(aShield, Galactic, "aShield_log");
-  fLogicalVolumeVector.push_back(aShield_log);  //ASO
+  fLogicalVolumeVector.push_back(aShield_log); //ASO
 
   // physical parallel cells
 
   G4int i = 1;
   G4double startz = -85*cm; 
-  //  for (i=1; i<=18; ++i) {
-  for (i=1; i<=18; i++) {
+  for (i=1; i<=18; ++i) {
    
     name = GetCellName(i);
     
@@ -165,21 +160,17 @@ void B02ImportanceDetectorConstruction::Construct()
 			name, 
 			worldLogical, 
 			false, 
-			i);
-    //			0);
-    G4GeometryCell cell(*pvol, i);
-    //    G4GeometryCell cell(*pvol, 0);
-    fPVolumeStore.AddPVolume(cell);
+			i); //ASO
+    //G4GeometryCell cell(*pvol, i);  //ASO
+    //fPVolumeStore.AddPVolume(cell);
   }
 
   // filling the rest of the world volumr behind the concrete with
   // another slob which should get the same importance value as the 
   // last slob
   innerRadiusShield = 0*cm;
-  //  outerRadiusShield = 110*cm; exceeds world volume!!!!
-  outerRadiusShield = 101*cm;
-  //  hightShield       = 10*cm;
-  hightShield       = 5*cm;
+  outerRadiusShield = 100*cm;  //ASO
+  hightShield       = 5*cm;    // ASO 
   startAngleShield  = 0*deg;
   spanningAngleShield    = 360*deg;
 
@@ -192,14 +183,11 @@ void B02ImportanceDetectorConstruction::Construct()
   
   G4LogicalVolume *aRest_log = 
     new G4LogicalVolume(aRest, Galactic, "aRest_log");
-
-  fLogicalVolumeVector.push_back(aRest_log);  //ASO
-
   name = GetCellName(19);
+  fLogicalVolumeVector.push_back(aRest_log); //ASO
     
   G4double pos_x = 0*cm;
   G4double pos_y = 0*cm;
-  //  G4double pos_z = 100*cm;
   G4double pos_z = 95*cm;
   G4VPhysicalVolume *pvol = 
     new G4PVPlacement(0, 
@@ -208,29 +196,27 @@ void B02ImportanceDetectorConstruction::Construct()
 		      name, 
 		      worldLogical, 
 		      false, 
-		      19);
-  //		      0);
-  G4GeometryCell cell(*pvol, 19);
-  //  G4GeometryCell cell(*pvol, 0);
-  fPVolumeStore.AddPVolume(cell);
+		      19); // i = 19  ASO
+  //G4GeometryCell cell(*pvol, i); // ASO
+  //fPVolumeStore.AddPVolume(cell);
 
-  SetSensitive();
+  SetSensitive(); //ASO
 
 }
 
-const G4VPhysicalVolume &B02ImportanceDetectorConstruction::
-GetPhysicalVolumeByName(const G4String& name) const {
-  return *fPVolumeStore.GetPVolume(name);
-}
+//const G4VPhysicalVolume &B02PSScoringDetectorConstruction::
+//GetPhysicalVolumeByName(const G4String& name) const {
+//  return *fPVolumeStore.GetPVolume(name);
+//}
 
 
-G4String B02ImportanceDetectorConstruction::ListPhysNamesAsG4String(){
-  G4String names(fPVolumeStore.GetPNames());
-  return names;
-}
+//G4String B02PSScoringDetectorConstruction::ListPhysNamesAsG4String(){
+//  G4String names(fPVolumeStore.GetPNames());
+//  return names;
+//}
 
 
-G4String B02ImportanceDetectorConstruction::GetCellName(G4int i) {
+G4String B02PSScoringDetectorConstruction::GetCellName(G4int i) {
   std::ostringstream os;
   os << "cell_";
   if (i<10) {
@@ -241,30 +227,36 @@ G4String B02ImportanceDetectorConstruction::GetCellName(G4int i) {
   return name;
 }
 
-G4GeometryCell B02ImportanceDetectorConstruction::GetGeometryCell(G4int i){
-  G4String name(GetCellName(i));
-  const G4VPhysicalVolume *p=0;
-  p = fPVolumeStore.GetPVolume(name);
-  if (p) {
-    return G4GeometryCell(*p,0);
-  }
-  else {
-    G4cout << "B02ImportanceDetectorConstruction::GetGeometryCell: couldn't get G4GeometryCell" << G4endl;
-    return G4GeometryCell(*ghostWorld,-2);
-  }
+//G4GeometryCell B02PSScoringDetectorConstruction::GetGeometryCell(G4int i){
+//  G4String name(GetCellName(i));
+//  const G4VPhysicalVolume *p=0;
+//  p = fPVolumeStore.GetPVolume(name);
+//  if (p) {
+//    G4cout << " returning GetGeometryCell " << G4endl;
+//    return G4GeometryCell(*p,i); //ASO
+//  }
+//  else {
+//    G4cout << "B02PSScoringDetectorConstruction::GetGeometryCell: couldn't get G4GeometryCell" << G4endl;
+//    return G4GeometryCell(*ghostWorld,-2);
+//  }
+//}
+
+
+// G4VPhysicalVolume *B02PSScoringDetectorConstruction::GetWorldVolume() const{
+//   return *fWorldVolume;
+// }
+
+
+G4VPhysicalVolume *B02PSScoringDetectorConstruction::GetWorldVolume() {
+   return ghostWorld;
 }
 
 
-G4VPhysicalVolume &B02ImportanceDetectorConstruction::GetWorldVolumeAddress() const{
-   return *ghostWorld;
+G4VPhysicalVolume &B02PSScoringDetectorConstruction::GetWorldVolumeAddress() const{
+  return *ghostWorld;
 }
 
-G4VPhysicalVolume *B02ImportanceDetectorConstruction::GetWorldVolume() {
-  return ghostWorld;
-}
-
-
-void B02ImportanceDetectorConstruction::SetSensitive(){
+void B02PSScoringDetectorConstruction::SetSensitive(){
 
   //  -------------------------------------------------
   //   The collection names of defined Primitives are
@@ -285,7 +277,6 @@ void B02ImportanceDetectorConstruction::SetSensitive(){
   //================================================
   //
   //  Sensitive Detector Manager.
-
   G4SDManager* SDman = G4SDManager::GetSDMpointer();
   //
   // Sensitive Detector Name

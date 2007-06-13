@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: B02DetectorConstruction.cc,v 1.12 2006-06-29 16:34:46 gunter Exp $
+// $Id: B02DetectorConstruction.cc,v 1.13 2007-06-13 13:31:41 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4Types.hh"
@@ -43,6 +43,16 @@
 
 // for importance biasing
 #include "G4IStore.hh"
+
+// For Primitive Scorers
+#include "G4SDManager.hh"
+#include "G4MultiFunctionalDetector.hh"
+#include "G4SDParticleFilter.hh"
+#include "G4PSNofCollision.hh"
+#include "G4PSPopulation.hh"
+#include "G4PSTrackCounter.hh"
+#include "G4PSTrackLength.hh"
+
 
 B02DetectorConstruction::B02DetectorConstruction()
 {;}
@@ -200,7 +210,16 @@ G4VPhysicalVolume* B02DetectorConstruction::Construct()
 		    false, 
 		    0);
   
+
   return pWorldVolume;
 }
 
 
+G4VPhysicalVolume *B02DetectorConstruction::GetWorldVolume() {
+   return pWorldVolume;
+}
+
+
+G4VPhysicalVolume &B02DetectorConstruction::GetWorldVolumeAddress() const{
+  return *pWorldVolume;
+}
