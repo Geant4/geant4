@@ -223,7 +223,6 @@ const G4Track &aTrack, const G4Step &)
     return theTotalResult;
   }
 
-
   // Get kinetic energy per nucleon for ions
 
   if(aParticle->GetDefinition()->GetBaryonNumber() > 1.5)
@@ -314,7 +313,6 @@ const G4Track &aTrack, const G4Step &)
   }
   while(!result);
 
-
   if(!ModelingState && !getenv("BypassAllSafetyChecks") ) 
   {
     G4cout << "ERROR IN EXECUTION -- HADRONIC PROCESS STATE NOT VALID"<<G4endl;
@@ -322,7 +320,6 @@ const G4Track &aTrack, const G4Step &)
   }
 
   // NOT USED ?? Projectile particle has changed character during interaction
-
   if(result->GetStatusChange() == isAlive && 
      thePro.GetDefinition() != aTrack.GetDefinition())
   {
@@ -393,6 +390,7 @@ const G4Track &aTrack, const G4Step &)
   FillTotalResult(result, aTrack);
   if(G4HadronicProcess_debug_flag) 
     std::cout << "@@@@ hadronic process end "<< std::endl;
+    
   return theTotalResult;
 }
 
@@ -517,6 +515,7 @@ G4HadronicProcess::FillTotalResult(G4HadFinalState * aR, const G4Track & aT)
   theTotalResult->ProposeTrackStatus(fAlive);
   G4double rotation = 2.*pi*G4UniformRand();
   G4ThreeVector it(0., 0., 1.);
+
   /*
   if(xBiasOn)
   {
@@ -602,32 +601,29 @@ G4HadronicProcess::FillTotalResult(G4HadFinalState * aR, const G4Track & aT)
     G4Exception("G4HadronicProcess", "007", FatalException,
     "use of unsupported track-status.");
   }
+
   if(GetProcessName() != "hElastic" && GetProcessName() != "HadronElastic"
      &&  theTotalResult->GetTrackStatus()==fAlive
      && aR->GetStatusChange()==isAlive
     )
   {
     // Use for debugging:   G4double newWeight = theTotalResult->GetParentWeight();
-    G4double newM=aT.GetDefinition()->GetPDGMass();
-    G4double newE=aR->GetEnergyChange() + newM;
-    G4double newP=std::sqrt(newE*newE - newM*newM);
-    G4DynamicParticle * aNew = 
-    new G4DynamicParticle(aT.GetDefinition(), newE, newP*aR->GetMomentumChange());
-    // std::cout << "Debug 0 "<<aR->GetNumberOfSecondaries()<<std::endl;
-    //std::cout << "Debug 1 "<<aR->GetEnergyChange()<<" "<< aNew->GetTotalEnergy() <<std::endl;
-    //std::cout << "Debug 2 "<<aR->GetMomentumChange()<<" "<< aNew->GetMomentum() << std::endl;
-    //std::cout << "Debug 3 "<<newWeight<<std::endl;
-    //std::cout << std::endl;
+
+    G4double newKE = std::max(DBL_MIN, aR->GetEnergyChange());
+    G4DynamicParticle* aNew = new G4DynamicParticle(aT.GetDefinition(), 
+                                                    aR->GetMomentumChange(), 
+                                                    newKE);
     G4HadSecondary* theSec = new G4HadSecondary(aNew, 1.0);
     aR->AddSecondary(theSec);
     aR->SetStatusChange(stopAndKill);
+
     theTotalResult->ProposeTrackStatus(fStopAndKill);
     theTotalResult->ProposeEnergy( 0.0 );
-    //std::cout << "Debug 4 "<< aR->GetNumberOfSecondaries() <<std::endl;
+
   }
   theTotalResult->ProposeLocalEnergyDeposit(aR->GetLocalEnergyDeposit());
   theTotalResult->SetNumberOfSecondaries(aR->GetNumberOfSecondaries());
-  
+
   if(aR->GetStatusChange() != stopAndKill)
   {
     G4double newM=aT.GetDefinition()->GetPDGMass();
@@ -639,12 +635,13 @@ G4HadronicProcess::FillTotalResult(G4HadFinalState * aR, const G4Track & aT)
     newP4*=aR->GetTrafoToLab();
     theTotalResult->ProposeMomentumDirection(newP4.vect().unit());
   }
+
   for(G4int i=0; i<aR->GetNumberOfSecondaries(); i++)
   {
-    //std::cout << "Debug 5 "<< aR->GetNumberOfSecondaries() <<std::endl;
     G4LorentzVector theM = aR->GetSecondary(i)->GetParticle()->Get4Momentum();
     theM.rotate(rotation, it);
     theM*=aR->GetTrafoToLab();
+
     if(go_wild(theM.e()))
     {
       G4Exception("G4HadronicProcess", "007", FatalException,
@@ -657,12 +654,15 @@ G4HadronicProcess::FillTotalResult(G4HadFinalState * aR, const G4Track & aT)
       G4Exception("G4HadronicProcess", "007", FatalException,
       "secondary track received NaN momentum.");  
     }
+
     aR->GetSecondary(i)->GetParticle()->Set4Momentum(theM);
     G4double time = aR->GetSecondary(i)->GetTime();
     if(time<0) time = aT.GetGlobalTime();
+
     G4Track* track = new G4Track(aR->GetSecondary(i)->GetParticle(),
     aT.GetGlobalTime(),
     aT.GetPosition());
+
     G4double newWeight = aT.GetWeight()*aR->GetSecondary(i)->GetWeight();
     //static G4double pinelcount=0;
     if(xBiasOn) newWeight *= XBiasSecondaryWeight();
@@ -687,10 +687,10 @@ G4HadronicProcess::FillTotalResult(G4HadFinalState * aR, const G4Track & aT)
         <<" "<<aT.GetDefinition()->GetParticleName() 
         <<G4endl;
       }
-      
       track->SetTouchableHandle(aT.GetTouchableHandle());
       theTotalResult->AddSecondary(track);
   }
+
   aR->Clear();
   return;
 }
