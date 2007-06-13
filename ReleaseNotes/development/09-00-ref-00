@@ -207,7 +207,7 @@ physics_lists                                    phys-lists-V08-03-06
   defined inside the constructor itself.
 - Incremented version number.
 
-processes/biasing                                procbiasing-V08-03-04
+processes/biasing                                procbiasing-V08-03-05
 -----------------
 - New module for process-based biasing.
 - Migrated classes from processes/scoring and transportation modules.
@@ -338,8 +338,11 @@ processes/hadronic                               hadr-V08-03-00
     GetRatioQE() allowing for retrieving qe/in and sd/in ratios.
   o G4HadronNucleonXsc: add new method GetHadronNucleonXscMK() to get
     hadron-nucleon cross section.
-- management (hadr-man-V08-03-01)
+- management (hadr-man-V08-03-02)
   o G4HadronicProcess:
+    + In method FillTotalResult() partly remove spurious peak at 90 degrees
+      by using different G4DynamicParticle constructor and prohibiting kinetic
+      energy from being exactly zero.
     + Changed default for isotope production to off to fix a memory leak.
     + Removed effective charge calculation.
 - models/binary_cascade (had-binary-V08-03-00)
@@ -392,8 +395,12 @@ processes/hadronic                               hadr-V08-03-00
   o Separate G4DiffractiveExcitation for FTF from QGS. Added original
     G4DiffractiveExcitation to qgsm as G4QGSDiffractiveExcitation
     Moved G4SingleDiffractiveExcitation from management to qgsm.
-- util (hadr-util-V08-03-00)
+- util (hadr-util-V08-03-02)
   o Removed un-used classes G4Fuzzy, G4EffectiveCharge and G4ParticleVector.
+  o Three bug fixes in G4ReactionDynamics::TwoCluster(): removed a sharp peak
+    at 180 degrees by fixing a units error and fixed an error in sampling the
+    momentum transfer. Fixed array bound violation which caused in some rare
+    occasions an infinite loop.
 
 processes/management                             procman-V08-02-00
 --------------------
@@ -551,9 +558,10 @@ examples                                         examples-V09-00-00
   o Fixed indexing scheme of GetIndex() method in the scorers.
 - novice/N02 (exampleN02-V08-03-00)
   o Show usage of G4GeometryTolerance tuned for the geometry topology.
-- novice/N03 (exampleN03-V08-03-00)
+- novice/N03 (exampleN03-V08-03-01)
   o Changed visTutor/exN03Vis12 and visTutor/exN03Vis13 macros, following
     change to /vis/ogl/printEPS command.
+  o Increased verbosity in rndmSeed input macro.
 - novice/N05 (exampleN05-V08-03-00)
   o Migrated to new parallel geometry scheme.
   o Added vis.mac macro.

@@ -605,8 +605,15 @@ please refer to the related History files provided in most packages):
     </UL></LI>
 <LI><B>Management</B>
     <UL>
-    <LI><TT>G4HadronicProcess</TT>: changed default for isotope production
-        to off to fix a memory leak. Removed effective charge calculation.</LI>
+    <LI><TT>G4HadronicProcess</TT>:
+        <UL>
+        <LI>In method <TT>FillTotalResult()</TT> partly remove spurious peak
+            at 90 degrees by using different <TT>G4DynamicParticle</TT>
+            constructor and prohibiting kinetic energy from being exactly
+            zero.</LI>
+        <LI>Changed default for isotope production to off to fix a memory
+            leak. Removed effective charge calculation.</LI>
+        </UL></LI>
     </UL></LI>
 <LI><B>Binary Cascade</B>
     <UL>
@@ -681,6 +688,10 @@ please refer to the related History files provided in most packages):
     <UL>
     <LI>Removed un-used classes <TT>G4Fuzzy</TT>, <TT>G4EffectiveCharge</TT>
         and <TT>G4ParticleVector</TT>.</LI>
+    <LI>Three bug fixes in <TT>G4ReactionDynamics::TwoCluster()</TT>: removed
+        a sharp peak at 180 degrees by fixing a units error and fixed an error
+        in sampling the momentum transfer. Fixed array bound violation which
+        caused in some rare occasions an infinite loop.</LI>
     </UL></LI>
 </UL>
 
@@ -971,6 +982,7 @@ please refer to the related History files provided in most packages):
         <UL>
         <LI>Changed <TT>visTutor/exN03Vis12</TT> and <TT>visTutor/exN03Vis13</TT>
             macros, following change to <TT>/vis/ogl/printEPS</TT> command.</LI>
+        <LI>Increased verbosity in <TT>rndmSeed</TT> input macro.</LI>
         </UL></LI>
     <LI>N05
         <UL>
