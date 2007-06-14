@@ -60,7 +60,18 @@ ExN04DetectorConstruction::ExN04DetectorConstruction()
 }
 
 ExN04DetectorConstruction::~ExN04DetectorConstruction()
-{;}
+{
+  delete Scinti;
+  delete Silicon;
+  delete Ar;
+  delete Lead;
+  delete Air;
+
+  delete O;
+  delete N;
+  delete C;
+  delete H;
+}
 
 void ExN04DetectorConstruction::DefineMaterials()
 {
@@ -71,10 +82,10 @@ void ExN04DetectorConstruction::DefineMaterials()
   G4double a, z, density;
   G4int nel;
 
-  G4Element* H = new G4Element("Hydrogen", "H", z=1., a=  1.01*g/mole);
-  G4Element* C = new G4Element("Carbon",   "C", z=6., a= 12.01*g/mole);
-  G4Element* N = new G4Element("Nitrogen", "N", z=7., a= 14.01*g/mole);
-  G4Element* O = new G4Element("Oxygen",   "O", z=8., a= 16.00*g/mole);
+  H = new G4Element("Hydrogen", "H", z=1., a=  1.01*g/mole);
+  C = new G4Element("Carbon",   "C", z=6., a= 12.01*g/mole);
+  N = new G4Element("Nitrogen", "N", z=7., a= 14.01*g/mole);
+  O = new G4Element("Oxygen",   "O", z=8., a= 16.00*g/mole);
 
   Air = new G4Material("Air", density= 1.29*mg/cm3, nel=2);
   Air->AddElement(N, 70.*perCent);

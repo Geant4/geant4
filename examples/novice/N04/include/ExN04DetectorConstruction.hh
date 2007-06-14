@@ -32,6 +32,7 @@
 
 class G4VPhysicalVolume;
 class G4Material;
+class G4Element;
 
 class ExN04DetectorConstruction : public G4VUserDetectorConstruction
 {
@@ -53,6 +54,10 @@ class ExN04DetectorConstruction : public G4VUserDetectorConstruction
   G4Material* Scinti;
   G4Material* Lead;
 
+  G4Element* H;
+  G4Element* C;
+  G4Element* N;
+  G4Element* O;
 };
 
 #endif

@@ -28,6 +28,8 @@
 
 #include "G4VReadOutGeometry.hh"
 
+class G4Material;
+
 class ExN04CalorimeterROGeometry : public G4VReadOutGeometry
 {
 public:
@@ -37,6 +39,7 @@ public:
 
 private:
   G4VPhysicalVolume* Build();
+  G4Material* dummyMat;
 
 #include "ExN04DetectorParameterDef.hh"
 
