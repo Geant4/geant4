@@ -1,6 +1,12 @@
                  History file
                  ------------
 
+14-Jun-2007 - A.Ribon (statAccepTest-V08-03-03)
+- Modified simuDriver.sh to print the error code,
+  in order to help debugging Grid sudden crashes
+  of jobs without error messages.
+
+
 07-Jun-2007 - A.Ribon (statAccepTest-V08-03-02)
 - Updated G4 DATA libraries in build.py .
 
