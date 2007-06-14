@@ -1,4 +1,4 @@
-$Id: History,v 1.83 2007-06-14 07:33:31 vnivanch Exp $
+$Id: History,v 1.84 2007-06-14 14:24:30 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,8 @@ committal in the CVS repository !
 
 14-06-07 V.Ivanchenko (materials-V08-03-00)
 - G4SandiaTable - added deletion of elements of the table in destructor
+- G4NistElementBuilder - protection (Z>=limitNumElements) inside BuildElement
+                         (Mokka request)
 
 02-05-07 V.Ivanchenko (materials-V08-02-02)
 - G4NistManager and G4NistElementBuilder - add GetNistFirstIsotopeN
