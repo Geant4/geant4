@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElasticHadrNucleusHE.cc,v 1.72 2007-05-31 17:03:01 vnivanch Exp $
+// $Id: G4ElasticHadrNucleusHE.cc,v 1.73 2007-06-14 10:00:45 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -97,62 +97,72 @@ G4ElasticData::G4ElasticData(const G4ParticleDefinition* p,
 
 void G4ElasticData::DefineNucleusParameters(G4double A)
 {
-  if(AtomicWeight == 208)
-  {
-      R1       = 20.5;    //  26.09.06
+  switch (AtomicWeight)
+    {
+    case 207:
+    case 208:
+      R1       = 20.5;    
       R2       = 15.74;
       Pnucl    = 0.4;
       Aeff     = 0.7;
-  }
-  else if(AtomicWeight == 90)
-  {
+      break;
+    case 237:
+    case 238:
+      R1       = 21.7;    
+      R2       = 16.5;
+      Pnucl    = 0.4;
+      Aeff     = 0.7;
+      break;
+    case 90:
+    case 91:
       R1    = 16.5*1.1;
       R2    = 11.62;
       Pnucl = 0.4;
       Aeff  = 0.7;
-  }
-  else if(AtomicWeight == 58)
-  {
+      break;
+    case 58:
+    case 59:
       R1    = 15.0*1.05;
       R2    = 9.9;
       Pnucl = 0.45;
       Aeff  = 0.85;
-  }
-  else if(AtomicWeight == 16)
-  {
+      break;
+    case 16:
       R1    = 10.50;
       R2    = 5.5;
       Pnucl = 0.7;
       Aeff  = 0.98;
-  }
-  else if(AtomicWeight == 9)
-  {
+      break;
+    case 9:
       R1    = 9.0;
       R2    = 7.0;
       Pnucl = 0.190;
       Aeff  = 0.9;
-  }
-  else if(AtomicWeight == 4)
-  {
-      R1    = 6.0;   //  26.09.06
+      break;
+    case 4:
+      R1    = 6.0;   
       R2    = 3.7;
       Pnucl = 0.4;
       Aeff  = 0.87;
-  }
-  else if(AtomicWeight == 1)
-  {
+      break;
+    case 1:
       R1    = 4.5;   
       R2    = 2.3;
       Pnucl = 0.177;
       Aeff  = 0.9;
-  }
-  else
-  {
+      break;
+    default:
       R1    = 4.45*std::pow(A - 1.,0.309)*0.9;
       R2    = 2.3 *std::pow(A, 0.36);
-      Pnucl = 0.176 + 0.00167*A + 8.69E-6*A*A;
-      Aeff  = 0.9;
-  }
+
+      if(A < 100 && A > 3) Pnucl = 0.176 + 0.00275*A;
+      else                 Pnucl = 0.4;
+
+      if(A >= 100)               Aeff = 0.7;
+      else if(A < 100 && A > 75) Aeff = 1.5 - 0.008*A;
+      else                       Aeff = 0.9;
+      break;
+    }
 }
 
 ////////////////////////////////////////////////////////////////////
