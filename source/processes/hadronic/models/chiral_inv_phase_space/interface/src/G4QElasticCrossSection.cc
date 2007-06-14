@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QElasticCrossSection.cc,v 1.27 2007-05-25 14:38:28 mkossov Exp $
+// $Id: G4QElasticCrossSection.cc,v 1.28 2007-06-14 16:48:11 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -83,6 +83,49 @@ G4double  G4QElasticCrossSection::lastP=0.;   // Last used in cross section Mome
 G4double  G4QElasticCrossSection::lastTH=0.;  // Last threshold momentum
 G4double  G4QElasticCrossSection::lastCS=0.;  // Last value of the Cross Section
 G4int     G4QElasticCrossSection::lastI=0;    // The last position in the DAMDB
+
+std::vector<G4double*> G4QElasticCrossSection::PAR;   // Vector of parameters for functional calculations
+std::vector<G4double*> G4QElasticCrossSection::CST;   // Vector of cross-section table
+std::vector<G4double*> G4QElasticCrossSection::SST;   // Vector of the first squared slope
+std::vector<G4double*> G4QElasticCrossSection::S1T;   // Vector of the first mantissa
+std::vector<G4double*> G4QElasticCrossSection::B1T;   // Vector of the first slope
+std::vector<G4double*> G4QElasticCrossSection::S2T;   // Vector of the secon mantissa
+std::vector<G4double*> G4QElasticCrossSection::B2T;   // Vector of the second slope
+std::vector<G4double*> G4QElasticCrossSection::S3T;   // Vector of the third mantissa
+std::vector<G4double*> G4QElasticCrossSection::B3T;   // Vector of the third slope
+std::vector<G4double*> G4QElasticCrossSection::S4T;   // Vector of the 4-th mantissa (gloria)
+std::vector<G4double*> G4QElasticCrossSection::B4T;   // Vector of the 4-th slope    (gloria)
+
+G4QElasticCrossSection::G4QElasticCrossSection()
+{
+}
+
+G4QElasticCrossSection::~G4QElasticCrossSection()
+{
+  std::vector<G4double*>::iterator pos;
+  for (pos=CST.begin(); pos<CST.end(); pos++)
+  { delete [] *pos; CST.clear(); }
+  for (pos=PAR.begin(); pos<PAR.end(); pos++)
+  { delete [] *pos; PAR.clear(); }
+  for (pos=SST.begin(); pos<SST.end(); pos++)
+  { delete [] *pos; SST.clear(); }
+  for (pos=S1T.begin(); pos<S1T.end(); pos++)
+  { delete [] *pos; S1T.clear(); }
+  for (pos=B1T.begin(); pos<B1T.end(); pos++)
+  { delete [] *pos; B1T.clear(); }
+  for (pos=S2T.begin(); pos<S2T.end(); pos++)
+  { delete [] *pos; S2T.clear(); }
+  for (pos=B2T.begin(); pos<B2T.end(); pos++)
+  { delete [] *pos; B2T.clear(); }
+  for (pos=S3T.begin(); pos<S3T.end(); pos++)
+  { delete [] *pos; S3T.clear(); }
+  for (pos=B3T.begin(); pos<B3T.end(); pos++)
+  { delete [] *pos; B3T.clear(); }
+  for (pos=S4T.begin(); pos<S4T.end(); pos++)
+  { delete [] *pos; S4T.clear(); }
+  for (pos=B4T.begin(); pos<B4T.end(); pos++)
+  { delete [] *pos; B4T.clear(); }
+}
 
 // Returns Pointer to the G4VQCrossSection class
 G4VQCrossSection* G4QElasticCrossSection::GetPointer()
@@ -275,17 +318,6 @@ G4double G4QElasticCrossSection::CalculateCrossSection(G4bool CS,G4int F,G4int I
 {
   // *** Begin of Associative Memory DB for acceleration of the cross section calculations
   static std::vector <G4double>  PIN;   // Vector of max initialized log(P) in the table
-  static std::vector <G4double*> PAR;   // Vector of parameters for functional calculations
-  static std::vector <G4double*> CST;   // Vector of cross-section table
-  static std::vector <G4double*> SST;   // Vector of the first squared slope
-  static std::vector <G4double*> S1T;   // Vector of the first mantissa
-  static std::vector <G4double*> B1T;   // Vector of the first slope
-  static std::vector <G4double*> S2T;   // Vector of the secon mantissa
-  static std::vector <G4double*> B2T;   // Vector of the second slope
-  static std::vector <G4double*> S3T;   // Vector of the third mantissa
-  static std::vector <G4double*> B3T;   // Vector of the third slope
-  static std::vector <G4double*> S4T;   // Vector of the 4-th mantissa (gloria)
-  static std::vector <G4double*> B4T;   // Vector of the 4-th slope    (gloria)
   // *** End of Static Definitions (Associative Memory Data Base) ***
   if(tgZ==0 && tgN==1)                 // Temporary change for Quasi-Elastic
 		{
