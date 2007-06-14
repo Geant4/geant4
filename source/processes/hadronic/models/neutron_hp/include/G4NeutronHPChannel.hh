@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPChannel.hh,v 1.13 2007-06-06 12:45:13 ahoward Exp $
+// $Id: G4NeutronHPChannel.hh,v 1.14 2007-06-14 17:17:30 tkoi Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  // Hadronic Process: Very Low Energy Neutron X-Sections
@@ -32,6 +32,7 @@
  // Builds and has the Cross-section data for one element and channel.
 //
 // Bug fixes and workarounds in the destructor, F.W.Jones 06-Jul-1999
+// 070612 Fix memory leaking by T. Koi
  
 #ifndef G4NeutronHPChannel_h
 #define G4NeutronHPChannel_h 1
@@ -83,6 +84,16 @@ public:
     //}
     // FWJ experiment
     //if(active!=0) delete [] active;
+// T.K. 
+   if ( theFinalStates != 0 )
+   {
+      for ( G4int i = 0 ; i < niso ; i++ )
+      {
+         delete theFinalStates[i];
+      }
+      delete [] theFinalStates;
+   }
+   if ( active != 0 ) delete [] active;
     
   }
   

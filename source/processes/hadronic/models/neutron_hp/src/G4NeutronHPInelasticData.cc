@@ -28,6 +28,7 @@
 // A prototype of the low energy neutron transport model.
 //
 // 070523 add neglecting doppler broadening on the fly. T. Koi
+// 070613 fix memory leaking by T. Koi
 //
 #include "G4NeutronHPInelasticData.hh"
 #include "G4Neutron.hh"
@@ -44,11 +45,16 @@ G4bool G4NeutronHPInelasticData::IsApplicable(const G4DynamicParticle*aP, const 
 
 G4NeutronHPInelasticData::G4NeutronHPInelasticData()
 {
+// TKDB
+   theCrossSections = NULL;
   BuildPhysicsTable(*G4Neutron::Neutron());
 }
    
 G4NeutronHPInelasticData::~G4NeutronHPInelasticData()
 {
+// TKDB
+   if ( theCrossSections != NULL )
+      theCrossSections->clearAndDestroy();
   delete theCrossSections;
 }
    
@@ -57,7 +63,9 @@ void G4NeutronHPInelasticData::BuildPhysicsTable(const G4ParticleDefinition& aP)
   if(&aP!=G4Neutron::Neutron()) 
      throw G4HadronicException(__FILE__, __LINE__, "Attempt to use NeutronHP data for particles other than neutrons!!!");  
   size_t numberOfElements = G4Element::GetNumberOfElements();
-  theCrossSections = new G4PhysicsTable( numberOfElements );
+//  theCrossSections = new G4PhysicsTable( numberOfElements );
+// TKDB
+   if ( theCrossSections == NULL ) theCrossSections = new G4PhysicsTable( numberOfElements );
 
   // make a PhysicsVector for each element
 

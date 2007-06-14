@@ -24,13 +24,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPPhotonDist.hh,v 1.13 2007-06-07 07:03:00 tkoi Exp $
+// $Id: G4NeutronHPPhotonDist.hh,v 1.14 2007-06-14 17:17:30 tkoi Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  // Hadronic Process: Very Low Energy Neutron X-Sections
  // original by H.P. Wellisch, TRIUMF, 14-Feb-97
 //
 // 070606 fix for Valgrind error by T. Koi
+// 070612 fix memory leaking by T. Koi
 //
  
 #ifndef G4NeutronHPPhotonDist_h
@@ -103,7 +104,17 @@ public:
      if(theAngular != 0) delete [] theAngular;
      if(distribution != 0) delete [] distribution;
      if(probs != 0) delete [] probs;
-     if(partials != 0) delete [] partials;
+
+// TKDB
+     if ( partials != 0 ) 
+     {
+        for ( G4int i = 0 ; i < nPartials ; i++ )
+           delete partials[ i ];
+
+        delete [] partials;
+     }
+     //if(partials != 0) delete [] partials;
+
      if(actualMult != 0) delete [] actualMult;
 
      if(theLevelEnergies != 0) delete theLevelEnergies;

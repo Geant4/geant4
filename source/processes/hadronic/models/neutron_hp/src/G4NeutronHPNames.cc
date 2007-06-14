@@ -29,6 +29,7 @@
 //
 // 24-Jan-07 Enable to use exact data only and add warnig when substitute file is used T. Koi
 // 30-Jan-07 Modified method of searching substitute isotope data by T. Koi
+// 07-06-12 fix memory leaking by T. Koi
 //
 #include "G4NeutronHPNames.hh"
 #include "G4SandiaTable.hh"
@@ -98,6 +99,13 @@ if(getenv("NeutronHPNames"))  G4cout << "entered GetName!!!"<<G4endl;
        result.SetA(myA);
        result.SetZ(myZ);
 if(getenv("NeutronHPNames")) G4cout <<"HPWD 1 "<<*theName<<G4endl;
+//3456
+     // T.K. debug for memory leak
+     if ( check != NULL )
+     {
+        check->close();
+        delete check;
+     } 
        check = new std::ifstream(*theName);
        if ( !(*check) ) 
        {
