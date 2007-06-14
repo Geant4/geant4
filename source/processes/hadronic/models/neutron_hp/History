@@ -13,6 +13,13 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+08 Jun 2007 Tatsumi Koi (hadr-hpn-V08-03-03)
+- fixes for memory leaking 
+	G4NeutronHPAngular.hh G4NeutronHPChannel.hh G4NeutronHPPhotonDist.hh
+        G4NeutronHPCaptureData.cc G4NeutronHPElasticData.cc G4NeutronHPInelasticData.cc 
+	G4NeutronHPNames.cc
+	
+
 08 Jun 2007 Tatsumi Koi (hadr-hpn-V08-03-02)
 - Bug fixes for valgrind & delete Unnecessary comment out from
 	G4NeutronHPFissionERelease.hh
