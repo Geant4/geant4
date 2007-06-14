@@ -1,4 +1,4 @@
-$Id: History,v 1.79 2007-05-21 07:30:47 kmura Exp $
+$Id: History,v 1.80 2007-06-14 05:44:58 kmura Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+14 June 2007, Koichi Murakami (interface-V08-03-01)
+- fixed the problem with Ctl-C termination for bash users.
+ * G4VUIshell   : add a virtual method ResetTerminal()
+ * G4UItcsh     : add a method ResetTerminal()
+ * G4UIterminal : add terminal reset when Ctl-C termination
 
 22 May 2007, Koichi Murakami (interface-V08-03-00)
 - G4UIterminal.cc: implement signal handler for soft-abort

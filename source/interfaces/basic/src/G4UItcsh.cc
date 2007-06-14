@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UItcsh.cc,v 1.13 2007-05-21 07:31:57 kmura Exp $
+// $Id: G4UItcsh.cc,v 1.14 2007-06-14 05:44:58 kmura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -75,10 +75,10 @@ G4UItcsh::~G4UItcsh()
 /////////////////////
 {
 }
-  
-///////////////////////////
+
+//////////////////////////////////////////
 void G4UItcsh::MakePrompt(const char* msg)
-///////////////////////////
+//////////////////////////////////////////
 {
   if(promptSetting.length()<=1) {
     promptString= promptSetting;
@@ -128,6 +128,15 @@ void G4UItcsh::MakePrompt(const char* msg)
   if(i == promptSetting.length()-1) 
     promptString.append(G4String(promptSetting[i]));
 }
+
+
+//////////////////////////////
+void G4UItcsh::ResetTerminal()
+//////////////////////////////
+{
+  RestoreTerm();
+}
+
 
 // --------------------------------------------------------------------
 //      commad line operations

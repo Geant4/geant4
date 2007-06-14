@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIterminal.cc,v 1.23 2007-05-22 01:51:17 kmura Exp $
+// $Id: G4UIterminal.cc,v 1.24 2007-06-14 05:44:58 kmura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ====================================================================
@@ -49,6 +49,9 @@
 // signal handler for soft-abort
 // ====================================================================
 #ifndef WIN32
+
+static G4VUIshell* theshell= 0;
+
 ////////////////////////////////
 static void SignalHandler(G4int)
 ////////////////////////////////
@@ -64,6 +67,7 @@ static void SignalHandler(G4int)
   } else {
     G4cout << G4endl
            << "Session terminated." << G4endl;
+    theshell-> ResetTerminal();
     delete runManager;
     exit(0);
   }
@@ -92,6 +96,7 @@ G4UIterminal::G4UIterminal(G4VUIshell* aShell, G4bool qsig)
 
   if(aShell) shell= aShell;
   else shell= new G4UIcsh;
+  theshell= shell; // locally stored for the signal handler
 
   // add signal handler
   if(qsig) {
