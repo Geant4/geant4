@@ -56,7 +56,7 @@ Histo* Histo::GetInstance()
     m_instance = &hist;
   }
   return m_instance;
-};
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

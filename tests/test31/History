@@ -1,4 +1,4 @@
-$Id: History,v 1.19 2007-05-25 10:02:17 vnivanch Exp $
+$Id: History,v 1.20 2007-06-14 10:31:01 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+14-06-07  V.Ivant (test31-V08-03-04)
+- fixed compilation problem at SLC4
 
 25-05-07  V.Ivant (test31-V08-03-03)
 - fixed name of default file
