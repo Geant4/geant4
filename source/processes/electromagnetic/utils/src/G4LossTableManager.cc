@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.cc,v 1.83 2007-05-18 18:39:55 vnivanch Exp $
+// $Id: G4LossTableManager.cc,v 1.84 2007-06-14 07:28:48 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -124,6 +124,7 @@ G4LossTableManager::~G4LossTableManager()
   Clear();
   delete theMessenger;
   delete tableBuilder;
+  delete emCorrections;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....

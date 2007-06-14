@@ -1,4 +1,4 @@
-$Id: History,v 1.288 2007-06-12 12:57:11 vnivanch Exp $
+$Id: History,v 1.289 2007-06-14 07:28:48 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+14 June 07: V.Ivant (emutils-V08-03-05)
+- G4LossTableManager - add deletion of G4EmCorrections in destructor
 
 12 June 07: V.Ivant (emutils-V08-03-04)
 - G4VEnergyLossProcess fixed estimation of step limit inside
