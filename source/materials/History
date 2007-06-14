@@ -1,4 +1,4 @@
-$Id: History,v 1.82 2007-05-02 11:22:35 vnivanch Exp $
+$Id: History,v 1.83 2007-06-14 07:33:31 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+14-06-07 V.Ivanchenko (materials-V08-03-00)
+- G4SandiaTable - added deletion of elements of the table in destructor
 
 02-05-07 V.Ivanchenko (materials-V08-02-02)
 - G4NistManager and G4NistElementBuilder - add GetNistFirstIsotopeN
