@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QuasiFreeRatios.cc,v 1.13 2007-06-15 16:43:39 gcosmo Exp $
+// $Id: G4QuasiFreeRatios.cc,v 1.14 2007-06-15 17:06:30 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -41,7 +41,10 @@
 #include "G4QuasiFreeRatios.hh"
 
 // initialisation of statics
-std::vector<G4double*> G4QuasiFreeRatios::vE;      // Vector of ElastPointers to LogTable in C++ heap
+std::vector<G4double*> G4QuasiFreeRatios::vE;     // Vector of ElastPointers to LogTable in C++ heap
+std::vector<G4double*> G4QuasiFreeRatios::vT;     // Vector of pointers to LinTable in C++ heap
+std::vector<G4double*> G4QuasiFreeRatios::vL;     // Vector of pointers to LogTable in C++ heap
+std::vector<std::pair<G4double,G4double>*> G4QuasiFreeRatios::vX; // Vector of ETPointers to LogTable
 
 G4QuasiFreeRatios::G4QuasiFreeRatios()
 {
@@ -53,6 +56,17 @@ G4QuasiFreeRatios::~G4QuasiFreeRatios()
   for(pos=vE.begin(); pos<vE.end(); pos++)
   { delete [] *pos; }
   vE.clear();
+  for(pos=vT.begin(); pos<vT.end(); pos++)
+  { delete [] *pos; }
+  vT.clear();
+  for(pos=vL.begin(); pos<vL.end(); pos++)
+  { delete [] *pos; }
+  vL.clear();
+
+  std::vector<std::pair<G4double,G4double>*>::iterator pos2;
+  for(pos2=vX.begin(); pos2<vX.end(); pos2++)
+  { delete [] *pos2; }
+  vX.clear();
 }
 
 // Returns Pointer to the G4VQCrossSection class
@@ -101,8 +115,6 @@ G4double G4QuasiFreeRatios::GetQF2IN_Ratio(G4double s, G4int A)
   static std::vector<G4int>     vN;     // Vector of topBin number initialized in LinTable
   static std::vector<G4double>  vM;     // Vector of rel max ln(s) initialized in LogTable
   static std::vector<G4int>     vK;     // Vector of topBin number initialized in LogTable
-  static std::vector<G4double*> vT;     // Vector of pointers to LinTable in C++ heap
-  static std::vector<G4double*> vL;     // Vector of pointers to LogTable in C++ heap
   // Last values of the Associative Data Base:
   static G4int     lastA=0;             // theLast of calculated A
   static G4double  lastH=0.;            // theLast of max s initialized in the LinTable
@@ -560,7 +572,6 @@ std::pair<G4double,G4double> G4QuasiFreeRatios::FetchElTot(G4double p, G4int PDG
   static std::vector<G4int>     vI;      // Vector of index for which XS was calculated
   static std::vector<G4double>  vM;      // Vector of rel max ln(p) initialized in LogTable
   static std::vector<G4int>     vK;      // Vector of topBin number initialized in LogTable
-  static std::vector<std::pair<G4double,G4double>*> vX; // Vector of ETPointers to LogTable
   // Last values of the Associative Data Base:
   static G4int     lastI=0;              // The Last index for which XS was calculated
   static G4double  lastM=0.;             // The Last rel max ln(p) initialized in LogTable

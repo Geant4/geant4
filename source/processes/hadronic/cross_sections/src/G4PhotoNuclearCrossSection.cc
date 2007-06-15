@@ -71,9 +71,9 @@ G4PhotoNuclearCrossSection::~G4PhotoNuclearCrossSection()
   for(pos=GDR.begin(); pos<GDR.end(); pos++)
   { delete [] *pos; }
   GDR.clear();
-  for(pos=GDR.begin(); pos<GDR.end(); pos++)
+  for(pos=HEN.begin(); pos<HEN.end(); pos++)
   { delete [] *pos; }
-  GDR.clear();
+  HEN.clear();
 }
 
 // The main member function giving the gamma-A cross section 

@@ -89,7 +89,9 @@ class G4QuasiFreeRatios
 
  // Body
  private:
-
-  static std::vector<G4double*> vE;      // Vector of ElastPointers to LogTable
+  static std::vector<G4double*> vE;     // Vector of ElastPointers to LogTable
+  static std::vector<G4double*> vT;     // Vector of pointers to LinTable
+  static std::vector<G4double*> vL;     // Vector of pointers to LogTable
+  static std::vector<std::pair<G4double,G4double>*> vX; // Vector of ETPointers to LogTable
 }; 					
 #endif
