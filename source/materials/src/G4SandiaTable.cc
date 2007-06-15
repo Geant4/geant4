@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SandiaTable.cc,v 1.24 2007-06-14 07:51:49 vnivanch Exp $
+// $Id: G4SandiaTable.cc,v 1.25 2007-06-15 19:22:01 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
@@ -76,6 +76,7 @@ G4SandiaTable::G4SandiaTable(G4int matIndex)
 G4SandiaTable::G4SandiaTable(G4Material* material)
   : fMaterial(material)
 {
+  fMatSandiaMatrix = 0 ; 
   fPhotoAbsorptionCof = 0 ;
   //build the CumulInterval array
   fCumulInterval[0] = 1;
@@ -132,7 +133,7 @@ void G4SandiaTable::ComputeMatSandiaMatrix()
   G4int MaxIntervals = 0;
   G4int elm;    
   for (elm=0; elm<NbElm; elm++)
-     { Z[elm] = (int)(*ElementVector)[elm]->GetZ();
+     { Z[elm] = (G4int)(*ElementVector)[elm]->GetZ();
        MaxIntervals += fNbOfIntervals[Z[elm]];
      }  
      
@@ -211,7 +212,7 @@ void G4SandiaTable::ComputeMatSandiaMatrix()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
-G4double  G4SandiaTable::GetSandiaCofForMaterial(G4int interval, G4int j)                                                 
+G4double  G4SandiaTable::GetSandiaCofForMaterial(G4int interval, G4int j)    
 {
    assert (interval>=0 && interval<fMatNbOfIntervals && j>=0 && j<5);                      
    return ((*(*fMatSandiaMatrix)[interval])[j]); 
@@ -446,7 +447,7 @@ void G4SandiaTable::ComputeMatTable()
 
   for (elm = 0; elm<noElm; elm++)
   { 
-    Z[elm] = (int)(*ElementVector)[elm]->GetZ();
+    Z[elm] = (G4int)(*ElementVector)[elm]->GetZ();
     MaxIntervals += fNbOfIntervals[Z[elm]];
   }  
   fMaxInterval = 0 ;
@@ -618,6 +619,7 @@ void G4SandiaTable::ComputeMatTable()
       (*(*fMatSandiaMatrix)[i])[j] = fPhotoAbsorptionCof[i+1][j];
     }     
   }	         	    
+  delete [] Z;
   return ;
 }  
 
