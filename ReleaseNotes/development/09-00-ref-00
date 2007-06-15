@@ -174,17 +174,20 @@ graphics_reps                                    greps-V08-03-00
 - G4AttHolder: replaced forward declarations in header with explicit
   inclusions to allow for porting on Intel-icc compiler.
 
-interfaces                                       interface-V08-03-00
+interfaces                                       interfaces-V08-03-01
 ----------
 - Implemented signal handler for soft-abort in G4UIterminal.
 
-materials                                        materials-V08-02-02
+materials                                        materials-V08-03-00
 ---------
 - Added implementation file for G4SurfaceProperty.
 - Added static G4SurfacePropertyTable to G4MaterialTable
 - Added G4Exception to SetGROUPVEL() when E_photon <= 0.
 - G4NistManager and G4NistElementBuilder: added GetNistFirstIsotopeN()
   and GetNumberOfNistIsotopes() methods.
+- G4NistElementBuilder: added protection (Z>=limitNumElements) inside
+  BuildElement() on Mokka request.
+- G4SandiaTable: fixed deletion of elements of the table in destructor.
 
 particles                                        particles-V08-03-01
 ---------
@@ -287,7 +290,7 @@ processes/electromagnetic/standard               emstand-V08-03-09
   G4PhotoElectricEffect52, G4eBremsstrahlung52, G4eIonisation52,
   G4eplusAnnihilation52, G4hIonisation52 and G4MultipleScattering52.
 
-processes/electromagnetic/utils                  emutils-V08-03-04
+processes/electromagnetic/utils                  emutils-V08-03-05
 -------------------------------
 - G4VEmModel: changed interface of SampleSecondary() method, return type
   becomes 'void', added extra parameter std::vector<G4DynamicParticle*>*.
@@ -316,7 +319,8 @@ processes/electromagnetic/utils                  emutils-V08-03-04
   Using G4EmProcessOptions as an interface to all EM processes.
 - G4MscStepLimitType, G4VMultipleScattering, G4EnergyLossMessenger:
   replaced identifier "G4v71" with "Minimal".
-- G4LossTableManager: removed set multiple-scattering parameters.
+- G4LossTableManager: removed set multiple-scattering parameters and
+  fixed deletion of G4EmCorrections in destructor.
 - G4EmProcessOptions: updated interface to multiple-scattering processes,
   added extra methods to set parameters.
 - Added class G4MscStepLimitType.
@@ -353,24 +357,29 @@ processes/hadronic                               hadr-V08-03-00
     models.
 - models/chiral_inv_phase_space/body (hadr-chips-body-V08-03-01)
   o More accurate initialization of dZ, dN, dS (dense area) in G4QNucleus.
-- models/chiral_inv_phase_space/interface (hadr-chips-inter-V08-03-06)
+- models/chiral_inv_phase_space/interface (hadr-chips-inter-V08-03-07)
   o Elastic cross-section for low energy neutrons upgraded in
     G4QElasticCrossSection. High energy, heavy nuclei nA correction in
     G4QElasticCrossSection
-  o Memory leak correction in G4StringChipsParticleLevelInterface.
+  o Memory leak fix in G4StringChipsParticleLevelInterface and
+    G4QElasticCrossSection.
   o First implementation of the G4QDiffractionRatio class.
   o First implementation of the charge-exchange: coherent in the new process
     G4QCoherentChargeExchange and incoherent as an extention of the
     G4QuasiFreeRatios.
   o Large A tuning of the reaction cross-sections in G4QElasticCrossSection.
-- models/coherent_elastic (hadr-cohe-V08-03-05)
+- models/coherent_elastic (hadr-cohe-V08-03-07)
   o G4ElasticHadrNucleusHE:
     + Optimised computation of tables.
     + general cleanup and redesign of private methods.
+    + Fixed compilation of nuclear parameters for heavy nucleus (A>100).
   o Added model names to constructors in G4LEnp, G4LEpp, G4ChargeExchange,
     G4HadronElastic and G4ElasticHadrNucleusHE.
   o G4HadronElastic: use QElasticCrossSection for p, n incident for any energy
     and any target; use HElastic for mesons only.
+  o G4UHadronElasticProcess: use "true" flag calling CHIPS to compute cross
+    section.
+  o New class G4DiffuseElastic, new model for elastic scattering.
 - models/de_excitation (hadr-deex-V08-03-01)
   o Fixed bug in G4ExcitationHandler: deleted pointers and iterators were
     attempted to be accessed. Now a final state iterator list is created and
@@ -446,18 +455,18 @@ processes/transportation                         transport-V08-03-12
   G4SamplingPostStepAction, G4VProcessPlacer, G4VSampler,
   G4VSamplerConfigurator, G4WeightCutOffConfigurator.
 
-run                                              run-V08-03-05
+run                                              run-V08-03-06
 ---
 - G4VUserDetectorConstruction class now has access methods to the parallel
   worlds.
 - Fix against accessing to the world logical volume that had already been
   deleted.
-- Fixed memory leak in G4VUserPhysicsList.
+- Fixed memory leak in G4VUserPhysicsList and G4VModularPhysicsList.
 - Fixed the name of random number status file.
 - In G4RunManagerKernel, UpdateRegion() method now internally invokes
   CheckRegions() method to make sure all region information are updated.
 
-visualization                                    vis-V08-03-06
+visualization                                    vis-V08-03-07
 -------------
 - management:
   o Improved error trapping and bug fix.
@@ -469,7 +478,7 @@ visualization                                    vis-V08-03-06
   o /vis/ogl/printEPS should work for all viewers.
   o Improved error trapping and bug fixes.
 - RayTracer:
-  o Fix for dubious ValGrind diagnostic.
+  o Fixed memory leak at initialisation.
 
 environments                                     envs-V08-03-01
 ------------
@@ -506,9 +515,13 @@ examples                                         examples-V09-00-00
   o Minor correction to documentation.
 - advanced/radioprotection (radioprotection-V08-03-00)
   o Correction to documentation.
+- advanced/underground_physics (DMX-V08-03-01)
+  o Migrated to new interface for SetMscStepLimitation(fMinimal) in
+    DMXPhysicsList.
+  o Changed to hIonisation from hLowEnergyIonisation.
 - extended/analysis/N03Con (exampleN03Con-V08-03-01)
   o New example showing how to apply convergence test in simulation.
-- extended/biasing (exbiasing-V08-03-00)
+- extended/biasing (exbiasing-V08-03-01)
   o Migrated example B01 to new biasing/scoring scheme.
   o Removed B03 (redundant/obsolete use of Python).
 - extended/electromagnetic/TestEm1 (testem1-V08-03-00)
@@ -562,6 +575,8 @@ examples                                         examples-V09-00-00
   o Changed visTutor/exN03Vis12 and visTutor/exN03Vis13 macros, following
     change to /vis/ogl/printEPS command.
   o Increased verbosity in rndmSeed input macro.
+- novice/N04 (exampleN04-V08-03-00)
+  o Delete materials and elements when quitting application. 
 - novice/N05 (exampleN05-V08-03-00)
   o Migrated to new parallel geometry scheme.
   o Added vis.mac macro.
@@ -584,7 +599,7 @@ tests                                            tests-V09-00-00
 - test15 (test15-V08-03-00)
 - test16 (test16-V08-03-00)
   o Removed useless setup for fast-parameterisation in physics list.
-- test31 (test31-V08-03-03)
+- test31 (test31-V08-03-04)
   o Use renamed EM physics-list components from physics_lists module;
     adopt default EM physics opt2.
   o Substituted usage of 'autoptr' by normal pointers in Histo to avoid crash.

@@ -134,7 +134,30 @@ and <TT>GetAngularTolerance()</TT>.
 <B>Standard Electromagnetic physics</B>
 <P> </P>
 
-TEXT HERE !!!!!!!!!!!!!!!!!!!
+Old implementations of physics processes from release 5.2 have been removed.
+Few implementations of processes (multiple-scattering) from release 7.1 are
+still available.
+The interfaces <TT>G4VEmModel</TT>, <TT>G4VEnergyLossProcess</TT>,
+<TT>G4VEmProcess</TT>, <TT>G4VMultipleScattering</TT> were slightly modified
+in order to speed up computations. All classes inheriting these interfaces need
+to be modified accordingly (see detailed list of changes).<BR>
+The structure of UI commands has been changed: a new directory
+<TT>/process/msc</TT> is added and all commands for multiple scattering moved
+to this path. The interface to <TT>G4EmProcessOptions</TT> is also modified to
+be consistent with the changes in the UI interface. As a result of this
+modification, the possibility to change parameters between runs is extended
+for all parameters which are defined via UI.<BR>
+An enumerator of multiple-scattering step limitation algorithms has been
+introduced. The step limitation types are:
+<UL>
+<LI><TT>Minimal</TT> - equivalent to the algorithm implemented in release 7.1</LI>
+<LI><TT>UseSafety</TT> - the default, making use of the geometrical safety</LI> 
+<LI><TT>UseDistanceToBoundary</TT> - the most advanced, recommended for the
+    cases where no magnetic field is set.</LI>
+</UL>
+New UI commands are added: <TT>/process/msc/Skin</TT>,
+<TT>/process/msc/RangeFactor</TT>, <TT>/process/msc/GeomFactor</TT>, and  
+<TT>/process/msc/StepLimit</TT>.
 
 <P> </P>
 <B>Hadronic physics</B>
@@ -146,8 +169,15 @@ TEXT HERE !!!!!!!!!!!!!!!!!!!
 <B>Physics Lists</B>
 <P> </P>
 
-TEXT HERE !!!!!!!!!!!!!!!!!!!
-
+The components for electro-magnetic physics have been renamed and three
+variants are now available:
+<UL>
+<LI><TT>G4EmStandardPhysics</TT> - the default</LI>
+<LI><TT>G4EmStandardPhysics_option1</TT> - providing similar physics to
+    that implemented in release 7.1</LI>
+<LI><TT>G4EmStandardPhysics_option2</TT> - using <TT>sub-cutoff</TT>
+    options.</LI>
+</UL>
 
 <P> </P>
 <A NAME="4."></A>
@@ -159,7 +189,11 @@ TEXT HERE !!!!!!!!!!!!!!!!!!!
 
 <B>Standard Electromagnetic physics</B>
 <UL>
-  <LI>TEXT HERE !!!!!!!!!!!!!!!!!!!</LI>
+  <LI>Results for calorimetry are expected to be unchanged with high precision.
+      The width of energy deposition in thin layers (vertex detectors) should
+      be more close to data. About 10% speedup of simulation of EM showers 
+      is expected for default physics lists (QGSP) and about 5% for more fast 
+      optional physics lists (QGSP_EMV).</LI>
 </UL>
 
 <B>Hadronic physics</B>
@@ -314,20 +348,22 @@ please refer to the related History files provided in most packages):
         </UL></LI>
     <LI><TT>G4MultipleScattering</TT>, <TT>G4hMultipleScattering</TT>:
         <UL>
-        <LI>Reorganised methods for setting multiple-scattering parameters.</LI>
-        <LI>Replaced identifier <TT>G4v71</TT> with <TT>Minimal</TT>.</LI>
+        <LI>Reorganized methods for setting multiple-scattering parameters.</LI>
         </UL></LI>
     <LI><TT>G4UrbanMscModel</TT>:
         <UL>
-        <LI>Reorganised initialisation; using <TT>G4MscStepLimitType</TT>
-            enumerator to choose step limit algorithm.</LI>
-        <LI>Fixed bug affecting performance of EMV PhysicsLists.</LI>
+        <LI>Reorganized initialisation and ComputeTruePathLengthLimit method using 
+            <TT>G4MscStepLimitType</TT> enumerator to choose step limit algorithm.</LI>
         <LI>Optimisation of step limitation for <TT>skin&gt;0</TT> (about 5%
             CPU save).</LI>
+        <LI>Use G4SafetyHelper for computation of safety and distance to the boundary;
+            remove pointer to G4Navigator.</LI>	    
         </UL></LI>
+    <LI><TT>G4UniversalFluctuation</TT>: correction of the algorithm in order to have 
+        better agreement between sampled width and data.</LI>
     <LI><TT>G4eBremsstrahlung</TT>: removed definition of gamma threshold from
         constructor, define this parameter at initialisation of the process
-        from <TT>G4LossTableManager</TT>.</LI>
+        from <TT>G4LossTableManager</TT> - allow to use UI command.</LI>
     <LI>Use <TT>fParticleChange</TT> in
         <TT>G4eeToTwoGammaModel::SampleSecondaries()</TT>.</LI>
     <LI>Modified interface of <TT>SampleSecondary()</TT> method according to
@@ -352,42 +388,42 @@ please refer to the related History files provided in most packages):
             to selected model instead.</LI>
         <LI>Speedup code by adding implementation method
             <TT>PostStepGetPhysicalInteractionLength()</TT>.</LI>
-        <LI>Added methods <TT>InitialiseStep()</TT> and
-            <TT>InitialiseMassCharge()</TT> in
-            <TT>G4VEnergyLossProcess</TT>.</LI>
-        <LI>Added implementation method
-            <TT>AlongStepGetPhysicalInteractionLength()</TT>
-            in <TT>G4VEnergyLossProcess</TT> and do not use
-            safety.</LI>
-        <LI>Cleanup comments and reorganised code for easier reading;
+        <LI>Cleanup comments and reorganized code for easier reading;
             moved short methods to inline.</LI>
         </UL></LI>
+    <LI><TT>G4VEnergyLossProcess</TT>:
+        <UL>
+        <LI>Added methods <TT>InitialiseStep()</TT> and
+            <TT>InitialiseMassCharge()</TT>.</LI>
+        <LI>Added implementation method
+            <TT>AlongStepGetPhysicalInteractionLength()</TT> in order to 
+	    speedup computations.</LI>
+        <LI>Remove pointer to G4Navigator and use G4SafetyHelper.</LI>
     <LI><TT>G4VMultipleScattering</TT>:
         <UL>
         <LI>Speedup code by adding implementation of methods
             <TT>AlongStepGetPhysicalInteractionLength()</TT> and
             <TT>PostStepGetPhysicalInteractionLength()</TT>.</LI>
-        <LI>Cleanup comments and reorganised code for easier reading;
+        <LI>Cleanup comments and reorganized code for easier reading;
             moved short methods to inline; added method to set
             multiple-scattering parameters.</LI>
         </UL></LI>
     <LI><TT>G4EnergyLossMessenger</TT>:
         <UL>
         <LI>Defined new UI sub-directory <TT>/process/msc</TT>
-            and reorganised UI commands for multiple-scattering processes.
+            and reorganized UI commands for multiple-scattering processes.
             Using <TT>G4EmProcessOptions</TT> as an interface to all EM
             processes.</LI>
         </UL></LI>
-    <LI><TT>G4MscStepLimitType</TT>, <TT>G4VMultipleScattering</TT>,
-        <TT>G4EnergyLossMessenger</TT>: replaced identifier <TT>G4v71</TT>
-        with <TT>Minimal</TT>.</LI>
     <LI><TT>G4LossTableManager</TT>: removed set multiple-scattering
-        parameters.</LI>
+        parameters and fixed deletion of <TT>G4EmCorrections</TT> in
+        destructor.</LI>
     <LI><TT>G4EmProcessOptions</TT>: updated interface to multiple-scattering
         processes, added extra methods to set parameters.</LI>
     <LI>Added class <TT>G4MscStepLimitType</TT>.</LI>
     </UL></LI>
 </UL>
+
 
 <A NAME="err-notes">
 <H3><I>Error Propagation</I></H3></A>
@@ -516,9 +552,9 @@ please refer to the related History files provided in most packages):
         <TT>G4ErrorTarget</TT>, <TT>G4ErrorSurfaceTarget</TT>,
         <TT>G4ErrorTanPlaneTarget</TT>, <TT>G4ErrorPlaneSurfaceTarget</TT>
         and <TT>G4ErrorCylSurfaceTarget</TT>.</LI>
-    <LI>Added forward declaration and pointer (with set/get methods) to
-        <TT>G4VUserSteppingAction</TT>, to allow for stepping actions to be
-        defined at region.</LI>
+    <LI><TT>G4Region</TT> may have assigned a regional user stepping action.
+        This local action is invoked after the global user stepping action
+        which is set to <TT>G4RunManager</TT>.</LI>
     </UL></LI>
 <LI><B>Navigation</B>
     <UL>
@@ -632,8 +668,8 @@ please refer to the related History files provided in most packages):
     <LI>Elastic cross-section for low energy neutrons upgraded and tuned in
         <TT>G4QElasticCrossSection</TT>. High energy, heavy nuclei nA
         correction.</LI>
-    <LI>Memory leak correction in
-        <TT>G4StringChipsParticleLevelInterface</TT>.</LI>
+    <LI>Memory leak fix in <TT>G4StringChipsParticleLevelInterface</TT>
+        and <TT>G4QElasticCrossSection</TT>.</LI>
     <LI>First implementation of the G4QDiffractionRatio class.</LI>
     <LI>First implementation of the charge-exchange: coherent in the new
         process <TT>G4QCoherentChargeExchange</TT> and incoherent as an
@@ -650,13 +686,17 @@ please refer to the related History files provided in most packages):
 <LI><B>Elastic scattering</B>
     <UL>
     <LI><TT>G4ElasticHadrNucleusHE</TT>: optimised computation of tables.
-        General cleanup and redesign of private methods.</LI>
+        Fixed compilation of nuclear parameters for heavy nucleus (<TT>A
+        &ft;100</TT>). General cleanup and redesign of private methods.</LI>
     <LI>Added model names to constructors in <TT>G4LEnp</TT>, <TT>G4LEpp</TT>,
         <TT>G4ChargeExchange</TT>, <TT>G4HadronElastic</TT> and
         <TT>G4ElasticHadrNucleusHE</TT>.</LI>
     <LI><TT>G4HadronElastic</TT>: use <TT>QElasticCrossSection</TT> for
         <TT>p, n</TT> incident for any energy and any target; use
         <TT>HElastic</TT> for mesons only.</LI>
+    <LI><TT>G4UHadronElasticProcess</TT>: use <TT>true</TT> flag calling
+         CHIPS to compute cross section.</LI>
+    <LI>New class <TT>G4DiffuseElastic</TT>, new model for elastic scattering.</LI>
     </UL></LI>
 <LI><B>High precision Neutron</B>
     <UL>
@@ -710,6 +750,11 @@ please refer to the related History files provided in most packages):
 <LI><TT>G4NistManager</TT> and <TT>G4NistElementBuilder</TT>: added
     <TT>GetNistFirstIsotopeN()</TT> and <TT>GetNumberOfNistIsotopes()</TT>
     methods.</LI>
+<LI><TT>G4NistElementBuilder</TT>: added protection
+    (<TT>Z&gt;=limitNumElements</TT>) inside <TT>BuildElement()</TT> on Mokka
+    request.</LI>
+<LI><TT>G4SandiaTable</TT>: fixed deletion of elements of the table in
+    destructor.</LI>
 </UL>
 
 <A NAME="part-notes">
@@ -755,7 +800,8 @@ please refer to the related History files provided in most packages):
     parallel worlds.</LI>
 <LI>Fix against accessing to the world logical volume that had already been
     deleted.</LI>
-<LI>Fixed memory leak in <TT>G4VUserPhysicsList</TT>.</LI>
+<LI>Fixed memory leak in <TT>G4VUserPhysicsList</TT> and
+    <TT>G4VModularPhysicsList</TT>.</LI>
 <LI>Fixed the name of random number status file.</LI>
 <LI>In <TT>G4RunManagerKernel</TT>, <TT>UpdateRegion()</TT> method now
     internally invokes <TT>CheckRegions()</TT> method to make sure all
@@ -812,7 +858,7 @@ please refer to the related History files provided in most packages):
     </UL></LI>
 <LI><B>RayTracer</B>
     <UL>
-    <LI>Fix for dubious ValGrind diagnostic.</LI>
+    <LI>Fixed memory leak at initialisation.</LI>
     </UL></LI>
 <LI><B>ASCIITree</B>
     <UL>
@@ -880,6 +926,12 @@ please refer to the related History files provided in most packages):
     <LI>radioprotection
         <UL>
         <LI>Correction to documentation.</LI>
+        </UL></LI>
+    <LI>underground_physics
+        <UL>
+        <LI>Migrated to new interface for <TT>SetMscStepLimitation(fMinimal)</TT>
+            in <TT>DMXPhysicsList</TT>.</LI>
+        <LI>Changed to <TT>hIonisation</TT> from <TT>hLowEnergyIonisation</TT>.</LI>
         </UL></LI>
     </UL></LI>
 <LI><B>extended</B>
@@ -983,6 +1035,10 @@ please refer to the related History files provided in most packages):
         <LI>Changed <TT>visTutor/exN03Vis12</TT> and <TT>visTutor/exN03Vis13</TT>
             macros, following change to <TT>/vis/ogl/printEPS</TT> command.</LI>
         <LI>Increased verbosity in <TT>rndmSeed</TT> input macro.</LI>
+        </UL></LI>
+    <LI>N04
+        <UL>
+        <LI>Delete materials and elements when quitting application.</LI>
         </UL></LI>
     <LI>N05
         <UL>
