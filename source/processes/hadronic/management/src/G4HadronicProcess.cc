@@ -62,8 +62,8 @@ namespace G4HadronicProcess_local
   }
 } 
 
-G4IsoParticleChange * G4HadronicProcess::theIsoResult = NULL;
-G4IsoParticleChange * G4HadronicProcess::theOldIsoResult = NULL;
+G4IsoParticleChange * G4HadronicProcess::theIsoResult = 0;
+G4IsoParticleChange * G4HadronicProcess::theOldIsoResult = 0;
 G4bool G4HadronicProcess::isoIsEnabled = true;
 
 void G4HadronicProcess::
@@ -88,13 +88,13 @@ G4VDiscreteProcess( processName, aType)
 G4HadronicProcess::~G4HadronicProcess()
 { 
   delete theTotalResult;
-  std::for_each(theProductionModels.begin(), 
-  theProductionModels.end(), 
-  G4Delete());
-  std::for_each(theBias.begin(), 
-  theBias.end(), 
-  G4Delete());
-  if(theOldIsoResult) delete theOldIsoResult;
+
+  std::for_each(theProductionModels.begin(),
+                theProductionModels.end(), G4Delete());
+  std::for_each(theBias.begin(), theBias.end(), G4Delete());
+ 
+  delete theOldIsoResult; delete theIsoResult;
+  delete theCrossSectionDataStore;
 }
 
 void G4HadronicProcess::RegisterMe( G4HadronicInteraction *a )
@@ -401,15 +401,16 @@ G4HadronicProcess::DoIsotopeCounting(G4HadFinalState * aResult,
                                      const G4Nucleus & aNucleus)
 {
   // get the PC from iso-production
-  if(theOldIsoResult) delete theOldIsoResult;
-  if(theIsoResult) delete theIsoResult;
+  delete theOldIsoResult;
+  theOldIsoResult = 0;
+  delete theIsoResult;
   theIsoResult = new G4IsoParticleChange;
   G4bool done = false;
-  G4IsoResult * anIsoResult = NULL;
+  G4IsoResult * anIsoResult = 0;
   for(unsigned int i=0; i<theProductionModels.size(); i++)
   {
     anIsoResult = theProductionModels[i]->GetIsotope(aTrack, aNucleus);
-    if(anIsoResult!=NULL)
+    if(anIsoResult!=0)
     {
       done = true;
       break;
