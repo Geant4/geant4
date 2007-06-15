@@ -1,4 +1,4 @@
-$Id: History,v 1.164 2007-05-30 10:35:12 gcosmo Exp $
+$Id: History,v 1.165 2007-06-15 07:28:44 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+June 15th, 2007, Gabriele Cosmo (run-V08-03-06)
+- Fixed leak in G4VModularPhysicsList: delete allocated 'physicsVector'
+  in destructor.
 
 May 30th, 2007, Gabriele Cosmo (run-V08-03-05)
 - Temporarly restored switching mechanism for G4CoupledTransportation,
