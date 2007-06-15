@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QuasiFreeRatios.cc,v 1.12 2007-05-24 10:18:56 mkossov Exp $
+// $Id: G4QuasiFreeRatios.cc,v 1.13 2007-06-15 16:43:39 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -39,6 +39,21 @@
 //#define nandebug
 
 #include "G4QuasiFreeRatios.hh"
+
+// initialisation of statics
+std::vector<G4double*> G4QuasiFreeRatios::vE;      // Vector of ElastPointers to LogTable in C++ heap
+
+G4QuasiFreeRatios::G4QuasiFreeRatios()
+{
+}
+
+G4QuasiFreeRatios::~G4QuasiFreeRatios()
+{
+  std::vector<G4double*>::iterator pos;
+  for(pos=vE.begin(); pos<vE.end(); pos++)
+  { delete [] *pos; }
+  vE.clear();
+}
 
 // Returns Pointer to the G4VQCrossSection class
 G4QuasiFreeRatios* G4QuasiFreeRatios::GetPointer()
@@ -545,7 +560,6 @@ std::pair<G4double,G4double> G4QuasiFreeRatios::FetchElTot(G4double p, G4int PDG
   static std::vector<G4int>     vI;      // Vector of index for which XS was calculated
   static std::vector<G4double>  vM;      // Vector of rel max ln(p) initialized in LogTable
   static std::vector<G4int>     vK;      // Vector of topBin number initialized in LogTable
-  static std::vector<G4double*> vE;      // Vector of ElastPointers to LogTable in C++ heap
   static std::vector<std::pair<G4double,G4double>*> vX; // Vector of ETPointers to LogTable
   // Last values of the Associative Data Base:
   static G4int     lastI=0;              // The Last index for which XS was calculated

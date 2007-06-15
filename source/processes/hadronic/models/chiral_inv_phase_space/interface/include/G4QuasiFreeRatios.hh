@@ -54,11 +54,11 @@ class G4QuasiFreeRatios
 {
  protected:
 
-  G4QuasiFreeRatios()  {}                 // Constructor
+  G4QuasiFreeRatios();                 // Constructor
 
  public:
 
-  ~G4QuasiFreeRatios() {}                 // Destructor
+  ~G4QuasiFreeRatios();                 // Destructor
 
   static G4QuasiFreeRatios* GetPointer(); // Gives a pointer to this singletone
 
@@ -89,5 +89,7 @@ class G4QuasiFreeRatios
 
  // Body
  private:
+
+  static std::vector<G4double*> vE;      // Vector of ElastPointers to LogTable
 }; 					
 #endif

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QElasticCrossSection.cc,v 1.28 2007-06-14 16:48:11 gcosmo Exp $
+// $Id: G4QElasticCrossSection.cc,v 1.29 2007-06-15 16:43:39 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -104,27 +104,38 @@ G4QElasticCrossSection::~G4QElasticCrossSection()
 {
   std::vector<G4double*>::iterator pos;
   for (pos=CST.begin(); pos<CST.end(); pos++)
-  { delete [] *pos; CST.clear(); }
+  { delete [] *pos; }
+  CST.clear();
   for (pos=PAR.begin(); pos<PAR.end(); pos++)
-  { delete [] *pos; PAR.clear(); }
+  { delete [] *pos; }
+  PAR.clear();
   for (pos=SST.begin(); pos<SST.end(); pos++)
-  { delete [] *pos; SST.clear(); }
+  { delete [] *pos; }
+  SST.clear();
   for (pos=S1T.begin(); pos<S1T.end(); pos++)
-  { delete [] *pos; S1T.clear(); }
+  { delete [] *pos; }
+  S1T.clear();
   for (pos=B1T.begin(); pos<B1T.end(); pos++)
-  { delete [] *pos; B1T.clear(); }
+  { delete [] *pos; }
+  B1T.clear();
   for (pos=S2T.begin(); pos<S2T.end(); pos++)
-  { delete [] *pos; S2T.clear(); }
+  { delete [] *pos; }
+  S2T.clear();
   for (pos=B2T.begin(); pos<B2T.end(); pos++)
-  { delete [] *pos; B2T.clear(); }
+  { delete [] *pos; }
+  B2T.clear();
   for (pos=S3T.begin(); pos<S3T.end(); pos++)
-  { delete [] *pos; S3T.clear(); }
+  { delete [] *pos; }
+  S3T.clear();
   for (pos=B3T.begin(); pos<B3T.end(); pos++)
-  { delete [] *pos; B3T.clear(); }
+  { delete [] *pos; }
+  B3T.clear();
   for (pos=S4T.begin(); pos<S4T.end(); pos++)
-  { delete [] *pos; S4T.clear(); }
+  { delete [] *pos; }
+  S4T.clear();
   for (pos=B4T.begin(); pos<B4T.end(); pos++)
-  { delete [] *pos; B4T.clear(); }
+  { delete [] *pos; }
+  B4T.clear();
 }
 
 // Returns Pointer to the G4VQCrossSection class
