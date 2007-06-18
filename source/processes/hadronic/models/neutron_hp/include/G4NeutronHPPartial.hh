@@ -24,8 +24,10 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPPartial.hh,v 1.12 2007-06-06 12:45:13 ahoward Exp $
+// $Id: G4NeutronHPPartial.hh,v 1.13 2007-06-18 20:56:05 tkoi Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
+//
+// 070618 Comment out unused private member leaking by T. Koi
 //
 #ifndef G4NeutronHPPartial_h
 #define G4NeutronHPPartial_h 1
@@ -121,7 +123,8 @@ class G4NeutronHPPartial
   G4double * X;
   G4double * T;
   G4NeutronHPVector * data;
-  G4NeutronHPVector * theBuffer;
+  // TKDB
+  //G4NeutronHPVector * theBuffer;
   G4int nData;
   G4InterpolationManager theManager; // interpolate between different data[i]
   G4NeutronHPInterpolator theInt;

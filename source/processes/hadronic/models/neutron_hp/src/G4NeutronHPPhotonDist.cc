@@ -31,6 +31,7 @@
 //        in the of nDiscrete = 1 an nPartial = 1. Most case are satisfied. 
 //        T. Koi
 // 070606 Add Partial case by T. Koi 
+// 070618 fix memory leaking by T. Koi
 //
 // there is a lot of unused (and undebugged) code in this file. Kept for the moment just in case. @@
 
@@ -342,6 +343,8 @@ G4int maxEnergyIndex = 0;
                  //       << best/eV << " ratio " << best / maximumE 
                  //       << G4endl;
                }
+               // TKDB
+               delete temp;
             }
 	    else    // discrete
  	    {

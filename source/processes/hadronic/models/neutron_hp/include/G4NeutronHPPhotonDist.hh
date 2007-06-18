@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPPhotonDist.hh,v 1.14 2007-06-14 17:17:30 tkoi Exp $
+// $Id: G4NeutronHPPhotonDist.hh,v 1.15 2007-06-18 20:56:05 tkoi Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  // Hadronic Process: Very Low Energy Neutron X-Sections
@@ -32,6 +32,7 @@
 //
 // 070606 fix for Valgrind error by T. Koi
 // 070612 fix memory leaking by T. Koi
+// 070615 fix memory leaking by T. Koi
 //
  
 #ifndef G4NeutronHPPhotonDist_h
@@ -117,9 +118,13 @@ public:
 
      if(actualMult != 0) delete [] actualMult;
 
-     if(theLevelEnergies != 0) delete theLevelEnergies;
-     if(theTransitionProbabilities != 0) delete theTransitionProbabilities;
-     if(thePhotonTransitionFraction != 0) delete thePhotonTransitionFraction;
+     //if(theLevelEnergies != 0) delete theLevelEnergies;
+     //if(theTransitionProbabilities != 0) delete theTransitionProbabilities;
+     //if(thePhotonTransitionFraction != 0) delete thePhotonTransitionFraction;
+// TKDB
+     if(theLevelEnergies != 0) delete [] theLevelEnergies;
+     if(theTransitionProbabilities != 0) delete [] theTransitionProbabilities;
+     if(thePhotonTransitionFraction != 0) delete [] thePhotonTransitionFraction;
   }
   
   G4bool InitMean(std::ifstream & aDataFile);
