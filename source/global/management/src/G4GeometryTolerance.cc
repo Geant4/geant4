@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeometryTolerance.cc,v 1.1 2007-05-11 13:08:37 gcosmo Exp $
+// $Id: G4GeometryTolerance.cc,v 1.2 2007-06-18 13:26:40 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GeometryTolerance
@@ -39,21 +39,21 @@
 #include "globals.hh"
 
 // ***************************************************************************
-// Static class variable: ptr to single instance of class
+// Static class data
 // ***************************************************************************
 //
 G4GeometryTolerance* G4GeometryTolerance::fInstance = 0;
+G4bool G4GeometryTolerance::fInitialised = false;
+G4double G4GeometryTolerance::fCarTolerance = 1E-9*mm;
+G4double G4GeometryTolerance::fAngTolerance = 1E-9*rad;
+G4double G4GeometryTolerance::fRadTolerance = 1E-9*mm;
 
 // ***************************************************************************
-// Constructor. Fix values to constants
+// Constructor.
 // ***************************************************************************
 //
 G4GeometryTolerance::G4GeometryTolerance()
-  : fInitialised(false)
 {
-  fCarTolerance = 1E-9*mm;
-  fAngTolerance = 1E-9*rad;
-  fRadTolerance = 1E-9*mm;
 }
 
 // ***************************************************************************

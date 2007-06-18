@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeometryTolerance.hh,v 1.1 2007-05-11 13:08:37 gcosmo Exp $
+// $Id: G4GeometryTolerance.hh,v 1.2 2007-06-18 13:26:40 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -72,7 +72,7 @@ class G4GeometryTolerance
 
   protected:
 
-    void SetSurfaceTolerance(G4double worldExtent);
+    static void SetSurfaceTolerance(G4double worldExtent);
       // Sets the Cartesian surface tolerance to a value computed
       // from the maximum extent of the world volume. This method
       // can be called only once, and is done only through the
@@ -85,10 +85,10 @@ class G4GeometryTolerance
   private:
 
     static G4GeometryTolerance* fInstance;
-    G4double fCarTolerance;
-    G4double fAngTolerance;
-    G4double fRadTolerance;
-    G4bool fInitialised;
+    static G4double fCarTolerance;
+    static G4double fAngTolerance;
+    static G4double fRadTolerance;
+    static G4bool fInitialised;
  };
 
 #endif // G4GeometryTolerance_hh
