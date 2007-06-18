@@ -178,7 +178,7 @@ interfaces                                       interfaces-V08-03-01
 ----------
 - Implemented signal handler for soft-abort in G4UIterminal.
 
-materials                                        materials-V08-03-00
+materials                                        materials-V08-03-01
 ---------
 - Added implementation file for G4SurfaceProperty.
 - Added static G4SurfacePropertyTable to G4MaterialTable
@@ -187,7 +187,8 @@ materials                                        materials-V08-03-00
   and GetNumberOfNistIsotopes() methods.
 - G4NistElementBuilder: added protection (Z>=limitNumElements) inside
   BuildElement() on Mokka request.
-- G4SandiaTable: fixed deletion of elements of the table in destructor.
+- G4SandiaTable: fixed deletion of elements of the table in destructor
+  and non-initilised pointer in constructor. Use G4 native types.
 
 particles                                        particles-V08-03-01
 ---------
@@ -332,22 +333,25 @@ processes/electromagnetic/xrays                  xrays-V08-03-00
 
 processes/hadronic                               hadr-V08-03-00
 ------------------
-- cross_sections (hadr-cross-V08-03-03)
-  o Fix for non-initialised total cross section for pi- G4PiNuclearCrossSection.
-  o G4GlauberGribovCrossSection, G4HadronNucleonXsc: fixed compiler warning
-    for un-initialized variable.
-  o G4HadronCrossSections: replaced 'PSIZE' with 'NPARTS' to avoid
-    name conflict with SDK Windows environment.
+- cross_sections (hadr-cross-V08-03-04)
   o G4GlauberGribovCrossSection: add new methods GetRatioSD() and
     GetRatioQE() allowing for retrieving qe/in and sd/in ratios.
   o G4HadronNucleonXsc: add new method GetHadronNucleonXscMK() to get
     hadron-nucleon cross section.
-- management (hadr-man-V08-03-02)
+  o Fix for non-initialised total cross section for pi- G4PiNuclearCrossSection.
+  o G4GlauberGribovCrossSection, G4HadronNucleonXsc: fixed compiler warning
+    for un-initialized variable.
+  o Fixed memory leak at initialisation in classes G4ElectroNuclearCrossSection
+    and G4PhotoNuclearCrossSection.
+  o G4HadronCrossSections: replaced 'PSIZE' with 'NPARTS' to avoid
+    name conflict with SDK Windows environment.
+- management (hadr-man-V08-03-03)
   o G4HadronicProcess:
     + In method FillTotalResult() partly remove spurious peak at 90 degrees
       by using different G4DynamicParticle constructor and prohibiting kinetic
       energy from being exactly zero.
     + Changed default for isotope production to off to fix a memory leak.
+    + Fixed memory leak at initialisation.
     + Removed effective charge calculation.
 - models/binary_cascade (had-binary-V08-03-00)
   o G4BinaryLightIonReaction: added protection against divide by 0 when energy
@@ -357,12 +361,12 @@ processes/hadronic                               hadr-V08-03-00
     models.
 - models/chiral_inv_phase_space/body (hadr-chips-body-V08-03-01)
   o More accurate initialization of dZ, dN, dS (dense area) in G4QNucleus.
-- models/chiral_inv_phase_space/interface (hadr-chips-inter-V08-03-07)
+- models/chiral_inv_phase_space/interface (hadr-chips-inter-V08-03-08)
   o Elastic cross-section for low energy neutrons upgraded in
     G4QElasticCrossSection. High energy, heavy nuclei nA correction in
     G4QElasticCrossSection
-  o Memory leak fix in G4StringChipsParticleLevelInterface and
-    G4QElasticCrossSection.
+  o Memory leak fix in G4StringChipsParticleLevelInterface,
+    G4QuasiFreeRatios and G4QElasticCrossSection.
   o First implementation of the G4QDiffractionRatio class.
   o First implementation of the charge-exchange: coherent in the new process
     G4QCoherentChargeExchange and incoherent as an extention of the

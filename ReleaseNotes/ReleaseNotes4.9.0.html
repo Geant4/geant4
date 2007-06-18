@@ -627,17 +627,20 @@ please refer to the related History files provided in most packages):
 <UL>
 <LI><B>Cross sections</B>
     <UL>
-    <LI>Fix for non-initialised total cross section for <TT>pi-</TT>
-        in <TT>G4PiNuclearCrossSection</TT>.</LI>
-    <LI><TT>G4HadronCrossSections</TT>: replaced <TT>PSIZE</TT> with
-        <TT>NPARTS</TT> to avoid name conflict with SDK Windows
-        environment.</LI>
     <LI><TT>G4GlauberGribovCrossSection</TT>: added new methods
         <TT>GetRatioSD()</TT> and <TT>GetRatioQE()</TT> allowing for
         retrieving qe/in and sd/in ratios.</LI>
     <LI><TT>G4HadronNucleonXsc</TT>: added new method
         <TT>GetHadronNucleonXscMK()</TT> to get hadron-nucleon cross
         section.</LI>
+    <LI>Fix for non-initialised total cross section for <TT>pi-</TT>
+        in <TT>G4PiNuclearCrossSection</TT>.</LI>
+    <LI>Fixed memory leak at initialisation in classes
+        <TT>G4ElectroNuclearCrossSection</TT> and
+        <TT>G4PhotoNuclearCrossSection</TT>.</LI>
+    <LI><TT>G4HadronCrossSections</TT>: replaced <TT>PSIZE</TT> with
+        <TT>NPARTS</TT> to avoid name conflict with SDK Windows
+        environment.</LI>
     </UL></LI>
 <LI><B>Management</B>
     <UL>
@@ -648,7 +651,8 @@ please refer to the related History files provided in most packages):
             constructor and prohibiting kinetic energy from being exactly
             zero.</LI>
         <LI>Changed default for isotope production to off to fix a memory
-            leak. Removed effective charge calculation.</LI>
+            leak. Fixed memory leak at initialisation. Removed effective
+            charge calculation.</LI>
         </UL></LI>
     </UL></LI>
 <LI><B>Binary Cascade</B>
@@ -668,8 +672,8 @@ please refer to the related History files provided in most packages):
     <LI>Elastic cross-section for low energy neutrons upgraded and tuned in
         <TT>G4QElasticCrossSection</TT>. High energy, heavy nuclei nA
         correction.</LI>
-    <LI>Memory leak fix in <TT>G4StringChipsParticleLevelInterface</TT>
-        and <TT>G4QElasticCrossSection</TT>.</LI>
+    <LI>Memory leak fix in <TT>G4StringChipsParticleLevelInterface</TT>,
+        <TT>G4QuasiFreeRatios</TT> and <TT>G4QElasticCrossSection</TT>.</LI>
     <LI>First implementation of the G4QDiffractionRatio class.</LI>
     <LI>First implementation of the charge-exchange: coherent in the new
         process <TT>G4QCoherentChargeExchange</TT> and incoherent as an
@@ -754,7 +758,8 @@ please refer to the related History files provided in most packages):
     (<TT>Z&gt;=limitNumElements</TT>) inside <TT>BuildElement()</TT> on Mokka
     request.</LI>
 <LI><TT>G4SandiaTable</TT>: fixed deletion of elements of the table in
-    destructor.</LI>
+    destructor and non-initilised pointer in constructor. Use G4 native
+    types.</LI>
 </UL>
 
 <A NAME="part-notes">
