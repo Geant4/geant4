@@ -27,12 +27,14 @@ Some of the development/fixes included since the last development tags are:
 
 Summarised, the list of changes is the following:
 
-config                                           config-V08-03-01
+config                                           config-V08-03-02
 ------
 - Added modules "biasing", "error_propagation" and "lll_fission" to
   binmake.gmk.
 - Removed G4LIB_BUILD_LISTS flag. Physics lists are built by default.
-- Updated Configure script to detect new data sets (Configure-V08-03-00).
+- Updated Configure script to detect new data sets (Configure-V08-03-00)
+  and to remove search for old physics_list module in installation of
+  libraries.
 
 digits_hits                                      digits_hits-V08-03-04
 -----------
@@ -150,7 +152,7 @@ geometry/volumes                                 geomvol-V08-03-00
 - Use call to G4GeometryTolerance instead of kCarTolerance in
   G4ReflectionFactory.
 
-global                                           global-V08-03-06
+global                                           global-V08-03-07
 ------
 - Added G4GeometryTolerance singleton class for the definition of
   tunable geometrical tolerances. The Cartesian tolerance can either be set
