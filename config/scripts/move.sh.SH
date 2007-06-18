@@ -384,7 +384,7 @@ echo ""
 echo "Installing sources and headers..."
 echo ""
 mkdir -p $g4final_install/src/geant4/
-tar cf - Configure config/ source/ environments/ physics_lists/ examples/ |(cd $g4final_install/src/geant4/; tar xf -)
+tar cf - Configure config/ source/ environments/ examples/ |(cd $g4final_install/src/geant4/; tar xf -)
 fi
 fi
 
@@ -398,7 +398,7 @@ echo "Installing sources..."
 echo ""
 
 mkdir -p $g4final_install/src/geant4/
-tar cf - Configure config/ source/ environments/ physics_lists/ examples/ |(cd $g4final_install/src/geant4/; tar xf -)
+tar cf - Configure config/ source/ environments/ examples/ |(cd $g4final_install/src/geant4/; tar xf -)
 fi
 
 echo ""
