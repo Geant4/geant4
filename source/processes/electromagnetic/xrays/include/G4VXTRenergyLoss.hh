@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VXTRenergyLoss.hh,v 1.20 2007-06-19 16:23:17 vnivanch Exp $
+// $Id: G4VXTRenergyLoss.hh,v 1.21 2007-06-19 17:44:01 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -67,7 +67,6 @@
 #include "G4PhysicsOrderedFreeVector.hh"
 #include "G4Integrator.hh"
 #include "G4ParticleChange.hh"
-#include "G4OrderedTable.hh"
 
 
 
@@ -231,11 +230,11 @@ protected:
 
   G4int fPlateNumber ;
   G4double fTotalDist ;
-  G4OrderedTable*  fPlatePhotoAbsCof ;
+  G4double** fPlatePhotoAbsCof ;
   G4int      fPlateIntervalNumber ;
   G4double   fPlateThick ;
  
-  G4OrderedTable*  fGasPhotoAbsCof ;
+  G4double** fGasPhotoAbsCof ;
   G4int      fGasIntervalNumber ;
   G4double   fGasThick ;     
   G4double fAlphaPlate, fAlphaGas ;
