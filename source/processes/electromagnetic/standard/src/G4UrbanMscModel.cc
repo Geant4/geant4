@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel.cc,v 1.60 2007-05-22 17:34:36 vnivanch Exp $
+// $Id: G4UrbanMscModel.cc,v 1.61 2007-06-19 12:10:26 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -137,6 +137,8 @@
 // 10-04-07 optimize logic of ComputeTruePathLengthLimit, remove
 //          unused members, use unique G4SafetyHelper (V.Ivanchenko)
 // 01-05-07 optimization for skin > 0 (L.Urban)
+// 19-06-07 modification for skin > 0 in order to get facgeom 
+//          working properly (L.Urban)
 //
 
 // Class Description:
@@ -205,7 +207,6 @@ G4UrbanMscModel::G4UrbanMscModel(G4double m_facrange, G4double m_dtrl,
   theManager    = G4LossTableManager::Instance(); 
   inside        = false;  
   insideskin    = false;
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -530,7 +531,7 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
     {
       //compute geomlimit and presafety 
       GeomLimit(track);
-   
+
       // is far from boundary
       if(currentRange <= presafety)
 	{
@@ -543,7 +544,6 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
 
       if((stepStatus == fGeomBoundary) || (stepNumber == 1))
 	{
-
 	  if(stepNumber == 1) smallstep = 1.e10;
 	  else  smallstep = 1.;
 
@@ -557,15 +557,7 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
 	  if (currentRange > lambda0) tlimit = facr*currentRange;
 	  else                        tlimit = facr*lambda0;
 
-	  // constraint from the geometry (if tlimit above is too big)
-	  G4double tgeom = geombig; 
-	  if(geomlimit > geommin)
-	    {
-	      if(stepStatus == fGeomBoundary)  
-		tgeom = geomlimit/facgeom;
-	      else
-		tgeom = 2.*geomlimit/facgeom;
-	    }
+          if(tlimit > currentRange) tlimit = currentRange;
 
 	  //define stepmin here (it depends on lambda!)
 	  //rough estimation of lambda_elastic/lambda_transport
@@ -583,8 +575,17 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
 	  //lower limit for tlimit
 	  if(tlimit < tlimitmin) tlimit = tlimitmin;
 
-	  //check against geometry limit
-	  if(tlimit > tgeom) tlimit = tgeom;
+	  // constraint from the geometry (if tlimit above is too big)
+	  G4double tgeom = geombig; 
+	  if((geomlimit < geombig) && (geomlimit > geommin))
+	    {
+	      if(stepStatus == fGeomBoundary)  
+		tgeom = geomlimit/facgeom;
+	      else
+		tgeom = 2.*geomlimit/facgeom;
+
+	      if(tlimit > tgeom) tlimit = tgeom;
+	    }
 	}
 
       //if track starts far from boundaries increase tlimit!
@@ -624,6 +625,7 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
       if(tnow < stepmin) tnow = stepmin;
 
       if(tPathLength > tnow) tPathLength = tnow ; 
+
     }
     // for 'normal' simulation with or without magnetic field 
     //  there no small step/single scattering at boundaries
@@ -692,7 +694,9 @@ void G4UrbanMscModel::GeomLimit(const G4Track&  track)
   if((track.GetVolume() != 0) &&
      (track.GetVolume() != safetyHelper->GetWorldVolume()))  
   {
-    G4double cstep = tPathLength;
+    // in order to define tgeom cstep = range shold be used
+    G4double  cstep = currentRange;
+
     geomlimit = safetyHelper->CheckNextStep(
                   track.GetStep()->GetPreStepPoint()->GetPosition(),
                   track.GetMomentumDirection(),
