@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VXTRenergyLoss.cc,v 1.34 2006-06-29 19:56:25 gunter Exp $
+// $Id: G4VXTRenergyLoss.cc,v 1.35 2007-06-19 14:42:49 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // History:
@@ -1273,7 +1273,7 @@ void G4XTRenergyLoss::ComputePlatePhotoAbsCof()
                            (*theMaterialTable)[fMatIndex1]->GetFractionVector() ,
         		     numberOfElements,fPlateIntervalNumber) ;
    
-   fPlatePhotoAbsCof = new G4double*[fPlateIntervalNumber] ;
+   *fPlatePhotoAbsCof = new G4double [fPlateIntervalNumber];
 
    for(i=0;i<=fPlateIntervalNumber;i++)
    {
@@ -1390,7 +1390,7 @@ void G4XTRenergyLoss::ComputeGasPhotoAbsCof()
                            (*theMaterialTable)[fMatIndex2]->GetFractionVector() ,
         		     numberOfElements,fGasIntervalNumber) ;
    
-   fGasPhotoAbsCof = new G4double*[fGasIntervalNumber] ;
+   *fGasPhotoAbsCof = new G4double [fGasIntervalNumber];
 
    for(i=0;i<=fGasIntervalNumber;i++)
    {

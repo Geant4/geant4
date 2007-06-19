@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VXTRenergyLoss.hh,v 1.18 2006-06-29 19:55:55 gunter Exp $
+// $Id: G4VXTRenergyLoss.hh,v 1.19 2007-06-19 14:42:49 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
