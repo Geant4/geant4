@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VXTRenergyLoss.cc,v 1.38 2007-06-19 16:23:17 vnivanch Exp $
+// $Id: G4VXTRenergyLoss.cc,v 1.39 2007-06-19 16:38:16 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // History:
@@ -1271,11 +1271,12 @@ void G4XTRenergyLoss::ComputePlatePhotoAbsCof()
    }
    fPlateIntervalNumber = thisMaterialSandiaTable.SandiaIntervals
                            (thisMaterialZ,numberOfElements) ;
-   
+   G4cout << "Nint0= " << fPlateIntervalNumber<<G4endl;
    fPlateIntervalNumber = thisMaterialSandiaTable.SandiaMixing
                            ( thisMaterialZ ,
                            (*theMaterialTable)[fMatIndex1]->GetFractionVector() ,
         		     numberOfElements,fPlateIntervalNumber) ;
+   G4cout << "Nint1= " << fPlateIntervalNumber<<G4endl;
    
    fPlatePhotoAbsCof = new G4OrderedTable(fPlateIntervalNumber);
 
@@ -1388,11 +1389,13 @@ void G4XTRenergyLoss::ComputeGasPhotoAbsCof()
    }
    fGasIntervalNumber = thisMaterialSandiaTable.SandiaIntervals
                            (thisMaterialZ,numberOfElements) ;
+   G4cout << "NintGas0= " << fGasIntervalNumber<<G4endl;
    
    fGasIntervalNumber = thisMaterialSandiaTable.SandiaMixing
                            ( thisMaterialZ ,
                            (*theMaterialTable)[fMatIndex2]->GetFractionVector() ,
         		     numberOfElements,fGasIntervalNumber) ;
+   G4cout << "NintGas1= " << fGasIntervalNumber<<G4endl;
    
    fGasPhotoAbsCof = new G4OrderedTable(fGasIntervalNumber);
 
