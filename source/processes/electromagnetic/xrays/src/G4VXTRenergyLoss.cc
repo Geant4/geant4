@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VXTRenergyLoss.cc,v 1.37 2007-06-19 15:00:13 vnivanch Exp $
+// $Id: G4VXTRenergyLoss.cc,v 1.38 2007-06-19 16:23:17 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // History:
@@ -51,6 +51,7 @@
 #include "G4PhysicsVector.hh"
 #include "G4PhysicsFreeVector.hh"
 #include "G4PhysicsLinearVector.hh"
+#include "G4DataVector.hh"
 
 using namespace std;
 
@@ -160,21 +161,24 @@ G4XTRenergyLoss::G4XTRenergyLoss(G4LogicalVolume *anEnvelope,
 
 G4XTRenergyLoss::~G4XTRenergyLoss()
 {
-   G4int i ;
+  //   G4int i ;
 
    if(fEnvelope) delete fEnvelope;
+   if(fGasPhotoAbsCof) fGasPhotoAbsCof->clearAndDestroy();
+   if(fPlatePhotoAbsCof) fPlatePhotoAbsCof->clearAndDestroy();
+   delete fGasPhotoAbsCof;
+   delete fPlatePhotoAbsCof;
+   //   for(i=0;i<fGasIntervalNumber;i++)
+   // {
+   //  delete[] fGasPhotoAbsCof[i] ;
+   // }
+   //   delete[] fGasPhotoAbsCof ;
 
-   for(i=0;i<fGasIntervalNumber;i++)
-   {
-     delete[] fGasPhotoAbsCof[i] ;
-   }
-   delete[] fGasPhotoAbsCof ;
-
-   for(i=0;i<fPlateIntervalNumber;i++)
-   {
-     delete[] fPlatePhotoAbsCof[i] ;
-   }
-   delete[] fPlatePhotoAbsCof ;
+   //for(i=0;i<fPlateIntervalNumber;i++)
+   // {
+   //  delete[] fPlatePhotoAbsCof[i] ;
+   //}
+   //delete[] fPlatePhotoAbsCof ;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1273,20 +1277,20 @@ void G4XTRenergyLoss::ComputePlatePhotoAbsCof()
                            (*theMaterialTable)[fMatIndex1]->GetFractionVector() ,
         		     numberOfElements,fPlateIntervalNumber) ;
    
-   fPlatePhotoAbsCof = new G4double* [fPlateIntervalNumber];
+   fPlatePhotoAbsCof = new G4OrderedTable(fPlateIntervalNumber);
 
    for(i=0;i<=fPlateIntervalNumber;i++)
    {
-     fPlatePhotoAbsCof[i] = new G4double[5] ;
+     fPlatePhotoAbsCof->push_back(new G4DataVector(5,0.0));
    }
    for(i=0;i<fPlateIntervalNumber;i++)
    {
-      fPlatePhotoAbsCof[i][0] = thisMaterialSandiaTable.
+     (*((*fPlatePhotoAbsCof)[i]))[0] = thisMaterialSandiaTable.
                                 GetPhotoAbsorpCof(i+1,0) ; 
                               
       for(j=1;j<5;j++)
       {
-           fPlatePhotoAbsCof[i][j] = thisMaterialSandiaTable.
+        (*((*fPlatePhotoAbsCof)[i]))[j] = thisMaterialSandiaTable.
 	                             GetPhotoAbsorpCof(i+1,j)*
                  (*theMaterialTable)[fMatIndex1]->GetDensity() ;
       }
@@ -1311,7 +1315,7 @@ G4double G4XTRenergyLoss::GetPlateLinearPhotoAbs(G4double omega)
 
   for(i=0;i<fPlateIntervalNumber;i++)
   {
-    if( omega < fPlatePhotoAbsCof[i][0] ) break ;
+    if( omega < (*((*fPlatePhotoAbsCof)[i]))[0] ) break ;
   }
   if( i == 0 )
   { 
@@ -1319,8 +1323,8 @@ G4double G4XTRenergyLoss::GetPlateLinearPhotoAbs(G4double omega)
   }
   else i-- ;
   
-  return fPlatePhotoAbsCof[i][1]/omega  + fPlatePhotoAbsCof[i][2]/omega2 + 
-         fPlatePhotoAbsCof[i][3]/omega3 + fPlatePhotoAbsCof[i][4]/omega4  ;
+  return (*((*fPlatePhotoAbsCof)[i]))[1]/omega  + (*((*fPlatePhotoAbsCof)[i]))[2]/omega2 + 
+         (*((*fPlatePhotoAbsCof)[i]))[3]/omega3 + (*((*fPlatePhotoAbsCof)[i]))[4]/omega4  ;
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -1390,20 +1394,20 @@ void G4XTRenergyLoss::ComputeGasPhotoAbsCof()
                            (*theMaterialTable)[fMatIndex2]->GetFractionVector() ,
         		     numberOfElements,fGasIntervalNumber) ;
    
-   fGasPhotoAbsCof = new G4double* [fGasIntervalNumber];
+   fGasPhotoAbsCof = new G4OrderedTable(fGasIntervalNumber);
 
    for(i=0;i<=fGasIntervalNumber;i++)
    {
-     fGasPhotoAbsCof[i] = new G4double[5] ;
+     fGasPhotoAbsCof->push_back(new G4DataVector(5,0.0));
    } 
    for(i=0;i<fGasIntervalNumber;i++)
    {
-      fGasPhotoAbsCof[i][0] = thisMaterialSandiaTable.
+      (*((*fGasPhotoAbsCof)[i]))[0] = thisMaterialSandiaTable.
                                 GetPhotoAbsorpCof(i+1,0) ; 
                               
       for(j=1;j<5;j++)
       {
-           fGasPhotoAbsCof[i][j] = thisMaterialSandiaTable.
+           (*((*fGasPhotoAbsCof)[i]))[j] = thisMaterialSandiaTable.
 	                             GetPhotoAbsorpCof(i+1,j)*
                  (*theMaterialTable)[fMatIndex2]->GetDensity() ;
       }
@@ -1428,7 +1432,7 @@ G4double G4XTRenergyLoss::GetGasLinearPhotoAbs(G4double omega)
 
   for(i=0;i<fGasIntervalNumber;i++)
   {
-    if( omega < fGasPhotoAbsCof[i][0] ) break ;
+    if( omega < (*((*fGasPhotoAbsCof)[i]))[0] ) break ;
   }
   if( i == 0 )
   { 
@@ -1436,8 +1440,8 @@ G4double G4XTRenergyLoss::GetGasLinearPhotoAbs(G4double omega)
   }
   else i-- ;
   
-  return fGasPhotoAbsCof[i][1]/omega  + fGasPhotoAbsCof[i][2]/omega2 + 
-         fGasPhotoAbsCof[i][3]/omega3 + fGasPhotoAbsCof[i][4]/omega4  ;
+  return (*((*fGasPhotoAbsCof)[i]))[1]/omega  + (*((*fGasPhotoAbsCof)[i]))[2]/omega2 + 
+         (*((*fGasPhotoAbsCof)[i]))[3]/omega3 + (*((*fGasPhotoAbsCof)[i]))[4]/omega4  ;
 
 }
 
