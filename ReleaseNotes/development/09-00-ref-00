@@ -395,7 +395,7 @@ processes/hadronic                               hadr-V08-03-00
     >100) and includes helium (previously excluded).
 - models/lll_fission (hadr-lllfis-V08-03-06)
   o New module for Livermore LLNL spontaneous fission model.
-- models/neutron_hp (hadr-hpn-V08-03-02)
+- models/neutron_hp (hadr-hpn-V08-03-04)
   o Try to limit sum of secondary photons energy while keeping distributions
     in G4NeutronHPPhotonDist.
   o Added neglecting doppler broadening mode for boosting perfomance in
@@ -405,7 +405,7 @@ processes/hadronic                               hadr-V08-03-00
     G4NeutronHPNames.
   o Added 'NeutronHP_ALWAYS_USE_PHOTONEVAPORATION_FOR_CAPTURE_FS' flag in
     G4NeutronHPCaptureFS.
-  o Bug fixes for Valgrind run-time errors and NaNs.
+  o Bug fixes for Valgrind run-time errors and NaNs. Fixes for memory leaks.
 - models/parton_string (had-prtn-V08-02-02)
   o Separate G4DiffractiveExcitation for FTF from QGS. Added original
     G4DiffractiveExcitation to qgsm as G4QGSDiffractiveExcitation
