@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.cc,v 1.102 2007-05-24 20:42:37 asaim Exp $
+// $Id: G4RunManager.cc,v 1.103 2007-06-20 17:00:23 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -318,7 +318,7 @@ void G4RunManager::StackPreviousEvent(G4Event* anEvent)
     evt = previousEvents->back();
     previousEvents->pop_back();
   }
-  if(!(evt->ToBeKept())) delete evt;
+  if(evt && !(evt->ToBeKept())) delete evt;
 }
 
 void G4RunManager::Initialize()
