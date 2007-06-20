@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagHelicalStepper.hh,v 1.13 2007-05-18 15:45:22 tnikitin Exp $
+// $Id: G4MagHelicalStepper.hh,v 1.14 2007-06-20 15:03:16 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -83,7 +83,7 @@ class G4MagHelicalStepper : public G4MagIntegratorStepper
      void AdvanceHelix( const G4double  yIn[],
                              G4ThreeVector   Bfld,
                              G4double  h,
-			G4double  yHelix[]);    // output 
+			G4double  yHelix[],G4double yHelix2[]=0);    // output 
       // A first order Step along a helix inside the field.
 
     inline void MagFieldEvaluate( const G4double y[], G4ThreeVector& Bfield );
