@@ -1,4 +1,4 @@
-$Id: History,v 1.289 2007-06-14 07:28:48 vnivanch Exp $
+$Id: History,v 1.290 2007-06-20 12:43:54 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+20 June 07: V.Ivant (emutils-V08-03-06)
+- G4VEnergyLossProcess add initialisation of preStepKinEnergy before 
+  run in order to fix a problem of test14 reported by Valgrind 
 
 14 June 07: V.Ivant (emutils-V08-03-05)
 - G4LossTableManager - add deletion of G4EmCorrections in destructor

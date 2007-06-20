@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.108 2007-05-23 08:43:46 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.109 2007-06-20 12:43:55 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -310,6 +310,7 @@ void G4VEnergyLossProcess::PreparePhysicsTable(
   preStepLambda = 0.0;
   mfpKinEnergy  = DBL_MAX;
   fRange        = DBL_MAX;
+  preStepKinEnergy = 0.0;
 
   // Base particle and set of models can be defined here
   InitialiseEnergyLossProcess(particle, baseParticle);
