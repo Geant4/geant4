@@ -85,7 +85,7 @@ geometry/magneticfield                           field-V08-03-03
 - Use call to G4GeometryTolerance instead of kCarTolerance constant in
   G4MagIntegratorDriver.
 
-geometry/management                              geommng-V08-03-02
+geometry/management                              geommng-V08-03-03
 -------------------
 - Introduced new classes for handling error propagation: G4ErrorTarget,
   G4ErrorSurfaceTarget, G4ErrorTanPlaneTarget, G4ErrorPlaneSurfaceTarget,
@@ -180,7 +180,7 @@ interfaces                                       interfaces-V08-03-02
 ----------
 - Implemented signal handler for soft-abort in G4UIterminal.
 
-materials                                        materials-V08-03-01
+materials                                        materials-V08-03-02
 ---------
 - Added implementation file for G4SurfaceProperty.
 - Added static G4SurfacePropertyTable to G4MaterialTable
@@ -189,8 +189,6 @@ materials                                        materials-V08-03-01
   and GetNumberOfNistIsotopes() methods.
 - G4NistElementBuilder: added protection (Z>=limitNumElements) inside
   BuildElement() on Mokka request.
-- G4SandiaTable: fixed deletion of elements of the table in destructor
-  and non-initilised pointer in constructor. Use G4 native types.
 
 particles                                        particles-V08-03-01
 ---------

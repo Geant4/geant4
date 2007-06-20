@@ -118,6 +118,7 @@ release, some of which may require migrations (mainly for advanced uses of
 features in Geant4) in order to upgrade from release 8.3 to release 9.0.
 Note that a full re-installation of libraries (or a full recompilation) and
 a recompilation of user applications is anyhow required.
+
 <P> </P>
 <B>Geometry</B>
 <P> </P>
@@ -162,21 +163,21 @@ New UI commands are added: <TT>/process/msc/Skin</TT>,
 <P> </P>
 <B>Hadronic physics</B>
 <P> </P>
-<ul>
-  <li>Isotope production flag is now set to OFF by default.   If desired,
-      user code must switch it on using method 
-      G4HadronicProcess::EnableIsotopeCounting() </li>
-  <li>When using high precision neutron code, user may now choose to force the 
-      use of Photon Evaporation model instead of using the neutron capture final 
-      state data. The environment variable
-      <TT>NeutronHP_ALWAYS_USE_PHOTONEVAPORATION_FOR_CAPTURE_FS</TT> must be set
-      to do this</li>
-  <li>User can now force high precison neutron code to use only exact isotope 
-      data files instead of allowing nearby isotope files to be used.  If the 
+<UL>
+  <LI>Isotope production flag is now set to OFF by default.
+      If desired, user code must switch it on using the method 
+      <TT>G4HadronicProcess::EnableIsotopeCounting()</TT>.</LI>
+  <LI>When using high precision neutron code, user may now choose to force the 
+      use of Photon Evaporation model instead of using the neutron capture
+      final state data. The environment variable
+      <TT>NeutronHP_ALWAYS_USE_PHOTONEVAPORATION_FOR_CAPTURE_FS</TT> must be
+      set to do this.</LI>
+  <LI>User can now force high precison neutron code to use only exact isotope 
+      data files instead of allowing nearby isotope files to be used. If the 
       exact file is not available, the cross section will be set to zero and a 
-      warning message will be printed.  To enable this set the environment 
-      variable NeutronHP_USE_ONLY_EXACT_FILE</li>
-</ul>
+      warning message will be printed. To enable this set the environment 
+      variable <TT>NeutronHP_USE_ONLY_EXACT_FILE</TT>.</li>
+</UL>
 
 <P> </P>
 <B>Physics Lists</B>
@@ -210,16 +211,19 @@ variants are now available:
 </UL>
 
 <B>Hadronic physics</B>
-<ul>
-  <li>FTF model now used in some physics lists down to 5 GeV</li>
-  <li>Bug fixes in LEP models remove an un-physical peak at 180 degrees and 
-      reduce the number of very low energy nucleons produced.  The net effect 
+<UL>
+  <LI>The FTF model is now used in some physics lists down to
+      <TT>5 GeV</TT>.</LI>
+  <LI>Bug fixes in LEP models remove an un-physical peak at 180 degrees and 
+      reduce the number of very low energy nucleons produced. The net effect 
       is to shift the angular distributions forward by about 5-10 degrees and 
-      increase the mean secondary kinetic energy by roughly 20 - 30 MeV. 
-      Effects of this size occur at incident particle energies of 2 - 10 GeV.
-      At higher energies the effect is small.  Benchmark tests show little change 
-      in shower shape.</li>
-</ul>  
+      increase the mean secondary kinetic energy by roughly
+      <TT>20 - 30 MeV</TT>. 
+      Effects of this size occur at incident particle energies of
+      <TT>2 - 10 GeV</TT>.
+      At higher energies the effect is small. Benchmark tests show little
+      change in shower shape.</LI>
+</UL>  
 
 <B>Physics Lists</B>
 <UL>
