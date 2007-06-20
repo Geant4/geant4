@@ -85,22 +85,22 @@ void G4HelixMixedStepper::Stepper(  const G4double  yInput[7],
       const G4int nvar = 6 ;
       G4int i;
       G4double      yTemp[7], yIn[7] ;
+      G4double yTemp2[7];
       G4ThreeVector  Bfld_midpoint;
     //  Saving yInput because yInput and yOut can be aliases for same array
         for(i=0;i<nvar;i++) yIn[i]=yInput[i];
 
       G4double h = Step * 0.5;
  
-     // Do two half steps
-          AdvanceHelix(yIn,   Bfld,  h, yTemp);
+     // Do two half steps and full step
+          AdvanceHelix(yIn,   Bfld,  h, yTemp,yTemp2);
           MagFieldEvaluate(yTemp, Bfld_midpoint) ;     
           AdvanceHelix(yTemp, Bfld_midpoint, h, yOut);
-     // Do a full step    
-          h = Step ;
-          AdvanceHelix(yIn, Bfld, h, yTemp); 
+    
      // Error estimation
           for(i=0;i<nvar;i++) {
-          yErr[i] = yOut[i] - yTemp[i] ;
+          yErr[i] = yOut[i] - yTemp2[i] ;
+          G4cout<<"i="<<i<<"  yTemp2="<<yTemp2[i]<<G4endl;
           }
     }
 
