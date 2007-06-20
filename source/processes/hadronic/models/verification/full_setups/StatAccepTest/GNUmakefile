@@ -8,7 +8,7 @@ endif
 
 include $(G4INSTALL)/config/architecture.gmk
 
-include hadronic_lists.gmk
+#include hadronic_lists.gmk
 
 .PHONY: all
  
