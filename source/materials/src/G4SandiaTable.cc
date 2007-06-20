@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SandiaTable.cc,v 1.26 2007-06-20 08:03:55 vnivanch Exp $
+// $Id: G4SandiaTable.cc,v 1.27 2007-06-20 09:21:45 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
@@ -105,7 +105,7 @@ G4SandiaTable::G4SandiaTable(__void__&)
 G4SandiaTable::~G4SandiaTable()
 { 
   if(fMatSandiaMatrix) {
-    fMatSandiaMatrix->clearAndDestroy();
+    //    fMatSandiaMatrix->clearAndDestroy();
     delete fMatSandiaMatrix;
   }
   
