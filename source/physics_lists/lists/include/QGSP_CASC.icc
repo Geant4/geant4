@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: QGSP_CASC.icc,v 1.1 2007-06-20 09:56:04 gunter Exp $
+// $Id: QGSP_CASC.icc,v 1.2 2007-06-20 10:00:06 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -61,6 +61,8 @@
 #include "G4DataQuestionaire.hh"
 #include "HadronPhysicsQGSP_CASC.hh"
 
+#include "G4WarnPLStatus.hh"
+
 template<class T> TQGSP_CASC<T>::TQGSP_CASC(G4int ver):  T()
 {
 
@@ -70,6 +72,9 @@ template<class T> TQGSP_CASC<T>::TQGSP_CASC(G4int ver):  T()
 
   this->defaultCutValue = 0.7*mm;  
   this->SetVerboseLevel(ver);
+
+  G4WarnPLStatus exp;
+  exp.Experimental("QGSP_CASC");
 
   // EM Physics
   this->RegisterPhysics( new G4EmStandardPhysics("standard EM",ver));
