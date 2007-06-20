@@ -1,15 +1,13 @@
-# $Id: range.mac,v 1.11 2007-06-20 15:26:33 maire Exp $
+# $Id: erange.mac,v 1.1 2007-06-20 15:26:33 maire Exp $
 #
 # Macro file for "TestEm1.cc"
 # 
-# compute the csda range of the primary particle
-# with or without fluctuations
+# compute the csda range of primary particle
 #
 /control/verbose 2
 /run/verbose 2
 #
 /testem/det/setMat Water
-/testem/det/setSize 10 cm
 #
 /testem/phys/addPhysics  standard
 ###/testem/phys/addPhysics  penelope
@@ -17,7 +15,7 @@
 #
 /run/initialize
 #
-# prevent any secondary production
+# csda condition
 /testem/phys/setCuts 1 km
 #
 # no step limitation from eLoss
@@ -28,13 +26,15 @@
 /process/inactivate msc
 #
 /testem/gun/setDefault
-/gun/particle proton
-/gun/energy 100 MeV
+/gun/particle e-
+/gun/energy 100 keV
 #
-/testem/histo/setFileName range
-/testem/histo/setFileType hbook
-/testem/histo/setHisto 1 150 70 85 mm	# csda range
-#	 
-/testem/event/printModulo 4000
+/tracking/verbose 1
+/run/beamOn 5
 #
-/run/beamOn 40000
+###/testem/histo/setFileName std.1km
+###/testem/histo/setFileType hbook
+###/testem/histo/setHisto 1 200 0 2000 um		# csda range
+###/testem/histo/setHisto 1 250 0 5000 um
+#
+###/run/beamOn 20000
