@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagHelicalStepper.cc,v 1.19 2007-05-18 15:48:42 tnikitin Exp $
+// $Id: G4MagHelicalStepper.cc,v 1.20 2007-06-20 15:06:47 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -56,7 +56,7 @@ void
 G4MagHelicalStepper::AdvanceHelix( const G4double  yIn[],
 				   G4ThreeVector   Bfld,    
 				   G4double  h,
-				   G4double  yHelix[])
+				   G4double  yHelix[],G4double yHelix2[])
 {
   // const G4int    nvar = 6;
  
@@ -72,7 +72,6 @@ G4MagHelicalStepper::AdvanceHelix( const G4double  yIn[],
   G4double R_1;
   G4double R_Helix;
   G4double CosT2, SinT2, CosT, SinT;
-  //G4double CosT, SinT;
   G4ThreeVector positionMove, endTangent;
 
   G4double Bmag = Bfld.mag();
@@ -118,20 +117,15 @@ G4MagHelicalStepper::AdvanceHelix( const G4double  yIn[],
       // Trigonometrix
       
       if( std::fabs(Theta) > approc_limit ) {
-	SinT2    = std::sin(0.5 * Theta);
-	CosT2    = std::cos(0.5 * Theta);
-	// SinT     = std::sin(Theta);
-	// CosT     = std::cos(Theta);
-	SinT     = 2.0 * SinT2 * CosT2;
-	CosT     = 1.0 - 2.0 * SinT2 * SinT2;
+	 SinT     = std::sin(Theta);
+	 CosT     = std::cos(Theta);
       } else {
 	G4double Theta2 = Theta*Theta;
 	G4double Theta3 = Theta2 * Theta;
 	G4double Theta4 = Theta2 * Theta2;
 	SinT     = Theta - 1.0/6.0 * Theta3;
 	CosT     = 1 - 0.5 * Theta2 + 1.0/24.0 * Theta4;
-	SinT2    = 0.5 * Theta - 1.0/48.0 * Theta3;
-	CosT2    = 1 - 0.125 * Theta2 + 1.0/384 * Theta4;
+        
       }
 
       // the actual "rotation"
@@ -149,7 +143,22 @@ G4MagHelicalStepper::AdvanceHelix( const G4double  yIn[],
       yHelix[3] = velocityVal * endTangent.x();
       yHelix[4] = velocityVal * endTangent.y();
       yHelix[5] = velocityVal * endTangent.z();
+      // Store 2*h step Helix
+      if(yHelix2){
 
+	SinT2     = 2.0 * SinT * CosT;
+	CosT2     = 1.0 - 2.0 * SinT * SinT;
+        endTangent    = (CosT2 * vperp + SinT2 * B_x_P + vpar);
+        positionMove  = R * ( SinT2 * vperp + (1-CosT2) * B_x_P) + h*2 * vpar;
+      
+       yHelix2[0]   = yIn[0] + positionMove.x(); 
+       yHelix2[1]   = yIn[1] + positionMove.y(); 
+       yHelix2[2]   = yIn[2] + positionMove.z(); 
+      
+       yHelix2[3] = velocityVal * endTangent.x();
+       yHelix2[4] = velocityVal * endTangent.y();
+       yHelix2[5] = velocityVal * endTangent.z();
+      }
       // Store and/or calculate parameters for chord distance.
            
        G4ThreeVector B_x_P_x_B = B_x_P.cross(Bnorm); 
@@ -193,7 +202,14 @@ G4MagHelicalStepper::Stepper( const G4double yInput[],
    G4double h = hstep * 0.5; 
 
    MagFieldEvaluate(yIn, Bfld_initial) ;      
-
+    if(IntegratorOrder()==1){
+     G4double yTemp2[7];
+     AdvanceHelix(yIn,   Bfld_initial,  h, yTemp2,yTemp);
+     MagFieldEvaluate(yTemp2, Bfld_midpoint) ;  
+     yMidPoint = G4ThreeVector( yTemp2[0],  yTemp2[1],  yTemp2[2]);    
+     AdvanceHelix(yTemp2, Bfld_midpoint, h, yOut); 
+   }
+   else{
    // Do two half steps
    DumbStepper(yIn,   Bfld_initial,  h, yTemp);
    MagFieldEvaluate(yTemp, Bfld_midpoint) ;     
@@ -205,7 +221,7 @@ G4MagHelicalStepper::Stepper( const G4double yInput[],
    // Do a full Step
    h = hstep ;
    DumbStepper(yIn, Bfld_initial, h, yTemp); 
-
+   }
 
    for(i=0;i<nvar;i++) {
      yErr[i] = yOut[i] - yTemp[i] ;
