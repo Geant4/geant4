@@ -291,7 +291,7 @@ processes/electromagnetic/standard               emstand-V08-03-09
   G4PhotoElectricEffect52, G4eBremsstrahlung52, G4eIonisation52,
   G4eplusAnnihilation52, G4hIonisation52 and G4MultipleScattering52.
 
-processes/electromagnetic/utils                  emutils-V08-03-05
+processes/electromagnetic/utils                  emutils-V08-03-06
 -------------------------------
 - G4VEmModel: changed interface of SampleSecondary() method, return type
   becomes 'void', added extra parameter std::vector<G4DynamicParticle*>*.
@@ -307,6 +307,7 @@ processes/electromagnetic/utils                  emutils-V08-03-05
     G4VEnergyLossProcess.
   o Added implementation method AlongStepGetPhysicalInteractionLength()
     in G4VEnergyLossProcess and do not use safety.
+  o Added proper initialisation of 'preStepKinEnergy'.
   o Cleanup comments and reorganised code for easier reading; moved short
     methods to inline.
 - G4VMultipleScattering:
