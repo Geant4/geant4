@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ErrorCylSurfaceTarget.cc,v 1.2 2007-06-19 11:28:38 gcosmo Exp $
+// $Id: G4ErrorCylSurfaceTarget.cc,v 1.3 2007-06-20 10:40:11 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -147,7 +147,7 @@ IntersectLocal( const G4ThreeVector& localPoint,
   G4double eqb = 2*(localPoint.x()*localDir.x()+localPoint.y()*localDir.y());
   G4double eqc = -fradius*fradius+localPoint.x()*localPoint.x()
                  +localPoint.y()*localPoint.y();
-  G4int inside = G4int(std::pow(-1,G4int(localPoint.perp() > fradius) ));
+  G4int inside = G4int(std::pow(-1.,G4double(localPoint.perp() > fradius)));
   G4double lambda;
 
   if( eqa*inside > 0. )
