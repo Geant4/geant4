@@ -162,8 +162,21 @@ New UI commands are added: <TT>/process/msc/Skin</TT>,
 <P> </P>
 <B>Hadronic physics</B>
 <P> </P>
-
-TEXT HERE !!!!!!!!!!!!!!!!!!!
+<ul>
+  <li>Isotope production flag is now set to OFF by default.   If desired,
+      user code must switch it on using method 
+      G4HadronicProcess::EnableIsotopeCounting() </li>
+  <li>When using high precision neutron code, user may now choose to force the 
+      use of Photon Evaporation model instead of using the neutron capture final 
+      state data. The environment variable
+      <TT>NeutronHP_ALWAYS_USE_PHOTONEVAPORATION_FOR_CAPTURE_FS</TT> must be set
+      to do this</li>
+  <li>User can now force high precison neutron code to use only exact isotope 
+      data files instead of allowing nearby isotope files to be used.  If the 
+      exact file is not available, the cross section will be set to zero and a 
+      warning message will be printed.  To enable this set the environment 
+      variable NeutronHP_USE_ONLY_EXACT_FILE</li>
+</ul>
 
 <P> </P>
 <B>Physics Lists</B>
@@ -197,9 +210,16 @@ variants are now available:
 </UL>
 
 <B>Hadronic physics</B>
-<UL>
-  <LI>TEXT HERE !!!!!!!!!!!!!!!!!!!</LI>
-</UL>  
+<ul>
+  <li>FTF model now used in some physics lists down to 5 GeV</li>
+  <li>Bug fixes in LEP models remove an un-physical peak at 180 degrees and 
+      reduce the number of very low energy nucleons produced.  The net effect 
+      is to shift the angular distributions forward by about 5-10 degrees and 
+      increase the mean secondary kinetic energy by roughly 20 - 30 MeV. 
+      Effects of this size occur at incident particle energies of 2 - 10 GeV.
+      At higher energies the effect is small.  Benchmark tests show little change 
+      in shower shape.</li>
+</ul>  
 
 <B>Physics Lists</B>
 <UL>
@@ -683,11 +703,10 @@ please refer to the related History files provided in most packages):
     </UL></LI>
 <LI><B>De-excitation</B>
     <UL>
-    <LI>Fixed bug in <TT>G4ExcitationHandler</TT>: deleted pointers and
-        iterators were attempted to be accessed. Now a final state iterator
-        list is created and filled when necessary.</LI>
-    <LI>Fixed bug in low A,Z false condition in
-        <TT>G4DiscreteGammaDeexcitation</TT>.</LI>
+    <li>Fixed bug in <TT>G4ExcitationHandler</TT> caused by attempt to 
+        access deleted pointers and iterators. Now a final state iterator
+        list is created and filled only when necessary.</li>
+    <li>Fixed bug in low A,Z false condition in <TT>G4DiscreteGammaDeexcitation</TT>.</li>
     </UL></LI>
 <LI><B>Elastic scattering</B>
     <UL>
@@ -708,12 +727,13 @@ please refer to the related History files provided in most packages):
     <UL>
     <LI>Try to limit sum of secondary photons energy while keeping
         distributions in <TT>G4NeutronHPPhotonDist</TT>.</LI>
-    <LI>Added neglecting doppler broadening mode for boosting perfomance in
+    <li>Removed Doppler broadening mode to boost performance in
         <TT>G4NeutronHPElasticData</TT>, <TT>G4NeutronHPInelasticData</TT> and
-        <TT>G4NeutronHPCaptureData</TT>.</LI>
-    <LI>Enabled to use only exact data file and added warning when substituted
-        file is used. Modified method of searching substitute isotope data in
-        <TT>G4NeutronHPNames</TT>.</LI>
+        <TT>G4NeutronHPCaptureData</TT>.</li>
+    <li>Add environment variable NeutronHP_USE_ONLY_EXACT_FILE which will force
+        the use of the exact isotope file and set the cross section to zero and
+        print a warning if the file is not found.  Modified method of searching 
+        substitute isotope data in <TT>G4NeutronHPNames</TT>.</li>
     <LI>Added <TT>NeutronHP_ALWAYS_USE_PHOTONEVAPORATION_FOR_CAPTURE_FS</TT>
         flag in <TT>G4NeutronHPCaptureFS</TT>.</LI>
     <LI>Bug fixes for Valgrind run-time errors and NaNs. Fixes for memory
@@ -721,7 +741,10 @@ please refer to the related History files provided in most packages):
     </UL></LI>
 <LI><B>LLNL Fission</B>
     <UL>
-    <LI>New module for Livermore LLNL spontaneous fission model.</LI>
+    <li>New module for Livermore LLNL neutron-induced and spontaneous fission 
+        model is now available.  Model class G4FissLib must be instantiated
+        and assigned to G4HadronFissionProcess.  Pointer to G4NDL is required
+        as in high precision neutron models. </li>
     </UL></LI>
 <LI><B>Parton String</B>
     <UL>
@@ -733,8 +756,8 @@ please refer to the related History files provided in most packages):
     </UL></LI>
 <LI><B>Utils</B>
     <UL>
-    <LI>Removed un-used classes <TT>G4Fuzzy</TT>, <TT>G4EffectiveCharge</TT>
-        and <TT>G4ParticleVector</TT>.</LI>
+    <li>Removed unused classes <TT>G4Fuzzy</TT>, <TT>G4EffectiveCharge</TT>
+        and <TT>G4ParticleVector</TT>.</li>
     <LI>Three bug fixes in <TT>G4ReactionDynamics::TwoCluster()</TT>: removed
         a sharp peak at 180 degrees by fixing a units error and fixed an error
         in sampling the momentum transfer. Fixed array bound violation which
