@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ErrorSymMatrix.cc,v 1.2 2007-06-01 12:43:28 gcosmo Exp $
+// $Id: G4ErrorSymMatrix.cc,v 1.3 2007-06-21 15:04:10 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -702,9 +702,9 @@ void G4ErrorSymMatrix::invert(G4int &ifail)
           - (*(m.begin()+4)) * (*m.begin());
       c33 = (*m.begin()) * (*(m.begin()+2))
           - (*(m.begin()+1)) * (*(m.begin()+1));
-      t1 = fabs(*m.begin());
-      t2 = fabs(*(m.begin()+1));
-      t3 = fabs(*(m.begin()+3));
+      t1 = std::fabs(*m.begin());
+      t2 = std::fabs(*(m.begin()+1));
+      t3 = std::fabs(*(m.begin()+3));
       if (t1 >= t2)
       {
         if (t3 >= t1)
@@ -886,9 +886,9 @@ void G4ErrorSymMatrix::invertBunchKaufman(G4int &ifail)
           ip = m.begin() + (j+1)*j/2 + j-1;
           for (i=j+1; i <= nrow ; ip += i++)
           {
-            if (fabs(*ip) > lambda)
+            if (std::fabs(*ip) > lambda)
               {
-                lambda = fabs(*ip);
+                lambda = std::fabs(*ip);
                 pivrow = i;
               }
           }
@@ -904,7 +904,7 @@ void G4ErrorSymMatrix::invertBunchKaufman(G4int &ifail)
             }
           else
             {
-              if (fabs(*mjj) >= lambda*alpha)
+              if (std::fabs(*mjj) >= lambda*alpha)
                 {
                   s=1;
                   pivrow=j;
@@ -915,16 +915,16 @@ void G4ErrorSymMatrix::invertBunchKaufman(G4int &ifail)
                   ip = m.begin() + pivrow*(pivrow-1)/2+j-1;
                   for (k=j; k < pivrow; k++)
                     {
-                      if (fabs(*ip) > sigma)
-                        sigma = fabs(*ip);
+                      if (std::fabs(*ip) > sigma)
+                        sigma = std::fabs(*ip);
                       ip++;
                     }
-                  if (sigma * fabs(*mjj) >= alpha * lambda * lambda)
+                  if (sigma * std::fabs(*mjj) >= alpha * lambda * lambda)
                     {
                       s=1;
                       pivrow = j;
                     }
-                  else if (fabs(*(m.begin()+pivrow*(pivrow-1)/2+pivrow-1)) 
+                  else if (std::fabs(*(m.begin()+pivrow*(pivrow-1)/2+pivrow-1)) 
                                 >= alpha * sigma)
                     { s=1; }
                   else
@@ -948,7 +948,7 @@ void G4ErrorSymMatrix::invertBunchKaufman(G4int &ifail)
                       for (k=j+1; k<=i; k++)
                         {
                           *ip -= temp1 * *(m.begin() + k*(k-1)/2 + j-1);
-                          if (fabs(*ip) <= epsilon)
+                          if (std::fabs(*ip) <= epsilon)
                             { *ip=0; }
                           ip++;
                         }
@@ -1000,7 +1000,7 @@ void G4ErrorSymMatrix::invertBunchKaufman(G4int &ifail)
                       for (k=j+1; k<=i; k++)
                         {
                           *ip -= temp1 * *(m.begin() + k*(k-1)/2 + j-1);
-                          if (fabs(*ip) <= epsilon)
+                          if (std::fabs(*ip) <= epsilon)
                             { *ip=0; }
                           ip++;
                         }
@@ -1069,17 +1069,17 @@ void G4ErrorSymMatrix::invertBunchKaufman(G4int &ifail)
                         {
                           ip = m.begin() + i*(i-1)/2 + j-1;
                           temp1 = *ip * *mjj + *(ip + 1) * *(mjj + j);
-                          if (fabs(temp1 ) <= epsilon)
+                          if (std::fabs(temp1 ) <= epsilon)
                             { temp1 = 0; }
                           temp2 = *ip * *(mjj + j) + *(ip + 1) * *(mjj + j + 1);
-                          if (fabs(temp2 ) <= epsilon)
+                          if (std::fabs(temp2 ) <= epsilon)
                             { temp2 = 0; }
                           for (k = j+2; k <= i ; k++)
                             {
                               ip = m.begin() + i*(i-1)/2 + k-1;
                               iq = m.begin() + k*(k-1)/2 + j-1;
                               *ip -= temp1 * *iq + temp2 * *(iq+1);
-                              if (fabs(*ip) <= epsilon)
+                              if (std::fabs(*ip) <= epsilon)
                                 { *ip = 0; }
                             }
                         }
@@ -1088,10 +1088,10 @@ void G4ErrorSymMatrix::invertBunchKaufman(G4int &ifail)
                         {
                           ip = m.begin() + i*(i-1)/2 + j-1;
                           temp1 = *ip * *mjj + *(ip+1) * *(mjj + j);
-                          if (fabs(temp1) <= epsilon)
+                          if (std::fabs(temp1) <= epsilon)
                             { temp1 = 0; }
                           *(ip+1) = *ip * *(mjj + j) + *(ip+1) * *(mjj + j + 1);
-                          if (fabs(*(ip+1)) <= epsilon)
+                          if (std::fabs(*(ip+1)) <= epsilon)
                             { *(ip+1) = 0; }
                           *ip = temp1;
                         }
@@ -1942,7 +1942,7 @@ void G4ErrorSymMatrix::invertCholesky5 (G4int & ifail)
 
   h00 = m[A00]; 
   if (h00 <= 0) { return; }
-  h00 = 1.0 / sqrt(h00);
+  h00 = 1.0 / std::sqrt(h00);
 
   g10 = m[A10] * h00;
   g20 = m[A20] * h00;
@@ -1953,7 +1953,7 @@ void G4ErrorSymMatrix::invertCholesky5 (G4int & ifail)
 
   h11 = m[A11] - (g10 * g10);
   if (h11 <= 0) { return; }
-  h11 = 1.0 / sqrt(h11);
+  h11 = 1.0 / std::sqrt(h11);
 
   // Subtract inter-column column dot products from rest of column 1 and
   // scale to get column 1 of G 
@@ -1966,7 +1966,7 @@ void G4ErrorSymMatrix::invertCholesky5 (G4int & ifail)
 
   h22 = m[A22] - (g20 * g20) - (g21 * g21);
   if (h22 <= 0) { return; }
-  h22 = 1.0 / sqrt(h22);
+  h22 = 1.0 / std::sqrt(h22);
 
   // Subtract inter-column column dot products from rest of column 2 and
   // scale to get column 2 of G 
@@ -1978,7 +1978,7 @@ void G4ErrorSymMatrix::invertCholesky5 (G4int & ifail)
 
   h33 = m[A33] - (g30 * g30) - (g31 * g31) - (g32 * g32);
   if (h33 <= 0) { return; }
-  h33 = 1.0 / sqrt(h33);
+  h33 = 1.0 / std::sqrt(h33);
 
   // Subtract inter-column column dot product from A43 and scale to get G43
 
@@ -1988,7 +1988,7 @@ void G4ErrorSymMatrix::invertCholesky5 (G4int & ifail)
 
   h44 = m[A44] - (g40 * g40) - (g41 * g41) - (g42 * g42) - (g43 * g43);
   if (h44 <= 0) { return; }
-  h44 = 1.0 / sqrt(h44);
+  h44 = 1.0 / std::sqrt(h44);
 
   // Form H = 1/G -- diagonal members of H are already correct
   //-------------
@@ -2065,7 +2065,7 @@ void G4ErrorSymMatrix::invertCholesky6 (G4int & ifail)
 
   h00 = m[A00]; 
   if (h00 <= 0) { return; }
-  h00 = 1.0 / sqrt(h00);
+  h00 = 1.0 / std::sqrt(h00);
 
   g10 = m[A10] * h00;
   g20 = m[A20] * h00;
@@ -2077,7 +2077,7 @@ void G4ErrorSymMatrix::invertCholesky6 (G4int & ifail)
 
   h11 = m[A11] - (g10 * g10);
   if (h11 <= 0) { return; }
-  h11 = 1.0 / sqrt(h11);
+  h11 = 1.0 / std::sqrt(h11);
 
   // Subtract inter-column column dot products from rest of column 1 and
   // scale to get column 1 of G 
@@ -2091,7 +2091,7 @@ void G4ErrorSymMatrix::invertCholesky6 (G4int & ifail)
 
   h22 = m[A22] - (g20 * g20) - (g21 * g21);
   if (h22 <= 0) { return; }
-  h22 = 1.0 / sqrt(h22);
+  h22 = 1.0 / std::sqrt(h22);
 
   // Subtract inter-column column dot products from rest of column 2 and
   // scale to get column 2 of G 
@@ -2104,7 +2104,7 @@ void G4ErrorSymMatrix::invertCholesky6 (G4int & ifail)
 
   h33 = m[A33] - (g30 * g30) - (g31 * g31) - (g32 * g32);
   if (h33 <= 0) { return; }
-  h33 = 1.0 / sqrt(h33);
+  h33 = 1.0 / std::sqrt(h33);
 
   // Subtract inter-column column dot products from rest of column 3 and
   // scale to get column 3 of G 
@@ -2116,7 +2116,7 @@ void G4ErrorSymMatrix::invertCholesky6 (G4int & ifail)
 
   h44 = m[A44] - (g40 * g40) - (g41 * g41) - (g42 * g42) - (g43 * g43);
   if (h44 <= 0) { return; }
-  h44 = 1.0 / sqrt(h44);
+  h44 = 1.0 / std::sqrt(h44);
 
   // Subtract inter-column column dot product from M54 and scale to get G54
 
@@ -2126,7 +2126,7 @@ void G4ErrorSymMatrix::invertCholesky6 (G4int & ifail)
 
   h55 = m[A55] - (g50*g50) - (g51*g51) - (g52*g52) - (g53*g53) - (g54*g54);
   if (h55 <= 0) { return; }
-  h55 = 1.0 / sqrt(h55);
+  h55 = 1.0 / std::sqrt(h55);
 
   // Form H = 1/G -- diagonal members of H are already correct
   //-------------

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ErrorFreeTrajState.cc,v 1.5 2007-06-04 14:59:32 gcosmo Exp $
+// $Id: G4ErrorFreeTrajState.cc,v 1.6 2007-06-21 15:04:04 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -67,15 +67,15 @@ G4ErrorFreeTrajState::G4ErrorFreeTrajState( const G4ErrorSurfaceTrajState& tpSD 
   G4ErrorSurfaceTrajParam tpSDparam = tpSD.GetParameters();
   G4double mom = fMomentum.mag();
   G4double mom2 = fMomentum.mag2();
-  G4double TVW1 = sqrt( mom2 / ( mom2 + tpSDparam.GetPV()*tpSDparam.GetPV() + tpSDparam.GetPV()*tpSDparam.GetPV()) );
+  G4double TVW1 = std::sqrt( mom2 / ( mom2 + tpSDparam.GetPV()*tpSDparam.GetPV() + tpSDparam.GetPV()*tpSDparam.GetPV()) );
   G4ThreeVector vTVW( TVW1, tpSDparam.GetPV()/mom * TVW1, tpSDparam.GetPW()/mom * TVW1 );
   G4Vector3D vectorU = tpSDparam.GetVectorV().cross(  tpSDparam.GetVectorW() );
   G4Vector3D vTN = vTVW.x()*vectorU + vTVW.y()*tpSDparam.GetVectorV() + vTVW.z()*tpSDparam.GetVectorW();
 
 #ifdef G4EVERBOSE
    if( iverbose >= 5){
-     G4double pc2 = asin( vTN.z() );
-     G4double pc3 = atan (vTN.y()/vTN.x());
+     G4double pc2 = std::asin( vTN.z() );
+     G4double pc3 = std::atan (vTN.y()/vTN.x());
   
      G4cout << " CHECK: pc2 " << pc2 << " = " << GetParameters().GetLambda() <<  " diff " << pc2-GetParameters().GetLambda() << G4endl;
      G4cout << " CHECK: pc3 " << pc3 << " = " << GetParameters().GetPhi() <<  " diff " << pc3-GetParameters().GetPhi() << G4endl;
@@ -83,7 +83,7 @@ G4ErrorFreeTrajState::G4ErrorFreeTrajState( const G4ErrorSurfaceTrajState& tpSD 
 #endif
 
   //--- Get the unit vectors perp to P 
-  G4double cosl = cos( GetParameters().GetLambda() ); 
+  G4double cosl = std::cos( GetParameters().GetLambda() ); 
   if (cosl < 1.E-30) cosl = 1.E-30;
   G4double cosl1 = 1./cosl;
   G4Vector3D vUN(-vTN.y()*cosl1, vTN.x()*cosl1, 0. );
@@ -113,7 +113,7 @@ G4ErrorFreeTrajState::G4ErrorFreeTrajState( const G4ErrorSurfaceTrajState& tpSD 
   //--- Get magnetic field
   const G4Field* field = G4TransportationManager::GetTransportationManager()->GetFieldManager()->GetDetectorField();
   G4ThreeVector dir = fTrajParam.GetDirection();
-  G4double invCosTheta = 1./cos( dir.theta() );
+  G4double invCosTheta = 1./std::cos( dir.theta() );
 
   if( fCharge != 0 
 && field ) {
@@ -204,7 +204,7 @@ G4int G4ErrorFreeTrajState::PropagateError( const G4Track* aTrack )
   G4double stepLengthCm = aTrack->GetStep()->GetStepLength()/cm;
   G4double kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
 
-  if( fabs(stepLengthCm) <= kCarTolerance/cm ) return 0;
+  if( std::fabs(stepLengthCm) <= kCarTolerance/cm ) return 0;
   
 #ifdef G4EVERBOSE
   if( iverbose >= 2 )G4cout << "  G4ErrorFreeTrajState::PropagateError " << G4endl;
@@ -243,10 +243,10 @@ G4int G4ErrorFreeTrajState::PropagateError( const G4Track* aTrack )
   G4Vector3D vpPostNorm = vpPost * pInvPost;
   //  if( iverbose >= 2 ) G4cout << "G4EP: vpPreNorm " << vpPreNorm << " vpPostNorm " << vpPostNorm << G4endl;
   //return if propagation along Z??  
-  if( 1. - fabs(vpPostNorm.z()) < kCarTolerance ) return 4;
-  G4double sinpPre = sin( vpPreNorm.theta() ); //cosine perpendicular to pPre = sine pPre
-  G4double sinpPost = sin( vpPostNorm.theta() ); //cosine perpendicular to pPost = sine pPost
-  G4double sinpPostInv = 1./sin( vpPreNorm.theta() );
+  if( 1. - std::fabs(vpPostNorm.z()) < kCarTolerance ) return 4;
+  G4double sinpPre = std::sin( vpPreNorm.theta() ); //cosine perpendicular to pPre = sine pPre
+  G4double sinpPost = std::sin( vpPostNorm.theta() ); //cosine perpendicular to pPost = sine pPost
+  G4double sinpPostInv = 1./std::sin( vpPreNorm.theta() );
 
 #ifdef G4EVERBOSE
   if( iverbose >= 2 ) G4cout << "G4EP: cosl " << sinpPre << " cosl0 " << sinpPost << G4endl;
@@ -333,8 +333,8 @@ G4int G4ErrorFreeTrajState::PropagateError( const G4Track* aTrack )
     G4double pAver = (pPre+pPost)*0.5;
     G4double QAver = -HAver/pAver;
     G4double thetaAver = QAver * stepLengthCm;
-    G4double sinThetaAver = sin(thetaAver);
-    G4double cosThetaAver = cos(thetaAver);
+    G4double sinThetaAver = std::sin(thetaAver);
+    G4double cosThetaAver = std::cos(thetaAver);
     G4double gamma = vHAverNorm * vpPostNorm;
     G4ThreeVector AN2 = vHAverNorm.cross( vpPostNorm );
     
@@ -609,7 +609,7 @@ G4int G4ErrorFreeTrajState::PropagateErrorMSC( const G4Track* aTrack )
   G4double S2 = DD;
   G4double S3 = DD*stepLengthCm/2.;
 
-  G4double CLA = sqrt( vpPre.x() * vpPre.x() + vpPre.y() * vpPre.y() )/pPre;
+  G4double CLA = std::sqrt( vpPre.x() * vpPre.x() + vpPre.y() * vpPre.y() )/pPre;
 #ifdef G4EVERBOSE
   if( iverbose >= 2 ) G4cout << std::setw(6) << "G4EP:MSC: RI " << RI << " S1 " << S1 << " S2 "  << S2 << " S3 "  << S3 << " CLA " << CLA << G4endl;
 #endif
@@ -689,7 +689,7 @@ G4int G4ErrorFreeTrajState::PropagateErrorIoni( const G4Track* aTrack )
   //  if( iverbose >= 2 ) G4cout << "G4EP:IONI: Etot " << Etot << " DEDX2 " << dedxSq << " emass " << eMass << G4endl;
   
   G4double pPre6 = (aTrack->GetStep()->GetPreStepPoint()->GetMomentum()/GeV).mag();
-  pPre6 = pow(pPre6, 6 );
+  pPre6 = std::pow(pPre6, 6 );
   //Apply it to error 
   fError[0][0] += Etot*Etot*dedxSq / pPre6;
 #ifdef G4EVERBOSE

@@ -1,27 +1,30 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
 //
-// $Id: G4IntegratorTest.cc,v 1.4 2001-07-11 10:04:13 gunter Exp $
+// $Id: G4IntegratorTest.cc,v 1.5 2007-06-21 15:04:40 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Test program for G4Integrator class. The function exp(-x)*cos(x) is
@@ -39,11 +42,11 @@
 #include "G4Integrator.hh"
 
 
-G4double GlobalFunction( G4double x ){  return exp(-x)*cos(x) ; }
+G4double GlobalFunction( G4double x ){  return std::exp(-x)*std::cos(x) ; }
 
-G4double GlobalCos( G4double x ){  cos(x) ; }
+G4double GlobalCos( G4double x ){  std::cos(x) ; }
 
-G4double GlobalHermite(G4double x){  return x*x*cos(x) ; }
+G4double GlobalHermite(G4double x){  return x*x*std::cos(x) ; }
 
 
 class B
@@ -54,11 +57,11 @@ public:
 
  ~B(){;}
 
-  G4double TestFunction(G4double x){  return exp(-x)*cos(x) ; }
+  G4double TestFunction(G4double x){  return std::exp(-x)*std::cos(x) ; }
 
-  G4double CosFunction(G4double x) {  return cos(x) ; }
+  G4double CosFunction(G4double x) {  return std::cos(x) ; }
 
-  G4double TestHermite(G4double x){  return x*x*cos(x) ; }
+  G4double TestHermite(G4double x){  return x*x*std::cos(x) ; }
 
   void Integrand() ;
 
@@ -114,7 +117,7 @@ void B::Integrand()
 
      for(i=0;i<8;i++)
      {
-       pTolerance = pow(10.0,-i) ;
+       pTolerance = std::pow(10.0,-i) ;
 
        adaptg = integral.AdaptiveGauss(this,&B::TestFunction,a,b,pTolerance) ;
 
@@ -133,7 +136,7 @@ void B::Integrand()
    for(i=1;i<20;i++)
    {
       n = 1*i ;
-      G4double exactH = 2*0.125*sqrt(pi)*exp(-0.25) ;
+      G4double exactH = 2*0.125*std::sqrt(pi)*std::exp(-0.25) ;
       G4double hermite1 = integral.Hermite(bbb,&B::TestHermite,n) ;
       G4double hermite2 = integral.Hermite(this,&B::TestHermite,n) ;
       G4cout<<"n = "<<n<<"\t"<<"exact = "<<exactH
@@ -185,7 +188,7 @@ int main()
 
    for(i=0;i<8;i++)
    {
-     G4double  pTolerance = pow(10.0,-i) ;
+     G4double  pTolerance = std::pow(10.0,-i) ;
 
      G4double  adaptg = iii.AdaptiveGauss(&GlobalFunction,a,b,pTolerance) ;
 
@@ -202,7 +205,7 @@ int main()
    for(i=1;i<20;i++)
    {
       n = 1*i ;
-      G4double exactH = 2*0.125*sqrt(pi)*exp(-0.25) ;
+      G4double exactH = 2*0.125*std::sqrt(pi)*std::exp(-0.25) ;
       G4double hermite = iii.Hermite(&GlobalHermite,n) ;
       G4cout<<"n = "<<n<<"\t"<<"exact = "<<exactH
             <<"  and n-point Hermite =  "

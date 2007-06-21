@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ErrorMatrix.cc,v 1.2 2007-06-01 12:43:28 gcosmo Exp $
+// $Id: G4ErrorMatrix.cc,v 1.3 2007-06-21 15:04:06 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -544,12 +544,12 @@ G4int G4ErrorMatrix::dfact_matrix(G4double &det, G4int *ir)
   for (G4int j=1;j<=n;j++)
   {
     G4int k = j;
-    p = (fabs(*mjj));
+    p = (std::fabs(*mjj));
     if (j!=n) {
       G4ErrorMatrixIter mij = mj + n + j - 1; 
       for (G4int i=j+1;i<=n;i++)
       {
-        q = (fabs(*(mij)));
+        q = (std::fabs(*(mij)));
         if (q > p)
         {
           k = i;
@@ -592,7 +592,7 @@ G4int G4ErrorMatrix::dfact_matrix(G4double &det, G4int *ir)
     }
     det *= *mjj;
     *mjj = 1.0 / *mjj;
-    t = (fabs(det));
+    t = (std::fabs(det));
     if (t < g1)
     {
       det = 0.0;
@@ -681,9 +681,9 @@ void G4ErrorMatrix::invert(G4int &ierr)
         - (*m.begin()) * (*(m.begin()+5));
     c33 = (*m.begin()) * (*(m.begin()+4))
         - (*(m.begin()+1)) * (*(m.begin()+3));
-    t1 = fabs(*m.begin());
-    t2 = fabs(*(m.begin()+3));
-    t3 = fabs(*(m.begin()+6));
+    t1 = std::fabs(*m.begin());
+    t2 = std::fabs(*(m.begin()+3));
+    t3 = std::fabs(*(m.begin()+6));
     if (t1 >= t2)
     {
       if (t3 >= t1)

@@ -1,27 +1,30 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
 //
-// $Id: Em10DetectorConstruction.cc,v 1.3 2007-05-31 18:21:48 vnivanch Exp $
+// $Id: Em10DetectorConstruction.cc,v 1.4 2007-06-21 15:06:56 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -793,7 +796,7 @@ G4VPhysicalVolume* Em10DetectorConstruction::SetUpBari05()
   // G4double field         = 1.0;   // field in helium pipe used?
   // G4double fieldStrength = 1.0*tesla;  // field strength in pipe
 
-  if ( fabs(pipe) > 1.e-15 ) 
+  if ( std::fabs(pipe) > 1.e-15 ) 
   {
 
     G4Box* solidPipe = new G4Box("Pipe",fAbsorberRadius*0.5,
@@ -836,7 +839,7 @@ G4VPhysicalVolume* Em10DetectorConstruction::SetUpBari05()
                                                     fWindowMat,
                                                     "Mylar");
 
-  if ( fabs(pipe) > 1.e-15 ) 
+  if ( std::fabs(pipe) > 1.e-15 ) 
   {
 
     G4VPhysicalVolume* physiMylar1 = new G4PVPlacement(0,
@@ -859,7 +862,7 @@ G4VPhysicalVolume* Em10DetectorConstruction::SetUpBari05()
 
   G4double zMylar = zElectrode2 + fElectrodeThick/2. + fMylarThick/2. + 1.0*mm;
 
-  if ( fabs(pipe) > 1.e-15 ) zMylar += ( fPipeLength + pipeDist );
+  if ( std::fabs(pipe) > 1.e-15 ) zMylar += ( fPipeLength + pipeDist );
 
   G4VPhysicalVolume*    physiMylar = new G4PVPlacement(0,
                         G4ThreeVector(0.,0.,zMylar),

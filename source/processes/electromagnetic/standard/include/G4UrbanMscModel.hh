@@ -1,4 +1,4 @@
-//  
+//
 // ********************************************************************
 // * License and Disclaimer                                           *
 // *                                                                  *
@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel.hh,v 1.28 2007-05-22 17:34:36 vnivanch Exp $
+// $Id: G4UrbanMscModel.hh,v 1.29 2007-06-21 15:04:24 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------

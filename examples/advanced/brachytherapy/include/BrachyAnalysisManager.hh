@@ -22,9 +22,8 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-
 //
-// $Id: BrachyAnalysisManager.hh,v 1.12 2007-05-14 09:57:55 pia Exp $
+// $Id: BrachyAnalysisManager.hh,v 1.13 2007-06-21 14:58:39 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // Code review: MG Pia, 14/05/2207

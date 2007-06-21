@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ErrorSurfaceTrajState.cc,v 1.5 2007-06-04 14:59:32 gcosmo Exp $
+// $Id: G4ErrorSurfaceTrajState.cc,v 1.6 2007-06-21 15:04:08 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -110,10 +110,10 @@ BuildErrorMatrix( G4ErrorFreeTrajState& tpSC, const G4Vector3D&,
     sclambda *= -1;
     scphi += CLHEP::pi;
   }
-  G4double cosLambda = cos( sclambda );
-  G4double sinLambda = sin( sclambda );
-  G4double sinPhi = sin( scphi );
-  G4double cosPhi = cos( scphi );
+  G4double cosLambda = std::cos( sclambda );
+  G4double sinLambda = std::sin( sclambda );
+  G4double sinPhi = std::sin( scphi );
+  G4double cosPhi = std::cos( scphi );
 
 #ifdef G4EVERBOSE
   if( iverbose >= 4) G4cout << " PM " << fMomentum.mag() << " pLambda " << sclambda << " pPhi " << scphi << G4endl;
@@ -161,7 +161,7 @@ BuildErrorMatrix( G4ErrorFreeTrajState& tpSC, const G4Vector3D&,
 
       G4double sinz = -H*vUN * magHM2;
       G4double cosz =  H*vVN * magHM2;
-      G4double T3R = Q * pow(T1R,3);
+      G4double T3R = Q * std::pow(T1R,3);
       G4double UI = vUN * vectorU;
       G4double VI = vVN * vectorU;
 #ifdef G4EVERBOSE

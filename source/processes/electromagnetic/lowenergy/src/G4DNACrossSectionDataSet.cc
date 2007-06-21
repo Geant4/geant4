@@ -1,3 +1,7 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
 // * The  Geant4 software  is  copyright of the Copyright Holders  of *
 // * the Geant4 Collaboration.  It is provided  under  the terms  and *
 // * conditions of the Geant4 Software License,  included in the file *
@@ -21,7 +25,7 @@
 //
 //
 
-// $Id: G4DNACrossSectionDataSet.cc,v 1.3 2007-06-07 13:51:12 pia Exp $
+// $Id: G4DNACrossSectionDataSet.cc,v 1.4 2007-06-21 15:04:22 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Riccardo Capra <capra@ge.infn.it>

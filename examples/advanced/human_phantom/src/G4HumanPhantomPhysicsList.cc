@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-///
+//
 // Authors: S. Guatelli and M. G. Pia, INFN Genova, Italy
 // 
 // Based on code developed by the undergraduate student G. Guerrieri 

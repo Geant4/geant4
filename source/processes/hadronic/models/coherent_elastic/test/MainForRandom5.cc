@@ -1,23 +1,26 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
 	//  The main program for "G4ElasticHadrNucleusHE" class
@@ -94,7 +97,7 @@
            for(G4int i1=1; i1<=2; i1+=5)
              {
                  Momentum = i1*100;
-                 Tkin     = sqrt(Momentum*Momentum+938.*938.)-938.;
+                 Tkin     = std::sqrt(Momentum*Momentum+938.*938.)-938.;
 
                  inVector.setZ(Momentum);
                  inVector.setY(100);
@@ -144,26 +147,26 @@ inVector.y()<<" "<<  inVector.z()<<" " << " Tkin " << Tkin << endl;
 /*                   outVector  =  aTrack.GetMomentum();
 
          G4double  outE       =  aTrack.GetTotalEnergy();
-         G4double  outP       =  sqrt(outE*outE-938.*938.);
+         G4double  outP       =  std::sqrt(outE*outE-938.*938.);
  
                    secTrack   =  aChange->GetSecondary(0);
          G4double  secEnergy  =  secTrack->GetKineticEnergy();
 
    G4cout<<" SecEnergy "<<secEnergy<<" outE "<< outE<<endl;
    G4cout<<" outVector  "<< outVector <<endl;    
-   G4cout<< " outVector^2 "<<pow(outVector.x(),2)+
-                      pow(outVector.y(),2)+
-                      pow(outVector.z(),2)<<endl;
+   G4cout<< " outVector^2 "<<std::pow(outVector.x(),2)+
+                      std::pow(outVector.y(),2)+
+                      std::pow(outVector.z(),2)<<endl;
 
-             Q2      =  pow(outE-TotE,2)-
-                        pow((outVector.x()*outP-inVector.x()),2)-
-                        pow((outVector.y()*outP-inVector.y()),2)-
-                        pow((outVector.z()*outP-inVector.z()),2);
+             Q2      =  std::pow(outE-TotE,2)-
+                        std::pow((outVector.x()*outP-inVector.x()),2)-
+                        std::pow((outVector.y()*outP-inVector.y()),2)-
+                        std::pow((outVector.z()*outP-inVector.z()),2);
 
   G4cout <<" Common i1 i2 "<< i1<<" " <<i2<<" dE "<<(outE-TotE)/1000 <<
-  " outVector " <<  sqrt(pow(outVector.x()*outP,2)+
-                         pow(outVector.y()*outP,2)+
-                         pow(outVector.z()*outP,2))/1000
+  " outVector " <<  std::sqrt(std::pow(outVector.x()*outP,2)+
+                         std::pow(outVector.y()*outP,2)+
+                         std::pow(outVector.z()*outP,2))/1000
    <<" Q2 " <<Q2<<endl<<endl;    
 */
 

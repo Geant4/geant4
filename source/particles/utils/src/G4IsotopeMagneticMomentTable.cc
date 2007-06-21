@@ -156,7 +156,7 @@ G4bool G4IsotopeMagneticMomentTable::FindIsotope(G4IsotopeProperty* pP)
     }
     
     //check E
-    if (fabs(fP->GetEnergy() - pP->GetEnergy()) <= fP->GetEnergy()*levelTolerance) {
+    if (std::fabs(fP->GetEnergy() - pP->GetEnergy()) <= fP->GetEnergy()*levelTolerance) {
       // Found
       return true;     
     }
@@ -189,7 +189,7 @@ G4IsotopeProperty* G4IsotopeMagneticMomentTable::GetIsotope(G4int Z, G4int A, G4
     }
     
     //check E
-    if (fabs(fP->GetEnergy() - E) <= fP->GetEnergy()*levelTolerance) {
+    if (std::fabs(fP->GetEnergy() - E) <= fP->GetEnergy()*levelTolerance) {
       // Found
       fProperty = fP;
       fP->DumpInfo();

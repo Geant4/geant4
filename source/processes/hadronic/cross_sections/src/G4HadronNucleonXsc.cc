@@ -571,7 +571,7 @@ G4HadronNucleonXsc::GetHadronNucleonXscNS(const G4DynamicParticle* aParticle,
       }
       else //  if(proj_momentum > 3.5) // mb
       {
-        hpXsc = 10.6+2.*log(proj_energy)+25*std::pow(proj_energy,-0.43);
+        hpXsc = 10.6+2.*std::log(proj_energy)+25*std::pow(proj_energy,-0.43);
       }
       fTotalXsc = hpXsc;
     }    
@@ -596,7 +596,7 @@ G4HadronNucleonXsc::GetHadronNucleonXscNS(const G4DynamicParticle* aParticle,
       }
       else if(proj_momentum<3.0)
       {
-        hnXsc = 36.1+0.079-4.313*log(proj_momentum)+
+        hnXsc = 36.1+0.079-4.313*std::log(proj_momentum)+
                 3*std::exp(-(proj_momentum-2.1)*(proj_momentum-2.1)/0.4/0.4)+
                 1.5*std::exp(-(proj_momentum-1.4)*(proj_momentum-1.4)/0.12/0.12);
       }
@@ -632,7 +632,7 @@ G4HadronNucleonXsc::GetHadronNucleonXscNS(const G4DynamicParticle* aParticle,
       }
       else //  if(proj_momentum > 3.5) // mb
       {
-      hnXsc = 10.6+2.*log(proj_energy)+25*std::pow(proj_energy,-0.43);
+      hnXsc = 10.6+2.*std::log(proj_energy)+25*std::pow(proj_energy,-0.43);
       }
       fTotalXsc = hnXsc;
     }
@@ -656,7 +656,7 @@ G4HadronNucleonXsc::GetHadronNucleonXscNS(const G4DynamicParticle* aParticle,
       }
       else if(proj_momentum<3.0)
       {
-        hpXsc = 36.1+0.079-4.313*log(proj_momentum)+
+        hpXsc = 36.1+0.079-4.313*std::log(proj_momentum)+
                 3*std::exp(-(proj_momentum-2.1)*(proj_momentum-2.1)/0.4/0.4)+
                 1.5*std::exp(-(proj_momentum-1.4)*(proj_momentum-1.4)/0.12/0.12);
       }

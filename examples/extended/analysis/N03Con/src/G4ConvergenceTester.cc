@@ -1,4 +1,29 @@
 //
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+//
 // Convergence Tests for Monte Carlo resut.
 //
 // Reference
@@ -132,9 +157,9 @@ void G4ConvergenceTester::calStat()
 
    var = var/(n-1);
 
-   sd = sqrt ( var );
+   sd = std::sqrt ( var );
 
-   r = sd / mean / sqrt ( n ); 
+   r = sd / mean / std::sqrt ( n ); 
 
    r2eff = ( 1 - efficiency ) / ( efficiency * n );
    r2int = sum_x2 / ( sum * sum ) - 1 / ( efficiency * n );
@@ -195,7 +220,7 @@ void G4ConvergenceTester::calStat()
 
    sd_1 = std::sqrt ( var_1 );
 
-   r_1 = sd_1 / mean_1 / sqrt ( n + 1 ); 
+   r_1 = sd_1 / mean_1 / std::sqrt ( n + 1 ); 
 
    shift_1 = shift_1 / ( 2 * var_1 * ( n + 1 ) );
 
@@ -403,7 +428,7 @@ void G4ConvergenceTester::check_stat_history()
    }
 
    pearson_r = calc_Pearson_r ( N , first_ally , second_ally );
-   t = pearson_r * sqrt ( ( N - 2 ) / ( 1 - pearson_r * pearson_r ) );
+   t = pearson_r * std::sqrt ( ( N - 2 ) / ( 1 - pearson_r * pearson_r ) );
 
    if ( t < 0.429318 ) // Student t of (Degree of freedom = N-2 )  
    {    
@@ -420,21 +445,21 @@ void G4ConvergenceTester::check_stat_history()
 
    for ( i = 0 ; i < N ; i++ ) 
    {
-      first_ally [ i ] = 1.0 / sqrt ( history_grid [ N + i ] );
+      first_ally [ i ] = 1.0 / std::sqrt ( history_grid [ N + i ] );
       second_ally [ i ] = r_history [ N + i ];
    }
 
    pearson_r = calc_Pearson_r ( N , first_ally , second_ally );
-   t = pearson_r * sqrt ( ( N - 2 ) / ( 1 - pearson_r * pearson_r ) );
+   t = pearson_r * std::sqrt ( ( N - 2 ) / ( 1 - pearson_r * pearson_r ) );
       
    if ( t > 1.090546 )
    {    
-      G4cout << "r follows 1/sqrt(N)" << G4endl; 
+      G4cout << "r follows 1/std::sqrt(N)" << G4endl; 
       noPass++;
    }
    else
    {
-      G4cout << "r does not follow 1/sqrt(N)" << G4endl; 
+      G4cout << "r does not follow 1/std::sqrt(N)" << G4endl; 
    }
 
    G4cout << "r is monotonically decrease " << is_monotonically_decrease( second_ally ) << G4endl;
@@ -458,16 +483,16 @@ void G4ConvergenceTester::check_stat_history()
    }
 
    pearson_r = calc_Pearson_r ( N , first_ally , second_ally );
-   t = pearson_r * sqrt ( ( N - 2 ) / ( 1 - pearson_r * pearson_r ) );
+   t = pearson_r * std::sqrt ( ( N - 2 ) / ( 1 - pearson_r * pearson_r ) );
       
    if ( t > 1.090546 )
    {    
-      G4cout << "VOV follows 1/sqrt(N)" << G4endl; 
+      G4cout << "VOV follows 1/std::sqrt(N)" << G4endl; 
       noPass++;
    }
    else
    {
-      G4cout << "VOV does not follow 1/sqrt(N)" << G4endl; 
+      G4cout << "VOV does not follow 1/std::sqrt(N)" << G4endl; 
    }
    G4cout << "VOV is monotonically decrease " << is_monotonically_decrease( second_ally ) << G4endl;
 
@@ -480,7 +505,7 @@ void G4ConvergenceTester::check_stat_history()
    }
 
    pearson_r = calc_Pearson_r ( N , first_ally , second_ally );
-   t = pearson_r * sqrt ( ( N - 2 ) / ( 1 - pearson_r * pearson_r ) );
+   t = pearson_r * std::sqrt ( ( N - 2 ) / ( 1 - pearson_r * pearson_r ) );
 
    if ( t < 0.429318 )
    {    
@@ -524,7 +549,7 @@ G4double G4ConvergenceTester::calc_Pearson_r ( G4int N , std::vector<G4double> f
       b2 += ( second_ally [ i ] - second_mean ) * ( second_ally [ i ] - second_mean );
    }
    
-   G4double r = a / sqrt ( b1 * b2 );  
+   G4double r = a / std::sqrt ( b1 * b2 );  
 
    return r; 
 }

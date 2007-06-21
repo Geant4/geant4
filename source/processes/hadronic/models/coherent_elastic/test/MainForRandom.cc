@@ -1,3 +1,28 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
 //  pfnhfns
 //  The main program for "G4ElasticHadrNucleusHE" class
 
@@ -83,7 +108,7 @@
           aNucleus.SetParameters( N, Z);
 
           Momentum = 2000;
-          Tkin     = sqrt(Momentum*Momentum+938.27*938.27)-938.27;
+          Tkin     = std::sqrt(Momentum*Momentum+938.27*938.27)-938.27;
 
            inVector.setZ(Momentum);
            aParticle.SetMomentum(inVector);
@@ -121,14 +146,14 @@
 //  --------------- Hadron's kinematics ---------------
             outVector  =  HadSta->GetMomentumChange();
    G4double       outE =  HadSta->GetEnergyChange();
-   G4double       outP =  sqrt(outE*outE-938.27*938.27);
+   G4double       outP =  std::sqrt(outE*outE-938.27*938.27);
    G4double  secEnergy; // =  Had->GetKineticEnergy();
 /*
    G4cout<<"Hadron outE "<<outE<<"  outP  "<<outP<<G4endl;
    G4cout<<" outVector  "<< outVector;    
-   G4cout<<" outVector^2 "<<pow(outVector.x(),2)+
-                            pow(outVector.y(),2)+
-                            pow(outVector.z(),2)<<G4endl;
+   G4cout<<" outVector^2 "<<std::pow(outVector.x(),2)+
+                            std::pow(outVector.y(),2)+
+                            std::pow(outVector.z(),2)<<G4endl;
 */
 //  --------------- Nucleus kinematics ----------------
 
@@ -141,50 +166,50 @@
    G4ThreeVector outVectorN =  SecPartNuc->GetMomentum();
 
    G4double        outENucl =  SecPartNuc->GetTotalEnergy();
-   G4double        outPNucl =  sqrt(outENucl*outENucl-938.*938.*N*N);
+   G4double        outPNucl =  std::sqrt(outENucl*outENucl-938.*938.*N*N);
    G4double   secEnergyNucl =  SecPartNuc->GetKineticEnergy();
 /*
    G4cout<<"Nucleus KinEnergy "<<secEnergyNucl<<" outE "
          <<outENucl<<"  NuclMass "<<outENucl-secEnergyNucl<<G4endl;
    G4cout<<" outVector  "<< outVectorN<<G4endl;    
-   G4cout<< " outVector^2 "<<pow(outVectorN.x(),2)+
-                      pow(outVectorN.y(),2)+
-                      pow(outVectorN.z(),2)<<G4endl;
+   G4cout<< " outVector^2 "<<std::pow(outVectorN.x(),2)+
+                      std::pow(outVectorN.y(),2)+
+                      std::pow(outVectorN.z(),2)<<G4endl;
 */
  //  ---------------------------------------------------
  //   G4cout<<"  outVector "<<outVector<<G4endl;
-             Q2      =  pow(outE-TotE,2)-
-                        pow((outVector.x()*outP-inVector.x()),2)-
-                        pow((outVector.y()*outP-inVector.y()),2)-
-                        pow((outVector.z()*outP-inVector.z()),2);
+             Q2      =  std::pow(outE-TotE,2)-
+                        std::pow((outVector.x()*outP-inVector.x()),2)-
+                        std::pow((outVector.y()*outP-inVector.y()),2)-
+                        std::pow((outVector.z()*outP-inVector.z()),2);
 /* 
 G4cout<<" dE "<<outE-TotE
        <<" dx "<<outVector.x()*outP-inVector.x()
        <<" dy "<<outVector.y()*outP-inVector.y()
        <<" dz "<<outVector.z()*outP-inVector.z()<<G4endl;
 */
- G4cout<<" outVector " <<  sqrt(pow(outVector.x()*outP,2)+
-                         pow(outVector.y()*outP,2)+
-                         pow(outVector.z()*outP,2))/1000
-       <<"    i2  "<<i2<<"    Q2 " <<abs(Q2)/1000/1000<<G4endl;    
+ G4cout<<" outVector " <<  std::sqrt(std::pow(outVector.x()*outP,2)+
+                         std::pow(outVector.y()*outP,2)+
+                         std::pow(outVector.z()*outP,2))/1000
+       <<"    i2  "<<i2<<"    Q2 " <<std::abs(Q2)/1000/1000<<G4endl;    
 
 //      G4cout<<" end cicle of Q2 "<< Q2<<G4endl;
 
-      TestFile<<abs(Q2)/1000/1000<<G4endl;
+      TestFile<<std::abs(Q2)/1000/1000<<G4endl;
 /*
       iq=0;
 	for(G4int ip=0; ip<50; ip++)
 	{
- G4cout<<"1 iq qhist[iq] "<<iq<<"  "<<qhist[iq]<<"  "<<abs(Q2)<<G4endl;
-          if(abs(Q2)>qhist[iq]) { iq++; }
+ G4cout<<"1 iq qhist[iq] "<<iq<<"  "<<qhist[iq]<<"  "<<std::abs(Q2)<<G4endl;
+          if(std::abs(Q2)>qhist[iq]) { iq++; }
         }
 
   iq=0; 
- G4cout<<"1 iq qhist[iq] "<<iq<<"  "<<qhist[iq]<<"  "<<abs(Q2)<<G4endl;
+ G4cout<<"1 iq qhist[iq] "<<iq<<"  "<<qhist[iq]<<"  "<<std::abs(Q2)<<G4endl;
  
-  while(abs(Q2)<qhist[iq]) 
+  while(std::abs(Q2)<qhist[iq]) 
            {
- G4cout<<"2 iq qhist[iq] "<<iq<<"  "<<qhist[iq]<<"  "<<abs(Q2)<<G4endl;
+ G4cout<<"2 iq qhist[iq] "<<iq<<"  "<<qhist[iq]<<"  "<<std::abs(Q2)<<G4endl;
         iq++;
            }
  */
