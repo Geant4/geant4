@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysListEmStandard.cc,v 1.5 2006-06-29 16:50:35 gunter Exp $
+// $Id: PhysListEmStandard.cc,v 1.6 2007-06-21 14:21:46 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -50,6 +50,10 @@
 
 #include "G4hIonisation.hh"
 #include "G4ionIonisation.hh"
+
+#include "G4EmProcessOptions.hh"
+#include "G4MscStepLimitType.hh"
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -113,6 +117,28 @@ void PhysListEmStandard::ConstructProcess()
       pmanager->AddProcess(new G4hIonisation,       -1,2,2);
     }
   }
+   
+  // Em options
+  //
+  G4EmProcessOptions emOptions;
+    
+  //coulomb scattering
+  //
+  emOptions.SetMscStepLimitation(fUseDistanceToBoundary);   
+  emOptions.SetSkin(2.);
+  
+  //energy loss
+  //
+  emOptions.SetLinearLossLimit(1.e-6);
+  emOptions.SetStepFunction(0.2, 100*um); 
+   
+  //ionization
+  //
+  emOptions.SetSubCutoff(true);
+    
+  // define high energy threshold for bremstrahlung 
+  //
+  emOptions.SetBremsstrahlungTh(10.*GeV); 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
