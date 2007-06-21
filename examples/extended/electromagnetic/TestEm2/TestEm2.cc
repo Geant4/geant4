@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: TestEm2.cc,v 1.13 2007-06-21 16:38:28 maire Exp $
+// $Id: TestEm2.cc,v 1.14 2007-06-21 17:47:08 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -80,8 +80,15 @@ int main(int argc,char** argv) {
   // get the pointer to the User Interface manager 
   G4UImanager* UI = G4UImanager::GetUIpointer();  
 
-  if (argc==1)   // Define visualization and UI terminal for interactive mode.
+  if (argc!=1)   // batch mode
     {
+      G4String command = "/control/execute ";
+      G4String fileName = argv[1];
+      UI->ApplyCommand(command+fileName);
+    }
+    
+  else           // define visualization and UI terminal for interactive mode
+    { 
 #ifdef G4VIS_USE
      G4VisManager* visManager = new G4VisExecutive;
      visManager->Initialize();
@@ -99,13 +106,7 @@ int main(int argc,char** argv) {
       
 #ifdef G4VIS_USE
       delete visManager;
-#endif      
-    }
-  else           // Batch mode
-    { 
-      G4String command = "/control/execute ";
-      G4String fileName = argv[1];
-      UI->ApplyCommand(command+fileName);
+#endif            
     }
 
   // job termination
