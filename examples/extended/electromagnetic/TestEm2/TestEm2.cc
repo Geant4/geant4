@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: TestEm2.cc,v 1.12 2007-06-12 15:29:38 vnivanch Exp $
+// $Id: TestEm2.cc,v 1.13 2007-06-21 16:38:28 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -70,11 +70,6 @@ int main(int argc,char** argv) {
   PrimaryGeneratorAction* primary = new PrimaryGeneratorAction(detector);
   runManager->SetUserAction(primary);
     
-#ifdef G4VIS_USE
-  // visualization manager
-  G4VisManager* visManager = 0;
-#endif
-    
   // set user action classes
   RunAction* RunAct = new RunAction(detector,primary);
   runManager->SetUserAction(RunAct);
@@ -85,18 +80,26 @@ int main(int argc,char** argv) {
   // get the pointer to the User Interface manager 
   G4UImanager* UI = G4UImanager::GetUIpointer();  
 
-  if (argc==1)   // Define UI terminal for interactive mode.
+  if (argc==1)   // Define visualization and UI terminal for interactive mode.
     {
-      visManager = new G4VisExecutive;
-      visManager->Initialize();
+#ifdef G4VIS_USE
+     G4VisManager* visManager = new G4VisExecutive;
+     visManager->Initialize();
+#endif
+                 
       G4UIsession * session = 0;
 #ifdef G4UI_USE_TCSH
       session = new G4UIterminal(new G4UItcsh);      
 #else
       session = new G4UIterminal();
-#endif           
+#endif
+
       session->SessionStart();
       delete session;
+      
+#ifdef G4VIS_USE
+      delete visManager;
+#endif      
     }
   else           // Batch mode
     { 
@@ -106,9 +109,7 @@ int main(int argc,char** argv) {
     }
 
   // job termination
-#ifdef G4VIS_USE
-  delete visManager;
-#endif
+  //
   delete runManager;
 
   return 0;
