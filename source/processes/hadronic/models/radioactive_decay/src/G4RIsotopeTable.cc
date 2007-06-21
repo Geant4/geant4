@@ -201,7 +201,8 @@ G4double G4RIsotopeTable::GetMeanLifeTime (G4int Z, G4int A, G4double& aE)
     G4double a(0.0);
     G4double b(0.0);
 
-    while (!found && -DecaySchemeFile.getline(inputChars, 80).eof() != EOF)
+//     while (!found && -DecaySchemeFile.getline(inputChars, 80).eof() != EOF)   
+     while (!found && !DecaySchemeFile.getline(inputChars, 80).eof())
     {
       inputLine = inputChars;
       //G4String::stripType stripend(1);
