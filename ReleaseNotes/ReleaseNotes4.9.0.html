@@ -759,6 +759,11 @@ please refer to the related History files provided in most packages):
         <TT>G4SingleDiffractiveExcitation</TT> class from <TT>management</TT>
         to <TT>qgsm</TT> module.</LI>
     </UL></LI>
+<LI><B>Radioactive Decay</B>
+    <UL>
+    <LI>Minor fix to remove compilation warnings on Windows in
+        <TT>G4RIsotopeTable</TT> and <TT>G4RadioactiveDecay</TT>.</LI>
+    </UL></LI>
 <LI><B>Utils</B>
     <UL>
     <li>Removed unused classes <TT>G4Fuzzy</TT>, <TT>G4EffectiveCharge</TT>
@@ -839,6 +844,8 @@ please refer to the related History files provided in most packages):
 <LI>Fixed memory leak in <TT>G4VUserPhysicsList</TT> and
     <TT>G4VModularPhysicsList</TT>.</LI>
 <LI>Fixed the name of random number status file.</LI>
+<LI>Fixed case of segmentation fault with stacking events; addressing
+    problem report #951.</LI>
 <LI>In <TT>G4RunManagerKernel</TT>, <TT>UpdateRegion()</TT> method now
     internally invokes <TT>CheckRegions()</TT> method to make sure all
     region information are updated.</LI>
@@ -985,6 +992,8 @@ please refer to the related History files provided in most packages):
         <UL>
         <LI>Use <TT>G4EmProcessOptions</TT> to define bremsstrahlung threshold
             energy.</LI>
+        <LI>Completed <TT>PhysListEmStandard</TT> options and added new input
+            macro for <TT>e-</TT>.</LI>
         </UL></LI>
     <LI>electromagnetic/TestEm2
         <UL>

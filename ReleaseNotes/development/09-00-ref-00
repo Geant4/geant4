@@ -409,6 +409,9 @@ processes/hadronic                               hadr-V08-03-00
   o Separate G4DiffractiveExcitation for FTF from QGS. Added original
     G4DiffractiveExcitation to qgsm as G4QGSDiffractiveExcitation
     Moved G4SingleDiffractiveExcitation from management to qgsm.
+- models/radioactive_decay (radioactive_decay-V08-03-00)
+  o Minor fix to remove compilation warnings on Windows in G4RIsotopeTable
+    and G4RadioactiveDecay.
 - util (hadr-util-V08-03-02)
   o Removed un-used classes G4Fuzzy, G4EffectiveCharge and G4ParticleVector.
   o Three bug fixes in G4ReactionDynamics::TwoCluster(): removed a sharp peak
@@ -460,7 +463,7 @@ processes/transportation                         transport-V08-03-12
   G4SamplingPostStepAction, G4VProcessPlacer, G4VSampler,
   G4VSamplerConfigurator, G4WeightCutOffConfigurator.
 
-run                                              run-V08-03-06
+run                                              run-V08-03-07
 ---
 - G4VUserDetectorConstruction class now has access methods to the parallel
   worlds.
@@ -468,6 +471,7 @@ run                                              run-V08-03-06
   deleted.
 - Fixed memory leak in G4VUserPhysicsList and G4VModularPhysicsList.
 - Fixed the name of random number status file.
+- Fixed case of segmentation fault with stacking events; problem report #951.
 - In G4RunManagerKernel, UpdateRegion() method now internally invokes
   CheckRegions() method to make sure all region information are updated.
 
@@ -529,8 +533,9 @@ examples                                         examples-V09-00-00
 - extended/biasing (exbiasing-V08-03-01)
   o Migrated example B01 to new biasing/scoring scheme.
   o Removed B03 (redundant/obsolete use of Python).
-- extended/electromagnetic/TestEm1 (testem1-V08-03-00)
+- extended/electromagnetic/TestEm1 (testem1-V08-03-01)
   o Use G4EmProcessOptions to define bremsstrahlung threshold energy.
+  o Completed PhysListEmStandard options and added new input macro for e-.
 - extended/electromagnetic/TestEm2 (testem2-V08-03-00)
   o Updated main input macro file; use visualisation only for interactive
     session.
