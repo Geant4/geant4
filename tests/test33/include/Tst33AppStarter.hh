@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33AppStarter.hh,v 1.9 2006-06-29 21:59:29 gunter Exp $
+// $Id: Tst33AppStarter.hh,v 1.10 2007-06-22 12:13:37 ahoward Exp $
 // GEANT4 tag 
 //
 // ----------------------------------------------------------------------
@@ -49,7 +49,7 @@
 
 class Tst33DetectorConstruction;
 class Tst33VGeometry;
-class G4VSampler;
+class G4VSampler8;
 class G4VIStore;
 class G4VWeightWindowStore;
 class G4CellStoreScorer;
@@ -100,7 +100,7 @@ private:
   Tst33VGeometry *fParallelGeometry;
   Tst33VApplication *fApp;
   Tst33DetectorConstruction *fDetectorConstruction;
-  G4VSampler *fSampler;
+  G4VSampler8 *fSampler;
   G4CellStoreScorer *fScorer;
   G4CellScorerStore *fScorerStore;
   const G4CellScorer *fCell_19_Scorer;
