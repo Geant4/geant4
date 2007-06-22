@@ -549,8 +549,10 @@ examples                                         examples-V09-00-00
 - extended/electromagnetic/TestEm3 (testem3-V08-03-02)
   o Use renamed EM builders and update macro files.
   o More options in PhysListEmStandard.
-- extended/electromagnetic/TestEm5 (testem5-V08-03-00)
-- extended/electromagnetic/TestEm7 (testem7-V08-03-01)
+- extended/electromagnetic/TestEm4 (testem4-V08-03-00)
+  o Cosmetic changes ...
+- extended/electromagnetic/TestEm5 (testem5-V08-03-01)
+- extended/electromagnetic/TestEm7 (testem7-V08-03-02)
   o Fixed bug in standardSS Physics Lists.
   o Added EM builders from physics_lists library.
   o Added output of mean number of primary steps and kaon+ run in
@@ -622,6 +624,8 @@ tests                                            tests-V09-00-00
     adopt default EM physics opt2.
   o Substituted usage of 'autoptr' by normal pointers in Histo to avoid crash.
   o Fixed name of default file.
+- test33 (test33-V08-03-01)
+  o Updated to follow new biasing/scoring interface.
 - test34 (test34-V08-03-01)
   o Updated physics-list: register the fast simulation process as a discrete
     process.
