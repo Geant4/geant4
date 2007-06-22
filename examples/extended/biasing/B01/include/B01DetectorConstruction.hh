@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: B01DetectorConstruction.hh,v 1.8 2007-06-05 18:20:09 ahoward Exp $
+// $Id: B01DetectorConstruction.hh,v 1.9 2007-06-22 13:15:29 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -35,7 +35,7 @@
 #include "G4VUserDetectorConstruction.hh"
 #include <vector>
 class G4VPhysicalVolume;
-class G4LogicalVolume; //ASO
+class G4LogicalVolume;
 class G4VIStore;
 class G4VWeightWindowStore;
 
@@ -58,11 +58,11 @@ public:
 
   G4VPhysicalVolume* GetWorldVolume();
 
-  void SetSensitive();  //ASO
+  void SetSensitive();
 
 private:
   std::vector< G4VPhysicalVolume * > fPhysicalVolumeVector;
-  std::vector< G4LogicalVolume * > fLogicalVolumeVector;  //ASO
+  std::vector< G4LogicalVolume * > fLogicalVolumeVector;
 
   G4VPhysicalVolume* pWorldVolume;
 

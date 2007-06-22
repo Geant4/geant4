@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: exampleB01.cc,v 1.24 2007-06-05 18:20:09 ahoward Exp $
+// $Id: exampleB01.cc,v 1.25 2007-06-22 13:15:28 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -135,7 +135,6 @@ int main(int argc, char **argv)
   // print a table of the scores
   //
   B01ScoreTable sp(aIstore); //ASO
-  //x  sp.Print(scorer.GetMapGeometryCellCellScorer(), myout);
 
   // open geometry for clean biasing stores clean-up
   //
