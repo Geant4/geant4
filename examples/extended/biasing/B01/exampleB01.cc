@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: exampleB01.cc,v 1.26 2007-06-22 13:19:56 ahoward Exp $
+// $Id: exampleB01.cc,v 1.27 2007-06-22 13:22:09 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -61,7 +61,6 @@
 #include "B01PrimaryGeneratorAction.hh"
 #include "B01RunAction.hh"
 #include "B01ScoreTable.hh"
-#include "B01PSScoringDetectorConstruction.hh"
 
 // Files specific for biasing and scoring
 #include "G4GeometrySampler.hh"
