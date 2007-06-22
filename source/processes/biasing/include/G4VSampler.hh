@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSampler.hh,v 1.6 2007-06-01 15:22:32 ahoward Exp $
+// $Id: G4VSampler.hh,v 1.7 2007-06-22 11:47:32 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -83,6 +83,9 @@ public:  // with description
 
   virtual G4bool IsConfigured() const = 0;
     // check if some initialization hase already been done
+
+  virtual void SetParallel(G4bool paraflag) = 0;
+
 };
   
 #endif

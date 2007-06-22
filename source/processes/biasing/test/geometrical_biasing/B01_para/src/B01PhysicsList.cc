@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: B01PhysicsList.cc,v 1.1 2007-05-30 17:42:55 ahoward Exp $
+// $Id: B01PhysicsList.cc,v 1.2 2007-06-22 11:47:32 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -117,7 +117,7 @@ void B01PhysicsList::ConstructAllShortLiveds()
 
 void B01PhysicsList::ConstructProcess()
 {
-  if(!ifCoupled) UseG4Transportation8();
+  //  if(!ifCoupled) UseG4Transportation8();
   AddTransportation();
   ConstructEM();
   ConstructLeptHad();
