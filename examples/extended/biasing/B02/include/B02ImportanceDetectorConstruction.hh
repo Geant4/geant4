@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: B02ImportanceDetectorConstruction.hh,v 1.6 2007-06-13 13:31:41 ahoward Exp $
+// $Id: B02ImportanceDetectorConstruction.hh,v 1.7 2007-06-22 13:38:55 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -40,7 +40,7 @@
 #include "G4VUserParallelWorld.hh"
 
 class G4VPhysicalVolume;
-class G4LogicalVolume; //ASO
+class G4LogicalVolume;
 
 
 
@@ -58,14 +58,14 @@ public:
 
   G4VPhysicalVolume* GetWorldVolume();
 
-  void SetSensitive();  //ASO  
+  void SetSensitive();
 
 private:
   void Construct();
   B02PVolumeStore fPVolumeStore;
 
   //  std::vector< G4VPhysicalVolume * > fPhysicalVolumeVector;
-  std::vector< G4LogicalVolume * > fLogicalVolumeVector;  //ASO
+  std::vector< G4LogicalVolume * > fLogicalVolumeVector;
 
   //  G4VPhysicalVolume *fWorldVolume;
 

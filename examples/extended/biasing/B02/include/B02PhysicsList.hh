@@ -30,7 +30,7 @@
 #include "G4VUserPhysicsList.hh"
 #include "globals.hh"
 
-#include <vector>  //ASO
+#include <vector>
 
 // taken from Tst12PhysicsList
 
@@ -40,7 +40,7 @@ class B02PhysicsList: public G4VUserPhysicsList
     B02PhysicsList();
     virtual ~B02PhysicsList();
 
-  public:  //ASO
+  public: 
     void AddParallelWorldName(G4String& pname)
          {paraWorldName.push_back(pname);}
 
@@ -59,7 +59,7 @@ class B02PhysicsList: public G4VUserPhysicsList
     virtual void ConstructHad();
     virtual void ConstructLeptHad();
 
-    void AddScoringProcess();  //ASO
+    void AddScoringProcess(); 
 
  //
     void  ConstructAllBosons();
@@ -70,7 +70,7 @@ class B02PhysicsList: public G4VUserPhysicsList
     void  ConstructAllShortLiveds();
 
   private:
-    std::vector<G4String>  paraWorldName; //ASO
+    std::vector<G4String>  paraWorldName; 
 
 
 };

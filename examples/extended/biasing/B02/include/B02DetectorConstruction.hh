@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: B02DetectorConstruction.hh,v 1.5 2007-06-13 13:31:41 ahoward Exp $
+// $Id: B02DetectorConstruction.hh,v 1.6 2007-06-22 13:38:55 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -50,7 +50,7 @@ public:
 
   //  G4String GetCellName(G4int i);
 
-  void SetSensitive();  //ASO  
+  void SetSensitive();
 
 private:
 

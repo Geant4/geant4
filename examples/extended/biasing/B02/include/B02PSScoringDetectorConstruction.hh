@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: B02PSScoringDetectorConstruction.hh,v 1.1 2007-06-13 13:31:41 ahoward Exp $
+// $Id: B02PSScoringDetectorConstruction.hh,v 1.2 2007-06-22 13:38:55 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -38,9 +38,9 @@
 
 #include "G4VUserParallelWorld.hh"
 
-#include <vector> //ASO
+#include <vector> 
 class G4VPhysicalVolume;
-class G4LogicalVolume; //ASO
+class G4LogicalVolume;
 
 
 class B02PSScoringDetectorConstruction: public G4VUserParallelWorld
@@ -58,7 +58,7 @@ public:
   G4VPhysicalVolume* GetWorldVolume();
   G4VPhysicalVolume& GetWorldVolumeAddress() const;
 
-  void SetSensitive(); //ASO
+  void SetSensitive();
 
 private:
   void Construct();
@@ -67,7 +67,7 @@ private:
 
   G4VPhysicalVolume* ghostWorld;
 
-  std::vector< G4LogicalVolume* > fLogicalVolumeVector; //ASO
+  std::vector< G4LogicalVolume* > fLogicalVolumeVector;
 
 };
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: exampleB02.cc,v 1.21 2007-06-13 13:31:41 ahoward Exp $
+// $Id: exampleB02.cc,v 1.22 2007-06-22 13:38:55 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -95,7 +95,6 @@
 
 int main(int , char **)
 {  
-  std::ostream *myout = &G4cout;
   G4int numberOfEvents = 100;
 
   G4long myseed = 345354;
@@ -113,22 +112,19 @@ int main(int , char **)
   // create a parallel detector
   //  B02ImportanceDetectorConstruction *pdet = 
   //    new B02ImportanceDetectorConstruction;
-  G4String parallelName("ParallelBiasingWorld"); //ASO
+  G4String parallelName("ParallelBiasingWorld");
   B02ImportanceDetectorConstruction *pdet = 
-    new B02ImportanceDetectorConstruction(parallelName); //ASO
+    new B02ImportanceDetectorConstruction(parallelName);
   detector->RegisterParallelWorld(pdet);
 
 
-  B02PhysicsList* physlist = new B02PhysicsList; //ASO
-  physlist->AddParallelWorldName(parallelName);  //ASO
-  //physlist->AddParallelWorldName(sparallelName); //ASO
-  runManager->SetUserInitialization(physlist);   //ASO
+  B02PhysicsList* physlist = new B02PhysicsList;
+  physlist->AddParallelWorldName(parallelName); 
+  //physlist->AddParallelWorldName(sparallelName);
+  runManager->SetUserInitialization(physlist);
   runManager->SetUserAction(new B02PrimaryGeneratorAction);
   //  runManager->SetUserAction(new B02PrimaryGeneratorAction(ifElectron));
-  runManager->SetUserAction(new B02RunAction);   //ASO
-
-  //  runManager->Initialize();
-
+  runManager->SetUserAction(new B02RunAction);
 
   runManager->Initialize();
 
@@ -206,9 +202,7 @@ int main(int , char **)
   runManager->BeamOn(numberOfEvents);
 
   // print a table of the scores
-  //  G4ScoreTable sp(&aIstore);
   B02ScoreTable sp(&aIstore);
-  //    sp.Print(b02store.GetMapGeometryCellCellScorer(), myout);
 
 
  

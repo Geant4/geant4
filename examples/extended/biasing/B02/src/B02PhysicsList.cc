@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: B02PhysicsList.cc,v 1.6 2007-06-13 13:31:41 ahoward Exp $
+// $Id: B02PhysicsList.cc,v 1.7 2007-06-22 13:38:55 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -50,13 +50,13 @@
 
 B02PhysicsList::B02PhysicsList():  G4VUserPhysicsList()
 {
-  paraWorldName.clear(); //ASO
+  paraWorldName.clear();
   SetVerboseLevel(1);
 }
 
 B02PhysicsList::~B02PhysicsList()
 {
-  paraWorldName.clear(); //ASO
+  paraWorldName.clear();
 }
 
 void B02PhysicsList::ConstructParticle()
@@ -638,8 +638,8 @@ void B02PhysicsList::SetCuts()
   SetCutsWithDefault();   
 }
 
-// ASO
-#include "G4ParallelWorldScoringProcess.hh" //ASO
+
+#include "G4ParallelWorldScoringProcess.hh"
 void B02PhysicsList::AddScoringProcess(){
 
   G4int npw = paraWorldName.size();

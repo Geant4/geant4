@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: B02ImportanceDetectorConstruction.cc,v 1.10 2007-06-13 13:31:41 ahoward Exp $
+// $Id: B02ImportanceDetectorConstruction.cc,v 1.11 2007-06-22 13:38:55 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -39,7 +39,6 @@
 #include "G4ThreeVector.hh"
 #include "G4PVPlacement.hh"
 
-//ASO
 // For Primitive Scorers
 #include "G4SDManager.hh"
 #include "G4MultiFunctionalDetector.hh"
@@ -59,7 +58,7 @@ B02ImportanceDetectorConstruction::B02ImportanceDetectorConstruction(G4String wo
 
 B02ImportanceDetectorConstruction::~B02ImportanceDetectorConstruction()
 {
-  fLogicalVolumeVector.clear(); //ASO
+  fLogicalVolumeVector.clear();
 }
 
 void B02ImportanceDetectorConstruction::Construct()
@@ -70,7 +69,7 @@ void B02ImportanceDetectorConstruction::Construct()
   // via the transportation manager
   ghostWorld = GetWorld();
   G4LogicalVolume* worldLogical = ghostWorld->GetLogicalVolume();
-  fLogicalVolumeVector.push_back(worldLogical); //ASO
+  fLogicalVolumeVector.push_back(worldLogical);
 
   G4String name("none");
   G4double density(universe_mean_density), temperature(0), pressure(0);
@@ -83,40 +82,6 @@ void B02ImportanceDetectorConstruction::Construct()
   G4Material *Galactic = 
     new G4Material(name, 1., 1.01*g/mole, density,
                    kStateGas,temperature,pressure);
-
-
-  //////////////////////////////////
-  // parallel world cylinder volume
-  //////////////////////////////////
-
-  // parallel world solid larger than in the mass geometry
-
-  // don't create parallel world as it's now synonymous with physical world
-  /*
-  G4double innerRadiusCylinder = 0*cm;
-  G4double outerRadiusCylinder = 110*cm;
-  G4double hightCylinder       = 110*cm;
-  G4double startAngleCylinder  = 0*deg;
-  G4double spanningAngleCylinder    = 360*deg;
-
-  G4Tubs *worldCylinder = new G4Tubs("worldCylinder",
-                                     innerRadiusCylinder,
-                                     outerRadiusCylinder,
-                                     hightCylinder,
-                                     startAngleCylinder,
-                                     spanningAngleCylinder);
-
-  // logical world
-
-  G4LogicalVolume *worldCylinder_log = 
-    new G4LogicalVolume(worldCylinder, Galactic, "worldCylinder_log");
-  fLogicalVolumeVector.push_back(worldCylinder_log);  //ASO
-
-  name = "parallelWorld";
-  pWorldVolume = new 
-    G4PVPlacement(0, G4ThreeVector(0,0,0), worldCylinder_log,
-		  name, 0, false, 0);
-  */
 
 
   //  fPVolumeStore.AddPVolume(G4GeometryCell(*pWorldVolume, 0));
@@ -144,7 +109,7 @@ void B02ImportanceDetectorConstruction::Construct()
 
   G4LogicalVolume *aShield_log = 
     new G4LogicalVolume(aShield, Galactic, "aShield_log");
-  fLogicalVolumeVector.push_back(aShield_log);  //ASO
+  fLogicalVolumeVector.push_back(aShield_log);
 
   // physical parallel cells
 
@@ -193,7 +158,7 @@ void B02ImportanceDetectorConstruction::Construct()
   G4LogicalVolume *aRest_log = 
     new G4LogicalVolume(aRest, Galactic, "aRest_log");
 
-  fLogicalVolumeVector.push_back(aRest_log);  //ASO
+  fLogicalVolumeVector.push_back(aRest_log);
 
   name = GetCellName(19);
     
@@ -268,15 +233,15 @@ void B02ImportanceDetectorConstruction::SetSensitive(){
 
   //  -------------------------------------------------
   //   The collection names of defined Primitives are
-  //   0       PhantomSD/Collisions
-  //   1       PhantomSD/CollWeight
-  //   2       PhantomSD/Population
-  //   3       PhantomSD/TrackEnter
-  //   4       PhantomSD/SL
-  //   5       PhantomSD/SLW
-  //   6       PhantomSD/SLWE
-  //   7       PhantomSD/SLW_V
-  //   8       PhantomSD/SLWE_V
+  //   0       ConcreteSD/Collisions
+  //   1       ConcreteSD/CollWeight
+  //   2       ConcreteSD/Population
+  //   3       ConcreteSD/TrackEnter
+  //   4       ConcreteSD/SL
+  //   5       ConcreteSD/SLW
+  //   6       ConcreteSD/SLWE
+  //   7       ConcreteSD/SLW_V
+  //   8       ConcreteSD/SLWE_V
   //  -------------------------------------------------
 
 
@@ -289,14 +254,14 @@ void B02ImportanceDetectorConstruction::SetSensitive(){
   G4SDManager* SDman = G4SDManager::GetSDMpointer();
   //
   // Sensitive Detector Name
-  G4String phantomSDname = "PhantomSD";
+  G4String concreteSDname = "ConcreteSD";
 
   //------------------------
   // MultiFunctionalDetector
   //------------------------
   //
   // Define MultiFunctionalDetector with name.
-  G4MultiFunctionalDetector* MFDet = new G4MultiFunctionalDetector(phantomSDname);
+  G4MultiFunctionalDetector* MFDet = new G4MultiFunctionalDetector(concreteSDname);
   SDman->AddNewDetector( MFDet );                 // Register SD to SDManager
 
 
