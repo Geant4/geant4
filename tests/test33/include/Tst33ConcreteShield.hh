@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33ConcreteShield.hh,v 1.6 2006-06-29 21:59:33 gunter Exp $
+// $Id: Tst33ConcreteShield.hh,v 1.7 2007-06-22 12:47:16 ahoward Exp $
 // GEANT4 tag 
 //
 // ----------------------------------------------------------------------
@@ -60,11 +60,14 @@ private:
   Tst33ConcreteShield &operator=(const Tst33ConcreteShield &);
   void Construct();
   Tst33MaterialFactory fMaterialFactory;
+  Tst33VGeometry * vGeometry;
   G4VPhysicalVolume *fWorldVolume;
   Tst33PVolumeStore fPVolumeStore;
 
   G4Material *fConcrete;
   G4Material *fGalactic;
+
+  G4String worldname;
 
 };
 

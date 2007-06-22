@@ -23,75 +23,69 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: Tst33ParallelGeometry.hh,v 1.7 2007-06-22 12:47:16 ahoward Exp $
-// GEANT4 tag 
+// $Id: Tst33ScoreTable.hh,v 1.1 2007-06-22 12:47:16 ahoward Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
-// Class Tst33ParallelGeometry
+// Class Tst33ScoreTable
 //
 // Class description:
+// 
+// This class creates a table from a given G4CellScoreStore
+// and prints it to a given output stream.
 //
-// Provides the cells for scoring and importance sampling.
 
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
+//
 
-#ifndef Tst33ParallelGeometry_hh
-#define Tst33ParallelGeometry_hh Tst33ParallelGeometry_hh
+#ifndef Tst33ScoreTable_hh
+#define Tst33ScoreTable_hh Tst33ScoreTable_hh
 
-#include <map>
+#include <iostream>
+#include <iomanip>
 #include <vector>
 
-#include "G4VUserParallelWorld.hh"
-
-#include "Tst33VGeometry.hh"
-#include "Tst33PVolumeStore.hh"
-#include "Tst33MaterialFactory.hh"
-
-class G4VPhysicalVolume;
-class G4LogicalVolume; //ASO
+#include "globals.hh"
+#include "G4CellScorerStore.hh"
+#include "G4CellScoreValues.hh"
+class G4VIStore;
 
 
-class Tst33ParallelGeometry : public G4VUserParallelWorld, public Tst33VGeometry
- {
-public:
-  Tst33ParallelGeometry(G4String worldName, G4VPhysicalVolume* ghostworld);
-  virtual ~Tst33ParallelGeometry();
+class Tst33ScoreTable
+{
+public: // with description
+  explicit Tst33ScoreTable(const G4VIStore *aIStore = 0);
 
-  virtual G4VPhysicalVolume &GetWorldVolume() const;
+  ~Tst33ScoreTable();
 
-  virtual G4GeometryCell GetGeometryCell(G4int i, const G4String &) const; 
+  void Print(const G4MapGeometryCellCellScorer &cs, 
+	     std::ostream *out = 0);
+    // create the table and print it to the ouput stream.
 
-   void SetSensitive();
+  void PrintHeader(std::ostream *out);
+    // print the table header, done by the above Print() function
+
+  void PrintTable(const G4MapGeometryCellCellScorer &cs,
+		  std::ostream *out);
+    // print the table contend, done by the above Print() function
+
+  std::string FillString(const std::string &name, 
+			   char c, G4int n, G4bool back = true);
+    // create a string of length n, by filling up
+    // name with the char c.
 
 private:
-  Tst33ParallelGeometry(const Tst33ParallelGeometry &);
+  Tst33ScoreTable(const Tst33ScoreTable &);
+  Tst33ScoreTable &operator=(const Tst33ScoreTable &);
 
-  void Construct();
-
-  Tst33ParallelGeometry &operator=(const Tst33ParallelGeometry &);
-
-  Tst33MaterialFactory fMaterialFactory;
-   //  G4VPhysicalVolume *fWorldVolume;
-   Tst33PVolumeStore fPVolumeStore;
-
-   //   G4VUserParallelWorld * fParallelWorld;
-
-   G4String worldVolumeName;
-
-  //  std::vector< G4VPhysicalVolume * > fPhysicalVolumeVector;
-  std::vector< G4LogicalVolume * > fLogicalVolumeVector;  //ASO
-
-  //  G4VPhysicalVolume *fWorldVolume;
-
-  G4VPhysicalVolume* ghostWorld;
-
-  G4Material *fGalactic;
-
-
+  G4String CreateName(const G4GeometryCell &gCell);
+  void PrintLine(const G4String &name,
+		 const G4CellScoreValues &sc_scores,
+		 std::ostream *out);
+  const G4VIStore *fIStore;
+  G4int FieldName;
+  G4int FieldValue;
 };
-
-
 
 #endif

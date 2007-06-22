@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33ConcreteShield.cc,v 1.11 2006-06-29 22:00:25 gunter Exp $
+// $Id: Tst33ConcreteShield.cc,v 1.12 2007-06-22 12:47:16 ahoward Exp $
 // GEANT4 tag 
 //
 // ----------------------------------------------------------------------
@@ -79,7 +79,8 @@ void Tst33ConcreteShield::Construct(){
   G4LogicalVolume *worldCylinder_log = 
     new G4LogicalVolume(worldCylinder, fGalactic, "worldCylinder_log");
 
-  G4String name("shieldWorld");
+  //  G4String name("shieldWorld");
+  G4String name = worldname;
   fWorldVolume = new 
     G4PVPlacement(0, G4ThreeVector(0,0,0), worldCylinder_log,
 		  name, 0, false, 0);

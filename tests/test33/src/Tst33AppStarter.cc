@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33AppStarter.cc,v 1.10 2006-06-29 22:00:21 gunter Exp $
+// $Id: Tst33AppStarter.cc,v 1.11 2007-06-22 12:47:16 ahoward Exp $
 // GEANT4 tag 
 //
 // ----------------------------------------------------------------------
@@ -34,19 +34,19 @@
 //
 // ----------------------------------------------------------------------
 
+#include "Tst33RunAction.hh"
 #include "Tst33AppStarter.hh"
 #include "Tst33PhysicsList.hh"
 #include "Tst33PrimaryGeneratorAction.hh"
 #include "Tst33DetectorConstruction.hh"
 #include "G4UImanager.hh"
-#include "G4ParallelGeometrySampler.hh"
-#include "G4MassGeometrySampler.hh"
+#include "G4GeometrySampler.hh"
 #include "Tst33VGeometry.hh"
 #include "Tst33SlobedConcreteShield.hh"
 #include "Tst33ConcreteShield.hh"
 #include "Tst33ParallelGeometry.hh"
 #include "G4CellScorerStore.hh"
-#include "G4CellStoreScorer.hh"
+//#include "G4CellStoreScorer.hh"
 #include "Tst33IStoreBuilder.hh"
 #include "Tst33WeightWindowStoreBuilder.hh"
 #include "Tst33ScorerBuilder.hh"
@@ -56,7 +56,8 @@
 #include "Tst33TimedEventAction.hh"
 #include "G4VIStore.hh"
 #include "G4CellScorer.hh"
-#include "G4ScoreTable.hh"
+//#include "G4ScoreTable.hh"
+#include "Tst33ScoreTable.hh"
 #include "Tst33TimedApplication.hh"
 #include "Tst33VisApplication.hh"
 #include "G4ProcessPlacer.hh"
@@ -64,6 +65,16 @@
 #include "G4PlaceOfAction.hh"
 #include "G4WeightWindowAlgorithm.hh"
 #include "G4VWeightWindowStore.hh"
+
+// customized scorer and store
+#include "Tst33CellScorer.hh"
+#include "Tst33CellScorerStore.hh"
+
+// a score table
+//#include "G4ScoreTable.hh"
+#include "Tst33ScoreTable.hh"
+
+
 
 Tst33AppStarter::Tst33AppStarter()
   : 
@@ -88,9 +99,11 @@ Tst33AppStarter::Tst33AppStarter()
   if (!fDetectorConstruction) {
     NewFailed("Tst33AppStarter", "Tst33DetectorConstruction");
   }
-  fRunManager.SetUserInitialization(new Tst33PhysicsList); 
+  physlist = new Tst33PhysicsList;
+  fRunManager.SetUserInitialization(physlist); 
   fRunManager.SetUserAction(new Tst33PrimaryGeneratorAction);  
   fRunManager.SetUserInitialization(fDetectorConstruction);
+  fRunManager.SetUserAction(new Tst33RunAction);
 }
 Tst33AppStarter::~Tst33AppStarter()
 {
@@ -113,6 +126,7 @@ Tst33AppStarter::~Tst33AppStarter()
 }
 
 void Tst33AppStarter::CreateMassGeometry() {
+  G4cout << " Creating Mass Geometry " << G4endl;
   if (fMassGeometry) {
     G4cout << "Tst33AppStarter::CreateMassGeometry: a geometry already exists!" << G4endl;
   } 
@@ -125,10 +139,9 @@ void Tst33AppStarter::CreateMassGeometry() {
     fDetectorConstruction->SetWorldVolume(&fMassGeometry->
 					  GetWorldVolume());
     fSampleGeometry = fMassGeometry;
-    fSampler = new G4MassGeometrySampler("neutron");
-    if (!fSampler) {
-      NewFailed("CreateMassGeometry", "G4MassGeometrySampler");
-    } 
+    //    G4GeometrySampler fSampler(&fMassGeometry->GetWorldVolume(),"neutron");
+    fSampler = new G4GeometrySampler(&fMassGeometry->GetWorldVolume(),"neutron");
+    
   }
 }
 
@@ -137,23 +150,32 @@ void Tst33AppStarter::CreateParallelGeometry() {
     G4cout << "Tst33AppStarter::CreateParallelGeometry: a eometry already exists!" << G4endl;
   } 
   else {
-    fMassGeometry = new Tst33ConcreteShield;
+    fMassGeometry = new Tst33ConcreteShield();
     if (!fMassGeometry) {
       NewFailed("CreateParallelGeometry", "Tst33ConcreteShield");
     }    
     fDetectorConstruction->SetWorldVolume(&fMassGeometry->
 					  GetWorldVolume());
-    fParallelGeometry = new Tst33ParallelGeometry;
+    G4String parallelName("ParallelBiasingWorld"); //ASO
+    fParallelGeometry = new Tst33ParallelGeometry(parallelName,
+						  &fMassGeometry->GetWorldVolume());
     if (!fParallelGeometry) {
       NewFailed("CreateParallelGeometry", "Tst33ParallelGeometry");
     }
+    fDetectorConstruction->RegisterParallelWorld(fParallelGeometry);
+    //    fDetectorConstruction->RegisterParallelWorld(fParallelGeometry->GetParallelWorld());
     fSampleGeometry = fParallelGeometry;
-    fSampler = new
-      G4ParallelGeometrySampler(fParallelGeometry->GetWorldVolume(),
-				"neutron");
-    if (!fSampler) {
-      NewFailed("CreateParallelGeometry", "G4ParallelGeometrySampler");
-    }
+//     G4GeometrySampler fSampler(&fParallelGeometry->GetWorldVolume(),
+// 			       "neutron");
+//    fSampler = new G4GeometrySampler(&fParallelGeometry->GetWorldVolume(),
+//			       "neutron");
+    fSampler = new G4GeometrySampler(&fParallelGeometry->GetWorldVolume(),
+				     "neutron");
+
+    fSampler->SetParallel(true);
+
+    physlist->AddParallelWorldName(parallelName);
+
   }
 }
 
@@ -180,26 +202,33 @@ G4bool Tst33AppStarter::CheckCreateScorer() {
     G4cout << "Tst33AppStarter::CheckCreateScorer: scorer already exists!" << G4endl;
     createscorer = false;
   }
+  if (fScorerStore) {
+    G4cout << "Tst33AppStarter::CheckCreateScorer: scorer already exists!" << G4endl;
+    createscorer = false;
+  }
   return createscorer;
 }
 
 void Tst33AppStarter::CreateScorer() {
+  // create a customized cell scorer store
+  Tst33CellScorerStore tst33store;
+
   if (CheckCreateScorer()) { 
     Tst33ScorerBuilder sb;
     fScorerStore = sb.CreateScorer(fSampleGeometry,
-				   &fCell_19_Scorer);
-    fScorer = new G4CellStoreScorer(*fScorerStore);
-    if (!fScorer) {
-      NewFailed("CreateScorer","G4CellStoreScorer");
-    }
-    fSampler->PrepareScoring(fScorer);
-    fEventAction->SpecialCellScorer(fCell_19_Scorer);
+ 				   &fCell_19_Scorer);
+//     fScorer = new G4CellStoreScorer(*fScorerStore);
+//     if (!fScorer) {
+//       NewFailed("CreateScorer","G4CellStoreScorer");
+//     }
+//     fSampler->PrepareScoring(fScorer);
+//x    fEventAction->SpecialCellScorer(fCell_19_Scorer);
   }
 }
 
 void Tst33AppStarter::DeleteScorers() {
-  delete fScorer;
-  fScorer = 0;
+  //  delete fScorer;
+  //  fScorer = 0;
   fScorerStore->DeleteAllScorers();
   fCell_19_Scorer = 0;
 }
@@ -240,19 +269,29 @@ void Tst33AppStarter::CreateIStore() {
 
 void Tst33AppStarter::CreateWeightWindowStore(G4PlaceOfAction poa,
 					      G4bool zeroWindow) {
+  G4cout << " Weight window store creator 1 " << G4endl;
   if (CheckCreateWeightWindowStore()) {
     
     Tst33WeightWindowStoreBuilder wb;
+    G4cout << " Weight window store creator 2 " << G4endl;
     fWWStore = wb.CreateWeightWindowStore(fSampleGeometry);
+    G4cout << " Weight window store creator 3 " << G4endl;
     if (zeroWindow) {
       fWWAlg = new G4WeightWindowAlgorithm(1,1,100);
     }
     else {
       fWWAlg = new G4WeightWindowAlgorithm(5,3,5);
     }
+    G4cout << " Weight window store creator 4 " << poa << G4endl;
+    if(!fSampler) G4cout << " fSampler doesn't exist - why? " << G4endl; 
     fSampler->PrepareWeightWindow(fWWStore,
 				  fWWAlg,
 				  poa);
+    //				  onBoundary);
+    G4cout << " Weight window store creator 5 " << G4endl;
+
+
+
   }
 }
 
@@ -341,7 +380,7 @@ void Tst33AppStarter::ClearSampling() {
   else {
     fSampler->ClearSampling();
     if (fScorer) {
-      DeleteScorers();
+       DeleteScorers();
     }
     if (fIStore) {
       delete fIStore;
@@ -406,8 +445,10 @@ void Tst33AppStarter::Run(G4int nevents) {
 void Tst33AppStarter::PostRun() {
   if (fConfigured) {
     if (fScorerStore) {
-      G4ScoreTable sp(fIStore);
-      sp.Print(fScorerStore->GetMapGeometryCellCellScorer(), &G4cout);
+      //      G4ScoreTable sp(fIStore);
+      //      B02ScoreTable sp(&aIstore);
+      //xtest      Tst33ScoreTable sp(fIStore);
+      //xtest      sp.Print(fScorerStore->GetMapGeometryCellCellScorer(), &G4cout);
     }
   }
   else {

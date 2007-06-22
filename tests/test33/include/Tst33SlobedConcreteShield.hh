@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33SlobedConcreteShield.hh,v 1.6 2006-06-29 21:59:53 gunter Exp $
+// $Id: Tst33SlobedConcreteShield.hh,v 1.7 2007-06-22 12:47:16 ahoward Exp $
 // GEANT4 tag 
 //
 // ----------------------------------------------------------------------
@@ -46,6 +46,13 @@
 #include "Tst33PVolumeStore.hh"
 #include "Tst33MaterialFactory.hh"
 
+#include <vector>
+
+class G4VPhysicalVolume;
+class G4LogicalVolume; //ASO
+class G4VIStore;
+class G4VWeightWindowStore;
+
 
 class Tst33SlobedConcreteShield : public Tst33VGeometry {
 public:
@@ -55,8 +62,11 @@ public:
   virtual G4VPhysicalVolume &GetWorldVolume() const;
 
   virtual G4GeometryCell GetGeometryCell(G4int i, const G4String &) const; 
-  
 
+  void SetSensitive();  //ASO
+
+  G4String GetCellName(G4int i);
+    
 private:
   Tst33SlobedConcreteShield(const Tst33SlobedConcreteShield &);
 
@@ -70,6 +80,9 @@ private:
 
   G4Material *fConcrete;
   G4Material *fGalactic;
+
+  std::vector< G4VPhysicalVolume * > fPhysicalVolumeVector;
+  std::vector< G4LogicalVolume * > fLogicalVolumeVector;  //ASO
 
 };
 

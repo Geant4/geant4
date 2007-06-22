@@ -24,74 +24,25 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33ParallelGeometry.hh,v 1.7 2007-06-22 12:47:16 ahoward Exp $
-// GEANT4 tag 
+// $Id: Tst33ScoringDetectorConstruction.hh,v 1.1 2007-06-22 12:47:16 ahoward Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
-// ----------------------------------------------------------------------
-// Class Tst33ParallelGeometry
-//
-// Class description:
-//
-// Provides the cells for scoring and importance sampling.
 
-// Author: Michael Dressel (Michael.Dressel@cern.ch)
-// ----------------------------------------------------------------------
+#ifndef Tst33ScoringDetectorConstruction_hh 
+#define Tst33ScoringDetectorConstruction_hh  Tst33ScoringDetectorConstruction_hh 
 
-#ifndef Tst33ParallelGeometry_hh
-#define Tst33ParallelGeometry_hh Tst33ParallelGeometry_hh
+#include "G4VUserDetectorConstruction.hh"
 
-#include <map>
-#include <vector>
+class G4VPhysicalVolume; 
 
-#include "G4VUserParallelWorld.hh"
-
-#include "Tst33VGeometry.hh"
-#include "Tst33PVolumeStore.hh"
-#include "Tst33MaterialFactory.hh"
-
-class G4VPhysicalVolume;
-class G4LogicalVolume; //ASO
-
-
-class Tst33ParallelGeometry : public G4VUserParallelWorld, public Tst33VGeometry
- {
+class Tst33ScoringDetectorConstruction : public G4VUserDetectorConstruction
+{
 public:
-  Tst33ParallelGeometry(G4String worldName, G4VPhysicalVolume* ghostworld);
-  virtual ~Tst33ParallelGeometry();
+  Tst33ScoringDetectorConstruction(){}
+  ~Tst33ScoringDetectorConstruction(){}
 
-  virtual G4VPhysicalVolume &GetWorldVolume() const;
-
-  virtual G4GeometryCell GetGeometryCell(G4int i, const G4String &) const; 
-
-   void SetSensitive();
-
-private:
-  Tst33ParallelGeometry(const Tst33ParallelGeometry &);
-
-  void Construct();
-
-  Tst33ParallelGeometry &operator=(const Tst33ParallelGeometry &);
-
-  Tst33MaterialFactory fMaterialFactory;
-   //  G4VPhysicalVolume *fWorldVolume;
-   Tst33PVolumeStore fPVolumeStore;
-
-   //   G4VUserParallelWorld * fParallelWorld;
-
-   G4String worldVolumeName;
-
-  //  std::vector< G4VPhysicalVolume * > fPhysicalVolumeVector;
-  std::vector< G4LogicalVolume * > fLogicalVolumeVector;  //ASO
-
-  //  G4VPhysicalVolume *fWorldVolume;
-
-  G4VPhysicalVolume* ghostWorld;
-
-  G4Material *fGalactic;
-
-
+  G4VPhysicalVolume* Construct();
+  
 };
-
-
 
 #endif

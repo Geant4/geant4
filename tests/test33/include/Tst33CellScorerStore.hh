@@ -24,74 +24,60 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33ParallelGeometry.hh,v 1.7 2007-06-22 12:47:16 ahoward Exp $
-// GEANT4 tag 
+// $Id: Tst33CellScorerStore.hh,v 1.1 2007-06-22 12:47:15 ahoward Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
-// Class Tst33ParallelGeometry
+// Class Tst33CellScorerStore
 //
 // Class description:
 //
-// Provides the cells for scoring and importance sampling.
-
+// This class is a cell customized cell scorer store.
+// Nevertheless the standard G4CellScorer may be created with this class
+// simular to the G4CellScorerStore. In addition this class
+// stores Tst33CellScorer pointers.
+// This class delivers a map with the G4CellScorer objects
+// to be printed with the G4ScorerTable class.
+// 
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
 
-#ifndef Tst33ParallelGeometry_hh
-#define Tst33ParallelGeometry_hh Tst33ParallelGeometry_hh
+#ifndef Tst33CellScorerStore_hh
+#define Tst33CellScorerStore_hh Tst33CellScorerStore_hh
 
 #include <map>
-#include <vector>
+#include "G4GeometryCell.hh"
+#include "G4GeometryCellComp.hh"
 
-#include "G4VUserParallelWorld.hh"
+#include "globals.hh"
+#include "G4VCellScorerStore.hh"
 
-#include "Tst33VGeometry.hh"
-#include "Tst33PVolumeStore.hh"
-#include "Tst33MaterialFactory.hh"
+class G4CellScorer;
+class Tst33CellScorer;
+class IHistogram1D;
 
-class G4VPhysicalVolume;
-class G4LogicalVolume; //ASO
+typedef std::map<G4GeometryCell, G4CellScorer *, G4GeometryCellComp> G4MapGeometryCellCellScorer;
 
+typedef std::map<G4GeometryCell,Tst33CellScorer  *, G4GeometryCellComp> Tst33MapGeometryCellTst33CellScorer;
 
-class Tst33ParallelGeometry : public G4VUserParallelWorld, public Tst33VGeometry
- {
+class Tst33CellScorerStore : public G4VCellScorerStore {
 public:
-  Tst33ParallelGeometry(G4String worldName, G4VPhysicalVolume* ghostworld);
-  virtual ~Tst33ParallelGeometry();
+  Tst33CellScorerStore();
+  virtual ~Tst33CellScorerStore(){}
+  
+  virtual G4VCellScorer *GetCellScore(const G4GeometryCell &gCell);
 
-  virtual G4VPhysicalVolume &GetWorldVolume() const;
+  G4CellScorer *AddG4CellScorer(const G4GeometryCell &gCell);
+  const G4MapGeometryCellCellScorer &GetMapGeometryCellCellScorer()  ;
 
-  virtual G4GeometryCell GetGeometryCell(G4int i, const G4String &) const; 
-
-   void SetSensitive();
-
+  void AddTst33CellScorer(Tst33CellScorer *b02cellScorer,
+			const G4GeometryCell &gCell);
+  const Tst33MapGeometryCellTst33CellScorer &GetMapGeometryCellTst33CellScorer() const ;
+  
 private:
-  Tst33ParallelGeometry(const Tst33ParallelGeometry &);
-
-  void Construct();
-
-  Tst33ParallelGeometry &operator=(const Tst33ParallelGeometry &);
-
-  Tst33MaterialFactory fMaterialFactory;
-   //  G4VPhysicalVolume *fWorldVolume;
-   Tst33PVolumeStore fPVolumeStore;
-
-   //   G4VUserParallelWorld * fParallelWorld;
-
-   G4String worldVolumeName;
-
-  //  std::vector< G4VPhysicalVolume * > fPhysicalVolumeVector;
-  std::vector< G4LogicalVolume * > fLogicalVolumeVector;  //ASO
-
-  //  G4VPhysicalVolume *fWorldVolume;
-
-  G4VPhysicalVolume* ghostWorld;
-
-  G4Material *fGalactic;
-
+  G4MapGeometryCellCellScorer fMapGeometryCellCellScorer;
+  Tst33MapGeometryCellTst33CellScorer fMapGeometryCellTst33CellScorer;
 
 };
-
-
 
 #endif

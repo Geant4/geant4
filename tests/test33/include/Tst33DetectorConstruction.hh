@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33DetectorConstruction.hh,v 1.3 2006-06-29 21:59:35 gunter Exp $
+// $Id: Tst33DetectorConstruction.hh,v 1.4 2007-06-22 12:47:16 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -50,7 +50,7 @@ public:
   
   virtual G4VPhysicalVolume* Construct();
   void SetWorldVolume(G4VPhysicalVolume *v);
-  
+
 private:
   Tst33DetectorConstruction(const Tst33DetectorConstruction &);
   Tst33DetectorConstruction &operator=(const Tst33DetectorConstruction &);

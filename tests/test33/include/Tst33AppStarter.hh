@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33AppStarter.hh,v 1.10 2007-06-22 12:13:37 ahoward Exp $
+// $Id: Tst33AppStarter.hh,v 1.11 2007-06-22 12:47:15 ahoward Exp $
 // GEANT4 tag 
 //
 // ----------------------------------------------------------------------
@@ -47,9 +47,12 @@
 #include "G4RunManager.hh"
 #include "G4PlaceOfAction.hh"
 
+class Tst33PhysicsList;
 class Tst33DetectorConstruction;
 class Tst33VGeometry;
-class G4VSampler8;
+class Tst33ParallelGeometry;
+class G4VSampler;
+//class G4GeometrySampler;
 class G4VIStore;
 class G4VWeightWindowStore;
 class G4CellStoreScorer;
@@ -97,10 +100,12 @@ private:
   G4RunManager fRunManager;
   Tst33VGeometry *fMassGeometry;
   Tst33VGeometry *fSampleGeometry;
-  Tst33VGeometry *fParallelGeometry;
+  //  Tst33VGeometry *fParallelGeometry;
+  Tst33ParallelGeometry *fParallelGeometry;
   Tst33VApplication *fApp;
   Tst33DetectorConstruction *fDetectorConstruction;
-  G4VSampler8 *fSampler;
+  G4VSampler *fSampler;
+  //  G4GeometrySampler *fSampler;
   G4CellStoreScorer *fScorer;
   G4CellScorerStore *fScorerStore;
   const G4CellScorer *fCell_19_Scorer;
@@ -114,6 +119,8 @@ private:
   G4ProcessPlacer *fChangeWeightPlacer;
   Tst33WeightChangeProcess *fWeightChangeProcess;
   G4VWeightWindowAlgorithm *fWWAlg;
+
+  Tst33PhysicsList * physlist;
 };
 
 #endif

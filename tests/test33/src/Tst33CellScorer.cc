@@ -24,74 +24,41 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33ParallelGeometry.hh,v 1.7 2007-06-22 12:47:16 ahoward Exp $
-// GEANT4 tag 
+// $Id: Tst33CellScorer.cc,v 1.1 2007-06-22 12:47:16 ahoward Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
-// Class Tst33ParallelGeometry
+// GEANT 4 class source file
 //
-// Class description:
+// Tst33CellScorer.cc
 //
-// Provides the cells for scoring and importance sampling.
-
-// Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
 
-#ifndef Tst33ParallelGeometry_hh
-#define Tst33ParallelGeometry_hh Tst33ParallelGeometry_hh
-
-#include <map>
-#include <vector>
-
-#include "G4VUserParallelWorld.hh"
-
-#include "Tst33VGeometry.hh"
-#include "Tst33PVolumeStore.hh"
-#include "Tst33MaterialFactory.hh"
-
-class G4VPhysicalVolume;
-class G4LogicalVolume; //ASO
+#include "Tst33CellScorer.hh"
+#include "G4GeometryCell.hh"
+#include "G4Step.hh"
+#include "G4StepPoint.hh"
 
 
-class Tst33ParallelGeometry : public G4VUserParallelWorld, public Tst33VGeometry
- {
-public:
-  Tst33ParallelGeometry(G4String worldName, G4VPhysicalVolume* ghostworld);
-  virtual ~Tst33ParallelGeometry();
+Tst33CellScorer::Tst33CellScorer()
+{}
 
-  virtual G4VPhysicalVolume &GetWorldVolume() const;
+Tst33CellScorer::~Tst33CellScorer()
+{}
 
-  virtual G4GeometryCell GetGeometryCell(G4int i, const G4String &) const; 
+void Tst33CellScorer::ScoreAnExitingStep(const G4Step &aStep,
+				       const G4GeometryCell &pre_gCell){
+  fG4CellScorer.ScoreAnExitingStep(aStep, pre_gCell);
+}
 
-   void SetSensitive();
+void Tst33CellScorer::ScoreAnEnteringStep(const G4Step &aStep,
+					const G4GeometryCell &post_gCell){
+  fG4CellScorer.ScoreAnEnteringStep(aStep, post_gCell);
+  return;
+}
 
-private:
-  Tst33ParallelGeometry(const Tst33ParallelGeometry &);
+void Tst33CellScorer::ScoreAnInVolumeStep(const G4Step &aStep,
+					const G4GeometryCell &post_gCell){
+  fG4CellScorer.ScoreAnInVolumeStep(aStep, post_gCell);
+}
 
-  void Construct();
-
-  Tst33ParallelGeometry &operator=(const Tst33ParallelGeometry &);
-
-  Tst33MaterialFactory fMaterialFactory;
-   //  G4VPhysicalVolume *fWorldVolume;
-   Tst33PVolumeStore fPVolumeStore;
-
-   //   G4VUserParallelWorld * fParallelWorld;
-
-   G4String worldVolumeName;
-
-  //  std::vector< G4VPhysicalVolume * > fPhysicalVolumeVector;
-  std::vector< G4LogicalVolume * > fLogicalVolumeVector;  //ASO
-
-  //  G4VPhysicalVolume *fWorldVolume;
-
-  G4VPhysicalVolume* ghostWorld;
-
-  G4Material *fGalactic;
-
-
-};
-
-
-
-#endif

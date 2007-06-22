@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33VGeometry.hh,v 1.6 2006-06-29 22:00:05 gunter Exp $
+// $Id: Tst33VGeometry.hh,v 1.7 2007-06-22 12:47:16 ahoward Exp $
 // GEANT4 tag 
 //
 // ----------------------------------------------------------------------
@@ -43,8 +43,10 @@
 #include "globals.hh"
 #include "G4GeometryCell.hh"
 
-class G4VPhysicalVolume;
+//#include "G4VUserParallelWorld.hh"
 
+
+//class Tst33VGeometry : public G4VUserParallelWorld {
 class Tst33VGeometry {
 public:
   Tst33VGeometry();

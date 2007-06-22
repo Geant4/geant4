@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33IStoreBuilder.cc,v 1.13 2006-06-29 22:00:29 gunter Exp $
+// $Id: Tst33IStoreBuilder.cc,v 1.14 2007-06-22 12:47:16 ahoward Exp $
 // GEANT4 tag 
 //
 // ----------------------------------------------------------------------
@@ -35,6 +35,7 @@
 // ----------------------------------------------------------------------
 
 #include "Tst33IStoreBuilder.hh"
+#include "Tst33CellScorerStore.hh"
 #include "G4IStore.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4GeometryCell.hh"
@@ -50,6 +51,9 @@ Tst33IStoreBuilder::~Tst33IStoreBuilder()
 G4VIStore *Tst33IStoreBuilder::CreateIStore(Tst33VGeometry *samplegeo) {
   // create an importance store and fill it with the importance
   // per cell values
+
+  Tst33CellScorerStore tst33store;
+
   const G4VPhysicalVolume &pworld = samplegeo->GetWorldVolume();
   G4IStore *istore=0;
   istore = new G4IStore(pworld);
@@ -59,6 +63,8 @@ G4VIStore *Tst33IStoreBuilder::CreateIStore(Tst33VGeometry *samplegeo) {
   // adding GeometryCell for world volume. ReplicaNumer = 0, since  "geomvol-V05-00-01 !
   G4GeometryCell gWorldCell(pworld, 0);
   istore->AddImportanceGeometryCell(1, gWorldCell);
+
+  tst33store.AddG4CellScorer(gWorldCell);
   
   G4int i=1;
   for (i=1; i <= 19; ++i) {
@@ -71,10 +77,16 @@ G4VIStore *Tst33IStoreBuilder::CreateIStore(Tst33VGeometry *samplegeo) {
       G4GeometryCell gCellMinus(samplegeo->GetGeometryCell(i, "I1-"));
       G4GeometryCell gCellPlus(samplegeo->GetGeometryCell(i, "I1+"));
     
-      istore->AddImportanceGeometryCell(imp, gCellMinus);
-      istore->AddImportanceGeometryCell(imp, gCellPlus);
+//       istore->AddImportanceGeometryCell(imp, gCellMinus);
+//       istore->AddImportanceGeometryCell(imp, gCellPlus);
+      istore->AddImportanceGeometryCell(imp, gCellMinus.GetPhysicalVolume(), i); //ASO - change overloading of AddImportanceGeometryCell?
+      istore->AddImportanceGeometryCell(imp, gCellPlus.GetPhysicalVolume(), i); //ASO
+      tst33store.AddG4CellScorer(gCell);
     }
-    istore->AddImportanceGeometryCell(imp, gCell);
+    //    istore->AddImportanceGeometryCell(imp, gCell);
+    istore->AddImportanceGeometryCell(imp, gCell.GetPhysicalVolume(), i);
+    G4cout << " adding importance to: " << gCell.GetPhysicalVolume().GetName() << G4endl;
+
   }
   return istore;
 }

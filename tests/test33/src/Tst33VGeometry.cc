@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33VGeometry.cc,v 1.3 2006-06-29 22:01:36 gunter Exp $
+// $Id: Tst33VGeometry.cc,v 1.4 2007-06-22 12:47:16 ahoward Exp $
 // GEANT4 tag 
 //
 // ----------------------------------------------------------------------
@@ -36,6 +36,7 @@
 
 #include "Tst33VGeometry.hh"
 
+//Tst33VGeometry::Tst33VGeometry():G4VUserParallelWorld(G4String worldName)
 Tst33VGeometry::Tst33VGeometry()
 {}
 

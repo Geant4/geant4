@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33WeightWindowStoreBuilder.cc,v 1.5 2006-06-29 22:02:03 gunter Exp $
+// $Id: Tst33WeightWindowStoreBuilder.cc,v 1.6 2007-06-22 12:47:16 ahoward Exp $
 // GEANT4 tag 
 //
 // ----------------------------------------------------------------------
@@ -51,6 +51,7 @@ G4VWeightWindowStore *Tst33WeightWindowStoreBuilder::CreateWeightWindowStore(Tst
   // create an importance store and fill it with the importance
   // per cell values
   const G4VPhysicalVolume &pworld = samplegeo->GetWorldVolume();
+  G4cout << " weight window store name: " << pworld.GetName() << G4endl;
   G4WeightWindowStore *wwstore=0;
   wwstore = new G4WeightWindowStore(pworld);
 
@@ -92,12 +93,11 @@ G4VWeightWindowStore *Tst33WeightWindowStoreBuilder::CreateWeightWindowStore(Tst
     if (i!=19)  {
       G4GeometryCell gCellMinus(samplegeo->GetGeometryCell(i, "I1-"));
       G4GeometryCell gCellPlus(samplegeo->GetGeometryCell(i, "I1+"));
-    
-      wwstore->AddLowerWeights(gCellMinus, lowerWeights);
-      wwstore->AddLowerWeights(gCellPlus, lowerWeights);
+      wwstore->AddLowerWeights(G4GeometryCell(gCellMinus.GetPhysicalVolume(),i), lowerWeights);
+      wwstore->AddLowerWeights(G4GeometryCell(gCellPlus.GetPhysicalVolume(),i), lowerWeights);
     }
 
-    wwstore->AddLowerWeights(gCell, lowerWeights);
+    wwstore->AddLowerWeights(G4GeometryCell(gCell.GetPhysicalVolume(),i), lowerWeights);
 
   }
   return wwstore;

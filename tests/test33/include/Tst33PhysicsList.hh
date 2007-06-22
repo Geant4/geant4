@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33PhysicsList.hh,v 1.3 2006-06-29 21:59:45 gunter Exp $
+// $Id: Tst33PhysicsList.hh,v 1.4 2007-06-22 12:47:16 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -52,6 +52,10 @@ class Tst33PhysicsList: public G4VUserPhysicsList
     Tst33PhysicsList();
     virtual ~Tst33PhysicsList();
 
+  public: 
+    void AddParallelWorldName(G4String& pname)
+         {paraWorldName.push_back(pname);}
+
   protected:
     // Construct particle and physics
     virtual void ConstructParticle();
@@ -66,6 +70,9 @@ class Tst33PhysicsList: public G4VUserPhysicsList
     virtual void ConstructEM();
     virtual void ConstructHad();
     virtual void ConstructLeptHad();
+
+    void AddScoringProcess();
+
  //
     void  ConstructAllBosons();
     void  ConstructAllLeptons();
@@ -73,6 +80,10 @@ class Tst33PhysicsList: public G4VUserPhysicsList
     void  ConstructAllBaryons();
     void  ConstructAllIons();
     void  ConstructAllShortLiveds();
+
+  private:
+    std::vector<G4String>  paraWorldName;
+
 
 };
 
