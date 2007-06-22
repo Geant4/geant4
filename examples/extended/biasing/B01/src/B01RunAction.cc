@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: B01RunAction.cc,v 1.3 2007-06-22 13:15:29 ahoward Exp $
+// $Id: B01RunAction.cc,v 1.4 2007-06-22 13:29:45 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 #include "B01RunAction.hh"
@@ -44,7 +44,7 @@
 //=======================================================================
 // Constructor
 B01RunAction::B01RunAction():
-  FieldName(25),
+  FieldName(15),
   FieldValue(14)
 {
   // - Prepare data member for B01Run.
