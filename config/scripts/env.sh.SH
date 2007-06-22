@@ -37,7 +37,7 @@ unset  G4INSTALL
 
 unset  G4LEDATA
 unset  G4LEVELGAMMADATA
-unset  NeutronHPCrossSections
+unset  G4NEUTRONHPDATA
 unset  G4RADIOACTIVEDATA
 
 unset  G4LIB
@@ -163,10 +163,10 @@ fi
 
 #+
 if [ X$g4neutronhpcrosssections != X ] ; then 
-NeutronHPCrossSections="$g4neutronhpcrosssections"
-export NeutronHPCrossSections
+G4NEUTRONHPDATA="$g4neutronhpcrosssections"
+export G4NEUTRONHPDATA
 if [ X\$g4non_display = X ] ; then
-echo "On this machine the NeutronHPCrossSections=\$NeutronHPCrossSections"
+echo "On this machine the G4NEUTRONHPDATA=\$G4NEUTRONHPDATA"
 fi
 fi
 
@@ -617,7 +617,7 @@ $spitshell >>env.sh <<'!NO!SUBS!'
 #
 if [ $G4WORKDIR ] ; then
 
-if [ X$g4non_display = X ] ; then
+if [ X\$g4non_display = X ] ; then
 echo "In your environment you have the G4WORKDIR=$G4WORKDIR"
 fi
 
@@ -626,7 +626,7 @@ else
 # Check for Windows!
 if test "X$G4SYSTEM" = "XWIN32-VC" -o "X$G4SYSTEM" = "XWIN32-VC7"; then
 
-if [ X$g4non_display = X ] ; then
+if [ X\$g4non_display = X ] ; then
 echo "G4WORKDIR will be set to c:/geant4 (in "native" Windows syntax)"
 fi
 
@@ -635,7 +635,7 @@ export G4WORKDIR
 
 else # if Unix
 
-if [ X$g4non_display = X ] ; then
+if [ X\$g4non_display = X ] ; then
 echo "G4WORKDIR will be set to HOME/geant4=$HOME/geant4"
 fi
 
@@ -656,7 +656,6 @@ if [ $G4LIB_BUILD_SHARED ] ; then
 #
 # Warning about LD_LIBRARY_PATH
 #
-if [ X$g4non_display = X ] ; then
 echo ''
 echo 'LD_LIBRARY_PATH is set to include CLHEP and Geant4 libraries. '
 echo ''
@@ -666,7 +665,6 @@ echo 'variable in your environment, and no other outdated installations'
 echo 'of CLHEP are by chance referenced through $LD_LIBRARY_PATH and'
 echo 'present in your system !'
 echo ''
-fi
 
 if [ $LD_LIBRARY_PATH ] ; then
 LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${G4LIB}/${G4SYSTEM}
