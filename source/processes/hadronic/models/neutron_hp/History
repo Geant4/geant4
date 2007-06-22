@@ -13,6 +13,20 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+22 Jun 2007 Gabriele Cosmo (hadr-hpn-V08-03-05)
+- Replaced following environment variables:
+  o NeutronHP_ALWAYS_USE_PHOTONEVAPORATION_FOR_CAPTURE_FS
+    with: G4NEUTRONHP_USE_ONLY_PHOTONEVAPORATION
+  o NeutronHP_USE_ONLY_EXACT_FILE
+    with: G4NEUTRONHP_SKIP_MISSING_ISOTOPES
+  o NeutronHPCrossSections
+    with: G4NEUTRONHPDATA
+  o NeutronHP_NEGLECT_DOPPLER_BROADENING
+    with: G4NEUTRONHP_NEGLECT_DOPPLER.
+- Replaced NULL with 0 everywhere and removed unnecessary check on zero
+  pointer when performing deletion.
+
 18 Jun 2007 Tatsumi Koi (hadr-hpn-V08-03-04)
 - fixes for memory leaking 
 	G4NeutronHPPartial.hh
