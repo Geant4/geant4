@@ -37,7 +37,7 @@ unset  G4INSTALL
 
 unset  G4LEDATA
 unset  G4LEVELGAMMADATA
-unset  NeutronHPCrossSections
+unset  G4NEUTRONHPDATA
 unset  G4RADIOACTIVEDATA
 
 unset  G4LIB
@@ -144,9 +144,9 @@ fi
 
 #+
 if [ X$g4neutronhpcrosssections != X ] ; then 
-NeutronHPCrossSections="$g4neutronhpcrosssections"
-export NeutronHPCrossSections
-echo "On this machine the NeutronHPCrossSections=\$NeutronHPCrossSections"
+G4NEUTRONHPDATA="$g4neutronhpcrosssections"
+export G4NEUTRONHPDATA
+echo "On this machine the G4NEUTRONHPDATA=\$G4NEUTRONHPDATA"
 fi
 
 #+

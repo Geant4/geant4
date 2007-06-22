@@ -89,9 +89,9 @@ fi
 
 #+
 if [ X$g4neutronhpcrosssections != X ] ; then 
-NeutronHPCrossSections="$g4neutronhpcrosssections"
-export NeutronHPCrossSections
-echo "On this machine the NeutronHPCrossSections=\$NeutronHPCrossSections"
+G4NEUTRONHPDATA="$g4neutronhpcrosssections"
+export G4NEUTRONHPDATA
+echo "On this machine the G4NEUTRONHPDATA=\$G4NEUTRONHPDATA"
 fi
 
 #+

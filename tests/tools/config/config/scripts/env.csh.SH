@@ -37,7 +37,7 @@ unsetenv  G4INSTALL
 
 unsetenv  G4LEDATA
 unsetenv  G4LEVELGAMMADATA
-unsetenv  NeutronHPCrossSections
+unsetenv  G4NEUTRONHPDATA
 unsetenv  G4RADIOACTIVEDATA
 
 unsetenv  G4LIB
@@ -140,8 +140,8 @@ endif
 
 #+
 if ( X$g4neutronhpcrosssections != X ) then
-setenv NeutronHPCrossSections "$g4neutronhpcrosssections"
-echo "On this machine the NeutronHPCrossSections=\$NeutronHPCrossSections"
+setenv G4NEUTRONHPDATA "$g4neutronhpcrosssections"
+echo "On this machine the G4NEUTRONHPDATA=\$G4NEUTRONHPDATA"
 endif
 
 #+

@@ -58,7 +58,7 @@ Please, specify default directory where ALL the Geant4 data is installed:
 
  G4LEDATA:			$g4ledata
 
- NeutronHPCrossSections:	$g4neutronhpcrosssections
+ G4NEUTRONHPDATA:		$g4neutronhpcrosssections
 
 You will be asked about customizing these next.
 
@@ -100,7 +100,7 @@ Please, specify default directory where the Geant4 data is installed:
 
 3) G4LEDATA:			$g4ledata
 
-4) NeutronHPCrossSections:	$g4neutronhpcrosssections
+4) G4NEUTRONHPDATA:		$g4neutronhpcrosssections
 
 To modify default settings, select number above (e.g. 2) 
 EOM`
