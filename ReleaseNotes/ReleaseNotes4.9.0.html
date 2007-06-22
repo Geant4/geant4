@@ -167,16 +167,19 @@ New UI commands are added: <TT>/process/msc/Skin</TT>,
   <LI>Isotope production flag is now set to OFF by default.
       If desired, user code must switch it on using the method 
       <TT>G4HadronicProcess::EnableIsotopeCounting()</TT>.</LI>
+  <LI>The old variable <TT>NeutronHPCrossSections</TT> defining the path where
+      to load the G4NDL data set has been renamed to <TT>G4NEUTRONHPDATA</TT>,
+      therefore the user environment must be changed accordingly.</LI>
   <LI>When using high precision neutron code, user may now choose to force the 
       use of Photon Evaporation model instead of using the neutron capture
       final state data. The environment variable
-      <TT>NeutronHP_ALWAYS_USE_PHOTONEVAPORATION_FOR_CAPTURE_FS</TT> must be
+      <TT>G4NEUTRONHP_USE_ONLY_PHOTONEVAPORATION</TT> must be
       set to do this.</LI>
   <LI>User can now force high precison neutron code to use only exact isotope 
       data files instead of allowing nearby isotope files to be used. If the 
       exact file is not available, the cross section will be set to zero and a 
       warning message will be printed. To enable this set the environment 
-      variable <TT>NeutronHP_USE_ONLY_EXACT_FILE</TT>.</li>
+      variable <TT>G4NEUTRONHP_SKIP_MISSING_ISOTOPES</TT>.</li>
 </UL>
 
 <P> </P>
@@ -191,6 +194,17 @@ variants are now available:
     that implemented in release 7.1</LI>
 <LI><TT>G4EmStandardPhysics_option2</TT> - using <TT>sub-cutoff</TT>
     options.</LI>
+</UL>
+
+<P> </P>
+<B>Data Sets</B>
+<P> </P>
+
+This release introduced three new versions of data sets:
+<UL>
+<LI>New data for neutron cross-sections, G4NDL.3.11.</LI>
+<LI>New low-energy data set, G4EMLOW.4.3.</LI>
+<LI>New data set for radioactive-decay, G4RadioactiveDecay.3.2.</LI>
 </UL>
 
 <P> </P>
@@ -732,14 +746,19 @@ please refer to the related History files provided in most packages):
     <UL>
     <LI>Try to limit sum of secondary photons energy while keeping
         distributions in <TT>G4NeutronHPPhotonDist</TT>.</LI>
-    <li>Removed Doppler broadening mode to boost performance in
-        <TT>G4NeutronHPElasticData</TT>, <TT>G4NeutronHPInelasticData</TT> and
-        <TT>G4NeutronHPCaptureData</TT>.</li>
-    <li>Add environment variable NeutronHP_USE_ONLY_EXACT_FILE which will force
-        the use of the exact isotope file and set the cross section to zero and
-        print a warning if the file is not found.  Modified method of searching 
-        substitute isotope data in <TT>G4NeutronHPNames</TT>.</li>
-    <LI>Added <TT>NeutronHP_ALWAYS_USE_PHOTONEVAPORATION_FOR_CAPTURE_FS</TT>
+    <LI>Renamed variable <TT>NeutronHPCrossSections<TT> to
+        <TT>G4NEUTRONHPDATA</TT> for the path definition to the G4NDL data
+        library.</LI>
+    <LI>Added possibility to neglet Doppler broadening mode to boost
+        performance in <TT>G4NeutronHPElasticData</TT>,
+        <TT>G4NeutronHPInelasticData</TT> and <TT>G4NeutronHPCaptureData</TT>,
+        by using the environment variable <TT>G4NEUTRONHP_NEGLECT_DOPPLER</TT>.</LI>
+    <LI>Added environment variable <TT>G4NEUTRONHP_SKIP_MISSING_ISOTOPES</TT>
+        which will force the use of the exact isotope file and set the cross
+        section to zero and print a warning if the file is not found.
+        Modified method of searching substitute isotope data in
+        <TT>G4NeutronHPNames</TT>.</LI>
+    <LI>Added <TT>G4NEUTRONHP_USE_ONLY_PHOTONEVAPORATION</TT>
         flag in <TT>G4NeutronHPCaptureFS</TT>.</LI>
     <LI>Bug fixes for Valgrind run-time errors and NaNs. Fixes for memory
         leaks.</LI>
@@ -988,21 +1007,28 @@ please refer to the related History files provided in most packages):
         <LI>Migrated example B01 to new biasing/scoring scheme.</LI>
         <LI>Removed B03 (redundant/obsolete use of Python).</LI>
         </UL></LI>
+    <LI>electromagnetic/TestEm0
+        <UL>
+        <LI>Cosmetics ...</LI>
+        </UL></LI>
     <LI>electromagnetic/TestEm1
         <UL>
         <LI>Use <TT>G4EmProcessOptions</TT> to define bremsstrahlung threshold
             energy.</LI>
         <LI>Completed <TT>PhysListEmStandard</TT> options and added new input
             macro for <TT>e-</TT>.</LI>
+        <LI>Make visualization only in interactive mode.</LI>
         </UL></LI>
     <LI>electromagnetic/TestEm2
         <UL>
+        <LI>Completed <TT>PhysListEmStandard</TT> options.</LI>
         <LI>Updated main input macro file; use visualisation only for
             interactive session.</LI>
         </UL></LI>
     <LI>electromagnetic/TestEm3
         <UL>
         <LI>Use renamed EM builders and update macro files.</LI>
+        <LI>More options in <TT>PhysListEmStandard</TT>.</LI>
         </UL></LI>
     <LI>electromagnetic/TestEm5</LI>
     <LI>electromagnetic/TestEm7

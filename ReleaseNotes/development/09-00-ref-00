@@ -394,17 +394,20 @@ processes/hadronic                               hadr-V08-03-00
     >100) and includes helium (previously excluded).
 - models/lll_fission (hadr-lllfis-V08-03-06)
   o New module for Livermore LLNL spontaneous fission model.
-- models/neutron_hp (hadr-hpn-V08-03-04)
+- models/neutron_hp (hadr-hpn-V08-03-05)
   o Try to limit sum of secondary photons energy while keeping distributions
     in G4NeutronHPPhotonDist.
+  o Replaced variable 'NeutronHPCrossSections' with 'G4NEUTRONHPDATA' for
+    path definition of the G4NDL data library.
   o Added neglecting doppler broadening mode for boosting perfomance in
-    G4NeutronHPElasticData, G4NeutronHPInelasticData and G4NeutronHPCaptureData.
+    G4NeutronHPElasticData, G4NeutronHPInelasticData and
+    G4NeutronHPCaptureData, using variable G4NEUTRONHP_NEGLECT_DOPPLER.
   o Enabled to use only exact data file and added warning when substituted
-    file is used. Modified method of searching substitute isotope data in
-    G4NeutronHPNames.
-  o Added 'NeutronHP_ALWAYS_USE_PHOTONEVAPORATION_FOR_CAPTURE_FS' flag in
-    G4NeutronHPCaptureFS.
+    file is used, using variable G4NEUTRONHP_SKIP_MISSING_ISOTOPES.
+    Modified method of searching substitute isotope data in G4NeutronHPNames.
+  o Added 'G4NEUTRONHP_USE_ONLY_PHOTONEVAPORATION' flag in G4NeutronHPCaptureFS.
   o Bug fixes for Valgrind run-time errors and NaNs. Fixes for memory leaks.
+  o Replaced NULL with 0 where necessary and some cleanup.
 - models/parton_string (had-prtn-V08-02-02)
   o Separate G4DiffractiveExcitation for FTF from QGS. Added original
     G4DiffractiveExcitation to qgsm as G4QGSDiffractiveExcitation
@@ -533,14 +536,19 @@ examples                                         examples-V09-00-00
 - extended/biasing (exbiasing-V08-03-01)
   o Migrated example B01 to new biasing/scoring scheme.
   o Removed B03 (redundant/obsolete use of Python).
-- extended/electromagnetic/TestEm1 (testem1-V08-03-01)
+- extended/electromagnetic/TestEm0 (testem0-V08-03-00)
+  o Cosmetic changes ...
+- extended/electromagnetic/TestEm1 (testem1-V08-03-02)
   o Use G4EmProcessOptions to define bremsstrahlung threshold energy.
   o Completed PhysListEmStandard options and added new input macro for e-.
-- extended/electromagnetic/TestEm2 (testem2-V08-03-00)
+  o Make visualization only in interactive mode.
+- extended/electromagnetic/TestEm2 (testem2-V08-03-02)
+  o Completed PhysListEmStandard options.
   o Updated main input macro file; use visualisation only for interactive
     session.
-- extended/electromagnetic/TestEm3 (testem3-V08-03-01)
+- extended/electromagnetic/TestEm3 (testem3-V08-03-02)
   o Use renamed EM builders and update macro files.
+  o More options in PhysListEmStandard.
 - extended/electromagnetic/TestEm5 (testem5-V08-03-00)
 - extended/electromagnetic/TestEm7 (testem7-V08-03-01)
   o Fixed bug in standardSS Physics Lists.
