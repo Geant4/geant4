@@ -542,11 +542,11 @@ examples                                         examples-V09-00-00
   o Use G4EmProcessOptions to define bremsstrahlung threshold energy.
   o Completed PhysListEmStandard options and added new input macro for e-.
   o Make visualization only in interactive mode.
-- extended/electromagnetic/TestEm2 (testem2-V08-03-02)
+- extended/electromagnetic/TestEm2 (testem2-V08-03-00)
   o Completed PhysListEmStandard options.
   o Updated main input macro file; use visualisation only for interactive
     session.
-- extended/electromagnetic/TestEm3 (testem3-V08-03-02)
+- extended/electromagnetic/TestEm3 (testem3-V08-03-01)
   o Use renamed EM builders and update macro files.
   o More options in PhysListEmStandard.
 - extended/electromagnetic/TestEm4 (testem4-V08-03-00)
