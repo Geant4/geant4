@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: exampleB01.cc,v 1.25 2007-06-22 13:15:28 ahoward Exp $
+// $Id: exampleB01.cc,v 1.26 2007-06-22 13:19:56 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -75,7 +75,6 @@ int main(int argc, char **argv)
   G4int mode = 0;
   if (argc>1)  mode = atoi(argv[1]);
 
-  std::ostream *myout = &G4cout;
   G4int numberOfEvents = 100;
   G4long myseed = 345354;
   CLHEP::HepRandom::setTheSeed(myseed);

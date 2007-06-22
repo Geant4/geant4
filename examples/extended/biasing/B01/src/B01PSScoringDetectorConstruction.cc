@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: B01PSScoringDetectorConstruction.cc,v 1.1 2007-06-05 18:20:09 ahoward Exp $
+// $Id: B01PSScoringDetectorConstruction.cc,v 1.2 2007-06-22 13:15:29 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -44,21 +44,21 @@
 #include "G4MultiFunctionalDetector.hh"
 #include "G4SDParticleFilter.hh"
 #include "G4PSNofCollision.hh"
-//#include "G4PSPopulation.hh"
+#include "G4PSPopulation.hh"
 #include "G4PSTrackCounter.hh"
 #include "G4PSTrackLength.hh"
 
 
 
 B01PSScoringDetectorConstruction::B01PSScoringDetectorConstruction(G4String worldName)
-  :G4VUserParallelWorld(worldName),fLogicalVolumeVector() //ASO
+  :G4VUserParallelWorld(worldName),fLogicalVolumeVector()
 {
   //  Construct();
 }
 
 B01PSScoringDetectorConstruction::~B01PSScoringDetectorConstruction()
 {
-  fLogicalVolumeVector.clear(); //ASO
+  fLogicalVolumeVector.clear();
 }
 
 void B01PSScoringDetectorConstruction::Construct()
@@ -70,7 +70,7 @@ void B01PSScoringDetectorConstruction::Construct()
   // via the transportation manager
   ghostWorld = GetWorld();
   G4LogicalVolume* worldLogical = ghostWorld->GetLogicalVolume();
-  fLogicalVolumeVector.push_back(worldLogical); //ASO
+  fLogicalVolumeVector.push_back(worldLogical);
 
   G4String name("none");
   G4double density(universe_mean_density), temperature(0), pressure(0);
@@ -85,37 +85,6 @@ void B01PSScoringDetectorConstruction::Construct()
                    kStateGas,temperature,pressure);
 
 
-  //////////////////////////////////
-  // parallel world cylinder volume
-  //////////////////////////////////
-
-  // parallel world solid larger than in the mass geometry
-
-  //G4double innerRadiusCylinder = 0*cm;
-  //G4double outerRadiusCylinder = 110*cm;
-  //G4double hightCylinder       = 110*cm;
-  //G4double startAngleCylinder  = 0*deg;
-  //G4double spanningAngleCylinder    = 360*deg;
-
-  /*
-  G4Tubs *worldCylinder = new G4Tubs("worldCylinder",
-                                     innerRadiusCylinder,
-                                     outerRadiusCylinder,
-                                     hightCylinder,
-                                     startAngleCylinder,
-                                     spanningAngleCylinder);
-
-  // logical world
-
-  G4LogicalVolume *worldCylinder_log = 
-    new G4LogicalVolume(worldCylinder, Galactic, "worldCylinder_log");
-
-  name = "parallelWorld";
-  fWorldVolume = new 
-    G4PVPlacement(0, G4ThreeVector(0,0,0), worldCylinder_log,
-		  name, 0, false, 0);
-
-  */
   //fPVolumeStore.AddPVolume(G4GeometryCell(*ghostWorld, 0));
 
 
@@ -140,7 +109,7 @@ void B01PSScoringDetectorConstruction::Construct()
 
   G4LogicalVolume *aShield_log = 
     new G4LogicalVolume(aShield, Galactic, "aShield_log");
-  fLogicalVolumeVector.push_back(aShield_log); //ASO
+  fLogicalVolumeVector.push_back(aShield_log);
 
   // physical parallel cells
 
@@ -160,8 +129,8 @@ void B01PSScoringDetectorConstruction::Construct()
 			name, 
 			worldLogical, 
 			false, 
-			i); //ASO
-    //G4GeometryCell cell(*pvol, i);  //ASO
+			i);
+    //G4GeometryCell cell(*pvol, i);
     //fPVolumeStore.AddPVolume(cell);
   }
 
@@ -169,8 +138,8 @@ void B01PSScoringDetectorConstruction::Construct()
   // another slob which should get the same importance value as the 
   // last slob
   innerRadiusShield = 0*cm;
-  outerRadiusShield = 100*cm;  //ASO
-  hightShield       = 5*cm;    // ASO 
+  outerRadiusShield = 100*cm; 
+  hightShield       = 5*cm;    
   startAngleShield  = 0*deg;
   spanningAngleShield    = 360*deg;
 
@@ -184,7 +153,7 @@ void B01PSScoringDetectorConstruction::Construct()
   G4LogicalVolume *aRest_log = 
     new G4LogicalVolume(aRest, Galactic, "aRest_log");
   name = GetCellName(19);
-  fLogicalVolumeVector.push_back(aRest_log); //ASO
+  fLogicalVolumeVector.push_back(aRest_log);
     
   G4double pos_x = 0*cm;
   G4double pos_y = 0*cm;
@@ -196,24 +165,13 @@ void B01PSScoringDetectorConstruction::Construct()
 		      name, 
 		      worldLogical, 
 		      false, 
-		      19); // i = 19  ASO
-  //G4GeometryCell cell(*pvol, i); // ASO
+		      19); // i = 19
+  //G4GeometryCell cell(*pvol, i);
   //fPVolumeStore.AddPVolume(cell);
 
-  SetSensitive(); //ASO
+  SetSensitive();
 
 }
-
-//const G4VPhysicalVolume &B01PSScoringDetectorConstruction::
-//GetPhysicalVolumeByName(const G4String& name) const {
-//  return *fPVolumeStore.GetPVolume(name);
-//}
-
-
-//G4String B01PSScoringDetectorConstruction::ListPhysNamesAsG4String(){
-//  G4String names(fPVolumeStore.GetPNames());
-//  return names;
-//}
 
 
 G4String B01PSScoringDetectorConstruction::GetCellName(G4int i) {
@@ -226,26 +184,6 @@ G4String B01PSScoringDetectorConstruction::GetCellName(G4int i) {
   G4String name = os.str();
   return name;
 }
-
-//G4GeometryCell B01PSScoringDetectorConstruction::GetGeometryCell(G4int i){
-//  G4String name(GetCellName(i));
-//  const G4VPhysicalVolume *p=0;
-//  p = fPVolumeStore.GetPVolume(name);
-//  if (p) {
-//    G4cout << " returning GetGeometryCell " << G4endl;
-//    return G4GeometryCell(*p,i); //ASO
-//  }
-//  else {
-//    G4cout << "B01PSScoringDetectorConstruction::GetGeometryCell: couldn't get G4GeometryCell" << G4endl;
-//    return G4GeometryCell(*ghostWorld,-2);
-//  }
-//}
-
-
-// G4VPhysicalVolume *B01PSScoringDetectorConstruction::GetWorldVolume() const{
-//   return *fWorldVolume;
-// }
-
 
 G4VPhysicalVolume *B01PSScoringDetectorConstruction::GetWorldVolume() {
    return ghostWorld;
@@ -260,15 +198,15 @@ void B01PSScoringDetectorConstruction::SetSensitive(){
 
   //  -------------------------------------------------
   //   The collection names of defined Primitives are
-  //   0       PhantomSD/Collisions
-  //   1       PhantomSD/CollWeight
-  //   2       PhantomSD/Population
-  //   3       PhantomSD/TrackEnter
-  //   4       PhantomSD/SL
-  //   5       PhantomSD/SLW
-  //   6       PhantomSD/SLWE
-  //   7       PhantomSD/SLW_V
-  //   8       PhantomSD/SLWE_V
+  //   0       ConcreteSD/Collisions
+  //   1       ConcreteSD/CollWeight
+  //   2       ConcreteSD/Population
+  //   3       ConcreteSD/TrackEnter
+  //   4       ConcreteSD/SL
+  //   5       ConcreteSD/SLW
+  //   6       ConcreteSD/SLWE
+  //   7       ConcreteSD/SLW_V
+  //   8       ConcreteSD/SLWE_V
   //  -------------------------------------------------
 
 
@@ -280,14 +218,14 @@ void B01PSScoringDetectorConstruction::SetSensitive(){
   G4SDManager* SDman = G4SDManager::GetSDMpointer();
   //
   // Sensitive Detector Name
-  G4String phantomSDname = "PhantomSD";
+  G4String concreteSDname = "ConcreteSD";
 
   //------------------------
   // MultiFunctionalDetector
   //------------------------
   //
   // Define MultiFunctionalDetector with name.
-  G4MultiFunctionalDetector* MFDet = new G4MultiFunctionalDetector(phantomSDname);
+  G4MultiFunctionalDetector* MFDet = new G4MultiFunctionalDetector(concreteSDname);
   SDman->AddNewDetector( MFDet );                 // Register SD to SDManager
 
 

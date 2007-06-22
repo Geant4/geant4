@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: B01ScoreTable.cc,v 1.1 2007-06-05 18:20:09 ahoward Exp $
+// $Id: B01ScoreTable.cc,v 1.2 2007-06-22 13:15:29 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -45,7 +45,7 @@
 
 B01ScoreTable::B01ScoreTable(const G4VIStore *aIStore) :
   fIStore(aIStore),
-  FieldName(25),
+  FieldName(15),
   FieldValue(12)
 {}
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: B01DetectorConstruction.cc,v 1.19 2007-06-05 18:20:09 ahoward Exp $
+// $Id: B01DetectorConstruction.cc,v 1.20 2007-06-22 13:15:29 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -44,13 +44,12 @@
 #include "G4VisAttributes.hh"
 #include "G4Colour.hh"
 
-//ASO
 // For Primitive Scorers
 #include "G4SDManager.hh"
 #include "G4MultiFunctionalDetector.hh"
 #include "G4SDParticleFilter.hh"
 #include "G4PSNofCollision.hh"
-//#include "G4PSPopulation.hh"
+#include "G4PSPopulation.hh"
 #include "G4PSTrackCounter.hh"
 #include "G4PSTrackLength.hh"
 
@@ -61,7 +60,7 @@
 #include "G4WeightWindowStore.hh"
 
 B01DetectorConstruction::B01DetectorConstruction() :
-  fPhysicalVolumeVector(),fLogicalVolumeVector()  //ASO
+  fPhysicalVolumeVector(),fLogicalVolumeVector()
 {;}
 
 B01DetectorConstruction::~B01DetectorConstruction()
@@ -154,7 +153,7 @@ G4VPhysicalVolume* B01DetectorConstruction::Construct()
 
   G4LogicalVolume *worldCylinder_log = 
     new G4LogicalVolume(worldCylinder, Galactic, "worldCylinder_log");
-  fLogicalVolumeVector.push_back(worldCylinder_log);  //ASO
+  fLogicalVolumeVector.push_back(worldCylinder_log); 
 
   name = "shieldWorld";
   pWorldVolume = new 
@@ -183,7 +182,7 @@ G4VPhysicalVolume* B01DetectorConstruction::Construct()
 
   G4LogicalVolume *aShield_log =
     new G4LogicalVolume(aShield, Concrete, "aShield_log");
-  fLogicalVolumeVector.push_back(aShield_log);  //ASO
+  fLogicalVolumeVector.push_back(aShield_log);
 
   G4VisAttributes* pShieldVis = new G4VisAttributes(G4Colour(0.0,0.0,1.0));
   pShieldVis->SetForceSolid(true);
@@ -206,7 +205,7 @@ G4VPhysicalVolume* B01DetectorConstruction::Construct()
 			name, 
 			worldCylinder_log, 
 			false, 
-			i);  //ASO
+			i); 
     fPhysicalVolumeVector.push_back(pvol);
   }
 
@@ -229,7 +228,7 @@ G4VPhysicalVolume* B01DetectorConstruction::Construct()
   
   G4LogicalVolume *aRest_log =
     new G4LogicalVolume(aRest, Galactic, "aRest_log");
-  fLogicalVolumeVector.push_back(aRest_log);  //ASO
+  fLogicalVolumeVector.push_back(aRest_log);
   name = "rest";
     
   pos_x = 0*cm;
@@ -276,7 +275,7 @@ G4VIStore *B01DetectorConstruction::CreateImportanceStore()
       imp = std::pow(2., n++);
       G4cout << "Going to assign importance: " << imp << ", to volume: " 
 	     << (*it)->GetName() << G4endl;
-      istore->AddImportanceGeometryCell(imp, *(*it),n);  //ASO
+      istore->AddImportanceGeometryCell(imp, *(*it),n);
     }
   }
 
@@ -284,7 +283,7 @@ G4VIStore *B01DetectorConstruction::CreateImportanceStore()
   // importance as the last conrete cell
   //
   istore->AddImportanceGeometryCell(imp, 
-				    *(fPhysicalVolumeVector[fPhysicalVolumeVector.size()-1]),++n);//ASO
+				    *(fPhysicalVolumeVector[fPhysicalVolumeVector.size()-1]),++n);
   
   return istore;
 }
@@ -326,7 +325,7 @@ G4VWeightWindowStore *B01DetectorConstruction::CreateWeightWindowStore()
       G4cout << "Going to assign lower weight: " << lowerWeight 
 	     << ", to volume: " 
 	     << (*it)->GetName() << G4endl;
-      G4GeometryCell gCell(*(*it),n); //ASOA
+      G4GeometryCell gCell(*(*it),n);
       lowerWeights.clear();
       lowerWeights.push_back(lowerWeight);
       wwstore->AddLowerWeights(gCell, lowerWeights);
@@ -337,7 +336,7 @@ G4VWeightWindowStore *B01DetectorConstruction::CreateWeightWindowStore()
   // lower weight bound  as the last conrete cell
   //
   G4GeometryCell
-    gRestCell(*(fPhysicalVolumeVector[fPhysicalVolumeVector.size()-1]), ++n); //ASO
+    gRestCell(*(fPhysicalVolumeVector[fPhysicalVolumeVector.size()-1]), ++n);
   wwstore->AddLowerWeights(gRestCell,  lowerWeights);
 
   return wwstore;
@@ -364,15 +363,15 @@ void B01DetectorConstruction::SetSensitive(){
 
   //  -------------------------------------------------
   //   The collection names of defined Primitives are
-  //   0       PhantomSD/Collisions
-  //   1       PhantomSD/CollWeight
-  //   2       PhantomSD/Population
-  //   3       PhantomSD/TrackEnter
-  //   4       PhantomSD/SL
-  //   5       PhantomSD/SLW
-  //   6       PhantomSD/SLWE
-  //   7       PhantomSD/SLW_V
-  //   8       PhantomSD/SLWE_V
+  //   0       ConcreteSD/Collisions
+  //   1       ConcreteSD/CollWeight
+  //   2       ConcreteSD/Population
+  //   3       ConcreteSD/TrackEnter
+  //   4       ConcreteSD/SL
+  //   5       ConcreteSD/SLW
+  //   6       ConcreteSD/SLWE
+  //   7       ConcreteSD/SLW_V
+  //   8       ConcreteSD/SLWE_V
   //  -------------------------------------------------
 
 
@@ -384,14 +383,14 @@ void B01DetectorConstruction::SetSensitive(){
   G4SDManager* SDman = G4SDManager::GetSDMpointer();
   //
   // Sensitive Detector Name
-  G4String phantomSDname = "PhantomSD";
+  G4String concreteSDname = "ConcreteSD";
 
   //------------------------
   // MultiFunctionalDetector
   //------------------------
   //
   // Define MultiFunctionalDetector with name.
-  G4MultiFunctionalDetector* MFDet = new G4MultiFunctionalDetector(phantomSDname);
+  G4MultiFunctionalDetector* MFDet = new G4MultiFunctionalDetector(concreteSDname);
   SDman->AddNewDetector( MFDet );                 // Register SD to SDManager
 
 
@@ -417,8 +416,8 @@ void B01DetectorConstruction::SetSensitive(){
   MFDet->RegisterPrimitive(scorer1);
 
 
-//   G4PSPopulation*   scorer2 = new G4PSPopulation(psName="Population");  
-//   MFDet->RegisterPrimitive(scorer2);
+  G4PSPopulation*   scorer2 = new G4PSPopulation(psName="Population");  
+  MFDet->RegisterPrimitive(scorer2);
 
   G4PSTrackCounter* scorer3 = new G4PSTrackCounter(psName="TrackEnter",fCurrent_In);  
   MFDet->RegisterPrimitive(scorer3);

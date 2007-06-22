@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: B01RunAction.cc,v 1.2 2007-06-21 15:03:39 gunter Exp $
+// $Id: B01RunAction.cc,v 1.3 2007-06-22 13:15:29 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 #include "B01RunAction.hh"
@@ -49,7 +49,7 @@ B01RunAction::B01RunAction():
 {
   // - Prepare data member for B01Run.
   //   vector represents a list of MultiFunctionalDetector names.
-  theSDName.push_back(G4String("PhantomSD"));
+  theSDName.push_back(G4String("ConcreteSD"));
 }
 
 // Destructor.
@@ -96,19 +96,19 @@ void B01RunAction::EndOfRunAction(const G4Run* aRun)
     //---------------------------------------------
     // Dump accumulated quantities for this RUN.
     //  (Display only central region of x-y plane)
-    //      0       PhantomSD/Collisions
-    //      1       PhantomSD/CollWeight
-    //      2       PhantomSD/Population
-    //      3       PhantomSD/TrackEnter
-    //      4       PhantomSD/SL
-    //      5       PhantomSD/SLW
-    //      6       PhantomSD/SLWE
-    //      7       PhantomSD/SLW_V
-    //      8       PhantomSD/SLWE_V
+    //      0       ConcreteSD/Collisions
+    //      1       ConcreteSD/CollWeight
+    //      2       ConcreteSD/Population
+    //      3       ConcreteSD/TrackEnter
+    //      4       ConcreteSD/SL
+    //      5       ConcreteSD/SLW
+    //      6       ConcreteSD/SLWE
+    //      7       ConcreteSD/SLW_V
+    //      8       ConcreteSD/SLWE_V
     //---------------------------------------------
     G4THitsMap<G4double>* Collisions = re02Run->GetHitsMap(theSDName[i]+"/Collisions");
     G4THitsMap<G4double>* CollWeight = re02Run->GetHitsMap(theSDName[i]+"/CollWeight");
-    //x    G4THitsMap<G4double>* Population = re02Run->GetHitsMap(theSDName[i]+"/Population");
+    G4THitsMap<G4double>* Population = re02Run->GetHitsMap(theSDName[i]+"/Population");
     G4THitsMap<G4double>* TrackEnter = re02Run->GetHitsMap(theSDName[i]+"/TrackEnter");
     G4THitsMap<G4double>* SL = re02Run->GetHitsMap(theSDName[i]+"/SL");
     G4THitsMap<G4double>* SLW = re02Run->GetHitsMap(theSDName[i]+"/SLW");
@@ -127,7 +127,7 @@ void B01RunAction::EndOfRunAction(const G4Run* aRun)
     for ( G4int iz = 0; iz < 20; iz++){ 
       G4double* SumCollisions = (*Collisions)[iz];
       G4double* SumCollWeight = (*CollWeight)[iz];
-      //x      G4double* Populations   = (*Population)[iz];
+      G4double* Populations   = (*Population)[iz];
       G4double* TrackEnters   = (*TrackEnter)[iz];
       G4double* SLs   = (*SL)[iz];
       G4double* SLWs   = (*SLW)[iz];
@@ -136,7 +136,7 @@ void B01RunAction::EndOfRunAction(const G4Run* aRun)
       G4double* SLWE_Vs   = (*SLWE_V)[iz];
       if ( !SumCollisions ) SumCollisions = new G4double(0.0);
       if ( !SumCollWeight ) SumCollWeight = new G4double(0.0);
-      //x      if ( !Populations   ) Populations   = new G4double(0.0);
+      if ( !Populations   ) Populations   = new G4double(0.0);
       if ( !TrackEnters   ) TrackEnters   = new G4double(0.0);
       if ( !SLs   ) SLs   = new G4double(0.0);
       if ( !SLWs   ) SLWs   = new G4double(0.0);
@@ -153,7 +153,7 @@ void B01RunAction::EndOfRunAction(const G4Run* aRun)
       G4cout 
 	<< std::setw(FieldValue) << cname << " |"
 	<< std::setw(FieldValue) << (*TrackEnters) << " |"
-	//x	<< std::setw(FieldValue) << (*Populations) << " |"
+	<< std::setw(FieldValue) << (*Populations) << " |"
 	<< std::setw(FieldValue) << (*SumCollisions) << " |"
 	<< std::setw(FieldValue) << (*SumCollWeight) << " |"
 	<< std::setw(FieldValue) << NumWeightedEnergy << " |"
@@ -176,7 +176,7 @@ void B01RunAction::PrintHeader(std::ostream *out)
 {
   std::vector<G4String> vecScoreName;
   vecScoreName.push_back("Tr.Entering");
-  //x  vecScoreName.push_back("Population");
+  vecScoreName.push_back("Population");
   vecScoreName.push_back("Collisions");
   vecScoreName.push_back("Coll*WGT");
   vecScoreName.push_back("NumWGTedE");
