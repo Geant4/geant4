@@ -472,6 +472,7 @@ if [ $UNAMEN = pcg4speed.cern.ch ]; then
 #export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:"/afs/cern.ch/sw/lhcxx/specific/redhat61/gcc-2.95.2/5.0.1/lib"
 
 . /afs/cern.ch/sw/lcg/external/icc/9.1.039/slc3_ia32_gcc323/bin/iccvars.sh
+export INTEL_LICENSE_FILE="1988@licman1.cern.ch"
 
 # Only for one advanced example: 
 export CCAL_CONFPATH=./dataconf
@@ -625,6 +626,33 @@ if [ $UNAMEN = pcgeant6.cern.ch ]; then
 #  export G4VIS_BUILD_OIX_DRIVER=1
 fi
 
+if [ $UNAMEN = lxbuild021.cern.ch ]; then
+  export DEBOPT=${DEBOPT}_slc4_i32
+  export CVSROOT=/afs/cern.ch/sw/geant4/cvs
+  export G4SYSTEM=Linux-g++
+  export G4INSTALL=/afs/cern.ch/sw/geant4/stt/$REF/src/geant4
+  export G4STTDIR=/afs/cern.ch/sw/geant4/stt/$REF/testtools/geant4/tests/tools
+  export G4WORKDIR=/afs/cern.ch/sw/geant4/stt/$REF/Linux-g++/$DEBOPT
+  export G4LIB=$G4WORKDIR/lib
+
+# Take CLHEP with links to lcg area
+  export CLHEP_BASE_DIR=$G4WORKDIR/clhep
+#  export CLHEP_BASE_DIR=/scratch/stesting/clhep
+  
+  # Shareable library
+  #####################
+#  export G4LIB_BUILD_SHARED=1
+  export LD_LIBRARY_PATH=$G4LIB/$G4SYSTEM:${CLHEP_BASE_DIR}/lib:${LD_LIBRARY_PATH}
+#  export LD_LIBRARY_PATH=$G4LIB/$G4SYSTEM:${LD_LIBRARY_PATH}
+
+  # G4 build flags :
+  ######export G4UI_BUILD_XM_SESSION=1
+#  export G4VIS_BUILD_OPENGLXM_DRIVER=1
+  export G4VIS_BUILD_OPENGLX_DRIVER=1
+  export G4VIS_USE_OPENGLX=1
+#  export G4VIS_BUILD_OIX_DRIVER=1
+fi
+
 if [ $UNAMEN = pcg4speed2.cern.ch ]; then
   export DEBOPT=${DEBOPT}_slc4_i32
   export CVSROOT=/afs/cern.ch/sw/geant4/cvs
@@ -679,6 +707,9 @@ if [ $UNAMEN = lxplus072.cern.ch ]; then
 fi
 
 if [ $UNAMEN = lxplus071.cern.ch ]; then
+# Special G4 flag for FPE exceptions on Linux systems
+ export G4FPE_DEBUG=1
+ 
   export DEBOPT=${DEBOPT}_slc4_i32
   export CVSROOT=/afs/cern.ch/sw/geant4/cvs
   export G4SYSTEM=Linux-g++
@@ -1098,74 +1129,6 @@ if [ $UNAMEN = XXXlxplus075 ]; then
     #####################################
 export PATH=/usr/local/gcc-alt-2.95.2/bin:${PATH}
 export LD_LIBRARY_PATH=/usr/local/gcc-alt-2.95.2/lib:${LD_LIBRARY_PATH}
-
-fi
-
-if [ $UNAMEN = lxplus071 ]; then
-  export DEBOPT=${DEBOPT}_7.3.1_3.2
-#  export DEBOPT=${DEBOPT}
-  export CVSROOT=/afs/cern.ch/sw/geant4/cvs
-  export G4SYSTEM=Linux-g++
-  export G4INSTALL=/afs/cern.ch/sw/geant4/stt/$REF/src/geant4
-  export G4STTDIR=/afs/cern.ch/sw/geant4/stt/$REF/testtools/geant4/tests/tools
-  export G4WORKDIR=/afs/cern.ch/sw/geant4/stt/$REF/$G4SYSTEM/$DEBOPT
-  export G4LIB=$G4WORKDIR/lib
-#  export CLHEP_BASE_DIR=/home/stesting/CLHEP
-#  export CLHEP_BASE_DIR=/afs/cern.ch/sw/lhcxx/specific/redhat61/gcc-2.95.2/CLHEP/1.7.0.0/
-#  export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/Linux-g++/$CLHEP_VERSION
-  export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/Linux-g++/RH73/1.8/
-#  export G4_NO_CBRT=1
-
-  # Shareable library
-  #####################
-  export G4LIB_BUILD_SHARED=1
-  export LD_LIBRARY_PATH=$G4LIB/$G4SYSTEM:${CLHEP_BASE_DIR}/lib:${LD_LIBRARY_PATH}
-#  export LD_LIBRARY_PATH=$G4LIB/$G4SYSTEM:${LD_LIBRARY_PATH}
-
-  # G4 build flags :
-  ######export G4UI_BUILD_XM_SESSION=1
-#  export G4VIS_BUILD_OPENGLXM_DRIVER=1
-#  export G4VIS_BUILD_OPENGLX_DRIVER=1
-#  export G4VIS_BUILD_OIX_DRIVER=1
-
-    # Set alternative g++ 3.2 compiler
-    #####################################
-export PATH=/usr/local/gcc-alt-3.2/bin:${PATH}
-export LD_LIBRARY_PATH=/usr/local/gcc-alt-3.2/lib:${LD_LIBRARY_PATH}
-
-fi
-
-if [ $UNAMEN = lxplus075 ]; then
-  export DEBOPT=${DEBOPT}_7.3.1_3.2
-#  export DEBOPT=${DEBOPT}
-  export CVSROOT=/afs/cern.ch/sw/geant4/cvs
-  export G4SYSTEM=Linux-icc
-  export G4INSTALL=/afs/cern.ch/sw/geant4/stt/$REF/src/geant4
-  export G4STTDIR=/afs/cern.ch/sw/geant4/stt/$REF/testtools/geant4/tests/tools
-  export G4WORKDIR=/afs/cern.ch/sw/geant4/stt/$REF/$G4SYSTEM/$DEBOPT
-  export G4LIB=$G4WORKDIR/lib
-#  export CLHEP_BASE_DIR=/home/stesting/CLHEP
-#  export CLHEP_BASE_DIR=/afs/cern.ch/sw/lhcxx/specific/redhat61/gcc-2.95.2/CLHEP/1.7.0.0/
-#  export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/Linux-g++/$CLHEP_VERSION
-  export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/Linux-g++/RH72/1.8/
-#  export G4_NO_CBRT=1
-
-  # Shareable library
-  #####################
-  export G4LIB_BUILD_SHARED=1
-  export LD_LIBRARY_PATH=$G4LIB/$G4SYSTEM:${CLHEP_BASE_DIR}/lib:${LD_LIBRARY_PATH}
-#  export LD_LIBRARY_PATH=$G4LIB/$G4SYSTEM:${LD_LIBRARY_PATH}
-
-  # G4 build flags :
-  ######export G4UI_BUILD_XM_SESSION=1
-#  export G4VIS_BUILD_OPENGLXM_DRIVER=1
-#  export G4VIS_BUILD_OPENGLX_DRIVER=1
-#  export G4VIS_BUILD_OIX_DRIVER=1
-
-    # Set alternative g++ 3.2 compiler
-    #####################################
-export PATH=/usr/local/gcc-alt-3.2/bin:${PATH}
-export LD_LIBRARY_PATH=/usr/local/gcc-alt-3.2/lib:${LD_LIBRARY_PATH}
 
 fi
 
