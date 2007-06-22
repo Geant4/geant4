@@ -1,4 +1,4 @@
-$Id: History,v 1.105 2007-06-22 09:22:05 maire Exp $
+$Id: History,v 1.106 2007-06-22 16:20:14 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ---------------------------------------------------------
+
+22-05-07  V.Ivant (testem3-V08-03-03)
+- update TestEm3.in in order to have the same options as before
      
 22-06-07  mma (testem3-V08-03-02)
 - more options in PhysListEmStandard
