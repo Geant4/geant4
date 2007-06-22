@@ -27,7 +27,7 @@ Some of the development/fixes included since the last development tags are:
 
 Summarised, the list of changes is the following:
 
-config                                           config-V08-03-02
+config                                           config-V08-03-03
 ------
 - Added modules "biasing", "error_propagation" and "lll_fission" to
   binmake.gmk.
@@ -211,7 +211,7 @@ physics_lists                                    phys-lists-V08-03-06
   defined inside the constructor itself.
 - Incremented version number.
 
-processes/biasing                                procbiasing-V08-03-05
+processes/biasing                                procbiasing-V08-03-07
 -----------------
 - New module for process-based biasing.
 - Migrated classes from processes/scoring and transportation modules.
@@ -533,7 +533,7 @@ examples                                         examples-V09-00-00
   o Changed to hIonisation from hLowEnergyIonisation.
 - extended/analysis/N03Con (exampleN03Con-V08-03-01)
   o New example showing how to apply convergence test in simulation.
-- extended/biasing (exbiasing-V08-03-01)
+- extended/biasing (exbiasing-V08-03-02)
   o Migrated example B01 to new biasing/scoring scheme.
   o Removed B03 (redundant/obsolete use of Python).
 - extended/electromagnetic/TestEm0 (testem0-V08-03-00)
