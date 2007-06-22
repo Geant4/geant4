@@ -43,7 +43,7 @@ void G4NeutronHPFieldPoint::operator= (const G4NeutronHPFieldPoint & aSet)
     if(&aSet!=this)
     {
       X = aSet.GetX();
-      if(Y!=NULL) delete [] Y;
+      delete [] Y;
       Y = new G4double[aSet.GetDepth()];
       for(G4int i=0; i<aSet.GetDepth(); i++) Y[i] = aSet.GetY(i);
     }
@@ -51,7 +51,7 @@ void G4NeutronHPFieldPoint::operator= (const G4NeutronHPFieldPoint & aSet)
 
 G4NeutronHPFieldPoint::~G4NeutronHPFieldPoint()
   {
-   if(Y!=NULL) delete [] Y;
+    delete [] Y;
   }
     
 void G4NeutronHPFieldPoint::InitY(G4int n)

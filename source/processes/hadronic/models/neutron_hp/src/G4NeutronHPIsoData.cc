@@ -32,7 +32,7 @@
 
   G4bool G4NeutronHPIsoData::Init(G4int A, G4int Z, G4double abun, G4String dirName, G4String aFSType)
   {
-    theChannelData = NULL;
+    theChannelData = 0;
     G4double abundance = abun/100.;
     G4String filename;
     G4bool result = true;
@@ -69,9 +69,9 @@
   void G4NeutronHPIsoData::Init(G4int A, G4int Z, G4double abun) //fill PhysicsVector for this Isotope
   {
     G4String dirName;
-    if(!getenv("NeutronHPCrossSections")) 
-       throw G4HadronicException(__FILE__, __LINE__, "Please setenv NeutronHPCrossSections to point to the neutron cross-section files.");
-    G4String baseName = getenv("NeutronHPCrossSections");
+    if(!getenv("G4NEUTRONHPDATA")) 
+       throw G4HadronicException(__FILE__, __LINE__, "Please setenv G4NEUTRONHPDATA to point to the neutron cross-section files.");
+    G4String baseName = getenv("G4NEUTRONHPDATA");
     dirName = baseName+"/Fission";
     if(Z>89) 
     {
@@ -82,32 +82,32 @@
        theChannelData = new G4NeutronHPVector;
     }
     theFissionData = theChannelData;
-    theChannelData = NULL; // fast fix for double delete; revisit later. @@@@@@@
+    theChannelData = 0; // fast fix for double delete; revisit later. @@@@@@@
     dirName = baseName+"/Capture";
     Init(A, Z, abun, dirName, "/CrossSection/");
     theCaptureData = theChannelData;
-     theChannelData = NULL;
+    theChannelData = 0;
     dirName = baseName+"/Elastic";
     Init(A, Z, abun, dirName, "/CrossSection/");
     theElasticData = theChannelData;
-    theChannelData = NULL;
+    theChannelData = 0;
     dirName = baseName+"/Inelastic";
     Init(A, Z, abun, dirName, "/CrossSection/");
     theInelasticData = theChannelData;
-    theChannelData = NULL;
+    theChannelData = 0;
     
-//    if(theInelasticData!=NULL) G4cout << "Inelastic Data Statistics: "<<theInelasticData->GetVectorLength()<<G4endl;
-//    if(theElasticData!=NULL) G4cout << "Elastic Data Statistics: "<<theElasticData->GetVectorLength()<<G4endl;
-//    if(theCaptureData!=NULL) G4cout << "Capture Data Statistics: "<<theCaptureData->GetVectorLength()<<G4endl;
-//    if(theFissionData!=NULL) G4cout << "Fission Data Statistics: "<<theFissionData->GetVectorLength()<<G4endl;
+//    if(theInelasticData!=0) G4cout << "Inelastic Data Statistics: "<<theInelasticData->GetVectorLength()<<G4endl;
+//    if(theElasticData!=0) G4cout << "Elastic Data Statistics: "<<theElasticData->GetVectorLength()<<G4endl;
+//    if(theCaptureData!=0) G4cout << "Capture Data Statistics: "<<theCaptureData->GetVectorLength()<<G4endl;
+//    if(theFissionData!=0) G4cout << "Fission Data Statistics: "<<theFissionData->GetVectorLength()<<G4endl;
 //  G4cout << "Inelastic data"<<G4endl;
-//  if(theInelasticData!=NULL) theInelasticData->Dump();
+//  if(theInelasticData!=0) theInelasticData->Dump();
 //  G4cout << "Elastic data"<<G4endl;
-//  if(theElasticData!=NULL) theElasticData->Dump();
+//  if(theElasticData!=0) theElasticData->Dump();
 //  G4cout << "Capture data"<<G4endl;
-//  if(theCaptureData!=NULL) theCaptureData->Dump();
+//  if(theCaptureData!=0) theCaptureData->Dump();
 //  G4cout << "Fission data"<<G4endl;
-//  if(theFissionData!=NULL) theFissionData->Dump();
+//  if(theFissionData!=0) theFissionData->Dump();
 
   }
   

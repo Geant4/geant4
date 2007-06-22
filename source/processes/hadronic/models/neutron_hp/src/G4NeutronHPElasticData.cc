@@ -46,14 +46,14 @@ G4bool G4NeutronHPElasticData::IsApplicable(const G4DynamicParticle*aP, const G4
 G4NeutronHPElasticData::G4NeutronHPElasticData()
 {
 // TKDB
-   theCrossSections = NULL;
+   theCrossSections = 0;
   BuildPhysicsTable(*G4Neutron::Neutron());
 }
    
 G4NeutronHPElasticData::~G4NeutronHPElasticData()
 {
 // TKDB
-   if ( theCrossSections != NULL )
+   if ( theCrossSections != 0 )
       theCrossSections->clearAndDestroy();
   delete theCrossSections;
 }
@@ -65,7 +65,7 @@ void G4NeutronHPElasticData::BuildPhysicsTable(const G4ParticleDefinition& aP)
      throw G4HadronicException(__FILE__, __LINE__, "Attempt to use NeutronHP data for particles other than neutrons!!!");  
   size_t numberOfElements = G4Element::GetNumberOfElements();
 // TKDB
-   if ( theCrossSections == NULL ) theCrossSections = new G4PhysicsTable( numberOfElements );
+   if ( theCrossSections == 0 ) theCrossSections = new G4PhysicsTable( numberOfElements );
 
   // make a PhysicsVector for each element
 
@@ -101,7 +101,7 @@ GetCrossSection(const G4DynamicParticle* aP, const G4Element*anE, G4double aT)
   G4double eKinetic = aP->GetKineticEnergy();
 
   // T. K. 
-  if ( getenv( "NeutronHP_NEGLECT_DOPPLER_BROADENING" ) )
+  if ( getenv( "G4NEUTRONHP_NEGLECT_DOPPLER" ) )
   {
      G4double factor = 1.0;
      if ( eKinetic < aT * k_Boltzmann ) 
@@ -158,7 +158,7 @@ GetCrossSection(const G4DynamicParticle* aP, const G4Element*anE, G4double aT)
   }
   result /= counter;
 /*
-  // Checking impact of  NeutronHP_NEGLECT_DOPPLER_BROADENING
+  // Checking impact of  G4NEUTRONHP_NEGLECT_DOPPLER
   G4cout << " result " << result << " " 
          << (*((*theCrossSections)(index))).GetValue(eKinetic, outOfRange) << " " 
          << (*((*theCrossSections)(index))).GetValue(eKinetic, outOfRange) /result << G4endl;

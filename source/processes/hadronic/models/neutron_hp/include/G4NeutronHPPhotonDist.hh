@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPPhotonDist.hh,v 1.15 2007-06-18 20:56:05 tkoi Exp $
+// $Id: G4NeutronHPPhotonDist.hh,v 1.16 2007-06-22 09:23:47 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  // Hadronic Process: Very Low Energy Neutron X-Sections
@@ -70,61 +70,61 @@ public:
       , theBaseEnergy( 0.0 )
   {
 
-     disType = NULL;
-     energy = NULL;
-     theYield = NULL;
-     thePartialXsec = NULL;
-     isPrimary = NULL;
-     theShells = NULL;
-     theGammas = NULL;
-     nNeu = NULL;
-     theLegendre = NULL;
-     theAngular = NULL;
-     distribution = NULL;
-     probs = NULL;
-     partials = NULL;
-     actualMult = NULL;
+     disType = 0;
+     energy = 0;
+     theYield = 0;
+     thePartialXsec = 0;
+     isPrimary = 0;
+     theShells = 0;
+     theGammas = 0;
+     nNeu = 0;
+     theLegendre = 0;
+     theAngular = 0;
+     distribution = 0;
+     probs = 0;
+     partials = 0;
+     actualMult = 0;
 
-     theLevelEnergies = NULL;
-     theTransitionProbabilities = NULL;
-     thePhotonTransitionFraction = NULL;
+     theLevelEnergies = 0;
+     theTransitionProbabilities = 0;
+     thePhotonTransitionFraction = 0;
 
   }
 
   ~G4NeutronHPPhotonDist()
   {
-     if(disType != 0) delete [] disType;
-     if(energy != 0) delete [] energy;
-     if(theYield != 0) delete [] theYield;
-     if(thePartialXsec != 0) delete [] thePartialXsec;
-     if(isPrimary != 0) delete [] isPrimary;
-     if(theShells != 0) delete [] theShells;
-     if(theGammas != 0) delete [] theGammas;
-     if(nNeu != 0) delete [] nNeu;
-     if(theLegendre != 0) delete [] theLegendre;
-     if(theAngular != 0) delete [] theAngular;
-     if(distribution != 0) delete [] distribution;
-     if(probs != 0) delete [] probs;
+     delete [] disType;
+     delete [] energy;
+     delete [] theYield;
+     delete [] thePartialXsec;
+     delete [] isPrimary;
+     delete [] theShells;
+     delete [] theGammas;
+     delete [] nNeu;
+     delete [] theLegendre;
+     delete [] theAngular;
+     delete [] distribution;
+     delete [] probs;
 
 // TKDB
      if ( partials != 0 ) 
      {
         for ( G4int i = 0 ; i < nPartials ; i++ )
-           delete partials[ i ];
+           { delete partials[ i ]; }
 
         delete [] partials;
      }
-     //if(partials != 0) delete [] partials;
+     // delete [] partials;
 
-     if(actualMult != 0) delete [] actualMult;
+     delete [] actualMult;
 
-     //if(theLevelEnergies != 0) delete theLevelEnergies;
-     //if(theTransitionProbabilities != 0) delete theTransitionProbabilities;
-     //if(thePhotonTransitionFraction != 0) delete thePhotonTransitionFraction;
+     // delete theLevelEnergies;
+     // delete theTransitionProbabilities;
+     // delete thePhotonTransitionFraction;
 // TKDB
-     if(theLevelEnergies != 0) delete [] theLevelEnergies;
-     if(theTransitionProbabilities != 0) delete [] theTransitionProbabilities;
-     if(thePhotonTransitionFraction != 0) delete [] thePhotonTransitionFraction;
+     delete [] theLevelEnergies;
+     delete [] theTransitionProbabilities;
+     delete [] thePhotonTransitionFraction;
   }
   
   G4bool InitMean(std::ifstream & aDataFile);

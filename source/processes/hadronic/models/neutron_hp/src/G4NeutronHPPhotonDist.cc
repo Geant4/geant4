@@ -567,7 +567,7 @@ G4int maxEnergyIndex = 0;
   {
 
 // TK add 
-      if ( thePartialXsec == NULL ) 
+      if ( thePartialXsec == 0 ) 
       {
          //G4cout << "repFlag is 0, but no PartialXsec data" << G4endl;
          //G4cout << "This is not support yet." << G4endl;
@@ -693,7 +693,7 @@ G4int maxEnergyIndex = 0;
   else
   {
     delete thePhotons;
-    thePhotons = NULL; // no gamma data available; some work needed @@@@@@@
+    thePhotons = 0; // no gamma data available; some work needed @@@@@@@
   }    
   return thePhotons;
 }

@@ -37,9 +37,9 @@
   {
     overrideSuspension = false;
     G4NeutronHPElasticFS * theFS = new G4NeutronHPElasticFS;
-    if(!getenv("NeutronHPCrossSections")) 
-       throw G4HadronicException(__FILE__, __LINE__, "Please setenv NeutronHPCrossSections to point to the neutron cross-section files.");
-    dirName = getenv("NeutronHPCrossSections");
+    if(!getenv("G4NEUTRONHPDATA")) 
+       throw G4HadronicException(__FILE__, __LINE__, "Please setenv G4NEUTRONHPDATA to point to the neutron cross-section files.");
+    dirName = getenv("G4NEUTRONHPDATA");
     G4String tString = "/Elastic/";
     dirName = dirName + tString;
 //    G4cout <<"G4NeutronHPElastic::G4NeutronHPElastic testit "<<dirName<<G4endl;

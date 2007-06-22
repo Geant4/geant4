@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPAngular.hh,v 1.11 2007-06-14 17:17:30 tkoi Exp $
+// $Id: G4NeutronHPAngular.hh,v 1.12 2007-06-22 09:23:47 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 070613 fix memory leaking by T. Koi
@@ -49,14 +49,14 @@ class G4NeutronHPAngular
     theAngularDistributionType = 0;
     theIsoFlag = false;
 // TKDB
-      theCoefficients = NULL;
-      theProbArray = NULL;
+      theCoefficients = 0;
+      theProbArray = 0;
   } 
   ~G4NeutronHPAngular()
    {
 // TKDB
-      if ( theCoefficients != NULL ) delete theCoefficients;
-      if ( theProbArray != NULL ) delete theProbArray;
+      delete theCoefficients;
+      delete theProbArray;
    }
   
   void Init(std::ifstream & aDataFile);

@@ -76,11 +76,11 @@
     if(count == 0||registerCount!=0) count +=
          theStableOnes.GetNumberOfIsotopes(Z);
     niso = count;
-    if(theIsotopeWiseData!=NULL) delete [] theIsotopeWiseData;
+    delete [] theIsotopeWiseData;
     theIsotopeWiseData = new G4NeutronHPIsoData [niso];
-    if(active!=NULL) delete [] active;
+    delete [] active;
     active = new G4bool[niso];
-    if(theFinalStates!=NULL) delete [] theFinalStates;
+    delete [] theFinalStates;
     theFinalStates = new G4NeutronHPFinalState * [niso];
     delete theChannelData;
     theChannelData = new G4NeutronHPVector; 
@@ -126,7 +126,7 @@
     if(!theFinalStates[index]->HasAnyData()) return; // nothing there for exactly this isotope.
 
     // the above has put the X-sec into the FS
-    theBuffer = NULL;
+    theBuffer = 0;
     if(theFinalStates[index]->HasXsec())
     {
       theBuffer = theFinalStates[index]->GetXsec();
@@ -139,7 +139,7 @@
       active[index] = theIsotopeWiseData[index].Init(A, Z, abundance, theDir, tString);
       if(active[index]) theBuffer = theIsotopeWiseData[index].MakeChannelData();
     }
-    if(theBuffer != NULL) Harmonise(theChannelData, theBuffer);
+    if(theBuffer != 0) Harmonise(theChannelData, theBuffer);
   }
   
   void G4NeutronHPChannel::Harmonise(G4NeutronHPVector *& theStore, G4NeutronHPVector * theNew)
@@ -237,8 +237,8 @@
       if(it==niso) it--;
     }
     delete [] xsec;
-    G4HadFinalState * theFinalState=NULL;
-    while(theFinalState==NULL)
+    G4HadFinalState * theFinalState=0;
+    while(theFinalState==0)
     {
 //    G4cout << "TESTHP 24 it="<<it<<G4endl;
       theFinalState = theFinalStates[it]->ApplyYourself(theTrack);

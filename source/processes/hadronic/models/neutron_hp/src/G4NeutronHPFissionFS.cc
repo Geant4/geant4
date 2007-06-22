@@ -107,7 +107,7 @@
 // also for mean, we rely on the consistancy of the data. @@
 
    G4int Prompt=0, delayed=0, all=0;
-   G4DynamicParticleVector * theNeutrons = NULL;
+   G4DynamicParticleVector * theNeutrons = 0;
    switch(it) // check logic, and ask, if partials can be assumed to correspond to individual particles @@@
    {
      case 0:
@@ -139,18 +139,18 @@
 
    G4double * theDecayConstants;
 
-   if(theNeutrons != NULL)
+   if(theNeutrons != 0)
    {
      theDecayConstants = new G4double[delayed];
      G4int nPhotons = 0;
-     if(thePhotons!=NULL) nPhotons = thePhotons->size();
+     if(thePhotons!=0) nPhotons = thePhotons->size();
      for(i=0; i<theNeutrons->size(); i++)
      {
        theResult.AddSecondary(theNeutrons->operator[](i));
      }
      delete theNeutrons;  
 
-     G4DynamicParticleVector * theDelayed = NULL;
+     G4DynamicParticleVector * theDelayed = 0;
      theDelayed = theFS.ApplyYourself(0, delayed, theDecayConstants);
      for(i=0; i<theDelayed->size(); i++)
      {
@@ -170,7 +170,7 @@
      if(Prompt==0&&delayed==0) Prompt=all;
      theNeutrons = theFS.ApplyYourself(Prompt, delayed, theDecayConstants);
      G4int nPhotons = 0;
-     if(thePhotons!=NULL) nPhotons = thePhotons->size();
+     if(thePhotons!=0) nPhotons = thePhotons->size();
      G4int i0;
      for(i0=0; i0<Prompt; i0++)
      {
@@ -190,7 +190,7 @@
    delete [] theDecayConstants;
 //    cout << "all delayed "<<delayed<<G4endl; 
    unsigned int nPhotons = 0;
-   if(thePhotons!=NULL)
+   if(thePhotons!=0)
    {
      nPhotons = thePhotons->size();
      for(i=0; i<nPhotons; i++)

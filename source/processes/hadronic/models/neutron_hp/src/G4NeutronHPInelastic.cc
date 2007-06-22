@@ -32,7 +32,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPInelastic.cc,v 1.22 2007-05-23 19:23:28 tkoi Exp $
+// $Id: G4NeutronHPInelastic.cc,v 1.23 2007-06-22 09:23:48 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 070523 bug fix for G4FPE_DEBUG on by A. Howard ( and T. Koi)
@@ -44,11 +44,11 @@
   {
     SetMinEnergy( 0.0 );
     SetMaxEnergy( 20.*MeV );
-    system("echo $NeutronHPCrossSections");
+    system("echo $G4NEUTRONHPDATA");
 //    G4cout << " entering G4NeutronHPInelastic constructor"<<G4endl;
-    if(!getenv("NeutronHPCrossSections")) 
-       throw G4HadronicException(__FILE__, __LINE__, "Please setenv NeutronHPCrossSections to point to the neutron cross-section files.");
-    dirName = getenv("NeutronHPCrossSections");
+    if(!getenv("G4NEUTRONHPDATA")) 
+       throw G4HadronicException(__FILE__, __LINE__, "Please setenv G4NEUTRONHPDATA to point to the neutron cross-section files.");
+    dirName = getenv("G4NEUTRONHPDATA");
     G4String tString = "/Inelastic/";
     dirName = dirName + tString;
     numEle = G4Element::GetNumberOfElements();

@@ -81,7 +81,7 @@
     nPoints=20;
     nEntries=0;
     Verbose=0;
-    theIntegral=NULL;
+    theIntegral=0;
     totalIntegral=-1;
     isFreed = 0;
     maxValue = -DBL_MAX;
@@ -97,7 +97,7 @@
     theData = new G4NeutronHPDataPoint[nPoints]; 
     nEntries=0;
     Verbose=0;
-    theIntegral=NULL;
+    theIntegral=0;
     totalIntegral=-1;
     isFreed = 0;
     maxValue = -DBL_MAX;
@@ -108,12 +108,9 @@
   G4NeutronHPVector::~G4NeutronHPVector()
   {
 //    if(Verbose==1)G4cout <<"G4NeutronHPVector::~G4NeutronHPVector"<<G4endl;
-    if(theData!=NULL)     
-    {
       delete [] theData;
-    }
 //    if(Verbose==1)G4cout <<"Vector: delete theData"<<G4endl;
-    if(theIntegral!=NULL) delete [] theIntegral;
+      delete [] theIntegral;
 //    if(Verbose==1)G4cout <<"Vector: delete theIntegral"<<G4endl;
     isFreed = 1;
   }
@@ -126,11 +123,11 @@
     G4int i;
     
     totalIntegral = right.totalIntegral;
-    if(right.theIntegral!=NULL) theIntegral = new G4double[right.nEntries];
+    if(right.theIntegral!=0) theIntegral = new G4double[right.nEntries];
     for(i=0; i<right.nEntries; i++)
     {
       SetPoint(i, right.GetPoint(i)); // copy theData
-      if(right.theIntegral!=NULL) theIntegral[i] = right.theIntegral[i];
+      if(right.theIntegral!=0) theIntegral[i] = right.theIntegral[i];
     }
     theManager = right.theManager; 
     label = right.label;
@@ -365,7 +362,7 @@
     }
     else
     {
-      if(theIntegral==NULL) IntegrateAndNormalise();
+      if(theIntegral==0) { IntegrateAndNormalise(); }
       do
       {
         G4double value, test, baseline;
@@ -398,7 +395,7 @@
     }
     else
     {
-      if(theIntegral==NULL) IntegrateAndNormalise();
+      if(theIntegral==0) { IntegrateAndNormalise(); }
       G4int i;
       result = theData[GetVectorLength()-1].GetX();
       for(i=0;i<GetVectorLength();i++)
@@ -426,7 +423,7 @@
     }
     else
     {
-      if(theIntegral==NULL) IntegrateAndNormalise();
+      if(theIntegral==0) { IntegrateAndNormalise(); }
       G4int i;
       G4double x = 0.5;
       result = theData[GetVectorLength()-1].GetX();

@@ -42,13 +42,13 @@ G4bool G4NeutronHPFissionData::IsApplicable(const G4DynamicParticle*aP, const G4
 
 G4NeutronHPFissionData::G4NeutronHPFissionData()
 {
-  theCrossSections = NULL;
+  theCrossSections = 0;
   BuildPhysicsTable(*G4Neutron::Neutron());
 }
    
 G4NeutronHPFissionData::~G4NeutronHPFissionData()
 {
-  if(theCrossSections!=NULL) delete theCrossSections;
+  delete theCrossSections;
 }
    
 void G4NeutronHPFissionData::BuildPhysicsTable(const G4ParticleDefinition& aP)

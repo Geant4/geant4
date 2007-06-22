@@ -73,7 +73,7 @@ if(getenv("NeutronHPNames")) G4cout << "Names::GetName entered for Z = " << Z <<
       throw G4HadronicException(__FILE__, __LINE__, "G4NeutronHPNames::GetName - data with Z>92 are not provided");
     }
 
-    G4String * theName = NULL;
+    G4String * theName = 0;
     G4String theFileName("");
 
 //    G4int inc = 1;
@@ -93,7 +93,7 @@ if(getenv("NeutronHPNames"))  G4cout << "entered GetName!!!"<<G4endl;
        G4String * biff = new G4String(); // delete here as theName
        *biff = base+"/"+"CrossSection/"+itoa(myZ)+"_"+itoa(myA)+"_"+theString[myZ-1];
       
-       if(theName!=NULL) delete theName;
+       if(theName!=0) delete theName;
        theName = biff;
        result.SetName(*theName);
        result.SetA(myA);
@@ -101,7 +101,7 @@ if(getenv("NeutronHPNames"))  G4cout << "entered GetName!!!"<<G4endl;
 if(getenv("NeutronHPNames")) G4cout <<"HPWD 1 "<<*theName<<G4endl;
 //3456
      // T.K. debug for memory leak
-     if ( check != NULL )
+     if ( check != 0 )
      {
         check->close();
         delete check;
@@ -119,7 +119,7 @@ if(getenv("NeutronHPNames")) G4cout <<"HPWD 1 "<<*theName<<G4endl;
              first = false;
              biff = new G4String(); // delete here as theName
              *biff = base+"/"+"CrossSection/"+itoa(myZ)+"_"+"nat"+"_"+theString[myZ-1];
-             if(theName!=NULL) delete theName;
+             if(theName!=0) delete theName;
              theName = biff;
 if(getenv("NeutronHPNames"))    G4cout <<"HPWD 2 "<<*theName<<G4endl;
              result.SetName(*theName);
@@ -137,7 +137,7 @@ if(getenv("NeutronHPNames"))    G4cout <<"HPWD 2 "<<*theName<<G4endl;
              else
              {
                 biff = new G4String(); // delete here as theName
-                if(theName!=NULL) delete theName;
+                if(theName!=0) delete theName;
                 *biff = base+"/"+rest+itoa(myZ)+"_"+"nat"+"_"+theString[myZ-1];  
                 theName = biff;
 if(getenv("NeutronHPNames"))    G4cout <<"HPWD 3 "<<*theName<<G4endl;
@@ -152,7 +152,7 @@ if(getenv("NeutronHPNames"))    G4cout <<"HPWD 3 "<<*theName<<G4endl;
        {
           biff = new G4String(); // delete here as theName
           *biff = base+"/"+rest+itoa(myZ)+"_"+itoa(myA)+"_"+theString[myZ-1];  
-          if(theName!=NULL) delete theName;
+          if(theName!=0) delete theName;
           theName = biff;
 if(getenv("NeutronHPNames"))    G4cout <<"HPWD 4 "<<*theName<<G4endl;
           result.SetName(*theName);
@@ -174,7 +174,7 @@ if(getenv("NeutronHPNames"))    G4cout <<"HPWD 4 "<<*theName<<G4endl;
              //else
              //{
                 G4cout <<"G4NeutronHPNames: Sorry, this material does not come near to any data."<<G4endl;
-                G4cout <<"G4NeutronHPNames: Please make sure NeutronHPCrossSections points to the" << G4endl;
+                G4cout <<"G4NeutronHPNames: Please make sure G4NEUTRONHPDATA points to the" << G4endl;
                 G4cout <<"                  directory, the neutron scattering data are located in." << G4endl;
                 G4cout << "G4NeutronHPNames: The material was: A="<<A<<", Z="<<Z<<G4endl;
                 throw G4HadronicException(__FILE__, __LINE__, "In case the data sets are at present not available in the neutron data library, please contact Hans-Peter.Wellisch@cern.ch");
@@ -246,9 +246,9 @@ if(getenv("NeutronHPNames"))    G4cout <<"HPWD 4 "<<*theName<<G4endl;
        if ( rest == "/CrossSection/" )
        {
           G4String reac = base;
-          G4String dir = getenv("NeutronHPCrossSections"); 
+          G4String dir = getenv("G4NEUTRONHPDATA"); 
           reac.erase ( 0 , dir.length() );
-          if ( getenv ( "NeutronHP_USE_ONLY_EXACT_FILE" ) )
+          if ( getenv ( "G4NEUTRONHP_SKIP_MISSING_ISOTOPES" ) )
           {
              G4cout << "NeutronHP: " << reac << " file for Z = " << Z << ", A = " << A << " is not found and CrossSection set to 0." << G4endl;
              G4String new_name = base+"/"+rest+"0_0_Zero";  

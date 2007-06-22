@@ -46,14 +46,14 @@ G4bool G4NeutronHPCaptureData::IsApplicable(const G4DynamicParticle*aP, const G4
 G4NeutronHPCaptureData::G4NeutronHPCaptureData()
 {
 // TKDB
-   theCrossSections = NULL;
+   theCrossSections = 0;
   BuildPhysicsTable(*G4Neutron::Neutron());
 }
    
 G4NeutronHPCaptureData::~G4NeutronHPCaptureData()
 {
 // TKDB
-   if ( theCrossSections != NULL )
+   if ( theCrossSections != 0 )
       theCrossSections->clearAndDestroy();
 
   delete theCrossSections;
@@ -66,7 +66,7 @@ void G4NeutronHPCaptureData::BuildPhysicsTable(const G4ParticleDefinition& aP)
   size_t numberOfElements = G4Element::GetNumberOfElements();
   // G4cout << "CALLED G4NeutronHPCaptureData::BuildPhysicsTable "<<numberOfElements<<G4endl;
    // TKDB
-   if ( theCrossSections == NULL ) theCrossSections = new G4PhysicsTable( numberOfElements );
+   if ( theCrossSections == 0 ) theCrossSections = new G4PhysicsTable( numberOfElements );
 
   // make a PhysicsVector for each element
 
@@ -103,7 +103,7 @@ GetCrossSection(const G4DynamicParticle* aP, const G4Element*anE, G4double aT)
   // prepare neutron
   G4double eKinetic = aP->GetKineticEnergy();
 
-  if ( getenv( "NeutronHP_NEGLECT_DOPPLER_BROADENING" ) )
+  if ( getenv( "G4NEUTRONHP_NEGLECT_DOPPLER" ) )
   {
      G4double factor = 1.0;
      if ( eKinetic < aT * k_Boltzmann ) 
@@ -158,7 +158,7 @@ GetCrossSection(const G4DynamicParticle* aP, const G4Element*anE, G4double aT)
   }
   result /= counter;
 /*
-  // Checking impact of  NeutronHP_NEGLECT_DOPPLER_BROADENING
+  // Checking impact of  G4NEUTRONHP_NEGLECT_DOPPLER
   G4cout << " result " << result << " " 
          << (*((*theCrossSections)(index))).GetValue(eKinetic, outOfRange) << " " 
          << (*((*theCrossSections)(index))).GetValue(eKinetic, outOfRange) /result << G4endl;

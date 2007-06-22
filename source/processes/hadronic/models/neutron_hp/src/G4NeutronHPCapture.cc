@@ -41,9 +41,9 @@
     SetMinEnergy( 0.0 );
     SetMaxEnergy( 20.*MeV );
 //    G4cout << "Capture : start of construction!!!!!!!!"<<G4endl;
-    if(!getenv("NeutronHPCrossSections")) 
-       throw G4HadronicException(__FILE__, __LINE__, "Please setenv NeutronHPCrossSections to point to the neutron cross-section files.");
-    dirName = getenv("NeutronHPCrossSections");
+    if(!getenv("G4NEUTRONHPDATA")) 
+       throw G4HadronicException(__FILE__, __LINE__, "Please setenv G4NEUTRONHPDATA to point to the neutron cross-section files.");
+    dirName = getenv("G4NEUTRONHPDATA");
     G4String tString = "/Capture/";
     dirName = dirName + tString;
     numEle = G4Element::GetNumberOfElements();

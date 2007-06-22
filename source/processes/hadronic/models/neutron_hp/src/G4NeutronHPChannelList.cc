@@ -48,14 +48,14 @@
   G4NeutronHPChannelList::G4NeutronHPChannelList()
   {
     nChannels = 0;
-    theChannels = NULL;
+    theChannels = 0;
     allChannelsCreated = false;
     theInitCount = 0;
   }
   
   G4NeutronHPChannelList::~G4NeutronHPChannelList()
   {
-    if(theChannels!=NULL)
+    if(theChannels!=0)
     {
       for(G4int i=0;i<nChannels; i++)
       {
