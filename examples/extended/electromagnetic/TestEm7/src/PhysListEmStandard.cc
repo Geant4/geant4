@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysListEmStandard.cc,v 1.7 2007-04-24 13:10:12 vnivanch Exp $
+// $Id: PhysListEmStandard.cc,v 1.8 2007-06-22 12:44:42 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -51,6 +51,7 @@
 
 #include "G4hIonisation.hh"
 #include "G4ionIonisation.hh"
+
 #include "G4EmProcessOptions.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -116,7 +117,8 @@ void PhysListEmStandard::ConstructProcess()
     }
   }
   G4EmProcessOptions opt;
-  opt.SetSkin(1.0);
+  opt.SetStepFunction(0.2, 100*um);
+  opt.SetSkin(1.);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
