@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33SlobedConcreteShield.cc,v 1.13 2007-06-22 12:47:16 ahoward Exp $
+// $Id: Tst33SlobedConcreteShield.cc,v 1.14 2007-06-25 11:44:41 ahoward Exp $
 // GEANT4 tag 
 //
 // ----------------------------------------------------------------------
@@ -33,6 +33,10 @@
 // Tst33SlobedConcreteShield.cc
 //
 // ----------------------------------------------------------------------
+
+#include "G4Types.hh"
+#include <sstream>
+#include <set>
 
 #include "Tst33SlobedConcreteShield.hh"
 
