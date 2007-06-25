@@ -624,7 +624,7 @@ tests                                            tests-V09-00-00
     adopt default EM physics opt2.
   o Substituted usage of 'autoptr' by normal pointers in Histo to avoid crash.
   o Fixed name of default file.
-- test33 (test33-V08-03-01)
+- test33 (test33-V08-03-02)
   o Updated to follow new biasing/scoring interface.
 - test34 (test34-V08-03-01)
   o Updated physics-list: register the fast simulation process as a discrete
