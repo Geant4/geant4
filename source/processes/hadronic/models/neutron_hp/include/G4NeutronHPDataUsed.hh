@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// 070625 add natural abundance (nat) flag by T. Koi 
+//
 #ifndef G4NeutronHPDataUsed_h
 #define G4NeutronHPDataUsed_h 1
 
@@ -37,6 +39,7 @@ class G4NeutronHPDataUsed
     theName = "";
     theA = 0;
     theZ = 0;
+     nat = false;
   }
   
   void SetA(G4double anA){theA = anA;}
@@ -52,6 +55,12 @@ class G4NeutronHPDataUsed
   G4String theName;
   G4double theA;
   G4int theZ;
+   public:
+      G4bool IsThisNaturalAbundance() { return nat; };
+      void SetNaturalAbundanceFlag() { nat = TRUE; };
+
+   private:
+      G4bool nat;
 };
 
 #endif

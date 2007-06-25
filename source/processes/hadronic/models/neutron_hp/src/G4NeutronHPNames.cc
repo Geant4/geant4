@@ -30,6 +30,8 @@
 // 24-Jan-07 Enable to use exact data only and add warnig when substitute file is used T. Koi
 // 30-Jan-07 Modified method of searching substitute isotope data by T. Koi
 // 07-06-12 fix memory leaking by T. Koi
+// 07-06-25 Change data selection logic when G4NEUTRONHP_SKIP_MISSING_ISOTOPES is turn on
+//          Natural Abundance data are allowed. by T. Koi
 //
 #include "G4NeutronHPNames.hh"
 #include "G4SandiaTable.hh"
@@ -145,6 +147,7 @@ if(getenv("NeutronHPNames"))    G4cout <<"HPWD 3 "<<*theName<<G4endl;
                 G4double natA = myZ/G4SandiaTable::GetZtoA(myZ);
                 result.SetA(natA);
                 result.SetZ(myZ);
+                result.SetNaturalAbundanceFlag();
              }
           }
        }
@@ -248,7 +251,7 @@ if(getenv("NeutronHPNames"))    G4cout <<"HPWD 4 "<<*theName<<G4endl;
           G4String reac = base;
           G4String dir = getenv("G4NEUTRONHPDATA"); 
           reac.erase ( 0 , dir.length() );
-          if ( getenv ( "G4NEUTRONHP_SKIP_MISSING_ISOTOPES" ) )
+          if ( getenv ( "G4NEUTRONHP_SKIP_MISSING_ISOTOPES" ) && !( Z == result.GetZ() && result.IsThisNaturalAbundance() ) )
           {
              G4cout << "NeutronHP: " << reac << " file for Z = " << Z << ", A = " << A << " is not found and CrossSection set to 0." << G4endl;
              G4String new_name = base+"/"+rest+"0_0_Zero";  
