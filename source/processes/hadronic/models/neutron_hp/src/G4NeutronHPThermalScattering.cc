@@ -36,6 +36,8 @@
 // the corresponding process.
 // Class Description - End
 
+// 070625 Fix memory leaking at destructor by T. Koi 
+
 #include "G4NeutronHPThermalScattering.hh"
 #include "G4Neutron.hh"
 #include "G4ElementTable.hh"
@@ -101,7 +103,67 @@ G4NeutronHPThermalScattering::G4NeutronHPThermalScattering()
 
 G4NeutronHPThermalScattering::~G4NeutronHPThermalScattering()
 {
-   ;
+
+   { // separate name scope of it 
+   std::map < G4int , std::map < G4double , std::vector < E_isoAng* >* >* >::iterator it;
+   for ( it = incoherentFSs.begin() ; it != incoherentFSs.end() ; it++ )
+   {
+      std::map < G4double , std::vector < E_isoAng* >* >::iterator itt;
+      for ( itt = it->second->begin() ; itt != it->second->end() ; itt++ )
+      {
+         std::vector< E_isoAng* >::iterator ittt;
+         for ( ittt = itt->second->begin(); ittt != itt->second->end() ; ittt++ )
+         {
+            delete *ittt;
+         }
+         delete itt->second;
+      }
+      delete it->second;
+   }
+   }
+
+   {
+   std::map < G4int , std::map < G4double , std::vector < std::pair< G4double , G4double >* >* >* >::iterator it;
+   for ( it = coherentFSs.begin() ; it != coherentFSs.end() ; it++ )
+   {
+      std::map < G4double , std::vector < std::pair< G4double , G4double >* >* >::iterator itt;
+      for ( itt = it->second->begin() ; itt != it->second->end() ; itt++ )
+      {
+         std::vector < std::pair< G4double , G4double >* >::iterator ittt;
+         for ( ittt = itt->second->begin(); ittt != itt->second->end() ; ittt++ )
+         {
+            delete *ittt;
+         }
+         delete itt->second;
+      }
+      delete it->second;
+   }
+   }
+
+   {
+   std::map < G4int ,  std::map < G4double , std::vector < E_P_E_isoAng* >* >* >::iterator it;
+   for ( it = inelasticFSs.begin() ; it != inelasticFSs.end() ; it++ )
+   {
+      std::map < G4double , std::vector < E_P_E_isoAng* >* >::iterator itt;
+      for ( itt = it->second->begin() ; itt != it->second->end() ; itt++ )
+      {
+         std::vector < E_P_E_isoAng* >::iterator ittt;
+         for ( ittt = itt->second->begin(); ittt != itt->second->end() ; ittt++ )
+         {
+            std::vector < E_isoAng* >::iterator it4;
+            for ( it4 = (*ittt)->vE_isoAngle.begin() ; it4 != (*ittt)->vE_isoAngle.end() ; it4++ )
+            {
+               delete *it4;
+            }
+            delete *ittt;
+         }
+         delete itt->second;
+      }
+      delete it->second;
+   }
+   }
+
+   delete theXSection;
 }
 
 

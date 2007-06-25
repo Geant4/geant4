@@ -40,6 +40,7 @@
 // Class Description - End
 
 // 15-Nov-06 First implementation is done by T. Koi (SLAC/SCCS)
+// 070625 create clearCurrentXSData to fix memory leaking by T. Koi
 
 #include "G4NeutronHPThermalScatteringNames.hh"
 #include "G4NeutronHPVector.hh"
@@ -77,6 +78,7 @@ class G4NeutronHPThermalScatteringData : public G4VCrossSectionDataSet
 
       G4double emax; 
    
+      void clearCurrentXSData();
 
 //              element            temp       x section from E
       std::map< G4int , std::map< G4double , G4NeutronHPVector* >* > coherent;
