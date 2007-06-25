@@ -13,6 +13,12 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+25 Jun 2007 Tatsumi Koi (hadr-hpn-V08-03-06)
+- fixes for memory leaking 
+	G4NeutronHPFissionData.cc
+	G4NeutronHPThermalScattering.cc
+	G4NeutronHPThermalScatteringData.hh
+	G4NeutronHPThermalScatteringData.cc
 
 22 Jun 2007 Gabriele Cosmo (hadr-hpn-V08-03-05)
 - Replaced following environment variables:
