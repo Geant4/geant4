@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSampler.hh,v 1.7 2007-06-22 11:47:32 ahoward Exp $
+// $Id: G4VSampler.hh,v 1.8 2007-06-25 06:57:22 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -50,7 +50,7 @@ class G4VImportanceAlgorithm;
 class G4VIStore;
 class G4VWeightWindowAlgorithm;
 class G4VWeightWindowStore;
-class G4VScorer;
+//class G4VScorer;
 
 class G4VSampler
 {
@@ -60,7 +60,8 @@ public:  // with description
   G4VSampler();
   virtual ~G4VSampler();
 
-  virtual void PrepareScoring(G4VScorer *Scorer) = 0;
+  //  virtual void PrepareScoring(G4VScorer *Scorer) = 0;
+  //  virtual void PrepareScoring() = 0;
 
   virtual void PrepareImportanceSampling(G4VIStore *istore,
                                          const G4VImportanceAlgorithm 
