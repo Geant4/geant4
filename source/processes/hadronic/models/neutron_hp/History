@@ -13,6 +13,12 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+25 Jun 2007 Tatsumi Koi (hadr-hpn-V08-03-07)
+- Changed logic of data selection when G4NEUTRONHP_SKIP_MISSING_ISOTOPES turn on
+  natural abandance data are allowed. 
+	G4NeutronHPDataUsed.hh
+	G4NeutronHPNames.cc
+
 25 Jun 2007 Tatsumi Koi (hadr-hpn-V08-03-06)
 - fixes for memory leaking 
 	G4NeutronHPFissionData.cc
