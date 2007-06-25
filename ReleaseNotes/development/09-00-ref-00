@@ -211,7 +211,7 @@ physics_lists                                    phys-lists-V08-03-06
   defined inside the constructor itself.
 - Incremented version number.
 
-processes/biasing                                procbiasing-V08-03-07
+processes/biasing                                procbiasing-V08-03-08
 -----------------
 - New module for process-based biasing.
 - Migrated classes from processes/scoring and transportation modules.
