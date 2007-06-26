@@ -248,26 +248,6 @@ G4VProcess* Test30Physics::GetProcess(const G4String& gen_name,
     theStringModel->SetFragmentationModel(theStringDecay);
 
     theModel->SetTransport(theCascade);
-    //    theQuasiElastic = new G4QuasiElasticChannel;
-    // theModel->SetQuasiElasticChannel(theQuasiElastic);
-    theModel->SetHighEnergyGenerator(theStringModel);
-    theModel->SetMinEnergy(GeV);
-
-    sg = new Test30VSecondaryGenerator(theModel, mat);
-    theProcess->SetSecondaryGenerator(sg);
-    man->AddDiscreteProcess(theProcess);
-
-  } else if(gen_name == "ftfpqel") {
-
-    G4TheoFSGenerator* theModel = new G4TheoFSGenerator;
-    G4FTFModel* theStringModel = new G4FTFModel();
-    G4GeneratorPrecompoundInterface* theCascade = 
-      new G4GeneratorPrecompoundInterface;
-    G4ExcitedStringDecay* theStringDecay = 
-      new G4ExcitedStringDecay(new G4LundStringFragmentation());
-    theStringModel->SetFragmentationModel(theStringDecay);
-
-    theModel->SetTransport(theCascade);
     theQuasiElastic = new G4QuasiElasticChannel;
     theModel->SetQuasiElasticChannel(theQuasiElastic);
     theModel->SetHighEnergyGenerator(theStringModel);
@@ -288,8 +268,8 @@ G4VProcess* Test30Physics::GetProcess(const G4String& gen_name,
     theStringModel->SetFragmentationModel(theStringDecay);
 
     theModel->SetTransport(theCascade);
-    //theQuasiElastic = new G4QuasiElasticChannel;
-    // theModel->SetQuasiElasticChannel(theQuasiElastic);
+    theQuasiElastic = new G4QuasiElasticChannel;
+    theModel->SetQuasiElasticChannel(theQuasiElastic);
     theModel->SetHighEnergyGenerator(theStringModel);
     theModel->SetMinEnergy(GeV);
 
