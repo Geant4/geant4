@@ -164,7 +164,7 @@ New UI commands are added: <TT>/process/msc/Skin</TT>,
 <B>Hadronic physics</B>
 <P> </P>
 <UL>
-  <LI>Isotope production flag is now set to OFF by default.
+  <LI>Isotope production counting flag is now set to OFF by default.
       If desired, user code must switch it on using the method 
       <TT>G4HadronicProcess::EnableIsotopeCounting()</TT>.</LI>
   <LI>The old variable <TT>NeutronHPCrossSections</TT> defining the path where
@@ -175,12 +175,22 @@ New UI commands are added: <TT>/process/msc/Skin</TT>,
       use of Photon Evaporation model instead of using the neutron capture
       final state data. The environment variable
       <TT>G4NEUTRONHP_USE_ONLY_PHOTONEVAPORATION</TT> must be
-      set to do this.</LI>
+      set to do this.  If the final state data didn't exist in G4NDL previously
+      then there is no change. </LI>
   <LI>User can now force high precison neutron code to use only exact isotope 
       data files instead of allowing nearby isotope files to be used. If the 
       exact file is not available, the cross section will be set to zero and a 
       warning message will be printed. To enable this set the environment 
       variable <TT>G4NEUTRONHP_SKIP_MISSING_ISOTOPES</TT>.</li>
+  <LI>User can now switch off Doppler broadening due to the thermal motion of
+      the target nucleus and the fact that the G4NDL data are zero temperature.
+      The environment variable <TT>G4NEUTRONHP_NEGLECT_DOPPLER</TT> is required
+      to be set.  This only neglects the Doppler broadening in the cross section
+      calculation whilst the thermal motion of the nucleus is still taken into
+      account in the Final State Generator.  This will however still give a CPU
+      performance advantage, although changing the output (for very low energy
+      neutrons).</li>
+
 </UL>
 
 <P> </P>
@@ -563,10 +573,30 @@ please refer to the related History files provided in most packages):
         and <TT>processes/scoring</TT> modules).
         The following classes are removed: <TT>G4ParallelNavigator</TT>,
         <TT>G4ParallelStepper</TT>, <TT>G4ParallelWorld</TT>,
-        <TT>G4VIStore</TT>, <TT>G4VParallelStepper</TT>, <TT>G4VPGeoDriver</TT>,
+        <TT>G4VParallelStepper</TT>, <TT>G4VPGeoDriver</TT>,
         <TT>G4VScorer</TT>, <TT>G4ImportanceSplitExaminer</TT>,
         <TT>G4VImportanceSplitExaminer</TT>, <TT>G4VWeightWindowExaminer</TT>,
         <TT>G4WeightWindowExaminer</TT>.</LI>
+    <LI>The parallel geometry now has to inherit from
+        <TT>G4VUserParallelWorld</TT> which also has the <TT>GetWorld()</TT> method
+        in order to retrieve a copy of the mass geometry WorldVolume.</LI>
+    <LI>The different parallel and mass sampler classes have been combined into
+        one <TT>G4GeometrySampler</TT> class which requires the following
+	instantiation:  <TT>mgs(detector->GetWorldVolume(),"neutron");</TT>
+	with an additional set method for whether or not the sampler is a
+	parallel geometry: <TT>mgs.SetParallel(false);</TT></LI>
+    <LI>The parallel navigation is now automatically taken care of via
+        <TT>G4CoupledTransportation</TT> which is picked up by the creation of
+	the parallel world copy.</LI>
+    <LI>The scoring can now only be implemented through the Primitive Scorer
+        classes in a standard Geant4 manner.  The same functionality (apart from
+	the G4ScoreTable) should be present, but the scorers are now attached to
+	logical volumes.  This requires explicit copy numbers to be utilised for
+	the same logical volume and the GeometryCell methods should be accessed
+	through the physical volume <B>and</B> replica number method and not
+	the alternative physical volume only method.</LI>
+    <LI>The <TT>examples/extended/biasing/B01</TT> and <TT>B02</TT> demonstrate
+        the new implementation of both scoring and biasing.</LI>
     </UL></LI>
 <LI><B>Magnetic field</B>
     <UL>
@@ -991,6 +1021,10 @@ please refer to the related History files provided in most packages):
             in <TT>DMXPhysicsList</TT>.</LI>
         <LI>Changed to <TT>hIonisation</TT> from <TT>hLowEnergyIonisation</TT>.</LI>
         </UL></LI>
+    <LI>Tiara
+        <UL>
+        <LI>Not currently supported and not migrated to new python, scoring or biasing.</LI>
+        </UL></LI>
     </UL></LI>
 <LI><B>extended</B>
     <UL>
@@ -1000,7 +1034,7 @@ please refer to the related History files provided in most packages):
         </UL></LI>
     <LI>biasing
         <UL>
-        <LI>Migrated example B01 to new biasing/scoring scheme.</LI>
+        <LI>Migrated example B01 and B02 to new biasing/scoring scheme.</LI>
         <LI>Removed B03 (redundant/obsolete use of Python).</LI>
         </UL></LI>
     <LI>electromagnetic/TestEm0
