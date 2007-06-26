@@ -202,6 +202,7 @@ if [ `uname -n | grep tersk08` ]; then
   #######export G4VIS_BUILD_OIX_DRIVER=1
   
   export G4LEDATA=$G4WORKDIR/data/G4EMLOW
+  export G4NEUTRONHPDATA=$G4WORKDIR/data/G4NDL
   export NeutronHPCrossSections=$G4WORKDIR/data/G4NDL
   export G4LEVELGAMMADATA=$G4WORKDIR/data/PhotonEvaporation
   export G4ELASTICDATA=$G4WORKDIR/data/G4ELASTIC
