@@ -1,4 +1,4 @@
-# $Id: architecture.gmk,v 1.108 2007-05-12 15:57:08 gcosmo Exp $
+# $Id: architecture.gmk,v 1.109 2007-06-26 13:09:03 gcosmo Exp $
 # ------------------------------------------------------------------------
 #       GEANT 4 - Architecture configuration script for GNU Make
 #
@@ -17,7 +17,7 @@
 #
 #          SUN-CC      SunOS 5.8, CC 5.5
 #
-#          WIN32-VC    Windows/XP and Microsoft Visual C++ 7.1 .NET
+#          WIN32-VC    Windows/XP and Microsoft Visual C++ 8.0
 #                      Adding CYGWIN32 tools
 # -------------------------------------------------------------------------
 
