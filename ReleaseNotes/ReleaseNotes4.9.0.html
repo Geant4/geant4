@@ -135,9 +135,8 @@ and <TT>GetAngularTolerance()</TT>.
 <B>Standard Electromagnetic physics</B>
 <P> </P>
 
-Old implementations of physics processes from release 5.2 have been removed.
-Few implementations of processes (multiple-scattering) from release 7.1 are
-still available.
+Old implementations of physics processes from release 5.2 have been removed 
+(see below detailed list of changings).
 The interfaces <TT>G4VEmModel</TT>, <TT>G4VEnergyLossProcess</TT>,
 <TT>G4VEmProcess</TT>, <TT>G4VMultipleScattering</TT> were slightly modified
 in order to speed up computations. All classes inheriting these interfaces need
@@ -193,7 +192,8 @@ variants are now available:
 <LI><TT>G4EmStandardPhysics_option1</TT> - providing similar physics to
     that implemented in release 7.1</LI>
 <LI><TT>G4EmStandardPhysics_option2</TT> - using <TT>sub-cutoff</TT>
-    options.</LI>
+    options, which enables lower production thresholds for delta-electrons
+    near geometry boundary.</LI>
 </UL>
 
 <P> </P>
@@ -217,9 +217,10 @@ This release introduced three new versions of data sets:
 
 <B>Standard Electromagnetic physics</B>
 <UL>
-  <LI>Results for calorimetry are expected to be unchanged with high precision.
+  <LI>Results for calorimetry are expected to be unchanged within 0.5%.
       The width of energy deposition in thin layers (vertex detectors) should
-      be more close to data. About 10% speedup of simulation of EM showers 
+      be more close to data - current accuracy is few percent. 
+      About 10% speedup of simulation of EM showers 
       is expected for default physics lists (QGSP) and about 5% for more fast 
       optional physics lists (QGSP_EMV).</LI>
 </UL>
