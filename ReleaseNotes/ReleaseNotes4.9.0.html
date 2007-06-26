@@ -122,14 +122,15 @@ a recompilation of user applications is anyhow required.
 <P> </P>
 <B>Geometry</B>
 <P> </P>
-The static constants <TT>kCarTolerance</TT>, <TT>kRadTolerance</TT>
-and <TT>kAngTolerance</TT> which used to be defined at global scope, have been
-now removed.<BR>
-Advanced applications making use of such constants are required to retrieve
-the values for Cartesian, Angular and Radial tolerances through the new class
-<TT>G4GeometryTolerance</TT>, a singleton class providing the methods,
+The static constants for the geometrical tolerance <TT>kCarTolerance</TT>,
+<TT>kRadTolerance</TT> and <TT>kAngTolerance</TT> which used to be defined
+at global scope, have been now removed.<BR>
+Advanced applications making use of such constants in the code are required
+to retrieve the values for Cartesian, Angular and Radial tolerances through
+the class <TT>G4GeometryTolerance</TT>, a new class providing the methods,
 respectively: <TT>GetSurfaceTolerance()</TT>, <TT>GetRadialTolerance()</TT>
-and <TT>GetAngularTolerance()</TT>.
+and <TT>GetAngularTolerance()</TT> (see the User's Guide for Application
+Developers for the details).
 
 <P> </P>
 <B>Standard Electromagnetic physics</B>
@@ -168,7 +169,8 @@ New UI commands are added: <TT>/process/msc/Skin</TT>,
       <TT>G4HadronicProcess::EnableIsotopeCounting()</TT>.</LI>
   <LI>The old variable <TT>NeutronHPCrossSections</TT> defining the path where
       to load the G4NDL data set has been renamed to <TT>G4NEUTRONHPDATA</TT>,
-      therefore the user environment must be changed accordingly.</LI>
+      so that this variable shares the G4 prefix used for other environment
+      variables; therefore the user environment must be changed accordingly.</LI>
   <LI>When using high precision neutron code, user may now choose to force the 
       use of Photon Evaporation model instead of using the neutron capture
       final state data. The environment variable
@@ -192,7 +194,7 @@ variants are now available:
 <LI><TT>G4EmStandardPhysics_option1</TT> - providing similar physics to
     that implemented in release 7.1</LI>
 <LI><TT>G4EmStandardPhysics_option2</TT> - using <TT>sub-cutoff</TT>
-    options, which enables lower production thresholds for delta-electrons
+    options, which enable lower production thresholds for delta-electrons
     near geometry boundary.</LI>
 </UL>
 
@@ -239,11 +241,6 @@ This release introduced three new versions of data sets:
       At higher energies the effect is small. Benchmark tests show little
       change in shower shape.</LI>
 </UL>  
-
-<B>Physics Lists</B>
-<UL>
-<LI>TEXT HERE !!!!!!!!!!!!!!!!!!!</LI>
-</UL>
 
 <P> </P>
 <A NAME="5."></A>
