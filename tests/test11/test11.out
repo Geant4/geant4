@@ -10,46 +10,46 @@ SimpleBox is now made of Pb
 # /run/verbose 2
 /run/particle/setCut 1 m
 /run/initialize
-NeutronHP: /Elastic/ file for Z = 8, A = 18 is not found and NeutronHP will use /afs/slac/package/geant4/vol45/data/G4NDL3.11/Elastic///CrossSection/8_17_Oxygen
-NeutronHP: /Elastic/ file for Z = 6, A = 13 is not found and NeutronHP will use /afs/slac/package/geant4/vol45/data/G4NDL3.11/Elastic///CrossSection/6_nat_Carbon
-NeutronHP: /Elastic/ file for Z = 30, A = 64 is not found and NeutronHP will use /afs/slac/package/geant4/vol45/data/G4NDL3.11/Elastic///CrossSection/31_nat_Gallium
-NeutronHP: /Elastic/ file for Z = 30, A = 66 is not found and NeutronHP will use /afs/slac/package/geant4/vol45/data/G4NDL3.11/Elastic///CrossSection/31_nat_Gallium
-NeutronHP: /Elastic/ file for Z = 30, A = 67 is not found and NeutronHP will use /afs/slac/package/geant4/vol45/data/G4NDL3.11/Elastic///CrossSection/31_nat_Gallium
-NeutronHP: /Elastic/ file for Z = 30, A = 68 is not found and NeutronHP will use /afs/slac/package/geant4/vol45/data/G4NDL3.11/Elastic///CrossSection/31_nat_Gallium
-NeutronHP: /Elastic/ file for Z = 30, A = 70 is not found and NeutronHP will use /afs/slac/package/geant4/vol45/data/G4NDL3.11/Elastic///CrossSection/31_nat_Gallium
-NeutronHP: /Capture file for Z = 8, A = 18 is not found and NeutronHP will use /afs/slac/package/geant4/vol45/data/G4NDL3.11/Capture//CrossSection/8_17_Oxygen
-NeutronHP: /Elastic file for Z = 8, A = 18 is not found and NeutronHP will use /afs/slac/package/geant4/vol45/data/G4NDL3.11/Elastic//CrossSection/8_17_Oxygen
-NeutronHP: /Inelastic file for Z = 8, A = 18 is not found and NeutronHP will use /afs/slac/package/geant4/vol45/data/G4NDL3.11/Inelastic//CrossSection/8_17_Oxygen
-NeutronHP: /Inelastic file for Z = 1, A = 1 is not found and NeutronHP will use /afs/slac/package/geant4/vol45/data/G4NDL3.11/Inelastic//CrossSection/1_2_Hydrogen
-NeutronHP: /Capture file for Z = 2, A = 4 is not found and NeutronHP will use /afs/slac/package/geant4/vol45/data/G4NDL3.11/Capture//CrossSection/2_3_Helium
-NeutronHP: /Inelastic file for Z = 2, A = 4 is not found and NeutronHP will use /afs/slac/package/geant4/vol45/data/G4NDL3.11/Inelastic//CrossSection/2_3_Helium
-NeutronHP: /Capture file for Z = 6, A = 13 is not found and NeutronHP will use /afs/slac/package/geant4/vol45/data/G4NDL3.11/Capture//CrossSection/6_nat_Carbon
-NeutronHP: /Elastic file for Z = 6, A = 13 is not found and NeutronHP will use /afs/slac/package/geant4/vol45/data/G4NDL3.11/Elastic//CrossSection/6_nat_Carbon
-NeutronHP: /Inelastic file for Z = 6, A = 13 is not found and NeutronHP will use /afs/slac/package/geant4/vol45/data/G4NDL3.11/Inelastic//CrossSection/6_nat_Carbon
-NeutronHP: /Capture file for Z = 30, A = 64 is not found and NeutronHP will use /afs/slac/package/geant4/vol45/data/G4NDL3.11/Capture//CrossSection/31_nat_Gallium
-NeutronHP: /Elastic file for Z = 30, A = 64 is not found and NeutronHP will use /afs/slac/package/geant4/vol45/data/G4NDL3.11/Elastic//CrossSection/31_nat_Gallium
-NeutronHP: /Inelastic file for Z = 30, A = 64 is not found and NeutronHP will use /afs/slac/package/geant4/vol45/data/G4NDL3.11/Inelastic//CrossSection/31_nat_Gallium
-NeutronHP: /Capture file for Z = 30, A = 66 is not found and NeutronHP will use /afs/slac/package/geant4/vol45/data/G4NDL3.11/Capture//CrossSection/31_nat_Gallium
-NeutronHP: /Elastic file for Z = 30, A = 66 is not found and NeutronHP will use /afs/slac/package/geant4/vol45/data/G4NDL3.11/Elastic//CrossSection/31_nat_Gallium
-NeutronHP: /Inelastic file for Z = 30, A = 66 is not found and NeutronHP will use /afs/slac/package/geant4/vol45/data/G4NDL3.11/Inelastic//CrossSection/31_nat_Gallium
-NeutronHP: /Capture file for Z = 30, A = 67 is not found and NeutronHP will use /afs/slac/package/geant4/vol45/data/G4NDL3.11/Capture//CrossSection/31_nat_Gallium
-NeutronHP: /Elastic file for Z = 30, A = 67 is not found and NeutronHP will use /afs/slac/package/geant4/vol45/data/G4NDL3.11/Elastic//CrossSection/31_nat_Gallium
-NeutronHP: /Inelastic file for Z = 30, A = 67 is not found and NeutronHP will use /afs/slac/package/geant4/vol45/data/G4NDL3.11/Inelastic//CrossSection/31_nat_Gallium
-NeutronHP: /Capture file for Z = 30, A = 68 is not found and NeutronHP will use /afs/slac/package/geant4/vol45/data/G4NDL3.11/Capture//CrossSection/31_nat_Gallium
-NeutronHP: /Elastic file for Z = 30, A = 68 is not found and NeutronHP will use /afs/slac/package/geant4/vol45/data/G4NDL3.11/Elastic//CrossSection/31_nat_Gallium
-NeutronHP: /Inelastic file for Z = 30, A = 68 is not found and NeutronHP will use /afs/slac/package/geant4/vol45/data/G4NDL3.11/Inelastic//CrossSection/31_nat_Gallium
-NeutronHP: /Capture file for Z = 30, A = 70 is not found and NeutronHP will use /afs/slac/package/geant4/vol45/data/G4NDL3.11/Capture//CrossSection/31_nat_Gallium
-NeutronHP: /Elastic file for Z = 30, A = 70 is not found and NeutronHP will use /afs/slac/package/geant4/vol45/data/G4NDL3.11/Elastic//CrossSection/31_nat_Gallium
-NeutronHP: /Inelastic file for Z = 30, A = 70 is not found and NeutronHP will use /afs/slac/package/geant4/vol45/data/G4NDL3.11/Inelastic//CrossSection/31_nat_Gallium
-/afs/slac/package/geant4/vol45/data/G4NDL3.11
-NeutronHP: /Capture/ file for Z = 8, A = 18 is not found and NeutronHP will use /afs/slac/package/geant4/vol45/data/G4NDL3.11/Capture///CrossSection/8_17_Oxygen
-NeutronHP: /Capture/ file for Z = 2, A = 4 is not found and NeutronHP will use /afs/slac/package/geant4/vol45/data/G4NDL3.11/Capture///CrossSection/2_3_Helium
-NeutronHP: /Capture/ file for Z = 6, A = 13 is not found and NeutronHP will use /afs/slac/package/geant4/vol45/data/G4NDL3.11/Capture///CrossSection/6_nat_Carbon
-NeutronHP: /Capture/ file for Z = 30, A = 64 is not found and NeutronHP will use /afs/slac/package/geant4/vol45/data/G4NDL3.11/Capture///CrossSection/31_nat_Gallium
-NeutronHP: /Capture/ file for Z = 30, A = 66 is not found and NeutronHP will use /afs/slac/package/geant4/vol45/data/G4NDL3.11/Capture///CrossSection/31_nat_Gallium
-NeutronHP: /Capture/ file for Z = 30, A = 67 is not found and NeutronHP will use /afs/slac/package/geant4/vol45/data/G4NDL3.11/Capture///CrossSection/31_nat_Gallium
-NeutronHP: /Capture/ file for Z = 30, A = 68 is not found and NeutronHP will use /afs/slac/package/geant4/vol45/data/G4NDL3.11/Capture///CrossSection/31_nat_Gallium
-NeutronHP: /Capture/ file for Z = 30, A = 70 is not found and NeutronHP will use /afs/slac/package/geant4/vol45/data/G4NDL3.11/Capture///CrossSection/31_nat_Gallium
+NeutronHP: /Elastic/ file for Z = 8, A = 18 is not found and NeutronHP will use /afs/cern.ch/sw/geant4/dev/data/G4NDL/Elastic///CrossSection/8_17_Oxygen
+NeutronHP: /Elastic/ file for Z = 6, A = 13 is not found and NeutronHP will use /afs/cern.ch/sw/geant4/dev/data/G4NDL/Elastic///CrossSection/6_nat_Carbon
+NeutronHP: /Elastic/ file for Z = 30, A = 64 is not found and NeutronHP will use /afs/cern.ch/sw/geant4/dev/data/G4NDL/Elastic///CrossSection/31_nat_Gallium
+NeutronHP: /Elastic/ file for Z = 30, A = 66 is not found and NeutronHP will use /afs/cern.ch/sw/geant4/dev/data/G4NDL/Elastic///CrossSection/31_nat_Gallium
+NeutronHP: /Elastic/ file for Z = 30, A = 67 is not found and NeutronHP will use /afs/cern.ch/sw/geant4/dev/data/G4NDL/Elastic///CrossSection/31_nat_Gallium
+NeutronHP: /Elastic/ file for Z = 30, A = 68 is not found and NeutronHP will use /afs/cern.ch/sw/geant4/dev/data/G4NDL/Elastic///CrossSection/31_nat_Gallium
+NeutronHP: /Elastic/ file for Z = 30, A = 70 is not found and NeutronHP will use /afs/cern.ch/sw/geant4/dev/data/G4NDL/Elastic///CrossSection/31_nat_Gallium
+NeutronHP: /Capture file for Z = 8, A = 18 is not found and NeutronHP will use /afs/cern.ch/sw/geant4/dev/data/G4NDL/Capture//CrossSection/8_17_Oxygen
+NeutronHP: /Elastic file for Z = 8, A = 18 is not found and NeutronHP will use /afs/cern.ch/sw/geant4/dev/data/G4NDL/Elastic//CrossSection/8_17_Oxygen
+NeutronHP: /Inelastic file for Z = 8, A = 18 is not found and NeutronHP will use /afs/cern.ch/sw/geant4/dev/data/G4NDL/Inelastic//CrossSection/8_17_Oxygen
+NeutronHP: /Inelastic file for Z = 1, A = 1 is not found and NeutronHP will use /afs/cern.ch/sw/geant4/dev/data/G4NDL/Inelastic//CrossSection/1_2_Hydrogen
+NeutronHP: /Capture file for Z = 2, A = 4 is not found and NeutronHP will use /afs/cern.ch/sw/geant4/dev/data/G4NDL/Capture//CrossSection/2_3_Helium
+NeutronHP: /Inelastic file for Z = 2, A = 4 is not found and NeutronHP will use /afs/cern.ch/sw/geant4/dev/data/G4NDL/Inelastic//CrossSection/2_3_Helium
+NeutronHP: /Capture file for Z = 6, A = 13 is not found and NeutronHP will use /afs/cern.ch/sw/geant4/dev/data/G4NDL/Capture//CrossSection/6_nat_Carbon
+NeutronHP: /Elastic file for Z = 6, A = 13 is not found and NeutronHP will use /afs/cern.ch/sw/geant4/dev/data/G4NDL/Elastic//CrossSection/6_nat_Carbon
+NeutronHP: /Inelastic file for Z = 6, A = 13 is not found and NeutronHP will use /afs/cern.ch/sw/geant4/dev/data/G4NDL/Inelastic//CrossSection/6_nat_Carbon
+NeutronHP: /Capture file for Z = 30, A = 64 is not found and NeutronHP will use /afs/cern.ch/sw/geant4/dev/data/G4NDL/Capture//CrossSection/31_nat_Gallium
+NeutronHP: /Elastic file for Z = 30, A = 64 is not found and NeutronHP will use /afs/cern.ch/sw/geant4/dev/data/G4NDL/Elastic//CrossSection/31_nat_Gallium
+NeutronHP: /Inelastic file for Z = 30, A = 64 is not found and NeutronHP will use /afs/cern.ch/sw/geant4/dev/data/G4NDL/Inelastic//CrossSection/31_nat_Gallium
+NeutronHP: /Capture file for Z = 30, A = 66 is not found and NeutronHP will use /afs/cern.ch/sw/geant4/dev/data/G4NDL/Capture//CrossSection/31_nat_Gallium
+NeutronHP: /Elastic file for Z = 30, A = 66 is not found and NeutronHP will use /afs/cern.ch/sw/geant4/dev/data/G4NDL/Elastic//CrossSection/31_nat_Gallium
+NeutronHP: /Inelastic file for Z = 30, A = 66 is not found and NeutronHP will use /afs/cern.ch/sw/geant4/dev/data/G4NDL/Inelastic//CrossSection/31_nat_Gallium
+NeutronHP: /Capture file for Z = 30, A = 67 is not found and NeutronHP will use /afs/cern.ch/sw/geant4/dev/data/G4NDL/Capture//CrossSection/31_nat_Gallium
+NeutronHP: /Elastic file for Z = 30, A = 67 is not found and NeutronHP will use /afs/cern.ch/sw/geant4/dev/data/G4NDL/Elastic//CrossSection/31_nat_Gallium
+NeutronHP: /Inelastic file for Z = 30, A = 67 is not found and NeutronHP will use /afs/cern.ch/sw/geant4/dev/data/G4NDL/Inelastic//CrossSection/31_nat_Gallium
+NeutronHP: /Capture file for Z = 30, A = 68 is not found and NeutronHP will use /afs/cern.ch/sw/geant4/dev/data/G4NDL/Capture//CrossSection/31_nat_Gallium
+NeutronHP: /Elastic file for Z = 30, A = 68 is not found and NeutronHP will use /afs/cern.ch/sw/geant4/dev/data/G4NDL/Elastic//CrossSection/31_nat_Gallium
+NeutronHP: /Inelastic file for Z = 30, A = 68 is not found and NeutronHP will use /afs/cern.ch/sw/geant4/dev/data/G4NDL/Inelastic//CrossSection/31_nat_Gallium
+NeutronHP: /Capture file for Z = 30, A = 70 is not found and NeutronHP will use /afs/cern.ch/sw/geant4/dev/data/G4NDL/Capture//CrossSection/31_nat_Gallium
+NeutronHP: /Elastic file for Z = 30, A = 70 is not found and NeutronHP will use /afs/cern.ch/sw/geant4/dev/data/G4NDL/Elastic//CrossSection/31_nat_Gallium
+NeutronHP: /Inelastic file for Z = 30, A = 70 is not found and NeutronHP will use /afs/cern.ch/sw/geant4/dev/data/G4NDL/Inelastic//CrossSection/31_nat_Gallium
+/afs/cern.ch/sw/geant4/dev/data/G4NDL
+NeutronHP: /Capture/ file for Z = 8, A = 18 is not found and NeutronHP will use /afs/cern.ch/sw/geant4/dev/data/G4NDL/Capture///CrossSection/8_17_Oxygen
+NeutronHP: /Capture/ file for Z = 2, A = 4 is not found and NeutronHP will use /afs/cern.ch/sw/geant4/dev/data/G4NDL/Capture///CrossSection/2_3_Helium
+NeutronHP: /Capture/ file for Z = 6, A = 13 is not found and NeutronHP will use /afs/cern.ch/sw/geant4/dev/data/G4NDL/Capture///CrossSection/6_nat_Carbon
+NeutronHP: /Capture/ file for Z = 30, A = 64 is not found and NeutronHP will use /afs/cern.ch/sw/geant4/dev/data/G4NDL/Capture///CrossSection/31_nat_Gallium
+NeutronHP: /Capture/ file for Z = 30, A = 66 is not found and NeutronHP will use /afs/cern.ch/sw/geant4/dev/data/G4NDL/Capture///CrossSection/31_nat_Gallium
+NeutronHP: /Capture/ file for Z = 30, A = 67 is not found and NeutronHP will use /afs/cern.ch/sw/geant4/dev/data/G4NDL/Capture///CrossSection/31_nat_Gallium
+NeutronHP: /Capture/ file for Z = 30, A = 68 is not found and NeutronHP will use /afs/cern.ch/sw/geant4/dev/data/G4NDL/Capture///CrossSection/31_nat_Gallium
+NeutronHP: /Capture/ file for Z = 30, A = 70 is not found and NeutronHP will use /afs/cern.ch/sw/geant4/dev/data/G4NDL/Capture///CrossSection/31_nat_Gallium
 Tst11PhysicsList::SetCuts:CutLength : 1000 (mm)
 /gun/direction 0 0 1
 #
@@ -3215,7 +3215,6 @@ SimpleBox is now made of G4_Ge
 /mydet/SelectMaterial G4_Ge
 SimpleBox is now made of G4_Ge
 /run/beamOn 1
- G4NuclearLevelManager: nuclide (32,74) does not have a gamma levels file
 #
 # neutron at 10 eV  in G4_Ge
 #
@@ -3390,7 +3389,6 @@ hIoni:   tables are built for  pi-
 /mydet/SelectMaterial G4_Ag
 SimpleBox is now made of G4_Ag
 /run/beamOn 1
- G4NuclearLevelManager: nuclide (47,108) does not have a gamma levels file
 #
 # neutron at 100 keV in G4_Ag
 #
@@ -3431,7 +3429,6 @@ SimpleBox is now made of G4_Ag
 /mydet/SelectMaterial G4_Ag
 SimpleBox is now made of G4_Ag
 /run/beamOn 1
- G4NuclearLevelManager: nuclide (47,110) does not have a gamma levels file
 #
 # neutron at 1 eV  in G4_Ag
 #
@@ -3852,35 +3849,3 @@ SimpleBox is now made of G4_U
 /mydet/SelectMaterial G4_U
 SimpleBox is now made of G4_U
 /run/beamOn 1
-
-------------------------------------------------------------
-Sender: LSF System <lsf@cob0353>
-Subject: Job 153540: <../../bin/Linux-g++/test11 test.in> Done
-
-Job <../../bin/Linux-g++/test11 test.in> was submitted from host <noric01> by user <tkoi>.
-Job was executed on host(s) <cob0353>, in queue <medium>, as user <tkoi>.
-</u/sf/tkoi> was used as the home directory.
-</afs/slac.stanford.edu/package/geant4/vol43/geant4/work/test11> was used as the working directory.
-Started at Thu May 31 17:19:30 2007
-Results reported at Thu May 31 17:19:55 2007
-
-Your job looked like:
-
-------------------------------------------------------------
-# LSBATCH: User input
-../../bin/Linux-g++/test11 test.in
-------------------------------------------------------------
-
-Successfully completed.
-
-Resource usage summary:
-
-    CPU time   :     19.89 sec.
-    Max Memory :         1 MB
-    Max Swap   :         4 MB
-
-    Max Processes  :         1
-    Max Threads    :         1
-
-The output (if any) is above this job summary.
-

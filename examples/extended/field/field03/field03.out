@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-08-03-cand-00    (5-May-2007)
+ Geant4 version Name: geant4-09-00-cand-03    (29-June-2007)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -63,7 +63,6 @@ You have successfully registered the following graphics systems.
 Current available graphics systems are:
   ASCIITree (ATree)
   DAWNFILE (DAWNFILE)
-  GAGTree (GAGTree)
   G4HepRep (HepRepXML)
   G4HepRepFile (HepRepFile)
   RayTracer (RayTracer)
@@ -128,7 +127,7 @@ eBrem:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
-      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
 
 eIoni:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -141,12 +140,12 @@ eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
-      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
 
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       LateralDisplacementFlag=  1   Skin= 0
-      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
 
 hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -159,7 +158,7 @@ hIoni:   tables are built for  proton
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       LateralDisplacementFlag=  1   Skin= 0
-      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
 
 muIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -206,7 +205,7 @@ hIoni:   tables are built for  pi+
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       LateralDisplacementFlag=  1   Skin= 0
-      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
 
 hIoni:   tables are built for  pi-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -240,7 +239,6 @@ Start Run processing.
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
     0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
-G4GlobalFastSimulationManager::GetFlavoredWorldForThis(...): DEPRECATING, will be dropped @ next major release
     1          0 fm  4.0138452 cm   21.79201 m         500 MeV0.00049462122 eV  20.288442 cm  20.288442 cm      World  Transportation           0 fm    390.36094 um    -920.6619 um 
     2          0 fm  6.5801506 cm      21.74 m         500 MeV0.00014147067 eV  5.8028637 cm  26.091306 cm   RadSlice  Transportation           0 fm    493.16452 um   -869.93607 um 
     3          0 fm  19.942497 cm   21.58699 m         500 MeV0.00049864186 eV  20.453361 cm  46.544667 cm   Radiator  Transportation           0 fm    795.60591 um   -605.81452 um 
@@ -250,13 +248,11 @@ G4GlobalFastSimulationManager::GetFlavoredWorldForThis(...): DEPRECATING, will b
     7          0 fm  1.0118328 m     21.9895 m         500 MeV0.0003699973 eV  15.176601 cm  1.5893831 m       World  Transportation           0 fm    2.1791515 Ang        1000 um 
     8          0 fm  1.0118318 m     21.9905 m         500 MeV2.4379474e-06 eV  1.0000007 mm  1.5903831 m    Absorber  Transportation           0 fm   -1.9763932 um    999.99805 um 
     9          0 fm  1.0117238 m          22 m         500 MeV2.3162324e-05 eV  9.5007541 mm  1.5998839 m  OutOfWorld  Transportation           0 fm   -20.754201 um    999.78461 um 
-G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.02s Real=0.06s Sys=0s
+  User=0.03s Real=0.06s Sys=0s
 ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
-G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
 
 ========= Table of registered couples ==============================
 
@@ -269,25 +265,18 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 
 ====================================================================
 
-G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
 ### Run 1 start.
 WARNING: Scene "refresh" not found.
   /vis/scene/list to see scenes.
 Start Run processing.
-G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
 
 ---> Begin of Event: 0
-G4GlobalFastSimulationManager::GetFlavoredWorldForThis(...): DEPRECATING, will be dropped @ next major release
-G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
-G4GlobalFastSimulationManager::GetFlavoredWorldForThis(...): DEPRECATING, will be dropped @ next major release
-G4GlobalFastSimulationManager::GetFlavoredWorldForThis(...): DEPRECATING, will be dropped @ next major release
-G4GlobalFastSimulationManager::GetFlavoredWorldForThis(...): DEPRECATING, will be dropped @ next major release
 
 ---> Begin of Event: 50
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.82s Real=0.82s Sys=0s
+  User=0.8s Real=0.8s Sys=0s
 ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
 Set field value to (0,0,1000) Gauss 
 
@@ -311,7 +300,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.11s Real=0.11s Sys=0s
+  User=0.12s Real=0.12s Sys=0s
 ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
 Graphics systems deleted.
 Visualization Manager deleting...

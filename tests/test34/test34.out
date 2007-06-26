@@ -5,7 +5,7 @@
 +-------------------------------------------------------+
 
 *************************************************************
- Geant4 version Name: geant4-08-03-cand-00    (5-May-2007)
+ Geant4 version Name: geant4-09-00-cand-03    (29-June-2007)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -37,7 +37,6 @@ FastSimulationManagerProcess
 AddParameterisation
 Physics List constructor
 ConstructEM
-G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
 
 conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
       sampling secondary e+e- according Bethe-Heitler model
@@ -55,7 +54,7 @@ phot:  Total cross sections from Sandia parametrisation.
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       LateralDisplacementFlag=  1   Skin= 0
-      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
 
 eIoni:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -68,7 +67,7 @@ eBrem:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
-      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
 
 eIoni:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -81,7 +80,7 @@ eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
-      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
 
 annihil:       Sampling according eplus2gg model
       tables are built for  e+
@@ -98,11 +97,11 @@ hIoni:   tables are built for  proton
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       LateralDisplacementFlag=  1   Skin= 0
-      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
 
 msc:  Model variant of multiple scattering for GenericIon
       LateralDisplacementFlag=  0   Skin= 0
-      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+      Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 1
 
 hIoni:   tables are built for  anti_proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -122,7 +121,7 @@ muIoni:   tables are built for  mu+
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       LateralDisplacementFlag=  1   Skin= 0
-      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
 
 muBrems:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -170,7 +169,7 @@ hIoni:   tables are built for  pi-
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       LateralDisplacementFlag=  1   Skin= 0
-      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
 
 ========= Table of registered couples ==============================
 
@@ -190,42 +189,33 @@ Index : 1     used in the geometry : Yes     recalculation needed : No
 
 ====================================================================
 
-G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
 ### Run 0 start.
-G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
 ::Initializing the sensitive detector
  ------ Start Tst34EventAction ----- 
  Start generating event Nr 0
 
-G4GlobalFastSimulationManager::GetFlavoredWorldForThis(...): DEPRECATING, will be dropped @ next major release
-G4GlobalFastSimulationManager::GetFlavoredWorldForThis(...): DEPRECATING, will be dropped @ next major release
-G4GlobalFastSimulationManager::GetFlavoredWorldForThis(...): DEPRECATING, will be dropped @ next major release
-G4GlobalFastSimulationManager::GetFlavoredWorldForThis(...): DEPRECATING, will be dropped @ next major release
-G4GlobalFastSimulationManager::GetFlavoredWorldForThis(...): DEPRECATING, will be dropped @ next major release
 
 ******************************************
-Internal Real Elapsed Time is: 0.21
+Internal Real Elapsed Time is: 0.23
 Internal System Elapsed Time: 0.01
 Internal GetUserElapsed Time: 0.19
 ******************************************
  ------ Tst34EventAction::End of event nr. 0  -----
-  5320 hits are stored in Tst34HitsCollection 
- #### Tst34EventAction::Test: Total energy deposited in the calorimeter: 19.9527 (GeV)
-G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
-G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release
+  5310 hits are stored in Tst34HitsCollection 
+ #### Tst34EventAction::Test: Total energy deposited in the calorimeter: 19.956 (GeV)
 ::Initializing the sensitive detector
  ------ Start Tst34EventAction ----- 
  Start generating event Nr 1
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.18
+Internal Real Elapsed Time is: 0.19
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.18
+Internal GetUserElapsed Time: 0.19
 ******************************************
  ------ Tst34EventAction::End of event nr. 1  -----
-  5288 hits are stored in Tst34HitsCollection 
- #### Tst34EventAction::Test: Total energy deposited in the calorimeter: 19.9366 (GeV)
+  5317 hits are stored in Tst34HitsCollection 
+ #### Tst34EventAction::Test: Total energy deposited in the calorimeter: 19.9676 (GeV)
 ::Initializing the sensitive detector
  ------ Start Tst34EventAction ----- 
  Start generating event Nr 2
@@ -237,34 +227,34 @@ Internal System Elapsed Time: 0
 Internal GetUserElapsed Time: 0.18
 ******************************************
  ------ Tst34EventAction::End of event nr. 2  -----
-  5302 hits are stored in Tst34HitsCollection 
- #### Tst34EventAction::Test: Total energy deposited in the calorimeter: 19.9375 (GeV)
+  5307 hits are stored in Tst34HitsCollection 
+ #### Tst34EventAction::Test: Total energy deposited in the calorimeter: 19.9636 (GeV)
 ::Initializing the sensitive detector
  ------ Start Tst34EventAction ----- 
  Start generating event Nr 3
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.17
-Internal System Elapsed Time: 0
+Internal Real Elapsed Time is: 0.18
+Internal System Elapsed Time: 0.01
 Internal GetUserElapsed Time: 0.17
 ******************************************
  ------ Tst34EventAction::End of event nr. 3  -----
-  5336 hits are stored in Tst34HitsCollection 
- #### Tst34EventAction::Test: Total energy deposited in the calorimeter: 19.9721 (GeV)
+  5308 hits are stored in Tst34HitsCollection 
+ #### Tst34EventAction::Test: Total energy deposited in the calorimeter: 19.9746 (GeV)
 ::Initializing the sensitive detector
  ------ Start Tst34EventAction ----- 
  Start generating event Nr 4
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.17
+Internal Real Elapsed Time is: 0.18
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.17
+Internal GetUserElapsed Time: 0.18
 ******************************************
  ------ Tst34EventAction::End of event nr. 4  -----
-  5328 hits are stored in Tst34HitsCollection 
- #### Tst34EventAction::Test: Total energy deposited in the calorimeter: 19.9614 (GeV)
+  5316 hits are stored in Tst34HitsCollection 
+ #### Tst34EventAction::Test: Total energy deposited in the calorimeter: 19.9739 (GeV)
 ::Initializing the sensitive detector
  ------ Start Tst34EventAction ----- 
  Start generating event Nr 5
@@ -276,8 +266,8 @@ Internal System Elapsed Time: 0
 Internal GetUserElapsed Time: 0.18
 ******************************************
  ------ Tst34EventAction::End of event nr. 5  -----
-  5312 hits are stored in Tst34HitsCollection 
- #### Tst34EventAction::Test: Total energy deposited in the calorimeter: 19.9679 (GeV)
+  5318 hits are stored in Tst34HitsCollection 
+ #### Tst34EventAction::Test: Total energy deposited in the calorimeter: 19.9781 (GeV)
 ::Initializing the sensitive detector
  ------ Start Tst34EventAction ----- 
  Start generating event Nr 6
@@ -289,8 +279,8 @@ Internal System Elapsed Time: 0
 Internal GetUserElapsed Time: 0.18
 ******************************************
  ------ Tst34EventAction::End of event nr. 6  -----
-  5293 hits are stored in Tst34HitsCollection 
- #### Tst34EventAction::Test: Total energy deposited in the calorimeter: 19.9108 (GeV)
+  5313 hits are stored in Tst34HitsCollection 
+ #### Tst34EventAction::Test: Total energy deposited in the calorimeter: 19.9572 (GeV)
 ::Initializing the sensitive detector
  ------ Start Tst34EventAction ----- 
  Start generating event Nr 7
@@ -298,42 +288,42 @@ Internal GetUserElapsed Time: 0.18
 
 ******************************************
 Internal Real Elapsed Time is: 0.18
-Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.18
+Internal System Elapsed Time: 0.01
+Internal GetUserElapsed Time: 0.17
 ******************************************
  ------ Tst34EventAction::End of event nr. 7  -----
-  5323 hits are stored in Tst34HitsCollection 
- #### Tst34EventAction::Test: Total energy deposited in the calorimeter: 19.9632 (GeV)
+  5286 hits are stored in Tst34HitsCollection 
+ #### Tst34EventAction::Test: Total energy deposited in the calorimeter: 19.8436 (GeV)
 ::Initializing the sensitive detector
  ------ Start Tst34EventAction ----- 
  Start generating event Nr 8
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.19
+Internal Real Elapsed Time is: 0.18
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.19
+Internal GetUserElapsed Time: 0.18
 ******************************************
  ------ Tst34EventAction::End of event nr. 8  -----
-  5334 hits are stored in Tst34HitsCollection 
- #### Tst34EventAction::Test: Total energy deposited in the calorimeter: 19.9613 (GeV)
+  5320 hits are stored in Tst34HitsCollection 
+ #### Tst34EventAction::Test: Total energy deposited in the calorimeter: 19.9698 (GeV)
 ::Initializing the sensitive detector
  ------ Start Tst34EventAction ----- 
  Start generating event Nr 9
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.19
+Internal Real Elapsed Time is: 0.18
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.19
+Internal GetUserElapsed Time: 0.18
 ******************************************
  ------ Tst34EventAction::End of event nr. 9  -----
-  5330 hits are stored in Tst34HitsCollection 
- #### Tst34EventAction::Test: Total energy deposited in the calorimeter: 19.9791 (GeV)
+  5332 hits are stored in Tst34HitsCollection 
+ #### Tst34EventAction::Test: Total energy deposited in the calorimeter: 19.956 (GeV)
 number of events = 10
 
 ******************************************
-Total Real Elapsed Time is: 14.07
-Total System Elapsed Time: 0.1
-Total GetUserElapsed Time: 13.71
+Total Real Elapsed Time is: 14.25
+Total System Elapsed Time: 0.17
+Total GetUserElapsed Time: 13.76
 ******************************************

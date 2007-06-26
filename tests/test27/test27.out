@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-08-03-cand-00    (5-May-2007)
+ Geant4 version Name: geant4-09-00-cand-03    (29-June-2007)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -54,7 +54,7 @@ phot:  Total cross sections from Sandia parametrisation.
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       LateralDisplacementFlag=  1   Skin= 0
-      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
 
 eIoni:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -67,7 +67,7 @@ eBrem:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
-      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
 
 eIoni:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -80,7 +80,7 @@ eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
-      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
 
 annihil:       Sampling according eplus2gg model
       tables are built for  e+
@@ -89,7 +89,7 @@ annihil:       Sampling according eplus2gg model
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       LateralDisplacementFlag=  1   Skin= 0
-      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
 
 hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -101,7 +101,7 @@ hIoni:   tables are built for  proton
 
 msc:  Model variant of multiple scattering for GenericIon
       LateralDisplacementFlag=  0   Skin= 0
-      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+      Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 1
 
 hIoni:   tables are built for  anti_proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -114,7 +114,7 @@ hIoni:   tables are built for  anti_proton
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       LateralDisplacementFlag=  1   Skin= 0
-      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
 
 muIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -161,7 +161,7 @@ hIoni:   tables are built for  pi+
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       LateralDisplacementFlag=  1   Skin= 0
-      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
 
 hIoni:   tables are built for  pi-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -172,6 +172,8 @@ hIoni:   tables are built for  pi-
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
+ Root logical volume(s) : SLog 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Uranium 
  Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
@@ -192,25 +194,25 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     Total memory consumed for geometry optimisation:   0 kByte
     Total CPU time elapsed for geometry optimisation: 0 seconds
 Start Run processing.
- G4NuclearLevelManager: nuclide (57,152) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (89,222) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (17,41) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (73,190) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (44,113) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (89,233) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (55,144) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (43,111) does not have a gamma levels file
  G4NuclearLevelManager: nuclide (57,150) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (35,90) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (91,232) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (41,108) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (47,122) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (41,110) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (43,112) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (57,149) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (44,115) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (55,145) does not have a gamma levels file
  G4NuclearLevelManager: nuclide (91,237) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (35,88) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (32,84) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (44,120) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (53,138) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (33,85) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (44,114) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (45,115) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (93,236) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (43,112) does not have a gamma levels file
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=23s Real=23s Sys=0.18s
+  User=27s Real=27s Sys=0.16s
 #
 # deuteron at 1 GeV/nucleon on H 
 #
@@ -236,7 +238,7 @@ phot:  Total cross sections from Sandia parametrisation.
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
       LateralDisplacementFlag=  1   Skin= 0
-      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
 
 eIoni:   tables are built for  e-
       dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
@@ -249,7 +251,7 @@ eBrem:   tables are built for  e-
       dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
       Lambda tables from threshold to 1e+02 TeV in 120 bins.
       Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
-      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
 
 eIoni:   tables are built for  e+
       dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
@@ -262,7 +264,7 @@ eBrem:   tables are built for  e+
       dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
       Lambda tables from threshold to 1e+02 TeV in 120 bins.
       Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
-      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
 
 annihil:       Sampling according eplus2gg model
       tables are built for  e+
@@ -271,7 +273,7 @@ annihil:       Sampling according eplus2gg model
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
       LateralDisplacementFlag=  1   Skin= 0
-      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
 
 hIoni:   tables are built for  proton
       dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
@@ -283,7 +285,7 @@ hIoni:   tables are built for  proton
 
 msc:  Model variant of multiple scattering for GenericIon
       LateralDisplacementFlag=  0   Skin= 0
-      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+      Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 1
 
 hIoni:   tables are built for  anti_proton
       dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
@@ -296,7 +298,7 @@ hIoni:   tables are built for  anti_proton
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
       LateralDisplacementFlag=  1   Skin= 0
-      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
 
 muIoni:   tables are built for  mu+
       dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
@@ -343,7 +345,7 @@ hIoni:   tables are built for  pi+
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
       LateralDisplacementFlag=  1   Skin= 0
-      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
 
 hIoni:   tables are built for  pi-
       dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
@@ -354,6 +356,8 @@ hIoni:   tables are built for  pi-
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
+ Root logical volume(s) : SLog 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : H 
  Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
@@ -377,7 +381,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.03s Real=0.03s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 #
 # deuteron at 1 GeV/nucleon on Silicon 
 #
@@ -406,7 +410,7 @@ phot:  Total cross sections from Sandia parametrisation.
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       LateralDisplacementFlag=  1   Skin= 0
-      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
 
 eIoni:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -419,7 +423,7 @@ eBrem:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
-      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
 
 eIoni:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -432,7 +436,7 @@ eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
-      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
 
 annihil:       Sampling according eplus2gg model
       tables are built for  e+
@@ -441,7 +445,7 @@ annihil:       Sampling according eplus2gg model
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       LateralDisplacementFlag=  1   Skin= 0
-      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
 
 hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -453,7 +457,7 @@ hIoni:   tables are built for  proton
 
 msc:  Model variant of multiple scattering for GenericIon
       LateralDisplacementFlag=  0   Skin= 0
-      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+      Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 1
 
 hIoni:   tables are built for  anti_proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -466,7 +470,7 @@ hIoni:   tables are built for  anti_proton
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       LateralDisplacementFlag=  1   Skin= 0
-      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
 
 muIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -513,7 +517,7 @@ hIoni:   tables are built for  pi+
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       LateralDisplacementFlag=  1   Skin= 0
-      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
 
 hIoni:   tables are built for  pi-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -524,6 +528,8 @@ hIoni:   tables are built for  pi-
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
+ Root logical volume(s) : SLog 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Silicon 
  Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
@@ -552,7 +558,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=5.97s Real=6.04s Sys=0.05s
+  User=5.63s Real=5.73s Sys=0.06s
 #
 #
 # deuteron at 200 MeV in U
@@ -564,6 +570,8 @@ SimpleBox is now made of U
 /run/beamOn 20
 
 Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
+ Root logical volume(s) : SLog 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Uranium 
  Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
@@ -589,12 +597,10 @@ Index : 2     used in the geometry : No      recalculation needed : No
 ====================================================================
 
 Start Run processing.
- G4NuclearLevelManager: nuclide (89,226) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (53,138) does not have a gamma levels file
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=1.34s Real=1.44s Sys=0.04s
+  User=0.4s Real=0.42s Sys=0s
 #
 # deuteron at 200 MeV/nucleon on H 
 #
@@ -605,6 +611,8 @@ SimpleBox is now made of H
 /run/beamOn 20
 
 Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
+ Root logical volume(s) : SLog 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : H 
  Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
@@ -644,6 +652,8 @@ SimpleBox is now made of Si
 /run/beamOn 20
 
 Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
+ Root logical volume(s) : SLog 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Silicon 
  Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
@@ -672,7 +682,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.15s Real=0.17s Sys=0.02s
+  User=0.12s Real=0.12s Sys=0s
 #
 #  .....end deuteron.............
 #
@@ -685,6 +695,8 @@ SimpleBox is now made of U
 /run/beamOn 20
 
 Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
+ Root logical volume(s) : SLog 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Uranium 
  Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
@@ -710,11 +722,12 @@ Index : 2     used in the geometry : No      recalculation needed : No
 ====================================================================
 
 Start Run processing.
- G4NuclearLevelManager: nuclide (34,87) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (35,86) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (90,237) does not have a gamma levels file
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=5.69s Real=5.82s Sys=0.05s
+  User=3.87s Real=3.94s Sys=0.04s
 #
 # alpha at 1 GeV/nucleon on H 
 #
@@ -725,6 +738,8 @@ SimpleBox is now made of H
 /run/beamOn 20
 
 Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
+ Root logical volume(s) : SLog 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : H 
  Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
@@ -764,6 +779,8 @@ SimpleBox is now made of Si
 /run/beamOn 20
 
 Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
+ Root logical volume(s) : SLog 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Silicon 
  Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
@@ -792,7 +809,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=2.21s Real=2.22s Sys=0.01s
+  User=2.33s Real=2.33s Sys=0s
 #
 # deuteron at 200 MeV/nucleon in U
 #
@@ -803,6 +820,8 @@ SimpleBox is now made of U
 /run/beamOn 20
 
 Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
+ Root logical volume(s) : SLog 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Uranium 
  Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
@@ -831,7 +850,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.31s Real=0.34s Sys=0.01s
+  User=0.01s Real=0.01s Sys=0s
 #
 # alpha at 200 MeV/nucleon on H 
 #
@@ -842,6 +861,8 @@ SimpleBox is now made of H
 /run/beamOn 20
 
 Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
+ Root logical volume(s) : SLog 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : H 
  Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
@@ -870,7 +891,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.01s Real=0.01s Sys=0s
+  User=0.02s Real=0.02s Sys=0s
 #
 # alpha at 200 MeV/nucleon on Silicon 
 #
@@ -881,6 +902,8 @@ SimpleBox is now made of Si
 /run/beamOn 20
 
 Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
+ Root logical volume(s) : SLog 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Silicon 
  Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
@@ -923,6 +946,8 @@ SimpleBox is now made of U
 /run/beamOn 20
 
 Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
+ Root logical volume(s) : SLog 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Uranium 
  Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
@@ -948,17 +973,16 @@ Index : 2     used in the geometry : No      recalculation needed : No
 ====================================================================
 
 Start Run processing.
- G4NuclearLevelManager: nuclide (46,120) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (53,139) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (34,86) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (46,118) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (41,107) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (47,121) does not have a gamma levels file
- G4NuclearLevelManager: nuclide (91,238) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (42,111) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (45,117) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (59,154) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (64,171) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (35,91) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (46,121) does not have a gamma levels file
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=32.06s Real=32.4s Sys=0.13s
+  User=31.07s Real=31.49s Sys=0.11s
 #
 # C(12,6)++ at 1 GeV/nucleon on H 
 #
@@ -970,6 +994,8 @@ SimpleBox is now made of H
 /run/beamOn 20
 
 Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
+ Root logical volume(s) : SLog 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : H 
  Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
@@ -1010,6 +1036,8 @@ SimpleBox is now made of Si
 /run/beamOn 20
 
 Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
+ Root logical volume(s) : SLog 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Silicon 
  Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
@@ -1035,11 +1063,11 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
 ====================================================================
 
 Start Run processing.
- G4NuclearLevelManager: nuclide (15,27) does not have a gamma levels file
+ G4NuclearLevelManager: nuclide (16,28) does not have a gamma levels file
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=6.77s Real=6.87s Sys=0.06s
+  User=7.39s Real=7.39s Sys=0s
 #
 # C(12,6)++ at 1 GeV/nucleon on Water 
 #
@@ -1066,7 +1094,7 @@ phot:  Total cross sections from Sandia parametrisation.
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       LateralDisplacementFlag=  1   Skin= 0
-      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
 
 eIoni:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -1079,7 +1107,7 @@ eBrem:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
-      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
 
 eIoni:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -1092,7 +1120,7 @@ eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
-      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
 
 annihil:       Sampling according eplus2gg model
       tables are built for  e+
@@ -1101,7 +1129,7 @@ annihil:       Sampling according eplus2gg model
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       LateralDisplacementFlag=  1   Skin= 0
-      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
 
 hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -1113,7 +1141,7 @@ hIoni:   tables are built for  proton
 
 msc:  Model variant of multiple scattering for GenericIon
       LateralDisplacementFlag=  0   Skin= 0
-      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+      Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 1
 
 hIoni:   tables are built for  anti_proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -1126,7 +1154,7 @@ hIoni:   tables are built for  anti_proton
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       LateralDisplacementFlag=  1   Skin= 0
-      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
 
 muIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -1173,7 +1201,7 @@ hIoni:   tables are built for  pi+
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       LateralDisplacementFlag=  1   Skin= 0
-      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
 
 hIoni:   tables are built for  pi-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -1184,6 +1212,8 @@ hIoni:   tables are built for  pi-
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
+ Root logical volume(s) : SLog 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Water 
  Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
@@ -1217,7 +1247,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=5.32s Real=5.37s Sys=0.04s
+  User=4.83s Real=4.87s Sys=0s
 #
 #
 # C(12,6)++ at 200 MeV in U
@@ -1230,6 +1260,8 @@ SimpleBox is now made of U
 /run/beamOn 20
 
 Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
+ Root logical volume(s) : SLog 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Uranium 
  Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
@@ -1263,7 +1295,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.28s Real=0.32s Sys=0s
+  User=0.31s Real=0.32s Sys=0.01s
 #
 # C(12,6)++ at 200 MeV/nucleon on H 
 #
@@ -1275,6 +1307,8 @@ SimpleBox is now made of H
 /run/beamOn 20
 
 Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
+ Root logical volume(s) : SLog 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : H 
  Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
@@ -1320,6 +1354,8 @@ SimpleBox is now made of Si
 /run/beamOn 20
 
 Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
+ Root logical volume(s) : SLog 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Silicon 
  Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
@@ -1353,7 +1389,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.3s Real=0.3s Sys=0s
+  User=0.39s Real=0.41s Sys=0s
 #
 #  .....end C(12,6)++............
 #
@@ -1392,7 +1428,7 @@ phot:  Total cross sections from Sandia parametrisation.
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       LateralDisplacementFlag=  1   Skin= 0
-      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
 
 eIoni:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -1405,7 +1441,7 @@ eBrem:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
-      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
 
 eIoni:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -1418,7 +1454,7 @@ eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
-      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
 
 annihil:       Sampling according eplus2gg model
       tables are built for  e+
@@ -1427,7 +1463,7 @@ annihil:       Sampling according eplus2gg model
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       LateralDisplacementFlag=  1   Skin= 0
-      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
 
 hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -1439,7 +1475,7 @@ hIoni:   tables are built for  proton
 
 msc:  Model variant of multiple scattering for GenericIon
       LateralDisplacementFlag=  0   Skin= 0
-      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+      Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 1
 
 hIoni:   tables are built for  anti_proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -1452,7 +1488,7 @@ hIoni:   tables are built for  anti_proton
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       LateralDisplacementFlag=  1   Skin= 0
-      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
 
 muIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -1499,7 +1535,7 @@ hIoni:   tables are built for  pi+
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       LateralDisplacementFlag=  1   Skin= 0
-      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
 
 hIoni:   tables are built for  pi-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -1510,6 +1546,8 @@ hIoni:   tables are built for  pi-
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
+ Root logical volume(s) : SLog 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Lead 
  Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
@@ -1545,10 +1583,11 @@ Index : 4     used in the geometry : Yes     recalculation needed : No
 ====================================================================
 
 Start Run processing.
+ G4NuclearLevelManager: nuclide (64,167) does not have a gamma levels file
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.15s Real=0.2s Sys=0s
+  User=0.22s Real=0.23s Sys=0.01s
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
 UserRunAction deleted.

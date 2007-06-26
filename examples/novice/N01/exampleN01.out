@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-08-03-cand-00    (5-May-2007)
+ Geant4 version Name: geant4-09-00-cand-03    (29-June-2007)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -222,5 +222,5 @@ Terminate current event processing.
 Run terminated.
 Run Summary
   Number of events processed : 3
-  User=0.05s Real=0.08s Sys=0.03s
+  User=0.03s Real=0.08s Sys=0.04s
 G4 kernel has come to Quit state.

@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-08-03-cand-00    (5-May-2007)
+ Geant4 version Name: geant4-09-00-cand-03    (29-June-2007)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -80,7 +80,7 @@ conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV f
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       LateralDisplacementFlag=  1   Skin= 1
-      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 2
 
 eIoni:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -93,7 +93,7 @@ eBrem:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
-      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
 
 eIoni:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -106,7 +106,7 @@ eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
-      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
 
 annihil:       Sampling according eplus2gg model
       tables are built for  e+
@@ -115,7 +115,7 @@ annihil:       Sampling according eplus2gg model
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       LateralDisplacementFlag=  1   Skin= 1
-      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 2
 
 hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -127,14 +127,14 @@ hIoni:   tables are built for  proton
 
 msc:  Model variant of multiple scattering for GenericIon
       LateralDisplacementFlag=  0   Skin= 0
-      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+      Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 1
 
 ionIoni:   tables are built for  GenericIon
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
-      Parametrisation from BraggIon for protons below.
+      Parametrisation from BraggIon for protons below. NuclearStopping 1
 
       Stopping Power data for 8 ion/material pairs are used.
       Step function: finalRange(mm)= 0.1, dRoverRange= 0.1, integral: 1
@@ -150,7 +150,7 @@ hIoni:   tables are built for  anti_proton
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       LateralDisplacementFlag=  1   Skin= 1
-      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 2
 
 muIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -197,7 +197,7 @@ hIoni:   tables are built for  pi+
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       LateralDisplacementFlag=  1   Skin= 1
-      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 2
 
 hIoni:   tables are built for  pi-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -208,6 +208,8 @@ hIoni:   tables are built for  pi-
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Galactic Lead liquidArgon 
  Production cuts :  gamma 1 mm     e- 1 mm     e+ 1 mm 
 
@@ -240,18 +242,18 @@ Start closing geometry.
 G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
     Total memory consumed for geometry optimisation:   1 kByte
-    Total CPU time elapsed for geometry optimisation: 0.01 seconds
+    Total CPU time elapsed for geometry optimisation: 0 seconds
 
     Voxelisation: top CPU users:
     Percent   Total CPU    System CPU       Memory  Volume
     -------   ----------   ----------     --------  ----------
-     100.00         0.01         0.00            2k Calorimeter
+       0.00         0.00         0.00            2k Calorimeter
        0.00         0.00         0.00            0k Layer
 
     Voxelisation: top memory users:
     Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
     -------   --------     ------   ------   --------   ----------    ----------
-      91.70          1k         1       50         50         0.01    Calorimeter
+      91.70          1k         1       50         50         0.00    Calorimeter
        8.30          0k         1        3          4         0.00    Layer
 ### Run 0 start.
 
@@ -267,28 +269,28 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=199.23s Real=228.98s Sys=28.48s
+  User=185.5s Real=186.77s Sys=0.04s
 
 ------------------------------------------------------------
       material       Total Edep         sqrt(E0(GeV))*rmsE/Emean     total tracklen 
  
-          Lead: 783.24 MeV +- 15.76 MeV     2.013 +- 0.2013 %      53.9 cm  +-  1.2 cm 
-   liquidArgon: 204.82 MeV +- 14.94 MeV     7.296 +- 0.7296 %      1.01 m   +- 7.72 cm 
+          Lead: 781.05 MeV +- 17.85 MeV     2.285 +- 0.2285 %      53.7 cm  +- 1.33 cm 
+   liquidArgon: 207.34 MeV +- 15.88 MeV     7.657 +- 0.7657 %      1.02 m   +- 8.16 cm 
 
 ------------------------------------------------------------
 
  Energy deposition from Energy flow balance : 
   material 	 Total Edep 
  
-      Lead:	 783.237 MeV
-liquidArgon:	 204.824 MeV
+      Lead:	 781.048 MeV
+liquidArgon:	 207.339 MeV
 
 ------------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 536502410, 2064128558
+ Current couple of seeds = 596130632, 1069559193
 ----------------------------------------
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.

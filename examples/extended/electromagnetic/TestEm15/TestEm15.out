@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-08-03-cand-00    (5-May-2007)
+ Geant4 version Name: geant4-09-00-cand-03    (29-June-2007)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -71,7 +71,6 @@ You have successfully registered the following graphics systems.
 Current available graphics systems are:
   ASCIITree (ATree)
   DAWNFILE (DAWNFILE)
-  GAGTree (GAGTree)
   G4HepRep (HepRepXML)
   G4HepRepFile (HepRepFile)
   RayTracer (RayTracer)
@@ -136,7 +135,7 @@ conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV f
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       LateralDisplacementFlag=  1   Skin= 0
-      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
 
 eIoni:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -148,7 +147,7 @@ eBrem:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
-      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
       Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 0
 
 eIoni:   tables are built for  e+
@@ -161,7 +160,7 @@ eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
-      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
       Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 0
 
 annihil:       Sampling according eplus2gg model
@@ -171,7 +170,7 @@ annihil:       Sampling according eplus2gg model
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       LateralDisplacementFlag=  1   Skin= 0
-      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
 
 hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -183,14 +182,14 @@ hIoni:   tables are built for  proton
 
 msc:  Model variant of multiple scattering for GenericIon
       LateralDisplacementFlag=  0   Skin= 0
-      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+      Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 1
 
 ionIoni:   tables are built for  GenericIon
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
-      Parametrisation from BraggIon for protons below.
+      Parametrisation from BraggIon for protons below. NuclearStopping 1
 
       Stopping Power data for 8 ion/material pairs are used.
       Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 0
@@ -206,7 +205,7 @@ hIoni:   tables are built for  anti_proton
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       LateralDisplacementFlag=  1   Skin= 0
-      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
 
 muIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -253,7 +252,7 @@ hIoni:   tables are built for  pi+
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       LateralDisplacementFlag=  1   Skin= 0
-      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
 
 hIoni:   tables are built for  pi-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -264,6 +263,8 @@ hIoni:   tables are built for  pi-
       Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 0
 
 Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Galactic Water 
  Production cuts :  gamma 1 mm     e- 1 mm     e+ 1 mm 
 
@@ -302,7 +303,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=5.6s Real=5.6s Sys=0s
+  User=5.5s Real=5.5s Sys=0s
 
  The run consists of 10000 e- of 5 MeV through 100 m   of Water (density: 1 g/cm3 )
 
@@ -313,8 +314,8 @@ Run Summary
  lateralDisplac :	1.1482 cm  +- 9.6993 nm 
  Psi            :	506.49 mrad +- 0.00036931 mrad  (29.02 deg +- 2.116e-05 deg)
 
- Theta_plane    :	1818.2 mrad  (104.18 deg)
- phi correlation:	0.26267 +- 0.058466  (std::cos(phi_pos - phi_dir))
+ Theta_plane    :	1803.7 mrad  (103.34 deg)
+ phi correlation:	0.26266 +- 0.058181  (std::cos(phi_pos - phi_dir))
 
  Verification from G4EmCalculator. 
 
@@ -326,13 +327,15 @@ Run Summary
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1055489048, 167744914
+ Current couple of seeds = 2018111343, 1005755293
 ----------------------------------------
 #
 /gun/energy 100 keV
 /run/beamOn 10000
 
 Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Galactic Water 
  Production cuts :  gamma 1 mm     e- 1 mm     e+ 1 mm 
 
@@ -358,7 +361,7 @@ Index : 1     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1055489048, 167744914
+ Current couple of seeds = 2018111343, 1005755293
 ----------------------------------------
 Start Run processing.
 
@@ -366,7 +369,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=5.4s Real=5.4s Sys=0s
+  User=5.3s Real=5.3s Sys=0s
 
  The run consists of 10000 e- of 100 keV through 100 m   of Water (density: 1 g/cm3 )
 
@@ -377,8 +380,8 @@ Run Summary
  lateralDisplac :	923.68 nm  +- 256.83 fm 
  Psi            :	148.35 mrad +- 8.7703e-05 mrad  (8.4998 deg +- 5.025e-06 deg)
 
- Theta_plane    :	241.37 mrad  (13.83 deg)
- phi correlation:	0.090798 +- 0.13131  (std::cos(phi_pos - phi_dir))
+ Theta_plane    :	246.16 mrad  (14.104 deg)
+ phi correlation:	0.08837 +- 0.13162  (std::cos(phi_pos - phi_dir))
 
  Verification from G4EmCalculator. 
 
@@ -390,7 +393,7 @@ Run Summary
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 647930445, 779579682
+ Current couple of seeds = 1387038228, 1801671687
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

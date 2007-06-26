@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-08-03-cand-00    (5-May-2007)
+ Geant4 version Name: geant4-09-00-cand-03    (29-June-2007)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -30,7 +30,6 @@ You have successfully registered the following graphics systems.
 Current available graphics systems are:
   ASCIITree (ATree)
   DAWNFILE (DAWNFILE)
-  GAGTree (GAGTree)
   G4HepRep (HepRepXML)
   G4HepRepFile (HepRepFile)
   RayTracer (RayTracer)
@@ -100,8 +99,8 @@ conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV f
 
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 0
-      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+      LateralDisplacementFlag=  1   Skin= 2
+      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 2
 
 eIoni:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -121,8 +120,8 @@ eIoni:   tables are built for  e+
 
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      LateralDisplacementFlag=  1   Skin= 0
-      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+      LateralDisplacementFlag=  1   Skin= 2
+      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 2
 
 hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -134,6 +133,8 @@ hIoni:   tables are built for  proton
       CSDA range table up to 1 GeV in 70 bins.
 
 Region <DefaultRegionForTheWorld> -- appears in <Wall> world volume
+ Root logical volume(s) : Chamber 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Water Water_vapor 
  Production cuts :  gamma 10 km     e- 10 km     e+ 10 km 
 
@@ -168,15 +169,15 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 ----------------------------------------
 Start Run processing.
 
- ---> NbofEvents= 1000   NbOfelectr= 70423   Tkin= 586.033 keV (0.000 %)   NbOfelec in cav= 4909   Dose/EnFluence= 30.351 cm2/g (0.000 %)
+ ---> NbofEvents= 1000   NbOfelectr= 70984   Tkin= 588.477 keV (0.000 %)   NbOfelec in cav= 4728   Dose/EnFluence= 27.992 cm2/g (0.000 %)
 
- ---> NbofEvents= 2000   NbOfelectr= 140560   Tkin= 587.773 keV (0.297 %)   NbOfelec in cav= 9596   Dose/EnFluence= 30.633 cm2/g (0.930 %)
+ ---> NbofEvents= 2000   NbOfelectr= 141575   Tkin= 588.989 keV (0.087 %)   NbOfelec in cav= 9601   Dose/EnFluence= 29.795 cm2/g (6.441 %)
 
- ---> NbofEvents= 3000   NbOfelectr= 210966   Tkin= 587.676 keV (-0.016 %)   NbOfelec in cav= 14212   Dose/EnFluence= 30.832 cm2/g (0.648 %)
+ ---> NbofEvents= 3000   NbOfelectr= 212837   Tkin= 588.952 keV (-0.006 %)   NbOfelec in cav= 14224   Dose/EnFluence= 29.087 cm2/g (-2.375 %)
 Run terminated.
 Run Summary
   Number of events processed : 4000
-  User=636.53s Real=826.15s Sys=189.57s
+  User=665.47s Real=665.52s Sys=0s
 
  ======================== run summary ======================
 
@@ -186,32 +187,32 @@ Run Summary
 
  ============================================================
 
- Process calls frequency --->  compt= 281426  Transportation= 77384  msc= 1138228  eIoni= 1844414
+ Process calls frequency --->  compt= 283779  Transportation= 76764  msc= 1330017  eIoni= 1882531
 
  Gamma crossSections in wall material :  compt= 63.447 cm2/g   --> total= 63.447 cm2/g
 
- Mean energy of secondary e- = 587.7447 keV  (--> range in wall material = 2.2089 mm )
- Mass_energy_transfer coef: 29.8325 cm2/g
+ Mean energy of secondary e- = 588.9356 keV  (--> range in wall material = 2.2149 mm )
+ Mass_energy_transfer coef: 29.8930 cm2/g
 
- StoppingPower in wall   = 1.9782 MeV*cm2/g
-               in cavity = 1.9782 MeV*cm2/g
+ StoppingPower in wall   = 1.9774 MeV*cm2/g
+               in cavity = 1.9774 MeV*cm2/g
 
  Charged particle flow in cavity :
-      Enter --> nbParticles = 19031	 Energy = 9.6724 GeV
-      Exit  --> nbParticles = 19015	 Energy = 9.6589 GeV
+      Enter --> nbParticles = 18964	 Energy = 9.4797 GeV
+      Exit  --> nbParticles = 18928	 Energy = 9.4666 GeV
 
- Total edep in cavity = 13.4511 MeV	 Total charged trackLength = 53.0512 m     (mean value = 2.7876 mm )
- Total dose in cavity = 21.4081 MeV/mg
- Dose/EnergyFluence   = 30.2650 cm2/g
+ Total edep in cavity = 13.1454 MeV	 Total charged trackLength = 52.9837 m     (mean value = 2.7939 mm )
+ Total dose in cavity = 20.9215 MeV/mg
+ Dose/EnergyFluence   = 29.5771 cm2/g
 
- (Dose/EnergyFluence)/Mass_energy_transfer = 1.0145
+ (Dose/EnergyFluence)/Mass_energy_transfer = 0.9894
 
- StepSize of ch. tracks in wall   = 154.3774 um  +- 137.3663 um 	 (nbSteps/track = 10.7751)
- StepSize of ch. tracks in cavity = 2.6495 mm  +- 2.0211 mm 	 (nbSteps/track = 1.0521)
+ StepSize of ch. tracks in wall   = 149.5427 um  +- 127.2593 um 	 (nbSteps/track = 11.2424)
+ StepSize of ch. tracks in cavity = 579.6401 um  +- 656.8654 um 	 (nbSteps/track = 4.8201)
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 297718525, 1625708163
+ Current couple of seeds = 423862883, 1083343246
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-08-03-cand-00    (5-May-2007)
+ Geant4 version Name: geant4-09-00-cand-03    (29-June-2007)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -63,7 +63,7 @@ physicsList->setCut() start.
  The ABSORBER is made of 100mm of Lead, the transverse size (R) is 120 mm. 
  Z position of the (middle of the) absorber 0  mm.
 
-World is removed from the default region.
+Obsolete world logical volume is removed from the default region.
 World is registered to the default region.
 #
 /lowenergy/lowlimG 2.5e-4
@@ -99,6 +99,8 @@ G4VUserPhysicsList::ResetCuts() is obsolete. This method gives no effect and you
 /run/beamOn 1
 
 Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Aluminium 
  Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
 
@@ -138,11 +140,13 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.03s Sys=0s
+  User=0s Real=0.02s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
 
 Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Aluminium 
  Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
 
@@ -175,6 +179,8 @@ Run Summary
 /run/beamOn 1
 
 Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Aluminium 
  Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
 
@@ -209,11 +215,13 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
 
 Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Aluminium 
  Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
 
@@ -246,6 +254,8 @@ Run Summary
 /run/beamOn 1
 
 Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Aluminium 
  Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
 
@@ -280,11 +290,13 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0s Real=0.01s Sys=0.01s
 /tracking/verbose 0
 /run/beamOn 1000
 
 Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Aluminium 
  Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
 
@@ -310,13 +322,15 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.49s Real=0.49s Sys=0s
+  User=0.5s Real=0.5s Sys=0s
 #
 /gun/energy 300 eV
 /tracking/verbose 2
 /run/beamOn 1
 
 Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Aluminium 
  Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
 
@@ -351,11 +365,13 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0.01s Sys=0.01s
+  User=0s Real=0s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
 
 Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Aluminium 
  Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
 
@@ -390,6 +406,8 @@ Run Summary
 /run/beamOn 1
 
 Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Aluminium 
  Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
 
@@ -424,11 +442,238 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0.01s Sys=0.01s
+  User=0s Real=0s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
 
 Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Air Aluminium 
+ Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
+ Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
+ Energy thresholds :  gamma 2.331105122779143 keV    e- 130.147332742996 keV    e+ 127.666462607321 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1000
+  User=0.51s Real=0.51s Sys=0s
+#
+/gun/energy 2 keV
+/tracking/verbose 2
+/run/beamOn 1
+
+Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Air Aluminium 
+ Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
+ Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
+ Energy thresholds :  gamma 2.3311051 keV    e- 130.14733 keV    e+ 127.66646 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0        0        0      -50     0.002        0        0         0    Absorber initStep
+    1        0        0       50     0.002        0      100       100       World Transportation
+    2        0        0    1e+03     0.002        0      950  1.05e+03  OutOfWorld Transportation
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0s Real=0s Sys=0s
+/tracking/verbose 0
+/run/beamOn 1000
+
+Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Air Aluminium 
+ Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
+ Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
+ Energy thresholds :  gamma 2.331105122779143 keV    e- 130.147332742996 keV    e+ 127.666462607321 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1000
+  User=0.51s Real=0.51s Sys=0s
+#
+/gun/energy 600 eV
+/tracking/verbose 2
+/run/beamOn 1
+
+Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Air Aluminium 
+ Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
+ Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
+ Energy thresholds :  gamma 2.3311051 keV    e- 130.14733 keV    e+ 127.66646 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0        0        0      -50    0.0006        0        0         0    Absorber initStep
+    1        0        0       50    0.0006        0      100       100       World Transportation
+    2        0        0    1e+03    0.0006        0      950  1.05e+03  OutOfWorld Transportation
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0s Real=0s Sys=0s
+/tracking/verbose 0
+/run/beamOn 1000
+
+Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Air Aluminium 
+ Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
+ Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
+ Energy thresholds :  gamma 2.331105122779143 keV    e- 130.147332742996 keV    e+ 127.666462607321 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1000
+  User=0.51s Real=0.51s Sys=0s
+#
+/gun/energy 300 eV
+/tracking/verbose 2
+/run/beamOn 1
+
+Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Air Aluminium 
+ Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
+ Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
+ Energy thresholds :  gamma 2.3311051 keV    e- 130.14733 keV    e+ 127.66646 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0        0        0      -50    0.0003        0        0         0    Absorber initStep
+    1        0        0       50    0.0003        0      100       100       World Transportation
+    2        0        0    1e+03    0.0003        0      950  1.05e+03  OutOfWorld Transportation
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0.01s Real=0.01s Sys=0s
+/tracking/verbose 0
+/run/beamOn 1000
+
+Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Aluminium 
  Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
 
@@ -456,219 +701,6 @@ Run Summary
   Number of events processed : 1000
   User=0.52s Real=0.52s Sys=0s
 #
-/gun/energy 2 keV
-/tracking/verbose 2
-/run/beamOn 1
-
-Region <DefaultRegionForTheWorld> -- appears in <World> world volume
- Materials : Air Aluminium 
- Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 1     used in the geometry : Yes     recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 2.3311051 keV    e- 130.14733 keV    e+ 127.66646 keV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-Start Run processing.
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0        0      -50     0.002        0        0         0    Absorber initStep
-    1        0        0       50     0.002        0      100       100       World Transportation
-    2        0        0    1e+03     0.002        0      950  1.05e+03  OutOfWorld Transportation
-Run terminated.
-Run Summary
-  Number of events processed : 1
-  User=0s Real=0s Sys=0s
-/tracking/verbose 0
-/run/beamOn 1000
-
-Region <DefaultRegionForTheWorld> -- appears in <World> world volume
- Materials : Air Aluminium 
- Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 1     used in the geometry : Yes     recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 2.331105122779143 keV    e- 130.147332742996 keV    e+ 127.666462607321 keV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-Start Run processing.
-Run terminated.
-Run Summary
-  Number of events processed : 1000
-  User=0.51s Real=0.51s Sys=0s
-#
-/gun/energy 600 eV
-/tracking/verbose 2
-/run/beamOn 1
-
-Region <DefaultRegionForTheWorld> -- appears in <World> world volume
- Materials : Air Aluminium 
- Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 1     used in the geometry : Yes     recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 2.3311051 keV    e- 130.14733 keV    e+ 127.66646 keV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-Start Run processing.
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0        0      -50    0.0006        0        0         0    Absorber initStep
-    1        0        0       50    0.0006        0      100       100       World Transportation
-    2        0        0    1e+03    0.0006        0      950  1.05e+03  OutOfWorld Transportation
-Run terminated.
-Run Summary
-  Number of events processed : 1
-  User=0s Real=0s Sys=0s
-/tracking/verbose 0
-/run/beamOn 1000
-
-Region <DefaultRegionForTheWorld> -- appears in <World> world volume
- Materials : Air Aluminium 
- Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 1     used in the geometry : Yes     recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 2.331105122779143 keV    e- 130.147332742996 keV    e+ 127.666462607321 keV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-Start Run processing.
-Run terminated.
-Run Summary
-  Number of events processed : 1000
-  User=0.51s Real=0.51s Sys=0s
-#
-/gun/energy 300 eV
-/tracking/verbose 2
-/run/beamOn 1
-
-Region <DefaultRegionForTheWorld> -- appears in <World> world volume
- Materials : Air Aluminium 
- Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 1     used in the geometry : Yes     recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 2.3311051 keV    e- 130.14733 keV    e+ 127.66646 keV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-Start Run processing.
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0        0      -50    0.0003        0        0         0    Absorber initStep
-    1        0        0       50    0.0003        0      100       100       World Transportation
-    2        0        0    1e+03    0.0003        0      950  1.05e+03  OutOfWorld Transportation
-Run terminated.
-Run Summary
-  Number of events processed : 1
-  User=0s Real=0s Sys=0s
-/tracking/verbose 0
-/run/beamOn 1000
-
-Region <DefaultRegionForTheWorld> -- appears in <World> world volume
- Materials : Air Aluminium 
- Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 1     used in the geometry : Yes     recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 2.331105122779143 keV    e- 130.147332742996 keV    e+ 127.666462607321 keV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-Start Run processing.
-Run terminated.
-Run Summary
-  Number of events processed : 1000
-  User=0.51s Real=0.51s Sys=0s
-#
 /calor/setAbsMat Lead      
 
  The  WORLD   is made of 2000mm of Air, the transverse size (R) of the world is 2000 mm. 
@@ -685,6 +717,8 @@ Run Summary
 /run/beamOn 1
 
 Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Lead 
  Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
 
@@ -729,6 +763,8 @@ Run Summary
 /run/beamOn 1000
 
 Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Lead 
  Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
 
@@ -759,13 +795,15 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.49s Real=0.49s Sys=0s
+  User=0.5s Real=0.5s Sys=0s
 # 
 /gun/energy 2 keV
 /tracking/verbose 2
 /run/beamOn 1
 
 Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Lead 
  Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
 
@@ -805,11 +843,13 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0.01s Sys=0.01s
+  User=0s Real=0s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
 
 Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Lead 
  Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
 
@@ -847,6 +887,8 @@ Run Summary
 /run/beamOn 1
 
 Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Lead 
  Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
 
@@ -891,6 +933,8 @@ Run Summary
 /run/beamOn 1000
 
 Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Lead 
  Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
 
@@ -928,6 +972,8 @@ Run Summary
 /run/beamOn 1
 
 Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Lead 
  Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
 
@@ -967,11 +1013,13 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0s Real=0.01s Sys=0.01s
 /tracking/verbose 0
 /run/beamOn 1000
 
 Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Lead 
  Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
 
@@ -1011,6 +1059,8 @@ Run Summary
 /run/beamOn 1
 
 Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Lead 
  Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
 
@@ -1055,6 +1105,8 @@ Run Summary
 /run/beamOn 1000
 
 Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Lead 
  Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
 
@@ -1085,13 +1137,15 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.51s Real=0.51s Sys=0s
+  User=0.52s Real=0.52s Sys=0s
 #
 /gun/energy 2 keV
 /tracking/verbose 2
 /run/beamOn 1
 
 Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Lead 
  Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
 
@@ -1136,6 +1190,8 @@ Run Summary
 /run/beamOn 1000
 
 Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Lead 
  Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
 
@@ -1173,6 +1229,8 @@ Run Summary
 /run/beamOn 1
 
 Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Lead 
  Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
 
@@ -1217,6 +1275,8 @@ Run Summary
 /run/beamOn 1000
 
 Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Lead 
  Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
 
@@ -1254,6 +1314,8 @@ Run Summary
 /run/beamOn 1
 
 Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Lead 
  Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
 
@@ -1298,6 +1360,8 @@ Run Summary
 /run/beamOn 1000
 
 Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Lead 
  Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
 
@@ -1328,7 +1392,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.51s Real=0.51s Sys=0s
+  User=0.52s Real=0.52s Sys=0s
 #
 #
 /calor/setAbsMat Water
@@ -1347,6 +1411,8 @@ Run Summary
 /run/beamOn 1
 
 Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Water 
  Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
 
@@ -1391,11 +1457,13 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
 
 Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Water 
  Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
 
@@ -1438,6 +1506,8 @@ Run Summary
 /run/beamOn 1
 
 Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Water 
  Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
 
@@ -1487,6 +1557,8 @@ Run Summary
 /run/beamOn 1000
 
 Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Water 
  Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
 
@@ -1522,13 +1594,15 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.5s Real=0.5s Sys=0s
+  User=0.49s Real=0.49s Sys=0s
 #
 /gun/energy 600 eV
 /tracking/verbose 2
 /run/beamOn 1
 
 Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Water 
  Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
 
@@ -1578,6 +1652,8 @@ Run Summary
 /run/beamOn 1000
 
 Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Water 
  Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
 
@@ -1620,6 +1696,8 @@ Run Summary
 /run/beamOn 1
 
 Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Water 
  Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
 
@@ -1669,6 +1747,8 @@ Run Summary
 /run/beamOn 1000
 
 Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Water 
  Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
 
@@ -1713,6 +1793,8 @@ Run Summary
 /run/beamOn 1
 
 Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Water 
  Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
 
@@ -1762,6 +1844,8 @@ Run Summary
 /run/beamOn 1000
 
 Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Water 
  Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
 
@@ -1804,6 +1888,8 @@ Run Summary
 /run/beamOn 1
 
 Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Water 
  Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
 
@@ -1853,6 +1939,8 @@ Run Summary
 /run/beamOn 1000
 
 Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Water 
  Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
 
@@ -1895,6 +1983,8 @@ Run Summary
 /run/beamOn 1
 
 Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Water 
  Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
 
@@ -1939,11 +2029,13 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
 
 Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Water 
  Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
 
@@ -1986,6 +2078,8 @@ Run Summary
 /run/beamOn 1
 
 Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Water 
  Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
 
@@ -2030,11 +2124,13 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
 
 Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Water 
  Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
 
@@ -2070,7 +2166,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.52s Real=0.52s Sys=0s
+  User=0.51s Real=0.51s Sys=0s
 #
 /gun/particle gamma
 #------------------
@@ -2102,6 +2198,8 @@ Run Summary
 /run/beamOn 1000
 
 Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Aluminium 
  Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
 
@@ -2142,6 +2240,8 @@ Run Summary
 /run/beamOn 1000
 
 Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Aluminium 
  Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
 
@@ -2190,6 +2290,8 @@ Run Summary
 /run/beamOn 1000
 
 Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Lead 
  Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
 
@@ -2225,11 +2327,13 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.5s Real=0.5s Sys=0s
+  User=0.49s Real=0.49s Sys=0s
 /gun/energy 100 MeV
 /run/beamOn 1000
 
 Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Lead 
  Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
 
@@ -2278,6 +2382,8 @@ Run Summary
 /run/beamOn 1000
 
 Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Water 
  Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
 
@@ -2318,6 +2424,8 @@ Run Summary
 /run/beamOn 1000
 
 Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Water 
  Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
 
@@ -2353,7 +2461,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.49s Real=0.49s Sys=0s
+  User=0.5s Real=0.5s Sys=0s
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
 UserRunAction deleted.

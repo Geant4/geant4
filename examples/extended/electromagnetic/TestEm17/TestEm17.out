@@ -1,13 +1,13 @@
 
 *************************************************************
- Geant4 version Name: geant4-08-03-cand-00    (5-May-2007)
+ Geant4 version Name: geant4-09-00-cand-03    (29-June-2007)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
 
 
-***** Table : Nb of materials = 6 *****
+***** Table : Nb of materials = 7 *****
 
  Material: galactic     density:  0.000 mg/cm3  temperature:   2.73 K  pressure:   0.00 atm  RadLength: 204727576.737 pc 
    --->  Element: galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
@@ -30,6 +30,10 @@
  Material:      Tin     density:  7.310 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.206 cm 
    --->  Element: Tin ( )   Z = 50.0   N = 118.7   A = 118.70 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
+ Material:       HI     density:  2.800 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   3.049 cm 
+   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:   0.79 %  ElmAbundance  50.00 %
+   --->  Element: Iodine (I)   Z = 53.0   N = 126.9   A = 126.90 g/mole  ElmMassFraction:  99.21 %  ElmAbundance  50.00 %
+
 
 Visualization Manager instantiating...
 Visualization Manager initialising...
@@ -39,7 +43,6 @@ You have successfully registered the following graphics systems.
 Current available graphics systems are:
   ASCIITree (ATree)
   DAWNFILE (DAWNFILE)
-  GAGTree (GAGTree)
   G4HepRep (HepRepXML)
   G4HepRepFile (HepRepFile)
   RayTracer (RayTracer)
@@ -88,6 +91,8 @@ PhysicsList::SetCuts:CutLength : 1 mm
 /run/beamOn 10000
 
 Region <DefaultRegionForTheWorld> -- appears in <Iron> world volume
+ Root logical volume(s) : Iron 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Iron 
  Production cuts :  gamma 1 mm     e- 1 mm     e+ 1 mm 
 
@@ -137,18 +142,18 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=140.49s Real=246.11s Sys=6.32s
+  User=138.96s Real=254.58s Sys=6.83s
 
  The run consists of 10000 mu+ of 10 TeV through 1 m   of Iron (density: 7.9 g/cm3 )
 
- Number of process calls --->	muIoni : 468767	muPairProd : 63239	muBrems : 694
+ Number of process calls --->	muIoni : 469141	muPairProd : 63354	muBrems : 711
 
- Simulation: total CrossSection = 0.5327 /cm	 MeanFreePath = 1.8772 cm 	 massicCrossSection = 0.067687 cm2/g
+ Simulation: total CrossSection = 0.53321 /cm	 MeanFreePath = 1.8754 cm 	 massicCrossSection = 0.067752 cm2/g
  Theory:     total CrossSection = 0.53938 /cm	 MeanFreePath = 1.854 cm 	 massicCrossSection = 0.068536 cm2/g
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 758590255, 1816922510
+ Current couple of seeds = 630902075, 802952017
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

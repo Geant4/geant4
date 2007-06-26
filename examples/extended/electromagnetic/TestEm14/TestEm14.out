@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-08-03-cand-00    (5-May-2007)
+ Geant4 version Name: geant4-09-00-cand-03    (29-June-2007)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -68,7 +68,6 @@ You have successfully registered the following graphics systems.
 Current available graphics systems are:
   ASCIITree (ATree)
   DAWNFILE (DAWNFILE)
-  GAGTree (GAGTree)
   G4HepRep (HepRepXML)
   G4HepRepFile (HepRepFile)
   RayTracer (RayTracer)
@@ -137,7 +136,7 @@ eBrem:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
-      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
 
 eIoni:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -150,7 +149,7 @@ eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
-      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
 
 annihil:       Sampling according eplus2gg model
       tables are built for  e+
@@ -169,7 +168,7 @@ ionIoni:   tables are built for  GenericIon
       Lambda tables from threshold to 100 TeV in 120 bins.
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
-      Parametrisation from BraggIon for protons below.
+      Parametrisation from BraggIon for protons below. NuclearStopping 1
 
       Stopping Power data for 8 ion/material pairs are used.
       Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 0
@@ -233,6 +232,8 @@ hIoni:   tables are built for  pi-
       Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 0
 
 Region <DefaultRegionForTheWorld> -- appears in <Water> world volume
+ Root logical volume(s) : Water 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Water 
  Production cuts :  gamma 1 mm     e- 1 mm     e+ 1 mm 
 
@@ -282,23 +283,23 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=33s Real=33s Sys=0s
+  User=32s Real=32s Sys=0s
 
  The run consists of 100000 gamma of 100 keV through 100 m   of Water (density: 1 g/cm3 )
 
- Process calls frequency --->	compt = 98387	phot = 1613
+ Process calls frequency --->	compt = 98335	phot = 1665
 
- MeanFreePath:	6.0724 cm  +- 6.0579 cm 	massic: 6.0724 g/cm2 
- CrossSection:	0.16468 cm^-1 			massic: 0.16468 cm2/g
+ MeanFreePath:	6.0496 cm  +- 6.0503 cm 	massic: 6.0496 g/cm2 
+ CrossSection:	0.1653 cm^-1 			massic: 0.1653 cm2/g
 
- mean energy of charged secondaries: 15.125 keV	mass_energy_transfer coef: 0.024907 cm2/g
+ mean energy of charged secondaries: 15.218 keV	mass_energy_transfer coef: 0.025156 cm2/g
 
  Verification : crossSections from G4EmCalculator 
 	compt= 0.1623 cm2/g	phot= 0.0026853 cm2/g	total= 0.16498 cm2/g
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1634454967, 1791823047
+ Current couple of seeds = 1982964064, 678286457
 ----------------------------------------
 #
 /gun/particle e-
@@ -307,6 +308,8 @@ Run Summary
 /run/beamOn 100000
 
 Region <DefaultRegionForTheWorld> -- appears in <Water> world volume
+ Root logical volume(s) : Water 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Water 
  Production cuts :  gamma 1 mm     e- 1 mm     e+ 1 mm 
 
@@ -325,7 +328,7 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1634454967, 1791823047
+ Current couple of seeds = 1982964064, 678286457
 ----------------------------------------
 Start Run processing.
 
@@ -355,19 +358,19 @@ Run Summary
 
  The run consists of 100000 e- of 100 MeV through 100 m   of Water (density: 1 g/cm3 )
 
- Process calls frequency --->	eBrem = 61689	eIoni = 38311
+ Process calls frequency --->	eBrem = 61697	eIoni = 38303
 
- MeanFreePath:	1.5667 cm  +- 1.5656 cm 	massic: 1.5667 g/cm2 
- CrossSection:	0.63828 cm^-1 			massic: 0.63828 cm2/g
+ MeanFreePath:	1.5679 cm  +- 1.5695 cm 	massic: 1.5679 g/cm2 
+ CrossSection:	0.63781 cm^-1 			massic: 0.63781 cm2/g
 
- mean energy of charged secondaries: 704.14 keV	mass_energy_transfer coef: 0.0044944 cm2/g
+ mean energy of charged secondaries: 705.83 keV	mass_energy_transfer coef: 0.0045019 cm2/g
 
  Verification : crossSections from G4EmCalculator 
 	eBrem= 0.39397 cm2/g	eIoni= 0.24497 cm2/g	total= 0.63894 cm2/g
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1057715345, 1956988917
+ Current couple of seeds = 679237908, 105871640
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

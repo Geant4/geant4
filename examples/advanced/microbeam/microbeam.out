@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-08-03-cand-00    (5-May-2007)
+ Geant4 version Name: geant4-09-00-cand-03    (29-June-2007)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -14,7 +14,6 @@ You have successfully registered the following graphics systems.
 Current available graphics systems are:
   ASCIITree (ATree)
   DAWNFILE (DAWNFILE)
-  GAGTree (GAGTree)
   G4HepRep (HepRepXML)
   G4HepRepFile (HepRepFile)
   RayTracer (RayTracer)
@@ -131,7 +130,7 @@ MicrobeamPhysicsList::SetCuts:CutLength : 10 nm
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       LateralDisplacementFlag=  1   Skin= 0
-      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
 G4AugerData for Element no. 6 are loaded
 G4AugerData for Element no. 7 are loaded
 G4AugerData for Element no. 8 are loaded
@@ -166,7 +165,7 @@ eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
-      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
 
 annihil:       Sampling according eplus2gg model
       tables are built for  e+
@@ -175,7 +174,7 @@ annihil:       Sampling according eplus2gg model
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       LateralDisplacementFlag=  1   Skin= 0
-      Boundary/stepping algorithm is active with facrange= 0.2  Step limitation 0
+      Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 0
 
 hLowEIoni:    Knock-on electron cross sections . 
         Good description above the mean excitation energy.
@@ -191,7 +190,7 @@ hLowEIoni:    Knock-on electron cross sections .
 
 msc:  Model variant of multiple scattering for GenericIon
       LateralDisplacementFlag=  0   Skin= 0
-      Boundary/stepping algorithm is active with facrange= 0.2  Step limitation 0
+      Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 1
 
 hLowEIoni:    Knock-on electron cross sections . 
         Good description above the mean excitation energy.
@@ -208,7 +207,7 @@ hLowEIoni:    Knock-on electron cross sections .
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       LateralDisplacementFlag=  1   Skin= 0
-      Boundary/stepping algorithm is active with facrange= 0.2  Step limitation 0
+      Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 0
 
 ========= Table of registered couples ==============================
 
@@ -307,24 +306,26 @@ Index : 12     used in the geometry : Yes     recalculation needed : No
 
 -> Event # 1 generated 
    ===> The incident alpha particle has reached the targeted cell :
-   -----> total absorbed dose within Nucleus   is (Gy) = 0.38476
-   -----> total absorbed dose within Cytoplasm is (Gy) = 0.0474129
+   -----> total absorbed dose within Nucleus   is (Gy) = 0.307962
+   -----> total absorbed dose within Cytoplasm is (Gy) = 0.0382348
 
 -> Event # 2 generated 
    ===> The incident alpha particle has reached the targeted cell :
-   -----> total absorbed dose within Nucleus   is (Gy) = 0.326371
-   -----> total absorbed dose within Cytoplasm is (Gy) = 0.0235737
+   -----> total absorbed dose within Nucleus   is (Gy) = 0.3149
+   -----> total absorbed dose within Cytoplasm is (Gy) = 0.13141
 
 -> Event # 3 generated 
-   ===> Sorry, the incident alpha particle has missed the targeted cell !
+   ===> The incident alpha particle has reached the targeted cell :
+   -----> total absorbed dose within Nucleus   is (Gy) = 0.307115
+   -----> total absorbed dose within Cytoplasm is (Gy) = 0.100445
 
 -> Event # 4 generated 
-   ===> Sorry, the incident alpha particle has missed the targeted cell !
+   ===> The incident alpha particle has reached the targeted cell :
+   -----> total absorbed dose within Nucleus   is (Gy) = 0.388045
+   -----> total absorbed dose within Cytoplasm is (Gy) = 0.0381594
 
 -> Event # 5 generated 
-   ===> The incident alpha particle has reached the targeted cell :
-   -----> total absorbed dose within Nucleus   is (Gy) = 0.327327
-   -----> total absorbed dose within Cytoplasm is (Gy) = 0.00630958
+   ===> Sorry, the incident alpha particle has missed the targeted cell !
 
 -> Event # 6 generated 
    ===> Sorry, the incident alpha particle has missed the targeted cell !
@@ -339,9 +340,7 @@ Index : 12     used in the geometry : Yes     recalculation needed : No
    ===> Sorry, the incident alpha particle has missed the targeted cell !
 
 -> Event # 10 generated 
-   ===> The incident alpha particle has reached the targeted cell :
-   -----> total absorbed dose within Nucleus   is (Gy) = 0.383181
-   -----> total absorbed dose within Cytoplasm is (Gy) = 0.0430387
+   ===> Sorry, the incident alpha particle has missed the targeted cell !
 
 ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
 -> Total number of particles detected by the gas detector : 4

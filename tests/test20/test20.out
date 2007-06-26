@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-08-03-cand-00    (5-May-2007)
+ Geant4 version Name: geant4-09-00-cand-03    (29-June-2007)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -63,7 +63,7 @@ physicsList->setCut() start.
  The ABSORBER is made of 100mm of Lead, the transverse size (R) is 120 mm. 
  Z position of the (middle of the) absorber 0  mm.
 
-World is removed from the default region.
+Obsolete world logical volume is removed from the default region.
 World is registered to the default region.
 #
 /lowenergy/lowlimG 2.5e-4
@@ -102,7 +102,7 @@ for LowEnergyBremsstrahlung, LowEnergyPhotoElectric, LowEnergyIonisation
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       LateralDisplacementFlag=  1   Skin= 0
-      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
 G4AugerData for Element no. 7 are loaded
 G4AugerData for Element no. 8 are loaded
 G4AugerData for Element no. 13 are loaded
@@ -137,13 +137,15 @@ eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
-      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
 
 annihil:       Sampling according eplus2gg model
       tables are built for  e+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
 
 Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Aluminium 
  Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
 
@@ -193,11 +195,13 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0s Real=0.02s Sys=0.01s
 /tracking/verbose 0
 /run/beamOn 1000
 
 Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Aluminium 
  Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
 
@@ -223,7 +227,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.06s Real=1.06s Sys=0s
+  User=1.05s Real=1.05s Sys=0s
 # 
 /gun/energy 2 keV
 /gun/polarization 0. 1. 0.
@@ -231,6 +235,8 @@ Run Summary
 /run/beamOn 1
 
 Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Aluminium 
  Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
 
@@ -260,7 +266,7 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50     0.002        0        0         0    Absorber initStep
-    1        0        0      -50         0  0.00155 0.000299  0.000299    Absorber LowEnPhotoElec
+    1        0        0      -50         0  0.00155 0.000736  0.000736    Absorber LowEnPhotoElec
     :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  1 ---------------
     :         0         0       -50   0.00045                 e-
     :----------------------------------------------------------------- EndOf2ndaries Info ---------------
@@ -280,6 +286,8 @@ Run Summary
 /run/beamOn 1000
 
 Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Aluminium 
  Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
 
@@ -305,7 +313,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.01s Real=1.01s Sys=0s
+  User=1.06s Real=1.06s Sys=0s
 #
 /gun/energy 600 eV
 /gun/polarization 0. 0. 0.
@@ -313,6 +321,8 @@ Run Summary
 /run/beamOn 1
 
 Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Aluminium 
  Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
 
@@ -342,7 +352,7 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50    0.0006        0        0         0    Absorber initStep
-    1        0        0      -50         0 8.07e-05  0.00048   0.00048    Absorber LowEnPhotoElec
+    1        0        0      -50         0 8.07e-05  0.00324   0.00324    Absorber LowEnPhotoElec
     :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  1 ---------------
     :         0         0       -50  0.000519                 e-
     :----------------------------------------------------------------- EndOf2ndaries Info ---------------
@@ -357,11 +367,13 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
 
 Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Aluminium 
  Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
 
@@ -387,7 +399,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.99s Real=1.01s Sys=0.02s
+  User=1.03s Real=1.03s Sys=0s
 #
 /gun/energy 300 eV
 /gun/polarization 0. 0. 1.
@@ -395,6 +407,8 @@ Run Summary
 /run/beamOn 1
 
 Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Aluminium 
  Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
 
@@ -424,7 +438,7 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50    0.0003        0        0         0    Absorber initStep
-    1        0        0      -50         0 8.07e-05 0.000389  0.000389    Absorber LowEnPhotoElec
+    1        0        0      -50         0 8.07e-05 9.94e-05  9.94e-05    Absorber LowEnPhotoElec
     :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  1 ---------------
     :         0         0       -50  0.000219                 e-
     :----------------------------------------------------------------- EndOf2ndaries Info ---------------
@@ -439,11 +453,13 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.01s Sys=0s
+  User=0s Real=0.01s Sys=0.01s
 /tracking/verbose 0
 /run/beamOn 1000
 
 Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Aluminium 
  Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
 
@@ -469,7 +485,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.03s Real=1.03s Sys=0s
+  User=1.04s Real=1.04s Sys=0s
 #
 /calor/setAbsMat Lead      
 #====================
@@ -485,7 +501,7 @@ Run Summary
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       LateralDisplacementFlag=  1   Skin= 0
-      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
 
 LowEnergyIoni:  Total cross sections from EEDL database.
       Gamma energy sampled from a parametrised formula.
@@ -510,13 +526,15 @@ eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
-      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
 
 annihil:       Sampling according eplus2gg model
       tables are built for  e+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
 
 Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Lead 
  Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
 
@@ -551,9 +569,9 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50      0.01        0        0         0    Absorber initStep
-    1        0        0      -50         0  0.00259  0.00146   0.00146    Absorber LowEnPhotoElec
+    1        0        0      -50         0  0.00249   0.0208    0.0208    Absorber LowEnPhotoElec
     :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  1 ---------------
-    :         0         0       -50   0.00741                 e-
+    :         0         0       -50   0.00751                 e-
     :----------------------------------------------------------------- EndOf2ndaries Info ---------------
 
 *********************************************************************************************************
@@ -561,16 +579,18 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0        0      -50   0.00741        0        0         0    Absorber initStep
-    1        0        0      -50         0  0.00741 0.000403  0.000403    Absorber LowEnergyIoni
+    0        0        0      -50   0.00751        0        0         0    Absorber initStep
+    1        0        0      -50         0  0.00751 0.000412  0.000412    Absorber LowEnergyIoni
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.01s Sys=0s
+  User=0s Real=0.01s Sys=0.01s
 /tracking/verbose 0
 /run/beamOn 1000
 
 Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Lead 
  Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
 
@@ -601,7 +621,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.61s Real=1.68s Sys=0.07s
+  User=1.58s Real=1.59s Sys=0.01s
 # 
 /gun/energy 2 keV
 /gun/polarization 0. 1. 0.
@@ -609,6 +629,8 @@ Run Summary
 /run/beamOn 1
 
 Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Lead 
  Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
 
@@ -643,9 +665,9 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50     0.002        0        0         0    Absorber initStep
-    1        0        0      -50         0 0.000153 0.000562  0.000562    Absorber LowEnPhotoElec
+    1        0        0      -50         0  2.6e-05  0.00173   0.00173    Absorber LowEnPhotoElec
     :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  1 ---------------
-    :         0         0       -50   0.00185                 e-
+    :         0         0       -50   0.00197                 e-
     :----------------------------------------------------------------- EndOf2ndaries Info ---------------
 
 *********************************************************************************************************
@@ -653,16 +675,18 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0        0      -50   0.00185        0        0         0    Absorber initStep
-    1        0        0      -50         0  0.00185 5.56e-05  5.56e-05    Absorber LowEnergyIoni
+    0        0        0      -50   0.00197        0        0         0    Absorber initStep
+    1        0        0      -50         0  0.00197 6.05e-05  6.05e-05    Absorber LowEnergyIoni
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0.01s Sys=0.01s
+  User=0.01s Real=0.01s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
 
 Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Lead 
  Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
 
@@ -693,7 +717,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.58s Real=1.63s Sys=0.05s
+  User=1.56s Real=1.57s Sys=0.01s
 #
 /gun/energy 600 eV
 /gun/polarization 0. 0. 0.
@@ -701,6 +725,8 @@ Run Summary
 /run/beamOn 1
 
 Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Lead 
  Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
 
@@ -735,7 +761,7 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50    0.0006        0        0         0    Absorber initStep
-    1        0        0      -50         0 0.000148 0.000111  0.000111    Absorber LowEnPhotoElec
+    1        0        0      -50         0 0.000148 6.08e-05  6.08e-05    Absorber LowEnPhotoElec
     :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  1 ---------------
     :         0         0       -50  0.000452                 e-
     :----------------------------------------------------------------- EndOf2ndaries Info ---------------
@@ -750,11 +776,13 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0.01s Sys=0.01s
+  User=0.01s Real=0.01s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
 
 Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Lead 
  Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
 
@@ -785,7 +813,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.59s Real=1.63s Sys=0.04s
+  User=1.56s Real=1.61s Sys=0.05s
 #
 /gun/energy 300 eV
 /gun/polarization 0. 0. 1.
@@ -793,6 +821,8 @@ Run Summary
 /run/beamOn 1
 
 Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Lead 
  Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
 
@@ -827,9 +857,9 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50    0.0003        0        0         0    Absorber initStep
-    1        0        0      -50         0 0.000153  3.8e-05   3.8e-05    Absorber LowEnPhotoElec
+    1        0        0      -50         0 0.000148 2.39e-05  2.39e-05    Absorber LowEnPhotoElec
     :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  1 ---------------
-    :         0         0       -50  0.000147                 e-
+    :         0         0       -50  0.000152                 e-
     :----------------------------------------------------------------- EndOf2ndaries Info ---------------
 
 *********************************************************************************************************
@@ -837,8 +867,8 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0        0      -50  0.000147        0        0         0    Absorber initStep
-    1        0        0      -50         0 0.000147 6.33e-06  6.33e-06    Absorber LowEnergyIoni
+    0        0        0      -50  0.000152        0        0         0    Absorber initStep
+    1        0        0      -50         0 0.000152 6.42e-06  6.42e-06    Absorber LowEnergyIoni
 Run terminated.
 Run Summary
   Number of events processed : 1
@@ -847,6 +877,8 @@ Run Summary
 /run/beamOn 1000
 
 Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Lead 
  Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
 
@@ -877,7 +909,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.45s Real=1.45s Sys=0s
+  User=1.45s Real=1.46s Sys=0.01s
 #
 /calor/setAbsMat Water
 #======================
@@ -893,7 +925,7 @@ Run Summary
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       LateralDisplacementFlag=  1   Skin= 0
-      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
 
 LowEnergyIoni:  Total cross sections from EEDL database.
       Gamma energy sampled from a parametrised formula.
@@ -918,13 +950,15 @@ eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
-      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
 
 annihil:       Sampling according eplus2gg model
       tables are built for  e+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
 
 Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Water 
  Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
 
@@ -964,9 +998,9 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50      0.01        0        0         0    Absorber initStep
-    1        0        0    -46.4         0 0.000537     3.59      3.59    Absorber LowEnPhotoElec
+    1        0        0    -47.8         0 0.000537     2.17      2.17    Absorber LowEnPhotoElec
     :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  1 ---------------
-    :         0         0     -46.4   0.00946                 e-
+    :         0         0     -47.8   0.00946                 e-
     :----------------------------------------------------------------- EndOf2ndaries Info ---------------
 
 *********************************************************************************************************
@@ -974,16 +1008,19 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0        0    -46.4   0.00946        0        0         0    Absorber initStep
-    1        0        0    -46.4         0  0.00946    0.368     0.368    Absorber LowEnergyIoni
+    0        0        0    -47.8   0.00946        0        0         0    Absorber initStep
+    1   0.0162  -0.0254    -47.8   0.00242  0.00704    0.368     0.368    Absorber LowEnergyIoni
+    2   0.0164  -0.0253    -47.8         0  0.00242    0.368     0.736    Absorber LowEnergyIoni
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
 
 Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Water 
  Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
 
@@ -1019,7 +1056,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=2.15s Real=2.22s Sys=0.07s
+  User=2.17s Real=2.2s Sys=0.03s
 # 
 /gun/energy 2 keV
 /gun/polarization 0. 1. 0.
@@ -1027,6 +1064,8 @@ Run Summary
 /run/beamOn 1
 
 Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Water 
  Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
 
@@ -1066,7 +1105,7 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50     0.002        0        0         0    Absorber initStep
-    1        0        0      -50         0 0.000537  0.00273   0.00273    Absorber LowEnPhotoElec
+    1        0        0      -50         0 0.000537   0.0121    0.0121    Absorber LowEnPhotoElec
     :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  1 ---------------
     :         0         0       -50   0.00146                 e-
     :----------------------------------------------------------------- EndOf2ndaries Info ---------------
@@ -1081,11 +1120,13 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0.01s Sys=0.01s
+  User=0s Real=0s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
 
 Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Water 
  Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
 
@@ -1121,7 +1162,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.98s Real=0.98s Sys=0s
+  User=1.01s Real=1.01s Sys=0s
 #
 /gun/energy 600 eV
 /gun/polarization 0. 0. 0.
@@ -1129,6 +1170,8 @@ Run Summary
 /run/beamOn 1
 
 Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Water 
  Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
 
@@ -1168,7 +1211,7 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50    0.0006        0        0         0    Absorber initStep
-    1        0        0      -50         0 0.000537 0.000682  0.000682    Absorber LowEnPhotoElec
+    1        0        0      -50         0 0.000537 0.000344  0.000344    Absorber LowEnPhotoElec
     :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  1 ---------------
     :         0         0       -50  6.27e-05                 e-
     :----------------------------------------------------------------- EndOf2ndaries Info ---------------
@@ -1183,11 +1226,13 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
 
 Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Water 
  Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
 
@@ -1223,7 +1268,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.98s Real=0.98s Sys=0s
+  User=1.01s Real=1.01s Sys=0s
 #
 /gun/energy 300 eV
 /gun/polarization 0. 0. 1.
@@ -1231,6 +1276,8 @@ Run Summary
 /run/beamOn 1
 
 Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Water 
  Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
 
@@ -1270,9 +1317,9 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50    0.0003        0        0         0    Absorber initStep
-    1        0        0      -50         0 2.92e-05   0.0037    0.0037    Absorber LowEnPhotoElec
+    1        0        0      -50         0 1.42e-05  0.00323   0.00323    Absorber LowEnPhotoElec
     :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  1 ---------------
-    :         0         0       -50  0.000271                 e-
+    :         0         0       -50  0.000286                 e-
     :----------------------------------------------------------------- EndOf2ndaries Info ---------------
 
 *********************************************************************************************************
@@ -1280,8 +1327,8 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0        0      -50  0.000271        0        0         0    Absorber initStep
-    1        0        0      -50         0 0.000271   0.0215    0.0215    Absorber msc
+    0        0        0      -50  0.000286        0        0         0    Absorber initStep
+    1        0        0      -50         0 0.000286   0.0215    0.0215    Absorber msc
 Run terminated.
 Run Summary
   Number of events processed : 1
@@ -1290,6 +1337,8 @@ Run Summary
 /run/beamOn 1000
 
 Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Water 
  Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
 
@@ -1325,7 +1374,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.96s Real=0.96s Sys=0s
+  User=0.99s Real=0.99s Sys=0s
 #
 /gun/particle gamma
 #------------------
@@ -1354,7 +1403,7 @@ Run Summary
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       LateralDisplacementFlag=  1   Skin= 0
-      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
 
 LowEnergyIoni:  Total cross sections from EEDL database.
       Gamma energy sampled from a parametrised formula.
@@ -1378,7 +1427,7 @@ eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
-      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 annihil:       Sampling according eplus2gg model
@@ -1386,6 +1435,8 @@ annihil:       Sampling according eplus2gg model
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
 
 Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Aluminium 
  Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
 
@@ -1421,11 +1472,13 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.79s Real=1.82s Sys=0.03s
+  User=1.83s Real=1.85s Sys=0.02s
 /gun/energy 100 MeV
 /run/beamOn 1000
 
 Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Aluminium 
  Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
 
@@ -1461,7 +1514,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.99s Real=0.99s Sys=0s
+  User=1.04s Real=1.04s Sys=0s
 /calor/setAbsMat Lead
 #======================
 /tracking/verbose 0
@@ -1469,6 +1522,8 @@ Run Summary
 /run/beamOn 1000
 
 Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Lead 
  Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
 
@@ -1504,11 +1559,13 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=7.97s Real=8.25s Sys=0.28s
+  User=8.19s Real=8.56s Sys=0.37s
 /gun/energy 100 MeV
 /run/beamOn 1000
 
 Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Lead 
  Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
 
@@ -1544,7 +1601,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=4.55s Real=4.67s Sys=0.12s
+  User=4.72s Real=4.82s Sys=0.1s
 /calor/setAbsMat Water
 #======================
 /tracking/verbose 0
@@ -1552,6 +1609,8 @@ Run Summary
 /run/beamOn 1000
 
 Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Water 
  Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
 
@@ -1587,11 +1646,13 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.11s Real=1.11s Sys=0s
+  User=1.13s Real=1.13s Sys=0s
 /gun/energy 100 MeV
 /run/beamOn 1000
 
 Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Water 
  Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
 
@@ -1627,46 +1688,44 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.72s Real=0.72s Sys=0s
+  User=0.74s Real=0.74s Sys=0s
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
 UserRunAction deleted.
 UserPrimaryGenerator deleted.
 G4 kernel has come to Quit state.
 G4SDManager deleted.
-LowEnBrem for e- in Aluminium : 1 calls
-LowEnBrem for e- in Water : 37 calls
-LowEnConversion for gamma in Aluminium : 432 calls
-LowEnConversion for gamma in Lead : 1497 calls
-LowEnConversion for gamma in Water : 143 calls
-LowEnPhotoElec for gamma in Air : 13 calls
-LowEnPhotoElec for gamma in Aluminium : 4042 calls
-LowEnPhotoElec for gamma in Lead : 4009 calls
-LowEnPhotoElec for gamma in Water : 4022 calls
-LowEnRayleigh for gamma in Aluminium : 24 calls
-LowEnRayleigh for gamma in Lead : 41 calls
-LowEnRayleigh for gamma in Water : 47 calls
-LowEnergyIoni for e- in Air : 25 calls
-LowEnergyIoni for e- in Aluminium : 4025 calls
-LowEnergyIoni for e- in Lead : 3915 calls
-LowEnergyIoni for e- in Water : 1498 calls
-Transportation for e+ in Air : 1406 calls
-Transportation for e- in Air : 6393 calls
-Transportation for e- in Lead : 3 calls
-Transportation for gamma in Air : 5289 calls
+LowEnBrem for e- in Water : 22 calls
+LowEnConversion for gamma in Aluminium : 461 calls
+LowEnConversion for gamma in Lead : 1490 calls
+LowEnConversion for gamma in Water : 135 calls
+LowEnPhotoElec for gamma in Air : 14 calls
+LowEnPhotoElec for gamma in Aluminium : 4035 calls
+LowEnPhotoElec for gamma in Lead : 4016 calls
+LowEnPhotoElec for gamma in Water : 4019 calls
+LowEnRayleigh for gamma in Aluminium : 30 calls
+LowEnRayleigh for gamma in Lead : 43 calls
+LowEnRayleigh for gamma in Water : 53 calls
+LowEnergyIoni for e- in Air : 29 calls
+LowEnergyIoni for e- in Aluminium : 4014 calls
+LowEnergyIoni for e- in Lead : 3912 calls
+LowEnergyIoni for e- in Water : 1495 calls
+Transportation for e+ in Air : 1425 calls
+Transportation for e- in Air : 6382 calls
+Transportation for gamma in Air : 5263 calls
 Transportation for gamma in Lead : 2 calls
 annihil for e+ in Air : 1 calls
 annihil for e+ in Aluminium : 33 calls
-annihil for e+ in Lead : 627 calls
-annihil for e+ in Water : 6 calls
-msc for e- in Air : 12 calls
-msc for e- in Aluminium : 385 calls
-msc for e- in Lead : 2774 calls
-msc for e- in Water : 3867 calls
-polarLowEnCompt for gamma in Air : 5 calls
-polarLowEnCompt for gamma in Aluminium : 3513 calls
-polarLowEnCompt for gamma in Lead : 37468 calls
-polarLowEnCompt for gamma in Water : 852 calls
+annihil for e+ in Lead : 624 calls
+annihil for e+ in Water : 4 calls
+msc for e- in Air : 18 calls
+msc for e- in Aluminium : 389 calls
+msc for e- in Lead : 2320 calls
+msc for e- in Water : 3903 calls
+polarLowEnCompt for gamma in Air : 3 calls
+polarLowEnCompt for gamma in Aluminium : 3443 calls
+polarLowEnCompt for gamma in Lead : 37264 calls
+polarLowEnCompt for gamma in Water : 837 calls
 EventManager deleted.
 Default detector region deleted.
 UImanager deleted.

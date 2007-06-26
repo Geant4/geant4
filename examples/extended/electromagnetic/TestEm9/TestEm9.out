@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-08-03-cand-00    (5-May-2007)
+ Geant4 version Name: geant4-09-00-cand-03    (29-June-2007)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -17,16 +17,17 @@ G4Material: Mean excitation energy is changed for G4_CESIUM_IODIDE Iold= 491.166
 #
 #  select EM PhysicsList
 #
-/testem/phys/addPhysics  standard
+/testem/phys/addPhysics  emstandard_opt1
+PhysicsList::Set emstandard_opt1 EM physics
 #
 /testem/phys/setCuts    0.3 mm
 /testem/phys/VertexCuts 0.01 mm
 /testem/phys/MuonCuts  10.0 mm
 /testem/stepMax         100 mm
 #
-/testem/det/acceptance1  0.8260 0.0351 2.5
-/testem/det/acceptance9  0.9564 0.0160 2.5
-/testem/det/acceptance25 0.9790 0.0119 2.5
+/testem/det/acceptance1  0.8271 0.02974 2.5
+/testem/det/acceptance9  0.9570 0.01286 2.5
+/testem/det/acceptance25 0.9793 0.00884 2.5
 #
 #/process/eLoss/preciseRange  true
 #/process/eLoss/integral      true
@@ -104,33 +105,33 @@ conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV f
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       LateralDisplacementFlag=  1   Skin= 0
-      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+      Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 0
 
 eIoni:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Delta cross sections and sampling from MollerBhabha model
       Good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.8, integral: 1
 
 eBrem:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
-      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
 
 eIoni:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Delta cross sections and sampling from MollerBhabha model
       Good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Step function: finalRange(mm)= 1, dRoverRange= 0.8, integral: 1
 
 eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
-      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
 
 annihil:       Sampling according eplus2gg model
       tables are built for  e+
@@ -139,7 +140,7 @@ annihil:       Sampling according eplus2gg model
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       LateralDisplacementFlag=  1   Skin= 0
-      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+      Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 0
 
 hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -151,14 +152,14 @@ hIoni:   tables are built for  proton
 
 msc:  Model variant of multiple scattering for GenericIon
       LateralDisplacementFlag=  0   Skin= 0
-      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+      Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 1
 
 ionIoni:   tables are built for  GenericIon
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
-      Parametrisation from BraggIon for protons below.
+      Parametrisation from BraggIon for protons below. NuclearStopping 1
 
       Stopping Power data for 8 ion/material pairs are used.
       Step function: finalRange(mm)= 0.1, dRoverRange= 0.1, integral: 1
@@ -174,7 +175,7 @@ hIoni:   tables are built for  anti_proton
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       LateralDisplacementFlag=  1   Skin= 0
-      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+      Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 0
 
 muIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -221,7 +222,7 @@ hIoni:   tables are built for  pi+
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       LateralDisplacementFlag=  1   Skin= 0
-      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+      Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 0
 
 hIoni:   tables are built for  pi-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -297,29 +298,33 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=102.24s Real=108.87s Sys=6.58s
+  User=81.22s Real=81.31s Sys=0s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started
-========================================================
+=================================================================
 Number of events             100
-Average number of e-         1314
-Average number of gamma      697.4
-Average number of e+         48.17
-Average number of steps      4482
-Edep 1x1 =                   0.8323 +- 0.0303  res=  3.641 %
-Edep 3x3 =                   0.959 +- 0.0122  res=  1.272 %
-Edep 5x5 =                   0.9802 +- 0.008353  res=  0.8522 %
-========================================================
+Average number of e-         1318
+Average number of gamma      699.4
+Average number of e+         48.33
+Average number of steps      3975
+Edep 1x1 =                   0.8349 +- 0.003051  res=  3.655 %
+Edep 3x3 =                   0.9574 +- 0.001213  res=  1.267 %
+Edep 5x5 =                   0.9795 +- 0.0007431  res=  0.7587 %
+===========  Mean values without trancating =====================
+Edep 1x1 =                   0.8309 +- 0.003579  res=  4.307 %
+Edep 3x3 =                   0.9559 +- 0.001677  res=  1.754 %
+Edep 5x5 =                   0.978 +- 0.001364  res=  1.395 %
+==================================================================
 
 
 <<<<<ACCEPTANCE>>>>> 100 events for Crystal Calorimeter
-Edep1x1: 0.8311  delEdep1x1= 0.005141 nrms= 1.465
-Erms1x1: 0.03216  delErms1x1= -0.002944 nrms= -0.8387
-Edep3x3: 0.9563  delEdep3x3= -9.751e-05 nrms= -0.06094
-Erms3x3: 0.01836  delErms3x3= 0.002359 nrms= 1.474
-Edep5x5: 0.978  delEdep5x5= -0.001003 nrms= -0.8427
-Erms5x5: 0.01504  delErms5x5= 0.00314 nrms= 2.639
-<<<<<END>>>>>   IS ACCEPTED
+Edep1x1: 0.8349  delEdep1x1= 0.007834 nrms= 2.634
+Erms1x1: 0.03051  delErms1x1= 0.0007728 nrms= 0.2599
+Edep3x3: 0.9574  delEdep3x3= 0.0004009 nrms= 0.3117
+Erms3x3: 0.01213  delErms3x3= -0.000728 nrms= -0.5661
+Edep5x5: 0.9795  delEdep5x5= 0.0001678 nrms= 0.1898
+Erms5x5: 0.007431  delErms5x5= -0.001409 nrms= -1.594
+<<<<<END>>>>>   IS NOT ACCEPTED
 
 #
 G4 kernel has come to Quit state.

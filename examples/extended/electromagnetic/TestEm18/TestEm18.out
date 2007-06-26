@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-08-03-cand-00    (5-May-2007)
+ Geant4 version Name: geant4-09-00-cand-03    (29-June-2007)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -93,7 +93,7 @@ eBrem:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 480 bins.
       Lambda tables from threshold to 100 TeV in 480 bins.
       Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
-      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
 
 eIoni:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 480 bins.
@@ -107,7 +107,7 @@ eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 480 bins.
       Lambda tables from threshold to 100 TeV in 480 bins.
       Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
-      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
 
 annihil:       Sampling according eplus2gg model
       tables are built for  e+
@@ -127,7 +127,7 @@ ionIoni:   tables are built for  GenericIon
       Lambda tables from threshold to 100 TeV in 480 bins.
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
-      Parametrisation from BraggIon for protons below.
+      Parametrisation from BraggIon for protons below. NuclearStopping 1
 
       Stopping Power data for 8 ion/material pairs are used.
       Step function: finalRange(mm)= 0.1, dRoverRange= 0.1, integral: 1
@@ -197,6 +197,8 @@ hIoni:   tables are built for  pi-
       CSDA range table up to 100 TeV in 480 bins.
 
 Region <DefaultRegionForTheWorld> -- appears in <Water> world volume
+ Root logical volume(s) : Water 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Water 
  Production cuts :  gamma 1 mm     e- 1 mm     e+ 1 mm 
 
@@ -246,7 +248,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=48.74s Real=48.78s Sys=0.02s
+  User=47.51s Real=47.52s Sys=0s
 
  ======================== run summary ======================
 
@@ -254,19 +256,19 @@ Run Summary
  ===========================================================
 
 
- trackLength= 1.0005 cm 	 nb of steps= 1.5573  stepSize= 6.4242 mm 
+ trackLength= 1.0005 cm 	 nb of steps= 1.5539  stepSize= 6.4383 mm 
 
- d-rays  : eLoss/primary= 249.72 keV	  nb of d-rays= 0.23634  <Tkin>= 1.0566 MeV  Tmin= 347.15 keV  Tmax= 4.9638 MeV
+ d-rays  : eLoss/primary= 245.12 keV	  nb of d-rays= 0.23468  <Tkin>= 1.0445 MeV  Tmin= 347.15 keV  Tmax= 4.9503 MeV
 
- brems   : eLoss/primary= 173.41 keV	  nb of gammas= 0.30721  <Tkin>= 564.48 keV  Tmin= 2.9024 keV  Tmax= 9.6666 MeV
+ brems   : eLoss/primary= 176.1 keV	  nb of gammas= 0.30529  <Tkin>= 576.82 keV  Tmin= 2.9021 keV  Tmax= 9.7003 MeV
 
- deposit : eLoss/primary= 1.7336 MeV	 <dEcut > table= 1.7348 MeV   ---> simul/reference= 0.99936
+ deposit : eLoss/primary= 1.7338 MeV	 <dEcut > table= 1.7348 MeV   ---> simul/reference= 0.99947
 
- total   : eLoss/primary= 2.1568 MeV	 <dEfull> table= 2.1626 MeV   ---> simul/reference= 0.99733
+ total   : eLoss/primary= 2.1551 MeV	 <dEfull> table= 2.1626 MeV   ---> simul/reference= 0.99653
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1637293684, 1659265773
+ Current couple of seeds = 1318030641, 1948814343
 ----------------------------------------
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
