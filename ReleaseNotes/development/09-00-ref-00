@@ -519,7 +519,7 @@ examples                                         examples-V09-00-00
     experimental CATANA proton therapy beam line.
   o Improved the modulator geometry and fixed a bug on its rotation.
   o Physics component redesigned and reimplemented as a result of code review.
-- advanced/human_phantom-V08-03-00)
+- advanced/human_phantom (human_phantom-V08-03-00)
   o Corrected bug in MIRDLeftBreast and MIRDRightBreast.
   o Introduced voxel Left/Right breast, VoxelBreastSensitive detector and
     PhantomHeadBuilder.
